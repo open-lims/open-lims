@@ -1,0 +1,38 @@
+<br />
+<div class='title'>{TITLE}</div>
+<br />
+
+<!-- CONTAINER BEGIN ("General",0) -->
+
+<!-- IF ({IS_OWNER}) -->
+
+	<div class='boxIconBarRight'>
+		<a href='index.php?{ADMIN_PARAMS}'><img src='images/icons/administration.png' alt='new' border='0' /></a>&nbsp;<a href='index.php?{ADMIN_PARAMS}'>Administrate Organisation Unit</a>
+	</div>
+		
+<!-- ENDIF -->
+				
+<table>
+	<tr>
+		<td><span class='bold'>Owner:</span></td>
+		<td>{OWNER}</td>
+	</tr>
+	<tr>
+		<td><span class='bold'>Leader:</span></td>
+		<td>{LEADER}</td>
+	</tr>
+	<tr>
+		<td><span class='bold'>Member(s):</span></td>
+		<td>{MEMBERS}</td>
+	</tr>
+	<tr>
+		<td><span class='bold'>Group(s):</span></td>
+		<td>{GROUPS}</td>
+	</tr>
+	<tr>
+		<td><span class='bold'>Lab-Folder:</span></td>
+		<td><a href='index.php?{FOLDER_PARAMS'>show</a></td>
+	</tr>
+</table>
+		
+<!-- CONTAINER END (0) -->

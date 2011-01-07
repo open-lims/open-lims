@@ -1,0 +1,67 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Detail: {TITLE}",0) -->
+
+<div class='boxIconBar'>
+	<div class='boxIconLeft'>
+
+	Version {VERSION} (<a href='index.php?{VERSION_LIST_LINK}'>History</a>) |
+	
+	<!-- IF ({CHANGE_PERMISSION}) -->
+					
+	<div class='boxIcon'><img src='images/icons/permissions.png' alt='' />&nbsp;<a href='index.php?{CHANGE_PERMISSION_PARAMS}'>Change Permissions</a></div>
+	
+	<!-- ELSE -->
+					
+	<div class='boxIcon'><img src='images/icons/permissions_na.png' alt='' />&nbsp;<span class='FontDeactivated'>Change Permissions</span></div>
+					
+	<!-- ENDIF -->	
+	
+	</div>
+	<div class='boxIconRight'>
+		<form  action='index.php' method='get'>
+		<select name='version'>
+		<option value='{VERSION}'>Version {VERSION} - {VERSION_DATETIME}</options>
+		
+		<!-- FOREACH BEGIN ({VERSION_OPTION}) -->
+		
+		<option value='{VERSION_OPTION:VERSION}'>{VERSION_OPTION:TEXT}</option>
+		
+		<!-- FOREACH END -->
+		
+		</select>
+		<input type='submit' value='open' class='FormButton' />
+		
+		<!-- FOREACH BEGIN ({GET}) -->		
+
+		<input type='hidden' value='{GET:VALUE}' name='{GET:KEY}' />
+
+		<!-- FOREACH END -->
+
+		</form>
+	</div>
+</div>
+
+<form action='index.php?{PARAMS}' method='post' onSubmit='return submitForm(this.submitbutton)'>
+<table class='formTable'>
+	<tr>
+		<td colspan='2'>
+			<textarea name='desc' cols='66' rows='15' class='FormTextarea'>{DESC}</textarea>
+			<span class='formError'>{ERROR}</span>
+		</td>
+	</tr>
+	<tr>
+		<td><br /></td>
+	</tr>
+	<tr>
+		<td>
+			<button type='submit' name='submitbutton' value='major' class='FormButton'>Update</button>
+			<button type='submit' name='submitbutton' value='minor' class='FormButton'>Update Minor</button>
+		</td>
+	</tr>
+</table>
+
+</form>
+
+<!-- CONTAINER END (0) -->
+		

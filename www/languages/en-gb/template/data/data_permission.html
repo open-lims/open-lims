@@ -1,0 +1,86 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Permissions: {TITLE}",0) -->
+
+<div id='file_chmod_container'>
+<div id='file_chmod_box'>
+<form action='index.php?{PARAMS}' method='post'>
+<br />
+<table width='80%'>
+	<tr>
+		<td><span class='bold'>Owner:</span></td>
+		<td>{OWNER}</td>
+		<td><a href='index.php?{PARAMS_CHOWN}'>change</a></td>
+	</tr>
+	<tr>
+		<td><span class='bold'>Group:</span></td>
+		<td>{OWNER_GROUP}</td>
+		<td><a href='index.php?{PARAMS_CHGROUP}'>change</a></td>
+	</tr>
+		<td colspan='3'><br /></td>
+	</tr>
+	<tr>
+		<td><span class='bold'>Automatic-mode:</span></td>
+		<td><input type='checkbox' name='automatic' value='1' {CHECKED_AUTOMATIC} {DISABLED_AUTOMATIC} />{HIDDEN_AUTOMATIC}</td>
+		<td></td>
+	</tr>
+</table>
+<span class='smallText'>Notice: If automatic-mode is enabled, all specific permissions will be ignored.</span>
+<br />
+<br />
+<br />
+<span class='bold'>CHMODs</span>
+<table class='file_chmod_table'>
+	<tr>
+		<th></th>
+		<th>Read</th>
+		<th>Write</th>
+		<th>Delete</th>
+		<th>Control</th>
+	</tr>
+	
+	<tr>
+		<td>Owner</td>
+		<td><input type='checkbox' name='1-1' value='1' {CHECKED_1_1} {DISABLED_1_1} />{HIDDEN_1_1}</td>
+		<td><input type='checkbox' name='1-2' value='1' {CHECKED_1_2} {DISABLED_1_2} />{HIDDEN_1_2}</td>
+		<td><input type='checkbox' name='1-3' value='1' {CHECKED_1_3} {DISABLED_1_3} />{HIDDEN_1_3}</td>
+		<td><input type='checkbox' name='1-4' value='1' {CHECKED_1_4} {DISABLED_1_4} />{HIDDEN_1_4}</td>
+	</tr>
+	
+	<tr>
+		<td>Group</td>
+		<td><input type='checkbox' name='2-1' value='1' {CHECKED_2_1} {DISABLED_2_1} />{HIDDEN_2_1}</td>
+		<td><input type='checkbox' name='2-2' value='1' {CHECKED_2_2} {DISABLED_2_2} />{HIDDEN_2_2}</td>
+		<td><input type='checkbox' name='2-3' value='1' {CHECKED_2_3} {DISABLED_2_3} />{HIDDEN_2_3}</td>
+		<td><input type='checkbox' name='2-4' value='1' {CHECKED_2_4} {DISABLED_2_4} />{HIDDEN_2_4}</td>
+	</tr>
+	
+	<tr>
+		<td>Project/Sample</td>
+		<td><input type='checkbox' name='3-1' value='1' {CHECKED_3_1} {DISABLED_3_1} />{HIDDEN_3_1}</td>
+		<td><input type='checkbox' name='3-2' value='1' {CHECKED_3_2} {DISABLED_3_2} />{HIDDEN_3_2}</td>
+		<td><input type='checkbox' name='3-3' value='1' {CHECKED_3_3} {DISABLED_3_3} />{HIDDEN_3_3}</td>
+		<td><input type='checkbox' name='3-4' value='1' {CHECKED_3_4} {DISABLED_3_4} />{HIDDEN_3_4}</td>
+	</tr>
+	
+	<tr>
+		<td>Global/Public</td>
+		<td><input type='checkbox' name='4-1' value='1' {CHECKED_4_1} {DISABLED_4_1} />{HIDDEN_4_1}</td>
+		<td><input type='checkbox' name='4-2' value='1' {CHECKED_4_2} {DISABLED_4_2} />{HIDDEN_4_2}</td>
+		<td><input type='checkbox' name='4-3' value='1' {CHECKED_4_3} {DISABLED_4_3} />{HIDDEN_4_3}</td>
+		<td><input type='checkbox' name='4-4' value='1' {CHECKED_4_4} {DISABLED_4_4} />{HIDDEN_4_4}</td>
+	</tr>
+	
+</table>
+<br />
+<br />
+<input type='submit' name='save' value='save' class='FormButton' />
+<input type='submit' name='savenc' value='save and close' class='FormButton' />
+</form>
+</div>
+</div>
+
+<!-- CONTAINER END (0) -->					
+
+<br />
+<div class='center'><a href='index.php?{BACK_LINK}'>back</a></div>

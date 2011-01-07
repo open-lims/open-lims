@@ -1,0 +1,52 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Image Browser",0) -->
+	
+<div class='boxIconBar'>
+	<div class='boxIconLeft'>
+
+	<div class='boxIconElement'><img src='images/icons/image_browser_multi.png' alt='' />&nbsp;<a href='index.php?{MULTI_PARAMS}'>Multi View</a></div>
+	
+	<div class='boxIconElement'><img src='images/icons/image_browser_detail.png' alt='' />&nbsp;<a href='index.php?{DETAIL_PARAMS}'>Detail View</a></div>
+	
+	</div>
+	<div class='boxIconRight'>
+		<form  action='index.php' method='get'>
+		<select name='version' class='FormSelect'>
+		<option value='{VERSION}'>Version {VERSION} - {DATETIME}</options>
+		
+		<!-- FOREACH BEGIN (VERSION_OPTION) -->
+		
+		<option value='{VERSION_OPTION:VERSION}'>{VERSION_OPTION:TEXT}</option>
+		
+		<!-- FOREACH END -->
+		
+		</select>
+		<input type='submit' value='open' class='FormButton' />
+		
+		<!-- FOREACH BEGIN (GET) -->		
+
+		<input type='hidden' value='{GET:VALUE}' name='{GET:KEY}' />
+
+		<!-- FOREACH END -->
+
+		</form>
+	</div>
+</div>
+<br />
+			
+<div class='imagebrowser'>
+
+<a href='image.php?{IMAGE_CLICK_PARAMS}'>
+<img src='image.php?{IMAGE_PARAMS}' alt='' border='0' />
+</a>
+	<div class='imagebrowserfoot'>
+	Filename: {FILENAME}
+	<br />Version: {VERSION}
+	<br />Datetime: {DATETIME}
+	</div>
+</div>
+
+{PAGE_BAR}
+			
+<!-- CONTAINER END (0) -->

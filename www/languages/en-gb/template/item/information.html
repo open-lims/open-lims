@@ -1,0 +1,50 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Item Information",0) -->
+
+<br />
+
+<form action='index.php?{LINK}' method='post'>
+
+<table class='formTable'>
+
+	<!-- IF ({KEYWORDS}) -->
+	
+		<tr>
+			<td>Keywords:</td>
+			<td><input name='keywords' type='text' value='{KEYWORDS_VALUE}' size='75' class='FormTextfield' /></td>
+		</tr>
+		<tr>
+			<td colspan='2'><br /></td>
+		</tr>
+	
+	<!-- ENDIF -->
+
+
+	<!-- IF ({DESCRIPTION}) -->
+	
+		<tr>
+			<td colspan='2'>Description</td>
+		</tr>
+		<tr>
+			<td colspan='2'><textarea name='description' cols='66' rows='15' class='FormTextarea'>{DESCRIPTION_VALUE}</textarea></td>
+		</tr>
+
+	<!-- ENDIF -->
+	
+	<!-- IF ({ERROR}) -->
+		
+		<tr>
+			<td colspan='2'><br /><span class='formError'>{ERROR}</span></td>
+		</tr>
+		
+	<!-- ENDIF -->
+	
+	<tr>
+		<td colspan='2'><br />
+			<div class='button_right'><input type='submit' value='next' name='submitbutton' class='next_button' /></div>
+		</td>
+	</tr>
+</table>
+
+<!-- CONTAINER END (0) -->	

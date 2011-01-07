@@ -1,0 +1,20 @@
+#header {
+	background: url(’http://localhost:81/images/icons_large/logon.png’)
+		no-repeat top left;
+}
+
+* html #header {
+	filter: progid :   DXImageTransform .   Microsoft . 
+		
+		AlphaImageLoader(enabled =   true, sizingMethod =   crop src =   ’http :
+		// localhost :   81/ images/ icons_large/ logon .   png’);
+	background-image: none;
+}
+
+.ProjectStatusBox {
+	height: 25em;
+}
+
+.loginRoundMain {
+	padding-left: 1px;
+}

@@ -1,0 +1,34 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Add Permission",0) -->
+
+<br />
+<form action='index.php?{PARAMS}' method='post'>
+
+<table class='formTable'>
+
+	<tr>
+		<td colspan='2'><span class='bold'>Select Permissions:</span></td>
+	</tr>
+	
+	<tr>
+		<td width='30px'><input type='checkbox' name='read' value='1' checked='checked' /></td>
+		<td>Read</td>
+	</tr>
+	
+	<tr>
+		<td><input type='checkbox' name='write' value='1' checked='checked' /></td>
+		<td>Write</td>
+	</tr>
+	
+	<tr>
+		<td><br />
+			<div class='button_right'><input type='submit' value='next' name='submitbutton' class='next_button' /></div>
+		</td>
+	</tr>
+	
+</table>
+<input type='hidden' name='user' value='{USER}' />
+</form>
+
+<!-- CONTAINER END (0) -->	

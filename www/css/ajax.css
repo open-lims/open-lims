@@ -1,0 +1,80 @@
+ul.tree_menu {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+ul.tree_menu li img {
+	margin-right: 3px;
+}
+
+div.tree_menu_loading {
+	text-align: center;
+}
+
+div.tree_menu_element {
+	padding-top: 5px;
+	height: 25px;
+}
+
+div.tree_menu_left {
+	float: left;
+}
+
+div.tree_menu_right {
+	float: right;
+	margin-right: 10px;
+}
+
+div.tree_menu_clear {
+	clear: both;
+	height: 0px;
+}
+
+.in_box_list div.tree_menu_element {
+	border-bottom: 1px #C0C0C0 dotted;
+}
+
+.in_box_list div.tree_menu_element:hover,.in_box_list div.tree_menu_element:active,.in_box_list div.tree_menu_element:focus
+	{
+	background-color: #E0E0E0;
+}
+
+.autofield {
+	margin-left: auto;
+	margin-right: auto;
+	width: 70%;
+	border: 1px #D0D0D0 dotted;
+	padding: 5px;
+}
+
+.autofield_header {
+	font: normal 10px Verdana, Helvetica, sans-serif;
+}
+
+.autofield_button {
+	border: 1px #C0C0C0 solid;
+	background-color: white;
+}
+
+#AjaxProceedShade {
+	background-color: white;
+	filter: alpha(opacity = 50);
+	opacity: 0.5;
+	-moz-opacity: 0.5;
+}
+
+#AjaxProceedWindowImage {
+	text-align: center;
+	margin-top: 24%;
+}
+
+#AjaxProceedWindowText {
+	text-align: center;
+	margin-top: 1%;
+}
+
+#AjaxProceedWindowSubtext {
+	text-align: center;
+	margin-top: 1%;
+}

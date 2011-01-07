@@ -1,0 +1,29 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Add Value Template",0) -->
+
+<br />
+<form action='index.php?{PARAMS}' method='post' onSubmit='return submitForm(this.submitbutton)'>			
+	<table class='formTable'>
+		<tr>
+			<td>File:</td>
+			<td>
+				<select name='object_id'>
+				
+				<!-- FOREACH BEGIN ({FILE}) -->
+	
+					<option value='{FILE:VALUE}'>{FILE:CONTENT}</option>
+		
+				<!-- FOREACH END -->
+				
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><br /><input type='submit' value='new' class='FormButton' /></td>
+		</tr>
+	</table>
+</form>
+
+<!-- CONTAINER END (0) -->

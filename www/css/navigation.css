@@ -1,0 +1,304 @@
+.navigation_main_navigation {
+	font: normal 0.8em Verdana, Helvetica, sans-serif;
+}
+
+.navigation_main_navigation_left {
+	
+}
+
+.navigation_main_navigation_right {
+	float: right;
+	padding: 3px 10px 0 0;
+}
+
+ul.navigation_main_navigation_list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	margin-left: 20px;
+}
+
+ul.navigation_main_navigation_list li {
+	width: 100px;
+	float: left;
+}
+
+ul.navigation_main_navigation_list a {
+	display: block;
+	float: left;
+	width: 100px;
+	text-align: center;
+	color: #606060;
+	text-decoration: none;
+	font: normal 14px Verdana, Tahoma, Helvetica, sans-serif;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+ul.navigation_main_navigation_list a:hover {
+	color: #F0F0F0;
+}
+
+ul.navigation_main_navigation_list li.active a {
+	color: #F0F0F0;
+}
+
+.navigation_main_navigation_tab_home,.navigation_main_navigation_tab_projects,.navigation_main_navigation_tab_samples,.navigation_main_navigation_tab_data,.navigation_main_navigation_tab_search,.navigation_main_navigation_tab_organiser,.navigation_main_navigation_tab_extensions,.navigation_main_navigation_tab_default
+	{
+	background-image: url(../images/tabs/tab_empty.png);
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+
+.navigation_main_navigation_tab_default_active,.navigation_main_navigation_tab_default:hover
+	{
+	background-image: url(../images/tabs/tab_grey.png);
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+
+.navigation_main_navigation_tab_home_active,.navigation_main_navigation_tab_home:hover
+	{
+	background-image: url(../images/tabs/tab_blue.png);
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+
+.navigation_main_navigation_tab_projects_active,.navigation_main_navigation_tab_projects:hover
+	{
+	background-image: url(../images/tabs/tab_green.png);
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+
+.navigation_main_navigation_tab_samples_active,.navigation_main_navigation_tab_samples:hover
+	{
+	background-image: url(../images/tabs/tab_orange.png);
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+
+.navigation_main_navigation_tab_data_active,.navigation_main_navigation_tab_data:hover
+	{
+	background-image: url(../images/tabs/tab_lightgreen.png);
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+
+.navigation_main_navigation_tab_search_active,.navigation_main_navigation_tab_search:hover
+	{
+	background-image: url(../images/tabs/tab_orange.png);
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+
+.navigation_main_navigation_tab_organiser_active,.navigation_main_navigation_tab_organiser:hover
+	{
+	background-image: url(../images/tabs/tab_lightblue.png);
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+
+.navigation_main_navigation_tab_extensions_active,.navigation_main_navigation_tab_extensions:hover
+	{
+	background-image: url(../images/tabs/tab_blue.png);
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+
+.navigation_sub_navigation {
+	clear: both;
+	height: 30px;
+	width: 100%;
+	color: #EFEFEF;
+	font: normal 0.8em Verdana, Helvetica, sans-serif;
+}
+
+.navigation_sub_navigation a {
+	color: #EFEFEF;
+}
+
+.navigation_sub_navigation_left {
+	float: left;
+	padding: 7px 0 0 20px;
+}
+
+.navigation_sub_navigation_right {
+	float: right;
+	padding: 5px 10px 0 0;
+}
+
+.navigation_sub_navigation_default,.navigation_sub_navigation_home,.navigation_sub_navigation_projects,.navigation_sub_navigation_samples,.navigation_sub_navigation_data,.navigation_sub_navigation_search,.navigation_sub_navigation_organiser,.navigation_sub_navigation_extensions
+	{
+	height: 100%;
+	width: 100%;
+}
+
+.navigation_sub_navigation_default {
+	background-color: #c0c0c0;
+}
+
+.navigation_sub_navigation_home {
+	background-color: #336699;
+}
+
+.navigation_sub_navigation_projects {
+	background-color: #99cd32;
+}
+
+.navigation_sub_navigation_samples {
+	background-color: #dcaf36;
+}
+
+.navigation_sub_navigation_data {
+	background-color: #bbe664;
+}
+
+.navigation_sub_navigation_search {
+	background-color: #dcaf36;
+}
+
+.navigation_sub_navigation_organiser {
+	background-color: #669acc;
+}
+
+.navigation_sub_navigation_extensions {
+	background-color: #336699;
+}
+
+ul.navigation_sub_navigation_list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+ul.navigation_sub_navigation_list li {
+	display: inline;
+	padding-right: 0.5em;
+}
+
+ul.navigation_sub_navigation_list a,.navigation_sub_navigation_right a {
+	text-decoration: none;
+}
+
+ul.navigation_sub_navigation_list a:hover,ul.navigation_sub_navigation_list a:focus,ul.navigation_sub_navigation_list a:active,.navigation_sub_navigation_right a:hover,.navigation_sub_navigation_right a:focus,.navigation_sub_navigation_right a:active
+	{
+	text-decoration: underline;
+}
+
+.navigation_sub_navigation_search_field {
+	border: 1px #D0D0D0 solid;
+	margin: 0;
+	padding: 0;
+	display: block;
+	float: left;
+	height: 18px;
+}
+
+.navigation_sub_navigation_search_button {
+	border-right: 1px #D0D0D0 solid;
+	border-top: 1px #D0D0D0 solid;
+	border-bottom: 1px #D0D0D0 solid;
+	margin: 0;
+	padding: 0;
+	background: white;
+	display: block;
+	height: 20px;
+	float: left;
+}
+
+/* Vertical Navigation / Menu */
+#navigation {
+	font: normal 0.8em Verdana, Helvetica, sans-serif;
+	float: left;
+	width: 180px;
+	height: 90%;
+	margin-left: 0.3em;
+	margin-top: 0.3em;
+}
+
+#navigation a {
+	color: black;
+	text-decoration: none;
+}
+
+#navigation a:hover,#nagivation a:focus,#navigation a:active {
+	text-decoration: underline;
+}
+
+#navigation_header {
+	padding: 10px 0 0 0;
+}
+
+#navigation_switcher {
+	padding: 0;
+	margin: 0;
+	width: 100%;
+}
+
+#navigation_switcher li {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	float: left;
+}
+
+#navigation_switcher li.active {
+	background-image: url(../images/tabs/left_nav_tab.png);
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+
+#navigation_switcher li a {
+	display: block;
+	padding: 4px;
+}
+
+#navigation_switcher li a:hover,#navigation_switcher li a:focus,#navigation_switcher li a:active
+	{
+	background-image: url(../images/tabs/left_nav_tab.png);
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+
+#navigation_switcher li div {
+	display: block;
+	padding: 4px;
+}
+
+#navigation_current_info {
+	padding: 6px 4px 4px 4px;
+	font-weight: bold;
+}
+
+#navigation_header_clear {
+	border-top: 1px #D0D0D0 dotted;
+	clear: left;
+	width: 100%;
+}
+
+.left_navigation div.tree_menu_element {
+	
+}
+
+.left_navigation div.tree_menu_element:hover,.left_navigation div.tree_menu_element:active,.left_navigation div.tree_menu_element:focus
+	{
+	
+}
+
+ul.AdministrationNavigation {
+	list-style: none;
+	margin: 5px 5px;
+	padding: 0;
+}
+
+ul.AdministrationNavigation li {
+	margin: 5px 0;
+	padding: 0;
+}
+
+.AdminstrationNavigationTitle {
+	margin-top: 10px;
+	margin-bottom: 3px;
+	font-weight: bold;
+}

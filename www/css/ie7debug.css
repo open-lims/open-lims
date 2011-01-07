@@ -1,0 +1,23 @@
+/* Deactivation of IE-Cleartype technology */
+body {
+	filter: alpha(opacity =   100);
+	opacity: 1.0;
+}
+
+#top {
+	padding-bottom: 0.4em;
+}
+
+ul#topmenu {
+	padding-top: 0;
+}
+
+.loginRoundMain {
+	padding-right: 1px;
+}
+
+.tabImage {
+	margin-top: 0;
+	margin-bottom: 0;
+	margin-right: 0;
+}

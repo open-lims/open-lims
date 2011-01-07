@@ -1,0 +1,97 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Project Tasks",0) -->
+
+<table class='ProjectTaskDetailTable'>
+	<tr>
+		<td>Type:</td>
+		<td>{TYPE}</td>
+	</tr>
+	<tr>
+		<td>Owner:</td>
+		<td>{OWNER}</td>
+	</tr>
+	<tr>
+		<td>Start:</td>
+		<td>
+			{START}
+			
+			<!-- IF ({TASK_ADMIN}) -->
+			
+				(<a href='index.php?{TASK_EDIT_START_PARAMS}'>change</a>)
+			
+			<!-- ENDIF -->
+			
+		</td>
+	</tr>
+	<tr>
+		<td>End:</td>
+		<td>
+			{END}
+			
+			<!-- IF ({TASK_ADMIN}) -->
+			
+				(<a href='index.php?{TASK_EDIT_END_PARAMS}'>change</a>)
+			
+			<!-- ENDIF -->
+			
+		</td>
+	</tr>
+	<tr>
+		<td>Auto Connect:</td>
+		<td>{AUTO_CONNECT}</td>
+	</tr>
+	<tr>
+		<td>Created at:</td>
+		<td>{CREATED_AT}</td>
+	</tr>
+	<tr>
+		<td colspan='2'></td>
+	</tr>
+	
+	<!-- IF ({TASK_TYPE} == 1) -->
+
+		<tr>
+			<td>Task:</td>
+			<td>{NAME}</td>
+		</tr>
+		<tr>
+			<td>Progress:</td>
+			<td>{PROGRESS}</td>
+		</tr>
+		<tr>
+			<td>Begin Status:</td>
+			<td>{BEGIN_STATUS}</td>
+		</tr>
+
+	<!-- ELSEIF ({TASK_TYPE} == 2) -->
+	
+		<tr>
+			<td>Name:</td>
+			<td>{NAME}</td>
+		</tr>
+		<tr>
+			<td>Progress:</td>
+			<td>{PROGRESS}</td>
+		</tr>
+	
+	<!-- ELSEIF ({TASK_TYPE} == 3) -->
+	
+		<tr>
+			<td>Name:</td>
+			<td>{NAME}</td>
+		</tr>
+	
+	<!-- ENDIF -->
+	
+	<!-- IF ({TASK_ADMIN}) -->
+	
+		<tr>
+			<td colspan='2'><a href='index.php?{DELETE_PARAMS}'>Delete Task</a></td>
+		</tr>
+	
+	<!-- ENDIF -->
+	
+</table>
+
+<!-- CONTAINER END (0) -->

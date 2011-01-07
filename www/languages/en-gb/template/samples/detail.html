@@ -1,0 +1,147 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Information","sampleGeneral") -->
+
+<div class='SampleBarcode'>
+	<div class='SampleBarcodeTitle'>Barcode:</div>
+	<div class='SampleBarcodePrint'><a href=''><img src='images/icons/print.png' alt='' style='border:0;'></a></div>
+	<div class='SampleBarcodeImage'>
+		<img src='core/images/barcode.php?type=Code128&#38;string={ID}' alt='Barcode' />
+	</div>
+</div>
+
+<div class='horizontal_line'></div>
+
+<table class='SampleGeneralTable'>
+	<tr>
+		<td>Sample-ID:</td>
+		<td>{ID}</td>
+	</tr>
+	<tr>
+		<td>Sample-Name:</td>
+		<td>{NAME}</td>
+	</tr>
+	<tr>
+		<td>Owner:</td>
+		<td><a href=''>{OWNER}</a></td>
+	</tr>
+	<tr>
+		<td>Current Depository:</td>
+		<td>{DEPOSITORY} (<a href='index.php?{DEPOSITORY_HISTORY_PARAMS}'>History</a>)</td>
+	</tr>
+	<tr>
+		<td>Supplier/Source:</td>
+		<td>{SUPPLIER}</td>
+	</tr>
+	<tr>
+		<td>Date/Time:</td>
+		<td>{DATETIME}</td>
+	</tr>
+	<tr>
+		<td>Template:</td>
+		<td>{TEMPLATE}</td>
+	</tr>
+	<tr>
+		<td>Status:</td>
+		<td>{STATUS}</td>
+	</tr>
+	<tr>
+		<td>Permissions:</td>
+		<td>{PERMISSIONS}</td>
+	</tr>
+</table>
+
+<!-- CONTAINER END ("sampleGeneral") -->
+
+
+<!-- CONTAINER BEGIN ("I want to...","sampleMenu") -->
+
+	<!-- FOREACH BEGIN ({ACTION}) -->
+	
+		<!-- IF ({ACTION:PERMISSION}) -->
+	
+			<!-- IF ({ACTION:STATUS} == 1) -->
+		
+				<a href='index.php?{ACTION:PARAMS}' class='projectEasyButton'>
+					<span class='projectEasyIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
+					<span class='projectEasyText'>{ACTION:NAME}</span>
+				</a>
+			
+			<!-- ELSEIF ({ACTION:STATUS} == 2) -->
+			
+				<a href='index.php?{ACTION:PARAMS}' class='projectEasyButton'>
+					<span class='projectEasyIcon'><img src='images/icons_30/add_done.png' alt='' border='0' /></span>
+					<span class='projectEasyText'>{ACTION:NAME}</span>
+				</a>
+			
+			<!-- ELSE -->
+			
+				<a class='projectEasyButton'>
+					<span class='projectEasyIcon'><img src='images/icons_30/add_done_na.png' alt='' border='0' /></span>
+					<span class='projectEasyText'>{ACTION:NAME}</span>
+				</a>
+						
+			<!-- ENDIF -->
+			
+		<!-- ELSE -->
+		
+			<a class='projectEasyButton'>
+				<span class='projectEasyIcon'><img src='images/icons_30/add_na.png' alt='' border='0' /></span>
+				<span class='projectEasyText'>{ACTION:NAME}</span>
+			</a>
+		
+		<!-- ENDIF -->
+	
+	<!-- FOREACH END -->	
+
+
+<div class='horizontal_line'></div>
+
+<a href='index.php?{MOVE_PARAMS}' class='projectEasyButton'>
+	<span class='projectEasyIcon'><img src='images/icons_30/sample_move.png' alt='' border='0' /></span>
+	<span class='projectEasyText'>move sample</span>
+</a>
+
+<a href='index.php?{AVAILABILITY_PARAMS}' class='projectEasyButton'>
+	<span class='projectEasyIcon'><img src='images/icons_30/sample_status.png' alt='' border='0' /></span>
+	<span class='projectEasyText'>set {NEW_STATUS}</span>
+</a>
+
+<!-- IF ({IS_OWNER}) -->
+
+	<div class='horizontal_line'></div>
+
+	<a href='index.php?{RENAME_PARAMS}' class='projectEasyButton'>
+		<span class='projectEasyIcon'><img src='images/icons_30/sample_rename.png' alt='' border='0' /></span>
+		<span class='projectEasyText'>rename sample</span>
+	</a>
+
+	<a href='index.php?{USER_PERMISSIONS_PARAMS}' class='projectEasyButton'>
+		<span class='projectEasyIcon'><img src='images/icons_30/users.png' alt='' border='0' /></span>
+		<span class='projectEasyText'>set user permissions</span>
+	</a>
+	
+	<a href='index.php?{OU_PERMISSIONS_PARAMS}' class='projectEasyButton'>
+		<span class='projectEasyIcon'><img src='images/icons_30/organ_units.png' alt='' border='0' /></span>
+		<span class='projectEasyText'>set organisation unit permissions</span>
+	</a>
+	
+<!-- ENDIF -->
+
+<!-- IF ({IS_ADMIN}) -->
+
+	<a href='index.php?{DELETE_PARAMS}' class='projectEasyButton'>
+		<span class='projectEasyIcon'><img src='images/icons_30/delete_sample.png' alt='' border='0' /></span>
+		<span class='projectEasyText'>delete sample</span>
+	</a>
+
+<!-- ENDIF -->
+
+<div class='horizontal_line'></div>
+						
+<a href='index.php?{ADD_SUBSAMPLE_PARAMS}' class='projectEasyButton'>
+	<span class='projectEasyIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
+	<span class='projectEasyText'>add a sub-sample</span>
+</a>
+
+<!-- CONTAINER END ("sampleMenu") -->

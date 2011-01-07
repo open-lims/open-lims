@@ -1,0 +1,66 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Organisation Units",0) -->
+
+<div class='boxIconBar'>
+	<a href='index.php?{ADD_PARAMS}'>
+		<img src='images/icons/add_child.png' alt='new' border='0' />
+	</a>&nbsp;
+	<a href='index.php?{ADD_PARAMS}'>Add Organisation Unit</a> (to root)
+</div>
+
+<table class='OverviewTable'>
+	<tr>
+		<th width='16px'></th>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Owner</th>
+		<th>Leader</th>
+		<th>DE</th>
+		<th>ED</th>
+		<th>UW</th>
+		<th>DW</th>
+		<th>CC</th>
+		<th>VI</th>
+	</tr>
+
+	<tr>
+		<td colspan='11'>
+		<div class='adminOrganUnitDotted'>&nbsp;</div>
+		</td>
+	</tr>
+
+	<!-- FOREACH BEGIN ({OU}) -->
+
+	<tr>
+		<td><div style='padding-left: {OU:PADDING}em'><img src='images/icons/{OU:ICON}' alt='' /></div></td>
+		<td><a href='index.php?{OU:DETAIL_PARAMS}'>{OU:NAME}</a></td>
+		<td>{OU:TYPE}</td>
+		<td>{OU:OWNER}</td>
+		<td>{OU:LEADER}</td>
+		<td><a href='index.php?{OU:DELETE_PARAMS}'><img	src='images/icons/delete_organunit.png' alt='' style='border: 0;' /></a></td>
+		<td><a href='index.php?{OU:DETAIL_PARAMS}'><img	src='images/icons/edit_organunit.png' alt='' style='border: 0;' /></a></td>
+		<td><a href='{OU:UPWARDS_PARAMS}'><img src='images/icons/{OU:UPWARDS_ICON}' alt='' style='border: 0;' /></a></td>
+		<td><a href='{OU:DOWNWARDS_PARAMS}'><img src='images/icons/{OU:DOWNWARDS_ICON}' alt='' style='border: 0;' /></a></td>
+		<td><a href='index.php?{OU:ADD_CHILD_PARAMS}'><img src='images/icons/add_child.png' alt='' style='border: 0;' /></a></td>
+		<td><a href='index.php?{OU:HIDE_PARAMS}'><img src='images/icons/{OU:HIDE_ICON}' alt='' style='border: 0;' /></a></td>
+	</tr>
+
+	<!-- IF ({OU:SHOW_LINE}) -->
+
+	<tr>
+		<td colspan='11'>
+		<div class='adminOrganUnitDotted'>&nbsp;</div>
+		</td>
+	</tr>
+
+	<!-- ENDIF -->
+
+	<!-- FOREACH END -->
+
+</table>
+<div class='adminOrganUnitSolid'>&nbsp;</div>
+DE = Delete; ED = Edit; UW = Upward; DW = Downward; CC = Create Child;
+VI = Visible
+
+<!-- CONTAINER END (0) -->

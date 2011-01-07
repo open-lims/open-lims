@@ -1,0 +1,59 @@
+
+<br />
+
+<!-- CONTAINER BEGIN ("{TITLE}",0) -->
+
+<div class='boxIconBar'>
+
+<!-- IF ({FOLDER_IMAGE}) -->	
+
+<div class='boxIcon'><img src='images/icons/images.png' alt='' />&nbsp;<a href='index.php?{FOLDER_IMAGE_PARAMS}'>Image Browser</a></div>
+				
+<!-- ELSE -->
+						
+<div class='boxIcon'><img src='images/icons/images_d.png' alt='' />&nbsp;<span class='FontDeactivated'>Image Browser</span></div>
+				
+<!-- ENDIF -->
+
+
+
+<!-- IF ({ADD_FILE}) -->
+				
+<div class='boxIcon'><img src='images/icons/add.png' alt='' />&nbsp;<a href='index.php?{ADD_FILE_PARAMS}'>Add File</a></div>
+	
+<!-- ELSE -->							
+				
+<div class='boxIcon'><img src='images/icons/add_na.png' alt='' />&nbsp;<span class='FontDeactivated'>Add File</span></div>
+
+<!-- ENDIF -->				
+
+
+<div class='boxIcon'><img src='images/icons/folder_home.png' alt='' />&nbsp;<a href='index.php?{HOME_FOLDER_PARAMS}'>Home Folder</a></div>		
+
+
+<!-- IF ({FOLDER_ADMINISTRATION}) -->
+				
+<div class='boxIcon'><img src='images/icons/folder_administration.png' alt='' />&nbsp;<a href='index.php?{FOLDER_ADMINISTRATION_PARAMS}'>Folder Administration</a></div>
+
+<!-- ELSE -->
+				
+<div class='boxIcon'><img src='images/icons/folder_administration_na.png' alt='' />&nbsp;<span class='FontDeactivated'>Folder Administration</span></div>
+				
+<!-- ENDIF -->		
+
+<!-- IF ({ITEM_ADMINISTRATION}) -->
+				
+<div class='boxIcon'><img src='images/icons/item_administration.png' alt='' />&nbsp;<a href='index.php?{ITEM_ADMINISTRATION_PARAMS}'>Item Administration</a></div>
+
+<!-- ELSE -->
+				
+<div class='boxIcon'><img src='images/icons/item_administration_na.png' alt='' />&nbsp;<span class='FontDeactivated'>Item Administration</span></div>
+				
+<!-- ENDIF -->	
+
+
+</div>
+
+{TABLE}
+
+<!-- CONTAINER END (0) -->

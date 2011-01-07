@@ -1,0 +1,68 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Search",0) -->
+
+<br />
+<div class='SearchContainer'>
+<form action='index.php?{PARAMS}' method='post' onsubmit='return submitForm(this.submitbutton)'>
+<div class='center'><span class='bold'>Data Search</span></div>
+<br />
+<br />
+<table class='SearchTable'>
+	<tr>
+		<td colspan='2'>
+			<input type='text' name='string' size='47' class='FormTextfield' />
+			<span class='formError'>{ERROR}</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan='2'><div class='center'><span class='smallTextBlack'>use * as a wildcard character</span></div></td>
+	</tr>
+	<tr>
+		<td colspan='2'><br /></td>
+	</tr>
+	<tr>
+		<td colspan='2'>
+		
+			<div id='SearchDataAjaxProject'>
+			<div class='SearchDataSwitcher'><a href='#' onclick='toogleDataSearchProject()' style='text-decoration: underline;'>Projects</a></div>
+			<div class='SearchDataSwitcher'><a href='#' onclick='toogleDataSearchSample()'>Samples</a></div>
+			<select class='SearchCommonSelect' id='SearchDataAjaxSelectProject' size='8' name='project_id'>
+			
+				<option value='0' selected='selected'>All</option>
+			
+				<!-- FOREACH BEGIN ({PROJECT}) -->
+		
+					<option value='{PROJECT:VALUE}' {PROJECT:SELECTED}>{PROJECT:CONTENT}</option>
+		
+				<!-- FOREACH END -->
+			
+			</select>
+			</div>
+			
+			<div id='SearchDataAjaxSample' style='display: none;'>
+			<div class='SearchDataSwitcher'><a href='#' onclick='toogleDataSearchProject()'>Projects</a></div>
+			<div class='SearchDataSwitcher'><a href='#' onclick='toogleDataSearchSample()' style='text-decoration: underline;'>Samples</a></div>
+			<select class='SearchCommonSelect' id='SearchDataAjaxSelectSample' size='8'>
+			
+				<option value='0' selected='selected'>All</option>
+			
+				<!-- FOREACH BEGIN ({SAMPLE}) -->
+		
+					<option value='{SAMPLE:VALUE}' {SAMPLE:SELECTED}>{SAMPLE:CONTENT}</option>
+		
+				<!-- FOREACH END -->
+			
+			</select>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td colspan='2'><br /><input type='submit' value='Search' class='FormButton' /></td>
+	</tr>
+</table>
+<br />
+</form>
+</div>
+					
+<!-- CONTAINER END (0) -->

@@ -1,0 +1,37 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Associate Sample",0) -->
+
+<form action='index.php?{PARAMS}' method='post'>
+<br />
+	<table class='formTable'>
+	<tr>
+		<td colspan='2'>Select Sample<br /><br /></td>
+	</tr>
+		<tr>
+			<td width='30%'>Sample:</td>
+			<td>
+				<select name='sample'>
+				
+				<!-- FOREACH BEGIN ({SAMPLE}) -->
+				
+					<option value='{SAMPLE:VALUE}' {SAMPLE:SELECTED}>{SAMPLE:CONTENT}</option>
+				
+				<!-- FOREACH END -->				
+				
+				</select>
+			</td>
+		</tr>
+			
+	
+	<tr>
+		<td colspan='2'><br />
+			<div class='button_right'><input type='submit' value='next' name='submitbutton' class='next_button' /></div>
+		</td>
+	</tr>
+</table>
+<input type='hidden' name='template_data_type' value='sample' />
+</form>
+
+
+<!-- CONTAINER END (0) -->

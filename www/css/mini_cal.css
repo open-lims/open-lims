@@ -1,0 +1,60 @@
+.mini_cal {
+	background-color: #F0F0F0;
+	font: normal 12px Arial, Helvetica, sans-serif;
+	padding: 4px;
+}
+
+#mini_cal_close {
+	float: right;
+}
+
+#mini_cal_close :hover,#mini_cal_close :active,#mini_cal_close :focus {
+	text-decoration: underline;
+}
+
+#mini_cal_left {
+	float: left;
+	height: 16px;
+	width: 16px;
+	background-image: url(../images/icons/previous.png);
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+#mini_cal_middle {
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#mini_cal_right {
+	float: right;
+	height: 16px;
+	width: 16px;
+	background-image: url(../images/icons/next.png);
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+.mini_cal_clear {
+	clear: both;
+	height: 0px;
+}
+
+.mini_cal_table {
+	font: normal 10px Arial, Helvetica, sans-serif;
+	border-collapse: collapse;
+	text-align: center;
+}
+
+.mini_cal_table td {
+	width: 18px;
+	height: 16px;
+	border: 1px #C0C0C0 solid;
+	color: #336699;
+}
+
+.mini_cal_table td:hover,.mini_cal_table td:active,.mini_cal_table td:focus
+	{
+	text-decoration: underline;
+}

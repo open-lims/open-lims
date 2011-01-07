@@ -1,0 +1,63 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Folder Administration",0) -->
+
+	<div style='width: 80%; margin: 0 auto; padding: 20px 0;'>
+
+	<!-- IF ({CHANGE_PERMISSION}) -->
+					
+		<div><img src='images/icons/permissions.png' alt='' />&nbsp;<a href='index.php?{CHANGE_PERMISSION_PARAMS}'>Change Permissions</a></div>
+	
+	<!-- ELSE -->
+					
+		<div><img src='images/icons/permissions_na.png' alt='' />&nbsp;<span class='FontDeactivated'>Change Permissions</span></div>
+					
+	<!-- ENDIF -->			
+
+
+
+	<!-- IF ({ADD}) -->
+		
+		<div><img src='images/icons/add.png' alt='' />&nbsp;<a href='index.php?{ADD_FOLDER_PARAMS}'>Add Folder</a></div>
+	
+	<!-- ELSE -->
+	
+		<div><img src='images/icons/add.png' alt='' />&nbsp;<span class='FontDeactivated'>Add Folder</span></div>
+		
+	<!-- ENDIF -->	
+
+
+
+	<!-- IF ({CMD}) -->
+										
+		<div><img src='images/icons/remove.png' alt='' />&nbsp;<a href='index.php?{DELETE_FOLDER_PARAMS}'>Delete Folder</a></div>
+	
+		<div><img src='images/icons/move.png' alt='' />&nbsp;<a href='index.php?{MOVE_FOLDER_PARAMS}'>Move Folder</a></div>
+	
+		<div><img src='images/icons/copy.png' alt='' />&nbsp;<span class='FontDeactivated'>Copy Folder</span></div>
+	
+	<!-- ELSE -->
+									
+		<div><img src='images/icons/remove.png' alt='' />&nbsp;<span class='FontDeactivated'>Delete Folder</span></div>
+		
+		<div><img src='images/icons/move.png' alt='' />&nbsp;<span class='FontDeactivated'>Move Folder</span></div>
+		
+		<div><img src='images/icons/copy.png' alt='' />&nbsp;<span class='FontDeactivated'>Copy Folder</span></div>
+		
+	<!-- ENDIF -->	
+
+
+
+	<!-- IF ({RENAME}) -->
+
+	<div><img src='images/icons/rename.png' alt='' />&nbsp;<span class='FontDeactivated'>Rename Folder</span></div>
+
+	<!-- ELSE -->
+	
+	<div><img src='images/icons/rename.png' alt='' />&nbsp;<span class='FontDeactivated'>Rename Folder</span></div>
+
+	<!-- ENDIF -->
+
+</div>
+
+<!-- CONTAINER END (0) -->	

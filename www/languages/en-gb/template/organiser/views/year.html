@@ -1,0 +1,82 @@
+<div class='CalendarHead'>
+	<a href='index.php?{PREVIOUS_PARAMS}'><img src='images/icons/previous.png' alt='' border='0' /></a>
+	{YEAR}
+	<a href='index.php?{NEXT_PARAMS}'><img src='images/icons/next.png' alt='' border='0' /></a>
+</div>
+<br />
+		
+<table class='CalendarYearTable'>
+	<tr>
+	
+	<!-- FOREACH BEGIN ({CONTENT_ARRAY}) -->
+		
+		<td>
+			<div class='CalendarYearMonth'>
+				<div class='CalendarYearMonthTitle'>{CONTENT_ARRAY:MONTHNAME}</div>
+				<table>
+					<tr>
+						<td></td>
+						<td><span class='CalendarYearWDay'>Mon</span></td>
+						<td><span class='CalendarYearWDay'>Tue</span></td>
+						<td><span class='CalendarYearWDay'>Wed</span></td>
+						<td><span class='CalendarYearWDay'>Thu</span></td>
+						<td><span class='CalendarYearWDay'>Fri</span></td>
+						<td><span class='CalendarYearWDay'>Sat</span></td>
+						<td><span class='CalendarYearWDay'>Sun</span></td>
+					</tr>
+	
+	
+		<!-- FOREACH BEGIN ({CONTENT_ARRAY}) -->
+	
+			<tr>
+				<td><span class='CalendarYearWeek'>{CONTENT_ARRAY:WEEK}</span></td>
+				
+			<!-- FOREACH BEGIN ({CONTENT_ARRAY}) -->
+		
+				<!-- IF ({CONTENT_ARRAY:LINK}) -->
+				
+					<!-- IF ({CONTENT_ARRAY:DATE}) -->
+
+						<td><span class='CalendarYearDate'><a href='index.php?{CONTENT_ARRAY:LINK_PARAMS}'>{CONTENT_ARRAY:CONTENT}</a></span></td>
+					
+					<!-- ELSE -->
+
+						<td><a href='index.php?{CONTENT_ARRAY:LINK_PARAMS}'>{CONTENT_ARRAY:CONTENT}</a></td>
+					
+					<!-- ENDIF -->
+				
+				<!-- ELSE -->
+				
+					<!-- IF ({CONTENT_ARRAY:DATE}) -->
+				
+						<td><span class='CalendarYearDate'>{CONTENT_ARRAY:CONTENT}</span></td>
+					
+					<!-- ELSE -->
+						
+						<td>{CONTENT_ARRAY:CONTENT}</td>
+					
+					<!-- ENDIF -->
+				
+				<!-- ENDIF -->
+			
+			<!-- FOREACH END -->
+			
+				</tr>
+			
+		<!-- FOREACH END -->
+	
+		</table>
+		</div>
+		</td>
+		
+		<!-- IF ({CONTENT_ARRAY:DISPLAY_TR}) -->
+	
+		</tr><tr>
+	
+		<!-- ENDIF -->
+	
+	<!-- FOREACH END -->
+
+	</tr>
+
+</table>

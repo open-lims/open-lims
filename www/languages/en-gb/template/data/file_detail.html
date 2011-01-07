@@ -1,0 +1,174 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Detail: {TITLE}",0) -->
+
+<div class='boxIconBar'>
+	<div class='boxIconLeft'>
+
+	Version {VERSION} (<a href='index.php?{VERSION_LIST_LINK}'>History</a>)
+	
+	</div>
+	<div class='boxIconRight'>
+		<form  action='index.php' method='get'>
+		<select name='version'>
+		<option value='{VERSION}'>Version {VERSION} - {VERSION_DATETIME}</options>
+		
+		<!-- FOREACH BEGIN (VERSION_OPTION) -->
+		
+		<option value='{VERSION_OPTION:VERSION}'>{VERSION_OPTION:TEXT}</option>
+		
+		<!-- FOREACH END -->
+		
+		</select>
+		<input type='submit' value='open' class='FormButton' />
+		
+		<!-- FOREACH BEGIN (GET) -->		
+
+		<input type='hidden' value='{GET:VALUE}' name='{GET:KEY}' />
+
+		<!-- FOREACH END -->
+
+		</form>
+	</div>
+</div>
+
+<div class='filebox'>
+<div class='filebox_left'>
+<table class='file_info_table'>
+	<tr>
+		<td>Name:</td>
+		<td>{NAME}</td>
+	</tr>
+	<tr>
+		<td>Path:</td>
+		<td>{PATH}</td>
+	</tr>
+	<tr>
+		<td>Size:</td>
+		<td>{SIZE} ({SIZE_IN_BYTE} Byte)</td>
+	</tr>
+	<tr>
+		<td>Creation date:</td>
+		<td>{CREATION_DATETIME}</td>
+	</tr>
+	<tr>
+		<td>Version date:</td>
+		<td>{VERSION_DATETIME}</td>
+	</tr>
+	<tr>
+		<td>MIME type:</td>
+		<td>{MIME_TYPE}</td>
+	</tr>
+	<tr>
+		<td>Owner:</td>
+		<td>{OWNER}</td>
+	</tr>
+	<tr>
+		<td>MD5:</td>
+		<td>{CHECKSUM}</td>
+	</tr>
+	<tr>
+		<td>Permission:</td>
+		<td>{PERMISSION}</td>
+	</tr>
+	<tr>
+		<td>Comment:</td>
+		<td>{COMMENT} (<a href='index.php?{COMMENT_CHANGE_LINK}'>change</a>)</td>
+	</tr>
+</table>
+</div>
+<div class='filebox_right'>
+			
+{THUMBNAIL_IMAGE}
+			
+</div>
+</div>
+<br />
+<br />
+<div class='FileDetailMenu'>
+
+	<div class='FileDetailLeft'>
+	
+		<div class='FileDetailAdminMenuHead'>File Administration</div>
+	
+		<ul class='FileDetailAdminMenu'>
+			
+			<!-- IF ({WRITE_ACCESS}) -->
+		
+			<li>
+				<a href='index.php?{UPDATE_PARAMS}'>
+					<span class='FileDetailAdminMenuIcon'><img src='images/icons/upload.png' alt='' border='0' /></span>
+					<span class='FileDetailAdminMenuTitle'>Upload Newer Version (Update)</span>
+				</a>
+			</li>
+			<li>
+				<a href='index.php?{UPDATE_MINOR_PARAMS}'>
+					<span class='FileDetailAdminMenuIcon'><img src='images/icons/upload.png' alt='' border='0' /></span>
+					<span class='FileDetailAdminMenuTitle'>Upload Minor Version</span>
+				</a>
+			</li>
+			
+			<!-- ENDIF -->
+			
+			<!-- IF ({CHANGE_PERMISSION}) -->
+			
+			<li>
+				<a href='index.php?{SET_PERMISSION_PARAMS}'>
+					<span class='FileDetailAdminMenuIcon'><img src='images/icons/permissions.png' alt='' border='0' /></span>
+					<span class='FileDetailAdminMenuTitle'>Set File Permission</span>
+				</a>
+			</li>
+			
+			<!-- ENDIF -->
+			
+			<!-- IF ({DELETE_ACCESS}) -->
+			
+			<li>
+				<a href='index.php?{DELETE_FILE_PARAMS}'>
+					<span class='FileDetailAdminMenuIcon'><img src='images/icons/delete.png' alt='' border='0' /></span>
+					<span class='FileDetailAdminMenuTitle'>Delete File</span>
+				</a>
+			</li>
+			<li>
+				<a href='index.php?{DELETE_FILE_VERSION_PARAMS}'>
+					<span class='FileDetailAdminMenuIcon'><img src='images/icons/delete.png' alt='' border='0' /></span>
+					<span class='FileDetailAdminMenuTitle'>Delete Version (including minor versions)</span>
+				</a>
+			</li>
+			
+			<!-- ENDIF -->
+			
+		</ul>
+	
+	</div>
+	
+	<div class='FileDetailRight'>
+	
+		<div class='FileDetailDownload'>
+	
+			<div class='FileDetailDownloadImage'>
+				<a href='download.php?{DOWNLOAD_PARAMS}'><img src='images/icons_large/download_50.png' alt='' border='0' /></a>
+			</div>
+			
+			<div class='FileDetailDownloadText'>
+				<a href='download.php?{DOWNLOAD_PARAMS}'>Open/Download File</a>
+			</div>
+		
+		</div>
+
+
+	</div>
+	
+	<div class='FileDetailClear'>
+	</div>
+
+
+</div>
+
+						
+<!-- CONTAINER END (0) -->					
+
+<br />
+<div class='center'><a href='index.php?{BACK_LINK}'>back</a></div>
+
+

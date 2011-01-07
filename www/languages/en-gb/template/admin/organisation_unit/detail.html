@@ -1,0 +1,105 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Organisation Unit Detail",0) -->
+
+<table width='50%'>
+	<tr>
+		<td><span class='bold'>Name:</span></td>
+		<td>{NAME}</td>
+		<td>
+		
+		<!-- IF ({IS_ADMIN}) -->
+		
+			<a href='index.php?{NAME_PARAMS}'>change</a>
+				
+		<!-- ENDIF -->
+		
+		</td>
+	</tr>
+	<tr>
+		<td><span class='bold'>Owner:</span></td>
+		<td>{OWNER}</td>
+		<td>
+		
+		<!-- IF ({IS_ADMIN}) -->
+		
+			<a href='index.php?{OWNER_PARAMS}'>change</a>
+				
+		<!-- ENDIF -->
+		
+		</td>
+	</tr>
+	<tr>
+		<td><span class='bold'>Leader:</span></td>
+		<td>{LEADER}</td>
+		<td>
+		
+		<!-- IF ({IS_ADMIN}) -->
+		
+			<a href='index.php?{LEADER_PARAMS}'>change</a>
+				
+		<!-- ENDIF -->
+		
+		</td>
+	</tr>
+</table>
+
+<br /><div class='horzontalLineGrey'></div>
+<div class='boxIconBar'><a href='index.php?{ADD_USER_PARAMS}'><img src='images/icons/add_user.png' alt='new' border='0' /></a>&nbsp;<a href='index.php?{ADD_USER_PARAMS}'>Add User</a></div>
+
+<table class='OverviewTable'>
+	<tr>
+		<th>Username:</th>
+		<th>Fullname:</th>
+		<th width='15%'>Delete:</th>
+	</tr>
+					
+	<!-- FOREACH BEGIN ({USER}) -->
+			
+		<tr>
+			<td>{USER:USERNAME}</td>
+			<td>{USER:FULLNAME}</td>
+			<td><a href='index.php?{USER:DELETE_PARAMS}'>delete</a></td>
+		</tr>
+	
+	<!-- FOREACH END -->
+	
+	<!-- IF ({NO_USER}) -->
+	
+		<tr>
+			<td colspan='2'><span class='italic'>No User Found!</span></td>
+		</tr>
+	
+	<!-- ENDIF -->
+
+</table>
+
+<div class='horzontalLineGrey'></div>
+<div class='boxIconBar'><a href='index.php?{ADD_GROUP_PARAMS}'><img src='images/icons/add_group.png' alt='new' border='0' /></a>&nbsp;<a href='index.php?{ADD_GROUP_PARAMS}'>Add Group</a></div>
+
+<table class='OverviewTable'>
+	<tr>
+		<th>Groupname:</th>
+		<th width='15%'>Delete:</th>
+	</tr>
+	
+	<!-- FOREACH BEGIN ({GROUP}) -->
+			
+		<tr>
+			<td>{GROUP:NAME}</td>
+			<td><a href='index.php?{GROUP:DELETE_PARAMS}'>delete</a></td>
+		</tr>
+	
+	<!-- FOREACH END -->
+	
+	<!-- IF ({NO_GROUP}) -->
+	
+		<tr>
+			<td colspan='2'><span class='italic'>No Groups Found!</span></td>
+		</tr>
+	
+	<!-- ENDIF -->
+	
+</table>
+
+<!-- CONTAINER END (0) -->

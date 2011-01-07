@@ -1,0 +1,68 @@
+<br />
+
+<!-- CONTAINER BEGIN ("File Upload",0) -->
+
+<iframe src='core/modules/data/file.upload.php?{PARAMS}' name='hidden_uploader' style='display: none;'></iframe>
+<iframe src='core/modules/data/file_check.upload.php?{PARAMS}' name='hidden_upload_checker' style='display: none;'></iframe>
+
+<div class='file_upload_container'>
+<br />
+<br />
+<form enctype='multipart/form-data' action='core/modules/data/file.upload.php?{PARAMS}' method='post' target='hidden_uploader'>
+<table class='formTable'>
+	
+	<tbody id='uploader_tbody'>
+	
+		<tr>
+			<td><span class='smallText'>Notice: You can leave upload-fields empty</span><br /><br /></td>
+		</tr>
+								
+		<tr>
+			<td>1. file</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><input type='file' name='file-1' id='file-1' value='' /></td>
+		</tr>
+		<tr>
+			<td><span class='formError' id='file-1-error'></span></td>
+		</tr>
+	
+		<tr id='uploader_break'>
+			<td colspan='2'><br /></td>
+		</tr>
+	
+		<tr>
+			
+			<td colspan='2'>I want to add <input type='textfield' size='2' value='1' id='uploader_number_of_fields' class='FormTexfield' /> more file(s) <button type='button' id='uploader_add_fields' class='FormButton'>OK</button></td>
+	
+		</tr>
+						
+		<tr>
+			<td colspan='2'>
+				<br />
+				<input type='hidden' name='file_amount' id='uploader_file_amount' value='1' />
+				<input type='hidden' value='{DESCRIPTION}' name='description' />
+				<input type='hidden' value='{KEYWORDS}' name='keywords' />
+				<button type='submit' id='uploader_upload' class='FormButton'>Upload</button>
+			</td>
+	</tr>
+	
+	</tbody>
+	
+</table>
+
+<script language='javascript'>
+var upload_reload = false;
+uploader = new Uploader();
+uploader.setUniqueId('{UNIQUE_ID}');
+uploader.setSessionId('{SESSION_ID}');
+</script>
+
+</form>
+<br />
+<br />
+</div>
+<div id='AjaxProceed'></div>
+
+<!-- CONTAINER END (0) -->

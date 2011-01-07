@@ -1,0 +1,41 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Move Sample",0) -->
+
+<div class='ProjectReorgaContainer'>
+<br />
+<form action='index.php?{PARAMS}' method='post'>
+	<table class='ProjectReorgaTable'>
+		<tr>
+			<td>Select new Depository</td>
+		</tr>
+		<tr>
+			<td>
+				<select name='depository' size='10' class='ProjectCreateSelect' />
+		
+				<!-- FOREACH BEGIN ({OPTION}) -->
+		
+				<option value='{OPTION:VALUE}'>{OPTION:CONTENT}</option>
+		
+				<!-- FOREACH END -->
+		
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td><span class='formError'>{ERROR}</span></td>
+		</tr>
+		<tr>
+			<td>
+				<div class='button_right'>
+					<br />
+					<input type='submit' value='next' name='submitbutton' class='next_button' />
+				</div>
+			</td>
+		</tr>
+	</table>
+</form>
+<br />
+</div>
+
+<!-- CONTAINER END (0) -->	

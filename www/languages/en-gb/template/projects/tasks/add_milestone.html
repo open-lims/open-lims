@@ -1,0 +1,65 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Add Project Task",0) -->
+
+	<br />
+	<form action='index.php?{PARAMS}' method='post'>
+	<table class='formTable'>
+		<tr>
+			<td width='20%'>Auto-Connect:</td>
+			<td>
+				<input type='checkbox' name='auto_connect' value='1' checked='checked' />
+			</td>
+		</tr>
+		<tr>
+			<td colspan='2'><div class='horizontal_line'>&nbsp;</div></td>
+		</tr>
+		<tr>
+			<td width='20%'>Name:</td>
+			<td>
+				<input type='text' name='name' value='{NAME}' class='FormTextfield' />
+				<span class='formError'>{ERROR0}</span>
+			</td>
+		</tr>
+		<tr>
+			<td colspan='2'><div class='horizontal_line'>&nbsp;</div></td>
+		</tr>
+		<tr>
+			<td width='20%'>Date:</td>
+			<td>
+				<input type='text' id='enddate' name='enddate' class='FormTextfield' value='{ENDDATE}' />
+				<a href='#' onclick='selectDate("enddate",event)'><img src='images/icons/month.png' style='border: 0;' /></a>
+				<span class='formError'>{ERROR1}</span>
+			</td>
+		</tr>
+		<tr>
+			<td colspan='2'><div class='horizontal_line'>&nbsp;</div></td>
+		</tr>
+		<tr>
+			<td>Time:</td>
+			<td>
+				<input type='text' name='time1' size='2' class='FormTextfield' maxlength='2' value='{TIME1}' />:<input type='text' name='time2' size='2' class='FormTextfield' maxlength='2' value='{TIME2}' />
+			</td>
+		</tr>
+		<tr>
+			<td colspan='2'><div class='horizontal_line'>&nbsp;</div></td>
+		</tr>
+		<tr>
+			<td colspan='2'>Comment</td>
+		</tr>
+		<tr>
+			<td colspan='2'>
+				<textarea name='comment' cols='64' rows='8' class='FormTextarea'>{COMMENT}</textarea>
+			</td>
+		</tr>
+		<tr>
+			<td colspan='2'><div class='horizontal_line'>&nbsp;</div></td>
+		</tr>
+		<tr>
+			<td colspan='2'><br /><input type='submit' value='next' name='submitbutton' class='FormButton'></td>
+		</tr>
+	</table>
+	<input type='hidden' name='type' value='{TYPE}' />
+	</form>
+	
+<!-- CONTAINER END (0) -->

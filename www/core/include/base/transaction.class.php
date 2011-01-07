@@ -1,0 +1,200 @@
+<?php
+/**
+ * @package base
+ * @version 0.4.0.0
+ * @author Roman Konertz
+ * @copyright (c) 2008-2010 by Roman Konertz
+ * @license GPLv3
+ * 
+ * This file is part of Open-LIMS
+ * Available at http://www.open-lims.org
+ * 
+ * This program is free software;
+ * you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation;
+ * version 3 of the License.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program;
+ * if not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * 
+ */
+require_once("interfaces/transaction.interface.php");
+
+if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
+{
+	require_once("access/transaction.access.php");
+}
+
+/**
+ * DB Transaction Management Class
+ * @package base
+ */
+class Transaction implements TransactionInterface {
+
+	private $unique_id;
+	private $is_copy;
+
+    function __construct()
+    {
+    	if (!$GLOBALS[transaction] or $GLOBALS[transaction] == false)
+    	{
+    		$this->unique_id = null;
+    		$this->is_copy = false;
+    		$GLOBALS[transaction] = true;
+    	}
+    	else
+    	{
+    		$this->is_copy = true;
+    	}
+    }
+    
+    function __destruct()
+    {
+    	unset($GLOBALS[transaction]);
+    	unset($this->unique_id);
+    	unset($this->is_copy);
+    }
+    
+    /**
+     * Starts a new transaction
+     * @return string
+     */
+    public function begin()
+    {
+    	global $db;
+    	
+    	if ($this->unique_id == null and $this->is_copy == false)
+    	{
+    		$this->unique_id = uniqid();
+    		$db->query_log_start();
+    		Transaction_Access::begin();
+    		return $this->unique_id;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+    /**
+     * Commits a transaction
+     * @param string $unique_id
+     * @return bool
+     */
+    public function commit($unique_id)
+    {
+    	global $db;
+    	
+    	if ($unique_id != null and $this->unique_id != null and $this->is_copy == false)
+    	{
+    		if ($unique_id == $this->unique_id)
+    		{
+    			Transaction_Access::commit();
+    			$db->query_log_end();
+    			$this->unique_id = null;
+    			if ($GLOBALS[enable_db_log_on_commit] == true)
+    			{
+	    			if (is_writable($GLOBALS[log_dir]))
+	    			{
+	    				$filename = date("Ymd-His")."-".uniqid()."-commit.txt";
+	    				$handle = fopen($GLOBALS[log_dir]."/".$filename, "w");
+	    				fwrite($handle, $db->get_query_log());
+	    			}
+    			}
+    			return true;
+    		}
+    		else
+    		{
+    			return false;
+    		}
+    	}
+    	else
+    	{
+    		return false;
+    	}	
+    }
+    
+    /**
+     * Undo all DB-Changes since begin
+     * @param string $unique_id
+     * @return bool
+     */
+    public function rollback($unique_id)
+    {
+    	global $db;
+    	
+    	if ($unique_id != null and $this->unique_id != null and $this->is_copy == false)
+    	{
+    		if ($unique_id == $this->unique_id)
+    		{
+    			Transaction_Access::rollback();
+    			$db->query_log_end();
+    			$this->unique_id = null;
+    			if ($GLOBALS[enable_db_log_on_rollback] == true)
+    			{
+	    			if (is_writable($GLOBALS[log_dir]))
+	    			{
+	    				$filename = date("Ymd-His")."-".uniqid()."-rollback.txt";
+	    				$handle = fopen($GLOBALS[log_dir]."/".$filename, "w");
+	    				fwrite($handle, $db->get_query_log());
+	    			}
+    			}
+    			return true;
+    		}
+    		else
+    		{
+    			return false;
+    		}
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
+    
+    /**
+     * Undo all DB-Changes since begin (expected in difference to rollback())
+     * @param string $unique_id
+     * @return bool
+     */
+    public function expected_rollback($unique_id)
+    {
+    	global $db;
+    	
+    	if ($unique_id != null and $this->unique_id != null and $this->is_copy == false)
+    	{
+    		if ($unique_id == $this->unique_id)
+    		{
+    			Transaction_Access::rollback();
+    			$db->query_log_end();
+    			$this->unique_id = null;
+    			if ($GLOBALS[enable_db_log_on_exp_rollback] == true)
+    			{
+	    			if (is_writable($GLOBALS[log_dir]))
+	    			{
+	    				$filename = date("Ymd-His")."-".uniqid()."-expected_rollback.txt";
+	    				$handle = fopen($GLOBALS[log_dir]."/".$filename, "w");
+	    				fwrite($handle, $db->get_query_log());
+	    			}
+    			}
+    			return true;
+    		}
+    		else
+    		{
+    			return false;
+    		}
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
+    
+}
+?>

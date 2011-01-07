@@ -1,0 +1,186 @@
+<br />
+		
+<!-- CONTAINER BEGIN (Project Administration",0) -->
+	
+<div class='ProjectReorgaContainer'>
+<table class='ProjectReorgaTable'>
+	
+<!-- IF ({SET_PERMISSIONS_PERMISSION}) -->
+	
+	<tr>
+		<td width='18px'><img src='images/icons/permissions.png' alt='' /></td>
+		<td colspan='3'><a href='index.php?{PERMISSION_PARAMS}'>set project permissions</a></td>
+	</tr>
+			
+<!-- ELSE -->
+		
+	<tr>
+		<td width='18px'><img src='images/icons/permissions_na.png' alt='' /></td>
+		<td colspan='3'><span class='ProjectOptionsFontDeactivated'>set project permissions</span></td>
+	</tr>
+			
+<!-- ENDIF -->
+	
+		
+<!-- IF ({PROJECT_DELETED}) -->	
+
+	<!-- IF ({ADMIN}) -->
+
+		<tr>
+			<td><img src='images/icons/delete.png' alt='' /></td>
+			<td colspan='3'><a href='index.php?{FULL_DELETE_PARAMS}'>full delete</a></td>
+		</tr>
+		<tr>
+			<td><img src='images/icons/restore.png' alt='' /></td>
+			<td colspan='3'><a href='index.php?{RESTORE_PARAMS}'>restore project</a></td>
+		</tr>
+	
+	<!-- ENDIF -->
+
+<!-- ELSE -->
+
+	<!-- IF ({DELETE}) -->
+
+	<tr>
+		<td><img src='images/icons/delete.png' alt='' /></td>
+		<td colspan='3'><a href='index.php?{DELETE_PARAMS}'>delete</a></td>
+	</tr>
+	
+	<!-- ELSE -->
+		
+		<tr>
+			<td><img src='images/icons/delete.png' alt='' /></td>
+			<td colspan='3'><span class='ProjectOptionsFontDeactivated'>delete</a></td>
+		</tr>
+			
+	<!-- ENDIF -->
+				
+<!-- ENDIF -->
+	
+	
+<!-- IF ({PROJECT_CANCELED}) -->	
+			
+		<!-- IF ({ADMIN}) -->	
+		
+			<tr>
+				<td><img src='images/icons/reactivate_project.png' alt='' /></td>
+				<td colspan='3'><a href='index.php?{REACTIVATE_PARAMS}'>reactivate project</a></td>
+			</tr>
+		
+		<!-- ELSE -->
+
+			<tr>
+				<td><img src='images/icons/cancel_project.png' alt='' /></td>
+				<td colspan='3'><span class='ProjectOptionsFontDeactivated'>cancel project</a></td>
+			</tr>
+				
+		<!-- ENDIF -->
+		
+<!-- ELSE -->
+
+		<!-- IF ({WRITE}) -->				
+
+			<tr>
+				<td><img src='images/icons/cancel_project.png' alt='' /></td>
+				<td colspan='3'><a href='index.php?{CANCEL_PARAMS}'>cancel project</a></td>
+			</tr>
+						
+		<!-- ELSE -->
+
+			<tr>
+				<td><img src='images/icons/cancel_project.png' alt='' /></td>
+				<td colspan='3'><span class='ProjectOptionsFontDeactivated'>cancel project</a></td>
+			</tr>
+
+		<!-- ENDIF -->
+
+<!-- ENDIF -->
+	
+				
+	<tr>
+		<td colspan='4'><br /></td>
+	</tr>
+	<tr>
+		<td><img src='images/icons/project.png' alt='' /></td>
+		<td>Name:</td>
+		<td>{NAME}</td>
+						
+				
+		<!-- IF ({RENAME}) -->	
+		
+			<td><a href='index.php?{RENAME_PARAMS}'>change</a></td>
+			
+		<!-- ELSE -->
+		
+			<td></td>
+		
+		<!-- ENDIF -->
+				
+	</tr>
+	<tr>
+		<td><img src='images/icons/user.png' alt='' /></td>
+		<td>Owner:</td>
+		<td>{OWNER}</td>
+					
+				
+		<!-- IF ({ADMIN}) -->
+			
+			<td><a href='index.php?{CHOWN_PARAMS}'>change</a></td>
+			
+		<!-- ELSE -->
+			
+			<td></td>
+			
+		<!-- ENDIF -->
+							
+	</tr>
+	<tr>
+		<td><img src='images/icons/parent.png' alt='' /></td>
+		<td>Parent:</td>
+		<td>{PARENT}</td>
+						
+		<!-- IF ({ADMIN}) -->
+				
+			<td><a href='index.php?{MOVE_PARAMS}'>change</a></td>
+				
+		<!-- ELSE -->
+			
+			<td></td>
+			
+		<!-- ENDIF -->
+				
+	</tr>
+	<tr>
+		<td></td>
+		<td>Parent Type:</td>
+		<td>{PARENT_TYPE}</td>
+	</tr>
+	<tr>
+		<td><img src='images/icons/quota.png' alt='' /></td>
+		<td>Project Quota:</td>
+		<td>{QUOTA}</td>
+										
+		<!-- IF ({ADMIN}) -->
+			
+			<td><a href='index.php?{CHQUOTA_PARAMS}'>change</a></td>
+			
+		<!-- ELSE -->
+			
+			<td></td>
+					
+		<!-- ENDIF -->
+
+	</tr>					
+	<tr>
+		<td colspan='4'><br /></td>
+	</tr>
+	<tr>
+		<td><img src='images/icons/project_consistency.png' alt='' /></td>
+		<td>Project Consistency:</td>
+		<td><a href=''>complete check</a></td>
+		<td><a href=''>basis check</a></td>
+	</tr>
+</table>
+</div>
+
+<!-- CONTAINER END (0) -->

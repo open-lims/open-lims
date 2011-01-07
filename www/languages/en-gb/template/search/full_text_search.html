@@ -1,0 +1,40 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Search",0) -->
+
+<br />
+<div class='SearchContainer'>
+<form action='index.php?{PARAMS}' method='post' onsubmit='return submitForm(this.submitbutton)'>
+<div class='center'><span class='bold'>Full-Text Search</span></div>
+<br />
+<br />
+<table class='SearchTable'>
+	<tr>
+		<td colspan='2'>
+			<input type='text' name='string' size='47' class='FormTextfield' />
+			<span class='formError'>{ERROR}</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan='2'><div class='center'><span class='smallTextBlack'>use * as a wildcard character</span></div></td>
+	</tr>
+	<tr>
+		<td colspan='2'><br /></td>
+	</tr>
+	<tr>
+		<td><input type='checkbox' name='values' value='1' checked='checked' /> Values</td>
+		<td><input type='checkbox' name='project_descriptions' value='1'  checked='checked' /> Project Desc.</td>
+	</tr>
+	<tr>
+		<td><input type='checkbox' name='sample_descriptions' value='1' checked='checked' /> Sample Desc.</td>
+		<td><input type='checkbox' name='items' value='1' checked='checked' /> Item/Item-Class Desc.</td>
+	</tr>
+	<tr>
+		<td colspan='2'><br /><input type='submit' value='Search' class='FormButton' /></td>
+	</tr>
+</table>
+<br />
+</form>
+</div>
+					
+<!-- CONTAINER END (0) -->
