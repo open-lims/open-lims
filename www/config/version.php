@@ -23,7 +23,7 @@
 
 $GLOBALS[product_name]				= "Open-LIMS";
 $GLOBALS[major_release]				= "0";
-$GLOBALS[minor_release]				= ".3.9.6 &#945;";
+$GLOBALS[minor_release]				= ".3.9.6-1 &#945;";
 
 $GLOBALS[oldl_version]				= "0.4 &#945;";
 $GLOBALS[olvdl_version]				= "0.4 &#945;";

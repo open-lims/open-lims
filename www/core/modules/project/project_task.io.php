@@ -1580,12 +1580,12 @@ class ProjectTaskIO
 				
 				$template->set_var("cal_view_params", $cal_view_params);
 				
-				require_once("core/modules/organiser/abstract_organiser.io.php");
-				$abstract_organiser_io = new AbstractOrganiserIO(31);
+				require_once("core/modules/organiser/organiser_library.io.php");
+				$organiser_library_io = new OrganiserLibraryIO(31);
+								
+				$organiser_library_io->set_calendar_array($calendar_array);
 				
-				$abstract_organiser_io->set_calendar_array($calendar_array);
-				
-				$template->set_var("content", $abstract_organiser_io->get_content());
+				$template->set_var("content", $organiser_library_io->get_content());
 				
 				$template->output();
 			}
