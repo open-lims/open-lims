@@ -22,6 +22,14 @@
  */
 
 /**
+ * 
+ */
+if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
+{
+	require_once("exceptions/database_query_failed_exception.class.php");
+}
+
+/**
  * DB Class
  * @package base
  */

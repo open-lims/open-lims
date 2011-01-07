@@ -363,7 +363,12 @@ class AdminUserIO
 				
 				$template->output();
 			}
-			catch (Exception $e)
+			catch (UserCreationFailedException $e)
+			{
+				$error_io = new Error_IO($e, 3, 30, 1);
+				$error_io->display_error();
+			}
+			catch (UserAlreadyExistException $e)
 			{
 				$error_io = new Error_IO($e, 3, 30, 1);
 				$error_io->display_error();
@@ -1619,7 +1624,7 @@ class AdminUserIO
 			{
 				if (User::exist_user($_GET[id]) == false)
 				{
-					throw new Exception("",1);
+					throw new UserNotFoundException("",1);
 				}
 			}
 			
@@ -1686,7 +1691,7 @@ class AdminUserIO
 				break;
 			endswitch;
 		}
-		catch (Exception $e)
+		catch (UserNotFoundException $e)
 		{
 			$error_io = new Error_IO($e, 3, 40, 1);
 			$error_io->display_error();

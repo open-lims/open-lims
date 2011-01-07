@@ -36,7 +36,7 @@ function error_handler($code, $message, $file, $line)
 			
 	if ($code != 8 and $code != 2048)
 	{
-		if (stripos($message, "Failed to connect to mailserver") === false)
+		if (stripos($message, "Failed to connect to mailserver") === false and stripos($message, "pg_query()") === false)
 		{
 			$in_container = Common_IO::get_in_container();
 		

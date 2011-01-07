@@ -411,7 +411,7 @@ class AdminSampleDepositoryIO
 			{
 				if (SampleDepository::exist_id($_GET[id]) == false)
 				{
-					throw new Exception("",2);
+					throw new SampleDepositoryNotFoundException("",2);
 				}
 			}
 
@@ -435,7 +435,7 @@ class AdminSampleDepositoryIO
 			
 			endswitch;
 		}
-		catch (Exception $e)
+		catch (SampleDepositoryNotFoundException $e)
 		{
 			$error_io = new Error_IO($e, 250, 40, 1);
 			$error_io->display_error();

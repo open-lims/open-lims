@@ -41,7 +41,7 @@ class FileIO
 					{
 						if ($file->exist_file_version($_GET[version]) == false)
 						{
-							throw new Exception("",5);
+							throw new FileVersionNotFoundException("",5);
 						}
 					}
 					
@@ -203,7 +203,7 @@ class FileIO
 				$error_io->display_error();
 			}
 		}
-		catch(Exception $e)
+		catch(FileVersionNotFoundException $e)
 		{
 			$error_io = new Error_IO($e, 20, 40, 1);
 			$error_io->display_error();
@@ -662,7 +662,7 @@ class FileIO
 			if ($_GET[file_id])
 			{
 				if (File::exist_file($_GET[file_id]) == false) {
-					throw new Exception("",2);
+					throw new FileNotFoundException("",2);
 				}
 			}
 		
@@ -706,7 +706,7 @@ class FileIO
 				break;
 			endswitch;
 		}
-		catch (Exception $e)
+		catch (FileNotFoundException $e)
 		{
 			$error_io = new Error_IO($e, 20, 40, 1);
 			$error_io->display_error();

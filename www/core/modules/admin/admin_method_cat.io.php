@@ -412,7 +412,7 @@ class AdminMethodCatIO
 			{
 				if (MethodCat::exist_id($_GET[id]) == false)
 				{
-					throw new Exception("",4);
+					throw new MethodCategoryNotFoundException("",4);
 				}
 			}
 
@@ -435,7 +435,7 @@ class AdminMethodCatIO
 				break;
 			endswitch;
 		}
-		catch (Exception $e)
+		catch (MethodCategoryNotFoundException $e)
 		{
 			$error_io = new Error_IO($e, 50, 40, 1);
 			$error_io->display_error();

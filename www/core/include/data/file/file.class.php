@@ -28,6 +28,9 @@ require_once("interfaces/file.interface.php");
  
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("exceptions/file_not_found_exception.class.php");
+	require_once("exceptions/file_version_not_found_exception.class.php");
+		
 	require_once("access/file.access.php");
 	require_once("access/file_version.access.php");
 }

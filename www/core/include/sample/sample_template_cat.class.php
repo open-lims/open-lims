@@ -28,6 +28,8 @@ require_once("interfaces/sample_template_cat.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("exceptions/sample_template_category_not_found_exception.class.php");
+	
 	require_once("access/sample_template_cat.access.php");
 }
 

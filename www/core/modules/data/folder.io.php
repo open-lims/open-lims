@@ -373,7 +373,7 @@ class FolderIO
 				$folder = new Folder($_GET[folder_id]);
 				if ($folder->exist_folder() == false)
 				{
-					throw new DataException("",1);
+					throw new FolderNotFoundException("",1);
 				}
 			}
 			
@@ -399,7 +399,7 @@ class FolderIO
 				
 			endswitch;
 		}
-		catch (Exception $e)
+		catch (FolderNotFoundException $e)
 		{
 			$error_io = new Error_IO($e, 20, 40, 1);
 			$error_io->display_error();

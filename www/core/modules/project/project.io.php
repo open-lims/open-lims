@@ -1226,7 +1226,7 @@ class ProjectIO
 							$common->step_proceed($params, "Create New Project", "Operation Failed", null);
 						}
 					}
-					catch (Exception $e)
+					catch (ProjectCreationFailedException $e)
 					{
 						$error_io = new Error_IO($e, 200, 30, 1);
 						$error_io->display_error();
@@ -1284,8 +1284,7 @@ class ProjectIO
 				
 				
 				// Status Bar
-				$all_status_array = $project->get_all_status_array();
-				
+				$all_status_array = $project->get_all_status_array();				
 				$result = array();
 				$counter = 0;
 				
@@ -2015,7 +2014,7 @@ class ProjectIO
 			{
 				if (Project::exist_project($_GET[project_id]) == false)
 				{
-					throw new Exception("",1);
+					throw new ProjectSecurityException("",1);
 				}
 				else
 				{
@@ -2214,7 +2213,7 @@ class ProjectIO
 	
 			endswitch;
 		}
-		catch (Exception $e)
+		catch (ProjectSecurityException $e)
 		{
 			$error_io = new Error_IO($e, 200, 40, 1);
 			$error_io->display_error();

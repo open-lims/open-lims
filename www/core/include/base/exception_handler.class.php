@@ -104,13 +104,14 @@ class ExceptionHandler implements ExceptionHandlerInterface
 				}
 			
 				$trace_array_string = serialize($this->exception_trace_array);
-			
+				$trace_array_string = str_replace("'", "[aps]", $trace_array_string);
+				
 				$trace_array_string = str_replace("\\","/",$trace_array_string);
 				$this->exception_file = str_replace("\\","/",$this->exception_file);
 			
 				$system_log = new SystemLog(null);
 		   		$system_log->create($user_id,2,1,$this->error_message,$this->error_code,$this->exception_file,$this->exception_line,null);
-		 		$system_log->set_stack_trace($trace_array_string);
+		   		$system_log->set_stack_trace($trace_array_string);
 			}
 		}
 	}

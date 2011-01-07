@@ -28,6 +28,8 @@ require_once("interfaces/method_type.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("exceptions/method_type_not_found_exception.class.php");
+	
 	require_once("access/method_type.access.php");
 	require_once("access/method_cat.access.php");
 }

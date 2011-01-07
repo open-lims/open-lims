@@ -28,6 +28,8 @@ require_once("interfaces/value_type.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("exceptions/value_type_not_found_exception.class.php");
+	
 	require_once("access/value_type.access.php");
 }
 

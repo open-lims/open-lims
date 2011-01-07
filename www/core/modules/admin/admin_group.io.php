@@ -219,7 +219,13 @@ class AdminGroupIO
 				{
 					$common->step_proceed($params, "Add Group", "Operation Failed" ,null);	
 				}
-			}catch (Exception $e)
+			}
+			catch (GroupCreationFailedException $e)
+			{
+				$error_io = new Error_IO($e, 3, 30, 1);
+				$error_io->display_error();
+			}
+			catch (GroupAlreadyExistException $e)
 			{
 				$error_io = new Error_IO($e, 3, 30, 1);
 				$error_io->display_error();
@@ -780,7 +786,7 @@ class AdminGroupIO
 			{
 				if (Group::exist_group($_GET[id]) == false)
 				{
-					throw new Exception("",3);
+					throw new GroupNotFoundException("",3);
 				}
 			}
 		
@@ -822,7 +828,7 @@ class AdminGroupIO
 				break;
 			endswitch;
 		}
-		catch (Exception $e)
+		catch (GroupNotFoundException $e)
 		{
 			$error_io = new Error_IO($e, 3, 40, 1);
 			$error_io->display_error();

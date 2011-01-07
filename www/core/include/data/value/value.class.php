@@ -29,6 +29,9 @@ require_once("interfaces/value.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("exceptions/value_not_found_exception.class.php");
+	require_once("exceptions/value_version_not_found_exception.class.php");
+	
 	require_once("access/value.access.php");
 	require_once("access/value_version.access.php");
 }

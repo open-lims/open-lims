@@ -331,7 +331,7 @@ class AdminProjectTemplateCatIO
 			{
 				if (ProjectTemplateCat::exist_id($_GET[id]) == false)
 				{
-					throw new Exception("",4);
+					throw new ProjectTemplateCategoryNotFoundException("",4);
 				}
 			}
 			
@@ -353,7 +353,7 @@ class AdminProjectTemplateCatIO
 				break;
 			endswitch;
 		}
-		catch (Exception $e)
+		catch (ProjectTemplateCategoryNotFoundException $e)
 		{
 			$error_io = new Error_IO($e, 200, 40, 1);
 			$error_io->display_error();

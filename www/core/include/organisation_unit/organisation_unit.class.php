@@ -28,6 +28,10 @@ require_once("interfaces/organisation_unit.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("exceptions/organisation_unit_already_exist_exception.class.php");
+	require_once("exceptions/organisation_unit_creation_failed_exception.class.php");
+	require_once("exceptions/organisation_unit_not_found_exception.class.php");
+	
 	require_once("access/organisation_unit.access.php");
 	
 	require_once("access/organisation_unit_has_member.access.php");
@@ -75,6 +79,8 @@ class OrganisationUnit implements OrganisationUnitInterface
 	 * @param integer $type_id
 	 * @param bool $contains_projects
 	 * @return integer
+	 * @throws OrganisationUnitAlreadyExistException
+	 * @throws OrganisationUnitCreationFailedException
 	 */
 	public function create($toid, $name, $type_id, $contains_projects) 
 	{
@@ -92,7 +98,7 @@ class OrganisationUnit implements OrganisationUnitInterface
 					{
 						$transaction->rollback($transaction_id);
 					}
-					throw new Exception("",2);
+					throw new OrganisationUnitAlreadyExistException("",2);
 				}
 				
 				$current_highest_position_ou_id = OrganisationUnit_Access::get_highest_position_by_toid($toid);
@@ -130,7 +136,7 @@ class OrganisationUnit implements OrganisationUnitInterface
 								{
 									$transaction->rollback($transaction_id);
 								}
-								throw new Exception("",1);
+								throw new OrganisationUnitCreationFailedException("",1);
 							}
 							if ($folder->set_flag(8) == false)
 							{
@@ -139,7 +145,7 @@ class OrganisationUnit implements OrganisationUnitInterface
 								{
 									$transaction->rollback($transaction_id);
 								}
-								throw new Exception("",1);
+								throw new OrganisationUnitCreationFailedException("",1);
 							}
 							
 													
@@ -153,7 +159,7 @@ class OrganisationUnit implements OrganisationUnitInterface
 								{
 									$transaction->rollback($transaction_id);
 								}
-								throw new Exception("",1);
+								throw new OrganisationUnitCreationFailedException("",1);
 							}
 							if ($virtual_folder->set_sample_vfolder() == false)
 							{
@@ -162,7 +168,7 @@ class OrganisationUnit implements OrganisationUnitInterface
 								{
 									$transaction->rollback($transaction_id);
 								}
-								throw new Exception("",1);
+								throw new OrganisationUnitCreationFailedException("",1);
 							}
 							
 							
@@ -176,7 +182,7 @@ class OrganisationUnit implements OrganisationUnitInterface
 								{
 									$transaction->rollback($transaction_id);
 								}
-								throw new Exception("",1);
+								throw new OrganisationUnitCreationFailedException("",1);
 							}
 							if ($virtual_folder->set_project_vfolder() == false)
 							{
@@ -185,7 +191,7 @@ class OrganisationUnit implements OrganisationUnitInterface
 								{
 									$transaction->rollback($transaction_id);
 								}
-								throw new Exception("",1);
+								throw new OrganisationUnitCreationFailedException("",1);
 							}
 						}
 						else
@@ -194,7 +200,7 @@ class OrganisationUnit implements OrganisationUnitInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new OrganisationUnitCreationFailedException("",1);
 						}
 					}
 						
@@ -211,17 +217,17 @@ class OrganisationUnit implements OrganisationUnitInterface
 					{
 						$transaction->rollback($transaction_id);
 					}
-					throw new Exception("",1);
+					throw new OrganisationUnitCreationFailedException("",1);
 				}
 			}
 			else
 			{
-				throw new Exception("",1);
+				throw new OrganisationUnitCreationFailedException("",1);
 			}
 		}
 		else
 		{
-			throw new Exception("",1);
+			throw new OrganisationUnitCreationFailedException("",1);
 		}
 		
 	}

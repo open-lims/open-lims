@@ -236,7 +236,7 @@ class AdminValueTemplateIO
 			{
 				if (ValueType::exist_id($_GET[id]) == false)
 				{
-					throw new Exception("",7);
+					throw new ValueTypeNotFoundException("",7);
 				}
 			}
 			
@@ -256,7 +256,7 @@ class AdminValueTemplateIO
 			
 			endswitch;
 		}
-		catch (Exception $e)
+		catch (ValueTypeNotFoundException $e)
 		{
 			$error_io = new Error_IO($e, 20, 40, 1);
 			$error_io->display_error();

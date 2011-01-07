@@ -963,7 +963,7 @@ class DataIO
 				}
 				else
 				{
-					throw new Exception("", 0);
+					throw new IdMissingException("", 0);
 				}
 			}
 			
@@ -1257,7 +1257,7 @@ class DataIO
 				$error_io->display_error();
 			}
 		}
-		catch (Exception $e)
+		catch (IdMissingException $e)
 		{
 			$error_io = new Error_IO($e, 20, 40, 3);
 			$error_io->display_error();
@@ -1301,7 +1301,7 @@ class DataIO
 				}
 				else
 				{
-					throw new Exception("", 0);
+					throw new IdMissingException("", 0);
 				}
 			}
 			
@@ -1385,7 +1385,7 @@ class DataIO
 				$error_io->display_error();
 			}
 		}
-		catch (Exception $e)
+		catch (IdMissingException $e)
 		{
 			$error_io = new Error_IO($e, 20, 40, 3);
 			$error_io->display_error();
@@ -1429,7 +1429,7 @@ class DataIO
 				}
 				else
 				{
-					throw new Exception("", 0);
+					throw new IdMissingException("", 0);
 				}
 			}
 			
@@ -1513,7 +1513,7 @@ class DataIO
 				$error_io->display_error();
 			}
 		}
-		catch (Exception $e)
+		catch (IdMissingException $e)
 		{
 			$error_io = new Error_IO($e, 20, 40, 3);
 			$error_io->display_error();

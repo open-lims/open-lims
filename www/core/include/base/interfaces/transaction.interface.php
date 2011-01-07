@@ -35,5 +35,6 @@ interface TransactionInterface
 	public function commit($unique_id);
 	public function rollback($unique_id);
 	public function expected_rollback($unique_id);
+	public function force_rollback();
 }
 ?>

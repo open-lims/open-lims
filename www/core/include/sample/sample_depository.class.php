@@ -28,6 +28,8 @@ require_once("interfaces/sample_depository.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("exceptions/sample_depository_not_found_exception.class.php");
+	
 	require_once("access/sample_has_sample_depository.access.php");
 	require_once("access/sample_depository.access.php");
 }

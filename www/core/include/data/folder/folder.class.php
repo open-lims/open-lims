@@ -28,6 +28,8 @@ require_once("interfaces/folder.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("exceptions/folder_not_found_exception.class.php");
+	
 	require_once("access/folder.access.php");
 	
 	require_once("access/folder_join.access.php");

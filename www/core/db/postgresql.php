@@ -73,11 +73,10 @@ class Postgresql
  
  	public function sql_query($connection, $query)
  	{
- 	 	$pg_result = pg_query($connection, $query);
+ 	 	@$pg_result = pg_query($connection, $query);
  	 	if (!$pg_result)
  	 	{
- 	 		echo $query;
- 	 		return 0;
+ 	 		throw new DatabaseQueryFailedException(pg_last_error(), 2);
  	 	}
  	 	else
  	 	{

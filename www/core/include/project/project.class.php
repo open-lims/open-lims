@@ -28,6 +28,8 @@ require_once("interfaces/project.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("exceptions/project_creation_failed_exception.class.php");
+	
 	require_once("access/project.access.php");
 	
 	require_once("access/project_has_item.access.php");
@@ -128,12 +130,12 @@ class Project implements ProjectInterface
 					{						
 						if (self::exist_project_name($organisation_unit_id, null, $name) == true)
 						{
-							throw new Exception("",1);
+							throw new ProjectCreationFailedException("",1);
 						}
 					}
 					else
 					{
-						throw new Exception("",1);
+						throw new ProjectCreationFailedException("",1);
 					}
 				}
 				else
@@ -143,12 +145,12 @@ class Project implements ProjectInterface
 					{
 						if (self::exist_project_name(null, $parent_project_id , $name) == true)
 						{
-							throw new Exception("",1);
+							throw new ProjectCreationFailedException("",1);
 						}
 					}
 					else
 					{
-						throw new Exception("",1);
+						throw new ProjectCreationFailedException("",1);
 					}
 				}
 				
@@ -162,14 +164,17 @@ class Project implements ProjectInterface
 				{
 					$this->__construct($project_id);
 					
+					$project_template = new ProjectTemplate($template_id);
+					$project_all_status_array = $project_template->get_all_status();
+					
 					$project_has_project_status = new ProjectHasProjectStatus_Access(null);
-					if ($project_has_project_status->create($project_id,1) != true)
+					if ($project_has_project_status->create($project_id,$project_all_status_array[0]) != true)
 					{
 						if ($transaction_id != null)
 						{
 							$transaction->rollback($transaction_id);
 						}
-						throw new Exception("",1);
+						throw new ProjectCreationFailedException("",1);
 					}
 					
 					// Create Projectfolder
@@ -197,7 +202,7 @@ class Project implements ProjectInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new ProjectCreationFailedException("",1);
 						}
 						if ($folder->set_flag(16) == false)
 						{
@@ -206,7 +211,7 @@ class Project implements ProjectInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new ProjectCreationFailedException("",1);
 						}
 						
 						// Create Supplementary Folder
@@ -222,7 +227,7 @@ class Project implements ProjectInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new ProjectCreationFailedException("",1);
 						}
 						
 						if ($supplementary_folder->set_flag(128) == false)
@@ -232,15 +237,12 @@ class Project implements ProjectInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new ProjectCreationFailedException("",1);
 						}
 						
 						// Status Folder
-										
-						$project_template = new ProjectTemplate($template_id);
 						
 						$folder_array = array();
-						$project_all_status_array = $project_template->get_all_status();
 						
 						foreach($project_all_status_array as $key => $value)
 						{
@@ -277,7 +279,7 @@ class Project implements ProjectInterface
 								{
 									$transaction->rollback($transaction_id);
 								}
-								throw new Exception("",1);
+								throw new ProjectCreationFailedException("",1);
 							}
 							
 							if ($status_folder->create_project_status_folder($value, $project_id) == false)
@@ -287,7 +289,7 @@ class Project implements ProjectInterface
 								{
 									$transaction->rollback($transaction_id);
 								}
-								throw new Exception("",1);
+								throw new ProjectCreationFailedException("",1);
 							}
 							
 							if ($status_folder->set_flag(256) == false)
@@ -297,7 +299,7 @@ class Project implements ProjectInterface
 								{
 									$transaction->rollback($transaction_id);
 								}
-								throw new Exception("",1);
+								throw new ProjectCreationFailedException("",1);
 							}
 							
 							// Create Subfolder
@@ -333,7 +335,7 @@ class Project implements ProjectInterface
 										{
 											$transaction->rollback($transaction_id);
 										}
-										throw new Exception("",1);
+										throw new ProjectCreationFailedException("",1);
 									}
 									
 									if ($sub_folder->set_flag(2048) == false)
@@ -343,7 +345,7 @@ class Project implements ProjectInterface
 										{
 											$transaction->rollback($transaction_id);
 										}
-										throw new Exception("",1);
+										throw new ProjectCreationFailedException("",1);
 									}
 		    					}
 		    				}	
@@ -358,7 +360,7 @@ class Project implements ProjectInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new ProjectCreationFailedException("",1);
 						}
 						
 						$project_item = new ProjectItem($project_id);
@@ -373,7 +375,7 @@ class Project implements ProjectInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new ProjectCreationFailedException("",1);
 						}
 						
 						if ($project_item->set_required(true) == false)
@@ -383,7 +385,7 @@ class Project implements ProjectInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new ProjectCreationFailedException("",1);
 						}
 						
 						// Create Project Master Data
@@ -398,7 +400,7 @@ class Project implements ProjectInterface
 								{
 									$transaction->rollback($transaction_id);
 								}
-								throw new Exception("",1);
+								throw new ProjectCreationFailedException("",1);
 							}
 							
 							$project_item = new ProjectItem($project_id);
@@ -413,7 +415,7 @@ class Project implements ProjectInterface
 								{
 									$transaction->rollback($transaction_id);
 								}	
-								throw new Exception("",1);
+								throw new ProjectCreationFailedException("",1);
 							}
 							
 							if ($project_item->set_required(true) == false)
@@ -423,7 +425,7 @@ class Project implements ProjectInterface
 								{
 									$transaction->rollback($transaction_id);
 								}
-								throw new Exception("",1);
+								throw new ProjectCreationFailedException("",1);
 							}
 						}
 
@@ -440,7 +442,7 @@ class Project implements ProjectInterface
 								{
 									$transaction->rollback($transaction_id);
 								}
-								throw new Exception("",1);
+								throw new ProjectCreationFailedException("",1);
 							}
 						
 							$project_permission = new ProjectPermission(null);
@@ -451,7 +453,7 @@ class Project implements ProjectInterface
 								{
 									$transaction->rollback($transaction_id);
 								}
-								throw new Exception("",1);
+								throw new ProjectCreationFailedException("",1);
 							}
 							
 							
@@ -465,7 +467,7 @@ class Project implements ProjectInterface
 								{
 									$transaction->rollback($transaction_id);
 								}
-								throw new Exception("",1);
+								throw new ProjectCreationFailedException("",1);
 							}
 						
 							$group_array = $organisation_unit->list_groups();
@@ -482,7 +484,7 @@ class Project implements ProjectInterface
 										{
 											$transaction->rollback($transaction_id);
 										}
-										throw new Exception("",1);
+										throw new ProjectCreationFailedException("",1);
 									}
 								}
 							}
@@ -498,7 +500,7 @@ class Project implements ProjectInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new ProjectCreationFailedException("",1);
 						}
 						if ($virtual_folder->set_sample_vfolder() == false)
 						{
@@ -507,7 +509,7 @@ class Project implements ProjectInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new ProjectCreationFailedException("",1);
 						}
 			
 						$this->__construct($project_id);
@@ -524,7 +526,7 @@ class Project implements ProjectInterface
 						{
 							$transaction->rollback($transaction_id);
 						}
-						throw new Exception("",1);
+						throw new ProjectCreationFailedException("",1);
 					}
 				}
 				else
@@ -533,17 +535,17 @@ class Project implements ProjectInterface
 					{
 						$transaction->rollback($transaction_id);
 					}
-					throw new Exception("",1);
+					throw new ProjectCreationFailedException("",1);
 				}
 			}
 			else
 			{
-				throw new Exception("",1);
+				throw new ProjectCreationFailedException("",1);
 			}
 		}
 		else
 		{
-			throw new Exception("",1);
+			throw new ProjectCreationFailedException("",1);
 		}
     }
 

@@ -196,5 +196,35 @@ class Transaction implements TransactionInterface {
     	}
     }
     
+    /**
+     * Rollbacks current transaction during an database error
+     * @return bool
+     */
+    public function force_rollback()
+    {
+    	global $db;
+    	
+    	if ($this->unique_id != null)
+    	{
+    		Transaction_Access::rollback();
+	    	$db->query_log_end();
+	    	$this->unique_id = null;
+	    	if ($GLOBALS[enable_db_log_on_exp_rollback] == true)
+	    	{
+		    	if (is_writable($GLOBALS[log_dir]))
+		    	{
+		    		$filename = date("Ymd-His")."-".uniqid()."-expected_rollback.txt";
+		    		$handle = fopen($GLOBALS[log_dir]."/".$filename, "w");
+		    		fwrite($handle, $db->get_query_log());
+		    	}
+	    	}
+    		return true;
+    	}
+    	else
+    	{
+    		return true;
+    	}
+    }
+    
 }
 ?>

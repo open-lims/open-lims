@@ -28,6 +28,10 @@ require_once("interfaces/user.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("exceptions/user_already_exist_exception.class.php");
+	require_once("exceptions/user_creation_failed_exception.class.php");
+	require_once("exceptions/user_not_found_exception.class.php");
+	
 	require_once("access/user.access.php");
 	require_once("access/user_admin_setting.access.php");
 	require_once("access/user_profile_setting.access.php");
@@ -91,7 +95,8 @@ class User implements UserInterface {
 	 * @param bool $must_change_password
 	 * @param bool $disabled
 	 * @return string Generated User Password
-	 * @exception Exception
+	 * @throws UserCreationFailedException
+	 * @throws UserAlreadyExistException
 	 */
 	public function create($username, $gender, $title, $forename, $surname, $mail, $can_change_password, $must_change_password, $disabled)
 	{
@@ -109,7 +114,7 @@ class User implements UserInterface {
 					{
 						$transaction->rollback($transaction_id);
 					}
-					throw new Exception("",2);
+					throw new UserAlreadyExistException("",2);
 				}
 						
 				$password = self::generate_password();
@@ -122,7 +127,7 @@ class User implements UserInterface {
 						{
 							$transaction->rollback($transaction_id);
 						}
-						throw new Exception("",1);
+						throw new UserCreationFailedException("",1);
 					}
 					
 					$user_profile_setting = new UserProfileSetting_Access(null);
@@ -132,7 +137,7 @@ class User implements UserInterface {
 						{
 							$transaction->rollback($transaction_id);
 						}
-						throw new Exception("",1);
+						throw new UserCreationFailedException("",1);
 					}
 					
 					if ($can_change_password == true)
@@ -173,7 +178,7 @@ class User implements UserInterface {
 						{
 							$transaction->rollback($transaction_id);
 						}
-						throw new Exception("",1);
+						throw new UserCreationFailedException("",1);
 					}
 					
 					$this->__construct($user_id);
@@ -196,7 +201,7 @@ class User implements UserInterface {
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new UserCreationFailedException("",1);
 						}
 						if ($folder->set_flag(2) == false)
 						{
@@ -205,7 +210,7 @@ class User implements UserInterface {
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new UserCreationFailedException("",1);
 						}
 						
 						// _Public
@@ -221,7 +226,7 @@ class User implements UserInterface {
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new UserCreationFailedException("",1);
 						}
 						
 						if ($public_folder->set_flag(512) == false)
@@ -231,7 +236,7 @@ class User implements UserInterface {
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new UserCreationFailedException("",1);
 						}
 						
 						
@@ -248,7 +253,7 @@ class User implements UserInterface {
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new UserCreationFailedException("",1);
 						}
 						
 						if ($private_folder->set_flag(512) == false)
@@ -258,7 +263,7 @@ class User implements UserInterface {
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new UserCreationFailedException("",1);
 						}
 						
 						// Sample - Virtual Folder
@@ -271,7 +276,7 @@ class User implements UserInterface {
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new UserCreationFailedException("",1);
 						}
 						if ($virtual_folder->set_sample_vfolder() == false)
 						{
@@ -280,7 +285,7 @@ class User implements UserInterface {
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new UserCreationFailedException("",1);
 						}
 						
 						
@@ -294,7 +299,7 @@ class User implements UserInterface {
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new UserCreationFailedException("",1);
 						}
 						if ($virtual_folder->set_project_vfolder() == false)
 						{
@@ -303,7 +308,7 @@ class User implements UserInterface {
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new UserCreationFailedException("",1);
 						}
 						
 						// Groups
@@ -315,7 +320,7 @@ class User implements UserInterface {
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new UserCreationFailedException("",1);
 						}
 						
 						if ($transaction_id != null)
@@ -331,7 +336,7 @@ class User implements UserInterface {
 						{
 							$transaction->rollback($transaction_id);
 						}
-						throw new Exception("",1);
+						throw new UserCreationFailedException("",1);
 					}
 						
 				}
@@ -341,19 +346,19 @@ class User implements UserInterface {
 					{
 						$transaction->rollback($transaction_id);
 					}
-					throw new Exception("",1);
+					throw new UserCreationFailedException("",1);
 				}
 			
 			}
 			else
 			{
-				throw new Exception("",1);
+				throw new UserCreationFailedException("",1);
 			}
 				
 		}
 		else
 		{
-			throw new Exception("",1);
+			throw new UserCreationFailedException("",1);
 		}
 	
 	}

@@ -410,7 +410,12 @@ class AdminOrganisationUnitIO
 						$common->step_proceed($params, "Add Organisation Unit", "Operation Failed" ,null);	
 					}
 				}
-				catch (Exception $e)
+				catch (OrganisationUnitAlreadyExistException $e)
+				{
+					$error_io = new Error_IO($e, 40, 30, 1);
+					$error_io->display_error();
+				}
+				catch (OrganisationUnitCreationFailedException $e)
 				{
 					$error_io = new Error_IO($e, 40, 30, 1);
 					$error_io->display_error();
@@ -1272,7 +1277,7 @@ class AdminOrganisationUnitIO
 			{
 				if (OrganisationUnit::exist_organisation_unit($_GET[id]) == false)
 				{
-					throw new Exception("",1);
+					throw new OrganisationUnitNotFoundException("",1);
 				}		
 			}
 		
@@ -1335,7 +1340,7 @@ class AdminOrganisationUnitIO
 				break;
 			endswitch;
 		}
-		catch (Exception $e)
+		catch (OrganisationUnitNotFoundException $e)
 		{
 			$error_io = new Error_IO($e, 40, 40, 1);
 			$error_io->display_error();

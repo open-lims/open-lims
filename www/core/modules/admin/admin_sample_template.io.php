@@ -245,7 +245,7 @@ class AdminSampleTemplateIO
 			{
 				if (SampleTemplate::exist_id($_GET[id]) == false)
 				{
-					throw new Exception("",3);
+					throw new SampleTemplateNotFoundException("",3);
 				}
 			}
 			
@@ -263,7 +263,7 @@ class AdminSampleTemplateIO
 				break;
 			endswitch;
 		}
-		catch (Exception $e)
+		catch (SampleTemplateNotFoundException $e)
 		{
 			$error_io = new Error_IO($e, 250, 40, 1);
 			$error_io->display_error();

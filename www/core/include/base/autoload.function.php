@@ -39,6 +39,7 @@ function __autoload($classname)
 	
 	$classes['AuthForgotPasswordSendFailedException']	= $path_prefix."core/include/base/exceptions/auth_forgot_password_send_failed_exception.class.php";
 	$classes['AuthUserNotFoundException']				= $path_prefix."core/include/base/exceptions/auth_user_not_found_exception.class.php";
+	$classes['IdMissingException']						= $path_prefix."core/include/base/exceptions/id_missing_exception.class.php";
 	
 	$classes['Auth'] 						= $path_prefix."core/include/base/auth.class.php";
 	$classes['Communicator']				= $path_prefix."core/include/base/communicator.class.php";
@@ -97,7 +98,7 @@ function __autoload($classname)
 	
 	$classes['DataException']				= $path_prefix."core/include/data/exceptions/data_exception.class.php";
 	$classes['DataSecurityException']		= $path_prefix."core/include/data/exceptions/data_security_exception.class.php";
-	
+		
 	$classes['DataBrowser']					= $path_prefix."core/include/data/data_browser.class.php";
 	$classes['DataPath']					= $path_prefix."core/include/data/data_path.class.php";
 	$classes['DataPermission']				= $path_prefix."core/include/data/data_permission.class.php";

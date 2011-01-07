@@ -40,6 +40,7 @@
 	// DB
 	
 	$error[2][10][1][1]		= "Database connection failed!";
+	$error[2][10][1][2]		= "Database query failed!";
 	
 	
 	// User

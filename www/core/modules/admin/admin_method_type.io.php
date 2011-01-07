@@ -488,7 +488,7 @@ class AdminMethodTypeIO
 			{
 				if (MethodType::exist_id($_GET[id]) == false)
 				{
-					throw new Exception("",5);
+					throw new MethodTypeNotFoundException("",5);
 				}
 			}
 
@@ -515,7 +515,7 @@ class AdminMethodTypeIO
 				break;
 			endswitch;
 		}
-		catch (Exception $e)
+		catch (MethodTypeNotFoundException $e)
 		{
 			$error_io = new Error_IO($e, 50, 40, 1);
 			$error_io->display_error();

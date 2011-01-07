@@ -46,7 +46,7 @@ $GLOBALS[enable_services]			= true;							// true for enabled
 $GLOBALS[enable_job_system]			= false;							// "
 
 
-$GLOBALS[base_dir] 					= "D:/htdocs_lims";				// Always needed , dir in System (eg. C:/lims (windows) or /srv/www/lims (unix))
+$GLOBALS[base_dir] 					= "D:/web/open-lims";				// Always needed , dir in System (eg. C:/lims (windows) or /srv/www/lims (unix))
 $GLOBALS[www_dir]					= $GLOBALS[base_dir]."/www";	
 $GLOBALS[files_dir]					= $GLOBALS[base_dir]."/files";
 $GLOBALS[log_dir]					= $GLOBALS[base_dir]."/logs";

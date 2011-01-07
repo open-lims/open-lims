@@ -265,7 +265,7 @@ class AdminProjectTemplateIO
 			{
 				if (ProjectTemplate::exist_id($_GET[id]) == false)
 				{
-					throw new Exception("",3);
+					throw new ProjectTemplateNotFoundException("",3);
 				}
 			}
 			
@@ -283,7 +283,7 @@ class AdminProjectTemplateIO
 				break;
 			endswitch;
 		}
-		catch (Exception $e)
+		catch (ProjectTemplateNotFoundException $e)
 		{
 			$error_io = new Error_IO($e, 200, 40, 1);
 			$error_io->display_error();

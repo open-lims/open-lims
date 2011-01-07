@@ -43,7 +43,7 @@ class ValueIO
 					{
 						if ($value->exist_value_version($_GET[version]) == false)
 						{
-							throw new Exception("",6);
+							throw new ValueVersionNotFoundException("",6);
 						}
 					}
 					
@@ -338,7 +338,7 @@ class ValueIO
 				$error_io->display_error();			
 			}
 		}
-		catch(Exception $e)
+		catch(ValueVersionNotFoundException $e)
 		{
 			$error_io = new Error_IO($e, 20, 40, 1);
 			$error_io->display_error();
@@ -938,7 +938,7 @@ class ValueIO
 			{
 				if (Value::exist_value($_GET[value_id]) == false)
 				{
-					throw new DataException("",3);
+					throw new ValueNotFoundException("",3);
 				}
 			}
 			
@@ -972,7 +972,7 @@ class ValueIO
 				break;
 			endswitch;
 		}
-		catch (Exception $e)
+		catch (ValueNotFoundException $e)
 		{
 			$error_io = new Error_IO($e, 20, 40, 1);
 			$error_io->display_error();

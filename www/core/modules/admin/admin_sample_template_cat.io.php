@@ -332,7 +332,7 @@ class AdminSampleTemplateCatIO
 			{
 				if (SampleTemplateCat::exist_id($_GET[id]) == false)
 				{
-					throw new Exception("",4);
+					throw new SampleTemplateCategoryNotFoundException("",4);
 				}
 			}
 			
@@ -354,7 +354,7 @@ class AdminSampleTemplateCatIO
 				break;
 			endswitch;
 		}
-		catch (Exception $e)
+		catch (SampleTemplateCategoryNotFoundException $e)
 		{
 			$error_io = new Error_IO($e, 250, 40, 1);
 			$error_io->display_error();

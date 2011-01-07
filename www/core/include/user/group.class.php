@@ -28,6 +28,10 @@ require_once("interfaces/group.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("exceptions/group_already_exist_exception.class.php");
+	require_once("exceptions/group_creation_failed_exception.class.php");
+	require_once("exceptions/group_not_found_exception.class.php");
+	
 	require_once("access/group.access.php");
 	require_once("access/group_has_user.access.php");
 }
@@ -70,6 +74,8 @@ class Group implements GroupInterface
 	 * Creates a new user including all needed dependencies
 	 * @param string $name
 	 * @return integer
+	 * @throws GroupAlreadyExistException
+	 * @throws GroupCreationFailedException
 	 */
 	public function create($name)
 	{
@@ -87,7 +93,7 @@ class Group implements GroupInterface
 					{
 						$transaction->rollback($transaction_id);
 					}
-					throw new Exception("",4);
+					throw new GroupAlreadyExistException("",4);
 				}
 				
 				if (($group_id = $this->group->create($name)) != null)
@@ -112,7 +118,7 @@ class Group implements GroupInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",3);
+							throw new GroupCreationFailedException("",3);
 						}
 						if ($folder->set_flag(4) == false)
 						{
@@ -121,7 +127,7 @@ class Group implements GroupInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",3);
+							throw new GroupCreationFailedException("",3);
 						}
 						
 												
@@ -135,7 +141,7 @@ class Group implements GroupInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",3);
+							throw new GroupCreationFailedException("",3);
 						}
 						if ($virtual_folder->set_sample_vfolder() == false)
 						{
@@ -144,7 +150,7 @@ class Group implements GroupInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",3);
+							throw new GroupCreationFailedException("",3);
 						}
 						
 						
@@ -158,7 +164,7 @@ class Group implements GroupInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",3);
+							throw new GroupCreationFailedException("",3);
 						}
 						if ($virtual_folder->set_project_vfolder() == false)
 						{
@@ -167,7 +173,7 @@ class Group implements GroupInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",3);
+							throw new GroupCreationFailedException("",3);
 						}
 						
 						if ($transaction_id != null)
@@ -184,7 +190,7 @@ class Group implements GroupInterface
 						{
 							$transaction->rollback($transaction_id);
 						}
-						throw new Exception("",3);
+						throw new GroupCreationFailedException("",3);
 					}
 				}
 				else
@@ -193,17 +199,17 @@ class Group implements GroupInterface
 					{
 						$transaction->rollback($transaction_id);
 					}
-					throw new Exception("",3);
+					throw new GroupCreationFailedException("",3);
 				}
 			}
 			else
 			{
-				throw new Exception("",3);
+				throw new GroupCreationFailedException("",3);
 			}
 		}
 		else
 		{
-			throw new Exception("",3);
+			throw new GroupCreationFailedException("",3);
 		}
 		
 	}

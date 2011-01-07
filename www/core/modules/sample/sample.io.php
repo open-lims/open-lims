@@ -370,7 +370,7 @@ class SampleIO
 				{
 					if ($sample_security->is_access(2, false) == false)
 					{
-						throw new SampleException("",1);	
+						throw new SampleSecurityException("",1);	
 					}
 					else
 					{
@@ -1445,7 +1445,7 @@ class SampleIO
 						$session->delete_value("SAMPLE_TEMPALTE_DATA_ARRAY");
 						$session->delete_value("SAMPLE_TOID");	
 					}
-					catch (Exception $e)
+					catch (SampleCreationFailedException $e)
 					{
 						$error_io = new Error_IO($e, 250, 30, 1);
 						$error_io->display_error();
@@ -1453,7 +1453,7 @@ class SampleIO
 				break;	
 			endswitch;
 		}
-		catch (SampleException $e)
+		catch (SampleSecurityException $e)
 		{
 			$error_io = new Error_IO($e, 250, 40, 2);
 			$error_io->display_error();
@@ -2867,7 +2867,7 @@ class SampleIO
 			{
 				if (Sample::exist_sample($_GET[sample_id]) == false)
 				{
-					throw new Exception("",1);
+					throw new SampleNotFoundException("",1);
 				}
 				else
 				{
@@ -2993,7 +2993,7 @@ class SampleIO
 			
 			endswitch;
 		}
-		catch (Exception $e)
+		catch (SampleNotFoundException $e)
 		{
 			$error_io = new Error_IO($e, 250, 40, 1);
 			$error_io->display_error();

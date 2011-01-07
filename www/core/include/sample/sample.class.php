@@ -28,6 +28,9 @@ require_once("interfaces/sample.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("exceptions/sample_not_found_exception.class.php");
+	require_once("exceptions/sample_creation_failed_exception.class.php");
+	
 	require_once("access/sample.access.php");
 	
 	require_once("access/sample_has_sample_depository.access.php");
@@ -116,6 +119,7 @@ class Sample implements SampleInterface
      * @param integer $depository_id
      * @param string $desc
      * @return integer Sample-ID
+     * @throws SampleCreationFailedException
      */
     public function create($organisation_unit_id, $template_id, $name, $supplier, $depository_id, $desc)
     {
@@ -151,7 +155,7 @@ class Sample implements SampleInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new SampleCreationFailedException("",1);
 						}
 						
 		    			if ($folder->set_flag(32) == false)
@@ -161,7 +165,7 @@ class Sample implements SampleInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new SampleCreationFailedException("",1);
 		    			}
 		    			
 		    			// Create Permissions and V-Folders
@@ -174,7 +178,7 @@ class Sample implements SampleInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new SampleCreationFailedException("",1);
 		    			}
 		    			
 		    			if (is_numeric($organisation_unit_id)) {
@@ -185,7 +189,7 @@ class Sample implements SampleInterface
 								{
 									$transaction->rollback($transaction_id);
 								}
-								throw new Exception("",1);
+								throw new SampleCreationFailedException("",1);
 		    				}
 		    			}
 		    			
@@ -227,7 +231,7 @@ class Sample implements SampleInterface
 										{
 											$transaction->rollback($transaction_id);
 										}
-										throw new Exception("",1);
+										throw new SampleCreationFailedException("",1);
 									}
 									
 									if ($sub_folder->set_flag(1024) == false)
@@ -237,7 +241,7 @@ class Sample implements SampleInterface
 										{
 											$transaction->rollback($transaction_id);
 										}
-										throw new Exception("",1);
+										throw new SampleCreationFailedException("",1);
 									}
 		    					}
 		    				}
@@ -252,7 +256,7 @@ class Sample implements SampleInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new SampleCreationFailedException("",1);
 		    			}
 		    			
 		    			// Create Item
@@ -264,7 +268,7 @@ class Sample implements SampleInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new SampleCreationFailedException("",1);
 						}
 						
 						if ($item->link_sample($sample_id) == false)
@@ -274,7 +278,7 @@ class Sample implements SampleInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new Exception("",1);
+							throw new SampleCreationFailedException("",1);
 						}
 			
 						// Create Required Value or Sample
@@ -294,7 +298,7 @@ class Sample implements SampleInterface
 											{
 												$transaction->rollback($transaction_id);
 											}
-											throw new Exception("",1);
+											throw new SampleCreationFailedException("",1);
 										}
 									}
 								}
@@ -310,7 +314,7 @@ class Sample implements SampleInterface
 									{
 										$transaction->rollback($transaction_id);
 									}
-									throw new Exception("",1);
+									throw new SampleCreationFailedException("",1);
 								}
 								
 								$sample_item = new SampleItem($sample_id);
@@ -322,7 +326,7 @@ class Sample implements SampleInterface
 									{
 										$transaction->rollback($transaction_id);
 									}
-									throw new Exception("",1);
+									throw new SampleCreationFailedException("",1);
 								}
 								
 								$sample_item->set_item_id($value->get_item_id());
@@ -334,7 +338,7 @@ class Sample implements SampleInterface
 									{
 										$transaction->rollback($transaction_id);
 									}
-									throw new Exception("",1);
+									throw new SampleCreationFailedException("",1);
 								}
 							}
 						}
@@ -353,7 +357,7 @@ class Sample implements SampleInterface
 						{
 							$transaction->rollback($transaction_id);
 						}
-						throw new Exception("",1);
+						throw new SampleCreationFailedException("",1);
 					}
 	    		}
 	    		else
@@ -362,17 +366,17 @@ class Sample implements SampleInterface
 	    			{
 						$transaction->rollback($transaction_id);
 					}
-	    			throw new Exception("",1);
+	    			throw new SampleCreationFailedException("",1);
 	    		}
 	    	}
 	    	else
 	    	{
-	    		throw new Exception("",1);
+	    		throw new SampleCreationFailedException("",1);
 	    	}
     	}
     	else
     	{
-    		throw new Exception("",1);
+    		throw new SampleCreationFailedException("",1);
     	}
     }
 
