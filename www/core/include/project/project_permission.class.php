@@ -35,7 +35,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Project Permission Management Class
  * @package project
  */
-class ProjectPermission implements ProjectPermissionInterface {
+class ProjectPermission implements ProjectPermissionInterface, EventListenerInterface {
 
     private $permission_id;
     private $project_permission;
@@ -876,7 +876,14 @@ class ProjectPermission implements ProjectPermissionInterface {
 	{
 		return ProjectPermission_Access::reset_owner_id($old_owner_id, $new_owner_id);
 	}
-        
+
+    /**
+     * @todo implementation
+     */
+    public static function listen_events($event_object)
+    {
+    	
+    }
 }
 
 ?>

@@ -21,14 +21,16 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /**
- * Event Listener Interface
- * This interface will be used by all classes listing events
+ * Include Requirement Failed Exception
  * @package base
  */
-interface EventListenerInterface
+class IncludeRequirementFailedException extends Exception
 {
-	public static function listen_events($event_object);	
+    function __construct($message, $code)
+    {
+    	parent::__construct($message, $code);	
+    }    
 }
+
 ?>

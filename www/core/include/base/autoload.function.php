@@ -37,6 +37,8 @@ function __autoload($classname)
 		$path_prefix = "";
 	}
 	
+	$classes['EventListenerInterface']		= $path_prefix."core/include/base/interfaces/event_listener.interface.php"; 
+	
 	$classes['AuthForgotPasswordSendFailedException']	= $path_prefix."core/include/base/exceptions/auth_forgot_password_send_failed_exception.class.php";
 	$classes['AuthUserNotFoundException']				= $path_prefix."core/include/base/exceptions/auth_user_not_found_exception.class.php";
 	$classes['IdMissingException']						= $path_prefix."core/include/base/exceptions/id_missing_exception.class.php";
@@ -48,77 +50,23 @@ function __autoload($classname)
 	$classes['Regional']					= $path_prefix."core/include/base/regional.class.php";
 	$classes['System']						= $path_prefix."core/include/base/system.class.php";
 	$classes['SystemMessage']				= $path_prefix."core/include/base/system_message.class.php";
-	
-	$classes['OrganisationUnit']			= $path_prefix."core/include/organisation_unit/organisation_unit.class.php";
-	
-	$classes['ProjectException']			= $path_prefix."core/include/project/exceptions/project_exception.class.php";
-	$classes['ProjectSecurityException']	= $path_prefix."core/include/project/exceptions/project_security_exception.class.php";
-	
-	$classes['Project'] 					= $path_prefix."core/include/project/project.class.php";
-	$classes['ProjectItem'] 				= $path_prefix."core/include/project/project_item.class.php";
-	$classes['ProjectLog']					= $path_prefix."core/include/project/project_log.class.php";
-	$classes['ProjectPermission'] 			= $path_prefix."core/include/project/project_permission.class.php";
-	$classes['ProjectSecurity'] 			= $path_prefix."core/include/project/project_security.class.php";
-	$classes['ProjectStatus']				= $path_prefix."core/include/project/project_status.class.php";
-	$classes['ProjectStatusRelation']		= $path_prefix."core/include/project/project_status_relation.class.php";
-	$classes['ProjectTask']					= $path_prefix."core/include/project/project_task.class.php";
-	$classes['ProjectTaskPoint']			= $path_prefix."core/include/project/project_task_point.class.php";
-	$classes['ProjectTemplate']				= $path_prefix."core/include/project/project_template.class.php";
-	$classes['ProjectTemplateCat']			= $path_prefix."core/include/project/project_template_cat.class.php";
-	
-	$classes['SampleException']				= $path_prefix."core/include/sample/exceptions/sample_exception.class.php";
-	$classes['SampleSecurityException']		= $path_prefix."core/include/sample/exceptions/sample_security_exception.class.php";
-	
-	$classes['Sample']						= $path_prefix."core/include/sample/sample.class.php";
-	$classes['SampleDepository']			= $path_prefix."core/include/sample/sample_depository.class.php";
-	$classes['SampleItem']					= $path_prefix."core/include/sample/sample_item.class.php";
-	$classes['SampleSecurity']				= $path_prefix."core/include/sample/sample_security.class.php";
-	$classes['SampleTemplate']				= $path_prefix."core/include/sample/sample_template.class.php";
-	$classes['SampleTemplateCat']			= $path_prefix."core/include/sample/sample_template_cat.class.php";
-	
-	$classes['Method']						= $path_prefix."core/include/method/method.class.php";
-	$classes['MethodCat']					= $path_prefix."core/include/method/method_cat.class.php";
-	$classes['MethodType']					= $path_prefix."core/include/method/method_type.class.php";
-	
-	$classes['User'] 						= $path_prefix."core/include/user/user.class.php";
-	$classes['Group'] 						= $path_prefix."core/include/user/group.class.php";
-	
-	$classes['Item']						= $path_prefix."core/include/item/item.class.php";
-	$classes['ItemClass']					= $path_prefix."core/include/item/item_class.class.php";
-	$classes['ItemHasProjectStatus']		= $path_prefix."core/include/item/item_has_project_status.class.php";
-	$classes['ItemHasProjectLog']			= $path_prefix."core/include/item/item_has_project_log.class.php";
-	$classes['ItemHasSampleGid']			= $path_prefix."core/include/item/item_has_sample_gid.class.php";
-	$classes['ItemInformation']				= $path_prefix."core/include/item/item_information.class.php";
-	
-	$classes['Xml']							= $path_prefix."core/include/parser/xml.class.php";
-	
-	$classes['XmlCache']					= $path_prefix."core/include/template/xml_cache.class.php";
-	$classes['Oldl']						= $path_prefix."core/include/template/oldl.class.php";
-	$classes['Olvdl']						= $path_prefix."core/include/template/olvdl.class.php";
-	
-	$classes['DataException']				= $path_prefix."core/include/data/exceptions/data_exception.class.php";
-	$classes['DataSecurityException']		= $path_prefix."core/include/data/exceptions/data_security_exception.class.php";
-		
-	$classes['DataBrowser']					= $path_prefix."core/include/data/data_browser.class.php";
-	$classes['DataPath']					= $path_prefix."core/include/data/data_path.class.php";
-	$classes['DataPermission']				= $path_prefix."core/include/data/data_permission.class.php";
-	$classes['File']						= $path_prefix."core/include/data/file/file.class.php";
-	$classes['Folder']						= $path_prefix."core/include/data/folder/folder.class.php";
-	$classes['Object']						= $path_prefix."core/include/data/object/object.class.php";
-	$classes['ObjectPermission']			= $path_prefix."core/include/data/object/object_permission.class.php";
-	$classes['Path']						= $path_prefix."core/include/data/folder/path.class.php";
-	$classes['Value']						= $path_prefix."core/include/data/value/value.class.php";
-	$classes['ValueVar']					= $path_prefix."core/include/data/value/value_var.class.php";
-	$classes['ValueType']					= $path_prefix."core/include/data/value/value_type.class.php";
-	$classes['ValueExternalVar']			= $path_prefix."core/include/data/value/value_external_var.class.php";
-	$classes['VirtualFolder']				= $path_prefix."core/include/data/folder/virtual_folder.class.php";
 
-	$classes['DataSearch_Wrapper']			= $path_prefix."core/include/wrapper/data.search.wrapper.class.php";
-	$classes['SystemLog_Wrapper']			= $path_prefix."core/include/wrapper/system_log.list.wrapper.class.php";
-	$classes['Data_Wrapper']				= $path_prefix."core/include/wrapper/data.wrapper.class.php";
-	$classes['Project_Wrapper']				= $path_prefix."core/include/wrapper/project.wrapper.class.php";
-	$classes['Sample_Wrapper']				= $path_prefix."core/include/wrapper/sample.wrapper.class.php";
-
+	$registered_include_array = SystemHandler::get_include_folders();
+	if (is_array($registered_include_array) and count($registered_include_array) >= 1)
+	{
+		foreach($registered_include_array as $key => $value)
+		{
+			$config_file = $GLOBALS[include_dir]."/".$value."/config/include_info.php";
+			include($config_file);
+			if ($no_class_path != true)
+			{
+				$class_path_file = $GLOBALS[include_dir]."/".$value."/config/class_path.php";
+				include($class_path_file);
+			}
+			unset($no_class_path);
+		}
+	}
+	
 	if (isset($classes[$classname])) {
 		require_once($classes[$classname]);
 	}

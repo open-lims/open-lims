@@ -1,9 +1,9 @@
-<?php
+<?php 
 /**
- * @package base
+ * @package project
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -21,14 +21,11 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /**
- * Event Listener Interface
- * This interface will be used by all classes listing events
- * @package base
+ * 
  */
-interface EventListenerInterface
-{
-	public static function listen_events($event_object);	
-}
+	$name 						= "base";
+	
+	$no_class_event_listener 	= true;
+	$no_class_path				= true;
 ?>

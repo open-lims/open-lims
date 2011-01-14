@@ -28,8 +28,6 @@ require_once("interfaces/system_message.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	
-	
 	require_once("access/system_message.access.php");
 	require_once("access/system_log_type.access.php");
 }

@@ -1,6 +1,6 @@
-<?php
+<?php 
 /**
- * @package base
+ * @package project
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -21,14 +21,13 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /**
- * Event Listener Interface
- * This interface will be used by all classes listing events
- * @package base
+ * 
  */
-interface EventListenerInterface
-{
-	public static function listen_events($event_object);	
-}
+	$name 			= "user";
+	
+	$no_class_event_listener 	= true;
+	
+	$requires[0] 	= "base";
+	$requires[1]	= "organisation_unit";
 ?>

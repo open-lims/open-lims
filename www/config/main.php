@@ -51,6 +51,9 @@ $GLOBALS[www_dir]					= $GLOBALS[base_dir]."/www";
 $GLOBALS[files_dir]					= $GLOBALS[base_dir]."/files";
 $GLOBALS[log_dir]					= $GLOBALS[base_dir]."/logs";
 
+$GLOBALS[include_dir]				= $GLOBALS[www_dir]."/core/include";	
+$GLOBALS[modules_dir]				= $GLOBALS[www_dir]."/core/modules";
+
 // ! The following settings only needed by enabled serivce system !
 $GLOBALS[bin_dir] 					= $GLOBALS[base_dir]."/bin";	// Only needed for services
 

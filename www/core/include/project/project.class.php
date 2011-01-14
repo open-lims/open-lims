@@ -44,7 +44,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Project Management Class
  * @package project
  */
-class Project implements ProjectInterface
+class Project implements ProjectInterface, EventListenerInterface
 {
 	private $project_id;
 
@@ -2395,6 +2395,14 @@ class Project implements ProjectInterface
     	{
     		return array();
     	}
+    }
+    
+    /**
+     * @todo implementation
+     */
+    public static function listen_events($event_object)
+    {
+    	
     }
        
 }

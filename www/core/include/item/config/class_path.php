@@ -1,6 +1,6 @@
-<?php
+<?php 
 /**
- * @package base
+ * @package project
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -21,14 +21,13 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /**
- * Event Listener Interface
- * This interface will be used by all classes listing events
- * @package base
+ * 
  */
-interface EventListenerInterface
-{
-	public static function listen_events($event_object);	
-}
+	$classes['Item']						= $path_prefix."core/include/item/item.class.php";
+	$classes['ItemClass']					= $path_prefix."core/include/item/item_class.class.php";
+	$classes['ItemHasProjectStatus']		= $path_prefix."core/include/item/item_has_project_status.class.php";
+	$classes['ItemHasProjectLog']			= $path_prefix."core/include/item/item_has_project_log.class.php";
+	$classes['ItemHasSampleGid']			= $path_prefix."core/include/item/item_has_sample_gid.class.php";
+	$classes['ItemInformation']				= $path_prefix."core/include/item/item_information.class.php";
 ?>

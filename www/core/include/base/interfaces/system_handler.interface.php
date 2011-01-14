@@ -1,4 +1,4 @@
-<?php
+<?php 
 /**
  * @package base
  * @version 0.4.0.0
@@ -23,12 +23,11 @@
 
 
 /**
- * Event Listener Interface
- * This interface will be used by all classes listing events
+ * System Hanlder Interface
  * @package base
  */
-interface EventListenerInterface
+interface SystemHandlerInterface
 {
-	public static function listen_events($event_object);	
+
 }
 ?>

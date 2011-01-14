@@ -1,6 +1,6 @@
-<?php
+<?php 
 /**
- * @package base
+ * @package project
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -21,14 +21,12 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /**
- * Event Listener Interface
- * This interface will be used by all classes listing events
- * @package base
+ * 
  */
-interface EventListenerInterface
-{
-	public static function listen_events($event_object);	
-}
+	$classes['DataSearch_Wrapper']			= $path_prefix."core/include/wrapper/data.search.wrapper.class.php";
+	$classes['SystemLog_Wrapper']			= $path_prefix."core/include/wrapper/system_log.list.wrapper.class.php";
+	$classes['Data_Wrapper']				= $path_prefix."core/include/wrapper/data.wrapper.class.php";
+	$classes['Project_Wrapper']				= $path_prefix."core/include/wrapper/project.wrapper.class.php";
+	$classes['Sample_Wrapper']				= $path_prefix."core/include/wrapper/sample.wrapper.class.php";
 ?>

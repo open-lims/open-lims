@@ -77,16 +77,40 @@ class Main
 			require_once("include/base/misc.class.php");
 			require_once("include/base/session.class.php");
 			require_once("include/base/runtime_data.class.php");
-
+			require_once("include/base/system_handler.class.php");
+			
 			require_once("include/base/interfaces/event_listener.interface.php");
 			
 			Security::protect_session();
 	
 			$misc = new Misc();
-			
 			$runtime_data = new RuntimeData();
+			
+			try
+			{
+				$system_handler = new SystemHandler();
+			}
+			catch(IncludeDataCorruptException $e)
+			{
+				die("The config-ata of a module is corrupt!");
+			}
+			catch(IncludeProcessFailedException $e)
+			{
+				die("Include register process failed!");
+			}
+			catch(IncludeRequirementFailedException $e)
+			{
+				die("An include-module requirement is not found!");
+			}
+			catch(IncludeFolderEmptyException $e)
+			{
+				die("Include folder is empty!");
+			}
+			catch(EventHandlerCreationFailedException $e)
+			{
+				die("Event-handler creation failed!");
+			}
 		}
-
 	}
 	
 	/**
