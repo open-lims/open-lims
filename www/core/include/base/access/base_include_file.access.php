@@ -312,6 +312,38 @@ class BaseIncludeFile_Access
 	
 	/**
 	 * @param integer $include_id
+	 * @param string $name
+	 * @return string
+	 */
+	public static function get_id_by_include_id_and_name($include_id, $name)
+	{
+		global $db;
+
+		if (is_numeric($include_id) and $name)
+		{
+			$name = trim(strtolower($name));
+			
+			$sql = "SELECT id FROM ".constant("BASE_INCLUDE_FILE_TABLE")." WHERE include_id = '".$include_id."' AND TRIM(LOWER(name)) = '".$name."'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[id])
+			{
+				return $data[id];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $include_id
 	 * @return bool
 	 */
 	public static function delete_by_include_id($include_id)

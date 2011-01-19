@@ -26,21 +26,6 @@
  */
 require_once("../base/ajax_init.php");
 
-require_once("../../include/data/object/object_permission.class.php");
-
-require_once("../../include/item/item.class.php");
-
-require_once("../../include/project/project.class.php");
-require_once("../../include/project/project_item.class.php");
-require_once("../../include/project/project_permission.class.php");
-require_once("../../include/project/project_security.class.php");
-
-require_once("../../include/sample/sample.class.php");
-require_once("../../include/sample/sample_item.class.php");
-require_once("../../include/sample/sample_security.class.php");
-
-require_once("../../include/data/folder/folder.class.php");
-
 /**
  * Folder AJAX Class
  * @package data

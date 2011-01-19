@@ -39,7 +39,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * File Class for Management of Files in Folders
  * @package data
  */
-class File extends Object implements FileInterface
+class File extends Object implements FileInterface, EventListenerInterface
 {
 	private $file_id;
 	
@@ -1869,6 +1869,13 @@ class File extends Object implements FileInterface
 	{
 		return File_Access::set_owner_group_id_on_null($owner_group_id);
 	}
-
+    
+    /**
+     * @todo implementation
+     */
+    public static function listen_events($event_object)
+    {
+    	
+    }
 }
 ?>

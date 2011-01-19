@@ -43,9 +43,8 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Organisation Unit Class
  * @package organisation_unit
  */
-class OrganisationUnit implements OrganisationUnitInterface
+class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterface
 {
-
 	private $organisation_unit_id;
 	private $organisation_unit;
 
@@ -1655,6 +1654,14 @@ class OrganisationUnit implements OrganisationUnitInterface
 	}
 	
 	// --- TREE REC BLOCK END ---
-	
+	   
+    /**
+     * @todo implementation
+     */
+    public static function listen_events($event_object)
+    {
+    	
+    }
+    
 }
 ?>

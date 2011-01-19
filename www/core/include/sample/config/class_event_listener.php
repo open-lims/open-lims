@@ -25,4 +25,5 @@
  * 
  */
 	$event_listerner[0] = "Sample";
+	$event_listerner[1] = "SampleSecurity";
 ?>

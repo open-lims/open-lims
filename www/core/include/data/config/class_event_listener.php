@@ -24,4 +24,7 @@
 /**
  * 
  */
+	$event_listerner[0] = "Folder";
+	$event_listerner[1] = "File";
+	$event_listerner[2] = "Value";
 ?>

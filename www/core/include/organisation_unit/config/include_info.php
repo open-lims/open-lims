@@ -25,9 +25,7 @@
  * 
  */
 	$name 			= "organisation_unit";
-	
-	$no_class_event_listener 	= true;
-	
+		
 	$requires[0] 	= "base";
 	$requires[1]	= "user";
 ?>

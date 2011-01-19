@@ -25,8 +25,6 @@
  * 
  */
 require_once("../base/ajax_init.php");
-require_once("../../include/base/session.class.php");
-require_once("../../include/organisation_unit/organisation_unit.class.php");
 
 /**
  * Organiser AJAX IO Class

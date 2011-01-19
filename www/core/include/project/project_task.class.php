@@ -43,7 +43,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Project Task Management Class
  * @package project
  */
-class ProjectTask implements ProjectTaskInterface
+class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 {
 	private $task_id;
 	
@@ -2258,7 +2258,14 @@ class ProjectTask implements ProjectTaskInterface
      	}
      	return $upcoming_task_array;		
     }
-        
+
+    /**
+     * @todo implementation
+     */
+    public static function listen_events($event_object)
+    {
+    	
+    }
 }
 
 ?>

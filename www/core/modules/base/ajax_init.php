@@ -29,12 +29,23 @@ define("UNIT_TEST", false);
 require_once("../../../config/main.php");
 require_once("../../db/db.php");
 
+global $db;
+
+$db = new Database("postgresql");
+$db->db_connect($GLOBALS[server],$GLOBALS[port],$GLOBALS[dbuser],$GLOBALS[password],$GLOBALS[database]);
+
+
+require_once("../../include/base/system_handler.class.php");
+
+$GLOBALS[autoload_prefix] = "../../../";
+
+require_once("../../include/base/autoload.function.php");
+
 require_once("../../include/user/group.class.php");	
 require_once("../../include/user/user.class.php");
 
-require_once("../../include/organisation_unit/organisation_unit.class.php");
-
 require_once("../../include/base/session.class.php");
+
 
 /**
  * AJAX Init Class
@@ -44,10 +55,7 @@ class AJAXInit
 {
 	function __construct()
 	{
-		global $db, $user;
-
-		$db = new Database("postgresql");
-		$db->db_connect($GLOBALS[server],$GLOBALS[port],$GLOBALS[dbuser],$GLOBALS[password],$GLOBALS[database]);
+		global $user;
 
 		if ($_GET[session_id])
 		{

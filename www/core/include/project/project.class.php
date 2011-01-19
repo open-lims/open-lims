@@ -2402,7 +2402,12 @@ class Project implements ProjectInterface, EventListenerInterface
      */
     public static function listen_events($event_object)
     {
+    	if ($event_object instanceof UserDeletePrecheckEvent)
+    	{
+    		
+    	}
     	
+    	return true;
     }
        
 }

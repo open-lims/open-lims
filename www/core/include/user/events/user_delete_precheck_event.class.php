@@ -1,6 +1,6 @@
 <?php
- /**
- * @package data
+/**
+ * @package user
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -21,23 +21,38 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /**
- * Object Permission Management Interface
- * @package data
+ * User Delete Precheck Event
+ * @package user
  */
-interface ObjectPermissionInterface
-{
-	function __construct($permission, $automatic, $owner_id, $owner_group_id);
-	function __destruct();
+class UserDeletePrecheckEvent extends Event
+{    
+	private $user_id;
 	
-	public function set_project_id($project_id);
-	public function set_sample_id($sample_id);
-	public function set_organisation_unit_id($organisation_unit_id);
-	public function set_folder_flag($folder_flag);
-	
-	public function is_access($intention);
-	public function get_permission_string();
+	function __construct($user_id)
+    {
+    	if (is_numeric($user_id))
+    	{
+    		parent::__construct();
+    		$this->user_id = $user_id;
+    	}
+    	else
+    	{
+    		$this->user_id = null;
+    	}
+    }
+    
+    public function get_user_id()
+    {
+    	if ($this->user_id)
+    	{
+    		return $this->user_id;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
 }
 
 ?>

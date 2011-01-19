@@ -45,7 +45,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Sample Management Class
  * @package sample
  */
-class Sample implements SampleInterface
+class Sample implements SampleInterface, EventListenerInterface
 {
 	private $sample;
 	
@@ -1512,6 +1512,14 @@ class Sample implements SampleInterface
     	{
     		return null;
     	}
+    }
+    
+    /**
+     * @todo implementation
+     */
+    public static function listen_events($event_object)
+    {
+    	
     }
     
 }

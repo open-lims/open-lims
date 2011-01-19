@@ -79,8 +79,6 @@ class Main
 			require_once("include/base/runtime_data.class.php");
 			require_once("include/base/system_handler.class.php");
 			
-			require_once("include/base/interfaces/event_listener.interface.php");
-			
 			Security::protect_session();
 	
 			$misc = new Misc();

@@ -258,6 +258,33 @@ class BaseEventListener_Access
 	}
 	
 	/**
+	 * @return array
+	 */
+	public static function list_classes()
+	{
+		global $db;
+		
+		$return_array = array();
+		
+		$sql = "SELECT class_name FROM ".constant("BASE_EVENT_LISTENER_TABLE")."";
+		$res = $db->db_query($sql);
+		
+		while ($data = $db->db_fetch_assoc($res))
+		{
+			array_push($return_array,$data[class_name]);
+		}
+		
+		if (is_array($return_array))
+		{
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @param integer $include_id
 	 * @return bool
 	 */

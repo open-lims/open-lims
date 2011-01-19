@@ -36,7 +36,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Project Item Management Class
  * @package project
  */
-class ProjectLog implements ProjectLogInterface
+class ProjectLog implements ProjectLogInterface, EventListenerInterface
 {
 	private $log_id;
 	private $log;
@@ -342,5 +342,13 @@ class ProjectLog implements ProjectLogInterface
 	{
 		return ProjectLog_Access::list_entries_by_owner_id($user_id);
 	}
+	
+    /**
+     * @todo implementation
+     */
+    public static function listen_events($event_object)
+    {
+    	
+    }
 }
 ?>

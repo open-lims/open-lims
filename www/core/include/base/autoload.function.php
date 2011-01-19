@@ -43,6 +43,9 @@ function __autoload($classname)
 	$classes['AuthUserNotFoundException']				= $path_prefix."core/include/base/exceptions/auth_user_not_found_exception.class.php";
 	$classes['IdMissingException']						= $path_prefix."core/include/base/exceptions/id_missing_exception.class.php";
 	
+	$classes['EventHandler']				= $path_prefix."core/include/base/event_handler.class.php";
+	$classes['Event']						= $path_prefix."core/include/base/events/event.class.php";
+	
 	$classes['Auth'] 						= $path_prefix."core/include/base/auth.class.php";
 	$classes['Communicator']				= $path_prefix."core/include/base/communicator.class.php";
 	$classes['DatetimeHandler']				= $path_prefix."core/include/base/datetime_handler.class.php";

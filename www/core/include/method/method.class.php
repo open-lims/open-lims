@@ -35,7 +35,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Method Category Management Class
  * @package method
  */
-class Method implements MethodInterface
+class Method implements MethodInterface, EventListenerInterface
 {
 	private $method_id;
 	
@@ -260,6 +260,13 @@ class Method implements MethodInterface
 	{
 		return Method_Access::list_entries_by_type_id($type_id);
 	}
-
+	
+    /**
+     * @todo implementation
+     */
+    public static function listen_events($event_object)
+    {
+    	
+    }
 }
 ?>

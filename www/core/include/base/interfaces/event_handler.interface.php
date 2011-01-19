@@ -30,9 +30,5 @@ interface EventHandlerInterface
 {
 	function __construct($event_object);
 	public function get_success();
-	
-	public static function register_handler($class, $include_id);
-	public static function remove_handler($class, $include_id);
-	public static function remove_all_handler($include_id);
 }
 ?>

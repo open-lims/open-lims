@@ -24,4 +24,5 @@
 /**
  * 
  */
+	$event_listerner[0] = "Method";
 ?>

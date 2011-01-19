@@ -36,7 +36,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Sample Security Management Class
  * @package sample
  */
-class SampleSecurity implements SampleSecurityInterface
+class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
 {
 	private $sample_id;
 
@@ -802,5 +802,12 @@ class SampleSecurity implements SampleSecurityInterface
     	return SampleHasOrganisationUnit_Access::delete_by_organisation_unit_id($organisation_unit_id);
     }
     
+    /**
+     * @todo implementation
+     */
+    public static function listen_events($event_object)
+    {
+    	
+    }
 }
 ?>

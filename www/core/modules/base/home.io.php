@@ -20,16 +20,16 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
- 	
+
  $template = new Template("languages/en-gb/template/home.html");
 
  $homeDate = date("l, jS F Y");
 
  $template->set_var("USERNAME",$user->get_full_name(false));
  $template->set_var("DATE",$homeDate);
- 
+
  $project = new Project(null);
- 
+  
  $user_filesize = $user->get_user_filesize();
  $user_quota = $user->get_user_quota();
  
@@ -67,7 +67,7 @@
  
  $act_filesize = Misc::calc_size($user_filesize);
  
- 
+
  $sum_running_projects = Project_Wrapper::count_user_running_projects($user->get_user_id());
  $sum_finished_projects = Project_Wrapper::count_user_finished_projects($user->get_user_id());
  $sum_projects = Project_Wrapper::count_user_projects($user->get_user_id());

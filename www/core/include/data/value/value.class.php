@@ -40,7 +40,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Value Management Class
  * @package data
  */
-class Value extends Object implements ValueInterface
+class Value extends Object implements ValueInterface, EventListenerInterface
 {
 	private $value_id;
 	
@@ -1779,6 +1779,13 @@ class Value extends Object implements ValueInterface
 	{
 		return Value_Access::set_owner_group_id_on_null($owner_group_id);
 	}
-	
+    
+    /**
+     * @todo implementation
+     */
+    public static function listen_events($event_object)
+    {
+    	
+    }
 }
 ?>

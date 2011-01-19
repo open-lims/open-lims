@@ -26,4 +26,6 @@
  */
 	$event_listerner[0] = "Project";
 	$event_listerner[1] = "ProjectPermission";
+	$event_listerner[2] = "ProjectLog";
+	$event_listerner[3] = "ProjectTask";
 ?>

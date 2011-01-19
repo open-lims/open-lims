@@ -49,7 +49,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Folder Management Class
  * @package data
  */
-class Folder implements FolderInterface
+class Folder implements FolderInterface, EventListenerInterface
 {
 	private $folder_id;
 	
@@ -2140,7 +2140,14 @@ class Folder implements FolderInterface
 	{
 		return Folder_Access::set_owner_group_id_on_null($owner_group_id);
 	}
-
+    
+    /**
+     * @todo implementation
+     */
+    public static function listen_events($event_object)
+    {
+    	
+    }
 }
 
 ?>

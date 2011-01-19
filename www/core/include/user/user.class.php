@@ -32,6 +32,9 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("exceptions/user_creation_failed_exception.class.php");
 	require_once("exceptions/user_not_found_exception.class.php");
 	
+	require_once("events/user_delete_event.class.php");
+	require_once("events/user_delete_precheck_event.class.php");
+	
 	require_once("access/user.access.php");
 	require_once("access/user_admin_setting.access.php");
 	require_once("access/user_profile_setting.access.php");
@@ -575,6 +578,14 @@ class User implements UserInterface {
 		if ($this->user_id)
 		{
 			if ($this->user_id == 1)
+			{
+				return false;
+			}
+			
+			$user_delete_precheck_event = new UserDeletePrecheckEvent($this->user_id);
+			$event_handler = new EventHandler($user_delete_precheck_event);
+			
+			if ($event_handler->get_success() == false)
 			{
 				return false;
 			}
