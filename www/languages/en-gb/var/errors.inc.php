@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * @package base
  * @version 0.4.0.0
