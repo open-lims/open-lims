@@ -44,7 +44,6 @@ $GLOBALS[enable_job_system]			= false;							// "
 
 $GLOBALS[base_dir] 					= "";								// directory in System (eg. C:/lims (windows) or /srv/www/lims (unix))
 $GLOBALS[www_dir]					= $GLOBALS[base_dir]."/www";	
-$GLOBALS[files_dir]					= $GLOBALS[base_dir]."/files";
 $GLOBALS[log_dir]					= $GLOBALS[base_dir]."/logs";
 
 // ! The following settings only needed by enabled serivce system !
