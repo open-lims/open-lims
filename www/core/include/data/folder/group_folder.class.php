@@ -24,98 +24,61 @@
 /**
  * 
  */
-require_once("interfaces/user_folder.interface.php");
+require_once("interfaces/group_folder.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	require_once("access/folder_is_home_folder.access.php");
+	require_once("access/folder_is_group_folder.access.php");
 }
 
 /**
- * User Folder Class
+ * Group Folder Class
  * @package data
  */
-class UserFolder implements UserFolderInterface, EventListenerInterface
+class GroupFolder implements GroupFolderInterface, EventListenerInterface
 {
 	function __construct()
 	{
 		
 	}
 	
-	public function create($user_id)
+	public function create($group_id)
 	{
-		if (is_numeric($user_id))
+		if (is_numeric($group_id))
 		{
-			$user = new User($user_id);
+			$group = new Group($group_id);
 			
 			// Folder
-			$user_folder_id = $GLOBALS[user_folder_id];
-			$folder = new Folder($user_folder_id);
+			$group_folder_id = $GLOBALS[group_folder_id];
+			$folder = new Folder($group_folder_id);
 
 			$path = new Path($folder->get_path());
-			$path->add_element($user_id);
+			$path->add_element($group_id);
 			
 			$folder = new Folder(null);
-			if (($folder_id = $folder->create($user->get_username(), $user_folder_id, false, $path->get_path_string(), $user_id, null)) != null)
+			if (($folder_id = $folder->create($group->get_name(), $group_folder_id, false, $path->get_path_string(), 1, $group_id)) != null)
 			{
-				$folder_is_home_folder_access = new FolderIsHomeFolder_Access(null);
-				if ($folder_is_home_folder_access->create($user_id, $folder_id) == null)
+				$folder_is_group_folder_access = new FolderIsGroupFolder_Access(null);
+				if ($folder_is_group_folder_access->create($group_id, $folder_id) == null)
 				{
 					return false;
 				}
-				if ($folder->set_flag(2) == false)
+				if ($folder->set_flag(4) == false)
 				{
 					$folder->delete(true, true);
 					return false;
 				}
-				
-				// _Public
-				$public_path = new Path($path->get_path_string());
-				$public_path->add_element("_public");
-				
-				$public_folder = new Folder(null);
-				if (($public_folder->create("_public", $folder_id, false, $public_path->get_path_string(), $user_id, null)) == null)
-				{
-					$folder->delete();
-					return false;
-				}
-				
-				if ($public_folder->set_flag(512) == false)
-				{
-					$folder->delete();
-					return false;
-				}
-				
-				
-				// _Private
-				
-				$private_path = new Path($path->get_path_string());
-				$private_path->add_element("_private");
-				
-				$private_folder = new Folder(null);
-				if (($private_folder->create("_private", $folder_id, false, $private_path->get_path_string(), $user_id, null)) == null)
-				{
-					$folder->delete();
-					return false;
-				}
-				
-				if ($private_folder->set_flag(512) == false)
-				{
-					$folder->delete();
-					return false;
-				}
-				
+										
 				// Sample - Virtual Folder
-				
 				$virtual_folder = new VirtualFolder(null);
 				if ($virtual_folder->create($folder_id, "samples") == null)
 				{
-					$folder->delete();
+					$folder->delete(true, true);
 					return false;
 				}
 				if ($virtual_folder->set_sample_vfolder() == false)
 				{
-					$folder->delete();
+					$folder->delete(true, true);
 					return false;
 				}
 				
@@ -125,12 +88,12 @@ class UserFolder implements UserFolderInterface, EventListenerInterface
 				$virtual_folder = new VirtualFolder(null);
 				if ($virtual_folder->create($folder_id, "projects") == null)
 				{
-					$folder->delete();
+					$folder->delete(true, true);
 					return false;
 				}
 				if ($virtual_folder->set_project_vfolder() == false)
 				{
-					$folder->delete();
+					$folder->delete(true, true);
 					return false;
 				}
 				return true;
@@ -148,10 +111,10 @@ class UserFolder implements UserFolderInterface, EventListenerInterface
 	
 	public static function listen_events($event_object)
 	{
-		if ($event_object instanceof UserCreateEvent)
+		if ($event_object instanceof GroupCreateEvent)
     	{
-    		$user_folder = new UserFolder();
-    		if ($user_folder->create($event_object->get_user_id()) == false)
+    		$group_folder = new GroupFolder();
+    		if ($group_folder->create($event_object->get_group_id()) == false)
     		{
 				return false;
     		}

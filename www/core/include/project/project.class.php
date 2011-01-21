@@ -2415,6 +2415,19 @@ class Project implements ProjectInterface, EventListenerInterface
 			}
     	}
     	
+    	if ($event_object instanceof OrganisationUnitDeletePrecheckEvent)
+    	{
+    		$project_array = self::list_organisation_unit_related_projects($event_object->get_organisation_unit_id(), true);
+    		
+    		if (is_array($project_array))
+			{
+				if (count($project_array) >= 1)
+				{
+					return false;
+				}
+			}
+    	}
+    	
     	return true;
     }
        

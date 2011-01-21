@@ -843,18 +843,6 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 	}
 	
 	/**
-     * Deletes an organisation-unit from permission table completly.
-     * Warning: This method is for organisation-unit-deletion only!
-     * 			Outside organisation-unit-deletion is causes logical inconsistency!
-     * @param integer $organisation_unit_id
-     * @return bool
-     */
-	public static function delete_by_organisation_unit_id($organisation_unit_id)
-	{
-		return ProjectPermission_Access::delete_by_organisation_unit_id($organisation_unit_id);
-	}
-	
-	/**
 	 * Changes all owner_ids of another giver owner_id
 	 * @param integer $old_owner_id
 	 * @param integer $new_owner_id
@@ -873,6 +861,22 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     	if ($event_object instanceof UserDeleteEvent)
     	{
     		if (ProjectPermission_Access::delete_by_user_id($event_object->get_user_id()) == false)
+			{
+				return false;
+			}
+    	}
+    	
+    	if ($event_object instanceof GroupDeleteEvent)
+    	{
+    		if (ProjectPermission_Access::delete_by_group_id($event_object->get_group_id()) == false)
+			{
+				return false;
+			}
+    	}
+    	
+    	if ($event_object instanceof OrganisationUnitDeleteEvent)
+    	{
+    		if (ProjectPermission_Access::delete_by_organisation_unit_id($event_object->get_organisation_unit_id()) == false)
 			{
 				return false;
 			}

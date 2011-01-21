@@ -32,8 +32,12 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("exceptions/organisation_unit_creation_failed_exception.class.php");
 	require_once("exceptions/organisation_unit_not_found_exception.class.php");
 	
-	require_once("access/organisation_unit.access.php");
+	require_once("events/organisation_unit_create_event.class.php");
+	require_once("events/organisation_unit_delete_event.class.php");
+	require_once("events/organisation_unit_delete_precheck_event.class.php");
+	require_once("events/organisation_unit_post_delete_event.class.php");
 	
+	require_once("access/organisation_unit.access.php");
 	require_once("access/organisation_unit_has_member.access.php");
 	require_once("access/organisation_unit_has_group.access.php");
 	require_once("access/organisation_unit_type.access.php");
@@ -116,94 +120,18 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 				{
 					$this->__construct($organisation_unit_id);
 					
-					if ($contains_projects == true)
+					$organisation_unit_create_event = new OrganisationUnitCreateEvent($organisation_unit_id, $contains_projects);
+					$event_handler = new EventHandler($organisation_unit_create_event);
+					
+					if ($event_handler->get_success() == false)
 					{
-						// Folder
-						$organisation_unit_folder_id = $GLOBALS[organisation_unit_folder_id];
-						$folder = new Folder($organisation_unit_folder_id);
-		
-						$path = new Path($folder->get_path());
-						$path->add_element($organisation_unit_id);
-						
-						$folder = new Folder(null);
-						if (($folder_id = $folder->create($name, $organisation_unit_folder_id, false, $path->get_path_string(), $this->get_owner_id(), null)) != null)
+						if ($transaction_id != null)
 						{
-							if ($folder->create_organisation_unit_folder($organisation_unit_id) == false)
-							{
-								$folder->delete(true, true);
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
-								throw new OrganisationUnitCreationFailedException("",1);
-							}
-							if ($folder->set_flag(8) == false)
-							{
-								$folder->delete(true, true);
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
-								throw new OrganisationUnitCreationFailedException("",1);
-							}
-							
-													
-							// Sample - Virtual Folder
-							
-							$virtual_folder = new VirtualFolder(null);
-							if ($virtual_folder->create($folder_id, "samples") == null)
-							{
-								$folder->delete(true, true);
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
-								throw new OrganisationUnitCreationFailedException("",1);
-							}
-							if ($virtual_folder->set_sample_vfolder() == false)
-							{
-								$folder->delete(true, true);
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
-								throw new OrganisationUnitCreationFailedException("",1);
-							}
-							
-							
-							// Project - Virtual Folder
-							
-							$virtual_folder = new VirtualFolder(null);
-							if ($virtual_folder->create($folder_id, "projects") == null)
-							{
-								$folder->delete(true, true);
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
-								throw new OrganisationUnitCreationFailedException("",1);
-							}
-							if ($virtual_folder->set_project_vfolder() == false)
-							{
-								$folder->delete(true, true);
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
-								throw new OrganisationUnitCreationFailedException("",1);
-							}
+							$transaction->rollback($transaction_id);
 						}
-						else
-						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new OrganisationUnitCreationFailedException("",1);
-						}
+						throw new OrganisationUnitCreationFailedException("",1);
 					}
-						
-					if ($transaction_id != null)
+					else
 					{
 						$transaction->commit($transaction_id);
 					}
@@ -266,40 +194,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 					return false;
 				}
 				
-					
-				// Permissions
-				if (ProjectPermission::delete_by_organisation_unit_id($this->organisation_unit_id) == false)
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
-				}
-			
-								
-				// Folders
-				if ($this->organisation_unit->get_contains_projects() == true)
-				{
-					$contains_projects = true;
-					$folder_id = Folder::get_organisation_unit_folder_by_organisation_unit_id($this->organisation_unit_id);
-					$folder = new Folder($folder_id);
-					
-					if ($folder->unset_organisation_unit_folder() == false)
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						return false;
-					}
-				}
-				else
-				{
-					$contains_projects = false;
-				}
-					
-				// Organisation Unit
+				// Organisation Unit Position
 				if ($this->organisation_unit->get_next_position() != $this->organisation_unit_id)
 				{
 					
@@ -329,6 +224,20 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 					
 				}
 				
+				// Event
+				$contains_projects = $this->organisation_unit->get_contains_projects();
+				$organisation_unit_delete_event = new OrganisationUnitDeleteEvent($this->organisation_unit_id, $contains_projects);
+				$event_handler = new EventHandler($organisation_unit_delete_event);
+				
+				if ($event_handler->get_success() == false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+				}			
+													
 				if ($this->organisation_unit->delete() == false)
 				{
 					if ($transaction_id != null)
@@ -337,26 +246,17 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 					}
 					return false;
 				}
+
+				$organisation_unit_post_delete_event = new OrganisationUnitPostDeleteEvent($this->organisation_unit_id, $contains_projects);
+				$event_handler = new EventHandler($organisation_unit_post_delete_event);
 				
-				if ($contains_projects == true)
-				{	
-					// Final Folder
-					if ($folder->delete(true, true) == false)
+				if ($event_handler->get_success() == false)
+				{
+					if ($transaction_id != null)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						return false;
+						$transaction->rollback($transaction_id);
 					}
-					else
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
-						return true;
-					}
+					return false;
 				}
 				else
 				{
@@ -387,25 +287,13 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	{
 		if ($this->organisation_unit_id)
 		{
-			// Projecs
-			$project_array = Project::list_organisation_unit_related_projects($this->organisation_unit_id, true);
-			if (is_array($project_array))
-			{
-				if (count($project_array) >= 1)
-				{
-					return false;
-				}
-			}
 		
-			// Samples
-			$sample_array = Sample::list_organisation_unit_related_samples($this->organisation_unit_id);
+			$organisation_unit_delete_precheck_event = new OrganisationUnitDeletePrecheckEvent($this->organisation_unit_id);
+			$event_handler = new EventHandler($organisation_unit_delete_precheck_event);
 			
-			if (is_array($sample_array))
+			if ($event_handler->get_success() == false)
 			{
-				if (count($sample_array) >= 1)
-				{
-					return false;
-				}
+				return false;
 			}
 			
 			// Organisation-Unit Childs	
@@ -419,7 +307,6 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 			}
 			
 			return true;
-			
 		}
 		else
 		{
@@ -1496,16 +1383,6 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Deletes a group from all OUs
-	 * @param integer $group_id Group-ID
-	 * @return bool
-	 */
-	public static function delete_groups_by_group_id($group_id)
-	{
-		return OrganisationUnitHasGroup_Access::delete_by_group_id($group_id);
-	}
-	
-	/**
 	 * Checks if an User is a leader of any OU
 	 * @param integer $user_id User-ID
 	 * @return bool
@@ -1659,6 +1536,14 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
     	if ($event_object instanceof UserDeleteEvent)
     	{
 			if (OrganisationUnitHasMember_Access::delete_by_user_id($event_object->get_user_id()) == false)
+			{
+				return false;
+			}
+    	}
+    	
+   		if ($event_object instanceof GroupDeleteEvent)
+    	{
+			if (OrganisationUnitHasGroup_Access::delete_by_group_id($event_object->get_group_id()) == false)
 			{
 				return false;
 			}

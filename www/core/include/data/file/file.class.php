@@ -1849,16 +1849,6 @@ class File extends Object implements FileInterface, EventListenerInterface
 			return null;
 		}
 	}
-	
-	/**
-	 * Sets the owner_id on null, where owner_id = $owner_id
-	 * @param integer $owner_group_id
-	 * @return bool
-	 */
-	public static function set_owner_group_id_on_null($owner_group_id)
-	{
-		return File_Access::set_owner_group_id_on_null($owner_group_id);
-	}
     
     /**
      * @todo implementation
@@ -1868,6 +1858,14 @@ class File extends Object implements FileInterface, EventListenerInterface
     	if ($event_object instanceof UserDeleteEvent)
     	{
 			if (File_Access::set_owner_id_on_null($event_object->get_user_id()) == false)
+			{
+				return false;
+			}
+    	}
+    	
+    	if ($event_object instanceof GroupDeleteEvent)
+    	{
+			if (File_Access::set_owner_group_id_on_null($event_object->get_group_id()) == false)
 			{
 				return false;
 			}

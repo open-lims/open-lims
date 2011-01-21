@@ -169,12 +169,12 @@ class SystemHandler implements SystemHandlerInterface
 										}
 										
 										// Register Event Handler
-										if (is_array($event_listerner) and count($event_listerner) >= 1)
+										if (is_array($event_listener) and count($event_listener) >= 1)
 										{
-											foreach($event_listerner as $event_listerner_key => $event_listerner_value)
+											foreach($event_listener as $event_listener_key => $event_listener_value)
 											{
 												$base_event_listener = new BaseEventListener_Access(null);
-												if ($base_event_listener->create($register_key, $event_listerner_value) == null)
+												if ($base_event_listener->create($register_key, $event_listener_value) == null)
 												{
 													if ($transaction_id != null)
 													{
@@ -265,12 +265,12 @@ class SystemHandler implements SystemHandlerInterface
 									}
 									
 									// Register Event Handler
-									if (is_array($event_listerner) and count($event_listerner) >= 1)
+									if (is_array($event_listener) and count($event_listener) >= 1)
 									{
-										foreach($event_listerner as $event_listerner_key => $event_listerner_value)
+										foreach($event_listener as $event_listener_key => $event_listener_value)
 										{
 											$base_event_listener = new BaseEventListener_Access(null);
-											if ($base_event_listener->create($base_include_id, $event_listerner_value) == null)
+											if ($base_event_listener->create($base_include_id, $event_listener_value) == null)
 											{
 												if ($transaction_id != null)
 												{
@@ -310,7 +310,7 @@ class SystemHandler implements SystemHandlerInterface
 				}
 				unset($name);
 				unset($requires);
-				unset($event_listerner);
+				unset($event_listener);
 				unset($no_db_table_name);
 				unset($no_class_event_listener);
 				unset($no_class_path);

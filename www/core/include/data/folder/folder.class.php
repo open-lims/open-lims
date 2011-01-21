@@ -34,9 +34,9 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	
 	require_once("access/folder_join.access.php");
 	
-	require_once("access/folder_is_group_folder.access.php");
-	require_once("access/folder_is_home_folder.access.php");
-	require_once("access/folder_is_organisation_unit_folder.access.php");
+	require_once("access/folder_is_group_folder.access.php"); // Legacy
+	require_once("access/folder_is_home_folder.access.php"); // Legacy
+	require_once("access/folder_is_organisation_unit_folder.access.php"); // Legacy
 	require_once("access/folder_is_project_folder.access.php");
 	require_once("access/folder_is_project_status_folder.access.php");
 	require_once("access/folder_is_sample_folder.access.php");
@@ -468,54 +468,6 @@ class Folder implements FolderInterface, EventListenerInterface
 		else
 		{
 			return null;
-		}
-	}
-	
-	/**
-	 * Sets the current folder to a group folder
-	 * @todo extrat method from class due to loose dependency
-	 * @param integer $group_id
-	 * @return bool
-	 */
-	public function create_group_folder($group_id)
-	{
-		if ($this->folder_id and $group_id)
-		{	
-			$folder_is_group_folder_access = new FolderIsGroupFolder_Access(null);
-			$result = $folder_is_group_folder_access->create($group_id, $this->folder_id);
-			
-			if ($result != null)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-	}
-	
-	/**
-	 * Sets the current folder to an organisation unit folder
-	 * @todo extrat method from class due to loose dependency
-	 * @param integer $organisation_unit_id
-	 * @return bool
-	 */
-	public function create_organisation_unit_folder($organisation_unit_id)
-	{
-		if ($this->folder_id and $organisation_unit_id)
-		{	
-			$folder_is_organisation_unit_folder_access = new FolderIsOrganisationUnitFolder_Access(null);
-			$result = $folder_is_organisation_unit_folder_access->create($organisation_unit_id, $this->folder_id);
-			
-			if ($result != null)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
 		}
 	}
 	
@@ -2098,16 +2050,6 @@ class Folder implements FolderInterface, EventListenerInterface
 	{
 		return Folder_Access::list_folder();
 	}
-	
-	/**
-	 * Sets the owner_id on null, where owner_id = $owner_id
-	 * @param integer $owner_group_id
-	 * @return bool
-	 */
-	public static function set_owner_group_id_on_null($owner_group_id)
-	{
-		return Folder_Access::set_owner_group_id_on_null($owner_group_id);
-	}
     
     /**
      * @todo implementation
@@ -2129,8 +2071,39 @@ class Folder implements FolderInterface, EventListenerInterface
 				return false;
 			}
     	}
+    	    	
+   		if ($event_object instanceof GroupDeleteEvent)
+    	{
+    		$folder_id = Folder::get_group_folder_by_group_id($event_object->get_group_id());
+			self::$folder_delete_object = new Folder($folder_id);
+			
+			if (self::$folder_delete_object->unset_group_folder() == false)
+			{
+				return false;
+			}
+			
+			if (Folder_Access::set_owner_group_id_on_null($event_object->get_group_id()) == false)
+			{
+				return false;
+			}
+    	}
     	
-    	if ($event_object instanceof UserPostDeleteEvent)
+    	if ($event_object instanceof OrganisationUnitDeleteEvent)
+    	{
+    		if ($event_object->get_contains_projects() == true)
+    		{
+	    		$folder_id = Folder::get_organisation_unit_folder_by_organisation_unit_id($event_object->get_organisation_unit_id());
+				self::$folder_delete_object = new Folder($folder_id);
+				
+				if (self::$folder_delete_object->unset_organisation_unit_folder() == false)
+				{
+					return false;
+				}
+    		}
+    	}
+    	
+        if ($event_object instanceof UserPostDeleteEvent 
+        	or $event_object instanceof GroupPostDeleteEvent)
     	{
     		if (is_object(self::$folder_delete_object))
     		{
@@ -2142,6 +2115,24 @@ class Folder implements FolderInterface, EventListenerInterface
     		else
     		{
     			return false;
+    		}
+    	}
+    	
+    	if ($event_object instanceof OrganisationUnitPostDeleteEvent)
+    	{
+    		if ($event_object->get_contains_projects() == true)
+    		{
+    			if (is_object(self::$folder_delete_object))
+	    		{
+		    		if (self::$folder_delete_object->delete(true, true) == false)
+					{
+						return false;
+					}
+	    		}
+	    		else
+	    		{
+	    			return false;
+	    		}
     		}
     	}
     	

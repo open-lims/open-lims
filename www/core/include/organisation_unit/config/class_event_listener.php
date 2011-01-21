@@ -24,5 +24,5 @@
 /**
  * 
  */
-	$event_listerner[0] = "OrganisationUnit";
+	$event_listener[0] = "OrganisationUnit";
 ?>

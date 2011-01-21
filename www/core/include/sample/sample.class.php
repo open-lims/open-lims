@@ -1532,6 +1532,19 @@ class Sample implements SampleInterface, EventListenerInterface
 			}
     	}
     	
+    	if ($event_object instanceof OrganisationUnitDeletePrecheckEvent)
+    	{
+    		$sample_array = self::list_organisation_unit_related_samples($event_object->get_organisation_unit_id());
+			
+			if (is_array($sample_array))
+			{
+				if (count($sample_array) >= 1)
+				{
+					return false;
+				}
+			}
+    	}
+    	
     	return true;
     }
     

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package project
+ * @package user
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -22,10 +22,37 @@
  */
 
 /**
- * 
+ * Group Create Event
+ * @package user
  */
-	$event_listener[0] = "Project";
-	$event_listener[1] = "ProjectPermission";
-	$event_listener[2] = "ProjectLog";
-	$event_listener[3] = "ProjectTask";
+class GroupCreateEvent extends Event
+{    
+	private $group_id;
+	
+	function __construct($group_id)
+    {
+    	if (is_numeric($group_id))
+    	{
+    		parent::__construct();
+    		$this->group_id = $group_id;
+    	}
+    	else
+    	{
+    		$this->group_id = null;
+    	}
+    }
+    
+    public function get_group_id()
+    {
+    	if ($this->group_id)
+    	{
+    		return $this->group_id;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+}
+
 ?>

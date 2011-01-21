@@ -1783,6 +1783,14 @@ class Value extends Object implements ValueInterface, EventListenerInterface
 			}
     	}
     	
+   		if ($event_object instanceof GroupDeleteEvent)
+    	{
+			if (Value_Access::set_owner_group_id_on_null($event_object->get_group_id()) == false)
+			{
+				return false;
+			}
+    	}
+    	
     	return true;
     }
 }

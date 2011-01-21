@@ -24,8 +24,10 @@
 /**
  * 
  */
-	$event_listerner[0] = "Folder";
-	$event_listerner[1] = "UserFolder";
-	$event_listerner[2] = "File";
-	$event_listerner[3] = "Value";
+	$event_listener[0] = "Folder";
+	$event_listener[1] = "UserFolder";
+	$event_listener[2] = "GroupFolder";
+	$event_listener[3] = "OrganisationUnitFolder";
+	$event_listener[4] = "File";
+	$event_listener[5] = "Value";
 ?>

@@ -82,7 +82,6 @@ interface OrganisationUnitInterface
 	public static function list_entries_by_user_id($user_id);
 	public static function list_entries_by_group_id($group_id);
 	public static function list_types();
-	public static function delete_groups_by_group_id($group_id);
 	public static function count_organisation_units();
 	// private static function is_leader($user_id);
 	

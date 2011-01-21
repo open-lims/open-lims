@@ -84,6 +84,5 @@ interface FileInterface
 
 	public static function exist_file($file_id);
 	public static function get_icon_by_name($name);
-	public static function set_owner_group_id_on_null($owner_group_id);
 }
 ?>

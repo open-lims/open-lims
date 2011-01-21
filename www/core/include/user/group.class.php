@@ -32,6 +32,10 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("exceptions/group_creation_failed_exception.class.php");
 	require_once("exceptions/group_not_found_exception.class.php");
 	
+	require_once("events/group_create_event.class.php");
+	require_once("events/group_delete_event.class.php");
+	require_once("events/group_post_delete_event.class.php");
+	
 	require_once("access/group.access.php");
 	require_once("access/group_has_user.access.php");
 }
@@ -98,100 +102,25 @@ class Group implements GroupInterface
 				
 				if (($group_id = $this->group->create($name)) != null)
 				{
-					
 					$this->__construct($group_id);
 					
-					// Folder
-					$group_folder_id = $GLOBALS[group_folder_id];
-					$folder = new Folder($group_folder_id);
-	
-					$path = new Path($folder->get_path());
-					$path->add_element($group_id);
+					$group_create_event = new GroupCreateEvent($group_id);
+					$event_handler = new EventHandler($group_create_event);
 					
-					$folder = new Folder(null);
-					if (($folder_id = $folder->create($name, $group_folder_id, false, $path->get_path_string(), 1, $group_id)) != null)
-					{
-						if ($folder->create_group_folder($group_id) == false)
-						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new GroupCreationFailedException("",3);
-						}
-						if ($folder->set_flag(4) == false)
-						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new GroupCreationFailedException("",3);
-						}
-						
-												
-						// Sample - Virtual Folder
-						
-						$virtual_folder = new VirtualFolder(null);
-						if ($virtual_folder->create($folder_id, "samples") == null)
-						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new GroupCreationFailedException("",3);
-						}
-						if ($virtual_folder->set_sample_vfolder() == false)
-						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new GroupCreationFailedException("",3);
-						}
-						
-						
-						// Project - Virtual Folder
-						
-						$virtual_folder = new VirtualFolder(null);
-						if ($virtual_folder->create($folder_id, "projects") == null)
-						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new GroupCreationFailedException("",3);
-						}
-						if ($virtual_folder->set_project_vfolder() == false)
-						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new GroupCreationFailedException("",3);
-						}
-						
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
-						
-						return $group_id;
-						
-					}
-					else
+					if ($event_handler->get_success() == false)
 					{
 						if ($transaction_id != null)
 						{
 							$transaction->rollback($transaction_id);
 						}
-						throw new GroupCreationFailedException("",3);
+						throw new GroupCreationFailedException("",1);
 					}
+					else
+					{
+						$transaction->commit($transaction_id);
+					}
+					
+					return $group_id;
 				}
 				else
 				{
@@ -237,9 +166,10 @@ class Group implements GroupInterface
 				return false;
 			}
 			
+			$group_delete_event = new GroupDeleteEvent($this->group_id);
+			$event_handler = new EventHandler($group_delete_event);
 			
-			// Organisation-Unit-Connection
-			if (OrganisationUnit::delete_groups_by_group_id($this->group_id) == false)
+			if ($event_handler->get_success() == false)
 			{
 				if ($transaction_id != null)
 				{
@@ -247,59 +177,7 @@ class Group implements GroupInterface
 				}
 				return false;
 			}
-				
-			// Permissions
-			if (ProjectPermission::delete_by_group_id($this->group_id) == false)
-			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
-				return false;
-			}
-			
-			// Values
-			if (Value::set_owner_group_id_on_null($this->group_id) == false)
-			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
-				return false;
-			}
-				
-			// Files
-			if (File::set_owner_group_id_on_null($this->group_id) == false)
-			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
-				return false;
-			}
-				
-			// Folders
-			$folder_id = Folder::get_group_folder_by_group_id($this->group_id);
-			$folder = new Folder($folder_id);
-			
-			if ($folder->unset_group_folder() == false)
-			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
-				return false;
-			}
-			
-			if (Folder::set_owner_group_id_on_null($this->group_id) == false)
-			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
-				return false;
-			}
-				
+								
 			// Group
 			if ($this->group->delete() == false)
 			{
@@ -310,8 +188,10 @@ class Group implements GroupInterface
 				return false;
 			}
 				
-			// Final Folder
-			if ($folder->delete(true, true) == false)
+			$group_post_delete_event = new GroupPostDeleteEvent($this->group_id);
+			$event_handler = new EventHandler($group_post_delete_event);
+			
+			if ($event_handler->get_success() == false)
 			{
 				if ($transaction_id != null)
 				{
@@ -326,7 +206,7 @@ class Group implements GroupInterface
 					$transaction->commit($transaction_id);
 				}
 				return true;
-			}	
+			}
 		}
 		else
 		{

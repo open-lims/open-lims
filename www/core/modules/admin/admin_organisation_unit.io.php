@@ -482,7 +482,7 @@ class AdminOrganisationUnitIO
 			else
 			{
 				$exception = new Exception("", 2);
-				$error_io = new Error_IO($exception, 40, 40, 3);
+				$error_io = new Error_IO($exception, 40, 40, 1);
 				$error_io->display_error();
 			}
 		}

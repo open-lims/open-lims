@@ -24,5 +24,5 @@
 /**
  * 
  */
-	$event_listerner[0] = "Method";
+	$event_listener[0] = "Method";
 ?>
