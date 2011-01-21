@@ -334,21 +334,25 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 		return ProjectLog_Access::list_entries_by_project_id($project_id);
 	}
 	
-	/**
-	 * @param integer $user_id
-	 * @return array
-	 */
-	public static function list_entries_by_user_id($user_id)
-	{
-		return ProjectLog_Access::list_entries_by_owner_id($user_id);
-	}
-	
     /**
      * @todo implementation
      */
     public static function listen_events($event_object)
     {
+    	if ($event_object instanceof UserDeletePrecheckEvent)
+    	{
+    		$project_log_array = ProjectLog_Access::list_entries_by_owner_id($event_object->get_user_id());
+			
+			if (is_array($project_log_array))
+			{
+				if (count($project_log_array) >= 1)
+				{
+					return false;
+				}
+			}
+    	}
     	
+    	return true;
     }
 }
 ?>

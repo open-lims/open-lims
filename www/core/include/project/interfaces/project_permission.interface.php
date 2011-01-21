@@ -52,7 +52,6 @@ interface ProjectPermissionInterface
 	public static function list_system_setted_projects_by_organisation_id($organisation_unit_id);
 	public static function list_system_setted_entries_by_leader_id($leader_id);
 	
-	public static function delete_by_user_id($user_id);
 	public static function delete_by_group_id($group_id);
 	public static function delete_by_organisation_unit_id($organisation_unit_id);
 	

@@ -50,7 +50,6 @@ interface SampleSecurityInterface
 	public function is_user($user_id);
 	public function is_organisation_unit($organisation_unit_id);
 	
-	public static function delete_user_complete($user_id);
 	public static function delete_organisation_complete($organisation_unit_id);
 }
 

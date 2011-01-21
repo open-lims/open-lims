@@ -2404,7 +2404,15 @@ class Project implements ProjectInterface, EventListenerInterface
     {
     	if ($event_object instanceof UserDeletePrecheckEvent)
     	{
+    		$project_array = self::list_user_related_projects($event_object->get_user_id(), false);
     		
+    		if (is_array($project_array))
+			{
+				if (count($project_array) >= 1)
+				{
+					return false;
+				}
+			}
     	}
     	
     	return true;

@@ -266,7 +266,20 @@ class Method implements MethodInterface, EventListenerInterface
      */
     public static function listen_events($event_object)
     {
+    	if ($event_object instanceof UserDeletePrecheckEvent)
+    	{
+    		$method_array =  self::list_entries_by_user_id($event_object->get_user_id()); 
+			
+			if (is_array($method_array))
+			{
+				if (count($method_array) >= 1)
+				{
+					return false;
+				}
+			}
+    	}
     	
+    	return true;
     }
 }
 ?>

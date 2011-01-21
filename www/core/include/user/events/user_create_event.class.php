@@ -1,6 +1,6 @@
 <?php
 /**
- * @package project
+ * @package user
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -22,10 +22,37 @@
  */
 
 /**
- * 
+ * User Create Event
+ * @package user
  */
-	$event_listerner[0] = "Folder";
-	$event_listerner[1] = "UserFolder";
-	$event_listerner[2] = "File";
-	$event_listerner[3] = "Value";
+class UserCreateEvent extends Event
+{    
+	private $user_id;
+	
+	function __construct($user_id)
+    {
+    	if (is_numeric($user_id))
+    	{
+    		parent::__construct();
+    		$this->user_id = $user_id;
+    	}
+    	else
+    	{
+    		$this->user_id = null;
+    	}
+    }
+    
+    public function get_user_id()
+    {
+    	if ($this->user_id)
+    	{
+    		return $this->user_id;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+}
+
 ?>

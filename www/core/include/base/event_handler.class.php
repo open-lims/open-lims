@@ -57,7 +57,10 @@ class EventHandler implements EventHandlerInterface
 						break;
 					}
 				}
-				$this->success = true;	
+				if ($listen_success == true)
+				{
+					$this->success = true;	
+				}
 			}
 		}
 	}

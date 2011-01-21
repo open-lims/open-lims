@@ -32,6 +32,7 @@
 	$classes['DataPermission']				= $path_prefix."core/include/data/data_permission.class.php";
 	$classes['File']						= $path_prefix."core/include/data/file/file.class.php";
 	$classes['Folder']						= $path_prefix."core/include/data/folder/folder.class.php";
+	$classes['UserFolder']					= $path_prefix."core/include/data/folder/user_folder.class.php";
 	$classes['Object']						= $path_prefix."core/include/data/object/object.class.php";
 	$classes['ObjectPermission']			= $path_prefix."core/include/data/object/object_permission.class.php";
 	$classes['Path']						= $path_prefix."core/include/data/folder/path.class.php";

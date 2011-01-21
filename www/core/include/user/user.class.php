@@ -32,8 +32,10 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("exceptions/user_creation_failed_exception.class.php");
 	require_once("exceptions/user_not_found_exception.class.php");
 	
+	require_once("events/user_create_event.class.php");
 	require_once("events/user_delete_event.class.php");
 	require_once("events/user_delete_precheck_event.class.php");
+	require_once("events/user_post_delete_event.class.php");
 	
 	require_once("access/user.access.php");
 	require_once("access/user_admin_setting.access.php");
@@ -186,154 +188,8 @@ class User implements UserInterface {
 					
 					$this->__construct($user_id);
 					
-					// Folder
-					$user_folder_id = $GLOBALS[user_folder_id];
-					$folder = new Folder($user_folder_id);
-	
-					$path = new Path($folder->get_path());
-					$path->add_element($user_id);
-					
-					$folder = new Folder(null);
-					if (($folder_id = $folder->create($username, $user_folder_id, false, $path->get_path_string(), $user_id, null)) != null)
-					{
-						
-						if ($folder->create_home_folder($user_id) == false)
-						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new UserCreationFailedException("",1);
-						}
-						if ($folder->set_flag(2) == false)
-						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new UserCreationFailedException("",1);
-						}
-						
-						// _Public
-						
-						$public_path = new Path($path->get_path_string());
-						$public_path->add_element("_public");
-						
-						$public_folder = new Folder(null);
-						if (($public_folder->create("_public", $folder_id, false, $public_path->get_path_string(), $user_id, null)) == null)
-						{
-							$folder->delete();
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new UserCreationFailedException("",1);
-						}
-						
-						if ($public_folder->set_flag(512) == false)
-						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new UserCreationFailedException("",1);
-						}
-						
-						
-						// _Private
-						
-						$private_path = new Path($path->get_path_string());
-						$private_path->add_element("_private");
-						
-						$private_folder = new Folder(null);
-						if (($private_folder->create("_private", $folder_id, false, $private_path->get_path_string(), $user_id, null)) == null)
-						{
-							$folder->delete();
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new UserCreationFailedException("",1);
-						}
-						
-						if ($private_folder->set_flag(512) == false)
-						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new UserCreationFailedException("",1);
-						}
-						
-						// Sample - Virtual Folder
-						
-						$virtual_folder = new VirtualFolder(null);
-						if ($virtual_folder->create($folder_id, "samples") == null)
-						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new UserCreationFailedException("",1);
-						}
-						if ($virtual_folder->set_sample_vfolder() == false)
-						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new UserCreationFailedException("",1);
-						}
-						
-						
-						// Project - Virtual Folder
-						
-						$virtual_folder = new VirtualFolder(null);
-						if ($virtual_folder->create($folder_id, "projects") == null)
-						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new UserCreationFailedException("",1);
-						}
-						if ($virtual_folder->set_project_vfolder() == false)
-						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new UserCreationFailedException("",1);
-						}
-						
-						// Groups
-						$group = new Group(10);
-						if ($group->create_user_in_group($user_id) == false)
-						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new UserCreationFailedException("",1);
-						}
-						
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
-						return $password;
-						
-					}
-					else
+					$group = new Group(10);
+					if ($group->create_user_in_group($user_id) == false)
 					{
 						if ($transaction_id != null)
 						{
@@ -341,6 +197,23 @@ class User implements UserInterface {
 						}
 						throw new UserCreationFailedException("",1);
 					}
+					
+					$user_create_event = new UserCreateEvent($user_id);
+					$event_handler = new EventHandler($user_create_event);
+					
+					if ($event_handler->get_success() == false)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						throw new UserCreationFailedException("",1);
+					}
+					else
+					{
+						$transaction->commit($transaction_id);
+					}
+					return $password;
 						
 				}
 				else
@@ -433,46 +306,7 @@ class User implements UserInterface {
 					}
 					return false;
 				}
-				
-				// Organisation Units
-				if (OrganisationUnit::delete_members_by_user_id($this->user_id) == false)
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
-				}
-				
-				// Project-Permissions
-				if (ProjectPermission::delete_by_user_id($this->user_id) == false)
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
-				}
-				
-				if (ProjectPermission::reset_owner_id($this->user_id, 1) == false)
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
-				}
-				
-				// Sample-User Löschen
-				if (SampleSecurity::delete_user_complete($this->user_id) == false)
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
-				}
-				
+
 				// System-Logs
 				if (SystemLog::set_user_id_on_null($this->user_id) == false)
 				{
@@ -482,9 +316,11 @@ class User implements UserInterface {
 					}
 					return false;
 				}
-								
-				// Values
-				if (Value::set_owner_id_on_null($this->user_id) == false)
+				
+				$user_delete_event = new UserDeleteEvent($this->user_id);
+				$event_handler = new EventHandler($user_delete_event);
+				
+				if ($event_handler->get_success() == false)
 				{
 					if ($transaction_id != null)
 					{
@@ -492,40 +328,7 @@ class User implements UserInterface {
 					}
 					return false;
 				}
-				
-				// Files
-				if (File::set_owner_id_on_null($this->user_id) == false)
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
-				}
-				
-				// Folder
-				$folder_id = Folder::get_home_folder_by_user_id($this->user_id);
-				$folder = new Folder($folder_id);
-				
-				if ($folder->unset_home_folder() == false)
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
-				}
-				
-				if (Folder::set_owner_id_on_null($this->user_id) == false)
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
-				}
-				
-				// User
+			
 				if ($this->user->delete() == false)
 				{
 					if ($transaction_id != null)
@@ -535,8 +338,10 @@ class User implements UserInterface {
 					return false;
 				}
 				
-				// Final Folder Delete
-				if ($folder->delete(true, true) == false)
+				$user_post_delete_event = new UserPostDeleteEvent($this->user_id);
+				$event_handler = new EventHandler($user_post_delete_event);
+				
+				if ($event_handler->get_success() == false)
 				{
 					if ($transaction_id != null)
 					{
@@ -552,7 +357,6 @@ class User implements UserInterface {
 					}
 					return true;
 				}
-				
 			}
 			else
 			{
@@ -569,8 +373,6 @@ class User implements UserInterface {
 	
 	/**
 	 * Checks dependencies before user deletion.
-	 * @todo Return false if a job exists
-	 * @todo Use SQL COUNT in Access Layer (faster)
 	 * @return bool
 	 */
 	public function check_delete_dependencies()
@@ -589,85 +391,10 @@ class User implements UserInterface {
 			{
 				return false;
 			}
-			
-			$project_array = Project::list_user_related_projects($this->user_id, false);
-			
-			if (is_array($project_array))
+			else
 			{
-				if (count($project_array) >= 1)
-				{
-					return false;
-				}
+				return true;
 			}
-			
-			
-			$project_log_array = ProjectLog::list_entries_by_user_id($this->user_id);
-			
-			if (is_array($project_log_array))
-			{
-				if (count($project_log_array) >= 1)
-				{
-					return false;
-				}
-			}
-			
-			
-			$project_task_array = ProjectTask::list_tasks_by_user_id($this->user_id);
-			
-			if (is_array($project_task_array))
-			{
-				if (count($project_task_array) >= 1)
-				{
-					return false;
-				}
-			}
-			
-			
-			$sample_array = Sample::list_user_related_samples($this->user_id);
-			
-			if (is_array($sample_array))
-			{
-				if (count($sample_array) >= 1)
-				{
-					return false;
-				}
-			}
-			
-			
-			$method_array =  Method::list_entries_by_user_id($this->user_id); 
-			
-			if (is_array($method_array))
-			{
-				if (count($method_array) >= 1)
-				{
-					return false;
-				}
-			}
-			
-			
-			$owner_array = OrganisationUnit::list_entries_by_owner_id($this->user_id);
-			
-			if (is_array($owner_array))
-			{
-				if (count($owner_array) >= 1)
-				{
-					return false;
-				}
-			}
-			
-			
-			$leader_array = OrganisationUnit::list_entries_by_leader_id($this->user_id);
-			
-			if (is_array($leader_array))
-			{
-				if (count($leader_array) >= 1)
-				{
-					return false;
-				}
-			}
-			
-			return true;
-			
 		}
 		else
 		{

@@ -70,7 +70,6 @@ interface ProjectTaskInterface
 	// private function calc_progress();
 	
 	public static function list_tasks($project_id);
-	public static function list_tasks_by_user_id($user_id);
 	public static function check_over_time_tasks($project_id);
 	public static function list_upcoming_tasks();
 }

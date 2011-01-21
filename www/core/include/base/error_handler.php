@@ -38,12 +38,28 @@ function error_handler($code, $message, $file, $line)
 	{
 		if (stripos($message, "Failed to connect to mailserver") === false and stripos($message, "pg_query()") === false)
 		{
-			$in_container = Common_IO::get_in_container();
+			if (class_exists("Common_IO"))
+			{
+				$in_container = Common_IO::get_in_container();
+			}
+			else
+			{
+				$in_container = false;
+			}
 		
 			if ($in_container == false)
 			{	
-				echo "<br />";
-				echo Common_IO::container_begin("PHP Script Error",null);
+				if (class_exists("Common_IO"))
+				{
+					echo "<br />";
+					echo Common_IO::container_begin("PHP Script Error",null);
+				}
+				else
+				{
+					echo "<br />";
+					echo "<span class='bold'>PHP Script Error<span>";
+					echo "<br />";
+				}
 			}
 		
 			echo "<br /><span class='bold'>PHP Script Error</span>";
@@ -63,7 +79,10 @@ function error_handler($code, $message, $file, $line)
 		
 			if ($in_container == false)
 			{
-				echo Common_IO::container_end(null);
+				if (class_exists("Common_IO"))
+				{
+					echo Common_IO::container_end(null);
+				}
 			}
 		
 			if (class_exists('Database') and $db)

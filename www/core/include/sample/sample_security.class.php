@@ -777,19 +777,6 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     	}
     }
     
-    
-    /**
-     * Deletes an user from n:m table completly.
-     * Warning: This method is for user-deletion only!
-     * 			Outside user-deletion is causes logical inconsistency!
-     * @param integer $user_id;
-     * @return bool
-     */
-    public static function delete_user_complete($user_id)
-    {
-    	return SampleHasUser_Access::delete_by_user_id($user_id);
-    }
-    
     /**
      * Deletes an organisation unit from n:m table completly.
      * Warning: This method is for organisation-unit-deletion only!
@@ -807,7 +794,15 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
      */
     public static function listen_events($event_object)
     {
+    	if ($event_object instanceof UserDeleteEvent)
+    	{
+    		if (SampleHasUser_Access::delete_by_user_id($event_object->get_user_id()) == false)
+			{
+				return false;
+			}
+    	}
     	
+    	return true;
     }
 }
 ?>

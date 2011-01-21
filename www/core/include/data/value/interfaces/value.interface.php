@@ -78,7 +78,6 @@ interface ValueInterface
 	
 	public static function list_entries_by_type_id($type_id);
 	public static function exist_value($value_id);
-	public static function set_owner_id_on_null($owner_id);
 	public static function set_owner_group_id_on_null($owner_group_id);
 }
 

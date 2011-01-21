@@ -60,6 +60,8 @@ class Folder implements FolderInterface, EventListenerInterface
 	private $delete_access;
 	private $control_access;
 
+	private static $folder_delete_object;
+	
 	/**
 	 * @param integer $folder_id
 	 */
@@ -481,30 +483,6 @@ class Folder implements FolderInterface, EventListenerInterface
 		{	
 			$folder_is_group_folder_access = new FolderIsGroupFolder_Access(null);
 			$result = $folder_is_group_folder_access->create($group_id, $this->folder_id);
-			
-			if ($result != null)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-	}
-	
-	/**
-	 * Sets the current folder to an user (home) folder
-	 * @todo extrat method from class due to loose dependency
-	 * @param integer $user_id
-	 * @return bool
-	 */
-	public function create_home_folder($user_id)
-	{
-		if ($this->folder_id and $user_id)
-		{
-			$folder_is_home_folder_access = new FolderIsHomeFolder_Access(null);
-			$result = $folder_is_home_folder_access->create($user_id, $this->folder_id);
 			
 			if ($result != null)
 			{
@@ -2120,16 +2098,6 @@ class Folder implements FolderInterface, EventListenerInterface
 	{
 		return Folder_Access::list_folder();
 	}
-
-	/**
-	 * Sets the owner_id on null, where owner_id = $owner_id
-	 * @param integer $owner_id
-	 * @return bool
-	 */
-	public static function set_owner_id_on_null($owner_id)
-	{
-		return Folder_Access::set_owner_id_on_null($owner_id);
-	}
 	
 	/**
 	 * Sets the owner_id on null, where owner_id = $owner_id
@@ -2146,7 +2114,38 @@ class Folder implements FolderInterface, EventListenerInterface
      */
     public static function listen_events($event_object)
     {
+    	if ($event_object instanceof UserDeleteEvent)
+    	{
+    		$folder_id = Folder::get_home_folder_by_user_id($event_object->get_user_id());
+			self::$folder_delete_object = new Folder($folder_id);
+			
+			if (self::$folder_delete_object->unset_home_folder() == false)
+			{
+				return false;
+			}
+			
+			if (Folder_Access::set_owner_id_on_null($event_object->get_user_id()) == false)
+			{
+				return false;
+			}
+    	}
     	
+    	if ($event_object instanceof UserPostDeleteEvent)
+    	{
+    		if (is_object(self::$folder_delete_object))
+    		{
+	    		if (self::$folder_delete_object->delete(true, true) == false)
+				{
+					return false;
+				}
+    		}
+    		else
+    		{
+    			return false;
+    		}
+    	}
+    	
+    	return true;
     }
 }
 

@@ -43,7 +43,6 @@ interface FolderInterface
 	
 	public function create($name, $toid, $root, $path, $owner_id, $owner_group_id);
 	public function create_group_folder($group_id);
-	public function create_home_folder($user_id);
 	public function create_organisation_unit_folder($organisation_unit_id);
 	public function create_project_folder($project_id);
 	public function create_project_status_folder($status_id, $project_id);
@@ -113,7 +112,6 @@ interface FolderInterface
 	public static function get_sample_folder_by_sample_id($sample_id);
 	public static function get_folder_by_path($path);
 	public static function list_folder();
-	public static function set_owner_id_on_null($owner_id);
 	public static function set_owner_group_id_on_null($owner_group_id);
 }
 

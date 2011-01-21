@@ -1488,39 +1488,11 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * @param integer $owner_id User-ID
-	 * @return array List of owner OUs
-	 */
-	public static function list_entries_by_owner_id($owner_id)
-	{
-		return OrganisationUnit_Access::list_entries_by_owner_id($owner_id);
-	}
-	
-	/**
-	 * @param integer $leader_id User-ID
-	 * @return array List of leader OUs
-	 */
-	public static function list_entries_by_leader_id($leader_id)
-	{
-		return OrganisationUnit_Access::list_entries_by_leader_id($leader_id);
-	}
-	
-	/**
 	 * @return array Array of OU-Types
 	 */
 	public static function list_types()
 	{
 		return OrganisationUnitType_Access::list_entries();
-	}
-	
-	/**
-	 * Deletes an user from all OUs
-	 * @param integer $user_id User-ID
-	 * @return bool
-	 */
-	public static function delete_members_by_user_id($user_id)
-	{
-		return OrganisationUnitHasMember_Access::delete_by_user_id($user_id);
 	}
 	
 	/**
@@ -1660,7 +1632,39 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
      */
     public static function listen_events($event_object)
     {
+    	if ($event_object instanceof UserDeletePrecheckEvent)
+    	{
+    		$owner_array = OrganisationUnit_Access::list_entries_by_owner_id($event_object->get_user_id());
+			
+			if (is_array($owner_array))
+			{
+				if (count($owner_array) >= 1)
+				{
+					return false;
+				}
+			}
+			
+			
+			$leader_array = OrganisationUnit_Access::list_entries_by_leader_id($event_object->get_user_id());
+			
+			if (is_array($leader_array))
+			{
+				if (count($leader_array) >= 1)
+				{
+					return false;
+				}
+			}
+    	}
     	
+    	if ($event_object instanceof UserDeleteEvent)
+    	{
+			if (OrganisationUnitHasMember_Access::delete_by_user_id($event_object->get_user_id()) == false)
+			{
+				return false;
+			}
+    	}
+
+    	return true;
     }
     
 }

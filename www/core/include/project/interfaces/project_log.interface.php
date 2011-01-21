@@ -45,6 +45,5 @@ interface ProjectLogInterface
 	public function list_items();
 	
 	public static function list_entries_by_project_id($project_id);
-	public static function list_entries_by_user_id($user_id);
 }
 ?>

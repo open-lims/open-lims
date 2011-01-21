@@ -831,18 +831,6 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 	}
 	
 	/**
-     * Deletes an user from permission table completly.
-     * Warning: This method is for user-deletion only!
-     * 			Outside user-deletion is causes logical inconsistency!
-     * @param integer $user_id
-     * @return bool
-     */
-	public static function delete_by_user_id($user_id)
-	{
-		return ProjectPermission_Access::delete_by_user_id($user_id);
-	}
-	
-	/**
      * Deletes a group from permission table completly.
      * Warning: This method is for group-deletion only!
      * 			Outside group-deletion is causes logical inconsistency!
@@ -882,7 +870,15 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
      */
     public static function listen_events($event_object)
     {
+    	if ($event_object instanceof UserDeleteEvent)
+    	{
+    		if (ProjectPermission_Access::delete_by_user_id($event_object->get_user_id()) == false)
+			{
+				return false;
+			}
+    	}
     	
+    	return true;
     }
 }
 

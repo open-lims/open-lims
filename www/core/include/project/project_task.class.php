@@ -2150,17 +2150,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     {
     	return ProjectTask_Access::list_entries_by_project_id($project_id);
     }
-  
-  	/**
-  	 * @todo return user_has_tasks after user_has_task creation
-  	 * @param integer $user_id
-  	 * @return array
-  	 */
-    public static function list_tasks_by_user_id($user_id)
-    {
-    	return ProjectTask_Access::list_entries_by_owner_id($user_id);
-    }
-    
+      
     /**
      * Checks all overtime tasks of an project
      * @param integer $project_id
@@ -2264,7 +2254,20 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
      */
     public static function listen_events($event_object)
     {
+    	if ($event_object instanceof UserDeletePrecheckEvent)
+    	{
+    		$project_task_array = ProjectTask_Access::list_entries_by_owner_id($event_object->get_user_id());
+			
+			if (is_array($project_task_array))
+			{
+				if (count($project_task_array) >= 1)
+				{
+					return false;
+				}
+			}
+    	}
     	
+    	return true;
     }
 }
 

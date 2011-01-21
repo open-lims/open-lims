@@ -1,6 +1,6 @@
 <?php
 /**
- * @package project
+ * @package data
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -21,11 +21,12 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
+
 /**
- * 
+ * User Folder Interface
+ * @package data
  */
-	$event_listerner[0] = "Folder";
-	$event_listerner[1] = "UserFolder";
-	$event_listerner[2] = "File";
-	$event_listerner[3] = "Value";
-?>
+interface UserFolderInterface
+{
+	
+}

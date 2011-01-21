@@ -1519,7 +1519,20 @@ class Sample implements SampleInterface, EventListenerInterface
      */
     public static function listen_events($event_object)
     {
+    	if ($event_object instanceof UserDeletePrecheckEvent)
+    	{
+    		$sample_array = self::list_user_related_samples($event_object->get_user_id());
+			
+			if (is_array($sample_array))
+			{
+				if (count($sample_array) >= 1)
+				{
+					return false;
+				}
+			}
+    	}
     	
+    	return true;
     }
     
 }

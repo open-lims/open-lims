@@ -1760,16 +1760,6 @@ class Value extends Object implements ValueInterface, EventListenerInterface
    		}
 	}
 	
-    /**
-	 * Sets the owner_id on null, where owner_id = $owner_id
-	 * @param integer $owner_id
-	 * @return bool
-	 */
-	public static function set_owner_id_on_null($owner_id)
-	{
-		return Value_Access::set_owner_id_on_null($owner_id);
-	}
-	
 	/**
 	 * Sets the owner_id on null, where owner_id = $owner_id
 	 * @param integer $owner_group_id
@@ -1785,7 +1775,15 @@ class Value extends Object implements ValueInterface, EventListenerInterface
      */
     public static function listen_events($event_object)
     {
+    	if ($event_object instanceof UserDeleteEvent)
+    	{
+			if (Value_Access::set_owner_id_on_null($event_object->get_user_id()) == false)
+			{
+				return false;
+			}
+    	}
     	
+    	return true;
     }
 }
 ?>
