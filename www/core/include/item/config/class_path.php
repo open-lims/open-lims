@@ -26,8 +26,5 @@
  */
 	$classes['Item']						= $path_prefix."core/include/item/item.class.php";
 	$classes['ItemClass']					= $path_prefix."core/include/item/item_class.class.php";
-	$classes['ItemHasProjectStatus']		= $path_prefix."core/include/item/item_has_project_status.class.php";
-	$classes['ItemHasProjectLog']			= $path_prefix."core/include/item/item_has_project_log.class.php";
-	$classes['ItemHasSampleGid']			= $path_prefix."core/include/item/item_has_sample_gid.class.php";
 	$classes['ItemInformation']				= $path_prefix."core/include/item/item_information.class.php";
 ?>

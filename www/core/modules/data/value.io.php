@@ -485,9 +485,9 @@ class ValueIO
 									$item_id = $value->get_item_id();
 									
 									$project_item->set_item_id($item_id);
-									$project_item->set_item_status();
 									$project_item->link_item();
-								
+									$project_item->set_item_status();
+
 									if (($class_name = $project_item->is_classified()) == true)
 									{
 										$project_item->set_class($class_name);

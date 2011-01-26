@@ -34,6 +34,7 @@ class SampleHasItem_Access
 
 	private $sample_id;
 	private $item_id;
+	private $gid;
 
 	/**
 	 * @param integer $primary_key
@@ -58,6 +59,7 @@ class SampleHasItem_Access
 				
 				$this->sample_id		= $data[sample_id];
 				$this->item_id			= $data[item_id];
+				$this->gid				= $data[gid];
 			}
 			else
 			{
@@ -74,22 +76,33 @@ class SampleHasItem_Access
 			
 			unset($this->sample_id);
 			unset($this->item_id);
+			unset($this->gid);
 		}
 	}
 	
 	/**
 	 * @param integer $sample_id
 	 * @param integer $item_id
+	 * @param integer $gid
 	 * @return integer
 	 */
-	public function create($sample_id, $item_id)
+	public function create($sample_id, $item_id, $gid)
 	{
 		global $db;
 		
 		if (is_numeric($sample_id) and is_numeric($item_id))
 		{
-			$sql_write = "INSERT INTO ".self::SAMPLE_HAS_ITEM_TABLE." (primary_key,sample_id,item_id) " .
-					"VALUES (nextval('".self::SAMPLE_HAS_ITEM_PK_SEQUENCE."'::regclass),".$sample_id.",".$item_id.")";
+			if (is_numeric($gid))
+			{
+				$gid_insert = $gid;	
+			}
+			else
+			{
+				$gid_insert = "NULL";
+			}
+			
+			$sql_write = "INSERT INTO ".self::SAMPLE_HAS_ITEM_TABLE." (primary_key,sample_id,item_id,gid) " .
+					"VALUES (nextval('".self::SAMPLE_HAS_ITEM_PK_SEQUENCE."'::regclass),".$sample_id.",".$item_id.",".$gid_insert.")";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
@@ -175,6 +188,21 @@ class SampleHasItem_Access
 	}
 	
 	/**
+	 * @return integer
+	 */
+	public function get_gid()
+	{
+		if ($this->gid)
+		{
+			return $this->gid;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @param integer $sample_id
 	 * @return bool
 	 */
@@ -232,6 +260,34 @@ class SampleHasItem_Access
 		}	
 	}
 	
+	/**
+	 * @param integer $gid
+	 * @return bool
+	 */
+	public function set_gid($gid)
+	{
+		global $db;
+
+		if ($this->primary_key and is_numeric($gid))
+		{
+			$sql = "UPDATE ".self::SAMPLE_HAS_ITEM_TABLE." SET gid = '".$gid."' WHERE primary_key = '".$this->primary_key."'";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->gid = $gid;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}	
+	}
 	
 	/**
 	 * @param integer $item_id
@@ -253,6 +309,38 @@ class SampleHasItem_Access
 			if ($data[primary_key])
 			{
 				return $data[primary_key];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $item_id
+	 * @param integer $sample_id
+	 * @return integer
+	 */
+	public static function get_gid_by_item_id_and_sample_id($item_id, $sample_id)
+	{
+		global $db;
+			
+		if (is_numeric($item_id) and is_numeric($sample_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT gid FROM ".self::SAMPLE_HAS_ITEM_TABLE." WHERE item_id = ".$item_id." AND sample_id = ".$sample_id."";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+				
+			if (is_numeric($data[gid]))
+			{
+				return $data[gid];
 			}
 			else
 			{

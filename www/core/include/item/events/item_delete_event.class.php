@@ -20,21 +20,39 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
- 
 
 /**
- * Item Sample GID Interface
+ * Item Delete Event
  * @package item
- */ 	 
-interface ItemHasSampleGidInterface
-{
-	function __construct($item_id);
-	function __destruct();
+ */
+class ItemDeleteEvent extends Event
+{    
+	private $item_id;
 	
-	public function create($item_id, $gid);
-	public function delete();
-	public function get_gid();
-	public function set_gid($gid);
+	function __construct($item_id)
+    {
+    	if (is_numeric($item_id))
+    	{
+    		parent::__construct();
+    		$this->item_id = $item_id;
+    	}
+    	else
+    	{
+    		$this->item_id = null;
+    	}
+    }
+    
+    public function get_item_id()
+    {
+    	if ($this->item_id)
+    	{
+    		return $this->item_id;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
 }
 
 ?>

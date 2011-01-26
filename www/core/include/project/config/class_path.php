@@ -30,6 +30,7 @@
 	$classes['Project'] 					= $path_prefix."core/include/project/project.class.php";
 	$classes['ProjectItem'] 				= $path_prefix."core/include/project/project_item.class.php";
 	$classes['ProjectLog']					= $path_prefix."core/include/project/project_log.class.php";
+	$classes['ProjectLogHasItem']			= $path_prefix."core/include/project/project_log_has_item.class.php";
 	$classes['ProjectPermission'] 			= $path_prefix."core/include/project/project_permission.class.php";
 	$classes['ProjectSecurity'] 			= $path_prefix."core/include/project/project_security.class.php";
 	$classes['ProjectStatus']				= $path_prefix."core/include/project/project_status.class.php";

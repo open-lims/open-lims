@@ -82,7 +82,7 @@ class ProjectItem implements ProjectItemInterface
     	if ($this->item_id and $this->project_id)
     	{
     		$project_has_item = new ProjectHasItem_Access(null);
-    		$primary_key = $project_has_item->create($this->project_id, $this->item_id);
+    		$primary_key = $project_has_item->create($this->project_id, $this->item_id, null);
     		
     		if ($primary_key)
     		{
@@ -347,38 +347,38 @@ class ProjectItem implements ProjectItemInterface
     public function set_item_status()
     {
     	global $transaction;
-    	
-    	if ($this->item_id and $this->status_id and is_numeric($this->gid))
+
+    	if ($this->item_id and $this->project_id and $this->status_id and is_numeric($this->gid))
     	{
-			$transaction_id = $transaction->begin();
+    		$transaction_id = $transaction->begin();
 			
-			$item_has_project_status = new ItemHasProjectStatus(null,null);
-			if (($item_creation_successful = $item_has_project_status->create($this->item_id, $this->status_id)) != null)
-			{
-				if ($item_has_project_status->set_gid($this->gid) == true)
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
-					return true;
-				}
-				else
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
-				}
-			}
-			else
+			$primary_key = ProjectHasItem_Access::get_entry_by_item_id_and_project_id($this->item_id, $this->project_id);
+			$project_has_item = new ProjectHasItem_Access($primary_key);
+			
+			if ($project_has_item->set_gid($this->gid) == false)
 			{
 				if ($transaction_id != null)
 				{
 					$transaction->rollback($transaction_id);
 				}
 				return false;
+			}
+			
+    		if ($project_has_item->set_project_status_id($this->status_id) == false)
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+			}
+			else
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->commit($transaction_id);
+				}
+				return true;
 			}
     	}
     	else
@@ -806,6 +806,7 @@ class ProjectItem implements ProjectItemInterface
     /**
      * Creates a log-entry, that a new item is links and links the item to the log-entry
      * @return bool
+     * @todo transaction
      */
     public function create_log_entry()
     {
@@ -824,8 +825,8 @@ class ProjectItem implements ProjectItemInterface
     			$this->project_log_id = $project_log_id;
     		}
 			
-			$item_has_project_log = new ItemHasProjectLog($this->item_id);
-			$item_has_project_log->link_log($project_log_id);
+			$project_log_has_item = new ProjectLogHasItem($project_log_id);
+			$project_log_has_item->link_item($this->item_id);
 			
 			return true;
     	}
@@ -836,6 +837,27 @@ class ProjectItem implements ProjectItemInterface
     }
   
   
+    /**
+     * @param integer $item_id
+     * @param integer $project_id
+     * @param integer $project_status_id
+     * @return array
+     */
+    public static function get_gid_by_item_id_and_project_id($item_id, $project_id, $project_status_id)
+    {
+    	return ProjectHasItem_Access::get_gid_by_item_id_and_project_id($item_id, $project_id, $project_status_id);
+    }
+    
+    /**
+     * @param integer $item_id
+     * @param integer $project_id
+     * @return array
+     */
+    public static function get_gid_by_item_id_and_status_id($item_id, $status_id)
+    {
+    	return ProjectHasItem_Access::get_gid_by_item_id_and_status_id($item_id, $status_id);
+    }
+    
   	/**
   	 * Returns a list of project related items
   	 * @return array

@@ -116,7 +116,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 				}
 			}
 
-			if (ItemHasProjectLog::delete_by_log_id($this->log_id) == false)
+			if (ProjectLogHasItem::delete_by_log_id($this->log_id) == false)
 			{
 				if ($transaction_id != null)
 				{
@@ -316,7 +316,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 	{
 		if ($this->log_id and $this->log)
 		{
-			return ItemHasProjectLog::get_items_by_log_id($this->log_id);
+			return ProjectLogHasItem::get_items_by_log_id($this->log_id);
 		}
 		else
 		{

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package item
+ * @package project
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -24,17 +24,14 @@
 
 /**
  * Item Project Log Management Interface
- * @package item
+ * @package project
  */ 	 
-interface ItemHasProjectLogInterface
+interface ProjectLogHasItemInterface
 {
 	function __construct($item_id);
 	function __destruct();
 	
-	public function exist_log_entry();
-	public function delete();
-	public function link_log($project_log_id);
-	public function unlink_log($project_log_id);
+	public function link_item($item_id);
 	
 	public static function get_items_by_log_id($log_id);
 	public static function delete_by_log_id($log_id);

@@ -38,6 +38,8 @@
 	
 	require_once("../../include/base/transaction.class.php");
 	
+	require_once("../../include/base/system_handler.class.php");
+
 	require_once("../../include/base/session.class.php");
 
 	$GLOBALS[autoload_prefix] = "../../../";
@@ -109,8 +111,8 @@
 						$item_id = $value;
 						
 						$project_item->set_item_id($item_id);
-						$project_item->set_item_status();
 						$project_item->link_item();
+						$project_item->set_item_status();
 					
 						if (($class_name = $project_item->is_classified()) == true)
 						{

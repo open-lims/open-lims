@@ -377,8 +377,7 @@ class ValueVar implements ValueVarInterface
 										
 									foreach($project_item_array as $fe_key => $fe_value)
 									{
-										$item_has_project_status = new ItemHasProjectStatus($fe_value, $this->stack[count($this->stack)-2]);
-										if ($item_has_project_status->get_gid() !== null)
+										if (ProjectItem::get_gid_by_item_id_and_status_id($fe_value, $this->stack[count($this->stack)-2]) !== null)
 										{
 											array_push($result_array, $fe_value);
 										}

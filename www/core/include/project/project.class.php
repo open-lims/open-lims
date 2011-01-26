@@ -1151,11 +1151,12 @@ class Project implements ProjectInterface, EventListenerInterface
 								{
 									foreach($item_array as $item_key => $item_value)
 									{
-										$item_has_project_status = new ItemHasProjectStatus($item_value, $this->get_current_status_id());
-										if ($item_has_project_status->is_object() == true and $item_has_project_status->get_gid() == $gid)
+										$item = new Item($item_value);
+										$item_gid = ProjectItem::get_gid_by_item_id_and_project_id($item_value, $this->project_id,  $this->get_current_status_id());
+										
+										if (($object_id = $item->get_object_id()) != null and $item_gid == $gid and is_numeric($item_gid))
 										{
-											$item = new Item($item_value);
-											$object = new Object($item->get_object_id());
+											$object = new Object($object_id);
 											
 											if ($object->get_file_id() != null)
 											{
@@ -1174,11 +1175,12 @@ class Project implements ProjectInterface, EventListenerInterface
 								{
 									foreach($item_array as $item_key => $item_value)
 									{
-										$item_has_project_status = new ItemHasProjectStatus($item_value, $this->get_current_status_id());
-										if ($item_has_project_status->is_object() == true and $item_has_project_status->get_gid() == $gid)
+										$item = new Item($item_value);
+										$item_gid = ProjectItem::get_gid_by_item_id_and_project_id($item_value, $this->project_id,  $this->get_current_status_id());
+										
+										if (($object_id = $item->get_object_id()) != null and $item_gid == $gid and is_numeric($item_gid))
 										{
-											$item = new Item($item_value);
-											$object = new Object($item->get_object_id());
+											$object = new Object($object_id);
 	
 											if(($value_id = $object->get_value_id()) != null)
 											{
@@ -1209,9 +1211,10 @@ class Project implements ProjectInterface, EventListenerInterface
 								{
 									foreach($item_array as $item_key => $item_value)
 									{
-										$item_has_project_status = new ItemHasProjectStatus($item_value, $this->get_current_status_id());
+										$item = new Item($item_value);
+										$item_gid = ProjectItem::get_gid_by_item_id_and_project_id($item_value, $this->project_id,  $this->get_current_status_id());
 										
-										if ($item_has_project_status->is_method() == true and $item_has_project_status->get_gid() == $gid)
+										if ($item->get_method_id() != null and $item_gid == $gid and is_numeric($item_gid))
 										{
 											$fulfilled_array[$key] = true;	
 											$item = new Item($item_value);
@@ -1228,18 +1231,14 @@ class Project implements ProjectInterface, EventListenerInterface
 								{
 									foreach($item_array as $item_key => $item_value)
 									{
-										$item_has_project_status = new ItemHasProjectStatus($item_value, $this->get_current_status_id());
-										
-										if ($item_has_project_status->is_sample() == true)
+										$item = new Item($item_value);
+										$item_gid = ProjectItem::get_gid_by_item_id_and_project_id($item_value, $this->project_id,  $this->get_current_status_id());
+
+										if ($item->get_sample_id() != null and $item_gid == $gid and is_numeric($item_gid))
 										{
-											$item_has_project_status = new ItemHasProjectStatus($item_value, $this->get_current_status_id());
-											
-											if ($item_has_project_status->is_sample() == true and $item_has_project_status->get_gid() == $gid)
-											{
-												$fulfilled_array[$key] = true;	
-												$item = new Item($item_value);
-												$this->fulfilled_datetime_array[$key] = $item->get_datetime();
-											}	
+											$fulfilled_array[$key] = true;	
+											$item = new Item($item_value);
+											$this->fulfilled_datetime_array[$key] = $item->get_datetime();	
 										}
 									}
 								}

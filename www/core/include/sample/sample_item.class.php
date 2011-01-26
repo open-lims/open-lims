@@ -82,37 +82,22 @@ class SampleItem implements SampleItemInterface
     		
     		$sample_has_item = new SampleHasItem_Access(null);
     		
-    		if (($primary_key = $sample_has_item->create($this->sample_id, $this->item_id)) != null)
-    		{ 
-	    		if ($this->gid)
-	    		{
-	    			$item_has_sample_gid = new ItemHasSampleGid(null);
-	    			if ($item_has_sample_gid->create($this->item_id, $this->gid) == null)
-	    			{
-	    				if ($transaction_id != null)
-	    				{
-							$transaction->rollback($transaction_id);
-						}
-	    				return false;
-	    			}
-	    		}
-	    		
-	    		if ($primary_key)
-	    		{
-	    			if ($transaction_id != null)
-	    			{
-						$transaction->commit($transaction_id);
-					}
-	    			return true;
-	    		}
-	    		else
-	    		{
-	    			if ($transaction_id != null)
-	    			{
-						$transaction->rollback($transaction_id);
-					}
-	    			return false;
-	    		}
+    		if (is_numeric($this->gid))
+	    	{
+	    		$primary_key = $sample_has_item->create($this->sample_id, $this->item_id, $this->gid);
+	    	}
+	    	else
+	    	{
+	    		$primary_key = $sample_has_item->create($this->sample_id, $this->item_id, null);
+	    	}
+	    	
+    		if ($primary_key != null)
+    		{ 	    		
+    			if ($transaction_id != null)
+    			{
+					$transaction->commit($transaction_id);
+				}
+    			return true;
     		}
     		else
     		{
@@ -659,6 +644,15 @@ class SampleItem implements SampleItemInterface
     		return false;
     	}
     }
-  
+
+    /**
+     * @param integer $item_id
+     * @param integer $sample_id
+     * @return integer
+     */
+    public static function get_gid_by_item_id_and_sample_id($item_id, $sample_id)
+    {
+    	return SampleHasItem_Access::get_gid_by_item_id_and_sample_id($item_id, $sample_id);
+    }
 }
 ?>

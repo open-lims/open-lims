@@ -22,8 +22,8 @@
  */
 
 /**
- * Organisation Unit Create Event
- * @package user
+ * Organisation Unit Delete Event
+ * @package organisation_unit
  */
 class OrganisationUnitDeleteEvent extends Event
 {    

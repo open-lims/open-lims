@@ -167,8 +167,8 @@ class MethodIO
 								$item_id = $method->get_item_id();
 								
 								$project_item->set_item_id($item_id);
-								$project_item->set_item_status();
 								$project_item->link_item();
+								$project_item->set_item_status();
 							
 								if (($class_name = $project_item->is_classified()) == true)
 								{

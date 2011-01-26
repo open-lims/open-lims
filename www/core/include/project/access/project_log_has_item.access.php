@@ -25,15 +25,15 @@
  * Item Has Project Log Access Class
  * @package item
  */
-class ItemHasProjectLog_Access
+class ProjectLogHasItem_Access
 {
-	const ITEM_HAS_PROJECT_LOG_TABLE = 'core_item_has_project_log';
-	const ITEM_HAS_PROJECT_LOG_PK_SEQUENCE = 'core_item_has_project_log_primary_key_seq';
+	const PROJECT_LOG_HAS_ITEM_TABLE = 'core_project_log_has_items';
+	const PROJECT_LOG_HAS_ITEM_PK_SEQUENCE = 'core_project_log_has_items_primary_key_seq';
 	
 	private $primary_key;
 
-	private $item_id;
 	private $project_log_id;
+	private $item_id;
 	
 	/**
 	 * @param integer $primary_key
@@ -48,7 +48,7 @@ class ItemHasProjectLog_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::ITEM_HAS_PROJECT_LOG_TABLE." WHERE primary_key='".$primary_key."'";
+			$sql = "SELECT * FROM ".self::PROJECT_LOG_HAS_ITEM_TABLE." WHERE primary_key='".$primary_key."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -56,8 +56,8 @@ class ItemHasProjectLog_Access
 			{
 				$this->primary_key		= $primary_key;
 
-				$this->item_id			= $data[item_id];
 				$this->project_log_id	= $data[project_log_id];
+				$this->item_id			= $data[item_id];
 			}
 			else
 			{
@@ -71,8 +71,8 @@ class ItemHasProjectLog_Access
 		if ($this->primary_key)
 		{
 			unset($this->primary_key);
-			unset($this->item_id);
 			unset($this->project_log_id);
+			unset($this->item_id);
 		}
 	}
 	
@@ -87,15 +87,15 @@ class ItemHasProjectLog_Access
 		
 		if (is_numeric($item_id) and is_numeric($project_log_id))
 		{
-			$sql_write = "INSERT INTO ".self::ITEM_HAS_PROJECT_LOG_TABLE." (primary_key,item_id,project_log_id) " .
-					"VALUES (nextval('".self::ITEM_HAS_PROJECT_LOG_PK_SEQUENCE."'::regclass),".$item_id.",".$project_log_id.")";
+			$sql_write = "INSERT INTO ".self::PROJECT_LOG_HAS_ITEM_TABLE." (primary_key,item_id,project_log_id) " .
+					"VALUES (nextval('".self::PROJECT_LOG_HAS_ITEM_PK_SEQUENCE."'::regclass),".$item_id.",".$project_log_id.")";
 					
 			$res_write = $db->db_query($sql_write);	
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
 			
-				$sql_read = "SELECT primary_key FROM ".self::ITEM_HAS_PROJECT_LOG_TABLE." WHERE primary_key = currval('".self::ITEM_HAS_PROJECT_LOG_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT primary_key FROM ".self::PROJECT_LOG_HAS_ITEM_TABLE." WHERE primary_key = currval('".self::PROJECT_LOG_HAS_ITEM_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 									
@@ -127,7 +127,7 @@ class ItemHasProjectLog_Access
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".self::ITEM_HAS_PROJECT_LOG_TABLE." WHERE primary_key = ".$primary_key_tmp."";
+			$sql = "DELETE FROM ".self::PROJECT_LOG_HAS_ITEM_TABLE." WHERE primary_key = ".$primary_key_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -147,21 +147,6 @@ class ItemHasProjectLog_Access
 	
 	/**
 	 * @return integer
-	 */	
-	public function get_item_id()
-	{
-		if ($this->item_id)
-		{
-			return $this->item_id;
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return integer
 	 */
 	public function get_project_log_id()
 	{
@@ -174,36 +159,22 @@ class ItemHasProjectLog_Access
 			return null;
 		}
 	}
-
+	
 	/**
-	 * @param integer $item_id
-	 * @return bool
-	 */
-	public function set_item_id($item_id)
-	{	
-		global $db;
-			
-		if ($this->primary_key and is_numeric($item_id))
+	 * @return integer
+	 */	
+	public function get_item_id()
+	{
+		if ($this->item_id)
 		{
-			$sql = "UPDATE ".self::ITEM_HAS_PROJECT_LOG_TABLE." SET item_id = ".$item_id." WHERE primary_key = ".$this->primary_key."";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->item_id = $item_id;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+			return $this->item_id;
 		}
 		else
 		{
-			return false;
+			return null;
 		}
 	}
-	
+
 	/**
 	 * @param integer $project_log_id
 	 * @return bool
@@ -214,7 +185,7 @@ class ItemHasProjectLog_Access
 		
 		if ($this->primary_key and is_numeric($project_log_id))
 		{
-			$sql = "UPDATE ".self::ITEM_HAS_PROJECT_LOG_TABLE." SET project_log_id = ".$project_log_id." WHERE primary_key = ".$this->primary_key."";
+			$sql = "UPDATE ".self::PROJECT_LOG_HAS_ITEM_TABLE." SET project_log_id = ".$project_log_id." WHERE primary_key = ".$this->primary_key."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -233,6 +204,35 @@ class ItemHasProjectLog_Access
 		}
 	}
 	
+	/**
+	 * @param integer $item_id
+	 * @return bool
+	 */
+	public function set_item_id($item_id)
+	{	
+		global $db;
+			
+		if ($this->primary_key and is_numeric($item_id))
+		{
+			$sql = "UPDATE ".self::PROJECT_LOG_HAS_ITEM_TABLE." SET item_id = ".$item_id." WHERE primary_key = ".$this->primary_key."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->item_id = $item_id;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+		
 	
 	/**
 	 * @param integer $project_log_id
@@ -246,7 +246,7 @@ class ItemHasProjectLog_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".self::ITEM_HAS_PROJECT_LOG_TABLE." WHERE project_log_id = ".$project_log_id."";
+			$sql = "SELECT primary_key FROM ".self::PROJECT_LOG_HAS_ITEM_TABLE." WHERE project_log_id = ".$project_log_id."";
 			$res = $db->db_query($sql);
 			while ($data = $db->db_fetch_assoc($res))
 			{
@@ -269,35 +269,6 @@ class ItemHasProjectLog_Access
 	}
 	
 	/**
-	 * @param integer $item_id
-	 * @return array
-	 */
-	public static function get_entry_by_item_id($item_id)
-	{
-		global $db;
-		
-		if ($item_id)
-		{
-			$sql = "SELECT primary_key FROM ".self::ITEM_HAS_PROJECT_LOG_TABLE." WHERE item_id = ".$item_id."";
-			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
-			
-			if ($data[primary_key])
-			{
-				return $data[primary_key];	
-			}
-			else
-			{
-				return null;
-			}
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
 	 * @param integer $log_id
 	 * @return bool
 	 */
@@ -307,7 +278,26 @@ class ItemHasProjectLog_Access
 		
 		if (is_numeric($log_id))
 		{
-			$sql = "DELETE FROM ".self::ITEM_HAS_PROJECT_LOG_TABLE." WHERE project_log_id = ".$log_id."";
+			$sql = "DELETE FROM ".self::PROJECT_LOG_HAS_ITEM_TABLE." WHERE project_log_id = ".$log_id."";
+			$res = $db->db_query($sql);
+			return true;
+		}else
+		{
+			return false;
+		}
+    }
+    
+	/**
+	 * @param integer $item_id
+	 * @return bool
+	 */
+	public static function delete_by_item_id($item_id)
+	{
+    	global $db;
+		
+		if (is_numeric($item_id))
+		{
+			$sql = "DELETE FROM ".self::PROJECT_LOG_HAS_ITEM_TABLE." WHERE item_id = ".$item_id."";
 			$res = $db->db_query($sql);
 			return true;
 		}else

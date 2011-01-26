@@ -28,8 +28,9 @@ require_once("interfaces/item.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	require_once("access/item.access.php");
+	require_once("events/item_delete_event.class.php");
 	
+	require_once("access/item.access.php");	
 	require_once("access/item_is_object.access.php");
 	require_once("access/item_is_method.access.php");
 	require_once("access/item_is_sample.access.php");
@@ -141,44 +142,20 @@ class Item implements ItemInterface
 						return false;
 					}
 				}
-			}
-
-			// Item GID
-			$item_has_sample_gid = new ItemHasSampleGid($this->item_id);
-			if (is_numeric($item_has_sample_gid->get_gid()))
-			{
-				if ($item_has_sample_gid->delete() == false)
-				{
-					return false;
-				}
-			}
-
-			// Project Status
-			/**
-			 * @todo extrat from method due to loose dependency
-			 */
-			$status_id = ItemHasProjectStatus::get_status_id_by_item_id($this->item_id);
-			if (is_numeric($status_id))
-			{
-				$item_has_project_status = new ItemHasProjectStatus($this->item_id, $status_id);
-				if ($item_has_project_status->delete() == false)
-				{
-					return false;
-				}
-			}
-			
+			}			
 			
 			// Project Log
-			/**
-			 * @todo extrat from method due to loose dependency
-			 */
-			$item_has_project_log = new ItemHasProjectLog($this->item_id);
-			if ($item_has_project_log->exist_log_entry())
+			// Event
+			$item_delete_event = new ItemDeleteEvent($this->item_id);
+			$event_handler = new EventHandler($item_delete_event);
+			
+			if ($event_handler->get_success() == false)
 			{
-				if ($item_has_project_log->delete() == false)
+				if ($transaction_id != null)
 				{
-					return false;
+					$transaction->rollback($transaction_id);
 				}
+				return false;
 			}
 			
 			

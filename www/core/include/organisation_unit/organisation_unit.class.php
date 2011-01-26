@@ -1505,7 +1505,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	// --- TREE REC BLOCK END ---
 	   
     /**
-     * @todo implementation
+     * @param object $event_object
      */
     public static function listen_events($event_object)
     {

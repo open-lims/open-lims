@@ -23,7 +23,7 @@
 
 /**
  * Organisation Unit Create Event
- * @package user
+ * @package organisation_unit
  */
 class OrganisationUnitCreateEvent extends Event
 {    

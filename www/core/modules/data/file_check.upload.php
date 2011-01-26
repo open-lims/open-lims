@@ -42,6 +42,10 @@
 	require_once("../../../config/main.php");
 	require_once("../../db/db.php");
 	
+	require_once("../../include/base/transaction.class.php");
+	
+	require_once("../../include/base/system_handler.class.php");
+	
 	require_once("../../include/base/session.class.php");
 	
 	$GLOBALS[autoload_prefix] = "../../../";

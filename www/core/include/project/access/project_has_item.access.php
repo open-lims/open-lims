@@ -36,6 +36,8 @@ class ProjectHasItem_Access
 	private $item_id;
 	private $active;
 	private $required;
+	private $gid;
+	private $project_status_id;
 
 	/**
 	 * @param integer $primary_key
@@ -56,10 +58,12 @@ class ProjectHasItem_Access
 			
 			if ($data[primary_key])
 			{
-				$this->primary_key 		= $primary_key;
+				$this->primary_key 			= $primary_key;
 				
-				$this->project_id		= $data[project_id];
-				$this->item_id			= $data[item_id];
+				$this->project_id			= $data[project_id];
+				$this->item_id				= $data[item_id];
+				$this->gid					= $data[gid];
+				$this->project_status_id	= $data[project_status_id];
 				
 				if ($data[active] == 't')
 				{
@@ -95,6 +99,8 @@ class ProjectHasItem_Access
 			unset($this->item_id);
 			unset($this->active);
 			unset($this->required);
+			unset($this->gid);
+			unset($this->project_status_id);
 		}
 	}
 	
@@ -103,14 +109,23 @@ class ProjectHasItem_Access
 	 * @param integer $item_id
 	 * @return integer
 	 */
-	public function create($project_id, $item_id)
+	public function create($project_id, $item_id, $gid)
 	{
 		global $db;
 		
 		if (is_numeric($project_id) and is_numeric($item_id))
 		{
-			$sql_write = "INSERT INTO ".self::PROJECT_HAS_ITEM_TABLE." (primary_key,project_id,item_id,active, required) " .
-					"VALUES (nextval('".self::PROJECT_HAS_ITEM_PK_SEQUENCE."'::regclass),".$project_id.",".$item_id.",'t','f')";
+			if (is_numeric($gid))
+			{
+				$gid_insert = $gid;	
+			}
+			else
+			{
+				$gid_insert = "NULL";
+			}
+			
+			$sql_write = "INSERT INTO ".self::PROJECT_HAS_ITEM_TABLE." (primary_key,project_id,item_id,active, required, gid, project_status_id) " .
+					"VALUES (nextval('".self::PROJECT_HAS_ITEM_PK_SEQUENCE."'::regclass),".$project_id.",".$item_id.",'t','f',".$gid_insert.",NULL)";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
@@ -222,6 +237,36 @@ class ProjectHasItem_Access
 		else
 		{
 			return false;
+		}
+	}
+	
+	/**
+	 * @return integer
+	 */
+	public function get_gid()
+	{
+		if ($this->gid)
+		{
+			return $this->gid;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @return integer
+	 */
+	public function get_project_status_id()
+	{
+		if ($this->project_status_id)
+		{
+			return $this->project_status_id;
+		}
+		else
+		{
+			return null;
 		}
 	}
 	
@@ -359,6 +404,64 @@ class ProjectHasItem_Access
 		}
 	}
 	
+	/**
+	 * @param integer $gid
+	 * @return bool
+	 */
+	public function set_gid($gid)
+	{
+		global $db;
+
+		if ($this->primary_key and is_numeric($gid))
+		{
+			$sql = "UPDATE ".self::PROJECT_HAS_ITEM_TABLE." SET gid = '".$gid."' WHERE primary_key = '".$this->primary_key."'";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->gid = $gid;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}	
+	}
+	
+	/**
+	 * @param integer $project_status_id
+	 * @return bool
+	 */
+	public function set_project_status_id($project_status_id)
+	{
+		global $db;
+
+		if ($this->primary_key and is_numeric($project_status_id))
+		{
+			$sql = "UPDATE ".self::PROJECT_HAS_ITEM_TABLE." SET project_status_id = '".$project_status_id."' WHERE primary_key = '".$this->primary_key."'";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->project_status_id = $project_status_id;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}	
+	}
+	
 	
 	/**
 	 * @param integer $item_id
@@ -380,6 +483,71 @@ class ProjectHasItem_Access
 			if ($data[primary_key])
 			{
 				return $data[primary_key];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $item_id
+	 * @param integer $sample_id
+	 * @param integer $project_status_id
+	 * @return integer
+	 */
+	public static function get_gid_by_item_id_and_project_id($item_id, $project_id, $project_status_id)
+	{
+		global $db;
+			
+		if (is_numeric($item_id) and is_numeric($project_id) and is_numeric($project_status_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT gid FROM ".self::PROJECT_HAS_ITEM_TABLE." WHERE item_id = ".$item_id." AND project_id = ".$project_id." AND project_status_id = ".$project_status_id."";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+				
+			if (is_numeric($data[gid]))
+			{
+				return $data[gid];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $item_id
+	 * @param integer $status_id
+	 * @return integer
+	 */
+	public static function get_gid_by_item_id_and_status_id($item_id, $project_id, $status_id)
+	{
+		global $db;
+			
+		if (is_numeric($item_id) and is_numeric($project_id) and is_numeric($project_status_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT gid FROM ".self::PROJECT_HAS_ITEM_TABLE." WHERE item_id = ".$item_id." AND status_id = ".$status_id."";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+				
+			if (is_numeric($data[gid]))
+			{
+				return $data[gid];
 			}
 			else
 			{

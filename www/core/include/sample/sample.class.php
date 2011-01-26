@@ -654,9 +654,9 @@ class Sample implements SampleInterface, EventListenerInterface
 								foreach($item_array as $item_key => $item_value)
 								{
 									$item = new Item($item_value);
-									$item_has_sample_gid = new ItemHasSampleGid($item_value);
+									$item_gid = SampleItem::get_gid_by_item_id_and_sample_id($item_value, $this->sample_id);
 
-									if (($object_id = $item->get_object_id()) != null and $item_has_sample_gid->get_gid() == $gid)
+									if (($object_id = $item->get_object_id()) != null and $item_gid == $gid)
 									{
 										$object = new Object($object_id);
 										if ($object->get_file_id() != null)
@@ -676,9 +676,9 @@ class Sample implements SampleInterface, EventListenerInterface
 								foreach($item_array as $item_key => $item_value)
 								{
 									$item = new Item($item_value);
-									$item_has_sample_gid = new ItemHasSampleGid($item_value);
+									$item_gid = SampleItem::get_gid_by_item_id_and_sample_id($item_value, $this->sample_id);
 
-									if (($object_id = $item->get_object_id()) != null and $item_has_sample_gid->get_gid() == $gid)
+									if (($object_id = $item->get_object_id()) != null and $item_gid == $gid)
 									{
 										$object = new Object($object_id);
 										
@@ -710,8 +710,9 @@ class Sample implements SampleInterface, EventListenerInterface
 								foreach($item_array as $item_key => $item_value)
 								{
 									$item = new Item($item_value);
-									$item_has_sample_gid = new ItemHasSampleGid($item_value);
-									if ($item->get_method_id() != null and $item_has_sample_gid->get_gid() == $gid)
+									$item_gid = SampleItem::get_gid_by_item_id_and_sample_id($item_value, $this->sample_id);
+									
+									if ($item->get_method_id() != null and $item_gid == $gid)
 									{
 										$fulfilled_array[$key] = true;	
 									}
@@ -728,8 +729,9 @@ class Sample implements SampleInterface, EventListenerInterface
 								foreach($item_array as $item_key => $item_value)
 								{
 									$item = new Item($item_value);
-									$item_has_sample_gid = new ItemHasSampleGid($item_value);
-									if ($item->get_sample_id() != null and $item_has_sample_gid->get_gid() == $gid)
+									$item_gid = SampleItem::get_gid_by_item_id_and_sample_id($item_value, $this->sample_id);
+									
+									if ($item->get_sample_id() != null and $item_gid == $gid)
 									{
 										$fulfilled_array[$key] = true;	
 									}
