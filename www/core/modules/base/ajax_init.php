@@ -34,7 +34,7 @@ global $db;
 $db = new Database("postgresql");
 $db->db_connect($GLOBALS[server],$GLOBALS[port],$GLOBALS[dbuser],$GLOBALS[password],$GLOBALS[database]);
 
-
+require_once("../../include/base/events/event.class.php");
 require_once("../../include/base/system_handler.class.php");
 
 $GLOBALS[autoload_prefix] = "../../../";

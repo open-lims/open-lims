@@ -651,44 +651,22 @@ class Project implements ProjectInterface, EventListenerInterface
     		// Methods and Remaining Item-Links (including Sample Links)
     		$project_item = new ProjectItem($tmp_project_id);
 			$item_array = $project_item->get_project_items();
-    		
-    		if (is_array($item_array) and count($item_array) >= 1)
-    		{
-				foreach($item_array as $key => $value)
+			if (is_array($item_array) and count($item_array) >= 1)
+			{
+				foreach($item_array as $item_key => $item_value)
 				{
-					$item = new Item($value);
-				
-					if (($method_id = $item->get_method_id()) == true)
+					$project_item = new ProjectItem($tmp_project_id);
+					$project_item->set_item_id($item_value);
+					if ($project_item->unlink_item() == false)
 					{
-						$method = new Method($method_id);
-						if ($method->delete() == false)
+						if ($transaction_id != null)
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							return false;
+							$transaction->rollback($transaction_id);
 						}
-					}
-					elseif($item->get_sample_id() != null)
-					{
-						$project_item_sample = new ProjectItem($tmp_project_id);
-						$project_item_sample->set_item_id($value);
-						$project_item_sample->unlink_item_full();
-					}
-					else
-					{
-						if ($item->delete() == false)
-						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							return false;
-						}
+						return false;
 					}
 				}
-    		}
+			}	
     		
     		// Project Tasks
     		$project_task_array = ProjectTask::list_tasks($tmp_project_id);
@@ -1129,6 +1107,7 @@ class Project implements ProjectInterface, EventListenerInterface
 			{
 		    	$requirements_array = $this->get_current_status_requirements();			
 				$fulfilled_array = array();
+				$item_type_array = Item::list_types();
 				
 				if (is_array($requirements_array) and count($requirements_array) >= 1)
 				{
@@ -1143,107 +1122,26 @@ class Project implements ProjectInterface, EventListenerInterface
 							$gid = $key;
 						}
 						
-						switch($value[type]):
-							case("file"):
-								$project_item = new ProjectItem($this->project_id);
-								$item_array = $project_item->get_project_items();
-								if (is_array($item_array) and count($item_array) >= 1)
-								{
-									foreach($item_array as $item_key => $item_value)
-									{
-										$item = new Item($item_value);
-										$item_gid = ProjectItem::get_gid_by_item_id_and_project_id($item_value, $this->project_id,  $this->get_current_status_id());
-										
-										if (($object_id = $item->get_object_id()) != null and $item_gid == $gid and is_numeric($item_gid))
-										{
-											$object = new Object($object_id);
-											
-											if ($object->get_file_id() != null)
-											{
-												$fulfilled_array[$key] = true;
-												$this->fulfilled_datetime_array[$key] = $item->get_datetime();
-											}	
-										}
-									}
-								}
-							break;
+						$project_item = new ProjectItem($this->project_id);
+						$item_array = $project_item->get_project_status_items($this->get_current_status_id());
+						if (is_array($item_array) and count($item_array) >= 1)
+						{
+							foreach($item_array as $item_key => $item_value)
+							{
+								$item_gid = ProjectItem::get_gid_by_item_id_and_project_id($item_value, $this->project_id,  $this->get_current_status_id());
 								
-							case("value"):
-								$project_item = new ProjectItem($this->project_id);
-								$item_array = $project_item->get_project_items();
-								if (is_array($item_array) and count($item_array) >= 1)
+								if (is_array($item_type_array) and count($item_type_array) >= 1)
 								{
-									foreach($item_array as $item_key => $item_value)
+									foreach ($item_type_array as $item_type => $item_handling_class)
 									{
-										$item = new Item($item_value);
-										$item_gid = ProjectItem::get_gid_by_item_id_and_project_id($item_value, $this->project_id,  $this->get_current_status_id());
-										
-										if (($object_id = $item->get_object_id()) != null and $item_gid == $gid and is_numeric($item_gid))
+										if ($item_handling_class::is_kind_of($item_type, $item_value) == true  and $item_gid == $gid)
 										{
-											$object = new Object($object_id);
-	
-											if(($value_id = $object->get_value_id()) != null)
-											{
-												$value_obj = new Value($value_id);
-												if (is_array($value[type_id]))
-												{
-													if (in_array($value_obj->get_type_id(),$value[type_id]))
-													{
-														$fulfilled_array[$key] = true;	
-														$this->fulfilled_datetime_array[$key] = $item->get_datetime();
-													}
-												}
-												else
-												{
-													$fulfilled_array[$key] = true;	
-													$this->fulfilled_datetime_array[$key] = $item->get_datetime();
-												}											
-											}
+											$fulfilled_array[$key] = true;
 										}
 									}
 								}
-							break;
-							
-							case("method"):
-								$project_item = new ProjectItem($this->project_id);
-								$item_array = $project_item->get_project_items();
-								if (is_array($item_array) and count($item_array) >= 1)
-								{
-									foreach($item_array as $item_key => $item_value)
-									{
-										$item = new Item($item_value);
-										$item_gid = ProjectItem::get_gid_by_item_id_and_project_id($item_value, $this->project_id,  $this->get_current_status_id());
-										
-										if ($item->get_method_id() != null and $item_gid == $gid and is_numeric($item_gid))
-										{
-											$fulfilled_array[$key] = true;	
-											$item = new Item($item_value);
-											$this->fulfilled_datetime_array[$key] = $item->get_datetime();
-										}
-									}
-								}
-							break;
-							
-							case("sample"):
-								$project_item = new ProjectItem($this->project_id);
-								$item_array = $project_item->get_project_items();
-								if (is_array($item_array) and count($item_array) >= 1)
-								{
-									foreach($item_array as $item_key => $item_value)
-									{
-										$item = new Item($item_value);
-										$item_gid = ProjectItem::get_gid_by_item_id_and_project_id($item_value, $this->project_id,  $this->get_current_status_id());
-
-										if ($item->get_sample_id() != null and $item_gid == $gid and is_numeric($item_gid))
-										{
-											$fulfilled_array[$key] = true;	
-											$item = new Item($item_value);
-											$this->fulfilled_datetime_array[$key] = $item->get_datetime();	
-										}
-									}
-								}
-							break;
-						endswitch;
+							}
+						}
 					}
 					$runtime_data->write_object_data($this, "PROJECT_FULFILLED_STATUS_DATETIMES", $this->fulfilled_datetime_array);
 					$runtime_data->write_object_data($this, "PROJECT_FULFILLED_STATUS_REQUIREMENTS", $fulfilled_array);
@@ -1966,7 +1864,26 @@ class Project implements ProjectInterface, EventListenerInterface
 		if ($this->project_id)
 		{
 			$project_item = new ProjectItem($this->project_id);
-			$item_array = $project_item->get_project_items();
+			$item_array = $project_item->get_project_items();				
+		
+			if (is_array($item_array) and count($item_array) >= 1)
+			{
+				foreach($item_array as $item_key => $item_value)
+				{
+					if (is_array($item_type_array) and count($item_type_array) >= 1)
+					{
+						foreach ($item_type_array as $item_type => $item_handling_class)
+						{
+							if ($item_handling_class::is_kind_of("value", $item_value) == true)
+							{
+								
+							}
+						}
+					}
+				}
+			}
+	
+			
 			
 			if (is_array($item_array) and count($item_array) >= 1)
 			{
@@ -2397,7 +2314,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
-     * @todo implementation
+     * @param object $event_object
      */
     public static function listen_events($event_object)
     {

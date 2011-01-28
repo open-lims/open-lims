@@ -94,8 +94,6 @@ class Object_Access
 		{
 			unset($this->object_id);
 			unset($this->toid);
-			unset($this->file_id);
-			unset($this->value_id);
 			unset($this->hidden);
 			unset($this->deleted);		
 		}	

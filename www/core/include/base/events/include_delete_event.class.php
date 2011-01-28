@@ -1,6 +1,6 @@
 <?php
 /**
- * @package data
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -21,25 +21,38 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /**
- * Object Management Interface
- * @package data
+ * Include Delete Event
+ * @package base
  */
-interface ObjectInterface
-{
-	function __construct($object_id);
+class IncludeDeleteEvent extends Event
+{    
+	private $include_id;
 	
-	public function get_file_id();
-	public function get_value_id();
-	public function get_toid();
-	
-	public static function get_file_array($folder_id);
-	public static function get_value_array($folder_id);
-	public static function get_object_array($folder_id);
-	
-	// protected static function get_id_by_value_id($value_id);
-	// protected static function get_id_by_file_id($file_id);
+	function __construct($include_id)
+    {
+    	if (is_numeric($include_id))
+    	{
+    		parent::__construct();
+    		$this->include_id = $include_id;
+    	}
+    	else
+    	{
+    		$this->include_id = null;
+    	}
+    }
+    
+    public function get_include_id()
+    {
+    	if ($this->include_id)
+    	{
+    		return $this->include_id;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
 }
 
 ?>

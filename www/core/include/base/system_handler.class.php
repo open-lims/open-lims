@@ -34,6 +34,8 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("exceptions/include_data_corrupt_exception.class.php");
 	require_once("exceptions/include_requirement_failed_exception.class.php");
 	require_once("exceptions/include_process_failed_exception.class.php");
+
+	require_once("events/include_delete_event.class.php");
 	
 	define("BASE_EVENT_LISTENER_TABLE"	, "core_base_event_listeners");
 	define("BASE_INCLUDE_FILE_TABLE"	, "core_base_include_files");
@@ -361,6 +363,17 @@ class SystemHandler implements SystemHandlerInterface
 						}
 						throw new IncludeProcessFailedException(null, null);
 					}
+					$include_delete_event = new IncludeDeleteEvent($legacy_key);
+					$event_handler = new EventHandler($include_delete_event);
+					
+					if ($event_handler->get_success() == false)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+					}	
 					
 					$base_include = new BaseInclude_Access($legacy_key);
 					if ($base_include->delete() == false)
@@ -374,12 +387,53 @@ class SystemHandler implements SystemHandlerInterface
 				}
 			}
 			
+			// Register Executes
+			$registered_include_array = BaseInclude_Access::list_folder_entries();
+			if (is_array($registered_include_array) and count($registered_include_array) >= 1)
+			{
+				foreach($registered_include_array as $key => $value)
+				{
+					$register_execute = "core/include/".$value."/config/register_execute.php";
+					if (is_file($register_execute))
+					{
+						$register_execute_checksum = BaseIncludeFile_Access::get_checksum_by_include_id_and_name($key, "register_execute.php");
+						if ($register_execute_checksum != md5_file($register_execute))
+						{										
+							include($register_execute);
+
+							if ($result == true)
+							{
+								$base_include_file = new BaseIncludeFile_Access(null);
+								if ($base_include_file->create($key, "register_execute.php", md5_file($register_execute)) == null)
+								{
+									if ($transaction_id != null)
+									{
+										$transaction->rollback($transaction_id);
+									}
+									throw new IncludeProcessFailedException(null, null);
+								}
+							}
+							else
+							{
+								if ($transaction_id != null)
+								{
+									$transaction->rollback($transaction_id);
+								}
+								throw new IncludeProcessFailedException(null, null);
+							}
+							
+							unset($result);
+						}
+					}
+				}
+			}
+			
 			if ($transaction_id != null)
 			{
 				$transaction->commit($transaction_id);
 			}
-			return true;
 			
+			return true;
 		}
 		else
 		{

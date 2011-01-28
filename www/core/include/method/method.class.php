@@ -29,18 +29,17 @@ require_once("interfaces/method.interface.php");
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
 	require_once("access/method.access.php");
+	require_once("access/method_is_item.access.php");
 }
 
 /**
  * Method Category Management Class
  * @package method
  */
-class Method implements MethodInterface, EventListenerInterface
+class Method extends Item implements MethodInterface, EventListenerInterface, ItemListenerInterface
 {
 	private $method_id;
-	
 	private $method;
-	private $item_id;
 	
 	/**
 	 * @param integer $method_id
@@ -52,20 +51,16 @@ class Method implements MethodInterface, EventListenerInterface
 			$this->method_id = $method_id;
 			$this->method = new Method_Access($method_id);
 			
-			$this->item_id = Item::get_id_by_method_id($method_id);
+			$method_is_item = new MethodIsItem_Access($method_id);
+			$this->item_id = $method_is_item->get_item_id();
+    		parent::__construct($this->item_id);
 		}
 		else
 		{
 			$this->method_id = null;
 			$this->method = new Method_Access(null);
+			parent::__construct(null);
 		}
-	}
-	
-	function __destruct()
-	{
-		unset($this->method_id);
-		unset($this->method);
-		unset($this->item_id);
 	}
 	
 	/**
@@ -85,23 +80,26 @@ class Method implements MethodInterface, EventListenerInterface
 			if (($method_id = $this->method->create($type_id, $owner_id)) != null)
 			{
 				
-				$item = new Item(null);
-				if ($item->create() == null)
+			// Create Item
+				if (($this->item_id = parent::create()) == null)
 				{
+					$folder->delete(true, true);
 					if ($transaction_id != null)
 					{
 						$transaction->rollback($transaction_id);
 					}
-					return null;
+					throw new SampleCreationFailedException("",1);
 				}
 				
-				if($item->link_method($method_id) == null)
+				$method_is_item = new MethodIsItem_Access(null);
+				if ($method_is_item->create($method_id, $this->item_id) == false)
 				{
+					$folder->delete(true, true);
 					if ($transaction_id != null)
 					{
 						$transaction->rollback($transaction_id);
 					}
-					return null;
+					throw new SampleCreationFailedException("",1);
 				}
 				else
 				{
@@ -144,8 +142,7 @@ class Method implements MethodInterface, EventListenerInterface
 			
 			// Delete Item
 			if ($this->item_id) {
-				$item = new Item($this->item_id);
-				if ($item->delete() == false)
+				if (parent::delete() == false)
 				{
 					if ($transaction_id != null)
 					{
@@ -154,6 +151,16 @@ class Method implements MethodInterface, EventListenerInterface
 					return false;
 				}
 			}else{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+			}
+			
+			$method_is_item = new MethodIsItem_Access($tmp_method_id);
+			if ($method_is_item->delete() == false)
+			{
 				if ($transaction_id != null)
 				{
 					$transaction->rollback($transaction_id);
@@ -183,22 +190,7 @@ class Method implements MethodInterface, EventListenerInterface
 			return false;
 		}
 	}
-	
-	/**
-	 * @return integer
-	 */
-	public function get_item_id()
-	{
-		if ($this->item_id)
-		{
-			return $this->item_id;
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
+		
 	/**
 	 * @return integer
 	 */
@@ -262,7 +254,8 @@ class Method implements MethodInterface, EventListenerInterface
 	}
 	
     /**
-     * @todo implementation
+     * @params object $event_object
+     * @return bool
      */
     public static function listen_events($event_object)
     {
@@ -279,7 +272,39 @@ class Method implements MethodInterface, EventListenerInterface
 			}
     	}
     	
+    	if ($event_object instanceof ItemUnlinkEvent)
+    	{
+    		if (($method_id = MethodIsItem_Access::get_entry_by_item_id($event_object->get_item_id())) != null)
+    		{
+    			$method = new Method($method_id);
+    			if ($method->delete() == false)
+    			{
+    				return false;
+    			}	
+    		}
+    	}
+    	
     	return true;
+    }
+    
+ 	/**
+     * @param string $type
+     * @param integer $item_id
+     * @return bool
+     */
+    public static function is_kind_of($type, $item_id)
+    {
+    	if ($type and is_numeric($item_id))
+    	{
+    		if (($method_id = MethodIsItem_Access::get_entry_by_item_id($item_id)) != null)
+    		{
+    			return true;
+    		}
+    		else
+    		{
+    			return false;
+    		}
+    	}
     }
 }
 ?>

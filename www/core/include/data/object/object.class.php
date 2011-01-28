@@ -28,6 +28,7 @@ require_once("interfaces/object.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("access/object_is_item.access.php");
 	require_once("access/object.access.php");
 }
 
@@ -35,12 +36,11 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Object Management Class
  * @package data
  */
-class Object implements ObjectInterface
+class Object extends Item implements ObjectInterface, EventListenerInterface, ItemListenerInterface
 {
    	protected $object_id;
    	protected $project_id; // problematic dependency
    	protected $sample_id; // problematic dependency
-    protected $item_id;
     
    	private $object;
 
@@ -64,14 +64,20 @@ class Object implements ObjectInterface
 			if (is_numeric($_GET[sample_id]))
 			{
 				$this->sample_id = $_GET[sample_id];
-			}	
+			}
+			
+			parent::__construct(null);	
    	   	}
    	   	else
    	   	{
    	   		$this->object_id = $object_id;
    	   		$this->object = new Object_Access($object_id);
-   	   		$this->item_id = Item::get_id_by_object_id($object_id);
    	   		
+   	   		$object_is_item = new ObjectIsItem_Access($object_id);
+   	   		$this->item_id = $object_is_item->get_item_id();
+    		parent::__construct($this->item_id);
+   	   		
+     		
    	   		$project_item_array = ProjectItem::list_projects_by_item_id($this->item_id);
    	   		
    	   		$folder = new Folder($this->get_toid());
@@ -97,13 +103,6 @@ class Object implements ObjectInterface
 			}
    	   	}
    	}
-   	
-   	function __destruct()
-   	{
-   		unset($this->object_id);
-   		unset($this->item_id);
-   		unset($this->object);
-   	}
    
     /**
      * Creates a new object
@@ -125,9 +124,27 @@ class Object implements ObjectInterface
 	   		
 	   		if ($this->object_id)
 	   		{
-		   		$item = new Item(null);
-				$this->item_id = $item->create();
-				$item->link_object($this->object_id);
+	   			// Create Item
+				if (($this->item_id = parent::create()) == null)
+				{
+					$folder->delete(true, true);
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return null;
+				}
+				
+				$object_is_item = new ObjectIsItem_Access(null);
+				if ($object_is_item->create($this->object_id, $this->item_id) == false)
+				{
+					$folder->delete(true, true);
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return null;
+				}
 		   		
 		   		if ($transaction_id != null)
 		   		{
@@ -164,41 +181,28 @@ class Object implements ObjectInterface
 			$transaction_id = $transaction->begin();
 
 			if ($this->item_id != null)
-			{
-		   		$item = new Item($this->item_id);
-	
-		   		if ($item->delete() == true)
-		   		{
-		   			if ($this->object->delete() == true)
-		   			{
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
-						return true;
-					}
-					else
+			{	
+				if (parent::delete() == false)
+				{
+					if ($transaction_id != null)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						return false;
-					}
-		   		}
-		   		else
-		   		{
-		   			if ($transaction_id != null)
-		   			{
 						$transaction->rollback($transaction_id);
 					}
-		   			return false;
-		   		}
-			}
-			else
-			{
-				if ($this->object->delete() == true)
+					return false;
+				}
+
+				$object_is_item = new ObjectIsItem_Access($this->object_id);
+				if ($object_is_item->delete() == false)
 				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+				}
+				
+	   			if ($this->object->delete() == true)
+	   			{
 					if ($transaction_id != null)
 					{
 						$transaction->commit($transaction_id);
@@ -213,6 +217,10 @@ class Object implements ObjectInterface
 					}
 					return false;
 				}
+			}
+			else
+			{
+				return false;
 			}
    		}
    		else
@@ -235,21 +243,6 @@ class Object implements ObjectInterface
   	public function get_value_id()
   	{
   		return $this->object->get_value_id();
-  	}
-  	
-  	/**
-  	 * @return integer
-  	 */
-  	public function get_item_id()
-  	{
-  		if ($this->item_id)
-  		{
-  			return $this->item_id;
-  		}
-  		else
-  		{
-  			return null;
-  		}
   	}
   	
   	/**
@@ -384,6 +377,65 @@ class Object implements ObjectInterface
   	{
   		return Object_Access::get_id_by_file_id($file_id);
   	}
-  	 
+  	
+    /**
+     * @param object $event_object
+     * @return bool
+     */
+    public static function listen_events($event_object)
+    {
+   		if ($event_object instanceof ItemUnlinkEvent)
+    	{
+    		if (($object_id = ObjectIsItem_Access::get_entry_by_item_id($event_object->get_item_id())) != null)
+    		{
+    			if ($file_id = Object_Access::get_file_id_by_id($object_id))
+    			{
+    				$file = new File($file_id);
+    				if ($file->delete() == false)
+    				{
+    					return false;
+    				}
+    			}
+    			if ($value_id = Object_Access::get_value_id_by_id($object_id))
+    			{
+    				$value = new Value($value_id);
+    				if ($value->delete() == false)
+    				{
+    					return false;
+    				}
+    			}
+    		}
+    	}
+    	
+    	return true;
+    }
+  	
+    /**
+     * @param string $type
+     * @param integer $item_id
+     * @return bool
+     */
+    public static function is_kind_of($type, $item_id)
+    {
+    	if ($type and is_numeric($item_id))
+    	{
+    		if (($object_id = ObjectIsItem_Access::get_entry_by_item_id($item_id)) != null)
+    		{
+    			if (Object_Access::get_file_id_by_id($object_id) and $type == "file")
+    			{
+    				return true;
+    			}
+    			if (Object_Access::get_value_id_by_id($object_id) and $type == "value")
+    			{
+    				return true;
+    			}
+    			return false;
+    		}
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
 }
 ?>

@@ -56,10 +56,9 @@ class Value extends Object implements ValueInterface, EventListenerInterface
 	 */
     function __construct($value_id)
     {
-    	parent::__construct(null);
-		
 		if ($value_id == null)
 		{
+			parent::__construct(null);
 			$this->value_id = null;
 			$this->value = new Value_Access(null);
 			$this->value_version = new ValueVersion_Access(null);
@@ -346,14 +345,13 @@ class Value extends Object implements ValueInterface, EventListenerInterface
 		if (($this->value_id != null) and $this->value and $this->value_version)
 		{
 			$transaction_id = $transaction->begin();
-			
-			$object_id = $this->object_id;
+
 			$object_delete = parent::delete();
-			
+
 			if ($object_delete == true)
 			{
 				$value_version_array = ValueVersion_Access::list_entries_by_toid($this->value_id);
-				
+
 				unset($this->value_version);
 				
 				if (is_array($value_version_array) and count($value_version_array) >= 1)
@@ -367,6 +365,7 @@ class Value extends Object implements ValueInterface, EventListenerInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
+							echo "e";
 							return false;
 						}
 					}
@@ -386,6 +385,7 @@ class Value extends Object implements ValueInterface, EventListenerInterface
 						{
 							$transaction->rollback($transaction_id);
 						}
+						echo "d";
 						return false;
 					}
 				}
@@ -395,6 +395,7 @@ class Value extends Object implements ValueInterface, EventListenerInterface
 					{
 						$transaction->rollback($transaction_id);
 					}
+					echo "c";
 					return false;
 				}
 			}
@@ -404,11 +405,13 @@ class Value extends Object implements ValueInterface, EventListenerInterface
 				{
 					$transaction->rollback($transaction_id);
 				}
+				echo "b";
 				return false;	
 			}
 		}
 		else
 		{
+			echo "a";
 			return false;	
 		}
 	}

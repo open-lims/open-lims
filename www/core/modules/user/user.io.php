@@ -431,7 +431,7 @@ class UserIO
 		}
 	}
 	
-	public static static function change_password_on_login()
+	public static function change_password_on_login()
 	{
 		global $user, $common;
 		

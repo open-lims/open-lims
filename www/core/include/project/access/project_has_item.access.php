@@ -597,6 +597,42 @@ class ProjectHasItem_Access
 	
 	/**
 	 * @param integer $project_id
+	 * @param integer $project_status_id
+	 * @return array
+	 */
+	public static function list_entries_by_project_id_and_project_status_id($project_id, $project_status_id)
+	{
+		global $db;
+
+		if (is_numeric($project_id) and is_numeric($project_status_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT item_id FROM ".self::PROJECT_HAS_ITEM_TABLE." WHERE project_id = ".$project_id." AND project_status_id = ".$project_status_id."";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,$data[item_id]);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $project_id
 	 * @return array
 	 */	
 	public static function list_entries_by_project_id($project_id)

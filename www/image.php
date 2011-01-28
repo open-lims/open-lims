@@ -29,6 +29,9 @@
 	require_once("config/main.php");
 	require_once("core/db/db.php");
 	
+	require_once("core/include/base/transaction.class.php");
+	require_once("core/include/base/events/event.class.php");
+	require_once("core/include/base/system_handler.class.php");
 	require_once("core/include/base/session.class.php");
 
 	require_once("core/include/base/autoload.function.php");	

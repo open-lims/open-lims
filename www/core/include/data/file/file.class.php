@@ -53,14 +53,13 @@ class File extends Object implements FileInterface, EventListenerInterface
 	 */
 	function __construct($file_id)
 	{
-		parent::__construct(null);
-		
 		if ($file_id == null)
 		{
 			$this->file_id = null;
 			$this->file = new File_Access(null);
 			$this->file_version = new FileVersion_Access(null);
 			$this->object_id = null;
+			parent::__construct(null);
 		}
 		else
 		{

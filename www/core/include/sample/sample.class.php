@@ -32,7 +32,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("exceptions/sample_creation_failed_exception.class.php");
 	
 	require_once("access/sample.access.php");
-	
+	require_once("access/sample_is_item.access.php");
 	require_once("access/sample_has_sample_depository.access.php");
 	require_once("access/sample_has_sample.access.php");
 	require_once("access/sample_has_organisation_unit.access.php");
@@ -45,12 +45,11 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Sample Management Class
  * @package sample
  */
-class Sample implements SampleInterface, EventListenerInterface
+class Sample extends Item implements SampleInterface, EventListenerInterface, ItemListenerInterface
 {
 	private $sample;
 	
 	private $sample_id;
-	private $item_id;
 	
 	private $template_data_type;
 	private $template_data_type_id;
@@ -65,13 +64,16 @@ class Sample implements SampleInterface, EventListenerInterface
     	{
     		$this->sample_id = null;
     		$this->sample = new Sample_Access(null);
+    		parent::__construct(null);
     	}
     	else
     	{
     		$this->sample_id = $sample_id;
     		$this->sample = new Sample_Access($sample_id);
     		
-			$this->item_id = Item::get_id_by_sample_id($sample_id);
+    		$sample_is_item = new SampleIsItem_Access($sample_id);
+    		$this->item_id = $sample_is_item->get_item_id();
+    		parent::__construct($this->item_id);
     	}
     }
     
@@ -260,8 +262,7 @@ class Sample implements SampleInterface, EventListenerInterface
 		    			}
 		    			
 		    			// Create Item
-		    			$item = new Item(null);
-						if (($this->item_id = $item->create()) == null)
+						if (($this->item_id = parent::create()) == null)
 						{
 							$folder->delete(true, true);
 							if ($transaction_id != null)
@@ -271,7 +272,8 @@ class Sample implements SampleInterface, EventListenerInterface
 							throw new SampleCreationFailedException("",1);
 						}
 						
-						if ($item->link_sample($sample_id) == false)
+						$sample_is_item = new SampleIsItem_Access(null);
+						if ($sample_is_item->create($sample_id, $this->item_id) == false)
 						{
 							$folder->delete(true, true);
 							if ($transaction_id != null)
@@ -379,7 +381,7 @@ class Sample implements SampleInterface, EventListenerInterface
     		throw new SampleCreationFailedException("",1);
     	}
     }
-
+    
 	/**
 	 * Deletes a sample
 	 * @return bool
@@ -393,20 +395,7 @@ class Sample implements SampleInterface, EventListenerInterface
 			$transaction_id = $transaction->begin();
 			
 			$tmp_sample_id = $this->sample_id;
-			
-			// Delete Item
-			if ($this->item_id) {
-				$item = new Item($this->item_id);
-				if ($item->delete() == false)
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
-				}
-			}
-		
+
 			// Parent Relations (on Null)
 			$sample_has_sample_pid_array = SampleHasSample_Access::list_entries_by_sample_pid($tmp_sample_id);
 			if (is_array($sample_has_sample_pid_array) and count($sample_has_sample_pid_array) >= 1)
@@ -496,15 +485,15 @@ class Sample implements SampleInterface, EventListenerInterface
 			}
 			
 			// Other Items
-    		$sample_item = new SampleItem($tmp_sample_id);
+			$sample_item = new SampleItem($tmp_sample_id);
 			$item_array = $sample_item->get_sample_items();
-    		
-    		if (is_array($item_array) and count($item_array) >= 1)
-    		{
-				foreach($item_array as $key => $value)
+			if (is_array($item_array) and count($item_array) >= 1)
+			{
+				foreach($item_array as $item_key => $item_value)
 				{
-					$item = new Item($value);
-					if ($item->delete() == false)
+					$sample_item = new SampleItem($tmp_sample_id);
+					$sample_item->set_item_id($item_value);
+					if ($sample_item->unlink_item() == false)
 					{
 						if ($transaction_id != null)
 						{
@@ -513,7 +502,29 @@ class Sample implements SampleInterface, EventListenerInterface
 						return false;
 					}
 				}
-    		}
+			}	
+			
+			// Delete Item
+			if ($this->item_id) {
+				if (parent::delete() == false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+				}
+			}
+    		
+			$sample_is_item = new SampleIsItem_Access($tmp_sample_id);
+			if ($sample_is_item->delete() == false)
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+			}
 			
 			if ($this->sample->delete() == false)
 			{
@@ -552,6 +563,7 @@ class Sample implements SampleInterface, EventListenerInterface
 		}	
 	}
 
+	
 	/**
 	 * Returns all requirements
 	 * @return array
@@ -630,6 +642,7 @@ class Sample implements SampleInterface, EventListenerInterface
     	{
 	    	$requirements_array = $this->get_requirements();			
 			$fulfilled_array = array();
+			$item_type_array = Item::list_types();
 			
 			if (is_array($requirements_array) and count($requirements_array) >= 1)
 			{
@@ -644,103 +657,26 @@ class Sample implements SampleInterface, EventListenerInterface
 						$gid = $key;
 					}
 					
-					switch($value[type]):
-					
-						case("file"):
-							$sample_item = new SampleItem($this->sample_id);
-							$item_array = $sample_item->get_sample_items();
-							if (is_array($item_array) and count($item_array) >= 1)
-							{
-								foreach($item_array as $item_key => $item_value)
-								{
-									$item = new Item($item_value);
-									$item_gid = SampleItem::get_gid_by_item_id_and_sample_id($item_value, $this->sample_id);
-
-									if (($object_id = $item->get_object_id()) != null and $item_gid == $gid)
-									{
-										$object = new Object($object_id);
-										if ($object->get_file_id() != null)
-										{
-											$fulfilled_array[$key] = true;
-										}
-									}
-								}
-							}
-						break;
+					$sample_item = new SampleItem($this->sample_id);
+					$item_array = $sample_item->get_sample_items();
+					if (is_array($item_array) and count($item_array) >= 1)
+					{
+						foreach($item_array as $item_key => $item_value)
+						{
+							$item_gid = SampleItem::get_gid_by_item_id_and_sample_id($item_value, $this->sample_id);
 							
-						case("value"):
-							$sample_item = new SampleItem($this->sample_id);
-							$item_array = $sample_item->get_sample_items();
-							if (is_array($item_array) and count($item_array) >= 1)
-							{	
-								foreach($item_array as $item_key => $item_value)
-								{
-									$item = new Item($item_value);
-									$item_gid = SampleItem::get_gid_by_item_id_and_sample_id($item_value, $this->sample_id);
-
-									if (($object_id = $item->get_object_id()) != null and $item_gid == $gid)
-									{
-										$object = new Object($object_id);
-										
-										if(($value_id = $object->get_value_id()) != null)
-										{
-											$value_obj = new Value($value_id);
-											if (is_array($value[type_id]))
-											{
-												if (in_array($value_obj->get_type_id(),$value[type_id]))
-												{
-													$fulfilled_array[$key] = true;	
-												}
-											}
-											else
-											{
-												$fulfilled_array[$key] = true;	
-											}		
-										}
-									}
-								}
-							}
-						break;
-						
-						case("method"):
-							$sample_item = new SampleItem($this->sample_id);
-							$item_array = $sample_item->get_sample_items();
-							if (is_array($item_array) and count($item_array) >= 1)
+							if (is_array($item_type_array) and count($item_type_array) >= 1)
 							{
-								foreach($item_array as $item_key => $item_value)
+								foreach ($item_type_array as $item_type => $item_handling_class)
 								{
-									$item = new Item($item_value);
-									$item_gid = SampleItem::get_gid_by_item_id_and_sample_id($item_value, $this->sample_id);
-									
-									if ($item->get_method_id() != null and $item_gid == $gid)
+									if ($item_handling_class::is_kind_of($item_type, $item_value) == true  and $item_gid == $gid)
 									{
-										$fulfilled_array[$key] = true;	
+										$fulfilled_array[$key] = true;
 									}
 								}
 							}
-						break;
-						
-						case("sample"):
-						case("parentsample"):
-							$sample_item = new SampleItem($this->sample_id);
-							$item_array = $sample_item->get_sample_items();
-							if (is_array($item_array) and count($item_array) >= 1)
-							{
-								foreach($item_array as $item_key => $item_value)
-								{
-									$item = new Item($item_value);
-									$item_gid = SampleItem::get_gid_by_item_id_and_sample_id($item_value, $this->sample_id);
-									
-									if ($item->get_sample_id() != null and $item_gid == $gid)
-									{
-										$fulfilled_array[$key] = true;	
-									}
-								}
-							}
-						break;
-					
-					endswitch;
-					
+						}
+					}	
 				}
 				return $fulfilled_array;
 			}
@@ -1088,21 +1024,6 @@ class Sample implements SampleInterface, EventListenerInterface
     		return null;
     	}	
     }    
-
-	/**
-	 * @return integer
-	 */
-    public function get_item_id()
-    {
-    	if ($this->item_id)
-    	{
-    		return $this->item_id;
-    	}
-    	else
-    	{
-    		return null;
-    	}
-    }
     
     /**
      * @return string
@@ -1517,7 +1438,8 @@ class Sample implements SampleInterface, EventListenerInterface
     }
     
     /**
-     * @todo implementation
+     * @param object $event_object
+     * @return bool
      */
     public static function listen_events($event_object)
     {
@@ -1547,8 +1469,36 @@ class Sample implements SampleInterface, EventListenerInterface
 			}
     	}
     	
+   		if ($event_object instanceof ItemUnlinkEvent)
+    	{
+    		// Do Nothing
+    	}
+    	
     	return true;
     }
     
+ 	/**
+     * @param string $type
+     * @param integer $item_id
+     * @return bool
+     */
+    public static function is_kind_of($type, $item_id)
+    {
+    	if ($type and is_numeric($item_id))
+    	{
+    		if (($sample_id = SampleIsItem_Access::get_entry_by_item_id($item_id)) != null)
+    		{
+    			return true;
+    		}
+    		else
+    		{
+    			return false;
+    		}
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
 }
 ?>

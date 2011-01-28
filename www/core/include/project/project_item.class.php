@@ -35,7 +35,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Project Item Management Class
  * @package project
  */
-class ProjectItem implements ProjectItemInterface
+class ProjectItem implements ProjectItemInterface, EventListenerInterface
 {
 	private $project_id;
 	private $item_id;
@@ -112,6 +112,19 @@ class ProjectItem implements ProjectItemInterface
     		
     		if ($project_has_item->delete())
     		{
+    			// Event
+	  			$item_unlink_event = new ItemUnlinkEvent($this->item_id);
+				$event_handler = new EventHandler($item_unlink_event);
+					
+				if ($event_handler->get_success() == false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+				}
+				
     			return true;
     		}
     		else
@@ -138,27 +151,34 @@ class ProjectItem implements ProjectItemInterface
     		$transaction_id = $transaction->begin();
     			
   			$project_has_item_pk_array = ProjectHasItem_Access::list_entries_by_item_id($this->item_id);
-  			  			
-  			if (is_array($project_has_item_pk_array) and count($project_has_item_pk_array) >= 1)
+
+  			if (is_array($project_has_item_pk_array))
   			{
-  				foreach ($project_has_item_pk_array as $key => $value)
+  				if (count($project_has_item_pk_array) >= 1)
   				{
-  					$project_has_item = new ProjectHasItem_Access($value);
-  					if ($project_has_item->delete() == false)
-  					{
-  						if ($transaction_id != null)
-  						{
-							$transaction->rollback($transaction_id);
-						}
-						return false;
-  					}
-  				} 
-  				
-  				if ($transaction_id != null)
+	  				foreach ($project_has_item_pk_array as $key => $value)
+	  				{
+	  					$project_has_item = new ProjectHasItem_Access($value);
+	  					if ($project_has_item->delete() == false)
+	  					{
+	  						if ($transaction_id != null)
+	  						{
+								$transaction->rollback($transaction_id);
+							}
+							return false;
+	  					}
+	  				} 
+	  				
+	  				if ($transaction_id != null)
+	  				{
+						$transaction->commit($transaction_id);
+					}
+	  				return true;
+  				}
+  				else
   				{
-					$transaction->commit($transaction_id);
-				}
-  				return true;				
+  					return true;
+  				}				
   			}
   			else
   			{
@@ -283,6 +303,21 @@ class ProjectItem implements ProjectItemInterface
     		{
     			return null;
     		}
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+    /**
+     * @return array
+     */
+    public function get_project_status_items($project_status_id)
+    {
+    	if ($this->project_id)
+    	{
+    		return ProjectHasItem_Access::list_entries_by_project_id_and_project_status_id($this->project_id, $project_status_id);
     	}
     	else
     	{
@@ -889,6 +924,25 @@ class ProjectItem implements ProjectItemInterface
   			return null;
   		} 		
   	}
+  	
+	/**
+     * @param object $event_object
+     * @return bool
+     */
+    public static function listen_events($event_object)
+    {
+    	if ($event_object instanceof ItemDeleteEvent)
+    	{
+    		$project_item = new ProjectItem(null);
+			$project_item->set_item_id($event_object->get_item_id());
+			if ($project_item->unlink_item_full() == false)
+			{
+				return false;
+			}
+    	}
+    	
+    	return true;
+    }
   
 }
 ?>

@@ -680,7 +680,6 @@ class ValueIO
 								if ($value_add_successful == true)
 								{
 									$item_id = $value->get_item_id();
-									
 									$sample_item->set_item_id($item_id);
 									$sample_item->link_item();
 								

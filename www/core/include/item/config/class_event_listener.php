@@ -24,4 +24,5 @@
 /**
  * 
  */
+	$event_listener[0] = "Item";
 ?>

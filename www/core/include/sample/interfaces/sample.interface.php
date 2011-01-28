@@ -52,7 +52,6 @@ interface SampleInterface
 	public function get_all_depository_information();
 	public function get_current_depository();
 	
-	public function get_item_id();
 	public function get_name();
 	public function get_datetime();
 	public function get_owner_id();

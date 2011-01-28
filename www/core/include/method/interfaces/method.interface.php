@@ -29,11 +29,9 @@
 interface MethodInterface
 {
 	function __construct($method_id);
-	function __destruct();
 	
 	public function create($type_id, $owner_id);
 	public function delete();
-	public function get_item_id();
 	public function get_type_id();
 	public function get_owner_id();
 	public function get_datetime();

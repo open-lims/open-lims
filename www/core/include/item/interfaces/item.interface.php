@@ -31,28 +31,12 @@ interface ItemInterface
 	function __construct($item_id);
 	function __destruct();
 	
-	public function create();
-	public function delete();
-	
-	public function link_object($object_id);
-	public function link_method($method_id);
-	public function link_sample($sample_id);
-	
-	public function unlink_object();
-	public function unlink_method();
-	public function unlink_sample();
-	
 	public function is_classified();
 	public function get_class_ids();
 	public function get_information();
 	public function get_datetime();
-	public function get_object_id();
-	public function get_method_id();
-	public function get_sample_id();
 	
-	public static function get_id_by_object_id($object_id);
-	public static function get_id_by_method_id($method_id);
-	public static function get_id_by_sample_id($sample_id);
+	public static function register_type($type, $handling_class, $include_id);
 }
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package data
+ * @package method
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -21,25 +21,19 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /**
- * Object Management Interface
- * @package data
- */
-interface ObjectInterface
+ * Registering Functions
+ */ 
+function register_method($include_id)
 {
-	function __construct($object_id);
-	
-	public function get_file_id();
-	public function get_value_id();
-	public function get_toid();
-	
-	public static function get_file_array($folder_id);
-	public static function get_value_array($folder_id);
-	public static function get_object_array($folder_id);
-	
-	// protected static function get_id_by_value_id($value_id);
-	// protected static function get_id_by_file_id($file_id);
+	if (Item::register_type("method", "Method", $include_id) == true)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
-
+$result = register_method($key);
 ?>

@@ -44,7 +44,6 @@ function __autoload($classname)
 	$classes['IdMissingException']						= $path_prefix."core/include/base/exceptions/id_missing_exception.class.php";
 	
 	$classes['EventHandler']				= $path_prefix."core/include/base/event_handler.class.php";
-	$classes['Event']						= $path_prefix."core/include/base/events/event.class.php";
 	
 	$classes['Auth'] 						= $path_prefix."core/include/base/auth.class.php";
 	$classes['Communicator']				= $path_prefix."core/include/base/communicator.class.php";
@@ -60,13 +59,16 @@ function __autoload($classname)
 		foreach($registered_include_array as $key => $value)
 		{
 			$config_file = $GLOBALS[include_dir]."/".$value."/config/include_info.php";
-			include($config_file);
-			if ($no_class_path != true)
+			if (file_exists($config_file))
 			{
-				$class_path_file = $GLOBALS[include_dir]."/".$value."/config/class_path.php";
-				include($class_path_file);
+				include($config_file);
+				if ($no_class_path != true)
+				{
+					$class_path_file = $GLOBALS[include_dir]."/".$value."/config/class_path.php";
+					include($class_path_file);
+				}
+				unset($no_class_path);
 			}
-			unset($no_class_path);
 		}
 	}
 	

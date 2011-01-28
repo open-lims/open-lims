@@ -64,6 +64,9 @@ class Main
 		
 		set_error_handler('error_handler');
 		
+		require_once("include/base/events/event.class.php");
+		require_once("include/base/system_handler.class.php");
+		
 		require_once("include/base/autoload.function.php");
 		
 		if ($GLOBALS[con_run] == true)
@@ -77,8 +80,7 @@ class Main
 			require_once("include/base/misc.class.php");
 			require_once("include/base/session.class.php");
 			require_once("include/base/runtime_data.class.php");
-			require_once("include/base/system_handler.class.php");
-			
+
 			Security::protect_session();
 	
 			$misc = new Misc();

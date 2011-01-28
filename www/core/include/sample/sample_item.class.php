@@ -35,7 +35,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Sample Item Management Class
  * @package sample
  */
-class SampleItem implements SampleItemInterface
+class SampleItem implements SampleItemInterface, EventListenerInterface
 {
 	private $sample_id;
 	private $item_id;
@@ -127,6 +127,19 @@ class SampleItem implements SampleItemInterface
     		
     		if ($sample_has_item->delete())
     		{
+  				// Event
+	  			$item_unlink_event = new ItemUnlinkEvent($this->item_id);
+				$event_handler = new EventHandler($item_unlink_event);
+					
+				if ($event_handler->get_success() == false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+				}
+    			
     			return true;
     		}
     		else
@@ -155,26 +168,33 @@ class SampleItem implements SampleItemInterface
     		
   			$sample_has_item_pk_array = SampleHasItem_Access::list_entries_by_item_id($this->item_id);
   			  			
-  			if (is_array($sample_has_item_pk_array) and count($sample_has_item_pk_array) >= 1)
+  			if (is_array($sample_has_item_pk_array))
   			{
-  				foreach ($sample_has_item_pk_array as $key => $value)
+  				if (count($sample_has_item_pk_array) >= 1)
   				{
-  					$sample_has_item = new SampleHasItem_Access($value);
-  					if ($sample_has_item->delete() == false)
-  					{
-  						if ($transaction_id != null)
-  						{
-							$transaction->rollback($transaction_id);
-						}
-						return false;
-  					}
-  				} 
-  				
-  				if ($transaction_id != null)
+	  				foreach ($sample_has_item_pk_array as $key => $value)
+	  				{
+	  					$sample_has_item = new SampleHasItem_Access($value);
+	  					if ($sample_has_item->delete() == false)
+	  					{
+	  						if ($transaction_id != null)
+	  						{
+								$transaction->rollback($transaction_id);
+							}
+							return false;
+	  					}
+	  				}
+	  				
+	  				if ($transaction_id != null)
+	  				{
+						$transaction->commit($transaction_id);
+					}
+					return true;
+  				}
+  				else
   				{
-					$transaction->commit($transaction_id);
-				}
-				return true;				
+  					return true;
+  				}				
   			}
   			else
   			{
@@ -653,6 +673,25 @@ class SampleItem implements SampleItemInterface
     public static function get_gid_by_item_id_and_sample_id($item_id, $sample_id)
     {
     	return SampleHasItem_Access::get_gid_by_item_id_and_sample_id($item_id, $sample_id);
+    }
+    
+	/**
+     * @param object $event_object
+     * @return bool
+     */
+    public static function listen_events($event_object)
+    {
+    	if ($event_object instanceof ItemDeleteEvent)
+    	{
+			$sample_item = new SampleItem(null);
+			$sample_item->set_item_id($event_object->get_item_id());
+			if ($sample_item->unlink_item_full() == false)
+			{
+				return false;
+			}
+    	}
+    	
+    	return true;
     }
 }
 ?>

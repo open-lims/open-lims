@@ -28,6 +28,7 @@
 	$event_listener[1] = "UserFolder";
 	$event_listener[2] = "GroupFolder";
 	$event_listener[3] = "OrganisationUnitFolder";
-	$event_listener[4] = "File";
-	$event_listener[5] = "Value";
+	$event_listener[4] = "Object";
+	$event_listener[5] = "File";
+	$event_listener[6] = "Value";
 ?>
