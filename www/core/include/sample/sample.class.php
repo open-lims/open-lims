@@ -669,9 +669,12 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 							{
 								foreach ($item_type_array as $item_type => $item_handling_class)
 								{
-									if ($item_handling_class::is_kind_of($item_type, $item_value) == true  and $item_gid == $gid)
+									if (class_exists($item_handling_class))
 									{
-										$fulfilled_array[$key] = true;
+										if ($item_handling_class::is_kind_of($item_type, $item_value) == true  and $item_gid == $gid)
+										{
+											$fulfilled_array[$key] = true;
+										}
 									}
 								}
 							}
@@ -1303,7 +1306,17 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
    	{
 		return Sample_Access::exist_sample_by_sample_id($sample_id);
    	}
-   	  
+
+	/**
+	 * Returns the sample-id of a given item-id
+	 * @param integer $item_id
+	 * @return integer
+	 */
+	public static function get_entry_by_item_id($item_id)
+	{
+		return SampleIsItem_Access::get_entry_by_item_id($item_id);
+	}
+   	
    	/**
    	 * Lists all user-related samples
    	 * @param integer $user_id

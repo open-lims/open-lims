@@ -441,6 +441,7 @@ class Value_Access
 	
 	
 	/**
+	 * @param integer $type_id
 	 * @return array
 	 */
 	public static function list_entries_by_type_id($type_id)
@@ -471,6 +472,38 @@ class Value_Access
 		else
 		{
 			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $value_id
+	 * @param integer $type_id
+	 * @return array
+	 */
+	public static function is_entry_type_of($value_id, $type_id)
+	{
+		global $db;
+		
+		if (is_numeric($value_id) and is_numeric($type_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT id FROM ".self::VALUE_TABLE." WHERE id= ".$value_id." AND type_id = ".$type_id."";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[id])
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
 		}
 	}
 	

@@ -639,7 +639,7 @@ class ProjectIO
 				$project_template_data_type  	= $session->read_value("PROJECT_TEMPLATE_DATA_TYPE");	
 				$project_template_data_type_id	= $session->read_value("PROJECT_TEMPLATE_DATA_TYPE_ID");	
 				$project_template_data_array	= $session->read_value("PROJECT_TEMPLATE_DATA_ARRAY");	
-				
+
 				if (($session->read_value("PROJECT_TYPE") == 3 or $session->read_value("PROJECT_TYPE") == 4) and !$project_desc)
 				{
 					if ($project_toid)
@@ -647,6 +647,14 @@ class ProjectIO
 						$parent_project = new Project($project_toid);
 						$project_desc = $parent_project->get_description();
 					}
+				}
+			}
+			elseif ($_GET[run] == "new_subproject")
+			{
+				if ($_GET[project_id])
+				{
+					$parent_project = new Project($_GET[project_id]);
+					$project_desc = $parent_project->get_description();
 				}
 			}
 			

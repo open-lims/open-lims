@@ -63,6 +63,11 @@ class Method extends Item implements MethodInterface, EventListenerInterface, It
 		}
 	}
 	
+	public function __destruct()
+   	{
+   		
+   	}
+	
 	/**
 	 * Creates a new method
 	 * @param integer $type_id
@@ -246,11 +251,21 @@ class Method extends Item implements MethodInterface, EventListenerInterface, It
 	} 
 	
 	/**
+	 * @param integer $type_id
 	 * @return array
 	 */
 	public static function list_entries_by_type_id($type_id)
 	{
 		return Method_Access::list_entries_by_type_id($type_id);
+	}
+	
+	/**
+	 * @param integer $item_id
+	 * @return integer
+	 */
+	public static function get_entry_by_item_id($item_id)
+	{
+		return MethodIsItem_Access::get_entry_by_item_id($item_id);
 	}
 	
     /**

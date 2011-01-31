@@ -1772,7 +1772,18 @@ class Value extends Object implements ValueInterface, EventListenerInterface
 	{
 		return Value_Access::set_owner_group_id_on_null($owner_group_id);
 	}
-    
+	
+	/**
+	 * Checks if an value-id is a type of type-id
+	 * @param integer $value_id
+	 * @param integer $type_id
+	 * @return bool
+	 */
+	public static function is_entry_type_of($value_id, $type_id)
+	{
+		return Value_Access::is_entry_type_of($value_id, $type_id);
+	}
+	
     /**
      * @todo implementation
      */

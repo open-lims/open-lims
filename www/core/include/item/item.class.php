@@ -47,7 +47,7 @@ class Item implements ItemInterface, EventListenerInterface
 	 * @param integer $item_id
 	 * @todo set on protected
 	 */
-	function __construct($item_id)
+	protected function __construct($item_id)
 	{
 		if ($item_id == null)
 		{
@@ -61,7 +61,7 @@ class Item implements ItemInterface, EventListenerInterface
 		}
 	}
 	
-	function __destruct()
+	protected function __destruct()
 	{
 		if ($this->item_id)
 		{
@@ -239,52 +239,7 @@ class Item implements ItemInterface, EventListenerInterface
 			return null;
 		}
 	}
-	
-	/**
-	 * @return integer
-	 */
-    public function get_object_id()
-    {
-    	if ($this->object_id)
-    	{
-    		return $this->object_id;
-    	}
-    	else
-    	{
-    		return null;
-    	}
-    }
-    
-    /**
-     * @return integer
-     */
-	public function get_method_id()
-	{
-		if ($this->method_id)
-		{
-    		return $this->method_id;
-    	}
-    	else
-    	{
-    		return null;
-    	}
-	}
-	
-	/**
-	 * @return integer
-	 */
-	public function get_sample_id()
-	{
-		if ($this->sample_id)
-		{
-    		return $this->sample_id;
-    	}
-    	else
-    	{
-    		return null;
-    	}
-	}
-	
+		
 		
 	/**
 	 * @param string $type

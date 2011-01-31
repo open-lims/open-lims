@@ -133,35 +133,7 @@ class ItemIO
 				}
 				$counter_begin = (25*$page)-25;
 			}
-			
-			$begin_time = microtime(true);
-			
-			$file_array = Object::get_object_array($_GET[folder_id]);
-			
-			if (is_array($file_array) and count($file_array) >= 1)
-			{
-				foreach($file_array as $key => $value)
-				{
-					$object = new Object($value);
-					$item_id = $object->get_item_id();
-					
-					if ($item_id)
-					{
-						$item = new Item($item_id);
 						
-						if (($item_class_array = $item->get_class_ids) != null)
-						{
-							
-						}
-					}
-				}
-			}
-			
-			$end_time = microtime(true);
-			$time = $end_time - $begin_time;
-			
-			echo $time;
-			
 			$template = new Template("languages/en-gb/template/item/item_administration_folder.html");
 			
 			$template->set_var("title", $folder->get_name());	

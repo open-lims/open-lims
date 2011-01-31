@@ -533,9 +533,9 @@ class ValueVar implements ValueVarInterface
 	    						$result_array = array();
 	    						foreach($this->item_array as $fe_key => $fe_value)
 	    						{
-	    							$item = new Item($fe_value);
-	    							if (($sample_id = $item->get_sample_id()) != null)
+	    							if (Sample::is_kind_of("sample", $fe_value) == true)
 	    							{
+	    								$sample_id = Sample::get_entry_by_item_id($fe_value);
 	    								array_push($result_array, $sample_id);
 	    							}
 	    						}
@@ -562,10 +562,9 @@ class ValueVar implements ValueVarInterface
 	    						
 	    						foreach($this->item_array as $fe_key => $fe_value)
 	    						{
-	    							$item = new Item($fe_value);
-	    							
-	    							if (($object_id = $item->get_object_id()) != null)
+	    							if (Object::is_kind_of("value", $fe_value) == true)
 	    							{
+	    								$object_id = Object::get_entry_by_item_id($fe_value);
 	    								$object = new Object($object_id);
 	    								if (($value_id = $object->get_value_id()) != null)
 	    								{
@@ -710,10 +709,9 @@ class ValueVar implements ValueVarInterface
 		    						
 		    						foreach($this->item_array as $fe_key => $fe_value)
 		    						{
-		    							$item = new Item($fe_value);
-		    							
-		    							if (($object_id = $item->get_object_id()) != null)
+			    						if (Object::is_kind_of("value", $fe_value) == true)
 		    							{
+		    								$object_id = Object::get_entry_by_item_id($fe_value);
 		    								$object = new Object($object_id);
 		    								if (($value_id = $object->get_value_id()) != null)
 		    								{

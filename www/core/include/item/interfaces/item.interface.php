@@ -27,10 +27,7 @@
  * @package item
  */ 	 
 interface ItemInterface
-{
-	function __construct($item_id);
-	function __destruct();
-	
+{	
 	public function is_classified();
 	public function get_class_ids();
 	public function get_information();

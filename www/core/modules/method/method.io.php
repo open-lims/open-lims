@@ -451,10 +451,9 @@ class MethodIO
 				{
 					foreach($item_array as $key => $value)
 					{
-						$item = new Item($value);
-					
-						if (($method_id = $item->get_method_id()) == true)
-						{
+						if (Method::is_kind_of("method",$value) == true)
+						{					
+							$method_id = Method::get_entry_by_item_id($value);
 							$method = new Method($method_id);
 							$method_type = new MethodType($method->get_type_id());
 					
@@ -535,10 +534,9 @@ class MethodIO
 				{
 					foreach($item_array as $key => $value)
 					{
-						$item = new Item($value);
-					
-						if (($method_id = $item->get_method_id()) == true)
-						{
+						if (Method::is_kind_of("method",$value) == true)
+						{					
+							$method_id = Method::get_entry_by_item_id($value);
 							$method = new Method($method_id);
 							$method_type = new MethodType($method->get_type_id());
 					

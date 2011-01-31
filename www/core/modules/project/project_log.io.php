@@ -157,6 +157,9 @@ class ProjectLogIO
 		}
 	}
 	
+	/**
+	 * @todo implementing list-behav. of concrete items
+	 */
 	public static function detail()
 	{
 		global $project_security;
@@ -168,6 +171,7 @@ class ProjectLogIO
 				$project_log = new ProjectLog($_GET[id]);
 				
 				$item_array = $project_log->list_items();
+				$item_type_array = Item::list_types();
 				
 				if (is_array($item_array) and count($item_array) >= 1)
 				{
@@ -176,39 +180,20 @@ class ProjectLogIO
 					
 					foreach($item_array as $key => $value)
 					{
-						$item = new Item($value);
+						if (is_array($item_type_array) and count($item_type_array) >= 1)
+						{
+							foreach ($item_type_array as $item_type => $item_handling_class)
+							{
+								if ($item_handling_class::is_kind_of($item_type, $value) == true)
+								{
+									if (class_exists($item_handling_class))
+									{
+									// Verhalten müssen IO Klassen der Items selbst zur verfügung stellen
+									}
+								}
+							}
+						}
 						
-						if ($item->get_object_id() != null)
-						{
-							$object = new Object($item->get_object_id());
-							
-							if ($object->get_file_id() != null)
-							{
-								$file = new File($object->get_file_id());
-								$result[$counter][icon] = $file->get_icon();
-								$result[$counter][name] = $file->get_name();
-								$result[$counter][type] = "File";
-							}
-							else
-							{
-								$value = new Value($object->get_value_id());
-								$result[$counter][icon] = "images/fileicons/16/unknown.png";
-								$result[$counter][name] = $value->get_type_name();
-								$result[$counter][type] = "Value";
-							}
-						}
-						elseif($item->get_method_id() != null)
-						{
-							$method = new Method($item->get_method_id());
-							$method_type = new MethodType($method->get_type_id());
-							$result[$counter][icon] = "images/fileicons/16/unknown.png";
-							$result[$counter][name] = $method_type->get_name();
-							$result[$counter][type] = "Method";
-						}
-						elseif($item->get_sample_id() != null)
-						{
-							$result[$counter][type] = "Sample";
-						}
 						$counter++;
 					}
 				}

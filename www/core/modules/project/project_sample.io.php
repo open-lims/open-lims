@@ -83,10 +83,9 @@ class ProjectSampleIO {
 				{	
 					foreach($item_array as $key => $value)
 					{
-						$item = new Item($value);
-					
-						if (($sample_id = $item->get_sample_id()) == true)
-						{
+						if (Sample::is_kind_of("sample",$value) == true)
+						{					
+							$sample_id = Sample::get_entry_by_item_id($value);
 							$sample = new Sample($sample_id);
 							$owner = new User($sample->get_owner_id());
 					

@@ -106,8 +106,8 @@ class SampleIsItem_Access
 	{
 		global $db;
 			
-		if ($this->sample_id and $this->item_id) {
-			
+		if ($this->sample_id and $this->item_id)
+		{
 			$sql = "DELETE FROM ".self::SAMPLE_IS_ITEM_TABLE." WHERE sample_id = ".$this->sample_id." AND item_id = ".$this->item_id."";
 			$res = $db->db_query($sql);
 			

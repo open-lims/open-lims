@@ -104,6 +104,11 @@ class Object extends Item implements ObjectInterface, EventListenerInterface, It
    	   	}
    	}
    
+   	public function __destruct()
+   	{
+   		
+   	}
+   	
     /**
      * Creates a new object
      * @param integer $folder_id
@@ -377,6 +382,17 @@ class Object extends Item implements ObjectInterface, EventListenerInterface, It
   	{
   		return Object_Access::get_id_by_file_id($file_id);
   	}
+  	
+    
+	/**
+	 * Returns the object-id of a given item-id
+	 * @param integer $item_id
+	 * @return integer
+	 */
+	public static function get_entry_by_item_id($item_id)
+	{
+		return ObjectIsItem_Access::get_entry_by_item_id($item_id);
+	}
   	
     /**
      * @param object $event_object

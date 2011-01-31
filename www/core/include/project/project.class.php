@@ -1134,9 +1134,12 @@ class Project implements ProjectInterface, EventListenerInterface
 								{
 									foreach ($item_type_array as $item_type => $item_handling_class)
 									{
-										if ($item_handling_class::is_kind_of($item_type, $item_value) == true  and $item_gid == $gid)
+										if (class_exists($item_handling_class))
 										{
-											$fulfilled_array[$key] = true;
+											if ($item_handling_class::is_kind_of($item_type, $item_value) == true  and $item_gid == $gid)
+											{
+												$fulfilled_array[$key] = true;
+											}
 										}
 									}
 								}
@@ -1870,45 +1873,23 @@ class Project implements ProjectInterface, EventListenerInterface
 			{
 				foreach($item_array as $item_key => $item_value)
 				{
-					if (is_array($item_type_array) and count($item_type_array) >= 1)
+					if (Object::is_kind_of("value", $item_value) == true)
 					{
-						foreach ($item_type_array as $item_type => $item_handling_class)
-						{
-							if ($item_handling_class::is_kind_of("value", $item_value) == true)
-							{
-								
-							}
-						}
-					}
-				}
-			}
-	
-			
-			
-			if (is_array($item_array) and count($item_array) >= 1)
-			{
-				foreach($item_array as $key => $value)
-				{
-					$item = new Item($value);
-										
-					if (($object_id = $item->get_object_id()) != null)
-					{
+						$object_id = Object::get_entry_by_item_id($item_value);
 						$object = new Object($object_id);
-						
-						if (($value_id = $object->get_value_id()) != null)
+						$value_id = $object->get_value_id();
+						if (Value::is_entry_type_of($value_id, 2) == true)
 						{
-							$value = new Value($value_id);
-							if ($value->get_type_id() == 2)
-							{
-								return unserialize($value->get_value());
-							}
+							$description_id = $value_id;
 						}
 					}
 				}
 			}
-			else
+			
+			$value = new Value($value_id);
+			if ($value->get_type_id() == 2)
 			{
-				return null;
+				return unserialize($value->get_value());
 			}
 		}
 		else
