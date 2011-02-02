@@ -42,6 +42,9 @@ class UserFolder implements UserFolderInterface, EventListenerInterface
 		
 	}
 	
+	/**
+	 * @todo: remove v-folder
+	 */
 	public function create($user_id)
 	{
 		if (is_numeric($user_id))

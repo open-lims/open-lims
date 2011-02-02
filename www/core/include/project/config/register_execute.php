@@ -24,11 +24,11 @@
 /**
  * Registering Functions
  */ 
-function register_sample($include_id)
+function register_project($include_id)
 {	
-	if (Item::delete_type_by_include_id($include_id))
+	if (Folder::delete_type_by_include_id($include_id))
 	{
-		if (Item::register_type("sample", "Sample", $include_id) == true)
+		if (Folder::register_type("project_folder", "ProjectFolder", $include_id) == true)
 		{
 			return true;
 		}
@@ -42,5 +42,5 @@ function register_sample($include_id)
 		return false;
 	}
 }
-$result = register_sample($key);
+$result = register_project($key);
 ?>

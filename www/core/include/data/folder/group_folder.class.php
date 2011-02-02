@@ -42,6 +42,9 @@ class GroupFolder implements GroupFolderInterface, EventListenerInterface
 		
 	}
 	
+	/**
+	 * @todo: remove v-folder
+	 */
 	public function create($group_id)
 	{
 		if (is_numeric($group_id))

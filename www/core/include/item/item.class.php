@@ -260,6 +260,11 @@ class Item implements ItemInterface, EventListenerInterface
 		}
 	}
 	
+	public static function delete_type_by_include_id($include_id)
+	{
+		return ItemConcretion_Access::delete_by_include_id($include_id);
+	}
+	
 	/**
 	 * @return array
 	 */

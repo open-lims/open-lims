@@ -1,6 +1,6 @@
 <?php
 /**
- * @package sample
+ * @package data
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -21,26 +21,29 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
+
 /**
- * Registering Functions
- */ 
-function register_sample($include_id)
-{	
-	if (Item::delete_type_by_include_id($include_id))
-	{
-		if (Item::register_type("sample", "Sample", $include_id) == true)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	else
-	{
-		return false;
-	}
+ * Folder Management Interface
+ * @package data
+ */
+interface ConcreteFolderCaseInterface
+{
+	function __construct($folder_id);
+	function __destruct();
+
+	public function is_read_access();
+	public function is_write_access();
+	public function is_delete_access();
+	public function is_control_access();
+	
+	public function is_flag_change_permission();
+	public function is_flag_add_folder();
+	public function is_flag_cmd_folder();
+	public function is_flag_rename_folder();
+	
+	public function delete($recursive, $content);
+	
+	public static function is_case($folder_id);
 }
-$result = register_sample($key);
+
 ?>

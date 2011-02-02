@@ -42,6 +42,9 @@ class OrganisationUnitFolder implements OrganisationUnitFolderInterface, EventLi
 		
 	}
 	
+	/**
+	 * @todo: remove v-folder
+	 */
 	public function create($organisation_unit_id)
 	{
 		if (is_numeric($organisation_unit_id))

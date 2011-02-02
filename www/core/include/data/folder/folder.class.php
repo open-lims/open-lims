@@ -32,6 +32,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	
 	require_once("access/folder.access.php");
 	
+	require_once("access/folder_concretion.access.php");
 	require_once("access/folder_join.access.php");
 	
 	require_once("access/folder_is_group_folder.access.php"); // Legacy
@@ -2043,6 +2044,30 @@ class Folder implements FolderInterface, EventListenerInterface
 		}
 	}
 
+	/**
+	 * @param string $type
+	 * @param string $handling_class
+	 * @param integer $include_id
+	 * @return bool
+	 */
+	public static function register_type($type, $handling_class, $include_id)
+	{
+		$folder_concretion = new FolderConcretion_Access(null);
+		if ($folder_concretion->create($type, $handling_class, $include_id) != null)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public static function delete_type_by_include_id($include_id)
+	{
+		return FolderConcretion_Access::delete_by_include_id($include_id);
+	}
+	
 	/**
 	 * @return array
 	 */
