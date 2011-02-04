@@ -28,19 +28,22 @@ function register_project($include_id)
 {	
 	if (Folder::delete_type_by_include_id($include_id))
 	{
-		if (Folder::register_type("project_folder", "ProjectFolder", $include_id) == true)
-		{
-			return true;
-		}
-		else
+		if (Folder::register_type("project_folder", "ProjectFolder", $include_id) == false)
 		{
 			return false;
-		}
+		}	
+		
+		if (Folder::register_type("project_status_folder", "ProjectStatusFolder", $include_id) == false)
+		{
+			return false;
+		}	
 	}
 	else
 	{
 		return false;
 	}
+	
+	return true;
 }
 $result = register_project($key);
 ?>

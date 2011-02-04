@@ -83,7 +83,7 @@ class VirtualFolder implements VirtualFolderInterface
 		{
 			$transaction_id = $transaction->begin();
 			
-			$folder = new Folder($folder_id);
+			$folder = Folder::get_instance($folder_id);
 			
 			if ($folder->exist_folder() == true)
 			{

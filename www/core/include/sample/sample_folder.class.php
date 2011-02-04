@@ -1,9 +1,9 @@
 <?php
 /**
- * @package data
+ * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -26,17 +26,17 @@
  */
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	require_once("access/folder_is_group_folder.access.php");
+	require_once("access/sample_has_folder.access.php");
 }
 
 /**
- * Group Folder Class
- * @package data
+ * Sample Folder Class
+ * @package sample
  */
-class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventListenerInterface
+class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 {
-	private $group_folder;
-	private $group_id;
+  	private $sample_folder;
+	private $sample_id;
   	
   	/**
   	 * @param integer $folder_id
@@ -46,24 +46,24 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 		if (is_numeric($folder_id))
   		{
   			parent::__construct($folder_id);
-  			$this->group_folder = new FolderIsGroupFolder_Access($folder_id);
-  			$this->group_id = $this->group_folder->get_group_id();
+  			$this->sample_folder = new SampleHasFolder_Access($folder_id);
+  			$this->sample_id = $this->sample_folder->get_sample_id();
   		}
   		else
   		{
   			parent::__construct(null);
-  			$this->group_folder = null;
-  			$this->group_id = null;
+  			$this->sample_folder = null;
+  			$this->sample_id = null;
   		}
   	}
   	
 	function __destruct()
 	{
-		unset($this->group_folder);
-		unset($this->group_id);
+		unset($this->sample_folder);
+		unset($this->sample_id);
 		parent::__destruct();
 	}
-	
+
 	/**
 	 * @return bool
 	 */
@@ -129,75 +129,65 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 	}
 	
 	/**
+	 * Creates a new Sample Folder including Folder
+	 * @param integer $sample_id
+	 * @return integer
 	 * @todo: remove v-folder
 	 */
-	public function create($group_id)
+	public function create($sample_id)
 	{
-		if (is_numeric($group_id))
+		if (is_numeric($sample_id))
 		{
-			$group = new Group($group_id);
+			$sample = new Sample($sample_id);
 			
 			// Folder
-			$group_folder_id = $GLOBALS[group_folder_id];
-			$folder = new Folder($group_folder_id);
+			$sample_folder_id = $GLOBALS[sample_folder_id];
+			$folder = new Folder($sample_folder_id);
 
 			$path = new Path($folder->get_path());
-			$path->add_element($group_id);
+			$path->add_element($sample_id);
 			
-			$folder = new Folder(null);
-			if (($folder_id = parent::create($group->get_name(), $group_folder_id, false, $path->get_path_string(), 1, $group_id)) != null)
+			if (($folder_id = parent::create($sample->get_name(), $sample_folder_id, false, $path->get_path_string(), $sample->get_owner_id(), null)) != null)
 			{
-				$folder_is_group_folder_access = new FolderIsGroupFolder_Access(null);
-				if ($folder_is_group_folder_access->create($group_id, $folder_id) == null)
+				$sample_has_folder_access = new SampleHasFolder_Access(null);
+				if ($sample_has_folder_access->create($sample_id, $folder_id) == null)
 				{
-					return false;
+					return null;
 				}
-				if ($this->set_flag(4) == false)
+				if ($this->set_flag(32) == false)
 				{
 					$this->delete(true, true);
-					return false;
+					return null;
 				}
-										
+				
 				// Sample - Virtual Folder
+				
 				$virtual_folder = new VirtualFolder(null);
 				if ($virtual_folder->create($folder_id, "samples") == null)
 				{
-					$this->delete(true, true);
-					return false;
+					$this->delete();
+					return null;
 				}
 				if ($virtual_folder->set_sample_vfolder() == false)
 				{
-					$this->delete(true, true);
-					return false;
+					$this->delete();
+					return null;
 				}
-				
-				
-				// Project - Virtual Folder
-				
-				$virtual_folder = new VirtualFolder(null);
-				if ($virtual_folder->create($folder_id, "projects") == null)
-				{
-					$this->delete(true, true);
-					return false;
-				}
-				if ($virtual_folder->set_project_vfolder() == false)
-				{
-					$this->delete(true, true);
-					return false;
-				}
-				return true;
+				return $folder_id;
 			}
 			else
 			{
-				return false;
+				return null;
 			}
 		}
 		else
 		{
-			return false;
+			return null;
 		}
 	}
 	
+	// Wird über konkretisierung automatisch über Folder ausgeführt,
+	// kann aber auch direkt ausgeführt werden (wenn Klasse bekannt)
 	/**
 	 * @param bool $recursive
 	 * @param bool $content
@@ -207,11 +197,11 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 	{
 		global $transaction;
 		
-		if ($this->group_id)
+		if ($this->sample_id)
 		{
 			$transaction_id = $transaction->begin();
 			
-			if ($this->group_folder->delete() == true)
+			if ($this->sample_folder->delete() == true)
 			{
 				if (parent::delete($recursive, $content) == true)
 				{
@@ -255,8 +245,8 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 	{
 		if (is_numeric($folder_id))
 		{
-			$folder_is_group_folder_access = new FolderIsGroupFolder_Access($folder_id);
-			if ($folder_is_group_folder_access->get_group_id())
+			$sample_has_folder_access = new SampleHasFolder_Access($folder_id);
+			if ($sample_has_folder_access->get_sample_id())
 			{
 				return true;
 			}
@@ -271,33 +261,9 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 		}
 	}
 	
-	public static function get_folder_by_group_id($group_id)
+	public static function get_folder_by_sample_id($sample_id)
 	{
-		return FolderIsGroupFolder_Access::get_entry_by_group_id($group_id);
-	}
-	
-	public static function listen_events($event_object)
-	{
-		if ($event_object instanceof GroupCreateEvent)
-    	{
-    		$group_folder = new GroupFolder(null);
-    		if ($group_folder->create($event_object->get_group_id()) == false)
-    		{
-				return false;
-    		}
-    	}
-    	
-		if ($event_object instanceof GroupPostDeleteEvent)
-    	{
-    		$folder_id = GroupFolder::get_folder_by_group_id($event_object->get_group_id());
-    		$group_folder = new GroupFolder($folder_id);
-			
-			if ($group_folder->delete(true, true) == false)
-			{
-				return false;
-			}
-    	}
-    	
-		return true;
+		return SampleHasFolder_Access::get_entry_by_sample_id($sample_id);
 	}
 }
+?>

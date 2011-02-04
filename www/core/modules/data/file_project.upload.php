@@ -72,12 +72,12 @@
 			
 			if ($_GET[run] == "add_project_supplementary_file")
 			{
-				$folder_id = Folder::get_project_supplementary_folder($project_id);
-				$folder = new Folder($folder_id);	
+				$folder_id = ProjectFolder::get_supplementary_folder($project_id);
+				$folder = Folder::get_instance($folder_id);	
 			}
 			else
 			{
-				$folder_id = Folder::get_project_status_folder_by_status_id($project_id,$project->get_current_status_id());
+				$folder_id = ProjectStatusFolder::get_folder_by_project_id_and_project_status_id($project_id,$project->get_current_status_id());
 				
 				$sub_folder_id = $project->get_sub_folder($_GET[key], $project->get_current_status_id());
 				
@@ -86,7 +86,7 @@
 					$folder_id = $sub_folder_id;
 				}
 				
-				$folder = new Folder($folder_id);	
+				$folder = Folder::get_instance($folder_id);	
 			}
 			
 			if ($_POST[file_amount] > 25 or $_POST[file_amount] < 1 or !$_POST[file_amount])

@@ -100,7 +100,7 @@ class ItemIO
 			$table_io->add_row("Owner","owner",false,null);
 			$table_io->add_row("Number of Items","number",false,null);
 			
-			$folder = new Folder($_GET[folder_id]);
+			$folder = Folder::get_instance($_GET[folder_id]);
 			
 			$item_class_array_cardinality = 0;
 			

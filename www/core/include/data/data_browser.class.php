@@ -53,7 +53,7 @@ class DataBrowser implements DataBrowserInterface
     	{	    	
 	    	if ($folder_id == null)
 	    	{
-	    		$new_folder_id = Folder::get_home_folder_by_user_id($user->get_user_id());
+	    		$new_folder_id = UserFolder::get_folder_by_user_id($user->get_user_id());
 	    		if ($new_folder_id != null)
 	    		{
 	    			$this->folder_id = $new_folder_id;
@@ -71,7 +71,7 @@ class DataBrowser implements DataBrowserInterface
 	    	$return_array = array();
 	    	
 	    	// Folder
-	    	$folder = new Folder($this->folder_id);
+	    	$folder = Folder::get_instance($this->folder_id);
 	    	$folder_array = $folder->get_subfolder_array();
 	    	
 	    	if (is_array($folder_array))

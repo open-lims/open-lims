@@ -356,8 +356,8 @@ class Group implements GroupInterface
 		{
 			$transaction_id = $transaction->begin();
 			
-			$folder_id = Folder::get_group_folder_by_group_id($this->group_id);
-			$folder = new Folder($folder_id);
+			$folder_id = GroupFolder::get_folder_by_group_id($this->group_id);
+			$folder = Folder::get_instance($folder_id);
 			if ($folder->set_name($name) == true)
 			{
 				if ($this->group->set_name($name) == true)

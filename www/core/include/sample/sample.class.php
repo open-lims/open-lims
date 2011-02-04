@@ -141,226 +141,212 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					}
 
 					// Create Sample Folder
-					$sample_folder_id = $GLOBALS[sample_folder_id];
-					$folder = new Folder($sample_folder_id);
+	    			$base_folder_id = $GLOBALS[sample_folder_id];
+					$base_folder = Folder::get_instance($base_folder_id);
 
-					$path = new Path($folder->get_path());
+					$path = new Path($base_folder->get_path());
 					$path->add_element($sample_id);
 					
-					$folder = new Folder(null);
-					if (($folder_id = $folder->create($name, $sample_folder_id, false, $path->get_path_string(), $user->get_user_id(), null)) != null)
-					{ 
-						if ($folder->create_sample_folder($sample_id) == false)
-						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new SampleCreationFailedException("",1);
-						}
-						
-		    			if ($folder->set_flag(32) == false)
-		    			{
-		    				$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new SampleCreationFailedException("",1);
-		    			}
-		    			
-		    			// Create Permissions and V-Folders
-		    			$sample_security = new SampleSecurity($sample_id);
-		    		
-		    			if ($sample_security->create_user($user->get_user_id(), true, true) == null)
-		    			{
-		    				$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new SampleCreationFailedException("",1);
-		    			}
-		    			
-		    			if (is_numeric($organisation_unit_id)) {
-		    				if ($sample_security->create_organisation_unit($organisation_unit_id) == null)
-		    				{
-		    					$folder->delete(true, true);
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
-								throw new SampleCreationFailedException("",1);
-		    				}
-		    			}
-		    			
-		    			// Create Subfolders
-		    			$sample_template = new SampleTemplate($template_id);
-		    			
-		    			$folder_array = array();
-		    			$requirement_array = $sample_template->get_requirements();
-		    			
-		    			if (is_array($requirement_array) and count($requirement_array) >= 1)
-		    			{
-		    				foreach($requirement_array as $key => $value)
-		    				{
-		    					if (($value[type] == "file" or $value[type] == "value") and $value[folder])
-		    					{
-									if (!in_array($value[folder], $folder_array))
-									{
-										array_push($folder_array, $value[folder]);
-									}
-								}
-		    					
-		    				}	
-		    				
-		    				if (is_array($folder_array) and count($folder_array) >= 1)
-		    				{
-		    					foreach($folder_array as $key => $value)
-		    					{
-		    						$folder_name = strtolower(trim($value));
-		    						$folder_name = str_replace(" ","-",$folder_name);
-		    										
-									$folder_path = new Path($folder->get_path());
-									$folder_path->add_element($folder_name);
-									
-									$sub_folder = new Folder(null);
-									if ($sub_folder->create($value, $folder_id, false, $folder_path->get_path_string(), $user->get_user_id(), null) == null)
-									{
-										$folder->delete(true, true);
-										if ($transaction_id != null)
-										{
-											$transaction->rollback($transaction_id);
-										}
-										throw new SampleCreationFailedException("",1);
-									}
-									
-									if ($sub_folder->set_flag(1024) == false)
-									{
-										$folder->delete(true, true);
-										if ($transaction_id != null)
-										{
-											$transaction->rollback($transaction_id);
-										}
-										throw new SampleCreationFailedException("",1);
-									}
-		    					}
-		    				}
-		    			}
-		    			
-		    			// Create First Depository
-		    			$sample_has_sample_depository_access = new SampleHasSampleDepository_Access(null);
-		    			if ($sample_has_sample_depository_access->create($sample_id, $depository_id, $user->get_user_id()) == null)
-		    			{
-		    				$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new SampleCreationFailedException("",1);
-		    			}
-		    			
-		    			// Create Item
-						if (($this->item_id = parent::create()) == null)
-						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new SampleCreationFailedException("",1);
-						}
-						
-						$sample_is_item = new SampleIsItem_Access(null);
-						if ($sample_is_item->create($sample_id, $this->item_id) == false)
-						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new SampleCreationFailedException("",1);
-						}
-			
-						// Create Required Value or Sample
-						if (is_array($this->template_data_array) and count($this->template_data_array) >= 1)
-						{
-							if ($this->template_data_type == "sample")
-							{
-								foreach($this->template_data_array as $key => $value)
-								{
-									if ($value > 0)
-									{
-										$sample_has_sample = new SampleHasSample_Access(null);
-										if ($sample_has_sample->create($value, $sample_id) == null)
-										{
-											$folder->delete(true, true);
-											if ($transaction_id != null)
-											{
-												$transaction->rollback($transaction_id);
-											}
-											throw new SampleCreationFailedException("",1);
-										}
-									}
-								}
-							}
-							
-							if ($this->template_data_type == "value")
-							{
-								$value = new Value(null);				
-								if ($value->create($folder_id, $user->get_user_id(), $this->template_data_type_id, $this->template_data_array, false) == null)
-								{
-									$folder->delete(true, true);
-									if ($transaction_id != null)
-									{
-										$transaction->rollback($transaction_id);
-									}
-									throw new SampleCreationFailedException("",1);
-								}
-								
-								$sample_item = new SampleItem($sample_id);
-								
-								if ($sample_item->set_gid(1) == false)
-								{
-									$folder->delete(true, true);
-									if ($transaction_id != null)
-									{
-										$transaction->rollback($transaction_id);
-									}
-									throw new SampleCreationFailedException("",1);
-								}
-								
-								$sample_item->set_item_id($value->get_item_id());
-								
-								if ($sample_item->link_item() == false)
-								{
-									$folder->delete(true, true);
-									if ($transaction_id != null)
-									{
-										$transaction->rollback($transaction_id);
-									}
-									throw new SampleCreationFailedException("",1);
-								}
-							}
-						}
-			
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
-			
-						$this->__construct($sample_id);
-		    			return $sample_id;	
-					}
-					else
+					$sample_folder = new SampleFolder(null);
+					if (($folder_id = $sample_folder->create($sample_id)) == null)
 					{
+						$sample_folder->delete(true, true);
 						if ($transaction_id != null)
 						{
 							$transaction->rollback($transaction_id);
 						}
 						throw new SampleCreationFailedException("",1);
 					}
+					
+					
+					$sample_folder_id = $GLOBALS[sample_folder_id];
+					$folder = Folder::get_instance($sample_folder_id);
+
+					$path = new Path($folder->get_path());
+					$path->add_element($sample_id);
+						    			
+	    			// Create Permissions and V-Folders
+	    			$sample_security = new SampleSecurity($sample_id);
+	    		
+	    			if ($sample_security->create_user($user->get_user_id(), true, true) == null)
+	    			{
+	    				$sample_folder->delete(true, true);
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						throw new SampleCreationFailedException("",1);
+	    			}
+	    			
+	    			if (is_numeric($organisation_unit_id)) {
+	    				if ($sample_security->create_organisation_unit($organisation_unit_id) == null)
+	    				{
+	    					$sample_folder->delete(true, true);
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							throw new SampleCreationFailedException("",1);
+	    				}
+	    			}
+	    			
+	    			// Create Subfolders
+	    			$sample_template = new SampleTemplate($template_id);
+	    			
+	    			$folder_array = array();
+	    			$requirement_array = $sample_template->get_requirements();
+	    			
+	    			if (is_array($requirement_array) and count($requirement_array) >= 1)
+	    			{
+	    				foreach($requirement_array as $key => $value)
+	    				{
+	    					if (($value[type] == "file" or $value[type] == "value") and $value[folder])
+	    					{
+								if (!in_array($value[folder], $folder_array))
+								{
+									array_push($folder_array, $value[folder]);
+								}
+							}
+	    					
+	    				}	
+	    				
+	    				if (is_array($folder_array) and count($folder_array) >= 1)
+	    				{
+	    					foreach($folder_array as $key => $value)
+	    					{
+	    						$folder_name = strtolower(trim($value));
+	    						$folder_name = str_replace(" ","-",$folder_name);
+	    										
+								$folder_path = new Path($folder->get_path());
+								$folder_path->add_element($folder_name);
+								
+								$sub_folder = Folder::get_instance(null);
+								if ($sub_folder->create($value, $folder_id, false, $folder_path->get_path_string(), $user->get_user_id(), null) == null)
+								{
+									$sample_folder->delete(true, true);
+									if ($transaction_id != null)
+									{
+										$transaction->rollback($transaction_id);
+									}
+									throw new SampleCreationFailedException("",1);
+								}
+								
+								if ($sub_folder->set_flag(1024) == false)
+								{
+									$sample_folder->delete(true, true);
+									if ($transaction_id != null)
+									{
+										$transaction->rollback($transaction_id);
+									}
+									throw new SampleCreationFailedException("",1);
+								}
+	    					}
+	    				}
+	    			}
+	    			
+	    			// Create First Depository
+	    			$sample_has_sample_depository_access = new SampleHasSampleDepository_Access(null);
+	    			if ($sample_has_sample_depository_access->create($sample_id, $depository_id, $user->get_user_id()) == null)
+	    			{
+	    				$sample_folder->delete(true, true);
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						throw new SampleCreationFailedException("",1);
+	    			}
+	    			
+	    			// Create Item
+					if (($this->item_id = parent::create()) == null)
+					{
+						$sample_folder->delete(true, true);
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						throw new SampleCreationFailedException("",1);
+					}
+					
+					$sample_is_item = new SampleIsItem_Access(null);
+					if ($sample_is_item->create($sample_id, $this->item_id) == false)
+					{
+						$sample_folder->delete(true, true);
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						throw new SampleCreationFailedException("",1);
+					}
+		
+					// Create Required Value or Sample
+					if (is_array($this->template_data_array) and count($this->template_data_array) >= 1)
+					{
+						if ($this->template_data_type == "sample")
+						{
+							foreach($this->template_data_array as $key => $value)
+							{
+								if ($value > 0)
+								{
+									$sample_has_sample = new SampleHasSample_Access(null);
+									if ($sample_has_sample->create($value, $sample_id) == null)
+									{
+										$sample_folder->delete(true, true);
+										if ($transaction_id != null)
+										{
+											$transaction->rollback($transaction_id);
+										}
+										throw new SampleCreationFailedException("",1);
+									}
+								}
+							}
+						}
+						
+						if ($this->template_data_type == "value")
+						{
+							$value = new Value(null);				
+							if ($value->create($folder_id, $user->get_user_id(), $this->template_data_type_id, $this->template_data_array, false) == null)
+							{
+								$sample_folder->delete(true, true);
+								if ($transaction_id != null)
+								{
+									$transaction->rollback($transaction_id);
+								}
+								throw new SampleCreationFailedException("",1);
+							}
+							
+							$sample_item = new SampleItem($sample_id);
+							
+							if ($sample_item->set_gid(1) == false)
+							{
+								$sample_folder->delete(true, true);
+								if ($transaction_id != null)
+								{
+									$transaction->rollback($transaction_id);
+								}
+								throw new SampleCreationFailedException("",1);
+							}
+							
+							$sample_item->set_item_id($value->get_item_id());
+							
+							if ($sample_item->link_item() == false)
+							{
+								$sample_folder->delete(true, true);
+								if ($transaction_id != null)
+								{
+									$transaction->rollback($transaction_id);
+								}
+								throw new SampleCreationFailedException("",1);
+							}
+						}
+					}
+		
+					if ($transaction_id != null)
+					{
+						$transaction->commit($transaction_id);
+					}
+		
+					$this->__construct($sample_id);
+	    			return $sample_id;	
 	    		}
 	    		else
 	    		{
@@ -537,8 +523,8 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 			else
 			{
 				$this->__destruct();
-	    		$folder_id = Folder::get_sample_folder_by_sample_id($tmp_sample_id);
-	    		$folder = new Folder($folder_id);
+	    		$folder_id = SampleFolder::get_folder_by_sample_id($tmp_sample_id);
+	    		$folder = Folder::get_instance($folder_id);
 	    		if ($folder->delete(true, true) == false)
 	    		{
 	    			if ($transaction_id != null)
@@ -706,11 +692,11 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     	{
 	    	if (is_numeric($folder_id) and is_numeric($gid))
 	    	{
-				$sample_folder_id = Folder::get_sample_folder_by_sample_id($this->sample_id);
+				$sample_folder_id = SampleFolder::get_folder_by_sample_id($this->sample_id);
 	    		
 	    		if ($folder_id == $sample_folder_id)
 	    		{
-	    			$folder = new Folder($folder_id);
+	    			$folder = Folder::get_instance($folder_id);
 	    		
 	    			$sample_template = new SampleTemplate($this->sample->get_template_id());
 	    			$attribute_array = $sample_template->get_gid_attributes($gid);
@@ -1213,8 +1199,8 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 		{
     		$transaction_id = $transaction->begin();
 
-	    	$folder_id = Folder::get_sample_folder_by_sample_id($this->sample_id);
-	    	$folder = new Folder($folder_id);
+	    	$folder_id = SampleFolder::get_folder_by_sample_id($this->sample_id);
+	    	$folder = Folder::get_instance($folder_id);
 
 			if ($folder->set_name($name) == false)
 			{

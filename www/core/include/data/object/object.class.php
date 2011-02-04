@@ -80,7 +80,7 @@ class Object extends Item implements ObjectInterface, EventListenerInterface, It
      		
    	   		$project_item_array = ProjectItem::list_projects_by_item_id($this->item_id);
    	   		
-   	   		$folder = new Folder($this->get_toid());
+   	   		$folder = Folder::get_instance($this->get_toid());
    	   		
    	   		// problematic dependency
 			if (($project_id = $folder->is_child_of_project_folder()) != null)

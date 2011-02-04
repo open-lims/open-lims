@@ -43,7 +43,7 @@ class FolderAJAX extends AJAXInit
 
 			$return_array = array();
 
-			$folder = new Folder($_GET[folder_id]);
+			$folder = Folder::get_instance($_GET[folder_id]);
 			
 			$folder_array = $folder->get_subfolder_array();
 			
@@ -55,7 +55,7 @@ class FolderAJAX extends AJAXInit
 				{
 					if ($value[type] == 0)
 					{
-						$folder = new Folder($value[id]);
+						$folder = Folder::get_instance($value[id]);
 						
 						$return_array[$counter][0] = -1;
 						$return_array[$counter][1] = $value[id];
@@ -100,7 +100,7 @@ class FolderAJAX extends AJAXInit
 					{
 						$return_array = array();
 						
-						$folder = new Folder(1);
+						$folder = Folder::get_instance(1);
 					
 						$folder_array = $folder->get_subfolder_array();
 						
@@ -112,7 +112,7 @@ class FolderAJAX extends AJAXInit
 							{
 								if ($value[type] == 0)
 								{
-									$folder = new Folder($value[id]);
+									$folder = Folder::get_instance($value[id]);
 									
 									$return_array[$counter][0] = 0;
 									$return_array[$counter][1] = $value[id];
@@ -143,7 +143,7 @@ class FolderAJAX extends AJAXInit
 					{
 						$return_array = array();
 						
-						$folder = new Folder($_GET[folder_id]);
+						$folder = Folder::get_instance($_GET[folder_id]);
 						
 						$folder_array = $folder->get_subfolder_array();
 						
@@ -155,7 +155,7 @@ class FolderAJAX extends AJAXInit
 							{
 								if ($value[type] == 0)
 								{
-									$folder = new Folder($value[id]);
+									$folder = Folder::get_instance($value[id]);
 									
 									$return_array[$counter][0] = -1;
 									$return_array[$counter][1] = $value[id];

@@ -403,6 +403,8 @@ class SystemHandler implements SystemHandlerInterface
 
 							if ($result == true)
 							{
+								BaseIncludeFile_Access::delete_by_include_id_and_name($key, "register_execute.php");
+								
 								$base_include_file = new BaseIncludeFile_Access(null);
 								if ($base_include_file->create($key, "register_execute.php", md5_file($register_execute)) == null)
 								{

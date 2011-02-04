@@ -188,7 +188,7 @@ class ProjectStatusHasFolder_Access
 		
 		if (is_numeric($project_id))
 		{	
-			$sql = "SELECT folder_id FROM ".self::PROJECT_HAS_FOLDER_TABLE." WHERE project_id='".$project_id."' AND project_status_id='".$project_status_id."'";
+			$sql = "SELECT folder_id FROM ".self::PROJECT_STATUS_HAS_FOLDER_TABLE." WHERE project_id='".$project_id."' AND project_status_id='".$project_status_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

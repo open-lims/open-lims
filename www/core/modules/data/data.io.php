@@ -62,7 +62,7 @@ class DataIO
 			}
 			elseif ($_GET[folder_id])
 			{
-				$folder = new Folder($_GET[folder_id]);
+				$folder = Folder::get_instance($_GET[folder_id]);
 				
 				if ($folder->exist_folder() == false)
 				{
@@ -257,7 +257,7 @@ class DataIO
 									
 									if ($sub_value[type] == 0)
 									{
-										$folder = new Folder($sub_value[id]);
+										$folder = Folder::get_instance($sub_value[id]);
 																				
 										$user = new User($folder->get_owner_id());
 										
@@ -448,7 +448,7 @@ class DataIO
 	
 			if ($folder_id and !$virtual_folder_id)
 			{
-				$folder = new Folder($folder_id);			
+				$folder = Folder::get_instance($folder_id);			
 				
 				if ($folder->is_write_access() == true)
 				{
@@ -600,7 +600,7 @@ class DataIO
 		if ($_GET[folder_id])
 		{
 			$folder_id = $_GET[folder_id];
-			$folder = new Folder($folder_id);
+			$folder = Folder::get_instance($folder_id);
 			
 			if ($folder->is_read_access() == true)
 			{
@@ -730,7 +730,7 @@ class DataIO
 		if ($_GET[folder_id])
 		{
 			$folder_id = $_GET[folder_id];
-			$folder = new Folder($folder_id);
+			$folder = Folder::get_instance($folder_id);
 			
 			if ($folder->is_read_access() == true)
 			{
@@ -940,7 +940,7 @@ class DataIO
 				if ($_GET[folder_id])
 				{
 					$id = $_GET[folder_id];
-					$folder = new Folder($id);
+					$folder = Folder::get_instance($id);
 					$type = "folder";
 					$title = $folder->get_name();
 					if ($folder->is_control_access() == true)
@@ -1052,11 +1052,11 @@ class DataIO
 					{
 						if ($type == "file")
 						{
-							$folder = new Folder($file->get_toid());
+							$folder = Folder::get_instance($file->get_toid());
 						}
 						else
 						{
-							$folder = new Folder($value->get_toid());
+							$folder = Folder::get_instance($value->get_toid());
 						}
 						
 						if ($folder->is_project_folder() == true or
@@ -1294,7 +1294,7 @@ class DataIO
 				if ($_GET[folder_id])
 				{
 					$id = $_GET[folder_id];
-					$folder = new Folder($id);
+					$folder = Folder::get_instance($id);
 					$type = "folder";
 					$title = $folder->get_name();
 					$access = $folder->is_control_access();
@@ -1422,7 +1422,7 @@ class DataIO
 				if ($_GET[folder_id])
 				{
 					$id = $_GET[folder_id];
-					$folder = new Folder($id);
+					$folder = Folder::get_instance($id);
 					$type = "folder";
 					$title = $folder->get_name();
 					$access = $folder->is_control_access();

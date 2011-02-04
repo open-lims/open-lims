@@ -28,11 +28,7 @@ function register_sample($include_id)
 {	
 	if (Item::delete_type_by_include_id($include_id))
 	{
-		if (Item::register_type("sample", "Sample", $include_id) == true)
-		{
-			return true;
-		}
-		else
+		if (Item::register_type("sample", "Sample", $include_id) == false)
 		{
 			return false;
 		}
@@ -41,6 +37,19 @@ function register_sample($include_id)
 	{
 		return false;
 	}
+	
+	if (Folder::delete_type_by_include_id($include_id))
+	{
+		if (Folder::register_type("sample_folder", "SampleFolder", $include_id) == false)
+		{
+			return false;
+		}		
+	}
+	else
+	{
+		return false;
+	}
+	return true;
 }
 $result = register_sample($key);
 ?>

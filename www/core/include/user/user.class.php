@@ -799,8 +799,8 @@ class User implements UserInterface {
 			
 			$transaction_id = $transaction->begin();
 			
-			$folder_id = Folder::get_home_folder_by_user_id($this->user_id);
-			$folder = new Folder($folder_id);
+			$folder_id = UserFolder::get_folder_by_user_id($this->user_id);
+			$folder = Folder::get_instance($folder_id);
 			if ($folder->set_name($username) == true)
 			{
 				if ($this->user->set_username($username) == true)

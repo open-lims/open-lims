@@ -434,7 +434,7 @@ class ValueIO
 						}
 						else
 						{
-							$folder_id = Folder::get_project_status_folder_by_status_id($project_id,$project->get_current_status_id());
+							$folder_id = ProjectStatusFolder::get_folder_by_project_id_and_project_status_id($project_id,$project->get_current_status_id());
 							
 							$sub_folder_id = $project->get_sub_folder($_GET[key], $project->get_current_status_id());
 							
@@ -443,7 +443,7 @@ class ValueIO
 								$folder_id = $sub_folder_id;
 							}
 							
-							$folder = new Folder($folder_id);
+							$folder = Folder::get_instance($folder_id);
 									
 							$value = new Value(null);
 							$value_type = new ValueType($type_id);
@@ -631,7 +631,7 @@ class ValueIO
 						}
 						else
 						{
-							$folder_id = Folder::get_sample_folder_by_sample_id($sample_id);
+							$folder_id = SampleFolder::get_folder_by_sample_id($sample_id);
 							
 							$sub_folder_id = $sample->get_sub_folder($folder_id, $_GET[key]);				
 			
@@ -640,7 +640,7 @@ class ValueIO
 								$folder_id = $sub_folder_id;
 							}
 							
-							$folder = new Folder($folder_id);
+							$folder = Folder::get_instance($folder_id);
 									
 							$value = new Value(null);
 							$value_type = new ValueType($type_id);

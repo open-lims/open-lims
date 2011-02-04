@@ -22,14 +22,14 @@
  */
  
 /**
- * Folder Is Group Folder Access Class
+ * Folder Is User Folder Access Class
  * @package data
  */
-class FolderIsGroupFolder_Access
+class FolderIsUserFolder_Access
 {
-	const FOLDER_IS_GROUP_FOLDER_TABLE = 'core_folder_is_group_folder';
+	const FOLDER_IS_USER_FOLDER_TABLE = 'core_folder_is_user_folder';
 	
-	private $group_id;
+	private $user_id;
 	private $folder_id;
 	
 	/**
@@ -45,18 +45,18 @@ class FolderIsGroupFolder_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::FOLDER_IS_GROUP_FOLDER_TABLE." WHERE folder_id='".$folder_id."'";
+			$sql = "SELECT * FROM ".self::FOLDER_IS_USER_FOLDER_TABLE." WHERE folder_id='".$folder_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[group_id])
+			if ($data[user_id])
 			{
-				$this->group_id	= $data[group_id];
+				$this->user_id	= $data[user_id];
 				$this->folder_id	= $folder_id;
 			}
 			else
 			{
-				$this->group_id	= null;
+				$this->user_id	= null;
 				$this->folder_id	= null;
 			}
 		}	
@@ -64,23 +64,23 @@ class FolderIsGroupFolder_Access
 	
 	function __destruct()
 	{
-		unset($this->group_id);
+		unset($this->user_id);
 		unset($this->folder_id);
 	}
 	
 	/**
-	 * @param integer $group_id
+	 * @param integer $user_id
 	 * @param integer $folder_id
 	 * @return boolean
 	 */
-	public function create($group_id, $folder_id)
+	public function create($user_id, $folder_id)
 	{
 		global $db;
 		
-		if (is_numeric($group_id) and is_numeric($folder_id))
+		if (is_numeric($user_id) and is_numeric($folder_id))
 		{	
-			$sql_write = "INSERT INTO ".self::FOLDER_IS_GROUP_FOLDER_TABLE." (group_id,folder_id) " .
-					"VALUES (".$group_id.",".$folder_id.")";
+			$sql_write = "INSERT INTO ".self::FOLDER_IS_USER_FOLDER_TABLE." (user_id,folder_id) " .
+					"VALUES (".$user_id.",".$folder_id.")";
 					
 			$res_write = $db->db_query($sql_write);	
 			
@@ -106,9 +106,9 @@ class FolderIsGroupFolder_Access
 	{
 		global $db;
 			
-		if ($this->group_id and $this->folder_id)
+		if ($this->user_id and $this->folder_id)
 		{
-			$sql = "DELETE FROM ".self::FOLDER_IS_GROUP_FOLDER_TABLE." WHERE group_id = ".$this->group_id." AND folder_id = ".$this->folder_id."";
+			$sql = "DELETE FROM ".self::FOLDER_IS_USER_FOLDER_TABLE." WHERE user_id = ".$this->user_id." AND folder_id = ".$this->folder_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -130,11 +130,11 @@ class FolderIsGroupFolder_Access
 	/**
 	 * @return integer
 	 */
-	public function get_group_id()
+	public function get_user_id()
 	{
-		if ($this->group_id)
+		if ($this->user_id)
 		{
-			return $this->group_id;
+			return $this->user_id;
 		}
 		else
 		{
@@ -159,16 +159,16 @@ class FolderIsGroupFolder_Access
 	
 	
 	/**
-	 * @param integer $group_id
+	 * @param integer $user_id
 	 * @return integer
 	 */
-	public static function get_entry_by_group_id($group_id)
+	public static function get_entry_by_user_id($user_id)
 	{
 		global $db;
 		
-		if (is_numeric($group_id))
+		if (is_numeric($user_id))
 		{	
-			$sql = "SELECT folder_id FROM ".self::FOLDER_IS_GROUP_FOLDER_TABLE." WHERE group_id='".$group_id."'";
+			$sql = "SELECT folder_id FROM ".self::FOLDER_IS_USER_FOLDER_TABLE." WHERE user_id='".$user_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

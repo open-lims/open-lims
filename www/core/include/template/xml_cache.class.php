@@ -127,7 +127,7 @@ class XmlCache implements XmlCacheInterface
     		
     		$file = new File($file_id);
     		
-    		$folder = new Folder($file->get_toid());
+    		$folder = Folder::get_instance($file->get_toid());
 			$folder_path = $folder->get_path();
 			
 			$extension_array = explode(".",$file->get_name());

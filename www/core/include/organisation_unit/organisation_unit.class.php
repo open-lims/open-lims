@@ -1020,8 +1020,8 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 		{
 			$transaction_id = $transaction->begin();
 			
-			$folder_id = Folder::get_organisation_unit_folder_by_organisation_unit_id($this->organisation_unit_id);
-			$folder = new Folder($folder_id);
+			$folder_id = OrganisationUnitFolder::get_folder_by_organisation_unit_id($this->organisation_unit_id);
+			$folder = Folder::get_instance($folder_id);
 			if ($folder->set_name($name) == true)
 			{
 				if ($this->organisation_unit->set_name($name) == true)
@@ -1068,8 +1068,8 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 		{
 			$transaction_id = $transaction->begin();
 			
-			$folder_id = Folder::get_organisation_unit_folder_by_organisation_unit_id($this->organisation_unit_id);
-			$folder = new Folder($folder_id);
+			$folder_id = OrganisationUnitFolder::get_folder_by_organisation_unit_id($this->organisation_unit_id);
+			$folder = Folder::get_instance($folder_id);
 			
 			if ($folder->set_owner_id($owner_id) == true)
 			{

@@ -82,7 +82,7 @@ class DataPermission implements DataPermissionInterface
 				
 				case("folder"):
 					$this->folder_id = $id;
-					$this->folder = new Folder($id);
+					$this->folder = Folder::get_instance($id);
 					
 					$this->automatic = $this->folder->get_automatic();
 					$this->permission = $this->folder->get_permission();

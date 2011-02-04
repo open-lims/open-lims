@@ -86,11 +86,11 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     	{
     		$this->__construct($permission_id);
     		
-    		$project_folder_id = Folder::get_project_folder_by_project_id($project_id);
+    		$project_folder_id = ProjectFolder::get_folder_by_project_id($project_id);
     		
     		if($user_id)
     		{
-    			$folder_id = Folder::get_home_folder_by_user_id($user_id);
+    			$folder_id = UserFolder::get_folder_by_user_id($user_id);
     			
     			$virtual_folder = new VirtualFolder(null);
     			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
@@ -103,7 +103,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     					$virtual_folder_id = $value;
     				}
     			}
-    			
+
     			if (is_numeric($virtual_folder_id))
     			{
     				$virtual_folder = new VirtualFolder($virtual_folder_id);
@@ -119,7 +119,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     		}
     		elseif($organisation_unit_id)
     		{
-    			$folder_id = Folder::get_organisation_unit_folder_by_organisation_unit_id($organisation_unit_id);
+    			$folder_id = OrganisationUnitFolder::get_folder_by_organisation_unit_id($organisation_unit_id);
     			
     			$virtual_folder = new VirtualFolder(null);
     			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
@@ -148,7 +148,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     		}
     		elseif($group_id)
     		{
-    			$folder_id = Folder::get_group_folder_by_group_id($group_id);
+    			$folder_id = GroupFolder::get_folder_by_group_id($group_id);
     			
     			$virtual_folder = new VirtualFolder(null);
     			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
@@ -206,13 +206,13 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 
 			$project_id = $this->project_permission->get_project_id();
 
-    		$project_folder_id = Folder::get_project_folder_by_project_id($project_id);
+    		$project_folder_id = ProjectFolder::get_folder_by_project_id($project_id);
     		
     		if ($this->project_permission->get_user_id())
     		{
 				if (ProjectPermission_Access::count_entries_with_project_id_and_user_id($project_id, $this->project_permission->get_user_id()) <= 1)
 				{
-	    			$folder_id = Folder::get_home_folder_by_user_id($this->project_permission->get_user_id());
+	    			$folder_id = UserFolder::get_folder_by_user_id($this->project_permission->get_user_id());
 	    			
 	    			$virtual_folder = new VirtualFolder(null);
 	    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
@@ -245,7 +245,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     		{
     			if (ProjectPermission_Access::count_entries_with_project_id_and_organisation_unit_id($project_id, $this->project_permission->get_organisation_unit_id()) <= 1)
     			{
-	    			$folder_id = Folder::get_organisation_unit_folder_by_organisation_unit_id($this->project_permission->get_organisation_unit_id());
+	    			$folder_id = OrganisationUnitFolder::get_folder_by_organisation_unit_id($this->project_permission->get_organisation_unit_id());
 	    			
 	    			$virtual_folder = new VirtualFolder(null);
 	    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
@@ -278,7 +278,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     		{
     			if (ProjectPermission_Access::count_entries_with_project_id_and_group_id($project_id, $this->project_permission->get_group_id()) <= 1)
     			{
-	    			$folder_id = Folder::get_group_folder_by_group_id($this->project_permission->get_group_id());
+	    			$folder_id = GroupFolder::get_folder_by_group_id($this->project_permission->get_group_id());
 	    			
 	    			$virtual_folder = new VirtualFolder(null);
 	    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
@@ -516,9 +516,9 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     		
     		$project_id = $this->project_permission->get_project_id();
 
-    		$project_folder_id 		= Folder::get_project_folder_by_project_id($project_id);
-			$current_user_folder_id = Folder::get_home_folder_by_user_id($this->project_permission->get_user_id());
-			$new_user_folder_id 	= Folder::get_home_folder_by_user_id($user_id);
+    		$project_folder_id		= ProjectFolder::get_folder_by_project_id($project_id);
+			$current_user_folder_id = UserFolder::get_folder_by_user_id($this->project_permission->get_user_id());
+			$new_user_folder_id 	= UserFolder::get_folder_by_user_id($user_id);
 						
 			$current_virtual_folder_array = VirtualFolder::list_entries_by_folder_id($current_user_folder_id);
 			
@@ -603,7 +603,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     		
     		$project_id = $this->project_permission->get_project_id();
 
-    		$project_folder_id 		= Folder::get_project_folder_by_project_id($project_id);
+    		$project_folder_id 		= ProjectFolder::get_folder_by_project_id($project_id);
 			$current_ou_folder_id 	= Folder::get_organisation_unit_folder_by_organisaiton_unit_id($this->project_permission->get_organisation_unit_id());
 			$new_ou_folder_id 		= Folder::get_organisation_unit_folder_by_organisaiton_unit_id($organisation_unit_id);
 						
@@ -690,7 +690,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     		
     		$project_id = $this->project_permission->get_project_id();
 
-    		$project_folder_id 			= Folder::get_project_folder_by_project_id($project_id);
+    		$project_folder_id 			= ProjectFolder::get_folder_by_project_id($project_id);
 			$current_group_folder_id	= Folder::get_group_folder_by_organisaiton_group_id($this->project_permission->get_group_id());
 			$new_group_folder_id 		= Folder::get_group_folder_by_organisaiton_group_id($group_id);
 						

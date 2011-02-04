@@ -29,6 +29,7 @@
 	
 	$classes['Sample']						= $path_prefix."core/include/sample/sample.class.php";
 	$classes['SampleDepository']			= $path_prefix."core/include/sample/sample_depository.class.php";
+	$classes['SampleFolder']				= $path_prefix."core/include/sample/sample_folder.class.php";
 	$classes['SampleItem']					= $path_prefix."core/include/sample/sample_item.class.php";
 	$classes['SampleSecurity']				= $path_prefix."core/include/sample/sample_security.class.php";
 	$classes['SampleTemplate']				= $path_prefix."core/include/sample/sample_template.class.php";

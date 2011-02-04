@@ -47,7 +47,7 @@ class FileIO
 					
 					$template = new Template("languages/en-gb/template/data/file_detail.html");
 					
-					$folder = new Folder($file->get_toid());
+					$folder = Folder::get_instance($file->get_toid());
 					
 					if ($_GET[version] and is_numeric($_GET[version]))
 					{
@@ -327,7 +327,7 @@ class FileIO
 	{
 		if ($_GET[folder_id])
 		{
-			$folder = new Folder($_GET[folder_id]);
+			$folder = Folder::get_instance($_GET[folder_id]);
 			
 			if ($folder->is_write_access() == true)
 			{

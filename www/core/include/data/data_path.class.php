@@ -46,7 +46,7 @@ class DataPath implements DataPathInterface
     	{
     		if ($folder_id)
     		{			
-    			$folder = new Folder($folder_id);
+    			$folder = Folder::get_instance($folder_id);
     			$this->path = $folder->get_object_path();
     			
     			$this->folder_id = $folder_id;
@@ -89,8 +89,8 @@ class DataPath implements DataPathInterface
     		}
     		else
     		{
-		    	$folder_id = Folder::get_home_folder_by_user_id($user->get_user_id());
-		    	$folder = new Folder($folder_id);
+		    	$folder_id = UserFolder::get_folder_by_user_id($user->get_user_id());
+		    	$folder = Folder::get_instance($folder_id);
 		    	$this->init_stack($folder_id);
 	    		$this->path = $folder->get_object_path();
 	    		
@@ -186,7 +186,7 @@ class DataPath implements DataPathInterface
     	
     	$this->path_stack_array = array();
     	
-    	$folder = new Folder($folder_id);
+    	$folder = Folder::get_instance($folder_id);
     	$init_array = $folder->get_object_id_path();
     	
     	if (is_array($init_array) and count($init_array) >= 1)
@@ -272,8 +272,8 @@ class DataPath implements DataPathInterface
     	
     	$this->path_stack_array = array();
     	
-    	$folder_id = Folder::get_project_folder_by_project_id($project_id);
-    	$folder = new Folder($folder_id);
+    	$folder_id = ProjectFolder::get_folder_by_project_id($project_id);
+    	$folder = Folder::get_instance($folder_id);
     	$init_array = $folder->get_object_id_path();
     	
     	foreach($init_array as $key => $value)
@@ -304,8 +304,8 @@ class DataPath implements DataPathInterface
     	
     	$this->path_stack_array = array();
     	
-    	$folder_id = Folder::get_sample_folder_by_sample_id($sample_id);
-    	$folder = new Folder($folder_id);
+    	$folder_id = SampleFolder::get_folder_by_sample_id($sample_id);
+    	$folder = Folder::get_instance($folder_id);
     	$init_array = $folder->get_object_id_path();
     	
     	foreach($init_array as $key => $value)
@@ -352,7 +352,7 @@ class DataPath implements DataPathInterface
 	    	{
 	    		if ($value[virtual] == false)
 	    		{
-	    			$folder = new Folder($value[id]);
+	    			$folder = Folder::get_instance($value[id]);
 	    			$return_string = $return_string."/".$folder->get_name();
 	    		}
 	    		else

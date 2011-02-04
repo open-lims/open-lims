@@ -26,15 +26,41 @@
  */ 
 function register_data($include_id)
 {
-	if (Item::register_type("file", "Object", $include_id) == true and 
-		Item::register_type("value", "Object", $include_id) == true)
+	if (Item::delete_type_by_include_id($include_id))
 	{
-		return true;
+		if (Item::register_type("file", "Object", $include_id) == false or 
+			Item::register_type("value", "Object", $include_id) == false)
+		{
+			return false;
+		}
 	}
 	else
 	{
 		return false;
 	}
+	
+	if (Folder::delete_type_by_include_id($include_id))
+	{
+		if (Folder::register_type("user_folder", "UserFolder", $include_id) == false)
+		{
+			return false;
+		}
+		
+		if (Folder::register_type("group_folder", "GroupFolder", $include_id) == false)
+		{
+			return false;
+		}
+		
+		if (Folder::register_type("organisation_unit_folder", "OrganisationUnitFolder", $include_id) == false)
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+	return true;
 }
 $result = register_data($key);
 ?>

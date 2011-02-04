@@ -1018,7 +1018,7 @@ class SearchIO
 			$list->add_row("Owner", "owner", true, null);
 			$list->add_row("Permission", "permission", false, null);
 			
-			$folder = new Folder($folder_id);
+			$folder = Folder::get_instance($folder_id);
 			
 			$template = new Template("languages/en-gb/template/search/ffv_search_result.html");
 		

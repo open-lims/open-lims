@@ -283,9 +283,9 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
 	    		$sample_has_user = new SampleHasUser_Access(null);
 	    		if (($sample_has_user_pk = $sample_has_user->create($this->sample_id, $user_id, $read, $write)) != null)
 	    		{
-	    			$sample_folder_id = Folder::get_sample_folder_by_sample_id($this->sample_id);
+	    			$sample_folder_id = SampleFolder::get_folder_by_sample_id($this->sample_id);
 	    			
-	    			$folder_id = Folder::get_home_folder_by_user_id($user_id);
+	    			$folder_id = UserFolder::get_folder_by_user_id($user_id);
 	    			
 	    			$virtual_folder = new VirtualFolder(null);
 	    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
@@ -354,9 +354,9 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     		$sample_has_organisation_unit = new SampleHasOrganisationUnit_Access(null);
     		if (($sample_has_organisation_unit_pk = $sample_has_organisation_unit->create($this->sample_id, $organisation_unit_id)) != null)
     		{
-    			$sample_folder_id = Folder::get_sample_folder_by_sample_id($this->sample_id);
+    			$sample_folder_id = SampleFolder::get_folder_by_sample_id($this->sample_id);
     			
-    			$folder_id = Folder::get_organisation_unit_folder_by_organisation_unit_id($organisation_unit_id);
+    			$folder_id = OrganisationUnitFolder::get_folder_by_organisation_unit_id($organisation_unit_id);
     			
     			$virtual_folder = new VirtualFolder(null);
     			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
@@ -420,9 +420,9 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     		
     		if (is_numeric($project_id))
     		{
-    			$sample_folder_id = Folder::get_sample_folder_by_sample_id($this->sample_id);
+    			$sample_folder_id = SampleFolder::get_folder_by_sample_id($this->sample_id);
     			
-    			$folder_id = Folder::get_project_folder_by_project_id($project_id);
+    			$folder_id = ProjectFolder::get_folder_by_project_id($project_id);
     			
     			$virtual_folder = new VirtualFolder(null);
     			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
@@ -490,9 +490,9 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     		
     		if ($success == true)
     		{
-    			$sample_folder_id = Folder::get_sample_folder_by_sample_id($this->sample_id);
+    			$sample_folder_id = SampleFolder::get_folder_by_sample_id($this->sample_id);
     			
-    			$folder_id = Folder::get_home_folder_by_user_id($user_id);
+    			$folder_id = UserFolder::get_folder_by_user_id($user_id);
     			
     			$virtual_folder = new VirtualFolder(null);
     			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
@@ -559,9 +559,9 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     		
     		if ($success == true)
     		{
-    			$sample_folder_id = Folder::get_sample_folder_by_sample_id($this->sample_id);
+    			$sample_folder_id = SampleFolder::get_folder_by_sample_id($this->sample_id);
     			
-    			$folder_id = Folder::get_organisation_unit_folder_by_organisation_unit_id($organisation_unit_id);
+    			$folder_id = OrganisationUnitFolder::get_folder_by_organisation_unit_id($organisation_unit_id);
     			
     			$virtual_folder = new VirtualFolder(null);
     			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);

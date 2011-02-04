@@ -67,7 +67,7 @@
 			$sample_item = new SampleItem($sample_id);
 			$sample_item->set_gid($_GET[key]);
 			
-			$folder_id = Folder::get_sample_folder_by_sample_id($sample_id);
+			$folder_id = SampleFolder::get_folder_by_sample_id($sample_id);
 			
 			$sub_folder_id = $sample->get_sub_folder($folder_id, $_GET[key]);				
 
@@ -76,7 +76,7 @@
 				$folder_id = $sub_folder_id;
 			}
 			
-			$folder = new Folder($folder_id);
+			$folder = Folder::get_instance($folder_id);
 						
 			if ($_POST[file_amount] > 25 or $_POST[file_amount] < 1 or !$_POST[file_amount])
 			{				

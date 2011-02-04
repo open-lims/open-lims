@@ -1,9 +1,9 @@
 <?php
 /**
- * @package data
+ * @package project
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -26,17 +26,18 @@
  */
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	require_once("access/folder_is_group_folder.access.php");
+	require_once("access/project_status_has_folder.access.php");
 }
 
 /**
- * Group Folder Class
- * @package data
+ * Project Status Folder Class
+ * @package project
  */
-class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventListenerInterface
+class ProjectStatusFolder extends Folder implements ConcreteFolderCaseInterface
 {
-	private $group_folder;
-	private $group_id;
+  	private $project_status_folder;
+	private $project_status_id;
+	private $project_id;
   	
   	/**
   	 * @param integer $folder_id
@@ -46,24 +47,27 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 		if (is_numeric($folder_id))
   		{
   			parent::__construct($folder_id);
-  			$this->group_folder = new FolderIsGroupFolder_Access($folder_id);
-  			$this->group_id = $this->group_folder->get_group_id();
+  			$this->project_status_folder = new ProjectStatusHasFolder_Access($folder_id);
+  			$this->project_status_id = $this->project_status_folder->get_project_status_id();
+  			$this->project_id = $this->project_status_folder->get_project_id();
   		}
   		else
   		{
   			parent::__construct(null);
-  			$this->group_folder = null;
-  			$this->group_id = null;
+  			$this->project_status_folder = null;
+  			$this->project_status_id = null;
+  			$this->project_id = null;
   		}
   	}
   	
 	function __destruct()
 	{
-		unset($this->group_folder);
-		unset($this->group_id);
+		unset($this->project_status_folder);
+		unset($this->project_status_id);
+		unset($this->project_id);
 		parent::__destruct();
 	}
-	
+
 	/**
 	 * @return bool
 	 */
@@ -129,75 +133,52 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 	}
 	
 	/**
+	 * Creates a new Project Folder including Folder
+	 * @param integer $project_id
+	 * @return integer
 	 * @todo: remove v-folder
 	 */
-	public function create($group_id)
+	public function create($project_id, $project_status_id)
 	{
-		if (is_numeric($group_id))
-		{
-			$group = new Group($group_id);
+		if (is_numeric($project_id) and is_numeric($project_status_id))
+		{			
+			$project_status = new ProjectStatus($project_status_id);
+			$project = new Project($project_id);
 			
-			// Folder
-			$group_folder_id = $GLOBALS[group_folder_id];
-			$folder = new Folder($group_folder_id);
+			$project_folder_id = ProjectFolder::get_folder_by_project_id($project_id);
+			$folder = new Folder($project_folder_id);
 
 			$path = new Path($folder->get_path());
-			$path->add_element($group_id);
+			$path->add_element("status-".$project_status_id);
 			
-			$folder = new Folder(null);
-			if (($folder_id = parent::create($group->get_name(), $group_folder_id, false, $path->get_path_string(), 1, $group_id)) != null)
+			if (($folder_id = parent::create($project_status->get_name(), $project_folder_id, false, $path->get_path_string(), $project->get_owner_id(), null)) != null)
 			{
-				$folder_is_group_folder_access = new FolderIsGroupFolder_Access(null);
-				if ($folder_is_group_folder_access->create($group_id, $folder_id) == null)
+				$project_status_has_folder_access = new ProjectStatusHasFolder_Access(null);
+				if ($project_status_has_folder_access->create($project_id, $project_status_id, $folder_id) == null)
 				{
-					return false;
+					return null;
 				}
-				if ($this->set_flag(4) == false)
+				if ($this->set_flag(256) == false)
 				{
 					$this->delete(true, true);
-					return false;
-				}
-										
-				// Sample - Virtual Folder
-				$virtual_folder = new VirtualFolder(null);
-				if ($virtual_folder->create($folder_id, "samples") == null)
-				{
-					$this->delete(true, true);
-					return false;
-				}
-				if ($virtual_folder->set_sample_vfolder() == false)
-				{
-					$this->delete(true, true);
-					return false;
+					return null;
 				}
 				
-				
-				// Project - Virtual Folder
-				
-				$virtual_folder = new VirtualFolder(null);
-				if ($virtual_folder->create($folder_id, "projects") == null)
-				{
-					$this->delete(true, true);
-					return false;
-				}
-				if ($virtual_folder->set_project_vfolder() == false)
-				{
-					$this->delete(true, true);
-					return false;
-				}
-				return true;
+				return $folder_id;
 			}
 			else
 			{
-				return false;
+				return null;
 			}
 		}
 		else
 		{
-			return false;
+			return null;
 		}
 	}
 	
+	// Wird über konkretisierung automatisch über Folder ausgeführt,
+	// kann aber auch direkt ausgeführt werden (wenn Klasse bekannt)
 	/**
 	 * @param bool $recursive
 	 * @param bool $content
@@ -207,11 +188,11 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 	{
 		global $transaction;
 		
-		if ($this->group_id)
+		if ($this->project_id)
 		{
 			$transaction_id = $transaction->begin();
 			
-			if ($this->group_folder->delete() == true)
+			if ($this->project_status_folder->delete() == true)
 			{
 				if (parent::delete($recursive, $content) == true)
 				{
@@ -247,7 +228,7 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 	
 	
 	/**
-	 * Checks if $folder_id is a case of Sample Folder
+	 * Checks if $folder_id is a case of Project Folder
 	 * @param integer $folder_id
 	 * @return bool
 	 */
@@ -255,8 +236,8 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 	{
 		if (is_numeric($folder_id))
 		{
-			$folder_is_group_folder_access = new FolderIsGroupFolder_Access($folder_id);
-			if ($folder_is_group_folder_access->get_group_id())
+			$project_status_has_folder_access = new ProjectStatusHasFolder_Access($folder_id);
+			if ($project_status_has_folder_access->get_project_id())
 			{
 				return true;
 			}
@@ -271,33 +252,9 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 		}
 	}
 	
-	public static function get_folder_by_group_id($group_id)
+	public static function get_folder_by_project_id_and_project_status_id($project_id, $project_status_id)
 	{
-		return FolderIsGroupFolder_Access::get_entry_by_group_id($group_id);
-	}
-	
-	public static function listen_events($event_object)
-	{
-		if ($event_object instanceof GroupCreateEvent)
-    	{
-    		$group_folder = new GroupFolder(null);
-    		if ($group_folder->create($event_object->get_group_id()) == false)
-    		{
-				return false;
-    		}
-    	}
-    	
-		if ($event_object instanceof GroupPostDeleteEvent)
-    	{
-    		$folder_id = GroupFolder::get_folder_by_group_id($event_object->get_group_id());
-    		$group_folder = new GroupFolder($folder_id);
-			
-			if ($group_folder->delete(true, true) == false)
-			{
-				return false;
-			}
-    	}
-    	
-		return true;
+		return ProjectStatusHasFolder_Access::get_entry_by_project_id_and_project_status_id($project_id, $project_status_id);
 	}
 }
+?>

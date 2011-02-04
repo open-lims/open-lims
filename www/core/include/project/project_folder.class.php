@@ -3,7 +3,7 @@
  * @package project
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -26,7 +26,7 @@
  */
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	
+	require_once("access/project_has_folder.access.php");
 }
 
 /**
@@ -35,27 +35,32 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 {
-  	private $project_id
   	private $project_folder;
+	private $project_id;
   	
   	/**
   	 * @param integer $folder_id
   	 */
 	function __construct($folder_id)
 	{
-  		if (is_numeric($folder_id))
+		if (is_numeric($folder_id))
   		{
-  			
+  			parent::__construct($folder_id);
+  			$this->project_folder = new ProjectHasFolder_Access($folder_id);
+  			$this->project_id = $this->project_folder->get_project_id();
   		}
   		else
   		{
+  			parent::__construct(null);
+  			$this->project_folder = null;
   			$this->project_id = null;
   		}
-		// evtl parent::__construct($folder_id);
   	}
   	
 	function __destruct()
 	{
+		unset($this->project_folder);
+		unset($this->project_id);
 		parent::__destruct();
 	}
 
@@ -64,7 +69,7 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 	 */
 	public function is_read_access()
 	{
-		parent::is_read_access();
+		return parent::is_read_access();
 	}
 	
 	/**
@@ -72,7 +77,7 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 	 */
 	public function is_write_access()
 	{
-		parent::is_write_access();
+		return parent::is_write_access();
 	}
 	
 	/**
@@ -80,7 +85,7 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 	 */
 	public function is_delete_access()
 	{
-		parent::is_delete_access();
+		return parent::is_delete_access();
 	}
 	
 	/**
@@ -88,7 +93,7 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 	 */
 	public function is_control_access()
 	{
-		parent::is_control_access();
+		return parent::is_control_access();
 	}
 	
 	/**
@@ -96,7 +101,7 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 	 */
 	public function is_flag_change_permission()
 	{
-		parent::is_flag_change_permission();
+		return parent::is_flag_change_permission();
 	}
 	
 	/**
@@ -104,7 +109,7 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 	 */
 	public function is_flag_add_folder()
 	{
-		parent::is_flag_add_folder();
+		return parent::is_flag_add_folder();
 	}
 	
 	/**
@@ -112,7 +117,7 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 	 */
 	public function is_flag_cmd_folder()
 	{
-		parent::is_flag_cmd_folder();
+		return parent::is_flag_cmd_folder();
 	}
 	
 	/**
@@ -120,13 +125,13 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 	 */
 	public function is_flag_rename_folder()
 	{
-		parent::is_flag_rename_folder();
+		return parent::is_flag_rename_folder();
 	}
 	
 	/**
 	 * Creates a new Project Folder including Folder
 	 * @param integer $project_id
-	 * @return bool
+	 * @return integer
 	 * @todo: remove v-folder
 	 */
 	public function create($project_id)
@@ -142,18 +147,17 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 			$path = new Path($folder->get_path());
 			$path->add_element($project_id);
 			
-			$folder = new Folder(null);
-			if (($folder_id = $folder->create($project->get_name(), $project_folder_id, false, $path->get_path_string(), $project->get_owner_id(), null)) != null)
+			if (($folder_id = parent::create($project->get_name(), $project_folder_id, false, $path->get_path_string(), $project->get_owner_id(), null)) != null)
 			{
 				$project_has_folder_access = new ProjectHasFolder_Access(null);
 				if ($project_has_folder_access->create($project_id, $folder_id) == null)
 				{
-					return false;
+					return null;
 				}
-				if ($folder->set_flag(16) == false)
+				if ($this->set_flag(16) == false)
 				{
-					$folder->delete(true, true);
-					return false;
+					$this->delete(true, true);
+					return null;
 				}
 				
 				// Sample - Virtual Folder
@@ -161,29 +165,29 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 				$virtual_folder = new VirtualFolder(null);
 				if ($virtual_folder->create($folder_id, "samples") == null)
 				{
-					$folder->delete();
-					return false;
+					$this->delete();
+					return null;
 				}
 				if ($virtual_folder->set_sample_vfolder() == false)
 				{
-					$folder->delete();
-					return false;
+					$this->delete();
+					return null;
 				}
-
-				return true;
+				return $folder_id;
 			}
 			else
 			{
-				return false;
+				return null;
 			}
 		}
 		else
 		{
-			return false;
+			return null;
 		}
 	}
 	
-	// Wird über konkretisierung automatisch über Folder ausgeführt
+	// Wird über konkretisierung automatisch über Folder ausgeführt,
+	// kann aber auch direkt ausgeführt werden (wenn Klasse bekannt)
 	/**
 	 * @param bool $recursive
 	 * @param bool $content
@@ -197,7 +201,7 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 		{
 			$transaction_id = $transaction->begin();
 			
-			if ($project_folder->delete() == true)
+			if ($this->project_folder->delete() == true)
 			{
 				if (parent::delete($recursive, $content) == true)
 				{
@@ -254,6 +258,42 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 		else
 		{
 			return false;
+		}
+	}
+	
+	public static function get_folder_by_project_id($project_id)
+	{
+		return ProjectHasFolder_Access::get_entry_by_project_id($project_id);
+	}
+	
+	/**
+	 * @param integer $project_id
+	 * @return integer
+	 */
+	public static function get_supplementary_folder($project_id)
+	{
+		if ($project_id)
+		{
+			$project_folder_id = self::get_folder_by_project_id($project_id);
+			$folder_array = Folder_Access::list_entries_by_toid($project_folder_id);
+			
+			foreach($folder_array as $key => $value)
+			{
+				$folder_access = new Folder_Access($value);
+				
+				$path = new Path($folder_access->get_path());
+				$path_array = $path->get_path_elements();
+				
+				if ($path_array[$path->get_path_length()] == "supplementary")
+				{   // If supplement-folder is found
+					return $value;	
+				}	
+			}
+			return null;	
+		}
+		else
+		{
+			return null;
 		}
 	}
 }

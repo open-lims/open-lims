@@ -28,12 +28,14 @@
 	$classes['ProjectSecurityException']	= $path_prefix."core/include/project/exceptions/project_security_exception.class.php";
 		
 	$classes['Project'] 					= $path_prefix."core/include/project/project.class.php";
+	$classes['ProjectFolder'] 				= $path_prefix."core/include/project/project_folder.class.php";
 	$classes['ProjectItem'] 				= $path_prefix."core/include/project/project_item.class.php";
 	$classes['ProjectLog']					= $path_prefix."core/include/project/project_log.class.php";
 	$classes['ProjectLogHasItem']			= $path_prefix."core/include/project/project_log_has_item.class.php";
 	$classes['ProjectPermission'] 			= $path_prefix."core/include/project/project_permission.class.php";
 	$classes['ProjectSecurity'] 			= $path_prefix."core/include/project/project_security.class.php";
 	$classes['ProjectStatus']				= $path_prefix."core/include/project/project_status.class.php";
+	$classes['ProjectStatusFolder']			= $path_prefix."core/include/project/project_status_folder.class.php";
 	$classes['ProjectStatusRelation']		= $path_prefix."core/include/project/project_status_relation.class.php";
 	$classes['ProjectTask']					= $path_prefix."core/include/project/project_task.class.php";
 	$classes['ProjectTaskPoint']			= $path_prefix."core/include/project/project_task_point.class.php";

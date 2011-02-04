@@ -177,185 +177,183 @@ class Project implements ProjectInterface, EventListenerInterface
 						throw new ProjectCreationFailedException("",1);
 					}
 					
-					// Create Projectfolder
-					if ($organisation_unit_id)
-					{
-						$project_folder_id = $GLOBALS[project_folder_id];
-						$folder = new Folder($project_folder_id);
-					}
-					else
-					{
-						$project_folder_id = Folder::get_project_folder_by_project_id($parent_project_id);
-						$folder = new Folder($project_folder_id);
-					}
-					
-					$path = new Path($folder->get_path());
+
+					$base_folder_id = $GLOBALS[project_folder_id];
+					$base_folder = Folder::get_instance($base_folder_id);
+
+					$path = new Path($base_folder->get_path());
 					$path->add_element($project_id);
 					
-					$folder = new Folder(null);
-					if (($folder_id = $folder->create($name, $project_folder_id, false, $path->get_path_string(), $owner_id, null)) != null)
+					$projet_folder = new ProjectFolder(null);
+					if (($folder_id = $projet_folder->create($project_id)) == null)
 					{
-						if ($folder->create_project_folder($project_id) == false)
+						$projet_folder->delete(true, true);
+						if ($transaction_id != null)
 						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new ProjectCreationFailedException("",1);
+							$transaction->rollback($transaction_id);
 						}
-						if ($folder->set_flag(16) == false)
+						throw new ProjectCreationFailedException("",1);
+					}
+					
+					// Create Supplementary Folder
+					
+					$supplementary_path = new Path($path->get_path_string());
+					$supplementary_path->add_element("supplementary");
+					
+					$supplementary_folder = Folder::get_instance(null);
+					if (($supplementary_folder->create("supplementary", $folder_id, false, $supplementary_path->get_path_string(), $owner_id, null)) == null)
+					{
+						$projet_folder->delete();
+						if ($transaction_id != null)
 						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new ProjectCreationFailedException("",1);
+							$transaction->rollback($transaction_id);
 						}
-						
-						// Create Supplementary Folder
-						
-						$supplementary_path = new Path($path->get_path_string());
-						$supplementary_path->add_element("supplementary");
-						
-						$supplementary_folder = new Folder(null);
-						if (($supplementary_folder->create("supplementary", $folder_id, false, $supplementary_path->get_path_string(), $owner_id, null)) == null)
+						throw new ProjectCreationFailedException("",1);
+					}
+					
+					if ($supplementary_folder->set_flag(128) == false)
+					{
+						$projet_folder->delete(true, true);
+						if ($transaction_id != null)
 						{
-							$folder->delete();
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new ProjectCreationFailedException("",1);
+							$transaction->rollback($transaction_id);
 						}
-						
-						if ($supplementary_folder->set_flag(128) == false)
-						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new ProjectCreationFailedException("",1);
-						}
-						
-						// Status Folder
-						
-						$folder_array = array();
-						
-						foreach($project_all_status_array as $key => $value)
-						{
-							$project_status_array = $project_template->get_status_requirements($value);
+						throw new ProjectCreationFailedException("",1);
+					}
+					
+					// Status Folder
+					
+					$folder_array = array();
+					
+					foreach($project_all_status_array as $key => $value)
+					{
+						$project_status_array = $project_template->get_status_requirements($value);
 
-							if (is_array($project_status_array) and count($project_status_array) >= 1)
+						if (is_array($project_status_array) and count($project_status_array) >= 1)
+						{
+							foreach($project_status_array as $status_key => $status_value)
 							{
-								foreach($project_status_array as $status_key => $status_value)
+								if ($status_value[type] == "file" or $status_value[type] == "value")
 								{
-									if ($status_value[type] == "file" or $status_value[type] == "value")
+									if (!in_array($value, $folder_array))
 									{
-										if (!in_array($value, $folder_array))
-										{
-											array_push($folder_array, $value);
-										}
+										array_push($folder_array, $value);
 									}
 								}
-							}	
+							}
 						}	
-						
-						foreach($folder_array as $key => $value)
+					}	
+					
+					foreach($folder_array as $key => $value)
+					{
+						$projet_status_folder = new ProjectStatusFolder(null);
+						if (($status_folder_id = $projet_status_folder->create($project_id, $value)) == null)
 						{
-							$project_status = new ProjectStatus($value);
-							$project_status_requirements = $project_template->get_status_requirements($value);
-							
-							$status_path = new Path($path->get_path_string());
-							$status_path->add_element("status-".$value);
-							
-							$status_folder = new Folder(null);
-							if (($status_folder_id = $status_folder->create($project_status->get_name(), $folder_id, false, $status_path->get_path_string(), $owner_id, null)) == null)
+							$projet_folder->delete(true, true);
+							if ($transaction_id != null)
 							{
-								$folder->delete(true, true);
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
-								throw new ProjectCreationFailedException("",1);
+								$transaction->rollback($transaction_id);
 							}
-							
-							if ($status_folder->create_project_status_folder($value, $project_id) == false)
-							{
-								$folder->delete(true, true);
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
-								throw new ProjectCreationFailedException("",1);
-							}
-							
-							if ($status_folder->set_flag(256) == false)
-							{
-								$folder->delete(true, true);
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
-								throw new ProjectCreationFailedException("",1);
-							}
-							
-							// Create Subfolder
-							$sub_folder_array = array();
-							
-							foreach($project_status_requirements as $sub_key => $sub_value)
-		    				{
-		    					if (($sub_value[type] == "file" or $sub_value[type] == "value") and $sub_value[folder])
-		    					{
-									if (array_search(trim($sub_value[folder]), $sub_folder_array) === false)
-									{
-										array_push($sub_folder_array, trim($sub_value[folder]));
-									}
-								}
-		    					
-		    				}
-		    				
-		    				if (is_array($sub_folder_array) and count($sub_folder_array) >= 1)
-		    				{
-		    					foreach($sub_folder_array as $sub_key => $sub_value)
-		    					{
-		    						$folder_name = strtolower(trim($sub_value));
-		    						$folder_name = str_replace(" ","-",$folder_name);
-		    										
-									$folder_path = new Path($status_folder->get_path());
-									$folder_path->add_element($folder_name);
-									
-									$sub_folder = new Folder(null);
-									if ($sub_folder->create($sub_value, $status_folder_id, false, $folder_path->get_path_string(), $user->get_user_id(), null) == null)
-									{
-										$folder->delete(true, true);
-										if ($transaction_id != null)
-										{
-											$transaction->rollback($transaction_id);
-										}
-										throw new ProjectCreationFailedException("",1);
-									}
-									
-									if ($sub_folder->set_flag(2048) == false)
-									{
-										$folder->delete(true, true);
-										if ($transaction_id != null)
-										{
-											$transaction->rollback($transaction_id);
-										}
-										throw new ProjectCreationFailedException("",1);
-									}
-		    					}
-		    				}	
-						}			
+							throw new ProjectCreationFailedException("",1);
+						}
+
+						$project_status = new ProjectStatus($value);
+						$project_status_requirements = $project_template->get_status_requirements($value);
 						
-						// Create Project Description
-						$value = new Value(null);
-						if ($value->create($folder_id, $owner_id, 2, $description, false) == null)
+						// Create Subfolder
+						$sub_folder_array = array();
+						
+						foreach($project_status_requirements as $sub_key => $sub_value)
+	    				{
+	    					if (($sub_value[type] == "file" or $sub_value[type] == "value") and $sub_value[folder])
+	    					{
+								if (array_search(trim($sub_value[folder]), $sub_folder_array) === false)
+								{
+									array_push($sub_folder_array, trim($sub_value[folder]));
+								}
+							}
+	    					
+	    				}
+	    				
+	    				if (is_array($sub_folder_array) and count($sub_folder_array) >= 1)
+	    				{
+	    					foreach($sub_folder_array as $sub_key => $sub_value)
+	    					{
+	    						$folder_name = strtolower(trim($sub_value));
+	    						$folder_name = str_replace(" ","-",$folder_name);
+	    										
+								$folder_path = new Path($status_folder->get_path());
+								$folder_path->add_element($folder_name);
+								
+								$sub_folder = Folder::get_instance(null);
+								if ($sub_folder->create($sub_value, $status_folder_id, false, $folder_path->get_path_string(), $user->get_user_id(), null) == null)
+								{
+									$projet_folder->delete(true, true);
+									if ($transaction_id != null)
+									{
+										$transaction->rollback($transaction_id);
+									}
+									throw new ProjectCreationFailedException("",1);
+								}
+								
+								if ($sub_folder->set_flag(2048) == false)
+								{
+									$projet_folder->delete(true, true);
+									if ($transaction_id != null)
+									{
+										$transaction->rollback($transaction_id);
+									}
+									throw new ProjectCreationFailedException("",1);
+								}
+	    					}
+	    				}	
+					}			
+					
+					// Create Project Description
+					$value = new Value(null);
+					if ($value->create($folder_id, $owner_id, 2, $description, false) == null)
+					{
+						$projet_folder->delete(true, true);
+						if ($transaction_id != null)
 						{
-							$folder->delete(true, true);
+							$transaction->rollback($transaction_id);
+						}
+						throw new ProjectCreationFailedException("",1);
+					}
+					
+					$project_item = new ProjectItem($project_id);
+					$project_item->set_gid(1);
+					$project_item->set_status_id(1);
+					$project_item->set_item_id($value->get_item_id());
+					
+					if ($project_item->link_item() == false)
+					{
+						$projet_folder->delete(true, true);
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						throw new ProjectCreationFailedException("",1);
+					}
+					
+					if ($project_item->set_required(true) == false)
+					{
+						$projet_folder->delete(true, true);
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						throw new ProjectCreationFailedException("",1);
+					}
+					
+					// Create Project Master Data
+					if ($this->template_data_array and is_numeric($this->template_data_type_id))
+					{
+						$value = new Value(null);				
+						
+						if ($value->create($folder_id, $owner_id, $this->template_data_type_id, $this->template_data_array, false) == null)
+						{
+							$projet_folder->delete(true, true);
 							if ($transaction_id != null)
 							{
 								$transaction->rollback($transaction_id);
@@ -370,164 +368,92 @@ class Project implements ProjectInterface, EventListenerInterface
 						
 						if ($project_item->link_item() == false)
 						{
-							$folder->delete(true, true);
+							$projet_folder->delete(true, true);
 							if ($transaction_id != null)
 							{
 								$transaction->rollback($transaction_id);
-							}
+							}	
 							throw new ProjectCreationFailedException("",1);
 						}
 						
 						if ($project_item->set_required(true) == false)
 						{
-							$folder->delete(true, true);
+							$projet_folder->delete(true, true);
 							if ($transaction_id != null)
 							{
 								$transaction->rollback($transaction_id);
 							}
 							throw new ProjectCreationFailedException("",1);
 						}
-						
-						// Create Project Master Data
-						if ($this->template_data_array and is_numeric($this->template_data_type_id))
-						{
-							$value = new Value(null);				
-							
-							if ($value->create($folder_id, $owner_id, $this->template_data_type_id, $this->template_data_array, false) == null)
-							{
-								$folder->delete(true, true);
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
-								throw new ProjectCreationFailedException("",1);
-							}
-							
-							$project_item = new ProjectItem($project_id);
-							$project_item->set_gid(1);
-							$project_item->set_status_id(1);
-							$project_item->set_item_id($value->get_item_id());
-							
-							if ($project_item->link_item() == false)
-							{
-								$folder->delete(true, true);
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}	
-								throw new ProjectCreationFailedException("",1);
-							}
-							
-							if ($project_item->set_required(true) == false)
-							{
-								$folder->delete(true, true);
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
-								throw new ProjectCreationFailedException("",1);
-							}
-						}
+					}
 
-						if ($organisation_unit_id)
-						{
-							$organisation_unit = new OrganisationUnit($organisation_unit_id);
-		
-							// Project Permissions
-							$project_permission = new ProjectPermission(null);
-							if ($project_permission->create($owner_id, null, null, $project_id, $GLOBALS[std_perm_user], null, 1) == null)
-							{
-								$folder->delete(true, true);
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
-								throw new ProjectCreationFailedException("",1);
-							}
-						
-							$project_permission = new ProjectPermission(null);
-							if ($project_permission->create($organisation_unit->get_leader_id(), null, null, $project_id, $GLOBALS[std_perm_organ_leader], null, 2) == null)
-							{
-								$folder->delete(true, true);
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
-								throw new ProjectCreationFailedException("",1);
-							}
-							
-							
-							// Virtual-Folder von OrganUnits und Groups
-						
-							$project_permission = new ProjectPermission(null);
-							if ($project_permission->create(null, $organisation_unit_id, null, $project_id, $GLOBALS[std_perm_organ_unit], null, 3) == null)
-							{
-								$folder->delete(true, true);
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
-								throw new ProjectCreationFailedException("",1);
-							}
-						
-							$group_array = $organisation_unit->list_groups();
-							
-							if(is_array($group_array) and count($group_array) >= 1)
-							{
-								foreach($group_array as $key => $value)
-								{
-									$project_permission = new ProjectPermission(null);
-									if ($project_permission->create(null, null, $value, $project_id, $GLOBALS[std_perm_organ_group], null, 4) == null)
-									{
-										$folder->delete(true, true);
-										if ($transaction_id != null)
-										{
-											$transaction->rollback($transaction_id);
-										}
-										throw new ProjectCreationFailedException("",1);
-									}
-								}
-							}
-						}
-						
-						// Create Virtual Sample Folder
-						// !! Problematic Dependency
-						$virtual_folder = new VirtualFolder(null);
-						if ($virtual_folder->create($folder_id, "samples") == null)
-						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new ProjectCreationFailedException("",1);
-						}
-						if ($virtual_folder->set_sample_vfolder() == false)
-						{
-							$folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new ProjectCreationFailedException("",1);
-						}
-			
-						$this->__construct($project_id);
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
-						return $project_id;
-						
-					}
-					else
+					if ($organisation_unit_id)
 					{
-						if ($transaction_id != null)
+						$organisation_unit = new OrganisationUnit($organisation_unit_id);
+	
+						// Project Permissions
+						$project_permission = new ProjectPermission(null);
+						if ($project_permission->create($owner_id, null, null, $project_id, $GLOBALS[std_perm_user], null, 1) == null)
 						{
-							$transaction->rollback($transaction_id);
+							$projet_folder->delete(true, true);
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							throw new ProjectCreationFailedException("",1);
 						}
-						throw new ProjectCreationFailedException("",1);
+					
+						$project_permission = new ProjectPermission(null);
+						if ($project_permission->create($organisation_unit->get_leader_id(), null, null, $project_id, $GLOBALS[std_perm_organ_leader], null, 2) == null)
+						{
+							$projet_folder->delete(true, true);
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							throw new ProjectCreationFailedException("",1);
+						}
+						
+						
+						// Virtual-Folder von OrganUnits und Groups
+					
+						$project_permission = new ProjectPermission(null);
+						if ($project_permission->create(null, $organisation_unit_id, null, $project_id, $GLOBALS[std_perm_organ_unit], null, 3) == null)
+						{
+							$projet_folder->delete(true, true);
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							throw new ProjectCreationFailedException("",1);
+						}
+					
+						$group_array = $organisation_unit->list_groups();
+						
+						if(is_array($group_array) and count($group_array) >= 1)
+						{
+							foreach($group_array as $key => $value)
+							{
+								$project_permission = new ProjectPermission(null);
+								if ($project_permission->create(null, null, $value, $project_id, $GLOBALS[std_perm_organ_group], null, 4) == null)
+								{
+									$projet_folder->delete(true, true);
+									if ($transaction_id != null)
+									{
+										$transaction->rollback($transaction_id);
+									}
+									throw new ProjectCreationFailedException("",1);
+								}
+							}
+						}
 					}
+							
+					$this->__construct($project_id);
+					if ($transaction_id != null)
+					{
+						$transaction->commit($transaction_id);
+					}
+					return $project_id;
 				}
 				else
 				{
@@ -699,9 +625,9 @@ class Project implements ProjectInterface, EventListenerInterface
     		else
     		{
     			$this->__destruct();
-	    		$folder_id = Folder::get_project_folder_by_project_id($tmp_project_id);
-	    		$folder = new Folder($folder_id);
-	    		if ($folder->delete(true, true) == false)
+	    		$project_folder_id = ProjectFolder::get_folder_by_project_id($tmp_project_id);
+	    		$project_folder = new ProjectFolder($project_folder_id);
+	    		if ($project_folder->delete(true, true) == false)
 	    		{
 	    			if ($transaction_id != null)
 	    			{
@@ -1380,9 +1306,8 @@ class Project implements ProjectInterface, EventListenerInterface
     	{
 	    	if (is_numeric($gid) and is_numeric($status_id))
 	    	{
-	    		$folder_id = Folder::get_project_status_folder_by_status_id($this->project_id, $status_id);
-	    		
-    			$folder = new Folder($folder_id);
+	    		$folder_id = ProjectStatusFolder::get_folder_by_project_id_and_project_status_id($this->project_id, $status_id);
+    			$folder = Folder::get_instance($folder_id);
     		
     			$project_template = new ProjectTemplate($this->project->get_template_id());
     			$attribute_array = $project_template->get_gid_attributes($gid, $status_id);
@@ -1586,8 +1511,8 @@ class Project implements ProjectInterface, EventListenerInterface
 			$project_log = new ProjectLog(null);
 			$project_log->create($this->project_id, "Project Deleted", false, true, md5(rand(0,32768)));
 			
-			$folder_id = Folder::get_project_folder_by_project_id($this->project_id);
-			$folder = new Folder($folder_id);
+			$folder_id = ProjectFolder::get_folder_by_project_id($this->project_id);
+			$folder = Folder::get_instance($folder_id);
 			$folder->mark_as_deleted();
 			
 			return $this->project->set_deleted(true);
@@ -2042,8 +1967,8 @@ class Project implements ProjectInterface, EventListenerInterface
     		
     		$transaction_id = $transaction->begin();
     		
-    		$folder_id = Folder::get_project_folder_by_project_id($this->project_id);
-    		$folder = new Folder($folder_id);
+    		$folder_id = ProjectFolder::get_folder_by_project_id($this->project_id);
+    		$folder = Folder::get_instance($folder_id);
     		
     		if ($folder->set_name($name) == false)
 			{

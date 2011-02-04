@@ -24,6 +24,8 @@
 /**
  * 
  */
+	$classes['ConcreteFolderCaseInterface']	= $path_prefix."core/include/data/folder/interfaces/concrete_folder_case.interface.php";	
+
 	$classes['DataException']				= $path_prefix."core/include/data/exceptions/data_exception.class.php";
 	$classes['DataSecurityException']		= $path_prefix."core/include/data/exceptions/data_security_exception.class.php";
 		

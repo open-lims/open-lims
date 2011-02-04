@@ -336,7 +336,7 @@ class File extends Object implements FileInterface, EventListenerInterface
 			$object_toid = parent::get_toid();
 			$object_delete = parent::delete();
 			
-			$folder = new Folder($object_toid);
+			$folder = Folder::get_instance($object_toid);
 			
 			if ($object_delete == true)
 			{
@@ -465,7 +465,7 @@ class File extends Object implements FileInterface, EventListenerInterface
 				$object_id = $this->object_id;
 				$object_toid = parent::get_toid();
 				
-				$folder = new Folder($object_toid);
+				$folder = Folder::get_instance($object_toid);
 			
 				$this->open_internal_revision($internal_revision);
 				
@@ -642,7 +642,7 @@ class File extends Object implements FileInterface, EventListenerInterface
 		
 		if ($session->is_value("FILE_UPLOAD_".$unique_id))
 		{
-			$folder = new Folder($folder_id);
+			$folder = Folder::get_instance($folder_id);
 	
 			for ($i=1;$i<=$file_amount;$i++)
 			{			
@@ -686,7 +686,7 @@ class File extends Object implements FileInterface, EventListenerInterface
 		{
 			$transaction_id = $transaction->begin();
 
-			$folder = new Folder($folder_id);	    	
+			$folder = Folder::get_instance($folder_id);	    	
 
 			if ($folder->is_write_access() == true)
 			{
@@ -894,7 +894,7 @@ class File extends Object implements FileInterface, EventListenerInterface
 		{
 			$transaction_id = $transaction->begin();
 	
-			$folder = new Folder(parent::get_toid());
+			$folder = Folder::get_instance(parent::get_toid());
 			$folder_path = $folder->get_path();
 	
 			if ($folder->is_write_access() == true)
@@ -1232,7 +1232,7 @@ class File extends Object implements FileInterface, EventListenerInterface
 		{
 			$object_toid = parent::get_toid();
 			
-			$folder = new Folder($object_toid);
+			$folder = Folder::get_instance($object_toid);
 
 			$extension_array = explode(".",$this->file_version->get_name());
 			$extension_array_length = substr_count($this->file_version->get_name(),".");

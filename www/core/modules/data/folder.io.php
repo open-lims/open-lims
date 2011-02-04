@@ -33,7 +33,7 @@ class FolderIO
 		
 		if ($_GET[folder_id])
 		{
-			$folder = new Folder($_GET[folder_id]);
+			$folder = Folder::get_instance($_GET[folder_id]);
 			
 			if ($folder->is_flag_add_folder())
 			{
@@ -87,7 +87,7 @@ class FolderIO
 				}
 				else
 				{
-					$new_folder = new Folder(null);
+					$new_folder = Folder::get_instance(null);
 					
 					$paramquery = $_GET;
 					unset($paramquery[nextpage]);
@@ -130,7 +130,7 @@ class FolderIO
 		
 		if ($_GET[folder_id])
 		{
-			$folder = new Folder($_GET[folder_id]);
+			$folder = Folder::get_instance($_GET[folder_id]);
 		
 			if ($folder->is_flag_cmd_folder())
 			{
@@ -195,7 +195,7 @@ class FolderIO
 		
 		if ($_GET[folder_id])
 		{
-			$folder = new Folder($_GET[folder_id]);
+			$folder = Folder::get_instance($_GET[folder_id]);
 		
 			if ($folder->is_flag_cmd_folder())
 			{
@@ -267,7 +267,7 @@ class FolderIO
 		
 		if ($_GET[folder_id])
 		{
-			$folder = new Folder($_GET[folder_id]);
+			$folder = Folder::get_instance($_GET[folder_id]);
 		
 			if ($folder->is_flag_change_permission() or 
 				$folder->is_flag_add_folder() or 
@@ -370,7 +370,7 @@ class FolderIO
 		{
 			if ($_GET[folder_id])
 			{
-				$folder = new Folder($_GET[folder_id]);
+				$folder = Folder::get_instance($_GET[folder_id]);
 				if ($folder->exist_folder() == false)
 				{
 					throw new FolderNotFoundException("",1);

@@ -36,11 +36,10 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("access/folder_join.access.php");
 	
 	require_once("access/folder_is_group_folder.access.php"); // Legacy
-	require_once("access/folder_is_home_folder.access.php"); // Legacy
 	require_once("access/folder_is_organisation_unit_folder.access.php"); // Legacy
-	require_once("access/folder_is_project_folder.access.php");
-	require_once("access/folder_is_project_status_folder.access.php");
-	require_once("access/folder_is_sample_folder.access.php");
+	require_once("access/folder_is_project_folder.access.php"); // Legacy
+	require_once("access/folder_is_project_status_folder.access.php"); // Legacy
+	require_once("access/folder_is_sample_folder.access.php"); // Legacy
 	
 	require_once("access/virtual_folder.access.php");
 	require_once("access/virtual_folder_has_folder.access.php");
@@ -64,9 +63,10 @@ class Folder implements FolderInterface, EventListenerInterface
 	private static $folder_delete_object;
 	
 	/**
+	 * Get instance via static::get_instance($folder_id)
 	 * @param integer $folder_id
 	 */
-	function __construct($folder_id)
+	protected function __construct($folder_id)
 	{		
 		if ($folder_id == null)
 		{
@@ -78,8 +78,11 @@ class Folder implements FolderInterface, EventListenerInterface
 			$this->folder_id 			= $folder_id;
 			$this->folder				= new Folder_Access($folder_id);
 			
+			
+			
 			if ($this->folder->get_id() != null)
-			{	
+			{
+				// [OLD] => To Data Entity
 				$object_permission = new ObjectPermission($this->folder->get_permission(), $this->folder->get_automatic(), $this->folder->get_owner_id(), $this->folder->get_owner_group_id());
 				$object_permission->set_folder_flag($this->folder->get_flag());
 				
@@ -127,7 +130,8 @@ class Folder implements FolderInterface, EventListenerInterface
 				else
 				{
 					$this->control_access = false;
-				}	
+				}
+				// [DLO]	
 			}
 			else
 			{
@@ -473,79 +477,6 @@ class Folder implements FolderInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Sets the current folder to a project folder
-	 * @todo extrat method from class due to loose dependency
-	 * @param integer $project_id
-	 * @return bool
-	 */
-	public function create_project_folder($project_id)
-	{
-		if ($this->folder_id and $project_id)
-		{
-			$folder_is_project_folder_access = new FolderIsProjectFolder_Access(null);
-			$result = $folder_is_project_folder_access->create($project_id, $this->folder_id);
-			
-			if ($result != null)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}				
-		}
-	}
-	
-	/**
-	 * Sets the current folder to a project status folder
-	 * @todo extrat method from class due to loose dependency
-	 * @param integer $status_id
-	 * @param integer $project_id
-	 * @return bool
-	 */
-	public function create_project_status_folder($status_id, $project_id)
-	{
-		if ($this->folder_id and $status_id and $project_id)
-		{				
-			$folder_is_project_status_folder_access = new FolderIsProjectStatusFolder_Access(null);
-			$result = $folder_is_project_status_folder_access->create($status_id, $project_id, $this->folder_id);
-			
-			if ($result != null)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-	}
-
-	/**
-	 * Sets the current folder to a sample folder
-	 * @todo extrat method from class due to loose dependency
-	 * @param integer $sample_id
-	 * @return bool
-	 */
-	public function create_sample_folder($sample_id)
-	{
-		if ($this->folder_id and $sample_id)
-		{
-			$folder_is_sample_folder_access = new FolderIsSampleFolder_Access(null);
-			$result = $folder_is_sample_folder_access->create($sample_id, $this->folder_id);
-			
-			if ($result != null)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-	}
-	
-	/**
 	 * @return bool
 	 */
 	public function exist_folder()
@@ -685,7 +616,7 @@ class Folder implements FolderInterface, EventListenerInterface
 						{
 							if ($value[type] == 0)
 							{
-								$folder = new Folder($value[id]);
+								$folder = Folder::get_instance($value[id]);
 								if ($folder->delete(true, true) == false)
 								{
 									if ($transaction_id != null)
@@ -808,13 +739,6 @@ class Folder implements FolderInterface, EventListenerInterface
 					}
 				}
 				
-				$this->unset_group_folder();
-				$this->unset_home_folder();
-				$this->unset_organisation_unit_folder();
-				$this->unset_project_folder();
-				$this->unset_project_status_folder();
-				$this->unset_sample_folder();
-				
 				if (file_exists($path))
 				{
 					if (rmdir($path))
@@ -899,180 +823,6 @@ class Folder implements FolderInterface, EventListenerInterface
 		else
 		{
 			return false;
-		}
-	}
-	
-	/**
-	 * @todo extrat method from class due to loose dependency
-	 * @return bool
-	 */
-	public function unset_group_folder()
-	{
-		if ($this->folder_id)
-		{	
-			$pk = FolderIsGroupFolder_Access::get_entry_by_folder_id($this->folder_id);
-			
-			if ($pk)
-			{
-				$folder_is_group_folder_access = new FolderIsGroupFolder_Access($pk);
-				
-				if ($folder_is_group_folder_access->delete())
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			}
-			else
-			{
-				return true;
-			}
-		}
-	}
-	
-	/**
-	 * @todo extrat method from class due to loose dependency
-	 * @return bool
-	 */
-	public function unset_home_folder()
-	{
-		if ($this->folder_id)
-		{
-			$pk = FolderIsHomeFolder_Access::get_entry_by_folder_id($this->folder_id);
-			
-			if ($pk)
-			{
-				$folder_is_home_folder_access = new FolderIsHomeFolder_Access($pk);
-				
-				if ($folder_is_home_folder_access->delete())
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			}
-			else
-			{
-				return true;
-			}
-		}
-	}
-	
-	/**
-	 * @todo extrat method from class due to loose dependency
-	 * @return bool
-	 */
-	public function unset_organisation_unit_folder()
-	{
-		if ($this->folder_id)
-		{
-			$pk = FolderIsOrganisationUnitFolder_Access::get_entry_by_folder_id($this->folder_id);
-			
-			if ($pk)
-			{
-				$folder_is_organisation_unit_folder_access = new FolderIsOrganisationUnitFolder_Access($pk);
-				
-				if ($folder_is_organisation_unit_folder_access->delete()){
-					return true;
-				}else{
-					return false;
-				}
-			}
-			else
-			{
-				return true;
-			}
-		}
-	}
-	
-	/**
-	 * @todo extrat method from class due to loose dependency
-	 * @return bool
-	 */
-	public function unset_project_folder()
-	{
-		if ($this->folder_id)
-		{
-			$pk = FolderIsProjectFolder_Access::get_entry_by_folder_id($this->folder_id);
-			
-			if ($pk)
-			{
-				$folder_is_project_folder_access = new FolderIsProjectFolder_Access($pk);
-				
-				if ($folder_is_project_folder_access->delete())
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			}
-			else
-			{
-				return true;
-			}
-		}
-	}
-	
-	/**
-	 * @todo extrat method from class due to loose dependency
-	 * @return bool
-	 */
-	public function unset_project_status_folder()
-	{
-		if ($this->folder_id)
-		{
-			$pk = FolderIsProjectStatusFolder_Access::get_entry_by_folder_id($this->folder_id);
-			
-			if ($pk) 
-			{
-				$folder_is_project_status_folder_access = new FolderIsProjectStatusFolder_Access($pk);
-				
-				if ($folder_is_project_status_folder_access->delete())
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			}
-			else
-			{
-				return true;
-			}
-		}	
-	}
-	
-	/**
-	 * @todo extrat method from class due to loose dependency
-	 * @return bool
-	 */
-	public function unset_sample_folder()
-	{
-		if ($this->folder_id)
-		{	
-			$pk = FolderIsSampleFolder_Access::get_entry_by_folder_id($this->folder_id);
-				
-			if ($pk)
-			{
-				$folder_is_sample_folder_access = new FolderIsSampleFolder_Access($pk);
-				
-				if ($folder_is_sample_folder_access->delete()){
-					return true;
-				}else{
-					return false;
-				}
-			}
-			else
-			{
-				return true;
-			}
 		}
 	}
 	
@@ -1879,154 +1629,6 @@ class Folder implements FolderInterface, EventListenerInterface
 		}
 	}
 
-
-	/**
-	 * @todo extrat method from class due to loose dependency
-	 * @param integer $project_id
-	 * @return integer
-	 */
-	public static function get_project_supplementary_folder($project_id)
-	{
-		if ($project_id)
-		{
-			$project_folder_id = self::get_project_folder_by_project_id($project_id);
-			
-			$folder_array = Folder_Access::list_entries_by_toid($project_folder_id);
-			
-			foreach($folder_array as $key => $value)
-			{
-				$folder_access = new Folder_Access($value);
-				
-				$path = new Path($folder_access->get_path());
-				$path_array = $path->get_path_elements();
-				
-				if ($path_array[$path->get_path_length()] == "supplementary")
-				{   // If supplement-folder is found
-					return $value;	
-				}	
-			}
-			return null;	
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-	 * @todo extrat method from class due to loose dependency
-	 * @param integer $group_id
-	 * @return integer
-	 */
-	public static function get_group_folder_by_group_id($group_id)
-	{
-		if (is_numeric($group_id))
-		{
-			$folder_is_group_folder_pk = FolderIsGroupFolder_Access::get_entry_by_group_id($group_id);
-			$folder_is_group_folder = new FolderIsGroupFolder_Access($folder_is_group_folder_pk);
-			return $folder_is_group_folder->get_folder_id();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @todo extrat method from class due to loose dependency
-	 * @param integer $user_id
-	 * @return integer
-	 */
-	public static function get_home_folder_by_user_id($user_id)
-	{
-		if (is_numeric($user_id))
-		{
-			$folder_is_home_folder_pk = FolderIsHomeFolder_Access::get_entry_by_user_id($user_id);
-			$folder_is_home_folder = new FolderIsHomeFolder_Access($folder_is_home_folder_pk);
-			return $folder_is_home_folder->get_folder_id();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @todo extrat method from class due to loose dependency
-	 * @param integer $organisation_unit_id
-	 * @return integer
-	 */
-	public static function get_organisation_unit_folder_by_organisation_unit_id($organisation_unit_id)
-	{
-		if (is_numeric($organisation_unit_id))
-		{
-			$folder_is_organisation_unit_folder_pk = FolderIsOrganisationUnitFolder_Access::get_entry_by_organisation_unit_id($organisation_unit_id);
-			$folder_is_organisation_unit_folder = new FolderIsOrganisationUnitFolder_Access($folder_is_organisation_unit_folder_pk);
-			return $folder_is_organisation_unit_folder->get_folder_id();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @todo extrat method from class due to loose dependency
-	 * @param integer $project_id
-	 * @return integer
-	 */
-	public static function get_project_folder_by_project_id($project_id)
-	{
-		if (is_numeric($project_id))
-		{
-			$folder_is_project_folder_pk = FolderIsProjectFolder_Access::get_entry_by_project_id($project_id);
-			$folder_is_project_folder = new FolderIsProjectFolder_Access($folder_is_project_folder_pk);
-			return $folder_is_project_folder->get_folder_id();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @todo extrat method from class due to loose dependency
-	 * @param integer $project_id
-	 * @param integer $status_id
-	 * @return integer
-	 */
-	public static function get_project_status_folder_by_status_id($project_id, $status_id)
-	{
-		if (is_numeric($project_id) and is_numeric($status_id))
-		{
-			$folder_is_project_status_folder_pk = FolderIsProjectStatusFolder_Access::get_entry_by_status_id_and_project_id($status_id, $project_id);
-			$folder_is_project_status_folder = new FolderIsProjectStatusFolder_Access($folder_is_project_status_folder_pk);
-			return $folder_is_project_status_folder->get_folder_id();
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-	 * @todo extrat method from class due to loose dependency
-	 * @param integer $sample_id
-	 * @return integer
-	 */
-	public static function get_sample_folder_by_sample_id($sample_id)
-	{
-		if (is_numeric($sample_id))
-		{
-			$folder_is_sample_folder_pk = FolderIsSampleFolder_Access::get_entry_by_sample_id($sample_id);
-			$folder_is_sample_folder = new FolderIsSampleFolder_Access($folder_is_sample_folder_pk);
-			return $folder_is_sample_folder->get_folder_id();
-		}
-		else
-		{
-			return null;
-		}
-	}
 	
 	/**
 	 * @param string $path
@@ -2063,6 +1665,10 @@ class Folder implements FolderInterface, EventListenerInterface
 		}
 	}
 	
+	/**
+	 * @param integer $include_id
+	 * @return bool
+	 */
 	public static function delete_type_by_include_id($include_id)
 	{
 		return FolderConcretion_Access::delete_by_include_id($include_id);
@@ -2081,87 +1687,55 @@ class Folder implements FolderInterface, EventListenerInterface
      */
     public static function listen_events($event_object)
     {
-    	if ($event_object instanceof UserDeleteEvent)
-    	{
-    		$folder_id = Folder::get_home_folder_by_user_id($event_object->get_user_id());
-			self::$folder_delete_object = new Folder($folder_id);
-			
-			if (self::$folder_delete_object->unset_home_folder() == false)
-			{
-				return false;
-			}
-			
+   		if ($event_object instanceof UserDeleteEvent)
+    	{			
 			if (Folder_Access::set_owner_id_on_null($event_object->get_user_id()) == false)
 			{
 				return false;
 			}
     	}
-    	    	
+    	  	
    		if ($event_object instanceof GroupDeleteEvent)
     	{
-    		$folder_id = Folder::get_group_folder_by_group_id($event_object->get_group_id());
-			self::$folder_delete_object = new Folder($folder_id);
-			
-			if (self::$folder_delete_object->unset_group_folder() == false)
-			{
-				return false;
-			}
-			
 			if (Folder_Access::set_owner_group_id_on_null($event_object->get_group_id()) == false)
 			{
 				return false;
 			}
     	}
     	
-    	if ($event_object instanceof OrganisationUnitDeleteEvent)
-    	{
-    		if ($event_object->get_contains_projects() == true)
-    		{
-	    		$folder_id = Folder::get_organisation_unit_folder_by_organisation_unit_id($event_object->get_organisation_unit_id());
-				self::$folder_delete_object = new Folder($folder_id);
-				
-				if (self::$folder_delete_object->unset_organisation_unit_folder() == false)
-				{
-					return false;
-				}
-    		}
-    	}
-    	
-        if ($event_object instanceof UserPostDeleteEvent 
-        	or $event_object instanceof GroupPostDeleteEvent)
-    	{
-    		if (is_object(self::$folder_delete_object))
-    		{
-	    		if (self::$folder_delete_object->delete(true, true) == false)
-				{
-					return false;
-				}
-    		}
-    		else
-    		{
-    			return false;
-    		}
-    	}
-    	
-    	if ($event_object instanceof OrganisationUnitPostDeleteEvent)
-    	{
-    		if ($event_object->get_contains_projects() == true)
-    		{
-    			if (is_object(self::$folder_delete_object))
-	    		{
-		    		if (self::$folder_delete_object->delete(true, true) == false)
-					{
-						return false;
-					}
-	    		}
-	    		else
-	    		{
-	    			return false;
-	    		}
-    		}
-    	}
-    	
     	return true;
+    }
+    
+    /**
+     * Returns a new instance of Folder or of one of its child
+     * @param integer $folder_id
+     * @return object
+     * @todo create a pool of instances which contains only one object per ID
+     */
+    public static function get_instance($folder_id)
+    {
+    	if (is_numeric($folder_id) and $folder_id > 0)
+    	{
+	    	$conrete_folder_array = FolderConcretion_Access::list_entries();
+			if (is_array($conrete_folder_array) and count($conrete_folder_array) >= 1)
+			{
+				foreach($conrete_folder_array as $key => $value)
+				{
+					if (class_exists($value))
+					{
+						if ($value::is_case($folder_id))
+						{
+							return new $value($folder_id);
+						}
+					}
+				}
+			}
+			return new Folder($folder_id);
+    	}
+    	else
+    	{
+    		return new Folder(null);
+    	}
     }
 }
 

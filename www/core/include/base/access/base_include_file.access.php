@@ -369,6 +369,34 @@ class BaseIncludeFile_Access
 			return false;
 		}
 	}
+	
+	/**
+	 * @param integer $include_id
+	 * @return bool
+	 */
+	public static function delete_by_include_id_and_name($include_id, $name)
+	{
+		global $db;
+
+		if (is_numeric($include_id) and $name)
+		{
+			$sql = "DELETE FROM ".constant("BASE_INCLUDE_FILE_TABLE")." WHERE include_id = '".$include_id."' AND TRIM(name) = TRIM('".$name."')";
+			$res = $db->db_query($sql);
+			
+			if ($res !== false)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 
 ?>
