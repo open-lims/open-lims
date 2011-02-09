@@ -1,6 +1,6 @@
 <?php
 /**
- * @package project
+ * @package data
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -21,14 +21,27 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
+
 /**
- * 
+ * Virtual Folder Management Interface
+ * @package data
  */
-	$event_listener[0] = "Project";
-	$event_listener[1] = "ProjectPermission";
-	$event_listener[2] = "ProjectLog";
-	$event_listener[3] = "ProjectItem";
-	$event_listener[4] = "ProjectLogHasItem";
-	$event_listener[5] = "ProjectTask";
-	$event_listener[6] = "ProjectVirtualFolder";
+interface VirtualFolderInterface
+{
+	function __construct($virtual_folder_id);
+	function __destruct();
+	
+	public function create($folder_id, $name);
+	public function delete();
+	
+	public function link_folder($folder_id);
+	public function unlink_folder($folder_id);
+	
+	public function get_subfolder_array();
+	public function get_name();
+
+	public static function exist_vfolder($virtual_folder_id);
+	public static function list_entries_by_folder_id($folder_id);
+}
+
 ?>

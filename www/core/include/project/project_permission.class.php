@@ -854,7 +854,8 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 	}
 
     /**
-     * @todo implementation
+     * @param object $event_object
+     * @return bool
      */
     public static function listen_events($event_object)
     {

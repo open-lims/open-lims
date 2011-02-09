@@ -126,23 +126,28 @@ class AdminValueTemplateIO
 			{
 				$template->set_var("error", "");	
 			}
-
-			$file_array = Object::get_file_array($GLOBALS[olvdl_folder_id]);
 			
-			if (is_array($file_array))
+			$folder = Folder::get_instance($GLOBALS[olvdl_folder_id]);
+			$data_entity_array = $folder->get_childs();
+			
+			if (is_array($data_entity_array))
 			{								
 				$result = array();
 				$counter = 0;
 				
-				foreach($file_array as $key => $value)
+				foreach($data_entity_array as $key => $value)
 				{
-					$file = new File($value);
-					$result[$counter][value] = $file->get_object_id();
-					$result[$counter][content] = $file->get_name();
-					$counter++;
+					if (($file_id = File::get_file_id_by_data_entity_id($value)) != null)
+					{
+						$file = new File($file_id);
+						$result[$counter][value] = $value;
+						$result[$counter][content] = $file->get_name();
+						$counter++;
+					}
 				}
 				$template->set_var("file",$result);
 			}
+			
 			$template->output();		
 		}
 		else
@@ -163,7 +168,7 @@ class AdminValueTemplateIO
 			unset($paramquery[nextpage]);
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			if ($value_type->create($_POST[object_id]))
+			if ($value_type->create($_POST[data_entity_id]))
 			{
 				$common->step_proceed($params, "Add Value Template", "Operation Successful", null);
 			}

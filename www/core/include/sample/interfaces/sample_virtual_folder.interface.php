@@ -1,6 +1,6 @@
 <?php
 /**
- * @package data
+ * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -23,23 +23,11 @@
 
 
 /**
- * Object Management Interface
- * @package data
- */
-interface ObjectInterface
+ * Sample Template Interface
+ * @package sample
+ */ 	 
+interface SampleVirtualFolderInterface
 {
-	function __construct($object_id);
-	
-	public function get_file_id();
-	public function get_value_id();
-	public function get_toid();
-	
-	public static function get_file_array($folder_id);
-	public static function get_value_array($folder_id);
-	public static function get_object_array($folder_id);
-	
-	// protected static function get_id_by_value_id($value_id);
-	// protected static function get_id_by_file_id($file_id);
-}
 
+}
 ?>

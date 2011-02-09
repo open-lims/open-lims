@@ -35,6 +35,5 @@ interface OlvdlInterface
 	public function delete();
 	
 	public function get_xml_array();
-	public function get_xml_string();
 }
 ?>

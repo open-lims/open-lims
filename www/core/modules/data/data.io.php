@@ -138,8 +138,7 @@ class DataIO
 					$folder_id = $data_path->get_last_entry_id();
 				}
 			}
-					
-			$data_browser_array = $data_browser->get_data_browser_array($folder_id, $virtual_folder_id);
+
 			
 			if ($folder_id == null and $virtual_folder_id == null)
 			{
@@ -149,42 +148,6 @@ class DataIO
 			
 			$content_array = array();
 			
-			if ($folder_id != 1 or $virtual_folder_id != null)
-			{
-				$column_array = array();
-				
-				if ($data_path->get_previous_entry_virtual() == true)
-				{			
-					$paramquery = $_GET;
-					$paramquery[vfolder_id] = $data_path->get_previous_entry_id();
-					$paramquery[nav] = "data";
-					unset($paramquery[folder_id]);
-					unset($paramquery[nextpage]);
-					$params = http_build_query($paramquery,'','&#38;');
-				}
-				else
-				{
-					$paramquery = $_GET;
-					$paramquery[folder_id] = $data_path->get_previous_entry_id();
-					$paramquery[nav] = "data";
-					unset($paramquery[nextpage]);
-					unset($paramquery[vfolder_id]);
-					$params = http_build_query($paramquery,'','&#38;');
-				}		
-				
-				$column_array[symbol][link] = $params;
-				$column_array[symbol][content] = "<img src='images/icons/parent_folder.png' alt='' style='border:0;' />";
-				$column_array[name][link] = $params;
-				$column_array[name][content] = "[parent folder]";
-				$column_array[type] = "Parent Folder";
-				$column_array[version] = "";
-				$column_array[datetime] = "";
-				$column_array[size] = "";
-				$column_array[owner] = "";
-				$column_array[permission] = "";
-				
-				array_push($content_array, $column_array);
-			}
 	
 			$data_browser_array_cardinality = 0;
 	
@@ -238,11 +201,13 @@ class DataIO
 				}
 				$counter_begin = (25*$page)-25;
 			}
-	
+
 			if (is_array($data_browser_array) and count($data_browser_array) > 0)
 			{
 				foreach($data_browser_array as $key => $value)
 				{
+					
+					/*
 					switch($key):
 					
 					// Folder
@@ -433,9 +398,9 @@ class DataIO
 								$counter++;
 							}
 						}
-					break;
+					break; 
 					
-					endswitch;
+					endswitch; */
 				}
 				$last_line = null;
 			}
@@ -444,12 +409,202 @@ class DataIO
 				$last_line = "This folder is empty.";
 			}
 			
+				
+			// !!!!! ---------- !!!!!!!!!!!!!1
+			$folder = Folder::get_instance($folder_id);	
+
+			$list = new List_IO(null, 20);
+
+			$list->set_top_right_text($data_path->get_stack_path());
+			
+			$list->add_row("","symbol",false,16);
+			$list->add_row("Name","name",true,null);
+			$list->add_row("Type","type",true,null);
+			$list->add_row("Ver.","version",false,null);
+			$list->add_row("Date/Time","datetime",true,null);
+			$list->add_row("Size","size",true,null);
+			$list->add_row("Owner","owner",true,null);
+			$list->add_row("Permission","permission",false,null);
+			
+			if ($_GET[page])
+			{
+				if ($_GET[sortvalue] and $_GET[sortmethod])
+				{
+					$result_array = DataBrowser::get_data_browser_array($folder_id, null, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
+				}
+				else
+				{
+					$result_array = DataBrowser::get_data_browser_array($folder_id, null, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
+				}				
+			}
+			else
+			{
+				if ($_GET[sortvalue] and $_GET[sortmethod])
+				{
+					$result_array = DataBrowser::get_data_browser_array($folder_id, null, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
+				}
+				else
+				{
+					$result_array = DataBrowser::get_data_browser_array($folder_id, null, null, null, 0, 20);
+				}	
+			}
+			
+			if ($folder_id != 1 or $virtual_folder_id != null)
+			{
+				$column_array = array();
+				
+				
+				if ($data_path->get_previous_entry_virtual() == true)
+				{			
+					$paramquery = $_GET;
+					$paramquery[vfolder_id] = $data_path->get_previous_entry_id();
+					$paramquery[nav] = "data";
+					unset($paramquery[folder_id]);
+					unset($paramquery[nextpage]);
+					$params = http_build_query($paramquery,'','&#38;');
+				}
+				else
+				{
+					$paramquery = $_GET;
+					$paramquery[folder_id] = $data_path->get_previous_entry_id();
+					$paramquery[nav] = "data";
+					unset($paramquery[nextpage]);
+					unset($paramquery[vfolder_id]);
+					$params = http_build_query($paramquery,'','&#38;');
+				}		
+				
+				$first_line_array[symbol][link] = $params;
+				$first_line_array[symbol][content] = "<img src='images/icons/parent_folder.png' alt='' style='border:0;' />";
+				$first_line_array[name][link] = $params;
+				$first_line_array[name][content] = "[parent folder]";
+				$first_line_array[type] = "Parent Folder";
+				$first_line_array[version] = "";
+				$first_line_array[datetime] = "";
+				$first_line_array[size] = "";
+				$first_line_array[owner] = "";
+				$first_line_array[permission] = "";
+				
+				$list->add_first_line($first_line_array);
+			} 
+			
+			if (is_array($result_array) and count($result_array) >= 1)
+			{
+				foreach($result_array as $key => $value)
+				{
+					// Common
+					$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
+					$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+					
+					if ($result_array[$key][owner_id])
+					{
+						$user = new User($result_array[$key][owner_id]);
+					}
+					else
+					{
+						$user = new User(1);
+					}
+					
+					$result_array[$key][owner] = $user->get_full_name(true);
+
+					// Special
+					if ($result_array[$key][file_id])
+					{
+						$result_array[$key][symbol] = "";
+												
+						$file = new File($result_array[$key][file_id]);
+
+						if ($file->is_read_access() == true)
+						{
+							$paramquery = $_GET;
+							$paramquery[file_id] = $result_array[$key][file_id];
+							$paramquery[nav] = "file";
+							$paramquery[run] = "detail";
+							unset($paramquery[nextpage]);
+							unset($paramquery[version]);
+							$params = http_build_query($paramquery,'','&#38;');
+						
+							$result_array[$key][symbol][link] = $params;
+							$result_array[$key][symbol][content] = "<img src='".$file->get_icon()."' alt='' style='border:0;' />";
+							
+							$tmp_name = $result_array[$key][name];
+							unset($result_array[$key][name]);
+							$result_array[$key][name][content] = $tmp_name;
+							$result_array[$key][name][link] = $params;
+						}
+						else
+						{
+							$result_array[$key][symbol] = "<img src='core/images/denied_overlay.php?image=".$file->get_icon()."' alt='' border='0' />";
+						}
+						
+						$result_array[$key][type] = "File";
+						$result_array[$key][version] = $file->get_version();
+						$result_array[$key][size] = Misc::calc_size($result_array[$key][size]);
+						$result_array[$key][permission] = $file->get_permission_string();
+					}
+					elseif ($result_array[$key][value_id])
+					{
+						$result_array[$key][symbol] = "";
+						
+					}
+					elseif ($result_array[$key][folder_id])
+					{	
+						$sub_folder = Folder::get_instance($result_array[$key][folder_id]);				
+						if ($sub_folder->is_read_access() == true)
+						{
+							$paramquery = $_GET;
+							$paramquery[folder_id] = $result_array[$key][folder_id];
+							$paramquery[nav] = "data";
+							unset($paramquery[nextpage]);
+							unset($paramquery[vfolder_id]);
+							$params = http_build_query($paramquery,'','&#38;');
+							
+							$result_array[$key][symbol][content] = "<img src='images/icons/folder.png' alt='' style='border:0;' />";
+							$result_array[$key][symbol][link] = $params;
+							
+							$tmp_name = $result_array[$key][name];
+							unset($result_array[$key][name]);
+							$result_array[$key][name][content] = $tmp_name;
+							$result_array[$key][name][link] = $params;
+						}
+						else
+						{
+							$result_array[$key][symbol] = "<img src='core/images/denied_overlay.php?image=images/icons/folder.png' alt='' border='0' />";
+						}
+						
+						$result_array[$key][type] = "Folder";
+						$result_array[$key][permission] = $folder->get_permission_string();
+					}
+					elseif ($result_array[$key][virtual_folder_id])
+					{
+						$paramquery = $_GET;
+						$paramquery[vfolder_id] = $result_array[$key][virtual_folder_id];
+						$paramquery[nav] = "data";
+						unset($paramquery[nextpage]);
+						$params = http_build_query($paramquery,'','&#38;');
+						
+						$result_array[$key][symbol][content] = "<img src='images/icons/virtual_folder.png' alt='' style='border:0;' />";
+						$result_array[$key][symbol][link] = $params;
+								
+						$tmp_name = $result_array[$key][name];
+						unset($result_array[$key][name]);
+						$result_array[$key][name][content] = $tmp_name;
+						$result_array[$key][name][link] = $params;
+						
+						$result_array[$key][type] = "Virtual Folder";
+						$result_array[$key][permission] = "automatic";
+					}
+				}
+				
+			}else{
+				$list->override_last_line("<span class='italic'>No results found!</span>");
+			}
+
+			
+			
 			$template = new Template("languages/en-gb/template/data/data_browser.html");
 	
 			if ($folder_id and !$virtual_folder_id)
 			{
-				$folder = Folder::get_instance($folder_id);			
-				
 				if ($folder->is_write_access() == true)
 				{
 					$template->set_var("add_file", true);
@@ -538,29 +693,9 @@ class DataIO
 	
 	
 			$template->set_var("title","Data Browser");
-	
-			$table_io = new TableIO("OverviewTable");
 			
-			$table_io->set_bottom_right_text($data_path->get_stack_path());
+			$template->set_var("table", $list->get_list($result_array, $_GET[page]));	
 			
-			$table_io->add_row("","symbol",false,16);
-			$table_io->add_row("Name","name",false,null);
-			$table_io->add_row("Type","type",false,null);
-			$table_io->add_row("Ver.","version",false,null);
-			$table_io->add_row("Date/Time","datetime",false,null);
-			$table_io->add_row("Size","size",false,null);
-			$table_io->add_row("Owner","owner",false,null);
-			$table_io->add_row("Permission","permission",false,null);
-			
-			if ($last_line != null)
-			{
-				$table_io->override_last_line($last_line);
-			}
-			
-			$table_io->add_content_array($content_array);	
-				
-			$template->set_var("table", $table_io->get_table($page ,$data_browser_array_cardinality));		
-	
 			$template->output();
 		}
 		catch (DataException $e)
@@ -878,6 +1013,9 @@ class DataIO
 		}
 	}
 
+	/**
+	 * @todo set project-permission to entity-permission
+	 */
 	public static function permission()
 	{
 		global $common, $user;
@@ -1003,106 +1141,88 @@ class DataIO
 
 					if ($type == "folder")
 					{
-						if ($folder->is_project_folder() == true or
-							$folder->is_project_status_folder() == true or
-							$folder->is_sample_folder() == true)
+						if ($folder->can_set_automatic())
 						{
-							$disable_automatic = true;
-							$disable_project = true;
-							$disable_control = true;
-							$disable_remain = true;
-						}
-						elseif($folder->is_child_of_project_folder() == true or
-								$folder->is_child_of_sample_folder())
-						{
-							if ($full_access == true)
-							{
-								$disable_automatic = false;
-								$disable_project = false;
-								$disable_control = false;
-								$disable_remain = false;
-							}
-							else
-							{
-								$disable_automatic = false;
-								$disable_project = false;
-								$disable_control = true;
-								$disable_remain = false;		
-							}
+							
 						}
 						else
 						{
-							if ($full_access == true)
-							{
-								$disable_automatic = false;
-								$disable_project = true;
-								$disable_control = false;
-								$disable_remain = false;
-							}
-							else
-							{
-								$disable_automatic = false;
-								$disable_project = true;
-								$disable_control = true;
-								$disable_remain = false;	
-							}
+							$disable_automatic = true;
+						}
+						
+						if ($folder->can_set_data_entity())
+						{
+							
+						}
+						else
+						{
+							$disable_project = true;
+						}
+						
+						if ($folder->can_set_data_control())
+						{
+							
+						}
+						else
+						{
+							$disable_control = true;
+						}
+						
+						if ($folder->can_set_data_remain())
+						{
+							
+						}
+						else
+						{
+							$disable_remain = true;
 						}
 					}
 					else
 					{
 						if ($type == "file")
 						{
-							$folder = Folder::get_instance($file->get_toid());
+							$folder = Folder::get_instance($file->get_parent_folder());
 						}
 						else
 						{
-							$folder = Folder::get_instance($value->get_toid());
+							$folder = Folder::get_instance($value->get_parent_folder());
 						}
 						
-						if ($folder->is_project_folder() == true or
-							$folder->is_sample_folder() == true)
+						if ($folder->can_set_automatic())
+						{
+							
+						}
+						else
 						{
 							$disable_automatic = true;
-							$disable_project = true;
-							$disable_control = true;
-							$disable_remain = true;
 						}
-						elseif($folder->is_child_of_project_folder() == true or
-								$folder->is_child_of_sample_folder())
+						
+						if ($folder->can_set_data_entity())
 						{
-							if ($full_access == true)
-							{
-								$disable_automatic = false;
-								$disable_project = false;
-								$disable_control = false;
-								$disable_remain = false;
-							}
-							else
-							{
-								$disable_automatic = false;
-								$disable_project = false;
-								$disable_control = true;
-								$disable_remain = false;	
-							}
+							
 						}
 						else
 						{
-							if ($full_access == true)
-							{
-								$disable_automatic = false;
-								$disable_project = true;
-								$disable_control = false;
-								$disable_remain = false;
-							}
-							else
-							{
-								$disable_automatic = false;
-								$disable_project = true;
-								$disable_control = true;
-								$disable_remain = false;	
-							}
+							$disable_project = true;
 						}
 						
+						if ($folder->can_set_data_control())
+						{
+							
+						}
+						else
+						{
+							$disable_control = true;
+						}
+						
+						if ($folder->can_set_data_remain())
+						{
+							
+						}
+						else
+						{
+							$disable_remain = true;
+						}
 					}
 					
 					if ($disable_automatic == true)

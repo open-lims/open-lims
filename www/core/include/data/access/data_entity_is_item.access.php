@@ -22,41 +22,41 @@
  */
 
 /**
- * Object Is Item Access Class
+ * Data Entity Is Item Access Class
  * @package data
  */
-class ObjectIsItem_Access
+class DataEntityIsItem_Access
 {
-	const OBJECT_IS_ITEM_TABLE = 'core_object_is_item';
+	const DATA_ENTITY_IS_ITEM_TABLE = 'core_data_entity_is_item';
 	
-	private $object_id;
+	private $data_entity_id;
 	private $item_id;
 	
 	/**
-	 * @param integer $object_id
+	 * @param integer $data_entity_id
 	 */
-	function __construct($object_id)
+	function __construct($data_entity_id)
 	{
 		global $db;
 		
-		if ($object_id == null)
+		if ($data_entity_id == null)
 		{
-			$this->object_id = null;
+			$this->data_entity_id = null;
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::OBJECT_IS_ITEM_TABLE." WHERE object_id='".$object_id."'";
+			$sql = "SELECT * FROM ".self::DATA_ENTITY_IS_ITEM_TABLE." WHERE data_entity_id='".$data_entity_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[object_id])
+			if ($data[data_entity_id])
 			{
-				$this->object_id	= $object_id;
+				$this->data_entity_id	= $data_entity_id;
 				$this->item_id		= $data[item_id];
 			}
 			else
 			{
-				$this->object_id	= null;
+				$this->data_entity_id	= null;
 				$this->item_id		= null;
 			}
 		}	
@@ -64,23 +64,23 @@ class ObjectIsItem_Access
 	
 	function __destruct()
 	{
-		unset($this->object_id);
+		unset($this->data_entity_id);
 		unset($this->item_id);
 	}
 	
 	/**
-	 * @param integer $object_id
+	 * @param integer $data_entity_id
 	 * @param integer $item_id
 	 * @return boolean
 	 */
-	public function create($object_id, $item_id)
+	public function create($data_entity_id, $item_id)
 	{
 		global $db;
 		
-		if (is_numeric($object_id) and is_numeric($item_id))
+		if (is_numeric($data_entity_id) and is_numeric($item_id))
 		{	
-			$sql_write = "INSERT INTO ".self::OBJECT_IS_ITEM_TABLE." (object_id,item_id) " .
-					"VALUES (".$object_id.",".$item_id.")";
+			$sql_write = "INSERT INTO ".self::DATA_ENTITY_IS_ITEM_TABLE." (data_entity_id,item_id) " .
+					"VALUES (".$data_entity_id.",".$item_id.")";
 					
 			$res_write = $db->db_query($sql_write);	
 			
@@ -106,9 +106,9 @@ class ObjectIsItem_Access
 	{
 		global $db;
 			
-		if ($this->object_id and $this->item_id) {
+		if ($this->data_entity_id and $this->item_id) {
 			
-			$sql = "DELETE FROM ".self::OBJECT_IS_ITEM_TABLE." WHERE object_id = ".$this->object_id." AND item_id = ".$this->item_id."";
+			$sql = "DELETE FROM ".self::DATA_ENTITY_IS_ITEM_TABLE." WHERE data_entity_id = ".$this->data_entity_id." AND item_id = ".$this->item_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -130,11 +130,11 @@ class ObjectIsItem_Access
 	/**
 	 * @return integer
 	 */
-	public function get_object_id()
+	public function get_data_entity_id()
 	{
-		if ($this->object_id)
+		if ($this->data_entity_id)
 		{
-			return $this->object_id;
+			return $this->data_entity_id;
 		}
 		else
 		{
@@ -168,13 +168,13 @@ class ObjectIsItem_Access
 		
 		if (is_numeric($item_id))
 		{	
-			$sql = "SELECT object_id FROM ".self::OBJECT_IS_ITEM_TABLE." WHERE item_id='".$item_id."'";
+			$sql = "SELECT data_entity_id FROM ".self::DATA_ENTITY_IS_ITEM_TABLE." WHERE item_id='".$item_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[object_id])
+			if ($data[data_entity_id])
 			{
-				return $data[object_id];
+				return $data[data_entity_id];
 			}
 			else
 			{

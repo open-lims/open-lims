@@ -26,6 +26,8 @@
  */
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("events/organisation_unit_folder_create_event.class.php");
+	
 	require_once("access/folder_is_organisation_unit_folder.access.php");
 }
 
@@ -145,7 +147,7 @@ class OrganisationUnitFolder extends Folder implements ConcreteFolderCaseInterfa
 			$path->add_element($organisation_unit_id);
 			
 			$folder = new Folder(null);
-			if (($folder_id = parent::create($organisation_unit->get_name(), $organisation_unit_folder_id, false, $path->get_path_string(), $organisation_unit->get_owner_id(), null)) != null)
+			if (($folder_id = parent::create($organisation_unit->get_name(), $organisation_unit_folder_id, $path->get_path_string(), $organisation_unit->get_owner_id(), null)) != null)
 			{
 				$folder_is_organisation_unit_folder_access = new FolderIsOrganisationUnitFolder_Access(null);
 				if ($folder_is_organisation_unit_folder_access->create($organisation_unit_id, $folder_id) == null)
@@ -157,35 +159,20 @@ class OrganisationUnitFolder extends Folder implements ConcreteFolderCaseInterfa
 					$this->delete(true, true);
 					return false;
 				}
+									
+				// Virtual Folders (Event)
+				$organisation_unit_folder_create_event = new OrganisationUnitFolderCreateEvent($folder_id);
+				$event_handler = new EventHandler($organisation_unit_folder_create_event);
 				
-										
-				// Sample - Virtual Folder
-				$virtual_folder = new VirtualFolder(null);
-				if ($virtual_folder->create($folder_id, "samples") == null)
+				if ($event_handler->get_success() == false)
 				{
-					$this->delete(true, true);
+					$this->delete();
 					return false;
 				}
-				if ($virtual_folder->set_sample_vfolder() == false)
+				else
 				{
-					$this->delete(true, true);
-					return false;
+					return true;
 				}
-				
-				
-				// Project - Virtual Folder
-				$virtual_folder = new VirtualFolder(null);
-				if ($virtual_folder->create($folder_id, "projects") == null)
-				{
-					$this->delete(true, true);
-					return false;
-				}
-				if ($virtual_folder->set_project_vfolder() == false)
-				{
-					$this->delete(true, true);
-					return false;
-				}
-				return true;
 			}
 			else
 			{

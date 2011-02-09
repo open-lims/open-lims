@@ -32,9 +32,8 @@ class VirtualFolder_Access
 	
 	private $virtual_folder_id;
 	
-	private $folder_id;
+	private $data_entity_id;
 	private $name;
-	private $datetime;
 	
 	/**
 	 * @param integer $virutal_folder_id
@@ -57,9 +56,8 @@ class VirtualFolder_Access
 			{
 				$this->virtual_folder_id	= $virtual_folder_id;
 				
-				$this->folder_id			= $data[folder_id];
-				$this->name					= $data[name];
-				$this->datetime				= $data[datetime];			
+				$this->data_entity_id		= $data[data_entity_id];
+				$this->name					= $data[name];		
 			}
 			else
 			{
@@ -74,30 +72,27 @@ class VirtualFolder_Access
 		if ($this->virtual_folder_id)
 		{
 			unset($this->virtual_folder_id);
-			unset($this->folder_id);
+			unset($this->data_entity_id);
 			unset($this->name);
-			unset($this->datetime);
 		}
 	}
 
 	/**
-	 * @param integer $folder_id
+	 * @param integer $data_entity_id
 	 * @param string $name
 	 * @return integer
 	 */
-	public function create($folder_id, $name)
+	public function create($data_entity_id, $name)
 	{
 		global $db, $session;
 
-		if (is_numeric($folder_id) and $name)
-		{
-			$datetime = date("Y-m-d H:i:s");
-					
-			$sql_write = "INSERT INTO ".self::VIRTUAL_FOLDER_TABLE." (id, folder_id, name, datetime) " .
-								"VALUES (nextval('".self::VIRTUAL_FOLDER_PK_SEQUENCE."'::regclass), ".$folder_id.",'".$name."','".$datetime."')";		
-			
+		if (is_numeric($data_entity_id) and $name)
+		{	
+			$sql_write = "INSERT INTO ".self::VIRTUAL_FOLDER_TABLE." (id, data_entity_id, name) " .
+								"VALUES (nextval('".self::VIRTUAL_FOLDER_PK_SEQUENCE."'::regclass), ".$data_entity_id.",'".$name."')";		
+
 			$res_write = $db->db_query($sql_write);
-			
+
 			if ($db->db_affected_rows($res_write) != 1)
 			{
 				return null;
@@ -153,11 +148,11 @@ class VirtualFolder_Access
 	/**
 	 * @return integer
 	 */
-	public function get_folder_id()
+	public function get_data_entity_id()
 	{
-		if ($this->folder_id)
+		if ($this->data_entity_id)
 		{
-			return $this->folder_id;
+			return $this->data_entity_id;
 		}
 		else
 		{
@@ -181,36 +176,21 @@ class VirtualFolder_Access
 	}
 	
 	/**
-	 * @return string
-	 */
-	public function get_datetime()
-	{
-		if ($this->datetime)
-		{
-			return $this->datetime;
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @param integer $folder_id
+	 * @param integer $data_entity_id
 	 * @return bool
 	 */
-	public function set_folder_id($folder_id)
+	public function set_data_entity_id($data_entity_id)
 	{
 		global $db;
 			
-		if ($this->folder_id and is_numeric($folder_id))
+		if ($this->folder_id and is_numeric($data_entity_id))
 		{
-			$sql = "UPDATE ".self::VIRTUAL_FOLDER_TABLE." SET folder_id = ".$folder_id." WHERE id = ".$this->virtual_folder_id."";
+			$sql = "UPDATE ".self::VIRTUAL_FOLDER_TABLE." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->virtual_folder_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
 			{
-				$this->folder_id = $folder_id;
+				$this->data_entity_id = $data_entity_id;
 				return true;
 			}
 			else
@@ -252,50 +232,21 @@ class VirtualFolder_Access
 			return false;
 		}
 	}
-	
-	/**
-	 * @param string $datetime
-	 * @return bool
-	 */
-	public function set_datetime($datetime)
-	{
-		global $db;
-
-		if ($this->virtual_folder_id and $datetime)
-		{
-			$sql = "UPDATE ".self::VIRTUAL_FOLDER_TABLE." SET datetime = '".$datetime."' WHERE id = ".$this->virtual_folder_id."";
-			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
-			{
-				$this->datetime = $datetime;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-		
 	
 	/**
-	 * @param integer $folder_id
+	 * @param integer $data_entity_id
 	 * @return array
 	 */
-	public static function list_entries_by_folder_id($folder_id)
+	public static function get_entry_by_data_entity_id($data_entity_id)
 	{
 		global $db;
 
-		if (is_numeric($folder_id))
+		if (is_numeric($data_entity_id))
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::VIRTUAL_FOLDER_TABLE." WHERE folder_id = ".$folder_id."";
+			$sql = "SELECT id FROM ".self::VIRTUAL_FOLDER_TABLE." WHERE data_entity_id = ".$data_entity_id."";
 			$res = $db->db_query($sql);
 			while ($data = $db->db_fetch_assoc($res))
 			{

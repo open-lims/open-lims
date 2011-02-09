@@ -35,8 +35,7 @@ interface OldlInterface
 	public function delete();
 	 
 	public function get_xml_array(); 
-	public function get_cutted_xml_array($element);
-	public function get_xml_string();    
+	public function get_cutted_xml_array($element);  
 }
 
 ?>

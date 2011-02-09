@@ -27,7 +27,7 @@
  */
 class Data_Wrapper_Access
 {
-	const OBJECT_TABLE = 'core_objects';
+	const DATA_ENTITY_TABLE = 'core_data_entities';
 	
 	const FILE_TABLE = 'core_files';
 	const FILE_VERSION_TABLE = 'core_file_versions';
@@ -239,9 +239,10 @@ class Data_Wrapper_Access
 					"".self::VALUE_TYPE_TABLE.".name AS name," .
 					"".self::FILE_VERSION_TABLE.".name AS file " .
 					"FROM ".self::VALUE_TYPE_TABLE." " .
-					"LEFT JOIN ".self::OLVDL_TEMPLATE_TABLE." 		ON ".self::VALUE_TYPE_TABLE.".template_id 		= ".self::OLVDL_TEMPLATE_TABLE.".id " .
-					"LEFT JOIN ".self::OBJECT_TABLE." 				ON ".self::OLVDL_TEMPLATE_TABLE.".object_id 	= ".self::OBJECT_TABLE.".id " .
-					"LEFT JOIN ".self::FILE_VERSION_TABLE." 		ON ".self::OBJECT_TABLE.".file_id 				= ".self::FILE_VERSION_TABLE.".toid " .					
+					"LEFT JOIN ".self::OLVDL_TEMPLATE_TABLE." 		ON ".self::VALUE_TYPE_TABLE.".template_id 			= ".self::OLVDL_TEMPLATE_TABLE.".id " .
+					"LEFT JOIN ".self::DATA_ENTITY_TABLE." 			ON ".self::OLVDL_TEMPLATE_TABLE.".data_entity_id 	= ".self::DATA_ENTITY_TABLE.".id " .
+					"LEFT JOIN ".self::FILE_TABLE." 				ON ".self::DATA_ENTITY_TABLE.".id 					= ".self::FILE_TABLE.".data_entity_id " .
+					"LEFT JOIN ".self::FILE_VERSION_TABLE." 		ON ".self::FILE_TABLE.".id 							= ".self::FILE_VERSION_TABLE.".toid " .					
 					"WHERE ".self::FILE_VERSION_TABLE.".internal_revision = 1 " .
 					"".$sql_order_by."";
 		

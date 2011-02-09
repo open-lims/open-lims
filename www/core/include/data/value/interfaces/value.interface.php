@@ -34,12 +34,7 @@ interface ValueInterface
 	public function open_internal_revision($internal_revision);
 	// private function open_value_version_id($value_version_id);
 	
-	public function is_read_access();
-	public function is_write_access();
-	public function is_delete_access();
-	public function is_control_access();
-	
-	public function create($folder_id, $owner_id, $type_id, $value, $premature);
+	public function create($folder_id, $owner_id, $type_id, $value);
 	public function delete();
 	public function delete_version($internal_revision);
 	
@@ -51,28 +46,17 @@ interface ValueInterface
 	public function is_current();
 	
 	public function get_value_internal_revisions();
-	public function get_object_id();
 	public function get_type_name();
 	public function get_type_id();
 	public function get_version();
 	public function get_internal_revision();
 	public function get_value();
-	public function get_datetime();
 	public function get_checksum();
-	public function get_owner_id();
-	public function get_owner_group_id();
-	public function get_permission();
-	public function get_automatic();
-	public function get_permission_string();
 	
 	// private function array_contains_each_statements($xml_array);
 	// private function resolve_each_statements($xml_array);
 	public function get_html_form($error_array, $type_id);
 	
-	public function set_owner_id($owner_id);
-	public function set_owner_group_id($owner_group_id);
-	public function set_permission($permission);
-	public function set_automatic($automatic);
 	public function set_content_array($content_array);
 	public function set_autofield_array_string($autofield_array_string);
 	

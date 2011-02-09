@@ -154,7 +154,7 @@ class Item implements ItemInterface, EventListenerInterface
 	/**
 	 * @return integer
 	 */
-	public function get_item_id()
+	public final function get_item_id()
 	{
 		if ($this->item_id)
 		{

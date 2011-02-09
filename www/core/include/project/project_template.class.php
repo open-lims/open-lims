@@ -70,20 +70,20 @@ class ProjectTemplate implements ProjectTemplateInterface
 	
 	/**
 	 * Creates a new project-template
-	 * @param integer $object_id
+	 * @param integer $data_entity_id
 	 * @param integer $category_id
 	 * @param bool $parent_template
 	 * @return bool
 	 */
-	public function create($object_id, $category_id, $parent_template)
+	public function create($data_entity_id, $category_id, $parent_template)
 	{
 		global $transaction;
 		
-		if ($this->project_template and is_numeric($object_id) and is_numeric($category_id) and isset($parent_template))
+		if ($this->project_template and is_numeric($data_entity_id) and is_numeric($category_id) and isset($parent_template))
 		{
-			$xml_cache = new XmlCache($object_id);
+			$xml_cache = new XmlCache($data_entity_id);
     		$xml_array = $xml_cache->get_xml_array();
-			
+
 			$oldl_found = false;
 			$title_found = false;
 			$id_found = false;
@@ -139,7 +139,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 				$transaction_id = $transaction->begin();
 				
 				$oldl = new Oldl(null);
-				if (($oldl_id = $oldl->create($object_id)) == null)
+				if (($oldl_id = $oldl->create($data_entity_id)) == null)
 				{
 					if ($transaction_id != null)
 					{

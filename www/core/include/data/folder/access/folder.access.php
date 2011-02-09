@@ -31,16 +31,9 @@ class Folder_Access
 	const FOLDER_PK_SEQUENCE = 'core_folders_id_seq';
 	
 	private $folder_id;
-	
-	private $toid;
-	private $is_root;
+	private $data_entity_id;
 	private $name;
 	private $path;
-	private $datetime;
-	private $owner_id;
-	private $owner_group_id;
-	private $permission;
-	private $automatic;
 	private $deleted;
 	private $blob;
 	private $flag;
@@ -66,33 +59,11 @@ class Folder_Access
 			{
 				$this->folder_id 			= $folder_id;
 				
-				$this->toid					= $data[toid];
+				$this->data_entity_id		= $data[data_entity_id];
 				$this->name					= $data[name];
 				$this->path					= $data[path];
-				$this->datetime				= $data[datetime];
-				$this->owner_id				= $data[owner_id];
-				$this->owner_group_id		= $data[owner_group_id];
-				$this->permission			= $data[permission];
 				$this->flag					= $data[flag];
 									
-				if ($data[is_root] == "t")
-				{
-					$this->is_root			= true;
-				}
-				else{
-					
-					$this->is_root			= false;
-				}
-				
-				if ($data[automatic] == "t")
-				{
-					$this->automatic		= true;
-				}
-				else
-				{
-					$this->automatic		= false;
-				}
-
 				if ($data[deleted] == "t")
 				{
 					$this->deleted			= true;
@@ -123,104 +94,47 @@ class Folder_Access
 		if ($this->folder_id)
 		{
 			unset($this->folder_id);
-			unset($this->toid);
-			unset($this->is_root);
+			unset($this->data_entity_id);
 			unset($this->name);
 			unset($this->path);
-			unset($this->datetime);
-			unset($this->owner_id);
-			unset($this->owner_group_id);
-			unset($this->permission);
-			unset($this->automatic);
 			unset($this->deleted);
 			unset($this->blob);
 			unset($this->flag);
-		
 		}
 	}
 
 	/**
+	 * @param integer $data_entity_id
 	 * @param string $name
-	 * @param integer $toid
-	 * @param bool $root
 	 * @param string $path
-	 * @param integer $owner_id
-	 * @param integer $owner_group_id
 	 * @return integer
 	 */
-	public function create($name, $toid, $root, $path, $owner_id, $owner_group_id)
+	public function create($data_entity_id, $name, $path)
 	{
 		global $db, $user;
 		
-		if (is_numeric($toid) and $path and isset($root))
+		if (is_numeric($data_entity_id) and $path and $name)
 		{
 			$datetime = date("Y-m-d H:i:s");
+
+			$sql_write = "INSERT INTO ".self::FOLDER_TABLE." (id, data_entity_id, name, path, deleted, blob, flag) " .
+								"VALUES (nextval('".self::FOLDER_PK_SEQUENCE."'::regclass), ".$data_entity_id.",'".$name."','".$path."','f','f','0')";		
 			
-			if ($name)
-			{
-				$name_insert = $name;
-			}
-			else
-			{
-				$name_insert = "";
-			}
+			$res_write = $db->db_query($sql_write);
 			
-			if ($root == true)
-			{
-				$root_insert = "t";
-			}
-			else
-			{
-				$root_insert = "f";
-			}
-			
-			if ($owner_id)
-			{
-				$owner_id_insert = $owner_id;
-			}
-			else
-			{
-				$owner_id_insert = $user->get_user_id();
-			}
-			
-			if ($owner_group_id)
-			{
-				$owner_group_id_insert = $owner_group_id;
-			}
-			else
-			{
-				$owner_group_id_insert = "NULL";
-			}
-			
-			$sql_folder = "SELECT COUNT(id) AS numberoffolders FROM ".self::FOLDER_TABLE." WHERE toid=".trim($toid)." AND TRIM(NAME)='".trim($name)."'";
-			$res_folder = $db->db_query($sql_folder);
-			$data_folder = $db->db_fetch_assoc($res_folder);
-			
-			if ($data_folder[numberoffolders] <= 0 or !$name)
-			{
-				$sql_write = "INSERT INTO ".self::FOLDER_TABLE." (id, toid, is_root, name, path, datetime, owner_id, owner_group_id, permission, automatic, deleted, blob, flag) " .
-									"VALUES (nextval('".self::FOLDER_PK_SEQUENCE."'::regclass), '".$toid."','".$root_insert."','".$name_insert."','".$path."','".$datetime."',".$owner_id_insert.",".$owner_group_id_insert.",'0','t','f','f','0')";		
-				
-				$res_write = $db->db_query($sql_write);
-				
-				if ($db->db_affected_rows($res_write) != 1)
-				{
-					return null;
-				}
-				else
-				{
-					$sql_read = "SELECT id FROM ".self::FOLDER_TABLE." WHERE id = currval('".self::FOLDER_PK_SEQUENCE."'::regclass)";
-					$res_read = $db->db_query($sql_read);
-					$data_read = $db->db_fetch_assoc($res_read);
-					
-					$this->__construct($data_read[id]);
-					
-					return $data_read[id];
-				}
-			}
-			else
+			if ($db->db_affected_rows($res_write) != 1)
 			{
 				return null;
+			}
+			else
+			{
+				$sql_read = "SELECT id FROM ".self::FOLDER_TABLE." WHERE id = currval('".self::FOLDER_PK_SEQUENCE."'::regclass)";
+				$res_read = $db->db_query($sql_read);
+				$data_read = $db->db_fetch_assoc($res_read);
+				
+				$this->__construct($data_read[id]);
+				
+				return $data_read[id];
 			}
 		}
 		else
@@ -278,11 +192,11 @@ class Folder_Access
 	/**
 	 * @return integer
 	 */
-	public function get_toid()
+	public function get_data_entity_id()
 	{
-		if ($this->toid)
+		if ($this->data_entity_id)
 		{
-			return $this->toid;
+			return $this->data_entity_id;
 		}
 		else
 		{
@@ -290,21 +204,6 @@ class Folder_Access
 		}
 	}
 	
-	/**
-	 * @return bool
-	 */
-	public function get_is_root()
-	{
-		if (isset($this->is_root))
-		{
-			return $this->is_root;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
 	/**
 	 * @return string
 	 */
@@ -333,81 +232,6 @@ class Folder_Access
 		{
 			return null;
 		}	
-	}
-	
-	/**
-	 * @return string
-	 */	
-	public function get_datetime()
-	{
-		if ($this->datetime)
-		{
-			return $this->datetime;
-		}
-		else
-		{
-			return null;
-		}	
-	}
-	
-	/**
-	 * @return integer
-	 */
-	public function get_owner_id()
-	{
-		if ($this->owner_id)
-		{
-			return $this->owner_id;
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return integer
-	 */
-	public function get_owner_group_id()
-	{
-		if ($this->owner_group_id)
-		{
-			return $this->owner_group_id;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-	 * @return integer
-	 */
-	public function get_permission()
-	{
-		if ($this->permission)
-		{
-			return $this->permission;
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function get_automatic()
-	{
-		if (isset($this->automatic))
-		{
-			return $this->automatic;
-		}
-		else
-		{
-			return null;
-		}
 	}
 	
 	/**
@@ -456,21 +280,21 @@ class Folder_Access
 	}
 	
 	/**
-	 * @param integer $toid
+	 * @param integer $data_entity_id
 	 * @return bool
 	 */
-	public function set_toid($toid)
+	public function set_data_entity_id($data_entity_id)
 	{
 		global $db;
 			
-		if ($this->folder_id and is_numeric($toid))
+		if ($this->folder_id and is_numeric($data_entity_id))
 		{
-			$sql = "UPDATE ".self::FOLDER_TABLE." SET toid = ".$toid." WHERE id = ".$this->folder_id."";
+			$sql = "UPDATE ".self::FOLDER_TABLE." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->folder_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
 			{
-				$this->toid = $toid;
+				$this->data_entity_id = $data_entity_id;
 				return true;
 			}
 			else
@@ -483,45 +307,7 @@ class Folder_Access
 			return false;
 		}
 	}
-	
-	/**
-	 * @param bool $is_root
-	 * @return bool
-	 */
-	public function set_is_root($is_root)
-	{
-		global $db;
-			
-		if ($this->folder_id and isset($is_root))
-		{
-			if ($is_root == true)
-			{
-				$is_root_insert = "t";
-			}
-			else
-			{
-				$is_root_insert = "f";
-			}
-			
-			$sql = "UPDATE ".self::FOLDER_TABLE." SET is_root = '".$is_root_insert."' WHERE id = ".$this->folder_id."";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->is_root = $is_root;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
+		
 	/**
 	 * @param string $name
 	 * @return bool
@@ -567,160 +353,6 @@ class Folder_Access
 			if ($db->db_affected_rows($res))
 			{
 				$this->path = $path;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param string $datetime
-	 * @return bool
-	 */
-	public function set_datetime($datetime)
-	{
-		global $db;
-
-		if ($this->folder_id and $datetime)
-		{
-			$sql = "UPDATE ".self::FOLDER_TABLE." SET datetime = '".$datetime."' WHERE id = ".$this->folder_id."";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->datetime = $datetime;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param integer $owner_id
-	 * @return bool
-	 */
-	public function set_owner_id($owner_id)
-	{
-		global $db;
-
-		if ($this->folder_id and is_numeric($owner_id))
-		{
-			$sql = "UPDATE ".self::FOLDER_TABLE." SET owner_id = ".$owner_id." WHERE id = ".$this->folder_id."";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->owner_id = $owner_id;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	/**
-	 * @param integer $owner_group_id
-	 * @return bool
-	 */
-	public function set_owner_group_id($owner_group_id)
-	{
-		global $db;
-
-		if ($this->folder_id and is_numeric($owner_group_id))
-		{
-			$sql = "UPDATE ".self::FOLDER_TABLE." SET owner_group_id = ".$owner_group_id." WHERE id = ".$this->folder_id."";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->owner_group_id = $owner_group_id;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param integer $permission
-	 * @return bool
-	 */
-	public function set_permission($permission)
-	{
-		global $db;
-
-		if ($this->folder_id and isset($permission))
-		{
-			$sql = "UPDATE ".self::FOLDER_TABLE." SET permission = ".$permission." WHERE id = ".$this->folder_id."";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->permission = $permission;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param bool $automatic
-	 * @return bool
-	 */
-	public function set_automatic($automatic)
-	{
-		global $db;
-
-		if ($this->folder_id and isset($automatic))
-		{
-			if ($automatic == true)
-			{
-				$automatic_insert = "t";
-			}
-			else
-			{
-				$automatic_insert = "f";
-			}
-			
-			$sql = "UPDATE ".self::FOLDER_TABLE." SET automatic = '".$automatic_insert."' WHERE id = ".$this->folder_id."";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->automatic = $automatic;
 				return true;
 			}
 			else
@@ -884,29 +516,25 @@ class Folder_Access
 			return null;
 		}
 	}
-
+	
 	/**
-	 * @param integer $toid
-	 * @return array
+	 * @param string $data_entity_id
+	 * @return integer
 	 */
-	public static function list_entries_by_toid($toid)
+	public static function get_entry_by_data_entity_id($data_entity_id)
 	{
 		global $db;
 
-		if ($toid)
+		if (is_numeric($data_entity_id))
 		{
-			$return_array = array();
-			
-			$sql = "SELECT id FROM ".self::FOLDER_TABLE." WHERE toid = ".$toid." AND id <> toid";
+			$sql = "SELECT id FROM ".self::FOLDER_TABLE." WHERE data_entity_id = '".$data_entity_id."'";
+
 			$res = $db->db_query($sql);
-			while ($data = $db->db_fetch_assoc($res))
-			{
-				array_push($return_array,$data[id]);
-			}
+			$data = $db->db_fetch_assoc($res);
 			
-			if (is_array($return_array))
+			if ($data[id])
 			{
-				return $return_array;
+				return $data[id];
 			}
 			else
 			{
@@ -919,6 +547,7 @@ class Folder_Access
 		}
 	}
 
+	// !!! Deprecated
 	/**
 	 * @param integer $owner_id
 	 * @return bool
@@ -940,6 +569,7 @@ class Folder_Access
 		}
 	}
 	
+	// !!! Deprecated
 	/**
 	 * @param integer $owner_group_id
 	 * @return bool
@@ -961,7 +591,7 @@ class Folder_Access
 		}
 	}
 
-
+	// !!! Deprecated
 	/**
 	 * @param integer $id
 	 * @return integer
@@ -993,6 +623,7 @@ class Folder_Access
 		}
 	}
 	
+	// !!! Deprecated
 	/**
 	 * @param integer $layer
 	 * @param array $array

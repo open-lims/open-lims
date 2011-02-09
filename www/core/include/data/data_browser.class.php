@@ -37,7 +37,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class DataBrowser implements DataBrowserInterface
 {
-	private $folder_id;
+	private static $folder_id;
     
     /**
      * Returns an array of folder or virtual-folder content
@@ -45,7 +45,7 @@ class DataBrowser implements DataBrowserInterface
      * @param integer $virtual_folder_id
      * @return array
      */
-    public function get_data_browser_array($folder_id, $virtual_folder_id)
+    public static function get_data_browser_array($folder_id, $virtual_folder_id, $order_by, $order_method, $start, $end)
     {
     	global $user;
     	
@@ -56,7 +56,7 @@ class DataBrowser implements DataBrowserInterface
 	    		$new_folder_id = UserFolder::get_folder_by_user_id($user->get_user_id());
 	    		if ($new_folder_id != null)
 	    		{
-	    			$this->folder_id = $new_folder_id;
+	    			self::$folder_id = $new_folder_id;
 	    		}
 	    		else
 	    		{
@@ -65,35 +65,11 @@ class DataBrowser implements DataBrowserInterface
 	    	}
 	    	else
 	    	{
-	    		$this->folder_id = $folder_id;
+	    		self::$folder_id = $folder_id;
 	    	}
 	    	
-	    	$return_array = array();
-	    	
-	    	// Folder
-	    	$folder = Folder::get_instance($this->folder_id);
-	    	$folder_array = $folder->get_subfolder_array();
-	    	
-	    	if (is_array($folder_array))
-	    	{
-	    		$return_array[1] = $folder_array;
-	    	}
-	    	
-	    	// Files
-	    	$file_array = Object::get_file_array($this->folder_id);
-	    	if (is_array($file_array))
-	    	{
-	    		$return_array[2] = $file_array;
-	    	}
-	    	
-	    	// Value
-	    	$value_array = Object::get_value_array($this->folder_id);
-	    	if (is_array($value_array))
-	    	{
-	    		$return_array[3] = $value_array;
-	    	}
-	    	
-	    	return $return_array;
+	    	$folder = Folder::get_instance(self::$folder_id);
+	    	return DataJoin_Access::list_data_entity_childs($folder->get_data_entity_id(), $order_by, $order_method, $start, $end);
     	}
     	elseif(!$folder_id and $virtual_folder_id)
     	{
@@ -114,6 +90,11 @@ class DataBrowser implements DataBrowserInterface
     	}	
     }
     
+    public static function get_data_browser_count()
+    {
+    	// count_list_data_entity_childs
+    }
+
     /**
      * @return integer
      */

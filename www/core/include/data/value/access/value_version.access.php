@@ -41,6 +41,8 @@ class ValueVersion_Access
 	private $previous_version_id;
 	private $internal_revision;
 	private $current;
+	private $owner_id;
+	private $name;
 	
 	/**
 	 * @param integer $value_version_id
@@ -71,6 +73,8 @@ class ValueVersion_Access
 				$this->language_id			= $data[language_id];
 				$this->previous_version_id	= $data[previous_version_id];
 				$this->internal_revision	= $data[internal_revision];
+				$this->owner_id				= $data[owner_id];
+				$this->name					= $data[name];
 				
 				if ($data[current] == 't')
 				{
@@ -102,6 +106,8 @@ class ValueVersion_Access
 			unset($this->previous_version_id);
 			unset($this->internal_revision);
 			unset($this->current);
+			unset($this->owner_id);
+			unset($this->name);
 		}
 	}
 	
@@ -142,8 +148,8 @@ class ValueVersion_Access
 						
 			$datetime = date("Y-m-d H:i:s");
 			
-			$sql_write = "INSERT INTO ".self::VALUE_VERSION_TABLE." (id,toid,version,value,checksum,datetime,language_id,previous_version_id,internal_revision,current,owner_id) " .
-					"VALUES (nextval('".self::VALUE_VERSION_PK_SEQUENCE."'::regclass),".$toid.",".$version.",'".$value."','".$checksum."','".$datetime."',1,".$previous_version_id_insert.",".$internal_revision.",".$current_insert.",".$owner_id.")";
+			$sql_write = "INSERT INTO ".self::VALUE_VERSION_TABLE." (id,toid,version,value,checksum,datetime,language_id,previous_version_id,internal_revision,current,owner_id,name) " .
+					"VALUES (nextval('".self::VALUE_VERSION_PK_SEQUENCE."'::regclass),".$toid.",".$version.",'".$value."','".$checksum."','".$datetime."',1,".$previous_version_id_insert.",".$internal_revision.",".$current_insert.",".$owner_id.",NULL)";
 					
 			$res_write = $db->db_query($sql_write);	
 
@@ -349,6 +355,36 @@ class ValueVersion_Access
 	}
 	
 	/**
+	 * @return integer
+	 */
+	public function get_owner_id()
+	{
+		if ($this->owner_id)
+		{
+			return $this->owner_id;
+		}
+		else
+		{
+			return null;
+		}	
+	}
+	
+	/**
+	 * @return integer
+	 */
+	public function get_name()
+	{
+		if ($this->name)
+		{
+			return $this->name;
+		}
+		else
+		{
+			return null;
+		}	
+	}
+	
+	/**
 	 * @param integer $toid
 	 * @return bool
 	 */
@@ -434,6 +470,44 @@ class ValueVersion_Access
 			return false;
 		}
 	}	
+	
+	/**
+	 * @param string $string
+	 * @param string $language_name
+	 * @return bool
+	 */
+	public function set_text_search_vector($string, $language_name)
+	{	
+		global $db;
+			
+		if ($this->value_version_id and $string)
+		{
+			if ($language_name == null)
+			{
+				$language_name_insert = "default";
+			}
+			else
+			{
+				$language_name_insert = $language_name;
+			}
+			
+			$sql = "UPDATE ".self::VALUE_VERSION_TABLE." SET text_search_vector = to_tsvector('".$language_name_insert."','".$string."') WHERE id = ".$this->value_version_id."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
 	
 	/**
 	 * @param string $checksum
@@ -619,30 +693,21 @@ class ValueVersion_Access
 	}
 	
 	/**
-	 * @param string $string
-	 * @param string $language_name
+	 * @param integer $owner_id
 	 * @return bool
 	 */
-	public function set_text_search_vector($string, $language_name)
-	{	
+	public function set_owner_id($owner_id)
+	{
 		global $db;
-			
-		if ($this->value_version_id and $string)
+
+		if ($this->value_version_id and is_numeric($owner_id))
 		{
-			if ($language_name == null)
-			{
-				$language_name_insert = "default";
-			}
-			else
-			{
-				$language_name_insert = $language_name;
-			}
-			
-			$sql = "UPDATE ".self::VALUE_VERSION_TABLE." SET text_search_vector = to_tsvector('".$language_name_insert."','".$string."') WHERE id = ".$this->value_version_id."";
+			$sql = "UPDATE ".self::VALUE_VERSION_TABLE." SET owner_id = '".$owner_id."' WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
 			{
+				$this->owner_id = $owner_id;
 				return true;
 			}
 			else
@@ -655,6 +720,36 @@ class ValueVersion_Access
 			return false;
 		}
 	}
+	
+	/**
+	 * @param string $name
+	 * @return bool
+	 */
+	public function set_name($name)
+	{
+		global $db;
+	
+		if ($this->value_version_id and $name)
+		{
+			$sql = "UPDATE ".self::VALUE_VERSION_TABLE." SET name = '".$name."' WHERE id = ".$this->value_version_id."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->name = $name;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}	
+
 
 	/**
 	 * @param integer $internal_revision

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package project
+ * @package data
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -21,14 +21,14 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
+
 /**
- * 
+ * Data Entity Interface
+ * @package data
  */
-	$event_listener[0] = "Project";
-	$event_listener[1] = "ProjectPermission";
-	$event_listener[2] = "ProjectLog";
-	$event_listener[3] = "ProjectItem";
-	$event_listener[4] = "ProjectLogHasItem";
-	$event_listener[5] = "ProjectTask";
-	$event_listener[6] = "ProjectVirtualFolder";
+interface DataEntityInterface
+{	
+	
+}
+
 ?>

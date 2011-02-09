@@ -31,13 +31,8 @@ class Value_Access
 	const VALUE_PK_SEQUENCE = 'core_values_id_seq';
 
 	private $value_id;
-	
+	private $data_entity_id;
 	private $type_id;
-	private $datetime;
-	private $owner_id;
-	private $owner_group_id;
-	private $permission;
-	private $automatic;
 
 	/**
 	 * @param integer $value_id
@@ -59,21 +54,8 @@ class Value_Access
 			if ($data[id])
 			{
 				$this->value_id			= $value_id;
-				
+				$this->data_entity_id	= $data[data_entity_id];
 				$this->type_id			= $data[type_id];
-				$this->datetime			= $data[datetime];
-				$this->owner_id			= $data[owner_id];
-				$this->owner_group_id	= $data[owner_group_id];
-				$this->permission		= $data[permission];
-				
-				if ($data[automatic] == "t")
-				{
-					$this->automatic	= true;
-				}
-				else
-				{
-					$this->automatic	= false;
-				}
 			}
 			else
 			{
@@ -87,30 +69,26 @@ class Value_Access
 		if ($this->value_id)
 		{
 			unset($this->value_id);
-	
-			unset($this->datetime);
-			unset($this->owner_id);
-			unset($this->owner_group_id);
-			unset($this->permission);
-			unset($this->automatic);
+			unset($this->data_entity_id);
+			unset($this->type_id);
 		}
 	}
 
 	/**
+	 * @param integer $data_entity_id
 	 * @param integer $type_id
-	 * @param integer $owner_id
 	 * @return integer
 	 */
-	public function create($type_id, $owner_id)
+	public function create($data_entity_id, $type_id)
 	{
 		global $db;
 		
-		if (is_numeric($owner_id))
+		if (is_numeric($data_entity_id))
 		{	
 			$datetime = date("Y-m-d H:i:s");
 			
-			$sql_write = "INSERT INTO ".self::VALUE_TABLE." (id,type_id,datetime,owner_id,owner_group_id,permission,automatic) " .
-					"VALUES (nextval('".self::VALUE_PK_SEQUENCE."'::regclass),".$type_id.",'".$datetime."',".$owner_id.",NULL,NULL,'t')";
+			$sql_write = "INSERT INTO ".self::VALUE_TABLE." (id,data_entity_id,type_id) " .
+					"VALUES (nextval('".self::VALUE_PK_SEQUENCE."'::regclass),".$data_entity_id.",".$type_id.")";
 					
 			$res_write = $db->db_query($sql_write);	
 
@@ -169,22 +147,7 @@ class Value_Access
 	/**
 	 * @return integer
 	 */
-	public function get_type_id()
-	{
-		if ($this->type_id)
-		{
-			return $this->type_id;
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return string
-	 */
-	public function get_datetime()
+	public function get_data_entity_id()
 	{
 		if ($this->datetime)
 		{
@@ -199,60 +162,45 @@ class Value_Access
 	/**
 	 * @return integer
 	 */
-	public function get_owner_id()
+	public function get_type_id()
 	{
-		if ($this->owner_id)
+		if ($this->type_id)
 		{
-			return $this->owner_id;
+			return $this->type_id;
 		}
 		else
 		{
 			return null;
 		}
 	}
+
 	
 	/**
-	 * @return integer
-	 */
-	public function get_owner_group_id()
-	{
-		if ($this->owner_group_id)
-		{
-			return $this->owner_group_id;
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return integer
-	 */
-	public function get_permission()
-	{
-		if ($this->permission)
-		{
-			return $this->permission;
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
+	 * @param integer $data_entity_id
 	 * @return bool
 	 */
-	public function get_automatic()
-	{
-		if (isset($this->automatic))
+	public function set_data_entity_id($data_entity_id)
+	{	
+		global $db;
+
+		if ($this->value_id and is_numeric($data_entity_id))
 		{
-			return $this->automatic;
+			$sql = "UPDATE ".self::VALUE_TABLE." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->value_id."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->data_entity_id = $data_entity_id;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		else
 		{
-			return null;
+			return false;
 		}
 	}
 	
@@ -285,160 +233,37 @@ class Value_Access
 		}
 	}
 	
+
+
 	/**
-	 * @param string $datetime
-	 * @return bool
+	 * @param string $data_entity_id
+	 * @return integer
 	 */
-	public function set_datetime($datetime)
+	public static function get_entry_by_data_entity_id($data_entity_id)
 	{
 		global $db;
 
-		if ($this->value_id and $datetime)
+		if (is_numeric($data_entity_id))
 		{
-			$sql = "UPDATE ".self::VALUE_TABLE." SET datetime = '".$datetime."' WHERE id = ".$this->value_id."";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->datetime = $datetime;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param integer $owner_id
-	 * @return bool
-	 */
-	public function set_owner_id($owner_id)
-	{	
-		global $db;
+			$sql = "SELECT id FROM ".self::VALUE_TABLE." WHERE data_entity_id = '".$data_entity_id."'";
 
-		if ($this->value_id and is_numeric($owner_id))
-		{
-			$sql = "UPDATE ".self::VALUE_TABLE." SET owner_id = ".$owner_id." WHERE id = ".$this->value_id."";
 			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
 			
-			if ($db->db_affected_rows($res))
+			if ($data[id])
 			{
-				$this->owner_id = $owner_id;
-				return true;
+				return $data[id];
 			}
 			else
 			{
-				return false;
+				return null;
 			}
 		}
 		else
 		{
-			return false;
+			return null;
 		}
 	}
-	
-	/**
-	 * @param integer $owner_group_id
-	 * @return bool
-	 */
-	public function set_owner_group_id($owner_group_id)
-	{
-		global $db;
-			
-		if ($this->value_id and is_numeric($owner_group_id))
-		{
-			$sql = "UPDATE ".self::VALUE_TABLE." SET owner_group_id = ".$owner_group_id." WHERE id = ".$this->value_id."";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->owner_group_id = $owner_group_id;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param integer $permission
-	 * @return bool
-	 */
-	public function set_permission($permission)
-	{
-		global $db;
-
-		if ($this->value_id and is_numeric($permission))
-		{
-			$sql = "UPDATE ".self::VALUE_TABLE." SET permission = ".$permission." WHERE id = ".$this->value_id."";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->permission = $permission;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param bool $automatic
-	 * @return bool
-	 */
-	public function set_automatic($automatic)
-	{
-		global $db;
-
-		if ($this->value_id and isset($automatic))
-		{
-			if ($automatic == true)
-			{
-				$automatic_insert = "t";
-			}
-			else
-			{
-				$automatic_insert = "f";
-			}
-			
-			$sql = "UPDATE ".self::VALUE_TABLE." SET automatic = '".$automatic_insert."' WHERE id = ".$this->value_id."";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->automatic = automatic;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
 	
 	/**
 	 * @param integer $type_id
@@ -535,49 +360,6 @@ class Value_Access
 			return false;
 		}
 	}
-	
-	/**
-	 * @param integer $owner_id
-	 * @return bool
-	 */
-	public static function set_owner_id_on_null($owner_id)
-	{
-		global $db;
-			
-		if (is_numeric($owner_id))
-		{
-			$sql = "UPDATE ".self::VALUE_TABLE." SET owner_id = NULL WHERE owner_id = ".$owner_id."";
-			$res = $db->db_query($sql);
-			
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param integer $owner_group_id
-	 * @return bool
-	 */
-	public static function set_owner_group_id_on_null($owner_group_id)
-	{
-		global $db;
-			
-		if (is_numeric($owner_group_id))
-		{
-			$sql = "UPDATE ".self::VALUE_TABLE." SET owner_group_id = NULL WHERE owner_group_id = ".$owner_group_id."";
-			$res = $db->db_query($sql);
-			
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
 }
 
 ?>

@@ -201,7 +201,7 @@ class Project implements ProjectInterface, EventListenerInterface
 					$supplementary_path->add_element("supplementary");
 					
 					$supplementary_folder = Folder::get_instance(null);
-					if (($supplementary_folder->create("supplementary", $folder_id, false, $supplementary_path->get_path_string(), $owner_id, null)) == null)
+					if (($supplementary_folder->create("supplementary", $folder_id, $supplementary_path->get_path_string(), $owner_id, null)) == null)
 					{
 						$projet_folder->delete();
 						if ($transaction_id != null)
@@ -286,7 +286,7 @@ class Project implements ProjectInterface, EventListenerInterface
 								$folder_path->add_element($folder_name);
 								
 								$sub_folder = Folder::get_instance(null);
-								if ($sub_folder->create($sub_value, $status_folder_id, false, $folder_path->get_path_string(), $user->get_user_id(), null) == null)
+								if ($sub_folder->create($sub_value, $status_folder_id, $folder_path->get_path_string(), $user->get_user_id(), null) == null)
 								{
 									$projet_folder->delete(true, true);
 									if ($transaction_id != null)
@@ -311,7 +311,7 @@ class Project implements ProjectInterface, EventListenerInterface
 					
 					// Create Project Description
 					$value = new Value(null);
-					if ($value->create($folder_id, $owner_id, 2, $description, false) == null)
+					if ($value->create($folder_id, $owner_id, 2, $description) == null)
 					{
 						$projet_folder->delete(true, true);
 						if ($transaction_id != null)
@@ -320,6 +320,8 @@ class Project implements ProjectInterface, EventListenerInterface
 						}
 						throw new ProjectCreationFailedException("",1);
 					}
+					
+					echo "#".$value->get_item_id();
 					
 					$project_item = new ProjectItem($project_id);
 					$project_item->set_gid(1);
@@ -351,7 +353,7 @@ class Project implements ProjectInterface, EventListenerInterface
 					{
 						$value = new Value(null);				
 						
-						if ($value->create($folder_id, $owner_id, $this->template_data_type_id, $this->template_data_array, false) == null)
+						if ($value->create($folder_id, $owner_id, $this->template_data_type_id, $this->template_data_array) == null)
 						{
 							$projet_folder->delete(true, true);
 							if ($transaction_id != null)

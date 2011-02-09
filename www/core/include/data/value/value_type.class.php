@@ -70,13 +70,13 @@ class ValueType implements ValueTypeInterface {
 	 * @param integer $object_id
 	 * @return integer
 	 */
-	public function create($object_id)
+	public function create($data_entity_id)
 	{
 		global $transaction;
 		
-		if ($this->value_type and is_numeric($object_id))
+		if ($this->value_type and is_numeric($data_entity_id))
 		{
-			$xml_cache = new XmlCache($object_id);
+			$xml_cache = new XmlCache($data_entity_id);
     		$xml_array = $xml_cache->get_xml_array();
 			
 			$olvdl_found = false;
@@ -127,7 +127,7 @@ class ValueType implements ValueTypeInterface {
 				$transaction_id = $transaction->begin();
 				
 				$olvdl = new Olvdl(null);
-				if (($olvdl_id = $olvdl->create($object_id)) == null)
+				if (($olvdl_id = $olvdl->create($data_entity_id)) == null)
 				{
 					if ($transaction_id != null)
 					{

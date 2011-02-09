@@ -27,4 +27,5 @@
 	$event_listener[0] = "Sample";
 	$event_listener[1] = "SampleSecurity";
 	$event_listener[2] = "SampleItem";
+	$event_listener[3] = "SampleVirtualFolder";
 ?>

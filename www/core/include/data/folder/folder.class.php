@@ -34,109 +34,43 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	
 	require_once("access/folder_concretion.access.php");
 	require_once("access/folder_join.access.php");
-	
-	require_once("access/folder_is_group_folder.access.php"); // Legacy
-	require_once("access/folder_is_organisation_unit_folder.access.php"); // Legacy
-	require_once("access/folder_is_project_folder.access.php"); // Legacy
-	require_once("access/folder_is_project_status_folder.access.php"); // Legacy
-	require_once("access/folder_is_sample_folder.access.php"); // Legacy
-	
-	require_once("access/virtual_folder.access.php");
-	require_once("access/virtual_folder_has_folder.access.php");
 }
 
 /**
  * Folder Management Class
  * @package data
  */
-class Folder implements FolderInterface, EventListenerInterface
+class Folder extends DataEntity implements FolderInterface, EventListenerInterface
 {
 	private $folder_id;
-	
 	private $folder;
-	
-	private $read_access;
-	private $write_access;
-	private $delete_access;
-	private $control_access;
 
-	private static $folder_delete_object;
-	
 	/**
 	 * Get instance via static::get_instance($folder_id)
 	 * @param integer $folder_id
 	 */
-	protected function __construct($folder_id)
+	function __construct($folder_id)
 	{		
 		if ($folder_id == null)
 		{
 			$this->folder_id 			= null;
 			$this->folder				= new Folder_Access(null);
+			parent::__construct(null);
 		}
 		else
 		{				
 			$this->folder_id 			= $folder_id;
 			$this->folder				= new Folder_Access($folder_id);
 			
-			
-			
 			if ($this->folder->get_id() != null)
 			{
-				// [OLD] => To Data Entity
-				$object_permission = new ObjectPermission($this->folder->get_permission(), $this->folder->get_automatic(), $this->folder->get_owner_id(), $this->folder->get_owner_group_id());
-				$object_permission->set_folder_flag($this->folder->get_flag());
-				
-				if (($project_id = $this->is_child_of_project_folder()) != null)
-				{
-					$object_permission->set_project_id($project_id);
-				}
-				
-				if (($sample_id = $this->is_child_of_sample_folder()) != null)
-				{
-					$object_permission->set_sample_id($sample_id);
-				}
-				
-				if ($object_permission->is_access(1))
-				{
-					$this->read_access = true;
-				}
-				else
-				{
-					$this->read_access = false;
-				}
-				
-				if ($object_permission->is_access(2))
-				{
-					$this->write_access = true;
-				}
-				else
-				{
-					$this->write_access = false;
-				}
-				
-				if ($object_permission->is_access(3))
-				{
-					$this->delete_access = true;
-				}
-				else
-				{
-					$this->delete_access = false;
-				}
-				
-				if ($object_permission->is_access(4))
-				{
-					$this->control_access = true;
-				}
-				else
-				{
-					$this->control_access = false;
-				}
-				// [DLO]	
+				parent::__construct($this->folder->get_data_entity_id());
 			}
 			else
 			{
 				$this->folder_id 			= null;
 				$this->folder				= new Folder_Access(null);
+				parent::__construct(null);
 			}
 		}
 	} 
@@ -146,68 +80,8 @@ class Folder implements FolderInterface, EventListenerInterface
 		if ($this->folder_id)
 		{
 			unset($this->folder_id);
-		
 			unset($this->folder);
-			
-			unset($this->read_access);
-			unset($this->write_access);
-			unset($this->delete_access);
-			unset($this->control_access);
 		}
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_read_access()
-	{
-		return $this->read_access;
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_write_access()
-	{
-		if ($this->folder and $this->folder_id)
-		{
-			$flag = $this->folder->get_flag();
-			if ($flag)
-			{
-				if ($flag == 16)
-				{
-					return false;
-				}
-				else
-				{
-					return $this->write_access;
-				}
-			}
-			else
-			{
-				return $this->write_access;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_delete_access()
-	{
-		return $this->delete_access;
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_control_access()
-	{
-		return $this->control_access;
 	}
 	
 	/**
@@ -406,42 +280,58 @@ class Folder implements FolderInterface, EventListenerInterface
 	 * @param integer $owner_group_id
 	 * @return integer
 	 */
-	public function create($name, $toid, $root, $path, $owner_id, $owner_group_id)
+	public function create($name, $toid, $path, $owner_id, $owner_group_id)
 	{
 		global $transaction;
 
-		if (is_numeric($toid) and isset($root))
+		if (is_numeric($toid))
 		{
 			$transaction_id = $transaction->begin();
+			$folder = new Folder($toid);
+			$parent_data_entity_id = $folder->get_data_entity_id();
 			
-			if (!$path and $name)
+			if (!$path)
 			{
 				$folder = new Folder($toid);
 				$folder_name = str_replace(" ","_",trim($name));
 				$path = $folder->get_path()."/".$folder_name;
 			}
-			elseif(!$path and !$name)
-			{
-				return null;
-			}
 
-			$folder_id = $this->folder->create($name, $toid, $root, $path, $owner_id, $owner_group_id);
-			
-			if ($folder_id)
+			if (($data_entity_id = parent::create($owner_id, $owner_group_id)) != null)
 			{
-				$this->__construct($folder_id);
-				
-				$system_path = $GLOBALS[base_dir]."/".$path;
+				if (($folder_id = $this->folder->create($data_entity_id, $name, $path)) != null)
+				{	
+					$this->__construct($folder_id);
 					
-				if (!file_exists($system_path))
-				{
-					if (mkdir($system_path) == true)
+					if (parent::set_as_child_of($parent_data_entity_id) == false)
 					{
 						if ($transaction_id != null)
 						{
-							$transaction->commit($transaction_id);
+							$transaction->rollback($transaction_id);
 						}
-						return $folder_id;
+						return null;
+					}
+					
+					$system_path = $GLOBALS[base_dir]."/".$path;
+						
+					if (!file_exists($system_path))
+					{
+						if (mkdir($system_path) == true)
+						{
+							if ($transaction_id != null)
+							{
+								$transaction->commit($transaction_id);
+							}
+							return $folder_id;
+						}
+						else
+						{
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							return null;
+						}
 					}
 					else
 					{
@@ -499,16 +389,14 @@ class Folder implements FolderInterface, EventListenerInterface
 	{
 		if ($this->folder_id and $this->folder)
 		{
-			$subfolder_array = $this->get_subfolder_array();
-			
-			if (is_array($subfolder_array) and count($subfolder_array) >= 1)
+			$data_entity_array = $this->get_childs();
+			if (is_array($data_entity_array) and count($data_entity_array) >= 1)
 			{
-				foreach($subfolder_array as $key => $value)
+				foreach($data_entity_array as $key => $value)
 				{
-					if ($value[type] == 0)
+					if (($folder_id = self::get_folder_id_by_data_entity_id($value)) != null)
 					{
-						$folder = new Folder($value[id]);
-						
+						$folder = new Folder($folder_id);
 						if (trim(strtolower($folder->get_name())) == trim(strtolower($name)))
 						{
 							return true;
@@ -529,64 +417,6 @@ class Folder implements FolderInterface, EventListenerInterface
 	}
 	
 	/**
-	 * @param string $name
-	 * @return bool
-	 */
-	public function exist_file($name)
-	{
-		if ($this->folder_id and $this->folder and $name)
-		{
-			$folder_join_access = new FolderJoin_Access();
-			if ($folder_join_access->get_existing_file_id_in_folder($this->folder_id, $name) != null)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	/**
-	 * @param integer $value_type_id
-	 * @return bool
-	 */
-	public function exist_value($value_type_id)
-	{
-		if ($this->folder_id and $this->folder and is_numeric($value_type_id))
-		{	
-			$value_array = Object::get_value_array($this->folder_id);
-	    	
-	    	if (is_array($value_array) and count($value_array) >= 1)
-	    	{
-	    		foreach($value_array as $fe_key => $fe_value)
-	    		{
-	    			$value = new Value($fe_value);
-	    			
-	    			if (trim($value->get_type_id()) == $value_type_id)
-	    			{
-	    				return true;
-	    			}	    			
-	    		}
-	    		return false;
-	    	}
-	    	else
-	    	{
-	    		return false;
-	    	}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
 	 * Deletes a folder including sub-folders and content
 	 * @param bool $recursive
 	 * @param bool $content
@@ -599,7 +429,7 @@ class Folder implements FolderInterface, EventListenerInterface
 		if ($this->folder_id and $this->folder)
 		{
 			$transaction_id = $transaction->begin();
-			
+
 			$subfolder_array = $this->get_subfolder_array();
 	
 			if ((is_array($subfolder_array) and $recursive == false) or ($content == false and $recursive == true))
@@ -614,44 +444,39 @@ class Folder implements FolderInterface, EventListenerInterface
 					{
 						foreach($subfolder_array as $key => $value)
 						{
-							if ($value[type] == 0)
+							$folder = Folder::get_instance($value);
+							if ($folder->delete(true, true) == false)
 							{
-								$folder = Folder::get_instance($value[id]);
-								if ($folder->delete(true, true) == false)
+								if ($transaction_id != null)
 								{
-									if ($transaction_id != null)
-									{
-										$transaction->rollback($transaction_id);
-									}
-									return false;	
+									$transaction->rollback($transaction_id);
 								}
-								else
+								return false;	
+							}
+							else
+							{
+								if ($transaction_id != null)
 								{
-									if ($transaction_id != null)
-									{
-										// Avoids Ghost-Folders
-										$transaction->commit($transaction_id);
-										$transaction_id = $transaction->begin();
-									}
+									// Avoids Ghost-Folders
+									$transaction->commit($transaction_id);
+									$transaction_id = $transaction->begin();
 								}
 							}
 						}
 					}
 				}
 			
-				$file_array = Object::get_file_array($this->folder_id);
-			
-				if ($content == false and is_array($file_array) and count($file_array) >= 1)
+				
+				$data_entity_array = $this->get_childs();
+				
+				if (is_array($data_entity_array) and count($data_entity_array) >= 1)
 				{
-					return false;
-				}
-				else
-				{
-					if (is_array($file_array) and count($file_array) >= 1)
+					foreach ($data_entity_array as $key => $value)
 					{
-						foreach ($file_array as $key => $value)
+						// Files
+						if (($file_id = File::get_file_id_by_data_entity_id($value)) != null)
 						{
-							$file = new File($value);
+							$file = new File($file_id);
 							$file_delete = $file->delete();
 							if ($file_delete == false)
 							{
@@ -670,20 +495,8 @@ class Folder implements FolderInterface, EventListenerInterface
 								}
 							}
 						}
-					}
-				}
-				
-				$value_array = Object::get_value_array($this->folder_id);
-			
-				if ($content == false and is_array($value_array) and count($value_array) >= 1)
-				{
-					return false;
-				}
-				else
-				{
-					if (is_array($value_array) and count($value_array) >= 1)
-					{
-						foreach ($value_array as $key => $value)
+						// Values
+						if (($value_id = Value::get_value_id_by_data_entity_id($value)) != null)
 						{
 							$value_obj = new Value($value);
 							$value_delete = $value_obj->delete();
@@ -716,18 +529,23 @@ class Folder implements FolderInterface, EventListenerInterface
 						}
 					}
 				}
-				
-				$linked_vfolder_array = VirtualFolderHasFolder_Access::list_entries_by_folder_id($this->folder_id);
-				
-				if (is_array($linked_vfolder_array) and count($linked_vfolder_array) >= 1)
+
+				$linked_virtual_folder_array = $this->get_parent_virtual_folders();
+				if (is_array($linked_virtual_folder_array) and count($linked_virtual_folder_array))
 				{
-					foreach($linked_vfolder_array as $key => $value)
+					foreach($linked_virtual_folder_array as $key => $value)
 					{
-						$virtual_folder_has_folder = new VirtualFolderHasFolder_Access($value);
-						$virtual_folder_has_folder->delete();
+						if ($this->unset_child_of($value) == false)
+						{
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							return false;
+						}
 					}
-				}
-				
+				}	
+					
 				$vfolder_array = VirtualFolder::list_entries_by_folder_id($this->folder_id);
 				
 				if (is_array($vfolder_array) and count($vfolder_array) >= 1)
@@ -737,6 +555,15 @@ class Folder implements FolderInterface, EventListenerInterface
 						$virtual_folder = new VirtualFolder($value);
 						$virtual_folder->delete();
 					}
+				}
+				
+				if (parent::delete() == false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
 				}
 				
 				if (file_exists($path))
@@ -827,291 +654,6 @@ class Folder implements FolderInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Returns project-id of a project folder
-	 * @todo extrat method from class due to loose dependency
-	 * @return integer
-	 */
-	public function is_in_project()
-	{	
-		if ($this->folder_id)
-		{
-			$folder_is_project_folder_access_primary_key = FolderIsProjectFolder_Access::get_entry_by_folder_id($this->folder_id);
-			
-			if ($folder_is_project_folder_access_primary_key != null)
-			{
-				$folder_is_project_folder_access = new FolderIsProjectFolder_Access($folder_is_project_folder_access_primary_key);
-				return $folder_is_project_folder_access->get_project_id();
-			}
-			else
-			{
-				return null;
-			}		
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * Returns sample-id of a sample folder
-	 * @todo extrat method from class due to loose dependency
-	 * @return integer
-	 */
-	public function is_in_sample()
-	{
-		if ($this->folder_id)
-		{
-			$folder_is_sample_folder_access_primary_key = FolderIsSampleFolder_Access::get_entry_by_folder_id($this->folder_id);
-			
-			if ($folder_is_sample_folder_access_primary_key != null)
-			{
-				$folder_is_sample_folder_access = new FolderIsSampleFolder_Access($folder_is_sample_folder_access_primary_key);
-				return $folder_is_sample_folder_access->get_sample_id();
-			}
-			else
-			{
-				return null;
-			}		
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * Checeks if the folder is a group folder
-	 * @todo extrat method from class due to loose dependency
-	 * @return bool
-	 */
-	public function is_group_folder()
-	{
-		if ($this->folder_id)
-		{
-			$folder_is_group_folder_access_primary_key = FolderIsGroupFolder_Access::get_entry_by_folder_id($this->folder_id);
-			
-			if ($folder_is_group_folder_access_primary_key != null)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}		
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * Checks if the folder is an user (home) folder
-	 * @todo extrat method from class due to loose dependency
-	 * @return bool
-	 */
-	public function is_home_folder()
-	{
-		if ($this->folder_id)
-		{
-			$folder_is_home_folder_access_primary_key = FolderIsHomeFolder_Access::get_entry_by_folder_id($this->folder_id);
-			
-			if ($folder_is_home_folder_access_primary_key != null)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}		
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * Checks if the folder is an organisation unit folder
-	 * @todo extrat method from class due to loose dependency
-	 * @return bool
-	 */
-	public function is_organisation_unit_folder()
-	{
-		if ($this->folder_id)
-		{
-			$folder_is_organisation_unit_folder_access_primary_key = FolderIsOrganisationUnitFolder_Access::get_entry_by_folder_id($this->folder_id);
-			
-			if ($folder_is_organisation_unit_folder_access_primary_key != null)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}	
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * Checks if the folder is a project folder
-	 * @todo extrat method from class due to loose dependency
-	 * @return bool
-	 */
-	public function is_project_folder()
-	{
-		if ($this->folder_id)
-		{
-			$folder_is_project_folder_access_primary_key = FolderIsProjectFolder_Access::get_entry_by_folder_id($this->folder_id);
-			
-			if ($folder_is_project_folder_access_primary_key != null)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}		
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * Checks if the folder is a project status folder
-	 * @todo extrat method from class due to loose dependency
-	 * @return bool
-	 */
-	public function is_project_status_folder()
-	{
-		if ($this->folder_id)
-		{
-			$folder_is_project_status_folder_access_primary_key = FolderIsProjectStatusFolder_Access::get_entry_by_folder_id($this->folder_id);
-			
-			if ($folder_is_project_status_folder_access_primary_key != null)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}		
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * Checks if the folder is a sample folder
-	 * @todo extrat method from class due to loose dependency
-	 * @return bool
-	 */
-	public function is_sample_folder()
-	{
-		if ($this->folder_id)
-		{
-			$folder_is_sample_folder_access_primary_key = FolderIsSampleFolder_Access::get_entry_by_folder_id($this->folder_id);
-			
-			if ($folder_is_sample_folder_access_primary_key != null)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}		
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * Checks if the current folder is a child of a project folder
-	 * @todo extrat method from class due to loose dependency
-	 * @return integer
-	 */
-	public function is_child_of_project_folder()
-	{
-		if ($this->folder_id)
-		{
-			$folder_id = $this->folder_id;
-			$project_id = null;
-				
-			do
-			{
-				$folder = new Folder_Access($folder_id);
-		
-				$folder_is_project_folder_access_primary_key = FolderIsProjectFolder_Access::get_entry_by_folder_id($folder_id);
-				if ($folder_is_project_folder_access_primary_key != null)
-				{
-					$folder_is_project_folder_access = new FolderIsProjectFolder_Access($folder_is_project_folder_access_primary_key);
-					$project_id = $folder_is_project_folder_access->get_project_id();
-				}
-				else
-				{
-					$folder_id = $folder->get_toid();
-				}
-			}
-			while($folder_id != 1 and $project_id == null);
-		
-			return $project_id;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-	 * Checks if the current folder is a child of a sample folder
-	 * @todo extrat method from class due to loose dependency
-	 * @return integer
-	 */
-	public function is_child_of_sample_folder()
-	{
-		if ($this->folder_id)
-		{
-			$folder_id = $this->folder_id;
-			$sample_id = null;
-				
-			do
-			{
-				$folder = new Folder_Access($folder_id);
-		
-				$folder_is_sample_folder_access_primary_key = FolderIsSampleFolder_Access::get_entry_by_folder_id($folder_id);
-				
-				if ($folder_is_sample_folder_access_primary_key != null)
-				{
-					$folder_is_sample_folder_access = new FolderIsSampleFolder_Access($folder_is_sample_folder_access_primary_key);
-					$sample_id = $folder_is_sample_folder_access->get_sample_id();
-				}
-				else
-				{
-					$folder_id = $folder->get_toid();
-				}
-			}
-			while($folder_id != 1 and $sample_id == null);
-		
-			return $sample_id;
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
 	 * Moves a folder to another location
 	 * @param integer $destination_id
 	 * @return bool
@@ -1145,11 +687,8 @@ class Folder implements FolderInterface, EventListenerInterface
 					{
 						foreach($subfolder_array as $key => $value)
 						{
-							if ($value[type] == 0)
-							{
-								$folder = new Folder($value[id]);
-								$folder->move_folder($this->folder_id);
-							}							
+							$folder = new Folder($value);
+							$folder->move_folder($this->folder_id);						
 						}
 					}
 				}
@@ -1209,16 +748,26 @@ class Folder implements FolderInterface, EventListenerInterface
 	{
 		if ($this->folder_id)
 		{
-			$folder_id = $this->folder_id;
-			
-			$is_root = false;
 			$path = "";
+			$folder_id = $this->folder_id;
 			$folder_array = array();
+			$data_entity = new DataEntity($this->data_entity_id);
 			
-			while($is_root == false)
+			$return_array = array();
+			array_push($return_array,$this->folder_id);
+			
+			if ($this->folder_id != 1)
 			{
-				$folder_access = new Folder_Access($folder_id);
+				$path = trim($this->folder->get_name());	
+			}
+			else
+			{
+				$path = "/".$path;
+			}
 			
+			while (($parent_data_entity_id = $data_entity->get_parent_folder()) != null)
+			{
+				
 				if (!in_array($folder_id, $folder_array))
 				{
 					array_push($folder_array, $folder_id);
@@ -1228,41 +777,21 @@ class Folder implements FolderInterface, EventListenerInterface
 					return "database consistency error";
 				}
 				
-				if ($folder_access->get_is_root() == false)
+				$data_entity = new DataEntity($parent_data_entity_id);
+				$folder_id = Folder_Access::get_entry_by_data_entity_id($parent_data_entity_id);
+				$folder_access = new Folder($folder_id);
+				
+				if ($folder_id != 1)
 				{
-					$is_root = false;
-					$folder_id = $folder_access->get_toid();
+					$path = trim($folder_access->get_name())."/".$path;
 				}
 				else
 				{
-					$is_root = true;
-				}
-
-				if ($path)
-				{
-					if ($folder_access->get_name() == "/")
-					{
-						$path = "/".$path;
-					}
-					else
-					{
-						$path = trim($folder_access->get_name())."/".$path;
-					}
-				}
-				else
-				{
-					$path = trim($folder_access->get_name());	
+					$path = "/".$path;
 				}
 			}
 			
-			if (!$path)
-			{
-				return "/";
-			}
-			else
-			{
-				return $path;
-			}
+			return $path;
 		}
 		else
 		{
@@ -1277,52 +806,18 @@ class Folder implements FolderInterface, EventListenerInterface
 	{
 		if ($this->folder_id)
 		{
-			$return_array = array();
-			$is_root = $this->folder->get_is_root();
-			$toid = $this->folder->get_toid();
+			$data_entity = new DataEntity($this->data_entity_id);
 			
+			$return_array = array();
 			array_push($return_array,$this->folder_id);
 			
-			while ($is_root == false)
+			while (($parent_data_entity_id = $data_entity->get_parent_folder()) != null)
 			{
-				$folder = new Folder($toid);
-				
-				$is_root = $folder->get_is_root();
-				
-				if ($toid != $folder->get_toid())
-				{
-					array_push($return_array,$toid);
-				}
-				
-				$toid = $folder->get_toid();
+				$data_entity = new DataEntity($parent_data_entity_id);
+				array_push($return_array,Folder_Access::get_entry_by_data_entity_id($parent_data_entity_id));
 			}
+			
 			return $return_array;
-		}
-	}
-	
-	/**
-	 * @return integer
-	 */		
-	public function get_toid()
-	{
-		if ($this->folder)
-		{
-			return $this->folder->get_toid();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function get_is_root()
-	{
-		if ($this->folder)
-		{
-			return $this->folder->get_is_root();
 		}
 		else
 		{
@@ -1361,97 +856,6 @@ class Folder implements FolderInterface, EventListenerInterface
 	}
 	
 	/**
-	 * @return string
-	 */
-	public function get_datetime()
-	{
-		if ($this->folder)
-		{
-			return $this->folder->get_datetime();
-		}
-		else
-		{
-			return null;
-		}	
-	}
-	
-	/**
-	 * @return integer
-	 */
-	public function get_owner_id()
-	{
-		if ($this->folder)
-		{
-			return $this->folder->get_owner_id();
-		}
-		else
-		{
-			return null;
-		}	
-	}
-	
-	/**
-	 * @return integer
-	 */
-	public function get_owner_group_id()
-	{
-		if ($this->folder)
-		{
-			return $this->folder->get_owner_group_id();
-		}
-		else
-		{
-			return null;
-		}	
-	}
-	
-	/**
-	 * @return integer
-	 */
-	public function get_permission()
-	{
-		if ($this->folder)
-		{
-			return $this->folder->get_permission();
-		}
-		else
-		{
-			return null;
-		}	
-	}
-	
-	/**
-	 * @return string
-	 */
-	public function get_permission_string()
-	{
-		if ($this->folder)
-		{
-			$object_permission = new ObjectPermission($this->folder->get_permission(), $this->folder->get_automatic(), $this->folder->get_owner_id(), $this->folder->get_owner_group_id());
-			return $object_permission->get_permission_string();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function get_automatic()
-	{
-		if ($this->folder)
-		{
-			return $this->folder->get_automatic();
-		}
-		else
-		{
-			return null;
-		}	
-	}
-
-	/**
 	 * @param string $name
 	 * @return bool
 	 */
@@ -1460,70 +864,6 @@ class Folder implements FolderInterface, EventListenerInterface
 		if ($name and $this->folder_id and $this->folder)
 		{
 			return $this->folder->set_name($name);
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	/**
-	 * @param integer $owner_id
-	 * @return bool
-	 */
-	public function set_owner_id($owner_id)
-	{
-		if (is_numeric($owner_id) and $this->folder_id and $this->folder)
-		{
-			return $this->folder->set_owner_id($owner_id);
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	/**
-	 * @param integer $owner_group_id
-	 * @return bool
-	 */
-	public function set_owner_group_id($owner_group_id)
-	{
-		if (is_numeric($owner_group_id) and $this->folder_id and $this->folder)
-		{
-			return $this->folder->set_owner_group_id($owner_group_id);
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param integer $permission
-	 * @return bool
-	 */
-	public function set_permission($permission)
-	{
-		if (isset($permission) and $this->folder)
-		{
-			return $this->folder->set_permission($permission);
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param bool $automatic
-	 * @return bool
-	 */
-	public function set_automatic($automatic)
-	{
-		if (isset($automatic) and $this->folder)
-		{
-			return $this->folder->set_automatic($automatic);
 		}
 		else
 		{
@@ -1550,49 +890,27 @@ class Folder implements FolderInterface, EventListenerInterface
 	/**
 	 * Returns an array with all subfolders
 	 * @return array
+	 * @todo return array has changed
 	 */
 	public function get_subfolder_array()
 	{
 		if ($this->folder_id and $this->folder)
 		{
-			$return_array = array();
+			$subfolder_array = array();
 			
-			$folder_array = $this->folder->list_entries_by_toid($this->folder_id);
-			
-			$virtual_folder_array = VirtualFolder_Access::list_entries_by_folder_id($this->folder_id);
-			
-			$counter = 0;
-			
-			if (is_array($folder_array) and count($folder_array) > 0)
+			$data_entity_array = $this->get_childs();
+			if (is_array($data_entity_array) and count($data_entity_array) >= 1)
 			{
-				foreach($folder_array as $key => $value)
+				foreach($data_entity_array as $key => $value)
 				{
-					$return_array[$counter][id]		= $value;
-					$return_array[$counter][type]	= 0;
-					
-					$counter++;
+					if (($folder_id = self::get_folder_id_by_data_entity_id($value)) != null)
+					{
+						array_push($subfolder_array, $folder_id);
+					}
 				}
 			}
 			
-			if (is_array($virtual_folder_array) and count($virtual_folder_array) > 0)
-			{
-				foreach($virtual_folder_array as $key => $value)
-				{
-					$return_array[$counter][id]		= $value;
-					$return_array[$counter][type]	= 1;
-					
-					$counter++;
-				}
-			}
-			
-			if (is_array($return_array) and count($return_array) > 0)
-			{
-				return $return_array;
-			}
-			else
-			{
-				return null;
-			}
+			return $subfolder_array;
 		}
 		else
 		{
@@ -1608,16 +926,19 @@ class Folder implements FolderInterface, EventListenerInterface
 	{
 		if ($this->folder and $this->folder_id)
 		{
-			$object_array = Object::get_file_array($this->folder_id);
+			$data_entity_array = $this->get_childs();
 			
-			if (is_array($object_array) and count($object_array) >= 1)
+			if (is_array($data_entity_array) and count($data_entity_array) >= 1)
 			{
-				foreach ($object_array as $key => $value)
+				foreach ($data_entity_array as $key => $value)
 				{
-					$file = new File($value);
-					if ($file->is_image() == true)
+					if (($file_id = File::get_file_id_by_data_entity_id($value)) != null)
 					{
-						return true;
+						$file = new File($file_id);
+						if ($file->is_image() == true)
+						{
+							return true;
+						}
 					}
 				}
 			}
@@ -1646,6 +967,15 @@ class Folder implements FolderInterface, EventListenerInterface
 		}
 	}
 
+	/**
+	 * @param integer $data_entity_id
+	 * @return integer
+	 */
+	public static function get_folder_id_by_data_entity_id($data_entity_id)
+	{	
+		return Folder_Access::get_entry_by_data_entity_id($data_entity_id);
+	}
+	
 	/**
 	 * @param string $type
 	 * @param string $handling_class
@@ -1683,7 +1013,8 @@ class Folder implements FolderInterface, EventListenerInterface
 	}
     
     /**
-     * @todo implementation
+     * @param object $event_object
+     * @return bool
      */
     public static function listen_events($event_object)
     {

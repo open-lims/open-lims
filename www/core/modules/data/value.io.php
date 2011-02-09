@@ -478,7 +478,7 @@ class ValueIO
 								unset($paramquery[nextpage]);
 								$params = http_build_query($paramquery,'','&#38;');
 					
-								$value_add_successful = $value->create($folder_id, $user->get_user_id(), $type_id, $_POST, false);
+								$value_add_successful = $value->create($folder_id, $user->get_user_id(), $type_id, $_POST);
 															
 								if ($value_add_successful == true)
 								{
@@ -675,7 +675,7 @@ class ValueIO
 								unset($paramquery[nextpage]);
 								$params = http_build_query($paramquery,'','&#38;');
 					
-								$value_add_successful = $value->create($folder_id, $user->get_user_id(), $type_id, $_POST, false);
+								$value_add_successful = $value->create($folder_id, $user->get_user_id(), $type_id, $_POST);
 															
 								if ($value_add_successful == true)
 								{

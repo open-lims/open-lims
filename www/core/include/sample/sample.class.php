@@ -221,7 +221,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 								$folder_path->add_element($folder_name);
 								
 								$sub_folder = Folder::get_instance(null);
-								if ($sub_folder->create($value, $folder_id, false, $folder_path->get_path_string(), $user->get_user_id(), null) == null)
+								if ($sub_folder->create($value, $folder_id, $folder_path->get_path_string(), $user->get_user_id(), null) == null)
 								{
 									$sample_folder->delete(true, true);
 									if ($transaction_id != null)
@@ -304,7 +304,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 						if ($this->template_data_type == "value")
 						{
 							$value = new Value(null);				
-							if ($value->create($folder_id, $user->get_user_id(), $this->template_data_type_id, $this->template_data_array, false) == null)
+							if ($value->create($folder_id, $user->get_user_id(), $this->template_data_type_id, $this->template_data_array) == null)
 							{
 								$sample_folder->delete(true, true);
 								if ($transaction_id != null)

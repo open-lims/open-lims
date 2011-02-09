@@ -28,20 +28,22 @@ require_once("interfaces/virtual_folder.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("events/virtual_folder_delete_event.class.php");
+	
+	require_once("core/include/data/access/data_join.access.php");
+	
 	require_once("access/virtual_folder.access.php");
 	require_once("access/virtual_folder_has_folder.access.php");
-	require_once("access/virtual_folder_is_project.access.php");
-	require_once("access/virtual_folder_is_sample.access.php");
 }
 
 /**
  * Virtual Folder Management Class
  * @package data
  */
-class VirtualFolder implements VirtualFolderInterface
+class VirtualFolder extends DataEntity implements VirtualFolderInterface
 {
-	private $virtual_folder_id;
-	private $virtual_folder;
+	protected $virtual_folder_id;
+	protected $virtual_folder;
 	
 	/**
 	 * @param integer $virtual_folder_id
@@ -52,11 +54,13 @@ class VirtualFolder implements VirtualFolderInterface
 		{
 			$this->virtual_folder_id 	= null;
 			$this->virtual_folder 		= new VirtualFolder_Access(null);
+			parent::__construct(null);
 		}
 		else
 		{				
 			$this->virtual_folder_id 	= $virtual_folder_id;
 			$this->virtual_folder		= new VirtualFolder_Access($virtual_folder_id);
+			parent::__construct($this->virtual_folder->get_data_entity_id());
 		}
 	}
 	
@@ -75,7 +79,7 @@ class VirtualFolder implements VirtualFolderInterface
 	 * @param string $name
 	 * @return integer
 	 */
-	public function create($folder_id, $name)
+	public final function create($folder_id, $name)
 	{
 		global $transaction;
 		
@@ -87,14 +91,34 @@ class VirtualFolder implements VirtualFolderInterface
 			
 			if ($folder->exist_folder() == true)
 			{
-				if (($vfolder_id = $this->virtual_folder->create($folder_id, $name)) != null)
+				if (($data_entity_id = parent::create(1 , null)) != null)
 				{
-					$this->__construct($vfolder_id);
-					if ($transaction_id != null)
+					
+					if (parent::set_as_child_of($folder->get_data_entity_id()) == false)
 					{
-						$transaction->commit($transaction_id);
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return null;
 					}
-					return $vfolder_id;	
+				
+					if (($vfolder_id = $this->virtual_folder->create($data_entity_id, $name)) != null)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->commit($transaction_id);
+						}
+						return $vfolder_id;	
+					}
+					else
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return null;
+					}
 				}
 				else
 				{
@@ -124,7 +148,7 @@ class VirtualFolder implements VirtualFolderInterface
 	 * Deletes a Virtual-Folder
 	 * @return bool
 	 */
-	public function delete()
+	public final function delete()
 	{
 		global $transaction;
 		
@@ -150,30 +174,16 @@ class VirtualFolder implements VirtualFolderInterface
 				}
 			}
 			
-			if ($this->is_project_vfolder() == true)
-			{
-				$virtual_folder_is_project = new VirtualFolderIsProject_Access($this->virtual_folder_id);
-				if ($virtual_folder_is_project->delete() == false)
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
-				}
-			}
+			$virtual_folder_delete_event = new VirtualFolderDeleteEvent($folder_id);
+			$event_handler = new EventHandler($virtual_folder_delete_event);
 			
-			if ($this->is_sample_vfolder() == true)
+			if ($event_handler->get_success() == false)
 			{
-				$virtual_folder_is_sample = new VirtualFolderIsSample_Access($this->virtual_folder_id);
-				if ($virtual_folder_is_sample->delete() == false)
+				if ($transaction_id != null)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
+					$transaction->rollback($transaction_id);
 				}
+				return false;
 			}
 			
 			if ($this->virtual_folder->delete() == true)
@@ -317,38 +327,6 @@ class VirtualFolder implements VirtualFolderInterface
 	}
 	
 	/**
-	 * @todo extrat method from class due to loose dependency
-	 * @return bool
-	 */
-	public function is_project_vfolder()
-	{
-		if ($this->virtual_folder_id and $this->virtual_folder)
-		{
-			return VirtualFolderIsProject_Access::is_entry($this->virtual_folder_id);
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @todo extrat method from class due to loose dependency
-	 * @return bool
-	 */
-	public function is_sample_vfolder()
-	{
-		if ($this->virtual_folder_id and $this->virtual_folder)
-		{
-			return VirtualFolderIsSample_Access::is_entry($this->virtual_folder_id);
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
 	 * Returns an array of all folders in the current Virtual-Folder
 	 * @return array
 	 */
@@ -403,56 +381,15 @@ class VirtualFolder implements VirtualFolderInterface
 			return null;
 		}
 	}
-	
+		
 	/**
-	 * @return string
+	 * @param integer $data_entity_id
+	 * @return integer
 	 */
-	public function get_datetime()
-	{
-		if ($this->virtual_folder_id and $this->virtual_folder)
-		{
-			return $this->virtual_folder->get_datetime();
-		}
-		else
-		{
-			return null;
-		}
+	public static function get_virtual_folder_id_by_data_entity_id($data_entity_id)
+	{	
+		return VirtualFolder_Access::get_entry_by_data_entity_id($data_entity_id);
 	}
-	
-	/**
-	 * @todo extrat method from class due to loose dependency
-	 * @return bool
-	 */
-	public function set_project_vfolder()
-	{
-		if ($this->virtual_folder_id and $this->virtual_folder)
-		{
-			$virtual_folder_is_project = new VirtualFolderIsProject_Access(null);
-			return $virtual_folder_is_project->create($this->virtual_folder_id);	
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @todo extrat method from class due to loose dependency
-	 * @return bool
-	 */
-	public function set_sample_vfolder()
-	{
-		if ($this->virtual_folder_id and $this->virtual_folder)
-		{
-			$virtual_folder_is_sample = new VirtualFolderIsSample_Access(null);
-			return $virtual_folder_is_sample->create($this->virtual_folder_id);	
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
 	
 	/**
 	 * @param integer $virtual_folder_id
@@ -476,7 +413,7 @@ class VirtualFolder implements VirtualFolderInterface
 	 */
 	public static function list_entries_by_folder_id($folder_id)
 	{
-		return VirtualFolder_Access::list_entries_by_folder_id($folder_id);
+		return DataJoin_Access::list_virtual_folders_by_folder_id($folder_id);
 	}
 	
 }

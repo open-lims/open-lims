@@ -289,7 +289,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
 	    			
 	    			$virtual_folder = new VirtualFolder(null);
 	    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
-	    			
+
 	    			foreach($virtual_folder_array as $key => $value)
 	    			{
 	    				$virtual_folder = new VirtualFolder($value);

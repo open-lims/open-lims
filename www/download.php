@@ -55,7 +55,7 @@
 			
 			if ($file->is_read_access() == true)
 			{
-				$folder = Folder::get_instance($file->get_toid());
+				$folder = Folder::get_instance($file->get_parent_folder());
 				$folder_path = $folder->get_path();
 				
 				$extension_array = explode(".",$file->get_name());
@@ -63,11 +63,11 @@
 				
 				if (!$_GET[version])
 				{
-					$file_path = $GLOBALS[base_dir]."/".$folder_path."/".$file->get_object_id()."-".$file->get_internal_revision().".".$extension_array[$extension_array_length];
+					$file_path = $GLOBALS[base_dir]."/".$folder_path."/".$file->get_data_entity_id()."-".$file->get_internal_revision().".".$extension_array[$extension_array_length];
 				}
 				else
 				{
-					$file_path = $GLOBALS[base_dir]."/".$folder_path."/".$file->get_object_id()."-".$_GET[version].".".$extension_array[$extension_array_length];
+					$file_path = $GLOBALS[base_dir]."/".$folder_path."/".$file->get_data_entity_id()."-".$_GET[version].".".$extension_array[$extension_array_length];
 				}
 				
 				header("Content-Type: application/octet-stream");

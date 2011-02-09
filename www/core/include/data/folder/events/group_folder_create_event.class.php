@@ -21,34 +21,38 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /**
- * Virtual Folder Management Interface
+ * Group Folder Create Event
  * @package data
  */
-interface VirtualFolderInterface
-{
-	function __construct($virtual_folder_id);
-	function __destruct();
+class GroupFolderCreateEvent extends Event
+{    
+	private $folder_id;
 	
-	public function create($folder_id, $name);
-	public function delete();
-	
-	public function link_folder($folder_id);
-	public function unlink_folder($folder_id);
-
-	public function is_project_vfolder();
-	public function is_sample_vfolder();
-	
-	public function get_subfolder_array();
-	public function get_name();
-	public function get_datetime();
-	
-	public function set_project_vfolder();
-	public function set_sample_vfolder();
-
-	public static function exist_vfolder($virtual_folder_id);
-	public static function list_entries_by_folder_id($folder_id);
+	function __construct($folder_id)
+    {
+    	if (is_numeric($folder_id))
+    	{
+    		parent::__construct();
+    		$this->folder_id = $folder_id;
+    	}
+    	else
+    	{
+    		$this->folder_id = null;
+    	}
+    }
+    
+    public function get_folder_id()
+    {
+    	if ($this->folder_id)
+    	{
+    		return $this->folder_id;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
 }
 
 ?>

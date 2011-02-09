@@ -29,11 +29,6 @@
 interface FolderInterface
 {
 	function __destruct();
-
-	public function is_read_access();
-	public function is_write_access();
-	public function is_delete_access();
-	public function is_control_access();
 	
 	public function is_flag_change_permission();
 	public function is_flag_add_folder();
@@ -44,8 +39,6 @@ interface FolderInterface
 	
 	public function exist_folder();
 	public function exist_subfolder_name($name);
-	public function exist_file($name);
-	public function exist_value($value_type_id);
 	
 	public function delete($recursive, $content);
 	public function mark_as_deleted();
@@ -56,22 +49,10 @@ interface FolderInterface
 	
 	public function get_object_path();
 	public function get_object_id_path();
-	public function get_toid();
-	public function get_is_root();
 	public function get_name();
 	public function get_path();
-	public function get_datetime();
-	public function get_owner_id();
-	public function get_owner_group_id();
-	public function get_permission();
-	public function get_permission_string();
-	public function get_automatic();
 	
 	public function set_name($name);
-	public function set_owner_id($owner_id);
-	public function set_owner_group_id($owner_group_id);
-	public function set_permission($permission);
-	public function set_automatic($automatic);
 	public function set_flag($flag);
 	
 	public function get_subfolder_array();

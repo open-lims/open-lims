@@ -32,7 +32,7 @@ class TableIO {
 	private $css_class;
 	private $last_line_text;
 	
-	private $bottom_right_text;
+	private $top_right_text;
 	
 	private $finalised;
 

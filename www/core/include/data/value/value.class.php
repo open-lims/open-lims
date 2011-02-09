@@ -40,7 +40,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Value Management Class
  * @package data
  */
-class Value extends Object implements ValueInterface, EventListenerInterface
+class Value extends DataEntity implements ValueInterface
 {
 	private $value_id;
 	
@@ -62,7 +62,7 @@ class Value extends Object implements ValueInterface, EventListenerInterface
 			$this->value_id = null;
 			$this->value = new Value_Access(null);
 			$this->value_version = new ValueVersion_Access(null);
-			$this->object_id = null;
+			parent::__construct(null);
 		}
 		else
 		{
@@ -72,58 +72,7 @@ class Value extends Object implements ValueInterface, EventListenerInterface
 			$value_version_id = ValueVersion_Access::get_current_entry_by_toid($value_id);
 			$this->value_version = new ValueVersion_Access($value_version_id);
 			
-			$object_id = parent::get_id_by_value_id($value_id);
-			parent::__construct($object_id);
-
-			$object_permission = new ObjectPermission($this->value->get_permission(), $this->value->get_automatic(), $this->value->get_owner_id(), $this->value->get_owner_group_id());
-			
-			// Problematic Dependecy
-			if ($this->project_id)
-			{
-				$object_permission->set_project_id($this->project_id);
-			}
-			
-			// Problematic Dependecy
-			if ($this->sample_id)
-			{
-				$object_permission->set_sample_id($this->sample_id);
-			}
-			
-			if ($object_permission->is_access(1))
-			{
-				$this->read_access = true;
-			}
-			else
-			{
-				$this->read_access = false;
-			}
-			
-			if ($object_permission->is_access(2))
-			{
-				$this->write_access = true;
-			}
-			else
-			{
-				$this->write_access = false;
-			}
-			
-			if ($object_permission->is_access(3))
-			{
-				$this->delete_access = true;
-			}
-			else
-			{
-				$this->delete_access = false;
-			}
-			
-			if ($object_permission->is_access(4))
-			{
-				$this->control_access = true;
-			}
-			else
-			{
-				$this->control_access = false;
-			}
+			parent::__construct($this->value->get_data_entity_id());
 		}
     }
     
@@ -171,39 +120,7 @@ class Value extends Object implements ValueInterface, EventListenerInterface
 			return false;
 		}
 	}
-    
-    /**
-     * @return bool
-     */
-	public function is_read_access()
-	{
-		return $this->read_access;
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_write_access()
-	{
-		return $this->write_access;
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_delete_access()
-	{
-		return $this->delete_access;
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_control_access()
-	{
-		return $this->control_access;
-	}
-	
+    	
 	/**
 	 * Creates a new value
 	 * @param integer $folder_id
@@ -213,7 +130,7 @@ class Value extends Object implements ValueInterface, EventListenerInterface
 	 * @param bool $premature
 	 * @return integer
 	 */
-	public function create($folder_id, $owner_id, $type_id, $value, $premature)
+	public function create($folder_id, $owner_id, $type_id, $value)
 	{
 		global $user, $transaction;
 		
@@ -226,82 +143,82 @@ class Value extends Object implements ValueInterface, EventListenerInterface
 				$owner_id = $user->get_user_id();
 			}
 			
-			if ($premature == true)
-			{
-				$checksum = 0;
-			}
-			else
-			{
-				$checksum = md5(serialize($value));
-			}
+			$checksum = md5(serialize($value));
 			
-			$value_access = new Value_Access(null);
-			$value_id = $value_access->create($type_id, $owner_id);
-			
-			if ($value_id != null)
+			$folder = Folder::get_instance($folder_id);
+					
+			if (($data_entity_id = parent::create($owner_id, null)) != null)
 			{
-				if ($type_id != 2 and is_array($value))
+				if (parent::set_as_child_of($folder->get_data_entity_id()) == false)
 				{
-					$full_text_index = false;
-					$full_text_key_array = array();
-					$full_text_content_string = "";
-				
-					foreach ($value as $fe_key => $fe_value)
+					if ($transaction_id != null)
 					{
-						if (strpos($fe_key, "-vartype") !== false)
+						$transaction->rollback($transaction_id);
+					}
+					return null;
+				}
+				
+				$value_access = new Value_Access(null);
+				
+				if (($value_id = $value_access->create($data_entity_id, $type_id)) != null)
+				{
+					if ($type_id != 2 and is_array($value))
+					{
+						$full_text_index = false;
+						$full_text_key_array = array();
+						$full_text_content_string = "";
+					
+						foreach ($value as $fe_key => $fe_value)
 						{
-							if ($fe_value == "string")
+							if (strpos($fe_key, "-vartype") !== false)
 							{
-								$full_text_index = true;
-								$tmp_key = str_replace("-vartype","",$fe_key);
-								array_push($full_text_key_array, $tmp_key);
+								if ($fe_value == "string")
+								{
+									$full_text_index = true;
+									$tmp_key = str_replace("-vartype","",$fe_key);
+									array_push($full_text_key_array, $tmp_key);
+								}
 							}
 						}
+						
+						if (is_array($full_text_key_array) and count($full_text_key_array) >= 1)
+						{
+							foreach($full_text_key_array as $fe_key => $fe_value)
+							{
+								if ($full_text_content_string)
+								{
+									$full_text_content_string = $full_text_content_string." ".$value[$fe_value];
+								}
+								else
+								{
+									$full_text_content_string = $value[$fe_value];
+								}
+							}
+						}
+					}
+					else
+					{
+						$full_text_index = true;
+						$full_text_content_string = $value;
 					}
 					
-					if (is_array($full_text_key_array) and count($full_text_key_array) >= 1)
+					$value_version_access = new ValueVersion_access(null);
+					$value_version_id = $value_version_access->create($value_id, 1, serialize($value), $checksum, null, 1, true, $owner_id);
+					
+					if ($full_text_index == true and $full_text_content_string)
 					{
-						foreach($full_text_key_array as $fe_key => $fe_value)
-						{
-							if ($full_text_content_string)
-							{
-								$full_text_content_string = $full_text_content_string." ".$value[$fe_value];
-							}
-							else
-							{
-								$full_text_content_string = $value[$fe_value];
-							}
-						}
+						$value_version_access->set_text_search_vector($full_text_content_string, "english");
 					}
-				}
-				else
-				{
-					$full_text_index = true;
-					$full_text_content_string = $value;
-				}
-				
-				$value_version_access = new ValueVersion_access(null);
-				$value_version_id = $value_version_access->create($value_id, 1, serialize($value), $checksum, null, 1, true, $owner_id);
-				
-				if ($full_text_index == true and $full_text_content_string)
-				{
-					$value_version_access->set_text_search_vector($full_text_content_string, "english");
-				}
-				
-				if ($value_version_id != null)
-				{
-					parent::create($folder_id, null, $value_id, $premature);
-				
-					if ($this->object_id != null)
+					
+					if ($value_version_id != null)
 					{
-						$this->__construct($value_id);
 						if ($transaction_id != null)
 						{
 							$transaction->commit($transaction_id);
 						}
 						return $value_id;
-					
-					}else
+					}
+					else
 					{
 						if ($transaction_id != null)
 						{
@@ -895,21 +812,6 @@ class Value extends Object implements ValueInterface, EventListenerInterface
 			}			
 		}
 	}
-
-	/**
-	 * @return integer
-	 */
-	public function get_object_id()
-	{
-		if ($this->object_id)
-		{
-			return $this->object_id;
-		}
-		else
-		{
-			return null;
-		}
-	}
 	
 	/**
 	 * @return string
@@ -1010,21 +912,6 @@ class Value extends Object implements ValueInterface, EventListenerInterface
 	/**
 	 * @return string
 	 */
-	public function get_datetime()
-	{
-		if ($this->value_version)
-		{
-			return $this->value_version->get_datetime();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return string
-	 */
 	public function get_checksum()
 	{
 		if ($this->value_version)
@@ -1036,83 +923,7 @@ class Value extends Object implements ValueInterface, EventListenerInterface
 			return null;
 		}
 	}
-	
-	/**
-	 * @return integer
-	 */
-	public function get_owner_id()
-	{
-		if ($this->value)
-		{
-			return $this->value->get_owner_id();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return integer
-	 */
-	public function get_owner_group_id()
-	{
-		if ($this->value)
-		{
-			return $this->value->get_owner_group_id();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return integer
-	 */
-	public function get_permission()
-	{
-		if ($this->value)
-		{
-			return $this->value->get_permission();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function get_automatic()
-	{
-		if ($this->value)
-		{
-			return $this->value->get_automatic();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return string
-	 */
-	public function get_permission_string()
-	{
-		if ($this->value)
-		{
-			$object_permission = new ObjectPermission($this->value->get_permission(), $this->value->get_automatic(), $this->value->get_owner_id(), $this->value->get_owner_group_id());
-			return $object_permission->get_permission_string();
-		}
-		else
-		{
-			return null;
-		}
-	}
-    
+	    
     /**
      * Checks if the xml-array contains one or more each-statements
      * @param array $xml_array
@@ -1650,71 +1461,7 @@ class Value extends Object implements ValueInterface, EventListenerInterface
     	}
 		return $return;
 	}
-	
-	/**
-	 * @param integer $owner_id
-	 * @return bool
-	 */
-	public function set_owner_id($owner_id)
-	{
-		if (isset($owner_id) and $this->value)
-		{
-			return $this->value->set_owner_id($owner_id);
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param integer $owner_group_id
-	 * @return bool
-	 */
-	public function set_owner_group_id($owner_group_id)
-	{
-		if (isset($owner_group_id) and $this->value)
-		{
-			return $this->value->set_owner_group_id($owner_group_id);
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param integer $permission
-	 * @return bool
-	 */
-	public function set_permission($permission)
-	{
-		if (isset($permission) and $this->value)
-		{
-			return $this->value->set_permission($permission);
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param bool $automatic
-	 * @return bool
-	 */
-	public function set_automatic($automatic)
-	{
-		if (isset($automatic) and $this->value)
-		{
-			return $this->value->set_automatic($automatic);
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
+		
 	/**
 	 * @param array $content_array
 	 */
@@ -1764,6 +1511,15 @@ class Value extends Object implements ValueInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @param integer $data_entity_id
+	 * @return integer
+	 */
+	public static function get_value_id_by_data_entity_id($data_entity_id)
+	{	
+		return Value_Access::get_entry_by_data_entity_id($data_entity_id);
+	}
+	
+	/**
 	 * Sets the owner_id on null, where owner_id = $owner_id
 	 * @param integer $owner_group_id
 	 * @return bool
@@ -1783,29 +1539,5 @@ class Value extends Object implements ValueInterface, EventListenerInterface
 	{
 		return Value_Access::is_entry_type_of($value_id, $type_id);
 	}
-	
-    /**
-     * @todo implementation
-     */
-    public static function listen_events($event_object)
-    {
-    	if ($event_object instanceof UserDeleteEvent)
-    	{
-			if (Value_Access::set_owner_id_on_null($event_object->get_user_id()) == false)
-			{
-				return false;
-			}
-    	}
-    	
-   		if ($event_object instanceof GroupDeleteEvent)
-    	{
-			if (Value_Access::set_owner_group_id_on_null($event_object->get_group_id()) == false)
-			{
-				return false;
-			}
-    	}
-    	
-    	return true;
-    }
 }
 ?>

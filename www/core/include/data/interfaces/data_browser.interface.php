@@ -28,10 +28,7 @@
  */
 interface DataBrowserInterface
 {	
-	public function get_data_browser_array($folder_id, $virtual_folder_id);
-	public function get_folder_id();
-	
-	public static function get_image_browser_array($folder_id);
+
 }
 
 ?>

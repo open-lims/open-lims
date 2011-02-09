@@ -147,7 +147,7 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 			$path = new Path($folder->get_path());
 			$path->add_element($project_id);
 			
-			if (($folder_id = parent::create($project->get_name(), $project_folder_id, false, $path->get_path_string(), $project->get_owner_id(), null)) != null)
+			if (($folder_id = parent::create($project->get_name(), $project_folder_id, $path->get_path_string(), $project->get_owner_id(), null)) != null)
 			{
 				$project_has_folder_access = new ProjectHasFolder_Access(null);
 				if ($project_has_folder_access->create($project_id, $folder_id) == null)

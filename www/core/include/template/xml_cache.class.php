@@ -38,20 +38,20 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class XmlCache implements XmlCacheInterface
 {
-	private $object_id;
+	private $data_entity_id;
 	private $xml_cache;
 	private $xml_cache_id;
 	private $xml_array;
 	
 	/**
-	 * @param integer $object_id
+	 * @param integer $data_entity_id
 	 */
-    function __construct($object_id)
+    function __construct($data_entity_id)
     {
-    	if (is_numeric($object_id))
+    	if (is_numeric($data_entity_id))
     	{
-	    	$this->object_id = $object_id;
-	    	$this->xml_cache_id = XmlCache_Access::get_id_by_object_id($object_id);
+	    	$this->data_entity_id = $data_entity_id;
+	    	$this->xml_cache_id = XmlCache_Access::get_id_by_data_entity_id($data_entity_id);
 	    	
 	    	if (is_numeric($this->xml_cache_id))
 	    	{
@@ -118,25 +118,23 @@ class XmlCache implements XmlCacheInterface
 	{
 		global $transaction;
 		
-		if ($this->object_id)
+		if ($this->data_entity_id)
 		{
 			$transaction_id = $transaction->begin();
-			
-			$object = new Object($this->object_id);
-    		$file_id = $object->get_file_id();
-    		
+
+    		$file_id = File::get_file_id_by_data_entity_id($this->data_entity_id);
     		$file = new File($file_id);
     		
-    		$folder = Folder::get_instance($file->get_toid());
+    		$folder = Folder::get_instance($file->get_parent_folder());
 			$folder_path = $folder->get_path();
-			
+
 			$extension_array = explode(".",$file->get_name());
 			$extension_array_length = substr_count($file->get_name(),".");
 			
-			$file_path = $GLOBALS[base_dir]."/".$folder_path."/".$file->get_object_id()."-1.".$extension_array[$extension_array_length];
+			$file_path = $GLOBALS[base_dir]."/".$folder_path."/".$this->data_entity_id."-1.".$extension_array[$extension_array_length];
     		
     		$this->xml_string = $file->get_file_content();
-    		
+
     		if (strlen($this->xml_string) > 0)
     		{
 	    		$xml = new Xml($this->xml_string);
@@ -146,7 +144,7 @@ class XmlCache implements XmlCacheInterface
 				if (is_array($this->xml_array) and count($this->xml_array) >= 1)
 				{
 					$this->xml_cache = new XmlCache_Access(null);
-					$id = $this->xml_cache->create($this->object_id, $file_path, md5_file($file_path));
+					$id = $this->xml_cache->create($this->data_entity_id, $file_path, md5_file($file_path));
 					
 					foreach($this->xml_array as $key => $value)
 					{
@@ -154,7 +152,7 @@ class XmlCache implements XmlCacheInterface
 						$xml_cache_element->create($id, $value[0], $value[1], $value[2], $value[3]);
 					}
 					
-					$this->__construct($this->object_id);
+					$this->__construct($this->data_entity_id);
 					
 					if ($transaction_id != null)
 					{

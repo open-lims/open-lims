@@ -34,12 +34,7 @@ interface FileInterface
 	public function open_internal_revision($internal_revision);
 	// private function open_file_version_id($file_version_id)
 	
-	public function is_read_access();
-	public function is_write_access();
-	public function is_delete_access();
-	public function is_control_access();
-	
-	public function create($name, $folder_id, $path, $owner_id, $premature);
+	public function create($name, $folder_id, $path, $owner_id);
 	public function delete();
 	
 	public function delete_version($internal_revision);
@@ -57,7 +52,6 @@ interface FileInterface
 	public function get_file_content();
 	
 	public function get_file_internal_revisions();
-	public function get_object_id();
 	
 	public function get_item_id_array();
 	
@@ -67,20 +61,9 @@ interface FileInterface
 	public function get_name();
 	public function get_version();
 	public function get_internal_revision();
-	public function get_file_datetime();
-	public function get_datetime();
+	public function get_version_datetime();
 	public function get_size();
 	public function get_checksum();
-	public function get_owner_id();
-	public function get_owner_group_id();
-	public function get_permission();
-	public function get_automatic();
-	public function get_permission_string();	
-	
-	public function set_owner_id($owner_id);
-	public function set_owner_group_id($owner_group_id);
-	public function set_permission($permission);
-	public function set_automatic($automatic);
 
 	public static function exist_file($file_id);
 	public static function get_icon_by_name($name);

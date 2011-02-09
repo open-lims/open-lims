@@ -39,7 +39,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * File Class for Management of Files in Folders
  * @package data
  */
-class File extends Object implements FileInterface, EventListenerInterface
+class File extends DataEntity implements FileInterface
 {
 	private $file_id;
 	
@@ -58,7 +58,6 @@ class File extends Object implements FileInterface, EventListenerInterface
 			$this->file_id = null;
 			$this->file = new File_Access(null);
 			$this->file_version = new FileVersion_Access(null);
-			$this->object_id = null;
 			parent::__construct(null);
 		}
 		else
@@ -68,57 +67,8 @@ class File extends Object implements FileInterface, EventListenerInterface
 			
 			$file_version_id = FileVersion_Access::get_current_entry_by_toid($file_id);
 			$this->file_version = new FileVersion_Access($file_version_id);
-			
-			$object_id = parent::get_id_by_file_id($file_id);
-			parent::__construct($object_id);
-			
-			$object_permission = new ObjectPermission($this->file->get_permission(), $this->file->get_automatic(), $this->file->get_owner_id(), $this->file->get_owner_group_id());
-			
-			if ($this->project_id)
-			{
-				$object_permission->set_project_id($this->project_id);
-			}
-			
-			if ($this->sample_id)
-			{
-				$object_permission->set_sample_id($this->sample_id);
-			}
-			
-			if ($object_permission->is_access(1))
-			{
-				$this->read_access = true;
-			}
-			else
-			{
-				$this->read_access = false;
-			}
-			
-			if ($object_permission->is_access(2))
-			{
-				$this->write_access = true;
-			}
-			else
-			{
-				$this->write_access = false;
-			}
-			
-			if ($object_permission->is_access(3))
-			{
-				$this->delete_access = true;
-			}
-			else
-			{
-				$this->delete_access = false;
-			}
-			
-			if ($object_permission->is_access(4))
-			{
-				$this->control_access = true;
-			}
-			else
-			{
-				$this->control_access = false;
-			}
+
+			parent::__construct($this->file->get_data_entity_id());
 		}
 	}
 	
@@ -194,39 +144,7 @@ class File extends Object implements FileInterface, EventListenerInterface
 			return false;
 		}
 	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_read_access()
-	{
-		return $this->read_access;
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_write_access()
-	{
-		return $this->write_access;
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_delete_access()
-	{
-		return $this->delete_access;
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_control_access()
-	{
-		return $this->control_access;
-	}
-	
+		
 	/**
 	 * Creates a new file
 	 * @param string $name
@@ -236,7 +154,7 @@ class File extends Object implements FileInterface, EventListenerInterface
 	 * @param bool $premature
 	 * @return integer
 	 */
-	public function create($name, $folder_id, $path, $owner_id, $premature)
+	public function create($name, $folder_id, $path, $owner_id)
 	{
 		global $user, $transaction;
 		
@@ -253,33 +171,33 @@ class File extends Object implements FileInterface, EventListenerInterface
 			{
 				$path = $GLOBALS[base_dir]."/".$path;
 			}
+
+			$size = filesize($path);
+			$checksum = md5_file($path);
 			
-			if ($premature == true)
+			$folder = Folder::get_instance($folder_id);
+					
+			if (($data_entity_id = parent::create($owner_id, null)) != null)
 			{
-				$size = 0;
-				$checksum = 0;
-			}
-			else
-			{
-				$size = filesize($path);
-				$checksum = md5_file($path);
-			}
-			
-			$file_access = new File_Access(null);
-			$file_id = $file_access->create($owner_id);
-			
-			if ($file_id != null)
-			{
-				$file_version_access = new FileVersion_access(null);
-				$file_version_id = $file_version_access->create($file_id, $name, 1, $size, $checksum, null, null, 1, true, $owner_id);
-				
-				if ($file_version_id != null)
+				if (parent::set_as_child_of($folder->get_data_entity_id()) == false)
 				{
-					parent::create($folder_id, $file_id, null, $premature);
-				
-					if ($this->object_id != null)
+					if ($transaction_id != null)
 					{
-						$this->__construct($file_id);
+						$transaction->rollback($transaction_id);
+					}
+					return null;
+				}
+			
+				$file_access = new File_Access(null);
+				$file_id = $file_access->create($data_entity_id);
+				
+				if ($file_id != null)
+				{
+					$file_version_access = new FileVersion_access(null);
+					$file_version_id = $file_version_access->create($file_id, $name, 1, $size, $checksum, null, null, 1, true, $owner_id);
+					
+					if ($file_version_id != null)
+					{
 						if ($transaction_id != null)
 						{
 							$transaction->commit($transaction_id);
@@ -288,6 +206,7 @@ class File extends Object implements FileInterface, EventListenerInterface
 					}
 					else
 					{
+						$file_access->delete();
 						if ($transaction_id != null)
 						{
 							$transaction->rollback($transaction_id);
@@ -297,13 +216,12 @@ class File extends Object implements FileInterface, EventListenerInterface
 				}
 				else
 				{
-					$file_access->delete();
 					if ($transaction_id != null)
 					{
 						$transaction->rollback($transaction_id);
 					}
 					return null;
-				}
+				}	
 			}
 			else
 			{
@@ -312,7 +230,7 @@ class File extends Object implements FileInterface, EventListenerInterface
 					$transaction->rollback($transaction_id);
 				}
 				return null;
-			}	
+			}
 		}
 		else
 		{
@@ -323,6 +241,7 @@ class File extends Object implements FileInterface, EventListenerInterface
 	/**
 	 * Deletes a file, including all versions
 	 * @return bool
+	 * @todo first db delete, the filesystem delete
 	 */
 	public function delete()
 	{
@@ -332,56 +251,40 @@ class File extends Object implements FileInterface, EventListenerInterface
 		{
 			$transaction_id = $transaction->begin();
 			
-			$object_id = $this->object_id;
-			$object_toid = parent::get_toid();
-			$object_delete = parent::delete();
+			$folder = Folder::get_instance($this->get_parent_folder());
+
+			$file_version_array = FileVersion_Access::list_entries_by_toid($this->file_id);
 			
-			$folder = Folder::get_instance($object_toid);
+			unset($this->file_version);
 			
-			if ($object_delete == true)
+			if (is_array($file_version_array) and count($file_version_array) >= 1)
 			{
-				$file_version_array = FileVersion_Access::list_entries_by_toid($this->file_id);
-				
-				unset($this->file_version);
-				
-				if (is_array($file_version_array) and count($file_version_array) >= 1)
+				foreach($file_version_array as $key => $value)
 				{
-					foreach($file_version_array as $key => $value)
-					{
-						$file_version_access = new FileVersion_Access($value);
-						
-						$extension_array = explode(".",$file_version_access->get_name());
-						$extension_array_length = substr_count($file_version_access->get_name(),".");
-									
-						if ($extension_array_length == 0)
-						{
-							$extension = "";
-						}
-						else
-						{
-							$extension = ".".$extension_array[$extension_array_length];
-						}
-						
-						$path = $GLOBALS[base_dir]."/".$folder->get_path()."/".$object_id."-".$file_version_access->get_internal_revision()."".$extension."";
+					$file_version_access = new FileVersion_Access($value);
 					
-						if ($file_version_access->delete())
+					$extension_array = explode(".",$file_version_access->get_name());
+					$extension_array_length = substr_count($file_version_access->get_name(),".");
+								
+					if ($extension_array_length == 0)
+					{
+						$extension = "";
+					}
+					else
+					{
+						$extension = ".".$extension_array[$extension_array_length];
+					}
+					
+					$path = $GLOBALS[base_dir]."/".$folder->get_path()."/".$this->data_entity_id."-".$file_version_access->get_internal_revision()."".$extension."";
+				
+					if ($file_version_access->delete())
+					{
+						if (is_file($path))
 						{
-							if (is_file($path))
+							if (is_writable($path))
 							{
-								if (is_writable($path))
-								{
-									$delete_success = unlink($path);
-									if ($delete_success == false)
-									{
-										if ($transaction_id != null)
-										{
-											$transaction->rollback($transaction_id);
-										}
-										$this->file->set_flag(-1); // Corrupt
-										return false;
-									}
-								}
-								else
+								$delete_success = unlink($path);
+								if ($delete_success == false)
 								{
 									if ($transaction_id != null)
 									{
@@ -390,23 +293,36 @@ class File extends Object implements FileInterface, EventListenerInterface
 									$this->file->set_flag(-1); // Corrupt
 									return false;
 								}
-							}	
-						}
-						else
-						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
 							}
-							return false;
-						}
+							else
+							{
+								if ($transaction_id != null)
+								{
+									$transaction->rollback($transaction_id);
+								}
+								$this->file->set_flag(-1); // Corrupt
+								return false;
+							}
+						}	
 					}
+					else
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+					}
+				}
+			
+				$file_delete = $this->file->delete();
 				
-					$file_delete = $this->file->delete();
-					
-					$this->__destruct();
-					
-					if ($file_delete == true)
+				$this->__destruct();
+				
+				if ($file_delete == true)
+				{
+					// Data Entity Delete
+					if (parent::delete() == true)
 					{
 						if ($transaction_id != null)
 						{
@@ -422,6 +338,7 @@ class File extends Object implements FileInterface, EventListenerInterface
 						}
 						return false;
 					}
+					
 				}
 				else
 				{
@@ -462,10 +379,7 @@ class File extends Object implements FileInterface, EventListenerInterface
 			{
 				$transaction_id = $transaction->begin();
 				
-				$object_id = $this->object_id;
-				$object_toid = parent::get_toid();
-				
-				$folder = Folder::get_instance($object_toid);
+				$folder = Folder::get_instance($this->get_parent_folder());
 			
 				$this->open_internal_revision($internal_revision);
 				
@@ -515,7 +429,7 @@ class File extends Object implements FileInterface, EventListenerInterface
 						$extension = ".".$extension_array[$extension_array_length];
 					}
 					
-					$path = $GLOBALS[base_dir]."/".$folder->get_path()."/".$object_id."-".$this->file_version->get_internal_revision()."".$extension."";
+					$path = $GLOBALS[base_dir]."/".$folder->get_path()."/".$this->date_entity_id."-".$this->file_version->get_internal_revision()."".$extension."";
 					
 					if ($this->file_version->delete())
 					{
@@ -677,6 +591,8 @@ class File extends Object implements FileInterface, EventListenerInterface
 	 * @param integer $folder_id
 	 * @param array $file_array
 	 * @return integer
+	 * @todo checks if file exists in folder via DataEntity
+	 * @todo project quota via event
 	 */
 	public function upload_file($folder_id, $file_array)
 	{
@@ -690,7 +606,8 @@ class File extends Object implements FileInterface, EventListenerInterface
 
 			if ($folder->is_write_access() == true)
 			{
-				if ($folder->exist_file($file_array['name']) == false)
+				// check is file exists in folder via DataEntity
+				if (true)
 				{
 					$target = $GLOBALS[base_dir]."/".$folder->get_path()."/".$file_array['name'];
 		
@@ -730,43 +647,23 @@ class File extends Object implements FileInterface, EventListenerInterface
 		 						
 		 						$user_quota = $user->get_user_quota();
 								$user_filesize = $user->get_user_filesize();
-								
-								if (($project_id = $folder->is_child_of_project_folder()) != null)
-								{
-									$project = new Project($project_id);
-									$project_quota = $project->get_quota();
-									$project_filesize = $project->get_filesize();
-									
-									$new_project_filesize = $project_filesize + $file_size;
-									
-									if ($project_quota > $new_project_filesize or $project_quota == 0)
-									{
-										$project_quota = true;
-									}
-									else
-									{
-										$project_quota = false;
-									}
-								}
-								else
-								{
-									$project_quota = true;
-								}
-								
+																
 								$new_user_filesize = $user_filesize + $file_size;
 								
-								if (($user_quota > $new_user_filesize or $user_quota == 0) and $project_quota == true)
+								if (($user_quota > $new_user_filesize or $user_quota == 0))
 								{
 									$user->set_user_filesize($new_user_filesize);
 			
-									if ($folder->is_child_of_project_folder() != null)
-									{
-										$project->set_filesize($new_project_filesize);
-									}
-			
 			 						// Create File
-			 						$file_id = $this->create($file_array['name'], $folder_id, $target, $user->get_user_id(), false);
-			 						$object_id = $this->get_object_id();
+			 						if (($file_id = $this->create($file_array['name'], $folder_id, $target, $user->get_user_id())) == null)
+			 						{
+			 							if ($transaction_id != null)
+										{
+											$transaction->rollback($transaction_id);
+										}
+										return 2;
+			 						}
+			 						$data_entity_id = $this->get_data_entity_id();
 			 													
 									// Rename File
 									$extension_array = explode(".",$target);
@@ -781,7 +678,7 @@ class File extends Object implements FileInterface, EventListenerInterface
 										$extension = ".".$extension_array[$extension_array_length];
 									}
 									
-									$new_filename = $GLOBALS[base_dir]."/".$folder->get_path()."/".$object_id."-1".$extension;
+									$new_filename = $GLOBALS[base_dir]."/".$folder->get_path()."/".$data_entity_id."-1".$extension;
 									
 									// Rename file with the object id
 									if (rename($target, $new_filename) == true)
@@ -885,6 +782,7 @@ class File extends Object implements FileInterface, EventListenerInterface
 	 * @param bool $major
 	 * @param bool $current
 	 * @return integer
+	 * @todo project quota via event
 	 */
 	public function update_file($file_array, $previous_version_id, $major, $current)
 	{
@@ -894,7 +792,7 @@ class File extends Object implements FileInterface, EventListenerInterface
 		{
 			$transaction_id = $transaction->begin();
 	
-			$folder = Folder::get_instance(parent::get_toid());
+			$folder = Folder::get_instance($this->get_parent_folder());
 			$folder_path = $folder->get_path();
 	
 			if ($folder->is_write_access() == true)
@@ -941,29 +839,11 @@ class File extends Object implements FileInterface, EventListenerInterface
 								$user_filesize = $user->get_user_filesize();
 								
 								$new_user_filesize = $user_filesize + $file_size;
-								
-								if (($project_id = $folder->is_in_project()) != null)
-								{
-									$project = new Project($project_id);
-									
-									$project_quota = $project->get_quota();
-			 						$project_filesize = $project->get_size();
-								
-									$new_project_filesize = $project_filesize + $file_size;
-								}
-								else
-								{
-									$project_quota = 0;
-								}
+
 			
-								if (($user_quota > $new_user_filesize or $user_quota == 0) and ($project_quota > $new_project_filesize or $project_id == 0 or $project_quota == 0))
+								if (($user_quota > $new_user_filesize or $user_quota == 0))
 								{
 									$user->set_user_filesize($new_user_filesize);
-								
-									if ($project_id != null)
-									{							
-			 							$project->set_filesize($new_project_filesize);
-			 						}
 			 						
 									// Rename Old File
 									$current_file_version_id = FileVersion_Access::get_current_entry_by_toid($this->file_id);
@@ -1043,7 +923,7 @@ class File extends Object implements FileInterface, EventListenerInterface
 										$extension_array[0] = "";
 									}
 									
-									$new_filename = $GLOBALS[base_dir]."/".$folder_path."/".$this->object_id."-".$new_internal_revision.".".$extension_array[$extension_array_length];
+									$new_filename = $GLOBALS[base_dir]."/".$folder_path."/".$this->data_entity_id."-".$new_internal_revision.".".$extension_array[$extension_array_length];
 									
 									// Rename file with the object id
 									if (rename($target, $new_filename) == true)
@@ -1228,11 +1108,9 @@ class File extends Object implements FileInterface, EventListenerInterface
 	 */
 	public function get_file_content()
 	{
-		if ($this->file_id and $this->object_id)
-		{
-			$object_toid = parent::get_toid();
-			
-			$folder = Folder::get_instance($object_toid);
+		if ($this->file_id)
+		{			
+			$folder = Folder::get_instance($this->get_parent_folder());
 
 			$extension_array = explode(".",$this->file_version->get_name());
 			$extension_array_length = substr_count($this->file_version->get_name(),".");
@@ -1246,7 +1124,7 @@ class File extends Object implements FileInterface, EventListenerInterface
 				$extension = ".".$extension_array[$extension_array_length];
 			}
 			
-			$path = $GLOBALS[base_dir]."/".$folder->get_path()."/".$this->object_id."-".$this->file_version->get_internal_revision()."".$extension."";
+			$path = $GLOBALS[base_dir]."/".$folder->get_path()."/".$this->data_entity_id."-".$this->file_version->get_internal_revision()."".$extension."";
 		
 			$size = filesize($path);
 			$handle = fopen($path, "r");
@@ -1285,21 +1163,6 @@ class File extends Object implements FileInterface, EventListenerInterface
 			{
 				return null;
 			}		
-		}
-	}
-	
-	/**
-	 * @return integer
-	 */
-	public function get_object_id()
-	{
-		if ($this->object_id)
-		{
-			return $this->object_id;
-		}
-		else
-		{
-			return null;
 		}
 	}
 	
@@ -1600,22 +1463,7 @@ class File extends Object implements FileInterface, EventListenerInterface
 	/**
 	 * @return string
 	 */
-	public function get_file_datetime()
-	{
-		if ($this->file)
-		{
-			return $this->file->get_datetime();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return string
-	 */
-	public function get_datetime()
+	public function get_version_datetime()
 	{
 		if ($this->file_version)
 		{
@@ -1656,150 +1504,7 @@ class File extends Object implements FileInterface, EventListenerInterface
 			return null;
 		}
 	}
-	
-	/**
-	 * @return integer
-	 */
-	public function get_owner_id()
-	{
-		if ($this->file)
-		{
-			return $this->file->get_owner_id();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return integer
-	 */
-	public function get_owner_group_id()
-	{
-		if ($this->file)
-		{
-			return $this->file->get_owner_group_id();
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-	 * @return integer
-	 */
-	public function get_permission()
-	{
-		if ($this->file)
-		{
-			return $this->file->get_permission();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function get_automatic()
-	{
-		if ($this->file)
-		{
-			return $this->file->get_automatic();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * Returns the Permission-String
-	 * Example: rwdc---------r-dc
-	 * @return string
-	 */
-	public function get_permission_string()
-	{
-		if ($this->file)
-		{
-			$object_permission = new ObjectPermission($this->file->get_permission(), $this->file->get_automatic(), $this->file->get_owner_id(), $this->file->get_owner_group_id());
-			return $object_permission->get_permission_string();
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	/**
-	 * @param integer $owner_id
-	 * @return bool
-	 */
-	public function set_owner_id($owner_id)
-	{
-		if (isset($owner_id) and $this->file)
-		{
-			return $this->file->set_owner_id($owner_id);
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param integer $owner_group_id
-	 * @return bool
-	 */
-	public function set_owner_group_id($owner_group_id)
-	{
-		if (isset($owner_group_id) and $this->file)
-		{
-			return $this->file->set_owner_group_id($owner_group_id);
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	/**
-	 * @param integer $permission
-	 * @return bool
-	 */
-	public function set_permission($permission)
-	{
-		if (isset($permission) and $this->file)
-		{
-			return $this->file->set_permission($permission);
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param bool $automatic
-	 * @return bool
-	 */
-	public function set_automatic($automatic)
-	{
-		if (isset($automatic) and $this->file)
-		{
-			return $this->file->set_automatic($automatic);
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	
+		
 	/**
 	 * Returns true, if a file exists
 	 * @param integer $file_id
@@ -1815,6 +1520,15 @@ class File extends Object implements FileInterface, EventListenerInterface
    		{
    			return false;
    		}
+	}
+	
+	/**
+	 * @param integer $data_entity_id
+	 * @return integer
+	 */
+	public static function get_file_id_by_data_entity_id($data_entity_id)
+	{	
+		return File_Access::get_entry_by_data_entity_id($data_entity_id);
 	}
 	
 	/**
@@ -1848,29 +1562,5 @@ class File extends Object implements FileInterface, EventListenerInterface
 			return null;
 		}
 	}
-    
-    /**
-     * @todo implementation
-     */
-    public static function listen_events($event_object)
-    {
-    	if ($event_object instanceof UserDeleteEvent)
-    	{
-			if (File_Access::set_owner_id_on_null($event_object->get_user_id()) == false)
-			{
-				return false;
-			}
-    	}
-    	
-    	if ($event_object instanceof GroupDeleteEvent)
-    	{
-			if (File_Access::set_owner_group_id_on_null($event_object->get_group_id()) == false)
-			{
-				return false;
-			}
-    	}
-    	
-    	return true;
-    }
 }
 ?>

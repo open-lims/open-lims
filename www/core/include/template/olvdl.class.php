@@ -40,9 +40,8 @@ class Olvdl
 	private $olvdl;
 
 	private $olvdl_id;
-    private $object_id;
-    
-    private $xml_string;
+    private $data_entity_id;
+
     private $xml_array;
     
     /**
@@ -60,21 +59,10 @@ class Olvdl
     		$this->olvdl_id = $olvdl_id;
     		$this->olvdl = new OlvdlTemplate_Access($olvdl_id);
     		
-    		$this->object_id = $this->olvdl->get_object_id();
+    		$this->data_entity_id = $this->olvdl->get_data_entity_id();
     		
-    		$object = new Object($this->object_id);
-    		$file_id = $object->get_file_id();
-    		
-    		$file = new File($file_id);
-    		
-    		$this->xml_string = $file->get_file_content();
-    		
-    		if (strlen($this->xml_string) > 0)
-    		{
-	    		$xml = new Xml($this->xml_string);
-	    		$xml->parser();
-	    		$this->xml_array = $xml->get_array();
-    		}
+    		$xml_cache = new XmlCache($this->data_entity_id);
+    		$this->xml_array = $xml_cache->get_xml_array();
     	}
     }
     
@@ -84,28 +72,27 @@ class Olvdl
     	{
     		unset($this->olvdl_id);
     		unset($this->olvdl);
-    		unset($this->object_id);
-    		unset($this->xml_string);
+    		unset($this->data_entity_id);
     		unset($this->xml_array);
     	}
     }   
     
     /**
      * Creates a new OLVDL-Template in DB
-     * @param integer $object_id
+     * @param integer $data_entity_id
      * @return integer
      */
-    public function create($object_id)
+    public function create($data_entity_id)
     {
-    	if ($this->olvdl and is_numeric($object_id))
+    	if ($this->olvdl and is_numeric($data_entity_id))
     	{
-    		if (OlvdlTemplate_Access::is_object_id($object_id) == true)
+    		if (OlvdlTemplate_Access::is_data_entity_id($data_entity_id) == true)
     		{
     			return null;	
     		}
     		else
     		{
-    			return $this->olvdl->create($object_id);	
+    			return $this->olvdl->create($data_entity_id);	
     		}
     	}
     	else
@@ -144,21 +131,5 @@ class Olvdl
     		return null;
     	}
     }
-    
-    /**
-     * @return string
-     */
-    public function get_xml_string()
-    {
-    	if ($this->xml_string)
-    	{
-    		return $this->xml_string;
-    	}
-    	else
-    	{
-    		return null;
-    	}
-    }
-
 }
 ?>

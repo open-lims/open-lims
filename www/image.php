@@ -55,14 +55,14 @@
 			
 			if ($file->is_read_access() == true)
 			{
-				$folder = Folder::get_instance($file->get_toid());
+				$folder = Folder::get_instance($file->get_parent_folder());
 				$folder_path = $folder->get_path();
 				
 				$extension_array = explode(".",$file->get_name());
 				$extension_array_length = substr_count($file->get_name(),".");
 				
 
-				$file_path = $GLOBALS[base_dir]."/".$folder_path."/".$file->get_object_id()."-".$file->get_internal_revision().".".$extension_array[$extension_array_length];
+				$file_path = $GLOBALS[base_dir]."/".$folder_path."/".$file->get_data_entity_id()."-".$file->get_internal_revision().".".$extension_array[$extension_array_length];
 				if (!file_exists($file_path))
 				{
 					$file_path = $GLOBALS[www_dir]."/images/access.jpg";

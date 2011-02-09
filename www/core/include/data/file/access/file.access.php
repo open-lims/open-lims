@@ -31,12 +31,7 @@ class File_Access
 	const FILE_PK_SEQUENCE = 'core_files_id_seq';
 
 	private $file_id;
-	
-	private $datetime;
-	private $owner_id;
-	private $owner_group_id;
-	private $permission;
-	private $automatic;
+	private $data_entity_id;
 	private $flag;
 
 	/**
@@ -59,21 +54,8 @@ class File_Access
 			if ($data[id])
 			{
 				$this->file_id			= $file_id;
-				
-				$this->datetime			= $data[datetime];
-				$this->owner_id			= $data[owner_id];
-				$this->owner_group_id	= $data[owner_group_id];
-				$this->permission		= $data[permission];
+				$this->data_entity_id	= $data[data_entity_id];
 				$this->flag				= $data[flag];
-				
-				if ($data[automatic] == "t")
-				{
-					$this->automatic	= true;
-				}
-				else
-				{
-					$this->automatic	= false;
-				}
 			}
 			else
 			{
@@ -87,30 +69,25 @@ class File_Access
 		if ($this->file_id)
 		{
 			unset($this->file_id);
-	
-			unset($this->datetime);
-			unset($this->owner_id);
-			unset($this->owner_group_id);
-			unset($this->permission);
-			unset($this->automatic);
+			unset($this->data_entity_id);
 			unset($this->flag);
 		}
 	}
 
 	/**
-	 * @param integer $owner_id
+	 * @param integer $data_entity_id
 	 * @return integer
 	 */
-	public function create($owner_id)
+	public function create($data_entity_id)
 	{
 		global $db;
 		
-		if (is_numeric($owner_id))
+		if (is_numeric($data_entity_id))
 		{
 			$datetime = date("Y-m-d H:i:s");
 			
-			$sql_write = "INSERT INTO ".self::FILE_TABLE." (id,datetime,owner_id,owner_group_id,permission,automatic,flag) " .
-					"VALUES (nextval('".self::FILE_PK_SEQUENCE."'::regclass),'".$datetime."',".$owner_id.",NULL,NULL,'t',0)";
+			$sql_write = "INSERT INTO ".self::FILE_TABLE." (id,data_entity_id,flag) " .
+					"VALUES (nextval('".self::FILE_PK_SEQUENCE."'::regclass),".$data_entity_id.",0)";
 					
 			$db->db_query($sql_write);	
 			
@@ -158,81 +135,23 @@ class File_Access
 			return false;
 		}
 	}
-	
-	/**
-	 * @return string
-	 */
-	public function get_datetime()
-	{
-		if ($this->datetime)
-		{
-			return $this->datetime;
-		}
-		else
-		{
-			return null;
-		}
-	}
+
 	
 	/**
 	 * @return integer
 	 */
-	public function get_owner_id()
+	public function get_data_entity_id()
 	{
-		if ($this->owner_id)
+		if ($this->data_entity_id)
 		{
-			return $this->owner_id;
+			return $this->data_entity_id;
 		}
 		else
 		{
 			return null;
 		}
 	}
-	
-	/**
-	 * @return integer
-	 */
-	public function get_owner_group_id()
-	{
-		if ($this->owner_group_id)
-		{
-			return $this->owner_group_id;
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return integer
-	 */
-	public function get_permission()
-	{
-		if ($this->permission){
-			return $this->permission;
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function get_automatic()
-	{
-		if (isset($this->automatic))
-		{
-			return $this->automatic;
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
+		
 	/**
 	 * @return integer
 	 */
@@ -249,50 +168,21 @@ class File_Access
 	}
 	
 	/**
-	 * @param string $datetime
+	 * @param integer $data_entity_id
 	 * @return bool
 	 */
-	public function set_datetime($datetime)
-	{		
-		global $db;
-
-		if ($this->file_id and $datetime)
-		{
-			$sql = "UPDATE ".self::FILE_TABLE." SET datetime = '".$datetime."' WHERE id = ".$this->file_id."";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->datetime = $datetime;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param integer $owner_id
-	 * @return bool
-	 */
-	public function set_owner_id($owner_id)
+	public function set_data_entity_id($data_entity_id)
 	{
 		global $db;
 
-		if ($this->file_id and is_numeric($owner_id))
+		if ($this->file_id and is_numeric($data_entity_id))
 		{
-			$sql = "UPDATE ".self::FILE_TABLE." SET owner_id = ".$owner_id." WHERE id = ".$this->file_id."";
+			$sql = "UPDATE ".self::FILE_TABLE." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->file_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
 			{
-				$this->owner_id = $owner_id;
+				$this->data_entity_id = $data_entity_id;
 				return true;
 			}
 			else
@@ -306,102 +196,6 @@ class File_Access
 		}
 	}
 	
-	/**
-	 * @param integer $owner_group_id
-	 * @return bool
-	 */
-	public function set_owner_group_id($owner_group_id)
-	{	
-		global $db;
-
-		if ($this->file_id and is_numeric($owner_group_id))
-		{
-			$sql = "UPDATE ".self::FILE_TABLE." SET owner_group_id = ".$owner_group_id." WHERE id = ".$this->file_id."";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->owner_group_id = $owner_group_id;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param integer $permission
-	 * @return bool
-	 */
-	public function set_permission($permission)
-	{		
-		global $db;
-
-		if ($this->file_id and is_numeric($permission))
-		{
-			$sql = "UPDATE ".self::FILE_TABLE." SET permission = ".$permission." WHERE id = ".$this->file_id."";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->permission = $permission;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param bool $automatic
-	 * @return bool
-	 */
-	public function set_automatic($automatic)
-	{
-		global $db;
-
-		if ($this->file_id and isset($automatic))
-		{
-			if ($automatic == true)
-			{
-				$automatic_insert = "t";
-			}
-			else
-			{
-				$automatic_insert = "f";
-			}
-			
-			$sql = "UPDATE ".self::FILE_TABLE." SET automatic = '".$automatic_insert."' WHERE id = ".$this->file_id."";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->automatic = automatic;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-
 	/**
 	 * @param integer $flag
 	 * @return bool
@@ -433,6 +227,36 @@ class File_Access
 	
 	
 	/**
+	 * @param string $data_entity_id
+	 * @return integer
+	 */
+	public static function get_entry_by_data_entity_id($data_entity_id)
+	{
+		global $db;
+
+		if (is_numeric($data_entity_id))
+		{
+			$sql = "SELECT id FROM ".self::FILE_TABLE." WHERE data_entity_id = '".$data_entity_id."'";
+
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[id])
+			{
+				return $data[id];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @param integer $file_id
 	 * @return bool
 	 */
@@ -459,50 +283,7 @@ class File_Access
 		{
 			return false;
 		}
-	}
-	
-	/**
-	 * @param integer $owner_id
-	 * @return bool
-	 */
-	public static function set_owner_id_on_null($owner_id)
-	{
-		global $db;
-			
-		if (is_numeric($owner_id))
-		{
-			$sql = "UPDATE ".self::FILE_TABLE." SET owner_id = NULL WHERE owner_id = ".$owner_id."";
-			$res = $db->db_query($sql);
-			
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param integer $owner_group_id
-	 * @return bool
-	 */
-	public static function set_owner_group_id_on_null($owner_group_id)
-	{
-		global $db;
-			
-		if (is_numeric($owner_group_id))
-		{
-			$sql = "UPDATE ".self::FILE_TABLE." SET owner_group_id = NULL WHERE owner_group_id = ".$owner_group_id."";
-			$res = $db->db_query($sql);
-			
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
+	}	
 }
 
 ?>

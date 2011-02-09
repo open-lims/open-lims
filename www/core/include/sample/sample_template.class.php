@@ -73,13 +73,13 @@ class SampleTemplate implements SampleTemplateInterface
 	 * @param integer $category_id
 	 * @return bool
 	 */
-	public function create($object_id, $category_id)
+	public function create($data_entity_id, $category_id)
 	{
 		global $transaction;
 		
-		if ($this->sample_template and is_numeric($object_id) and is_numeric($category_id))
+		if ($this->sample_template and is_numeric($data_entity_id) and is_numeric($category_id))
 		{
-			$xml_cache = new XmlCache($object_id);
+			$xml_cache = new XmlCache($data_entity_id);
     		$xml_array = $xml_cache->get_xml_array();
 			
 			$oldl_found = false;
@@ -136,7 +136,7 @@ class SampleTemplate implements SampleTemplateInterface
 				$transaction_id = $transaction->begin();
 				
 				$oldl = new Oldl(null);
-				if (($oldl_id = $oldl->create($object_id)) == null)
+				if (($oldl_id = $oldl->create($data_entity_id)) == null)
 				{
 					if ($transaction_id != null)
 					{

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package project
+ * @package data
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -22,13 +22,37 @@
  */
 
 /**
- * 
+ * Virtual Folder Delete Event
+ * @package data
  */
-	$event_listener[0] = "Project";
-	$event_listener[1] = "ProjectPermission";
-	$event_listener[2] = "ProjectLog";
-	$event_listener[3] = "ProjectItem";
-	$event_listener[4] = "ProjectLogHasItem";
-	$event_listener[5] = "ProjectTask";
-	$event_listener[6] = "ProjectVirtualFolder";
+class VirtualFolderDeleteEvent extends Event
+{    
+	private $virtual_folder_id;
+	
+	function __construct($virtual_folder_id)
+    {
+    	if (is_numeric($virtual_folder_id))
+    	{
+    		parent::__construct();
+    		$this->virtual_folder_id = $virtual_folder_id;
+    	}
+    	else
+    	{
+    		$this->virtual_folder_id = null;
+    	}
+    }
+    
+    public function get_virtual_folder_id()
+    {
+    	if ($this->virtual_folder_id)
+    	{
+    		return $this->virtual_folder_id;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+}
+
 ?>

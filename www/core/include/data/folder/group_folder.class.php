@@ -26,6 +26,8 @@
  */
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("events/group_folder_create_event.class.php");
+	
 	require_once("access/folder_is_group_folder.access.php");
 }
 
@@ -145,7 +147,7 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 			$path->add_element($group_id);
 			
 			$folder = new Folder(null);
-			if (($folder_id = parent::create($group->get_name(), $group_folder_id, false, $path->get_path_string(), 1, $group_id)) != null)
+			if (($folder_id = parent::create($group->get_name(), $group_folder_id, $path->get_path_string(), 1, $group_id)) != null)
 			{
 				$folder_is_group_folder_access = new FolderIsGroupFolder_Access(null);
 				if ($folder_is_group_folder_access->create($group_id, $folder_id) == null)
@@ -158,34 +160,19 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 					return false;
 				}
 										
-				// Sample - Virtual Folder
-				$virtual_folder = new VirtualFolder(null);
-				if ($virtual_folder->create($folder_id, "samples") == null)
-				{
-					$this->delete(true, true);
-					return false;
-				}
-				if ($virtual_folder->set_sample_vfolder() == false)
-				{
-					$this->delete(true, true);
-					return false;
-				}
+				// Virtual Folders (Event)
+				$group_folder_create_event = new GroupFolderCreateEvent($folder_id);
+				$event_handler = new EventHandler($group_folder_create_event);
 				
-				
-				// Project - Virtual Folder
-				
-				$virtual_folder = new VirtualFolder(null);
-				if ($virtual_folder->create($folder_id, "projects") == null)
+				if ($event_handler->get_success() == false)
 				{
-					$this->delete(true, true);
+					$this->delete();
 					return false;
 				}
-				if ($virtual_folder->set_project_vfolder() == false)
+				else
 				{
-					$this->delete(true, true);
-					return false;
+					return true;
 				}
-				return true;
 			}
 			else
 			{

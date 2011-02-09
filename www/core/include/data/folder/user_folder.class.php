@@ -26,6 +26,8 @@
  */
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("events/user_folder_create_event.class.php");
+	
 	require_once("access/folder_is_user_folder.access.php");
 }
 
@@ -144,7 +146,7 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 			$path = new Path($folder->get_path());
 			$path->add_element($user_id);
 			
-			if (($folder_id = parent::create($user->get_username(), $user_folder_id, false, $path->get_path_string(), $user_id, null)) != null)
+			if (($folder_id = parent::create($user->get_username(), $user_folder_id, $path->get_path_string(), $user_id, null)) != null)
 			{
 				$folder_is_user_folder_access = new FolderIsUserFolder_Access(null);
 				if ($folder_is_user_folder_access->create($user_id, $folder_id) == null)
@@ -162,7 +164,7 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 				$public_path->add_element("_public");
 				
 				$public_folder = new Folder(null);
-				if (($public_folder->create("_public", $folder_id, false, $public_path->get_path_string(), $user_id, null)) == null)
+				if (($public_folder->create("_public", $folder_id, $public_path->get_path_string(), $user_id, null)) == null)
 				{
 					$this->delete();
 					return false;
@@ -181,7 +183,7 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 				$private_path->add_element("_private");
 				
 				$private_folder = new Folder(null);
-				if (($private_folder->create("_private", $folder_id, false, $private_path->get_path_string(), $user_id, null)) == null)
+				if (($private_folder->create("_private", $folder_id, $private_path->get_path_string(), $user_id, null)) == null)
 				{
 					$this->delete();
 					return false;
@@ -193,35 +195,19 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 					return false;
 				}
 				
-				// Sample - Virtual Folder
+				// Virtual Folders (Event)
+				$user_folder_create_event = new UserFolderCreateEvent($folder_id);
+				$event_handler = new EventHandler($user_folder_create_event);
 				
-				$virtual_folder = new VirtualFolder(null);
-				if ($virtual_folder->create($folder_id, "samples") == null)
+				if ($event_handler->get_success() == false)
 				{
 					$this->delete();
 					return false;
 				}
-				if ($virtual_folder->set_sample_vfolder() == false)
+				else
 				{
-					$this->delete();
-					return false;
+					return true;
 				}
-				
-				
-				// Project - Virtual Folder
-				
-				$virtual_folder = new VirtualFolder(null);
-				if ($virtual_folder->create($folder_id, "projects") == null)
-				{
-					$this->delete();
-					return false;
-				}
-				if ($virtual_folder->set_project_vfolder() == false)
-				{
-					$this->delete();
-					return false;
-				}
-				return true;
 			}
 			else
 			{

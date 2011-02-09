@@ -138,19 +138,23 @@ class AdminProjectTemplateIO
 				$template->set_var("error", "");	
 			}
 			
-			$file_array = Object::get_file_array($GLOBALS[oldl_folder_id]);
+			$folder = Folder::get_instance($GLOBALS[oldl_folder_id]);
+			$data_entity_array = $folder->get_childs();
 			
-			if (is_array($file_array))
+			if (is_array($data_entity_array))
 			{								
 				$result = array();
 				$counter = 0;
 				
-				foreach($file_array as $key => $value)
+				foreach($data_entity_array as $key => $value)
 				{
-					$file = new File($value);
-					$result[$counter][value] = $file->get_object_id();
-					$result[$counter][content] = $file->get_name();
-					$counter++;
+					if (($file_id = File::get_file_id_by_data_entity_id($value)) != null)
+					{
+						$file = new File($file_id);
+						$result[$counter][value] = $value;
+						$result[$counter][content] = $file->get_name();
+						$counter++;
+					}
 				}
 				$template->set_var("file",$result);
 			}
@@ -192,7 +196,7 @@ class AdminProjectTemplateIO
 			unset($paramquery[nextpage]);
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			if ($project_template->create($_POST[object_id], $_POST[category_id], $parent))
+			if ($project_template->create($_POST[data_entity_id], $_POST[category_id], $parent))
 			{
 				$common->step_proceed($params, "Add Project Template", "Operation Successful", null);
 			}

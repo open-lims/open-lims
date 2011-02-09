@@ -31,7 +31,7 @@ class OlvdlTemplate_Access
 	const OLVDL_TEMPLATE_PK_SEQUENCE = 'core_olvdl_templates_id_seq';
 
 	private $olvdl_id;
-	private $object_id;
+	private $data_entity_id;
 	
 	/**
 	 * @param integer $olvdl_id
@@ -53,7 +53,7 @@ class OlvdlTemplate_Access
 			if ($data[id])
 			{
 				$this->olvdl_id		= $olvdl_id;
-				$this->object_id	= $data[object_id];
+				$this->data_entity_id	= $data[data_entity_id];
 			}
 			else
 			{
@@ -67,21 +67,21 @@ class OlvdlTemplate_Access
 		if ($this->olvdl_id)
 		{
 			unset($this->olvdl_id);
-			unset($this->object_id);
+			unset($this->data_entity_id);
 		}
 	}
 	
 	/**
-	 * @param integer $object_id
+	 * @param integer $data_entity_id
 	 */
-	public function create($object_id)
+	public function create($data_entity_id)
 	{
 		global $db;
 		
-		if (is_numeric($object_id))
+		if (is_numeric($data_entity_id))
 		{
-			$sql_write = "INSERT INTO ".self::OLVDL_TEMPLATE_TABLE." (id,object_id) " .
-					"VALUES (nextval('".self::OLVDL_TEMPLATE_PK_SEQUENCE."'::regclass),".$object_id.")";
+			$sql_write = "INSERT INTO ".self::OLVDL_TEMPLATE_TABLE." (id,data_entity_id) " .
+					"VALUES (nextval('".self::OLVDL_TEMPLATE_PK_SEQUENCE."'::regclass),".$data_entity_id.")";
 					
 			$db->db_query($sql_write);	
 			
@@ -133,11 +133,11 @@ class OlvdlTemplate_Access
 	/**
 	 * @return integer
 	 */
-	public function get_object_id()
+	public function get_data_entity_id()
 	{
-		if ($this->object_id)
+		if ($this->data_entity_id)
 		{
-			return $this->object_id;
+			return $this->data_entity_id;
 		}
 		else
 		{
@@ -146,21 +146,21 @@ class OlvdlTemplate_Access
 	}
 
 	/**
-	 * @param integer $object_id
+	 * @param integer $data_entity_id
 	 * @return bool
 	 */
-	public function set_object_id($object_id)
+	public function set_data_entity_id($data_entity_id)
 	{	
 		global $db;
 
-		if ($this->olvdl_id and is_numeric($object_id))
+		if ($this->olvdl_id and is_numeric($data_entity_id))
 		{
-			$sql = "UPDATE ".self::OLVDL_TEMPLATE_TABLE." SET object_id = ".$object_id." WHERE id = ".$this->olvdl_id."";
+			$sql = "UPDATE ".self::OLVDL_TEMPLATE_TABLE." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->olvdl_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
 			{
-				$this->object_id = $object_id;
+				$this->data_entity_id = $data_entity_id;
 				return true;
 			}
 			else
@@ -176,16 +176,16 @@ class OlvdlTemplate_Access
 	
 	
 	/**
-	 * @param integer $object_id
+	 * @param integer $data_entity_id
 	 * @return bool
 	 */
-	public static function is_object_id($object_id)
+	public static function is_data_entity_id($data_entity_id)
 	{
 		global $db;
 		
-		if (is_numeric($object_id))
+		if (is_numeric($data_entity_id))
 		{
-			$sql = "SELECT * FROM ".self::OLVDL_TEMPLATE_TABLE." WHERE object_id='".$object_id."'";
+			$sql = "SELECT * FROM ".self::OLVDL_TEMPLATE_TABLE." WHERE data_entity_id='".$data_entity_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

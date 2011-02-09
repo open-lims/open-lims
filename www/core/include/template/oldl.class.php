@@ -40,9 +40,8 @@ class Oldl implements OldlInterface
 	private $oldl;
 
 	private $oldl_id;
-    private $object_id;
-    
-    private $xml_string;
+    private $data_entity_id;
+
     private $xml_array;
     
     /**
@@ -60,9 +59,9 @@ class Oldl implements OldlInterface
     		$this->oldl_id = $oldl_id;
     		$this->oldl = new OldlTemplate_Access($oldl_id);
     		
-    		$this->object_id = $this->oldl->get_object_id();
+    		$this->data_entity_id = $this->oldl->get_data_entity_id();
     		
-    		$xml_cache = new XmlCache($this->object_id);
+    		$xml_cache = new XmlCache($this->data_entity_id);
     		$this->xml_array = $xml_cache->get_xml_array();
     	}
     }
@@ -73,8 +72,7 @@ class Oldl implements OldlInterface
     	{
     		unset($this->oldl_id);
     		unset($this->oldl);
-    		unset($this->object_id);
-    		unset($this->xml_string);
+    		unset($this->data_entity_id);
     		unset($this->xml_array);
     	}
     }   
@@ -84,17 +82,17 @@ class Oldl implements OldlInterface
      * @param integer $object_id
      * @return integer
      */
-    public function create($object_id)
+    public function create($data_entity_id)
     {
-    	if ($this->oldl and is_numeric($object_id))
+    	if ($this->oldl and is_numeric($data_entity_id))
     	{
-    		if (OldlTemplate_Access::is_object_id($object_id) == true)
+    		if (OldlTemplate_Access::is_data_entity_id($data_entity_id) == true)
     		{
     			return null;	
     		}
     		else
     		{
-    			return $this->oldl->create($object_id);	
+    			return $this->oldl->create($data_entity_id);	
     		}
     	}
     	else
@@ -181,21 +179,5 @@ class Oldl implements OldlInterface
     		return null;
     	}
     }
-    
-    /**
-     * @return string
-     */
-    public function get_xml_string()
-    {
-    	if ($this->xml_string)
-    	{
-    		return $this->xml_string;
-    	}
-    	else
-    	{
-    		return null;
-    	}
-    }
-
 }
 ?>

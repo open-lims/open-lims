@@ -47,7 +47,7 @@ class FileIO
 					
 					$template = new Template("languages/en-gb/template/data/file_detail.html");
 					
-					$folder = Folder::get_instance($file->get_toid());
+					$folder = Folder::get_instance($file->get_parent_folder());
 					
 					if ($_GET[version] and is_numeric($_GET[version]))
 					{
@@ -114,8 +114,8 @@ class FileIO
 					$template->set_var("size",Misc::calc_size($file->get_size()));
 					$template->set_var("size_in_byte",$file->get_size());
 					
-					$template->set_var("creation_datetime",$file->get_file_datetime());
-					$template->set_var("version_datetime",$file->get_datetime());
+					$template->set_var("creation_datetime",$file->get_datetime());
+					$template->set_var("version_datetime",$file->get_version_datetime());
 					$template->set_var("mime_type",$file->get_mime_type());
 					$template->set_var("owner",$user->get_full_name(false));
 					$template->set_var("checksum",$file->get_checksum());

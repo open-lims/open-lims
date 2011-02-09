@@ -1,6 +1,6 @@
 <?php
- /**
- * @package data
+/**
+ * @package project
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -20,24 +20,14 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
-
+ 
 
 /**
- * Object Permission Management Interface
- * @package data
- */
-interface ObjectPermissionInterface
+ * Project Template Interface
+ * @package project
+ */ 
+interface ProjectVirtualFolderInterface
 {
-	function __construct($permission, $automatic, $owner_id, $owner_group_id);
-	function __destruct();
-	
-	public function set_project_id($project_id);
-	public function set_sample_id($sample_id);
-	public function set_organisation_unit_id($organisation_unit_id);
-	public function set_folder_flag($folder_flag);
-	
-	public function is_access($intention);
-	public function get_permission_string();
-}
 
+}
 ?>

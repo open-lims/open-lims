@@ -25,6 +25,8 @@
  * 
  */ 	
  
+$GLOBALS[debug]						= true;
+
 // Database Settings
 $GLOBALS[server] 					= "localhost";
 $GLOBALS[port] 						= "";

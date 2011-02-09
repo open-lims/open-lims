@@ -32,7 +32,7 @@ class XmlCache_Access
 
 	private $id;
 	
-	private $object_id;
+	private $data_entity_id;
 	private $path;
 	private $checksum;
 	
@@ -55,10 +55,10 @@ class XmlCache_Access
 			
 			if ($data[id])
 			{
-				$this->id			= $id;
-				$this->object_id	= $data[object_id];
-				$this->path			= $data[path];
-				$this->checksum		= $data[checksum];
+				$this->id				= $id;
+				$this->data_entity_id	= $data[data_entity_id];
+				$this->path				= $data[path];
+				$this->checksum			= $data[checksum];
 			}
 			else
 			{
@@ -72,26 +72,26 @@ class XmlCache_Access
 		if ($this->id)
 		{
 			unset($this->id);
-			unset($this->object_id);
+			unset($this->data_entity_id);
 			unset($this->path);
 			unset($this->checksum);
 		}
 	}
 	
 	/**
-	 * @param integer $object_id
+	 * @param integer $data_entity_id
 	 * @param string $path
 	 * @param string $checksum
 	 * @return integer
 	 */
-	public function create($object_id, $path, $checksum)
+	public function create($data_entity_id, $path, $checksum)
 	{
 		global $db;
 		
-		if (is_numeric($object_id) and $path and $checksum)
+		if (is_numeric($data_entity_id) and $path and $checksum)
 		{
-			$sql_write = "INSERT INTO ".self::XML_CACHE_TABLE." (id,object_id,path,checksum) " .
-					"VALUES (nextval('".self::XML_CACHE_PK_SEQUENCE."'::regclass),".$object_id.",'".$path."','".$checksum."')";
+			$sql_write = "INSERT INTO ".self::XML_CACHE_TABLE." (id,data_entity_id,path,checksum) " .
+					"VALUES (nextval('".self::XML_CACHE_PK_SEQUENCE."'::regclass),".$data_entity_id.",'".$path."','".$checksum."')";
 					
 			$db->db_query($sql_write);	
 			
@@ -143,11 +143,11 @@ class XmlCache_Access
 	/**
 	 * @return integer
 	 */
-	public function get_object_id()
+	public function get_data_entity_id_id()
 	{
-		if ($this->object_id)
+		if ($this->data_entity_id)
 		{
-			return $this->object_id;
+			return $this->data_entity_id;
 		}
 		else
 		{
@@ -188,18 +188,18 @@ class XmlCache_Access
 	/**
 	 * @return integer
 	 */
-	public function set_object_id($object_id)
+	public function set_data_entity_id_id($data_entity_id)
 	{
 		global $db;
 		
-		if ($this->id and is_numeric($object_id))
+		if ($this->id and is_numeric($data_entity_id))
 		{
-			$sql = "UPDATE ".self::XML_CACHE_TABLE." SET object_id = ".$object_id." WHERE id = ".$this->id."";
+			$sql = "UPDATE ".self::XML_CACHE_TABLE." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
 			{
-				$this->object_id = $object_id;
+				$this->data_entity_id = $data_entity_id;
 				return true;
 			}
 			else
@@ -273,16 +273,16 @@ class XmlCache_Access
 	
 	
 	/**
-	 * @param integer $object_id
+	 * @param integer $data_entity_id
 	 * @return integer
 	 */
-	public static function get_id_by_object_id($object_id)
+	public static function get_id_by_data_entity_id($data_entity_id)
 	{
 		global $db;
 		
-		if (is_numeric($object_id))
+		if (is_numeric($data_entity_id))
 		{
-			$sql = "SELECT id FROM ".self::XML_CACHE_TABLE." WHERE object_id = ".$object_id."";
+			$sql = "SELECT id FROM ".self::XML_CACHE_TABLE." WHERE data_entity_id = ".$data_entity_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

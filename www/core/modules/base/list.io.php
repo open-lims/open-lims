@@ -34,7 +34,9 @@ class List_IO
 	private $entries_per_page;
 
 	private $last_line_text;
-
+	private $first_line_entry;
+	private $top_right_text;
+	
 	private $finalised;
 
     function __construct($entries, $entries_per_page)
@@ -108,6 +110,33 @@ class List_IO
     	}
     }
 
+    /**
+     * Adds a first line, which is everytime visible and it will be not sorted
+     * (e.g. for [parent folder] in Data Browser
+     * @param array $array
+     * @return bool
+     */
+    public function add_first_line($array)
+    {
+    	if (is_array($array))
+    	{
+    		$this->first_line_entry = $array;
+    		return true;
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
+    
+    public function set_top_right_text($top_right_text)
+    {
+    	if ($top_right_text)
+    	{
+    		$this->top_right_text = $top_right_text;	
+    	}
+    }
+    
 	public function get_list($array, $page)
     {
     	if (!$page)
@@ -121,7 +150,7 @@ class List_IO
 			$number_of_pages = ceil($this->entries/$this->entries_per_page);
     		
 			$return = "<div class='OverviewTableLeft'>".Common_IO::results_on_page($this->entries, $number_of_pages)."</div>" .
-						"<div class='OverviewTableRight'>".$this->bottom_right_text."</div>";
+						"<div class='OverviewTableRight'>".$this->top_right_text."</div>";
     		
     			
     		$return .= "<table class='OverviewTable'><tr>";	
@@ -192,7 +221,35 @@ class List_IO
 			}
     		
     		$return .= "</tr>";
-    					
+
+    		if (is_array($this->first_line_entry))
+    		{
+    			foreach ($this->rows as $key => $value)
+				{
+					if (is_array($this->first_line_entry[$value[address]]))
+					{
+						
+						if ($this->first_line_entry[$value[address]][link] and $this->first_line_entry[$value[address]][content])
+						{
+							$return .= "<td><a href='index.php?".$this->first_line_entry[$value[address]][link]."'>".$this->first_line_entry[$value[address]][content]."</a></td>";
+						}
+						elseif(!$this->first_line_entry[$value[address]][link] and $this->first_line_entry[$value[address]][content])
+						{
+							$return .= "<td>".$this->first_line_entry[$value[address]][content]."</td>";
+						}else
+						{
+							$return .= "<td></td>";
+						}
+													
+					}
+					else
+					{
+						$return .= "<td>".$this->first_line_entry[$value[address]]."</td>";
+						
+					}
+				}
+    		}
+    		
 			if (is_array($array))
 			{
 			

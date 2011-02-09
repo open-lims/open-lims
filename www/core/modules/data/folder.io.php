@@ -95,7 +95,7 @@ class FolderIO
 					$paramquery[nav] = "data";
 					$params = http_build_query($paramquery);
 							
-					if ($new_folder->create($_POST[name], $_GET[folder_id], false, null, null, null))
+					if ($new_folder->create($_POST[name], $_GET[folder_id], null, $user->get_user_id(), null))
 					{
 						if (!$user->is_admin())
 						{
@@ -157,11 +157,13 @@ class FolderIO
 				}
 				else
 				{		
+					$parent_folder_data_entity_id = $folder->get_parent_folder();
+					
 					$paramquery = $_GET;
 					unset($paramquery[nextpage]);
 					unset($paramquery[run]);
 					$paramquery[nav] = "data";
-					$paramquery[folder_id] = $folder->get_toid();
+					$paramquery[folder_id] = Folder::get_folder_id_by_data_entity_id($parent_folder_data_entity_id);
 					$params = http_build_query($paramquery);
 							
 					if ($folder->delete(true, true))

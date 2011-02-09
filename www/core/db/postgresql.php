@@ -76,6 +76,10 @@ class Postgresql
  	 	@$pg_result = pg_query($connection, $query);
  	 	if (!$pg_result)
  	 	{
+ 	 		if ($GLOBALS[debug] == true)
+ 	 		{
+ 	 			echo $query;
+ 	 		}
  	 		throw new DatabaseQueryFailedException(pg_last_error(), 2);
  	 	}
  	 	else
