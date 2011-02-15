@@ -64,7 +64,10 @@ class VirtualFolder_Access
 				$this->virtual_folder_id			= null;
 			}
 		}
-
+		$this->read_access = true;
+		$this->write_access = false;
+		$this->delete_access = false;
+		$this->control_access = false;
 	} 
 
 	function __destruct()

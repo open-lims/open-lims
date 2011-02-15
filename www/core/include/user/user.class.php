@@ -789,6 +789,7 @@ class User implements UserInterface {
 	/**
 	 * @param string $username New User-Name
 	 * @return bool
+	 * @todo remove dependency with folder
 	 */
 	public function set_username($username)
 	{

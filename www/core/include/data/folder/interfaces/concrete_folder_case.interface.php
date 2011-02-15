@@ -30,16 +30,6 @@ interface ConcreteFolderCaseInterface
 {
 	function __construct($folder_id);
 	function __destruct();
-
-	public function is_read_access();
-	public function is_write_access();
-	public function is_delete_access();
-	public function is_control_access();
-	
-	public function is_flag_change_permission();
-	public function is_flag_add_folder();
-	public function is_flag_cmd_folder();
-	public function is_flag_rename_folder();
 	
 	public function delete($recursive, $content);
 	

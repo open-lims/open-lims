@@ -28,8 +28,6 @@
  */
 interface FolderInterface
 {
-	function __destruct();
-	
 	public function is_flag_change_permission();
 	public function is_flag_add_folder();
 	public function is_flag_cmd_folder();

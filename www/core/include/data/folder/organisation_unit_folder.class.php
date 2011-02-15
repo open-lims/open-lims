@@ -234,7 +234,7 @@ class OrganisationUnitFolder extends Folder implements ConcreteFolderCaseInterfa
 	}
 	
 	/**
-	 * Checks if $folder_id is a case of Sample Folder
+	 * Checks if $folder_id is a case of Organisation Unit Folder
 	 * @param integer $folder_id
 	 * @return bool
 	 */

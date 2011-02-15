@@ -1,6 +1,6 @@
 <?php 
 /**
- * @package project
+ * @package data
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -30,6 +30,7 @@
 	$classes['DataSecurityException']		= $path_prefix."core/include/data/exceptions/data_security_exception.class.php";
 
 	$classes['DataEntity']					= $path_prefix."core/include/data/data_entity.class.php";
+	$classes['DataEntityPermission']		= $path_prefix."core/include/data/data_entity_permission.class.php";
 	$classes['DataBrowser']					= $path_prefix."core/include/data/data_browser.class.php";
 	$classes['DataPath']					= $path_prefix."core/include/data/data_path.class.php";
 	$classes['DataPermission']				= $path_prefix."core/include/data/data_permission.class.php";

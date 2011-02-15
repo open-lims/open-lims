@@ -42,6 +42,8 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class Folder extends DataEntity implements FolderInterface
 {
+	private static $folder_object_array;
+	
 	private $folder_id;
 	private $folder;
 
@@ -65,6 +67,13 @@ class Folder extends DataEntity implements FolderInterface
 			if ($this->folder->get_id() != null)
 			{
 				parent::__construct($this->folder->get_data_entity_id());
+				
+				$this->data_entity_permission->set_folder_flag($this->folder->get_flag());
+				
+				if ($this->data_entity_permission->is_access(1))
+				{
+					$this->read_access = true;
+				}
 			}
 			else
 			{
@@ -77,11 +86,7 @@ class Folder extends DataEntity implements FolderInterface
 	
 	function __destruct()
 	{
-		if ($this->folder_id)
-		{
-			unset($this->folder_id);
-			unset($this->folder);
-		}
+		// Empty
 	}
 	
 	/**
@@ -1017,27 +1022,37 @@ class Folder extends DataEntity implements FolderInterface
      * Returns a new instance of Folder or of one of its child
      * @param integer $folder_id
      * @return object
-     * @todo create a pool of instances which contains only one object per ID
      */
     public static function get_instance($folder_id)
-    {
+    {    	
     	if (is_numeric($folder_id) and $folder_id > 0)
     	{
-	    	$conrete_folder_array = FolderConcretion_Access::list_entries();
-			if (is_array($conrete_folder_array) and count($conrete_folder_array) >= 1)
+			if (self::$folder_object_array[$folder_id])
 			{
-				foreach($conrete_folder_array as $key => $value)
+				return self::$folder_object_array[$folder_id];
+			}
+			else
+			{
+				$conrete_folder_array = FolderConcretion_Access::list_entries();
+				if (is_array($conrete_folder_array) and count($conrete_folder_array) >= 1)
 				{
-					if (class_exists($value))
+					foreach($conrete_folder_array as $key => $value)
 					{
-						if ($value::is_case($folder_id))
+						if (class_exists($value))
 						{
-							return new $value($folder_id);
+							if ($value::is_case($folder_id))
+							{
+								$folder = new $value($folder_id);
+								self::$folder_object_array[$folder_id] = $folder;
+								return $folder;
+							}
 						}
 					}
 				}
+				$folder = new Folder($folder_id);
+				self::$folder_object_array[$folder_id] = $folder;
+				return $folder;
 			}
-			return new Folder($folder_id);
     	}
     	else
     	{

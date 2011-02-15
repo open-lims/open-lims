@@ -1,6 +1,6 @@
 <?php 
 /**
- * @package project
+ * @package parser
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz

@@ -50,6 +50,90 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
   			parent::__construct($folder_id);
   			$this->project_folder = new ProjectHasFolder_Access($folder_id);
   			$this->project_id = $this->project_folder->get_project_id();
+  			
+  			if ($this->project_id)
+  			{
+  				$project_security = new ProjectSecurity($this->project_id);
+  				
+  				if ($this->get_automatic == false)
+  				{
+  					$permission_bin = decbin($this->get_permission());
+					$permission_bin = str_pad($permission_bin, 16, "0", STR_PAD_LEFT);
+					$permission_bin = strrev($permission_bin);		
+  				}
+  				
+  				if ($this->read_access == false)
+  				{
+  					if ($this->get_automatic() == true)
+  					{
+  						if ($project_security->is_access(1, false) or $project_security->is_access(2, false))
+						{
+							$this->read_access = true;
+						}
+  					}
+  					else
+  					{
+	  					if ($permission_bin{8} == "1" and ($project_security->is_access(1, false) or $project_security->is_access(2, false)))
+						{
+							$this->read_access = true;
+						}
+  					}
+  				}
+  				
+  				if ($this->write_access == false)
+  				{
+  					if ($this->get_automatic() == true)
+  					{
+  						if ($project_security->is_access(3, false) or $project_security->is_access(4, false))
+						{
+							$this->write_access = true;
+						}
+  					}
+  					else
+  					{
+	  					if ($permission_bin{9} == "1" and ($project_security->is_access(3, false) or $project_security->is_access(4, false)))
+						{
+							$this->write_access = true;
+						}
+  					}
+  				}
+  				
+  				if ($this->delete_access == false)
+  				{
+  					if ($this->get_automatic() == true)
+  					{
+  						if ($project_security->is_access(5, false))
+						{
+							$this->delete_access = true;
+						}
+  					}
+  					else
+  					{
+	  					if ($permission_bin{10} == "1" and $project_security->is_access(5, false))
+						{
+							$this->delete_access = true;
+						}
+  					}
+  				}
+  				
+  				if ($this->control_access == false)
+  				{
+  					if ($this->get_automatic() == true)
+  					{
+  						if ($project_security->is_access(7, false))
+						{
+							$this->control_access = true;
+						}
+  					}
+  					else
+  					{
+	  					if ($permission_bin{11} == "1" and $project_security->is_access(7, false))
+						{
+							$this->control_access = true;
+						}
+  					}
+  				}
+  			}
   		}
   		else
   		{
@@ -64,70 +148,6 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 		unset($this->project_folder);
 		unset($this->project_id);
 		parent::__destruct();
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function is_read_access()
-	{
-		return parent::is_read_access();
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_write_access()
-	{
-		return parent::is_write_access();
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_delete_access()
-	{
-		return parent::is_delete_access();
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_control_access()
-	{
-		return parent::is_control_access();
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_flag_change_permission()
-	{
-		return parent::is_flag_change_permission();
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_flag_add_folder()
-	{
-		return parent::is_flag_add_folder();
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_flag_cmd_folder()
-	{
-		return parent::is_flag_cmd_folder();
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_flag_rename_folder()
-	{
-		return parent::is_flag_rename_folder();
 	}
 	
 	/**

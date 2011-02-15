@@ -965,12 +965,12 @@ class Value extends DataEntity implements ValueInterface
 				$parent_folder_data_entity_id = $this->get_parent_folder();
 				$folder = Folder::get_instance(Folder::get_folder_id_by_data_entity_id($parent_folder_data_entity_id));
 				
-				if (is_method($folder->get_project_id()))
+				if (method_exists($folder, "get_project_id"))
 				{
 					$value_var->set_project_id($folder->get_project_id());
 				}
 				
-				if (is_method($folder->get_sample_id()))
+				if (method_exists($folder, "get_sample_id"))
 				{
 					$value_var->set_sample_id($folder->get_sample_id());
 				}
@@ -1228,12 +1228,12 @@ class Value extends DataEntity implements ValueInterface
 							$parent_folder_data_entity_id = $this->get_parent_folder();
 							$folder = Folder::get_instance(Folder::get_folder_id_by_data_entity_id($parent_folder_data_entity_id));
 							
-							if (is_method($folder->get_project_id()))
+							if (method_exists($folder, "get_project_id"))
 							{
 								$value_var->set_project_id($folder->get_project_id());
 							}
 							
-							if (is_method($folder->get_sample_id()))
+							if (method_exists($folder, "get_sample_id"))
 							{
 								$value_var->set_sample_id($folder->get_sample_id());
 							}
@@ -1398,12 +1398,12 @@ class Value extends DataEntity implements ValueInterface
 									$parent_folder_data_entity_id = $this->get_parent_folder();
 									$folder = Folder::get_instance(Folder::get_folder_id_by_data_entity_id($parent_folder_data_entity_id));
 									
-									if (is_method($folder->get_project_id()))
+									if (method_exists($folder, "get_project_id"))
 									{
 										$value_var->set_project_id($folder->get_project_id());
 									}
 									
-									if (is_method($folder->get_sample_id()))
+									if (method_exists($folder, "get_sample_id"))
 									{
 										$value_var->set_sample_id($folder->get_sample_id());
 									}

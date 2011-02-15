@@ -271,7 +271,7 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 	
 	
 	/**
-	 * Checks if $folder_id is a case of Sample Folder
+	 * Checks if $folder_id is a case of User Folder
 	 * @param integer $folder_id
 	 * @return bool
 	 */

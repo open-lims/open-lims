@@ -136,7 +136,8 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
 	    					}
 	    				}
 	    			
-	    			}else
+	    			}
+	    			else
 	    			{
 	    				if ($sample_has_user->get_write() == true)
 	    				{

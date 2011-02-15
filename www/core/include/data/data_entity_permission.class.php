@@ -24,22 +24,18 @@
 /**
  * 
  */
-require_once("interfaces/object_permission.interface.php");
+require_once("interfaces/data_entity_permission.interface.php");
 
 /**
- * Object Permission Management Class
+ * Data Entity Permission Management Class
  * @package data
  */
-class ObjectPermission implements ObjectPermissionInterface
+class DataEntityPermission implements DataEntityPermissionInterface
 {
 	private $permission;
 	private $automatic;
 	private $owner_id;
 	private $owner_group_id;
-	
-	private $project_id;
-	private $sample_id;
-	private $organisation_unit_id;
 	
 	private $folder_flag;
 	
@@ -72,69 +68,8 @@ class ObjectPermission implements ObjectPermissionInterface
 		unset($this->permission);
 		unset($this->automatic);
 		unset($this->owner_id);
-		unset($this->owner_group_id);
-		
-		unset($this->project_id);
-		unset($this->sample_id);
-		unset($this->organisation_unit_id);
-		
+		unset($this->owner_group_id);		
 		unset($this->folder_flag);
-	}
-	
-	/**
-	 * @todo extrat method from class due to loose dependency
-	 * @param integer $project_id
-	 * @return bool
-	 */
-	public function set_project_id($project_id)
-	{
-		if ($project_id)
-		{
-			$this->project_id = $project_id;
-			return true;
-		}
-		else
-		{
-			$this->project_id = null;
-			return false;
-		}
-	}
-	
-	/**
-	 * @todo extrat method from class due to loose dependency
-	 * @param integer $sample_id
-	 * @return bool
-	 */
-	public function set_sample_id($sample_id)
-	{
-		if ($sample_id)
-		{
-			$this->sample_id = $sample_id;
-			return true;
-		}
-		else
-		{
-			$this->sample_id = null;
-			return false;
-		}
-	}
-	
-	/**
-	 * @param integer $organisation_unit_id
-	 * @return bool
-	 */
-	public function set_organisation_unit_id($organisation_unit_id)
-	{
-		if ($organisation_unit_id)
-		{
-			$this->organisation_unit_id = $organisation_unit_id;
-			return true;
-		}
-		else
-		{
-			$this->organisation_unit_id = null;
-			return false;
-		}
 	}
 	
 	/**
@@ -175,128 +110,22 @@ class ObjectPermission implements ObjectPermissionInterface
 		else
 		{
 			if ($this->automatic == true)
-			{
-				if ($this->project_id != null)
+			{	
+				if ($this->folder_flag == 1 and $intention == 1)
 				{
-					// problematic dependency
-					$project_security = new ProjectSecurity($this->project_id);
-					
-					switch($intention):
-						case 1:
-							if ($project_security->is_access(1, false) or $project_security->is_access(2, false))
-							{
-								return true;
-							}
-							else
-							{
-								return false;
-							}
-						break;
-						
-						case 2:
-							if ($project_security->is_access(3, false) or $project_security->is_access(4, false))
-							{
-								return true;
-							}
-							else
-							{
-								return false;
-							}
-						break;
-						
-						case 3:
-							if ($project_security->is_access(5, false))
-							{
-								return true;
-							}
-							else
-							{
-								return false;
-							}
-						break;
-						
-						default:
-							if ($project_security->is_access(7, false))
-							{
-								return true;
-							}
-							else
-							{
-								return false;
-							}
-						break;							
-					endswitch;			
-				}
-				elseif ($this->sample_id != null)
-				{
-					// problematic dependency
-					$sample_security = new SampleSecurity($this->sample_id);
-					
-					switch($intention):
-						case 1:
-							if ($sample_security->is_access(1, false))
-							{
-								return true;
-							}
-							else
-							{
-								return false;
-							}
-						break;
-						
-						case 2:
-							if ($sample_security->is_access(2, false))
-							{
-								return true;
-							}
-							else
-							{
-								return false;
-							}
-						break;
-						
-						case 3:
-							if ($user->is_admin() == true)
-							{
-								return true;
-							}
-							else
-							{
-								return false;
-							}
-						break;
-						
-						default:
-							if ($user->is_admin() == true)
-							{
-								return true;
-							}
-							else
-							{
-								return false;
-							}
-						break;
-						
-					endswitch;	
+					return true;
 				}
 				else
-				{						
-					if ($this->folder_flag == 1 and $intention == 1)
+				{
+					if ($this->owner_id == $user->get_user_id())
 					{
 						return true;
 					}
 					else
 					{
-						if ($this->owner_id == $user->get_user_id())
-						{
-							return true;
-						}
-						else
-						{
-							return false;
-						}
-					}	
-				}
+						return false;
+					}
+				}	
 			}
 			else
 			{	
@@ -373,42 +202,6 @@ class ObjectPermission implements ObjectPermissionInterface
 							break;							
 						endswitch;	
 					}
-				}
-
-				if ($this->project_id)
-				{
-					// problematic dependency
-					$project_security = new ProjectSecurity($this->project_id);
-					
-					switch($intention):
-						case 1:
-							if ($permission_bin{8} == "1" and ($project_security->is_access(1, false) or $project_security->is_access(2, false)))
-							{
-								return true;
-							}
-						break;
-						
-						case 2:
-							if ($permission_bin{9} == "1" and ($project_security->is_access(3, false) or $project_security->is_access(4, false)))
-							{
-								return true;
-							}
-						break;
-						
-						case 3:
-							if ($permission_bin{10} == "1" and $project_security->is_access(5, false))
-							{
-								return true;
-							}
-						break;
-						
-						default:
-							if ($permission_bin{11} == "1" and $project_security->is_access(7, false))
-							{
-								return true;
-							}
-						break;							
-					endswitch;	
 				}
 				
 				// Public				

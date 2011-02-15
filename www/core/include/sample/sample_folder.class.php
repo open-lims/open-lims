@@ -45,11 +45,97 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
   	 */
 	function __construct($folder_id)
 	{
+		global $user;
+		
 		if (is_numeric($folder_id))
   		{
   			parent::__construct($folder_id);
   			$this->sample_folder = new SampleHasFolder_Access($folder_id);
   			$this->sample_id = $this->sample_folder->get_sample_id();
+  			
+  			if ($this->sample_id)
+  			{
+  				$sample_security = new SampleSecurity($this->sample_id);
+  				
+  				if ($this->get_automatic == false)
+  				{
+  					$permission_bin = decbin($this->get_permission());
+					$permission_bin = str_pad($permission_bin, 16, "0", STR_PAD_LEFT);
+					$permission_bin = strrev($permission_bin);		
+  				}
+  				
+  				if ($this->read_access == false)
+  				{
+  					if ($this->get_automatic() == true)
+  					{
+  						if ($sample_security->is_access(1, false))
+						{
+							$this->read_access = true;
+						}
+  					}
+  					else
+  					{
+	  					if ($permission_bin{8} == "1" and $sample_security->is_access(1, false))
+						{
+							$this->read_access = true;
+						}
+  					}
+  				}
+  				
+  				if ($this->write_access == false)
+  				{
+  					if ($this->get_automatic() == true)
+  					{
+  						if ($sample_security->is_access(2, false))
+						{
+							$this->write_access = true;
+						}
+  					}
+  					else
+  					{
+	  					if ($permission_bin{9} == "1" and $sample_security->is_access(2, false))
+						{
+							$this->write_access = true;
+						}
+  					}
+  				}
+  				
+  				if ($this->delete_access == false)
+  				{
+  					if ($user->is_admin() == true)
+  					{
+  						if ($sample_security->is_access(5, false))
+						{
+							$this->delete_access = true;
+						}
+  					}
+  					else
+  					{
+	  					if ($permission_bin{10} == "1" and $user->is_admin() == true)
+						{
+							$this->delete_access = true;
+						}
+  					}
+  				}
+  				
+  				if ($this->control_access == false)
+  				{
+  					if ($user->is_admin() == true)
+  					{
+  						if ($sample_security->is_access(7, false))
+						{
+							$this->control_access = true;
+						}
+  					}
+  					else
+  					{
+	  					if ($permission_bin{11} == "1" and $user->is_admin() == true)
+						{
+							$this->control_access = true;
+						}
+  					}
+  				}
+  			}
   		}
   		else
   		{

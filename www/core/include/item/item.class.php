@@ -45,7 +45,6 @@ class Item implements ItemInterface, EventListenerInterface
 	
 	/**
 	 * @param integer $item_id
-	 * @todo set on protected
 	 */
 	protected function __construct($item_id)
 	{
@@ -170,7 +169,7 @@ class Item implements ItemInterface, EventListenerInterface
 	 * Checks if the current item is classified
 	 * @return bool
 	 */
-	public function is_classified()
+	public final function is_classified()
 	{
 		if ($this->item_id)
 		{
@@ -195,7 +194,7 @@ class Item implements ItemInterface, EventListenerInterface
 	 * Returns the class-ids of the current item
 	 * @return integer
 	 */
-	public function get_class_ids()
+	public final function get_class_ids()
 	{
 		if ($this->item_id)
 		{
@@ -220,7 +219,7 @@ class Item implements ItemInterface, EventListenerInterface
 	/**
 	 * @todo implementation
 	 */
-	public function get_information()
+	public final function get_information()
 	{
 		
 	}

@@ -39,8 +39,17 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class DataEntity extends Item implements DataEntityInterface, EventListenerInterface, ItemListenerInterface
 {
-	protected $data_entity_id;
 	private $data_entity;
+	
+	protected $data_entity_permission;
+	protected $data_entity_id;
+	
+	protected $read_access;
+	protected $write_access;
+	protected $delete_access;
+	protected $control_access;
+	
+	protected $inherit_permission;
 	
 	function __construct($entity_id)
 	{
@@ -60,26 +69,9 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
     		parent::__construct(null);
 		}
 		
+		$this->data_entity_permission = new DataEntityPermission($this->data_entity->get_permission(), $this->data_entity->get_automatic(), $this->data_entity->get_owner_id(), $this->data_entity->get_owner_group_id());
 		
-		// Create Item Object with Item ID
-		
-		// Überarbeiten (aus Folder)
-		/*
-		// [OLD] => To Data Entity
-		$object_permission = new ObjectPermission($this->folder->get_permission(), $this->folder->get_automatic(), $this->folder->get_owner_id(), $this->folder->get_owner_group_id());
-		$object_permission->set_folder_flag($this->folder->get_flag());
-		
-		if (($project_id = $this->is_child_of_project_folder()) != null)
-		{
-			$object_permission->set_project_id($project_id);
-		}
-		
-		if (($sample_id = $this->is_child_of_sample_folder()) != null)
-		{
-			$object_permission->set_sample_id($sample_id);
-		}
-		
-		if ($object_permission->is_access(1))
+		if ($this->data_entity_permission->is_access(1))
 		{
 			$this->read_access = true;
 		}
@@ -88,7 +80,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 			$this->read_access = false;
 		}
 		
-		if ($object_permission->is_access(2))
+		if ($this->data_entity_permission->is_access(2))
 		{
 			$this->write_access = true;
 		}
@@ -97,7 +89,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 			$this->write_access = false;
 		}
 		
-		if ($object_permission->is_access(3))
+		if ($this->data_entity_permission->is_access(3))
 		{
 			$this->delete_access = true;
 		}
@@ -106,7 +98,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 			$this->delete_access = false;
 		}
 		
-		if ($object_permission->is_access(4))
+		if ($this->data_entity_permission->is_access(4))
 		{
 			$this->control_access = true;
 		}
@@ -114,48 +106,83 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		{
 			$this->control_access = false;
 		}
-		*/
-		// [DLO]	
-	}
-	
-	/**
-	 * @todo implementation
-	 */
-	function __destruct()
-	{
 		
+		if ($this->data_entity->get_automatic() == true)
+		{
+			if ($parent_folderdata_entity_id = $this->get_parent_folder())
+			{
+				$folder = Folder::get_instance(Folder::get_folder_id_by_data_entity_id($parent_folderdata_entity_id));
+				if ($folder->get_inherit_permission() == true)
+				{
+					$this->inherit_permission = true;
+					if ($folder->is_read_access() == true)
+					{
+						$this->read_access = true;
+					}
+					if ($folder->is_write_access() == true)
+					{
+						$this->write_access = true;
+					}
+					if ($folder->is_delete_access() == true)
+					{
+						$this->delete_access = true;
+					}
+					if ($folder->is_control_access() == true)
+					{
+						$this->control_access = true;
+					}
+				}
+				elseif (is_subclass_of($folder, "Folder") == true)
+				{
+					$this->inherit_permission = true;
+					if ($folder->is_read_access() == true)
+					{
+						$this->read_access = true;
+					}
+					if ($folder->is_write_access() == true)
+					{
+						$this->write_access = true;
+					}
+					if ($folder->is_delete_access() == true)
+					{
+						$this->delete_access = true;
+					}
+					if ($folder->is_control_access() == true)
+					{
+						$this->control_access = true;
+					}
+				}
+			}
+			else
+			{
+				$this->inherit_permission = false;
+			}
+		} 
+	}
+
+	protected final function get_inherit_permission()
+	{
+		return $this->inherit_permission;
 	}
 	
-	/**
-	 * @todo implementation
-	 */
 	public function is_read_access()
 	{
-		return true;
+		return $this->read_access;
 	}
 	
-	/**
-	 * @todo implementation
-	 */
 	public function is_write_access()
 	{
-		return true;
+		return $this->write_access;
 	}
 	
-	/**
-	 * @todo implementation
-	 */
 	public function is_delete_access()
 	{
-		return true;
+		return $this->delete_access;
 	}
 	
-	/**
-	 * @todo implementation
-	 */
 	public function is_control_access()
 	{
-		return true;
+		return $this->control_access;
 	}
 	
 	/**
@@ -360,7 +387,6 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		}
 	}
 	
-	
 	public final function get_childs()
 	{
 		if ($this->data_entity_id)
@@ -390,7 +416,14 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 */
 	public final function get_datetime()
 	{
-		
+		if ($this->data_entity)
+		{
+			return $this->data_entity->get_datetime();
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**
@@ -398,7 +431,14 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 */
 	public final function get_owner_id()
 	{
-		
+		if ($this->data_entity)
+		{
+			return $this->data_entity->get_owner_id();
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**
@@ -406,7 +446,14 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 */
 	public final function get_owner_group_id()
 	{
-		
+		if ($this->data_entity)
+		{
+			return $this->data_entity->get_owner_group_id();
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**
@@ -414,7 +461,14 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 */
 	public final function get_permission()
 	{
-		
+		if ($this->data_entity)
+		{
+			return $this->data_entity->get_permission();
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**
@@ -422,7 +476,14 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 */
 	public final function get_permission_string()
 	{
-		return "automatic";	
+		if (is_object($this->data_entity_permission))
+		{
+			return $this->data_entity_permission->get_permission_string();
+		}
+		else
+		{
+			return "unknown";
+		}
 	}
 	
 	/**
@@ -430,7 +491,14 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 */
 	public final function get_automatic()
 	{
-		
+		if ($this->data_entity)
+		{
+			return $this->data_entity->get_automatic();
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**

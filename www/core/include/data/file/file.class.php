@@ -241,7 +241,7 @@ class File extends DataEntity implements FileInterface
 	/**
 	 * Deletes a file, including all versions
 	 * @return bool
-	 * @todo first db delete, the filesystem delete
+	 * @todo first db delete, then filesystem delete
 	 */
 	public function delete()
 	{

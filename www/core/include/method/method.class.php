@@ -93,7 +93,7 @@ class Method extends Item implements MethodInterface, EventListenerInterface, It
 					{
 						$transaction->rollback($transaction_id);
 					}
-					throw new SampleCreationFailedException("",1);
+					return null;
 				}
 				
 				$method_is_item = new MethodIsItem_Access(null);
@@ -104,7 +104,7 @@ class Method extends Item implements MethodInterface, EventListenerInterface, It
 					{
 						$transaction->rollback($transaction_id);
 					}
-					throw new SampleCreationFailedException("",1);
+					return null;
 				}
 				else
 				{

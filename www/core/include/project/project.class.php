@@ -88,7 +88,7 @@ class Project implements ProjectInterface, EventListenerInterface
 	 */
   	public function set_template_data($type, $type_id, $array)
   	{
-    	if (($type == "sample" or $type == "value") and is_array($array))
+    	if (is_array($array))
     	{
     		$this->template_data_type = $type;
     		$this->template_data_type_id = $type_id;
