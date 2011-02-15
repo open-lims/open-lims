@@ -149,9 +149,9 @@ class Value_Access
 	 */
 	public function get_data_entity_id()
 	{
-		if ($this->datetime)
+		if ($this->data_entity_id)
 		{
-			return $this->datetime;
+			return $this->data_entity_id;
 		}
 		else
 		{

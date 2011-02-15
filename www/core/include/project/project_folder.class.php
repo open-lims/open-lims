@@ -26,6 +26,8 @@
  */
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("events/project_folder_create_event.class.php");
+	
 	require_once("access/project_has_folder.access.php");
 }
 
@@ -160,20 +162,19 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 					return null;
 				}
 				
-				// Sample - Virtual Folder
+				// Virtual Folder				
+				$project_folder_create_event = new ProjectFolderCreateEvent($folder_id);
+				$event_handler = new EventHandler($project_folder_create_event);
 				
-				$virtual_folder = new VirtualFolder(null);
-				if ($virtual_folder->create($folder_id, "samples") == null)
+				if ($event_handler->get_success() == false)
 				{
 					$this->delete();
-					return null;
+					return false;
 				}
-				if ($virtual_folder->set_sample_vfolder() == false)
+				else
 				{
-					$this->delete();
-					return null;
+					return $folder_id;
 				}
-				return $folder_id;
 			}
 			else
 			{

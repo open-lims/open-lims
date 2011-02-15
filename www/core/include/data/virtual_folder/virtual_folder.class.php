@@ -29,11 +29,9 @@ require_once("interfaces/virtual_folder.interface.php");
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
 	require_once("events/virtual_folder_delete_event.class.php");
-	
+
 	require_once("core/include/data/access/data_join.access.php");
-	
 	require_once("access/virtual_folder.access.php");
-	require_once("access/virtual_folder_has_folder.access.php");
 }
 
 /**
@@ -151,33 +149,33 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 	public final function delete()
 	{
 		global $transaction;
-		
+
 		if ($this->virtual_folder_id and $this->virtual_folder)
 		{
 			$transaction_id = $transaction->begin();
 			
-			$linked_folder_array = VirtualFolderHasFolder_Access::list_entries_by_virtual_folder_id($this->virtual_folder_id);
-			
-			if (is_array($linked_folder_array) and count($linked_folder_array) >= 1)
+			if ($this->unset_childs() == false)
 			{
-				foreach($linked_folder_array as $key => $value)
+				if ($transaction_id != null)
 				{
-					$virtual_folder_has_folder = new VirtualFolderHasFolder_Access($value);
-					if ($virtual_folder_has_folder->delete() == false)
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						return false;
-					}
+					$transaction->rollback($transaction_id);
 				}
-			}
-			
-			$virtual_folder_delete_event = new VirtualFolderDeleteEvent($folder_id);
+				return false;
+			} 
+
+			$virtual_folder_delete_event = new VirtualFolderDeleteEvent($this->virtual_folder_id);
 			$event_handler = new EventHandler($virtual_folder_delete_event);
 			
 			if ($event_handler->get_success() == false)
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+			}
+			
+			if (parent::delete() == false)
 			{
 				if ($transaction_id != null)
 				{
@@ -215,55 +213,24 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 	 * @return bool
 	 */
 	public function link_folder($folder_id)
-	{
-		global $transaction;
-		
+	{		
 		if (is_numeric($folder_id))
 		{
-			$transaction_id = $transaction->begin();
+			$folder = new Folder($folder_id);
+			$data_entity_id = $folder->get_data_entity_id();
 			
-			$entry_exists = false;
-			
-			$folder_array = VirtualFolderHasFolder_Access::list_entries_by_virtual_folder_id($this->virtual_folder_id);
-			
-			if (is_array($folder_array))
+			if ($data_entity_id)
 			{
-				foreach ($folder_array as $key => $value)
-				{
-					$virtual_folder_has_folder = new VirtualFolderHasFolder_Access($value);
-					if ($virtual_folder_has_folder->get_folder_id() == $folder_id)
-					{
-						$entry_exists = true;
-					}
-				}
-			}
-			
-			if ($entry_exists == false)
-			{			
-				$virtual_folder_has_folder = new VirtualFolderHasFolder_Access(null);
-				$return_value = $virtual_folder_has_folder->create($this->virtual_folder_id, $folder_id);
-				
-				if ($return_value != null)
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
-					return true;
-				}
-				else
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
-				}
+				return $folder->set_as_child_of($this->data_entity_id);
 			}
 			else
 			{
-				return true;
+				return false;
 			}
+		}
+		else
+		{
+			return false;
 		}
 	}
 	
@@ -278,46 +245,16 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 		
 		if (is_numeric($folder_id))
 		{
-			$transaction_id = $transaction->begin();
-		
-			$entry_exists = false;
+			$folder = new Folder($folder_id);
+			$data_entity_id = $folder->get_data_entity_id();
 			
-			$folder_array = VirtualFolderHasFolder_Access::list_entries_by_virtual_folder_id($this->virtual_folder_id);
-			
-			if (is_array($folder_array))
+			if ($data_entity_id)
 			{
-				foreach ($folder_array as $key => $value)
-				{
-					$virtual_folder_has_folder = new VirtualFolderHasFolder_Access($value);
-					if ($virtual_folder_has_folder->get_folder_id() == $folder_id)
-					{
-						if ($virtual_folder_has_folder->delete())
-						{
-							if ($transaction_id != null)
-							{
-								$transaction->commit($transaction_id);
-							}
-							return true;
-						}
-						else
-						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							return false;
-						}
-					}
-				}
-				return true;
+				return $folder->unset_child_of($this->data_entity_id);
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
-				return true;
+				return false;
 			}
 		}
 		else
@@ -325,48 +262,7 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 			return false;
 		}
 	}
-	
-	/**
-	 * Returns an array of all folders in the current Virtual-Folder
-	 * @return array
-	 */
-	public function get_subfolder_array()
-	{
-		if ($this->virtual_folder_id and $this->virtual_folder)
-		{
-			$return_array = array();
-			
-			$folder_array = VirtualFolderHasFolder_Access::list_entries_by_virtual_folder_id($this->virtual_folder_id);
-			
-			if (is_array($folder_array) and count($folder_array) > 0)
-			{
-				$counter = 0;
-				foreach($folder_array as $key => $value)
-				{
-					$virtual_folder_has_folder = new VirtualFolderHasFolder_Access($value);
-					
-					$return_array[$counter][id]		= $virtual_folder_has_folder->get_folder_id();
-					$return_array[$counter][type]	= 0;
-					
-					$counter++;
-				}
-			}
-											
-			if (is_array($return_array) and count($return_array) > 0)
-			{
-				return $return_array;
-			}
-			else
-			{
-				return null;
-			}
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
+		
 	/**
 	 * @return string
 	 */

@@ -40,7 +40,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Folder Management Class
  * @package data
  */
-class Folder extends DataEntity implements FolderInterface, EventListenerInterface
+class Folder extends DataEntity implements FolderInterface
 {
 	private $folder_id;
 	private $folder;
@@ -499,8 +499,20 @@ class Folder extends DataEntity implements FolderInterface, EventListenerInterfa
 						if (($value_id = Value::get_value_id_by_data_entity_id($value)) != null)
 						{
 							$value_obj = new Value($value);
-							$value_delete = $value_obj->delete();
-							if ($value_delete == false)
+							if ($value_obj->delete() == false)
+							{
+								if ($transaction_id != null)
+								{
+									$transaction->rollback($transaction_id);
+								}
+								return false;
+							}
+						}
+						// Virtual Folders
+						if (($virtual_folder_id = VirtualFolder::get_virtual_folder_id_by_data_entity_id($value)) != null)
+						{
+							$virtual_folder = new VirtualFolder($virtual_folder_id);
+							if ($virtual_folder->delete() == false)
 							{
 								if ($transaction_id != null)
 								{
@@ -545,17 +557,6 @@ class Folder extends DataEntity implements FolderInterface, EventListenerInterfa
 						}
 					}
 				}	
-					
-				$vfolder_array = VirtualFolder::list_entries_by_folder_id($this->folder_id);
-				
-				if (is_array($vfolder_array) and count($vfolder_array) >= 1)
-				{
-					foreach($vfolder_array as $key => $value)
-					{
-						$virtual_folder = new VirtualFolder($value);
-						$virtual_folder->delete();
-					}
-				}
 				
 				if (parent::delete() == false)
 				{
@@ -1011,31 +1012,6 @@ class Folder extends DataEntity implements FolderInterface, EventListenerInterfa
 	{
 		return Folder_Access::list_folder();
 	}
-    
-    /**
-     * @param object $event_object
-     * @return bool
-     */
-    public static function listen_events($event_object)
-    {
-   		if ($event_object instanceof UserDeleteEvent)
-    	{			
-			if (Folder_Access::set_owner_id_on_null($event_object->get_user_id()) == false)
-			{
-				return false;
-			}
-    	}
-    	  	
-   		if ($event_object instanceof GroupDeleteEvent)
-    	{
-			if (Folder_Access::set_owner_group_id_on_null($event_object->get_group_id()) == false)
-			{
-				return false;
-			}
-    	}
-    	
-    	return true;
-    }
     
     /**
      * Returns a new instance of Folder or of one of its child

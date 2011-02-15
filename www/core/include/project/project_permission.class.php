@@ -97,7 +97,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     			
     			foreach($virtual_folder_array as $key => $value)
     			{
-    				$virtual_folder = new VirtualFolder($value);
+    				$virtual_folder = new ProjectVirtualFolder($value);
     				if ($virtual_folder->is_project_vfolder() == true)
     				{
     					$virtual_folder_id = $value;
@@ -126,7 +126,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     			
     			foreach($virtual_folder_array as $key => $value)
     			{
-    				$virtual_folder = new VirtualFolder($value);
+    				$virtual_folder = new ProjectVirtualFolder($value);
     				if ($virtual_folder->is_project_vfolder() == true)
     				{
     					$virtual_folder_id = $value;
@@ -155,7 +155,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     			
     			foreach($virtual_folder_array as $key => $value)
     			{
-    				$virtual_folder = new VirtualFolder($value);
+    				$virtual_folder = new ProjectVirtualFolder($value);
     				if ($virtual_folder->is_project_vfolder() == true)
     				{
     					$virtual_folder_id = $value;
@@ -219,7 +219,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 	    			
 	    			foreach($virtual_folder_array as $key => $value)
 	    			{
-	    				$virtual_folder = new VirtualFolder($value);
+	    				$virtual_folder = new ProjectVirtualFolder($value);
 	    				if ($virtual_folder->is_project_vfolder() == true)
 	    				{
 	    					$virtual_folder_id = $value;
@@ -252,7 +252,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 	    			
 	    			foreach($virtual_folder_array as $key => $value)
 	    			{
-	    				$virtual_folder = new VirtualFolder($value);
+	    				$virtual_folder = new ProjectVirtualFolder($value);
 	    				if ($virtual_folder->is_project_vfolder() == true)
 	    				{
 	    					$virtual_folder_id = $value;
@@ -285,7 +285,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 	    			
 	    			foreach($virtual_folder_array as $key => $value)
 	    			{
-	    				$virtual_folder = new VirtualFolder($value);
+	    				$virtual_folder = new ProjectVirtualFolder($value);
 	    				if ($virtual_folder->is_project_vfolder() == true)
 	    				{
 	    					$virtual_folder_id = $value;
@@ -524,7 +524,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 			
 			foreach($current_virtual_folder_array as $key => $value)
 			{
-				$virtual_folder = new VirtualFolder($value);
+				$virtual_folder = new ProjectVirtualFolder($value);
 				if ($virtual_folder->is_project_vfolder() == true)
 				{
 					$virtual_folder_id = $value;
@@ -548,7 +548,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 			
 			foreach($new_virtual_folder_array as $key => $value)
 			{
-				$virtual_folder = new VirtualFolder($value);
+				$virtual_folder = new ProjectVirtualFolder($value);
 				if ($virtual_folder->is_project_vfolder() == true)
 				{
 					$virtual_folder_id = $value;
@@ -611,7 +611,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 			
 			foreach($current_virtual_folder_array as $key => $value)
 			{
-				$virtual_folder = new VirtualFolder($value);
+				$virtual_folder = new ProjectVirtualFolder($value);
 				if ($virtual_folder->is_project_vfolder() == true)
 				{
 					$virtual_folder_id = $value;
@@ -635,7 +635,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 			
 			foreach($new_virtual_folder_array as $key => $value)
 			{
-				$virtual_folder = new VirtualFolder($value);
+				$virtual_folder = new ProjectVirtualFolder($value);
 				if ($virtual_folder->is_project_vfolder() == true)
 				{
 					$virtual_folder_id = $value;
@@ -698,7 +698,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 			
 			foreach($current_virtual_folder_array as $key => $value)
 			{
-				$virtual_folder = new VirtualFolder($value);
+				$virtual_folder = new ProjectVirtualFolder($value);
 				if ($virtual_folder->is_project_vfolder() == true)
 				{
 					$virtual_folder_id = $value;
@@ -722,7 +722,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 			
 			foreach($new_virtual_folder_array as $key => $value)
 			{
-				$virtual_folder = new VirtualFolder($value);
+				$virtual_folder = new ProjectVirtualFolder($value);
 				if ($virtual_folder->is_project_vfolder() == true)
 				{
 					$virtual_folder_id = $value;

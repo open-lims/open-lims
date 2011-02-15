@@ -71,7 +71,7 @@ class Value extends DataEntity implements ValueInterface
 			
 			$value_version_id = ValueVersion_Access::get_current_entry_by_toid($value_id);
 			$this->value_version = new ValueVersion_Access($value_version_id);
-			
+
 			parent::__construct($this->value->get_data_entity_id());
 		}
     }
@@ -263,33 +263,29 @@ class Value extends DataEntity implements ValueInterface
 		{
 			$transaction_id = $transaction->begin();
 
-			$object_delete = parent::delete();
+			$value_version_array = ValueVersion_Access::list_entries_by_toid($this->value_id);
 
-			if ($object_delete == true)
+			unset($this->value_version);
+			
+			if (is_array($value_version_array) and count($value_version_array) >= 1)
 			{
-				$value_version_array = ValueVersion_Access::list_entries_by_toid($this->value_id);
-
-				unset($this->value_version);
-				
-				if (is_array($value_version_array) and count($value_version_array) >= 1)
+				foreach($value_version_array as $key => $fe_value)
 				{
-					foreach($value_version_array as $key => $fe_value)
+					$value_version = new ValueVersion_Access($fe_value);
+					if ($value_version->delete() == false)
 					{
-						$value_version = new ValueVersion_Access($fe_value);
-						if ($value_version->delete() == false)
+						if ($transaction_id != null)
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							echo "e";
-							return false;
+							$transaction->rollback($transaction_id);
 						}
+						return false;
 					}
-					
-					if ($this->value->delete() == true)
+				}
+				
+				if ($this->value->delete() == true)
+				{
+					if (parent::delete() == true)
 					{
-						$this->__destruct();
 						if ($transaction_id != null)
 						{
 							$transaction->commit($transaction_id);
@@ -302,7 +298,6 @@ class Value extends DataEntity implements ValueInterface
 						{
 							$transaction->rollback($transaction_id);
 						}
-						echo "d";
 						return false;
 					}
 				}
@@ -312,7 +307,6 @@ class Value extends DataEntity implements ValueInterface
 					{
 						$transaction->rollback($transaction_id);
 					}
-					echo "c";
 					return false;
 				}
 			}
@@ -322,13 +316,11 @@ class Value extends DataEntity implements ValueInterface
 				{
 					$transaction->rollback($transaction_id);
 				}
-				echo "b";
-				return false;	
+				return false;
 			}
 		}
 		else
 		{
-			echo "a";
 			return false;	
 		}
 	}
@@ -968,13 +960,28 @@ class Value extends DataEntity implements ValueInterface
     	if (is_array($xml_array) and count($xml_array) >= 1)
     	{
     		$value_var = new ValueVar;
-			if (is_numeric($this->project_id))
+    		if (is_numeric($this->data_entity_id))
 			{
-				$value_var->set_project_id($this->project_id);
+				$parent_folder_data_entity_id = $this->get_parent_folder();
+				$folder = Folder::get_instance(Folder::get_folder_id_by_data_entity_id($parent_folder_data_entity_id));
+				
+				if (is_method($folder->get_project_id()))
+				{
+					$value_var->set_project_id($folder->get_project_id());
+				}
+				
+				if (is_method($folder->get_sample_id()))
+				{
+					$value_var->set_sample_id($folder->get_sample_id());
+				}
 			}
-			if (is_numeric($this->sample_id))
+			elseif($_GET[project_id])
 			{
-				$value_var->set_sample_id($this->sample_id);
+				$value_var->set_project_id($_GET[project_id]);
+			}
+			elseif($_GET[sample_id])
+			{
+				$value_var->set_sample_id($_GET[sample_id]);
 			}
     		
     		foreach($xml_array as $key => $value)
@@ -1037,7 +1044,7 @@ class Value extends DataEntity implements ValueInterface
     
     /**
      * Returns an HTML-String of the current value
-     * @todo remove dependecies
+     * @todo remove dependecies (project and sample)
      * @todo remove HTML
      * @param array $error_array
      * @param integer $type_id
@@ -1216,14 +1223,30 @@ class Value extends DataEntity implements ValueInterface
 					elseif (!$value[3][value] and $value[3]['var'])
 					{
 						$value_var = new ValueVar;
-						if (is_numeric($this->project_id))
+						if (is_numeric($this->data_entity_id))
 						{
-							$value_var->set_project_id($this->project_id);
+							$parent_folder_data_entity_id = $this->get_parent_folder();
+							$folder = Folder::get_instance(Folder::get_folder_id_by_data_entity_id($parent_folder_data_entity_id));
+							
+							if (is_method($folder->get_project_id()))
+							{
+								$value_var->set_project_id($folder->get_project_id());
+							}
+							
+							if (is_method($folder->get_sample_id()))
+							{
+								$value_var->set_sample_id($folder->get_sample_id());
+							}
 						}
-						if (is_numeric($this->sample_id))
+						elseif($_GET[project_id])
 						{
-							$value_var->set_sample_id($this->sample_id);
+							$value_var->set_project_id($_GET[project_id]);
 						}
+						elseif($_GET[sample_id])
+						{
+							$value_var->set_sample_id($_GET[sample_id]);
+						}
+						
 						$value_var_content = $value_var->get_var_content($value[3]['var']);
 								
 						if (!is_array($value_var_content))
@@ -1370,14 +1393,30 @@ class Value extends DataEntity implements ValueInterface
 							elseif (!$value[3][value] and $value[3]['var'])
 							{
 								$value_var = new ValueVar;
-								if (is_numeric($this->project_id))
+								if (is_numeric($this->data_entity_id))
 								{
-									$value_var->set_project_id($this->project_id);
+									$parent_folder_data_entity_id = $this->get_parent_folder();
+									$folder = Folder::get_instance(Folder::get_folder_id_by_data_entity_id($parent_folder_data_entity_id));
+									
+									if (is_method($folder->get_project_id()))
+									{
+										$value_var->set_project_id($folder->get_project_id());
+									}
+									
+									if (is_method($folder->get_sample_id()))
+									{
+										$value_var->set_sample_id($folder->get_sample_id());
+									}
 								}
-								if (is_numeric($this->sample_id))
+								elseif($_GET[project_id])
 								{
-									$value_var->set_sample_id($this->sample_id);
+									$value_var->set_project_id($_GET[project_id]);
 								}
+								elseif($_GET[sample_id])
+								{
+									$value_var->set_sample_id($_GET[sample_id]);
+								}
+			
 								$value_var_content = $value_var->get_var_content($value[3]['var']);
 
 								if (is_array($value_var_content) and count($value_var_content) >= 1) {

@@ -562,11 +562,10 @@ class ValueVar implements ValueVarInterface
 	    						
 	    						foreach($this->item_array as $fe_key => $fe_value)
 	    						{
-	    							if (Object::is_kind_of("value", $fe_value) == true)
+	    							if (DataEntity::is_kind_of("value", $fe_value) == true)
 	    							{
-	    								$object_id = Object::get_entry_by_item_id($fe_value);
-	    								$object = new Object($object_id);
-	    								if (($value_id = $object->get_value_id()) != null)
+	    								$data_entity_id = DataEntity::get_entry_by_item_id($fe_value);
+	    								if (($value_id = Value::get_value_id_by_data_entity_id($data_entity_id)) != null)
 	    								{
 	    									array_push($result_array, $value_id);
 	    								}
@@ -709,11 +708,10 @@ class ValueVar implements ValueVarInterface
 		    						
 		    						foreach($this->item_array as $fe_key => $fe_value)
 		    						{
-			    						if (Object::is_kind_of("value", $fe_value) == true)
+			    						if (DataEntity::is_kind_of("value", $fe_value) == true)
 		    							{
-		    								$object_id = Object::get_entry_by_item_id($fe_value);
-		    								$object = new Object($object_id);
-		    								if (($value_id = $object->get_value_id()) != null)
+		    								$data_entity_id = DataEntity::get_entry_by_item_id($fe_value);
+		    								if (($value_id = Value::get_value_id_by_data_entity_id($data_entity_id)) != null)
 		    								{
 		    									array_push($result_array, $value_id);
 		    								}

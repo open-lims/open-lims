@@ -28,8 +28,8 @@ function register_data($include_id)
 {
 	if (Item::delete_type_by_include_id($include_id))
 	{
-		if (Item::register_type("file", "Object", $include_id) == false or 
-			Item::register_type("value", "Object", $include_id) == false)
+		if (Item::register_type("file", "DataEntity", $include_id) == false or 
+			Item::register_type("value", "DataEntity", $include_id) == false)
 		{
 			return false;
 		}

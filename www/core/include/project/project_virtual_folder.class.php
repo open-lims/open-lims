@@ -92,7 +92,7 @@ class ProjectVirtualFolder extends VirtualFolder implements ProjectVirtualFolder
 			{
 				return false;
 			}
-    	}
+    	} 
     	
     	if ($event_object instanceof VirtualFolderDeleteEvent)
     	{

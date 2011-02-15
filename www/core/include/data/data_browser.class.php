@@ -74,15 +74,7 @@ class DataBrowser implements DataBrowserInterface
     	elseif(!$folder_id and $virtual_folder_id)
     	{
     		$virtual_folder = new VirtualFolder($virtual_folder_id);
-    		
-    		$virtual_folder_array = $virtual_folder->get_subfolder_array();
-    		
-    		if (is_array($virtual_folder_array))
-    		{
-    			$return_array[1] = $virtual_folder_array;
-    		}
-
-    		return $return_array;	
+    		return DataJoin_Access::list_data_entity_childs($virtual_folder->get_data_entity_id(), $order_by, $order_method, $start, $end);
     	}
     	else
     	{

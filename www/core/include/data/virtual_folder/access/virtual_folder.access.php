@@ -248,14 +248,11 @@ class VirtualFolder_Access
 			
 			$sql = "SELECT id FROM ".self::VIRTUAL_FOLDER_TABLE." WHERE data_entity_id = ".$data_entity_id."";
 			$res = $db->db_query($sql);
-			while ($data = $db->db_fetch_assoc($res))
-			{
-				array_push($return_array,$data[id]);
-			}
+			$data = $db->db_fetch_assoc($res);
 			
-			if (is_array($return_array))
+			if ($data[id])
 			{
-				return $return_array;
+				return $data[id];
 			}
 			else
 			{

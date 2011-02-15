@@ -139,276 +139,11 @@ class DataIO
 				}
 			}
 
-			
 			if ($folder_id == null and $virtual_folder_id == null)
 			{
 				$folder_id = $data_browser->get_folder_id();
 			}
-			
-			
-			$content_array = array();
-			
-	
-			$data_browser_array_cardinality = 0;
-	
-			if ($data_browser_array[0])
-			{
-				$data_browser_array_cardinality = $data_browser_array_cardinality + count($data_browser_array[0]);
-			}
-			
-			if ($data_browser_array[1])
-			{
-				$data_browser_array_cardinality = $data_browser_array_cardinality + count($data_browser_array[1]);			
-			}
-			
-			if ($data_browser_array[2])
-			{
-				$data_browser_array_cardinality = $data_browser_array_cardinality + count($data_browser_array[2]);
-			}
-			
-			if ($data_browser_array[3])
-			{
-				$data_browser_array_cardinality = $data_browser_array_cardinality + count($data_browser_array[3]);
-			}
-			
-			
-			$counter = 0;
-	
-			if (!$_GET[page] or $_GET[page] == 1)
-			{
-				$page = 1;
-				$counter_begin = 0;
-				if ($data_browser_array_cardinality > 25)
-				{
-					$counter_end = 24;
-				}
-				else
-				{
-					$counter_end = $data_browser_array_cardinality-1;
-				}
-			}
-			else
-			{
-				if ($_GET[page] >= ceil($data_browser_array_cardinality/25))
-				{
-					$page = ceil($data_browser_array_cardinality/25);
-					$counter_end = $data_browser_array_cardinality;
-				}
-				else
-				{
-					$page = $_GET[page];
-					$counter_end = (25*$page)-1;
-				}
-				$counter_begin = (25*$page)-25;
-			}
-
-			if (is_array($data_browser_array) and count($data_browser_array) > 0)
-			{
-				foreach($data_browser_array as $key => $value)
-				{
 					
-					/*
-					switch($key):
-					
-					// Folder
-					case(1):
-						if (is_array($value))
-						{
-							foreach ($value as $sub_key => $sub_value)
-							{
-								if ($counter >= $counter_begin and $counter <= $counter_end)
-								{
-									$column_array = array();
-									
-									if ($sub_value[type] == 0)
-									{
-										$folder = Folder::get_instance($sub_value[id]);
-																				
-										$user = new User($folder->get_owner_id());
-										
-										$paramquery = $_GET;
-										$paramquery[folder_id] = $sub_value[id];
-										$paramquery[nav] = "data";
-										unset($paramquery[nextpage]);
-										unset($paramquery[vfolder_id]);
-										$params = http_build_query($paramquery,'','&#38;');
-										
-										if ($folder->is_read_access() == true)
-										{
-											$column_array[symbol][link] = $params;
-											$column_array[symbol][content] = "<img src='images/icons/folder.png' alt='' style='border:0;' />";
-											$column_array[name][link] = $params;
-										}
-										else
-										{
-											$column_array[symbol][link] = "";
-											$column_array[symbol][content] = "<img src='core/images/denied_overlay.php?image=images/icons/folder.png' alt='' border='0' />";
-											$column_array[name][link] = "";
-										}
-										
-										$column_array[name][content] = $folder->get_name();
-										$column_array[type] = "Folder";
-										$column_array[version] = "";
-										$column_array[datetime] = $folder->get_datetime();
-										$column_array[size] = "";
-										$column_array[owner] = $user->get_full_name(true);
-										$column_array[permission] = $folder->get_permission_string();
-										
-										$folder_write_access = $folder->is_write_access();
-									}
-									else
-									{
-										$virtual_folder = new VirtualFolder($sub_value[id]);
-										
-										$paramquery = $_GET;
-										$paramquery[vfolder_id] = $sub_value[id];
-										$paramquery[nav] = "data";
-										unset($paramquery[nextpage]);
-										$params = http_build_query($paramquery,'','&#38;');
-										
-										$column_array[symbol][link] = $params;
-										$column_array[symbol][content] = "<img src='images/icons/virtual_folder.png' alt='' style='border:0;' />";
-										$column_array[name][link] = $params;
-										$column_array[name][content] = $virtual_folder->get_name();
-										$column_array[type] = "Virtual Folder";
-										$column_array[version] = "";
-										$column_array[datetime] = $virtual_folder->get_datetime();
-										$column_array[size] = "";
-										$column_array[owner] = "System";
-										$column_array[permission] = "automatic";
-										
-										$folder_write_access = false;
-									}
-									array_push($content_array, $column_array);
-								}
-								$counter++;
-							}
-						}
-					break;
-					
-					// Files
-					case(2):
-						if (is_array($value))
-						{
-							foreach ($value as $sub_key => $sub_value)
-							{
-								if ($counter >= $counter_begin and $counter <= $counter_end)
-								{
-									$column_array = array();
-									
-									$file = new File($sub_value);
-									
-									$user = new User($file->get_owner_id());
-									
-									$name = $file->get_name();
-									
-									if (strlen($name) > 20)
-									{
-										$name = substr($name,0 ,20)."...";
-									}
-									
-									$paramquery = $_GET;
-									$paramquery[file_id] = $sub_value;
-									$paramquery[nav] = "file";
-									$paramquery[run] = "detail";
-									unset($paramquery[nextpage]);
-									unset($paramquery[version]);
-									$params = http_build_query($paramquery,'','&#38;');
-									
-									if ($file->is_read_access() == true)
-									{
-										$column_array[symbol][link] = $params;
-										$column_array[symbol][content] = "<img src='".$file->get_icon()."' alt='' style='border:0;' />";
-										$column_array[name][link] = $params;
-									}
-									else
-									{
-										$column_array[symbol][link] = "";
-										$column_array[symbol][content] = "<img src='core/images/denied_overlay.php?image=".$file->get_icon()."' alt='' border='0' />";
-										$column_array[name][link] = "";
-									}
-									
-									$column_array[name][content] = $name;
-									$column_array[type] = "File";
-									$column_array[version] = $file->get_version();
-									$column_array[datetime] = $file->get_datetime();
-									$column_array[size] = Misc::calc_size($file->get_size());
-									$column_array[owner] = $user->get_full_name(true);
-									$column_array[permission] = $file->get_permission_string();
-									
-									array_push($content_array, $column_array);
-								}
-								$counter++;
-							}
-						}
-					break;
-					
-					// Values
-					case(3):
-						if (is_array($value))
-						{
-							foreach ($value as $sub_key => $sub_value)
-							{
-								if ($counter >= $counter_begin and $counter <= $counter_end)
-								{
-									$column_array = array();
-			
-									$value_class = new Value($sub_value);
-			
-									$user = new User($value_class->get_owner_id());
-									
-									$name = $value_class->get_type_name();
-									
-									if (strlen($name) > 20)
-									{
-										$name = substr($name,0 ,20)."...";
-									}
-									
-									$paramquery = $_GET;
-									$paramquery[value_id] = $sub_value;
-									$paramquery[nav] = "value";
-									$paramquery[run] = "detail";
-									unset($paramquery[nextpage]);
-									unset($paramquery[version]);
-									$params = http_build_query($paramquery,'','&#38;');
-									
-									if ($value_class->is_read_access() == true)
-									{
-										$column_array[symbol][link] = $params;
-										$column_array[symbol][content] = "<img src='images/fileicons/16/unknown.png' alt='' style='border:0;' />";
-										$column_array[name][link] = $params;
-									}
-									else
-									{
-										$column_array[symbol][link] = "";
-										$column_array[symbol][content] = "<img src='core/images/denied_overlay.php?image=images/fileicons/16/unknown.png' alt='' border='0' />";
-										$column_array[name][link] = "";
-									}
-									
-									$column_array[name][content] = $name;
-									$column_array[type] = "Value";
-									$column_array[version] = $value_class->get_version();
-									$column_array[datetime] = $value_class->get_datetime();
-									$column_array[size] = "";
-									$column_array[owner] = $user->get_full_name(true);
-									$column_array[permission] = $value_class->get_permission_string();
-									
-									array_push($content_array, $column_array);
-								}
-								$counter++;
-							}
-						}
-					break; 
-					
-					endswitch; */
-				}
-				$last_line = null;
-			}
-			else
-			{
-				$last_line = "This folder is empty.";
-			}
-			
 				
 			// !!!!! ---------- !!!!!!!!!!!!!1
 			$folder = Folder::get_instance($folder_id);	
@@ -430,22 +165,22 @@ class DataIO
 			{
 				if ($_GET[sortvalue] and $_GET[sortmethod])
 				{
-					$result_array = DataBrowser::get_data_browser_array($folder_id, null, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
+					$result_array = DataBrowser::get_data_browser_array($folder_id, $virtual_folder_id, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
 				}
 				else
 				{
-					$result_array = DataBrowser::get_data_browser_array($folder_id, null, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
+					$result_array = DataBrowser::get_data_browser_array($folder_id, $virtual_folder_id, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
 				}				
 			}
 			else
 			{
 				if ($_GET[sortvalue] and $_GET[sortmethod])
 				{
-					$result_array = DataBrowser::get_data_browser_array($folder_id, null, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
+					$result_array = DataBrowser::get_data_browser_array($folder_id, $virtual_folder_id, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
 				}
 				else
 				{
-					$result_array = DataBrowser::get_data_browser_array($folder_id, null, null, null, 0, 20);
+					$result_array = DataBrowser::get_data_browser_array($folder_id, $virtual_folder_id, null, null, 0, 20);
 				}	
 			}
 			
@@ -508,9 +243,7 @@ class DataIO
 
 					// Special
 					if ($result_array[$key][file_id])
-					{
-						$result_array[$key][symbol] = "";
-												
+					{						
 						$file = new File($result_array[$key][file_id]);
 
 						if ($file->is_read_access() == true)
@@ -543,8 +276,34 @@ class DataIO
 					}
 					elseif ($result_array[$key][value_id])
 					{
-						$result_array[$key][symbol] = "";
+						$value = new Value($result_array[$key][value_id]);
+
+						if ($value->is_read_access() == true)
+						{
+							$paramquery = $_GET;
+							$paramquery[value_id] = $result_array[$key][value_id];
+							$paramquery[nav] = "value";
+							$paramquery[run] = "detail";
+							unset($paramquery[nextpage]);
+							unset($paramquery[version]);
+							$params = http_build_query($paramquery,'','&#38;');
 						
+							$result_array[$key][symbol][link] = $params;
+							$result_array[$key][symbol][content] = "<img src='images/fileicons/16/unknown.png' alt='' style='border:0;' />";
+							
+							$tmp_name = $result_array[$key][name];
+							unset($result_array[$key][name]);
+							$result_array[$key][name][content] = $tmp_name;
+							$result_array[$key][name][link] = $params;
+						}
+						else
+						{
+							$result_array[$key][symbol] = "<img src='core/images/denied_overlay.php?image=images/fileicons/16/unknown.png' alt='' border='0' />";
+						}
+						
+						$result_array[$key][type] = "Value";
+						$result_array[$key][version] = $value->get_version();
+						$result_array[$key][permission] = $value->get_permission_string();
 					}
 					elseif ($result_array[$key][folder_id])
 					{	

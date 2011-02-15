@@ -352,8 +352,11 @@ class DataPath implements DataPathInterface
 	    	{
 	    		if ($value[virtual] == false)
 	    		{
-	    			$folder = Folder::get_instance($value[id]);
-	    			$return_string = $return_string."/".$folder->get_name();
+	    			if ($value[id] != 1)
+	    			{
+	    				$folder = Folder::get_instance($value[id]);
+	    				$return_string = $return_string."/".$folder->get_name();
+	    			}
 	    		}
 	    		else
 	    		{

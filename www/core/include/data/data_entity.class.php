@@ -263,45 +263,33 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		if ($this->data_entity_id)
 		{
 			$transaction_id = $transaction->begin();
-			
-			$child_array = DataEntityHasDataEntity_Access::list_data_entity_cid_by_data_entity_pid($this->data_entity_id);
-			if (count($child_array) == 0)
+
+			if (DataEntityHasDataEntity_Access::delete_by_data_entity_cid($this->data_entity_id) == false)
 			{
-				if (DataEntityHasDataEntity_Access::delete_by_data_entity_cid($this->data_entity_id) == false)
+				if ($transaction_id != null)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
+					$transaction->rollback($transaction_id);
 				}
-				
-				$data_entity_is_item = new DataEntityIsItem_Access($this->data_entity_id);
-				if ($data_entity_is_item->delete() == false)
+				return false;
+			}
+			
+			$data_entity_is_item = new DataEntityIsItem_Access($this->data_entity_id);
+			if ($data_entity_is_item->delete() == false)
+			{
+				if ($transaction_id != null)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
+					$transaction->rollback($transaction_id);
 				}
-				
-				if ($this->data_entity->delete() == true)
+				return false;
+			}
+			
+			if ($this->data_entity->delete() == true)
+			{
+				if ($transaction_id != null)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
-					return true;
+					$transaction->commit($transaction_id);
 				}
-				else
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
-				}
+				return true;
 			}
 			else
 			{
@@ -318,9 +306,6 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		}
 	}
 	
-	/**
-	 * @todo: check if the parent is a folder
-	 */
 	public final function get_parent_folder()
 	{
 		if ($this->data_entity_id)
@@ -348,9 +333,6 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		}
 	}
 	
-	/**
-	 * @todo: check if the parent is a folder
-	 */
 	public final function get_parent_virtual_folders()
 	{
 		if ($this->data_entity_id)
@@ -377,6 +359,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 			return null;
 		}
 	}
+	
 	
 	public final function get_childs()
 	{
@@ -508,7 +491,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 			}
 			else
 			{
-				return false;
+				return true;
 			}
 		}
 		else
@@ -541,20 +524,76 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		}
 	}
 	
+	public final function unset_childs()
+	{
+		if ($this->data_entity_id)
+		{
+			$parent_array = DataEntityHasDataEntity_Access::list_data_entity_cid_by_data_entity_pid($this->data_entity_id);
+			if (is_array($parent_array) and count($parent_array) >= 1)
+			{
+				foreach($parent_array as $key => $value)
+				{
+					$data_entity_has_data_entity = new DataEntityHasDataEntity_Access($this->data_entity_id, $value);
+					if ($data_entity_has_data_entity->delete() == false)
+					{
+						return false;
+					}
+				}
+				return true;
+			}
+			else
+			{
+				return true;
+			}
+		}
+		else
+		{
+			return false;	
+		}
+	}
+	
+	
+	/**
+	 * @param integer $item_id
+	 * @return integer
+	 */
+	public static function get_entry_by_item_id($item_id)
+	{
+		return DataEntityIsItem_Access::get_entry_by_item_id($item_id);
+	}
 	
 	/**
      * @param object $event_object
      * @return bool
+     * @todo
      */
     public static function listen_events($event_object)
     {
    		if ($event_object instanceof ItemUnlinkEvent)
     	{
-    		if (($object_id = ObjectIsItem_Access::get_entry_by_item_id($event_object->get_item_id())) != null)
+    		if (($data_entity_id = DataEntityIsItem_Access::get_entry_by_item_id($event_object->get_item_id())) != null)
     		{
-    			// Delete file or value
+    			if (($file_id = File::get_file_id_by_data_entity_id($data_entity_id)) != null)
+				{
+					$file = new File($file_id);
+    				if ($file->delete() == false)
+    				{
+    					return false;
+    				}
+				}
+				
+    			if (($value_id = Value::get_value_id_by_data_entity_id($data_entity_id)) != null)
+				{
+					$value = new Value($value_id);
+    				if ($value->delete() == false)
+    				{
+    					return false;
+    				}
+				}
     		}
     	}
+    	
+    	// User Delete Event, set owner id On Null
     	
     	return true;
     }
@@ -568,9 +607,24 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
     {
     	if ($type and is_numeric($item_id))
     	{
-    		if (($object_id = ObjectIsItem_Access::get_entry_by_item_id($item_id)) != null)
+    		if (($data_entity_id = DataEntityIsItem_Access::get_entry_by_item_id($item_id)) != null)
     		{
-    			// Check if it is a file or a value
+    			if ($type == "file")
+    			{
+	    			if (File::get_file_id_by_data_entity_id($data_entity_id) != null)
+					{
+						return true;
+					}
+    			}
+    			
+    			if ($type == "value")
+    			{
+    				if (Value::get_value_id_by_data_entity_id($data_entity_id) != null)
+					{
+						return true;
+					}
+    			}
+    			
     			return false;
     		}
     	}

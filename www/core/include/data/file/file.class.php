@@ -317,8 +317,6 @@ class File extends DataEntity implements FileInterface
 			
 				$file_delete = $this->file->delete();
 				
-				$this->__destruct();
-				
 				if ($file_delete == true)
 				{
 					// Data Entity Delete

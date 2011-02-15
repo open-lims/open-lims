@@ -2100,7 +2100,7 @@ class SampleIO
 				$sample_template 				= new SampleTemplate($sample->get_template_id());
 				$current_requirements 			= $sample->get_requirements();
 				$current_fulfilled_requirements = $sample->get_fulfilled_requirements();
-							
+				
 				$result = array();
 				$counter = 0;
 				

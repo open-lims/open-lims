@@ -328,7 +328,7 @@ class User implements UserInterface {
 					}
 					return false;
 				}
-			
+
 				if ($this->user->delete() == false)
 				{
 					if ($transaction_id != null)
@@ -337,7 +337,7 @@ class User implements UserInterface {
 					}
 					return false;
 				}
-				
+
 				$user_post_delete_event = new UserPostDeleteEvent($this->user_id);
 				$event_handler = new EventHandler($user_post_delete_event);
 				

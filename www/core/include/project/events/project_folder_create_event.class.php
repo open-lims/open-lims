@@ -1,6 +1,6 @@
 <?php
 /**
- * @package data
+ * @package project
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -21,25 +21,38 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /**
- * Virtual Folder Management Interface
- * @package data
+ * Project Folder Create Event
+ * @package project
  */
-interface VirtualFolderInterface
-{
-	function __construct($virtual_folder_id);
-	function __destruct();
+class ProjectFolderCreateEvent extends Event
+{    
+	private $folder_id;
 	
-	public function create($folder_id, $name);
-	public function delete();
-	
-	public function link_folder($folder_id);
-	public function unlink_folder($folder_id);
-	
-	public function get_name();
-
-	public static function exist_vfolder($virtual_folder_id);
+	function __construct($folder_id)
+    {
+    	if (is_numeric($folder_id))
+    	{
+    		parent::__construct();
+    		$this->folder_id = $folder_id;
+    	}
+    	else
+    	{
+    		$this->folder_id = null;
+    	}
+    }
+    
+    public function get_folder_id()
+    {
+    	if ($this->folder_id)
+    	{
+    		return $this->folder_id;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
 }
 
 ?>

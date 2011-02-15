@@ -321,8 +321,6 @@ class Project implements ProjectInterface, EventListenerInterface
 						throw new ProjectCreationFailedException("",1);
 					}
 					
-					echo "#".$value->get_item_id();
-					
 					$project_item = new ProjectItem($project_id);
 					$project_item->set_gid(1);
 					$project_item->set_status_id(1);
@@ -575,7 +573,7 @@ class Project implements ProjectInterface, EventListenerInterface
 	    			}
 	    		}
     		}
-    		    		
+    		    	
     		// Methods and Remaining Item-Links (including Sample Links)
     		$project_item = new ProjectItem($tmp_project_id);
 			$item_array = $project_item->get_project_items();
@@ -595,7 +593,7 @@ class Project implements ProjectInterface, EventListenerInterface
 					}
 				}
 			}	
-    		
+	
     		// Project Tasks
     		$project_task_array = ProjectTask::list_tasks($tmp_project_id);
     		

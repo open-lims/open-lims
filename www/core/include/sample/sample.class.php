@@ -645,6 +645,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					
 					$sample_item = new SampleItem($this->sample_id);
 					$item_array = $sample_item->get_sample_items();
+					
 					if (is_array($item_array) and count($item_array) >= 1)
 					{
 						foreach($item_array as $item_key => $item_value)

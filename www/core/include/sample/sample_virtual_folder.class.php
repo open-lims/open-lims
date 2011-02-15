@@ -80,7 +80,9 @@ class SampleVirtualFolder extends VirtualFolder implements SampleVirtualFolderIn
     {
     	if ($event_object instanceof UserFolderCreateEvent or 
    			$event_object instanceof GroupFolderCreateEvent or 
-   			$event_object instanceof OrganisationUnitFolderCreateEvent)
+   			$event_object instanceof OrganisationUnitFolderCreateEvent or
+   			$event_object instanceof SampleFolderCreateEvent or 
+   			$event_object instanceof ProjectFolderCreateEvent)
     	{
     		$sample_virtual_folder = new SampleVirtualFolder(null);
 			if (($virtual_folder_id = $sample_virtual_folder->create($event_object->get_folder_id(), "samples")) == null)
