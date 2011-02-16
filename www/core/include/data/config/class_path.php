@@ -34,6 +34,7 @@
 	$classes['DataBrowser']					= $path_prefix."core/include/data/data_browser.class.php";
 	$classes['DataPath']					= $path_prefix."core/include/data/data_path.class.php";
 	$classes['DataPermission']				= $path_prefix."core/include/data/data_permission.class.php";
+	$classes['DataUserData']				= $path_prefix."core/include/data/data_user_data.class.php";
 	
 	$classes['File']						= $path_prefix."core/include/data/file/file.class.php";
 	$classes['Folder']						= $path_prefix."core/include/data/folder/folder.class.php";

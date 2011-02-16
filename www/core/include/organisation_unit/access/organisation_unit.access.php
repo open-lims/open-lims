@@ -39,7 +39,7 @@ class OrganisationUnit_Access
 	private $type_id;
 	private $leader_id;
 	private $owner_id;
-	private $contains_projects;
+	private $stores_data;
 	private $position;
 	private $hidden;
 
@@ -81,13 +81,13 @@ class OrganisationUnit_Access
 					$this->is_root = false;;
 				}
 				
-				if ($data[contains_projects] == "t")
+				if ($data[stores_data] == "t")
 				{
-					$this->contains_projects = true;;
+					$this->stores_data = true;;
 				}
 				else
 				{
-					$this->contains_projects = false;
+					$this->stores_data = false;
 				}
 				
 				if ($data[hidden] == "t")
@@ -118,7 +118,7 @@ class OrganisationUnit_Access
 			unset($this->type_id);
 			unset($this->leader_id);
 			unset($this->owner_id);
-			unset($this->contains_projects);
+			unset($this->stores_data);
 			unset($this->position);
 			unset($this->hidden);
 		}
@@ -128,34 +128,34 @@ class OrganisationUnit_Access
 	 * @param integer $toid
 	 * @param string $name
 	 * @param integer $type_id
-	 * @param bool $contains_project
+	 * @param bool $stores_data
 	 * @param integer $positon
 	 * @return integer
 	 */
-	public function create($toid, $name, $type_id, $contains_projects, $position)
+	public function create($toid, $name, $type_id, $stores_data, $position)
 	{
 		global $db, $session;
 		if ($name and $type_id and $position)
 		{
-			if ($contains_projects == true)
+			if ($stores_data == true)
 			{
-				$contains_projects_insert = "t";
+				$stores_data_insert = "t";
 			}
 			else
 			{
-				$contains_projects_insert = "f";
+				$stores_data_insert = "f";
 			}
 			
 			if (is_numeric($toid))
 			{
-				$sql_write = "INSERT INTO ".self::ORGANISATION_UNIT_TABLE." (id, toid, is_root, name, type_id, leader_id, owner_id, contains_projects, position, hidden) " .
-								"VALUES (nextval('".self::ORGANISATION_UNIT_PK_SEQUENCE."'::regclass), '".$toid."','f','".$name."','".$type_id."','".$session->get_user_id()."',".$session->get_user_id().",'".$contains_projects_insert."',".$position.",'f')";		
+				$sql_write = "INSERT INTO ".self::ORGANISATION_UNIT_TABLE." (id, toid, is_root, name, type_id, leader_id, owner_id, stores_data, position, hidden) " .
+								"VALUES (nextval('".self::ORGANISATION_UNIT_PK_SEQUENCE."'::regclass), '".$toid."','f','".$name."','".$type_id."','".$session->get_user_id()."',".$session->get_user_id().",'".$stores_data_insert."',".$position.",'f')";		
 			
 			}
 			else
 			{
-				$sql_write = "INSERT INTO ".self::ORGANISATION_UNIT_TABLE." (id, toid, is_root, name, type_id, leader_id, owner_id, contains_projects, position, hidden) " .
-								"VALUES (nextval('".self::ORGANISATION_UNIT_PK_SEQUENCE."'::regclass), currval('".self::ORGANISATION_UNIT_PK_SEQUENCE."'::regclass),'t','".$name."','".$type_id."','".$session->get_user_id()."',".$session->get_user_id().",'".$contains_projects_insert."',".$position.",'f')";		
+				$sql_write = "INSERT INTO ".self::ORGANISATION_UNIT_TABLE." (id, toid, is_root, name, type_id, leader_id, owner_id, stores_data, position, hidden) " .
+								"VALUES (nextval('".self::ORGANISATION_UNIT_PK_SEQUENCE."'::regclass), currval('".self::ORGANISATION_UNIT_PK_SEQUENCE."'::regclass),'t','".$name."','".$type_id."','".$session->get_user_id()."',".$session->get_user_id().",'".$stores_data_insert."',".$position.",'f')";		
 			
 			}
 			
@@ -306,11 +306,11 @@ class OrganisationUnit_Access
 	/**
 	 * @return bool
 	 */
-	public function get_contains_projects()
+	public function get_stores_data()
 	{
-		if (isset($this->contains_projects))
+		if (isset($this->stores_data))
 		{
-			return $this->contains_projects;
+			return $this->stores_data;
 		}
 		else
 		{
@@ -532,30 +532,30 @@ class OrganisationUnit_Access
 	}
 	
 	/**
-	 * @param bool $contains_projects
+	 * @param bool $stores_data
 	 * @return bool
 	 */
-	public function set_contains_projects($contains_projects)
+	public function set_stores_data($stores_data)
 	{
 		global $db;
 
-		if ($this->organisation_unit_id and isset($contains_projects))
+		if ($this->organisation_unit_id and isset($stores_data))
 		{
-			if ($contains_projects == true)
+			if ($stores_data == true)
 			{
-				$contains_projects_insert = "t";
+				$stores_data_insert = "t";
 			}
 			else
 			{
-				$contains_projects_insert = "f";
+				$stores_data_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::ORGANISATION_UNIT_TABLE." SET contains_projects = '".$contains_projects_insert."' WHERE id = ".$this->organisation_unit_id."";
+			$sql = "UPDATE ".self::ORGANISATION_UNIT_TABLE." SET stores_data = '".$stores_data_insert."' WHERE id = ".$this->organisation_unit_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
 			{
-				$this->contains_projects = $contains_projects;
+				$this->stores_data = $stores_data;
 				return true;
 			}
 			else

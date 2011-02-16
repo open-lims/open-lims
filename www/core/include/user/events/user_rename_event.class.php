@@ -1,6 +1,6 @@
 <?php
 /**
- * @package project
+ * @package user
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -22,14 +22,37 @@
  */
 
 /**
- * 
+ * User Rename Event
+ * @package user
  */
-	$event_listener[0] = "Project";
-	$event_listener[1] = "ProjectPermission";
-	$event_listener[2] = "ProjectLog";
-	$event_listener[3] = "ProjectItem";
-	$event_listener[4] = "ProjectLogHasItem";
-	$event_listener[5] = "ProjectTask";
-	$event_listener[6] = "ProjectVirtualFolder";
-	$event_listener[7] = "ProjectUserData";
+class UserRenameEvent extends Event
+{    
+	private $user_id;
+	
+	function __construct($user_id)
+    {
+    	if (is_numeric($user_id))
+    	{
+    		parent::__construct();
+    		$this->user_id = $user_id;
+    	}
+    	else
+    	{
+    		$this->user_id = null;
+    	}
+    }
+    
+    public function get_user_id()
+    {
+    	if ($this->user_id)
+    	{
+    		return $this->user_id;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+}
+
 ?>

@@ -89,5 +89,39 @@ class ProjectJoin_Access
 		
 	}
 	
+	/**
+	 * @param integer $leader_id
+	 * @param integer $organisation_unit_id
+	 * @return bool
+	 */
+	public static function change_leader_permission_by_organisation_unit_id($leader_id, $organisation_unit_id)
+	{
+		global $db;
+		
+		if (is_numeric($leader_id) and is_numeric($organisation_unit_id))
+		{	
+			$sql = "UPDATE ".self::PROJECT_PERMISSION_TABLE." " .
+					"SET user_id = ".$leader_id." " .
+					"WHERE ".self::PROJECT_PERMISSION_TABLE.".intention = 2 " .
+						"AND ".self::PROJECT_PERMISSION_TABLE.".project_id = " .
+							"(SELECT ".self::PROJECT_TABLE.".id FROM ".self::PROJECT_TABLE." WHERE toid_organ_unit = ".$organisation_unit_id.")";
+
+			$res = $db->db_query($sql);
+			
+			if ($res !== false)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 }
 ?>

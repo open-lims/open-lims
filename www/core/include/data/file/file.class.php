@@ -242,6 +242,7 @@ class File extends DataEntity implements FileInterface
 	 * Deletes a file, including all versions
 	 * @return bool
 	 * @todo first db delete, then filesystem delete
+	 * @todo descent filesize while deleting
 	 */
 	public function delete()
 	{
@@ -366,6 +367,7 @@ class File extends DataEntity implements FileInterface
 	 * Deletes a specific file version
 	 * @param integer $internal_revision
 	 * @return bool
+	 * @todo descent filesize while deleting
 	 */
 	public function delete_version($internal_revision)
 	{	
@@ -600,6 +602,7 @@ class File extends DataEntity implements FileInterface
 		{
 			$transaction_id = $transaction->begin();
 
+			$user_data = new DataUserData($user->get_user_id());
 			$folder = Folder::get_instance($folder_id);	    	
 
 			if ($folder->is_write_access() == true)
@@ -643,14 +646,14 @@ class File extends DataEntity implements FileInterface
 		 						$file_size = filesize($target);
 		 						$checksum = md5_file($target);
 		 						
-		 						$user_quota = $user->get_user_quota();
-								$user_filesize = $user->get_user_filesize();
+		 						$user_quota = $user_data->get_quota();
+								$user_filesize = $user_data->get_filesize();
 																
 								$new_user_filesize = $user_filesize + $file_size;
 								
 								if (($user_quota > $new_user_filesize or $user_quota == 0))
 								{
-									$user->set_user_filesize($new_user_filesize);
+									$user_data->set_filesize($new_user_filesize);
 			
 			 						// Create File
 			 						if (($file_id = $this->create($file_array['name'], $folder_id, $target, $user->get_user_id())) == null)
@@ -790,6 +793,7 @@ class File extends DataEntity implements FileInterface
 		{
 			$transaction_id = $transaction->begin();
 	
+			$user_data = new DataUserData($user->get_user_id());
 			$folder = Folder::get_instance($this->get_parent_folder());
 			$folder_path = $folder->get_path();
 	
@@ -833,15 +837,15 @@ class File extends DataEntity implements FileInterface
 							
 							if ($this->compare_with_current_version($checksum) == false)
 							{ 
-								$user_quota = $user->get_user_quota();
-								$user_filesize = $user->get_user_filesize();
+								$user_quota = $user_data->get_quota();
+								$user_filesize = $user_data->get_filesize();
 								
 								$new_user_filesize = $user_filesize + $file_size;
 
 			
 								if (($user_quota > $new_user_filesize or $user_quota == 0))
 								{
-									$user->set_user_filesize($new_user_filesize);
+									$user_data->set_filesize($new_user_filesize);
 			 						
 									// Rename Old File
 									$current_file_version_id = FileVersion_Access::get_current_entry_by_toid($this->file_id);

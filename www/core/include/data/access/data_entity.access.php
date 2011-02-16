@@ -284,7 +284,7 @@ class DataEntity_Access
 	{
 		global $db;
 			
-		if ($this->id and $datetime)
+		if ($this->id and is_numeric($owner_id))
 		{
 			$sql = "UPDATE ".self::DATA_ENTITY_TABLE." SET owner_id = ".$owner_id." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
@@ -313,7 +313,7 @@ class DataEntity_Access
 	{
 		global $db;
 			
-		if ($this->id and $datetime)
+		if ($this->id and is_numeric($owner_group_id))
 		{
 			$sql = "UPDATE ".self::DATA_ENTITY_TABLE." SET owner_group_id = ".$owner_group_id." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
@@ -342,7 +342,7 @@ class DataEntity_Access
 	{
 		global $db;
 			
-		if ($this->id and $datetime)
+		if ($this->id and $permission)
 		{
 			$sql = "UPDATE ".self::DATA_ENTITY_TABLE." SET permission = ".$permission." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);

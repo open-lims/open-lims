@@ -389,11 +389,11 @@ class AdminOrganisationUnitIO
 					
 					if ($_POST[contains_projects] == "1")
 					{
-						$contains_projects = true;
+						$stores_data = true;
 					}
 					else
 					{
-						$contains_projects = false;
+						$stores_data = false;
 					}
 				
 					$paramquery = $_GET;
@@ -401,7 +401,7 @@ class AdminOrganisationUnitIO
 					unset($paramquery[nextpage]);
 					$params = http_build_query($paramquery,'','&#38;');
 					
-					if ($organisation_unit->create($toid, $_POST[name], $_POST[type], $contains_projects))
+					if ($organisation_unit->create($toid, $_POST[name], $_POST[type], $stores_data))
 					{
 						$common->step_proceed($params, "Add Organisation Unit", "Operation Successful", null);
 					}

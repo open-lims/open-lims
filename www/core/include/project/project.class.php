@@ -155,7 +155,8 @@ class Project implements ProjectInterface, EventListenerInterface
 				}
 				
 				$user = new User($owner_id);
-				$project_quota = $user->get_project_quota();
+				$project_user = new ProjectUserData($owner_id);
+				$project_quota = $project_user->get_quota();
 		
 				// Create Project
 				$project_id = $this->project->create($organisation_unit_id, $parent_project_id, $name, $owner_id, $template_id, $project_quota);

@@ -29,6 +29,7 @@ require_once("interfaces/project_permission.interface.php");
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
 	require_once("access/project_permission.access.php");
+	require_once("core/include/project/access/project_join.access.php");
 }
 
 /**
@@ -807,7 +808,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 	 * @param integer $group_id
 	 * @return array
 	 */
-	public static function list_entries_by_project_id_and_intention_and_group_id($project_id, $intention, $group_id)
+	private static function list_entries_by_project_id_and_intention_and_group_id($project_id, $intention, $group_id)
 	{
 		return ProjectPermission_Access::list_entries_by_project_id_and_intention_and_group_id($project_id, $intention, $group_id);
 	}
@@ -816,18 +817,9 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 	 * @param integer $organisation_unit_id
 	 * @return array
 	 */
-	public static function list_system_setted_projects_by_organisation_id($organisation_unit_id)
+	private static function list_system_setted_projects_by_organisation_id($organisation_unit_id)
 	{
 		return ProjectPermission_Access::list_projects_by_organisation_id_and_intention($organisation_unit_id, 3);
-	}
-	
-	/**
-	 * @param integer $leader_id
-	 * @return array
-	 */
-	public static function list_system_setted_entries_by_leader_id($leader_id)
-	{
-		return ProjectPermission_Access::list_entries_by_user_id_and_intention($leader_id, 2);
 	}
 	
 	/**
@@ -880,6 +872,61 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     		if (ProjectPermission_Access::delete_by_organisation_unit_id($event_object->get_organisation_unit_id()) == false)
 			{
 				return false;
+			}
+    	}
+    	
+   		if ($event_object instanceof OrganisationUnitChangeLeaderEvent)
+    	{
+    		$organisation_unit = new OrganisationUnit($event_object->get_organisation_unit_id());
+    		$leader_id = $organisation_unit->get_leader_id();
+    		if (is_numeric($leader_id))
+    		{
+    			return ProjectJoin_Access::change_leader_permission_by_organisation_unit_id($leader_id, $event_object->get_organisation_unit_id());
+    		}
+    		else
+    		{
+    			return false;
+    		}
+    	}
+    	
+    	if ($event_object instanceof OrganisationUnitGroupCreateEvent)
+    	{
+    		$project_array = self::list_system_setted_projects_by_organisation_id($event_object->get_organisation_unit_id());
+					
+			if (is_array($project_array) and count($project_array) >= 1)
+			{
+				foreach($project_array as $key => $value)
+				{
+					$project_permission = new ProjectPermission(null);
+					if ($project_permission->create(null, null, $event_object->get_group_id(), $value, $GLOBALS[std_perm_organ_group], null, 4) == null)
+					{
+						return false;
+					}							
+				}
+			}
+    	}
+    	
+    	if ($event_object instanceof OrganisationUnitGroupDeleteEvent)
+    	{
+    		$project_array = self::list_system_setted_projects_by_organisation_id($event_object->get_organisation_unit_id());
+					
+			if (is_array($project_array) and count($project_array) >= 1)
+			{
+				foreach($project_array as $key => $value)
+				{
+					$project_permission_array = ProjectPermission::list_entries_by_project_id_and_intention_and_group_id($value, 4, $event_object->get_group_id());
+					if (is_array($project_permission_array) and count($project_permission_array) >= 1)
+					{
+						foreach($project_permission_array as $sub_key => $sub_value)
+						{
+							$project_permission = new ProjectPermission($sub_value);
+							if ($project_permission->delete() == false)
+							{
+								return false;
+							}
+						}
+					}							
+				}
 			}
     	}
     	

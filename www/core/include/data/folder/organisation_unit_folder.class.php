@@ -267,7 +267,7 @@ class OrganisationUnitFolder extends Folder implements ConcreteFolderCaseInterfa
 	{
 		if ($event_object instanceof OrganisationUnitCreateEvent)
     	{
-    		if ($event_object->get_contains_projects() == true)
+    		if ($event_object->get_stores_data() == true)
     		{
     			$organisation_unit_folder = new OrganisationUnitFolder(null);
 	    		if ($organisation_unit_folder->create($event_object->get_organisation_unit_id()) == false)
@@ -279,7 +279,7 @@ class OrganisationUnitFolder extends Folder implements ConcreteFolderCaseInterfa
     	
 		if ($event_object instanceof OrganisationUnitPostDeleteEvent)
     	{
-    		if ($event_object->get_contains_projects() == true)
+    		if ($event_object->get_stores_data() == true)
     		{
 	    		$folder_id = OrganisationUnitFolder::get_folder_by_organisation_unit_id($event_object->get_organisation_unit_id());
 	    		$organisation_unit_folder = new OrganisationUnitFolder($folder_id);
@@ -288,6 +288,26 @@ class OrganisationUnitFolder extends Folder implements ConcreteFolderCaseInterfa
 				{
 					return false;
 				}
+    		}
+    	}
+    	
+		if ($event_object instanceof OrganisationUnitRenameEvent)
+    	{
+    		$organisation_unit = new OrganisationUnit($event_object->get_organisation_unit_id());
+    		$organisation_unit_folder = new OrganisationUnitFolder(self::get_folder_by_organisation_unit_id($event_object->get_organisation_unit_id()));
+    		if ($organisation_unit_folder->set_name($organisation_unit->get_name()) == false)
+    		{
+    			return false;
+    		}
+    	}
+    	
+		if ($event_object instanceof OrganisationUnitChangeOwnerEvent)
+    	{
+    		$organisation_unit = new OrganisationUnit($event_object->get_organisation_unit_id());
+    		$organisation_unit_folder = new OrganisationUnitFolder(self::get_folder_by_organisation_unit_id($event_object->get_organisation_unit_id()));
+    		if ($organisation_unit_folder->set_owner_id($organisation_unit->get_owner_id()) == false)
+    		{
+    			return false;
     		}
     	}
     	

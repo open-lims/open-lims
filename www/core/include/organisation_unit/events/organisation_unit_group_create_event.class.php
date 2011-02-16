@@ -22,26 +22,26 @@
  */
 
 /**
- * Organisation Unit Delete Event
+ * Organisation Unit Group Create Event
  * @package organisation_unit
  */
-class OrganisationUnitDeleteEvent extends Event
+class OrganisationUnitGroupCreateEvent extends Event
 {    
 	private $organisation_unit_id;
-	private $stores_data;
+	private $group_id;
 	
-	function __construct($organisation_unit_id, $stores_data)
+	function __construct($organisation_unit_id, $group_id)
     {
-    	if (is_numeric($organisation_unit_id))
+    	if (is_numeric($organisation_unit_id) and is_numeric($group_id))
     	{
     		parent::__construct();
     		$this->organisation_unit_id = $organisation_unit_id;
-    		$this->stores_data = $stores_data;
+    		$this->group_id = $group_id;
     	}
     	else
     	{
     		$this->organisation_unit_id = null;
-    		$this->stores_data = false;
+    		$this->group_id = null;
     	}
     }
     
@@ -57,15 +57,15 @@ class OrganisationUnitDeleteEvent extends Event
     	}
     }
     
-	public function get_stores_data() 
+  	public function get_group_id()
     {
-    	if ($this->stores_data)
+    	if ($this->group_id)
     	{
-    		return $this->stores_data;
+    		return $this->group_id;
     	}
     	else
     	{
-    		return false;
+    		return null;
     	}
     }
 }

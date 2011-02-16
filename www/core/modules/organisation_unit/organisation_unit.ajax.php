@@ -71,7 +71,7 @@ class OrganisationUnitAJAX extends AJAXInit
 								$return_array[$counter][3] = $organisation_unit->get_icon();
 								$return_array[$counter][4] = true; // Permission
 								
-								if ($organisation_unit->get_contains_projects() == true)
+								if ($organisation_unit->get_stores_data() == true)
 								{
 									$return_array[$counter][5] = true;
 								}
@@ -110,7 +110,7 @@ class OrganisationUnitAJAX extends AJAXInit
 								$return_array[$counter][3] = $organisation_unit->get_icon();
 								$return_array[$counter][4] = true; // Permission
 								
-								if ($organisation_unit->get_contains_projects() == true)
+								if ($organisation_unit->get_stores_data() == true)
 								{
 									$return_array[$counter][5] = true;
 								}

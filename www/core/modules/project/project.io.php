@@ -715,7 +715,7 @@ class ProjectIO
 							{
 								$organisation_unit = new OrganisationUnit($value);
 						
-								if ($organisation_unit->is_permission($user->get_user_id()) and $organisation_unit->get_contains_projects() == true)
+								if ($organisation_unit->is_permission($user->get_user_id()) and $organisation_unit->get_stores_data() == true)
 								{
 									$result[$counter][value] = $value;
 									$result[$counter][content] = $organisation_unit->get_name();		

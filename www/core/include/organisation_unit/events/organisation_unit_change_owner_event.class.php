@@ -1,6 +1,6 @@
 <?php
 /**
- * @package project
+ * @package organisation_unit
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -22,14 +22,37 @@
  */
 
 /**
- * 
+ * Organisation Unit Change Owner Event
+ * @package organisation_unit
  */
-	$event_listener[0] = "Project";
-	$event_listener[1] = "ProjectPermission";
-	$event_listener[2] = "ProjectLog";
-	$event_listener[3] = "ProjectItem";
-	$event_listener[4] = "ProjectLogHasItem";
-	$event_listener[5] = "ProjectTask";
-	$event_listener[6] = "ProjectVirtualFolder";
-	$event_listener[7] = "ProjectUserData";
+class OrganisationUnitChangeOwnerEvent extends Event
+{    
+	private $organisation_unit_id;
+	
+	function __construct($organisation_unit_id)
+    {
+    	if (is_numeric($organisation_unit_id))
+    	{
+    		parent::__construct();
+    		$this->organisation_unit_id = $organisation_unit_id;
+    	}
+    	else
+    	{
+    		$this->organisation_unit_id = null;
+    	}
+    }
+    
+    public function get_organisation_unit_id()
+    {
+    	if ($this->organisation_unit_id)
+    	{
+    		return $this->organisation_unit_id;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+}
+
 ?>

@@ -28,4 +28,5 @@
 	$event_listener[1] = "GroupFolder";
 	$event_listener[2] = "OrganisationUnitFolder";
 	$event_listener[3] = "DataEntity";
+	$event_listener[4] = "DataUserData";
 ?>

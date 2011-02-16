@@ -44,9 +44,6 @@ interface UserInterface
 	public function get_username();
 	public function get_full_name($short_version);
 	public function get_password();
-	public function get_project_quota();
-	public function get_user_quota();
-	public function get_user_filesize();
 	public function get_last_password_change();
 	public function get_boolean_user_entry($entry);
 	public function get_profile($entry);
@@ -57,10 +54,6 @@ interface UserInterface
 	public function set_password($password);
 	public function set_password_on_login($password);
 	public function set_last_password_change($last_password_change);
-	public function set_project_quota($project_quota);
-	public function set_user_quota($user_quota);
-	public function set_user_filesize($filesize);
-	public function increase_filesize($filesize);
 	public function set_boolean_user_entry($entry, $value);
 	public function set_profile($entry, $value);
 	public function set_language_id($language_id);

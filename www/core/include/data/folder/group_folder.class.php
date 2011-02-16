@@ -285,6 +285,16 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 			}
     	}
     	
+		if ($event_object instanceof GroupRenameEvent)
+    	{
+    		$group = new Group($event_object->get_group_id());
+    		$group_folder = new GroupFolder(self::get_folder_by_group_id($event_object->get_group_id()));
+    		if ($group_folder->set_name($group->get_name()) == false)
+    		{
+    			return false;
+    		}
+    	}
+    	
 		return true;
 	}
 }

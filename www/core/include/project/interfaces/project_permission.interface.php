@@ -48,9 +48,8 @@ interface ProjectPermissionInterface
 	
 	public static function list_entries_by_project_id($project_id);
 	public static function list_entries_by_project_id_and_intention($project_id, $intention);
-	public static function list_entries_by_project_id_and_intention_and_group_id($project_id, $intention, $group_id);
-	public static function list_system_setted_projects_by_organisation_id($organisation_unit_id);
-	public static function list_system_setted_entries_by_leader_id($leader_id);
+	// private static function list_entries_by_project_id_and_intention_and_group_id($project_id, $intention, $group_id);
+	// private static function list_system_setted_projects_by_organisation_id($organisation_unit_id);
 	
 	public static function reset_owner_id($old_owner_id, $new_owner_id);	
 }

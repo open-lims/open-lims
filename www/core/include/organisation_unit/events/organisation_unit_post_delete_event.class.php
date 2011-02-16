@@ -28,20 +28,20 @@
 class OrganisationUnitPostDeleteEvent extends Event
 {    
 	private $organisation_unit_id;
-	private $contains_projects;
+	private $stores_data;
 	
-	function __construct($organisation_unit_id, $contains_projects)
+	function __construct($organisation_unit_id, $stores_data)
     {
     	if (is_numeric($organisation_unit_id))
     	{
     		parent::__construct();
     		$this->organisation_unit_id = $organisation_unit_id;
-    		$this->contains_projects = $contains_projects;
+    		$this->stores_data = $stores_data;
     	}
     	else
     	{
     		$this->organisation_unit_id = null;
-    		$this->contains_projects = false;
+    		$this->stores_data = false;
     	}
     }
     
@@ -57,11 +57,11 @@ class OrganisationUnitPostDeleteEvent extends Event
     	}
     }
     
-	public function get_contains_projects()
+	public function get_stores_data()
     {
-    	if ($this->contains_projects)
+    	if ($this->stores_data)
     	{
-    		return $this->contains_projects;
+    		return $this->stores_data;
     	}
     	else
     	{

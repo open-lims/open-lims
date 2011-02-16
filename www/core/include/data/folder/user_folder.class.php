@@ -322,6 +322,16 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 			}
     	}
     	
+		if ($event_object instanceof UserRenameEvent)
+    	{
+    		$user = new User($event_object->get_user_id());
+    		$user_folder = new UserFolder(self::get_folder_by_user_id($event_object->get_user_id()));
+    		if ($user_folder->set_name($user->get_username()) == false)
+    		{
+    			return false;
+    		}
+    	}
+    	
 		return true;
 	}
 }

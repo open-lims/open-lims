@@ -21,6 +21,7 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
+ $user_data = new DataUserData($user->get_user_id());
  $template = new Template("languages/en-gb/template/home.html");
 
  $homeDate = date("l, jS F Y");
@@ -30,8 +31,8 @@
 
  $project = new Project(null);
   
- $user_filesize = $user->get_user_filesize();
- $user_quota = $user->get_user_quota();
+ $user_filesize = $user_data->get_filesize();
+ $user_quota = $user_data->get_quota();
  
  if ($user_quota == 0) {
  	$quota = "unlimited";

@@ -35,6 +35,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("events/group_create_event.class.php");
 	require_once("events/group_delete_event.class.php");
 	require_once("events/group_post_delete_event.class.php");
+	require_once("events/group_rename_event.class.php");
 	
 	require_once("access/group.access.php");
 	require_once("access/group_has_user.access.php");
@@ -356,11 +357,12 @@ class Group implements GroupInterface
 		{
 			$transaction_id = $transaction->begin();
 			
-			$folder_id = GroupFolder::get_folder_by_group_id($this->group_id);
-			$folder = Folder::get_instance($folder_id);
-			if ($folder->set_name($name) == true)
+			if ($this->group->set_name($name) == true)
 			{
-				if ($this->group->set_name($name) == true)
+				$group_rename_event = new GroupRenameEvent($this->group_id);
+				$event_handler = new EventHandler($group_rename_event);
+				
+				if ($event_handler->get_success() == true)
 				{
 					if ($transaction_id != null)
 					{

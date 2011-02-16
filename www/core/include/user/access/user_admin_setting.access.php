@@ -27,13 +27,9 @@
  */
 class UserAdminSetting_Access
 {
-	
 	const USER_ADMIN_SETTING_TABLE = 'core_user_admin_settings';
 	
 	private $user_id;
-	
-	private $project_quota;
-	private $user_quota;
 	
 	private $can_change_password;
 	private $must_change_password;
@@ -64,9 +60,6 @@ class UserAdminSetting_Access
 			if ($data[id])
 			{
 				$this->user_id 				= $user_id;
-				
-				$this->project_quota		= $data[project_quota];
-				$this->user_quota			= $data[user_quota];
 				
 				$this->last_password_change	= $data[last_password_change];
 				
@@ -145,9 +138,6 @@ class UserAdminSetting_Access
 		if ($this->user_id)
 		{
 			unset($this->user_id);
-
-			unset($this->project_quota);
-			unset($this->user_quota);
 			
 			unset($this->can_change_password);
 			unset($this->must_change_password);
@@ -173,8 +163,6 @@ class UserAdminSetting_Access
 		if ($user_id)
 		{
 			$sql_write = "INSERT INTO ".self::USER_ADMIN_SETTING_TABLE." (id," .
-															"project_quota," .
-															"user_quota," .
 															"can_change_password," .
 															"must_change_password," .
 															"user_locked," .
@@ -184,8 +172,6 @@ class UserAdminSetting_Access
 															"block_write," .
 															"create_folder) " .
 											"VALUES (".$user_id."," .
-															"0," .
-															"0," .
 															"'f'," .
 															"'f'," .
 															"'f'," .
@@ -242,36 +228,6 @@ class UserAdminSetting_Access
 		else
 		{
 			return false;
-		}
-	}
-	
-	/**
-	 * @return integer
-	 */
-	public function get_project_quota()
-	{
-		if ($this->project_quota)
-		{
-			return $this->project_quota;
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return integer
-	 */
-	public function get_user_quota()
-	{
-		if ($this->user_quota)
-		{
-			return $this->user_quota;
-		}
-		else
-		{
-			return null;
 		}
 	}
 	
@@ -393,64 +349,6 @@ class UserAdminSetting_Access
 		{
 			return false;
 		}
-	}
-	
-	/**
-	 * @param integer $project_quota
-	 * @return bool
-	 */
-	public function set_project_quota($project_quota)
-	{
-		global $db;
-			
-		if ($this->user_id and is_numeric($project_quota))
-		{
-			$sql = "UPDATE ".self::USER_ADMIN_SETTING_TABLE." SET project_quota = ".$project_quota." WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->project_quota = $project_quota;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param integer $user_quota
-	 * @return bool
-	 */
-	public function set_user_quota($user_quota)
-	{
-		global $db;
-		
-		if ($this->user_id and is_numeric($user_quota))
-		{
-			$sql = "UPDATE ".self::USER_ADMIN_SETTING_TABLE." SET user_quota = ".$user_quota." WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->user_quota = $user_quota;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}	
 	}
 	
 	/**

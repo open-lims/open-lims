@@ -31,7 +31,7 @@ interface OrganisationUnitInterface
 	function __construct($organisation_unit_id);
 	function __destruct();
 
-	public function create($toid, $name, $type_id, $contains_projects);
+	public function create($toid, $name, $type_id, $stores_data);
 	public function delete();
 	
 	public function check_delete_dependencies();
@@ -54,7 +54,7 @@ interface OrganisationUnitInterface
 	public function get_icon();
 	public function get_owner_id();
 	public function get_leader_id();
-	public function get_contains_projects();
+	public function get_stores_data();
 	public function get_hidden();
 	public function get_user_status($user_id);
 	public function get_organisation_unit_childs();

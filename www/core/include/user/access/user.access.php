@@ -35,8 +35,6 @@ class User_Access {
 	private $username;
 	private $password;
 
-	private $user_filesize;
-
 	/**
 	 * @param integer $user_id
 	 */
@@ -60,8 +58,6 @@ class User_Access {
 				
 				$this->username				= $data[username];
 				$this->password				= $data[password];
-
-				$this->user_filesize		= $data[user_filesize];
 			}
 			else
 			{
@@ -78,8 +74,6 @@ class User_Access {
 	
 			unset($this->username);
 			unset($this->password);
-
-			unset($this->user_filesize);
 		}
 	}
 	
@@ -98,12 +92,10 @@ class User_Access {
 		{	
 			$sql_write = "INSERT INTO ".self::USER_TABLE." (id," .
 															"username," .
-															"password," .
-															"user_filesize) " .
+															"password) " .
 						"VALUES (nextval('".self::USER_PK_SEQUENCE."'::regclass)," .
 															"'".$username."'," .
-															"'".$password."'," .
-															"0)";
+															"'".$password."')";
 																	
 			$res_write = $db->db_query($sql_write);
 			
@@ -190,21 +182,6 @@ class User_Access {
 	}
 	
 	/**
-	 * @return integer
-	 */	
-	public function get_user_filesize()
-	{
-		if ($this->user_filesize)
-		{
-			return $this->user_filesize;
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
 	 * @param string $username
 	 * @return bool
 	 */	
@@ -249,35 +226,6 @@ class User_Access {
 			if ($db->db_affected_rows($res))
 			{
 				$this->password = $password;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-		
-	/**
-	 * @param integer $user_filesize
-	 * @return bool
-	 */
-	public function set_user_filesize($user_filesize)
-	{
-		global $db;
-			
-		if ($this->user_id and is_numeric($user_filesize))
-		{
-			$sql = "UPDATE ".self::USER_TABLE." SET user_filesize = ".$user_filesize." WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->user_filesize = $user_filesize;
 				return true;
 			}
 			else

@@ -507,7 +507,14 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 */
 	public final function set_owner_id($owner_id)
 	{
-		
+		if ($this->data_entity and is_numeric($owner_id))
+		{
+			return $this->data_entity->set_owner_id($owner_id);
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**

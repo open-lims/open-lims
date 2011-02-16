@@ -440,6 +440,9 @@ class AdminUserIO
 		}
 	}
 	
+	/**
+	 * @todo remove dependency
+	 */
 	public static function detail()
 	{
 		global $user;
@@ -451,6 +454,8 @@ class AdminUserIO
 			$template = new Template("languages/en-gb/template/admin/user/detail.html");
 			
 			$current_user = new User($user_id);
+			$user_data = new DataUserData($user_id);
+			$project_data = new ProjectUserData($user_id);
 			
 			if ($user_id == $user->get_user_id())
 			{
@@ -508,7 +513,7 @@ class AdminUserIO
 			$paramquery[action] = "change_user_quota";
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			$file_quota = $current_user->get_user_quota();
+			$file_quota = $user_data->get_quota();
 			$template->set_var("user_quota", Misc::calc_size($file_quota));
 			$template->set_var("change_user_quota_params", $params);
 			
@@ -517,7 +522,7 @@ class AdminUserIO
 			$paramquery[action] = "change_project_quota";
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			$project_quota = $current_user->get_project_quota();
+			$project_quota = $project_data->get_quota();
 			$template->set_var("project_quota", Misc::calc_size($project_quota));
 			$template->set_var("change_project_quota_params", $params);
 			
@@ -645,7 +650,6 @@ class AdminUserIO
 			$paramquery[action] = "change_language";
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			$project_quota = $current_user->get_project_quota();
 			$template->set_var("language", Regional::get_language_name($current_user->get_language_id()));
 			$template->set_var("language_params", $params);
 			
@@ -654,7 +658,6 @@ class AdminUserIO
 			$paramquery[action] = "change_timezone";
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			$project_quota = $current_user->get_project_quota();
 			$template->set_var("timezone", Regional::get_timezone_name($current_user->get_timezone_id()));
 			$template->set_var("timezone_params", $params);
 			
@@ -1265,6 +1268,9 @@ class AdminUserIO
 		}
 	}
 	
+	/**
+	 * @todo remove dependency
+	 */
 	public static function change_quota()
 	{
 		global $common;
@@ -1272,6 +1278,8 @@ class AdminUserIO
 		if ($_GET[id])
 		{
 			$user = new User($_GET[id]);
+			$user_data = new DataUserData($_GET[id]);
+			$project_data = new ProjectUserData($_GET[id]);
 						
 			if ($_GET[nextpage] == 1)
 			{
@@ -1321,11 +1329,11 @@ class AdminUserIO
 				{
 					if ($_GET[action] == "change_user_quota")
 					{
-						$template->set_var("quota", $user->get_user_quota());
+						$template->set_var("quota", $user_data->get_quota());
 					}
 					else
 					{
-						$template->set_var("quota", $user->get_project_quota());	
+						$template->set_var("quota", $project_data->get_quota());	
 					}
 				}
 				$template->output();
@@ -1339,7 +1347,7 @@ class AdminUserIO
 				
 				if ($_GET[action] == "change_user_quota")
 				{
-					if ($user->set_user_quota($_POST[quota]))
+					if ($user_data->set_quota($_POST[quota]))
 					{
 						$common->step_proceed($params, "Change User Quota", "Operation Successful", null);
 					}
@@ -1350,7 +1358,7 @@ class AdminUserIO
 				}
 				else
 				{
-					if ($user->set_project_quota($_POST[quota]))
+					if ($project_data->set_quota($_POST[quota]))
 					{
 						$common->step_proceed($params, "Change Project Quota", "Operation Successful", null);
 					}

@@ -36,6 +36,11 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("events/organisation_unit_delete_event.class.php");
 	require_once("events/organisation_unit_delete_precheck_event.class.php");
 	require_once("events/organisation_unit_post_delete_event.class.php");
+	require_once("events/organisation_unit_rename_event.class.php");
+	require_once("events/organisation_unit_change_owner_event.class.php");
+	require_once("events/organisation_unit_change_leader_event.class.php");
+	require_once("events/organisation_unit_group_create_event.class.php");
+	require_once("events/organisation_unit_group_delete_event.class.php");
 	
 	require_once("access/organisation_unit.access.php");
 	require_once("access/organisation_unit_has_member.access.php");
@@ -80,18 +85,18 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	 * @param integer $toid Parent-ID
 	 * @param string $name
 	 * @param integer $type_id
-	 * @param bool $contains_projects
+	 * @param bool $stores_data
 	 * @return integer
 	 * @throws OrganisationUnitAlreadyExistException
 	 * @throws OrganisationUnitCreationFailedException
 	 */
-	public function create($toid, $name, $type_id, $contains_projects) 
+	public function create($toid, $name, $type_id, $stores_data) 
 	{
 		global $transaction;
 		
 		if ($this->organisation_unit)
 		{
-			if ($name and is_numeric($type_id) and is_bool($contains_projects))
+			if ($name and is_numeric($type_id) and is_bool($stores_data))
 			{
 				$transaction_id = $transaction->begin();
 
@@ -116,11 +121,11 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 					$new_highest_position = 1;
 				}
 				
-				if (($organisation_unit_id = $this->organisation_unit->create($toid, $name, $type_id, $contains_projects, $new_highest_position)) != null)
+				if (($organisation_unit_id = $this->organisation_unit->create($toid, $name, $type_id, $stores_data, $new_highest_position)) != null)
 				{
 					$this->__construct($organisation_unit_id);
 					
-					$organisation_unit_create_event = new OrganisationUnitCreateEvent($organisation_unit_id, $contains_projects);
+					$organisation_unit_create_event = new OrganisationUnitCreateEvent($organisation_unit_id, $stores_data);
 					$event_handler = new EventHandler($organisation_unit_create_event);
 					
 					if ($event_handler->get_success() == false)
@@ -225,8 +230,8 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 				}
 				
 				// Event
-				$contains_projects = $this->organisation_unit->get_contains_projects();
-				$organisation_unit_delete_event = new OrganisationUnitDeleteEvent($this->organisation_unit_id, $contains_projects);
+				$stores_data = $this->organisation_unit->get_stores_data();
+				$organisation_unit_delete_event = new OrganisationUnitDeleteEvent($this->organisation_unit_id, $stores_data);
 				$event_handler = new EventHandler($organisation_unit_delete_event);
 				
 				if ($event_handler->get_success() == false)
@@ -247,7 +252,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 					return false;
 				}
 
-				$organisation_unit_post_delete_event = new OrganisationUnitPostDeleteEvent($this->organisation_unit_id, $contains_projects);
+				$organisation_unit_post_delete_event = new OrganisationUnitPostDeleteEvent($this->organisation_unit_id, $stores_data);
 				$event_handler = new EventHandler($organisation_unit_post_delete_event);
 				
 				if ($event_handler->get_success() == false)
@@ -670,29 +675,25 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 				$organisation_unit_has_group = new OrganisationUnitHasGroup_Access(null);
 				if ($organisation_unit_has_group->create($this->organisation_unit_id, $group_id) != null)
 				{
-					$project_array = ProjectPermission::list_system_setted_projects_by_organisation_id($this->organisation_unit_id);
+					$organisation_unit_group_create_event = new OrganisationUnitGroupCreateEvent($this->organisation_unit_id, $group_id);
+					$event_handler = new EventHandler($organisation_unit_group_create_event);
 					
-					if (is_array($project_array) and count($project_array) >= 1)
+					if ($event_handler->get_success() == true)
 					{
-						foreach($project_array as $key => $value)
+						if ($transaction_id != null)
 						{
-							$project_permission = new ProjectPermission(null);
-							if ($project_permission->create(null, null, $group_id, $value, $GLOBALS[std_perm_organ_group], null, 4) == null)
-							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
-								return false;
-							}							
+							$transaction->commit($transaction_id);
 						}
+						return true;
 					}
-					
-					if ($transaction_id != null)
+					else
 					{
-						$transaction->commit($transaction_id);
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
 					}
-					return true;	
 				}
 				else
 				{
@@ -738,36 +739,25 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 				
 				if ($organisation_unit_has_group->delete() == true)
 				{
-					$project_array = ProjectPermission::list_system_setted_projects_by_organisation_id($this->organisation_unit_id);
+					$organisation_unit_group_create_event = new OrganisationUnitGroupDeleteEvent($this->organisation_unit_id, $group_id);
+					$event_handler = new EventHandler($organisation_unit_group_create_event);
 					
-					if (is_array($project_array) and count($project_array) >= 1)
+					if ($event_handler->get_success() == true)
 					{
-						foreach($project_array as $key => $value)
+						if ($transaction_id != null)
 						{
-							$project_permission_array = ProjectPermission::list_entries_by_project_id_and_intention_and_group_id($value, 4, $group_id);
-							if (is_array($project_permission_array) and count($project_permission_array) >= 1)
-							{
-								foreach($project_permission_array as $sub_key => $sub_value)
-								{
-									$project_permission = new ProjectPermission($sub_value);
-									if ($project_permission->delete() == false)
-									{
-										if ($transaction_id != null)
-										{
-											$transaction->rollback($transaction_id);
-										}
-										return false;
-									}
-								}
-							}							
+							$transaction->commit($transaction_id);
 						}
+						return true;
 					}
-					
-					if ($transaction_id != null)
+					else
 					{
-						$transaction->commit($transaction_id);
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
 					}
-					return true;
 				}
 				else
 				{
@@ -873,11 +863,11 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	/**
 	 * @return bool Contains-Projects
 	 */
-	public function get_contains_projects()
+	public function get_stores_data()
 	{
 		if ($this->organisation_unit)
 		{
-			return $this->organisation_unit->get_contains_projects();
+			return $this->organisation_unit->get_stores_data();
 		}
 		else
 		{
@@ -1019,12 +1009,13 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 		if ($this->organisation_unit and $this->organisation_unit_id and $name)
 		{
 			$transaction_id = $transaction->begin();
-			
-			$folder_id = OrganisationUnitFolder::get_folder_by_organisation_unit_id($this->organisation_unit_id);
-			$folder = Folder::get_instance($folder_id);
-			if ($folder->set_name($name) == true)
+
+			if ($this->organisation_unit->set_name($name) == true)
 			{
-				if ($this->organisation_unit->set_name($name) == true)
+				$organisation_unit_rename_event = new OrganisationUnitRenameEvent($this->organisation_unit_id);
+				$event_handler = new EventHandler($organisation_unit_rename_event);
+				
+				if ($event_handler->get_success() == true)
 				{
 					if ($transaction_id != null)
 					{
@@ -1068,12 +1059,12 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 		{
 			$transaction_id = $transaction->begin();
 			
-			$folder_id = OrganisationUnitFolder::get_folder_by_organisation_unit_id($this->organisation_unit_id);
-			$folder = Folder::get_instance($folder_id);
-			
-			if ($folder->set_owner_id($owner_id) == true)
+			if ($this->organisation_unit->set_owner_id($owner_id) == true)
 			{
-				if ($this->organisation_unit->set_owner_id($owner_id) == true)
+				$organisation_unit_change_owner_event = new OrganisationUnitChangeOwnerEvent($this->organisation_unit_id);
+				$event_handler = new EventHandler($organisation_unit_change_owner_event);
+				
+				if ($event_handler->get_success() == true)
 				{
 					if ($transaction_id != null)
 					{
@@ -1120,69 +1111,67 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 				$transaction_id = $transaction->begin();
 				
 				$current_leader_id = $this->organisation_unit->get_leader_id();
-				
-				// Alle Projektrechte ändern
-				$project_permission_array = ProjectPermission::list_system_setted_entries_by_leader_id($current_leader_id);
-				
-				if (is_array($project_permission_array) and count($project_permission_array) >= 1)
-				{
-					foreach($project_permission_array as $key => $value)
+							
+				if ($this->organisation_unit->set_leader_id($leader_id) == true)
+				{				
+					$group = new Group(constant("GROUP_LEADER_GROUP"));
+					
+					if (self::is_leader($current_leader_id) == false)
 					{
-						$project_permission = new ProjectPermission($value);
-						
-						if ($project_permission->set_user_id($leader_id) == false)
+						if ($group->is_user_in_group($current_leader_id) == true)
 						{
-							if ($transaction_id != null)
+							if($group->delete_user_from_group($current_leader_id) == false)
 							{
-								$transaction->rollback($transaction_id);
+								if ($transaction_id != null)
+								{
+									$transaction->rollback($transaction_id);
+								}
+								return false;
 							}
-							return false;
-						}							
-					}
-				}
-			
-				// Leader Ändern
-				if ($this->organisation_unit->set_leader_id($leader_id) == false)
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
-				}
-			
-				// Alten User Prüfen
-				
-				$group = new Group(constant("GROUP_LEADER_GROUP"));
-				
-				if (self::is_leader($current_leader_id) == false)
-				{
-					if ($group->is_user_in_group($current_leader_id) == true)
-					{
-						if($group->delete_user_from_group($current_leader_id) == false)
-						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							return false;
 						}
 					}
-				}
-				
-				// Neuer User in Group
-				if (defined("GROUP_LEADER_GROUP"))
-				{
-					if ($group->is_user_in_group($leader_id) == false)
+					
+					if (defined("GROUP_LEADER_GROUP"))
 					{
-						if($group->create_user_in_group($leader_id) == false)
+						if ($group->is_user_in_group($leader_id) == false)
 						{
-							if ($transaction_id != null)
+							if($group->create_user_in_group($leader_id) == false)
 							{
-								$transaction->rollback($transaction_id);
+								if ($transaction_id != null)
+								{
+									$transaction->rollback($transaction_id);
+								}
+								return false;
 							}
-							return false;
 						}
+					}
+					else
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+					}
+					
+					$organisation_unit_change_leader_event = new OrganisationUnitChangeLeaderEvent($this->organisation_unit_id);
+					$event_handler = new EventHandler($organisation_unit_change_leader_event);
+					
+					if ($event_handler->get_success() == true)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->commit($transaction_id);
+						}
+						return true;
+					}
+					else
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
 					}
 				}
 				else
@@ -1193,12 +1182,6 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 					}
 					return false;
 				}
-				
-				if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
-				return true;
 			}
 			else
 			{
@@ -1506,6 +1489,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	   
     /**
      * @param object $event_object
+     * @return bool
      */
     public static function listen_events($event_object)
     {

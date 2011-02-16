@@ -650,52 +650,7 @@ class ProjectPermission_Access
 			return null;
 		}
 	}
-	
-	/**
-	 * @param integer $user_id
-	 * @param integer $intention
-	 * @return array
-	 */
-	public static function list_entries_by_user_id_and_intention($user_id, $intention)
-	{
-		global $db;
 		
-		if (is_numeric($user_id))
-		{
-			if ($intention == null)
-			{
-				$intention_insert = "AND intention IS NULL";
-			}
-			else
-			{
-				$intention_insert = "AND intention = ".$intention."";
-			}
-			
-			$return_array = array();
-				
-			$sql = "SELECT id FROM ".self::PROJECT_PERMISSION_TABLE." WHERE user_id = ".$user_id." ".$intention_insert."";
-			$res = $db->db_query($sql);
-			
-			while ($data = $db->db_fetch_assoc($res))
-			{
-				array_push($return_array,$data[id]);
-			}
-			
-			if (is_array($return_array))
-			{
-				return $return_array;
-			}
-			else
-			{
-				return null;
-			}
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
 	/**
 	 * @param integer $project_id
 	 * @param integer $user_id

@@ -53,18 +53,6 @@ class OrganisationUnitDeletePrecheckEvent extends Event
     		return null;
     	}
     }
-    
-	public function get_contains_projects()
-    {
-    	if ($this->contains_projects)
-    	{
-    		return $this->contains_projects;
-    	}
-    	else
-    	{
-    		return null;
-    	}
-    }
 }
 
 ?>

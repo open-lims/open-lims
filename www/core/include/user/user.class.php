@@ -36,6 +36,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("events/user_delete_event.class.php");
 	require_once("events/user_delete_precheck_event.class.php");
 	require_once("events/user_post_delete_event.class.php");
+	require_once("events/user_rename_event.class.php");
 	
 	require_once("access/user.access.php");
 	require_once("access/user_admin_setting.access.php");
@@ -171,10 +172,7 @@ class User implements UserInterface {
 					{
 						$user_admin_setting->set_user_locked(false);
 					}
-					
-					$user_admin_setting->set_project_quota($GLOBALS[std_projectquota]);
-					$user_admin_setting->set_user_quota($GLOBALS[std_userquota]);
-					
+										
 					$user_profile_setting->set_timezone_id($GLOBALS[timezone_id]);
 					
 					if ($this->user_profile->create($user_id, $gender, $title, $forename, $surname, $mail) == null)
@@ -555,51 +553,6 @@ class User implements UserInterface {
 	}
 	
 	/**
-	 * @return integer Project Quota in byte
-	 */
-	public function get_project_quota()
-	{
-		if ($this->user_admin_setting)
-		{
-			return $this->user_admin_setting->get_project_quota();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return integer User Quota in byte
-	 */
-	public function get_user_quota()
-	{
-		if ($this->user_admin_setting)
-		{
-			return $this->user_admin_setting->get_user_quota();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return integer User Filesize in byte
-	 */
-	public function get_user_filesize()
-	{
-		if ($this->user)
-		{
-			return $this->user->get_user_filesize();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
 	 * @return string Date of last password change
 	 */
 	public function get_last_password_change()
@@ -797,14 +750,14 @@ class User implements UserInterface {
 		
 		if ($this->user and $this->user_id and $username)
 		{
-			
 			$transaction_id = $transaction->begin();
 			
-			$folder_id = UserFolder::get_folder_by_user_id($this->user_id);
-			$folder = Folder::get_instance($folder_id);
-			if ($folder->set_name($username) == true)
+			if ($this->user->set_username($username) == true)
 			{
-				if ($this->user->set_username($username) == true)
+				$user_rename_event = new UserRenameEvent($this->user_id);
+				$event_handler = new EventHandler($user_rename_event);
+				
+				if ($event_handler->get_success() == true)
 				{
 					if ($transaction_id != null)
 					{
@@ -816,7 +769,7 @@ class User implements UserInterface {
 				{
 					if ($transaction_id != null)
 					{
-					$transaction->rollback($transaction_id);
+						$transaction->rollback($transaction_id);
 					}
 					return false;
 				}
@@ -825,7 +778,7 @@ class User implements UserInterface {
 			{
 				if ($transaction_id != null)
 				{
-					$transaction->rollback($transaction_id);
+				$transaction->rollback($transaction_id);
 				}
 				return false;
 			}
@@ -925,73 +878,6 @@ class User implements UserInterface {
 		}
 	}
 	
-	/**
-	 * @param integer $project_quota New project-quota in byte
-	 * @return bool
-	 */
-	public function set_project_quota($project_quota)
-	{
-		if ($this->user_admin_setting and $project_quota)
-		{
-			return $this->user_admin_setting->set_project_quota($project_quota);
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param integer $user_quota New user-quota in byte
-	 * @return bool
-	 */
-	public function set_user_quota($user_quota)
-	{
-		if ($this->user_admin_setting and $user_quota)
-		{
-			return $this->user_admin_setting->set_user_quota($user_quota);
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param integer $filesize New user-filesize in byte
-	 * @return bool
-	 */
-	public function set_user_filesize($filesize)
-	{
-		if ($this->user)
-		{
-			return $this->user->set_user_filesize($filesize);
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * Increases uses's filesize about $filesize byte
-	 * @param integer $filesize amount in byte
-	 * @return bool
-	 */
-	public function increase_filesize($filesize)
-	{
-		if ($this->user_admin_setting)
-		{
-			$current_filesize = $this->user_get_user_filesize();
-			$new_filesize = $current_filesize + $filesize;
-			
-			return $this->user_admin_setting->set_filesize($new_filesize);
-		}
-		else
-		{
-			return false;
-		}
-	}
 	
 	/**
 	 * @param string $entry Name of the entry
