@@ -27,8 +27,6 @@
  */
 class SystemMessage_Access
 {
-	
-	const SYSTEM_MESSAGE_TABLE = 'core_system_messages';
 	const SYSTEM_MESSAGE_PK_SEQUENCE = 'core_system_messages_id_seq';
 	
 	private $id;
@@ -50,7 +48,7 @@ class SystemMessage_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::SYSTEM_MESSAGE_TABLE." WHERE id = ".$id."";
+			$sql = "SELECT * FROM ".constant("SYSTEM_MESSAGE_TABLE")." WHERE id = ".$id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -94,14 +92,14 @@ class SystemMessage_Access
 		{
 			$datetime = date("Y-m-d H:i:s");
 		
-			$sql_write = "INSERT INTO ".self::SYSTEM_MESSAGE_TABLE." (id,user_id,datetime,content) " .
+			$sql_write = "INSERT INTO ".constant("SYSTEM_MESSAGE_TABLE")." (id,user_id,datetime,content) " .
 							"VALUES (nextval('".self::SYSTEM_MESSAGE_PK_SEQUENCE."'::regclass),".$user_id.",'".$datetime."','".$content."')";
 			
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".self::SYSTEM_MESSAGE_TABLE." WHERE id = currval('".self::SYSTEM_MESSAGE_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("SYSTEM_MESSAGE_TABLE")." WHERE id = currval('".self::SYSTEM_MESSAGE_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -132,7 +130,7 @@ class SystemMessage_Access
     		$tmp_id = $this->id;
     		$this->__destruct();
 
-    		$sql = "DELETE FROM ".self::SYSTEM_MESSAGE_TABLE." WHERE id = ".$tmp_id."";
+    		$sql = "DELETE FROM ".constant("SYSTEM_MESSAGE_TABLE")." WHERE id = ".$tmp_id."";
     		$res = $db->db_query($sql);
     		
     		if ($db->db_affected_rows($res) == 1)
@@ -204,7 +202,7 @@ class SystemMessage_Access
 
 		if ($this->id and is_numeric($user_id))
 		{
-			$sql = "UPDATE ".self::SYSTEM_MESSAGE_TABLE." SET user_id = '".$user_id."' WHERE id = ".$this->id."";
+			$sql = "UPDATE ".constant("SYSTEM_MESSAGE_TABLE")." SET user_id = '".$user_id."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -233,7 +231,7 @@ class SystemMessage_Access
 
 		if ($this->id and $datetime)
 		{
-			$sql = "UPDATE ".self::SYSTEM_MESSAGE_TABLE." SET datetime = '".$datetime."' WHERE id = ".$this->id."";
+			$sql = "UPDATE ".constant("SYSTEM_MESSAGE_TABLE")." SET datetime = '".$datetime."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -262,7 +260,7 @@ class SystemMessage_Access
 
 		if ($this->id and $content)
 		{
-			$sql = "UPDATE ".self::SYSTEM_MESSAGE_TABLE." SET content = '".$content."' WHERE id = ".$this->id."";
+			$sql = "UPDATE ".constant("SYSTEM_MESSAGE_TABLE")." SET content = '".$content."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -293,7 +291,7 @@ class SystemMessage_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::SYSTEM_MESSAGE_TABLE." WHERE id = '".$id."'";
+			$sql = "SELECT id FROM ".constant("SYSTEM_MESSAGE_TABLE")." WHERE id = '".$id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 
@@ -321,7 +319,7 @@ class SystemMessage_Access
 
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::SYSTEM_MESSAGE_TABLE." ORDER BY datetime DESC";
+		$sql = "SELECT id FROM ".constant("SYSTEM_MESSAGE_TABLE")." ORDER BY datetime DESC";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))

@@ -291,27 +291,6 @@ class User_Access {
 	}
 	
 	/**
-	 * @return integer
-	 */
-	public static function get_used_user_space()
-   	{
-   		global $db;
-		
-		$sql = "SELECT SUM(user_filesize) AS size FROM ".self::USER_TABLE."";
-		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
-		
-		if ($data[size])
-		{
-			return $data[size];
-		}
-		else
-		{
-			return null;
-		}
-   	}
-	
-	/**
 	 * @return array
 	 */
 	public static function list_entries()

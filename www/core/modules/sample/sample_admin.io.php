@@ -788,7 +788,7 @@ class SampleAdminIO
 	
 	public static function ou_permission_delete()
 	{
-		global $common;
+		global $common, $user;
 		
 		if ($_GET[sample_id])
 		{

@@ -27,7 +27,6 @@
  */
 class SampleHasSampleDepository_Access
 {
-	const SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE = 'core_sample_has_sample_depositories';
 	const SAMPLE_HAS_SAMPLE_DEPOSITORY_PK_SEQUENCE = 'core_sample_has_sample_depositories_primary_key_seq';
 
 	private $primary_key;
@@ -50,7 +49,7 @@ class SampleHasSampleDepository_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE." WHERE primary_key='".$primary_key."'";
+			$sql = "SELECT * FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." WHERE primary_key='".$primary_key."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
@@ -97,13 +96,13 @@ class SampleHasSampleDepository_Access
 		{
 			$datetime = date("Y-m-d H:i:s");
 			
-			$sql_write = "INSERT INTO ".self::SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE." (primary_key,sample_id,sample_depository_id,datetime,user_id) " .
+			$sql_write = "INSERT INTO ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." (primary_key,sample_id,sample_depository_id,datetime,user_id) " .
 					"VALUES (nextval('".self::SAMPLE_HAS_SAMPLE_DEPOSITORY_PK_SEQUENCE."'::regclass),".$sample_id.",".$sample_depository_id.",'".$datetime."',".$user_id.")";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT primary_key FROM ".self::SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE." WHERE primary_key = currval('".self::SAMPLE_HAS_SAMPLE_DEPOSITORY_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT primary_key FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." WHERE primary_key = currval('".self::SAMPLE_HAS_SAMPLE_DEPOSITORY_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -135,7 +134,7 @@ class SampleHasSampleDepository_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".self::SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE." WHERE primary_key = ".$tmp_primary_key."";
+			$sql = "DELETE FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." WHERE primary_key = ".$tmp_primary_key."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -223,7 +222,7 @@ class SampleHasSampleDepository_Access
 			
 		if ($this->primary_key and is_numeric($sample_id))
 		{
-			$sql = "UPDATE ".self::SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE." SET sample_id = '".$sample_id."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." SET sample_id = '".$sample_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -252,7 +251,7 @@ class SampleHasSampleDepository_Access
 		
 		if ($this->primary_key and is_numeric($sample_depository_id))
 		{
-			$sql = "UPDATE ".self::SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE." SET sample_depository_id = '".$sample_depository_id."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." SET sample_depository_id = '".$sample_depository_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -281,7 +280,7 @@ class SampleHasSampleDepository_Access
 			
 		if ($this->primary_key and $datetime)
 		{
-			$sql = "UPDATE ".self::SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE." SET datetime = '".$datetime."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." SET datetime = '".$datetime."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -310,7 +309,7 @@ class SampleHasSampleDepository_Access
 		
 		if ($this->primary_key and $user_id)
 		{
-			$sql = "UPDATE ".self::SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE." SET user_id = '".$user_id."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." SET user_id = '".$user_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -338,7 +337,7 @@ class SampleHasSampleDepository_Access
 			
 		if ($this->primary_key)
 		{
-			$sql = "UPDATE ".self::SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE." SET sample_depository_id = NULL WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." SET sample_depository_id = NULL WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -370,7 +369,7 @@ class SampleHasSampleDepository_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".self::SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE." WHERE sample_id = ".$sample_id." ORDER BY datetime ASC";
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." WHERE sample_id = ".$sample_id." ORDER BY datetime ASC";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -405,7 +404,7 @@ class SampleHasSampleDepository_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".self::SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE." WHERE sample_depository_id = ".$sample_depository_id."";
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." WHERE sample_depository_id = ".$sample_depository_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -437,7 +436,7 @@ class SampleHasSampleDepository_Access
 				
 		$return_array = array();
 		
-		$sql = "SELECT primary_key FROM ".self::SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE."";
+		$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")."";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))

@@ -27,8 +27,6 @@
  */
 class OrganisationUnit_Access
 {
-
-	const ORGANISATION_UNIT_TABLE = 'core_organisation_units';
 	const ORGANISATION_UNIT_PK_SEQUENCE = 'core_organisation_units_id_seq';
 
 	private $organisation_unit_id;
@@ -57,7 +55,7 @@ class OrganisationUnit_Access
 		}
 		else
 		{	
-			$sql = "SELECT * FROM ".self::ORGANISATION_UNIT_TABLE." WHERE id = ".$organisation_unit_id."";
+			$sql = "SELECT * FROM ".constant("ORGANISATION_UNIT_TABLE")." WHERE id = ".$organisation_unit_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -148,13 +146,13 @@ class OrganisationUnit_Access
 			
 			if (is_numeric($toid))
 			{
-				$sql_write = "INSERT INTO ".self::ORGANISATION_UNIT_TABLE." (id, toid, is_root, name, type_id, leader_id, owner_id, stores_data, position, hidden) " .
+				$sql_write = "INSERT INTO ".constant("ORGANISATION_UNIT_TABLE")." (id, toid, is_root, name, type_id, leader_id, owner_id, stores_data, position, hidden) " .
 								"VALUES (nextval('".self::ORGANISATION_UNIT_PK_SEQUENCE."'::regclass), '".$toid."','f','".$name."','".$type_id."','".$session->get_user_id()."',".$session->get_user_id().",'".$stores_data_insert."',".$position.",'f')";		
 			
 			}
 			else
 			{
-				$sql_write = "INSERT INTO ".self::ORGANISATION_UNIT_TABLE." (id, toid, is_root, name, type_id, leader_id, owner_id, stores_data, position, hidden) " .
+				$sql_write = "INSERT INTO ".constant("ORGANISATION_UNIT_TABLE")." (id, toid, is_root, name, type_id, leader_id, owner_id, stores_data, position, hidden) " .
 								"VALUES (nextval('".self::ORGANISATION_UNIT_PK_SEQUENCE."'::regclass), currval('".self::ORGANISATION_UNIT_PK_SEQUENCE."'::regclass),'t','".$name."','".$type_id."','".$session->get_user_id()."',".$session->get_user_id().",'".$stores_data_insert."',".$position.",'f')";		
 			
 			}
@@ -167,7 +165,7 @@ class OrganisationUnit_Access
 			}
 			else
 			{
-				$sql_read = "SELECT id FROM ".self::ORGANISATION_UNIT_TABLE." WHERE id = currval('".self::ORGANISATION_UNIT_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("ORGANISATION_UNIT_TABLE")." WHERE id = currval('".self::ORGANISATION_UNIT_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -195,7 +193,7 @@ class OrganisationUnit_Access
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".self::ORGANISATION_UNIT_TABLE." WHERE id = ".$organisation_unit_id_tmp."";
+			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_TABLE")." WHERE id = ".$organisation_unit_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -358,7 +356,7 @@ class OrganisationUnit_Access
 
 		if ($this->organisation_unit_id and $toid)
 		{
-			$sql = "UPDATE ".self::ORGANISATION_UNIT_TABLE." SET toid = ".$toid." WHERE id = ".$this->organisation_unit_id."";
+			$sql = "UPDATE ".constant("ORGANISATION_UNIT_TABLE")." SET toid = ".$toid." WHERE id = ".$this->organisation_unit_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -396,7 +394,7 @@ class OrganisationUnit_Access
 				$is_root_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::ORGANISATION_UNIT_TABLE." SET is_root = '".$is_root_insert."' WHERE id = ".$this->organisation_unit_id."";
+			$sql = "UPDATE ".constant("ORGANISATION_UNIT_TABLE")." SET is_root = '".$is_root_insert."' WHERE id = ".$this->organisation_unit_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -425,7 +423,7 @@ class OrganisationUnit_Access
 
 		if ($this->organisation_unit_id and $name)
 		{
-			$sql = "UPDATE ".self::ORGANISATION_UNIT_TABLE." SET name = '".$name."' WHERE id = ".$this->organisation_unit_id."";
+			$sql = "UPDATE ".constant("ORGANISATION_UNIT_TABLE")." SET name = '".$name."' WHERE id = ".$this->organisation_unit_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -454,7 +452,7 @@ class OrganisationUnit_Access
 			
 		if ($this->organisation_unit_id and $type_id)
 		{
-			$sql = "UPDATE ".self::ORGANISATION_UNIT_TABLE." SET type_id = ".$type_id." WHERE id = ".$this->organisation_unit_id."";
+			$sql = "UPDATE ".constant("ORGANISATION_UNIT_TABLE")." SET type_id = ".$type_id." WHERE id = ".$this->organisation_unit_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -483,7 +481,7 @@ class OrganisationUnit_Access
 			
 		if ($this->organisation_unit_id and $leader_id)
 		{
-			$sql = "UPDATE ".self::ORGANISATION_UNIT_TABLE." SET leader_id = ".$leader_id." WHERE id = ".$this->organisation_unit_id."";
+			$sql = "UPDATE ".constant("ORGANISATION_UNIT_TABLE")." SET leader_id = ".$leader_id." WHERE id = ".$this->organisation_unit_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -512,7 +510,7 @@ class OrganisationUnit_Access
 		
 		if ($this->organisation_unit_id and $owner_id)
 		{
-			$sql = "UPDATE ".self::ORGANISATION_UNIT_TABLE." SET owner_id = ".$owner_id." WHERE id = ".$this->organisation_unit_id."";
+			$sql = "UPDATE ".constant("ORGANISATION_UNIT_TABLE")." SET owner_id = ".$owner_id." WHERE id = ".$this->organisation_unit_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -550,7 +548,7 @@ class OrganisationUnit_Access
 				$stores_data_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::ORGANISATION_UNIT_TABLE." SET stores_data = '".$stores_data_insert."' WHERE id = ".$this->organisation_unit_id."";
+			$sql = "UPDATE ".constant("ORGANISATION_UNIT_TABLE")." SET stores_data = '".$stores_data_insert."' WHERE id = ".$this->organisation_unit_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -579,7 +577,7 @@ class OrganisationUnit_Access
 			
 		if ($this->organisation_unit_id and $position)
 		{
-			$sql = "UPDATE ".self::ORGANISATION_UNIT_TABLE." SET position = ".$position." WHERE id = ".$this->organisation_unit_id."";
+			$sql = "UPDATE ".constant("ORGANISATION_UNIT_TABLE")." SET position = ".$position." WHERE id = ".$this->organisation_unit_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -617,7 +615,7 @@ class OrganisationUnit_Access
 				$hidden_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::ORGANISATION_UNIT_TABLE." SET hidden = '".$hidden_insert."' WHERE id = ".$this->organisation_unit_id."";
+			$sql = "UPDATE ".constant("ORGANISATION_UNIT_TABLE")." SET hidden = '".$hidden_insert."' WHERE id = ".$this->organisation_unit_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -647,14 +645,14 @@ class OrganisationUnit_Access
 		{
 			if(is_numeric($this->toid) and $this->is_root == false)
 			{
-				$sql = "SELECT id FROM ".self::ORGANISATION_UNIT_TABLE." " .
+				$sql = "SELECT id FROM ".constant("ORGANISATION_UNIT_TABLE")." " .
 					"WHERE toid=".$this->toid." " .
 						"AND is_root = 'f' " .
 						"AND position = ".($this->position-1)."";
 			}
 			else
 			{
-				$sql = "SELECT id FROM ".self::ORGANISATION_UNIT_TABLE." " .
+				$sql = "SELECT id FROM ".constant("ORGANISATION_UNIT_TABLE")." " .
 					"WHERE is_root = 't' " .
 						"AND position = ".($this->position-1)."";
 			}
@@ -684,14 +682,14 @@ class OrganisationUnit_Access
 		{
 			if(is_numeric($this->toid) and $this->is_root == false)
 			{
-				$sql = "SELECT id FROM ".self::ORGANISATION_UNIT_TABLE." " .
+				$sql = "SELECT id FROM ".constant("ORGANISATION_UNIT_TABLE")." " .
 					"WHERE toid=".$this->toid." " .
 						"AND is_root = 'f' " .
 						"AND position = ".($this->position+1)."";
 			}
 			else
 			{
-				$sql = "SELECT id FROM ".self::ORGANISATION_UNIT_TABLE." " .
+				$sql = "SELECT id FROM ".constant("ORGANISATION_UNIT_TABLE")." " .
 					"WHERE is_root = 't' " .
 						"AND position = ".($this->position+1)."";
 			}
@@ -721,20 +719,20 @@ class OrganisationUnit_Access
 		
 		if (is_numeric($toid))
 		{
-			$sql = "SELECT id FROM ".self::ORGANISATION_UNIT_TABLE." " .
+			$sql = "SELECT id FROM ".constant("ORGANISATION_UNIT_TABLE")." " .
 					"WHERE toid=".$toid." " .
 						"AND is_root = 'f' " .
 						"AND position = " .
-							"(SELECT MAX(position) FROM ".self::ORGANISATION_UNIT_TABLE." " .
+							"(SELECT MAX(position) FROM ".constant("ORGANISATION_UNIT_TABLE")." " .
 									"WHERE toid=".$toid." " .
 										"AND is_root = 'f')";
 		}
 		else
 		{
-			$sql = "SELECT id FROM ".self::ORGANISATION_UNIT_TABLE." " .
+			$sql = "SELECT id FROM ".constant("ORGANISATION_UNIT_TABLE")." " .
 					"WHERE is_root = 't' " .
 						"AND position = " .
-							"(SELECT MAX(position) FROM ".self::ORGANISATION_UNIT_TABLE." " .
+							"(SELECT MAX(position) FROM ".constant("ORGANISATION_UNIT_TABLE")." " .
 									"WHERE is_root = 't')";
 		}
 
@@ -765,14 +763,14 @@ class OrganisationUnit_Access
 			
 			if (is_numeric($toid))
 			{
-				$sql = "SELECT id FROM ".self::ORGANISATION_UNIT_TABLE." " .
+				$sql = "SELECT id FROM ".constant("ORGANISATION_UNIT_TABLE")." " .
 						"WHERE toid=".$toid." " .
 							"AND is_root = 'f' " .
 							"AND position = ".$position."";
 			}
 			else
 			{
-				$sql = "SELECT id FROM ".self::ORGANISATION_UNIT_TABLE." " .
+				$sql = "SELECT id FROM ".constant("ORGANISATION_UNIT_TABLE")." " .
 						"WHERE is_root = 't' " .
 							"AND position = ".$position."";
 			}
@@ -805,7 +803,7 @@ class OrganisationUnit_Access
 		
 		if ($name)
 		{						
-			$sql = "SELECT id FROM ".self::ORGANISATION_UNIT_TABLE." WHERE LOWER(name) = '".$name."'";
+			$sql = "SELECT id FROM ".constant("ORGANISATION_UNIT_TABLE")." WHERE LOWER(name) = '".$name."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -833,7 +831,7 @@ class OrganisationUnit_Access
 				
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::ORGANISATION_UNIT_TABLE." ORDER BY position";
+		$sql = "SELECT id FROM ".constant("ORGANISATION_UNIT_TABLE")." ORDER BY position";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))
@@ -863,7 +861,7 @@ class OrganisationUnit_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::ORGANISATION_UNIT_TABLE." WHERE toid = ".$toid." AND toid != id ORDER BY position";
+			$sql = "SELECT id FROM ".constant("ORGANISATION_UNIT_TABLE")." WHERE toid = ".$toid." AND toid != id ORDER BY position";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -899,7 +897,7 @@ class OrganisationUnit_Access
 			
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::ORGANISATION_UNIT_TABLE." WHERE owner_id = ".$owner_id." ORDER BY position";
+			$sql = "SELECT id FROM ".constant("ORGANISATION_UNIT_TABLE")." WHERE owner_id = ".$owner_id." ORDER BY position";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -934,7 +932,7 @@ class OrganisationUnit_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::ORGANISATION_UNIT_TABLE." WHERE leader_id = ".$leader_id." ORDER BY position";
+			$sql = "SELECT id FROM ".constant("ORGANISATION_UNIT_TABLE")." WHERE leader_id = ".$leader_id." ORDER BY position";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -966,7 +964,7 @@ class OrganisationUnit_Access
 			
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::ORGANISATION_UNIT_TABLE." WHERE is_root = 't' ORDER BY position";
+		$sql = "SELECT id FROM ".constant("ORGANISATION_UNIT_TABLE")." WHERE is_root = 't' ORDER BY position";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))
@@ -993,7 +991,7 @@ class OrganisationUnit_Access
 					
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::ORGANISATION_UNIT_TABLE." WHERE is_root = 't ORDER BY position'";
+		$sql = "SELECT id FROM ".constant("ORGANISATION_UNIT_TABLE")." WHERE is_root = 't ORDER BY position'";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))
@@ -1023,7 +1021,7 @@ class OrganisationUnit_Access
 		{
 			$return_array = array();	
 												
-			$sql = "SELECT id FROM ".self::ORGANISATION_UNIT_TABLE." WHERE id = ".$organisation_unit_id."";
+			$sql = "SELECT id FROM ".constant("ORGANISATION_UNIT_TABLE")." WHERE id = ".$organisation_unit_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -1054,7 +1052,7 @@ class OrganisationUnit_Access
 		{
 			$return_array = array();	
 												
-			$sql = "SELECT id FROM ".self::ORGANISATION_UNIT_TABLE." WHERE leader_id = ".$user_id."";
+			$sql = "SELECT id FROM ".constant("ORGANISATION_UNIT_TABLE")." WHERE leader_id = ".$user_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -1080,7 +1078,7 @@ class OrganisationUnit_Access
 	{
 		global $db;
 											
-		$sql = "SELECT COUNT(id) AS result FROM ".self::ORGANISATION_UNIT_TABLE."";
+		$sql = "SELECT COUNT(id) AS result FROM ".constant("ORGANISATION_UNIT_TABLE")."";
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);
 		

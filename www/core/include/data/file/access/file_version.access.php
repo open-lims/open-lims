@@ -27,7 +27,6 @@
  */
 class FileVersion_Access
 {
-	const FILE_VERSION_TABLE = 'core_file_versions';
 	const FILE_VERSION_PK_SEQUENCE = 'core_file_versions_id_seq';
 
 	private $file_version_id;
@@ -57,7 +56,7 @@ class FileVersion_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::FILE_VERSION_TABLE." WHERE id='".$file_version_id."'";
+			$sql = "SELECT * FROM ".constant("FILE_VERSION_TABLE")." WHERE id='".$file_version_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -171,14 +170,14 @@ class FileVersion_Access
 			
 			$datetime = date("Y-m-d H:i:s");
 			
-			$sql_write = "INSERT INTO ".self::FILE_VERSION_TABLE." (id,toid,name,version,size,checksum,datetime,comment,previous_version_id,internal_revision,current,file_extension,owner_id) " .
+			$sql_write = "INSERT INTO ".constant("FILE_VERSION_TABLE")." (id,toid,name,version,size,checksum,datetime,comment,previous_version_id,internal_revision,current,file_extension,owner_id) " .
 					"VALUES (nextval('".self::FILE_VERSION_PK_SEQUENCE."'::regclass),".$toid.",'".$name."',".$version.",".$size.",'".$checksum."','".$datetime."',".$comment_insert.",".$previous_version_id_insert.",".$internal_revision.",".$current_insert.",".$extension_insert.",".$owner_id.")";
 					
 			$res_write = $db->db_query($sql_write);	
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".self::FILE_VERSION_TABLE." WHERE id = currval('".self::FILE_VERSION_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("FILE_VERSION_TABLE")." WHERE id = currval('".self::FILE_VERSION_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 									
@@ -211,7 +210,7 @@ class FileVersion_Access
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".self::FILE_VERSION_TABLE." WHERE id = ".$file_version_id_tmp."";
+			$sql = "DELETE FROM ".constant("FILE_VERSION_TABLE")." WHERE id = ".$file_version_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -419,7 +418,7 @@ class FileVersion_Access
 		
 		if ($this->file_version_id and is_numeric($toid))
 		{
-			$sql = "UPDATE ".self::FILE_VERSION_TABLE." SET toid = ".$toid." WHERE id = ".$this->file_version_id."";
+			$sql = "UPDATE ".constant("FILE_VERSION_TABLE")." SET toid = ".$toid." WHERE id = ".$this->file_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -448,7 +447,7 @@ class FileVersion_Access
 
 		if ($this->file_version_id and $name)
 		{
-			$sql = "UPDATE ".self::FILE_VERSION_TABLE." SET name = ".$name." WHERE id = ".$this->file_version_id."";
+			$sql = "UPDATE ".constant("FILE_VERSION_TABLE")." SET name = ".$name." WHERE id = ".$this->file_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -477,7 +476,7 @@ class FileVersion_Access
 	
 		if ($this->file_version_id and is_numeric($version))
 		{
-			$sql = "UPDATE ".self::FILE_VERSION_TABLE." SET version = ".$version." WHERE id = ".$this->file_version_id."";
+			$sql = "UPDATE ".constant("FILE_VERSION_TABLE")." SET version = ".$version." WHERE id = ".$this->file_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -506,7 +505,7 @@ class FileVersion_Access
 	
 		if ($this->file_version_id and $size)
 		{
-			$sql = "UPDATE ".self::FILE_VERSION_TABLE." SET size = ".$size." WHERE id = ".$this->file_version_id."";
+			$sql = "UPDATE ".constant("FILE_VERSION_TABLE")." SET size = ".$size." WHERE id = ".$this->file_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -535,7 +534,7 @@ class FileVersion_Access
 
 		if ($this->file_version_id and $checksum)
 		{
-			$sql = "UPDATE ".self::FILE_VERSION_TABLE." SET checksum = ".$checksum." WHERE id = ".$this->file_version_id."";
+			$sql = "UPDATE ".constant("FILE_VERSION_TABLE")." SET checksum = ".$checksum." WHERE id = ".$this->file_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -564,7 +563,7 @@ class FileVersion_Access
 			
 		if ($this->file_version_id and $datetime)
 		{
-			$sql = "UPDATE ".self::FILE_VERSION_TABLE." SET datetime = '".$datetime."' WHERE id = ".$this->file_version_id."";
+			$sql = "UPDATE ".constant("FILE_VERSION_TABLE")." SET datetime = '".$datetime."' WHERE id = ".$this->file_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -593,7 +592,7 @@ class FileVersion_Access
 
 		if ($this->file_version_id and $comment)
 		{
-			$sql = "UPDATE ".self::FILE_VERSION_TABLE." SET comment = ".$comment." WHERE id = ".$this->file_version_id."";
+			$sql = "UPDATE ".constant("FILE_VERSION_TABLE")." SET comment = ".$comment." WHERE id = ".$this->file_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -622,7 +621,7 @@ class FileVersion_Access
 
 		if ($this->file_version_id and is_numeric($previous_version_id))
 		{
-			$sql = "UPDATE ".self::FILE_VERSION_TABLE." SET previous_version_id = ".$previous_version_id." WHERE id = ".$this->file_version_id."";
+			$sql = "UPDATE ".constant("FILE_VERSION_TABLE")." SET previous_version_id = ".$previous_version_id." WHERE id = ".$this->file_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -651,7 +650,7 @@ class FileVersion_Access
 
 		if ($this->file_version_id and is_numeric($internal_revision))
 		{
-			$sql = "UPDATE ".self::FILE_VERSION_TABLE." SET internal_revision = ".$internal_revision." WHERE id = ".$this->file_version_id."";
+			$sql = "UPDATE ".constant("FILE_VERSION_TABLE")." SET internal_revision = ".$internal_revision." WHERE id = ".$this->file_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -689,7 +688,7 @@ class FileVersion_Access
 				$current_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::FILE_VERSION_TABLE." SET current = '".$current_insert."' WHERE id = ".$this->file_version_id."";
+			$sql = "UPDATE ".constant("FILE_VERSION_TABLE")." SET current = '".$current_insert."' WHERE id = ".$this->file_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -718,7 +717,7 @@ class FileVersion_Access
 		
 		if ($this->file_version_id and $file_extension)
 		{
-			$sql = "UPDATE ".self::FILE_VERSION_TABLE." SET file_extension = '".$file_extension."' WHERE id = ".$this->file_version_id."";
+			$sql = "UPDATE ".constant("FILE_VERSION_TABLE")." SET file_extension = '".$file_extension."' WHERE id = ".$this->file_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -747,7 +746,7 @@ class FileVersion_Access
 			
 		if ($this->toid and is_numeric($internal_revision))
 		{
-			$sql = "SELECT id FROM ".self::FILE_VERSION_TABLE." WHERE internal_revision = ".$internal_revision." AND toid = '".$this->toid."'";
+			$sql = "SELECT id FROM ".constant("FILE_VERSION_TABLE")." WHERE internal_revision = ".$internal_revision." AND toid = '".$this->toid."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -814,7 +813,7 @@ class FileVersion_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::FILE_VERSION_TABLE." WHERE previous_version_id = ".$previous_version_id." AND id != previous_version_id";
+			$sql = "SELECT id FROM ".constant("FILE_VERSION_TABLE")." WHERE previous_version_id = ".$previous_version_id." AND id != previous_version_id";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -849,7 +848,7 @@ class FileVersion_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT COUNT(id) AS numberofresults FROM ".self::FILE_VERSION_TABLE." WHERE toid = ".$toid." AND id = previous_version_id";
+			$sql = "SELECT COUNT(id) AS numberofresults FROM ".constant("FILE_VERSION_TABLE")." WHERE toid = ".$toid." AND id = previous_version_id";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -878,8 +877,8 @@ class FileVersion_Access
 
 		if (is_numeric($toid))
 		{
-			$sql = "SELECT id FROM ".self::FILE_VERSION_TABLE." WHERE toid = ".$toid." " .
-							"AND internal_revision = (SELECT MAX(internal_revision) FROM ".self::FILE_VERSION_TABLE." WHERE toid = ".$toid.")";				
+			$sql = "SELECT id FROM ".constant("FILE_VERSION_TABLE")." WHERE toid = ".$toid." " .
+							"AND internal_revision = (SELECT MAX(internal_revision) FROM ".constant("FILE_VERSION_TABLE")." WHERE toid = ".$toid.")";				
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 							
@@ -908,8 +907,8 @@ class FileVersion_Access
 	
 		if (is_numeric($id))
 		{
-			$sql = "SELECT id FROM ".self::FILE_VERSION_TABLE." WHERE previous_version_id = ".$id." " .
-							"AND version = (SELECT MAX(version) FROM ".self::FILE_VERSION_TABLE." WHERE previous_version_id = ".$id." AND previous_version_id != id) AND previous_version_id != id";				
+			$sql = "SELECT id FROM ".constant("FILE_VERSION_TABLE")." WHERE previous_version_id = ".$id." " .
+							"AND version = (SELECT MAX(version) FROM ".constant("FILE_VERSION_TABLE")." WHERE previous_version_id = ".$id." AND previous_version_id != id) AND previous_version_id != id";				
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 							
@@ -941,13 +940,13 @@ class FileVersion_Access
 		{
 			if (!is_numeric($previous_version_id))
 			{
-				$sql = "SELECT id FROM ".self::FILE_VERSION_TABLE." WHERE previous_version_id = id AND toid = ".$toid."" .
-						"AND version = (SELECT MAX(version) FROM ".self::FILE_VERSION_TABLE." WHERE previous_version_id = id AND toid = ".$toid.")";				
+				$sql = "SELECT id FROM ".constant("FILE_VERSION_TABLE")." WHERE previous_version_id = id AND toid = ".$toid."" .
+						"AND version = (SELECT MAX(version) FROM ".constant("FILE_VERSION_TABLE")." WHERE previous_version_id = id AND toid = ".$toid.")";				
 			}
 			else
 			{
-				$sql = "SELECT id FROM ".self::FILE_VERSION_TABLE." WHERE previous_version_id = ".$previous_version_id." AND toid = ".$toid."" .
-						"AND version = (SELECT MAX(version) FROM ".self::FILE_VERSION_TABLE." WHERE previous_version_id = ".$previous_version_id." AND toid = ".$toid." AND previous_version_id != id) AND previous_version_id != id";				
+				$sql = "SELECT id FROM ".constant("FILE_VERSION_TABLE")." WHERE previous_version_id = ".$previous_version_id." AND toid = ".$toid."" .
+						"AND version = (SELECT MAX(version) FROM ".constant("FILE_VERSION_TABLE")." WHERE previous_version_id = ".$previous_version_id." AND toid = ".$toid." AND previous_version_id != id) AND previous_version_id != id";				
 			}
 			
 			$res = $db->db_query($sql);
@@ -979,8 +978,8 @@ class FileVersion_Access
 		
 		if (is_numeric($toid) and is_numeric($internal_revision))
 		{
-			$sql = "SELECT id FROM ".self::FILE_VERSION_TABLE." WHERE toid = ".$toid." AND internal_revision != ".$internal_revision." " .
-						"AND datetime = (SELECT MAX(datetime) FROM ".self::FILE_VERSION_TABLE." WHERE toid = ".$toid." AND internal_revision != ".$internal_revision.")";				
+			$sql = "SELECT id FROM ".constant("FILE_VERSION_TABLE")." WHERE toid = ".$toid." AND internal_revision != ".$internal_revision." " .
+						"AND datetime = (SELECT MAX(datetime) FROM ".constant("FILE_VERSION_TABLE")." WHERE toid = ".$toid." AND internal_revision != ".$internal_revision.")";				
 			
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
@@ -1011,7 +1010,7 @@ class FileVersion_Access
 			
 		if (is_numeric($toid) and is_numeric($internal_revision))
 		{
-			$sql = "SELECT id FROM ".self::FILE_VERSION_TABLE." WHERE toid = ".$toid." " .
+			$sql = "SELECT id FROM ".constant("FILE_VERSION_TABLE")." WHERE toid = ".$toid." " .
 							"AND internal_revision = ".$internal_revision."";				
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
@@ -1041,7 +1040,7 @@ class FileVersion_Access
 
 		if (is_numeric($toid))
 		{
-			$sql = "SELECT id FROM ".self::FILE_VERSION_TABLE." WHERE toid = ".$toid." " .
+			$sql = "SELECT id FROM ".constant("FILE_VERSION_TABLE")." WHERE toid = ".$toid." " .
 							"AND current = 't'";				
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
@@ -1073,7 +1072,7 @@ class FileVersion_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT file_extension FROM ".self::FILE_VERSION_TABLE." WHERE toid = ".$toid." AND current = 't'";
+			$sql = "SELECT file_extension FROM ".constant("FILE_VERSION_TABLE")." WHERE toid = ".$toid." AND current = 't'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

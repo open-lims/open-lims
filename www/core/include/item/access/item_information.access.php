@@ -27,7 +27,6 @@
  */
 class ItemInformation_Access
 {
-	const ITEM_INFORMATION_TABLE = 'core_item_information';
 	const ITEM_INFORMATION_PK_SEQUENCE = 'core_item_information_id_seq';
 
 	private $information_id;
@@ -49,7 +48,7 @@ class ItemInformation_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::ITEM_INFORMATION_TABLE." WHERE id='".$information_id."'";
+			$sql = "SELECT * FROM ".constant("ITEM_INFORMATION_TABLE")." WHERE id='".$information_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -110,14 +109,14 @@ class ItemInformation_Access
 		
 			$datetime = date("Y-m-d H:i:s");
 			
-			$sql_write = "INSERT INTO ".self::ITEM_INFORMATION_TABLE." (id,description,keywords,last_update,language_id) " .
+			$sql_write = "INSERT INTO ".constant("ITEM_INFORMATION_TABLE")." (id,description,keywords,last_update,language_id) " .
 					"VALUES (nextval('".self::ITEM_INFORMATION_PK_SEQUENCE."'::regclass),".$description_insert.",".$keywords_insert.",'".$datetime."',1)";
 					
 			$res_write = $db->db_query($sql_write);	
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".self::ITEM_INFORMATION_TABLE." WHERE id = currval('".self::ITEM_INFORMATION_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("ITEM_INFORMATION_TABLE")." WHERE id = currval('".self::ITEM_INFORMATION_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 									
@@ -149,7 +148,7 @@ class ItemInformation_Access
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".self::ITEM_INFORMATION_TABLE." WHERE id = ".$information_id_tmp."";
+			$sql = "DELETE FROM ".constant("ITEM_INFORMATION_TABLE")." WHERE id = ".$information_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -222,7 +221,7 @@ class ItemInformation_Access
 		
 		if ($this->information_id and $description)
 		{
-			$sql = "UPDATE ".self::ITEM_INFORMATION_TABLE." SET description = '".$description."' WHERE id = ".$this->information_id."";
+			$sql = "UPDATE ".constant("ITEM_INFORMATION_TABLE")." SET description = '".$description."' WHERE id = ".$this->information_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -251,7 +250,7 @@ class ItemInformation_Access
 	
 		if ($this->information_id and $keywords)
 		{
-			$sql = "UPDATE ".self::ITEM_INFORMATION_TABLE." SET keywords = '".$keywords."' WHERE id = ".$this->information_id."";
+			$sql = "UPDATE ".constant("ITEM_INFORMATION_TABLE")." SET keywords = '".$keywords."' WHERE id = ".$this->information_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -280,7 +279,7 @@ class ItemInformation_Access
 	
 		if ($this->information_id and $last_update)
 		{
-			$sql = "UPDATE ".self::ITEM_INFORMATION_TABLE." SET last_update = '".$last_update."' WHERE id = ".$this->information_id."";
+			$sql = "UPDATE ".constant("ITEM_INFORMATION_TABLE")." SET last_update = '".$last_update."' WHERE id = ".$this->information_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -319,7 +318,7 @@ class ItemInformation_Access
 				$language_name_insert = $language_name;
 			}
 			
-			$sql = "UPDATE ".self::ITEM_INFORMATION_TABLE." SET description_text_search_vector = to_tsvector('".$language_name_insert."','".$string."') WHERE id = ".$this->information_id."";
+			$sql = "UPDATE ".constant("ITEM_INFORMATION_TABLE")." SET description_text_search_vector = to_tsvector('".$language_name_insert."','".$string."') WHERE id = ".$this->information_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -357,7 +356,7 @@ class ItemInformation_Access
 					$language_name_insert = $language_name;
 				}
 				
-				$sql = "UPDATE ".self::ITEM_INFORMATION_TABLE." SET keywords_text_search_vector = to_tsvector('".$language_name_insert."','".$string."') WHERE id = ".$this->information_id."";
+				$sql = "UPDATE ".constant("ITEM_INFORMATION_TABLE")." SET keywords_text_search_vector = to_tsvector('".$language_name_insert."','".$string."') WHERE id = ".$this->information_id."";
 				$res = $db->db_query($sql);
 				
 				if ($db->db_affected_rows($res))
@@ -385,7 +384,7 @@ class ItemInformation_Access
 
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::ITEM_INFORMATION_TABLE."";
+		$sql = "SELECT id FROM ".constant("ITEM_INFORMATION_TABLE")."";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))

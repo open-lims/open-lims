@@ -27,7 +27,6 @@
  */
 class FolderConcretion_Access
 {
-	const FOLDER_CONCRETION_TABLE = 'core_folder_concretion';
 	const FOLDER_CONCRETION_PK_SEQUENCE = 'core_folder_concretion_id_seq';
 	
 	private $id;
@@ -48,7 +47,7 @@ class FolderConcretion_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::FOLDER_CONCRETION_TABLE." WHERE id='".$id."'";
+			$sql = "SELECT * FROM ".constant("FOLDER_CONCRETION_TABLE")." WHERE id='".$id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -86,14 +85,14 @@ class FolderConcretion_Access
 		
 		if ($type and $handling_class and is_numeric($include_id))
 		{
-			$sql_write = "INSERT INTO ".self::FOLDER_CONCRETION_TABLE." (id,type,handling_class,include_id) " .
+			$sql_write = "INSERT INTO ".constant("FOLDER_CONCRETION_TABLE")." (id,type,handling_class,include_id) " .
 					"VALUES (nextval('".self::FOLDER_CONCRETION_PK_SEQUENCE."'::regclass),'".$type."','".$handling_class."','".$include_id."')";
 			
 			$res_write = $db->db_query($sql_write);	
 					
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".self::FOLDER_CONCRETION_TABLE." WHERE id = currval('".self::FOLDER_CONCRETION_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("FOLDER_CONCRETION_TABLE")." WHERE id = currval('".self::FOLDER_CONCRETION_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 									
@@ -125,7 +124,7 @@ class FolderConcretion_Access
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".self::FOLDER_CONCRETION_TABLE." WHERE id = ".$id_tmp."";
+			$sql = "DELETE FROM ".constant("FOLDER_CONCRETION_TABLE")." WHERE id = ".$id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -198,7 +197,7 @@ class FolderConcretion_Access
 
 		if ($this->id and $type)
 		{
-			$sql = "UPDATE ".self::FOLDER_CONCRETION_TABLE." SET type = '".$type."' WHERE id = ".$this->id."";
+			$sql = "UPDATE ".constant("FOLDER_CONCRETION_TABLE")." SET type = '".$type."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -227,7 +226,7 @@ class FolderConcretion_Access
 
 		if ($this->id and $handling_class)
 		{
-			$sql = "UPDATE ".self::FOLDER_CONCRETION_TABLE." SET handling_class = '".$handling_class."' WHERE id = ".$this->id."";
+			$sql = "UPDATE ".constant("FOLDER_CONCRETION_TABLE")." SET handling_class = '".$handling_class."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -256,7 +255,7 @@ class FolderConcretion_Access
 
 		if ($this->id and is_numeric($include_id))
 		{
-			$sql = "UPDATE ".self::FOLDER_CONCRETION_TABLE." SET include_id = '".$include_id."' WHERE id = ".$this->id."";
+			$sql = "UPDATE ".constant("FOLDER_CONCRETION_TABLE")." SET include_id = '".$include_id."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -284,7 +283,7 @@ class FolderConcretion_Access
 		
 		$return_array = array();
 		
-		$sql = "SELECT type,handling_class FROM ".self::FOLDER_CONCRETION_TABLE."";
+		$sql = "SELECT type,handling_class FROM ".constant("FOLDER_CONCRETION_TABLE")."";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))
@@ -312,7 +311,7 @@ class FolderConcretion_Access
 
 		if (is_numeric($include_id))
 		{
-			$sql = "DELETE FROM ".self::FOLDER_CONCRETION_TABLE." WHERE include_id = '".$include_id."'";
+			$sql = "DELETE FROM ".constant("FOLDER_CONCRETION_TABLE")." WHERE include_id = '".$include_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($res !== false)

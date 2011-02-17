@@ -24,7 +24,24 @@
 /**
  * 
  */
-	define("PROJECT_TABLE", "core_projects");
-	
-
+	define("PROJECT_HAS_FOLDER_TABLE", 				"core_project_has_folder");
+	define("PROJECT_HAS_ITEM_TABLE", 				"core_project_has_items");
+	define("PROJECT_HAS_PROJECT_STATUS_TABLE", 		"core_project_has_project_status");
+	define("PROJECT_LINK_TABLE", 					"core_project_links");
+	define("PROJECT_LOG_HAS_ITEM_TABLE", 			"core_project_log_has_items");
+	define("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE", 	"core_project_log_has_project_status");
+	define("PROJECT_LOG_TABLE", 					"core_project_log");
+	define("PROJECT_PERMISSION_TABLE", 				"core_project_permissions");
+	define("PROJECT_STATUS_HAS_FOLDER_TABLE", 		"core_project_status_has_folder");
+	define("PROJECT_STATUS_TABLE", 					"core_project_status");
+	define("PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE", 	"core_project_task_has_previous_tasks");
+	define("PROJECT_TASK_MILESTONE_TABLE", 			"core_project_task_milestones");
+	define("PROJECT_TASK_PROCESS_TABLE", 			"core_project_task_processes");
+	define("PROJECT_TASK_STATUS_PROCESS_TABLE", 	"core_project_task_status_processes");
+	define("PROJECT_TASK_TABLE", 					"core_project_tasks");
+	define("PROJECT_TEMPLATE_CAT_TABLE", 			"core_project_template_cats");
+	define("PROJECT_TEMPLATE_TABLE", 				"core_project_templates");
+	define("PROJECT_USER_DATA_TABLE", 				"core_project_user_data");
+	define("PROJECT_TABLE", 						"core_projects");
+	define("VIRTUAL_FOLDER_IS_PROJECT_TABLE", 		"core_virtual_folder_is_project");
 ?>

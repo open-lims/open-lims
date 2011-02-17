@@ -27,8 +27,6 @@
  */
 class ProjectTaskMilestone_Access
 {
-	const PROJECT_TASK_MILESTONE_TABLE = 'core_project_task_milestones';
-	
 	private $task_id;
 	private $name;
 	
@@ -45,7 +43,7 @@ class ProjectTaskMilestone_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::PROJECT_TASK_MILESTONE_TABLE." WHERE task_id='".$task_id."'";
+			$sql = "SELECT * FROM ".constant("PROJECT_TASK_MILESTONE_TABLE")." WHERE task_id='".$task_id."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
@@ -81,7 +79,7 @@ class ProjectTaskMilestone_Access
 		
 		if (is_numeric($task_id) and $name)
 		{
-			$sql_write = "INSERT INTO ".self::PROJECT_TASK_MILESTONE_TABLE." (task_id, name) " .
+			$sql_write = "INSERT INTO ".constant("PROJECT_TASK_MILESTONE_TABLE")." (task_id, name) " .
 					"VALUES (".$task_id.", '".$name."')";
 			$res_write = $db->db_query($sql_write);
 			
@@ -113,7 +111,7 @@ class ProjectTaskMilestone_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".self::PROJECT_TASK_MILESTONE_TABLE." WHERE task_id = ".$tmp_task_id."";
+			$sql = "DELETE FROM ".constant("PROJECT_TASK_MILESTONE_TABLE")." WHERE task_id = ".$tmp_task_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -156,7 +154,7 @@ class ProjectTaskMilestone_Access
 
 		if ($this->task_id and $name)
 		{
-			$sql = "UPDATE ".self::PROJECT_TASK_MILESTONE_TABLE." SET name = '".$name."' WHERE task_id = '".$this->task_id."'";
+			$sql = "UPDATE ".constant("PROJECT_TASK_MILESTONE_TABLE")." SET name = '".$name."' WHERE task_id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))

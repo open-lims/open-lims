@@ -27,8 +27,6 @@
  */
 class ProjectTaskProcess_Access
 {
-	const PROJECT_TASK_PROCESS_TABLE = 'core_project_task_processes';
-	
 	private $task_id;
 	private $name;
 	private $progress;
@@ -46,7 +44,7 @@ class ProjectTaskProcess_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::PROJECT_TASK_PROCESS_TABLE." WHERE task_id='".$task_id."'";
+			$sql = "SELECT * FROM ".constant("PROJECT_TASK_PROCESS_TABLE")." WHERE task_id='".$task_id."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
@@ -84,7 +82,7 @@ class ProjectTaskProcess_Access
 		
 		if (is_numeric($task_id) and $name)
 		{
-			$sql_write = "INSERT INTO ".self::PROJECT_TASK_PROCESS_TABLE." (task_id, name, progress) " .
+			$sql_write = "INSERT INTO ".constant("PROJECT_TASK_PROCESS_TABLE")." (task_id, name, progress) " .
 					"VALUES (".$task_id.", '".$name."', '0')";
 			$res_write = $db->db_query($sql_write);
 			
@@ -116,7 +114,7 @@ class ProjectTaskProcess_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".self::PROJECT_TASK_PROCESS_TABLE." WHERE task_id = ".$tmp_task_id."";
+			$sql = "DELETE FROM ".constant("PROJECT_TASK_PROCESS_TABLE")." WHERE task_id = ".$tmp_task_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -174,7 +172,7 @@ class ProjectTaskProcess_Access
 		
 		if ($this->task_id and $name)
 		{
-			$sql = "UPDATE ".self::PROJECT_TASK_PROCESS_TABLE." SET name = '".$name."' WHERE task_id = '".$this->task_id."'";
+			$sql = "UPDATE ".constant("PROJECT_TASK_PROCESS_TABLE")." SET name = '".$name."' WHERE task_id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -203,7 +201,7 @@ class ProjectTaskProcess_Access
 
 		if ($this->task_id and is_float($progress))
 		{
-			$sql = "UPDATE ".self::PROJECT_TASK_PROCESS_TABLE." SET progress = '".$progress."' WHERE task_id = '".$this->task_id."'";
+			$sql = "UPDATE ".constant("PROJECT_TASK_PROCESS_TABLE")." SET progress = '".$progress."' WHERE task_id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))

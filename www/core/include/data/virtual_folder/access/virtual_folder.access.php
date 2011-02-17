@@ -27,7 +27,6 @@
  */
 class VirtualFolder_Access
 {	
-	const VIRTUAL_FOLDER_TABLE = 'core_virtual_folders';
 	const VIRTUAL_FOLDER_PK_SEQUENCE = 'core_virtual_folders_id_seq';
 	
 	private $virtual_folder_id;
@@ -48,7 +47,7 @@ class VirtualFolder_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::VIRTUAL_FOLDER_TABLE." WHERE id='".$virtual_folder_id."'";
+			$sql = "SELECT * FROM ".constant("VIRTUAL_FOLDER_TABLE")." WHERE id='".$virtual_folder_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -91,7 +90,7 @@ class VirtualFolder_Access
 
 		if (is_numeric($data_entity_id) and $name)
 		{	
-			$sql_write = "INSERT INTO ".self::VIRTUAL_FOLDER_TABLE." (id, data_entity_id, name) " .
+			$sql_write = "INSERT INTO ".constant("VIRTUAL_FOLDER_TABLE")." (id, data_entity_id, name) " .
 								"VALUES (nextval('".self::VIRTUAL_FOLDER_PK_SEQUENCE."'::regclass), ".$data_entity_id.",'".$name."')";		
 
 			$res_write = $db->db_query($sql_write);
@@ -102,7 +101,7 @@ class VirtualFolder_Access
 			}
 			else
 			{
-				$sql_read = "SELECT id FROM ".self::VIRTUAL_FOLDER_TABLE." WHERE id = currval('".self::VIRTUAL_FOLDER_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("VIRTUAL_FOLDER_TABLE")." WHERE id = currval('".self::VIRTUAL_FOLDER_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -130,7 +129,7 @@ class VirtualFolder_Access
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".self::VIRTUAL_FOLDER_TABLE." WHERE id = ".$virtual_folder_id_tmp."";
+			$sql = "DELETE FROM ".constant("VIRTUAL_FOLDER_TABLE")." WHERE id = ".$virtual_folder_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -188,7 +187,7 @@ class VirtualFolder_Access
 			
 		if ($this->folder_id and is_numeric($data_entity_id))
 		{
-			$sql = "UPDATE ".self::VIRTUAL_FOLDER_TABLE." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->virtual_folder_id."";
+			$sql = "UPDATE ".constant("VIRTUAL_FOLDER_TABLE")." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->virtual_folder_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -217,7 +216,7 @@ class VirtualFolder_Access
 
 		if ($this->virtual_folder_id and $name)
 		{
-			$sql = "UPDATE ".self::VIRTUAL_FOLDER_TABLE." SET name = '".$name."' WHERE id = ".$this->virtual_folder_id."";
+			$sql = "UPDATE ".constant("VIRTUAL_FOLDER_TABLE")." SET name = '".$name."' WHERE id = ".$this->virtual_folder_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -249,7 +248,7 @@ class VirtualFolder_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::VIRTUAL_FOLDER_TABLE." WHERE data_entity_id = ".$data_entity_id."";
+			$sql = "SELECT id FROM ".constant("VIRTUAL_FOLDER_TABLE")." WHERE data_entity_id = ".$data_entity_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -279,7 +278,7 @@ class VirtualFolder_Access
 			
 		if (is_numeric($virtual_folder_id))
 		{
-			$sql = "SELECT id FROM ".self::VIRTUAL_FOLDER_TABLE." WHERE id = ".$virtual_folder_id."";
+			$sql = "SELECT id FROM ".constant("VIRTUAL_FOLDER_TABLE")." WHERE id = ".$virtual_folder_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

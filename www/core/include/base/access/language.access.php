@@ -27,7 +27,6 @@
  */
 class Language_Access
 {
-	const LANGUAGE_TABLE = 'core_languages';
 	const LANGUAGE_PK_SEQUENCE = 'core_languages_id_seq';
 	
 	private $language_id;
@@ -51,7 +50,7 @@ class Language_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::LANGUAGE_TABLE." WHERE id='".$language_id."'";
+			$sql = "SELECT * FROM ".constant("LANGUAGE_TABLE")." WHERE id='".$language_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 
@@ -100,14 +99,14 @@ class Language_Access
 		
 		if ($english_name and $language_name and $tsvector_name and $iso_639 and $iso_3166)
 		{
-	 		$sql_write = "INSERT INTO ".self::LANGUAGE_TABLE." (id, english_name, language_name, tsvector_name, iso_639, iso_3166) " .
+	 		$sql_write = "INSERT INTO ".constant("LANGUAGE_TABLE")." (id, english_name, language_name, tsvector_name, iso_639, iso_3166) " .
 								"VALUES (nextval('".self::LANGUAGE_PK_SEQUENCE."'::regclass),'".$english_name."','".$language_name."','".$tsvector_name."','".$iso_639."','".$iso_3166."')";		
 				
 			$res_write = $db->db_query($sql_write);
 		
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".self::LANGUAGE_TABLE." WHERE id = currval('".self::LANGUAGE_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("LANGUAGE_TABLE")." WHERE id = currval('".self::LANGUAGE_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -139,7 +138,7 @@ class Language_Access
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".self::LANGUAGE_TABLE." WHERE id = '".$id_tmp."'";
+			$sql = "DELETE FROM ".constant("LANGUAGE_TABLE")." WHERE id = '".$id_tmp."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -242,7 +241,7 @@ class Language_Access
 
 		if ($this->language_id and $english_name)
 		{
-			$sql = "UPDATE ".self::LANGUAGE_TABLE." SET english_name = '".$english_name."' WHERE id = ".$this->language_id."";
+			$sql = "UPDATE ".constant("LANGUAGE_TABLE")." SET english_name = '".$english_name."' WHERE id = ".$this->language_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -271,7 +270,7 @@ class Language_Access
 
 		if ($this->language_id and $language_name)
 		{
-			$sql = "UPDATE ".self::LANGUAGE_TABLE." SET language_name = '".$language_name."' WHERE id = ".$this->language_id."";
+			$sql = "UPDATE ".constant("LANGUAGE_TABLE")." SET language_name = '".$language_name."' WHERE id = ".$this->language_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -300,7 +299,7 @@ class Language_Access
 
 		if ($this->language_id and $tsvector_name)
 		{
-			$sql = "UPDATE ".self::LANGUAGE_TABLE." SET tsvector_name = '".$tsvector_name."' WHERE id = ".$this->language_id."";
+			$sql = "UPDATE ".constant("LANGUAGE_TABLE")." SET tsvector_name = '".$tsvector_name."' WHERE id = ".$this->language_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -329,7 +328,7 @@ class Language_Access
 			
 		if ($this->language_id and $iso_639)
 		{
-			$sql = "UPDATE ".self::LANGUAGE_TABLE." SET iso_639 = '".$iso_639."' WHERE id = ".$this->language_id."";
+			$sql = "UPDATE ".constant("LANGUAGE_TABLE")." SET iso_639 = '".$iso_639."' WHERE id = ".$this->language_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -358,7 +357,7 @@ class Language_Access
 
 		if ($this->language_id and $iso_3166)
 		{
-			$sql = "UPDATE ".self::LANGUAGE_TABLE." SET iso_3166 = '".$iso_3166."' WHERE id = ".$this->language_id."";
+			$sql = "UPDATE ".constant("LANGUAGE_TABLE")." SET iso_3166 = '".$iso_3166."' WHERE id = ".$this->language_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -387,7 +386,7 @@ class Language_Access
 		
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::LANGUAGE_TABLE." ORDER BY english_name";
+		$sql = "SELECT id FROM ".constant("LANGUAGE_TABLE")." ORDER BY english_name";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))

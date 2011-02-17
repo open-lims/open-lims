@@ -27,7 +27,6 @@
  */
 class SampleDepository_Access
 {
-	const SAMPLE_DEPOSITORY_TABLE = 'core_sample_depositories';
 	const SAMPLE_DEPOSITORY_PK_SEQUENCE = 'core_sample_depositories_id_seq';
 
 	private $id;
@@ -48,7 +47,7 @@ class SampleDepository_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::SAMPLE_DEPOSITORY_TABLE." WHERE id='".$id."'";
+			$sql = "SELECT * FROM ".constant("SAMPLE_DEPOSITORY_TABLE")." WHERE id='".$id."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
@@ -97,13 +96,13 @@ class SampleDepository_Access
 				$toid_insert = "NULL";
 			}
 			
-			$sql_write = "INSERT INTO ".self::SAMPLE_DEPOSITORY_TABLE." (id, toid, name) " .
+			$sql_write = "INSERT INTO ".constant("SAMPLE_DEPOSITORY_TABLE")." (id, toid, name) " .
 					"VALUES (nextval('".self::SAMPLE_DEPOSITORY_PK_SEQUENCE."'::regclass), ".$toid_insert.", '".$name."')";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".self::SAMPLE_DEPOSITORY_TABLE." WHERE id = currval('".self::SAMPLE_DEPOSITORY_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("SAMPLE_DEPOSITORY_TABLE")." WHERE id = currval('".self::SAMPLE_DEPOSITORY_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -135,7 +134,7 @@ class SampleDepository_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".self::SAMPLE_DEPOSITORY_TABLE." WHERE id = ".$tmp_id."";
+			$sql = "DELETE FROM ".constant("SAMPLE_DEPOSITORY_TABLE")." WHERE id = ".$tmp_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -193,7 +192,7 @@ class SampleDepository_Access
 		
 		if ($this->id and is_numeric($toid))
 		{
-			$sql = "UPDATE ".self::SAMPLE_DEPOSITORY_TABLE." SET toid = '".$toid."' WHERE id = '".$this->id."'";
+			$sql = "UPDATE ".constant("SAMPLE_DEPOSITORY_TABLE")." SET toid = '".$toid."' WHERE id = '".$this->id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -222,7 +221,7 @@ class SampleDepository_Access
 
 		if ($this->id and $name)
 		{
-			$sql = "UPDATE ".self::SAMPLE_DEPOSITORY_TABLE." SET name = '".$name."' WHERE id = '".$this->id."'";
+			$sql = "UPDATE ".constant("SAMPLE_DEPOSITORY_TABLE")." SET name = '".$name."' WHERE id = '".$this->id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -256,7 +255,7 @@ class SampleDepository_Access
 			
 			$name = trim(strtolower($name));
 			
-			$sql = "SELECT id FROM ".self::SAMPLE_DEPOSITORY_TABLE." WHERE id = '".$id."'";
+			$sql = "SELECT id FROM ".constant("SAMPLE_DEPOSITORY_TABLE")." WHERE id = '".$id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -289,7 +288,7 @@ class SampleDepository_Access
 			
 			$name = trim(strtolower($name));
 			
-			$sql = "SELECT id FROM ".self::SAMPLE_DEPOSITORY_TABLE." WHERE TRIM(LOWER(name)) = '".$name."'";
+			$sql = "SELECT id FROM ".constant("SAMPLE_DEPOSITORY_TABLE")." WHERE TRIM(LOWER(name)) = '".$name."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -320,7 +319,7 @@ class SampleDepository_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::SAMPLE_DEPOSITORY_TABLE." WHERE toid = ".$toid." AND toid != id ORDER BY name";
+			$sql = "SELECT id FROM ".constant("SAMPLE_DEPOSITORY_TABLE")." WHERE toid = ".$toid." AND toid != id ORDER BY name";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -352,7 +351,7 @@ class SampleDepository_Access
 				
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::SAMPLE_DEPOSITORY_TABLE." WHERE toid IS NULL OR toid = id ORDER BY name";
+		$sql = "SELECT id FROM ".constant("SAMPLE_DEPOSITORY_TABLE")." WHERE toid IS NULL OR toid = id ORDER BY name";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))
@@ -379,7 +378,7 @@ class SampleDepository_Access
 				
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::SAMPLE_DEPOSITORY_TABLE." ORDER BY name";
+		$sql = "SELECT id FROM ".constant("SAMPLE_DEPOSITORY_TABLE")." ORDER BY name";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))

@@ -38,6 +38,7 @@ class DataJoin_Access
 	/**
 	 * @param integer $toid
 	 * @return array
+	 * @todo redesign
 	 */
 	public static function get_images_in_folder($toid)
 	{

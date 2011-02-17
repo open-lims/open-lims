@@ -452,6 +452,44 @@ class SystemHandler implements SystemHandlerInterface
 
 	}
 
+	/**
+	 * For AJAX Handler only
+	 */
+	public static function init_db_constants()
+	{		
+		$registered_include_array = BaseInclude_Access::list_folder_entries();		
+		$include_folder_array = scandir($GLOBALS[include_dir]);
+		
+		if (is_array($include_folder_array) and count($include_folder_array) >= 1)
+		{
+			foreach($include_folder_array as $key => $value)
+			{
+				$sub_folder = $GLOBALS[include_dir]."/".$value;
+				if (is_dir($sub_folder) and $key > 1)
+				{
+					$config_folder = $sub_folder."/config";
+					if (is_dir($config_folder))
+					{
+						$config_file = $config_folder."/include_info.php";
+						if (is_file($config_file))
+						{
+							include($config_file);
+							
+							if ($no_db_table_name != true)
+							{
+								$db_table_name_file = $config_folder."/db_table_name.php";
+								if (is_file($db_table_name_file))
+								{
+									include($db_table_name_file);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	public static function get_include_folders()
 	{
 		return BaseInclude_Access::list_folder_entries();

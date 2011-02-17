@@ -27,7 +27,6 @@
  */
 class ItemClass_Access
 {
-	const ITEM_CLASS_TABLE = 'core_item_classes';
 	const ITEM_CLASS_PK_SEQUENCE = 'core_item_classes_id_seq';
 
 	private $class_id;
@@ -50,7 +49,7 @@ class ItemClass_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::ITEM_CLASS_TABLE." WHERE id='".$class_id."'";
+			$sql = "SELECT * FROM ".constant("ITEM_CLASS_TABLE")." WHERE id='".$class_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -95,14 +94,14 @@ class ItemClass_Access
 		{
 			$datetime = date("Y-m-d H:i:s");
 			
-			$sql_write = "INSERT INTO ".self::ITEM_CLASS_TABLE." (id,name,datetime,owner_id,colour) " .
+			$sql_write = "INSERT INTO ".constant("ITEM_CLASS_TABLE")." (id,name,datetime,owner_id,colour) " .
 					"VALUES (nextval('".self::ITEM_CLASS_PK_SEQUENCE."'::regclass),'".$name."','".$datetime."','".$owner_id."',NULL)";
 					
 			$res_write = $db->db_query($sql_write);	
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".self::ITEM_CLASS_TABLE." WHERE id = currval('".self::ITEM_CLASS_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("ITEM_CLASS_TABLE")." WHERE id = currval('".self::ITEM_CLASS_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 									
@@ -134,7 +133,7 @@ class ItemClass_Access
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".self::ITEM_CLASS_TABLE." WHERE id = ".$class_id_tmp."";
+			$sql = "DELETE FROM ".constant("ITEM_CLASS_TABLE")." WHERE id = ".$class_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -222,7 +221,7 @@ class ItemClass_Access
 
 		if ($this->class_id and $name)
 		{
-			$sql = "UPDATE ".self::ITEM_CLASS_TABLE." SET name = '".$name."' WHERE id = ".$this->class_id."";
+			$sql = "UPDATE ".constant("ITEM_CLASS_TABLE")." SET name = '".$name."' WHERE id = ".$this->class_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -251,7 +250,7 @@ class ItemClass_Access
 
 		if ($this->class_id and $datetime)
 		{
-			$sql = "UPDATE ".self::ITEM_CLASS_TABLE." SET datetime = '".$datetime."' WHERE id = ".$this->class_id."";
+			$sql = "UPDATE ".constant("ITEM_CLASS_TABLE")." SET datetime = '".$datetime."' WHERE id = ".$this->class_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -280,7 +279,7 @@ class ItemClass_Access
 
 		if ($this->class_id and is_numeric($owner_id))
 		{
-			$sql = "UPDATE ".self::ITEM_CLASS_TABLE." SET owner_id = '".$owner_id."' WHERE id = ".$this->class_id."";
+			$sql = "UPDATE ".constant("ITEM_CLASS_TABLE")." SET owner_id = '".$owner_id."' WHERE id = ".$this->class_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -309,7 +308,7 @@ class ItemClass_Access
 
 		if ($this->class_id and $colour)
 		{
-			$sql = "UPDATE ".self::ITEM_CLASS_TABLE." SET colour = '".$colour."' WHERE id = ".$this->class_id."";
+			$sql = "UPDATE ".constant("ITEM_CLASS_TABLE")." SET colour = '".$colour."' WHERE id = ".$this->class_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -338,7 +337,7 @@ class ItemClass_Access
 
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::ITEM_CLASS_TABLE."";
+		$sql = "SELECT id FROM ".constant("ITEM_CLASS_TABLE")."";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))

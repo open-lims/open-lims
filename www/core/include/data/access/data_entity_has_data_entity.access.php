@@ -27,8 +27,6 @@
  */
 class DataEntityHasDataEntity_Access
 {
-	const DATA_ENTITY_HAS_DATA_ENTITY_TABLE = 'core_data_entity_has_data_entities';
-
 	private $data_entity_pid;
 	private $data_entity_cid;
 
@@ -41,7 +39,7 @@ class DataEntityHasDataEntity_Access
 			
 		if (is_numeric($data_entity_pid) and is_numeric($data_entity_cid))
 		{
-			$sql = "SELECT * FROM ".self::DATA_ENTITY_HAS_DATA_ENTITY_TABLE." WHERE data_entity_pid = ".$data_entity_pid." AND data_entity_cid = ".$data_entity_cid."";
+			$sql = "SELECT * FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_pid = ".$data_entity_pid." AND data_entity_cid = ".$data_entity_cid."";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
@@ -83,7 +81,7 @@ class DataEntityHasDataEntity_Access
 		
 		if (is_numeric($data_entity_pid) and is_numeric($data_entity_cid))
 		{
-			$sql_write = "INSERT INTO ".self::DATA_ENTITY_HAS_DATA_ENTITY_TABLE." (data_entity_pid,data_entity_cid) " .
+			$sql_write = "INSERT INTO ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." (data_entity_pid,data_entity_cid) " .
 					"VALUES (".$data_entity_pid.",".$data_entity_cid.")";
 			$res_write = $db->db_query($sql_write);
 			
@@ -111,7 +109,7 @@ class DataEntityHasDataEntity_Access
 		
 		if ($this->data_entity_pid)
 		{		
-			$sql = "DELETE FROM ".self::DATA_ENTITY_HAS_DATA_ENTITY_TABLE." WHERE data_entity_pid = ".$this->data_entity_pid." AND data_entity_cid = ".$this->data_entity_cid."";
+			$sql = "DELETE FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_pid = ".$this->data_entity_pid." AND data_entity_cid = ".$this->data_entity_cid."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -143,7 +141,7 @@ class DataEntityHasDataEntity_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT data_entity_cid FROM ".self::DATA_ENTITY_HAS_DATA_ENTITY_TABLE." WHERE data_entity_pid = ".$data_entity_pid."";
+			$sql = "SELECT data_entity_cid FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_pid = ".$data_entity_pid."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -178,7 +176,7 @@ class DataEntityHasDataEntity_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT data_entity_pid FROM ".self::DATA_ENTITY_HAS_DATA_ENTITY_TABLE." WHERE data_entity_cid = ".$data_entity_cid."";
+			$sql = "SELECT data_entity_pid FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_cid = ".$data_entity_cid."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -213,7 +211,7 @@ class DataEntityHasDataEntity_Access
 		{
 			$return_array = array();
 			
-			$sql = "DELETE FROM ".self::DATA_ENTITY_HAS_DATA_ENTITY_TABLE." WHERE data_entity_cid = ".$data_entity_cid."";
+			$sql = "DELETE FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_cid = ".$data_entity_cid."";
 			$res = $db->db_query($sql);
 			
 			if ($res !== false)

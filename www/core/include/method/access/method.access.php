@@ -27,7 +27,6 @@
  */
 class Method_Access
 {
-	const METHOD_TABLE = 'core_methods';
 	const METHOD_PK_SEQUENCE = 'core_methods_id_seq';
 
 	private $method_id;
@@ -49,7 +48,7 @@ class Method_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::METHOD_TABLE." WHERE id='".$method_id."'";
+			$sql = "SELECT * FROM ".constant("METHOD_TABLE")." WHERE id='".$method_id."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
@@ -92,13 +91,13 @@ class Method_Access
 		{
 			$datetime = date("Y-m-d H:i:s");
 			
-			$sql_write = "INSERT INTO ".self::METHOD_TABLE." (id,type_id,owner_id,datetime) " .
+			$sql_write = "INSERT INTO ".constant("METHOD_TABLE")." (id,type_id,owner_id,datetime) " .
 					"VALUES (nextval('".self::METHOD_PK_SEQUENCE."'::regclass),".$type_id.",".$owner_id.",'".$datetime."')";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".self::METHOD_TABLE." WHERE id = currval('".self::METHOD_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("METHOD_TABLE")." WHERE id = currval('".self::METHOD_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -130,7 +129,7 @@ class Method_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".self::METHOD_TABLE." WHERE id = ".$tmp_method_id."";
+			$sql = "DELETE FROM ".constant("METHOD_TABLE")." WHERE id = ".$tmp_method_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -203,7 +202,7 @@ class Method_Access
 
 		if ($this->method_id and is_numeric($type_id))
 		{
-			$sql = "UPDATE ".self::METHOD_TABLE." SET type_id = '".$type_id."' WHERE id = '".$this->method_id."'";
+			$sql = "UPDATE ".constant("METHOD_TABLE")." SET type_id = '".$type_id."' WHERE id = '".$this->method_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -232,7 +231,7 @@ class Method_Access
 	
 		if ($this->method_id and is_numeric($owner_id))
 		{
-			$sql = "UPDATE ".self::METHOD_TABLE." SET owner_id = '".$owner_id."' WHERE id = '".$this->method_id."'";
+			$sql = "UPDATE ".constant("METHOD_TABLE")." SET owner_id = '".$owner_id."' WHERE id = '".$this->method_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -261,7 +260,7 @@ class Method_Access
 
 		if ($this->method_id and $datetime)
 		{
-			$sql = "UPDATE ".self::METHOD_TABLE." SET datetime = '".$datetime."' WHERE id = '".$this->method_id."'";
+			$sql = "UPDATE ".constant("METHOD_TABLE")." SET datetime = '".$datetime."' WHERE id = '".$this->method_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -293,7 +292,7 @@ class Method_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::METHOD_TABLE." WHERE owner_id = ".$owner_id."";
+			$sql = "SELECT id FROM ".constant("METHOD_TABLE")." WHERE owner_id = ".$owner_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -328,7 +327,7 @@ class Method_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::METHOD_TABLE." WHERE type_id = ".$type_id."";
+			$sql = "SELECT id FROM ".constant("METHOD_TABLE")." WHERE type_id = ".$type_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -360,7 +359,7 @@ class Method_Access
 
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::METHOD_TABLE."";
+		$sql = "SELECT id FROM ".constant("METHOD_TABLE")."";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))

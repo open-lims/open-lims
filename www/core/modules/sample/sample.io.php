@@ -1349,10 +1349,7 @@ class SampleIO
 								}
 								
 								$project_item->create_log_entry();	
-								
-								$sample_security = new SampleSecurity($sample_id);
-			    				$sample_security->create_project($project_id);
-								
+
 								ProjectTask::check_over_time_tasks($project_id);
 								
 								$paramquery = $_GET;

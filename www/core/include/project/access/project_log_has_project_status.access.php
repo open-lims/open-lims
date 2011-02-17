@@ -27,7 +27,6 @@
  */
 class ProjectLogHasProjectStatus_Access
 {
-	const PROJECT_LOG_HAS_PROJECT_STATUS_TABLE = 'core_project_log_has_project_status';
 	const PROJECT_LOG_HAS_PROJECT_STATUS_PK_SEQUENCE = 'core_project_log_has_project_status_primary_key_seq';
 
 	private $primary_key;
@@ -48,7 +47,7 @@ class ProjectLogHasProjectStatus_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::PROJECT_LOG_HAS_PROJECT_STATUS_TABLE." WHERE primary_key='".$primary_key."'";
+			$sql = "SELECT * FROM ".constant("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE")." WHERE primary_key='".$primary_key."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
@@ -87,13 +86,13 @@ class ProjectLogHasProjectStatus_Access
 		
 		if (is_numeric($log_id) and is_numeric($status_id))
 		{
-			$sql_write = "INSERT INTO ".self::PROJECT_LOG_HAS_PROJECT_STATUS_TABLE." (primary_key,log_id,status_id) " .
+			$sql_write = "INSERT INTO ".constant("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE")." (primary_key,log_id,status_id) " .
 					"VALUES (nextval('".self::PROJECT_LOG_HAS_PROJECT_STATUS_PK_SEQUENCE."'::regclass),".$log_id.",".$status_id.")";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{	
-				$sql_read = "SELECT primary_key FROM ".self::PROJECT_LOG_HAS_PROJECT_STATUS_TABLE." WHERE primary_key = currval('".self::PROJECT_LOG_HAS_PROJECT_STATUS_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT primary_key FROM ".constant("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE")." WHERE primary_key = currval('".self::PROJECT_LOG_HAS_PROJECT_STATUS_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -125,7 +124,7 @@ class ProjectLogHasProjectStatus_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".self::PROJECT_LOG_HAS_PROJECT_STATUS_TABLE." WHERE primary_key = ".$tmp_primary_key."";
+			$sql = "DELETE FROM ".constant("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE")." WHERE primary_key = ".$tmp_primary_key."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -183,7 +182,7 @@ class ProjectLogHasProjectStatus_Access
 	
 		if ($this->primary_key and is_numeric($log_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_LOG_HAS_PROJECT_STATUS_TABLE." SET log_id = '".$log_id."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE")." SET log_id = '".$log_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -212,7 +211,7 @@ class ProjectLogHasProjectStatus_Access
 		
 		if ($this->primary_key and is_numeric($status_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_LOG_HAS_PROJECT_STATUS_TABLE." SET status_id = '".$status_id."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE")." SET status_id = '".$status_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -241,7 +240,7 @@ class ProjectLogHasProjectStatus_Access
 	
 		$return_array = array();
 		
-		$sql = "SELECT primary_key FROM ".self::PROJECT_LOG_HAS_PROJECT_STATUS_TABLE."";
+		$sql = "SELECT primary_key FROM ".constant("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE")."";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))
@@ -271,7 +270,7 @@ class ProjectLogHasProjectStatus_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".self::PROJECT_LOG_HAS_PROJECT_STATUS_TABLE." WHERE log_id = '".$log_id."'";
+			$sql = "SELECT primary_key FROM ".constant("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE")." WHERE log_id = '".$log_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 

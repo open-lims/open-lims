@@ -27,8 +27,6 @@
  */
 class DataUserData_Access
 {
-	const DATA_USER_DATA_TABLE = 'core_data_user_data';
-	
 	private $user_id;
 	
 	private $quota;
@@ -47,7 +45,7 @@ class DataUserData_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::DATA_USER_DATA_TABLE." WHERE user_id='".$user_id."'";
+			$sql = "SELECT * FROM ".constant("DATA_USER_DATA_TABLE")." WHERE user_id='".$user_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -85,7 +83,7 @@ class DataUserData_Access
 		
 		if (is_numeric($user_id) and is_numeric($quota))
 		{
-			$sql_write = "INSERT INTO ".self::DATA_USER_DATA_TABLE." (user_id,quota,filesize) " .
+			$sql_write = "INSERT INTO ".constant("DATA_USER_DATA_TABLE")." (user_id,quota,filesize) " .
 					"VALUES (".$user_id.",".$quota.",0)";
 					
 			$res_write = $db->db_query($sql_write);	
@@ -118,7 +116,7 @@ class DataUserData_Access
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".self::DATA_USER_DATA_TABLE." WHERE user_id = ".$user_id_tmp."";
+			$sql = "DELETE FROM ".constant("DATA_USER_DATA_TABLE")." WHERE user_id = ".$user_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -176,7 +174,7 @@ class DataUserData_Access
 			
 		if ($this->user_id and is_numeric($quota))
 		{
-			$sql = "UPDATE ".self::DATA_USER_DATA_TABLE." SET quota = '".$quota."' WHERE user_id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("DATA_USER_DATA_TABLE")." SET quota = '".$quota."' WHERE user_id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -205,7 +203,7 @@ class DataUserData_Access
 			
 		if ($this->user_id and is_numeric($filesize))
 		{
-			$sql = "UPDATE ".self::DATA_USER_DATA_TABLE." SET filesize = '".$filesize."' WHERE user_id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("DATA_USER_DATA_TABLE")." SET filesize = '".$filesize."' WHERE user_id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -223,5 +221,27 @@ class DataUserData_Access
 			return false;
 		}
 	}
+	
+	
+	/**
+	 * @return integer
+	 */
+	public static function get_used_space()
+   	{
+   		global $db;
+		
+		$sql = "SELECT SUM(filesize) AS size FROM ".constant("DATA_USER_DATA_TABLE")."";
+		$res = $db->db_query($sql);
+		$data = $db->db_fetch_assoc($res);
+		
+		if ($data[size])
+		{
+			return $data[size];
+		}
+		else
+		{
+			return null;
+		}
+   	}
 }
 ?>

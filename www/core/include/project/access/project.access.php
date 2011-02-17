@@ -27,7 +27,6 @@
  */
 class Project_Access
 {
-	const PROJECT_TABLE = 'core_projects';
 	const PROJECT_PK_SEQUENCE = 'core_projects_id_seq';
 
 	private $project_id;
@@ -55,7 +54,7 @@ class Project_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::PROJECT_TABLE." WHERE id='".$project_id."'";
+			$sql = "SELECT * FROM ".constant("PROJECT_TABLE")." WHERE id='".$project_id."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
@@ -134,13 +133,13 @@ class Project_Access
 			
 			if ($organisation_unit_id)
 			{
-				$sql_write = "INSERT INTO ".self::PROJECT_TABLE." " .
+				$sql_write = "INSERT INTO ".constant("PROJECT_TABLE")." " .
 								"(id,toid_organ_unit,toid_project,datetime,name,owner_id,template_id,quota,filesize,deleted) " .
 								"VALUES (nextval('".self::PROJECT_PK_SEQUENCE."'::regclass),".$organisation_unit_id.",NULL,'".$datetime."','".$name."',".$owner_id.",".$template_id.",".$project_quota_insert.", 0, 'f')";
 			}
 			else
 			{
-				$sql_write = "INSERT INTO ".self::PROJECT_TABLE." " .
+				$sql_write = "INSERT INTO ".constant("PROJECT_TABLE")." " .
 								"(id,toid_organ_unit,toid_project,datetime,name,owner_id,template_id,quota,filesize,deleted) " .
 								"VALUES (nextval('".self::PROJECT_PK_SEQUENCE."'::regclass),NULL,".$parent_project_id.",'".$datetime."','".$name."',".$owner_id.",".$template_id.",".$project_quota_insert.", 0, 'f')";	
 			}
@@ -149,7 +148,7 @@ class Project_Access
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".self::PROJECT_TABLE." WHERE id = currval('".self::PROJECT_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("PROJECT_TABLE")." WHERE id = currval('".self::PROJECT_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);	
 				
@@ -181,7 +180,7 @@ class Project_Access
     		
     		$this->__destruct();
 
-    		$sql = "DELETE FROM ".self::PROJECT_TABLE." WHERE id = ".$tmp_project_id."";
+    		$sql = "DELETE FROM ".constant("PROJECT_TABLE")." WHERE id = ".$tmp_project_id."";
     		$res = $db->db_query($sql);
     		
     		if ($db->db_affected_rows($res) == 1)
@@ -353,7 +352,7 @@ class Project_Access
 				$organ_unit_id_insert = $organ_unit_id;
 			}
 			
-			$sql = "UPDATE ".self::PROJECT_TABLE." SET toid_organ_unit = ".$organ_unit_id_insert." WHERE id = ".$this->project_id."";
+			$sql = "UPDATE ".constant("PROJECT_TABLE")." SET toid_organ_unit = ".$organ_unit_id_insert." WHERE id = ".$this->project_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -391,7 +390,7 @@ class Project_Access
 				$project_id_insert = $project_id;
 			}
 			
-			$sql = "UPDATE ".self::PROJECT_TABLE." SET toid_project = ".$project_id_insert." WHERE id = ".$this->project_id."";
+			$sql = "UPDATE ".constant("PROJECT_TABLE")." SET toid_project = ".$project_id_insert." WHERE id = ".$this->project_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -420,7 +419,7 @@ class Project_Access
 
 		if ($this->project_id and $datetime)
 		{
-			$sql = "UPDATE ".self::PROJECT_TABLE." SET datetime = '".$datetime."' WHERE id = ".$this->project_id."";
+			$sql = "UPDATE ".constant("PROJECT_TABLE")." SET datetime = '".$datetime."' WHERE id = ".$this->project_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -448,7 +447,7 @@ class Project_Access
 
 		if ($this->project_id and $name)
 		{
-			$sql = "UPDATE ".self::PROJECT_TABLE." SET name = '".$name."' WHERE id = ".$this->project_id."";
+			$sql = "UPDATE ".constant("PROJECT_TABLE")." SET name = '".$name."' WHERE id = ".$this->project_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -477,7 +476,7 @@ class Project_Access
 
 		if ($this->project_id and is_numeric($owner_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_TABLE." SET owner_id = ".$owner_id." WHERE id = ".$this->project_id."";
+			$sql = "UPDATE ".constant("PROJECT_TABLE")." SET owner_id = ".$owner_id." WHERE id = ".$this->project_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -506,7 +505,7 @@ class Project_Access
 		
 		if ($this->project_id and is_numeric($template_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_TABLE." SET template_id = ".$template_id." WHERE id = ".$this->project_id."";
+			$sql = "UPDATE ".constant("PROJECT_TABLE")." SET template_id = ".$template_id." WHERE id = ".$this->project_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -535,7 +534,7 @@ class Project_Access
 			
 		if ($this->project_id and $quota)
 		{
-			$sql = "UPDATE ".self::PROJECT_TABLE." SET quota = '".$quota."' WHERE id = ".$this->project_id."";
+			$sql = "UPDATE ".constant("PROJECT_TABLE")." SET quota = '".$quota."' WHERE id = ".$this->project_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -565,7 +564,7 @@ class Project_Access
 		if ($this->project_id and $filesize)
 		{
 			
-			$sql = "UPDATE ".self::PROJECT_TABLE." SET filesize = '".$filesize."' WHERE id = ".$this->project_id."";
+			$sql = "UPDATE ".constant("PROJECT_TABLE")." SET filesize = '".$filesize."' WHERE id = ".$this->project_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -603,7 +602,7 @@ class Project_Access
 				$deleted_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::PROJECT_TABLE." SET deleted = '".$deleted_insert."' WHERE id = ".$this->project_id."";
+			$sql = "UPDATE ".constant("PROJECT_TABLE")." SET deleted = '".$deleted_insert."' WHERE id = ".$this->project_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -634,7 +633,7 @@ class Project_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::PROJECT_TABLE." WHERE toid_organ_unit = ".$organ_unit_id."";
+			$sql = "SELECT id FROM ".constant("PROJECT_TABLE")." WHERE toid_organ_unit = ".$organ_unit_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -669,7 +668,7 @@ class Project_Access
 		{	
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::PROJECT_TABLE." WHERE toid_project = ".$project_id."";
+			$sql = "SELECT id FROM ".constant("PROJECT_TABLE")." WHERE toid_project = ".$project_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -704,7 +703,7 @@ class Project_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::PROJECT_TABLE." WHERE owner_id = ".$owner_id."";
+			$sql = "SELECT id FROM ".constant("PROJECT_TABLE")." WHERE owner_id = ".$owner_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -739,7 +738,7 @@ class Project_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::PROJECT_TABLE." WHERE template_id = ".$template_id."";
+			$sql = "SELECT id FROM ".constant("PROJECT_TABLE")." WHERE template_id = ".$template_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -771,7 +770,7 @@ class Project_Access
 
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::PROJECT_TABLE." WHERE toid_project IS NULL AND toid_organ_unit IS NOT NULL";
+		$sql = "SELECT id FROM ".constant("PROJECT_TABLE")." WHERE toid_project IS NULL AND toid_organ_unit IS NOT NULL";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))
@@ -799,7 +798,7 @@ class Project_Access
 			
 		if (is_numeric($project_id))
 		{
-			$sql = "SELECT id FROM ".self::PROJECT_TABLE." WHERE id = ".$project_id."";
+			$sql = "SELECT id FROM ".constant("PROJECT_TABLE")." WHERE id = ".$project_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -831,7 +830,7 @@ class Project_Access
 		{
 			$name = strtolower(trim($name));
 			
-			$sql = "SELECT id FROM ".self::PROJECT_TABLE." WHERE LOWER(TRIM(name)) = '".$name."' AND toid_organ_unit = ".$toid_organ_unit."";
+			$sql = "SELECT id FROM ".constant("PROJECT_TABLE")." WHERE LOWER(TRIM(name)) = '".$name."' AND toid_organ_unit = ".$toid_organ_unit."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -863,7 +862,7 @@ class Project_Access
 		{
 			$name = strtolower(trim($name));
 			
-			$sql = "SELECT id FROM ".self::PROJECT_TABLE." WHERE LOWER(TRIM(name)) = '".$name."' AND toid_project = ".$toid_project."";
+			$sql = "SELECT id FROM ".constant("PROJECT_TABLE")." WHERE LOWER(TRIM(name)) = '".$name."' AND toid_project = ".$toid_project."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -889,7 +888,7 @@ class Project_Access
    	{
    		global $db;
 		
-		$sql = "SELECT SUM(filesize) AS size FROM ".self::PROJECT_TABLE."";
+		$sql = "SELECT SUM(filesize) AS size FROM ".constant("PROJECT_TABLE")."";
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);
 		
@@ -917,7 +916,7 @@ class Project_Access
    		if (($name or (is_array($template_array) and count($template_array) >= 1)) and 
    			(is_array($organisation_unit_array) and count($organisation_unit_array) >= 1))
    		{
-   			$base_sql = "SELECT id FROM ".self::PROJECT_TABLE." WHERE";
+   			$base_sql = "SELECT id FROM ".constant("PROJECT_TABLE")." WHERE";
    			
    			if ($name)
    			{
@@ -1021,7 +1020,7 @@ class Project_Access
    		if (($name or  (is_array($template_array) and count($template_array) >= 1)) and  
    			(is_array($organisation_unit_array) and count($organisation_unit_array) >= 1))
    		{
-   			$base_sql = "SELECT id FROM ".self::PROJECT_TABLE." WHERE";
+   			$base_sql = "SELECT id FROM ".constant("PROJECT_TABLE")." WHERE";
    			
    			if ($name)
    			{

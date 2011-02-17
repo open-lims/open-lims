@@ -27,7 +27,6 @@
  */
 class ProjectHasItem_Access
 {
-	const PROJECT_HAS_ITEM_TABLE = 'core_project_has_items';
 	const PROJECT_HAS_ITEM_PK_SEQUENCE = 'core_project_has_items_primary_key_seq';
 
 	private $primary_key;
@@ -52,7 +51,7 @@ class ProjectHasItem_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::PROJECT_HAS_ITEM_TABLE." WHERE primary_key='".$primary_key."'";
+			$sql = "SELECT * FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE primary_key='".$primary_key."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
@@ -124,13 +123,13 @@ class ProjectHasItem_Access
 				$gid_insert = "NULL";
 			}
 			
-			$sql_write = "INSERT INTO ".self::PROJECT_HAS_ITEM_TABLE." (primary_key,project_id,item_id,active, required, gid, project_status_id) " .
+			$sql_write = "INSERT INTO ".constant("PROJECT_HAS_ITEM_TABLE")." (primary_key,project_id,item_id,active, required, gid, project_status_id) " .
 					"VALUES (nextval('".self::PROJECT_HAS_ITEM_PK_SEQUENCE."'::regclass),".$project_id.",".$item_id.",'t','f',".$gid_insert.",NULL)";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT primary_key FROM ".self::PROJECT_HAS_ITEM_TABLE." WHERE primary_key = currval('".self::PROJECT_HAS_ITEM_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE primary_key = currval('".self::PROJECT_HAS_ITEM_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -162,7 +161,7 @@ class ProjectHasItem_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".self::PROJECT_HAS_ITEM_TABLE." WHERE primary_key = ".$tmp_primary_key."";
+			$sql = "DELETE FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE primary_key = ".$tmp_primary_key."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -280,7 +279,7 @@ class ProjectHasItem_Access
 
 		if ($this->primary_key and is_numeric($project_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_HAS_ITEM_TABLE." SET project_id = '".$project_id."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET project_id = '".$project_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -309,7 +308,7 @@ class ProjectHasItem_Access
 
 		if ($this->primary_key and is_numeric($item_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_HAS_ITEM_TABLE." SET item_id = '".$item_id."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET item_id = '".$item_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -347,7 +346,7 @@ class ProjectHasItem_Access
 				$active_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::PROJECT_HAS_ITEM_TABLE." SET active = '".$active_insert."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET active = '".$active_insert."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -385,7 +384,7 @@ class ProjectHasItem_Access
 				$required_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::PROJECT_HAS_ITEM_TABLE." SET required = '".$required_insert."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET required = '".$required_insert."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -414,7 +413,7 @@ class ProjectHasItem_Access
 
 		if ($this->primary_key and is_numeric($gid))
 		{
-			$sql = "UPDATE ".self::PROJECT_HAS_ITEM_TABLE." SET gid = '".$gid."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET gid = '".$gid."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -443,7 +442,7 @@ class ProjectHasItem_Access
 
 		if ($this->primary_key and is_numeric($project_status_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_HAS_ITEM_TABLE." SET project_status_id = '".$project_status_id."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET project_status_id = '".$project_status_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -476,7 +475,7 @@ class ProjectHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".self::PROJECT_HAS_ITEM_TABLE." WHERE item_id = ".$item_id." AND project_id = ".$project_id."";
+			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND project_id = ".$project_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 				
@@ -509,7 +508,7 @@ class ProjectHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT gid FROM ".self::PROJECT_HAS_ITEM_TABLE." WHERE item_id = ".$item_id." AND project_id = ".$project_id." AND project_status_id = ".$project_status_id."";
+			$sql = "SELECT gid FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND project_id = ".$project_id." AND project_status_id = ".$project_status_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 				
@@ -541,7 +540,7 @@ class ProjectHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT gid FROM ".self::PROJECT_HAS_ITEM_TABLE." WHERE item_id = ".$item_id." AND status_id = ".$status_id."";
+			$sql = "SELECT gid FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND status_id = ".$status_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 				
@@ -572,7 +571,7 @@ class ProjectHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".self::PROJECT_HAS_ITEM_TABLE." WHERE item_id = ".$item_id."";
+			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -608,7 +607,7 @@ class ProjectHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT item_id FROM ".self::PROJECT_HAS_ITEM_TABLE." WHERE project_id = ".$project_id." AND project_status_id = ".$project_status_id."";
+			$sql = "SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$project_id." AND project_status_id = ".$project_status_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -643,7 +642,7 @@ class ProjectHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".self::PROJECT_HAS_ITEM_TABLE." WHERE project_id = ".$project_id."";
+			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$project_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -675,7 +674,7 @@ class ProjectHasItem_Access
 
 		$return_array = array();
 		
-		$sql = "SELECT primary_key FROM ".self::PROJECT_HAS_ITEM_TABLE."";
+		$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")."";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))

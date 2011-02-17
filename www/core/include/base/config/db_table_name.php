@@ -24,7 +24,11 @@
 /**
  * 
  */
-	define("PROJECT_TABLE", "core_projects");
-	
-
+	define("LANGUAGE_TABLE", 		"core_languages");
+	define("SESSION_VALUE_TABLE", 	"core_session_values");
+	define("SESSION_TABLE", 		"core_sessions");
+	define("SYSTEM_LOG_TYPE_TABLE", "core_system_log_types");
+	define("SYSTEM_LOG_TABLE", 		"core_system_log");
+	define("SYSTEM_MESSAGE_TABLE", 	"core_system_messages");
+	define("TIMEZONE_TABLE", 		"core_timezones");
 ?>

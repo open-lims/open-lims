@@ -27,8 +27,6 @@
  */
 class SampleHasFolder_Access
 {
-	const SAMPLE_HAS_FOLDER_TABLE = 'core_sample_has_folder';
-	
 	private $sample_id;
 	private $folder_id;
 	
@@ -45,7 +43,7 @@ class SampleHasFolder_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::SAMPLE_HAS_FOLDER_TABLE." WHERE folder_id='".$folder_id."'";
+			$sql = "SELECT * FROM ".constant("SAMPLE_HAS_FOLDER_TABLE")." WHERE folder_id='".$folder_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -79,7 +77,7 @@ class SampleHasFolder_Access
 		
 		if (is_numeric($sample_id) and is_numeric($folder_id))
 		{	
-			$sql_write = "INSERT INTO ".self::SAMPLE_HAS_FOLDER_TABLE." (sample_id,folder_id) " .
+			$sql_write = "INSERT INTO ".constant("SAMPLE_HAS_FOLDER_TABLE")." (sample_id,folder_id) " .
 					"VALUES (".$sample_id.",".$folder_id.")";
 					
 			$res_write = $db->db_query($sql_write);	
@@ -108,7 +106,7 @@ class SampleHasFolder_Access
 			
 		if ($this->sample_id and $this->folder_id)
 		{
-			$sql = "DELETE FROM ".self::SAMPLE_HAS_FOLDER_TABLE." WHERE sample_id = ".$this->sample_id." AND folder_id = ".$this->folder_id."";
+			$sql = "DELETE FROM ".constant("SAMPLE_HAS_FOLDER_TABLE")." WHERE sample_id = ".$this->sample_id." AND folder_id = ".$this->folder_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -168,7 +166,7 @@ class SampleHasFolder_Access
 		
 		if (is_numeric($sample_id))
 		{	
-			$sql = "SELECT folder_id FROM ".self::SAMPLE_HAS_FOLDER_TABLE." WHERE sample_id='".$sample_id."'";
+			$sql = "SELECT folder_id FROM ".constant("SAMPLE_HAS_FOLDER_TABLE")." WHERE sample_id='".$sample_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

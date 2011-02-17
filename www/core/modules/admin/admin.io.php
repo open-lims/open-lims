@@ -34,7 +34,7 @@ class AdminIO
 		
 		$template->set_var("base_dir", System::get_base_directory());
 		$template->set_var("system_space", Misc::calc_size(System::get_system_space()));
-		$template->set_var("user_used_space", Misc::calc_size(User::get_used_user_space()));
+		$template->set_var("user_used_space", Misc::calc_size(DataUserData::get_used_space()));
 		$template->set_var("project_used_space", Misc::calc_size(Project::get_used_project_space()));
 		$template->set_var("db_used_space", Misc::calc_size(System::get_used_database_space()));
 		$template->set_var("free_space", Misc::calc_size(System::get_free_space()));

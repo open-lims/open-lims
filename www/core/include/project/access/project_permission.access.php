@@ -27,7 +27,6 @@
  */
 class ProjectPermission_Access
 {
-	const PROJECT_PERMISSION_TABLE = 'core_project_permissions';
 	const PROJECT_PERMISSION_PK_SEQUENCE = 'core_project_permissions_id_seq';
 
 	private $permission_id;
@@ -53,7 +52,7 @@ class ProjectPermission_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::PROJECT_PERMISSION_TABLE." WHERE id='".$permission_id."'";
+			$sql = "SELECT * FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE id='".$permission_id."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
@@ -162,13 +161,13 @@ class ProjectPermission_Access
 				$intention_insert = "0";
 			}
 			
-			$sql_write = "INSERT INTO ".self::PROJECT_PERMISSION_TABLE." (id,user_id,organisation_unit_id,group_id,project_id,permission,owner_id,intention) " .
+			$sql_write = "INSERT INTO ".constant("PROJECT_PERMISSION_TABLE")." (id,user_id,organisation_unit_id,group_id,project_id,permission,owner_id,intention) " .
 					"VALUES (nextval('".self::PROJECT_PERMISSION_PK_SEQUENCE."'::regclass),".$user_id_insert.",".$organisation_unit_id_insert.",".$group_id_insert.",".$project_id.",".$permission_insert.",".$owner_id_insert.",".$intention_insert.")";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".self::PROJECT_PERMISSION_TABLE." WHERE id = currval('".self::PROJECT_PERMISSION_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE id = currval('".self::PROJECT_PERMISSION_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -200,7 +199,7 @@ class ProjectPermission_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".self::PROJECT_PERMISSION_TABLE." WHERE id = ".$tmp_id."";
+			$sql = "DELETE FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE id = ".$tmp_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -333,7 +332,7 @@ class ProjectPermission_Access
 
 		if ($this->permission_id and is_numeric($user_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_PERMISSION_TABLE." SET user_id = '".$user_id."' WHERE id = '".$this->permission_id."'";
+			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET user_id = '".$user_id."' WHERE id = '".$this->permission_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -362,7 +361,7 @@ class ProjectPermission_Access
 
 		if ($this->permission_id and is_numeric($organisation_unit_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_PERMISSION_TABLE." SET organisation_unit_id = '".$organisation_unit_id."' WHERE id = '".$this->permission_id."'";
+			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET organisation_unit_id = '".$organisation_unit_id."' WHERE id = '".$this->permission_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -391,7 +390,7 @@ class ProjectPermission_Access
 
 		if ($this->permission_id and is_numeric($group_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_PERMISSION_TABLE." SET group_id = '".$group_id."' WHERE id = '".$this->permission_id."'";
+			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET group_id = '".$group_id."' WHERE id = '".$this->permission_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -420,7 +419,7 @@ class ProjectPermission_Access
 
 		if ($this->permission_id and is_numeric($project_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_PERMISSION_TABLE." SET project_id = '".$project_id."' WHERE id = '".$this->permission_id."'";
+			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET project_id = '".$project_id."' WHERE id = '".$this->permission_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -449,7 +448,7 @@ class ProjectPermission_Access
 
 		if ($this->permission_id and is_numeric($permission))
 		{
-			$sql = "UPDATE ".self::PROJECT_PERMISSION_TABLE." SET permission = '".$permission."' WHERE id = '".$this->permission_id."'";
+			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET permission = '".$permission."' WHERE id = '".$this->permission_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -478,7 +477,7 @@ class ProjectPermission_Access
 
 		if ($this->permission_id and is_numeric($owner_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_PERMISSION_TABLE." SET owner_id = '".$owner_id."' WHERE id = '".$this->permission_id."'";
+			$sql = "UPDATE "constant("PROJECT_PERMISSION_TABLE")." SET owner_id = '".$owner_id."' WHERE id = '".$this->permission_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -510,7 +509,7 @@ class ProjectPermission_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::PROJECT_PERMISSION_TABLE." WHERE project_id = ".$project_id." ORDER BY intention DESC";
+			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." ORDER BY intention DESC";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -546,7 +545,7 @@ class ProjectPermission_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::PROJECT_PERMISSION_TABLE." WHERE project_id = ".$project_id." AND intention = ".$intention." AND intention IS NOT NULL";
+			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." AND intention = ".$intention." AND intention IS NOT NULL";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -583,7 +582,7 @@ class ProjectPermission_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::PROJECT_PERMISSION_TABLE." WHERE project_id = ".$project_id." AND intention = ".$intention." AND intention IS NOT NULL AND group_id = ".$group_id."";
+			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." AND intention = ".$intention." AND intention IS NOT NULL AND group_id = ".$group_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -628,7 +627,7 @@ class ProjectPermission_Access
 			
 			$return_array = array();
 				
-			$sql = "SELECT project_id FROM ".self::PROJECT_PERMISSION_TABLE." WHERE organisation_unit_id = ".$organisation_unit_id." ".$intention_insert."";
+			$sql = "SELECT project_id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id." ".$intention_insert."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -662,7 +661,7 @@ class ProjectPermission_Access
 			
 		if (is_numeric($project_id) and is_numeric($user_id))
 		{			
-			$sql = "SELECT COUNT(id) AS numberofentries FROM ".self::PROJECT_PERMISSION_TABLE." WHERE project_id = ".$project_id." and user_id = ".$user_id."";
+			$sql = "SELECT COUNT(id) AS numberofentries FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." and user_id = ".$user_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -692,7 +691,7 @@ class ProjectPermission_Access
 			
 		if (is_numeric($project_id) and is_numeric($organisation_unit_id))
 		{
-			$sql = "SELECT COUNT(id) AS numberofentries FROM ".self::PROJECT_PERMISSION_TABLE." WHERE project_id = ".$project_id." and organisation_unit_id = ".$organisation_unit_id."";
+			$sql = "SELECT COUNT(id) AS numberofentries FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." and organisation_unit_id = ".$organisation_unit_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -722,7 +721,7 @@ class ProjectPermission_Access
 
 		if (is_numeric($project_id) and is_numeric($group_id))
 		{	
-			$sql = "SELECT COUNT(id) AS numberofentries FROM ".self::PROJECT_PERMISSION_TABLE." WHERE project_id = ".$project_id." and group_id = ".$group_id."";
+			$sql = "SELECT COUNT(id) AS numberofentries FROM ".constant("PROJECT_PERMISSION_TABLE")" WHERE project_id = ".$project_id." and group_id = ".$group_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -751,7 +750,7 @@ class ProjectPermission_Access
 		
 		if (is_numeric($user_id))
 		{
-			$sql = "DELETE FROM ".self::PROJECT_PERMISSION_TABLE." WHERE user_id = ".$user_id."";
+			$sql = "DELETE FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE user_id = ".$user_id."";
 			$res = $db->db_query($sql);
 			return true;
 		}
@@ -771,7 +770,7 @@ class ProjectPermission_Access
 		
 		if (is_numeric($group_id)) 
 		{
-			$sql = "DELETE FROM ".self::PROJECT_PERMISSION_TABLE." WHERE group_id = ".$group_id."";
+			$sql = "DELETE FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE group_id = ".$group_id."";
 			$res = $db->db_query($sql);
 			return true;
 		}
@@ -791,7 +790,7 @@ class ProjectPermission_Access
 		
 		if (is_numeric($organisation_unit_id))
 		{	
-			$sql = "DELETE FROM ".self::PROJECT_PERMISSION_TABLE." WHERE organisation_unit_id = ".$organisation_unit_id."";
+			$sql = "DELETE FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
 			$res = $db->db_query($sql);	
 			return true;
 		}
@@ -812,7 +811,7 @@ class ProjectPermission_Access
 		
 		if (is_numeric($old_owner_id) and is_numeric($new_owner_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_PERMISSION_TABLE." SET owner_id = ".$new_owner_id." WHERE owner_id = ".$old_owner_id."";
+			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET owner_id = ".$new_owner_id." WHERE owner_id = ".$old_owner_id."";
 			$res = $db->db_query($sql);
 			return true;
 		}

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package data
+ * @package project
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -24,59 +24,47 @@
 /**
  * 
  */
-require_once("interfaces/data_user_data.interface.php");
+require_once("interfaces/project_user_data.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	require_once("access/data_user_data.access.php");
+	require_once("access/project_user_data.access.php");
 }
 
 /**
- * Data User Data Class
- * @package data
+ * Project User Data Class
+ * @package project
  */
-class DataUserData implements DataUserDataInterface, EventListenerInterface
+class ProjectUserData implements ProjectUserDataInterface, EventListenerInterface
 {
 	private $user_id;
-	private $data_user_data;
+	private $project_user_data;
 	
 	function __construct($user_id)
 	{
 		if (is_numeric($user_id))
 		{
 			$this->user_id = $user_id;
-			$this->data_user_data = new DataUserData_Access($user_id);	
+			$this->project_user_data = new ProjectUserData_Access($user_id);	
 		}
 		else
 		{
 			$this->user_id = null;
-			$this->data_user_data = null;
+			$this->project_user_data = null;
 		}
 	}
 	
 	function __destruct()
 	{
 		unset($this->user_id);
-		unset($this->data_user_data);
+		unset($this->project_user_data);
 	}
 	
 	public function get_quota()
 	{
 		if ($this->user_id)
 		{
-			return $this->data_user_data->get_quota();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	public function get_filesize()
-	{
-		if ($this->user_id)
-		{
-			return $this->data_user_data->get_filesize();
+			return $this->project_user_data->get_quota();
 		}
 		else
 		{
@@ -88,34 +76,13 @@ class DataUserData implements DataUserDataInterface, EventListenerInterface
 	{
 		if ($this->user_id)
 		{
-			return $this->data_user_data->set_quota($quota);
+			return $this->project_user_data->set_quota($quota);
 		}
 		else
 		{
 			return null;
 		}
-	}
-	
-	public function set_filesize($filesize)
-	{
-		if ($this->user_id)
-		{
-			return $this->data_user_data->set_filesize($filesize);
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	
-	/**
-	 * @return integer Used Diskspace of all uses
-	 */
-	public static function get_used_space()
-	{
-		return DataUserData_Access::get_used_space();
-	}
+	}	
 	
 	/**
      * @param object $event_object
@@ -125,8 +92,8 @@ class DataUserData implements DataUserDataInterface, EventListenerInterface
     {
     	if ($event_object instanceof UserCreateEvent)
     	{
-    		$data_user_data_access = new DataUserData_Access(null);
-    		if ($data_user_data_access->create($event_object->get_user_id(),$GLOBALS[std_userquota]) == false)
+    		$project_user_data_access = new ProjectUserData_Access(null);
+    		if ($project_user_data_access->create($event_object->get_user_id(),$GLOBALS[std_projectquota]) == false)
     		{
     			return false;
     		}
@@ -134,8 +101,8 @@ class DataUserData implements DataUserDataInterface, EventListenerInterface
     	
     	if ($event_object instanceof UserDeleteEvent)
     	{
-    		$data_user_data_access = new DataUserData_Access($event_object->get_user_id());
-    		if ($data_user_data_access->delete() == false)
+    		$project_user_data_access = new ProjectUserData_Access($event_object->get_user_id());
+    		if ($project_user_data_access->delete() == false)
     		{
     			return false;
     		}

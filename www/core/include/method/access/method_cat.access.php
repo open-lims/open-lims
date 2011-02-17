@@ -27,7 +27,6 @@
  */
 class MethodCat_Access
 {
-	const METHOD_CAT_TABLE = 'core_method_cats';
 	const METHOD_CAT_PK_SEQUENCE = 'core_method_cats_id_seq';
 
 	private $method_cat_id;
@@ -47,7 +46,7 @@ class MethodCat_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::METHOD_CAT_TABLE." WHERE id='".$method_cat_id."'";
+			$sql = "SELECT * FROM ".constant("METHOD_CAT_TABLE")." WHERE id='".$method_cat_id."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
@@ -86,12 +85,12 @@ class MethodCat_Access
 		{
 			if (is_numeric($toid))
 			{
-				$sql_write = "INSERT INTO ".self::METHOD_CAT_TABLE." (id,toid,name) " .
+				$sql_write = "INSERT INTO ".constant("METHOD_CAT_TABLE")." (id,toid,name) " .
 					"VALUES (nextval('".self::METHOD_CAT_PK_SEQUENCE."'::regclass),'".$toid."','".$name."')";
 			}
 			else
 			{
-				$sql_write = "INSERT INTO ".self::METHOD_CAT_TABLE." (id,toid,name) " .
+				$sql_write = "INSERT INTO ".constant("METHOD_CAT_TABLE")." (id,toid,name) " .
 					"VALUES (nextval('".self::METHOD_CAT_PK_SEQUENCE."'::regclass),currval('".self::METHOD_CAT_PK_SEQUENCE."'::regclass),'".$name."')";
 			}
 			
@@ -99,7 +98,7 @@ class MethodCat_Access
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".self::METHOD_CAT_TABLE." WHERE id = currval('".self::METHOD_CAT_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("METHOD_CAT_TABLE")." WHERE id = currval('".self::METHOD_CAT_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -131,7 +130,7 @@ class MethodCat_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".self::METHOD_CAT_TABLE." WHERE id = ".$tmp_method_cat_id."";
+			$sql = "DELETE FROM ".constant("METHOD_CAT_TABLE")." WHERE id = ".$tmp_method_cat_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -189,7 +188,7 @@ class MethodCat_Access
 			
 		if ($this->method_cat_id and $name)
 		{
-			$sql = "UPDATE ".self::METHOD_CAT_TABLE." SET name = '".$name."' WHERE id = '".$this->method_cat_id."'";
+			$sql = "UPDATE ".constant("METHOD_CAT_TABLE")." SET name = '".$name."' WHERE id = '".$this->method_cat_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -219,7 +218,7 @@ class MethodCat_Access
 			
 		if ($this->method_cat_id and is_numeric($toid))
 		{
-			$sql = "UPDATE ".self::METHOD_CAT_TABLE." SET toid = '".$toid."' WHERE id = '".$this->method_cat_id."'";
+			$sql = "UPDATE ".constant("METHOD_CAT_TABLE")." SET toid = '".$toid."' WHERE id = '".$this->method_cat_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -252,7 +251,7 @@ class MethodCat_Access
 		{	
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::METHOD_CAT_TABLE." WHERE id=".$id."";
+			$sql = "SELECT id FROM ".constant("METHOD_CAT_TABLE")." WHERE id=".$id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 						
@@ -285,7 +284,7 @@ class MethodCat_Access
 			$name = trim(strtolower($name));
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::METHOD_CAT_TABLE." WHERE TRIM(LOWER(name))='".$name."'";
+			$sql = "SELECT id FROM ".constant("METHOD_CAT_TABLE")." WHERE TRIM(LOWER(name))='".$name."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 						
@@ -316,7 +315,7 @@ class MethodCat_Access
 		{	
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::METHOD_CAT_TABLE." WHERE toid = ".$toid." AND toid != id ORDER BY name";
+			$sql = "SELECT id FROM ".constant("METHOD_CAT_TABLE")." WHERE toid = ".$toid." AND toid != id ORDER BY name";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -348,7 +347,7 @@ class MethodCat_Access
 	
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::METHOD_CAT_TABLE." WHERE toid = id ORDER BY name";
+		$sql = "SELECT id FROM ".constant("METHOD_CAT_TABLE")." WHERE toid = id ORDER BY name";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))
@@ -375,7 +374,7 @@ class MethodCat_Access
 	
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::METHOD_CAT_TABLE." ORDER BY name";
+		$sql = "SELECT id FROM ".constant("METHOD_CAT_TABLE")." ORDER BY name";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))

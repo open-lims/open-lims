@@ -27,7 +27,6 @@
  */
 class MethodType_Access
 {
-	const METHOD_TYPE_TABLE = 'core_method_types';
 	const METHOD_TYPE_PK_SEQUENCE = 'core_method_types_id_seq';
 
 	private $method_type_id;
@@ -51,7 +50,7 @@ class MethodType_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::METHOD_TYPE_TABLE." WHERE id='".$method_type_id."'";
+			$sql = "SELECT * FROM ".constant("METHOD_TYPE_TABLE")." WHERE id='".$method_type_id."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
@@ -117,12 +116,12 @@ class MethodType_Access
 			
 			if (is_numeric($toid))
 			{
-				$sql_write = "INSERT INTO ".self::METHOD_TYPE_TABLE." (id,toid,name,cat_id,location_id,description) " .
+				$sql_write = "INSERT INTO ".constant("METHOD_TYPE_TABLE")." (id,toid,name,cat_id,location_id,description) " .
 						"VALUES (nextval('".self::METHOD_TYPE_PK_SEQUENCE."'::regclass),".$toid.",'".$name."',".$cat_id.",".$location_id_insert.",".$description_insert.")";
 			}
 			else
 			{
-				$sql_write = "INSERT INTO ".self::METHOD_TYPE_TABLE." (id,toid,name,cat_id,location_id,description) " .
+				$sql_write = "INSERT INTO ".constant("METHOD_TYPE_TABLE")." (id,toid,name,cat_id,location_id,description) " .
 						"VALUES (nextval('".self::METHOD_TYPE_PK_SEQUENCE."'::regclass),currval('".self::METHOD_TYPE_PK_SEQUENCE."'::regclass),'".$name."',".$cat_id.",".$location_id_insert.",".$description_insert.")";
 			}
 			
@@ -130,7 +129,7 @@ class MethodType_Access
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".self::METHOD_TYPE_TABLE." WHERE id = currval('".self::METHOD_TYPE_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("METHOD_TYPE_TABLE")." WHERE id = currval('".self::METHOD_TYPE_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -162,7 +161,7 @@ class MethodType_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".self::METHOD_TYPE_TABLE." WHERE id = ".$tmp_method_type_id."";
+			$sql = "DELETE FROM ".constant("METHOD_TYPE_TABLE")." WHERE id = ".$tmp_method_type_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -250,7 +249,7 @@ class MethodType_Access
 
 		if ($this->method_type_id and is_numeric($toid))
 		{
-			$sql = "UPDATE ".self::METHOD_TYPE_TABLE." SET toid = '".$toid."' WHERE id = '".$this->method_type_id."'";
+			$sql = "UPDATE ".constant("METHOD_TYPE_TABLE")." SET toid = '".$toid."' WHERE id = '".$this->method_type_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -279,7 +278,7 @@ class MethodType_Access
 
 		if ($this->method_type_id and $name)
 		{
-			$sql = "UPDATE ".self::METHOD_TYPE_TABLE." SET name = '".$name."' WHERE id = '".$this->method_type_id."'";
+			$sql = "UPDATE ".constant("METHOD_TYPE_TABLE")." SET name = '".$name."' WHERE id = '".$this->method_type_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -308,7 +307,7 @@ class MethodType_Access
 			
 		if ($this->method_type_id and is_numeric($cat_id))
 		{
-			$sql = "UPDATE ".self::METHOD_TYPE_TABLE." SET cat_id = '".$cat_id."' WHERE id = '".$this->method_type_id."'";
+			$sql = "UPDATE ".constant("METHOD_TYPE_TABLE")." SET cat_id = '".$cat_id."' WHERE id = '".$this->method_type_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -337,7 +336,7 @@ class MethodType_Access
 			
 		if ($this->method_type_id and is_numeric($location_id))
 		{
-			$sql = "UPDATE ".self::METHOD_TYPE_TABLE." SET location_id = '".$location_id."' WHERE id = '".$this->method_type_id."'";
+			$sql = "UPDATE ".constant("METHOD_TYPE_TABLE")." SET location_id = '".$location_id."' WHERE id = '".$this->method_type_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -366,7 +365,7 @@ class MethodType_Access
 
 		if ($this->method_type_id and $description)
 		{
-			$sql = "UPDATE ".self::METHOD_TYPE_TABLE." SET description = '".$description."' WHERE id = '".$this->method_type_id."'";
+			$sql = "UPDATE ".constant("METHOD_TYPE_TABLE")." SET description = '".$description."' WHERE id = '".$this->method_type_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -398,7 +397,7 @@ class MethodType_Access
 		{	
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::METHOD_TYPE_TABLE." WHERE id=".$id."";
+			$sql = "SELECT id FROM ".constant("METHOD_TYPE_TABLE")." WHERE id=".$id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 						
@@ -431,7 +430,7 @@ class MethodType_Access
 			$name = trim(strtolower($name));
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::METHOD_TYPE_TABLE." WHERE TRIM(LOWER(name))='".$name."'";
+			$sql = "SELECT id FROM ".constant("METHOD_TYPE_TABLE")." WHERE TRIM(LOWER(name))='".$name."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 						
@@ -462,7 +461,7 @@ class MethodType_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::METHOD_TYPE_TABLE." WHERE toid = ".$toid." AND toid != id ORDER BY name";
+			$sql = "SELECT id FROM ".constant("METHOD_TYPE_TABLE")." WHERE toid = ".$toid." AND toid != id ORDER BY name";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -497,7 +496,7 @@ class MethodType_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::METHOD_TYPE_TABLE." WHERE cat_id = ".$cat_id." ORDER BY cat_id,name";
+			$sql = "SELECT id FROM ".constant("METHOD_TYPE_TABLE")." WHERE cat_id = ".$cat_id." ORDER BY cat_id,name";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -529,7 +528,7 @@ class MethodType_Access
 
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::METHOD_TYPE_TABLE." WHERE id = toid ORDER BY cat_id,name";
+		$sql = "SELECT id FROM ".constant("METHOD_TYPE_TABLE")." WHERE id = toid ORDER BY cat_id,name";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))
@@ -556,7 +555,7 @@ class MethodType_Access
 
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::METHOD_TYPE_TABLE." ORDER BY name";
+		$sql = "SELECT id FROM ".constant("METHOD_TYPE_TABLE")." ORDER BY name";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))

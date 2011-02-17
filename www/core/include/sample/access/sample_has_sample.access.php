@@ -27,7 +27,6 @@
  */
 class SampleHasSample_Access
 {
-	const SAMPLE_HAS_SAMPLE_TABLE = 'core_sample_has_samples';
 	const SAMPLE_HAS_SAMPLE_PK_SEQUENCE = 'core_sample_has_samples_primary_key_seq';
 
 	private $primary_key;
@@ -48,7 +47,7 @@ class SampleHasSample_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::SAMPLE_HAS_SAMPLE_TABLE." WHERE primary_key='".$primary_key."'";
+			$sql = "SELECT * FROM ".constant("SAMPLE_HAS_SAMPLE_TABLE")." WHERE primary_key='".$primary_key."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
@@ -88,13 +87,13 @@ class SampleHasSample_Access
 		
 		if (is_numeric($sample_pid) and is_numeric($sample_cid))
 		{
-			$sql_write = "INSERT INTO ".self::SAMPLE_HAS_SAMPLE_TABLE." (primary_key,sample_pid,sample_cid) " .
+			$sql_write = "INSERT INTO ".constant("SAMPLE_HAS_SAMPLE_TABLE")." (primary_key,sample_pid,sample_cid) " .
 					"VALUES (nextval('".self::SAMPLE_HAS_SAMPLE_PK_SEQUENCE."'::regclass),".$sample_pid.",".$sample_cid.")";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT primary_key FROM ".self::SAMPLE_HAS_SAMPLE_TABLE." WHERE primary_key = currval('".self::SAMPLE_HAS_SAMPLE_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT primary_key FROM ".constant("SAMPLE_HAS_SAMPLE_TABLE")." WHERE primary_key = currval('".self::SAMPLE_HAS_SAMPLE_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -126,7 +125,7 @@ class SampleHasSample_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".self::SAMPLE_HAS_SAMPLE_TABLE." WHERE primary_key = ".$tmp_primary_key."";
+			$sql = "DELETE FROM ".constant("SAMPLE_HAS_SAMPLE_TABLE")." WHERE primary_key = ".$tmp_primary_key."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -184,7 +183,7 @@ class SampleHasSample_Access
 
 		if ($this->primary_key and is_numeric($sample_pid))
 		{
-			$sql = "UPDATE ".self::SAMPLE_HAS_SAMPLE_TABLE." SET sample_pid = '".$sample_pid."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("SAMPLE_HAS_SAMPLE_TABLE")." SET sample_pid = '".$sample_pid."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -213,7 +212,7 @@ class SampleHasSample_Access
 			
 		if ($this->primary_key and is_numeric($sample_cid))
 		{
-			$sql = "UPDATE ".self::SAMPLE_HAS_SAMPLE_TABLE." SET sample_cid = '".$sample_cid."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("SAMPLE_HAS_SAMPLE_TABLE")." SET sample_cid = '".$sample_cid."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -241,7 +240,7 @@ class SampleHasSample_Access
 			
 		if ($this->primary_key)
 		{
-			$sql = "UPDATE ".self::SAMPLE_HAS_SAMPLE_TABLE." SET sample_pid = NULL WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("SAMPLE_HAS_SAMPLE_TABLE")." SET sample_pid = NULL WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -269,7 +268,7 @@ class SampleHasSample_Access
 
 		if ($this->primary_key)
 		{
-			$sql = "UPDATE ".self::SAMPLE_HAS_SAMPLE_TABLE." SET sample_cid = NULL WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("SAMPLE_HAS_SAMPLE_TABLE")." SET sample_cid = NULL WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -302,7 +301,7 @@ class SampleHasSample_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".self::SAMPLE_HAS_SAMPLE_TABLE." WHERE sample_pid = ".$sample_pid." AND sample_cid = ".$sample_cid."";
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_SAMPLE_TABLE")." WHERE sample_pid = ".$sample_pid." AND sample_cid = ".$sample_cid."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 
@@ -333,7 +332,7 @@ class SampleHasSample_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".self::SAMPLE_HAS_SAMPLE_TABLE." WHERE sample_pid = ".$sample_pid."";
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_SAMPLE_TABLE")." WHERE sample_pid = ".$sample_pid."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -368,7 +367,7 @@ class SampleHasSample_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".self::SAMPLE_HAS_SAMPLE_TABLE." WHERE sample_cid = ".$sample_cid."";
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_SAMPLE_TABLE")." WHERE sample_cid = ".$sample_cid."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -400,7 +399,7 @@ class SampleHasSample_Access
 	
 		$return_array = array();
 		
-		$sql = "SELECT primary_key FROM ".self::SAMPLE_HAS_SAMPLE_TABLE."";
+		$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_SAMPLE_TABLE")."";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))

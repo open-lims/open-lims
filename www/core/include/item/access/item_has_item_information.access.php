@@ -27,7 +27,6 @@
  */
 class ItemHasItemInformation_Access
 {
-	const ITEM_HAS_ITEM_INFORMATION_TABLE = 'core_item_has_item_information';
 	const ITEM_HAS_ITEM_INFORMATION_PK_SEQUENCE = 'core_item_has_item_information_primary_key_seq';
 
 	private $primary_key;
@@ -48,7 +47,7 @@ class ItemHasItemInformation_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::ITEM_HAS_ITEM_INFORMATION_TABLE." WHERE primary_key='".$primary_key."'";
+			$sql = "SELECT * FROM ".constant("ITEM_HAS_ITEM_INFORMATION_TABLE")." WHERE primary_key='".$primary_key."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -87,14 +86,14 @@ class ItemHasItemInformation_Access
 		
 		if (is_numeric($item_id) and is_numeric($item_information_id))
 		{
-			$sql_write = "INSERT INTO ".self::ITEM_HAS_ITEM_INFORMATION_TABLE." (primary_key,item_id,item_information_id) " .
+			$sql_write = "INSERT INTO ".constant("ITEM_HAS_ITEM_INFORMATION_TABLE")." (primary_key,item_id,item_information_id) " .
 					"VALUES (nextval('".self::ITEM_HAS_ITEM_INFORMATION_PK_SEQUENCE."'::regclass),".$item_id.",".$item_information_id.")";
 					
 			$res_write = $db->db_query($sql_write);	
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT primary_key FROM ".self::ITEM_HAS_ITEM_INFORMATION_TABLE." WHERE primary_key = currval('".self::ITEM_HAS_ITEM_INFORMATION_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT primary_key FROM ".constant("ITEM_HAS_ITEM_INFORMATION_TABLE")." WHERE primary_key = currval('".self::ITEM_HAS_ITEM_INFORMATION_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 									
@@ -125,7 +124,7 @@ class ItemHasItemInformation_Access
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".self::ITEM_HAS_ITEM_INFORMATION_TABLE." WHERE primary_key = ".$primary_key_tmp."";
+			$sql = "DELETE FROM ".constant("ITEM_HAS_ITEM_INFORMATION_TABLE")." WHERE primary_key = ".$primary_key_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -183,7 +182,7 @@ class ItemHasItemInformation_Access
 		
 		if ($this->primary_key and is_numeric($item_id))
 		{
-			$sql = "UPDATE ".self::ITEM_HAS_ITEM_INFORMATION_TABLE." SET item_id = ".$item_id." WHERE primary_key = ".$this->primary_key."";
+			$sql = "UPDATE ".constant("ITEM_HAS_ITEM_INFORMATION_TABLE")." SET item_id = ".$item_id." WHERE primary_key = ".$this->primary_key."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -212,7 +211,7 @@ class ItemHasItemInformation_Access
 
 		if ($this->primary_key and is_numeric($item_information_id))
 		{
-			$sql = "UPDATE ".self::ITEM_HAS_ITEM_INFORMATION_TABLE." SET item_information_id = ".$item_information_id." WHERE primary_key = ".$this->primary_key."";
+			$sql = "UPDATE ".constant("ITEM_HAS_ITEM_INFORMATION_TABLE")." SET item_information_id = ".$item_information_id." WHERE primary_key = ".$this->primary_key."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -244,7 +243,7 @@ class ItemHasItemInformation_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".self::ITEM_HAS_ITEM_INFORMATION_TABLE." WHERE item_id = ".$item_id."";
+			$sql = "SELECT primary_key FROM ".constant("ITEM_HAS_ITEM_INFORMATION_TABLE")." WHERE item_id = ".$item_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -279,7 +278,7 @@ class ItemHasItemInformation_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".self::ITEM_HAS_ITEM_INFORMATION_TABLE." WHERE item_information_id = ".$item_information_id."";
+			$sql = "SELECT primary_key FROM ".constant("ITEM_HAS_ITEM_INFORMATION_TABLE")." WHERE item_information_id = ".$item_information_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -311,7 +310,7 @@ class ItemHasItemInformation_Access
 
 		$return_array = array();
 		
-		$sql = "SELECT primary_key FROM ".self::ITEM_HAS_ITEM_INFORMATION_TABLE."";
+		$sql = "SELECT primary_key FROM ".constant("ITEM_HAS_ITEM_INFORMATION_TABLE")."";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))

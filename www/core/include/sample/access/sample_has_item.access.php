@@ -27,7 +27,6 @@
  */
 class SampleHasItem_Access
 {
-	const SAMPLE_HAS_ITEM_TABLE = 'core_sample_has_items';
 	const SAMPLE_HAS_ITEM_PK_SEQUENCE = 'core_sample_has_items_primary_key_seq';
 
 	private $primary_key;
@@ -49,7 +48,7 @@ class SampleHasItem_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::SAMPLE_HAS_ITEM_TABLE." WHERE primary_key='".$primary_key."'";
+			$sql = "SELECT * FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE primary_key='".$primary_key."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
@@ -101,13 +100,13 @@ class SampleHasItem_Access
 				$gid_insert = "NULL";
 			}
 			
-			$sql_write = "INSERT INTO ".self::SAMPLE_HAS_ITEM_TABLE." (primary_key,sample_id,item_id,gid) " .
+			$sql_write = "INSERT INTO ".constant("SAMPLE_HAS_ITEM_TABLE")." (primary_key,sample_id,item_id,gid) " .
 					"VALUES (nextval('".self::SAMPLE_HAS_ITEM_PK_SEQUENCE."'::regclass),".$sample_id.",".$item_id.",".$gid_insert.")";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT primary_key FROM ".self::SAMPLE_HAS_ITEM_TABLE." WHERE primary_key = currval('".self::SAMPLE_HAS_ITEM_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE primary_key = currval('".self::SAMPLE_HAS_ITEM_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -139,7 +138,7 @@ class SampleHasItem_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".self::SAMPLE_HAS_ITEM_TABLE." WHERE primary_key = ".$tmp_primary_key."";
+			$sql = "DELETE FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE primary_key = ".$tmp_primary_key."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -212,7 +211,7 @@ class SampleHasItem_Access
 			
 		if ($this->primary_key and is_numeric($sample_id))
 		{
-			$sql = "UPDATE ".self::SAMPLE_HAS_ITEM_TABLE." SET sample_id = '".$sample_id."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("SAMPLE_HAS_ITEM_TABLE")." SET sample_id = '".$sample_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -241,7 +240,7 @@ class SampleHasItem_Access
 
 		if ($this->primary_key and is_numeric($item_id))
 		{
-			$sql = "UPDATE ".self::SAMPLE_HAS_ITEM_TABLE." SET item_id = '".$item_id."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("SAMPLE_HAS_ITEM_TABLE")." SET item_id = '".$item_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -270,7 +269,7 @@ class SampleHasItem_Access
 
 		if ($this->primary_key and is_numeric($gid))
 		{
-			$sql = "UPDATE ".self::SAMPLE_HAS_ITEM_TABLE." SET gid = '".$gid."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("SAMPLE_HAS_ITEM_TABLE")." SET gid = '".$gid."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -302,7 +301,7 @@ class SampleHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".self::SAMPLE_HAS_ITEM_TABLE." WHERE item_id = ".$item_id." AND sample_id = ".$sample_id."";
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND sample_id = ".$sample_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 				
@@ -334,7 +333,7 @@ class SampleHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT gid FROM ".self::SAMPLE_HAS_ITEM_TABLE." WHERE item_id = ".$item_id." AND sample_id = ".$sample_id."";
+			$sql = "SELECT gid FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND sample_id = ".$sample_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 				
@@ -365,7 +364,7 @@ class SampleHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".self::SAMPLE_HAS_ITEM_TABLE." WHERE item_id = ".$item_id."";
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -400,7 +399,7 @@ class SampleHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".self::SAMPLE_HAS_ITEM_TABLE." WHERE sample_id = ".$sample_id."";
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = ".$sample_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -432,7 +431,7 @@ class SampleHasItem_Access
 				
 		$return_array = array();
 		
-		$sql = "SELECT primary_key FROM ".self::SAMPLE_HAS_ITEM_TABLE."";
+		$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")."";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))

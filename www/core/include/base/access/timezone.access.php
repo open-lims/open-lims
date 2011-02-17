@@ -27,7 +27,6 @@
  */
 class Timezone_Access
 {
-	const TIMEZONE_TABLE = 'core_timezones';
 	const TIMEZONE_PK_SEQUENCE = 'core_timezones_id_seq';
 	
 	private $timezone_id;
@@ -49,7 +48,7 @@ class Timezone_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::TIMEZONE_TABLE." WHERE id='".$timezone_id."'";
+			$sql = "SELECT * FROM ".constant("TIMEZONE_TABLE")." WHERE id='".$timezone_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -91,14 +90,14 @@ class Timezone_Access
 		
 		if ($title and $php_title and is_numeric($deviation))
 		{
-	 		$sql_write = "INSERT INTO ".self::TIMEZONE_TABLE." (id, title, php_title, deviation) " .
+	 		$sql_write = "INSERT INTO ".constant("TIMEZONE_TABLE")." (id, title, php_title, deviation) " .
 								"VALUES (nextval('".self::TIMEZONE_PK_SEQUENCE."'::regclass),'".$title."','".$php_title."','".$deviation."')";		
 				
 			$res_write = $db->db_query($sql_write);
 		
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".self::TIMEZONE_TABLE." WHERE id = currval('".self::TIMEZONE_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("TIMEZONE_TABLE")." WHERE id = currval('".self::TIMEZONE_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 							
@@ -130,7 +129,7 @@ class Timezone_Access
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".self::TIMEZONE_TABLE." WHERE id = '".$id_tmp."'";
+			$sql = "DELETE FROM ".constant("TIMEZONE_TABLE")." WHERE id = '".$id_tmp."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -203,7 +202,7 @@ class Timezone_Access
 
 		if ($this->timezone_id and $title)
 		{
-			$sql = "UPDATE ".self::TIMEZONE_TABLE." SET title = '".$title."' WHERE id = ".$this->timezone_id."";
+			$sql = "UPDATE ".constant("TIMEZONE_TABLE")." SET title = '".$title."' WHERE id = ".$this->timezone_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -232,7 +231,7 @@ class Timezone_Access
 
 		if ($this->timezone_id and $php_title)
 		{
-			$sql = "UPDATE ".self::TIMEZONE_TABLE." SET php_title = '".$php_title."' WHERE id = ".$this->timezone_id."";
+			$sql = "UPDATE ".constant("TIMEZONE_TABLE")." SET php_title = '".$php_title."' WHERE id = ".$this->timezone_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -261,7 +260,7 @@ class Timezone_Access
 
 		if ($this->timezone_id and $deviation)
 		{
-			$sql = "UPDATE ".self::TIMEZONE_TABLE." SET deviation = '".$deviation."' WHERE id = ".$this->timezone_id."";
+			$sql = "UPDATE ".constant("TIMEZONE_TABLE")." SET deviation = '".$deviation."' WHERE id = ".$this->timezone_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -290,7 +289,7 @@ class Timezone_Access
 		
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::TIMEZONE_TABLE." ORDER BY deviation, title";
+		$sql = "SELECT id FROM ".constant("TIMEZONE_TABLE")." ORDER BY deviation, title";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))

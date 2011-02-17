@@ -27,7 +27,6 @@
  */
 class Sample_Access
 {
-	const SAMPLE_TABLE = 'core_samples';
 	const SAMPLE_PK_SEQUENCE = 'core_samples_id_seq';
 	
 	private $sample_id;
@@ -54,7 +53,7 @@ class Sample_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::SAMPLE_TABLE." WHERE id='".$sample_id."'";
+			$sql = "SELECT * FROM ".constant("SAMPLE_TABLE")." WHERE id='".$sample_id."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
@@ -136,13 +135,13 @@ class Sample_Access
 			
 			$datetime = date("Y-m-d H:i:s");
 			
-			$sql_write = "INSERT INTO ".self::SAMPLE_TABLE." (id, name, datetime, owner_id, template_id, supplier, available, deleted, comment, language_id) " .
+			$sql_write = "INSERT INTO ".constant("SAMPLE_TABLE")." (id, name, datetime, owner_id, template_id, supplier, available, deleted, comment, language_id) " .
 					"VALUES (nextval('".self::SAMPLE_PK_SEQUENCE."'::regclass), '".$name."','".$datetime."',".$owner_id.",".$template_id.",'".$supplier."','t','f',".$comment_insert.",1)";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".self::SAMPLE_TABLE." WHERE id = currval('".self::SAMPLE_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("SAMPLE_TABLE")." WHERE id = currval('".self::SAMPLE_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -174,7 +173,7 @@ class Sample_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".self::SAMPLE_TABLE." WHERE id = ".$tmp_sample_id."";
+			$sql = "DELETE FROM ".constant("SAMPLE_TABLE")." WHERE id = ".$tmp_sample_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -322,7 +321,7 @@ class Sample_Access
 			
 		if ($this->sample_id and $name)
 		{
-			$sql = "UPDATE ".self::SAMPLE_TABLE." SET name = '".$name."' WHERE id = '".$this->sample_id."'";
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET name = '".$name."' WHERE id = '".$this->sample_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -351,7 +350,7 @@ class Sample_Access
 			
 		if ($this->sample_id and $datetime)
 		{
-			$sql = "UPDATE ".self::SAMPLE_TABLE." SET datetime = '".$datetime."' WHERE id = '".$this->sample_id."'";
+			$sql = "UPDATE ".constant(":SAMPLE_TABLE")." SET datetime = '".$datetime."' WHERE id = '".$this->sample_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -380,7 +379,7 @@ class Sample_Access
 			
 		if ($this->sample_id and is_numeric($owner_id))
 		{
-			$sql = "UPDATE ".self::SAMPLE_TABLE." SET owner_id = '".$owner_id."' WHERE id = '".$this->sample_id."'";
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET owner_id = '".$owner_id."' WHERE id = '".$this->sample_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -410,7 +409,7 @@ class Sample_Access
 			
 		if ($this->sample_id and is_numeric($template_id))
 		{
-			$sql = "UPDATE ".self::SAMPLE_TABLE." SET template_id = '".$template_id."' WHERE id = '".$this->sample_id."'";
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET template_id = '".$template_id."' WHERE id = '".$this->sample_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -439,7 +438,7 @@ class Sample_Access
 
 		if ($this->sample_id and $supplier)
 		{
-			$sql = "UPDATE ".self::SAMPLE_TABLE." SET supplier = '".$supplier."' WHERE id = '".$this->sample_id."'";
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET supplier = '".$supplier."' WHERE id = '".$this->sample_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -477,7 +476,7 @@ class Sample_Access
 				$available_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::SAMPLE_TABLE." SET available = '".$available_insert."' WHERE id = '".$this->sample_id."'";
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET available = '".$available_insert."' WHERE id = '".$this->sample_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -515,7 +514,7 @@ class Sample_Access
 				$deleted_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::SAMPLE_TABLE." SET deleted = '".$deleted_insert."' WHERE id = '".$this->sample_id."'";
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET deleted = '".$deleted_insert."' WHERE id = '".$this->sample_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -544,7 +543,7 @@ class Sample_Access
 			
 		if ($this->sample_id and $comment)
 		{
-			$sql = "UPDATE ".self::SAMPLE_TABLE." SET comment = '".$comment."' WHERE id = '".$this->sample_id."'";
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET comment = '".$comment."' WHERE id = '".$this->sample_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -583,7 +582,7 @@ class Sample_Access
 				$language_name_insert = $language_name;
 			}
 			
-			$sql = "UPDATE ".self::SAMPLE_TABLE." SET comment_text_search_vector = to_tsvector('".$language_name_insert."','".$string."') WHERE id = ".$this->sample_id."";
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET comment_text_search_vector = to_tsvector('".$language_name_insert."','".$string."') WHERE id = ".$this->sample_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -615,7 +614,7 @@ class Sample_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::SAMPLE_TABLE." WHERE owner_id = ".$owner_id."";
+			$sql = "SELECT id FROM ".constant("SAMPLE_TABLE")." WHERE owner_id = ".$owner_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -650,7 +649,7 @@ class Sample_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::SAMPLE_TABLE." WHERE template_id = ".$template_id."";
+			$sql = "SELECT id FROM ".constant("SAMPLE_TABLE")." WHERE template_id = ".$template_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -682,7 +681,7 @@ class Sample_Access
 
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::SAMPLE_TABLE."";
+		$sql = "SELECT id FROM ".constant("SAMPLE_TABLE")."";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))
@@ -711,7 +710,7 @@ class Sample_Access
 		if (is_numeric($sample_id))
 		{
 			
-			$sql = "SELECT id FROM ".self::SAMPLE_TABLE." WHERE id = ".$sample_id."";
+			$sql = "SELECT id FROM ".constant("SAMPLE_TABLE")." WHERE id = ".$sample_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

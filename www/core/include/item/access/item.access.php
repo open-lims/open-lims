@@ -27,7 +27,6 @@
  */
 class Item_Access
 {
-	const ITEM_TABLE = 'core_items';
 	const ITEM_PK_SEQUENCE = 'core_items_id_seq';
 	
 	private $item_id;
@@ -46,7 +45,7 @@ class Item_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::ITEM_TABLE." WHERE id='".$item_id."'";
+			$sql = "SELECT * FROM ".constant("ITEM_TABLE")." WHERE id='".$item_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -82,14 +81,14 @@ class Item_Access
 		
 		$datetime = date("Y-m-d H:i:s");
 		
-		$sql_write = "INSERT INTO ".self::ITEM_TABLE." (id,datetime) " .
+		$sql_write = "INSERT INTO ".constant("ITEM_TABLE")." (id,datetime) " .
 				"VALUES (nextval('".self::ITEM_PK_SEQUENCE."'::regclass),'".$datetime."')";
 		
 		$res_write = $db->db_query($sql_write);	
 				
 		if ($db->db_affected_rows($res_write) == 1)
 		{
-			$sql_read = "SELECT id FROM ".self::ITEM_TABLE." WHERE id = currval('".self::ITEM_PK_SEQUENCE."'::regclass)";
+			$sql_read = "SELECT id FROM ".constant("ITEM_TABLE")." WHERE id = currval('".self::ITEM_PK_SEQUENCE."'::regclass)";
 			$res_read = $db->db_query($sql_read);
 			$data_read = $db->db_fetch_assoc($res_read);
 								
@@ -116,7 +115,7 @@ class Item_Access
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".self::ITEM_TABLE." WHERE id = ".$item_id_tmp."";
+			$sql = "DELETE FROM ".constant("ITEM_TABLE")." WHERE id = ".$item_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -159,7 +158,7 @@ class Item_Access
 
 		if ($this->item_id and $datetime)
 		{	
-			$sql = "UPDATE ".self::ITEM_TABLE." SET datetime = '".$datetime."' WHERE id = ".$this->item_id."";
+			$sql = "UPDATE ".constant("ITEM_TABLE")." SET datetime = '".$datetime."' WHERE id = ".$this->item_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))

@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * @package project
  * @version 0.4.0.0
@@ -22,10 +22,52 @@
  */
 
 /**
- * 
+ * Project Item Link Event
+ * @package project
  */
-	define("ORGANISATION_UNIT_HAS_GROUP_TABLE", 	"core_organisation_unit_has_groups");
-	define("ORGANISATION_UNIT_HAS_MEMBER_TABLE", 	"core_organisation_unit_has_members");
-	define("ORGANISATION_UNIT_TYPE_TABLE", 			"core_organisation_unit_types");
-	define("ORGANISATION_UNIT_TABLE", 				"core_organisation_units");
+class ProjectItemLinkEvent extends Event
+{    
+	private $item_id;
+	private $folder_id;
+	
+	function __construct($item_id, $folder_id)
+    {
+    	if (is_numeric($folder_id) and is_numeric($item_id))
+    	{
+    		parent::__construct();
+    		$this->item_id = $item_id;
+    		$this->folder_id = $folder_id;
+    	}
+    	else
+    	{
+    		$this->item_id = null;
+    		$this->folder_id = null;
+    	}
+    }
+    
+	public function get_item_id()
+    {
+    	if ($this->item_id)
+    	{
+    		return $this->item_id;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+    public function get_folder_id()
+    {
+    	if ($this->folder_id)
+    	{
+    		return $this->folder_id;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+}
+
 ?>

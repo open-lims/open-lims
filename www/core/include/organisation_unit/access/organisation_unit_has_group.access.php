@@ -27,8 +27,6 @@
  */
 class OrganisationUnitHasGroup_Access
 {
-
-	const ORGANISATION_UNIT_HAS_GROUP_TABLE = 'core_organisation_unit_has_groups';
 	const ORGANISATION_UNIT_HAS_GROUP_PK_SEQUENCE = 'core_organisation_unit_has_groups_primary_key_seq';
 
 	private $primary_key;
@@ -49,7 +47,7 @@ class OrganisationUnitHasGroup_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::ORGANISATION_UNIT_HAS_GROUP_TABLE." WHERE primary_key = ".$primary_key."";
+			$sql = "SELECT * FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE primary_key = ".$primary_key."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -84,13 +82,13 @@ class OrganisationUnitHasGroup_Access
 		
 		if (is_numeric($organisation_unit_id) and is_numeric($group_id))
 		{
-			$sql_write = "INSERT INTO ".self::ORGANISATION_UNIT_HAS_GROUP_TABLE." (primary_key,organisation_unit_id,group_id) " .
+			$sql_write = "INSERT INTO ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." (primary_key,organisation_unit_id,group_id) " .
 					"VALUES (nextval('".self::ORGANISATION_UNIT_HAS_GROUP_PK_SEQUENCE."'::regclass),".$organisation_unit_id.",".$group_id.")";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT primary_key FROM ".self::ORGANISATION_UNIT_HAS_GROUP_TABLE." WHERE primary_key = currval('".self::ORGANISATION_UNIT_HAS_GROUP_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT primary_key FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE primary_key = currval('".self::ORGANISATION_UNIT_HAS_GROUP_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -122,7 +120,7 @@ class OrganisationUnitHasGroup_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".self::ORGANISATION_UNIT_HAS_GROUP_TABLE." WHERE primary_key = ".$tmp_primary_key."";
+			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE primary_key = ".$tmp_primary_key."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -180,7 +178,7 @@ class OrganisationUnitHasGroup_Access
 			
 		if ($this->primary_key and is_numeric($organisation_unit_id))
 		{
-			$sql = "UPDATE ".self::ORGANISATION_UNIT_HAS_GROUP_TABLE." SET organisation_unit_id = '".$organisation_unit_id."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." SET organisation_unit_id = '".$organisation_unit_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -209,7 +207,7 @@ class OrganisationUnitHasGroup_Access
 			
 		if ($this->primary_key and is_numeric($group_id))
 		{
-			$sql = "UPDATE ".self::ORGANISATION_UNIT_HAS_GROUP_TABLE." SET group_id = '".$group_id."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." SET group_id = '".$group_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -241,7 +239,7 @@ class OrganisationUnitHasGroup_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT COUNT(organisation_unit_id) AS result FROM ".self::ORGANISATION_UNIT_HAS_GROUP_TABLE." WHERE group_id = ".$group_id."";
+			$sql = "SELECT COUNT(organisation_unit_id) AS result FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE group_id = ".$group_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -272,7 +270,7 @@ class OrganisationUnitHasGroup_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT COUNT(group_id) AS result FROM ".self::ORGANISATION_UNIT_HAS_GROUP_TABLE." WHERE organisation_unit_id = ".$organisation_unit_id."";
+			$sql = "SELECT COUNT(group_id) AS result FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -304,7 +302,7 @@ class OrganisationUnitHasGroup_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".self::ORGANISATION_UNIT_HAS_GROUP_TABLE." WHERE group_id = ".$group_id." AND organisation_unit_id = ".$organisation_unit_id."";
+			$sql = "SELECT primary_key FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE group_id = ".$group_id." AND organisation_unit_id = ".$organisation_unit_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -335,7 +333,7 @@ class OrganisationUnitHasGroup_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT organisation_unit_id FROM ".self::ORGANISATION_UNIT_HAS_GROUP_TABLE." WHERE group_id = ".$group_id."";
+			$sql = "SELECT organisation_unit_id FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE group_id = ".$group_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -370,7 +368,7 @@ class OrganisationUnitHasGroup_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT group_id FROM ".self::ORGANISATION_UNIT_HAS_GROUP_TABLE." WHERE organisation_unit_id = ".$organisation_unit_id."";
+			$sql = "SELECT group_id FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -405,7 +403,7 @@ class OrganisationUnitHasGroup_Access
 		{
 			$return_array = array();
 			
-			$sql = "DELETE FROM ".self::ORGANISATION_UNIT_HAS_GROUP_TABLE." WHERE group_id = ".$group_id."";
+			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE group_id = ".$group_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -429,7 +427,7 @@ class OrganisationUnitHasGroup_Access
 		{
 			$return_array = array();
 			
-			$sql = "DELETE FROM ".self::ORGANISATION_UNIT_HAS_GROUP_TABLE." WHERE organisation_unit_id = ".$organisation_unit_id."";
+			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

@@ -27,8 +27,6 @@
  */
 class MethodIsItem_Access
 {
-	const METHOD_IS_ITEM_TABLE = 'core_method_is_item';
-	
 	private $method_id;
 	private $item_id;
 	
@@ -45,7 +43,7 @@ class MethodIsItem_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::METHOD_IS_ITEM_TABLE." WHERE method_id='".$method_id."'";
+			$sql = "SELECT * FROM ".constant("METHOD_IS_ITEM_TABLE")." WHERE method_id='".$method_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -79,7 +77,7 @@ class MethodIsItem_Access
 		
 		if (is_numeric($method_id) and is_numeric($item_id))
 		{	
-			$sql_write = "INSERT INTO ".self::METHOD_IS_ITEM_TABLE." (method_id,item_id) " .
+			$sql_write = "INSERT INTO ".constant("METHOD_IS_ITEM_TABLE")." (method_id,item_id) " .
 					"VALUES (".$method_id.",".$item_id.")";
 					
 			$res_write = $db->db_query($sql_write);	
@@ -108,7 +106,7 @@ class MethodIsItem_Access
 			
 		if ($this->method_id and $this->item_id) {
 			
-			$sql = "DELETE FROM ".self::METHOD_IS_ITEM_TABLE." WHERE method_id = ".$this->method_id." AND item_id = ".$this->item_id."";
+			$sql = "DELETE FROM ".constant("METHOD_IS_ITEM_TABLE")." WHERE method_id = ".$this->method_id." AND item_id = ".$this->item_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -168,7 +166,7 @@ class MethodIsItem_Access
 		
 		if (is_numeric($item_id))
 		{	
-			$sql = "SELECT method_id FROM ".self::METHOD_IS_ITEM_TABLE." WHERE item_id='".$item_id."'";
+			$sql = "SELECT method_id FROM ".constant("METHOD_IS_ITEM_TABLE")." WHERE item_id='".$item_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

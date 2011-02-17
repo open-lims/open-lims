@@ -27,8 +27,6 @@
  */
 class Session_Access
 {
-	const SESSION_TABLE = 'core_sessions';
-	
 	private $session_id;
 	
 	private $ip;
@@ -48,7 +46,7 @@ class Session_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::SESSION_TABLE." WHERE session_id='".$session_id."'";
+			$sql = "SELECT * FROM ".constant("SESSION_TABLE")." WHERE session_id='".$session_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -94,7 +92,7 @@ class Session_Access
 			$datetime = date("Y-m-d H:i:s");
 			$ip = $_SERVER['REMOTE_ADDR'];
 			
-	 		$sql_write = "INSERT INTO ".self::SESSION_TABLE." (session_id, ip, user_id, datetime) " .
+	 		$sql_write = "INSERT INTO ".constant("SESSION_TABLE")." (session_id, ip, user_id, datetime) " .
 								"VALUES ('".$session_id."','".$ip."',".$user_id.",'".$datetime."')";		
 				
 			$res_write = $db->db_query($sql_write);
@@ -126,7 +124,7 @@ class Session_Access
 			$session_id_tmp = $this->session_id;
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".self::SESSION_TABLE." WHERE session_id = '".$session_id_tmp."'";
+			$sql = "DELETE FROM ".constant("SESSION_TABLE")." WHERE session_id = '".$session_id_tmp."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -199,7 +197,7 @@ class Session_Access
 
 		if ($this->session_id and $datetime)
 		{
-			$sql = "UPDATE ".self::SESSION_TABLE." SET datetime = '".$datetime."' WHERE session_id = '".$this->session_id."'";
+			$sql = "UPDATE ".constant("SESSION_TABLE")." SET datetime = '".$datetime."' WHERE session_id = '".$this->session_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -231,7 +229,7 @@ class Session_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT session_id FROM ".self::SESSION_TABLE." WHERE user_id = ".$user_id."";
+			$sql = "SELECT session_id FROM ".constant("SESSION_TABLE")." WHERE user_id = ".$user_id."";
 			$res = $db->db_query($sql);
 			while ($data = $db->db_fetch_assoc($res))
 			{
@@ -262,7 +260,7 @@ class Session_Access
 
 		$return_array = array();
 		
-		$sql = "SELECT session_id FROM ".self::SESSION_TABLE." ORDER BY user_id ASC";
+		$sql = "SELECT session_id FROM ".constant("SESSION_TABLE")." ORDER BY user_id ASC";
 		$res = $db->db_query($sql);
 		while ($data = $db->db_fetch_assoc($res))
 		{

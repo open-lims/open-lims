@@ -27,7 +27,6 @@
  */
 class ProjectStatus_Access
 {
-	const PROJECT_STATUS_TABLE = 'core_project_status';
 	const PROJECT_STATUS_PK_SEQUENCE = 'core_project_status_id_seq';
 
 	private $project_status_id;
@@ -50,7 +49,7 @@ class ProjectStatus_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::PROJECT_STATUS_TABLE." WHERE id='".$project_status_id."'";
+			$sql = "SELECT * FROM ".constant("PROJECT_STATUS_TABLE")." WHERE id='".$project_status_id."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
@@ -119,14 +118,14 @@ class ProjectStatus_Access
 				$comment_insert = "NULL";
 			}
 		
-			$sql_write = "INSERT INTO ".self::PROJECT_STATUS_TABLE." " .
+			$sql_write = "INSERT INTO ".constant("PROJECT_STATUS_TABLE")." " .
 							"(id,name,analysis,blocked,comment) " .
 							"VALUES (nextval('".self::PROJECT_STATUS_PK_SEQUENCE."'::regclass),'".$name."','f','f',".$comment_insert.")";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".self::PROJECT_STATUS_TABLE." WHERE id = currval('".self::PROJECT_STATUS_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("PROJECT_STATUS_TABLE")." WHERE id = currval('".self::PROJECT_STATUS_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 								
@@ -158,7 +157,7 @@ class ProjectStatus_Access
     		
     		$this->__destruct();
     		
-    		$sql = "DELETE FROM ".self::PROJECT_STATUS_TABLE." WHERE id = ".$tmp_project_status_id."";
+    		$sql = "DELETE FROM ".constant("PROJECT_STATUS_TABLE")." WHERE id = ".$tmp_project_status_id."";
     		$res = $db->db_query($sql);
     		
     		if ($db->db_affected_rows($res) == 1)
@@ -246,7 +245,7 @@ class ProjectStatus_Access
 
 		if ($this->project_status_id and $name)
 		{
-			$sql = "UPDATE ".self::PROJECT_STATUS_TABLE." SET name = '".$name."' WHERE id = ".$this->project_status_id."";
+			$sql = "UPDATE ".constant("PROJECT_STATUS_TABLE")." SET name = '".$name."' WHERE id = ".$this->project_status_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -284,7 +283,7 @@ class ProjectStatus_Access
 				$analysis_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::PROJECT_STATUS_TABLE." SET analysis = '".$analysis_insert."' WHERE id = ".$this->project_status_id."";
+			$sql = "UPDATE ".constant("PROJECT_STATUS_TABLE")." SET analysis = '".$analysis_insert."' WHERE id = ".$this->project_status_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -322,7 +321,7 @@ class ProjectStatus_Access
 				$blocked_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::PROJECT_STATUS_TABLE." SET blocked = '".$blocked_insert."' WHERE id = ".$this->project_status_id."";
+			$sql = "UPDATE ".constant("PROJECT_STATUS_TABLE")." SET blocked = '".$blocked_insert."' WHERE id = ".$this->project_status_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -351,7 +350,7 @@ class ProjectStatus_Access
 
 		if ($this->project_status_id and $comment)
 		{
-			$sql = "UPDATE ".self::PROJECT_STATUS_TABLE." SET comment = '".$comment."' WHERE id = ".$this->project_status_id."";
+			$sql = "UPDATE ".constant("PROJECT_STATUS_TABLE")." SET comment = '".$comment."' WHERE id = ".$this->project_status_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -381,7 +380,7 @@ class ProjectStatus_Access
 
 		if (is_numeric($id))
 		{
-			$sql = "SELECT id FROM ".self::PROJECT_STATUS_TABLE." WHERE id = ".$id."";
+			$sql = "SELECT id FROM ".constant("PROJECT_STATUS_TABLE")." WHERE id = ".$id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

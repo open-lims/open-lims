@@ -27,7 +27,6 @@
  */
 class Value_Access
 {
-	const VALUE_TABLE = 'core_values';
 	const VALUE_PK_SEQUENCE = 'core_values_id_seq';
 
 	private $value_id;
@@ -47,7 +46,7 @@ class Value_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::VALUE_TABLE." WHERE id='".$value_id."'";
+			$sql = "SELECT * FROM ".constant("VALUE_TABLE")." WHERE id='".$value_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -87,14 +86,14 @@ class Value_Access
 		{	
 			$datetime = date("Y-m-d H:i:s");
 			
-			$sql_write = "INSERT INTO ".self::VALUE_TABLE." (id,data_entity_id,type_id) " .
+			$sql_write = "INSERT INTO ".constant("VALUE_TABLE")." (id,data_entity_id,type_id) " .
 					"VALUES (nextval('".self::VALUE_PK_SEQUENCE."'::regclass),".$data_entity_id.",".$type_id.")";
 					
 			$res_write = $db->db_query($sql_write);	
 
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".self::VALUE_TABLE." WHERE id = currval('".self::VALUE_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("VALUE_TABLE")." WHERE id = currval('".self::VALUE_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 									
@@ -126,7 +125,7 @@ class Value_Access
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".self::VALUE_TABLE." WHERE id = ".$value_id_tmp."";
+			$sql = "DELETE FROM ".constant("VALUE_TABLE")." WHERE id = ".$value_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -185,7 +184,7 @@ class Value_Access
 
 		if ($this->value_id and is_numeric($data_entity_id))
 		{
-			$sql = "UPDATE ".self::VALUE_TABLE." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->value_id."";
+			$sql = "UPDATE ".constant("VALUE_TABLE")." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->value_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -214,7 +213,7 @@ class Value_Access
 	
 		if ($this->value_id and is_numeric($type_id))
 		{
-			$sql = "UPDATE ".self::VALUE_TABLE." SET type_id = ".$type_id." WHERE id = ".$this->value_id."";
+			$sql = "UPDATE ".constant("VALUE_TABLE")." SET type_id = ".$type_id." WHERE id = ".$this->value_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -245,7 +244,7 @@ class Value_Access
 
 		if (is_numeric($data_entity_id))
 		{
-			$sql = "SELECT id FROM ".self::VALUE_TABLE." WHERE data_entity_id = '".$data_entity_id."'";
+			$sql = "SELECT id FROM ".constant("VALUE_TABLE")." WHERE data_entity_id = '".$data_entity_id."'";
 
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
@@ -277,7 +276,7 @@ class Value_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::VALUE_TABLE." WHERE type_id = ".$type_id."";
+			$sql = "SELECT id FROM ".constant("VALUE_TABLE")." WHERE type_id = ".$type_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -313,7 +312,7 @@ class Value_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::VALUE_TABLE." WHERE id= ".$value_id." AND type_id = ".$type_id."";
+			$sql = "SELECT id FROM ".constant("VALUE_TABLE")." WHERE id= ".$value_id." AND type_id = ".$type_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -342,7 +341,7 @@ class Value_Access
 			
 		if (is_numeric($value_id))
 		{
-			$sql = "SELECT id FROM ".self::VALUE_TABLE." WHERE id = ".$value_id."";
+			$sql = "SELECT id FROM ".constant("VALUE_TABLE")." WHERE id = ".$value_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

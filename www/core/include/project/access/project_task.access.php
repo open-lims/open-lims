@@ -27,7 +27,6 @@
  */
 class ProjectTask_Access
 {
-	const PROJECT_TASK_TABLE = 'core_project_tasks';
 	const PROJECT_TASK_PK_SEQUENCE = 'core_project_tasks_id_seq';
 
 	private $task_id;
@@ -60,7 +59,7 @@ class ProjectTask_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::PROJECT_TASK_TABLE." WHERE id='".$task_id."'";
+			$sql = "SELECT * FROM ".constant("PROJECT_TASK_TABLE")." WHERE id='".$task_id."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
@@ -225,13 +224,13 @@ class ProjectTask_Access
 			
 			$datetime = date("Y-m-d H:i:s");
 			
-			$sql_write = "INSERT INTO ".self::PROJECT_TASK_TABLE." (id, type_id, project_id, owner_id, comment, start_date, start_time, end_date, end_time, whole_day, auto_connect, finished, created_at, finished_at, over_time) " .
+			$sql_write = "INSERT INTO ".constant("PROJECT_TASK_TABLE")." (id, type_id, project_id, owner_id, comment, start_date, start_time, end_date, end_time, whole_day, auto_connect, finished, created_at, finished_at, over_time) " .
 					"VALUES (nextval('".self::PROJECT_TASK_PK_SEQUENCE."'::regclass),".$type_id.",".$project_id.",".$user_id.",".$comment_insert.",".$start_date_insert.",".$start_time_insert.",'".$end_date."',".$end_time_insert.",'".$whole_day_insert."','".$auto_connect_insert."','f','".$datetime."', NULL, 'f')";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".self::PROJECT_TASK_TABLE." WHERE id = currval('".self::PROJECT_TASK_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("PROJECT_TASK_TABLE")." WHERE id = currval('".self::PROJECT_TASK_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -263,7 +262,7 @@ class ProjectTask_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".self::PROJECT_TASK_TABLE." WHERE id = ".$tmp_task_id."";
+			$sql = "DELETE FROM ".constant("PROJECT_TASK_TABLE")." WHERE id = ".$tmp_task_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -501,7 +500,7 @@ class ProjectTask_Access
 		
 		if ($this->task_id and is_numeric($type_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_TASK_TABLE." SET type_id = '".$type_id."' WHERE id = '".$this->task_id."'";
+			$sql = "UPDATE ".constant("PROJECT_TASK_TABLE")." SET type_id = '".$type_id."' WHERE id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -530,7 +529,7 @@ class ProjectTask_Access
 
 		if ($this->task_id and is_numeric($project_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_TASK_TABLE." SET project_id = '".$project_id."' WHERE id = '".$this->task_id."'";
+			$sql = "UPDATE ".constant("PROJECT_TASK_TABLE")." SET project_id = '".$project_id."' WHERE id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -559,7 +558,7 @@ class ProjectTask_Access
 
 		if ($this->task_id and is_numeric($owner_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_TASK_TABLE." SET owner_id = '".$owner_id."' WHERE id = '".$this->task_id."'";
+			$sql = "UPDATE ".constant("PROJECT_TASK_TABLE")." SET owner_id = '".$owner_id."' WHERE id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -588,7 +587,7 @@ class ProjectTask_Access
 
 		if ($this->task_id and $comment)
 		{
-			$sql = "UPDATE ".self::PROJECT_TASK_TABLE." SET comment = '".$comment."' WHERE id = '".$this->task_id."'";
+			$sql = "UPDATE ".constant("PROJECT_TASK_TABLE")." SET comment = '".$comment."' WHERE id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -617,7 +616,7 @@ class ProjectTask_Access
 	
 		if ($this->task_id and $start_date)
 		{			
-			$sql = "UPDATE ".self::PROJECT_TASK_TABLE." SET start_date = '".$start_date."' WHERE id = '".$this->task_id."'";
+			$sql = "UPDATE ".constant("PROJECT_TASK_TABLE")." SET start_date = '".$start_date."' WHERE id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -646,7 +645,7 @@ class ProjectTask_Access
 
 		if ($this->task_id and $start_time)
 		{		
-			$sql = "UPDATE ".self::PROJECT_TASK_TABLE." SET start_time = '".$start_time."' WHERE id = '".$this->task_id."'";
+			$sql = "UPDATE ".constant("PROJECT_TASK_TABLE")." SET start_time = '".$start_time."' WHERE id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -675,7 +674,7 @@ class ProjectTask_Access
 
 		if ($this->task_id and $end_date)
 		{
-			$sql = "UPDATE ".self::PROJECT_TASK_TABLE." SET end_date = '".$end_date."' WHERE id = '".$this->task_id."'";
+			$sql = "UPDATE ".constant("PROJECT_TASK_TABLE")." SET end_date = '".$end_date."' WHERE id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -704,7 +703,7 @@ class ProjectTask_Access
 	
 		if ($this->task_id and $end_time)
 		{
-			$sql = "UPDATE ".self::PROJECT_TASK_TABLE." SET end_time = '".$end_time."' WHERE id = '".$this->task_id."'";
+			$sql = "UPDATE ".constant("PROJECT_TASK_TABLE")." SET end_time = '".$end_time."' WHERE id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -742,7 +741,7 @@ class ProjectTask_Access
 				$whole_day_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::PROJECT_TASK_TABLE." SET whole_day = '".$whole_day_insert."' WHERE id = '".$this->task_id."'";
+			$sql = "UPDATE ".constant("PROJECT_TASK_TABLE")." SET whole_day = '".$whole_day_insert."' WHERE id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -780,7 +779,7 @@ class ProjectTask_Access
 				$auto_connect_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::PROJECT_TASK_TABLE." SET auto_connect = '".$auto_connect_insert."' WHERE id = '".$this->task_id."'";
+			$sql = "UPDATE ".constant("PROJECT_TASK_TABLE")." SET auto_connect = '".$auto_connect_insert."' WHERE id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -818,7 +817,7 @@ class ProjectTask_Access
 				$finished_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::PROJECT_TASK_TABLE." SET finished = '".$finished_insert."' WHERE id = '".$this->task_id."'";
+			$sql = "UPDATE ".constant("PROJECT_TASK_TABLE")." SET finished = '".$finished_insert."' WHERE id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -847,7 +846,7 @@ class ProjectTask_Access
 
 		if ($this->task_id and $created_at)
 		{
-			$sql = "UPDATE ".self::PROJECT_TASK_TABLE." SET created_at = '".$created_at."' WHERE id = '".$this->task_id."'";
+			$sql = "UPDATE ".constant("PROJECT_TASK_TABLE")." SET created_at = '".$created_at."' WHERE id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -876,7 +875,7 @@ class ProjectTask_Access
 
 		if ($this->task_id and $finished_at)
 		{
-			$sql = "UPDATE ".self::PROJECT_TASK_TABLE." SET finished_at = '".$finished_at."' WHERE id = '".$this->task_id."'";
+			$sql = "UPDATE ".constant("PROJECT_TASK_TABLE")." SET finished_at = '".$finished_at."' WHERE id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -914,7 +913,7 @@ class ProjectTask_Access
 				$over_time_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::PROJECT_TASK_TABLE." SET over_time = '".$over_time_insert."' WHERE id = '".$this->task_id."'";
+			$sql = "UPDATE ".constant("PROJECT_TASK_TABLE")." SET over_time = '".$over_time_insert."' WHERE id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -946,7 +945,7 @@ class ProjectTask_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::PROJECT_TASK_TABLE." WHERE project_id = ".$project_id." AND auto_connect = 't' ORDER BY start_date ASC";
+			$sql = "SELECT id FROM ".constant("PROJECT_TASK_TABLE")." WHERE project_id = ".$project_id." AND auto_connect = 't' ORDER BY start_date ASC";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -981,7 +980,7 @@ class ProjectTask_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::PROJECT_TASK_TABLE." WHERE project_id = ".$project_id." ORDER BY start_date ASC";
+			$sql = "SELECT id FROM ".constant("PROJECT_TASK_TABLE")." WHERE project_id = ".$project_id." ORDER BY start_date ASC";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -1016,7 +1015,7 @@ class ProjectTask_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::PROJECT_TASK_TABLE." WHERE project_id = ".$project_id." AND over_time = 't'";
+			$sql = "SELECT id FROM ".constant("PROJECT_TASK_TABLE")." WHERE project_id = ".$project_id." AND over_time = 't'";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -1051,7 +1050,7 @@ class ProjectTask_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::PROJECT_TASK_TABLE." WHERE owner_id = ".$owner_id." ORDER BY start_date ASC";
+			$sql = "SELECT id FROM ".constant("PROJECT_TASK_TABLE")." WHERE owner_id = ".$owner_id." ORDER BY start_date ASC";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -1083,7 +1082,7 @@ class ProjectTask_Access
 				
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::PROJECT_TASK_TABLE." ORDER BY start_date ASC";
+		$sql = "SELECT id FROM ".constant("PROJECT_TASK_TABLE")." ORDER BY start_date ASC";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))

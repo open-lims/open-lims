@@ -27,8 +27,6 @@
  */
 class SystemLogType_Access
 {
-	const SYSTEM_LOG_TYPE_TABLE = 'core_system_log_types';
-	
 	private $log_type_id;
 	private $name;
 	
@@ -45,7 +43,7 @@ class SystemLogType_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::SYSTEM_LOG_TYPE_TABLE." WHERE id = ".$log_type_id."";
+			$sql = "SELECT * FROM ".constant("SYSTEM_LOG_TYPE_TABLE")." WHERE id = ".$log_type_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -94,7 +92,7 @@ class SystemLogType_Access
 			
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::SYSTEM_LOG_TYPE_TABLE." ORDER BY id";
+		$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TYPE_TABLE")." ORDER BY id";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))

@@ -27,7 +27,6 @@
  */
 class ValueVersion_Access
 {
-	const VALUE_VERSION_TABLE = 'core_value_versions';
 	const VALUE_VERSION_PK_SEQUENCE = 'core_value_versions_id_seq';
 
 	private $value_version_id;
@@ -57,7 +56,7 @@ class ValueVersion_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::VALUE_VERSION_TABLE." WHERE id='".$value_version_id."'";
+			$sql = "SELECT * FROM ".constant("VALUE_VERSION_TABLE")." WHERE id='".$value_version_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -148,14 +147,14 @@ class ValueVersion_Access
 						
 			$datetime = date("Y-m-d H:i:s");
 			
-			$sql_write = "INSERT INTO ".self::VALUE_VERSION_TABLE." (id,toid,version,value,checksum,datetime,language_id,previous_version_id,internal_revision,current,owner_id,name) " .
+			$sql_write = "INSERT INTO ".constant("VALUE_VERSION_TABLE")." (id,toid,version,value,checksum,datetime,language_id,previous_version_id,internal_revision,current,owner_id,name) " .
 					"VALUES (nextval('".self::VALUE_VERSION_PK_SEQUENCE."'::regclass),".$toid.",".$version.",'".$value."','".$checksum."','".$datetime."',1,".$previous_version_id_insert.",".$internal_revision.",".$current_insert.",".$owner_id.",NULL)";
 					
 			$res_write = $db->db_query($sql_write);	
 
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".self::VALUE_VERSION_TABLE." WHERE id = currval('".self::VALUE_VERSION_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("VALUE_VERSION_TABLE")." WHERE id = currval('".self::VALUE_VERSION_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 									
@@ -186,7 +185,7 @@ class ValueVersion_Access
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".self::VALUE_VERSION_TABLE." WHERE id = ".$value_version_id_tmp."";
+			$sql = "DELETE FROM ".constant("VALUE_VERSION_TABLE")." WHERE id = ".$value_version_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -394,7 +393,7 @@ class ValueVersion_Access
 	
 		if ($this->value_version_id and is_numeric($toid))
 		{
-			$sql = "UPDATE ".self::VALUE_VERSION_TABLE." SET toid = ".$toid." WHERE id = ".$this->value_version_id."";
+			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET toid = ".$toid." WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -423,7 +422,7 @@ class ValueVersion_Access
 
 		if ($this->value_version_id and is_numeric($version))
 		{
-			$sql = "UPDATE ".self::VALUE_VERSION_TABLE." SET version = ".$version." WHERE id = ".$this->value_version_id."";
+			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET version = ".$version." WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -452,7 +451,7 @@ class ValueVersion_Access
 
 		if ($this->value_version_id and $value)
 		{
-			$sql = "UPDATE ".self::VALUE_VERSION_TABLE." SET value = '".$value."' WHERE id = ".$this->value_version_id."";
+			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET value = '".$value."' WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -491,7 +490,7 @@ class ValueVersion_Access
 				$language_name_insert = $language_name;
 			}
 			
-			$sql = "UPDATE ".self::VALUE_VERSION_TABLE." SET text_search_vector = to_tsvector('".$language_name_insert."','".$string."') WHERE id = ".$this->value_version_id."";
+			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET text_search_vector = to_tsvector('".$language_name_insert."','".$string."') WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -519,7 +518,7 @@ class ValueVersion_Access
 	
 		if ($this->value_version_id and $checksum)
 		{
-			$sql = "UPDATE ".self::VALUE_VERSION_TABLE." SET checksum = '".$checksum."' WHERE id = ".$this->value_version_id."";
+			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET checksum = '".$checksum."' WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -548,7 +547,7 @@ class ValueVersion_Access
 	
 		if ($this->value_version_id and $datetime)
 		{
-			$sql = "UPDATE ".self::VALUE_VERSION_TABLE." SET datetime = '".$datetime."' WHERE id = ".$this->value_version_id."";
+			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET datetime = '".$datetime."' WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -577,7 +576,7 @@ class ValueVersion_Access
 
 		if ($this->value_version_id and is_numeric($language_id))
 		{
-			$sql = "UPDATE ".self::VALUE_VERSION_TABLE." SET language_id = '".$language_id."' WHERE id = ".$this->value_version_id."";
+			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET language_id = '".$language_id."' WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -606,7 +605,7 @@ class ValueVersion_Access
 
 		if ($this->value_version_id and is_numeric($previous_version_id))
 		{
-			$sql = "UPDATE ".self::VALUE_VERSION_TABLE." SET previous_version_id = '".$previous_version_id."' WHERE id = ".$this->value_version_id."";
+			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET previous_version_id = '".$previous_version_id."' WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -635,7 +634,7 @@ class ValueVersion_Access
 
 		if ($this->value_version_id and is_numeric($internal_revision))
 		{
-			$sql = "UPDATE ".self::VALUE_VERSION_TABLE." SET internal_revision = '".$internal_revision."' WHERE id = ".$this->value_version_id."";
+			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET internal_revision = '".$internal_revision."' WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -673,7 +672,7 @@ class ValueVersion_Access
 				$current_insert = 'f';
 			}
 			
-			$sql = "UPDATE ".self::VALUE_VERSION_TABLE." SET current= '".$current_insert."' WHERE id = ".$this->value_version_id."";
+			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET current= '".$current_insert."' WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -702,7 +701,7 @@ class ValueVersion_Access
 
 		if ($this->value_version_id and is_numeric($owner_id))
 		{
-			$sql = "UPDATE ".self::VALUE_VERSION_TABLE." SET owner_id = '".$owner_id."' WHERE id = ".$this->value_version_id."";
+			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET owner_id = '".$owner_id."' WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -731,7 +730,7 @@ class ValueVersion_Access
 	
 		if ($this->value_version_id and $name)
 		{
-			$sql = "UPDATE ".self::VALUE_VERSION_TABLE." SET name = '".$name."' WHERE id = ".$this->value_version_id."";
+			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET name = '".$name."' WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -761,7 +760,7 @@ class ValueVersion_Access
 			
 		if ($this->toid and is_numeric($internal_revision))
 		{
-			$sql = "SELECT id FROM ".self::VALUE_VERSION_TABLE." WHERE internal_revision = ".$internal_revision." AND toid = '".$this->toid."'";
+			$sql = "SELECT id FROM ".constant("VALUE_VERSION_TABLE")." WHERE internal_revision = ".$internal_revision." AND toid = '".$this->toid."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -828,7 +827,7 @@ class ValueVersion_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::VALUE_VERSION_TABLE." WHERE previous_version_id = ".$previous_version_id." AND id != previous_version_id";
+			$sql = "SELECT id FROM ".constant("VALUE_VERSION_TABLE")." WHERE previous_version_id = ".$previous_version_id." AND id != previous_version_id";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -863,7 +862,7 @@ class ValueVersion_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT COUNT(id) AS numberofresults FROM ".self::VALUE_VERSION_TABLE." WHERE toid = ".$toid." AND id = previous_version_id";
+			$sql = "SELECT COUNT(id) AS numberofresults FROM ".constant("VALUE_VERSION_TABLE")." WHERE toid = ".$toid." AND id = previous_version_id";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -892,8 +891,8 @@ class ValueVersion_Access
 	
 		if (is_numeric($toid))
 		{
-			$sql = "SELECT id FROM ".self::VALUE_VERSION_TABLE." WHERE toid = ".$toid." " .
-							"AND internal_revision = (SELECT MAX(internal_revision) FROM ".self::VALUE_VERSION_TABLE." WHERE toid = ".$toid.")";				
+			$sql = "SELECT id FROM ".constant("VALUE_VERSION_TABLE")." WHERE toid = ".$toid." " .
+							"AND internal_revision = (SELECT MAX(internal_revision) FROM ".constant("VALUE_VERSION_TABLE")." WHERE toid = ".$toid.")";				
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 							
@@ -922,8 +921,8 @@ class ValueVersion_Access
 	
 		if (is_numeric($id))
 		{
-			$sql = "SELECT id FROM ".self::VALUE_VERSION_TABLE." WHERE previous_version_id = ".$id." " .
-							"AND version = (SELECT MAX(version) FROM ".self::VALUE_VERSION_TABLE." WHERE previous_version_id = ".$id." AND previous_version_id != id) AND previous_version_id != id";				
+			$sql = "SELECT id FROM ".constant("VALUE_VERSION_TABLE")." WHERE previous_version_id = ".$id." " .
+							"AND version = (SELECT MAX(version) FROM ".constant("VALUE_VERSION_TABLE")." WHERE previous_version_id = ".$id." AND previous_version_id != id) AND previous_version_id != id";				
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 							
@@ -955,13 +954,13 @@ class ValueVersion_Access
 		{
 			if (!is_numeric($previous_version_id))
 			{
-				$sql = "SELECT id FROM ".self::VALUE_VERSION_TABLE." WHERE previous_version_id = id AND toid = ".$toid."" .
-						"AND version = (SELECT MAX(version) FROM ".self::VALUE_VERSION_TABLE." WHERE previous_version_id = id AND toid = ".$toid.")";				
+				$sql = "SELECT id FROM ".constant("VALUE_VERSION_TABLE")." WHERE previous_version_id = id AND toid = ".$toid."" .
+						"AND version = (SELECT MAX(version) FROM ".constant("VALUE_VERSION_TABLE")." WHERE previous_version_id = id AND toid = ".$toid.")";				
 			}
 			else
 			{
-				$sql = "SELECT id FROM ".self::VALUE_VERSION_TABLE." WHERE previous_version_id = ".$previous_version_id." AND toid = ".$toid."" .
-						"AND version = (SELECT MAX(version) FROM ".self::VALUE_VERSION_TABLE." WHERE previous_version_id = ".$previous_version_id." AND toid = ".$toid." AND previous_version_id != id) AND previous_version_id != id";				
+				$sql = "SELECT id FROM ".constant("VALUE_VERSION_TABLE")." WHERE previous_version_id = ".$previous_version_id." AND toid = ".$toid."" .
+						"AND version = (SELECT MAX(version) FROM ".constant("VALUE_VERSION_TABLE")." WHERE previous_version_id = ".$previous_version_id." AND toid = ".$toid." AND previous_version_id != id) AND previous_version_id != id";				
 			}
 			
 			$res = $db->db_query($sql);
@@ -993,8 +992,8 @@ class ValueVersion_Access
 	
 		if (is_numeric($toid) and is_numeric($internal_revision))
 		{
-			$sql = "SELECT id FROM ".self::VALUE_VERSION_TABLE." WHERE toid = ".$toid." AND internal_revision != ".$internal_revision." " .
-						"AND datetime = (SELECT MAX(datetime) FROM ".self::VALUE_VERSION_TABLE." WHERE toid = ".$toid." AND internal_revision != ".$internal_revision.")";				
+			$sql = "SELECT id FROM ".constant("VALUE_VERSION_TABLE")." WHERE toid = ".$toid." AND internal_revision != ".$internal_revision." " .
+						"AND datetime = (SELECT MAX(datetime) FROM ".constant("VALUE_VERSION_TABLE")." WHERE toid = ".$toid." AND internal_revision != ".$internal_revision.")";				
 			
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
@@ -1025,7 +1024,7 @@ class ValueVersion_Access
 
 		if (is_numeric($toid) and is_numeric($internal_revision))
 		{
-			$sql = "SELECT id FROM ".self::VALUE_VERSION_TABLE." WHERE toid = ".$toid." " .
+			$sql = "SELECT id FROM ".constant("VALUE_VERSION_TABLE")." WHERE toid = ".$toid." " .
 							"AND internal_revision = ".$internal_revision."";				
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
@@ -1055,7 +1054,7 @@ class ValueVersion_Access
 
 		if (is_numeric($toid))
 		{
-			$sql = "SELECT id FROM ".self::VALUE_VERSION_TABLE." WHERE toid = ".$toid." " .
+			$sql = "SELECT id FROM ".constant("VALUE_VERSION_TABLE")." WHERE toid = ".$toid." " .
 							"AND current = 't'";				
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);

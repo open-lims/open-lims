@@ -28,6 +28,8 @@ require_once("access/project_has_item.access.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("events/project_item_link_event.class.php");
+	
 	require_once("interfaces/project_item.interface.php");
 }
 
@@ -79,19 +81,48 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
      */
     public function link_item()
     {    	
+    	global $transaction;
+    	
     	if ($this->item_id and $this->project_id)
     	{
-    		$project_has_item = new ProjectHasItem_Access(null);
-    		$primary_key = $project_has_item->create($this->project_id, $this->item_id, null);
-    		
-    		if ($primary_key)
-    		{
-    			return true;
-    		}
-    		else
-    		{
-    			return false;
-    		}
+			$transaction_id = $transaction->begin();
+			
+			if (($project_folder_id = ProjectFolder::get_folder_by_project_id($this->project_id)) != null)
+			{
+				$project_has_item = new ProjectHasItem_Access(null);
+	    		if ($project_has_item->create($this->project_id, $this->item_id, null) == null)
+	    		{
+	    			
+	    		}
+	    		
+				$project_item_link_event = new ProjectItemLinkEvent($this->item_id, $project_folder_id);
+				$event_handler = new EventHandler($project_item_link_event);
+				
+				if ($event_handler->get_success() == false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+				}
+				else
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->commit($transaction_id);
+					}
+					return true;
+				}
+			}
+			else
+			{
+				if ($transaction_id != null)
+  				{
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+			}
     	}
     	else
     	{

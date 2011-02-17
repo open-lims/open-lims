@@ -27,7 +27,6 @@
  */
 class SessionValue_Access
 {
-	const SESSION_VALUE_TABLE = 'core_session_values';
 	const SESSION_VALUE_PK_SEQUENCE = 'core_session_values_id_seq';
 	
 	private $id;
@@ -49,7 +48,7 @@ class SessionValue_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::SESSION_VALUE_TABLE." WHERE id='".$id."'";
+			$sql = "SELECT * FROM ".constant("SESSION_VALUE_TABLE")." WHERE id='".$id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -92,7 +91,7 @@ class SessionValue_Access
 		
 		if ($session_id and $address and $value)
 		{
-	 		$sql_write = "INSERT INTO ".self::SESSION_VALUE_TABLE." (id, session_id, address, value) " .
+	 		$sql_write = "INSERT INTO ".constant("SESSION_VALUE_TABLE")." (id, session_id, address, value) " .
 								"VALUES (nextval('".self::SESSION_VALUE_PK_SEQUENCE."'::regclass),'".$session_id."','".$address."','".$value."')";		
 				
 			$res_write = $db->db_query($sql_write);
@@ -125,7 +124,7 @@ class SessionValue_Access
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".self::SESSION_VALUE_TABLE." WHERE id = '".$id_tmp."'";
+			$sql = "DELETE FROM ".constant("SESSION_VALUE_TABLE")." WHERE id = '".$id_tmp."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -198,7 +197,7 @@ class SessionValue_Access
 		
 		if ($this->session_id and $value)
 		{
-			$sql = "UPDATE ".self::SESSION_VALUE_TABLE." SET value = '".$value."' WHERE id = '".$this->id."'";
+			$sql = "UPDATE ".constant("SESSION_VALUE_TABLE")." SET value = '".$value."' WHERE id = '".$this->id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -229,7 +228,7 @@ class SessionValue_Access
 		
 		if ($session_id and $address)
 		{
-			$sql = "SELECT id FROM ".self::SESSION_VALUE_TABLE." WHERE session_id = '".$session_id."' AND address = '".$address."'";
+			$sql = "SELECT id FROM ".constant("SESSION_VALUE_TABLE")." WHERE session_id = '".$session_id."' AND address = '".$address."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 				
@@ -260,7 +259,7 @@ class SessionValue_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::SESSION_VALUE_TABLE." WHERE session_id = '".$session_id."'";
+			$sql = "SELECT id FROM ".constant("SESSION_VALUE_TABLE")." WHERE session_id = '".$session_id."'";
 			$res = $db->db_query($sql);
 			while ($data = $db->db_fetch_assoc($res))
 			{

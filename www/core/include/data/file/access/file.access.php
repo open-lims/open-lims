@@ -27,7 +27,6 @@
  */
 class File_Access
 {
-	const FILE_TABLE = 'core_files';
 	const FILE_PK_SEQUENCE = 'core_files_id_seq';
 
 	private $file_id;
@@ -47,7 +46,7 @@ class File_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::FILE_TABLE." WHERE id='".$file_id."'";
+			$sql = "SELECT * FROM ".constant("FILE_TABLE")." WHERE id='".$file_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -86,12 +85,12 @@ class File_Access
 		{
 			$datetime = date("Y-m-d H:i:s");
 			
-			$sql_write = "INSERT INTO ".self::FILE_TABLE." (id,data_entity_id,flag) " .
+			$sql_write = "INSERT INTO ".constant("FILE_TABLE")." (id,data_entity_id,flag) " .
 					"VALUES (nextval('".self::FILE_PK_SEQUENCE."'::regclass),".$data_entity_id.",0)";
 					
 			$db->db_query($sql_write);	
 			
-			$sql_read = "SELECT id FROM ".self::FILE_TABLE." WHERE id = currval('".self::FILE_PK_SEQUENCE."'::regclass)";
+			$sql_read = "SELECT id FROM ".constant("FILE_TABLE")." WHERE id = currval('".self::FILE_PK_SEQUENCE."'::regclass)";
 			$res_read = $db->db_query($sql_read);
 			$data_read = $db->db_fetch_assoc($res_read);
 								
@@ -118,7 +117,7 @@ class File_Access
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".self::FILE_TABLE." WHERE id = ".$file_id_tmp."";
+			$sql = "DELETE FROM ".constant("FILE_TABLE")." WHERE id = ".$file_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -177,7 +176,7 @@ class File_Access
 
 		if ($this->file_id and is_numeric($data_entity_id))
 		{
-			$sql = "UPDATE ".self::FILE_TABLE." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->file_id."";
+			$sql = "UPDATE ".constant("FILE_TABLE")." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->file_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -206,7 +205,7 @@ class File_Access
 
 		if ($this->file_id and is_numeric($flag))
 		{
-			$sql = "UPDATE ".self::FILE_TABLE." SET flag = ".$flag." WHERE id = ".$this->file_id."";
+			$sql = "UPDATE ".constant("FILE_TABLE")." SET flag = ".$flag." WHERE id = ".$this->file_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -236,7 +235,7 @@ class File_Access
 
 		if (is_numeric($data_entity_id))
 		{
-			$sql = "SELECT id FROM ".self::FILE_TABLE." WHERE data_entity_id = '".$data_entity_id."'";
+			$sql = "SELECT id FROM ".constant("FILE_TABLE")." WHERE data_entity_id = '".$data_entity_id."'";
 
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
@@ -266,7 +265,7 @@ class File_Access
 			
 		if (is_numeric($file_id))
 		{
-			$sql = "SELECT id FROM ".self::FILE_TABLE." WHERE id = ".$file_id."";
+			$sql = "SELECT id FROM ".constant("FILE_TABLE")." WHERE id = ".$file_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

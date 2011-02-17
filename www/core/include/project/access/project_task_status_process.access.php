@@ -27,8 +27,6 @@
  */
 class ProjectTaskStatusProcess_Access
 {
-	const PROJECT_TASK_STATUS_PROCESS_TABLE = 'core_project_task_status_processes';
-	
 	private $task_id;
 	private $begin_status_id;
 	private $end_status_id;
@@ -48,7 +46,7 @@ class ProjectTaskStatusProcess_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::PROJECT_TASK_STATUS_PROCESS_TABLE." WHERE task_id='".$task_id."'";
+			$sql = "SELECT * FROM ".constant("PROJECT_TASK_STATUS_PROCESS_TABLE")." WHERE task_id='".$task_id."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
@@ -120,7 +118,7 @@ class ProjectTaskStatusProcess_Access
 				$subtraction_points_insert = $subtraction_points;
 			}
 			
-			$sql_write = "INSERT INTO ".self::PROJECT_TASK_STATUS_PROCESS_TABLE." (task_id, begin_status_id, end_status_id, finalise, subtraction_points) " .
+			$sql_write = "INSERT INTO ".constant("PROJECT_TASK_STATUS_PROCESS_TABLE")." (task_id, begin_status_id, end_status_id, finalise, subtraction_points) " .
 					"VALUES (".$task_id.", ".$begin_status_id.", ".$end_status_id.", '".$finalise_insert."', ".$subtraction_points_insert.")";
 			$res_write = $db->db_query($sql_write);
 			
@@ -153,7 +151,7 @@ class ProjectTaskStatusProcess_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".self::PROJECT_TASK_STATUS_PROCESS_TABLE." WHERE task_id = ".$tmp_task_id."";
+			$sql = "DELETE FROM ".constant("PROJECT_TASK_STATUS_PROCESS_TABLE")." WHERE task_id = ".$tmp_task_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -241,7 +239,7 @@ class ProjectTaskStatusProcess_Access
 
 		if ($this->task_id and is_numeric($begin_status_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_TASK_STATUS_PROCESS_TABLE." SET begin_status_id = '".$begin_status_id."' WHERE task_id = '".$this->task_id."'";
+			$sql = "UPDATE ".constant("PROJECT_TASK_STATUS_PROCESS_TABLE")." SET begin_status_id = '".$begin_status_id."' WHERE task_id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -270,7 +268,7 @@ class ProjectTaskStatusProcess_Access
 
 		if ($this->task_id and is_numeric($end_status_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_TASK_STATUS_PROCESS_TABLE." SET end_status_id = '".$end_status_id."' WHERE task_id = '".$this->task_id."'";
+			$sql = "UPDATE ".constant("PROJECT_TASK_STATUS_PROCESS_TABLE")." SET end_status_id = '".$end_status_id."' WHERE task_id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -308,7 +306,7 @@ class ProjectTaskStatusProcess_Access
 				$finalise_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::PROJECT_TASK_STATUS_PROCESS_TABLE." SET finalise = '".$finalise_insert."' WHERE task_id = '".$this->task_id."'";
+			$sql = "UPDATE ".constant("PROJECT_TASK_STATUS_PROCESS_TABLE")." SET finalise = '".$finalise_insert."' WHERE task_id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -337,7 +335,7 @@ class ProjectTaskStatusProcess_Access
 	
 		if ($this->task_id and is_numeric($subtraction_points))
 		{
-			$sql = "UPDATE ".self::PROJECT_TASK_STATUS_PROCESS_TABLE." SET subtraction_points = '".$subtraction_points."' WHERE task_id = '".$this->task_id."'";
+			$sql = "UPDATE ".constant("PROJECT_TASK_STATUS_PROCESS_TABLE")." SET subtraction_points = '".$subtraction_points."' WHERE task_id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))

@@ -40,7 +40,6 @@ interface SampleSecurityInterface
 	
 	public function create_user($user_id, $read, $write);
 	public function create_organisation_unit($organisation_unit_id);
-	public function create_project($project_id);
 	public function delete_user($entry_id);
 	public function delete_organisation_unit($entry_id);
 	public function list_users();

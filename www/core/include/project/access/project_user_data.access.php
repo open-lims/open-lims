@@ -27,8 +27,6 @@
  */
 class ProjectUserData_Access
 {
-	const PROJECT_USER_DATA_TABLE = 'core_project_user_data';
-	
 	private $user_id;
 	private $quota;
 	
@@ -45,7 +43,7 @@ class ProjectUserData_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::PROJECT_USER_DATA_TABLE." WHERE user_id='".$user_id."'";
+			$sql = "SELECT * FROM ".constant("PROJECT_USER_DATA_TABLE")." WHERE user_id='".$user_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -81,7 +79,7 @@ class ProjectUserData_Access
 		
 		if (is_numeric($user_id) and is_numeric($quota))
 		{
-			$sql_write = "INSERT INTO ".self::PROJECT_USER_DATA_TABLE." (user_id,quota) " .
+			$sql_write = "INSERT INTO ".constant("PROJECT_USER_DATA_TABLE")." (user_id,quota) " .
 					"VALUES (".$user_id.",".$quota.")";
 					
 			$res_write = $db->db_query($sql_write);	
@@ -114,7 +112,7 @@ class ProjectUserData_Access
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".self::PROJECT_USER_DATA_TABLE." WHERE user_id = ".$user_id_tmp."";
+			$sql = "DELETE FROM ".constant("PROJECT_USER_DATA_TABLE")." WHERE user_id = ".$user_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -157,7 +155,7 @@ class ProjectUserData_Access
 			
 		if ($this->user_id and is_numeric($quota))
 		{
-			$sql = "UPDATE ".self::PROJECT_USER_DATA_TABLE." SET quota = '".$quota."' WHERE user_id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("PROJECT_USER_DATA_TABLE")." SET quota = '".$quota."' WHERE user_id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))

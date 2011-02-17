@@ -27,7 +27,6 @@
  */
 class ProjectLog_Access
 {
-	const PROJECT_LOG_TABLE = 'core_project_log';
 	const PROJECT_LOG_PK_SEQUENCE = 'core_project_log_id_seq';
 
 	private $log_id;
@@ -53,7 +52,7 @@ class ProjectLog_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::PROJECT_LOG_TABLE." WHERE id='".$log_id."'";
+			$sql = "SELECT * FROM ".constant("PROJECT_LOG_TABLE")." WHERE id='".$log_id."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
@@ -151,13 +150,13 @@ class ProjectLog_Access
 			
 			$datetime = date("Y-m-d H:i:s");
 			
-			$sql_write = "INSERT INTO ".self::PROJECT_LOG_TABLE." (id, project_id, datetime, content, cancel, important, owner_id, action_checksum) " .
+			$sql_write = "INSERT INTO ".constant("PROJECT_LOG_TABLE")." (id, project_id, datetime, content, cancel, important, owner_id, action_checksum) " .
 					"VALUES (nextval('".self::PROJECT_LOG_PK_SEQUENCE."'::regclass),".$project_id.",'".$datetime."',".$content_insert.",'".$cancel_insert."','".$important_insert."',".$owner_id.",'".$action_checksum."')";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".self::PROJECT_LOG_TABLE." WHERE id = currval('".self::PROJECT_LOG_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("PROJECT_LOG_TABLE")." WHERE id = currval('".self::PROJECT_LOG_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -189,7 +188,7 @@ class ProjectLog_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".self::PROJECT_LOG_TABLE." WHERE id = ".$tmp_log_id."";
+			$sql = "DELETE FROM ".constant("PROJECT_LOG_TABLE")." WHERE id = ".$tmp_log_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -314,7 +313,7 @@ class ProjectLog_Access
 		
 		if ($this->log_id and is_numeric($project_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_LOG_TABLE." SET project_id = '".$project_id."' WHERE id = '".$this->log_id."'";
+			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET project_id = '".$project_id."' WHERE id = '".$this->log_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -343,7 +342,7 @@ class ProjectLog_Access
 
 		if ($this->log_id and $datetime)
 		{
-			$sql = "UPDATE ".self::PROJECT_LOG_TABLE." SET datetime = '".$datetime."' WHERE id = '".$this->log_id."'";
+			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET datetime = '".$datetime."' WHERE id = '".$this->log_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -372,7 +371,7 @@ class ProjectLog_Access
 	
 		if ($this->log_id and $content)
 		{
-			$sql = "UPDATE ".self::PROJECT_LOG_TABLE." SET content = '".$content."' WHERE id = '".$this->log_id."'";
+			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET content = '".$content."' WHERE id = '".$this->log_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -410,7 +409,7 @@ class ProjectLog_Access
 				$cancel_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::PROJECT_LOG_TABLE." SET cancel = '".$cancel_insert."' WHERE id = '".$this->log_id."'";
+			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET cancel = '".$cancel_insert."' WHERE id = '".$this->log_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -448,7 +447,7 @@ class ProjectLog_Access
 				$important_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::PROJECT_LOG_TABLE." SET important = '".$important_insert."' WHERE id = '".$this->log_id."'";
+			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET important = '".$important_insert."' WHERE id = '".$this->log_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -477,7 +476,7 @@ class ProjectLog_Access
 
 		if ($this->log_id and is_numeric($owner_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_LOG_TABLE." SET owner_id = '".$owner_id."' WHERE id = '".$this->log_id."'";
+			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET owner_id = '".$owner_id."' WHERE id = '".$this->log_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -506,7 +505,7 @@ class ProjectLog_Access
 		
 		if ($this->log_id and strlen($action_checksum) == 32)
 		{
-			$sql = "UPDATE ".self::PROJECT_LOG_TABLE." SET action_checksum = '".$action_checksum."' WHERE id = '".$this->log_id."'";
+			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET action_checksum = '".$action_checksum."' WHERE id = '".$this->log_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -538,7 +537,7 @@ class ProjectLog_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::PROJECT_LOG_TABLE." WHERE project_id = ".$project_id." ORDER BY datetime DESC";
+			$sql = "SELECT id FROM ".constant("PROJECT_LOG_TABLE")." WHERE project_id = ".$project_id." ORDER BY datetime DESC";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -573,7 +572,7 @@ class ProjectLog_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::PROJECT_LOG_TABLE." WHERE owner_id = ".$owner_id."";
+			$sql = "SELECT id FROM ".constant("PROJECT_LOG_TABLE")." WHERE owner_id = ".$owner_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -605,7 +604,7 @@ class ProjectLog_Access
 				
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::PROJECT_LOG_TABLE."";
+		$sql = "SELECT id FROM ".constant("PROJECT_LOG_TABLE")."";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))

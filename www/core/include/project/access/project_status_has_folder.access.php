@@ -27,8 +27,6 @@
  */
 class ProjectStatusHasFolder_Access
 {
-	const PROJECT_STATUS_HAS_FOLDER_TABLE = 'core_project_status_has_folder';
-	
 	private $project_id;
 	private $project_status_id;
 	private $folder_id;
@@ -46,7 +44,7 @@ class ProjectStatusHasFolder_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::PROJECT_STATUS_HAS_FOLDER_TABLE." WHERE folder_id='".$folder_id."'";
+			$sql = "SELECT * FROM ".constant("PROJECT_STATUS_HAS_FOLDER_TABLE")." WHERE folder_id='".$folder_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -83,7 +81,7 @@ class ProjectStatusHasFolder_Access
 		
 		if (is_numeric($project_id) and is_numeric($project_status_id) and is_numeric($folder_id))
 		{	
-			$sql_write = "INSERT INTO ".self::PROJECT_STATUS_HAS_FOLDER_TABLE." (project_id,project_status_id,folder_id) " .
+			$sql_write = "INSERT INTO ".constant("PROJECT_STATUS_HAS_FOLDER_TABLE")." (project_id,project_status_id,folder_id) " .
 					"VALUES (".$project_id.",".$project_status_id.",".$folder_id.")";
 					
 			$res_write = $db->db_query($sql_write);	
@@ -112,7 +110,7 @@ class ProjectStatusHasFolder_Access
 			
 		if ($this->project_id and $this->folder_id)
 		{
-			$sql = "DELETE FROM ".self::PROJECT_STATUS_HAS_FOLDER_TABLE." WHERE project_id = ".$this->project_id." AND folder_id = ".$this->folder_id."";
+			$sql = "DELETE FROM ".constant("PROJECT_STATUS_HAS_FOLDER_TABLE")." WHERE project_id = ".$this->project_id." AND folder_id = ".$this->folder_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -188,7 +186,7 @@ class ProjectStatusHasFolder_Access
 		
 		if (is_numeric($project_id))
 		{	
-			$sql = "SELECT folder_id FROM ".self::PROJECT_STATUS_HAS_FOLDER_TABLE." WHERE project_id='".$project_id."' AND project_status_id='".$project_status_id."'";
+			$sql = "SELECT folder_id FROM ".constant("PROJECT_STATUS_HAS_FOLDER_TABLE")." WHERE project_id='".$project_id."' AND project_status_id='".$project_status_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

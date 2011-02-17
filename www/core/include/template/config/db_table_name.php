@@ -24,5 +24,8 @@
 /**
  * 
  */
-
+	define("OLDL_TEMPLATE_TABLE", 		"core_oldl_templates");
+	define("OLVDL_TEMPLATE_TABLE", 		"core_olvdl_templates");
+	define("XML_CACHE_ELEMENT_TABLE", 	"core_xml_cache_elements");
+	define("XML_CACHE_TABLE", 			"core_xml_cache");
 ?>

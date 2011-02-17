@@ -983,6 +983,15 @@ class Folder extends DataEntity implements FolderInterface
 	}
 	
 	/**
+	 * @param integer $data_entity_id
+	 * @return integer
+	 */
+	public static function get_data_entity_id_by_folder_id($folder_id)
+	{	
+		return Folder_Access::get_data_entity_id_by_folder_id($folder_id);
+	}
+	
+	/**
 	 * @param string $type
 	 * @param string $handling_class
 	 * @param integer $include_id

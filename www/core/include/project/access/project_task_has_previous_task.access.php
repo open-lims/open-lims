@@ -27,8 +27,6 @@
  */
 class ProjectTaskHasPreviousTask_Access
 {
-	const PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE = 'core_project_task_has_previous_tasks';
-	
 	private $task_id;
 	private $previous_task_id;
 	
@@ -47,7 +45,7 @@ class ProjectTaskHasPreviousTask_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE." WHERE task_id='".$task_id."' AND previous_task_id='".$previous_task_id."'";
+			$sql = "SELECT * FROM ".constant("PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE")." WHERE task_id='".$task_id."' AND previous_task_id='".$previous_task_id."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
@@ -84,7 +82,7 @@ class ProjectTaskHasPreviousTask_Access
 		
 		if (is_numeric($task_id) and is_numeric($previous_task_id))
 		{
-			$sql_write = "INSERT INTO ".self::PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE." (task_id, previous_task_id) " .
+			$sql_write = "INSERT INTO ".constant("PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE")." (task_id, previous_task_id) " .
 					"VALUES (".$task_id.", ".$previous_task_id.")";
 			$res_write = $db->db_query($sql_write);
 			
@@ -117,7 +115,7 @@ class ProjectTaskHasPreviousTask_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".self::PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE." WHERE task_id = ".$tmp_task_id." AND previous_task_id = ".$tmp_previous_task_id."";
+			$sql = "DELETE FROM ".constant("PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE")." WHERE task_id = ".$tmp_task_id." AND previous_task_id = ".$tmp_previous_task_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -145,7 +143,7 @@ class ProjectTaskHasPreviousTask_Access
 
 		if ($this->task_id and is_numeric($task_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE." SET task_id = '".$task_id."' WHERE task_id = ".$this->task_id." AND previous_task_id = ".$this->previous_task_id."";
+			$sql = "UPDATE ".constant("PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE")." SET task_id = '".$task_id."' WHERE task_id = ".$this->task_id." AND previous_task_id = ".$this->previous_task_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -174,7 +172,7 @@ class ProjectTaskHasPreviousTask_Access
 
 		if ($this->task_id and is_numeric($previous_task_id))
 		{
-			$sql = "UPDATE ".self::PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE." SET previous_task_id = '".$previous_task_id."' WHERE task_id = ".$this->task_id." AND previous_task_id = ".$this->previous_task_id."";
+			$sql = "UPDATE ".constant("PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE")." SET previous_task_id = '".$previous_task_id."' WHERE task_id = ".$this->task_id." AND previous_task_id = ".$this->previous_task_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -206,7 +204,7 @@ class ProjectTaskHasPreviousTask_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT previous_task_id FROM ".self::PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE." WHERE task_id = ".$task_id."";
+			$sql = "SELECT previous_task_id FROM ".constant("PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE")." WHERE task_id = ".$task_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -241,7 +239,7 @@ class ProjectTaskHasPreviousTask_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT task_id FROM ".self::PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE." WHERE previous_task_id = ".$previous_task_id."";
+			$sql = "SELECT task_id FROM ".constant("PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE")." WHERE previous_task_id = ".$previous_task_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -275,7 +273,7 @@ class ProjectTaskHasPreviousTask_Access
 
 		if (is_numeric($task_id) and is_numeric($previous_task_id))
 		{
-			$sql = "SELECT * FROM ".self::PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE." WHERE task_id='".$task_id."' AND previous_task_id='".$previous_task_id."'";
+			$sql = "SELECT * FROM ".constant("PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE")." WHERE task_id='".$task_id."' AND previous_task_id='".$previous_task_id."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			

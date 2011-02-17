@@ -27,8 +27,6 @@
  */
 class SampleIsItem_Access
 {
-	const SAMPLE_IS_ITEM_TABLE = 'core_sample_is_item';
-	
 	private $sample_id;
 	private $item_id;
 	
@@ -45,7 +43,7 @@ class SampleIsItem_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::SAMPLE_IS_ITEM_TABLE." WHERE sample_id='".$sample_id."'";
+			$sql = "SELECT * FROM ".constant("SAMPLE_IS_ITEM_TABLE")." WHERE sample_id='".$sample_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -79,7 +77,7 @@ class SampleIsItem_Access
 		
 		if (is_numeric($sample_id) and is_numeric($item_id))
 		{	
-			$sql_write = "INSERT INTO ".self::SAMPLE_IS_ITEM_TABLE." (sample_id,item_id) " .
+			$sql_write = "INSERT INTO ".constant("SAMPLE_IS_ITEM_TABLE")." (sample_id,item_id) " .
 					"VALUES (".$sample_id.",".$item_id.")";
 					
 			$res_write = $db->db_query($sql_write);	
@@ -108,7 +106,7 @@ class SampleIsItem_Access
 			
 		if ($this->sample_id and $this->item_id)
 		{
-			$sql = "DELETE FROM ".self::SAMPLE_IS_ITEM_TABLE." WHERE sample_id = ".$this->sample_id." AND item_id = ".$this->item_id."";
+			$sql = "DELETE FROM ".constant("SAMPLE_IS_ITEM_TABLE")." WHERE sample_id = ".$this->sample_id." AND item_id = ".$this->item_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -168,7 +166,7 @@ class SampleIsItem_Access
 		
 		if (is_numeric($item_id))
 		{	
-			$sql = "SELECT sample_id FROM ".self::SAMPLE_IS_ITEM_TABLE." WHERE item_id='".$item_id."'";
+			$sql = "SELECT sample_id FROM ".constant("SAMPLE_IS_ITEM_TABLE")." WHERE item_id='".$item_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

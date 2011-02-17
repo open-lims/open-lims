@@ -27,8 +27,6 @@
  */
 class FolderIsUserFolder_Access
 {
-	const FOLDER_IS_USER_FOLDER_TABLE = 'core_folder_is_user_folder';
-	
 	private $user_id;
 	private $folder_id;
 	
@@ -45,7 +43,7 @@ class FolderIsUserFolder_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::FOLDER_IS_USER_FOLDER_TABLE." WHERE folder_id='".$folder_id."'";
+			$sql = "SELECT * FROM ".constant("FOLDER_IS_USER_FOLDER_TABLE")." WHERE folder_id='".$folder_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -79,7 +77,7 @@ class FolderIsUserFolder_Access
 		
 		if (is_numeric($user_id) and is_numeric($folder_id))
 		{	
-			$sql_write = "INSERT INTO ".self::FOLDER_IS_USER_FOLDER_TABLE." (user_id,folder_id) " .
+			$sql_write = "INSERT INTO ".constant("FOLDER_IS_USER_FOLDER_TABLE")." (user_id,folder_id) " .
 					"VALUES (".$user_id.",".$folder_id.")";
 					
 			$res_write = $db->db_query($sql_write);	
@@ -108,7 +106,7 @@ class FolderIsUserFolder_Access
 			
 		if ($this->user_id and $this->folder_id)
 		{
-			$sql = "DELETE FROM ".self::FOLDER_IS_USER_FOLDER_TABLE." WHERE user_id = ".$this->user_id." AND folder_id = ".$this->folder_id."";
+			$sql = "DELETE FROM ".constant("FOLDER_IS_USER_FOLDER_TABLE")." WHERE user_id = ".$this->user_id." AND folder_id = ".$this->folder_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -168,7 +166,7 @@ class FolderIsUserFolder_Access
 		
 		if (is_numeric($user_id))
 		{	
-			$sql = "SELECT folder_id FROM ".self::FOLDER_IS_USER_FOLDER_TABLE." WHERE user_id='".$user_id."'";
+			$sql = "SELECT folder_id FROM ".constant("FOLDER_IS_USER_FOLDER_TABLE")." WHERE user_id='".$user_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

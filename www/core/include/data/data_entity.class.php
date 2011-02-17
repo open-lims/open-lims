@@ -51,6 +51,9 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	
 	protected $inherit_permission;
 	
+	/**
+	 * @param integer $entity_id
+	 */
 	function __construct($entity_id)
 	{
 		if (is_numeric($entity_id) and $entity_id > 0)
@@ -107,11 +110,15 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 			$this->control_access = false;
 		}
 		
-		if ($this->data_entity->get_automatic() == true)
+		if ($this->data_entity->get_automatic() == true and 
+			$this->data_entity->read_access == false and
+			$this->data_entity->write_access == false and
+			$this->data_entity->delete_access == false and 
+			$this->data_entity->control_access == false)
 		{
-			if ($parent_folderdata_entity_id = $this->get_parent_folder())
+			if ($parent_folder_id = $this->get_parent_folder_id())
 			{
-				$folder = Folder::get_instance(Folder::get_folder_id_by_data_entity_id($parent_folderdata_entity_id));
+				$folder = Folder::get_instance($parent_folder_id);
 				if ($folder->get_inherit_permission() == true)
 				{
 					$this->inherit_permission = true;
@@ -160,33 +167,56 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		} 
 	}
 
+	/**
+	 * Empty Destructor
+	 */
+	function __destruct()
+	{
+		
+	}
+	
+	/**
+	 * @return bool
+	 */
 	protected final function get_inherit_permission()
 	{
 		return $this->inherit_permission;
 	}
 	
+	/**
+	 * @return bool
+	 */
 	public function is_read_access()
 	{
 		return $this->read_access;
 	}
 	
+	/**
+	 * @return bool
+	 */
 	public function is_write_access()
 	{
 		return $this->write_access;
 	}
 	
+	/**
+	 * @return bool
+	 */
 	public function is_delete_access()
 	{
 		return $this->delete_access;
 	}
 	
+	/**
+	 * @return bool
+	 */
 	public function is_control_access()
 	{
 		return $this->control_access;
 	}
 	
 	/**
-	 * @todo implementation
+	 * @return bool
 	 */
 	public function can_set_automatic()
 	{
@@ -194,7 +224,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
-	 * @todo implementation
+	 * @return bool
 	 */
 	public function can_set_data_entity()
 	{
@@ -202,7 +232,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
-	 * @todo implementation
+	 * @return bool
 	 */
 	public function can_set_control()
 	{
@@ -210,7 +240,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
-	 * @todo implementation
+	 * @return bool
 	 */
 	public function cat_set_remain()
 	{
@@ -333,6 +363,10 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		}
 	}
 	
+	/**
+	 * Returns parent folder as data entity id
+	 * @return integer
+	 */
 	public final function get_parent_folder()
 	{
 		if ($this->data_entity_id)
@@ -360,7 +394,11 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		}
 	}
 	
-	public final function get_parent_virtual_folders()
+	/**
+	 * Returns parent folder as folder id
+	 * @return integer
+	 */
+	public final function get_parent_folder_id()
 	{
 		if ($this->data_entity_id)
 		{
@@ -369,12 +407,12 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 			{
 				foreach($parent_array as $key => $value)
 				{
-					if (VirtualFolder::get_virtual_folder_id_by_data_entity_id($value) != null)
+					if (($folder_id = Folder::get_folder_id_by_data_entity_id($value)) != null)
 					{
-						array_push($parent_array, $value);
+						return $folder_id;
 					}
 				}
-				return $parent_array;
+				return null;
 			}
 			else
 			{
@@ -387,6 +425,75 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		}
 	}
 	
+	/**
+	 * Returns a set of parent virutal folders with data entity ids
+	 * @return array
+	 */
+	public final function get_parent_virtual_folders()
+	{
+		if ($this->data_entity_id)
+		{
+			$parent_array = DataEntityHasDataEntity_Access::list_data_entity_pid_by_data_entity_cid($this->data_entity_id);
+			$result_array = array();
+			
+			if (count($parent_array) >= 1)
+			{
+				foreach($parent_array as $key => $value)
+				{
+					if (VirtualFolder::get_virtual_folder_id_by_data_entity_id($value) != null)
+					{
+						array_push($result_array, $value);
+					}
+				}
+				return $result_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * Returns a set of parent virtual folders with virtual folder ids
+	 * @return array
+	 */
+	public final function get_parent_virtual_folder_ids()
+	{
+		if ($this->data_entity_id)
+		{
+			$parent_array = DataEntityHasDataEntity_Access::list_data_entity_pid_by_data_entity_cid($this->data_entity_id);
+			$result_array = array();
+			
+			if (count($parent_array) >= 1)
+			{
+				foreach($parent_array as $key => $value)
+				{
+					if (($virtual_folder_id = VirtualFolder::get_virtual_folder_id_by_data_entity_id($value)) != null)
+					{
+						array_push($result_array, $virtual_folder_id);
+					}
+				}
+				return $result_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @return array
+	 */
 	public final function get_childs()
 	{
 		if ($this->data_entity_id)
@@ -399,6 +506,9 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		}
 	}
 	
+	/**
+	 * @return integer
+	 */
 	public final function get_data_entity_id()
 	{
 		if ($this->data_entity_id)
@@ -523,7 +633,14 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 */
 	public final function set_owner_group_id($owner_group_id)
 	{
-		
+		if ($this->data_entity and is_numeric($owner_group_id))
+		{
+			return $this->data_entity->set_owner_group_id($owner_group_id);
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**
@@ -532,7 +649,14 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 */
 	public final function set_permission($permission)
 	{
-		
+		if ($this->data_entity and is_numeric($permission))
+		{
+			return $this->data_entity->set_permission($permission);
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**
@@ -541,10 +665,18 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 */
 	public final function set_automatic($automatic)
 	{
-		
+		if ($this->data_entity and isset($automatic))
+		{
+			return $this->data_entity->set_automatic($automatic);
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**
+	 * Sets the current data entity as a child of $data_entity_id
 	 * @param integer $data_entity_id
 	 * @return bool
 	 */
@@ -576,6 +708,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * Unsets the current data entity from $data_entity_id
 	 * @param integer $data_entity_id
 	 * @return bool
 	 */
@@ -599,6 +732,10 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		}
 	}
 	
+	/**
+	 * Unsets all childs of the current data entity
+	 * @return bool
+	 */
 	public final function unset_childs()
 	{
 		if ($this->data_entity_id)
@@ -640,7 +777,6 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	/**
      * @param object $event_object
      * @return bool
-     * @todo
      */
     public static function listen_events($event_object)
     {
@@ -668,7 +804,21 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
     		}
     	}
     	
-    	// User Delete Event, set owner id On Null
+    	if ($event_object instanceof UserDeleteEvent)
+    	{
+    		if (DataEntity_Access::set_owner_id_on_null($event_object->get_user_id()) == false)
+    		{
+    			return true;
+    		}
+    	}
+    	
+    	if ($event_object instanceof GroupDeleteEvent)
+    	{
+    		if (DataEntity_Access::set_owner_group_id_on_null($event_object->get_group_id()) == false)
+    		{
+    			return true;
+    		}
+    	}
     	
     	return true;
     }

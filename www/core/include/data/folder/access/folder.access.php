@@ -27,7 +27,6 @@
  */
 class Folder_Access
 {
-	const FOLDER_TABLE = 'core_folders';
 	const FOLDER_PK_SEQUENCE = 'core_folders_id_seq';
 	
 	private $folder_id;
@@ -51,7 +50,7 @@ class Folder_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::FOLDER_TABLE." WHERE id='".$folder_id."'";
+			$sql = "SELECT * FROM ".constant("FOLDER_TABLE")." WHERE id='".$folder_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -117,7 +116,7 @@ class Folder_Access
 		{
 			$datetime = date("Y-m-d H:i:s");
 
-			$sql_write = "INSERT INTO ".self::FOLDER_TABLE." (id, data_entity_id, name, path, deleted, blob, flag) " .
+			$sql_write = "INSERT INTO ".constant("FOLDER_TABLE")." (id, data_entity_id, name, path, deleted, blob, flag) " .
 								"VALUES (nextval('".self::FOLDER_PK_SEQUENCE."'::regclass), ".$data_entity_id.",'".$name."','".$path."','f','f','0')";		
 			
 			$res_write = $db->db_query($sql_write);
@@ -128,7 +127,7 @@ class Folder_Access
 			}
 			else
 			{
-				$sql_read = "SELECT id FROM ".self::FOLDER_TABLE." WHERE id = currval('".self::FOLDER_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("FOLDER_TABLE")." WHERE id = currval('".self::FOLDER_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -156,7 +155,7 @@ class Folder_Access
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".self::FOLDER_TABLE." WHERE id = ".$folder_id_tmp."";
+			$sql = "DELETE FROM ".constant("FOLDER_TABLE")." WHERE id = ".$folder_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -289,7 +288,7 @@ class Folder_Access
 			
 		if ($this->folder_id and is_numeric($data_entity_id))
 		{
-			$sql = "UPDATE ".self::FOLDER_TABLE." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->folder_id."";
+			$sql = "UPDATE ".constant("FOLDER_TABLE")." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->folder_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -318,7 +317,7 @@ class Folder_Access
 			
 		if ($this->folder_id and $name)
 		{
-			$sql = "UPDATE ".self::FOLDER_TABLE." SET name = '".$name."' WHERE id = ".$this->folder_id."";
+			$sql = "UPDATE ".constant("FOLDER_TABLE")." SET name = '".$name."' WHERE id = ".$this->folder_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -347,7 +346,7 @@ class Folder_Access
 			
 		if ($this->folder_id and $path)
 		{
-			$sql = "UPDATE ".self::FOLDER_TABLE." SET path = '".$path."' WHERE id = ".$this->folder_id."";
+			$sql = "UPDATE ".constant("FOLDER_TABLE")." SET path = '".$path."' WHERE id = ".$this->folder_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -385,7 +384,7 @@ class Folder_Access
 				$deleted_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::FOLDER_TABLE." SET deleted = '".$deleted_insert."' WHERE id = ".$this->folder_id."";
+			$sql = "UPDATE ".constant("FOLDER_TABLE")." SET deleted = '".$deleted_insert."' WHERE id = ".$this->folder_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -423,7 +422,7 @@ class Folder_Access
 				$blob_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::FOLDER_TABLE." SET blob = '".$blob_insert."' WHERE id = ".$this->folder_id."";
+			$sql = "UPDATE ".constant("FOLDER_TABLE")." SET blob = '".$blob_insert."' WHERE id = ".$this->folder_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -452,7 +451,7 @@ class Folder_Access
 
 		if ($this->folder_id and is_numeric($flag))
 		{
-			$sql = "UPDATE ".self::FOLDER_TABLE." SET flag = ".$flag." WHERE id = ".$this->folder_id."";
+			$sql = "UPDATE ".constant("FOLDER_TABLE")." SET flag = ".$flag." WHERE id = ".$this->folder_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -470,22 +469,7 @@ class Folder_Access
 			return false;
 		}
 	}
-	
-	/**
-	 * @return array
-	 */
-	public function list_folders()
-	{
-		if ($this->folder_id)
-		{
-			return $this->rec_full_folder_tree_array(0, $this->rec_folder_tree_array($this->folder_id));
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
+
 	
 	/**
 	 * @param string $path
@@ -497,7 +481,7 @@ class Folder_Access
 
 		if ($path)
 		{
-			$sql = "SELECT id FROM ".self::FOLDER_TABLE." WHERE TRIM(LOWER(path)) = '".trim(strtolower($path))."'";
+			$sql = "SELECT id FROM ".constant("FOLDER_TABLE")." WHERE TRIM(LOWER(path)) = '".trim(strtolower($path))."'";
 
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
@@ -527,7 +511,7 @@ class Folder_Access
 
 		if (is_numeric($data_entity_id))
 		{
-			$sql = "SELECT id FROM ".self::FOLDER_TABLE." WHERE data_entity_id = '".$data_entity_id."'";
+			$sql = "SELECT id FROM ".constant("FOLDER_TABLE")." WHERE data_entity_id = '".$data_entity_id."'";
 
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
@@ -545,7 +529,37 @@ class Folder_Access
 		{
 			return null;
 		}
-	}	
+	}
+
+	/**
+	 * @param string $data_entity_id
+	 * @return integer
+	 */
+	public static function get_data_entity_id_by_folder_id($folder_id)
+	{
+		global $db;
+
+		if (is_numeric($folder_id))
+		{
+			$sql = "SELECT data_entity_id FROM ".constant("FOLDER_TABLE")." WHERE id = '".$folder_id."'";
+
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[data_entity_id])
+			{
+				return $data[data_entity_id];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
 }
 
 ?>

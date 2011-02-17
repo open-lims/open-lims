@@ -28,7 +28,6 @@
  */
 class SystemLog_Access
 {
-	const SYSTEM_LOG_TABLE = 'core_system_log';
 	const SYSTEM_LOG_PK_SEQUENCE = 'core_system_log_id_seq';
 	
 	private $log_id;
@@ -58,7 +57,7 @@ class SystemLog_Access
 		}
 		else
 		{	
-			$sql = "SELECT * FROM ".self::SYSTEM_LOG_TABLE." WHERE id = ".$log_id."";
+			$sql = "SELECT * FROM ".constant("SYSTEM_LOG_TABLE")." WHERE id = ".$log_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -171,14 +170,14 @@ class SystemLog_Access
 				 $content_errorno_insert = "NULL";
 			}
 			
-			$sql_write = "INSERT INTO ".self::SYSTEM_LOG_TABLE." (id,type_id,user_id,datetime,ip,content_int,content_string,content_errorno,file,line,link) " .
+			$sql_write = "INSERT INTO ".constant("SYSTEM_LOG_TABLE")." (id,type_id,user_id,datetime,ip,content_int,content_string,content_errorno,file,line,link) " .
 							"VALUES (nextval('".self::SYSTEM_LOG_PK_SEQUENCE."'::regclass),".$type_id.",".$user_id_insert.",'".$datetime."','".$ip."',".$content_int_insert.",'".$content_string."',".$content_errorno_insert.",'".$file."',".$line_insert.",".$link_insert.")";
 			
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".self::SYSTEM_LOG_TABLE." WHERE id = currval('".self::SYSTEM_LOG_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE id = currval('".self::SYSTEM_LOG_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -210,7 +209,7 @@ class SystemLog_Access
     		
     		$this->__destruct();
 
-    		$sql = "DELETE FROM ".self::SYSTEM_LOG_TABLE." WHERE id = ".$tmp_log_id."";
+    		$sql = "DELETE FROM ".constant("SYSTEM_LOG_TABLE")." WHERE id = ".$tmp_log_id."";
     		$res = $db->db_query($sql);
     		
     		if ($db->db_affected_rows($res) == 1)
@@ -403,7 +402,7 @@ class SystemLog_Access
 
 		if ($this->log_id and $stack_trace)
 		{
-			$sql = "UPDATE ".self::SYSTEM_LOG_TABLE." SET stack_trace = '".$stack_trace."' WHERE id = ".$this->log_id."";
+			$sql = "UPDATE ".constant("SYSTEM_LOG_TABLE")." SET stack_trace = '".$stack_trace."' WHERE id = ".$this->log_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -432,7 +431,7 @@ class SystemLog_Access
 		
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::SYSTEM_LOG_TABLE." ORDER BY datetime";
+		$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." ORDER BY datetime";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))
@@ -462,7 +461,7 @@ class SystemLog_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::SYSTEM_LOG_TABLE." WHERE type_id = ".$type_id." ORDER BY datetime";
+			$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE type_id = ".$type_id." ORDER BY datetime";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -497,7 +496,7 @@ class SystemLog_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".self::SYSTEM_LOG_TABLE." WHERE user_id = ".$user_id." ORDER BY datetime";
+			$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE user_id = ".$user_id." ORDER BY datetime";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -530,7 +529,7 @@ class SystemLog_Access
 		
 		if (is_numeric($user_id))
 		{
-			$sql = "UPDATE ".self::SYSTEM_LOG_TABLE." SET user_id = NULL WHERE user_id = ".$user_id."";
+			$sql = "UPDATE ".constant("SYSTEM_LOG_TABLE")." SET user_id = NULL WHERE user_id = ".$user_id."";
 			$res = $db->db_query($sql);
 				
 			return true;
@@ -551,7 +550,7 @@ class SystemLog_Access
 		
 		if (is_numeric($id))
 		{
-			$sql = "SELECT id FROM ".self::SYSTEM_LOG_TABLE." WHERE id = '".$id."'";
+			$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE id = '".$id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -575,7 +574,7 @@ class SystemLog_Access
 		
 		if ($ip)
 		{
-			$sql = "SELECT id FROM ".self::SYSTEM_LOG_TABLE." WHERE ip = '".$ip."'";
+			$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE ip = '".$ip."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -600,7 +599,7 @@ class SystemLog_Access
 		
 		if ($ip)
 		{
-			$sql = "SELECT COUNT(id) AS result FROM ".self::SYSTEM_LOG_TABLE." WHERE type_id = 1 AND LOWER(content_errorno) = 'login' AND content_int IS NULL AND ip = '".$ip."'";
+			$sql = "SELECT COUNT(id) AS result FROM ".constant("SYSTEM_LOG_TABLE")." WHERE type_id = 1 AND LOWER(content_errorno) = 'login' AND content_int IS NULL AND ip = '".$ip."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -625,7 +624,7 @@ class SystemLog_Access
 		
 		if ($ip)
 		{
-			$sql = "SELECT COUNT(id) AS result FROM ".self::SYSTEM_LOG_TABLE." WHERE type_id = 1 AND LOWER(content_errorno) = 'login' AND content_int = '1' AND ip = '".$ip."'";
+			$sql = "SELECT COUNT(id) AS result FROM ".constant("SYSTEM_LOG_TABLE")." WHERE type_id = 1 AND LOWER(content_errorno) = 'login' AND content_int = '1' AND ip = '".$ip."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -652,7 +651,7 @@ class SystemLog_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT user_id FROM ".self::SYSTEM_LOG_TABLE." WHERE user_id IS NOT NULL AND ip = '".$ip."' GROUP BY user_id";
+			$sql = "SELECT user_id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE user_id IS NOT NULL AND ip = '".$ip."' GROUP BY user_id";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res)) 

@@ -1120,14 +1120,6 @@ class User implements UserInterface {
 	}
 
 	/**
-	 * @return integer Used Diskspace of all uses
-	 */
-	public static function get_used_user_space()
-	{
-		return User_Access::get_used_user_space();
-	}
-
-	/**
 	 * Checks if an user exists
 	 * @param string $username
 	 * @return bool

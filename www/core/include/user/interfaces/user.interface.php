@@ -64,7 +64,6 @@ interface UserInterface
 	public static function get_number_of_users();
 	public static function get_number_of_inactive_users();
 	public static function get_number_of_locked_users();
-	public static function get_used_user_space();
 	public static function exist_username($username);
 	public static function exist_user($user_id);
 	public static function list_entries();

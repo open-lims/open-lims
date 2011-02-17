@@ -774,6 +774,7 @@ class DataIO
 
 	/**
 	 * @todo set project-permission to entity-permission
+	 * @todo user folder methods for deactivating fields
 	 */
 	public static function permission()
 	{

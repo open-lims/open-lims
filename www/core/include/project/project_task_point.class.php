@@ -137,7 +137,6 @@ class ProjectTaskPoint implements ProjectTaskPointInterface
     
     /**
      * Returns the currently achieved points
-     * @todo remove dependencies with sample and method
      * @param string $datetime
      * @return integer
      */    
@@ -181,51 +180,16 @@ class ProjectTaskPoint implements ProjectTaskPointInterface
     					
     					if ($status_requirement_array[$key][requirement] == "force")
     					{
-    						switch($status_requirement_array[$key][type]):
-    						
-	    						case "value":
-	    						case "file":
-	    							if ($ignore_points == false)
-	    							{
-		    							if ($status_requirement_array[$key][occurrence] == "once")
-		    							{
-		    								$points = $points + 4;
-		    							}
-		    							else
-		    							{
-		    								$points = $points + 2;
-		    							}
-	    							}
-	    						break;
-	    						
-	    						case "sample":
-		    						if ($ignore_points == false)
-		    						{
-		    							if ($status_requirement_array[$key][occurrence] == "once")
-		    							{
-		    								$points = $points + 3;
-		    							}
-		    							else
-		    							{
-		    								$points = $points + 1;
-		    							}
-		    						}
-	    						break;
-	    						
-	    						case "method":
-	    							if ($ignore_points == false) {
-		    							if ($status_requirement_array[$key][occurrence] == "once")
-		    							{
-		    								$points = $points + 2;
-		    							}
-		    							else
-		    							{
-		    								$points = $points + 1;
-		    							}
-	    							}
-	    						break;  						
-    						
-    						endswitch;
+    						if ($ignore_points == false) {
+	    						if ($status_requirement_array[$key][occurrence] == "once")
+	    						{
+	    							$points = $points + 2;
+	    						}
+	    						else
+	    						{
+	    							$points = $points + 1;
+	    						}
+    						}
     					}
     				}
     			}	
@@ -244,7 +208,6 @@ class ProjectTaskPoint implements ProjectTaskPointInterface
     
     /**
      * Returns the maximum of points of a given status
-     * @todo remove dependencies with sample and method
      * @param integer $status_id
      * @return integer
      */ 
@@ -263,43 +226,14 @@ class ProjectTaskPoint implements ProjectTaskPointInterface
     			{
 					if ($value[requirement] == "force")
 					{
-						switch($status_requirement_array[$key][type]):
-						
-    						case "value":
-    						case "file":
-    							if ($value[occurrence] == "once")
-    							{
-    								$points = $points + 4;
-    							}
-    							else
-    							{
-    								$points = $points + 2;
-    							}
-    						break;
-    						
-    						case "sample":
-    							if ($value[occurrence] == "once")
-    							{
-    								$points = $points + 3;
-    							}
-    							else
-    							{
-    								$points = $points + 1;
-    							}
-    						break;
-    						
-    						case "method":
-    							if ($value[occurrence] == "once")
-    							{
-    								$points = $points + 2;
-    							}
-    							else
-    							{
-    								$points = $points + 1;
-    							}
-    						break;  						
-						
-						endswitch;
+						if ($value[occurrence] == "once")
+    					{
+    						$points = $points + 2;
+    					}
+    					else
+    					{
+    						$points = $points + 1;
+    					}	
 					}	    				
     			}		
     			return $points;	

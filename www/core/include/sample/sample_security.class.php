@@ -62,7 +62,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     
    	/**
    	 * Return true, if the user has access
-   	 * @todo remove dependency with project
+   	 * @todo inherit write permission from project
    	 * @param integer $intention 1 = Read, 2 = Write
    	 * @param bool $ignore_admin_status
    	 * @return bool
@@ -81,6 +81,8 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
 	    	else
 	    	{
 	    		$sample = new Sample($this->sample_id);
+	    		$sample_folder_id = SampleFolder::get_folder_by_sample_id($this->sample_id);
+	    		$sample_folder_data_entity = new DataEntity(Folder::get_data_entity_id_by_folder_id($sample_folder_id));
 	    	
 	    		if ($sample->get_owner_id() == $user->get_user_id())
 	    		{
@@ -115,25 +117,23 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
 	    						}
 	    					}
 
-	    					$item_id = $sample->get_item_id();
-	    					$project_array = ProjectItem::list_projects_by_item_id($item_id);
+	    					$parent_virtual_folder_array = $sample_folder_data_entity->get_parent_virtual_folder_ids();
 	    					
-	    					if (is_array($project_array) and count($project_array) >= 1)
+	    					if (is_array($parent_virtual_folder_array) and count($parent_virtual_folder_array) >= 1)
 	    					{
-	    						foreach($project_array as $key => $value)
+	    						foreach($parent_virtual_folder_array as $key => $value)
 	    						{
-	    							$project_security = new ProjectSecurity($value);
-	    							if ($project_security->is_access(1, false) == true)
+	    							$virtual_folder = new VirtualFolder($value);
+	    							$parent_folder_id = $virtual_folder->get_parent_folder_id();
+	    							$folder = Folder::get_instance($parent_folder_id);
+	    							if ($folder->is_read_access() == true)
 	    							{
 	    								return true;
-	    							}		
+	    							}
 	    						}
-	    						return false;
 	    					}
-	    					else
-	    					{
-	    						return false;
-	    					}
+	    					
+	    					return false;
 	    				}
 	    			
 	    			}
@@ -405,73 +405,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     		return null;
     	}
     }
-    
-    /**
-     * Creates a new project V-Folder
-     * @param integer $project_id
-     * @return bool
-     */
-    public function create_project($project_id)
-    {
-    	global $transaction;
-    	
-    	if ($this->sample_id)
-    	{
-    		$transaction_id = $transaction->begin();
-    		
-    		if (is_numeric($project_id))
-    		{
-    			$sample_folder_id = SampleFolder::get_folder_by_sample_id($this->sample_id);
-    			
-    			$folder_id = ProjectFolder::get_folder_by_project_id($project_id);
-    			
-    			$virtual_folder = new VirtualFolder(null);
-    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
-    			
-    			foreach($virtual_folder_array as $key => $value)
-    			{
-    				$virtual_folder = new SampleVirtualFolder($value);
-    				if ($virtual_folder->is_sample_vfolder() == true)
-    				{
-    					$virtual_folder_id = $value;
-    				}
-    			}
-    			
-    			if ($virtual_folder_id)
-    			{
-    				$virtual_folder = new VirtualFolder($virtual_folder_id);
-    				if ($virtual_folder->link_folder($sample_folder_id) == false)
-    				{
-    					if ($transaction_id != null)
-    					{
-							$transaction->rollback($transaction_id);
-						}
-		    			return false;
-    				}
-    			}
-    			
-    			if ($transaction_id != null)
-    			{
-					$transaction->commit($transaction_id);
-				}
-    			return true;
-    		}
-    		else
-    		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->rollback($transaction_id);
-				}
-    			return false;
-    		}
-    	}
-    	else
-    	{
-    		return false;
-    	}
-    	
-    } 
-    
+        
     /**
      * Deletes an user-permission
      * @param integer $entry_id

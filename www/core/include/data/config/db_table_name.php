@@ -24,5 +24,23 @@
 /**
  * 
  */
+	define("DATA_ENTITY_HAS_DATA_ENTITY_TABLE", 		"core_data_entity_has_data_entities");
+	define("DATA_ENTITY_IS_ITEM_TABLE", 				"core_data_entity_is_item");
+	define("DATA_ENTITY_TABLE", 						"core_data_entities");
+	define("DATA_USER_DATA_TABLE", 						"core_data_user_data");
+	
+	define("FILE_VERSION_TABLE", 						"core_file_versions");
+	define("FILE_TABLE", 								"core_files");
+	
+	define("FOLDER_CONCRETION_TABLE", 					"core_folder_concretion");
+	define("FOLDER_IS_GROUP_FOLDER_TABLE", 				"core_folder_is_group_folder");
+	define("FOLDER_IS_ORGANISATION_UNIT_FOLDER_TABLE", 	"core_folder_is_organisation_unit_folder");
+	define("FOLDER_IS_USER_FOLDER_TABLE", 				"core_folder_is_user_folder");
+	define("FOLDER_TABLE", 								"core_folders");
 
+	define("VALUE_TYPE_TABLE", 							"core_value_types");
+	define("VALUE_VERSION_TABLE", 						"core_value_versions");
+	define("VALUE_TABLE", 								"core_values");
+	
+	define("VIRTUAL_FOLDER_TABLE", 						"core_virtual_folders");
 ?>

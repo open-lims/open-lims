@@ -24,6 +24,8 @@
 /**
  * 
  */
-
-
+	define("METHOD_CAT_TABLE", 		"core_method_cats");
+	define("METHOD_IS_ITEM_TABLE", 	"core_method_is_item");
+	define("METHOD_TYPE_TABLE", 	"core_method_types");
+	define("METHOD_TABLE", 			"core_methods");
 ?>

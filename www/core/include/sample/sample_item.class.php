@@ -28,6 +28,8 @@ require_once("interfaces/sample_item.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("events/sample_item_link_event.class.php");
+	
 	require_once("access/sample_has_item.access.php");
 }
 
@@ -80,24 +82,49 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     	{
     		$transaction_id = $transaction->begin();
     		
-    		$sample_has_item = new SampleHasItem_Access(null);
-    		
-    		if (is_numeric($this->gid))
-	    	{
-	    		$primary_key = $sample_has_item->create($this->sample_id, $this->item_id, $this->gid);
-	    	}
-	    	else
-	    	{
-	    		$primary_key = $sample_has_item->create($this->sample_id, $this->item_id, null);
-	    	}
-	    	
-    		if ($primary_key != null)
-    		{ 	    		
-    			if ($transaction_id != null)
-    			{
-					$transaction->commit($transaction_id);
-				}
-    			return true;
+    		if (($sample_folder_id = SampleFolder::get_folder_by_sample_id($this->sample_id)) != null)
+    		{
+	    		$sample_has_item = new SampleHasItem_Access(null);
+	    		
+	    		if (is_numeric($this->gid))
+		    	{
+		    		$primary_key = $sample_has_item->create($this->sample_id, $this->item_id, $this->gid);
+		    	}
+		    	else
+		    	{
+		    		$primary_key = $sample_has_item->create($this->sample_id, $this->item_id, null);
+		    	}
+		    	
+		    	if ($primary_key != null)
+	    		{ 
+		    		$sample_item_link_event = new SampleItemLinkEvent($this->item_id, $sample_folder_id);
+					$event_handler = new EventHandler($sample_item_link_event);
+					
+					if ($event_handler->get_success() == false)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+					}
+					else
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->commit($transaction_id);
+						}
+						return true;
+					}
+	    		}
+	    		else
+	    		{
+	    			if ($transaction_id != null)
+	    			{
+						$transaction->rollback($transaction_id);
+					}
+	    			return false;
+	    		}
     		}
     		else
     		{

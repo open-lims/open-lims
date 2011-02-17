@@ -27,8 +27,6 @@
  */
 class OrganisationUnitType_Access
 {
-
-	const ORGANISATION_UNIT_TYPE_TABLE = 'core_organisation_unit_types';
 	const ORGANISATION_UNIT_TYPE_PK_SEQUENCE = 'core_organisation_unit_types_id_seq';
 
 	private $type_id;
@@ -49,7 +47,7 @@ class OrganisationUnitType_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::ORGANISATION_UNIT_TYPE_TABLE." WHERE id = ".$type_id."";
+			$sql = "SELECT * FROM ".constant("ORGANISATION_UNIT_TYPE_TABLE")." WHERE id = ".$type_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -91,7 +89,7 @@ class OrganisationUnitType_Access
 
 		if ($name and $icon)
 		{	
-	 		$sql_write = "INSERT INTO ".self::ORGANISATION_UNIT_TYPE_TABLE." (id, name, icon) " .
+	 		$sql_write = "INSERT INTO ".constant("ORGANISATION_UNIT_TYPE_TABLE")." (id, name, icon) " .
 								"VALUES (nextval('".self::ORGANISATION_UNIT_TYPE_PK_SEQUENCE."'::regclass),'".$name."','".$icon."')";		
 				
 			$res_write = $db->db_query($sql_write);
@@ -124,7 +122,7 @@ class OrganisationUnitType_Access
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".self::ORGANISATION_UNIT_TYPE_TABLE." WHERE id = ".$type_id_tmp."";
+			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_TYPE_TABLE")." WHERE id = ".$type_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -182,7 +180,7 @@ class OrganisationUnitType_Access
 
 		if ($this->type_id and $name)
 		{
-			$sql = "UPDATE ".self::ORGANISATION_UNIT_TYPE_TABLE." SET name = '".$name."' WHERE id = '".$this->type_id."'";
+			$sql = "UPDATE ".constant("ORGANISATION_UNIT_TYPE_TABLE")." SET name = '".$name."' WHERE id = '".$this->type_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -208,7 +206,7 @@ class OrganisationUnitType_Access
 			
 		if ($this->type_id and $icon)
 		{
-			$sql = "UPDATE ".self::ORGANISATION_UNIT_TYPE_TABLE." SET icon = '".$icon."' WHERE id = '".$this->type_id."'";
+			$sql = "UPDATE ".constant("ORGANISATION_UNIT_TYPE_TABLE")." SET icon = '".$icon."' WHERE id = '".$this->type_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -236,7 +234,7 @@ class OrganisationUnitType_Access
 				
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::ORGANISATION_UNIT_TYPE_TABLE." ORDER BY name";
+		$sql = "SELECT id FROM ".constant("ORGANISATION_UNIT_TYPE_TABLE")." ORDER BY name";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))

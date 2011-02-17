@@ -27,8 +27,6 @@
  */
 class DataEntityIsItem_Access
 {
-	const DATA_ENTITY_IS_ITEM_TABLE = 'core_data_entity_is_item';
-	
 	private $data_entity_id;
 	private $item_id;
 	
@@ -45,7 +43,7 @@ class DataEntityIsItem_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::DATA_ENTITY_IS_ITEM_TABLE." WHERE data_entity_id='".$data_entity_id."'";
+			$sql = "SELECT * FROM ".constant("DATA_ENTITY_IS_ITEM_TABLE")." WHERE data_entity_id='".$data_entity_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -79,7 +77,7 @@ class DataEntityIsItem_Access
 		
 		if (is_numeric($data_entity_id) and is_numeric($item_id))
 		{	
-			$sql_write = "INSERT INTO ".self::DATA_ENTITY_IS_ITEM_TABLE." (data_entity_id,item_id) " .
+			$sql_write = "INSERT INTO ".constant("DATA_ENTITY_IS_ITEM_TABLE")." (data_entity_id,item_id) " .
 					"VALUES (".$data_entity_id.",".$item_id.")";
 					
 			$res_write = $db->db_query($sql_write);	
@@ -108,7 +106,7 @@ class DataEntityIsItem_Access
 			
 		if ($this->data_entity_id and $this->item_id) {
 			
-			$sql = "DELETE FROM ".self::DATA_ENTITY_IS_ITEM_TABLE." WHERE data_entity_id = ".$this->data_entity_id." AND item_id = ".$this->item_id."";
+			$sql = "DELETE FROM ".constant("DATA_ENTITY_IS_ITEM_TABLE")." WHERE data_entity_id = ".$this->data_entity_id." AND item_id = ".$this->item_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -168,7 +166,7 @@ class DataEntityIsItem_Access
 		
 		if (is_numeric($item_id))
 		{	
-			$sql = "SELECT data_entity_id FROM ".self::DATA_ENTITY_IS_ITEM_TABLE." WHERE item_id='".$item_id."'";
+			$sql = "SELECT data_entity_id FROM ".constant("DATA_ENTITY_IS_ITEM_TABLE")." WHERE item_id='".$item_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

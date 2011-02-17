@@ -27,7 +27,6 @@
  */
 class SampleHasUser_Access
 {
-	const SAMPLE_HAS_USER_TABLE = 'core_sample_has_users';
 	const SAMPLE_HAS_USER_PK_SEQUENCE = 'core_sample_has_users_primary_key_seq';
 
 	private $primary_key;
@@ -50,7 +49,7 @@ class SampleHasUser_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::SAMPLE_HAS_USER_TABLE." WHERE primary_key='".$primary_key."'";
+			$sql = "SELECT * FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE primary_key='".$primary_key."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
@@ -130,13 +129,13 @@ class SampleHasUser_Access
 				$write_insert = "f";
 			}
 			
-			$sql_write = "INSERT INTO ".self::SAMPLE_HAS_USER_TABLE." (primary_key,sample_id,user_id,read,write) " .
+			$sql_write = "INSERT INTO ".constant("SAMPLE_HAS_USER_TABLE")." (primary_key,sample_id,user_id,read,write) " .
 					"VALUES (nextval('".self::SAMPLE_HAS_USER_PK_SEQUENCE."'::regclass),".$sample_id.",".$user_id.",'".$read_insert."','".$write_insert."')";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT primary_key FROM ".self::SAMPLE_HAS_USER_TABLE." WHERE primary_key = currval('".self::SAMPLE_HAS_USER_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT primary_key FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE primary_key = currval('".self::SAMPLE_HAS_USER_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -168,7 +167,7 @@ class SampleHasUser_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".self::SAMPLE_HAS_USER_TABLE." WHERE primary_key = ".$tmp_primary_key."";
+			$sql = "DELETE FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE primary_key = ".$tmp_primary_key."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -256,7 +255,7 @@ class SampleHasUser_Access
 			
 		if ($this->primary_key and is_numeric($sample_id))
 		{
-			$sql = "UPDATE ".self::SAMPLE_HAS_USER_TABLE." SET sample_id = '".$sample_id."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("SAMPLE_HAS_USER_TABLE")." SET sample_id = '".$sample_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -285,7 +284,7 @@ class SampleHasUser_Access
 
 		if ($this->primary_key and is_numeric($user_id))
 		{
-			$sql = "UPDATE ".self::SAMPLE_HAS_USER_TABLE." SET user_id = '".$user_id."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("SAMPLE_HAS_USER_TABLE")." SET user_id = '".$user_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -323,7 +322,7 @@ class SampleHasUser_Access
 				$read_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::SAMPLE_HAS_USER_TABLE." SET read = '".$read_insert."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("SAMPLE_HAS_USER_TABLE")." SET read = '".$read_insert."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -361,7 +360,7 @@ class SampleHasUser_Access
 				$write_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::SAMPLE_HAS_USER_TABLE." SET write = '".$write_insert."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("SAMPLE_HAS_USER_TABLE")." SET write = '".$write_insert."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -394,7 +393,7 @@ class SampleHasUser_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".self::SAMPLE_HAS_USER_TABLE." WHERE sample_id = ".$sample_id." AND user_id = ".$user_id."";
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE sample_id = ".$sample_id." AND user_id = ".$user_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 
@@ -425,7 +424,7 @@ class SampleHasUser_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".self::SAMPLE_HAS_USER_TABLE." WHERE sample_id = ".$sample_id."";
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE sample_id = ".$sample_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -460,7 +459,7 @@ class SampleHasUser_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".self::SAMPLE_HAS_USER_TABLE." WHERE user_id = ".$user_id."";
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE user_id = ".$user_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -492,7 +491,7 @@ class SampleHasUser_Access
 
 		$return_array = array();
 		
-		$sql = "SELECT primary_key FROM ".self::SAMPLE_HAS_USER_TABLE."";
+		$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_USER_TABLE")."";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))
@@ -520,7 +519,7 @@ class SampleHasUser_Access
 		
 		if (is_numeric($user_id))
 		{
-			$sql = "DELETE FROM ".self::SAMPLE_HAS_USER_TABLE." WHERE user_id = ".$user_id."";
+			$sql = "DELETE FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE user_id = ".$user_id."";
 			$res = $db->db_query($sql);
 			
 			return true;

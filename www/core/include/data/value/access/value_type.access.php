@@ -27,8 +27,6 @@
  */
 class ValueType_Access
 {
-	const VALUE_TYPE_TABLE = 'core_value_types';
-	
 	private $value_type_id;
 	
 	private $name;
@@ -47,7 +45,7 @@ class ValueType_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::VALUE_TYPE_TABLE." WHERE id='".$value_type_id."'";
+			$sql = "SELECT * FROM ".constant("VALUE_TYPE_TABLE")." WHERE id='".$value_type_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -85,7 +83,7 @@ class ValueType_Access
 		
 		if (is_numeric($id) and $name and is_numeric($template_id))
 		{
-			$sql_write = "INSERT INTO ".self::VALUE_TYPE_TABLE." (id,name,template_id) " .
+			$sql_write = "INSERT INTO ".constant("VALUE_TYPE_TABLE")." (id,name,template_id) " .
 					"VALUES (".$id.",'".$name."',".$template_id.")";			
 			$res_write = $db->db_query($sql_write);	
 			
@@ -114,7 +112,7 @@ class ValueType_Access
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".self::VALUE_TYPE_TABLE." WHERE id = ".$value_type_id_tmp."";
+			$sql = "DELETE FROM ".constant("VALUE_TYPE_TABLE")." WHERE id = ".$value_type_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -172,7 +170,7 @@ class ValueType_Access
 
 		if ($this->value_type_id and $name)
 		{
-			$sql = "UPDATE ".self::VALUE_TYPE_TABLE." SET name = '".$name."' WHERE id = ".$this->value_type_id."";
+			$sql = "UPDATE ".constant("VALUE_TYPE_TABLE")." SET name = '".$name."' WHERE id = ".$this->value_type_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -201,7 +199,7 @@ class ValueType_Access
 
 		if ($this->value_type_id and is_numeric($template_id))
 		{
-			$sql = "UPDATE ".self::VALUE_TYPE_TABLE." SET template_id = ".$template_id." WHERE id = ".$this->value_type_id."";
+			$sql = "UPDATE ".constant("VALUE_TYPE_TABLE")." SET template_id = ".$template_id." WHERE id = ".$this->value_type_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -230,7 +228,7 @@ class ValueType_Access
 	
 		if (is_numeric($id))
 		{	
-			$sql = "SELECT id FROM ".self::VALUE_TYPE_TABLE." WHERE id = '".$id."'";
+			$sql = "SELECT id FROM ".constant("VALUE_TYPE_TABLE")." WHERE id = '".$id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 		
@@ -257,7 +255,7 @@ class ValueType_Access
 		
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::VALUE_TYPE_TABLE."";
+		$sql = "SELECT id FROM ".constant("VALUE_TYPE_TABLE")."";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))

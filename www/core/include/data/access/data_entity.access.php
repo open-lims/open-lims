@@ -27,7 +27,6 @@
  */
 class DataEntity_Access
 {
-	const DATA_ENTITY_TABLE = 'core_data_entities';
 	const DATA_ENTITY_PK_SEQUENCE = 'core_data_entities_id_seq';
 
 	private $id;
@@ -50,7 +49,7 @@ class DataEntity_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::DATA_ENTITY_TABLE." WHERE id='".$id."'";
+			$sql = "SELECT * FROM ".constant("DATA_ENTITY_TABLE")." WHERE id='".$id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -120,14 +119,14 @@ class DataEntity_Access
 			$owner_group_id_insert = "null";
 		}
 		
-		$sql_write = "INSERT INTO ".self::DATA_ENTITY_TABLE." (id,datetime,owner_id,owner_group_id,permission,automatic) " .
+		$sql_write = "INSERT INTO ".constant("DATA_ENTITY_TABLE")." (id,datetime,owner_id,owner_group_id,permission,automatic) " .
 				"VALUES (nextval('".self::DATA_ENTITY_PK_SEQUENCE."'::regclass),'".$datetime."',".$owner_id_insert.",".$owner_group_id_insert.",NULL,'t')";
 				
 		$res_write = $db->db_query($sql_write);	
 		
 		if ($db->db_affected_rows($res_write) == 1)
 		{
-			$sql_read = "SELECT id FROM ".self::DATA_ENTITY_TABLE." WHERE id = currval('".self::DATA_ENTITY_PK_SEQUENCE."'::regclass)";
+			$sql_read = "SELECT id FROM ".constant("DATA_ENTITY_TABLE")." WHERE id = currval('".self::DATA_ENTITY_PK_SEQUENCE."'::regclass)";
 			$res_read = $db->db_query($sql_read);
 			$data_read = $db->db_fetch_assoc($res_read);
 								
@@ -154,7 +153,7 @@ class DataEntity_Access
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".self::DATA_ENTITY_TABLE." WHERE id = ".$id_tmp."";
+			$sql = "DELETE FROM ".constant("DATA_ENTITY_TABLE")." WHERE id = ".$id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -257,7 +256,7 @@ class DataEntity_Access
 			
 		if ($this->id and $datetime)
 		{
-			$sql = "UPDATE ".self::DATA_ENTITY_TABLE." SET datetime = '".$datetime."' WHERE id = ".$this->id."";
+			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET datetime = '".$datetime."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -286,7 +285,7 @@ class DataEntity_Access
 			
 		if ($this->id and is_numeric($owner_id))
 		{
-			$sql = "UPDATE ".self::DATA_ENTITY_TABLE." SET owner_id = ".$owner_id." WHERE id = ".$this->id."";
+			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET owner_id = ".$owner_id." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -315,7 +314,7 @@ class DataEntity_Access
 			
 		if ($this->id and is_numeric($owner_group_id))
 		{
-			$sql = "UPDATE ".self::DATA_ENTITY_TABLE." SET owner_group_id = ".$owner_group_id." WHERE id = ".$this->id."";
+			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET owner_group_id = ".$owner_group_id." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -344,7 +343,7 @@ class DataEntity_Access
 			
 		if ($this->id and $permission)
 		{
-			$sql = "UPDATE ".self::DATA_ENTITY_TABLE." SET permission = ".$permission." WHERE id = ".$this->id."";
+			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET permission = ".$permission." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -382,7 +381,7 @@ class DataEntity_Access
 				$automatic_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::DATA_ENTITY_TABLE." SET automatic = '".$automatic_insert."' WHERE id = ".$this->id."";
+			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET automatic = '".$automatic_insert."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -399,7 +398,50 @@ class DataEntity_Access
 		{
 			return false;
 		}
-	}	
+	}
+
+	
+	/**
+	 * @param integer $owner_id
+	 * @return bool
+	 */
+	public static function set_owner_id_on_null($owner_id)
+	{
+		global $db;
+			
+		if (is_numeric($owner_id))
+		{
+			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET owner_id = NULL WHERE owner_id = ".$owner_id."";
+			$res = $db->db_query($sql);
+			
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param integer $owner_group_id
+	 * @return bool
+	 */
+	public static function set_owner_group_id_on_null($owner_group_id)
+	{
+		global $db;
+			
+		if (is_numeric($owner_group_id))
+		{
+			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET owner_group_id = NULL WHERE owner_group_id = ".$owner_group_id."";
+			$res = $db->db_query($sql);
+			
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 
 ?>

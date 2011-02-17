@@ -27,8 +27,6 @@
  */
 class VirtualFolderIsProject_Access
 {	
-	const VIRTUAL_FOLDER_IS_PROJECT_TABLE = 'core_virtual_folder_is_project';
-	
 	private $virtual_folder_id;
 	
 	/**
@@ -44,7 +42,7 @@ class VirtualFolderIsProject_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::VIRTUAL_FOLDER_IS_PROJECT_TABLE." WHERE id='".$virtual_folder_id."'";
+			$sql = "SELECT * FROM ".constant("VIRTUAL_FOLDER_IS_PROJECT_TABLE")." WHERE id='".$virtual_folder_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -79,7 +77,7 @@ class VirtualFolderIsProject_Access
 		{
 			$datetime = date("Y-m-d H:i:s");
 					
-			$sql_write = "INSERT INTO ".self::VIRTUAL_FOLDER_IS_PROJECT_TABLE." (id) " .
+			$sql_write = "INSERT INTO ".constant("VIRTUAL_FOLDER_IS_PROJECT_TABLE")." (id) " .
 								"VALUES (".$virtual_folder_id.")";		
 			
 			$res_write = $db->db_query($sql_write);
@@ -112,7 +110,7 @@ class VirtualFolderIsProject_Access
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".self::VIRTUAL_FOLDER_IS_PROJECT_TABLE." WHERE id = ".$virtual_folder_id_tmp."";
+			$sql = "DELETE FROM ".constant("VIRTUAL_FOLDER_IS_PROJECT_TABLE")." WHERE id = ".$virtual_folder_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -141,7 +139,7 @@ class VirtualFolderIsProject_Access
 		
 		if (is_numeric($virtual_folder_id))
 		{
-			$sql = "SELECT * FROM ".self::VIRTUAL_FOLDER_IS_PROJECT_TABLE." WHERE id='".$virtual_folder_id."'";
+			$sql = "SELECT * FROM ".constant("VIRTUAL_FOLDER_IS_PROJECT_TABLE")." WHERE id='".$virtual_folder_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

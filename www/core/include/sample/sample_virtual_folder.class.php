@@ -110,7 +110,36 @@ class SampleVirtualFolder extends VirtualFolder implements SampleVirtualFolderIn
 				}
 			}
     	}
-    	    	
+    	
+    	if ($event_object instanceof SampleItemLinkEvent or 
+    		$event_object instanceof ProjectItemLinkEvent)
+    	{
+    		if (($sample_id = Sample::get_entry_by_item_id($event_object->get_item_id())) != null)
+    		{
+    			$sample_folder_id = SampleFolder::get_folder_by_sample_id($sample_id);
+    			
+	    		$folder = Folder::get_instance($event_object->get_folder_id());
+	    		$child_array = $folder->get_childs();
+	    		if (is_array($child_array) and count($child_array) >= 1)
+	    		{
+	    			foreach($child_array as $key => $value)
+	    			{
+	    				if (($virtual_folder_id = VirtualFolder::get_virtual_folder_id_by_data_entity_id($value)) != null)
+	    				{
+	    					$sample_virtual_folder = new SampleVirtualFolder($virtual_folder_id);
+	    					if ($sample_virtual_folder->is_sample_vfolder() == true)
+	    					{
+	    						if ($sample_virtual_folder->link_folder($sample_folder_id) == false)
+			    				{
+					    			return false;
+			    				}
+	    					}
+	    				}
+	    			}
+	    		}
+    		}
+    	}
+    	
     	return true;
     }
 }
