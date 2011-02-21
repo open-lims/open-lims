@@ -27,10 +27,13 @@
  */
 class BaseModuleNavigation_Access
 {
+	const BASE_MODULE_NAVIGATION_PK_SEQUENCE = 'core_base_module_navigation_id_seq';
+	
 	private $id;
 	private $display_name;
 	private $position;
 	private $colour;
+	private $module_id;
 	
 	/**
 	 * @param string $id
@@ -55,6 +58,7 @@ class BaseModuleNavigation_Access
 				$this->display_name	= $data[display_name];
 				$this->position		= $data[position];
 				$this->colour		= $data[colour];
+				$this->module_id	= $data[module_id];
 			}
 			else
 			{
@@ -71,37 +75,44 @@ class BaseModuleNavigation_Access
 			unset($this->display_name);
 			unset($this->position);
 			unset($this->colour);
+			unset($this->module_id);
 		}
 	}
 	
 	/**
 	 * @param string $name
 	 * @param string $folder
-	 * @return bool
+	 * @return integer
 	 */
-	public function create($id, $display_name, $position, $colour)
+	public function create($display_name, $position, $colour, $module_id)
 	{
 		global $db;
 
-		if (is_numeric($id) and $display_name and is_numeric($position) and $colour)
+		if ($display_name and is_numeric($position) and $colour and is_numeric($module_id))
 		{
-	 		$sql_write = "INSERT INTO ".constant("BASE_MODULE_NAVIGATION_TABLE")." (id, display_name, position, colour) " .
-								"VALUES ('".$id."','".$display_name."','".$position."','".$colour."')";		
+	 		$sql_write = "INSERT INTO ".constant("BASE_MODULE_NAVIGATION_TABLE")." (id, display_name, position, colour, module_id) " .
+								"VALUES (nextval('".self::BASE_MODULE_NAVIGATION_PK_SEQUENCE."'::regclass),'".$display_name."','".$position."','".$colour."',".$module_id.")";		
 				
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
-			{								
-				return true;
+			{
+				$sql_read = "SELECT id FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." WHERE id = currval('".self::BASE_MODULE_NAVIGATION_PK_SEQUENCE."'::regclass)";
+				$res_read = $db->db_query($sql_read);
+				$data_read = $db->db_fetch_assoc($res_read);
+							
+				$this->__construct($data_read[id]);		
+								
+				return $data_read[id];
 			}
 			else
 			{
-				return false;
+				return null;
 			}
 		}
 		else
 		{
-			return false;
+			return null;
 		}
 	}
 	
@@ -182,6 +193,21 @@ class BaseModuleNavigation_Access
 	}
 	
 	/**
+	 * @return string
+	 */
+	public function get_module_id()
+	{
+		if ($this->module_id)
+		{
+			return $this->module_id;
+		}
+		else
+		{
+			return null;
+		}	
+	}
+	
+	/**
 	 * @param string $display_name
 	 * @return bool
 	 */
@@ -247,7 +273,7 @@ class BaseModuleNavigation_Access
 	{
 		global $db;
 
-		if ($this->id and colour)
+		if ($this->id and $colour)
 		{
 			$sql = "UPDATE ".constant("BASE_MODULE_NAVIGATION_TABLE")." SET colour = '".$colour."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
@@ -255,6 +281,64 @@ class BaseModuleNavigation_Access
 			if ($db->db_affected_rows($res))
 			{
 				$this->colour = $colour;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param string $module_id
+	 * @return bool
+	 */
+	public function set_module_id($module_id)
+	{
+		global $db;
+
+		if ($this->id and $module_id)
+		{
+			$sql = "UPDATE ".constant("BASE_MODULE_NAVIGATION_TABLE")." SET module_id = '".$module_id."' WHERE id = ".$this->id."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->module_id = $module_id;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	
+	/**
+	 * @param integer $module_id
+	 * @return bool
+	 */
+	public static function delete_by_module_id($module_id)
+	{
+		global $db;
+
+		if (is_numeric($include_id))
+		{
+			$sql = "DELETE FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." WHERE module_id = '".$module_id."'";
+			$res = $db->db_query($sql);
+			
+			if ($res !== false)
+			{
 				return true;
 			}
 			else

@@ -82,9 +82,41 @@ class DataBrowser implements DataBrowserInterface
     	}	
     }
     
-    public static function get_data_browser_count()
+    public static function count_data_browser_array($folder_id, $virtual_folder_id)
     {
-    	// count_list_data_entity_childs
+    	global $user;
+    	
+    	if (($folder_id and !$virtual_folder_id) or (!$folder_id and !$virtual_folder_id))
+    	{	    	
+	    	if ($folder_id == null)
+	    	{
+	    		$new_folder_id = UserFolder::get_folder_by_user_id($user->get_user_id());
+	    		if ($new_folder_id != null)
+	    		{
+	    			self::$folder_id = $new_folder_id;
+	    		}
+	    		else
+	    		{
+	    			// Exception
+	    		}
+	    	}
+	    	else
+	    	{
+	    		self::$folder_id = $folder_id;
+	    	}
+	    	
+	    	$folder = Folder::get_instance(self::$folder_id);
+	    	return DataJoin_Access::count_list_data_entity_childs($folder->get_data_entity_id(), $order_by, $order_method, $start, $end);
+    	}
+    	elseif(!$folder_id and $virtual_folder_id)
+    	{
+    		$virtual_folder = new VirtualFolder($virtual_folder_id);
+    		return DataJoin_Access::count_list_data_entity_childs($virtual_folder->get_data_entity_id(), $order_by, $order_method, $start, $end);
+    	}
+    	else
+    	{
+    		// Exception
+    	}
     }
 
     /**

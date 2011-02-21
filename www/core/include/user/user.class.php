@@ -1094,14 +1094,6 @@ class User implements UserInterface {
 		$username = trim(strtolower($username));
 		return User_Access::get_user_id_by_username($username);
 	}
-
-	/**
-	 * @return integer Number of Users
-	 */
-	public static function get_number_of_users()
-	{
-		return User_Access::get_number_of_users();
-	}
 	
 	/**
 	 * @return integer Number of inactive Users

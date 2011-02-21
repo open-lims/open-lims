@@ -32,6 +32,7 @@ class BaseModule_Access
 	private $id;
 	private $name;
 	private $folder;
+	private $class;
 	
 	/**
 	 * @param string $id
@@ -55,6 +56,7 @@ class BaseModule_Access
 				$this->id 			= $id;
 				$this->name			= $data[name];
 				$this->folder		= $data[folder];
+				$this->class		= $data[class];
 			}
 			else
 			{
@@ -70,6 +72,7 @@ class BaseModule_Access
 			unset($this->id);
 			unset($this->name);
 			unset($this->folder);
+			unset($this->class);
 		}
 	}
 	
@@ -78,14 +81,14 @@ class BaseModule_Access
 	 * @param string $folder
 	 * @return integer
 	 */
-	public function create($name, $folder)
+	public function create($name, $folder, $class)
 	{
 		global $db;
 
-		if ($name and $folder)
+		if ($name and $folder and $class)
 		{
-	 		$sql_write = "INSERT INTO ".constant("BASE_MODULE_TABLE")." (id, name, folder) " .
-								"VALUES (nextval('".self::BASE_MODULE_PK_SEQUENCE."'::regclass),'".$name."','".$folder."')";		
+	 		$sql_write = "INSERT INTO ".constant("BASE_MODULE_TABLE")." (id, name, folder, class) " .
+								"VALUES (nextval('".self::BASE_MODULE_PK_SEQUENCE."'::regclass),'".$name."','".$folder."','".$class."')";		
 				
 			$res_write = $db->db_query($sql_write);
 			
@@ -172,6 +175,21 @@ class BaseModule_Access
 	}
 	
 	/**
+	 * @return string
+	 */
+	public function get_class()
+	{
+		if ($this->class)
+		{
+			return $this->class;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @param string $name
 	 * @return bool
 	 */
@@ -216,6 +234,35 @@ class BaseModule_Access
 			if ($db->db_affected_rows($res))
 			{
 				$this->folder = $folder;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param string $class
+	 * @return bool
+	 */
+	public function set_folder($class)
+	{
+		global $db;
+
+		if ($this->id and $class)
+		{
+			$sql = "UPDATE ".constant("BASE_MODULE_TABLE")." SET class = '".$class."' WHERE id = ".$this->id."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->class = $class;
 				return true;
 			}
 			else

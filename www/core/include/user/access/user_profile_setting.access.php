@@ -27,9 +27,6 @@
  */
 class UserProfileSetting_Access
 {
-	
-	const USER_PROFILE_SETTING_TABLE = 'core_user_profile_settings';
-	
 	private $user_id;
 	
 	private $language_id;
@@ -48,7 +45,7 @@ class UserProfileSetting_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::USER_PROFILE_SETTING_TABLE." WHERE id='".$user_id."'";
+			$sql = "SELECT * FROM ".constant("USER_PROFILE_SETTING_TABLE")." WHERE id='".$user_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -89,7 +86,7 @@ class UserProfileSetting_Access
 		
 		if ($user_id)
 		{
-			$sql_write = "INSERT INTO ".self::USER_PROFILE_SETTING_TABLE." (id," .
+			$sql_write = "INSERT INTO ".constant("USER_PROFILE_SETTING_TABLE")." (id," .
 															"language_id," .
 															"timezone_id) " .
 											"VALUES (".$user_id."," .
@@ -128,7 +125,7 @@ class UserProfileSetting_Access
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".self::USER_PROFILE_SETTING_TABLE." WHERE id = ".$user_id_tmp."";
+			$sql = "DELETE FROM ".constant("USER_PROFILE_SETTING_TABLE")." WHERE id = ".$user_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -186,7 +183,7 @@ class UserProfileSetting_Access
 			
 		if ($this->user_id and is_numeric($language_id))
 		{
-			$sql = "UPDATE ".self::USER_PROFILE_SETTING_TABLE." SET language_id = ".$language_id." WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_PROFILE_SETTING_TABLE")." SET language_id = ".$language_id." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -215,7 +212,7 @@ class UserProfileSetting_Access
 			
 		if ($this->user_id and is_numeric($timezone_id))
 		{
-			$sql = "UPDATE ".self::USER_PROFILE_SETTING_TABLE." SET timezone_id = ".$timezone_id." WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_PROFILE_SETTING_TABLE")." SET timezone_id = ".$timezone_id." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))

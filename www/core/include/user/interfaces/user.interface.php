@@ -61,7 +61,6 @@ interface UserInterface
 	
 	public static function generate_password();
 	public static function get_user_id_by_username($username);
-	public static function get_number_of_users();
 	public static function get_number_of_inactive_users();
 	public static function get_number_of_locked_users();
 	public static function exist_username($username);

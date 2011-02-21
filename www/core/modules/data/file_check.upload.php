@@ -46,7 +46,7 @@
 	
 	require_once("../../include/base/events/event.class.php");
 	require_once("../../include/base/system_handler.class.php");
-	
+
 	require_once("../../include/base/session.class.php");
 	
 	$GLOBALS[autoload_prefix] = "../../../";
@@ -56,6 +56,8 @@
 	$db = new Database("postgresql");
 	$db->db_connect($GLOBALS[server],$GLOBALS[port],$GLOBALS[dbuser],$GLOBALS[password],$GLOBALS[database]);
 
+	SystemHandler::init_db_constants();
+	
 	$user = new User(1);
 
 	if ($_GET[session_id] and $_GET[unique_id])

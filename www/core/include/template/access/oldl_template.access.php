@@ -27,7 +27,6 @@
  */
 class OldlTemplate_Access
 {
-	const OLDL_TEMPLATE_TABLE = 'core_oldl_templates';
 	const OLDL_TEMPLATE_PK_SEQUENCE = 'core_oldl_templates_id_seq';
 
 	private $oldl_id;
@@ -46,7 +45,7 @@ class OldlTemplate_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::OLDL_TEMPLATE_TABLE." WHERE id='".$oldl_id."'";
+			$sql = "SELECT * FROM ".constant("OLDL_TEMPLATE_TABLE")." WHERE id='".$oldl_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -81,12 +80,12 @@ class OldlTemplate_Access
 		
 		if (is_numeric($data_entity_id))
 		{
-			$sql_write = "INSERT INTO ".self::OLDL_TEMPLATE_TABLE." (id,data_entity_id) " .
+			$sql_write = "INSERT INTO ".constant("OLDL_TEMPLATE_TABLE")." (id,data_entity_id) " .
 					"VALUES (nextval('".self::OLDL_TEMPLATE_PK_SEQUENCE."'::regclass),".$data_entity_id.")";
 					
 			$db->db_query($sql_write);	
 			
-			$sql_read = "SELECT id FROM ".self::OLDL_TEMPLATE_TABLE." WHERE id = currval('".self::OLDL_TEMPLATE_PK_SEQUENCE."'::regclass)";
+			$sql_read = "SELECT id FROM ".constant("OLDL_TEMPLATE_TABLE")." WHERE id = currval('".self::OLDL_TEMPLATE_PK_SEQUENCE."'::regclass)";
 			$res_read = $db->db_query($sql_read);
 			$data_read = $db->db_fetch_assoc($res_read);
 								
@@ -113,7 +112,7 @@ class OldlTemplate_Access
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".self::OLDL_TEMPLATE_TABLE." WHERE id = ".$oldl_id_tmp."";
+			$sql = "DELETE FROM ".constant("OLDL_TEMPLATE_TABLE")." WHERE id = ".$oldl_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -156,7 +155,7 @@ class OldlTemplate_Access
 			
 		if ($this->oldl_id and is_numeric($data_entity_id))
 		{
-			$sql = "UPDATE ".self::OLDL_TEMPLATE_TABLE." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->oldl_id."";
+			$sql = "UPDATE ".constant("OLDL_TEMPLATE_TABLE")." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->oldl_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -186,7 +185,7 @@ class OldlTemplate_Access
 		
 		if (is_numeric($data_entity_id))
 		{
-			$sql = "SELECT * FROM ".self::OLDL_TEMPLATE_TABLE." WHERE data_entity_id='".$data_entity_id."'";
+			$sql = "SELECT * FROM ".constant("OLDL_TEMPLATE_TABLE")." WHERE data_entity_id='".$data_entity_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

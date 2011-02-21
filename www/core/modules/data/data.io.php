@@ -148,7 +148,7 @@ class DataIO
 			// !!!!! ---------- !!!!!!!!!!!!!1
 			$folder = Folder::get_instance($folder_id);	
 
-			$list = new List_IO(null, 20);
+			$list = new List_IO(DataBrowser::count_data_browser_array($folder_id, $virtual_folder_id), 20);
 
 			$list->set_top_right_text($data_path->get_stack_path());
 			

@@ -27,7 +27,6 @@
  */
 class XmlCache_Access
 {
-	const XML_CACHE_TABLE = 'core_xml_cache';
 	const XML_CACHE_PK_SEQUENCE = 'core_xml_cache_id_seq';
 
 	private $id;
@@ -49,7 +48,7 @@ class XmlCache_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::XML_CACHE_TABLE." WHERE id='".$id."'";
+			$sql = "SELECT * FROM ".constant("XML_CACHE_TABLE")." WHERE id='".$id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -90,12 +89,12 @@ class XmlCache_Access
 		
 		if (is_numeric($data_entity_id) and $path and $checksum)
 		{
-			$sql_write = "INSERT INTO ".self::XML_CACHE_TABLE." (id,data_entity_id,path,checksum) " .
+			$sql_write = "INSERT INTO ".constant("XML_CACHE_TABLE")." (id,data_entity_id,path,checksum) " .
 					"VALUES (nextval('".self::XML_CACHE_PK_SEQUENCE."'::regclass),".$data_entity_id.",'".$path."','".$checksum."')";
 					
 			$db->db_query($sql_write);	
 			
-			$sql_read = "SELECT id FROM ".self::XML_CACHE_TABLE." WHERE id = currval('".self::XML_CACHE_PK_SEQUENCE."'::regclass)";
+			$sql_read = "SELECT id FROM ".constant("XML_CACHE_TABLE")." WHERE id = currval('".self::XML_CACHE_PK_SEQUENCE."'::regclass)";
 			$res_read = $db->db_query($sql_read);
 			$data_read = $db->db_fetch_assoc($res_read);
 								
@@ -122,7 +121,7 @@ class XmlCache_Access
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".self::XML_CACHE_TABLE." WHERE id = ".$id_tmp."";
+			$sql = "DELETE FROM ".constant("XML_CACHE_TABLE")." WHERE id = ".$id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -194,7 +193,7 @@ class XmlCache_Access
 		
 		if ($this->id and is_numeric($data_entity_id))
 		{
-			$sql = "UPDATE ".self::XML_CACHE_TABLE." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->id."";
+			$sql = "UPDATE ".constant("XML_CACHE_TABLE")." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -223,7 +222,7 @@ class XmlCache_Access
 
 		if ($this->id and $path)
 		{
-			$sql = "UPDATE ".self::XML_CACHE_TABLE." SET path = ".$path." WHERE id = ".$this->id."";
+			$sql = "UPDATE ".constant("XML_CACHE_TABLE")." SET path = ".$path." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -252,7 +251,7 @@ class XmlCache_Access
 			
 		if ($this->id and $checksum)
 		{
-			$sql = "UPDATE ".self::XML_CACHE_TABLE." SET checksum = ".$checksum." WHERE id = ".$this->id."";
+			$sql = "UPDATE ".constant("XML_CACHE_TABLE")." SET checksum = ".$checksum." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -282,7 +281,7 @@ class XmlCache_Access
 		
 		if (is_numeric($data_entity_id))
 		{
-			$sql = "SELECT id FROM ".self::XML_CACHE_TABLE." WHERE data_entity_id = ".$data_entity_id."";
+			$sql = "SELECT id FROM ".constant("XML_CACHE_TABLE")." WHERE data_entity_id = ".$data_entity_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

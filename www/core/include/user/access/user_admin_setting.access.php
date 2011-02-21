@@ -27,8 +27,6 @@
  */
 class UserAdminSetting_Access
 {
-	const USER_ADMIN_SETTING_TABLE = 'core_user_admin_settings';
-	
 	private $user_id;
 	
 	private $can_change_password;
@@ -53,7 +51,7 @@ class UserAdminSetting_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::USER_ADMIN_SETTING_TABLE." WHERE id='".$user_id."'";
+			$sql = "SELECT * FROM ".constant("USER_ADMIN_SETTING_TABLE")." WHERE id='".$user_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -162,7 +160,7 @@ class UserAdminSetting_Access
 		
 		if ($user_id)
 		{
-			$sql_write = "INSERT INTO ".self::USER_ADMIN_SETTING_TABLE." (id," .
+			$sql_write = "INSERT INTO ".constant("USER_ADMIN_SETTING_TABLE")." (id," .
 															"can_change_password," .
 															"must_change_password," .
 															"user_locked," .
@@ -213,7 +211,7 @@ class UserAdminSetting_Access
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".self::USER_ADMIN_SETTING_TABLE." WHERE id = ".$user_id_tmp."";
+			$sql = "DELETE FROM ".constant("USER_ADMIN_SETTING_TABLE")." WHERE id = ".$user_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -370,7 +368,7 @@ class UserAdminSetting_Access
 				$can_change_password_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::USER_ADMIN_SETTING_TABLE." SET can_change_password = '".$can_change_password_insert."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET can_change_password = '".$can_change_password_insert."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -408,7 +406,7 @@ class UserAdminSetting_Access
 				$must_change_password_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::USER_ADMIN_SETTING_TABLE." SET must_change_password = '".$must_change_password_insert."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET must_change_password = '".$must_change_password_insert."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -446,7 +444,7 @@ class UserAdminSetting_Access
 				$user_locked_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::USER_ADMIN_SETTING_TABLE." SET user_locked = '".$user_locked_insert."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET user_locked = '".$user_locked_insert."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -484,7 +482,7 @@ class UserAdminSetting_Access
 				$user_inactive_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::USER_ADMIN_SETTING_TABLE." SET user_inactive = '".$user_inactive_insert."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET user_inactive = '".$user_inactive_insert."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -522,7 +520,7 @@ class UserAdminSetting_Access
 				$secure_password_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::USER_ADMIN_SETTING_TABLE." SET secure_password = '".$secure_password_insert."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET secure_password = '".$secure_password_insert."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -551,7 +549,7 @@ class UserAdminSetting_Access
 			
 		if ($this->user_id and $last_password_change)
 		{
-			$sql = "UPDATE ".self::USER_ADMIN_SETTING_TABLE." SET last_password_change = ".$last_password_change." WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET last_password_change = ".$last_password_change." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -589,7 +587,7 @@ class UserAdminSetting_Access
 				$block_write_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::USER_ADMIN_SETTING_TABLE." SET block_write = '".$block_write_insert."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET block_write = '".$block_write_insert."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -627,7 +625,7 @@ class UserAdminSetting_Access
 				$create_folder_insert = "f";
 			}
 			
-			$sql = "UPDATE ".self::USER_ADMIN_SETTING_TABLE." SET create_folder = '".$create_folder_insert."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET create_folder = '".$create_folder_insert."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -653,7 +651,7 @@ class UserAdminSetting_Access
 	{
 		global $db;
 									
-		$sql = "SELECT COUNT(id) AS result FROM ".self::USER_ADMIN_SETTING_TABLE." WHERE user_inactive = 't'";
+		$sql = "SELECT COUNT(id) AS result FROM ".constant("USER_ADMIN_SETTING_TABLE")." WHERE user_inactive = 't'";
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);
 		
@@ -674,7 +672,7 @@ class UserAdminSetting_Access
 	{
 		global $db;
 									
-		$sql = "SELECT COUNT(id) AS result FROM ".self::USER_ADMIN_SETTING_TABLE." WHERE user_locked = 't'";
+		$sql = "SELECT COUNT(id) AS result FROM ".constant("USER_ADMIN_SETTING_TABLE")." WHERE user_locked = 't'";
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);
 		

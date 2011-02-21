@@ -483,6 +483,7 @@ class SystemHandler implements SystemHandlerInterface
 									include($db_table_name_file);
 								}
 							}
+							unset($no_db_table_name);
 						}
 					}
 				}

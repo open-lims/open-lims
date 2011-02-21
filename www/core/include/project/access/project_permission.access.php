@@ -477,7 +477,7 @@ class ProjectPermission_Access
 
 		if ($this->permission_id and is_numeric($owner_id))
 		{
-			$sql = "UPDATE "constant("PROJECT_PERMISSION_TABLE")." SET owner_id = '".$owner_id."' WHERE id = '".$this->permission_id."'";
+			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET owner_id = '".$owner_id."' WHERE id = '".$this->permission_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -721,7 +721,7 @@ class ProjectPermission_Access
 
 		if (is_numeric($project_id) and is_numeric($group_id))
 		{	
-			$sql = "SELECT COUNT(id) AS numberofentries FROM ".constant("PROJECT_PERMISSION_TABLE")" WHERE project_id = ".$project_id." and group_id = ".$group_id."";
+			$sql = "SELECT COUNT(id) AS numberofentries FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." and group_id = ".$group_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

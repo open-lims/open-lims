@@ -27,7 +27,6 @@
  */
 class XmlCacheElement_Access
 {
-	const XML_CACHE_ELEMENT_TABLE = 'core_xml_cache_elements';
 	const XML_CACHE_ELEMENT_PK_SEQUENCE = 'core_xml_cache_elements_primary_key_seq';
 	
 	/**
@@ -49,12 +48,12 @@ class XmlCacheElement_Access
 			$field_2 = serialize($field_2);
 			$field_3 = serialize($field_3);
 			
-			$sql_write = "INSERT INTO ".self::XML_CACHE_ELEMENT_TABLE." (primary_key,toid,field_0,field_1,field_2,field_3) " .
+			$sql_write = "INSERT INTO ".constant("XML_CACHE_ELEMENT_TABLE")." (primary_key,toid,field_0,field_1,field_2,field_3) " .
 					"VALUES (nextval('".self::XML_CACHE_ELEMENT_PK_SEQUENCE."'::regclass),".$toid.",'".$field_0."','".$field_1."','".$field_2."','".$field_3."')";
 					
 			$db->db_query($sql_write);	
 			
-			$sql_read = "SELECT primary_key FROM ".self::XML_CACHE_ELEMENT_TABLE." WHERE primary_key = currval('".self::XML_CACHE_ELEMENT_PK_SEQUENCE."'::regclass)";
+			$sql_read = "SELECT primary_key FROM ".constant("XML_CACHE_ELEMENT_TABLE")." WHERE primary_key = currval('".self::XML_CACHE_ELEMENT_PK_SEQUENCE."'::regclass)";
 			$res_read = $db->db_query($sql_read);
 			$data_read = $db->db_fetch_assoc($res_read);
 			
@@ -76,7 +75,7 @@ class XmlCacheElement_Access
 		
 		if (is_numeric($toid))
 		{	
-			$sql = "DELETE FROM ".self::XML_CACHE_ELEMENT_TABLE." WHERE toid = ".$toid."";
+			$sql = "DELETE FROM ".constant("XML_CACHE_ELEMENT_TABLE")." WHERE toid = ".$toid."";
 			$res = $db->db_query($sql);
 						
 			if ($db->db_affected_rows($res))
@@ -104,7 +103,7 @@ class XmlCacheElement_Access
 		
 		if (is_numeric($toid))
 		{	
-			$sql = "SELECT * FROM ".self::XML_CACHE_ELEMENT_TABLE." WHERE toid = ".$toid." ORDER BY primary_key ASC";
+			$sql = "SELECT * FROM ".constant("XML_CACHE_ELEMENT_TABLE")." WHERE toid = ".$toid." ORDER BY primary_key ASC";
 			$res = $db->db_query($sql);
 			
 			$result_array = array();

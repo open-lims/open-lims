@@ -25,10 +25,8 @@
  * User Profile Access Class
  * @package user
  */
-class UserProfile_Access {
-	
-	const USER_PROFILE_TABLE = 'core_user_profiles';
-	
+class UserProfile_Access
+{
 	private $user_id;
 	
 	private $gender;
@@ -63,7 +61,7 @@ class UserProfile_Access {
 		}
 		else
 		{			
-			$sql = "SELECT * FROM ".self::USER_PROFILE_TABLE." WHERE id='".$user_id."'";
+			$sql = "SELECT * FROM ".constant("USER_PROFILE_TABLE")." WHERE id='".$user_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -148,7 +146,7 @@ class UserProfile_Access {
 				$title_insert = "NULL";
 			}
 			
-			$sql = "INSERT INTO ".self::USER_PROFILE_TABLE." (id," .
+			$sql = "INSERT INTO ".constant("USER_PROFILE_TABLE")." (id," .
 																"gender," .
 																"title," .
 																"forename," .
@@ -217,7 +215,7 @@ class UserProfile_Access {
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".self::USER_PROFILE_TABLE." WHERE id = ".$user_id_tmp."";
+			$sql = "DELETE FROM ".constant("USER_PROFILE_TABLE")." WHERE id = ".$user_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -498,9 +496,9 @@ class UserProfile_Access {
 	{
 		global $db;
 
-		if ($this->user_id and isset($gender))
+		if ($this->user_id and $gender)
 		{
-			$sql = "UPDATE ".self::USER_PROFILE_TABLE." SET gender = '".$gender."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET gender = '".$gender."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -527,9 +525,9 @@ class UserProfile_Access {
 	{
 		global $db;
 
-		if ($this->user_id and isset($title))
+		if ($this->user_id and $title)
 		{
-			$sql = "UPDATE ".self::USER_PROFILE_TABLE." SET title = '".$title."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET title = '".$title."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -556,9 +554,9 @@ class UserProfile_Access {
 	{
 		global $db;
 		
-		if ($this->user_id and isset($forename))
+		if ($this->user_id and $forename)
 		{
-			$sql = "UPDATE ".self::USER_PROFILE_TABLE." SET forename = '".$forename."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET forename = '".$forename."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -585,9 +583,9 @@ class UserProfile_Access {
 	{
 		global $db;
 
-		if ($this->user_id and isset($surname))
+		if ($this->user_id and $surname)
 		{
-			$sql = "UPDATE ".self::USER_PROFILE_TABLE." SET surname = '".$surname."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET surname = '".$surname."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -614,9 +612,9 @@ class UserProfile_Access {
 	{
 		global $db;
 		
-		if ($this->user_id and isset($mail))
+		if ($this->user_id and $mail)
 		{
-			$sql = "UPDATE ".self::USER_PROFILE_TABLE." SET mail = '".$mail."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET mail = '".$mail."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -643,9 +641,9 @@ class UserProfile_Access {
 	{
 		global $db;
 			
-		if ($this->user_id and isset($institution))
+		if ($this->user_id and $institution)
 		{
-			$sql = "UPDATE ".self::USER_PROFILE_TABLE." SET institution = '".$institution."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET institution = '".$institution."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -672,9 +670,9 @@ class UserProfile_Access {
 	{
 		global $db;
 
-		if ($this->user_id and isset($department))
+		if ($this->user_id and $department)
 		{
-			$sql = "UPDATE ".self::USER_PROFILE_TABLE." SET department = '".$department."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET department = '".$department."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -701,9 +699,9 @@ class UserProfile_Access {
 	{
 		global $db;
 		
-		if ($this->user_id and isset($street))
+		if ($this->user_id and $street)
 		{
-			$sql = "UPDATE ".self::USER_PROFILE_TABLE." SET street = '".$street."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET street = '".$street."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -730,9 +728,9 @@ class UserProfile_Access {
 	{
 		global $db;
 			
-		if ($this->user_id and isset($zip))
+		if ($this->user_id and $zip)
 		{
-			$sql = "UPDATE ".self::USER_PROFILE_TABLE." SET zip = '".$zip."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET zip = '".$zip."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -759,9 +757,9 @@ class UserProfile_Access {
 	{
 		global $db;
 			
-		if ($this->user_id and isset($city))
+		if ($this->user_id and $city)
 		{
-			$sql = "UPDATE ".self::USER_PROFILE_TABLE." SET city = '".$city."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET city = '".$city."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res)){
@@ -787,9 +785,9 @@ class UserProfile_Access {
 	{
 		global $db;
 		
-		if ($this->user_id and isset($country))
+		if ($this->user_id and $country)
 		{
-			$sql = "UPDATE ".self::USER_PROFILE_TABLE." SET country = '".$country."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET country = '".$country."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -816,9 +814,9 @@ class UserProfile_Access {
 	{
 		global $db;
 		
-		if ($this->user_id and isset($phone))
+		if ($this->user_id and $phone)
 		{
-			$sql = "UPDATE ".self::USER_PROFILE_TABLE." SET phone = '".$phone."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET phone = '".$phone."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -845,7 +843,7 @@ class UserProfile_Access {
 	{	
 		global $db;
 		
-		if ($this->user_id and isset($icq))
+		if ($this->user_id and is_numeric($icq))
 		{
 			if ($icq)
 			{
@@ -856,7 +854,7 @@ class UserProfile_Access {
 				$icq_insert = "NULL";
 			}
 			
-			$sql = "UPDATE ".self::USER_PROFILE_TABLE." SET icq = ".$icq_insert." WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET icq = ".$icq_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -883,9 +881,9 @@ class UserProfile_Access {
 	{	
 		global $db;
 		
-		if ($this->user_id and isset($msn))
+		if ($this->user_id and $msn)
 		{
-			$sql = "UPDATE ".self::USER_PROFILE_TABLE." SET msn = '".$msn."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET msn = '".$msn."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -912,9 +910,9 @@ class UserProfile_Access {
 	{
 		global $db;
 			
-		if ($this->user_id and isset($yahoo))
+		if ($this->user_id and $yahoo)
 		{
-			$sql = "UPDATE ".self::USER_PROFILE_TABLE." SET yahoo = '".$yahoo."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET yahoo = '".$yahoo."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -941,9 +939,9 @@ class UserProfile_Access {
 	{
 		global $db;
 		
-		if ($this->user_id and isset($aim))
+		if ($this->user_id and $aim)
 		{
-			$sql = "UPDATE ".self::USER_PROFILE_TABLE." SET aim = '".$aim."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET aim = '".$aim."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -970,9 +968,9 @@ class UserProfile_Access {
 	{	
 		global $db;
 
-		if ($this->user_id and isset($skype))
+		if ($this->user_id and $skype)
 		{
-			$sql = "UPDATE ".self::USER_PROFILE_TABLE." SET skype = '".$skype."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET skype = '".$skype."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))

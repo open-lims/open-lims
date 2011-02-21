@@ -27,8 +27,6 @@
  */
 class Group_Access
 {
-	
-	const GROUP_TABLE = 'core_groups';
 	const GROUP_PK_SEQUENCE = 'core_groups_id_seq';
 	
 	private $group_id;
@@ -47,7 +45,7 @@ class Group_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::GROUP_TABLE." WHERE id='".$group_id."'";
+			$sql = "SELECT * FROM ".constant("GROUP_TABLE")." WHERE id='".$group_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -83,7 +81,7 @@ class Group_Access
 		if ($name)
 		{
 			$sql_write = "INSERT INTO ".self::GROUP_TABLE." (id,name) " .
-						"VALUES (nextval('".self::GROUP_PK_SEQUENCE."'::regclass),'".$name."')";
+						"VALUES (nextval('".constant("GROUP_PK_SEQUENCE")."'::regclass),'".$name."')";
 																	
 			$res_write = $db->db_query($sql_write);
 			
@@ -93,7 +91,7 @@ class Group_Access
 			}
 			else
 			{
-				$sql_read = "SELECT id FROM ".self::GROUP_TABLE." WHERE id = currval('".self::GROUP_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("GROUP_TABLE")." WHERE id = currval('".self::GROUP_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -121,7 +119,7 @@ class Group_Access
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".self::GROUP_TABLE." WHERE id = ".$group_id_tmp."";
+			$sql = "DELETE FROM ".constant("GROUP_TABLE")." WHERE id = ".$group_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -164,7 +162,7 @@ class Group_Access
 			
 		if ($this->group_id and $name)
 		{
-			$sql = "UPDATE ".self::GROUP_TABLE." SET name = '".$name."' WHERE id = ".$this->group_id."";
+			$sql = "UPDATE ".constant("GROUP_TABLE")." SET name = '".$name."' WHERE id = ".$this->group_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -194,7 +192,7 @@ class Group_Access
 		
 		if ($name)
 		{					
-			$sql = "SELECT id FROM ".self::GROUP_TABLE." WHERE LOWER(name) = '".$name."'";
+			$sql = "SELECT id FROM ".constant("GROUP_TABLE")." WHERE LOWER(name) = '".$name."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -220,7 +218,7 @@ class Group_Access
 	{
 		global $db;
 									
-		$sql = "SELECT COUNT(id) AS result FROM ".self::GROUP_TABLE."";
+		$sql = "SELECT COUNT(id) AS result FROM ".constant("GROUP_TABLE")."";
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);
 		
@@ -243,7 +241,7 @@ class Group_Access
 							
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".self::GROUP_TABLE."";
+		$sql = "SELECT id FROM ".constant("GROUP_TABLE")."";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))
@@ -275,7 +273,7 @@ class Group_Access
    			
    			$return_array = array();
    				
-   			$sql = "SELECT id FROM ".self::GROUP_TABLE." WHERE LOWER(name) LIKE '".$groupname."'";   			
+   			$sql = "SELECT id FROM ".constant("GROUP_TABLE")." WHERE LOWER(name) LIKE '".$groupname."'";   			
    			$res = $db->db_query($sql);
 			while ($data = $db->db_fetch_assoc($res))
 			{
@@ -311,7 +309,7 @@ class Group_Access
 		
 			$return_array = array();	
 												
-			$sql = "SELECT id FROM ".self::GROUP_TABLE." WHERE id = ".$group_id."";
+			$sql = "SELECT id FROM ".constant("GROUP_TABLE")." WHERE id = ".$group_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -337,7 +335,7 @@ class Group_Access
 	{
 		global $db;
 											
-		$sql = "SELECT COUNT(id) AS result FROM ".self::GROUP_TABLE."";
+		$sql = "SELECT COUNT(id) AS result FROM ".constant("GROUP_TABLE")."";
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);
 		

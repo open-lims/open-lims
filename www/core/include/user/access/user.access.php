@@ -25,9 +25,8 @@
  * User Access Class
  * @package user
  */
-class User_Access {
-	
-	const USER_TABLE = 'core_users';
+class User_Access
+{
 	const USER_PK_SEQUENCE = 'core_users_id_seq';
 	
 	private $user_id;
@@ -48,7 +47,7 @@ class User_Access {
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::USER_TABLE." WHERE id='".$user_id."'";
+			$sql = "SELECT * FROM ".constant("USER_TABLE")." WHERE id='".$user_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -90,7 +89,7 @@ class User_Access {
 		
 		if ($username and strlen($password) == 32)
 		{	
-			$sql_write = "INSERT INTO ".self::USER_TABLE." (id," .
+			$sql_write = "INSERT INTO ".constant("USER_TABLE")." (id," .
 															"username," .
 															"password) " .
 						"VALUES (nextval('".self::USER_PK_SEQUENCE."'::regclass)," .
@@ -105,7 +104,7 @@ class User_Access {
 			}
 			else
 			{
-				$sql_read = "SELECT id FROM ".self::USER_TABLE." WHERE id = currval('".self::USER_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("USER_TABLE")." WHERE id = currval('".self::USER_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -133,7 +132,7 @@ class User_Access {
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".self::USER_TABLE." WHERE id = ".$user_id_tmp."";
+			$sql = "DELETE FROM ".constant("USER_TABLE")." WHERE id = ".$user_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -191,7 +190,7 @@ class User_Access {
 
 		if ($this->user_id and $username)
 		{
-			$sql = "UPDATE ".self::USER_TABLE." SET username = '".$username."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_TABLE")." SET username = '".$username."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -220,7 +219,7 @@ class User_Access {
 			
 		if ($this->user_id and strlen($password) == 32)
 		{
-			$sql = "UPDATE ".self::USER_TABLE." SET password = '".$password."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_TABLE")." SET password = '".$password."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -250,7 +249,7 @@ class User_Access {
 		
 		if ($username)
 		{						
-			$sql = "SELECT id FROM ".self::USER_TABLE." WHERE LOWER(username) = '".$username."'";
+			$sql = "SELECT id FROM ".constant("USER_TABLE")." WHERE LOWER(username) = '".$username."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -270,27 +269,6 @@ class User_Access {
 	}
 	
 	/**
-	 * @return integer
-	 */
-	public static function get_number_of_users()
-	{
-		global $db;
-									
-		$sql = "SELECT COUNT(id) AS result FROM ".self::USER_TABLE."";
-		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
-		
-		if ($data[result])
-		{
-			return $data[result];
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
 	 * @return array
 	 */
 	public static function list_entries()
@@ -299,7 +277,7 @@ class User_Access {
 		
 		$return_array = array();	
 											
-		$sql = "SELECT id FROM ".self::USER_TABLE." ORDER BY id";
+		$sql = "SELECT id FROM ".constant("USER_TABLE")." ORDER BY id";
 		$res = $db->db_query($sql);
 		while ($data = $db->db_fetch_assoc($res))
 		{
@@ -327,7 +305,7 @@ class User_Access {
 		{
 			$return_array = array();	
 												
-			$sql = "SELECT id FROM ".self::USER_TABLE." WHERE id = ".$user_id."";
+			$sql = "SELECT id FROM ".constant("USER_TABLE")." WHERE id = ".$user_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -353,7 +331,7 @@ class User_Access {
 	{
 		global $db;
 											
-		$sql = "SELECT COUNT(id) AS result FROM ".self::USER_TABLE."";
+		$sql = "SELECT COUNT(id) AS result FROM ".constant("USER_TABLE")."";
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);
 		

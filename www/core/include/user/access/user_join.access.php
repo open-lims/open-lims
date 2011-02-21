@@ -27,12 +27,6 @@
  */
 class UserJoin_Access
 {
-	
-	const USER_TABLE = 'core_users';
-	const USER_PROFILE_TABLE = 'core_user_profiles';
-
-	const GROUP_HAS_USER_TABLE = 'core_group_has_users';
-
 	/**
 	 * @param string $username
 	 * @return array
@@ -51,8 +45,8 @@ class UserJoin_Access
    			
    			$return_array = array();
    				
-   			$sql = "SELECT ".self::USER_TABLE.".id FROM ".self::USER_TABLE." " .
-   					"JOIN ".self::USER_PROFILE_TABLE." ON ".self::USER_TABLE.".id = ".self::USER_PROFILE_TABLE.".id " .
+   			$sql = "SELECT ".constant("USER_TABLE").".id FROM ".constant("USER_TABLE")." " .
+   					"JOIN ".constant("USER_PROFILE_TABLE")." ON ".constant("USER_TABLE").".id = ".constant("USER_PROFILE_TABLE").".id " .
    					"WHERE LOWER(username) LIKE '".$username."' OR " .
    							"LOWER(forename) LIKE '".$username."' OR " .
    							"LOWER(surname) LIKE '".$username."'";   			
@@ -84,9 +78,9 @@ class UserJoin_Access
 	{
 		global $db;
 											
-		$sql = "SELECT COUNT(".self::USER_TABLE.".id) AS result FROM ".self::USER_TABLE." " .
-				"LEFT JOIN ".self::GROUP_HAS_USER_TABLE." ON ".self::USER_TABLE.".id = ".self::GROUP_HAS_USER_TABLE.".user_id " .
-				"WHERE ".self::GROUP_HAS_USER_TABLE.".group_id = 1";
+		$sql = "SELECT COUNT(".constant("USER_TABLE").".id) AS result FROM ".constant("USER_TABLE")." " .
+				"LEFT JOIN ".constant("GROUP_HAS_USER_TABLE")." ON ".constant("USER_TABLE").".id = ".constant("GROUP_HAS_USER_TABLE").".user_id " .
+				"WHERE ".constant("GROUP_HAS_USER_TABLE").".group_id = 1";
 				
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);

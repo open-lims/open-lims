@@ -33,7 +33,6 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("access/folder.access.php");
 	
 	require_once("access/folder_concretion.access.php");
-	require_once("access/folder_join.access.php");
 }
 
 /**

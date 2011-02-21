@@ -27,7 +27,6 @@
  */
 class OlvdlTemplate_Access
 {
-	const OLVDL_TEMPLATE_TABLE = 'core_olvdl_templates';
 	const OLVDL_TEMPLATE_PK_SEQUENCE = 'core_olvdl_templates_id_seq';
 
 	private $olvdl_id;
@@ -46,7 +45,7 @@ class OlvdlTemplate_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".self::OLVDL_TEMPLATE_TABLE." WHERE id='".$olvdl_id."'";
+			$sql = "SELECT * FROM ".constant("OLVDL_TEMPLATE_TABLE")." WHERE id='".$olvdl_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -80,12 +79,12 @@ class OlvdlTemplate_Access
 		
 		if (is_numeric($data_entity_id))
 		{
-			$sql_write = "INSERT INTO ".self::OLVDL_TEMPLATE_TABLE." (id,data_entity_id) " .
+			$sql_write = "INSERT INTO ".constant("OLVDL_TEMPLATE_TABLE")." (id,data_entity_id) " .
 					"VALUES (nextval('".self::OLVDL_TEMPLATE_PK_SEQUENCE."'::regclass),".$data_entity_id.")";
 					
 			$db->db_query($sql_write);	
 			
-			$sql_read = "SELECT id FROM ".self::OLVDL_TEMPLATE_TABLE." WHERE id = currval('".self::OLVDL_TEMPLATE_PK_SEQUENCE."'::regclass)";
+			$sql_read = "SELECT id FROM ".constant("OLVDL_TEMPLATE_TABLE")." WHERE id = currval('".self::OLVDL_TEMPLATE_PK_SEQUENCE."'::regclass)";
 			$res_read = $db->db_query($sql_read);
 			$data_read = $db->db_fetch_assoc($res_read);
 								
@@ -112,7 +111,7 @@ class OlvdlTemplate_Access
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".self::OLVDL_TEMPLATE_TABLE." WHERE id = ".$olvdl_id_tmp."";
+			$sql = "DELETE FROM ".constant("OLVDL_TEMPLATE_TABLE")." WHERE id = ".$olvdl_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -155,7 +154,7 @@ class OlvdlTemplate_Access
 
 		if ($this->olvdl_id and is_numeric($data_entity_id))
 		{
-			$sql = "UPDATE ".self::OLVDL_TEMPLATE_TABLE." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->olvdl_id."";
+			$sql = "UPDATE ".constant("OLVDL_TEMPLATE_TABLE")." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->olvdl_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -185,7 +184,7 @@ class OlvdlTemplate_Access
 		
 		if (is_numeric($data_entity_id))
 		{
-			$sql = "SELECT * FROM ".self::OLVDL_TEMPLATE_TABLE." WHERE data_entity_id='".$data_entity_id."'";
+			$sql = "SELECT * FROM ".constant("OLVDL_TEMPLATE_TABLE")." WHERE data_entity_id='".$data_entity_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
