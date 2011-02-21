@@ -1,6 +1,6 @@
-<?php 
+<?php
 /**
- * @package project
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -22,13 +22,15 @@
  */
 
 /**
- * 
+ * Module Folder Empty Exception
+ * @package base
  */
-	$name 					= "project";
-	$main_class				= "ProjectIO";
-	
-	$required_include[0] 	= "project";
-	
-	$tab_name				= "Projects";
-	$tab_colour				= "green";
+class ModuleFolderEmptyException extends Exception
+{
+    function __construct($message, $code)
+    {
+    	parent::__construct($message, $code);	
+    }    
+}
+
 ?>

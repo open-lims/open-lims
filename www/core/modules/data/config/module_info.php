@@ -29,6 +29,6 @@
 	
 	$required_include[0] 	= "data";
 	
-	$tab_name[0]			= "Data";
-	$tab_colour[0]			= "lightgreen";
+	$tab_name				= "Data";
+	$tab_colour				= "lightgreen";
 ?>

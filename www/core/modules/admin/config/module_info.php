@@ -29,6 +29,6 @@
 	
 	$required_include[0] 	= "base";
 	
-	$tab_name[0]			= "OL-Admin";
-	$tab_colour[0]			= "grey";
+	$tab_name				= "OL-Admin";
+	$tab_colour				= "grey";
 ?>

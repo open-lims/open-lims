@@ -35,7 +35,7 @@ class BaseModuleFile_Access
 	private $checksum;
 	
 	/**
-	 * @param string $id
+	 * @param integer $id
 	 */
 	function __construct($id)
 	{
@@ -318,7 +318,7 @@ class BaseModuleFile_Access
 	{
 		global $db;
 
-		if (is_numeric($include_id))
+		if (is_numeric($module_id))
 		{
 			$sql = "DELETE FROM ".constant("BASE_MODULE_FILE_TABLE")." WHERE module_id = '".$module_id."'";
 			$res = $db->db_query($sql);

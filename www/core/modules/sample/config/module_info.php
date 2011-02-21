@@ -29,6 +29,6 @@
 	
 	$required_include[0] 	= "sample";
 	
-	$tab_name[0]			= "Samples";
-	$tab_colour[0]			= "orange";
+	$tab_name				= "Samples";
+	$tab_colour				= "orange";
 ?>

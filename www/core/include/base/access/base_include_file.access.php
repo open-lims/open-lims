@@ -35,7 +35,7 @@ class BaseIncludeFile_Access
 	private $checksum;
 	
 	/**
-	 * @param string $id
+	 * @param integer $id
 	 */
 	function __construct($id)
 	{

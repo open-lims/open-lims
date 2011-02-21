@@ -34,19 +34,23 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("exceptions/include_data_corrupt_exception.class.php");
 	require_once("exceptions/include_requirement_failed_exception.class.php");
 	require_once("exceptions/include_process_failed_exception.class.php");
-
+	require_once("exceptions/module_folder_empty_exception.class.php");
+	require_once("exceptions/module_process_failed_exception.class.php");
+	
 	require_once("events/include_delete_event.class.php");
 	
-	define("BASE_EVENT_LISTENER_TABLE"	, "core_base_event_listeners");
-	define("BASE_INCLUDE_FILE_TABLE"	, "core_base_include_files");
-	define("BASE_INCLUDE_TABLE"			, "core_base_includes");
-	define("BASE_MODULE_FILE_TABLE"		, "core_base_module_files");
-	define("BASE_MODULE_TABLE"			, "core_base_modules");
+	define("BASE_EVENT_LISTENER_TABLE"		, "core_base_event_listeners");
+	define("BASE_INCLUDE_FILE_TABLE"		, "core_base_include_files");
+	define("BASE_INCLUDE_TABLE"				, "core_base_includes");
+	define("BASE_MODULE_FILE_TABLE"			, "core_base_module_files");
+	define("BASE_MODULE_NAVIGATION_TABLE"	, "core_base_module_navigation");
+	define("BASE_MODULE_TABLE"				, "core_base_modules");
 	
 	require_once("access/base_event_listener.access.php");
 	require_once("access/base_include_file.access.php");
 	require_once("access/base_include.access.php");
 	require_once("access/base_module_file.access.php");
+	require_once("access/base_module_navigation.access.php");
 	require_once("access/base_module.access.php");
 }
 
@@ -61,10 +65,7 @@ class SystemHandler implements SystemHandlerInterface
 	function __construct()
 	{
 		$this->scan_include();
-		
-		// Open Table Handlers
-		
-		// Scan Modules
+		$this->scan_modules();
 	}
 		
 	/**
@@ -449,9 +450,166 @@ class SystemHandler implements SystemHandlerInterface
 	 */
 	private function scan_modules()
 	{
+		global $transaction;
+		
+		$registered_module_array = BaseModule_Access::list_folder_entries();
+		$found_module_array = array();
+		$module_requirements_array = array();
+		
+		$module_folder_array = scandir($GLOBALS[modules_dir]);
+		
+		if (is_array($module_folder_array) and count($module_folder_array) >= 1)
+		{
+			$transaction_id = $transaction->begin();
+			
+			foreach($module_folder_array as $key => $value)
+			{
+				$sub_folder = $GLOBALS[modules_dir]."/".$value;
+				if (is_dir($sub_folder) and $key > 1)
+				{
+					$config_folder = $sub_folder."/config";
+					if (is_dir($config_folder))
+					{
+						$config_file = $config_folder."/module_info.php";
+						if (is_file($config_file))
+						{
+							include($config_file);
+						
+							// Is include registered ?
+							if (($register_key = array_search($value, $registered_module_array)) !== false)
+							{
+								$found_module_array[$register_key] = $value;
+							}
+							else
+							{
+								// Register new includes
+								if (is_array($requires) and count($requires) >= 1)
+								{
+									$module_requirements_array[$value] = $required_include;
+								}
+		
+								// Register includes
+								$base_module = new BaseModule_Access(null);
+								if (($base_module_id = $base_module->create($name, $value, $main_class)) == null)
+								{
+									if ($transaction_id != null)
+									{
+										$transaction->rollback($transaction_id);
+									}
+									throw new ModuleProcessFailedException(null, null);
+								}
+								else
+								{
+									$base_module_file = new BaseModuleFile_Access(null);
+									if ($base_module_file->create($base_module_id, "module_info.php", md5_file($config_file)) == null)
+									{
+										if ($transaction_id != null)
+										{
+											$transaction->rollback($transaction_id);
+										}
+										throw new ModuleProcessFailedException(null, null);
+									}
+								}
+								
+								if ($no_tab != true)
+								{
+									$position = BaseModuleNavigation_Access::get_next_position();
+									$base_module_navigation = new BaseModuleNavigation_Access(null);
+									if ($base_module_navigation->create($tab_name, $tab_colour, $position, $base_module_id) == null)
+									{
+										if ($transaction_id != null)
+										{
+											$transaction->rollback($transaction_id);
+										}
+										throw new ModuleProcessFailedException(null, null);
+									}
+								}
+								
+								$found_module_array[$register_key] = $value;
+							}
+						}
+					}
+				}
+				unset($name);
+				unset($class);
+				unset($no_tab);
+				unset($tab_name);
+				unset($tab_colour);
+				unset($required_include);
+			}
+			
+			// Past Requirements Check
+			$registered_module_array = BaseModule_Access::list_folder_entries();
+			if (is_array($registered_module_array) and count($registered_module_array) >= 1)
+			{
+				foreach($registered_module_array as $key => $value)
+				{
+					if (is_array($module_requirements_array[$value]) and count($module_requirements_array[$value]) >= 1)
+					{
+						foreach ($module_requirements_array[$value] as $sub_key => $sub_value)
+						{
+							if (!in_array($sub_value, $module_requirements_array))
+							{
+								if ($transaction_id != null)
+								{
+									$transaction->rollback($transaction_id);
+								}
+								throw new ModuleRequirementFailedException(null, null);
+							}
+						}
+					}
+				}
+			}
 
+			// Delete legacy includes
+			$legacy_module_array = array_diff($registered_module_array, $found_module_array);
+			if (is_array($legacy_module_array) and count($legacy_module_array) >= 1)
+			{
+				foreach($legacy_module_array as $legacy_key => $legacy_value)
+				{
+					if (BaseModuleFile_Access::delete_by_module_id($legacy_key) == false)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						throw new ModuleProcessFailedException(null, null);
+					}
+					// Position
+					
+					
+					if (BaseModuleNavigation_Access::delete_by_module_id($legacy_key) == false)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						throw new ModuleProcessFailedException(null, null);
+					}
+					$base_module = new BaseModule_Access($legacy_key);
+					if ($base_module->delete() == false)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						throw new IncludeProcessFailedException(null, null);
+					}
+				}
+			}
+			
+			if ($transaction_id != null)
+			{
+				$transaction->commit($transaction_id);
+			}
+		}
+		else
+		{
+			throw new ModuleFolderEmptyException(null, null);
+		}
 	}
 
+	
 	/**
 	 * For AJAX Handler only
 	 */

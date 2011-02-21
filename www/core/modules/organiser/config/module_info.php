@@ -29,6 +29,6 @@
 	
 	$required_include[0] 	= "user";
 	
-	$tab_name[0]			= "Organiser";
-	$tab_colour[0]			= "lightblue";
+	$tab_name				= "Organiser";
+	$tab_colour				= "lightblue";
 ?>

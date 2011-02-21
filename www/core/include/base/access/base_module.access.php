@@ -35,7 +35,7 @@ class BaseModule_Access
 	private $class;
 	
 	/**
-	 * @param string $id
+	 * @param integer $id
 	 */
 	function __construct($id)
 	{
@@ -56,7 +56,7 @@ class BaseModule_Access
 				$this->id 			= $id;
 				$this->name			= $data[name];
 				$this->folder		= $data[folder];
-				$this->class		= $data[class];
+				$this->class		= $data['class'];
 			}
 			else
 			{
@@ -79,6 +79,7 @@ class BaseModule_Access
 	/**
 	 * @param string $name
 	 * @param string $folder
+	 * @param string $class
 	 * @return integer
 	 */
 	public function create($name, $folder, $class)
@@ -251,7 +252,7 @@ class BaseModule_Access
 	 * @param string $class
 	 * @return bool
 	 */
-	public function set_folder($class)
+	public function set_class($class)
 	{
 		global $db;
 
@@ -280,18 +281,18 @@ class BaseModule_Access
 	/**
 	 * @return array
 	 */
-	public static function list_entries()
+	public static function list_folder_entries()
 	{
 		global $db;
 		
 		$return_array = array();
 		
-		$sql = "SELECT id FROM ".constant("BASE_MODULE_TABLE")."";
+		$sql = "SELECT id, folder FROM ".constant("BASE_MODULE_TABLE")."";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[id]);
+			$return_array[$data[id]] = $data[folder];
 		}
 		
 		if (is_array($return_array))

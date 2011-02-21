@@ -36,7 +36,7 @@ class BaseModuleNavigation_Access
 	private $module_id;
 	
 	/**
-	 * @param string $id
+	 * @param integer $id
 	 */
 	function __construct($id)
 	{
@@ -80,15 +80,17 @@ class BaseModuleNavigation_Access
 	}
 	
 	/**
-	 * @param string $name
-	 * @param string $folder
+	 * @param string $display_name
+	 * @param string $colour
+	 * @param integer $position
+	 * @param integer $module_id
 	 * @return integer
 	 */
-	public function create($display_name, $position, $colour, $module_id)
+	public function create($display_name, $colour, $position, $module_id)
 	{
 		global $db;
 
-		if ($display_name and is_numeric($position) and $colour and is_numeric($module_id))
+		if ($display_name and $colour and is_numeric($position) and is_numeric($module_id))
 		{
 	 		$sql_write = "INSERT INTO ".constant("BASE_MODULE_NAVIGATION_TABLE")." (id, display_name, position, colour, module_id) " .
 								"VALUES (nextval('".self::BASE_MODULE_NAVIGATION_PK_SEQUENCE."'::regclass),'".$display_name."','".$position."','".$colour."',".$module_id.")";		
@@ -193,7 +195,7 @@ class BaseModuleNavigation_Access
 	}
 	
 	/**
-	 * @return string
+	 * @return integer
 	 */
 	public function get_module_id()
 	{
@@ -295,14 +297,14 @@ class BaseModuleNavigation_Access
 	}
 	
 	/**
-	 * @param string $module_id
+	 * @param integer $module_id
 	 * @return bool
 	 */
 	public function set_module_id($module_id)
 	{
 		global $db;
 
-		if ($this->id and $module_id)
+		if ($this->id and is_numeric($module_id))
 		{
 			$sql = "UPDATE ".constant("BASE_MODULE_NAVIGATION_TABLE")." SET module_id = '".$module_id."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
@@ -324,6 +326,25 @@ class BaseModuleNavigation_Access
 	}
 	
 	
+	public static function get_next_position()
+	{
+		global $db;
+		
+		$sql = "SELECT MAX(position) AS position FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")."";
+		$res = $db->db_query($sql);
+		$data = $db->db_fetch_assoc($res);
+		
+		if ($data[position])
+		{
+			$position = $data[position] + 1;
+			return $position;
+		}
+		else
+		{
+			return 1;
+		}
+	}
+	
 	/**
 	 * @param integer $module_id
 	 * @return bool
@@ -332,7 +353,7 @@ class BaseModuleNavigation_Access
 	{
 		global $db;
 
-		if (is_numeric($include_id))
+		if (is_numeric($module_id))
 		{
 			$sql = "DELETE FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." WHERE module_id = '".$module_id."'";
 			$res = $db->db_query($sql);

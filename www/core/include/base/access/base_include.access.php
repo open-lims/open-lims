@@ -34,7 +34,7 @@ class BaseInclude_Access
 	private $folder;
 	
 	/**
-	 * @param string $id
+	 * @param integer $id
 	 */
 	function __construct($id)
 	{

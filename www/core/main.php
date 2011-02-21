@@ -27,7 +27,6 @@
  */
 class Main
 {
-	
 	/**
 	 * Checks basic requirements, includes basic files, creates global classes and starts Database-Connection
 	 */
@@ -105,6 +104,10 @@ class Main
 			catch(IncludeFolderEmptyException $e)
 			{
 				die("Include folder is empty!");
+			}
+			catch(ModuleProcessFailedException $e)
+			{
+				die("Module register process failed!");
 			}
 			catch(EventHandlerCreationFailedException $e)
 			{

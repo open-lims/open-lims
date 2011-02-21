@@ -34,7 +34,7 @@ class BaseEventListener_Access
 	private $class_name;
 	
 	/**
-	 * @param string $id
+	 * @param integer $id
 	 */
 	function __construct($id)
 	{
