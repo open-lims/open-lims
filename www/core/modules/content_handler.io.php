@@ -27,83 +27,58 @@
  */
 class ContentHandler_IO
 {
+	/**
+	 * @todo catch ModuleDataCorruptExeception
+	 */
 	public static function includer()
 	{
 		global $session, $user, $common, $misc, $transaction;
 		
 		try {
-			switch($_GET[nav]):
-			
-		 		case("projects"):
-		 			require_once("core/modules/project/project.io.php");
-		 			ProjectIO::method_handler();
-		 		break;
-		 		
-		 		case("method"):
-		 			require_once("core/modules/method/method.io.php");
-		 			MethodIO::method_handler();
-		 		break;
-		 		
-		 		case("samples"):
-		 			require_once("core/modules/sample/sample.io.php");
-		 			SampleIO::method_handler();
-		 		break;
-		 		
-		 		case("data"):
-		 			require_once("core/modules/data/data.io.php");
-					DataIO::method_handler();
-		 		break;
-		 		
-		 		case("folder"):
-		 			require_once("core/modules/data/folder.io.php");
-					FolderIO::method_handler();
-		 		break;
-		 		
-		 		case("file"):
-		 			require_once("core/modules/data/file.io.php");
-					FileIO::method_handler();
-		 		break;
-		 		
-		 		case("value"):
-		 			require_once("core/modules/data/value.io.php");
-					ValueIO::method_handler();
-		 		break;
-		 		
-		 		case("item"):
-		 			require_once("core/modules/item/item.io.php");
-					ItemIO::method_handler();
-		 		break;
-		 		
-		 		case("search"):
-		 			require_once("core/modules/search/search.io.php");
-					SearchIO::method_handler();
-		 		break;
-		 			 		
-		 		case("organiser"):
-		 			require_once("core/modules/organiser/organiser.io.php");
-					OrganiserIO::method_handler();
-		 		break;
-		 		
-		 		case("user"):
-		 			require_once("core/modules/user/user.io.php");
-					UserIO::method_handler();
-		 		break;
-		 		
-		 		case("administration"):
-		 			require_once("core/modules/admin/admin.io.php");
-					AdminIO::method_handler();
-		 		break;
-		 		
-		 		case ("static"):
-		 			require_once("core/modules/base/base.io.php");
-					BaseIO::method_handler();
-		 		break;
-		 		
-		 		default:
+			if ($_GET[nav])
+			{
+				if($_GET[nav] == "home")
+				{
 					include("core/modules/base/home.io.php");
-				break;
-	 		
-	 		endswitch;	
+				}
+				elseif($_GET[nav] == "static")
+				{
+					require_once("core/modules/base/base.io.php");
+					BaseIO::method_handler();
+				}
+				else
+				{
+					$module_array = SystemHandler::list_modules();
+					
+					if (is_array($module_array) and count($module_array) >= 1)
+					{
+						foreach($module_array as $key => $value)
+						{
+							if ($_GET[nav] == $value[name])
+							{
+								$module_path = "core/modules/".$value[folder]."/".$value[name].".io.php";
+								if (file_exists($module_path))
+								{
+									require_once($module_path);
+									$value['class']::method_handler();
+								}
+								else
+								{
+									throw new ModuleDataCorruptExeception(null, null);
+								}
+							}
+						}
+					}
+					else
+					{
+						include("core/modules/base/home.io.php");
+					}
+				}
+			}
+			else
+			{
+				include("core/modules/base/home.io.php");
+			}
 		}
 		catch(DatabaseQueryFailedException $e)
 		{

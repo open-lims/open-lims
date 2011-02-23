@@ -43,65 +43,62 @@ ul.navigation_main_navigation_list li.active a {
 	color: #F0F0F0;
 }
 
-.navigation_main_navigation_tab_home,.navigation_main_navigation_tab_projects,.navigation_main_navigation_tab_samples,.navigation_main_navigation_tab_data,.navigation_main_navigation_tab_search,.navigation_main_navigation_tab_organiser,.navigation_main_navigation_tab_extensions,.navigation_main_navigation_tab_default
+.navigation_main_navigation_tab_blue,
+.navigation_main_navigation_tab_orange,
+.navigation_main_navigation_tab_green,
+.navigation_main_navigation_tab_lightgreen,
+.navigation_main_navigation_tab_lightblue,
+.navigation_main_navigation_tab_grey
 	{
 	background-image: url(../images/tabs/tab_empty.png);
 	background-repeat: no-repeat;
 	background-position: top center;
 }
 
-.navigation_main_navigation_tab_default_active,.navigation_main_navigation_tab_default:hover
+.navigation_main_navigation_tab_grey_active,
+.navigation_main_navigation_tab_grey:hover
 	{
 	background-image: url(../images/tabs/tab_grey.png);
 	background-repeat: no-repeat;
 	background-position: top center;
 }
 
-.navigation_main_navigation_tab_home_active,.navigation_main_navigation_tab_home:hover
+.navigation_main_navigation_tab_blue_active,
+.navigation_main_navigation_tab_blue:hover
 	{
 	background-image: url(../images/tabs/tab_blue.png);
 	background-repeat: no-repeat;
 	background-position: top center;
 }
 
-.navigation_main_navigation_tab_projects_active,.navigation_main_navigation_tab_projects:hover
+.navigation_main_navigation_tab_green_active,
+.navigation_main_navigation_tab_green:hover
 	{
 	background-image: url(../images/tabs/tab_green.png);
 	background-repeat: no-repeat;
 	background-position: top center;
 }
 
-.navigation_main_navigation_tab_samples_active,.navigation_main_navigation_tab_samples:hover
+.navigation_main_navigation_tab_orange_active,
+.navigation_main_navigation_tab_orange:hover
 	{
 	background-image: url(../images/tabs/tab_orange.png);
 	background-repeat: no-repeat;
 	background-position: top center;
 }
 
-.navigation_main_navigation_tab_data_active,.navigation_main_navigation_tab_data:hover
+.navigation_main_navigation_tab_lightgreen_active,
+.navigation_main_navigation_tab_lightgreen:hover
 	{
 	background-image: url(../images/tabs/tab_lightgreen.png);
 	background-repeat: no-repeat;
 	background-position: top center;
 }
 
-.navigation_main_navigation_tab_search_active,.navigation_main_navigation_tab_search:hover
-	{
-	background-image: url(../images/tabs/tab_orange.png);
-	background-repeat: no-repeat;
-	background-position: top center;
-}
-
-.navigation_main_navigation_tab_organiser_active,.navigation_main_navigation_tab_organiser:hover
+.navigation_main_navigation_tab_lightblue_active,
+.navigation_main_navigation_tab_lightblue:hover
 	{
 	background-image: url(../images/tabs/tab_lightblue.png);
-	background-repeat: no-repeat;
-	background-position: top center;
-}
-
-.navigation_main_navigation_tab_extensions_active,.navigation_main_navigation_tab_extensions:hover
-	{
-	background-image: url(../images/tabs/tab_blue.png);
 	background-repeat: no-repeat;
 	background-position: top center;
 }
@@ -128,42 +125,39 @@ ul.navigation_main_navigation_list li.active a {
 	padding: 5px 10px 0 0;
 }
 
-.navigation_sub_navigation_default,.navigation_sub_navigation_home,.navigation_sub_navigation_projects,.navigation_sub_navigation_samples,.navigation_sub_navigation_data,.navigation_sub_navigation_search,.navigation_sub_navigation_organiser,.navigation_sub_navigation_extensions
-	{
+.navigation_sub_navigation_blue,
+.navigation_sub_navigation_green,
+.navigation_sub_navigation_orange,
+.navigation_sub_navigation_lightblue,
+.navigation_sub_navigation_lightgreen,
+.navigation_sub_navigation_grey
+{
 	height: 100%;
 	width: 100%;
 }
 
-.navigation_sub_navigation_default {
+.navigation_sub_navigation_grey {
 	background-color: #c0c0c0;
 }
 
-.navigation_sub_navigation_home {
+.navigation_sub_navigation_blue {
 	background-color: #336699;
 }
 
-.navigation_sub_navigation_projects {
+.navigation_sub_navigation_green {
 	background-color: #99cd32;
 }
 
-.navigation_sub_navigation_samples {
+.navigation_sub_navigation_orange {
 	background-color: #dcaf36;
 }
 
-.navigation_sub_navigation_data {
+.navigation_sub_navigation_lightgreen {
 	background-color: #bbe664;
 }
 
-.navigation_sub_navigation_search {
-	background-color: #dcaf36;
-}
-
-.navigation_sub_navigation_organiser {
+.navigation_sub_navigation_lightblue {
 	background-color: #669acc;
-}
-
-.navigation_sub_navigation_extensions {
-	background-color: #336699;
 }
 
 ul.navigation_sub_navigation_list {

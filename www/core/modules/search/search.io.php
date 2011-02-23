@@ -400,7 +400,7 @@ class SearchIO
 						else
 						{
 							$paramquery = $_GET;
-							$paramquery[nav] = "projects";
+							$paramquery[nav] = "project";
 							$paramquery[run] = "detail";
 							$paramquery[project_id] = $value;
 							unset($paramquery[page]);
@@ -752,7 +752,7 @@ class SearchIO
 						$column_array = array();
 						
 						$paramquery = $_GET;
-						$paramquery[nav] = "samples";
+						$paramquery[nav] = "sample";
 						$paramquery[run] = "detail";
 						$paramquery[sample_id] = $value;
 						unset($paramquery[page]);
@@ -1267,7 +1267,7 @@ class SearchIO
 						$proejct_paramquery = array();
 						$project_paramquery[username] = $_GET[username];
 						$project_paramquery[session_id] = $_GET[session_id];
-						$project_paramquery[nav] = "projects";
+						$project_paramquery[nav] = "project";
 						$project_paramquery[run] = "detail";
 						$project_paramquery[project_id] = $value[project_id];
 						$project_params = http_build_query($project_paramquery, '', '&#38;');
@@ -1330,7 +1330,7 @@ class SearchIO
 						if (is_numeric($value[sample_id]))
 						{
 							$item_paramquery = $_GET;
-							$item_paramquery[nav] = "samples";
+							$item_paramquery[nav] = "sample";
 							$item_paramquery[run] = "detail";
 							$item_paramquery[sample_id] = $value[sample_id];
 							unset($item_paramquery[sortvalue]);
@@ -1414,7 +1414,7 @@ class SearchIO
 						$sample_paramquery = array();
 						$sample_paramquery[username] = $_GET[username];
 						$sample_paramquery[session_id] = $_GET[session_id];
-						$sample_paramquery[nav] = "samples";
+						$sample_paramquery[nav] = "sample";
 						$sample_paramquery[run] = "detail";
 						$sample_paramquery[sample_id] = $value[sample_id];
 						$sample_params = http_build_query($sample_paramquery, '', '&#38;');
@@ -1477,7 +1477,7 @@ class SearchIO
 						if (is_numeric($value[sample_id]))
 						{
 							$item_paramquery = $_GET;
-							$item_paramquery[nav] = "samples";
+							$item_paramquery[nav] = "sample";
 							$item_paramquery[run] = "detail";
 							$item_paramquery[sample_id] = $value[sample_id];
 							unset($item_paramquery[sortvalue]);
@@ -1891,7 +1891,7 @@ class SearchIO
 					if (is_numeric($value[sample_id]))
 					{
 						$item_paramquery = $_GET;
-						$item_paramquery[nav] = "samples";
+						$item_paramquery[nav] = "sample";
 						$item_paramquery[run] = "detail";
 						$item_paramquery[sample_id] = $value[sample_id];
 						unset($item_paramquery[sortvalue]);

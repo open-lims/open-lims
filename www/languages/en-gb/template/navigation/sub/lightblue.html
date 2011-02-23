@@ -1,0 +1,36 @@
+<div class='navigation_sub_navigation_lightblue'>
+	<div class='navigation_sub_navigation_left'>
+		
+		<!-- IF ({SUB_MENU}) -->
+		
+			<ul class='navigation_sub_navigation_list'>
+			
+				<li>|</li>
+			
+				<!-- FOREACH BEGIN ({SUB_MENU}) -->
+		
+					<li>|</li>
+					<li><a href='index.php?{SUB_MENU:PARAMS}'>{SUB_MENU:TITLE}</a></li>
+		
+				<!-- FOREACH END -->
+	
+			</ul>
+		
+		<!-- ENDIF -->
+		
+	</div>
+	
+	<!-- IF ({SEARCH_BAR}) -->
+	
+		<div class='navigation_sub_navigation_right'>
+			<form action='index.php?{MINI_SEARCH_PARAMS}' method='post'>
+				<input type='hidden' name='organisation_unit' value='0' />
+				<input type='hidden' name='template' value='0' />
+				<input type='text' name='name' class='navigation_sub_navigation_search_field' />
+				<button name='submit' type='submit' class='navigation_sub_navigation_search_button'><img src='images/icons/search.png' alt='Search' /></button>
+			</form>	
+		</div>
+	
+	<!-- ENDIF -->
+	
+</div>

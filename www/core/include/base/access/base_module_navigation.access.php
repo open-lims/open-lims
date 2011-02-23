@@ -325,8 +325,37 @@ class BaseModuleNavigation_Access
 		}
 	}
 	
+	/**
+	 * @return integer
+	 */
+	public function get_next_position()
+	{
+		global $db;
+		
+		if ($this->id)
+		{
+			$sql = "SELECT id FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." " .
+				"WHERE position = ".($this->position+1)."";
+			
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[id])
+			{
+				return $data[id];
+			}
+			else
+			{
+				return $this->id;
+			}
+		}	
+	}
 	
-	public static function get_next_position()
+	
+	/**
+	 * @return integer
+	 */
+	public static function get_highest_position()
 	{
 		global $db;
 		
@@ -343,6 +372,56 @@ class BaseModuleNavigation_Access
 		{
 			return 1;
 		}
+	}
+	
+	/**
+	 * @param integer $module_id
+	 * @return integer
+	 */
+	public static function get_id_by_module_id($module_id)
+	{
+		global $db;
+		
+		if (is_numeric($module_id))
+		{
+			$sql = "SELECT id FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." WHERE module_id = ".$module_id."";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[id])
+			{
+				return $data[id];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @return array
+	 */
+	public static function list_entries()
+	{
+		global $db;
+		
+		$result_array = array();
+		
+		$sql = "SELECT id,display_name,colour,module_id FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." ORDER BY position";
+		$res = $db->db_query($sql);
+		while ($data = $db->db_fetch_assoc($res))
+		{
+			$result_array[$data[id]][display_name]	= $data[display_name];
+			$result_array[$data[id]][colour]		= $data[colour];
+			$result_array[$data[id]][module_id]		= $data[module_id];
+		}
+		
+		return $result_array;
 	}
 	
 	/**

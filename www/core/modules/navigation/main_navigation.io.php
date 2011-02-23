@@ -172,180 +172,122 @@ class MainNavigation_IO
 		$paramquery[change_tab] = "true";
 		$params = http_build_query($paramquery,'','&#38;');
 
-		if ($this->current_tab == "HOME")
+		if ($_GET[nav] == "home" or !$_GET[nav])
 		{
-			$template = new Template("languages/en-gb/template/navigation/tabs/home_active.html");
+			$template = new Template("languages/en-gb/template/navigation/tabs/blue_tab_active.html");
 			$template->set_var("params", $params);
+			$template->set_var("title", "Home");
 			$template->output();
 		}
 		else
 		{
-			$template = new Template("languages/en-gb/template/navigation/tabs/home.html");
+			$template = new Template("languages/en-gb/template/navigation/tabs/blue_tab.html");
 			$template->set_var("params", $params);
+			$template->set_var("title", "Home");
 			$template->output();
 		}
 		
+		$module_navigation_array = SystemHandler::list_module_navigations_entries();
 		
-		// PROJECTS
-		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "projects";
-		$paramquery[change_tab] = "true";
-		$params = http_build_query($paramquery,'','&#38;');
-		
-		if ($this->current_tab == "PROJECTS")
+		if (is_array($module_navigation_array) and count($module_navigation_array) >= 1)
 		{
-			$template = new Template("languages/en-gb/template/navigation/tabs/projects_active.html");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		else
-		{
-			$template = new Template("languages/en-gb/template/navigation/tabs/projects.html");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		
-		
-		// SAMPLES
-		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "samples";
-		$paramquery[change_tab] = "true";
-		$params = http_build_query($paramquery,'','&#38;');
-		
-		if ($this->current_tab == "SAMPLES")
-		{
-			$template = new Template("languages/en-gb/template/navigation/tabs/samples_active.html");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		else
-		{
-			$template = new Template("languages/en-gb/template/navigation/tabs/samples.html");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		
-		
-		// DATA
-		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "data";
-		$paramquery[change_tab] = "true";
-		$params = http_build_query($paramquery,'','&#38;');
-		
-		if ($this->current_tab == "DATA")
-		{
-			$template = new Template("languages/en-gb/template/navigation/tabs/data_active.html");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		else
-		{
-			$template = new Template("languages/en-gb/template/navigation/tabs/data.html");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		
-		
-		// SEARCH
-		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "search";
-		$paramquery[change_tab] = "true";
-		$params = http_build_query($paramquery,'','&#38;');
-		
-		if ($this->current_tab == "SEARCH")
-		{
-			$template = new Template("languages/en-gb/template/navigation/tabs/search_active.html");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		else
-		{
-			$template = new Template("languages/en-gb/template/navigation/tabs/search.html");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		
-		
-		// ORGANISER
-		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "organiser";
-		$paramquery[change_tab] = "true";
-		$params = http_build_query($paramquery,'','&#38;');
-		
-		if ($this->current_tab == "ORGANISER")
-		{
-			$template = new Template("languages/en-gb/template/navigation/tabs/organiser_active.html");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		else
-		{
-			$template = new Template("languages/en-gb/template/navigation/tabs/organiser.html");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		
-		
-		// EXTENSIONS
-
-		if (true)
-		{
-			$paramquery[username] = $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav] = "extensions";
-			$paramquery[change_tab] = "true";
-			$params = http_build_query($paramquery,'','&#38;');	
+			foreach($module_navigation_array as $key => $value)
+			{
+				$module_name = SystemHandler::get_module_name_by_module_id($value[module_id]);
+				
+				$paramquery[username] = $_GET[username];
+				$paramquery[session_id] = $_GET[session_id];
+				$paramquery[nav] = $module_name;
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				switch ($value[colour]):
+				
+					case "blue":
+						if ($_GET[nav] == $module_name)
+						{
+							$template = new Template("languages/en-gb/template/navigation/tabs/blue_tab_active.html");
+							$current_module = $module_name;
+							$current_color = $value[colour];
+						}
+						else
+						{
+							$template = new Template("languages/en-gb/template/navigation/tabs/blue_tab.html");
+						}
+					break;
 					
-			if ($this->current_tab == "EXTENSIONS")
-			{
-				$template = new Template("languages/en-gb/template/navigation/tabs/extensions_active.html");
+					case "green":
+						if ($_GET[nav] == $module_name)
+						{
+							$template = new Template("languages/en-gb/template/navigation/tabs/green_tab_active.html");
+							$current_module = $module_name;
+							$current_color = $value[colour];
+						}
+						else
+						{
+							$template = new Template("languages/en-gb/template/navigation/tabs/green_tab.html");
+						}
+					break;
+					
+					case "orange";
+						if ($_GET[nav] == $module_name)
+						{
+							$template = new Template("languages/en-gb/template/navigation/tabs/orange_tab_active.html");
+							$current_module = $module_name;
+							$current_color = $value[colour];
+						}
+						else
+						{
+							$template = new Template("languages/en-gb/template/navigation/tabs/orange_tab.html");
+						}
+					break;
+					
+					case "lightgreen":
+						if ($_GET[nav] == $module_name)
+						{
+							$template = new Template("languages/en-gb/template/navigation/tabs/lightgreen_tab_active.html");
+							$current_module = $module_name;
+							$current_color = $value[colour];
+						}
+						else
+						{
+							$template = new Template("languages/en-gb/template/navigation/tabs/lightgreen_tab.html");
+						}
+					break;
+						
+					case "lightblue":
+						if ($_GET[nav] == $module_name)
+						{
+							$template = new Template("languages/en-gb/template/navigation/tabs/lightblue_tab_active.html");
+							$current_module = $module_name;
+							$current_color = $value[colour];
+						}
+						else
+						{
+							$template = new Template("languages/en-gb/template/navigation/tabs/lightblue_tab.html");
+						}
+					break;
+				
+					default:
+						if ($_GET[nav] == $module_name)
+						{
+							$template = new Template("languages/en-gb/template/navigation/tabs/grey_tab_active.html");
+							$current_module = $module_name;
+							$current_color = $value[colour];
+						}
+						else
+						{
+							$template = new Template("languages/en-gb/template/navigation/tabs/grey_tab.html");
+						}
+					break;
+					
+				endswitch;
+				
 				$template->set_var("params", $params);
+				$template->set_var("title", $value[display_name]);
 				$template->output();
 			}
-			else
-			{
-				$template = new Template("languages/en-gb/template/navigation/tabs/extensions.html");
-				$template->set_var("params", $params);
-				$template->output();
-			}
-		
 		}
-		
-		
-		// ADMINISTRATION
-		
-		if ($user->is_admin())
-		{
-			$paramquery[username] = $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav] = "administration";
-			$paramquery[change_tab] = "true";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			if ($this->current_tab == "ADMINISTRATION")
-			{
-				$template = new Template("languages/en-gb/template/navigation/tabs/administration_active.html");
-				$template->set_var("params", $params);
-				$template->output();
-			}
-			else
-			{
-				$template = new Template("languages/en-gb/template/navigation/tabs/administration.html");
-				$template->set_var("params", $params);
-				$template->output();
-			}
-		}
-		
+				
 		$info_paramquery[username] = $_GET[username];
 		$info_paramquery[session_id] = $_GET[session_id];
 		$info_paramquery[nav] = "static";
@@ -365,7 +307,56 @@ class MainNavigation_IO
 		
 		// Submenu
 		
-		switch($this->current_tab):
+		if ($_GET[nav] == "home")
+		{
+			$template = new Template("languages/en-gb/template/navigation/sub/blue.html");
+			
+			$sub_menu = array();
+			
+			$my_profile_paramquery[username] = $_GET[username];
+			$my_profile_paramquery[session_id] = $_GET[session_id];
+			$my_profile_paramquery[nav] = "user";
+			$my_profile_params = http_build_query($my_profile_paramquery,'','&#38;');
+			
+			$sub_menu[0][params] = $my_profile_params;
+			$sub_menu[0][title] = "My Profile";
+			
+			$my_organisation_units_paramquery[username] = $_GET[username];
+			$my_organisation_units_paramquery[session_id] = $_GET[session_id];
+			$my_organisation_units_paramquery[nav] = "static";
+			$my_organisation_units_paramquery[run] = "myorgan";
+			$my_organisation_units_params = http_build_query($my_organisation_units_paramquery,'','&#38;');
+			
+			$sub_menu[1][params] = $my_organisation_units_params;
+			$sub_menu[1][title] = "My Organisation Units";
+			
+			$system_messages_paramquery[username] = $_GET[username];
+			$system_messages_paramquery[session_id] = $_GET[session_id];
+			$system_messages_paramquery[nav] = "static";
+			$system_messages_paramquery[run] = "sysmsg";
+			$system_messages_params = http_build_query($system_messages_paramquery,'','&#38;');
+			
+			$sub_menu[2][params] = $system_messages_params;
+			$sub_menu[2][title] = "System Messages";
+			
+			$template->set_var("sub_menu", $sub_menu);
+			$template->set_var("search_bar", false);
+			
+			$template->output();
+		}
+		else
+		{
+			$template = new Template("languages/en-gb/template/navigation/sub/".$current_color.".html");
+			
+			$template->set_var("sub_menu", false);
+			$template->set_var("search_bar", false);
+			
+			$template->output();
+		}
+		
+		
+		/*
+		switch(strtoupper($_GET[nav])):
 		
 			case "HOME":
 				
@@ -552,7 +543,7 @@ class MainNavigation_IO
 			break;
 		
 		
-		endswitch;
+		endswitch; */
 		
 		$template = new Template("languages/en-gb/template/navigation/main_navigation_footer.html");
 		$template->output();

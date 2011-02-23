@@ -34,6 +34,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("exceptions/include_data_corrupt_exception.class.php");
 	require_once("exceptions/include_requirement_failed_exception.class.php");
 	require_once("exceptions/include_process_failed_exception.class.php");
+	require_once("exceptions/module_data_corrupt_exception.class.php");
 	require_once("exceptions/module_folder_empty_exception.class.php");
 	require_once("exceptions/module_process_failed_exception.class.php");
 	
@@ -513,7 +514,7 @@ class SystemHandler implements SystemHandlerInterface
 								
 								if ($no_tab != true)
 								{
-									$position = BaseModuleNavigation_Access::get_next_position();
+									$position = BaseModuleNavigation_Access::get_highest_position();
 									$base_module_navigation = new BaseModuleNavigation_Access(null);
 									if ($base_module_navigation->create($tab_name, $tab_colour, $position, $base_module_id) == null)
 									{
@@ -575,8 +576,37 @@ class SystemHandler implements SystemHandlerInterface
 						}
 						throw new ModuleProcessFailedException(null, null);
 					}
-					// Position
 					
+					$base_module_navigation_id = BaseModuleNavigation_Access::get_id_by_module_id($legacy_key);
+					$base_module_navigation = new BaseModuleNavigation_Access($base_module_navigation_id);
+					
+					// Position
+					if ($base_module_navigation->get_next_position() != $base_module_navigation_id)
+					{
+						$tmp_base_module_navigation = $base_module_navigation;
+						$tmp_base_module_navigation_id = $base_module_navigation_id;
+						$tmp_position = $base_module_navigation->get_position();
+						
+						while(($next_base_module_navigation_id = $tmp_base_module_navigation->get_next_position()) != $tmp_base_module_navigation_id)
+						{
+							$next_base_module_navigation = new BaseModuleNavigation_Access($next_base_module_navigation_id);
+							$next_position = $next_base_module_navigation->get_position();
+							if ($next_base_module_navigation->set_position($tmp_position) == false)
+							{
+								if ($transaction_id != null)
+								{
+									$transaction->rollback($transaction_id);
+								}
+								throw new ModuleProcessFailedException(null, null);
+							}
+							else
+							{
+								$tmp_base_module_navigation = $next_base_module_navigation;
+								$tmp_base_module_navigation_id = $next_base_module_navigation_id;
+								$tmp_position = $next_position;
+							}
+						}
+					}
 					
 					if (BaseModuleNavigation_Access::delete_by_module_id($legacy_key) == false)
 					{
@@ -648,10 +678,25 @@ class SystemHandler implements SystemHandlerInterface
 			}
 		}
 	}
-	
+
 	public static function get_include_folders()
 	{
 		return BaseInclude_Access::list_folder_entries();
+	}
+	
+	public static function get_module_name_by_module_id($module_id)
+	{
+		return BaseModule_Access::get_module_name_by_module_id($module_id);
+	}
+	
+	public static function list_module_navigations_entries()
+	{
+		return BaseModuleNavigation_Access::list_entries();
+	}
+	
+	public static function list_modules()
+	{
+		return BaseModule_Access::list_entries();
 	}
 }
 ?>

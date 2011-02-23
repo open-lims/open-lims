@@ -52,7 +52,7 @@ class ProjectSampleIO {
 				}
 				
 				$paramquery = $_GET;
-				$paramquery[nav] = "samples";
+				$paramquery[nav] = "sample";
 				$paramquery[run] = "add_to_project";
 				unset($paramquery[nextpage]);
 				$params = http_build_query($paramquery,'','&#38;');
@@ -92,7 +92,7 @@ class ProjectSampleIO {
 							$column_array = array();
 					
 							$paramquery = $_GET;
-							$paramquery[nav] = "samples";
+							$paramquery[nav] = "sample";
 							$paramquery[run] = "detail";
 							$paramquery[sample_id] = $sample_id;
 							unset($paramquery[page]);
@@ -111,7 +111,7 @@ class ProjectSampleIO {
 							$column_array[av]				= "<img src='images/icons/grey_point.png' alt='' style='border: 0;' />";
 	
 							$delete_paramquery = $_GET;
-							$delete_paramquery[nav] = "samples";
+							$delete_paramquery[nav] = "sample";
 							$delete_paramquery[run] = "delete_project_association";
 							$delete_paramquery[project_id] = $_GET[project_id];
 							$delete_paramquery[sample_id] = $sample_id;

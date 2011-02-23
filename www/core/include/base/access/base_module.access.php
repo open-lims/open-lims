@@ -279,6 +279,35 @@ class BaseModule_Access
 	
 	
 	/**
+	 * @param integer $module_id
+	 * @return bool
+	 */
+	public static function get_module_name_by_module_id($module_id)
+	{
+		global $db;
+		
+		if (is_numeric($module_id))
+		{		
+			$sql = "SELECT name FROM ".constant("BASE_MODULE_TABLE")." WHERE id = ".$module_id."";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[name])
+			{
+				return $data[name];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @return array
 	 */
 	public static function list_folder_entries()
@@ -303,6 +332,27 @@ class BaseModule_Access
 		{
 			return null;
 		}
+	}
+	
+	/**
+	 * @return array
+	 */
+	public static function list_entries()
+	{
+		global $db;
+		
+		$result_array = array();
+		
+		$sql = "SELECT id,name,folder,class FROM ".constant("BASE_MODULE_TABLE")."";
+		$res = $db->db_query($sql);
+		while ($data = $db->db_fetch_assoc($res))
+		{
+			$result_array[$data[id]][name]		= $data[name];
+			$result_array[$data[id]][folder]	= $data[folder];
+			$result_array[$data[id]]['class']	= $data['class'];
+		}
+		
+		return $result_array;
 	}
 	
 	/**

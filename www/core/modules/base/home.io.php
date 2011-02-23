@@ -84,7 +84,7 @@
 // Menu
 
 $paramquery = $_GET;
-$paramquery[nav] = "projects";
+$paramquery[nav] = "project";
 $paramquery[run] = "new";
 unset($paramquery[runit]);
 unset($paramquery[nextpage]);
@@ -105,7 +105,7 @@ $template->set_var("NEW_PROJECT","index.php?".$params);
 
 	
 $paramquery = $_GET;
-$paramquery[nav] = "projects";
+$paramquery[nav] = "project";
 $paramquery[run] = "workon";
 unset($paramquery[runit]);
 unset($paramquery[nextpage]);
@@ -126,7 +126,7 @@ $template->set_var("WORK_PROJECT","index.php?".$params);
 
 	
 $paramquery = $_GET;
-$paramquery[nav] = "projects";
+$paramquery[nav] = "project";
 $paramquery[run] = "accessdata";
 unset($paramquery[runit]);
 unset($paramquery[nextpage]);
@@ -147,7 +147,7 @@ $template->set_var("ACCESS_PROJECT","index.php?".$params);
 
 	
 $paramquery = $_GET;
-$paramquery[nav] = "samples";
+$paramquery[nav] = "sample";
 $paramquery[run] = "new";
 unset($paramquery[runit]);
 unset($paramquery[nextpage]);
@@ -168,7 +168,7 @@ $template->set_var("CREATE_SAMPLE","index.php?".$params);
 
 	
 $paramquery = $_GET;
-$paramquery[nav] = "samples";
+$paramquery[nav] = "sample";
 $paramquery[run] = "mysamples";
 unset($paramquery[runit]);
 unset($paramquery[nextpage]);
@@ -266,7 +266,7 @@ if (is_array($project_task_array) and count($project_task_array) >= 1) {
 	foreach ($project_task_array as $key => $value) {
 		
 		$paramquery = $_GET;
-		$paramquery[nav] = "projects";
+		$paramquery[nav] = "project";
 		$paramquery[run] = "detail";
 		$paramquery[project_id] = $value[project_id];
 		$params = http_build_query($paramquery, '', '&#38;');

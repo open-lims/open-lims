@@ -1354,7 +1354,7 @@ class SampleIO
 								
 								$paramquery = $_GET;
 								unset($paramquery[nextpage]);
-								$paramquery[nav] = "projects";
+								$paramquery[nav] = "project";
 								$paramquery[run] = "detail";
 								$paramquery[project_id] = $sample_project_toid;
 								$params = http_build_query($paramquery);
@@ -1397,7 +1397,7 @@ class SampleIO
 
 									$paramquery = $_GET;
 									unset($paramquery[nextpage]);
-									$paramquery[nav] = "samples";
+									$paramquery[nav] = "sample";
 									$paramquery[run] = "detail";
 									$params = http_build_query($paramquery);
 									
@@ -1797,7 +1797,7 @@ class SampleIO
 				
 				$paramquery = $_GET;
 				unset($paramquery[nextpage]);
-				$paramquery[nav] = "projects";
+				$paramquery[nav] = "project";
 				$paramquery[run] = "detail";
 				$paramquery[project_id] = $project_id;
 				$params = http_build_query($paramquery);
@@ -1908,7 +1908,7 @@ class SampleIO
 				
 				$paramquery = $_GET;
 				unset($paramquery[nextpage]);
-				$paramquery[nav] = "samples";
+				$paramquery[nav] = "sample";
 				$paramquery[run] = "detail";
 				$paramquery[project_id] = $sample_id;
 				$params = http_build_query($paramquery);
@@ -2019,7 +2019,7 @@ class SampleIO
 				
 				$paramquery = $_GET;
 				unset($paramquery[nextpage]);
-				$paramquery[nav] = "samples";
+				$paramquery[nav] = "sample";
 				$paramquery[run] = "detail";
 				$paramquery[project_id] = $sample_id;
 				$params = http_build_query($paramquery);
@@ -2246,7 +2246,7 @@ class SampleIO
 							
 							case("sample"):
 								$paramquery = $_GET;
-								$paramquery[nav] = "samples";
+								$paramquery[nav] = "sample";
 								$paramquery[run] = "add_to_sample";
 								$paramquery[key] = $key;
 								unset($paramquery[nextpage]);
@@ -2287,7 +2287,7 @@ class SampleIO
 						
 							case("parentsample"):
 								$paramquery = $_GET;
-								$paramquery[nav] = "samples";
+								$paramquery[nav] = "sample";
 								$paramquery[run] = "add_parent_to_sample";
 								$paramquery[key] = $key;
 								unset($paramquery[nextpage]);
@@ -2613,7 +2613,7 @@ class SampleIO
 						
 						$paramquery[username] = $_GET[username];
 						$paramquery[session_id] = $_GET[session_id];
-						$paramquery[nav] = "samples";
+						$paramquery[nav] = "sample";
 						$paramquery[run] = "detail";
 						$paramquery[sample_id] = $value;
 						$params = http_build_query($paramquery, '', '&#38;');
@@ -2648,7 +2648,7 @@ class SampleIO
 						
 						$paramquery[username] = $_GET[username];
 						$paramquery[session_id] = $_GET[session_id];
-						$paramquery[nav] = "samples";
+						$paramquery[nav] = "sample";
 						$paramquery[run] = "detail";
 						$paramquery[sample_id] = $value;
 						$params = http_build_query($paramquery, '', '&#38;');
@@ -2718,7 +2718,7 @@ class SampleIO
 						$column_array = array();
 				
 						$paramquery = $_GET;
-						$paramquery[nav] = "projects";
+						$paramquery[nav] = "project";
 						$paramquery[run] = "detail";
 						$paramquery[project_id] = $value;
 						unset($paramquery[page]);
@@ -2744,7 +2744,7 @@ class SampleIO
 						}
 						
 						$delete_paramquery = $_GET;
-						$delete_paramquery[nav] = "samples";
+						$delete_paramquery[nav] = "sample";
 						$delete_paramquery[run] = "delete_project_association";
 						$delete_paramquery[project_id] = $value;
 						$delete_paramquery[sample_id] = $_GET[sample_id];

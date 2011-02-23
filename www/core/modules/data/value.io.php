@@ -472,7 +472,7 @@ class ValueIO
 							else
 							{
 								$paramquery = $_GET;
-								$paramquery[nav] = "projects";
+								$paramquery[nav] = "project";
 								$paramquery[run] = "detail";
 								unset($paramquery[key]);
 								unset($paramquery[nextpage]);
@@ -669,7 +669,7 @@ class ValueIO
 							else
 							{
 								$paramquery = $_GET;
-								$paramquery[nav] = "samples";
+								$paramquery[nav] = "sample";
 								$paramquery[run] = "detail";
 								unset($paramquery[key]);
 								unset($paramquery[nextpage]);

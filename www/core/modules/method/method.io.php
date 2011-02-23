@@ -152,7 +152,7 @@ class MethodIO
 						else
 						{
 							$paramquery = $_GET;
-							$paramquery[nav] = "projects";
+							$paramquery[nav] = "project";
 							$paramquery[run] = "detail";
 							unset($paramquery[nextpage]);
 							unset($paramquery[key]);
@@ -349,7 +349,7 @@ class MethodIO
 						else
 						{
 							$paramquery = $_GET;
-							$paramquery[nav] = "samples";
+							$paramquery[nav] = "sample";
 							$paramquery[run] = "detail";
 							unset($paramquery[nextpage]);
 							unset($paramquery[key]);

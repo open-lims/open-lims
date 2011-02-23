@@ -62,7 +62,7 @@ class SampleAdminIO
 					unset($paramquery[sure]);
 					unset($paramquery[run]);
 					unset($paramquery[sample_id]);
-					$paramquery[nav] = "samples";
+					$paramquery[nav] = "sample";
 					$params = http_build_query($paramquery);
 					
 					$sample = new Sample($_GET[sample_id]);
@@ -133,7 +133,7 @@ class SampleAdminIO
 						unset($paramquery[nextpage]);
 						unset($paramquery[sure]);
 						unset($paramquery[run]);
-						$paramquery[nav] = "samples";
+						$paramquery[nav] = "sample";
 						$params = http_build_query($paramquery);
 			
 						$item_id = $sample->get_item_id();
@@ -475,7 +475,7 @@ class SampleAdminIO
 						$paramquery = $_GET;
 						unset($paramquery[nextpage]);
 						unset($paramquery[sure]);
-						$paramquery[nav] = "samples";
+						$paramquery[nav] = "sample";
 						$paramquery[run] = "admin_permission_user";
 						$params = http_build_query($paramquery);
 						
@@ -551,7 +551,7 @@ class SampleAdminIO
 						$paramquery = $_GET;
 						unset($paramquery[nextpage]);
 						unset($paramquery[sure]);
-						$paramquery[nav] = "samples";
+						$paramquery[nav] = "sample";
 						$paramquery[run] = "admin_permission_user";
 						$params = http_build_query($paramquery);
 						
@@ -564,7 +564,7 @@ class SampleAdminIO
 						$paramquery = $_GET;
 						unset($paramquery[nextpage]);
 						unset($paramquery[sure]);
-						$paramquery[nav] = "samples";
+						$paramquery[nav] = "sample";
 						$paramquery[run] = "admin_permission_user";
 						$params = http_build_query($paramquery);
 						
@@ -757,7 +757,7 @@ class SampleAdminIO
 					$paramquery = $_GET;
 					unset($paramquery[nextpage]);
 					unset($paramquery[sure]);
-					$paramquery[nav] = "samples";
+					$paramquery[nav] = "sample";
 					$paramquery[run] = "admin_permission_ou";
 					$params = http_build_query($paramquery);
 					
@@ -814,7 +814,7 @@ class SampleAdminIO
 						$paramquery = $_GET;
 						unset($paramquery[nextpage]);
 						unset($paramquery[sure]);
-						$paramquery[nav] = "samples";
+						$paramquery[nav] = "sample";
 						$paramquery[run] = "admin_permission_ou";
 						$params = http_build_query($paramquery);
 						
@@ -827,7 +827,7 @@ class SampleAdminIO
 						$paramquery = $_GET;
 						unset($paramquery[nextpage]);
 						unset($paramquery[sure]);
-						$paramquery[nav] = "samples";
+						$paramquery[nav] = "sample";
 						$paramquery[run] = "admin_permission_ou";
 						$params = http_build_query($paramquery);
 						

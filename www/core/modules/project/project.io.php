@@ -85,7 +85,7 @@ class ProjectIO
 				$proejct_paramquery = array();
 				$project_paramquery[username] = $_GET[username];
 				$project_paramquery[session_id] = $_GET[session_id];
-				$project_paramquery[nav] = "projects";
+				$project_paramquery[nav] = "project";
 				$project_paramquery[run] = "detail";
 				$project_paramquery[project_id] = $value[id];
 				$project_params = http_build_query($project_paramquery, '', '&#38;');
@@ -216,7 +216,7 @@ class ProjectIO
 						$paramquery = $_GET;
 						$paramquery[username] = $_GET[username];
 						$paramquery[session_id] = $_GET[session_id];
-						$paramquery[nav] = "projects";
+						$paramquery[nav] = "project";
 						$paramquery[run] = "detail";
 						$paramquery[project_id] = $value;
 						$params = http_build_query($paramquery,'','&#38;');
@@ -1562,7 +1562,7 @@ class ProjectIO
 								
 								case("sample"):
 									$paramquery = $_GET;
-									$paramquery[nav] = "samples";
+									$paramquery[nav] = "sample";
 									$paramquery[run] = "add_to_project";
 									$paramquery[key] = $key;
 									unset($paramquery[nextpage]);
