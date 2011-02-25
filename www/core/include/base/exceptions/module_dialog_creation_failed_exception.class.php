@@ -1,6 +1,6 @@
-<?php 
+<?php
 /**
- * @package project
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -22,13 +22,15 @@
  */
 
 /**
- * 
+ * Module Dialog Creation Failed Exception
+ * @package base
  */
-	$name 					= "item";
-	$main_class				= "ItemIO";
-	
-	$required_include[0] 	= "item";
-	
-	$no_tab					= true;
-	$no_dialog				= true;
+class ModuleDialogCreationFailedException extends Exception
+{
+    function __construct($message, $code)
+    {
+    	parent::__construct($message, $code);	
+    }    
+}
+
 ?>

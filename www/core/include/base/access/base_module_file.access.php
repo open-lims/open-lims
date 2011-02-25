@@ -311,6 +311,38 @@ class BaseModuleFile_Access
 	}
 	
 	/**
+	 * @param integer $include_id
+	 * @param string $name
+	 * @return string
+	 */
+	public static function get_id_by_module_id_and_name($module_id, $name)
+	{
+		global $db;
+
+		if (is_numeric($module_id) and $name)
+		{
+			$name = trim(strtolower($name));
+			
+			$sql = "SELECT id FROM ".constant("BASE_MODULE_FILE_TABLE")." WHERE module_id = '".$module_id."' AND TRIM(LOWER(name)) = '".$name."'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[id])
+			{
+				return $data[id];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @param integer $module_id
 	 * @return bool
 	 */

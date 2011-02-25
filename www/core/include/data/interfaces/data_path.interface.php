@@ -37,9 +37,6 @@ interface DataPathInterface
 	// private function push_folder_id($folder_id);
 	// private function push_virtual_folder_id($virtual_folder_id);
 	
-	public function init_project_folder($project_id);
-	public function init_sample_folder($sample_id);
-	
 	public function get_path();
 	public function get_stack_path();
 	public function get_previous_entry_virtual();

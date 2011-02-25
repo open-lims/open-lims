@@ -24,16 +24,12 @@
 /**
  * Main Navigation IO Class
  * @todo problems with back button and tabbed browsing
- * @todo solve dependencies
  * @package base
  */
 class MainNavigation_IO
 {
 	private $current_tab;
-	
-	private $in_project;
-	private $in_sample;
-	
+
 	function __construct()
 	{
 		global $session;
@@ -140,16 +136,6 @@ class MainNavigation_IO
 			$this->in_project 	= false;
 			$this->in_sample	= false;
 		}
-	}
-	
-	public function is_in_project()
-	{
-		return $this->in_project;	
-	}
-	
-	public function is_in_sample()
-	{
-		return $this->in_sample;
 	}
 	
 	/**

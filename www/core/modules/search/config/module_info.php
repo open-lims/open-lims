@@ -29,4 +29,6 @@
 	
 	$tab_name				= "Search";
 	$tab_colour				= "orange";
+	
+	$no_dialog				= true;
 ?>

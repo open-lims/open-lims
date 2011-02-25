@@ -31,4 +31,6 @@
 	
 	$tab_name				= "OL-Admin";
 	$tab_colour				= "grey";
+	
+	$no_dialog				= true;
 ?>

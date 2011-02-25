@@ -30,4 +30,5 @@
 	$required_include[0] 	= "organisation_unit";
 	
 	$no_tab					= true;
+	$no_dialog				= true;
 ?>

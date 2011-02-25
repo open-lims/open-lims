@@ -31,4 +31,6 @@
 	
 	$tab_name				= "Organiser";
 	$tab_colour				= "lightblue";
+	
+	$no_dialog				= true;
 ?>

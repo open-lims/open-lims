@@ -1,6 +1,6 @@
-<?php 
+<?php
 /**
- * @package project
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -24,11 +24,28 @@
 /**
  * 
  */
-	$name 					= "item";
-	$main_class				= "ItemIO";
+require_once("interfaces/module_dialog.interface.php");
+
+if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
+{
+	require_once("access/base_module_dialog.access.php");
+}
+
+/**
+ * Module Dialog Class
+ * @package base
+ */
+class ModuleDialog implements ModuleDialogInterface
+{	
+	public static function get_by_type_and_internal_name($dialog_type, $internal_name)
+	{
+		return BaseModuleDialog_Access::get_by_type_and_internal_name($dialog_type, $internal_name);
+	}
 	
-	$required_include[0] 	= "item";
-	
-	$no_tab					= true;
-	$no_dialog				= true;
+	public static function list_dialogs_by_type($dialog_type)
+	{
+		return BaseModuleDialog_Access::list_dialogs_by_type($dialog_type);
+	}
+}
+
 ?>

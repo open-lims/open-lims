@@ -32,7 +32,7 @@ class SampleCommon_IO
 		$template = new Template("languages/en-gb/template/samples/tabs/small_tab_header.html");
 		$template->output();
 		
-		if ($_GET[nav] == "samples")
+		if ($_GET[nav] == "sample")
 		{
 			switch ($_GET[run]):
 				case "structure":
@@ -67,7 +67,7 @@ class SampleCommon_IO
 		// Main Page
 		$paramquery[username] 	= $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav]		= "samples";
+		$paramquery[nav]		= "sample";
 		$paramquery[run]		= "detail";
 		$paramquery[sample_id]	= $_GET[sample_id];
 		$params 				= http_build_query($paramquery,'','&#38;');
@@ -75,13 +75,15 @@ class SampleCommon_IO
 		
 		if ($current_tab == 1)
 		{ 
-			$template = new Template("languages/en-gb/template/samples/tabs/main_active.html");
+			$template = new Template("languages/en-gb/template/samples/tabs/generic_active.html");
+			$template->set_var("title", "Main Page");
 			$template->set_var("params", $params);
 			$template->output();
 		}
 		else
 		{
-			$template = new Template("languages/en-gb/template/samples/tabs/main.html");
+			$template = new Template("languages/en-gb/template/samples/tabs/generic.html");
+			$template->set_var("title", "Main Page");
 			$template->set_var("params", $params);
 			$template->output();
 		}
@@ -89,18 +91,20 @@ class SampleCommon_IO
 		// Structure
 		$paramquery[username] 	= $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav]		= "samples";
+		$paramquery[nav]		= "sample";
 		$paramquery[run]		= "structure";
 		$paramquery[sample_id]	= $_GET[sample_id];
 		$params 				= http_build_query($paramquery,'','&#38;');
 		unset($paramquery);
 		
 		if ($current_tab == 2) { 
-			$template = new Template("languages/en-gb/template/samples/tabs/structure_active.html");
+			$template = new Template("languages/en-gb/template/samples/tabs/generic_active.html");
+			$template->set_var("title", "Strucutre");
 			$template->set_var("params", $params);
 			$template->output();
 		}else{
-			$template = new Template("languages/en-gb/template/samples/tabs/structure.html");
+			$template = new Template("languages/en-gb/template/samples/tabs/generic.html");
+			$template->set_var("title", "Structure");
 			$template->set_var("params", $params);
 			$template->output();
 		}
@@ -110,7 +114,7 @@ class SampleCommon_IO
 		
 		$paramquery[username] 	= $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav]		= "samples";
+		$paramquery[nav]		= "sample";
 		$paramquery[run]		= "projects";
 		$paramquery[sample_id]	= $_GET[sample_id];
 		$params 				= http_build_query($paramquery,'','&#38;');
@@ -118,59 +122,49 @@ class SampleCommon_IO
 		
 		if ($current_tab == 3)
 		{ 
-			$template = new Template("languages/en-gb/template/samples/tabs/projects_active.html");
+			$template = new Template("languages/en-gb/template/samples/tabs/generic_active.html");
+			$template->set_var("title", "Projects");
 			$template->set_var("params", $params);
 			$template->output();
 		}
 		else
 		{
-			$template = new Template("languages/en-gb/template/samples/tabs/projects.html");
+			$template = new Template("languages/en-gb/template/samples/tabs/generic.html");
+			$template->set_var("title", "Projects");
 			$template->set_var("params", $params);
 			$template->output();
 		}
 		
-		// Projects
-		$paramquery[username] 	= $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav]		= "method";
-		$paramquery[run]		= "sample_related_methods";
-		$paramquery[sample_id]	= $_GET[sample_id];
-		$params 				= http_build_query($paramquery,'','&#38;');
-		unset($paramquery);
+		// Item Lister Dialogs
+		$module_dialog_array = ModuleDialog::list_dialogs_by_type("item_list");
 		
-		if ($current_tab == 4)
-		{ 
-			$template = new Template("languages/en-gb/template/samples/tabs/methods_active.html");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		else
+		if (is_array($module_dialog_array) and count($module_dialog_array) >= 1)
 		{
-			$template = new Template("languages/en-gb/template/samples/tabs/methods.html");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		
-		// Data
-		$paramquery[username] 	= $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav]		= "data";
-		$paramquery[run]		= "sample_folder";
-		$paramquery[sample_id]	= $_GET[sample_id];
-		$params 				= http_build_query($paramquery,'','&#38;');
-		unset($paramquery);
+			foreach ($module_dialog_array as $key => $value)
+			{
+				$paramquery[username] 	= $_GET[username];
+				$paramquery[session_id] = $_GET[session_id];
+				$paramquery[nav]		= "sample";
+				$paramquery[run]		= "item_list";
+				$paramquery[sample_id]	= $_GET[sample_id];
+				$paramquery[dialog]		= $value[internal_name];
+				$params 				= http_build_query($paramquery,'','&#38;');
 				
-		if ($current_tab == 5)
-		{ 
-			$template = new Template("languages/en-gb/template/samples/tabs/data_active.html");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		else
-		{
-			$template = new Template("languages/en-gb/template/samples/tabs/data.html");
-			$template->set_var("params", $params);
-			$template->output();
+				if ($_GET[run] == "item_list" and $_GET[dialog] == $value[internal_name])
+				{ 
+					$template = new Template("languages/en-gb/template/samples/tabs/generic_active.html");
+					$template->set_var("title", $value[display_name]);
+					$template->set_var("params", $params);
+					$template->output();
+				}
+				else
+				{
+					$template = new Template("languages/en-gb/template/samples/tabs/generic.html");
+					$template->set_var("title", $value[display_name]);
+					$template->set_var("params", $params);
+					$template->output();
+				}
+			}
 		}
 		
 		$template = new Template("languages/en-gb/template/samples/tabs/small_tab_footer.html");

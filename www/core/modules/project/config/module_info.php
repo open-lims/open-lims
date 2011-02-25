@@ -31,4 +31,6 @@
 	
 	$tab_name				= "Projects";
 	$tab_colour				= "green";
+	
+	$no_dialog				= true;
 ?>

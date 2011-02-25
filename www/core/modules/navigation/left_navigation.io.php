@@ -185,7 +185,7 @@ class LeftNavigation_IO
 	{
 		global $user, $session;
 		
-		if ($_GET[nav] != "administration" or !$user->is_admin())
+		if ($_GET[nav] != "admin" or !$user->is_admin())
 		{
 			if ($session->is_value("CURRENT_NAVIGATION"))
 			{

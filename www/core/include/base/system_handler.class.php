@@ -35,6 +35,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("exceptions/include_requirement_failed_exception.class.php");
 	require_once("exceptions/include_process_failed_exception.class.php");
 	require_once("exceptions/module_data_corrupt_exception.class.php");
+	require_once("exceptions/module_dialog_creation_failed_exception.class.php");
 	require_once("exceptions/module_folder_empty_exception.class.php");
 	require_once("exceptions/module_process_failed_exception.class.php");
 	
@@ -43,6 +44,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	define("BASE_EVENT_LISTENER_TABLE"		, "core_base_event_listeners");
 	define("BASE_INCLUDE_FILE_TABLE"		, "core_base_include_files");
 	define("BASE_INCLUDE_TABLE"				, "core_base_includes");
+	define("BASE_MODULE_DIALOG_TABLE"		, "core_base_module_dialogs");
 	define("BASE_MODULE_FILE_TABLE"			, "core_base_module_files");
 	define("BASE_MODULE_NAVIGATION_TABLE"	, "core_base_module_navigation");
 	define("BASE_MODULE_TABLE"				, "core_base_modules");
@@ -50,6 +52,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("access/base_event_listener.access.php");
 	require_once("access/base_include_file.access.php");
 	require_once("access/base_include.access.php");
+	require_once("access/base_module_dialog.access.php");
 	require_once("access/base_module_file.access.php");
 	require_once("access/base_module_navigation.access.php");
 	require_once("access/base_module.access.php");
@@ -192,8 +195,8 @@ class SystemHandler implements SystemHandlerInterface
 										$class_event_listener_id = BaseIncludeFile_Access::get_id_by_include_id_and_name($register_key, "class_event_listener.php");
 										if ($class_event_listener_id != null)
 										{
-											$base_inclide_file = new BaseIncludeFile_Access($class_event_listener_id);
-											$base_inclide_file->set_checksum(md5_file($class_event_listener));
+											$base_include_file = new BaseIncludeFile_Access($class_event_listener_id);
+											$base_include_file->set_checksum(md5_file($class_event_listener));
 										}
 										else
 										{
@@ -446,8 +449,9 @@ class SystemHandler implements SystemHandlerInterface
 	}
 	
 	/**
-	 * @todo implementation
-	 * @todo use falg for navigation
+	 * @todo use flag for navigation
+	 * @todo add register dialog (like EventHander in Include)
+	 * @todo reregister module after md5-checksum file change (hold position)
 	 */
 	private function scan_modules()
 	{
@@ -476,10 +480,78 @@ class SystemHandler implements SystemHandlerInterface
 						{
 							include($config_file);
 						
+							if ($no_dialog != true)
+							{
+								$module_dialog = $config_folder."/module_dialog.php";
+								if (!is_file($module_dialog))
+								{
+									if ($transaction_id != null)
+									{
+										$transaction->rollback($transaction_id);
+									}
+									throw new ModuleDataCorruptException(null, null);
+								}
+							}
+							
 							// Is include registered ?
 							if (($register_key = array_search($value, $registered_module_array)) !== false)
 							{
 								$found_module_array[$register_key] = $value;
+								
+								// Check Files
+								if ($no_dialog != true)
+								{
+									$module_dialog_checksum = BaseModuleFile_Access::get_checksum_by_module_id_and_name($register_key, "module_dialog.php");
+									if ($module_dialog_checksum != md5_file($module_dialog))
+									{										
+										include($module_dialog);
+										
+										if (BaseModuleDialog_Access::delete_by_module_id($register_key) == false)
+										{
+											if ($transaction_id != null)
+											{
+												$transaction->rollback($transaction_id);
+											}
+											throw new ModuleProcessFailedException(null, null);
+										}
+										
+										// Register Dialog
+										if (is_array($dialog) and count($dialog) >= 1)
+										{
+											foreach($dialog as $dialog_key => $dialog_value)
+											{
+												$base_module_dialog = new BaseModuleDialog_Access(null);
+												if ($base_module_dialog->create($register_key, $dialog_value[type], $dialog_value[class_path], $dialog_value['class'], $dialog_value[method], $dialog_value[internal_name], $dialog_value[display_name]) == null)
+												{
+													if ($transaction_id != null)
+													{
+														$transaction->rollback($transaction_id);
+													}
+													throw new ModuleDialogCreationFailedException(null, null);
+												}
+											}
+										}
+										
+										$module_dialog_id = BaseModuleFile_Access::get_id_by_module_id_and_name($register_key, "module_dialog.php");
+										if ($module_dialog_id != null)
+										{
+											$base_module_file = new BaseModuleFile_Access($module_dialog_id);
+											$base_module_file->set_checksum(md5_file($module_dialog));
+										}
+										else
+										{
+											$base_module_file = new BaseModuleFile_Access(null);
+											if ($base_module_file->create($register_key, "module_dialog.php", md5_file($module_dialog)) == null)
+											{
+												if ($transaction_id != null)
+												{
+													$transaction->rollback($transaction_id);
+												}
+												throw new IncludeProcessFailedException(null, null);
+											}
+										}
+									}
+								}
 							}
 							else
 							{
@@ -526,6 +598,40 @@ class SystemHandler implements SystemHandlerInterface
 									}
 								}
 								
+								if ($no_dialog != true)
+								{
+									include($module_dialog);
+									
+									$base_module_file = new BaseModuleFile_Access(null);
+									if ($base_module_file->create($base_module_id, "module_dialogs.php", md5_file($module_dialog)) == null)
+									{
+										if ($transaction_id != null)
+										{
+											$transaction->rollback($transaction_id);
+										}
+										throw new ModuleProcessFailedException(null, null);
+									}
+									
+									// Register Dialog
+									if (is_array($dialog) and count($dialog) >= 1)
+									{
+										foreach($dialog as $dialog_key => $dialog_value)
+										{
+											$base_module_dialog = new BaseModuleDialog_Access(null);
+											if ($base_module_dialog->create($base_module_id, $dialog_value[type], $dialog_value[class_path], $dialog_value['class'], $dialog_value[method], $dialog_value[internal_name], $dialog_value[display_name]) == null)
+											{
+												if ($transaction_id != null)
+												{
+													$transaction->rollback($transaction_id);
+												}
+												throw new ModuleDialogCreationFailedException(null, null);
+											}
+										}
+									}
+									
+									unset($dialog);
+								}
+								
 								$found_module_array[$register_key] = $value;
 							}
 						}
@@ -534,6 +640,7 @@ class SystemHandler implements SystemHandlerInterface
 				unset($name);
 				unset($class);
 				unset($no_tab);
+				unset($no_dialog);
 				unset($tab_name);
 				unset($tab_colour);
 				unset($required_include);

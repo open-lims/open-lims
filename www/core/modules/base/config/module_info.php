@@ -30,4 +30,5 @@
 	$required_include[0] 	= "base";
 	
 	$no_tab					= true;
+	$no_dialog				= true;
 ?>

@@ -2854,9 +2854,12 @@ class SampleIO
 		}
 	}
 	
+	/**
+	 * @todo sample bar appearance
+	 */
 	public static function method_handler()
 	{
-		global $sample_security;
+		global $sample_security, $session;
 		
 		try
 		{
@@ -2869,6 +2872,9 @@ class SampleIO
 				else
 				{
 					$sample_security = new SampleSecurity($_GET[sample_id]);
+					
+					require_once("sample_common.io.php");
+ 					SampleCommon_IO::tab_header();
 				}
 			}
 			else
@@ -2984,6 +2990,39 @@ class SampleIO
 					SampleAdminIO::ou_permission_delete();
 				break;
 	
+				// Item Lister
+				case("item_list"):
+					if ($_GET[dialog])
+					{
+						if ($_GET[dialog] == "data")
+						{
+							$path_stack_array = array();
+							
+					    	$folder_id = SampleFolder::get_folder_by_sample_id($_GET[sample_id]);
+					    	$folder = Folder::get_instance($folder_id);
+					    	$init_array = $folder->get_object_id_path();
+					    	
+					    	foreach($init_array as $key => $value)
+					    	{
+					    		$temp_array = array();
+					    		$temp_array[virtual] = false;
+					    		$temp_array[id] = $value;
+					    		array_unshift($path_stack_array, $temp_array);
+					    	}
+							
+							$session->write_value("stack_array", $path_stack_array, true);
+						}
+						
+						$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_list", $_GET[dialog]);
+						require_once($module_dialog[class_path]);
+						$module_dialog['class']::$module_dialog[method]($sql);
+					}
+					else
+					{
+						// error
+					}
+				break;
+				
 				default:
 					self::list_user_related_samples(null);
 				break;

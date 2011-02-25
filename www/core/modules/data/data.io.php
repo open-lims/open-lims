@@ -85,48 +85,6 @@ class DataIO
 			else
 			{
 				$data_path = new DataPath(null, null);
-				
-				if ($_GET[run] == "project_folder" and is_numeric($_GET[project_id]))
-				{					
-					if (Project::exist_project($_GET[project_id]) == false)
-					{
-						throw new ProjectException("",1);
-					}
-					else
-					{
-						$project_security = new ProjectSecurity($_GET[project_id]);
-						
-						if ($project_security->is_access(1, false) == false)
-						{
-							throw new ProjectSecurityException("",1);
-						}
-						else
-						{
-							$data_path->init_project_folder($_GET[project_id]);
-						}
-					}
-				}
-				
-				if ($_GET[run] == "sample_folder" and is_numeric($_GET[sample_id]))
-				{
-					if (Sample::exist_sample($_GET[sample_id]) == false)
-					{
-						throw new SampleException("",1);
-					}
-					else
-					{
-						$sample_security = new SampleSecurity($_GET[sample_id]);
-						if ($sample_security->is_access(1, false) == false)
-						{
-							throw new SampleSecurityException("",1);
-						}
-						else
-						{
-							$data_path->init_sample_folder($_GET[sample_id]);
-						}
-					}
-				}
-				
 				if ($data_path->get_last_entry_type() == true)
 				{
 					$virtual_folder_id = $data_path->get_last_entry_id();

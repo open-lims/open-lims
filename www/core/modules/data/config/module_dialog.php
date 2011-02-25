@@ -1,6 +1,6 @@
 <?php 
 /**
- * @package project
+ * @package data
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -24,11 +24,10 @@
 /**
  * 
  */
-	$name 					= "item";
-	$main_class				= "ItemIO";
-	
-	$required_include[0] 	= "item";
-	
-	$no_tab					= true;
-	$no_dialog				= true;
+	$dialog[0][type]			= "item_list";
+	$dialog[0][class_path]		= "core/modules/data/data.io.php";
+	$dialog[0]['class']			= "DataIO";
+	$dialog[0][method]			= "browser";
+	$dialog[0][internal_name]	= "data";
+	$dialog[0][display_name]	= "Data";
 ?>

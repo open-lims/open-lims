@@ -148,20 +148,6 @@ class ContentHandler_IO
  					}
  					else
  					{
- 						// Project Tab Bar
-	 					if ($main_navigation_io->is_in_project() == true)
-	 					{
-	 						require_once("project/project_common.io.php");
-	 						ProjectCommon_IO::tab_header();
-	 					}
-	 					
-	 					// Sample Tab Bar
-	 					if ($main_navigation_io->is_in_sample() == true)
-	 					{
-	 						require_once("sample/sample_common.io.php");
-	 						SampleCommon_IO::tab_header();
-	 					}
-	 					
 				 		self::includer();
  					}
 			 		

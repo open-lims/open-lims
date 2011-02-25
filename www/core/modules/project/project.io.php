@@ -2012,9 +2012,12 @@ class ProjectIO
 		}
 	}
 	
+	/**
+	 * @todo project bar appearance
+	 */
 	public static function method_handler()
 	{
-		global $project_security;
+		global $project_security, $session;
 		
 		try
 		{
@@ -2027,6 +2030,9 @@ class ProjectIO
 				else
 				{
 					$project_security = new ProjectSecurity($_GET[project_id]);
+					
+ 					require_once("project_common.io.php");
+ 					ProjectCommon_IO::tab_header();
 				}
 			}
 			else
@@ -2211,6 +2217,43 @@ class ProjectIO
 				case("admin_permission_delete"):
 					require_once("project_admin.io.php");
 					ProjectAdminIO::permission_delete();
+				break;
+				
+				// Item Lister
+				case("item_list"):
+					if ($_GET[dialog])
+					{
+						if ($_GET[dialog] == "data")
+						{
+							$path_stack_array = array();
+							
+							$folder_id = ProjectFolder::get_folder_by_project_id($_GET[project_id]);
+					    	$folder = Folder::get_instance($folder_id);
+					    	$init_array = $folder->get_object_id_path();
+					    	
+					    	foreach($init_array as $key => $value)
+					    	{
+					    		$temp_array = array();
+					    		$temp_array[virtual] = false;
+					    		$temp_array[id] = $value;
+					    		array_unshift($path_stack_array, $temp_array);
+					    	}
+							
+							$session->write_value("stack_array", $path_stack_array, true);
+						}
+						
+						$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_list", $_GET[dialog]);
+						require_once($module_dialog[class_path]);
+						$module_dialog['class']::$module_dialog[method]($sql);
+					}
+					else
+					{
+						// error
+					}
+				break;
+				
+				case("item_add"):
+					
 				break;
 				
 				// Default

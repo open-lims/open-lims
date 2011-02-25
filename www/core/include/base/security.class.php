@@ -71,6 +71,7 @@ class Security implements SecurityInterface
 			case("username"):
 			case("session_id"):
 			case("run"):
+			case("dialog"):
 			case("action"):
 			case("aspect"):
 			case("id"):

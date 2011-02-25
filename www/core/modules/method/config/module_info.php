@@ -30,4 +30,5 @@
 	$required_include[0] 	= "method";
 	
 	$no_tab					= true;
+	$no_dialog				= true;
 ?>

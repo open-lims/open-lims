@@ -23,8 +23,9 @@
 
 
 /**
- * System Hanlder Interface
+ * System Handler Interface
  * @package base
+ * @todo
  */
 interface SystemHandlerInterface
 {

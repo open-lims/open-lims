@@ -1,6 +1,6 @@
 <?php 
 /**
- * @package project
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -21,14 +21,14 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
+
 /**
- * 
+ * Module Dialog Interface
+ * @package base
+ * @todo
  */
-	$name 					= "item";
-	$main_class				= "ItemIO";
-	
-	$required_include[0] 	= "item";
-	
-	$no_tab					= true;
-	$no_dialog				= true;
+interface ModuleDialogInterface
+{
+
+}
 ?>

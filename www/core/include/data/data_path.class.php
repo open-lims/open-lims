@@ -260,71 +260,7 @@ class DataPath implements DataPathInterface
    		
    		$session->write_value("stack_array", $this->path_stack_array, true);
    	}
-   	
-   	/**
-   	 * Initialises the stack with given project_id
-   	 * @todo extrat method from class due to loose dependency
-   	 * @param $project_id
-   	 */
-   	public function init_project_folder($project_id)
-   	{
-    	global $session;
-    	
-    	$this->path_stack_array = array();
-    	
-    	$folder_id = ProjectFolder::get_folder_by_project_id($project_id);
-    	$folder = Folder::get_instance($folder_id);
-    	$init_array = $folder->get_object_id_path();
-    	
-    	foreach($init_array as $key => $value)
-    	{
-    		$temp_array = array();
-    		$temp_array[virtual] = false;
-    		$temp_array[id] = $value;
-    		array_unshift($this->path_stack_array, $temp_array);
-    	}
-		
-		$session->write_value("stack_array", $this->path_stack_array, true);
-		
-		$this->init_stack($folder_id);
-		$this->path = $folder->get_object_path();
-		
-		$this->folder_id = $folder_id;
-		$this->virtual_folder_id = null;
-   	}
-   	
-    /**
-   	 * Initialises the stack with given sample_id
-   	 * @todo extrat method from class due to loose dependency
-   	 * @param $sample_id
-   	 */
-   	public function init_sample_folder($sample_id)
-   	{
-    	global $session;
-    	
-    	$this->path_stack_array = array();
-    	
-    	$folder_id = SampleFolder::get_folder_by_sample_id($sample_id);
-    	$folder = Folder::get_instance($folder_id);
-    	$init_array = $folder->get_object_id_path();
-    	
-    	foreach($init_array as $key => $value)
-    	{
-    		$temp_array = array();
-    		$temp_array[virtual] = false;
-    		$temp_array[id] = $value;
-    		array_unshift($this->path_stack_array, $temp_array);
-    	}
-		
-		$session->write_value("stack_array", $this->path_stack_array, true);
-		
-		$this->init_stack($folder_id);
-		$this->path = $folder->get_object_path();
-		
-		$this->folder_id = $folder_id;
-		$this->virtual_folder_id = null;	
-   	}
-   	
+   	   	   	
    	/**
    	 * @return string
    	 */
