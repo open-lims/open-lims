@@ -796,6 +796,11 @@ class SystemHandler implements SystemHandlerInterface
 		return BaseModule_Access::get_module_name_by_module_id($module_id);
 	}
 	
+	public static function get_module_folder_by_module_name($module_name)
+	{
+		return BaseModule_Access::get_module_folder_by_module_name($module_name);
+	}
+	
 	public static function list_module_navigations_entries()
 	{
 		return BaseModuleNavigation_Access::list_entries();

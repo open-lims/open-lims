@@ -32,9 +32,9 @@ class SampleIO
 		global $user, $content;
 		
 		$content_array = array();
-		
+
 		$table_io = new TableIO("OverviewTable");
-		
+
 		$table_io->add_row("","symbol",false,16);
 		$table_io->add_row("Sample ID","id",false,null);
 		$table_io->add_row("Sample Name","name",false,null);
@@ -285,6 +285,27 @@ class SampleIO
 			$template->set_var("table", $table_io->get_table($page ,$sample_array_cardinality));		
 			
 			$template->output();
+		}
+		else
+		{
+			// Error
+		}
+	}
+	
+	public static function list_sample_items($sql)
+	{
+		if ($sql)
+		{
+			$list = new List_IO(0, 20);
+
+			$list->add_row("","symbol",false,16);
+			$list->add_row("Sample ID","id",true,null);
+			$list->add_row("Sample Name","name",true,null);
+			$list->add_row("Date/Time","datetime",true,null);
+			$list->add_row("Type/Template","template",true,null);
+			$list->add_row("Curr. Depository","depository",true,null);
+			$list->add_row("Owner","owner",true,null);
+			$list->add_row("AV","av",false,null);
 		}
 		else
 		{

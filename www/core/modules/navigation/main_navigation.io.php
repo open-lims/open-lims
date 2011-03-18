@@ -328,15 +328,34 @@ class MainNavigation_IO
 			$template->set_var("sub_menu", $sub_menu);
 			$template->set_var("search_bar", false);
 			
+			unset($sub_menu);
+			
 			$template->output();
 		}
 		else
 		{
 			$template = new Template("languages/en-gb/template/navigation/sub/".$current_color.".html");
 			
-			$template->set_var("sub_menu", false);
-			$template->set_var("search_bar", false);
-			
+			$config_folder = "core/modules/".SystemHandler::get_module_folder_by_module_name($_GET[nav])."/config";
+			if (is_dir($config_folder))
+			{
+				$subnavigation_file = $config_folder."/module_subnavigation.php";
+				if (is_file($subnavigation_file))
+				{
+					include($subnavigation_file);
+				}
+				else
+				{
+					$template->set_var("sub_menu", false);
+					$template->set_var("search_bar", false);
+				}
+			}
+			else
+			{
+				$template->set_var("sub_menu", false);
+				$template->set_var("search_bar", false);
+			}
+
 			$template->output();
 		}
 		

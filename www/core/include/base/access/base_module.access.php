@@ -308,6 +308,35 @@ class BaseModule_Access
 	}
 	
 	/**
+	 * @param param $module_name
+	 * @return bool
+	 */
+	public static function get_module_folder_by_module_name($module_name)
+	{
+		global $db;
+		
+		if ($module_name)
+		{		
+			$sql = "SELECT folder FROM ".constant("BASE_MODULE_TABLE")." WHERE TRIM(name) = '".trim($module_name)."'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[folder])
+			{
+				return $data[folder];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @return array
 	 */
 	public static function list_folder_entries()
