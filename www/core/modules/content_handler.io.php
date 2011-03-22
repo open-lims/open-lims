@@ -80,6 +80,30 @@ class ContentHandler_IO
 				include("core/modules/base/home.io.php");
 			}
 		}
+		catch(ModuleDialogCorruptException $e)
+		{
+			/**
+			 * @todo Error-Code
+			 */
+			$error_io = new Error_IO($e, 0, 0, 0);
+			$error_io->display_error();
+		}
+		catch(ModuleDialogNotFoundException $e)
+		{
+			/**
+			 * @todo Error-Code
+			 */
+			$error_io = new Error_IO($e, 0, 0, 0);
+			$error_io->display_error();
+		}
+		catch(ModuleDialogMissingException $e)
+		{
+			/**
+			 * @todo Error-Code
+			 */
+			$error_io = new Error_IO($e, 0, 0, 0);
+			$error_io->display_error();
+		}
 		catch(DatabaseQueryFailedException $e)
 		{
 			$transaction->force_rollback();

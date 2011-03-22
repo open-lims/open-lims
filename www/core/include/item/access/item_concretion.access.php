@@ -302,6 +302,34 @@ class ItemConcretion_Access
 	}
 	
 	/**
+	 * @return array
+	 */
+	public static function get_handling_class_by_type($type)
+	{
+		global $db;
+		
+		if ($type)
+		{
+			$sql = "SELECT handling_class FROM ".constant("ITEM_CONCRETION_TABLE")." WHERE type = '".$type."'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[handling_class])
+			{
+				return $data[handling_class];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @param integer $include_id
 	 * @return bool
 	 */

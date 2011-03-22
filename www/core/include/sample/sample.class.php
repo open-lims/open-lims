@@ -157,13 +157,8 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 						}
 						throw new SampleCreationFailedException("",1);
 					}
-					
-					
-					$sample_folder_id = $GLOBALS[sample_folder_id];
-					$folder = Folder::get_instance($sample_folder_id);
+					$folder = Folder::get_instance($folder_id);
 
-					$path = new Path($folder->get_path());
-					$path->add_element($sample_id);
 						    			
 	    			// Create Permissions and V-Folders
 	    			$sample_security = new SampleSecurity($sample_id);
@@ -178,7 +173,8 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 						throw new SampleCreationFailedException("",1);
 	    			}
 	    			
-	    			if (is_numeric($organisation_unit_id)) {
+	    			if (is_numeric($organisation_unit_id))
+	    			{
 	    				if ($sample_security->create_organisation_unit($organisation_unit_id) == null)
 	    				{
 	    					$sample_folder->delete(true, true);
@@ -216,10 +212,10 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	    					{
 	    						$folder_name = strtolower(trim($value));
 	    						$folder_name = str_replace(" ","-",$folder_name);
-	    										
+			
 								$folder_path = new Path($folder->get_path());
 								$folder_path->add_element($folder_name);
-								
+
 								$sub_folder = Folder::get_instance(null);
 								if ($sub_folder->create($value, $folder_id, $folder_path->get_path_string(), $user->get_user_id(), null) == null)
 								{
@@ -610,6 +606,22 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					}				
 				}
 			}
+			
+			if (is_array($return_array) and count($return_array) >= 1)
+			{
+				foreach($return_array as $key => $value)
+				{
+					if (!$value[name] and $value[type])
+					{
+						$item_handling_class = Item::get_handling_class_by_type($value[type]);
+						if ($item_handling_class)
+						{
+							$return_array[$key][name] = "Add ".$item_handling_class::get_generic_name($value[type], $value[type_id]);
+						}
+					}
+				}
+			}
+			
 			return $return_array;
     	}
     	else
@@ -642,7 +654,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					{
 						$gid = $key;
 					}
-					
+
 					$sample_item = new SampleItem($this->sample_id);
 					$item_array = $sample_item->get_sample_items();
 					
@@ -1500,5 +1512,46 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     		return false;
     	}
     }
+    
+    /**
+     * @param string $type
+     * @param array $type_array
+     * @return string
+     */
+    public static function get_generic_name($type, $type_array)
+    {
+    	if (is_array($type_array) and count($type_array) == 1)
+    	{
+			$sample_template = new SampleTemplate($type_array[0]);
+
+			if ($sample_template->get_name() != null)
+			{
+				return $sample_template->get_name();
+			}
+			else
+			{
+				if ($type == "parentsample")
+	    		{
+	    			return "Parent Sample";
+	    		}
+	    		else
+	    		{
+	    			return "Sample";
+	    		}
+			}
+    	}
+    	else
+    	{
+    		if ($type == "parentsample")
+    		{
+    			return "Parent Sample";
+    		}
+    		else
+    		{
+    			return "Sample";
+    		}
+    	}
+    }
+    
 }
 ?>

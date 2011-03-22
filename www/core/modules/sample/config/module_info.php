@@ -31,6 +31,4 @@
 	
 	$tab_name				= "Samples";
 	$tab_colour				= "orange";
-	
-	$no_dialog				= true;
 ?>

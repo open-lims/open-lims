@@ -1,6 +1,6 @@
-<?php 
+<?php
 /**
- * @package project
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -22,12 +22,15 @@
  */
 
 /**
- * 
+ * Module Dialog Corrupt Exception
+ * @package base
  */
-	$name 					= "method";
-	$main_class				= "MethodIO";
-	
-	$required_include[0] 	= "method";
-	
-	$no_tab					= true;
+class ModuleDialogCorruptException extends Exception
+{
+    function __construct($message, $code)
+    {
+    	parent::__construct($message, $code);	
+    }    
+}
+
 ?>

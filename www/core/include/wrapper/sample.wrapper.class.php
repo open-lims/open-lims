@@ -90,5 +90,29 @@ class Sample_Wrapper implements Sample_WrapperInterface
 		return Sample_Wrapper_Access::count_user_samples($user_id);
 	}
 	
+	/**
+	 * Returns a set of sample in relations of a SQL-String
+	 * @param string $item_sql
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_item_samples($item_sql, $order_by, $order_method, $start, $end)
+	{
+		return Sample_Wrapper_Access::list_item_samples($item_sql, $order_by, $order_method, $start, $end);
+	}
+	
+	/**
+	 * Returns the number of samples in relations of a SQL-String
+	 * @param string $item_id
+	 * @return integer
+	 */
+	public static function count_item_samples($item_sql)
+	{
+		return Sample_Wrapper_Access::count_item_samples($item_sql);
+	}
+	
 }
 ?>

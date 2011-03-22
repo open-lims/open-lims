@@ -321,5 +321,15 @@ class Method extends Item implements MethodInterface, EventListenerInterface, It
     		}
     	}
     }
+    
+    /**
+     * @param string $type
+     * @param array $type_array
+     * @return string
+     */
+    public static function get_generic_name($type, $type_array)
+    {
+    	return "Method";
+    }
 }
 ?>

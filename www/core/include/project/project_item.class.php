@@ -24,13 +24,13 @@
 /**
  * 
  */
-require_once("access/project_has_item.access.php");
+require_once("interfaces/project_item.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
 	require_once("events/project_item_link_event.class.php");
 	
-	require_once("interfaces/project_item.interface.php");
+	require_once("access/project_has_item.access.php");
 }
 
 /**

@@ -272,6 +272,11 @@ class Item implements ItemInterface, EventListenerInterface
 		return ItemConcretion_Access::list_entries();
 	}
 	
+	public static function get_handling_class_by_type($type)
+	{
+		return ItemConcretion_Access::get_handling_class_by_type($type);
+	}
+	
     /**
      * @param object $event_object
      */

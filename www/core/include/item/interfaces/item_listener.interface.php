@@ -29,5 +29,6 @@
 interface ItemListenerInterface
 {
 	public static function is_kind_of($type, $item_id);	
+	public static function get_generic_name($type, $type_array);
 }
 ?>

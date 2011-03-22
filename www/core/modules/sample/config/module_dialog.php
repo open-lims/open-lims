@@ -1,6 +1,6 @@
 <?php 
 /**
- * @package project
+ * @package data
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -24,10 +24,17 @@
 /**
  * 
  */
-	$name 					= "method";
-	$main_class				= "MethodIO";
+	$dialog[0][type]			= "item_list";
+	$dialog[0][class_path]		= "core/modules/sample/sample.io.php";
+	$dialog[0]['class']			= "SampleIO";
+	$dialog[0][method]			= "list_sample_items";
+	$dialog[0][internal_name]	= "sample";
+	$dialog[0][display_name]	= "Samples";
 	
-	$required_include[0] 	= "method";
-	
-	$no_tab					= true;
+	$dialog[1][type]			= "item_add";
+	$dialog[1][class_path]		= "core/modules/sample/sample.io.php";
+	$dialog[1]['class']			= "SampleIO";
+	$dialog[1][method]			= "add_sample_item";
+	$dialog[1][internal_name]	= "sample";
+	$dialog[1][display_name]	= "Sethod";
 ?>

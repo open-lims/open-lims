@@ -32,6 +32,11 @@ function register_sample($include_id)
 		{
 			return false;
 		}
+		
+		if (Item::register_type("parentsample", "Sample", $include_id) == false)
+		{
+			return false;
+		}
 	}
 	else
 	{

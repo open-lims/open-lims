@@ -35,7 +35,10 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("exceptions/include_requirement_failed_exception.class.php");
 	require_once("exceptions/include_process_failed_exception.class.php");
 	require_once("exceptions/module_data_corrupt_exception.class.php");
+	require_once("exceptions/module_dialog_corrupt_exception.class.php");
 	require_once("exceptions/module_dialog_creation_failed_exception.class.php");
+	require_once("exceptions/module_dialog_missing_exception.class.php");
+	require_once("exceptions/module_dialog_not_found_exception.class.php");
 	require_once("exceptions/module_folder_empty_exception.class.php");
 	require_once("exceptions/module_process_failed_exception.class.php");
 	

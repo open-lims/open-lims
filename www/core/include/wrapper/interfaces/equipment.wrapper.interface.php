@@ -1,6 +1,6 @@
-<?php 
+<?php
 /**
- * @package project
+ * @package equipment
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -20,14 +20,14 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
+ 
 
 /**
- * 
- */
-	$name 					= "method";
-	$main_class				= "MethodIO";
-	
-	$required_include[0] 	= "method";
-	
-	$no_tab					= true;
+ * Equipment Wrapper Interface
+ * @package equipment
+ */ 		 
+interface Equipment_WrapperInterface
+{
+
+}
 ?>

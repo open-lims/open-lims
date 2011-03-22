@@ -31,6 +31,7 @@
 	$classes['ProjectFolder'] 				= $path_prefix."core/include/project/project_folder.class.php";
 	$classes['ProjectVirtualFolder'] 		= $path_prefix."core/include/project/project_virtual_folder.class.php";
 	$classes['ProjectItem'] 				= $path_prefix."core/include/project/project_item.class.php";
+	$classes['ProjectItemFactory'] 			= $path_prefix."core/include/project/project_item_factory.class.php";
 	$classes['ProjectLog']					= $path_prefix."core/include/project/project_log.class.php";
 	$classes['ProjectLogHasItem']			= $path_prefix."core/include/project/project_log_has_item.class.php";
 	$classes['ProjectPermission'] 			= $path_prefix."core/include/project/project_permission.class.php";

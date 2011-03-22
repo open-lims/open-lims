@@ -69,7 +69,6 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
    	 */
     public function is_access($intention, $ignore_admin_status)
     {
-    	
     	global $user;
     	
     	if ($this->sample_id)

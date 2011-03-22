@@ -30,7 +30,7 @@ class ProjectIO
 	private static function list_user_related_projects($user_id)
 	{
 		global $user;
-		
+
 		if (!is_numeric($user_id))
 		{
 			$user_id = $user->get_user_id();
@@ -1417,206 +1417,41 @@ class ProjectIO
 					{
 						foreach($current_status_requirements as $key => $value)
 						{
-							switch($value[type]):
+							$paramquery[username] = $_GET[username];
+							$paramquery[session_id] = $_GET[session_id];
+							$paramquery[nav] = "project";
+							$paramquery[run] = "item_add";
+							$paramquery[dialog] = $value[type];
+							$paramquery[key] = $key;
+							unset($paramquery[nextpage]);
+							$params = http_build_query($paramquery,'','&#38;');
+	
+							$result[$counter][name] = $value[name];
+	
+							if ($current_fulfilled_requirements[$key] == true)
+							{
+								if ($value[occurrence] == "multiple")
+								{
+									$result[$counter][status] = 2;
+								}
+								else
+								{
+									$result[$counter][status] = 0;
+								}
+							}
+							else
+							{
+								$result[$counter][status] = 1;
+							}
+	
+							if ($value[requirement] == "optional")
+							{
+								$result[$counter][name] = $result[$counter][name]." (optional)";
+							}
 							
-								case("value"):
-								
-									$paramquery = $_GET;
-									$paramquery[nav] = "value";
-									$paramquery[run] = "add_to_project";
-									$paramquery[key] = $key;
-									unset($paramquery[nextpage]);
-									$params = http_build_query($paramquery,'','&#38;');
-								
-									if ($value[name])
-									{
-										$result[$counter][name] = "Add ".$value[name]." Value";
-									}
-									else
-									{
-										if (count($value[type_id]) == 1)
-										{
-											$value_type = new ValueType($value[type_id][0]);
-											if (($value_name = $value_type->get_name()) != null)
-											{
-												$result[$counter][name] = "Add ".$value_name;
-											}
-											else
-											{
-												$result[$counter][name] = "Add Value";
-											}
-										}
-										else
-										{
-											$result[$counter][name] = "Add Value";
-										}
-									}
-		
-									if ($current_fulfilled_requirements[$key] == true)
-									{
-										if ($value[occurrence] == "multiple")
-										{
-											$result[$counter][status] = 2;
-										}
-										else
-										{
-											$result[$counter][status] = 0;
-										}
-									}
-									else
-									{
-										$result[$counter][status] = 1;
-									}
-		
-									if ($value[requirement] == "optional")
-									{
-										$result[$counter][name] = $result[$counter][name]." (optional)";
-									}
-									
-									$result[$counter][params] = $params;
-									$counter++;
-								break;
-								
-								case("file"):
-									$paramquery = $_GET;
-									$paramquery[nav] = "file";
-									$paramquery[run] = "add_to_project";
-									$paramquery[key] = $key;
-									unset($paramquery[nextpage]);
-									$params = http_build_query($paramquery,'','&#38;');
-									
-									if ($value[name])
-									{
-										$result[$counter][name] = "Add ".$value[name]." File";
-									}
-									else
-									{
-										$result[$counter][name] = "Add File";
-									}
-									
-									if ($current_fulfilled_requirements[$key] == true)
-									{
-										if ($value[occurrence] == "multiple")
-										{
-											$result[$counter][status] = 2;
-										}
-										else
-										{
-											$result[$counter][status] = 0;
-										}
-									}
-									else
-									{
-										$result[$counter][status] = 1;
-									}
-									
-									if ($value[requirement] == "optional")
-									{
-										$result[$counter][name] = $result[$counter][name]." (optional)";
-									}
-									
-									$result[$counter][params] = $params;
-									$counter++;
-								break;
-								
-								case("method"):
-									$paramquery = $_GET;
-									$paramquery[nav] = "method";
-									$paramquery[run] = "add_to_project";
-									$paramquery[key] = $key;
-									unset($paramquery[nextpage]);
-									$params = http_build_query($paramquery,'','&#38;');
-								
-									if ($value[name])
-									{
-										$result[$counter][name] = "Add ".$value[name]." Method";
-									}
-									else
-									{
-										$result[$counter][name] = "Add Method";
-									}
-									if ($current_fulfilled_requirements[$key] == true)
-									{
-										if ($value[occurrence] == "multiple")
-										{
-											$result[$counter][status] = 2;
-										}
-										else
-										{
-											$result[$counter][status] = 0;
-										}
-									}
-									else
-									{
-										$result[$counter][status] = 1;
-									}
-		
-									if ($value[requirement] == "optional")
-									{
-										$result[$counter][name] = $result[$counter][name]." (optional)";
-									}
-									
-									$result[$counter][params] = $params;
-									$counter++;
-								break;
-								
-								case("sample"):
-									$paramquery = $_GET;
-									$paramquery[nav] = "sample";
-									$paramquery[run] = "add_to_project";
-									$paramquery[key] = $key;
-									unset($paramquery[nextpage]);
-									$params = http_build_query($paramquery,'','&#38;');
-								
-									if ($value[name])
-									{
-										$result[$counter][name] = "Add ".$value[name]." Sample";
-									}
-									else
-									{
-										if (count($value[type_id]) == 1)
-										{
-											$sample_template_cat = new SampleTemplateCat($value[type_id][0]);
-											if (($sample_cat_name = $sample_template_cat->get_name()) != null)
-											{
-												$result[$counter][name] = "Add ".$sample_cat_name." Sample";
-											}
-											else
-											{
-												$result[$counter][name] = "Add Sample";
-											}
-										}
-										else
-										{
-											$result[$counter][name] = "Add Sample";
-										}
-									}
-								
-									if ($current_fulfilled_requirements[$key] == true)
-									{
-										if ($value[occurrence] == "multiple")
-										{
-											$result[$counter][status] = 2;
-										}
-										else
-										{
-											$result[$counter][status] = 0;
-										}
-									}
-									else
-									{
-										$result[$counter][status] = 1;
-									}
-									
-									if ($value[requirement] == "optional")
-									{
-										$result[$counter][name] = $result[$counter][name]." (optional)";
-									}
-									
-									$result[$counter][params] = $params;
-									$counter++;
-								break;
-							endswitch;
+							$result[$counter][params] = $params;					
+							
+							$counter++;
 						}		
 					}
 					
@@ -2017,7 +1852,7 @@ class ProjectIO
 	 */
 	public static function method_handler()
 	{
-		global $project_security, $session;
+		global $common, $project_security, $session, $transaction;
 		
 		try
 		{
@@ -2127,12 +1962,6 @@ class ProjectIO
 					ProjectTaskIO::edit_end();
 				break;
 				
-				// Samples
-				
-				case("samples"):
-					require_once("project_sample.io.php");
-					ProjectSampleIO::list_project_related_samples();
-				break;
 							
 				// Administration
 				
@@ -2220,6 +2049,9 @@ class ProjectIO
 				break;
 				
 				// Item Lister
+				/**
+				 * @todo permissions
+				 */
 				case("item_list"):
 					if ($_GET[dialog])
 					{
@@ -2242,9 +2074,26 @@ class ProjectIO
 							$session->write_value("stack_array", $path_stack_array, true);
 						}
 						
+						$sql = " SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$_GET[project_id]."";
 						$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_list", $_GET[dialog]);
-						require_once($module_dialog[class_path]);
-						$module_dialog['class']::$module_dialog[method]($sql);
+						
+						if (file_exists($module_dialog[class_path]))
+						{
+							require_once($module_dialog[class_path]);
+							
+							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+							{
+								$module_dialog['class']::$module_dialog[method]($sql);
+							}
+							else
+							{
+								// Error
+							}
+						}
+						else
+						{
+							// Error
+						}
 					}
 					else
 					{
@@ -2252,8 +2101,94 @@ class ProjectIO
 					}
 				break;
 				
+				/**
+				 * @todo run an item-factory on finish
+				 * @todo delay commit of business-layer method
+				 * @todo Permission
+				 * @todo description and keywords
+				 * @todo save calling dialog and go back after running this dialog
+				 */
 				case("item_add"):
-					
+					if ($_GET[dialog])
+					{
+						$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_add", $_GET[dialog]);
+
+						if (is_array($module_dialog) and $module_dialog[class_path])
+						{
+							if (file_exists($module_dialog[class_path]))
+							{
+								require_once($module_dialog[class_path]);
+								
+								if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+								{
+									$transaction_id = $transaction->begin();
+									
+									$return_value = $module_dialog['class']::$module_dialog[method]($sql);
+									
+									if (is_numeric($return_value))
+									{
+										$paramquery = $_GET;
+										$paramquery[nav] = "project";
+										$paramquery[run] = "detail";
+										unset($paramquery[nextpage]);
+										unset($paramquery[key]);
+										$params = http_build_query($paramquery,'','&#38;');
+										
+										if (ProjectItemFactory::create($_GET[project_id], $return_value, $_GET[key], null, null) == true)
+										{
+											if ($transaction_id != null)
+											{
+												$transaction->commit($transaction_id);
+											}
+											$common->step_proceed($params, "Add Item", "Succeed." ,null);
+										}
+										else
+										{
+											if ($transaction_id != null)
+											{
+												$transaction->rollback($transaction_id);
+											}
+											$common->step_proceed($params, "Add Item", "Failed." ,null);	
+										}
+									}
+									else
+									{
+										if ($return_value === false)
+										{
+											if ($transaction_id != null)
+											{
+												$transaction->rollback($transaction_id);
+											}
+											throw new ModuleDialogFailedException("",1);
+										}
+										else
+										{
+											if ($transaction_id != null)
+											{
+												$transaction->commit($transaction_id);
+											}
+										}
+									}
+								}
+								else
+								{
+									throw new ModuleDialogCorruptException(null, null);
+								}
+							}
+							else
+							{
+								throw new ModuleDialogCorruptException(null, null);
+							}
+						}
+						else
+						{
+							throw new ModuleDialogNotFoundException(null, null);
+						}
+					}
+					else
+					{
+						throw new ModuleDialogMissingException(null, null);
+					}
 				break;
 				
 				// Default

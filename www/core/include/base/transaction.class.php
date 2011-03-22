@@ -226,5 +226,19 @@ class Transaction implements TransactionInterface {
     	}
     }
     
+    /**
+     * @return bool
+     */
+    public function is_in_transction()
+    {
+    	if ($this->unique_id != null)
+    	{
+    		return true;
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
 }
 ?>

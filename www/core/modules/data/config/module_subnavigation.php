@@ -1,6 +1,6 @@
-<?php 
+<?php
 /**
- * @package project
+ * @package data
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -24,10 +24,17 @@
 /**
  * 
  */
-	$name 					= "method";
-	$main_class				= "MethodIO";
-	
-	$required_include[0] 	= "method";
-	
-	$no_tab					= true;
+$mini_search_paramquery[username] = $_GET[username];
+$mini_search_paramquery[session_id] = $_GET[session_id];
+$mini_search_paramquery[nav] = "search";
+$mini_search_paramquery[run] = "ffv";
+$mini_search_paramquery[change_tab] = "true";
+$mini_search_paramquery[nextpage] = "1";
+$mini_search_params = http_build_query($mini_search_paramquery,'','&#38;');
+			
+$template->set_var("sub_menu", $sub_menu);
+$template->set_var("search_bar", true);
+$template->set_var("mini_search_params", $mini_search_params);
+
+unset($sub_menu);
 ?>

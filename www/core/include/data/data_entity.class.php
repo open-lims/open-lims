@@ -858,5 +858,37 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
     		return false;
     	}
     }
+    
+    /**
+     * @param string $type
+     * @param array $type_array
+     * @return string
+     */
+    public static function get_generic_name($type, $type_array)
+    {
+    	if ($type == "file")
+    	{
+    		return "File";
+    	}
+    	else
+    	{
+    		if (is_array($type_array) and count($type_array) == 1)
+    		{
+				$value_type = new ValueType($type_array[0]);
+				if (($value_name = $value_type->get_name()) != null)
+				{
+					return "".$value_name;
+				}
+				else
+				{
+					return "Value";
+				}
+    		}
+    		else
+    		{
+    			return "Value";
+    		}
+    	}
+    }
 }
 ?>

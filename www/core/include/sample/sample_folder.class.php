@@ -234,7 +234,7 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 
 			$path = new Path($folder->get_path());
 			$path->add_element($sample_id);
-			
+
 			if (($folder_id = parent::create($sample->get_name(), $sample_folder_id, $path->get_path_string(), $sample->get_owner_id(), null)) != null)
 			{
 				$sample_has_folder_access = new SampleHasFolder_Access(null);

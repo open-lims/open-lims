@@ -25,6 +25,7 @@
  * 
  */
 	$classes['DataSearch_Wrapper']			= $path_prefix."core/include/wrapper/data.search.wrapper.class.php";
+	$classes['Equipment_Wrapper']			= $path_prefix."core/include/wrapper/equipment.wrapper.class.php";
 	$classes['SystemLog_Wrapper']			= $path_prefix."core/include/wrapper/system_log.list.wrapper.class.php";
 	$classes['Data_Wrapper']				= $path_prefix."core/include/wrapper/data.wrapper.class.php";
 	$classes['Project_Wrapper']				= $path_prefix."core/include/wrapper/project.wrapper.class.php";

@@ -1006,6 +1006,22 @@ class Project implements ProjectInterface, EventListenerInterface
 						}					
 					}
 				}
+				
+				if (is_array($return_array) and count($return_array) >= 1)
+				{
+					foreach($return_array as $key => $value)
+					{
+						if (!$value[name] and $value[type])
+						{
+							$item_handling_class = Item::get_handling_class_by_type($value[type]);
+							if ($item_handling_class)
+							{
+								$return_array[$key][name] = "Add ".$item_handling_class::get_generic_name($value[type], $value[type_id]);
+							}
+						}
+					}
+				}
+				
 				$runtime_data->write_object_data($this, "PROJECT_CURRENT_STATUS_REQUIREMENTS", $return_array);	
 				return $return_array;
     		}
