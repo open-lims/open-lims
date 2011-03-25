@@ -47,6 +47,8 @@ class Template implements TemplateInterface
 			if (filesize($file) > 0)
 			{
 				$this->string = fread($handler, filesize($file));
+				$this->string = str_replace("\\{","[%OB%]",$this->string);
+				$this->string = str_replace("\\}","[%CB%]",$this->string);
 				$this->replace_containers();
 			}
 			else
@@ -104,6 +106,9 @@ class Template implements TemplateInterface
 		$this->call_control_structures();
 		$this->fill_string();
 	
+		$this->string = str_replace("[%OB%]","{",$this->string);
+		$this->string = str_replace("[%CB%]","}",$this->string);
+		
 		echo $this->string;
 	}
 	
@@ -120,6 +125,9 @@ class Template implements TemplateInterface
 		$this->call_control_structures();
 		$this->fill_string();
 	
+		$this->string = str_replace("[%OB%]","{",$this->string);
+		$this->string = str_replace("[%CB%]","}",$this->string);
+		
 		return $this->string;
 	}
 	

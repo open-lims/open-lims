@@ -4,7 +4,14 @@
 
 <br />
 <br />
-<form action='index.php?{PARAMS}' method='post'>
+<form action='index.php' method='get'>
+	
+	<!-- FOREACH BEGIN ({GET_VALUE}) -->
+	
+		<input type='hidden' name='{GET_VALUE:NAME}' value='{GET_VALUE:VALUE}' />
+	
+	<!-- FOREACH END -->	
+	
 	<div class='sample_container'>
 		<div class='sample_image'>
 		<img src='images/icons_large/wizard_64.png' alt='' />
@@ -16,11 +23,11 @@
 					<td><span class='bold'>I want to:</span></td>
 				</tr>
 				<tr>
-					<td><input type='radio' class='FormRadio' name='selection' value='1' checked="checked" /></td>
+					<td><input type='radio' class='FormRadio' name='selectpage' value='1' checked="checked" /></td>
 					<td>add a new sample</td>
 				</tr>
 				<tr>
-					<td><input type='radio' class='FormRadio' name='selection' value='2' /></td>
+					<td><input type='radio' class='FormRadio' name='selectpage' value='2' /></td>
 					<td>associate an existing sample</td>
 				</tr>
 			</table>

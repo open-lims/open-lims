@@ -92,6 +92,43 @@ class Misc implements MiscInterface
 		 return $act_filesize;
 	}
 	
+	/**
+	 * @todo vars of different modules like project_id etc.
+	 */
+	public static function create_retrace_string()
+	{
+		$retrace_array = array();
+		
+		foreach ($_GET as $key => $value)
+		{
+			switch ($key):
+				case "nav":
+				case "run":
+				case "project_id":
+				case "sample_id":
+					$retrace_array[$key] = $_GET[$key];
+				break;
+			endswitch;
+		}
+		
+		return base64_encode(serialize($retrace_array));
+	}
+	
+	public static function resovle_retrace_string($retrace_string)
+	{
+		if ($retrace_string)
+		{
+			$retrace_array = array();
+			$retrace_array[username] = $_GET[username];
+			$retrace_array[session_id] = $_GET[session_id];
+			$retrace_array += unserialize(base64_decode($retrace_string));
+			return $retrace_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
 }
 
 ?>

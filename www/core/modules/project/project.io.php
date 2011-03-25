@@ -1417,12 +1417,15 @@ class ProjectIO
 					{
 						foreach($current_status_requirements as $key => $value)
 						{
+							$paramquery = array();
 							$paramquery[username] = $_GET[username];
 							$paramquery[session_id] = $_GET[session_id];
 							$paramquery[nav] = "project";
 							$paramquery[run] = "item_add";
+							$paramquery[project_id] = $_GET[project_id];
 							$paramquery[dialog] = $value[type];
 							$paramquery[key] = $key;
+							$paramquery[retrace] = Misc::create_retrace_string();
 							unset($paramquery[nextpage]);
 							$params = http_build_query($paramquery,'','&#38;');
 	
@@ -2050,40 +2053,47 @@ class ProjectIO
 				
 				// Item Lister
 				/**
-				 * @todo permissions
+				 * @todo errors, exceptions
 				 */
 				case("item_list"):
-					if ($_GET[dialog])
+					if ($project_security->is_access(1, false) == true)
 					{
-						if ($_GET[dialog] == "data")
+						if ($_GET[dialog])
 						{
-							$path_stack_array = array();
-							
-							$folder_id = ProjectFolder::get_folder_by_project_id($_GET[project_id]);
-					    	$folder = Folder::get_instance($folder_id);
-					    	$init_array = $folder->get_object_id_path();
-					    	
-					    	foreach($init_array as $key => $value)
-					    	{
-					    		$temp_array = array();
-					    		$temp_array[virtual] = false;
-					    		$temp_array[id] = $value;
-					    		array_unshift($path_stack_array, $temp_array);
-					    	}
-							
-							$session->write_value("stack_array", $path_stack_array, true);
-						}
-						
-						$sql = " SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$_GET[project_id]."";
-						$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_list", $_GET[dialog]);
-						
-						if (file_exists($module_dialog[class_path]))
-						{
-							require_once($module_dialog[class_path]);
-							
-							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+							if ($_GET[dialog] == "data")
 							{
-								$module_dialog['class']::$module_dialog[method]($sql);
+								$path_stack_array = array();
+								
+								$folder_id = ProjectFolder::get_folder_by_project_id($_GET[project_id]);
+						    	$folder = Folder::get_instance($folder_id);
+						    	$init_array = $folder->get_object_id_path();
+						    	
+						    	foreach($init_array as $key => $value)
+						    	{
+						    		$temp_array = array();
+						    		$temp_array[virtual] = false;
+						    		$temp_array[id] = $value;
+						    		array_unshift($path_stack_array, $temp_array);
+						    	}
+								
+								$session->write_value("stack_array", $path_stack_array, true);
+							}
+							
+							$sql = " SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$_GET[project_id]."";
+							$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_list", $_GET[dialog]);
+							
+							if (file_exists($module_dialog[class_path]))
+							{
+								require_once($module_dialog[class_path]);
+								
+								if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+								{
+									$module_dialog['class']::$module_dialog[method]($sql);
+								}
+								else
+								{
+									// Error
+								}
 							}
 							else
 							{
@@ -2092,82 +2102,96 @@ class ProjectIO
 						}
 						else
 						{
-							// Error
+							// error
 						}
 					}
 					else
 					{
-						// error
+						$exception = new Exception("", 1);
+						$error_io = new Error_IO($exception, 200, 40, 2);
+						$error_io->display_error();
 					}
 				break;
 				
 				/**
-				 * @todo run an item-factory on finish
-				 * @todo delay commit of business-layer method
-				 * @todo Permission
 				 * @todo description and keywords
-				 * @todo save calling dialog and go back after running this dialog
 				 */
 				case("item_add"):
-					if ($_GET[dialog])
+					if ($project_security->is_access(3, false) == true)
 					{
-						$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_add", $_GET[dialog]);
-
-						if (is_array($module_dialog) and $module_dialog[class_path])
+						if ($_GET[dialog])
 						{
-							if (file_exists($module_dialog[class_path]))
+							$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_add", $_GET[dialog]);
+	
+							if (is_array($module_dialog) and $module_dialog[class_path])
 							{
-								require_once($module_dialog[class_path]);
-								
-								if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+								if (file_exists($module_dialog[class_path]))
 								{
-									$transaction_id = $transaction->begin();
+									require_once($module_dialog[class_path]);
 									
-									$return_value = $module_dialog['class']::$module_dialog[method]($sql);
-									
-									if (is_numeric($return_value))
+									if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
 									{
-										$paramquery = $_GET;
-										$paramquery[nav] = "project";
-										$paramquery[run] = "detail";
-										unset($paramquery[nextpage]);
-										unset($paramquery[key]);
-										$params = http_build_query($paramquery,'','&#38;');
+										$transaction_id = $transaction->begin();
 										
-										if (ProjectItemFactory::create($_GET[project_id], $return_value, $_GET[key], null, null) == true)
+										$project = new Project($_GET[project_id]);
+										$current_status_requirements = $project->get_current_status_requirements($project->get_current_status_id());
+										
+										$return_value = $module_dialog['class']::$module_dialog[method]($current_status_requirements[$_GET[key]][type_id], $current_status_requirements[$_GET[key]][category_id], $project->get_organisation_unit_id());
+										
+										if (is_numeric($return_value))
 										{
-											if ($transaction_id != null)
+											if ($_GET[retrace])
 											{
-												$transaction->commit($transaction_id);
+												$params = http_build_query(Misc::resovle_retrace_string($_GET[retrace]),'','&#38;');
 											}
-											$common->step_proceed($params, "Add Item", "Succeed." ,null);
+											else
+											{
+												$paramquery[username] = $_GET[username];
+												$paramquery[session_id] = $_GET[session_id];
+												$paramquery[nav] = "home";
+												$params = http_build_query($paramquery,'','&#38;');
+											}
+											
+											
+											if (ProjectItemFactory::create($_GET[project_id], $return_value, $_GET[key], null, null) == true)
+											{
+												if ($transaction_id != null)
+												{
+													$transaction->commit($transaction_id);
+												}
+												$common->step_proceed($params, "Add Item", "Succeed." ,null);
+											}
+											else
+											{
+												if ($transaction_id != null)
+												{
+													$transaction->rollback($transaction_id);
+												}
+												$common->step_proceed($params, "Add Item", "Failed." ,null);	
+											}
 										}
 										else
 										{
-											if ($transaction_id != null)
+											if ($return_value === false)
 											{
-												$transaction->rollback($transaction_id);
+												if ($transaction_id != null)
+												{
+													$transaction->rollback($transaction_id);
+												}
+												throw new ModuleDialogFailedException("",1);
 											}
-											$common->step_proceed($params, "Add Item", "Failed." ,null);	
+											else
+											{
+												if ($transaction_id != null)
+												{
+													$transaction->commit($transaction_id);
+												}
+											}
 										}
 									}
 									else
 									{
-										if ($return_value === false)
-										{
-											if ($transaction_id != null)
-											{
-												$transaction->rollback($transaction_id);
-											}
-											throw new ModuleDialogFailedException("",1);
-										}
-										else
-										{
-											if ($transaction_id != null)
-											{
-												$transaction->commit($transaction_id);
-											}
-										}
+										throw new ModuleDialogCorruptException(null, null);
 									}
 								}
 								else
@@ -2177,17 +2201,19 @@ class ProjectIO
 							}
 							else
 							{
-								throw new ModuleDialogCorruptException(null, null);
+								throw new ModuleDialogNotFoundException(null, null);
 							}
 						}
 						else
 						{
-							throw new ModuleDialogNotFoundException(null, null);
+							throw new ModuleDialogMissingException(null, null);
 						}
 					}
 					else
 					{
-						throw new ModuleDialogMissingException(null, null);
+						$exception = new Exception("", 1);
+						$error_io = new Error_IO($exception, 200, 40, 2);
+						$error_io->display_error();
 					}
 				break;
 				

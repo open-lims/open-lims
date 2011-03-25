@@ -32,6 +32,7 @@
 	$classes['SampleFolder']				= $path_prefix."core/include/sample/sample_folder.class.php";
 	$classes['SampleVirtualFolder']			= $path_prefix."core/include/sample/sample_virtual_folder.class.php";
 	$classes['SampleItem']					= $path_prefix."core/include/sample/sample_item.class.php";
+	$classes['SampleItemFactory']			= $path_prefix."core/include/sample/sample_item_factory.class.php";
 	$classes['SampleSecurity']				= $path_prefix."core/include/sample/sample_security.class.php";
 	$classes['SampleTemplate']				= $path_prefix."core/include/sample/sample_template.class.php";
 	$classes['SampleTemplateCat']			= $path_prefix."core/include/sample/sample_template_cat.class.php";

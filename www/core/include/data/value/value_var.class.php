@@ -198,7 +198,13 @@ class ValueVar implements ValueVarInterface
 	    			}
 	    			elseif ($this->stack[count($this->stack)-2] == "sample")
 	    			{
+	    				/**
+	    				 * @deprecated: method no more exists
+	    				 */
 	    				$parent_sample = $this->sample->list_parent_samples();
+	    				/**
+	    				 * @deprecated: method no more exists
+	    				 */
 	    				$parent_project = $this->sample->get_parent_project();
 	    				
 	    				// [!]

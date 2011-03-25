@@ -27,10 +27,7 @@
  */
 class EquipmentIO
 {
-	/**
-	 * @todo types of status or type-id-array
-	 */
-	public static function add_equipment_item()
+	public static function add_equipment_item($type_array, $category_array, $organisation_unit_id)
 	{
 		global $user, $project_security;
 		
@@ -63,21 +60,95 @@ class EquipmentIO
 			$template->set_var("params",$params);
 			
 			$result = array();
+			$hit_array = array();
 			$counter = 0;
 			
-			if (is_array($equipment_array) and count($equipment_array) >= 1)
+			if (is_array($type_array) and count($type_array) >= 1)
 			{
-				foreach($equipment_array as $key => $value)
+				if (is_array($equipment_array) and count($equipment_array) >= 1)
 				{
-					$equipment_type = new EquipmentType($value);
-					
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
-					
-					$counter++;
+					foreach($equipment_array as $key => $value)
+					{
+						if (in_array($value, $type_array))
+						{
+							$equipment_type = new EquipmentType($value);
+						
+							$result[$counter][value] = $value;
+							$result[$counter][content] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
+							
+							$counter++;
+							array_push($hit_array, $value);
+						}
+					}
+				}
+				
+				if (is_array($category_array) and count($category_array) >= 1)
+				{
+					foreach ($category_array as $key => $value)
+					{
+						$equipment_cat_array = EquipmentType::list_entries_by_cat_id($value);
+						
+						if (is_array($equipment_cat_array) and count($equipment_cat_array) >= 1)
+						{
+							foreach ($equipment_cat_array as $key => $value)
+							{
+								if (!in_array($value, $hit_array))
+								{
+									$equipment_type = new EquipmentType($value);
+							
+									$result[$counter][value] = $value;
+									$result[$counter][content] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
+									
+									$counter++;
+									array_push($hit_array, $value);
+								}
+							} 
+						}
+					}
 				}
 			}
 			else
+			{
+				if (is_array($category_array) and count($category_array) >= 1)
+				{
+					foreach ($category_array as $key => $value)
+					{
+						$equipment_cat_array = EquipmentType::list_entries_by_cat_id($value);
+						
+						if (is_array($equipment_cat_array) and count($equipment_cat_array) >= 1)
+						{
+							foreach ($equipment_cat_array as $key => $value)
+							{
+								if (!in_array($value, $hit_array))
+								{
+									$equipment_type = new EquipmentType($value);
+							
+									$result[$counter][value] = $value;
+									$result[$counter][content] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
+									
+									$counter++;
+									array_push($hit_array, $value);
+								}
+							} 
+						}
+					}
+				}
+				
+				if (is_array($equipment_array) and count($equipment_array) >= 1)
+				{
+					foreach($equipment_array as $key => $value)
+					{
+						$equipment_type = new EquipmentType($value);
+						
+						$result[$counter][value] = $value;
+						$result[$counter][content] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
+						
+						$counter++;
+					}
+				}
+			}
+
+			if ($counter == 0)
 			{
 				$result[0][value] = "0";
 				$result[0][content] = "NO EQUIPMENT FOUND!";	

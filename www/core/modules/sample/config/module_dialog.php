@@ -37,4 +37,11 @@
 	$dialog[1][method]			= "add_sample_item";
 	$dialog[1][internal_name]	= "sample";
 	$dialog[1][display_name]	= "Sethod";
+	
+	$dialog[2][type]			= "item_add";
+	$dialog[2][class_path]		= "core/modules/sample/sample.io.php";
+	$dialog[2]['class']			= "SampleIO";
+	$dialog[2][method]			= "add_sample_item";
+	$dialog[2][internal_name]	= "parentsample";
+	$dialog[2][display_name]	= "Parent Sethod";
 ?>

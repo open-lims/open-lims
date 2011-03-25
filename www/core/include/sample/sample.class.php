@@ -34,7 +34,6 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("access/sample.access.php");
 	require_once("access/sample_is_item.access.php");
 	require_once("access/sample_has_sample_depository.access.php");
-	require_once("access/sample_has_sample.access.php");
 	require_once("access/sample_has_organisation_unit.access.php");
 	require_once("access/sample_has_user.access.php");
 	
@@ -113,6 +112,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     }
     
     /**
+     * @todo sample adding via template required field via item_id
      * Creates a new sample
      * @param integer $organisation_unit_id
      * @param integer $template_id
@@ -283,16 +283,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 							{
 								if ($value > 0)
 								{
-									$sample_has_sample = new SampleHasSample_Access(null);
-									if ($sample_has_sample->create($value, $sample_id) == null)
-									{
-										$sample_folder->delete(true, true);
-										if ($transaction_id != null)
-										{
-											$transaction->rollback($transaction_id);
-										}
-										throw new SampleCreationFailedException("",1);
-									}
+									// !!! Adding Sample as Child via Item !!!
 								}
 							}
 						}
@@ -377,43 +368,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 			$transaction_id = $transaction->begin();
 			
 			$tmp_sample_id = $this->sample_id;
-
-			// Parent Relations (on Null)
-			$sample_has_sample_pid_array = SampleHasSample_Access::list_entries_by_sample_pid($tmp_sample_id);
-			if (is_array($sample_has_sample_pid_array) and count($sample_has_sample_pid_array) >= 1)
-			{
-				foreach($sample_has_sample_pid_array as $key => $value)
-				{
-					$sample_has_sample = new SampleHasSample_Access($value);
-					if ($sample_has_sample->set_sample_pid_on_null() == false)
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						return false;
-					}
-				}
-			}
-			
-			// Child Relations (on Null)
-			$sample_has_sample_cid_array = SampleHasSample_Access::list_entries_by_sample_cid($tmp_sample_id);
-			if (is_array($sample_has_sample_cid_array) and count($sample_has_sample_cid_array) >= 1)
-			{
-				foreach($sample_has_sample_cid_array as $key => $value)
-				{
-					$sample_has_sample = new SampleHasSample_Access($value);
-					if ($sample_has_sample->set_sample_cid_on_null() == false)
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						return false;
-					}
-				}
-			}
-			
+		
 			// Depository Relations
 			$sample_has_sample_depository_array = SampleHasSampleDepository_Access::list_entries_by_sample_id($tmp_sample_id);
 			if (is_array($sample_has_sample_depository_array) and count($sample_has_sample_depository_array) >= 1)
@@ -738,170 +693,6 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	    	{
 	    		return null;
 	    	}
-    	}
-    	else
-    	{
-    		return null;
-    	}
-    }
-    
-    /**
-     * Links another sample with the current sample as child
-     * @param integer $sample_id Sample-ID
-     * @return bool
-     */
-    public function link_sample($sample_id)
-    {
-    	if ($this->sample_id and $this->sample and is_numeric($sample_id))
-    	{
-    		$sample_has_sample = new SampleHasSample_Access(null);
-    		
-    		if ($sample_has_sample->create($this->sample_id, $sample_id) != null)
-    		{
-    			return true;
-    		}
-    		else
-    		{
-    			return false;
-    		}
-    	}
-    	else
-    	{
-    		return false;
-    	}
-    }
-    
-    /**
-     * Unlinks another sample with the current sample as child
-     * @param integer $sample_id Sample-ID
-     * @return bool
-     */
-    public function unlink_sample($sample_id)
-    {
-    	if ($this->sample_id and $this->sample and is_numeric($sample_id))
-    	{
-	    	$pk = SampleHasSample_Access::get_entry_by_sample_pid_and_sample_cid($this->sample_id, $sample_id);
-	    	if ($pk)
-	    	{
-	    		$sample_has_sample = new SampleHasSample_Access($pk);
-	    		return $sample_has_sample->delete();
-	    	}
-	    	else
-	    	{
-	    		return false;
-	    	}
-    	}
-    	else
-    	{
-    		return false;
-    	}
-    }
-    
-    /**
-     * Links another sample with the current sample as parent
-     * @param integer $sample_id Sample-ID
-     * @return bool
-     */
-    public function link_parent_sample($sample_id)
-    {
-    	if ($this->sample_id and $this->sample and is_numeric($sample_id))
-    	{
-    		$sample_has_sample = new SampleHasSample_Access(null);
-    		if ($sample_has_sample->create($sample_id, $this->sample_id) != null)
-    		{
-    			return true;
-    		}
-    		else
-    		{
-    			return false;
-    		}
-    	}
-    	else
-    	{
-    		return false;
-    	}
-    }
-    
-     /**
-     * Unlinks another sample with the current sample as parent
-     * @param integer $sample_id Sample-ID
-     * @return bool
-     */
-    public function unlink_parent_sample($sample_id)
-    {
-    	if ($this->sample_id and $this->sample and is_numeric($sample_id))
-    	{
-	    	$sample_has_sample = new SampleHasSample_Access(null);
-	    	$pk = $sample_has_sample->get_entry_by_sample_cid_and_sample_pid($this->sample_id, $sample_id);
-	    	if ($pk)
-	    	{
-	    		$sample_has_sample = new SampleHasSample_Access($pk);
-	    		return $sample_has_sample->delete();
-	    	}
-	    	else
-	    	{
-	    		return false;
-	    	}
-    	}
-    	else
-    	{
-    		return false;
-    	}
-    }
-    
-    /**
-     * Returns all related childs
-     * @return array
-     */
-    public function list_related_samples()
-    {
-    	if ($this->sample_id and $this->sample)
-    	{
-    		$pk_array = SampleHasSample_Access::list_entries_by_sample_pid($this->sample_id);
-    		if (is_array($pk_array) and count($pk_array) >= 1)
-    		{
-    			$return_array = array();
-    			foreach ($pk_array as $key => $value)
-    			{
-    				$sample_has_sample = new SampleHasSample_Access($value);
-    				array_push($return_array, $sample_has_sample->get_sample_cid());
-    			}
-    			return $return_array;
-    		}
-    		else
-    		{
-    			return null;
-    		}
-    	}
-    	else
-    	{
-    		return null;
-    	}
-    }
-    
-    /**
-     * Returns all related parents
-     * @return array
-     */
-    public function list_parent_samples()
-    {
-    	if ($this->sample_id and $this->sample)
-    	{
-    		$pk_array = SampleHasSample_Access::list_entries_by_sample_cid($this->sample_id);
-    		if (is_array($pk_array) and count($pk_array) >= 1)
-    		{
-    			$return_array = array();
-    			foreach ($pk_array as $key => $value)
-    			{
-    				$sample_has_sample = new SampleHasSample_Access($value);
-    				array_push($return_array, $sample_has_sample->get_sample_pid());
-    			}
-    			return $return_array;
-    		}
-    		else
-    		{
-    			return null;
-    		}
     	}
     	else
     	{

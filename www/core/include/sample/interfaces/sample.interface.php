@@ -40,13 +40,6 @@ interface SampleInterface
 	public function get_fulfilled_requirements();
 	public function get_sub_folder($folder_id, $gid);
 	
-	public function link_sample($sample_id);
-	public function unlink_sample($sample_id);
-	public function link_parent_sample($sample_id);
-	public function unlink_parent_sample($sample_id);
-	public function list_related_samples();
-	public function list_parent_samples();
-	
 	public function add_depository($depository_id);
 	public function get_all_depositories();
 	public function get_all_depository_information();

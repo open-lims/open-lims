@@ -41,9 +41,9 @@ class SampleIO
 		$table_io->add_row("","symbol",false,16);
 		$table_io->add_row("Sample ID","id",false,null);
 		$table_io->add_row("Sample Name","name",false,null);
-		$table_io->add_row("Date/Time","datetime",false,null);
+		$table_io->add_row("Date","datetime",false,null);
 		$table_io->add_row("Type/Template","template",false,null);
-		$table_io->add_row("Current Depository","depository",false,null);
+		$table_io->add_row("Curr. Depository","depository",false,null);
 		$table_io->add_row("Owner","owner",false,null);
 		$table_io->add_row("AV","av",false,null);
 
@@ -97,18 +97,18 @@ class SampleIO
 				unset($paramquery[page]);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				if (strlen($sample->get_name()) > 14)
+				if (strlen($sample->get_name()) > 11)
 				{
-					$sample_name = substr($sample->get_name(),0,14)."...";
+					$sample_name = substr($sample->get_name(),0,11)."...";
 				}
 				else
 				{
 					$sample_name = $sample->get_name();
 				}
 				
-				if (strlen($sample->get_template_name()) > 15)
+				if (strlen($sample->get_template_name()) > 18)
 				{
-					$sample_template = substr($sample->get_template_name(),0,15)."...";
+					$sample_template = substr($sample->get_template_name(),0,18)."...";
 				}
 				else
 				{
@@ -119,8 +119,9 @@ class SampleIO
 				$column_array[symbol][content]	= "<img src='images/icons/sample.png' alt='' style='border: 0;' />";
 				$column_array[id][link] 		= $params;
 				$column_array[id][content] 		= $sample->get_formatted_id();	
+				$column_array[name][link] 		= $params;
 				$column_array[name][content] 	= $sample_name;	
-				$column_array[datetime] 		= $datetime->get_formatted_string("dS M Y H:i");
+				$column_array[datetime] 		= $datetime->get_formatted_string("dS M Y");
 				$column_array[template]			= $sample_template;
 				$column_array[depository]		= $sample->get_current_depository_name();
 				$column_array[owner] 			= $owner->get_full_name(true);
@@ -298,6 +299,130 @@ class SampleIO
 		}
 	}
 	
+	public static function list_parentsample_items()
+	{
+		if ($_GET[sample_id])
+		{
+			$sample = new Sample($_GET[sample_id]);
+			
+			$list = new List_IO(Sample_Wrapper::count_item_parentsamples($sample->get_item_id()), 20);
+
+			$list->add_row("","symbol",false,16);
+			$list->add_row("Smpl. ID","id",true,null);
+			$list->add_row("Sample Name","name",true,null);
+			$list->add_row("Date","datetime",true,null);
+			$list->add_row("Type/Tmpl.","template",true,null);
+			$list->add_row("Curr. Depos.","depository",true,null);
+			$list->add_row("Owner","owner",true,null);
+			$list->add_row("AV","av",false,null);
+			
+			if ($_GET[page])
+			{
+				if ($_GET[sortvalue] and $_GET[sortmethod])
+				{
+					$result_array = Sample_Wrapper::list_item_parentsamples($sample->get_item_id(), $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
+				}
+				else
+				{
+					$result_array = Sample_Wrapper::list_item_parentsamples($sample->get_item_id(), null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
+				}				
+			}
+			else
+			{
+				if ($_GET[sortvalue] and $_GET[sortmethod])
+				{
+					$result_array = Sample_Wrapper::list_item_parentsamples($sample->get_item_id(), $_GET[sortvalue], $_GET[sortmethod], 0, 20);
+				}
+				else
+				{
+					$result_array = Sample_Wrapper::list_item_parentsamples($sample->get_item_id(), null, null, 0, 20);
+				}	
+			}
+			
+			if (is_array($result_array) and count($result_array) >= 1)
+			{
+				foreach($result_array as $key => $value)
+				{
+					$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
+					$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y");
+				
+					if ($result_array[$key][owner])
+					{
+						$user = new User($result_array[$key][owner]);
+					}
+					else
+					{
+						$user = new User(1);
+					}
+					
+					$result_array[$key][owner] = $user->get_full_name(true);
+					
+					if ($result_array[$key][av] == "t")
+					{
+						$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
+					}
+					else
+					{
+						$result_array[$key][av] = "<img src='images/icons/grey_point.png' alt='' />";
+					}
+					
+					if (strlen($result_array[$key][name]) > 10)
+					{
+						$result_array[$key][name] = substr($result_array[$key][name],0,10)."...";
+					}
+					else
+					{
+						$result_array[$key][name] = $result_array[$key][name];
+					}
+					
+					$sample_id = $result_array[$key][id];
+					$sample_security = new SampleSecurity($sample_id);
+					
+					if ($sample_security->is_access(1, false))
+					{
+						$paramquery = array();
+						$paramquery[username] = $_GET[username];
+						$paramquery[session_id] = $_GET[session_id];
+						$paramquery[nav] = "sample";
+						$paramquery[run] = "detail";
+						$paramquery[sample_id] = $sample_id;
+						$params = http_build_query($paramquery,'','&#38;');
+						
+						$result_array[$key][symbol][link]		= $params;
+						$result_array[$key][symbol][content] 	= "<img src='images/icons/sample.png' alt='' style='border:0;' />";
+					
+						unset($result_array[$key][id]);
+						$result_array[$key][id][link] 			= $params;
+						$result_array[$key][id][content]		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
+					
+						$sample_name = $result_array[$key][name];
+						unset($result_array[$key][name]);
+						$result_array[$key][name][link] 		= $params;
+						$result_array[$key][name][content]		= $sample_name;
+					}
+					else
+					{
+						$result_array[$key][symbol]	= "<img src='core/images/denied_overlay.php?image=images/icons/sample.png' alt='N' border='0' />";
+					}
+				}
+			}
+			else
+			{
+				$list->override_last_line("<span class='italic'>No results found!</span>");
+			}
+			
+			$template = new Template("languages/en-gb/template/samples/list_parents.html");
+
+			$template->set_var("table", $list->get_list($result_array, $_GET[page]));
+			
+			$template->output();
+		}
+		else
+		{
+			// Error
+		}
+	}
+	
 	public static function list_sample_items($sql)
 	{
 		if ($sql)
@@ -420,27 +545,15 @@ class SampleIO
 		}
 	}
 	
-	public static function create()
+	/**
+	 * @todo Associate Sample with Sample
+	 */
+	public static function create($type_array, $category_array, $organisation_unit_id)
 	{
 		global $user, $session, $common, $sample_security;
 		
 		try
 		{
-			if($_GET[run] == "new_project_sample" and $_GET[project_id])
-			{
-				$project_id = $_GET[project_id];
-				$project = new Project($project_id);
-				
-				$project_item = new ProjectItem($project_id);
-				$project_item->set_gid($_GET[key]);
-				$project_item->set_status_id($project->get_current_status_id());
-				
-				$description_required = $project_item->is_description();
-				$keywords_required = $project_item->is_keywords();
-				
-				$requirements_array = $project->get_current_status_requirements();
-			}
-			
 			if(($_GET[run] == "new_sample_sample" or $_GET[run] == "new_parent_sample") and $_GET[sample_id])
 			{
 				$sample_id = $_GET[sample_id];
@@ -462,60 +575,16 @@ class SampleIO
 				$session->delete_value("SAMPLE_NAME");
 				$session->delete_value("SAMPLE_SUPPLIER");
 				$session->delete_value("SAMPLE_DEPOSITORY");
+				$session->delete_value("SAMPLE_EXPIRY");
 				$session->delete_value("SAMPLE_DESC");		
 				$session->delete_value("SAMPLE_TEMPLATE_DATA_TYPE");
 				$session->delete_value("SAMPLE_TEMPLATE_DATA_TYPE_ID");	
 				$session->delete_value("SAMPLE_TEMPALTE_DATA_ARRAY");
-				$session->delete_value("SAMPLE_TOID");	
-				$session->delete_value("SAMPLE_PROJECT_TOID");	
 				
-				if($_GET[run] == "new_subsample")
-				{
-					if ($sample_security->is_access(2, false) == false)
-					{
-						throw new SampleException("",1);	
-					}
-					else
-					{
-						$sample_toid = $_GET[sample_id];
-						$sample_obj = new Sample($sample_toid);
-						$session->write_value("SAMPLE_ORGAN_UNIT", $sample_obj->get_organisation_unit_id(), true);
-						$session->write_value("SAMPLE_TOID", $sample_toid, true);
-						$session->write_value("SAMPLE_CURRENT_SCREEN", 2, true);
-					}
-				}
-				
-				if($_GET[run] == "new_project_sample" and $_GET[project_id])
-				{			
-					$sample_project_toid = $_GET[project_id];
-					$master_project_obj = new Project($project->get_master_project_id());
-					$session->write_value("SAMPLE_PROJECT_TOID", $sample_project_toid, true);
-					$session->write_value("SAMPLE_ORGAN_UNIT", $master_project_obj->get_organisation_unit_id(), true);
+				if($_GET[run] == "item_add")
+				{	
+					$session->write_value("SAMPLE_ORGAN_UNIT", $organisation_unit_id, true);
 					$session->write_value("SAMPLE_CURRENT_SCREEN", 2, true);
-				}
-				
-				if($_GET[run] == "new_sample_sample" and $_GET[sample_id])
-				{
-					if ($sample_security->is_access(2, false) == false)
-					{
-						throw new SampleSecurityException("",1);	
-					}
-					else
-					{
-						$sample_toid = $_GET[sample_id];
-						$sample_obj = new Sample($sample_toid);
-						$session->write_value("SAMPLE_ORGAN_UNIT", $sample_obj->get_organisation_unit_id(), true);
-						$session->write_value("SAMPLE_TOID", $sample_toid, true);
-						$session->write_value("SAMPLE_CURRENT_SCREEN", 2, true);
-					}
-				}
-				
-				if($_GET[run] == "new_parent_sample" and $_GET[sample_id])
-				{
-					if ($sample_security->is_access(2, false) == false)
-					{
-						throw new SampleException("",1);	
-					}
 				}
 			}
 			else
@@ -610,6 +679,10 @@ class SampleIO
 							if ($_POST[depository])
 							{
 								$session->write_value("SAMPLE_DEPOSITORY", $_POST[depository], true);
+							}
+							if ($_POST[expiry])
+							{
+								$session->write_value("SAMPLE_EXPIRY", $_POST[expiry], true);
 							}
 							if ($_POST[desc])
 							{
@@ -817,8 +890,6 @@ class SampleIO
 				$sample_template_data_type  	= $session->read_value("SAMPLE_TEMPLATE_DATA_TYPE");	
 				$sample_template_data_type_id	= $session->read_value("SAMPLE_TEMPLATE_DATA_TYPE_ID");	
 				$sample_template_data_array		= $session->read_value("SAMPLE_TEMPALTE_DATA_ARRAY");	
-				$sample_toid					= $session->read_value("SAMPLE_TOID");	
-				$sample_project_toid			= $session->read_value("SAMPLE_PROJECT_TOID");
 			}
 					
 			switch ($current_screen):
@@ -984,11 +1055,7 @@ class SampleIO
 						$template->set_var("error","");
 					}
 
-					if (is_array($requirements_array[$_GET[key]][type_id]) and count($requirements_array[$_GET[key]][type_id]) >= 1)
-					{
-						$type_array = $requirements_array[$_GET[key]][type_id];
-					}
-					else
+					if (!is_array($type_array) or count($type_array) == 0)
 					{
 						$type_array = null;
 					}
@@ -1431,116 +1498,20 @@ class SampleIO
 						{
 							$session->delete_value("SAMPLE_LAST_SCREEN");
 							$session->delete_value("SAMPLE_CURRENT_SCREEN");
-							
-							if (is_numeric($sample_toid))
+	
+							if ($_GET[run] == "item_add")
 							{
-								$sample->link_parent_sample($sample_toid);
-							}
-							
-							if ($_GET[run] == "new_parent_sample")
-							{
-								$sample_obj = new Sample($_GET[sample_id]);
-								$sample_obj->link_parent_sample($sample_id);
-							}
-							
-							if($_GET[run] == "new_project_sample" and $_GET[project_id])
-							{
-								$item_id = $sample->get_item_id();
-									
-								$project_item->set_item_id($item_id);
-								$project_item->link_item();
-								$project_item->set_item_status();
-							
-								if (($class_name = $project_item->is_classified()) == true)
-								{
-									$project_item->set_class($class_name);
-								}
-								
-								if ($description_required == true xor $keywords_required == true)
-								{
-									if ($description_required == false and $keywords_required == true)
-									{
-										$project_item->set_information(null,$session->read_value("ITEM_KEYWORDS"));
-									}
-									else
-									{
-										$project_item->set_information($session->read_value("ITEM_DESCRIPTION"),null);
-									}
-								}
-								else
-								{
-									if ($description_required == true and $keywords_required == true)
-									{
-										// Session
-										$project_item->set_information($session->read_value("ITEM_DESCRIPTION"),$session->read_value("ITEM_KEYWORDS"));
-									}
-								}
-								
-								$project_item->create_log_entry();	
-
-								ProjectTask::check_over_time_tasks($project_id);
-								
-								$paramquery = $_GET;
-								unset($paramquery[nextpage]);
-								$paramquery[nav] = "project";
-								$paramquery[run] = "detail";
-								$paramquery[project_id] = $sample_project_toid;
-								$params = http_build_query($paramquery);
-								
-								$common->step_proceed($params, "Add Sample", "Operation Successful", null);
+								return $sample->get_item_id();				
 							}
 							else
 							{
-								if(($_GET[run] == "new_sample_sample" or $_GET[run] == "new_parent_sample") and $_GET[sample_id])
-								{
-									$item_id = $sample->get_item_id();
-									
-									$sample_item->set_item_id($item_id);
-									$sample_item->link_item();
+								$paramquery = $_GET;
+								unset($paramquery[nextpage]);
+								$paramquery[run] = "detail";
+								$paramquery[sample_id] = $sample_id;
+								$params = http_build_query($paramquery);
 								
-									if (($class_name = $sample_item->is_classified()) == true)
-									{
-										$sample_item->set_class($class_name);
-									}
-									
-									if ($description_required == true xor $keywords_required == true)
-									{
-										if ($description_required == false and $keywords_required == true)
-										{
-											$sample_item->set_information(null,$session->read_value("ITEM_KEYWORDS"));
-										}
-										else
-										{
-											$sample_item->set_information($session->read_value("ITEM_DESCRIPTION"),null);
-										}
-									}
-									else
-									{
-										if ($description_required == true and $keywords_required == true)
-										{
-											// Session
-											$sample_item->set_information($session->read_value("ITEM_DESCRIPTION"),$session->read_value("ITEM_KEYWORDS"));
-										}
-									}
-
-									$paramquery = $_GET;
-									unset($paramquery[nextpage]);
-									$paramquery[nav] = "sample";
-									$paramquery[run] = "detail";
-									$params = http_build_query($paramquery);
-									
-									$common->step_proceed($params, "Add Sample", "Operation Successful", null);
-								}
-								else
-								{
-									$paramquery = $_GET;
-									unset($paramquery[nextpage]);
-									$paramquery[run] = "detail";
-									$paramquery[sample_id] = $sample_id;
-									$params = http_build_query($paramquery);
-									
-									$common->step_proceed($params, "Add Sample", "Operation Successful", null);
-								}
+								$common->step_proceed($params, "Add Sample", "Operation Successful", null);
 							}
 						}
 						else
@@ -1568,7 +1539,6 @@ class SampleIO
 						$session->delete_value("SAMPLE_TEMPLATE_DATA_TYPE");
 						$session->delete_value("SAMPLE_TEMPLATE_DATA_TYPE_ID");	
 						$session->delete_value("SAMPLE_TEMPALTE_DATA_ARRAY");
-						$session->delete_value("SAMPLE_TOID");	
 					}
 					catch (SampleCreationFailedException $e)
 					{
@@ -1586,167 +1556,106 @@ class SampleIO
 	}
 	
 	/**
-	 * @todo return item_id
-	 * @todo remove nextpage
+	 * @param array $type_array
+	 * @param array $category_array
+	 * @param integer $organisation_unit_id
+	 * @return integer
 	 */
-	public static function add_sample_item()
+	public static function add_sample_item($type_array, $category_array, $organisation_unit_id)
 	{
-		if (!$_GET[nextpage])
+		if (!$_GET[selectpage])
 		{
 			$template = new Template("languages/en-gb/template/samples/add_as_item.html");
 		
-			$paramquery = $_GET;
-			$paramquery[nextpage] = "1";
-			$params = http_build_query($paramquery, '', '&#38;');
+			$result = array();
+			$counter = 0;
+			
+			foreach ($_GET as $key => $value)
+			{
+				$result[$counter][name] = $key;
+				$result[$counter][value] = $value;
+				$counter++;
+			}
 		
-			$template->set_var("params", $params);
-		
-			$template->set_var("description", $_POST[description]);
-			$template->set_var("keywords", $_POST[keywords]);
+			$template->set_var("get_value", $result);
 		
 			$template->output();
 		}
 		else
 		{			
-			if ($_POST[selection] == 1)
+			if ($_GET[selectpage] == 1)
 			{
-				self::create();
+				return self::create($type_array, $category_array, $organisation_unit_id);
 			}
 			else
 			{
-				self::associate();
+				return self::associate($type_array, $category_array);
 			}
 		}
 	}
 
-	public static function associate()
+	/**
+	 * @todo Associate Sample with Sample
+	 */
+	public static function associate($type_array, $category_array)
 	{
 		global $user, $session, $common;
-		
-		if ($_GET[project_id])
-		{
-			$project_id = $_GET[project_id];
-			$project = new Project($project_id);
-				
-			$requirements_array = $project->get_current_status_requirements();
-			
-			if (!$_GET[nextpage])
-			{
-				$template = new Template("languages/en-gb/template/samples/associate_with_project.html");
-				
-				$paramquery = $_GET;
-				$paramquery[nextpage] = 1;
-				$params = http_build_query($paramquery,'','&#38;');
-				
-				$template->set_var("params", $params);
-									
-				$result = array();
-				$sample_array = Sample::list_user_related_samples($user->get_user_id());
-				
-				if (is_array($requirements_array[$_GET[key]][type_id]) and count($requirements_array[$_GET[key]][type_id]) >= 1)
-				{
-					$type_array = $requirements_array[$_GET[key]][type_id];
-				}
-				else
-				{
-					$type_array = null;
-				}
-	
-				if (is_array($sample_array) and count($sample_array) >= 1)
-				{
-					$counter = 0;
 					
-					foreach($sample_array as $key => $value)
+		if ($_GET[nextpage] < 2)
+		{
+			$template = new Template("languages/en-gb/template/samples/associate.html");
+			
+			$paramquery = $_GET;
+			$paramquery[nextpage] = 2;
+			$params = http_build_query($paramquery,'','&#38;');
+			
+			$template->set_var("params", $params);
+								
+			$result = array();
+			$sample_array = Sample::list_user_related_samples($user->get_user_id());
+			
+			if (!is_array($type_array) or count($type_array) == 0)
+			{
+				$type_array = null;
+			}
+
+			if (is_array($sample_array) and count($sample_array) >= 1)
+			{
+				$counter = 0;
+				
+				foreach($sample_array as $key => $value)
+				{
+					$sample = new Sample($value);
+					
+					if ($type_array == null or in_array($sample->get_template_id(), $type_array))
 					{
-						$sample = new Sample($value);
-						
-						if ($type_array == null or in_array($sample->get_template_id(), $type_array))
+						$result[$counter][value] = $value;
+						$result[$counter][content] = $sample->get_name();
+						if ($_POST[sample] == $value)
 						{
-							$result[$counter][value] = $value;
-							$result[$counter][content] = $sample->get_name();
-							if ($_POST[sample] == $value)
-							{
-								$result[$counter][selected] = "selected";
-							}
-							else
-							{
-								$result[$counter][selected] = "";
-							}
-							$counter++;
+							$result[$counter][selected] = "selected";
 						}
+						else
+						{
+							$result[$counter][selected] = "";
+						}
+						$counter++;
 					}
 				}
-				else
-				{
-					$result[0][value] = 0;
-					$result[0][content] = "You have no samples";
-					$result[0][selected] = "";
-				}
-				$template->set_var("sample", $result);
-				$template->output();
 			}
 			else
 			{
-				$project_item = new ProjectItem($project_id);
-				$project_item->set_gid($_GET[key]);
-				$project_item->set_status_id($project->get_current_status_id());
-				
-				$description_required = $project_item->is_description();
-				$keywords_required = $project_item->is_keywords();
-				
-				$requirements_array = $project->get_current_status_requirements();
-				
-				$sample = new Sample($_POST[sample]);
-				$item_id = $sample->get_item_id();
-
-				$project_item->set_item_id($item_id);
-				$project_item->link_item();
-				$project_item->set_item_status();
-				
-				if (($class_name = $project_item->is_classified()) == true)
-				{
-					$project_item->set_class($class_name);
-				}
-				
-				if ($description_required == true xor $keywords_required == true)
-				{
-					if ($description_required == false and $keywords_required == true)
-					{
-						$project_item->set_information(null,$session->read_value("ITEM_KEYWORDS"));
-					}
-					else
-					{
-						$project_item->set_information($session->read_value("ITEM_DESCRIPTION"),null);
-					}
-				}
-				else
-				{
-					if ($description_required == true and $keywords_required == true)
-					{
-						// Session
-						$project_item->set_information($session->read_value("ITEM_DESCRIPTION"),$session->read_value("ITEM_KEYWORDS"));
-					}
-				}
-				
-				$project_item->create_log_entry();	
-				
-				ProjectTask::check_over_time_tasks($project_id);
-				
-				$paramquery = $_GET;
-				unset($paramquery[nextpage]);
-				$paramquery[nav] = "project";
-				$paramquery[run] = "detail";
-				$paramquery[project_id] = $project_id;
-				$params = http_build_query($paramquery);
-				
-				$common->step_proceed($params, "Associate Sample", "Operation Successful", null);
+				$result[0][value] = 0;
+				$result[0][content] = "You have no samples";
+				$result[0][selected] = "";
 			}
+			$template->set_var("sample", $result);
+			$template->output();
 		}
 		else
 		{
-			$exception = new Exception("", 2);
-			$error_io = new Error_IO($exception, 250, 40, 3);
-			$error_io->display_error();
+			$sample = new Sample($_POST[sample]);
+			return  $sample->get_item_id();
 		}
 	}
 				
@@ -1820,12 +1729,15 @@ class SampleIO
 				{
 					foreach($current_requirements as $key => $value)
 					{						
+						$paramquery = array();
 						$paramquery[username] = $_GET[username];
 						$paramquery[session_id] = $_GET[session_id];
 						$paramquery[nav] = "sample";
 						$paramquery[run] = "item_add";
+						$paramquery[sample_id] = $_GET[sample_id];
 						$paramquery[dialog] = $value[type];
 						$paramquery[key] = $key;
+						$paramquery[retrace] = Misc::create_retrace_string();
 						unset($paramquery[nextpage]);
 						$params = http_build_query($paramquery,'','&#38;');
 
@@ -2108,214 +2020,7 @@ class SampleIO
 			$error_io->display_error();
 		}
 	}
-	
-	public static function structure()
-	{
-		global $sample_security;
 		
-		if ($_GET[sample_id])
-		{
-			if ($sample_security->is_access(1, false))
-			{
-				$template = new Template("languages/en-gb/template/samples/structure.html");
-				
-				$sample = new Sample($_GET[sample_id]);
-				
-				$sample_parent_array = $sample->list_parent_samples();
-				
-				if (is_array($sample_parent_array) and count($sample_parent_array) >= 1)
-				{
-					$result = array();
-					$counter = 0;
-				
-					foreach ($sample_parent_array as $key => $value)
-					{
-						$parent_sample = new Sample($value);
-						$owner = new User($parent_sample->get_owner_id());
-						
-						$result[$counter][id] = $parent_sample->get_formatted_id();
-						$result[$counter][name] = $parent_sample->get_name();
-						$result[$counter][datetime] = $parent_sample->get_datetime();
-						$result[$counter][owner] = $owner->get_full_name(false);
-						
-						$paramquery[username] = $_GET[username];
-						$paramquery[session_id] = $_GET[session_id];
-						$paramquery[nav] = "sample";
-						$paramquery[run] = "detail";
-						$paramquery[sample_id] = $value;
-						$params = http_build_query($paramquery, '', '&#38;');
-						
-						$result[$counter][params] = $params;
-						
-						$counter++;
-					}
-					$template->set_var("parent", $result);
-				}
-				else
-				{
-					// No Parents
-				}
-	
-				$sample_child_array = $sample->list_related_samples();
-				
-				if (is_array($sample_child_array) and count($sample_child_array) >= 1)
-				{
-					$result = array();
-					$counter = 0;
-				
-					foreach ($sample_child_array as $key => $value)
-					{
-						$child_sample = new Sample($value);
-						$owner = new User($child_sample->get_owner_id());
-						
-						$result[$counter][id] = $child_sample->get_formatted_id();
-						$result[$counter][name] = $child_sample->get_name();
-						$result[$counter][datetime] = $child_sample->get_datetime();
-						$result[$counter][owner] = $owner->get_full_name(false);
-						
-						$paramquery[username] = $_GET[username];
-						$paramquery[session_id] = $_GET[session_id];
-						$paramquery[nav] = "sample";
-						$paramquery[run] = "detail";
-						$paramquery[sample_id] = $value;
-						$params = http_build_query($paramquery, '', '&#38;');
-						
-						$result[$counter][params] = $params;
-						
-						$counter++;
-					}
-					$template->set_var("child", $result);
-				}
-				else
-				{
-					// No Childs
-				}
-				$template->output();
-			}
-			else
-			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 250, 40, 2);
-				$error_io->display_error();
-			}
-		}
-		else
-		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 250, 40, 3);
-			$error_io->display_error();
-		}
-	}
-	
-	/**
-	 * @deprecated bad dependency
-	 */
-	public static function projects()
-	{
-		global $sample_security;
-	
-		if ($_GET[sample_id])
-		{
-			if ($sample_security->is_access(1, false))
-			{
-				$sample = new Sample($_GET[sample_id]);
-				$item_id = $sample->get_item_id();
-				
-				$project_array = ProjectItem::list_projects_by_item_id($item_id);
-		
-				$template = new Template("languages/en-gb/template/samples/projects.html");
-				
-				$table_io = new TableIO("OverviewTable");
-			
-				$table_io->add_row("","symbol",false,16);
-				$table_io->add_row("Name","name",false,null);
-				$table_io->add_row("Organisation Unit","ou",false,null);
-				$table_io->add_row("Date/Time","datetime",false,null);
-				$table_io->add_row("Template","template",false,null);
-				$table_io->add_row("Status","status",false,null);
-				$table_io->add_row("","delete",false,16);
-				
-				$content_array = array();	
-				$entry_found = false;
-				
-				if (is_array($project_array) and count($project_array) >= 1)
-				{
-					foreach($project_array as $key => $value)
-					{
-						$project = new Project($value);
-						$owner = new User($project->get_owner_id());
-				
-						$column_array = array();
-				
-						$paramquery = $_GET;
-						$paramquery[nav] = "project";
-						$paramquery[run] = "detail";
-						$paramquery[project_id] = $value;
-						unset($paramquery[page]);
-						unset($paramquery[sample_id]);
-						$params = http_build_query($paramquery,'','&#38;');
-						
-						$column_array[symbol][link] 	= $params;
-						$column_array[symbol][content]	= "<img src='images/icons/project.png' alt='' style='border: 0;' />";
-						$column_array[name][link] 	= $params;
-						$column_array[name][content] 	= $project->get_name();
-						$column_array[datetime] 		= $project->get_datetime();
-						$column_array[template]			= $project->get_template_name();
-						$column_array[status]			= $project->get_current_status_name();
-		
-						if (is_numeric($project->get_organisation_unit_id()))
-						{
-							$organisation_unit = new OrganisationUnit($project->get_organisation_unit_id());
-							$column_array[ou]			= $organisation_unit->get_name();
-						}
-						else
-						{
-							$column_array[ou]			= "<span class='italic'>Subproject</span>";
-						}
-						
-						$delete_paramquery = $_GET;
-						$delete_paramquery[nav] = "sample";
-						$delete_paramquery[run] = "delete_project_association";
-						$delete_paramquery[project_id] = $value;
-						$delete_paramquery[sample_id] = $_GET[sample_id];
-						$delete_params = http_build_query($delete_paramquery,'','&#38;');
-						
-						$column_array[delete][link] 	= $delete_params;
-						$column_array[delete][content]	= "<img src='images/icons/delete_sample.png' alt='' style='border: 0;' />";
-			
-						array_push($content_array, $column_array);
-						
-						$entry_found = true;
-					}	
-				}
-				
-				if ($entry_found == false)
-				{
-					$content_array = null;
-					$table_io->override_last_line("<span class='italic'>No Samples Found!</span>");
-				}
-				
-				$table_io->add_content_array($content_array);	
-				
-				$template->set_var("table", $table_io->get_content($_GET[page]));		
-				
-				$template->output();
-			}
-			else
-			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 250, 40, 2);
-				$error_io->display_error();
-			}
-		}
-		else
-		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 250, 40, 3);
-			$error_io->display_error();
-		}
-	}
-	
 	public static function depository_history()
 	{
 		global $sample_security;
@@ -2389,7 +2094,7 @@ class SampleIO
 	 */
 	public static function method_handler()
 	{
-		global $sample_security, $session;
+		global $sample_security, $session, $transaction, $common;
 		
 		try
 		{
@@ -2415,7 +2120,7 @@ class SampleIO
 			switch($_GET[run]):
 				case ("new"):
 				case ("new_subsample"):
-					self::create();
+					self::create(null,null,null);
 				break;
 				
 				case ("organ_unit"):
@@ -2438,8 +2143,8 @@ class SampleIO
 					self::structure();
 				break;
 				
-				case("projects"):
-					self::projects();
+				case("parents"):
+					self::list_parentsample_items();
 				break;
 				
 				case("depository_history"):
@@ -2489,6 +2194,9 @@ class SampleIO
 				break;
 	
 				// Item Lister
+				/**
+				 * @todo permissions
+				 */
 				case("item_list"):
 					if ($_GET[dialog])
 					{
@@ -2535,6 +2243,133 @@ class SampleIO
 					else
 					{
 						// error
+					}
+				break;
+				
+				/**
+				 * @todo description and keywords
+				 */
+				case("item_add"):
+					if ($sample_security->is_access(2, false) == true)
+					{
+						if ($_GET[dialog])
+						{
+							$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_add", $_GET[dialog]);
+	
+							if (is_array($module_dialog) and $module_dialog[class_path])
+							{
+								if (file_exists($module_dialog[class_path]))
+								{
+									require_once($module_dialog[class_path]);
+									
+									if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+									{
+										$transaction_id = $transaction->begin();
+										
+										$sample = new Sample($_GET[sample_id]);
+										$current_requirements = $sample->get_requirements();
+										
+										$return_value = $module_dialog['class']::$module_dialog[method]($current_requirements[$_GET[key]][type_id], $current_requirements[$_GET[key]][category_id], null);
+										
+										if (is_numeric($return_value))
+										{
+											if ($_GET[retrace])
+											{
+												$params = http_build_query(Misc::resovle_retrace_string($_GET[retrace]),'','&#38;');
+											}
+											else
+											{
+												$paramquery[username] = $_GET[username];
+												$paramquery[session_id] = $_GET[session_id];
+												$paramquery[nav] = "home";
+												$params = http_build_query($paramquery,'','&#38;');
+											}
+											
+											if ($_GET[dialog] == "parentsample")
+											{
+												$parent_sample_id = Sample::get_entry_by_item_id($return_value);
+												
+												if (SampleItemFactory::create($parent_sample_id, $sample->get_item_id(), $_GET[key], null, null) == true)
+												{
+													if ($transaction_id != null)
+													{
+														$transaction->commit($transaction_id);
+													}
+													$common->step_proceed($params, "Add Item", "Succeed." ,null);
+												}
+												else
+												{
+													if ($transaction_id != null)
+													{
+														$transaction->rollback($transaction_id);
+													}
+													$common->step_proceed($params, "Add Item", "Failed." ,null);	
+												}
+											}
+											else
+											{
+												if (SampleItemFactory::create($_GET[sample_id], $return_value, $_GET[key], null, null) == true)
+												{
+													if ($transaction_id != null)
+													{
+														$transaction->commit($transaction_id);
+													}
+													$common->step_proceed($params, "Add Item", "Succeed." ,null);
+												}
+												else
+												{
+													if ($transaction_id != null)
+													{
+														$transaction->rollback($transaction_id);
+													}
+													$common->step_proceed($params, "Add Item", "Failed." ,null);	
+												}
+											}
+										}
+										else
+										{
+											if ($return_value === false)
+											{
+												if ($transaction_id != null)
+												{
+													$transaction->rollback($transaction_id);
+												}
+												throw new ModuleDialogFailedException("",1);
+											}
+											else
+											{
+												if ($transaction_id != null)
+												{
+													$transaction->commit($transaction_id);
+												}
+											}
+										}
+									}
+									else
+									{
+										throw new ModuleDialogCorruptException(null, null);
+									}
+								}
+								else
+								{
+									throw new ModuleDialogCorruptException(null, null);
+								}
+							}
+							else
+							{
+								throw new ModuleDialogNotFoundException(null, null);
+							}
+						}
+						else
+						{
+							throw new ModuleDialogMissingException(null, null);
+						}
+					}
+					else
+					{
+						$exception = new Exception("", 1);
+						$error_io = new Error_IO($exception, 250, 40, 2);
+						$error_io->display_error();
 					}
 				break;
 				

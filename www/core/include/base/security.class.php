@@ -46,6 +46,7 @@ class Security implements SecurityInterface
 
 	/**
 	 * Checks all GET- and POST-variables
+	 * @todo vars of different modules like project_id etc.
 	 */
 	public static function protect_session()
 	{
@@ -72,26 +73,28 @@ class Security implements SecurityInterface
 			case("session_id"):
 			case("run"):
 			case("dialog"):
-			case("action"):
-			case("aspect"):
-			case("id"):
-			case("runid"):
 			case("vfolder_id"):
 			case("folder_id"):
 			case("file_id"):
 			case("value_id"):
-			case("key"):
 			case("project_id"):
 			case("sample_id"):
+			case("retrace");
+				
+			case("action"):
+			case("aspect"):
+			case("id"):
+			case("runid"):
+			case("key"):
 			case("version"):
 			case("sortmethod"):
 			case("sortvalue"):
 			case("sure"):
 			case("nextpage"):
+			case("selectpage");
 			case("page"):
 			case("pageref");
 			case("show"):
-			case("change_tab"):
 			case("change_nav"):
 			case("tpage"):
 			case("view"):

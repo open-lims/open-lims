@@ -34,13 +34,9 @@ class SampleCommon_IO
 		
 		if ($_GET[nav] == "sample")
 		{
-			switch ($_GET[run]):
-				case "structure":
+			switch ($_GET[run]):				
+				case "parents":
 					$current_tab = 2;
-				break;
-				
-				case "projects":
-					$current_tab = 3;
 				break;
 								
 				default:
@@ -87,50 +83,28 @@ class SampleCommon_IO
 			$template->set_var("params", $params);
 			$template->output();
 		}
-		
-		// Structure
-		$paramquery[username] 	= $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav]		= "sample";
-		$paramquery[run]		= "structure";
-		$paramquery[sample_id]	= $_GET[sample_id];
-		$params 				= http_build_query($paramquery,'','&#38;');
-		unset($paramquery);
-		
-		if ($current_tab == 2) { 
-			$template = new Template("languages/en-gb/template/samples/tabs/generic_active.html");
-			$template->set_var("title", "Strucutre");
-			$template->set_var("params", $params);
-			$template->output();
-		}else{
-			$template = new Template("languages/en-gb/template/samples/tabs/generic.html");
-			$template->set_var("title", "Structure");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		
-		
-		// Projects
+				
+		// Parent Samples
 		
 		$paramquery[username] 	= $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
 		$paramquery[nav]		= "sample";
-		$paramquery[run]		= "projects";
+		$paramquery[run]		= "parents";
 		$paramquery[sample_id]	= $_GET[sample_id];
 		$params 				= http_build_query($paramquery,'','&#38;');
 		unset($paramquery);
 		
-		if ($current_tab == 3)
+		if ($current_tab == 2)
 		{ 
 			$template = new Template("languages/en-gb/template/samples/tabs/generic_active.html");
-			$template->set_var("title", "Projects");
+			$template->set_var("title", "Par. Samples");
 			$template->set_var("params", $params);
 			$template->output();
 		}
 		else
 		{
 			$template = new Template("languages/en-gb/template/samples/tabs/generic.html");
-			$template->set_var("title", "Projects");
+			$template->set_var("title", "Par. Samples");
 			$template->set_var("params", $params);
 			$template->output();
 		}

@@ -386,6 +386,133 @@ class Sample_Wrapper_Access
 			return null;
 		}
 	}
+	
+	public static function list_item_parentsamples($item_id, $order_by, $order_method, $start, $end)
+	{
+		global $db;
+		
+		if (is_numeric($item_id))
+		{
+			if ($order_by and $order_method)
+			{
+				if ($order_method == "asc")
+				{
+					$sql_order_method = "ASC";
+				}
+				else
+				{
+					$sql_order_method = "DESC";
+				}
+				
+				switch($order_by):
+				
+					case "id":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_TABLE").".id ".$sql_order_method;
+					break;
+						
+					case "name":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_TABLE").".name ".$sql_order_method;
+					break;
+					
+					case "datetime":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_TABLE").".datetime ".$sql_order_method;
+					break;
+					
+					case "template":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_TEMPLATE_TABLE").".name ".$sql_order_method;
+					break;
+					
+					case "depository":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_DEPOSITORY_TABLE").".name ".$sql_order_method;
+					break;
+					
+					case "owner":
+						$sql_order_by = "ORDER BY ".constant("USER_PROFILE_TABLE").".surname ".$sql_order_method;
+					break;
+					
+					default:
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_TABLE").".datetime ".$sql_order_method;
+					break;
+				
+				endswitch;
+			}
+			else
+			{
+				$sql_order_by = "ORDER BY ".constant("SAMPLE_TABLE").".datetime";
+			}
+				
+			$sql = "SELECT ".constant("SAMPLE_TABLE").".id AS id, " .
+						"".constant("SAMPLE_TABLE").".name AS name," .
+						"".constant("SAMPLE_TABLE").".datetime AS datetime," .
+						"".constant("SAMPLE_TEMPLATE_TABLE").".name AS template, " .
+						"".constant("SAMPLE_DEPOSITORY_TABLE").".name AS depository, " .
+						"".constant("SAMPLE_TABLE").".available AS av, " .
+						"".constant("SAMPLE_TABLE").".owner_id AS owner " .
+						"FROM ".constant("SAMPLE_TABLE")." " .
+						"LEFT JOIN ".constant("SAMPLE_HAS_ITEM_TABLE")." 				ON ".constant("SAMPLE_TABLE").".id 											= ".constant("SAMPLE_HAS_ITEM_TABLE").".sample_id " .
+						"LEFT JOIN ".constant("SAMPLE_TEMPLATE_TABLE")." 				ON ".constant("SAMPLE_TABLE").".template_id 								= ".constant("SAMPLE_TEMPLATE_TABLE").".id " .
+						"LEFT JOIN ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." 	ON ".constant("SAMPLE_TABLE").".id 											= ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_id " .
+						"LEFT JOIN ".constant("SAMPLE_DEPOSITORY_TABLE")." 				ON ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_depository_id 	= ".constant("SAMPLE_DEPOSITORY_TABLE").".id " .
+						"LEFT JOIN ".constant("USER_PROFILE_TABLE")." 					ON ".constant("SAMPLE_TABLE").".owner_id								 	= ".constant("USER_PROFILE_TABLE").".id " .
+						"WHERE ".constant("SAMPLE_HAS_ITEM_TABLE").".item_id = ".$item_id." " .
+						"".$sql_order_by."";
+			
+			$return_array = array();
+			
+			$res = $db->db_query($sql);
+			
+			if (is_numeric($start) and is_numeric($end))
+			{
+				for ($i = 0; $i<=$end-1; $i++)
+				{
+					if (($data = $db->db_fetch_assoc($res)) == null)
+					{
+						break;
+					}
+					
+					if ($i >= $start)
+					{
+						array_push($return_array, $data);
+					}
+				}
+			}
+			else
+			{
+				while ($data = $db->db_fetch_assoc($res))
+				{
+					array_push($return_array, $data);
+				}
+			}
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public static function count_item_parentsamples($item_id)
+	{
+		global $db;
+		
+		if (is_numeric($item_id))
+		{	
+			$sql = "SELECT COUNT (".constant("SAMPLE_HAS_ITEM_TABLE").".sample_id) AS result " .
+						"FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." " .
+						"WHERE ".constant("SAMPLE_HAS_ITEM_TABLE").".item_id = ".$item_id." " .
+						"".$sql_order_by."";
+			
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+	
+			return $data[result];
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 }
 
 ?>

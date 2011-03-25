@@ -3,6 +3,16 @@
 
 <!-- CONTAINER BEGIN ("Create New Sample (3/5)",0) -->
 
+<script>
+$(function() \{
+	$( "#datepicker" ).datepicker(\{
+		changeMonth: true,
+		changeYear: true,
+		dateFormat: 'yy-mm-dd'
+	\});
+\});
+</script>
+
 <form action='index.php?{LINK}' method='post'>
 {BAR}
 <br />
@@ -15,10 +25,16 @@
 		</td>
 	</tr>
 	<tr>
-		<td>Supplier/Source:</td>
+		<td>Supplier/Source/Manufacturer:</td>
 		<td>
 			<input type='text' name='supplier' class='sampleTextfield' value='{SUPPLIER}' />
 			<span class='formError'>{ERROR1}</span>
+		</td>
+	</tr>
+	<tr>
+		<td>Date of Expiry:</td>
+		<td>
+			<input type='text' name='dateofexpiry' class='sampleTextfield' id='datepicker' />
 		</td>
 	</tr>
 	<tr>
