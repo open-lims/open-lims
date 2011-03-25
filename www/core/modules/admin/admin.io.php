@@ -71,51 +71,6 @@ class AdminIO
 					AdminOrganisationUnitIO::handler();
 				break;
 				
-				case "project_template":
-					require_once("admin_project_template.io.php");
-					AdminProjectTemplateIO::handler();
-				break;
-				
-				case "project_template_cat":
-					require_once("admin_project_template_cat.io.php");
-					AdminProjectTemplateCatIO::handler();
-				break;
-				
-				case "sample_template":
-					require_once("admin_sample_template.io.php");
-					AdminSampleTemplateIO::handler();
-				break;
-				
-				case "sample_template_cat":
-					require_once("admin_sample_template_cat.io.php");
-					AdminSampleTemplateCatIO::handler();
-				break;
-				
-				case "value_template":
-					require_once("admin_value_template.io.php");
-					AdminValueTemplateIO::handler();
-				break;
-				
-				case "project_status":
-					require_once("admin_project_status.io.php");
-					AdminProjectStatusIO::handler();
-				break;
-				
-				case "method_cat":
-					require_once("admin_method_cat.io.php");
-					AdminMethodCatIO::handler();
-				break;
-				
-				case "method_type":
-					require_once("admin_method_type.io.php");
-					AdminMethodTypeIO::handler();
-				break;
-				
-				case "sample_depository":
-					require_once("admin_sample_depository.io.php");
-					AdminSampleDepositoryIO::handler();
-				break;
-				
 				case "system_log":
 					require_once("admin_system_log.io.php");
 					AdminSystemLogIO::handler();
@@ -124,6 +79,36 @@ class AdminIO
 				case "system_message":
 					require_once("admin_system_message.io.php");
 					AdminSystemMessageIO::handler();
+				break;
+				
+				// Modules
+				case("module"):
+					if ($_GET[dialog])
+					{
+						$module_dialog = ModuleDialog::get_by_type_and_internal_name("admin", $_GET[dialog]);
+						
+						if (file_exists($module_dialog[class_path]))
+						{
+							require_once($module_dialog[class_path]);
+							
+							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+							{
+								$module_dialog['class']::$module_dialog[method]($sql);
+							}
+							else
+							{
+								// Error
+							}
+						}
+						else
+						{
+							// Error
+						}
+					}
+					else
+					{
+						// error
+					}
 				break;
 				
 				default:

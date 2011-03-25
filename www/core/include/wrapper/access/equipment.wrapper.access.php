@@ -27,57 +27,57 @@
  */
 class Equipment_Wrapper_Access
 {	
-	public static function list_item_equipments($item_sql, $order_by, $order_method, $start, $end)
+	public static function list_item_equipments($item_sql, $order_by, $order_equipment, $start, $end)
 	{
 		global $db;
 		
 		if ($item_sql)
 		{
-			if ($order_by and $order_method)
+			if ($order_by and $order_equipment)
 			{
-				if ($order_method == "asc")
+				if ($order_equipment == "asc")
 				{
-					$sql_order_method = "ASC";
+					$sql_order_equipment = "ASC";
 				}
 				else
 				{
-					$sql_order_method = "DESC";
+					$sql_order_equipment = "DESC";
 				}
 				
 				switch($order_by):
 
 					case "name":
-						$sql_order_by = "ORDER BY ".constant("METHOD_TYPE_TABLE").".name ".$sql_order_method;
+						$sql_order_by = "ORDER BY ".constant("EQUIPMENT_TYPE_TABLE").".name ".$sql_order_equipment;
 					break;
 					
 					case "category":
-						$sql_order_by = "ORDER BY ".constant("METHOD_CAT_TABLE").".name ".$sql_order_method;
+						$sql_order_by = "ORDER BY ".constant("EQUIPMENT_CAT_TABLE").".name ".$sql_order_equipment;
 					break;
 					
 					case "datetime":
-						$sql_order_by = "ORDER BY ".constant("METHOD_TABLE").".datetime ".$sql_order_method;
+						$sql_order_by = "ORDER BY ".constant("EQUIPMENT_TABLE").".datetime ".$sql_order_equipment;
 					break;
 					
 					default:
-						$sql_order_by = "ORDER BY ".constant("METHOD_TABLE").".datetime ".$sql_order_method;
+						$sql_order_by = "ORDER BY ".constant("EQUIPMENT_TABLE").".datetime ".$sql_order_equipment;
 					break;
 				
 				endswitch;
 			}
 			else
 			{
-				$sql_order_by = "ORDER BY ".constant("METHOD_TABLE").".datetime";
+				$sql_order_by = "ORDER BY ".constant("EQUIPMENT_TABLE").".datetime";
 			}
 				
-			$sql = "SELECT ".constant("METHOD_TABLE").".id AS id, " .
-							"".constant("METHOD_TYPE_TABLE").".name AS name, " .
-							"".constant("METHOD_CAT_TABLE").".name AS category, " .
-							"".constant("METHOD_TABLE").".datetime AS datetime " .
-							"FROM ".constant("METHOD_TABLE")." " .
-							"LEFT JOIN ".constant("METHOD_IS_ITEM_TABLE")." 	ON ".constant("METHOD_TABLE").".id 			= ".constant("METHOD_IS_ITEM_TABLE").".method_id " .
-							"LEFT JOIN ".constant("METHOD_TYPE_TABLE")." 		ON ".constant("METHOD_TABLE").".type_id 	= ".constant("METHOD_TYPE_TABLE").".id " .
-							"LEFT JOIN ".constant("METHOD_CAT_TABLE")." 		ON ".constant("METHOD_TYPE_TABLE").".cat_id = ".constant("METHOD_CAT_TABLE").".id " .
-							"WHERE ".constant("METHOD_IS_ITEM_TABLE").".item_id IN (".$item_sql.") " .
+			$sql = "SELECT ".constant("EQUIPMENT_TABLE").".id AS id, " .
+							"".constant("EQUIPMENT_TYPE_TABLE").".name AS name, " .
+							"".constant("EQUIPMENT_CAT_TABLE").".name AS category, " .
+							"".constant("EQUIPMENT_TABLE").".datetime AS datetime " .
+							"FROM ".constant("EQUIPMENT_TABLE")." " .
+							"LEFT JOIN ".constant("EQUIPMENT_IS_ITEM_TABLE")." 	ON ".constant("EQUIPMENT_TABLE").".id 			= ".constant("EQUIPMENT_IS_ITEM_TABLE").".equipment_id " .
+							"LEFT JOIN ".constant("EQUIPMENT_TYPE_TABLE")." 		ON ".constant("EQUIPMENT_TABLE").".type_id 	= ".constant("EQUIPMENT_TYPE_TABLE").".id " .
+							"LEFT JOIN ".constant("EQUIPMENT_CAT_TABLE")." 		ON ".constant("EQUIPMENT_TYPE_TABLE").".cat_id = ".constant("EQUIPMENT_CAT_TABLE").".id " .
+							"WHERE ".constant("EQUIPMENT_IS_ITEM_TABLE").".item_id IN (".$item_sql.") " .
 							"".$sql_order_by."";
 			
 			$return_array = array();
@@ -120,9 +120,9 @@ class Equipment_Wrapper_Access
 		
 		if ($item_sql)
 		{	
-			$sql = "SELECT COUNT(".constant("METHOD_IS_ITEM_TABLE").".method_id) AS result " .
-							"FROM ".constant("METHOD_IS_ITEM_TABLE")." " .
-							"WHERE ".constant("METHOD_IS_ITEM_TABLE").".item_id IN (".$item_sql.")";
+			$sql = "SELECT COUNT(".constant("EQUIPMENT_IS_ITEM_TABLE").".equipment_id) AS result " .
+							"FROM ".constant("EQUIPMENT_IS_ITEM_TABLE")." " .
+							"WHERE ".constant("EQUIPMENT_IS_ITEM_TABLE").".item_id IN (".$item_sql.")";
 			
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);

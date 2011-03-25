@@ -57,90 +57,7 @@ class LeftNavigation_IO
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("organisation_unit_params", $params);
-		
-		
-		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "administration";
-		$paramquery[run] = "project_template";
-		$params = http_build_query($paramquery,'','&#38;');
-		
-		$template->set_var("project_template_params", $params);
-		
-		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "administration";
-		$paramquery[run] = "project_template_cat";
-		$params = http_build_query($paramquery,'','&#38;');
-		
-		$template->set_var("project_template_cat_params", $params);
-		
-		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "administration";
-		$paramquery[run] = "sample_template";
-		$params = http_build_query($paramquery,'','&#38;');
-		
-		$template->set_var("sample_template_params", $params);
-		
-		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "administration";
-		$paramquery[run] = "sample_template_cat";
-		$params = http_build_query($paramquery,'','&#38;');
-		
-		$template->set_var("sample_template_cat_params", $params);
-		
-		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "administration";
-		$paramquery[run] = "value_template";
-		$params = http_build_query($paramquery,'','&#38;');
-		
-		$template->set_var("value_template_params", $params);
-		
-		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "administration";
-		$paramquery[run] = "project_status";
-		$params = http_build_query($paramquery,'','&#38;');
-		
-		$template->set_var("project_status_params", $params);
-		
-		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "administration";
-		$paramquery[run] = "method_cat";
-		$params = http_build_query($paramquery,'','&#38;');
-		
-		$template->set_var("method_cat_params", $params);
-		
-		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "administration";
-		$paramquery[run] = "method_type";
-		$params = http_build_query($paramquery,'','&#38;');
-		
-		$template->set_var("method_type_params", $params);
-		
-		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "administration";
-		$paramquery[run] = "sample_depository";
-		$params = http_build_query($paramquery,'','&#38;');
-		
-		$template->set_var("sample_depository_params", $params);
-		
-		
+
 		
 		$paramquery[username] = $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
@@ -159,6 +76,34 @@ class LeftNavigation_IO
 		
 		$template->set_var("system_message_params", $params);
 		
+		
+		$module_admin_navigation_array = array();
+		$counter = 0;
+		
+		$module_dialog_array = ModuleDialog::list_dialogs_by_type("admin");
+		
+		if (is_array($module_dialog_array) and count($module_dialog_array) >= 1)
+		{
+			foreach ($module_dialog_array as $key => $value)
+			{
+				$paramquery[username] 	= $_GET[username];
+				$paramquery[session_id] = $_GET[session_id];
+				$paramquery[nav]		= "admin";
+				$paramquery[run]		= "module";
+				$paramquery[dialog]		= $value[internal_name];
+				$params 				= http_build_query($paramquery,'','&#38;');
+				
+				/**
+				 * @todo icon
+				 */
+				$module_admin_navigation_array[$counter][icon] = "equipment.png";
+				$module_admin_navigation_array[$counter][params] = $params;
+				$module_admin_navigation_array[$counter][title] = $value[display_name];
+				$counter++;
+			}
+		}
+		
+		$template->set_var("module_admin", $module_admin_navigation_array);
 		
 		$template->output();
 	}
