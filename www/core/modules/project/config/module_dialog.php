@@ -1,6 +1,6 @@
 <?php 
 /**
- * @package project
+ * @package data
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -24,11 +24,10 @@
 /**
  * 
  */
-	$name 					= "project";
-	$main_class				= "ProjectIO";
-	
-	$required_include[0] 	= "project";
-	
-	$tab_name				= "Projects";
-	$tab_colour				= "green";
+	$dialog[0][type]			= "project_list";
+	$dialog[0][class_path]		= "core/modules/project/project.io.php";
+	$dialog[0]['class']			= "ProjectIO";
+	$dialog[0][method]			= "list_projects_by_item_id";
+	$dialog[0][internal_name]	= "project";
+	$dialog[0][display_name]	= "Projects";
 ?>

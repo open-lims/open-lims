@@ -32,7 +32,7 @@ class ProjectCommon_IO
 		$template = new Template("languages/en-gb/template/projects/tabs/small_tab_header.html");
 		$template->output();
 		
-		if ($_GET[nav] == "project")
+		if ($_GET[run] != "item_add" and $_GET[run] != "item_list")
 		{
 			switch ($_GET[run]):
 			
@@ -54,9 +54,6 @@ class ProjectCommon_IO
 					$current_tab = 4;
 				break;
 				
-				case "samples":
-					$current_tab = 5;
-				break;
 				
 				case "admin":
 				case "set_permissions":
@@ -75,24 +72,9 @@ class ProjectCommon_IO
 			
 			endswitch;
 		}
-		elseif($_GET[nav] == "method")
-		{
-			$current_tab = 6;
-		}
-		elseif($_GET[nav] == "samples")
-		{
-			
-		}
-		elseif ($_GET[nav] == "data" or
-				 $_GET[nav] == "value" or
-				 $_GET[nav] == "file" or
-				 $_GET[nav] == "folder")
-		{
-			$current_tab = 7;	
-		}
 		else
 		{
-			$current_tab = 0;
+			$current_tab = null;
 		}
 
 		
@@ -160,7 +142,7 @@ class ProjectCommon_IO
 		
 		if ($current_tab == 3)
 		{ 
-			$template = new Template("languages/en-gb/template/projects/tabs/generic_acitve.html");
+			$template = new Template("languages/en-gb/template/projects/tabs/generic_active.html");
 			$template->set_var("title", "Structure");
 			$template->set_var("params", $params);
 			$template->output();
@@ -249,9 +231,10 @@ class ProjectCommon_IO
 			{
 				$paramquery[username] 	= $_GET[username];
 				$paramquery[session_id] = $_GET[session_id];
-				$paramquery[nav]		= "projects";
+				$paramquery[nav]		= "project";
 				$paramquery[run]		= "admin";
 				$paramquery[project_id]	= $_GET[project_id];
+				unset($paramquery[dialog]);
 				$params 				= http_build_query($paramquery,'','&#38;');
 			 	unset($paramquery);
 			 

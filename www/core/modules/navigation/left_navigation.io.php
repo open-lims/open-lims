@@ -34,7 +34,7 @@ class LeftNavigation_IO
 		
 		$paramquery[username] = $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "administration";
+		$paramquery[nav] = "admin";
 		$paramquery[run] = "user";
 		$params = http_build_query($paramquery,'','&#38;');
 		
@@ -43,7 +43,7 @@ class LeftNavigation_IO
 		
 		$paramquery[username] = $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "administration";
+		$paramquery[nav] = "admin";
 		$paramquery[run] = "group";
 		$params = http_build_query($paramquery,'','&#38;');
 		
@@ -52,7 +52,7 @@ class LeftNavigation_IO
 		
 		$paramquery[username] = $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "administration";
+		$paramquery[nav] = "admin";
 		$paramquery[run] = "organisation_unit";
 		$params = http_build_query($paramquery,'','&#38;');
 		
@@ -61,7 +61,7 @@ class LeftNavigation_IO
 		
 		$paramquery[username] = $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "administration";
+		$paramquery[nav] = "admin";
 		$paramquery[run] = "system_log";
 		$params = http_build_query($paramquery,'','&#38;');
 		
@@ -70,7 +70,7 @@ class LeftNavigation_IO
 		
 		$paramquery[username] = $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "administration";
+		$paramquery[nav] = "admin";
 		$paramquery[run] = "system_message";
 		$params = http_build_query($paramquery,'','&#38;');
 		

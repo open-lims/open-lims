@@ -151,7 +151,6 @@ class DataIO
 				{			
 					$paramquery = $_GET;
 					$paramquery[vfolder_id] = $data_path->get_previous_entry_id();
-					$paramquery[nav] = "data";
 					unset($paramquery[folder_id]);
 					unset($paramquery[nextpage]);
 					$params = http_build_query($paramquery,'','&#38;');
@@ -160,7 +159,6 @@ class DataIO
 				{
 					$paramquery = $_GET;
 					$paramquery[folder_id] = $data_path->get_previous_entry_id();
-					$paramquery[nav] = "data";
 					unset($paramquery[nextpage]);
 					unset($paramquery[vfolder_id]);
 					$params = http_build_query($paramquery,'','&#38;');
@@ -270,7 +268,6 @@ class DataIO
 						{
 							$paramquery = $_GET;
 							$paramquery[folder_id] = $result_array[$key][folder_id];
-							$paramquery[nav] = "data";
 							unset($paramquery[nextpage]);
 							unset($paramquery[vfolder_id]);
 							$params = http_build_query($paramquery,'','&#38;');
@@ -295,7 +292,6 @@ class DataIO
 					{
 						$paramquery = $_GET;
 						$paramquery[vfolder_id] = $result_array[$key][virtual_folder_id];
-						$paramquery[nav] = "data";
 						unset($paramquery[nextpage]);
 						$params = http_build_query($paramquery,'','&#38;');
 						

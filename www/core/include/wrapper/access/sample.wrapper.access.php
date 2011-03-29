@@ -235,6 +235,127 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
+	 * NEW
+	 * @param integer $user_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return integer
+	 */
+	public static function list_user_samples($user_id, $order_by, $order_method, $start, $end)
+	{
+		global $db;
+		
+		if (is_numeric($user_id))
+		{	
+			if ($order_by and $order_method)
+			{
+				if ($order_method == "asc")
+				{
+					$sql_order_method = "ASC";
+				}
+				else
+				{
+					$sql_order_method = "DESC";
+				}
+				
+				switch($order_by):
+				
+					case "id":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_TABLE").".id ".$sql_order_method;
+					break;
+						
+					case "name":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_TABLE").".name ".$sql_order_method;
+					break;
+					
+					case "datetime":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_TABLE").".datetime ".$sql_order_method;
+					break;
+					
+					case "template":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_TEMPLATE_TABLE").".name ".$sql_order_method;
+					break;
+					
+					case "depository":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_DEPOSITORY_TABLE").".name ".$sql_order_method;
+					break;
+					
+					default:
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_TABLE").".id ".$sql_order_method;
+					break;
+				
+				endswitch;
+			}
+			else
+			{
+				$sql_order_by = "ORDER BY ".constant("SAMPLE_TABLE").".id";
+			}
+			
+			$sql = "SELECT ".constant("SAMPLE_TABLE").".id AS id, " .
+						"".constant("SAMPLE_TABLE").".name AS name," .
+						"".constant("SAMPLE_TABLE").".datetime AS datetime," .
+						"".constant("SAMPLE_TEMPLATE_TABLE").".name AS template," .
+						"".constant("SAMPLE_DEPOSITORY_TABLE").".name AS depository," .
+						"".constant("SAMPLE_TABLE").".date_of_expiry AS date_of_expiry, " .
+						"".constant("SAMPLE_TABLE").".available AS av " .
+						"FROM ".constant("SAMPLE_TABLE")." " .
+						"JOIN ".constant("SAMPLE_TEMPLATE_TABLE")." 				ON ".constant("SAMPLE_TABLE").".template_id 								= ".constant("SAMPLE_TEMPLATE_TABLE").".id " .
+						"LEFT JOIN ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." 	ON ".constant("SAMPLE_TABLE").".id 											= ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_id " .
+						"LEFT JOIN ".constant("SAMPLE_DEPOSITORY_TABLE")." 				ON ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_depository_id 	= ".constant("SAMPLE_DEPOSITORY_TABLE").".id " .
+						"WHERE " .
+							"(".constant("SAMPLE_TABLE").".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE ".constant("SAMPLE_HAS_USER_TABLE").".write = 't' AND ".constant("SAMPLE_HAS_USER_TABLE").".user_id = ".$user_id.") " .
+							"OR owner_id = ".$user_id.") " .
+							"AND " .
+								"(".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".primary_key IN " .
+									"( " .
+									"SELECT primary_key " .
+									"FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." " .
+									"WHERE sample_id = ".constant("SAMPLE_TABLE").".id AND " .
+									"".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime = " .
+										"(SELECT MAX(".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime) FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." WHERE ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_id = ".constant("SAMPLE_TABLE").".id) " .
+									") " .
+								"OR ".constant("SAMPLE_TABLE").".id NOT IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").") " .
+								") " .
+							"".$sql_order_by."";
+			
+			$return_array = array();
+		
+			$res = $db->db_query($sql);
+			
+			if (is_numeric($start) and is_numeric($end))
+			{
+				for ($i = 0; $i<=$end-1; $i++)
+				{
+					if (($data = $db->db_fetch_assoc($res)) == null)
+					{
+						break;
+					}
+					
+					if ($i >= $start)
+					{
+						array_push($return_array, $data);
+					}
+				}
+			}
+			else
+			{
+				while ($data = $db->db_fetch_assoc($res))
+				{
+					array_push($return_array, $data);
+				}
+			}
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * NEW
 	 * @param integer $user_id
 	 * @return integer
 	 */
@@ -244,10 +365,10 @@ class Sample_Wrapper_Access
 		
 		if (is_numeric($user_id))
 		{	
-			$sql = "SELECT COUNT(".self::SAMPLE_TABLE.".id) AS result " .
-						"FROM ".self::SAMPLE_TABLE." " .
-						"LEFT JOIN ".self::SAMPLE_HAS_USER_TABLE." ON ".self::SAMPLE_TABLE.".id = ".self::SAMPLE_HAS_USER_TABLE.".sample_id " .
-						"WHERE (".self::SAMPLE_HAS_USER_TABLE.".read = 't' AND user_id = ".$user_id.") " .
+			$sql = "SELECT COUNT(".constant("SAMPLE_TABLE").".id) AS result " .
+						"FROM ".constant("SAMPLE_TABLE")." " .
+						"LEFT JOIN ".constant("SAMPLE_HAS_USER_TABLE")." ON ".constant("SAMPLE_TABLE").".id = ".constant("SAMPLE_HAS_USER_TABLE").".sample_id " .
+						"WHERE (".constant("SAMPLE_HAS_USER_TABLE").".write = 't' AND user_id = ".$user_id.") " .
 							"OR owner_id = ".$user_id."";
 			
 			$res = $db->db_query($sql);
@@ -261,6 +382,9 @@ class Sample_Wrapper_Access
 		}
 	}
 	
+	/**
+	 * NEW
+	 */
 	public static function list_item_samples($item_sql, $order_by, $order_method, $start, $end)
 	{
 		global $db;
@@ -329,6 +453,16 @@ class Sample_Wrapper_Access
 						"LEFT JOIN ".constant("SAMPLE_DEPOSITORY_TABLE")." 				ON ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_depository_id 	= ".constant("SAMPLE_DEPOSITORY_TABLE").".id " .
 						"LEFT JOIN ".constant("USER_PROFILE_TABLE")." 					ON ".constant("SAMPLE_TABLE").".owner_id								 	= ".constant("USER_PROFILE_TABLE").".id " .
 						"WHERE ".constant("SAMPLE_IS_ITEM_TABLE").".item_id IN (".$item_sql.") " .
+						"AND (".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".primary_key IN " .
+									"( " .
+									"SELECT primary_key " .
+									"FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." " .
+									"WHERE sample_id = ".constant("SAMPLE_TABLE").".id AND " .
+									"".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime = " .
+										"(SELECT MAX(".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime) FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." WHERE ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_id = ".constant("SAMPLE_TABLE").".id) " .
+									") " .
+								"OR ".constant("SAMPLE_TABLE").".id NOT IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").") " .
+								") " .
 						"".$sql_order_by."";
 			
 			$return_array = array();
@@ -365,6 +499,9 @@ class Sample_Wrapper_Access
 		}
 	}
 	
+	/**
+	 * NEW
+	 */
 	public static function count_item_samples($item_sql)
 	{
 		global $db;
@@ -387,6 +524,9 @@ class Sample_Wrapper_Access
 		}
 	}
 	
+	/**
+	 * NEW
+	 */
 	public static function list_item_parentsamples($item_id, $order_by, $order_method, $start, $end)
 	{
 		global $db;
@@ -455,6 +595,16 @@ class Sample_Wrapper_Access
 						"LEFT JOIN ".constant("SAMPLE_DEPOSITORY_TABLE")." 				ON ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_depository_id 	= ".constant("SAMPLE_DEPOSITORY_TABLE").".id " .
 						"LEFT JOIN ".constant("USER_PROFILE_TABLE")." 					ON ".constant("SAMPLE_TABLE").".owner_id								 	= ".constant("USER_PROFILE_TABLE").".id " .
 						"WHERE ".constant("SAMPLE_HAS_ITEM_TABLE").".item_id = ".$item_id." " .
+						"AND (".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".primary_key IN " .
+									"( " .
+									"SELECT primary_key " .
+									"FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." " .
+									"WHERE sample_id = ".constant("SAMPLE_TABLE").".id AND " .
+									"".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime = " .
+										"(SELECT MAX(".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime) FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." WHERE ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_id = ".constant("SAMPLE_TABLE").".id) " .
+									") " .
+								"OR ".constant("SAMPLE_TABLE").".id NOT IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").") " .
+								") " .
 						"".$sql_order_by."";
 			
 			$return_array = array();
@@ -491,6 +641,9 @@ class Sample_Wrapper_Access
 		}
 	}
 	
+	/**
+	 * NEW
+	 */
 	public static function count_item_parentsamples($item_id)
 	{
 		global $db;
@@ -513,6 +666,151 @@ class Sample_Wrapper_Access
 		}
 	}
 	
+	/**
+	 * NEW
+	 * @param integer $organisation_unit_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return integer
+	 */
+	public static function list_organisation_unit_samples($organisation_unit_id, $order_by, $order_method, $start, $end)
+	{
+		global $db;
+		
+		if (is_numeric($organisation_unit_id))
+		{	
+			if ($order_by and $order_method)
+			{
+				if ($order_method == "asc")
+				{
+					$sql_order_method = "ASC";
+				}
+				else
+				{
+					$sql_order_method = "DESC";
+				}
+				
+				switch($order_by):
+				
+					case "id":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_TABLE").".id ".$sql_order_method;
+					break;
+						
+					case "name":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_TABLE").".name ".$sql_order_method;
+					break;
+					
+					case "datetime":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_TABLE").".datetime ".$sql_order_method;
+					break;
+					
+					case "template":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_TEMPLATE_TABLE").".name ".$sql_order_method;
+					break;
+					
+					case "depository":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_DEPOSITORY_TABLE").".name ".$sql_order_method;
+					break;
+					
+					default:
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_TABLE").".id ".$sql_order_method;
+					break;
+				
+				endswitch;
+			}
+			else
+			{
+				$sql_order_by = "ORDER BY ".constant("SAMPLE_TABLE").".id";
+			}
+			
+			$sql = "SELECT ".constant("SAMPLE_TABLE").".id AS id, " .
+						"".constant("SAMPLE_TABLE").".name AS name," .
+						"".constant("SAMPLE_TABLE").".datetime AS datetime," .
+						"".constant("SAMPLE_TEMPLATE_TABLE").".name AS template," .
+						"".constant("SAMPLE_DEPOSITORY_TABLE").".name AS depository," .
+						"".constant("SAMPLE_TABLE").".date_of_expiry AS date_of_expiry, " .
+						"".constant("SAMPLE_TABLE").".available AS av " .
+						"FROM ".constant("SAMPLE_TABLE")." " .
+						"JOIN ".constant("SAMPLE_TEMPLATE_TABLE")." 				ON ".constant("SAMPLE_TABLE").".template_id 								= ".constant("SAMPLE_TEMPLATE_TABLE").".id " .
+						"LEFT JOIN ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." 	ON ".constant("SAMPLE_TABLE").".id 											= ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_id " .
+						"LEFT JOIN ".constant("SAMPLE_DEPOSITORY_TABLE")." 				ON ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_depository_id 	= ".constant("SAMPLE_DEPOSITORY_TABLE").".id " .
+						"WHERE " .
+							"".constant("SAMPLE_TABLE").".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE").".organisation_unit_id = ".$organisation_unit_id.") " .
+							"AND " .
+								"(".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".primary_key IN " .
+									"( " .
+									"SELECT primary_key " .
+									"FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." " .
+									"WHERE sample_id = ".constant("SAMPLE_TABLE").".id AND " .
+									"".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime = " .
+										"(SELECT MAX(".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime) FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." WHERE ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_id = ".constant("SAMPLE_TABLE").".id) " .
+									") " .
+								"OR ".constant("SAMPLE_TABLE").".id NOT IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").") " .
+								") " .
+							"".$sql_order_by."";
+			
+			$return_array = array();
+		
+			$res = $db->db_query($sql);
+			
+			if (is_numeric($start) and is_numeric($end))
+			{
+				for ($i = 0; $i<=$end-1; $i++)
+				{
+					if (($data = $db->db_fetch_assoc($res)) == null)
+					{
+						break;
+					}
+					
+					if ($i >= $start)
+					{
+						array_push($return_array, $data);
+					}
+				}
+			}
+			else
+			{
+				while ($data = $db->db_fetch_assoc($res))
+				{
+					array_push($return_array, $data);
+				}
+			}
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * NEW
+	 * @param integer $organisation_unit_id
+	 * @return integer
+	 */
+	public static function count_organisation_unit_samples($organisation_unit_id)
+	{
+		global $db;
+		
+		if (is_numeric($organisation_unit_id))
+		{	
+			$sql = "SELECT COUNT(".constant("SAMPLE_TABLE").".id) AS result " .
+						"FROM ".constant("SAMPLE_TABLE")." " .
+						"LEFT JOIN ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." ON ".constant("SAMPLE_TABLE").".id = ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE").".sample_id " .
+						"WHERE organisation_unit_id = ".$organisation_unit_id." ";
+			
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+	
+			return $data[result];
+		}
+		else
+		{
+			return null;
+		}
+	}
 }
 
 ?>

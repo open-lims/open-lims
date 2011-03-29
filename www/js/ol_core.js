@@ -49,10 +49,10 @@ function menuOrganisationUnitInit(id) {
 	var username = getGetParam("username");
 	
 	var nav = getGetParam("nav");
-	if (nav == "samples") {
-		nav = "samples";
+	if (nav == "sample") {
+		nav = "sample";
 	}else{
-		nav = "projects";
+		nav = "project";
 	}
 	
 	menu[id] = new TreeMenu(id, "/core/modules/organisation_unit/organisation_unit.ajax.php?run=list_menu_ou_childs&session_id=" + session_id + "&ou_id", "index.php?username=" + username + "&session_id=" + session_id + "&nav=" + nav +"&run=organ_unit&ou_id", "menuFolderSub", false, "left_navigation");

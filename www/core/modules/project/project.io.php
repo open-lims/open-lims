@@ -1850,6 +1850,116 @@ class ProjectIO
 		}
 	}
 	
+	public static function list_projects_by_item_id($item_id)
+	{
+		if (is_numeric($item_id))
+		{
+			$list = new List_IO(Project_Wrapper::count_projects_by_item_id($item_id), 20);
+
+			$list->add_row("","symbol",false,16);
+			$list->add_row("Name","name",true,null);
+			$list->add_row("Date/Time","datetime",true,null);
+			$list->add_row("Template","template",true,null);
+			$list->add_row("Owner","owner",true,null);
+			$list->add_row("Status","status",true,null);
+
+			if ($_GET[page])
+			{
+				if ($_GET[sortvalue] and $_GET[sortmethod])
+				{
+					$result_array = Project_Wrapper::list_projects_by_item_id($item_id, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
+				}
+				else
+				{
+					$result_array = Project_Wrapper::list_projects_by_item_id($item_id, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
+				}				
+			}
+			else
+			{
+				if ($_GET[sortvalue] and $_GET[sortmethod])
+				{
+					$result_array = Project_Wrapper::list_projects_by_item_id($item_id, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
+				}
+				else
+				{
+					$result_array = Project_Wrapper::list_projects_by_item_id($item_id, null, null, 0, 20);
+				}	
+			}
+			
+			if (is_array($result_array) and count($result_array) >= 1)
+			{
+				$today_begin = new DatetimeHandler(date("Y-m-d")." 00:00:00");
+				$today_end = new DatetimeHandler(date("Y-m-d")." 23:59:59");
+				
+				foreach($result_array as $key => $value)
+				{
+					$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
+					$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y");
+				
+					if ($result_array[$key][owner])
+					{
+						$user = new User($result_array[$key][owner]);
+					}
+					else
+					{
+						$user = new User(1);
+					}
+					
+					$result_array[$key][owner] = $user->get_full_name(true);
+					
+					if (strlen($result_array[$key][template]) > 25)
+					{
+						$result_array[$key][template] = substr($result_array[$key][template],0,25)."...";
+					}
+					else
+					{
+						$result_array[$key][template] = $result_array[$key][template];
+					}
+					
+					$project_id = $result_array[$key][id];
+					$project_security = new ProjectSecurity($sample_id);
+					
+					if ($project_security->is_access(1, false))
+					{
+						$paramquery = array();
+						$paramquery[username] = $_GET[username];
+						$paramquery[session_id] = $_GET[session_id];
+						$paramquery[nav] = "project";
+						$paramquery[run] = "detail";
+						$paramquery[project_id] = $project_id;
+						$params = http_build_query($paramquery,'','&#38;');
+						
+						$result_array[$key][symbol][link]		= $params;
+						$result_array[$key][symbol][content] 	= "<img src='images/icons/project.png' alt='' style='border:0;' />";
+					
+						$project_name = $result_array[$key][name];
+						unset($result_array[$key][name]);
+						$result_array[$key][name][link] 		= $params;
+						$result_array[$key][name][content]		= $project_name;
+					}
+					else
+					{
+						$result_array[$key][symbol]	= "<img src='core/images/denied_overlay.php?image=images/icons/project.png' alt='N' border='0' />";
+					}
+				}
+			}
+			else
+			{
+				$list->override_last_line("<span class='italic'>No results found!</span>");
+			}
+			
+			$template = new Template("languages/en-gb/template/projects/list_projects_by_item.html");
+
+			$template->set_var("table", $list->get_list($result_array, $_GET[page]));
+			
+			$template->output();
+		}
+		else
+		{
+			// Error
+		}
+	}
+	
 	/**
 	 * @todo project bar appearance
 	 */

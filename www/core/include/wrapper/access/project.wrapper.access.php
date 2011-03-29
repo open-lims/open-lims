@@ -584,6 +584,135 @@ class Project_Wrapper_Access
 			return null;
 		}
 	}
+
+	/**
+	 * NEW
+	 */
+	public static function list_projects_by_item_id($item_id, $order_by, $order_method, $start, $end)
+	{
+		global $db;
 		
+		if (is_numeric($item_id))
+		{
+			if ($order_by and $order_method)
+			{
+				if ($order_method == "asc")
+				{
+					$sql_order_method = "ASC";
+				}
+				else
+				{
+					$sql_order_method = "DESC";
+				}
+				
+				switch($order_by):
+						
+					case "name":
+						$sql_order_by = "ORDER BY ".constant("PROJECT_TABLE").".name ".$sql_order_method;
+					break;
+					
+					case "datetime":
+						$sql_order_by = "ORDER BY ".constant("PROJECT_TABLE").".datetime ".$sql_order_method;
+					break;
+					
+					case "template":
+						$sql_order_by = "ORDER BY ".constant("PROJECT_TEMPLATE_TABLE").".name ".$sql_order_method;
+					break;
+					
+					case "status":
+						$sql_order_by = "ORDER BY ".constant("PROJECT_STATUS_TABLE").".name ".$sql_order_method;
+					break;
+					
+					case "owner":
+						$sql_order_by = "ORDER BY ".constant("USER_PROFILE_TABLE").".surname ".$sql_order_method;
+					break;
+					
+					default:
+						$sql_order_by = "ORDER BY ".constant("PROJECT_TABLE").".datetime ".$sql_order_method;
+					break;
+				
+				endswitch;
+			}
+			else
+			{
+				$sql_order_by = "ORDER BY ".constant("PROJECT_TABLE").".datetime";
+			}
+				
+			$sql = "SELECT ".constant("PROJECT_TABLE").".id AS id, " .
+						"".constant("PROJECT_TABLE").".name AS name," .
+						"".constant("PROJECT_TABLE").".datetime AS datetime," .
+						"".constant("PROJECT_TEMPLATE_TABLE").".name AS template, " .
+						"".constant("PROJECT_STATUS_TABLE").".name AS status, " .
+						"".constant("PROJECT_TABLE").".owner_id AS owner " .
+						"FROM ".constant("PROJECT_TABLE")." " .
+						"JOIN ".constant("PROJECT_HAS_ITEM_TABLE")." 				ON ".constant("PROJECT_TABLE").".id 										= ".constant("PROJECT_HAS_ITEM_TABLE").".project_id ".
+						"JOIN ".constant("PROJECT_TEMPLATE_TABLE")." 				ON ".constant("PROJECT_TABLE").".template_id 								= ".constant("PROJECT_TEMPLATE_TABLE").".id " .
+						"JOIN ".constant("USER_PROFILE_TABLE")." 					ON ".constant("PROJECT_TABLE").".owner_id								 	= ".constant("USER_PROFILE_TABLE").".id " .
+						"JOIN ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." 		ON ".constant("PROJECT_TABLE").".id 										= ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE").".project_id " .
+						"JOIN ".constant("PROJECT_STATUS_TABLE")." 					ON ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE").".status_id 				= ".constant("PROJECT_STATUS_TABLE").".id " .					
+						"WHERE ".constant("PROJECT_HAS_ITEM_TABLE").".item_id = ".$item_id." " .
+						"AND ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE").".datetime = " .
+									"(SELECT MAX(datetime) FROM ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." WHERE ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE").".project_id = ".constant("PROJECT_TABLE").".id)" .
+						"".$sql_order_by."";
+			
+			$return_array = array();
+			
+			$res = $db->db_query($sql);
+			
+			if (is_numeric($start) and is_numeric($end))
+			{
+				for ($i = 0; $i<=$end-1; $i++)
+				{
+					if (($data = $db->db_fetch_assoc($res)) == null)
+					{
+						break;
+					}
+					
+					if ($i >= $start)
+					{
+						array_push($return_array, $data);
+					}
+				}
+			}
+			else
+			{
+				while ($data = $db->db_fetch_assoc($res))
+				{
+					array_push($return_array, $data);
+				}
+			}
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * NEW
+	 */
+	public static function count_projects_by_item_id($item_id)
+	{
+		global $db;
+		
+		if (is_numeric($item_id))
+		{
+			$sql = "SELECT COUNT(DISTINCT ".self::PROJECT_TABLE.".id) AS result " .
+						"FROM ".constant("PROJECT_TABLE")." " .
+						"JOIN ".constant("PROJECT_HAS_ITEM_TABLE")." ON ".constant("PROJECT_TABLE").".id = ".constant("PROJECT_HAS_ITEM_TABLE").".project_id ".
+						"WHERE ".constant("PROJECT_HAS_ITEM_TABLE").".item_id = ".$item_id." ";
+						
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+	
+			return $data[result];
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 }
 ?>

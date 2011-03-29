@@ -25,14 +25,28 @@
 		<td>Owner:</td>
 		<td><a href=''>{OWNER}</a></td>
 	</tr>
+	
+	<!-- IF ({DEPOSITORY}) -->
 	<tr>
 		<td>Current Depository:</td>
 		<td>{DEPOSITORY} (<a href='index.php?{DEPOSITORY_HISTORY_PARAMS}'>History</a>)</td>
 	</tr>
+	<!-- ENDIF -->
+	
+	<!-- IF ({SUPPLIER}) -->
 	<tr>
 		<td>Supplier/Source:</td>
 		<td>{SUPPLIER}</td>
 	</tr>
+	<!-- ENDIF -->
+	
+	<!-- IF ({DATE_OF_EXPIRY}) -->
+	<tr>
+		<td>Date of Expiry:</td>
+		<td>{DATE_OF_EXPIRY}</td>
+	</tr>
+	<!-- ENDIF -->
+	
 	<tr>
 		<td>Date/Time:</td>
 		<td>{DATETIME}</td>

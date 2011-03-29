@@ -44,15 +44,8 @@ class ProjectItemFactory implements ProjectItemFactoryInterface
 			$project = new Project($project_id);
 			$project_item = new ProjectItem($project_id);
 			
-			if ($project_item->set_gid($gid) == false)
-			{
-				return false;
-			}
-			
-			if ($project_item->set_status_id($project->get_current_status_id()) == false)
-			{
-				return false;	
-			}
+			$project_item->set_gid($gid) == false;
+			$project_item->set_status_id($project->get_current_status_id());
 			
 			if ($project_item->set_item_id($item_id) == false)
 			{
@@ -64,10 +57,7 @@ class ProjectItemFactory implements ProjectItemFactoryInterface
 				return false;	
 			}
 			
-			if ($project_item->set_item_status() == false)
-			{
-				return false;	
-			}
+			$project_item->set_item_status();
 		
 			if (($class_name = $project_item->is_classified()) == true)
 			{

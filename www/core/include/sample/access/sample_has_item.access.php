@@ -354,6 +354,42 @@ class SampleHasItem_Access
 	
 	/**
 	 * @param integer $item_id
+	 * @param integer $gid
+	 * @return array
+	 */
+	public static function list_sample_id_by_item_id_and_gid($item_id, $gid)
+	{
+		global $db;
+		
+		if (is_numeric($item_id) and is_numeric($gid))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT sample_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND gid = ".$gid."";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,$data[sample_id]);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $item_id
 	 * @return array
 	 */
 	public static function list_entries_by_item_id($item_id)

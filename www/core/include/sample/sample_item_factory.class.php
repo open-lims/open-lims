@@ -44,10 +44,7 @@ class SampleItemFactory implements SampleItemFactoryInterface
 			$sample = new Sample($sample_id);
 			$sample_item = new SampleItem($sample_id);
 			
-			if ($sample_item->set_gid($gid) == false)
-			{
-				return false;
-			}
+			$sample_item->set_gid($gid);
 			
 			if ($sample_item->set_item_id($item_id) == false)
 			{

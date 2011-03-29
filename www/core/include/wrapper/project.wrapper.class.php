@@ -153,5 +153,14 @@ class Project_Wrapper implements Project_WrapperInterface
 		return Project_Wrapper_Access::count_list_user_related_projects($user_id);
 	}
 	
+	public static function list_projects_by_item_id($item_id, $order_by, $order_method, $start, $end)
+	{
+		return Project_Wrapper_Access::list_projects_by_item_id($item_id, $order_by, $order_method, $start, $end);
+	}
+	
+	public static function count_projects_by_item_id($item_id)
+	{
+		return Project_Wrapper_Access::count_projects_by_item_id($item_id);
+	}
 }
 ?>

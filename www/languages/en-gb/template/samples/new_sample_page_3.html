@@ -18,25 +18,37 @@ $(function() \{
 <br />
 <table class='formTable'>
 	<tr>
+		<th width='50%'></th>
+		<th width='50%'></th>
+	<tr>
 		<td>Name:</td>
 		<td>
 			<input type='text' name='name' class='sampleTextfield' value='{NAME}' />
-			<span class='formError'>{ERROR0}</span>
+			<span class='formError'><br />{ERROR0}</span>
 		</td>
 	</tr>
+	
+	<!-- IF ({SHOW_SUPPLIER}) -->
 	<tr>
 		<td>Supplier/Source/Manufacturer:</td>
 		<td>
 			<input type='text' name='supplier' class='sampleTextfield' value='{SUPPLIER}' />
-			<span class='formError'>{ERROR1}</span>
+			<span class='formError'><br />{ERROR1}</span>
 		</td>
 	</tr>
+	<!-- ENDIF -->
+	
+	<!-- IF ({SHOW_EXPIRY}) -->
 	<tr>
 		<td>Date of Expiry:</td>
 		<td>
-			<input type='text' name='dateofexpiry' class='sampleTextfield' id='datepicker' />
+			<input type='text' name='expiry' class='sampleTextfield' value='{EXPIRY}' id='datepicker' />
+			<span class='formError'><br />{ERROR2}</span>
 		</td>
 	</tr>
+	<!-- ENDIF -->
+	
+	<!-- IF ({SHOW_DEPOSITORY}) -->
 	<tr>
 		<td>Depository:</td>
 		<td>
@@ -49,8 +61,10 @@ $(function() \{
 			<!-- FOREACH END -->	
 				
 			</select>
+			<span class='formError'><br />{ERROR3}</span>
 		</td>
 	</tr>
+	<!-- ENDIF -->
 
 	<tr>
 		<td colspan='2'><div class='horizontal_line'>&nbsp;</div></td>

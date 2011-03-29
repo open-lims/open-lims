@@ -99,7 +99,7 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 }
 
 #content {
-	font: normal 0.8em Verdana, Helvetica, sans-serif;
+	font: normal 0.8em Arial, Helvetica, sans-serif;
 	width: 750px;
 	margin-right: 15px;
 	margin-bottom: 2em;
@@ -169,21 +169,27 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 
 .OverviewTable {
 	width: 100%;
+	border-collapse: collapse;
 }
 
 .OverviewTable th {
 	font-weight: bold;
 	text-align: left;
-	/* background-color: #99b2cc; */
+	border-bottom: 1px #C0C0C0 dotted;
 }
 
 .OverviewTable th a {
 	text-decoration: none;
 }
 
+.OverviewTable td {
+	padding: 4px 2px;
+}
+
 .OverviewTable tr {
 	vertical-align: top;
 }
+
 
 .OverviewTableLeft {
 	float: left;
@@ -1067,12 +1073,12 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 }
 
 .sampleSelect {
-	width: 18em;
+	width: 272px;
 	border: 1px #C0C0C0 solid;
 }
 
 .sampleTextfield {
-	width: 18em;
+	width: 270px;
 	border: 1px #C0C0C0 solid;
 }
 

@@ -259,6 +259,50 @@ class SampleTemplate implements SampleTemplateInterface
 	}
 	
 	/**
+	 * @return array
+	 */
+	public function get_information_fields()
+	{
+		if ($this->sample_template and $this->sample_template_id)
+		{
+			$oldl = new Oldl($this->sample_template->get_template_id());	    
+		    $xml_array = $oldl->get_cutted_xml_array("head");	
+
+			if (is_array($xml_array) and count($xml_array) >= 1)
+		    {
+			    foreach($xml_array as $key => $value)
+			    {
+			    	$value[0] = trim(strtolower($value[0]));
+					$value[1] = trim(strtolower($value[1]));
+					$value[2] = trim(strtolower($value[2]));
+			
+					if ($value[1] == "depository" or $value[1] == "supplier" or $value[1] == "expiry")
+					{
+			    		if ($value[3][id] != "#" and $value[3][type] != "#")
+			    		{
+				    		$return_array[$value[1]][name]		= $value[1];
+				    					    		
+				    		if ($value[3]['requirement'])
+				    		{
+				    			$return_array[$value[1]]['requirement']	= $value[3]['requirement'];
+				    		}
+			    		}
+					}
+			    }
+		    }
+		    else
+		    {
+		    	$return_array = array();
+		    }
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * Checks if a required-section exists in template
 	 * @return bool
 	 */

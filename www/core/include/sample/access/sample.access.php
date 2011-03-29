@@ -39,6 +39,8 @@ class Sample_Access
 	private $available;
 	private $deleted;
 	private $comment;
+	private $language_id;
+	private $date_of_expiry;
 	
 	/**
 	 * @param integer $sample_id
@@ -59,14 +61,16 @@ class Sample_Access
 			
 			if ($data[id])
 			{
-				$this->sample_id 	= $sample_id;
+				$this->sample_id 		= $sample_id;
 				
-				$this->name			= $data[name];
-				$this->datetime		= $data[datetime];
-				$this->owner_id		= $data[owner_id];
-				$this->template_id	= $data[template_id];
-				$this->supplier		= $data[supplier];
-				$this->comment		= $data[comment];
+				$this->name				= $data[name];
+				$this->datetime			= $data[datetime];
+				$this->owner_id			= $data[owner_id];
+				$this->template_id		= $data[template_id];
+				$this->supplier			= $data[supplier];
+				$this->comment			= $data[comment];
+				$this->language_id		= $data[language_id];
+				$this->date_of_expiry	= $data[date_of_expiry];
 				
 				if ($data[deleted] == "t")
 				{
@@ -118,12 +122,21 @@ class Sample_Access
 	 * @param string $comment
 	 * @return integer
 	 */
-	public function create($name, $owner_id, $template_id, $supplier, $comment)
+	public function create($name, $owner_id, $template_id, $supplier, $comment, $language_id, $date_of_expiry)
 	{
 		global $db;
 		
-		if ($name and is_numeric($owner_id) and is_numeric($template_id) and $supplier)
+		if ($name and is_numeric($owner_id) and is_numeric($template_id))
 		{
+			if (!$supplier)
+			{
+				$supplier_insert = "NULL";
+			}
+			else
+			{
+				$supplier_insert = "'".$supplier."'";
+			}
+			
 			if (!$comment)
 			{
 				$comment_insert = "NULL";
@@ -133,10 +146,28 @@ class Sample_Access
 				$comment_insert = "'".$comment."'";
 			}
 			
+			if (is_numeric($language_id))
+			{
+				$language_id_insert = $language_id;
+			}
+			else
+			{
+				$language_id_insert = "1";
+			}
+			
+			if (!$date_of_expiry)
+			{
+				$date_of_expiry_insert = "NULL";
+			}
+			else
+			{
+				$date_of_expiry_insert = "'".$date_of_expiry."'";
+			}
+			
 			$datetime = date("Y-m-d H:i:s");
 			
-			$sql_write = "INSERT INTO ".constant("SAMPLE_TABLE")." (id, name, datetime, owner_id, template_id, supplier, available, deleted, comment, language_id) " .
-					"VALUES (nextval('".self::SAMPLE_PK_SEQUENCE."'::regclass), '".$name."','".$datetime."',".$owner_id.",".$template_id.",'".$supplier."','t','f',".$comment_insert.",1)";
+			$sql_write = "INSERT INTO ".constant("SAMPLE_TABLE")." (id, name, datetime, owner_id, template_id, supplier, available, deleted, comment, language_id, date_of_expiry) " .
+					"VALUES (nextval('".self::SAMPLE_PK_SEQUENCE."'::regclass), '".$name."','".$datetime."',".$owner_id.",".$template_id.",".$supplier_insert.",'t','f',".$comment_insert.",".$language_id_insert.",".$date_of_expiry_insert.")";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
@@ -304,6 +335,36 @@ class Sample_Access
 		if ($this->comment)
 		{
 			return $this->comment;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @return integer
+	 */
+	public function get_language_id()
+	{
+		if ($this->language_id)
+		{
+			return $this->language_id;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function get_date_of_expiry()
+	{
+		if ($this->date_of_expiry)
+		{
+			return $this->date_of_expiry;
 		}
 		else
 		{
@@ -600,6 +661,63 @@ class Sample_Access
 		}
 	}
 	
+	/**
+	 * @param integer $language_id
+	 * @return bool
+	 */
+	public function set_language_id($language_id)
+	{
+		global $db;
+			
+		if ($this->sample_id and is_numeric($language_id))
+		{
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET language_id = '".$language_id."' WHERE id = '".$this->sample_id."'";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->language_id = $language_id;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param string $date_of_expiry
+	 * @return bool
+	 */
+	public function set_date_of_expiry($date_of_expiry)
+	{
+		global $db;
+			
+		if ($this->sample_id and $date_of_expiry)
+		{
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET date_of_expiry = '".$date_of_expiry."' WHERE id = '".$this->sample_id."'";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->date_of_expiry = $date_of_expiry;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
 	
 	
 	/**

@@ -104,6 +104,7 @@ class Misc implements MiscInterface
 			switch ($key):
 				case "nav":
 				case "run":
+				case "dialog":
 				case "project_id":
 				case "sample_id":
 					$retrace_array[$key] = $_GET[$key];

@@ -703,6 +703,16 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     }
     
 	/**
+	 * @param integer $item_id
+	 * @param integer $gid
+	 * @return array
+	 */
+	public static function list_sample_id_by_item_id_and_gid($item_id, $gid)
+	{
+		return SampleHasItem_Access::list_sample_id_by_item_id_and_gid($item_id, $gid);
+	}
+    
+	/**
      * @param object $event_object
      * @return bool
      */

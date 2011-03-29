@@ -28,268 +28,305 @@
 class SampleIO
 {
 	/**
-	 * todo via wrapper and list io
+	 * NEW
 	 */
 	public static function list_user_related_samples($user_id)
 	{
-		global $user, $content;
+		global $user;
 		
-		$content_array = array();
+		$list = new List_IO(Sample_Wrapper::count_user_samples($user->get_user_id()), 20);
 
-		$table_io = new TableIO("OverviewTable");
-
-		$table_io->add_row("","symbol",false,16);
-		$table_io->add_row("Sample ID","id",false,null);
-		$table_io->add_row("Sample Name","name",false,null);
-		$table_io->add_row("Date","datetime",false,null);
-		$table_io->add_row("Type/Template","template",false,null);
-		$table_io->add_row("Curr. Depository","depository",false,null);
-		$table_io->add_row("Owner","owner",false,null);
-		$table_io->add_row("AV","av",false,null);
-
-		$sample_array = Sample::list_user_related_samples($user->get_user_id());
+		$list->add_row("","symbol",false,"16px");
+		$list->add_row("Smpl. ID","id",true,"11%");
+		$list->add_row("Sample Name","name",true,null);
+		$list->add_row("Date/Time","datetime",true,null);
+		$list->add_row("Type/Tmpl.","template",true,null);
+		$list->add_row("Curr. Depos.","depository",true,null);
+		$list->add_row("AV","av",false,"16px");
 		
-		$sample_array_cardinality = count($sample_array);
-		
-		$counter = 0;
-
-		if (!$_GET[page] or $_GET[page] == 1)
+		if ($_GET[page])
 		{
-			$page = 1;
-			$counter_begin = 0;
-			if ($sample_array_cardinality > 25)
+			if ($_GET[sortvalue] and $_GET[sortmethod])
 			{
-				$counter_end = 24;
+				$result_array = Sample_Wrapper::list_user_samples($user->get_user_id(), $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
 			}
 			else
 			{
-				$counter_end = $sample_array_cardinality-1;
-			}
+				$result_array = Sample_Wrapper::list_user_samples($user->get_user_id(), null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
+			}				
 		}
 		else
 		{
-			if ($_GET[page] >= ceil($sample_array_cardinality/25))
+			if ($_GET[sortvalue] and $_GET[sortmethod])
 			{
-				$page = ceil($sample_array_cardinality/25);
-				$counter_end = $sample_array_cardinality;
+				$result_array = Sample_Wrapper::list_user_samples($user->get_user_id(), $_GET[sortvalue], $_GET[sortmethod], 0, 20);
 			}
 			else
 			{
-				$page = $_GET[page];
-				$counter_end = (25*$page)-1;
-			}
-			$counter_begin = (25*$page)-25;
+				$result_array = Sample_Wrapper::list_user_samples($user->get_user_id(), null, null, 0, 20);
+			}	
 		}
 		
-		if (is_array($sample_array) and count($sample_array) >= 1)
+		if (is_array($result_array) and count($result_array) >= 1)
 		{
-			foreach ($sample_array as $key => $value)
-			{
-				$sample	= new Sample($value);
-				$owner = new User($sample->get_owner_id());
-				$datetime = new DatetimeHandler($sample->get_datetime());
-				
-				$column_array = array();
-				
-				$paramquery = $_GET;
-				$paramquery[run] = "detail";
-				$paramquery[sample_id] = $value;
-				unset($paramquery[page]);
-				$params = http_build_query($paramquery,'','&#38;');
-				
-				if (strlen($sample->get_name()) > 11)
-				{
-					$sample_name = substr($sample->get_name(),0,11)."...";
-				}
-				else
-				{
-					$sample_name = $sample->get_name();
-				}
-				
-				if (strlen($sample->get_template_name()) > 18)
-				{
-					$sample_template = substr($sample->get_template_name(),0,18)."...";
-				}
-				else
-				{
-					$sample_template = $sample->get_template_name();
-				}
-				
-				$column_array[symbol][link] 	= $params;
-				$column_array[symbol][content]	= "<img src='images/icons/sample.png' alt='' style='border: 0;' />";
-				$column_array[id][link] 		= $params;
-				$column_array[id][content] 		= $sample->get_formatted_id();	
-				$column_array[name][link] 		= $params;
-				$column_array[name][content] 	= $sample_name;	
-				$column_array[datetime] 		= $datetime->get_formatted_string("dS M Y");
-				$column_array[template]			= $sample_template;
-				$column_array[depository]		= $sample->get_current_depository_name();
-				$column_array[owner] 			= $owner->get_full_name(true);
-				
-				if ($sample->get_availability() == true)
-				{
-					$column_array[av]			= "<img src='images/icons/green_point.png' alt='' />";
-				}
-				else
-				{
-					$column_array[av]			= "<img src='images/icons/grey_point.png' alt='' />";
-				}
-				array_push($content_array, $column_array);				
-			}
-		}
-		else
-		{
-			$content_array = null;
-			$table_io->override_last_line("<span class='italic'>No Samples Found!</span>");
-		}
-		
-		$template = new Template("languages/en-gb/template/samples/user_related_samples.html");	
-
-		$table_io->add_content_array($content_array);	
+			$today_begin = new DatetimeHandler(date("Y-m-d")." 00:00:00");
+			$today_end = new DatetimeHandler(date("Y-m-d")." 23:59:59");
 			
-		$template->set_var("table", $table_io->get_table($page ,$sample_array_cardinality));		
+			foreach($result_array as $key => $value)
+			{
+				$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
+				$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y");
 
+				if ($result_array[$key][av] == "f")
+				{
+					$result_array[$key][av] = "<img src='images/icons/grey_point.png' alt='' />";
+				}
+				else
+				{
+					if ($result_array[$key][date_of_expiry])
+					{
+						$date_of_expiry = new DatetimeHandler($result_array[$key][date_of_expiry]);
+	
+						if ($date_of_expiry->distance($today_end) > 0)
+						{
+							if ($date_of_expiry->distance($today_begin) > 0)
+							{
+								$result_array[$key][av] = "<img src='images/icons/red_point.png' alt='' />";
+							}
+							else
+							{
+								$result_array[$key][av] = "<img src='images/icons/yellow_point.png' alt='' />";
+							}
+						}
+						else
+						{
+							if ($result_array[$key][av] == "t")
+							{
+								$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
+							}
+							else
+							{
+								$result_array[$key][av] = "<img src='images/icons/grey_point.png' alt='' />";
+							}
+						}
+					}
+					else
+					{
+						$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
+					}
+				}
+				
+				if (strlen($result_array[$key][name]) > 17)
+				{
+					$result_array[$key][name] = substr($result_array[$key][name],0,17)."...";
+				}
+				else
+				{
+					$result_array[$key][name] = $result_array[$key][name];
+				}
+				
+				if (strlen($result_array[$key][template]) > 25)
+				{
+					$result_array[$key][template] = substr($result_array[$key][template],0,25)."...";
+				}
+				else
+				{
+					$result_array[$key][template] = $result_array[$key][template];
+				}
+				
+				$sample_id = $result_array[$key][id];
+				$sample_security = new SampleSecurity($sample_id);
+				
+				if ($sample_security->is_access(1, false))
+				{
+					$paramquery = array();
+					$paramquery[username] = $_GET[username];
+					$paramquery[session_id] = $_GET[session_id];
+					$paramquery[nav] = "sample";
+					$paramquery[run] = "detail";
+					$paramquery[sample_id] = $sample_id;
+					$params = http_build_query($paramquery,'','&#38;');
+					
+					$result_array[$key][symbol][link]		= $params;
+					$result_array[$key][symbol][content] 	= "<img src='images/icons/sample.png' alt='' style='border:0;' />";
+				
+					unset($result_array[$key][id]);
+					$result_array[$key][id][link] 			= $params;
+					$result_array[$key][id][content]		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
+				
+					$sample_name = $result_array[$key][name];
+					unset($result_array[$key][name]);
+					$result_array[$key][name][link] 		= $params;
+					$result_array[$key][name][content]		= $sample_name;
+				}
+				else
+				{
+					$result_array[$key][symbol]	= "<img src='core/images/denied_overlay.php?image=images/icons/sample.png' alt='N' border='0' />";
+				}
+			}
+		}
+		else
+		{
+			$list->override_last_line("<span class='italic'>No results found!</span>");
+		}
+		
+		$template = new Template("languages/en-gb/template/samples/list_user.html");	
+
+		$template->set_var("table", $list->get_list($result_array, $_GET[page]));
+		
 		$template->output();
 	}
 	
 	/**
-	 * todo via wrapper and list io
+	 * NEW
 	 */
 	public static function list_organisation_unit_related_samples()
 	{
 		if ($_GET[ou_id])
 		{
-			$content_array = array();
-			
-			$table_io = new TableIO("OverviewTable");
-			
-			$table_io->add_row("","symbol",false,16);
-			$table_io->add_row("Sample ID","id",false,null);
-			$table_io->add_row("Sample Name","name",false,null);
-			$table_io->add_row("Date/Time","datetime",false,null);
-			$table_io->add_row("Type/Template","template",false,null);
-			$table_io->add_row("Current Depository","depository",false,null);
-			$table_io->add_row("Owner","owner",false,null);
-			$table_io->add_row("AV","av",false,null);
-			
-			$sample_array = Sample::list_organisation_unit_related_samples($_GET[ou_id]);
-			
-			$sample_array_cardinality = count($sample_array);
+			$list = new List_IO(Sample_Wrapper::count_organisation_unit_samples($_GET[ou_id]), 12);
+
+			$list->add_row("","symbol",false,"16px");
+			$list->add_row("Smpl. ID","id",true,"11%");
+			$list->add_row("Sample Name","name",true,null);
+			$list->add_row("Date/Time","datetime",true,null);
+			$list->add_row("Type/Tmpl.","template",true,null);
+			$list->add_row("Curr. Depos.","depository",true,null);
+			$list->add_row("AV","av",false,"16px");
 		
-			$counter = 0;
-	
-			if (!$_GET[page] or $_GET[page] == 1)
+			if ($_GET[page])
 			{
-				$page = 1;
-				$counter_begin = 0;
-				if ($sample_array_cardinality > 25)
+				if ($_GET[sortvalue] and $_GET[sortmethod])
 				{
-					$counter_end = 24;
+					$result_array = Sample_Wrapper::list_organisation_unit_samples($_GET[ou_id], $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*12)-12, ($_GET[page]*12));
 				}
 				else
 				{
-					$counter_end = $sample_array_cardinality-1;
-				}
+					$result_array = Sample_Wrapper::list_organisation_unit_samples($_GET[ou_id], null, null, ($_GET[page]*12)-12, ($_GET[page]*12));
+				}				
 			}
 			else
 			{
-				if ($_GET[page] >= ceil($sample_array_cardinality/25))
+				if ($_GET[sortvalue] and $_GET[sortmethod])
 				{
-					$page = ceil($sample_array_cardinality/25);
-					$counter_end = $sample_array_cardinality;
+					$result_array = Sample_Wrapper::list_organisation_unit_samples($_GET[ou_id], $_GET[sortvalue], $_GET[sortmethod], 0, 12);
 				}
 				else
 				{
-					$page = $_GET[page];
-					$counter_end = (25*$page)-1;
-				}
-				$counter_begin = (25*$page)-25;
+					$result_array = Sample_Wrapper::list_organisation_unit_samples($_GET[ou_id], null, null, 0, 12);
+				}	
 			}
 			
-			if (is_array($sample_array) and count($sample_array) >= 1)
+			if (is_array($result_array) and count($result_array) >= 1)
 			{
-				foreach ($sample_array as $key => $value)
+				$today_begin = new DatetimeHandler(date("Y-m-d")." 00:00:00");
+				$today_end = new DatetimeHandler(date("Y-m-d")." 23:59:59");
+				
+				foreach($result_array as $key => $value)
 				{
-					if ($counter >= $counter_begin and $counter <= $counter_end)
+					$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
+					$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y");
+	
+					if ($result_array[$key][av] == "f")
 					{
-						$sample	= new Sample($value);
-						$sample_security = new SampleSecurity($value);
-						$owner = new User($sample->get_owner_id());
-						$datetime = new DatetimeHandler($sample->get_datetime());
-						
-						$column_array = array();
-						
-						$paramquery = $_GET;
+						$result_array[$key][av] = "<img src='images/icons/grey_point.png' alt='' />";
+					}
+					else
+					{
+						if ($result_array[$key][date_of_expiry])
+						{
+							$date_of_expiry = new DatetimeHandler($result_array[$key][date_of_expiry]);
+		
+							if ($date_of_expiry->distance($today_end) > 0)
+							{
+								if ($date_of_expiry->distance($today_begin) > 0)
+								{
+									$result_array[$key][av] = "<img src='images/icons/red_point.png' alt='' />";
+								}
+								else
+								{
+									$result_array[$key][av] = "<img src='images/icons/yellow_point.png' alt='' />";
+								}
+							}
+							else
+							{
+								if ($result_array[$key][av] == "t")
+								{
+									$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
+								}
+								else
+								{
+									$result_array[$key][av] = "<img src='images/icons/grey_point.png' alt='' />";
+								}
+							}
+						}
+						else
+						{
+							$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
+						}
+					}
+					
+					if (strlen($result_array[$key][name]) > 17)
+					{
+						$result_array[$key][name] = substr($result_array[$key][name],0,17)."...";
+					}
+					else
+					{
+						$result_array[$key][name] = $result_array[$key][name];
+					}
+					
+					if (strlen($result_array[$key][template]) > 25)
+					{
+						$result_array[$key][template] = substr($result_array[$key][template],0,25)."...";
+					}
+					else
+					{
+						$result_array[$key][template] = $result_array[$key][template];
+					}
+					
+					$sample_id = $result_array[$key][id];
+					$sample_security = new SampleSecurity($sample_id);
+					
+					if ($sample_security->is_access(1, false))
+					{
+						$paramquery = array();
+						$paramquery[username] = $_GET[username];
+						$paramquery[session_id] = $_GET[session_id];
+						$paramquery[nav] = "sample";
 						$paramquery[run] = "detail";
-						$paramquery[sample_id] = $value;
-						unset($paramquery[page]);
+						$paramquery[sample_id] = $sample_id;
 						$params = http_build_query($paramquery,'','&#38;');
 						
-						if ($sample_security->is_access(1, false) == true)
-						{					
-							$column_array[symbol][link] 	= $params;
-							$column_array[symbol][content] 	= "<img src='images/icons/sample.png' alt='' style='border: 0;' />";	
-							$column_array[id][link] 		= $params;
-						}
-						else
-						{
-							$column_array[symbol][link]		= "";
-							$column_array[symbol][content]	= "<img src='core/images/denied_overlay.php?image=images/icons/sample.png' alt='N' border='0' />";
-							$column_array[id][link]			= "";
-						}
-						
-						if (strlen($sample->get_name()) > 14)
-						{
-							$sample_name = substr($sample->get_name(),0,14)."...";
-						}
-						else
-						{
-							$sample_name = $sample->get_name();
-						}
-						
-						if (strlen($sample->get_template_name()) > 15)
-						{
-							$sample_template = substr($sample->get_template_name(),0,15)."...";
-						}
-						else
-						{
-							$sample_template = $sample->get_template_name();
-						}
-						
-						$column_array[id][content] 		= $sample->get_formatted_id();	
-						$column_array[name][content] 	= $sample_name;	
-						$column_array[datetime] 		= $datetime->get_formatted_string("dS M Y H:i");
-						$column_array[template]			= $sample_template;
-						$column_array[depository]		= $sample->get_current_depository_name();
-						$column_array[owner] 			= $owner->get_full_name(true);
-						
-						if ($sample->get_availability() == true)
-						{
-							$column_array[av]			= "<img src='images/icons/green_point.png' alt='' />";
-						}
-						else
-						{
-							$column_array[av]			= "<img src='images/icons/grey_point.png' alt='' />";
-						}
-						array_push($content_array, $column_array);
+						$result_array[$key][symbol][link]		= $params;
+						$result_array[$key][symbol][content] 	= "<img src='images/icons/sample.png' alt='' style='border:0;' />";
+					
+						unset($result_array[$key][id]);
+						$result_array[$key][id][link] 			= $params;
+						$result_array[$key][id][content]		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
+					
+						$sample_name = $result_array[$key][name];
+						unset($result_array[$key][name]);
+						$result_array[$key][name][link] 		= $params;
+						$result_array[$key][name][content]		= $sample_name;
 					}
-					$counter++;	
+					else
+					{
+						$result_array[$key][symbol]	= "<img src='core/images/denied_overlay.php?image=images/icons/sample.png' alt='N' border='0' />";
+					}
 				}
-				$table_io->add_content_array($content_array);
 			}
 			else
 			{
-				$content_array = null;
-				$table_io->override_last_line("<span class='italic'>No Samples Found!</span>");
+				$list->override_last_line("<span class='italic'>No results found!</span>");
 			}
-				
+			
 			require_once("core/modules/organisation_unit/organisation_unit.io.php");
 			$organisation_unit_io = new OrganisationUnitIO;
 			$organisation_unit_io->detail();
-				
-			$template = new Template("languages/en-gb/template/samples/organisation_unit_related_samples.html");
 			
-			$template->set_var("table", $table_io->get_table($page ,$sample_array_cardinality));		
+			$template = new Template("languages/en-gb/template/samples/list.html");
+
+			$template->set_var("table", $list->get_list($result_array, $_GET[page]));
 			
 			$template->output();
 		}
@@ -299,6 +336,9 @@ class SampleIO
 		}
 	}
 	
+	/**
+	 * NEW
+	 */
 	public static function list_parentsample_items()
 	{
 		if ($_GET[sample_id])
@@ -307,14 +347,14 @@ class SampleIO
 			
 			$list = new List_IO(Sample_Wrapper::count_item_parentsamples($sample->get_item_id()), 20);
 
-			$list->add_row("","symbol",false,16);
-			$list->add_row("Smpl. ID","id",true,null);
+			$list->add_row("","symbol",false,"16px");
+			$list->add_row("Smpl. ID","id",true,"11%");
 			$list->add_row("Sample Name","name",true,null);
 			$list->add_row("Date","datetime",true,null);
 			$list->add_row("Type/Tmpl.","template",true,null);
 			$list->add_row("Curr. Depos.","depository",true,null);
 			$list->add_row("Owner","owner",true,null);
-			$list->add_row("AV","av",false,null);
+			$list->add_row("AV","av",false,"16px");
 			
 			if ($_GET[page])
 			{
@@ -341,6 +381,9 @@ class SampleIO
 			
 			if (is_array($result_array) and count($result_array) >= 1)
 			{
+				$today_begin = new DatetimeHandler(date("Y-m-d")." 00:00:00");
+				$today_end = new DatetimeHandler(date("Y-m-d")." 23:59:59");
+				
 				foreach($result_array as $key => $value)
 				{
 					$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
@@ -357,22 +400,61 @@ class SampleIO
 					
 					$result_array[$key][owner] = $user->get_full_name(true);
 					
-					if ($result_array[$key][av] == "t")
-					{
-						$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
-					}
-					else
+					if ($result_array[$key][av] == "f")
 					{
 						$result_array[$key][av] = "<img src='images/icons/grey_point.png' alt='' />";
 					}
-					
-					if (strlen($result_array[$key][name]) > 10)
+					else
 					{
-						$result_array[$key][name] = substr($result_array[$key][name],0,10)."...";
+						if ($result_array[$key][date_of_expiry])
+						{
+							$date_of_expiry = new DatetimeHandler($result_array[$key][date_of_expiry]);
+		
+							if ($date_of_expiry->distance($today_end) > 0)
+							{
+								if ($date_of_expiry->distance($today_begin) > 0)
+								{
+									$result_array[$key][av] = "<img src='images/icons/red_point.png' alt='' />";
+								}
+								else
+								{
+									$result_array[$key][av] = "<img src='images/icons/yellow_point.png' alt='' />";
+								}
+							}
+							else
+							{
+								if ($result_array[$key][av] == "t")
+								{
+									$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
+								}
+								else
+								{
+									$result_array[$key][av] = "<img src='images/icons/grey_point.png' alt='' />";
+								}
+							}
+						}
+						else
+						{
+							$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
+						}
+					}
+					
+					if (strlen($result_array[$key][name]) > 17)
+					{
+						$result_array[$key][name] = substr($result_array[$key][name],0,17)."...";
 					}
 					else
 					{
 						$result_array[$key][name] = $result_array[$key][name];
+					}
+					
+					if (strlen($result_array[$key][template]) > 25)
+					{
+						$result_array[$key][template] = substr($result_array[$key][template],0,25)."...";
+					}
+					else
+					{
+						$result_array[$key][template] = $result_array[$key][template];
 					}
 					
 					$sample_id = $result_array[$key][id];
@@ -423,20 +505,23 @@ class SampleIO
 		}
 	}
 	
+	/**
+	 * NEW
+	 */
 	public static function list_sample_items($sql)
 	{
 		if ($sql)
 		{
 			$list = new List_IO(Sample_Wrapper::count_item_samples($sql), 20);
 
-			$list->add_row("","symbol",false,16);
-			$list->add_row("Smpl. ID","id",true,null);
+			$list->add_row("","symbol",false,"16px");
+			$list->add_row("Smpl. ID","id",true,"11%");
 			$list->add_row("Sample Name","name",true,null);
 			$list->add_row("Date","datetime",true,null);
 			$list->add_row("Type/Tmpl.","template",true,null);
 			$list->add_row("Curr. Depos.","depository",true,null);
 			$list->add_row("Owner","owner",true,null);
-			$list->add_row("AV","av",false,null);
+			$list->add_row("AV","av",false,"16px");
 			
 			if ($_GET[page])
 			{
@@ -463,6 +548,9 @@ class SampleIO
 			
 			if (is_array($result_array) and count($result_array) >= 1)
 			{
+				$today_begin = new DatetimeHandler(date("Y-m-d")." 00:00:00");
+				$today_end = new DatetimeHandler(date("Y-m-d")." 23:59:59");
+				
 				foreach($result_array as $key => $value)
 				{
 					$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
@@ -479,22 +567,61 @@ class SampleIO
 					
 					$result_array[$key][owner] = $user->get_full_name(true);
 					
-					if ($result_array[$key][av] == "t")
-					{
-						$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
-					}
-					else
+					if ($result_array[$key][av] == "f")
 					{
 						$result_array[$key][av] = "<img src='images/icons/grey_point.png' alt='' />";
 					}
-					
-					if (strlen($result_array[$key][name]) > 10)
+					else
 					{
-						$result_array[$key][name] = substr($result_array[$key][name],0,10)."...";
+						if ($result_array[$key][date_of_expiry])
+						{
+							$date_of_expiry = new DatetimeHandler($result_array[$key][date_of_expiry]);
+		
+							if ($date_of_expiry->distance($today_end) > 0)
+							{
+								if ($date_of_expiry->distance($today_begin) > 0)
+								{
+									$result_array[$key][av] = "<img src='images/icons/red_point.png' alt='' />";
+								}
+								else
+								{
+									$result_array[$key][av] = "<img src='images/icons/yellow_point.png' alt='' />";
+								}
+							}
+							else
+							{
+								if ($result_array[$key][av] == "t")
+								{
+									$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
+								}
+								else
+								{
+									$result_array[$key][av] = "<img src='images/icons/grey_point.png' alt='' />";
+								}
+							}
+						}
+						else
+						{
+							$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
+						}
+					}
+					
+					if (strlen($result_array[$key][name]) > 17)
+					{
+						$result_array[$key][name] = substr($result_array[$key][name],0,17)."...";
 					}
 					else
 					{
 						$result_array[$key][name] = $result_array[$key][name];
+					}
+					
+					if (strlen($result_array[$key][template]) > 25)
+					{
+						$result_array[$key][template] = substr($result_array[$key][template],0,25)."...";
+					}
+					else
+					{
+						$result_array[$key][template] = $result_array[$key][template];
 					}
 					
 					$sample_id = $result_array[$key][id];
@@ -535,6 +662,17 @@ class SampleIO
 			
 			$template = new Template("languages/en-gb/template/samples/list.html");
 
+			$add_sample_paramquery = $_GET;
+			$add_sample_paramquery[username] = $_GET[username];
+			$add_sample_paramquery[session_id] = $_GET[session_id];
+			$add_sample_paramquery[run] = "item_add";
+			$add_sample_paramquery[dialog] = "sample";
+			$add_sample_paramquery[retrace] = Misc::create_retrace_string();
+			unset($add_sample_paramquery[key]);
+			unset($add_sample_paramquery[nextpage]);
+			$add_sample_params = http_build_query($add_sample_paramquery,'','&#38;');
+			
+			$template->set_var("add_sample_params", $add_sample_params);
 			$template->set_var("table", $list->get_list($result_array, $_GET[page]));
 			
 			$template->output();
@@ -546,7 +684,7 @@ class SampleIO
 	}
 	
 	/**
-	 * @todo Associate Sample with Sample
+	 * NEW
 	 */
 	public static function create($type_array, $category_array, $organisation_unit_id)
 	{
@@ -636,6 +774,7 @@ class SampleIO
 							if (is_numeric($_POST[template]))
 							{
 								$session->write_value("SAMPLE_TEMPLATE",$_POST[template],true);
+								$sample_template_obj = new SampleTemplate($_POST[template]);
 							}
 						}
 						else
@@ -644,6 +783,7 @@ class SampleIO
 							{
 								$session->write_value("SAMPLE_TEMPLATE",$_POST[template],true);
 								$session->write_value("SAMPLE_CURRENT_SCREEN", 3, true);
+								$sample_template_obj = new SampleTemplate($_POST[template]);
 							}
 							else
 							{
@@ -691,15 +831,60 @@ class SampleIO
 						}
 						else
 						{
-							if ($_POST[name] and $_POST[supplier])
+							$information_fields = $sample_template_obj->get_information_fields();
+
+							if ($information_fields[supplier][name] and $information_fields[supplier][requirement] != "optional")
 							{
-								if ($sample_template_specific_information == true)
+								$check_supplier = true;
+							}
+							else
+							{
+								$check_supplier = false;
+							}
+							
+							if ($information_fields[expiry][name] and $information_fields[expiry][requirement] != "optional")
+							{
+								$check_expiry = true;
+							}
+							else
+							{
+								$check_expiry = false;
+							}
+							
+							if ($information_fields[depository][name] and $information_fields[depository][requirement] != "optional")
+							{
+								$check_depository = true;
+							}
+							else
+							{
+								$check_depository = false;
+							}
+							
+							if (!$_POST[supplier] and $check_supplier == true)
+							{
+								$error[1] = "Enter a supplier!";	
+							}
+							if (!$_POST[expiry] and $check_expiry == true)
+							{
+								$error[2] = "Enter a date of expiry!";	
+							}
+							if (!$_POST[depository] and $check_depository == true)
+							{
+								$error[3] = "Select a despository!";	
+							}
+							
+							if ($_POST[name])
+							{
+								if (!$error[1] and !$error[2] and !$error[3])
 								{
-									$session->write_value("SAMPLE_CURRENT_SCREEN", 4, true);
-								}
-								else
-								{
-									$session->write_value("SAMPLE_CURRENT_SCREEN", 5, true);	
+									if ($sample_template_specific_information == true)
+									{
+										$session->write_value("SAMPLE_CURRENT_SCREEN", 4, true);
+									}
+									else
+									{
+										$session->write_value("SAMPLE_CURRENT_SCREEN", 5, true);	
+									}
 								}
 							}
 							else
@@ -707,10 +892,6 @@ class SampleIO
 								if (!$_POST[name])
 								{
 									$error[0] = "Enter a name!";	
-								}
-								if (!$_POST[supplier])
-								{
-									$error[1] = "Enter a supplier!"	;
 								}
 							}
 							if ($_POST[name]) 
@@ -724,6 +905,10 @@ class SampleIO
 							if ($_POST[depository])
 							{
 								$session->write_value("SAMPLE_DEPOSITORY", $_POST[depository], true);
+							}
+							if ($_POST[expiry])
+							{
+								$session->write_value("SAMPLE_EXPIRY", $_POST[expiry], true);
 							}
 							if ($_POST[desc])
 							{
@@ -745,6 +930,10 @@ class SampleIO
 						if ($_POST[depository])
 						{
 							$session->write_value("SAMPLE_DEPOSITORY", $_POST[depository], true);
+						}
+						if ($_POST[expiry])
+						{
+							$session->write_value("SAMPLE_EXPIRY", $_POST[expiry], true);
 						}
 						if ($_POST[desc])
 						{
@@ -886,6 +1075,7 @@ class SampleIO
 				$sample_name					= $session->read_value("SAMPLE_NAME");
 				$sample_supplier				= $session->read_value("SAMPLE_SUPPLIER");			
 				$sample_depository				= $session->read_value("SAMPLE_DEPOSITORY");
+				$sample_expiry					= $session->read_value("SAMPLE_EXPIRY");
 				$sample_desc					= $session->read_value("SAMPLE_DESC");
 				$sample_template_data_type  	= $session->read_value("SAMPLE_TEMPLATE_DATA_TYPE");	
 				$sample_template_data_type_id	= $session->read_value("SAMPLE_TEMPLATE_DATA_TYPE_ID");	
@@ -1167,6 +1357,24 @@ class SampleIO
 						$template->set_var("error1","");
 					}
 					
+					if ($error[2])
+					{
+						$template->set_var("error2",$error[2]);
+					}
+					else
+					{
+						$template->set_var("error2","");
+					}
+					
+					if ($error[3])
+					{
+						$template->set_var("error3",$error[3]);
+					}
+					else
+					{
+						$template->set_var("error3","");
+					}
+					
 					if ($sample_name)
 					{
 						$template->set_var("name",$sample_name);
@@ -1176,6 +1384,35 @@ class SampleIO
 						$template->set_var("name","");
 					}
 					
+					$information_fields = $sample_template_obj->get_information_fields();
+
+					if ($information_fields[supplier][name])
+					{
+						$template->set_var("show_supplier",true);
+					}
+					else
+					{
+						$template->set_var("show_supplier",false);
+					}
+					
+					if ($information_fields[expiry][name])
+					{
+						$template->set_var("show_expiry",true);
+					}
+					else
+					{
+						$template->set_var("show_expiry",false);
+					}
+					
+					if ($information_fields[depository][name])
+					{
+						$template->set_var("show_depository",true);
+					}
+					else
+					{
+						$template->set_var("show_depository",false);
+					}
+					
 					if ($sample_supplier)
 					{
 						$template->set_var("supplier",$sample_supplier);
@@ -1183,6 +1420,15 @@ class SampleIO
 					else
 					{
 						$template->set_var("supplier","");
+					}
+					
+					if ($sample_expiry)
+					{
+						$template->set_var("expiry",$sample_expiry);
+					}
+					else
+					{
+						$template->set_var("expiry","");
 					}
 					
 					if ($sample_desc)
@@ -1470,10 +1716,25 @@ class SampleIO
 					$template->set_var("template",$sample_template_obj->get_name());
 				
 					$template->set_var("name",$sample_name);
-					$template->set_var("supplier",$sample_supplier);
-				
-					$sample_depository_obj = new SampleDepository($sample_depository);
-					$template->set_var("depository",$sample_depository_obj->get_name());
+					
+					if ($sample_supplier)
+					{
+						$template->set_var("supplier",$sample_supplier);
+					}
+					else
+					{
+						$template->set_var("supplier","");
+					}
+					
+					if ($sample_depository)
+					{
+						$sample_depository_obj = new SampleDepository($sample_depository);
+						$template->set_var("depository",$sample_depository_obj->get_name());
+					}
+					else
+					{
+						$template->set_var("depository","");
+					}
 				
 					if ($sample_desc)
 					{
@@ -1494,7 +1755,7 @@ class SampleIO
 		
 						$sample->set_template_data($sample_template_data_type, $sample_template_data_type_id, $sample_template_data_array);
 		
-						if (($sample_id = $sample->create($sample_organ_unit, $sample_template, $sample_name, $sample_supplier, $sample_depository, $sample_desc)) != null)
+						if (($sample_id = $sample->create($sample_organ_unit, $sample_template, $sample_name, $sample_supplier, $sample_depository, $sample_desc, null, $sample_expiry)) != null)
 						{
 							$session->delete_value("SAMPLE_LAST_SCREEN");
 							$session->delete_value("SAMPLE_CURRENT_SCREEN");
@@ -1535,6 +1796,7 @@ class SampleIO
 						$session->delete_value("SAMPLE_NAME");
 						$session->delete_value("SAMPLE_SUPPLIER");
 						$session->delete_value("SAMPLE_DEPOSITORY");
+						$session->delete_value("SAMPLE_EXPIRY");
 						$session->delete_value("SAMPLE_DESC");		
 						$session->delete_value("SAMPLE_TEMPLATE_DATA_TYPE");
 						$session->delete_value("SAMPLE_TEMPLATE_DATA_TYPE_ID");	
@@ -1556,6 +1818,7 @@ class SampleIO
 	}
 	
 	/**
+	 * NEW
 	 * @param array $type_array
 	 * @param array $category_array
 	 * @param integer $organisation_unit_id
@@ -1595,7 +1858,7 @@ class SampleIO
 	}
 
 	/**
-	 * @todo Associate Sample with Sample
+	 * NEW
 	 */
 	public static function associate($type_array, $category_array)
 	{
@@ -1675,12 +1938,40 @@ class SampleIO
 				$template->set_var("id", $sample->get_formatted_id());
 				$template->set_var("name", $sample->get_name());
 				$template->set_var("owner", $owner->get_full_name(false));
-				$template->set_var("depository", $sample->get_current_depository_name());
-				$template->set_var("supplier", $sample->get_supplier());
-				$template->set_var("datetime", $sample->get_datetime());
 				$template->set_var("template", $sample->get_template_name());
 				$template->set_var("permissions", $sample_security->get_access_string());
 			
+				$datetime = new DatetimeHandler($sample->get_datetime());
+				$template->set_var("datetime", $datetime->get_formatted_string("dS M Y H:i"));
+				
+				if ($sample->get_date_of_expiry())
+				{
+					$date_of_expiry = new DatetimeHandler($sample->get_date_of_expiry());
+					$template->set_var("date_of_expiry", $date_of_expiry->get_formatted_string("dS M Y"));
+				}
+				else
+				{
+					$template->set_var("date_of_expiry", false);
+				}
+				
+				if ($sample->get_current_depository_name())
+				{
+					$template->set_var("depository", $sample->get_current_depository_name());
+				}
+				else
+				{
+					$template->set_var("depository", false);
+				}
+				
+				if ($sample->get_supplier())
+				{
+					$template->set_var("supplier", $sample->get_supplier());
+				}
+				else
+				{
+					$template->set_var("supplier", false);
+				}
+				
 				if ($sample->get_availability() == true)
 				{
 					$template->set_var("status", "available");
@@ -2020,7 +2311,7 @@ class SampleIO
 			$error_io->display_error();
 		}
 	}
-		
+
 	public static function depository_history()
 	{
 		global $sample_security;
@@ -2046,23 +2337,30 @@ class SampleIO
 				
 				$sample_depository_array = $sample->get_all_depository_information();
 				
-				foreach($sample_depository_array as $key => $value)
+				if (is_array($sample_depository_array) and count($sample_depository_array) >= 1)
 				{
-					$column_array = array();
+					foreach($sample_depository_array as $key => $value)
+					{
+						$column_array = array();
+						
+						$sample_depository = new SampleDepository($value[id]);
+						
+						$depository_user = new User($value[user_id]);
+						
+						$column_array[symbol] = "<img src='images/fileicons/16/unknown.png' alt='' style='border:0;' />";
+						$column_array[name] = $sample_depository->get_name();
+						$column_array[datetime] = $value[datetime];
+						$column_array[user] = $depository_user->get_full_name(false);
+						
+						array_push($content_array, $column_array);
+					}
 					
-					$sample_depository = new SampleDepository($value[id]);
-					
-					$depository_user = new User($value[user_id]);
-					
-					$column_array[symbol] = "<img src='images/fileicons/16/unknown.png' alt='' style='border:0;' />";
-					$column_array[name] = $sample_depository->get_name();
-					$column_array[datetime] = $value[datetime];
-					$column_array[user] = $depository_user->get_full_name(false);
-					
-					array_push($content_array, $column_array);
+					$table_io->add_content_array($content_array);
 				}
-				
-				$table_io->add_content_array($content_array);
+				else
+				{
+					$table_io->override_last_line("<span class='italic'>No Depository Defined Yet!</span>");
+				}
 				
 				$template->set_var("table", $table_io->get_content($_GET[page]));	
 				
@@ -2289,7 +2587,7 @@ class SampleIO
 											{
 												$parent_sample_id = Sample::get_entry_by_item_id($return_value);
 												
-												if (SampleItemFactory::create($parent_sample_id, $sample->get_item_id(), $_GET[key], null, null) == true)
+												if (SampleItemFactory::create($parent_sample_id, $sample->get_item_id(), ($_GET[key]*-1), null, null) == true)
 												{
 													if ($transaction_id != null)
 													{
@@ -2370,6 +2668,41 @@ class SampleIO
 						$exception = new Exception("", 1);
 						$error_io = new Error_IO($exception, 250, 40, 2);
 						$error_io->display_error();
+					}
+				break;
+				
+				// Item Lister
+				/**
+				 * @todo permissions
+				 */
+				case("project_list"):
+					if ($_GET[dialog])
+					{
+						$sample = new Sample($_GET[sample_id]);
+						$item_id = $sample->get_item_id();
+						$module_dialog = ModuleDialog::get_by_type_and_internal_name("project_list", $_GET[dialog]);
+						
+						if (file_exists($module_dialog[class_path]))
+						{
+							require_once($module_dialog[class_path]);
+							
+							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+							{
+								$module_dialog['class']::$module_dialog[method]($item_id);
+							}
+							else
+							{
+								// Error
+							}
+						}
+						else
+						{
+							// Error
+						}
+					}
+					else
+					{
+						// error
 					}
 				break;
 				

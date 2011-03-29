@@ -97,7 +97,7 @@ class AdminSampleDepositoryIO
 
 	public static function home()
 	{
-		$template = new Template("languages/en-gb/template/admin/sample_depository/list.html");	
+		$template = new Template("languages/en-gb/template/samples/admin/sample_depository/list.html");	
 
 		$content_array = array();
 		
@@ -198,7 +198,7 @@ class AdminSampleDepositoryIO
 	
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/admin/sample_depository/add.html");
+				$template = new Template("languages/en-gb/template/samples/admin/sample_depository/add.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -270,7 +270,7 @@ class AdminSampleDepositoryIO
 		{
 			if ($_GET[sure] != "true")
 			{
-				$template = new Template("languages/en-gb/template/admin/sample_depository/delete.html");
+				$template = new Template("languages/en-gb/template/samples/admin/sample_depository/delete.html");
 				
 				$paramquery = $_GET;
 				$paramquery[sure] = "true";
@@ -350,7 +350,7 @@ class AdminSampleDepositoryIO
 	
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/admin/sample_depository/edit.html");
+				$template = new Template("languages/en-gb/template/samples/admin/sample_depository/edit.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";

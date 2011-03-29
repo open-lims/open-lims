@@ -82,7 +82,21 @@ class Sample_Wrapper implements Sample_WrapperInterface
 	}
 	
 	/**
+	 * @param integer $user_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_user_samples($user_id, $order_by, $order_method, $start, $end)
+	{
+		return Sample_Wrapper_Access::list_user_samples($user_id, $order_by, $order_method, $start, $end);
+	}
+	
+	/**
 	 * Returns the number of all users related samples
+	 * @param integer $user_id
 	 * @return integer
 	 */
 	public static function count_user_samples($user_id)
@@ -135,6 +149,16 @@ class Sample_Wrapper implements Sample_WrapperInterface
 	public static function count_item_parentsamples($item_id)
 	{
 		return Sample_Wrapper_Access::count_item_parentsamples($item_id);
+	}
+
+	public static function list_organisation_unit_samples($organisation_unit_id, $order_by, $order_method, $start, $end)
+	{
+		return Sample_Wrapper_Access::list_organisation_unit_samples($organisation_unit_id, $order_by, $order_method, $start, $end);
+	}
+	
+	public static function count_organisation_unit_samples($organisation_unit_id)
+	{
+		return Sample_Wrapper_Access::count_organisation_unit_samples($organisation_unit_id);
 	}
 }
 ?>

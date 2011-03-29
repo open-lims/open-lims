@@ -166,12 +166,36 @@ class List_IO
 					
 					if ($value[width] != null)
 					{
-						$return .= "<th width='".$value[width]."'>" .
-									"<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=asc'>".$value[title]."</a>" .
-										"&nbsp;<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=asc'>" .
-												"<img src='images/nosort.png' alt='' border='0' />" .
-										"</a>" .
-									"</th>";
+						if ($_GET[sortvalue] == $value[address])
+						{
+							if (!$_GET[sortmethod] or $_GET[sortmethod] == "asc")
+							{
+								$return .= "<th width='".$value[width]."'>" .
+												"<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=desc'>".$value[title]."</a>" .
+												"&nbsp;<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=desc'>" .
+														"<img src='images/downside.png' alt='' border='0' />" .
+												"</a>" .
+											"</th>";
+							}
+							else
+							{
+								$return .= "<th width='".$value[width]."'>" .
+												"<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=asc'>".$value[title]."</a>" .
+												"&nbsp;<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=asc'>" .
+														"<img src='images/upside.png' alt='' border='0' />" .
+												"</a>" .
+											"</th>";
+							}
+						}
+						else
+						{
+							$return .= "<th width='".$value[width]."'>" .
+											"<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=asc'>".$value[title]."</a>" .
+											"&nbsp;<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=asc'>" .
+													"<img src='images/nosort.png' alt='' border='0' />" .
+											"</a>" .
+										"</th>";
+						}
 					}
 					else
 					{

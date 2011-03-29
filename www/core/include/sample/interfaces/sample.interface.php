@@ -33,7 +33,7 @@ interface SampleInterface
 	
 	public function set_template_data($type, $type_id, $array);
 	
-	public function create($organisation_unit_id, $template_id, $name, $supplier, $depository_id, $desc);
+	public function create($organisation_unit_id, $template_id, $name, $supplier, $depository_id, $desc, $language_id, $date_of_expiry);
 	public function delete();
 	
 	public function get_requirements();

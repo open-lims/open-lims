@@ -123,17 +123,17 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
      * @return integer Sample-ID
      * @throws SampleCreationFailedException
      */
-    public function create($organisation_unit_id, $template_id, $name, $supplier, $depository_id, $desc)
+    public function create($organisation_unit_id, $template_id, $name, $supplier, $depository_id, $desc, $language_id, $date_of_expiry)
     {
     	global $user, $transaction;
     	
     	if ($this->sample)
     	{
-	    	if (is_numeric($template_id) and $name and $supplier and is_numeric($depository_id))
+	    	if (is_numeric($template_id) and $name)
 	    	{
 	    		$transaction_id = $transaction->begin();
 	    		
-	    		if (($sample_id = $this->sample->create($name, $user->get_user_id(), $template_id, $supplier, $desc)) != null)
+	    		if (($sample_id = $this->sample->create($name, $user->get_user_id(), $template_id, $supplier, $desc, $language_id, $date_of_expiry)) != null)
 	    		{
 					if ($desc)
 					{
@@ -240,16 +240,19 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	    				}
 	    			}
 	    			
-	    			// Create First Depository
-	    			$sample_has_sample_depository_access = new SampleHasSampleDepository_Access(null);
-	    			if ($sample_has_sample_depository_access->create($sample_id, $depository_id, $user->get_user_id()) == null)
+	    			if (is_numeric($depository_id))
 	    			{
-	    				$sample_folder->delete(true, true);
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						throw new SampleCreationFailedException("",1);
+		    			// Create First Depository
+		    			$sample_has_sample_depository_access = new SampleHasSampleDepository_Access(null);
+		    			if ($sample_has_sample_depository_access->create($sample_id, $depository_id, $user->get_user_id()) == null)
+		    			{
+		    				$sample_folder->delete(true, true);
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							throw new SampleCreationFailedException("",1);
+		    			}
 	    			}
 	    			
 	    			// Create Item
@@ -283,7 +286,15 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 							{
 								if ($value > 0)
 								{
-									// !!! Adding Sample as Child via Item !!!
+									if (SampleItemFactory::create($value, $this->item_id, null, null, null) == false)
+									{
+										$sample_folder->delete(true, true);
+										if ($transaction_id != null)
+										{
+											$transaction->rollback($transaction_id);
+										}
+										throw new SampleCreationFailedException("",1);
+									}
 								}
 							}
 						}
@@ -597,6 +608,9 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 			$fulfilled_array = array();
 			$item_type_array = Item::list_types();
 			
+			$sample_item = new SampleItem($this->sample_id);
+			$item_array = $sample_item->get_sample_items();
+			
 			if (is_array($requirements_array) and count($requirements_array) >= 1)
 			{
 				foreach($requirements_array as $key => $value)
@@ -609,31 +623,39 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					{
 						$gid = $key;
 					}
-
-					$sample_item = new SampleItem($this->sample_id);
-					$item_array = $sample_item->get_sample_items();
 					
-					if (is_array($item_array) and count($item_array) >= 1)
+					if ($value[type] != "parentsample")
 					{
-						foreach($item_array as $item_key => $item_value)
+						if (is_array($item_array) and count($item_array) >= 1)
 						{
-							$item_gid = SampleItem::get_gid_by_item_id_and_sample_id($item_value, $this->sample_id);
-							
-							if (is_array($item_type_array) and count($item_type_array) >= 1)
+							foreach($item_array as $item_key => $item_value)
 							{
-								foreach ($item_type_array as $item_type => $item_handling_class)
+								$item_gid = SampleItem::get_gid_by_item_id_and_sample_id($item_value, $this->sample_id);
+								
+								if (is_array($item_type_array) and count($item_type_array) >= 1)
 								{
-									if (class_exists($item_handling_class))
+									foreach ($item_type_array as $item_type => $item_handling_class)
 									{
-										if ($item_handling_class::is_kind_of($item_type, $item_value) == true  and $item_gid == $gid)
+										if (class_exists($item_handling_class))
 										{
-											$fulfilled_array[$key] = true;
+											if ($item_handling_class::is_kind_of($item_type, $item_value) == true  and $item_gid == $gid)
+											{
+												$fulfilled_array[$key] = true;
+											}
 										}
 									}
 								}
 							}
 						}
-					}	
+					}
+					else
+					{
+						$parent_sample_array = SampleItem::list_sample_id_by_item_id_and_gid($this->item_id, ($gid*-1));
+						if (is_array($parent_sample_array) and count($parent_sample_array) >= 1)
+						{
+							$fulfilled_array[$key] = true;
+						}
+					}
 				}
 				return $fulfilled_array;
 			}
@@ -905,6 +927,21 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 		else
 		{
 			return false;
+		}		
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function get_date_of_expiry()
+	{
+		if ($this->sample_id and $this->sample)
+		{
+			return $this->sample->get_date_of_expiry();
+		}
+		else
+		{
+			return null;
 		}		
 	}
 	
