@@ -265,12 +265,101 @@ class SampleAdminIO
 			$sample_id = $_GET[sample_id];
 		
 			$sample = new Sample($sample_id);
-			$sample_security = new SampleSecurity($sample_id);
-			$sample_user_array = $sample_security->list_users();
 		
 			if ($sample->get_owner_id() == $user->get_user_id() or
 				$user->is_admin() == true)
 			{
+				$list = new List_IO(Sample_Wrapper::count_sample_users($_GET[sample_id]), 20);
+	
+				$list->add_row("","symbol",false,"16px");
+				$list->add_row("Username","username",true,null);
+				$list->add_row("Full Name","name",true,null);
+				$list->add_row("Read","read",true,"70px");
+				$list->add_row("Write","write",true,"70px");
+				$list->add_row("Delete","delete",false,"70px");
+				
+				if ($_GET[page])
+				{
+					if ($_GET[sortvalue] and $_GET[sortmethod])
+					{
+						$result_array = Sample_Wrapper::list_sample_users($_GET[sample_id], $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
+					}
+					else
+					{
+						$result_array = Sample_Wrapper::list_sample_users($_GET[sample_id], null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
+					}				
+				}
+				else
+				{
+					if ($_GET[sortvalue] and $_GET[sortmethod])
+					{
+						$result_array = Sample_Wrapper::list_sample_users($_GET[sample_id], $_GET[sortvalue], $_GET[sortmethod], 0, 20);
+					}
+					else
+					{
+						$result_array = Sample_Wrapper::list_sample_users($_GET[sample_id], null, null, 0, 20);
+					}	
+				}
+				
+				if (is_array($result_array) and count($result_array) >= 1)
+				{
+					foreach($result_array as $key => $value)
+					{
+						$result_array[$key][symbol] = "<img src='images/icons/user.png' alt='' style='border:0;' />";
+						
+						if ($result_array[$key][user])
+						{
+							$user = new User($result_array[$key][user]);
+						}
+						else
+						{
+							$user = new User(1);
+						}
+						
+						$result_array[$key][username] = $user->get_username();
+						$result_array[$key][name] = $user->get_full_name(false);
+						
+						if ($result_array[$key][read] == 't')
+						{
+							$result_array[$key][read] = "<img src='images/icons/permission_ok_active.png' alt='' />";
+						}
+						else
+						{
+							$result_array[$key][read] = "<img src='images/icons/permission_denied_active.png' alt='' />";
+						}
+						
+						if ($result_array[$key][write] == 't')
+						{
+							$result_array[$key][write] = "<img src='images/icons/permission_ok_active.png' alt='' />";
+						}
+						else
+						{
+							$result_array[$key][write] = "<img src='images/icons/permission_denied_active.png' alt='' />";
+						}
+						
+						$delete_paramquery = $_GET;
+						$delete_paramquery[run] = "admin_permission_user_delete";
+						$delete_paramquery[id] = $result_array[$key][user];
+						unset($delete_paramquery[sure]);
+						$delete_params = http_build_query($delete_paramquery,'','&#38;');
+
+						if ($sample->get_owner_id() == $result_array[$key][user])
+						{
+							$result_array[$key][delete][link] = "";
+							$result_array[$key][delete][content] = "";
+						}
+						else
+						{
+							$result_array[$key][delete][link] = $delete_params;
+							$result_array[$key][delete][content] = "delete";
+						}
+					}
+				}
+				else
+				{
+					$list->override_last_line("<span class='italic'>No results found!</span>");
+				}
+
 				$template = new Template("languages/en-gb/template/samples/int_admin/user_permission.html");
 				
 				$add_user_paramquery = $_GET;
@@ -278,83 +367,8 @@ class SampleAdminIO
 				$add_user_params = http_build_query($add_user_paramquery,'','&#38;');
 				
 				$template->set_var("add_user_params", $add_user_params);
-		
-				$table_io = new TableIO("OverviewTable");
-					
-				$table_io->add_row("Username","username",false,null);
-				$table_io->add_row("Full Name","fullname",false,null);
-				$table_io->add_row("Read","read",false,50);
-				$table_io->add_row("Write","write",false,50);
-				$table_io->add_row("Delete","delete",false,50);	
 				
-				$content_array = array();
-				
-				if (is_array($sample_user_array) and count($sample_user_array) >= 1)
-				{
-					foreach($sample_user_array as $key => $value)
-					{
-						$column_array = array();
-						
-						$column_user = new User($value);
-						
-						if ($sample->get_owner_id() == $value)
-						{
-							$column_array[username] = $column_user->get_username()." (owner)";
-						}
-						else
-						{
-							$column_array[username] = $column_user->get_username();
-						}
-						
-						$column_array[fullname] = $column_user->get_full_name(false);
-						
-						$access_array = $sample_security->get_access_by_user_id($value);
-						
-						if ($access_array[read] == true)
-						{
-							$column_array[read] = "<img src='images/icons/permission_ok_active.png' alt='' />";
-						}
-						else
-						{
-							$column_array[read] = "<img src='images/icons/permission_denied_active.png' alt='' />";
-						}
-						
-						if ($access_array[write] == true)
-						{
-							$column_array[write] = "<img src='images/icons/permission_ok_active.png' alt='' />";
-						}
-						else
-						{
-							$column_array[write] = "<img src='images/icons/permission_denied_active.png' alt='' />";
-						}
-						
-						$delete_paramquery = $_GET;
-						$delete_paramquery[run] = "admin_permission_user_delete";
-						$delete_paramquery[id] = $value;
-						unset($delete_paramquery[sure]);
-						$delete_params = http_build_query($delete_paramquery,'','&#38;');
-						
-						if ($sample->get_owner_id() == $value)
-						{
-							$column_array[delete][link] = "";
-							$column_array[delete][content] = "";
-						}
-						else
-						{
-							$column_array[delete][link] = $delete_params;
-							$column_array[delete][content] = "delete";
-						}
-						array_push($content_array, $column_array);
-						
-						$table_io->add_content_array($content_array);	
-					}
-				}
-				else
-				{
-					$table_io->override_last_line("<span class='italic'>No Samples Found!</span>");
-				}
-
-				$template->set_var("table", $table_io->get_content($_GET[page]));		
+				$template->set_var("table", $list->get_list($result_array, $_GET[page]));	
 					
 				$template->output();			
 			}
@@ -611,12 +625,71 @@ class SampleAdminIO
 			$sample_id = $_GET[sample_id];
 		
 			$sample = new Sample($sample_id);
-			$sample_security = new SampleSecurity($sample_id);
-			$sample_ou_array = $sample_security->list_organisation_units();
 		
 			if ($sample->get_owner_id() == $user->get_user_id() or
 				$user->is_admin() == true)
 			{
+				$list = new List_IO(Sample_Wrapper::count_sample_organisation_units($_GET[sample_id]), 20);
+	
+				$list->add_row("","symbol",false,"16px");
+				$list->add_row("Name","name",true,null);
+				$list->add_row("Delete","delete",false,"70px");
+				
+				if ($_GET[page])
+				{
+					if ($_GET[sortvalue] and $_GET[sortmethod])
+					{
+						$result_array = Sample_Wrapper::list_sample_organisation_units($_GET[sample_id], $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
+					}
+					else
+					{
+						$result_array = Sample_Wrapper::list_sample_organisation_units($_GET[sample_id], null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
+					}				
+				}
+				else
+				{
+					if ($_GET[sortvalue] and $_GET[sortmethod])
+					{
+						$result_array = Sample_Wrapper::list_sample_organisation_units($_GET[sample_id], $_GET[sortvalue], $_GET[sortmethod], 0, 20);
+					}
+					else
+					{
+						$result_array = Sample_Wrapper::list_sample_organisation_units($_GET[sample_id], null, null, 0, 20);
+					}	
+				}
+
+				if (is_array($result_array) and count($result_array) >= 1)
+				{
+					foreach($result_array as $key => $value)
+					{
+						$result_array[$key][symbol] = "<img src='images/icons/organisation_unit.png' alt='' style='border:0;' />";
+						
+						if ($result_array[$key][organisation_unit_id])
+						{
+							$organisation_unit = new OrganisationUnit($result_array[$key][organisation_unit_id]);
+						}
+						else
+						{
+							$organisation_unit = new OrganisationUnit(1);
+						}
+						
+						$result_array[$key][name] = $organisation_unit->get_name();
+						
+						$delete_paramquery = $_GET;
+						$delete_paramquery[run] = "admin_permission_ou_delete";
+						$delete_paramquery[id] = $result_array[$key][organisation_unit_id];
+						unset($delete_paramquery[sure]);
+						$delete_params = http_build_query($delete_paramquery,'','&#38;');
+						
+						$result_array[$key][delete][link] = $delete_params;
+						$result_array[$key][delete][content] = "delete";
+					}
+				}
+				else
+				{
+					$list->override_last_line("<span class='italic'>No results found!</span>");
+				}
+		
 				$template = new Template("languages/en-gb/template/samples/int_admin/ou_permission.html");
 				
 				$add_ou_paramquery = $_GET;
@@ -624,44 +697,8 @@ class SampleAdminIO
 				$add_ou_params = http_build_query($add_ou_paramquery,'','&#38;');
 				
 				$template->set_var("add_ou_params", $add_ou_params);
-		
-				$table_io = new TableIO("OverviewTable");
-					
-				$table_io->add_row("Name","name",false,null);
-				$table_io->add_row("Delete","delete",false,50);	
 				
-				$content_array = array();
-
-				if (is_array($sample_ou_array) and count($sample_ou_array) >= 1)
-				{
-					foreach($sample_ou_array as $key => $value)
-					{
-						$column_array = array();
-
-						$column_ou = new OrganisationUnit($value);
-						
-						$column_array[name] = $column_ou->get_name();
-						
-						$delete_paramquery = $_GET;
-						$delete_paramquery[run] = "admin_permission_ou_delete";
-						$delete_paramquery[id] = $value;
-						unset($delete_paramquery[sure]);
-						$delete_params = http_build_query($delete_paramquery,'','&#38;');
-						
-						$column_array[delete][link] = $delete_params;
-						$column_array[delete][content] = "delete";
-											
-						array_push($content_array, $column_array);	
-					}
-					
-					$table_io->add_content_array($content_array);	
-				}
-				else
-				{
-					$table_io->override_last_line("<span class='italic'>No Entries Found!</span>");
-				}
-		
-				$template->set_var("table", $table_io->get_content($_GET[page]));		
+				$template->set_var("table", $list->get_list($result_array, $_GET[page]));			
 				
 				$template->output();	
 			}

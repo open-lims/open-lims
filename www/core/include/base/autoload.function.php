@@ -53,6 +53,7 @@ function __autoload($classname)
 	$classes['System']						= $path_prefix."core/include/base/system.class.php";
 	$classes['SystemMessage']				= $path_prefix."core/include/base/system_message.class.php";
 	$classes['ModuleDialog']				= $path_prefix."core/include/base/module_dialog.class.php";
+	$classes['ModuleLink']					= $path_prefix."core/include/base/module_link.class.php";
 	
 	$registered_include_array = SystemHandler::get_include_folders();
 	if (is_array($registered_include_array) and count($registered_include_array) >= 1)

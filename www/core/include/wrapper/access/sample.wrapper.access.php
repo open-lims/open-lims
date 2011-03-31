@@ -811,6 +811,336 @@ class Sample_Wrapper_Access
 			return null;
 		}
 	}
+	
+	/**
+	 * NEW
+	 */
+	public static function list_sample_depositories($sample_id, $order_by, $order_method, $start, $end)
+	{
+		global $db;
+		
+		if (is_numeric($sample_id))
+		{	
+			if ($order_by and $order_method)
+			{
+				if ($order_method == "asc")
+				{
+					$sql_order_method = "ASC";
+				}
+				else
+				{
+					$sql_order_method = "DESC";
+				}
+				
+				switch($order_by):
+						
+					case "name":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_DEPOSITORY_TABLE").".name ".$sql_order_method;
+					break;
+					
+					case "datetime":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime ".$sql_order_method;
+					break;
+					
+					case "user":
+						$sql_order_by = "ORDER BY ".constant("USER_PROFILE_TABLE").".surname ".$sql_order_method;
+					break;
+					
+					default:
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime ".$sql_order_method;
+					break;
+				
+				endswitch;
+			}
+			else
+			{
+				$sql_order_by = "ORDER BY ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime";
+			}
+			
+			$sql = "SELECT ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime AS datetime," .
+						"".constant("SAMPLE_DEPOSITORY_TABLE").".name AS name," .
+						"".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".user_id AS user " .
+						"FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." " .
+						"JOIN ".constant("USER_PROFILE_TABLE")." 						ON ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".user_id 				= ".constant("USER_PROFILE_TABLE").".id " .
+						"LEFT JOIN ".constant("SAMPLE_DEPOSITORY_TABLE")." 				ON ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_depository_id 	= ".constant("SAMPLE_DEPOSITORY_TABLE").".id " .
+						"WHERE " .
+							"".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_id = ".$sample_id." " .
+							"".$sql_order_by."";
+			
+			$return_array = array();
+		
+			$res = $db->db_query($sql);
+			
+			if (is_numeric($start) and is_numeric($end))
+			{
+				for ($i = 0; $i<=$end-1; $i++)
+				{
+					if (($data = $db->db_fetch_assoc($res)) == null)
+					{
+						break;
+					}
+					
+					if ($i >= $start)
+					{
+						array_push($return_array, $data);
+					}
+				}
+			}
+			else
+			{
+				while ($data = $db->db_fetch_assoc($res))
+				{
+					array_push($return_array, $data);
+				}
+			}
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * NEW
+	 */
+	public static function count_sample_depositories($sample_id)
+	{
+		global $db;
+		
+		if (is_numeric($sample_id))
+		{	
+			$sql = "SELECT COUNT(primary_key) AS result " .
+						"FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." " .
+						"WHERE sample_id = ".$sample_id." ";
+			
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+	
+			return $data[result];
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * NEW
+	 */
+	public static function list_sample_users($sample_id, $order_by, $order_method, $start, $end)
+	{
+		global $db;
+		
+		if (is_numeric($sample_id))
+		{	
+			if ($order_by and $order_method)
+			{
+				if ($order_method == "asc")
+				{
+					$sql_order_method = "ASC";
+				}
+				else
+				{
+					$sql_order_method = "DESC";
+				}
+				
+				switch($order_by):
+						
+					case "username":
+						$sql_order_by = "ORDER BY ".constant("USER_TABLE").".username ".$sql_order_method;
+					break;
+					
+					case "name":
+						$sql_order_by = "ORDER BY ".constant("USER_PROFILE_TABLE").".surname ".$sql_order_method;
+					break;
+					
+					case "read":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_HAS_USER_TABLE").".read ".$sql_order_method;
+					break;
+					
+					case "write":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_HAS_USER_TABLE").".write ".$sql_order_method;
+					break;
+					
+					default:
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_HAS_USER_TABLE").".primary_key ".$sql_order_method;
+					break;
+				
+				endswitch;
+			}
+			else
+			{
+				$sql_order_by = "ORDER BY ".constant("SAMPLE_HAS_USER_TABLE").".primary_key";
+			}
+			
+			$sql = "SELECT ".constant("SAMPLE_HAS_USER_TABLE").".read AS read," .
+						"".constant("SAMPLE_HAS_USER_TABLE").".write AS write," .
+						"".constant("USER_TABLE").".id AS user " .
+						"FROM ".constant("SAMPLE_HAS_USER_TABLE")." " .
+						"JOIN ".constant("USER_PROFILE_TABLE")." 	ON ".constant("SAMPLE_HAS_USER_TABLE").".user_id 	= ".constant("USER_PROFILE_TABLE").".id " .
+						"JOIN ".constant("USER_TABLE")." 			ON ".constant("SAMPLE_HAS_USER_TABLE").".user_id 	= ".constant("USER_TABLE").".id " .
+						"WHERE " .
+							"".constant("SAMPLE_HAS_USER_TABLE").".sample_id = ".$sample_id." " .
+							"".$sql_order_by."";
+			
+			$return_array = array();
+		
+			$res = $db->db_query($sql);
+			
+			if (is_numeric($start) and is_numeric($end))
+			{
+				for ($i = 0; $i<=$end-1; $i++)
+				{
+					if (($data = $db->db_fetch_assoc($res)) == null)
+					{
+						break;
+					}
+					
+					if ($i >= $start)
+					{
+						array_push($return_array, $data);
+					}
+				}
+			}
+			else
+			{
+				while ($data = $db->db_fetch_assoc($res))
+				{
+					array_push($return_array, $data);
+				}
+			}
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * NEW
+	 */
+	public static function count_sample_users($sample_id)
+	{
+		global $db;
+		
+		if (is_numeric($sample_id))
+		{	
+			$sql = "SELECT COUNT(primary_key) AS result " .
+						"FROM ".constant("SAMPLE_HAS_USER_TABLE")." " .
+						"WHERE sample_id = ".$sample_id." ";
+			
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+	
+			return $data[result];
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public static function list_sample_organisation_units($sample_id, $order_by, $order_method, $start, $end)
+	{
+		global $db;
+		
+		if (is_numeric($sample_id))
+		{	
+			if ($order_by and $order_method)
+			{
+				if ($order_method == "asc")
+				{
+					$sql_order_method = "ASC";
+				}
+				else
+				{
+					$sql_order_method = "DESC";
+				}
+				
+				switch($order_by):
+											
+					case "name":
+						$sql_order_by = "ORDER BY ".constant("ORGANISATION_UNIT_TABLE").".name ".$sql_order_method;
+					break;
+										
+					default:
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE").".primary_key ".$sql_order_method;
+					break;
+				
+				endswitch;
+			}
+			else
+			{
+				$sql_order_by = "ORDER BY ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE").".primary_key";
+			}
+			
+			$sql = "SELECT ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE").".organisation_unit_id AS organisation_unit_id " .
+						"FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." " .
+						"JOIN ".constant("ORGANISATION_UNIT_TABLE")." ON ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE").".organisation_unit_id = ".constant("ORGANISATION_UNIT_TABLE").".id " .
+						"WHERE " .
+							"".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE").".sample_id = ".$sample_id." " .
+							"".$sql_order_by."";
+			
+			$return_array = array();
+		
+			$res = $db->db_query($sql);
+			
+			if (is_numeric($start) and is_numeric($end))
+			{
+				for ($i = 0; $i<=$end-1; $i++)
+				{
+					if (($data = $db->db_fetch_assoc($res)) == null)
+					{
+						break;
+					}
+					
+					if ($i >= $start)
+					{
+						array_push($return_array, $data);
+					}
+				}
+			}
+			else
+			{
+				while ($data = $db->db_fetch_assoc($res))
+				{
+					array_push($return_array, $data);
+				}
+			}
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * NEW
+	 */
+	public static function count_sample_organisation_units($sample_id)
+	{
+		global $db;
+		
+		if (is_numeric($sample_id))
+		{	
+			$sql = "SELECT COUNT(primary_key) AS result " .
+						"FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." " .
+						"WHERE sample_id = ".$sample_id." ";
+			
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+	
+			return $data[result];
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 }
 
 ?>

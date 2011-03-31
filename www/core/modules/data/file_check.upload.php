@@ -1,11 +1,22 @@
 <html>
 <head>
+<script type="text/javascript" src="../../../js/phpjs/phpjs.js"></script>
 <script type="text/javascript" src="../../../js/yajsl_php.js"></script>
 <script type="text/javascript" src="../../../js/yajsl.js"></script>
 <script type="text/javascript" src="../../../js/ol_core.js"></script>
 </head>
 <body>
-
+<script language='javascript'>
+	if (parent.uploader.getUploadReload() == true)
+	{
+		local_uploader = new Uploader();
+		function atload()
+		{
+			location.reload(true);
+		}
+		window.onload=atload;
+	}
+</script>
 <?php
 /**
  * @package data
@@ -62,18 +73,16 @@
 
 	if ($_GET[session_id] and $_GET[unique_id])
 	{
-		echo "<script language='javascript'>" .
-				"uploader = new Uploader();" .
-				"if (top.upload_reload == true) {
-					uploader.reload();
-				}" .
-				"</script>";
-	
 		$session = new Session($_GET[session_id]);
 		$file_upload_status = $session->read_value("FILE_UPLOAD_".$_GET[unique_id]);
 	
 		if (is_array($file_upload_status) and count($file_upload_status) > 0)
 		{
+			if ($session->is_value("FILE_UPLOAD_FINISHED_".$_GET[unique_id]) == false)
+			{
+				// $session->write_value("FILE_UPLOAD_FINISHED_".$_GET[unique_id], false, true);
+			}
+			
 			$upload_error_array = array();
 			
 			$number_of_complete_uploads = 0;
@@ -104,15 +113,15 @@
 			if ($upload_complete == false)
 			{
 				echo "<script language='javascript'>" .
-						"uploader.setNumberOfUploads(".$number_of_total_uploads.",".$number_of_complete_uploads.");" .
-						"</script>";		
+						"parent.uploader.setNumberOfUploads(".$number_of_total_uploads.",".$number_of_complete_uploads.");" .
+						"</script>";
 			}
 			else
 			{
 				if ($upload_error == true)
 				{
 					echo "<script language='javascript'>";
-					echo "uploader.stop(".$number_of_total_uploads.");";
+					echo "parent.uploader.stop(".$number_of_total_uploads.");";
 					
 					if ($_GET[run] == "update" or $_GET[run] == "update_minor")
 					{
@@ -127,38 +136,24 @@
 					{
 						foreach ($upload_error_array as $key => $value)
 						{
-							echo "uploader.enableField(".$key.");";
-							echo "uploader.error(".$key.", ".$value.", '".$type."');";
+							echo "parent.uploader.enableField(".$key.");";
+							echo "parent.uploader.error(".$key.", ".$value.", '".$type."');";
 						}
 					}
 					echo "</script>";
 				}
 				else
 				{
-					if ($_GET[nav] == "file" and $_GET[run] == "add_to_project")
-					{
-						$proceed_target = "project";
-					}
-					elseif ($_GET[nav] == "file" and $_GET[run] == "add_to_sample")
-					{
-						$proceed_target = "sample";
-					}
-					else
-					{
-						if ($_GET[run] == "update" or $_GET[run] == "update_minor")
-						{
-							$proceed_target = "file_detail";
-						}
-						else
-						{
-							$proceed_target = "data_browser";
-						}
-					}
-
 					echo "<script language='javascript'>" .
-						"uploader.setNumberOfUploads(".$number_of_total_uploads.",".$number_of_complete_uploads.");" .						
-						"uploader.proceed('".$proceed_target."');" .
-						"</script>";					
+						"parent.uploader.setNumberOfUploads(".$number_of_total_uploads.",".$number_of_complete_uploads.");" .						
+						"</script>";	
+					
+					if ($session->read_value("FILE_UPLOAD_FINISHED_".$_GET[unique_id]) == true)
+					{
+						echo "<script language='javascript'>" .
+							"parent.uploader.proceed();" .
+							"</script>";		
+					}	
 				}
 			}
 		}
@@ -170,6 +165,5 @@
 	$db->db_close();
 
 ?>
-
 </body>
 </html>

@@ -24,7 +24,6 @@
 /**
  * Equipment Has Responsible Person Access Class
  * @package equipment
- * @todo implementation of equipment has responsible persons
  */
 class EquipmentHasResponsiblePerson_Access
 {

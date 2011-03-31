@@ -28,9 +28,18 @@ require_once("interfaces/virtual_folder.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	if ($GLOBALS[autoload_prefix])
+	{
+		$path_prefix = $GLOBALS[autoload_prefix];
+	}
+	else
+	{
+		$path_prefix = "";
+	}
+	
 	require_once("events/virtual_folder_delete_event.class.php");
 
-	require_once("core/include/data/access/data_join.access.php");
+	require_once($path_prefix."core/include/data/access/data_join.access.php");
 	require_once("access/virtual_folder.access.php");
 }
 

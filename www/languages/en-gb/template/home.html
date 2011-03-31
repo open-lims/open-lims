@@ -52,40 +52,11 @@
 
 <!-- CONTAINER BEGIN ("I want to...","homeEasyStartBox") -->
 
-<a href='{NEW_PROJECT}' class='homeEasyButton'>
-	<span class='homeEasyIcon'><img src='images/icons_30/new_project.png' alt='' border='0' /></span>
-	<span class='homeEasyText'>create a new project/experiment</span>
-</a>
-			
-<a href='{WORK_PROJECT}' class='homeEasyButton'>
-	<span class='homeEasyIcon'><img src='images/icons_30/projects.png' alt='' border='0' /></span>
-	<span class='homeEasyText'>work with a project/experiment</span>
-</a>
-			
-<a href='{ACCESS_PROJECT}' class='homeEasyButton'>
-	<span class='homeEasyIcon'><img src='images/icons_30/project_data.png' alt='' border='0' /></span>
-	<span class='homeEasyText'>access to project/experiment data</span>
-</a>
-			
-<a href='{CREATE_SAMPLE}' class='homeEasyButton'>
-	<span class='homeEasyIcon'><img src='images/icons_30/new_sample.png' alt='' border='0' /></span>
-	<span class='homeEasyText'>create a new sample</span>
-</a>
-			
-<a href='{VIEW_SAMPLES}' class='homeEasyButton'>
-	<span class='homeEasyIcon'><img src='images/icons_30/my_samples.png' alt='' border='0' /></span>
-	<span class='homeEasyText'>view my samples</span>
-</a>
-			
-<a href='{VIEW_FILES}' class='homeEasyButton'>
-	<span class='homeEasyIcon'><img src='images/icons_30/my_files.png' alt='' border='0' /></span>
-	<span class='homeEasyText'>view my files</span>
-</a>
-			
-<a href='{GET_TO_GROUP}' class='homeEasyButton'>
-	<span class='homeEasyIcon'><img src='images/icons_30/organ_units.png' alt='' border='0' /></span>
-	<span class='homeEasyText'>get to my group/organisation unit/lab</span>
-</a>
+	<!-- FOREACH BEGIN ({I_WANT_TO_ARRAY}) -->
+	
+	{I_WANT_TO_ARRAY:CONTENT}
+	
+	<!-- FOREACH END -->
 			
 <a href='{GET_HELP}' class='homeEasyButton'>
 	<span class='homeEasyIcon'><img src='images/icons_30/help.png' alt='' border='0' /></span>

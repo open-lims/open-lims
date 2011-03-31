@@ -62,34 +62,7 @@
 		
 		if ($session->is_valid() == true)
 		{ 
-			$project_id = $_GET[project_id];
-			$project = new Project($project_id);
-			
-			$project_item = new ProjectItem($project_id);
-			$project_item->set_gid($_GET[key]);
-			$project_item->set_status_id($project->get_current_status_id());
-			
-			$description_required = $project_item->is_description();
-			$keywords_required = $project_item->is_keywords();
-			
-			if ($_GET[run] == "add_project_supplementary_file")
-			{
-				$folder_id = ProjectFolder::get_supplementary_folder($project_id);
-				$folder = Folder::get_instance($folder_id);	
-			}
-			else
-			{
-				$folder_id = ProjectStatusFolder::get_folder_by_project_id_and_project_status_id($project_id,$project->get_current_status_id());
-				
-				$sub_folder_id = $project->get_sub_folder($_GET[key], $project->get_current_status_id());
-				
-				if (is_numeric($sub_folder_id))
-				{
-					$folder_id = $sub_folder_id;
-				}
-				
-				$folder = Folder::get_instance($folder_id);	
-			}
+			$folder_id = $_GET[folder_id];
 			
 			if ($_POST[file_amount] > 25 or $_POST[file_amount] < 1 or !$_POST[file_amount])
 			{				
@@ -100,50 +73,28 @@
 				$file_amount = $_POST[file_amount];		
 			}	
 	
+			
 			$file = new File(null);
 			$file_upload_successful = $file->upload_file_stack($file_amount, $folder_id, $_FILES, $_GET[unique_id]);
 	
 			if ($file_upload_successful == true)
 			{
+				// Create Item
 				$item_id_array = $file->get_item_id_array();
 				
 				if(is_array($item_id_array) and count($item_id_array) >= 1)
 				{
 					foreach($item_id_array as $key => $value)
 					{
-						$item_id = $value;
-						
-						$project_item->set_item_id($item_id);
-						$project_item->link_item();
-						$project_item->set_item_status();
-					
-						if (($class_name = $project_item->is_classified()) == true)
-						{
-							$project_item->set_class($class_name);
-						}
-						
-						if ($description_required == true xor $keywords_required == true)
-						{
-							if ($description_required == false and $keywords_required == true)
-							{
-								$project_item->set_information(null,$_POST[keywords]);
-							}
-							else
-							{
-								$project_item->set_information($_POST[description],null);
-							}
-						}
-						else
-						{
-							if ($description_required == true and $keywords_required == true)
-							{
-								$project_item->set_information($_POST[description],$_POST[keywords]);
-							}
-						}
-						$project_item->create_log_entry();	
+						$file_as_item_upload_event = new FileAsItemUploadEvent($value, $_GET);
+						$event_handler = new EventHandler($file_as_item_upload_event);
 					}
 				}
-				ProjectTask::check_over_time_tasks($project_id);
+				$session->write_value("FILE_UPLOAD_FINISHED_".$_GET[unique_id], true, true);
+			}
+			else
+			{
+				
 			}
 		}
 	}

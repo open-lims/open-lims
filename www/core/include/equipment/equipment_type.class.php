@@ -33,6 +33,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("access/equipment_type.access.php");
 	require_once("access/equipment_cat.access.php");
 	require_once("access/equipment_has_responsible_person.access.php");
+	require_once("access/equipment_has_organisation_unit.access.php");
 }
 
 /**
@@ -343,6 +344,10 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
 		}
     }
     
+    /**
+     * @param integer $user_id
+     * @return bool
+     */
     public function is_user_responsible($user_id)
     {
    		if ($this->equipment_type_id and is_numeric($user_id))
@@ -363,6 +368,9 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
 		}
     }
     
+    /**
+     * @return array
+     */
     public function list_users()
     {
    		if ($this->equipment_type_id)
@@ -371,7 +379,94 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
 		}
 		else
 		{
+			return null;
+		}
+    }
+    
+    /**
+     * @param integer $organisation_unit_id
+     * @return bool
+     */
+    public function add_organisation_unit($organisation_unit_id)
+    {
+    	if ($this->equipment_type_id and is_numeric($organisation_unit_id))
+		{
+			$equipment_has_organisation_unit = new EquipmentHasOrganisationUnit_Access(null, null);
+			if ($equipment_has_organisation_unit->create($this->equipment_type_id, $organisation_unit_id) != null)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
 			return false;
+		}
+    }
+    
+    /**
+     * @param integer $organisation_unit_id
+     * @return bool
+     */
+    public function delete_organisation_unit($organisation_unit_id)
+    {
+   		if ($this->equipment_type_id and is_numeric($organisation_unit_id))
+		{
+			$equipment_has_organisation_unit = new EquipmentHasOrganisationUnit_Access($this->equipment_type_id, $organisation_unit_id);
+			if ($equipment_has_organisation_unit->delete())
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+    }
+    
+    /**
+     * @param integer $organisation_unit
+     * @return bool
+     */
+    public function is_organisation_unit($organisation_unit_id)
+    {
+   		if ($this->equipment_type_id and is_numeric($organisation_unit_id))
+		{
+			$organisation_unit_array = EquipmentHasOrganisationUnit_Access::get_organisation_unit_ids_by_equipment_id($this->equipment_type_id);
+			if (in_array($organisation_unit_id, $organisation_unit_array))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+    }
+    
+    /**
+     * @return array
+     */
+    public function list_organisation_units()
+    {
+   		if ($this->equipment_type_id)
+		{
+			return EquipmentHasOrganisationUnit_Access::get_organisation_unit_ids_by_equipment_id($this->equipment_type_id);
+		}
+		else
+		{
+			return null;
 		}
     }
     

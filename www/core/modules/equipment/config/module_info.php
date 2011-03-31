@@ -30,4 +30,5 @@
 	$required_include[0] 	= "equipment";
 	
 	$no_tab					= true;
+	$no_link				= true;
 ?>

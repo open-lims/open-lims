@@ -153,6 +153,7 @@ class DataIO
 					$paramquery[vfolder_id] = $data_path->get_previous_entry_id();
 					unset($paramquery[folder_id]);
 					unset($paramquery[nextpage]);
+					unset($paramquery[page]);
 					$params = http_build_query($paramquery,'','&#38;');
 				}
 				else
@@ -161,6 +162,7 @@ class DataIO
 					$paramquery[folder_id] = $data_path->get_previous_entry_id();
 					unset($paramquery[nextpage]);
 					unset($paramquery[vfolder_id]);
+					unset($paramquery[page]);
 					$params = http_build_query($paramquery,'','&#38;');
 				}		
 				
@@ -206,8 +208,7 @@ class DataIO
 						{
 							$paramquery = $_GET;
 							$paramquery[file_id] = $result_array[$key][file_id];
-							$paramquery[nav] = "file";
-							$paramquery[run] = "detail";
+							$paramquery[action] = "file_detail";
 							unset($paramquery[nextpage]);
 							unset($paramquery[version]);
 							$params = http_build_query($paramquery,'','&#38;');
@@ -238,8 +239,7 @@ class DataIO
 						{
 							$paramquery = $_GET;
 							$paramquery[value_id] = $result_array[$key][value_id];
-							$paramquery[nav] = "value";
-							$paramquery[run] = "detail";
+							$paramquery[action] = "value_detail";
 							unset($paramquery[nextpage]);
 							unset($paramquery[version]);
 							$params = http_build_query($paramquery,'','&#38;');
@@ -1356,32 +1356,110 @@ class DataIO
 
 	public static function method_handler()
 	{	
-		switch($_GET[run]):
-			case("permission"):
-				self::permission();
-			break;
+		try
+		{
+			if ($_GET[file_id])
+			{
+				if (File::exist_file($_GET[file_id]) == false) {
+					throw new FileNotFoundException("",2);
+				}
+			}
 			
-			case("chown"):
-				self::change_owner();
-			break;
+			if ($_GET[value_id])
+			{
+				if (Value::exist_value($_GET[value_id]) == false)
+				{
+					throw new ValueNotFoundException("",3);
+				}
+			}
 			
-			case("chgroup"):
-				self::change_group();
-			break;
+			switch($_GET[action]):
+				case("permission"):
+					self::permission();
+				break;
+				
+				case("chown"):
+					self::change_owner();
+				break;
+				
+				case("chgroup"):
+					self::change_group();
+				break;
+	
+				case("image_browser_detail"):
+					self::image_browser_detail();
+				break;
+				
+				case("image_browser_multi"):
+					self::image_browser_multi();
+				break;
+	
+				
+				case("value_detail"):
+					require_once("value.io.php");
+					ValueIO::detail();
+				break;
+				
+				case("value_history"):
+					require_once("value.io.php");
+					ValueIO::history();
+				break;
+					
+				case("value_delete_version"):
+					require_once("value.io.php");
+					ValueIO::delete_version();
+				break;
 
-			case("image_browser_detail"):
-				self::image_browser_detail();
-			break;
-			
-			case("image_browser_multi"):
-				self::image_browser_multi();
-			break;
-
-			default:
-				self::browser();
-			break;
-			
-		endswitch;	
+				
+				case("file_add"):
+					require_once("file.io.php");
+					FileIO::upload();
+				break;
+				
+				case("file_update"):
+				case("file_update_minor"):
+					require_once("file.io.php");
+					FileIO::update();
+				break;
+	
+				case("file_detail"):
+					require_once("file.io.php");
+					FileIO::detail();
+				break;
+				
+				case("file_history"):
+					require_once("file.io.php");
+					FileIO::history();
+				break;
+				
+				case("file_delete"):
+					require_once("file.io.php");
+					FileIO::delete();
+				break;
+				
+				case("file_delete_version"):
+					require_once("file.io.php");
+					FileIO::delete_version();
+				break;
+				
+				
+				default:
+					self::browser();
+				break;
+				
+			endswitch;	
+		}
+		catch (FileNotFoundException $e)
+		{
+			$error_io = new Error_IO($e, 20, 40, 1);
+			$error_io->display_error();
+		}
+		catch (ValueNotFoundException $e)
+		{
+			$error_io = new Error_IO($e, 20, 40, 1);
+			$error_io->display_error();
+		}
+		
 	}
 	
 }

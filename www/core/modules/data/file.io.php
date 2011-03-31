@@ -27,7 +27,7 @@
  */
 class FileIO
 {
-	private static function detail()
+	public static function detail()
 	{
 		try
 		{
@@ -209,121 +209,57 @@ class FileIO
 			$error_io->display_error();
 		}
 	}
-		
-	private static function upload_to_project()
-	{
-		if ($_GET[project_id])
+
+	/**
+	 * @todo error: no folder id
+	 */
+	public static function upload_as_item($type_array, $category_array, $organisation_unit_id, $folder_id)
+	{		
+		if (is_numeric($folder_id))
 		{
-			$project_id = $_GET[project_id];
-			$project = new Project($project_id);
-			$project_security = new ProjectSecurity($project_id);
+			$template = new Template("languages/en-gb/template/data/file_upload_item.html");
 			
-			if ($project_security->is_access(3, false) == true)
+			$unique_id = uniqid();
+			
+			$paramquery = $_GET;
+			$paramquery[unique_id] = $unique_id;
+			$paramquery[folder_id] = $folder_id;
+			$params = http_build_query($paramquery, '', '&#38;');
+			
+			$template->set_var("params", $params);
+			$template->set_var("unique_id", $unique_id);
+			$template->set_var("session_id", $_GET[session_id]);
+			
+			if ($_GET[retrace])
 			{
-				$project_item = new ProjectItem($project_id);
-				$project_item->set_gid($_GET[key]);
-				$project_item->set_status_id($project->get_current_status_id());
-				
-				$description_required = $project_item->is_description();
-				$keywords_required = $project_item->is_keywords();
-				
-				if (($description_required and !$_POST[description]) or ($keywords_required and !$_POST[keywords]))
+				$js_retrace_array = array();
+				$js_retrace_counter = 0;
+				$retrace_array = unserialize(base64_decode($_GET[retrace]));
+				foreach($retrace_array as $key => $value)
 				{
-					require_once("core/modules/item/item.io.php");
-					ItemIO::information(http_build_query($_GET), $description_required, $keywords_required);
+					$js_retrace_array[$js_retrace_counter][0] = $key;
+					$js_retrace_array[$js_retrace_counter][1] = $value;
+					$js_retrace_counter++;
 				}
-				else
-				{
-					$template = new Template("languages/en-gb/template/data/file_upload_project.html");
-					
-					$unique_id = uniqid();
-					
-					$paramquery = $_GET;
-					$paramquery[unique_id] = $unique_id;
-					$params = http_build_query($paramquery, '', '&#38;');
-					
-					$template->set_var("params", $params);
-					$template->set_var("unique_id", $unique_id);
-					$template->set_var("session_id", $_GET[session_id]);
-					
-					$template->set_var("keywords", $_POST[keywords]);
-					$template->set_var("description", $_POST[description]);
-					
-					$template->output();
-				}
+				$template->set_var("retrace", serialize($js_retrace_array));
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 20, 40, 2);
-				$error_io->display_error();
-			}	
-		}
-		else
-		{
-			$exception = new Exception("", 4);
-			$error_io = new Error_IO($exception, 20, 40, 3);
-			$error_io->display_error();
-		}
-	}
-		
-	private static function upload_to_sample()
-	{
-		if ($_GET[sample_id])
-		{
-			$sample_id = $_GET[sample_id];
-			$sample = new Sample($sample_id);
-			$sample_security = new SampleSecurity($sample_id);
-			
-			if ($sample_security->is_access(2, false))
-			{
-				$sample_item = new SampleItem($sample_id);
-				$sample_item->set_gid($_GET[key]);
-				
-				$description_required = $sample_item->is_description();
-				$keywords_required = $sample_item->is_keywords();
-				
-				if (($description_required and !$_POST[description]) or ($keywords_required and !$_POST[keywords]))
-				{
-					require_once("core/modules/item/item.io.php");
-					ItemIO::information(http_build_query($_GET), $description_required, $keywords_required);
-				}
-				else
-				{
-					$template = new Template("languages/en-gb/template/data/file_upload_sample.html");
-					
-					$unique_id = uniqid();
-					
-					$paramquery = $_GET;
-					$paramquery[unique_id] = $unique_id;
-					$params = http_build_query($paramquery, '', '&#38;');
-					
-					$template->set_var("params", $params);
-					$template->set_var("unique_id", $unique_id);
-					$template->set_var("session_id", $_GET[session_id]);
-					
-					$template->set_var("keywords", $_POST[keywords]);
-					$template->set_var("description", $_POST[description]);
-					
-					$template->output();
-				}
+				$template->set_var("retrace", "");
 			}
-			else
-			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 20, 40, 2);
-				$error_io->display_error();
-			}		
+			
+			$template->set_var("keywords", $_POST[keywords]);
+			$template->set_var("description", $_POST[description]);
+			
+			$template->output();
 		}
 		else
 		{
-			$exception = new Exception("", 5);
-			$error_io = new Error_IO($exception, 20, 40, 3);
-			$error_io->display_error();
-		}
+			// error
+		}	
 	}
-	
-	private static function upload()
+			
+	public static function upload()
 	{
 		if ($_GET[folder_id])
 		{
@@ -360,7 +296,7 @@ class FileIO
 		}
 	}
 	
-	private static function update()
+	public static function update()
 	{
 		if ($_GET[file_id])
 		{		
@@ -397,7 +333,7 @@ class FileIO
 		}
 	}
 		
-	private static function delete()
+	public static function delete()
 	{
 		global $common;
 		
@@ -467,7 +403,7 @@ class FileIO
 		}
 	}
 	
-	private static function delete_version()
+	public static function delete_version()
 	{
 		global $common;
 		
@@ -552,7 +488,7 @@ class FileIO
 	/**
 	 * @todo empty history error
 	 */
-	private static function history()
+	public static function history()
 	{
 		if ($_GET[file_id])
 		{
@@ -653,64 +589,6 @@ class FileIO
 			$error_io = new Error_IO($exception, 20, 40, 3);
 			$error_io->display_error();
 		}		
-	}
-	
-	public static function method_handler()
-	{
-		try
-		{
-			if ($_GET[file_id])
-			{
-				if (File::exist_file($_GET[file_id]) == false) {
-					throw new FileNotFoundException("",2);
-				}
-			}
-		
-			switch($_GET[run]):
-				case("add_to_project"):
-				case("add_project_supplementary_file"):
-					self::upload_to_project();
-				break;
-				
-				case("add_to_sample"):
-					self::upload_to_sample();
-				break;
-				
-				case("add"):
-					self::upload();
-				break;
-				
-				case("update"):
-				case("update_minor"):
-					self::update();
-				break;
-	
-				case("detail"):
-					self::detail();
-				break;
-				
-				case("history"):
-					self::history();
-				break;
-				
-				case("delete"):
-					self::delete();
-				break;
-				
-				case("delete_version"):
-					self::delete_version();
-				break;
-				
-				default:
-				
-				break;
-			endswitch;
-		}
-		catch (FileNotFoundException $e)
-		{
-			$error_io = new Error_IO($e, 20, 40, 1);
-			$error_io->display_error();
-		}
 	}
 
 }

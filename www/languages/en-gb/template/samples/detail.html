@@ -1,10 +1,33 @@
 <br />
 
+<script>
+	$(function() \{
+		$( "#print_dialog" ).dialog(\{
+			autoOpen: false,
+			buttons: \{
+				"Close": function() \{
+					$( this ).dialog( "close" );
+				\}
+			\}
+		\});
+
+		$( "#print_dialog_opener" ).click(function() \{
+			$( "#print_dialog" ).dialog( "open" );
+			return false;
+		\});
+	\});
+</script>
+
+
 <!-- CONTAINER BEGIN ("Information","sampleGeneral") -->
+
+<div id="print_dialog" title="Print Report">
+	<p>This function is not available in the current version.</p>
+</div>
 
 <div class='SampleBarcode'>
 	<div class='SampleBarcodeTitle'>Barcode:</div>
-	<div class='SampleBarcodePrint'><a href=''><img src='images/icons/print.png' alt='' style='border:0;'></a></div>
+	<div class='SampleBarcodePrint'><a href='' id='print_dialog_opener'><img src='images/icons/print.png' alt='' style='border:0;'></a></div>
 	<div class='SampleBarcodeImage'>
 		<img src='core/images/barcode.php?type=Code128&#38;string={ID}' alt='Barcode' />
 	</div>

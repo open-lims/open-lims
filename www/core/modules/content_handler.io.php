@@ -48,6 +48,7 @@ class ContentHandler_IO
 				}
 				else
 				{
+					$module_found = false;
 					$module_array = SystemHandler::list_modules();
 					
 					if (is_array($module_array) and count($module_array) >= 1)
@@ -61,6 +62,7 @@ class ContentHandler_IO
 								{
 									require_once($module_path);
 									$value['class']::method_handler();
+									$module_found = true;
 								}
 								else
 								{
@@ -72,6 +74,12 @@ class ContentHandler_IO
 					else
 					{
 						include("core/modules/base/home.io.php");
+					}
+					
+					if ($module_found == false)
+					{
+						$error_io = new Error_IO($e, 0, 0, 0);
+						$error_io->display_error();
 					}
 				}
 			}

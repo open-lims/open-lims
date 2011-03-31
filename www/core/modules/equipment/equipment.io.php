@@ -27,7 +27,7 @@
  */
 class EquipmentIO
 {
-	public static function add_equipment_item($type_array, $category_array, $organisation_unit_id)
+	public static function add_equipment_item($type_array, $category_array, $organisation_unit_id, $folder_id)
 	{
 		global $user, $project_security;
 		

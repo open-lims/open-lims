@@ -37,6 +37,7 @@ class BaseModuleDialog_Access
 	private $method;
 	private $internal_name;
 	private $display_name;
+	private $weight;
 	
 	/**
 	 * @param integer $id
@@ -65,6 +66,7 @@ class BaseModuleDialog_Access
 				$this->method			= $data[method];
 				$this->internal_name	= $data[internal_name];
 				$this->display_name		= $data[display_name];
+				$this->weight			= $data[weight];
 			}
 			else
 			{
@@ -85,6 +87,7 @@ class BaseModuleDialog_Access
 			unset($this->method);
 			unset($this->internal_name);
 			unset($this->display_name);
+			unset($this->weight);
 		}
 	}
 	
@@ -96,14 +99,23 @@ class BaseModuleDialog_Access
 	 * @param string $method
 	 * @return integer
 	 */
-	public function create($module_id, $dialog_type, $class_path, $class, $method, $internal_name, $display_name)
+	public function create($module_id, $dialog_type, $class_path, $class, $method, $internal_name, $display_name, $weight)
 	{
 		global $db;
 
 		if (is_numeric($module_id) and $dialog_type and $class and $method and $internal_name and $display_name)
 		{
-	 		$sql_write = "INSERT INTO ".constant("BASE_MODULE_DIALOG_TABLE")." (id, module_id, dialog_type, class_path, class, method, internal_name, display_name) " .
-								"VALUES (nextval('".self::BASE_MODULE_DIALOG_PK_SEQUENCE."'::regclass),'".$module_id."','".$dialog_type."','".$class_path."','".$class."','".$method."','".$internal_name."','".$display_name."')";		
+	 		if (is_numeric($weight))
+	 		{
+	 			$weight_insert = $weight;
+	 		}
+	 		else
+	 		{
+	 			$weight_insert = "NULL";
+	 		}
+			
+			$sql_write = "INSERT INTO ".constant("BASE_MODULE_DIALOG_TABLE")." (id, module_id, dialog_type, class_path, class, method, internal_name, display_name, weight) " .
+								"VALUES (nextval('".self::BASE_MODULE_DIALOG_PK_SEQUENCE."'::regclass),'".$module_id."','".$dialog_type."','".$class_path."','".$class."','".$method."','".$internal_name."','".$display_name."',".$weight_insert.")";		
 				
 			$res_write = $db->db_query($sql_write);
 			
@@ -257,6 +269,21 @@ class BaseModuleDialog_Access
 		if ($this->display_name)
 		{
 			return $this->display_name;
+		}
+		else
+		{
+			return null;
+		}	
+	}
+	
+	/**
+	 * @return integer
+	 */
+	public function get_weight()
+	{
+		if ($this->weight)
+		{
+			return $this->weight;
 		}
 		else
 		{
@@ -467,6 +494,35 @@ class BaseModuleDialog_Access
 		}
 	}
 	
+	/**
+	 * @param integer $weight
+	 * @return bool
+	 */
+	public function set_weight($weight)
+	{
+		global $db;
+
+		if ($this->id and is_numeric($weight))
+		{
+			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET weight = '".$weight."' WHERE id = ".$this->id."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->weight = $weight;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	
 	/**
 	 * @param string $dialog_type
@@ -517,7 +573,7 @@ class BaseModuleDialog_Access
 			$result_array = array();
 			$counter = 0;
 			
-			$sql = "SELECT * FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE TRIM(dialog_type) = '".trim($dialog_type)."'";
+			$sql = "SELECT * FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE TRIM(dialog_type) = '".trim($dialog_type)."' ORDER BY weight";
 			$res = $db->db_query($sql);
 			while ($data = $db->db_fetch_assoc($res))
 			{

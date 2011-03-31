@@ -1,6 +1,6 @@
 <?php 
 /**
- * @package data
+ * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -30,6 +30,7 @@
 	$dialog[0][method]			= "list_sample_items";
 	$dialog[0][internal_name]	= "sample";
 	$dialog[0][display_name]	= "Samples";
+	$dialog[0][weight]			= 100;
 	
 	$dialog[1][type]			= "item_add";
 	$dialog[1][class_path]		= "core/modules/sample/sample.io.php";

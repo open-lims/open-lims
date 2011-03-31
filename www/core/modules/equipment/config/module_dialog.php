@@ -30,6 +30,7 @@
 	$dialog[0][method]			= "list_equipment_item_handler";
 	$dialog[0][internal_name]	= "equipment";
 	$dialog[0][display_name]	= "Equipment";
+	$dialog[0][weight]			= 200;
 	
 	$dialog[1][type]			= "item_add";
 	$dialog[1][class_path]		= "core/modules/equipment/equipment.io.php";

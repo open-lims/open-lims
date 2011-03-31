@@ -1,6 +1,6 @@
 <?php
 /**
- * @package project
+ * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -28,4 +28,5 @@
 	$event_listener[1] = "SampleSecurity";
 	$event_listener[2] = "SampleItem";
 	$event_listener[3] = "SampleVirtualFolder";
+	$event_listener[4] = "SampleItemFactory";
 ?>

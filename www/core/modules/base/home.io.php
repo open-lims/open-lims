@@ -83,151 +83,38 @@
 	
 // Menu
 
-$paramquery = $_GET;
-$paramquery[nav] = "project";
-$paramquery[run] = "new";
-unset($paramquery[runit]);
-unset($paramquery[nextpage]);
-unset($paramquery[sure]);
-unset($paramquery[id]);
-unset($paramquery[aspect]);
-unset($paramquery[sortvalue]);
-unset($paramquery[sortby]);
-unset($paramquery[page]);
-unset($paramquery[pageref]);
-unset($paramquery[folderid]);
-unset($paramquery[objectid]);
-unset($paramquery[action]);
-unset($paramquery[projectid]);
-$params = http_build_query($paramquery,'','&#38;');
-
-$template->set_var("NEW_PROJECT","index.php?".$params);
-
+$module_link_array = ModuleLink::list_links_by_type("home_button");
+		
+if (is_array($module_link_array) and count($module_link_array) >= 1)
+{
+	$content_array = array();
+	$counter = 0;
 	
-$paramquery = $_GET;
-$paramquery[nav] = "project";
-$paramquery[run] = "workon";
-unset($paramquery[runit]);
-unset($paramquery[nextpage]);
-unset($paramquery[sure]);
-unset($paramquery[id]);
-unset($paramquery[aspect]);
-unset($paramquery[sortvalue]);
-unset($paramquery[sortby]);
-unset($paramquery[page]);
-unset($paramquery[pageref]);
-unset($paramquery[folderid]);
-unset($paramquery[objectid]);
-unset($paramquery[action]);
-unset($paramquery[projectid]);
-$params = http_build_query($paramquery,'','&#38;');
+	foreach ($module_link_array as $key => $value)
+	{
+		$button_template = new Template("languages/en-gb/template/".$value[file]);
 	
-$template->set_var("WORK_PROJECT","index.php?".$params);
-
+		$button_paramquery = array();
+		$button_paramquery[username] = $_GET[username];
+		$button_paramquery[session_id] = $_GET[session_id];
+		
+		if (is_array($value['array']) and count($value['array']) >= 1)
+		{
+			foreach ($value['array'] as $array_key => $array_value)
+			{
+				$button_paramquery[$array_key] = $array_value;
+			}
+		}
+		
+		$button_params = http_build_query($button_paramquery,'','&#38;');
+		$button_template->set_var("params", $button_params);
+		
+		$content_array[$counter][content] = $button_template->get_string();
+		$counter++;
+	}
 	
-$paramquery = $_GET;
-$paramquery[nav] = "project";
-$paramquery[run] = "accessdata";
-unset($paramquery[runit]);
-unset($paramquery[nextpage]);
-unset($paramquery[sure]);
-unset($paramquery[id]);
-unset($paramquery[aspect]);
-unset($paramquery[sortvalue]);
-unset($paramquery[sortby]);
-unset($paramquery[page]);
-unset($paramquery[pageref]);
-unset($paramquery[folderid]);
-unset($paramquery[objectid]);
-unset($paramquery[action]);
-unset($paramquery[projectid]);
-$params = http_build_query($paramquery,'','&#38;');
-	
-$template->set_var("ACCESS_PROJECT","index.php?".$params);
-
-	
-$paramquery = $_GET;
-$paramquery[nav] = "sample";
-$paramquery[run] = "new";
-unset($paramquery[runit]);
-unset($paramquery[nextpage]);
-unset($paramquery[sure]);
-unset($paramquery[id]);
-unset($paramquery[aspect]);
-unset($paramquery[sortvalue]);
-unset($paramquery[sortby]);
-unset($paramquery[page]);
-unset($paramquery[pageref]);
-unset($paramquery[folderid]);
-unset($paramquery[objectid]);
-unset($paramquery[action]);
-unset($paramquery[projectid]);
-$params = http_build_query($paramquery,'','&#38;');
-	
-$template->set_var("CREATE_SAMPLE","index.php?".$params);
-
-	
-$paramquery = $_GET;
-$paramquery[nav] = "sample";
-$paramquery[run] = "mysamples";
-unset($paramquery[runit]);
-unset($paramquery[nextpage]);
-unset($paramquery[sure]);
-unset($paramquery[id]);
-unset($paramquery[aspect]);
-unset($paramquery[sortvalue]);
-unset($paramquery[sortby]);
-unset($paramquery[page]);
-unset($paramquery[pageref]);
-unset($paramquery[folderid]);
-unset($paramquery[objectid]);
-unset($paramquery[action]);
-unset($paramquery[projectid]);
-$params = http_build_query($paramquery,'','&#38;');
-
-$template->set_var("VIEW_SAMPLES","index.php?".$params);
-
-	
-$paramquery = $_GET;
-$paramquery[nav] = "objects";
-unset($paramquery[runit]);
-unset($paramquery[nextpage]);
-unset($paramquery[sure]);
-unset($paramquery[id]);
-unset($paramquery[aspect]);
-unset($paramquery[sortvalue]);
-unset($paramquery[sortby]);
-unset($paramquery[page]);
-unset($paramquery[pageref]);
-unset($paramquery[folderid]);
-unset($paramquery[objectid]);
-unset($paramquery[action]);
-unset($paramquery[projectid]);
-unset($paramquery[run]);
-$params = http_build_query($paramquery,'','&#38;');
-	
-$template->set_var("VIEW_FILES","index.php?".$params);
-
-	
-$paramquery = $_GET;
-$paramquery[nav] = "static";
-$paramquery[run] = "tomylab";
-unset($paramquery[runit]);
-unset($paramquery[nextpage]);
-unset($paramquery[sure]);
-unset($paramquery[id]);
-unset($paramquery[aspect]);
-unset($paramquery[sortvalue]);
-unset($paramquery[sortby]);
-unset($paramquery[page]);
-unset($paramquery[pageref]);
-unset($paramquery[folderid]);
-unset($paramquery[objectid]);
-unset($paramquery[action]);
-unset($paramquery[projectid]);
-$params = http_build_query($paramquery,'','&#38;');
-	
-$template->set_var("GET_TO_GROUP","index.php?".$params);
+	$template->set_var("I_WANT_TO_ARRAY" ,$content_array);
+}
 	
 
 	

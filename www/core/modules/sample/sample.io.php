@@ -1824,7 +1824,7 @@ class SampleIO
 	 * @param integer $organisation_unit_id
 	 * @return integer
 	 */
-	public static function add_sample_item($type_array, $category_array, $organisation_unit_id)
+	public static function add_sample_item($type_array, $category_array, $organisation_unit_id, $folder_id)
 	{
 		if (!$_GET[selectpage])
 		{
@@ -2312,6 +2312,9 @@ class SampleIO
 		}
 	}
 
+	/**
+	 * NEW
+	 */
 	public static function depository_history()
 	{
 		global $sample_security;
@@ -2320,56 +2323,79 @@ class SampleIO
 		{
 			if ($sample_security->is_access(1, false))
 			{
+				$list = new List_IO(Sample_Wrapper::count_sample_depositories($_GET[sample_id]), 20);
+	
+				$list->add_row("","symbol",false,"16px");
+				$list->add_row("Name","name",true,null);
+				$list->add_row("Date","datetime",true,null);
+				$list->add_row("User","user",true,null);
+				
+				if ($_GET[page])
+				{
+					if ($_GET[sortvalue] and $_GET[sortmethod])
+					{
+						$result_array = Sample_Wrapper::list_sample_depositories($_GET[sample_id], $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
+					}
+					else
+					{
+						$result_array = Sample_Wrapper::list_sample_depositories($_GET[sample_id], null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
+					}				
+				}
+				else
+				{
+					if ($_GET[sortvalue] and $_GET[sortmethod])
+					{
+						$result_array = Sample_Wrapper::list_sample_depositories($_GET[sample_id], $_GET[sortvalue], $_GET[sortmethod], 0, 20);
+					}
+					else
+					{
+						$result_array = Sample_Wrapper::list_sample_depositories($_GET[sample_id], null, null, 0, 20);
+					}	
+				}
+				
+				if (is_array($result_array) and count($result_array) >= 1)
+				{
+					foreach($result_array as $key => $value)
+					{
+						$result_array[$key][symbol] = "<img src='images/icons/sample.png' alt='' style='border:0;' />";
+						
+						$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
+						$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+					
+						if ($result_array[$key][user])
+						{
+							$user = new User($result_array[$key][user]);
+						}
+						else
+						{
+							$user = new User(1);
+						}
+						
+						$result_array[$key][user] = $user->get_full_name(false);
+					}
+				}
+				else
+				{
+					$list->override_last_line("<span class='italic'>No results found!</span>");
+				}
+	
 				$template = new Template("languages/en-gb/template/samples/depository_history.html");
 				
 				$sample = new Sample($_GET[sample_id]);
 				
 				$template->set_var("sample_id",$sample->get_formatted_id());
+				$template->set_var("sample_name","(".$sample->get_name().")");
 				
-				$table_io = new TableIO("OverviewTable");
-				
-				$table_io->add_row("","symbol",false,16);
-				$table_io->add_row("Name","name",false,null);
-				$table_io->add_row("Date/Time","datetime",false,null);
-				$table_io->add_row("User","user",false,null);
-				
-				$content_array = array();
-				
-				$sample_depository_array = $sample->get_all_depository_information();
-				
-				if (is_array($sample_depository_array) and count($sample_depository_array) >= 1)
-				{
-					foreach($sample_depository_array as $key => $value)
-					{
-						$column_array = array();
-						
-						$sample_depository = new SampleDepository($value[id]);
-						
-						$depository_user = new User($value[user_id]);
-						
-						$column_array[symbol] = "<img src='images/fileicons/16/unknown.png' alt='' style='border:0;' />";
-						$column_array[name] = $sample_depository->get_name();
-						$column_array[datetime] = $value[datetime];
-						$column_array[user] = $depository_user->get_full_name(false);
-						
-						array_push($content_array, $column_array);
-					}
-					
-					$table_io->add_content_array($content_array);
-				}
-				else
-				{
-					$table_io->override_last_line("<span class='italic'>No Depository Defined Yet!</span>");
-				}
-				
-				$template->set_var("table", $table_io->get_content($_GET[page]));	
+				$template->set_var("table", $list->get_list($result_array, $_GET[page]));
 				
 				$paramquery = $_GET;
 				$paramquery[run] = "detail";
+				unset($paramquery[sortvalue]);
+				unset($paramquery[sortmethod]);
 				$params = http_build_query($paramquery,'','&#38;');	
 				
 				$template->set_var("back_link",$params);
-	
+				
 				$template->output();
 			}
 			else
@@ -2567,7 +2593,16 @@ class SampleIO
 										$sample = new Sample($_GET[sample_id]);
 										$current_requirements = $sample->get_requirements();
 										
-										$return_value = $module_dialog['class']::$module_dialog[method]($current_requirements[$_GET[key]][type_id], $current_requirements[$_GET[key]][category_id], null);
+										$folder_id = SampleFolder::get_folder_by_sample_id($_GET[sample_id]);
+										
+										$sub_folder_id = $sample->get_sub_folder($folder_id, $_GET[key]);				
+						
+										if (is_numeric($sub_folder_id))
+										{
+											$folder_id = $sub_folder_id;
+										}
+										
+										$return_value = $module_dialog['class']::$module_dialog[method]($current_requirements[$_GET[key]][type_id], $current_requirements[$_GET[key]][category_id], null, $folder_id);
 										
 										if (is_numeric($return_value))
 										{

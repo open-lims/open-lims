@@ -248,6 +248,8 @@ class List_IO
 
     		if (is_array($this->first_line_entry))
     		{
+    			$return .= "<tr class ='trLightGrey'>";
+    			
     			foreach ($this->rows as $key => $value)
 				{
 					if (is_array($this->first_line_entry[$value[address]]))
@@ -272,6 +274,8 @@ class List_IO
 						
 					}
 				}
+				
+				$return .= "</tr>";
     		}
     		
 			if (is_array($array))

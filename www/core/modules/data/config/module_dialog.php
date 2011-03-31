@@ -27,7 +27,22 @@
 	$dialog[0][type]			= "item_list";
 	$dialog[0][class_path]		= "core/modules/data/data.io.php";
 	$dialog[0]['class']			= "DataIO";
-	$dialog[0][method]			= "browser";
+	$dialog[0][method]			= "method_handler";
 	$dialog[0][internal_name]	= "data";
 	$dialog[0][display_name]	= "Data";
+	$dialog[0][weight]			= 300;
+	
+	$dialog[1][type]			= "item_add";
+	$dialog[1][class_path]		= "core/modules/data/value.io.php";
+	$dialog[1]['class']			= "ValueIO";
+	$dialog[1][method]			= "add_value_item";
+	$dialog[1][internal_name]	= "value";
+	$dialog[1][display_name]	= "Value";
+	
+	$dialog[2][type]			= "item_add";
+	$dialog[2][class_path]		= "core/modules/data/file.io.php";
+	$dialog[2]['class']			= "FileIO";
+	$dialog[2][method]			= "upload_as_item";
+	$dialog[2][internal_name]	= "file";
+	$dialog[2][display_name]	= "File";
 ?>

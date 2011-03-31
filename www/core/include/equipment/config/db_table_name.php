@@ -26,6 +26,7 @@
  */
 	define("EQUIPMENT_CAT_TABLE", 						"core_equipment_cats");
 	define("EQUIPMENT_HAS_RESPONSIBLE_PERSON_TABLE", 	"core_equipment_has_responsible_persons");
+	define("EQUIPMENT_HAS_ORGANISTAION_UNIT_TABLE", 	"core_equipment_has_organisation_units");
 	define("EQUIPMENT_IS_ITEM_TABLE", 					"core_equipment_is_item");
 	define("EQUIPMENT_TYPE_TABLE", 						"core_equipment_types");
 	define("EQUIPMENT_TABLE", 							"core_equipment");

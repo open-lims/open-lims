@@ -29,6 +29,7 @@ class Main
 {
 	/**
 	 * Checks basic requirements, includes basic files, creates global classes and starts Database-Connection
+	 * @todo handling of system exceptions
 	 */
 	function __construct()
 	{
@@ -108,6 +109,10 @@ class Main
 			catch(ModuleProcessFailedException $e)
 			{
 				die("Module register process failed!");
+			}
+			catch(ModuleDataCorruptException $e)
+			{
+				die("Module Data Corrupt!");
 			}
 			catch(EventHandlerCreationFailedException $e)
 			{

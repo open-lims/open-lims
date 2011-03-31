@@ -31,4 +31,5 @@
 	$tab_colour				= "orange";
 	
 	$no_dialog				= true;
+	$no_link				= true;
 ?>

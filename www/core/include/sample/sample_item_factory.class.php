@@ -30,7 +30,7 @@ require_once("interfaces/sample_item_factory.interface.php");
  * Sample Item Factory Class
  * @package sample
  */
-class SampleItemFactory implements SampleItemFactoryInterface
+class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInterface
 {
 	/**
 	 * @todo check over time tasks via event
@@ -99,5 +99,41 @@ class SampleItemFactory implements SampleItemFactoryInterface
 			return false;
 		}
 	}
+	
+	/**
+     * @param object $event_object
+     */
+    public static function listen_events($event_object)
+    {
+    	global $transaction;
+    	
+    	if ($event_object instanceof FileAsItemUploadEvent)
+    	{
+    		$get_array = $event_object->get_get_array();
+    		if ($get_array[nav] == "sample" and is_numeric($get_array[sample_id]))
+    		{
+    			$transaction_id = $transaction->begin();
+    			
+    			if (self::create($get_array[sample_id], $event_object->get_item_id(), $get_array[key], null, null) == false)
+    			{
+    				if ($transaction_id != null)
+	    			{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+    			}
+    			else
+    			{
+    				if ($transaction_id != null)
+	    			{
+						$transaction->commit($transaction_id);
+					}
+    			}
+    		}
+    	}
+    	
+    	return true;
+    }
+    
 }
 ?>

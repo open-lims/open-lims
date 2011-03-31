@@ -334,221 +334,40 @@ class MainNavigation_IO
 		}
 		else
 		{
-			$template = new Template("languages/en-gb/template/navigation/sub/".$current_color.".html");
-			
-			$config_folder = "core/modules/".SystemHandler::get_module_folder_by_module_name($_GET[nav])."/config";
-			if (is_dir($config_folder))
+			if ($current_color)
 			{
-				$subnavigation_file = $config_folder."/module_subnavigation.php";
-				if (is_file($subnavigation_file))
+				$template = new Template("languages/en-gb/template/navigation/sub/".$current_color.".html");
+				
+				$config_folder = "core/modules/".SystemHandler::get_module_folder_by_module_name($_GET[nav])."/config";
+				if (is_dir($config_folder))
 				{
-					include($subnavigation_file);
+					$subnavigation_file = $config_folder."/module_subnavigation.php";
+					if (is_file($subnavigation_file))
+					{
+						include($subnavigation_file);
+					}
+					else
+					{
+						$template->set_var("sub_menu", false);
+						$template->set_var("search_bar", false);
+					}
 				}
 				else
 				{
 					$template->set_var("sub_menu", false);
 					$template->set_var("search_bar", false);
 				}
+	
+				$template->output();
 			}
 			else
 			{
+				$template = new Template("languages/en-gb/template/navigation/sub/blue.html");
 				$template->set_var("sub_menu", false);
 				$template->set_var("search_bar", false);
+				$template->output();
 			}
-
-			$template->output();
 		}
-		
-		
-		/*
-		switch(strtoupper($_GET[nav])):
-		
-			case "HOME":
-				
-				$my_profile_paramquery[username] = $_GET[username];
-				$my_profile_paramquery[session_id] = $_GET[session_id];
-				$my_profile_paramquery[nav] = "user";
-				$my_profile_params = http_build_query($my_profile_paramquery,'','&#38;');
-				
-				$my_organisation_units_paramquery[username] = $_GET[username];
-				$my_organisation_units_paramquery[session_id] = $_GET[session_id];
-				$my_organisation_units_paramquery[nav] = "static";
-				$my_organisation_units_paramquery[run] = "myorgan";
-				$my_organisation_units_params = http_build_query($my_organisation_units_paramquery,'','&#38;');
-				
-				$system_messages_paramquery[username] = $_GET[username];
-				$system_messages_paramquery[session_id] = $_GET[session_id];
-				$system_messages_paramquery[nav] = "static";
-				$system_messages_paramquery[run] = "sysmsg";
-				$system_messages_params = http_build_query($system_messages_paramquery,'','&#38;');
-				
-				$template = new Template("languages/en-gb/template/navigation/sub/home.html");
-				$template->set_var("my_profile_params", $my_profile_params);
-				$template->set_var("my_organ_units_params", $my_organisation_units_params);
-				$template->set_var("system_messages_params", $system_messages_params);
-				$template->output();
-				
-			break;
-			
-			case "PROJECTS":
-			
-				$new_project_paramquery[username] = $_GET[username];
-				$new_project_paramquery[session_id] = $_GET[session_id];
-				$new_project_paramquery[nav] = "projects";
-				$new_project_paramquery[run] = "new";
-				$new_project_paramquery[change_tab] = "true";
-				$new_project_params = http_build_query($new_project_paramquery,'','&#38;');
-			
-				$my_projects_paramquery[username] = $_GET[username];
-				$my_projects_paramquery[session_id] = $_GET[session_id];
-				$my_projects_paramquery[nav] = "projects";
-				$my_projects_paramquery[change_tab] = "true";
-				$my_projects_params = http_build_query($my_projects_paramquery,'','&#38;');
-			
-				$mini_search_paramquery[username] = $_GET[username];
-				$mini_search_paramquery[session_id] = $_GET[session_id];
-				$mini_search_paramquery[nav] = "search";
-				$mini_search_paramquery[run] = "project";
-				$mini_search_paramquery[change_tab] = "true";
-				$mini_search_paramquery[nextpage] = "1";
-				$mini_search_params = http_build_query($mini_search_paramquery,'','&#38;');
-			
-				$template = new Template("languages/en-gb/template/navigation/sub/projects.html");
-				$template->set_var("new_project_params", $new_project_params);
-				$template->set_var("my_projects_params", $my_projects_params);
-				$template->set_var("mini_search_params", $mini_search_params);
-				$template->output();
-				
-			break;
-			
-			case "SAMPLES":
-				
-				$new_sample_paramquery[username] = $_GET[username];
-				$new_sample_paramquery[session_id] = $_GET[session_id];
-				$new_sample_paramquery[nav] = "samples";
-				$new_sample_paramquery[run] = "new";
-				$new_sample_paramquery[change_tab] = "true";
-				$new_sample_params = http_build_query($new_sample_paramquery,'','&#38;');
-			
-				$my_samples_paramquery[username] = $_GET[username];
-				$my_samples_paramquery[session_id] = $_GET[session_id];
-				$my_samples_paramquery[nav] = "samples";
-				$my_samples_paramquery[change_tab] = "true";
-				$my_samples_params = http_build_query($my_samples_paramquery,'','&#38;');
-				
-				$mini_search_paramquery[username] = $_GET[username];
-				$mini_search_paramquery[session_id] = $_GET[session_id];
-				$mini_search_paramquery[nav] = "search";
-				$mini_search_paramquery[run] = "sample";
-				$mini_search_paramquery[change_tab] = "true";
-				$mini_search_paramquery[nextpage] = "1";
-				$mini_search_params = http_build_query($mini_search_paramquery,'','&#38;');
-				
-				$template = new Template("languages/en-gb/template/navigation/sub/samples.html");
-				$template->set_var("new_sample_params", $new_sample_params);
-				$template->set_var("my_samples_params", $my_samples_params);
-				$template->set_var("mini_search_params", $mini_search_params);
-				$template->output();
-				
-			break;
-			
-			case "DATA":
-				$mini_search_paramquery[username] = $_GET[username];
-				$mini_search_paramquery[session_id] = $_GET[session_id];
-				$mini_search_paramquery[nav] = "search";
-				$mini_search_paramquery[run] = "ffv";
-				$mini_search_paramquery[change_tab] = "true";
-				$mini_search_paramquery[nextpage] = "1";
-				$mini_search_params = http_build_query($mini_search_paramquery,'','&#38;');
-				
-				if ($_GET[folder_id]) {
-					$folder_id = $_GET[folder_id];
-				}else{
-					$folder_id = 1;
-				}
-				
-				$template = new Template("languages/en-gb/template/navigation/sub/data.html");
-				$template->set_var("mini_search_params", $mini_search_params);
-				$template->set_var("mini_search_folder_id", $folder_id);
-				$template->output();
-			break;
-			
-			case "SEARCH":
-				
-				$project_search_paramquery[username] = $_GET[username];
-				$project_search_paramquery[session_id] = $_GET[session_id];
-				$project_search_paramquery[nav] = "search";
-				$project_search_paramquery[run] = "project";
-				$project_search_paramquery[change_tab] = "true";
-				$project_search_params = http_build_query($project_search_paramquery,'','&#38;');
-				
-				$sample_search_paramquery[username] = $_GET[username];
-				$sample_search_paramquery[session_id] = $_GET[session_id];
-				$sample_search_paramquery[nav] = "search";
-				$sample_search_paramquery[run] = "sample";
-				$sample_search_paramquery[change_tab] = "true";
-				$sample_search_params = http_build_query($sample_search_paramquery,'','&#38;');
-				
-				$ffv_search_paramquery[username] = $_GET[username];
-				$ffv_search_paramquery[session_id] = $_GET[session_id];
-				$ffv_search_paramquery[nav] = "search";
-				$ffv_search_paramquery[run] = "ffv";
-				$ffv_search_paramquery[change_tab] = "true";
-				$ffv_search_params = http_build_query($ffv_search_paramquery,'','&#38;');
-				
-				$data_search_paramquery[username] = $_GET[username];
-				$data_search_paramquery[session_id] = $_GET[session_id];
-				$data_search_paramquery[nav] = "search";
-				$data_search_paramquery[run] = "data";
-				$data_search_paramquery[change_tab] = "true";
-				$data_search_params = http_build_query($data_search_paramquery,'','&#38;');
-				
-				$user_search_paramquery[username] = $_GET[username];
-				$user_search_paramquery[session_id] = $_GET[session_id];
-				$user_search_paramquery[nav] = "search";
-				$user_search_paramquery[run] = "user";
-				$user_search_paramquery[change_tab] = "true";
-				$user_search_params = http_build_query($user_search_paramquery,'','&#38;');
-				
-				$full_text_search_paramquery[username] = $_GET[username];
-				$full_text_search_paramquery[session_id] = $_GET[session_id];
-				$full_text_search_paramquery[nav] = "search";
-				$full_text_search_paramquery[run] = "full_text";
-				$full_text_search_paramquery[change_tab] = "true";
-				$full_text_search_params = http_build_query($full_text_search_paramquery,'','&#38;');
-				
-				$template = new Template("languages/en-gb/template/navigation/sub/search.html");
-				$template->set_var("project_search_params", $project_search_params);
-				$template->set_var("sample_search_params", $sample_search_params);
-				$template->set_var("ffv_search_params", $ffv_search_params);
-				$template->set_var("data_search_params", $data_search_params);
-				$template->set_var("user_search_params", $user_search_params);
-				$template->set_var("full_text_search_params", $full_text_search_params);
-				$template->output();
-				
-			break;
-			
-			case "ORGANISER":
-				$template = new Template("languages/en-gb/template/navigation/sub/organiser.html");
-				$template->output();
-			break;
-			
-			case "EXTENSIONS":
-				$template = new Template("languages/en-gb/template/navigation/sub/extensions.html");
-				$template->output();
-			break;
-			
-			case "ADMINISTRATION":
-				$template = new Template("languages/en-gb/template/navigation/sub/administration.html");
-				$template->output();
-			break;
-			
-			default:
-				
-			break;
-		
-		
-		endswitch; */
 		
 		$template = new Template("languages/en-gb/template/navigation/main_navigation_footer.html");
 		$template->output();

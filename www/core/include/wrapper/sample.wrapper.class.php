@@ -160,5 +160,36 @@ class Sample_Wrapper implements Sample_WrapperInterface
 	{
 		return Sample_Wrapper_Access::count_organisation_unit_samples($organisation_unit_id);
 	}
+	
+	public static function list_sample_depositories($sample_id, $order_by, $order_method, $start, $end)
+	{
+		return Sample_Wrapper_Access::list_sample_depositories($sample_id, $order_by, $order_method, $start, $end);
+	}
+	
+	public static function count_sample_depositories($sample_id)
+	{
+		return Sample_Wrapper_Access::count_sample_depositories($sample_id);
+	}
+	
+	public static function list_sample_users($sample_id, $order_by, $order_method, $start, $end)
+	{
+		return Sample_Wrapper_Access::list_sample_users($sample_id, $order_by, $order_method, $start, $end);
+	}
+	
+	public static function count_sample_users($sample_id)
+	{
+		return Sample_Wrapper_Access::count_sample_users($sample_id);
+	}
+	
+	public static function list_sample_organisation_units($sample_id, $order_by, $order_method, $start, $end)
+	{
+		return Sample_Wrapper_Access::list_sample_organisation_units($sample_id, $order_by, $order_method, $start, $end);
+	}
+	
+	public static function count_sample_organisation_units($sample_id)
+	{
+		return Sample_Wrapper_Access::count_sample_organisation_units($sample_id);
+	}
+
 }
 ?>

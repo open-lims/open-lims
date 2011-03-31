@@ -1197,8 +1197,10 @@ function Uploader() {
 	
 	this.setUniqueId = setUniqueId;
 	this.setSessionId = setSessionId;
-	this.reload = reload;
+	this.setRetrace = setRetrace;
+	this.getUploadReload = getUploadReload;
 	this.proceed = proceed;
+	this.reload = reload;
 	this.stop = stop;
 	this.enableField = enableField;
 	this.setNumberOfUploads = setNumberOfUploads;
@@ -1209,6 +1211,7 @@ function Uploader() {
 	var unique_id;
 	var session_id;
 	
+	var upload_reload = false;
 	var upload_status_array;
 	
 	if (document.captureEvents) {
@@ -1246,6 +1249,15 @@ function Uploader() {
 	
 	function setSessionId(id) {
 		session_id = id;
+	}
+	
+	function setRetrace(id) {
+		retrace = id;
+	}
+	
+	function getUploadReload()
+	{
+		return upload_reload;
 	}
 	
 	function addFields() {
@@ -1305,10 +1317,6 @@ function Uploader() {
 		}
 			
 	}
-		
-	function reload() {
-		window.setTimeout('location.reload()',500);
-	}	
 	
 	function enableField(field_no) {
 		if ((field = top.document.getElementById("file-" + field_no)) != null) {
@@ -1329,156 +1337,133 @@ function Uploader() {
 					
 		// Proceed Bar
 		AjaxProceed("Please wait while uploading file(s)",0);
-		
 	}
 	
-	function proceed(proceed_target) {
+	function reload() {
+		window.setTimeout('location.reload(true)',500);
+	}
+	
+	function proceed() {
 
-		top.upload_reload = false;
+		upload_reload = false;
 		
 		var target = "";
 		
-		var get_param_string = top.location.search.substring(1, top.location.search.length);
+		var get_param_string = location.search.substring(1, location.search.length);
 	    var get_params = get_param_string.split("&");
-
-	    switch (proceed_target) {
 	    
-	    	case "project":
-	    		
-	    		for(i=0; i<get_params.length; i++) {
-		   	    	  
-	   		       var key_value = get_params[i].split("=");
-	   		       
-	   		       if(key_value.length == 2) {
-	   		        	 
+	    if (retrace == "") {
+   			for(i=0; i<get_params.length; i++) {
+   	    	  
+   		       var key_value = get_params[i].split("=");
+   		       
+   		       if(key_value.length == 2) {
+   		        	 
+   		          if (key_value[0] != "run") {
    		        	  if (key_value[0] == "nav") {
    		        		  if (target == "") {
-   		  					target = "nav=projects";
+   		  					target = "nav=data";
    		  	        	  }else{
-   		  					target = target + "&nav=projects";
+   		  					target = target + "&nav=data";
    		  	        	  }
    		        	  }else{
-   		        		  if (key_value[0] == "run") {
-	   		        		  if (target == "") {
-	   		  					target = "run=detail";
-	   		  	        	  }else{
-	   		  					target = target + "&run=detail";
-	   		  	        	  }
-	   		        	  }else{
-	   		        		  if (target == "") {
-	   		  					target = key_value[0] + "=" + key_value[1];
-	   		  	        	  }else{
-	   		  					target = target + "&" + key_value[0] + "=" + key_value[1];
-	   		  	        	  }
-	   		        	  }
-   		        	  }
-	   	   
-	   		       }
-		   		         
-		   		 } 
-	    		
-	    	break;
-	    	
-	    	case "sample":
-	    	
-	    		for(i=0; i<get_params.length; i++) {
-		   	    	  
-	   		       var key_value = get_params[i].split("=");
-	   		       
-	   		       if(key_value.length == 2) {
-	   		        	 
-   		        	  if (key_value[0] == "nav") {
    		        		  if (target == "") {
-   		  					target = "nav=samples";
+   		  					target = key_value[0] + "=" + key_value[1];
    		  	        	  }else{
-   		  					target = target + "&nav=samples";
+   		  					target = target + "&" + key_value[0] + "=" + key_value[1];
    		  	        	  }
-   		        	  }else{
-   		        		  if (key_value[0] == "run") {
-	   		        		  if (target == "") {
-	   		  					target = "run=detail";
-	   		  	        	  }else{
-	   		  					target = target + "&run=detail";
-	   		  	        	  }
-	   		        	  }else{
-	   		        		  if (target == "") {
-	   		  					target = key_value[0] + "=" + key_value[1];
-	   		  	        	  }else{
-	   		  					target = target + "&" + key_value[0] + "=" + key_value[1];
-	   		  	        	  }
-	   		        	  }
    		        	  }
-	   	   
-	   		       }
-		   		         
-		   		 } 
-	    		
-	    	break;
-	    	
-	   		case "data_browser":
-	   			
-	   			for(i=0; i<get_params.length; i++) {
-	   	    	  
-	   		       var key_value = get_params[i].split("=");
-	   		       
-	   		       if(key_value.length == 2) {
-	   		        	 
-	   		          if (key_value[0] != "run") {
-	   		        	  if (key_value[0] == "nav") {
-	   		        		  if (target == "") {
-	   		  					target = "nav=data";
-	   		  	        	  }else{
-	   		  					target = target + "&nav=data";
-	   		  	        	  }
-	   		        	  }else{
+   		          }
+   	   
+   		       }
+   			}
+	    }
+	    else
+	    {
+	    	target_array = unserialize(retrace);
+	    	if (target_array != null)
+	    	{
+	    		if (target_array.length > 0)
+	    		{
+	    			for(i=0; i<get_params.length; i++) {  
+    	   		       var key_value = get_params[i].split("=");
+    	   		       
+    	   		       if(key_value.length == 2) {
+    	   		        	 
+    	   		          if (key_value[0] == "username" || key_value[0] == "session_id") {
 	   		        		  if (target == "") {
 	   		  					target = key_value[0] + "=" + key_value[1];
 	   		  	        	  }else{
 	   		  					target = target + "&" + key_value[0] + "=" + key_value[1];
 	   		  	        	  }
-	   		        	  }
-	   		          }
-	   	   
-	   		       }
-	   		         
-	   		    } 
-	   			
-	    	break;
-	    	
-	   		case "file_detail":
-	   			
-	   			for(i=0; i<get_params.length; i++) {
-		   	    	  
-		   		       var key_value = get_params[i].split("=");
-		   		       
-		   		       if(key_value.length == 2) {
-		   		        	 
-	   		        	  if (key_value[0] == "run") {
-	   		        		  if (target == "") {
-	   		  					target = "run=detail";
-	   		  	        	  }else{
-	   		  					target = target + "&run=detail";
-	   		  	        	  }
-	   		        	  }else{
-	   		        		  if (target == "") {
-	   		  					target = key_value[0] + "=" + key_value[1];
-	   		  	        	  }else{
-	   		  					target = target + "&" + key_value[0] + "=" + key_value[1];
-	   		  	        	  }
-	   		        	  }
-		   	   
-		   		       }
-		   		         
-		   		    } 
-	   			
-	   		break;
-	    
-	    
+    	   		          }
+    	   	   
+    	   		       }
+    	   			}
+	    			
+	    			for (i=0; i<target_array.length; i++)
+	    			{
+	    				target = target+"&"+target_array[i][0]+"="+target_array[i][1];
+	    			}
+	    		}
+	    		else
+	    		{
+	    			for(i=0; i<get_params.length; i++) {  
+    	   		       var key_value = get_params[i].split("=");
+    	   		       
+    	   		       if(key_value.length == 2) {
+    	   		        	 
+    	   		          if (key_value[0] != "run") {
+    	   		        	  if (key_value[0] == "nav") {
+    	   		        		  if (target == "") {
+    	   		  					target = "nav=data";
+    	   		  	        	  }else{
+    	   		  					target = target + "&nav=data";
+    	   		  	        	  }
+    	   		        	  }else{
+    	   		        		  if (target == "") {
+    	   		  					target = key_value[0] + "=" + key_value[1];
+    	   		  	        	  }else{
+    	   		  					target = target + "&" + key_value[0] + "=" + key_value[1];
+    	   		  	        	  }
+    	   		        	  }
+    	   		          }
+    	   	   
+    	   		       }
+    	   			}
+	    		}
+	    	}
+	    	else
+	    	{
+	    		for(i=0; i<get_params.length; i++) {  
+ 	   		       var key_value = get_params[i].split("=");
+ 	   		       
+ 	   		       if(key_value.length == 2) {
+ 	   		        	 
+ 	   		          if (key_value[0] != "run") {
+ 	   		        	  if (key_value[0] == "nav") {
+ 	   		        		  if (target == "") {
+ 	   		  					target = "nav=data";
+ 	   		  	        	  }else{
+ 	   		  					target = target + "&nav=data";
+ 	   		  	        	  }
+ 	   		        	  }else{
+ 	   		        		  if (target == "") {
+ 	   		  					target = key_value[0] + "=" + key_value[1];
+ 	   		  	        	  }else{
+ 	   		  					target = target + "&" + key_value[0] + "=" + key_value[1];
+ 	   		  	        	  }
+ 	   		        	  }
+ 	   		          }
+ 	   	   
+ 	   		       }
+ 	   			}	
+	    	}
 	    }
 		
 	    target = "/index.php?" + target;
 	    
-		top.location.replace(target); 
+		location.replace(target); 
 		
 	}
 	
@@ -1533,7 +1518,7 @@ function Uploader() {
 	
 	function stop(number_of_files) {
 	
-		top.upload_reload = false;
+		upload_reload = false;
 		
 		// Stopps upload in main frame
 		if ((div = top.document.getElementById("AjaxProceed")) != null) {

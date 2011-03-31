@@ -29,7 +29,7 @@ require_once("interfaces/project_permission.interface.php");
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
 	require_once("access/project_permission.access.php");
-	require_once("core/include/project/access/project_join.access.php");
+	require_once("access/project_join.access.php");
 }
 
 /**

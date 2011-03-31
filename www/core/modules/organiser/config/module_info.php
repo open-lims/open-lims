@@ -33,4 +33,5 @@
 	$tab_colour				= "lightblue";
 	
 	$no_dialog				= true;
+	$no_link				= true;
 ?>

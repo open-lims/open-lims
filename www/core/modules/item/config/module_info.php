@@ -31,4 +31,5 @@
 	
 	$no_tab					= true;
 	$no_dialog				= true;
+	$no_link				= true;
 ?>

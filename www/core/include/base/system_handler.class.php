@@ -48,6 +48,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	define("BASE_INCLUDE_FILE_TABLE"		, "core_base_include_files");
 	define("BASE_INCLUDE_TABLE"				, "core_base_includes");
 	define("BASE_MODULE_DIALOG_TABLE"		, "core_base_module_dialogs");
+	define("BASE_MODULE_LINK_TABLE"			, "core_base_module_links");
 	define("BASE_MODULE_FILE_TABLE"			, "core_base_module_files");
 	define("BASE_MODULE_NAVIGATION_TABLE"	, "core_base_module_navigation");
 	define("BASE_MODULE_TABLE"				, "core_base_modules");
@@ -56,6 +57,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("access/base_include_file.access.php");
 	require_once("access/base_include.access.php");
 	require_once("access/base_module_dialog.access.php");
+	require_once("access/base_module_link.access.php");
 	require_once("access/base_module_file.access.php");
 	require_once("access/base_module_navigation.access.php");
 	require_once("access/base_module.access.php");
@@ -455,6 +457,7 @@ class SystemHandler implements SystemHandlerInterface
 	 * @todo use flag for navigation
 	 * @todo add register dialog (like EventHander in Include)
 	 * @todo reregister module after md5-checksum file change (hold position)
+	 * @todo lösche module_links und module_dialogs (evtl.)
 	 */
 	private function scan_modules()
 	{
@@ -496,6 +499,19 @@ class SystemHandler implements SystemHandlerInterface
 								}
 							}
 							
+							if ($no_link != true)
+							{
+								$module_link = $config_folder."/module_link.php";
+								if (!is_file($module_link))
+								{
+									if ($transaction_id != null)
+									{
+										$transaction->rollback($transaction_id);
+									}
+									throw new ModuleDataCorruptException(null, null);
+								}
+							}
+							
 							// Is include registered ?
 							if (($register_key = array_search($value, $registered_module_array)) !== false)
 							{
@@ -524,7 +540,7 @@ class SystemHandler implements SystemHandlerInterface
 											foreach($dialog as $dialog_key => $dialog_value)
 											{
 												$base_module_dialog = new BaseModuleDialog_Access(null);
-												if ($base_module_dialog->create($register_key, $dialog_value[type], $dialog_value[class_path], $dialog_value['class'], $dialog_value[method], $dialog_value[internal_name], $dialog_value[display_name]) == null)
+												if ($base_module_dialog->create($register_key, $dialog_value[type], $dialog_value[class_path], $dialog_value['class'], $dialog_value[method], $dialog_value[internal_name], $dialog_value[display_name], $dialog_value[weight]) == null)
 												{
 													if ($transaction_id != null)
 													{
@@ -555,6 +571,62 @@ class SystemHandler implements SystemHandlerInterface
 										}
 									}
 								}
+								
+								if ($no_link != true)
+								{
+
+									$module_link_checksum = BaseModuleFile_Access::get_checksum_by_module_id_and_name($register_key, "module_link.php");
+									if ($module_link_checksum != md5_file($module_link))
+									{										
+										include($module_link);
+
+										if (BaseModuleDialog_Access::delete_by_module_id($register_key) == false)
+										{
+											if ($transaction_id != null)
+											{
+												$transaction->rollback($transaction_id);
+											}
+											throw new ModuleProcessFailedException(null, null);
+										}
+										
+										// Register Dialog
+										if (is_array($link) and count($link) >= 1)
+										{
+											foreach($link as $link_key => $link_value)
+											{
+												$base_module_link = new BaseModuleLink_Access(null);
+												if ($base_module_link->create($register_key, $link_value[type], serialize($link_value['array']), $link_value[file], $link_value[weight]) == null)
+												{
+													if ($transaction_id != null)
+													{
+														$transaction->rollback($transaction_id);
+													}
+													throw new ModuleLinkCreationFailedException(null, null);
+												}
+											}
+										}
+										
+										$module_link_id = BaseModuleFile_Access::get_id_by_module_id_and_name($register_key, "module_link.php");
+										if ($module_dialog_id != null)
+										{
+											$base_module_file = new BaseModuleFile_Access($module_link_id);
+											$base_module_file->set_checksum(md5_file($module_link));
+										}
+										else
+										{
+											$base_module_file = new BaseModuleFile_Access(null);
+											if ($base_module_file->create($register_key, "module_link.php", md5_file($module_link)) == null)
+											{
+												if ($transaction_id != null)
+												{
+													$transaction->rollback($transaction_id);
+												}
+												throw new IncludeProcessFailedException(null, null);
+											}
+										}
+									}
+								}
+								
 							}
 							else
 							{
@@ -621,7 +693,7 @@ class SystemHandler implements SystemHandlerInterface
 										foreach($dialog as $dialog_key => $dialog_value)
 										{
 											$base_module_dialog = new BaseModuleDialog_Access(null);
-											if ($base_module_dialog->create($base_module_id, $dialog_value[type], $dialog_value[class_path], $dialog_value['class'], $dialog_value[method], $dialog_value[internal_name], $dialog_value[display_name]) == null)
+											if ($base_module_dialog->create($base_module_id, $dialog_value[type], $dialog_value[class_path], $dialog_value['class'], $dialog_value[method], $dialog_value[internal_name], $dialog_value[display_name], $dialog_value[weight]) == null)
 											{
 												if ($transaction_id != null)
 												{
@@ -635,6 +707,40 @@ class SystemHandler implements SystemHandlerInterface
 									unset($dialog);
 								}
 								
+								if ($no_link != true)
+								{
+									include($module_link);
+									
+									$base_module_file = new BaseModuleFile_Access(null);
+									if ($base_module_file->create($base_module_id, "module_link.php", md5_file($module_link)) == null)
+									{
+										if ($transaction_id != null)
+										{
+											$transaction->rollback($transaction_id);
+										}
+										throw new ModuleProcessFailedException(null, null);
+									}
+									
+									// Register Dialog
+									if (is_array($link) and count($link) >= 1)
+									{
+										foreach($link as $link_key => $link_value)
+										{
+											$base_module_link= new BaseModuleLink_Access(null);
+											if ($base_module_dialog->create($base_module_id, $link_value[type], serialize($link_value['array']), $link_value[file], $link_value[weight]) == null)
+											{
+												if ($transaction_id != null)
+												{
+													$transaction->rollback($transaction_id);
+												}
+												throw new ModuleLinkCreationFailedException(null, null);
+											}
+										}
+									}
+									
+									unset($link);
+								}
+								
 								$found_module_array[$register_key] = $value;
 							}
 						}
@@ -644,6 +750,7 @@ class SystemHandler implements SystemHandlerInterface
 				unset($class);
 				unset($no_tab);
 				unset($no_dialog);
+				unset($no_link);
 				unset($tab_name);
 				unset($tab_colour);
 				unset($required_include);
@@ -792,6 +899,11 @@ class SystemHandler implements SystemHandlerInterface
 	public static function get_include_folders()
 	{
 		return BaseInclude_Access::list_folder_entries();
+	}
+	
+	public static function get_module_folders()
+	{
+		return BaseModule_Access::list_folder_entries();
 	}
 	
 	public static function get_module_name_by_module_id($module_id)

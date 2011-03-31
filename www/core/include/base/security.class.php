@@ -52,6 +52,34 @@ class Security implements SecurityInterface
 	{
 		global $db;
 		
+		$module_get_array = array();
+		
+		$registered_module_array = SystemHandler::get_module_folders();
+		if (is_array($registered_module_array) and count($registered_module_array) >= 1)
+		{
+			foreach($registered_module_array as $key => $value)
+			{
+				$get_file = $GLOBALS[modules_dir]."/".$value."/config/module_get.php";
+				if (file_exists($get_file))
+				{
+					$get_file = $GLOBALS[modules_dir]."/".$value."/config/module_get.php";
+					include($get_file);
+					
+					if (is_array($get) and count($get) >= 1)
+					{
+						foreach($get as $key => $value)
+						{
+							array_push($module_get_array, $value);
+						}
+					}
+				}
+			}
+		}
+		
+		if (isset($classes[$classname])) {
+			require_once($classes[$classname]);
+		}
+		
 		foreach ($_GET as $key => $value)
 		{
 			// HTML-Entities	
@@ -65,20 +93,13 @@ class Security implements SecurityInterface
 			
 			// GET-Values
 			switch($key):
-			
-			case("ou_id"):
+
 			case("nav"):
 			case("vnav"):
 			case("username"):
 			case("session_id"):
 			case("run"):
 			case("dialog"):
-			case("vfolder_id"):
-			case("folder_id"):
-			case("file_id"):
-			case("value_id"):
-			case("project_id"):
-			case("sample_id"):
 			case("retrace");
 				
 			case("action"):
@@ -101,11 +122,7 @@ class Security implements SecurityInterface
 			break;
 			
 			default:
-			if ($_GET[nav] == "extensions")
-			{
-				unset($_GET[$key]);
-			}
-			else
+			if (!in_array($key, $module_get_array))
 			{
 				unset($_GET[$key]);
 			}
