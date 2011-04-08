@@ -32,7 +32,7 @@ $mini_search_paramquery[change_tab] = "true";
 $mini_search_paramquery[nextpage] = "1";
 $mini_search_params = http_build_query($mini_search_paramquery,'','&#38;');
 			
-$template->set_var("sub_menu", $sub_menu);
+$template->set_var("sub_menu", false);
 $template->set_var("search_bar", true);
 $template->set_var("mini_search_params", $mini_search_params);
 

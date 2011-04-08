@@ -61,5 +61,14 @@ class Equipment_Wrapper implements Equipment_WrapperInterface
 		return Equipment_Wrapper_Access::count_item_equipments($item_sql);
 	}
 	
+	public static function list_organisation_unit_equipments($organisation_unit_id, $order_by, $order_equipment, $start, $end)
+	{
+		return Equipment_Wrapper_Access::list_organisation_unit_equipments($organisation_unit_id, $order_by, $order_equipment, $start, $end);
+	}
+	
+	public static function count_organisation_unit_equipments($organisation_unit_id)
+	{
+		return Equipment_Wrapper_Access::count_organisation_unit_equipments($organisation_unit_id);
+	}
 }
 ?>

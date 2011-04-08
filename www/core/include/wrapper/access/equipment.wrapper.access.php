@@ -134,6 +134,110 @@ class Equipment_Wrapper_Access
 			return null;
 		}
 	}
+	
+	public static function list_organisation_unit_equipments($organisation_unit_id, $order_by, $order_equipment, $start, $end)
+	{
+		global $db;
+		
+		if (is_numeric($organisation_unit_id))
+		{
+			if ($order_by and $order_equipment)
+			{
+				if ($order_equipment == "asc")
+				{
+					$sql_order_equipment = "ASC";
+				}
+				else
+				{
+					$sql_order_equipment = "DESC";
+				}
+				
+				switch($order_by):
+
+					case "name":
+						$sql_order_by = "ORDER BY ".constant("EQUIPMENT_TYPE_TABLE").".name ".$sql_order_equipment;
+					break;
+					
+					case "category":
+						$sql_order_by = "ORDER BY ".constant("EQUIPMENT_CAT_TABLE").".name ".$sql_order_equipment;
+					break;
+					
+					default:
+						$sql_order_by = "ORDER BY ".constant("EQUIPMENT_TYPE_TABLE").".name ".$sql_order_equipment;
+					break;
+				
+				endswitch;
+			}
+			else
+			{
+				$sql_order_by = "ORDER BY ".constant("EQUIPMENT_TYPE_TABLE").".name";
+			}
+				
+			$sql = "SELECT ".constant("EQUIPMENT_TYPE_TABLE").".id AS id, " .
+							"".constant("EQUIPMENT_TYPE_TABLE").".name AS name, " .
+							"".constant("EQUIPMENT_CAT_TABLE").".name AS category, " .
+							"".constant("EQUIPMENT_HAS_ORGANISTAION_UNIT_TABLE").".organisation_unit_id AS organisation_unit_id " .
+							"FROM ".constant("EQUIPMENT_TYPE_TABLE")." " .
+							"JOIN ".constant("EQUIPMENT_HAS_ORGANISTAION_UNIT_TABLE")." 	ON ".constant("EQUIPMENT_TYPE_TABLE").".id 		= ".constant("EQUIPMENT_HAS_ORGANISTAION_UNIT_TABLE").".equipment_id " .
+							"JOIN ".constant("EQUIPMENT_CAT_TABLE")." 						ON ".constant("EQUIPMENT_TYPE_TABLE").".cat_id 	= ".constant("EQUIPMENT_CAT_TABLE").".id " .
+							"WHERE ".constant("EQUIPMENT_HAS_ORGANISTAION_UNIT_TABLE").".organisation_unit_id IN (SELECT * FROM get_organisation_unit_childs(".$organisation_unit_id.")) " .
+							"".$sql_order_by."";
+			
+			$return_array = array();
+			
+			$res = $db->db_query($sql);
+			
+			if (is_numeric($start) and is_numeric($end))
+			{
+				for ($i = 0; $i<=$end-1; $i++)
+				{
+					if (($data = $db->db_fetch_assoc($res)) == null)
+					{
+						break;
+					}
+					
+					if ($i >= $start)
+					{
+						array_push($return_array, $data);
+					}
+				}
+			}
+			else
+			{
+				while ($data = $db->db_fetch_assoc($res))
+				{
+					array_push($return_array, $data);
+				}
+			}
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public static function count_organisation_unit_equipments($organisation_unit_id)
+	{
+		global $db;
+		
+		if (is_numeric($organisation_unit_id))
+		{	
+			$sql = "SELECT COUNT(".constant("EQUIPMENT_TYPE_TABLE").".id) AS result " .
+							"FROM ".constant("EQUIPMENT_TYPE_TABLE")." " .
+							"JOIN ".constant("EQUIPMENT_HAS_ORGANISTAION_UNIT_TABLE")." 	ON ".constant("EQUIPMENT_TYPE_TABLE").".id 		= ".constant("EQUIPMENT_HAS_ORGANISTAION_UNIT_TABLE").".equipment_id " .
+							"WHERE ".constant("EQUIPMENT_HAS_ORGANISTAION_UNIT_TABLE").".organisation_unit_id IN (SELECT * FROM get_organisation_unit_childs(".$organisation_unit_id."))";
+
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+
+			return $data[result];
+		}
+		else
+		{
+			return null;
+		}
+	}
 }
 
 ?>

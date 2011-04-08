@@ -27,7 +27,7 @@
  */
 class FolderIO
 {
-	private static function add()
+	public static function add()
 	{
 		global $common, $user;
 		
@@ -91,7 +91,7 @@ class FolderIO
 					
 					$paramquery = $_GET;
 					unset($paramquery[nextpage]);
-					unset($paramquery[run]);
+					unset($paramquery[action]);
 					$paramquery[nav] = "data";
 					$params = http_build_query($paramquery);
 							
@@ -124,7 +124,7 @@ class FolderIO
 		}
 	}
 	
-	private static function delete()
+	public static function delete()
 	{
 		global $common, $user;
 		
@@ -161,7 +161,7 @@ class FolderIO
 					
 					$paramquery = $_GET;
 					unset($paramquery[nextpage]);
-					unset($paramquery[run]);
+					unset($paramquery[action]);
 					$paramquery[nav] = "data";
 					$paramquery[folder_id] = Folder::get_folder_id_by_data_entity_id($parent_folder_data_entity_id);
 					$params = http_build_query($paramquery);
@@ -191,7 +191,7 @@ class FolderIO
 		}
 	}
 	
-	private static function move()
+	public static function move()
 	{
 		global $common;
 		
@@ -227,7 +227,7 @@ class FolderIO
 					$paramquery = $_GET;
 					$paramquery[nav] = "data";
 					unset($paramquery[nextpage]);
-					unset($paramquery[run]);
+					unset($paramquery[action]);
 					$params = http_build_query($paramquery);
 							
 					if ($folder->move_folder($_POST[folder_id]))
@@ -258,12 +258,12 @@ class FolderIO
 	/**
 	 * @todo Rename folder is currently not supported.
 	 */
-	private static function rename()
+	public static function rename()
 	{
 		
 	}
 	
-	private static function folder_administration()
+	public static function folder_administration()
 	{
 		global $user;
 		
@@ -315,8 +315,7 @@ class FolderIO
 				}
 				
 				$paramquery = $_GET;
-				$paramquery[nav] = "folder";
-				$paramquery[run] = "add";
+				$paramquery[action] = "folder_add";
 				unset($paramquery[nextpage]);
 				$params = http_build_query($paramquery,'','&#38;');
 								
@@ -324,8 +323,7 @@ class FolderIO
 		
 		
 				$paramquery = $_GET;
-				$paramquery[nav] = "folder";
-				$paramquery[run] = "delete";
+				$paramquery[action] = "folder_delete";
 				unset($paramquery[nextpage]);
 				$params = http_build_query($paramquery,'','&#38;');
 								
@@ -333,8 +331,7 @@ class FolderIO
 				
 				
 				$paramquery = $_GET;
-				$paramquery[nav] = "folder";
-				$paramquery[run] = "move";
+				$paramquery[action] = "folder_move";
 				unset($paramquery[nextpage]);
 				$params = http_build_query($paramquery,'','&#38;');
 								
@@ -342,8 +339,7 @@ class FolderIO
 		
 		
 				$paramquery = $_GET;
-				$paramquery[run] = "permission";
-				$paramquery[nav] = "data";
+				$paramquery[action] = "permission";
 				unset($paramquery[value_id]);
 				unset($paramquery[file_id]);
 				$params = http_build_query($paramquery,'','&#38;');	
@@ -365,49 +361,7 @@ class FolderIO
 			$error_io->display_error();
 		}
 	}
-	
-	public static function method_handler()
-	{
-		try
-		{
-			if ($_GET[folder_id])
-			{
-				$folder = Folder::get_instance($_GET[folder_id]);
-				if ($folder->exist_folder() == false)
-				{
-					throw new FolderNotFoundException("",1);
-				}
-			}
-			
-			switch($_GET[run]):
-				case("add"):
-					self::add();	
-				break;
-				
-				case("delete"):
-					self::delete();
-				break;
-				
-				case("move"):
-					self::move();
-				break;
-	
-				case("administration"):
-					self::folder_administration();	
-				break;
-	
-				default:
-				break;
-				
-			endswitch;
-		}
-		catch (FolderNotFoundException $e)
-		{
-			$error_io = new Error_IO($e, 20, 40, 1);
-			$error_io->display_error();
-		}
-	}
-	
+
 }
 
 ?>

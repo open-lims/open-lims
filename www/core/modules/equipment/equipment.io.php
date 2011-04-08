@@ -274,6 +274,102 @@ class EquipmentIO
 	}
 	
 	/**
+	 * @param string $sql
+	 */
+	public static function list_organisation_unit_related_equipment_handler()
+	{
+		switch ($_GET[action]):
+		
+			case "detail":
+				self::type_detail($_GET[id], null);
+			break;
+			
+			default:
+				self::list_organisation_unit_related_equipment();
+			break;
+		
+		endswitch;
+	}
+	
+	public static function list_organisation_unit_related_equipment()
+	{
+		if ($_GET[ou_id])
+		{
+			$list = new List_IO(Equipment_Wrapper::count_organisation_unit_equipments($_GET[ou_id]), 20);
+
+			$list->add_row("","symbol",false,16);
+			$list->add_row("Equipment Name","name",true,null);
+			$list->add_row("Category","category",true,null);
+			
+			if ($_GET[page])
+			{
+				if ($_GET[sortvalue] and $_GET[sortmethod])
+				{
+					$result_array = Equipment_Wrapper::list_organisation_unit_equipments($_GET[ou_id], $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
+				}
+				else
+				{
+					$result_array = Equipment_Wrapper::list_organisation_unit_equipments($_GET[ou_id], null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
+				}				
+			}
+			else
+			{
+				if ($_GET[sortvalue] and $_GET[sortmethod])
+				{
+					$result_array = Equipment_Wrapper::list_organisation_unit_equipments($_GET[ou_id], $_GET[sortvalue], $_GET[sortmethod], 0, 20);
+				}
+				else
+				{
+					$result_array = Equipment_Wrapper::list_organisation_unit_equipments($_GET[ou_id], null, null, 0, 20);
+				}	
+			}
+			
+			if (is_array($result_array) and count($result_array) >= 1)
+			{
+				foreach($result_array as $key => $value)
+				{
+					$paramquery = $_GET;
+					$paramquery[action] = "detail";
+					$paramquery[id] = $result_array[$key][id];
+					$params = http_build_query($paramquery,'','&#38;');
+					
+					$result_array[$key][symbol][link]		= $params;
+					$result_array[$key][symbol][content] 	= "<img src='images/icons/equipment.png' alt='N' border='0' />";
+				
+					if ($result_array[$key][organisation_unit_id] != $_GET[ou_id])
+					{
+						$equipment_name = $result_array[$key][name];
+						unset($result_array[$key][name]);
+						$result_array[$key][name][link] 		= $params;
+						$result_array[$key][name][content]		= $equipment_name." (CH)";
+					}
+					else
+					{
+						$equipment_name = $result_array[$key][name];
+						unset($result_array[$key][name]);
+						$result_array[$key][name][link] 		= $params;
+						$result_array[$key][name][content]		= $equipment_name;
+					}
+				}
+			}
+			else
+			{
+				$list->override_last_line("<span class='italic'>No results found!</span>");
+			}
+			
+			$template = new Template("languages/en-gb/template/equipment/list_organisation_unit.html");
+
+			$template->set_var("table", $list->get_list($result_array, $_GET[page]));
+			
+			$template->output();
+		}
+		else
+		{
+			// Error
+		}
+	}
+	
+	/**
 	 * @todo error on missing id
 	 */
 	public static function detail()
@@ -281,8 +377,23 @@ class EquipmentIO
 		if ($_GET[id])
 		{
 			$equipment = new Equipment($_GET[id]);
-			$equipment_type = new EquipmentType($equipment->get_type_id());
-			$equipment_owner = new User($equipment->get_owner_id());
+			self::type_detail($equipment->get_type_id(), $equipment->get_owner_id());
+		}
+		else
+		{
+			// Error
+		}
+	}
+	
+	/**
+	 * @todo error on missing id
+	 */
+	public static function type_detail($type_id, $owner_id)
+	{
+		if (is_numeric($type_id))
+		{
+			$equipment_type = new EquipmentType($type_id);
+			$equipment_owner = new User($owner_id);
 						
 			$template = new Template("languages/en-gb/template/equipment/detail.html");
 
@@ -332,6 +443,33 @@ class EquipmentIO
 			}
 			
 			$template->set_var("user", $user_content_array);
+			
+			
+			$ou_array = $equipment_type->list_organisation_units();
+			$ou_content_array = array();
+			
+			$counter = 0;
+			
+			if (is_array($ou_array) and count($ou_array) >= 1)
+			{
+				foreach($ou_array as $key => $value)
+				{
+					$organisation_unit = new OrganisationUnit($value);
+					$organisation_unit_leader = new User($organisation_unit->get_leader_id());
+					
+					$ou_content_array[$counter][name] = $organisation_unit->get_name();
+					$ou_content_array[$counter][leader] = $organisation_unit_leader->get_full_name(false);
+					$counter++;
+				}
+				$template->set_var("no_ou", false);
+			}
+			else
+			{
+				$template->set_var("no_ou", true);
+			}
+			
+			$template->set_var("ou", $ou_content_array);
+			
 			
 			$template->output();
 		}

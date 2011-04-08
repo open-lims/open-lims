@@ -33,7 +33,7 @@
 
 	<table class='OverviewTable'>
 		<tr>
-			<th>Username:</th>
+			<th width='45%'>Username:</th>
 			<th>Fullname:</th>
 		</tr>
 						
@@ -55,6 +55,34 @@
 		<!-- ENDIF -->
 	
 	</table>
+	
+	<br /><span class='bold'>Organisation Unit(s)</span><div class='horzontalLineGrey'></div>
+
+	<table class='OverviewTable'>
+		<tr>
+			<th width='45%'>Name:</th>
+			<th>Leader:</th>
+		</tr>
+						
+		<!-- FOREACH BEGIN ({OU}) -->
+				
+			<tr>
+				<td>{OU:NAME}</td>
+				<td>{OU:LEADER}</td>
+			</tr>
+		
+		<!-- FOREACH END -->
+		
+		<!-- IF ({NO_OU}) -->
+		
+			<tr>
+				<td colspan='2'><span class='italic'>No Organisation Unit Found!</span></td>
+			</tr>
+		
+		<!-- ENDIF -->
+	
+	</table>
+		
 </form>
 
 <!-- CONTAINER END (0) -->

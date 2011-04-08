@@ -36,8 +36,6 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("access/sample_has_sample_depository.access.php");
 	require_once("access/sample_has_organisation_unit.access.php");
 	require_once("access/sample_has_user.access.php");
-	
-	require_once("access/sample_join.access.php");
 }
 
 /**
@@ -123,7 +121,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
      * @return integer Sample-ID
      * @throws SampleCreationFailedException
      */
-    public function create($organisation_unit_id, $template_id, $name, $supplier, $depository_id, $desc, $language_id, $date_of_expiry)
+    public function create($organisation_unit_id, $template_id, $name, $supplier, $depository_id, $desc, $language_id, $date_of_expiry, $expiry_warning)
     {
     	global $user, $transaction;
     	
@@ -133,7 +131,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	    	{
 	    		$transaction_id = $transaction->begin();
 	    		
-	    		if (($sample_id = $this->sample->create($name, $user->get_user_id(), $template_id, $supplier, $desc, $language_id, $date_of_expiry)) != null)
+	    		if (($sample_id = $this->sample->create($name, $user->get_user_id(), $template_id, $supplier, $desc, $language_id, $date_of_expiry, $expiry_warning)) != null)
 	    		{
 					if ($desc)
 					{
@@ -944,7 +942,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 			return null;
 		}		
 	}
-	
+		
 	/**
 	 * Returns the name of the current depository
 	 * @return string
@@ -1229,54 +1227,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     {
     	
     }
-	
-	/**
-	 * Searchs a sample
-	 * @param string $string Search-String
-	 * @param array $organisation_unit_array Array of Organisation Units
-	 * @param array $template_array Array of Sample-Templates
-	 * @param bool $in_id Searchs in ID
-	 * @param bool $in_name Searchs in Name
-	 * @return array
-	 * @todo Replace with Wrapper-Method
-	 */
-	public static function search_samples($string, $organisation_unit_array, $template_array, $in_id, $in_name)
-	{
-    	if (($string or ((is_array($template_array) and count($template_array) >= 1))) and 
-    		is_array($organisation_unit_array) and 
-    		count($organisation_unit_array) >= 1)
-    	{
-			if ($string)
-			{
-				$string = strtolower($string);
-			}
-			
-			if ($in_id)
-			{
-				$id = $string;
-			}
-			else
-			{
-				$id = null;
-			}
-			
-			if ($in_name)
-			{
-				$name = $string;
-			}
-			else
-			{
-				$name = null;
-			}
-
-    		return SampleJoin_Access::search_samples($id, $name, $template_array, $organisation_unit_array);
-    	}
-    	else
-    	{
-    		return null;
-    	}
-    }
-    
+	    
     /**
      * @param object $event_object
      * @return bool

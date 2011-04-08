@@ -34,7 +34,7 @@
 	<table class='OverviewTable'>
 		<tr>
 			<th>Username:</th>
-			<th>Fullname:</th>
+			<th width='50%'>Fullname:</th>
 			<th width='15%'>Delete:</th>
 		</tr>
 						
@@ -57,6 +57,38 @@
 		<!-- ENDIF -->
 	
 	</table>
+	
+	
+	<br /><span class='bold'>Organisation Unit(s)</span><div class='horzontalLineGrey'></div>
+	<div class='boxIconBar'><a href='index.php?{ADD_OU_PARAMS}'><img src='images/icons/add_organ_unit.png' alt='new' border='0' /></a>&nbsp;<a href='index.php?{ADD_OU_PARAMS}'>Add Organisation Unit</a></div>
+	
+	<table class='OverviewTable'>
+		<tr>
+			<th>Name:</th>
+			<th width='50%'>Leader:</th>
+			<th width='15%'>Delete:</th>
+		</tr>
+						
+		<!-- FOREACH BEGIN ({OU}) -->
+				
+			<tr>
+				<td>{OU:NAME}</td>
+				<td>{OU:LEADER}</td>
+				<td><a href='index.php?{OU:DELETE_PARAMS}'>delete</a></td>
+			</tr>
+		
+		<!-- FOREACH END -->
+		
+		<!-- IF ({NO_OU}) -->
+		
+			<tr>
+				<td colspan='2'><span class='italic'>No Organisation Unit Found!</span></td>
+			</tr>
+		
+		<!-- ENDIF -->
+	
+	</table>
+	
 </form>
 
 <!-- CONTAINER END (0) -->

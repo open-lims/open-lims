@@ -4,12 +4,32 @@
 <!-- CONTAINER BEGIN ("Create New Sample (3/5)",0) -->
 
 <script>
-$(function() \{
-	$( "#datepicker" ).datepicker(\{
+$(function()
+\{
+	$( "#datepicker" ).datepicker(
+	\{
 		changeMonth: true,
 		changeYear: true,
 		dateFormat: 'yy-mm-dd'
 	\});
+\});
+
+$(document).ready(function()
+\{
+	$('#warning').hide();
+	$('#show_warning').click(function()
+	\{
+		if ($('#warning').is(":visible"))
+		\{
+			$('#warning').fadeOut("slow");
+		\}
+		else
+		\{
+			$('#warning').fadeIn("slow");
+		\}
+		
+	\});
+
 \});
 </script>
 
@@ -40,9 +60,16 @@ $(function() \{
 	
 	<!-- IF ({SHOW_EXPIRY}) -->
 	<tr>
-		<td>Date of Expiry:</td>
+		<td>Date of Expiry: (<a href='#' id='show_warning'>lead time</a>)</td>
 		<td>
 			<input type='text' name='expiry' class='sampleTextfield' value='{EXPIRY}' id='datepicker' />
+			<span class='formError'><br />{ERROR2}</span>
+		</td>
+	</tr>
+	<tr id='warning'>
+		<td>Lead-Time (in days):</td>
+		<td>
+			<input type='text' name='expiry_warning' class='sampleTextfield' value='{EXPIRY_WARNING}' />
 			<span class='formError'><br />{ERROR2}</span>
 		</td>
 	</tr>

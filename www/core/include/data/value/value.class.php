@@ -85,6 +85,70 @@ class Value extends DataEntity implements ValueInterface
     }
 	
 	/**
+ 	 * @return bool
+	 */
+	public function can_set_automatic()
+	{
+		if ($this->value_id)
+		{
+			$parent_folder = Folder::get_instance($this->get_parent_folder_id());
+			return $parent_folder->can_set_automatic();
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function can_set_data_entity()
+	{
+		if ($this->value_id)
+		{
+			$parent_folder = Folder::get_instance($this->get_parent_folder_id());
+			return $parent_folder->can_set_data_entity();
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function can_set_control()
+	{
+		if ($this->value_id)
+		{
+			$parent_folder = Folder::get_instance($this->get_parent_folder_id());
+			return $parent_folder->can_set_control();
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function can_set_remain()
+	{
+		if ($this->value_id)
+		{
+			$parent_folder = Folder::get_instance($this->get_parent_folder_id());
+			return $parent_folder->can_set_remain();
+		}
+		else
+		{
+			return false;
+		}
+	}
+    
+	/**
 	 * Opens another version of the value with internal revision id
 	 * @param integer
 	 * @return bool

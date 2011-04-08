@@ -101,7 +101,7 @@ class FileIO
 					$template->set_var("version",$file->get_version());
 					
 					$paramquery = $_GET;
-					$paramquery[run] = "history";
+					$paramquery[action] = "file_history";
 					$params = http_build_query($paramquery,'','&#38;');	
 					
 					$template->set_var("version_list_link",$params);
@@ -129,20 +129,21 @@ class FileIO
 					$template->set_var("download_params",$params);
 					
 					$paramquery = $_GET;
-					$paramquery[run] = "update";
+					$paramquery[action] = "file_update";
 					$paramquery[version] = $internal_revision;
+					$paramquery[retrace] = Misc::create_retrace_string();
 					$params = http_build_query($paramquery,'','&#38;');	
 					$template->set_var("update_params",$params);
 					
 					$paramquery = $_GET;
-					$paramquery[run] = "update_minor";
+					$paramquery[action] = "file_update_minor";
 					$paramquery[version] = $file->get_internal_revision();
+					$paramquery[retrace] = Misc::create_retrace_string();
 					$params = http_build_query($paramquery,'','&#38;');	
 					$template->set_var("update_minor_params",$params);
 					
 					$paramquery = $_GET;
-					$paramquery[run] = "permission";
-					$paramquery[nav] = "data";
+					$paramquery[action] = "permission";
 					$params = http_build_query($paramquery,'','&#38;');	
 					$template->set_var("set_permission_params",$params);
 					
@@ -162,7 +163,7 @@ class FileIO
 					
 					
 					$paramquery = $_GET;
-					$paramquery[run] = "delete";
+					$paramquery[action] = "file_delete";
 					unset($paramquery[sure]);
 					$params = http_build_query($paramquery,'','&#38;');	
 					
@@ -170,7 +171,7 @@ class FileIO
 					
 					
 					$paramquery = $_GET;
-					$paramquery[run] = "delete_version";
+					$paramquery[action] = "file_delete_version";
 					$paramquery[version] = $internal_revision;
 					unset($paramquery[sure]);
 					$params = http_build_query($paramquery,'','&#38;');	
@@ -179,10 +180,9 @@ class FileIO
 					
 					
 					$paramquery = $_GET;
-					$paramquery[nav] = "data";
 					unset($paramquery[file_id]);
 					unset($paramquery[version]);
-					unset($paramquery[run]);
+					unset($paramquery[action]);
 					$params = http_build_query($paramquery,'','&#38;');	
 					
 					$template->set_var("back_link",$params);
@@ -210,9 +210,6 @@ class FileIO
 		}
 	}
 
-	/**
-	 * @todo error: no folder id
-	 */
 	public static function upload_as_item($type_array, $category_array, $organisation_unit_id, $folder_id)
 	{		
 		if (is_numeric($folder_id))
@@ -255,7 +252,9 @@ class FileIO
 		}
 		else
 		{
-			// error
+			$exception = new Exception("", 1);
+			$error_io = new Error_IO($exception, 20, 40, 3);
+			$error_io->display_error();
 		}	
 	}
 			
@@ -316,6 +315,24 @@ class FileIO
 				$template->set_var("unique_id", $unique_id);
 				$template->set_var("session_id", $_GET[session_id]);
 				
+				if ($_GET[retrace])
+				{
+					$js_retrace_array = array();
+					$js_retrace_counter = 0;
+					$retrace_array = unserialize(base64_decode($_GET[retrace]));
+					foreach($retrace_array as $key => $value)
+					{
+						$js_retrace_array[$js_retrace_counter][0] = $key;
+						$js_retrace_array[$js_retrace_counter][1] = $value;
+						$js_retrace_counter++;
+					}
+					$template->set_var("retrace", serialize($js_retrace_array));
+				}
+				else
+				{
+					$template->set_var("retrace", "");
+				}
+				
 				$template->output();
 			}
 			else
@@ -354,7 +371,7 @@ class FileIO
 					$template->set_var("yes_params", $params);
 							
 					$paramquery = $_GET;
-					$paramquery[run] = "detail";
+					$paramquery[action] = "file_detail";
 					unset($paramquery[sure]);
 					$params = http_build_query($paramquery);
 					
@@ -369,9 +386,8 @@ class FileIO
 					if ($file->delete() == true)
 					{
 						$paramquery = $_GET;
-						$paramquery[nav] = "data";
 						unset($paramquery[sure]);
-						unset($paramquery[run]);
+						unset($paramquery[action]);
 						unset($paramquery[file_id]);
 						$params = http_build_query($paramquery);
 								
@@ -380,7 +396,7 @@ class FileIO
 					else
 					{
 						$paramquery = $_GET;
-						$paramquery[run] = "detail";
+						$paramquery[action] = "file_detail";
 						unset($paramquery[sure]);
 						$params = http_build_query($paramquery);
 								
@@ -424,7 +440,7 @@ class FileIO
 					$template->set_var("yes_params", $params);
 							
 					$paramquery = $_GET;
-					$paramquery[run] = "detail";
+					$paramquery[action] = "file_detail";
 					unset($paramquery[sure]);
 					$params = http_build_query($paramquery);
 					
@@ -441,8 +457,7 @@ class FileIO
 						if ($return_value == 1)
 						{
 							$paramquery = $_GET;
-							$paramquery[nav] = "file";
-							$paramquery[run] = "detail";
+							$paramquery[action] = "file_detail";
 							unset($paramquery[sure]);
 							unset($paramquery[version]);
 							$params = http_build_query($paramquery);
@@ -450,9 +465,8 @@ class FileIO
 						else
 						{
 							$paramquery = $_GET;
-							$paramquery[nav] = "data";
 							unset($paramquery[sure]);
-							unset($paramquery[run]);
+							unset($paramquery[action]);
 							unset($paramquery[file_id]);
 							$params = http_build_query($paramquery);
 						}
@@ -461,8 +475,7 @@ class FileIO
 					else
 					{
 						$paramquery = $_GET;
-						$paramquery[nav] = "file";
-						$paramquery[run] = "detail";
+						$paramquery[action] = "file_detail";
 						unset($paramquery[sure]);
 						$params = http_build_query($paramquery);
 								
@@ -485,9 +498,6 @@ class FileIO
 		}
 	}
 
-	/**
-	 * @todo empty history error
-	 */
 	public static function history()
 	{
 		if ($_GET[file_id])
@@ -526,8 +536,7 @@ class FileIO
 						$paramquery = $_GET;
 						$paramquery[file_id] = $_GET[file_id];
 						$paramquery[version] = $value;
-						$paramquery[nav] = "file";
-						$paramquery[run] = "detail";
+						$paramquery[action] = "file_detail";
 						unset($paramquery[nextpage]);
 						$params = http_build_query($paramquery,'','&#38;');
 						
@@ -558,18 +567,18 @@ class FileIO
 						
 						array_push($content_array, $column_array);
 					}
+					
+					$table_io->add_content_array($content_array);
 				}
 				else
 				{
-					// Error
+					$table_io->override_last_line("<span class='italic'>No results found!</span>");
 				}
-				
-				$table_io->add_content_array($content_array);
 				
 				$template->set_var("table", $table_io->get_content($_GET[page]));	
 				
 				$paramquery = $_GET;
-				$paramquery[run] = "detail";
+				$paramquery[action] = "file_detail";
 				$params = http_build_query($paramquery,'','&#38;');	
 				
 				$template->set_var("back_link",$params);

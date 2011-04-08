@@ -41,6 +41,41 @@
 		$db = new Database("postgresql");
 		$db->db_connect($GLOBALS[server],$GLOBALS[port],$GLOBALS[dbuser],$GLOBALS[password],$GLOBALS[database]);
 		
+		$transaction = new Transaction();
+		
+		try
+		{
+			$system_handler = new SystemHandler();
+		}
+		catch(IncludeDataCorruptException $e)
+		{
+			die("The config-ata of a module is corrupt!");
+		}
+		catch(IncludeProcessFailedException $e)
+		{
+			die("Include register process failed!");
+		}
+		catch(IncludeRequirementFailedException $e)
+		{
+			die("An include-module requirement is not found!");
+		}
+		catch(IncludeFolderEmptyException $e)
+		{
+			die("Include folder is empty!");
+		}
+		catch(ModuleProcessFailedException $e)
+		{
+			die("Module register process failed!");
+		}
+		catch(ModuleDataCorruptException $e)
+		{
+			die("Module Data Corrupt!");
+		}
+		catch(EventHandlerCreationFailedException $e)
+		{
+			die("Event-handler creation failed!");
+		}
+		
 		$session = new Session($_GET[session_id]);
 		$user = new User($session->get_user_id());
 		
@@ -55,7 +90,7 @@
 			
 			if ($file->is_read_access() == true)
 			{
-				$folder = Folder::get_instance($file->get_parent_folder());
+				$folder = Folder::get_instance($file->get_parent_folder_id());
 				$folder_path = $folder->get_path();
 				
 				$extension_array = explode(".",$file->get_name());

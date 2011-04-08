@@ -170,7 +170,7 @@ class DataPermission implements DataPermissionInterface
 	 */
 	public function set_permission_array($array)
 	{		
-		$object_permission = new ObjectPermission($this->permission, $this->automatic, $this->owner_id, $this->owner_group_id);
+		$object_permission = new DataEntityPermission($this->permission, $this->automatic, $this->owner_id, $this->owner_group_id);
 		
 		$value = 1;
 		$max = 32768;

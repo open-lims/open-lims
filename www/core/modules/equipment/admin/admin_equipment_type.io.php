@@ -495,6 +495,46 @@ class AdminEquipmentTypeIO
 			
 			$template->set_var("user", $user_content_array);
 			
+			
+			$paramquery = $_GET;
+			$paramquery[action] = "add_ou";
+			$params = http_build_query($paramquery,'','&#38;');
+			
+			$template->set_var("add_ou_params", $params);	
+			
+			$ou_array = $equipment_type->list_organisation_units();
+			$ou_content_array = array();
+			
+			$counter = 0;
+			
+			if (is_array($ou_array) and count($ou_array) >= 1)
+			{
+				foreach($ou_array as $key => $value)
+				{
+					$organisation_unit = new OrganisationUnit($value);
+					$organisation_unit_leader = new User($organisation_unit->get_leader_id());
+					
+					$paramquery = $_GET;
+					$paramquery[action] = "delete_ou";
+					$paramquery[key] = $value;
+					$params = http_build_query($paramquery,'','&#38;');
+					
+					$ou_content_array[$counter][name] = $organisation_unit->get_name();
+					$ou_content_array[$counter][leader] = $organisation_unit_leader->get_full_name(false);
+					$ou_content_array[$counter][delete_params] = $params;
+					
+					$counter++;
+				}
+				$template->set_var("no_ou", false);
+			}
+			else
+			{
+				$template->set_var("no_ou", true);
+			}
+			
+			$template->set_var("ou", $ou_content_array);
+			
+			
 			$template->output();
 		}
 		else
@@ -764,6 +804,152 @@ class AdminEquipmentTypeIO
 		}
 	}
 	
+	public static function add_organisation_unit()
+	{
+		global $common;
+		
+		if ($_GET[id])
+		{			
+			if ($_GET[nextpage] == 1)
+			{
+				if (is_numeric($_POST[ou]))
+				{
+					$equipment_type = new EquipmentType($_GET[id]);
+					if ($equipment_type->is_organisation_unit($_POST[ou]) == true)
+					{
+						$page_1_passed = false;
+						$error = "The organisation units is already connected with this equipment.";
+					}
+					else
+					{
+						$page_1_passed = true;
+					}
+				}
+				else
+				{
+					$page_1_passed = false;
+					$error = "You must select an organisation unit.";
+				}
+			}
+			elseif($_GET[nextpage] > 1)
+			{
+				$page_1_passed = true;
+			}
+			else
+			{
+				$page_1_passed = false;
+				$error = "";
+			}
+			
+			if ($page_1_passed == false)
+			{
+				$template = new Template("languages/en-gb/template/equipment/admin/equipment_type/add_organisation_unit.html");
+				
+				$paramquery = $_GET;
+				$paramquery[nextpage] = "1";
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$template->set_var("params",$params);
+				
+				$template->set_var("error",$error);
+				
+				$organisation_unit_array = OrganisationUnit::list_entries();
+					
+				$result = array();
+				$counter = 0;
+				
+				foreach($organisation_unit_array as $key => $value)
+				{
+					$organisation_unit = new OrganisationUnit($value);
+					$result[$counter][value] = $value;
+					$result[$counter][content] = $organisation_unit->get_name();
+					$counter++;
+				}
+				
+				$template->set_var("option",$result);
+				
+				$template->output();
+			}
+			else
+			{
+				$equipment_type = new EquipmentType($_GET[id]);
+				
+				$paramquery = $_GET;
+				$paramquery[action] = "detail";
+				unset($paramquery[nextpage]);
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				if ($equipment_type->add_organisation_unit($_POST[ou]))
+				{
+					$common->step_proceed($params, "Add Organisation Unit", "Operation Successful", null);
+				}
+				else
+				{
+					$common->step_proceed($params, "Add Organisation Unit", "Operation Failed" ,null);	
+				}
+			}
+		}
+		else
+		{
+			$exception = new Exception("", 5);
+			$error_io = new Error_IO($exception, 50, 40, 3);
+			$error_io->display_error();
+		}
+	}
+	
+	public static function delete_organisation_unit()
+	{
+		global $common;
+		
+		if ($_GET[id] and $_GET[key])
+		{
+			if ($_GET[sure] != "true")
+			{
+				$template = new Template("languages/en-gb/template/equipment/admin/equipment_type/delete_organisation_unit.html");
+				
+				$paramquery = $_GET;
+				$paramquery[sure] = "true";
+				$params = http_build_query($paramquery);
+				
+				$template->set_var("yes_params", $params);
+						
+				$paramquery = $_GET;
+				unset($paramquery[key]);
+				$paramquery[action] = "detail";
+				$params = http_build_query($paramquery);
+				
+				$template->set_var("no_params", $params);
+				
+				$template->output();
+			}
+			else
+			{
+				$paramquery = $_GET;
+				unset($paramquery[key]);
+				unset($paramquery[sure]);
+				$paramquery[action] = "detail";
+				$params = http_build_query($paramquery);
+				
+				$equipment_type = new EquipmentType($_GET[id]);
+						
+				if ($equipment_type->delete_organisation_unit($_GET[key]))
+				{							
+					$common->step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
+				}
+				else
+				{							
+					$common->step_proceed($params, "Delete Organisation Unit", "Operation Failed" ,null);
+				}			
+			}
+		}
+		else
+		{
+			$exception = new Exception("", 5);
+			$error_io = new Error_IO($exception, 50, 40, 3);
+			$error_io->display_error();
+		}
+	}
+	
 	public static function change_location()
 	{
 		global $common;
@@ -877,6 +1063,14 @@ class AdminEquipmentTypeIO
 
 				case "delete_user":
 					self::delete_user();
+				break;
+				
+				case "add_ou":
+					self::add_organisation_unit();
+				break;
+
+				case "delete_ou":
+					self::delete_organisation_unit();
 				break;
 				
 				default:

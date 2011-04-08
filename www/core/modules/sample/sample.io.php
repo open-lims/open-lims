@@ -69,7 +69,6 @@ class SampleIO
 		
 		if (is_array($result_array) and count($result_array) >= 1)
 		{
-			$today_begin = new DatetimeHandler(date("Y-m-d")." 00:00:00");
 			$today_end = new DatetimeHandler(date("Y-m-d")." 23:59:59");
 			
 			foreach($result_array as $key => $value)
@@ -83,30 +82,25 @@ class SampleIO
 				}
 				else
 				{
-					if ($result_array[$key][date_of_expiry])
+					if ($result_array[$key][date_of_expiry] and $result_array[$key][expiry_warning])
 					{
-						$date_of_expiry = new DatetimeHandler($result_array[$key][date_of_expiry]);
-	
+						$date_of_expiry = new DatetimeHandler($result_array[$key][date_of_expiry]." 23:59:59");
+						$warning_day = clone $date_of_expiry;
+						$warning_day->sub_day($result_array[$key][expiry_warning]);
+					
 						if ($date_of_expiry->distance($today_end) > 0)
 						{
-							if ($date_of_expiry->distance($today_begin) > 0)
-							{
-								$result_array[$key][av] = "<img src='images/icons/red_point.png' alt='' />";
-							}
-							else
-							{
-								$result_array[$key][av] = "<img src='images/icons/yellow_point.png' alt='' />";
-							}
+							$result_array[$key][av] = "<img src='images/icons/red_point.png' alt='' />";
 						}
 						else
 						{
-							if ($result_array[$key][av] == "t")
+							if ($warning_day->distance($today_end) > 0)
 							{
-								$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
+								$result_array[$key][av] = "<img src='images/icons/yellow_point.png' alt='' />";
 							}
 							else
 							{
-								$result_array[$key][av] = "<img src='images/icons/grey_point.png' alt='' />";
+								$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
 							}
 						}
 					}
@@ -162,6 +156,7 @@ class SampleIO
 				else
 				{
 					$result_array[$key][symbol]	= "<img src='core/images/denied_overlay.php?image=images/icons/sample.png' alt='N' border='0' />";
+					$result_array[$key][id]		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
 				}
 			}
 		}
@@ -219,7 +214,6 @@ class SampleIO
 			
 			if (is_array($result_array) and count($result_array) >= 1)
 			{
-				$today_begin = new DatetimeHandler(date("Y-m-d")." 00:00:00");
 				$today_end = new DatetimeHandler(date("Y-m-d")." 23:59:59");
 				
 				foreach($result_array as $key => $value)
@@ -233,30 +227,25 @@ class SampleIO
 					}
 					else
 					{
-						if ($result_array[$key][date_of_expiry])
+						if ($result_array[$key][date_of_expiry] and $result_array[$key][expiry_warning])
 						{
-							$date_of_expiry = new DatetimeHandler($result_array[$key][date_of_expiry]);
-		
+							$date_of_expiry = new DatetimeHandler($result_array[$key][date_of_expiry]." 23:59:59");
+							$warning_day = clone $date_of_expiry;
+							$warning_day->sub_day($result_array[$key][expiry_warning]);
+						
 							if ($date_of_expiry->distance($today_end) > 0)
 							{
-								if ($date_of_expiry->distance($today_begin) > 0)
-								{
-									$result_array[$key][av] = "<img src='images/icons/red_point.png' alt='' />";
-								}
-								else
-								{
-									$result_array[$key][av] = "<img src='images/icons/yellow_point.png' alt='' />";
-								}
+								$result_array[$key][av] = "<img src='images/icons/red_point.png' alt='' />";
 							}
 							else
 							{
-								if ($result_array[$key][av] == "t")
+								if ($warning_day->distance($today_end) > 0)
 								{
-									$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
+									$result_array[$key][av] = "<img src='images/icons/yellow_point.png' alt='' />";
 								}
 								else
 								{
-									$result_array[$key][av] = "<img src='images/icons/grey_point.png' alt='' />";
+									$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
 								}
 							}
 						}
@@ -312,6 +301,7 @@ class SampleIO
 					else
 					{
 						$result_array[$key][symbol]	= "<img src='core/images/denied_overlay.php?image=images/icons/sample.png' alt='N' border='0' />";
+						$result_array[$key][id]		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
 					}
 				}
 			}
@@ -406,30 +396,25 @@ class SampleIO
 					}
 					else
 					{
-						if ($result_array[$key][date_of_expiry])
+						if ($result_array[$key][date_of_expiry] and $result_array[$key][expiry_warning])
 						{
-							$date_of_expiry = new DatetimeHandler($result_array[$key][date_of_expiry]);
-		
+							$date_of_expiry = new DatetimeHandler($result_array[$key][date_of_expiry]." 23:59:59");
+							$warning_day = clone $date_of_expiry;
+							$warning_day->sub_day($result_array[$key][expiry_warning]);
+						
 							if ($date_of_expiry->distance($today_end) > 0)
 							{
-								if ($date_of_expiry->distance($today_begin) > 0)
-								{
-									$result_array[$key][av] = "<img src='images/icons/red_point.png' alt='' />";
-								}
-								else
-								{
-									$result_array[$key][av] = "<img src='images/icons/yellow_point.png' alt='' />";
-								}
+								$result_array[$key][av] = "<img src='images/icons/red_point.png' alt='' />";
 							}
 							else
 							{
-								if ($result_array[$key][av] == "t")
+								if ($warning_day->distance($today_end) > 0)
 								{
-									$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
+									$result_array[$key][av] = "<img src='images/icons/yellow_point.png' alt='' />";
 								}
 								else
 								{
-									$result_array[$key][av] = "<img src='images/icons/grey_point.png' alt='' />";
+									$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
 								}
 							}
 						}
@@ -485,6 +470,7 @@ class SampleIO
 					else
 					{
 						$result_array[$key][symbol]	= "<img src='core/images/denied_overlay.php?image=images/icons/sample.png' alt='N' border='0' />";
+						$result_array[$key][id]		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
 					}
 				}
 			}
@@ -573,30 +559,25 @@ class SampleIO
 					}
 					else
 					{
-						if ($result_array[$key][date_of_expiry])
+						if ($result_array[$key][date_of_expiry] and $result_array[$key][expiry_warning])
 						{
-							$date_of_expiry = new DatetimeHandler($result_array[$key][date_of_expiry]);
-		
+							$date_of_expiry = new DatetimeHandler($result_array[$key][date_of_expiry]." 23:59:59");
+							$warning_day = clone $date_of_expiry;
+							$warning_day->sub_day($result_array[$key][expiry_warning]);
+						
 							if ($date_of_expiry->distance($today_end) > 0)
 							{
-								if ($date_of_expiry->distance($today_begin) > 0)
-								{
-									$result_array[$key][av] = "<img src='images/icons/red_point.png' alt='' />";
-								}
-								else
-								{
-									$result_array[$key][av] = "<img src='images/icons/yellow_point.png' alt='' />";
-								}
+								$result_array[$key][av] = "<img src='images/icons/red_point.png' alt='' />";
 							}
 							else
 							{
-								if ($result_array[$key][av] == "t")
+								if ($warning_day->distance($today_end) > 0)
 								{
-									$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
+									$result_array[$key][av] = "<img src='images/icons/yellow_point.png' alt='' />";
 								}
 								else
 								{
-									$result_array[$key][av] = "<img src='images/icons/grey_point.png' alt='' />";
+									$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
 								}
 							}
 						}
@@ -652,6 +633,7 @@ class SampleIO
 					else
 					{
 						$result_array[$key][symbol]	= "<img src='core/images/denied_overlay.php?image=images/icons/sample.png' alt='N' border='0' />";
+						$result_array[$key][id]		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
 					}
 				}
 			}
@@ -714,6 +696,7 @@ class SampleIO
 				$session->delete_value("SAMPLE_SUPPLIER");
 				$session->delete_value("SAMPLE_DEPOSITORY");
 				$session->delete_value("SAMPLE_EXPIRY");
+				$session->delete_value("SAMPLE_EXPIRY_WARNING");
 				$session->delete_value("SAMPLE_DESC");		
 				$session->delete_value("SAMPLE_TEMPLATE_DATA_TYPE");
 				$session->delete_value("SAMPLE_TEMPLATE_DATA_TYPE_ID");	
@@ -824,6 +807,10 @@ class SampleIO
 							{
 								$session->write_value("SAMPLE_EXPIRY", $_POST[expiry], true);
 							}
+							if ($_POST[expiry])
+							{
+								$session->write_value("SAMPLE_EXPIRY_WARNING", $_POST[expiry], true);
+							}
 							if ($_POST[desc])
 							{
 								$session->write_value("SAMPLE_DESC", $_POST[desc], true);
@@ -910,6 +897,10 @@ class SampleIO
 							{
 								$session->write_value("SAMPLE_EXPIRY", $_POST[expiry], true);
 							}
+							if ($_POST[expiry_warning])
+							{
+								$session->write_value("SAMPLE_EXPIRY_WARNING", $_POST[expiry_warning], true);
+							}
 							if ($_POST[desc])
 							{
 								$session->write_value("SAMPLE_DESC", $_POST[desc], true);
@@ -934,6 +925,10 @@ class SampleIO
 						if ($_POST[expiry])
 						{
 							$session->write_value("SAMPLE_EXPIRY", $_POST[expiry], true);
+						}
+						if ($_POST[expiry_warning])
+						{
+							$session->write_value("SAMPLE_EXPIRY_WARNING", $_POST[expiry_warning], true);
 						}
 						if ($_POST[desc])
 						{
@@ -1076,6 +1071,7 @@ class SampleIO
 				$sample_supplier				= $session->read_value("SAMPLE_SUPPLIER");			
 				$sample_depository				= $session->read_value("SAMPLE_DEPOSITORY");
 				$sample_expiry					= $session->read_value("SAMPLE_EXPIRY");
+				$sample_expiry_warning			= $session->read_value("SAMPLE_EXPIRY_WARNING");
 				$sample_desc					= $session->read_value("SAMPLE_DESC");
 				$sample_template_data_type  	= $session->read_value("SAMPLE_TEMPLATE_DATA_TYPE");	
 				$sample_template_data_type_id	= $session->read_value("SAMPLE_TEMPLATE_DATA_TYPE_ID");	
@@ -1431,6 +1427,15 @@ class SampleIO
 						$template->set_var("expiry","");
 					}
 					
+					if ($sample_expiry_warning)
+					{
+						$template->set_var("expiry_warning",$sample_expiry_warning);
+					}
+					else
+					{
+						$template->set_var("expiry_warning",constant("SAMPLE_EXIRY_WARNING"));
+					}
+					
 					if ($sample_desc)
 					{
 						$template->set_var("desc",$sample_desc);
@@ -1755,7 +1760,7 @@ class SampleIO
 		
 						$sample->set_template_data($sample_template_data_type, $sample_template_data_type_id, $sample_template_data_array);
 		
-						if (($sample_id = $sample->create($sample_organ_unit, $sample_template, $sample_name, $sample_supplier, $sample_depository, $sample_desc, null, $sample_expiry)) != null)
+						if (($sample_id = $sample->create($sample_organ_unit, $sample_template, $sample_name, $sample_supplier, $sample_depository, $sample_desc, null, $sample_expiry, $sample_expiry_warning)) != null)
 						{
 							$session->delete_value("SAMPLE_LAST_SCREEN");
 							$session->delete_value("SAMPLE_CURRENT_SCREEN");
@@ -1797,6 +1802,7 @@ class SampleIO
 						$session->delete_value("SAMPLE_SUPPLIER");
 						$session->delete_value("SAMPLE_DEPOSITORY");
 						$session->delete_value("SAMPLE_EXPIRY");
+						$session->delete_value("SAMPLE_EXPIRY_WARNING");
 						$session->delete_value("SAMPLE_DESC");		
 						$session->delete_value("SAMPLE_TEMPLATE_DATA_TYPE");
 						$session->delete_value("SAMPLE_TEMPLATE_DATA_TYPE_ID");	
@@ -2517,6 +2523,13 @@ class SampleIO
 					SampleAdminIO::ou_permission_delete();
 				break;
 	
+				
+				case("list_ou_equipment"):
+					require_once("core/modules/equipment/equipment.io.php");
+					EquipmentIO::list_organisation_unit_related_equipment_handler();
+				break;
+				
+				
 				// Item Lister
 				/**
 				 * @todo permissions

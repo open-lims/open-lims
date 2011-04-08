@@ -41,6 +41,7 @@ class Sample_Access
 	private $comment;
 	private $language_id;
 	private $date_of_expiry;
+	private $expiry_warning;
 	
 	/**
 	 * @param integer $sample_id
@@ -71,6 +72,7 @@ class Sample_Access
 				$this->comment			= $data[comment];
 				$this->language_id		= $data[language_id];
 				$this->date_of_expiry	= $data[date_of_expiry];
+				$this->expiry_warning	= $data[expiry_warning];
 				
 				if ($data[deleted] == "t")
 				{
@@ -111,6 +113,9 @@ class Sample_Access
 			unset($this->available);
 			unset($this->deleted);
 			unset($this->comment);
+			unset($this->language_id);
+			unset($this->date_of_expiry);
+			unset($this->expiry_warning);
 		}
 	}
 	
@@ -122,7 +127,7 @@ class Sample_Access
 	 * @param string $comment
 	 * @return integer
 	 */
-	public function create($name, $owner_id, $template_id, $supplier, $comment, $language_id, $date_of_expiry)
+	public function create($name, $owner_id, $template_id, $supplier, $comment, $language_id, $date_of_expiry, $expiry_warning)
 	{
 		global $db;
 		
@@ -155,19 +160,21 @@ class Sample_Access
 				$language_id_insert = "1";
 			}
 			
-			if (!$date_of_expiry)
+			if (!$date_of_expiry or !$expiry_warning)
 			{
 				$date_of_expiry_insert = "NULL";
+				$expiry_warning_insert = "NULL";
 			}
 			else
 			{
 				$date_of_expiry_insert = "'".$date_of_expiry."'";
+				$expiry_warning_insert = "'".$expiry_warning."'";
 			}
 			
 			$datetime = date("Y-m-d H:i:s");
 			
-			$sql_write = "INSERT INTO ".constant("SAMPLE_TABLE")." (id, name, datetime, owner_id, template_id, supplier, available, deleted, comment, language_id, date_of_expiry) " .
-					"VALUES (nextval('".self::SAMPLE_PK_SEQUENCE."'::regclass), '".$name."','".$datetime."',".$owner_id.",".$template_id.",".$supplier_insert.",'t','f',".$comment_insert.",".$language_id_insert.",".$date_of_expiry_insert.")";
+			$sql_write = "INSERT INTO ".constant("SAMPLE_TABLE")." (id, name, datetime, owner_id, template_id, supplier, available, deleted, comment, language_id, date_of_expiry, expiry_warning) " .
+					"VALUES (nextval('".self::SAMPLE_PK_SEQUENCE."'::regclass), '".$name."','".$datetime."',".$owner_id.",".$template_id.",".$supplier_insert.",'t','f',".$comment_insert.",".$language_id_insert.",".$date_of_expiry_insert.",".$expiry_warning_insert.")";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
@@ -365,6 +372,21 @@ class Sample_Access
 		if ($this->date_of_expiry)
 		{
 			return $this->date_of_expiry;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @return integer
+	 */
+	public function get_expiry_warning()
+	{
+		if ($this->expiry_warning)
+		{
+			return $this->expiry_warning;
 		}
 		else
 		{
@@ -706,6 +728,35 @@ class Sample_Access
 			if ($db->db_affected_rows($res))
 			{
 				$this->date_of_expiry = $date_of_expiry;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param integer $expiry_warning
+	 * @return bool
+	 */
+	public function set_expiry_warning($expiry_warning)
+	{
+		global $db;
+			
+		if ($this->sample_id and is_numeric($expiry_warning))
+		{
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET expiry_warning = '".$expiry_warning."' WHERE id = '".$this->sample_id."'";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->expiry_warning = $expiry_warning;
 				return true;
 			}
 			else

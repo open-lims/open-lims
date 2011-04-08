@@ -273,7 +273,7 @@ class Folder extends DataEntity implements FolderInterface
 			return false;
 		}
 	}
-	
+		
 	/**
 	 * Creates a new folder
 	 * @param string $name
@@ -850,7 +850,7 @@ class Folder extends DataEntity implements FolderInterface
 	 */
 	public function get_path()
 	{
-		if ($this->folder->get_path())
+		if ($this->folder)
 		{
 			return $this->folder->get_path();
 		}

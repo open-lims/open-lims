@@ -1359,7 +1359,7 @@ function Uploader() {
    		       
    		       if(key_value.length == 2) {
    		        	 
-   		          if (key_value[0] != "run") {
+   		          if ((key_value[0] != "action") && (key_value[0] != "file_id")) {
    		        	  if (key_value[0] == "nav") {
    		        		  if (target == "") {
    		  					target = "nav=data";
@@ -1413,7 +1413,7 @@ function Uploader() {
     	   		       
     	   		       if(key_value.length == 2) {
     	   		        	 
-    	   		          if (key_value[0] != "run") {
+    	   		    	   if ((key_value[0] != "action") && (key_value[0] != "file_id")) {
     	   		        	  if (key_value[0] == "nav") {
     	   		        		  if (target == "") {
     	   		  					target = "nav=data";

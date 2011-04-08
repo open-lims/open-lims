@@ -359,8 +359,7 @@ class DataIO
 			}
 			
 			$paramquery = $_GET;
-			$paramquery[nav] = "data";
-			$paramquery[run] = "image_browser_detail";
+			$paramquery[action] = "image_browser_detail";
 			$paramquery[folder_id] = $folder_id;
 			unset($paramquery[nextpage]);
 			$params = http_build_query($paramquery,'','&#38;');
@@ -369,8 +368,7 @@ class DataIO
 			
 			
 			$paramquery = $_GET;
-			$paramquery[nav] = "file";
-			$paramquery[run] = "add";
+			$paramquery[action] = "file_add";
 			$paramquery[folder_id] = $folder_id;
 			unset($paramquery[nextpage]);
 			$params = http_build_query($paramquery,'','&#38;');
@@ -379,7 +377,7 @@ class DataIO
 	
 	
 			$paramquery = $_GET;
-			$paramquery[run] = "delete_stack";
+			$paramquery[action] = "delete_stack";
 			unset($paramquery[folder_id]);
 			$params = http_build_query($paramquery,'','&#38;');
 							
@@ -387,8 +385,7 @@ class DataIO
 			
 	
 			$paramquery = $_GET;
-			$paramquery[nav] = "folder";
-			$paramquery[run] = "administration";
+			$paramquery[action] = "folder_administration";
 			$paramquery[folder_id] = $folder_id;
 			unset($paramquery[nextpage]);
 			$params = http_build_query($paramquery,'','&#38;');
@@ -396,8 +393,7 @@ class DataIO
 			$template->set_var("folder_administration_params", $params);
 			
 			$paramquery = $_GET;
-			$paramquery[nav] = "item";
-			$paramquery[run] = "administration_folder";
+			$paramquery[action] = "item_administration_folder";
 			$paramquery[folder_id] = $folder_id;
 			unset($paramquery[nextpage]);
 			$params = http_build_query($paramquery,'','&#38;');
@@ -726,10 +722,6 @@ class DataIO
 		}
 	}
 
-	/**
-	 * @todo set project-permission to entity-permission
-	 * @todo user folder methods for deactivating fields
-	 */
 	public static function permission()
 	{
 		global $common, $user;
@@ -741,50 +733,17 @@ class DataIO
 				if ($_GET[file_id])
 				{
 					$id = $_GET[file_id];
-					$file = new File($id);
+					$object = new File($id);
 					$type = "file";
-					$title = $file->get_name();
-					if ($file->is_control_access() == true)
-					{
-						$full_access = true;
-						
-					}
-					else{
-						$full_access = false;
-					}
-					
-					if ($file->get_owner_id() == $user->get_user_id())
-					{
-						$user_access = true;
-					}
-					else
-					{
-						$user_access = false;
-					}
+					$title = $object->get_name();
 				}
 				
 				if ($_GET[value_id])
 				{
 					$id = $_GET[value_id];
-					$value = new Value($id);
+					$object = new Value($id);
 					$type = "value";
-					$title = $value->get_type_name();
-					if ($value->is_control_access() == true)
-					{
-						$full_access = true;
-					}
-					else{
-						$full_access = false;
-					}
-					
-					if ($value->get_owner_id() == $user->get_user_id())
-					{
-						$user_access = true;
-					}
-					else
-					{
-						$user_access = false;
-					}
+					$title = $object->get_type_name();
 				}
 			}
 			else
@@ -792,31 +751,32 @@ class DataIO
 				if ($_GET[folder_id])
 				{
 					$id = $_GET[folder_id];
-					$folder = Folder::get_instance($id);
+					$object = Folder::get_instance($id);
 					$type = "folder";
-					$title = $folder->get_name();
-					if ($folder->is_control_access() == true)
-					{
-						$full_access = true;
-					}
-					else
-					{
-						$full_access = false;
-					}
-					
-					if ($folder->get_owner_id() == $user->get_user_id())
-					{
-						$user_access = true;
-					}
-					else
-					{
-						$user_access = false;
-					}
+					$title = $object->get_name();
 				}
 				else
 				{
 					throw new IdMissingException("", 0);
 				}
+			}
+			
+			if ($object->is_control_access() == true)
+			{
+				$full_access = true;
+				
+			}
+			else{
+				$full_access = false;
+			}
+			
+			if ($object->get_owner_id() == $user->get_user_id())
+			{
+				$user_access = true;
+			}
+			else
+			{
+				$user_access = false;
 			}
 			
 			if ($full_access == true or $user_access == true)
@@ -834,13 +794,13 @@ class DataIO
 					$template->set_var("params", $params);
 					
 					$paramquery = $_GET;
-					$paramquery[run] = "chown";
+					$paramquery[action] = "chown";
 					$params = http_build_query($paramquery,'','&#38;');
 					
 					$template->set_var("params_chown", $params);
 					
 					$paramquery = $_GET;
-					$paramquery[run] = "chgroup";
+					$paramquery[action] = "chgroup";
 					$params = http_build_query($paramquery,'','&#38;');
 					
 					$template->set_var("params_chgroup", $params);
@@ -853,90 +813,40 @@ class DataIO
 					$template->set_var("owner", $user->get_full_name(false));
 					$template->set_var("owner_group", $group->get_name());
 
-					if ($type == "folder")
+					if ($object->can_set_automatic())
 					{
-						if ($folder->can_set_automatic())
-						{
-							
-						}
-						else
-						{
-							$disable_automatic = true;
-						}
 						
-						if ($folder->can_set_data_entity())
-						{
-							
-						}
-						else
-						{
-							$disable_project = true;
-						}
-						
-						if ($folder->can_set_data_control())
-						{
-							
-						}
-						else
-						{
-							$disable_control = true;
-						}
-						
-						if ($folder->can_set_data_remain())
-						{
-							
-						}
-						else
-						{
-							$disable_remain = true;
-						}
 					}
 					else
 					{
-						if ($type == "file")
-						{
-							$folder = Folder::get_instance($file->get_parent_folder());
-						}
-						else
-						{
-							$folder = Folder::get_instance($value->get_parent_folder());
-						}
+						$disable_automatic = true;
+					}
+					
+					if ($object->can_set_data_entity())
+					{
 						
-						if ($folder->can_set_automatic())
-						{
-							
-						}
-						else
-						{
-							$disable_automatic = true;
-						}
+					}
+					else
+					{
+						$disable_project = true;
+					}
+					
+					if ($object->can_set_control())
+					{
 						
-						if ($folder->can_set_data_entity())
-						{
-							
-						}
-						else
-						{
-							$disable_project = true;
-						}
+					}
+					else
+					{
+						$disable_control = true;
+					}
+					
+					if ($object->can_set_remain())
+					{
 						
-						if ($folder->can_set_data_control())
-						{
-							
-						}
-						else
-						{
-							$disable_control = true;
-						}
-						
-						if ($folder->can_set_data_remain())
-						{
-							
-						}
-						else
-						{
-							$disable_remain = true;
-						}
+					}
+					else
+					{
+						$disable_remain = true;
 					}
 					
 					if ($disable_automatic == true)
@@ -960,6 +870,7 @@ class DataIO
 						}
 					}else{
 						$template->set_var("checked_automatic","");
+						$template->set_var("hidden_automatic","");
 					}
 					
 					
@@ -1024,7 +935,7 @@ class DataIO
 	
 					$paramquery = $_GET;
 					$paramquery[nav] = "data";
-					unset($paramquery[run]);
+					unset($paramquery[action]);
 					$params = http_build_query($paramquery,'','&#38;');
 					
 					$template->set_var("back_link", $params);
@@ -1044,16 +955,14 @@ class DataIO
 						if ($type == folder)
 						{
 							$paramquery = $_GET;
-							$paramquery[nav] = "data";
-							$paramquery[run] = "detail";
+							unset($paramquery[action]);
 							unset($paramquery[nextpage]);
 							$params = http_build_query($paramquery,'','&#38;');
 						}
 						else
 						{
 							$paramquery = $_GET;
-							$paramquery[nav] = $type;
-							$paramquery[run] = "detail";
+							unset($paramquery[action]);
 							unset($paramquery[nextpage]);
 							$params = http_build_query($paramquery,'','&#38;');
 						}
@@ -1109,18 +1018,16 @@ class DataIO
 				if ($_GET[file_id])
 				{
 					$id = $_GET[file_id];
-					$file = new File($id);
+					$object = new File($id);
 					$type = "file";
-					$title = $file->get_name();
-					$access = $file->is_control_access();
+					$title = $object->get_name();
 				}
 				if ($_GET[value_id])
 				{
 					$id = $_GET[value_id];
-					$value = new Value($id);
+					$object = new Value($id);
 					$type = "value";
-					$title = $value->get_type_name();
-					$access = $value->is_control_access();
+					$title = $object->get_type_name();
 				}
 			}
 			else
@@ -1128,10 +1035,9 @@ class DataIO
 				if ($_GET[folder_id])
 				{
 					$id = $_GET[folder_id];
-					$folder = Folder::get_instance($id);
+					$object = Folder::get_instance($id);
 					$type = "folder";
-					$title = $folder->get_name();
-					$access = $folder->is_control_access();
+					$title = $object->get_name();
 				}
 				else
 				{
@@ -1139,7 +1045,7 @@ class DataIO
 				}
 			}
 			
-			if ($access == true)
+			if ($object->is_control_access() == true)
 			{
 				$data_permission = new DataPermission($type, $id);
 				
@@ -1172,7 +1078,7 @@ class DataIO
 					$template->set_array("option",$result);
 					
 					$paramquery = $_GET;
-					$paramquery[run] = "permission";
+					$paramquery[action] = "permission";
 					unset($paramquery[nextpage]);
 					$params = http_build_query($paramquery,'','&#38;');
 					
@@ -1183,7 +1089,7 @@ class DataIO
 				else
 				{
 					$paramquery = $_GET;
-					$paramquery[run] = "permission";
+					$paramquery[action] = "permission";
 					unset($paramquery[nextpage]);
 					$params = http_build_query($paramquery,'','&#38;');
 					
@@ -1237,18 +1143,16 @@ class DataIO
 				if ($_GET[file_id])
 				{
 					$id = $_GET[file_id];
-					$file = new File($id);
+					$object = new File($id);
 					$type = "file";
-					$title = $file->get_name();
-					$access = $file->is_control_access();
+					$title = $object->get_name();
 				}
 				if ($_GET[value_id])
 				{
 					$id = $_GET[value_id];
-					$value = new Value($id);
+					$object = new Value($id);
 					$type = "value";
-					$title = $value->get_type_name();
-					$access = $value->is_control_access();
+					$title = $object->get_type_name();
 				}
 			}
 			else
@@ -1256,10 +1160,9 @@ class DataIO
 				if ($_GET[folder_id])
 				{
 					$id = $_GET[folder_id];
-					$folder = Folder::get_instance($id);
+					$object = Folder::get_instance($id);
 					$type = "folder";
-					$title = $folder->get_name();
-					$access = $folder->is_control_access();
+					$title = $object->get_name();
 				}
 				else
 				{
@@ -1267,7 +1170,7 @@ class DataIO
 				}
 			}
 			
-			if ($access == true)
+			if ($object->is_control_access() == true)
 			{
 				$data_permission = new DataPermission($type, $id);
 				
@@ -1300,7 +1203,7 @@ class DataIO
 					$template->set_array("option",$result);
 					
 					$paramquery = $_GET;
-					$paramquery[run] = "permission";
+					$paramquery[action] = "permission";
 					unset($paramquery[nextpage]);
 					$params = http_build_query($paramquery,'','&#38;');
 					
@@ -1311,7 +1214,7 @@ class DataIO
 				else
 				{
 					$paramquery = $_GET;
-					$paramquery[run] = "permission";
+					$paramquery[action] = "permission";
 					unset($paramquery[nextpage]);
 					$params = http_build_query($paramquery,'','&#38;');
 					
@@ -1370,6 +1273,15 @@ class DataIO
 				if (Value::exist_value($_GET[value_id]) == false)
 				{
 					throw new ValueNotFoundException("",3);
+				}
+			}
+			
+			if ($_GET[folder_id])
+			{
+				$folder = Folder::get_instance($_GET[folder_id]);
+				if ($folder->exist_folder() == false)
+				{
+					throw new FolderNotFoundException("",1);
 				}
 			}
 			
@@ -1443,6 +1355,27 @@ class DataIO
 				break;
 				
 				
+				case("folder_add"):
+					require_once("folder.io.php");
+					FolderIO::add();	
+				break;
+				
+				case("folder_delete"):
+					require_once("folder.io.php");
+					FolderIO::delete();
+				break;
+				
+				case("folder_move"):
+					require_once("folder.io.php");
+					FolderIO::move();
+				break;
+	
+				case("folder_administration"):
+					require_once("folder.io.php");
+					FolderIO::folder_administration();	
+				break;
+				
+				
 				default:
 					self::browser();
 				break;
@@ -1455,6 +1388,11 @@ class DataIO
 			$error_io->display_error();
 		}
 		catch (ValueNotFoundException $e)
+		{
+			$error_io = new Error_IO($e, 20, 40, 1);
+			$error_io->display_error();
+		}
+		catch (FolderNotFoundException $e)
 		{
 			$error_io = new Error_IO($e, 20, 40, 1);
 			$error_io->display_error();

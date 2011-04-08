@@ -116,6 +116,12 @@ class OrganisationUnitIO
 			
 			$template->set_var("groups",$ou_groups);
 			
+			$paramquery = $_GET;
+			$paramquery[run] = "list_ou_equipment";
+			$params = http_build_query($paramquery,'','&#38;');
+			
+			$template->set_var("ou_equipment_params", $params);
+			
 			$template->output();
 		}
 		else
@@ -215,11 +221,6 @@ class OrganisationUnitIO
 		$template->set_var("table", $table_io->get_table($page ,$organisation_unit_array_cardinality));		
 
 		$template->output();
-	}
-
-	public static function method_handler()
-	{
-		
 	}
 	
 }

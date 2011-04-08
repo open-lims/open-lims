@@ -33,7 +33,7 @@ interface SampleInterface
 	
 	public function set_template_data($type, $type_id, $array);
 	
-	public function create($organisation_unit_id, $template_id, $name, $supplier, $depository_id, $desc, $language_id, $date_of_expiry);
+	public function create($organisation_unit_id, $template_id, $name, $supplier, $depository_id, $desc, $language_id, $date_of_expiry, $expiry_warning);
 	public function delete();
 	
 	public function get_requirements();
@@ -66,6 +66,5 @@ interface SampleInterface
 	public static function list_user_related_samples($user_id);
 	public static function list_organisation_unit_related_samples($organisation_unit_id);
 	public static function count_samples($user_id);
-	public static function search_samples($string, $organisation_unit_array, $template_array, $in_id, $in_name);
 }
 ?>

@@ -228,7 +228,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 */
 	public function can_set_data_entity()
 	{
-		return true;
+		return false;
 	}
 	
 	/**
@@ -236,13 +236,22 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 */
 	public function can_set_control()
 	{
-		return true;
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**
 	 * @return bool
 	 */
-	public function cat_set_remain()
+	public function can_set_remain()
 	{
 		return true;
 	}

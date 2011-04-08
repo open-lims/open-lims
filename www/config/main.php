@@ -124,4 +124,6 @@ $GLOBALS[oldl_folder_id]				= 51;
 $GLOBALS[olvdl_folder_id]				= 52;
 
 define("GROUP_LEADER_GROUP", 9);
+
+define("SAMPLE_EXIRY_WARNING", 7);
 ?>

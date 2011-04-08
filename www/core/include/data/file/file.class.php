@@ -86,6 +86,70 @@ class File extends DataEntity implements FileInterface
 		unset($this->item_id_array);
 	}
 	
+ 	/**
+ 	 * @return bool
+	 */
+	public function can_set_automatic()
+	{
+		if ($this->file_id)
+		{
+			$parent_folder = Folder::get_instance($this->get_parent_folder_id());
+			return $parent_folder->can_set_automatic();
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function can_set_data_entity()
+	{
+		if ($this->file_id)
+		{
+			$parent_folder = Folder::get_instance($this->get_parent_folder_id());
+			return $parent_folder->can_set_data_entity();
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function can_set_control()
+	{
+		if ($this->file_id)
+		{
+			$parent_folder = Folder::get_instance($this->get_parent_folder_id());
+			return $parent_folder->can_set_control();
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function can_set_remain()
+	{
+		if ($this->file_id)
+		{
+			$parent_folder = Folder::get_instance($this->get_parent_folder_id());
+			return $parent_folder->can_set_remain();
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	/**
 	 * Checks if current version has the same md5-checksum like $checksum
 	 * @param string $checksum

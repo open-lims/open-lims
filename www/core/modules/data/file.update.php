@@ -29,6 +29,11 @@
 	// Disable PHP Timeout
 	set_time_limit(0);
 
+	/**
+	 * @ignore
+	 */
+	define("UNIT_TEST", false);
+	
 	require_once("../../../config/main.php");
 	require_once("../../db/db.php");
 	
@@ -71,7 +76,7 @@
 				$current = false;
 			}
 			
-			if ($_GET[run] == "update")
+			if ($_GET[action] == "file_update")
 			{
 				$major = true;
 			}
