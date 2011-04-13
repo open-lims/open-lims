@@ -102,6 +102,34 @@ class BaseIO
 	}
 	
 	/**
+	 * @todo content
+	 */
+	public static function system_info()
+	{
+		$template = new Template("languages/en-gb/template/base/system_info.html");
+		
+		$template->output();
+	}
+	
+	/**
+	 * @todo content
+	 */
+	public static function software_info()
+	{
+		$template = new Template("languages/en-gb/template/base/software_info.html");
+		
+		$template->output();
+	}
+	
+	/**
+	 * @todo content
+	 */
+	public static function license()
+	{
+		
+	}
+	
+	/**
 	 * @todo info page
 	 * @todo version info
 	 * @todo license
@@ -120,16 +148,16 @@ class BaseIO
 				self::list_system_messages();
 			break;
 			
-			case "info":
-			
+			case "system_info":
+				self::system_info();
 			break;
 			
-			case "versioninfo":
-			
+			case "software_info":
+				self::software_info();
 			break;
 			
 			case "license":
-			
+				self::license();
 			break;
 			
 		endswitch;

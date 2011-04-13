@@ -277,7 +277,7 @@ class MainNavigation_IO
 		$info_paramquery[username] = $_GET[username];
 		$info_paramquery[session_id] = $_GET[session_id];
 		$info_paramquery[nav] = "static";
-		$info_paramquery[run] = "info";
+		$info_paramquery[run] = "system_info";
 		$info_params = http_build_query($info_paramquery,'','&#38;');
 		
 		$logout_paramquery[username] = $_GET[username];

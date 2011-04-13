@@ -29,7 +29,7 @@ require_once("interfaces/project_permission.interface.php");
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
 	require_once("access/project_permission.access.php");
-	require_once("access/project_join.access.php");
+	require_once("access/project.wrapper.access.php");
 }
 
 /**
@@ -881,7 +881,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     		$leader_id = $organisation_unit->get_leader_id();
     		if (is_numeric($leader_id))
     		{
-    			return ProjectJoin_Access::change_leader_permission_by_organisation_unit_id($leader_id, $event_object->get_organisation_unit_id());
+    			return Project_Wrapper_Access::change_leader_permission_by_organisation_unit_id($leader_id, $event_object->get_organisation_unit_id());
     		}
     		else
     		{

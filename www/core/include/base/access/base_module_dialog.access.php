@@ -577,6 +577,7 @@ class BaseModuleDialog_Access
 			$res = $db->db_query($sql);
 			while ($data = $db->db_fetch_assoc($res))
 			{
+				$result_array[$counter]['class_path'] 	= $data['class_path'];
 				$result_array[$counter]['class'] 		= $data['class'];
 				$result_array[$counter][method] 		= $data[method];
 				$result_array[$counter][internal_name] 	= $data[internal_name];

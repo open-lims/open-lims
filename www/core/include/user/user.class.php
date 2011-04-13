@@ -43,7 +43,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("access/user_profile_setting.access.php");
 	require_once("access/user_profile.access.php");
 	
-	require_once("access/user_join.access.php");
+	require_once("access/user.wrapper.access.php");
 }
 
 /**
@@ -1146,24 +1146,6 @@ class User implements UserInterface {
 	{
 		return User_Access::list_entries();
 	}
-
-	/**
-	 * Searchs users via username
-	 * @param string $username
-	 * @return array Array of User-IDs
-	 */
-	public static function search_users($username)
-	{
-   		if ($username)
-   		{
-   			$username = strtolower($username);
-   			return UserJoin_Access::search_users($username);
-   		}
-   		else
-   		{
-   			return null;
-   		}
-   	}
    	
    	/**
    	 * @return integer
@@ -1178,7 +1160,7 @@ class User implements UserInterface {
    	 */
    	public static function count_administrators()
    	{
-   		return UserJoin_Access::count_administrators();
+   		return User_Wrapper_Access::count_administrators();
    	}
 
 }

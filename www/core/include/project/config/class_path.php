@@ -44,4 +44,6 @@
 	$classes['ProjectTemplate']				= $path_prefix."core/include/project/project_template.class.php";
 	$classes['ProjectTemplateCat']			= $path_prefix."core/include/project/project_template_cat.class.php";
 	$classes['ProjectUserData']				= $path_prefix."core/include/project/project_user_data.class.php";
+	
+	$classes['Project_Wrapper']				= $path_prefix."core/include/project/project.wrapper.class.php";
 ?>

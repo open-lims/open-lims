@@ -860,13 +860,13 @@ class File extends DataEntity implements FileInterface
 			$transaction_id = $transaction->begin();
 	
 			$user_data = new DataUserData($user->get_user_id());
-			$folder = Folder::get_instance($this->get_parent_folder());
+			$folder = Folder::get_instance($this->get_parent_folder_id());
 			$folder_path = $folder->get_path();
 	
 			if ($folder->is_write_access() == true)
 			{
 				$target = $GLOBALS[base_dir]."/".$folder_path."/".$file_array['name'];
-		
+				
 				if(!empty($file_array['name']))
 				{
 					$file_name_array = explode(".",$file_array['name']);

@@ -162,5 +162,25 @@ class Project_Wrapper implements Project_WrapperInterface
 	{
 		return Project_Wrapper_Access::count_projects_by_item_id($item_id);
 	}
+	
+	public static function list_search_projects_without_subprojects($name, $template_array, $organisation_unit_array, $order_by, $order_method, $start, $end)
+	{
+		return Project_Wrapper_Access::list_search_projects_without_subprojects($name, $template_array, $organisation_unit_array, $order_by, $order_method, $start, $end);
+	}
+	
+	public static function count_search_projects_without_subprojects($name, $template_array, $organisation_unit_array)
+	{
+		return Project_Wrapper_Access::count_search_projects_without_subprojects($name, $template_array, $organisation_unit_array);
+	}
+	
+	public static function list_search_projects_with_subprojects($name, $template_array, $organisation_unit_array, $order_by, $order_method, $start, $end)
+	{
+		return Project_Wrapper_Access::list_search_projects_with_subprojects($name, $template_array, $organisation_unit_array, $order_by, $order_method, $start, $end);
+	}
+	
+	public static function count_search_projects_with_subprojects($name, $template_array, $organisation_unit_array)
+	{
+		return Project_Wrapper_Access::count_search_projects_with_subprojects($name, $template_array, $organisation_unit_array);
+	}
 }
 ?>

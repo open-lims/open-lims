@@ -84,7 +84,6 @@ interface ProjectInterface
 	public static function list_entries_by_template_id($template_id);
 	public static function exist_project_name($toid_organ_unit, $toid_project, $name);
 	public static function exist_project($project_id);
-	public static function search_projects($name, $organisation_unit_array, $template_array, $sub_projects);
 	public static function get_used_project_space();
 	// private static function make_project_tree_rec($layer, $id);	
 }

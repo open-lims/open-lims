@@ -27,4 +27,6 @@
 	$classes['Equipment']					= $path_prefix."core/include/equipment/equipment.class.php";
 	$classes['EquipmentCat']				= $path_prefix."core/include/equipment/equipment_cat.class.php";
 	$classes['EquipmentType']				= $path_prefix."core/include/equipment/equipment_type.class.php";
+	
+	$classes['Equipment_Wrapper']			= $path_prefix."core/include/equipment/equipment.wrapper.class.php";
 ?>

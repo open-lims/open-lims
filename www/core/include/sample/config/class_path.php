@@ -36,4 +36,6 @@
 	$classes['SampleSecurity']				= $path_prefix."core/include/sample/sample_security.class.php";
 	$classes['SampleTemplate']				= $path_prefix."core/include/sample/sample_template.class.php";
 	$classes['SampleTemplateCat']			= $path_prefix."core/include/sample/sample_template_cat.class.php";
+	
+	$classes['Sample_Wrapper']				= $path_prefix."core/include/sample/sample.wrapper.class.php";
 ?>

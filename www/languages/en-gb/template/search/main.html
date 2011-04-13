@@ -4,62 +4,22 @@
 
 <div class='SearchMain'>
 
-	<div class='SearchMainLeft'>
+	<!-- FOREACH BEGIN ({SEARCH_ARRAY}) -->
+
+		<div class='SearchMainLeft'>
+		
+			<a href='index.php?{SEARCH_ARRAY:PARAMS}' class='SearchMainButton'>
+				<span class='SearchMainButtonImage'><img src='{SEARCH_ARRAY:ICON}' alt='' style='border: 0;' /></span>
+				<span class='SearchMainButtonText'>
+					<span class='SearchMainButtonTitle'>{SEARCH_ARRAY:TITLE}</span>
+					<span class='SearchMainButtonDesc'>{SEARCH_ARRAY:DESCRIPTION}</span>
+				</span>
+			</a>
+		
+		</div>
 	
-		<a href='index.php?{PROJECT_SEARCH_PARAMS}' class='SearchMainButton'>
-			<span class='SearchMainButtonImage'><img src='images/icons_large/project_search_50.png' alt='' style='border: 0;' /></span>
-			<span class='SearchMainButtonText'>
-				<span class='SearchMainButtonTitle'>Project Search</span>
-				<span class='SearchMainButtonDesc'>Finds Projects in Organisation Units via Name and/or Template.</span>
-			</span>
-		</a>
+	<!-- FOREACH END -->
 		
-		<a href='index.php?{FFV_SEARCH_PARAMS}' class='SearchMainButton'>
-			<span class='SearchMainButtonImage'><img src='images/icons_large/ffv_search_50.png' alt='' style='border: 0;' /></span>
-			<span class='SearchMainButtonText'>
-				<span class='SearchMainButtonTitle'>File/Folder/Value Search</span>
-				<span class='SearchMainButtonDesc'>Finds Files, Values or Folders in Folders via Name or Extension.</span>
-			</span>
-		</a>
-		
-		<a href='index.php?{USER_SEARCH_PARAMS}' class='SearchMainButton'>
-			<span class='SearchMainButtonImage'><img src='images/icons_large/user_search_50.png' alt='' style='border: 0;' /></span>
-			<span class='SearchMainButtonText'>
-				<span class='SearchMainButtonTitle'>User/Group Search</span>
-				<span class='SearchMainButtonDesc'>Finds Users or Groups.</span>
-			</span>
-		</a>
-		
-	</div>
-	
-	<div class='SearchMainRight'>	
-		
-		<a href='index.php?{SAMPLE_SEARCH_PARAMS}' class='SearchMainButton'>
-			<span class='SearchMainButtonImage'><img src='images/icons_large/sample_search_50.png' alt='' style='border: 0;' /></span>
-			<span class='SearchMainButtonText'>
-				<span class='SearchMainButtonTitle'>Sample Search</span>
-				<span class='SearchMainButtonDesc'>Finds Samples in Organisation Units via Name, ID and/or Template.</span>
-			</span>
-		</a>
-		
-		<a href='index.php?{DATA_SEARCH_PARAMS}' class='SearchMainButton'>
-			<span class='SearchMainButtonImage'><img src='images/icons_large/data_search_50.png' alt='' style='border: 0;' /></span>
-			<span class='SearchMainButtonText'>
-				<span class='SearchMainButtonTitle'>Data Search</span>
-				<span class='SearchMainButtonDesc'>Finds Data in Projects or Samples uncoupled to Folder-structure.</span>
-			</span>
-		</a>
-		
-		<a href='index.php?{FULL_TEXT_SEARCH_PARAMS}' class='SearchMainButton'>
-			<span class='SearchMainButtonImage'><img src='images/icons_large/full_text_search_50.png' alt='' style='border: 0;' /></span>
-			<span class='SearchMainButtonText'>
-				<span class='SearchMainButtonTitle'>Full Text Search</span>
-				<span class='SearchMainButtonDesc'>Makes a Full Text Search over all Values with Text, including Project Descriptions.</span>
-			</span>
-		</a>
-	
-	</div>
-	
 </div>
 
 <div class='SearchMainClear'></div>

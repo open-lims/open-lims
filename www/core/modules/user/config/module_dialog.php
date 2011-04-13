@@ -1,6 +1,6 @@
 <?php 
 /**
- * @package project
+ * @package data
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -24,8 +24,11 @@
 /**
  * 
  */
-	$classes['User'] 						= $path_prefix."core/include/user/user.class.php";
-	$classes['Group'] 						= $path_prefix."core/include/user/group.class.php";
-	
-	$classes['User_Wrapper'] 				= $path_prefix."core/include/user/user.wrapper.class.php";
+	$dialog[0][type]			= "search";
+	$dialog[0][class_path]		= "core/modules/user/user_search.io.php";
+	$dialog[0]['class']			= "UserSearchIO";
+	$dialog[0][method]			= "search";
+	$dialog[0][internal_name]	= "user_search";
+	$dialog[0][display_name]	= "User Search";
+	$dialog[0][weight]			= 500;
 ?>

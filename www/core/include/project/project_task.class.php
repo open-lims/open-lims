@@ -36,7 +36,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	
 	require_once("access/project_task_has_previous_task.access.php");
 	
-	require_once("access/project_join.access.php");
+	require_once("access/project.wrapper.access.php");
 }
 
 /**
@@ -2196,7 +2196,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
      	
      	$upcoming_task_array = array();
      	
-     	$over_time_task_array = ProjectJoin_Access::list_not_finished_over_time_project_tasks_by_user_id($user->get_user_id(),  date("Y-m-d H:i:s"));
+     	$over_time_task_array = Project_Wrapper_Access::list_not_finished_over_time_project_tasks_by_user_id($user->get_user_id(),  date("Y-m-d H:i:s"));
      	
      	if (is_array($over_time_task_array) and count($over_time_task_array) >= 1)
      	{

@@ -200,5 +200,6 @@ class Sample_Wrapper implements Sample_WrapperInterface
 	{
 		return Sample_Wrapper_Access::count_sample_search($name, $organisation_unit_array, $template_array, $in_id, $in_name);
 	}
+
 }
 ?>

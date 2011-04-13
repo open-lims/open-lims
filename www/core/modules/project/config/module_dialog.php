@@ -30,4 +30,20 @@
 	$dialog[0][method]			= "list_projects_by_item_id";
 	$dialog[0][internal_name]	= "project";
 	$dialog[0][display_name]	= "Projects";
+	
+	$dialog[1][type]			= "search";
+	$dialog[1][class_path]		= "core/modules/project/project_search.io.php";
+	$dialog[1]['class']			= "ProjectSearchIO";
+	$dialog[1][method]			= "search";
+	$dialog[1][internal_name]	= "project_search";
+	$dialog[1][display_name]	= "Project Search";
+	$dialog[1][weight]			= 100;
+	
+	$dialog[2][type]			= "search";
+	$dialog[2][class_path]		= "core/modules/project/project_data_search.io.php";
+	$dialog[2]['class']			= "ProjectDataSearchIO";
+	$dialog[2][method]			= "search";
+	$dialog[2][internal_name]	= "project_data_search";
+	$dialog[2][display_name]	= "Project Data Search";
+	$dialog[2][weight]			= 300;
 ?>

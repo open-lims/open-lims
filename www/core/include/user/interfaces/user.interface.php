@@ -66,7 +66,6 @@ interface UserInterface
 	public static function exist_username($username);
 	public static function exist_user($user_id);
 	public static function list_entries();
-	public static function search_users($username);
 	public static function count_users();
 	public static function count_administrators();
 }

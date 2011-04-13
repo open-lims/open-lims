@@ -27,18 +27,8 @@
  */
 class Sample_Wrapper_Access
 {
-	const SAMPLE_TABLE = 'core_samples';
-	const SAMPLE_TEMPLATE_TABLE = 'core_sample_templates';
-	const SAMPLE_TEMPLATE_CAT_TABLE = 'core_sample_template_cats';
-	const SAMPLE_HAS_USER_TABLE = 'core_sample_has_users';
-	
-	const OLDL_TEMPLATE_TABLE = 'core_oldl_templates';
-	
-	const DATA_ENTITY_TABLE = 'core_data_entities';
-	const FILE_TABLE = 'core_files';
-	const FILE_VERSION_TABLE = 'core_file_versions';
-	
 	/**
+	 * NEW
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -89,17 +79,17 @@ class Sample_Wrapper_Access
 			$sql_order_by = "ORDER BY id";
 		}
 			
-		$sql = "SELECT ".self::SAMPLE_TEMPLATE_TABLE.".id AS id, " .
-					"".self::SAMPLE_TEMPLATE_TABLE.".name AS name," .
-					"".self::FILE_VERSION_TABLE.".name AS file, " .
-					"".self::SAMPLE_TEMPLATE_CAT_TABLE.".name AS category " .
-					"FROM ".self::SAMPLE_TEMPLATE_TABLE." " .
-					"LEFT JOIN ".self::SAMPLE_TEMPLATE_CAT_TABLE." 	ON ".self::SAMPLE_TEMPLATE_TABLE.".cat_id 			= ".self::SAMPLE_TEMPLATE_CAT_TABLE.".id " .
-					"LEFT JOIN ".self::OLDL_TEMPLATE_TABLE." 		ON ".self::SAMPLE_TEMPLATE_TABLE.".template_id 		= ".self::OLDL_TEMPLATE_TABLE.".id " .
-					"LEFT JOIN ".self::DATA_ENTITY_TABLE." 			ON ".self::OLDL_TEMPLATE_TABLE.".data_entity_id 	= ".self::DATA_ENTITY_TABLE.".id " .
-					"LEFT JOIN ".self::FILE_TABLE." 				ON ".self::DATA_ENTITY_TABLE.".id 					= ".self::FILE_TABLE.".data_entity_id " .
-					"LEFT JOIN ".self::FILE_VERSION_TABLE." 		ON ".self::FILE_TABLE.".id 							= ".self::FILE_VERSION_TABLE.".toid " .					
-					"WHERE ".self::FILE_VERSION_TABLE.".internal_revision = 1 " .
+		$sql = "SELECT ".constant("SAMPLE_TEMPLATE_TABLE").".id AS id, " .
+					"".constant("SAMPLE_TEMPLATE_TABLE").".name AS name," .
+					"".constant("FILE_VERSION_TABLE").".name AS file, " .
+					"".constant("SAMPLE_TEMPLATE_CAT_TABLE").".name AS category " .
+					"FROM ".constant("SAMPLE_TEMPLATE_TABLE")." " .
+					"LEFT JOIN ".constant("SAMPLE_TEMPLATE_CAT_TABLE")." 	ON ".constant("SAMPLE_TEMPLATE_TABLE").".cat_id 		= ".constant("SAMPLE_TEMPLATE_CAT_TABLE").".id " .
+					"LEFT JOIN ".constant("OLDL_TEMPLATE_TABLE")." 			ON ".constant("SAMPLE_TEMPLATE_TABLE").".template_id 	= ".constant("OLDL_TEMPLATE_TABLE").".id " .
+					"LEFT JOIN ".constant("DATA_ENTITY_TABLE")." 			ON ".constant("OLDL_TEMPLATE_TABLE").".data_entity_id 	= ".constant("DATA_ENTITY_TABLE").".id " .
+					"LEFT JOIN ".constant("FILE_TABLE")." 					ON ".constant("DATA_ENTITY_TABLE").".id 				= ".constant("FILE_TABLE").".data_entity_id " .
+					"LEFT JOIN ".constant("FILE_VERSION_TABLE")." 			ON ".constant("FILE_TABLE").".id 						= ".constant("FILE_VERSION_TABLE").".toid " .					
+					"WHERE ".constant("FILE_VERSION_TABLE").".internal_revision = 1 " .
 					"".$sql_order_by."";
 		
 		$return_array = array();
@@ -132,14 +122,15 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
+	 * NEW
 	 * @return integer
 	 */
 	public static function count_list_sample_templates()
 	{
 		global $db;
 						
-		$sql = "SELECT COUNT(".self::SAMPLE_TEMPLATE_TABLE.".id) AS result " .
-					"FROM ".self::SAMPLE_TEMPLATE_TABLE."";
+		$sql = "SELECT COUNT(".constant("SAMPLE_TEMPLATE_TABLE").".id) AS result " .
+					"FROM ".constant("SAMPLE_TEMPLATE_TABLE")."";
 		
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);
@@ -148,6 +139,7 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
+	 * NEW
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -184,9 +176,9 @@ class Sample_Wrapper_Access
 			$sql_order_by = "ORDER BY id";
 		}
 			
-		$sql = "SELECT ".self::SAMPLE_TEMPLATE_CAT_TABLE.".id AS id, " .
-					"".self::SAMPLE_TEMPLATE_CAT_TABLE.".name AS name " .
-					"FROM ".self::SAMPLE_TEMPLATE_CAT_TABLE." " .
+		$sql = "SELECT ".constant("SAMPLE_TEMPLATE_CAT_TABLE").".id AS id, " .
+					"".constant("SAMPLE_TEMPLATE_CAT_TABLE").".name AS name " .
+					"FROM ".constant("SAMPLE_TEMPLATE_CAT_TABLE")." " .
 					"".$sql_order_by."";
 		
 		$return_array = array();
@@ -219,14 +211,15 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
+	 * NEW
 	 * @return integer
 	 */
 	public static function count_list_sample_template_categories()
 	{
 		global $db;
 						
-		$sql = "SELECT COUNT(".self::SAMPLE_TEMPLATE_CAT_TABLE.".id) AS result " .
-					"FROM ".self::SAMPLE_TEMPLATE_CAT_TABLE."";
+		$sql = "SELECT COUNT(".constant("SAMPLE_TEMPLATE_CAT_TABLE").".id) AS result " .
+					"FROM ".constant("SAMPLE_TEMPLATE_CAT_TABLE")."";
 		
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);
@@ -1150,6 +1143,9 @@ class Sample_Wrapper_Access
 		}
 	}
 	
+	/**
+	 * NEW
+	 */
 	public static function list_sample_search($name, $organisation_unit_array, $template_array, $in_id, $in_name, $order_by, $order_method, $start, $end)
 	{
 		global $db;
@@ -1157,8 +1153,55 @@ class Sample_Wrapper_Access
    		if (($name or $id or (is_array($template_array) and count($template_array) >= 1)) and 
    			(is_array($organisation_unit_array) and count($organisation_unit_array) >= 1))
    		{	
+   			if ($order_by and $order_method)
+			{
+				if ($order_method == "asc")
+				{
+					$sql_order_method = "ASC";
+				}
+				else
+				{
+					$sql_order_method = "DESC";
+				}
+				
+				switch($order_by):
+				
+					case "id":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_TABLE").".id ".$sql_order_method;
+					break;
+						
+					case "name":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_TABLE").".name ".$sql_order_method;
+					break;
+					
+					case "datetime":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_TABLE").".datetime ".$sql_order_method;
+					break;
+					
+					case "template":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_TEMPLATE_TABLE").".name ".$sql_order_method;
+					break;
+					
+					case "depository":
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_DEPOSITORY_TABLE").".name ".$sql_order_method;
+					break;
+					
+					default:
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_TABLE").".id ".$sql_order_method;
+					break;
+				
+				endswitch;
+			}
+			else
+			{
+				$sql_order_by = "ORDER BY ".constant("SAMPLE_TABLE").".id";
+			}
+   			
+   			$name = strtolower(trim($name));
+   			$id = strtolower(trim($id));
+   			
    			$base_sql = "SELECT ".constant('SAMPLE_TABLE').".id AS id, ".
-   								"".constant('SAMPLE_TABLE').".name AS name " .
+   								"".constant('SAMPLE_TABLE').".name AS name, " .
    								"".constant("SAMPLE_TABLE").".datetime AS datetime," .
 								"".constant("SAMPLE_TABLE").".owner_id AS owner," .
    								"".constant("SAMPLE_TEMPLATE_TABLE").".name AS template," .
@@ -1166,11 +1209,11 @@ class Sample_Wrapper_Access
 								"".constant("SAMPLE_TABLE").".date_of_expiry AS date_of_expiry, " .
 								"".constant("SAMPLE_TABLE").".available AS av " .
    								" FROM ".constant('SAMPLE_TABLE')." " .
-   								"JOIN ".constant("SAMPLE_TEMPLATE_TABLE")." 				ON ".constant("SAMPLE_TABLE").".template_id 								= ".constant("SAMPLE_TEMPLATE_TABLE").".id " .
+   								"JOIN ".constant("SAMPLE_TEMPLATE_TABLE")." 					ON ".constant("SAMPLE_TABLE").".template_id 								= ".constant("SAMPLE_TEMPLATE_TABLE").".id " .
 								"LEFT JOIN ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." 	ON ".constant("SAMPLE_TABLE").".id 											= ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_id " .
 								"LEFT JOIN ".constant("SAMPLE_DEPOSITORY_TABLE")." 				ON ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_depository_id 	= ".constant("SAMPLE_DEPOSITORY_TABLE").".id " .
    								"LEFT JOIN ".constant("USER_PROFILE_TABLE")." 					ON ".constant("SAMPLE_TABLE").".owner_id								 	= ".constant("USER_PROFILE_TABLE").".id " .
-								"WHERE";
+								"WHERE (";
    			
    			if ($id)
    			{
@@ -1188,7 +1231,7 @@ class Sample_Wrapper_Access
    				$id_string = (int)$id_string;
    				if ($id_string)
    				{
-   					$add_sql = " CAST(id AS TEXT) LIKE '".$id_string."'";
+   					$add_sql = " CAST(".constant('SAMPLE_TABLE').".id AS TEXT) LIKE '".$id_string."'";
    				}
    			}
    			else
@@ -1201,11 +1244,11 @@ class Sample_Wrapper_Access
    				$name = str_replace("*","%",$name);
    				if ($add_sql)
    				{
-					$add_sql .= " OR LOWER(name) LIKE '".$name."'";
+					$add_sql .= " OR LOWER(".constant('SAMPLE_TABLE').".name) LIKE '".$name."'";
 				}
 				else
 				{
-					$add_sql = " LOWER(name) LIKE '".$name."'";
+					$add_sql = " LOWER(".constant('SAMPLE_TABLE').".name) LIKE '".$name."'";
 				}
    			}
    			else
@@ -1230,11 +1273,11 @@ class Sample_Wrapper_Access
    				{
    					if ($template_sql)
    					{
-   						$template_sql .= " OR template_id = '".$value."'";
+   						$template_sql .= " OR ".constant('SAMPLE_TABLE').".template_id = '".$value."'";
    					}
    					else
    					{
-   						$template_sql .= "template_id = '".$value."'";
+   						$template_sql .= "".constant('SAMPLE_TABLE').".template_id = '".$value."'";
    					}
    				}
    				$add_sql .= $template_sql.")";
@@ -1255,35 +1298,57 @@ class Sample_Wrapper_Access
 			{
 				if ($organisation_unit_sql)
 				{
-					$organisation_unit_sql .= " OR id IN (SELECT sample_id FROM ".self::SAMPLE_HAS_ORGANISATION_UNIT_TABLE." WHERE organisation_unit_id = ".$value.")";
+					$organisation_unit_sql .= " OR ".constant('SAMPLE_TABLE').".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE organisation_unit_id = ".$value.")";
 				}
 				else
 				{
-					$organisation_unit_sql .= "id IN (SELECT sample_id FROM ".self::SAMPLE_HAS_ORGANISATION_UNIT_TABLE." WHERE organisation_unit_id = ".$value.")";
+					$organisation_unit_sql .= "".constant('SAMPLE_TABLE').".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE organisation_unit_id = ".$value.")";
 				}
 			}
 			
 			$add_sql .= $organisation_unit_sql.")";
 			
 			
-   			$sql = $base_sql."".$add_sql;
+   			$sql = $base_sql."".$add_sql.") AND " .
+   								"(".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".primary_key IN " .
+									"( " .
+									"SELECT primary_key " .
+									"FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." " .
+									"WHERE sample_id = ".constant("SAMPLE_TABLE").".id AND " .
+									"".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime = " .
+										"(SELECT MAX(".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime) FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." WHERE ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_id = ".constant("SAMPLE_TABLE").".id) " .
+									") " .
+								"OR ".constant("SAMPLE_TABLE").".id NOT IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").") " .
+								") " .
+							"".$sql_order_by."";
    			
    			$return_array = array();
    			
    			$res = $db->db_query($sql);
-			while ($data = $db->db_fetch_assoc($res))
+   			
+			if (is_numeric($start) and is_numeric($end))
 			{
-				array_push($return_array, $data[id]);
-			}
-			
-			if (is_array($return_array))
-			{
-				return $return_array;
+				for ($i = 0; $i<=$end-1; $i++)
+				{
+					if (($data = $db->db_fetch_assoc($res)) == null)
+					{
+						break;
+					}
+					
+					if ($i >= $start)
+					{
+						array_push($return_array, $data);
+					}
+				}
 			}
 			else
 			{
-				return null;
-			}	
+				while ($data = $db->db_fetch_assoc($res))
+				{
+					array_push($return_array, $data);
+				}
+			}
+			return $return_array;
    		}
    		else
    		{
@@ -1291,9 +1356,128 @@ class Sample_Wrapper_Access
    		}
 	}
 	
+	/**
+	 * NEW
+	 */
 	public static function count_sample_search($name, $organisation_unit_array, $template_array, $in_id, $in_name)
 	{
-		
+		global $db;
+   		
+   		if (($name or $id or (is_array($template_array) and count($template_array) >= 1)) and 
+   			(is_array($organisation_unit_array) and count($organisation_unit_array) >= 1))
+   		{	
+   			$name = strtolower(trim($name));
+   			$id = strtolower(trim($id));
+   			
+   			$base_sql = "SELECT COUNT(".constant('SAMPLE_TABLE').".id) AS result ".
+   								" FROM ".constant('SAMPLE_TABLE')." " .
+								"WHERE";
+   			
+   			if ($id)
+   			{
+   				$id = str_replace("*","%",$id);
+   				$id_string = "";
+   				$id_length = strlen($id);
+   				for($i=0;$i<=($id_length-1);$i++)
+   				{
+   					if (is_numeric($id{$i}))
+   					{
+   						$id_string .= $id{$i};
+   					}
+   				}
+   				
+   				$id_string = (int)$id_string;
+   				if ($id_string)
+   				{
+   					$add_sql = " CAST(".constant('SAMPLE_TABLE').".id AS TEXT) LIKE '".$id_string."'";
+   				}
+   			}
+   			else
+   			{
+   				$add_sql .= "";
+   			}
+   			
+   			if ($name)
+   			{
+   				$name = str_replace("*","%",$name);
+   				if ($add_sql)
+   				{
+					$add_sql .= " OR LOWER(".constant('SAMPLE_TABLE').".name) LIKE '".$name."'";
+				}
+				else
+				{
+					$add_sql = " LOWER(".constant('SAMPLE_TABLE').".name) LIKE '".$name."'";
+				}
+   			}
+   			else
+   			{
+   				$add_sql .= "";
+   			}	
+   			
+   			if (is_array($template_array) and count($template_array) >= 1)
+   			{
+   				if ($add_sql)
+   				{
+					$add_sql .= " AND (";
+				}
+				else
+				{
+					$add_sql .= " (";
+				}
+				
+				$template_sql = "";
+   				
+   				foreach($template_array as $key => $value)
+   				{
+   					if ($template_sql)
+   					{
+   						$template_sql .= " OR ".constant('SAMPLE_TABLE').".template_id = '".$value."'";
+   					}
+   					else
+   					{
+   						$template_sql .= "".constant('SAMPLE_TABLE').".template_id = '".$value."'";
+   					}
+   				}
+   				$add_sql .= $template_sql.")";
+   			}
+   			
+			if ($add_sql)
+			{
+				$add_sql .= " AND (";
+			}
+			else
+			{
+				$add_sql .= " (";
+			}
+			
+			$organisation_unit_sql = "";
+			
+			foreach($organisation_unit_array as $key => $value)
+			{
+				if ($organisation_unit_sql)
+				{
+					$organisation_unit_sql .= " OR ".constant('SAMPLE_TABLE').".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE organisation_unit_id = ".$value.")";
+				}
+				else
+				{
+					$organisation_unit_sql .= "".constant('SAMPLE_TABLE').".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE organisation_unit_id = ".$value.")";
+				}
+			}
+			
+			$add_sql .= $organisation_unit_sql.")";
+			
+			
+   			$sql = $base_sql."".$add_sql."";
+   			   			
+   			$res = $db->db_query($sql);
+   			$data = $db->db_fetch_assoc($res);
+	
+			return $data[result];
+   		}
+   		else
+   		{
+   			return null;
+   		}
 	}
 	
 }

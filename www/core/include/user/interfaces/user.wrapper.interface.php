@@ -1,6 +1,6 @@
-<?php 
+<?php
 /**
- * @package project
+ * @package user
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -21,11 +21,14 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
+
 /**
- * 
- */
-	$classes['User'] 						= $path_prefix."core/include/user/user.class.php";
-	$classes['Group'] 						= $path_prefix."core/include/user/group.class.php";
-	
-	$classes['User_Wrapper'] 				= $path_prefix."core/include/user/user.wrapper.class.php";
+ * @todo
+ * User Wrapper Interface
+ * @package user
+ */ 	 
+interface User_WrapperInterface
+{
+
+}
 ?>

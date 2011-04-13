@@ -45,4 +45,12 @@
 	$dialog[2][method]			= "upload_as_item";
 	$dialog[2][internal_name]	= "file";
 	$dialog[2][display_name]	= "File";
+	
+	$dialog[3][type]			= "search";
+	$dialog[3][class_path]		= "core/modules/data/data_search.io.php";
+	$dialog[3]['class']			= "DataSearchIO";
+	$dialog[3][method]			= "search";
+	$dialog[3][internal_name]	= "ffv_search";
+	$dialog[3][display_name]	= "File/Folder/Value Search";
+	$dialog[3][weight]			= 600;
 ?>

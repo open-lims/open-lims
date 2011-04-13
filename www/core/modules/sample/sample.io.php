@@ -534,7 +534,6 @@ class SampleIO
 			
 			if (is_array($result_array) and count($result_array) >= 1)
 			{
-				$today_begin = new DatetimeHandler(date("Y-m-d")." 00:00:00");
 				$today_end = new DatetimeHandler(date("Y-m-d")." 23:59:59");
 				
 				foreach($result_array as $key => $value)

@@ -2162,41 +2162,7 @@ class Project implements ProjectInterface, EventListenerInterface
    	{
    		return Project_Access::exist_project_by_project_id($project_id);
    	}
-      
-    /**
-     * @todo move to wrapper-class
-     * @param string $name
-     * @param array $organisation_unit_array
-     * @param array $template_array
-     * @param bool $sub_projects
-     * @return array
-     */
-    public static function search_projects($name, $organisation_unit_array, $template_array, $sub_projects)
-    {
-    	if (($name or ((is_array($template_array) and count($template_array) >= 1))) and 
-    		is_array($organisation_unit_array) and 
-    		count($organisation_unit_array) >= 1)
-    	{
-			if ($name)
-			{
-				$name = strtolower($name);
-			}
-
-    		if ($sub_projects == true)
-    		{
-    			return Project_Access::search_projects_with_subprojects($name, $template_array, $organisation_unit_array);
-    		}
-    		else
-    		{
-    			return Project_Access::search_projects_without_subprojects($name, $template_array, $organisation_unit_array);
-    		}
-    	}
-    	else
-    	{
-    		return null;
-    	}
-    } 
-    
+         
     /**
      * @return integer
      */
