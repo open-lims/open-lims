@@ -379,6 +379,7 @@ class DataIO
 			$paramquery = $_GET;
 			$paramquery[action] = "delete_stack";
 			unset($paramquery[folder_id]);
+			unset($paramquery[vfolder_id]);
 			$params = http_build_query($paramquery,'','&#38;');
 							
 			$template->set_var("home_folder_params", $params);
@@ -1373,6 +1374,39 @@ class DataIO
 				case("folder_administration"):
 					require_once("folder.io.php");
 					FolderIO::folder_administration();	
+				break;
+				
+				// Search
+				/**
+				 * @todo errors, exceptions
+				 */
+				case("search"):
+					if ($_GET[dialog])
+					{
+						$module_dialog = ModuleDialog::get_by_type_and_internal_name("search", $_GET[dialog]);
+						
+						if (file_exists($module_dialog[class_path]))
+						{
+							require_once($module_dialog[class_path]);
+							
+							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+							{
+								$module_dialog['class']::$module_dialog[method]();
+							}
+							else
+							{
+								// Error
+							}
+						}
+						else
+						{
+							// Error
+						}
+					}
+					else
+					{
+						// error
+					}
 				break;
 				
 				default:

@@ -108,6 +108,67 @@ class BaseIO
 	{
 		$template = new Template("languages/en-gb/template/base/system_info.html");
 		
+		$template->set_var("product", constant("PRODUCT"));
+		$template->set_var("product_version", constant("PRODUCT_VERSION"));
+		$template->set_var("product_user", constant("PRODUCT_USER"));
+		$template->set_var("product_function", constant("PRODUCT_FUNCTION"));
+
+		$paramquery = $_GET;
+		$paramquery[run] = "software_info";
+		$params = http_build_query($paramquery, '', '&#38;');
+		
+		$template->set_var("sw_info_params", $params);
+		
+		$include_array = SystemHandler::list_includes();
+		
+		if (is_array($include_array) and count($include_array) >= 1)
+		{
+			$include_string = null;
+			
+			foreach($include_array as $key => $value)
+			{
+				if (!$include_string)
+				{
+					$include_string = $value[name];
+				}
+				else
+				{
+					$include_string = $include_string.", ".$value[name];
+				}
+			}
+			
+			$template->set_var("includes", $include_string);
+		}
+		else
+		{
+			$template->set_var("includes", "<span class='italic'>none</span>");
+		}
+		
+		$module_array = SystemHandler::list_modules();
+		
+		if (is_array($module_array) and count($module_array) >= 1)
+		{
+			$module_string = null;
+			
+			foreach($module_array as $key => $value)
+			{
+				if (!$module_string)
+				{
+					$module_string = $value[name];
+				}
+				else
+				{
+					$module_string = $module_string.", ".$value[name];
+				}
+			}
+			
+			$template->set_var("modules", $module_string);
+		}
+		else
+		{
+			$template->set_var("modules", "<span class='italic'>none</span>");
+		}
+		
 		$template->output();
 	}
 	

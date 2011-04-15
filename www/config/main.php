@@ -73,6 +73,9 @@ $GLOBALS[enable_db_log_on_commit]		= false;
 $GLOBALS[server_info]				= "development server";
 $GLOBALS[product_user]				= "University of Cologne";
 
+define("PRODUCT_USER", $GLOBALS[product_user]);
+define("PRODUCT_FUNCTION", $GLOBALS[server_info]);
+
 
 $GLOBALS[important]					= "";
 $GLOBALS[accountmail]				= "roman.konertz@uni-koeln.de";

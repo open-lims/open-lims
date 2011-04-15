@@ -372,7 +372,7 @@ class BaseModule_Access
 		
 		$result_array = array();
 		
-		$sql = "SELECT id,name,folder,class FROM ".constant("BASE_MODULE_TABLE")."";
+		$sql = "SELECT id,name,folder,class FROM ".constant("BASE_MODULE_TABLE")." ORDER BY name";
 		$res = $db->db_query($sql);
 		while ($data = $db->db_fetch_assoc($res))
 		{

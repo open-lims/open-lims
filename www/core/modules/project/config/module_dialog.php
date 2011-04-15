@@ -24,12 +24,13 @@
 /**
  * 
  */
-	$dialog[0][type]			= "project_list";
+	$dialog[0][type]			= "parent_item_list";
 	$dialog[0][class_path]		= "core/modules/project/project.io.php";
 	$dialog[0]['class']			= "ProjectIO";
 	$dialog[0][method]			= "list_projects_by_item_id";
 	$dialog[0][internal_name]	= "project";
-	$dialog[0][display_name]	= "Projects";
+	$dialog[0][display_name]	= "Par. Projects";
+	$dialog[0][weight]			= 100;
 	
 	$dialog[1][type]			= "search";
 	$dialog[1][class_path]		= "core/modules/project/project_search.io.php";

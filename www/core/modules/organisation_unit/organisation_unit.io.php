@@ -74,13 +74,20 @@ class OrganisationUnitIO
 				foreach ($organisation_unit_member_array as $key => $value)
 				{
 					$member = new User($value);
+					
+					$member_paramquery = $_GET;
+					$member_paramquery[run] = "common_dialog";
+					$member_paramquery[dialog] = "user_detail";
+					$member_paramquery[id] = $value;
+					$member_params = http_build_query($member_paramquery, '', '&#38;');
+					
 					if ($ou_members)
 					{
-						$ou_members .= ", ".$member->get_full_name(true);
+						$ou_members .= ", <a href='index.php?".$member_params."'>".$member->get_full_name(true)."</a>";
 					}
 					else
 					{
-						$ou_members .= $member->get_full_name(true);	
+						$ou_members .= "<a href='index.php?".$member_params."'>".$member->get_full_name(true)."</a>";	
 					}
 				}
 			}
@@ -99,13 +106,20 @@ class OrganisationUnitIO
 				foreach ($organisation_unit_group_array as $key => $value)
 				{
 					$group = new Group($value);
+					
+					$group_paramquery = $_GET;
+					$group_paramquery[run] = "common_dialog";
+					$group_paramquery[dialog] = "group_detail";
+					$group_paramquery[id] = $value;
+					$group_params = http_build_query($group_paramquery, '', '&#38;');
+					
 					if ($ou_groups)
 					{
-						$ou_groups .= ",".$group->get_name();
+						$ou_groups .= ", <a href='index.php?".$group_params."'>".$group->get_name()."</a>";
 					}
 					else
 					{
-						$ou_groups .= $group->get_name();	
+						$ou_groups .= "<a href='index.php?".$group_params."'>".$group->get_name()."</a>";	
 					}
 				}
 			}

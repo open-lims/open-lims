@@ -30,7 +30,6 @@ $new_sample_paramquery[username] = $_GET[username];
 $new_sample_paramquery[session_id] = $_GET[session_id];
 $new_sample_paramquery[nav] = "sample";
 $new_sample_paramquery[run] = "new";
-$new_sample_paramquery[change_tab] = "true";
 $new_sample_params = http_build_query($new_sample_paramquery,'','&#38;');
 
 $sub_menu[0][params] = $new_sample_params;
@@ -39,7 +38,6 @@ $sub_menu[0][title] = "New Sample";
 $my_samples_paramquery[username] = $_GET[username];
 $my_samples_paramquery[session_id] = $_GET[session_id];
 $my_samples_paramquery[nav] = "sample";
-$my_samples_paramquery[change_tab] = "true";
 $my_samples_params = http_build_query($my_samples_paramquery,'','&#38;');
 
 $sub_menu[1][params] = $my_samples_params;
@@ -47,9 +45,9 @@ $sub_menu[1][title] = "My Samples";
 
 $mini_search_paramquery[username] = $_GET[username];
 $mini_search_paramquery[session_id] = $_GET[session_id];
-$mini_search_paramquery[nav] = "search";
-$mini_search_paramquery[run] = "sample";
-$mini_search_paramquery[change_tab] = "true";
+$mini_search_paramquery[nav] = "sample";
+$mini_search_paramquery[run] = "search";
+$mini_search_paramquery[dialog] = "sample_search";
 $mini_search_paramquery[nextpage] = "1";
 $mini_search_params = http_build_query($mini_search_paramquery,'','&#38;');
 			

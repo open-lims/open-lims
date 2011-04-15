@@ -313,7 +313,7 @@ class SearchIO
 	{	
 		switch($_GET[run]):
 			
-			// Item Lister
+			// Search
 			/**
 			 * @todo errors, exceptions
 			 */

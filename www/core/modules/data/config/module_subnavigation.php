@@ -26,10 +26,14 @@
  */
 $mini_search_paramquery[username] = $_GET[username];
 $mini_search_paramquery[session_id] = $_GET[session_id];
-$mini_search_paramquery[nav] = "search";
-$mini_search_paramquery[run] = "ffv";
-$mini_search_paramquery[change_tab] = "true";
+$mini_search_paramquery[nav] = "data";
+$mini_search_paramquery[action] = "search";
+$mini_search_paramquery[dialog] = "ffv_search";
 $mini_search_paramquery[nextpage] = "1";
+if ($_GET[folder_id])
+{
+	$mini_search_paramquery[folder_id] = $_GET[folder_id];
+}
 $mini_search_params = http_build_query($mini_search_paramquery,'','&#38;');
 			
 $template->set_var("sub_menu", false);

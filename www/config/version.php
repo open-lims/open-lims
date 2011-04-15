@@ -25,6 +25,6 @@ $GLOBALS[product_name]				= "Open-LIMS";
 $GLOBALS[major_release]				= "0";
 $GLOBALS[minor_release]				= ".3.9.9 &#945;";
 
-$GLOBALS[oldl_version]				= "0.4 &#945;";
-$GLOBALS[olvdl_version]				= "0.4 &#945;";
+define("PRODUCT", "Open-LIMS");
+define("PRODUCT_VERSION", "0.3.9.9 &#945;");
 ?>

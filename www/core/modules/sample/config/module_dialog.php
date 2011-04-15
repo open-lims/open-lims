@@ -82,4 +82,12 @@
 	$dialog[7][internal_name]	= "sample_data_search";
 	$dialog[7][display_name]	= "Sample Data Search";
 	$dialog[7][weight]			= 400;
+	
+	$dialog[8][type]			= "parent_item_list";
+	$dialog[8][class_path]		= "core/modules/sample/sample.io.php";
+	$dialog[8]['class']			= "SampleIO";
+	$dialog[8][method]			= "list_samples_by_item_id";
+	$dialog[8][internal_name]	= "sample";
+	$dialog[8][display_name]	= "Par. Samples";
+	$dialog[8][weight]			= 200;
 ?>

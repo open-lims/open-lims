@@ -45,14 +45,14 @@ class DataSearchIO
 		{
 			if ($_GET[sortvalue] and $_GET[sortmethod])
 			{
-				if ($_GET[nextpage] == "2" and $_POST[string])
+				if ($_GET[nextpage] == "2" and $_POST[name])
 				{
-					$string = $_POST[string];
+					$name = $_POST[name];
 					$folder_id = $session->read_value("SEARCH_FFV_FOLDER_ID");
 				}
 				else
 				{
-					$string = $session->read_value("SEARCH_FFV_STRING");
+					$name = $session->read_value("SEARCH_FFV_NAME");
 					$folder_id = $session->read_value("SEARCH_FFV_FOLDER_ID");
 				}
 			}
@@ -60,20 +60,28 @@ class DataSearchIO
 			{
 				if ($_GET[page])
 				{
-					$string = $session->read_value("SEARCH_FFV_STRING");
+					$name = $session->read_value("SEARCH_FFV_NAME");
 					$folder_id = $session->read_value("SEARCH_FFV_FOLDER_ID");
 				}
 				else
 				{
 					if ($_GET[nextpage] == "1")
 					{
-						$string = $_POST[string];
-						$session->delete_value("SEARCH_FFV_STRING");
+						$name = $_POST[name];
+						if ($_GET[folder_id])
+						{
+							$folder_id = $_GET[folder_id];
+						}
+						else
+						{
+							$folder_id = UserFolder::get_folder_by_user_id($user->get_user_id());
+						}
+						$session->delete_value("SEARCH_FFV_NAME");
 						$session->delete_value("SEARCH_FFV_FOLDER_ID");
 					}
 					else
 					{
-						$string = $_POST[string];
+						$name = $_POST[name];
 						$folder_id = $session->read_value("SEARCH_FFV_FOLDER_ID");
 					}
 				}
@@ -107,33 +115,33 @@ class DataSearchIO
 				$folder_id = $_POST[folder_id];
 			}
 
-			$session->write_value("SEARCH_FFV_STRING", $string, true);
+			$session->write_value("SEARCH_FFV_NAME", $name, true);
 			$session->write_value("SEARCH_FFV_FOLDER_ID", $folder_id, true);
 			
 			if ($_GET[page])
 			{
 				if ($_GET[sortvalue] and $_GET[sortmethod])
 				{
-					$result_array = Data_Wrapper::list_search_ffv($folder_id, $string, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
+					$result_array = Data_Wrapper::list_search_ffv($folder_id, $name, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
 				}
 				else
 				{
-					$result_array = Data_Wrapper::list_search_ffv($folder_id, $string, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
+					$result_array = Data_Wrapper::list_search_ffv($folder_id, $name, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
 				}				
 			}
 			else
 			{
 				if ($_GET[sortvalue] and $_GET[sortmethod])
 				{
-					$result_array = Data_Wrapper::list_search_ffv($folder_id, $string, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
+					$result_array = Data_Wrapper::list_search_ffv($folder_id, $name, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
 				}
 				else
 				{
-					$result_array = Data_Wrapper::list_search_ffv($folder_id, $string, null, null, 0, 20);
+					$result_array = Data_Wrapper::list_search_ffv($folder_id, $name, null, null, 0, 20);
 				}	
 			}
 			
-			$list = new List_IO(Data_Wrapper::count_search_ffv($folder_id, $string), 20);
+			$list = new List_IO(Data_Wrapper::count_search_ffv($folder_id, $name), 20);
 			
 			if (is_array($result_array) and count($result_array) >= 1)
 			{
@@ -251,7 +259,7 @@ class DataSearchIO
 			
 			$template->set_var("params", $params);
 			
-			$template->set_var("string", $string);
+			$template->set_var("name", $name);
 			$template->set_var("folder", $folder->get_name());
 				
 			$template->set_var("table", $list->get_list($result_array, $_GET[page]));		

@@ -925,5 +925,10 @@ class SystemHandler implements SystemHandlerInterface
 	{
 		return BaseModule_Access::list_entries();
 	}
+	
+	public static function list_includes()
+	{
+		return BaseInclude_Access::list_entries();
+	}
 }
 ?>

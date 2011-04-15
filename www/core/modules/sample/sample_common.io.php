@@ -55,34 +55,9 @@ class SampleCommon_IO
 			$template->set_var("params", $params);
 			$template->output();
 		}
-				
-		// Parent Samples
-		
-		$paramquery[username] 	= $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav]		= "sample";
-		$paramquery[run]		= "parents";
-		$paramquery[sample_id]	= $_GET[sample_id];
-		$params 				= http_build_query($paramquery,'','&#38;');
-		unset($paramquery);
-		
-		if ($_GET[run] == "parents")
-		{ 
-			$template = new Template("languages/en-gb/template/samples/tabs/generic_active.html");
-			$template->set_var("title", "Par. Samples");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		else
-		{
-			$template = new Template("languages/en-gb/template/samples/tabs/generic.html");
-			$template->set_var("title", "Par. Samples");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		
-		// Project Dialogs
-		$module_dialog_array = ModuleDialog::list_dialogs_by_type("project_list");
+						
+		// Parent Item Dialogs
+		$module_dialog_array = ModuleDialog::list_dialogs_by_type("parent_item_list");
 		
 		if (is_array($module_dialog_array) and count($module_dialog_array) >= 1)
 		{
@@ -91,12 +66,12 @@ class SampleCommon_IO
 				$paramquery[username] 	= $_GET[username];
 				$paramquery[session_id] = $_GET[session_id];
 				$paramquery[nav]		= "sample";
-				$paramquery[run]		= "project_list";
+				$paramquery[run]		= "parent_item_list";
 				$paramquery[sample_id]	= $_GET[sample_id];
 				$paramquery[dialog]		= $value[internal_name];
 				$params 				= http_build_query($paramquery,'','&#38;');
 				
-				if ($_GET[run] == "project_list" and $_GET[dialog] == $value[internal_name])
+				if ($_GET[run] == "parent_item_list" and $_GET[dialog] == $value[internal_name])
 				{ 
 					$template = new Template("languages/en-gb/template/samples/tabs/generic_active.html");
 					$template->set_var("title", $value[display_name]);

@@ -258,6 +258,26 @@ class BaseInclude_Access
 	}
 	
 	/**
+	 * @return array
+	 */
+	public static function list_entries()
+	{
+		global $db;
+		
+		$result_array = array();
+		
+		$sql = "SELECT id,name,folder FROM ".constant("BASE_INCLUDE_TABLE")." ORDER BY name";
+		$res = $db->db_query($sql);
+		while ($data = $db->db_fetch_assoc($res))
+		{
+			$result_array[$data[id]][name]		= $data[name];
+			$result_array[$data[id]][folder]	= $data[folder];
+		}
+		
+		return $result_array;
+	}
+	
+	/**
 	 * @param string $name
 	 * @return bool
 	 */

@@ -2239,6 +2239,7 @@ class ProjectIO
 					}
 				break;
 				
+				// Item Add
 				/**
 				 * @todo description and keywords
 				 */
@@ -2360,6 +2361,39 @@ class ProjectIO
 					if ($_GET[dialog])
 					{
 						$module_dialog = ModuleDialog::get_by_type_and_internal_name("common_dialog", $_GET[dialog]);
+						
+						if (file_exists($module_dialog[class_path]))
+						{
+							require_once($module_dialog[class_path]);
+							
+							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+							{
+								$module_dialog['class']::$module_dialog[method]();
+							}
+							else
+							{
+								// Error
+							}
+						}
+						else
+						{
+							// Error
+						}
+					}
+					else
+					{
+						// error
+					}
+				break;
+				
+				// Search
+				/**
+				 * @todo errors, exceptions
+				 */
+				case("search"):
+					if ($_GET[dialog])
+					{
+						$module_dialog = ModuleDialog::get_by_type_and_internal_name("search", $_GET[dialog]);
 						
 						if (file_exists($module_dialog[class_path]))
 						{

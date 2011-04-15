@@ -728,12 +728,75 @@ class UserIO
 
 	/**
 	 * @todo implementation
+	 * @todo error
 	 */
 	public static function group_details()
 	{
-		$template = new Template("languages/en-gb/template/user/group_details.html");
+		if ($_GET[id])
+		{
+			$group = new Group($_GET[id]);
 			
-		$template->output();
+			$template = new Template("languages/en-gb/template/user/group_details.html");
+
+			$template->set_var("name", $group->get_name());
+			
+			$user_array = Group::list_group_releated_users($_GET[id]);
+			$user_content_array = array();
+			
+			$counter = 0;
+			
+			if (is_array($user_array) and count($user_array) >= 1)
+			{
+				foreach($user_array as $key => $value)
+				{
+					$user = new User($value);
+					
+					$paramquery = $_GET;
+					$paramquery[dialog] = "user_detail";
+					$paramquery[id] = $value;
+					$params = http_build_query($paramquery,'','&#38;');
+					
+					$user_content_array[$counter][username] = $user->get_username();
+					$user_content_array[$counter][fullname] = $user->get_full_name(false);
+					$user_content_array[$counter][params] = $params;
+					
+					$counter++;
+				}
+				$template->set_var("no_user", false);
+			}
+			else
+			{
+				$template->set_var("no_user", true);
+			}
+			
+			$template->set_var("user", $user_content_array);
+			
+			
+			$organisation_unit_array = OrganisationUnit::list_entries_by_group_id($_GET[id]);
+			$organisation_unit_content_array = array();
+			
+			$counter = 0;
+			
+			if (is_array($organisation_unit_array) and count($organisation_unit_array) >= 1)
+			{
+				foreach($organisation_unit_array as $key => $value)
+				{
+					$organisation_unit = new OrganisationUnit($value);
+					$organisation_unit_content_array[$counter][name] = $organisation_unit->get_name();
+					$counter++;
+				}
+				$template->set_var("no_ou", false);
+			}
+			else
+			{
+				$template->set_var("no_ou", true);
+			}
+			
+			$template->set_var("ou", $organisation_unit_content_array);
+			
+			
+			$template->output();
+		}
 	}
 	
 	public static function method_handler()

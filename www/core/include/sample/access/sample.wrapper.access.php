@@ -523,7 +523,7 @@ class Sample_Wrapper_Access
 	/**
 	 * NEW
 	 */
-	public static function list_item_parentsamples($item_id, $order_by, $order_method, $start, $end)
+	public static function list_samples_by_item_id($item_id, $order_by, $order_method, $start, $end)
 	{
 		global $db;
 		
@@ -642,7 +642,7 @@ class Sample_Wrapper_Access
 	/**
 	 * NEW
 	 */
-	public static function count_item_parentsamples($item_id)
+	public static function count_samples_by_item_id($item_id)
 	{
 		global $db;
 		

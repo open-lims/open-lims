@@ -136,9 +136,9 @@ class Sample_Wrapper implements Sample_WrapperInterface
 	 * @param integer $end
 	 * @return array
 	 */
-	public static function list_item_parentsamples($item_id, $order_by, $order_method, $start, $end)
+	public static function list_samples_by_item_id($item_id, $order_by, $order_method, $start, $end)
 	{
-		return Sample_Wrapper_Access::list_item_parentsamples($item_id, $order_by, $order_method, $start, $end);
+		return Sample_Wrapper_Access::list_samples_by_item_id($item_id, $order_by, $order_method, $start, $end);
 	}
 	
 	/**
@@ -146,9 +146,9 @@ class Sample_Wrapper implements Sample_WrapperInterface
 	 * @param string $item_id
 	 * @return integer
 	 */
-	public static function count_item_parentsamples($item_id)
+	public static function count_samples_by_item_id($item_id)
 	{
-		return Sample_Wrapper_Access::count_item_parentsamples($item_id);
+		return Sample_Wrapper_Access::count_samples_by_item_id($item_id);
 	}
 
 	public static function list_organisation_unit_samples($organisation_unit_id, $order_by, $order_method, $start, $end)

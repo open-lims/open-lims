@@ -328,14 +328,13 @@ class SampleIO
 	
 	/**
 	 * NEW
+	 * @todo error
 	 */
-	public static function list_parentsample_items()
+	public static function list_samples_by_item_id($item_id)
 	{
-		if ($_GET[sample_id])
+		if (is_numeric($item_id))
 		{
-			$sample = new Sample($_GET[sample_id]);
-			
-			$list = new List_IO(Sample_Wrapper::count_item_parentsamples($sample->get_item_id()), 20);
+			$list = new List_IO(Sample_Wrapper::count_samples_by_item_id($item_id), 20);
 
 			$list->add_row("","symbol",false,"16px");
 			$list->add_row("Smpl. ID","id",true,"11%");
@@ -350,22 +349,22 @@ class SampleIO
 			{
 				if ($_GET[sortvalue] and $_GET[sortmethod])
 				{
-					$result_array = Sample_Wrapper::list_item_parentsamples($sample->get_item_id(), $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
+					$result_array = Sample_Wrapper::list_samples_by_item_id($item_id, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
 				}
 				else
 				{
-					$result_array = Sample_Wrapper::list_item_parentsamples($sample->get_item_id(), null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
+					$result_array = Sample_Wrapper::list_samples_by_item_id($item_id, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
 				}				
 			}
 			else
 			{
 				if ($_GET[sortvalue] and $_GET[sortmethod])
 				{
-					$result_array = Sample_Wrapper::list_item_parentsamples($sample->get_item_id(), $_GET[sortvalue], $_GET[sortmethod], 0, 20);
+					$result_array = Sample_Wrapper::list_samples_by_item_id($item_id, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
 				}
 				else
 				{
-					$result_array = Sample_Wrapper::list_item_parentsamples($sample->get_item_id(), null, null, 0, 20);
+					$result_array = Sample_Wrapper::list_samples_by_item_id($item_id, null, null, 0, 20);
 				}	
 			}
 			
@@ -2479,14 +2478,6 @@ class SampleIO
 					self::set_availability();
 				break;
 				
-				case("structure"):
-					self::structure();
-				break;
-				
-				case("parents"):
-					self::list_parentsample_items();
-				break;
-				
 				case("depository_history"):
 					self::depository_history();
 				break;
@@ -2729,16 +2720,16 @@ class SampleIO
 					}
 				break;
 				
-				// Item Lister
+				// Parent Item Lister
 				/**
 				 * @todo permissions
 				 */
-				case("project_list"):
+				case("parent_item_list"):
 					if ($_GET[dialog])
 					{
 						$sample = new Sample($_GET[sample_id]);
 						$item_id = $sample->get_item_id();
-						$module_dialog = ModuleDialog::get_by_type_and_internal_name("project_list", $_GET[dialog]);
+						$module_dialog = ModuleDialog::get_by_type_and_internal_name("parent_item_list", $_GET[dialog]);
 						
 						if (file_exists($module_dialog[class_path]))
 						{
@@ -2772,6 +2763,39 @@ class SampleIO
 					if ($_GET[dialog])
 					{
 						$module_dialog = ModuleDialog::get_by_type_and_internal_name("common_dialog", $_GET[dialog]);
+						
+						if (file_exists($module_dialog[class_path]))
+						{
+							require_once($module_dialog[class_path]);
+							
+							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+							{
+								$module_dialog['class']::$module_dialog[method]();
+							}
+							else
+							{
+								// Error
+							}
+						}
+						else
+						{
+							// Error
+						}
+					}
+					else
+					{
+						// error
+					}
+				break;
+				
+				// Search
+				/**
+				 * @todo errors, exceptions
+				 */
+				case("search"):
+					if ($_GET[dialog])
+					{
+						$module_dialog = ModuleDialog::get_by_type_and_internal_name("search", $_GET[dialog]);
 						
 						if (file_exists($module_dialog[class_path]))
 						{
