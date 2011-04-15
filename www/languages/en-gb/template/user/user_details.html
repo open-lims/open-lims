@@ -2,7 +2,7 @@
 
 <!-- CONTAINER BEGIN ("User Details",0) -->
 		
-<br />.
+<br />
 <table class='formTable'>
 	<tr>
 		<td colspan='2'><div class='profileHeadline'>Personal Information:</div></td>
@@ -44,7 +44,7 @@
 	</tr>
 	<tr>
 		<td>Street:</td>
-		<td>"{STREET}</td>
+		<td>{STREET}</td>
 	</tr>
 	<tr>
 		<td>Zip:</td>
@@ -88,13 +88,24 @@
 	<tr>
 		<td colspan='2'><div class='profileHeadline'>Groups:</div></td>
 	</tr>
-	<tr>
-		<td colspan='2'>{GROUPS}</td>
-	</tr>
+	
+	<!-- FOREACH BEGIN ({GROUP}) -->
+			
+		<tr>
+			<td><a href='index.php?{GROUP:PARAMS}'>{GROUP:NAME}</a></td>
+		</tr>
+	
+	<!-- FOREACH END -->
+	
+	<!-- IF ({NO_GROUP}) -->
+	
+		<tr>
+			<td><span class='italic'>No Groups Found!</span></td>
+		</tr>
+	
+	<!-- ENDIF -->
+	
 </table>
 <br />
 				
 <!-- CONTAINER END (0) -->	
-		
-<br />
-<div class='center'><a href='index.php?{BACK_PARAMS}'>back</a></div>

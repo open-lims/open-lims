@@ -39,7 +39,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	
 	require_once("events/virtual_folder_delete_event.class.php");
 
-	require_once($path_prefix."core/include/data/access/data_join.access.php");
+	require_once($path_prefix."core/include/data/access/data.wrapper.access.php");
 	require_once("access/virtual_folder.access.php");
 }
 
@@ -318,7 +318,7 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 	 */
 	public static function list_entries_by_folder_id($folder_id)
 	{
-		return DataJoin_Access::list_virtual_folders_by_folder_id($folder_id);
+		return Data_Wrapper_Access::list_virtual_folders_by_folder_id($folder_id);
 	}
 	
 }

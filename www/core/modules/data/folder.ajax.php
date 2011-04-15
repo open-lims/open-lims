@@ -53,28 +53,25 @@ class FolderAJAX extends AJAXInit
 				
 				foreach($folder_array as $key => $value)
 				{
-					if ($value[type] == 0)
+					$folder = Folder::get_instance($value);
+					
+					$return_array[$counter][0] = -1;
+					$return_array[$counter][1] = $value;
+					$return_array[$counter][2] = $folder->get_name();
+					$return_array[$counter][3] = "folder.png";
+					
+					if ($folder->is_read_access() == true)
 					{
-						$folder = Folder::get_instance($value[id]);
-						
-						$return_array[$counter][0] = -1;
-						$return_array[$counter][1] = $value[id];
-						$return_array[$counter][2] = $folder->get_name();
-						$return_array[$counter][3] = "folder.png";
-						
-						if ($folder->is_read_access() == true)
-						{
-							$return_array[$counter][4] = true;
-						}
-						else
-						{
-							$return_array[$counter][4] = false;	
-						}
-						
-						$return_array[$counter][5] = true; // Clickable
-						
-						$counter++;
-					}	
+						$return_array[$counter][4] = true;
+					}
+					else
+					{
+						$return_array[$counter][4] = false;	
+					}
+					
+					$return_array[$counter][5] = true; // Clickable
+					
+					$counter++;
 				}	
 			}
 			return serialize($return_array);	

@@ -87,7 +87,7 @@ class DataSearchIO
 		
 		if ($no_error == false)
 		{
-			$template = new Template("languages/en-gb/template/search/ffv_search.html");
+			$template = new Template("languages/en-gb/template/data/search/ffv_search.html");
 			
 			$paramquery = $_GET;
 			unset($paramquery[page]);
@@ -114,26 +114,26 @@ class DataSearchIO
 			{
 				if ($_GET[sortvalue] and $_GET[sortmethod])
 				{
-					$result_array = DataSearch_Wrapper::search_ffv($folder_id, $string, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
+					$result_array = Data_Wrapper::list_search_ffv($folder_id, $string, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
 				}
 				else
 				{
-					$result_array = DataSearch_Wrapper::search_ffv($folder_id, $string, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
+					$result_array = Data_Wrapper::list_search_ffv($folder_id, $string, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
 				}				
 			}
 			else
 			{
 				if ($_GET[sortvalue] and $_GET[sortmethod])
 				{
-					$result_array = DataSearch_Wrapper::search_ffv($folder_id, $string, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
+					$result_array = Data_Wrapper::list_search_ffv($folder_id, $string, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
 				}
 				else
 				{
-					$result_array = DataSearch_Wrapper::search_ffv($folder_id, $string, null, null, 0, 20);
+					$result_array = Data_Wrapper::list_search_ffv($folder_id, $string, null, null, 0, 20);
 				}	
 			}
 			
-			$list = new List_IO(DataSearch_Wrapper::count_search_ffv($folder_id, $string), 20);
+			$list = new List_IO(Data_Wrapper::count_search_ffv($folder_id, $string), 20);
 			
 			if (is_array($result_array) and count($result_array) >= 1)
 			{
@@ -141,6 +141,9 @@ class DataSearchIO
 				{
 					$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
 					$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+					
+					$owner = new User($value[owner]);
+					$result_array[$key][owner] = $owner->get_full_name(true);
 					
 					if (is_numeric($value[file_id]))
 					{
@@ -240,7 +243,7 @@ class DataSearchIO
 			
 			$folder = Folder::get_instance($folder_id);
 			
-			$template = new Template("languages/en-gb/template/search/ffv_search_result.html");
+			$template = new Template("languages/en-gb/template/data/search/ffv_search_result.html");
 		
 			$paramquery = $_GET;
 			$paramquery[nextpage] = "2";

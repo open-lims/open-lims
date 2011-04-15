@@ -313,7 +313,7 @@ class SearchIO
 	{	
 		switch($_GET[run]):
 			
-		// Item Lister
+			// Item Lister
 			/**
 			 * @todo errors, exceptions
 			 */
@@ -321,6 +321,39 @@ class SearchIO
 				if ($_GET[dialog])
 				{
 					$module_dialog = ModuleDialog::get_by_type_and_internal_name("search", $_GET[dialog]);
+					
+					if (file_exists($module_dialog[class_path]))
+					{
+						require_once($module_dialog[class_path]);
+						
+						if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+						{
+							$module_dialog['class']::$module_dialog[method]();
+						}
+						else
+						{
+							// Error
+						}
+					}
+					else
+					{
+						// Error
+					}
+				}
+				else
+				{
+					// error
+				}
+			break;
+			
+			// Common Dialogs
+			/**
+			 * @todo errors, exceptions
+			 */
+			case("common_dialog"):
+				if ($_GET[dialog])
+				{
+					$module_dialog = ModuleDialog::get_by_type_and_internal_name("common_dialog", $_GET[dialog]);
 					
 					if (file_exists($module_dialog[class_path]))
 					{

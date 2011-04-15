@@ -514,13 +514,228 @@ class UserIO
 	}
 	
 	/**
-	 * @todo implementation
+	 * @todo error
 	 */
-	public static function details()
+	public static function user_details()
 	{
-		
+		if ($_GET[id])
+		{
+			$user = new User($_GET[id]);
+			
+			$template = new Template("languages/en-gb/template/user/user_details.html");
+			
+			if ($user->get_username())
+			{
+				$template->set_var("username",$user->get_username());
+			}
+			else
+			{
+				$template->set_var("username","");
+			}
+			
+			if ($user->get_profile("gender") == "m")
+			{
+				$template->set_if("gender", "male");
+			}
+			else
+			{
+				$template->set_if("gender", "female");
+			}
+			
+			if ($user->get_profile("forename"))
+			{
+				$template->set_var("forename",$user->get_profile("forename"));
+			}
+			else
+			{
+				$template->set_var("forename","");
+			}
+			
+			if ($user->get_profile("surname"))
+			{
+				$template->set_var("surname",$user->get_profile("surname"));
+			}
+			else
+			{
+				$template->set_var("surname","");
+			}
+			
+			if ($user->get_profile("title"))
+			{
+				$template->set_var("title",$user->get_profile("title"));
+			}
+			else
+			{
+				$template->set_var("title","");
+			}
+			
+			
+			if ($user->get_profile("mail"))
+			{
+				$template->set_var("mail",$user->get_profile("mail"));
+			}
+			else
+			{
+				$template->set_var("mail","");
+			}
+			
+			if ($user->get_profile("institution"))
+			{
+				$template->set_var("institution",$user->get_profile("institution"));
+			}
+			else
+			{
+				$template->set_var("institution","");
+			}
+			
+			if ($user->get_profile("department"))
+			{
+				$template->set_var("department",$user->get_profile("department"));
+			}
+			else
+			{
+				$template->set_var("department","");
+			}
+			
+			if ($user->get_profile("street"))
+			{
+				$template->set_var("street",$user->get_profile("street"));
+			}
+			else
+			{
+				$template->set_var("street","");
+			}
+			
+			if ($user->get_profile("zip"))
+			{
+				$template->set_var("zip",$user->get_profile("zip"));
+			}
+			else
+			{
+				$template->set_var("zip","");
+			}
+			
+			if ($user->get_profile("city"))
+			{
+				$template->set_var("city",$user->get_profile("city"));
+			}
+			else
+			{
+				$template->set_var("city","");
+			}
+			
+			if ($user->get_profile("country"))
+			{
+				$template->set_var("country",$user->get_profile("country"));
+			}
+			else
+			{
+				$template->set_var("country","");
+			}
+			
+			if ($user->get_profile("phone"))
+			{
+				$template->set_var("phone",$user->get_profile("phone"));
+			}
+			else
+			{
+				$template->set_var("phone","");
+			}
+
+
+			if ($user->get_profile("icq"))
+			{
+				$template->set_var("icq",$user->get_profile("icq"));
+			}
+			else
+			{
+				$template->set_var("icq","");
+			}
+			
+			if ($user->get_profile("msn"))
+			{
+				$template->set_var("msn",$user->get_profile("msn"));
+			}
+			else
+			{
+				$template->set_var("msn","");
+			}
+			
+			if ($user->get_profile("yahoo"))
+			{
+				$template->set_var("yahoo",$user->get_profile("yahoo"));
+			}
+			else
+			{
+				$template->set_var("yahoo","");
+			}
+			
+			if ($user->get_profile("aim"))
+			{
+				$template->set_var("aim",$user->get_profile("aim"));
+			}
+			else
+			{
+				$template->set_var("aim","");
+			}
+			
+			if ($user->get_profile("skype"))
+			{
+				$template->set_var("skype",$user->get_profile("skype"));
+			}
+			else
+			{
+				$template->set_var("skype","");
+			}
+			
+			$group_array = Group::list_user_releated_groups($_GET[id]);
+			$group_content_array = array();
+			
+			$counter = 0;
+			
+			if (is_array($group_array) and count($group_array) >= 1)
+			{
+				foreach($group_array as $key => $value) {
+					
+					$group = new Group($value);
+					
+					$paramquery = $_GET;
+					$paramquery[dialog] = "group_detail";
+					$paramquery[id] = $value;
+					$params = http_build_query($paramquery,'','&#38;');
+					
+					$group_content_array[$counter][name] = $group->get_name();
+					$group_content_array[$counter][params] = $params;
+					
+					$counter++;
+				}
+				$template->set_var("no_group", false);
+			}
+			else
+			{
+				$template->set_var("no_group", true);
+			}
+			
+			$template->set_var("group", $group_content_array);
+			
+			$template->output();
+		}
+		else
+		{
+			// Error
+		}
 	}
 
+	/**
+	 * @todo implementation
+	 */
+	public static function group_details()
+	{
+		$template = new Template("languages/en-gb/template/user/group_details.html");
+			
+		$template->output();
+	}
+	
 	public static function method_handler()
 	{
 		switch($_GET[run]):

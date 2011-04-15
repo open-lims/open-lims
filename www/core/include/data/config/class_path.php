@@ -49,4 +49,6 @@
 	$classes['ValueExternalVar']			= $path_prefix."core/include/data/value/value_external_var.class.php";
 	
 	$classes['VirtualFolder']				= $path_prefix."core/include/data/virtual_folder/virtual_folder.class.php";
+	
+	$classes['Data_Wrapper']				= $path_prefix."core/include/data/data.wrapper.class.php";
 ?>

@@ -31,4 +31,18 @@
 	$dialog[0][internal_name]	= "user_search";
 	$dialog[0][display_name]	= "User Search";
 	$dialog[0][weight]			= 500;
+	
+	$dialog[1][type]			= "common_dialog";
+	$dialog[1][class_path]		= "core/modules/user/user.io.php";
+	$dialog[1]['class']			= "UserIO";
+	$dialog[1][method]			= "user_details";
+	$dialog[1][internal_name]	= "user_detail";
+	$dialog[1][display_name]	= "User Detail";
+	
+	$dialog[2][type]			= "common_dialog";
+	$dialog[2][class_path]		= "core/modules/user/user.io.php";
+	$dialog[2]['class']			= "UserIO";
+	$dialog[2][method]			= "group_details";
+	$dialog[2][internal_name]	= "group_detail";
+	$dialog[2][display_name]	= "Group Detail";
 ?>

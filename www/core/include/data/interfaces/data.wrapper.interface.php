@@ -1,6 +1,6 @@
-<?php 
+<?php
 /**
- * @package project
+ * @package data
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -20,10 +20,15 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
+ 
 
 /**
- * 
- */
-	$classes['DataSearch_Wrapper']			= $path_prefix."core/include/wrapper/data.search.wrapper.class.php";
-	$classes['SystemLog_Wrapper']			= $path_prefix."core/include/wrapper/system_log.list.wrapper.class.php";
+ * @todo
+ * Data Search Wrapper Interface
+ * @package data
+ */ 		 
+interface Data_WrapperInterface
+{
+
+}
 ?>

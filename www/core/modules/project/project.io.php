@@ -1290,6 +1290,16 @@ class ProjectIO
 				$template->set_var("size",Misc::calc_size($project->get_filesize()));
 				$template->set_var("quota",Misc::calc_size($project->get_quota()));
 				
+				$owner_paramquery = array();
+				$owner_paramquery[username] = $_GET[username];
+				$owner_paramquery[session_id] = $_GET[session_id];
+				$owner_paramquery[nav] = "project";
+				$owner_paramquery[run] = "common_dialog";
+				$owner_paramquery[dialog] = "user_detail";
+				$owner_paramquery[id] = $project->get_owner_id();
+				$owner_params = http_build_query($owner_paramquery,'','&#38;');
+				
+				$template->set_var("owner_params", $owner_params);	
 				
 				// Status Bar
 				$all_status_array = $project->get_all_status_array();				
@@ -2339,6 +2349,39 @@ class ProjectIO
 						$exception = new Exception("", 1);
 						$error_io = new Error_IO($exception, 200, 40, 2);
 						$error_io->display_error();
+					}
+				break;
+				
+				// Common Dialogs
+				/**
+				 * @todo errors, exceptions
+				 */
+				case("common_dialog"):
+					if ($_GET[dialog])
+					{
+						$module_dialog = ModuleDialog::get_by_type_and_internal_name("common_dialog", $_GET[dialog]);
+						
+						if (file_exists($module_dialog[class_path]))
+						{
+							require_once($module_dialog[class_path]);
+							
+							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+							{
+								$module_dialog['class']::$module_dialog[method]();
+							}
+							else
+							{
+								// Error
+							}
+						}
+						else
+						{
+							// Error
+						}
+					}
+					else
+					{
+						// error
 					}
 				break;
 				

@@ -27,7 +27,7 @@
 require_once("interfaces/data.wrapper.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
-{
+{ 
 	require_once("access/data.wrapper.access.php");
 }
 
@@ -37,7 +37,17 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class Data_Wrapper implements Data_WrapperInterface
 {
-    public static function list_value_templates($order_by, $order_method, $start, $end)
+	public static function list_search_ffv($folder_id, $search_string, $order_by, $order_method, $start, $end)
+	{
+		return Data_Wrapper_Access::list_search_ffv($folder_id, $search_string, $order_by, $order_method, $start, $end);
+	}
+	
+	public static function count_search_ffv($folder_id, $search_string)
+	{
+		return Data_Wrapper_Access::count_search_ffv($folder_id, $search_string);
+	}
+	
+	public static function list_value_templates($order_by, $order_method, $start, $end)
     {
     	return Data_Wrapper_Access::list_value_templates($order_by, $order_method, $start, $end);
     }

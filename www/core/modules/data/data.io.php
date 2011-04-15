@@ -1375,7 +1375,6 @@ class DataIO
 					FolderIO::folder_administration();	
 				break;
 				
-				
 				default:
 					self::browser();
 				break;

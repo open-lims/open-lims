@@ -28,7 +28,7 @@ require_once("interfaces/data_browser.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	require_once("access/data_join.access.php");
+	require_once("access/data.wrapper.access.php");
 }
 
 /**
@@ -69,12 +69,12 @@ class DataBrowser implements DataBrowserInterface
 	    	}
 	    	
 	    	$folder = Folder::get_instance(self::$folder_id);
-	    	return DataJoin_Access::list_data_entity_childs($folder->get_data_entity_id(), $order_by, $order_method, $start, $end);
+	    	return Data_Wrapper_Access::list_data_entity_childs($folder->get_data_entity_id(), $order_by, $order_method, $start, $end);
     	}
     	elseif(!$folder_id and $virtual_folder_id)
     	{
     		$virtual_folder = new VirtualFolder($virtual_folder_id);
-    		return DataJoin_Access::list_data_entity_childs($virtual_folder->get_data_entity_id(), $order_by, $order_method, $start, $end);
+    		return Data_Wrapper_Access::list_data_entity_childs($virtual_folder->get_data_entity_id(), $order_by, $order_method, $start, $end);
     	}
     	else
     	{
@@ -106,12 +106,12 @@ class DataBrowser implements DataBrowserInterface
 	    	}
 	    	
 	    	$folder = Folder::get_instance(self::$folder_id);
-	    	return DataJoin_Access::count_list_data_entity_childs($folder->get_data_entity_id(), $order_by, $order_method, $start, $end);
+	    	return Data_Wrapper_Access::count_list_data_entity_childs($folder->get_data_entity_id(), $order_by, $order_method, $start, $end);
     	}
     	elseif(!$folder_id and $virtual_folder_id)
     	{
     		$virtual_folder = new VirtualFolder($virtual_folder_id);
-    		return DataJoin_Access::count_list_data_entity_childs($virtual_folder->get_data_entity_id(), $order_by, $order_method, $start, $end);
+    		return Data_Wrapper_Access::count_list_data_entity_childs($virtual_folder->get_data_entity_id(), $order_by, $order_method, $start, $end);
     	}
     	else
     	{
@@ -142,7 +142,7 @@ class DataBrowser implements DataBrowserInterface
     {
     	if (is_numeric($folder_id))
     	{
-	    	return DataJoin_Access::get_images_in_folder($folder_id);
+	    	return Data_Wrapper_Access::get_images_in_folder($folder_id);
     	}
     	else
     	{
