@@ -240,7 +240,10 @@ class ValueVar implements ValueVarInterface
 	    			{
 	    				if (is_object($this->sample))
 	    				{
-		    				$parent_sample = $this->sample->list_parent_samples();
+		    				/**
+		    				 * @todo
+		    				 */
+	    					// $parent_sample = $this->sample->list_parent_samples();
 		    				
 		    				if (count($parent_sample) >= 1)
 		    				{

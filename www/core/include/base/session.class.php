@@ -78,8 +78,7 @@ class Session implements SessionInterface
     {
     	if (is_numeric($user_id))
     	{
-			srand(mktime());
-	 		$session_id = md5(rand());
+	 		$session_id = md5(uniqid(mt_rand(), true));
 	 						
 			if ($this->session->create($session_id, $user_id) == false)
 			{

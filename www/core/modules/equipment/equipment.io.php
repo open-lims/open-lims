@@ -156,8 +156,23 @@ class EquipmentIO
 			
 			$template->set_var("select",$result);
 			
-			$template->set_var("keywords", $_POST[keywords]);
-			$template->set_var("description", $_POST[description]);
+			if ($_POST[keywords])
+			{
+				$template->set_var("keywords", $_POST[keywords]);
+			}
+			else
+			{
+				$template->set_var("keywords", "");
+			}
+			
+			if ($_POST[description])
+			{
+				$template->set_var("description", $_POST[description]);
+			}
+			else
+			{
+				$template->set_var("description", "");	
+			}
 			
 			$template->output();
 		}

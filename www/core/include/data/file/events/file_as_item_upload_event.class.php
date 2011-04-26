@@ -30,18 +30,27 @@ class FileAsItemUploadEvent extends Event
 	private $item_id;
 	private $get_array;
 	
-	function __construct($item_id, $get_array)
+	function __construct($item_id, $get_array, $post_array)
     {
     	if (is_numeric($item_id) and is_array($get_array))
     	{
     		parent::__construct();
     		$this->item_id = $item_id;
     		$this->get_array = $get_array;
+    		if (is_array($post_array))
+    		{
+    			$this->post_array = $post_array;
+    		}
+    		else
+    		{
+    			$this->post_array = null;
+    		}
     	}
     	else
     	{
     		$this->item_id = null;
     		$this->get_array = null;
+    		$this->post_array = null;
     	}
     }
     
@@ -62,6 +71,18 @@ class FileAsItemUploadEvent extends Event
     	if ($this->get_array)
     	{
     		return $this->get_array;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+	public function get_post_array()
+    {
+    	if ($this->post_array)
+    	{
+    		return $this->post_array;
     	}
     	else
     	{

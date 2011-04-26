@@ -91,7 +91,7 @@ class AdminProjectTemplateIO
 			$list->override_last_line("<span class='italic'>No results found!</span>");
 		}
 		
-		$template = new Template("languages/en-gb/template/admin/project_template/list.html");	
+		$template = new Template("languages/en-gb/template/projects/admin/project_template/list.html");	
 	
 		$paramquery = $_GET;
 		$paramquery[action] = "add";
@@ -121,7 +121,7 @@ class AdminProjectTemplateIO
 
 		if ($page_1_passed == false)
 		{
-			$template = new Template("languages/en-gb/template/admin/project_template/add.html");
+			$template = new Template("languages/en-gb/template/projects/admin/project_template/add.html");
 			
 			$paramquery = $_GET;
 			$paramquery[nextpage] = "1";
@@ -215,7 +215,7 @@ class AdminProjectTemplateIO
 		{
 			if ($_GET[sure] != "true")
 			{
-				$template = new Template("languages/en-gb/template/admin/project_template/delete.html");
+				$template = new Template("languages/en-gb/template/projects/admin/project_template/delete.html");
 				
 				$paramquery = $_GET;
 				$paramquery[sure] = "true";

@@ -1173,7 +1173,7 @@ class SampleIO
 					}
 			
 					$template->set_array("option",$result);
-		
+					
 					$template->output();
 				break;
 			
@@ -1187,6 +1187,7 @@ class SampleIO
 					
 					$paramquery = $_GET;
 					$paramquery[nextpage] = 2;
+					unset($paramquery[idk_unique_id]);
 					$params = http_build_query($paramquery,'','&#38;');
 								
 					// Assistant Bar Begin			
@@ -1277,7 +1278,26 @@ class SampleIO
 						$result[$counter][value] = "0";
 						$result[$counter][content] = "NO TEMPLATES FOUND!";
 					}
-					$template->set_array("option",$result);
+					$template->set_var("option",$result);
+					
+					if ($session->is_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]) == true)
+					{
+						$template->set_var("keywords", $session->read_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]));
+					}
+					else
+					{
+						$template->set_var("keywords", "");
+					}
+					
+					if ($session->is_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]) == true)
+					{
+						$template->set_var("description", $session->read_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]));
+					}
+					else
+					{
+						$template->set_var("description", "");
+					}
+					
 					$template->output();
 				break;
 				
@@ -1482,7 +1502,9 @@ class SampleIO
 						$result[$counter][value] = "0";
 						$result[$counter][content] = "NO DEPOSITORIES FOUND!";
 					}
-					$template->set_array("depository",$result);
+					$template->set_var("depository",$result);
+					$template->set_var("keywords", $_POST[keywords]);
+					$template->set_var("description", $_POST[description]);
 					$template->output();
 				break;
 				
@@ -1584,6 +1606,8 @@ class SampleIO
 								$template->set_var("content",$value_html);
 								
 								$template->set_var("template_data_type_id", $value_type_id);
+								$template->set_var("keywords", $_POST[keywords]);
+								$template->set_var("description", $_POST[description]);
 								$template->output();
 							}
 							else
@@ -1640,7 +1664,9 @@ class SampleIO
 										unset($selected_id);
 									}
 									$template->set_var("sample", $result);
-								}		
+								}	
+								$template->set_var("keywords", $_POST[keywords]);
+								$template->set_var("description", $_POST[description]);	
 								$template->output();
 							}
 						}
@@ -1648,7 +1674,9 @@ class SampleIO
 						{
 							$template = new Template("languages/en-gb/template/samples/new_sample_page_4_error.html");
 							$template->set_var("bar",$assistant_bar_io->get_content());
-							$template->set_var("link",$params);	
+							$template->set_var("link",$params);
+							$template->set_var("keywords", $_POST[keywords]);
+							$template->set_var("description", $_POST[description]);	
 							$template->output();
 						}
 					}
@@ -1748,6 +1776,9 @@ class SampleIO
 						$template->set_var("desc","<span class='italic'>None</span>");
 					}
 				
+					$template->set_var("keywords", $_POST[keywords]);
+					$template->set_var("description", $_POST[description]);
+			
 					$template->output();
 				break;
 				
@@ -1830,8 +1861,22 @@ class SampleIO
 	 */
 	public static function add_sample_item($type_array, $category_array, $organisation_unit_id, $folder_id)
 	{
+		global $session;
+		
 		if (!$_GET[selectpage])
 		{
+			$unique_id = uniqid();
+			
+			if ($_POST[keywords])
+			{
+				$session->write_value("ADD_ITEM_TEMP_KEYWORDS_".$unique_id, $_POST[keywords], true);
+			}
+			
+			if ($_POST[description])
+			{
+				$session->write_value("ADD_ITEM_TEMP_DESCRIPTION_".$unique_id, $_POST[description], true);
+			}
+			
 			$template = new Template("languages/en-gb/template/samples/add_as_item.html");
 		
 			$result = array();
@@ -1845,7 +1890,8 @@ class SampleIO
 			}
 		
 			$template->set_var("get_value", $result);
-		
+			$template->set_var("unique_id", $unique_id);
+			
 			$template->output();
 		}
 		else
@@ -1874,6 +1920,7 @@ class SampleIO
 			
 			$paramquery = $_GET;
 			$paramquery[nextpage] = 2;
+			unset($paramquery[idk_unique_id]);
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			$template->set_var("params", $params);
@@ -1917,6 +1964,25 @@ class SampleIO
 				$result[0][selected] = "";
 			}
 			$template->set_var("sample", $result);
+			
+			if ($session->is_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]) == true)
+			{
+				$template->set_var("keywords", $session->read_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]));
+			}
+			else
+			{
+				$template->set_var("keywords", "");
+			}
+			
+			if ($session->is_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]) == true)
+			{
+				$template->set_var("description", $session->read_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]));
+			}
+			else
+			{
+				$template->set_var("description", "");
+			}
+			
 			$template->output();
 		}
 		else
@@ -2584,9 +2650,6 @@ class SampleIO
 					}
 				break;
 				
-				/**
-				 * @todo description and keywords
-				 */
 				case("item_add"):
 					if ($sample_security->is_access(2, false) == true)
 					{
@@ -2602,92 +2665,106 @@ class SampleIO
 									
 									if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
 									{
-										$transaction_id = $transaction->begin();
+										$sample_item = new SampleItem($_GET[sample_id]);
+										$sample_item->set_gid($_GET[key]);
 										
-										$sample = new Sample($_GET[sample_id]);
-										$current_requirements = $sample->get_requirements();
+										$description_required = $sample_item->is_description_required();
+										$keywords_required = $sample_item->is_keywords_required();
 										
-										$folder_id = SampleFolder::get_folder_by_sample_id($_GET[sample_id]);
-										
-										$sub_folder_id = $sample->get_sub_folder($folder_id, $_GET[key]);				
-						
-										if (is_numeric($sub_folder_id))
+										if (($description_required and !$_POST[description] and !$_GET[idk_unique_id]) or ($keywords_required and !$_POST[keywords] and !$_GET[idk_unique_id]))
 										{
-											$folder_id = $sub_folder_id;
-										}
-										
-										$return_value = $module_dialog['class']::$module_dialog[method]($current_requirements[$_GET[key]][type_id], $current_requirements[$_GET[key]][category_id], null, $folder_id);
-										
-										if (is_numeric($return_value))
-										{
-											if ($_GET[retrace])
-											{
-												$params = http_build_query(Misc::resovle_retrace_string($_GET[retrace]),'','&#38;');
-											}
-											else
-											{
-												$paramquery[username] = $_GET[username];
-												$paramquery[session_id] = $_GET[session_id];
-												$paramquery[nav] = "home";
-												$params = http_build_query($paramquery,'','&#38;');
-											}
-											
-											if ($_GET[dialog] == "parentsample")
-											{
-												$parent_sample_id = Sample::get_entry_by_item_id($return_value);
-												
-												if (SampleItemFactory::create($parent_sample_id, $sample->get_item_id(), ($_GET[key]*-1), null, null) == true)
-												{
-													if ($transaction_id != null)
-													{
-														$transaction->commit($transaction_id);
-													}
-													$common->step_proceed($params, "Add Item", "Succeed." ,null);
-												}
-												else
-												{
-													if ($transaction_id != null)
-													{
-														$transaction->rollback($transaction_id);
-													}
-													$common->step_proceed($params, "Add Item", "Failed." ,null);	
-												}
-											}
-											else
-											{
-												if (SampleItemFactory::create($_GET[sample_id], $return_value, $_GET[key], null, null) == true)
-												{
-													if ($transaction_id != null)
-													{
-														$transaction->commit($transaction_id);
-													}
-													$common->step_proceed($params, "Add Item", "Succeed." ,null);
-												}
-												else
-												{
-													if ($transaction_id != null)
-													{
-														$transaction->rollback($transaction_id);
-													}
-													$common->step_proceed($params, "Add Item", "Failed." ,null);	
-												}
-											}
+											require_once("core/modules/item/item.io.php");
+											ItemIO::information(http_build_query($_GET), $description_required, $keywords_required);
 										}
 										else
 										{
-											if ($return_value === false)
+											$transaction_id = $transaction->begin();
+											
+											$sample = new Sample($_GET[sample_id]);
+											$current_requirements = $sample->get_requirements();
+											
+											$folder_id = SampleFolder::get_folder_by_sample_id($_GET[sample_id]);
+											
+											$sub_folder_id = $sample->get_sub_folder($folder_id, $_GET[key]);				
+							
+											if (is_numeric($sub_folder_id))
 											{
-												if ($transaction_id != null)
+												$folder_id = $sub_folder_id;
+											}
+											
+											$return_value = $module_dialog['class']::$module_dialog[method]($current_requirements[$_GET[key]][type_id], $current_requirements[$_GET[key]][category_id], null, $folder_id);
+											
+											if (is_numeric($return_value))
+											{
+												if ($_GET[retrace])
 												{
-													$transaction->rollback($transaction_id);
+													$params = http_build_query(Misc::resovle_retrace_string($_GET[retrace]),'','&#38;');
 												}
-												throw new ModuleDialogFailedException("",1);
+												else
+												{
+													$paramquery[username] = $_GET[username];
+													$paramquery[session_id] = $_GET[session_id];
+													$paramquery[nav] = "home";
+													$params = http_build_query($paramquery,'','&#38;');
+												}
+												
+												if ($_GET[dialog] == "parentsample")
+												{
+													$parent_sample_id = Sample::get_entry_by_item_id($return_value);
+													
+													if (SampleItemFactory::create($parent_sample_id, $sample->get_item_id(), ($_GET[key]*-1), $_POST[keywords], $_POST[description]) == true)
+													{
+														if ($transaction_id != null)
+														{
+															$transaction->commit($transaction_id);
+														}
+														$common->step_proceed($params, "Add Item", "Succeed." ,null);
+													}
+													else
+													{
+														if ($transaction_id != null)
+														{
+															$transaction->rollback($transaction_id);
+														}
+														$common->step_proceed($params, "Add Item", "Failed." ,null);	
+													}
+												}
+												else
+												{
+													if (SampleItemFactory::create($_GET[sample_id], $return_value, $_GET[key], $_POST[keywords], $_POST[description]) == true)
+													{
+														if ($transaction_id != null)
+														{
+															$transaction->commit($transaction_id);
+														}
+														$common->step_proceed($params, "Add Item", "Succeed." ,null);
+													}
+													else
+													{
+														if ($transaction_id != null)
+														{
+															$transaction->rollback($transaction_id);
+														}
+														$common->step_proceed($params, "Add Item", "Failed." ,null);	
+													}
+												}
 											}
 											else
 											{
-												if ($transaction_id != null)
+												if ($return_value === false)
 												{
-													$transaction->commit($transaction_id);
+													if ($transaction_id != null)
+													{
+														$transaction->rollback($transaction_id);
+													}
+													throw new ModuleDialogFailedException("",1);
+												}
+												else
+												{
+													if ($transaction_id != null)
+													{
+														$transaction->commit($transaction_id);
+													}
 												}
 											}
 										}

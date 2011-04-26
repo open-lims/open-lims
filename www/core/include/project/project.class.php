@@ -1804,6 +1804,7 @@ class Project implements ProjectInterface, EventListenerInterface
 
 	/**
 	 * @return string
+	 * @todo replace object with data entity
 	 */
 	public function get_description()
 	{

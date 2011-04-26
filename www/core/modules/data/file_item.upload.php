@@ -86,7 +86,7 @@
 				{
 					foreach($item_id_array as $key => $value)
 					{
-						$file_as_item_upload_event = new FileAsItemUploadEvent($value, $_GET);
+						$file_as_item_upload_event = new FileAsItemUploadEvent($value, $_GET, $_POST);
 						$event_handler = new EventHandler($file_as_item_upload_event);
 					}
 				}

@@ -1565,97 +1565,23 @@ class ProjectIO
 					{
 						foreach($current_status_requirements as $key => $value)
 						{
-							switch($value[type]):
-								case("value"):
-									$value_obj = new Value($value[id]);
-									if (($value_name = $value_obj->get_type_name()) != null)
-									{
-										$result[$counter][name] = "Add ".$value_name;
-									}
-									else
-									{
-										$result[$counter][name] = "Add Value";
-									}
-									
-									if ($current_fulfilled_requirements[$key] == true)
-									{
-										$result[$counter][status] = 0;
-									}
-									else
-									{
-										if ($value[requirement] != "optional")
-										{
-											$result[$counter][status] = 1;
-										}
-										else
-										{
-											$result[$counter][status] = 2;
-										}
-									}
-									$counter++;
-								break;
-								
-								case("file"):					
-									$result[$counter][name] = "Add File";
-									if ($current_fulfilled_requirements[$key] == true)
-									{
-										$result[$counter][status] = 0;
-									}
-									else
-									{
-										if ($value[requirement] != "optional")
-										{
-											$result[$counter][status] = 1;
-										}
-										else
-										{
-											$result[$counter][status] = 2;
-										}
-									}
-									$counter++;
-								break;
-								
-								case("method"):
-									$result[$counter][name] = "Add Method";
-									if ($current_fulfilled_requirements[$key] == true)
-									{
-										$result[$counter][status] = 0;
-									}
-									else
-									{
-										if ($value[requirement] != "optional")
-										{
-											$result[$counter][status] = 1;
-										}
-										else
-										{
-											$result[$counter][status] = 2;
-										}
-									}
-									$counter++;
-								break;
-								
-								case("sample"):
-									$result[$counter][name] = "Add Sample";
-									if ($current_fulfilled_requirements[$key] == true)
-									{
-										$result[$counter][status] = 0;
-									}
-									else
-									{
-										if ($value[requirement] != "optional")
-										{
-											$result[$counter][status] = 1;
-										}
-										else
-										{
-											$result[$counter][status] = 2;
-										}
-									}
-									$counter++;
-									
-								break;
-							endswitch;
+							$result[$counter][name] = $value[name];
+							if ($current_fulfilled_requirements[$key] == true)
+							{
+								$result[$counter][status] = 0;
+							}
+							else
+							{
+								if ($value[requirement] != "optional")
+								{
+									$result[$counter][status] = 1;
+								}
+								else
+								{
+									$result[$counter][status] = 2;
+								}
+							}
+							$counter++;
 						}			
 					}
 					else
@@ -2240,9 +2166,6 @@ class ProjectIO
 				break;
 				
 				// Item Add
-				/**
-				 * @todo description and keywords
-				 */
 				case("item_add"):
 					if ($project_security->is_access(3, false) == true)
 					{
@@ -2258,69 +2181,84 @@ class ProjectIO
 									
 									if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
 									{
-										$transaction_id = $transaction->begin();
-										
 										$project = new Project($_GET[project_id]);
-										$current_status_requirements = $project->get_current_status_requirements($project->get_current_status_id());
+										$project_item = new ProjectItem($_GET[project_id]);
+										$project_item->set_status_id($project->get_current_status_id());
+										$project_item->set_gid($_GET[key]);
 										
-										$folder_id = ProjectStatusFolder::get_folder_by_project_id_and_project_status_id($_GET[project_id],$project->get_current_status_id());
+										$description_required = $project_item->is_description_required();
+										$keywords_required = $project_item->is_keywords_required();
 										
-										$sub_folder_id = $project->get_sub_folder($_GET[key], $project->get_current_status_id());
-										
-										if (is_numeric($sub_folder_id))
+										if (($description_required and !$_POST[description] and !$_GET[idk_unique_id]) or ($keywords_required and !$_POST[keywords] and !$_GET[idk_unique_id]))
 										{
-											$folder_id = $sub_folder_id;
-										}
-										
-										$return_value = $module_dialog['class']::$module_dialog[method]($current_status_requirements[$_GET[key]][type_id], $current_status_requirements[$_GET[key]][category_id], $project->get_organisation_unit_id(), $folder_id);
-										
-										if (is_numeric($return_value))
-										{
-											if ($_GET[retrace])
-											{
-												$params = http_build_query(Misc::resovle_retrace_string($_GET[retrace]),'','&#38;');
-											}
-											else
-											{
-												$paramquery[username] = $_GET[username];
-												$paramquery[session_id] = $_GET[session_id];
-												$paramquery[nav] = "home";
-												$params = http_build_query($paramquery,'','&#38;');
-											}
-											
-											
-											if (ProjectItemFactory::create($_GET[project_id], $return_value, $_GET[key], null, null) == true)
-											{
-												if ($transaction_id != null)
-												{
-													$transaction->commit($transaction_id);
-												}
-												$common->step_proceed($params, "Add Item", "Succeed." ,null);
-											}
-											else
-											{
-												if ($transaction_id != null)
-												{
-													$transaction->rollback($transaction_id);
-												}
-												$common->step_proceed($params, "Add Item", "Failed." ,null);	
-											}
+											require_once("core/modules/item/item.io.php");
+											ItemIO::information(http_build_query($_GET), $description_required, $keywords_required);
 										}
 										else
 										{
-											if ($return_value === false)
+											$transaction_id = $transaction->begin();
+											
+											$current_status_requirements = $project->get_current_status_requirements($project->get_current_status_id());
+																						
+											$folder_id = ProjectStatusFolder::get_folder_by_project_id_and_project_status_id($_GET[project_id],$project->get_current_status_id());
+											
+											$sub_folder_id = $project->get_sub_folder($_GET[key], $project->get_current_status_id());
+											
+											if (is_numeric($sub_folder_id))
 											{
-												if ($transaction_id != null)
+												$folder_id = $sub_folder_id;
+											}
+											
+											$return_value = $module_dialog['class']::$module_dialog[method]($current_status_requirements[$_GET[key]][type_id], $current_status_requirements[$_GET[key]][category_id], $project->get_organisation_unit_id(), $folder_id);
+											
+											if (is_numeric($return_value))
+											{
+												if ($_GET[retrace])
 												{
-													$transaction->rollback($transaction_id);
+													$params = http_build_query(Misc::resovle_retrace_string($_GET[retrace]),'','&#38;');
 												}
-												throw new ModuleDialogFailedException("",1);
+												else
+												{
+													$paramquery[username] = $_GET[username];
+													$paramquery[session_id] = $_GET[session_id];
+													$paramquery[nav] = "home";
+													$params = http_build_query($paramquery,'','&#38;');
+												}
+												
+												
+												if (ProjectItemFactory::create($_GET[project_id], $return_value, $_GET[key], $_POST[keywords], $_POST[description]) == true)
+												{
+													if ($transaction_id != null)
+													{
+														$transaction->commit($transaction_id);
+													}
+													$common->step_proceed($params, "Add Item", "Succeed." ,null);
+												}
+												else
+												{
+													if ($transaction_id != null)
+													{
+														$transaction->rollback($transaction_id);
+													}
+													$common->step_proceed($params, "Add Item", "Failed." ,null);	
+												}
 											}
 											else
 											{
-												if ($transaction_id != null)
+												if ($return_value === false)
 												{
-													$transaction->commit($transaction_id);
+													if ($transaction_id != null)
+													{
+														$transaction->rollback($transaction_id);
+													}
+													throw new ModuleDialogFailedException("",1);
+												}
+												else
+												{
+													if ($transaction_id != null)
+													{
+														$transaction->commit($transaction_id);
+													}
 												}
 											}
 										}

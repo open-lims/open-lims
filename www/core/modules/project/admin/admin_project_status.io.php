@@ -22,58 +22,47 @@
  */
 
 /**
- * Project Template Category Admin IO Class
+ * Project Status Admin IO Class
  * @package project
  */
-class AdminProjectTemplateCatIO
+class AdminProjectStatusIO
 {
 	public static function home()
-	{
-		$list = new List_IO(Project_Wrapper::count_list_project_template_categories(), 20);
+	{	
+		$list = new List_IO(Project_Wrapper::count_list_project_status(), 20);
 		
+		$list->add_row("ID", "id", true, null);
 		$list->add_row("Name", "name", true, null);
-		$list->add_row("Edit", "edit", false, "10%");
-		$list->add_row("Delete", "delete", false, "10%");
+		$list->add_row("Edit", "edit", false, "15%");
+		$list->add_row("Delete", "delete", false, "15%");
 		
 		if ($_GET[page])
 		{
 			if ($_GET[sortvalue] and $_GET[sortmethod])
 			{
-				$result_array = Project_Wrapper::list_project_template_categories($_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
+				$result_array = Project_Wrapper::list_project_status($_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
 			}
 			else
 			{
-				$result_array = Project_Wrapper::list_project_template_categories(null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
+				$result_array = Project_Wrapper::list_project_status(null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
 			}				
 		}
 		else
 		{
 			if ($_GET[sortvalue] and $_GET[sortmethod])
 			{
-				$result_array = Project_Wrapper::list_project_template_categories($_GET[sortvalue], $_GET[sortmethod], 0, 20);
+				$result_array = Project_Wrapper::list_project_status($_GET[sortvalue], $_GET[sortmethod], 0, 20);
 			}
 			else
 			{
-				$result_array = Project_Wrapper::list_project_template_categories(null, null, 0, 20);
+				$result_array = Project_Wrapper::list_project_status(null, null, 0, 20);
 			}	
 		}
 		
 		if (is_array($result_array) and count($result_array) >= 1)
 		{		
 			foreach($result_array as $key => $value)
-			{
-				$paramquery = $_GET;
-				$paramquery[id] = $result_array[$key][id];
-				$paramquery[action] = "edit";
-				unset($paramquery[sortvalue]);
-				unset($paramquery[sortmethod]);
-				unset($paramquery[nextpage]);
-				$params = http_build_query($paramquery, '', '&#38;');
-
-				$result_array[$key][edit][link] = $params;
-				$result_array[$key][edit][content] = "edit";
-				
-				
+			{		
 				$paramquery = $_GET;
 				$paramquery[id] = $result_array[$key][id];
 				$paramquery[action] = "delete";
@@ -84,6 +73,18 @@ class AdminProjectTemplateCatIO
 
 				$result_array[$key][delete][link] = $params;
 				$result_array[$key][delete][content] = "delete";
+				
+				
+				$paramquery = $_GET;
+				$paramquery[id] = $result_array[$key][id];
+				$paramquery[action] = "edit";
+				unset($paramquery[sortvalue]);
+				unset($paramquery[sortmethod]);
+				unset($paramquery[nextpage]);
+				$params = http_build_query($paramquery, '', '&#38;');
+		
+				$result_array[$key][edit][link] = $params;
+				$result_array[$key][edit][content] = "edit";
 			}
 		}
 		else
@@ -91,7 +92,7 @@ class AdminProjectTemplateCatIO
 			$list->override_last_line("<span class='italic'>No results found!</span>");
 		}
 		
-		$template = new Template("languages/en-gb/template/admin/project_template_cat/list.html");	
+		$template = new Template("languages/en-gb/template/projects/admin/project_status/list.html");	
 	
 		$paramquery = $_GET;
 		$paramquery[action] = "add";
@@ -112,16 +113,8 @@ class AdminProjectTemplateCatIO
 		if ($_GET[nextpage] == 1)
 		{
 			$page_1_passed = true;
-				
-			if ($_POST[name])
-			{
-				if (ProjectTemplateCat::exist_name($_POST[name]) == true)
-				{
-					$page_1_passed = false;
-					$error = "This name already exists";
-				}
-			}
-			else
+			
+			if (!$_POST[name])
 			{
 				$page_1_passed = false;
 				$error = "You must enter a name";
@@ -135,7 +128,7 @@ class AdminProjectTemplateCatIO
 
 		if ($page_1_passed == false)
 		{
-			$template = new Template("languages/en-gb/template/admin/project_template_cat/add.html");
+			$template = new Template("languages/en-gb/template/projects/admin/project_status/add.html");
 			
 			$paramquery = $_GET;
 			$paramquery[nextpage] = "1";
@@ -151,34 +144,34 @@ class AdminProjectTemplateCatIO
 			{
 				$template->set_var("error", "");	
 			}
-
+												 
 			if ($_POST[name])
 			{
 				$template->set_var("name", $_POST[name]);
 			}
 			else
 			{
-				$template->set_var("name", "");	
+				$template->set_var("name", "");
 			}
-			
+						
 			$template->output();
 		}
 		else
 		{				
-			$project_template_cat = new ProjectTemplateCat(null);
-								
+			$project_status = new ProjectStatus(null);
+
 			$paramquery = $_GET;
 			unset($paramquery[action]);
 			unset($paramquery[nextpage]);
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			if ($project_template_cat->create($_POST[name]))
+			if ($project_status->create($_POST[name], null))
 			{
-				$common->step_proceed($params, "Add Project Template Categories", "Operation Successful", null);
+				$common->step_proceed($params, "Add Project Status", "Operation Successful", null);
 			}
 			else
 			{
-				$common->step_proceed($params, "Add Project Template Categories", "Operation Failed" ,null);	
+				$common->step_proceed($params, "Add Project Status", "Operation Failed" ,null);	
 			}
 		}
 	}
@@ -191,7 +184,7 @@ class AdminProjectTemplateCatIO
 		{
 			if ($_GET[sure] != "true")
 			{
-				$template = new Template("languages/en-gb/template/admin/project_template_cat/delete.html");
+				$template = new Template("languages/en-gb/template/projects/admin/project_status/delete.html");
 				
 				$paramquery = $_GET;
 				$paramquery[sure] = "true";
@@ -217,21 +210,21 @@ class AdminProjectTemplateCatIO
 				unset($paramquery[id]);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				$project_template_cat = new ProjectTemplateCat($_GET[id]);
+				$project_status = new ProjectStatus($_GET[id]);
 				
-				if ($project_template_cat->delete())
+				if ($project_status->delete())
 				{							
-					$common->step_proceed($params, "Delete Project Template Category", "Operation Successful" ,null);
+					$common->step_proceed($params, "Delete Project Status", "Operation Successful" ,null);
 				}
 				else
 				{							
-					$common->step_proceed($params, "Delete Project Template Category", "Operation Failed" ,null);
-				}			
+					$common->step_proceed($params, "Delete Project Status", "Operation Failed" ,null);
+				}	
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 4);
+			$exception = new Exception("", 2);
 			$error_io = new Error_IO($exception, 200, 40, 3);
 			$error_io->display_error();
 		}
@@ -243,21 +236,13 @@ class AdminProjectTemplateCatIO
 		
 		if ($_GET[id])
 		{
-			$project_template_cat = new ProjectTemplateCat($_GET[id]);
+			$project_status = new ProjectStatus($_GET[id]);
 		
 			if ($_GET[nextpage] == 1)
 			{
 				$page_1_passed = true;
 				
-				if ($_POST[name])
-				{
-					if (ProjectTemplateCat::exist_name($_POST[name]) == true and $project_template_cat->get_name() != $_POST[name])
-					{
-						$page_1_passed = false;
-						$error = "This name already exists";
-					}
-				}
-				else
+				if (!$_POST[name])
 				{
 					$page_1_passed = false;
 					$error = "You must enter a name";
@@ -271,7 +256,7 @@ class AdminProjectTemplateCatIO
 	
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/admin/project_template_cat/edit.html");
+				$template = new Template("languages/en-gb/template/projects/admin/project_status/edit.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -294,8 +279,9 @@ class AdminProjectTemplateCatIO
 				}
 				else
 				{
-					$template->set_var("name", $project_template_cat->get_name());
-				}		
+					$template->set_var("name", $project_status->get_name());
+				}
+							
 				$template->output();
 			}
 			else
@@ -305,19 +291,19 @@ class AdminProjectTemplateCatIO
 				unset($paramquery[action]);
 				$params = http_build_query($paramquery);
 				
-				if ($project_template_cat->set_name($_POST[name]))
+				if ($project_status->set_name($_POST[name]))
 				{
-					$common->step_proceed($params, "Edit Project Template Category", "Operation Successful", null);
+					$common->step_proceed($params, "Edit Project Status", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Edit Project Tempalte Category", "Operation Failed" ,null);	
+					$common->step_proceed($params, "Edit Project Status", "Operation Failed" ,null);	
 				}
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 4);
+			$exception = new Exception("", 2);
 			$error_io = new Error_IO($exception, 200, 40, 3);
 			$error_io->display_error();
 		}
@@ -329,9 +315,9 @@ class AdminProjectTemplateCatIO
 		{
 			if ($_GET[id])
 			{
-				if (ProjectTemplateCat::exist_id($_GET[id]) == false)
+				if (ProjectStatus::exist_id($_GET[id]) == false)
 				{
-					throw new ProjectTemplateCategoryNotFoundException("",4);
+					throw new ProjectStatusNotFoundException("",2);
 				}
 			}
 			
@@ -339,21 +325,21 @@ class AdminProjectTemplateCatIO
 				case "add":
 					self::create();
 				break;
-
+				
+				case "edit":
+					self::edit();
+				break;
+				
 				case "delete":
 					self::delete();
 				break;
-	
-				case "edit":
-					self::edit();
-				break;	
-					
+							
 				default:
 					self::home();
 				break;
 			endswitch;
 		}
-		catch (ProjectTemplateCategoryNotFoundException $e)
+		catch (ProjectStatusNotFoundException $e)
 		{
 			$error_io = new Error_IO($e, 200, 40, 1);
 			$error_io->display_error();

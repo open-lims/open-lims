@@ -47,4 +47,25 @@
 	$dialog[2][internal_name]	= "project_data_search";
 	$dialog[2][display_name]	= "Project Data Search";
 	$dialog[2][weight]			= 300;
+	
+	$dialog[3][type]			= "admin";
+	$dialog[3][class_path]		= "core/modules/project/admin/admin_project_status.io.php";
+	$dialog[3]['class']			= "AdminProjectStatusIO";
+	$dialog[3][method]			= "handler";
+	$dialog[3][internal_name]	= "project_status";
+	$dialog[3][display_name]	= "Project Status";
+	
+	$dialog[4][type]			= "admin";
+	$dialog[4][class_path]		= "core/modules/project/admin/admin_project_template_cat.io.php";
+	$dialog[4]['class']			= "AdminProjectTemplateCatIO";
+	$dialog[4][method]			= "handler";
+	$dialog[4][internal_name]	= "Project_template_cat";
+	$dialog[4][display_name]	= "Project Template Cat.";
+	
+	$dialog[5][type]			= "admin";
+	$dialog[5][class_path]		= "core/modules/project/admin/admin_project_template.io.php";
+	$dialog[5]['class']			= "AdminProjectTemplateIO";
+	$dialog[5][method]			= "handler";
+	$dialog[5][internal_name]	= "project_template";
+	$dialog[5][display_name]	= "Project Templates";
 ?>

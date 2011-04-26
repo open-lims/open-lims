@@ -67,31 +67,25 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
 				}
 			}
 			
+			$description_required = $project_item->is_description();
+			$keywords_required = $project_item->is_keywords();
+			
 			if ($description_required == true xor $keywords_required == true)
 			{
 				if ($description_required == false and $keywords_required == true)
 				{
-					if ($project_item->set_information(null,$_POST[keywords]) == false)
-					{
-						return false;
-					}
+					$project_item->set_information(null, $keywords);
 				}
 				else
 				{
-					if ($project_item->set_information($_POST[description],null) == false)
-					{
-						return false;
-					}
+					$project_item->set_information($description, null);
 				}
 			}
 			else
 			{
 				if ($description_required == true and $keywords_required == true)
 				{
-					if ($project_item->set_information($_POST[description],$_POST[keywords]) == false)
-					{
-						return false;
-					}
+					$project_item->set_information($description, $keywords);
 				}
 			}
 			
@@ -121,11 +115,12 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
     	if ($event_object instanceof FileAsItemUploadEvent)
     	{
     		$get_array = $event_object->get_get_array();
+    		$post_array = $event_object->get_post_array();
     		if ($get_array[nav] == "project" and is_numeric($get_array[project_id]))
     		{
     			$transaction_id = $transaction->begin();
     			
-    			if (self::create($get_array[project_id], $event_object->get_item_id(), $get_array[key], null, null) == false)
+    			if (self::create($get_array[project_id], $event_object->get_item_id(), $get_array[key], $post_array[keywords], $post_array[description]) == false)
     			{
     				if ($transaction_id != null)
 	    			{

@@ -418,14 +418,14 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     		$item_information = new ItemInformation(null);
     		if ($item_information->create($description, $keywords) != null)
     		{
-    			if ($this->is_item_information() != false or $this->is_item_information() != false)
+    			if ($this->is_item_information() != false or $this->is_class_information(true) != false)
     			{
 	    			if ($this->is_item_information() != false)
 	    			{
 	    				$item_information->link_item($this->item_id);
 		    		}
 		    		
-		    		if ($this->is_class_information() != false)
+		    		if ($this->is_class_information(true) != false)
 		    		{
 		    			$item_information->link_class($this->item_class_id);
 		    		}
@@ -508,9 +508,10 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     
     /**
      * Checks if an Item needs class-information
+     * @param $no_class_exist_check If this is true, method will not check the existence of the class
      * @return bool
      */
-    private function is_class_information()
+    private function is_class_information($no_class_exist_check)
     {
     	if ($this->sample and is_numeric($this->gid))
     	{
@@ -523,7 +524,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     			{
     				$class_name = $attribute_array['class'];
     				
-    				if ($this->exist_class($class_name))
+    				if ($this->exist_class($class_name) and ($no_class_exist_check == false or $no_class_exist_check == null))
     				{
     					return false;
     				}
@@ -590,7 +591,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     {
     	if (is_numeric($this->gid))
     	{
-	    	$class_information = $this->is_class_information();
+	    	$class_information = $this->is_class_information(true);
 	    	$item_information = $this->is_item_information();
 	    	
 	    	if ($class_information)
@@ -626,7 +627,79 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     {
     	if (is_numeric($this->gid))
     	{
-	    	$class_information = $this->is_class_information();
+	    	$class_information = $this->is_class_information(true);
+	    	$item_information = $this->is_item_information();
+	    	
+	    	if ($class_information)
+	    	{
+				if ($class_information[keywords] == true)
+				{
+					return true;
+				}
+	    	}
+	    	elseif($item_information)
+	    	{
+	    		if ($item_information[keywords] == true)
+	    		{
+					return true;
+				}
+	    	}
+	    	else
+	    	{
+	    		return false;
+	    	}
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
+    
+    /**
+     * Checks if an Item needs a description
+     * @return bool
+     */
+    public function is_description_required()
+    {
+    	if (is_numeric($this->gid))
+    	{
+	    	$class_information = $this->is_class_information(false);
+	    	$item_information = $this->is_item_information();
+	    	
+	    	if ($class_information)
+	    	{
+				if ($class_information[description] == true)
+				{
+					return true;
+				}
+	    	}
+	    	elseif($item_information)
+	    	{
+	    		if ($item_information[description] == true)
+	    		{
+					return true;
+				}
+	    	}
+	    	else
+	    	{
+	    		return false;
+	    	}
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
+    
+    /**
+     * Checks if an Item needs keywords
+     * @return bool
+     */
+    public function is_keywords_required()
+    {
+    	if (is_numeric($this->gid))
+    	{
+	    	$class_information = $this->is_class_information(false);
 	    	$item_information = $this->is_item_information();
 	    	
 	    	if ($class_information)
