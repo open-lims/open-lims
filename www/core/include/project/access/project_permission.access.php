@@ -661,7 +661,7 @@ class ProjectPermission_Access
 			
 		if (is_numeric($project_id) and is_numeric($user_id))
 		{			
-			$sql = "SELECT COUNT(id) AS numberofentries FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." and user_id = ".$user_id."";
+			$sql = "SELECT COUNT(id) AS numberofentries FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." and user_id = ".$user_id." AND TRUE = (SELECT * FROM project_permission_user(".$project_id.", ".$user_id."))";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

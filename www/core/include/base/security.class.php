@@ -119,6 +119,7 @@ class Security implements SecurityInterface
 			case("change_nav"):
 			case("tpage"):
 			case("view"):
+			case("clear");
 			break;
 			
 			default:

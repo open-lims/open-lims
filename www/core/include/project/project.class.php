@@ -178,17 +178,24 @@ class Project implements ProjectInterface, EventListenerInterface
 						throw new ProjectCreationFailedException("",1);
 					}
 					
-
-					$base_folder_id = $GLOBALS[project_folder_id];
+					if ($organisation_unit_id)
+					{
+						$base_folder_id = $GLOBALS[project_folder_id];
+					}
+					else
+					{
+						$base_folder_id = ProjectFolder::get_folder_by_project_id($parent_project_id);
+					}
+					
 					$base_folder = Folder::get_instance($base_folder_id);
 
 					$path = new Path($base_folder->get_path());
 					$path->add_element($project_id);
 					
-					$projet_folder = new ProjectFolder(null);
-					if (($folder_id = $projet_folder->create($project_id)) == null)
+					$project_folder = new ProjectFolder(null);
+					if (($folder_id = $project_folder->create($project_id, $base_folder_id)) == null)
 					{
-						$projet_folder->delete(true, true);
+						$project_folder->delete(true, true);
 						if ($transaction_id != null)
 						{
 							$transaction->rollback($transaction_id);
@@ -197,14 +204,13 @@ class Project implements ProjectInterface, EventListenerInterface
 					}
 					
 					// Create Supplementary Folder
-					
 					$supplementary_path = new Path($path->get_path_string());
 					$supplementary_path->add_element("supplementary");
-					
+
 					$supplementary_folder = Folder::get_instance(null);
 					if (($supplementary_folder->create("supplementary", $folder_id, $supplementary_path->get_path_string(), $owner_id, null)) == null)
 					{
-						$projet_folder->delete();
+						$project_folder->delete();
 						if ($transaction_id != null)
 						{
 							$transaction->rollback($transaction_id);
@@ -214,7 +220,7 @@ class Project implements ProjectInterface, EventListenerInterface
 					
 					if ($supplementary_folder->set_flag(128) == false)
 					{
-						$projet_folder->delete(true, true);
+						$project_folder->delete(true, true);
 						if ($transaction_id != null)
 						{
 							$transaction->rollback($transaction_id);
@@ -223,7 +229,6 @@ class Project implements ProjectInterface, EventListenerInterface
 					}
 					
 					// Status Folder
-					
 					$folder_array = array();
 					
 					foreach($project_all_status_array as $key => $value)
@@ -250,7 +255,7 @@ class Project implements ProjectInterface, EventListenerInterface
 						$projet_status_folder = new ProjectStatusFolder(null);
 						if (($status_folder_id = $projet_status_folder->create($project_id, $value)) == null)
 						{
-							$projet_folder->delete(true, true);
+							$project_folder->delete(true, true);
 							if ($transaction_id != null)
 							{
 								$transaction->rollback($transaction_id);
@@ -289,7 +294,7 @@ class Project implements ProjectInterface, EventListenerInterface
 								$sub_folder = Folder::get_instance(null);
 								if ($sub_folder->create($sub_value, $status_folder_id, $folder_path->get_path_string(), $user->get_user_id(), null) == null)
 								{
-									$projet_folder->delete(true, true);
+									$project_folder->delete(true, true);
 									if ($transaction_id != null)
 									{
 										$transaction->rollback($transaction_id);
@@ -299,7 +304,7 @@ class Project implements ProjectInterface, EventListenerInterface
 								
 								if ($sub_folder->set_flag(2048) == false)
 								{
-									$projet_folder->delete(true, true);
+									$project_folder->delete(true, true);
 									if ($transaction_id != null)
 									{
 										$transaction->rollback($transaction_id);
@@ -314,7 +319,7 @@ class Project implements ProjectInterface, EventListenerInterface
 					$value = new Value(null);
 					if ($value->create($folder_id, $owner_id, 2, $description) == null)
 					{
-						$projet_folder->delete(true, true);
+						$project_folder->delete(true, true);
 						if ($transaction_id != null)
 						{
 							$transaction->rollback($transaction_id);
@@ -329,7 +334,7 @@ class Project implements ProjectInterface, EventListenerInterface
 					
 					if ($project_item->link_item() == false)
 					{
-						$projet_folder->delete(true, true);
+						$project_folder->delete(true, true);
 						if ($transaction_id != null)
 						{
 							$transaction->rollback($transaction_id);
@@ -339,7 +344,7 @@ class Project implements ProjectInterface, EventListenerInterface
 					
 					if ($project_item->set_required(true) == false)
 					{
-						$projet_folder->delete(true, true);
+						$project_folder->delete(true, true);
 						if ($transaction_id != null)
 						{
 							$transaction->rollback($transaction_id);
@@ -354,7 +359,7 @@ class Project implements ProjectInterface, EventListenerInterface
 						
 						if ($value->create($folder_id, $owner_id, $this->template_data_type_id, $this->template_data_array) == null)
 						{
-							$projet_folder->delete(true, true);
+							$project_folder->delete(true, true);
 							if ($transaction_id != null)
 							{
 								$transaction->rollback($transaction_id);
@@ -369,7 +374,7 @@ class Project implements ProjectInterface, EventListenerInterface
 						
 						if ($project_item->link_item() == false)
 						{
-							$projet_folder->delete(true, true);
+							$project_folder->delete(true, true);
 							if ($transaction_id != null)
 							{
 								$transaction->rollback($transaction_id);
@@ -379,7 +384,7 @@ class Project implements ProjectInterface, EventListenerInterface
 						
 						if ($project_item->set_required(true) == false)
 						{
-							$projet_folder->delete(true, true);
+							$project_folder->delete(true, true);
 							if ($transaction_id != null)
 							{
 								$transaction->rollback($transaction_id);
@@ -388,6 +393,7 @@ class Project implements ProjectInterface, EventListenerInterface
 						}
 					}
 
+					// Permissions
 					if ($organisation_unit_id)
 					{
 						$organisation_unit = new OrganisationUnit($organisation_unit_id);
@@ -396,7 +402,7 @@ class Project implements ProjectInterface, EventListenerInterface
 						$project_permission = new ProjectPermission(null);
 						if ($project_permission->create($owner_id, null, null, $project_id, $GLOBALS[std_perm_user], null, 1) == null)
 						{
-							$projet_folder->delete(true, true);
+							$project_folder->delete(true, true);
 							if ($transaction_id != null)
 							{
 								$transaction->rollback($transaction_id);
@@ -407,7 +413,7 @@ class Project implements ProjectInterface, EventListenerInterface
 						$project_permission = new ProjectPermission(null);
 						if ($project_permission->create($organisation_unit->get_leader_id(), null, null, $project_id, $GLOBALS[std_perm_organ_leader], null, 2) == null)
 						{
-							$projet_folder->delete(true, true);
+							$project_folder->delete(true, true);
 							if ($transaction_id != null)
 							{
 								$transaction->rollback($transaction_id);
@@ -421,7 +427,7 @@ class Project implements ProjectInterface, EventListenerInterface
 						$project_permission = new ProjectPermission(null);
 						if ($project_permission->create(null, $organisation_unit_id, null, $project_id, $GLOBALS[std_perm_organ_unit], null, 3) == null)
 						{
-							$projet_folder->delete(true, true);
+							$project_folder->delete(true, true);
 							if ($transaction_id != null)
 							{
 								$transaction->rollback($transaction_id);
@@ -438,7 +444,7 @@ class Project implements ProjectInterface, EventListenerInterface
 								$project_permission = new ProjectPermission(null);
 								if ($project_permission->create(null, null, $value, $project_id, $GLOBALS[std_perm_organ_group], null, 4) == null)
 								{
-									$projet_folder->delete(true, true);
+									$project_folder->delete(true, true);
 									if ($transaction_id != null)
 									{
 										$transaction->rollback($transaction_id);
@@ -1355,7 +1361,7 @@ class Project implements ProjectInterface, EventListenerInterface
     } 
     
     /**
-     * Moves the project to an organisation unit (sub-project will be normal-projects)
+     * Moves the project to an organisation unit
      * @param integer $organisation_unit_id
      * @return bool
      */    
@@ -1373,26 +1379,10 @@ class Project implements ProjectInterface, EventListenerInterface
 				{
 					$transaction_id = $transaction->begin();
 					
-					$project_security = new ProjectSecurity($this->project_id);
-			
-					if ($project_security->change_owner_permission($this->get_owner_id()) == false)
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-					}
-					
-					if ($project_security->change_leader_permission($organisation_unit->get_leader_id()) == false)
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						return false;
-					}
-					
-					if ($project_security->change_organisation_unit_permission($organisation_unit_id) == false)
+					$folder_id = ProjectFolder::get_folder_by_project_id($this->project_id);
+					$folder = new Folder($folder_id);
+					$destination_id = $GLOBALS[project_folder_id];
+					if ($folder->move_folder($destination_id, false) == false)
 					{
 						if ($transaction_id != null)
 						{
@@ -1419,6 +1409,35 @@ class Project implements ProjectInterface, EventListenerInterface
 						return false;
 					}			
 					
+					$project_security = new ProjectSecurity($this->project_id);
+			
+					if ($project_security->change_owner_permission($this->get_owner_id()) == false)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+					}
+					
+					if ($project_security->change_leader_permission($organisation_unit->get_leader_id()) == false)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+					}
+					
+					if ($project_security->change_organisation_unit_permission($organisation_unit_id) == false)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+					}
+					
 					if ($transaction_id != null)
 					{
 						$transaction->commit($transaction_id);
@@ -1442,13 +1461,13 @@ class Project implements ProjectInterface, EventListenerInterface
 	}
 	
 	/**
-     * Moves the project to another project (normal-projects will be sub-projects)
+     * Moves the project to another project
      * @param integer $organisation_unit_id
      * @return bool
      */   
 	public function move_to_project($project_id)
 	{
-		global $user;
+		global $user, $transaction;
 	
 		if ($this->project_id and $this->project and is_numeric($project_id))
 		{
@@ -1488,6 +1507,18 @@ class Project implements ProjectInterface, EventListenerInterface
 					}
 					
 					if ($this->project->set_toid_project($project_id) == false)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+					}
+					
+					$folder_id = ProjectFolder::get_folder_by_project_id($this->project_id);
+					$folder = new Folder($folder_id);
+					$destination_id = ProjectFolder::get_folder_by_project_id($project_id);
+					if ($folder->move_folder($destination_id, false) == false)
 					{
 						if ($transaction_id != null)
 						{
@@ -1804,7 +1835,6 @@ class Project implements ProjectInterface, EventListenerInterface
 
 	/**
 	 * @return string
-	 * @todo replace object with data entity
 	 */
 	public function get_description()
 	{
@@ -1817,11 +1847,10 @@ class Project implements ProjectInterface, EventListenerInterface
 			{
 				foreach($item_array as $item_key => $item_value)
 				{
-					if (Object::is_kind_of("value", $item_value) == true)
+					if (DataEntity::is_kind_of("value", $item_value) == true)
 					{
-						$object_id = Object::get_entry_by_item_id($item_value);
-						$object = new Object($object_id);
-						$value_id = $object->get_value_id();
+						$data_entity_id = DataEntity::get_entry_by_item_id($item_value);
+						$value_id = Value::get_value_id_by_data_entity_id($data_entity_id);
 						if (Value::is_entry_type_of($value_id, 2) == true)
 						{
 							$description_id = $value_id;
@@ -1830,7 +1859,7 @@ class Project implements ProjectInterface, EventListenerInterface
 				}
 			}
 			
-			$value = new Value($value_id);
+			$value = new Value($description_id);
 			if ($value->get_type_id() == 2)
 			{
 				return unserialize($value->get_value());

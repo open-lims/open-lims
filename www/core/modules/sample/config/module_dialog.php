@@ -46,26 +46,29 @@
 	$dialog[2][internal_name]	= "parentsample";
 	$dialog[2][display_name]	= "Parent Sample";
 	
-	$dialog[3][type]			= "admin";
+	$dialog[3][type]			= "module_admin";
 	$dialog[3][class_path]		= "core/modules/sample/admin/admin_sample_depository.io.php";
 	$dialog[3]['class']			= "AdminSampleDepositoryIO";
 	$dialog[3][method]			= "handler";
 	$dialog[3][internal_name]	= "sample_depository";
 	$dialog[3][display_name]	= "Sample Depositories";
+	$dialog[3][weight]			= 2000;
 	
-	$dialog[4][type]			= "admin";
+	$dialog[4][type]			= "module_admin";
 	$dialog[4][class_path]		= "core/modules/sample/admin/admin_sample_template_cat.io.php";
 	$dialog[4]['class']			= "AdminSampleTemplateCatIO";
 	$dialog[4][method]			= "handler";
 	$dialog[4][internal_name]	= "sample_template_cat";
 	$dialog[4][display_name]	= "Sample Template Cat.";
+	$dialog[4][weight]			= 2100;
 	
-	$dialog[5][type]			= "admin";
+	$dialog[5][type]			= "module_admin";
 	$dialog[5][class_path]		= "core/modules/sample/admin/admin_sample_template.io.php";
 	$dialog[5]['class']			= "AdminSampleTemplateIO";
 	$dialog[5][method]			= "handler";
 	$dialog[5][internal_name]	= "sample_template";
 	$dialog[5][display_name]	= "Sample Templates";
+	$dialog[5][weight]			= 2200;
 	
 	$dialog[6][type]			= "search";
 	$dialog[6][class_path]		= "core/modules/sample/sample_search.io.php";

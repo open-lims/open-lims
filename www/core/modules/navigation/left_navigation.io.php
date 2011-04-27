@@ -31,34 +31,7 @@ class LeftNavigation_IO
 	{
 		$template = new Template("languages/en-gb/template/navigation/left/administration.html");
 		
-		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "admin";
-		$paramquery[run] = "user";
-		$params = http_build_query($paramquery,'','&#38;');
-		
-		$template->set_var("user_params", $params);
-		
-		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "admin";
-		$paramquery[run] = "group";
-		$params = http_build_query($paramquery,'','&#38;');
-		
-		$template->set_var("group_params", $params);
-		
-		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "admin";
-		$paramquery[run] = "organisation_unit";
-		$params = http_build_query($paramquery,'','&#38;');
-		
-		$template->set_var("organisation_unit_params", $params);
 
-		
 		$paramquery[username] = $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
 		$paramquery[nav] = "admin";
@@ -77,10 +50,41 @@ class LeftNavigation_IO
 		$template->set_var("system_message_params", $params);
 		
 		
+		
+		$organisation_admin_navigation_array = array();
+		$counter = 0;
+		
+		$organisation_dialog_array = ModuleDialog::list_dialogs_by_type("organisation_admin");
+		
+		if (is_array($organisation_dialog_array) and count($organisation_dialog_array) >= 1)
+		{
+			foreach ($organisation_dialog_array as $key => $value)
+			{
+				$paramquery[username] 	= $_GET[username];
+				$paramquery[session_id] = $_GET[session_id];
+				$paramquery[nav]		= "admin";
+				$paramquery[run]		= "organisation";
+				$paramquery[dialog]		= $value[internal_name];
+				$params 				= http_build_query($paramquery,'','&#38;');
+				
+				/**
+				 * @todo icon
+				 */
+				$organisation_admin_navigation_array[$counter][icon] = "equipment.png";
+				$organisation_admin_navigation_array[$counter][params] = $params;
+				$organisation_admin_navigation_array[$counter][title] = $value[display_name];
+				$counter++;
+			}
+		}
+		
+		$template->set_var("organisation_admin", $organisation_admin_navigation_array);
+		
+		
+		
 		$module_admin_navigation_array = array();
 		$counter = 0;
 		
-		$module_dialog_array = ModuleDialog::list_dialogs_by_type("admin");
+		$module_dialog_array = ModuleDialog::list_dialogs_by_type("module_admin");
 		
 		if (is_array($module_dialog_array) and count($module_dialog_array) >= 1)
 		{

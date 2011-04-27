@@ -283,33 +283,36 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
 	    		$sample_has_user = new SampleHasUser_Access(null);
 	    		if (($sample_has_user_pk = $sample_has_user->create($this->sample_id, $user_id, $read, $write)) != null)
 	    		{
-	    			$sample_folder_id = SampleFolder::get_folder_by_sample_id($this->sample_id);
-	    			
-	    			$folder_id = UserFolder::get_folder_by_user_id($user_id);
-	    			
-	    			$virtual_folder = new VirtualFolder(null);
-	    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
-	    			
-	    			foreach($virtual_folder_array as $key => $value)
+	    			if ($write == true)
 	    			{
-	    				$virtual_folder = new SampleVirtualFolder($value);
-	    				if ($virtual_folder->is_sample_vfolder() == true)
-	    				{
-	    					$virtual_folder_id = $value;
-	    				}
-	    			}
-	    			
-	    			if ($virtual_folder_id)
-	    			{
-	    				$virtual_folder = new VirtualFolder($virtual_folder_id);
-	    				if ($virtual_folder->link_folder($sample_folder_id) == false)
-	    				{
-	    					if ($transaction_id != null)
-	    					{
-								$transaction->rollback($transaction_id);
-							}
-							return null;
-	    				}
+		    			$sample_folder_id = SampleFolder::get_folder_by_sample_id($this->sample_id);
+		    			
+		    			$folder_id = UserFolder::get_folder_by_user_id($user_id);
+		    			
+		    			$virtual_folder = new VirtualFolder(null);
+		    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
+		    			
+		    			foreach($virtual_folder_array as $key => $value)
+		    			{
+		    				$virtual_folder = new SampleVirtualFolder($value);
+		    				if ($virtual_folder->is_sample_vfolder() == true)
+		    				{
+		    					$virtual_folder_id = $value;
+		    				}
+		    			}
+		    			
+		    			if ($virtual_folder_id)
+		    			{
+		    				$virtual_folder = new VirtualFolder($virtual_folder_id);
+		    				if ($virtual_folder->link_folder($sample_folder_id) == false)
+		    				{
+		    					if ($transaction_id != null)
+		    					{
+									$transaction->rollback($transaction_id);
+								}
+								return null;
+		    				}
+		    			}
 	    			}
 	    			
 	    			if ($transaction_id != null)
@@ -383,6 +386,42 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     				}
     			}
     			
+    			$organisation_unit = new OrganisationUnit($organisation_unit_id);
+    			$group_array = $organisation_unit->list_groups();
+
+				if(is_array($group_array) and count($group_array) >= 1)
+				{
+					foreach($group_array as $key => $value)
+					{
+						$folder_id = GroupFolder::get_folder_by_group_id($value);
+		    			
+		    			$virtual_folder = new VirtualFolder(null);
+		    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
+		    			
+		    			foreach($virtual_folder_array as $key => $value)
+		    			{
+		    				$virtual_folder = new SampleVirtualFolder($value);
+		    				if ($virtual_folder->is_sample_vfolder() == true)
+		    				{
+		    					$virtual_folder_id = $value;
+		    				}
+		    			}
+		    			
+		    			if (is_numeric($virtual_folder_id))
+		    			{
+		    				$virtual_folder = new VirtualFolder($virtual_folder_id);
+		    				if ($virtual_folder->link_folder($sample_folder_id) == false)
+		    				{
+		    					if ($transaction_id != null)
+		    					{
+									$transaction->rollback($transaction_id);
+								}
+					    		return null;
+		    				}
+		    			}
+					}
+				}
+    			
     			if ($transaction_id != null)
     			{
 					$transaction->commit($transaction_id);
@@ -419,40 +458,44 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     		$transaction_id = $transaction->begin();
     		
     		$sample_has_user = new SampleHasUser_Access($entry_id);
+    		$write = $sample_has_user->get_write();
     		$user_id = $sample_has_user->get_user_id();
     		$success = $sample_has_user->delete();
     		
     		if ($success == true)
     		{
-    			$sample_folder_id = SampleFolder::get_folder_by_sample_id($this->sample_id);
-    			
-    			$folder_id = UserFolder::get_folder_by_user_id($user_id);
-    			
-    			$virtual_folder = new VirtualFolder(null);
-    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
-    			
-    			foreach($virtual_folder_array as $key => $value)
+    			if ($write == true)
     			{
-    				$virtual_folder = new SampleVirtualFolder($value);
-    				if ($virtual_folder->is_sample_vfolder() == true)
-    				{
-    					$virtual_folder_id = $value;
-    				}
+	    			$sample_folder_id = SampleFolder::get_folder_by_sample_id($this->sample_id);
+	    			
+	    			$folder_id = UserFolder::get_folder_by_user_id($user_id);
+	    			
+	    			$virtual_folder = new VirtualFolder(null);
+	    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
+	    			
+	    			foreach($virtual_folder_array as $key => $value)
+	    			{
+	    				$virtual_folder = new SampleVirtualFolder($value);
+	    				if ($virtual_folder->is_sample_vfolder() == true)
+	    				{
+	    					$virtual_folder_id = $value;
+	    				}
+	    			}
+	    			   			
+	    			if ($virtual_folder_id)
+	    			{
+	    				$virtual_folder = new VirtualFolder($virtual_folder_id);
+	    				if ($virtual_folder->unlink_folder($sample_folder_id) == false)
+	    				{
+	    					if ($transaction_id != null)
+	    					{
+								$transaction->rollback($transaction_id);
+							}
+	    					return false;
+	    				}
+	    			}
     			}
-    			   			
-    			if ($virtual_folder_id)
-    			{
-    				$virtual_folder = new VirtualFolder($virtual_folder_id);
-    				if ($virtual_folder->unlink_folder($sample_folder_id) == false)
-    				{
-    					if ($transaction_id != null)
-    					{
-							$transaction->rollback($transaction_id);
-						}
-    					return false;
-    				}
-    			}
-    			
+    				
     			if ($transaction_id != null)
     			{
 					$transaction->commit($transaction_id);
@@ -521,6 +564,42 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     					return false;
     				}
     			}
+    			
+    			$organisation_unit = new OrganisationUnit($organisation_unit_id);
+    			$group_array = $organisation_unit->list_groups();
+
+				if(is_array($group_array) and count($group_array) >= 1)
+				{
+					foreach($group_array as $key => $value)
+					{
+						$folder_id = GroupFolder::get_folder_by_group_id($value);
+		    			
+		    			$virtual_folder = new VirtualFolder(null);
+		    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
+		    			
+		    			foreach($virtual_folder_array as $key => $value)
+		    			{
+		    				$virtual_folder = new SampleVirtualFolder($value);
+		    				if ($virtual_folder->is_sample_vfolder() == true)
+		    				{
+		    					$virtual_folder_id = $value;
+		    				}
+		    			}
+		    			
+		    			if (is_numeric($virtual_folder_id))
+		    			{
+		    				$virtual_folder = new VirtualFolder($virtual_folder_id);
+		    				if ($virtual_folder->unlink_folder($sample_folder_id) == false)
+		    				{
+		    					if ($transaction_id != null)
+		    					{
+									$transaction->rollback($transaction_id);
+								}
+					    		return null;
+		    				}
+		    			}
+					}
+				}
     			
     			if ($transaction_id != null)
     			{

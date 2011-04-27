@@ -85,7 +85,7 @@ class AdminIO
 				case("module"):
 					if ($_GET[dialog])
 					{
-						$module_dialog = ModuleDialog::get_by_type_and_internal_name("admin", $_GET[dialog]);
+						$module_dialog = ModuleDialog::get_by_type_and_internal_name("module_admin", $_GET[dialog]);
 						
 						if (file_exists($module_dialog[class_path]))
 						{

@@ -38,11 +38,11 @@ class DataIO
 		{
 			$data_browser = new DataBrowser();
 	
-			if ($_GET[run] == "delete_stack")
+			if ($_GET[clear] == "delete_stack")
 			{
 				$data_path = new DataPath(null, null);
 				$data_path->delete_stack();
-				unset($_GET[run]);
+				unset($_GET[clear]);
 				unset($_GET[vfolder_id]);
 			}
 			
@@ -270,6 +270,7 @@ class DataIO
 							$paramquery[folder_id] = $result_array[$key][folder_id];
 							unset($paramquery[nextpage]);
 							unset($paramquery[vfolder_id]);
+							unset($paramquery[page]);
 							$params = http_build_query($paramquery,'','&#38;');
 							
 							$result_array[$key][symbol][content] = "<img src='images/icons/folder.png' alt='' style='border:0;' />";
@@ -377,7 +378,7 @@ class DataIO
 	
 	
 			$paramquery = $_GET;
-			$paramquery[action] = "delete_stack";
+			$paramquery[clear] = "delete_stack";
 			unset($paramquery[folder_id]);
 			unset($paramquery[vfolder_id]);
 			$params = http_build_query($paramquery,'','&#38;');

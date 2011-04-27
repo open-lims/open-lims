@@ -156,14 +156,22 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 	 * @return integer
 	 * @todo: remove v-folder
 	 */
-	public function create($project_id)
+	public function create($project_id, $base_folder_id)
 	{
 		if (is_numeric($project_id))
 		{
 			$project = new Project($project_id);
 			
 			// Folder
-			$project_folder_id = $GLOBALS[project_folder_id];
+			if ($base_folder_id == null)
+			{
+				$project_folder_id = $GLOBALS[project_folder_id];
+			}
+			else
+			{
+				$project_folder_id = $base_folder_id;
+			}
+			
 			$folder = new Folder($project_folder_id);
 
 			$path = new Path($folder->get_path());

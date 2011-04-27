@@ -1041,7 +1041,9 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	    	$folder_id = SampleFolder::get_folder_by_sample_id($this->sample_id);
 	    	$folder = Folder::get_instance($folder_id);
 
-			if ($folder->set_name($name) == false)
+	    	$folder_name = $name." (".$this->get_formatted_id().")";
+	    	
+			if ($folder->set_name($folder_name) == false)
 			{
 				if ($transaction_id != null)
 				{

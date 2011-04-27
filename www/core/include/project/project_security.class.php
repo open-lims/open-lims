@@ -373,7 +373,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     	
     		$project_permission_array = ProjectPermission::list_entries_by_project_id_and_intention($this->project_id, 1);
     		
-    		if (is_numeric($project_permission_array[0]))
+    		if (count($project_permission_array) > 0 and is_numeric($project_permission_array[0]))
     		{
 	    		$project_permission = new ProjectPermission($project_permission_array[0]);
 	    		if ($project_permission->set_user_id($owner_id) == true)
@@ -434,7 +434,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     	
     		$project_permission_array = ProjectPermission::list_entries_by_project_id_and_intention($this->project_id, 2);
     	
-    		if (is_numeric($project_permission_array[0]))
+    		if (count($project_permission_array) > 0 and is_numeric($project_permission_array[0]))
     		{
 	    		$project_permission = new ProjectPermission($project_permission_array[0]);
 	    		if ($project_permission->set_user_id($leader_id) == true)
@@ -516,7 +516,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     		
     		$project_permission_array = ProjectPermission::list_entries_by_project_id_and_intention($this->project_id, 3);
     	
-    		if (is_numeric($project_permission_array[0]))
+    		if (count($project_permission_array) > 0 and is_numeric($project_permission_array[0]))
     		{
     			$project_permission = new ProjectPermission($project_permission_array[0]);
 				if (($return_value = $project_permission->set_organisation_unit_id($organisation_unit_id)) == false)

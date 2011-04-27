@@ -303,10 +303,14 @@ class ProjectAdminIO
 						}
 						array_push($content_array, $column_array);
 					}
+					
+					$table_io->add_content_array($content_array);	
 				}
-				
-				$table_io->add_content_array($content_array);	
-				
+				else
+				{
+					$table_io->override_last_line("<span class='italic'>No results found!</span>");
+				}
+
 				$template->set_var("table", $table_io->get_content($_GET[page]));		
 		
 				$template->output();

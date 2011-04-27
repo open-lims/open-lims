@@ -42,8 +42,8 @@ interface FolderInterface
 	public function mark_as_deleted();
 	public function mark_as_undeleted();
 	
-	public function move_folder($destination_id);
-	public function copy_folder($destination_id);
+	public function move_folder($destination_id, $force_exist_check);
+	public function copy_folder($destination_id, $force_exist_check);
 	
 	public function get_object_path();
 	public function get_object_id_path();

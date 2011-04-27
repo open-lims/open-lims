@@ -39,17 +39,19 @@
 	$dialog[1][internal_name]	= "equipment";
 	$dialog[1][display_name]	= "Equipment";
 	
-	$dialog[2][type]			= "admin";
+	$dialog[2][type]			= "module_admin";
 	$dialog[2][class_path]		= "core/modules/equipment/admin/admin_equipment_cat.io.php";
 	$dialog[2]['class']			= "AdminEquipmentCatIO";
 	$dialog[2][method]			= "handler";
 	$dialog[2][internal_name]	= "equipment_cat";
 	$dialog[2][display_name]	= "Equipment Categories";
+	$dialog[2][weight]			= 10000;
 	
-	$dialog[3][type]			= "admin";
+	$dialog[3][type]			= "module_admin";
 	$dialog[3][class_path]		= "core/modules/equipment/admin/admin_equipment_type.io.php";
 	$dialog[3]['class']			= "AdminEquipmentTypeIO";
 	$dialog[3][method]			= "handler";
 	$dialog[3][internal_name]	= "equipment_type";
 	$dialog[3][display_name]	= "Equipment Types";
+	$dialog[3][weight]			= 10100; 
 ?>

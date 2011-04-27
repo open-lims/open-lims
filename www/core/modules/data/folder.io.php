@@ -230,7 +230,7 @@ class FolderIO
 					unset($paramquery[action]);
 					$params = http_build_query($paramquery);
 							
-					if ($folder->move_folder($_POST[folder_id]))
+					if ($folder->move_folder($_POST[folder_id], false))
 					{
 						$common->step_proceed($params, "Move Folder", "Operation Successful", null);
 					}

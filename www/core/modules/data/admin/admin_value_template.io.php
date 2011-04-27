@@ -80,7 +80,7 @@ class AdminValueTemplateIO
 			$list->override_last_line("<span class='italic'>No results found!</span>");
 		}
 		
-		$template = new Template("languages/en-gb/template/admin/value_template/list.html");	
+		$template = new Template("languages/en-gb/template/data/admin/value_template/list.html");	
 	
 		$paramquery = $_GET;
 		$paramquery[action] = "add";
@@ -110,7 +110,7 @@ class AdminValueTemplateIO
 
 		if ($page_1_passed == false)
 		{
-			$template = new Template("languages/en-gb/template/admin/value_template/add.html");
+			$template = new Template("languages/en-gb/template/data/admin/value_template/add.html");
 			
 			$paramquery = $_GET;
 			$paramquery[nextpage] = "1";
@@ -187,7 +187,7 @@ class AdminValueTemplateIO
 		{
 			if ($_GET[sure] != "true")
 			{
-				$template = new Template("languages/en-gb/template/admin/value_template/delete.html");
+				$template = new Template("languages/en-gb/template/data/admin/value_template/delete.html");
 				
 				$paramquery = $_GET;
 				$paramquery[sure] = "true";

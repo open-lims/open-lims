@@ -661,17 +661,20 @@ class Folder extends DataEntity implements FolderInterface
 	/**
 	 * Moves a folder to another location
 	 * @param integer $destination_id
+	 * @param bool $force_exist_check
 	 * @return bool
 	 */
-	public function move_folder($destination_id)
+	public function move_folder($destination_id, $force_exist_check)
 	{
-		global $session;
+		global $session, $transaction;
 	
 		if ($this->folder_id and $this->folder and is_numeric($destination_id))
 		{
-			$destination_folder = new Folder($destination_id);
-			if ($destination_folder->exist_subfolder_name($this->get_name()) == false)
+			$destination_folder = Folder::get_instance($destination_id);
+			if ($destination_folder->exist_subfolder_name($this->get_name()) == false or $force_exist_check == true)
 			{
+				$transaction_id = $transaction->begin();
+				
 				$current_path = new Path($this->get_path());
 				$destination_path = new Path($destination_folder->get_path());
 				$destination_path->add_element($current_path->get_last_element());
@@ -679,10 +682,45 @@ class Folder extends DataEntity implements FolderInterface
 				$new_path = $destination_path->get_path_string();
 				
 				// create new folder
-				mkdir($GLOBALS[base_dir]."/".$new_path);
+				if (mkdir($GLOBALS[base_dir]."/".$new_path) == false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+				}
 				
-				// change path
-				$this->folder->set_path($new_path);
+				// change database
+				if ($this->folder->set_path($new_path) == false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					rmdir($GLOBALS[base_dir]."/".$new_path);
+					return false;
+				}
+				
+				if ($this->unset_child_of($this->get_parent_folder()) == false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					rmdir($GLOBALS[base_dir]."/".$new_path);
+					return false;
+				}
+				
+				if ($this->set_as_child_of($destination_folder->get_data_entity_id()) == false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					rmdir($GLOBALS[base_dir]."/".$new_path);
+					return false;
+				}
 				
 				// subfolder filesystem move
 				
@@ -692,8 +730,15 @@ class Folder extends DataEntity implements FolderInterface
 					{
 						foreach($subfolder_array as $key => $value)
 						{
-							$folder = new Folder($value);
-							$folder->move_folder($this->folder_id);						
+							$folder = Folder::get_instance($value);
+							if ($folder->move_folder($this->folder_id, true) == false)
+							{
+								if ($transaction_id != null)
+								{
+									$transaction->rollback($transaction_id);
+								}
+								return false;
+							}			
 						}
 					}
 				}
@@ -712,9 +757,7 @@ class Folder extends DataEntity implements FolderInterface
 						unlink($current_file);
 					}
 				}
-				
-				$this->folder->set_toid($destination_id);
-				
+
 				closedir($handle);
 				
 				rmdir($GLOBALS[base_dir]."/".$current_path->get_path_string());
@@ -722,6 +765,10 @@ class Folder extends DataEntity implements FolderInterface
 				// Delete Folder Stack
 				$session->delete_value("stack_array");
 				
+				if ($transaction_id != null)
+				{
+					$transaction->commit($transaction_id);
+				}
 				return true;
 			}
 			else
@@ -741,7 +788,7 @@ class Folder extends DataEntity implements FolderInterface
 	 * @return bool
 	 * @todo Implementation - Copy folder is not supported in current version
 	 */
-	public function copy_folder($destination_id)
+	public function copy_folder($destination_id, $force_exist_check)
 	{	
 
 	}

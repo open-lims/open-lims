@@ -53,4 +53,12 @@
 	$dialog[3][internal_name]	= "ffv_search";
 	$dialog[3][display_name]	= "File/Folder/Value Search";
 	$dialog[3][weight]			= 600;
+	
+	$dialog[4][type]			= "module_admin";
+	$dialog[4][class_path]		= "core/modules/data/admin/admin_value_template.io.php";
+	$dialog[4]['class']			= "AdminValueTemplateIO";
+	$dialog[4][method]			= "handler";
+	$dialog[4][internal_name]	= "value_template";
+	$dialog[4][display_name]	= "Value Templates";
+	$dialog[4][weight]			= 100; 
 ?>

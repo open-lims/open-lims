@@ -91,31 +91,36 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     		
     		if($user_id)
     		{
-    			$folder_id = UserFolder::get_folder_by_user_id($user_id);
+    			$permission_string = strrev(decbin($permission));
     			
-    			$virtual_folder = new VirtualFolder(null);
-    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
-    			
-    			foreach($virtual_folder_array as $key => $value)
+    			if ($permission_string{2} == 1 or $permission_string{3} == 1  or $permission_string{7} == 1)
     			{
-    				$virtual_folder = new ProjectVirtualFolder($value);
-    				if ($virtual_folder->is_project_vfolder() == true)
-    				{
-    					$virtual_folder_id = $value;
-    				}
-    			}
-
-    			if (is_numeric($virtual_folder_id))
-    			{
-    				$virtual_folder = new VirtualFolder($virtual_folder_id);
-    				if ($virtual_folder->link_folder($project_folder_id) == false)
-    				{
-    					if ($transaction_id != null)
-    					{
-							$transaction->rollback($transaction_id);
-						}
-			    		return null;
-    				}
+	    			$folder_id = UserFolder::get_folder_by_user_id($user_id);
+	    			
+	    			$virtual_folder = new VirtualFolder(null);
+	    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
+	    			
+	    			foreach($virtual_folder_array as $key => $value)
+	    			{
+	    				$virtual_folder = new ProjectVirtualFolder($value);
+	    				if ($virtual_folder->is_project_vfolder() == true)
+	    				{
+	    					$virtual_folder_id = $value;
+	    				}
+	    			}
+	
+	    			if (is_numeric($virtual_folder_id))
+	    			{
+	    				$virtual_folder = new VirtualFolder($virtual_folder_id);
+	    				if ($virtual_folder->link_folder($project_folder_id) == false)
+	    				{
+	    					if ($transaction_id != null)
+	    					{
+								$transaction->rollback($transaction_id);
+							}
+				    		return null;
+	    				}
+	    			}
     			}
     		}
     		elseif($organisation_unit_id)
@@ -598,6 +603,8 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
      */
     public function set_organisation_unit_id($organisation_unit_id)
     {
+    	global $transaction;
+    	
     	if (is_numeric($organisation_unit_id) and $this->project_permission and $this->permission_id)
     	{
     		$transaction_id = $transaction->begin();
@@ -605,8 +612,8 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     		$project_id = $this->project_permission->get_project_id();
 
     		$project_folder_id 		= ProjectFolder::get_folder_by_project_id($project_id);
-			$current_ou_folder_id 	= Folder::get_organisation_unit_folder_by_organisaiton_unit_id($this->project_permission->get_organisation_unit_id());
-			$new_ou_folder_id 		= Folder::get_organisation_unit_folder_by_organisaiton_unit_id($organisation_unit_id);
+			$current_ou_folder_id 	= OrganisationUnitFolder::get_folder_by_organisation_unit_id($this->project_permission->get_organisation_unit_id());
+			$new_ou_folder_id 		= OrganisationUnitFolder::get_folder_by_organisation_unit_id($organisation_unit_id);
 						
 			$current_virtual_folder_array = VirtualFolder::list_entries_by_folder_id($current_ou_folder_id);
 			
@@ -685,6 +692,8 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
      */
     public function set_group_id($group_id)
     {
+    	global $transaction;
+    	
     	if (is_numeric($group_id) and $this->project_permission and $this->permission_id)
     	{
     		$transaction_id = $transaction->begin();
@@ -692,8 +701,8 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     		$project_id = $this->project_permission->get_project_id();
 
     		$project_folder_id 			= ProjectFolder::get_folder_by_project_id($project_id);
-			$current_group_folder_id	= Folder::get_group_folder_by_organisaiton_group_id($this->project_permission->get_group_id());
-			$new_group_folder_id 		= Folder::get_group_folder_by_organisaiton_group_id($group_id);
+			$current_group_folder_id	= GroupFolder::get_folder_by_group_id($this->project_permission->get_group_id());
+			$new_group_folder_id 		= GroupFolder::get_folder_by_group_id($group_id);
 						
 			$current_virtual_folder_array = VirtualFolder::list_entries_by_folder_id($current_group_folder_id);
 			
@@ -774,6 +783,44 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     {
     	if (is_numeric($permission) and $this->project_permission and $this->permission_id)
     	{
+    		if (($user_id = $this->project_permission->get_user_id()) != null)
+    		{
+	    		$current_permission_string = strrev(decbin($this->project_permission->get_permission()));
+	    		$new_permission_string = strrev(decbin($permission));
+
+	    		$project_folder_id = ProjectFolder::get_folder_by_project_id($this->project_permission->get_project_id());
+	    		
+	    		if ($current_permission_string{2} == 0 and $current_permission_string{3} == 0  and $current_permission_string{7} == 0)
+	    		{
+	    			$folder_id = UserFolder::get_folder_by_user_id($user_id);
+		    			
+	    			$virtual_folder = new VirtualFolder(null);
+	    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
+	    			
+	    			foreach($virtual_folder_array as $key => $value)
+	    			{
+	    				$virtual_folder = new ProjectVirtualFolder($value);
+	    				if ($virtual_folder->is_project_vfolder() == true)
+	    				{
+	    					$virtual_folder_id = $value;
+	    				}
+	    			}
+	
+	    			if (is_numeric($virtual_folder_id))
+	    			{
+	    				$virtual_folder = new VirtualFolder($virtual_folder_id);
+	    				if ($virtual_folder->link_folder($project_folder_id) == false)
+	    				{
+	    					if ($transaction_id != null)
+	    					{
+								$transaction->rollback($transaction_id);
+							}
+				    		return null;
+	    				}
+    			}
+    		}
+    		}
+    		
     		return $this->project_permission->set_permission($permission);
     	}
     	else
