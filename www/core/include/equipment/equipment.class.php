@@ -331,5 +331,36 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
     {
     	return "Equipment";
     }
+    
+    public static function get_generic_symbol($type, $id)
+    {
+    	return "<img src='images/icons/equipment.png' alt='' style='border: 0;' />";
+    }
+    
+	public static function get_generic_link($type, $id)
+	{
+		return null;
+	}
+    
+	public static function get_sql_select_array($type)
+    {
+    	$select_array[name] = "".constant("EQUIPMENT_TYPE_TABLE").".name";
+		$select_array[type_id] = "".constant("EQUIPMENT_TYPE_TABLE").".id AS equipment_id";
+		$select_array[datetime] = "".constant("EQUIPMENT_TABLE").".datetime";
+		return $select_array;
+    }
+    
+	public static function get_sql_join($type)
+	{
+		return 	"LEFT JOIN ".constant("EQUIPMENT_IS_ITEM_TABLE")." 		ON ".constant("ITEM_TABLE").".id 						= ".constant("EQUIPMENT_IS_ITEM_TABLE").".item_id " .
+				"LEFT JOIN ".constant("EQUIPMENT_TABLE")." 				ON ".constant("EQUIPMENT_IS_ITEM_TABLE").".equipment_id = ".constant("EQUIPMENT_TABLE").".id " .
+				"LEFT JOIN ".constant("EQUIPMENT_TYPE_TABLE")." 		ON ".constant("EQUIPMENT_TABLE").".type_id 				= ".constant("EQUIPMENT_TYPE_TABLE").".id ";
+	}
+	
+	public static function get_sql_where($type)
+	{
+		return "(LOWER(TRIM(".constant("EQUIPMENT_TYPE_TABLE").".name)) LIKE '{STRING}')";
+	}
+	
 }
 ?>

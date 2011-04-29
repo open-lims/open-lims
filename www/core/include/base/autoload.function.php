@@ -55,6 +55,8 @@ function __autoload($classname)
 	$classes['ModuleDialog']				= $path_prefix."core/include/base/module_dialog.class.php";
 	$classes['ModuleLink']					= $path_prefix."core/include/base/module_link.class.php";
 	
+	$classes['Base_Wrapper']				= $path_prefix."core/include/base/base.wrapper.class.php";
+	
 	$registered_include_array = SystemHandler::get_include_folders();
 	if (is_array($registered_include_array) and count($registered_include_array) >= 1)
 	{

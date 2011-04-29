@@ -38,7 +38,7 @@ class AdminSystemLogIO
 			$type_id = 1;
 		}
 		
-		$list = new List_IO(SystemLog_Wrapper::count_list_system_log($type_id), 20);
+		$list = new List_IO(Base_Wrapper::count_list_system_log($type_id), 20);
 		
 		$list->add_row("User", "user", true, null);
 		$list->add_row("Date/Time", "datetime", true, null);
@@ -50,22 +50,22 @@ class AdminSystemLogIO
 		{
 			if ($_GET[sortvalue] and $_GET[sortmethod])
 			{
-				$result_array = SystemLog_Wrapper::list_system_log($type_id, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
+				$result_array = Base_Wrapper::list_system_log($type_id, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
 			}
 			else
 			{
-				$result_array = SystemLog_Wrapper::list_system_log($type_id, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
+				$result_array = Base_Wrapper::list_system_log($type_id, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
 			}				
 		}
 		else
 		{
 			if ($_GET[sortvalue] and $_GET[sortmethod])
 			{
-				$result_array = SystemLog_Wrapper::list_system_log($type_id, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
+				$result_array = Base_Wrapper::list_system_log($type_id, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
 			}
 			else
 			{
-				$result_array = SystemLog_Wrapper::list_system_log($type_id, null, null, 0, 20);
+				$result_array = Base_Wrapper::list_system_log($type_id, null, null, 0, 20);
 			}	
 		}
 		

@@ -182,5 +182,96 @@ class Project_Wrapper implements Project_WrapperInterface
 	{
 		return Project_Wrapper_Access::count_search_projects_with_subprojects($name, $template_array, $organisation_unit_array);
 	}
+	
+	/**
+   	 * @todo remove double of code
+   	 */
+	public static function list_data_search($string, $project_id_array, $item_type_array, $order_by, $order_method, $start, $end)
+	{
+		if (is_array($item_type_array) and count($item_type_array) >= 1)
+		{
+			$string = strtolower(trim($string));
+			$string = str_replace("*", "%", $string);
+			
+			$select_sql_array = array();
+			$join_sql = "";
+			$where_sql = "";
+			
+			foreach($item_type_array as $key => $value)
+			{
+				$handling_class = Item::get_handling_class_by_type($value);
+				if (class_exists($handling_class))
+				{
+					if (is_array($handling_class::get_sql_select_array($value)))
+					{
+						array_push($select_sql_array, $handling_class::get_sql_select_array($value));
+					}
+					
+					$join_sql .= $handling_class::get_sql_join($value);
+					if (($return_where_sql = $handling_class::get_sql_where($value)) != null)
+					{
+						$return_where_sql = str_replace("{STRING}", $string, $return_where_sql);
+						
+						if ($where_sql == "")
+						{
+							$where_sql .= $return_where_sql;
+						}
+						else
+						{
+							$where_sql .= " OR ".$return_where_sql;
+						}
+					}
+				}
+			}
+			return Project_Wrapper_Access::list_data_search($string, $project_id_array, $select_sql_array, $join_sql, $where_sql, $order_by, $order_method, $start, $end);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+   	 * @todo remove double of code
+   	 */
+	public static function count_data_search($string, $project_id_array, $item_type_array)
+	{
+		if (is_array($item_type_array) and count($item_type_array) >= 1)
+		{
+			$string = strtolower(trim($string));
+			$string = str_replace("*", "%", $string);
+			
+			$join_sql = "";
+			$where_sql = "";
+			
+			foreach($item_type_array as $key => $value)
+			{
+				$handling_class = Item::get_handling_class_by_type($value);
+				if (class_exists($handling_class))
+				{					
+					$join_sql .= $handling_class::get_sql_join($value);
+					if (($return_where_sql = $handling_class::get_sql_where($value)) != null)
+					{
+						$return_where_sql = str_replace("{STRING}", $string, $return_where_sql);
+						
+						if ($where_sql == "")
+						{
+							$where_sql .= $return_where_sql;
+						}
+						else
+						{
+							$where_sql .= " OR ".$return_where_sql;
+						}
+					}
+				}
+			}
+			return Project_Wrapper_Access::count_data_search($string, $project_id_array, $select_sql_array, $join_sql, $where_sql);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 }
 ?>

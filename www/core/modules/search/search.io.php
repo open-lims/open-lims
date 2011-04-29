@@ -378,7 +378,7 @@ class SearchIO
 					// error
 				}
 			break;
-			
+						
 			default:
 				self::main();
 			break;

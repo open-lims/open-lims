@@ -30,5 +30,10 @@ interface ItemListenerInterface
 {
 	public static function is_kind_of($type, $item_id);	
 	public static function get_generic_name($type, $type_array);
+	public static function get_generic_symbol($type, $id);
+	public static function get_generic_link($type, $id);
+	public static function get_sql_select_array($type);
+	public static function get_sql_join($type);
+	public static function get_sql_where($type);
 }
 ?>

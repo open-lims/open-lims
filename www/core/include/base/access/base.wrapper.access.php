@@ -22,15 +22,11 @@
  */
  
 /**
- * System Log Access Class
+ * Base Access Class
  * @package base
  */
-class SystemLog_Wrapper_Access
+class Base_Wrapper_Access
 {
-	const SYSTEM_LOG_TABLE = 'core_system_log';
-	
-	const USER_TABLE = 'core_users';
-
 	/**
 	 * @param integer $type_id
 	 * @param string $order_by
@@ -91,14 +87,14 @@ class SystemLog_Wrapper_Access
 				$sql_order_by = "ORDER BY datetime DESC";
 			}
 			
-			$sql = "SELECT ".self::SYSTEM_LOG_TABLE.".id, " .
-								"".self::SYSTEM_LOG_TABLE.".ip AS ip, " .
-								"".self::SYSTEM_LOG_TABLE.".file AS file, " .
-								"".self::SYSTEM_LOG_TABLE.".content_string AS info, " .
-								"".self::SYSTEM_LOG_TABLE.".datetime AS datetime, " .
-								"".self::USER_TABLE.".username AS user " .
-						 "FROM ".self::SYSTEM_LOG_TABLE." " .
-					"LEFT JOIN ".self::USER_TABLE." ON ".self::USER_TABLE.".id = ".self::SYSTEM_LOG_TABLE.".user_id " .
+			$sql = "SELECT ".constant("SYSTEM_LOG_TABLE").".id, " .
+								"".constant("SYSTEM_LOG_TABLE").".ip AS ip, " .
+								"".constant("SYSTEM_LOG_TABLE").".file AS file, " .
+								"".constant("SYSTEM_LOG_TABLE").".content_string AS info, " .
+								"".constant("SYSTEM_LOG_TABLE").".datetime AS datetime, " .
+								"".constant("USER_TABLE").".username AS user " .
+						 "FROM ".constant("SYSTEM_LOG_TABLE")." " .
+					"LEFT JOIN ".constant("USER_TABLE")." ON ".constant("USER_TABLE").".id = ".constant("SYSTEM_LOG_TABLE").".user_id " .
 						"WHERE " .
 							"type_id = ".$type_id. " " .
 									"".$sql_order_by."";
@@ -147,8 +143,8 @@ class SystemLog_Wrapper_Access
 		
 		if (is_numeric($type_id))
 		{
-			$sql = "SELECT COUNT(".self::SYSTEM_LOG_TABLE.".id) AS result " .
-						 "FROM ".self::SYSTEM_LOG_TABLE." " .
+			$sql = "SELECT COUNT(".constant("SYSTEM_LOG_TABLE").".id) AS result " .
+						 "FROM ".constant("SYSTEM_LOG_TABLE")." " .
 						"WHERE " .
 							"type_id = ".$type_id;
 			

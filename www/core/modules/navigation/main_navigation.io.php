@@ -181,96 +181,100 @@ class MainNavigation_IO
 			{
 				$module_name = SystemHandler::get_module_name_by_module_id($value[module_id]);
 				
-				$paramquery[username] = $_GET[username];
-				$paramquery[session_id] = $_GET[session_id];
-				$paramquery[nav] = $module_name;
-				$params = http_build_query($paramquery,'','&#38;');
+				if (($module_name == "admin" and $user->is_admin()) or $module_name != admin)
+				{
 				
-				switch ($value[colour]):
-				
-					case "blue":
-						if ($_GET[nav] == $module_name)
-						{
-							$template = new Template("languages/en-gb/template/navigation/tabs/blue_tab_active.html");
-							$current_module = $module_name;
-							$current_color = $value[colour];
-						}
-						else
-						{
-							$template = new Template("languages/en-gb/template/navigation/tabs/blue_tab.html");
-						}
-					break;
+					$paramquery[username] = $_GET[username];
+					$paramquery[session_id] = $_GET[session_id];
+					$paramquery[nav] = $module_name;
+					$params = http_build_query($paramquery,'','&#38;');
 					
-					case "green":
-						if ($_GET[nav] == $module_name)
-						{
-							$template = new Template("languages/en-gb/template/navigation/tabs/green_tab_active.html");
-							$current_module = $module_name;
-							$current_color = $value[colour];
-						}
-						else
-						{
-							$template = new Template("languages/en-gb/template/navigation/tabs/green_tab.html");
-						}
-					break;
+					switch ($value[colour]):
 					
-					case "orange";
-						if ($_GET[nav] == $module_name)
-						{
-							$template = new Template("languages/en-gb/template/navigation/tabs/orange_tab_active.html");
-							$current_module = $module_name;
-							$current_color = $value[colour];
-						}
-						else
-						{
-							$template = new Template("languages/en-gb/template/navigation/tabs/orange_tab.html");
-						}
-					break;
-					
-					case "lightgreen":
-						if ($_GET[nav] == $module_name)
-						{
-							$template = new Template("languages/en-gb/template/navigation/tabs/lightgreen_tab_active.html");
-							$current_module = $module_name;
-							$current_color = $value[colour];
-						}
-						else
-						{
-							$template = new Template("languages/en-gb/template/navigation/tabs/lightgreen_tab.html");
-						}
-					break;
+						case "blue":
+							if ($_GET[nav] == $module_name)
+							{
+								$template = new Template("languages/en-gb/template/navigation/tabs/blue_tab_active.html");
+								$current_module = $module_name;
+								$current_color = $value[colour];
+							}
+							else
+							{
+								$template = new Template("languages/en-gb/template/navigation/tabs/blue_tab.html");
+							}
+						break;
 						
-					case "lightblue":
-						if ($_GET[nav] == $module_name)
-						{
-							$template = new Template("languages/en-gb/template/navigation/tabs/lightblue_tab_active.html");
-							$current_module = $module_name;
-							$current_color = $value[colour];
-						}
-						else
-						{
-							$template = new Template("languages/en-gb/template/navigation/tabs/lightblue_tab.html");
-						}
-					break;
-				
-					default:
-						if ($_GET[nav] == $module_name)
-						{
-							$template = new Template("languages/en-gb/template/navigation/tabs/grey_tab_active.html");
-							$current_module = $module_name;
-							$current_color = $value[colour];
-						}
-						else
-						{
-							$template = new Template("languages/en-gb/template/navigation/tabs/grey_tab.html");
-						}
-					break;
+						case "green":
+							if ($_GET[nav] == $module_name)
+							{
+								$template = new Template("languages/en-gb/template/navigation/tabs/green_tab_active.html");
+								$current_module = $module_name;
+								$current_color = $value[colour];
+							}
+							else
+							{
+								$template = new Template("languages/en-gb/template/navigation/tabs/green_tab.html");
+							}
+						break;
+						
+						case "orange";
+							if ($_GET[nav] == $module_name)
+							{
+								$template = new Template("languages/en-gb/template/navigation/tabs/orange_tab_active.html");
+								$current_module = $module_name;
+								$current_color = $value[colour];
+							}
+							else
+							{
+								$template = new Template("languages/en-gb/template/navigation/tabs/orange_tab.html");
+							}
+						break;
+						
+						case "lightgreen":
+							if ($_GET[nav] == $module_name)
+							{
+								$template = new Template("languages/en-gb/template/navigation/tabs/lightgreen_tab_active.html");
+								$current_module = $module_name;
+								$current_color = $value[colour];
+							}
+							else
+							{
+								$template = new Template("languages/en-gb/template/navigation/tabs/lightgreen_tab.html");
+							}
+						break;
+							
+						case "lightblue":
+							if ($_GET[nav] == $module_name)
+							{
+								$template = new Template("languages/en-gb/template/navigation/tabs/lightblue_tab_active.html");
+								$current_module = $module_name;
+								$current_color = $value[colour];
+							}
+							else
+							{
+								$template = new Template("languages/en-gb/template/navigation/tabs/lightblue_tab.html");
+							}
+						break;
 					
-				endswitch;
-				
-				$template->set_var("params", $params);
-				$template->set_var("title", $value[display_name]);
-				$template->output();
+						default:
+							if ($_GET[nav] == $module_name)
+							{
+								$template = new Template("languages/en-gb/template/navigation/tabs/grey_tab_active.html");
+								$current_module = $module_name;
+								$current_color = $value[colour];
+							}
+							else
+							{
+								$template = new Template("languages/en-gb/template/navigation/tabs/grey_tab.html");
+							}
+						break;
+						
+					endswitch;
+					
+					$template->set_var("params", $params);
+					$template->set_var("title", $value[display_name]);
+					$template->output();
+				}
 			}
 		}
 				

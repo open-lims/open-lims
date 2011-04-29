@@ -1333,6 +1333,55 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     		}
     	}
     }
+
+    public static function get_generic_symbol($type, $id)
+    {
+   		if ($type == "sample")
+    	{
+    		return "<img src='images/icons/sample.png' alt='' style='border: 0;' />";
+    	}
+    }
     
+	public static function get_generic_link($type, $id)
+	{
+		if ($type == "sample")
+		{
+			$paramquery[username] = $_GET[username];
+			$paramquery[session_id] = $_GET[session_id];
+			$paramquery[nav] = "sample";
+			$paramquery[run] = "detail";
+			$paramquery[sample_id] = $id;
+			return http_build_query($paramquery, '', '&#38;');
+		}
+	}
+    
+	public static function get_sql_select_array($type)
+    {
+   		if ($type == "sample")
+		{
+			$select_array[name] = "".constant("SAMPLE_TABLE").".name";
+			$select_array[type_id] = "".constant("SAMPLE_TABLE").".id AS sample_id";
+			$select_array[datetime] = "".constant("SAMPLE_TABLE").".datetime";
+			return $select_array;
+		}
+    }
+    
+	public static function get_sql_join($type)
+	{
+		if ($type == "sample")
+		{
+			return 	"LEFT JOIN ".constant("SAMPLE_IS_ITEM_TABLE")." 	ON ".constant("ITEM_TABLE").".id 					= ".constant("SAMPLE_IS_ITEM_TABLE").".item_id " .
+					"LEFT JOIN ".constant("SAMPLE_TABLE")." 			ON ".constant("SAMPLE_IS_ITEM_TABLE").".sample_id 	= ".constant("SAMPLE_TABLE").".id ";
+		}
+	}
+	
+	public static function get_sql_where($type)
+	{
+		if ($type == "sample")
+		{
+			return "(LOWER(TRIM(".constant("SAMPLE_TABLE").".name)) LIKE '{STRING}')";
+		}
+	}
+	
 }
 ?>

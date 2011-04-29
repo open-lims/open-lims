@@ -899,5 +899,87 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
     		}
     	}
     }
+    
+    public static function get_generic_symbol($type, $id)
+    {
+   		if ($type == "file")
+    	{
+    		$file = new File($id);
+    		return "<img src='".$file->get_icon()."' alt='' style='border: 0;' />";
+    	}
+    	else
+    	{
+    		return "<img src='images/icons/value.png' alt='' style='border: 0;' />";
+    	}
+    }
+    
+	public static function get_generic_link($type, $id)
+	{
+		if ($type == "file")
+		{
+			$paramquery[username] = $_GET[username];
+			$paramquery[session_id] = $_GET[session_id];
+			$paramquery[nav] = "data";
+			$paramquery[action] = "file_detail";
+			$paramquery[file_id] = $id;
+			return http_build_query($paramquery, '', '&#38;');
+		}
+		else
+		{
+			$paramquery[username] = $_GET[username];
+			$paramquery[session_id] = $_GET[session_id];
+			$paramquery[nav] = "data";
+			$paramquery[action] = "value_detail";
+			$paramquery[value_id] = $id;
+			return http_build_query($paramquery, '', '&#38;');
+		}
+	}
+    
+    public static function get_sql_select_array($type)
+    {
+    	if ($type == "file")
+		{
+			$select_array[name] = "".constant("FILE_VERSION_TABLE").".name";
+			$select_array[type_id] = "".constant("FILE_TABLE").".id AS file_id";
+			$select_array[datetime] = "".constant("FILE_VERSION_TABLE").".datetime";
+			return $select_array;
+		}
+		else
+		{
+			$select_array[name] = "".constant("VALUE_TYPE_TABLE").".name";
+			$select_array[type_id] = "".constant("VALUE_TABLE").".id AS value_id";
+			$select_array[datetime] = "".constant("VALUE_VERSION_TABLE").".datetime";
+			return $select_array;
+		}
+    }
+    
+	public static function get_sql_join($type)
+	{
+		if ($type == "file")
+		{
+			return 	"LEFT JOIN ".constant("DATA_ENTITY_IS_ITEM_TABLE")." AS deiita_a 	ON ".constant("ITEM_TABLE").".id 	= deiita_a.item_id " .
+					"LEFT JOIN ".constant("FILE_TABLE")." 					ON deiita_a.data_entity_id 						= ".constant("FILE_TABLE").".data_entity_id " .
+					"LEFT JOIN ".constant("FILE_VERSION_TABLE")." 			ON ".constant("FILE_TABLE").".id 				= ".constant("FILE_VERSION_TABLE").".toid ";
+		}
+		else
+		{
+			return 	"LEFT JOIN ".constant("DATA_ENTITY_IS_ITEM_TABLE")." AS deiita_b  	ON ".constant("ITEM_TABLE").".id 	= deiita_b.item_id " .
+					"LEFT JOIN ".constant("VALUE_TABLE")." 					ON deiita_b.data_entity_id 						= ".constant("VALUE_TABLE").".data_entity_id " .
+					"LEFT JOIN ".constant("VALUE_TYPE_TABLE")." 			ON ".constant("VALUE_TABLE").".type_id 			= ".constant("VALUE_TYPE_TABLE").".id " .		
+					"LEFT JOIN ".constant("VALUE_VERSION_TABLE")." 			ON ".constant("VALUE_TABLE").".id 				= ".constant("VALUE_VERSION_TABLE").".toid ";
+		}
+	}
+	
+	public static function get_sql_where($type)
+	{
+		if ($type == "file")
+		{
+			return "(LOWER(TRIM(".constant("FILE_VERSION_TABLE").".name)) LIKE '{STRING}' AND ".constant("FILE_VERSION_TABLE").".current = 't')";
+		}
+		else
+		{
+			return "(LOWER(TRIM(".constant("VALUE_TYPE_TABLE").".name)) LIKE '{STRING}' AND ".constant("VALUE_VERSION_TABLE").".current = 't')";
+		}
+	}
 }
 ?>
