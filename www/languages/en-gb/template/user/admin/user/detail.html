@@ -45,17 +45,6 @@
 	<tr>
 		<td colspan='3'><div class='bold'>Administrative Settings</div></td>
 	</tr>
-	
-	<tr>
-		<td>User-Quota</td>
-		<td>{User_QUOTA}</td>
-		<td><a href='index.php?{CHANGE_USER_QUOTA_PARAMS}'>change</a></td>
-	</tr>
-	<tr>
-		<td>Project-Quota</td>
-		<td>{PROJECT_QUOTA}</td>
-		<td><a href='index.php?{CHANGE_PROJECT_QUOTA_PARAMS}'>change</a></td>
-	</tr>
 	<tr>
 		<td>Must change password<br />at next login</td>
 		<td>{MC_PASSWORD}</t>
@@ -147,6 +136,27 @@
 		
 		</td>
 	</tr>
+	
+	<!-- IF ({MODULE_SETTINGS}) -->
+	
+	<tr>
+		<td colspan='3'><div class='horizontal_line'></div></td>
+	</tr>
+	<tr>
+		<td colspan='3'><div class='bold'>Module Settings</div></td>
+	</tr>
+	
+		<!-- FOREACH BEGIN ({MODULE_SETTINGS_ARRAY}) -->
+
+			<tr>
+				<td>{MODULE_SETTINGS_ARRAY:TITLE}</td>
+				<td>{MODULE_SETTINGS_ARRAY:VALUE}</td>
+				<td><a href='index.php?{MODULE_SETTINGS_ARRAY:PARAMS}'>change</a></td>
+			</tr>
+	
+		<!-- FOREACH END -->
+	
+	<!-- ENDIF -->
 	
 	<tr>
 		<td colspan='3'><div class='horizontal_line'></div></td>

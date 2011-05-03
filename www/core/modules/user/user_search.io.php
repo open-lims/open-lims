@@ -37,9 +37,6 @@ class UserSearchIO
 		return "images/icons_large/user_search_50.png";
 	}
 	
-	/**
-	 * @todo use ListIO
-	 */
 	public static function search()
 	{
 		global $user, $session;
@@ -98,8 +95,6 @@ class UserSearchIO
 			$session->write_value("SEARCH_USER_TYPE", $type, true);
 			
 			$content_array = array();
-			
-			$table_io = new TableIO("OverviewTable");
 			
 			if ($type == 1)
 			{

@@ -71,4 +71,27 @@
 	$dialog[5][internal_name]	= "project_template";
 	$dialog[5][display_name]	= "Project Templates";
 	$dialog[5][weight]			= 1200;
+	
+	$dialog[6][type]			= "user_module_detail_setting";
+	$dialog[6][class_path]		= "core/modules/project/project_data.io.php";
+	$dialog[6]['class']			= "ProjectDataIO";
+	$dialog[6][method]			= "get_user_module_detail_setting";
+	$dialog[6][internal_name]	= "project_quota";
+	$dialog[6][display_name]	= "Project Quota";
+	$dialog[6][weight]			= 200;
+	
+	$dialog[7][type]			= "module_value_change";
+	$dialog[7][class_path]		= "core/modules/project/project_data.io.php";
+	$dialog[7]['class']			= "ProjectDataIO";
+	$dialog[7][method]			= "change";
+	$dialog[7][internal_name]	= "project_quota";
+	$dialog[7][display_name]	= "Project Quota";
+	
+	$dialog[8][type]			= "additional_quota";
+	$dialog[8][class_path]		= "core/modules/project/project_data.io.php";
+	$dialog[8]['class']			= "ProjectDataIO";
+	$dialog[8][method]			= "get_used_project_space";
+	$dialog[8][internal_name]	= "project_quota";
+	$dialog[8][display_name]	= "Used Space (by Project)";
+	$dialog[8][weight]			= 100;
 ?>

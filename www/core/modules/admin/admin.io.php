@@ -29,25 +29,39 @@ class AdminIO
 {
 	private static function home()
 	{
-		
 		$template = new Template("languages/en-gb/template/admin/home.html");
 		
-		$template->set_var("base_dir", System::get_base_directory());
-		$template->set_var("system_space", Misc::calc_size(System::get_system_space()));
-		$template->set_var("user_used_space", Misc::calc_size(DataUserData::get_used_space()));
-		$template->set_var("project_used_space", Misc::calc_size(Project::get_used_project_space()));
-		$template->set_var("db_used_space", Misc::calc_size(System::get_used_database_space()));
-		$template->set_var("free_space", Misc::calc_size(System::get_free_space()));
+		$module_dialog_array = ModuleDialog::list_dialogs_by_type("admin_home_box");
 		
-		$template->set_var("user_amount", User::count_users());
-		$template->set_var("user_administrators", User::count_administrators());
-		$template->set_var("group_amount", Group::count_groups());
-		$template->set_var("ou_amount", OrganisationUnit::count_organisation_units());
+		if (is_array($module_dialog_array) and count($module_dialog_array) >= 1)
+		{
+			$content = "";
+			
+			foreach ($module_dialog_array as $key => $value)
+			{
+				require_once($value['class_path']);
+				$content .= $value['class']::$value['method']();
+			}
+			
+			$template->set_var("content", $content);
+		}
+		else
+		{
+			$template->set_var("content", "");
+		}
 		
 		$template->output();
-		
 	}
-		
+
+	public static function get_navigation()
+	{
+		$return_array = array();
+		$return_array['class_path'] = "core/modules/admin/navigation/admin_navigation.io.php";
+		$return_array['class'] = "AdminNavigationIO";
+		$return_array['method'] = "navigation";
+		return $return_array;
+	}
+	
 	public static function method_handler()
 	{
 		global $user;
@@ -81,11 +95,71 @@ class AdminIO
 					AdminSystemMessageIO::handler();
 				break;
 				
+				// Organisation
+				case("organisation"):
+					if ($_GET[dialog])
+					{
+						$module_dialog = ModuleDialog::get_by_type_and_internal_name("organisation_admin", $_GET[dialog]);
+						
+						if (file_exists($module_dialog[class_path]))
+						{
+							require_once($module_dialog[class_path]);
+							
+							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+							{
+								$module_dialog['class']::$module_dialog[method]($sql);
+							}
+							else
+							{
+								// Error
+							}
+						}
+						else
+						{
+							// Error
+						}
+					}
+					else
+					{
+						// error
+					}
+				break;
+				
 				// Modules
 				case("module"):
 					if ($_GET[dialog])
 					{
 						$module_dialog = ModuleDialog::get_by_type_and_internal_name("module_admin", $_GET[dialog]);
+						
+						if (file_exists($module_dialog[class_path]))
+						{
+							require_once($module_dialog[class_path]);
+							
+							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+							{
+								$module_dialog['class']::$module_dialog[method]($sql);
+							}
+							else
+							{
+								// Error
+							}
+						}
+						else
+						{
+							// Error
+						}
+					}
+					else
+					{
+						// error
+					}
+				break;
+				
+				// Module Value Change
+				case("module_value_change"):
+					if ($_GET[dialog])
+					{
+						$module_dialog = ModuleDialog::get_by_type_and_internal_name("module_value_change", $_GET[dialog]);
 						
 						if (file_exists($module_dialog[class_path]))
 						{

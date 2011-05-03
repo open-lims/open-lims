@@ -62,7 +62,6 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     
    	/**
    	 * Return true, if the user has access
-   	 * @todo inherit write permission from project
    	 * @param integer $intention 1 = Read, 2 = Write
    	 * @param bool $ignore_admin_status
    	 * @return bool

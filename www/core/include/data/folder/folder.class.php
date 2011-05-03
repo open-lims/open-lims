@@ -906,6 +906,24 @@ class Folder extends DataEntity implements FolderInterface
 			return null;
 		}	
 	}
+		
+	public function get_quota_access($user_id, $filesize)
+	{
+		$user_data = new DataUserData($user_id);
+		$user_quota = $user_data->get_quota();
+		$user_filesize = $user_data->get_filesize();
+										
+		$new_user_filesize = $user_filesize + $filesize;
+		
+		if (($user_quota > $new_user_filesize or $user_quota == 0))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 	
 	/**
 	 * @param string $name
@@ -939,6 +957,16 @@ class Folder extends DataEntity implements FolderInterface
 		}
 	}
 
+	public function increase_filesize($user_id, $filesize)
+	{
+		$user_data = new DataUserData($user_id);
+		$user_filesize = $user_data->get_filesize();
+										
+		$new_user_filesize = $user_filesize + $filesize;
+		
+		return $user_data->set_filesize($new_user_filesize);
+	}
+	
 	/**
 	 * Returns an array with all subfolders
 	 * @return array
@@ -1002,6 +1030,7 @@ class Folder extends DataEntity implements FolderInterface
 		}
 	}
 
+	
 	
 	/**
 	 * @param string $path

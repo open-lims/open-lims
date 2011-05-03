@@ -106,6 +106,7 @@ class Misc implements MiscInterface
 				case "run":
 				case "dialog":
 				case "action":
+				case "id":
 				case "project_id":
 				case "sample_id":
 				case "file_id":

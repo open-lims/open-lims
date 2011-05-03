@@ -123,6 +123,7 @@ class ContentHandler_IO
 	/**
 	 * @todo Remove HTML Statements
 	 * @todo Implement IP-Blocking
+	 * @todo include includer()
 	 */
 	public static function main()
 	{
@@ -157,18 +158,15 @@ class ContentHandler_IO
 
 					$template->output();
 
-					// HNAV
-					require_once("navigation/main_navigation.io.php");
-					$main_navigation_io = new MainNavigation_IO();
-					$main_navigation_io->output();
+					// Navigation
+					require_once("base/navigation.io.php");
+					Navigation_IO::main();
 
 					echo "</div>";	
 
 					// VNAV
 					echo "<div class='clearbox'></div><div id='navigation'>";
-
-					require_once("navigation/left_navigation.io.php");
-					LeftNavigation_IO::handler();
+					Navigation_IO::left();
 			
 					echo "</div>" .
 						"<div id='content'>";

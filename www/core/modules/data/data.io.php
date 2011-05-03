@@ -1434,6 +1434,112 @@ class DataIO
 		
 	}
 	
+	public static function get_user_module_detail_setting($user_id)
+	{
+		if ($user_id)
+		{
+			$data_user_data = new DataUserData($user_id);
+			
+			$paramquery = $_GET;
+			$paramquery[run] = "module_value_change";
+			$paramquery[dialog] = "user_quota";
+			$paramquery[retrace] = Misc::create_retrace_string();
+			$params = http_build_query($paramquery, '', '&#38;');
+			
+			$return_array = array();
+			$return_array[value] = Misc::calc_size($data_user_data->get_quota());
+			$return_array[params] = $params;
+			return $return_array;	
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public static function change_quota()
+	{
+		global $common;
+		
+		if ($_GET[id])
+		{
+			$user = new User($_GET[id]);
+			$user_data = new DataUserData($_GET[id]);
+						
+			if ($_GET[nextpage] == 1)
+			{
+				if (is_numeric($_POST[quota]))
+				{
+					$page_1_passed = true;
+				}
+				else
+				{
+					$page_1_passed = false;
+					$error = "You must enter a valid quota.";
+				}
+			}
+			elseif($_GET[nextpage] > 1)
+			{
+				$page_1_passed = true;
+			}
+			else
+			{
+				$page_1_passed = false;
+				$error = "";
+			}
+			
+			if ($page_1_passed == false)
+			{
+				$template = new Template("languages/en-gb/template/data/admin/user/change_user_quota.html");
+
+				$paramquery = $_GET;
+				$paramquery[nextpage] = "1";
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$template->set_var("params",$params);
+				$template->set_var("error",$error);
+				
+				if ($_POST[quota])
+				{
+					$template->set_var("mail", $_POST[quota]);
+				}
+				else
+				{
+					$template->set_var("quota", $user_data->get_quota());
+				}
+				$template->output();
+			}
+			else
+			{
+				if ($_GET[retrace])
+				{
+					$params = http_build_query(Misc::resovle_retrace_string($_GET[retrace]),'','&#38;');
+				}
+				else
+				{
+					$paramquery[username] = $_GET[username];
+					$paramquery[session_id] = $_GET[session_id];
+					$paramquery[nav] = "home";
+					$params = http_build_query($paramquery,'','&#38;');
+				}
+			
+				if ($user_data->set_quota($_POST[quota]))
+				{
+					$common->step_proceed($params, "Change User Quota", "Operation Successful", null);
+				}
+				else
+				{
+					$common->step_proceed($params, "Change User Quota", "Operation Failed" ,null);	
+				}
+			}
+		}
+		else
+		{
+			$exception = new Exception("", 1);
+			$error_io = new Error_IO($exception, 3, 40, 3);
+			$error_io->display_error();
+		}
+	}
 }
 
 ?>

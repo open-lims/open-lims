@@ -124,7 +124,7 @@ class AdminUserIO
 		
 		$table_io->add_content_array($content_array);
 		
-		$template = new Template("languages/en-gb/template/admin/user/list.html");
+		$template = new Template("languages/en-gb/template/user/admin/user/list.html");
 		
 		$paramquery = $_GET;
 		$paramquery[action] = "add";
@@ -186,7 +186,7 @@ class AdminUserIO
 
 		if ($page_1_passed == false)
 		{
-			$template = new Template("languages/en-gb/template/admin/user/add.html");
+			$template = new Template("languages/en-gb/template/user/admin/user/add.html");
 			
 			$paramquery = $_GET;
 			$paramquery[nextpage] = "1";
@@ -356,7 +356,7 @@ class AdminUserIO
 									$_POST[disabled]);
 				
 				
-				$template = new Template("languages/en-gb/template/admin/user/add_proceed.html");
+				$template = new Template("languages/en-gb/template/user/admin/user/add_proceed.html");
 				
 				$template->set_var("params", $params);
 				$template->set_var("new_password", $new_password);
@@ -389,7 +389,7 @@ class AdminUserIO
 			{
 				if ($_GET[sure] != "true")
 				{
-					$template = new Template("languages/en-gb/template/admin/user/delete.html");
+					$template = new Template("languages/en-gb/template/user/admin/user/delete.html");
 					
 					$paramquery = $_GET;
 					$paramquery[sure] = "true";
@@ -440,9 +440,6 @@ class AdminUserIO
 		}
 	}
 	
-	/**
-	 * @todo remove dependency
-	 */
 	public static function detail()
 	{
 		global $user;
@@ -451,11 +448,13 @@ class AdminUserIO
 		{
 			$user_id = $_GET[id];
 				
-			$template = new Template("languages/en-gb/template/admin/user/detail.html");
+			$template = new Template("languages/en-gb/template/user/admin/user/detail.html");
 			
 			$current_user = new User($user_id);
 			$user_data = new DataUserData($user_id);
 			$project_data = new ProjectUserData($user_id);
+			
+			// General
 			
 			if ($user_id == $user->get_user_id())
 			{
@@ -509,23 +508,7 @@ class AdminUserIO
 			$template->set_var("change_password_params", $params);
 			
 			
-			$paramquery = $_GET;
-			$paramquery[action] = "change_user_quota";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$file_quota = $user_data->get_quota();
-			$template->set_var("user_quota", Misc::calc_size($file_quota));
-			$template->set_var("change_user_quota_params", $params);
-			
-			
-			$paramquery = $_GET;
-			$paramquery[action] = "change_project_quota";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$project_quota = $project_data->get_quota();
-			$template->set_var("project_quota", Misc::calc_size($project_quota));
-			$template->set_var("change_project_quota_params", $params);
-			
+			// Administrative Settings
 			
 			$paramquery = $_GET;
 			$paramquery[action] = "change_boolean_entry";
@@ -645,6 +628,38 @@ class AdminUserIO
 				$template->set_var("inactive", "no");
 			}
 			
+			
+			// Module Settings
+			
+			$user_module_settings_dialog_array = ModuleDialog::list_dialogs_by_type("user_module_detail_setting");
+		
+			if (is_array($user_module_settings_dialog_array) and count($user_module_settings_dialog_array) >= 1)
+			{
+				$module_settings_array = array();
+				$module_settings_counter = 0;
+				
+				foreach ($user_module_settings_dialog_array as $key => $value)
+				{
+					if (file_exists($value['class_path']))
+					{
+						require_once($value['class_path']);
+						$module_settings_return = $value['class']::$value['method']($user_id);
+						$module_settings_array[$module_settings_counter][title] = $value['display_name'];
+						$module_settings_array[$module_settings_counter][value] = $module_settings_return[value];
+						$module_settings_array[$module_settings_counter][params] = $module_settings_return[params];
+						$module_settings_counter++;
+					}
+				}
+				
+				$template->set_var("module_settings_array", $module_settings_array);
+				$template->set_var("module_settings", true);
+			}
+			else
+			{
+				$template->set_var("module_settings", false);
+			}
+			
+			// User Settings
 			
 			$paramquery = $_GET;
 			$paramquery[action] = "change_language";
@@ -787,7 +802,7 @@ class AdminUserIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/admin/user/add_group.html");
+				$template = new Template("languages/en-gb/template/user/admin/user/add_group.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -849,7 +864,7 @@ class AdminUserIO
 		{
 			if ($_GET[sure] != "true")
 			{
-				$template = new Template("languages/en-gb/template/admin/user/delete_group.html");
+				$template = new Template("languages/en-gb/template/user/admin/user/delete_group.html");
 				
 				$paramquery = $_GET;
 				$paramquery[sure] = "true";
@@ -933,7 +948,7 @@ class AdminUserIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/admin/user/add_organisation_unit.html");
+				$template = new Template("languages/en-gb/template/user/admin/user/add_organisation_unit.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -995,7 +1010,7 @@ class AdminUserIO
 		{
 			if ($_GET[sure] != "true")
 			{
-				$template = new Template("languages/en-gb/template/admin/user/delete_organisation_unit.html");
+				$template = new Template("languages/en-gb/template/user/admin/user/delete_organisation_unit.html");
 				
 				$paramquery = $_GET;
 				$paramquery[sure] = "true";
@@ -1080,7 +1095,7 @@ class AdminUserIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/admin/user/rename.html");
+				$template = new Template("languages/en-gb/template/user/admin/user/rename.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -1156,7 +1171,7 @@ class AdminUserIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/admin/user/change_mail.html");
+				$template = new Template("languages/en-gb/template/user/admin/user/change_mail.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -1230,7 +1245,7 @@ class AdminUserIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/admin/user/change_password.html");
+				$template = new Template("languages/en-gb/template/user/admin/user/change_password.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -1267,116 +1282,7 @@ class AdminUserIO
 			$error_io->display_error();
 		}
 	}
-	
-	/**
-	 * @todo remove dependency
-	 */
-	public static function change_quota()
-	{
-		global $common;
 		
-		if ($_GET[id])
-		{
-			$user = new User($_GET[id]);
-			$user_data = new DataUserData($_GET[id]);
-			$project_data = new ProjectUserData($_GET[id]);
-						
-			if ($_GET[nextpage] == 1)
-			{
-				if (is_numeric($_POST[quota]))
-				{
-					$page_1_passed = true;
-				}
-				else
-				{
-					$page_1_passed = false;
-					$error = "You must enter a valid quota.";
-				}
-			}
-			elseif($_GET[nextpage] > 1)
-			{
-				$page_1_passed = true;
-			}
-			else
-			{
-				$page_1_passed = false;
-				$error = "";
-			}
-			
-			if ($page_1_passed == false)
-			{
-				if ($_GET[action] == "change_user_quota")
-				{
-					$template = new Template("languages/en-gb/template/admin/user/change_user_quota.html");
-				}
-				else
-				{
-					$template = new Template("languages/en-gb/template/admin/user/change_project_quota.html");
-				}
-				
-				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
-				$params = http_build_query($paramquery,'','&#38;');
-				
-				$template->set_var("params",$params);
-				$template->set_var("error",$error);
-				
-				if ($_POST[quota])
-				{
-					$template->set_var("mail", $_POST[quota]);
-				}
-				else
-				{
-					if ($_GET[action] == "change_user_quota")
-					{
-						$template->set_var("quota", $user_data->get_quota());
-					}
-					else
-					{
-						$template->set_var("quota", $project_data->get_quota());	
-					}
-				}
-				$template->output();
-			}
-			else
-			{
-				$paramquery = $_GET;
-				$paramquery[action] = "detail";
-				unset($paramquery[nextpage]);
-				$params = http_build_query($paramquery,'','&#38;');
-				
-				if ($_GET[action] == "change_user_quota")
-				{
-					if ($user_data->set_quota($_POST[quota]))
-					{
-						$common->step_proceed($params, "Change User Quota", "Operation Successful", null);
-					}
-					else
-					{
-						$common->step_proceed($params, "Change User Quota", "Operation Failed" ,null);	
-					}
-				}
-				else
-				{
-					if ($project_data->set_quota($_POST[quota]))
-					{
-						$common->step_proceed($params, "Change Project Quota", "Operation Successful", null);
-					}
-					else
-					{
-						$common->step_proceed($params, "Change Project Quota", "Operation Failed" ,null);	
-					}
-				}
-			}
-		}
-		else
-		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
-		}
-	}
-	
 	public static function change_boolean_entry()
 	{
 		global $common;
@@ -1485,7 +1391,7 @@ class AdminUserIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/admin/user/change_language.html");
+				$template = new Template("languages/en-gb/template/user/admin/user/change_language.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -1565,7 +1471,7 @@ class AdminUserIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/admin/user/change_timezone.html");
+				$template = new Template("languages/en-gb/template/user/admin/user/change_timezone.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -1706,6 +1612,25 @@ class AdminUserIO
 		}
 	}
 	
+	public static function home_dialog()
+	{
+		$template = new Template("languages/en-gb/template/user/admin/user/home_dialog.html");
+		
+		$paramquery 			= array();
+		$paramquery[username] 	= $_GET[username];
+		$paramquery[session_id] = $_GET[session_id];
+		$paramquery[nav] 		= $_GET[nav];
+		$paramquery[run] 		= "organisation";
+		$paramquery[dialog] 	= "users";
+		$paramquery[action] 	= "add";
+		$params = http_build_query($paramquery, '', '&#38;');
+		
+		$template->set_var("user_add_params", $params);
+		$template->set_var("user_amount", User::count_users());
+		$template->set_var("user_administrators", User::count_administrators());
+		
+		return $template->get_string();
+	}
 }
 
 ?>

@@ -711,15 +711,10 @@ class File extends DataEntity implements FileInterface
 							{
 		 						$file_size = filesize($target);
 		 						$checksum = md5_file($target);
-		 						
-		 						$user_quota = $user_data->get_quota();
-								$user_filesize = $user_data->get_filesize();
-																
-								$new_user_filesize = $user_filesize + $file_size;
 								
-								if (($user_quota > $new_user_filesize or $user_quota == 0))
+								if ($folder->get_quota_access($user->get_user_id(), $file_size) == true)
 								{
-									$user_data->set_filesize($new_user_filesize);
+									$folder->increase_filesize($user->get_user_id(), $file_size);
 			
 			 						// Create File
 			 						if (($file_id = $this->create($file_array['name'], $folder_id, $target, $user->get_user_id())) == null)

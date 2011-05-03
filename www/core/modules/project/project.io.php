@@ -1727,6 +1727,15 @@ class ProjectIO
 						$project_security = new ProjectSecurity($value[id]);
 						$project_owner = new User($project->get_owner_id());
 						
+						$paramquery[username] = $_GET[username];
+						$paramquery[session_id] = $_GET[session_id];
+						$paramquery[nav] = "project";
+						$paramquery[run] = "detail";
+						$paramquery[project_id] = $value[id];
+						$params = http_build_query($paramquery, '', '&#38;');
+						
+						$result[$counter][link] = $params;
+						
 						$result[$counter][name] 	= $project->get_name();
 						$result[$counter][status] 	= $project->get_current_status_name();
 						$result[$counter][template] = $project->get_template_name();

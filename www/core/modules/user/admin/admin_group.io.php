@@ -123,7 +123,7 @@ class AdminGroupIO
 		
 		$table_io->add_content_array($content_array);
 		
-		$template = new Template("languages/en-gb/template/admin/group/list.html");
+		$template = new Template("languages/en-gb/template/user/admin/group/list.html");
 		
 		$paramquery = $_GET;
 		$paramquery[action] = "add";
@@ -167,7 +167,7 @@ class AdminGroupIO
 
 		if ($page_1_passed == false)
 		{
-			$template = new Template("languages/en-gb/template/admin/group/add.html");
+			$template = new Template("languages/en-gb/template/user/admin/group/add.html");
 			
 			$paramquery = $_GET;
 			$paramquery[nextpage] = "1";
@@ -244,7 +244,7 @@ class AdminGroupIO
 			
 			if ($_GET[sure] != "true")
 			{
-				$template = new Template("languages/en-gb/template/admin/group/delete.html");
+				$template = new Template("languages/en-gb/template/user/admin/group/delete.html");
 				
 				$paramquery = $_GET;
 				$paramquery[sure] = "true";
@@ -294,7 +294,7 @@ class AdminGroupIO
 		{
 			$group_id = $_GET[id];
 			
-			$template = new Template("languages/en-gb/template/admin/group/detail.html");
+			$template = new Template("languages/en-gb/template/user/admin/group/detail.html");
 			
 			$group = new Group($group_id);
 			
@@ -441,7 +441,7 @@ class AdminGroupIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/admin/group/add_user.html");
+				$template = new Template("languages/en-gb/template/user/admin/group/add_user.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -503,7 +503,7 @@ class AdminGroupIO
 		{
 			if ($_GET[sure] != "true")
 			{
-				$template = new Template("languages/en-gb/template/admin/group/delete_user.html");
+				$template = new Template("languages/en-gb/template/user/admin/group/delete_user.html");
 				
 				$paramquery = $_GET;
 				$paramquery[sure] = "true";
@@ -587,7 +587,7 @@ class AdminGroupIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/admin/group/add_organisation_unit.html");
+				$template = new Template("languages/en-gb/template/user/admin/group/add_organisation_unit.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -649,7 +649,7 @@ class AdminGroupIO
 		{
 			if ($_GET[sure] != "true")
 			{
-				$template = new Template("languages/en-gb/template/admin/group/delete_organisation_unit.html");
+				$template = new Template("languages/en-gb/template/user/admin/group/delete_organisation_unit.html");
 				
 				$paramquery = $_GET;
 				$paramquery[sure] = "true";
@@ -734,7 +734,7 @@ class AdminGroupIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/admin/group/rename.html");
+				$template = new Template("languages/en-gb/template/user/admin/group/rename.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -835,6 +835,24 @@ class AdminGroupIO
 		}
 	}
 	
+	public static function home_dialog()
+	{
+		$template = new Template("languages/en-gb/template/user/admin/group/home_dialog.html");
+	
+		$paramquery 			= array();
+		$paramquery[username] 	= $_GET[username];
+		$paramquery[session_id] = $_GET[session_id];
+		$paramquery[nav] 		= $_GET[nav];
+		$paramquery[run] 		= "organisation";
+		$paramquery[dialog] 	= "groups";
+		$paramquery[action] 	= "add";
+		$params = http_build_query($paramquery, '', '&#38;');
+		
+		$template->set_var("group_add_params", $params);
+		$template->set_var("group_amount", Group::count_groups());
+		
+		return $template->get_string();
+	}
 }
 
 ?>

@@ -270,7 +270,7 @@ class AdminOrganisationUnitIO
 			$content_array[$last_counter][show_line] = true;
 		}
 		
-		$template = new Template("languages/en-gb/template/admin/organisation_unit/list.html");
+		$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/list.html");
 		
 		$paramquery = $_GET;
 		$paramquery[action] = "add";
@@ -315,7 +315,7 @@ class AdminOrganisationUnitIO
 	
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/admin/organisation_unit/add.html");
+				$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/add.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -443,7 +443,7 @@ class AdminOrganisationUnitIO
 			{
 				if ($_GET[sure] != "true")
 				{
-					$template = new Template("languages/en-gb/template/admin/organisation_unit/delete.html");
+					$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/delete.html");
 					
 					$paramquery = $_GET;
 					$paramquery[sure] = "true";
@@ -502,7 +502,7 @@ class AdminOrganisationUnitIO
 		{
 			$organisation_unit_id = $_GET[id];
 		
-			$template = new Template("languages/en-gb/template/admin/organisation_unit/detail.html");
+			$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/detail.html");
 			
 			if ($user->is_admin())
 			{
@@ -666,7 +666,7 @@ class AdminOrganisationUnitIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/admin/organisation_unit/add_user.html");
+				$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/add_user.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -728,7 +728,7 @@ class AdminOrganisationUnitIO
 		{
 			if ($_GET[sure] != "true")
 			{
-				$template = new Template("languages/en-gb/template/admin/organisation_unit/delete_user.html");
+				$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/delete_user.html");
 				
 				$paramquery = $_GET;
 				$paramquery[sure] = "true";
@@ -812,7 +812,7 @@ class AdminOrganisationUnitIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/admin/organisation_unit/add_group.html");
+				$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/add_group.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -874,7 +874,7 @@ class AdminOrganisationUnitIO
 		{
 			if ($_GET[sure] != "true")
 			{	
-				$template = new Template("languages/en-gb/template/admin/organisation_unit/delete_group.html");
+				$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/delete_group.html");
 				
 				$paramquery = $_GET;
 				$paramquery[sure] = "true";
@@ -958,7 +958,7 @@ class AdminOrganisationUnitIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/admin/organisation_unit/rename.html");
+				$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/rename.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -1032,7 +1032,7 @@ class AdminOrganisationUnitIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/admin/organisation_unit/change_owner.html");
+				$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/change_owner.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -1116,7 +1116,7 @@ class AdminOrganisationUnitIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/admin/organisation_unit/change_leader.html");
+				$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/change_leader.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -1347,6 +1347,24 @@ class AdminOrganisationUnitIO
 		}
 	}
 	
+	public static function home_dialog()
+	{
+		$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/home_dialog.html");
+	
+		$paramquery 			= array();
+		$paramquery[username] 	= $_GET[username];
+		$paramquery[session_id] = $_GET[session_id];
+		$paramquery[nav] 		= $_GET[nav];
+		$paramquery[run] 		= "organisation";
+		$paramquery[dialog] 	= "organisation_units";
+		$paramquery[action] 	= "add";
+		$params = http_build_query($paramquery, '', '&#38;');
+		
+		$template->set_var("ou_add_params", $params);
+		$template->set_var("ou_amount", OrganisationUnit::count_organisation_units());
+		
+		return $template->get_string();
+	}
 }
 
 ?>

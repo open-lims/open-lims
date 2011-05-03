@@ -264,6 +264,48 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 		}
 	}
 	
+	public function get_quota_access($user_id, $filesize)
+	{
+		if (parent::get_quota_access($user_id, $filesize) == true)
+		{
+			$project = new Project($project_id);
+			$project_quota = $project->get_quota();
+			$project_filesize = $project->get_filesize();
+											
+			$new_project_filesize = $project_filesize + $filesize;
+			
+			if (($project_quota > $new_project_filesize or $project_quota == 0))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public function increase_filesize($user_id, $filesize)
+	{
+		if (parent::increase_filesize($user_id, $filesize) == true)
+		{
+			$project = new Project($project_id);
+			$project_filesize = $project->get_filesize();
+											
+			$new_project_filesize = $project_filesize + $filesize;
+			
+			return $project->set_filesize($new_project_filesize);
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	
 	/**
 	 * Checks if $folder_id is a case of Project Folder

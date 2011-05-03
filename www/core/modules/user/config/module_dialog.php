@@ -45,4 +45,36 @@
 	$dialog[2][method]			= "group_details";
 	$dialog[2][internal_name]	= "group_detail";
 	$dialog[2][display_name]	= "Group Detail";
+	
+	$dialog[3][type]			= "organisation_admin";
+	$dialog[3][class_path]		= "core/modules/user/admin/admin_user.io.php";
+	$dialog[3]['class']			= "AdminUserIO";
+	$dialog[3][method]			= "handler";
+	$dialog[3][internal_name]	= "users";
+	$dialog[3][display_name]	= "Users";
+	$dialog[3][weight]			= 100;
+	
+	$dialog[4][type]			= "organisation_admin";
+	$dialog[4][class_path]		= "core/modules/user/admin/admin_group.io.php";
+	$dialog[4]['class']			= "AdminGroupIO";
+	$dialog[4][method]			= "handler";
+	$dialog[4][internal_name]	= "groups";
+	$dialog[4][display_name]	= "Groups";
+	$dialog[4][weight]			= 200;
+	
+	$dialog[5][type]			= "admin_home_box";
+	$dialog[5][class_path]		= "core/modules/user/admin/admin_user.io.php";
+	$dialog[5]['class']			= "AdminUserIO";
+	$dialog[5][method]			= "home_dialog";
+	$dialog[5][internal_name]	= "users";
+	$dialog[5][display_name]	= "Users";
+	$dialog[5][weight]			= "200";
+	
+	$dialog[6][type]			= "admin_home_box";
+	$dialog[6][class_path]		= "core/modules/user/admin/admin_group.io.php";
+	$dialog[6]['class']			= "AdminGroupIO";
+	$dialog[6][method]			= "home_dialog";
+	$dialog[6][internal_name]	= "groups";
+	$dialog[6][display_name]	= "Groups";
+	$dialog[6][weight]			= 300;
 ?>

@@ -64,7 +64,10 @@ class SearchIO
 	}
 	
 	
-	
+	/**
+	 * @todo remove
+	 * @deprecated
+	 */
 	private static function full_text_search()
 	{
 		global $session;

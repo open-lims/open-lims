@@ -60,5 +60,28 @@
 	$dialog[4][method]			= "handler";
 	$dialog[4][internal_name]	= "value_template";
 	$dialog[4][display_name]	= "Value Templates";
-	$dialog[4][weight]			= 100; 
+	$dialog[4][weight]			= 100;
+	
+	$dialog[5][type]			= "admin_home_box";
+	$dialog[5][class_path]		= "core/modules/data/admin/admin_data.io.php";
+	$dialog[5]['class']			= "AdminDataIO";
+	$dialog[5][method]			= "home_dialog";
+	$dialog[5][internal_name]	= "data";
+	$dialog[5][display_name]	= "data";
+	$dialog[5][weight]			= "100";
+	
+	$dialog[6][type]			= "user_module_detail_setting";
+	$dialog[6][class_path]		= "core/modules/data/data.io.php";
+	$dialog[6]['class']			= "DataIO";
+	$dialog[6][method]			= "get_user_module_detail_setting";
+	$dialog[6][internal_name]	= "user_quota";
+	$dialog[6][display_name]	= "User Quota";
+	$dialog[6][weight]			= 100;
+	
+	$dialog[7][type]			= "module_value_change";
+	$dialog[7][class_path]		= "core/modules/data/data.io.php";
+	$dialog[7]['class']			= "DataIO";
+	$dialog[7][method]			= "change_quota";
+	$dialog[7][internal_name]	= "user_quota";
+	$dialog[7][display_name]	= "User Quota";
 ?>

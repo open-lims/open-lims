@@ -2264,6 +2264,16 @@ class Project implements ProjectInterface, EventListenerInterface
 			}
     	}
     	
+    	if ($event_object instanceof FileUploadPrecheckEvent)
+    	{
+    		$folder_id = $event_object->get_folder_id();
+    	}
+    	
+   		if ($event_object instanceof FileUploadEvent)
+    	{
+    		
+    	}
+    	
     	return true;
     }
        

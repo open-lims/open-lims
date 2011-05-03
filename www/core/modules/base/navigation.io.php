@@ -22,126 +22,15 @@
  */
 
 /**
- * Main Navigation IO Class
- * @todo problems with back button and tabbed browsing
+ * Navigation IO Class
  * @package base
  */
-class MainNavigation_IO
+class Navigation_IO
 {
-	private $current_tab;
-
-	function __construct()
-	{
-		global $session;
-		
-		if ($_GET[change_tab] == "true")
-		{
-			$session->write_value("CURRENT_IN_PROJECT", false, true);
-			$session->write_value("CURRENT_IN_SAMPLE", false, true);
-			
-			switch($_GET[nav]):
-			
-				case("home"):
-					$session->write_value("CURRENT_TAB", "HOME", true);
-				break;
-				
-				case("projects"):
-					$session->write_value("CURRENT_TAB", "PROJECTS", true);
-				break;
-				
-				case("samples"):
-					$session->write_value("CURRENT_TAB", "SAMPLES", true);
-				break;
-				
-				case("data"):
-					$session->write_value("CURRENT_TAB", "DATA", true);
-				break;
-				
-				case("search"):
-					$session->write_value("CURRENT_TAB", "SEARCH", true);
-				break;
-				
-				case("organiser"):
-					$session->write_value("CURRENT_TAB", "ORGANISER", true);
-				break;
-				
-				case("extensions"):
-					$session->write_value("CURRENT_TAB", "EXTENSIONS", true);
-				break;
-				
-				case("administration"):
-					$session->write_value("CURRENT_TAB", "ADMINISTRATION", true);
-				break;
-			
-			endswitch;
-			
-			unset($_GET[change_tab]);
-		}
-		else
-		{
-			unset($_GET[change_tab]);
-		}
-
-		if ($_GET[nav] == "projects" and is_numeric($_GET[project_id]))
-		{
-			// In Projekt Tab und Projekt
-			$session->write_value("CURRENT_IN_PROJECT", true, true);
-			$session->write_value("CURRENT_IN_SAMPLE", false, true);
-			$session->write_value("CURRENT_TAB", "PROJECTS", true);
-		}
-		elseif($_GET[nav] == "projects" and !$_GET[project_id])
-		{
-			// In Projekt Tab und außerhalb Project
-			$session->write_value("CURRENT_IN_PROJECT", false, true);
-			$session->write_value("CURRENT_IN_SAMPLE", false, true);
-			$session->write_value("CURRENT_TAB", "PROJECTS", true);
-		}
-		elseif($_GET[nav] == "samples" and is_numeric($_GET[sample_id]))
-		{
-			// In Sample Tab und Sample
-			$session->write_value("CURRENT_IN_PROJECT", false, true);
-			$session->write_value("CURRENT_IN_SAMPLE", true, true);
-			$session->write_value("CURRENT_TAB", "SAMPLES", true);
-		}
-		elseif($_GET[nav] == "samples" and !$_GET[sample_id])
-		{
-			// In Sample Tab und außerhalb Sample
-			if ($_GET[run] != "add_to_project" and 
-				$_GET[run] != "new_project_sample" and 
-				$_GET[run] != "associate")
-			{
-				$session->write_value("CURRENT_IN_PROJECT", false, true);
-				$session->write_value("CURRENT_IN_SAMPLE", false, true);
-				$session->write_value("CURRENT_TAB", "SAMPLES", true);
-			}
-		}
-		
-		if ($_GET[nav] == "projects" and $_GET[run] == "organ_unit")
-		{
-			$session->write_value("CURRENT_TAB", "PROJECTS", true);
-		}
-
-		if ($session->is_value("CURRENT_TAB"))
-		{
-			$this->current_tab 	= $session->read_value("CURRENT_TAB");
-			$this->in_project 	= $session->read_value("CURRENT_IN_PROJECT");
-			$this->in_sample	= $session->read_value("CURRENT_IN_SAMPLE");
-		}
-		else
-		{
-			$session->write_value("CURRENT_TAB", "HOME", true);
-			$session->write_value("CURRENT_IN_PROJECT", false, true);
-			$session->write_value("CURRENT_IN_SAMPLE", false, true);
-			$this->current_tab	= "HOME";
-			$this->in_project 	= false;
-			$this->in_sample	= false;
-		}
-	}
-	
 	/**
-	 * @todo a lot of
+	 * @todo use JQuery drop-down menu, if more than 8 entries
 	 */
-	public function output()
+	public static function main()
 	{
 		global $user;
 		
@@ -151,7 +40,6 @@ class MainNavigation_IO
 		$template->output();
 
 		// HOME
-
 		$paramquery[username] = $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
 		$paramquery[nav] = "home";
@@ -377,5 +265,89 @@ class MainNavigation_IO
 		$template->output();
 	}
 	
+	private static function get_left_standard_navigation()
+	{
+		$dialog_array = ModuleDialog::list_dialogs_by_type("standard_navigation");
+		if (count($dialog_array) == 1)
+		{
+			if (file_exists($dialog_array[0]['class_path']))
+			{
+				require_once($dialog_array[0]['class_path']);
+				$dialog_array[0]['class']::$dialog_array[0]['method']();
+			}
+			else
+			{
+				// Exception
+			}
+		}
+		else
+		{
+			// Exception
+		}
+	}
+	
+	/**
+	 * @todo ambiguous std. navigation exception
+	 */
+	public static function left()
+	{
+		if ($_GET[nav] and $_GET[nav] != "static" and $_GET[nav] != "home")
+		{
+			$module_array = SystemHandler::list_modules();
+			
+			if (is_array($module_array) and count($module_array) >= 1)
+			{
+				foreach($module_array as $key => $value)
+				{
+					if ($_GET[nav] == $value[name])
+					{
+						$module_path = "core/modules/".$value[folder]."/".$value[name].".io.php";
+						if (file_exists($module_path))
+						{
+							require_once($module_path);
+							if (method_exists($value['class'], get_navigation))
+							{
+								if (($navigation_array = $value['class']::get_navigation()) !== false)
+								{
+									if ($navigation_array['class'] and $navigation_array['method'] and $navigation_array['class_path'])
+									{
+										if (file_exists($navigation_array['class_path']))
+										{
+											require_once($navigation_array['class_path']);
+											$navigation_array['class']::$navigation_array['method']();
+										}
+										else
+										{
+											self::get_left_standard_navigation();
+										}
+									}
+									else
+									{
+										self::get_left_standard_navigation();
+									}
+								}
+								else
+								{
+									self::get_left_standard_navigation();
+								}
+							}
+							else
+							{
+								self::get_left_standard_navigation();
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				self::get_left_standard_navigation();
+			}
+		}
+		else
+		{
+			self::get_left_standard_navigation();
+		}
+	}
 }
 ?>
