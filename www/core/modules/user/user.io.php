@@ -68,7 +68,7 @@ class UserIO
 	
 	public static function change_personal()
 	{
-		global $user, $common;
+		global $user;
 		
 		$no_error = false;
 		if ($_GET[nextpage] == 1)
@@ -138,7 +138,7 @@ class UserIO
 			unset($paramquery[run]);
 			$params = http_build_query($paramquery);
 			
-			$common->step_proceed($params, "Change Personal Data", "Data Changed",null);
+			Common_IO::step_proceed($params, "Change Personal Data", "Data Changed",null);
 			
 			$user->set_profile("gender",$_POST[gender]);
 			$user->set_profile("title",$_POST[title]);
@@ -337,7 +337,7 @@ class UserIO
 	
 	public static function change_password()
 	{
-		global $user, $common;
+		global $user;
 		
 		$no_error = false;
 		
@@ -409,7 +409,7 @@ class UserIO
 			unset($paramquery[run]);
 			$params = http_build_query($paramquery);
 			
-			$common->step_proceed($params, "Change Password", "Password Changed",null);
+			Common_IO::step_proceed($params, "Change Password", "Password Changed",null);
 			
 			$user->set_password($_POST[new_password_1]);
 		}
@@ -433,7 +433,7 @@ class UserIO
 	
 	public static function change_password_on_login()
 	{
-		global $user, $common;
+		global $user;
 		
 		$no_error = false;
 		
@@ -488,11 +488,11 @@ class UserIO
 			
 			if ($user->set_password_on_login($_POST[new_password_1]))
 			{
-				$common->step_proceed($params, "Change Password Succesful", "Password Changed",null);
+				Common_IO::step_proceed($params, "Change Password Succesful", "Password Changed",null);
 			}
 			else
 			{
-				$common->step_proceed($params, "Change Password Failed", "Password Changed",null);
+				Common_IO::step_proceed($params, "Change Password Failed", "Password Changed",null);
 			}
 		}
 		else

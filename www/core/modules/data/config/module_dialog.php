@@ -84,4 +84,11 @@
 	$dialog[7][method]			= "change_quota";
 	$dialog[7][internal_name]	= "user_quota";
 	$dialog[7][display_name]	= "User Quota";
+	
+	$dialog[8][type]			= "common_dialog";
+	$dialog[8][class_path]		= "core/modules/data/file.io.php";
+	$dialog[8]['class']			= "FileIO";
+	$dialog[8][method]			= "upload";
+	$dialog[8][internal_name]	= "file_add";
+	$dialog[8][display_name]	= "File";
 ?>

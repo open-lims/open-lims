@@ -151,69 +151,37 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 		unset($this->sample_id);
 		parent::__destruct();
 	}
-
+	
 	/**
 	 * @return bool
 	 */
-	public function is_read_access()
+	public function can_set_automatic()
 	{
-		return parent::is_read_access();
+		return false;
 	}
 	
 	/**
 	 * @return bool
 	 */
-	public function is_write_access()
+	public function can_set_data_entity()
 	{
-		return parent::is_write_access();
+		return false;
 	}
 	
 	/**
 	 * @return bool
 	 */
-	public function is_delete_access()
+	public function can_set_control()
 	{
-		return parent::is_delete_access();
+		return false;
 	}
 	
 	/**
 	 * @return bool
 	 */
-	public function is_control_access()
+	public function can_set_remain()
 	{
-		return parent::is_control_access();
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_flag_change_permission()
-	{
-		return parent::is_flag_change_permission();
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_flag_add_folder()
-	{
-		return parent::is_flag_add_folder();
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_flag_cmd_folder()
-	{
-		return parent::is_flag_cmd_folder();
-	}
-	
-	/**
-	 * @return bool
-	 */
-	public function is_flag_rename_folder()
-	{
-		return parent::is_flag_rename_folder();
+		return false;
 	}
 	
 	/**

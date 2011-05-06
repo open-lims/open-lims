@@ -192,8 +192,6 @@ class AdminEquipmentTypeIO
 
 	public static function create()
 	{
-		global $common;
-		
 		if (($_GET[action] == "add_child" and $_GET[id]) or $_GET[action] == "add")
 		{
 			if ($_GET[nextpage] == 1)
@@ -342,11 +340,11 @@ class AdminEquipmentTypeIO
 				
 				if ($equipment_type->create($toid, $_POST[name], $_POST[cat_id], $_POST[location_id], $_POST[description], $_POST[manufacturer]))
 				{
-					$common->step_proceed($params, "Add Equipment Type", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Add Equipment Type", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Add Equipment Type", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Add Equipment Type", "Operation Failed" ,null);	
 				}
 			}
 		}
@@ -360,8 +358,6 @@ class AdminEquipmentTypeIO
 	
 	public static function delete()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			if ($_GET[sure] != "true")
@@ -396,11 +392,11 @@ class AdminEquipmentTypeIO
 				
 				if ($equipment_type->delete())
 				{							
-					$common->step_proceed($params, "Delete Type Category", "Operation Successful" ,null);
+					Common_IO::step_proceed($params, "Delete Type Category", "Operation Successful" ,null);
 				}
 				else
 				{							
-					$common->step_proceed($params, "Delete Type Category", "Operation Failed" ,null);
+					Common_IO::step_proceed($params, "Delete Type Category", "Operation Failed" ,null);
 				}		
 			}
 		}
@@ -414,8 +410,6 @@ class AdminEquipmentTypeIO
 	
 	public static function detail()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			$equipment_type = new EquipmentType($_GET[id]);	
@@ -547,8 +541,6 @@ class AdminEquipmentTypeIO
 	
 	public static function rename()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			$equipment_type = new EquipmentType($_GET[id]);
@@ -642,11 +634,11 @@ class AdminEquipmentTypeIO
 				
 				if ($equipment_type->set_name($_POST[name]) and $equipment_type->set_manufacturer($_POST[manufacturer]))
 				{
-					$common->step_proceed($params, "Rename Equipment Type", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Rename Equipment Type", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Rename Equipment Type", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Rename Equipment Type", "Operation Failed" ,null);	
 				}
 			}
 		}
@@ -660,8 +652,6 @@ class AdminEquipmentTypeIO
 	
 	public static function add_user()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{			
 			if ($_GET[nextpage] == 1)
@@ -735,11 +725,11 @@ class AdminEquipmentTypeIO
 				
 				if ($equipment_type->add_responsible_person($_POST[user]))
 				{
-					$common->step_proceed($params, "Equipment Type", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Equipment Type", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Equipment Type", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Equipment Type", "Operation Failed" ,null);	
 				}
 			}
 		}
@@ -753,8 +743,6 @@ class AdminEquipmentTypeIO
 	
 	public static function delete_user()
 	{
-		global $common;
-		
 		if ($_GET[id] and $_GET[key])
 		{
 			if ($_GET[sure] != "true")
@@ -788,11 +776,11 @@ class AdminEquipmentTypeIO
 						
 				if ($equipment_type->delete_responsible_person($_GET[key]))
 				{							
-					$common->step_proceed($params, "Equipment Type", "Operation Successful" ,null);
+					Common_IO::step_proceed($params, "Equipment Type", "Operation Successful" ,null);
 				}
 				else
 				{							
-					$common->step_proceed($params, "Equipment Type", "Operation Failed" ,null);
+					Common_IO::step_proceed($params, "Equipment Type", "Operation Failed" ,null);
 				}			
 			}
 		}
@@ -806,8 +794,6 @@ class AdminEquipmentTypeIO
 	
 	public static function add_organisation_unit()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{			
 			if ($_GET[nextpage] == 1)
@@ -881,11 +867,11 @@ class AdminEquipmentTypeIO
 				
 				if ($equipment_type->add_organisation_unit($_POST[ou]))
 				{
-					$common->step_proceed($params, "Add Organisation Unit", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Add Organisation Unit", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Failed" ,null);	
 				}
 			}
 		}
@@ -899,8 +885,6 @@ class AdminEquipmentTypeIO
 	
 	public static function delete_organisation_unit()
 	{
-		global $common;
-		
 		if ($_GET[id] and $_GET[key])
 		{
 			if ($_GET[sure] != "true")
@@ -934,11 +918,11 @@ class AdminEquipmentTypeIO
 						
 				if ($equipment_type->delete_organisation_unit($_GET[key]))
 				{							
-					$common->step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
+					Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
 				}
 				else
 				{							
-					$common->step_proceed($params, "Delete Organisation Unit", "Operation Failed" ,null);
+					Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Failed" ,null);
 				}			
 			}
 		}
@@ -952,8 +936,6 @@ class AdminEquipmentTypeIO
 	
 	public static function change_location()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			if ($_GET[nextpage] == 1)
@@ -1007,11 +989,11 @@ class AdminEquipmentTypeIO
 				
 				if ($equipment_type->set_location_id($_POST[location]))
 				{
-					$common->step_proceed($params, "Equipment Type", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Equipment Type", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Equipment Type", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Equipment Type", "Operation Failed" ,null);	
 				}
 			}
 		}

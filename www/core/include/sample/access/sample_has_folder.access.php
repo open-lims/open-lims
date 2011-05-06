@@ -184,5 +184,30 @@ class SampleHasFolder_Access
 			return null;
 		}
 	}
+	
+	public static function get_sample_id_by_folder_id($folder_id)
+	{
+		global $db;
+		
+		if (is_numeric($folder_id))
+		{
+			$sql = "SELECT get_sample_id_by_folder_id(".$folder_id.") AS return_value";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[return_value])
+			{
+				return $data[return_value];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
 }
 ?>

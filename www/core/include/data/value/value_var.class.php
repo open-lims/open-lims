@@ -35,18 +35,8 @@ require_once("interfaces/value_var.interface.php");
  */
 class ValueVar implements ValueVarInterface
 {
-    private $project_id;
-    private $sample_id;
-    
-    private $project;
-    private $sample;
-    
     private $item_array;
-    private $project_array;
-    private $sample_array;
-    
     private $result;
-    
     private $stack;
     
     function __construct()
@@ -58,31 +48,7 @@ class ValueVar implements ValueVarInterface
     {
     	unset($this->stack);
     }
-    
-    /**
-     * @param integer $project_id
-     * @todo remove method
-     */
-    public function set_project_id($project_id)
-    {
-    	if (is_numeric($project_id))
-    	{
-    		$this->project_id = $project_id;
-    		$this->project = new Project($project_id);
-    	}
-    }
-    
-    /**
-     * @param integer $sample_id
-     * @todo remove method
-     */
-    public function set_sample_id($sample_id)
-    {
-    	if (is_numeric($sample_id)) {
-    		$this->sample_id = $sample_id;
-    		$this->sample = new Sample($sample_id);
-    	}
-    }
+
     
     /**
      * Returns the content of given address
@@ -143,231 +109,9 @@ class ValueVar implements ValueVarInterface
 	    		break;
 	    	
 	    		case "this":
-	    			if ($this->project_id)
-	    			{
-	    				array_push($this->stack, "project");
-	    				array_push($this->stack, $this->project_id);
-	    			}
-	    			elseif($this->sample_id)
-	    			{
-	    				array_push($this->stack, "sample");
-	    				array_push($this->stack, $this->sample_id);
-	    			}
-	    			else
-	    			{
-	    				// Exception
-	    			}
+	    			
 	    		break;
-	    		
-	    		case "project":
-	    			array_push($this->stack, "project");
-	    		break;
-	    		
-	    		case "sample":
-	    			if (count($this->stack) <= 0)
-	    			{
-	    				array_push($this->stack, "sample");
-	    			}
-	    			else
-	    			{
-	    				if ($this->stack[count($this->stack)-1] == "item")
-	    				{
-	    					array_push($this->stack, "sample");
-	    				}
-	    				else
-	    				{
-	    					// Exception
-	    				}
-	    			}
-	    		break;
-	    		
-	    		case "parent":
-	    			if ($this->stack[count($this->stack)-2] == "project")
-	    			{
-	    				if (($project_toid = $this->project->get_project_toid()) != null)
-	    				{
-	    					array_pop($this->stack);
-	    					array_push($this->stack, $project_toid);
-	    					$this->project = new Project($project_toid);
-	    					$this->project_id = $project_toid;
-	    				}
-	    				else
-	    				{
-	    					// Exception
-	    				}
-	    			}
-	    			elseif ($this->stack[count($this->stack)-2] == "sample")
-	    			{
-	    				/**
-	    				 * @deprecated: method no more exists
-	    				 */
-	    				$parent_sample = $this->sample->list_parent_samples();
-	    				/**
-	    				 * @deprecated: method no more exists
-	    				 */
-	    				$parent_project = $this->sample->get_parent_project();
-	    				
-	    				// [!]
-	    				if ((!count($parent_sample) == 1) and (!count($parent_sample) == 0 or !count($parent_project) == 1)) {
-	    					// Exception
-	    				}
-	    			}
-	    			else
-	    			{
-	    				// Exception
-	    			}
-	    		break;
-	    		
-	    		case "parents":
-	    			if ($this->stack[count($this->stack)-2] == "project")
-	    			{
-	    				if (($project_toid = $this->project->get_project_toid()) != null)
-	    				{
-	    					if (!is_array($this->result))
-	    					{
-									$this->result = array();
-							}
-	    					
-	    					array_push($this->result, $project_toid);
-	    					array_push($this->stack, "parents");
-	    				}
-	    				else
-	    				{
-	    					// Exception
-	    				}
-	    			}
-	    			elseif ($this->stack[count($this->stack)-2] == "sample")
-	    			{
-	    				if (is_object($this->sample))
-	    				{
-		    				/**
-		    				 * @todo
-		    				 */
-	    					// $parent_sample = $this->sample->list_parent_samples();
-		    				
-		    				if (count($parent_sample) >= 1)
-		    				{
-								if (!is_array($this->result))
-								{
-									$this->result = array();
-								}
-								
-								foreach($parent_sample as $key => $value)
-								{
-									array_push($this->result, $value);
-								}
-								
-								array_push($this->stack, "parents");
-		    				}
-		    				else
-		    				{
-		    					// Exception
-		    				}
-	    				}
-	    				else
-	    				{
-	    					// Exception
-	    				}
-	    			}
-	    			else
-	    			{
-	    				// Exception
-	    			}
-	    		break;
-	    		
-	    		case "current":
-	    			if ($this->stack[count($this->stack)-1] == "status")
-	    			{
-	    				array_push($this->stack, $this->project->get_current_status_id());
-	    			}
-	    			else
-	    			{
-	    				// Exception
-	    			}
-	    		break;
-	    		
-	    		case "typeof":
-	    			if ($number_of_statements >= 1)
-	    			{
-	    				$statement_array = explode(".", $address);
-			    		$type_of_id = $statement_array[1];
-			    		
-			    		$statement_array = explode(".", $address);
-			    		$statement_string = "";
-			    		for ($i=1;$i<=$number_of_statements;$i++)
-			    		{
-			    			if (!$statement_string)
-			    			{
-			    				$statement_string = $statement_array[$i];
-			    			}
-			    			else
-			    			{
-			    				$statement_string .= ".".$statement_array[$i];
-			    			}
-			    		}
-			    		$address = $statement_string;
-			    		
-			    		switch ($this->stack[count($this->stack)-2]):
-	    					case "value":
-	    					
-	    						$tmp_result = $this->result;
-								$this->result = array();
 
-	    						if (is_array($tmp_result) and count($tmp_result) >= 1)
-	    						{
-	    							foreach ($tmp_result as $fe_key => $fe_value)
-	    							{
-	    								$value = new Value($fe_value);
-	    								
-	    								if ($value->get_type_id() == $type_of_id)
-	    								{
-	    									array_push($this->result, $fe_value);
-	    								}
-	    							}
-	    						}
-	    					break;
-	    				
-	    					case "sample":
-								$tmp_result = $this->result;
-								$this->result = array();
-
-	    						if (is_array($tmp_result) and count($tmp_result) >= 1)
-	    						{
-	    							foreach ($tmp_result as $fe_key => $fe_value)
-	    							{
-	    								$sample = new Sample($fe_value);
-	    								$sample_template = new SampleTemplate($sample->get_template_id());
-	    								
-	    								if ($sample_template->get_cat_id() == $type_of_id)
-	    								{
-	    									array_push($this->result, $fe_value);
-	    								}
-	    							}
-	    						}
-	    					break;
-	    				endswitch;	    
-	    			}
-	    			else
-	    			{
-			    		// Exception
-	    			}
-	    		break;
-	    		
-	    		case "status":
-	    			if ($this->stack[count($this->stack)-2] == "project")
-	    			{
-	    				array_push($this->stack, "status");
-	    			}
-	    			else
-	    			{
-	    				// Exception
-	    			}
-	    		break;
-	    		
-	    		case "required":
-	    			array_push($this->stack, "status");
-	    			array_push($this->stack, 0);
-	    		break;
 	    		
 	    		case "item":
 	    			if ($this->stack[count($this->stack)-2] == "status")
@@ -466,102 +210,9 @@ class ValueVar implements ValueVarInterface
 	    			}
 	    		break;
 	    		
-	    		case "active":
-	    			if ($this->stack[count($this->stack)-2] == "sample" and $this->project_id)
-	    			{
-						$tmp_result = $this->result;
-						$this->result = array();
-
-						if (is_array($tmp_result) and count($tmp_result) >= 1)
-						{
-							foreach ($tmp_result as $fe_key => $fe_value)
-							{
-								$sample = new Sample($fe_value);
-								$project_item = new ProjectItem($this->project_id);
-								$project_item->set_item_id($sample->get_item_id());
-								
-								if ($project_item->is_active() == true)
-								{
-									array_push($this->result, $fe_value);
-								}
-							}	
-						}
-    				}	
-	    		break;
-	    		
-	    		case "inactive":
-	    			if ($this->stack[count($this->stack)-2] == "sample" and $this->project_id)
-	    			{
-						$tmp_result = $this->result;
-						$this->result = array();
-
-						if (is_array($tmp_result) and count($tmp_result) >= 1)
-						{
-							foreach ($tmp_result as $fe_key => $fe_value)
-							{
-								$sample = new Sample($fe_value);
-								$project_item = new ProjectItem($this->project_id);
-								$project_item->set_item_id($sample->get_item_id());
-								
-								if ($project_item->is_active() == false)
-								{
-									array_push($this->result, $fe_value);
-								}
-							}
-						}
-    				}
-	    		break;
-	    		
+	
 	    		case "list":
-	    			if ($this->stack[count($this->stack)-1] == "item")
-	    			{   				
-	    				if ($this->stack[count($this->stack)-3] == "project" or
-	    					$this->stack[count($this->stack)-3] == "sample" or
-	    					is_numeric($this->stack[count($this->stack)-2]))
-	    				{
-	    					if (is_array($this->item_array) and count($this->item_array) >= 1)
-	    					{
-								$this->result = $this->item_array;
-							}
-							else
-							{
-								$this->result = null;
-							}
-	    				}
-	    				else
-	    				{
-	    					// Exception
-	    				}	    			
-	    			}
-	    			elseif ($this->stack[count($this->stack)-1] == "sample")
-	    			{
-	    				if ($this->stack[count($this->stack)-2] == "item" and $this->item_array)
-	    				{
-	    					if (is_array($this->item_array) and count($this->item_array) >= 1)
-	    					{
-	    						$result_array = array();
-	    						foreach($this->item_array as $fe_key => $fe_value)
-	    						{
-	    							if (Sample::is_kind_of("sample", $fe_value) == true)
-	    							{
-	    								$sample_id = Sample::get_entry_by_item_id($fe_value);
-	    								array_push($result_array, $sample_id);
-	    							}
-	    						}
-	    						$this->result = $result_array;
-	    						$this->item_array = $result_array;
-	    					}
-	    					else
-	    					{
-	    						$this->result = null;
-	    					}
-	    				}
-	    				else
-	    				{
-	    					// Exception
-	    				}
-	    			}
-	    			elseif($this->stack[count($this->stack)-1] == "value")
+	    			if($this->stack[count($this->stack)-1] == "value")
 	    			{
 	    				if ($this->stack[count($this->stack)-2] == "item" and $this->item_array)
 	    				{
@@ -601,34 +252,7 @@ class ValueVar implements ValueVarInterface
 	    		break;
 	    		
 	    		case "getName":
-	    			if ($this->stack[count($this->stack)-1] == "list")
-	    			{
-	    				if ($this->stack[count($this->stack)-3] == "sample" or 
-	    					$this->stack[count($this->stack)-3] == "project")
-	    				{
-		    				switch ($this->stack[count($this->stack)-3]):
-		    					case "project":
-		    					
-		    					break;
-		    					
-		    					case "sample":
-		    						if (is_array($this->result) and count($this->result) >= 1)
-		    						{
-		    							$tmp_array = $this->result;
-		    							$this->result = array();
-		    							foreach ($tmp_array as $key => $value)
-		    							{
-		    								$sample = new Sample($value);
-		    								$this->result[$value] = $sample->get_name();
-		    							}
-		    						}
-		    					break;
-	
-		    				endswitch;	    
-	    				}
-	    				else
-	    				{
-	    					switch ($this->stack[count($this->stack)-2]):
+	    				switch ($this->stack[count($this->stack)-2]):
 		    					case "value":
 		    						if (is_array($this->result) and count($this->result) >= 1)
 		    						{
@@ -640,35 +264,8 @@ class ValueVar implements ValueVarInterface
 		    								$this->result[$fe_value] = $value->get_type_name();
 		    							}
 		    						}
-		    					break;
-		    					
-		    					case "sample":
-		    						if (is_array($this->result) and count($this->result) >= 1)
-		    						{
-		    							$tmp_array = $this->result;
-		    							$this->result = array();
-		    							foreach ($tmp_array as $fe_key => $fe_value)
-		    							{
-		    								$sample = new Sample($fe_value);
-		    								$this->result[$fe_value] = $sample->get_name();
-		    							}
-		    						}
-		    					break;
-		    				endswitch;	    	
-	    				}
-	    			}
-	    			else
-	    			{
-	    				switch ($this->stack[count($this->stack)-2]):
-	    					case "project":
-	    						$this->result = $this->project->get_name();
-	    					break;
-	    				
-	    					case "sample":
-	    						$this->result = $this->sample->get_name();
-	    					break;
-	    				endswitch;
-	    			}
+		    				break;
+		    			endswitch;	    	
 	    		break;
 	    		
 	    		default:
@@ -677,22 +274,6 @@ class ValueVar implements ValueVarInterface
 	    				if (count($this->stack) >= 1)
 	    				{
 	    					switch ($this->stack[count($this->stack)-1]):
-	    						case "project":
-	    							array_push($this->stack, $current_statement);
-	    							$this->project_id = $current_statement;
-	    							$this->project = new Project($current_statement);
-	    						break;
-	    						
-	    						case "sample":
-	    							array_push($this->stack, $current_statement);
-	    							$this->sample_id = $current_statement;
-	    							$this->sample = new Sample($current_statement);
-	    						break;
-	    						
-	    						case "status":
-	    							array_push($this->stack, $current_statement);
-	    						break;
-	    						
 	    						case "value":
 	    							array_push($this->stack, $current_statement);
 	    						break;
@@ -708,43 +289,7 @@ class ValueVar implements ValueVarInterface
 	    				if ($this->stack[count($this->stack)-2] == "value" and
 	    					is_numeric($this->stack[count($this->stack)-1]))
 	    				{
-	    					if ($this->stack[count($this->stack)-5] == "status" and
-	    						is_numeric($this->stack[count($this->stack)-4]))
-	    					{    					
-			    				if (is_array($this->item_array) and count($this->item_array) >= 1)
-			    				{
-		    						$result_array = array();
-		    						
-		    						foreach($this->item_array as $fe_key => $fe_value)
-		    						{
-			    						if (DataEntity::is_kind_of("value", $fe_value) == true)
-		    							{
-		    								$data_entity_id = DataEntity::get_entry_by_item_id($fe_value);
-		    								if (($value_id = Value::get_value_id_by_data_entity_id($data_entity_id)) != null)
-		    								{
-		    									array_push($result_array, $value_id);
-		    								}
-		    							}
-		    						}
-		    						
-		    						$array_address = $this->stack[count($this->stack)-1] - 1;
-		    						
-		    						if ($result_array[$array_address])
-		    						{
-		    							$value = new Value($result_array[$array_address]);
-		    							$value_array = unserialize($value->get_value());
-		    							
-		    							if ($value_array[$current_statement])
-		    							{
-		    								$this->result = $value_array[$current_statement];
-		    							}
-		    						}	
-			    				}else{
-			    					// Exception
-			    				}	
-	    					}else{
-	    						// Exception - No Status
-	    					}
+	    					
 	    				}
 	    				else
 	    				{

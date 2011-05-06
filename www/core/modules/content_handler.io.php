@@ -28,106 +28,13 @@
 class ContentHandler_IO
 {
 	/**
-	 * @todo catch ModuleDataCorruptExeception
-	 */
-	public static function includer()
-	{
-		global $session, $user, $common, $misc, $transaction;
-		
-		try {
-			if ($_GET[nav])
-			{
-				if($_GET[nav] == "home")
-				{
-					include("core/modules/base/home.io.php");
-				}
-				elseif($_GET[nav] == "static")
-				{
-					require_once("core/modules/base/base.io.php");
-					BaseIO::method_handler();
-				}
-				else
-				{
-					$module_found = false;
-					$module_array = SystemHandler::list_modules();
-					
-					if (is_array($module_array) and count($module_array) >= 1)
-					{
-						foreach($module_array as $key => $value)
-						{
-							if ($_GET[nav] == $value[name])
-							{
-								$module_path = "core/modules/".$value[folder]."/".$value[name].".io.php";
-								if (file_exists($module_path))
-								{
-									require_once($module_path);
-									$value['class']::method_handler();
-									$module_found = true;
-								}
-								else
-								{
-									throw new ModuleDataCorruptExeception(null, null);
-								}
-							}
-						}
-					}
-					else
-					{
-						include("core/modules/base/home.io.php");
-					}
-					
-					if ($module_found == false)
-					{
-						$error_io = new Error_IO($e, 0, 0, 0);
-						$error_io->display_error();
-					}
-				}
-			}
-			else
-			{
-				include("core/modules/base/home.io.php");
-			}
-		}
-		catch(ModuleDialogCorruptException $e)
-		{
-			/**
-			 * @todo Error-Code
-			 */
-			$error_io = new Error_IO($e, 0, 0, 0);
-			$error_io->display_error();
-		}
-		catch(ModuleDialogNotFoundException $e)
-		{
-			/**
-			 * @todo Error-Code
-			 */
-			$error_io = new Error_IO($e, 0, 0, 0);
-			$error_io->display_error();
-		}
-		catch(ModuleDialogMissingException $e)
-		{
-			/**
-			 * @todo Error-Code
-			 */
-			$error_io = new Error_IO($e, 0, 0, 0);
-			$error_io->display_error();
-		}
-		catch(DatabaseQueryFailedException $e)
-		{
-			$transaction->force_rollback();
-			$error_io = new Error_IO($e, 2, 10, 1);
-			$error_io->display_error();
-		}
-	}
-	
-	/**
 	 * @todo Remove HTML Statements
 	 * @todo Implement IP-Blocking
-	 * @todo include includer()
+	 * @todo catch ModuleDataCorruptExeception
 	 */
 	public static function main()
 	{
-		global $session;
+		global $session, $user, $misc, $transaction;
 
 		if ($GLOBALS[con_run] == true)
 		{
@@ -135,15 +42,27 @@ class ContentHandler_IO
 			{
 				$template = new Template("languages/en-gb/template/index_header.html");
 	
-				$index_css = "";
+				$css_directory = $GLOBALS[www_dir]."/css";
+				$css_directory_array = scandir($css_directory);
 				
-				if ($session->is_valid() == false or $_GET[run] == "logout")
+				if (is_array($css_directory_array))
 				{
-					$index_css .= "<link rel='stylesheet' type='text/css' href='css/login.css' title='Style' />";
+					$index_css = "";
+					
+					foreach($css_directory_array as $key => $value)
+					{
+						if ((strpos(strrev($value),"ssc.") === 0) and (strpos(strrev($value),"ssc.gubed") === false) and ($value != "main.css"))
+						{
+							if (is_file($css_directory."/".$value))
+							{
+								$index_css .= "<link rel='stylesheet' type='text/css' href='css/".$value."' title='Style' />\n";
+							}	
+						}
+					}	
 				}
 				
-				
 				$template->set_var("INDEX_CSS",$index_css);
+							
 			 	$template->set_var("INDEX_TITLE",$GLOBALS[htmltitle]);
 			
 				$template->output();
@@ -178,7 +97,90 @@ class ContentHandler_IO
  					}
  					else
  					{
-				 		self::includer();
+ 						try {
+							if ($_GET[nav])
+							{
+								if($_GET[nav] == "home")
+								{
+									include("core/modules/base/home.io.php");
+								}
+								elseif($_GET[nav] == "static")
+								{
+									require_once("core/modules/base/base.io.php");
+									BaseIO::method_handler();
+								}
+								else
+								{
+									$module_found = false;
+									$module_array = SystemHandler::list_modules();
+									
+									if (is_array($module_array) and count($module_array) >= 1)
+									{
+										foreach($module_array as $key => $value)
+										{
+											if ($_GET[nav] == $value[name])
+											{
+												$module_path = "core/modules/".$value[folder]."/".$value[name].".io.php";
+												if (file_exists($module_path))
+												{
+													require_once($module_path);
+													$value['class']::method_handler();
+													$module_found = true;
+												}
+												else
+												{
+													throw new ModuleDataCorruptExeception(null, null);
+												}
+											}
+										}
+									}
+									else
+									{
+										include("core/modules/base/home.io.php");
+									}
+									
+									if ($module_found == false)
+									{
+										$error_io = new Error_IO($e, 0, 0, 0);
+										$error_io->display_error();
+									}
+								}
+							}
+							else
+							{
+								include("core/modules/base/home.io.php");
+							}
+						}
+						catch(ModuleDialogCorruptException $e)
+						{
+							/**
+							 * @todo Error-Code
+							 */
+							$error_io = new Error_IO($e, 0, 0, 0);
+							$error_io->display_error();
+						}
+						catch(ModuleDialogNotFoundException $e)
+						{
+							/**
+							 * @todo Error-Code
+							 */
+							$error_io = new Error_IO($e, 0, 0, 0);
+							$error_io->display_error();
+						}
+						catch(ModuleDialogMissingException $e)
+						{
+							/**
+							 * @todo Error-Code
+							 */
+							$error_io = new Error_IO($e, 0, 0, 0);
+							$error_io->display_error();
+						}
+						catch(DatabaseQueryFailedException $e)
+						{
+							$transaction->force_rollback();
+							$error_io = new Error_IO($e, 2, 10, 1);
+							$error_io->display_error();
+						}
  					}
 			 		
 			 		echo "</div>";

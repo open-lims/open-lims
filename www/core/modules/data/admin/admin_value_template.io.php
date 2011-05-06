@@ -96,8 +96,6 @@ class AdminValueTemplateIO
 
 	public static function create()
 	{
-		global $common;
-
 		if ($_GET[nextpage] == 1)
 		{
 			$page_1_passed = true;
@@ -170,19 +168,17 @@ class AdminValueTemplateIO
 			
 			if ($value_type->create($_POST[data_entity_id]))
 			{
-				$common->step_proceed($params, "Add Value Template", "Operation Successful", null);
+				Common_IO::step_proceed($params, "Add Value Template", "Operation Successful", null);
 			}
 			else
 			{
-				$common->step_proceed($params, "Add Value Template", "Operation Failed" ,null);	
+				Common_IO::step_proceed($params, "Add Value Template", "Operation Failed" ,null);	
 			}
 		}
 	}
 	
 	public static function delete()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			if ($_GET[sure] != "true")
@@ -217,11 +213,11 @@ class AdminValueTemplateIO
 				
 				if ($value_type->delete())
 				{							
-					$common->step_proceed($params, "Delete Value Template", "Operation Successful" ,null);
+					Common_IO::step_proceed($params, "Delete Value Template", "Operation Successful" ,null);
 				}
 				else
 				{							
-					$common->step_proceed($params, "Delete Value Template", "Operation Failed" ,null);
+					Common_IO::step_proceed($params, "Delete Value Template", "Operation Failed" ,null);
 				}		
 			}
 		}

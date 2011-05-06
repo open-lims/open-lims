@@ -726,7 +726,7 @@ class DataIO
 
 	public static function permission()
 	{
-		global $common, $user;
+		global $user;
 		
 		try
 		{
@@ -817,7 +817,7 @@ class DataIO
 
 					if ($object->can_set_automatic())
 					{
-						
+						$disable_automatic = false;
 					}
 					else
 					{
@@ -826,7 +826,7 @@ class DataIO
 					
 					if ($object->can_set_data_entity())
 					{
-						
+						$disable_project = false;
 					}
 					else
 					{
@@ -835,7 +835,7 @@ class DataIO
 					
 					if ($object->can_set_control())
 					{
-						
+						$disable_control = false;
 					}
 					else
 					{
@@ -844,7 +844,7 @@ class DataIO
 					
 					if ($object->can_set_remain())
 					{
-						
+						$disable_remain = false;
 					}
 					else
 					{
@@ -972,11 +972,11 @@ class DataIO
 					
 					if ($data_permission->set_permission_array($_POST) == true)
 					{
-						$common->step_proceed($params, "Permission: ".$title."", "Changes saved succesful" ,null);
+						Common_IO::step_proceed($params, "Permission: ".$title."", "Changes saved succesful" ,null);
 					}
 					else
 					{
-						$common->step_proceed($params, "Permission: ".$title."", "Operation failed" ,null);
+						Common_IO::step_proceed($params, "Permission: ".$title."", "Operation failed" ,null);
 					}
 				}
 			}
@@ -1011,8 +1011,6 @@ class DataIO
 
 	public static function change_owner()
 	{
-		global $common;
-		
 		try
 		{
 			if ($_GET[file_id] xor $_GET[value_id])
@@ -1097,11 +1095,11 @@ class DataIO
 					
 					if ($data_permission->set_owner_id($_POST[user]) == true)
 					{
-						$common->step_proceed($params, "Permission: ".$title."", "Changes saved succesful" ,null);
+						Common_IO::step_proceed($params, "Permission: ".$title."", "Changes saved succesful" ,null);
 					}
 					else
 					{
-						$common->step_proceed($params, "Permission: ".$title."", "Operation failed" ,null);
+						Common_IO::step_proceed($params, "Permission: ".$title."", "Operation failed" ,null);
 					}
 				}
 			}
@@ -1136,8 +1134,6 @@ class DataIO
 	
 	public static function change_group()
 	{
-		global $common;
-		
 		try
 		{
 			if ($_GET[file_id] xor $_GET[value_id])
@@ -1222,11 +1218,11 @@ class DataIO
 					
 					if ($data_permission->set_owner_group_id($_POST[group]) == true)
 					{
-						$common->step_proceed($params, "Permission: ".$title."", "Changes saved succesful" ,null);
+						Common_IO::step_proceed($params, "Permission: ".$title."", "Changes saved succesful" ,null);
 					}
 					else
 					{
-						$common->step_proceed($params, "Permission: ".$title."", "Operation failed" ,null);
+						Common_IO::step_proceed($params, "Permission: ".$title."", "Operation failed" ,null);
 					}
 				}
 			}
@@ -1459,8 +1455,6 @@ class DataIO
 	
 	public static function change_quota()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			$user = new User($_GET[id]);
@@ -1525,11 +1519,11 @@ class DataIO
 			
 				if ($user_data->set_quota($_POST[quota]))
 				{
-					$common->step_proceed($params, "Change User Quota", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Change User Quota", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Change User Quota", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Change User Quota", "Operation Failed" ,null);	
 				}
 			}
 		}

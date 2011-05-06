@@ -32,7 +32,7 @@ class ValueIO
 	 */
 	public static function detail()
 	{
-		global $common, $user;
+		global $user;
 		
 		try
 		{
@@ -311,16 +311,16 @@ class ValueIO
 				
 							if ($value->update($value_array, $previous_version_id, $major, true, false))
 							{			
-								$common->step_proceed($params, "Value Update", "Value Update Succeed" ,null);			
+								Common_IO::step_proceed($params, "Value Update", "Value Update Succeed" ,null);			
 							}
 							else
 							{
-								$common->step_proceed($params, "Value Update", "Value Update Failed" ,null);			
+								Common_IO::step_proceed($params, "Value Update", "Value Update Failed" ,null);			
 							}
 						}
 						else
 						{
-							$common->step_proceed($params, "Value Update", "Value Update Failed" ,null);	
+							Common_IO::step_proceed($params, "Value Update", "Value Update Failed" ,null);	
 						}
 					}
 				}
@@ -599,8 +599,6 @@ class ValueIO
 	 */
 	public static function delete_version()
 	{
-		global $common;
-		
 		if ($_GET[value_id] and $_GET[version])
 		{
 			$value = new Value($_GET[value_id]);
@@ -646,7 +644,7 @@ class ValueIO
 							unset($paramquery[value_id]);
 							$params = http_build_query($paramquery);
 						}					
-						$common->step_proceed($params, "Delete Value", "Operation Successful" ,null);
+						Common_IO::step_proceed($params, "Delete Value", "Operation Successful" ,null);
 					}
 					else
 					{
@@ -656,7 +654,7 @@ class ValueIO
 						unset($paramquery[value_id]);
 						$params = http_build_query($paramquery);
 								
-						$common->step_proceed($params, "Delete Value", "Operation Failed" ,null);
+						Common_IO::step_proceed($params, "Delete Value", "Operation Failed" ,null);
 					}			
 				}
 			}

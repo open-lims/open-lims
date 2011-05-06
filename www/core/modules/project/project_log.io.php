@@ -267,7 +267,7 @@ class ProjectLogIO
 
 	public static function add_comment()
 	{
-		global $common, $project_security;
+		global $project_security;
 		
 		if ($_GET[project_id])
 		{
@@ -344,11 +344,11 @@ class ProjectLogIO
 					
 					if ($project_log->create($_GET[project_id], $_POST[text], false, $important, md5(rand(0,50000))))
 					{
-						$common->step_proceed($params, "Project Log", "comment added successful",null);
+						Common_IO::step_proceed($params, "Project Log", "comment added successful",null);
 					}
 					else
 					{
-						$common->step_proceed($params, "Project Log", "operation failed",null);
+						Common_IO::step_proceed($params, "Project Log", "operation failed",null);
 					}
 				}
 			}

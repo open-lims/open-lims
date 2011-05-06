@@ -194,10 +194,7 @@ class Common_IO
 		
 	}
 	
-	/**
-	 * @todo make static
-	 */
-	public function step_proceed($target, $title, $text, $css_class)
+	public static function step_proceed($target, $title, $text, $css_class)
 	{
 		$template = new Template("languages/en-gb/template/common/step_proceed.html");
 		

@@ -97,8 +97,6 @@ class AdminSampleTemplateIO
 
 	public static function create()
 	{
-		global $common;
-
 		if ($_GET[nextpage] == 1)
 		{
 			$page_1_passed = true;
@@ -178,19 +176,17 @@ class AdminSampleTemplateIO
 			
 			if ($sample_template->create($_POST[data_entity_id], $_POST[category_id]))
 			{
-				$common->step_proceed($params, "Add Sample Template", "Operation Successful", null);
+				Common_IO::step_proceed($params, "Add Sample Template", "Operation Successful", null);
 			}
 			else
 			{
-				$common->step_proceed($params, "Add Sample Template", "Operation Failed" ,null);	
+				Common_IO::step_proceed($params, "Add Sample Template", "Operation Failed" ,null);	
 			}
 		}
 	}
 	
 	public static function delete()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			if ($_GET[sure] != "true")
@@ -225,11 +221,11 @@ class AdminSampleTemplateIO
 				
 				if ($sample_template->delete())
 				{							
-					$common->step_proceed($params, "Delete Sample Template", "Operation Successful" ,null);
+					Common_IO::step_proceed($params, "Delete Sample Template", "Operation Successful" ,null);
 				}
 				else
 				{							
-					$common->step_proceed($params, "Delete Sample Template", "Operation Failed" ,null);
+					Common_IO::step_proceed($params, "Delete Sample Template", "Operation Failed" ,null);
 				}		
 			}
 		}

@@ -1,0 +1,30 @@
+.SampleBarcode {
+	width: 95%;
+	padding: 10px;
+}
+
+.SampleBarcodeTitle {
+	float: left;
+	font-weight: bold;
+}
+
+.SampleBarcodePrint {
+	float: right;
+}
+
+.SampleBarcodeImage {
+	clear: both;
+}
+
+.SampleStructureArea {
+	border-bottom: 1px #D0D0D0 dotted;
+	padding: 5px;
+}
+
+.SampleStructureTitle {
+	font-weight: bold;
+}
+
+.SampleStructureElement {
+	padding: 3px 0 3px 0;
+}

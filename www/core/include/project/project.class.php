@@ -1989,8 +1989,6 @@ class Project implements ProjectInterface, EventListenerInterface
     }
 
 	/**
-	 * @todo Transaction
-	 * @todo Folder Name
 	 * @param string $name
 	 * @return bool
 	 */
@@ -2267,11 +2265,49 @@ class Project implements ProjectInterface, EventListenerInterface
     	if ($event_object instanceof FileUploadPrecheckEvent)
     	{
     		$folder_id = $event_object->get_folder_id();
+    		if (($project_id = ProjectFolder::get_project_id_by_folder_id($folder_id)) != null)
+    		{
+				$project = new Project($project_id);
+				$project_quota = $project->get_quota();
+				$project_filesize = $project->get_filesize();
+												
+				$new_project_filesize = $project_filesize + $event_object->get_filesize();
+				
+				if (($project_quota <= $new_project_filesize and $project_quota != 0))
+				{
+					return false;
+				}	
+    		}
     	}
     	
    		if ($event_object instanceof FileUploadEvent)
     	{
-    		
+    		$folder_id = $event_object->get_folder_id();
+    		if (($project_id = ProjectFolder::get_project_id_by_folder_id($folder_id)) != null)
+    		{
+    			$project = new Project($project_id);							
+				$new_project_filesize = $project->get_filesize() + $event_object->get_filesize();
+				
+				if ($project->set_filesize($new_project_filesize) == false)
+				{
+					return false;
+				}
+    		}
+    	}
+    	
+    	if ($event_object instanceof FileDeleteEvent)
+    	{
+    		$folder_id = $event_object->get_folder_id();
+    		if (($project_id = ProjectFolder::get_project_id_by_folder_id($folder_id)) != null)
+    		{
+    			$project = new Project($project_id);							
+				$new_project_filesize = $project->get_filesize() - $event_object->get_filesize();
+
+				if ($project->set_filesize($new_project_filesize) == false)
+				{
+					return false;
+				}
+    		}
     	}
     	
     	return true;

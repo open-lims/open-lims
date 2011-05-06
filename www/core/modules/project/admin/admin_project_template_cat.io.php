@@ -107,8 +107,6 @@ class AdminProjectTemplateCatIO
 
 	public static function create()
 	{
-		global $common;
-
 		if ($_GET[nextpage] == 1)
 		{
 			$page_1_passed = true;
@@ -174,19 +172,17 @@ class AdminProjectTemplateCatIO
 			
 			if ($project_template_cat->create($_POST[name]))
 			{
-				$common->step_proceed($params, "Add Project Template Categories", "Operation Successful", null);
+				Common_IO::step_proceed($params, "Add Project Template Categories", "Operation Successful", null);
 			}
 			else
 			{
-				$common->step_proceed($params, "Add Project Template Categories", "Operation Failed" ,null);	
+				Common_IO::step_proceed($params, "Add Project Template Categories", "Operation Failed" ,null);	
 			}
 		}
 	}
 	
 	public static function delete()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			if ($_GET[sure] != "true")
@@ -221,11 +217,11 @@ class AdminProjectTemplateCatIO
 				
 				if ($project_template_cat->delete())
 				{							
-					$common->step_proceed($params, "Delete Project Template Category", "Operation Successful" ,null);
+					Common_IO::step_proceed($params, "Delete Project Template Category", "Operation Successful" ,null);
 				}
 				else
 				{							
-					$common->step_proceed($params, "Delete Project Template Category", "Operation Failed" ,null);
+					Common_IO::step_proceed($params, "Delete Project Template Category", "Operation Failed" ,null);
 				}			
 			}
 		}
@@ -239,8 +235,6 @@ class AdminProjectTemplateCatIO
 	
 	public static function edit()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			$project_template_cat = new ProjectTemplateCat($_GET[id]);
@@ -307,11 +301,11 @@ class AdminProjectTemplateCatIO
 				
 				if ($project_template_cat->set_name($_POST[name]))
 				{
-					$common->step_proceed($params, "Edit Project Template Category", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Edit Project Template Category", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Edit Project Tempalte Category", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Edit Project Tempalte Category", "Operation Failed" ,null);	
 				}
 			}
 		}

@@ -42,6 +42,7 @@ class FileVersion_Access
 	private $internal_revision;
 	private $current;
 	private $file_extension;
+	private $owner_id;
 
 	/**
 	 * @param integer $file_version_id
@@ -74,6 +75,7 @@ class FileVersion_Access
 				$this->previous_version_id	= $data[previous_version_id];
 				$this->internal_revision	= $data[internal_revision];
 				$this->file_extension		= $data[file_extension];
+				$this->owner_id				= $data[owner_id];
 				
 				if ($data[current] == 't')
 				{
@@ -407,6 +409,21 @@ class FileVersion_Access
 			return null;
 		}	
 	}
+	
+	/**
+	 * @return string
+	 */
+	public function get_owner_id()
+	{
+		if ($this->owner_id)
+		{
+			return $this->owner_id;
+		}
+		else
+		{
+			return null;
+		}	
+	}
 
 	/**
 	 * @param integer $toid
@@ -706,7 +723,7 @@ class FileVersion_Access
 			return false;
 		}
 	}
-	
+		
 	/**
 	 * @param string $file_extension
 	 * @return bool
@@ -723,6 +740,35 @@ class FileVersion_Access
 			if ($db->db_affected_rows($res))
 			{
 				$this->file_extension = $file_extension;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param integer $owner_id
+	 * @return bool
+	 */
+	public function set_owner_id($owner_id)
+	{	
+		global $db;
+		
+		if ($this->file_version_id and is_numeric($owner_id))
+		{			
+			$sql = "UPDATE ".constant("FILE_VERSION_TABLE")." SET owner_id = '".$owner_id."' WHERE id = ".$this->file_version_id."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->owner_id = $owner_id;
 				return true;
 			}
 			else

@@ -32,6 +32,9 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("exceptions/file_version_not_found_exception.class.php");
 
 	require_once("events/file_as_item_upload_event.class.php");
+	require_once("events/file_delete_event.class.php");
+	require_once("events/file_upload_event.class.php");
+	require_once("events/file_upload_precheck_event.class.php");
 	
 	require_once("access/file.access.php");
 	require_once("access/file_version.access.php");
@@ -308,7 +311,6 @@ class File extends DataEntity implements FileInterface
 	 * Deletes a file, including all versions
 	 * @return bool
 	 * @todo first db delete, then filesystem delete
-	 * @todo descent filesize while deleting
 	 */
 	public function delete()
 	{
@@ -318,7 +320,8 @@ class File extends DataEntity implements FileInterface
 		{
 			$transaction_id = $transaction->begin();
 			
-			$folder = Folder::get_instance($this->get_parent_folder());
+			$folder_id = $this->get_parent_folder_id();
+			$folder = Folder::get_instance($folder_id);
 
 			$file_version_array = FileVersion_Access::list_entries_by_toid($this->file_id);
 			
@@ -326,9 +329,12 @@ class File extends DataEntity implements FileInterface
 			
 			if (is_array($file_version_array) and count($file_version_array) >= 1)
 			{
+				$file_size = 0;
+				
 				foreach($file_version_array as $key => $value)
 				{
 					$file_version_access = new FileVersion_Access($value);
+					$file_size = $file_size + $file_version_access->get_size();
 					
 					$extension_array = explode(".",$file_version_access->get_name());
 					$extension_array_length = substr_count($file_version_access->get_name(),".");
@@ -380,6 +386,20 @@ class File extends DataEntity implements FileInterface
 						}
 						return false;
 					}
+				}
+				
+				$folder->decrease_filesize($this->get_owner_id(), $file_size);
+				
+				$file_delete_event = new FileDeleteEvent($folder_id, $file_size);
+				$event_handler = new EventHandler($file_delete_event);
+				
+				if ($event_handler->get_success() == false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return 0;
 				}
 			
 				$file_delete = $this->file->delete();
@@ -433,7 +453,6 @@ class File extends DataEntity implements FileInterface
 	 * Deletes a specific file version
 	 * @param integer $internal_revision
 	 * @return bool
-	 * @todo descent filesize while deleting
 	 */
 	public function delete_version($internal_revision)
 	{	
@@ -445,7 +464,8 @@ class File extends DataEntity implements FileInterface
 			{
 				$transaction_id = $transaction->begin();
 				
-				$folder = Folder::get_instance($this->get_parent_folder());
+				$folder_id = $this->get_parent_folder_id();
+				$folder = Folder::get_instance($folder_id);
 			
 				$this->open_internal_revision($internal_revision);
 				
@@ -481,6 +501,21 @@ class File extends DataEntity implements FileInterface
 						$file_version_access->set_current(true);
 					}
 	
+					// Minimise Filesize
+					$folder->decrease_filesize($this->file_version->get_owner_id(), $this->file_version->get_size());
+					
+					$file_delete_event = new FileDeleteEvent($folder_id, $this->file_version->get_size());
+					$event_handler = new EventHandler($file_delete_event);
+					
+					if ($event_handler->get_success() == false)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return 0;
+					}
+					
 					// Datei Löschen
 							
 					$extension_array = explode(".",$this->file_version->get_name());
@@ -658,7 +693,6 @@ class File extends DataEntity implements FileInterface
 	 * @param array $file_array
 	 * @return integer
 	 * @todo checks if file exists in folder via DataEntity
-	 * @todo project quota via event
 	 */
 	public function upload_file($folder_id, $file_array)
 	{
@@ -712,10 +746,30 @@ class File extends DataEntity implements FileInterface
 		 						$file_size = filesize($target);
 		 						$checksum = md5_file($target);
 								
+								$file_upload_precheck_event = new FileUploadPrecheckEvent($folder_id, $file_size);
+								$event_handler = new EventHandler($file_upload_precheck_event);
+								
+								if ($event_handler->get_success() == false)
+								{
+									if ($transaction_id != null)
+									{
+										$transaction->rollback($transaction_id);
+									}
+									return 6;
+								}
+		 						
 								if ($folder->get_quota_access($user->get_user_id(), $file_size) == true)
 								{
 									$folder->increase_filesize($user->get_user_id(), $file_size);
 			
+									$file_upload_event = new FileUploadEvent($folder_id, $file_size);
+									$event_handler = new EventHandler($file_upload_event);
+									
+									if ($event_handler->get_success() == false)
+									{
+										// Nothing happens
+									}
+									
 			 						// Create File
 			 						if (($file_id = $this->create($file_array['name'], $folder_id, $target, $user->get_user_id())) == null)
 			 						{
@@ -844,7 +898,6 @@ class File extends DataEntity implements FileInterface
 	 * @param bool $major
 	 * @param bool $current
 	 * @return integer
-	 * @todo project quota via event
 	 */
 	public function update_file($file_array, $previous_version_id, $major, $current)
 	{
@@ -898,16 +951,31 @@ class File extends DataEntity implements FileInterface
 							
 							if ($this->compare_with_current_version($checksum) == false)
 							{ 
-								$user_quota = $user_data->get_quota();
-								$user_filesize = $user_data->get_filesize();
 								
-								$new_user_filesize = $user_filesize + $file_size;
-
-			
-								if (($user_quota > $new_user_filesize or $user_quota == 0))
+								$file_upload_precheck_event = new FileUploadPrecheckEvent($this->get_parent_folder_id(), $file_size);
+								$event_handler = new EventHandler($file_upload_precheck_event);
+								
+								if ($event_handler->get_success() == false)
 								{
-									$user_data->set_filesize($new_user_filesize);
+									if ($transaction_id != null)
+									{
+										$transaction->rollback($transaction_id);
+									}
+									return 6;
+								}
+			
+								if ($folder->get_quota_access($user->get_user_id(), $file_size) == true)
+								{
+									$folder->increase_filesize($user->get_user_id(), $file_size);
 			 						
+									$file_upload_event = new FileUploadEvent($this->get_parent_folder_id(), $file_size);
+									$event_handler = new EventHandler($file_upload_event);
+									
+									if ($event_handler->get_success() == false)
+									{
+										// Nothing happens
+									}
+									
 									// Rename Old File
 									$current_file_version_id = FileVersion_Access::get_current_entry_by_toid($this->file_id);
 									$current_file_version = new FileVersion_Access($current_file_version_id);
@@ -1173,7 +1241,7 @@ class File extends DataEntity implements FileInterface
 	{
 		if ($this->file_id)
 		{			
-			$folder = Folder::get_instance($this->get_parent_folder());
+			$folder = Folder::get_instance($this->get_parent_folder_id());
 
 			$extension_array = explode(".",$this->file_version->get_name());
 			$extension_array_length = substr_count($this->file_version->get_name(),".");

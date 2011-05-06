@@ -332,7 +332,7 @@ class ProjectAdminIO
 
 	public static function permission_add_user()
 	{
-		global $user, $common;
+		global $user;
 
 		if ($_GET[project_id])
 		{
@@ -553,11 +553,11 @@ class ProjectAdminIO
 						
 						if ($project_permission->create($_POST[user], null, null, $project_id, $new_permission, $user->get_user_id(), null))
 						{
-							$common->step_proceed($params, "Add Permission", "Operation Successful", null);
+							Common_IO::step_proceed($params, "Add Permission", "Operation Successful", null);
 						}
 						else
 						{
-							$common->step_proceed($params, "Add Permission", "Operation Failed" ,null);	
+							Common_IO::step_proceed($params, "Add Permission", "Operation Failed" ,null);	
 						}
 					}
 				}
@@ -579,7 +579,7 @@ class ProjectAdminIO
 	
 	public static function permission_add_group()
 	{
-		global $user, $common;
+		global $user;
 
 		if ($_GET[project_id])
 		{
@@ -794,11 +794,11 @@ class ProjectAdminIO
 					
 					if ($project_permission->create(null, null, $_POST[group], $project_id, $new_permission, $user->get_user_id(), null))
 					{
-						$common->step_proceed($params, "Add Permission", "Operation Successful", null);
+						Common_IO::step_proceed($params, "Add Permission", "Operation Successful", null);
 					}
 					else
 					{
-						$common->step_proceed($params, "Add Permission", "Operation Failed" ,null);	
+						Common_IO::step_proceed($params, "Add Permission", "Operation Failed" ,null);	
 					}
 				}
 			}
@@ -813,7 +813,7 @@ class ProjectAdminIO
 	
 	public static function permission_add_organisation_unit()
 	{
-		global $user, $common;
+		global $user;
 
 		if ($_GET[project_id])
 		{
@@ -1033,11 +1033,11 @@ class ProjectAdminIO
 						
 						if ($project_permission->create(null, $_POST[ou], null, $project_id, $new_permission, $user->get_user_id(), null))
 						{
-							$common->step_proceed($params, "Add Permission", "Operation Successful", null);
+							Common_IO::step_proceed($params, "Add Permission", "Operation Successful", null);
 						}
 						else
 						{
-							$common->step_proceed($params, "Add Permission", "Operation Failed" ,null);	
+							Common_IO::step_proceed($params, "Add Permission", "Operation Failed" ,null);	
 						}
 					}
 				}
@@ -1059,7 +1059,7 @@ class ProjectAdminIO
 	
 	public static function permission_edit()
 	{
-		global $common, $user;
+		global $user;
 		
 		if ($_GET[project_id])
 		{
@@ -1273,11 +1273,11 @@ class ProjectAdminIO
 						
 						if ($project_permission->set_permission($new_permission))
 						{
-							$common->step_proceed($params, "Edit Permission", "Operation Successful", null);
+							Common_IO::step_proceed($params, "Edit Permission", "Operation Successful", null);
 						}
 						else
 						{
-							$common->step_proceed($params, "Edit Permission", "Operation Failed" ,null);	
+							Common_IO::step_proceed($params, "Edit Permission", "Operation Failed" ,null);	
 						}
 					}
 				}
@@ -1305,7 +1305,7 @@ class ProjectAdminIO
 	
 	public static function permission_delete()
 	{
-		global $common, $user;
+		global $user;
 		
 		if ($_GET[project_id])
 		{
@@ -1352,11 +1352,11 @@ class ProjectAdminIO
 						
 						if ($project_permission->delete())
 						{							
-							$common->step_proceed($params, "Delete Permission", "Operation Successful" ,null);
+							Common_IO::step_proceed($params, "Delete Permission", "Operation Successful" ,null);
 						}
 						else
 						{							
-							$common->step_proceed($params, "Delete Permission", "Operation Failed" ,null);
+							Common_IO::step_proceed($params, "Delete Permission", "Operation Failed" ,null);
 						}			
 					}
 				}
@@ -1384,7 +1384,7 @@ class ProjectAdminIO
 	
 	public static function rename()
 	{
-		global $common, $project_security, $user;
+		global $project_security, $user;
 		
 		if ($_GET[project_id])
 		{
@@ -1467,11 +1467,11 @@ class ProjectAdminIO
 					
 					if ($project->set_name($_POST[name]))
 					{
-						$common->step_proceed($params, "Rename Project", "Operation Successful", null);
+						Common_IO::step_proceed($params, "Rename Project", "Operation Successful", null);
 					}
 					else
 					{
-						$common->step_proceed($params, "Rename Project", "Operation Failed" ,null);	
+						Common_IO::step_proceed($params, "Rename Project", "Operation Failed" ,null);	
 					}
 				}
 			}
@@ -1492,7 +1492,7 @@ class ProjectAdminIO
 	
 	public static function chown()
 	{
-		global $common, $project_security;
+		global $project_security;
 	
 		if ($_GET[project_id])
 		{
@@ -1557,11 +1557,11 @@ class ProjectAdminIO
 					
 					if ($project->set_owner_id($_POST[user]))
 					{
-						$common->step_proceed($params, "Change Project Owner", "Operation Successful", null);
+						Common_IO::step_proceed($params, "Change Project Owner", "Operation Successful", null);
 					}
 					else
 					{
-						$common->step_proceed($params, "Change Project Owner", "Operation Failed" ,null);	
+						Common_IO::step_proceed($params, "Change Project Owner", "Operation Failed" ,null);	
 					}
 				}
 			}
@@ -1582,7 +1582,7 @@ class ProjectAdminIO
 	
 	public static function move()
 	{
-		global $common, $project_security, $user;
+		global $project_security, $user;
 
 		if ($_GET[project_id])
 		{
@@ -1695,11 +1695,11 @@ class ProjectAdminIO
 							
 							if ($project->move_to_organisation_unit($_POST[ou]))
 							{
-								$common->step_proceed($params, "Move Project", "Operation Successful", null);
+								Common_IO::step_proceed($params, "Move Project", "Operation Successful", null);
 							}
 							else
 							{
-								$common->step_proceed($params, "Move Project", "Operation Failed" ,null);	
+								Common_IO::step_proceed($params, "Move Project", "Operation Failed" ,null);	
 							}
 						}
 					}
@@ -1785,11 +1785,11 @@ class ProjectAdminIO
 							
 							if ($project->move_to_project($_POST[project]))
 							{
-								$common->step_proceed($params, "Move Project", "Operation Successful", null);
+								Common_IO::step_proceed($params, "Move Project", "Operation Successful", null);
 							}
 							else
 							{
-								$common->step_proceed($params, "Move Project", "Operation Failed" ,null);	
+								Common_IO::step_proceed($params, "Move Project", "Operation Failed" ,null);	
 							}
 						}
 					}
@@ -1812,7 +1812,7 @@ class ProjectAdminIO
 	
 	public static function quota()
 	{
-		global $common, $project_security;
+		global $project_security;
 	
 		if ($_GET[project_id])
 		{
@@ -1870,11 +1870,11 @@ class ProjectAdminIO
 					
 					if ($project->set_quota($_POST[quota]))
 					{
-						$common->step_proceed($params, "Change Quota", "Operation Successful", null);
+						Common_IO::step_proceed($params, "Change Quota", "Operation Successful", null);
 					}
 					else
 					{
-						$common->step_proceed($params, "Change Quota", "Operation Failed" ,null);	
+						Common_IO::step_proceed($params, "Change Quota", "Operation Failed" ,null);	
 					}
 				}
 			}
@@ -1895,7 +1895,7 @@ class ProjectAdminIO
 	
 	public static function delete()
 	{
-		global $common, $project_security;
+		global $project_security;
 		
 		if ($_GET[project_id])
 		{
@@ -1936,11 +1936,11 @@ class ProjectAdminIO
 					
 					if ($project->mark_as_deleted())
 					{							
-						$common->step_proceed($params, "Delete Project", "Operation Successful" ,null);
+						Common_IO::step_proceed($params, "Delete Project", "Operation Successful" ,null);
 					}
 					else
 					{							
-						$common->step_proceed($params, "Delete Project", "Operation Failed" ,null);
+						Common_IO::step_proceed($params, "Delete Project", "Operation Failed" ,null);
 					}			
 				}
 			}
@@ -1961,7 +1961,7 @@ class ProjectAdminIO
 	
 	public static function full_delete()
 	{
-		global $common, $user;
+		global $user;
 		
 		if ($_GET[project_id])
 		{
@@ -2002,11 +2002,11 @@ class ProjectAdminIO
 					
 					if ($project->delete())
 					{							
-						$common->step_proceed($params, "Full Project Delete", "Operation Successful" ,null);
+						Common_IO::step_proceed($params, "Full Project Delete", "Operation Successful" ,null);
 					}
 					else
 					{							
-						$common->step_proceed($params, "Full Project Delete", "Operation Failed" ,null);
+						Common_IO::step_proceed($params, "Full Project Delete", "Operation Failed" ,null);
 					}			
 				}
 			}
@@ -2027,7 +2027,7 @@ class ProjectAdminIO
 	
 	public static function restore()
 	{
-		global $common, $user;
+		global $user;
 	
 		if ($_GET[project_id])
 		{
@@ -2068,11 +2068,11 @@ class ProjectAdminIO
 					
 					if ($project->mark_as_undeleted())
 					{							
-						$common->step_proceed($params, "Restore Project", "Operation Successful" ,null);
+						Common_IO::step_proceed($params, "Restore Project", "Operation Successful" ,null);
 					}
 					else
 					{							
-						$common->step_proceed($params, "Restore Project", "Operation Failed" ,null);
+						Common_IO::step_proceed($params, "Restore Project", "Operation Failed" ,null);
 					}			
 				}
 			}
@@ -2093,7 +2093,7 @@ class ProjectAdminIO
 	
 	public static function cancel()
 	{
-		global $common, $project_security, $user;
+		global $project_security, $user;
 	
 		if ($_GET[project_id])
 		{
@@ -2153,11 +2153,11 @@ class ProjectAdminIO
 					
 					if ($project->mark_as_canceled($_POST[reason]))
 					{
-						$common->step_proceed($params, "Change Quota", "Operation Successful", null);
+						Common_IO::step_proceed($params, "Change Quota", "Operation Successful", null);
 					}
 					else
 					{
-						$common->step_proceed($params, "Change Quota", "Operation Failed" ,null);	
+						Common_IO::step_proceed($params, "Change Quota", "Operation Failed" ,null);	
 					}
 				}
 			}
@@ -2177,9 +2177,7 @@ class ProjectAdminIO
 	}
 	
 	public static function reactivate()
-	{
-		global $common;
-		
+	{		
 		if ($_GET[project_id])
 		{
 			if ($project_security->is_access(5, false) == true)
@@ -2219,11 +2217,11 @@ class ProjectAdminIO
 					
 					if ($project->mark_as_reactivated())
 					{							
-						$common->step_proceed($params, "Reactivate Project", "Operation Successful" ,null);
+						Common_IO::step_proceed($params, "Reactivate Project", "Operation Successful" ,null);
 					}
 					else
 					{							
-						$common->step_proceed($params, "Reactivate Project", "Operation Failed" ,null);
+						Common_IO::step_proceed($params, "Reactivate Project", "Operation Failed" ,null);
 					}			
 				}
 			}

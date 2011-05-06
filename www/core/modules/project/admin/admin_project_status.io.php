@@ -108,8 +108,6 @@ class AdminProjectStatusIO
 
 	public static function create()
 	{
-		global $common;
-
 		if ($_GET[nextpage] == 1)
 		{
 			$page_1_passed = true;
@@ -167,19 +165,17 @@ class AdminProjectStatusIO
 			
 			if ($project_status->create($_POST[name], null))
 			{
-				$common->step_proceed($params, "Add Project Status", "Operation Successful", null);
+				Common_IO::step_proceed($params, "Add Project Status", "Operation Successful", null);
 			}
 			else
 			{
-				$common->step_proceed($params, "Add Project Status", "Operation Failed" ,null);	
+				Common_IO::step_proceed($params, "Add Project Status", "Operation Failed" ,null);	
 			}
 		}
 	}
 	
 	public static function delete()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			if ($_GET[sure] != "true")
@@ -214,11 +210,11 @@ class AdminProjectStatusIO
 				
 				if ($project_status->delete())
 				{							
-					$common->step_proceed($params, "Delete Project Status", "Operation Successful" ,null);
+					Common_IO::step_proceed($params, "Delete Project Status", "Operation Successful" ,null);
 				}
 				else
 				{							
-					$common->step_proceed($params, "Delete Project Status", "Operation Failed" ,null);
+					Common_IO::step_proceed($params, "Delete Project Status", "Operation Failed" ,null);
 				}	
 			}
 		}
@@ -232,8 +228,6 @@ class AdminProjectStatusIO
 	
 	public static function edit()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			$project_status = new ProjectStatus($_GET[id]);
@@ -293,11 +287,11 @@ class AdminProjectStatusIO
 				
 				if ($project_status->set_name($_POST[name]))
 				{
-					$common->step_proceed($params, "Edit Project Status", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Edit Project Status", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Edit Project Status", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Edit Project Status", "Operation Failed" ,null);	
 				}
 			}
 		}

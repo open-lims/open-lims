@@ -72,7 +72,6 @@ class ProjectStatusFolder extends Folder implements ConcreteFolderCaseInterface
 	 * Creates a new Project Folder including Folder
 	 * @param integer $project_id
 	 * @return integer
-	 * @todo: remove v-folder
 	 */
 	public function create($project_id, $project_status_id)
 	{

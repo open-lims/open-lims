@@ -107,8 +107,6 @@ class AdminProjectTemplateIO
 
 	public static function create()
 	{
-		global $common;
-
 		if ($_GET[nextpage] == 1)
 		{
 			$page_1_passed = true;
@@ -198,19 +196,17 @@ class AdminProjectTemplateIO
 			
 			if ($project_template->create($_POST[data_entity_id], $_POST[category_id], $parent))
 			{
-				$common->step_proceed($params, "Add Project Template", "Operation Successful", null);
+				Common_IO::step_proceed($params, "Add Project Template", "Operation Successful", null);
 			}
 			else
 			{
-				$common->step_proceed($params, "Add Project Template", "Operation Failed" ,null);	
+				Common_IO::step_proceed($params, "Add Project Template", "Operation Failed" ,null);	
 			}
 		}
 	}
 	
 	public static function delete()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			if ($_GET[sure] != "true")
@@ -245,11 +241,11 @@ class AdminProjectTemplateIO
 				
 				if ($project_template->delete())
 				{							
-					$common->step_proceed($params, "Delete Project Template", "Operation Successful" ,null);
+					Common_IO::step_proceed($params, "Delete Project Template", "Operation Successful" ,null);
 				}
 				else
 				{							
-					$common->step_proceed($params, "Delete Project Template", "Operation Failed" ,null);
+					Common_IO::step_proceed($params, "Delete Project Template", "Operation Failed" ,null);
 				}		
 			}
 		}

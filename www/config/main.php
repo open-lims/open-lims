@@ -99,12 +99,13 @@ $GLOBALS[std_userquota] 			= 53687091200;
 $GLOBALS[quota_warning] 			= 90; // Quota Warning (in percent)
 
 // Entries per Page
+/**
+ * @deprecated
+ */
 $GLOBALS[entriesperpage] 				= 25;
-$GLOBALS[logentriesperpage]				= 5;
-$GLOBALS[subprojectsperpage]			= 5;
 
-$GLOBALS[projectsearchresultsperpage]	= 4;
-$GLOBALS[filesearchresultsperpage]		= 25;
+$GLOBALS[logentriesperpage]				= 5;
+
 
 // Session-Time
 $GLOBALS[max_session_period] 		= 36000; 	// Session Timeout (s)
@@ -112,9 +113,8 @@ $GLOBALS[max_session_period] 		= 36000; 	// Session Timeout (s)
 // IP Errors
 $GLOBALS[max_ip_errors]				= 50; 		// Max. Login Tries per IP
 
-$GLOBALS[max_method_delete_time]  	= 600;
 
-$GLOBALS[languages_folder_id]			= 2;
+
 $GLOBALS[organisation_unit_folder_id]	= 3;
 $GLOBALS[project_folder_id]				= 4;
 $GLOBALS[sample_folder_id]				= 5;

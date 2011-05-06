@@ -118,7 +118,24 @@ class OrganiserIO
 	{
 		self::personal_organiser();
 	}
+
+	public static function list_upcoming_appointments()
+	{
+		$template = new Template("languages/en-gb/template/organiser/list_upcoming_appointments.html");
+		
+		$template->set_var("exist_appointment", false);
+		
+		return $template->get_string();
+	}
 	
+	public static function list_upcoming_tasks()
+	{
+		$template = new Template("languages/en-gb/template/organiser/list_upcoming_tasks.html");
+		
+		$template->set_var("exist_todo_task", false);
+		
+		return $template->get_string();
+	}
 }
 
 ?>

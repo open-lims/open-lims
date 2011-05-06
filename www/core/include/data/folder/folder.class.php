@@ -967,6 +967,23 @@ class Folder extends DataEntity implements FolderInterface
 		return $user_data->set_filesize($new_user_filesize);
 	}
 	
+	public function decrease_filesize($user_id, $filesize)
+	{
+		if (is_numeric($user_id))
+		{
+			$user_data = new DataUserData($user_id);
+			$user_filesize = $user_data->get_filesize();
+											
+			$new_user_filesize = $user_filesize - $filesize;
+			
+			return $user_data->set_filesize($new_user_filesize);
+		}
+		else
+		{
+			// nothing happens (system files, etc.)
+		}
+	}
+	
 	/**
 	 * Returns an array with all subfolders
 	 * @return array

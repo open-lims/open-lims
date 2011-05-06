@@ -139,8 +139,6 @@ class AdminGroupIO
 	
 	public static function create()
 	{
-		global $common;
-		
 		if ($_GET[nextpage] == 1)
 		{
 			$page_1_passed = true;
@@ -213,11 +211,11 @@ class AdminGroupIO
 				
 				if ($group->create($_POST[name]))
 				{
-					$common->step_proceed($params, "Add Group", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Add Group", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Add Group", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Add Group", "Operation Failed" ,null);	
 				}
 			}
 			catch (GroupCreationFailedException $e)
@@ -235,8 +233,6 @@ class AdminGroupIO
 	
 	public static function delete()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			$group_id = $_GET[id];
@@ -272,11 +268,11 @@ class AdminGroupIO
 								
 				if ($group->delete())
 				{							
-					$common->step_proceed($params, "Delete Group", "Operation Successful" ,null);
+					Common_IO::step_proceed($params, "Delete Group", "Operation Successful" ,null);
 				}
 				else
 				{							
-					$common->step_proceed($params, "Delete Group", "Operation Failed" ,null);
+					Common_IO::step_proceed($params, "Delete Group", "Operation Failed" ,null);
 				}	
 			}
 		}
@@ -404,8 +400,6 @@ class AdminGroupIO
 
 	public static function add_user()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{			
 			if ($_GET[nextpage] == 1)
@@ -479,11 +473,11 @@ class AdminGroupIO
 				
 				if ($group->create_user_in_group($_POST[user]))
 				{
-					$common->step_proceed($params, "Add User", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Add User", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Add User", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Add User", "Operation Failed" ,null);	
 				}
 			}
 		}
@@ -497,8 +491,6 @@ class AdminGroupIO
 	
 	public static function delete_user()
 	{
-		global $common;
-		
 		if ($_GET[id] and $_GET[key])
 		{
 			if ($_GET[sure] != "true")
@@ -532,11 +524,11 @@ class AdminGroupIO
 						
 				if ($group->delete_user_from_group($_GET[key]))
 				{							
-					$common->step_proceed($params, "Delete User", "Operation Successful" ,null);
+					Common_IO::step_proceed($params, "Delete User", "Operation Successful" ,null);
 				}
 				else
 				{							
-					$common->step_proceed($params, "Delete User", "Operation Failed" ,null);
+					Common_IO::step_proceed($params, "Delete User", "Operation Failed" ,null);
 				}			
 			}
 		}
@@ -550,8 +542,6 @@ class AdminGroupIO
 	
 	public static function add_organisation_unit()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{		
 			if ($_GET[nextpage] == 1)
@@ -625,11 +615,11 @@ class AdminGroupIO
 				
 				if ($organisation_unit->create_group_in_organisation_unit($_GET[id]))
 				{
-					$common->step_proceed($params, "Add Organisation Unit", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Add Organisation Unit", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Failed" ,null);	
 				}
 			}
 		}
@@ -643,8 +633,6 @@ class AdminGroupIO
 	
 	public static function delete_organisation_unit()
 	{
-		global $common;
-		
 		if ($_GET[id] and $_GET[key])
 		{
 			if ($_GET[sure] != "true")
@@ -678,11 +666,11 @@ class AdminGroupIO
 						
 				if ($organisation_unit->delete_group_from_organisation_unit($_GET[id]))
 				{							
-					$common->step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
+					Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
 				}
 				else
 				{							
-					$common->step_proceed($params, "Delete Organisation Unit", "Operation Failed" ,null);
+					Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Failed" ,null);
 				}			
 			}
 		}
@@ -696,8 +684,6 @@ class AdminGroupIO
 	
 	public static function rename()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			$group = new Group($_GET[id]);
@@ -762,11 +748,11 @@ class AdminGroupIO
 				
 				if ($group->set_name($_POST[name]))
 				{
-					$common->step_proceed($params, "Rename User", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Rename User", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Rename User", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Rename User", "Operation Failed" ,null);	
 				}
 			}
 		}

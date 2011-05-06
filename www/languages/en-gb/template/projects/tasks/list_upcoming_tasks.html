@@ -1,0 +1,21 @@
+<div class='HomeTodayArea'>
+<div class='HomeTodayHeadline'>
+	<img src='images/icons/project_task.png' alt='' class='HomeTodayIcon' />
+	Project Tasks
+</div>
+
+<!-- IF ({EXIST_PROJECT_TASK}) -->
+
+	<!-- FOREACH BEGIN ({PROJECT_TASK_ARRAY}) -->
+	
+		<div class='HomeTodayEntry'>{PROJECT_TASK_ARRAY:NAME}</div>
+	
+	<!-- FOREACH END -->
+
+<!-- ELSE -->
+
+	No upcoming project tasks.
+	
+<!-- ENDIF -->
+
+</div>

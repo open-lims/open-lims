@@ -33,9 +33,9 @@ class Main
 	 */
 	function __construct()
 	{
-		if (version_compare(PHP_VERSION, '5.2.0', 'le'))
+		if (version_compare(PHP_VERSION, '5.3.0', 'le'))
 		{
-    		die('PHP 5.2.0 is minimum required');
+    		die('PHP 5.3.0 is minimum required');
 		}
 		
 		if (!extension_loaded("imagick"))
@@ -92,31 +92,31 @@ class Main
 			}
 			catch(IncludeDataCorruptException $e)
 			{
-				die("The config-ata of a module is corrupt!");
+				die("Fatal: The config-data of a module is corrupt!");
 			}
 			catch(IncludeProcessFailedException $e)
 			{
-				die("Include register process failed!");
+				die("Fatal: Include register process failed!");
 			}
 			catch(IncludeRequirementFailedException $e)
 			{
-				die("An include-module requirement is not found!");
+				die("Fatal: An include-module requirement is not found!");
 			}
 			catch(IncludeFolderEmptyException $e)
 			{
-				die("Include folder is empty!");
+				die("Fatal: Include folder is empty!");
 			}
 			catch(ModuleProcessFailedException $e)
 			{
-				die("Module register process failed!");
+				die("Fatal: Module register process failed!");
 			}
 			catch(ModuleDataCorruptException $e)
 			{
-				die("Module Data Corrupt!");
+				die("Fatal: Module Data Corrupt!");
 			}
 			catch(EventHandlerCreationFailedException $e)
 			{
-				die("Event-handler creation failed!");
+				die("Fatal: Event-handler creation failed!");
 			}
 		}
 	}
@@ -134,7 +134,7 @@ class Main
 	 */
 	public function init()
 	{
-		global $session, $user, $common;
+		global $session, $user;
 		
 		if ($GLOBALS[con_run] == true)
 		{
@@ -155,8 +155,6 @@ class Main
 		require_once("modules/base/error.io.php");
 		require_once("modules/base/table.io.php");
 		require_once("modules/base/list.io.php");
-		
-		$common = new Common_IO;
 
 		ContentHandler_IO::main();
 	}	

@@ -29,7 +29,7 @@ class ProjectTaskIO
 {
 	public static function add()
 	{
-		global $user, $common, $project_security;
+		global $user, $project_security;
 		
 		if ($_GET[project_id])
 		{
@@ -315,11 +315,11 @@ class ProjectTaskIO
 								
 								if ($project_task->create_status_process($project_id, $user->get_user_id(), $_POST[comment], $_POST[startdate], null, $_POST[enddate], $time, $whole_day, $_POST[status], $finalise, $auto_connect))
 								{
-									$common->step_proceed($params, "Add Project Task", "Operation Successful" ,null);
+									Common_IO::step_proceed($params, "Add Project Task", "Operation Successful" ,null);
 								}
 								else
 								{
-									$common->step_proceed($params, "Add Project Task", "Operation Failed" ,null);	
+									Common_IO::step_proceed($params, "Add Project Task", "Operation Failed" ,null);	
 								}
 							}
 						break;
@@ -523,11 +523,11 @@ class ProjectTaskIO
 								
 								if ($project_task->create_process($project_id, $user->get_user_id(), $_POST[comment], $_POST[startdate], null, $_POST[enddate], $time, $whole_day, $_POST[name], $auto_connect))
 								{
-									$common->step_proceed($params, "Add Project Task", "Operation Successful" ,null);
+									Common_IO::step_proceed($params, "Add Project Task", "Operation Successful" ,null);
 								}
 								else
 								{
-									$common->step_proceed($params, "Add Project Task", "Operation Failed" ,null);	
+									Common_IO::step_proceed($params, "Add Project Task", "Operation Failed" ,null);	
 								}		
 							}
 						break;
@@ -669,11 +669,11 @@ class ProjectTaskIO
 								
 								if ($project_task->create_milestone($project_id, $user->get_user_id(), $_POST[comment], $_POST[enddate], $time, $_POST[name], $auto_connect))
 								{
-									$common->step_proceed($params, "Add Project Task", "Operation Successful" ,null);
+									Common_IO::step_proceed($params, "Add Project Task", "Operation Successful" ,null);
 								}
 								else
 								{
-									$common->step_proceed($params, "Add Project Task", "Operation Failed" ,null);	
+									Common_IO::step_proceed($params, "Add Project Task", "Operation Failed" ,null);	
 								}
 							}
 						break;		
@@ -697,7 +697,7 @@ class ProjectTaskIO
 	
 	public static function delete()
 	{
-		global $common, $project_security;
+		global $project_security;
 		
 		if ($_GET[id])
 		{
@@ -735,11 +735,11 @@ class ProjectTaskIO
 					
 					if ($project_task->delete())
 					{							
-						$common->step_proceed($params, "Delete Project Task", "Operation Successful" ,null);
+						Common_IO::step_proceed($params, "Delete Project Task", "Operation Successful" ,null);
 					}
 					else
 					{							
-						$common->step_proceed($params, "Delete Project Task", "Operation Failed" ,null);
+						Common_IO::step_proceed($params, "Delete Project Task", "Operation Failed" ,null);
 					}			
 				}
 			}
@@ -760,7 +760,7 @@ class ProjectTaskIO
 
 	public static function edit_start()
 	{
-		global $common, $project_security;
+		global $project_security;
 		
 		if ($_GET[id])
 		{
@@ -853,11 +853,11 @@ class ProjectTaskIO
 					
 					if ($project_task->set_start($_POST[startdate], $time))
 					{
-						$common->step_proceed($params, "Change Start Date/Time", "Operation Successful" ,null);
+						Common_IO::step_proceed($params, "Change Start Date/Time", "Operation Successful" ,null);
 					}
 					else
 					{
-						$common->step_proceed($params, "Change Start Date/Time", "Operation Failed" ,null);	
+						Common_IO::step_proceed($params, "Change Start Date/Time", "Operation Failed" ,null);	
 					}
 				}
 			}
@@ -878,7 +878,7 @@ class ProjectTaskIO
 	
 	public static function edit_end()
 	{
-		global $common, $project_security;
+		global $project_security;
 		
 		if ($_GET[id])
 		{
@@ -991,11 +991,11 @@ class ProjectTaskIO
 					
 					if ($project_task->set_end($_POST[enddate], $time, $whole_day))
 					{
-						$common->step_proceed($params, "Change End Date/Time", "Operation Successful" ,null);
+						Common_IO::step_proceed($params, "Change End Date/Time", "Operation Successful" ,null);
 					}
 					else
 					{
-						$common->step_proceed($params, "Change End Date/Time", "Operation Failed" ,null);	
+						Common_IO::step_proceed($params, "Change End Date/Time", "Operation Failed" ,null);	
 					}
 				}
 			}
@@ -1622,6 +1622,47 @@ class ProjectTaskIO
 		endswitch;
 	}
 	
+	public static function list_upcoming_tasks()
+	{
+		$template = new Template("languages/en-gb/template/projects/tasks/list_upcoming_tasks.html");
+		
+		$project_task = new ProjectTask(null);
+		$project_task_array = $project_task->list_upcoming_tasks();
+		
+		if (is_array($project_task_array) and count($project_task_array) >= 1) {
+			
+			$template->set_var("exist_project_task", true);
+			
+			$content_array = array();
+			$counter = 0;
+			
+			foreach ($project_task_array as $key => $value) {
+				
+				$paramquery = $_GET;
+				$paramquery[nav] = "project";
+				$paramquery[run] = "detail";
+				$paramquery[project_id] = $value[project_id];
+				$params = http_build_query($paramquery, '', '&#38;');
+				
+				if ($value[status] == 1) {
+					$content_array[$counter][name] = "<span class='HomeTodayOverdueEntry'><a href='index.php?".$params."'>".$value[project_name]."</a> - ".$value[task_name]." - ".$value[end_date]."</span>";
+				}else{
+					$content_array[$counter][name] = "<a href='index.php?".$params."'>".$value[project_name]."</a> - ".$value[task_name]." - ".$value[end_date];
+				}
+				
+				
+				$counter++;
+				
+			}
+			
+			$template->set_var("project_task_array", $content_array);
+			
+		}else{
+			$template->set_var("exist_project_task", false);
+		}
+		
+		return $template->get_string();
+	}
 }
 
 ?>

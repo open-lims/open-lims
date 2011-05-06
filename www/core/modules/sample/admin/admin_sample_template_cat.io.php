@@ -107,8 +107,6 @@ class AdminSampleTemplateCatIO
 
 	public static function create()
 	{
-		global $common;
-
 		if ($_GET[nextpage] == 1)
 		{
 			$page_1_passed = true;
@@ -174,19 +172,17 @@ class AdminSampleTemplateCatIO
 			
 			if ($sample_template_cat->create($_POST[name]))
 			{
-				$common->step_proceed($params, "Add Sample Template Categories", "Operation Successful", null);
+				Common_IO::step_proceed($params, "Add Sample Template Categories", "Operation Successful", null);
 			}
 			else
 			{
-				$common->step_proceed($params, "Add Sample Template Categories", "Operation Failed" ,null);	
+				Common_IO::step_proceed($params, "Add Sample Template Categories", "Operation Failed" ,null);	
 			}
 		}
 	}
 	
 	public static function delete()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			if ($_GET[sure] != "true")
@@ -221,11 +217,11 @@ class AdminSampleTemplateCatIO
 				
 				if ($sample_template_cat->delete())
 				{							
-					$common->step_proceed($params, "Delete Sample Template Category", "Operation Successful" ,null);
+					Common_IO::step_proceed($params, "Delete Sample Template Category", "Operation Successful" ,null);
 				}
 				else
 				{							
-					$common->step_proceed($params, "Delete Sample Template Category", "Operation Failed" ,null);
+					Common_IO::step_proceed($params, "Delete Sample Template Category", "Operation Failed" ,null);
 				}	
 			}
 		}
@@ -239,8 +235,6 @@ class AdminSampleTemplateCatIO
 	
 	public static function edit()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			$sample_template_cat = new SampleTemplateCat($_GET[id]);
@@ -308,11 +302,11 @@ class AdminSampleTemplateCatIO
 				
 				if ($sample_template_cat->set_name($_POST[name]))
 				{
-					$common->step_proceed($params, "Edit Sample Template Category", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Edit Sample Template Category", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Edit Sample Tempalte Category", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Edit Sample Tempalte Category", "Operation Failed" ,null);	
 				}
 			}
 		}

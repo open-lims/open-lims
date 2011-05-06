@@ -286,8 +286,6 @@ class AdminOrganisationUnitIO
 	
 	public static function create()
 	{
-		global $common;
-		
 		if (($_GET[action] == "add_child" and $_GET[id]) or $_GET[action] == "add")
 		{
 			if ($_GET[nextpage] == 1)
@@ -403,11 +401,11 @@ class AdminOrganisationUnitIO
 					
 					if ($organisation_unit->create($toid, $_POST[name], $_POST[type], $stores_data))
 					{
-						$common->step_proceed($params, "Add Organisation Unit", "Operation Successful", null);
+						Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Successful", null);
 					}
 					else
 					{
-						$common->step_proceed($params, "Add Organisation Unit", "Operation Failed" ,null);	
+						Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Failed" ,null);	
 					}
 				}
 				catch (OrganisationUnitAlreadyExistException $e)
@@ -432,8 +430,6 @@ class AdminOrganisationUnitIO
 	
 	public static function delete()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			$organisation_unit_id = $_GET[id];
@@ -471,11 +467,11 @@ class AdminOrganisationUnitIO
 					
 					if ($organisation_unit->delete())
 					{							
-						$common->step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
+						Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
 					}
 					else
 					{							
-						$common->step_proceed($params, "Delete Organisation Unit", "Operation Failed" ,null);
+						Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Failed" ,null);
 					}		
 				}
 			}
@@ -629,8 +625,6 @@ class AdminOrganisationUnitIO
 	
 	public static function add_user()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{			
 			if ($_GET[nextpage] == 1)
@@ -704,11 +698,11 @@ class AdminOrganisationUnitIO
 				
 				if ($organisation_unit->create_user_in_organisation_unit($_POST[user]))
 				{
-					$common->step_proceed($params, "Add Organisation Unit", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Add Organisation Unit", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Failed" ,null);	
 				}
 			}
 		}
@@ -722,8 +716,6 @@ class AdminOrganisationUnitIO
 	
 	public static function delete_user()
 	{
-		global $common;
-		
 		if ($_GET[id] and $_GET[key])
 		{
 			if ($_GET[sure] != "true")
@@ -757,11 +749,11 @@ class AdminOrganisationUnitIO
 						
 				if ($organisation_unit->delete_user_from_organisation_unit($_GET[key]))
 				{							
-					$common->step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
+					Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
 				}
 				else
 				{							
-					$common->step_proceed($params, "Delete Organisation Unit", "Operation Failed" ,null);
+					Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Failed" ,null);
 				}			
 			}
 		}
@@ -775,8 +767,6 @@ class AdminOrganisationUnitIO
 	
 	public static function add_group()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{		
 			if ($_GET[nextpage] == 1)
@@ -850,11 +840,11 @@ class AdminOrganisationUnitIO
 				
 				if ($organisation_unit->create_group_in_organisation_unit($_POST[group]))
 				{
-					$common->step_proceed($params, "Add Organisation Unit", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Add Organisation Unit", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Failed" ,null);	
 				}
 			}
 		}
@@ -868,8 +858,6 @@ class AdminOrganisationUnitIO
 	
 	public static function delete_group()
 	{
-		global $common;
-		
 		if ($_GET[id] and $_GET[key])
 		{
 			if ($_GET[sure] != "true")
@@ -903,11 +891,11 @@ class AdminOrganisationUnitIO
 						
 				if ($organisation_unit->delete_group_from_organisation_unit($_GET[key]))
 				{							
-					$common->step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
+					Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
 				}
 				else
 				{							
-					$common->step_proceed($params, "Delete Organisation Unit", "Operation Failed" ,null);
+					Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Failed" ,null);
 				}			
 			}
 		}
@@ -921,8 +909,6 @@ class AdminOrganisationUnitIO
 	
 	public static function rename()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			$organisation_unit = new OrganisationUnit($_GET[id]);
@@ -986,11 +972,11 @@ class AdminOrganisationUnitIO
 				
 				if ($organisation_unit->set_name($_POST[name]))
 				{
-					$common->step_proceed($params, "Rename User", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Rename User", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Rename User", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Rename User", "Operation Failed" ,null);	
 				}
 			}
 		}
@@ -1004,8 +990,6 @@ class AdminOrganisationUnitIO
 	
 	public static function change_owner()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{		
 			if ($_GET[nextpage] == 1)
@@ -1070,11 +1054,11 @@ class AdminOrganisationUnitIO
 				
 				if ($organisation_unit->set_owner_id($_POST[user]))
 				{
-					$common->step_proceed($params, "Change Owner", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Change Owner", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Change Owner", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Change Owner", "Operation Failed" ,null);	
 				}
 			}
 		}
@@ -1088,8 +1072,6 @@ class AdminOrganisationUnitIO
 	
 	public static function change_leader()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{		
 			if ($_GET[nextpage] == 1)
@@ -1154,11 +1136,11 @@ class AdminOrganisationUnitIO
 				
 				if ($organisation_unit->set_leader_id($_POST[user]))
 				{
-					$common->step_proceed($params, "Change Leader", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Change Leader", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Change Leader", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Change Leader", "Operation Failed" ,null);	
 				}
 			}
 		}
@@ -1172,8 +1154,6 @@ class AdminOrganisationUnitIO
 	
 	public static function upwards()
 	{
-		global $common;
-	
 		if ($_GET[id])
 		{
 			$organisation_unit = new OrganisationUnit($_GET[id]);
@@ -1185,11 +1165,11 @@ class AdminOrganisationUnitIO
 			
 			if ($organisation_unit->position_upwards())
 			{
-				$common->step_proceed($params, "Upwards", "Operation Successful", null);
+				Common_IO::step_proceed($params, "Upwards", "Operation Successful", null);
 			}
 			else
 			{
-				$common->step_proceed($params, "Upwards", "Operation Failed" ,null);	
+				Common_IO::step_proceed($params, "Upwards", "Operation Failed" ,null);	
 			}
 		}
 		else
@@ -1202,8 +1182,6 @@ class AdminOrganisationUnitIO
 	
 	public static function downwards()
 	{
-		global $common;
-	
 		if ($_GET[id])
 		{
 			$organisation_unit = new OrganisationUnit($_GET[id]);
@@ -1215,11 +1193,11 @@ class AdminOrganisationUnitIO
 			
 			if ($organisation_unit->position_downwards())
 			{
-				$common->step_proceed($params, "Upwards", "Operation Successful", null);
+				Common_IO::step_proceed($params, "Upwards", "Operation Successful", null);
 			}
 			else
 			{
-				$common->step_proceed($params, "Upwards", "Operation Failed" ,null);	
+				Common_IO::step_proceed($params, "Upwards", "Operation Failed" ,null);	
 			}
 		}
 		else
@@ -1232,8 +1210,6 @@ class AdminOrganisationUnitIO
 	
 	public static function toogle_visible()
 	{
-		global $common;
-	
 		if ($_GET[id])
 		{
 			$organisation_unit = new OrganisationUnit($_GET[id]);
@@ -1254,11 +1230,11 @@ class AdminOrganisationUnitIO
 			
 			if ($organisation_unit->set_hidden($hidden))
 			{
-				$common->step_proceed($params, "Upwards", "Operation Successful", null);
+				Common_IO::step_proceed($params, "Upwards", "Operation Successful", null);
 			}
 			else
 			{
-				$common->step_proceed($params, "Upwards", "Operation Failed" ,null);	
+				Common_IO::step_proceed($params, "Upwards", "Operation Failed" ,null);	
 			}
 		}
 		else

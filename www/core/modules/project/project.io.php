@@ -271,7 +271,7 @@ class ProjectIO
 	
 	private static function create()
 	{
-		global $user, $session, $common, $project_security;
+		global $user, $session, $project_security;
 		
 		try
 		{
@@ -1197,7 +1197,7 @@ class ProjectIO
 							$paramquery[project_id] = $new_project_id;
 							$params = http_build_query($paramquery, '', '&#38;');
 							
-							$common->step_proceed($params, "Create New Project", "Operation Successful", null);		
+							Common_IO::step_proceed($params, "Create New Project", "Operation Successful", null);		
 						}
 						elseif($project_type and $project_toid and $project_name and $project_desc and $project_template)
 						{
@@ -1222,7 +1222,7 @@ class ProjectIO
 							$paramquery[project_id] = $new_project_id;
 							$params = http_build_query($paramquery, '', '&#38;');
 							
-							$common->step_proceed($params, "Create New Project", "Operation Successful", null);
+							Common_IO::step_proceed($params, "Create New Project", "Operation Successful", null);
 						}
 						else
 						{
@@ -1231,7 +1231,7 @@ class ProjectIO
 							unset($paramquery[run]);
 							$params = http_build_query($paramquery);	
 		
-							$common->step_proceed($params, "Create New Project", "Operation Failed", null);
+							Common_IO::step_proceed($params, "Create New Project", "Operation Failed", null);
 						}
 					}
 					catch (ProjectCreationFailedException $e)
@@ -1477,11 +1477,16 @@ class ProjectIO
 					$template->set_array("write",false);
 				}
 				
-				$supplementary_paramquery = $_GET;
-				$supplementary_paramquery[nav] = "file";
-				$supplementary_paramquery[run] = "add_project_supplementary_file";
-				unset($supplementary_paramquery[nextpage]);
-				$supplementary_params = http_build_query($supplementary_paramquery,'','&#38;');
+				$paramquery = array();
+				$paramquery[username] = $_GET[username];
+				$paramquery[session_id] = $_GET[session_id];
+				$paramquery[nav] = "project";
+				$paramquery[run] = "common_dialog";
+				$paramquery[folder_id] = ProjectFolder::get_supplementary_folder($_GET[project_id]);
+				$paramquery[dialog] = "file_add";
+				$paramquery[retrace] = Misc::create_retrace_string();
+				unset($paramquery[nextpage]);
+				$supplementary_params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("supplementary_params",$supplementary_params);
 				
@@ -1536,7 +1541,7 @@ class ProjectIO
 	
 	private static function proceed()
 	{
-		global $common, $project_security;
+		global $project_security;
 		
 		if ($_GET[project_id])
 		{
@@ -1678,11 +1683,11 @@ class ProjectIO
 						
 						if ($project->set_next_status(null,null))
 						{
-							$common->step_proceed($params, "Proceed to next status", "Operation Successful" ,null);
+							Common_IO::step_proceed($params, "Proceed to next status", "Operation Successful" ,null);
 						}
 						else
 						{
-							$common->step_proceed($params, "Proceed to next status", "Operation Failed" ,null);	
+							Common_IO::step_proceed($params, "Proceed to next status", "Operation Failed" ,null);	
 							$project_log->delete();
 						}
 					}
@@ -1910,7 +1915,7 @@ class ProjectIO
 	 */
 	public static function method_handler()
 	{
-		global $common, $project_security, $session, $transaction;
+		global $project_security, $session, $transaction;
 		
 		try
 		{
@@ -2241,7 +2246,7 @@ class ProjectIO
 													{
 														$transaction->commit($transaction_id);
 													}
-													$common->step_proceed($params, "Add Item", "Succeed." ,null);
+													Common_IO::step_proceed($params, "Add Item", "Succeed." ,null);
 												}
 												else
 												{
@@ -2249,7 +2254,7 @@ class ProjectIO
 													{
 														$transaction->rollback($transaction_id);
 													}
-													$common->step_proceed($params, "Add Item", "Failed." ,null);	
+													Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
 												}
 											}
 											else

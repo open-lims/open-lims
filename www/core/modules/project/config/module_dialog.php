@@ -94,4 +94,12 @@
 	$dialog[8][internal_name]	= "project_quota";
 	$dialog[8][display_name]	= "Used Space (by Project)";
 	$dialog[8][weight]			= 100;
+	
+	$dialog[9][type]			= "home_today_box";
+	$dialog[9][class_path]		= "core/modules/project/project_task.io.php";
+	$dialog[9]['class']			= "ProjectTaskIO";
+	$dialog[9][method]			= "list_upcoming_tasks";
+	$dialog[9][internal_name]	= "project_tasks";
+	$dialog[9][display_name]	= "Project Tasks";
+	$dialog[9][weight]			= 100;
 ?>

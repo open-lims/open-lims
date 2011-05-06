@@ -127,7 +127,7 @@ class AdminSystemMessageIO
 
 	public static function create()
 	{
-		global $common, $user;
+		global $user;
 		
 		if ($_GET[nextpage] == 1)
 		{
@@ -186,19 +186,17 @@ class AdminSystemMessageIO
 			
 			if ($system_message->create($user->get_user_id(), $_POST[content]))
 			{
-				$common->step_proceed($params, "Add System Message", "Operation Successful", null);
+				Common_IO::step_proceed($params, "Add System Message", "Operation Successful", null);
 			}
 			else
 			{
-				$common->step_proceed($params, "Add System Message", "Operation Failed" ,null);	
+				Common_IO::step_proceed($params, "Add System Message", "Operation Failed" ,null);	
 			}				
 		}
 	}
 	
 	public static function delete()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			if (SystemMessage::exist_entry($_GET[id]))
@@ -235,11 +233,11 @@ class AdminSystemMessageIO
 									
 					if ($system_message->delete())
 					{							
-						$common->step_proceed($params, "Delete System Message", "Operation Successful" ,null);
+						Common_IO::step_proceed($params, "Delete System Message", "Operation Successful" ,null);
 					}
 					else
 					{							
-						$common->step_proceed($params, "Delete System Message", "Operation Failed" ,null);
+						Common_IO::step_proceed($params, "Delete System Message", "Operation Failed" ,null);
 					}		
 				}
 			}
@@ -260,8 +258,6 @@ class AdminSystemMessageIO
 	
 	public static function edit()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			if (SystemMessage::exist_entry($_GET[id]))
@@ -325,11 +321,11 @@ class AdminSystemMessageIO
 	
 					if ($system_message->set_content($_POST[content]))
 					{
-						$common->step_proceed($params, "Add System Message", "Operation Successful", null);
+						Common_IO::step_proceed($params, "Add System Message", "Operation Successful", null);
 					}
 					else
 					{
-						$common->step_proceed($params, "Add System Message", "Operation Failed" ,null);	
+						Common_IO::step_proceed($params, "Add System Message", "Operation Failed" ,null);	
 					}			
 				}
 			}

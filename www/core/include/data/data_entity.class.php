@@ -49,6 +49,8 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	protected $delete_access;
 	protected $control_access;
 	
+	protected $set_data_entity = false;
+	
 	protected $inherit_permission;
 	
 	/**
@@ -138,6 +140,10 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 					{
 						$this->control_access = true;
 					}
+					if ($folder->can_set_data_entity() == true)
+					{
+						$this->set_data_entity = true;
+					}
 				}
 				elseif (is_subclass_of($folder, "Folder") == true)
 				{
@@ -157,6 +163,10 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 					if ($folder->is_control_access() == true)
 					{
 						$this->control_access = true;
+					}
+					if ($folder->can_set_data_entity() == true)
+					{
+						$this->set_data_entity = true;
 					}
 				}
 			}
@@ -228,7 +238,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 */
 	public function can_set_data_entity()
 	{
-		return false;
+		return $this->set_data_entity;
 	}
 	
 	/**

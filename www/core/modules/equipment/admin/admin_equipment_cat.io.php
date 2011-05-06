@@ -169,8 +169,6 @@ class AdminEquipmentCatIO
 
 	public static function create()
 	{
-		global $common;
-		
 		if (($_GET[action] == "add_child" and $_GET[id]) or $_GET[action] == "add")
 		{
 			if ($_GET[nextpage] == 1)
@@ -247,11 +245,11 @@ class AdminEquipmentCatIO
 				
 				if ($equipment_cat->create($toid, $_POST[name]))
 				{
-					$common->step_proceed($params, "Add Equipment Category", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Add Equipment Category", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Add Equipment Category", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Add Equipment Category", "Operation Failed" ,null);	
 				}
 			}
 		}
@@ -265,8 +263,6 @@ class AdminEquipmentCatIO
 	
 	public static function delete()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			if ($_GET[sure] != "true")
@@ -301,11 +297,11 @@ class AdminEquipmentCatIO
 				
 				if ($equipment_cat->delete())
 				{							
-					$common->step_proceed($params, "Delete Equipment Category", "Operation Successful" ,null);
+					Common_IO::step_proceed($params, "Delete Equipment Category", "Operation Successful" ,null);
 				}
 				else
 				{							
-					$common->step_proceed($params, "Delete Equipment Category", "Operation Failed" ,null);
+					Common_IO::step_proceed($params, "Delete Equipment Category", "Operation Failed" ,null);
 				}		
 			}
 		}
@@ -319,8 +315,6 @@ class AdminEquipmentCatIO
 	
 	public static function edit()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			$equipment_cat = new EquipmentCat($_GET[id]);
@@ -388,11 +382,11 @@ class AdminEquipmentCatIO
 				
 				if ($equipment_cat->set_name($_POST[name]))
 				{
-					$common->step_proceed($params, "Edit Equipment Category", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Edit Equipment Category", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Edit Equipment Category", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Edit Equipment Category", "Operation Failed" ,null);	
 				}
 			}
 		}

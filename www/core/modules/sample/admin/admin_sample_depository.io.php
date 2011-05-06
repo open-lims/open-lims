@@ -167,9 +167,7 @@ class AdminSampleDepositoryIO
 	}
 
 	public static function create()
-	{
-		global $common;
-		
+	{		
 		if (($_GET[action] == "add_child" and $_GET[id]) or $_GET[action] == "add")
 		{
 			if ($_GET[nextpage] == 1)
@@ -246,11 +244,11 @@ class AdminSampleDepositoryIO
 				
 				if ($sample_depository->create($toid, $_POST[name]))
 				{
-					$common->step_proceed($params, "Add Sample Depository", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Add Sample Depository", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Add Sample Depository", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Add Sample Depository", "Operation Failed" ,null);	
 				}
 			}
 		}
@@ -264,8 +262,6 @@ class AdminSampleDepositoryIO
 	
 	public static function delete()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			if ($_GET[sure] != "true")
@@ -300,11 +296,11 @@ class AdminSampleDepositoryIO
 				
 				if ($sample_depository->delete())
 				{							
-					$common->step_proceed($params, "Delete Sample Depository", "Operation Successful" ,null);
+					Common_IO::step_proceed($params, "Delete Sample Depository", "Operation Successful" ,null);
 				}
 				else
 				{							
-					$common->step_proceed($params, "Delete Sample Depository", "Operation Failed" ,null);
+					Common_IO::step_proceed($params, "Delete Sample Depository", "Operation Failed" ,null);
 				}		
 			}
 		}
@@ -318,8 +314,6 @@ class AdminSampleDepositoryIO
 	
 	public static function edit()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			$sample_depository = new SampleDepository($_GET[id]);
@@ -387,11 +381,11 @@ class AdminSampleDepositoryIO
 				
 				if ($sample_depository->set_name($_POST[name]))
 				{
-					$common->step_proceed($params, "Edit Sample Depository", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Edit Sample Depository", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Edit Sample Depository", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Edit Sample Depository", "Operation Failed" ,null);	
 				}
 			}
 		}

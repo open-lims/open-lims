@@ -293,6 +293,24 @@ class FileIO
 				$template->set_var("unique_id", $unique_id);
 				$template->set_var("session_id", $_GET[session_id]);
 				
+				if ($_GET[retrace])
+				{
+					$js_retrace_array = array();
+					$js_retrace_counter = 0;
+					$retrace_array = unserialize(base64_decode($_GET[retrace]));
+					foreach($retrace_array as $key => $value)
+					{
+						$js_retrace_array[$js_retrace_counter][0] = $key;
+						$js_retrace_array[$js_retrace_counter][1] = $value;
+						$js_retrace_counter++;
+					}
+					$template->set_var("retrace", serialize($js_retrace_array));
+				}
+				else
+				{
+					$template->set_var("retrace", "");
+				}
+				
 				$template->output();
 			}
 			else
@@ -366,9 +384,7 @@ class FileIO
 	}
 		
 	public static function delete()
-	{
-		global $common;
-		
+	{		
 		if ($_GET[file_id])
 		{
 			$file = new File($_GET[file_id]);
@@ -406,7 +422,7 @@ class FileIO
 						unset($paramquery[file_id]);
 						$params = http_build_query($paramquery);
 								
-						$common->step_proceed($params, "Delete File", "Operation Successful" ,null);
+						Common_IO::step_proceed($params, "Delete File", "Operation Successful" ,null);
 					}
 					else
 					{
@@ -415,7 +431,7 @@ class FileIO
 						unset($paramquery[sure]);
 						$params = http_build_query($paramquery);
 								
-						$common->step_proceed($params, "Delete File", "Operation Failed" ,null);
+						Common_IO::step_proceed($params, "Delete File", "Operation Failed" ,null);
 					}			
 				}
 			}
@@ -435,9 +451,7 @@ class FileIO
 	}
 	
 	public static function delete_version()
-	{
-		global $common;
-		
+	{		
 		if ($_GET[file_id] and $_GET[version])
 		{
 			$file = new File($_GET[file_id]);
@@ -485,7 +499,7 @@ class FileIO
 							unset($paramquery[file_id]);
 							$params = http_build_query($paramquery);
 						}
-						$common->step_proceed($params, "Delete File", "Operation Successful" ,null);
+						Common_IO::step_proceed($params, "Delete File", "Operation Successful" ,null);
 					}
 					else
 					{
@@ -494,7 +508,7 @@ class FileIO
 						unset($paramquery[sure]);
 						$params = http_build_query($paramquery);
 								
-						$common->step_proceed($params, "Delete File", "Operation Failed" ,null);
+						Common_IO::step_proceed($params, "Delete File", "Operation Failed" ,null);
 					}			
 				}
 			}

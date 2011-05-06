@@ -40,6 +40,8 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
   	private $project_folder;
 	private $project_id;
   	
+	protected $set_data_entity = true;
+	
   	/**
   	 * @param integer $folder_id
   	 */
@@ -151,10 +153,41 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 	}
 	
 	/**
+	 * @return bool
+	 */
+	public function can_set_automatic()
+	{
+		return false;
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function can_set_data_entity()
+	{
+		return $this->set_data_entity;
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function can_set_control()
+	{
+		return false;
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function can_set_remain()
+	{
+		return false;
+	}
+	
+	/**
 	 * Creates a new Project Folder including Folder
 	 * @param integer $project_id
 	 * @return integer
-	 * @todo: remove v-folder
 	 */
 	public function create($project_id, $base_folder_id)
 	{
@@ -264,49 +297,6 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 		}
 	}
 	
-	public function get_quota_access($user_id, $filesize)
-	{
-		if (parent::get_quota_access($user_id, $filesize) == true)
-		{
-			$project = new Project($project_id);
-			$project_quota = $project->get_quota();
-			$project_filesize = $project->get_filesize();
-											
-			$new_project_filesize = $project_filesize + $filesize;
-			
-			if (($project_quota > $new_project_filesize or $project_quota == 0))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	public function increase_filesize($user_id, $filesize)
-	{
-		if (parent::increase_filesize($user_id, $filesize) == true)
-		{
-			$project = new Project($project_id);
-			$project_filesize = $project->get_filesize();
-											
-			$new_project_filesize = $project_filesize + $filesize;
-			
-			return $project->set_filesize($new_project_filesize);
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	
 	/**
 	 * Checks if $folder_id is a case of Project Folder
 	 * @param integer $folder_id
@@ -345,27 +335,18 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 	{
 		if ($project_id)
 		{
-			$project_folder_id = self::get_folder_by_project_id($project_id);
-			$folder_array = Folder_Access::list_entries_by_toid($project_folder_id);
-			
-			foreach($folder_array as $key => $value)
-			{
-				$folder_access = new Folder_Access($value);
-				
-				$path = new Path($folder_access->get_path());
-				$path_array = $path->get_path_elements();
-				
-				if ($path_array[$path->get_path_length()] == "supplementary")
-				{   // If supplement-folder is found
-					return $value;	
-				}	
-			}
-			return null;	
+			$folder_id = self::get_folder_by_project_id($project_id);
+			return ProjectHasFolder_Access::get_project_supplementary_folder($folder_id);
 		}
 		else
 		{
 			return null;
 		}
+	}
+	
+	public static function get_project_id_by_folder_id($folder_id)
+	{
+		return ProjectHasFolder_Access::get_project_id_by_folder_id($folder_id);
 	}
 }
 ?>

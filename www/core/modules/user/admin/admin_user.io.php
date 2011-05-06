@@ -140,8 +140,6 @@ class AdminUserIO
 	
 	public static function create()
 	{
-		global $common;
-		
 		if ($_GET[nextpage] == 1)
 		{
 			$page_1_passed = true;
@@ -378,8 +376,6 @@ class AdminUserIO
 	
 	public static function delete()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			$user_id = $_GET[id];
@@ -417,11 +413,11 @@ class AdminUserIO
 					
 					if ($user->delete())
 					{							
-						$common->step_proceed($params, "Delete User", "Operation Successful" ,null);
+						Common_IO::step_proceed($params, "Delete User", "Operation Successful" ,null);
 					}
 					else
 					{							
-						$common->step_proceed($params, "Delete User", "Operation Failed" ,null);
+						Common_IO::step_proceed($params, "Delete User", "Operation Failed" ,null);
 					}		
 				}
 			}
@@ -765,8 +761,6 @@ class AdminUserIO
 	
 	public static function add_group()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{		
 			if ($_GET[nextpage] == 1)
@@ -840,11 +834,11 @@ class AdminUserIO
 				
 				if ($group->create_user_in_group($_GET[id]))
 				{
-					$common->step_proceed($params, "Add Group", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Add Group", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Add Group", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Add Group", "Operation Failed" ,null);	
 				}
 			}
 		}
@@ -858,8 +852,6 @@ class AdminUserIO
 	
 	public static function delete_group()
 	{
-		global $common;
-		
 		if ($_GET[id] and $_GET[key])
 		{
 			if ($_GET[sure] != "true")
@@ -893,11 +885,11 @@ class AdminUserIO
 						
 				if ($group->delete_user_from_group($_GET[id]))
 				{							
-					$common->step_proceed($params, "Delete Group", "Operation Successful" ,null);
+					Common_IO::step_proceed($params, "Delete Group", "Operation Successful" ,null);
 				}
 				else
 				{							
-					$common->step_proceed($params, "Delete Group", "Operation Failed" ,null);
+					Common_IO::step_proceed($params, "Delete Group", "Operation Failed" ,null);
 				}			
 			}
 		}
@@ -911,8 +903,6 @@ class AdminUserIO
 	
 	public static function add_organisation_unit()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{			
 			if ($_GET[nextpage] == 1)
@@ -986,11 +976,11 @@ class AdminUserIO
 				
 				if ($organisation_unit->create_user_in_organisation_unit($_GET[id]))
 				{
-					$common->step_proceed($params, "Add Organisation Unit", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Add Organisation Unit", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Failed" ,null);	
 				}
 			}
 		}
@@ -1004,8 +994,6 @@ class AdminUserIO
 	
 	public static function delete_organisation_unit()
 	{
-		global $common;
-		
 		if ($_GET[id] and $_GET[key])
 		{
 			if ($_GET[sure] != "true")
@@ -1039,11 +1027,11 @@ class AdminUserIO
 						
 				if ($organisation_unit->delete_user_from_organisation_unit($_GET[id]))
 				{							
-					$common->step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
+					Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
 				}
 				else
 				{							
-					$common->step_proceed($params, "Delete Organisation Unit", "Operation Failed" ,null);
+					Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Failed" ,null);
 				}			
 			}
 		}
@@ -1057,8 +1045,6 @@ class AdminUserIO
 	
 	public static function rename()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			$user = new User($_GET[id]);
@@ -1123,11 +1109,11 @@ class AdminUserIO
 				
 				if ($user->set_username($_POST[username]))
 				{
-					$common->step_proceed($params, "Rename User", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Rename User", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Rename User", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Rename User", "Operation Failed" ,null);	
 				}
 			}
 		}
@@ -1141,8 +1127,6 @@ class AdminUserIO
 	
 	public static function change_mail()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			$user = new User($_GET[id]);
@@ -1199,11 +1183,11 @@ class AdminUserIO
 				
 				if ($user->set_profile("mail", $_POST[mail]))
 				{
-					$common->step_proceed($params, "Change Mail", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Change Mail", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Change Mail", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Change Mail", "Operation Failed" ,null);	
 				}
 			}
 		}
@@ -1217,8 +1201,6 @@ class AdminUserIO
 	
 	public static function change_password()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{		
 			if ($_GET[nextpage] == 1)
@@ -1267,11 +1249,11 @@ class AdminUserIO
 				
 				if ($user->set_password($_POST[password]))
 				{
-					$common->step_proceed($params, "Set New Password", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Set New Password", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Set New Password", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Set New Password", "Operation Failed" ,null);	
 				}
 			}
 		}
@@ -1285,8 +1267,6 @@ class AdminUserIO
 		
 	public static function change_boolean_entry()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			$user = new User($_GET[id]);
@@ -1357,11 +1337,11 @@ class AdminUserIO
 		
 			if ($return == true)
 			{
-				$common->step_proceed($params, "Change Value", "Operation Successful", null);
+				Common_IO::step_proceed($params, "Change Value", "Operation Successful", null);
 			}
 			else
 			{
-				$common->step_proceed($params, "Change Value", "Operation Failed" ,null);	
+				Common_IO::step_proceed($params, "Change Value", "Operation Failed" ,null);	
 			}
 		}
 		else
@@ -1374,8 +1354,6 @@ class AdminUserIO
 	
 	public static function change_language()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			$user = new User($_GET[id]);
@@ -1436,11 +1414,11 @@ class AdminUserIO
 				
 				if ($user->set_language_id($_POST[language]))
 				{
-					$common->step_proceed($params, "Change Language", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Change Language", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Change Language", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Change Language", "Operation Failed" ,null);	
 				}
 			}
 		}
@@ -1454,8 +1432,6 @@ class AdminUserIO
 	
 	public static function change_timezone()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			$user = new User($_GET[id]);
@@ -1514,11 +1490,11 @@ class AdminUserIO
 				
 				if ($user->set_timezone_id($_POST[timezone]))
 				{
-					$common->step_proceed($params, "Change Timezone", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Change Timezone", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Change Timezone", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Change Timezone", "Operation Failed" ,null);	
 				}
 			}
 		}

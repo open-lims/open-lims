@@ -140,43 +140,24 @@ $template->set_var("GET_HELP","index.php?".$params);
 
 // Today Screen
 
-$project_task = new ProjectTask(null);
-$project_task_array = $project_task->list_upcoming_tasks();
-
-if (is_array($project_task_array) and count($project_task_array) >= 1) {
+$module_dialog_array = ModuleDialog::list_dialogs_by_type("home_today_box");
+		
+if (is_array($module_dialog_array) and count($module_dialog_array) >= 1)
+{
+	$content = "";
 	
-	$template->set_var("exist_project_task", true);
-	
-	$content_array = array();
-	$counter = 0;
-	
-	foreach ($project_task_array as $key => $value) {
-		
-		$paramquery = $_GET;
-		$paramquery[nav] = "project";
-		$paramquery[run] = "detail";
-		$paramquery[project_id] = $value[project_id];
-		$params = http_build_query($paramquery, '', '&#38;');
-		
-		if ($value[status] == 1) {
-			$content_array[$counter][name] = "<span class='HomeTodayOverdueEntry'><a href='index.php?".$params."'>".$value[project_name]."</a> - ".$value[task_name]." - ".$value[end_date]."</span>";
-		}else{
-			$content_array[$counter][name] = "<a href='index.php?".$params."'>".$value[project_name]."</a> - ".$value[task_name]." - ".$value[end_date];
-		}
-		
-		
-		$counter++;
-		
+	foreach ($module_dialog_array as $key => $value)
+	{
+		require_once($value['class_path']);
+		$content .= $value['class']::$value['method']();
 	}
 	
-	$template->set_var("project_task_array", $content_array);
-	
-}else{
-	$template->set_var("exist_project_task", false);
+	$template->set_var("content", $content);
 }
-
-$template->set_var("exist_appointment", false);
-$template->set_var("exist_todo_task", false);
+else
+{
+	$template->set_var("content", "");
+}
 
 $template->output();
 

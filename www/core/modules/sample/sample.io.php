@@ -668,7 +668,7 @@ class SampleIO
 	 */
 	public static function create($type_array, $category_array, $organisation_unit_id)
 	{
-		global $user, $session, $common, $sample_security;
+		global $user, $session, $sample_security;
 		
 		try
 		{
@@ -1806,7 +1806,7 @@ class SampleIO
 								$paramquery[sample_id] = $sample_id;
 								$params = http_build_query($paramquery);
 								
-								$common->step_proceed($params, "Add Sample", "Operation Successful", null);
+								Common_IO::step_proceed($params, "Add Sample", "Operation Successful", null);
 							}
 						}
 						else
@@ -1819,7 +1819,7 @@ class SampleIO
 							
 							$session->delete_value("SAMPLE_LAST_SCREEN");
 							$session->delete_value("SAMPLE_CURRENT_SCREEN");
-							$common->step_proceed($params, "Add Sample", "Operation Failed", null);
+							Common_IO::step_proceed($params, "Add Sample", "Operation Failed", null);
 						}
 					
 						$session->delete_value("SAMPLE_LAST_SCREEN");
@@ -1912,7 +1912,7 @@ class SampleIO
 	 */
 	public static function associate($type_array, $category_array)
 	{
-		global $user, $session, $common;
+		global $user, $session;
 					
 		if ($_GET[nextpage] < 2)
 		{
@@ -2223,7 +2223,7 @@ class SampleIO
 
 	public static function move()
 	{
-		global $user, $common, $sample_security;
+		global $user, $sample_security;
 
 		if ($_GET[sample_id])
 		{
@@ -2293,11 +2293,11 @@ class SampleIO
 					
 					if ($sample->add_depository($_POST[depository]))
 					{
-						$common->step_proceed($params, "Move Sample", "Operation Successful", null);
+						Common_IO::step_proceed($params, "Move Sample", "Operation Successful", null);
 					}
 					else
 					{
-						$common->step_proceed($params, "Move Sample", "Operation Failed" ,null);	
+						Common_IO::step_proceed($params, "Move Sample", "Operation Failed" ,null);	
 					}
 				}
 			}
@@ -2318,7 +2318,7 @@ class SampleIO
 	
 	public static function set_availability()
 	{
-		global $common, $sample_security;
+		global $sample_security;
 		
 		if ($_GET[sample_id])
 		{
@@ -2358,22 +2358,22 @@ class SampleIO
 					{
 						if ($sample->set_availability(false))
 						{							
-							$common->step_proceed($params, "Delete Permission", "Operation Successful" ,null);
+							Common_IO::step_proceed($params, "Delete Permission", "Operation Successful" ,null);
 						}
 						else
 						{							
-							$common->step_proceed($params, "Delete Permission", "Operation Failed" ,null);
+							Common_IO::step_proceed($params, "Delete Permission", "Operation Failed" ,null);
 						}
 					}
 					else
 					{
 						if ($sample->set_availability(true))
 						{							
-							$common->step_proceed($params, "Delete Permission", "Operation Successful" ,null);
+							Common_IO::step_proceed($params, "Delete Permission", "Operation Successful" ,null);
 						}
 						else
 						{							
-							$common->step_proceed($params, "Delete Permission", "Operation Failed" ,null);
+							Common_IO::step_proceed($params, "Delete Permission", "Operation Failed" ,null);
 						}
 					}		
 				}
@@ -2499,7 +2499,7 @@ class SampleIO
 	 */
 	public static function method_handler()
 	{
-		global $sample_security, $session, $transaction, $common;
+		global $sample_security, $session, $transaction;
 		
 		try
 		{
@@ -2718,7 +2718,7 @@ class SampleIO
 														{
 															$transaction->commit($transaction_id);
 														}
-														$common->step_proceed($params, "Add Item", "Succeed." ,null);
+														Common_IO::step_proceed($params, "Add Item", "Succeed." ,null);
 													}
 													else
 													{
@@ -2726,7 +2726,7 @@ class SampleIO
 														{
 															$transaction->rollback($transaction_id);
 														}
-														$common->step_proceed($params, "Add Item", "Failed." ,null);	
+														Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
 													}
 												}
 												else
@@ -2737,7 +2737,7 @@ class SampleIO
 														{
 															$transaction->commit($transaction_id);
 														}
-														$common->step_proceed($params, "Add Item", "Succeed." ,null);
+														Common_IO::step_proceed($params, "Add Item", "Succeed." ,null);
 													}
 													else
 													{
@@ -2745,7 +2745,7 @@ class SampleIO
 														{
 															$transaction->rollback($transaction_id);
 														}
-														$common->step_proceed($params, "Add Item", "Failed." ,null);	
+														Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
 													}
 												}
 											}

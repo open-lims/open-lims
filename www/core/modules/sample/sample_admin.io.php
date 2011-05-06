@@ -29,7 +29,7 @@ class SampleAdminIO
 {
 	public static function delete()
 	{
-		global $common, $user;
+		global $user;
 		
 		if ($_GET[sample_id])
 		{	
@@ -69,11 +69,11 @@ class SampleAdminIO
 								
 					if ($sample->delete())
 					{							
-						$common->step_proceed($params, "Delete Sample", "Operation Successful" ,null);
+						Common_IO::step_proceed($params, "Delete Sample", "Operation Successful" ,null);
 					}
 					else
 					{							
-						$common->step_proceed($params, "Delete Sample", "Operation Failed" ,null);
+						Common_IO::step_proceed($params, "Delete Sample", "Operation Failed" ,null);
 					}			
 				}
 			}
@@ -94,7 +94,7 @@ class SampleAdminIO
 	
 	public static function delete_project_association()
 	{
-		global $common, $user;
+		global $user;
 		
 		if ($_GET[sample_id])
 		{
@@ -142,11 +142,11 @@ class SampleAdminIO
 						
 						if ($project_item->unlink_item())
 						{							
-							$common->step_proceed($params, "Delete Project Association", "Operation Successful" ,null);
+							Common_IO::step_proceed($params, "Delete Project Association", "Operation Successful" ,null);
 						}
 						else
 						{							
-							$common->step_proceed($params, "Delete Project Association", "Operation Failed" ,null);
+							Common_IO::step_proceed($params, "Delete Project Association", "Operation Failed" ,null);
 						}			
 					}
 				}
@@ -174,7 +174,7 @@ class SampleAdminIO
 	
 	public static function rename()
 	{
-		global $common, $user;
+		global $user;
 		
 		if ($_GET[sample_id])
 		{
@@ -233,11 +233,11 @@ class SampleAdminIO
 					
 					if ($sample->set_name($_POST[name]))
 					{
-						$common->step_proceed($params, "Rename Sample", "Operation Successful", null);
+						Common_IO::step_proceed($params, "Rename Sample", "Operation Successful", null);
 					}
 					else
 					{
-						$common->step_proceed($params, "Rename Sample", "Operation Failed" ,null);	
+						Common_IO::step_proceed($params, "Rename Sample", "Operation Failed" ,null);	
 					}
 				}
 			}
@@ -389,7 +389,7 @@ class SampleAdminIO
 	
 	public static function user_permission_add()
 	{
-		global $user, $common;
+		global $user;
 
 		if ($_GET[sample_id])
 		{
@@ -513,11 +513,11 @@ class SampleAdminIO
 						
 						if ($sample_security->create_user($_POST[user], $read, $write) != null)
 						{							
-							$common->step_proceed($params, "Add Permission", "Operation Successful" ,null);
+							Common_IO::step_proceed($params, "Add Permission", "Operation Successful" ,null);
 						}
 						else
 						{							
-							$common->step_proceed($params, "Add Permission", "Operation Failed" ,null);
+							Common_IO::step_proceed($params, "Add Permission", "Operation Failed" ,null);
 						}
 					}
 				}
@@ -539,7 +539,7 @@ class SampleAdminIO
 	
 	public static function user_permission_delete()
 	{
-		global $common, $user;
+		global $user;
 		
 		if ($_GET[sample_id])
 		{
@@ -586,11 +586,11 @@ class SampleAdminIO
 													
 						if ($sample_security->delete_user($entry_id))
 						{							
-							$common->step_proceed($params, "Delete Sample", "Operation Successful" ,null);
+							Common_IO::step_proceed($params, "Delete Sample", "Operation Successful" ,null);
 						}
 						else
 						{							
-							$common->step_proceed($params, "Delete Sample", "Operation Failed" ,null);
+							Common_IO::step_proceed($params, "Delete Sample", "Operation Failed" ,null);
 						}	
 					}
 				}
@@ -719,7 +719,7 @@ class SampleAdminIO
 	
 	public static function ou_permission_add()
 	{
-		global $user, $common;
+		global $user;
 
 		if($_GET[sample_id])
 		{
@@ -800,11 +800,11 @@ class SampleAdminIO
 					
 					if ($sample_security->create_organisation_unit($_POST[ou]))
 					{							
-						$common->step_proceed($params, "Add Permission", "Operation Successful" ,null);
+						Common_IO::step_proceed($params, "Add Permission", "Operation Successful" ,null);
 					}
 					else
 					{							
-						$common->step_proceed($params, "Add Permission", "Operation Failed" ,null);
+						Common_IO::step_proceed($params, "Add Permission", "Operation Failed" ,null);
 					}
 				}
 			}
@@ -825,7 +825,7 @@ class SampleAdminIO
 	
 	public static function ou_permission_delete()
 	{
-		global $common, $user;
+		global $user;
 		
 		if ($_GET[sample_id])
 		{
@@ -872,11 +872,11 @@ class SampleAdminIO
 													
 						if ($sample_security->delete_organisation_unit($entry_id))
 						{							
-							$common->step_proceed($params, "Delete Sample", "Operation Successful" ,null);
+							Common_IO::step_proceed($params, "Delete Sample", "Operation Successful" ,null);
 						}
 						else
 						{							
-							$common->step_proceed($params, "Delete Sample", "Operation Failed" ,null);
+							Common_IO::step_proceed($params, "Delete Sample", "Operation Failed" ,null);
 						}	
 					}
 				}

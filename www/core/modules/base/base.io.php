@@ -119,6 +119,12 @@ class BaseIO
 		
 		$template->set_var("sw_info_params", $params);
 		
+		$paramquery = $_GET;
+		$paramquery[run] = "license";
+		$params = http_build_query($paramquery, '', '&#38;');
+		
+		$template->set_var("license_params", $params);
+		
 		$include_array = SystemHandler::list_includes();
 		
 		if (is_array($include_array) and count($include_array) >= 1)
@@ -179,6 +185,15 @@ class BaseIO
 	{
 		$template = new Template("languages/en-gb/template/base/software_info.html");
 		
+		$template->set_var("product", constant("PRODUCT"));
+		$template->set_var("product_version", constant("PRODUCT_VERSION"));
+		
+		$paramquery = $_GET;
+		$paramquery[run] = "license";
+		$params = http_build_query($paramquery, '', '&#38;');
+		
+		$template->set_var("license_params", $params);
+		
 		$template->output();
 	}
 	
@@ -187,7 +202,9 @@ class BaseIO
 	 */
 	public static function license()
 	{
+		$template = new Template("languages/en-gb/template/base/license.html");
 		
+		$template->output();
 	}
 	
 	/**

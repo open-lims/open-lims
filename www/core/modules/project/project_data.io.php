@@ -57,8 +57,6 @@ class ProjectDataIO
 		
 	public static function change()
 	{
-		global $common;
-		
 		if ($_GET[id])
 		{
 			$user = new User($_GET[id]);
@@ -123,11 +121,11 @@ class ProjectDataIO
 												
 				if ($project_data->set_quota($_POST[quota]))
 				{
-					$common->step_proceed($params, "Change Project Quota", "Operation Successful", null);
+					Common_IO::step_proceed($params, "Change Project Quota", "Operation Successful", null);
 				}
 				else
 				{
-					$common->step_proceed($params, "Change Project Quota", "Operation Failed" ,null);	
+					Common_IO::step_proceed($params, "Change Project Quota", "Operation Failed" ,null);	
 				}
 			}
 		}

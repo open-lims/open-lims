@@ -29,7 +29,7 @@ class FolderIO
 {
 	public static function add()
 	{
-		global $common, $user;
+		global $user;
 		
 		if ($_GET[folder_id])
 		{
@@ -101,11 +101,11 @@ class FolderIO
 						{
 							$new_folder->set_flag(64);
 						}
-						$common->step_proceed($params, "Add Folder", "Operation Successful", null);
+						Common_IO::step_proceed($params, "Add Folder", "Operation Successful", null);
 					}
 					else
 					{
-						$common->step_proceed($params, "Add Folder", "Operation Failed" ,null);	
+						Common_IO::step_proceed($params, "Add Folder", "Operation Failed" ,null);	
 					}
 				}
 			}
@@ -126,7 +126,7 @@ class FolderIO
 	
 	public static function delete()
 	{
-		global $common, $user;
+		global $user;
 		
 		if ($_GET[folder_id])
 		{
@@ -168,11 +168,11 @@ class FolderIO
 							
 					if ($folder->delete(true, true))
 					{
-						$common->step_proceed($params, "Delete Folder", "Operation Successful", null);
+						Common_IO::step_proceed($params, "Delete Folder", "Operation Successful", null);
 					}
 					else
 					{
-						$common->step_proceed($params, "Delete Folder", "Operation Failed" ,null);	
+						Common_IO::step_proceed($params, "Delete Folder", "Operation Failed" ,null);	
 					}
 				}
 			}
@@ -192,9 +192,7 @@ class FolderIO
 	}
 	
 	public static function move()
-	{
-		global $common;
-		
+	{		
 		if ($_GET[folder_id])
 		{
 			$folder = Folder::get_instance($_GET[folder_id]);
@@ -232,11 +230,11 @@ class FolderIO
 							
 					if ($folder->move_folder($_POST[folder_id], false))
 					{
-						$common->step_proceed($params, "Move Folder", "Operation Successful", null);
+						Common_IO::step_proceed($params, "Move Folder", "Operation Successful", null);
 					}
 					else
 					{
-						$common->step_proceed($params, "Move Folder", "Operation Failed" ,null);	
+						Common_IO::step_proceed($params, "Move Folder", "Operation Failed" ,null);	
 					}
 				}
 			}
