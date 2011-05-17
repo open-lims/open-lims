@@ -241,6 +241,24 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 		}
 	}
 	
+	public final function get_item_name()
+	{
+		if ($this->equipment_id and $this->equipment)
+		{
+			$equipment_type = new EquipmentType($this->equipment->get_type_id());
+			return $equipment_type->get_name();
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public final function get_item_parents()
+	{
+		return null;
+	}
+	
 	
 	/**
 	 * @return array
@@ -309,7 +327,7 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
      */
     public static function is_kind_of($type, $item_id)
     {
-    	if ($type and is_numeric($item_id))
+    	if (is_numeric($item_id))
     	{
     		if (($equipment_id = EquipmentIsItem_Access::get_entry_by_item_id($item_id)) != null)
     		{
@@ -319,6 +337,27 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
     		{
     			return false;
     		}
+    	}
+    }
+    
+    /**
+     * @todo
+     */
+    public static function is_type_or_category($category_id, $type_id, $item_id)
+    {
+    	
+    }
+    
+    public static function get_instance_by_item_id($item_id)
+    {
+    	if (is_numeric($item_id))
+    	{
+    		$equipment_id = EquipmentIsItem_Access::get_entry_by_item_id($item_id);
+    		return new Equipment($equipment_id);
+    	}
+    	else
+    	{
+    		return null;
     	}
     }
     

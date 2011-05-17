@@ -55,7 +55,7 @@ interface ValueInterface
 	
 	// private function array_contains_each_statements($xml_array);
 	// private function resolve_each_statements($xml_array);
-	public function get_html_form($error_array, $type_id);
+	public function get_html_form($error_array, $type_id, $folder_id);
 	
 	public function set_content_array($content_array);
 	public function set_autofield_array_string($autofield_array_string);

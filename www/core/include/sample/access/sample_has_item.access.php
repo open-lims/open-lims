@@ -392,7 +392,7 @@ class SampleHasItem_Access
 	 * @param integer $item_id
 	 * @return array
 	 */
-	public static function list_entries_by_item_id($item_id)
+	public static function list_entries_by_item_id_pk($item_id)
 	{
 		global $db;
 
@@ -406,6 +406,41 @@ class SampleHasItem_Access
 			while ($data = $db->db_fetch_assoc($res))
 			{
 				array_push($return_array,$data[primary_key]);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $item_id
+	 * @return array
+	 */
+	public static function list_entries_by_item_id($item_id)
+	{
+		global $db;
+
+		if (is_numeric($item_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT sample_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id."";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,$data[sample_id]);
 			}
 			
 			if (is_array($return_array))

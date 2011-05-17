@@ -263,7 +263,7 @@ class ValueIO
 							
 							$template->set_var("title", $value->get_type_name());
 							
-							$template->set_var("value",$value->get_html_form(null, null));
+							$template->set_var("value",$value->get_html_form(null, null, null));
 				
 							$template->output();
 						}
@@ -443,7 +443,7 @@ class ValueIO
 					
 					$template->set_var("title", $value_type->get_name());
 					
-					$template->set_var("value",$value->get_html_form(null, $type_id));
+					$template->set_var("value",$value->get_html_form(null, $type_id, $folder_id));
 		
 					$template->set_var("type_id", $type_id);
 		

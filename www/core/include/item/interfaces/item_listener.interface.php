@@ -3,7 +3,7 @@
  * @package item
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -28,12 +28,93 @@
  */
 interface ItemListenerInterface
 {
-	public static function is_kind_of($type, $item_id);	
+	/**
+	 * Returns the name of a specific item 
+	 * Requires instance via get_instance_by_item_id($item_id)
+	 * @return string
+	 */
+	public function get_item_name();
+	
+	/**
+	 * Returns a set of parents
+	 * Requires instance via get_instance_by_item_id($item_id)
+	 * @return string
+	 */
+	public function get_item_parents();
+	
+	
+	/**
+	 * Checks if an item_id is a kind of the current class.
+	 * type is an optional variable, if one class handles two or more item-types
+	 * @param string $type
+	 * @param integer $item_id
+	 * @return bool
+	 */
+	public static function is_kind_of($type, $item_id);
+	
+	/**
+	 * Checks if an item_id is in a category or a type_id. 
+	 * $type_id is an internal type of the specific item. It is not the ID of the item-concreation nor the $type of is_kind_of().
+	 * This is an optional method (some methods could return false everytime)
+	 * @param $category_id
+	 * @param integer $type_id
+	 * @param integer $item_id
+	 * @return bool
+	 */
+	public static function is_type_or_category($category_id, $type_id, $item_id);
+	
+	/**
+	 * Returns an instance of a specific class by item-id
+	 * @param integer $item_id
+	 * @return object
+	 */
+	public static function get_instance_by_item_id($item_id);
+	
+	
+	/**
+	 * Returns the generic name of the item-type
+	 * @param string $type
+	 * @param array $type_array
+	 * @return string
+	 */
 	public static function get_generic_name($type, $type_array);
+	
+	/**
+	 * Returns the generic symbol of the item-type
+	 * @param string $type
+	 * @param integer $id
+	 * @return string
+	 */
 	public static function get_generic_symbol($type, $id);
+	
+	/**
+	 * Returns the generic link of the item-type
+	 * @param string $type
+	 * @param string $id
+	 * @return string
+	 */
 	public static function get_generic_link($type, $id);
+	
+	
+	/**
+	 * Returns the SELECT-SQL part for data-search
+	 * @param string $type
+	 * @return string
+	 */
 	public static function get_sql_select_array($type);
+	
+	/**
+	 * Returns the SELECT-JOIN part for data-search
+	 * @param string $type
+	 * @return string
+	 */
 	public static function get_sql_join($type);
+	
+	/**
+	 * Returns the SELECT-WHERE part for data-search
+	 * @param string $type
+	 * @return string
+	 */
 	public static function get_sql_where($type);
 }
 ?>

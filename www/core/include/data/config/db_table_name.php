@@ -39,6 +39,7 @@
 	define("FOLDER_TABLE", 								"core_folders");
 
 	define("VALUE_TYPE_TABLE", 							"core_value_types");
+	define("VALUE_VAR_CASE_TABLE", 						"core_value_var_cases");
 	define("VALUE_VERSION_TABLE", 						"core_value_versions");
 	define("VALUE_TABLE", 								"core_values");
 	

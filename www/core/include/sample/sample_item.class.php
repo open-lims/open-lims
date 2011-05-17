@@ -193,7 +193,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     	{
     		$transaction_id = $transaction->begin();
     		
-  			$sample_has_item_pk_array = SampleHasItem_Access::list_entries_by_item_id($this->item_id);
+  			$sample_has_item_pk_array = SampleHasItem_Access::list_entries_by_item_id_pk($this->item_id);
   			  			
   			if (is_array($sample_has_item_pk_array))
   			{
@@ -765,6 +765,16 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     	}
     }
 
+    
+    /**
+     * @param integer $item_id
+     * @return array
+     */
+    public static function list_entries_by_item_id($item_id)
+    {
+    	return SampleHasItem_Access::list_entries_by_item_id($item_id);
+    }
+    
     /**
      * @param integer $item_id
      * @param integer $sample_id

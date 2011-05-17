@@ -886,6 +886,14 @@ class Value extends DataEntity implements ValueInterface
 	}
 	
 	/**
+	 * @todo individual value naming
+	 */
+	public function get_name()
+	{
+		return $this->get_type_name();
+	}
+	
+	/**
 	 * @return integer
 	 */
 	public function get_type_id()
@@ -1013,7 +1021,7 @@ class Value extends DataEntity implements ValueInterface
      * @param array $xml_array
      * @return array
      */
-    private function resolve_each_statements($xml_array)
+    private function resolve_each_statements($xml_array, $folder_id)
     {
     	$xml_return_array = array();
     	$xml_each_temp_array = array();
@@ -1023,31 +1031,8 @@ class Value extends DataEntity implements ValueInterface
     	
     	if (is_array($xml_array) and count($xml_array) >= 1)
     	{
-    		$value_var = new ValueVar;
-    		if (is_numeric($this->data_entity_id))
-			{
-				$parent_folder_data_entity_id = $this->get_parent_folder();
-				$folder = Folder::get_instance(Folder::get_folder_id_by_data_entity_id($parent_folder_data_entity_id));
-				
-				if (method_exists($folder, "get_project_id"))
-				{
-					$value_var->set_project_id($folder->get_project_id());
-				}
-				
-				if (method_exists($folder, "get_sample_id"))
-				{
-					$value_var->set_sample_id($folder->get_sample_id());
-				}
-			}
-			elseif($_GET[project_id])
-			{
-				$value_var->set_project_id($_GET[project_id]);
-			}
-			elseif($_GET[sample_id])
-			{
-				$value_var->set_sample_id($_GET[sample_id]);
-			}
-    		
+    		$value_var = new ValueVar($folder_id);
+	
     		foreach($xml_array as $key => $value)
     		{
     			$value[1] = strtolower(trim($value[1]));
@@ -1056,7 +1041,7 @@ class Value extends DataEntity implements ValueInterface
     			if ($value[1] == "each" and $value[2] != "#")
     			{
     				$each_count++;
-					$value_var_content = $value_var->get_var_content($value[3]['var']);				
+					$value_var_content = $value_var->get_content($value[3]['var']);				
     			}
     			else
     			{
@@ -1114,11 +1099,16 @@ class Value extends DataEntity implements ValueInterface
      * @param integer $type_id
      * @return string
      */
-	public function get_html_form($error_array, $type_id)
+	public function get_html_form($error_array, $type_id, $folder_id)
 	{	
-		if ($type_id == null)
+		if ($type_id == null and $this->value_id)
 		{
 			$type_id = $this->value->get_type_id();
+		}
+		
+		if ($folder_id == null and $this->value_id)
+		{
+			$folder_id = $this->get_parent_folder_id();
 		}
 		
 		$value_type = new ValueType($type_id);
@@ -1139,7 +1129,7 @@ class Value extends DataEntity implements ValueInterface
 			
 			if ($this->array_contains_each_statements($xml_array))
 			{
-				$xml_array = $this->resolve_each_statements($xml_array);
+				$xml_array = $this->resolve_each_statements($xml_array, $folder_id);
 			}
 			
 			if (is_array($content_array) and count($content_array) >= 1)
@@ -1286,32 +1276,8 @@ class Value extends DataEntity implements ValueInterface
 					}
 					elseif (!$value[3][value] and $value[3]['var'])
 					{
-						$value_var = new ValueVar;
-						if (is_numeric($this->data_entity_id))
-						{
-							$parent_folder_data_entity_id = $this->get_parent_folder();
-							$folder = Folder::get_instance(Folder::get_folder_id_by_data_entity_id($parent_folder_data_entity_id));
-							
-							if (method_exists($folder, "get_project_id"))
-							{
-								$value_var->set_project_id($folder->get_project_id());
-							}
-							
-							if (method_exists($folder, "get_sample_id"))
-							{
-								$value_var->set_sample_id($folder->get_sample_id());
-							}
-						}
-						elseif($_GET[project_id])
-						{
-							$value_var->set_project_id($_GET[project_id]);
-						}
-						elseif($_GET[sample_id])
-						{
-							$value_var->set_sample_id($_GET[sample_id]);
-						}
-						
-						$value_var_content = $value_var->get_var_content($value[3]['var']);
+						$value_var = new ValueVar($folder_id);
+						$value_var_content = $value_var->get_content($value[3]['var']);
 								
 						if (!is_array($value_var_content))
 						{
@@ -1456,32 +1422,8 @@ class Value extends DataEntity implements ValueInterface
 							}
 							elseif (!$value[3][value] and $value[3]['var'])
 							{
-								$value_var = new ValueVar;
-								if (is_numeric($this->data_entity_id))
-								{
-									$parent_folder_data_entity_id = $this->get_parent_folder();
-									$folder = Folder::get_instance(Folder::get_folder_id_by_data_entity_id($parent_folder_data_entity_id));
-									
-									if (method_exists($folder, "get_project_id"))
-									{
-										$value_var->set_project_id($folder->get_project_id());
-									}
-									
-									if (method_exists($folder, "get_sample_id"))
-									{
-										$value_var->set_sample_id($folder->get_sample_id());
-									}
-								}
-								elseif($_GET[project_id])
-								{
-									$value_var->set_project_id($_GET[project_id]);
-								}
-								elseif($_GET[sample_id])
-								{
-									$value_var->set_sample_id($_GET[sample_id]);
-								}
-			
-								$value_var_content = $value_var->get_var_content($value[3]['var']);
+								$value_var = new ValueVar($folder_id);
+								$value_var_content = $value_var->get_content($value[3]['var']);
 
 								if (is_array($value_var_content) and count($value_var_content) >= 1) {
 	

@@ -783,6 +783,36 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		}
 	}
 	
+	public final function get_item_name()
+	{
+		if ($this->data_entity_id)
+		{
+			if (($file_id = File::get_file_id_by_data_entity_id($this->data_entity_id)) != null)
+			{
+				$file = new File($file_id);
+	    		return $file->get_name();
+			}
+					
+	    	if (($value_id = Value::get_value_id_by_data_entity_id($this->data_entity_id)) != null)
+			{
+				$value = new Value($value_id);
+	    		return $value->get_name();
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+     * @todo
+     */
+	public final function get_item_parents()
+	{
+		
+	}
+	
 	
 	/**
 	 * @param integer $item_id
@@ -849,7 +879,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
      */
     public static function is_kind_of($type, $item_id)
     {
-    	if ($type and is_numeric($item_id))
+    	if (is_numeric($item_id))
     	{
     		if (($data_entity_id = DataEntityIsItem_Access::get_entry_by_item_id($item_id)) != null)
     		{
@@ -869,12 +899,37 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 					}
     			}
     			
-    			return false;
+    			if ($type == null)
+    			{
+    				return true;
+    			}
+    			else
+    			{
+    				return false;
+    			}
     		}
     	}
     	else
     	{
     		return false;
+    	}
+    }
+    
+    public static function is_type_or_category($category_id, $type_id, $item_id)
+    {
+    	return false;
+    }
+    
+	public static function get_instance_by_item_id($item_id)
+    {
+    	if (is_numeric($item_id))
+    	{
+    		$data_entity_id = DataEntityIsItem_Access::get_entry_by_item_id($item_id);
+    		return new DataEntity($data_entity_id);
+    	}
+    	else
+    	{
+    		return null;
     	}
     }
     

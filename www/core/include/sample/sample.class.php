@@ -1123,6 +1123,47 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     	}
 	}
 	
+	public final function get_item_name()
+	{
+		if ($this->sample_id and $this->sample)
+    	{
+    		return $this->sample->get_name();
+    	}
+    	else
+    	{
+    		return null;
+    	}
+	}
+	
+	public final function get_item_parents()
+	{
+		if ($this->item_id)
+		{
+			$parent_sample_array = SampleItem::list_entries_by_item_id($this->item_id);
+			
+			if (is_array($parent_sample_array) and count($parent_sample_array) >= 1)
+			{
+				$return_array = array();
+				
+				foreach($parent_sample_array as $key => $value)
+				{
+					$sample_is_item = new SampleIsItem_Access($value);
+    				array_push($return_array, $sample_is_item->get_item_id());
+				}
+				
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 	
 	/**
 	 * Returns true if a sample exists
@@ -1277,7 +1318,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
      */
     public static function is_kind_of($type, $item_id)
     {
-    	if ($type and is_numeric($item_id))
+    	if (is_numeric($item_id))
     	{
     		if (($sample_id = SampleIsItem_Access::get_entry_by_item_id($item_id)) != null)
     		{
@@ -1291,6 +1332,56 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     	else
     	{
     		return false;
+    	}
+    }
+    
+    public static function is_type_or_category($category_id, $type_id, $item_id)
+    {
+    	if (is_numeric($type_id))
+    	{
+    		$sample_id = SampleIsItem_Access::get_entry_by_item_id($item_id);
+    		$sample = new Sample($sample_id);
+    		
+    		if ($sample->get_template_id() == $type_id)
+    		{
+    			return true;
+    		}
+    		else
+    		{
+    			return false;
+    		}
+    	}
+    	elseif (is_numeric($category_id))
+    	{
+    		$sample_id = SampleIsItem_Access::get_entry_by_item_id($item_id);
+    		$sample = new Sample($sample_id);
+    		$sample_template = new SampleTemplate($sample->get_template_id());
+    		
+    		if ($sample_template->get_cat_id() == $category_id)
+    		{
+    			return true;
+    		}
+    		else
+    		{
+    			return false;
+    		}
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
+    
+	public static function get_instance_by_item_id($item_id)
+    {
+    	if (is_numeric($item_id))
+    	{
+    		$sample_id = SampleIsItem_Access::get_entry_by_item_id($item_id);
+    		return new Sample($sample_id);
+    	}
+    	else
+    	{
+    		return null;
     	}
     }
     

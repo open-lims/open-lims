@@ -24,7 +24,8 @@
 /**
  * 
  */
-	$classes['ConcreteFolderCaseInterface']	= $path_prefix."core/include/data/folder/interfaces/concrete_folder_case.interface.php";	
+	$classes['ConcreteFolderCaseInterface']	= $path_prefix."core/include/data/folder/interfaces/concrete_folder_case.interface.php";		
+	$classes['ValueVarCaseInterface']		= $path_prefix."core/include/data/value/interfaces/value_var_case.interface.php";	
 
 	$classes['DataException']				= $path_prefix."core/include/data/exceptions/data_exception.class.php";
 	$classes['DataSecurityException']		= $path_prefix."core/include/data/exceptions/data_security_exception.class.php";
@@ -44,9 +45,11 @@
 
 	$classes['Path']						= $path_prefix."core/include/data/folder/path.class.php";
 	$classes['Value']						= $path_prefix."core/include/data/value/value.class.php";
-	$classes['ValueVar']					= $path_prefix."core/include/data/value/value_var.class.php";
 	$classes['ValueType']					= $path_prefix."core/include/data/value/value_type.class.php";
 	$classes['ValueExternalVar']			= $path_prefix."core/include/data/value/value_external_var.class.php";
+	
+	$classes['ValueVar']					= $path_prefix."core/include/data/value/value_var.class.php";
+	$classes['ItemValueVar']				= $path_prefix."core/include/data/value/item_value_var.class.php";
 	
 	$classes['VirtualFolder']				= $path_prefix."core/include/data/virtual_folder/virtual_folder.class.php";
 	

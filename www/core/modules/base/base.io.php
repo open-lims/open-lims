@@ -101,9 +101,6 @@ class BaseIO
 		
 	}
 	
-	/**
-	 * @todo content
-	 */
 	public static function system_info()
 	{
 		$template = new Template("languages/en-gb/template/base/system_info.html");
@@ -197,20 +194,14 @@ class BaseIO
 		$template->output();
 	}
 	
-	/**
-	 * @todo content
-	 */
 	public static function license()
 	{
 		$template = new Template("languages/en-gb/template/base/license.html");
-		
 		$template->output();
 	}
 	
 	/**
-	 * @todo info page
 	 * @todo version info
-	 * @todo license
 	 */
 	public static function method_handler()
 	{

@@ -23,16 +23,12 @@
 
 
 /**
+ * @todo
  * Value Var Interface
  * @package data
  */
 interface ValueVarInterface
 {
-	function __construct();
-	function __destruct();
-	
-	public function set_project_id($project_id);
-	public function set_sample_id($sample_id);
-	 public function get_var_content($address);
+
 }
 ?>

@@ -1602,7 +1602,7 @@ class SampleIO
 								{
 									$value->set_content_array($sample_template_data_array);
 								}	
-								$value_html = $value_obj->get_html_form(null, $value_type_id);
+								$value_html = $value_obj->get_html_form(null, $value_type_id, null);
 								$template->set_var("content",$value_html);
 								
 								$template->set_var("template_data_type_id", $value_type_id);

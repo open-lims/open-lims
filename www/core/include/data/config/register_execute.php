@@ -39,6 +39,7 @@ function register_data($include_id)
 		return false;
 	}
 	
+	
 	if (Folder::delete_type_by_include_id($include_id))
 	{
 		if (Folder::register_type("user_folder", "UserFolder", $include_id) == false)
@@ -60,6 +61,21 @@ function register_data($include_id)
 	{
 		return false;
 	}
+	
+	
+	if (ValueVar::delete_by_include_id($include_id))
+	{
+		if (ValueVar::register_type("item", "ItemValueVar", true, $include_id) == false)
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+
+	
 	return true;
 }
 $result = register_data($key);

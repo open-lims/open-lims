@@ -21,209 +21,207 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * 
- */
-// require_once("interfaces/project_value_var.interface.php");  
 
 /**
  * Manages requests of OLVDL var requests
  * @package project
  */
-class ProjectValueVar
+class ProjectValueVar implements ValueVarCaseInterface
 {
-	function __construct($project_id)
-	{
-		
-	}
+	private static $instance;
 	
-	public function get_var_content($address)
-	{
-		$number_of_statements = substr_count($address, ".");
-    	
-    	if ($number_of_statements >= 0)
-    	{
-    		if ($number_of_statements == 0)
-    		{
-    			$current_statement = $address;
-    		}
-    		else
-    		{
-	    		$statement_array = explode(".", $address);
-	    		$current_statement = $statement_array[0];
-    		}
-	    	
-	    	switch($current_statement):
-		
-				case "parent":
-	    			if ($this->stack[count($this->stack)-2] == "project")
-	    			{
-	    				if (($project_toid = $this->project->get_project_toid()) != null)
-	    				{
-	    					array_pop($this->stack);
-	    					array_push($this->stack, $project_toid);
-	    					$this->project = new Project($project_toid);
-	    					$this->project_id = $project_toid;
-	    				}
-	    				else
-	    				{
-	    					// Exception
-	    				}
-	    			}
-	    			else
-	    			{
-	    				// Exception
-	    			}
-	    		break;
-	    		
-	    		case "parents":
-	    			if ($this->stack[count($this->stack)-2] == "project")
-	    			{
-	    				if (($project_toid = $this->project->get_project_toid()) != null)
-	    				{
-	    					if (!is_array($this->result))
-	    					{
-									$this->result = array();
-							}
-	    					
-	    					array_push($this->result, $project_toid);
-	    					array_push($this->stack, "parents");
-	    				}
-	    				else
-	    				{
-	    					// Exception
-	    				}
-	    			}
-	    			else
-	    			{
-	    				// Exception
-	    			}
-	    		break;
-	    		
-	    		case "current":
-	    			if ($this->stack[count($this->stack)-1] == "status")
-	    			{
-	    				array_push($this->stack, $this->project->get_current_status_id());
-	    			}
-	    			else
-	    			{
-	    				// Exception
-	    			}
-	    		break;
-	    			    		
-	    		case "status":
-	    			if ($this->stack[count($this->stack)-2] == "project")
-	    			{
-	    				array_push($this->stack, "status");
-	    			}
-	    			else
-	    			{
-	    				// Exception
-	    			}
-	    		break;
-	    		
-	    		case "required":
-	    			array_push($this->stack, "status");
-	    			array_push($this->stack, 0);
-	    		break;
-	    		
-	    		case "item":
-	    			// An Item
-	    		break;
-	    		
-	    		
-	    	
-	    		
-	    		case "list":
-	    			if ($this->stack[count($this->stack)-1] == "parents")
-	    			{
-	    				array_pop($this->stack);
-	    			}
-	    			array_push($this->stack, "list");
-	    		break;
-	    		
-	    		case "getName":
-	    			if ($this->stack[count($this->stack)-1] == "list")
-	    			{
-	    				if ($this->stack[count($this->stack)-3] == "project")
-	    				{
-							// [...]
-	    				}
-	    			}
-	    			else
-	    			{
-	    				switch ($this->stack[count($this->stack)-2]):
-	    					case "project":
-	    						$this->result = $this->project->get_name();
-	    					break;
-	    				endswitch;
-	    			}
-	    		break;
-	    		
-	    		default:
-	    			if (is_numeric($current_statement))
-	    			{	
-	    				if (count($this->stack) >= 1)
-	    				{
-	    					switch ($this->stack[count($this->stack)-1]):
-	    						case "project":
-	    							array_push($this->stack, $current_statement);
-	    							$this->project_id = $current_statement;
-	    							$this->project = new Project($current_statement);
-	    						break;
-	    						
-	    						case "status":
-	    							array_push($this->stack, $current_statement);
-	    						break;
-	    					
-		    					default:
-		    						// Exception
-		    					break;
-	    					endswitch;	
-	    				}
-	    			}
-	    		break;    	
+	private $project_id;
+	private $temp;
+    private $result;
+    private $stack;
+    
+    private $string_array;
 	
-	    	endswitch;
-	    	
-	    	if ($number_of_statements == 0)
-	    	{
-    			return $this->result;
-    		}
-    		else
-    		{
-    			if ($number_of_statements == 1)
+    private function interpret($word)
+    {
+    	switch($word):
+
+    		case "getName":
+    			if ($this->stack[count($this->stack)-1] == "list")
     			{
-    				$statement_string = $statement_array[1];
+    				if ($this->stack[count($this->stack)-3] == "project")
+    				{
+						// [...]
+    				}
     			}
     			else
     			{
-		    		$statement_array = explode(".", $address);
-		    		$statement_string = "";
-		    		for ($i=1;$i<=$number_of_statements;$i++)
-		    		{
-		    			if (!$statement_string)
-		    			{
-		    				$statement_string = $statement_array[$i];
-		    			}
-		    			else
-		    			{
-		    				$statement_string .= ".".$statement_array[$i];
-		    			}
-		    		}
+    				switch ($this->stack[count($this->stack)-2]):
+    					case "project":
+  							if ($this->project instanceof Project)
+  							{
+  								$this->result = $this->project->get_name();
+  							}
+  							else
+  							{
+  								$this->project = new Project($this->stack[count($this->stack)-1]);
+  								$this->result = $this->project->get_name();
+  							}
+    						
+    					break;
+    				endswitch;
     			}
-	    		return $this->get_var_content($statement_string);
-    		}
+    		break;
+    		
+    		case "item":
+    			if ($this->stack[count($this->stack)-2] == "status")
+	    		{
+	    			if ($this->stack[count($this->stack)-1] != 0)
+	    			{
+	    				$project_item = new ProjectItem($this->project_id);
+						$project_item_array = $project_item->get_project_items();
+								
+						if (is_array($project_item_array) and count($project_item_array) >= 1)
+						{
+							$result_array = array();
+									
+							foreach($project_item_array as $fe_key => $fe_value)
+							{
+								if (ProjectItem::get_gid_by_item_id_and_status_id($fe_value, $this->stack[count($this->stack)-2]) !== null)
+								{
+									array_push($result_array, $fe_value);
+								}
+							}
+							$this->temp = $result_array;
+						}
+	    			}
+	    			else
+	    			{
+		    			$project_item = new ProjectItem($this->project_id);
+						$project_item_array = $project_item->get_project_items();
+							
+						if (is_array($project_item_array) and count($project_item_array) >= 1)
+						{
+							$result_array = array();
+								
+							foreach($project_item_array as $fe_key => $fe_value)
+							{
+								$project_item = new ProjectItem($this->project_id);
+								$project_item->set_item_id($fe_value);
+										
+								if ($project_item->is_required() == true)
+								{
+									array_push($result_array, $fe_value);
+								}
+							}
+							$this->temp = $result_array;
+						}
+	    			}
+	    		}
+	    		else
+	    		{
+	    			$project_item = new ProjectItem($this->project_id);
+    				$this->temp = $project_item->get_project_items();
+	    		}
+	    		
+	    		array_push($this->stack, "item");
+	    		
+    			$item_value_var = new ItemValueVar();
+    			$this->result = $item_value_var->get_content($this->string_array, $this->stack, $this->result, $this->temp);
+    			$this->stack = $item_value_var->get_stack();
+    			$this->string_array = $item_value_var->get_string_array();
+    		break;
+    		
+    		case "current":
+    			
+    		break;
+    		
+    		case "status":
+    			
+    		break;
+    		
+    		case "required":
+    			
+    		break;
+    		
+    		default:
+    			
+    		break;    	
+
+    	endswitch;
+    	
+    	if (count($this->string_array) == 0)
+    	{
+    		return $this->result;
     	}
     	else
     	{
-    		// Exception
+    		return $this->get_content(null, null, null, null);
     	}
+    }
+
+	public function get_content($string_array, $stack, $result, $temp)
+	{
+		if (is_array($string_array) and is_array($stack))
+		{
+	    	$this->string_array = $string_array;
+			$this->stack = $stack;
+			$this->result = $result;
+			$this->stack;
+			
+			$stack_length = count($stack);
+			if ($stack_length >= 2)
+			{
+				$this->project_id = $this->stack[$stack_length-1];
+			}
+    		
+    		return $this->interpret(array_shift($this->string_array));
+		}
+		elseif(is_array($this->string_array) and count($this->string_array) >= 1)
+		{
+			return $this->interpret(array_shift($this->string_array));
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public function get_stack()
+	{
+		return $this->stack;
+	}
+	
+	public function get_string_array()
+	{
+		return $this->string_array;
 	}
 	
 	
-	public static function init($address)
+	public static function is_case($folder_id)
 	{
-		
+		if (is_numeric($folder_id))
+		{			
+			if (($project_id = ProjectFolder::get_project_id_by_folder_id($folder_id)) != null)
+			{
+				return $project_id;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public static function get_instance()
+	{
+		if (self::$instance instanceof ProjectValueVar)
+		{
+			return self::$instance;
+		}
+		else
+		{
+			self::$instance = new ProjectValueVar();
+			return self::$instance;
+		}
 	}
 }
