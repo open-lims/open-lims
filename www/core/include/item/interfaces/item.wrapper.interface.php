@@ -1,6 +1,6 @@
-<?php 
+<?php
 /**
- * @package project
+ * @package item
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -20,15 +20,16 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
+ 
 
 /**
- * 
- */
-	$name 					= "item";
-	$main_class				= "ItemIO";
-	
-	$required_include[0] 	= "item";
-	
-	$no_tab					= true;
-	$no_link				= true;
+ * @todo
+ * Item Class Management Interface
+ * @package item
+ */ 	 
+interface Item_WrapperInterface
+{
+
+}
+
 ?>

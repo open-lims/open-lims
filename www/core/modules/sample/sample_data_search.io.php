@@ -135,12 +135,15 @@ class SampleDataSearchIO
 				{
 					if (class_exists($value))
 					{
-						$result[$counter][title] = $value::get_generic_name($key, null);
-						$result[$counter][name] = "item-".$key;
-						$result[$counter][value] = $key;
-						$result[$counter][checked] = "checked='checked'";
-						
-						$counter++;
+						if ($value::get_sql_select_array($key) != null)
+						{
+							$result[$counter][title] = $value::get_generic_name($key, null);
+							$result[$counter][name] = "item-".$key;
+							$result[$counter][value] = $key;
+							$result[$counter][checked] = "checked='checked'";
+							
+							$counter++;
+						}
 					}
 				}
 			}
@@ -277,8 +280,6 @@ class SampleDataSearchIO
 			$list->add_row("Type", "type", false, null);
 			$list->add_row("Datetime", "datetime", true, null);
 			$list->add_row("Sample", "sample_name", true, null);
-			
-			// print_r($result_array);
 			
 			$template = new Template("languages/en-gb/template/samples/search/data_search_result.html");
 		

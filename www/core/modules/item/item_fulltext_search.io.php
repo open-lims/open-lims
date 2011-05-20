@@ -1,6 +1,6 @@
 <?php
 /**
- * @package project
+ * @package item
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -22,27 +22,24 @@
  */
 
 /**
- * Project Data Search IO Class
- * @package project
+ * Item Fulltext Search IO Class
+ * @package item
  */
-class ProjectDataSearchIO
+class ItemFulltextSearchIO
 {
 	public static function get_description($language_id)
 	{
-		return "Finds Data in Projects uncoupled to Folder-structure.";
+		return "Finds Items via Fulltext-Search.";
 	}
 	
 	public static function get_icon()
 	{
-		return "images/icons_large/data_search_50.png";
+		return "images/icons_large/fulltext_search_50.png";
 	}
 	
-	/**
-	 * @todo search on read-only projects
-	 */
 	public static function search()
 	{
-		global $user, $session;
+		global $session;
 		
 		if ($_GET[nextpage])
 		{
@@ -51,38 +48,32 @@ class ProjectDataSearchIO
 				if ($_GET[nextpage] == "2" and $_POST[string])
 				{
 					$string = $_POST[string];
-					$item_type_array = $session->read_value("SEARCH_DATA_ITEM_TYPE");
-					$project_id_array = $session->read_value("SEARCH_DATA_PROJECT_ID");
+					$item_type_array = $session->read_value("SEARCH_FULL_TEXT_ITEM_TYPE");		
 				}
 				else
 				{
-					$string = $session->read_value("SEARCH_DATA_STRING");
-					$item_type_array = $session->read_value("SEARCH_DATA_ITEM_TYPE");
-					$project_id_array = $session->read_value("SEARCH_DATA_PROJECT_ID");
+					$string = $session->read_value("SEARCH_FULLTEXT_STRING");
+					$item_type_array = $session->read_value("SEARCH_FULL_TEXT_ITEM_TYPE");	
 				}
 			}
 			else
 			{
 				if ($_GET[page])
 				{
-					$string = $session->read_value("SEARCH_DATA_STRING");
-					$item_type_array = $session->read_value("SEARCH_DATA_ITEM_TYPE");
-					$project_id_array = $session->read_value("SEARCH_DATA_PROJECT_ID");
+					$string = $session->read_value("SEARCH_FULLTEXT_STRING");
+					$item_type_array = $session->read_value("SEARCH_FULL_TEXT_ITEM_TYPE");		
 				}
 				else
 				{
 					if ($_GET[nextpage] == "1")
 					{
 						$string = $_POST[string];
-						$session->delete_value("SEARCH_DATA_STRING");
-						$session->delete_value("SEARCH_DATA_ITEM_TYPE");
-						$session->delete_value("SEARCH_DATA_PROJECT_ID");
+						$session->delete_value("SEARCH_FULL_TEXT_ITEM_TYPE");
 					}
 					else
 					{
-						$string = $_POST[string];
-						$item_type_array = $session->read_value("SEARCH_DATA_ITEM_TYPE");
-						$project_id_array = $session->read_value("SEARCH_DATA_PROJECT_ID");
+						$string = $session->read_value("SEARCH_FULLTEXT_STRING");
+						$item_type_array = $session->read_value("SEARCH_FULL_TEXT_ITEM_TYPE");	
 					}
 				}
 			}
@@ -95,9 +86,7 @@ class ProjectDataSearchIO
 		
 		if ($no_error == false)
 		{
-			$template = new Template("languages/en-gb/template/projects/search/data_search.html");
-			
-			$template->set_var("error", "");
+			$template = new Template("languages/en-gb/template/item/search/full_text_search.html");
 			
 			$paramquery = $_GET;
 			unset($paramquery[page]);
@@ -105,28 +94,8 @@ class ProjectDataSearchIO
 			$params = http_build_query($paramquery,'','&#38;');
 					
 			$template->set_var("params",$params);
-				
-			$result = array();
-			$counter = 0;
-							
-			$project_array = Project::list_user_related_projects($user->get_user_id(), false);
 			
-			if (is_array($project_array))
-			{
-				foreach($project_array as $key => $value)
-				{
-					$project = new Project($value);
-					$organisation_unit = new OrganisationUnit($project->get_organisation_unit_id());
-				
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $project->get_name()." (".$organisation_unit->get_name().")";		
-					$result[$counter][selected] = "";
-		
-					$counter++;
-				}
-			}
-			
-			$template->set_array("project_array",$result);
+			$template->set_var("error", "");
 			
 			
 			$result = array();
@@ -139,7 +108,7 @@ class ProjectDataSearchIO
 				{
 					if (class_exists($value))
 					{
-						if ($value::get_sql_select_array($key) != null)
+						if ($value::get_sql_fulltext_select_array($key) != null)
 						{
 							$result[$counter][title] = $value::get_generic_name($key, null);
 							$result[$counter][name] = "item-".$key;
@@ -154,42 +123,11 @@ class ProjectDataSearchIO
 			
 			$template->set_array("item_type_array",$result);
 			
+			
 			$template->output();
 		}
 		else
 		{
-			if(!$project_id_array)
-			{	
-				if ($_POST[project_id] == 0)
-				{
-					$project_id_array = array();
-					$tmp_id_array = Project::list_user_related_projects($user->get_user_id(), false);
-					foreach($tmp_id_array as $key => $value)
-					{
-						array_push($project_id_array, $value);
-					}
-				}
-				else
-				{
-					$project_id_array = array();
-					$project_id_array[0] = $_POST[project_id];
-					$project = new Project($_POST[project_id]);
-					$search_name = $project->get_name();
-				}
-			}
-			else
-			{
-				if (count($project_id_array) == 1)
-				{
-					$project = new Project($project_id_array[0]);
-					$search_name = $project->get_name();
-				}
-				else
-				{
-					$search_name = "All";
-				}
-			}
-			
 			if(!$item_type_array)
 			{
 				$item_type_array = array();
@@ -203,34 +141,33 @@ class ProjectDataSearchIO
 				}
 			}
 			
-			$session->write_value("SEARCH_DATA_STRING", $string, true);
-			$session->write_value("SEARCH_DATA_ITEM_TYPE", $item_type_array, true);
-			$session->write_value("SEARCH_DATA_PROJECT_ID", $project_id_array, true);
+			$session->write_value("SEARCH_FULLTEXT_STRING", $string, true);
+			$session->write_value("SEARCH_FULL_TEXT_ITEM_TYPE", $item_type_array, true);	
 
 			if ($_GET[page])
 			{
 				if ($_GET[sortvalue] and $_GET[sortmethod])
 				{
-					$result_array = Project_Wrapper::list_data_search($string, $project_id_array, $item_type_array, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
+					$result_array = Item_Wrapper::list_fulltext_search($string, $item_type_array, null, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
 				}
 				else
 				{
-					$result_array = Project_Wrapper::list_data_search($string, $project_id_array, $item_type_array, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
+					$result_array = Item_Wrapper::list_fulltext_search($string, $item_type_array, null, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
 				}				
 			}
 			else
 			{
 				if ($_GET[sortvalue] and $_GET[sortmethod])
 				{
-					$result_array = Project_Wrapper::list_data_search($string, $project_id_array, $item_type_array, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
+					$result_array = Item_Wrapper::list_fulltext_search($string, $item_type_array, null, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
 				}
 				else
 				{
-					$result_array = Project_Wrapper::list_data_search($string, $project_id_array, $item_type_array, null, null, 0, 20);
+					$result_array = Item_Wrapper::list_fulltext_search($string, $item_type_array, null, null, null, 0, 20);
 				}	
 			}
-											
-			$list = new List_IO(Project_Wrapper::count_data_search($string, $project_id_array, $item_type_array), 20);
+			
+			$list = new List_IO(Item_Wrapper::count_fulltext_search($string, $item_type_array, null), 20);
 			
 			if (is_array($result_array) and count($result_array) >= 1)
 			{
@@ -241,18 +178,18 @@ class ProjectDataSearchIO
 					$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
 					$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
 					
-					$project_paramquery = array();
-					$project_paramquery[username] = $_GET[username];
-					$project_paramquery[session_id] = $_GET[session_id];
-					$project_paramquery[nav] = "project";
-					$project_paramquery[run] = "detail";
-					$project_paramquery[project_id] = $value[project_id];
-					$project_params = http_build_query($project_paramquery, '', '&#38;');
+					$sample_paramquery = array();
+					$sample_paramquery[username] = $_GET[username];
+					$sample_paramquery[session_id] = $_GET[session_id];
+					$sample_paramquery[nav] = "sample";
+					$sample_paramquery[run] = "detail";
+					$sample_paramquery[sample_id] = $value[sample_id];
+					$sample_params = http_build_query($sample_paramquery, '', '&#38;');
 					
-					$tmp_project_name = $result_array[$key][project_name];
-					unset($result_array[$key][project_name]);
-					$result_array[$key][project_name][content] = $tmp_project_name;
-					$result_array[$key][project_name][link] = $project_params;
+					$tmp_sample_name = $result_array[$key][sample_name];
+					unset($result_array[$key][sample_name]);
+					$result_array[$key][sample_name][content] = $tmp_sample_name;
+					$result_array[$key][sample_name][link] = $sample_params;
 					
 					if (is_array($item_type_array) and count($item_type_array) >= 1)
 					{
@@ -283,11 +220,9 @@ class ProjectDataSearchIO
 			$list->add_row("Name", "name", true, null);
 			$list->add_row("Type", "type", false, null);
 			$list->add_row("Datetime", "datetime", true, null);
-			$list->add_row("Project", "project_name", true, null);
+			$list->add_row("Rank", "rank", true, null);
 			
-			// print_r($result_array);
-			
-			$template = new Template("languages/en-gb/template/projects/search/data_search_result.html");
+			$template = new Template("languages/en-gb/template/item/search/full_text_search_result.html");
 		
 			$paramquery = $_GET;
 			$paramquery[nextpage] = "2";
@@ -303,3 +238,5 @@ class ProjectDataSearchIO
 		}
 	}
 }
+
+?>

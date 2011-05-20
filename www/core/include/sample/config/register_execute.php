@@ -54,6 +54,19 @@ function register_sample($include_id)
 	{
 		return false;
 	}
+	
+	if (ValueVar::delete_by_include_id($include_id))
+	{
+		if (ValueVar::register_type("sample", "SampleValueVar", false, $include_id) == false)
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+	
 	return true;
 }
 $result = register_sample($key);

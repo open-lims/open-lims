@@ -1,6 +1,6 @@
 <?php
 /**
- * @package project
+ * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -24,14 +24,14 @@
 
 /**
  * Manages requests of OLVDL var requests
- * @package project
+ * @package sample
  */
-class ProjectValueVar implements ValueVarCaseInterface
+class SampleValueVar implements ValueVarCaseInterface
 {
 	private static $instance;
 	
-	private $project_id;
-	private $project;
+	private $sample_id;
+	private $sample;
 	private $temp;
     private $result;
     private $stack;
@@ -45,7 +45,7 @@ class ProjectValueVar implements ValueVarCaseInterface
     		case "getName":
     			if ($this->stack[count($this->stack)-1] == "list")
     			{
-    				if ($this->stack[count($this->stack)-3] == "project")
+    				if ($this->stack[count($this->stack)-3] == "sample")
     				{
 						// [...]
     				}
@@ -53,15 +53,15 @@ class ProjectValueVar implements ValueVarCaseInterface
     			else
     			{
     				switch ($this->stack[count($this->stack)-2]):
-    					case "project":
-  							if ($this->project instanceof Project)
+    					case "sample":
+  							if ($this->sample instanceof Sample)
   							{
-  								$this->result = $this->project->get_name();
+  								$this->result = $this->sample->get_name();
   							}
   							else
   							{
-  								$this->project = new Project($this->stack[count($this->stack)-1]);
-  								$this->result = $this->project->get_name();
+  								$this->sample = new Sample($this->stack[count($this->stack)-1]);
+  								$this->result = $this->sample->get_name();
   							}
   							return $this->result;
     					break;
@@ -70,16 +70,8 @@ class ProjectValueVar implements ValueVarCaseInterface
     		break;
     		
     		case "item":
-    			if ($this->stack[count($this->stack)-2] == "status")
-	    		{
-    				$project_item = new ProjectItem($this->project_id);
-					$this->temp = $project_item->get_project_status_items($this->stack[count($this->stack)-1]);
-	    		}
-	    		else
-	    		{
-	    			$project_item = new ProjectItem($this->project_id);
-    				$this->temp = $project_item->get_project_items();
-	    		}
+	    		$sample_item = new SampleItem($this->sample_id);
+    			$this->temp = $sample_item->get_sample_items();
 	    		
 	    		array_push($this->stack, "item");
 	    		
@@ -88,32 +80,9 @@ class ProjectValueVar implements ValueVarCaseInterface
     			$this->stack = $item_value_var->get_stack();
     			$this->string_array = $item_value_var->get_string_array();
     		break;
-    		
-    		case "current":
-    			array_push($this->stack, "status");
-    			if (($this->project instanceof Project) == false)
-  				{
-  					$this->project = new Project($this->stack[count($this->stack)-1]);
-  				}
-  				array_push($this->stack, $this->project->get_current_status_id());
-    		break;
-    		
-    		case "status":
-    			array_push($this->stack, "status");
-    		break;
-    		
-    		case "required":
-    			array_push($this->stack, 0);
-    		break;
-    		
+
     		default:
-    			if (is_numeric($word))
-    			{
-    				if ($this->stack[count($this->stack)-1] == "status")
-	    			{
-	    				array_push($this->stack, $word);
-	    			}
-    			}
+    		
     		break;    	
 
     	endswitch;
@@ -140,7 +109,7 @@ class ProjectValueVar implements ValueVarCaseInterface
 			$stack_length = count($stack);
 			if ($stack_length >= 2)
 			{
-				$this->project_id = $this->stack[$stack_length-1];
+				$this->sample_id = $this->stack[$stack_length-1];
 			}
     		
     		return $this->interpret(array_shift($this->string_array));
@@ -170,9 +139,9 @@ class ProjectValueVar implements ValueVarCaseInterface
 	{
 		if (is_numeric($folder_id))
 		{			
-			if (($project_id = ProjectFolder::get_project_id_by_folder_id($folder_id)) != null)
+			if (($sample_id = SampleFolder::get_sample_id_by_folder_id($folder_id)) != null)
 			{
-				return $project_id;
+				return $sample_id;
 			}
 			else
 			{
@@ -187,14 +156,15 @@ class ProjectValueVar implements ValueVarCaseInterface
 	
 	public static function get_instance()
 	{
-		if (self::$instance instanceof ProjectValueVar)
+		if (self::$instance instanceof SampleValueVar)
 		{
 			return self::$instance;
 		}
 		else
 		{
-			self::$instance = new ProjectValueVar();
+			self::$instance = new SampleValueVar();
 			return self::$instance;
 		}
 	}
+	
 }

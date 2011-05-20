@@ -401,5 +401,19 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 		return "(LOWER(TRIM(".constant("EQUIPMENT_TYPE_TABLE").".name)) LIKE '{STRING}')";
 	}
 	
+	public static function get_sql_fulltext_select_array($type)
+	{
+		return null;
+	}
+	
+	public static function get_sql_fulltext_join($type)
+	{
+		return null;
+	}
+	
+	public static function get_sql_fulltext_where($type)
+	{
+		return null;
+	}
 }
 ?>

@@ -97,24 +97,45 @@ interface ItemListenerInterface
 	
 	
 	/**
-	 * Returns the SELECT-SQL part for data-search
+	 * Returns the SELECT-SQL part for data-search as an array
 	 * @param string $type
-	 * @return string
+	 * @return array
 	 */
 	public static function get_sql_select_array($type);
 	
 	/**
-	 * Returns the SELECT-JOIN part for data-search
+	 * Returns the JOIN-SQL part for data-search
 	 * @param string $type
 	 * @return string
 	 */
 	public static function get_sql_join($type);
 	
 	/**
-	 * Returns the SELECT-WHERE part for data-search
+	 * Returns the WHERE-SQL part for data-search
 	 * @param string $type
 	 * @return string
 	 */
 	public static function get_sql_where($type);
+	
+	/**
+	 * Returns the SELECT-SQL part for fulltext-search as an array
+	 * @param string $type
+	 * @return array
+	 */
+	public static function get_sql_fulltext_select_array($type);
+	
+	/**
+	 * Returns the JOIN-SQL part for fulltext-search
+	 * @param string $type
+	 * @return string
+	 */
+	public static function get_sql_fulltext_join($type);
+	
+	/**
+	 * Returns the WHERE-SQL part for fulltext-search
+	 * @param string $type
+	 * @return string
+	 */
+	public static function get_sql_fulltext_where($type);
 }
 ?>

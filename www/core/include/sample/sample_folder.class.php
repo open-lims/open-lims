@@ -322,5 +322,10 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 	{
 		return SampleHasFolder_Access::get_entry_by_sample_id($sample_id);
 	}
+
+	public static function get_sample_id_by_folder_id($folder_id)
+	{
+		return SampleHasFolder_Access::get_sample_id_by_folder_id($folder_id);
+	}
 }
 ?>

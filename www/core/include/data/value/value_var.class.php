@@ -58,7 +58,6 @@ class ValueVar implements ValueVarInterface
     	unset($this->stack);
     }
 
-    
     /**
      * Returns the content of given address
      * @param string $address
@@ -199,8 +198,7 @@ class ValueVar implements ValueVarInterface
     	}
     }
     
-    
-    
+
 	public static function register_type($name, $handling_class, $ignore_this, $include_id)
 	{
 		$value_var_case = new ValueVarCase_Access(null);

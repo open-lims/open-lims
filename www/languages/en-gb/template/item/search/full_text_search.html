@@ -21,14 +21,17 @@
 	<tr>
 		<td colspan='2'><br /></td>
 	</tr>
-	<tr>
-		<td><input type='checkbox' name='values' value='1' checked='checked' /> Values</td>
-		<td><input type='checkbox' name='project_descriptions' value='1'  checked='checked' /> Project Desc.</td>
-	</tr>
-	<tr>
-		<td><input type='checkbox' name='sample_descriptions' value='1' checked='checked' /> Sample Desc.</td>
-		<td><input type='checkbox' name='items' value='1' checked='checked' /> Item/Item-Class Desc.</td>
-	</tr>
+	
+		<!-- FOREACH BEGIN ({ITEM_TYPE_ARRAY}) -->
+		
+		<tr>
+			<td colspan='2'>
+			<input type='checkbox' name='{ITEM_TYPE_ARRAY:NAME}' value='{ITEM_TYPE_ARRAY:VALUE}' {ITEM_TYPE_ARRAY:CHECKED}>{ITEM_TYPE_ARRAY:TITLE}</option>
+			</td>
+		</tr>
+		
+		<!-- FOREACH END -->
+		
 	<tr>
 		<td colspan='2'><br /><input type='submit' value='Search' class='FormButton' /></td>
 	</tr>

@@ -73,12 +73,13 @@ class Postgresql
  
  	public function sql_query($connection, $query)
  	{
- 	 	@$pg_result = pg_query($connection, $query);
+ 	 	$pg_result = pg_query($connection, $query);
  	 	if (!$pg_result)
  	 	{
  	 		if ($GLOBALS[debug] == true)
  	 		{
  	 			echo $query;
+ 	 			echo "<br />".pg_last_error();
  	 		}
  	 		throw new DatabaseQueryFailedException(pg_last_error(), 2);
  	 	}

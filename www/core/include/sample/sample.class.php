@@ -1455,6 +1455,10 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 			$select_array[datetime] = "".constant("SAMPLE_TABLE").".datetime";
 			return $select_array;
 		}
+		else
+		{
+			return null;
+		}
     }
     
 	public static function get_sql_join($type)
@@ -1464,6 +1468,10 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 			return 	"LEFT JOIN ".constant("SAMPLE_IS_ITEM_TABLE")." 	ON ".constant("ITEM_TABLE").".id 					= ".constant("SAMPLE_IS_ITEM_TABLE").".item_id " .
 					"LEFT JOIN ".constant("SAMPLE_TABLE")." 			ON ".constant("SAMPLE_IS_ITEM_TABLE").".sample_id 	= ".constant("SAMPLE_TABLE").".id ";
 		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	public static function get_sql_where($type)
@@ -1472,7 +1480,51 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 		{
 			return "(LOWER(TRIM(".constant("SAMPLE_TABLE").".name)) LIKE '{STRING}')";
 		}
+		else
+		{
+			return null;
+		}
 	}
 	
+	public static function get_sql_fulltext_select_array($type)
+	{
+		if ($type == "sample")
+		{
+			$select_array[name] = "".constant("SAMPLE_TABLE").".name";
+			$select_array[type_id] = "".constant("SAMPLE_TABLE").".id AS sample_id";
+			$select_array[datetime] = "".constant("SAMPLE_TABLE").".datetime";
+			$select_array[rank] = "ts_rank_cd(".constant("SAMPLE_TABLE").".comment_text_search_vector, to_tsquery('{LANGUAGE}', '{STRING}'), 32 /* rank/(rank+1) */)";
+			return $select_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public static function get_sql_fulltext_join($type)
+	{
+		if ($type == "sample")
+		{
+			return 	"LEFT JOIN ".constant("SAMPLE_IS_ITEM_TABLE")." 	ON ".constant("ITEM_TABLE").".id 					= ".constant("SAMPLE_IS_ITEM_TABLE").".item_id " .
+					"LEFT JOIN ".constant("SAMPLE_TABLE")." 			ON ".constant("SAMPLE_IS_ITEM_TABLE").".sample_id 	= ".constant("SAMPLE_TABLE").".id ";
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public static function get_sql_fulltext_where($type)
+	{
+		if ($type == "sample")
+		{
+			return "".constant("SAMPLE_TABLE").".comment_text_search_vector @@ to_tsquery('{LANGUAGE}', '{STRING}')";
+		}
+		else
+		{
+			return null;
+		}
+	}
 }
 ?>

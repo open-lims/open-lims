@@ -805,12 +805,9 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		}
 	}
 	
-	/**
-     * @todo
-     */
 	public final function get_item_parents()
 	{
-		
+		return null;
 	}
 	
 	
@@ -1044,6 +1041,48 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		else
 		{
 			return "(LOWER(TRIM(".constant("VALUE_TYPE_TABLE").".name)) LIKE '{STRING}' AND ".constant("VALUE_VERSION_TABLE").".current = 't')";
+		}
+	}
+	
+	public static function get_sql_fulltext_select_array($type)
+	{
+		if ($type == "file")
+		{
+			return null;
+		}
+		else
+		{
+			$select_array[name] = "".constant("VALUE_TYPE_TABLE").".name";
+			$select_array[type_id] = "".constant("VALUE_TABLE").".id AS value_id";
+			$select_array[datetime] = "".constant("VALUE_VERSION_TABLE").".datetime";
+			$select_array[rank] = "ts_rank_cd(".constant("VALUE_VERSION_TABLE").".text_search_vector, to_tsquery('{LANGUAGE}', '{STRING}'), 32 /* rank/(rank+1) */)";
+			return $select_array;
+		}
+	}
+	
+	public static function get_sql_fulltext_join($type)
+	{
+		if ($type == "file")
+		{
+			return 	null;
+		}
+		else
+		{
+			return 	"LEFT JOIN ".constant("DATA_ENTITY_IS_ITEM_TABLE")." AS deiita_b  	ON ".constant("ITEM_TABLE").".id 	= deiita_b.item_id " .
+					"LEFT JOIN ".constant("VALUE_TABLE")." 					ON deiita_b.data_entity_id 						= ".constant("VALUE_TABLE").".data_entity_id " .	
+					"LEFT JOIN ".constant("VALUE_VERSION_TABLE")." 			ON ".constant("VALUE_TABLE").".id 				= ".constant("VALUE_VERSION_TABLE").".toid ";
+		}
+	}
+	
+	public static function get_sql_fulltext_where($type)
+	{
+		if ($type == "file")
+		{
+			return null;
+		}
+		else
+		{
+			return "(".constant("VALUE_VERSION_TABLE").".text_search_vector @@ to_tsquery('{LANGUAGE}', '{STRING}') AND ".constant("VALUE_VERSION_TABLE").".current = 't')";
 		}
 	}
 }

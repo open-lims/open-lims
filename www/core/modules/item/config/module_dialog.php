@@ -1,6 +1,6 @@
 <?php 
 /**
- * @package project
+ * @package item
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -23,12 +23,12 @@
 
 /**
  * 
- */
-	$name 					= "item";
-	$main_class				= "ItemIO";
-	
-	$required_include[0] 	= "item";
-	
-	$no_tab					= true;
-	$no_link				= true;
+ */	
+	$dialog[0][type]			= "search";
+	$dialog[0][class_path]		= "core/modules/item/item_fulltext_search.io.php";
+	$dialog[0]['class']			= "ItemFulltextSearchIO";
+	$dialog[0][method]			= "search";
+	$dialog[0][internal_name]	= "item_fulltext_search";
+	$dialog[0][display_name]	= "Fulltext Search";
+	$dialog[0][weight]			= 700;
 ?>

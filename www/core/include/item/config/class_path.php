@@ -31,4 +31,6 @@
 	$classes['Item']						= $path_prefix."core/include/item/item.class.php";
 	$classes['ItemClass']					= $path_prefix."core/include/item/item_class.class.php";
 	$classes['ItemInformation']				= $path_prefix."core/include/item/item_information.class.php";
+	
+	$classes['Item_Wrapper']				= $path_prefix."core/include/item/item.wrapper.class.php";
 ?>

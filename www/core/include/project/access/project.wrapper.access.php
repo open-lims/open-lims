@@ -1282,7 +1282,7 @@ class Project_Wrapper_Access
 								"JOIN ".constant("ITEM_TABLE")." 	ON ".constant("PROJECT_HAS_ITEM_TABLE").".item_id 		= ".constant("ITEM_TABLE").".id " .
 	   							"".$item_join_sql."" .
 	   							"WHERE (".$item_where_sql.") AND (".$project_where_sql.") AND " .
-	   								"".constant("PROJECT_TABLE").".id IN (" .
+	   								"".constant("PROJECT_HAS_ITEM_TABLE").".project_id IN (" .
 										"SELECT DISTINCT ".constant("PROJECT_TABLE").".id AS id " .
 										"FROM ".constant("PROJECT_TABLE")." " .
 										"LEFT JOIN ".constant("GROUP_HAS_USER_TABLE")." 				ON ".$user->get_user_id()." 						= ".constant("GROUP_HAS_USER_TABLE").".user_id " .
