@@ -43,7 +43,7 @@
 	
 	require_once("../../include/base/session.class.php");
 
-	$GLOBALS[autoload_prefix] = "../../../";
+	$GLOBALS['autoload_prefix'] = "../../../";
 
 	require_once("../../include/base/autoload.function.php");
 
@@ -51,8 +51,8 @@
 	{
 		global $db, $user, $session, $transaction;
 	
-		$db = new Database("postgresql");
-		$db->db_connect($GLOBALS[server],$GLOBALS[port],$GLOBALS[dbuser],$GLOBALS[password],$GLOBALS[database]);
+		$db = new Database(constant("DB_TYPE"));
+		$db->db_connect(constant("DB_SERVER"),constant("DB_PORT"),constant("DB_USER"),constant("DB_PASSWORD"),constant("DB_DATABASE"));
 		
 		SystemHandler::init_db_constants();
 		

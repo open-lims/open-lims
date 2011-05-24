@@ -38,7 +38,7 @@ class System implements SystemInterface
      */
     public static function get_base_directory()
     {
-    	return $GLOBALS[base_dir];
+    	return constant("BASE_DIR");
     }
     
     /**
@@ -46,7 +46,7 @@ class System implements SystemInterface
      */
     public static function get_system_space()
     {
-    	return disk_total_space($GLOBALS[base_dir]);
+    	return disk_total_space(constant("BASE_DIR"));
     }
     
     /**
@@ -64,7 +64,7 @@ class System implements SystemInterface
      */
     public static function get_free_space()
     {
-    	return disk_free_space($GLOBALS[base_dir]);
+    	return disk_free_space(constant("BASE_DIR"));
     }
 }
 ?>

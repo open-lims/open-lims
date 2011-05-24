@@ -28,14 +28,14 @@
 class Data_Wrapper_Access
 {
 		/**
-	 * @param integer $toid
+	 * @param integer $folder_id
 	 * @return array
 	 */
-	public static function get_images_in_folder($toid)
+	public static function get_images_in_folder($folder_id)
 	{
 		global $db;
 			
-		if (is_numeric($toid))
+		if (is_numeric($folder_id))
 		{
 			$return_array = array();
 			
@@ -44,7 +44,7 @@ class Data_Wrapper_Access
 					"JOIN ".constant("FILE_TABLE")." 			ON ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_cid	= ".constant("FILE_TABLE").".data_entity_id " .
 					"JOIN ".constant("FILE_VERSION_TABLE")." 	ON ".constant("FILE_TABLE").".id 										= ".constant("FILE_VERSION_TABLE").".toid " .
 						"WHERE ".constant("FILE_VERSION_TABLE").".current = 't' AND " .
-								"".constant("FOLDER_TABLE").".id = ".$toid." AND " .
+								"".constant("FOLDER_TABLE").".id = ".$folder_id." AND " .
 									"(LOWER(".constant("FILE_VERSION_TABLE").".file_extension) = 'jpg' OR " .
 									"LOWER(".constant("FILE_VERSION_TABLE").".file_extension) = 'jpeg' OR " .
 									"LOWER(".constant("FILE_VERSION_TABLE").".file_extension) = 'png' OR " .
@@ -74,6 +74,46 @@ class Data_Wrapper_Access
 		}
 	}
 
+	/**
+	 * NEW
+	 * @param integer $folder_id
+	 * @param string $name
+	 * @return bool
+	 */
+	public static function is_file_in_folder($folder_id, $name)
+	{
+		global $db;
+		
+		if (is_numeric($folder_id) and $name)
+		{
+			$name = strtolower(trim($name));
+			
+			$sql = "SELECT ".constant("FILE_TABLE").".id FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." " .
+					"JOIN ".constant("FOLDER_TABLE")." 			ON ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_pid	= ".constant("FOLDER_TABLE").".data_entity_id " .
+					"JOIN ".constant("FILE_TABLE")." 			ON ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_cid	= ".constant("FILE_TABLE").".data_entity_id " .
+					"JOIN ".constant("FILE_VERSION_TABLE")." 	ON ".constant("FILE_TABLE").".id 										= ".constant("FILE_VERSION_TABLE").".toid " .
+						"WHERE ".constant("FILE_VERSION_TABLE").".current = 't' AND " .
+								"".constant("FOLDER_TABLE").".id = ".$folder_id." AND " .
+									"LOWER(TRIM(".constant("FILE_VERSION_TABLE").".name)) = '".$name."'";	
+
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[id])
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return true;
+		}
+	}
+	
 	/**
 	 * @todo SQL Order
 	 * @todo User Profile Table

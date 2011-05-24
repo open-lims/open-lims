@@ -36,13 +36,13 @@ class ContentHandler_IO
 	{
 		global $session, $user, $misc, $transaction;
 
-		if ($GLOBALS[con_run] == true)
+		if ($GLOBALS['con_run'] == true)
 		{
-			if (Security::ip_error_count() < $GLOBALS[max_ip_errors])
+			if (Security::ip_error_count() < constant("MAX_IP_ERRORS"))
 			{
 				$template = new Template("languages/en-gb/template/index_header.html");
 	
-				$css_directory = $GLOBALS[www_dir]."/css";
+				$css_directory = constant("WWW_DIR")."/css";
 				$css_directory_array = scandir($css_directory);
 				
 				if (is_array($css_directory_array))
@@ -63,7 +63,7 @@ class ContentHandler_IO
 				
 				$template->set_var("INDEX_CSS",$index_css);
 							
-			 	$template->set_var("INDEX_TITLE",$GLOBALS[htmltitle]);
+			 	$template->set_var("INDEX_TITLE",constant("HTML_TITLE"));
 			
 				$template->output();
 				
@@ -71,9 +71,9 @@ class ContentHandler_IO
 		 		{
 					$template = new Template("languages/en-gb/template/structure_main.html");
 					
-					$template->set_var("release",$GLOBALS[product_name]." ".$GLOBALS[major_release]."".$GLOBALS[minor_release]);
-					$template->set_var("user",$GLOBALS[product_user]);
-					$template->set_var("servertype",$GLOBALS[server_info]);
+					$template->set_var("release",constant("PRODUCT")." ".constant("PRODUCT_VERSION"));
+					$template->set_var("user",constant("PRODUCT_USER"));
+					$template->set_var("servertype",constant("PRODUCT_FUNCTION"));
 
 					$template->output();
 

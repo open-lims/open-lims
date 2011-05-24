@@ -42,11 +42,11 @@ class Transaction implements TransactionInterface {
 
     function __construct()
     {
-    	if (!$GLOBALS[transaction] or $GLOBALS[transaction] == false)
+    	if (!$GLOBALS['transaction'] or $GLOBALS['transaction'] == false)
     	{
     		$this->unique_id = null;
     		$this->is_copy = false;
-    		$GLOBALS[transaction] = true;
+    		$GLOBALS['transaction'] = true;
     	}
     	else
     	{
@@ -56,7 +56,7 @@ class Transaction implements TransactionInterface {
     
     function __destruct()
     {
-    	unset($GLOBALS[transaction]);
+    	unset($GLOBALS['transaction']);
     	unset($this->unique_id);
     	unset($this->is_copy);
     }
@@ -98,12 +98,12 @@ class Transaction implements TransactionInterface {
     			Transaction_Access::commit();
     			$db->query_log_end();
     			$this->unique_id = null;
-    			if ($GLOBALS[enable_db_log_on_commit] == true)
+    			if (constant("ENABLE_DB_LOG_ON_COMMIT") == true)
     			{
-	    			if (is_writable($GLOBALS[log_dir]))
+	    			if (is_writable(constant("LOG_DIR")))
 	    			{
 	    				$filename = date("Ymd-His")."-".uniqid()."-commit.txt";
-	    				$handle = fopen($GLOBALS[log_dir]."/".$filename, "w");
+	    				$handle = fopen(constant("LOG_DIR")."/".$filename, "w");
 	    				fwrite($handle, $db->get_query_log());
 	    			}
     			}
@@ -136,12 +136,12 @@ class Transaction implements TransactionInterface {
     			Transaction_Access::rollback();
     			$db->query_log_end();
     			$this->unique_id = null;
-    			if ($GLOBALS[enable_db_log_on_rollback] == true)
+    			if (constant("ENABLE_DB_LOG_ON_ROLLBACK") == true)
     			{
-	    			if (is_writable($GLOBALS[log_dir]))
+	    			if (is_writable(constant("LOG_DIR")))
 	    			{
 	    				$filename = date("Ymd-His")."-".uniqid()."-rollback.txt";
-	    				$handle = fopen($GLOBALS[log_dir]."/".$filename, "w");
+	    				$handle = fopen(constant("LOG_DIR")."/".$filename, "w");
 	    				fwrite($handle, $db->get_query_log());
 	    			}
     			}
@@ -174,12 +174,12 @@ class Transaction implements TransactionInterface {
     			Transaction_Access::rollback();
     			$db->query_log_end();
     			$this->unique_id = null;
-    			if ($GLOBALS[enable_db_log_on_exp_rollback] == true)
+    			if (constant("ENABLE_DB_LOG_ON_EXP_ROLLBACK") == true)
     			{
-	    			if (is_writable($GLOBALS[log_dir]))
+	    			if (is_writable(constant("LOG_DIR")))
 	    			{
 	    				$filename = date("Ymd-His")."-".uniqid()."-expected_rollback.txt";
-	    				$handle = fopen($GLOBALS[log_dir]."/".$filename, "w");
+	    				$handle = fopen(constant("LOG_DIR")."/".$filename, "w");
 	    				fwrite($handle, $db->get_query_log());
 	    			}
     			}
@@ -209,12 +209,12 @@ class Transaction implements TransactionInterface {
     		Transaction_Access::rollback();
 	    	$db->query_log_end();
 	    	$this->unique_id = null;
-	    	if ($GLOBALS[enable_db_log_on_exp_rollback] == true)
+	    	if (constant("ENABLE_DB_LOG_ON_EXP_ROLLBACK") == true)
 	    	{
-		    	if (is_writable($GLOBALS[log_dir]))
+		    	if (is_writable(constant("LOG_DIR")))
 		    	{
 		    		$filename = date("Ymd-His")."-".uniqid()."-expected_rollback.txt";
-		    		$handle = fopen($GLOBALS[log_dir]."/".$filename, "w");
+		    		$handle = fopen(constant("LOG_DIR")."/".$filename, "w");
 		    		fwrite($handle, $db->get_query_log());
 		    	}
 	    	}

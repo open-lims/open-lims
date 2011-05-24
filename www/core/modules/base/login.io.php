@@ -60,10 +60,10 @@ class Login_IO
 
 		$template = new Template("languages/en-gb/template/login.html");
 
-		$template->set_var("version",$GLOBALS[major_release]."".$GLOBALS[minor_release]);
-		$template->set_var("product_name",$GLOBALS[product_name]);
-		$template->set_var("product_user",$GLOBALS[product_user]);
-		$template->set_var("server_info",$GLOBALS[server_info]);
+		$template->set_var("version",constant("PRODUCT_VERSION"));
+		$template->set_var("product_name",constant("PRODUCT"));
+		$template->set_var("product_user",constant("PRODUCT_USER"));
+		$template->set_var("server_info",constant("PRODUCT_FUNCTION"));
 
 		$language_array = Regional::list_languages();
 				
@@ -115,10 +115,10 @@ class Login_IO
 		if ($auth->logout($session->get_user_id(),$_GET[session_id]) == true)
 		{
  			$template = new Template("languages/en-gb/template/common/logout_proceed.html");
-			$template->set_var("version",$GLOBALS[major_release]."".$GLOBALS[minor_release]);
-			$template->set_var("product_name",$GLOBALS[product_name]);
-			$template->set_var("product_user",$GLOBALS[product_user]);
-			$template->set_var("server_info",$GLOBALS[server_info]);
+			$template->set_var("version",constant("PRODUCT_VERSION"));
+			$template->set_var("product_name",constant("PRODUCT"));
+			$template->set_var("product_user",constant("PRODUCT_USER"));
+			$template->set_var("server_info",constant("PRODUCT_FUNCTION"));
  			$template->output();		
 		}
 	}
@@ -139,10 +139,10 @@ class Login_IO
 		
 		$template = new Template("languages/en-gb/template/forgot_password.html");
 
-		$template->set_var("version",$GLOBALS[major_release]."".$GLOBALS[minor_release]);
-		$template->set_var("product_name",$GLOBALS[product_name]);
-		$template->set_var("product_user",$GLOBALS[product_user]);
-		$template->set_var("server_info",$GLOBALS[server_info]);
+		$template->set_var("version",constant("PRODUCT_VERSION"));
+		$template->set_var("product_name",constant("PRODUCT"));
+		$template->set_var("product_user",constant("PRODUCT_USER"));
+		$template->set_var("server_info",constant("PRODUCT_FUNCTION"));
 		
 		if ($error)
 		{
@@ -171,10 +171,10 @@ class Login_IO
 			$template->set_var("message","Unable to send you a new password. Contact Administrator.");
 		}
 		
-		$template->set_var("version",$GLOBALS[major_release]."".$GLOBALS[minor_release]);
-		$template->set_var("product_name",$GLOBALS[product_name]);
-		$template->set_var("product_user",$GLOBALS[product_user]);
-		$template->set_var("server_info",$GLOBALS[server_info]);
+		$template->set_var("version",constant("PRODUCT_VERSION"));
+		$template->set_var("product_name",constant("PRODUCT"));
+		$template->set_var("product_user",constant("PRODUCT_USER"));
+		$template->set_var("server_info",constant("PRODUCT_FUNCTION"));
 		$template->output();	
 	}
 	
@@ -182,10 +182,10 @@ class Login_IO
 	{
 		$template = new Template("languages/en-gb/template/common/login_info.html");
 		
-		$template->set_var("version",$GLOBALS[major_release]."".$GLOBALS[minor_release]);
-		$template->set_var("product_name",$GLOBALS[product_name]);
-		$template->set_var("product_user",$GLOBALS[product_user]);
-		$template->set_var("server_info",$GLOBALS[server_info]);
+		$template->set_var("version",constant("PRODUCT_VERSION"));
+		$template->set_var("product_name",constant("PRODUCT"));
+		$template->set_var("product_user",constant("PRODUCT_USER"));
+		$template->set_var("server_info",constant("PRODUCT_FUNCTION"));
 			
 		$template->output();
 	}
@@ -194,10 +194,10 @@ class Login_IO
 	{
 		$template = new Template("languages/en-gb/template/common/login_help.html");
 		
-		$template->set_var("version",$GLOBALS[major_release]."".$GLOBALS[minor_release]);
-		$template->set_var("product_name",$GLOBALS[product_name]);
-		$template->set_var("product_user",$GLOBALS[product_user]);
-		$template->set_var("server_info",$GLOBALS[server_info]);
+		$template->set_var("version",constant("PRODUCT_VERSION"));
+		$template->set_var("product_name",constant("PRODUCT"));
+		$template->set_var("product_user",constant("PRODUCT_USER"));
+		$template->set_var("server_info",constant("PRODUCT_FUNCTION"));
 			
 		$template->output();
 	}
@@ -225,10 +225,10 @@ class Login_IO
 				 			$template = new Template("languages/en-gb/template/common/login_proceed.html");
 							$template->set_var("username",$_POST[username]);
 							$template->set_var("session_id",$session_id);
-							$template->set_var("version",$GLOBALS[major_release]."".$GLOBALS[minor_release]);
-							$template->set_var("product_name",$GLOBALS[product_name]);
-							$template->set_var("product_user",$GLOBALS[product_user]);
-							$template->set_var("server_info",$GLOBALS[server_info]);
+							$template->set_var("version",constant("PRODUCT_VERSION"));
+							$template->set_var("product_name",constant("PRODUCT"));
+							$template->set_var("product_user",constant("PRODUCT_USER"));
+							$template->set_var("server_info",constant("PRODUCT_FUNCTION"));
 				 			$template->output();		
 						}
 						else

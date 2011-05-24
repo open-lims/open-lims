@@ -31,13 +31,13 @@ require_once("../../db/db.php");
 
 global $db;
 
-$db = new Database("postgresql");
-$db->db_connect($GLOBALS[server],$GLOBALS[port],$GLOBALS[dbuser],$GLOBALS[password],$GLOBALS[database]);
+$db = new Database(constant("DB_TYPE"));
+$db->db_connect(constant("DB_SERVER"),constant("DB_PORT"),constant("DB_USER"),constant("DB_PASSWORD"),constant("DB_DATABASE"));
 
 require_once("../../include/base/events/event.class.php");
 require_once("../../include/base/system_handler.class.php");
 
-$GLOBALS[autoload_prefix] = "../../../";
+$GLOBALS['autoload_prefix'] = "../../../";
 
 require_once("../../include/base/autoload.function.php");
 

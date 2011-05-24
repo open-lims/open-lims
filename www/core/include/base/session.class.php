@@ -137,7 +137,7 @@ class Session implements SessionInterface
 			
 			$current_mktime = mktime();
 			
-			$max_session_mktime = $session_mktime+$GLOBALS[max_session_period];
+			$max_session_mktime = $session_mktime+constant("MAX_SESSION_PERIOD");
 			
 			if ($current_mktime > $max_session_mktime)
 			{
@@ -313,7 +313,7 @@ class Session implements SessionInterface
 				
 				$current_mktime = mktime();
 				
-				$max_session_mktime = $session_mktime+$GLOBALS[max_session_period];
+				$max_session_mktime = $session_mktime+constant("MAX_SESSION_PERIOD");
 				
 				if ($current_mktime > $max_session_mktime)
 				{

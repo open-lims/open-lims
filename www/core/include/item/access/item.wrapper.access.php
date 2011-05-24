@@ -27,10 +27,6 @@
  */
 class Item_Wrapper_Access
 {
-	/**
-   	 * @todo remove double of code
-   	 * @todo search in read-only projects too
-   	 */
    	public static function list_fulltext_search($string, $item_select_sql_array, $item_join_sql, $item_where_sql, $order_by, $order_method, $start, $end)
    	{
    		global $db, $user;
@@ -163,9 +159,6 @@ class Item_Wrapper_Access
 		return $return_array;
    	}
 	
-   	/**
-   	 * @todo remove double of code
-   	 */
    	public static function count_fulltext_search($string, $item_select_sql_array, $item_join_sql, $item_where_sql)
    	{
    		global $db, $user;

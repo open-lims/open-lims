@@ -839,6 +839,11 @@ class AdminGroupIO
 		
 		return $template->get_string();
 	}
+
+	public static function get_icon()
+	{
+		return "groups.png";
+	}
 }
 
 ?>

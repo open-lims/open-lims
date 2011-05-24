@@ -132,7 +132,7 @@ class TableIO {
     	{
     		$entry_count = count($this->content_array);
 
-			$number_of_pages = ceil($entry_count/$GLOBALS[entriesperpage]);
+			$number_of_pages = ceil($entry_count/20);
     		
 			$return = "<div class='OverviewTableLeft'>".Common_IO::results_on_page($entry_count, $number_of_pages)."</div>" .
 						"<div class='OverviewTableRight'>".$this->bottom_right_text."</div>";
@@ -156,12 +156,12 @@ class TableIO {
 
     		if ($number_of_pages <= $page)
     		{
-				$max_for = $entry_count-(($number_of_pages-1)*$GLOBALS[entriesperpage])-1;
+				$max_for = $entry_count-(($number_of_pages-1)*20)-1;
 				$page = $number_of_pages;
 			}
 			else
 			{
-				$max_for = $GLOBALS[entriesperpage]-1; 
+				$max_for = 20-1; 
 			}
 			
 			if (is_array($this->content_array))
@@ -181,7 +181,7 @@ class TableIO {
 	    			
 	    			$return .= "<tr".$tr_class.">";
 	    			
-					$entry = ($page*$GLOBALS[entriesperpage])+$i-$GLOBALS[entriesperpage]; // Erzeugt Entry-ID
+					$entry = ($page*20)+$i-20; // Erzeugt Entry-ID
 									
 					$content = $this->content_array[$entry];
 					
@@ -239,7 +239,7 @@ class TableIO {
     	
     	if (is_array($this->rows))
     	{
-			$number_of_pages = ceil($number_of_results/$GLOBALS[entriesperpage]);
+			$number_of_pages = ceil($number_of_results/20);
     		
 			$return = "<div class='OverviewTableLeft'>".Common_IO::results_on_page($number_of_results, $number_of_pages)."</div>" .
 						"<div class='OverviewTableRight'>".$this->bottom_right_text."</div>";

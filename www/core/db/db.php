@@ -48,12 +48,12 @@ class Database
 		
 		switch ($sql_type):
 		
-		case ("postgresql"):
+		case ("postgres"):
 			require_once("postgresql.php");
 			$this->sql = new Postgresql;	
 		break;
 		default:
-			echo "Error";
+			die("Wrong Database Type");
 		break;
 		
 		endswitch;

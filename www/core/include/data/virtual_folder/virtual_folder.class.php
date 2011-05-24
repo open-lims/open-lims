@@ -28,9 +28,9 @@ require_once("interfaces/virtual_folder.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	if ($GLOBALS[autoload_prefix])
+	if ($GLOBALS['autoload_prefix'])
 	{
-		$path_prefix = $GLOBALS[autoload_prefix];
+		$path_prefix = $GLOBALS['autoload_prefix'];
 	}
 	else
 	{

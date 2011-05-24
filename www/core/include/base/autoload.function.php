@@ -28,9 +28,9 @@
  */
 function __autoload($classname)
 {
-	if ($GLOBALS[autoload_prefix])
+	if ($GLOBALS['autoload_prefix'])
 	{
-		$path_prefix = $GLOBALS[autoload_prefix];
+		$path_prefix = $GLOBALS['autoload_prefix'];
 	}
 	else
 	{
@@ -62,13 +62,13 @@ function __autoload($classname)
 	{
 		foreach($registered_include_array as $key => $value)
 		{
-			$config_file = $GLOBALS[include_dir]."/".$value."/config/include_info.php";
+			$config_file = constant("INCLUDE_DIR")."/".$value."/config/include_info.php";
 			if (file_exists($config_file))
 			{
 				include($config_file);
 				if ($no_class_path != true)
 				{
-					$class_path_file = $GLOBALS[include_dir]."/".$value."/config/class_path.php";
+					$class_path_file = constant("INCLUDE_DIR")."/".$value."/config/class_path.php";
 					include($class_path_file);
 				}
 				unset($no_class_path);

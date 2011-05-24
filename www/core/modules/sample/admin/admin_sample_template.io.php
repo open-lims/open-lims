@@ -126,7 +126,7 @@ class AdminSampleTemplateIO
 				$template->set_var("error", "");	
 			}
 
-			$folder = Folder::get_instance($GLOBALS[oldl_folder_id]);
+			$folder = Folder::get_instance(constant("OLDL_FOLDER_ID"));
 			$data_entity_array = $folder->get_childs();
 			
 			if (is_array($data_entity_array))

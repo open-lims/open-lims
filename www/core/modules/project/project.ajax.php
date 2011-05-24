@@ -27,7 +27,7 @@
 require_once("../base/ajax_init.php");
 require_once("../../include/base/session.class.php");
 
-$GLOBALS[autoload_prefix] = "../../../";
+$GLOBALS['autoload_prefix'] = "../../../";
 
 require_once("../../include/base/autoload.function.php");
 

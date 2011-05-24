@@ -198,7 +198,7 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 			// Folder
 			if ($base_folder_id == null)
 			{
-				$project_folder_id = $GLOBALS[project_folder_id];
+				$project_folder_id = constant("PROJECT_FOLDER_ID");
 			}
 			else
 			{

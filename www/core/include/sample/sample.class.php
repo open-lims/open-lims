@@ -139,7 +139,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					}
 
 					// Create Sample Folder
-	    			$base_folder_id = $GLOBALS[sample_folder_id];
+	    			$base_folder_id = constant("SAMPLE_FOLDER_ID");
 					$base_folder = Folder::get_instance($base_folder_id);
 
 					$path = new Path($base_folder->get_path());

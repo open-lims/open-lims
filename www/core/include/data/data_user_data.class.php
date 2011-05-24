@@ -126,7 +126,7 @@ class DataUserData implements DataUserDataInterface, EventListenerInterface
     	if ($event_object instanceof UserCreateEvent)
     	{
     		$data_user_data_access = new DataUserData_Access(null);
-    		if ($data_user_data_access->create($event_object->get_user_id(),$GLOBALS[std_userquota]) == false)
+    		if ($data_user_data_access->create($event_object->get_user_id(),constant("USER_STD_QUOTA")) == false)
     		{
     			return false;
     		}

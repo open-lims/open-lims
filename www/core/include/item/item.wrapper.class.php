@@ -38,7 +38,6 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 class Item_Wrapper implements Item_WrapperInterface
 {
 	/**
- 	 * @todo remove double of code
  	 * @todo language
    	 */
 	public static function list_fulltext_search($string, $item_type_array, $language_id, $order_by, $order_method, $start, $end)
@@ -96,7 +95,6 @@ class Item_Wrapper implements Item_WrapperInterface
 	}
 	
 	/**
-   	 * @todo remove double of code
    	 * @todo language
    	 */
 	public static function count_fulltext_search($string, $item_type_array, $language_id)

@@ -73,7 +73,7 @@ class OrganisationUnitFolder extends Folder implements ConcreteFolderCaseInterfa
 			$organisation_unit = new OrganisationUnit($organisation_unit_id);
 			
 			// Folder
-			$organisation_unit_folder_id = $GLOBALS[organisation_unit_folder_id];
+			$organisation_unit_folder_id = constant("ORGANISATION_UNIT_FOLDER_ID");
 			$folder = new Folder($organisation_unit_folder_id);
 
 			$path = new Path($folder->get_path());

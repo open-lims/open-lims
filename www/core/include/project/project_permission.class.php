@@ -945,7 +945,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 				foreach($project_array as $key => $value)
 				{
 					$project_permission = new ProjectPermission(null);
-					if ($project_permission->create(null, null, $event_object->get_group_id(), $value, $GLOBALS[std_perm_organ_group], null, 4) == null)
+					if ($project_permission->create(null, null, $event_object->get_group_id(), $value, constant("PROJECT_GROUP_STD_PERMISSION"), null, 4) == null)
 					{
 						return false;
 					}							

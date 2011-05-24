@@ -58,7 +58,7 @@
 	 	
 	 }
 	 
-	if (round($user_filesize/$user_quota*100,0) >= $GLOBALS[quota_warning]) {
+	if (round($user_filesize/$user_quota*100,0) >= constant("QUOTA_WARNING")) {
 		$quotaWarn = " <img src='images/icons/notice.png' alt='W' />";
 	}
  }else{

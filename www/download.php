@@ -38,8 +38,8 @@
 		
 	if ($_GET[username] and $_GET[session_id] and $_GET[file_id])
 	{
-		$db = new Database("postgresql");
-		$db->db_connect($GLOBALS[server],$GLOBALS[port],$GLOBALS[dbuser],$GLOBALS[password],$GLOBALS[database]);
+		$db = new Database(constant("DB_TYPE"));
+		$db->db_connect(constant("DB_SERVER"),constant("DB_PORT"),constant("DB_USER"),constant("DB_PASSWORD"),constant("DB_DATABASE"));
 		
 		$transaction = new Transaction();
 		
@@ -98,11 +98,11 @@
 				
 				if (!$_GET[version])
 				{
-					$file_path = $GLOBALS[base_dir]."/".$folder_path."/".$file->get_data_entity_id()."-".$file->get_internal_revision().".".$extension_array[$extension_array_length];
+					$file_path = constant("BASE_DIR")."/".$folder_path."/".$file->get_data_entity_id()."-".$file->get_internal_revision().".".$extension_array[$extension_array_length];
 				}
 				else
 				{
-					$file_path = $GLOBALS[base_dir]."/".$folder_path."/".$file->get_data_entity_id()."-".$_GET[version].".".$extension_array[$extension_array_length];
+					$file_path = constant("BASE_DIR")."/".$folder_path."/".$file->get_data_entity_id()."-".$_GET[version].".".$extension_array[$extension_array_length];
 				}
 				
 				header("Content-Type: application/octet-stream");

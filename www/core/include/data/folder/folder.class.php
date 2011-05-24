@@ -316,7 +316,7 @@ class Folder extends DataEntity implements FolderInterface
 						return null;
 					}
 					
-					$system_path = $GLOBALS[base_dir]."/".$path;
+					$system_path = constant("BASE_DIR")."/".$path;
 						
 					if (!file_exists($system_path))
 					{
@@ -528,7 +528,7 @@ class Folder extends DataEntity implements FolderInterface
 					}
 				}
 				
-				$path = $GLOBALS[base_dir]."/".$this->folder->get_path();
+				$path = constant("BASE_DIR")."/".$this->folder->get_path();
 				
 				if (file_exists($path))
 				{
@@ -682,7 +682,7 @@ class Folder extends DataEntity implements FolderInterface
 				$new_path = $destination_path->get_path_string();
 				
 				// create new folder
-				if (mkdir($GLOBALS[base_dir]."/".$new_path) == false)
+				if (mkdir(constant("BASE_DIR")."/".$new_path) == false)
 				{
 					if ($transaction_id != null)
 					{
@@ -698,7 +698,7 @@ class Folder extends DataEntity implements FolderInterface
 					{
 						$transaction->rollback($transaction_id);
 					}
-					rmdir($GLOBALS[base_dir]."/".$new_path);
+					rmdir(constant("BASE_DIR")."/".$new_path);
 					return false;
 				}
 				
@@ -708,7 +708,7 @@ class Folder extends DataEntity implements FolderInterface
 					{
 						$transaction->rollback($transaction_id);
 					}
-					rmdir($GLOBALS[base_dir]."/".$new_path);
+					rmdir(constant("BASE_DIR")."/".$new_path);
 					return false;
 				}
 				
@@ -718,7 +718,7 @@ class Folder extends DataEntity implements FolderInterface
 					{
 						$transaction->rollback($transaction_id);
 					}
-					rmdir($GLOBALS[base_dir]."/".$new_path);
+					rmdir(constant("BASE_DIR")."/".$new_path);
 					return false;
 				}
 				
@@ -745,14 +745,14 @@ class Folder extends DataEntity implements FolderInterface
 				
 				// Move Files
 				
-				$handle = opendir($GLOBALS[base_dir]."/".$current_path->get_path_string());
+				$handle = opendir(constant("BASE_DIR")."/".$current_path->get_path_string());
 				
 				while(($file_name = readdir($handle)) !== false)
 				{
 					if ($file_name != "." and $file_name != "..")
 					{
-						$current_file = $GLOBALS[base_dir]."/".$current_path->get_path_string()."/".$file_name;
-						$destination_file = $GLOBALS[base_dir]."/".$new_path."/".$file_name;
+						$current_file = constant("BASE_DIR")."/".$current_path->get_path_string()."/".$file_name;
+						$destination_file = constant("BASE_DIR")."/".$new_path."/".$file_name;
 						copy($current_file, $destination_file);
 						unlink($current_file);
 					}
@@ -760,7 +760,7 @@ class Folder extends DataEntity implements FolderInterface
 
 				closedir($handle);
 				
-				rmdir($GLOBALS[base_dir]."/".$current_path->get_path_string());
+				rmdir(constant("BASE_DIR")."/".$current_path->get_path_string());
 				
 				// Delete Folder Stack
 				$session->delete_value("stack_array");

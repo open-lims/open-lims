@@ -76,7 +76,7 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 			$user = new User($user_id);
 			
 			// Folder
-			$user_folder_id = $GLOBALS[user_folder_id];
+			$user_folder_id = constant("USER_FOLDER_ID");
 			$folder = new Folder($user_folder_id);
 
 			$path = new Path($folder->get_path());

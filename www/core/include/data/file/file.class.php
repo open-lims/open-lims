@@ -236,9 +236,9 @@ class File extends DataEntity implements FileInterface
 				$owner_id = $user->get_user_id();
 			}
 			
-			if (substr_count($path, $GLOBALS[base_dir]) != 1)
+			if (substr_count($path, constant("BASE_DIR")) != 1)
 			{
-				$path = $GLOBALS[base_dir]."/".$path;
+				$path = constant("BASE_DIR")."/".$path;
 			}
 
 			$size = filesize($path);
@@ -310,7 +310,6 @@ class File extends DataEntity implements FileInterface
 	/**
 	 * Deletes a file, including all versions
 	 * @return bool
-	 * @todo first db delete, then filesystem delete
 	 */
 	public function delete()
 	{
@@ -330,6 +329,8 @@ class File extends DataEntity implements FileInterface
 			if (is_array($file_version_array) and count($file_version_array) >= 1)
 			{
 				$file_size = 0;
+				$file_path_array = array();
+				$temp_file_id = $this->file_id;
 				
 				foreach($file_version_array as $key => $value)
 				{
@@ -348,35 +349,11 @@ class File extends DataEntity implements FileInterface
 						$extension = ".".$extension_array[$extension_array_length];
 					}
 					
-					$path = $GLOBALS[base_dir]."/".$folder->get_path()."/".$this->data_entity_id."-".$file_version_access->get_internal_revision()."".$extension."";
+					$path = constant("BASE_DIR")."/".$folder->get_path()."/".$this->data_entity_id."-".$file_version_access->get_internal_revision()."".$extension."";
 				
 					if ($file_version_access->delete())
 					{
-						if (is_file($path))
-						{
-							if (is_writable($path))
-							{
-								$delete_success = unlink($path);
-								if ($delete_success == false)
-								{
-									if ($transaction_id != null)
-									{
-										$transaction->rollback($transaction_id);
-									}
-									$this->file->set_flag(-1); // Corrupt
-									return false;
-								}
-							}
-							else
-							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
-								$this->file->set_flag(-1); // Corrupt
-								return false;
-							}
-						}	
+						array_push($file_path_array, $path);
 					}
 					else
 					{
@@ -409,6 +386,40 @@ class File extends DataEntity implements FileInterface
 					// Data Entity Delete
 					if (parent::delete() == true)
 					{
+						if (is_array($file_path_array) and count($file_path_array) >= 1)
+						{
+							foreach ($file_path_array as $key => $value)
+							{
+								if (is_file($value))
+								{
+									if (is_writable($value))
+									{
+										$delete_success = unlink($value);
+										if ($delete_success == false)
+										{
+											if ($transaction_id != null)
+											{
+												$transaction->rollback($transaction_id);
+											}
+											$this->file->__consturct($temp_file_id);
+											$this->file->set_flag(-1); // Corrupt
+											return false;
+										}
+									}
+									else
+									{
+										if ($transaction_id != null)
+										{
+											$transaction->rollback($transaction_id);
+										}
+										$this->file->__consturct($temp_file_id);
+										$this->file->set_flag(-1); // Corrupt
+										return false;
+									}
+								}	
+							}
+						}
+						
 						if ($transaction_id != null)
 						{
 							$transaction->commit($transaction_id);
@@ -530,7 +541,7 @@ class File extends DataEntity implements FileInterface
 						$extension = ".".$extension_array[$extension_array_length];
 					}
 					
-					$path = $GLOBALS[base_dir]."/".$folder->get_path()."/".$this->date_entity_id."-".$this->file_version->get_internal_revision()."".$extension."";
+					$path = constant("BASE_DIR")."/".$folder->get_path()."/".$this->date_entity_id."-".$this->file_version->get_internal_revision()."".$extension."";
 					
 					if ($this->file_version->delete())
 					{
@@ -692,7 +703,6 @@ class File extends DataEntity implements FileInterface
 	 * @param integer $folder_id
 	 * @param array $file_array
 	 * @return integer
-	 * @todo checks if file exists in folder via DataEntity
 	 */
 	public function upload_file($folder_id, $file_array)
 	{
@@ -708,9 +718,9 @@ class File extends DataEntity implements FileInterface
 			if ($folder->is_write_access() == true)
 			{
 				// check is file exists in folder via DataEntity
-				if (true)
+				if (Data_Wrapper::is_file_in_folder($folder_id, $file_array['name']) == false)
 				{
-					$target = $GLOBALS[base_dir]."/".$folder->get_path()."/".$file_array['name'];
+					$target = constant("BASE_DIR")."/".$folder->get_path()."/".$file_array['name'];
 		
 					if((!empty($file_array['name']) or !file_exists($target)))
 					{
@@ -794,7 +804,7 @@ class File extends DataEntity implements FileInterface
 										$extension = ".".$extension_array[$extension_array_length];
 									}
 									
-									$new_filename = $GLOBALS[base_dir]."/".$folder->get_path()."/".$data_entity_id."-1".$extension;
+									$new_filename = constant("BASE_DIR")."/".$folder->get_path()."/".$data_entity_id."-1".$extension;
 									
 									// Rename file with the object id
 									if (rename($target, $new_filename) == true)
@@ -913,7 +923,7 @@ class File extends DataEntity implements FileInterface
 	
 			if ($folder->is_write_access() == true)
 			{
-				$target = $GLOBALS[base_dir]."/".$folder_path."/".$file_array['name'];
+				$target = constant("BASE_DIR")."/".$folder_path."/".$file_array['name'];
 				
 				if(!empty($file_array['name']))
 				{
@@ -1054,7 +1064,7 @@ class File extends DataEntity implements FileInterface
 										$extension_array[0] = "";
 									}
 									
-									$new_filename = $GLOBALS[base_dir]."/".$folder_path."/".$this->data_entity_id."-".$new_internal_revision.".".$extension_array[$extension_array_length];
+									$new_filename = constant("BASE_DIR")."/".$folder_path."/".$this->data_entity_id."-".$new_internal_revision.".".$extension_array[$extension_array_length];
 									
 									// Rename file with the object id
 									if (rename($target, $new_filename) == true)
@@ -1255,7 +1265,7 @@ class File extends DataEntity implements FileInterface
 				$extension = ".".$extension_array[$extension_array_length];
 			}
 			
-			$path = $GLOBALS[base_dir]."/".$folder->get_path()."/".$this->data_entity_id."-".$this->file_version->get_internal_revision()."".$extension."";
+			$path = constant("BASE_DIR")."/".$folder->get_path()."/".$this->data_entity_id."-".$this->file_version->get_internal_revision()."".$extension."";
 		
 			$size = filesize($path);
 			$handle = fopen($path, "r");

@@ -131,7 +131,7 @@ class XmlCache implements XmlCacheInterface
 			$extension_array = explode(".",$file->get_name());
 			$extension_array_length = substr_count($file->get_name(),".");
 			
-			$file_path = $GLOBALS[base_dir]."/".$folder_path."/".$this->data_entity_id."-1.".$extension_array[$extension_array_length];
+			$file_path = constant("BASE_DIR")."/".$folder_path."/".$this->data_entity_id."-1.".$extension_array[$extension_array_length];
     		
     		$this->xml_string = $file->get_file_content();
 

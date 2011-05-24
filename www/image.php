@@ -38,8 +38,8 @@
 		
 	if ($_GET[session_id] and $_GET[file_id])
 	{
-		$db = new Database("postgresql");
-		$db->db_connect($GLOBALS[server],$GLOBALS[port],$GLOBALS[dbuser],$GLOBALS[password],$GLOBALS[database]);
+		$db = new Database(constant("DB_TYPE"));
+		$db->db_connect(constant("DB_SERVER"),constant("DB_PORT"),constant("DB_USER"),constant("DB_PASSWORD"),constant("DB_DATABASE"));
 		
 		$transaction = new Transaction();
 		
@@ -97,25 +97,25 @@
 				$extension_array_length = substr_count($file->get_name(),".");
 				
 
-				$file_path = $GLOBALS[base_dir]."/".$folder_path."/".$file->get_data_entity_id()."-".$file->get_internal_revision().".".$extension_array[$extension_array_length];
+				$file_path = constant("BASE_DIR")."/".$folder_path."/".$file->get_data_entity_id()."-".$file->get_internal_revision().".".$extension_array[$extension_array_length];
 				if (!file_exists($file_path))
 				{
-					$file_path = $GLOBALS[www_dir]."/images/access.jpg";
+					$file_path = constant("WWW_DIR")."/images/access.jpg";
 				}
 			}
 			else
 			{
-				$file_path = $GLOBALS[www_dir]."/images/access.jpg";
+				$file_path = constant("WWW_DIR")."/images/access.jpg";
 			}
 		}
 		else
 		{
-			$file_path = $GLOBALS[www_dir]."/images/access.jpg";
+			$file_path = constant("WWW_DIR")."/images/access.jpg";
 		}
 	}
 	else
 	{
-		$file_path = $GLOBALS[www_dir]."/images/access.jpg";
+		$file_path = constant("WWW_DIR")."/images/access.jpg";
 	}
 
 	$image = new Imagick($file_path);

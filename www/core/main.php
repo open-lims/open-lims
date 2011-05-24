@@ -57,8 +57,8 @@ class Main
 		
 		require_once("core/db/db.php");
 		
-		$db = new Database("postgresql");
-		@$GLOBALS[con_run] = $db->db_connect($GLOBALS[server],$GLOBALS[port],$GLOBALS[dbuser],$GLOBALS[password],$GLOBALS[database]);
+		$db = new Database(constant("DB_TYPE"));
+		@$GLOBALS['con_run'] = $db->db_connect(constant("DB_SERVER"),constant("DB_PORT"),constant("DB_USER"),constant("DB_PASSWORD"),constant("DB_DATABASE"));
 				
 		require_once("include/base/error_handler.php");
 		
@@ -69,7 +69,7 @@ class Main
 		
 		require_once("include/base/autoload.function.php");
 		
-		if ($GLOBALS[con_run] == true)
+		if ($GLOBALS['con_run'] == true)
 		{
 			require_once("include/base/transaction.class.php");
 			
@@ -136,7 +136,7 @@ class Main
 	{
 		global $session, $user;
 		
-		if ($GLOBALS[con_run] == true)
+		if ($GLOBALS['con_run'] == true)
 		{
 			if ($_GET[session_id])
 			{

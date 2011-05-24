@@ -1341,6 +1341,11 @@ class AdminOrganisationUnitIO
 		
 		return $template->get_string();
 	}
+
+	public static function get_icon()
+	{
+		return "organisation_unit.png";
+	}
 }
 
 ?>

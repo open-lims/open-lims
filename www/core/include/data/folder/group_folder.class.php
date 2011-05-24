@@ -73,7 +73,7 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 			$group = new Group($group_id);
 			
 			// Folder
-			$group_folder_id = $GLOBALS[group_folder_id];
+			$group_folder_id = constant("GROUP_FOLDER_ID");
 			$folder = new Folder($group_folder_id);
 
 			$path = new Path($folder->get_path());

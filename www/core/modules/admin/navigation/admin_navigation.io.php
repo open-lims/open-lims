@@ -29,7 +29,7 @@ class AdminNavigationIO
 {
 	public static function navigation()
 	{
-		$template = new Template("languages/en-gb/template/navigation/left/administration.html");
+		$template = new Template("languages/en-gb/template/admin/navigation/administration.html");
 		
 
 		$paramquery[username] = $_GET[username];
@@ -64,13 +64,28 @@ class AdminNavigationIO
 				$paramquery[session_id] = $_GET[session_id];
 				$paramquery[nav]		= "admin";
 				$paramquery[run]		= "organisation";
-				$paramquery[dialog]		= $value[internal_name];
+				$paramquery[dialog]		= $value['internal_name'];
 				$params 				= http_build_query($paramquery,'','&#38;');
 				
-				/**
-				 * @todo icon
-				 */
-				$organisation_admin_navigation_array[$counter][icon] = "equipment.png";
+				require_once($value['class_path']);
+				
+				if (method_exists($value['class'], "get_icon"))
+				{
+					if (($icon = $value['class']::get_icon()) != null)
+					{
+						$organisation_admin_navigation_array[$counter][icon] = $icon;
+					}
+					else
+					{
+						$organisation_admin_navigation_array[$counter][icon] = "blank.png";
+					}
+					
+				}
+				else
+				{
+					$organisation_admin_navigation_array[$counter][icon] = "blank.png";
+				}
+				
 				$organisation_admin_navigation_array[$counter][params] = $params;
 				$organisation_admin_navigation_array[$counter][title] = $value[display_name];
 				$counter++;
@@ -97,10 +112,25 @@ class AdminNavigationIO
 				$paramquery[dialog]		= $value[internal_name];
 				$params 				= http_build_query($paramquery,'','&#38;');
 				
-				/**
-				 * @todo icon
-				 */
-				$module_admin_navigation_array[$counter][icon] = "equipment.png";
+				require_once($value['class_path']);
+				
+				if (method_exists($value['class'], "get_icon"))
+				{
+					if (($icon = $value['class']::get_icon()) != null)
+					{
+						$module_admin_navigation_array[$counter][icon] = $icon;
+					}
+					else
+					{
+						$module_admin_navigation_array[$counter][icon] = "blank.png";
+					}
+					
+				}
+				else
+				{
+					$module_admin_navigation_array[$counter][icon] = "blank.png";
+				}
+				
 				$module_admin_navigation_array[$counter][params] = $params;
 				$module_admin_navigation_array[$counter][title] = $value[display_name];
 				$counter++;

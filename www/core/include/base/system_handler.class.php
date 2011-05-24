@@ -96,7 +96,7 @@ class SystemHandler implements SystemHandlerInterface
 		$found_include_array = array();
 		$include_requirements_array = array();
 		
-		$include_folder_array = scandir($GLOBALS[include_dir]);
+		$include_folder_array = scandir(constant("INCLUDE_DIR"));
 		
 		if (is_array($include_folder_array) and count($include_folder_array) >= 1)
 		{
@@ -104,7 +104,7 @@ class SystemHandler implements SystemHandlerInterface
 			
 			foreach($include_folder_array as $key => $value)
 			{
-				$sub_folder = $GLOBALS[include_dir]."/".$value;
+				$sub_folder = constant("INCLUDE_DIR")."/".$value;
 				if (is_dir($sub_folder) and $key > 1)
 				{
 					$config_folder = $sub_folder."/config";
@@ -467,7 +467,7 @@ class SystemHandler implements SystemHandlerInterface
 		$found_module_array = array();
 		$module_requirements_array = array();
 		
-		$module_folder_array = scandir($GLOBALS[modules_dir]);
+		$module_folder_array = scandir(constant("MODULES_DIR"));
 		
 		if (is_array($module_folder_array) and count($module_folder_array) >= 1)
 		{
@@ -475,7 +475,7 @@ class SystemHandler implements SystemHandlerInterface
 			
 			foreach($module_folder_array as $key => $value)
 			{
-				$sub_folder = $GLOBALS[modules_dir]."/".$value;
+				$sub_folder = constant("MODULES_DIR")."/".$value;
 				if (is_dir($sub_folder) and $key > 1)
 				{
 					$config_folder = $sub_folder."/config";
@@ -863,13 +863,13 @@ class SystemHandler implements SystemHandlerInterface
 	public static function init_db_constants()
 	{		
 		$registered_include_array = BaseInclude_Access::list_folder_entries();		
-		$include_folder_array = scandir($GLOBALS[include_dir]);
+		$include_folder_array = scandir(constant("INCLUDE_DIR"));
 		
 		if (is_array($include_folder_array) and count($include_folder_array) >= 1)
 		{
 			foreach($include_folder_array as $key => $value)
 			{
-				$sub_folder = $GLOBALS[include_dir]."/".$value;
+				$sub_folder = constant("INCLUDE_DIR")."/".$value;
 				if (is_dir($sub_folder) and $key > 1)
 				{
 					$config_folder = $sub_folder."/config";

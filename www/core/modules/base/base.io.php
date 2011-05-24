@@ -175,9 +175,6 @@ class BaseIO
 		$template->output();
 	}
 	
-	/**
-	 * @todo content
-	 */
 	public static function software_info()
 	{
 		$template = new Template("languages/en-gb/template/base/software_info.html");
@@ -200,9 +197,6 @@ class BaseIO
 		$template->output();
 	}
 	
-	/**
-	 * @todo version info
-	 */
 	public static function method_handler()
 	{
 		switch ($_GET[run]):

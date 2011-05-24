@@ -125,7 +125,7 @@ class Communicator implements CommunicatorInterface {
 	    			$user = new User($this->user_id);
 	    			$mail = $user->get_profile("mail");
 	    			
-	    			$header = "From: ".$GLOBALS[sendmail_from]."\r\n";
+	    			$header = "From: ".constant("SENDMAIL_FROM")."\r\n";
 	    			
 	    			if (!@mail($mail, $this->subject, $this->text, $header))
 	    			{

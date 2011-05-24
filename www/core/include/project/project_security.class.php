@@ -396,7 +396,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     		else
     		{
     			$project_permission = new ProjectPermission(null);
-				if ($project_permission->create($owner_id, null, null, $this->project_id, $GLOBALS[std_perm_user], null, 1) != null) {
+				if ($project_permission->create($owner_id, null, null, $this->project_id, constant("PROJECT_USER_STD_PERMISSION"), null, 1) != null) {
 					if ($transaction_id != null)
 					{
 						$transaction->commit($transaction_id);
@@ -457,7 +457,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     		else
     		{
     			$project_permission = new ProjectPermission(null);
-				if ($project_permission->create($leader_id, null, null, $this->project_id, $GLOBALS[std_perm_organ_leader], null, 2) != null)
+				if ($project_permission->create($leader_id, null, null, $this->project_id, constant("PROJECT_LEADER_STD_PERMISSION"), null, 2) != null)
 				{
 					if ($transaction_id != null)
 					{
@@ -531,7 +531,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     		else
     		{
     			$project_permission = new ProjectPermission(null);
-				if (($return_value = $project_permission->create(null, $organisation_unit_id, null, $this->project_id, $GLOBALS[std_perm_organ_unit], null, 3)) == null)
+				if (($return_value = $project_permission->create(null, $organisation_unit_id, null, $this->project_id, constant("PROJECT_OU_STD_PERMISSION"), null, 3)) == null)
 				{
 					if ($transaction_id != null)
 					{
@@ -548,7 +548,7 @@ class ProjectSecurity implements ProjectSecurityInterface
 				foreach($group_array as $key => $value)
 				{
 					$project_permission = new ProjectPermission(null);
-					if ($project_permission->create(null, null, $value, $this->project_id, $GLOBALS[std_perm_organ_group], null, 4) == null)
+					if ($project_permission->create(null, null, $value, $this->project_id, constant("PROJECT_GROUP_STD_PERMISSION"), null, 4) == null)
 					{
 						if ($transaction_id != null)
 						{

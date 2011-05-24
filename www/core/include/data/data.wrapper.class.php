@@ -37,6 +37,11 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class Data_Wrapper implements Data_WrapperInterface
 {
+	public static function is_file_in_folder($folder_id, $name)
+	{
+		return Data_Wrapper_Access::is_file_in_folder($folder_id, $name);
+	}
+	
 	public static function list_search_ffv($folder_id, $search_string, $order_by, $order_method, $start, $end)
 	{
 		return Data_Wrapper_Access::list_search_ffv($folder_id, $search_string, $order_by, $order_method, $start, $end);

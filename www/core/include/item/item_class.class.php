@@ -96,6 +96,8 @@ class ItemClass implements ItemClassInterface
      */
 	public function delete()
 	{
+		global $transaction;
+		
     	if ($this->class_id and $this->item_class and $this->item_has_item_class)
     	{
     		$item_link_array = $this->list_items();

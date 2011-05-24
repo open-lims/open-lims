@@ -173,7 +173,7 @@ class User implements UserInterface {
 						$user_admin_setting->set_user_locked(false);
 					}
 										
-					$user_profile_setting->set_timezone_id($GLOBALS[timezone_id]);
+					$user_profile_setting->set_timezone_id(constant("TIMEZONE_ID"));
 					
 					if ($this->user_profile->create($user_id, $gender, $title, $forename, $surname, $mail) == null)
 					{

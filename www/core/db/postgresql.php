@@ -76,7 +76,7 @@ class Postgresql
  	 	$pg_result = pg_query($connection, $query);
  	 	if (!$pg_result)
  	 	{
- 	 		if ($GLOBALS[debug] == true)
+ 	 		if (constant("DEBUG") == true)
  	 		{
  	 			echo $query;
  	 			echo "<br />".pg_last_error();

@@ -21,10 +21,9 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-$GLOBALS[product_name]				= "Open-LIMS";
-$GLOBALS[major_release]				= "0";
-$GLOBALS[minor_release]				= ".3.9.9-0-dev &#945;";
-
+/**
+ * 
+ */
 define("PRODUCT", "Open-LIMS");
 define("PRODUCT_VERSION", "0.3.9.9-0-dev &#945;");
 ?>

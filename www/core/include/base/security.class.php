@@ -59,10 +59,10 @@ class Security implements SecurityInterface
 		{
 			foreach($registered_module_array as $key => $value)
 			{
-				$get_file = $GLOBALS[modules_dir]."/".$value."/config/module_get.php";
+				$get_file = constant("MODULES_DIR")."/".$value."/config/module_get.php";
 				if (file_exists($get_file))
 				{
-					$get_file = $GLOBALS[modules_dir]."/".$value."/config/module_get.php";
+					$get_file = constant("MODULES_DIR")."/".$value."/config/module_get.php";
 					include($get_file);
 					
 					if (is_array($get) and count($get) >= 1)

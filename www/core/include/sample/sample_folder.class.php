@@ -188,7 +188,6 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 	 * Creates a new Sample Folder including Folder
 	 * @param integer $sample_id
 	 * @return integer
-	 * @todo: remove v-folder
 	 */
 	public function create($sample_id)
 	{
@@ -197,7 +196,7 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 			$sample = new Sample($sample_id);
 			
 			// Folder
-			$sample_folder_id = $GLOBALS[sample_folder_id];
+			$sample_folder_id = constant("SAMPLE_FOLDER_ID");
 			$folder = new Folder($sample_folder_id);
 
 			$path = new Path($folder->get_path());

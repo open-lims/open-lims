@@ -180,7 +180,7 @@ class Project implements ProjectInterface, EventListenerInterface
 					
 					if ($organisation_unit_id)
 					{
-						$base_folder_id = $GLOBALS[project_folder_id];
+						$base_folder_id = constant("PROJECT_FOLDER_ID");
 					}
 					else
 					{
@@ -400,7 +400,7 @@ class Project implements ProjectInterface, EventListenerInterface
 	
 						// Project Permissions
 						$project_permission = new ProjectPermission(null);
-						if ($project_permission->create($owner_id, null, null, $project_id, $GLOBALS[std_perm_user], null, 1) == null)
+						if ($project_permission->create($owner_id, null, null, $project_id, constant("PROJECT_USER_STD_PERMISSION"), null, 1) == null)
 						{
 							$project_folder->delete(true, true);
 							if ($transaction_id != null)
@@ -411,7 +411,7 @@ class Project implements ProjectInterface, EventListenerInterface
 						}
 					
 						$project_permission = new ProjectPermission(null);
-						if ($project_permission->create($organisation_unit->get_leader_id(), null, null, $project_id, $GLOBALS[std_perm_organ_leader], null, 2) == null)
+						if ($project_permission->create($organisation_unit->get_leader_id(), null, null, $project_id, constant("PROJECT_LEADER_STD_PERMISSION"), null, 2) == null)
 						{
 							$project_folder->delete(true, true);
 							if ($transaction_id != null)
@@ -425,7 +425,7 @@ class Project implements ProjectInterface, EventListenerInterface
 						// Virtual-Folder von OrganUnits und Groups
 					
 						$project_permission = new ProjectPermission(null);
-						if ($project_permission->create(null, $organisation_unit_id, null, $project_id, $GLOBALS[std_perm_organ_unit], null, 3) == null)
+						if ($project_permission->create(null, $organisation_unit_id, null, $project_id, constant("PROJECT_OU_STD_PERMISSION"), null, 3) == null)
 						{
 							$project_folder->delete(true, true);
 							if ($transaction_id != null)
@@ -442,7 +442,7 @@ class Project implements ProjectInterface, EventListenerInterface
 							foreach($group_array as $key => $value)
 							{
 								$project_permission = new ProjectPermission(null);
-								if ($project_permission->create(null, null, $value, $project_id, $GLOBALS[std_perm_organ_group], null, 4) == null)
+								if ($project_permission->create(null, null, $value, $project_id, constant("PROJECT_GROUP_STD_PERMISSION"), null, 4) == null)
 								{
 									$project_folder->delete(true, true);
 									if ($transaction_id != null)
@@ -1381,7 +1381,7 @@ class Project implements ProjectInterface, EventListenerInterface
 					
 					$folder_id = ProjectFolder::get_folder_by_project_id($this->project_id);
 					$folder = new Folder($folder_id);
-					$destination_id = $GLOBALS[project_folder_id];
+					$destination_id = constant("PROJECT_FOLDER_ID");
 					if ($folder->move_folder($destination_id, false) == false)
 					{
 						if ($transaction_id != null)
