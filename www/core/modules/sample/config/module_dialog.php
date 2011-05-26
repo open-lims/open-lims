@@ -93,4 +93,18 @@
 	$dialog[8][internal_name]	= "sample";
 	$dialog[8][display_name]	= "Par. Samples";
 	$dialog[8][weight]			= 200;
+	
+	$dialog[9][type]			= "report";
+	$dialog[9][class_path]		= "core/modules/sample/sample_report.io.php";
+	$dialog[9]['class']			= "SampleReportIO";
+	$dialog[9][method]			= "get_full_report";
+	$dialog[9][internal_name]	= "sample_full_report";
+	$dialog[9][display_name]	= "Sample Full Report";
+	
+	$dialog[10][type]			= "report";
+	$dialog[10][class_path]		= "core/modules/sample/sample_report.io.php";
+	$dialog[10]['class']		= "SampleReportIO";
+	$dialog[10][method]			= "get_full_report";
+	$dialog[10][internal_name]	= "sample_barcode_report";
+	$dialog[10][display_name]	= "Sample Barcode Report";
 ?>

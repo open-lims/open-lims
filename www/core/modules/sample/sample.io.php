@@ -2045,11 +2045,11 @@ class SampleIO
 				if ($sample->get_availability() == true)
 				{
 					$template->set_var("status", "available");
-					$template->set_var("new_status", "unavailable");
+					$template->set_var("new_status", "not available");
 				}
 				else
 				{
-					$template->set_var("status", "unavailable");
+					$template->set_var("status", "not available");
 					$template->set_var("new_status", "available");
 				}
 				
