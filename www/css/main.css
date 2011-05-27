@@ -1528,3 +1528,30 @@ a.SearchMainButton:hover span span {
 .FormSelect {
 	width: 100%;
 }
+
+#ErrorFatalFooter {
+	position: absolute;
+	height: 100px;
+	width: 98%;
+	bottom: 0;
+	background-image: url(../images/login_logo.png);
+	background-repeat: no-repeat;
+	background-position: bottom right;
+}
+#ErrorFatalTitle {
+	font-weight: bold;
+	text-align: center;
+	padding: 10px;
+}
+#ErrorFatalLeft {
+	float: left;
+	width: 55px;
+	margin: 10px 20px;
+}
+#ErrorFatalRight {
+	margin: 10px;
+	text-align: left;
+}
+#ErrorFatalClear {
+	clear: both;
+}

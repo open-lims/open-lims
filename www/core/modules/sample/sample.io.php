@@ -2494,9 +2494,6 @@ class SampleIO
 		}
 	}
 	
-	/**
-	 * @todo sample bar appearance
-	 */
 	public static function method_handler()
 	{
 		global $sample_security, $session, $transaction;

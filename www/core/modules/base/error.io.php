@@ -56,18 +56,25 @@ class Error_IO
 		}
 	}
 	
-	public function display_outside_error()
+	public static function fatal_error($message)
 	{
-		if ($this->exception_handler)
-		{
-			echo "Error";
-			echo "<br />";	
-			echo $this->exception_handler->get_error_no();
-			echo "<br />";
-			echo $this->exception_handler->get_error_message();
-		}
+		$template = new Template("languages/en-gb/template/login_header.html");
+		$template->output();
+		
+		$template = new Template("languages/en-gb/template/base/error/fatal.html");
+		$template->set_var("message", $message);
+		$template->output();
 	}
 	
+	public static function security_out_of_box_error($message)
+	{
+		$template = new Template("languages/en-gb/template/login_header.html");
+		$template->output();
+		
+		$template = new Template("languages/en-gb/template/base/error/security_out_of_box.html");
+		$template->set_var("message", $message);
+		$template->output();
+	}
 }
 
 ?>

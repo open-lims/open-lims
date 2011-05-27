@@ -1017,7 +1017,6 @@ class Value extends DataEntity implements ValueInterface
     
     /**
      * Resolves the each statements of the xml_array
-     * @todo remove dependecies
      * @param array $xml_array
      * @return array
      */
@@ -1093,7 +1092,6 @@ class Value extends DataEntity implements ValueInterface
     
     /**
      * Returns an HTML-String of the current value
-     * @todo remove dependecies (project and sample)
      * @todo remove HTML
      * @param array $error_array
      * @param integer $type_id

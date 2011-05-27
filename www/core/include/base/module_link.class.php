@@ -37,6 +37,9 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class ModuleLink implements ModuleLinkInterface
 {		
+	/**
+	 * @param string $link_type
+	 */
 	public static function list_links_by_type($link_type)
 	{
 		return BaseModuleLink_Access::list_links_by_type($link_type);

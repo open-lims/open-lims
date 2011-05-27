@@ -3,7 +3,7 @@
  * @package data
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -23,12 +23,48 @@
  
 
 /**
- * @todo
  * Data Search Wrapper Interface
  * @package data
  */ 		 
 interface Data_WrapperInterface
 {
-
+	/**
+	 * @param integer $folder_id
+	 * @param string $name
+	 * @return bool
+	 */
+	public static function is_file_in_folder($folder_id, $name);
+	
+	/**
+	 * @param integer $folder_id
+	 * @param string $search_string
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_search_ffv($folder_id, $search_string, $order_by, $order_method, $start, $end);
+	
+	/**
+	 * @param integer $folder_id
+	 * @param string $search_string
+	 * @return integer
+	 */
+	public static function count_search_ffv($folder_id, $search_string);
+	
+	/**
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_value_templates($order_by, $order_method, $start, $end);
+	
+	/**
+     * @return integer
+     */
+	public static function count_list_value_templates();
 }
 ?>

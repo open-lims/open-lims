@@ -29,6 +29,32 @@
  */
 interface ValueVarInterface
 {
-
+	/**
+     * @param integer $folder_id
+     */
+	function __construct($folder_id);
+	
+	function __destruct();
+	
+	/**
+     * @param string $string
+     * @return mixed
+     */
+    public function get_content($string);
+    
+     /**
+     * @param string $name
+     * @param stirng $handling_class
+     * @param bool $ignore_this
+     * @param integer $include_id
+     * @return bool
+     */
+	public static function register_type($name, $handling_class, $ignore_this, $include_id);
+	
+	/**
+	 * @param integer $include_id
+	 * @return bool
+	 */
+	public static function delete_by_include_id($include_id);
 }
 ?>

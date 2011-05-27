@@ -43,7 +43,6 @@ class Navigation_IO
 		$paramquery[username] = $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
 		$paramquery[nav] = "home";
-		$paramquery[change_tab] = "true";
 		$params = http_build_query($paramquery,'','&#38;');
 
 		if ($_GET[nav] == "home" or !$_GET[nav])

@@ -25,10 +25,48 @@
 /**
  * System Handler Interface
  * @package base
- * @todo
  */
 interface SystemHandlerInterface
 {
-
+	function __construct();
+	
+	public static function init_db_constants();
+	
+	/**
+	 * @return array;
+	 */
+	public static function get_include_folders();
+	
+	/**
+	 * @return array
+	 */
+	public static function get_module_folders();
+	
+	/**
+	 * @param integer $module_id
+	 * @return string
+	 */
+	public static function get_module_name_by_module_id($module_id);
+	
+	/**
+	 * @param string $module_name
+	 * @return string
+	 */
+	public static function get_module_folder_by_module_name($module_name);
+	
+	/**
+	 * @return array
+	 */
+	public static function list_module_navigations_entries();
+	
+	/**
+	 * @return array
+	 */
+	public static function list_modules();
+	
+	/**
+	 * @return array
+	 */
+	public static function list_includes();
 }
 ?>

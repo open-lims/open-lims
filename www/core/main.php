@@ -29,94 +29,100 @@ class Main
 {
 	/**
 	 * Checks basic requirements, includes basic files, creates global classes and starts Database-Connection
-	 * @todo handling of system exceptions
 	 */
 	function __construct()
 	{
 		if (version_compare(PHP_VERSION, '5.3.0', 'le'))
 		{
-    		die('PHP 5.3.0 is minimum required');
+    		$GLOBALS['fatal_error'] = "PHP 5.3.0 is minimum required!";
 		}
 		
 		if (!extension_loaded("imagick"))
 		{
-			die('Extension "Imagick" is missing!');
+			$GLOBALS['fatal_error'] = "Extension \"Imagick\" is missing!";
 		}
 		
 		if (!extension_loaded("mbstring"))
 		{
-			die('Extension "mbstring" is missing!');
+			$GLOBALS['fatal_error'] = "Extension \"mbstring\" is missing!";
 		}
 		
 		if (!extension_loaded("gd"))
 		{
-			die('Extension "GD" is missing!');
+			$GLOBALS['fatal_error'] = "Extension \"GD\" is missing!";
 		}
 
-		global $db, $misc, $runtime_data, $transaction;
-		
-		require_once("core/db/db.php");
-		
-		$db = new Database(constant("DB_TYPE"));
-		@$GLOBALS['con_run'] = $db->db_connect(constant("DB_SERVER"),constant("DB_PORT"),constant("DB_USER"),constant("DB_PASSWORD"),constant("DB_DATABASE"));
-				
-		require_once("include/base/error_handler.php");
-		
-		set_error_handler('error_handler');
-		
-		require_once("include/base/events/event.class.php");
-		require_once("include/base/system_handler.class.php");
-		
-		require_once("include/base/autoload.function.php");
-		
-		if ($GLOBALS['con_run'] == true)
+		if ($GLOBALS['fatal_error'] == null)
 		{
-			require_once("include/base/transaction.class.php");
+			global $db, $misc, $runtime_data, $transaction;
 			
-			$transaction = new Transaction();
+			require_once("core/db/db.php");
 			
-			require_once("include/base/security.class.php");
-			require_once("include/base/system_log.class.php");
-			require_once("include/base/misc.class.php");
-			require_once("include/base/session.class.php");
-			require_once("include/base/runtime_data.class.php");
-
-			Security::protect_session();
+			$db = new Database(constant("DB_TYPE"));
+			@$connection_result = $db->db_connect(constant("DB_SERVER"),constant("DB_PORT"),constant("DB_USER"),constant("DB_PASSWORD"),constant("DB_DATABASE"));
+					
+			require_once("include/base/error_handler.php");
+			
+			set_error_handler('error_handler');
+			
+			require_once("include/base/events/event.class.php");
+			require_once("include/base/system_handler.class.php");
+			
+			require_once("include/base/autoload.function.php");
+			
+			if ($connection_result == true)
+			{
+				require_once("include/base/transaction.class.php");
+				
+				$transaction = new Transaction();
+				
+				require_once("include/base/security.class.php");
+				require_once("include/base/system_log.class.php");
+				require_once("include/base/misc.class.php");
+				require_once("include/base/session.class.php");
+				require_once("include/base/runtime_data.class.php");
 	
-			$misc = new Misc();
-			$runtime_data = new RuntimeData();
-			
-			try
-			{
-				$system_handler = new SystemHandler();
+				Security::protect_session();
+		
+				$misc = new Misc();
+				$runtime_data = new RuntimeData();
+				
+				try
+				{
+					$system_handler = new SystemHandler();
+				}
+				catch(IncludeDataCorruptException $e)
+				{
+					$GLOBALS['fatal_error'] = "The config-data of a module is corrupt!";
+				}
+				catch(IncludeProcessFailedException $e)
+				{
+					$GLOBALS['fatal_error'] = "Include register process failed!";
+				}
+				catch(IncludeRequirementFailedException $e)
+				{
+					$GLOBALS['fatal_error'] = "An include-module requirement is not found!";
+				}
+				catch(IncludeFolderEmptyException $e)
+				{
+					$GLOBALS['fatal_error'] = "Include folder is empty!";
+				}
+				catch(ModuleProcessFailedException $e)
+				{
+					$GLOBALS['fatal_error'] = "Module register process failed!";
+				}
+				catch(ModuleDataCorruptException $e)
+				{
+					$GLOBALS['fatal_error'] = "Module Data Corrupt!";
+				}
+				catch(EventHandlerCreationFailedException $e)
+				{
+					$GLOBALS['fatal_error'] = "Event-handler creation failed!";
+				}
 			}
-			catch(IncludeDataCorruptException $e)
+			else
 			{
-				die("Fatal: The config-data of a module is corrupt!");
-			}
-			catch(IncludeProcessFailedException $e)
-			{
-				die("Fatal: Include register process failed!");
-			}
-			catch(IncludeRequirementFailedException $e)
-			{
-				die("Fatal: An include-module requirement is not found!");
-			}
-			catch(IncludeFolderEmptyException $e)
-			{
-				die("Fatal: Include folder is empty!");
-			}
-			catch(ModuleProcessFailedException $e)
-			{
-				die("Fatal: Module register process failed!");
-			}
-			catch(ModuleDataCorruptException $e)
-			{
-				die("Fatal: Module Data Corrupt!");
-			}
-			catch(EventHandlerCreationFailedException $e)
-			{
-				die("Fatal: Event-handler creation failed!");
+				$GLOBALS['fatal_error'] = "Database-Connection failed!";
 			}
 		}
 	}
@@ -136,7 +142,7 @@ class Main
 	{
 		global $session, $user;
 		
-		if ($GLOBALS['con_run'] == true)
+		if ($GLOBALS['fatal_error'] == null)
 		{
 			if ($_GET[session_id])
 			{

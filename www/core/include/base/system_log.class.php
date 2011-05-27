@@ -320,6 +320,15 @@ class SystemLog implements SystemLogInterface
 	}
 	
 	/**
+	 * @param string $ip
+	 * @param string $begin
+	 */
+	public static function count_ip_failed_logins_with_begin($ip, $lead_time)
+	{
+		return SystemLog_Access::count_ip_failed_logins_with_begin($ip, $lead_time);
+	}
+	
+	/**
 	 * Counts all failed logins with $ip
 	 * @param string $ip
 	 * @return integer
@@ -348,6 +357,7 @@ class SystemLog implements SystemLogInterface
 	{
 		return SystemLog_Access::list_ip_users($ip);
 	}
+
 
 }
 ?>

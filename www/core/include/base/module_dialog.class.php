@@ -37,11 +37,20 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class ModuleDialog implements ModuleDialogInterface
 {	
+	/**
+	 * @param string $dialog_type
+	 * @param string $internal_array
+	 * @return array
+	 */
 	public static function get_by_type_and_internal_name($dialog_type, $internal_name)
 	{
 		return BaseModuleDialog_Access::get_by_type_and_internal_name($dialog_type, $internal_name);
 	}
 	
+	/**
+	 * @param string $dialog_type
+	 * @return array
+	 */
 	public static function list_dialogs_by_type($dialog_type)
 	{
 		return BaseModuleDialog_Access::list_dialogs_by_type($dialog_type);

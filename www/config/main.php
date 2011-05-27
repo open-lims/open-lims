@@ -84,9 +84,9 @@ define("USER_STD_QUOTA",				53687091200);
 define("QUOTA_WARNING",					90);
 
 // Session-Time and IP Errors
-define("MAX_SESSION_PERIOD",			36000);
-define("MAX_IP_ERRORS",					50);
-define("IP_ERROR_LEAD_TIME",			36000);
+define("MAX_SESSION_PERIOD",			36000);	// in seconds
+define("MAX_IP_ERRORS",					10);
+define("IP_ERROR_LEAD_TIME",			36000);	// in seconds
 
 define("ORGANISATION_UNIT_FOLDER_ID",	3);
 define("PROJECT_FOLDER_ID",				4);

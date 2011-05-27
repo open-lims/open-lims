@@ -203,12 +203,12 @@ ul.navigation_sub_navigation_list a:hover,ul.navigation_sub_navigation_list a:fo
 
 /* Vertical Navigation / Menu */
 #navigation {
-	font: normal 0.8em Verdana, Helvetica, sans-serif;
+	font: normal 0.6em Verdana, Helvetica, sans-serif;
 	float: left;
-	width: 180px;
+	width: 190px;
 	height: 90%;
-	margin-left: 0.3em;
-	margin-top: 0.3em;
+	margin-left: 0.6em;
+	margin-top: 0.6em;
 }
 
 #navigation a {

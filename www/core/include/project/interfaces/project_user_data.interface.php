@@ -25,11 +25,26 @@
 /**
  * Project User Data Interface
  * @package project
- * @todo
  */
 interface ProjectUserDataInterface
 {	
+	/**
+	 * @param integer $user_id
+	 */
+	function __construct($user_id);
 	
+	function __destruct();
+	
+	/**
+	 * @return integer
+	 */
+	public function get_quota();
+	
+	/**
+	 * @param integer $quota
+	 * @return integer
+	 */
+	public function set_quota($quota);
 }
 
 ?>

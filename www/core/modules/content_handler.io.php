@@ -27,49 +27,44 @@
  */
 class ContentHandler_IO
 {
-	/**
-	 * @todo Remove HTML Statements
-	 * @todo Implement IP-Blocking
-	 * @todo catch ModuleDataCorruptExeception
-	 */
 	public static function main()
 	{
 		global $session, $user, $misc, $transaction;
 
-		if ($GLOBALS['con_run'] == true)
+		$template = new Template("languages/en-gb/template/index_header.html");
+	
+		$css_directory = constant("WWW_DIR")."/css";
+		$css_directory_array = scandir($css_directory);
+		
+		if (is_array($css_directory_array))
+		{
+			$index_css = "";
+			
+			foreach($css_directory_array as $key => $value)
+			{
+				if ((strpos(strrev($value),"ssc.") === 0) and (strpos(strrev($value),"ssc.gubed") === false) and ($value != "main.css"))
+				{
+					if (is_file($css_directory."/".$value))
+					{
+						$index_css .= "<link rel='stylesheet' type='text/css' href='css/".$value."' title='Style' />\n";
+					}	
+				}
+			}	
+		}
+		
+		$template->set_var("INDEX_CSS",$index_css);
+					
+	 	$template->set_var("INDEX_TITLE",constant("HTML_TITLE"));
+	
+		$template->output();
+		
+		if ($GLOBALS['fatal_error'] == null)
 		{
 			if (Security::ip_error_count() < constant("MAX_IP_ERRORS"))
 			{
-				$template = new Template("languages/en-gb/template/index_header.html");
-	
-				$css_directory = constant("WWW_DIR")."/css";
-				$css_directory_array = scandir($css_directory);
-				
-				if (is_array($css_directory_array))
-				{
-					$index_css = "";
-					
-					foreach($css_directory_array as $key => $value)
-					{
-						if ((strpos(strrev($value),"ssc.") === 0) and (strpos(strrev($value),"ssc.gubed") === false) and ($value != "main.css"))
-						{
-							if (is_file($css_directory."/".$value))
-							{
-								$index_css .= "<link rel='stylesheet' type='text/css' href='css/".$value."' title='Style' />\n";
-							}	
-						}
-					}	
-				}
-				
-				$template->set_var("INDEX_CSS",$index_css);
-							
-			 	$template->set_var("INDEX_TITLE",constant("HTML_TITLE"));
-			
-				$template->output();
-				
 		 		if ($session->is_valid() == true and $_GET[run] != "logout")
 		 		{
-					$template = new Template("languages/en-gb/template/structure_main.html");
+					$template = new Template("languages/en-gb/template/main_header.html");
 					
 					$template->set_var("release",constant("PRODUCT")." ".constant("PRODUCT_VERSION"));
 					$template->set_var("user",constant("PRODUCT_USER"));
@@ -80,16 +75,8 @@ class ContentHandler_IO
 					// Navigation
 					require_once("base/navigation.io.php");
 					Navigation_IO::main();
-
-					echo "</div>";	
-
-					// VNAV
-					echo "<div class='clearbox'></div><div id='navigation'>";
 					Navigation_IO::left();
-			
-					echo "</div>" .
-						"<div id='content'>";
- 		
+			 		
  					if ($session->read_value("must_change_password") == true)
  					{
  						require_once("core/modules/user/user.io.php");
@@ -183,29 +170,27 @@ class ContentHandler_IO
 						}
  					}
 			 		
-			 		echo "</div>";
+			 		$template = new Template("languages/en-gb/template/main_footer.html");
+			 		$template->output();
 		 		}
 		 		else
 		 		{
 		 			require_once("base/login.io.php");
 		 			Login_IO::output();	 			
 		 		}
-		 		
-		 		$template = new Template("languages/en-gb/template/index_footer.html");
-				$template->output();
 			}
 			else
 			{
-				// IP Blocked by Server
+				Error_IO::security_out_of_box_error("Your IP was blocked by server!");	
 			}	
 		}
 		else
 		{
-			// SQL Connection Failed
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 2, 10, 1);
-			$error_io->display_outside_error();			
+			Error_IO::fatal_error($GLOBALS['fatal_error']);	
 		}
+		
+		$template = new Template("languages/en-gb/template/index_footer.html");
+		$template->output();
 	}
 	
 }

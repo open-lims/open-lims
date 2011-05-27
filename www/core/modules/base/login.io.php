@@ -58,7 +58,7 @@ class Login_IO
 			$error = "";
 		}
 
-		$template = new Template("languages/en-gb/template/login.html");
+		$template = new Template("languages/en-gb/template/base/login/login.html");
 
 		$template->set_var("version",constant("PRODUCT_VERSION"));
 		$template->set_var("product_name",constant("PRODUCT"));
@@ -137,7 +137,7 @@ class Login_IO
 			endswitch;
 		}
 		
-		$template = new Template("languages/en-gb/template/forgot_password.html");
+		$template = new Template("languages/en-gb/template/base/login/forgot_password.html");
 
 		$template->set_var("version",constant("PRODUCT_VERSION"));
 		$template->set_var("product_name",constant("PRODUCT"));
@@ -206,7 +206,7 @@ class Login_IO
 	{
 		$auth = new Auth();
 		
-		$template = new Template("languages/en-gb/template/structure_login.html");
+		$template = new Template("languages/en-gb/template/login_header.html");
 		$template->output();
 		
 		switch ($_GET[run]):

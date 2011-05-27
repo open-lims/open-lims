@@ -7,6 +7,13 @@
 			buttons: \{
 				"Close": function() \{
 					$( this ).dialog( "close" );
+				\},
+				"OK": function() \{
+					var url = "index.php?username=";
+                    var windowName = $(this).attr("name");
+ 
+                    window.open(url, windowName);
+                    $( this ).dialog( "close" );
 				\}
 			\}
 		\});
@@ -21,8 +28,11 @@
 
 <!-- CONTAINER BEGIN ("Information","sampleGeneral") -->
 
-<div id="print_dialog" title="Print Report">
-	<p>This function is not available in the current version.</p>
+<div id="print_dialog" title="Print Report" style='display: none;'>
+	<div style='text-align: center; font-weight: bold;'>Create Report.</div>
+	<p><input type='radio' name='selection' /> Barcode only</p>
+	<p>Paper Format: <select><option>A4</option></select></p>
+	<p><input type='radio' name='selection' /> Full Report</p>
 </div>
 
 <div class='SampleBarcode'>

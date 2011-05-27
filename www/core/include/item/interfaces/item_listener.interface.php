@@ -44,6 +44,13 @@ interface ItemListenerInterface
 	
 	
 	/**
+	 * Returns entry ID via item ID
+	 * @param integer $item_id
+	 * @return integer
+	 */
+	public static function get_entry_by_item_id($item_id);
+	
+	/**
 	 * Checks if an item_id is a kind of the current class.
 	 * type is an optional variable, if one class handles two or more item-types
 	 * @param string $type

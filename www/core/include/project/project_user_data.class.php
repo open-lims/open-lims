@@ -40,6 +40,9 @@ class ProjectUserData implements ProjectUserDataInterface, EventListenerInterfac
 	private $user_id;
 	private $project_user_data;
 	
+	/**
+	 * @param integer $user_id
+	 */
 	function __construct($user_id)
 	{
 		if (is_numeric($user_id))
@@ -60,6 +63,9 @@ class ProjectUserData implements ProjectUserDataInterface, EventListenerInterfac
 		unset($this->project_user_data);
 	}
 	
+	/**
+	 * @return integer
+	 */
 	public function get_quota()
 	{
 		if ($this->user_id)
@@ -72,6 +78,10 @@ class ProjectUserData implements ProjectUserDataInterface, EventListenerInterfac
 		}
 	}
 	
+	/**
+	 * @param integer $quota
+	 * @return integer
+	 */
 	public function set_quota($quota)
 	{
 		if ($this->user_id)

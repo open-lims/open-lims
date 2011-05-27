@@ -23,13 +23,28 @@
  
 
 /**
- * @todo
  * Item Class Management Interface
  * @package item
  */ 	 
 interface Item_WrapperInterface
 {
-
+	/**
+	 * @param string $string
+	 * @param array $item_type_array
+	 * @param integer $language_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 */
+	public static function list_fulltext_search($string, $item_type_array, $language_id, $order_by, $order_method, $start, $end);
+	
+	/**
+	 * @param string $string
+	 * @param array $item_type_array
+	 * @param integer $language_id
+	 */
+	public static function count_fulltext_search($string, $item_type_array, $language_id);
 }
 
 ?>

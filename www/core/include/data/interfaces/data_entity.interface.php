@@ -3,7 +3,7 @@
  * @package data
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -25,11 +25,149 @@
 /**
  * Data Entity Interface
  * @package data
- * @todo
  */
 interface DataEntityInterface
 {	
+	/**
+	 * @return bool
+	 */
+	public function is_read_access();
 	
+	/**
+	 * @return bool
+	 */
+	public function is_write_access();
+	
+	/**
+	 * @return bool
+	 */
+	public function is_delete_access();
+	
+	/**
+	 * @return bool
+	 */
+	public function is_control_access();
+	
+	/**
+	 * @return bool
+	 */
+	public function can_set_automatic();
+	
+	/**
+	 * @return bool
+	 */
+	public function can_set_data_entity();
+	
+	/**
+	 * @return bool
+	 */
+	public function can_set_control();
+	
+	/**
+	 * @return bool
+	 */
+	public function can_set_remain();
+	
+	/**
+	 * @return integer
+	 */
+	public function get_parent_folder();
+	
+	/**
+	 * @return integer
+	 */
+	public function get_parent_folder_id();
+	
+	/**
+	 * @return array
+	 */
+	public function get_parent_virtual_folders();
+	
+	/**
+	 * @return array
+	 */
+	public function get_parent_virtual_folder_ids();
+	
+	/**
+	 * @return array
+	 */
+	public function get_childs();
+	
+	/**
+	 * @return integer
+	 */
+	public function get_data_entity_id();
+	
+	/**
+	 * @return string
+	 */
+	public function get_datetime();
+	
+	/**
+	 * @return integer
+	 */
+	public function get_owner_id();
+	
+	/**
+	 * @return integer
+	 */
+	public function get_owner_group_id();
+	
+	/**
+	 * @return integer
+	 */
+	public function get_permission();
+	
+	/**
+	 * @return string
+	 */
+	public function get_permission_string();
+	
+	/**
+	 * @return bool
+	 */
+	public function get_automatic();
+	
+	/**
+	 * @param integer $owner_id
+	 * @return bool
+	 */
+	public function set_owner_id($owner_id);
+	
+	/**
+	 * @param integer $owner_group_id
+	 * @return bool
+	 */
+	public function set_owner_group_id($owner_group_id);
+	
+	/**
+	 * @param integer $permission
+	 * @return bool
+	 */
+	public function set_permission($permission);
+	
+	/**
+	 * @param bool $automatic
+	 * @return bool
+	 */
+	public function set_automatic($automatic);
+	
+	/**
+	 * @param integer $data_entity_id
+	 * @return bool
+	 */
+	public function set_as_child_of($data_entity_id);
+	
+	/**
+	 * @param integer $data_entity_id
+	 * @return bool
+	 */
+	public function unset_child_of($data_entity_id);
+	
+	/**
+	 * @return bool
+	 */
+	public function unset_childs();
 }
 
 ?>

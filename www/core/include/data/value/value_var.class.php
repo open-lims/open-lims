@@ -34,9 +34,6 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 /**
  * Manages requests of OLVDL var requests
  * @package data
- * @todo create an interface for adapting other subsystem information
- * @todo remove project dependency, create class in project subsystem
- * @todo remove sample dependency, create class in sample subsystem
  */
 class ValueVar implements ValueVarInterface
 {
@@ -47,6 +44,9 @@ class ValueVar implements ValueVarInterface
     
     private $string_array;
     
+    /**
+     * @param integer $folder_id
+     */
     function __construct($folder_id)
     {
     	$this->stack = array();
@@ -60,8 +60,8 @@ class ValueVar implements ValueVarInterface
 
     /**
      * Returns the content of given address
-     * @param string $address
-     * @todo remove dependecies
+     * @param string $word
+     * @return mixed
      */
     private function interpret($word)
     {
@@ -170,6 +170,10 @@ class ValueVar implements ValueVarInterface
     	endswitch;
     }
 
+    /**
+     * @param string $string
+     * @return mixed
+     */
     public function get_content($string)
     {
     	if ($string)
@@ -199,6 +203,13 @@ class ValueVar implements ValueVarInterface
     }
     
 
+    /**
+     * @param string $name
+     * @param stirng $handling_class
+     * @param bool $ignore_this
+     * @param integer $include_id
+     * @return bool
+     */
 	public static function register_type($name, $handling_class, $ignore_this, $include_id)
 	{
 		$value_var_case = new ValueVarCase_Access(null);
@@ -212,6 +223,10 @@ class ValueVar implements ValueVarInterface
 		}
 	}
 	
+	/**
+	 * @param integer $include_id
+	 * @return bool
+	 */
 	public static function delete_by_include_id($include_id)
 	{
 		return ValueVarCase_Access::delete_by_include_id($include_id);

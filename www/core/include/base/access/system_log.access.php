@@ -590,7 +590,32 @@ class SystemLog_Access
 	}
 	
 	/**
-	 * @param integer $ip
+	 * @param string $ip
+	 * @param string $begin
+	 */
+	public static function count_ip_failed_logins_with_begin($ip, $begin)
+	{
+		global $db;
+		
+		if ($ip and $begin)
+		{
+			$sql = "SELECT COUNT(id) AS result FROM ".constant("SYSTEM_LOG_TABLE")." WHERE type_id = 1 AND LOWER(content_errorno) = 'login' AND content_int IS NULL AND ip = '".$ip."' AND datetime > '".$begin."'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[result])
+			{
+				return $data[result];
+			}
+			else
+			{
+				return null;
+			}
+		}
+	}
+	
+	/**
+	 * @param string $ip
 	 * @return integer
 	 */
 	public static function count_ip_failed_logins($ip)
@@ -615,7 +640,7 @@ class SystemLog_Access
 	}
 	
 	/**
-	 * @param integer $ip
+	 * @param string $ip
 	 * @return integer
 	 */
 	public static function count_ip_successful_logins($ip)
@@ -669,7 +694,7 @@ class SystemLog_Access
 			}
 		}
 	}
-		
+
 }
 
 ?>

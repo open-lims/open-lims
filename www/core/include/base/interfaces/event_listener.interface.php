@@ -29,6 +29,11 @@
  */
 interface EventListenerInterface
 {
+	/**
+	 * Checks if an class will listen on an event
+	 * @param object $event_object
+	 * @return bool
+	 */
 	public static function listen_events($event_object);	
 }
 ?>

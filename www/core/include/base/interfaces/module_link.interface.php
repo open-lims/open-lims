@@ -25,10 +25,12 @@
 /**
  * Module Link Interface
  * @package base
- * @todo
  */
 interface ModuleLinkInterface
 {
-
+	/**
+	 * @param string $link_type
+	 */
+	public static function list_links_by_type($link_type);
 }
 ?>

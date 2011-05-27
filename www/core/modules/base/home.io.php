@@ -22,7 +22,7 @@
  */
 
  $user_data = new DataUserData($user->get_user_id());
- $template = new Template("languages/en-gb/template/home.html");
+ $template = new Template("languages/en-gb/template/base/home.html");
 
  $homeDate = date("l, jS F Y");
 

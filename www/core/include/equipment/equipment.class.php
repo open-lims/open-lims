@@ -241,6 +241,9 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 		}
 	}
 	
+	/**
+	 * @return string
+	 */
 	public final function get_item_name()
 	{
 		if ($this->equipment_id and $this->equipment)
@@ -254,6 +257,9 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 		}
 	}
 	
+	/**
+	 * @return array
+	 */
 	public final function get_item_parents()
 	{
 		return null;
@@ -341,13 +347,51 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
     }
     
     /**
-     * @todo
+     * @param integer $category_id
+     * @param integer $type_id
+     * @param integer $item_id
+     * @return bool
      */
     public static function is_type_or_category($category_id, $type_id, $item_id)
     {
-    	
+    	if (is_numeric($type_id))
+    	{
+    		$equpiment_id = EquipmentIsItem_Access::get_entry_by_item_id($item_id);
+    		$equipment = new Equipment($equpiment_id);
+    		
+    		if ($equipment->get_type_id() == $type_id)
+    		{
+    			return true;
+    		}
+    		else
+    		{
+    			return false;
+    		}
+    	}
+    	elseif (is_numeric($category_id))
+    	{
+    		$equipment_id = EquipmentIsItem_Access::get_entry_by_item_id($item_id);
+    		$equipment = new Equipment($equipment_id);
+    		$equipment_type = new SampleTtype($equipment->get_type_id());
+    		
+    		if ($equipment_type->get_cat_id() == $category_id)
+    		{
+    			return true;
+    		}
+    		else
+    		{
+    			return false;
+    		}	
+    	}
+    	else
+    	{	
+    		return false;
+    	}
     }
     
+    /**
+     * @return object
+     */
     public static function get_instance_by_item_id($item_id)
     {
     	if (is_numeric($item_id))

@@ -69,29 +69,14 @@ class AdminIO
 		if ($user->is_admin())
 		{
 			switch($_GET[run]):
-			
-				case "user":
-					require_once("admin_user.io.php");
-					AdminUserIO::handler();
-				break;
-				
-				case "group":
-					require_once("admin_group.io.php");
-					AdminGroupIO::handler();
-				break;
-				
-				case "organisation_unit":
-					require_once("admin_organisation_unit.io.php");
-					AdminOrganisationUnitIO::handler();
-				break;
 				
 				case "system_log":
-					require_once("admin_system_log.io.php");
+					require_once("core/modules/base/admin/admin_system_log.io.php");
 					AdminSystemLogIO::handler();
 				break;
 				
 				case "system_message":
-					require_once("admin_system_message.io.php");
+					require_once("core/modules/base/admin/admin_system_message.io.php");
 					AdminSystemMessageIO::handler();
 				break;
 				

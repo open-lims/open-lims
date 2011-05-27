@@ -3,7 +3,7 @@
  * @package data
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -25,11 +25,35 @@
 /**
  * Data Entity Interface
  * @package data
- * @todo
  */
 interface DataEntityPermissionInterface
 {	
+	/**
+	 * @param integer $permission
+	 * @param bool $automatic
+	 * @param integer $owner_id
+	 * @param integer $owner_group_id
+	 */
+	function __construct($permission, $automatic, $owner_id, $owner_group_id);
 	
+	function __destruct();
+	
+	/**
+	 * @param integer $folder_flag
+	 * @return bool
+	 */
+	public function set_folder_flag($folder_flag);
+	
+	/**
+	 * @param integer $intention
+	 * @return bool
+	 */	
+	public function is_access($intention);
+	
+	/**
+	 * @return string
+	 */	
+	public function get_permission_string();
 }
 
 ?>

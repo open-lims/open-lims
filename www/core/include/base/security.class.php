@@ -40,13 +40,15 @@ class Security implements SecurityInterface
 	 * @todo implementation
 	 */
  	public static function ip_error_count()
- 	{		
-		return 0;
+ 	{	
+ 		$ip = $_SERVER['REMOTE_ADDR'];
+ 		$lead_time = date("Y-m-d H:i:s", (mktime()-constant("IP_ERROR_LEAD_TIME")));
+ 		
+ 		return SystemLog::count_ip_failed_logins_with_begin($ip, $lead_time);
  	}
 
 	/**
 	 * Checks all GET- and POST-variables
-	 * @todo vars of different modules like project_id etc.
 	 */
 	public static function protect_session()
 	{

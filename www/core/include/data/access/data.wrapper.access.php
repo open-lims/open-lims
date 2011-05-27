@@ -115,8 +115,6 @@ class Data_Wrapper_Access
 	}
 	
 	/**
-	 * @todo SQL Order
-	 * @todo User Profile Table
 	 * @param integer $data_entity_pid
 	 * @param string $order_by
 	 * @param string $order_method
@@ -155,9 +153,20 @@ class Data_Wrapper_Access
 					break;
 					
 					case "owner":
-						$sql_order_by = "";
+						$sql_order_by = "ORDER BY ".constant("USER_PROFILE_TABLE").".surname ".$sql_order_method;
 					break;
 				
+					case "type":
+						if ($order_method == "asc")
+						{
+							$sql_order_by = "ORDER BY ".constant("VIRTUAL_FOLDER_TABLE").".id, ".constant("FOLDER_TABLE").".id, ".constant("VALUE_TABLE").".id, ".constant("FILE_TABLE").".id";
+						}
+						else
+						{
+							$sql_order_by = "ORDER BY ".constant("FILE_TABLE").".id, ".constant("VALUE_TABLE").".id, ".constant("FOLDER_TABLE").".id, ".constant("VIRTUAL_FOLDER_TABLE").".id";
+						}
+					break;
+					
 					default:
 						$sql_order_by = "ORDER BY ".constant("FILE_TABLE").".id, ".constant("VALUE_TABLE").".id, ".constant("FOLDER_TABLE").".id, ".constant("VIRTUAL_FOLDER_TABLE").".id";
 					break;
@@ -190,6 +199,7 @@ class Data_Wrapper_Access
 						"LEFT JOIN ".constant("VALUE_TYPE_TABLE")." 					ON ".constant("VALUE_TABLE").".type_id 									= ".constant("VALUE_TYPE_TABLE").".id " .
 						"LEFT JOIN ".constant("VALUE_VERSION_TABLE")." 					ON ".constant("VALUE_TABLE").".id 										= ".constant("VALUE_VERSION_TABLE").".toid " .
 						"LEFT JOIN ".constant("VIRTUAL_FOLDER_TABLE")."					ON ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_cid 	= ".constant("VIRTUAL_FOLDER_TABLE").".data_entity_id " .
+						"LEFT JOIN ".constant("USER_PROFILE_TABLE")."					ON current_entity.owner_id											 	= ".constant("USER_PROFILE_TABLE").".id " .
 						"WHERE " .
 							"(".constant("FOLDER_TABLE").".id IS NOT NULL OR " .
 							"".constant("VIRTUAL_FOLDER_TABLE")." IS NOT NULL OR " .

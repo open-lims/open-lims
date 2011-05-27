@@ -40,6 +40,9 @@ class DataUserData implements DataUserDataInterface, EventListenerInterface
 	private $user_id;
 	private $data_user_data;
 	
+	/**
+	 * @param integer $user_id
+	 */
 	function __construct($user_id)
 	{
 		if (is_numeric($user_id))
@@ -60,6 +63,9 @@ class DataUserData implements DataUserDataInterface, EventListenerInterface
 		unset($this->data_user_data);
 	}
 	
+	/**
+	 * @return integer
+	 */
 	public function get_quota()
 	{
 		if ($this->user_id)
@@ -72,6 +78,9 @@ class DataUserData implements DataUserDataInterface, EventListenerInterface
 		}
 	}
 	
+	/**
+	 * @return integer
+	 */
 	public function get_filesize()
 	{
 		if ($this->user_id)
@@ -84,6 +93,10 @@ class DataUserData implements DataUserDataInterface, EventListenerInterface
 		}
 	}
 	
+	/**
+	 * @param integer $quota
+	 * @return bool
+	 */
 	public function set_quota($quota)
 	{
 		if ($this->user_id)
@@ -96,6 +109,10 @@ class DataUserData implements DataUserDataInterface, EventListenerInterface
 		}
 	}
 	
+	/**
+	 * @param integer $filesize
+	 * @return bool
+	 */
 	public function set_filesize($filesize)
 	{
 		if ($this->user_id)

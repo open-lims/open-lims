@@ -886,3 +886,96 @@
 	border-bottom: 1px #C0C0C0 solid;
 	height: 10px;
 }
+
+
+/* Fatal Error */
+.ErrorFatalBoxBegin {
+	width: 35.2em;
+	margin: 0;
+	padding: 0;
+	border-spacing: 0;
+	border-collapse: collapse;
+	font: normal 0.8em Verdana, Helvetica, sans-serif;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.ErrorFatalBoxBegin td {
+	padding: 0px;
+}
+
+.ErrorFatalBoxBeginLeft {
+	width: 15px;
+	min-height: 10px;
+	background: #C0C0C0;
+	margin: 0;
+	padding: 0;
+	vertical-align: top;
+}
+
+.ErrorFatalBoxBeginRight {
+	width: 15px;
+	min-height: 10px;
+	background: #C0C0C0;
+	margin: 0;
+	padding: 0;
+	vertical-align: top;
+	text-align: right;
+}
+
+.ErrorFatalBoxBeginTitle {
+	background: #C0C0C0;
+	text-align: center;
+	color: white;
+	font: bold 1em Verdana, Helvetica, sans-serif;
+}
+
+.ErrorFatalBoxMain {
+	width: 35em;
+	border-left: 1px #C0C0C0 solid;
+	border-right: 1px #C0C0C0 solid;
+	margin-bottom: 0;
+	padding-bottom: 0;
+	font: normal 0.8em Verdana, Helvetica, sans-serif;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.ErrorFatalBoxEnd {
+	width: 35.2em;
+	margin: 0;
+	padding: 0;
+	border-spacing: 0;
+	border-collapse: collapse;
+	font: normal 0.8em Verdana, Helvetica, sans-serif;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.ErrorFatalBoxEnd td {
+	padding: 0px;
+}
+
+.ErrorFatalBoxEndLeft {
+	width: 10px;
+	height: 10px;
+	margin: 0;
+	padding: 0;
+	vertical-align: bottom;
+}
+
+.ErrorFatalBoxEndRight {
+	width: 10px;
+	height: 10px;
+	margin: 0;
+	padding: 0;
+	vertical-align: bottom;
+	text-align: right;
+}
+
+.ErrorFatalBoxEndBorder {
+	font: normal 1px sans-serif;
+	vertical-align: bottom;
+	border-bottom: 1px #C0C0C0 solid;
+	height: 10px;
+}

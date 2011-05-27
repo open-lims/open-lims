@@ -206,6 +206,22 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
      * Returns the cateogory-name of the current equipment-type
      * @return string
      */
+    public function get_cat_id()
+    {
+    	if ($this->equipment_type_id and $this->equipment_type)
+    	{
+    		return $this->equipment_type->get_cat_id();
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+    /**
+     * Returns the cateogory-name of the current equipment-type
+     * @return string
+     */
     public function get_cat_name()
     {
     	if ($this->equipment_type_id and $this->equipment_type)

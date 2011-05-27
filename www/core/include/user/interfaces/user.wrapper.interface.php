@@ -23,12 +23,41 @@
 
 
 /**
- * @todo
  * User Wrapper Interface
  * @package user
  */ 	 
 interface User_WrapperInterface
 {
-
+	/**
+	 * @param string $username
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+    public static function list_search_users($username, $order_by, $order_method, $start, $end);
+    
+    /**
+     * @param string $username
+	 * @return integer
+	 */
+	public static function count_search_users($username);
+	
+	/**
+	 * @param string $groupname
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+    public static function list_search_groups($groupname, $order_by, $order_method, $start, $end);
+    
+    /**
+	 * @param string $groupname
+	 * @return integer
+	 */
+	public static function count_search_groups($groupname);
 }
 ?>

@@ -25,11 +25,42 @@
 /**
  * Data User Data Interface
  * @package data
- * @todo
  */
 interface DataUserDataInterface
 {	
+	/**
+	 * @param integer $user_id
+	 */
+	function __construct($user_id);
 	
+	function __destruct();
+	
+	/**
+	 * @return integer
+	 */
+	public function get_quota();
+	
+	/**
+	 * @return integer
+	 */
+	public function get_filesize();
+	
+	/**
+	 * @param integer $quota
+	 * @return bool
+	 */
+	public function set_quota($quota);
+	
+	/**
+	 * @param integer $filesize
+	 * @return bool
+	 */
+	public function set_filesize($filesize);
+	
+	/**
+	 * @return integer
+	 */
+	public static function get_used_space();
 }
 
 ?>
