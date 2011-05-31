@@ -1172,7 +1172,7 @@ class SampleIO
 						$result[$counter][content] = "NO ORGANISATION UNIT FOUND!";
 					}
 			
-					$template->set_array("option",$result);
+					$template->set_var("option",$result);
 					
 					$template->output();
 				break;
@@ -2597,6 +2597,7 @@ class SampleIO
 				// Item Lister
 				/**
 				 * @todo permissions
+				 * @todo errors
 				 */
 				case("item_list"):
 					if ($_GET[dialog])

@@ -35,20 +35,20 @@ class UserIO
 		
 		if ($user->get_profile("gender") == "m")
 		{
-			$template->set_if("gender", true);
+			$template->set_var("gender", true);
 		}
 		else
 		{
-			$template->set_if("gender", false);
+			$template->set_var("gender", false);
 		}
 		
 		if ($user->get_boolean_user_entry("can_change_password") == true)
 		{
-			$template->set_if("can_change_password", true);
+			$template->set_var("can_change_password", true);
 		}
 		else
 		{
-			$template->set_if("can_change_password", false);
+			$template->set_var("can_change_password", false);
 		}
 				
 		$paramquery_personal = $_GET;
@@ -179,11 +179,11 @@ class UserIO
 			
 			if ($gender == "m")
 			{
-				$template->set_if("gender", true);
+				$template->set_var("gender", true);
 			}
 			else
 			{
-				$template->set_if("gender", false);
+				$template->set_var("gender", false);
 			}
 			
 			if ($user->get_profile("forename"))
@@ -535,11 +535,11 @@ class UserIO
 			
 			if ($user->get_profile("gender") == "m")
 			{
-				$template->set_if("gender", "male");
+				$template->set_var("gender", "male");
 			}
 			else
 			{
-				$template->set_if("gender", "female");
+				$template->set_var("gender", "female");
 			}
 			
 			if ($user->get_profile("forename"))
@@ -727,7 +727,6 @@ class UserIO
 	}
 
 	/**
-	 * @todo implementation
 	 * @todo error
 	 */
 	public static function group_details()
@@ -796,6 +795,10 @@ class UserIO
 			
 			
 			$template->output();
+		}
+		else
+		{
+			
 		}
 	}
 	

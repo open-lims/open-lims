@@ -945,7 +945,6 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     /**
      * Creates a log-entry, that a new item is links and links the item to the log-entry
      * @return bool
-     * @todo transaction
      */
     public function create_log_entry()
     {
@@ -953,6 +952,8 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     	
     	if ($this->project_id and $this->item_id)
     	{
+    		$transaction_id = $transaction->begin();
+    		
     		if ($this->project_log_id)
     		{
     			$project_log_id = $this->project_log_id;
@@ -960,14 +961,34 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     		else
     		{
     			$project_log = new ProjectLog(null);
-				$project_log_id = $project_log->create($this->project_id, null, false, false, md5(rand(0,32768)));
+				if (($project_log_id = $project_log->create($this->project_id, null, false, false, md5(rand(0,32768)))) == false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+				}
     			$this->project_log_id = $project_log_id;
     		}
 			
 			$project_log_has_item = new ProjectLogHasItem($project_log_id);
-			$project_log_has_item->link_item($this->item_id);
-			
-			return true;
+			if ($project_log_has_item->link_item($this->item_id) == false)
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+			}
+			else
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->commit($transaction_id);
+				}
+				return true;
+			}
     	}
     	else
     	{

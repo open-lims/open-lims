@@ -80,7 +80,7 @@ class FileIO
 							$result[$counter][text] = "Version ".$file_version->get_version()." - ".$file_version->get_datetime();
 							$counter++;
 						}
-						$template->set_array("version_option",$result);
+						$template->set_var("version_option",$result);
 					}
 					
 					$result = array();
@@ -96,7 +96,7 @@ class FileIO
 						}
 					}
 					
-					$template->set_array("get",$result);
+					$template->set_var("get",$result);
 					
 					$template->set_var("version",$file->get_version());
 					

@@ -122,7 +122,7 @@ class SampleSearchIO
 				$result[$counter][content] = "NO ORGANISATION UNIT FOUND!";
 			}
 			
-			$template->set_array("organ_unit",$result);
+			$template->set_var("organ_unit",$result);
 			
 			
 			$result = array();
@@ -165,7 +165,7 @@ class SampleSearchIO
 				$result[$counter][content] = "NO TEMPLATES FOUND!";	
 			}
 	
-			$template->set_array("template",$result);
+			$template->set_var("template",$result);
 			
 			$template->output();
 		}

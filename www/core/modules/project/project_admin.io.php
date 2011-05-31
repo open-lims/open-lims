@@ -1768,7 +1768,7 @@ class ProjectAdminIO
 								$result[$counter][content] = "NO PROJECT FOUND!";		
 							}
 					
-							$template->set_array("option",$result);
+							$template->set_var("option",$result);
 			
 							$template->set_var("type",$_POST[type]);
 			

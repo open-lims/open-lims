@@ -77,23 +77,7 @@ class Template implements TemplateInterface
 	{
 		$this->var_array[trim(strtolower($name))] = $value;
 	}
-	
-	/**
-	 * @deprecated outdated function
-	 */
-	public function set_if($name, $value)
-	{
-		$this->var_array[trim(strtolower($name))] = $value;
-	}
-	
-	/**
-	 * @deprecated outdated function
-	 */
-	public function set_array($name, $value)
-	{
-		$this->var_array[trim(strtolower($name))] = $value;	
-	}
-	
+			
 	/**
 	 * Writes the complete tempalte string into stdout
 	 */

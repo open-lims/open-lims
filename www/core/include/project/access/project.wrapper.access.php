@@ -33,11 +33,11 @@ class Project_Wrapper_Access
 	 * @param string $today
 	 * @return array
 	 */
-	public static function list_not_finished_over_time_project_tasks_by_user_id($user_id, $today)
+	public static function list_not_finished_over_time_project_tasks_by_user_id($user_id, $date)
 	{
 		global $db;
 		
-		if (is_numeric($user_id) and $today)
+		if (is_numeric($user_id) and $date)
 		{	
 			$sql = "SELECT ".constant("PROJECT_TASK_TABLE").".id FROM " .
 					"".constant("PROJECT_TASK_TABLE")." " .
@@ -46,7 +46,7 @@ class Project_Wrapper_Access
 							"WHERE ".constant("PROJECT_PERMISSION_TABLE").".user_id IS NOT NULL " .
 								"AND ".constant("PROJECT_PERMISSION_TABLE").".user_id = ".$user_id." " .
 								"AND ".constant("PROJECT_PERMISSION_TABLE").".permission > 1 " .
-								"AND ".constant("PROJECT_TASK_TABLE").".end_date < '".$today."'";
+								"AND ".constant("PROJECT_TASK_TABLE").".end_date < '".$date."'";
 			
 			$return_array = array();
 				
@@ -63,31 +63,7 @@ class Project_Wrapper_Access
 			return null;
 		}
 	}
-	
-	/**
-	 * NEW
-	 * @todo implementation
-	 * @param integer $user_id
-	 * @param string $today
-	 * @return array
-	 */
-	public static function list_not_finished_today_project_tasks_by_user_id($user_id, $today)
-	{
 		
-	}
-	
-	/**
-	 * NEW
-	 * @todo implementation
-	 * @param integer $user_id
-	 * @param string $today
-	 * @return array
-	 */
-	public static function list_not_finished_next_7_days_project_tasks_by_user_id($user_id, $today)
-	{
-		
-	}
-	
 	/**
 	 * NEW
 	 * @param integer $leader_id
@@ -1090,7 +1066,6 @@ class Project_Wrapper_Access
    	
    	/**
    	 * @todo remove double of code
-   	 * @todo search in read-only projects too
    	 */
    	public static function list_data_search($string, $project_id_array, $item_select_sql_array, $item_join_sql, $item_where_sql, $order_by, $order_method, $start, $end)
    	{
@@ -1254,7 +1229,6 @@ class Project_Wrapper_Access
    	}
 
    	/**
-   	 * @todo remove double of code
    	 * @todo search in read-only projects too
    	 */
    	public static function count_data_search($string, $project_id_array, $item_select_sql_array, $item_join_sql, $item_where_sql)

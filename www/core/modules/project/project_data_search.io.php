@@ -126,7 +126,7 @@ class ProjectDataSearchIO
 				}
 			}
 			
-			$template->set_array("project_array",$result);
+			$template->set_var("project_array",$result);
 			
 			
 			$result = array();
@@ -152,7 +152,7 @@ class ProjectDataSearchIO
 				}
 			}
 			
-			$template->set_array("item_type_array",$result);
+			$template->set_var("item_type_array",$result);
 			
 			$template->output();
 		}

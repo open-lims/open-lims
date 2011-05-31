@@ -44,7 +44,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * File Class for Management of Files in Folders
  * @package data
  */
-class File extends DataEntity implements FileInterface
+class File extends DataEntity implements FileInterface, EventListenerInterface
 {
 	private $file_id;
 	
@@ -1645,7 +1645,8 @@ class File extends DataEntity implements FileInterface
 			return null;
 		}
 	}
-		
+
+
 	/**
 	 * Returns true, if a file exists
 	 * @param integer $file_id
@@ -1703,5 +1704,22 @@ class File extends DataEntity implements FileInterface
 			return null;
 		}
 	}
+
+ 	/**
+     * @param object $event_object
+     * @return bool
+     */
+    public static function listen_events($event_object)
+    {
+    	if ($event_object instanceof UserDeleteEvent)
+    	{
+    		if (FileVersion_Access::set_owner_id_on_null($event_object->get_user_id()) == false)
+    		{
+    			return false;
+    		}
+    	}
+    	
+    	return true;
+    }
 }
 ?>

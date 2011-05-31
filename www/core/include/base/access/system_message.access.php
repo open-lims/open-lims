@@ -337,6 +337,33 @@ class SystemMessage_Access
 		}
 	}
 	
+	/**
+	 * @param integer $user_id
+	 * @return bool
+	 */
+	public static function delete_by_user_id($user_id)
+	{
+		global $db;
+
+		if (is_numeric($user_id))
+		{
+			$sql = "DELETE FROM ".constant("SYSTEM_MESSAGE_TABLE")." WHERE user_id = '".$user_id."'";
+			$res = $db->db_query($sql);
+
+			if ($res !== false)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 
 ?>

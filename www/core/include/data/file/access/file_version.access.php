@@ -1137,6 +1137,30 @@ class FileVersion_Access
 		}
 	}
 	
+	public static function set_owner_id_on_null($owner_id)
+	{
+		global $db;
+
+		if (is_numeric($owner_id))
+		{
+			$sql = "UPDATE ".constant("FILE_VERSION_TABLE")." SET owner_id = NULL WHERE owner_id = '".$owner_id."'";				
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+							
+			if ($res !== false)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 
 ?>

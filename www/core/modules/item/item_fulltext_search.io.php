@@ -121,7 +121,7 @@ class ItemFulltextSearchIO
 				}
 			}
 			
-			$template->set_array("item_type_array",$result);
+			$template->set_var("item_type_array",$result);
 			
 			
 			$template->output();

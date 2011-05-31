@@ -335,7 +335,8 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 	}
 	
     /**
-     * @todo implementation
+     * @param object $event_object
+     * @return bool
      */
     public static function listen_events($event_object)
     {

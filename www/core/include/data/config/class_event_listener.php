@@ -29,4 +29,6 @@
 	$event_listener[2] = "OrganisationUnitFolder";
 	$event_listener[3] = "DataEntity";
 	$event_listener[4] = "DataUserData";
+	$event_listener[5] = "File";
+	$event_listener[6] = "Value";
 ?>

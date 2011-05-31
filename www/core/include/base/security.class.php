@@ -37,7 +37,6 @@ class Security implements SecurityInterface
 	/**
 	 * Returns the number of failed logins
 	 * @return integer
-	 * @todo implementation
 	 */
  	public static function ip_error_count()
  	{	

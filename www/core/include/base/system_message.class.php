@@ -36,7 +36,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * System Message Management Class
  * @package base
  */
-class SystemMessage implements SystemMessageInterface
+class SystemMessage implements SystemMessageInterface, EventListenerInterface
 {
 	public $id;
 	public $system_message;
@@ -172,5 +172,21 @@ class SystemMessage implements SystemMessageInterface
 		return SystemMessage_Access::list_entries();
 	}
 
+	/**
+     * @param object $event_object
+     * @return bool
+     */
+    public static function listen_events($event_object)
+    {
+    	if ($event_object instanceof UserDeleteEvent)
+    	{
+    		if (SystemMessage_Access::delete_by_user_id($event_object->get_user_id()) == false)
+    		{
+    			return false;
+    		}
+    	}
+    	
+    	return true;
+    }
 }
 ?>

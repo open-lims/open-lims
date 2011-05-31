@@ -2250,7 +2250,8 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
 
     /**
-     * @todo implementation
+     * @param object $event_object
+     * @return bool
      */
     public static function listen_events($event_object)
     {

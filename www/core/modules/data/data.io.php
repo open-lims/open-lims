@@ -635,7 +635,7 @@ class DataIO
 								$result[$counter][text] = "Version ".$file_version->get_version()." - ".$file_version->get_datetime();
 								$counter++;
 							}
-							$template->set_array("version_option",$result);
+							$template->set_var("version_option",$result);
 						}
 						
 						$result = array();
@@ -651,7 +651,7 @@ class DataIO
 							}
 						}
 						
-						$template->set_array("get",$result);
+						$template->set_var("get",$result);
 						
 						
 						$paramquery = $_GET;
@@ -1075,7 +1075,7 @@ class DataIO
 						$counter++;
 					}
 					
-					$template->set_array("option",$result);
+					$template->set_var("option",$result);
 					
 					$paramquery = $_GET;
 					$paramquery[action] = "permission";
@@ -1198,7 +1198,7 @@ class DataIO
 						$counter++;
 					}
 					
-					$template->set_array("option",$result);
+					$template->set_var("option",$result);
 					
 					$paramquery = $_GET;
 					$paramquery[action] = "permission";

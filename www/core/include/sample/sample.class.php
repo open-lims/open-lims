@@ -1259,17 +1259,6 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     {
     	return Sample_Access::list_entries_by_template_id($template_id);;
     }
-    
-    /**
-     * Returns the number of samples of an user
-     * @param integer $user_id
-     * @return integer
-     * @todo implementation
-     */
-    public static function count_samples($user_id)
-    {
-    	
-    }
 	    
     /**
      * @param object $event_object

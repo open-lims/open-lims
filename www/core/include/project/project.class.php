@@ -103,7 +103,6 @@ class Project implements ProjectInterface, EventListenerInterface
 
 	/**
 	 * Creates a new Project
-	 * @todo Check project-permissions on sub-project creation
 	 * @param integer $organisation_unit_id
 	 * @param integer $parent_project_id
 	 * @param string $name
@@ -140,17 +139,10 @@ class Project implements ProjectInterface, EventListenerInterface
 				}
 				else
 				{	
-					// !! Check Permissions !!
-					if (true)
-					{
-						if (self::exist_project_name(null, $parent_project_id , $name) == true)
-						{
-							throw new ProjectCreationFailedException("",1);
-						}
-					}
-					else
+					if (self::exist_project_name(null, $parent_project_id , $name) == true)
 					{
 						throw new ProjectCreationFailedException("",1);
+					
 					}
 				}
 				
@@ -2233,6 +2225,7 @@ class Project implements ProjectInterface, EventListenerInterface
     
     /**
      * @param object $event_object
+     * @return bool
      */
     public static function listen_events($event_object)
     {

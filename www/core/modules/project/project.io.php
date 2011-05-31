@@ -702,7 +702,7 @@ class ProjectIO
 					
 					if ($session->read_value("PROJECT_TYPE") == 1 or $session->read_value("PROJECT_TYPE") == 2)
 					{
-						$template->set_if("organunit", true);
+						$template->set_var("organunit", true);
 						
 						$result = array();
 						$counter = 0;
@@ -739,11 +739,11 @@ class ProjectIO
 							$result[$counter][value] = "0";
 							$result[$counter][content] = "NO ORGANISATION UNIT FOUND!";	
 						}
-						$template->set_array("option",$result);
+						$template->set_var("option",$result);
 					}
 					else
 					{
-						$template->set_if("organunit", false);
+						$template->set_var("organunit", false);
 						
 						$result = array();
 						$counter = 0;
@@ -784,7 +784,7 @@ class ProjectIO
 							$result[$counter][value] = "0";
 							$result[$counter][content] = "NO PROJECT FOUND!";
 						}
-						$template->set_array("option",$result);
+						$template->set_var("option",$result);
 					}
 					
 					if ($error[0])
@@ -998,7 +998,7 @@ class ProjectIO
 						$result[$counter][content] = "NO TEMPLATES FOUND!";		
 					}
 			
-					$template->set_array("option",$result);
+					$template->set_var("option",$result);
 				
 					if ($error[0])
 					{
@@ -1468,13 +1468,13 @@ class ProjectIO
 						}		
 					}
 					
-					$template->set_array("status_action",$result);
+					$template->set_var("status_action",$result);
 					
-					$template->set_array("write",true);
+					$template->set_var("write",true);
 				}
 				else
 				{
-					$template->set_array("write",false);
+					$template->set_var("write",false);
 				}
 				
 				$paramquery = array();
@@ -1910,9 +1910,6 @@ class ProjectIO
 		}
 	}
 	
-	/**
-	 * @todo project bar appearance
-	 */
 	public static function method_handler()
 	{
 		global $project_security, $session, $transaction;
@@ -1929,8 +1926,11 @@ class ProjectIO
 				{
 					$project_security = new ProjectSecurity($_GET[project_id]);
 					
- 					require_once("project_common.io.php");
- 					ProjectCommon_IO::tab_header();
+					if ($_GET[run] != "new_subproject")
+					{
+	 					require_once("project_common.io.php");
+	 					ProjectCommon_IO::tab_header();
+					}
 				}
 			}
 			else

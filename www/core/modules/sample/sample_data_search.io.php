@@ -122,7 +122,7 @@ class SampleDataSearchIO
 				}
 			}
 			
-			$template->set_array("sample_array",$result);
+			$template->set_var("sample_array",$result);
 			
 			
 			$result = array();
@@ -148,7 +148,7 @@ class SampleDataSearchIO
 				}
 			}
 			
-			$template->set_array("item_type_array",$result);
+			$template->set_var("item_type_array",$result);
 			
 			$template->output();
 		}

@@ -202,7 +202,14 @@ class Sample_Wrapper implements Sample_WrapperInterface
 	}
 	 
 	/**
-	 * @todo remove double of code
+	 * @param string $string
+	 * @param array $sample_id_array
+	 * @param array $item_type_array
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
    	 */
 	public static function list_data_search($string, $sample_id_array, $item_type_array, $order_by, $order_method, $start, $end)
 	{
@@ -250,7 +257,10 @@ class Sample_Wrapper implements Sample_WrapperInterface
 	}
 	
 	/**
-   	 * @todo remove double of code
+   	 * @param string $string
+   	 * @param array $sample_id_array
+   	 * @param array $item_type_array
+   	 * @return integer
    	 */
 	public static function count_data_search($string, $sample_id_array, $item_type_array)
 	{

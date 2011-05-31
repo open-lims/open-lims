@@ -1481,7 +1481,6 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
-   	 * @todo remove double of code
    	 * @todo search in read-only projects too
    	 */
    	public static function list_data_search($string, $sample_id_array, $item_select_sql_array, $item_join_sql, $item_where_sql, $order_by, $order_method, $start, $end)
@@ -1635,9 +1634,6 @@ class Sample_Wrapper_Access
    		}
    	}
 	
-   	/**
-   	 * @todo remove double of code
-   	 */
    	public static function count_data_search($string, $sample_id_array, $item_select_sql_array, $item_join_sql, $item_where_sql)
    	{
    		global $db, $user;

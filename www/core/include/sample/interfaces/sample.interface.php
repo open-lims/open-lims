@@ -65,6 +65,5 @@ interface SampleInterface
 	public static function exist_sample($sample_id);
 	public static function list_user_related_samples($user_id);
 	public static function list_organisation_unit_related_samples($organisation_unit_id);
-	public static function count_samples($user_id);
 }
 ?>

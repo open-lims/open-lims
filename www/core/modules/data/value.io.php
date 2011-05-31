@@ -115,7 +115,7 @@ class ValueIO
 									$result[$counter][text] = "Version ".$value_version->get_version()." - ".$value_version->get_datetime();
 									$counter++;
 								}
-								$template->set_array("version_option",$result);
+								$template->set_var("version_option",$result);
 							}
 							
 							$result = array();
@@ -131,7 +131,7 @@ class ValueIO
 								}
 							}
 							
-							$template->set_array("get",$result);
+							$template->set_var("get",$result);
 							
 							$template->set_var("version",$value->get_version());
 							$template->set_var("version_datetime",$value->get_datetime());
@@ -204,7 +204,7 @@ class ValueIO
 									$result[$counter][text] = "Version ".$value_version->get_version()." - ".$value_version->get_datetime();
 									$counter++;
 								}
-								$template->set_array("version_option",$result);
+								$template->set_var("version_option",$result);
 							}
 							
 							$result = array();
@@ -220,7 +220,7 @@ class ValueIO
 								}
 							}
 							
-							$template->set_array("get",$result);
+							$template->set_var("get",$result);
 							
 							$template->set_var("version",$value->get_version());
 							$template->set_var("version_datetime",$value->get_datetime());

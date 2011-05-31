@@ -66,9 +66,6 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 		parent::__destruct();
 	}
 
-	/**
-	 * @todo: remove v-folder
-	 */
 	public function create($user_id)
 	{
 		if (is_numeric($user_id))

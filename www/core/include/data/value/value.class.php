@@ -40,7 +40,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Value Management Class
  * @package data
  */
-class Value extends DataEntity implements ValueInterface
+class Value extends DataEntity implements ValueInterface, EventListenerInterface
 {
 	private $value_id;
 	
@@ -1582,5 +1582,23 @@ class Value extends DataEntity implements ValueInterface
 	{
 		return Value_Access::is_entry_type_of($value_id, $type_id);
 	}
+	
+	/**
+     * @param object $event_object
+     * @return bool
+     */
+    public static function listen_events($event_object)
+    {
+    	if ($event_object instanceof UserDeleteEvent)
+    	{
+    		if (ValueVersion_Access::set_owner_id_on_null($event_object->get_user_id()) == false)
+    		{
+    			return false;
+    		}
+    	}
+    	
+    	return true;
+    }
+    
 }
 ?>

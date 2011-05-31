@@ -114,7 +114,7 @@ class Login_IO
 		
 		if ($auth->logout($session->get_user_id(),$_GET[session_id]) == true)
 		{
- 			$template = new Template("languages/en-gb/template/common/logout_proceed.html");
+ 			$template = new Template("languages/en-gb/template/base/login/logout_proceed.html");
 			$template->set_var("version",constant("PRODUCT_VERSION"));
 			$template->set_var("product_name",constant("PRODUCT"));
 			$template->set_var("product_user",constant("PRODUCT_USER"));
@@ -160,7 +160,7 @@ class Login_IO
 	 */
 	public static function forgot_password_proceed($success)
 	{
-		$template = new Template("languages/en-gb/template/common/forgot_password_proceed.html");
+		$template = new Template("languages/en-gb/template/base/login/forgot_password_proceed.html");
 		
 		if ($success == true)
 		{
@@ -180,7 +180,7 @@ class Login_IO
 	
 	public static function login_info()
 	{
-		$template = new Template("languages/en-gb/template/common/login_info.html");
+		$template = new Template("languages/en-gb/template/base/login/info.html");
 		
 		$template->set_var("version",constant("PRODUCT_VERSION"));
 		$template->set_var("product_name",constant("PRODUCT"));
@@ -192,7 +192,7 @@ class Login_IO
 	
 	public static function login_help()
 	{
-		$template = new Template("languages/en-gb/template/common/login_help.html");
+		$template = new Template("languages/en-gb/template/base/login/help.html");
 		
 		$template->set_var("version",constant("PRODUCT_VERSION"));
 		$template->set_var("product_name",constant("PRODUCT"));
@@ -222,7 +222,7 @@ class Login_IO
 											
 						if ($user->get_boolean_user_entry("user_locked") == false)
 						{
-				 			$template = new Template("languages/en-gb/template/common/login_proceed.html");
+				 			$template = new Template("languages/en-gb/template/base/login/proceed.html");
 							$template->set_var("username",$_POST[username]);
 							$template->set_var("session_id",$session_id);
 							$template->set_var("version",constant("PRODUCT_VERSION"));

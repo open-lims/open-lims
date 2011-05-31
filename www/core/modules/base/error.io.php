@@ -42,11 +42,11 @@ class Error_IO
 		{
 			if ($this->error_type == 2)
 			{
-				$template = new Template("languages/en-gb/template/base/security_in_box.html");
+				$template = new Template("languages/en-gb/template/base/error/security_in_box.html");
 			}
 			else
 			{
-				$template = new Template("languages/en-gb/template/base/error_in_box.html");
+				$template = new Template("languages/en-gb/template/base/error/error_in_box.html");
 			}	
 				
 			$template->set_var("error_code", $this->exception_handler->get_error_no());	

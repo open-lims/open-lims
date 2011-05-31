@@ -145,7 +145,7 @@ class AdminSystemLogIO
 			}
 		}
 		
-		$template->set_array("option",$result);
+		$template->set_var("option",$result);
 		
 		
 		$result = array();
@@ -161,7 +161,7 @@ class AdminSystemLogIO
 			}
 		}
 		
-		$template->set_array("get",$result);
+		$template->set_var("get",$result);
 		
 		$template->set_var("table", $list->get_list($result_array, $_GET[page]));			
 		

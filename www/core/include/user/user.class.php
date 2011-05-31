@@ -239,9 +239,6 @@ class User implements UserInterface {
 	
 	/**
 	 * Deletes an user
-	 * @todo Delete System-Messages
-	 * @todo Set File-Version creator_id on null
-	 * @todo Set Value-Version creator_id on null
 	 * @return bool
 	 */
 	public function delete()
