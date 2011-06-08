@@ -28,4 +28,6 @@
 	$get[1]	= "folder_id";
 	$get[2]	= "file_id";
 	$get[3]	= "value_id";
+	
+	$retrace[0] = "file_id";
 ?>

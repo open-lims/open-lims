@@ -959,7 +959,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 			}
 			else
 			{
-				return "unknow";
+				return null;
 			}
 		}
 		else

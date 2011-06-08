@@ -32,9 +32,6 @@ require_once("interfaces/project_item_factory.interface.php");
  */
 class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerInterface
 {
-	/**
-	 * @todo check over time tasks via event
-	 */
 	public static function create($project_id, $item_id, $gid, $keywords, $description)
 	{
 		global $transaction;

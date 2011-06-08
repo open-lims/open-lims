@@ -786,7 +786,7 @@ class Folder extends DataEntity implements FolderInterface
 	 * Copies a folder to another location
 	 * @param integer $destination_id
 	 * @return bool
-	 * @todo Implementation - Copy folder is not supported in current version
+	 * @todo LATER: Implementation - Copy folder is not supported in current version
 	 */
 	public function copy_folder($destination_id, $force_exist_check)
 	{	
@@ -987,7 +987,6 @@ class Folder extends DataEntity implements FolderInterface
 	/**
 	 * Returns an array with all subfolders
 	 * @return array
-	 * @todo return array has changed
 	 */
 	public function get_subfolder_array()
 	{

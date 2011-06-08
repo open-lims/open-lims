@@ -254,7 +254,7 @@ class FolderIO
 	}
 	
 	/**
-	 * @todo Rename folder is currently not supported.
+	 * @todo LATER: Rename folder is currently not supported.
 	 */
 	public static function rename()
 	{

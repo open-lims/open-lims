@@ -85,8 +85,7 @@ class SystemHandler implements SystemHandlerInterface
 	 * @throws IncludeRequirementFailedException
 	 * @throws IncludeFolderEmptyException
 	 * @throws EventHandlerCreationFailedException
-	 * @todo create warning on empty folders
-	 * @todo refresh md5 after rewriting changes of data
+	 * @todo LATER: create warning on empty folders
 	 */
 	private function scan_include()
 	{
@@ -163,6 +162,32 @@ class SystemHandler implements SystemHandlerInterface
 							{
 								$found_include_array[$register_key] = $value;
 								
+								if ($no_db_table_name != true)
+								{
+									$db_table_name_checksum = BaseIncludeFile_Access::get_checksum_by_include_id_and_name($register_key, "db_table_name.php");
+									if ($db_table_name_checksum != md5_file($db_table_name_file))
+									{
+										$db_table_name_id = BaseIncludeFile_Access::get_id_by_include_id_and_name($register_key, "db_table_name.php");
+										if ($db_table_name_id != null)
+										{
+											$base_include_file = new BaseIncludeFile_Access($db_table_name_id);
+											$base_include_file->set_checksum(md5_file($db_table_name_file));
+										}
+										else
+										{
+											$base_include_file = new BaseIncludeFile_Access(null);
+											if ($base_include_file->create($register_key, "db_table_name.php", md5_file($db_table_name_file)) == null)
+											{
+												if ($transaction_id != null)
+												{
+													$transaction->rollback($transaction_id);
+												}
+												throw new IncludeProcessFailedException(null, null);
+											}
+										}
+									}
+								}
+								
 								// Check Files
 								if ($no_class_event_listener != true)
 								{
@@ -207,6 +232,32 @@ class SystemHandler implements SystemHandlerInterface
 										{
 											$base_include_file = new BaseIncludeFile_Access(null);
 											if ($base_include_file->create($register_key, "class_event_listener.php", md5_file($class_event_listener)) == null)
+											{
+												if ($transaction_id != null)
+												{
+													$transaction->rollback($transaction_id);
+												}
+												throw new IncludeProcessFailedException(null, null);
+											}
+										}
+									}
+								}
+								
+								if ($no_class_path != true)
+								{
+									$class_path_checksum = BaseIncludeFile_Access::get_checksum_by_include_id_and_name($register_key, "class_path.php");
+									if ($class_path_checksum != md5_file($class_path_file))
+									{
+										$class_path_id = BaseIncludeFile_Access::get_id_by_include_id_and_name($register_key, "class_path.php");
+										if ($class_path_id != null)
+										{
+											$base_include_file = new BaseIncludeFile_Access($class_path_id);
+											$base_include_file->set_checksum(md5_file($class_path_file));
+										}
+										else
+										{
+											$base_include_file = new BaseIncludeFile_Access(null);
+											if ($base_include_file->create($register_key, "class_path.php", md5_file($class_path_file)) == null)
 											{
 												if ($transaction_id != null)
 												{

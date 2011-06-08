@@ -1754,7 +1754,7 @@ class SampleIO
 					}
 					else
 					{
-						$template->set_var("supplier","");
+						$template->set_var("supplier",false);
 					}
 					
 					if ($sample_depository)
@@ -1764,12 +1764,22 @@ class SampleIO
 					}
 					else
 					{
-						$template->set_var("depository","");
+						$template->set_var("depository",false);
 					}
 				
+					if ($sample_expiry)
+					{
+						$template->set_var("date_of_expiry",$sample_expiry);
+					}
+					else
+					{
+						$template->set_var("date_of_expiry",false);
+					}
+					
 					if ($sample_desc)
 					{
-						$template->set_var("desc",$sample_desc);
+						$sample_desc_display = str_replace("\n", "<br />", $sample_desc);
+						$template->set_var("desc",$sample_desc_display);
 					}
 					else
 					{
@@ -2596,41 +2606,47 @@ class SampleIO
 				
 				// Item Lister
 				/**
-				 * @todo permissions
 				 * @todo errors
 				 */
 				case("item_list"):
-					if ($_GET[dialog])
+					if ($sample_security->is_access(1, false) == true)
 					{
-						if ($_GET[dialog] == "data")
+						if ($_GET[dialog])
 						{
-							$path_stack_array = array();
-							
-					    	$folder_id = SampleFolder::get_folder_by_sample_id($_GET[sample_id]);
-					    	$folder = Folder::get_instance($folder_id);
-					    	$init_array = $folder->get_object_id_path();
-					    	
-					    	foreach($init_array as $key => $value)
-					    	{
-					    		$temp_array = array();
-					    		$temp_array[virtual] = false;
-					    		$temp_array[id] = $value;
-					    		array_unshift($path_stack_array, $temp_array);
-					    	}
-							
-							$session->write_value("stack_array", $path_stack_array, true);
-						}
-						
-						$sql = " SELECT item_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = ".$_GET[sample_id]."";
-						$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_list", $_GET[dialog]);
-						
-						if (file_exists($module_dialog[class_path]))
-						{
-							require_once($module_dialog[class_path]);
-							
-							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+							if ($_GET[dialog] == "data")
 							{
-								$module_dialog['class']::$module_dialog[method]($sql);
+								$path_stack_array = array();
+								
+						    	$folder_id = SampleFolder::get_folder_by_sample_id($_GET[sample_id]);
+						    	$folder = Folder::get_instance($folder_id);
+						    	$init_array = $folder->get_object_id_path();
+						    	
+						    	foreach($init_array as $key => $value)
+						    	{
+						    		$temp_array = array();
+						    		$temp_array[virtual] = false;
+						    		$temp_array[id] = $value;
+						    		array_unshift($path_stack_array, $temp_array);
+						    	}
+								
+								$session->write_value("stack_array", $path_stack_array, true);
+							}
+							
+							$sql = " SELECT item_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = ".$_GET[sample_id]."";
+							$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_list", $_GET[dialog]);
+							
+							if (file_exists($module_dialog[class_path]))
+							{
+								require_once($module_dialog[class_path]);
+								
+								if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+								{
+									$module_dialog['class']::$module_dialog[method]($sql);
+								}
+								else
+								{
+									// Error
+								}
 							}
 							else
 							{
@@ -2639,12 +2655,14 @@ class SampleIO
 						}
 						else
 						{
-							// Error
+							// error
 						}
 					}
 					else
 					{
-						// error
+						$exception = new Exception("", 1);
+						$error_io = new Error_IO($exception, 250, 40, 2);
+						$error_io->display_error();
 					}
 				break;
 				
@@ -2796,23 +2814,27 @@ class SampleIO
 				break;
 				
 				// Parent Item Lister
-				/**
-				 * @todo permissions
-				 */
 				case("parent_item_list"):
-					if ($_GET[dialog])
+					if ($sample_security->is_access(1, false) == true)
 					{
-						$sample = new Sample($_GET[sample_id]);
-						$item_id = $sample->get_item_id();
-						$module_dialog = ModuleDialog::get_by_type_and_internal_name("parent_item_list", $_GET[dialog]);
-						
-						if (file_exists($module_dialog[class_path]))
+						if ($_GET[dialog])
 						{
-							require_once($module_dialog[class_path]);
+							$sample = new Sample($_GET[sample_id]);
+							$item_id = $sample->get_item_id();
+							$module_dialog = ModuleDialog::get_by_type_and_internal_name("parent_item_list", $_GET[dialog]);
 							
-							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+							if (file_exists($module_dialog[class_path]))
 							{
-								$module_dialog['class']::$module_dialog[method]($item_id);
+								require_once($module_dialog[class_path]);
+								
+								if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+								{
+									$module_dialog['class']::$module_dialog[method]($item_id);
+								}
+								else
+								{
+									// Error
+								}
 							}
 							else
 							{
@@ -2821,12 +2843,14 @@ class SampleIO
 						}
 						else
 						{
-							// Error
+							// error
 						}
 					}
 					else
 					{
-						// error
+						$exception = new Exception("", 1);
+						$error_io = new Error_IO($exception, 250, 40, 2);
+						$error_io->display_error();
 					}
 				break;
 				

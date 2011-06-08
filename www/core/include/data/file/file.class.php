@@ -1175,7 +1175,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	
 	/**
 	 * Moves file to another location
-	 * @todo implementation - Move file is not supported in current version
+	 * @todo LATER: implementation - Move file is not supported in current version
 	 */
 	public function move($folder_id)
 	{
@@ -1184,7 +1184,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	
 	/**
 	 * Copies file to another location
-	 * @todo implementation - Copy file is not supported in current version
+	 * @todo LATER: implementation - Copy file is not supported in current version
 	 */
 	public function copy($folder_id)
 	{

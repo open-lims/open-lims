@@ -41,7 +41,7 @@ class SampleCommon_IO
 		$params 				= http_build_query($paramquery,'','&#38;');
 		unset($paramquery);
 		
-		if ($_GET[run] != "parents" and $_GET[run] != "project_list" and $_GET[run] != "item_list")
+		if ($_GET[run] != "parent_item_list" and $_GET[run] != "project_list" and $_GET[run] != "item_list")
 		{ 
 			$template = new Template("languages/en-gb/template/samples/tabs/generic_active.html");
 			$template->set_var("title", "Main Page");

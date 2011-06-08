@@ -562,9 +562,20 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     {
     	if ($event_object instanceof UserDeleteEvent)
     	{
-
+			if (EquipmentHasResponsiblePerson_Access::delete_by_user_id($event_object->get_user_id()) == false)
+			{
+				return false;
+			}
     	}
 
+   		if ($event_object instanceof OrganisationUnitDeleteEvent)
+    	{
+    		if (EquipmentHasOrganisationUnit_Access::delete_by_organisation_unit_id($event_object->get_organisation_unit_id()) == false)
+			{
+				return false;
+			}
+    	}
+    	
     	return true;
     }
 }

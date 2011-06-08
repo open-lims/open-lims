@@ -24,7 +24,6 @@
 /**
  * Search IO Class
  * @package base
- * @todo split class due to dependencies
  */
 class SearchIO
 {

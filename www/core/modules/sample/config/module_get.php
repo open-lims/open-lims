@@ -25,4 +25,6 @@
  * 
  */
 	$get[0]	= "sample_id";
+	
+	$retrace[0]	= "sample_id";
 ?>

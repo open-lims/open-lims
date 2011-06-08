@@ -78,7 +78,6 @@ class OrganisationUnitType_Access
 	}
 	
 	/**
-	 * @todo return type-id and run constructor
 	 * @param string $name
 	 * @param string $icon
 	 * @return integer
@@ -96,16 +95,22 @@ class OrganisationUnitType_Access
 			
 			if ($db->db_affected_rows($res_write) != 1)
 			{
-				return false;
+				return null;
 			}
 			else
 			{
-				return true;
+				$sql_read = "SELECT id FROM ".constant("ORGANISATION_UNIT_TYPE_TABLE")." WHERE id = currval('".self::ORGANISATION_UNIT_TYPE_PK_SEQUENCE."'::regclass)";
+				$res_read = $db->db_query($sql_read);
+				$data_read = $db->db_fetch_assoc($res_read);
+				
+				$this->__construct($data_read[id]);
+				
+				return $data_read[id];
 			}
 		}
 		else
 		{
-			return false;
+			return null;
 		}
 	}
 	

@@ -92,11 +92,35 @@ class Misc implements MiscInterface
 		 return $act_filesize;
 	}
 	
-	/**
-	 * @todo vars of different modules like project_id etc.
-	 */
 	public static function create_retrace_string()
 	{
+		$module_retrace_array = array();
+		
+		$registered_module_array = SystemHandler::get_module_folders();
+		if (is_array($registered_module_array) and count($registered_module_array) >= 1)
+		{
+			foreach($registered_module_array as $key => $value)
+			{
+				$get_file = constant("MODULES_DIR")."/".$value."/config/module_get.php";
+				if (file_exists($get_file))
+				{
+					$get_file = constant("MODULES_DIR")."/".$value."/config/module_get.php";
+					include($get_file);
+					
+					if (is_array($retrace) and count($retrace) >= 1)
+					{
+						foreach($retrace as $key => $value)
+						{
+							if (!in_array($value, $module_retrace_array))
+							{
+								array_push($module_retrace_array, $value);
+							}
+						}
+					}
+				}
+			}
+		}
+		
 		$retrace_array = array();
 		
 		foreach ($_GET as $key => $value)
@@ -107,10 +131,14 @@ class Misc implements MiscInterface
 				case "dialog":
 				case "action":
 				case "id":
-				case "project_id":
-				case "sample_id":
-				case "file_id":
 					$retrace_array[$key] = $_GET[$key];
+				break;
+				
+				default:
+				if (in_array($key, $module_retrace_array))
+				{
+					$retrace_array[$key] = $_GET[$key];
+				}
 				break;
 			endswitch;
 		}

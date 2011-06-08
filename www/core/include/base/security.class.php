@@ -70,7 +70,10 @@ class Security implements SecurityInterface
 					{
 						foreach($get as $key => $value)
 						{
-							array_push($module_get_array, $value);
+							if (!in_array($value, $module_get_array))
+							{
+								array_push($module_get_array, $value);
+							}
 						}
 					}
 				}

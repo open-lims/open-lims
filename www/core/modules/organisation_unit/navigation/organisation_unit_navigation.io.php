@@ -28,7 +28,7 @@
 class OrganisationUnitNavigationIO
 {
 	/**
-	 * @todo remove (via JQuery Menu) (bad dependency)
+	 * @todo JQUERY: remove (bad dependency)
 	 */
 	private static function folder()
 	{
@@ -37,7 +37,7 @@ class OrganisationUnitNavigationIO
 	}
 	
 	/**
-	 * @todo remove (via JQuery Menu)
+	 * @todo JQUERY: remove
 	 */
 	private static function organisation_unit()
 	{
@@ -46,7 +46,7 @@ class OrganisationUnitNavigationIO
 	}
 	
 	/**
-	 * @todo remove (via JQuery Menu) (bad dependency)
+	 * @todo JQUERY: remove (bad dependency)
 	 */
 	private static function project()
 	{
@@ -55,7 +55,7 @@ class OrganisationUnitNavigationIO
 	}
 	
 	/**
-	 * @todo Build New One (JQuery)
+	 * @todo JQUERY: Build New One
 	 */
 	public static function navigation()
 	{

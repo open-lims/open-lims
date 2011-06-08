@@ -25,5 +25,5 @@
  * 
  */
 define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-0-dev &#945;");
+define("PRODUCT_VERSION", "0.3.9.9-1-dev &#945;");
 ?>

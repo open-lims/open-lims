@@ -28,7 +28,7 @@
 class Navigation_IO
 {
 	/**
-	 * @todo use JQuery drop-down menu, if more than 8 entries
+	 * @todo JQUERY: use JQuery drop-down menu, if more than 8 entries
 	 */
 	public static function main()
 	{

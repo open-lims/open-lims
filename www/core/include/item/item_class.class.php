@@ -91,7 +91,6 @@ class ItemClass implements ItemClassInterface
     
     /**
      * Deletes a item-class
-     * @todo use db-transaction in this method
      * @return bool
      */
 	public function delete()
@@ -100,6 +99,8 @@ class ItemClass implements ItemClassInterface
 		
     	if ($this->class_id and $this->item_class and $this->item_has_item_class)
     	{
+    		$transaction_id = $transaction->begin();
+    		
     		$item_link_array = $this->list_items();
     		
     		if (is_array($item_link_array) and count($item_link_array) >= 1)
@@ -107,7 +108,14 @@ class ItemClass implements ItemClassInterface
     			foreach($item_link_array as $key => $value)
     			{
     				$item_has_item_class_access = new ItemHasItemClass_Access($value);
-    				$item_has_item_class_access->delete();
+    				if ($item_has_item_class_access->delete() == false)
+    				{
+    					if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+    				}
     			}
     		}
     		
@@ -118,15 +126,35 @@ class ItemClass implements ItemClassInterface
 				foreach($item_information_array as $key => $value)
 				{
 					$item_information = new ItemInformation($value);
-					$item_information->unlink_class($this->class_id);
+					if ($item_information->unlink_class($this->class_id) == false)
+					{
+    					if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+    				}
 				}
 			}
     		
-    		$this->item_class->delete();
+    		if ($this->item_class->delete() == true)
+    		{
+    			if ($transaction_id != null)
+				{
+					$transaction->commit($transaction_id);
+				}
+				$this->__destruct();
     		
-    		$this->__destruct();
-    		
-    		return true;
+    			return true;
+    		}
+    		else
+    		{
+    			if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+    		}
     	}
     	else
     	{

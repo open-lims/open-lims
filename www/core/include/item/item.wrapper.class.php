@@ -38,7 +38,6 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 class Item_Wrapper implements Item_WrapperInterface
 {
 	/**
- 	 * @todo language
 	 * @param string $string
 	 * @param array $item_type_array
 	 * @param integer $language_id
@@ -59,6 +58,16 @@ class Item_Wrapper implements Item_WrapperInterface
 			$join_sql = "";
 			$where_sql = "";
 			
+			if (is_numeric($language_id))
+			{
+				$language = new Language($language_id);
+				$tsvector_language = $language->get_tsvector_name();
+			}
+			else
+			{
+				$tsvector_language = "english";
+			}
+			
 			foreach($item_type_array as $key => $value)
 			{
 				$handling_class = Item::get_handling_class_by_type($value);
@@ -70,7 +79,7 @@ class Item_Wrapper implements Item_WrapperInterface
 						foreach ($handling_class::get_sql_fulltext_select_array($value) as $select_key => $select_value)
 						{
 							$temp_array[$select_key] = str_replace("{STRING}", $string, $select_value);
-							$temp_array[$select_key] = str_replace("{LANGUAGE}", "english", $temp_array[$select_key]);
+							$temp_array[$select_key] = str_replace("{LANGUAGE}", $tsvector_language, $temp_array[$select_key]);
 						}
 						array_push($select_sql_array, $temp_array);
 						unset($temp_array);
@@ -102,7 +111,6 @@ class Item_Wrapper implements Item_WrapperInterface
 	}
 	
 	/**
-   	 * @todo language
    	 * @param string $string
 	 * @param array $item_type_array
 	 * @param integer $language_id
@@ -117,6 +125,16 @@ class Item_Wrapper implements Item_WrapperInterface
 			
 			$join_sql = "";
 			$where_sql = "";
+			
+			if (is_numeric($language_id))
+			{
+				$language = new Language($language_id);
+				$tsvector_language = $language->get_tsvector_name();
+			}
+			else
+			{
+				$tsvector_language = "english";
+			}
 			
 			foreach($item_type_array as $key => $value)
 			{

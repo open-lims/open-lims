@@ -799,7 +799,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 
 	/**
 	 * Moves value to another location
-	 * @todo Move value is not supported in current version
+	 * @todo LATER: Move value is not supported in current version
 	 * @param integer $folder_id
 	 * @return bool
 	 */
@@ -810,7 +810,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	
 	/**
 	 * Copies value to another location
-	 * @todo Copy value is not supported in current version
+	 * @todo LATER: Copy value is not supported in current version
 	 * @param integer $folder_id
 	 * @return bool
 	 */
@@ -886,7 +886,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 	
 	/**
-	 * @todo individual value naming
+	 * @todo LATER: individual value naming
 	 */
 	public function get_name()
 	{
