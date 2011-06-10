@@ -33,6 +33,7 @@ class BaseModule_Access
 	private $name;
 	private $folder;
 	private $class;
+	private $disabled;
 	
 	/**
 	 * @param integer $id
@@ -57,6 +58,15 @@ class BaseModule_Access
 				$this->name			= $data[name];
 				$this->folder		= $data[folder];
 				$this->class		= $data['class'];
+				
+				if ($data[disabled] == 't')
+				{
+					$this->disabled = true;
+				}
+				else
+				{
+					$this->disabled = false;
+				}
 			}
 			else
 			{
@@ -88,8 +98,8 @@ class BaseModule_Access
 
 		if ($name and $folder and $class)
 		{
-	 		$sql_write = "INSERT INTO ".constant("BASE_MODULE_TABLE")." (id, name, folder, class) " .
-								"VALUES (nextval('".self::BASE_MODULE_PK_SEQUENCE."'::regclass),'".$name."','".$folder."','".$class."')";		
+	 		$sql_write = "INSERT INTO ".constant("BASE_MODULE_TABLE")." (id, name, folder, class, disabled) " .
+								"VALUES (nextval('".self::BASE_MODULE_PK_SEQUENCE."'::regclass),'".$name."','".$folder."','".$class."','f')";		
 				
 			$res_write = $db->db_query($sql_write);
 			
@@ -191,6 +201,21 @@ class BaseModule_Access
 	}
 	
 	/**
+	 * @return bool
+	 */
+	public function get_disabled()
+	{
+		if (isset($this->disabled))
+		{
+			return $this->disabled;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
 	 * @param string $name
 	 * @return bool
 	 */
@@ -264,6 +289,44 @@ class BaseModule_Access
 			if ($db->db_affected_rows($res))
 			{
 				$this->class = $class;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param bool $disabled
+	 * @return bool
+	 */
+	public function set_disabled($disabled)
+	{
+		global $db;
+
+		if ($this->id and isset($disabled))
+		{
+			if ($disabled == true)
+			{
+				$disabled_insert = "t";
+			}
+			else
+			{
+				$disabled_insert = "f";
+			}
+			
+			$sql = "UPDATE ".constant("BASE_MODULE_TABLE")." SET disabled = '".$disabled_insert."' WHERE id = ".$this->id."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->disabled = $disabled;
 				return true;
 			}
 			else

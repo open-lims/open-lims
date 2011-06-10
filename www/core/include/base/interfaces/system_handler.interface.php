@@ -53,12 +53,7 @@ interface SystemHandlerInterface
 	 * @return string
 	 */
 	public static function get_module_folder_by_module_name($module_name);
-	
-	/**
-	 * @return array
-	 */
-	public static function list_module_navigations_entries();
-	
+		
 	/**
 	 * @return array
 	 */
@@ -68,5 +63,11 @@ interface SystemHandlerInterface
 	 * @return array
 	 */
 	public static function list_includes();
+	
+	/**
+	 * @param integer $module_id
+	 * @return bool
+	 */
+	public static function disable_module($module_id);
 }
 ?>

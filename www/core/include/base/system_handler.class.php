@@ -43,6 +43,8 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("exceptions/module_process_failed_exception.class.php");
 	
 	require_once("events/include_delete_event.class.php");
+	require_once("events/module_disable_event.class.php");
+	require_once("events/module_enable_event.class.php");
 	
 	define("BASE_EVENT_LISTENER_TABLE"		, "core_base_event_listeners");
 	define("BASE_INCLUDE_FILE_TABLE"		, "core_base_include_files");
@@ -714,7 +716,7 @@ class SystemHandler implements SystemHandlerInterface
 								{
 									$position = BaseModuleNavigation_Access::get_highest_position();
 									$base_module_navigation = new BaseModuleNavigation_Access(null);
-									if ($base_module_navigation->create($tab_name, $tab_colour, $position, $base_module_id) == null)
+									if ($base_module_navigation->create($tab_name, $tab_colour, $position+1, $base_module_id) == null)
 									{
 										if ($transaction_id != null)
 										{
@@ -980,15 +982,7 @@ class SystemHandler implements SystemHandlerInterface
 	{
 		return BaseModule_Access::get_module_folder_by_module_name($module_name);
 	}
-	
-	/**
-	 * @return array
-	 */
-	public static function list_module_navigations_entries()
-	{
-		return BaseModuleNavigation_Access::list_entries();
-	}
-	
+		
 	/**
 	 * @return array
 	 */
@@ -1003,6 +997,89 @@ class SystemHandler implements SystemHandlerInterface
 	public static function list_includes()
 	{
 		return BaseInclude_Access::list_entries();
+	}
+
+	/**
+	 * @param integer $module_id
+	 * @return bool
+	 */
+	public static function disable_module($module_id)
+	{
+		global $transaction;
+		
+		if (is_numeric($module_id))
+		{
+			$transaction_id = $transaction->begin();
+			
+			$module_access = new BaseModule_Access($module_id);
+			
+			if ($module_access->get_disabled() == true)
+			{
+				$module_enable_event = new ModuleEnableEvent($module_id);
+				$event_handler = new EventHandler($module_enable_event);
+					
+				if ($event_handler->get_success() == false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+				}	
+				
+				if ($module_access->set_disabled(false) == true)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->commit($transaction_id);
+					}
+					return true;
+				}
+				else
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+				}
+			}
+			else
+			{
+				$module_disable_event = new ModuleDisableEvent($module_id);
+				$event_handler = new EventHandler($module_disable_event);
+					
+				if ($event_handler->get_success() == false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+				}	
+				
+				if ($module_access->set_disabled(true) == true)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->commit($transaction_id);
+					}
+					return true;
+				}
+				else
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+				}
+			}
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
 ?>

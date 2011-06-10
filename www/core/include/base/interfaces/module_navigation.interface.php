@@ -21,10 +21,21 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * 
- */
-define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-2-dev &#945;");
 
+/**
+ * Moldule Navigation Interface
+ * @package base
+ */
+interface ModuleNavigationInterface
+{
+	function __construct($navigation_id);
+	function __destruct();
+	
+	public function upwards();
+	public function downwards();
+	public function hide();
+	
+	public static function get_highest_position();
+	public static function list_module_navigations_entries();
+}
 ?>

@@ -38,6 +38,7 @@ class BaseModuleDialog_Access
 	private $internal_name;
 	private $display_name;
 	private $weight;
+	private $disabled;
 	
 	/**
 	 * @param integer $id
@@ -67,6 +68,15 @@ class BaseModuleDialog_Access
 				$this->internal_name	= $data[internal_name];
 				$this->display_name		= $data[display_name];
 				$this->weight			= $data[weight];
+				
+				if ($data[disabled] == 't')
+				{
+					$this->disabled = true;
+				}
+				else
+				{
+					$this->disabled = false;
+				}
 			}
 			else
 			{
@@ -114,8 +124,8 @@ class BaseModuleDialog_Access
 	 			$weight_insert = "NULL";
 	 		}
 			
-			$sql_write = "INSERT INTO ".constant("BASE_MODULE_DIALOG_TABLE")." (id, module_id, dialog_type, class_path, class, method, internal_name, display_name, weight) " .
-								"VALUES (nextval('".self::BASE_MODULE_DIALOG_PK_SEQUENCE."'::regclass),'".$module_id."','".$dialog_type."','".$class_path."','".$class."','".$method."','".$internal_name."','".$display_name."',".$weight_insert.")";		
+			$sql_write = "INSERT INTO ".constant("BASE_MODULE_DIALOG_TABLE")." (id, module_id, dialog_type, class_path, class, method, internal_name, display_name, weight, disabled) " .
+								"VALUES (nextval('".self::BASE_MODULE_DIALOG_PK_SEQUENCE."'::regclass),'".$module_id."','".$dialog_type."','".$class_path."','".$class."','".$method."','".$internal_name."','".$display_name."',".$weight_insert.",'f')";		
 				
 			$res_write = $db->db_query($sql_write);
 			
@@ -275,7 +285,7 @@ class BaseModuleDialog_Access
 			return null;
 		}	
 	}
-	
+		
 	/**
 	 * @return integer
 	 */
@@ -289,6 +299,21 @@ class BaseModuleDialog_Access
 		{
 			return null;
 		}	
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function get_disabled()
+	{
+		if (isset($this->disabled))
+		{
+			return $this->disabled;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**
@@ -523,6 +548,44 @@ class BaseModuleDialog_Access
 		}
 	}
 	
+	/**
+	 * @param bool $disabled
+	 * @return bool
+	 */
+	public function set_disabled($disabled)
+	{
+		global $db;
+
+		if ($this->id and isset($disabled))
+		{
+			if ($disabled == true)
+			{
+				$disabled_insert = "t";
+			}
+			else
+			{
+				$disabled_insert = "f";
+			}
+			
+			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET disabled = '".$disabled_insert."' WHERE id = ".$this->id."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->disabled = $disabled;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	
 	/**
 	 * @param string $dialog_type
@@ -537,7 +600,7 @@ class BaseModuleDialog_Access
 		{
 			$result_array = array();
 			
-			$sql = "SELECT * FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE TRIM(dialog_type) = '".trim($dialog_type)."' AND internal_name = '".$internal_name."'";
+			$sql = "SELECT * FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE TRIM(dialog_type) = '".trim($dialog_type)."' AND internal_name = '".$internal_name."' AND disabled='f'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 
@@ -573,7 +636,7 @@ class BaseModuleDialog_Access
 			$result_array = array();
 			$counter = 0;
 			
-			$sql = "SELECT * FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE TRIM(dialog_type) = '".trim($dialog_type)."' ORDER BY weight";
+			$sql = "SELECT * FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE TRIM(dialog_type) = '".trim($dialog_type)."' AND disabled='f' ORDER BY weight";
 			$res = $db->db_query($sql);
 			while ($data = $db->db_fetch_assoc($res))
 			{
@@ -588,6 +651,41 @@ class BaseModuleDialog_Access
 			if (is_array($result_array))
 			{
 				return $result_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $module_id
+	 * @return integer
+	 */
+	public static function list_id_by_module_id($module_id)
+	{
+		global $db;
+		
+		if (is_numeric($module_id))
+		{
+			$return_array = array();
+					
+			$sql = "SELECT id FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE module_id = ".$module_id."";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,$data[id]);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
 			}
 			else
 			{

@@ -34,6 +34,7 @@ class BaseModuleNavigation_Access
 	private $position;
 	private $colour;
 	private $module_id;
+	private $hidden;
 	
 	/**
 	 * @param integer $id
@@ -59,6 +60,15 @@ class BaseModuleNavigation_Access
 				$this->position		= $data[position];
 				$this->colour		= $data[colour];
 				$this->module_id	= $data[module_id];
+				
+				if ($data[hidden] == 't')
+				{
+					$this->hidden	= true;
+				}
+				else
+				{
+					$this->hidden	= false;
+				}
 			}
 			else
 			{
@@ -92,8 +102,8 @@ class BaseModuleNavigation_Access
 
 		if ($display_name and $colour and is_numeric($position) and is_numeric($module_id))
 		{
-	 		$sql_write = "INSERT INTO ".constant("BASE_MODULE_NAVIGATION_TABLE")." (id, display_name, position, colour, module_id) " .
-								"VALUES (nextval('".self::BASE_MODULE_NAVIGATION_PK_SEQUENCE."'::regclass),'".$display_name."','".$position."','".$colour."',".$module_id.")";		
+	 		$sql_write = "INSERT INTO ".constant("BASE_MODULE_NAVIGATION_TABLE")." (id, display_name, position, colour, module_id, hidden) " .
+								"VALUES (nextval('".self::BASE_MODULE_NAVIGATION_PK_SEQUENCE."'::regclass),'".$display_name."','".$position."','".$colour."',".$module_id.",'f')";		
 				
 			$res_write = $db->db_query($sql_write);
 			
@@ -209,6 +219,18 @@ class BaseModuleNavigation_Access
 		}	
 	}
 	
+	public function get_hidden()
+	{
+		if ($this->hidden)
+		{
+			return $this->hidden;
+		}
+		else
+		{
+			return false;
+		}	
+	}
+	
 	/**
 	 * @param string $display_name
 	 * @return bool
@@ -246,9 +268,18 @@ class BaseModuleNavigation_Access
 	{
 		global $db;
 
-		if ($this->id and is_numeric($position))
+		if ($this->id and is_numeric($position) or $position == null)
 		{
-			$sql = "UPDATE ".constant("BASE_MODULE_NAVIGATION_TABLE")." SET position = '".$position."' WHERE id = ".$this->id."";
+			if ($position == null)
+			{
+				$position_insert = "NULL";
+			}
+			else
+			{
+				$position_insert = $position;
+			}
+			
+			$sql = "UPDATE ".constant("BASE_MODULE_NAVIGATION_TABLE")." SET position = ".$position_insert." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -326,6 +357,44 @@ class BaseModuleNavigation_Access
 	}
 	
 	/**
+	 * @param bool $hidden
+	 * @return bool
+	 */
+	public function set_hidden($hidden)
+	{
+		global $db;
+
+		if ($this->id and isset($hidden))
+		{
+			if ($hidden == true)
+			{
+				$hidden_insert = 't';
+			}
+			else
+			{
+				$hidden_insert = 'f';
+			}
+			
+			$sql = "UPDATE ".constant("BASE_MODULE_NAVIGATION_TABLE")." SET hidden = '".$hidden_insert."' WHERE id = ".$this->id."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->hidden = $hidden;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
 	 * @return integer
 	 */
 	public function get_next_position()
@@ -365,8 +434,7 @@ class BaseModuleNavigation_Access
 		
 		if ($data[position])
 		{
-			$position = $data[position] + 1;
-			return $position;
+			return $data[position];
 		}
 		else
 		{
@@ -404,6 +472,35 @@ class BaseModuleNavigation_Access
 	}
 	
 	/**
+	 * @param integer $module_id
+	 * @return integer
+	 */
+	public static function get_id_by_position($position)
+	{
+		global $db;
+		
+		if (is_numeric($position))
+		{
+			$sql = "SELECT id FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." WHERE position = ".$position."";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[id])
+			{
+				return $data[id];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @return array
 	 */
 	public static function list_entries()
@@ -412,7 +509,7 @@ class BaseModuleNavigation_Access
 		
 		$result_array = array();
 		
-		$sql = "SELECT id,display_name,colour,module_id FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." ORDER BY position";
+		$sql = "SELECT id,display_name,colour,module_id FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." WHERE hidden = 'f' ORDER BY position";
 		$res = $db->db_query($sql);
 		while ($data = $db->db_fetch_assoc($res))
 		{

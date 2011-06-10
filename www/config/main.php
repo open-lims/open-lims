@@ -102,4 +102,8 @@ define("OLVDL_FOLDER_ID",				52);
 define("GROUP_LEADER_GROUP", 9);
 
 define("SAMPLE_EXIRY_WARNING", 7);
+
+define("LOGIN_FOOTER", "".constant("PRODUCT").", version: ".constant("PRODUCT_VERSION").", ".constant("PRODUCT_FUNCTION").", ".constant("PRODUCT_USER")." " .
+						"<br />This is free software; It comes with ABSOLUTELY NO WARRANTY." .
+						"<br />by R. Konertz, B. Tunggal, L. Eichinger et al.; 2008-2011");
 ?>

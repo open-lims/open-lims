@@ -60,5 +60,35 @@ class Base_Wrapper implements Base_WrapperInterface
 	{
 		return Base_Wrapper_Access::count_list_system_log($type_id);
 	}
+
+	public static function list_base_module_navigation($start, $end)
+	{
+		return Base_Wrapper_Access::list_base_module_navigation($start, $end);
+	}
+	
+	public static function count_base_module_navigation()
+	{
+		return Base_Wrapper_Access::count_base_module_navigation();
+	}
+
+	public static function list_base_module($order_by, $order_method, $start, $end)
+	{
+		return Base_Wrapper_Access::list_base_module($order_by, $order_method, $start, $end);
+	}
+	
+	public static function count_base_module()
+	{
+		return Base_Wrapper_Access::count_base_module();
+	}
+	
+	public static function list_base_include($order_by, $order_method, $start, $end)
+	{
+		
+	}
+	
+	public static function count_base_include()
+	{
+		
+	}
 }
 ?>

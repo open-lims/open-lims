@@ -1,6 +1,23 @@
 <br />
 
 <script>
+	
+	function getQueryParams(qs) \{
+	    qs = qs.split("+").join(" ");
+	    var params = \{\},
+	        tokens,
+	        re = /[?&]?([^=]+)=([^&]*)/g;
+	
+	    while (tokens = re.exec(qs)) \{
+	        params[decodeURIComponent(tokens[1])]
+	            = decodeURIComponent(tokens[2]);
+	    \}
+	
+	    return params;
+	\}
+	
+	var get_array = getQueryParams(document.location.search);
+
 	$(function() \{
 		$( "#print_dialog" ).dialog(\{
 			autoOpen: false,
@@ -9,7 +26,7 @@
 					$( this ).dialog( "close" );
 				\},
 				"OK": function() \{
-					var url = "index.php?username=";
+					var url = "report.php?username="+get_array["username"]+"&session_id="+get_array["session_id"]+"&dialog=sample_full_report&sample_id="+get_array["sample_id"];
                     var windowName = $(this).attr("name");
  
                     window.open(url, windowName);
@@ -18,6 +35,19 @@
 			\}
 		\});
 
+		$('#report_barcode').attr('checked', true);
+		$('#report_barcode_paper_format').attr('disabled', false);
+		
+		$('#report_full').click(function()
+		\{
+			$('#report_barcode_paper_format').attr('disabled', true);
+		\});
+		
+		$('#report_barcode').click(function()
+		\{
+			$('#report_barcode_paper_format').attr('disabled', false);
+		\});
+		
 		$( "#print_dialog_opener" ).click(function() \{
 			$( "#print_dialog" ).dialog( "open" );
 			return false;
@@ -30,9 +60,9 @@
 
 <div id="print_dialog" title="Print Report" style='display: none;'>
 	<div style='text-align: center; font-weight: bold;'>Create Report.</div>
-	<p><input type='radio' name='selection' /> Barcode only</p>
-	<p>Paper Format: <select><option>A4</option></select></p>
-	<p><input type='radio' name='selection' /> Full Report</p>
+	<p><input type='radio' name='selection' id='report_barcode' /> Barcode only</p>
+	<p>Paper Format: <select id='report_barcode_paper_format'><option>A4</option></select></p>
+	<p><input type='radio' name='selection' id='report_full' /> Full Report</p>
 </div>
 
 <div class='SampleBarcode'>

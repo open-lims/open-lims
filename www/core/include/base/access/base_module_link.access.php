@@ -35,6 +35,7 @@ class BaseModuleLink_Access
 	private $link_array;
 	private $link_file;
 	private $weight;
+	private $disabled;
 	
 	/**
 	 * @param integer $id
@@ -61,6 +62,15 @@ class BaseModuleLink_Access
 				$this->link_array		= $data[link_array];
 				$this->link_file		= $data[link_file];
 				$this->weight			= $data[weight];
+				
+				if ($data[disabled] == 't')
+				{
+					$this->disabled = true;
+				}
+				else
+				{
+					$this->disabled = false;
+				}
 			}
 			else
 			{
@@ -105,8 +115,8 @@ class BaseModuleLink_Access
 	 			$weight_insert = "NULL";
 	 		}
 			
-			$sql_write = "INSERT INTO ".constant("BASE_MODULE_LINK_TABLE")." (id, module_id, link_type, link_array, link_file, weight) " .
-								"VALUES (nextval('".self::BASE_MODULE_LINK_PK_SEQUENCE."'::regclass),'".$module_id."','".$link_type."','".$link_array."','".$link_file."',".$weight_insert.")";		
+			$sql_write = "INSERT INTO ".constant("BASE_MODULE_LINK_TABLE")." (id, module_id, link_type, link_array, link_file, weight, disabled) " .
+								"VALUES (nextval('".self::BASE_MODULE_LINK_PK_SEQUENCE."'::regclass),'".$module_id."','".$link_type."','".$link_array."','".$link_file."',".$weight_insert.", 'f')";		
 				
 			$res_write = $db->db_query($sql_write);
 			
@@ -235,6 +245,21 @@ class BaseModuleLink_Access
 		{
 			return null;
 		}	
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function get_disabled()
+	{
+		if (isset($this->disabled))
+		{
+			return $this->disabled;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**
@@ -382,6 +407,79 @@ class BaseModuleLink_Access
 		}
 	}
 	
+	/**
+	 * @param bool $disabled
+	 * @return bool
+	 */
+	public function set_disabled($disabled)
+	{
+		global $db;
+
+		if ($this->id and isset($disabled))
+		{
+			if ($disabled == true)
+			{
+				$disabled_insert = "t";
+			}
+			else
+			{
+				$disabled_insert = "f";
+			}
+			
+			$sql = "UPDATE ".constant("BASE_MODULE_LINK_TABLE")." SET disabled = '".$disabled_insert."' WHERE id = ".$this->id."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->disabled = $disabled;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	
+	/**
+	 * @param integer $module_id
+	 * @return integer
+	 */
+	public static function list_id_by_module_id($module_id)
+	{
+		global $db;
+		
+		if (is_numeric($module_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT id FROM ".constant("BASE_MODULE_LINK_TABLE")." WHERE module_id = ".$module_id."";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,$data[id]);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
 	
 	/**
 	 * @param string $link_type
@@ -396,7 +494,7 @@ class BaseModuleLink_Access
 			$result_array = array();
 			$counter = 0;
 			
-			$sql = "SELECT * FROM ".constant("BASE_MODULE_LINK_TABLE")." WHERE TRIM(link_type) = '".trim($link_type)."' ORDER BY weight";
+			$sql = "SELECT * FROM ".constant("BASE_MODULE_LINK_TABLE")." WHERE TRIM(link_type) = '".trim($link_type)."' AND disabled='f' ORDER BY weight";
 			$res = $db->db_query($sql);
 			while ($data = $db->db_fetch_assoc($res))
 			{

@@ -35,7 +35,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Module Dialog Class
  * @package base
  */
-class ModuleDialog implements ModuleDialogInterface
+class ModuleDialog implements ModuleDialogInterface, EventListenerInterface
 {	
 	/**
 	 * @param string $dialog_type
@@ -55,6 +55,53 @@ class ModuleDialog implements ModuleDialogInterface
 	{
 		return BaseModuleDialog_Access::list_dialogs_by_type($dialog_type);
 	}
+
+	/**
+     * @param object $event_object
+     * @return bool
+     */
+    public static function listen_events($event_object)
+    {
+    	if ($event_object instanceof ModuleDisableEvent)
+    	{
+    		$id_array = BaseModuleDialog_Access::list_id_by_module_id($event_object->get_module_id());
+    		if (is_array($id_array) and count($id_array) >= 1)
+    		{
+    			foreach($id_array as $key => $value)
+    			{
+	    			$module_dialog = new BaseModuleDialog_Access($value);
+	    			if ($module_dialog->get_disabled() == false)
+	    			{
+		    			if ($module_dialog->set_disabled(true) == false)
+		    			{
+		    				return false;
+		    			}
+	    			}
+    			}
+    		}
+    	}
+    	
+    	if ($event_object instanceof ModuleEnableEvent)
+    	{
+    		$id_array = BaseModuleDialog_Access::list_id_by_module_id($event_object->get_module_id());
+    		if (is_array($id_array) and count($id_array) >= 1)
+    		{
+    			foreach($id_array as $key => $value)
+    			{
+	    			$module_dialog = new BaseModuleDialog_Access($value);
+	    			if ($module_dialog->get_disabled() == true)
+	    			{
+		    			if ($module_dialog->set_disabled(false) == false)
+		    			{
+		    				return false;
+		    			}
+	    			}
+    			}
+    		}
+    	}
+    	
+    	return true;
+    }
 }
 
 ?>

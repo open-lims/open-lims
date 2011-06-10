@@ -30,5 +30,11 @@ interface Base_WrapperInterface
 {
 	public static function list_system_log($type_id, $order_by, $order_method, $start, $end);
 	public static function count_list_system_log($type_id);
+	public static function list_base_module_navigation($start, $end);
+	public static function count_base_module_navigation();
+	public static function list_base_module($order_by, $order_method, $start, $end);
+	public static function count_base_module();
+	public static function list_base_include($order_by, $order_method, $start, $end);
+	public static function count_base_include();
 }
 ?>

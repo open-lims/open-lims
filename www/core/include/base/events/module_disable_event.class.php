@@ -22,9 +22,37 @@
  */
 
 /**
- * 
+ * Module Disable Event
+ * @package base
  */
-define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-2-dev &#945;");
+class ModuleDisableEvent extends Event
+{    
+	private $module_id;
+	
+	function __construct($module_id)
+    {
+    	if (is_numeric($module_id))
+    	{
+    		parent::__construct();
+    		$this->module_id = $module_id;
+    	}
+    	else
+    	{
+    		$this->module_id = null;
+    	}
+    }
+    
+    public function get_module_id()
+    {
+    	if ($this->module_id)
+    	{
+    		return $this->module_id;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+}
 
 ?>

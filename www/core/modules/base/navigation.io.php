@@ -60,7 +60,7 @@ class Navigation_IO
 			$template->output();
 		}
 		
-		$module_navigation_array = SystemHandler::list_module_navigations_entries();
+		$module_navigation_array = ModuleNavigation::list_module_navigations_entries();
 		
 		if (is_array($module_navigation_array) and count($module_navigation_array) >= 1)
 		{

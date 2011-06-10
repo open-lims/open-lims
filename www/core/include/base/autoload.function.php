@@ -55,6 +55,7 @@ function __autoload($classname)
 	$classes['SystemMessage']				= $path_prefix."core/include/base/system_message.class.php";
 	$classes['ModuleDialog']				= $path_prefix."core/include/base/module_dialog.class.php";
 	$classes['ModuleLink']					= $path_prefix."core/include/base/module_link.class.php";
+	$classes['ModuleNavigation']			= $path_prefix."core/include/base/module_navigation.class.php";
 	
 	$classes['Base_Wrapper']				= $path_prefix."core/include/base/base.wrapper.class.php";
 	

@@ -31,6 +31,33 @@ class AdminNavigationIO
 	{
 		$template = new Template("languages/en-gb/template/admin/navigation/administration.html");
 		
+		
+		$paramquery[username] = $_GET[username];
+		$paramquery[session_id] = $_GET[session_id];
+		$paramquery[nav] = "admin";
+		$paramquery[run] = "include_admin";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("include_params", $params);
+		
+		
+		$paramquery[username] = $_GET[username];
+		$paramquery[session_id] = $_GET[session_id];
+		$paramquery[nav] = "admin";
+		$paramquery[run] = "module_admin";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("module_params", $params);
+		
+		
+		$paramquery[username] = $_GET[username];
+		$paramquery[session_id] = $_GET[session_id];
+		$paramquery[nav] = "admin";
+		$paramquery[run] = "navigation";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("navigation_params", $params);
+		
 
 		$paramquery[username] = $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];

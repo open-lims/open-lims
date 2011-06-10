@@ -35,7 +35,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Module Link Class
  * @package base
  */
-class ModuleLink implements ModuleLinkInterface
+class ModuleLink implements ModuleLinkInterface, EventListenerInterface
 {		
 	/**
 	 * @param string $link_type
@@ -44,6 +44,53 @@ class ModuleLink implements ModuleLinkInterface
 	{
 		return BaseModuleLink_Access::list_links_by_type($link_type);
 	}
+	
+	/**
+     * @param object $event_object
+     * @return bool
+     */
+    public static function listen_events($event_object)
+    {
+    	if ($event_object instanceof ModuleDisableEvent)
+    	{
+    		$id_array = BaseModuleLink_Access::list_id_by_module_id($event_object->get_module_id());
+    		if (is_array($id_array) and count($id_array) >= 1)
+    		{
+    			foreach($id_array as $key => $value)
+    			{
+	    			$module_link = new BaseModuleLink_Access($value);
+	    			if ($module_link->get_disabled() == false)
+	    			{
+		    			if ($module_link->set_disabled(true) == false)
+		    			{
+		    				return false;
+		    			}
+	    			}
+    			}
+    		}
+    	}
+    	
+    	if ($event_object instanceof ModuleEnableEvent)
+    	{
+    		$id_array = BaseModuleLink_Access::list_id_by_module_id($event_object->get_module_id());
+    		if (is_array($id_array) and count($id_array) >= 1)
+    		{
+    			foreach($id_array as $key => $value)
+    			{
+	    			$module_link = new BaseModuleLink_Access($value);
+	    			if ($module_link->get_disabled() == true)
+	    			{
+		    			if ($module_link->set_disabled(false) == false)
+		    			{
+		    				return false;
+		    			}
+	    			}
+    			}
+    		}
+    	}
+    	
+    	return true;
+    }
 }
 
 ?>

@@ -25,4 +25,7 @@
  * 
  */
 	$event_listener[0] = "SystemMessage";
+	$event_listener[1] = "ModuleNavigation";
+	$event_listener[2] = "ModuleLink";
+	$event_listener[3] = "ModuleDialog";
 ?>
