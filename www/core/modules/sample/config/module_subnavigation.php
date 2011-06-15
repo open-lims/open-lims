@@ -50,6 +50,23 @@ $mini_search_paramquery[run] = "search";
 $mini_search_paramquery[dialog] = "sample_search";
 $mini_search_paramquery[nextpage] = "1";
 $mini_search_params = http_build_query($mini_search_paramquery,'','&#38;');
+
+if (file_exists("core/modules/manufacturer/manufacturer.io.php"))
+{
+	require_once("core/modules/manufacturer/manufacturer.io.php");
+	if (class_exists("ManufacturerIO"))
+	{
+		$manufacturer_paramquery[username] = $_GET[username];
+		$manufacturer_paramquery[session_id] = $_GET[session_id];
+		$manufacturer_paramquery[nav] = "sample";
+		$manufacturer_paramquery[run] = "common_dialog";
+		$manufacturer_paramquery[dialog] = "list_manufacturers";
+		$manufacturer_params = http_build_query($manufacturer_paramquery,'','&#38;');
+		
+		$sub_menu[2][params] = $manufacturer_params;
+		$sub_menu[2][title] = "Manufacturer List";
+	}
+}
 			
 $template->set_var("sub_menu", $sub_menu);
 $template->set_var("search_bar", true);

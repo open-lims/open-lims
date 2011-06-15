@@ -1402,11 +1402,30 @@ class SampleIO
 
 					if ($information_fields[supplier][name])
 					{
-						$template->set_var("show_supplier",true);
+						if (file_exists("core/modules/manufacturer/manufacturer.io.php"))
+						{
+							require_once("core/modules/manufacturer/manufacturer.io.php");
+							if (class_exists("ManufacturerIO"))
+							{
+								$template->set_var("show_manufacturer",true);
+								$template->set_var("manufacturer_html",ManufacturerIO::dialog());
+							}
+							else
+							{
+								$template->set_var("show_manufacturer",false);
+								$template->set_var("manufacturer_html","");
+							}
+						}
+						else
+						{
+							$template->set_var("show_manufacturer",false);
+							$template->set_var("manufacturer_html","");
+						}
 					}
 					else
 					{
-						$template->set_var("show_supplier",false);
+						$template->set_var("show_manufacturer",false);
+						$template->set_var("manufacturer_html","");
 					}
 					
 					if ($information_fields[expiry][name])

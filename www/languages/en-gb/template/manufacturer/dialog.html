@@ -1,0 +1,60 @@
+
+<script>
+$(document).ready(function()
+\{
+	$( "#manufacturerDialog" ).dialog(\{
+		autoOpen: false,
+		buttons: \{
+			"Close": function() \{
+				$( this ).dialog( "close" );
+			\},
+			"OK": function() \{
+				$( this ).dialog( "close" );
+			\}
+		\},
+		height: 350,
+		width: 450
+	\});
+	$.ajax(\{
+		type: "GET",
+		url: "core/modules/manufacturer/manufacturer.ajax.php",
+		data: "run=get_next_entries&start=0&number=25",
+		success: function(data)\{
+			if (data)
+			\{
+				$("#manufacturerDialogContent").html(data);
+			\}
+			else
+			\{
+				$("#manufacturerDialogContent").html("<tr><td colspan='2'>No Entries found!</td></tr>");
+			\}
+		\}
+	\});
+	$( "#manufacturerDialogSearchField" ).keyup(function()\{
+		$.ajax(\{
+			type: "GET",
+			url: "core/modules/manufacturer/manufacturer.ajax.php",
+			data: "run=get_next_entries&start=0&number=25&string="+$("#manufacturerDialogSearchField").val(),
+			success: function(data)\{
+				if (data)
+				\{
+					$("#manufacturerDialogContent").html(data);
+				\}
+				else
+				\{
+					$("#manufacturerDialogContent").html("<tr><td colspan='2'>No Entries found!</td></tr>");
+				\}
+			\}
+		\});
+	\});
+\});
+</script>
+
+<div id="manufacturerDialog" title="Select Manufacturer" style='display: none;'>
+	<div style='text-align: center; font-weight: bold;'>
+		<input type='text' id='manufacturerDialogSearchField' size='50' />
+	</div>
+	<div style='border-bottom: 1px #D0D0D0 solid; margin: 5px 0;'></div>
+	<table id='manufacturerDialogContent' width='100%'>
+	</table>
+</div>

@@ -29,9 +29,21 @@ $(document).ready(function()
 		\}
 		
 	\});
+	
+	<!-- IF ({SHOW_MANUFACTURER}) -->
+	
+	$('#manufactuerField').click(function()
+	\{
+		$( "#manufacturerDialog" ).dialog( "open" );
+		return false;
+	\});
+	
+	<!-- ENDIF -->
 
 \});
 </script>
+
+{MANUFACTURER_HTML}
 
 <form action='index.php?{LINK}' method='post'>
 {BAR}
@@ -48,11 +60,11 @@ $(document).ready(function()
 		</td>
 	</tr>
 	
-	<!-- IF ({SHOW_SUPPLIER}) -->
+	<!-- IF ({SHOW_MANUFACTURER}) -->
 	<tr>
 		<td>Supplier/Source/Manufacturer:</td>
 		<td>
-			<input type='text' name='supplier' class='sampleTextfield' value='{SUPPLIER}' />
+			<input type='text' name='supplier' class='sampleTextfield' value='{SUPPLIER}' id='manufactuerField' />
 			<span class='formError'><br />{ERROR1}</span>
 		</td>
 	</tr>

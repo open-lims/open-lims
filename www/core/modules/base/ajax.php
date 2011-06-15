@@ -1,6 +1,5 @@
 <?php
 /**
- * @deprecated user Ajax
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
@@ -31,6 +30,8 @@ require_once("../../../config/version.php");
 require_once("../../../config/main.php");
 require_once("../../db/db.php");
 
+require_once("../../include/base/template.class.php");
+
 global $db;
 
 $db = new Database(constant("DB_TYPE"));
@@ -51,10 +52,10 @@ require_once("../../include/base/session.class.php");
 SystemHandler::init_db_constants();
 
 /**
- * AJAX Init Class
+ * AJAX Class
  * @package base
  */
-class AJAXInit
+class Ajax
 {
 	function __construct()
 	{
