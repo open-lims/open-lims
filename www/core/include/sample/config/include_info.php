@@ -32,4 +32,5 @@
 	$requires[3] 	= "data";
 	$requires[4] 	= "item";
 	$requires[5] 	= "template";
+	$requires[6] 	= "manufacturer";
 ?>

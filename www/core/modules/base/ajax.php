@@ -59,7 +59,7 @@ class Ajax
 {
 	function __construct()
 	{
-		global $user;
+		global $session, $user;
 
 		if ($_GET[session_id])
 		{
@@ -68,6 +68,7 @@ class Ajax
 		}
 		else
 		{
+			$session = new Session(null);
 			$user = new User(1);
 		}
 	}

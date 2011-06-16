@@ -32,7 +32,7 @@ $(document).ready(function()
 	
 	<!-- IF ({SHOW_MANUFACTURER}) -->
 	
-	$('#manufactuerField').click(function()
+	$('#manufactuerNameField').click(function()
 	\{
 		$( "#manufacturerDialog" ).dialog( "open" );
 		return false;
@@ -64,7 +64,8 @@ $(document).ready(function()
 	<tr>
 		<td>Supplier/Source/Manufacturer:</td>
 		<td>
-			<input type='text' name='supplier' class='sampleTextfield' value='{SUPPLIER}' id='manufactuerField' />
+			<input type='text' name='manufacturer_name' class='sampleTextfield' value='{MANUFACTURER_NAME}' id='manufactuerNameField' />
+			<input type='hidden' name='manufacturer' value='{MANUFACTURER}' id='manufactuerIdField' />
 			<span class='formError'><br />{ERROR1}</span>
 		</td>
 	</tr>

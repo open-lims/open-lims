@@ -37,6 +37,52 @@ class ManufacturerAjax extends Ajax
 		parent::__construct();
 	}
 
+	public function exist_name($name)
+	{
+		if (Manufacturer::exist_name($name))
+		{
+			echo 1;
+		}
+		else
+		{
+			echo 0;
+		}
+	}
+	
+	public function add_entry($name)
+	{
+		if ($name)
+		{
+			$manufacturer = new Manufacturer(null);
+			if ($manufacturer->create($name) == true)
+			{
+				echo 1;
+			}
+			else
+			{
+				echo 0;
+			}
+		}
+		else
+		{
+			echo 0;
+		}
+	}
+	
+	public function get_number_of_entries($string)
+	{
+		echo Manufacturer::count_entries($string);
+	}
+	
+	public function get_name($id)
+	{
+		if (is_numeric($id))
+		{
+			$manufacturer = new Manufacturer($id);
+			echo $manufacturer->get_name();
+		}
+	}
+	
 	public function get_next_entries($number_of_entries, $start_entry, $start_string)
 	{
 		$manufacturer_array = Manufacturer::list_manufacturers($number_of_entries, $start_entry, $start_string);
@@ -70,16 +116,37 @@ class ManufacturerAjax extends Ajax
 	
 	public function method_handler()
 	{
-		switch($_GET[run]):
+		global $session;
 		
-			case "get_next_entries":
-				$this->get_next_entries($_GET[number], $_GET[start], $_GET[string]);
-			break;
+		if ($session->is_valid())
+		{
+			switch($_GET[run]):
+	
+				case "exist_name":
+					$this->exist_name($_POST[name]);
+				break;
+				
+				case "add_entry":
+					$this->add_entry($_POST[name]);
+				break;
 			
-			default:
-			break;
-		
-		endswitch;
+				case "get_number_of_entries":
+					$this->get_number_of_entries($_GET[string]);
+				break;
+				
+				case "get_name":
+					$this->get_name($_GET[id]);
+				break;
+				
+				case "get_next_entries":
+					$this->get_next_entries($_GET[number], $_GET[start], $_GET[string]);
+				break;
+				
+				default:
+				break;
+			
+			endswitch;
+		}
 	}
 }
 

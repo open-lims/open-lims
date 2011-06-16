@@ -281,6 +281,34 @@ class Manufacturer_Access
 	}
 	
 	
+	public static function count_entries($string)
+	{
+		global $db;
+				
+		if ($string)
+		{
+			$string = trim(strtolower($string))."%";
+			
+			$sql = "SELECT COUNT(id) AS result FROM ".constant("MANUFACTURER_TABLE")." WHERE TRIM(LOWER(name)) LIKE ".$string."";
+		}
+		else
+		{
+			$sql = "SELECT COUNT(id) AS result FROM ".constant("MANUFACTURER_TABLE")."";
+		}
+		
+		$res = $db->db_query($sql);
+		$data = $db->db_fetch_assoc($res);
+					
+		if ($data[result])
+		{
+			return $data[result];
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 	public static function list_manufacturers($number_of_entries, $start_entry, $start_string)
 	{
 		global $db;
@@ -345,7 +373,6 @@ class Manufacturer_Access
 		if ($name)
 		{	
 			$name = trim(strtolower($name));
-			$return_array = array();
 			
 			$sql = "SELECT id FROM ".constant("MANUFACTURER_TABLE")." WHERE TRIM(LOWER(name))='".$name."'";
 			$res = $db->db_query($sql);

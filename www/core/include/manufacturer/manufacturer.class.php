@@ -60,6 +60,42 @@ class Manufacturer implements ManufacturerInterface, EventListenerInterface
 		unset($this->manufacturer);
 	}
 	
+	public function create($name)
+	{
+		global $user;
+		
+		if ($this->manufacturer)
+		{
+			return $this->manufacturer->create($name, $user->get_user_id());
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public function get_name()
+	{
+		if ($this->manufacturer)
+		{
+			return $this->manufacturer->get_name();
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	
+	public static function exist_name($name)
+	{
+		return Manufacturer_Access::exist_name($name);
+	}
+	
+	public static function count_entries($string)
+	{
+		return Manufacturer_Access::count_entries($string);
+	}
 	
 	public static function list_manufacturers($number_of_entries, $start_entry, $start_string)
 	{

@@ -691,7 +691,8 @@ class SampleIO
 				$session->delete_value("SAMPLE_ORGAN_UNIT");
 				$session->delete_value("SAMPLE_TEMPLATE");
 				$session->delete_value("SAMPLE_NAME");
-				$session->delete_value("SAMPLE_SUPPLIER");
+				$session->delete_value("SAMPLE_MANUFACTURER");
+				$session->delete_value("SAMPLE_MANUFACTURER_NAME");
 				$session->delete_value("SAMPLE_DEPOSITORY");
 				$session->delete_value("SAMPLE_EXPIRY");
 				$session->delete_value("SAMPLE_EXPIRY_WARNING");
@@ -793,9 +794,13 @@ class SampleIO
 							{
 								$session->write_value("SAMPLE_NAME", $_POST[name], true);
 							}
-							if ($_POST[supplier])
+							if ($_POST[manufacturer])
 							{
-								$session->write_value("SAMPLE_SUPPLIER", $_POST[supplier], true);
+								$session->write_value("SAMPLE_MANUFACTURER", $_POST[manufacturer], true);
+							}
+							if ($_POST[manufacturer_name])
+							{
+								$session->write_value("SAMPLE_MANUFACTURER_NAME", $_POST[manufacturer_name], true);
 							}
 							if ($_POST[depository])
 							{
@@ -845,7 +850,7 @@ class SampleIO
 								$check_depository = false;
 							}
 							
-							if (!$_POST[supplier] and $check_supplier == true)
+							if (!$_POST[manufacturer] and $check_supplier == true)
 							{
 								$error[1] = "Enter a supplier!";	
 							}
@@ -883,9 +888,13 @@ class SampleIO
 							{
 								$session->write_value("SAMPLE_NAME", $_POST[name], true);
 							}
-							if ($_POST[supplier])
+							if ($_POST[manufacturer])
 							{
-								$session->write_value("SAMPLE_SUPPLIER", $_POST[supplier], true);
+								$session->write_value("SAMPLE_MANUFACTURER", $_POST[manufacturer], true);
+							}
+							if ($_POST[manufacturer_name])
+							{
+								$session->write_value("SAMPLE_MANUFACTURER_NAME", $_POST[manufacturer_name], true);
 							}
 							if ($_POST[depository])
 							{
@@ -912,9 +921,13 @@ class SampleIO
 						{
 							$session->write_value("SAMPLE_NAME", $_POST[name], true);
 						}
-						if ($_POST[supplier])
+						if ($_POST[manufacturer])
 						{
-							$session->write_value("SAMPLE_SUPPLIER", $_POST[supplier], true);
+							$session->write_value("SAMPLE_MANUFACTURER", $_POST[manufacturer], true);
+						}
+						if ($_POST[manufacturer_name])
+						{
+							$session->write_value("SAMPLE_MANUFACTURER_NAME", $_POST[manufacturer_name], true);
 						}
 						if ($_POST[depository])
 						{
@@ -1066,7 +1079,8 @@ class SampleIO
 				$sample_organ_unit 				= $session->read_value("SAMPLE_ORGAN_UNIT");
 				$sample_template				= $session->read_value("SAMPLE_TEMPLATE");
 				$sample_name					= $session->read_value("SAMPLE_NAME");
-				$sample_supplier				= $session->read_value("SAMPLE_SUPPLIER");			
+				$sample_manufacturer			= $session->read_value("SAMPLE_MANUFACTURER");	
+				$sample_manufacturer_name		= $session->read_value("SAMPLE_MANUFACTURER_NAME");			
 				$sample_depository				= $session->read_value("SAMPLE_DEPOSITORY");
 				$sample_expiry					= $session->read_value("SAMPLE_EXPIRY");
 				$sample_expiry_warning			= $session->read_value("SAMPLE_EXPIRY_WARNING");
@@ -1402,25 +1416,9 @@ class SampleIO
 
 					if ($information_fields[supplier][name])
 					{
-						if (file_exists("core/modules/manufacturer/manufacturer.io.php"))
-						{
-							require_once("core/modules/manufacturer/manufacturer.io.php");
-							if (class_exists("ManufacturerIO"))
-							{
-								$template->set_var("show_manufacturer",true);
-								$template->set_var("manufacturer_html",ManufacturerIO::dialog());
-							}
-							else
-							{
-								$template->set_var("show_manufacturer",false);
-								$template->set_var("manufacturer_html","");
-							}
-						}
-						else
-						{
-							$template->set_var("show_manufacturer",false);
-							$template->set_var("manufacturer_html","");
-						}
+						require_once("core/modules/manufacturer/manufacturer.io.php");
+						$template->set_var("show_manufacturer",true);
+						$template->set_var("manufacturer_html",ManufacturerIO::dialog());
 					}
 					else
 					{
@@ -1446,13 +1444,22 @@ class SampleIO
 						$template->set_var("show_depository",false);
 					}
 					
-					if ($sample_supplier)
+					if ($sample_manufacturer)
 					{
-						$template->set_var("supplier",$sample_supplier);
+						$template->set_var("manufacturer",$sample_manufacturer);
 					}
 					else
 					{
-						$template->set_var("supplier","");
+						$template->set_var("manufacturer","");
+					}
+					
+					if ($sample_manufacturer_name)
+					{
+						$template->set_var("manufacturer_name",$sample_manufacturer_name);
+					}
+					else
+					{
+						$template->set_var("manufacturer_name","");
 					}
 					
 					if ($sample_expiry)
@@ -1767,13 +1774,13 @@ class SampleIO
 				
 					$template->set_var("name",$sample_name);
 					
-					if ($sample_supplier)
+					if ($sample_manufacturer)
 					{
-						$template->set_var("supplier",$sample_supplier);
+						$template->set_var("manufacturer",$sample_manufacturer_name);
 					}
 					else
 					{
-						$template->set_var("supplier",false);
+						$template->set_var("manufacturer",false);
 					}
 					
 					if ($sample_depository)
@@ -1818,7 +1825,7 @@ class SampleIO
 		
 						$sample->set_template_data($sample_template_data_type, $sample_template_data_type_id, $sample_template_data_array);
 		
-						if (($sample_id = $sample->create($sample_organ_unit, $sample_template, $sample_name, $sample_supplier, $sample_depository, $sample_desc, null, $sample_expiry, $sample_expiry_warning)) != null)
+						if (($sample_id = $sample->create($sample_organ_unit, $sample_template, $sample_name, $sample_manufacturer, $sample_depository, $sample_desc, null, $sample_expiry, $sample_expiry_warning)) != null)
 						{
 							$session->delete_value("SAMPLE_LAST_SCREEN");
 							$session->delete_value("SAMPLE_CURRENT_SCREEN");
@@ -1857,7 +1864,8 @@ class SampleIO
 						$session->delete_value("SAMPLE_ORGAN_UNIT");
 						$session->delete_value("SAMPLE_TEMPLATE");
 						$session->delete_value("SAMPLE_NAME");
-						$session->delete_value("SAMPLE_SUPPLIER");
+						$session->delete_value("SAMPLE_MANUFACTURER");
+						$session->delete_value("SAMPLE_MANUFACTURER_NAME");
 						$session->delete_value("SAMPLE_DEPOSITORY");
 						$session->delete_value("SAMPLE_EXPIRY");
 						$session->delete_value("SAMPLE_EXPIRY_WARNING");
@@ -2062,13 +2070,14 @@ class SampleIO
 					$template->set_var("depository", false);
 				}
 				
-				if ($sample->get_supplier())
+				if ($sample->get_manufacturer_id())
 				{
-					$template->set_var("supplier", $sample->get_supplier());
+					$manufacturer = new Manufacturer($sample->get_manufacturer_id());
+					$template->set_var("manufacturer", $manufacturer->get_name());
 				}
 				else
 				{
-					$template->set_var("supplier", false);
+					$template->set_var("manufacturer", false);
 				}
 				
 				if ($sample->get_availability() == true)

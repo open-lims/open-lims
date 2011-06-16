@@ -33,7 +33,7 @@ interface SampleInterface
 	
 	public function set_template_data($type, $type_id, $array);
 	
-	public function create($organisation_unit_id, $template_id, $name, $supplier, $depository_id, $desc, $language_id, $date_of_expiry, $expiry_warning);
+	public function create($organisation_unit_id, $template_id, $name, $manufacturer_id, $depository_id, $desc, $language_id, $date_of_expiry, $expiry_warning);
 	public function delete();
 	
 	public function get_requirements();
@@ -48,7 +48,7 @@ interface SampleInterface
 	public function get_name();
 	public function get_datetime();
 	public function get_owner_id();
-	public function get_supplier();
+	public function get_manufacturer_id();
 	public function get_template_id();
 	public function get_availability();
 	
@@ -59,7 +59,7 @@ interface SampleInterface
 	
 	public function set_name($name);
 	public function set_owner_id($owner_id);
-	public function set_supplier($supplier);
+	public function set_manufacturer_id($manufacturer_id);
 	public function set_availability($availability);
 	
 	public static function exist_sample($sample_id);

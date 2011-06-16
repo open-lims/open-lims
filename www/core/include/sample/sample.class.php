@@ -121,7 +121,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
      * @return integer Sample-ID
      * @throws SampleCreationFailedException
      */
-    public function create($organisation_unit_id, $template_id, $name, $supplier, $depository_id, $desc, $language_id, $date_of_expiry, $expiry_warning)
+    public function create($organisation_unit_id, $template_id, $name, $manufacturer_id, $depository_id, $desc, $language_id, $date_of_expiry, $expiry_warning)
     {
     	global $user, $transaction;
     	
@@ -131,7 +131,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	    	{
 	    		$transaction_id = $transaction->begin();
 	    		
-	    		if (($sample_id = $this->sample->create($name, $user->get_user_id(), $template_id, $supplier, $desc, $language_id, $date_of_expiry, $expiry_warning)) != null)
+	    		if (($sample_id = $this->sample->create($name, $user->get_user_id(), $template_id, $manufacturer_id, $desc, $language_id, $date_of_expiry, $expiry_warning)) != null)
 	    		{
 					if ($desc)
 					{
@@ -886,11 +886,11 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     /**
      * @return string
      */
-    public function get_supplier()
+    public function get_manufacturer_id()
     {
     	if ($this->sample_id and $this->sample)
     	{
-    		return $this->sample->get_supplier();
+    		return $this->sample->get_manufacturer_id();
     	}
     	else
     	{
@@ -1095,11 +1095,11 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	 * @param string $supplier
 	 * @return bool
 	 */
-	public function set_supplier($supplier)
+	public function set_manufacturer_id($manufacturer_id)
 	{
-		if ($this->sample_id and $this->sample and $supplier)
+		if ($this->sample_id and $this->sample)
 		{
-    		return $this->sample->set_supplier($supplier);
+    		return $this->sample->set_manufacturer_id($manufacturer_id);
     	}
     	else
     	{

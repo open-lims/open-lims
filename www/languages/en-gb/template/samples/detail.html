@@ -2,20 +2,6 @@
 
 <script>
 	
-	function getQueryParams(qs) \{
-	    qs = qs.split("+").join(" ");
-	    var params = \{\},
-	        tokens,
-	        re = /[?&]?([^=]+)=([^&]*)/g;
-	
-	    while (tokens = re.exec(qs)) \{
-	        params[decodeURIComponent(tokens[1])]
-	            = decodeURIComponent(tokens[2]);
-	    \}
-	
-	    return params;
-	\}
-	
 	var get_array = getQueryParams(document.location.search);
 
 	$(function() \{
@@ -96,10 +82,10 @@
 	</tr>
 	<!-- ENDIF -->
 	
-	<!-- IF ({SUPPLIER}) -->
+	<!-- IF ({MANUFACTURER}) -->
 	<tr>
-		<td>Supplier/Source:</td>
-		<td>{SUPPLIER}</td>
+		<td>Manufacturer:</td>
+		<td>{MANUFACTURER}</td>
 	</tr>
 	<!-- ENDIF -->
 	

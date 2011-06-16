@@ -35,13 +35,13 @@ class Sample_Access
 	private $datetime;
 	private $owner_id;
 	private $template_id;
-	private $supplier;
 	private $available;
 	private $deleted;
 	private $comment;
 	private $language_id;
 	private $date_of_expiry;
 	private $expiry_warning;
+	private $manufacturer_id;
 	
 	/**
 	 * @param integer $sample_id
@@ -68,11 +68,11 @@ class Sample_Access
 				$this->datetime			= $data[datetime];
 				$this->owner_id			= $data[owner_id];
 				$this->template_id		= $data[template_id];
-				$this->supplier			= $data[supplier];
 				$this->comment			= $data[comment];
 				$this->language_id		= $data[language_id];
 				$this->date_of_expiry	= $data[date_of_expiry];
 				$this->expiry_warning	= $data[expiry_warning];
+				$this->manufacturer_id	= $data[manufacturer_id];
 				
 				if ($data[deleted] == "t")
 				{
@@ -109,13 +109,13 @@ class Sample_Access
 			unset($this->datetime);
 			unset($this->owner_id);
 			unset($this->template_id);
-			unset($this->supplier);
 			unset($this->available);
 			unset($this->deleted);
 			unset($this->comment);
 			unset($this->language_id);
 			unset($this->date_of_expiry);
 			unset($this->expiry_warning);
+			unset($this->manufacturer_id);
 		}
 	}
 	
@@ -127,19 +127,19 @@ class Sample_Access
 	 * @param string $comment
 	 * @return integer
 	 */
-	public function create($name, $owner_id, $template_id, $supplier, $comment, $language_id, $date_of_expiry, $expiry_warning)
+	public function create($name, $owner_id, $template_id, $manufacturer_id, $comment, $language_id, $date_of_expiry, $expiry_warning)
 	{
 		global $db;
 		
 		if ($name and is_numeric($owner_id) and is_numeric($template_id))
 		{
-			if (!$supplier)
+			if (!is_numeric($manufacturer_id))
 			{
-				$supplier_insert = "NULL";
+				$manufacturer_id_insert = "NULL";
 			}
 			else
 			{
-				$supplier_insert = "'".$supplier."'";
+				$manufacturer_id_insert = $manufacturer_id;
 			}
 			
 			if (!$comment)
@@ -173,8 +173,8 @@ class Sample_Access
 			
 			$datetime = date("Y-m-d H:i:s");
 			
-			$sql_write = "INSERT INTO ".constant("SAMPLE_TABLE")." (id, name, datetime, owner_id, template_id, supplier, available, deleted, comment, language_id, date_of_expiry, expiry_warning) " .
-					"VALUES (nextval('".self::SAMPLE_PK_SEQUENCE."'::regclass), '".$name."','".$datetime."',".$owner_id.",".$template_id.",".$supplier_insert.",'t','f',".$comment_insert.",".$language_id_insert.",".$date_of_expiry_insert.",".$expiry_warning_insert.")";
+			$sql_write = "INSERT INTO ".constant("SAMPLE_TABLE")." (id, name, datetime, owner_id, template_id, available, deleted, comment, language_id, date_of_expiry, expiry_warning, manufacturer_id) " .
+					"VALUES (nextval('".self::SAMPLE_PK_SEQUENCE."'::regclass), '".$name."','".$datetime."',".$owner_id.",".$template_id.",'t','f',".$comment_insert.",".$language_id_insert.",".$date_of_expiry_insert.",".$expiry_warning_insert.",".$manufacturer_id_insert.")";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
@@ -288,22 +288,7 @@ class Sample_Access
 			return null;
 		}
 	}
-	
-	/**
-	 * @return string
-	 */
-	public function get_supplier()
-	{
-		if ($this->supplier)
-		{
-			return $this->supplier;
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
+		
 	/**
 	 * @return bool
 	 */
@@ -387,6 +372,21 @@ class Sample_Access
 		if ($this->expiry_warning)
 		{
 			return $this->expiry_warning;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @return integer
+	 */
+	public function get_manufacturer_id()
+	{
+		if ($this->manufacturer_id)
+		{
+			return $this->manufacturer_id;
 		}
 		else
 		{
@@ -498,35 +498,6 @@ class Sample_Access
 			if ($db->db_affected_rows($res))
 			{
 				$this->template_id = $template_id;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param string $supplier
-	 * @return bool
-	 */
-	public function set_supplier($supplier)
-	{
-		global $db;
-
-		if ($this->sample_id and $supplier)
-		{
-			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET supplier = '".$supplier."' WHERE id = '".$this->sample_id."'";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->supplier = $supplier;
 				return true;
 			}
 			else
@@ -757,6 +728,35 @@ class Sample_Access
 			if ($db->db_affected_rows($res))
 			{
 				$this->expiry_warning = $expiry_warning;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param integer $manufacturer_id
+	 * @return bool
+	 */
+	public function set_manufacturer_id($manufacturer_id)
+	{
+		global $db;
+
+		if ($this->sample_id and $manufacturer_id)
+		{
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET manufacturer_id = ".$manufacturer_id." WHERE id = '".$this->sample_id."'";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->manufacturer_id = $manufacturer_id;
 				return true;
 			}
 			else
