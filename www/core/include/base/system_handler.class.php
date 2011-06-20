@@ -622,6 +622,8 @@ class SystemHandler implements SystemHandlerInterface
 												throw new IncludeProcessFailedException(null, null);
 											}
 										}
+										
+										unset($dialog);
 									}
 								}
 								
@@ -633,7 +635,7 @@ class SystemHandler implements SystemHandlerInterface
 									{										
 										include($module_link);
 
-										if (BaseModuleDialog_Access::delete_by_module_id($register_key) == false)
+										if (BaseModuleLink_Access::delete_by_module_id($register_key) == false)
 										{
 											if ($transaction_id != null)
 											{
@@ -669,6 +671,54 @@ class SystemHandler implements SystemHandlerInterface
 										{
 											$base_module_file = new BaseModuleFile_Access(null);
 											if ($base_module_file->create($register_key, "module_link.php", md5_file($module_link)) == null)
+											{
+												if ($transaction_id != null)
+												{
+													$transaction->rollback($transaction_id);
+												}
+												throw new IncludeProcessFailedException(null, null);
+											}
+										}
+										
+										unset($link);
+									}
+								}
+								
+								if ($no_tab != true)
+								{
+									$module_info_checksum = BaseModuleFile_Access::get_checksum_by_module_id_and_name($register_key, "module_info.php");
+									if ($module_info_checksum != md5_file($config_file))
+									{
+										if (BaseModuleNavigation_Access::delete_by_module_id($register_key) == false)
+										{
+											if ($transaction_id != null)
+											{
+												$transaction->rollback($transaction_id);
+											}
+											throw new ModuleProcessFailedException(null, null);
+										}
+										
+										$position = BaseModuleNavigation_Access::get_highest_position();
+										$base_module_navigation = new BaseModuleNavigation_Access(null);
+										if ($base_module_navigation->create($tab_name, $tab_colour, $position+1, $register_key) == null)
+										{
+											if ($transaction_id != null)
+											{
+												$transaction->rollback($transaction_id);
+											}
+											throw new ModuleProcessFailedException(null, null);
+										}
+										
+										$module_info_id = BaseModuleFile_Access::get_id_by_module_id_and_name($register_key, "module_info.php");
+										if ($module_info_id != null)
+										{
+											$base_module_file = new BaseModuleFile_Access($module_info_id);
+											$base_module_file->set_checksum(md5_file($config_file));
+										}
+										else
+										{
+											$base_module_file = new BaseModuleFile_Access(null);
+											if ($base_module_file->create($register_key, "module_info.php", md5_file($config_file)) == null)
 											{
 												if ($transaction_id != null)
 												{
@@ -780,7 +830,7 @@ class SystemHandler implements SystemHandlerInterface
 										foreach($link as $link_key => $link_value)
 										{
 											$base_module_link= new BaseModuleLink_Access(null);
-											if ($base_module_dialog->create($base_module_id, $link_value[type], serialize($link_value['array']), $link_value[file], $link_value[weight]) == null)
+											if ($base_module_link->create($base_module_id, $link_value[type], serialize($link_value['array']), $link_value[file], $link_value[weight]) == null)
 											{
 												if ($transaction_id != null)
 												{
@@ -790,15 +840,15 @@ class SystemHandler implements SystemHandlerInterface
 											}
 										}
 									}
-									
 									unset($link);
 								}
-								
-								$found_module_array[$register_key] = $value;
+
+								$found_module_array[$base_module_id] = $value;
 							}
 						}
 					}
 				}
+
 				unset($name);
 				unset($class);
 				unset($no_tab);
@@ -833,7 +883,7 @@ class SystemHandler implements SystemHandlerInterface
 			}
 
 			// Delete legacy includes
-			$legacy_module_array = array_diff($registered_module_array, $found_module_array);
+			$legacy_module_array = array_diff($registered_module_array, $found_module_array);			
 			if (is_array($legacy_module_array) and count($legacy_module_array) >= 1)
 			{
 				foreach($legacy_module_array as $legacy_key => $legacy_value)
@@ -856,6 +906,15 @@ class SystemHandler implements SystemHandlerInterface
 						$tmp_base_module_navigation = $base_module_navigation;
 						$tmp_base_module_navigation_id = $base_module_navigation_id;
 						$tmp_position = $base_module_navigation->get_position();
+						
+						if ($base_module_navigation->set_position(null) === false)
+						{
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							throw new ModuleProcessFailedException(null, null);
+						}
 						
 						while(($next_base_module_navigation_id = $tmp_base_module_navigation->get_next_position()) != $tmp_base_module_navigation_id)
 						{
