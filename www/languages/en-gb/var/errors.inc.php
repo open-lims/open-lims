@@ -139,7 +139,7 @@
 	$error[250][30][2][1]	= "Sample Access Denied (BL)!";
 	
 	$error[250][40][1][1]	= "Sample Not Found!";
-	$error[250][40][1][2]	= "Sample-Depository Not Found!";
+	$error[250][40][1][2]	= "Location Not Found!";
 	$error[250][40][1][3]	= "Sample-Template Not Found!";
 	$error[250][40][1][4]	= "Sample-Template-Category Not Found!";
 	
@@ -149,7 +149,7 @@
 	$error[250][40][3][1]	= "Sample-ID is missing!";
 	$error[250][40][3][2]	= "Project-ID is missing!";
 	$error[250][40][3][3]	= "Sample-Template-ID is missing!";
-	$error[250][40][3][4]	= "Sample-Depository-ID is missing!";
+	$error[250][40][3][4]	= "Location-ID is missing!";
 	$error[250][40][3][5]	= "Sample-Template-Category-ID is missing!";
 
 ?>

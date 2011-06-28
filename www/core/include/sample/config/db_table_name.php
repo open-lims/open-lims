@@ -24,11 +24,10 @@
 /**
  * 
  */
-	define("SAMPLE_DEPOSITORY_TABLE", 			"core_sample_depositories");
 	define("SAMPLE_HAS_FOLDER_TABLE", 			"core_sample_has_folder");
 	define("SAMPLE_HAS_ITEM_TABLE", 			"core_sample_has_items");
+	define("SAMPLE_HAS_LOCATION_TABLE",			"core_sample_has_locations");
 	define("SAMPLE_HAS_ORGANISATION_UNIT_TABLE","core_sample_has_organisation_units");
-	define("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE","core_sample_has_sample_depositories");
 	define("SAMPLE_HAS_USER_TABLE", 			"core_sample_has_users");
 	define("SAMPLE_IS_ITEM_TABLE", 				"core_sample_is_item");
 	define("SAMPLE_TEMPLATE_CAT_TABLE", 		"core_sample_template_cats");

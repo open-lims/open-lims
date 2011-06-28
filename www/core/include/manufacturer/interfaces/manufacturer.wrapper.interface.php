@@ -1,6 +1,6 @@
-<?php 
+<?php
 /**
- * @package sample
+ * @package manufacturer
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -21,16 +21,14 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * Sample Depository Not Found Exception
- * @package sample
- */
-class SampleDepositoryNotFoundException extends Exception
-{
-    function __construct($message, $code)
-    {
-    	parent::__construct($message, $code);	
-    }  
-}
 
+/**
+ * Manufacturer Wrapper Interface
+ * @package manufacturer
+ */ 	 
+interface Manufacturer_WrapperInterface
+{
+	public static function list_manufacturers($order_by, $order_method, $start, $end);
+	public static function count_manufacturers();
+}
 ?>

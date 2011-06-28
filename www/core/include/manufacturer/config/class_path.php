@@ -25,4 +25,5 @@
  * 
  */
 	$classes['Manufacturer'] = $path_prefix."core/include/manufacturer/manufacturer.class.php";
+	$classes['Manufacturer_Wrapper'] = $path_prefix."core/include/manufacturer/manufacturer.wrapper.class.php";
 ?>

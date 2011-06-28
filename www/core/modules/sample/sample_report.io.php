@@ -79,19 +79,19 @@ class SampleReportIO
 				$pdf->SetFillColor(255, 255, 255);
 				$pdf->SetTextColor(0, 0, 0);
 				
-				$pdf->MultiCell(90, 0, "ID", 1, 'J', 1, 0, '', '', true, 0, false, true, 0);
+				$pdf->MultiCell(90, 0, "ID", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
 				$pdf->MultiCell(90, 0, $print_sample_id, 1, '', 1, 1, '', '', true, 0, false, true, 0);
 				
-				$pdf->MultiCell(90, 0, "Name", 1, 'J', 1, 0, '', '', true, 0, false, true, 0);
+				$pdf->MultiCell(90, 0, "Name", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
 				$pdf->MultiCell(90, 0, $sample->get_name(), 1, '', 1, 1, '', '', true, 0, false, true, 0);
 				
-				$pdf->MultiCell(90, 0, "Type/Template", 1, 'J', 1, 0, '', '', true, 0, false, true, 0);
+				$pdf->MultiCell(90, 0, "Type/Template", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
 				$pdf->MultiCell(90, 0, $sample->get_template_name(), 1, '', 1, 1, '', '', true, 0, false, true, 0);
 				
-				$pdf->MultiCell(90, 0, "Owner", 1, 'J', 1, 0, '', '', true, 0, false, true, 0);
+				$pdf->MultiCell(90, 0, "Owner", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
 				$pdf->MultiCell(90, 0, $owner_name, 1, '', 1, 1, '', '', true, 0, false, true, 0);
 				
-				$pdf->MultiCell(90, 0, "Status", 1, 'J', 1, 0, '', '', true, 0, false, true, 0);
+				$pdf->MultiCell(90, 0, "Status", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
 				if ($sample->get_availability() == true)
 				{
 					$pdf->MultiCell(90, 0, "available", 1, '', 1, 1, '', '', true, 0, false, true, 0);
@@ -101,19 +101,21 @@ class SampleReportIO
 					$pdf->MultiCell(90, 0, "not available", 1, '', 1, 1, '', '', true, 0, false, true, 0);
 				}
 				
-				$pdf->MultiCell(90, 0, "Date/Time", 1, 'J', 1, 0, '', '', true, 0, false, true, 0);
+				$pdf->MultiCell(90, 0, "Date/Time", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
 				$datetime = new DatetimeHandler($sample->get_datetime());
 				$pdf->MultiCell(90, 0, $datetime->get_formatted_string("dS M Y H:i"), 1, '', 1, 1, '', '', true, 0, false, true, 0);
 				
-				if ($sample->get_supplier())
+				if ($sample->get_manufacturer_id())
 				{
-					$pdf->MultiCell(90, 0, "Supplier", 1, 'J', 1, 0, '', '', true, 0, false, true, 0);
-					$pdf->MultiCell(90, 0, $sample->get_supplier(), 1, '', 1, 1, '', '', true, 0, false, true, 0);
+					$manufacturer = new Manufacturer($sample->get_manufacturer_id());
+					
+					$pdf->MultiCell(90, 0, "Manufacturer", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
+					$pdf->MultiCell(90, 0, $manufacturer->get_name(), 1, '', 1, 1, '', '', true, 0, false, true, 0);
 				}
 				
 				if ($sample->get_date_of_expiry())
 				{
-					$pdf->MultiCell(90, 0, "Date of Expiry", 1, 'J', 1, 0, '', '', true, 0, false, true, 0);
+					$pdf->MultiCell(90, 0, "Date of Expiry", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
 					$date_of_expiry = new DatetimeHandler($sample->get_date_of_expiry());
 					$pdf->MultiCell(90, 0, $date_of_expiry->get_formatted_string("dS M Y"), 1, '', 1, 1, '', '', true, 0, false, true, 0);
 				}

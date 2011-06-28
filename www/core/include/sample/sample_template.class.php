@@ -276,7 +276,7 @@ class SampleTemplate implements SampleTemplateInterface
 					$value[1] = trim(strtolower($value[1]));
 					$value[2] = trim(strtolower($value[2]));
 			
-					if ($value[1] == "depository" or $value[1] == "supplier" or $value[1] == "expiry")
+					if ($value[1] == "location" or $value[1] == "manufacturer" or $value[1] == "expiry")
 					{
 			    		if ($value[3][id] != "#" and $value[3][type] != "#")
 			    		{

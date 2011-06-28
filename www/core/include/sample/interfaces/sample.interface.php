@@ -33,17 +33,15 @@ interface SampleInterface
 	
 	public function set_template_data($type, $type_id, $array);
 	
-	public function create($organisation_unit_id, $template_id, $name, $manufacturer_id, $depository_id, $desc, $language_id, $date_of_expiry, $expiry_warning);
+	public function create($organisation_unit_id, $template_id, $name, $manufacturer_id, $location_id, $desc, $language_id, $date_of_expiry, $expiry_warning);
 	public function delete();
 	
 	public function get_requirements();
 	public function get_fulfilled_requirements();
 	public function get_sub_folder($folder_id, $gid);
 	
-	public function add_depository($depository_id);
-	public function get_all_depositories();
-	public function get_all_depository_information();
-	public function get_current_depository();
+	public function add_location($location_id);
+	public function get_current_location();	
 	
 	public function get_name();
 	public function get_datetime();
@@ -52,7 +50,7 @@ interface SampleInterface
 	public function get_template_id();
 	public function get_availability();
 	
-	public function get_current_depository_name();
+	public function get_current_location_name();
 	public function get_template_name();
 	public function get_formatted_id();
 	public function get_organisation_unit_id();

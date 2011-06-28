@@ -32,6 +32,8 @@ class List_IO
 	private $rows;
 	private $entries;
 	private $entries_per_page;
+	
+	private $js_page_id;
 
 	private $last_line_text;
 	private $first_line_entry;
@@ -39,10 +41,13 @@ class List_IO
 	
 	private $finalised;
 
-    function __construct($entries, $entries_per_page)
+    function __construct($entries, $entries_per_page, $js_page_id = null)
     {
     	$this->entries = $entries;
     	$this->entries_per_page = $entries_per_page;
+    	
+    	$this->js_page_id = $js_page_id;
+    	
     	$this->rows = array();
     	$this->finalised = false;
     	$this->last_line_text = null;
@@ -61,7 +66,7 @@ class List_IO
      * @param integer $width
      * @return bool
      */
-    public function add_row($title, $address, $sortable, $width)
+    public function add_row($title, $address, $sortable, $width, $js_sort_id = null)
     {
     	if ($this->finalised == false)
     	{
@@ -87,6 +92,15 @@ class List_IO
 	    		else
 	    		{
 	    			$row_array[sortable] = false;
+	    		}
+	    		
+	    		if ($js_sort_id != null)
+	    		{
+	    			$row_array[js_sort_id] = $js_sort_id;
+	    		}
+	    		else
+	    		{
+	    			$row_array[js_sort_id] = null;
 	    		}
 	    		
 	    		array_push($this->rows,$row_array);
@@ -150,7 +164,8 @@ class List_IO
 			$number_of_pages = ceil($this->entries/$this->entries_per_page);
     		
 			$return = "<div class='OverviewTableLeft'>".Common_IO::results_on_page($this->entries, $number_of_pages)."</div>" .
-						"<div class='OverviewTableRight'>".$this->top_right_text."</div>";
+						"<div class='OverviewTableRight'>".$this->top_right_text."</div>" .
+						"<div class='OverviewTableClear'>&nbsp;</div>";
     		
     			
     		$return .= "<table class='OverviewTable'><tr>";	
@@ -170,31 +185,67 @@ class List_IO
 						{
 							if (!$_GET[sortmethod] or $_GET[sortmethod] == "asc")
 							{
-								$return .= "<th width='".$value[width]."'>" .
-												"<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=desc'>".$value[title]."</a>" .
-												"&nbsp;<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=desc'>" .
-														"<img src='images/downside.png' alt='' border='0' />" .
+								if ($value[js_sort_id])
+								{
+									$return .= "<th width='".$value[width]."' id='".$value[js_sort_id]."'>" .
+													"<a href='#'>".$value[title]."</a>" .
+													"&nbsp;<a href='#'>" .
+															"<img src='images/downside.png' alt='' border='0' />" .
+													"</a>" .
+													"</th>";
+								}
+								else
+								{
+									$return .= "<th width='".$value[width]."'>" .
+													"<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=desc'>".$value[title]."</a>" .
+													"&nbsp;<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=desc'>" .
+															"<img src='images/downside.png' alt='' border='0' />" .
+													"</a>" .
+													"</th>";
+								}
+							}
+							else
+							{
+								if ($value[js_sort_id])
+								{
+									$return .= "<th width='".$value[width]."' id='".$value[js_sort_id]."'>" .
+													"<a href='#'>".$value[title]."</a>" .
+													"&nbsp;<a href='#'>" .
+															"<img src='images/upside.png' alt='' border='0' />" .
+													"</a>" .
+													"</th>";
+								}
+								else
+								{
+									$return .= "<th width='".$value[width]."'>" .
+													"<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=asc'>".$value[title]."</a>" .
+													"&nbsp;<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=asc'>" .
+															"<img src='images/upside.png' alt='' border='0' />" .
+													"</a>" .
+													"</th>";
+								}
+							}
+						}
+						else
+						{
+							if ($value[js_sort_id])
+							{
+								$return .= "<th width='".$value[width]."' id='".$value[js_sort_id]."'>" .
+												"<a href='#'>".$value[title]."</a>" .
+												"&nbsp;<a href='#'>" .
+														"<img src='images/nosort.png' alt='' border='0' />" .
 												"</a>" .
-											"</th>";
+												"</th>";
 							}
 							else
 							{
 								$return .= "<th width='".$value[width]."'>" .
 												"<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=asc'>".$value[title]."</a>" .
 												"&nbsp;<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=asc'>" .
-														"<img src='images/upside.png' alt='' border='0' />" .
+														"<img src='images/nosort.png' alt='' border='0' />" .
 												"</a>" .
-											"</th>";
+												"</th>";
 							}
-						}
-						else
-						{
-							$return .= "<th width='".$value[width]."'>" .
-											"<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=asc'>".$value[title]."</a>" .
-											"&nbsp;<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=asc'>" .
-													"<img src='images/nosort.png' alt='' border='0' />" .
-											"</a>" .
-										"</th>";
 						}
 					}
 					else
@@ -203,31 +254,67 @@ class List_IO
 						{
 							if (!$_GET[sortmethod] or $_GET[sortmethod] == "asc")
 							{
-								$return .= "<th>" .
-												"<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=desc'>".$value[title]."</a>" .
-												"&nbsp;<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=desc'>" .
-														"<img src='images/downside.png' alt='' border='0' />" .
+								if ($value[js_sort_id])
+								{
+									$return .= "<th id='".$value[js_sort_id]."'>" .
+													"<a href='#'>".$value[title]."</a>" .
+													"&nbsp;<a href='#'>" .
+															"<img src='images/downside.png' alt='' border='0' />" .
+													"</a>" .
+													"</th>";
+								}
+								else
+								{
+									$return .= "<th>" .
+													"<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=desc'>".$value[title]."</a>" .
+													"&nbsp;<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=desc'>" .
+															"<img src='images/downside.png' alt='' border='0' />" .
+													"</a>" .
+													"</th>";
+								}
+							}
+							else
+							{
+								if ($value[js_sort_id])
+								{
+									$return .= "<th id='".$value[js_sort_id]."'>" .
+													"<a href='#'>".$value[title]."</a>" .
+													"&nbsp;<a href='#'>" .
+															"<img src='images/upside.png' alt='' border='0' />" .
+													"</a>" .
+													"</th>";
+								}
+								else
+								{
+									$return .= "<th>" .
+													"<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=asc'>".$value[title]."</a>" .
+													"&nbsp;<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=asc'>" .
+															"<img src='images/upside.png' alt='' border='0' />" .
+													"</a>" .
+													"</th>";
+								}
+							}
+						}
+						else
+						{
+							if ($value[js_sort_id])
+							{
+								$return .= "<th id='".$value[js_sort_id]."'>" .
+												"<a href='#'>".$value[title]."</a>" .
+												"&nbsp;<a href='#'>" .
+														"<img src='images/nosort.png' alt='' border='0' />" .
 												"</a>" .
-											"</th>";
+												"</th>";
 							}
 							else
 							{
 								$return .= "<th>" .
 												"<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=asc'>".$value[title]."</a>" .
 												"&nbsp;<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=asc'>" .
-														"<img src='images/upside.png' alt='' border='0' />" .
+														"<img src='images/nosort.png' alt='' border='0' />" .
 												"</a>" .
-											"</th>";
+												"</th>";
 							}
-						}
-						else
-						{
-							$return .= "<th>" .
-											"<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=asc'>".$value[title]."</a>" .
-											"&nbsp;<a href='index.php?".$params."&#38;sortvalue=".$value[address]."&#38;sortmethod=asc'>" .
-													"<img src='images/nosort.png' alt='' border='0' />" .
-											"</a>" .
-										"</th>";
 						}
 					}
 				}
@@ -326,22 +413,164 @@ class List_IO
 					$return .= "<tr>";
 					
 					$color_count++;	
-					
 				}
-				
 			}
 			
 
-			if ($this->last_line_text) {
-				
+			if ($this->last_line_text)
+			{
 				$return .= "<tr><td colspan='".count($this->rows)."'>".$this->last_line_text."</td></tr>";
-				
 			}
 
 			$return .= "</table>";
 			
-			if ($number_of_pages > 1) {
-				$return .= Common_IO::page_bar($page, $number_of_pages, $_GET);
+			if ($number_of_pages > 1)
+			{
+				//$return .= Common_IO::page_bar($page, $number_of_pages, $_GET);
+
+				$return .= "<div class='ResultNextPageBar'>";
+		
+				$return .= "<table style='display: inline;'><tr><td><span class='smallTextBlack'>Page ".$page." of ".$number_of_pages."</span></td>";
+		
+				// Previous
+				if ($page == 1)
+				{
+					$return .= "<td><img src='images/icons/previous_d.png' alt='Previous' border='0' /></td>";		
+				}
+				else
+				{
+					
+					$previous_page = $page - 1;
+					
+					if ($this->js_page_id)
+					{
+						$return .= "<td><a href='#' class='".$this->js_page_id."' id='".$this->js_page_id."".$previous_page."'><img src='images/icons/previous.png' alt='Previous' border='0' /></a></td>";
+					}
+					else
+					{
+						$previous_paramquery = $_GET;
+						$previous_paramquery[page] = $previous_page;
+						unset($previous_paramquery[show]);
+						$previous_link = http_build_query($previous_paramquery,'','&#38;');
+						
+						$return .= "<td><a href='index.php?".$previous_link."'><img src='images/icons/previous.png' alt='Previous' border='0' /></a></td>";
+					}
+				}	
+				
+				$displayed = false;
+							
+				for ($i=1;$i<=$number_of_pages;$i++)
+				{
+					$display = false;
+					
+					if ($max_page < 5)
+					{
+						$display = true;
+					}
+					else
+					{
+	
+						if ($i <= 2) {
+							$display = true;
+						}
+						
+						if ($i > $max_page-2) {
+							$display = true;
+						}
+						
+						if ($display == false and $page+1 == $i) {
+							$display = true;
+						}
+						
+						if ($display == false and $page-1 == $i) {
+							$display = true;
+						}
+						
+						if ($display == false and $page == $i) {
+							$display = true;
+						}
+						if ($i == $page+10 and $display == false) {
+							$display = true;
+						}
+						
+						if ($i == $page-10 and $display == false) {
+							$display = true;
+						}
+	
+					}
+					
+					if ($display == true)
+					{
+						if ($page == $i)
+						{
+							if ($this->js_page_id)
+							{
+								$return .= "<td><span class='bold'><a href='#' class='".$this->js_page_id."' id='".$this->js_page_id."".$i."'>".$i."</a></span></td>";
+							}
+							else
+							{
+								$page_paramquery = $_GET;
+								$page_paramquery[page] = $i;
+								$page_link = http_build_query($page_paramquery,'','&#38;');
+								
+								$return .= "<td><span class='bold'><a href='index.php?".$page_link."'>".$i."</a></span></td>";
+							}
+						}
+						else
+						{
+							if ($this->js_page_id)
+							{
+								$return .= "<td><a href='#' class='".$this->js_page_id."' id='".$this->js_page_id."".$i."'>".$i."</a></td>";	
+							}
+							else
+							{
+								$page_paramquery = $_GET;
+								$page_paramquery[page] = $i;
+								$page_link = http_build_query($page_paramquery,'','&#38;');
+								
+								$return .= "<td><a href='index.php?".$page_link."'>".$i."</a></td>";	
+							}
+						}						
+						$displayed = true;
+					}
+					elseif ($displayed == true)
+					{
+						$return .= "<td>..</td>";
+					}
+					
+					if ($display == false)
+					{
+						$displayed = false;
+					}
+				}
+		
+				// Next
+				if($page == $number_of_pages)
+				{
+					$return .= "<td><img src='images/icons/next_d.png' alt='Next' border='0' /></td>";		
+				}
+				else
+				{
+					$next_page = $page + 1;
+					
+					if ($this->js_page_id)
+					{
+						$return .= "<td><a href='#' class='".$this->js_page_id."' id='".$this->js_page_id."".$next_page."'><img src='images/icons/next.png' alt='Previous' border='0' /></a></td>";
+					}
+					else
+					{
+						$next_paramquery = $_GET;
+						$next_paramquery[page] = $next_page;
+						unset($next_paramquery[show]);
+						$next_link = http_build_query($next_paramquery,'','&#38;');
+						
+						$return .= "<td><a href='index.php?".$next_link."'><img src='images/icons/next.png' alt='Next' border='0' /></a></td>";
+					}
+				}
+				
+				$return .= "</tr></table>";
+				
+				$return .= "</div>";
 			}
 			
 			return $return;	

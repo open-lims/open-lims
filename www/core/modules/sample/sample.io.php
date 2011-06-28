@@ -41,7 +41,7 @@ class SampleIO
 		$list->add_row("Sample Name","name",true,null);
 		$list->add_row("Date/Time","datetime",true,null);
 		$list->add_row("Type/Tmpl.","template",true,null);
-		$list->add_row("Curr. Depos.","depository",true,null);
+		$list->add_row("Curr. Loc.","location",true,null);
 		$list->add_row("AV","av",false,"16px");
 		
 		if ($_GET[page])
@@ -186,7 +186,7 @@ class SampleIO
 			$list->add_row("Sample Name","name",true,null);
 			$list->add_row("Date/Time","datetime",true,null);
 			$list->add_row("Type/Tmpl.","template",true,null);
-			$list->add_row("Curr. Depos.","depository",true,null);
+			$list->add_row("Curr. Loc.","location",true,null);
 			$list->add_row("AV","av",false,"16px");
 		
 			if ($_GET[page])
@@ -341,7 +341,7 @@ class SampleIO
 			$list->add_row("Sample Name","name",true,null);
 			$list->add_row("Date","datetime",true,null);
 			$list->add_row("Type/Tmpl.","template",true,null);
-			$list->add_row("Curr. Depos.","depository",true,null);
+			$list->add_row("Curr. Loc.","location",true,null);
 			$list->add_row("Owner","owner",true,null);
 			$list->add_row("AV","av",false,"16px");
 			
@@ -504,7 +504,7 @@ class SampleIO
 			$list->add_row("Sample Name","name",true,null);
 			$list->add_row("Date","datetime",true,null);
 			$list->add_row("Type/Tmpl.","template",true,null);
-			$list->add_row("Curr. Depos.","depository",true,null);
+			$list->add_row("Curr. Loc.","location",true,null);
 			$list->add_row("Owner","owner",true,null);
 			$list->add_row("AV","av",false,"16px");
 			
@@ -693,7 +693,7 @@ class SampleIO
 				$session->delete_value("SAMPLE_NAME");
 				$session->delete_value("SAMPLE_MANUFACTURER");
 				$session->delete_value("SAMPLE_MANUFACTURER_NAME");
-				$session->delete_value("SAMPLE_DEPOSITORY");
+				$session->delete_value("SAMPLE_LOCATION");
 				$session->delete_value("SAMPLE_EXPIRY");
 				$session->delete_value("SAMPLE_EXPIRY_WARNING");
 				$session->delete_value("SAMPLE_DESC");		
@@ -802,9 +802,9 @@ class SampleIO
 							{
 								$session->write_value("SAMPLE_MANUFACTURER_NAME", $_POST[manufacturer_name], true);
 							}
-							if ($_POST[depository])
+							if ($_POST[location])
 							{
-								$session->write_value("SAMPLE_DEPOSITORY", $_POST[depository], true);
+								$session->write_value("SAMPLE_LOCATION", $_POST[location], true);
 							}
 							if ($_POST[expiry])
 							{
@@ -823,13 +823,13 @@ class SampleIO
 						{
 							$information_fields = $sample_template_obj->get_information_fields();
 
-							if ($information_fields[supplier][name] and $information_fields[supplier][requirement] != "optional")
+							if ($information_fields[manufacturer][name] and $information_fields[manufacturer][requirement] != "optional")
 							{
-								$check_supplier = true;
+								$check_manufacturer = true;
 							}
 							else
 							{
-								$check_supplier = false;
+								$check_manufacturer = false;
 							}
 							
 							if ($information_fields[expiry][name] and $information_fields[expiry][requirement] != "optional")
@@ -841,26 +841,26 @@ class SampleIO
 								$check_expiry = false;
 							}
 							
-							if ($information_fields[depository][name] and $information_fields[depository][requirement] != "optional")
+							if ($information_fields[location][name] and $information_fields[location][requirement] != "optional")
 							{
-								$check_depository = true;
+								$check_location = true;
 							}
 							else
 							{
-								$check_depository = false;
+								$check_location = false;
 							}
 							
-							if (!$_POST[manufacturer] and $check_supplier == true)
+							if (!$_POST[manufacturer] and $check_manufacturer == true)
 							{
-								$error[1] = "Enter a supplier!";	
+								$error[1] = "Enter a manufacturer!";	
 							}
 							if (!$_POST[expiry] and $check_expiry == true)
 							{
 								$error[2] = "Enter a date of expiry!";	
 							}
-							if (!$_POST[depository] and $check_depository == true)
+							if (!$_POST[location] and $check_location == true)
 							{
-								$error[3] = "Select a despository!";	
+								$error[3] = "Select a location!";	
 							}
 							
 							if ($_POST[name])
@@ -896,9 +896,9 @@ class SampleIO
 							{
 								$session->write_value("SAMPLE_MANUFACTURER_NAME", $_POST[manufacturer_name], true);
 							}
-							if ($_POST[depository])
+							if ($_POST[location])
 							{
-								$session->write_value("SAMPLE_DEPOSITORY", $_POST[depository], true);
+								$session->write_value("SAMPLE_LOCATION", $_POST[location], true);
 							}
 							if ($_POST[expiry])
 							{
@@ -929,9 +929,9 @@ class SampleIO
 						{
 							$session->write_value("SAMPLE_MANUFACTURER_NAME", $_POST[manufacturer_name], true);
 						}
-						if ($_POST[depository])
+						if ($_POST[location])
 						{
-							$session->write_value("SAMPLE_DEPOSITORY", $_POST[depository], true);
+							$session->write_value("SAMPLE_LOCATION", $_POST[location], true);
 						}
 						if ($_POST[expiry])
 						{
@@ -1081,7 +1081,7 @@ class SampleIO
 				$sample_name					= $session->read_value("SAMPLE_NAME");
 				$sample_manufacturer			= $session->read_value("SAMPLE_MANUFACTURER");	
 				$sample_manufacturer_name		= $session->read_value("SAMPLE_MANUFACTURER_NAME");			
-				$sample_depository				= $session->read_value("SAMPLE_DEPOSITORY");
+				$sample_location				= $session->read_value("SAMPLE_LOCATION");
 				$sample_expiry					= $session->read_value("SAMPLE_EXPIRY");
 				$sample_expiry_warning			= $session->read_value("SAMPLE_EXPIRY_WARNING");
 				$sample_desc					= $session->read_value("SAMPLE_DESC");
@@ -1414,7 +1414,7 @@ class SampleIO
 					
 					$information_fields = $sample_template_obj->get_information_fields();
 
-					if ($information_fields[supplier][name])
+					if ($information_fields[manufacturer][name])
 					{
 						require_once("core/modules/manufacturer/manufacturer.io.php");
 						$template->set_var("show_manufacturer",true);
@@ -1435,13 +1435,45 @@ class SampleIO
 						$template->set_var("show_expiry",false);
 					}
 					
-					if ($information_fields[depository][name])
+					if ($information_fields[location][name])
 					{
-						$template->set_var("show_depository",true);
+						$template->set_var("show_location",true);
+						
+						$result = array();
+						$counter = 0;
+							
+						$sample_location_array = Location::list_entries();
+						
+						if (is_array($sample_location_array) and count($sample_location_array) >= 1)
+						{
+							foreach($sample_location_array as $key => $value)
+							{
+								$sample_location_obj = new Location($value);
+												
+								$result[$counter][value] = $value;
+								$result[$counter][content] = $sample_location_obj->get_name(true);		
+			
+								if ($sample_location == $value)
+								{
+									$result[$counter][selected] = "selected";
+								}
+								else
+								{
+									$result[$counter][selected] = "";
+								}
+								$counter++;
+							}
+						}
+						else
+						{
+							$result[$counter][value] = "0";
+							$result[$counter][content] = "NO LOCATIONS FOUND!";
+						}
+						$template->set_var("location",$result);
 					}
 					else
 					{
-						$template->set_var("show_depository",false);
+						$template->set_var("show_location",false);
 					}
 					
 					if ($sample_manufacturer)
@@ -1489,46 +1521,6 @@ class SampleIO
 						$template->set_var("desc","");
 					}
 					
-					$result = array();
-					$counter = 0;
-					
-					if ($sample_depository)
-					{
-						$sample_depository_obj = new SampleDepository($sample_depository);
-						$result[$counter][value] = $sample_depository;
-						$result[$counter][content] = $sample_depository_obj->get_name();
-						$counter++;
-					}
-						
-					$sample_depository_obj = new SampleDepository(null);
-					$sample_depository_array = $sample_depository_obj->list_entries();
-					
-					if (is_array($sample_depository_array) and count($sample_depository_array) >= 1)
-					{
-						foreach($sample_depository_array as $key => $value)
-						{
-							$sample_depository_obj = new SampleDepository($value);
-											
-							$result[$counter][value] = $value;
-							$result[$counter][content] = $sample_depository_obj->get_name();		
-		
-							if ($sample_depository == $value)
-							{
-								$result[$counter][selected] = "selected";
-							}
-							else
-							{
-								$result[$counter][selected] = "";
-							}
-							$counter++;
-						}
-					}
-					else
-					{
-						$result[$counter][value] = "0";
-						$result[$counter][content] = "NO DEPOSITORIES FOUND!";
-					}
-					$template->set_var("depository",$result);
 					$template->set_var("keywords", $_POST[keywords]);
 					$template->set_var("description", $_POST[description]);
 					$template->output();
@@ -1783,14 +1775,14 @@ class SampleIO
 						$template->set_var("manufacturer",false);
 					}
 					
-					if ($sample_depository)
+					if ($sample_location)
 					{
-						$sample_depository_obj = new SampleDepository($sample_depository);
-						$template->set_var("depository",$sample_depository_obj->get_name());
+						$sample_location_obj = new Location($sample_location);
+						$template->set_var("location",$sample_location_obj->get_name(true));
 					}
 					else
 					{
-						$template->set_var("depository",false);
+						$template->set_var("location",false);
 					}
 				
 					if ($sample_expiry)
@@ -1825,7 +1817,7 @@ class SampleIO
 		
 						$sample->set_template_data($sample_template_data_type, $sample_template_data_type_id, $sample_template_data_array);
 		
-						if (($sample_id = $sample->create($sample_organ_unit, $sample_template, $sample_name, $sample_manufacturer, $sample_depository, $sample_desc, null, $sample_expiry, $sample_expiry_warning)) != null)
+						if (($sample_id = $sample->create($sample_organ_unit, $sample_template, $sample_name, $sample_manufacturer, $sample_location, $sample_desc, null, $sample_expiry, $sample_expiry_warning)) != null)
 						{
 							$session->delete_value("SAMPLE_LAST_SCREEN");
 							$session->delete_value("SAMPLE_CURRENT_SCREEN");
@@ -1866,7 +1858,7 @@ class SampleIO
 						$session->delete_value("SAMPLE_NAME");
 						$session->delete_value("SAMPLE_MANUFACTURER");
 						$session->delete_value("SAMPLE_MANUFACTURER_NAME");
-						$session->delete_value("SAMPLE_DEPOSITORY");
+						$session->delete_value("SAMPLE_LOCATION");
 						$session->delete_value("SAMPLE_EXPIRY");
 						$session->delete_value("SAMPLE_EXPIRY_WARNING");
 						$session->delete_value("SAMPLE_DESC");		
@@ -2061,13 +2053,13 @@ class SampleIO
 					$template->set_var("date_of_expiry", false);
 				}
 				
-				if ($sample->get_current_depository_name())
+				if ($sample->get_current_location_name())
 				{
-					$template->set_var("depository", $sample->get_current_depository_name());
+					$template->set_var("location", $sample->get_current_location_name());
 				}
 				else
 				{
-					$template->set_var("depository", false);
+					$template->set_var("location", false);
 				}
 				
 				if ($sample->get_manufacturer_id())
@@ -2120,11 +2112,11 @@ class SampleIO
 				
 				$template->set_var("owner_params", $owner_params);	
 				
-				$depository_history_paramquery = $_GET;
-				$depository_history_paramquery[run] = "depository_history";
-				$depository_history_params = http_build_query($depository_history_paramquery,'','&#38;');
+				$location_history_paramquery = $_GET;
+				$location_history_paramquery[run] = "location_history";
+				$location_history_params = http_build_query($location_history_paramquery,'','&#38;');
 				
-				$template->set_var("depository_history_params", $depository_history_params);	
+				$template->set_var("location_history_params", $location_history_params);	
 				
 				// Buttons
 				
@@ -2272,14 +2264,14 @@ class SampleIO
 				
 				if ($_GET[nextpage] == 1)
 				{
-					if (is_numeric($_POST[depository]))
+					if (is_numeric($_POST[location]))
 					{
 						$page_1_passed = true;
 					}
 					else
 					{
 						$page_1_passed = false;
-						$error = "You must select a depository.";
+						$error = "You must select a location.";
 					}
 				}
 				elseif($_GET[nextpage] > 1)
@@ -2304,22 +2296,31 @@ class SampleIO
 					
 					$template->set_var("error",$error);
 					
-					$sample_depository = new SampleDepository(null);
-					$sample_depository_array = $sample_depository->list_entries();
-					
 					$result = array();
 					$counter = 0;
 					
-					foreach($sample_depository_array as $key => $value)
-					{
-						$sample_depository = new SampleDepository($value);
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $sample_depository->get_name();
-						$counter++;
-					}
-					
-					$template->set_var("option",$result);
+					$sample_location_array = Location::list_entries();
 						
+					if (is_array($sample_location_array) and count($sample_location_array) >= 1)
+					{
+						foreach($sample_location_array as $key => $value)
+						{
+							$sample_location_obj = new Location($value);
+											
+							$result[$counter][value] = $value;
+							$result[$counter][content] = $sample_location_obj->get_name(true);		
+		
+							$counter++;
+						}
+					}
+					else
+					{
+						$result[$counter][value] = "0";
+						$result[$counter][content] = "NO LOCATIONS FOUND!";
+					}
+
+					$template->set_var("option",$result);
+					
 					$template->output();
 				}
 				else
@@ -2329,7 +2330,7 @@ class SampleIO
 					$paramquery[run] = "detail";
 					$params = http_build_query($paramquery);
 					
-					if ($sample->add_depository($_POST[depository]))
+					if ($sample->add_location($_POST[location]))
 					{
 						Common_IO::step_proceed($params, "Move Sample", "Operation Successful", null);
 					}
@@ -2434,7 +2435,7 @@ class SampleIO
 	/**
 	 * NEW
 	 */
-	public static function depository_history()
+	public static function location_history()
 	{
 		global $sample_security;
 	
@@ -2442,7 +2443,7 @@ class SampleIO
 		{
 			if ($sample_security->is_access(1, false))
 			{
-				$list = new List_IO(Sample_Wrapper::count_sample_depositories($_GET[sample_id]), 20);
+				$list = new List_IO(Sample_Wrapper::count_sample_locations($_GET[sample_id]), 20);
 	
 				$list->add_row("","symbol",false,"16px");
 				$list->add_row("Name","name",true,null);
@@ -2453,22 +2454,22 @@ class SampleIO
 				{
 					if ($_GET[sortvalue] and $_GET[sortmethod])
 					{
-						$result_array = Sample_Wrapper::list_sample_depositories($_GET[sample_id], $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
+						$result_array = Sample_Wrapper::list_sample_locations($_GET[sample_id], $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
 					}
 					else
 					{
-						$result_array = Sample_Wrapper::list_sample_depositories($_GET[sample_id], null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
+						$result_array = Sample_Wrapper::list_sample_locations($_GET[sample_id], null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
 					}				
 				}
 				else
 				{
 					if ($_GET[sortvalue] and $_GET[sortmethod])
 					{
-						$result_array = Sample_Wrapper::list_sample_depositories($_GET[sample_id], $_GET[sortvalue], $_GET[sortmethod], 0, 20);
+						$result_array = Sample_Wrapper::list_sample_locations($_GET[sample_id], $_GET[sortvalue], $_GET[sortmethod], 0, 20);
 					}
 					else
 					{
-						$result_array = Sample_Wrapper::list_sample_depositories($_GET[sample_id], null, null, 0, 20);
+						$result_array = Sample_Wrapper::list_sample_locations($_GET[sample_id], null, null, 0, 20);
 					}	
 				}
 				
@@ -2498,7 +2499,7 @@ class SampleIO
 					$list->override_last_line("<span class='italic'>No results found!</span>");
 				}
 	
-				$template = new Template("languages/en-gb/template/samples/depository_history.html");
+				$template = new Template("languages/en-gb/template/samples/location_history.html");
 				
 				$sample = new Sample($_GET[sample_id]);
 				
@@ -2579,8 +2580,8 @@ class SampleIO
 					self::set_availability();
 				break;
 				
-				case("depository_history"):
-					self::depository_history();
+				case("location_history"):
+					self::location_history();
 				break;
 	
 				// Administration

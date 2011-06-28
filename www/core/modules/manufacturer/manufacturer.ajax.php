@@ -114,6 +114,94 @@ class ManufacturerAjax extends Ajax
 		}
 	}
 	
+	public function get_list($page, $sortvalue, $sortmethod)
+	{
+		global $user;
+		
+		$list = new List_IO(Manufacturer_Wrapper::count_manufacturers(), 20,"ManufacturerListPage");
+
+		$list->add_row("","symbol",false,"16px");
+		$list->add_row("Name","name",true,null,"ManufacturerListSortName");
+		$list->add_row("User","user",true,null,"ManufacturerListSortUser");
+		$list->add_row("","delete",false,"16px");
+		
+		if ($page)
+		{
+			if ($sortvalue and $sortmethod)
+			{
+				$result_array = Manufacturer_Wrapper::list_manufacturers($sortvalue, $sortmethod, ($page*20)-20, ($page*20));
+			}
+			else
+			{
+				$result_array = Manufacturer_Wrapper::list_manufacturers(null, null, ($page*20)-20, ($page*20));
+			}				
+		}
+		else
+		{
+			if ($sortvalue and $sortmethod)
+			{
+				$result_array = Manufacturer_Wrapper::list_manufacturers($sortvalue, $sortmethod, 0, 20);
+			}
+			else
+			{
+				$result_array = Manufacturer_Wrapper::list_manufacturers(null, null, 0, 20);
+			}	
+		}
+		
+		if (is_array($result_array) and count($result_array) >= 1)
+		{
+			if ($user->is_admin() == true)
+			{
+				$is_admin = true;
+			}
+			else
+			{
+				$is_admin = false;
+			}
+			
+			foreach($result_array as $key => $value)
+			{
+				$result_array[$key][symbol] = "<img src='images/icons/manufacturer.png' alt='' />";
+				
+				$user = new User($result_array[$key][user_id]);
+				$result_array[$key][user] = $user->get_full_name(false);
+				
+				if ($is_admin == true)
+				{
+					$result_array[$key][delete] = "<a href='#' class='ManufacturerListDelete' id='ManufacturerListDelete".$result_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+				}
+			}
+		}
+		else
+		{
+			$list->override_last_line("<span class='italic'>No results found!</span>");
+		}
+		
+		echo $list->get_list($result_array, $page);
+	}
+	
+	public function delete($id)
+	{
+		global $user;
+		
+		if (is_numeric($id) and $user->is_admin() == true)
+		{
+			$manufacturer = new Manufacturer($id);
+			if ($manufacturer->delete() == true)
+			{
+				echo 1;
+			}
+			else
+			{
+				echo 0;
+			}
+		}
+		else
+		{
+			echo 0;
+		}
+	}
+	
 	public function method_handler()
 	{
 		global $session;
@@ -140,6 +228,14 @@ class ManufacturerAjax extends Ajax
 				
 				case "get_next_entries":
 					$this->get_next_entries($_GET[number], $_GET[start], $_GET[string]);
+				break;
+				
+				case "get_list":
+					$this->get_list($_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				break;
+				
+				case "delete":
+					$this->delete($_GET[id]);
 				break;
 				
 				default:

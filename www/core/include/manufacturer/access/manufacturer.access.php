@@ -392,6 +392,31 @@ class Manufacturer_Access
 			return false;
 		}
 	}
+
+	public static function set_user_id_by_user_id($user_id, $new_user_id)
+	{
+		global $db;
+
+		if (is_numeric($user_id) and is_numeric($new_user_id))
+		{
+			$sql = "UPDATE ".constant("MANUFACTURER_TABLE")." SET user_id = ".$new_user_id." WHERE user_id = ".$user_id."";				
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+							
+			if ($res !== false)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 
 ?>

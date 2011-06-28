@@ -49,6 +49,9 @@ require_once("../../include/user/user.class.php");
 
 require_once("../../include/base/session.class.php");
 
+require_once("../../modules/base/common.io.php");
+require_once("../../modules/base/list.io.php");
+
 SystemHandler::init_db_constants();
 
 /**

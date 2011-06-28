@@ -21,23 +21,42 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /**
- * Manufacturer Management Interface
- * @package manufacturer
- */ 		 
-interface ManufacturerInterface
+ * 
+ */
+require_once("interfaces/manufacturer.wrapper.interface.php");
+
+if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	function __construct($manufacturer_id);
-	function __destruct();
-	
-	public function create($name);
-	public function delete();
-	public function get_name();
-	
-	public static function exist_name($name);
-	public static function count_entries($string);
-	public static function list_manufacturers($number_of_entries, $start_entry, $start_string);
+	require_once("access/manufacturer.wrapper.access.php");
 }
 
+/**
+ * Manufacturer Wrapper Class
+ * @package manufacturer
+ */
+class Manufacturer_Wrapper implements Manufacturer_WrapperInterface
+{
+	/**
+	 * Returns a list of manufacturers
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_manufacturers($order_by, $order_method, $start, $end)
+	{
+		return Manufacturer_Wrapper_Access::list_manufacturers($order_by, $order_method, $start, $end);
+	}
+	
+	/**
+	 * Returns the number of manufacturers
+	 * @return integer
+	 */
+	public static function count_manufacturers()
+	{
+		return Manufacturer_Wrapper_Access::count_manufacturers();
+	}	
+}
 ?>

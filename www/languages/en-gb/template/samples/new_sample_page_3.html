@@ -88,15 +88,15 @@ $(document).ready(function()
 	</tr>
 	<!-- ENDIF -->
 	
-	<!-- IF ({SHOW_DEPOSITORY}) -->
+	<!-- IF ({SHOW_LOCATION}) -->
 	<tr>
-		<td>Depository:</td>
+		<td>Location:</td>
 		<td>
-			<select name='depository' class='sampleSelect'>
+			<select name='location' class='sampleSelect'>
 			
-			<!-- FOREACH BEGIN ({DEPOSITORY}) -->
+			<!-- FOREACH BEGIN ({LOCATION}) -->
 	
-				<option value='{DEPOSITORY:VALUE}'>{DEPOSITORY:CONTENT}</option>
+				<option value='{LOCATION:VALUE}'>{LOCATION:CONTENT}</option>
 	
 			<!-- FOREACH END -->	
 				

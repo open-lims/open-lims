@@ -269,7 +269,7 @@ class SampleSearchIO
 			$list->add_row("Sample Name","name",true,null);
 			$list->add_row("Date","datetime",true,null);
 			$list->add_row("Type/Tmpl.","template",true,null);
-			$list->add_row("Curr. Depos.","depository",true,null);
+			$list->add_row("Curr. Loc.","location",true,null);
 			$list->add_row("AV","av",false,"16px");
 			
 			if ($_GET[page])

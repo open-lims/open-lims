@@ -271,8 +271,8 @@ class Sample_Wrapper_Access
 						$sql_order_by = "ORDER BY ".constant("SAMPLE_TEMPLATE_TABLE").".name ".$sql_order_method;
 					break;
 					
-					case "depository":
-						$sql_order_by = "ORDER BY ".constant("SAMPLE_DEPOSITORY_TABLE").".name ".$sql_order_method;
+					case "location":
+						$sql_order_by = "ORDER BY ".constant("LOCATION_TABLE").".name ".$sql_order_method;
 					break;
 					
 					default:
@@ -290,27 +290,28 @@ class Sample_Wrapper_Access
 						"".constant("SAMPLE_TABLE").".name AS name," .
 						"".constant("SAMPLE_TABLE").".datetime AS datetime," .
 						"".constant("SAMPLE_TEMPLATE_TABLE").".name AS template," .
-						"".constant("SAMPLE_DEPOSITORY_TABLE").".name AS depository," .
+						"NAMECONCAT(".constant("LOCATION_TYPE_TABLE").".name,".constant("LOCATION_TABLE").".name) AS location," .
 						"".constant("SAMPLE_TABLE").".date_of_expiry AS date_of_expiry, " .
 						"".constant("SAMPLE_TABLE").".expiry_warning AS expiry_warning, " .
 						"".constant("SAMPLE_TABLE").".available AS av " .
 						"FROM ".constant("SAMPLE_TABLE")." " .
-						"JOIN ".constant("SAMPLE_TEMPLATE_TABLE")." 				ON ".constant("SAMPLE_TABLE").".template_id 								= ".constant("SAMPLE_TEMPLATE_TABLE").".id " .
-						"LEFT JOIN ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." 	ON ".constant("SAMPLE_TABLE").".id 											= ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_id " .
-						"LEFT JOIN ".constant("SAMPLE_DEPOSITORY_TABLE")." 				ON ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_depository_id 	= ".constant("SAMPLE_DEPOSITORY_TABLE").".id " .
+						"JOIN ".constant("SAMPLE_TEMPLATE_TABLE")." 			ON ".constant("SAMPLE_TABLE").".template_id 				= ".constant("SAMPLE_TEMPLATE_TABLE").".id " .
+						"LEFT JOIN ".constant("SAMPLE_HAS_LOCATION_TABLE")." 	ON ".constant("SAMPLE_TABLE").".id 							= ".constant("SAMPLE_HAS_LOCATION_TABLE").".sample_id " .
+						"LEFT JOIN ".constant("LOCATION_TABLE")." 				ON ".constant("SAMPLE_HAS_LOCATION_TABLE").".location_id 	= ".constant("LOCATION_TABLE").".id " .
+						"LEFT JOIN ".constant("LOCATION_TYPE_TABLE")." 			ON ".constant("LOCATION_TABLE").".type_id 					= ".constant("LOCATION_TYPE_TABLE").".id " .
 						"WHERE " .
 							"(".constant("SAMPLE_TABLE").".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE ".constant("SAMPLE_HAS_USER_TABLE").".write = 't' AND ".constant("SAMPLE_HAS_USER_TABLE").".user_id = ".$user_id.") " .
 							"OR owner_id = ".$user_id.") " .
 							"AND " .
-								"(".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".primary_key IN " .
+								"(".constant("SAMPLE_HAS_LOCATION_TABLE").".primary_key IN " .
 									"( " .
 									"SELECT primary_key " .
-									"FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." " .
+									"FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." " .
 									"WHERE sample_id = ".constant("SAMPLE_TABLE").".id AND " .
-									"".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime = " .
-										"(SELECT MAX(".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime) FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." WHERE ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_id = ".constant("SAMPLE_TABLE").".id) " .
+									"".constant("SAMPLE_HAS_LOCATION_TABLE").".datetime = " .
+										"(SELECT MAX(".constant("SAMPLE_HAS_LOCATION_TABLE").".datetime) FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE ".constant("SAMPLE_HAS_LOCATION_TABLE").".sample_id = ".constant("SAMPLE_TABLE").".id) " .
 									") " .
-								"OR ".constant("SAMPLE_TABLE").".id NOT IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").") " .
+								"OR ".constant("SAMPLE_TABLE").".id NOT IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_LOCATION_TABLE").") " .
 								") " .
 							"".$sql_order_by."";
 			
@@ -414,8 +415,8 @@ class Sample_Wrapper_Access
 						$sql_order_by = "ORDER BY ".constant("SAMPLE_TEMPLATE_TABLE").".name ".$sql_order_method;
 					break;
 					
-					case "depository":
-						$sql_order_by = "ORDER BY ".constant("SAMPLE_DEPOSITORY_TABLE").".name ".$sql_order_method;
+					case "location":
+						$sql_order_by = "ORDER BY ".constant("LOCATION_TABLE").".name ".$sql_order_method;
 					break;
 					
 					case "owner":
@@ -437,27 +438,28 @@ class Sample_Wrapper_Access
 						"".constant("SAMPLE_TABLE").".name AS name," .
 						"".constant("SAMPLE_TABLE").".datetime AS datetime," .
 						"".constant("SAMPLE_TEMPLATE_TABLE").".name AS template, " .
-						"".constant("SAMPLE_DEPOSITORY_TABLE").".name AS depository, " .
+						"NAMECONCAT(".constant("LOCATION_TYPE_TABLE").".name,".constant("LOCATION_TABLE").".name) AS location," .
 						"".constant("SAMPLE_TABLE").".date_of_expiry AS date_of_expiry, " .
 						"".constant("SAMPLE_TABLE").".expiry_warning AS expiry_warning, " .
 						"".constant("SAMPLE_TABLE").".available AS av, " .
 						"".constant("SAMPLE_TABLE").".owner_id AS owner " .
 						"FROM ".constant("SAMPLE_TABLE")." " .
-						"LEFT JOIN ".constant("SAMPLE_IS_ITEM_TABLE")." 				ON ".constant("SAMPLE_TABLE").".id 											= ".constant("SAMPLE_IS_ITEM_TABLE").".sample_id " .
-						"LEFT JOIN ".constant("SAMPLE_TEMPLATE_TABLE")." 				ON ".constant("SAMPLE_TABLE").".template_id 								= ".constant("SAMPLE_TEMPLATE_TABLE").".id " .
-						"LEFT JOIN ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." 	ON ".constant("SAMPLE_TABLE").".id 											= ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_id " .
-						"LEFT JOIN ".constant("SAMPLE_DEPOSITORY_TABLE")." 				ON ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_depository_id 	= ".constant("SAMPLE_DEPOSITORY_TABLE").".id " .
-						"LEFT JOIN ".constant("USER_PROFILE_TABLE")." 					ON ".constant("SAMPLE_TABLE").".owner_id								 	= ".constant("USER_PROFILE_TABLE").".id " .
+						"LEFT JOIN ".constant("SAMPLE_IS_ITEM_TABLE")." 		ON ".constant("SAMPLE_TABLE").".id 							= ".constant("SAMPLE_IS_ITEM_TABLE").".sample_id " .
+						"LEFT JOIN ".constant("SAMPLE_TEMPLATE_TABLE")." 		ON ".constant("SAMPLE_TABLE").".template_id 				= ".constant("SAMPLE_TEMPLATE_TABLE").".id " .
+						"LEFT JOIN ".constant("SAMPLE_HAS_LOCATION_TABLE")." 	ON ".constant("SAMPLE_TABLE").".id 							= ".constant("SAMPLE_HAS_LOCATION_TABLE").".sample_id " .
+						"LEFT JOIN ".constant("LOCATION_TABLE")." 				ON ".constant("SAMPLE_HAS_LOCATION_TABLE").".location_id 	= ".constant("LOCATION_TABLE").".id " .
+						"LEFT JOIN ".constant("LOCATION_TYPE_TABLE")." 			ON ".constant("LOCATION_TABLE").".type_id 					= ".constant("LOCATION_TYPE_TABLE").".id " .
+						"LEFT JOIN ".constant("USER_PROFILE_TABLE")." 			ON ".constant("SAMPLE_TABLE").".owner_id					= ".constant("USER_PROFILE_TABLE").".id " .
 						"WHERE ".constant("SAMPLE_IS_ITEM_TABLE").".item_id IN (".$item_sql.") " .
-						"AND (".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".primary_key IN " .
+						"AND (".constant("SAMPLE_HAS_LOCATION_TABLE").".primary_key IN " .
 									"( " .
 									"SELECT primary_key " .
-									"FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." " .
+									"FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." " .
 									"WHERE sample_id = ".constant("SAMPLE_TABLE").".id AND " .
-									"".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime = " .
-										"(SELECT MAX(".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime) FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." WHERE ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_id = ".constant("SAMPLE_TABLE").".id) " .
+									"".constant("SAMPLE_HAS_LOCATION_TABLE").".datetime = " .
+										"(SELECT MAX(".constant("SAMPLE_HAS_LOCATION_TABLE").".datetime) FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE ".constant("SAMPLE_HAS_LOCATION_TABLE").".sample_id = ".constant("SAMPLE_TABLE").".id) " .
 									") " .
-								"OR ".constant("SAMPLE_TABLE").".id NOT IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").") " .
+								"OR ".constant("SAMPLE_TABLE").".id NOT IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_LOCATION_TABLE").") " .
 								") " .
 						"".$sql_order_by."";
 			
@@ -558,8 +560,8 @@ class Sample_Wrapper_Access
 						$sql_order_by = "ORDER BY ".constant("SAMPLE_TEMPLATE_TABLE").".name ".$sql_order_method;
 					break;
 					
-					case "depository":
-						$sql_order_by = "ORDER BY ".constant("SAMPLE_DEPOSITORY_TABLE").".name ".$sql_order_method;
+					case "location":
+						$sql_order_by = "ORDER BY ".constant("LOCATION_TABLE").".name ".$sql_order_method;
 					break;
 					
 					case "owner":
@@ -581,27 +583,28 @@ class Sample_Wrapper_Access
 						"".constant("SAMPLE_TABLE").".name AS name," .
 						"".constant("SAMPLE_TABLE").".datetime AS datetime," .
 						"".constant("SAMPLE_TEMPLATE_TABLE").".name AS template, " .
-						"".constant("SAMPLE_DEPOSITORY_TABLE").".name AS depository, " .
+						"NAMECONCAT(".constant("LOCATION_TYPE_TABLE").".name,".constant("LOCATION_TABLE").".name) AS location," .
 						"".constant("SAMPLE_TABLE").".date_of_expiry AS date_of_expiry, " .
 						"".constant("SAMPLE_TABLE").".expiry_warning AS expiry_warning, " .
 						"".constant("SAMPLE_TABLE").".available AS av, " .
 						"".constant("SAMPLE_TABLE").".owner_id AS owner " .
 						"FROM ".constant("SAMPLE_TABLE")." " .
-						"LEFT JOIN ".constant("SAMPLE_HAS_ITEM_TABLE")." 				ON ".constant("SAMPLE_TABLE").".id 											= ".constant("SAMPLE_HAS_ITEM_TABLE").".sample_id " .
-						"LEFT JOIN ".constant("SAMPLE_TEMPLATE_TABLE")." 				ON ".constant("SAMPLE_TABLE").".template_id 								= ".constant("SAMPLE_TEMPLATE_TABLE").".id " .
-						"LEFT JOIN ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." 	ON ".constant("SAMPLE_TABLE").".id 											= ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_id " .
-						"LEFT JOIN ".constant("SAMPLE_DEPOSITORY_TABLE")." 				ON ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_depository_id 	= ".constant("SAMPLE_DEPOSITORY_TABLE").".id " .
-						"LEFT JOIN ".constant("USER_PROFILE_TABLE")." 					ON ".constant("SAMPLE_TABLE").".owner_id								 	= ".constant("USER_PROFILE_TABLE").".id " .
+						"LEFT JOIN ".constant("SAMPLE_HAS_ITEM_TABLE")." 		ON ".constant("SAMPLE_TABLE").".id 							= ".constant("SAMPLE_HAS_ITEM_TABLE").".sample_id " .
+						"LEFT JOIN ".constant("SAMPLE_TEMPLATE_TABLE")." 		ON ".constant("SAMPLE_TABLE").".template_id 				= ".constant("SAMPLE_TEMPLATE_TABLE").".id " .
+						"LEFT JOIN ".constant("SAMPLE_HAS_LOCATION_TABLE")." 	ON ".constant("SAMPLE_TABLE").".id 							= ".constant("SAMPLE_HAS_LOCATION_TABLE").".sample_id " .
+						"LEFT JOIN ".constant("LOCATION_TABLE")." 				ON ".constant("SAMPLE_HAS_LOCATION_TABLE").".location_id 	= ".constant("LOCATION_TABLE").".id " .
+						"LEFT JOIN ".constant("LOCATION_TYPE_TABLE")." 			ON ".constant("LOCATION_TABLE").".type_id 					= ".constant("LOCATION_TYPE_TABLE").".id " .
+						"LEFT JOIN ".constant("USER_PROFILE_TABLE")." 			ON ".constant("SAMPLE_TABLE").".owner_id					= ".constant("USER_PROFILE_TABLE").".id " .
 						"WHERE ".constant("SAMPLE_HAS_ITEM_TABLE").".item_id = ".$item_id." " .
-						"AND (".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".primary_key IN " .
+						"AND (".constant("SAMPLE_HAS_LOCATION_TABLE").".primary_key IN " .
 									"( " .
 									"SELECT primary_key " .
-									"FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." " .
+									"FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." " .
 									"WHERE sample_id = ".constant("SAMPLE_TABLE").".id AND " .
-									"".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime = " .
-										"(SELECT MAX(".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime) FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." WHERE ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_id = ".constant("SAMPLE_TABLE").".id) " .
+									"".constant("SAMPLE_HAS_LOCATION_TABLE").".datetime = " .
+										"(SELECT MAX(".constant("SAMPLE_HAS_LOCATION_TABLE").".datetime) FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE ".constant("SAMPLE_HAS_LOCATION_TABLE").".sample_id = ".constant("SAMPLE_TABLE").".id) " .
 									") " .
-								"OR ".constant("SAMPLE_TABLE").".id NOT IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").") " .
+								"OR ".constant("SAMPLE_TABLE").".id NOT IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_LOCATION_TABLE").") " .
 								") " .
 						"".$sql_order_by."";
 			
@@ -708,8 +711,8 @@ class Sample_Wrapper_Access
 						$sql_order_by = "ORDER BY ".constant("SAMPLE_TEMPLATE_TABLE").".name ".$sql_order_method;
 					break;
 					
-					case "depository":
-						$sql_order_by = "ORDER BY ".constant("SAMPLE_DEPOSITORY_TABLE").".name ".$sql_order_method;
+					case "location":
+						$sql_order_by = "ORDER BY ".constant("LOCATION_TABLE").".name ".$sql_order_method;
 					break;
 					
 					default:
@@ -727,26 +730,27 @@ class Sample_Wrapper_Access
 						"".constant("SAMPLE_TABLE").".name AS name," .
 						"".constant("SAMPLE_TABLE").".datetime AS datetime," .
 						"".constant("SAMPLE_TEMPLATE_TABLE").".name AS template," .
-						"".constant("SAMPLE_DEPOSITORY_TABLE").".name AS depository," .
+						"NAMECONCAT(".constant("LOCATION_TYPE_TABLE").".name,".constant("LOCATION_TABLE").".name) AS location," .
 						"".constant("SAMPLE_TABLE").".date_of_expiry AS date_of_expiry, " .
 						"".constant("SAMPLE_TABLE").".expiry_warning AS expiry_warning, " .
 						"".constant("SAMPLE_TABLE").".available AS av " .
 						"FROM ".constant("SAMPLE_TABLE")." " .
-						"JOIN ".constant("SAMPLE_TEMPLATE_TABLE")." 				ON ".constant("SAMPLE_TABLE").".template_id 								= ".constant("SAMPLE_TEMPLATE_TABLE").".id " .
-						"LEFT JOIN ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." 	ON ".constant("SAMPLE_TABLE").".id 											= ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_id " .
-						"LEFT JOIN ".constant("SAMPLE_DEPOSITORY_TABLE")." 				ON ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_depository_id 	= ".constant("SAMPLE_DEPOSITORY_TABLE").".id " .
+						"JOIN ".constant("SAMPLE_TEMPLATE_TABLE")." 			ON ".constant("SAMPLE_TABLE").".template_id 				= ".constant("SAMPLE_TEMPLATE_TABLE").".id " .
+						"LEFT JOIN ".constant("SAMPLE_HAS_LOCATION_TABLE")." 	ON ".constant("SAMPLE_TABLE").".id 							= ".constant("SAMPLE_HAS_LOCATION_TABLE").".sample_id " .
+						"LEFT JOIN ".constant("LOCATION_TABLE")." 				ON ".constant("SAMPLE_HAS_LOCATION_TABLE").".location_id 	= ".constant("LOCATION_TABLE").".id " .
+						"LEFT JOIN ".constant("LOCATION_TYPE_TABLE")." 			ON ".constant("LOCATION_TABLE").".type_id 					= ".constant("LOCATION_TYPE_TABLE").".id " .
 						"WHERE " .
 							"".constant("SAMPLE_TABLE").".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE").".organisation_unit_id = ".$organisation_unit_id.") " .
 							"AND " .
-								"(".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".primary_key IN " .
+								"(".constant("SAMPLE_HAS_LOCATION_TABLE").".primary_key IN " .
 									"( " .
 									"SELECT primary_key " .
-									"FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." " .
+									"FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." " .
 									"WHERE sample_id = ".constant("SAMPLE_TABLE").".id AND " .
-									"".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime = " .
-										"(SELECT MAX(".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime) FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." WHERE ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_id = ".constant("SAMPLE_TABLE").".id) " .
+									"".constant("SAMPLE_HAS_LOCATION_TABLE").".datetime = " .
+										"(SELECT MAX(".constant("SAMPLE_HAS_LOCATION_TABLE").".datetime) FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE ".constant("SAMPLE_HAS_LOCATION_TABLE").".sample_id = ".constant("SAMPLE_TABLE").".id) " .
 									") " .
-								"OR ".constant("SAMPLE_TABLE").".id NOT IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").") " .
+								"OR ".constant("SAMPLE_TABLE").".id NOT IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_LOCATION_TABLE").") " .
 								") " .
 							"".$sql_order_by."";
 			
@@ -814,7 +818,7 @@ class Sample_Wrapper_Access
 	/**
 	 * NEW
 	 */
-	public static function list_sample_depositories($sample_id, $order_by, $order_method, $start, $end)
+	public static function list_sample_locations($sample_id, $order_by, $order_method, $start, $end)
 	{
 		global $db;
 		
@@ -834,11 +838,11 @@ class Sample_Wrapper_Access
 				switch($order_by):
 						
 					case "name":
-						$sql_order_by = "ORDER BY ".constant("SAMPLE_DEPOSITORY_TABLE").".name ".$sql_order_method;
+						$sql_order_by = "ORDER BY ".constant("LOCATION_TABLE").".name ".$sql_order_method;
 					break;
 					
 					case "datetime":
-						$sql_order_by = "ORDER BY ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime ".$sql_order_method;
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_HAS_LOCATION_TABLE").".datetime ".$sql_order_method;
 					break;
 					
 					case "user":
@@ -846,24 +850,25 @@ class Sample_Wrapper_Access
 					break;
 					
 					default:
-						$sql_order_by = "ORDER BY ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime ".$sql_order_method;
+						$sql_order_by = "ORDER BY ".constant("SAMPLE_HAS_LOCATION_TABLE").".datetime ".$sql_order_method;
 					break;
 				
 				endswitch;
 			}
 			else
 			{
-				$sql_order_by = "ORDER BY ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime";
+				$sql_order_by = "ORDER BY ".constant("SAMPLE_HAS_LOCATION_TABLE").".datetime";
 			}
 			
-			$sql = "SELECT ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime AS datetime," .
-						"".constant("SAMPLE_DEPOSITORY_TABLE").".name AS name," .
-						"".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".user_id AS user " .
-						"FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." " .
-						"JOIN ".constant("USER_PROFILE_TABLE")." 						ON ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".user_id 				= ".constant("USER_PROFILE_TABLE").".id " .
-						"LEFT JOIN ".constant("SAMPLE_DEPOSITORY_TABLE")." 				ON ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_depository_id 	= ".constant("SAMPLE_DEPOSITORY_TABLE").".id " .
+			$sql = "SELECT ".constant("SAMPLE_HAS_LOCATION_TABLE").".datetime AS datetime," .
+						"NAMECONCAT(".constant("LOCATION_TYPE_TABLE").".name,".constant("LOCATION_TABLE").".name) AS name," .
+						"".constant("SAMPLE_HAS_LOCATION_TABLE").".user_id AS user " .
+						"FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." " .
+						"JOIN ".constant("USER_PROFILE_TABLE")." 		ON ".constant("SAMPLE_HAS_LOCATION_TABLE").".user_id 		= ".constant("USER_PROFILE_TABLE").".id " .
+						"LEFT JOIN ".constant("LOCATION_TABLE")." 		ON ".constant("SAMPLE_HAS_LOCATION_TABLE").".location_id 	= ".constant("LOCATION_TABLE").".id " .
+						"LEFT JOIN ".constant("LOCATION_TYPE_TABLE")." 	ON ".constant("LOCATION_TABLE").".type_id 					= ".constant("LOCATION_TYPE_TABLE").".id " .
 						"WHERE " .
-							"".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_id = ".$sample_id." " .
+							"".constant("SAMPLE_HAS_LOCATION_TABLE").".sample_id = ".$sample_id." " .
 							"".$sql_order_by."";
 			
 			$return_array = array();
@@ -903,14 +908,14 @@ class Sample_Wrapper_Access
 	/**
 	 * NEW
 	 */
-	public static function count_sample_depositories($sample_id)
+	public static function count_sample_locations($sample_id)
 	{
 		global $db;
 		
 		if (is_numeric($sample_id))
 		{	
 			$sql = "SELECT COUNT(primary_key) AS result " .
-						"FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." " .
+						"FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." " .
 						"WHERE sample_id = ".$sample_id." ";
 			
 			$res = $db->db_query($sql);
@@ -1182,8 +1187,8 @@ class Sample_Wrapper_Access
 						$sql_order_by = "ORDER BY ".constant("SAMPLE_TEMPLATE_TABLE").".name ".$sql_order_method;
 					break;
 					
-					case "depository":
-						$sql_order_by = "ORDER BY ".constant("SAMPLE_DEPOSITORY_TABLE").".name ".$sql_order_method;
+					case "location":
+						$sql_order_by = "ORDER BY ".constant("LOCATION_TABLE").".name ".$sql_order_method;
 					break;
 					
 					default:
@@ -1205,14 +1210,16 @@ class Sample_Wrapper_Access
    								"".constant("SAMPLE_TABLE").".datetime AS datetime," .
 								"".constant("SAMPLE_TABLE").".owner_id AS owner," .
    								"".constant("SAMPLE_TEMPLATE_TABLE").".name AS template," .
-								"".constant("SAMPLE_DEPOSITORY_TABLE").".name AS depository," .
+								"NAMECONCAT(".constant("LOCATION_TYPE_TABLE").".name,".constant("LOCATION_TABLE").".name) AS location," .
 								"".constant("SAMPLE_TABLE").".date_of_expiry AS date_of_expiry, " .
+   								"".constant("SAMPLE_TABLE").".expiry_warning AS expiry_warning, " .
 								"".constant("SAMPLE_TABLE").".available AS av " .
    								" FROM ".constant('SAMPLE_TABLE')." " .
-   								"JOIN ".constant("SAMPLE_TEMPLATE_TABLE")." 					ON ".constant("SAMPLE_TABLE").".template_id 								= ".constant("SAMPLE_TEMPLATE_TABLE").".id " .
-								"LEFT JOIN ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." 	ON ".constant("SAMPLE_TABLE").".id 											= ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_id " .
-								"LEFT JOIN ".constant("SAMPLE_DEPOSITORY_TABLE")." 				ON ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_depository_id 	= ".constant("SAMPLE_DEPOSITORY_TABLE").".id " .
-   								"LEFT JOIN ".constant("USER_PROFILE_TABLE")." 					ON ".constant("SAMPLE_TABLE").".owner_id								 	= ".constant("USER_PROFILE_TABLE").".id " .
+   								"JOIN ".constant("SAMPLE_TEMPLATE_TABLE")." 			ON ".constant("SAMPLE_TABLE").".template_id 				= ".constant("SAMPLE_TEMPLATE_TABLE").".id " .
+								"LEFT JOIN ".constant("SAMPLE_HAS_LOCATION_TABLE")." 	ON ".constant("SAMPLE_TABLE").".id 							= ".constant("SAMPLE_HAS_LOCATION_TABLE").".sample_id " .
+								"LEFT JOIN ".constant("LOCATION_TABLE")." 				ON ".constant("SAMPLE_HAS_LOCATION_TABLE").".location_id 	= ".constant("LOCATION_TABLE").".id " .
+   								"LEFT JOIN ".constant("LOCATION_TYPE_TABLE")." 			ON ".constant("LOCATION_TABLE").".type_id 					= ".constant("LOCATION_TYPE_TABLE").".id " .
+								"LEFT JOIN ".constant("USER_PROFILE_TABLE")." 			ON ".constant("SAMPLE_TABLE").".owner_id					= ".constant("USER_PROFILE_TABLE").".id " .
 								"WHERE (";
    			
    			if ($id)
@@ -1310,15 +1317,15 @@ class Sample_Wrapper_Access
 			
 			
    			$sql = $base_sql."".$add_sql.") AND " .
-   								"(".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".primary_key IN " .
+   								"(".constant("SAMPLE_HAS_LOCATION_TABLE").".primary_key IN " .
 									"( " .
 									"SELECT primary_key " .
-									"FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." " .
+									"FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." " .
 									"WHERE sample_id = ".constant("SAMPLE_TABLE").".id AND " .
-									"".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime = " .
-										"(SELECT MAX(".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".datetime) FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE")." WHERE ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").".sample_id = ".constant("SAMPLE_TABLE").".id) " .
+									"".constant("SAMPLE_HAS_LOCATION_TABLE").".datetime = " .
+										"(SELECT MAX(".constant("SAMPLE_HAS_LOCATION_TABLE").".datetime) FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE ".constant("SAMPLE_HAS_LOCATION_TABLE").".sample_id = ".constant("SAMPLE_TABLE").".id) " .
 									") " .
-								"OR ".constant("SAMPLE_TABLE").".id NOT IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_SAMPLE_DEPOSITORY_TABLE").") " .
+								"OR ".constant("SAMPLE_TABLE").".id NOT IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_LOCATION_TABLE").") " .
 								") " .
 							"".$sql_order_by."";
    			

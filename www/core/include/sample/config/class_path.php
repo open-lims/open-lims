@@ -28,7 +28,6 @@
 	$classes['SampleSecurityException']		= $path_prefix."core/include/sample/exceptions/sample_security_exception.class.php";
 	
 	$classes['Sample']						= $path_prefix."core/include/sample/sample.class.php";
-	$classes['SampleDepository']			= $path_prefix."core/include/sample/sample_depository.class.php";
 	$classes['SampleFolder']				= $path_prefix."core/include/sample/sample_folder.class.php";
 	$classes['SampleVirtualFolder']			= $path_prefix."core/include/sample/sample_virtual_folder.class.php";
 	$classes['SampleItem']					= $path_prefix."core/include/sample/sample_item.class.php";

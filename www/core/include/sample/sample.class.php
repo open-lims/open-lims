@@ -33,7 +33,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	
 	require_once("access/sample.access.php");
 	require_once("access/sample_is_item.access.php");
-	require_once("access/sample_has_sample_depository.access.php");
+	require_once("access/sample_has_location.access.php");
 	require_once("access/sample_has_organisation_unit.access.php");
 	require_once("access/sample_has_user.access.php");
 }
@@ -116,12 +116,12 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
      * @param integer $template_id
      * @param string $name
      * @param string $supplier
-     * @param integer $depository_id
+     * @param integer $location_id
      * @param string $desc
      * @return integer Sample-ID
      * @throws SampleCreationFailedException
      */
-    public function create($organisation_unit_id, $template_id, $name, $manufacturer_id, $depository_id, $desc, $language_id, $date_of_expiry, $expiry_warning)
+    public function create($organisation_unit_id, $template_id, $name, $manufacturer_id, $location_id, $desc, $language_id, $date_of_expiry, $expiry_warning)
     {
     	global $user, $transaction;
     	
@@ -238,11 +238,12 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	    				}
 	    			}
 	    			
-	    			if (is_numeric($depository_id))
+	    			
+	    			if (is_numeric($location_id))
 	    			{
-		    			// Create First Depository
-		    			$sample_has_sample_depository_access = new SampleHasSampleDepository_Access(null);
-		    			if ($sample_has_sample_depository_access->create($sample_id, $depository_id, $user->get_user_id()) == null)
+		    			// Create First Location
+		    			$sample_has_locaiton_access = new SampleHasLocation_Access(null);
+		    			if ($sample_has_locaiton_access->create($sample_id, $location_id, $user->get_user_id()) == null)
 		    			{
 		    				$sample_folder->delete(true, true);
 							if ($transaction_id != null)
@@ -252,6 +253,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 							throw new SampleCreationFailedException("",1);
 		    			}
 	    			}
+	    			
 	    			
 	    			// Create Item
 					if (($this->item_id = parent::create()) == null)
@@ -378,14 +380,14 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 			
 			$tmp_sample_id = $this->sample_id;
 		
-			// Depository Relations
-			$sample_has_sample_depository_array = SampleHasSampleDepository_Access::list_entries_by_sample_id($tmp_sample_id);
-			if (is_array($sample_has_sample_depository_array) and count($sample_has_sample_depository_array) >= 1)
+			// Location Relations
+			$sample_has_location_array = SampleHasLocation_Access::list_entries_by_sample_id($tmp_sample_id);
+			if (is_array($sample_has_location_array) and count($sample_has_location_array) >= 1)
 			{
-				foreach($sample_has_sample_depository_array as $key => $value)
+				foreach($sample_has_location_array as $key => $value)
 				{
-					$sample_has_sample_depository = new SampleHasSampleDepository_Access($value);
-					if ($sample_has_sample_depository->delete() == false)
+					$sample_has_location = new SampleHasLocation_Access($value);
+					if ($sample_has_location->delete() == false)
 					{
 						if ($transaction_id != null)
 						{
@@ -721,20 +723,20 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     }
     
     /**
-     * Adds a new depository to the current sample
-     * @param integer $depository_id
+     * Adds a new location to the current sample
+     * @param integer location_id
      * @return bool
      */
-    public function add_depository($depository_id)
+    public function add_location($location_id)
     {
     	global $user;
     	
-    	if ($this->sample_id and $this->sample and is_numeric($depository_id))
+    	if ($this->sample_id and $this->sample and is_numeric($location_id))
     	{
-    		$sample_has_sample_depository = new SampleHasSampleDepository_Access(null);
-    		if ($depository_id != $this->get_current_depository())
+    		$sample_has_location = new SampleHasLocation_Access(null);
+    		if ($location_id != $this->get_current_location())
     		{
-	    		if ($sample_has_sample_depository->create($this->sample_id, $depository_id, $user->get_user_id()) != null)
+	    		if ($sample_has_location->create($this->sample_id, $location_id, $user->get_user_id()) != null)
 	    		{
 	    			return true;
 	    		}
@@ -755,82 +757,34 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     }
     
     /**
-     * Returns all depositories
-     * @return array
-     */
-    public function get_all_depositories()
-    {
-    	if ($this->sample_id and $this->sample)
-    	{
-    		$pk_array = SampleHasSampleDepository_Access::list_entries_by_sample_id($this->sample_id);
-    		if (is_array($pk_array) and count($pk_array) >= 1)
-    		{
-    			$return_array = array();
-    			foreach ($pk_array as $key => $value)
-    			{
-    				$sample_has_sample_depository = new SampleHasSampleDepository_Access($value);
-    				array_push($return_array, $sample_has_sample_depository->get_sample_depository_id());
-    			}
-    			return $return_array;
-    		}
-    		else
-    		{
-    			return null;
-    		}
-    	}
-    	else
-    	{
-    		return null;
-    	}
-    }
-    
-    /**
-     * Returns all depositories with special information
-     * @return array
-     */
-    public function get_all_depository_information()
-    {
-    	if ($this->sample_id and $this->sample)
-    	{
-    		$pk_array = SampleHasSampleDepository_Access::list_entries_by_sample_id($this->sample_id);
-    		if (is_array($pk_array) and count($pk_array) >= 1)
-    		{
-    			$return_array = array();
-    			$counter = 0;
-    			
-    			foreach ($pk_array as $key => $value)
-    			{
-    				$sample_has_sample_depository = new SampleHasSampleDepository_Access($value);
-    				
-    				$return_array[$counter][id] = $sample_has_sample_depository->get_sample_depository_id();
-    				$return_array[$counter][datetime] = $sample_has_sample_depository->get_datetime();
-    				$return_array[$counter][user_id] = $sample_has_sample_depository->get_user_id();
-    				
-    				$counter++;
-    			}
-    			return $return_array;
-    		}
-    		else
-    		{
-    			return null;
-    		}
-    	}
-    	else
-    	{
-    		return null;
-    	}
-    }
-    
-    /**
-     * Returns current depository
+     * Returns current location
      * @return integer
      */
-    public function get_current_depository()
+    public function get_current_location()
     {
     	if ($this->sample_id and $this->sample)
     	{
-    		$depository_array = $this->get_all_depositories();
-    		return $depository_array[count($depository_array)-1];
+	    	if ($this->sample_id and $this->sample)
+	    	{
+	    		$pk_array = SampleHasLocation_Access::list_entries_by_sample_id($this->sample_id);
+	    		if (is_array($pk_array) and count($pk_array) >= 1)
+	    		{
+	    			foreach ($pk_array as $key => $value)
+	    			{
+	    				$sample_has_location = new SampleHasLocation_Access($value);
+	    				$last_element = $sample_has_location->get_location_id();
+	    			}
+	    			return $last_element;
+	    		}
+	    		else
+	    		{
+	    			return null;
+	    		}
+	    	}
+	    	else
+	    	{
+	    		return null;
+	    	}
     	}
     	else
     	{
@@ -944,18 +898,18 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	}
 		
 	/**
-	 * Returns the name of the current depository
+	 * Returns the name of the current location
 	 * @return string
 	 */
-	public function get_current_depository_name()
+	public function get_current_location_name()
 	{
 		if ($this->sample_id and $this->sample)
 		{
-			$sample_depository_id = $this->get_current_depository();
-			$sample_depository = new SampleDepository($sample_depository_id);
-			if ($sample_depository->get_name()) 
+			$location_id = $this->get_current_location();
+			$location = new Location($location_id);
+			if ($location_name = $location->get_name(false)) 
 			{
-				return $sample_depository->get_name();
+				return $location_name;
 			}
 			else
 			{

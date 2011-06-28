@@ -6,8 +6,6 @@ $(document).ready(function()
 	var max_entries = 25;
 	var get_array = getQueryParams(document.location.search);
 	
-	
-	
 	function reload_content()
 	\{	
 		$.ajax(
@@ -87,14 +85,17 @@ $(document).ready(function()
 	\});
 	
 	$( "#manufacturerDialogButtonNew" ).click(function()
-	\{		
-		data = $("#manufacturerDialogContent").html();
-		
-		$("#manufacturerDialogContent").html("<tr id='manufacturerDialogNewFieldTr'>"+
-												"<td><input type='text' id='manufacturerDialogNewField' /></td>"+
-												"<td><a href='#' id='manufacturerDialogNewFieldButtonAdd'><img src='images/icons/add.png' alt='+' class='manufacturerDialogNewFieldButton' /></a>"+
-													"<a href='#' id='manufacturerDialogNewFieldButtonCancel'><img src='images/icons/cancel.png' alt='X'' class='manufacturerDialogNewFieldButton' /></a></td>"+
-												"</tr>"+data);
+	\{
+		if (!$("#manufacturerDialogNewFieldTr").html())
+		\{
+			var data = $("#manufacturerDialogContent").html();
+			
+			$("#manufacturerDialogContent").html("<thead><tr id='manufacturerDialogNewFieldTr'>"+
+													"<td><input type='text' id='manufacturerDialogNewField' /></td>"+
+													"<td><a href='#' id='manufacturerDialogNewFieldButtonAdd'><img src='images/icons/add.png' alt='+' class='manufacturerDialogNewFieldButton' /></a>"+
+														"<a href='#' id='manufacturerDialogNewFieldButtonCancel'><img src='images/icons/cancel.png' alt='X'' class='manufacturerDialogNewFieldButton' /></a></td>"+
+													"</tr></thead>"+data);
+		\}
 	
 		$( "#manufacturerDialogNewField" ).keyup(function()
 		\{

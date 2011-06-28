@@ -74,6 +74,18 @@ class Manufacturer implements ManufacturerInterface, EventListenerInterface
 		}
 	}
 	
+	public function delete()
+	{
+		if ($this->manufacturer_id and $this->manufacturer)
+		{
+			return $this->manufacturer->delete();
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	public function get_name()
 	{
 		if ($this->manufacturer)
@@ -103,14 +115,17 @@ class Manufacturer implements ManufacturerInterface, EventListenerInterface
 	}
 	
 	/**
-	 * @params object $event_object
+	 * @param object $event_object
      * @return bool
      */
     public static function listen_events($event_object)
     {
     	if ($event_object instanceof UserDeleteEvent)
     	{
-
+			if (Manufacturer_Access::set_user_id_by_user_id($event_object->get_user_id(), 1) == false)
+			{
+				return false;
+			}
     	}
 
     	return true;
