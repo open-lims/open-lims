@@ -38,13 +38,19 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("events/organisation_unit_post_delete_event.class.php");
 	require_once("events/organisation_unit_rename_event.class.php");
 	require_once("events/organisation_unit_change_owner_event.class.php");
-	require_once("events/organisation_unit_change_leader_event.class.php");
+	require_once("events/organisation_unit_leader_create_event.class.php");
+	require_once("events/organisation_unit_leader_delete_event.class.php");
+	require_once("events/organisation_unit_quality_manager_create_event.class.php");
+	require_once("events/organisation_unit_quality_manager_delete_event.class.php");
 	require_once("events/organisation_unit_group_create_event.class.php");
 	require_once("events/organisation_unit_group_delete_event.class.php");
 	
 	require_once("access/organisation_unit.access.php");
-	require_once("access/organisation_unit_has_member.access.php");
 	require_once("access/organisation_unit_has_group.access.php");
+	require_once("access/organisation_unit_has_leader.access.php");
+	require_once("access/organisation_unit_has_member.access.php");
+	require_once("access/organisation_unit_has_owner.access.php");
+	require_once("access/organisation_unit_has_quality_manager.access.php");
 	require_once("access/organisation_unit_type.access.php");
 }
 
@@ -92,7 +98,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	 */
 	public function create($toid, $name, $type_id, $stores_data) 
 	{
-		global $transaction;
+		global $transaction, $session;
 		
 		if ($this->organisation_unit)
 		{
@@ -124,6 +130,26 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 				if (($organisation_unit_id = $this->organisation_unit->create($toid, $name, $type_id, $stores_data, $new_highest_position)) != null)
 				{
 					$this->__construct($organisation_unit_id);
+					
+					// Create Owner
+					if ($this->create_owner_in_organisation_unit($session->get_user_id(), true) == false)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						throw new OrganisationUnitCreationFailedException("",1);
+					}
+					
+					// Create Leader
+					if ($this->create_leader_in_organisation_unit($session->get_user_id()) == false)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						throw new OrganisationUnitCreationFailedException("",1);
+					}
 					
 					$organisation_unit_create_event = new OrganisationUnitCreateEvent($organisation_unit_id, $stores_data);
 					$event_handler = new EventHandler($organisation_unit_create_event);
@@ -342,7 +368,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 				}
 				else
 				{
-					$organisation_unit_has_member_array = OrganisationUnitHasMember_Access::list_users_by_organisation_unit_id($this->organisation_unit_id);
+					$organisation_unit_has_member_array = OrganisationUnitHasMember_Access::list_members_by_organisation_unit_id($this->organisation_unit_id);
 					foreach($organisation_unit_has_member_array as $key => $value)
 					{
 						if ($value == $user_id)
@@ -551,7 +577,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	{
 		if (is_numeric($user_id))
 		{
-			$user_array = OrganisationUnitHasMember_Access::list_users_by_organisation_unit_id($this->organisation_unit_id);
+			$user_array = OrganisationUnitHasMember_Access::list_members_by_organisation_unit_id($this->organisation_unit_id);
 			if (in_array($user_id, $user_array))
 			{
 				return true;
@@ -578,8 +604,8 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 		{
 			if ($this->is_user_in_organisation_unit($user_id) == false)
 			{
-				$organisation_unit_has_user = new OrganisationUnitHasMember_Access(null);
-				if ($organisation_unit_has_user->create($this->organisation_unit_id, $user_id) != null)
+				$organisation_unit_has_user = new OrganisationUnitHasMember_Access(null, null);
+				if ($organisation_unit_has_user->create($this->organisation_unit_id, $user_id) == true)
 				{
 					return true;
 				}
@@ -610,8 +636,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 		{
 			if ($this->is_user_in_organisation_unit($user_id) == true)
 			{
-				$primary_key = OrganisationUnitHasMember_Access::get_pk_by_user_id_and_organisation_unit_id($user_id, $this->organisation_unit_id);
-				$organisation_unit_has_user = new OrganisationUnitHasMember_Access($primary_key);
+				$organisation_unit_has_user = new OrganisationUnitHasMember_Access($this->organisation_unit_id, $user_id);
 				if ($organisation_unit_has_user->delete() == true)
 				{
 					return true;
@@ -672,8 +697,8 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 			
 			if ($this->is_group_in_organisation_unit($group_id) == false)
 			{
-				$organisation_unit_has_group = new OrganisationUnitHasGroup_Access(null);
-				if ($organisation_unit_has_group->create($this->organisation_unit_id, $group_id) != null)
+				$organisation_unit_has_group = new OrganisationUnitHasGroup_Access(null, null);
+				if ($organisation_unit_has_group->create($this->organisation_unit_id, $group_id) == true)
 				{
 					$organisation_unit_group_create_event = new OrganisationUnitGroupCreateEvent($this->organisation_unit_id, $group_id);
 					$event_handler = new EventHandler($organisation_unit_group_create_event);
@@ -734,13 +759,332 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 			
 			if ($this->is_group_in_organisation_unit($group_id) == true)
 			{
-				$primary_key = OrganisationUnitHasGroup_Access::get_pk_by_group_id_and_organisation_unit_id($group_id, $this->organisation_unit_id);
-				$organisation_unit_has_group = new OrganisationUnitHasGroup_Access($primary_key);
+				$organisation_unit_has_group = new OrganisationUnitHasGroup_Access($this->organisation_unit_id, $group_id);
 				
 				if ($organisation_unit_has_group->delete() == true)
 				{
-					$organisation_unit_group_create_event = new OrganisationUnitGroupDeleteEvent($this->organisation_unit_id, $group_id);
-					$event_handler = new EventHandler($organisation_unit_group_create_event);
+					$organisation_unit_group_delete_event = new OrganisationUnitGroupDeleteEvent($this->organisation_unit_id, $group_id);
+					$event_handler = new EventHandler($organisation_unit_group_delete_event);
+					
+					if ($event_handler->get_success() == true)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->commit($transaction_id);
+						}
+						return true;
+					}
+					else
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+					}
+				}
+				else
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+				}
+			}
+			else
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * Checks if a Leader is in the OU
+	 * @param integer $leader_id
+	 * @return bool
+	 */
+	public function is_leader_in_organisation_unit($leader_id)
+	{
+		if (is_numeric($leader_id))
+		{
+			$leader_array = OrganisationUnitHasLeader_Access::list_leaders_by_organisation_unit_id($this->organisation_unit_id);
+			if (in_array($leader_id, $leader_array))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * Creates a Leader in the OU
+	 * @param integer $leader_id
+	 * @return bool
+	 */
+	public function create_leader_in_organisation_unit($leader_id)
+	{
+		global $transaction;
+		
+		if ($this->organisation_unit_id)
+		{
+			$transaction_id = $transaction->begin();
+			
+			if ($this->is_leader_in_organisation_unit($leader_id) == false)
+			{
+				$organisation_unit_has_leader = new OrganisationUnitHasLeader_Access(null, null);
+				if ($organisation_unit_has_leader->create($this->organisation_unit_id, $leader_id) == true)
+				{
+					$organisation_unit_leader_create_event = new OrganisationUnitLeaderCreateEvent($this->organisation_unit_id, $leader_id);
+					$event_handler = new EventHandler($organisation_unit_leader_create_event);
+					
+					if ($event_handler->get_success() == true)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->commit($transaction_id);
+						}
+						return true;
+					}
+					else
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+					}
+				}
+				else
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+				}
+			}
+			else
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * Deletes a Leader from the OU
+	 * @param integer $leader_id
+	 * @return bool
+	 */
+	public function delete_leader_from_organisation_unit($leader_id)
+	{
+		global $transaction;
+		
+		if ($this->organisation_unit_id)
+		{
+			$transaction_id = $transaction->begin();
+			
+			if ($this->is_leader_in_organisation_unit($leader_id) == true)
+			{
+				$organisation_unit_has_leader = new OrganisationUnitHasLeader_Access($this->organisation_unit_id, $leader_id);
+				
+				if ($organisation_unit_has_leader->delete() == true)
+				{
+					$organisation_unit_leader_delete_event = new OrganisationUnitLeaderDeleteEvent($this->organisation_unit_id, $leader_id);
+					$event_handler = new EventHandler($organisation_unit_leader_delete_event);
+					
+					if ($event_handler->get_success() == true)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->commit($transaction_id);
+						}
+						return true;
+					}
+					else
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+					}
+				}
+				else
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+				}
+			}
+			else
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * Checks if an Owner is in the OU
+	 * @param integer $owner_id
+	 * @return bool
+	 */
+	public function is_owner_in_organisation_unit($owner_id)
+	{
+		if (is_numeric($owner_id))
+		{
+			$owner_array = OrganisationUnitHasOwner_Access::list_owners_by_organisation_unit_id($this->organisation_unit_id);
+			if (in_array($owner_id, $owner_array))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @todo transaction
+	 * @todo master owner
+	 */
+	public function create_owner_in_organisation_unit($owner_id, $master_owner)
+	{
+		if ($this->organisation_unit_id)
+		{
+			if ($this->is_owner_in_organisation_unit($owner_id) == false)
+			{
+				$organisation_unit_has_user = new OrganisationUnitHasMember_Access(null, null);
+				if ($organisation_unit_has_user->create($this->organisation_unit_id, $user_id) == true)
+				{
+					if ($master_owner == true)
+					{
+						// check master owner
+						
+						
+					}
+					else
+					{
+						return true;
+					}
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @todo implementation
+	 * @todo set owner to system on last remove
+	 */
+	public function delete_owner_from_organisation_unit($owner_id)
+	{
+		
+	}
+	
+	/**
+	 * Checks if a Quality-Manager is in the OU
+	 * @param integer $quality_manager_id
+	 * @return bool
+	 */
+	public function is_quality_manager_in_organisation_unit($quality_manager_id)
+	{
+		if (is_numeric($quality_manager_id))
+		{
+			$quality_manager_array = OrganisationUnitHasQualityManager_Access::list_quality_managers_by_organisation_unit_id($this->organisation_unit_id);
+			if (in_array($quality_manager_id, $quality_manager_array))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @todo implementation
+	 */
+	public function create_quality_manager_in_organisation_unit($quality_manager_id)
+	{
+		
+	}
+	
+	/**
+	 * Deletes a Quality-Manager from the OU
+	 * @param integer $quality_manager_id
+	 * @return bool
+	 */
+	public function delete_quality_manager_from_organisation_unit($quality_manager_id)
+	{
+		global $transaction;
+		
+		if ($this->organisation_unit_id)
+		{
+			$transaction_id = $transaction->begin();
+			
+			if ($this->is_quality_manager_in_organisation_unit($quality_manager_id) == true)
+			{
+				$organisation_unit_has_quality_manager = new OrganisationUnitHasQualityManager_Access($this->organisation_unit_id, $quality_manager_id);
+				
+				if ($organisation_unit_has_quality_manager->delete() == true)
+				{
+					$organisation_unit_quality_manager_delete_event = new OrganisationUnitQualityManagerDeleteEvent($this->organisation_unit_id, $quality_manager_id);
+					$event_handler = new EventHandler($organisation_unit_quality_manager_delete_event);
 					
 					if ($event_handler->get_success() == true)
 					{
@@ -832,32 +1176,20 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 
 	/**
 	 * @return integer Owner-ID
+	 * @deprecated 
 	 */
 	public function get_owner_id()
 	{
-		if ($this->organisation_unit)
-		{
-			return $this->organisation_unit->get_owner_id();
-		}
-		else
-		{
-			return null;
-		}
+		return null;
 	}
 	
 	/**
 	 * @return integer Leader-ID
+	 * @deprecated 
 	 */
 	public function get_leader_id()
 	{
-		if ($this->organisation_unit)
-		{
-			return $this->organisation_unit->get_leader_id();
-		}
-		else
-		{
-			return null;
-		}
+		return null;
 	}
 
 	/**
@@ -929,7 +1261,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	{
 		if ($this->organisation_unit_id)
 		{
-			$number_of_users = OrganisationUnitHasMember_Access::count_users_by_organisation_unit_id($this->organisation_unit_id);
+			$number_of_users = OrganisationUnitHasMember_Access::count_members_by_organisation_unit_id($this->organisation_unit_id);
 			if (is_numeric($number_of_users))
 			{
 				return $number_of_users;
@@ -975,7 +1307,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	{
 		if ($this->organisation_unit_id)
 		{
-			return OrganisationUnitHasMember_Access::list_users_by_organisation_unit_id($this->organisation_unit_id);	
+			return OrganisationUnitHasMember_Access::list_members_by_organisation_unit_id($this->organisation_unit_id);	
 		}
 		else
 		{
@@ -996,6 +1328,30 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 		{
 			return null;
 		}
+	}
+	
+	/**
+	 * @todo implementation
+	 */
+	public function list_leaders()
+	{
+		
+	}
+	
+	/**
+	 * @todo implementation
+	 */
+	public function list_owners()
+	{
+		
+	}
+	
+	/**
+	 * @todo implementation
+	 */
+	public function list_quality_managers()
+	{
+		
 	}
 	
 	/**
@@ -1050,6 +1406,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	/**
 	 * @param integer $owner_id New Owner-ID
 	 * @return bool
+	 * @deprecated
 	 */
 	public function set_owner_id($owner_id)
 	{
@@ -1099,6 +1456,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	/**
 	 * @param interger $leader_id New Leader-ID
 	 * @return bool
+	 * @deprecated
 	 */
 	public function set_leader_id($leader_id)
 	{
@@ -1244,13 +1602,14 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	
+	
 	/**
 	 * @param integer $user_id User-ID
 	 * @return integer
 	 */
 	public static function get_number_of_organisation_units_by_user_id($user_id)
 	{
-		$number_of_organisation_units = OrganisationUnitHasMember_Access::count_organisation_units_by_user_id($user_id);
+		$number_of_organisation_units = OrganisationUnitHasMember_Access::count_organisation_units_by_member_id($user_id);
 		if (is_numeric($number_of_organisation_units))
 		{
 			return $number_of_organisation_units;
@@ -1345,10 +1704,10 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	 */
 	public static function list_entries_by_user_id($user_id)
 	{
-		return OrganisationUnitHasMember_Access::list_organisation_units_by_user_id($user_id);
+		return OrganisationUnitHasMember_Access::list_organisation_units_by_member_id($user_id);
 	}
 	
-	/***
+	/**
 	 * @param integer $group_id Group-ID
 	 * @return array List of group OUs
 	 */
@@ -1369,10 +1728,12 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	 * Checks if an User is a leader of any OU
 	 * @param integer $user_id User-ID
 	 * @return bool
+	 * @deprecated
 	 */	
 	private static function is_leader($user_id)
 	{
-		return OrganisationUnit_Access::is_leader($user_id);
+		return true;
+		// return OrganisationUnit_Access::is_leader($user_id);
 	}
 	
 	/**
@@ -1495,7 +1856,10 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
     {
     	if ($event_object instanceof UserDeletePrecheckEvent)
     	{
-    		$owner_array = OrganisationUnit_Access::list_entries_by_owner_id($event_object->get_user_id());
+    		/**
+    		 * @todo change
+    		 */
+    		// $owner_array = OrganisationUnit_Access::list_entries_by_owner_id($event_object->get_user_id());
 			
 			if (is_array($owner_array))
 			{
@@ -1505,8 +1869,10 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 				}
 			}
 			
-			
-			$leader_array = OrganisationUnit_Access::list_entries_by_leader_id($event_object->get_user_id());
+			/**
+    		 * @todo change
+    		 */
+			// $leader_array = OrganisationUnit_Access::list_entries_by_leader_id($event_object->get_user_id());
 			
 			if (is_array($leader_array))
 			{
@@ -1519,7 +1885,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
     	
     	if ($event_object instanceof UserDeleteEvent)
     	{
-			if (OrganisationUnitHasMember_Access::delete_by_user_id($event_object->get_user_id()) == false)
+			if (OrganisationUnitHasMember_Access::delete_by_member_id($event_object->get_user_id()) == false)
 			{
 				return false;
 			}

@@ -22,63 +22,63 @@
  */
  
 /**
- * Organisation Unit User Membership Access Class
+ * Organisation Unit User Leadership Access Class
  * @package organisation_unit
  */
-class OrganisationUnitHasMember_Access
+class OrganisationUnitHasLeader_Access
 {
 	private $organisation_unit_id;
-	private $member_id;
+	private $leader_id;
 	
 	/**
 	 * @param integer $organisation_unit_id
-	 * @param integer $member_id
+	 * @param integer $leader_id
 	 */
-	function __construct($organisation_unit_id, $member_id)
+	function __construct($organisation_unit_id, $leader_id)
 	{
 		global $db;
 		
-		if (!is_numeric($organisation_unit_id) or !is_numeric($member_id))
+		if (!is_numeric($organisation_unit_id) or !is_numeric($leader_id))
 		{
 			$this->organisation_unit_id = null;
-			$this->member_id = null;
+			$this->leader_id = null;
 		}
 		else
 		{	
-			$sql = "SELECT * FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id." AND member_id = ".$member_id."";
+			$sql = "SELECT * FROM ".constant("ORGANISATION_UNIT_HAS_LEADER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id." AND leader_id = ".$leader_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
 			if ($data[organisation_unit_id])
 			{
 				$this->organisation_unit_id	= $data[organisation_unit_id];
-				$this->member_id			= $data[member_id];
+				$this->leader_id			= $data[leader_id];
 			}
 		}
 	}
 	
 	function __destruct()
 	{
-		if ($this->organisation_unit_id and $this->member_id)
+		if ($this->organisation_unit_id and $this->leader_id)
 		{
 			unset($this->organisation_unit_id);
-			unset($this->member_id);
+			unset($this->leader_id);
 		}
 	}
 
 	/**
 	 * @param integer $organisation_unit_id
-	 * @param integer $member_id
+	 * @param integer $leader_id
 	 * @return bool
 	 */
-	public function create($organisation_unit_id, $member_id)
+	public function create($organisation_unit_id, $leader_id)
 	{
 		global $db;
 		
-		if (is_numeric($organisation_unit_id) and is_numeric($member_id))
+		if (is_numeric($organisation_unit_id) and is_numeric($leader_id))
 		{
-			$sql_write = "INSERT INTO ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." (organisation_unit_id,member_id) " .
-					"VALUES (".$organisation_unit_id.",".$member_id.")";
+			$sql_write = "INSERT INTO ".constant("ORGANISATION_UNIT_HAS_LEADER_TABLE")." (organisation_unit_id,leader_id) " .
+					"VALUES (".$organisation_unit_id.",".$leader_id.")";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
@@ -103,14 +103,14 @@ class OrganisationUnitHasMember_Access
 	{
 		global $db;
 		
-		if ($this->organisation_unit_id and $this->member_id)
+		if ($this->organisation_unit_id and $this->leader_id)
 		{
 			$tmp_organisation_unit_id = $this->organisation_unit_id;
-			$tmp_member_id = $this->member_id;
+			$tmp_leader_id = $this->leader_id;
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE organisation_unit_id = ".$tmp_organisation_unit_id." AND member_id = ".$tmp_member_id."";
+			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_LEADER_TABLE")." WHERE organisation_unit_id = ".$tmp_organisation_unit_id." AND leader_id = ".$tmp_leader_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -146,11 +146,11 @@ class OrganisationUnitHasMember_Access
 	/**
 	 * @return integer
 	 */
-	public function get_member_id()
+	public function get_leader_id()
 	{
-		if ($this->member_id)
+		if ($this->leader_id)
 		{
-			return $this->member_id;
+			return $this->leader_id;
 		}
 		else
 		{
@@ -166,9 +166,9 @@ class OrganisationUnitHasMember_Access
 	{
 		global $db;
 			
-		if ($this->organisation_unit_id and $this->member_id and is_numeric($organisation_unit_id))
+		if ($this->organisation_unit_id and $this->leader_id and is_numeric($organisation_unit_id))
 		{
-			$sql = "UPDATE ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." SET organisation_unit_id = '".$organisation_unit_id."' WHERE organisation_unit_id = '".$this->organisation_unit_id."' AND member_id='".$this->member_id."'";
+			$sql = "UPDATE ".constant("ORGANISATION_UNIT_HAS_LEADER_TABLE")." SET organisation_unit_id = '".$organisation_unit_id."' WHERE organisation_unit_id = '".$this->organisation_unit_id."' AND leader_id='".$this->leader_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -188,22 +188,22 @@ class OrganisationUnitHasMember_Access
 	}
 	
 	/**
-	 * @param integer $member_id
+	 * @param integer $leader_id
 	 * @return bool
 	 */
-	public function set_member_id($member_id)
+	public function set_leader_id($leader_id)
 	{
 		global $db;
 
-		if ($this->organisation_unit_id and $this->member_id and is_numeric($member_id))
+		if ($this->organisation_unit_id and $this->leader_id and is_numeric($leader_id))
 		{
 			
-			$sql = "UPDATE ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." SET member_id = '".$member_id."' WHERE organisation_unit_id = '".$this->organisation_unit_id."' AND member_id='".$this->member_id."'";
+			$sql = "UPDATE ".constant("ORGANISATION_UNIT_HAS_LEADER_TABLE")." SET leader_id = '".$leader_id."' WHERE organisation_unit_id = '".$this->organisation_unit_id."' AND leader_id='".$this->leader_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
 			{
-				$this->member_id = $member_id;
+				$this->leader_id = $leader_id;
 				return true;
 			}
 			else
@@ -219,18 +219,18 @@ class OrganisationUnitHasMember_Access
 	
 	
 	/**
-	 * @param integer $member_id
+	 * @param integer $leader_id
 	 * @return integer
 	 */
-	public static function count_organisation_units_by_member_id($member_id)
+	public static function count_organisation_units_by_leader_id($leader_id)
 	{		
 		global $db;
 		
-		if (is_numeric($member_id))
+		if (is_numeric($leader_id))
 		{
 			$return_array = array();
 			
-			$sql = "SELECT COUNT(organisation_unit_id) AS result FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE member_id = ".$member_id."";
+			$sql = "SELECT COUNT(organisation_unit_id) AS result FROM ".constant("ORGANISATION_UNIT_HAS_LEADER_TABLE")." WHERE leader_id = ".$leader_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -253,7 +253,7 @@ class OrganisationUnitHasMember_Access
 	 * @param integer $organisation_unit_id
 	 * @return integer
 	 */
-	public static function count_members_by_organisation_unit_id($organisation_unit_id)
+	public static function count_leaders_by_organisation_unit_id($organisation_unit_id)
 	{		
 		global $db;
 		
@@ -261,7 +261,7 @@ class OrganisationUnitHasMember_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT COUNT(member_id) AS result FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
+			$sql = "SELECT COUNT(leader_id) AS result FROM ".constant("ORGANISATION_UNIT_HAS_LEADER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -281,19 +281,19 @@ class OrganisationUnitHasMember_Access
 	}
 		
 	/**
-	 * @param integer $member_id
+	 * @param integer $leader_id
 	 * @return integer
 	 */
-	public static function list_organisation_units_by_member_id($member_id)
+	public static function list_organisation_units_by_leader_id($leader_id)
 	{
 		global $db;
 			
-		if (is_numeric($member_id))
+		if (is_numeric($leader_id))
 		{
 				
 			$return_array = array();
 			
-			$sql = "SELECT organisation_unit_id FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE member_id = ".$member_id."";
+			$sql = "SELECT organisation_unit_id FROM ".constant("ORGANISATION_UNIT_HAS_LEADER_TABLE")." WHERE leader_id = ".$leader_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -320,7 +320,7 @@ class OrganisationUnitHasMember_Access
 	 * @param integer $organisation_unit_id
 	 * @return array
 	 */
-	public static function list_members_by_organisation_unit_id($organisation_unit_id)
+	public static function list_leaders_by_organisation_unit_id($organisation_unit_id)
 	{
 		global $db;
 			
@@ -328,12 +328,12 @@ class OrganisationUnitHasMember_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT member_id FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
+			$sql = "SELECT leader_id FROM ".constant("ORGANISATION_UNIT_HAS_LEADER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[member_id]);
+				array_push($return_array,$data[leader_id]);
 			}
 			
 			if (is_array($return_array))
@@ -352,19 +352,19 @@ class OrganisationUnitHasMember_Access
 	}
 
 	/**
-	 * @param integer $member_id
+	 * @param integer $leader_id
 	 * @return bool
 	 */
-	public static function delete_by_member_id($member_id)
+	public static function delete_by_leader_id($leader_id)
 	{
 		global $db;
 		
-		if (is_numeric($member_id))
+		if (is_numeric($leader_id))
 		{
 			
 			$return_array = array();
 			
-			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE member_id = ".$member_id."";
+			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_LEADER_TABLE")." WHERE leader_id = ".$leader_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -388,7 +388,7 @@ class OrganisationUnitHasMember_Access
 		{
 			$return_array = array();
 			
-			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
+			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_LEADER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

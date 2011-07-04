@@ -1140,5 +1140,15 @@ class SystemHandler implements SystemHandlerInterface
 			return false;
 		}
 	}
+	
+	public static function include_exists($include_name)
+	{
+		return BaseInclude_Access::exist_entry($include_name);
+	}
+	
+	public static function module_exists($module_name)
+	{
+		return BaseModule_Access::exist_entry($module_name);
+	}
 }
 ?>

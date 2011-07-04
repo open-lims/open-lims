@@ -25,4 +25,5 @@
  * 
  */
 	$classes['OrganisationUnit']			= $path_prefix."core/include/organisation_unit/organisation_unit.class.php";
+	$classes['OrganisationUnit_Wrapper']	= $path_prefix."core/include/organisation_unit/organisation_unit.wrapper.class.php";
 ?>

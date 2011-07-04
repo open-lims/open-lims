@@ -35,8 +35,6 @@ class OrganisationUnit_Access
 	private $is_root;
 	private $name;
 	private $type_id;
-	private $leader_id;
-	private $owner_id;
 	private $stores_data;
 	private $position;
 	private $hidden;
@@ -66,8 +64,6 @@ class OrganisationUnit_Access
 				$this->toid						= $data[toid];
 				$this->name						= $data[name];
 				$this->type_id					= $data[type_id];
-				$this->leader_id				= $data[leader_id];
-				$this->owner_id					= $data[owner_id];
 				$this->position					= $data[position];
 				
 				if ($data[is_root] == "t")
@@ -114,8 +110,6 @@ class OrganisationUnit_Access
 			unset($this->is_root);
 			unset($this->name);
 			unset($this->type_id);
-			unset($this->leader_id);
-			unset($this->owner_id);
 			unset($this->stores_data);
 			unset($this->position);
 			unset($this->hidden);
@@ -132,7 +126,8 @@ class OrganisationUnit_Access
 	 */
 	public function create($toid, $name, $type_id, $stores_data, $position)
 	{
-		global $db, $session;
+		global $db;
+		
 		if ($name and $type_id and $position)
 		{
 			if ($stores_data == true)
@@ -146,14 +141,14 @@ class OrganisationUnit_Access
 			
 			if (is_numeric($toid))
 			{
-				$sql_write = "INSERT INTO ".constant("ORGANISATION_UNIT_TABLE")." (id, toid, is_root, name, type_id, leader_id, owner_id, stores_data, position, hidden) " .
-								"VALUES (nextval('".self::ORGANISATION_UNIT_PK_SEQUENCE."'::regclass), '".$toid."','f','".$name."','".$type_id."','".$session->get_user_id()."',".$session->get_user_id().",'".$stores_data_insert."',".$position.",'f')";		
+				$sql_write = "INSERT INTO ".constant("ORGANISATION_UNIT_TABLE")." (id, toid, is_root, name, type_id, stores_data, position, hidden) " .
+								"VALUES (nextval('".self::ORGANISATION_UNIT_PK_SEQUENCE."'::regclass), '".$toid."','f','".$name."','".$type_id."','".$stores_data_insert."',".$position.",'f')";		
 			
 			}
 			else
 			{
-				$sql_write = "INSERT INTO ".constant("ORGANISATION_UNIT_TABLE")." (id, toid, is_root, name, type_id, leader_id, owner_id, stores_data, position, hidden) " .
-								"VALUES (nextval('".self::ORGANISATION_UNIT_PK_SEQUENCE."'::regclass), currval('".self::ORGANISATION_UNIT_PK_SEQUENCE."'::regclass),'t','".$name."','".$type_id."','".$session->get_user_id()."',".$session->get_user_id().",'".$stores_data_insert."',".$position.",'f')";		
+				$sql_write = "INSERT INTO ".constant("ORGANISATION_UNIT_TABLE")." (id, toid, is_root, name, type_id, stores_data, position, hidden) " .
+								"VALUES (nextval('".self::ORGANISATION_UNIT_PK_SEQUENCE."'::regclass), currval('".self::ORGANISATION_UNIT_PK_SEQUENCE."'::regclass),'t','".$name."','".$type_id."','".$stores_data_insert."',".$position.",'f')";		
 			
 			}
 			
@@ -264,36 +259,6 @@ class OrganisationUnit_Access
 		if ($this->type_id)
 		{
 			return $this->type_id;
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return integer
-	 */
-	public function get_leader_id()
-	{
-		if ($this->leader_id)
-		{
-			return $this->leader_id;
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return integer
-	 */
-	public function get_owner_id()
-	{
-		if ($this->owner_id)
-		{
-			return $this->owner_id;
 		}
 		else
 		{
@@ -470,65 +435,7 @@ class OrganisationUnit_Access
 			return false;
 		}
 	}
-	
-	/**
-	 * @param integer $leader_id
-	 * @return bool
-	 */
-	public function set_leader_id($leader_id)
-	{
-		global $db;
-			
-		if ($this->organisation_unit_id and $leader_id)
-		{
-			$sql = "UPDATE ".constant("ORGANISATION_UNIT_TABLE")." SET leader_id = ".$leader_id." WHERE id = ".$this->organisation_unit_id."";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->leader_id = $leader_id;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}	
-	}
-	
-	/**
-	 * @param integer $owner_id
-	 * @return bool
-	 */
-	public function set_owner_id($owner_id)
-	{
-		global $db;
 		
-		if ($this->organisation_unit_id and $owner_id)
-		{
-			$sql = "UPDATE ".constant("ORGANISATION_UNIT_TABLE")." SET owner_id = ".$owner_id." WHERE id = ".$this->organisation_unit_id."";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->owner_id = $owner_id;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
 	/**
 	 * @param bool $stores_data
 	 * @return bool
@@ -883,78 +790,7 @@ class OrganisationUnit_Access
 			return null;
 		}		
 	}
-	
-	/**
-	 * @param integer $owner_id
-	 * @return array
-	 */
-	public static function list_entries_by_owner_id($owner_id)
-	{
-		global $db;
 		
-		if (is_numeric($owner_id))
-		{
-			
-			$return_array = array();
-			
-			$sql = "SELECT id FROM ".constant("ORGANISATION_UNIT_TABLE")." WHERE owner_id = ".$owner_id." ORDER BY position";
-			$res = $db->db_query($sql);
-			
-			while ($data = $db->db_fetch_assoc($res))
-			{
-				array_push($return_array,$data[id]);
-			}
-			
-			if (is_array($return_array))
-			{
-				return $return_array;
-			}
-			else
-			{
-				return null;
-			}
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @param integer $leader_id
-	 * @return array
-	 */
-	public static function list_entries_by_leader_id($leader_id)
-	{
-		global $db;
-			
-		if (is_numeric($leader_id))
-		{
-			$return_array = array();
-			
-			$sql = "SELECT id FROM ".constant("ORGANISATION_UNIT_TABLE")." WHERE leader_id = ".$leader_id." ORDER BY position";
-			$res = $db->db_query($sql);
-			
-			while ($data = $db->db_fetch_assoc($res))
-			{
-				array_push($return_array,$data[id]);
-			}
-			
-			if (is_array($return_array))
-			{
-				return $return_array;
-			}
-			else
-			{
-				return null;
-			}
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
 	/**
 	 * @return array
 	 */
@@ -1039,38 +875,7 @@ class OrganisationUnit_Access
 			return false;
 		}
 	}
-	
-	/**
-	 * @param integer $user_id
-	 * @return bool
-	 */
-	public static function is_leader($user_id)
-	{
-		global $db;
 		
-		if (is_numeric($user_id))
-		{
-			$return_array = array();	
-												
-			$sql = "SELECT id FROM ".constant("ORGANISATION_UNIT_TABLE")." WHERE leader_id = ".$user_id."";
-			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
-			
-			if ($data[id])
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
 	/**
 	 * @return integer
 	 */

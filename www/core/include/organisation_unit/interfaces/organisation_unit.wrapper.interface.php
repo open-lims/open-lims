@@ -21,38 +21,14 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * Organisation Unit Change Leader Event
- * @package organisation_unit
- */
-class OrganisationUnitChangeLeaderEvent extends Event
-{    
-	private $organisation_unit_id;
-	
-	function __construct($organisation_unit_id)
-    {
-    	if (is_numeric($organisation_unit_id))
-    	{
-    		parent::__construct();
-    		$this->organisation_unit_id = $organisation_unit_id;
-    	}
-    	else
-    	{
-    		$this->organisation_unit_id = null;
-    	}
-    }
-    
-    public function get_organisation_unit_id()
-    {
-    	if ($this->organisation_unit_id)
-    	{
-    		return $this->organisation_unit_id;
-    	}
-    	else
-    	{
-    		return null;
-    	}
-    }
-}
 
+/**
+ * @todo
+ * Organisation Unit Wrapper Interface
+ * @package organisation_unit
+ */ 
+interface OrganisationUnit_WrapperInterface
+{
+
+}
 ?>

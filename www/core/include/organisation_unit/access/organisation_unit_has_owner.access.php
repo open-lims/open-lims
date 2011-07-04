@@ -22,63 +22,74 @@
  */
  
 /**
- * Organisation Unit User Membership Access Class
+ * Organisation Unit User Ownership Access Class
  * @package organisation_unit
  */
-class OrganisationUnitHasMember_Access
+class OrganisationUnitHasOwner_Access
 {
 	private $organisation_unit_id;
-	private $member_id;
+	private $owner_id;
+	private $master_owner;
 	
 	/**
 	 * @param integer $organisation_unit_id
-	 * @param integer $member_id
+	 * @param integer $owner_id
 	 */
-	function __construct($organisation_unit_id, $member_id)
+	function __construct($organisation_unit_id, $owner_id)
 	{
 		global $db;
 		
-		if (!is_numeric($organisation_unit_id) or !is_numeric($member_id))
+		if (!is_numeric($organisation_unit_id) or !is_numeric($owner_id))
 		{
 			$this->organisation_unit_id = null;
-			$this->member_id = null;
+			$this->owner_id = null;
 		}
 		else
 		{	
-			$sql = "SELECT * FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id." AND member_id = ".$member_id."";
+			$sql = "SELECT * FROM ".constant("ORGANISATION_UNIT_HAS_OWNER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id." AND owner_id = ".$owner_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
 			if ($data[organisation_unit_id])
 			{
 				$this->organisation_unit_id	= $data[organisation_unit_id];
-				$this->member_id			= $data[member_id];
+				$this->owner_id				= $data[owner_id];
+				
+				if ($data[master_owner] == 't')
+				{
+					$this->master_owner = true;
+				}
+				else
+				{
+					$this->master_owner = false;
+				}
 			}
 		}
 	}
 	
 	function __destruct()
 	{
-		if ($this->organisation_unit_id and $this->member_id)
+		if ($this->organisation_unit_id and $this->owner_id)
 		{
 			unset($this->organisation_unit_id);
-			unset($this->member_id);
+			unset($this->owner_id);
+			unset($this->master_owner);
 		}
 	}
 
 	/**
 	 * @param integer $organisation_unit_id
-	 * @param integer $member_id
+	 * @param integer $owner_id
 	 * @return bool
 	 */
-	public function create($organisation_unit_id, $member_id)
+	public function create($organisation_unit_id, $owner_id)
 	{
 		global $db;
 		
-		if (is_numeric($organisation_unit_id) and is_numeric($member_id))
+		if (is_numeric($organisation_unit_id) and is_numeric($owner_id))
 		{
-			$sql_write = "INSERT INTO ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." (organisation_unit_id,member_id) " .
-					"VALUES (".$organisation_unit_id.",".$member_id.")";
+			$sql_write = "INSERT INTO ".constant("ORGANISATION_UNIT_HAS_OWNER_TABLE")." (organisation_unit_id,owner_id) " .
+					"VALUES (".$organisation_unit_id.",".$owner_id.")";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
@@ -103,14 +114,14 @@ class OrganisationUnitHasMember_Access
 	{
 		global $db;
 		
-		if ($this->organisation_unit_id and $this->member_id)
+		if ($this->organisation_unit_id and $this->owner_id)
 		{
 			$tmp_organisation_unit_id = $this->organisation_unit_id;
-			$tmp_member_id = $this->member_id;
+			$tmp_owner_id = $this->owner_id;
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE organisation_unit_id = ".$tmp_organisation_unit_id." AND member_id = ".$tmp_member_id."";
+			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_OWNER_TABLE")." WHERE organisation_unit_id = ".$tmp_organisation_unit_id." AND owner_id = ".$tmp_owner_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -146,11 +157,26 @@ class OrganisationUnitHasMember_Access
 	/**
 	 * @return integer
 	 */
-	public function get_member_id()
+	public function get_owner_id()
 	{
-		if ($this->member_id)
+		if ($this->owner_id)
 		{
-			return $this->member_id;
+			return $this->owner_id;
+		}
+		else
+		{
+			return null;
+		}		
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function get_master_owner()
+	{
+		if (isset($this->master_owner))
+		{
+			return $this->master_owner;
 		}
 		else
 		{
@@ -166,9 +192,9 @@ class OrganisationUnitHasMember_Access
 	{
 		global $db;
 			
-		if ($this->organisation_unit_id and $this->member_id and is_numeric($organisation_unit_id))
+		if ($this->organisation_unit_id and $this->owner_id and is_numeric($organisation_unit_id))
 		{
-			$sql = "UPDATE ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." SET organisation_unit_id = '".$organisation_unit_id."' WHERE organisation_unit_id = '".$this->organisation_unit_id."' AND member_id='".$this->member_id."'";
+			$sql = "UPDATE ".constant("ORGANISATION_UNIT_HAS_OWNER_TABLE")." SET organisation_unit_id = '".$organisation_unit_id."' WHERE organisation_unit_id = '".$this->organisation_unit_id."' AND owner_id='".$this->owner_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -188,22 +214,60 @@ class OrganisationUnitHasMember_Access
 	}
 	
 	/**
-	 * @param integer $member_id
+	 * @param integer $owner_id
 	 * @return bool
 	 */
-	public function set_member_id($member_id)
+	public function set_owner_id($owner_id)
 	{
 		global $db;
 
-		if ($this->organisation_unit_id and $this->member_id and is_numeric($member_id))
+		if ($this->organisation_unit_id and $this->owner_id and is_numeric($owner_id))
 		{
 			
-			$sql = "UPDATE ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." SET member_id = '".$member_id."' WHERE organisation_unit_id = '".$this->organisation_unit_id."' AND member_id='".$this->member_id."'";
+			$sql = "UPDATE ".constant("ORGANISATION_UNIT_HAS_OWNER_TABLE")." SET owner_id = '".$owner_id."' WHERE organisation_unit_id = '".$this->organisation_unit_id."' AND owner_id='".$this->owner_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
 			{
-				$this->member_id = $member_id;
+				$this->owner_id = $owner_id;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param bool $master_owner
+	 * @return bool
+	 */
+	public function set_master_owner($master_owner)
+	{
+		global $db;
+
+		if ($this->organisation_unit_id and $this->owner_id and isset($master_owner))
+		{
+			if ($master_owner == true)
+			{
+				$master_owner_insert = "t";
+			}
+			else
+			{
+				$master_owner_insert = "f";
+			}
+			
+			$sql = "UPDATE ".constant("ORGANISATION_UNIT_HAS_OWNER_TABLE")." SET master_owner = '".$master_owner_insert."' WHERE organisation_unit_id = '".$this->organisation_unit_id."' AND owner_id='".$this->owner_id."'";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->master_owner = $master_owner;
 				return true;
 			}
 			else
@@ -219,18 +283,18 @@ class OrganisationUnitHasMember_Access
 	
 	
 	/**
-	 * @param integer $member_id
+	 * @param integer $owner_id
 	 * @return integer
 	 */
-	public static function count_organisation_units_by_member_id($member_id)
+	public static function count_organisation_units_by_owner_id($owner_id)
 	{		
 		global $db;
 		
-		if (is_numeric($member_id))
+		if (is_numeric($owner_id))
 		{
 			$return_array = array();
 			
-			$sql = "SELECT COUNT(organisation_unit_id) AS result FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE member_id = ".$member_id."";
+			$sql = "SELECT COUNT(organisation_unit_id) AS result FROM ".constant("ORGANISATION_UNIT_HAS_OWNER_TABLE")." WHERE owner_id = ".$owner_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -253,7 +317,7 @@ class OrganisationUnitHasMember_Access
 	 * @param integer $organisation_unit_id
 	 * @return integer
 	 */
-	public static function count_members_by_organisation_unit_id($organisation_unit_id)
+	public static function count_owners_by_organisation_unit_id($organisation_unit_id)
 	{		
 		global $db;
 		
@@ -261,7 +325,7 @@ class OrganisationUnitHasMember_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT COUNT(member_id) AS result FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
+			$sql = "SELECT COUNT(owner_id) AS result FROM ".constant("ORGANISATION_UNIT_HAS_OWNER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -281,19 +345,19 @@ class OrganisationUnitHasMember_Access
 	}
 		
 	/**
-	 * @param integer $member_id
+	 * @param integer $owner_id
 	 * @return integer
 	 */
-	public static function list_organisation_units_by_member_id($member_id)
+	public static function list_organisation_units_by_owner_id($owner_id)
 	{
 		global $db;
 			
-		if (is_numeric($member_id))
+		if (is_numeric($owner_id))
 		{
 				
 			$return_array = array();
 			
-			$sql = "SELECT organisation_unit_id FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE member_id = ".$member_id."";
+			$sql = "SELECT organisation_unit_id FROM ".constant("ORGANISATION_UNIT_HAS_OWNER_TABLE")." WHERE owner_id = ".$owner_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -320,7 +384,7 @@ class OrganisationUnitHasMember_Access
 	 * @param integer $organisation_unit_id
 	 * @return array
 	 */
-	public static function list_members_by_organisation_unit_id($organisation_unit_id)
+	public static function list_owners_by_organisation_unit_id($organisation_unit_id)
 	{
 		global $db;
 			
@@ -328,12 +392,12 @@ class OrganisationUnitHasMember_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT member_id FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
+			$sql = "SELECT owner_id FROM ".constant("ORGANISATION_UNIT_HAS_OWNER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[member_id]);
+				array_push($return_array,$data[owner_id]);
 			}
 			
 			if (is_array($return_array))
@@ -352,19 +416,19 @@ class OrganisationUnitHasMember_Access
 	}
 
 	/**
-	 * @param integer $member_id
+	 * @param integer $owner_id
 	 * @return bool
 	 */
-	public static function delete_by_member_id($member_id)
+	public static function delete_by_owner_id($owner_id)
 	{
 		global $db;
 		
-		if (is_numeric($member_id))
+		if (is_numeric($owner_id))
 		{
 			
 			$return_array = array();
 			
-			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE member_id = ".$member_id."";
+			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_OWNER_TABLE")." WHERE owner_id = ".$owner_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -388,7 +452,7 @@ class OrganisationUnitHasMember_Access
 		{
 			$return_array = array();
 			
-			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
+			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_OWNER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

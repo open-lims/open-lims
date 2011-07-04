@@ -408,7 +408,7 @@ class Project_Wrapper_Access
 					"FROM ".constant("PROJECT_TABLE")." " .
 					"LEFT JOIN ".constant("GROUP_HAS_USER_TABLE")." 				ON ".$user_id." 									= ".constant("GROUP_HAS_USER_TABLE").".user_id " .
 					"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE").".organisation_unit_id " .
-					"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE").".user_id " .
+					"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE").".member_id " .
 					"WHERE (owner_id = ".$user_id." OR " .
 							"(SELECT * FROM project_permission_user(".constant("PROJECT_TABLE").".id, ".$user_id.")) = TRUE OR " .
 							"(SELECT * FROM project_permission_organisation_unit(".constant("PROJECT_TABLE").".id, ".constant("PROJECT_TABLE").".toid_organ_unit)) = TRUE OR " .
@@ -441,7 +441,7 @@ class Project_Wrapper_Access
 					"FROM ".constant("PROJECT_TABLE")." " .
 					"LEFT JOIN ".constant("GROUP_HAS_USER_TABLE")." 				ON ".$user_id." 									= ".constant("GROUP_HAS_USER_TABLE").".user_id " .
 					"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE").".organisation_unit_id " .
-					"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE").".user_id " .
+					"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE").".member_id " .
 					"WHERE (owner_id = ".$user_id." OR " .
 							"(SELECT * FROM project_permission_user(".constant("PROJECT_TABLE").".id, ".$user_id.")) = TRUE OR " .
 							"(SELECT * FROM project_permission_organisation_unit(".constant("PROJECT_TABLE").".id, ".constant("PROJECT_TABLE").".toid_organ_unit)) = TRUE OR " .
@@ -476,7 +476,7 @@ class Project_Wrapper_Access
 					"FROM ".constant("PROJECT_TABLE")." " .
 					"LEFT JOIN ".constant("GROUP_HAS_USER_TABLE")." 				ON ".$user_id." 									= ".constant("GROUP_HAS_USER_TABLE").".user_id " .
 					"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE").".organisation_unit_id " .
-					"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE").".user_id " .
+					"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE").".member_id " .
 					"LEFT JOIN ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." 	ON ".constant("PROJECT_TABLE").".id 				= ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE").".project_id " .
 					"WHERE (owner_id = ".$user_id." OR " .
 							"(SELECT * FROM project_permission_user(".constant("PROJECT_TABLE").".id, ".$user_id.")) = TRUE OR " .
@@ -572,7 +572,7 @@ class Project_Wrapper_Access
 									"FROM ".constant("PROJECT_TABLE")." " .
 									"LEFT JOIN ".constant("GROUP_HAS_USER_TABLE")." 				ON ".$user_id." 									= ".constant("GROUP_HAS_USER_TABLE").".user_id " .
 									"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE").".organisation_unit_id " .
-									"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE").".user_id " .
+									"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE").".member_id " .
 									"WHERE (owner_id = ".$user_id." OR " .
 											"(SELECT * FROM project_permission_user(".constant("PROJECT_TABLE").".id, ".$user_id.")) = TRUE OR " .
 											"(SELECT * FROM project_permission_organisation_unit(".constant("PROJECT_TABLE").".id, ".constant("PROJECT_TABLE").".toid_organ_unit)) = TRUE OR " .
@@ -631,7 +631,7 @@ class Project_Wrapper_Access
 					"FROM ".constant("PROJECT_TABLE")." " .
 					"LEFT JOIN ".constant("GROUP_HAS_USER_TABLE")." ON ".$user_id." = ".constant("GROUP_HAS_USER_TABLE").".user_id " .
 					"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." ON ".constant("PROJECT_TABLE").".toid_organ_unit = ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE").".organisation_unit_id " .
-					"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." ON ".constant("PROJECT_TABLE").".toid_organ_unit = ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE").".user_id " .
+					"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." ON ".constant("PROJECT_TABLE").".toid_organ_unit = ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE").".member_id " .
 					"WHERE (owner_id = ".$user_id." OR " .
 							"(SELECT * FROM project_permission_user(".constant("PROJECT_TABLE").".id, ".$user_id.")) = TRUE OR " .
 							"(SELECT * FROM project_permission_organisation_unit(".constant("PROJECT_TABLE").".id, ".constant("PROJECT_TABLE").".toid_organ_unit)) = TRUE OR " .
@@ -919,7 +919,7 @@ class Project_Wrapper_Access
 									"FROM ".constant("PROJECT_TABLE")." " .
 									"LEFT JOIN ".constant("GROUP_HAS_USER_TABLE")." 				ON ".$user->get_user_id()." 						= ".constant("GROUP_HAS_USER_TABLE").".user_id " .
 									"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE").".organisation_unit_id " .
-									"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE").".user_id " .
+									"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE").".member_id " .
 									"WHERE (owner_id = ".$user->get_user_id()." OR " .
 											"(SELECT * FROM project_permission_user(".constant("PROJECT_TABLE").".id, ".$user->get_user_id().")) = TRUE OR " .
 											"(SELECT * FROM project_permission_organisation_unit(".constant("PROJECT_TABLE").".id, ".constant("PROJECT_TABLE").".toid_organ_unit)) = TRUE OR " .
@@ -1044,7 +1044,7 @@ class Project_Wrapper_Access
 									"FROM ".constant("PROJECT_TABLE")." " .
 									"LEFT JOIN ".constant("GROUP_HAS_USER_TABLE")." 				ON ".$user->get_user_id()." 						= ".constant("GROUP_HAS_USER_TABLE").".user_id " .
 									"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE").".organisation_unit_id " .
-									"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE").".user_id " .
+									"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE").".member_id " .
 									"WHERE (owner_id = ".$user->get_user_id()." OR " .
 											"(SELECT * FROM project_permission_user(".constant("PROJECT_TABLE").".id, ".$user->get_user_id().")) = TRUE OR " .
 											"(SELECT * FROM project_permission_organisation_unit(".constant("PROJECT_TABLE").".id, ".constant("PROJECT_TABLE").".toid_organ_unit)) = TRUE OR " .
@@ -1184,7 +1184,7 @@ class Project_Wrapper_Access
 										"FROM ".constant("PROJECT_TABLE")." " .
 										"LEFT JOIN ".constant("GROUP_HAS_USER_TABLE")." 				ON ".$user->get_user_id()." 						= ".constant("GROUP_HAS_USER_TABLE").".user_id " .
 										"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE").".organisation_unit_id " .
-										"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE").".user_id " .
+										"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE").".member_id " .
 										"WHERE (owner_id = ".$user->get_user_id()." OR " .
 												"(SELECT * FROM project_permission_user(".constant("PROJECT_TABLE").".id, ".$user->get_user_id().")) = TRUE OR " .
 												"(SELECT * FROM project_permission_organisation_unit(".constant("PROJECT_TABLE").".id, ".constant("PROJECT_TABLE").".toid_organ_unit)) = TRUE OR " .
@@ -1261,7 +1261,7 @@ class Project_Wrapper_Access
 										"FROM ".constant("PROJECT_TABLE")." " .
 										"LEFT JOIN ".constant("GROUP_HAS_USER_TABLE")." 				ON ".$user->get_user_id()." 						= ".constant("GROUP_HAS_USER_TABLE").".user_id " .
 										"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE").".organisation_unit_id " .
-										"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE").".user_id " .
+										"LEFT JOIN ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." 	ON ".constant("PROJECT_TABLE").".toid_organ_unit 	= ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE").".member_id " .
 										"WHERE (owner_id = ".$user->get_user_id()." OR " .
 												"(SELECT * FROM project_permission_user(".constant("PROJECT_TABLE").".id, ".$user->get_user_id().")) = TRUE OR " .
 												"(SELECT * FROM project_permission_organisation_unit(".constant("PROJECT_TABLE").".id, ".constant("PROJECT_TABLE").".toid_organ_unit)) = TRUE OR " .

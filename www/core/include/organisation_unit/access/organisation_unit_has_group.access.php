@@ -27,34 +27,30 @@
  */
 class OrganisationUnitHasGroup_Access
 {
-	const ORGANISATION_UNIT_HAS_GROUP_PK_SEQUENCE = 'core_organisation_unit_has_groups_primary_key_seq';
-
-	private $primary_key;
-	
 	private $organisation_unit_id;
 	private $group_id;
 	
 	/**
-	 * @param integer $primary_key
+	 * @param integer $organisation_unit_id
+	 * @param integer $group_id
 	 */
-	function __construct($primary_key)
+	function __construct($organisation_unit_id, $group_id)
 	{
 		global $db;
 		
-		if ($primary_key == null)
+		if (!is_numeric($organisation_unit_id) or !is_numeric($group_id))
 		{
-			$this->primary_key = null;
+			$this->organisation_unit_id = null;
+			$this->group_id = null;
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE primary_key = ".$primary_key."";
+			$sql = "SELECT * FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id." AND group_id = ".$group_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[primary_key])
+			if ($data[organisation_unit_id])
 			{
-				$this->primary_key 			= $data[primary_key];
-				
 				$this->organisation_unit_id	= $data[organisation_unit_id];
 				$this->group_id				= $data[group_id];
 			}
@@ -63,9 +59,8 @@ class OrganisationUnitHasGroup_Access
 	
 	function __destruct()
 	{
-		if ($this->primary_key)
+		if ($this->organisation_unit_id and $this->group_id)
 		{
-			unset($this->primary_key);
 			unset($this->organisation_unit_id);
 			unset($this->group_id);
 		}
@@ -74,7 +69,7 @@ class OrganisationUnitHasGroup_Access
 	/**
 	 * @param integer $organisation_unit_id
 	 * @param integer $group_id
-	 * @return integer
+	 * @return bool
 	 */
 	public function create($organisation_unit_id, $group_id)
 	{
@@ -82,28 +77,22 @@ class OrganisationUnitHasGroup_Access
 		
 		if (is_numeric($organisation_unit_id) and is_numeric($group_id))
 		{
-			$sql_write = "INSERT INTO ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." (primary_key,organisation_unit_id,group_id) " .
-					"VALUES (nextval('".self::ORGANISATION_UNIT_HAS_GROUP_PK_SEQUENCE."'::regclass),".$organisation_unit_id.",".$group_id.")";
+			$sql_write = "INSERT INTO ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." (organisation_unit_id,group_id) " .
+					"VALUES (".$organisation_unit_id.",".$group_id.")";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT primary_key FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE primary_key = currval('".self::ORGANISATION_UNIT_HAS_GROUP_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
-				
-				$this->__construct($data_read[primary_key]);
-				
-				return $data_read[primary_key];	
+				return true;
 			}
 			else
 			{
-				return null;
+				return false;
 			}	
 		}
 		else
 		{
-			return null;
+			return false;
 		}
 	}
 	
@@ -114,13 +103,14 @@ class OrganisationUnitHasGroup_Access
 	{
 		global $db;
 		
-		if ($this->primary_key)
+		if ($this->organisation_unit_id and $this->group_id)
 		{
-			$tmp_primary_key = $this->primary_key;
+			$tmp_organisation_unit_id = $this->organisation_unit_id;
+			$tmp_group_id = $this->group_id;
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE primary_key = ".$tmp_primary_key."";
+			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE organisation_unit_id=".$tmp_organisation_unit_id." AND group_id=".$tmp_group_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -176,9 +166,9 @@ class OrganisationUnitHasGroup_Access
 	{
 		global $db;
 			
-		if ($this->primary_key and is_numeric($organisation_unit_id))
+		if ($this->organisation_unit_id and $this->group_id and is_numeric($organisation_unit_id))
 		{
-			$sql = "UPDATE ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." SET organisation_unit_id = '".$organisation_unit_id."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." SET organisation_unit_id = '".$organisation_unit_id."' WHERE organisation_unit_id = '".$this->organisation_unit_id."' AND group_id='".$this->group_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -205,9 +195,9 @@ class OrganisationUnitHasGroup_Access
 	{
 		global $db;
 			
-		if ($this->primary_key and is_numeric($group_id))
+		if ($this->organisation_unit_id and $this->group_id and is_numeric($group_id))
 		{
-			$sql = "UPDATE ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." SET group_id = '".$group_id."' WHERE primary_key = '".$this->primary_key."'";
+			$sql = "UPDATE ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." SET group_id = '".$group_id."' WHERE organisation_unit_id = '".$this->organisation_unit_id."' AND group_id='".$this->group_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -288,39 +278,7 @@ class OrganisationUnitHasGroup_Access
 			return null;
 		}
 	}
-	
-	/**
-	 * @param integer $group_id
-	 * @param integer $organisation_unit_id
-	 * @return integer
-	 */
-	public static function get_pk_by_group_id_and_organisation_unit_id($group_id, $organisation_unit_id)
-	{
-		global $db;
 		
-		if (is_numeric($group_id) and is_numeric($organisation_unit_id))
-		{
-			$return_array = array();
-			
-			$sql = "SELECT primary_key FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE group_id = ".$group_id." AND organisation_unit_id = ".$organisation_unit_id."";
-			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
-			
-			if ($data[primary_key])
-			{
-				return $data[primary_key];
-			}
-			else
-			{
-				return null;
-			}	
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
 	/**
 	 * @param integer $group_id
 	 * @return array

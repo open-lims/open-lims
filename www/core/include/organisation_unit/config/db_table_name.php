@@ -24,8 +24,11 @@
 /**
  * 
  */
-	define("ORGANISATION_UNIT_HAS_GROUP_TABLE", 	"core_organisation_unit_has_groups");
-	define("ORGANISATION_UNIT_HAS_MEMBER_TABLE", 	"core_organisation_unit_has_members");
-	define("ORGANISATION_UNIT_TYPE_TABLE", 			"core_organisation_unit_types");
-	define("ORGANISATION_UNIT_TABLE", 				"core_organisation_units");
+	define("ORGANISATION_UNIT_HAS_GROUP_TABLE", 			"core_organisation_unit_has_groups");
+	define("ORGANISATION_UNIT_HAS_LEADER_TABLE", 			"core_organisation_unit_has_leaders");
+	define("ORGANISATION_UNIT_HAS_MEMBER_TABLE", 			"core_organisation_unit_has_members");
+	define("ORGANISATION_UNIT_HAS_OWNER_TABLE", 			"core_organisation_unit_has_owners");
+	define("ORGANISATION_UNIT_HAS_QUALITY_MANAGER_TABLE", 	"core_organisation_unit_has_quality_managers");
+	define("ORGANISATION_UNIT_TYPE_TABLE", 					"core_organisation_unit_types");
+	define("ORGANISATION_UNIT_TABLE", 						"core_organisation_units");
 ?>

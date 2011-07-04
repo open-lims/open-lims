@@ -80,8 +80,8 @@ class Group_Access
 		
 		if ($name)
 		{
-			$sql_write = "INSERT INTO ".self::GROUP_TABLE." (id,name) " .
-						"VALUES (nextval('".constant("GROUP_PK_SEQUENCE")."'::regclass),'".$name."')";
+			$sql_write = "INSERT INTO ".constant("GROUP_TABLE")." (id,name) " .
+						"VALUES (nextval('".self::GROUP_PK_SEQUENCE."'::regclass),'".$name."')";
 																	
 			$res_write = $db->db_query($sql_write);
 			

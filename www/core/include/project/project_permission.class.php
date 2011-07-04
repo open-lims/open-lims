@@ -922,8 +922,11 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 			}
     	}
     	
-   		if ($event_object instanceof OrganisationUnitChangeLeaderEvent)
+   		if ($event_object instanceof OrganisationUnitLeaderCreateEvent)
     	{
+    		/**
+    		 * @todo
+    		 */
     		$organisation_unit = new OrganisationUnit($event_object->get_organisation_unit_id());
     		$leader_id = $organisation_unit->get_leader_id();
     		if (is_numeric($leader_id))
@@ -934,6 +937,27 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     		{
     			return false;
     		}
+    	}
+    	
+    	if ($event_object instanceof OrganisationUnitLeaderDeleteEvent)
+    	{
+    		/**
+    		 * @todo
+    		 */
+    	}
+    	
+    	if ($event_object instanceof OrganisationUnitQualityManagerDeleteEvent)
+    	{
+    		/**
+    		 * @todo
+    		 */
+    	}
+    	
+    	if ($event_object instanceof OrganisationUnitQualityManagerDeleteEvent)
+    	{
+    		/**
+    		 * @todo
+    		 */
     	}
     	
     	if ($event_object instanceof OrganisationUnitGroupCreateEvent)

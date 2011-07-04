@@ -622,6 +622,23 @@ class AdminOrganisationUnitIO
 			$error_io->display_error();
 		}
 	}
+
+	
+	public static function detail_member()
+	{
+		if ($_GET[id])
+		{
+			$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/detail_member.html");
+			$template->set_var("ORGANISATION_UNIT_ID", $_GET[id]);
+			$template->output();
+		}
+		else
+		{
+			$exception = new Exception("", 1);
+			$error_io = new Error_IO($exception, 40, 40, 3);
+			$error_io->display_error();
+		}
+	}
 	
 	public static function add_user()
 	{
@@ -765,6 +782,12 @@ class AdminOrganisationUnitIO
 		}
 	}
 	
+	
+	public static function detail_group()
+	{
+		
+	}
+	
 	public static function add_group()
 	{
 		if ($_GET[id])
@@ -905,6 +928,60 @@ class AdminOrganisationUnitIO
 			$error_io = new Error_IO($exception, 40, 40, 3);
 			$error_io->display_error();
 		}
+	}
+	
+	
+	public static function detail_owner()
+	{
+		
+	}
+	
+	public static function add_owner()
+	{
+		
+	}
+	
+	public static function delete_owner()
+	{
+		
+	}
+	
+	
+	public static function detail_leader()
+	{
+		
+	}
+	
+	public static function add_leader()
+	{
+		
+	}
+	
+	public static function delete_leader()
+	{
+		
+	}
+	
+	
+	public static function detail_quality_manager()
+	{
+		
+	}
+	
+	public static function add_quality_manager()
+	{
+		
+	}
+	
+	public static function delete_quality_manager()
+	{
+		
+	}
+	
+	
+	public static function detail_address()
+	{
+		
 	}
 	
 	public static function rename()
@@ -1254,7 +1331,91 @@ class AdminOrganisationUnitIO
 				if (OrganisationUnit::exist_organisation_unit($_GET[id]) == false)
 				{
 					throw new OrganisationUnitNotFoundException("",1);
-				}		
+				}
+
+				if ($_GET[action] != "delete" and 
+					$_GET[action] != "add_child" and 
+					$_GET[action] != "upwards"  and 
+					$_GET[action] != "downwards")
+				{
+					$tab_io = new Tab_IO();
+				
+					$paramquery = $_GET;
+					$paramquery[action] = "detail";
+					$params = http_build_query($paramquery,'','&#38;');
+					
+					$tab_io->add("general", "General", $params, false);
+					
+					$paramquery = $_GET;
+					$paramquery[action] = "detail_owner";
+					$params = http_build_query($paramquery,'','&#38;');
+					
+					$tab_io->add("owners", "Owners", $params, false);
+					
+					$paramquery = $_GET;
+					$paramquery[action] = "detail_leader";
+					$params = http_build_query($paramquery,'','&#38;');
+					
+					$tab_io->add("leaders", "Leaders", $params, false);
+					
+					$paramquery = $_GET;
+					$paramquery[action] = "detail_member";
+					$params = http_build_query($paramquery,'','&#38;');
+					
+					$tab_io->add("members", "Members", $params, false);
+					
+					$paramquery = $_GET;
+					$paramquery[action] = "detail_qm";
+					$params = http_build_query($paramquery,'','&#38;');
+					
+					$tab_io->add("qm", "Q.-Managers", $params, false);
+					
+					$paramquery = $_GET;
+					$paramquery[action] = "detail_group";
+					$params = http_build_query($paramquery,'','&#38;');
+					
+					$tab_io->add("groups", "Groups", $params, false);
+					
+					$paramquery = $_GET;
+					$paramquery[action] = "detail_address";
+					$params = http_build_query($paramquery,'','&#38;');
+					
+					$tab_io->add("addresses", "Addresses", $params, false);
+					
+					switch($_GET[action]):
+					
+						case "detail_owner":
+							$tab_io->activate("owners");
+						break;
+					
+						case "detail_leader":
+							$tab_io->activate("leaders");
+						break;
+						
+						case "detail_member":
+							$tab_io->activate("members");
+						break;
+						
+						case "detail_qm":
+							$tab_io->activate("qm");
+						break;
+						
+						case "detail_group":
+							$tab_io->activate("groups");
+						break;
+						
+						case "detail_address":
+							$tab_io->activate("addresses");
+						break;
+						
+						default:
+							$tab_io->activate("general");
+						break;
+					
+					endswitch;
+						
+					$tab_io->output();
+				}
 			}
 		
 			switch($_GET[action]):
@@ -1270,7 +1431,11 @@ class AdminOrganisationUnitIO
 				case "detail":
 					self::detail();
 				break;
-								
+
+				case "detail_member":
+					self::detail_member();
+				break;
+				
 				case "add_user":
 					self::add_user();
 				break;

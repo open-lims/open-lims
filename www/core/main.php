@@ -161,7 +161,8 @@ class Main
 		require_once("modules/base/error.io.php");
 		require_once("modules/base/table.io.php");
 		require_once("modules/base/list.io.php");
-
+		require_once("modules/base/tab.io.php");
+		
 		ContentHandler_IO::main();
 	}	
 	
