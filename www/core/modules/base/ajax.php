@@ -50,7 +50,7 @@ $db->db_connect(constant("DB_SERVER"),constant("DB_PORT"),constant("DB_USER"),co
 require_once($path_prefix."../../include/base/events/event.class.php");
 require_once($path_prefix."../../include/base/system_handler.class.php");
 
-$GLOBALS['autoload_prefix'] = "../../../";
+$GLOBALS['autoload_prefix'] = $path_prefix."../../../";
 
 require_once($path_prefix."../../include/base/autoload.function.php");
 

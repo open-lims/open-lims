@@ -55,16 +55,53 @@ class OrganisationUnitAjax extends Ajax
 	
 	public function get_array()
 	{
-		$return_array = array();
-		$return_array[0][0] = 0; //layer
-		$return_array[0][1] = 1; //id
-		$return_array[0][2] = "bananenbrot";
-		$return_array[0][3] = "project.png";
-		$return_array[0][4] = true; // Permission
-		$return_array[0][5] = true; //clickable
-		$return_array[0][6] = ""; //link
-		$return_array[0][7] = false; //open
-		echo json_encode($return_array);
+		global $session;
+
+		if ($session->is_valid())
+		{
+			if ($session->is_value("LEFT_NAVIGATION_OU_ARRAY"))
+			{
+				return serialize($session->read_value("LEFT_NAVIGATION_OU_ARRAY"));
+			}
+			else
+			{
+				$return_array = array();
+										
+				$organisation_unit_array = OrganisationUnit::list_organisation_unit_roots();
+				
+				if (is_array($organisation_unit_array) and count($organisation_unit_array) >= 1)
+				{
+					$counter = 0;
+					
+					foreach($organisation_unit_array as $key => $value)
+					{
+						$organisation_unit = new OrganisationUnit($value);
+
+						$return_array[$counter][0] = 0;
+						$return_array[$counter][1] = $value;
+						$return_array[$counter][2] = $organisation_unit->get_name();
+						$return_array[$counter][3] = $organisation_unit->get_icon();
+						$return_array[$counter][4] = true; // Permission
+						
+						if ($organisation_unit->get_stores_data() == true)
+						{
+							$return_array[$counter][5] = true;
+						}
+						else
+						{
+							$return_array[$counter][5] = false;
+						}
+						
+						$return_array[$counter][6] = ""; //link
+						$return_array[$counter][7] = false; //open
+						
+						$counter++;
+					}
+				}
+				
+				echo json_encode($return_array);
+			}
+		}
 	}
 	
 	public function set_array($array)
@@ -75,17 +112,46 @@ class OrganisationUnitAjax extends Ajax
 	
 	public function get_childs($id)
 	{
-		$return_array = array();
-		$return_array[0][0] = -1; //layer
-		$return_array[0][1] = mt_rand(100, 100000); //id
-		$return_array[0][2] = md5(microtime());
-		$return_array[0][3] = "project.png";
-		$return_array[0][4] = true; // Permission
-		$return_array[0][5] = true;
-		$return_array[0][6] = ""; //link
-		$return_array[0][7] = false; //open
-		
-		echo json_encode($return_array);
+		if (is_numeric($id) and $id != 0)
+		{
+			$return_array = array();
+
+			$organisation_unit = new OrganisationUnit($id);
+			
+			$organisation_unit_array = $organisation_unit->get_organisation_unit_childs();
+
+			if (is_array($organisation_unit_array) and count($organisation_unit_array) >= 1)
+			{
+				$counter = 0;
+				
+				foreach($organisation_unit_array as $key => $value)
+				{
+					$organisation_unit = new OrganisationUnit($value);
+						
+					$return_array[$counter][0] = -1;
+					$return_array[$counter][1] = $value;
+					$return_array[$counter][2] = $organisation_unit->get_name();
+					$return_array[$counter][3] = $organisation_unit->get_icon();
+					$return_array[$counter][4] = true; // Permission
+					
+					if ($organisation_unit->get_stores_data() == true)
+					{
+						$return_array[$counter][5] = true;
+					}
+					else
+					{
+						$return_array[$counter][5] = false;
+					}
+					
+					$return_array[$counter][6] = ""; //link
+					$return_array[$counter][7] = false; //open
+					
+					$counter++;
+				}
+			}
+			
+			echo json_encode($return_array);
+		}
 	}
 	
 	public function method_handler()

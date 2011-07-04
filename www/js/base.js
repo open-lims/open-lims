@@ -169,9 +169,10 @@ function create_menu_tree(id, ajax_handler)
 								update_scrollbar();
 						});
 					}
-					
 					else if($(target_div).hasClass("LeftNavigationFirstAnchorClosed"))
 					{
+						var clicked_id = $(target_div).attr("id").replace("LeftNavigationElementID","");
+						
 						var parent_layer = parseInt($(target_div).parent().parent().attr("class").replace("LeftNavigationLayer",""));
 						var layer = parent_layer + 1;
 
@@ -181,7 +182,7 @@ function create_menu_tree(id, ajax_handler)
 						{
 							type: "GET",
 							url: ajax_handler,
-							data: "run=get_childs&id="+id+"&session_id="+get_array['session_id'],
+							data: "run=get_childs&id="+clicked_id+"&session_id="+get_array['session_id'],
 							success: function(data)
 							{
 								var child_html = "<ul class='LeftNavigationLayer"+layer+"'>";
