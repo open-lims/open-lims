@@ -102,4 +102,12 @@
 	$dialog[9][internal_name]	= "project_tasks";
 	$dialog[9][display_name]	= "Project Tasks";
 	$dialog[9][weight]			= 100;
+	
+	$dialog[10][type]			= "base_left_navigation";
+	$dialog[10][class_path]		= "core/modules/project/navigation/project_navigation.io.php";
+	$dialog[10]['class']		= "ProjectNavigationIO";
+	$dialog[10][method]			= "get_html";
+	$dialog[10][internal_name]	= "projects";
+	$dialog[10][display_name]	= "Projects";
+	$dialog[10][weight]			= 300;
 ?>

@@ -71,12 +71,18 @@ class ContentHandler_IO
 					$template->set_var("servertype",constant("PRODUCT_FUNCTION"));
 
 					$template->output();
-
+					
 					// Navigation
 					require_once("base/navigation.io.php");
 					Navigation_IO::main();
 					Navigation_IO::left();
-			 		
+					
+					
+					/**
+					 * @todo remove
+					 */
+					echo "<div id='content'>";
+					
  					if ($session->read_value("must_change_password") == true)
  					{
  						require_once("core/modules/user/user.io.php");

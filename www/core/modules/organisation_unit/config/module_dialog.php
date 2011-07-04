@@ -23,28 +23,29 @@
 
 /**
  * 
- */	
-	$dialog[0][type]			= "standard_navigation";
-	$dialog[0][class_path]		= "core/modules/organisation_unit/navigation/organisation_unit_navigation.io.php";
-	$dialog[0]['class']			= "OrganisationUnitNavigationIO";
-	$dialog[0][method]			= "navigation";
-	$dialog[0][internal_name]	= "navigation";
-	$dialog[0][display_name]	= "navigation";
+ */		
+	$dialog[0][type]			= "organisation_admin";
+	$dialog[0][class_path]		= "core/modules/organisation_unit/admin/admin_organisation_unit.io.php";
+	$dialog[0]['class']			= "AdminOrganisationUnitIO";
+	$dialog[0][method]			= "handler";
+	$dialog[0][internal_name]	= "organisation_units";
+	$dialog[0][display_name]	= "Organisation Units";
+	$dialog[0][weight]			= 300;
 	
-	$dialog[1][type]			= "organisation_admin";
+	$dialog[1][type]			= "admin_home_box";
 	$dialog[1][class_path]		= "core/modules/organisation_unit/admin/admin_organisation_unit.io.php";
 	$dialog[1]['class']			= "AdminOrganisationUnitIO";
-	$dialog[1][method]			= "handler";
+	$dialog[1][method]			= "home_dialog";
 	$dialog[1][internal_name]	= "organisation_units";
 	$dialog[1][display_name]	= "Organisation Units";
-	$dialog[1][weight]			= 300;
+	$dialog[1][weight]			= 400;
 	
-	$dialog[2][type]			= "admin_home_box";
-	$dialog[2][class_path]		= "core/modules/organisation_unit/admin/admin_organisation_unit.io.php";
-	$dialog[2]['class']			= "AdminOrganisationUnitIO";
-	$dialog[2][method]			= "home_dialog";
+	$dialog[2][type]			= "base_left_navigation";
+	$dialog[2][class_path]		= "core/modules/organisation_unit/navigation/organisation_unit_navigation.io.php";
+	$dialog[2]['class']			= "OrganisationUnitNavigationIO";
+	$dialog[2][method]			= "get_html";
 	$dialog[2][internal_name]	= "organisation_units";
 	$dialog[2][display_name]	= "Organisation Units";
-	$dialog[2][weight]			= 400;
+	$dialog[2][weight]			= 200;
 	
 ?>

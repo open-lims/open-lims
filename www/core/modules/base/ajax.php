@@ -26,31 +26,41 @@
  */
 define("UNIT_TEST", false);
 
-require_once("../../../config/version.php");
-require_once("../../../config/main.php");
-require_once("../../db/db.php");
+if ($GLOBALS['autoload_prefix'])
+{
+	$path_prefix = $GLOBALS['autoload_prefix'];
+}
+else
+{
+	$path_prefix = "";
+}
 
-require_once("../../include/base/template.class.php");
+require_once($path_prefix."../../../config/version.php");
+require_once($path_prefix."../../../config/main.php");
+require_once($path_prefix."../../db/db.php");
+
+
+require_once($path_prefix."../../include/base/template.class.php");
 
 global $db;
 
 $db = new Database(constant("DB_TYPE"));
 $db->db_connect(constant("DB_SERVER"),constant("DB_PORT"),constant("DB_USER"),constant("DB_PASSWORD"),constant("DB_DATABASE"));
 
-require_once("../../include/base/events/event.class.php");
-require_once("../../include/base/system_handler.class.php");
+require_once($path_prefix."../../include/base/events/event.class.php");
+require_once($path_prefix."../../include/base/system_handler.class.php");
 
 $GLOBALS['autoload_prefix'] = "../../../";
 
-require_once("../../include/base/autoload.function.php");
+require_once($path_prefix."../../include/base/autoload.function.php");
 
-require_once("../../include/user/group.class.php");	
-require_once("../../include/user/user.class.php");
+require_once($path_prefix."../../include/user/group.class.php");	
+require_once($path_prefix."../../include/user/user.class.php");
 
-require_once("../../include/base/session.class.php");
+require_once($path_prefix."../../include/base/session.class.php");
 
-require_once("../../modules/base/common.io.php");
-require_once("../../modules/base/list.io.php");
+require_once($path_prefix."../../modules/base/common.io.php");
+require_once($path_prefix."../../modules/base/list.io.php");
 
 SystemHandler::init_db_constants();
 

@@ -198,10 +198,6 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 .OverviewTableRight {
 	float: right;
 }
-.OverviewTableClear {
-	font-size: 3px;
-	clear: both;
-}
 
 .rightText {
 	text-align: right;

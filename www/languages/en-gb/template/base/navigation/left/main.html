@@ -1,0 +1,100 @@
+<script>
+
+$(document).ready(function()
+\{
+	var get_array = getQueryParams(document.location.search);
+	<!-- FOREACH BEGIN ({JS}) -->
+	
+	var orig = $("#LeftNavigationTitle").html();
+
+	
+	$( "#{JS:ID}" ).click(function()
+	\{		
+		if($(this).hasClass('LeftNavigationSymbolInactive'))
+		\{
+			return;
+		\};
+		
+		$("#LeftNavigationSymbolArea > div").css("background-image","none");
+		$(this).css("background-image","url(images/tabs/left_nav_tab.png)");
+
+		
+		$.ajax(
+		\{
+			type: "GET",
+			url: "{JS:AJAX_URL}",
+			data: "run=get_name&session_id="+get_array['session_id'],
+			success: function(data)
+			\{
+				orig = data;
+				$("#LeftNavigationTitle").html(data);
+			\}
+		\});
+		
+		$.ajax(
+		\{
+			type: "GET",
+			url: "{JS:AJAX_URL}",
+			data: "run=get_html&session_id="+get_array['session_id'],
+			success: function(data)
+			\{
+				$("#LeftNavigationTree").html(data);
+			\}
+		\});
+	
+	\});
+	
+	$( "#{JS:ID}" ).mouseover(
+	function()
+	\{		
+		$.ajax(
+		\{
+			type: "GET",
+			url: "{JS:AJAX_URL}",
+			data: "run=get_name&session_id="+get_array['session_id'],
+			success: function(data)
+			\{
+				$("#LeftNavigationTitle").html(data);
+			\}
+		\});
+	
+	\});
+	$( "#{JS:ID}" ).mouseleave(function()
+	\{
+		$("#LeftNavigationTitle").html(orig);
+	\});
+
+	<!-- FOREACH END -->
+\});	
+</script>
+
+<div id="LeftNavigation">
+	<div id="LeftNavigationSymbolArea">	
+	
+		<!-- FOREACH BEGIN ({SYMBOLS}) -->
+		
+			<!-- IF ({SYMBOLS:ACTIVE}) -->
+		
+				<div id='{SYMBOLS:ID}'><img src='{SYMBOLS:ICON}' alt='' /></div>
+		
+			<!-- ELSE -->
+		
+				<div id='{SYMBOLS:ID}' class='LeftNavigationSymbolInactive'><img src='{SYMBOLS:ICON}' alt='' /></div>
+		
+			<!-- ENDIF -->
+		
+		<!-- FOREACH END -->
+	
+	</div>
+	<div id="LeftNavigationSymbolAreaClear"></div>
+	<div id='LeftNavigationTitle'>
+		beschreibung
+	</div>
+	
+	<div id='LeftNavigationTreeContainer'>
+		<div id='LeftNavigationTree'>
+		content
+		</div>
+	</div>
+	
+</div>
