@@ -52,21 +52,16 @@ interface OrganisationUnitInterface
 	public function get_type_name();
 	public function get_name();
 	public function get_icon();
-	public function get_owner_id();
-	public function get_leader_id();
+	public function get_master_owner_id();
 	public function get_stores_data();
 	public function get_hidden();
 	public function get_user_status($user_id);
 	public function get_organisation_unit_childs();
-	public function get_number_of_members();
-	public function get_number_of_groups();
 	
 	public function list_members();
 	public function list_groups();
 	
 	public function set_name($name);
-	public function set_owner_id($owner_id);
-	public function set_leader_id($leader_id);
 	public function set_hidden($hidden);
 	
 	// private function delete_members();

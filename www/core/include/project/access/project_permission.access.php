@@ -606,6 +606,43 @@ class ProjectPermission_Access
 	}
 	
 	/**
+	 * @param integer $project_id
+	 * @param integer $intention
+	 * @param integer $user_id
+	 * @return array
+	 */
+	public static function list_entries_by_project_id_and_intention_and_user_id($project_id, $intention, $user_id)
+	{
+		global $db;
+			
+		if (is_numeric($project_id) and is_numeric($intention) and is_numeric($user_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." AND intention = ".$intention." AND intention IS NOT NULL AND user_id = ".$user_id."";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,$data[id]);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @param integer $organisation_unit_id
 	 * @param integer $intention
 	 * @return array
@@ -733,6 +770,30 @@ class ProjectPermission_Access
 			{
 				return null;
 			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $project_id
+	 * @param integer $intention
+	 * @return array
+	 */
+	public static function delete_entries_by_project_id_and_intention($project_id, $intention)
+	{
+		global $db;
+
+		if (is_numeric($project_id) and is_numeric($intention))
+		{
+			$return_array = array();
+			
+			$sql = "DELETE FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." AND intention = ".$intention." AND intention IS NOT NULL";
+			$res = $db->db_query($sql);
+			
+			return true;
 		}
 		else
 		{

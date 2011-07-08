@@ -42,7 +42,7 @@ require_once($path_prefix."../../db/db.php");
 
 require_once($path_prefix."../../include/base/template.class.php");
 
-global $db;
+global $db, $transaction;
 
 $db = new Database(constant("DB_TYPE"));
 $db->db_connect(constant("DB_SERVER"),constant("DB_PORT"),constant("DB_USER"),constant("DB_PASSWORD"),constant("DB_DATABASE"));
@@ -53,6 +53,10 @@ require_once($path_prefix."../../include/base/system_handler.class.php");
 $GLOBALS['autoload_prefix'] = $path_prefix."../../../";
 
 require_once($path_prefix."../../include/base/autoload.function.php");
+
+require_once($path_prefix."../../include/base/transaction.class.php");
+				
+$transaction = new Transaction();
 
 require_once($path_prefix."../../include/user/group.class.php");	
 require_once($path_prefix."../../include/user/user.class.php");
@@ -84,12 +88,6 @@ class Ajax
 			$session = new Session(null);
 			$user = new User(1);
 		}
-	}
-	
-	function __destruct()
-	{
-		global $db;
-		$db->db_close();
 	}
 }
 

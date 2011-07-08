@@ -3,7 +3,7 @@
  * @package organisation_unit
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -24,148 +24,324 @@
 /**
  * 
  */
-require_once("../base/ajax_init.php");
+require_once("../base/ajax.php");
 
 /**
- * Organiser AJAX IO Class
+ * Organisation Unit AJAX IO Class
  * @package organisation_unit
  */
-class OrganisationUnitAJAX extends AJAXInit
-{
+class OrganisationUnitAjax extends Ajax
+{	
 	function __construct()
 	{
 		parent::__construct();
 	}
-		
-	private function list_menu_childs_by_id()
+	
+	public function list_members($organisation_unit_id, $page, $sortvalue, $sortmethod)
 	{
-		if ($_GET[session_id])
+		if (is_numeric($organisation_unit_id))
 		{
-			$session = new Session($_GET[session_id]);
-
-			if ($session->is_valid())
+			global $user;
+			
+			$list = new List_IO(OrganisationUnit_Wrapper::count_organisation_unit_members($organisation_unit_id), 20, "OrganisationUnitListPage");
+	
+			$list->add_row("","symbol",false,"16px");
+			$list->add_row("Username","username",true,null,"OrganisationUnitListSortUsername");
+			$list->add_row("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
+			
+			if ($page)
 			{
-				if ($_GET[ou_id] == 0)
+				if ($sortvalue and $sortmethod)
 				{
-					if ($session->is_value("CURRENT_NAVIGATION_OU"))
-					{
-						return serialize($session->read_value("CURRENT_NAVIGATION_OU"));
-					}
-					else
-					{
-						$return_array = array();
-												
-						$organisation_unit_array = OrganisationUnit::list_organisation_unit_roots();
-						
-						if (is_array($organisation_unit_array) and count($organisation_unit_array) >= 1)
-						{
-							$counter = 0;
-							
-							foreach($organisation_unit_array as $key => $value)
-							{
-								$organisation_unit = new OrganisationUnit($value);
-
-								$return_array[$counter][0] = 0;
-								$return_array[$counter][1] = $value;
-								$return_array[$counter][2] = $organisation_unit->get_name();
-								$return_array[$counter][3] = $organisation_unit->get_icon();
-								$return_array[$counter][4] = true; // Permission
-								
-								if ($organisation_unit->get_stores_data() == true)
-								{
-									$return_array[$counter][5] = true;
-								}
-								else
-								{
-									$return_array[$counter][5] = false;
-								}
-								
-								$counter++;
-							}
-						}
-						return serialize($return_array);
-					}
+					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_members($organisation_unit_id, $sortvalue, $sortmethod, ($page*20)-20, ($page*20));
 				}
 				else
 				{
-					if ($_GET[ou_id])
-					{
-						$return_array = array();
-
-						$organisation_unit = new OrganisationUnit($_GET[ou_id]);
-						
-						$organisation_unit_array = $organisation_unit->get_organisation_unit_childs();
-
-						if (is_array($organisation_unit_array) and count($organisation_unit_array) >= 1)
-						{
-							$counter = 0;
-							
-							foreach($organisation_unit_array as $key => $value)
-							{
-								$organisation_unit = new OrganisationUnit($value);
-									
-								$return_array[$counter][0] = -1;
-								$return_array[$counter][1] = $value;
-								$return_array[$counter][2] = $organisation_unit->get_name();
-								$return_array[$counter][3] = $organisation_unit->get_icon();
-								$return_array[$counter][4] = true; // Permission
-								
-								if ($organisation_unit->get_stores_data() == true)
-								{
-									$return_array[$counter][5] = true;
-								}
-								else
-								{
-									$return_array[$counter][5] = false;
-								}
-								$counter++;
-							}
-						}
-						return serialize($return_array);	
-					}
+					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_members($organisation_unit_id, null, null, ($page*20)-20, ($page*20));
+				}				
+			}
+			else
+			{
+				if ($sortvalue and $sortmethod)
+				{
+					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_members($organisation_unit_id, $sortvalue, $sortmethod, 0, 20);
+				}
+				else
+				{
+					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_members($organisation_unit_id, null, null, 0, 20);
+				}	
+			}
+			
+			if (is_array($result_array) and count($result_array) >= 1)
+			{
+				foreach($result_array as $key => $value)
+				{
+					$user = new User($value['id']);
+					$result_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
+					$result_array[$key]['username'] = $user->get_username();
+					$result_array[$key]['fullname'] = $user->get_full_name(false);
 				}
 			}
+			else
+			{
+				$list->override_last_line("<span class='italic'>No results found!</span>");
+			}
+			
+			echo $list->get_list($result_array, $page);
+		}
+	}
+		
+	public function list_owners($organisation_unit_id, $page, $sortvalue, $sortmethod)
+	{
+		if (is_numeric($organisation_unit_id))
+		{
+			global $user;
+			
+			$list = new List_IO(OrganisationUnit_Wrapper::count_organisation_unit_owners($organisation_unit_id), 20, "OrganisationUnitListPage");
+	
+			$list->add_row("","symbol",false,"16px");
+			$list->add_row("Username","username",true,null,"OrganisationUnitListSortUsername");
+			$list->add_row("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
+			
+			if ($page)
+			{
+				if ($sortvalue and $sortmethod)
+				{
+					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_owners($organisation_unit_id, $sortvalue, $sortmethod, ($page*20)-20, ($page*20));
+				}
+				else
+				{
+					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_owners($organisation_unit_id, null, null, ($page*20)-20, ($page*20));
+				}				
+			}
+			else
+			{
+				if ($sortvalue and $sortmethod)
+				{
+					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_owners($organisation_unit_id, $sortvalue, $sortmethod, 0, 20);
+				}
+				else
+				{
+					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_owners($organisation_unit_id, null, null, 0, 20);
+				}	
+			}
+			
+			if (is_array($result_array) and count($result_array) >= 1)
+			{
+				foreach($result_array as $key => $value)
+				{
+					$user = new User($value['id']);
+					$result_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
+					$result_array[$key]['username'] = $user->get_username();
+					$result_array[$key]['fullname'] = $user->get_full_name(false);
+				}
+			}
+			else
+			{
+				$list->override_last_line("<span class='italic'>No results found!</span>");
+			}
+			
+			echo $list->get_list($result_array, $page);
 		}
 	}
 	
-	private function rewrite_menu_childs_array()
+	public function list_leaders($organisation_unit_id, $page, $sortvalue, $sortmethod)
 	{
-		if ($_GET[session_id])
+		if (is_numeric($organisation_unit_id))
 		{
-			$session = new Session($_GET[session_id]);
-		
-			if ($_POST[serialized_folder_array])
+			global $user;
+			
+			$list = new List_IO(OrganisationUnit_Wrapper::count_organisation_unit_leaders($organisation_unit_id), 20, "OrganisationUnitListPage");
+	
+			$list->add_row("","symbol",false,"16px");
+			$list->add_row("Username","username",true,null,"OrganisationUnitListSortUsername");
+			$list->add_row("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
+			
+			if ($page)
 			{
-				$serialized_folder_array = $_POST[serialized_folder_array];
-				
-				$serialized_folder_array = stripslashes($serialized_folder_array);
-				$folder_array = unserialize($serialized_folder_array);
-
-				$session->write_value("CURRENT_NAVIGATION_OU", $folder_array, true);
+				if ($sortvalue and $sortmethod)
+				{
+					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_leaders($organisation_unit_id, $sortvalue, $sortmethod, ($page*20)-20, ($page*20));
+				}
+				else
+				{
+					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_leaders($organisation_unit_id, null, null, ($page*20)-20, ($page*20));
+				}				
 			}
+			else
+			{
+				if ($sortvalue and $sortmethod)
+				{
+					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_leaders($organisation_unit_id, $sortvalue, $sortmethod, 0, 20);
+				}
+				else
+				{
+					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_leaders($organisation_unit_id, null, null, 0, 20);
+				}	
+			}
+			
+			if (is_array($result_array) and count($result_array) >= 1)
+			{
+				foreach($result_array as $key => $value)
+				{
+					$user = new User($value['id']);
+					$result_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
+					$result_array[$key]['username'] = $user->get_username();
+					$result_array[$key]['fullname'] = $user->get_full_name(false);
+				}
+			}
+			else
+			{
+				$list->override_last_line("<span class='italic'>No results found!</span>");
+			}
+			
+			echo $list->get_list($result_array, $page);
 		}
 	}
-
+	
+	public function list_quality_managers($organisation_unit_id, $page, $sortvalue, $sortmethod)
+	{
+		if (is_numeric($organisation_unit_id))
+		{
+			global $user;
+			
+			$list = new List_IO(OrganisationUnit_Wrapper::count_organisation_unit_quality_managers($organisation_unit_id), 20, "OrganisationUnitListPage");
+	
+			$list->add_row("","symbol",false,"16px");
+			$list->add_row("Username","username",true,null,"OrganisationUnitListSortUsername");
+			$list->add_row("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
+			
+			if ($page)
+			{
+				if ($sortvalue and $sortmethod)
+				{
+					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_quality_managers($organisation_unit_id, $sortvalue, $sortmethod, ($page*20)-20, ($page*20));
+				}
+				else
+				{
+					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_quality_managers($organisation_unit_id, null, null, ($page*20)-20, ($page*20));
+				}				
+			}
+			else
+			{
+				if ($sortvalue and $sortmethod)
+				{
+					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_quality_managers($organisation_unit_id, $sortvalue, $sortmethod, 0, 20);
+				}
+				else
+				{
+					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_quality_managers($organisation_unit_id, null, null, 0, 20);
+				}	
+			}
+			
+			if (is_array($result_array) and count($result_array) >= 1)
+			{
+				foreach($result_array as $key => $value)
+				{
+					$user = new User($value['id']);
+					$result_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
+					$result_array[$key]['username'] = $user->get_username();
+					$result_array[$key]['fullname'] = $user->get_full_name(false);
+				}
+			}
+			else
+			{
+				$list->override_last_line("<span class='italic'>No results found!</span>");
+			}
+			
+			echo $list->get_list($result_array, $page);
+		}
+	}
+	
+	public function list_groups($organisation_unit_id, $page, $sortvalue, $sortmethod)
+	{
+		if (is_numeric($organisation_unit_id))
+		{
+			global $user;
+			
+			$list = new List_IO(OrganisationUnit_Wrapper::count_organisation_unit_groups($organisation_unit_id), 20, "OrganisationUnitListPage");
+	
+			$list->add_row("","symbol",false,"16px");
+			$list->add_row("Groupname","groupname",true,null,"OrganisationUnitListSortGroupname");
+			
+			if ($page)
+			{
+				if ($sortvalue and $sortmethod)
+				{
+					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_groups($organisation_unit_id, $sortvalue, $sortmethod, ($page*20)-20, ($page*20));
+				}
+				else
+				{
+					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_groups($organisation_unit_id, null, null, ($page*20)-20, ($page*20));
+				}				
+			}
+			else
+			{
+				if ($sortvalue and $sortmethod)
+				{
+					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_groups($organisation_unit_id, $sortvalue, $sortmethod, 0, 20);
+				}
+				else
+				{
+					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_groups($organisation_unit_id, null, null, 0, 20);
+				}	
+			}
+			
+			if (is_array($result_array) and count($result_array) >= 1)
+			{
+				foreach($result_array as $key => $value)
+				{
+					$group = new Group($value['id']);
+					$result_array[$key]['symbol'] = "<img src='images/icons/groups.png' alt='' />";
+					$result_array[$key]['groupname'] = $group->get_name();
+				}
+			}
+			else
+			{
+				$list->override_last_line("<span class='italic'>No results found!</span>");
+			}
+			
+			echo $list->get_list($result_array, $page);
+		}
+	}
+	
 	public function method_handler()
 	{
-		header("Content-Type: text/html; charset=utf-8");
+		global $session;
 		
-		switch($_GET[run]):
-			
-			case "list_menu_ou_childs":
-				echo $this->list_menu_childs_by_id();
-			break;
-			
-			case "rewrite_menu_childs_array":
-				echo $this->rewrite_menu_childs_array();
-			break;
-			
-		endswitch;
-	}
+		if ($session->is_valid())
+		{
+			switch($_GET[run]):
+	
+				case "list_members":
+					$this->list_members($_GET[organisation_unit_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				break;
+				
+				case "list_owners":
+					$this->list_owners($_GET[organisation_unit_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				break;
+				
+				case "list_leaders":
+					$this->list_leaders($_GET[organisation_unit_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				break;
+				
+				case "list_quality_managers":
+					$this->list_quality_managers($_GET[organisation_unit_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				break;
 
+				case "list_groups":
+					$this->list_groups($_GET[organisation_unit_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				break;
+				
+				default:
+				break;
+			
+			endswitch;
+		}
+	}
 }
 
-$organisation_unit_ajax = new OrganisationUnitAJAX;
+$organisation_unit_ajax = new OrganisationUnitAjax;
 $organisation_unit_ajax->method_handler();
 
 ?>

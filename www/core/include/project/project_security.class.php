@@ -424,55 +424,47 @@ class ProjectSecurity implements ProjectSecurityInterface
      * @param integer $leader_id
      * @return bool
      */
-    public function change_leader_permission($leader_id)
+    public function change_ou_user_permission($organisation_unit_id)
     {
-    	global $transaction;
-    	
-    	if (is_numeric($leader_id))
+    	if (is_numeric($organisation_unit_id))
     	{
-    		$transaction_id = $transaction->begin();
-    	
-    		$project_permission_array = ProjectPermission::list_entries_by_project_id_and_intention($this->project_id, 2);
-    	
-    		if (count($project_permission_array) > 0 and is_numeric($project_permission_array[0]))
+    		if (ProjectPermission::delete_entries_by_project_id_and_intention($this->project_id, 2) == true and ProjectPermission::delete_entries_by_project_id_and_intention($this->project_id, 5) == true)
     		{
-	    		$project_permission = new ProjectPermission($project_permission_array[0]);
-	    		if ($project_permission->set_user_id($leader_id) == true)
-	    		{
-	    			if ($transaction_id != null)
-	    			{
-						$transaction->commit($transaction_id);
+    			$organisation_unit = new OrganisationUnit($organisation_unit_id);
+    			
+    			$leader_array = $organisation_unit->list_leaders($organisation_unit_id);
+						
+				if(is_array($leader_array) and count($leader_array) >= 1)
+				{
+					foreach($leader_array as $key => $value)
+					{
+						$project_permission = new ProjectPermission(null);
+						if ($project_permission->create($value, null, null, $project_id, constant("PROJECT_LEADER_STD_PERMISSION"), null, 2) == null)
+						{
+							return false;
+						}
 					}
-					return true;
-	    		}
-	    		else
-	    		{
-	    			if ($transaction_id != null)
-	    			{
-						$transaction->rollback($transaction_id);
+				}
+				
+				$quality_manager_array = $organisation_unit->list_quality_managers();
+				
+				if(is_array($quality_manager_array) and count($quality_manager_array) >= 1)
+				{
+					foreach($quality_manager_array as $key => $value)
+					{
+						$project_permission = new ProjectPermission(null);
+						if ($project_permission->create($value, null, null, $project_id, constant("PROJECT_QM_STD_PERMISSION"), null, 5) == null)
+						{
+							return false;
+						}
 					}
-					return false;
-	    		}
+				}
+				
+				return true;
     		}
     		else
     		{
-    			$project_permission = new ProjectPermission(null);
-				if ($project_permission->create($leader_id, null, null, $this->project_id, constant("PROJECT_LEADER_STD_PERMISSION"), null, 2) != null)
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
-					return true;
-				}
-				else
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
-				}
+    			return false;
     		}
     	}
     	else

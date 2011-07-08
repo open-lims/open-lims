@@ -48,4 +48,10 @@
 	$dialog[2][display_name]	= "Organisation Units";
 	$dialog[2][weight]			= 200;
 	
+	$dialog[3][type]			= "common_dialog";
+	$dialog[3][class_path]		= "core/modules/organisation_unit/organisation_unit.io.php";
+	$dialog[3]['class']			= "OrganisationUnitIO";
+	$dialog[3][method]			= "detail_handler";
+	$dialog[3][internal_name]	= "ou_detail";
+	$dialog[3][display_name]	= "OU Detail";
 ?>

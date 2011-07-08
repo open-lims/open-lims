@@ -823,6 +823,17 @@ class UserIO
 		endswitch;	
 	}
 	
+	public static function user_select_dialog()
+	{
+		$template = new Template("languages/en-gb/template/user/user_select_dialog.html");
+		return $template->get_string();
+	}
+	
+	public static function group_select_dialog()
+	{
+		$template = new Template("languages/en-gb/template/user/group_select_dialog.html");
+		return $template->get_string();
+	}
 }
 
 ?>

@@ -1,0 +1,39 @@
+
+/* Organisation Unit Detail */
+
+#OrganisationUnitDetailTable
+{
+	width: 100%;
+	margin-left: 5px;
+	margin-right: 5px;	
+}
+#OrganisationUnitDetailTable tr
+{
+	vertical-align: top;
+}
+#OrganisationUnitDetailTable td
+{
+	padding-top: 5px;
+	line-height: 23px;
+}
+.OrganisationUnitDetailTableTitle
+{
+	width: 20%;	
+}
+#OrganisationUnitDetailFooter
+{
+	border-top: 1px #D0D0D0 dotted;
+	margin-top: 2px;
+	padding-top: 2px;
+}
+.OrganisationUnitDetailFooterElement
+{
+	float: left;
+	padding: 5px 10px;
+	border-right: 1px #D0D0D0 dotted;
+}
+#OrganisationUnitDetailFooterClear
+{
+	border-top: 1px #D0D0D0 dotted;
+	clear: left;	
+}

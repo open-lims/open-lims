@@ -320,15 +320,24 @@ class OrganisationUnitHasLeader_Access
 	 * @param integer $organisation_unit_id
 	 * @return array
 	 */
-	public static function list_leaders_by_organisation_unit_id($organisation_unit_id)
+	public static function list_leaders_by_organisation_unit_id($organisation_unit_id, $limit)
 	{
 		global $db;
 			
 		if (is_numeric($organisation_unit_id))
 		{
+			if ($limit > 0)
+			{
+				$limit_sql = "LIMIT ".$limit;
+			}
+			else
+			{
+				$limit_sql = "";
+			}
+			
 			$return_array = array();
 			
-			$sql = "SELECT leader_id FROM ".constant("ORGANISATION_UNIT_HAS_LEADER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
+			$sql = "SELECT leader_id FROM ".constant("ORGANISATION_UNIT_HAS_LEADER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."".$limit_sql;
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))

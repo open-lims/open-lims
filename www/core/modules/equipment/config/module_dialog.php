@@ -54,4 +54,11 @@
 	$dialog[3][internal_name]	= "equipment_type";
 	$dialog[3][display_name]	= "Equipment Types";
 	$dialog[3][weight]			= 10100; 
+	
+	$dialog[4][type]			= "common_dialog";
+	$dialog[4][class_path]		= "core/modules/equipment/equipment.io.php";
+	$dialog[4]['class']			= "EquipmentIO";
+	$dialog[4][method]			= "list_organisation_unit_related_equipment_handler";
+	$dialog[4][internal_name]	= "list_ou_equipment";
+	$dialog[4][display_name]	= "List OU Equipment";
 ?>

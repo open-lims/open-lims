@@ -216,36 +216,45 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     		
     		if ($this->project_permission->get_user_id())
     		{
-				if (ProjectPermission_Access::count_entries_with_project_id_and_user_id($project_id, $this->project_permission->get_user_id()) <= 1)
-				{
-	    			$folder_id = UserFolder::get_folder_by_user_id($this->project_permission->get_user_id());
-	    			
-	    			$virtual_folder = new VirtualFolder(null);
-	    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
-	    			
-	    			foreach($virtual_folder_array as $key => $value)
-	    			{
-	    				$virtual_folder = new ProjectVirtualFolder($value);
-	    				if ($virtual_folder->is_project_vfolder() == true)
-	    				{
-	    					$virtual_folder_id = $value;
-	    				}
-	    			}
-	    			
-	    			if ($virtual_folder_id)
-	    			{
-	    				$virtual_folder = new VirtualFolder($virtual_folder_id);
-	    				$vfolder_return = $virtual_folder->unlink_folder($project_folder_id);
-	    			}
-	    			else
-	    			{
-	    				$vfolder_return = true;
-	    			}
-				}
-				else
-				{
-					$vfolder_return = true;
-				}
+    			$permission_string = strrev(decbin($this->project_permission->get_permission()));
+    			
+    			if ($permission_string{2} == 1 or $permission_string{3} == 1  or $permission_string{7} == 1)
+    			{
+					if (ProjectPermission_Access::count_entries_with_project_id_and_user_id($project_id, $this->project_permission->get_user_id()) <= 1)
+					{
+		    			$folder_id = UserFolder::get_folder_by_user_id($this->project_permission->get_user_id());
+		    			
+		    			$virtual_folder = new VirtualFolder(null);
+		    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
+		    			
+		    			foreach($virtual_folder_array as $key => $value)
+		    			{
+		    				$virtual_folder = new ProjectVirtualFolder($value);
+		    				if ($virtual_folder->is_project_vfolder() == true)
+		    				{
+		    					$virtual_folder_id = $value;
+		    				}
+		    			}
+		    			
+		    			if ($virtual_folder_id)
+		    			{
+		    				$virtual_folder = new VirtualFolder($virtual_folder_id);
+		    				$vfolder_return = $virtual_folder->unlink_folder($project_folder_id);
+		    			}
+		    			else
+		    			{
+		    				$vfolder_return = true;
+		    			}
+					}
+					else
+					{
+						$vfolder_return = true;
+					}
+    			}
+    			else
+    			{
+    				$vfolder_return = true;
+    			}
     		}
     		elseif($this->project_permission->get_organisation_unit_id())
     		{
@@ -861,12 +870,33 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 	}
 	
 	/**
+	 * @param integer $project_id
+	 * @param integer $intention
+	 * @param integer $user_id
+	 * @return array
+	 */
+	private static function list_entries_by_project_id_and_intention_and_user_id($project_id, $intention, $user_id)
+	{
+		return ProjectPermission_Access::list_entries_by_project_id_and_intention_and_user_id($project_id, $intention, $user_id);
+	}
+	
+	/**
 	 * @param integer $organisation_unit_id
 	 * @return array
 	 */
 	private static function list_system_setted_projects_by_organisation_id($organisation_unit_id)
 	{
 		return ProjectPermission_Access::list_projects_by_organisation_id_and_intention($organisation_unit_id, 3);
+	}
+	
+	/**
+	 * @param integer $project_id
+	 * @param integer $intention
+	 * @return array
+	 */
+	public static function delete_entries_by_project_id_and_intention($project_id, $intention)
+	{
+		return ProjectPermission_Access::delete_entries_by_project_id_and_intention($project_id, $intention);
 	}
 	
 	/**
@@ -922,44 +952,99 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 			}
     	}
     	
+    	/**
+    	 * @todo slow
+    	 */
    		if ($event_object instanceof OrganisationUnitLeaderCreateEvent)
     	{
-    		/**
-    		 * @todo
-    		 */
-    		$organisation_unit = new OrganisationUnit($event_object->get_organisation_unit_id());
-    		$leader_id = $organisation_unit->get_leader_id();
-    		if (is_numeric($leader_id))
+    		$project_array = Project::list_organisation_unit_related_projects($event_object->get_organisation_unit_id(), true);
+    		if (is_array($project_array) and count($project_array) >= 1)
     		{
-    			return Project_Wrapper_Access::change_leader_permission_by_organisation_unit_id($leader_id, $event_object->get_organisation_unit_id());
-    		}
-    		else
-    		{
-    			return false;
+    			$project_permission = new ProjectPermission(null);
+    			foreach($project_array as $key => $value)
+    			{
+    				if ($project_permission->create($event_object->get_leader_id(), null, null, $value, constant("PROJECT_LEADER_STD_PERMISSION"), null, 2) == null)
+					{
+						return false;
+					}
+    			}
     		}
     	}
     	
+    	/**
+    	 * @todo slow
+    	 */
     	if ($event_object instanceof OrganisationUnitLeaderDeleteEvent)
     	{
-    		/**
-    		 * @todo
-    		 */
+    		$project_array = Project::list_organisation_unit_related_projects($event_object->get_organisation_unit_id(), true);
+    		if (is_array($project_array) and count($project_array) >= 1)
+    		{
+    			foreach($project_array as $key => $value)
+    			{
+    				$permission_array = self::list_entries_by_project_id_and_intention_and_user_id($value, 2, $event_object->get_leader_id());
+    				if (is_array($permission_array) and count($permission_array) >= 1)
+    				{
+    					foreach($permission_array as $permission_key => $permission_value)
+    					{
+    						$project_permission = new ProjectPermission($permission_value);
+    						if ($project_permission->delete() == false)
+    						{
+    							return false;
+    						}
+    					}
+    				}
+    			}
+    		}
     	}
     	
+    	/**
+    	 * @todo slow
+    	 */
+    	if ($event_object instanceof OrganisationUnitQualityManagerCreateEvent)
+    	{
+    		$project_array = Project::list_organisation_unit_related_projects($event_object->get_organisation_unit_id(), true);
+    		if (is_array($project_array) and count($project_array) >= 1)
+    		{
+    			$project_permission = new ProjectPermission(null);
+    			foreach($project_array as $key => $value)
+    			{
+    				if ($project_permission->create($event_object->get_quality_manager_id(), null, null, $value, constant("PROJECT_QM_STD_PERMISSION"), null, 5) == null)
+					{
+						return false;
+					}
+    			}
+    		}
+    	}
+    	
+    	/**
+    	 * @todo slow
+    	 */
     	if ($event_object instanceof OrganisationUnitQualityManagerDeleteEvent)
     	{
-    		/**
-    		 * @todo
-    		 */
+    		$project_array = Project::list_organisation_unit_related_projects($event_object->get_organisation_unit_id(), true);
+    		if (is_array($project_array) and count($project_array) >= 1)
+    		{
+    			foreach($project_array as $key => $value)
+    			{
+    				$permission_array = self::list_entries_by_project_id_and_intention_and_user_id($value, 5, $event_object->get_quality_manager_id());
+    				if (is_array($permission_array) and count($permission_array) >= 1)
+    				{
+    					foreach($permission_array as $permission_key => $permission_value)
+    					{
+    						$project_permission = new ProjectPermission($permission_value);
+    						if ($project_permission->delete() == false)
+    						{
+    							return false;
+    						}
+    					}
+    				}
+    			}
+    		}
     	}
     	
-    	if ($event_object instanceof OrganisationUnitQualityManagerDeleteEvent)
-    	{
-    		/**
-    		 * @todo
-    		 */
-    	}
-    	
+    	/**
+    	 * @todo slow
+    	 */
     	if ($event_object instanceof OrganisationUnitGroupCreateEvent)
     	{
     		$project_array = self::list_system_setted_projects_by_organisation_id($event_object->get_organisation_unit_id());
@@ -977,6 +1062,9 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 			}
     	}
     	
+    	/**
+    	 * @todo slow
+    	 */
     	if ($event_object instanceof OrganisationUnitGroupDeleteEvent)
     	{
     		$project_array = self::list_system_setted_projects_by_organisation_id($event_object->get_organisation_unit_id());

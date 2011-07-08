@@ -402,15 +402,23 @@ class Project implements ProjectInterface, EventListenerInterface
 							throw new ProjectCreationFailedException("",1);
 						}
 					
-						$project_permission = new ProjectPermission(null);
-						if ($project_permission->create($organisation_unit->get_leader_id(), null, null, $project_id, constant("PROJECT_LEADER_STD_PERMISSION"), null, 2) == null)
+						$leader_array = $organisation_unit->list_leaders();
+						
+						if(is_array($leader_array) and count($leader_array) >= 1)
 						{
-							$project_folder->delete(true, true);
-							if ($transaction_id != null)
+							foreach($leader_array as $key => $value)
 							{
-								$transaction->rollback($transaction_id);
+								$project_permission = new ProjectPermission(null);
+								if ($project_permission->create($value, null, null, $project_id, constant("PROJECT_LEADER_STD_PERMISSION"), null, 2) == null)
+								{
+									$project_folder->delete(true, true);
+									if ($transaction_id != null)
+									{
+										$transaction->rollback($transaction_id);
+									}
+									throw new ProjectCreationFailedException("",1);
+								}
 							}
-							throw new ProjectCreationFailedException("",1);
 						}
 						
 						
@@ -427,6 +435,26 @@ class Project implements ProjectInterface, EventListenerInterface
 							throw new ProjectCreationFailedException("",1);
 						}
 					
+						
+						$quality_manager_array = $organisation_unit->list_quality_managers();
+						
+						if(is_array($quality_manager_array) and count($quality_manager_array) >= 1)
+						{
+							foreach($quality_manager_array as $key => $value)
+							{
+								$project_permission = new ProjectPermission(null);
+								if ($project_permission->create($value, null, null, $project_id, constant("PROJECT_QM_STD_PERMISSION"), null, 5) == null)
+								{
+									$project_folder->delete(true, true);
+									if ($transaction_id != null)
+									{
+										$transaction->rollback($transaction_id);
+									}
+									throw new ProjectCreationFailedException("",1);
+								}
+							}
+						}
+						
 						$group_array = $organisation_unit->list_groups();
 						
 						if(is_array($group_array) and count($group_array) >= 1)
@@ -1412,7 +1440,7 @@ class Project implements ProjectInterface, EventListenerInterface
 						return false;
 					}
 					
-					if ($project_security->change_leader_permission($organisation_unit->get_leader_id()) == false)
+					if ($project_security->change_ou_user_permission($organisation_unit_id) == false)
 					{
 						if ($transaction_id != null)
 						{

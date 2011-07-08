@@ -43,17 +43,11 @@ class AdminOrganisationUnitIO
 				foreach($organisation_unit_child_array as $key => $value)
 				{
 					$organisation_unit = new OrganisationUnit($value);
-				
-					$owner = new User($organisation_unit->get_owner_id());
-					$leader = new User($organisation_unit->get_leader_id());
-					
+									
 					$content_array[self::$home_list_counter][padding] = 0.5 * $layer;
 					$content_array[self::$home_list_counter][icon] = $organisation_unit->get_icon();
 					$content_array[self::$home_list_counter][name] = $organisation_unit->get_name();
-					$content_array[self::$home_list_counter][type] = $organisation_unit->get_type_name();
-					$content_array[self::$home_list_counter][owner] = $owner->get_full_name(true);
-					$content_array[self::$home_list_counter][leader] = $leader->get_full_name(true);
-					
+					$content_array[self::$home_list_counter][type] = $organisation_unit->get_type_name();				
 					
 					$paramquery = $_GET;
 					$paramquery[action] = "detail";
@@ -169,15 +163,11 @@ class AdminOrganisationUnitIO
 			{
 				$organisation_unit = new OrganisationUnit($value);
 				
-				$owner = new User($organisation_unit->get_owner_id());
-				$leader = new User($organisation_unit->get_leader_id());
 				
 				$content_array[self::$home_list_counter][padding] = 0;
 				$content_array[self::$home_list_counter][icon] = $organisation_unit->get_icon();
 				$content_array[self::$home_list_counter][name] = $organisation_unit->get_name();
 				$content_array[self::$home_list_counter][type] = $organisation_unit->get_type_name();
-				$content_array[self::$home_list_counter][owner] = $owner->get_full_name(true);
-				$content_array[self::$home_list_counter][leader] = $leader->get_full_name(true);
 				
 				if ($organisation_unit->is_upper_position() == true)
 				{
@@ -510,12 +500,9 @@ class AdminOrganisationUnitIO
 			}
 			
 			$organisation_unit = new OrganisationUnit($organisation_unit_id);
-			$owner = new User($organisation_unit->get_owner_id());
-			$leader = new USer($organisation_unit->get_leader_id());
 			
 			$template->set_var("name", $organisation_unit->get_name());
-			$template->set_var("owner", $owner->get_full_name(false));
-			$template->set_var("leader", $leader->get_full_name(false));
+			$template->set_var("title", $organisation_unit->get_name());
 			
 			
 			$paramquery = $_GET;
@@ -525,94 +512,192 @@ class AdminOrganisationUnitIO
 			$template->set_var("name_params", $params);	
 			
 			
-			$paramquery = $_GET;
-			$paramquery[action] = "change_owner";
-			$params = http_build_query($paramquery,'','&#38;');
+			// OWNERS
 			
-			$template->set_var("owner_params", $params);	
+			$organisation_unit_owner_array = $organisation_unit->list_owners(12);
 			
-			
-			$paramquery = $_GET;
-			$paramquery[action] = "change_leader";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("leader_params", $params);	
-			
-			
-			$paramquery = $_GET;
-			$paramquery[action] = "add_user";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("add_user_params", $params);	
-			
-			
-			$user_array = $organisation_unit->list_members();
-			$user_content_array = array();
-			
-			$counter = 0;
-			
-			if (is_array($user_array) and count($user_array) >= 1)
+			if (is_array($organisation_unit_owner_array) and count($organisation_unit_owner_array) >= 1)
 			{
-				foreach($user_array as $key => $value)
+				$ou_owners = null;
+				foreach ($organisation_unit_owner_array as $key => $value)
 				{
-					$user = new User($value);
+					$owner = new User($value);
 					
-					$paramquery = $_GET;
-					$paramquery[action] = "delete_user";
-					$paramquery[key] = $value;
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$user_content_array[$counter][username] = $user->get_username();
-					$user_content_array[$counter][fullname] = $user->get_full_name(false);
-					$user_content_array[$counter][delete_params] = $params;
-					
-					$counter++;
+					if ($ou_owners)
+					{
+						$ou_owners .= ", ".$owner->get_full_name(true);
+					}
+					else
+					{
+						$ou_owners .= $owner->get_full_name(true);	
+					}
 				}
-				$template->set_var("no_user", false);
 			}
 			else
 			{
-				$template->set_var("no_user", true);
+				$ou_owners = "<span class='italic'>none</span>";
 			}
 			
-			$template->set_var("user", $user_content_array);
+			$number_of_owners = $organisation_unit->get_number_of_owners();
 			
-			
-			$paramquery = $_GET;
-			$paramquery[action] = "add_group";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("add_group_params", $params);	
-			
-			
-			$group_array = $organisation_unit->list_groups();
-			$group_content_array = array();
-			
-			$counter = 0;
-			
-			if (is_array($group_array) and count($group_array) >= 1)
+			if ($number_of_owners > 12)
 			{
-				foreach($group_array as $key => $value)
+				$number_of_owners = $number_of_owners - 12;
+				$ou_owners .= " (+ ".$number_of_owners." more)";
+			}
+			
+			$template->set_var("owners", $ou_owners);
+			
+			
+			// LEADERS
+			
+			$organisation_unit_leader_array = $organisation_unit->list_leaders(12);
+			
+			if (is_array($organisation_unit_leader_array) and count($organisation_unit_leader_array) >= 1)
+			{
+				$ou_leaders = null;
+				foreach ($organisation_unit_leader_array as $key => $value)
+				{
+					$leader = new User($value);
+										
+					if ($ou_leaders)
+					{
+						$ou_leaders .= ", ".$leader->get_full_name(true);
+					}
+					else
+					{
+						$ou_leaders .= $leader->get_full_name(true);	
+					}
+				}
+			}
+			else
+			{
+				$ou_leaders = "<span class='italic'>none</span>";
+			}
+			
+			$number_of_leaders = $organisation_unit->get_number_of_leaders();
+			
+			if ($number_of_leaders > 12)
+			{
+				$number_of_leaders = $number_of_leaders - 12;
+				$ou_leaders .= " (+ ".$number_of_leaders." more)";
+			}
+			
+			$template->set_var("leaders", $ou_leaders);
+			
+			
+			// MEMBERS
+			
+			$organisation_unit_member_array = $organisation_unit->list_members(12);
+			
+			if (is_array($organisation_unit_member_array) and count($organisation_unit_member_array) >= 1)
+			{
+				$ou_members = null;
+				foreach ($organisation_unit_member_array as $key => $value)
+				{
+					$member = new User($value);
+					
+					if ($ou_members)
+					{
+						$ou_members .= ", ".$member->get_full_name(true);
+					}
+					else
+					{
+						$ou_members .= $member->get_full_name(true);	
+					}
+				}
+			}
+			else
+			{
+				$ou_members = "<span class='italic'>none</span>";
+			}
+
+			$number_of_users = $organisation_unit->get_number_of_users();
+			
+			if ($number_of_users > 12)
+			{
+				$number_of_users = $number_of_users - 12;
+				$ou_members .= " (+ ".$number_of_users." more)";
+			}
+			
+			$template->set_var("members", $ou_members);
+			
+			
+			// QUALITY MANAGERS
+			
+			$organisation_unit_quality_manager_array = $organisation_unit->list_quality_managers(12);
+			
+			if (is_array($organisation_unit_quality_manager_array) and count($organisation_unit_quality_manager_array) >= 1)
+			{
+				$ou_quality_managers = null;
+				foreach ($organisation_unit_quality_manager_array as $key => $value)
+				{
+					$quality_manager = new User($value);
+					
+					if ($ou_quality_managers)
+					{
+						$ou_quality_managers .= ", ".$quality_manager->get_full_name(true);
+					}
+					else
+					{
+						$ou_quality_managers .= $quality_manager->get_full_name(true);	
+					}
+				}
+			}
+			else
+			{
+				$ou_quality_managers = "<span class='italic'>none</span>";
+			}
+			
+			$number_of_quality_managers = $organisation_unit->get_number_of_quality_managers();
+			
+			if ($number_of_quality_managers > 12)
+			{
+				$number_of_quality_managers = $number_of_quality_managers - 12;
+				$ou_quality_managers .= " (+ ".$number_of_quality_managers." more)";
+			}
+			
+			$template->set_var("quality_managers", $ou_quality_managers);
+			
+			
+			// GROUPS
+			
+			$organisation_unit_group_array = $organisation_unit->list_groups(12);
+			
+			if (is_array($organisation_unit_group_array) and count($organisation_unit_group_array) >= 1)
+			{
+				$ou_groups = null;
+				foreach ($organisation_unit_group_array as $key => $value)
 				{
 					$group = new Group($value);
 					
-					$paramquery = $_GET;
-					$paramquery[action] = "delete_group";
-					$paramquery[key] = $value;
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$group_content_array[$counter][name] = $group->get_name();
-					$group_content_array[$counter][delete_params] = $params;
-					
-					$counter++;
+					if ($ou_groups)
+					{
+						$ou_groups .= ", ".$group->get_name();
+					}
+					else
+					{
+						$ou_groups .= $group->get_name();	
+					}
 				}
-				$template->set_var("no_group", false);
 			}
 			else
 			{
-				$template->set_var("no_group", true);
+				$ou_groups = "<span class='italic'>none</span>";
 			}
-			$template->set_var("group", $group_content_array);
+			
+			$number_of_groups = $organisation_unit->get_number_of_groups();
+						
+			if ($number_of_groups > 12)
+			{
+				$number_of_groups = $number_of_groups - 12;
+				$ou_groups .= " (+ ".$number_of_groups." more)";
+			}
+			
+			$template->set_var("groups",$ou_groups);
+			
+			
+			
 			$template->output();
 		}
 		else
@@ -623,13 +708,18 @@ class AdminOrganisationUnitIO
 		}
 	}
 
-	
 	public static function detail_member()
 	{
 		if ($_GET[id])
 		{
+			$organisation_unit = new OrganisationUnit($_GET[id]);
+			
+			require_once("core/modules/user/user.io.php");
+			
 			$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/detail_member.html");
+			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("ORGANISATION_UNIT_ID", $_GET[id]);
+			$template->set_var("ADD_DIALOG", UserIO::user_select_dialog());
 			$template->output();
 		}
 		else
@@ -640,236 +730,19 @@ class AdminOrganisationUnitIO
 		}
 	}
 	
-	public static function add_user()
-	{
-		if ($_GET[id])
-		{			
-			if ($_GET[nextpage] == 1)
-			{
-				if (is_numeric($_POST[user]))
-				{
-					$organisation_unit = new OrganisationUnit($_GET[id]);
-					if ($organisation_unit->is_user_in_organisation_unit($_POST[user]) == true)
-					{
-						$page_1_passed = false;
-						$error = "The user is already member of this organisation unit.";
-					}
-					else
-					{
-						$page_1_passed = true;
-					}
-				}
-				else
-				{
-					$page_1_passed = false;
-					$error = "You must select an user.";
-				}
-			}
-			elseif($_GET[nextpage] > 1)
-			{
-				$page_1_passed = true;
-			}
-			else
-			{
-				$page_1_passed = false;
-				$error = "";
-			}
-			
-			if ($page_1_passed == false)
-			{
-				$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/add_user.html");
-				
-				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
-				$params = http_build_query($paramquery,'','&#38;');
-				
-				$template->set_var("params",$params);
-				
-				$template->set_var("error",$error);
-				
-				$user_array = User::list_entries();
-					
-				$result = array();
-				$counter = 0;
-				
-				foreach($user_array as $key => $value)
-				{
-					$user = new User($value);
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $user->get_username()." (".$user->get_full_name(false).")";
-					$counter++;
-				}
-				
-				$template->set_var("option",$result);
-				
-				$template->output();
-			}
-			else
-			{
-				$organisation_unit = new OrganisationUnit($_GET[id]);
-				
-				$paramquery = $_GET;
-				$paramquery[action] = "detail";
-				unset($paramquery[nextpage]);
-				$params = http_build_query($paramquery,'','&#38;');
-				
-				if ($organisation_unit->create_user_in_organisation_unit($_POST[user]))
-				{
-					Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Successful", null);
-				}
-				else
-				{
-					Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Failed" ,null);	
-				}
-			}
-		}
-		else
-		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
-		}
-	}
-	
-	public static function delete_user()
-	{
-		if ($_GET[id] and $_GET[key])
-		{
-			if ($_GET[sure] != "true")
-			{
-				$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/delete_user.html");
-				
-				$paramquery = $_GET;
-				$paramquery[sure] = "true";
-				$params = http_build_query($paramquery);
-				
-				$template->set_var("yes_params", $params);
-						
-				$paramquery = $_GET;
-				unset($paramquery[key]);
-				$paramquery[action] = "detail";
-				$params = http_build_query($paramquery);
-				
-				$template->set_var("no_params", $params);
-				
-				$template->output();
-			}
-			else
-			{
-				$paramquery = $_GET;
-				unset($paramquery[key]);
-				unset($paramquery[sure]);
-				$paramquery[action] = "detail";
-				$params = http_build_query($paramquery);
-				
-				$organisation_unit = new OrganisationUnit($_GET[id]);	
-						
-				if ($organisation_unit->delete_user_from_organisation_unit($_GET[key]))
-				{							
-					Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
-				}
-				else
-				{							
-					Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Failed" ,null);
-				}			
-			}
-		}
-		else
-		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
-		}
-	}
-	
-	
 	public static function detail_group()
 	{
-		
-	}
-	
-	public static function add_group()
-	{
 		if ($_GET[id])
-		{		
-			if ($_GET[nextpage] == 1)
-			{
-				if (is_numeric($_POST[group]))
-				{
-					$organisation_unit = new OrganisationUnit($_GET[id]);
-					if ($organisation_unit->is_group_in_organisation_unit($_POST[group]) == true)
-					{
-						$page_1_passed = false;
-						$error = "This group is already member of this organisation-unit.";
-					}
-					else
-					{
-						$page_1_passed = true;
-					}
-				}
-				else
-				{
-					$page_1_passed = false;
-					$error = "You must select a group.";
-				}
-			}
-			elseif($_GET[nextpage] > 1)
-			{
-				$page_1_passed = true;
-			}
-			else
-			{
-				$page_1_passed = false;
-				$error = "";
-			}
+		{
+			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
-			if ($page_1_passed == false)
-			{
-				$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/add_group.html");
-				
-				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
-				$params = http_build_query($paramquery,'','&#38;');
-				
-				$template->set_var("params",$params);
-				
-				$template->set_var("error",$error);
-				
-				$group_array = Group::list_groups();
-					
-				$result = array();
-				$counter = 0;
-				
-				foreach($group_array as $key => $value)
-				{
-					$group = new Group($value);
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $group->get_name();
-					$counter++;
-				}
-				
-				$template->set_var("option",$result);
-				
-				$template->output();
-			}
-			else
-			{
-				$organisation_unit = new OrganisationUnit($_GET[id]);
-				
-				$paramquery = $_GET;
-				$paramquery[action] = "detail";
-				unset($paramquery[nextpage]);
-				$params = http_build_query($paramquery,'','&#38;');
-				
-				if ($organisation_unit->create_group_in_organisation_unit($_POST[group]))
-				{
-					Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Successful", null);
-				}
-				else
-				{
-					Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Failed" ,null);	
-				}
-			}
+			require_once("core/modules/user/user.io.php");
+			
+			$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/detail_group.html");
+			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
+			$template->set_var("ORGANISATION_UNIT_ID", $_GET[id]);
+			$template->set_var("ADD_DIALOG", UserIO::group_select_dialog());
+			$template->output();
 		}
 		else
 		{
@@ -878,110 +751,90 @@ class AdminOrganisationUnitIO
 			$error_io->display_error();
 		}
 	}
-	
-	public static function delete_group()
-	{
-		if ($_GET[id] and $_GET[key])
-		{
-			if ($_GET[sure] != "true")
-			{	
-				$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/delete_group.html");
-				
-				$paramquery = $_GET;
-				$paramquery[sure] = "true";
-				$params = http_build_query($paramquery);
-				
-				$template->set_var("yes_params", $params);
-						
-				$paramquery = $_GET;
-				unset($paramquery[key]);
-				$paramquery[action] = "detail";
-				$params = http_build_query($paramquery);
-				
-				$template->set_var("no_params", $params);
-				
-				$template->output();
-			}
-			else
-			{
-				$paramquery = $_GET;
-				unset($paramquery[key]);
-				unset($paramquery[sure]);
-				$paramquery[action] = "detail";
-				$params = http_build_query($paramquery);
-				
-				$organisation_unit = new OrganisationUnit($_GET[id]);	
-						
-				if ($organisation_unit->delete_group_from_organisation_unit($_GET[key]))
-				{							
-					Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
-				}
-				else
-				{							
-					Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Failed" ,null);
-				}			
-			}
-		}
-		else
-		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
-		}
-	}
-	
-	
+		
 	public static function detail_owner()
 	{
-		
-	}
-	
-	public static function add_owner()
-	{
-		
-	}
-	
-	public static function delete_owner()
-	{
-		
-	}
-	
+		if ($_GET[id])
+		{
+			$organisation_unit = new OrganisationUnit($_GET[id]);
+			
+			require_once("core/modules/user/user.io.php");
+			
+			$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/detail_owner.html");
+			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
+			$template->set_var("ORGANISATION_UNIT_ID", $_GET[id]);
+			$template->set_var("ADD_DIALOG", UserIO::user_select_dialog());
+			$template->output();
+		}
+		else
+		{
+			$exception = new Exception("", 1);
+			$error_io = new Error_IO($exception, 40, 40, 3);
+			$error_io->display_error();
+		}
+	}	
 	
 	public static function detail_leader()
 	{
-		
+		if ($_GET[id])
+		{
+			$organisation_unit = new OrganisationUnit($_GET[id]);
+			
+			require_once("core/modules/user/user.io.php");
+			
+			$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/detail_leader.html");
+			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
+			$template->set_var("ORGANISATION_UNIT_ID", $_GET[id]);
+			$template->set_var("ADD_DIALOG", UserIO::user_select_dialog());
+			$template->output();
+		}
+		else
+		{
+			$exception = new Exception("", 1);
+			$error_io = new Error_IO($exception, 40, 40, 3);
+			$error_io->display_error();
+		}
 	}
-	
-	public static function add_leader()
-	{
-		
-	}
-	
-	public static function delete_leader()
-	{
-		
-	}
-	
 	
 	public static function detail_quality_manager()
 	{
-		
+		if ($_GET[id])
+		{
+			$organisation_unit = new OrganisationUnit($_GET[id]);
+			
+			require_once("core/modules/user/user.io.php");
+			
+			$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/detail_quality_manager.html");
+			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
+			$template->set_var("ORGANISATION_UNIT_ID", $_GET[id]);
+			$template->set_var("ADD_DIALOG", UserIO::user_select_dialog());
+			$template->output();
+		}
+		else
+		{
+			$exception = new Exception("", 1);
+			$error_io = new Error_IO($exception, 40, 40, 3);
+			$error_io->display_error();
+		}
 	}
-	
-	public static function add_quality_manager()
-	{
-		
-	}
-	
-	public static function delete_quality_manager()
-	{
-		
-	}
-	
 	
 	public static function detail_address()
 	{
-		
+		if ($_GET[id])
+		{
+			$organisation_unit = new OrganisationUnit($_GET[id]);
+			
+			$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/detail_address.html");
+			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
+			$template->set_var("CLIENT", SystemHandler::module_exists("client"));
+			$template->output();
+		}
+		else
+		{
+			$exception = new Exception("", 1);
+			$error_io = new Error_IO($exception, 40, 40, 3);
+			$error_io->display_error();
+		}
 	}
 	
 	public static function rename()
@@ -1064,171 +917,7 @@ class AdminOrganisationUnitIO
 			$error_io->display_error();
 		}
 	}
-	
-	public static function change_owner()
-	{
-		if ($_GET[id])
-		{		
-			if ($_GET[nextpage] == 1)
-			{
-				if (is_numeric($_POST[user]))
-				{
-					$page_1_passed = true;
-				}
-				else
-				{
-					$page_1_passed = false;
-					$error = "You must select an user.";
-				}
-			}
-			elseif($_GET[nextpage] > 1)
-			{
-				$page_1_passed = true;
-			}
-			else
-			{
-				$page_1_passed = false;
-				$error = "";
-			}
-			
-			if ($page_1_passed == false)
-			{
-				$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/change_owner.html");
-				
-				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
-				$params = http_build_query($paramquery,'','&#38;');
-				
-				$template->set_var("params",$params);
-				
-				$template->set_var("error",$error);
-				
-				$user_array = User::list_entries();
-					
-				$result = array();
-				$counter = 0;
-				
-				foreach($user_array as $key => $value)
-				{
-					$user = new User($value);
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $user->get_username()." (".$user->get_full_name(false).")";
-					$counter++;
-				}
-				
-				$template->set_var("option",$result);
-				
-				$template->output();
-			}
-			else
-			{
-				$organisation_unit = new OrganisationUnit($_GET[id]);
-				
-				$paramquery = $_GET;
-				$paramquery[action] = "detail";
-				unset($paramquery[nextpage]);
-				$params = http_build_query($paramquery,'','&#38;');
-				
-				if ($organisation_unit->set_owner_id($_POST[user]))
-				{
-					Common_IO::step_proceed($params, "Change Owner", "Operation Successful", null);
-				}
-				else
-				{
-					Common_IO::step_proceed($params, "Change Owner", "Operation Failed" ,null);	
-				}
-			}
-		}
-		else
-		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
-		}
-	}
-	
-	public static function change_leader()
-	{
-		if ($_GET[id])
-		{		
-			if ($_GET[nextpage] == 1)
-			{
-				if (is_numeric($_POST[user]))
-				{
-					$page_1_passed = true;
-				}
-				else
-				{
-					$page_1_passed = false;
-					$error = "You must select an user.";
-				}
-			}
-			elseif($_GET[nextpage] > 1)
-			{
-				$page_1_passed = true;
-			}
-			else
-			{
-				$page_1_passed = false;
-				$error = "";
-			}
-			
-			if ($page_1_passed == false)
-			{
-				$template = new Template("languages/en-gb/template/organisation_unit/admin/organisation_unit/change_leader.html");
-				
-				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
-				$params = http_build_query($paramquery,'','&#38;');
-				
-				$template->set_var("params",$params);
-				
-				$template->set_var("error",$error);
-				
-				$user_array = User::list_entries();
-					
-				$result = array();
-				$counter = 0;
-				
-				foreach($user_array as $key => $value)
-				{
-					$user = new User($value);
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $user->get_username()." (".$user->get_full_name(false).")";
-					$counter++;
-				}
-				
-				$template->set_var("option",$result);
-				
-				$template->output();
-			}
-			else
-			{
-				$organisation_unit = new OrganisationUnit($_GET[id]);
-				
-				$paramquery = $_GET;
-				$paramquery[action] = "detail";
-				unset($paramquery[nextpage]);
-				$params = http_build_query($paramquery,'','&#38;');
-				
-				if ($organisation_unit->set_leader_id($_POST[user]))
-				{
-					Common_IO::step_proceed($params, "Change Leader", "Operation Successful", null);
-				}
-				else
-				{
-					Common_IO::step_proceed($params, "Change Leader", "Operation Failed" ,null);	
-				}
-			}
-		}
-		else
-		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
-		}
-	}
-	
+		
 	public static function upwards()
 	{
 		if ($_GET[id])
@@ -1432,36 +1121,32 @@ class AdminOrganisationUnitIO
 					self::detail();
 				break;
 
+				case "detail_owner":
+					self::detail_owner();
+				break;
+				
+				case "detail_leader":
+					self::detail_leader();
+				break;
+				
 				case "detail_member":
 					self::detail_member();
 				break;
 				
-				case "add_user":
-					self::add_user();
+				case "detail_qm":
+					self::detail_quality_manager();
 				break;
 				
-				case "delete_user":
-					self::delete_user();
+				case "detail_group":
+					self::detail_group();
 				break;
 				
-				case "add_group":
-					self::add_group();
-				break;
-				
-				case "delete_group":
-					self::delete_group();
+				case "detail_address":
+					self::detail_address();
 				break;
 				
 				case "rename":
 					self::rename();
-				break;
-				
-				case "change_owner":
-					self::change_owner();
-				break;
-				
-				case "change_leader":
-					self::change_leader();
 				break;
 				
 				case "upwards":

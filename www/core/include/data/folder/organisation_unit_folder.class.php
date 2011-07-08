@@ -80,7 +80,7 @@ class OrganisationUnitFolder extends Folder implements ConcreteFolderCaseInterfa
 			$path->add_element($organisation_unit_id);
 			
 			$folder = new Folder(null);
-			if (($folder_id = parent::create($organisation_unit->get_name(), $organisation_unit_folder_id, $path->get_path_string(), $organisation_unit->get_owner_id(), null)) != null)
+			if (($folder_id = parent::create($organisation_unit->get_name(), $organisation_unit_folder_id, $path->get_path_string(), $organisation_unit->get_master_owner_id(), null)) != null)
 			{
 				$folder_is_organisation_unit_folder_access = new FolderIsOrganisationUnitFolder_Access(null);
 				if ($folder_is_organisation_unit_folder_access->create($organisation_unit_id, $folder_id) == null)
@@ -238,7 +238,7 @@ class OrganisationUnitFolder extends Folder implements ConcreteFolderCaseInterfa
     	{
     		$organisation_unit = new OrganisationUnit($event_object->get_organisation_unit_id());
     		$organisation_unit_folder = new OrganisationUnitFolder(self::get_folder_by_organisation_unit_id($event_object->get_organisation_unit_id()));
-    		if ($organisation_unit_folder->set_owner_id($organisation_unit->get_owner_id()) == false)
+    		if ($organisation_unit_folder->set_owner_id($organisation_unit->get_master_owner_id()) == false)
     		{
     			return false;
     		}
