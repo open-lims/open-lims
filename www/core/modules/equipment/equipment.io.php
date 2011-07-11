@@ -470,10 +470,8 @@ class EquipmentIO
 				foreach($ou_array as $key => $value)
 				{
 					$organisation_unit = new OrganisationUnit($value);
-					$organisation_unit_leader = new User($organisation_unit->get_leader_id());
 					
 					$ou_content_array[$counter][name] = $organisation_unit->get_name();
-					$ou_content_array[$counter][leader] = $organisation_unit_leader->get_full_name(false);
 					$counter++;
 				}
 				$template->set_var("no_ou", false);

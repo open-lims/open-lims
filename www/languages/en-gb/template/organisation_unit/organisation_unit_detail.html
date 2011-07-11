@@ -10,27 +10,39 @@
 		
 <!-- ENDIF -->
 				
-<table>
+<table id='OrganisationUnitDetailTable'>
 	<tr>
-		<td><span class='bold'>Owner:</span></td>
-		<td>{OWNER}</td>
+		<td class='OrganisationUnitDetailTableTitle'><span class='bold'>Owner(s):</span></td>
+		<td class='OrganisationUnitDetailTableContent'>{OWNERS}</td>
 	</tr>
 	<tr>
-		<td><span class='bold'>Leader:</span></td>
-		<td>{LEADER}</td>
+		<td><span class='bold'>Leader(s):</span></td>
+		<td>{LEADERS}</td>
 	</tr>
 	<tr>
 		<td><span class='bold'>Member(s):</span></td>
 		<td>{MEMBERS}</td>
 	</tr>
+		<tr>
+		<td><span class='bold'>Quality Manager(s):</span></td>
+		<td>{QUALITY_MANAGERS}</td>
+	</tr>
 	<tr>
 		<td><span class='bold'>Group(s):</span></td>
 		<td>{GROUPS}</td>
 	</tr>
-	<tr>
-		<td><span class='bold'>Equipment:</span></td>
-		<td><a href='index.php?{OU_EQUIPMENT_PARAMS}'>show</a></td>
-	</tr>
 </table>
+
+<div id='OrganisationUnitDetailFooter'>
+	
+	<!-- FOREACH BEGIN ({OU_FOOTER_ARRAY}) -->
+	
+		{OU_FOOTER_ARRAY:CONTENT}
+	
+	<!-- FOREACH END -->
+	
+</div>
+<div id='OrganisationUnitDetailFooterClear'>
+</div>
 		
 <!-- CONTAINER END (0) -->

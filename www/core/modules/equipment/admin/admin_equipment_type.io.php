@@ -506,7 +506,6 @@ class AdminEquipmentTypeIO
 				foreach($ou_array as $key => $value)
 				{
 					$organisation_unit = new OrganisationUnit($value);
-					$organisation_unit_leader = new User($organisation_unit->get_leader_id());
 					
 					$paramquery = $_GET;
 					$paramquery[action] = "delete_ou";
@@ -514,7 +513,6 @@ class AdminEquipmentTypeIO
 					$params = http_build_query($paramquery,'','&#38;');
 					
 					$ou_content_array[$counter][name] = $organisation_unit->get_name();
-					$ou_content_array[$counter][leader] = $organisation_unit_leader->get_full_name(false);
 					$ou_content_array[$counter][delete_params] = $params;
 					
 					$counter++;

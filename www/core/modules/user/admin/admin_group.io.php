@@ -365,7 +365,6 @@ class AdminGroupIO
 				foreach($organisation_unit_array as $key => $value)
 				{
 					$organisation_unit = new OrganisationUnit($value);
-					$leader = new User($organisation_unit->get_leader_id());
 					
 					$paramquery = $_GET;
 					$paramquery[action] = "delete_organisation_unit";
@@ -373,7 +372,6 @@ class AdminGroupIO
 					$params = http_build_query($paramquery,'','&#38;');
 					
 					$organisation_unit_content_array[$counter][name] = $organisation_unit->get_name();
-					$organisation_unit_content_array[$counter][leader] = $leader->get_full_name(false);
 					$organisation_unit_content_array[$counter][delete_params] = $params;
 					
 					$counter++;

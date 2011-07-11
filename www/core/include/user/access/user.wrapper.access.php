@@ -34,41 +34,41 @@ class User_Wrapper_Access
 	public static function list_search_users($username, $order_by, $order_method, $start, $end)
 	{
    		global $db;
-   		
-   		if ($username)
-   		{
-   			if ($order_by and $order_method)
+ 
+   		if ($order_by and $order_method)
+		{
+			if ($order_method == "asc")
 			{
-				if ($order_method == "asc")
-				{
-					$sql_order_method = "ASC";
-				}
-				else
-				{
-					$sql_order_method = "DESC";
-				}
-				
-				switch($order_by):
-										
-					case "username":
-						$sql_order_by = "ORDER BY ".constant("USER_TABLE").".username ".$sql_order_method;
-					break;
-					
-					case "fullname":
-						$sql_order_by = "ORDER BY fullname ".$sql_order_method;
-					break;
-					
-					default:
-						$sql_order_by = "ORDER BY ".constant("USER_TABLE").".id ".$sql_order_method;
-					break;
-				
-				endswitch;
+				$sql_order_method = "ASC";
 			}
 			else
 			{
-				$sql_order_by = "ORDER BY ".constant("USER_TABLE").".id";
+				$sql_order_method = "DESC";
 			}
 			
+			switch($order_by):
+									
+				case "username":
+					$sql_order_by = "ORDER BY ".constant("USER_TABLE").".username ".$sql_order_method;
+				break;
+				
+				case "fullname":
+					$sql_order_by = "ORDER BY fullname ".$sql_order_method;
+				break;
+				
+				default:
+					$sql_order_by = "ORDER BY ".constant("USER_TABLE").".id ".$sql_order_method;
+				break;
+			
+			endswitch;
+		}
+		else
+		{
+			$sql_order_by = "ORDER BY ".constant("USER_TABLE").".id";
+		}
+			
+		if ($username)
+   		{	
 			$username = strtolower(trim($username));
    			$username = str_replace("*","%",$username);
    			
@@ -83,41 +83,51 @@ class User_Wrapper_Access
    							"LOWER(forename) LIKE '".$username."' OR " .
    							"LOWER(surname) LIKE '".$username."'" .
    					"".$sql_order_by."";  
+   		}
+   		else
+   		{
+   			$sql = "SELECT ".constant("USER_TABLE").".id AS id, " .
+   				"".constant("USER_TABLE").".username AS username, " .
+   				"nameconcat(".constant("USER_PROFILE_TABLE").".forename, ".constant("USER_PROFILE_TABLE").".surname) AS fullname ".
+   				"FROM ".constant("USER_TABLE")." " .
+   				"JOIN ".constant("USER_PROFILE_TABLE")." ON ".constant("USER_TABLE").".id = ".constant("USER_PROFILE_TABLE").".id " .
+   				"".$sql_order_by."";
+   		}
    						
-   			$return_array = array();
+   		$return_array = array();
    			
-   			$res = $db->db_query($sql);
+   		$res = $db->db_query($sql);
    			
-			if (is_numeric($start) and is_numeric($end))
+		if (is_numeric($start) and is_numeric($end))
+		{
+			for ($i = 0; $i<=$end-1; $i++)
 			{
-				for ($i = 0; $i<=$end-1; $i++)
+				if (($data = $db->db_fetch_assoc($res)) == null)
 				{
-					if (($data = $db->db_fetch_assoc($res)) == null)
-					{
-						break;
-					}
-					
-					if ($i >= $start)
-					{
-						array_push($return_array, $data);
-					}
+					break;
 				}
-			}
-			else
-			{
-				while ($data = $db->db_fetch_assoc($res))
+				
+				if ($i >= $start)
 				{
 					array_push($return_array, $data);
 				}
 			}
-			return $return_array;
-   		}
-   		else
-   		{
-   			return null;
-   		}
+		}
+		else
+		{
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array, $data);
+			}
+		}
+			
+		return $return_array;
    	}
    	
+   	/**
+   	 * @param string $username
+   	 * @return integer
+   	 */
 	public static function count_search_users($username)
 	{
 		global $db;
@@ -127,24 +137,23 @@ class User_Wrapper_Access
 			$username = strtolower(trim($username));
    			$username = str_replace("*","%",$username);
    			
-   			$return_array = array();
-   				
    			$sql = "SELECT COUNT(".constant("USER_TABLE").".id) AS result " .
    					"FROM ".constant("USER_TABLE")." " .
    					"JOIN ".constant("USER_PROFILE_TABLE")." ON ".constant("USER_TABLE").".id = ".constant("USER_PROFILE_TABLE").".id " .
    					"WHERE LOWER(username) LIKE '".$username."' OR " .
    							"LOWER(forename) LIKE '".$username."' OR " .
    							"LOWER(surname) LIKE '".$username."'";  
-   						
-   			$res = $db->db_query($sql);
-   			$data = $db->db_fetch_assoc($res);
-	
-			return $data[result];
    		}
    		else
    		{
-   			return null;
+   			$sql = "SELECT COUNT(".constant("USER_TABLE").".id) AS result " .
+   				"FROM ".constant("USER_TABLE").""; 
    		}
+   						
+   		$res = $db->db_query($sql);
+   		$data = $db->db_fetch_assoc($res);
+	
+		return $data[result];
    	}
    	
 	/**
@@ -237,6 +246,10 @@ class User_Wrapper_Access
    		}
    	}
    	
+   	/**
+   	 * @param string $groupname
+   	 * @return integer
+   	 */
 	public static function count_search_groups($groupname)
 	{
 		global $db;
@@ -245,8 +258,6 @@ class User_Wrapper_Access
    		{
 			$groupname = strtolower(trim($groupname));
    			$groupname = str_replace("*","%",$groupname);
-   			
-   			$return_array = array();
    				
    			$sql = "SELECT COUNT(".constant("GROUP_TABLE").".id) AS result " .
    					"FROM ".constant("GROUP_TABLE")." " .
@@ -263,6 +274,106 @@ class User_Wrapper_Access
    		}
    	}
 	
+   	/**
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+   	public static function list_users($order_by, $order_method, $start, $end)
+   	{
+   		global $db;
+   		
+   		if ($order_by and $order_method)
+		{
+			if ($order_method == "asc")
+			{
+				$sql_order_method = "ASC";
+			}
+			else
+			{
+				$sql_order_method = "DESC";
+			}
+			
+			switch($order_by):
+									
+				case "username":
+					$sql_order_by = "ORDER BY ".constant("USER_TABLE").".username ".$sql_order_method;
+				break;
+				
+				case "fullname":
+					$sql_order_by = "ORDER BY fullname ".$sql_order_method;
+				break;
+				
+				default:
+					$sql_order_by = "ORDER BY ".constant("USER_TABLE").".id ".$sql_order_method;
+				break;
+			
+			endswitch;
+		}
+		else
+		{
+			$sql_order_by = "ORDER BY ".constant("USER_TABLE").".id";
+		}
+			
+		$username = strtolower(trim($username));
+   		$username = str_replace("*","%",$username);
+   			
+   		$return_array = array();
+   				
+   		$sql = "SELECT ".constant("USER_TABLE").".id AS id, " .
+   				"".constant("USER_TABLE").".username AS username, " .
+   				"nameconcat(".constant("USER_PROFILE_TABLE").".forename, ".constant("USER_PROFILE_TABLE").".surname) AS fullname ".
+   				"FROM ".constant("USER_TABLE")." " .
+   				"JOIN ".constant("USER_PROFILE_TABLE")." ON ".constant("USER_TABLE").".id = ".constant("USER_PROFILE_TABLE").".id " .
+   				"".$sql_order_by."";  
+   						
+   		$return_array = array();
+   			
+   		$res = $db->db_query($sql);
+   			
+		if (is_numeric($start) and is_numeric($end))
+		{
+			for ($i = 0; $i<=$end-1; $i++)
+			{
+				if (($data = $db->db_fetch_assoc($res)) == null)
+				{
+					break;
+				}
+				
+				if ($i >= $start)
+				{
+					array_push($return_array, $data);
+				}
+			}
+		}
+		else
+		{
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array, $data);
+			}
+		}
+		return $return_array;
+   	}
+   	
+   	/**
+   	 * @return integer
+   	 */
+   	public static function count_users()
+   	{
+   		global $db;
+   				
+   		$sql = "SELECT COUNT(".constant("USER_TABLE").".id) AS result " .
+   				"FROM ".constant("USER_TABLE")."";  
+   						
+   		$res = $db->db_query($sql);
+   		$data = $db->db_fetch_assoc($res);
+	
+		return $data[result];
+   	}
+   	
 	/**
 	 * @return integer
 	 */

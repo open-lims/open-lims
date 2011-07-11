@@ -94,6 +94,7 @@ class OrganisationUnitHasOwner_Access
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
+				$this->__construct($organisation_unit_id, $owner_id);
 				return true;
 			}
 			else
@@ -283,6 +284,70 @@ class OrganisationUnitHasOwner_Access
 	
 	
 	/**
+	 * @param integer $organisation_unit_id
+	 * @return integer
+	 */
+	public static function get_master_owner_id_by_organisation_unit_id($organisation_unit_id)
+	{
+		global $db;
+			
+		if (is_numeric($organisation_unit_id))
+		{
+				
+			$return_array = array();
+			
+			$sql = "SELECT owner_id FROM ".constant("ORGANISATION_UNIT_HAS_OWNER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id." AND master_owner = 't'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+						
+			if ($data[owner_id])
+			{
+				return $data[owner_id];
+			}
+			else
+			{
+				return null;
+			}	
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @return integer
+	 */
+	public static function get_first_owner_id_by_organisation_unit_id($organisation_unit_id)
+	{
+		global $db;
+			
+		if (is_numeric($organisation_unit_id))
+		{
+				
+			$return_array = array();
+			
+			$sql = "SELECT owner_id FROM ".constant("ORGANISATION_UNIT_HAS_OWNER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+						
+			if ($data[owner_id])
+			{
+				return $data[owner_id];
+			}
+			else
+			{
+				return null;
+			}	
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @param integer $owner_id
 	 * @return integer
 	 */
@@ -384,15 +449,24 @@ class OrganisationUnitHasOwner_Access
 	 * @param integer $organisation_unit_id
 	 * @return array
 	 */
-	public static function list_owners_by_organisation_unit_id($organisation_unit_id)
+	public static function list_owners_by_organisation_unit_id($organisation_unit_id, $limit)
 	{
 		global $db;
 			
 		if (is_numeric($organisation_unit_id))
 		{
+			if ($limit > 0)
+			{
+				$limit_sql = "LIMIT ".$limit;
+			}
+			else
+			{
+				$limit_sql = "";
+			}
+			
 			$return_array = array();
 			
-			$sql = "SELECT owner_id FROM ".constant("ORGANISATION_UNIT_HAS_OWNER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
+			$sql = "SELECT owner_id FROM ".constant("ORGANISATION_UNIT_HAS_OWNER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."".$limit_sql;
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))

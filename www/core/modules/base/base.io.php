@@ -203,8 +203,7 @@ class BaseIO
 		
 			case "myorgan":
 				require_once("core/modules/organisation_unit/organisation_unit.io.php");
-				$organisation_unit_io = new OrganisationUnitIO();
-				$organisation_unit_io->list_user_related_organisation_units();
+				OrganisationUnitIO::list_user_related_organisation_units();
 			break;
 			
 			case "sysmsg":

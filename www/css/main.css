@@ -108,7 +108,7 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 }
 
 #content a {
-	color: black;
+	color: #33577d;
 }
 
 #content a:hover,#content a:focus,#content a:active {
@@ -176,10 +176,12 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 	font-weight: bold;
 	text-align: left;
 	border-bottom: 1px #C0C0C0 dotted;
+	color: black;
 }
 
 .OverviewTable th a {
 	text-decoration: none;
+	color: black !important;
 }
 
 .OverviewTable td {

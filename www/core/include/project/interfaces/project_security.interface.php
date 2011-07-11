@@ -34,7 +34,7 @@ interface ProjectSecurityInterface
 	public function is_access($intention, $ignore_admin_status);
 	public function list_involved_users();
 	public function change_owner_permission($owner_id);
-	public function change_leader_permission($leader_id);
+	public function change_ou_user_permission($organisation_unit_id);
 	public function change_organisation_unit_permission($organisation_unit_id);
 }
 ?>

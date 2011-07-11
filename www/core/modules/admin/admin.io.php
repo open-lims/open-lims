@@ -199,7 +199,7 @@ class AdminIO
 			{
 				$organisation_unit = new OrganisationUnit($_GET[id]);
 				
-				if ($organisation_unit->get_owner_id() == $user->get_user_id())
+				if ($organisation_unit->is_owner_in_organisation_unit($user->get_user_id()) == true)
 				{
 					if ($_GET[action] == "detail" or 
 						$_GET[action] == "add_user" or 

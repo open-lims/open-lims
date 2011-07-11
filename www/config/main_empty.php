@@ -75,6 +75,7 @@ define("ENABLE_DB_LOG_ON_COMMIT",		false);
 // Standard Permissions of new Projects
 define("PROJECT_USER_STD_PERMISSION",	15);	// The Owner
 define("PROJECT_LEADER_STD_PERMISSION",	51);	// The Leader of the organ. Unit
+define("PROJECT_QM_STD_PERMISSION",		1);		// The Qualit Manager
 define("PROJECT_GROUP_STD_PERMISSION",	1);		// The group(s) of the organ. Unit
 define("PROJECT_OU_STD_PERMISSION",		1);		// The organ. Unit
 
@@ -99,7 +100,8 @@ define("GROUP_FOLDER_ID",				9);
 define("OLDL_FOLDER_ID",				51);
 define("OLVDL_FOLDER_ID",				52);
 
-define("GROUP_LEADER_GROUP", 9);
+define("OU_GROUP_LEADER_GROUP", 9);
+define("OU_QUALITY_MANAGER_GROUP", 11);
 
 define("SAMPLE_EXIRY_WARNING", 7);
 ?>
