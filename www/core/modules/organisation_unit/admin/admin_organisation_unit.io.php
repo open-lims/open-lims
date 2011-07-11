@@ -1035,7 +1035,6 @@ class AdminOrganisationUnitIO
 					
 					$tab_io->add("general", "General", $params, false);
 					
-					
 					$paramquery = $_GET;
 					$paramquery[action] = "detail_owner";
 					$params = http_build_query($paramquery,'','&#38;');

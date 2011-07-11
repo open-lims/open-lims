@@ -1648,7 +1648,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 		}
 		else
 		{
-			return null;
+			return false;
 		}
 	}
 	

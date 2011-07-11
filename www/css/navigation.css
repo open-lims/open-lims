@@ -1,29 +1,29 @@
-.navigation_main_navigation {
+.NavigationMainNavigation {
 	font: normal 0.8em Verdana, Helvetica, sans-serif;
 }
 
-.navigation_main_navigation_left {
+.NavigationMainNavigationLeft {
 	
 }
 
-.navigation_main_navigation_right {
+.NavigationMainNavigationRight {
 	float: right;
 	padding: 3px 10px 0 0;
 }
 
-ul.navigation_main_navigation_list {
+ul.NavigationMainNavigationList {
 	list-style: none;
 	padding: 0;
 	margin: 0;
 	margin-left: 20px;
 }
 
-ul.navigation_main_navigation_list li {
+ul.NavigationMainNavigationList li {
 	width: 100px;
 	float: left;
 }
 
-ul.navigation_main_navigation_list a {
+ul.NavigationMainNavigationList a {
 	display: block;
 	float: left;
 	width: 100px;
@@ -35,75 +35,75 @@ ul.navigation_main_navigation_list a {
 	padding-bottom: 4px;
 }
 
-ul.navigation_main_navigation_list a:hover {
+ul.NavigationMainNavigationList a:hover {
 	color: #F0F0F0;
 }
 
-ul.navigation_main_navigation_list li.active a {
+ul.NavigationMainNavigationList li.active a {
 	color: #F0F0F0;
 }
 
-.navigation_main_navigation_tab_blue,
-.navigation_main_navigation_tab_orange,
-.navigation_main_navigation_tab_green,
-.navigation_main_navigation_tab_lightgreen,
-.navigation_main_navigation_tab_lightblue,
-.navigation_main_navigation_tab_grey
+.NavigationMainNavigationTabBlue,
+.NavigationMainNavigationTabOrange,
+.NavigationMainNavigationTabGreen,
+.NavigationMainNavigationTabLightgreen,
+.NavigationMainNavigationTabLightblue,
+.NavigationMainNavigationTabGrey
 	{
 	background-image: url(../images/tabs/tab_empty.png);
 	background-repeat: no-repeat;
 	background-position: top center;
 }
 
-.navigation_main_navigation_tab_grey_active,
-.navigation_main_navigation_tab_grey:hover
+.NavigationMainNavigationTabGreyActive,
+.NavigationMainNavigationTabGrey:hover
 	{
 	background-image: url(../images/tabs/tab_grey.png);
 	background-repeat: no-repeat;
 	background-position: top center;
 }
 
-.navigation_main_navigation_tab_blue_active,
-.navigation_main_navigation_tab_blue:hover
+.NavigationMainNavigationTabBlueActive,
+.NavigationMainNavigationTabBlue:hover
 	{
 	background-image: url(../images/tabs/tab_blue.png);
 	background-repeat: no-repeat;
 	background-position: top center;
 }
 
-.navigation_main_navigation_tab_green_active,
-.navigation_main_navigation_tab_green:hover
+.NavigationMainNavigationTabGreenActive,
+.NavigationMainNavigationTabGreen:hover
 	{
 	background-image: url(../images/tabs/tab_green.png);
 	background-repeat: no-repeat;
 	background-position: top center;
 }
 
-.navigation_main_navigation_tab_orange_active,
-.navigation_main_navigation_tab_orange:hover
+.NavigationMainNavigationTabOrangeActive,
+.NavigationMainNavigationTabOrange:hover
 	{
 	background-image: url(../images/tabs/tab_orange.png);
 	background-repeat: no-repeat;
 	background-position: top center;
 }
 
-.navigation_main_navigation_tab_lightgreen_active,
-.navigation_main_navigation_tab_lightgreen:hover
+.NavigationMainNavigationTabLightgreenActive,
+.NavigationMainNavigationTabLightgreen:hover
 	{
 	background-image: url(../images/tabs/tab_lightgreen.png);
 	background-repeat: no-repeat;
 	background-position: top center;
 }
 
-.navigation_main_navigation_tab_lightblue_active,
-.navigation_main_navigation_tab_lightblue:hover
+.NavigationMainNavigationTabLightblueActive,
+.NavigationMainNavigationTabLightblue:hover
 	{
 	background-image: url(../images/tabs/tab_lightblue.png);
 	background-repeat: no-repeat;
 	background-position: top center;
 }
 
-.navigation_sub_navigation {
+.NavigationSubNavigation {
 	clear: both;
 	height: 30px;
 	width: 100%;
@@ -111,76 +111,76 @@ ul.navigation_main_navigation_list li.active a {
 	font: normal 0.8em Verdana, Helvetica, sans-serif;
 }
 
-.navigation_sub_navigation a {
+.NavigationSubNavigation a {
 	color: #EFEFEF;
 }
 
-.navigation_sub_navigation_left {
+.NavigationSubNavigationLeft {
 	float: left;
 	padding: 7px 0 0 20px;
 }
 
-.navigation_sub_navigation_right {
+.NavigationSubNavigationRight {
 	float: right;
 	padding: 5px 10px 0 0;
 }
 
-.navigation_sub_navigation_blue,
-.navigation_sub_navigation_green,
-.navigation_sub_navigation_orange,
-.navigation_sub_navigation_lightblue,
-.navigation_sub_navigation_lightgreen,
-.navigation_sub_navigation_grey
+.NavigationSubNavigationBlue,
+.NavigationSubNavigationGreen,
+.NavigationSubNavigationOrange,
+.NavigationSubNavigationLightblue,
+.NavigationSubNavigationLightgreen,
+.NavigationSubNavigationGrey
 {
 	height: 100%;
 	width: 100%;
 }
 
-.navigation_sub_navigation_grey {
+.NavigationSubNavigationGrey {
 	background-color: #c0c0c0;
 }
 
-.navigation_sub_navigation_blue {
+.NavigationSubNavigationBlue {
 	background-color: #336699;
 }
 
-.navigation_sub_navigation_green {
+.NavigationSubNavigationGreen {
 	background-color: #99cd32;
 }
 
-.navigation_sub_navigation_orange {
+.NavigationSubNavigationOrange {
 	background-color: #dcaf36;
 }
 
-.navigation_sub_navigation_lightgreen {
+.NavigationSubNavigationLightgreen {
 	background-color: #bbe664;
 }
 
-.navigation_sub_navigation_lightblue {
+.NavigationSubNavigationLightblue {
 	background-color: #669acc;
 }
 
-ul.navigation_sub_navigation_list {
+ul.NavigationSubNavigationList {
 	list-style: none;
 	padding: 0;
 	margin: 0;
 }
 
-ul.navigation_sub_navigation_list li {
+ul.NavigationSubNavigationList li {
 	display: inline;
 	padding-right: 0.5em;
 }
 
-ul.navigation_sub_navigation_list a,.navigation_sub_navigation_right a {
+ul.NavigationSubNavigationList a,.NavigationSubNavigationRight a {
 	text-decoration: none;
 }
 
-ul.navigation_sub_navigation_list a:hover,ul.navigation_sub_navigation_list a:focus,ul.navigation_sub_navigation_list a:active,.navigation_sub_navigation_right a:hover,.navigation_sub_navigation_right a:focus,.navigation_sub_navigation_right a:active
+ul.NavigationSubNavigationList a:hover,ul.NavigationSubNavigationList a:focus,ul.NavigationSubNavigationList a:active,.NavigationSubNavigationRight a:hover,.NavigationSubNavigationRight a:focus,.NavigationSubNavigationRight a:active
 	{
 	text-decoration: underline;
 }
 
-.navigation_sub_navigation_search_field {
+.NavigationSubNavigationSearchField {
 	border: 1px #D0D0D0 solid;
 	margin: 0;
 	padding: 0;
@@ -189,7 +189,7 @@ ul.navigation_sub_navigation_list a:hover,ul.navigation_sub_navigation_list a:fo
 	height: 18px;
 }
 
-.navigation_sub_navigation_search_button {
+.NavigationSubNavigationSearchButton {
 	border-right: 1px #D0D0D0 solid;
 	border-top: 1px #D0D0D0 solid;
 	border-bottom: 1px #D0D0D0 solid;
@@ -200,6 +200,8 @@ ul.navigation_sub_navigation_list a:hover,ul.navigation_sub_navigation_list a:fo
 	height: 20px;
 	float: left;
 }
+
+
 
 /* Vertical Navigation / Menu */
 #navigation {
@@ -271,11 +273,11 @@ ul.navigation_sub_navigation_list a:hover,ul.navigation_sub_navigation_list a:fo
 	width: 100%;
 }
 
-.left_navigation div.tree_menu_element {
+.LeftNavigation div.tree_menu_element {
 	
 }
 
-.left_navigation div.tree_menu_element:hover,.left_navigation div.tree_menu_element:active,.left_navigation div.tree_menu_element:focus
+.LeftNavigation div.tree_menu_element:hover,.LeftNavigation div.tree_menu_element:active,.LeftNavigation div.tree_menu_element:focus
 	{
 	
 }

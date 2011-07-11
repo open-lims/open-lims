@@ -1,18 +1,16 @@
-<div class='navigation_sub_navigation_green'>
-	<div class='navigation_sub_navigation_left'>
+<div class='NavigationSubNavigationGrey'>
+	<div class='NavigationSubNavigationLeft'>
 		
 		<!-- IF ({SUB_MENU}) -->
 		
-			<ul class='navigation_sub_navigation_list'>
+			<ul class='NavigationSubNavigationList'>
 			
 				<li>|</li>
 			
 				<!-- FOREACH BEGIN ({SUB_MENU}) -->
-		
-					
+
 					<li><a href='index.php?{SUB_MENU:PARAMS}'>{SUB_MENU:TITLE}</a></li>
 					<li>|</li>
-		
 		
 				<!-- FOREACH END -->
 	
@@ -24,12 +22,12 @@
 	
 	<!-- IF ({SEARCH_BAR}) -->
 	
-		<div class='navigation_sub_navigation_right'>
+		<div class='NavigationSubNavigationRight'>
 			<form action='index.php?{MINI_SEARCH_PARAMS}' method='post'>
 				<input type='hidden' name='organisation_unit' value='0' />
 				<input type='hidden' name='template' value='0' />
-				<input type='text' name='name' class='navigation_sub_navigation_search_field' />
-				<button name='submit' type='submit' class='navigation_sub_navigation_search_button'><img src='images/icons/search.png' alt='Search' /></button>
+				<input type='text' name='name' class='NavigationSubNavigationSearchField' />
+				<button name='submit' type='submit' class='NavigationSubNavigationSearchButton'><img src='images/icons/search.png' alt='Search' /></button>
 			</form>	
 		</div>
 	

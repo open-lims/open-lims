@@ -401,7 +401,7 @@ function tooltip(element_id, message)
 
 
 
-function create_scrollable_tabs()
+function create_scrollable_small_tabs()
 {	
 	var tabs = $(".SmallTabList");
 	var max_tabs = 7;
@@ -412,13 +412,13 @@ function create_scrollable_tabs()
 		var loading_animation = $("<div id='loadingAnimation'><img src='images/animations/loading_circle_small.gif'/></div>")
 			.css("margin","10px 0 0 367px");
 		$(".boxRoundMain").html(loading_animation);
-		if($("#arrowLeft").hasClass("buttonInactive") && $("#arrowRight").hasClass("buttonInactive"))
+		if($("#SmallTabArrowLeft").hasClass("buttonInactive") && $("#SmallTabArrowRight").hasClass("buttonInactive"))
 		{
 			//num_tabs < max_tabs, no scrolling
 		}
 		else
 		{
-			focus_tab($(this).children().text(),true);
+			focus_small_tab($(this).children().text(),true);
 		}
 	});
 
@@ -427,7 +427,7 @@ function create_scrollable_tabs()
 	tabs.css("width",max_tabs_width);
 	
 
-	$("#arrowLeft")
+	$("#SmallTabArrowLeft")
 		.addClass("buttonInactive")
 		.css("float","left")
 		.click(function(){
@@ -436,18 +436,18 @@ function create_scrollable_tabs()
 				if(!$(this).hasClass("showHiddenTabs")) 
 				{
 					$(this).addClass("showHiddenTabs")
-					$("#arrowLeft img").rotate({animateTo:-90,duration:300});
-					show_hidden_tabs("left");
+					$("#SmallTabArrowLeft img").rotate({animateTo:-90,duration:300});
+					show_hidden_small_tabs("left");
 				}
 				else
 				{
 					$(this).attr("class","");
-					$("#arrowLeft img").rotate({animateTo:0,duration:300});
+					$("#SmallTabArrowLeft img").rotate({animateTo:0,duration:300});
 					$("#hiddenTabs").remove();
 				}
 			}
 		});
-	$("#arrowRight")
+	$("#SmallTabArrowRight")
 		.addClass("buttonInactive")
 		.css("float","left")
 		.click(function(){
@@ -456,63 +456,57 @@ function create_scrollable_tabs()
 				if(!$(this).hasClass("showHiddenTabs")) 
 				{
 					$(this).addClass("showHiddenTabs")
-					$("#arrowRight img").rotate({animateTo:90,duration:300});
-					show_hidden_tabs("right");
+					$("#SmallTabArrowRight img").rotate({animateTo:90,duration:300});
+					show_hidden_small_tabs("right");
 				}
 				else
 				{
 					$(this).attr("class","");
-					$("#arrowRight img").rotate({animateTo:0,duration:300});
+					$("#SmallTabArrowRight img").rotate({animateTo:0,duration:300});
 					$("#hiddenTabs").remove();
 				}
 			}
 		});
 
 	
-	var camera_width;
 	var camera_height = 17;
+	var camera_width = tab_width * max_tabs +1;    //width - (2 * arrow_width);
 	
 	if(num_tabs > max_tabs)
 	{	
-		camera_width = tab_width * max_tabs +1;    //width - (2 * arrow_width);
-		focus_tab($(".SmallTabActive").text(),false);
-	}
-	else
-	{
-		camera_width = tab_width * num_tabs +1;
+		focus_small_tab($(".SmallTabActive").text(),false);
 	}
 
-	$("#cameraDiv")
-	.css("float","left")
-	.css("width",camera_width+"px")
-	.css("height",camera_height+"px")
-	.css("background-color","red")
-	.css("overflow","hidden");
+	$("#SmallTabCamera")
+		.css("float","left")
+		.css("width",camera_width+"px")
+		.css("height",camera_height+"px")
+		.css("background-color","red")
+		.css("overflow","hidden");
 	
-	$("#cameraDiv").append(tabs);
 	var container_width = camera_width + 32;
 	var container_margin = ($("#SmallTabContainer").css("width").replace("px","") - container_width) / 2;
 	$("#SmallTabContainer").css("margin-left",container_margin+"px");
 	
-	if($("#arrowLeft").hasClass("buttonInactive"))
+	if($("#SmallTabArrowLeft").hasClass("buttonInactive"))
 	{
-		$("#arrowLeft img").attr("src","images/1leftarrow_inactive.png");
+		$("#SmallTabArrowLeft img").attr("src","images/1leftarrow_inactive.png");
 	}
 	else
 	{
-		$("#arrowLeft img").attr("src","images/1leftarrow.png");
+		$("#SmallTabArrowLeft img").attr("src","images/1leftarrow.png");
 	}
-	if($("#arrowRight").hasClass("buttonInactive"))
+	if($("#SmallTabArrowRight").hasClass("buttonInactive"))
 	{
-		$("#arrowRight img").attr("src","images/1rightarrow_inactive.png");
+		$("#SmallTabArrowRight img").attr("src","images/1rightarrow_inactive.png");
 	}
 	else
 	{
-		$("#arrowRight img").attr("src","images/1rightarrow.png");
+		$("#SmallTabArrowRight img").attr("src","images/1rightarrow.png");
 	}	
 }
 
-function show_hidden_tabs(side) {
+function show_hidden_small_tabs(side) {
 	
 	var max_tabs = 7;
 	
@@ -534,12 +528,11 @@ function show_hidden_tabs(side) {
 	switch(side)
 	{
 	case "left":
-		var position = $("#arrowLeft").position();
+		var position = $("#SmallTabArrowLeft").position();
 		num_hidden_tabs = -(current_offset / tab_width);
 		var hidden_tabs = $(".SmallTabList li:lt("+num_hidden_tabs+")");
 		
 		$(hidden_tabs).each(function(){
-			console.log(this);
 			var html = $("<div>"+$(this).children().text()+"</div>")
 				.hover(function()
 					{
@@ -554,8 +547,8 @@ function show_hidden_tabs(side) {
 						.css("margin","10px 0 0 367px");
 					$(".boxRoundMain").html(loading_animation);
 					
-					focus_tab($(this).text(),true);
-					$("#arrowLeft img").rotate({animateTo:0,duration:300});
+					focus_small_tab($(this).text(),true);
+					$("#SmallTabAarrowLeft img").rotate({animateTo:0,duration:300});
 				})
 				.css("padding","2px 4px 2px 4px");
 			hidden_tabs_div.append(html);
@@ -566,12 +559,11 @@ function show_hidden_tabs(side) {
 		break;
 
 	case "right":
-		var position = $("#arrowRight").position();
+		var position = $("#SmallTabArrowRight").position();
 		last_visible_tab = -(current_offset - (max_tabs * tab_width)) / tab_width -1;
 		var hidden_tabs = $(".SmallTabList li:gt("+last_visible_tab+")");
 		
 		$(hidden_tabs).each(function(){
-			console.log(this);
 			var html = $("<div>"+$(this).children().text()+"</div>")
 				.hover(function()
 					{
@@ -586,10 +578,11 @@ function show_hidden_tabs(side) {
 						.css("margin","10px 0 0 367px");
 					$(".boxRoundMain").html(loading_animation);
 					
-					focus_tab($(this).text(),true);
-					$("#arrowRight img").rotate({animateTo:0,duration:300});
+					focus_small_tab($(this).text(),true);
+					$("#SmallTabArrowRight img").rotate({animateTo:0,duration:300});
 					
-				});
+				})
+				.css("padding","2px 4px 2px 4px");
 			hidden_tabs_div.append(html);
 		});
 		
@@ -601,11 +594,11 @@ function show_hidden_tabs(side) {
 }
 
 
-function focus_tab(capture,slide)
+function focus_small_tab(capture,slide)
 {
 	capture = $.trim(capture);
-	$("#arrowRight").attr("class","");
-	$("#arrowLeft").attr("class","");
+	$("#SmallTabArrowRight").attr("class","");
+	$("#SmallTabArrowLeft").attr("class","");
 	
 	var selected;
 	$(".SmallTabList > li > a").filter(function() {
@@ -628,12 +621,12 @@ function focus_tab(capture,slide)
 	if(offset <= max_offset)
 	{
 		offset = max_offset;
-		$("#arrowRight").addClass("buttonInactive");
+		$("#SmallTabArrowRight").addClass("buttonInactive");
 	}
 	else if(offset >= 0)
 	{
 		offset = 0;
-		$("#arrowLeft").addClass("buttonInactive");
+		$("#SmallTabArrowLeft").addClass("buttonInactive");
 	}
 	
 	var url = $(selected).attr("href");
@@ -647,6 +640,242 @@ function focus_tab(capture,slide)
 	else
 	{
 		$(".SmallTabList").css("margin-left",offset+"px");
+	}
+}
+
+
+function create_scrollable_main_tabs() 
+{
+	var tabs = $(".NavigationMainNavigationList");
+	var max_tabs = 6;
+	var num_tabs = $(tabs).children("li").length;
+	
+	if(num_tabs <= max_tabs)
+	{
+		return;
+	}
+	$(".NavigationMainNavigationList").remove();
+
+	$(tabs).children().click(function(e){
+		e.stopPropagation();
+		if($("#MainTabArrowLeft").hasClass("buttonInactive") && $("#MainTabArrowRight").hasClass("buttonInactive"))
+		{
+			//num_tabs < max_tabs, no scrolling
+		}
+		else
+		{
+			focus_main_tab($(this).children().text(),true);
+		}
+	});
+	
+	
+	var tab_width = parseInt($(tabs).children().css("width").replace("px",""));
+	var max_tabs_width = tab_width * num_tabs;
+	tabs.css("width",max_tabs_width).css("margin","0");
+	
+	
+	var leftArrow = $("<div id='MainTabArrowLeft'><img src='images/1leftarrow_inactive.png'/></div>")
+	.addClass("buttonInactive")
+	.css("float","left")
+	.css("margin-top","5px")
+	.click(function(){
+		if(!$(this).hasClass("buttonInactive"))
+		{
+			if(!$(this).hasClass("showHiddenTabs")) 
+			{
+				$(this).addClass("showHiddenTabs")
+				$("#MainTabArrowLeft img").rotate({animateTo:-90,duration:300});
+				show_hidden_main_tabs("left");
+			}
+			else
+			{
+				$(this).attr("class","");
+				$("#MainTabArrowLeft img").rotate({animateTo:0,duration:300});
+				$("#hiddenTabs").remove();
+			}
+		}
+	});
+	var rightArrow = $("<div id='MainTabArrowRight'><img src='images/1rightarrow_inactive.png'/></div>")
+	.addClass("buttonInactive")
+	.css("float","left")
+	.css("margin-top","5px")
+	.click(function(){
+		if(!$(this).hasClass("buttonInactive"))
+		{
+			if(!$(this).hasClass("showHiddenTabs")) 
+			{
+				$(this).addClass("showHiddenTabs")
+				$("#MainTabArrowRight img").rotate({animateTo:90,duration:300});
+				show_hidden_main_tabs("right");
+			}
+			else
+			{
+				$(this).attr("class","");
+				$("#MainTabArrowRight img").rotate({animateTo:0,duration:300});
+				$("#hiddenTabs").remove();
+			}
+		}
+	});
+		
+	var camera_width = tab_width * max_tabs;
+	var camera_height = 25;
+		
+	var camera = $("<div id='MainTabCamera'></div>")
+		.css("float","left")
+		.css("width",camera_width+"px")
+		.css("height",camera_height+"px")
+		.css("background-color","red")
+		.css("overflow","hidden")
+		.append(tabs);
+	
+	$(".NavigationMainNavigationLeft").append(leftArrow);
+	$(".NavigationMainNavigationLeft").append(camera);
+	$(".NavigationMainNavigationLeft").append(rightArrow);
+	
+	focus_main_tab($(".NavigationMainNavigationList .active").text(),false);
+
+	
+	if($("#MainTabArrowLeft").hasClass("buttonInactive"))
+	{
+		$("#MainTabArrowLeft img").attr("src","images/1leftarrow_inactive.png");
+	}
+	else
+	{
+		$("#MainTabArrowLeft img").attr("src","images/1leftarrow.png");
+	}
+	if($("#MainTabArrowRight").hasClass("buttonInactive"))
+	{
+		$("#MainTabArrowRight img").attr("src","images/1rightarrow_inactive.png");
+	}
+	else
+	{
+		$("#MainTabArrowRight img").attr("src","images/1rightarrow.png");
+	}		
+}
+
+
+function show_hidden_main_tabs(side)
+{
+	var max_tabs = 6;
+	var tab_width = parseInt($(".NavigationMainNavigationList").children().css("width").replace("px",""));
+	var current_offset = parseInt($(".NavigationMainNavigationList").css("margin-left").replace("px",""));
+	var num_hidden_tabs;
+	
+	var hidden_tabs_div = $("<div></div>")
+		.attr("id","hiddenTabs")
+		.css("position","absolute")
+		.css("width",tab_width+"px")
+		.css("background-color","white")
+		.css("border","solid black 1px")
+		.css("padding","2px 2px 2px 2px")
+		.css({"font-family":"arial","font-size":"12px"})
+		.hide();
+	
+	switch(side)
+	{
+	case "left":
+		var position = $("#MainTabArrowLeft").position();
+		num_hidden_tabs = -(current_offset / tab_width);
+		var hidden_tabs = $(".NavigationMainNavigationList li:lt("+num_hidden_tabs+")");
+		$(hidden_tabs).each(function(){
+			console.log(this);
+			var html = $("<div>"+$(this).children().text()+"</div>")
+				.hover(function()
+					{
+						$(this).css("background-color","#cccccc");
+					},function()
+					{
+						$(this).css("background-color","white");
+					})
+				.click(function(){			
+					focus_main_tab($(this).text(),true);
+					$("#MainTabAarrowLeft img").rotate({animateTo:0,duration:300});
+				})
+				.css("padding","2px 4px 2px 4px");
+			hidden_tabs_div.append(html);
+		});
+		
+		$(hidden_tabs_div)
+			.css({"left": position.left,"top":position.top+17});
+		break;
+
+	case "right":
+		var position = $("#MainTabArrowRight").position();
+		last_visible_tab = -(current_offset - (max_tabs * tab_width)) / tab_width -1;
+		var hidden_tabs = $(".NavigationMainNavigationList li:gt("+last_visible_tab+")");
+		
+		$(hidden_tabs).each(function(){
+			console.log(this);
+			var html = $("<div>"+$(this).children().text()+"</div>")
+				.hover(function()
+					{
+						$(this).css("background-color","#cccccc");
+					},function()
+					{
+						$(this).css("background-color","white");
+					})
+				.click(function(){				
+					focus_main_tab($(this).text(),true);
+					$("#MainTabArrowRight img").rotate({animateTo:0,duration:300});
+					
+				})
+				.css("padding","2px 4px 2px 4px");
+			hidden_tabs_div.append(html);
+		});
+		
+		$(hidden_tabs_div)
+			.css({"text-align":"right","left": position.left+10-tab_width,"top":position.top+17});
+		break;
+	}
+	$(hidden_tabs_div).appendTo(".NavigationMainNavigationLeft").fadeIn(300);
+}
+
+function focus_main_tab(capture,slide)
+{
+	capture = $.trim(capture);
+	$("#MainTabArrowRight").attr("class","");
+	$("#MainTabArrowLeft").attr("class","");
+	
+	var selected;
+	$(".NavigationMainNavigationList > li > a").filter(function() {
+	    if($(this).text() === capture)
+	    {
+	    	selected = this;
+	    	return true;
+	    }
+	});
+	
+	var number_of_previous_tabs = $(selected).parent().prevAll().size();
+	var num_tabs = $(".NavigationMainNavigationList").children("li").length;
+	
+	var tab_width = parseInt($(".NavigationMainNavigationList").children().css("width").replace("px",""));
+	var max_tabs_width = tab_width * num_tabs;
+
+	var offset = -(number_of_previous_tabs * tab_width - (2.5 * tab_width));
+	var max_offset = -(max_tabs_width-(6*tab_width)); ////remove!!
+	
+	if(offset <= max_offset)
+	{
+		offset = max_offset;
+		$("#MainTabArrowRight").addClass("buttonInactive");
+	}
+	else if(offset >= 0)
+	{
+		offset = 0;
+		$("#MainTabArrowLeft").addClass("buttonInactive");
+	}
+	
+	var url = $(selected).attr("href");
+	
+	if(slide==true)
+	{
+		$(".NavigationMainNavigationList").animate({"margin-left":offset+"px"},100,function(){
+			$(location).attr('href',url);
+		});
+	}
+	else
+	{
+		$(".NavigationMainNavigationList").css("margin-left",offset+"px");
 	}
 }
 

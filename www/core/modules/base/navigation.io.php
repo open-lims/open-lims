@@ -36,7 +36,7 @@ class Navigation_IO
 		
 		// Tabs
 		
-		$template = new Template("languages/en-gb/template/navigation/main_navigation_header.html");
+		$template = new Template("languages/en-gb/template/base/navigation/main/main_navigation_header.html");
 		$template->output();
 
 		// HOME
@@ -47,14 +47,14 @@ class Navigation_IO
 
 		if ($_GET[nav] == "home" or !$_GET[nav])
 		{
-			$template = new Template("languages/en-gb/template/navigation/tabs/blue_tab_active.html");
+			$template = new Template("languages/en-gb/template/base/navigation/main/tabs/blue_tab_active.html");
 			$template->set_var("params", $params);
 			$template->set_var("title", "Home");
 			$template->output();
 		}
 		else
 		{
-			$template = new Template("languages/en-gb/template/navigation/tabs/blue_tab.html");
+			$template = new Template("languages/en-gb/template/base/navigation/main/tabs/blue_tab.html");
 			$template->set_var("params", $params);
 			$template->set_var("title", "Home");
 			$template->output();
@@ -81,78 +81,78 @@ class Navigation_IO
 						case "blue":
 							if ($_GET[nav] == $module_name)
 							{
-								$template = new Template("languages/en-gb/template/navigation/tabs/blue_tab_active.html");
+								$template = new Template("languages/en-gb/template/base/navigation/main/tabs/blue_tab_active.html");
 								$current_module = $module_name;
 								$current_color = $value[colour];
 							}
 							else
 							{
-								$template = new Template("languages/en-gb/template/navigation/tabs/blue_tab.html");
+								$template = new Template("languages/en-gb/template/base/navigation/main/tabs/blue_tab.html");
 							}
 						break;
 						
 						case "green":
 							if ($_GET[nav] == $module_name)
 							{
-								$template = new Template("languages/en-gb/template/navigation/tabs/green_tab_active.html");
+								$template = new Template("languages/en-gb/template/base/navigation/main/tabs/green_tab_active.html");
 								$current_module = $module_name;
 								$current_color = $value[colour];
 							}
 							else
 							{
-								$template = new Template("languages/en-gb/template/navigation/tabs/green_tab.html");
+								$template = new Template("languages/en-gb/template/base/navigation/main/tabs/green_tab.html");
 							}
 						break;
 						
 						case "orange";
 							if ($_GET[nav] == $module_name)
 							{
-								$template = new Template("languages/en-gb/template/navigation/tabs/orange_tab_active.html");
+								$template = new Template("languages/en-gb/template/base/navigation/main/tabs/orange_tab_active.html");
 								$current_module = $module_name;
 								$current_color = $value[colour];
 							}
 							else
 							{
-								$template = new Template("languages/en-gb/template/navigation/tabs/orange_tab.html");
+								$template = new Template("languages/en-gb/template/base/navigation/main/tabs/orange_tab.html");
 							}
 						break;
 						
 						case "lightgreen":
 							if ($_GET[nav] == $module_name)
 							{
-								$template = new Template("languages/en-gb/template/navigation/tabs/lightgreen_tab_active.html");
+								$template = new Template("languages/en-gb/template/base/navigation/main/tabs/lightgreen_tab_active.html");
 								$current_module = $module_name;
 								$current_color = $value[colour];
 							}
 							else
 							{
-								$template = new Template("languages/en-gb/template/navigation/tabs/lightgreen_tab.html");
+								$template = new Template("languages/en-gb/template/base/navigation/main/tabs/lightgreen_tab.html");
 							}
 						break;
 							
 						case "lightblue":
 							if ($_GET[nav] == $module_name)
 							{
-								$template = new Template("languages/en-gb/template/navigation/tabs/lightblue_tab_active.html");
+								$template = new Template("languages/en-gb/template/base/navigation/main/tabs/lightblue_tab_active.html");
 								$current_module = $module_name;
 								$current_color = $value[colour];
 							}
 							else
 							{
-								$template = new Template("languages/en-gb/template/navigation/tabs/lightblue_tab.html");
+								$template = new Template("languages/en-gb/template/base/navigation/main/tabs/lightblue_tab.html");
 							}
 						break;
 					
 						default:
 							if ($_GET[nav] == $module_name)
 							{
-								$template = new Template("languages/en-gb/template/navigation/tabs/grey_tab_active.html");
+								$template = new Template("languages/en-gb/template/base/navigation/main/tabs/grey_tab_active.html");
 								$current_module = $module_name;
 								$current_color = $value[colour];
 							}
 							else
 							{
-								$template = new Template("languages/en-gb/template/navigation/tabs/grey_tab.html");
+								$template = new Template("languages/en-gb/template/base/navigation/main/tabs/grey_tab.html");
 							}
 						break;
 						
@@ -176,7 +176,7 @@ class Navigation_IO
 		$logout_paramquery[run] = "logout";
 		$logout_params = http_build_query($logout_paramquery,'','&#38;');
 			
-		$template = new Template("languages/en-gb/template/navigation/main_navigation_middle.html");
+		$template = new Template("languages/en-gb/template/base/navigation/main/main_navigation_middle.html");
 		$template->set_var("info_params", $info_params);
 		$template->set_var("logout_params", $logout_params);
 		$template->output();
@@ -186,7 +186,7 @@ class Navigation_IO
 		
 		if ($_GET[nav] == "home")
 		{
-			$template = new Template("languages/en-gb/template/navigation/sub/blue.html");
+			$template = new Template("languages/en-gb/template/base/navigation/main/sub/blue.html");
 			
 			$sub_menu = array();
 			
@@ -227,7 +227,7 @@ class Navigation_IO
 		{
 			if ($current_color)
 			{
-				$template = new Template("languages/en-gb/template/navigation/sub/".$current_color.".html");
+				$template = new Template("languages/en-gb/template/base/navigation/main/sub/".$current_color.".html");
 				
 				$config_folder = "core/modules/".SystemHandler::get_module_folder_by_module_name($_GET[nav])."/config";
 				if (is_dir($config_folder))
@@ -253,14 +253,14 @@ class Navigation_IO
 			}
 			else
 			{
-				$template = new Template("languages/en-gb/template/navigation/sub/blue.html");
+				$template = new Template("languages/en-gb/template/base/navigation/main/sub/blue.html");
 				$template->set_var("sub_menu", false);
 				$template->set_var("search_bar", false);
 				$template->output();
 			}
 		}
 		
-		$template = new Template("languages/en-gb/template/navigation/main_navigation_footer.html");
+		$template = new Template("languages/en-gb/template/base/navigation/main/main_navigation_footer.html");
 		$template->output();
 	}
 	
