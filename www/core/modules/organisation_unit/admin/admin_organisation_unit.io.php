@@ -1346,6 +1346,7 @@ class AdminOrganisationUnitIO
 					
 					$tab_io->add("general", "General", $params, false);
 					
+					
 					$paramquery = $_GET;
 					$paramquery[action] = "detail_owner";
 					$params = http_build_query($paramquery,'','&#38;');
@@ -1362,7 +1363,7 @@ class AdminOrganisationUnitIO
 					$paramquery[action] = "detail_member";
 					$params = http_build_query($paramquery,'','&#38;');
 					
-					$tab_io->add("members", "Members", $params, false);
+					$tab_io->add("members", "Members", $params, false);  
 					
 					$paramquery = $_GET;
 					$paramquery[action] = "detail_qm";
@@ -1383,7 +1384,7 @@ class AdminOrganisationUnitIO
 					$tab_io->add("addresses", "Addresses", $params, false);
 					
 					switch($_GET[action]):
-					
+
 						case "detail_owner":
 							$tab_io->activate("owners");
 						break;

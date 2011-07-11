@@ -8,6 +8,11 @@ padding: 0px;
 
 }
 
+#LeftNavigationTree
+{
+padding-top:2px;
+}
+
 #LeftNavigationTree ul li div
 {
 white-space: nowrap;
@@ -29,7 +34,14 @@ font-size: 11px;
 #LeftNavigationSymbolArea div
 {
 float: left;
-margin: 2px 2px 2px 2px;
+height:24px;
+width:24px;
+margin: 2px 2px 0 2px;
+}
+
+#LeftNavigationSymbolArea div img
+{
+	margin: 4px 4px 4px 4px;
 }
 
 #LeftNavigationSymbolAreaClear
@@ -43,4 +55,103 @@ border-top: 1px #D0D0D0 dotted;
 border-bottom: 1px #D0D0D0 dotted;
 font-weight: bold;
 padding: 2px 2px 2px 5px;
+}
+
+
+
+/*neu*/
+
+	
+	
+/* Small Tabs (ÜA) */
+#SmallTabContainer {
+	width: 750px;
+	font: normal 1em Verdana, Helvetica, sans-serif;
+}
+
+#SmallTabContainer a {
+	color: #404040;
+}
+
+#SmallTabContainer a:hover,
+#SmallTabContainer a:active,
+#SmallTabContainer a:focus
+	{
+	color: #404040;
+}
+
+#SmallTabFooter {
+	margin-top: 17px;
+	width: 750px;
+	border-top: 1px #D0D0D0 dotted;
+}
+
+.SmallTabList {
+	width: 750px;
+	padding: 0;
+	margin: 0;
+}
+
+.SmallTabList li {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	float: left;
+	width: 93px;
+}
+
+.SmallTabList li a.SmallTab {
+	display: block;
+	font: normal 12px Verdana, Tahoma, Helvatica, sans-serif;
+	background-image: url(../images/tabs/small_tab.png);
+	background-repeat: no-repeat;
+	background-position: bottom center;
+	padding: 0 3px 0 3px;
+	margin: 0;
+	float: left;
+	width: 88px;
+	height: 18px;
+	text-align: center;
+	text-decoration: none;
+}
+
+.SmallTabList li a.SmallTab:hover,
+.SmallTabList li a.SmallTab:active,
+.SmallTabList li a.SmallTab:focus
+	{
+	background-image: url(../images/tabs/small_tab_active.png);
+	background-repeat: no-repeat;
+	background-position: bottom center;
+}
+
+.SmallTabList li a.SmallTabActive {
+	display: block;
+	font: normal 12px Verdana, Tahoma, Helvatica, sans-serif;
+	background-image: url(../images/tabs/small_tab_active.png);
+	background-repeat: no-repeat;
+	background-position: bottom center;
+	padding: 0 3px 0 3px;
+	margin: 0;
+	float: left;
+	width: 88px;
+	height: 18px;
+	text-align: center;
+	text-decoration: none;
+}
+
+.SmallTabList li span.SmallTabInactive {
+	display: block;
+	font: normal 12px Verdana, Tahoma, Helvatica, sans-serif;
+	color: #C0C0C0;
+	background-image: url(../images/tabs/small_tab.png);
+	background-repeat: no-repeat;
+	background-position: bottom center;
+	padding: 0 3px 0 3px;
+	margin: 0;
+	float: left;
+	width: 87px;
+	height: 16px;
+	text-align: center;
+	text-decoration: none;
+	border: 1px #D0D0D0 solid;
 }

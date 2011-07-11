@@ -31,7 +31,7 @@ class Tab_IO
 	private $max_tabs;
 	private $tab_array;
 	
-	function __construct($max_tabs = 8)
+	function __construct($max_tabs = 7)
 	{
 		$this->max_tabs = $max_tabs;
 	}
@@ -43,7 +43,7 @@ class Tab_IO
 	}
 	
 	public function add($name, $display_name, $target, $active, $disabled = false, $css_id = null)
-	{
+	{		
 		if ($name and $display_name and ($target or $css_id))
 		{
 			$this->tab_array[$name]['name'] = $display_name;
@@ -167,7 +167,7 @@ class Tab_IO
 			}
 		}
 		
-		$template = new Template("languages/en-gb/template/projects/tabs/small_tab_footer.html");
+		$template = new Template("languages/en-gb/template/base/tabs/small_tab_footer.html");
 		$return .= $template->get_string();
 		
 		return $return;

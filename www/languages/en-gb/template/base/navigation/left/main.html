@@ -3,10 +3,8 @@
 $(document).ready(function()
 \{
 	var get_array = getQueryParams(document.location.search);
-	<!-- FOREACH BEGIN ({JS}) -->
 	
-	var orig = $("#LeftNavigationTitle").html();
-
+	<!-- FOREACH BEGIN ({JS}) -->
 	
 	$( "#{JS:ID}" ).click(function()
 	\{		
@@ -26,7 +24,6 @@ $(document).ready(function()
 			data: "run=get_name&session_id="+get_array['session_id'],
 			success: function(data)
 			\{
-				orig = data;
 				$("#LeftNavigationTitle").html(data);
 			\}
 		\});
@@ -41,31 +38,29 @@ $(document).ready(function()
 				$("#LeftNavigationTree").html(data);
 			\}
 		\});
-	
 	\});
 	
-	$( "#{JS:ID}" ).mouseover(
-	function()
-	\{		
-		$.ajax(
-		\{
-			type: "GET",
-			url: "{JS:AJAX_URL}",
-			data: "run=get_name&session_id="+get_array['session_id'],
-			success: function(data)
-			\{
-				$("#LeftNavigationTitle").html(data);
-			\}
-		\});
-	
-	\});
-	$( "#{JS:ID}" ).mouseleave(function()
+	$.ajax(
 	\{
-		$("#LeftNavigationTitle").html(orig);
+		type: "GET",
+		url: "{JS:AJAX_URL}",
+		data: "run=get_name&session_id="+get_array['session_id'],
+		success: function(data)
+		\{
+			tooltip("{JS:ID}",data);
+		\}
 	\});
 
 	<!-- FOREACH END -->
+	
+	if($("#LeftNavigationTree").text() == "")
+	\{
+		$("#LeftNavigationSymbolArea").children("div:nth-child(1)").trigger("click");
+	\}
+	
 \});	
+
+
 </script>
 
 <div id="LeftNavigation">
@@ -87,14 +82,10 @@ $(document).ready(function()
 	
 	</div>
 	<div id="LeftNavigationSymbolAreaClear"></div>
-	<div id='LeftNavigationTitle'>
-		beschreibung
-	</div>
+	<div id='LeftNavigationTitle'></div>
 	
 	<div id='LeftNavigationTreeContainer'>
-		<div id='LeftNavigationTree'>
-		content
-		</div>
+		<div id='LeftNavigationTree'></div>
 	</div>
 	
 </div>

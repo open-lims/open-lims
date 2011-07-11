@@ -91,4 +91,13 @@
 	$dialog[8][method]			= "upload";
 	$dialog[8][internal_name]	= "file_add";
 	$dialog[8][display_name]	= "File";
+		
+	$dialog[9][type]			= "base_left_navigation";
+	$dialog[9][class_path]		= "core/modules/data/navigation/data_navigation.io.php";
+	$dialog[9]['class']			= "DataNavigationIO";
+	$dialog[9][method]			= "get_html";
+	$dialog[9][internal_name]	= "data";
+	$dialog[9][display_name]	= "Data";
+	$dialog[9][weight]			= 400;
+	
 ?>
