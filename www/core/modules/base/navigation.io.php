@@ -45,30 +45,18 @@ class Navigation_IO
 		$paramquery[nav] = "home";
 		$params = http_build_query($paramquery,'','&#38;');
 
-		if ($_GET[nav] == "home" or !$_GET[nav])
-		{
-			$template = new Template("template/base/navigation/main/tabs/blue_tab_active.html");
-			$template->set_var("params", $params);
-			$template->set_var("title", "Home");
-			$template->output();
-		}
-		else
-		{
-			$template = new Template("template/base/navigation/main/tabs/blue_tab.html");
-			$template->set_var("params", $params);
-			$template->set_var("title", "Home");
-			$template->output();
-		}
-		
 		$module_navigation_array = ModuleNavigation::list_module_navigations_entries();
 		
 		if (is_array($module_navigation_array) and count($module_navigation_array) >= 1)
 		{
+			$module_tab_string = "";
+			$module_tab_active = false;
+			
 			foreach($module_navigation_array as $key => $value)
 			{
 				$module_name = SystemHandler::get_module_name_by_module_id($value[module_id]);
 				
-				if (($module_name == "admin" and $user->is_admin()) or $module_name != admin)
+				if (($module_name == "admin" and $user->is_admin()) or $module_name != "admin")
 				{
 				
 					$paramquery[username] = $_GET[username];
@@ -84,6 +72,7 @@ class Navigation_IO
 								$template = new Template("template/base/navigation/main/tabs/blue_tab_active.html");
 								$current_module = $module_name;
 								$current_color = $value[colour];
+								$module_tab_active = true;
 							}
 							else
 							{
@@ -97,6 +86,7 @@ class Navigation_IO
 								$template = new Template("template/base/navigation/main/tabs/green_tab_active.html");
 								$current_module = $module_name;
 								$current_color = $value[colour];
+								$module_tab_active = true;
 							}
 							else
 							{
@@ -110,6 +100,7 @@ class Navigation_IO
 								$template = new Template("template/base/navigation/main/tabs/orange_tab_active.html");
 								$current_module = $module_name;
 								$current_color = $value[colour];
+								$module_tab_active = true;
 							}
 							else
 							{
@@ -123,6 +114,7 @@ class Navigation_IO
 								$template = new Template("template/base/navigation/main/tabs/lightgreen_tab_active.html");
 								$current_module = $module_name;
 								$current_color = $value[colour];
+								$module_tab_active = true;
 							}
 							else
 							{
@@ -136,6 +128,7 @@ class Navigation_IO
 								$template = new Template("template/base/navigation/main/tabs/lightblue_tab_active.html");
 								$current_module = $module_name;
 								$current_color = $value[colour];
+								$module_tab_active = true;
 							}
 							else
 							{
@@ -149,6 +142,7 @@ class Navigation_IO
 								$template = new Template("template/base/navigation/main/tabs/grey_tab_active.html");
 								$current_module = $module_name;
 								$current_color = $value[colour];
+								$module_tab_active = true;
 							}
 							else
 							{
@@ -160,10 +154,27 @@ class Navigation_IO
 					
 					$template->set_var("params", $params);
 					$template->set_var("title", $value[display_name]);
-					$template->output();
+					$module_tab_string .= $template->get_string();
 				}
 			}
 		}
+		
+		if ($_GET[nav] == "home" or !$_GET[nav] or $module_tab_active == false)
+		{
+			$template = new Template("template/base/navigation/main/tabs/blue_tab_active.html");
+			$template->set_var("params", $params);
+			$template->set_var("title", "Home");
+			$template->output();
+		}
+		else
+		{
+			$template = new Template("template/base/navigation/main/tabs/blue_tab.html");
+			$template->set_var("params", $params);
+			$template->set_var("title", "Home");
+			$template->output();
+		}
+		
+		echo $module_tab_string;
 				
 		$info_paramquery[username] = $_GET[username];
 		$info_paramquery[session_id] = $_GET[session_id];
@@ -184,7 +195,7 @@ class Navigation_IO
 		
 		// Submenu
 		
-		if ($_GET[nav] == "home")
+		if ($_GET[nav] == "home" or !$_GET[nav] or $module_tab_active == false)
 		{
 			$template = new Template("template/base/navigation/main/sub/blue.html");
 			

@@ -61,7 +61,7 @@ class OrganisationUnitAjax extends Ajax
 		{
 			if ($session->is_value("LEFT_NAVIGATION_OU_ARRAY"))
 			{
-				return serialize($session->read_value("LEFT_NAVIGATION_OU_ARRAY"));
+				echo json_encode($session->read_value("LEFT_NAVIGATION_OU_ARRAY"));
 			}
 			else
 			{
@@ -106,8 +106,13 @@ class OrganisationUnitAjax extends Ajax
 	
 	public function set_array($array)
 	{
+		global $session;
+		
 		$var = json_decode($array);
-		echo count($var);
+		if (is_array($var))
+		{
+			$session->write_value("LEFT_NAVIGATION_OU_ARRAY", $var, true);
+		}
 	}
 	
 	public function get_childs($id)

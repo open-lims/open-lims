@@ -1,0 +1,31 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Change Language",0) -->
+
+<form action='index.php?[[PARAMS]]' method='post' onSubmit='return submitForm(this.submitbutton)'>
+<br />
+<table class='formTable'>
+	<tr>
+		<td>Language:</td>
+		<td>
+			<select name='language'>
+			
+				<!-- FOREACH BEGIN ([[OPTION]]) -->
+	
+				<option value='[[OPTION:VALUE]]' [[OPTION:SELECTED]]>[[OPTION:CONTENT]]</option>
+		
+				<!-- FOREACH END -->	
+			
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><br /><input type='submit' name='submitbutton' class='FormButton' value='change' /></td>
+	</tr>
+</table>
+</form>
+<br />	
+
+
+<!-- CONTAINER END (0) -->	
