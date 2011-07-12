@@ -1,0 +1,241 @@
+<br />
+
+<!-- CONTAINER BEGIN ("User Detail",0) -->
+
+<table class='AdminUserDetailTable'>
+	
+	<tr>
+		<td colspan='3'><div class='bold'>General</div></td>
+	</tr>
+	
+	<tr>
+		<td width='25%'>Username:</td>
+		<td>[[USERNAME]]</td>
+		<td>
+		
+		<!-- IF ([[CHANGE_USERNAME]]) -->
+		
+			<a href='index.php?[[RENAME_PARAMS]]'>change</a>
+				
+		<!-- ENDIF -->
+		
+		</td>	
+	</tr>
+	<tr>
+		<td>Full-Name</td>
+		<td>[[FULLNAME]]</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>Mail</td>
+		<td>[[MAIL]]</td>
+		<td>
+			<a href='index.php?[[CHANGE_MAIL_PARAMS]]'>change</a>
+		</td>
+	</tr>
+	<tr>
+		<td>Password</td>
+		<td>********</td>
+		<td><a href='index.php?[[CHANGE_PASSWORD_PARAMS]]'>change</a></td>
+	</tr>
+	
+	<tr>
+		<td colspan='3'><div class='horizontal_line'></div></td>
+	</tr>
+	<tr>
+		<td colspan='3'><div class='bold'>Administrative Settings</div></td>
+	</tr>
+	<tr>
+		<td>Must change password<br />at next login</td>
+		<td>[[MC_PASSWORD]]</t>
+		<td>
+		
+			<!-- IF ([[IS_NOT_SYSTEM]]) -->
+		
+				<a href='index.php?[[MC_PASSWORD_PARAMS]]'>change</a>
+				
+			<!-- ENDIF -->
+		
+		</td>
+	</tr>
+	<tr>
+		<td>Can change password</td>
+		<td>[[CC_PASSWORD]]</td>
+		<td>
+		
+			<!-- IF ([[IS_NOT_SYSTEM]]) -->
+		
+				<a href='index.php?[[CC_PASSWORD_PARAMS]]'>change</a>
+				
+			<!-- ENDIF -->
+		
+		</td>
+	</tr>
+	<tr>
+		<td>Secure password</td>
+		<td>[[SECURE_PASSWORD]]</td>
+		<td>
+		
+			<!-- IF ([[IS_NOT_SYSTEM]]) -->
+		
+				<a href='index.php?[[SECURE_PASSWORD_PARAMS]]'>change</a>
+				
+			<!-- ENDIF -->
+		
+		</td>
+	</tr>
+	<tr>
+		<td>Block write permission</td>
+		<td>[[BLOCK_WRITE]]</td>
+		<td>
+		
+			<!-- IF ([[IS_NOT_SYSTEM]]) -->
+		
+				<a href='index.php?[[BLOCK_WRITE_PARAMS]]'>change</a>
+				
+			<!-- ENDIF -->
+		
+		</td>
+	</tr>
+	<tr>
+		<td>Create folders</td>
+		<td>[[CREATE_FOLDER]]</td>
+		<td>
+		
+			<!-- IF ([[IS_NOT_SYSTEM]]) -->
+		
+				<a href='index.php?[[CREATE_FOLDER_PARAMS]]'>change</a>
+				
+			<!-- ENDIF -->
+		
+		</td>
+	</tr>
+	<tr>
+		<td>Locked</td>
+		<td>[[LOCKED]]</td>
+		<td>
+		
+			<!-- IF ([[IS_NOT_SYSTEM]]) -->
+		
+				<a href='index.php?[[LOCKED_PARAMS]]'>change</a>
+				
+			<!-- ENDIF -->
+		
+		</td>
+	</tr>
+	<tr>
+		<td>Inactive (hidden)</td>
+		<td>[[INACTIVE]]</td>
+		<td>
+		
+			<!-- IF ([[IS_NOT_SYSTEM]]) -->
+		
+				<a href='index.php?[[INACTIVE_PARAMS]]'>change</a>
+				
+			<!-- ENDIF -->
+		
+		</td>
+	</tr>
+	
+	<!-- IF ([[MODULE_SETTINGS]]) -->
+	
+	<tr>
+		<td colspan='3'><div class='horizontal_line'></div></td>
+	</tr>
+	<tr>
+		<td colspan='3'><div class='bold'>Module Settings</div></td>
+	</tr>
+	
+		<!-- FOREACH BEGIN ([[MODULE_SETTINGS_ARRAY]]) -->
+
+			<tr>
+				<td>[[MODULE_SETTINGS_ARRAY:TITLE]]</td>
+				<td>[[MODULE_SETTINGS_ARRAY:VALUE]]</td>
+				<td><a href='index.php?[[MODULE_SETTINGS_ARRAY:PARAMS]]'>change</a></td>
+			</tr>
+	
+		<!-- FOREACH END -->
+	
+	<!-- ENDIF -->
+	
+	<tr>
+		<td colspan='3'><div class='horizontal_line'></div></td>
+	</tr>
+	<tr>
+		<td colspan='3'><div class='bold'>User Settings</div></td>
+	</tr>
+	
+	<tr>
+		<td>Language</td>
+		<td>[[LANGUAGE]]</td>
+		<td><a href='index.php?[[LANGUAGE_PARAMS]]'>change</a></td>
+	</tr>
+	<tr>
+		<td>Timezone</td>
+		<td>[[TIMEZONE]]</td>
+		<td><a href='index.php?[[TIMEZONE_PARAMS]]'>change</a></td>
+	</tr>
+	
+</table>
+
+<br />		
+<div class='horzontalLineGrey'></div>
+
+<div class='boxIconBar'><a href='index.php?[[ADD_GROUP_PARAMS]]'><img src='images/icons/add_group.png' alt='new' border='0' /></a>&nbsp;<a href='index.php?[[ADD_GROUP_PARAMS]]'>Add Group</a></div>
+
+<table class='OverviewTable'>
+	<tr>
+		<th>Groupname:</th>
+		<th width='15%'>Delete:</th>
+	</tr>
+					
+	<!-- FOREACH BEGIN ([[GROUP]]) -->
+			
+		<tr>
+			<td>[[GROUP:NAME]]</td>
+			<td><a href='index.php?[[GROUP:DELETE_PARAMS]]'>delete</a></td>
+		</tr>
+	
+	<!-- FOREACH END -->
+	
+	<!-- IF ([[NO_GROUP]]) -->
+	
+		<tr>
+			<td colspan='2'><span class='italic'>No Groups Found!</span></td>
+		</tr>
+	
+	<!-- ENDIF -->
+
+</table>
+
+<br />		
+<div class='horzontalLineGrey'></div>
+
+<div class='boxIconBar'><a href='index.php?[[ADD_OU_PARAMS]]'><img src='images/icons/add_organ_unit.png' alt='new' border='0' /></a>&nbsp;<a href='index.php?[[ADD_OU_PARAMS]]'>Add Organisation Unit</a></div>
+
+<table class='OverviewTable'>
+	<tr>
+		<th>Name:</th>
+		<th width='15%'>Delete:</th>
+	</tr>
+					
+	<!-- FOREACH BEGIN ([[OU]]) -->
+			
+		<tr>
+			<td>[[OU:NAME]]</td>
+			<td><a href='index.php?[[OU:DELETE_PARAMS]]'>delete</a></td>
+		</tr>
+	
+	<!-- FOREACH END -->
+	
+	<!-- IF ([[NO_OU]]) -->
+	
+		<tr>
+			<td colspan='2'><span class='italic'>No Organisation Unit Found!</span></td>
+		</tr>
+	
+	<!-- ENDIF -->
+
+</table>
+
+<!-- CONTAINER END (0) -->

@@ -1,0 +1,27 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Search",0) -->
+
+<div class='SearchMain'>
+
+	<!-- FOREACH BEGIN ([[SEARCH_ARRAY]]) -->
+
+		<div class='SearchMainLeft'>
+		
+			<a href='index.php?[[SEARCH_ARRAY:PARAMS]]' class='SearchMainButton'>
+				<span class='SearchMainButtonImage'><img src='[[SEARCH_ARRAY:ICON]]' alt='' style='border: 0;' /></span>
+				<span class='SearchMainButtonText'>
+					<span class='SearchMainButtonTitle'>[[SEARCH_ARRAY:TITLE]]</span>
+					<span class='SearchMainButtonDesc'>[[SEARCH_ARRAY:DESCRIPTION]]</span>
+				</span>
+			</a>
+		
+		</div>
+	
+	<!-- FOREACH END -->
+		
+</div>
+
+<div class='SearchMainClear'></div>
+
+<!-- CONTAINER END (0) -->

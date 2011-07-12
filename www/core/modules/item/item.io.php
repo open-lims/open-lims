@@ -29,7 +29,7 @@ class ItemIO
 {
 	public static function information($link, $description, $keywords)
 	{
-		$template = new Template("languages/en-gb/template/item/information.html");
+		$template = new Template("template/item/information.html");
 		
 		$template->set_var("link", $link);
 		
@@ -134,7 +134,7 @@ class ItemIO
 				$counter_begin = (25*$page)-25;
 			}
 						
-			$template = new Template("languages/en-gb/template/item/item_administration_folder.html");
+			$template = new Template("template/item/item_administration_folder.html");
 			
 			$template->set_var("title", $folder->get_name());	
 				

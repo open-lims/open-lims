@@ -1,0 +1,57 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Project Log",0) -->
+
+<form action='index.php?[[PARAMS]]' method='post' onSubmit='return submitForm(this.submitbutton)'>
+<br />
+<table class='formTable'>
+
+	<!-- IF ([[IMPORTANT]] == 1) -->
+
+		<tr>
+			<td>important:&nbsp;<input type='checkbox' name='important' class='FormCheck' value='1' /></td>
+		</tr>
+	
+	<!-- ELSEIF ([[IMPORTANT]] == 2) -->
+	
+		<tr>
+			<td>important:&nbsp;<input type='checkbox' name='important' class='FormCheck' value='1' checked /></td>
+		</tr>
+	
+	<!-- ELSEIF ([[IMPORTANT]] == 3) -->
+	
+		<tr>
+			<td><span class='FontDeactivated'>important:</span>&nbsp;<input type='checkbox' name='important' class='FormCheck' value='1' disabled /></td>
+		</tr>
+	
+	<!-- ELSE -->
+	
+		<tr>
+			<td><span class='FontDeactivated'>important:</span>&nbsp;<input type='checkbox' name='important' class='FormCheck' value='1' checked disabled /></td>
+		</tr>
+	
+	<!-- ENDIF -->
+	
+	<tr>
+		<td><br /></td>
+	</tr>
+	<tr>
+		<td>Text:</td>
+	</tr>
+	<tr>
+		<td>
+			<textarea name='text' cols='66' rows='15' class='FormTextarea'>[[TEXTAREA_CONTENT]]</textarea>
+			<span class='formError'>[[ERROR]]</span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div class='button_right'><input type='submit' value='Next' name='submitbutton' class='FormButton' /></div>
+		</td>
+	</tr>
+</table>
+<input type='hidden' name='checksum' value='[[CHECKSUM]]' />
+</form>
+<br />
+
+<!-- CONTAINER END (0) -->

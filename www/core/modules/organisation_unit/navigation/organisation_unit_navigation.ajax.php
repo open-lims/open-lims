@@ -48,7 +48,7 @@ class OrganisationUnitAjax extends Ajax
 	 */
 	private function get_html()
 	{
-		$template = new Template("../../../../languages/en-gb/template/organisation_unit/navigation/left.html");
+		$template = new Template("../../../../template/organisation_unit/navigation/left.html");
 		
 		$template->output();
 	}

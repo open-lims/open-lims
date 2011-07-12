@@ -100,7 +100,7 @@ class OrganiserIO
 		$todo_array[3][id]			= null;
 		$todo_array[3][user_id]		= 2;
 		
-		$template = new Template("languages/en-gb/template/organiser/personal_organiser.html");
+		$template = new Template("template/organiser/personal_organiser.html");
 		
 		require_once("organiser_library.io.php");
 		
@@ -121,7 +121,7 @@ class OrganiserIO
 
 	public static function list_upcoming_appointments()
 	{
-		$template = new Template("languages/en-gb/template/organiser/list_upcoming_appointments.html");
+		$template = new Template("template/organiser/list_upcoming_appointments.html");
 		
 		$template->set_var("exist_appointment", false);
 		
@@ -130,7 +130,7 @@ class OrganiserIO
 	
 	public static function list_upcoming_tasks()
 	{
-		$template = new Template("languages/en-gb/template/organiser/list_upcoming_tasks.html");
+		$template = new Template("template/organiser/list_upcoming_tasks.html");
 		
 		$template->set_var("exist_todo_task", false);
 		

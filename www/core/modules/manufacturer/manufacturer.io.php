@@ -29,19 +29,19 @@ class ManufacturerIO
 {
 	public static function dialog()
 	{
-		$template = new Template("languages/en-gb/template/manufacturer/dialog.html");
+		$template = new Template("template/manufacturer/dialog.html");
 		return $template->get_string();
 	}
 	
 	public static function add()
 	{
-		$template = new Template("languages/en-gb/template/manufacturer/add.html");
+		$template = new Template("template/manufacturer/add.html");
 		return $template->get_string();
 	}
 	
 	public static function list_manufacturers()
 	{
-		$template = new Template("languages/en-gb/template/manufacturer/list.html");
+		$template = new Template("template/manufacturer/list.html");
 		$template->set_var("ADD_DIALOG", self::add());
 		$template->output();
 	}

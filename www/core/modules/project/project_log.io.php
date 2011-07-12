@@ -51,7 +51,7 @@ class ProjectLogIO
 				$entry_count = count($project_log_array);
 				$number_of_pages = ceil($entry_count/PROJECT_LOG_ENTRIES_PER_PAGE);
 			
-				$template = new Template("languages/en-gb/template/projects/project_log.html");
+				$template = new Template("template/projects/project_log.html");
 	
 				if (is_array($project_log_array) and count($project_log_array) >= 1)
 				{
@@ -202,7 +202,7 @@ class ProjectLogIO
 					$result = false;
 				}
 				
-				$template = new Template("languages/en-gb/template/projects/project_log_detail.html");
+				$template = new Template("template/projects/project_log_detail.html");
 			
 				$user = new User($project_log->get_owner_id());
 			
@@ -294,7 +294,7 @@ class ProjectLogIO
 				
 				if ($no_error == false)
 				{
-					$template = new Template("languages/en-gb/template/projects/project_log_add.html");
+					$template = new Template("template/projects/project_log_add.html");
 					
 					$paramquery = $_GET;
 					$paramquery[nextpage] = 1;

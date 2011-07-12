@@ -35,7 +35,7 @@ class OrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[ou_id]);
 			
-			$template = new Template("languages/en-gb/template/organisation_unit/organisation_unit_detail.html");
+			$template = new Template("template/organisation_unit/organisation_unit_detail.html");
 			
 			$template->set_var("title",$organisation_unit->get_name());
 			
@@ -354,7 +354,7 @@ class OrganisationUnitIO
 				
 				foreach ($module_link_array as $key => $value)
 				{
-					$button_template = new Template("languages/en-gb/template/".$value[file]);
+					$button_template = new Template("template/".$value[file]);
 				
 					$button_paramquery = array();
 					$button_paramquery[username] = $_GET[username];
@@ -470,7 +470,7 @@ class OrganisationUnitIO
 			$table_io->override_last_line("<span class='italic'>No Organisation Units Found!</span>");
 		}
 		
-		$template = new Template("languages/en-gb/template/organisation_unit/user_related_organisation_units.html");
+		$template = new Template("template/organisation_unit/user_related_organisation_units.html");
 		
 		$table_io->add_content_array($content_array);	
 			
@@ -485,7 +485,7 @@ class OrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[ou_id]);
 			
-			$template = new Template("languages/en-gb/template/organisation_unit/list_owners.html");
+			$template = new Template("template/organisation_unit/list_owners.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("ORGANISATION_UNIT_ID", $_GET[ou_id]);
 			$template->output();
@@ -504,7 +504,7 @@ class OrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[ou_id]);
 			
-			$template = new Template("languages/en-gb/template/organisation_unit/list_leaders.html");
+			$template = new Template("template/organisation_unit/list_leaders.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("ORGANISATION_UNIT_ID", $_GET[ou_id]);
 			$template->output();
@@ -523,7 +523,7 @@ class OrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[ou_id]);
 			
-			$template = new Template("languages/en-gb/template/organisation_unit/list_members.html");
+			$template = new Template("template/organisation_unit/list_members.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("ORGANISATION_UNIT_ID", $_GET[ou_id]);
 			$template->output();
@@ -542,7 +542,7 @@ class OrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[ou_id]);
 			
-			$template = new Template("languages/en-gb/template/organisation_unit/list_quality_managers.html");
+			$template = new Template("template/organisation_unit/list_quality_managers.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("ORGANISATION_UNIT_ID", $_GET[ou_id]);
 			$template->output();
@@ -561,7 +561,7 @@ class OrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[ou_id]);
 			
-			$template = new Template("languages/en-gb/template/organisation_unit/list_groups.html");
+			$template = new Template("template/organisation_unit/list_groups.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("ORGANISATION_UNIT_ID", $_GET[ou_id]);
 			$template->output();

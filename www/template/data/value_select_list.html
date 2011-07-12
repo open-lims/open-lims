@@ -1,0 +1,33 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Select Value",0) -->
+
+<form action='index.php?[[PARAMS]]' method='post'>
+
+<table class='formTable'>
+	<tr>
+		<td>
+
+			<select name='type_id' size='10' class='ProjectCreateSelect'>
+		
+			<!-- FOREACH BEGIN (SELECT) -->
+			
+				<option value='[[SELECT:VALUE]]'>[[SELECT:CONTENT]]</option>
+			
+			<!-- FOREACH END -->
+		
+			</select>
+			
+		</td>
+	</tr>
+	<tr>
+		<td><div class='button_right'><input type='submit' value='next' name='submitbutton' class='next_button' /></div></td>
+	</tr>
+</table>
+
+<input type='hidden' value='[[DESCRIPTION]]' name='description' />
+<input type='hidden' value='[[KEYWORDS]]' name='keywords' />
+
+</form>
+
+<!-- CONTAINER END (0) -->

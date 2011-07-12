@@ -1,0 +1,45 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Add Sample",0) -->
+
+<br />
+<br />
+<form action='index.php' method='get'>
+	
+	<!-- FOREACH BEGIN ([[GET_VALUE]]) -->
+	
+		<input type='hidden' name='[[GET_VALUE:NAME]]' value='[[GET_VALUE:VALUE]]' />
+	
+	<!-- FOREACH END -->	
+	
+	<div class='sample_container'>
+		<div class='sample_image'>
+		<img src='images/icons_large/wizard_64.png' alt='' />
+		</div>
+		<div class='sample_text'>
+			<table width='100%'>
+				<tr>
+					<td></td>
+					<td><span class='bold'>I want to:</span></td>
+				</tr>
+				<tr>
+					<td><input type='radio' class='FormRadio' name='selectpage' value='1' checked="checked" /></td>
+					<td>add a new sample</td>
+				</tr>
+				<tr>
+					<td><input type='radio' class='FormRadio' name='selectpage' value='2' /></td>
+					<td>associate an existing sample</td>
+				</tr>
+			</table>
+		</div>
+		<div class='sample_under'>
+			<br />
+			<br />
+			<br /><input type='submit' value='next' class='FormButton' /></div>
+		</div>
+		<input type='hidden' value='[[UNIQUE_ID]]' name='idk_unique_id' />
+</form>
+<br />
+<br />
+
+<!-- CONTAINER END (0) -->

@@ -119,7 +119,7 @@ class AdminSystemLogIO
 			$list->override_last_line("<span class='italic'>No results found!</span>");
 		}
 		
-		$template = new Template("languages/en-gb/template/base/admin/system_log/list.html");
+		$template = new Template("template/base/admin/system_log/list.html");
 										
 		$result = array();
 		$counter = 0;
@@ -178,7 +178,7 @@ class AdminSystemLogIO
 				$user = new User($system_log->get_user_id());
 				$datetime_handler = new DatetimeHandler($system_log->get_datetime());
 			
-				$template = new Template("languages/en-gb/template/base/admin/system_log/detail.html");
+				$template = new Template("template/base/admin/system_log/detail.html");
 				
 				$template->set_var("datetime", $datetime_handler->get_formatted_string("dS M Y H:i"));
 	
@@ -294,7 +294,7 @@ class AdminSystemLogIO
 				$successful_logins = SystemLog::count_ip_successful_logins($ip);
 				$failed_logins = SystemLog::count_ip_failed_logins($ip);
 			
-				$template = new Template("languages/en-gb/template/base/admin/system_log/ip_info.html");
+				$template = new Template("template/base/admin/system_log/ip_info.html");
 				
 				$template->set_var("ip", $ip);
 				

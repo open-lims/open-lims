@@ -37,7 +37,7 @@ class SampleAdminIO
 			{
 				if ($_GET[sure] != "true")
 				{
-					$template = new Template("languages/en-gb/template/samples/int_admin/delete.html");
+					$template = new Template("template/samples/int_admin/delete.html");
 					
 					$paramquery = $_GET;
 					$paramquery[sure] = "true";
@@ -109,7 +109,7 @@ class SampleAdminIO
 				{
 					if ($_GET[sure] != "true")
 					{
-						$template = new Template("languages/en-gb/template/samples/int_admin/delete_project_association.html");
+						$template = new Template("template/samples/int_admin/delete_project_association.html");
 						
 						$paramquery = $_GET;
 						$paramquery[sure] = "true";
@@ -204,7 +204,7 @@ class SampleAdminIO
 				
 				if ($page_1_passed == false)
 				{
-					$template = new Template("languages/en-gb/template/samples/int_admin/rename.html");
+					$template = new Template("template/samples/int_admin/rename.html");
 				
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";
@@ -360,7 +360,7 @@ class SampleAdminIO
 					$list->override_last_line("<span class='italic'>No results found!</span>");
 				}
 
-				$template = new Template("languages/en-gb/template/samples/int_admin/user_permission.html");
+				$template = new Template("template/samples/int_admin/user_permission.html");
 				
 				$add_user_paramquery = $_GET;
 				$add_user_paramquery[run] = "admin_permission_user_add";
@@ -432,7 +432,7 @@ class SampleAdminIO
 				
 				if ($page_1_passed == false)
 				{
-					$template = new Template("languages/en-gb/template/samples/int_admin/user_permission_add_page_1.html");
+					$template = new Template("template/samples/int_admin/user_permission_add_page_1.html");
 					
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";
@@ -472,7 +472,7 @@ class SampleAdminIO
 					
 					if ($page_2_passed == false)
 					{
-						$template = new Template("languages/en-gb/template/samples/int_admin/user_permission_add_page_2.html");
+						$template = new Template("template/samples/int_admin/user_permission_add_page_2.html");
 						
 						$paramquery = $_GET;
 						$paramquery[nextpage] = "2";
@@ -554,7 +554,7 @@ class SampleAdminIO
 				{
 					if ($_GET[sure] != "true")
 					{
-						$template = new Template("languages/en-gb/template/samples/int_admin/ou_permission_delete.html");
+						$template = new Template("template/samples/int_admin/ou_permission_delete.html");
 						
 						$paramquery = $_GET;
 						$paramquery[sure] = "true";
@@ -690,7 +690,7 @@ class SampleAdminIO
 					$list->override_last_line("<span class='italic'>No results found!</span>");
 				}
 		
-				$template = new Template("languages/en-gb/template/samples/int_admin/ou_permission.html");
+				$template = new Template("template/samples/int_admin/ou_permission.html");
 				
 				$add_ou_paramquery = $_GET;
 				$add_ou_paramquery[run] = "admin_permission_ou_add";
@@ -762,7 +762,7 @@ class SampleAdminIO
 				
 				if ($page_1_passed == false)
 				{
-					$template = new Template("languages/en-gb/template/samples/int_admin/ou_permission_add.html");
+					$template = new Template("template/samples/int_admin/ou_permission_add.html");
 					
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";
@@ -840,7 +840,7 @@ class SampleAdminIO
 				{
 					if ($_GET[sure] != "true")
 					{
-						$template = new Template("languages/en-gb/template/samples/int_admin/ou_permission_delete.html");
+						$template = new Template("template/samples/int_admin/ou_permission_delete.html");
 						
 						$paramquery = $_GET;
 						$paramquery[sure] = "true";

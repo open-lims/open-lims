@@ -49,7 +49,7 @@ class ProjectAjax extends Ajax
 	 */
 	private function get_html()
 	{
-		$template = new Template("../../../../languages/en-gb/template/projects/navigation/left.html");
+		$template = new Template("../../../../template/projects/navigation/left.html");
 		
 		$template->output();
 	}

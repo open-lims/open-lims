@@ -65,7 +65,7 @@ class FolderIO
 				
 				if ($page_1_passed == false)
 				{
-					$template = new Template("languages/en-gb/template/data/folder_add.html");
+					$template = new Template("template/data/folder_add.html");
 					
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";
@@ -145,7 +145,7 @@ class FolderIO
 				
 				if ($page_1_passed == false)
 				{
-					$template = new Template("languages/en-gb/template/data/folder_delete.html");
+					$template = new Template("template/data/folder_delete.html");
 					
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";
@@ -210,7 +210,7 @@ class FolderIO
 				
 				if ($page_1_passed == false)
 				{
-					$template = new Template("languages/en-gb/template/data/folder_move.html");
+					$template = new Template("template/data/folder_move.html");
 					
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";
@@ -274,7 +274,7 @@ class FolderIO
 				$folder->is_flag_cmd_folder() or 
 				$folder->is_flag_rename_folder())
 			{
-				$template = new Template("languages/en-gb/template/data/folder_administration.html");
+				$template = new Template("template/data/folder_administration.html");
 				
 				if ($folder->is_flag_change_permission())
 				{

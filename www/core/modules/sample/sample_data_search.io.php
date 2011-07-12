@@ -92,7 +92,7 @@ class SampleDataSearchIO
 		
 		if ($no_error == false)
 		{
-			$template = new Template("languages/en-gb/template/samples/search/data_search.html");
+			$template = new Template("template/samples/search/data_search.html");
 			
 			$template->set_var("error", "");
 			
@@ -281,7 +281,7 @@ class SampleDataSearchIO
 			$list->add_row("Datetime", "datetime", true, null);
 			$list->add_row("Sample", "sample_name", true, null);
 			
-			$template = new Template("languages/en-gb/template/samples/search/data_search_result.html");
+			$template = new Template("template/samples/search/data_search_result.html");
 		
 			$paramquery = $_GET;
 			$paramquery[nextpage] = "2";

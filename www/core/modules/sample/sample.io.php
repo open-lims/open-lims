@@ -165,7 +165,7 @@ class SampleIO
 			$list->override_last_line("<span class='italic'>No results found!</span>");
 		}
 		
-		$template = new Template("languages/en-gb/template/samples/list_user.html");	
+		$template = new Template("template/samples/list_user.html");	
 
 		$template->set_var("table", $list->get_list($result_array, $_GET[page]));
 		
@@ -314,7 +314,7 @@ class SampleIO
 			$organisation_unit_io = new OrganisationUnitIO;
 			$organisation_unit_io->detail();
 			
-			$template = new Template("languages/en-gb/template/samples/list.html");
+			$template = new Template("template/samples/list.html");
 
 			$template->set_var("table", $list->get_list($result_array, $_GET[page]));
 			
@@ -478,7 +478,7 @@ class SampleIO
 				$list->override_last_line("<span class='italic'>No results found!</span>");
 			}
 			
-			$template = new Template("languages/en-gb/template/samples/list_parents.html");
+			$template = new Template("template/samples/list_parents.html");
 
 			$template->set_var("table", $list->get_list($result_array, $_GET[page]));
 			
@@ -640,7 +640,7 @@ class SampleIO
 				$list->override_last_line("<span class='italic'>No results found!</span>");
 			}
 			
-			$template = new Template("languages/en-gb/template/samples/list.html");
+			$template = new Template("template/samples/list.html");
 
 			$add_sample_paramquery = $_GET;
 			$add_sample_paramquery[username] = $_GET[username];
@@ -1141,7 +1141,7 @@ class SampleIO
 					}
 					// Assistant Bar End
 				
-					$template = new Template("languages/en-gb/template/samples/new_sample_page_1.html");	
+					$template = new Template("template/samples/new_sample_page_1.html");	
 					$template->set_var("bar",$assistant_bar_io->get_content());
 					$template->set_var("link",$params);	
 		
@@ -1241,7 +1241,7 @@ class SampleIO
 					}
 					// Assistant Bar End
 	
-					$template = new Template("languages/en-gb/template/samples/new_sample_page_2.html");	
+					$template = new Template("template/samples/new_sample_page_2.html");	
 					$template->set_var("bar",$assistant_bar_io->get_content());
 					$template->set_var("link",$params);	
 					
@@ -1363,7 +1363,7 @@ class SampleIO
 					}
 					// Assistant Bar End
 	
-					$template = new Template("languages/en-gb/template/samples/new_sample_page_3.html");
+					$template = new Template("template/samples/new_sample_page_3.html");
 					$template->set_var("bar",$assistant_bar_io->get_content());
 					$template->set_var("link",$params);	
 				
@@ -1611,7 +1611,7 @@ class SampleIO
 						{
 							if ($is_value == true)
 							{
-								$template = new Template("languages/en-gb/template/samples/new_sample_page_4_value.html");
+								$template = new Template("template/samples/new_sample_page_4_value.html");
 								$template->set_var("bar",$assistant_bar_io->get_content());
 								$template->set_var("link",$params);	
 								
@@ -1630,7 +1630,7 @@ class SampleIO
 							}
 							else
 							{
-								$template = new Template("languages/en-gb/template/samples/new_sample_page_4_sample.html");
+								$template = new Template("template/samples/new_sample_page_4_sample.html");
 								$template->set_var("bar",$assistant_bar_io->get_content());
 								$template->set_var("link",$params);	
 								
@@ -1690,7 +1690,7 @@ class SampleIO
 						}
 						else
 						{
-							$template = new Template("languages/en-gb/template/samples/new_sample_page_4_error.html");
+							$template = new Template("template/samples/new_sample_page_4_error.html");
 							$template->set_var("bar",$assistant_bar_io->get_content());
 							$template->set_var("link",$params);
 							$template->set_var("keywords", $_POST[keywords]);
@@ -1700,7 +1700,7 @@ class SampleIO
 					}
 					else
 					{
-						$template = new Template("languages/en-gb/template/samples/new_sample_page_4_error.html");
+						$template = new Template("template/samples/new_sample_page_4_error.html");
 						$template->set_var("bar",$assistant_bar_io->get_content());
 						$template->set_var("link",$params);	
 						$template->output();
@@ -1754,7 +1754,7 @@ class SampleIO
 					}
 					// Assistant Bar End
 	
-					$template = new Template("languages/en-gb/template/samples/new_sample_page_5.html");
+					$template = new Template("template/samples/new_sample_page_5.html");
 					$template->set_var("bar",$assistant_bar_io->get_content());
 					$template->set_var("link",$params);	
 				
@@ -1906,7 +1906,7 @@ class SampleIO
 				$session->write_value("ADD_ITEM_TEMP_DESCRIPTION_".$unique_id, $_POST[description], true);
 			}
 			
-			$template = new Template("languages/en-gb/template/samples/add_as_item.html");
+			$template = new Template("template/samples/add_as_item.html");
 		
 			$result = array();
 			$counter = 0;
@@ -1945,7 +1945,7 @@ class SampleIO
 					
 		if ($_GET[nextpage] < 2)
 		{
-			$template = new Template("languages/en-gb/template/samples/associate.html");
+			$template = new Template("template/samples/associate.html");
 			
 			$paramquery = $_GET;
 			$paramquery[nextpage] = 2;
@@ -2032,7 +2032,7 @@ class SampleIO
 				$sample = new Sample($_GET[sample_id]);
 				$owner = new User($sample->get_owner_id());
 			
-				$template = new Template("languages/en-gb/template/samples/detail.html");
+				$template = new Template("template/samples/detail.html");
 				
 				$template->set_var("id", $sample->get_formatted_id());
 				$template->set_var("name", $sample->get_name());
@@ -2286,7 +2286,7 @@ class SampleIO
 				
 				if ($page_1_passed == false)
 				{
-					$template = new Template("languages/en-gb/template/samples/move.html");
+					$template = new Template("template/samples/move.html");
 						
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";
@@ -2365,7 +2365,7 @@ class SampleIO
 			{
 				if ($_GET[sure] != "true")
 				{
-					$template = new Template("languages/en-gb/template/samples/set_availability.html");
+					$template = new Template("template/samples/set_availability.html");
 					
 					$paramquery = $_GET;
 					$paramquery[sure] = "true";
@@ -2499,7 +2499,7 @@ class SampleIO
 					$list->override_last_line("<span class='italic'>No results found!</span>");
 				}
 	
-				$template = new Template("languages/en-gb/template/samples/location_history.html");
+				$template = new Template("template/samples/location_history.html");
 				
 				$sample = new Sample($_GET[sample_id]);
 				

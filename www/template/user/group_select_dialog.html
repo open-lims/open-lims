@@ -1,0 +1,76 @@
+<script>
+$(document).ready(function()
+{
+	var get_array = getQueryParams(document.location.search);
+	
+	$("#GroupSelectDialog").dialog(
+	{
+		autoOpen: false,
+		buttons: 
+		{
+			"Close": function()
+			{
+				$( this ).dialog( "close" );
+			},
+			"OK": function()
+			{
+				$("#GroupSelectDialogOK").html("true");
+				$( this ).dialog( "close" );
+			}
+		},
+		height: 380,
+		width: 450
+	});
+	
+	$("#GroupSelectDialog").bind( "dialogopen", function(event, ui) 
+	{
+		$.ajax(
+		{
+			type: "GET",
+			url: "core/modules/user/user.ajax.php",
+			data: "session_id="+get_array['session_id']+"&run=get_groups_in_option",
+			success: function(data)
+			{
+				if (data)
+				{
+					$("#GroupSelectDialogSelect").html(data);
+				}
+			}
+		});
+		$("#GroupSelectDialogOK").html("false");
+	});
+	
+	
+	$("#GroupSelectDialogSearchField").keyup(function()
+	{
+		$.ajax(
+		{
+			type: "GET",
+			url: "core/modules/user/user.ajax.php",
+			data: "session_id="+get_array['session_id']+"&run=get_groups_in_option&string="+$("#GroupSelectDialogSearchField").val(),
+			success: function(data)
+			{
+				if (data)
+				{
+					$("#GroupSelectDialogSelect").html(data);
+				}
+			}
+		});
+	});
+	
+});
+</script>
+
+<div id="GroupSelectDialog" title="Add Group" style='display: none;'>
+	<div style='text-align: center; font-weight: bold;'>
+		<div id='GroupSelectDialogSearch'>
+			<input type='text' id='GroupSelectDialogSearchField' size='50' />
+		</div>
+		<div>
+			<select style='width: 400px;' size='12' id="GroupSelectDialogSelect">
+			
+			</select>
+		</div>
+		<div style='display: none;' id='GroupSelectDialogOK'></div>
+	</div>
+</div>

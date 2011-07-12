@@ -29,8 +29,7 @@ class SampleCommon_IO
 {
 	public static function tab_header()
 	{			
-		$template = new Template("languages/en-gb/template/samples/tabs/small_tab_header.html");
-		$template->output();
+		$tab_io = new Tab_IO();
 
 		// Main Page
 		$paramquery[username] 	= $_GET[username];
@@ -41,21 +40,9 @@ class SampleCommon_IO
 		$params 				= http_build_query($paramquery,'','&#38;');
 		unset($paramquery);
 		
-		if ($_GET[run] != "parent_item_list" and $_GET[run] != "project_list" and $_GET[run] != "item_list")
-		{ 
-			$template = new Template("languages/en-gb/template/samples/tabs/generic_active.html");
-			$template->set_var("title", "Main Page");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		else
-		{
-			$template = new Template("languages/en-gb/template/samples/tabs/generic.html");
-			$template->set_var("title", "Main Page");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-						
+		$tab_io->add("main", "Main Page", $params, false);
+		
+					
 		// Parent Item Dialogs
 		$module_dialog_array = ModuleDialog::list_dialogs_by_type("parent_item_list");
 		
@@ -71,20 +58,7 @@ class SampleCommon_IO
 				$paramquery[dialog]		= $value[internal_name];
 				$params 				= http_build_query($paramquery,'','&#38;');
 				
-				if ($_GET[run] == "parent_item_list" and $_GET[dialog] == $value[internal_name])
-				{ 
-					$template = new Template("languages/en-gb/template/samples/tabs/generic_active.html");
-					$template->set_var("title", $value[display_name]);
-					$template->set_var("params", $params);
-					$template->output();
-				}
-				else
-				{
-					$template = new Template("languages/en-gb/template/samples/tabs/generic.html");
-					$template->set_var("title", $value[display_name]);
-					$template->set_var("params", $params);
-					$template->output();
-				}
+				$tab_io->add("pil_".$value[internal_name], $value[display_name], $params, false);
 			}
 		}
 		
@@ -103,25 +77,32 @@ class SampleCommon_IO
 				$paramquery[dialog]		= $value[internal_name];
 				$params 				= http_build_query($paramquery,'','&#38;');
 				
-				if ($_GET[run] == "item_list" and $_GET[dialog] == $value[internal_name])
-				{ 
-					$template = new Template("languages/en-gb/template/samples/tabs/generic_active.html");
-					$template->set_var("title", $value[display_name]);
-					$template->set_var("params", $params);
-					$template->output();
-				}
-				else
-				{
-					$template = new Template("languages/en-gb/template/samples/tabs/generic.html");
-					$template->set_var("title", $value[display_name]);
-					$template->set_var("params", $params);
-					$template->output();
-				}
+				$tab_io->add("il_".$value[internal_name], $value[display_name], $params, false);
 			}
 		}
 		
-		$template = new Template("languages/en-gb/template/samples/tabs/small_tab_footer.html");
-		$template->output();
+		
+		if ($_GET[run] != "parent_item_list" and $_GET[run] != "item_list")
+		{ 
+			$tab_io->activate("main");
+		}
+		else
+		{
+			if ($_GET[run] == "item_list" and $_GET[dialog])
+			{
+				$tab_io->activate("il_".$_GET[dialog]);
+			}
+			elseif ($_GET[run] == "parent_item_list" and $_GET[dialog])
+			{
+				$tab_io->activate("pil_".$_GET[dialog]);
+			}
+			else
+			{
+				$tab_io->activate("main");
+			}
+		}
+
+		$tab_io->output();
 	}
 
 }

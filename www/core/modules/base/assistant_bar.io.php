@@ -99,7 +99,7 @@ class AssistantBarIO {
 		{
 			$return = "";
 			
-			$template = new Template("languages/en-gb/template/assistants/header.html");
+			$template = new Template("template/assistants/header.html");
 			$return .= $template->get_string();
 			
 			$element_width = floor(730/count($this->screen_array));
@@ -109,7 +109,7 @@ class AssistantBarIO {
 				switch($value[status]):
 				
 					case(0):
-						$template = new Template("languages/en-gb/template/assistants/element.html");
+						$template = new Template("template/assistants/element.html");
 						$template->set_var("width", $element_width);
 						$template->set_var("image", $key."".$this->unvisited);
 						$template->set_var("text", $value[name]);
@@ -118,7 +118,7 @@ class AssistantBarIO {
 					break;
 					
 					case(1):
-						$template = new Template("languages/en-gb/template/assistants/element.html");
+						$template = new Template("template/assistants/element.html");
 						$template->set_var("width", $element_width);
 						$template->set_var("image", $key."".$this->active);
 						$template->set_var("text", $value[name]);
@@ -137,7 +137,7 @@ class AssistantBarIO {
 					break;
 					
 					case(2):
-						$template = new Template("languages/en-gb/template/assistants/element.html");
+						$template = new Template("template/assistants/element.html");
 						$template->set_var("width", $element_width);
 						$template->set_var("image", $key."".$this->visited);
 						$template->set_var("text", $value[name]);
@@ -159,7 +159,7 @@ class AssistantBarIO {
 					
 			}
 			
-			$template = new Template("languages/en-gb/template/assistants/footer.html");
+			$template = new Template("template/assistants/footer.html");
 			$return .= $template->get_string();
 			
 			return $return;

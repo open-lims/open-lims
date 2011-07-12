@@ -1,0 +1,57 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Sample Data Search",0) -->
+
+<br />
+<div class='SearchContainer'>
+<form action='index.php?[[PARAMS]]' method='post' onsubmit='return submitForm(this.submitbutton)'>
+<br />
+<br />
+<table class='SearchTable'>
+	<tr>
+		<td colspan='2'>
+			<input type='text' name='string' size='47' class='FormTextfield' />
+			<span class='formError'>[[ERROR]]</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan='2'><div class='center'><span class='smallTextBlack'>use * as a wildcard character</span></div></td>
+	</tr>
+	<tr>
+		<td colspan='2'><br /></td>
+	</tr>
+	<tr>
+		<td colspan='2'>
+			<select class='SearchCommonSelect' id='SearchDataAjaxSelectProject' size='8' name='sample_id'>
+			
+				<option value='0' selected='selected'>All</option>
+			
+				<!-- FOREACH BEGIN ([[SAMPLE_ARRAY]]) -->
+		
+					<option value='[[SAMPLE_ARRAY:VALUE]]' [[SAMPLE_ARRAY:SELECTED]]>[[SAMPLE_ARRAY:CONTENT]]</option>
+		
+				<!-- FOREACH END -->
+			
+			</select>
+		</td>
+	</tr>
+
+		<!-- FOREACH BEGIN ([[ITEM_TYPE_ARRAY]]) -->
+		
+		<tr>
+			<td colspan='2'>
+			<input type='checkbox' name='[[ITEM_TYPE_ARRAY:NAME]]' value='[[ITEM_TYPE_ARRAY:VALUE]]' [[ITEM_TYPE_ARRAY:CHECKED]]>[[ITEM_TYPE_ARRAY:TITLE]]</option>
+			</td>
+		</tr>
+		
+		<!-- FOREACH END -->
+
+	<tr>
+		<td colspan='2'><br /><input type='submit' value='Search' class='FormButton' /></td>
+	</tr>
+</table>
+<br />
+</form>
+</div>
+					
+<!-- CONTAINER END (0) -->

@@ -46,7 +46,7 @@ class ProjectAdminIO
 			{
 				$table_io = new TableIO("OverviewTable");
 				
-				$template = new Template("languages/en-gb/template/projects/admin/permission.html");
+				$template = new Template("template/projects/admin/permission.html");
 				
 				$add_user_paramquery = $_GET;
 				$add_user_paramquery[run] = "admin_permission_add_user";
@@ -371,7 +371,7 @@ class ProjectAdminIO
 				
 				if ($page_1_passed == false)
 				{
-					$template = new Template("languages/en-gb/template/projects/admin/permission_add_user.html");
+					$template = new Template("template/projects/admin/permission_add_user.html");
 					
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";
@@ -430,7 +430,7 @@ class ProjectAdminIO
 					
 					if ($page_2_passed == false)
 					{
-						$template = new Template("languages/en-gb/template/projects/admin/permission_add_edit.html");
+						$template = new Template("template/projects/admin/permission_add_edit.html");
 						
 						$template->set_var("add_edit","Add");
 						
@@ -612,7 +612,7 @@ class ProjectAdminIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/projects/admin/permission_add_group.html");
+				$template = new Template("template/projects/admin/permission_add_group.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -671,7 +671,7 @@ class ProjectAdminIO
 				
 				if ($page_2_passed == false)
 				{
-					$template = new Template("languages/en-gb/template/projects/admin/permission_add_edit.html");
+					$template = new Template("template/projects/admin/permission_add_edit.html");
 					
 					$template->set_var("add_edit","Add");
 					
@@ -851,7 +851,7 @@ class ProjectAdminIO
 				
 				if ($page_1_passed == false)
 				{
-					$template = new Template("languages/en-gb/template/projects/admin/permission_add_ou.html");
+					$template = new Template("template/projects/admin/permission_add_ou.html");
 					
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";
@@ -910,7 +910,7 @@ class ProjectAdminIO
 					
 					if ($page_2_passed == false)
 					{
-						$template = new Template("languages/en-gb/template/projects/admin/permission_add_edit.html");
+						$template = new Template("template/projects/admin/permission_add_edit.html");
 						
 						$template->set_var("add_edit","Add");
 						
@@ -1087,7 +1087,7 @@ class ProjectAdminIO
 					
 					if ($page_1_passed == false)
 					{
-						$template = new Template("languages/en-gb/template/projects/admin/permission_add_edit.html");
+						$template = new Template("template/projects/admin/permission_add_edit.html");
 								
 						$template->set_var("add_edit","Edit");
 						
@@ -1321,7 +1321,7 @@ class ProjectAdminIO
 				{
 					if ($_GET[sure] != "true")
 					{
-						$template = new Template("languages/en-gb/template/projects/admin/permission_delete.html");
+						$template = new Template("template/projects/admin/permission_delete.html");
 						
 						$paramquery = $_GET;
 						$paramquery[sure] = "true";
@@ -1438,7 +1438,7 @@ class ProjectAdminIO
 				
 				if ($page_1_passed == false)
 				{
-					$template = new Template("languages/en-gb/template/projects/admin/rename.html");
+					$template = new Template("template/projects/admin/rename.html");
 				
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";
@@ -1521,7 +1521,7 @@ class ProjectAdminIO
 				
 				if ($page_1_passed == false)
 				{
-					$template = new Template("languages/en-gb/template/projects/admin/chown.html");
+					$template = new Template("template/projects/admin/chown.html");
 				
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";
@@ -1615,7 +1615,7 @@ class ProjectAdminIO
 		
 				if ($page_1_passed == false)
 				{
-					$template = new Template("languages/en-gb/template/projects/admin/move_page_1.html");
+					$template = new Template("template/projects/admin/move_page_1.html");
 					
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";
@@ -1655,7 +1655,7 @@ class ProjectAdminIO
 						
 						if ($page_2_passed == false)
 						{
-							$template = new Template("languages/en-gb/template/projects/admin/move_page_2_ou.html");
+							$template = new Template("template/projects/admin/move_page_2_ou.html");
 			
 							$paramquery = $_GET;
 							$paramquery[nextpage] = "2";
@@ -1729,7 +1729,7 @@ class ProjectAdminIO
 						
 						if ($page_2_passed == false)
 						{
-							$template = new Template("languages/en-gb/template/projects/admin/move_page_2_project.html");
+							$template = new Template("template/projects/admin/move_page_2_project.html");
 			
 							$paramquery = $_GET;
 							$paramquery[nextpage] = "2";
@@ -1841,7 +1841,7 @@ class ProjectAdminIO
 				
 				if ($page_1_passed == false)
 				{
-					$template = new Template("languages/en-gb/template/projects/admin/quota.html");
+					$template = new Template("template/projects/admin/quota.html");
 				
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";
@@ -1906,7 +1906,7 @@ class ProjectAdminIO
 			
 				if ($_GET[sure] != "true")
 				{
-					$template = new Template("languages/en-gb/template/projects/admin/delete.html");
+					$template = new Template("template/projects/admin/delete.html");
 					
 					$paramquery = $_GET;
 					$paramquery[sure] = "true";
@@ -1972,7 +1972,7 @@ class ProjectAdminIO
 			
 				if ($_GET[sure] != "true")
 				{
-					$template = new Template("languages/en-gb/template/projects/admin/full_delete.html");
+					$template = new Template("template/projects/admin/full_delete.html");
 					
 					$paramquery = $_GET;
 					$paramquery[sure] = "true";
@@ -2038,7 +2038,7 @@ class ProjectAdminIO
 			
 				if ($_GET[sure] != "true")
 				{
-					$template = new Template("languages/en-gb/template/projects/admin/restore.html");
+					$template = new Template("template/projects/admin/restore.html");
 					
 					$paramquery = $_GET;
 					$paramquery[sure] = "true";
@@ -2123,7 +2123,7 @@ class ProjectAdminIO
 				
 				if ($page_1_passed == false)
 				{
-					$template = new Template("languages/en-gb/template/projects/admin/cancel.html");
+					$template = new Template("template/projects/admin/cancel.html");
 					
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";
@@ -2187,7 +2187,7 @@ class ProjectAdminIO
 			
 				if ($_GET[sure] != "true")
 				{
-					$template = new Template("languages/en-gb/template/projects/admin/reactivate.html");
+					$template = new Template("template/projects/admin/reactivate.html");
 					
 					$paramquery = $_GET;
 					$paramquery[sure] = "true";
@@ -2272,7 +2272,7 @@ class ProjectAdminIO
 					$parent_type = "Project";
 				}
 			
-				$template = new Template("languages/en-gb/template/projects/admin/menu.html");
+				$template = new Template("template/projects/admin/menu.html");
 				
 				$template->set_var("name", $project->get_name());
 				$template->set_var("owner", $project_owner->get_full_name(false));

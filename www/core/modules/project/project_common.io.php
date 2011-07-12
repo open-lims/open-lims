@@ -29,199 +29,87 @@ class ProjectCommon_IO
 {
 	public static function tab_header()
 	{
-		$template = new Template("languages/en-gb/template/projects/tabs/small_tab_header.html");
-		$template->output();
-		
-		if ($_GET[run] != "item_add" and $_GET[run] != "item_list")
-		{
-			switch ($_GET[run]):
-			
-				case "log":
-					$current_tab = 2;
-				break;
-				
-				case "structure":
-					$current_tab = 3;
-				break;
-				
-				case "add_task":
-				case "task_delete";
-				case "task_detail":
-				case "schedule":
-				case "show_tasks":
-				case "task_edit_start":
-				case "task_edit_end":
-					$current_tab = 4;
-				break;
-				
-				
-				case "admin":
-				case "set_permissions":
-				case "add_permissions":
-				case "edit_permissions":
-				case "delete_permission":
-				case "deleteproject":
-				case "cancel":
-				case "reactivate":
-					$current_tab = 8;
-				break;
-				
-				default:
-					$current_tab = 1;
-				break;
-			
-			endswitch;
-		}
-		else
-		{
-			$current_tab = null;
-		}
-
-		
-		// Main Page
-		
-		$paramquery[username] 	= $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav]		= "project";
-		$paramquery[run]		= "detail";
-		$paramquery[project_id]	= $_GET[project_id];
-		$params 				= http_build_query($paramquery,'','&#38;');
-		unset($paramquery);
-		
-		if ($current_tab == 1)
-		{ 
-			$template = new Template("languages/en-gb/template/projects/tabs/generic_active.html");
-			$template->set_var("title", "Main Page");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		else
-		{
-			$template = new Template("languages/en-gb/template/projects/tabs/generic.html");
-			$template->set_var("title", "Main Page");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		
-		
-		// Log
-		
-		$paramquery[username] 	= $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav]		= "project";
-		$paramquery[run]		= "log";
-		$paramquery[project_id]	= $_GET[project_id];
-		$params 				= http_build_query($paramquery,'','&#38;');
-		unset($paramquery);
-		
-		if ($current_tab == 2)
-		{ 
-			$template = new Template("languages/en-gb/template/projects/tabs/generic_active.html");
-			$template->set_var("title", "Log");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		else
-		{
-			$template = new Template("languages/en-gb/template/projects/tabs/generic.html");
-			$template->set_var("title", "Log");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		
-		
-		// Structure
-		
-		$paramquery[username] 	= $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav]		= "project";
-		$paramquery[run]		= "structure";
-		$paramquery[project_id]	= $_GET[project_id];
-		$params 				= http_build_query($paramquery,'','&#38;');
-		unset($paramquery);
-		
-		if ($current_tab == 3)
-		{ 
-			$template = new Template("languages/en-gb/template/projects/tabs/generic_active.html");
-			$template->set_var("title", "Structure");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		else
-		{
-			$template = new Template("languages/en-gb/template/projects/tabs/generic.html");
-			$template->set_var("title", "Structure");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		
-		
-		// Schedule
-		
-		$paramquery[username] 	= $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav]		= "project";
-		$paramquery[run]		= "schedule";
-		$paramquery[project_id]	= $_GET[project_id];
-		$params 				= http_build_query($paramquery,'','&#38;');
-		unset($paramquery);
-		
-		if ($current_tab == 4)
-		{ 
-			$template = new Template("languages/en-gb/template/projects/tabs/generic_active.html");
-			$template->set_var("title", "Schedule");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		else
-		{
-			$template = new Template("languages/en-gb/template/projects/tabs/generic.html");
-			$template->set_var("title", "Schedule");
-			$template->set_var("params", $params);
-			$template->output();
-		}
-		
-		
-		// Item Lister Dialogs
-		
-		$module_dialog_array = ModuleDialog::list_dialogs_by_type("item_list");
-		
-		if (is_array($module_dialog_array) and count($module_dialog_array) >= 1)
-		{
-			foreach ($module_dialog_array as $key => $value)
-			{
-				$paramquery[username] 	= $_GET[username];
-				$paramquery[session_id] = $_GET[session_id];
-				$paramquery[nav]		= "project";
-				$paramquery[run]		= "item_list";
-				$paramquery[project_id]	= $_GET[project_id];
-				$paramquery[dialog]		= $value[internal_name];
-				$params 				= http_build_query($paramquery,'','&#38;');
-				
-				if ($_GET[run] == "item_list" and $_GET[dialog] == $value[internal_name])
-				{ 
-					$template = new Template("languages/en-gb/template/projects/tabs/generic_active.html");
-					$template->set_var("title", $value[display_name]);
-					$template->set_var("params", $params);
-					$template->output();
-				}
-				else
-				{
-					$template = new Template("languages/en-gb/template/projects/tabs/generic.html");
-					$template->set_var("title", $value[display_name]);
-					$template->set_var("params", $params);
-					$template->output();
-				}
-			}
-		}
-		
-		
-		// Administration
-		
 		if ($_GET[project_id])
 		{
+			$tab_io = new Tab_IO();
+						
+			// Main Page
+			
+			$paramquery[username] 	= $_GET[username];
+			$paramquery[session_id] = $_GET[session_id];
+			$paramquery[nav]		= "project";
+			$paramquery[run]		= "detail";
+			$paramquery[project_id]	= $_GET[project_id];
+			$params 				= http_build_query($paramquery,'','&#38;');
+			unset($paramquery);
+			
+			$tab_io->add("main", "Main Page", $params, false);
+			
+			// Log
+			
+			$paramquery[username] 	= $_GET[username];
+			$paramquery[session_id] = $_GET[session_id];
+			$paramquery[nav]		= "project";
+			$paramquery[run]		= "log";
+			$paramquery[project_id]	= $_GET[project_id];
+			$params 				= http_build_query($paramquery,'','&#38;');
+			unset($paramquery);
+			
+			$tab_io->add("log", "Log", $params, false);
+			
+			
+			// Structure
+			
+			$paramquery[username] 	= $_GET[username];
+			$paramquery[session_id] = $_GET[session_id];
+			$paramquery[nav]		= "project";
+			$paramquery[run]		= "structure";
+			$paramquery[project_id]	= $_GET[project_id];
+			$params 				= http_build_query($paramquery,'','&#38;');
+			unset($paramquery);
+			
+			$tab_io->add("structure", "Structure", $params, false);
+			
+			
+			// Schedule
+			
+			$paramquery[username] 	= $_GET[username];
+			$paramquery[session_id] = $_GET[session_id];
+			$paramquery[nav]		= "project";
+			$paramquery[run]		= "schedule";
+			$paramquery[project_id]	= $_GET[project_id];
+			$params 				= http_build_query($paramquery,'','&#38;');
+			unset($paramquery);
+			
+			$tab_io->add("schedule", "Schedule", $params, false);
+			
+			
+			// Item Lister Dialogs
+			
+			$module_dialog_array = ModuleDialog::list_dialogs_by_type("item_list");
+			
+			if (is_array($module_dialog_array) and count($module_dialog_array) >= 1)
+			{
+				foreach ($module_dialog_array as $key => $value)
+				{
+					$paramquery[username] 	= $_GET[username];
+					$paramquery[session_id] = $_GET[session_id];
+					$paramquery[nav]		= "project";
+					$paramquery[run]		= "item_list";
+					$paramquery[project_id]	= $_GET[project_id];
+					$paramquery[dialog]		= $value[internal_name];
+					$params 				= http_build_query($paramquery,'','&#38;');
+					
+					$tab_io->add($value[internal_name], $value[display_name], $params, false);
+				}
+			}
+			
+			
+			// Administration
+			
+			
 			$project_security = new ProjectSecurity($_GET[project_id]);	
-
+	
 			if ($project_security->is_access(2,false) or 
 				$project_security->is_access(3,false) or 
 				$project_security->is_access(4,false) or 
@@ -238,36 +126,67 @@ class ProjectCommon_IO
 				$params 				= http_build_query($paramquery,'','&#38;');
 			 	unset($paramquery);
 			 
-				if ($current_tab == 8)
-				{ 
-					$template = new Template("languages/en-gb/template/projects/tabs/generic_active.html");
-					$template->set_var("title", "Administrat.");
-					$template->set_var("params", $params);
-					$template->output();
-				}
-				else
-				{
-					$template = new Template("languages/en-gb/template/projects/tabs/generic.html");
-					$template->set_var("title", "Administrat.");
-					$template->set_var("params", $params);
-					$template->output();
-				}
+				$tab_io->add("admin", "Administrat.", $params, false, false);
 			}
 			else
 			{
-				$template = new Template("languages/en-gb/template/projects/tabs/generic_inactive.html");
-				$template->set_var("title", "Administrat.");
-				$template->output();
+				$tab_io->add("admin", "Administrat.", $params, false, true);
 			}
+		
+			if ($_GET[run] != "item_add" and $_GET[run] != "item_list")
+			{
+				switch ($_GET[run]):
+				
+					case "log":
+						$tab_io->activate("log");
+					break;
+					
+					case "structure":
+						$tab_io->activate("structure");
+					break;
+					
+					case "add_task":
+					case "task_delete";
+					case "task_detail":
+					case "schedule":
+					case "show_tasks":
+					case "task_edit_start":
+					case "task_edit_end":
+						$tab_io->activate("schedule");
+					break;
+					
+					
+					case "admin":
+					case "set_permissions":
+					case "add_permissions":
+					case "edit_permissions":
+					case "delete_permission":
+					case "deleteproject":
+					case "cancel":
+					case "reactivate":
+						$tab_io->activate("admin");
+					break;
+					
+					default:
+						$tab_io->activate("main");
+					break;
+				
+				endswitch;
+			}
+			else
+			{
+				if ($_GET[run] == "item_list" and $_GET[dialog])
+				{
+					$tab_io->activate($_GET[dialog]);
+				}
+				else
+				{
+					$tab_io->activate("main");
+				}
+			}
+			
+			$tab_io->output();
 		}
-		else
-		{
-			$template = new Template("languages/en-gb/template/projects/tabs/generic_inactive.html");
-			$template->set_var("title", "Administrat.");
-			$template->output();
-		}
-		$template = new Template("languages/en-gb/template/projects/tabs/small_tab_footer.html");
-		$template->output();
 	}
 
 }

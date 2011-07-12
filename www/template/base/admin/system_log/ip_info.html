@@ -1,0 +1,63 @@
+<br />
+
+<!-- CONTAINER BEGIN ("System Log - IP Detail",0) -->
+
+<table class='AdminUserDetailTable'>
+	
+	<tr>
+		<td colspan='2'><div class='bold'>General</div></td>
+	</tr>
+	
+	<tr>
+		<td width='25%'>IP:</td>
+		<td>[[IP]]</td>	
+	</tr>
+	
+	<tr>
+		<td width='25%'>Successful Logins:</td>
+		<td>[[SUCCESSFUL_LOGINS]]</td>	
+	</tr>
+	
+	<tr>
+		<td width='25%'>Failed Logins:</td>
+		<td>[[FAILED_LOGINS]]</td>	
+	</tr>
+
+	<tr>
+		<td colspan='2'><div class='horizontal_line'></div></td>
+	</tr>
+	
+	<tr>
+		<td colspan='2'><div class='bold'>Loged-In Users</div></td>
+	</tr>
+	
+</table>
+
+<table class='OverviewTable'>
+	<tr>
+		<th>Username:</th>
+		<th>Fullname:</th>
+	</tr>
+					
+	<!-- FOREACH BEGIN ([[USER]]) -->
+			
+		<tr>
+			<td>[[USER:USERNAME]]</td>
+			<td>[[USER:FULLNAME]]</td>
+		</tr>
+	
+	<!-- FOREACH END -->
+	
+	<!-- IF ([[NO_USER]]) -->
+	
+		<tr>
+			<td colspan='2'><span class='italic'>No User Found!</span></td>
+		</tr>
+	
+	<!-- ENDIF -->
+
+</table>
+	
+
+
+<!-- CONTAINER END (0) -->

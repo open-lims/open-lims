@@ -109,7 +109,7 @@ class AdminEquipmentTypeIO
 
 	public static function home()
 	{
-		$template = new Template("languages/en-gb/template/equipment/admin/equipment_type/list.html");	
+		$template = new Template("template/equipment/admin/equipment_type/list.html");	
 
 		$content_array = array();
 		
@@ -223,7 +223,7 @@ class AdminEquipmentTypeIO
 	
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/equipment/admin/equipment_type/add.html");
+				$template = new Template("template/equipment/admin/equipment_type/add.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -362,7 +362,7 @@ class AdminEquipmentTypeIO
 		{
 			if ($_GET[sure] != "true")
 			{
-				$template = new Template("languages/en-gb/template/equipment/admin/equipment_type/delete.html");
+				$template = new Template("template/equipment/admin/equipment_type/delete.html");
 				
 				$paramquery = $_GET;
 				$paramquery[sure] = "true";
@@ -414,7 +414,7 @@ class AdminEquipmentTypeIO
 		{
 			$equipment_type = new EquipmentType($_GET[id]);	
 					
-			$template = new Template("languages/en-gb/template/equipment/admin/equipment_type/detail.html");
+			$template = new Template("template/equipment/admin/equipment_type/detail.html");
 			
 			$paramquery = $_GET;
 			$paramquery[action] = "rename";
@@ -572,7 +572,7 @@ class AdminEquipmentTypeIO
 	
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/equipment/admin/equipment_type/rename.html");
+				$template = new Template("template/equipment/admin/equipment_type/rename.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -685,7 +685,7 @@ class AdminEquipmentTypeIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/equipment/admin/equipment_type/add_user.html");
+				$template = new Template("template/equipment/admin/equipment_type/add_user.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -745,7 +745,7 @@ class AdminEquipmentTypeIO
 		{
 			if ($_GET[sure] != "true")
 			{
-				$template = new Template("languages/en-gb/template/equipment/admin/equipment_type/delete_user.html");
+				$template = new Template("template/equipment/admin/equipment_type/delete_user.html");
 				
 				$paramquery = $_GET;
 				$paramquery[sure] = "true";
@@ -827,7 +827,7 @@ class AdminEquipmentTypeIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/equipment/admin/equipment_type/add_organisation_unit.html");
+				$template = new Template("template/equipment/admin/equipment_type/add_organisation_unit.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -887,7 +887,7 @@ class AdminEquipmentTypeIO
 		{
 			if ($_GET[sure] != "true")
 			{
-				$template = new Template("languages/en-gb/template/equipment/admin/equipment_type/delete_organisation_unit.html");
+				$template = new Template("template/equipment/admin/equipment_type/delete_organisation_unit.html");
 				
 				$paramquery = $_GET;
 				$paramquery[sure] = "true";
@@ -947,7 +947,7 @@ class AdminEquipmentTypeIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/equipment/admin/equipment_type/change_location.html");
+				$template = new Template("template/equipment/admin/equipment_type/change_location.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";

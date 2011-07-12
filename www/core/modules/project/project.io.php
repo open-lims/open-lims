@@ -107,7 +107,7 @@ class ProjectIO
 		}
 		
 		
-		$template = new Template("languages/en-gb/template/projects/user_related_projects.html");
+		$template = new Template("template/projects/user_related_projects.html");
 
 		$template->set_var("title","My Projects");
 
@@ -256,7 +256,7 @@ class ProjectIO
 			$organisation_unit_io = new OrganisationUnitIO;
 			$organisation_unit_io->detail();
 
-			$template = new Template("languages/en-gb/template/projects/organisation_unit_related_projects.html");	
+			$template = new Template("template/projects/organisation_unit_related_projects.html");	
 
 			$template->set_var("table", $table_io->get_table($page ,$project_array_cardinality));		
 			
@@ -696,7 +696,7 @@ class ProjectIO
 						}
 					}
 				
-					$template = new Template("languages/en-gb/template/projects/new_project_page_1.html");	
+					$template = new Template("template/projects/new_project_page_1.html");	
 					$template->set_var("bar",$assistant_bar_io->get_content());
 					$template->set_var("link",$params);	
 					
@@ -839,7 +839,7 @@ class ProjectIO
 						}
 					}
 				
-					$template = new Template("languages/en-gb/template/projects/new_project_page_2.html");	
+					$template = new Template("template/projects/new_project_page_2.html");	
 					$template->set_var("bar",$assistant_bar_io->get_content());
 					$template->set_var("link",$params);	
 				
@@ -922,7 +922,7 @@ class ProjectIO
 						}
 					}
 				
-					$template = new Template("languages/en-gb/template/projects/new_project_page_3.html");	
+					$template = new Template("template/projects/new_project_page_3.html");	
 					$template->set_var("bar",$assistant_bar_io->get_content());
 					$template->set_var("link",$params);	
 				
@@ -1080,7 +1080,7 @@ class ProjectIO
 						
 						if ($is_value == true)
 						{
-							$template = new Template("languages/en-gb/template/projects/new_project_page_4_value.html");
+							$template = new Template("template/projects/new_project_page_4_value.html");
 							$template->set_var("bar",$assistant_bar_io->get_content());
 							$template->set_var("link",$params);	
 							
@@ -1097,7 +1097,7 @@ class ProjectIO
 						}
 						else
 						{
-							$template = new Template("languages/en-gb/template/projects/new_project_page_4_error.html");
+							$template = new Template("template/projects/new_project_page_4_error.html");
 							$template->set_var("bar",$assistant_bar_io->get_content());
 							$template->set_var("link",$params);	
 							$template->output();
@@ -1105,7 +1105,7 @@ class ProjectIO
 					}
 					else
 					{
-						$template = new Template("languages/en-gb/template/projects/new_project_page_4_error.html");
+						$template = new Template("template/projects/new_project_page_4_error.html");
 						$template->set_var("bar",$assistant_bar_io->get_content());
 						$template->set_var("link",$params);	
 						$template->output();
@@ -1150,7 +1150,7 @@ class ProjectIO
 						}
 					}
 					
-					$template = new Template("languages/en-gb/template/projects/new_project_page_5.html");	
+					$template = new Template("template/projects/new_project_page_5.html");	
 					$template->set_var("bar",$assistant_bar_io->get_content());
 					$template->set_var("link",$params);	
 					
@@ -1254,7 +1254,7 @@ class ProjectIO
 					$paramquery[nextpage] = 0;
 					$params = http_build_query($paramquery,'','&#38;');
 				
-					$template = new Template("languages/en-gb/template/projects/new_project_page_0.html");	
+					$template = new Template("template/projects/new_project_page_0.html");	
 					$template->set_var("link",$params);	
 		
 					$template->output();
@@ -1280,7 +1280,7 @@ class ProjectIO
 				$project = new Project($_GET[project_id]);
 				$project_owner = new User($project->get_owner_id());
 			
-				$template = new Template("languages/en-gb/template/projects/project_detail.html");
+				$template = new Template("template/projects/project_detail.html");
 				
 				$template->set_var("title", $project->get_name());
 				$template->set_var("owner",$project_owner->get_full_name(false));
@@ -1551,7 +1551,7 @@ class ProjectIO
 				
 				if (!$_GET[nextpage])
 				{
-					$template = new Template("languages/en-gb/template/projects/project_proceed.html");
+					$template = new Template("template/projects/project_proceed.html");
 					
 					$paramquery = $_GET;
 					$paramquery[nextpage] = 1;
@@ -1647,7 +1647,7 @@ class ProjectIO
 					
 					if ($comment_page_passed == false)
 					{
-						$template = new Template("languages/en-gb/template/projects/project_proceed_comment.html");
+						$template = new Template("template/projects/project_proceed_comment.html");
 					
 						$paramquery = $_GET;
 						$paramquery[nextpage] = 2;
@@ -1719,7 +1719,7 @@ class ProjectIO
 				$project = new Project($_GET[project_id]);
 				$project_structure_array = $project->get_project_tree();
 				
-				$template = new Template("languages/en-gb/template/projects/project_structure.html");
+				$template = new Template("template/projects/project_structure.html");
 				
 				if (is_array($project_structure_array) and count($project_structure_array) >= 1)
 				{
@@ -1898,7 +1898,7 @@ class ProjectIO
 				$list->override_last_line("<span class='italic'>No results found!</span>");
 			}
 			
-			$template = new Template("languages/en-gb/template/projects/list_projects_by_item.html");
+			$template = new Template("template/projects/list_projects_by_item.html");
 
 			$template->set_var("table", $list->get_list($result_array, $_GET[page]));
 			

@@ -1,0 +1,111 @@
+<br />
+
+<!-- CONTAINER BEGIN ("User Details",0) -->
+		
+<br />
+<table class='formTable'>
+	<tr>
+		<td colspan='2'><div class='profileHeadline'>Personal Information:</div></td>
+	</tr>
+	<tr>
+		<td width='30%'>Username:</td>
+		<td>[[USERNAME]]</td>
+	</tr>
+	<tr>
+		<td>Gender:</td>
+		<td>[[GENDER]]</td>
+	</tr>
+	<tr>
+		<td>First Name:</td>
+		<td>[[FORENAME]]</td>
+	</tr>
+	<tr>
+		<td>Last Name:</td>
+		<td>[[SURNAME]]</td>
+	</tr>
+	<tr>
+		<td>Title:</td>
+		<td>[[TITLE]]</td>
+	</tr>
+	<tr>
+		<td colspan='2'><div class='profileHeadline'>Contact Information:</div></td>
+	</tr>
+	<tr>
+		<td>Mail:</td>
+		<td>[[MAIL]]</td>
+	</tr>
+	<tr>
+		<td>Institution:</td>
+		<td>[[INSTITUTION]]</td>
+	</tr>
+	<tr>
+		<td>Department:</td>
+		<td>[[DEPARTMENT]]</td>
+	</tr>
+	<tr>
+		<td>Street:</td>
+		<td>[[STREET]]</td>
+	</tr>
+	<tr>
+		<td>Zip:</td>
+		<td>[[ZIP]]</td>
+	</tr>
+	<tr>
+		<td>City:</td>
+		<td>[[CITY]]</td>
+	</tr>
+	<tr>
+		<td>Country:</td>
+		<td>[[COUNTRY]]</td>
+	</tr>
+	<tr>
+		<td>Phone (Office):</td>
+		<td>[[PHONE]]</td>
+	</tr>
+	<tr>
+		<td colspan='2'><div class='profileHeadline'>Instant Messengers:</div></td>
+	</tr>
+	<tr>
+		<td>ICQ:</td>
+		<td>[[ICQ]]</td>
+	</tr>
+	<tr>
+		<td>MSN:</td>
+		<td>[[MSN]]</td>
+	</tr>
+	<tr>
+		<td>Yahoo:</td>
+		<td>[[YAHOO]]</td>
+	</tr>
+	<tr>
+		<td>AIM:</td>
+		<td>[[AIM]]</td>
+	</tr>
+	<tr>
+		<td>Skype:</td>
+		<td>[[SKYPE]]</td>
+	</tr>
+	<tr>
+		<td colspan='2'><div class='profileHeadline'>Groups:</div></td>
+	</tr>
+	
+	<!-- FOREACH BEGIN ([[GROUP]]) -->
+			
+		<tr>
+			<td><a href='index.php?[[GROUP:PARAMS]]'>[[GROUP:NAME]]</a></td>
+		</tr>
+	
+	<!-- FOREACH END -->
+	
+	<!-- IF ([[NO_GROUP]]) -->
+	
+		<tr>
+			<td><span class='italic'>No Groups Found!</span></td>
+		</tr>
+	
+	<!-- ENDIF -->
+	
+</table>
+<br />
+				
+<!-- CONTAINER END (0) -->	

@@ -1,0 +1,78 @@
+<script>
+$(document).ready(function()
+{
+	var get_array = getQueryParams(document.location.search);
+	
+	$("#ManufacturerAddDialog").dialog(
+	{
+		autoOpen: false,
+		buttons: 
+		{
+			"Close": function()
+			{
+				$( this ).dialog( "close" );
+			},
+			"OK": function()
+			{
+				$.ajax(
+				{
+					type: "POST",
+					url: "core/modules/manufacturer/manufacturer.ajax.php?session_id="+get_array['session_id']+"&run=exist_name",
+					data: "name="+$("#ManufacturerAddDialogField").val(),
+					success: function(data)
+					{
+						if (data == 0)
+						{
+							$.ajax(
+							{
+								type: "POST",
+								url: "core/modules/manufacturer/manufacturer.ajax.php?session_id="+get_array['session_id']+"&run=add_entry",
+								data: "name="+$("#ManufacturerAddDialogField").val(),
+								success: function(data)
+								{
+									if (data == 1)
+									{
+										$("#ManufacturerAddDialog").dialog( "close" );
+									}
+								}
+							});
+						}
+					}
+				});
+			}
+		},
+		height: 150,
+		width: 450
+	});
+	
+	$( "#ManufacturerAddDialogField" ).keyup(function()
+	{
+		$.ajax(
+		{
+			type: "POST",
+			url: "core/modules/manufacturer/manufacturer.ajax.php?session_id="+get_array['session_id']+"&run=exist_name",
+			data: "name="+$("#ManufacturerAddDialogField").val(),
+			success: function(data)
+			{
+				if (data == 1)
+				{
+					$("#ManufacturerAddDialogField").css("color", "#FF0000");
+				}
+				else
+				{
+					$("#ManufacturerAddDialogField").css("color", "#000000");
+				}
+			}
+		});
+	});
+
+});
+</script>
+
+<div id="ManufacturerAddDialog" title="Add Manufacturer" style='display: none;'>
+	<div style='text-align: center; font-weight: bold;'>
+		<div>
+			<input type='text' id='ManufacturerAddDialogField' size='50' />
+		</div>
+	</div>
+</div>

@@ -1,22 +1,22 @@
-#manufacturerDialogSeach
+#ManufacturerDialogSeach
 {
 	float: left;	
 }
-#manufacturerDialogButton
+#ManufacturerDialogButton
 {
 	float: right;	
 }
-#manufacturerDialogClear
+#ManufacturerDialogClear
 {
 	clear: both;
 }
-#manufacturerDialogNewField
+#ManufacturerDialogNewField
 {
 	font-size: 12px;
 	height: 12px;
 	width: 330px;	
 }
-.manufacturerDialogNewFieldButton
+.ManufacturerDialogNewFieldButton
 {
 	margin: 3px;	
 	border: 0;

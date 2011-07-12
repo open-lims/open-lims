@@ -22,7 +22,7 @@
  */
 
  $user_data = new DataUserData($user->get_user_id());
- $template = new Template("languages/en-gb/template/base/home.html");
+ $template = new Template("template/base/home.html");
 
  $homeDate = date("l, jS F Y");
 
@@ -92,7 +92,7 @@ if (is_array($module_link_array) and count($module_link_array) >= 1)
 	
 	foreach ($module_link_array as $key => $value)
 	{
-		$button_template = new Template("languages/en-gb/template/".$value[file]);
+		$button_template = new Template("template/".$value[file]);
 	
 		$button_paramquery = array();
 		$button_paramquery[username] = $_GET[username];

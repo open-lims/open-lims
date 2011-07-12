@@ -29,7 +29,7 @@ class AdminDataIO
 {
 	public static function home_dialog()
 	{
-		$template = new Template("languages/en-gb/template/data/admin/home_dialog.html");
+		$template = new Template("template/data/admin/home_dialog.html");
 		
 		$template->set_var("base_dir", System::get_base_directory());
 		$template->set_var("system_space", Misc::calc_size(System::get_system_space()));

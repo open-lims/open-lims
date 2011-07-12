@@ -1,0 +1,40 @@
+<br />
+
+<!-- CONTAINER BEGIN ("System Messages",0) -->
+
+<div class='boxIconBar'>
+
+<a href='index.php?[[ADD_PARAMS]]'><img src='images/icons/system_message.png' alt='new' border='0' /></a>&nbsp;<a href='index.php?[[ADD_PARAMS]]'>Add System Message</a>
+
+</div>
+	
+<div class='homeMessage'>
+
+<!-- FOREACH BEGIN ([[MESSAGE_ARRAY]]) -->
+
+	<table width='100%'>
+		<tr>
+			<td>[[MESSAGE_ARRAY:CONTENT]]</td>
+		</tr>
+		<tr>
+			<td><span class='smallTextBlack'>on [[MESSAGE_ARRAY:DATETIME]] by [[MESSAGE_ARRAY:USER]]</span></td>
+		</tr>
+		<tr>
+			<td><span class='smallTextBlack'><a href='index.php?[[MESSAGE_ARRAY:EDIT_PARAMS]]'>Edit</a> <a href='index.php?[[MESSAGE_ARRAY:DELETE_PARAMS]]'>Delete</a></span></td>
+		</td>
+		<tr>
+			<td><div class='horizontal_line'></div></td>
+		</tr>
+	</table>
+
+<!-- FOREACH END -->
+
+<!-- IF ([[NO_ENTRY]]) -->
+	<div class='italic'>No Messeges yet</div>
+<!-- ENDIF -->
+
+</div>
+
+[[PAGE_BAR]]
+
+<!-- CONTAINER END (0) -->

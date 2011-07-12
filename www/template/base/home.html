@@ -1,0 +1,72 @@
+<br />
+<div class='homeWelcome'>Welcome [[USERNAME]]</div>
+<div class='homeDate'>[[DATE]]</div>
+<br />
+<br />
+
+<!-- CONTAINER BEGIN ("Summary",0) -->
+
+<div class='homeSumLeft'>
+	<table width='100%'>
+		<tr>
+			<td width='20px'><img src='images/icons/running_project.png' alt='' /></td>
+			<td width='40%'>My Running Projects</td>
+			<td>[[RUNNING_PROJECTS]]</td>
+		</tr>
+		<tr>
+			<td><img src='images/icons/finished_project.png' alt='' /></td>
+			<td>My Finished Projects</td>
+			<td>[[FINISHED_PROJECTS]]</td>
+		</tr>
+		<tr>
+			<td><img src='images/icons/used_space.png' alt='' /></td>
+			<td>Used Diskspace</td>
+			<td>[[USED_DISKSPACE]]</td>
+		</tr>
+	</table>
+</div>
+	
+<div class='homeSumRight'>
+	<table width='100%'>
+		<tr>
+			<td width='20px'><img src='images/icons/sample.png' alt='' /></td>
+			<td width='40%'>My Samples</td>
+			<td>[[SAMPLES]]</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td><img src='images/icons/quota.png' alt='' /></td>
+			<td>Quota</td>
+			<td>[[QUOTA]]</td>
+		</tr>
+	</table>
+</div>
+
+<!-- CONTAINER END (0) -->
+
+<br />
+
+<!-- CONTAINER BEGIN ("I want to...","homeEasyStartBox") -->
+
+	<!-- FOREACH BEGIN ([[I_WANT_TO_ARRAY]]) -->
+	
+	[[I_WANT_TO_ARRAY:CONTENT]]
+	
+	<!-- FOREACH END -->
+			
+<a href='[[GET_HELP]]' class='homeEasyButton'>
+	<span class='homeEasyIcon'><img src='images/icons_30/help.png' alt='' border='0' /></span>
+	<span class='homeEasyText'>get help</span>
+</a>&nbsp;	
+			
+<!-- CONTAINER END ("homeEasyStartBox") -->
+
+<!-- CONTAINER BEGIN ("Today","homeMsgSearchBox") -->
+
+[[CONTENT]]
+	
+<!-- CONTAINER END ("homeMsgSearchBox") -->

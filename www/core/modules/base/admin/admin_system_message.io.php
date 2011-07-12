@@ -45,7 +45,7 @@ class AdminSystemMessageIO
 		$entry_count = count($system_message_array);
 		$number_of_pages = ceil($entry_count/SYSTEM_MESSAGE_ENTRIES_PER_PAGE);
 		
-		$template = new Template("languages/en-gb/template/base/admin/system_message/list.html");	
+		$template = new Template("template/base/admin/system_message/list.html");	
 		
 		$paramquery = $_GET;
 		$paramquery[action] = "add";
@@ -147,7 +147,7 @@ class AdminSystemMessageIO
 
 		if ($page_1_passed == false)
 		{
-			$template = new Template("languages/en-gb/template/base/admin/system_message/add.html");
+			$template = new Template("template/base/admin/system_message/add.html");
 			
 			$paramquery = $_GET;
 			$paramquery[nextpage] = "1";
@@ -205,7 +205,7 @@ class AdminSystemMessageIO
 			
 				if ($_GET[sure] != "true")
 				{
-					$template = new Template("languages/en-gb/template/base/admin/system_message/delete.html");
+					$template = new Template("template/base/admin/system_message/delete.html");
 					
 					$paramquery = $_GET;
 					$paramquery[sure] = "true";
@@ -282,7 +282,7 @@ class AdminSystemMessageIO
 		
 				if ($page_1_passed == false)
 				{
-					$template = new Template("languages/en-gb/template/base/admin/system_message/edit.html");
+					$template = new Template("template/base/admin/system_message/edit.html");
 					
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";

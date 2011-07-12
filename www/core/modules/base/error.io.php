@@ -42,11 +42,11 @@ class Error_IO
 		{
 			if ($this->error_type == 2)
 			{
-				$template = new Template("languages/en-gb/template/base/error/security_in_box.html");
+				$template = new Template("template/base/error/security_in_box.html");
 			}
 			else
 			{
-				$template = new Template("languages/en-gb/template/base/error/error_in_box.html");
+				$template = new Template("template/base/error/error_in_box.html");
 			}	
 				
 			$template->set_var("error_code", $this->exception_handler->get_error_no());	
@@ -58,20 +58,20 @@ class Error_IO
 	
 	public static function fatal_error($message)
 	{
-		$template = new Template("languages/en-gb/template/login_header.html");
+		$template = new Template("template/login_header.html");
 		$template->output();
 		
-		$template = new Template("languages/en-gb/template/base/error/fatal.html");
+		$template = new Template("template/base/error/fatal.html");
 		$template->set_var("message", $message);
 		$template->output();
 	}
 	
 	public static function security_out_of_box_error($message)
 	{
-		$template = new Template("languages/en-gb/template/login_header.html");
+		$template = new Template("template/login_header.html");
 		$template->output();
 		
-		$template = new Template("languages/en-gb/template/base/error/security_out_of_box.html");
+		$template = new Template("template/base/error/security_out_of_box.html");
 		$template->set_var("message", $message);
 		$template->output();
 	}

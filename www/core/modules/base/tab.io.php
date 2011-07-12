@@ -134,7 +134,7 @@ class Tab_IO
 	{
 		$return = "";
 		
-		$template = new Template("languages/en-gb/template/base/tabs/small_tab_header.html");
+		$template = new Template("template/base/tabs/small_tab_header.html");
 		$return .= $template->get_string();
 		
 		if (is_array($this->tab_array) and count($this->tab_array) >= 1)
@@ -143,7 +143,7 @@ class Tab_IO
 			{
 				if ($value['disabled'])
 				{
-					$template = new Template("languages/en-gb/template/base/tabs/generic_inactive.html");
+					$template = new Template("template/base/tabs/generic_inactive.html");
 					$template->set_var("title", $value['name']);
 					$return .= $template->get_string();
 				}
@@ -151,14 +151,14 @@ class Tab_IO
 				{
 					if ($value['active'] == true)
 					{
-						$template = new Template("languages/en-gb/template/base/tabs/generic_active.html");
+						$template = new Template("template/base/tabs/generic_active.html");
 						$template->set_var("title", $value['name']);
 						$template->set_var("params", $value['target']);
 						$return .= $template->get_string();
 					}
 					else
 					{
-						$template = new Template("languages/en-gb/template/base/tabs/generic.html");
+						$template = new Template("template/base/tabs/generic.html");
 						$template->set_var("title", $value['name']);
 						$template->set_var("params", $value['target']);
 						$return .= $template->get_string();
@@ -167,7 +167,7 @@ class Tab_IO
 			}
 		}
 		
-		$template = new Template("languages/en-gb/template/base/tabs/small_tab_footer.html");
+		$template = new Template("template/base/tabs/small_tab_footer.html");
 		$return .= $template->get_string();
 		
 		return $return;

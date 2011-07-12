@@ -315,7 +315,7 @@ class DataIO
 
 			
 			
-			$template = new Template("languages/en-gb/template/data/data_browser.html");
+			$template = new Template("template/data/data_browser.html");
 	
 			if ($folder_id and !$virtual_folder_id)
 			{
@@ -473,7 +473,7 @@ class DataIO
 						}
 					}
 				
-					$template = new Template("languages/en-gb/template/data/data_image_browser_multi.html");
+					$template = new Template("template/data/data_image_browser_multi.html");
 					
 					$paramquery = $_GET;
 					$paramquery[nav] = "data";
@@ -604,7 +604,7 @@ class DataIO
 					{
 						$file = new File($image_browser_array[$page]);
 				
-						$template = new Template("languages/en-gb/template/data/data_image_browser_detail.html");
+						$template = new Template("template/data/data_image_browser_detail.html");
 						
 						if ($_GET[version] and is_numeric($_GET[version])) 
 						{
@@ -787,7 +787,7 @@ class DataIO
 				
 				if (!$_GET[nextpage])
 				{
-					$template = new Template("languages/en-gb/template/data/data_permission.html");
+					$template = new Template("template/data/data_permission.html");
 					
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";
@@ -1051,7 +1051,7 @@ class DataIO
 				
 				if (!$_GET[nextpage])
 				{
-					$template = new Template("languages/en-gb/template/data/data_change_owner.html");
+					$template = new Template("template/data/data_change_owner.html");
 					
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";
@@ -1174,7 +1174,7 @@ class DataIO
 				
 				if (!$_GET[nextpage])
 				{
-					$template = new Template("languages/en-gb/template/data/data_change_group.html");
+					$template = new Template("template/data/data_change_group.html");
 					
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";
@@ -1484,7 +1484,7 @@ class DataIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/data/admin/user/change_user_quota.html");
+				$template = new Template("template/data/admin/user/change_user_quota.html");
 
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";

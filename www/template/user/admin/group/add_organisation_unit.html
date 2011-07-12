@@ -1,0 +1,33 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Add Organisation Unit",0) -->
+
+<br />
+<form action='index.php?[[PARAMS]]' method='post'>
+<table class='formTable'>
+	<tr>
+		<td><span class='bold'>Select Organisation Unit:</span></td>
+	</tr>
+	<tr>
+		<td>
+			<select name='ou' size='10' class='FormSelect' />
+	
+			<!-- FOREACH BEGIN ([[OPTION]]) -->
+	
+			<option value='[[OPTION:VALUE]]'>[[OPTION:CONTENT]]</option>
+	
+			<!-- FOREACH END -->
+	
+			</select>
+			<span class='formError'>[[ERROR]]</span>
+		</td>
+	</tr>
+	<tr>
+		<td><br />
+			<div class='button_right'><input type='submit' value='next' name='submitbutton' class='next_button' /></div>
+		</td>
+	</tr>
+</table>
+</form>
+
+<!-- CONTAINER END (0) -->	

@@ -86,7 +86,7 @@ class ItemFulltextSearchIO
 		
 		if ($no_error == false)
 		{
-			$template = new Template("languages/en-gb/template/item/search/full_text_search.html");
+			$template = new Template("template/item/search/full_text_search.html");
 			
 			$paramquery = $_GET;
 			unset($paramquery[page]);
@@ -222,7 +222,7 @@ class ItemFulltextSearchIO
 			$list->add_row("Datetime", "datetime", true, null);
 			$list->add_row("Rank", "rank", true, null);
 			
-			$template = new Template("languages/en-gb/template/item/search/full_text_search_result.html");
+			$template = new Template("template/item/search/full_text_search_result.html");
 		
 			$paramquery = $_GET;
 			$paramquery[nextpage] = "2";

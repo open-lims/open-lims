@@ -1,0 +1,128 @@
+<script>
+$(document).ready(function()
+{
+	var get_array = getQueryParams(document.location.search);
+	
+	function load_content(sortvalue, sortmethod, page)
+	{
+		$.ajax(
+		{
+			type: "GET",
+			url: "core/modules/organisation_unit/admin/admin_organisation_unit.ajax.php",
+			data: "session_id="+get_array['session_id']+"&run=list_groups&organisation_unit_id=[[ORGANISATION_UNIT_ID]]&sortvalue="+sortvalue+"&sortmethod="+sortmethod+"&page="+page,
+			success: function(data)
+			{
+				$("#OrganisationUnitAdminAjaxContent").contents().detach();
+				$("#OrganisationUnitAdminAjaxContent").append(data);
+			}
+		});
+	}
+	
+	var sortvalue = "";
+	var sortmethod = "";
+	var page = 0;
+	
+	load_content(sortvalue, sortmethod, page);
+	
+	var name_sortmethod = "asc";
+	
+	$("#OrganisationUnitAdminListSortGroupname").live('click', function()
+	{
+		sortvalue = "groupname";
+		
+		load_content(sortvalue, name_sortmethod, page);
+		
+		if (name_sortmethod == "asc")
+		{
+			name_sortmethod = "desc";
+			sortmethod = "asc";
+		}
+		else
+		{
+			name_sortmethod = "asc";
+			sortmethod = "desc";
+		}
+
+	});
+	
+	$(".OrganisationUnitAdminListPage").each().live('click', function()
+	{
+		var id = $(this).attr("id");
+		page = id.replace("OrganisationUnitAdminListPage","");
+		load_content(sortvalue, sortmethod, page);
+	});
+	
+	$(".OrganisationUnitAdminListDelete").each().live('click', function()
+	{
+		var id = $(this).attr("id");
+		id = id.replace("OrganisationUnitAdminListDelete","");
+		$.ajax(
+		{
+			type: "GET",
+			url: "core/modules/organisation_unit/admin/admin_organisation_unit.ajax.php",
+			data: "session_id="+get_array['session_id']+"&run=delete_group&organisation_unit_id=[[ORGANISATION_UNIT_ID]]&group_id="+id,
+			success: function(data)
+			{
+				if (data == 1)
+				{
+					load_content(sortvalue, sortmethod, page);
+				}
+			}
+		});
+	});
+	
+	$('#OrganisationUnitAdminGroupAdd').click(function()
+	{
+		$("#GroupSelectDialog").dialog("open");
+		$("#GroupSelectDialogSearchField").val("");
+		return false;
+	});
+	
+	$("#GroupSelectDialog").bind( "dialogbeforeclose", function(event, ui) 
+	{
+		if ($("#GroupSelectDialogOK").html() == "true")
+		{
+			var group_id = $("#GroupSelectDialogSelect option:selected").attr("id");
+			
+			if (group_id != undefined)
+			{
+				group_id = group_id.replace("Group","");
+				
+				$.ajax(
+				{
+					type: "GET",
+					url: "core/modules/organisation_unit/admin/admin_organisation_unit.ajax.php",
+					data: "session_id="+get_array['session_id']+"&run=add_group&organisation_unit_id=[[ORGANISATION_UNIT_ID]]&group_id="+group_id,
+					success: function(data)
+					{
+						if (data == 1)
+						{
+							load_content(sortvalue, sortmethod, page);
+						}
+					}
+				});
+			}
+		}
+	});
+	
+});
+</script>
+
+[[ADD_DIALOG]]
+
+<br />
+
+<!-- CONTAINER BEGIN ("Groups [[TITLE]]",0) -->
+
+<div class='boxIconBar'>
+				
+<div class='boxIcon'><img src='images/icons/add.png' alt='' />&nbsp;<a href='#' id='OrganisationUnitAdminGroupAdd'>Add a Group</a></div>
+
+</div>
+
+<div id='OrganisationUnitAdminAjaxContent'>
+
+
+</div>
+
+<!-- CONTAINER END (0) -->

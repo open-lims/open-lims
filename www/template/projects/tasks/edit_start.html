@@ -1,0 +1,35 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Change Start Date/Time",0) -->
+
+	<br />
+	<form action='index.php?[[PARAMS]]' method='post'>
+	<table class='formTable'>
+		<tr>
+			<td width='20%'>End Date:</td>
+			<td>
+				<input type='text' id='startdate' name='startdate' class='FormTextfield' value='[[STARTDATE]]' />
+				<a href='#' onclick='selectDate("startdate",event)'><img src='images/icons/month.png' style='border: 0;' /></a>
+				<span class='formError'>[[ERROR0]]</span>
+			</td>
+		</tr>
+		<tr>
+			<td colspan='2'><div class='horizontal_line'>&nbsp;</div></td>
+		</tr>
+		<tr>
+			<td>Time:</td>
+			<td>
+				<input type='text' name='time1' size='2' class='FormTextfield' maxlength='2' value='[[TIME1]]' />:<input type='text' name='time2' size='2' class='FormTextfield' maxlength='2' value='[[TIME2]]' />
+				<span class='formError'>[[ERROR1]]</span>
+			</td>
+		</tr>
+		<tr>
+			<td colspan='2'><div class='horizontal_line'>&nbsp;</div></td>
+		</tr>
+		<tr>
+			<td colspan='2'><br /><input type='submit' value='next' name='submitbutton' class='FormButton'></td>
+		</tr>
+	</table>
+	</form>
+	
+<!-- CONTAINER END (0) -->

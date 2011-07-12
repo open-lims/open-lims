@@ -22,9 +22,9 @@
  */
 
 /**
- * 
+ * IMPORTANT NOTE: Modification of this file is not allowed by developers!
  */
 define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-3-dev &#945;");
+define("PRODUCT_VERSION", "0.3.9.9-4-dev &#945;");
 
 ?>

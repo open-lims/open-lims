@@ -92,7 +92,7 @@ class ManufacturerAjax extends Ajax
 			$content_array = array();
 			$counter = 0;
 			
-			$template = new Template("../../../languages/en-gb/template/manufacturer/ajax/dialog_list.html");
+			$template = new Template("../../../template/manufacturer/ajax/dialog_list.html");
 		
 			foreach($manufacturer_array as $key => $value)
 			{

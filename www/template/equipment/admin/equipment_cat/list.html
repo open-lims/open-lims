@@ -1,0 +1,48 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Equipment Categories",0) -->
+
+<div class='boxIconBar'>
+
+<a href='index.php?[[ADD_PARAMS]]'><img src='images/icons/equipment.png' alt='new' border='0' /></a>&nbsp;<a href='index.php?[[ADD_PARAMS]]'>Add Equipment Category</a> (to root)
+
+</div>
+	
+<div class='homeMessage'>
+
+<table class='OverviewTable'>
+<tr>
+	<th width='16px'></th>
+	<th>Name</th>
+	<th>ID</th>
+	<th width='15%'>Delete</th>
+	<th width='15%'>Edit</th>
+	<th width='15%'>Create Child</th>
+</tr>
+
+	<!-- FOREACH BEGIN ([[EQUIPMENT_CAT_ARRAY]]) -->
+	
+		<tr>
+			<td><div style='padding-left: [[EQUIPMENT_CAT_ARRAY:PADDING]]em'><img src='images/icons/sample.png' alt='' /></div></td>
+			<td><div style='padding-left: [[EQUIPMENT_CAT_ARRAY:PADDING]]em'>[[EQUIPMENT_CAT_ARRAY:NAME]]</div></td>
+			<td>[[EQUIPMENT_CAT_ARRAY:ID]]</td>
+			<td><a href='index.php?[[EQUIPMENT_CAT_ARRAY:DELETE_PARAMS]]'>Delete</a></td>
+			<td><a href='index.php?[[EQUIPMENT_CAT_ARRAY:EDIT_PARAMS]]'>Edit</a></td>
+			<td><a href='index.php?[[EQUIPMENT_CAT_ARRAY:CREATE_CHILD_PARAMS]]'>Create Child</a></td>
+		</tr>
+	
+	<!-- FOREACH END -->
+	
+	<!-- IF ([[NO_ENTRY]]) -->
+		<tr>
+			<td colspan='5'>
+				<div class='italic'>No Categories Found!</div>
+			</td>
+		</tr>
+	<!-- ENDIF -->
+
+</table>
+
+</div>
+
+<!-- CONTAINER END (0) -->

@@ -86,7 +86,7 @@ class ProjectDataIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/projects/admin/user/change_project_quota.html");
+				$template = new Template("template/projects/admin/user/change_project_quota.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";

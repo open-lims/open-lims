@@ -1,0 +1,68 @@
+
+<br />
+
+<!-- CONTAINER BEGIN ("Create New Sample (5/5)",0) -->
+
+<form action='index.php?[[LINK]]' method='post'>
+[[BAR]]
+<br />
+<table class='formTable'>
+	<tr>
+		<td>Organisation Unit:</td>
+		<td>[[ORGAN_UNIT]]</td>
+	</tr>
+	<tr>
+		<td>Template:</td>
+		<td>[[TEMPLATE]]</td>
+	</tr>
+	<tr>
+		<td>Name:</td>
+		<td>[[NAME]]</td>
+	</tr>
+	
+	<!-- IF ([[MANUFACTURER]]) -->
+	<tr>
+		<td>Manufacturer:</td>
+		<td>[[MANUFACTURER]]</td>
+	</tr>
+	<!-- ENDIF -->
+	
+	<!-- IF ([[LOCATION]]) -->
+	<tr>
+		<td>Location:</td>
+		<td>[[LOCATION]]</td>
+	</tr>
+	<!-- ENDIF -->
+	
+	<!-- IF ([[DATE_OF_EXPIRY]]) -->
+	<tr>
+		<td>Date of Expiry:</td>
+		<td>[[DATE_OF_EXPIRY]]</td>
+	</tr>
+	<!-- ENDIF -->
+	
+	<tr>
+		<td colspan='2'><div class='horizontal_line'>&nbsp;</div></td>
+	</tr>		
+	<tr>
+		<td colspan='2'>Description/Comment:</td>
+	</tr>
+	<tr>
+		<td colspan='2'>[[DESC]]</td>
+	</tr>
+	<tr>
+		<td colspan='2'><div class='horizontal_line'>&nbsp;</div></td>
+	</tr>
+	<tr>
+		<td colspan='2'>
+			<br />
+			<div class='button_left'><input type='submit' value='previous' name='submitbutton' class='previous_button' /></div>
+			<div class='button_right'><input type='submit' value='finish' name='submitbutton' class='next_button' /></div>
+		</td>
+	</tr>
+</table>
+<input type='hidden' value='[[DESCRIPTION]]' name='description' />
+<input type='hidden' value='[[KEYWORDS]]' name='keywords' />
+</form>
+
+<!-- CONTAINER END (0) -->

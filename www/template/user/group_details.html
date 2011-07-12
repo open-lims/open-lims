@@ -1,0 +1,61 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Group Details",0) -->
+		
+<br />
+<table class='formTable'>
+	<tr>
+		<td colspan='2'><div class='profileHeadline'>General Information:</div></td>
+	</tr>
+	<tr>
+		<td width='30%'>Name:</td>
+		<td>[[NAME]]</td>
+	</tr>
+	<tr>
+		<td colspan='2'><div class='profileHeadline'>Users:</div></td>
+	</tr>
+	
+	<!-- FOREACH BEGIN ([[USER]]) -->
+			
+		<tr>
+			<td><a href='index.php?[[USER:PARAMS]]'>[[USER:USERNAME]]</a></td>
+			<td>[[USER:FULLNAME]]</td>
+		</tr>
+	
+	<!-- FOREACH END -->
+	
+	<!-- IF ([[NO_USER]]) -->
+	
+		<tr>
+			<td colspan='2'><span class='italic'>No Users Found!</span></td>
+		</tr>
+	
+	<!-- ENDIF -->
+	
+	
+	
+	<tr>
+		<td colspan='2'><div class='profileHeadline'>Organisation Units:</div></td>
+	</tr>
+	
+	<!-- FOREACH BEGIN ([[OU]]) -->
+			
+		<tr>
+			<td colspan='2'>[[OU:NAME]]</td>
+		</tr>
+	
+	<!-- FOREACH END -->
+	
+	<!-- IF ([[NO_OU]]) -->
+	
+		<tr>
+			<td colspan='2'><span class='italic'>No Organisation Units Found!</span></td>
+		</tr>
+	
+	<!-- ENDIF -->
+	
+</table>
+<br />
+
+				
+<!-- CONTAINER END (0) -->	

@@ -31,7 +31,7 @@ class UserIO
 	{
 		global $user;
 		
-		$template = new Template("languages/en-gb/template/user/user_profile.html");
+		$template = new Template("template/user/user_profile.html");
 		
 		if ($user->get_profile("gender") == "m")
 		{
@@ -162,7 +162,7 @@ class UserIO
 		}
 		else
 		{
-			$template = new Template("languages/en-gb/template/user/user_change_personal.html");
+			$template = new Template("template/user/user_change_personal.html");
 			
 			$template->set_var("error_0",$error[0]);
 			$template->set_var("error_1",$error[1]);
@@ -415,7 +415,7 @@ class UserIO
 		}
 		else
 		{
-			$template = new Template("languages/en-gb/template/user/user_change_password.html");
+			$template = new Template("template/user/user_change_password.html");
 			
 			$paramquery = $_GET;
 			$paramquery[nextpage] = 1;
@@ -497,7 +497,7 @@ class UserIO
 		}
 		else
 		{
-			$template = new Template("languages/en-gb/template/user/user_change_password_on_login.html");
+			$template = new Template("template/user/user_change_password_on_login.html");
 			
 			$paramquery = $_GET;
 			$paramquery[nextpage] = 1;
@@ -522,7 +522,7 @@ class UserIO
 		{
 			$user = new User($_GET[id]);
 			
-			$template = new Template("languages/en-gb/template/user/user_details.html");
+			$template = new Template("template/user/user_details.html");
 			
 			if ($user->get_username())
 			{
@@ -735,7 +735,7 @@ class UserIO
 		{
 			$group = new Group($_GET[id]);
 			
-			$template = new Template("languages/en-gb/template/user/group_details.html");
+			$template = new Template("template/user/group_details.html");
 
 			$template->set_var("name", $group->get_name());
 			
@@ -825,13 +825,13 @@ class UserIO
 	
 	public static function user_select_dialog()
 	{
-		$template = new Template("languages/en-gb/template/user/user_select_dialog.html");
+		$template = new Template("template/user/user_select_dialog.html");
 		return $template->get_string();
 	}
 	
 	public static function group_select_dialog()
 	{
-		$template = new Template("languages/en-gb/template/user/group_select_dialog.html");
+		$template = new Template("template/user/group_select_dialog.html");
 		return $template->get_string();
 	}
 }

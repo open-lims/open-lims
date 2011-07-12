@@ -49,7 +49,7 @@ class DataAjax extends Ajax
 	private function get_html()
 	{
 		
-		$template = new Template("../../../../languages/en-gb/template/data/navigation/left.html");
+		$template = new Template("../../../../template/data/navigation/left.html");
 		
 		$template->output();
 	}

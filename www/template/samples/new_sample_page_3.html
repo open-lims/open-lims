@@ -1,0 +1,133 @@
+
+<br />
+
+<!-- CONTAINER BEGIN ("Create New Sample (3/5)",0) -->
+
+<script>
+$(function()
+{
+	$( "#datepicker" ).datepicker(
+	{
+		changeMonth: true,
+		changeYear: true,
+		dateFormat: 'yy-mm-dd'
+	});
+});
+
+$(document).ready(function()
+{
+	$('#warning').hide();
+	$('#show_warning').click(function()
+	{
+		if ($('#warning').is(":visible"))
+		{
+			$('#warning').fadeOut("slow");
+		}
+		else
+		{
+			$('#warning').fadeIn("slow");
+		}
+		
+	});
+	
+	<!-- IF ([[SHOW_MANUFACTURER]]) -->
+	
+	$('#ManufactuerNameField').click(function()
+	{
+		$( "#ManufacturerDialog" ).dialog( "open" );
+		return false;
+	});
+	
+	<!-- ENDIF -->
+
+});
+</script>
+
+[[MANUFACTURER_HTML]]
+
+<form action='index.php?[[LINK]]' method='post'>
+[[BAR]]
+<br />
+<table class='formTable'>
+	<tr>
+		<th width='50%'></th>
+		<th width='50%'></th>
+	<tr>
+		<td>Name:</td>
+		<td>
+			<input type='text' name='name' class='sampleTextfield' value='[[NAME]]' />
+			<span class='formError'><br />[[ERROR0]]</span>
+		</td>
+	</tr>
+	
+	<!-- IF ([[SHOW_MANUFACTURER]]) -->
+	<tr>
+		<td>Supplier/Source/Manufacturer:</td>
+		<td>
+			<input type='text' name='manufacturer_name' class='sampleTextfield' value='[[MANUFACTURER_NAME]]' id='ManufactuerNameField' />
+			<input type='hidden' name='manufacturer' value='[[MANUFACTURER]]' id='manufactuerIdField' />
+			<span class='formError'><br />[[ERROR1]]</span>
+		</td>
+	</tr>
+	<!-- ENDIF -->
+	
+	<!-- IF ([[SHOW_EXPIRY]]) -->
+	<tr>
+		<td>Date of Expiry: (<a href='#' id='show_warning'>lead time</a>)</td>
+		<td>
+			<input type='text' name='expiry' class='sampleTextfield' value='[[EXPIRY]]' id='datepicker' />
+			<span class='formError'><br />[[ERROR2]]</span>
+		</td>
+	</tr>
+	<tr id='warning'>
+		<td>Lead-Time (in days):</td>
+		<td>
+			<input type='text' name='expiry_warning' class='sampleTextfield' value='[[EXPIRY_WARNING]]' />
+			<span class='formError'><br />[[ERROR2]]</span>
+		</td>
+	</tr>
+	<!-- ENDIF -->
+	
+	<!-- IF ([[SHOW_LOCATION]]) -->
+	<tr>
+		<td>Location:</td>
+		<td>
+			<select name='location' class='sampleSelect'>
+			
+			<!-- FOREACH BEGIN ([[LOCATION]]) -->
+	
+				<option value='[[LOCATION:VALUE]]'>[[LOCATION:CONTENT]]</option>
+	
+			<!-- FOREACH END -->	
+				
+			</select>
+			<span class='formError'><br />[[ERROR3]]</span>
+		</td>
+	</tr>
+	<!-- ENDIF -->
+
+	<tr>
+		<td colspan='2'><div class='horizontal_line'>&nbsp;</div></td>
+	</tr>			
+	<tr>
+		<td colspan='2'>Description/Comment (optional)</td>
+	</tr>
+	<tr>
+		<td colspan='2'><textarea name='desc' cols='66' rows='10' class='FormTextarea'>[[DESC]]</textarea></td>
+	</tr>
+	<tr>
+		<td colspan='2'><div class='horizontal_line'>&nbsp;</div></td>
+	</tr>
+	<tr>
+		<td colspan='2'>
+			<br />
+			<div class='button_left'><input type='submit' value='previous' name='submitbutton' class='previous_button' /></div>
+			<div class='button_right'><input type='submit' value='next' name='submitbutton' class='next_button' /></div>
+		</td>
+	</tr>
+</table>
+<input type='hidden' value='[[DESCRIPTION]]' name='description' />
+<input type='hidden' value='[[KEYWORDS]]' name='keywords' />
+</form>
+
+<!-- CONTAINER END (0) -->

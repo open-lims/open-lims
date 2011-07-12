@@ -1,0 +1,77 @@
+
+<br />
+
+<!-- CONTAINER BEGIN ("Create New Project (1/5)",0) -->
+
+<!-- IF ([[ORGANUNIT]]) -->
+
+<form action='index.php?[[LINK]]' method='post'>
+[[BAR]]
+<br />
+<table class='formTable'>
+	<tr>
+		<td><span class='bold'>Select the Organisation Unit:</span></td>
+	</tr>
+	<tr>
+		<td>
+			<select name='organunit' class='ProjectCreateSelect' size='10' />
+	
+			<!-- FOREACH BEGIN ([[OPTION]]) -->
+	
+			<option value='[[OPTION:VALUE]]' [[OPTION:SELECTED]]>[[OPTION:CONTENT]]</option>
+	
+			<!-- FOREACH END -->
+	
+			</select>
+		<span class='formError'>[[ERROR]]</span>
+		</td>
+	</tr>
+	<tr>
+		<td><br />
+			<div class='button_left'><input type='submit' value='previous' name='submitbutton' class='previous_button_disabled' disabled /></div>
+			<div class='button_right'><input type='submit' value='next' name='submitbutton' class='next_button' /></div>
+		</td>
+	</tr>
+</table>
+</form>
+<br />
+
+
+<!-- ELSE -->
+
+
+<form action='index.php?[[LINK]]' method='post'>
+[[BAR]]
+<br />
+<table class='formTable'>
+	<tr>
+		<td><span class='bold'>Select the Parent-Project:</span></td>
+	</tr>
+	<tr>
+		<td>
+			<select name='project_toid' class='ProjectCreateSelect' size='10' />
+	
+			<!-- FOREACH BEGIN ([[OPTION]]) -->
+	
+			<option value='[[OPTION:VALUE]]' [[OPTION:SELECTED]]>[[OPTION:CONTENT]]</option>
+	
+			<!-- FOREACH END -->
+	
+			</select>
+			<span class='formError'>[[ERROR]]</span>
+		</td>
+	</tr>
+	<tr>
+		<td><br />
+			<div class='button_left'><input type='submit' value='previous' name='submitbutton' class='previous_button_disabled' disabled /></div>
+			<div class='button_right'><input type='submit' value='next' name='submitbutton' class='next_button' /></div>
+		</td>
+	</tr>
+</table>
+</form>
+<br />
+
+<!-- ENDIF -->
+
+
+<!-- CONTAINER END (0) -->

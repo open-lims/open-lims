@@ -47,8 +47,8 @@ class Template implements TemplateInterface
 			if (filesize($file) > 0)
 			{
 				$this->string = fread($handler, filesize($file));
-				$this->string = str_replace("\\{","[%OB%]",$this->string);
-				$this->string = str_replace("\\}","[%CB%]",$this->string);
+				$this->string = str_replace("\\[[","[%OB%]",$this->string);
+				$this->string = str_replace("\\]]","[%CB%]",$this->string);
 				$this->replace_containers();
 			}
 			else
@@ -90,8 +90,8 @@ class Template implements TemplateInterface
 		$this->call_control_structures();
 		$this->fill_string();
 	
-		$this->string = str_replace("[%OB%]","{",$this->string);
-		$this->string = str_replace("[%CB%]","}",$this->string);
+		$this->string = str_replace("[%OB%]","[[",$this->string);
+		$this->string = str_replace("[%CB%]","]]",$this->string);
 		
 		echo $this->string;
 	}
@@ -109,8 +109,8 @@ class Template implements TemplateInterface
 		$this->call_control_structures();
 		$this->fill_string();
 	
-		$this->string = str_replace("[%OB%]","{",$this->string);
-		$this->string = str_replace("[%CB%]","}",$this->string);
+		$this->string = str_replace("[%OB%]","[[",$this->string);
+		$this->string = str_replace("[%CB%]","]]",$this->string);
 		
 		return $this->string;
 	}
@@ -266,7 +266,7 @@ class Template implements TemplateInterface
 					if (is_numeric($check_begin) and is_numeric($check_end))
 					{
 						$check_line = substr($command_array[3], $check_begin+1, ($check_end - $check_begin)-1);
-						$check_line = str_replace("}","",$check_line);
+						$check_line = str_replace("]]","",$check_line);
 					}
 				}
 				else
@@ -379,7 +379,7 @@ class Template implements TemplateInterface
 						
 						if (count($check_array) == 3)
 						{
-							if (strpos($check_array[0],"{") === false)
+							if (strpos($check_array[0],"[[") === false)
 							{
 								$left_value = $check_array[0];
 							}
@@ -388,7 +388,7 @@ class Template implements TemplateInterface
 								$left_value = $this->get_var_value($check_array[0]);
 							}
 							
-							if (strpos($check_array[2],"{") === false)
+							if (strpos($check_array[2],"[[") === false)
 							{
 								$right_value = $check_array[2];
 							}
@@ -445,7 +445,7 @@ class Template implements TemplateInterface
 						}
 						else
 						{
-							if (strpos($check_array[0],"{") === false)
+							if (strpos($check_array[0],"[[") === false)
 							{
 								if (trim(strtolower($check_array[0])) == "true")
 								{
@@ -499,7 +499,7 @@ class Template implements TemplateInterface
 							
 							if (count($check_array) == 3)
 							{
-								if (strpos($check_array[0],"{") === false)
+								if (strpos($check_array[0],"[[") === false)
 								{
 									$left_value = $check_array[0];
 								}
@@ -508,7 +508,7 @@ class Template implements TemplateInterface
 									$left_value = $this->get_var_value($check_array[0]);
 								}
 								
-								if (strpos($check_array[2],"{") === false)
+								if (strpos($check_array[2],"[[") === false)
 								{
 									$right_value = $check_array[2];
 								}
@@ -565,7 +565,7 @@ class Template implements TemplateInterface
 							}
 							else
 							{
-								if (strpos($check_array[0],"{") === false)
+								if (strpos($check_array[0],"[[") === false)
 								{
 									if (trim(strtolower($check_array[0])) == "true")
 									{
@@ -701,18 +701,18 @@ class Template implements TemplateInterface
 	{
 		$pointer = 0;
 		
-		while(($start_pos = strpos($this->string, "{", $pointer)) !== false)
+		while(($start_pos = strpos($this->string, "[[", $pointer)) !== false)
 		{
-			$end_pos = strpos($this->string, "}", $start_pos+1);
+			$end_pos = strpos($this->string, "]]", $start_pos+1);
 			$pointer = $start_pos + 1;  
 			
-			$current_var = substr($this->string, $start_pos+1, ($end_pos - $start_pos)-1);
+			$current_var = substr($this->string, $start_pos+2, ($end_pos - $start_pos)-2);
 			$current_var_length = strlen($current_var);
 
 			$new_var = $this->get_var_value($current_var);
 			$new_var_length = strlen($new_var);
 			
-			$this->string = substr_replace($this->string, $new_var, $start_pos, ($end_pos - $start_pos)+1);
+			$this->string = substr_replace($this->string, $new_var, $start_pos, ($end_pos - $start_pos)+2);
 			
 			$pointer_correction = $new_var_length - $current_var_length;
 						
@@ -727,8 +727,8 @@ class Template implements TemplateInterface
 	 */
 	private function get_var_cardinality($var)
 	{
-		$var = str_replace("{","",$var);
-		$var = str_replace("}","",$var);
+		$var = str_replace("[[","",$var);
+		$var = str_replace("]]","",$var);
 		if (strpos($var,":") === false)
 		{
 			if ($this->var_array[trim(strtolower($var))])
@@ -793,8 +793,8 @@ class Template implements TemplateInterface
 	 */
 	private function get_var_value($var)
 	{
-		$var = str_replace("{","",$var);
-		$var = str_replace("}","",$var);
+		$var = str_replace("[[","",$var);
+		$var = str_replace("]]","",$var);
 		if (strpos($var,":") === false)
 		{
 			if (isset($this->var_array[trim(strtolower($var))]))

@@ -1,0 +1,91 @@
+<script>
+
+$(document).ready(function()
+{
+	var get_array = getQueryParams(document.location.search);
+	
+	<!-- FOREACH BEGIN ([[JS]]) -->
+	
+	$( "#[[JS:ID]]" ).click(function()
+	{		
+		if($(this).hasClass('LeftNavigationSymbolInactive'))
+		{
+			return;
+		};
+		
+		$("#LeftNavigationSymbolArea > div").css("background-image","none");
+		$(this).css("background-image","url(images/tabs/left_nav_tab.png)");
+
+		
+		$.ajax(
+		{
+			type: "GET",
+			url: "[[JS:AJAX_URL]]",
+			data: "run=get_name&session_id="+get_array['session_id'],
+			success: function(data)
+			{
+				$("#LeftNavigationTitle").html(data);
+			}
+		});
+		
+		$.ajax(
+		{
+			type: "GET",
+			url: "[[JS:AJAX_URL]]",
+			data: "run=get_html&session_id="+get_array['session_id'],
+			success: function(data)
+			{
+				$("#LeftNavigationTree").html(data);
+			}
+		});
+	});
+	
+	$.ajax(
+	{
+		type: "GET",
+		url: "[[JS:AJAX_URL]]",
+		data: "run=get_name&session_id="+get_array['session_id'],
+		success: function(data)
+		{
+			tooltip("[[JS:ID]]",data);
+		}
+	});
+
+	<!-- FOREACH END -->
+	
+	if($("#LeftNavigationTree").text() == "")
+	{
+		$("#LeftNavigationSymbolArea").children("div:nth-child(1)").trigger("click");
+	}
+	
+});	
+
+
+</script>
+
+<div id="LeftNavigation">
+	<div id="LeftNavigationSymbolArea">	
+	
+		<!-- FOREACH BEGIN ([[SYMBOLS]]) -->
+		
+			<!-- IF ([[SYMBOLS:ACTIVE]]) -->
+		
+				<div id='[[SYMBOLS:ID]]'><img src='[[SYMBOLS:ICON]]' alt='' /></div>
+		
+			<!-- ELSE -->
+		
+				<div id='[[SYMBOLS:ID]]' class='LeftNavigationSymbolInactive'><img src='[[SYMBOLS:ICON]]' alt='' /></div>
+		
+			<!-- ENDIF -->
+		
+		<!-- FOREACH END -->
+	
+	</div>
+	<div id="LeftNavigationSymbolAreaClear"></div>
+	<div id='LeftNavigationTitle'></div>
+	
+	<div id='LeftNavigationTreeContainer'>
+		<div id='LeftNavigationTree'></div>
+	</div>
+	
+</div>

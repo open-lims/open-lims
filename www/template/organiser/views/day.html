@@ -1,0 +1,34 @@
+
+<div class='CalendarHead'>
+	<a href='index.php?[[PREVIOUS_PARAMS]]'><img src='images/icons/previous.png' alt='' border='0' /></a>
+	[[DATE]]
+	<a href='index.php?[[NEXT_PARAMS]]'><img src='images/icons/next.png' alt='' border='0' /></a>
+</div>
+<br />
+		
+<table class='CalendarDayTable'>
+
+<!-- FOREACH BEGIN ([[CONTENT_ARRAY]]) -->
+
+	<tr[[CONTENT_ARRAY:TR_CLASS]]>
+		<td width='15%'><span class='bold'>[[CONTENT_ARRAY:TIME]]</span></td>
+		
+		<!-- FOREACH BEGIN ([[CONTENT_ARRAY]]) -->
+			
+			<!-- IF ([[CONTENT_ARRAY:DATEBEGIN]]) -->
+			
+				<td><img src='core/images/cal_day_bar.php?length=8&height=30&value=[[CONTENT_ARRAY:VALUE]]' alt='' class='CalendarDayDateImage' />[[CONTENT_ARRAY:NAME]]<br /><span class='smallTextBlack'>[[CONTENT_ARRAY:RANGE]]</span></td>
+			
+			<!-- ELSE -->
+
+				<td><img src='core/images/cal_day_bar.php?length=8&height=30&value=[[CONTENT_ARRAY:VALUE]]' alt='' class='CalendarDayDateImage' /></td>
+			
+			<!-- ENDIF -->
+			
+		<!-- FOREACH END -->
+		
+	</tr>
+
+<!-- FOREACH END -->
+
+</table>

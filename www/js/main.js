@@ -1,10 +1,12 @@
-function getQueryParams(qs) {
+function getQueryParams(qs)
+{
     qs = qs.split("+").join(" ");
     var params = {},
         tokens,
         re = /[?&]?([^=]+)=([^&]*)/g;
 
-    while (tokens = re.exec(qs)) {
+    while (tokens = re.exec(qs))
+    {
         params[decodeURIComponent(tokens[1])]
             = decodeURIComponent(tokens[2]);
     }

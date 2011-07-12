@@ -31,29 +31,93 @@ class ContentHandler_IO
 	{
 		global $session, $user, $misc, $transaction;
 
-		$template = new Template("languages/en-gb/template/index_header.html");
+		$template = new Template("template/index_header.html");
 	
-		$css_directory = constant("WWW_DIR")."/css";
-		$css_directory_array = scandir($css_directory);
-		
-		if (is_array($css_directory_array))
+		if (file_exists(constant("WWW_DIR")))
 		{
-			$index_css = "";
-			
-			foreach($css_directory_array as $key => $value)
+			$css_directory = constant("WWW_DIR")."/css";
+			if (file_exists($css_directory))
 			{
-				if ((strpos(strrev($value),"ssc.") === 0) and (strpos(strrev($value),"ssc.gubed") === false) and ($value != "main.css"))
+				$css_directory_array = scandir($css_directory);
+				
+				
+				if (is_array($css_directory_array))
 				{
-					if (is_file($css_directory."/".$value))
+					$index_css = "";
+					
+					foreach($css_directory_array as $key => $value)
 					{
-						$index_css .= "<link rel='stylesheet' type='text/css' href='css/".$value."' title='Style' />\n";
+						if ((strpos(strrev($value),"ssc.") === 0) and (strpos(strrev($value),"ssc.gubed") === false) and ($value != "main.css"))
+						{
+							if (is_file($css_directory."/".$value))
+							{
+								$index_css .= "<link rel='stylesheet' type='text/css' href='css/".$value."' title='Style' />\n";
+							}	
+						}
 					}	
 				}
-			}	
+				
+				$template->set_var("INDEX_CSS",$index_css);
+			}
+			
+			$index_js = "";
+			
+			$js_lib_directory = constant("WWW_DIR")."/js/lib";
+			if (file_exists($js_lib_directory))
+			{
+				$js_lib_directory_array = scandir($js_lib_directory);
+				
+				if (is_array($js_lib_directory_array))
+				{
+					$index_js = "";
+					
+					foreach($js_lib_directory_array as $key => $value)
+					{
+						if ((strpos(strrev($value),"sj.") === 0))
+						{
+							if (is_file($js_lib_directory."/".$value))
+							{
+								$index_js .= "<script type='text/javascript' src='js/lib/".$value."'></script>\n";
+							}	
+						}
+					}	
+				}
+			}
+			
+			$js_modules_directory = constant("WWW_DIR")."/js/modules";
+			if (file_exists($js_modules_directory))
+			{
+				$js_modules_directory_array = scandir($js_modules_directory);
+				
+				if (is_array($js_modules_directory_array))
+				{
+					foreach($js_modules_directory_array as $key => $value)
+					{
+						if ((strpos(strrev($value),"sj.") === 0))
+						{
+							if (is_file($js_modules_directory."/".$value))
+							{
+								$index_js .= "<script type='text/javascript' src='js/modules/".$value."'></script>\n";
+							}	
+						}
+					}	
+				}
+			}
+			
+			if ($index_js)
+			{
+				$template->set_var("INDEX_JS",$index_js);
+			}
+			else
+			{
+				$template->set_var("INDEX_JS"," ");
+			}
+		}
+		else
+		{
+			$GLOBALS['fatal_error'] = "Main folder not found!";
 		}
 		
-		$template->set_var("INDEX_CSS",$index_css);
-					
 	 	$template->set_var("INDEX_TITLE",constant("HTML_TITLE"));
 	
 		$template->output();
@@ -64,7 +128,7 @@ class ContentHandler_IO
 			{
 		 		if ($session->is_valid() == true and $_GET[run] != "logout")
 		 		{
-					$template = new Template("languages/en-gb/template/main_header.html");
+					$template = new Template("template/main_header.html");
 					
 					$template->set_var("release",constant("PRODUCT")." ".constant("PRODUCT_VERSION"));
 					$template->set_var("user",constant("PRODUCT_USER"));
@@ -176,7 +240,7 @@ class ContentHandler_IO
 						}
  					}
 			 		
-			 		$template = new Template("languages/en-gb/template/main_footer.html");
+			 		$template = new Template("template/main_footer.html");
 			 		$template->output();
 		 		}
 		 		else
@@ -195,7 +259,7 @@ class ContentHandler_IO
 			Error_IO::fatal_error($GLOBALS['fatal_error']);	
 		}
 		
-		$template = new Template("languages/en-gb/template/index_footer.html");
+		$template = new Template("template/index_footer.html");
 		$template->output();
 	}
 	

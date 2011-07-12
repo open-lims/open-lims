@@ -29,7 +29,7 @@ class AdminIO
 {
 	private static function home()
 	{
-		$template = new Template("languages/en-gb/template/admin/home.html");
+		$template = new Template("template/admin/home.html");
 		
 		$module_dialog_array = ModuleDialog::list_dialogs_by_type("admin_home_box");
 		

@@ -98,7 +98,7 @@ class AdminEquipmentCatIO
 
 	public static function home()
 	{
-		$template = new Template("languages/en-gb/template/equipment/admin/equipment_cat/list.html");	
+		$template = new Template("template/equipment/admin/equipment_cat/list.html");	
 
 		$content_array = array();
 		
@@ -197,7 +197,7 @@ class AdminEquipmentCatIO
 	
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/equipment/admin/equipment_cat/add.html");
+				$template = new Template("template/equipment/admin/equipment_cat/add.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -267,7 +267,7 @@ class AdminEquipmentCatIO
 		{
 			if ($_GET[sure] != "true")
 			{
-				$template = new Template("languages/en-gb/template/equipment/admin/equipment_cat/delete.html");
+				$template = new Template("template/equipment/admin/equipment_cat/delete.html");
 				
 				$paramquery = $_GET;
 				$paramquery[sure] = "true";
@@ -345,7 +345,7 @@ class AdminEquipmentCatIO
 	
 			if ($page_1_passed == false)
 			{
-				$template = new Template("languages/en-gb/template/equipment/admin/equipment_cat/edit.html");
+				$template = new Template("template/equipment/admin/equipment_cat/edit.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";

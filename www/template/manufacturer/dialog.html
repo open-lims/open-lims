@@ -1,0 +1,173 @@
+
+<script>
+
+$(document).ready(function()
+{
+	var max_entries = 25;
+	var get_array = getQueryParams(document.location.search);
+	
+	function reload_content()
+	{	
+		$.ajax(
+		{
+			type: "GET",
+			url: "core/modules/manufacturer/manufacturer.ajax.php",
+			data: "session_id="+get_array['session_id']+"&run=get_next_entries&start=0&number="+max_entries+"&string="+$("#ManufacturerDialogSearchField").val(),
+			success: function(data)
+			{
+				if (data)
+				{
+					$("#ManufacturerDialogContent").html(data);
+					$.ajax(
+					{
+						type: "GET",
+						url: "core/modules/manufacturer/manufacturer.ajax.php",
+						data: "session_id="+get_array['session_id']+"&run=get_number_of_entries&string="+$("#ManufacturerDialogSearchField").val(),
+						success: function(data)
+						{
+							if (parseInt(data) > max_entries)
+							{
+								$("#ManufacturerDialogContent").append("<tr><td colspan='2'><div id='ManufacturerDialogContentMore'><a href='#'>more...</a></div></td></tr>");
+								$( "#ManufacturerDialogContentMore" ).click(function()
+								{	
+									max_entries = max_entries + 25;
+									reload_content();
+								});
+							}
+						}
+					});
+				}
+				else
+				{
+					$("#ManufacturerDialogContent").html("<tr><td colspan='2'>No Entries found!</td></tr>");
+				}
+			}
+		});
+	}
+	
+	$( "#ManufacturerDialog" ).dialog(
+	{
+		autoOpen: false,
+		buttons: 
+		{
+			"Close": function()
+			{
+				$( this ).dialog( "close" );
+			},
+			"OK": function()
+			{
+				$("#ManufactuerIdField").val($("input[@name='Manufacturer']:checked").val());
+				$.ajax(
+				{
+					type: "GET",
+					url: "core/modules/manufacturer/manufacturer.ajax.php",
+					data: "session_id="+get_array['session_id']+"&run=get_name&id="+$("input[@name='Manufacturer']:checked").val(),
+					success: function(data)
+					{
+						if (data)
+						{
+							$("#ManufactuerNameField").val(data);
+						}
+					}
+				});
+				$( this ).dialog( "close" );
+			}
+		},
+		height: 350,
+		width: 450
+	});
+	
+	reload_content();
+	
+	$( "#ManufacturerDialogSearchField" ).keyup(function()
+	{
+		reload_content();
+	});
+	
+	$( "#ManufacturerDialogButtonNew" ).click(function()
+	{
+		if (!$("#ManufacturerDialogNewFieldTr").html())
+		{
+			var data = $("#ManufacturerDialogContent").html();
+			
+			$("#ManufacturerDialogContent").html("<thead><tr id='ManufacturerDialogNewFieldTr'>"+
+													"<td><input type='text' id='ManufacturerDialogNewField' /></td>"+
+													"<td><a href='#' id='ManufacturerDialogNewFieldButtonAdd'><img src='images/icons/add.png' alt='+' class='ManufacturerDialogNewFieldButton' /></a>"+
+														"<a href='#' id='ManufacturerDialogNewFieldButtonCancel'><img src='images/icons/cancel.png' alt='X'' class='ManufacturerDialogNewFieldButton' /></a></td>"+
+													"</tr></thead>"+data);
+		}
+	
+		$( "#ManufacturerDialogNewField" ).keyup(function()
+		{
+			$.ajax(
+			{
+				type: "POST",
+				url: "core/modules/manufacturer/manufacturer.ajax.php?session_id="+get_array['session_id']+"&run=exist_name",
+				data: "name="+$("#ManufacturerDialogNewField").val(),
+				success: function(data)
+				{
+					if (data == 1)
+					{
+						$("#ManufacturerDialogNewField").css("color", "#FF0000");
+					}
+					else
+					{
+						$("#ManufacturerDialogNewField").css("color", "#000000");
+					}
+				}
+			});
+		});
+		
+		$( "#ManufacturerDialogNewFieldButtonAdd" ).click(function()
+		{
+			$.ajax(
+			{
+				type: "POST",
+				url: "core/modules/manufacturer/manufacturer.ajax.php?session_id="+get_array['session_id']+"&run=exist_name",
+				data: "name="+$("MmanufacturerDialogNewField").val(),
+				success: function(data)
+				{
+					if (data == 0)
+					{
+						$.ajax(
+						{
+							type: "POST",
+							url: "core/modules/manufacturer/manufacturer.ajax.php?session_id="+get_array['session_id']+"&run=add_entry",
+							data: "name="+$("#ManufacturerDialogNewField").val(),
+							success: function(data)
+							{
+								if (data == 1)
+								{
+									reload_content();
+								}
+							}
+						});
+					}
+				}
+			});
+		});
+		
+		$( "#ManufacturerDialogNewFieldButtonCancel" ).click(function()
+		{
+			$("#ManufacturerDialogNewFieldTr").detach();
+		});
+		
+	});
+
+});
+</script>
+
+<div id="ManufacturerDialog" title="Select Manufacturer" style='display: none;'>
+	<div style='text-align: center; font-weight: bold;'>
+		<div id='ManufacturerDialogSeach'>
+			<input type='text' id='ManufacturerDialogSearchField' size='50' />
+		</div>
+		<div id='ManufacturerDialogButton'>
+			<a href='#' id='ManufacturerDialogButtonNew'><img src='images/icons/new.png' alt='New' style='border: 0;' /></a>
+		</div>
+		<div id='ManufacturerDialogClear'></div>
+	</div>
+	<div style='border-bottom: 1px #D0D0D0 solid; margin: 5px 0;'></div>
+	<table id='ManufacturerDialogContent' width='100%'>
+	</table>
+</div>

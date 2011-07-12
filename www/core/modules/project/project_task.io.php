@@ -40,7 +40,7 @@ class ProjectTaskIO
 			
 				if (!$_GET[nextpage])
 				{
-					$template = new Template("languages/en-gb/template/projects/tasks/add.html");
+					$template = new Template("template/projects/tasks/add.html");
 					
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";
@@ -133,7 +133,7 @@ class ProjectTaskIO
 						
 							if ($page_2_passed == false)
 							{
-								$template = new Template("languages/en-gb/template/projects/tasks/add_status_process.html");
+								$template = new Template("template/projects/tasks/add_status_process.html");
 							
 								$paramquery = $_GET;
 								$paramquery[nextpage] = "2";
@@ -381,7 +381,7 @@ class ProjectTaskIO
 						
 							if ($page_2_passed == false)
 							{
-								$template = new Template("languages/en-gb/template/projects/tasks/add_process.html");
+								$template = new Template("template/projects/tasks/add_process.html");
 								
 								$paramquery = $_GET;
 								$paramquery[nextpage] = "2";
@@ -565,7 +565,7 @@ class ProjectTaskIO
 						
 							if ($page_2_passed == false)
 							{
-								$template = new Template("languages/en-gb/template/projects/tasks/add_milestone.html");
+								$template = new Template("template/projects/tasks/add_milestone.html");
 								
 								$paramquery = $_GET;
 								$paramquery[nextpage] = "2";
@@ -705,7 +705,7 @@ class ProjectTaskIO
 			{
 				if ($_GET[sure] != "true")
 				{
-					$template = new Template("languages/en-gb/template/projects/tasks/delete.html");
+					$template = new Template("template/projects/tasks/delete.html");
 					
 					$paramquery = $_GET;
 					$paramquery[sure] = "true";
@@ -770,7 +770,7 @@ class ProjectTaskIO
 			
 				if (!$_GET[nextpage])
 				{
-					$template = new Template("languages/en-gb/template/projects/tasks/edit_start.html");
+					$template = new Template("template/projects/tasks/edit_start.html");
 					
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";
@@ -888,7 +888,7 @@ class ProjectTaskIO
 			
 				if (!$_GET[nextpage])
 				{
-					$template = new Template("languages/en-gb/template/projects/tasks/edit_end.html");
+					$template = new Template("template/projects/tasks/edit_end.html");
 					
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";
@@ -1045,7 +1045,7 @@ class ProjectTaskIO
 				
 				$project_task_created_at = new DatetimeHandler($project_task->get_created_at());
 				
-				$template = new Template("languages/en-gb/template/projects/tasks/detail.html");
+				$template = new Template("template/projects/tasks/detail.html");
 				
 				switch($project_task->get_type()):
 					case 1:
@@ -1147,7 +1147,7 @@ class ProjectTaskIO
 			{
 				$project_task_array = ProjectTask::list_tasks($_GET[project_id]);
 				
-				$template = new Template("languages/en-gb/template/projects/tasks/table_view.html");
+				$template = new Template("template/projects/tasks/table_view.html");
 				
 				
 				$table_view_paramquery = $_GET;
@@ -1347,7 +1347,7 @@ class ProjectTaskIO
 						$date_mktime = $date_mktime + $date_range_addition;
 					}
 					
-					$template = new Template("languages/en-gb/template/projects/tasks/gantt_view.html");
+					$template = new Template("template/projects/tasks/gantt_view.html");
 				
 					$table_view_paramquery = $_GET;
 					$table_view_paramquery[show] = "table";
@@ -1464,7 +1464,7 @@ class ProjectTaskIO
 				}
 				else
 				{
-					$template = new Template("languages/en-gb/template/projects/tasks/gantt_view.html");
+					$template = new Template("template/projects/tasks/gantt_view.html");
 				
 					$table_view_paramquery = $_GET;
 					$table_view_paramquery[show] = "table";
@@ -1560,7 +1560,7 @@ class ProjectTaskIO
 					}
 				}
 						
-				$template = new Template("languages/en-gb/template/projects/tasks/calendar_view.html");
+				$template = new Template("template/projects/tasks/calendar_view.html");
 				
 				$table_view_paramquery = $_GET;
 				$table_view_paramquery[show] = "table";
@@ -1624,7 +1624,7 @@ class ProjectTaskIO
 	
 	public static function list_upcoming_tasks()
 	{
-		$template = new Template("languages/en-gb/template/projects/tasks/list_upcoming_tasks.html");
+		$template = new Template("template/projects/tasks/list_upcoming_tasks.html");
 		
 		$project_task = new ProjectTask(null);
 		$project_task_array = $project_task->list_upcoming_tasks();

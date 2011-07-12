@@ -29,7 +29,21 @@ class ProjectNavigationIO
 {
 	public static function get_active() 
 	{
-		return true;
+		if (is_numeric($_GET[project_id]))
+		{
+			if (Project::exist_project($_GET[project_id]))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	public static function get_icon()
@@ -40,7 +54,7 @@ class ProjectNavigationIO
 		}
 		else 
 		{
-			return "images/icons/sample.png";
+			return "images/icons/project_na.png";
 		}
 	}
 	

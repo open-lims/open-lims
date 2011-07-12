@@ -1,0 +1,94 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Add Project Task",0) -->
+
+	<br />
+	<form action='index.php?[[PARAMS]]' method='post'>
+	<table class='formTable'>
+		<tr>
+			<td width='20%'>Auto-Connect:</td>
+			<td>
+				<input type='checkbox' name='auto_connect' value='1' checked='checked' />
+			</td>
+		</tr>
+		<tr>
+			<td colspan='2'><div class='horizontal_line'>&nbsp;</div></td>
+		</tr>
+		<tr>
+			<td width='20%'>Start Date:</td>
+			<td>
+				<input type='text' id='startdate' name='startdate' class='FormTextfield' value='[[STARTDATE]]' />
+				<a href='#' onclick='selectDate("startdate",event)'><img src='images/icons/month.png' style='border: 0;' /></a>
+				<span class='formError'>[[ERROR0]]</span>
+			</td>
+		</tr>
+		<tr>
+			<td width='20%'>End Date:</td>
+			<td>
+				<input type='text' id='enddate' name='enddate' class='FormTextfield' value='[[ENDDATE]]' />
+				<a href='#' onclick='selectDate("enddate",event)'><img src='images/icons/month.png' style='border: 0;' /></a>
+				<span class='formError'>[[ERROR1]]</span>
+			</td>
+		</tr>
+		<tr>
+			<td colspan='2'><div class='horizontal_line'>&nbsp;</div></td>
+		</tr>
+		<tr>
+			<td>Whole Day:</td>
+			<td><input type='checkbox' name='wholeday' value='1' [[WHOLE_DAY_CHECKED]] /></td>
+		</tr>
+		<tr>
+			<td>Time:</td>
+			<td>
+				<input type='text' name='time1' size='2' class='FormTextfield' maxlength='2' value='[[TIME1]]' />:<input type='text' name='time2' size='2' class='FormTextfield' maxlength='2' value='[[TIME2]]' />
+				<span class='formError'>[[ERROR2]]</span>
+			</td>
+		</tr>
+		<tr>
+			<td colspan='2'><div class='horizontal_line'>&nbsp;</div></td>
+		</tr>
+		<tr>
+			<td>Status:</td>
+			<td>
+				<select name='status'>
+				
+				<!-- FOREACH BEGIN ([[STATUS]]) -->
+				
+					<option value='[[STATUS:VALUE]]'>[[STATUS:CONTENT]]</option>
+				
+				<!-- FOREACH END -->
+								
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Task:</td>
+			<td>
+				<input type='radio' name='finalise' value='2' [[ACHIVE_CHECKED]] /> achive	
+				<input type='radio' name='finalise' value='1' [[FINALISE_CHECKED]] /> finalise
+				<span class='formError'>[[ERROR3]]</span>
+			</td>
+			
+		</tr>
+		<tr>
+			<td colspan='2'><div class='horizontal_line'>&nbsp;</div></td>
+		</tr>
+		<tr>
+			<td colspan='2'>Comment</td>
+		</tr>
+		<tr>
+			<td colspan='2'>
+				<textarea name='comment' cols='64' rows='8' class='FormTextarea'>[[COMMENT]]</textarea>
+			</td>
+		</tr>
+		<tr>
+			<td colspan='2'><div class='horizontal_line'>&nbsp;</div></td>
+		</tr>
+		<tr>
+			<td colspan='2'><br /><input type='submit' value='next' name='submitbutton' class='FormButton'></td>
+		</tr>
+	</table>
+	<input type='hidden' name='type' value='[[TYPE]]' />
+	</form>
+	
+<!-- CONTAINER END (0) -->

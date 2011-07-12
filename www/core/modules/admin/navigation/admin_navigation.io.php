@@ -29,7 +29,7 @@ class AdminNavigationIO
 {
 	public static function navigation()
 	{
-		$template = new Template("languages/en-gb/template/admin/navigation/administration.html");
+		$template = new Template("template/admin/navigation/administration.html");
 		
 		
 		$paramquery[username] = $_GET[username];

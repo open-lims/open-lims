@@ -1,0 +1,50 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Add Project Template",0) -->
+
+<br />
+<form action='index.php?[[PARAMS]]' method='post' onSubmit='return submitForm(this.submitbutton)'>			
+	<table class='formTable'>
+		<tr>
+			<td>File:</td>
+			<td>
+				<select name='data_entity_id'>
+				
+				<!-- FOREACH BEGIN ([[FILE]]) -->
+	
+					<option value='[[FILE:VALUE]]'>[[FILE:CONTENT]]</option>
+		
+				<!-- FOREACH END -->
+				
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Category:</td>
+			<td>
+				<select name='category_id'>
+				
+				<!-- FOREACH BEGIN ([[CATEGORY]]) -->
+	
+					<option value='[[CATEGORY:VALUE]]'>[[CATEGORY:CONTENT]]</option>
+		
+				<!-- FOREACH END -->
+				
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Parent Template:</td>
+			<td>
+				<input type='radio' name='parent' value='1' /> Yes
+				<input type='radio' name='parent' value='0' checked='checked' /> No
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><br /><input type='submit' value='new' class='FormButton' /></td>
+		</tr>
+	</table>
+</form>
+
+<!-- CONTAINER END (0) -->

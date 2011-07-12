@@ -51,7 +51,7 @@ class EquipmentIO
 		{
 			$equipment_array = EquipmentType::list_entries();
 		
-			$template = new Template("languages/en-gb/template/equipment/add.html");
+			$template = new Template("template/equipment/add.html");
 			
 			$paramquery = $_GET;
 			$paramquery[nextpage] = 2;
@@ -276,7 +276,7 @@ class EquipmentIO
 				$list->override_last_line("<span class='italic'>No results found!</span>");
 			}
 			
-			$template = new Template("languages/en-gb/template/equipment/list.html");
+			$template = new Template("template/equipment/list.html");
 
 			$template->set_var("table", $list->get_list($result_array, $_GET[page]));
 			
@@ -372,7 +372,7 @@ class EquipmentIO
 				$list->override_last_line("<span class='italic'>No results found!</span>");
 			}
 			
-			$template = new Template("languages/en-gb/template/equipment/list_organisation_unit.html");
+			$template = new Template("template/equipment/list_organisation_unit.html");
 
 			$template->set_var("table", $list->get_list($result_array, $_GET[page]));
 			
@@ -410,7 +410,7 @@ class EquipmentIO
 			$equipment_type = new EquipmentType($type_id);
 			$equipment_owner = new User($owner_id);
 						
-			$template = new Template("languages/en-gb/template/equipment/detail.html");
+			$template = new Template("template/equipment/detail.html");
 
 			$template->set_var("name", $equipment_type->get_name());
 			$template->set_var("category", $equipment_type->get_cat_name());

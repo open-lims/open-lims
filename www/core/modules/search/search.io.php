@@ -29,7 +29,7 @@ class SearchIO
 {
 	private static function main()
 	{
-		$template = new Template("languages/en-gb/template/search/main.html");
+		$template = new Template("template/search/main.html");
 		
 		$module_dialog_array = ModuleDialog::list_dialogs_by_type("search");
 		
