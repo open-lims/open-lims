@@ -35,6 +35,15 @@ class AdminNavigationIO
 		$paramquery[username] = $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
 		$paramquery[nav] = "admin";
+		$paramquery[run] = "general_admin";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("general_params", $params);
+		
+		
+		$paramquery[username] = $_GET[username];
+		$paramquery[session_id] = $_GET[session_id];
+		$paramquery[nav] = "admin";
 		$paramquery[run] = "include_admin";
 		$params = http_build_query($paramquery,'','&#38;');
 		

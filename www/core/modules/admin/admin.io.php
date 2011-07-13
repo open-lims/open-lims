@@ -70,6 +70,11 @@ class AdminIO
 		{
 			switch($_GET[run]):
 				
+			case "general_admin":
+					require_once("core/modules/base/admin/admin_general.io.php");
+					AdminGeneralIO::handler();
+				break;
+			
 				case "include_admin":
 					require_once("core/modules/base/admin/admin_base_include.io.php");
 					AdminBaseIncludeIO::handler();
