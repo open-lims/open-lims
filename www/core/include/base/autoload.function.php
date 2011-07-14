@@ -50,6 +50,7 @@ function __autoload($classname)
 	$classes['DatetimeHandler']				= $path_prefix."core/include/base/datetime_handler.class.php";
 	$classes['ExceptionHandler']			= $path_prefix."core/include/base/exception_handler.class.php";
 	$classes['Language']					= $path_prefix."core/include/base/language.class.php";
+	$classes['PaperSize']					= $path_prefix."core/include/base/paper_size.class.php";
 	$classes['Regional']					= $path_prefix."core/include/base/regional.class.php";
 	$classes['System']						= $path_prefix."core/include/base/system.class.php";
 	$classes['SystemMessage']				= $path_prefix."core/include/base/system_message.class.php";

@@ -96,7 +96,7 @@
 	$dialog[10][type]			= "report";
 	$dialog[10][class_path]		= "core/modules/sample/sample_report.io.php";
 	$dialog[10]['class']		= "SampleReportIO";
-	$dialog[10][method]			= "get_full_report";
+	$dialog[10][method]			= "get_barcode_report";
 	$dialog[10][internal_name]	= "sample_barcode_report";
 	$dialog[10][display_name]	= "Sample Barcode Report";
 ?>

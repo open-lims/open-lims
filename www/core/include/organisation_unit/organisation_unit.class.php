@@ -1674,7 +1674,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	 */
 	public function get_user_status($user_id)
 	{
-		if ($this->organisation_unit->is_leader_in_organisation_unit($user_id) == true)
+		if ($this->is_leader_in_organisation_unit($user_id) == true)
 		{			
 			return "Leader";
 		}

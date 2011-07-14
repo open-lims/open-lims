@@ -43,7 +43,20 @@ class SampleReportIO
 				$owner = new User($sample->get_owner_id());
 				$owner_name = str_replace("&nbsp;"," ", $owner->get_full_name(false));
 				
-				$pdf = new SamplePDF($sample_id, $sample->get_name(), PDF_PAGE_ORIENTATION, PDF_UNIT, "A4", true, 'UTF-8', false);
+				$paper_size_info_array = PaperSize::get_standard_size();
+				
+				$format = Array($paper_size_info_array['width'], $paper_size_info_array['height']);
+				
+				if ($paper_size_info_array['width'] >= $paper_size_info_array['height'])
+				{
+					$orientation = "L";
+				}
+				else
+				{
+					$orientation = "P";
+				}
+				
+				$pdf = new SamplePDF($sample_id, $sample->get_name(), $orientation, "mm", $format, true, 'UTF-8', false);
 	
 				$pdf->SetCreator(PDF_CREATOR);
 				$pdf->SetAuthor('Open-LIMS');
@@ -56,11 +69,11 @@ class SampleReportIO
 				
 				$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 				
-				$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+				$pdf->SetMargins($paper_size_info_array['margin_left'], $paper_size_info_array['margin_top']*3, $paper_size_info_array['margin_right']);
 				$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 				$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 				
-				$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+				$pdf->SetAutoPageBreak(TRUE, $paper_size_info_array['margin_bottom']);
 				
 				$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 				
@@ -122,13 +135,22 @@ class SampleReportIO
 				
 				$module_dialog_array = ModuleDialog::list_dialogs_by_type("item_report");
 				
-				if (is_array($module_dialog_array))
+				if (is_array($module_dialog_array) and count($module_dialog_array) >= 1)
 				{
-					$pdf->AddPage();
-				}
-				else
-				{
-					
+					foreach($module_dialog_array as $key => $value)
+					{
+						if (file_exists($value['class_path']))
+						{
+							require_once($value['class_path']);
+							if (class_exists($value['class']))
+							{
+								if (method_exists($value['class'], $value['method']))
+								{
+									$pdf = $value['class']::$value['method']($pdf);
+								}
+							}
+						}
+					}
 				}
 				
 				return $pdf;
@@ -146,6 +168,100 @@ class SampleReportIO
 	
 	public static function get_barcode_report()
 	{
-		
+		if (class_exists("TCPDF"))
+		{
+			if ($_GET[sample_id])
+			{		
+				$sample_id = $_GET[sample_id];
+				
+				if ($_GET[paper_size])
+				{
+					$paper_size_info_array = PaperSize::get_size_by_id($_GET[paper_size]);
+				}
+				else
+				{
+					$paper_size_info_array = PaperSize::get_standard_size();
+				}
+				
+				$format = Array($paper_size_info_array['width'], $paper_size_info_array['height']);
+				
+				if ($paper_size_info_array['width'] >= $paper_size_info_array['height'])
+				{
+					$orientation = "L";
+				}
+				else
+				{
+					$orientation = "P";
+				}
+				
+				$pdf = new TCPDF($orientation, "mm", $format, true, 'UTF-8', false);
+	
+				$pdf->SetCreator(PDF_CREATOR);
+				$pdf->SetAuthor('Open-LIMS');
+				$pdf->SetTitle('Sample Report');
+				
+				$pdf->setPrintHeader(false);
+				$pdf->setPrintFooter(false);
+								
+				$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+				
+				$pdf->SetMargins($paper_size_info_array['margin_left'], $paper_size_info_array['margin_top'], $paper_size_info_array['margin_right']);
+				
+				$pdf->SetAutoPageBreak(TRUE, $paper_size_info_array['margin_bottom']);
+				
+				$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+				
+				$pdf->setLanguageArray($l);
+								
+				$pdf->AddPage();
+				
+				$page_width = $paper_size_info_array['width']-$paper_size_info_array['margin_left']-$paper_size_info_array['margin_right'];
+				$page_height = $paper_size_info_array['height']-$paper_size_info_array['margin_top'];
+				
+				$font_size = $page_height*0.1;
+				
+				if (($page_width*0.6) > $page_height)
+				{
+					$barcode_height = $page_height-$font_size;
+					$barcode_width = null;
+				}
+				else
+				{
+					$barcode_height = $page_width * 0.6;
+					$barcode_width = $page_width;
+				}
+				
+				$print_sample_id = "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
+				
+				$style = array(
+				    'position' => '',
+				    'align' => 'C',
+				    'stretch' => true,
+				    'fitwidth' => false,
+				    'cellfitalign' => '',
+				    'border' => false,
+				    'hpadding' => 'auto',
+				    'vpadding' => 'auto',
+				    'fgcolor' => array(0,0,0),
+				    'bgcolor' => false, //array(255,255,255),
+				    'text' => true,
+				    'font' => 'helvetica',
+				    'fontsize' => $font_size,
+				    'stretchtext' => 4
+				);
+				
+				$pdf->write1DBarcode($print_sample_id, 'C128B', '', '', $barcode_width, $barcode_height, 0.2, $style, 'M');
+			
+				return $pdf;
+			}
+			else
+			{
+				// Error
+			}
+		}
+		else
+		{
+			// Error
+		}
 	}
 }

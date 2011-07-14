@@ -1,0 +1,213 @@
+<script>
+
+$(document).ready(function()
+{
+	var get_array = getQueryParams(document.location.search);
+	
+	function load_content(sortvalue, sortmethod, page)
+	{
+		$.ajax(
+		{
+			type: "GET",
+			url: "core/modules/base/admin/admin_general.ajax.php",
+			data: "session_id="+get_array['session_id']+"&run=list_paper_sizes&sortvalue="+sortvalue+"&sortmethod="+sortmethod+"&page="+page,
+			success: function(data)
+			{
+				$("#BaseAdminAjaxContent").contents().detach();
+				$("#BaseAdminAjaxContent").append(data);
+			}
+		});
+	}
+	
+	var sortvalue = "";
+	var sortmethod = "";
+	var page = 0;
+	
+	load_content(sortvalue, sortmethod, page);
+	
+	$("#AddPaperSizeDialog").dialog(
+	{
+		autoOpen: false,
+		buttons: 
+		{
+			"Close": function()
+			{
+				$( this ).dialog( "close" );
+			},
+			"OK": function()
+			{
+				var name 			=  $("#AddPaperSizeDialogGeneralNameField").val();
+				var width 			= $("#AddPaperSizeDialogGeneralWidthField").val();
+				var height 			= $("#AddPaperSizeDialogGeneralHeightField").val();
+				var margin_left 	= $("#AddPaperSizeDialogGeneralMarginLeftField").val();
+				var margin_right 	= $("#AddPaperSizeDialogGeneralMarginRightField").val();
+				var margin_top 		= $("#AddPaperSizeDialogGeneralMarignTopField").val();
+				var margin_bottom 	= $("#AddPaperSizeDialogGeneralMarginButtomField").val();
+				
+				if ($("#AddPaperSizeDialogFunction").html() == "add")
+				{
+					$.ajax(
+					{
+						type: "POST",
+						url: "core/modules/base/admin/admin_general.ajax.php?session_id="+get_array['session_id']+"&run=add_paper_size",
+						data: "name="+name+"&width="+width+"&height="+height+"&margin_left="+margin_left+"&margin_right="+margin_right+"&margin_top="+margin_top+"&margin_bottom="+margin_bottom+"",
+						success: function(data)
+						{
+							if (data == "1")
+							{
+								load_content(sortvalue, sortmethod, page);
+								$("#AddPaperSizeDialog").dialog( "close" );
+							}
+						}
+					});
+				}
+				else
+				{
+					$.ajax(
+					{
+						type: "POST",
+						url: "core/modules/base/admin/admin_general.ajax.php?session_id="+get_array['session_id']+"&run=set_paper_size",
+						data: "id="+$("#AddPaperSizeDialogId").html()+"&name="+name+"&width="+width+"&height="+height+"&margin_left="+margin_left+"&margin_right="+margin_right+"&margin_top="+margin_top+"&margin_bottom="+margin_bottom+"",
+						success: function(data)
+						{
+							if (data == "1")
+							{
+								load_content(sortvalue, sortmethod, page);
+								$("#AddPaperSizeDialog").dialog( "close" );
+							}
+						}
+					});
+				}
+			}
+		},
+		height: 480,
+		width: 500
+	});
+	
+	$('#BaseAdminPaperSizeAdd').click(function()
+	{
+		$("#AddPaperSizeDialog").dialog("open");
+		$("#AddPaperSizeDialog").dialog("option", "title", "Add a Paper-Size");
+		$("#AddPaperSizeDialogFunction").html("add");
+		$("#AddPaperSizeDialogId").html("");
+		
+		$("#AddPaperSizeDialogGeneralNameField").attr('disabled', false);
+		$("#AddPaperSizeDialogGeneralHeightField").attr('disabled', false);
+		$("#AddPaperSizeDialogGeneralWidthField").attr('disabled', false);
+		
+		$("#AddPaperSizeDialogGeneralNameField").val("");
+		$("#AddPaperSizeDialogGeneralHeightField").val("");
+		$("#AddPaperSizeDialogGeneralWidthField").val("");
+		$("#AddPaperSizeDialogGeneralMarginLeftField").val("");
+		$("#AddPaperSizeDialogGeneralMarginRightField").val("");
+		$("#AddPaperSizeDialogGeneralMarignTopField").val("");
+		$("#AddPaperSizeDialogGeneralMarginButtomField").val("");
+		
+		return false;
+	});
+	
+	$(".BaseAdminPaperSizeEdit").each().live('click', function()
+	{
+		var id = $(this).attr("id");
+		id = id.replace("BaseAdminPaperSizeEdit","");
+		
+		$("#AddPaperSizeDialog").dialog("open");
+		$("#AddPaperSizeDialog").dialog("option", "title", "Edit Paper-Size");
+		$("#AddPaperSizeDialogFunction").html("edit");
+		$("#AddPaperSizeDialogId").html(id);
+		
+		$.ajax(
+		{
+			type: "GET",
+			url: "core/modules/base/admin/admin_general.ajax.php",
+			data: "session_id="+get_array['session_id']+"&run=get_paper_size&id="+id,
+			success: function(data)
+			{
+				array = $.parseJSON(data);
+				
+				if (array[0] == true)
+				{
+					$("#AddPaperSizeDialogGeneralNameField").attr('disabled', true);
+					$("#AddPaperSizeDialogGeneralHeightField").attr('disabled', true);
+					$("#AddPaperSizeDialogGeneralWidthField").attr('disabled', true);
+				}
+				else
+				{
+					$("#AddPaperSizeDialogGeneralNameField").attr('disabled', false);
+					$("#AddPaperSizeDialogGeneralHeightField").attr('disabled', false);
+					$("#AddPaperSizeDialogGeneralWidthField").attr('disabled', false);
+				}
+				
+				$("#AddPaperSizeDialogGeneralNameField").val(array[1]);
+				$("#AddPaperSizeDialogGeneralWidthField").val(array[2]);
+				$("#AddPaperSizeDialogGeneralHeightField").val(array[3]);
+				$("#AddPaperSizeDialogGeneralMarginLeftField").val(array[4]);
+				$("#AddPaperSizeDialogGeneralMarginRightField").val(array[5]);
+				$("#AddPaperSizeDialogGeneralMarignTopField").val(array[6]);
+				$("#AddPaperSizeDialogGeneralMarginButtomField").val(array[7]);
+			}
+		});
+		
+		return false;
+	});
+	
+	$(".BaseAdminPaperSizeDelete").each().live('click', function()
+	{
+		var id = $(this).attr("id");
+		id = id.replace("BaseAdminPaperSizeDelete","");
+		$.ajax(
+		{
+			type: "GET",
+			url: "core/modules/base/admin/admin_general.ajax.php",
+			data: "session_id="+get_array['session_id']+"&run=delete_paper_size&id="+id,
+			success: function(data)
+			{
+				if (data == 1)
+				{
+					load_content(sortvalue, sortmethod, page);
+				}
+			}
+		});
+	});
+});
+
+</script>
+
+<div id="AddPaperSizeDialog" style='display: none;'>
+	<div id='AddPaperSizeDialogGeneral'>
+		<div id='AddPaperSizeDialogGeneralTitle'>General</div>
+		<div class='AddPaperSizeDialogGeneralFieldTitle'>Name:</div>
+		<div class='AddPaperSizeDialogGeneralField'><input type='text' size='20' id='AddPaperSizeDialogGeneralNameField' /></div>
+		<div class='AddPaperSizeDialogGeneralFieldTitle'>Height:</div>
+		<div class='AddPaperSizeDialogGeneralField'><input type='text' size='5' id='AddPaperSizeDialogGeneralHeightField' /> mm</div>
+		<div class='AddPaperSizeDialogGeneralFieldTitle'>Width:</div>
+		<div class='AddPaperSizeDialogGeneralField'><input type='text' size='5' id='AddPaperSizeDialogGeneralWidthField' /> mm</div>
+	</div>
+	<div id='AddPaperSizeDialogMargin'>
+		<div id='AddPaperSizeDialogMarginTitle'>Margin</div>
+		<div id='AddPaperSizeDialogMarginTop'><input type='text' size='5' id='AddPaperSizeDialogGeneralMarignTopField' /> mm</div>
+		<div id='AddPaperSizeDialogMarginLeft'><input type='text' size='5' id='AddPaperSizeDialogGeneralMarginLeftField' /> mm</div>
+		<div id='AddPaperSizeDialogMarginImage'><img src='images/icons_large/text_128.png' alt='' /></div>
+		<div id='AddPaperSizeDialogMarginRight'><input type='text' size='5' id='AddPaperSizeDialogGeneralMarginRightField' /> mm</div>
+		<div id='AddPaperSizeDialogMarginBottom'><input type='text' size='5' id='AddPaperSizeDialogGeneralMarginButtomField' /> mm</div>
+	</div>
+	<div id='AddPaperSizeDialogFunction' style='display:none;'></div>
+	<div id='AddPaperSizeDialogId' style='display:none;'></div>
+</div>
+
+<br />
+
+<!-- CONTAINER BEGIN ("Papers-Sizes",0) -->
+
+<div class='boxIconBar'>
+				
+<div class='boxIcon'><img src='images/icons/add.png' alt='' />&nbsp;<a href='#' id='BaseAdminPaperSizeAdd'>Add a Paper-Size</a></div>
+
+</div>
+
+<div id='BaseAdminAjaxContent'>
+
+
+</div>
+
+<!-- CONTAINER END (0) -->
