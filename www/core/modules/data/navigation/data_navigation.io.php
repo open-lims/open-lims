@@ -34,7 +34,7 @@ class DataNavigationIO
 	
 	public static function get_icon()
 	{
-		return "images/icons/folder_home.png";
+		return "images/icons/folder_grey.png";
 	}
 	
 	public static function get_ajax_url()

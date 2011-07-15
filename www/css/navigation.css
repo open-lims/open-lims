@@ -3,7 +3,7 @@
 }
 
 .NavigationMainNavigationLeft {
-	
+	margin-left: 20px; 
 }
 
 .NavigationMainNavigationRight {
@@ -15,7 +15,7 @@ ul.NavigationMainNavigationList {
 	list-style: none;
 	padding: 0;
 	margin: 0;
-	margin-left: 20px;
+/* 	margin-left: 20px; 				 */
 }
 
 ul.NavigationMainNavigationList li {

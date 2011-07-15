@@ -1076,7 +1076,7 @@ class AdminOrganisationUnitIO
 						case "detail_owner":
 							$tab_io->activate("owners");
 						break;
-					
+						
 						case "detail_leader":
 							$tab_io->activate("leaders");
 						break;
