@@ -81,14 +81,94 @@ class Base_Wrapper implements Base_WrapperInterface
 		return Base_Wrapper_Access::count_base_module();
 	}
 	
+	/**
+	 * @todo implementation
+	 */
 	public static function list_base_include($order_by, $order_method, $start, $end)
 	{
-		
+		return null;
 	}
 	
+	/**
+	 * @todo implementation
+	 */
 	public static function count_base_include()
 	{
-		
+		return null;
+	}
+	
+	/**
+	 * @todo implementation
+	 */
+	public static function list_languages($order_by, $order_method, $start, $end)
+	{
+		return null;
+	}
+	
+	/**
+	 * @todo implementation
+	 */
+	public static function count_languages()
+	{
+		return null;
+	}
+	
+	/**
+	 * @todo implementation
+	 */
+	public static function list_timezones($order_by, $order_method, $start, $end)
+	{
+		return null;
+	}
+	
+	/**
+	 * @todo implementation
+	 */
+	public static function count_timezones()
+	{
+		return null;
+	}
+	
+	public static function list_paper_sizes($order_by, $order_method, $start, $end)
+	{
+		return Base_Wrapper_Access::list_paper_sizes($order_by, $order_method, $start, $end);
+	}
+	
+	public static function count_paper_sizes()
+	{
+		return Base_Wrapper_Access::count_paper_sizes();
+	}
+	
+	/**
+	 * @todo implementation
+	 */
+	public static function list_measuring_units($order_by, $order_method, $start, $end)
+	{
+		return null;
+	}
+	
+	/**
+	 * @todo implementation
+	 */
+	public static function count_measuring_units()
+	{
+		return null;
+	}
+	
+	/**
+	 * @todo implementation
+	 */
+	public static function list_currencies($order_by, $order_method, $start, $end)
+	{
+		return null;
+	}
+	
+	/**
+	 * @todo implementation
+	 */
+	public static function count_currencies()
+	{
+		return null;
 	}
 }
 ?>

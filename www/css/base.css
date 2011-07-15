@@ -150,3 +150,65 @@ padding: 2px 2px 2px 5px;
 	text-decoration: none;
 	border: 1px #D0D0D0 solid;
 }
+
+#AddPaperSizeDialogGeneral
+{
+	width: 350px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.AddPaperSizeDialogGeneralFieldTitle
+{
+	width: 100px;
+	float: left;
+	clear: left;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+.AddPaperSizeDialogGeneralField
+{
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+#AddPaperSizeDialogMargin
+{
+	width: 350px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 5px;
+	padding-top: 5px;
+	border-top: 1px #D0D0D0 solid;
+}
+#AddPaperSizeDialogMarginTitle,
+#AddPaperSizeDialogGeneralTitle
+{
+	clear: left;
+	font-weight: bold;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+#AddPaperSizeDialogMarginTop
+{
+	text-align: center;
+}
+#AddPaperSizeDialogMarginLeft
+{
+	float: left;
+	text-align: center;
+	padding-top: 55px;
+}
+#AddPaperSizeDialogMarginImage
+{
+	float: left;
+	text-align: center;
+}
+#AddPaperSizeDialogMarginRight
+{
+	text-align: center;
+	padding-top: 55px;
+}
+#AddPaperSizeDialogMarginBottom
+{
+	clear: left;
+	text-align: center;
+}

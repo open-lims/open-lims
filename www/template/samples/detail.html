@@ -17,7 +17,19 @@
 				},
 				"OK": function()
 				{
-					var url = "report.php?username="+get_array["username"]+"&session_id="+get_array["session_id"]+"&dialog=sample_full_report&sample_id="+get_array["sample_id"];
+					var selected_value = $("input.selection:checked").attr("value");
+					
+					if (selected_value == "sample_barcode_report")
+					{
+						var paper_size = $("#report_barcode_paper_format option:selected").attr("value");
+						
+						var url = "report.php?username="+get_array["username"]+"&session_id="+get_array["session_id"]+"&dialog=sample_barcode_report&paper_size="+paper_size+"&sample_id="+get_array["sample_id"];
+					}
+					else
+					{
+						var url = "report.php?username="+get_array["username"]+"&session_id="+get_array["session_id"]+"&dialog=sample_full_report&sample_id="+get_array["sample_id"];
+					}
+					
                     var windowName = $(this).attr("name");
  
                     window.open(url, windowName);
@@ -52,9 +64,17 @@
 
 <div id="print_dialog" title="Print Report" style='display: none;'>
 	<div style='text-align: center; font-weight: bold;'>Create Report.</div>
-	<p><input type='radio' name='selection' id='report_barcode' /> Barcode only</p>
-	<p>Paper Format: <select id='report_barcode_paper_format'><option>A4</option></select></p>
-	<p><input type='radio' name='selection' id='report_full' /> Full Report</p>
+	<p><input type='radio' name='selection' class='selection' value='sample_barcode_report' id='report_barcode' /> Barcode only</p>
+	<p>Paper Format: <select id='report_barcode_paper_format'>
+	
+	<!-- FOREACH BEGIN ([[PAPER_SIZE_ARRAY]]) -->
+	
+		<option value='[[PAPER_SIZE_ARRAY:ID]]'>[[PAPER_SIZE_ARRAY:NAME]]</option>
+	
+	<!-- FOREACH END -->
+	
+	</select></p>
+	<p><input type='radio' name='selection' class='selection' value='sample_full_report' id='report_full' /> Full Report</p>
 </div>
 
 <div class='SampleBarcode'>

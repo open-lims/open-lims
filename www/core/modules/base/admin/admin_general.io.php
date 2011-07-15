@@ -27,41 +27,68 @@
  */
 class AdminGeneralIO
 {	
+	public static function list_languages()
+	{
+		$template = new Template("template/base/admin/general/list_languages.html");
+		$template->output();		
+	}
+	
+	public static function list_timzones()
+	{
+		
+	}
+	
+	public static function list_paper_sizes()
+	{
+		$template = new Template("template/base/admin/general/list_paper_sizes.html");
+		$template->output();
+	}
+	
+	public static function list_measuring_units()
+	{
+		
+	}
+	
+	public static function list_currencies()
+	{
+		
+	}
+	
 	public static function handler()
 	{
 		$tab_io = new Tab_IO();
 	
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "detail";
+		$paramquery[action] = "list_languages";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$tab_io->add("languages", "Languages", $params, false);
 		
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "detail_owner";
+		$paramquery[action] = "list_timezones";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$tab_io->add("timezones", "Timezones", $params, false);
 		
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "detail_leader";
+		$paramquery[action] = "list_paper_sizes";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$tab_io->add("paper-sizes", "Paper Sizes", $params, false);
 
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "detail_member";
+		$paramquery[action] = "list_measuring_units";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$tab_io->add("measuring-units", "Measur. Un.", $params, false);  
 		
 				
 		$paramquery = $_GET;
-		$paramquery[action] = "detail_leader";
+		$paramquery[action] = "list_currencies";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$tab_io->add("currencies", "Currencies", $params, false);
@@ -69,6 +96,22 @@ class AdminGeneralIO
 		
 		switch($_GET[action]):
 			
+			case "list_timezones":
+				$tab_io->activate("timezones");
+			break;
+			
+			case "list_paper_sizes":
+				$tab_io->activate("paper-sizes");
+			break;
+			
+			case "list_measuring_units":
+				$tab_io->activate("measuring-units");
+			break;
+			
+			case "list_currencies":
+				$tab_io->activate("currencies");
+			break;
+		
 			default:
 				$tab_io->activate("languages");
 			break;
@@ -78,8 +121,24 @@ class AdminGeneralIO
 		$tab_io->output();
 		
 		switch($_GET[action]):
-			default:
+			case "list_timezones":
+				self::list_timezones();
+			break;
 			
+			case "list_paper_sizes":
+				self::list_paper_sizes();
+			break;
+			
+			case "list_measuring_units":
+				self::list_measuring_units();
+			break;
+			
+			case "list_currencies":
+				self::list_currencies();
+			break;
+		
+			default:
+				self::list_languages();
 			break;
 		endswitch;
 	}

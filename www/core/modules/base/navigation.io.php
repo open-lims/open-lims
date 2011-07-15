@@ -39,11 +39,6 @@ class Navigation_IO
 		$template = new Template("template/base/navigation/main/main_navigation_header.html");
 		$template->output();
 
-		// HOME
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "home";
-		$params = http_build_query($paramquery,'','&#38;');
 
 		$module_navigation_array = ModuleNavigation::list_module_navigations_entries();
 		
@@ -161,6 +156,11 @@ class Navigation_IO
 		
 		if ($_GET[nav] == "home" or !$_GET[nav] or $module_tab_active == false)
 		{
+			$paramquery[username] = $_GET[username];
+			$paramquery[session_id] = $_GET[session_id];
+			$paramquery[nav] = "home";
+			$params = http_build_query($paramquery,'','&#38;');
+			
 			$template = new Template("template/base/navigation/main/tabs/blue_tab_active.html");
 			$template->set_var("params", $params);
 			$template->set_var("title", "Home");
@@ -168,6 +168,11 @@ class Navigation_IO
 		}
 		else
 		{
+			$paramquery[username] = $_GET[username];
+			$paramquery[session_id] = $_GET[session_id];
+			$paramquery[nav] = "home";
+			$params = http_build_query($paramquery,'','&#38;');
+			
 			$template = new Template("template/base/navigation/main/tabs/blue_tab.html");
 			$template->set_var("params", $params);
 			$template->set_var("title", "Home");
