@@ -1,17 +1,14 @@
 	
 function create_menu_tree(id, ajax_handler) 
 {
-	
 	var array;
 	var div_id = id;
 	var global_ajax_handler = ajax_handler;
 	var get_array = getQueryParams(document.location.search);
 
-
 	$("<div id='loadingAnimation'><img src='images/animations/loading_circle_small.gif'/></div>")
 	.css("margin","10px 0 0 90px")
 	.appendTo("#LeftNavigationTree");
-	
 	
 	$('#LeftNavigationTreeContainer').jScrollPane();
 	var scroll_api = $('#LeftNavigationTreeContainer').data('jsp');
@@ -21,7 +18,7 @@ function create_menu_tree(id, ajax_handler)
 	{
 		type: "GET",
 		url: ajax_handler,
-		data: "run=get_array&session_id="+get_array['session_id'],
+		data: "run=get_array&session_id="+get_array['session_id']+"&username="+get_array['username'],
 		success: function(data)
 		{
 			array = $.parseJSON(data);
@@ -67,7 +64,7 @@ function create_menu_tree(id, ajax_handler)
 							}
 							return_html += "'";
 						}
-						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorOpen'><a href='"+link+"'><img/></a> <a><img src='images/icons/"+symbol+"'/></a> <a>"+name+"</a></div>";
+						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorOpen'><a href='#'><img/></a> <a href='index.php?"+link+"'><img src='images/icons/"+symbol+"'/></a> <a href='index.php?"+link+"'>"+name+"</a></div>";
 					}
 					else 
 					{
@@ -85,7 +82,7 @@ function create_menu_tree(id, ajax_handler)
 							}			
 							return_html += "'";
 						}
-						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorClosed'><a href='"+link+"'><img/></a> <a><img src='images/icons/"+symbol+"'/></a> <a>"+name+"</a></div>";
+						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorClosed'><a href='#'><img/></a> <a href='index.php?"+link+"'><img src='images/icons/"+symbol+"'/></a> <a href='index.php?"+link+"'>"+name+"</a></div>";
 					}
 					
 					if(layer >= next_layer)
@@ -125,7 +122,7 @@ function create_menu_tree(id, ajax_handler)
 							return_html += "'";
 						}
 						
-						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorOpen'><a href='"+link+"'><img/></a> <a><img src='images/icons/"+symbol+"'/></a> <a>"+name+"</a></div>";
+						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorOpen'><a href='#'><img/></a> <a href='index.php?"+link+"'><img src='images/icons/"+symbol+"'/></a> <a href='index.php?"+link+"'>"+name+"</a></div>";
 					}
 					else 
 					{
@@ -145,7 +142,7 @@ function create_menu_tree(id, ajax_handler)
 							return_html += "'";
 						} 
 						
-						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorClosed'><a href='"+link+"'><img/></a> <a><img src='images/icons/"+symbol+"'/></a> <a>"+name+"</a></div>";
+						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorClosed'><a href='#'><img/></a> <a href='index.php?"+link+"'><img src='images/icons/"+symbol+"'/></a> <a href='index.php?"+link+"'>"+name+"</a></div>";
 					}
 					
 					if(layer >= next_layer)
@@ -154,12 +151,16 @@ function create_menu_tree(id, ajax_handler)
 					}
 				}
 			});
-
-
+			var click_lock = false;
 			$("#loadingAnimation").remove();
 			$("#"+id).append(return_html)
 			.click(
-				function(event) {					
+				function(event) {
+					if(click_lock==true)
+					{
+						return false;
+					}
+					click_lock = true;
 					event.preventDefault();
 					var target = event.target;
 					var target_div = $(target).parents("div")[0];
@@ -172,6 +173,7 @@ function create_menu_tree(id, ajax_handler)
 								parse_array();
 								update_icons();
 								update_scrollbar();
+								click_lock = false;
 						});
 					}
 					else if($(target_div).hasClass("LeftNavigationFirstAnchorClosed"))
@@ -188,7 +190,7 @@ function create_menu_tree(id, ajax_handler)
 						{
 							type: "GET",
 							url: ajax_handler,
-							data: "run=get_childs&id="+clicked_id+"&session_id="+get_array['session_id'],
+							data: "run=get_children&id="+clicked_id+"&session_id="+get_array['session_id'],
 							success: function(data)
 							{
 								var child_html = "<ul class='LeftNavigationLayer"+layer+"'>";
@@ -216,16 +218,30 @@ function create_menu_tree(id, ajax_handler)
 										}
 										child_html += "'";
 									} 
-									child_html += "><div id='LeftNavigationElementID"+child_id+"' class='LeftNavigationFirstAnchorClosed'><a href='"+child_link+"'><img/></a> <a><img src='images/icons/"+child_symbol+"'/></a> <a>"+child_name+"</a></div></li>";
+									child_html += "><div id='LeftNavigationElementID"+child_id+"' class='LeftNavigationFirstAnchorClosed'><a href=''><img/></a> <a href='index.php?"+child_link+"'><img src='images/icons/"+child_symbol+"'/></a> <a href='index.php?"+child_link+"'>"+child_name+"</a></div></li>";
 								});
 								child_html += "</ul>";
 								
 								
 								$(parent_li).append(child_html)
-									.children("ul").hide().slideDown("normal");
+									.children("ul").hide().slideDown("normal",function(){
+										if(!$(parent_li).hasClass(" NotClickable"))
+										{
+											var href = $("#"+$(target_div).attr("id")+" a:nth-child(2)").attr("href");
+											if(href != "index.php?")
+											{
+												window.location.href = href;
+											}
+										}
+										
+									});
 								parse_array();
 								update_icons();
 								update_scrollbar();
+			
+					
+								
+								click_lock = false;
 							}
 						});		
 					}
@@ -240,6 +256,7 @@ function create_menu_tree(id, ajax_handler)
 	function update_icons() {
 		$(".LeftNavigationFirstAnchorOpen > a:nth-child(1) > img").attr("src","images/minus.png").css("border","0");
 		$(".LeftNavigationFirstAnchorClosed > a:nth-child(1) > img").attr("src","images/plus.png").css("border","0");
+		$("#LeftNavigationTree").find("a").css({"text-decoration":"none","color":"black"});
 	}
 	
 	
@@ -355,17 +372,15 @@ function create_menu_tree(id, ajax_handler)
 			}
 		});
 		
-		var json_array = JSON.stringify(array);
-		
+		var json_array = encodeURIComponent(JSON.stringify(array));
+		console.log(json_array);
 		$.ajax(
 		{
 			type: "POST",
 			url: global_ajax_handler+"?session_id="+get_array['session_id']+"&run=set_array",
 			data: "array="+json_array,
 			success: function(data)
-			{
-	//			console.log("wrote array: "+data+" entries.");
-			}
+			{}
 		});
 	}
 }

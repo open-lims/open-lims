@@ -1,3 +1,9 @@
 </div></div>
 
-<script>var f = new scrollable_tabs(".NavigationMainNavigationList",8,true,false,"MainTabArrowLeft","MainTabArrowRight","MainTabCamera","active");</script>
+<script>
+	var f = new scrollable_tabs(".NavigationMainNavigationList",8,true,false,"MainTabArrowLeft","MainTabArrowRight","MainTabCamera","active");
+	if($("#MainTabArrowLeft > img").attr("src")!=undefined)
+	{
+		$(".NavigationMainNavigationLeft").css("margin-left","4px");
+	}
+</script>

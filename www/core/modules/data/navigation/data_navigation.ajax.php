@@ -96,7 +96,13 @@ class DataAjax extends Ajax
 						
 						$return_array[$counter][5] = true; // Clickable
 						
-						$return_array[$counter][6] = ""; //link
+						$paramquery['username'] = $_GET['username'];
+						$paramquery['session_id'] = $_GET['session_id'];
+						$paramquery['nav'] = "data";
+						$paramquery['folder_id'] = $value;
+						$params = http_build_query($paramquery, '', '&#38;');
+						
+						$return_array[$counter][6] = $params; //link
 						$return_array[$counter][7] = false; //open
 						
 						$counter++;
@@ -111,7 +117,7 @@ class DataAjax extends Ajax
 	public function set_array($array)
 	{
 		global $session;
-		
+		echo $array;
 		$var = json_decode($array);
 		if (is_array($var))
 		{
@@ -119,7 +125,7 @@ class DataAjax extends Ajax
 		}
 	}
 	
-	public function get_childs($id)
+	public function get_children($id)
 	{
 		if (is_numeric($id) and $id != 0)
 		{
@@ -154,7 +160,13 @@ class DataAjax extends Ajax
 					
 					$return_array[$counter][5] = true; // Clickable
 					
-					$return_array[$counter][6] = ""; //link
+					$paramquery['username'] = $_GET['username'];
+					$paramquery['session_id'] = $_GET['session_id'];
+					$paramquery['nav'] = "data";
+					$paramquery['folder_id'] = $value;
+					$params = http_build_query($paramquery, '', '&#38;');
+					
+					$return_array[$counter][6] = $params; //link
 					$return_array[$counter][7] = false; //open
 					
 					$counter++;
@@ -188,8 +200,8 @@ class DataAjax extends Ajax
 					$this->set_array($_POST['array']);
 				break;
 				
-				case "get_childs":
-					$this->get_childs($_GET['id']);
+				case "get_children":
+					$this->get_children($_GET['id']);
 				break;	
 			endswitch;
 		}
