@@ -43,14 +43,9 @@ class DataAjax extends Ajax
 		echo "Data";
 	}
 	
-	/**
-	 * Should return HTML of Menu
-	 */
 	private function get_html()
 	{
-		
 		$template = new Template("../../../../template/data/navigation/left.html");
-		
 		$template->output();
 	}
 	
@@ -117,7 +112,7 @@ class DataAjax extends Ajax
 	public function set_array($array)
 	{
 		global $session;
-		echo $array;
+		
 		$var = json_decode($array);
 		if (is_array($var))
 		{

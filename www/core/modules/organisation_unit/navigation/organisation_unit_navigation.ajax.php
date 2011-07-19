@@ -43,9 +43,6 @@ class OrganisationUnitAjax extends Ajax
 		echo "OrganisationUnit";
 	}
 	
-	/**
-	 * Should return HTML of Menu
-	 */
 	private function get_html()
 	{
 		$template = new Template("../../../../template/organisation_unit/navigation/left.html");
@@ -83,14 +80,45 @@ class OrganisationUnitAjax extends Ajax
 					
 					if ($organisation_unit->get_stores_data() == true)
 					{
-						$return_array[$counter][5] = true;
+						$module_link_array = ModuleLink::list_links_by_type("ou_navigation");
+	
+						if (is_array($module_link_array) and count($module_link_array) >= 1)
+						{
+							$paramquery['username'] = $_GET['username'];
+							$paramquery['session_id'] = $_GET['session_id'];
+							
+							if (is_array($module_link_array[0]['array']) and count($module_link_array[0]['array']) >= 1)
+							{
+								foreach ($module_link_array[0]['array'] as $array_key => $array_value)
+								{
+									if ($array_value == "%OU_ID%")
+									{
+										$paramquery['ou_id'] = $value;
+									}
+									else
+									{
+										$paramquery[$array_key] = $array_value;
+									}
+								}
+							}
+							
+							$params = http_build_query($paramquery, '', '&#38;');
+							
+							$return_array[$counter][5] = true;
+							$return_array[$counter][6] = $params; //link
+						}
+						else
+						{
+							$return_array[$counter][5] = true;
+							$return_array[$counter][6] = ""; //link
+						}
 					}
 					else
 					{
 						$return_array[$counter][5] = false;
+						$return_array[$counter][6] = "";
 					}
 					
-					$return_array[$counter][6] = ""; //link
 					$return_array[$counter][7] = false; //open
 					
 					$counter++;
@@ -138,14 +166,45 @@ class OrganisationUnitAjax extends Ajax
 					
 					if ($organisation_unit->get_stores_data() == true)
 					{
-						$return_array[$counter][5] = true;
+						$module_link_array = ModuleLink::list_links_by_type("ou_navigation");
+	
+						if (is_array($module_link_array) and count($module_link_array) >= 1)
+						{
+							$paramquery['username'] = $_GET['username'];
+							$paramquery['session_id'] = $_GET['session_id'];
+							
+							if (is_array($module_link_array[0]['array']) and count($module_link_array[0]['array']) >= 1)
+							{
+								foreach ($module_link_array[0]['array'] as $array_key => $array_value)
+								{
+									if ($array_value == "%OU_ID%")
+									{
+										$paramquery['ou_id'] = $value;
+									}
+									else
+									{
+										$paramquery[$array_key] = $array_value;
+									}
+								}
+							}
+							
+							$params = http_build_query($paramquery, '', '&#38;');
+							
+							$return_array[$counter][5] = true;
+							$return_array[$counter][6] = $params; //link
+						}
+						else
+						{
+							$return_array[$counter][5] = true;
+							$return_array[$counter][6] = ""; //link
+						}
 					}
 					else
 					{
 						$return_array[$counter][5] = false;
+						$return_array[$counter][6] = "";
 					}
 					
-					$return_array[$counter][6] = ""; //link
 					$return_array[$counter][7] = false; //open
 					
 					$counter++;

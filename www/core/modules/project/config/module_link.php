@@ -34,4 +34,10 @@
 	$link[1]['array'][nav]		= "project";
 	$link[1][file]				= "projects/home_buttons/view_my.html";
 	$link[1][weight]			= 200;
+	
+	$link[2][type]				= "ou_navigation";
+	$link[2]['array'][nav]		= "project";
+	$link[2]['array'][run]		= "organ_unit";
+	$link[2]['array'][ou_id]	= "%OU_ID%";
+	$link[2][weight]			= 0;
 ?>

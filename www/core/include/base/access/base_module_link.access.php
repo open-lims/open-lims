@@ -104,7 +104,7 @@ class BaseModuleLink_Access
 	{
 		global $db;
 
-		if (is_numeric($module_id) and $link_type and $link_array and $link_file)
+		if (is_numeric($module_id) and $link_type and $link_array)
 		{
 	 		if (is_numeric($weight))
 	 		{
@@ -114,9 +114,18 @@ class BaseModuleLink_Access
 	 		{
 	 			$weight_insert = "NULL";
 	 		}
+	 		
+	 		if ($link_file)
+	 		{
+	 			$link_file_insert = "'".$link_file."'";
+	 		}
+	 		else
+	 		{
+	 			$link_file_insert = "NULL";
+	 		}
 			
 			$sql_write = "INSERT INTO ".constant("BASE_MODULE_LINK_TABLE")." (id, module_id, link_type, link_array, link_file, weight, disabled) " .
-								"VALUES (nextval('".self::BASE_MODULE_LINK_PK_SEQUENCE."'::regclass),'".$module_id."','".$link_type."','".$link_array."','".$link_file."',".$weight_insert.", 'f')";		
+								"VALUES (nextval('".self::BASE_MODULE_LINK_PK_SEQUENCE."'::regclass),'".$module_id."','".$link_type."','".$link_array."',".$link_file_insert.",".$weight_insert.", 'f')";		
 				
 			$res_write = $db->db_query($sql_write);
 			

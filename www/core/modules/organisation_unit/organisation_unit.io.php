@@ -367,7 +367,10 @@ class OrganisationUnitIO
 							if (strpos($array_value, "%") === 0 and strpos($array_value, "%", 1) !== false)
 							{
 								$array_value_key = strtolower(str_replace("%","", $array_value));
-								$button_paramquery[$array_key] = $_GET[$array_value_key];
+								if ($_GET[$array_value_key])
+								{
+									$button_paramquery[$array_key] = $_GET[$array_value_key];
+								}
 							}
 							else
 							{

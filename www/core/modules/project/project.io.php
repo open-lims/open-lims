@@ -299,7 +299,14 @@ class ProjectIO
 					else
 					{
 						$project_type = 3;
-						$project_toid = $_GET[project_id];
+						if ($_GET[id])
+						{
+							$project_toid = $_GET[id];
+						}
+						else
+						{
+							$project_toid = $_GET[project_id];
+						}
 						$session->write_value("PROJECT_TYPE", $project_type, true);
 						$session->write_value("PROJECT_TOID", $project_toid, true);
 						$session->write_value("PROJECT_CURRENT_SCREEN", 2, true);
