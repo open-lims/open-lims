@@ -64,7 +64,7 @@ function create_menu_tree(id, ajax_handler)
 							}
 							return_html += "'";
 						}
-						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorOpen'><a href='#'><img/></a> <a href='index.php?"+link+"'><img src='images/icons/"+symbol+"'/></a> <a href='index.php?"+link+"'>"+name+"</a></div>";
+						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorOpen'><a href='#'><img/></a> <a href='index.php?"+link+"'><img src='images/icons/"+symbol+"'/ style='border: 0;'></a> <a href='index.php?"+link+"'>"+name+"</a></div>";
 					}
 					else 
 					{
@@ -82,7 +82,7 @@ function create_menu_tree(id, ajax_handler)
 							}			
 							return_html += "'";
 						}
-						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorClosed'><a href='#'><img/></a> <a href='index.php?"+link+"'><img src='images/icons/"+symbol+"'/></a> <a href='index.php?"+link+"'>"+name+"</a></div>";
+						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorClosed'><a href='#'><img/></a> <a href='index.php?"+link+"'><img src='images/icons/"+symbol+"' style='border: 0;'/></a> <a href='index.php?"+link+"'>"+name+"</a></div>";
 					}
 					
 					if(layer >= next_layer)
@@ -122,7 +122,7 @@ function create_menu_tree(id, ajax_handler)
 							return_html += "'";
 						}
 						
-						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorOpen'><a href='#'><img/></a> <a href='index.php?"+link+"'><img src='images/icons/"+symbol+"'/></a> <a href='index.php?"+link+"'>"+name+"</a></div>";
+						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorOpen'><a href='#'><img/></a> <a href='index.php?"+link+"'><img src='images/icons/"+symbol+"' style='border: 0;'/></a> <a href='index.php?"+link+"'>"+name+"</a></div>";
 					}
 					else 
 					{
@@ -142,7 +142,7 @@ function create_menu_tree(id, ajax_handler)
 							return_html += "'";
 						} 
 						
-						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorClosed'><a href='#'><img/></a> <a href='index.php?"+link+"'><img src='images/icons/"+symbol+"'/></a> <a href='index.php?"+link+"'>"+name+"</a></div>";
+						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorClosed'><a href='#'><img/></a> <a href='index.php?"+link+"'><img src='images/icons/"+symbol+"' style='border: 0;'/></a> <a href='index.php?"+link+"'>"+name+"</a></div>";
 					}
 					
 					if(layer >= next_layer)
@@ -218,7 +218,7 @@ function create_menu_tree(id, ajax_handler)
 										}
 										child_html += "'";
 									} 
-									child_html += "><div id='LeftNavigationElementID"+child_id+"' class='LeftNavigationFirstAnchorClosed'><a href=''><img/></a> <a href='index.php?"+child_link+"'><img src='images/icons/"+child_symbol+"'/></a> <a href='index.php?"+child_link+"'>"+child_name+"</a></div></li>";
+									child_html += "><div id='LeftNavigationElementID"+child_id+"' class='LeftNavigationFirstAnchorClosed'><a href=''><img/></a> <a href='index.php?"+child_link+"'><img src='images/icons/"+child_symbol+"'/ style='border: 0;'></a> <a href='index.php?"+child_link+"'>"+child_name+"</a></div></li>";
 								});
 								child_html += "</ul>";
 								
