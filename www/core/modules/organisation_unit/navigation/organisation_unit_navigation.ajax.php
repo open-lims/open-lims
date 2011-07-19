@@ -57,50 +57,47 @@ class OrganisationUnitAjax extends Ajax
 	{
 		global $session;
 
-		if ($session->is_valid())
+		if ($session->is_value("LEFT_NAVIGATION_OU_ARRAY"))
 		{
-			if ($session->is_value("LEFT_NAVIGATION_OU_ARRAY"))
+			echo json_encode($session->read_value("LEFT_NAVIGATION_OU_ARRAY"));
+		}
+		else
+		{
+			$return_array = array();
+									
+			$organisation_unit_array = OrganisationUnit::list_organisation_unit_roots();
+			
+			if (is_array($organisation_unit_array) and count($organisation_unit_array) >= 1)
 			{
-				echo json_encode($session->read_value("LEFT_NAVIGATION_OU_ARRAY"));
-			}
-			else
-			{
-				$return_array = array();
-										
-				$organisation_unit_array = OrganisationUnit::list_organisation_unit_roots();
+				$counter = 0;
 				
-				if (is_array($organisation_unit_array) and count($organisation_unit_array) >= 1)
+				foreach($organisation_unit_array as $key => $value)
 				{
-					$counter = 0;
-					
-					foreach($organisation_unit_array as $key => $value)
-					{
-						$organisation_unit = new OrganisationUnit($value);
+					$organisation_unit = new OrganisationUnit($value);
 
-						$return_array[$counter][0] = 0;
-						$return_array[$counter][1] = $value;
-						$return_array[$counter][2] = $organisation_unit->get_name();
-						$return_array[$counter][3] = $organisation_unit->get_icon();
-						$return_array[$counter][4] = true; // Permission
-						
-						if ($organisation_unit->get_stores_data() == true)
-						{
-							$return_array[$counter][5] = true;
-						}
-						else
-						{
-							$return_array[$counter][5] = false;
-						}
-						
-						$return_array[$counter][6] = ""; //link
-						$return_array[$counter][7] = false; //open
-						
-						$counter++;
+					$return_array[$counter][0] = 0;
+					$return_array[$counter][1] = $value;
+					$return_array[$counter][2] = $organisation_unit->get_name();
+					$return_array[$counter][3] = $organisation_unit->get_icon();
+					$return_array[$counter][4] = true; // Permission
+					
+					if ($organisation_unit->get_stores_data() == true)
+					{
+						$return_array[$counter][5] = true;
 					}
+					else
+					{
+						$return_array[$counter][5] = false;
+					}
+					
+					$return_array[$counter][6] = ""; //link
+					$return_array[$counter][7] = false; //open
+					
+					$counter++;
 				}
-				
-				echo json_encode($return_array);
 			}
+			
+			echo json_encode($return_array);
 		}
 	}
 	
@@ -115,7 +112,7 @@ class OrganisationUnitAjax extends Ajax
 		}
 	}
 	
-	public function get_childs($id)
+	public function get_children($id)
 	{
 		if (is_numeric($id) and $id != 0)
 		{
@@ -182,8 +179,8 @@ class OrganisationUnitAjax extends Ajax
 					$this->set_array($_POST['array']);
 				break;
 				
-				case "get_childs":
-					$this->get_childs($_GET['id']);
+				case "get_children":
+					$this->get_children($_GET['id']);
 				break;	
 			endswitch;
 		}

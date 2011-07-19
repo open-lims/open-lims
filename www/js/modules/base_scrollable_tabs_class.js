@@ -6,6 +6,7 @@ function scrollable_tabs(tab_list,max_tabs,hide_arrows_if_deactivated,center_tab
 	var max_tabs = max_tabs;
 	var num_tabs = $(tabs).children("li").length;
 	var tab_width = parseInt($(tab_list).children().css("width").replace("px",""));
+	var tab_height = parseInt($(tab_list).children().css("height").replace("px",""));
 	var max_tabs_width = tab_width * num_tabs;
 	var tabs_to_center = max_tabs / 2;
 	if(tabs_to_center % 2 != 0)
@@ -47,11 +48,6 @@ function scrollable_tabs(tab_list,max_tabs,hide_arrows_if_deactivated,center_tab
 	}
 
 	$(tabs).children().click(function(e){
-//		e.stopPropagation();
-				
-//		var loading_animation = $("<div id='loadingAnimation'><img src='images/animations/loading_circle_small.gif'/></div>")
-//			.css("margin","10px 0 0 367px");
-//		$(".boxRoundMain").html(loading_animation);
 		if($("#"+arrow_left).hasClass("buttonInactive") && $("#"+arrow_right).hasClass("buttonInactive"))
 		{
 			//num_tabs < max_tabs, no scrolling
@@ -61,8 +57,8 @@ function scrollable_tabs(tab_list,max_tabs,hide_arrows_if_deactivated,center_tab
 			focus_tab($(this).children().text(),true);
 		}
 	});
-
 	
+
 	$("#"+arrow_left)
 	.addClass("buttonInactive")
 	.css("float","left")
@@ -115,6 +111,10 @@ function scrollable_tabs(tab_list,max_tabs,hide_arrows_if_deactivated,center_tab
 		focus_tab($("."+classname_active).text(),false);
 	}
 	
+	var arrow_vertical_offset = (tab_height-16) / 2;
+	$("#"+arrow_left).css("padding-top",arrow_vertical_offset+"px");
+	$("#"+arrow_right).css("padding-top",arrow_vertical_offset+"px");
+
 	if($("#"+arrow_left).hasClass("buttonInactive"))
 	{
 		$("#"+arrow_left+" img").attr("src","images/1leftarrow_inactive.png");
@@ -156,7 +156,7 @@ function scrollable_tabs(tab_list,max_tabs,hide_arrows_if_deactivated,center_tab
 			var hidden_tabs = $(tabs+" li:lt("+num_hidden_tabs+")");
 			
 			$(hidden_tabs).each(function(){
-				var html = $("<div><a href=''>"+$(this).children().text()+"</a></div>").css("text-decoration","none")
+				var html = $("<div><a href=''>"+$(this).children().text()+"</a></div>")
 					.hover(function()
 						{
 							$(this).css("background-color","#cccccc");
@@ -165,11 +165,6 @@ function scrollable_tabs(tab_list,max_tabs,hide_arrows_if_deactivated,center_tab
 							$(this).css("background-color","white");
 						})
 					.click(function(){
-						
-//						var loading_animation = $("<div id='loadingAnimation'><img src='images/animations/loading_circle_small.gif'/></div>")
-//							.css("margin","10px 0 0 367px");
-//						$(".boxRoundMain").html(loading_animation);
-						
 						focus_tab($(this).text(),true);
 						$("#"+arrow_left+" img").rotate({animateTo:0,duration:300});
 					})
@@ -187,7 +182,7 @@ function scrollable_tabs(tab_list,max_tabs,hide_arrows_if_deactivated,center_tab
 			var hidden_tabs = $(tabs+" li:gt("+last_visible_tab+")");
 			
 			$(hidden_tabs).each(function(){
-				var html = $("<div><a href=''>"+$(this).children().text()+"</a></div>").css("text-decoration","none")
+				var html = $("<div><a href=''>"+$(this).children().text()+"</a></div>")
 					.hover(function()
 						{
 							$(this).css("background-color","#cccccc");
@@ -196,11 +191,6 @@ function scrollable_tabs(tab_list,max_tabs,hide_arrows_if_deactivated,center_tab
 							$(this).css("background-color","white");
 						})
 					.click(function(){
-						
-//						var loading_animation = $("<div id='loadingAnimation'><img src='images/animations/loading_circle_small.gif'/></div>")
-//							.css("margin","10px 0 0 367px");
-//						$(".boxRoundMain").html(loading_animation);
-						
 						focus_tab($(this).text(),true); //todo
 						$("#"+arrow_right+" img").rotate({animateTo:0,duration:300});
 						
@@ -213,7 +203,7 @@ function scrollable_tabs(tab_list,max_tabs,hide_arrows_if_deactivated,center_tab
 				.css({"text-align":"right","left": position.left+10-tab_width,"top":position.top+17});
 			break;
 		}
-	
+		$(hidden_tabs_div).children().children().css({"text-decoration":"none","color":"black"});
 		$(hidden_tabs_div).appendTo($(tabs).parent().parent()).fadeIn(300);
 	}
 	

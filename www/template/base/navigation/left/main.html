@@ -32,11 +32,19 @@ $(document).ready(function()
 		{
 			type: "GET",
 			url: "[[JS:AJAX_URL]]",
-			data: "run=get_html&session_id="+get_array['session_id'],
+			data: "run=get_html&session_id="+get_array['session_id']+"&username="+get_array['username'],
 			success: function(data)
 			{
 				$("#LeftNavigationTree").html(data);
 			}
+		});
+		
+		$.ajax(
+		{
+			type: "GET",
+			url: "core/modules/base/navigation/left_navigation.ajax.php",
+			data: "run=set_active&session_id="+get_array['session_id']+"&id=[[JS:ID]]",
+			success: function(data){}
 		});
 	});
 	
@@ -53,10 +61,24 @@ $(document).ready(function()
 
 	<!-- FOREACH END -->
 	
-	if($("#LeftNavigationTree").text() == "")
+	$.ajax(
 	{
-		$("#LeftNavigationSymbolArea").children("div:nth-child(1)").trigger("click");
-	}
+		type: "GET",
+		url: "core/modules/base/navigation/left_navigation.ajax.php",
+		data: "run=get_active&session_id="+get_array['session_id'],
+		success: function(data)
+		{
+			if($("#"+data).hasClass("LeftNavigationSymbolInactive"))
+			{
+				$("#LeftNavigationSymbol0").trigger("click");
+			}
+			else
+			{
+				$("#"+data).trigger("click");
+			}
+		}
+	});
+
 	
 });	
 
