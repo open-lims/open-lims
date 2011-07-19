@@ -100,4 +100,11 @@
 	$dialog[9][display_name]	= "Data";
 	$dialog[9][weight]			= 400;
 	
+	$dialog[10][type]			= "item_report";
+	$dialog[10][class_path]		= "core/modules/data/data_report.io.php";
+	$dialog[10]['class']		= "DataReportIO";
+	$dialog[10][method]			= "get_data_item_report";
+	$dialog[10][internal_name]	= "data_item_report";
+	$dialog[10][display_name]	= "Data Item Report";
+	$dialog[10][weight]			= 100;
 ?>

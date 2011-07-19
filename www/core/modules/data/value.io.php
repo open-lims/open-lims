@@ -497,79 +497,80 @@ class ValueIO
 		
 		if ($_GET[value_id])
 		{
-			$value = new Value($_GET[value_id]);
+			$value_obj = new Value($_GET[value_id]);
 			
-			if ($value->is_read_access())
+			if ($value_obj->is_read_access())
 			{
-				$template = new Template("template/data/value_history.html");
-	
-				$template->set_var("title",$value->get_type_name());
+				$list = new List_IO(Data_Wrapper::count_value_versions($_GET[value_id]), 20);
+
+				$list->add_row("","symbol",false,"16px");
+				$list->add_row("Name","name",true,null);
+				$list->add_row("Version","version",false,null);
+				$list->add_row("Date/Time","datetime",true,null);
+				$list->add_row("User","user",true,null);
+				$list->add_row("","delete",false,"16px");
 				
-				$table_io = new TableIO("OverviewTable");
-				
-				$table_io->add_row("","symbol",false,16);
-				$table_io->add_row("Name","name",false,null);
-				$table_io->add_row("Version","version",false,null);
-				$table_io->add_row("Date/Time","datetime",false,null);
-				$table_io->add_row("","delete",false,16);
-				
-				$content_array = array();
-				
-				$value_version_array = $value->get_value_internal_revisions();
-				
-				foreach($value_version_array as $key => $fe_value)
+				if ($_GET[page])
 				{
-					$column_array = array();
-					
-					$value_version = new Value($_GET[value_id]);
-					$value_version->open_internal_revision($fe_value);
-					
-					$paramquery = $_GET;
-					$paramquery[value_id] = $_GET[value_id];
-					$paramquery[version] = $fe_value;
-					$paramquery[action] = "value_detail";
-					unset($paramquery[nextpage]);
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$column_array[symbol][link] = $params;
-					$column_array[symbol][content] = "<img src='images/fileicons/16/unknown.png' alt='' style='border:0;' />";
-					$column_array[name][link] = $params;
-					$column_array[name][content] = $value_version->get_type_name();
-					
-					if ($value_version->is_current() == true)
+					if ($_GET[sortvalue] and $_GET[sortmethod])
 					{
-						$column_array[version] = $value_version->get_version()." <span class='italic'>current</span>";
+						$result_array = Data_Wrapper::list_value_versions($_GET[value_id], $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
 					}
 					else
 					{
-						$column_array[version] = $value_version->get_version();
-					}
-					
-					$column_array[datetime] = $value_version->get_datetime();
-					
-					if ($value->is_control_access())
+						$result_array = Data_Wrapper::list_value_versions($_GET[value_id], null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
+					}				
+				}
+				else
+				{
+					if ($_GET[sortvalue] and $_GET[sortmethod])
 					{
-						$paramquery = $_GET;
-						$paramquery[value_id] = $_GET[value_id];
-						$paramquery[version] = $fe_value;
-						$paramquery[action] = "value_delete_version";
-						unset($paramquery[nextpage]);
-						$params = http_build_query($paramquery,'','&#38;');
-						
-						$column_array[delete][link] = $params;
-						$column_array[delete][content] = "<img src='images/icons/delete.png' alt='' style='border:0;' />";
+						$result_array = Data_Wrapper::list_value_versions($_GET[value_id], $_GET[sortvalue], $_GET[sortmethod], 0, 20);
 					}
 					else
 					{
-						$column_array[delete][link] = "";
-						$column_array[delete][content] = "";
-					}
-					array_push($content_array, $column_array);
+						$result_array = Data_Wrapper::list_value_versions($_GET[value_id], null, null, 0, 20);
+					}	
 				}
 				
-				$table_io->add_content_array($content_array);
+				if (is_array($result_array) and count($result_array) >= 1)
+				{
+					foreach($result_array as $key => $value)
+					{
+						$paramquery = $_GET;
+						$paramquery[action] = "value_detail";
+						$paramquery[version] = $result_array[$key][internal_revision];
+						$params = http_build_query($paramquery,'','&#38;');
+						
+						$result_array[$key][symbol][link]		= $params;
+						$result_array[$key][symbol][content] 	= "<img src='images/icons/value.png' alt='N' border='0' />";
+					
+						$tmp_name = $result_array[$key][name];
+						unset($result_array[$key][name]);
+						$result_array[$key][name][link]		= $params;
+						$result_array[$key][name][content] 	= $tmp_name;
+						
+						$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
+						$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+						
+						$user = new User($result_array[$key][owner_id]);
+						$result_array[$key][user] = $user->get_full_name(false);
+						
+						$value_version_obj = clone $value_obj;
+						$value_version_obj->open_internal_revision($value[internal_revision]);
+						$result_array[$key][version] = $value_version_obj->get_version();
+					}
+				}
+				else
+				{
+					$list->override_last_line("<span class='italic'>No results found!</span>");
+				}
 				
-				$template->set_var("table", $table_io->get_content($_GET[page]));	
+				$template = new Template("template/data/value_history.html");
+	
+				$template->set_var("title",$value_obj->get_type_name());
+				
+				$template->set_var("table", $list->get_list($result_array, $_GET[page]));
 				
 				$paramquery = $_GET;
 				$paramquery[action] = "value_detail";

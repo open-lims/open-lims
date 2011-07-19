@@ -61,4 +61,13 @@
 	$dialog[4][method]			= "list_organisation_unit_related_equipment_handler";
 	$dialog[4][internal_name]	= "list_ou_equipment";
 	$dialog[4][display_name]	= "List OU Equipment";
+	
+	$dialog[5][type]			= "item_report";
+	$dialog[5][class_path]		= "core/modules/equipment/equipment_report.io.php";
+	$dialog[5]['class']			= "EquipmentReportIO";
+	$dialog[5][method]			= "get_equipment_item_report";
+	$dialog[5][internal_name]	= "equipment_item_report";
+	$dialog[5][display_name]	= "Equipment Item Reportt";
+	$dialog[5][weight]			= 500;
+	
 ?>

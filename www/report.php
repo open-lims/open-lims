@@ -88,6 +88,8 @@
 		{
 			if ($_GET[dialog])
 			{
+				require_once("core/modules/base/report/report_table.io.php");	
+				
 				$module_dialog = ModuleDialog::get_by_type_and_internal_name("report", $_GET[dialog]);
 						
 				if (file_exists($module_dialog[class_path]))

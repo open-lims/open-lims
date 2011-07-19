@@ -93,44 +93,44 @@ class SampleReportIO
 				$pdf->SetTextColor(0, 0, 0);
 				
 				$pdf->MultiCell(90, 0, "ID", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
-				$pdf->MultiCell(90, 0, $print_sample_id, 1, '', 1, 1, '', '', true, 0, false, true, 0);
+				$pdf->MultiCell(100, 0, $print_sample_id, 1, '', 1, 1, '', '', true, 0, false, true, 0);
 				
 				$pdf->MultiCell(90, 0, "Name", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
-				$pdf->MultiCell(90, 0, $sample->get_name(), 1, '', 1, 1, '', '', true, 0, false, true, 0);
+				$pdf->MultiCell(100, 0, $sample->get_name(), 1, '', 1, 1, '', '', true, 0, false, true, 0);
 				
 				$pdf->MultiCell(90, 0, "Type/Template", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
-				$pdf->MultiCell(90, 0, $sample->get_template_name(), 1, '', 1, 1, '', '', true, 0, false, true, 0);
+				$pdf->MultiCell(100, 0, $sample->get_template_name(), 1, '', 1, 1, '', '', true, 0, false, true, 0);
 				
 				$pdf->MultiCell(90, 0, "Owner", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
-				$pdf->MultiCell(90, 0, $owner_name, 1, '', 1, 1, '', '', true, 0, false, true, 0);
+				$pdf->MultiCell(100, 0, $owner_name, 1, '', 1, 1, '', '', true, 0, false, true, 0);
 				
 				$pdf->MultiCell(90, 0, "Status", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
 				if ($sample->get_availability() == true)
 				{
-					$pdf->MultiCell(90, 0, "available", 1, '', 1, 1, '', '', true, 0, false, true, 0);
+					$pdf->MultiCell(100, 0, "available", 1, '', 1, 1, '', '', true, 0, false, true, 0);
 				}
 				else
 				{
-					$pdf->MultiCell(90, 0, "not available", 1, '', 1, 1, '', '', true, 0, false, true, 0);
+					$pdf->MultiCell(100, 0, "not available", 1, '', 1, 1, '', '', true, 0, false, true, 0);
 				}
 				
 				$pdf->MultiCell(90, 0, "Date/Time", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
 				$datetime = new DatetimeHandler($sample->get_datetime());
-				$pdf->MultiCell(90, 0, $datetime->get_formatted_string("dS M Y H:i"), 1, '', 1, 1, '', '', true, 0, false, true, 0);
+				$pdf->MultiCell(100, 0, $datetime->get_formatted_string("dS M Y H:i"), 1, '', 1, 1, '', '', true, 0, false, true, 0);
 				
 				if ($sample->get_manufacturer_id())
 				{
 					$manufacturer = new Manufacturer($sample->get_manufacturer_id());
 					
 					$pdf->MultiCell(90, 0, "Manufacturer", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
-					$pdf->MultiCell(90, 0, $manufacturer->get_name(), 1, '', 1, 1, '', '', true, 0, false, true, 0);
+					$pdf->MultiCell(100, 0, $manufacturer->get_name(), 1, '', 1, 1, '', '', true, 0, false, true, 0);
 				}
 				
 				if ($sample->get_date_of_expiry())
 				{
 					$pdf->MultiCell(90, 0, "Date of Expiry", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
 					$date_of_expiry = new DatetimeHandler($sample->get_date_of_expiry());
-					$pdf->MultiCell(90, 0, $date_of_expiry->get_formatted_string("dS M Y"), 1, '', 1, 1, '', '', true, 0, false, true, 0);
+					$pdf->MultiCell(100, 0, $date_of_expiry->get_formatted_string("dS M Y"), 1, '', 1, 1, '', '', true, 0, false, true, 0);
 				}
 				
 				$module_dialog_array = ModuleDialog::list_dialogs_by_type("item_report");
@@ -146,7 +146,8 @@ class SampleReportIO
 							{
 								if (method_exists($value['class'], $value['method']))
 								{
-									$pdf = $value['class']::$value['method']($pdf);
+									$sql = " SELECT item_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = ".$_GET[sample_id]."";
+									$pdf = $value['class']::$value['method']($sql, $sample->get_item_id(), $pdf);
 								}
 							}
 						}
@@ -263,5 +264,96 @@ class SampleReportIO
 		{
 			// Error
 		}
+	}
+	
+	public static function get_sample_item_report($sql, $item_id, $pdf)
+	{
+		if ($sql and is_object($pdf))
+		{
+			$new_page = false;
+			
+			$child_sample_array = Sample_Wrapper::list_item_samples($sql, null, null, null, null);
+			
+			if (is_array($child_sample_array) and count($child_sample_array) >= 1)
+			{
+				$pdf->addPage();
+				$new_page = true;
+				
+				$pdf->SetFont('dejavusans', 'B', 14, '', true);
+				
+				$pdf->Write(0, 'Samples', '', 0, 'C', true, 0, false, false, 0);
+				$pdf->Write(0, '', '', 0, 'L', true, 0, false, false, 0);
+				
+				$pdf->MultiCell(35, 0, "ID", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
+				$pdf->MultiCell(60, 0, "Name", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
+				$pdf->MultiCell(50, 0, "Date/Time", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
+				$pdf->MultiCell(45, 0, "User", 1, 'L', 1, 1, '', '', true, 0, false, true, 0);
+
+				$pdf->SetFont('dejavusans', '', 14, '', true);
+				
+				foreach($child_sample_array as $key => $value)
+				{
+					$datetime_handler = new DatetimeHandler($value[datetime]);
+					$value[datetime] = $datetime_handler->get_formatted_string("dS M y H:i");
+					$value[id]		= "S".str_pad($value[id], 8 ,'0', STR_PAD_LEFT);
+					$owner = new User($value[owner]);
+					
+					$pdf->MultiCell(35, 0, $value[id], 1, 'L', 1, 0, '', '', true, 0, true, true, 0);
+					$pdf->MultiCell(60, 0, $value[name], 1, 'L', 1, 0, '', '', true, 0, true, true, 0);
+					$pdf->MultiCell(50, 0, $value[datetime], 1, 'L', 1, 0, '', '', true, 0, true, true, 0);
+					$pdf->MultiCell(45, 0, $owner->get_full_name(true), 1, 'L', 1, 1, '', '', true, 0, true, true, 0);
+				}
+			}
+			
+			if ($item_id)
+			{
+				$parent_sample_array = Sample_Wrapper::list_samples_by_item_id($item_id, null, null, null, null);
+				
+				if (is_array($parent_sample_array) and count($parent_sample_array) >= 1)
+				{
+					if ($new_page == false)
+					{
+						$pdf->addPage();
+					}
+					else
+					{
+						$pdf->Write(0, '', '', 0, 'L', true, 0, false, false, 0);
+						$pdf->Write(0, '', '', 0, 'L', true, 0, false, false, 0);
+					}
+					
+					$pdf->SetFont('dejavusans', 'B', 14, '', true);
+					
+					$pdf->Write(0, 'Parent Samples', '', 0, 'C', true, 0, false, false, 0);
+					$pdf->Write(0, '', '', 0, 'L', true, 0, false, false, 0);
+					
+					$pdf->MultiCell(35, 0, "ID", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
+					$pdf->MultiCell(60, 0, "Name", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
+					$pdf->MultiCell(50, 0, "Date/Time", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
+					$pdf->MultiCell(45, 0, "User", 1, 'L', 1, 1, '', '', true, 0, false, true, 0);
+	
+					$pdf->SetFont('dejavusans', '', 14, '', true);
+					
+					foreach($parent_sample_array as $key => $value)
+					{
+						$datetime_handler = new DatetimeHandler($value[datetime]);
+						$value[datetime] = $datetime_handler->get_formatted_string("dS M y H:i");
+						$value[id]		= "S".str_pad($value[id], 8 ,'0', STR_PAD_LEFT);
+						$owner = new User($value[owner]);
+						
+						$pdf->MultiCell(35, 0, $value[id], 1, 'L', 1, 0, '', '', true, 0, true, true, 0);
+						$pdf->MultiCell(60, 0, $value[name], 1, 'L', 1, 0, '', '', true, 0, true, true, 0);
+						$pdf->MultiCell(50, 0, $value[datetime], 1, 'L', 1, 0, '', '', true, 0, true, true, 0);
+						$pdf->MultiCell(45, 0, $owner->get_full_name(true), 1, 'L', 1, 1, '', '', true, 0, true, true, 0);
+					}
+				}
+			}
+			
+			return $pdf;
+		}
+		else
+		{
+			return null;
+		}
+
 	}
 }
