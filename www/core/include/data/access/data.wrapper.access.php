@@ -636,14 +636,14 @@ class Data_Wrapper_Access
 					break;
 								
 					default:
-						$sql_order_by = "ORDER BY value_order.get_all_value_versions";
+						$sql_order_by = "";
 					break;
 				
 				endswitch;	
 			}
 			else
 			{
-				$sql_order_by = "ORDER BY ".constant("VALUE_VERSION_TABLE").".id IN (SELECT * FROM get_all_value_versions(".$value_id.", NULL) AS value_order)";
+				$sql_order_by = "";
 			}
 				
 			$sql = "SELECT ".constant("VALUE_VERSION_TABLE").".id AS id, " .
@@ -651,7 +651,8 @@ class Data_Wrapper_Access
 						"".constant("VALUE_VERSION_TABLE").".internal_revision AS internal_revision, " .
 						"".constant("VALUE_VERSION_TABLE").".datetime AS datetime, " .
 						"".constant("VALUE_VERSION_TABLE").".owner_id AS owner_id " .
-						"FROM ".constant("VALUE_VERSION_TABLE")." " .
+						"FROM get_all_value_versions(".$value_id.", NULL)" .
+						"LEFT JOIN ".constant("VALUE_VERSION_TABLE")." 	ON get_all_value_versions 						= ".constant("VALUE_VERSION_TABLE").".id " .
 						"LEFT JOIN ".constant("VALUE_TABLE")." 			ON ".constant("VALUE_VERSION_TABLE").".toid 	= ".constant("VALUE_TABLE").".id " .
 						"LEFT JOIN ".constant("VALUE_TYPE_TABLE")." 	ON ".constant("VALUE_TABLE").".type_id 			= ".constant("VALUE_TYPE_TABLE").".id " .
 						"LEFT JOIN ".constant("USER_PROFILE_TABLE")." 	ON ".constant("VALUE_VERSION_TABLE").".owner_id	= ".constant("USER_PROFILE_TABLE").".id " .
@@ -758,10 +759,11 @@ class Data_Wrapper_Access
 						"".constant("FILE_VERSION_TABLE").".internal_revision AS internal_revision, " .
 						"".constant("FILE_VERSION_TABLE").".datetime AS datetime, " .
 						"".constant("FILE_VERSION_TABLE").".owner_id AS owner_id " .
-						"FROM ".constant("FILE_VERSION_TABLE")." " .
+						"FROM get_all_file_versions(".$file_id.", NULL) " .
+						"LEFT JOIN ".constant("FILE_VERSION_TABLE")." 	ON get_all_file_versions						= ".constant("FILE_VERSION_TABLE").".id " .
 						"LEFT JOIN ".constant("FILE_TABLE")." 			ON ".constant("FILE_VERSION_TABLE").".toid 		= ".constant("FILE_TABLE").".id " .
 						"LEFT JOIN ".constant("USER_PROFILE_TABLE")." 	ON ".constant("FILE_VERSION_TABLE").".owner_id	= ".constant("USER_PROFILE_TABLE").".id " .
-						"WHERE ".constant("FILE_VERSION_TABLE").".id IN (SELECT * FROM get_all_file_versions(".$file_id.", NULL) AS file_version_order) " .
+						"WHERE ".constant("FILE_VERSION_TABLE").".id IN (SELECT * FROM get_all_file_versions(".$file_id.", NULL)) " .
 						"".$sql_order_by."";
 			
 			$return_array = array();

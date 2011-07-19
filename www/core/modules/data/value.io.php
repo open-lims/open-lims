@@ -558,7 +558,14 @@ class ValueIO
 						
 						$value_version_obj = clone $value_obj;
 						$value_version_obj->open_internal_revision($value[internal_revision]);
-						$result_array[$key][version] = $value_version_obj->get_version();
+						if ($value_version_obj->is_current() == true)
+						{
+							$result_array[$key][version] = $value_version_obj->get_version()." <span class='italic'>current</span>";
+						}
+						else
+						{
+							$result_array[$key][version] = $value_version_obj->get_version();
+						}
 					}
 				}
 				else

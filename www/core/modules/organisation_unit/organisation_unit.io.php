@@ -364,7 +364,15 @@ class OrganisationUnitIO
 					{
 						foreach ($value['array'] as $array_key => $array_value)
 						{
-							$button_paramquery[$array_key] = $array_value;
+							if (strpos($array_value, "%") === 0 and strpos($array_value, "%", 1) !== false)
+							{
+								$array_value_key = strtolower(str_replace("%","", $array_value));
+								$button_paramquery[$array_key] = $_GET[$array_value_key];
+							}
+							else
+							{
+								$button_paramquery[$array_key] = $array_value;
+							}
 						}
 					}
 					
