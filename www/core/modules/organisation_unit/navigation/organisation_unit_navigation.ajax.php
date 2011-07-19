@@ -67,6 +67,7 @@ class OrganisationUnitAjax extends Ajax
 			if (is_array($organisation_unit_array) and count($organisation_unit_array) >= 1)
 			{
 				$counter = 0;
+				$module_link_array = ModuleLink::list_links_by_type("ou_navigation");
 				
 				foreach($organisation_unit_array as $key => $value)
 				{
@@ -79,9 +80,7 @@ class OrganisationUnitAjax extends Ajax
 					$return_array[$counter][4] = true; // Permission
 					
 					if ($organisation_unit->get_stores_data() == true)
-					{
-						$module_link_array = ModuleLink::list_links_by_type("ou_navigation");
-	
+					{	
 						if (is_array($module_link_array) and count($module_link_array) >= 1)
 						{
 							$paramquery['username'] = $_GET['username'];

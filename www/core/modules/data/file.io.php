@@ -124,7 +124,14 @@ class FileIO
 					
 					$template->set_var("thumbnail_image","");
 					
-					$paramquery = $_GET;
+					$paramquery = array();
+					$paramquery['username'] = $_GET['username'];
+					$paramquery['session_id'] = $_GET['session_id'];
+					$paramquery['file_id'] = $_GET['file_id'];
+					if ($_GET['version'])
+					{
+						$paramquery['version'] = $_GET['version'];
+					}
 					$params = http_build_query($paramquery,'','&#38;');	
 					$template->set_var("download_params",$params);
 					

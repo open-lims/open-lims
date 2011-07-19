@@ -160,9 +160,12 @@ class SampleDataSearchIO
 				{
 					$sample_id_array = array();
 					$tmp_id_array = Sample::list_user_related_samples($user->get_user_id(), false);
-					foreach($tmp_id_array as $key => $value)
+					if (is_array($tmp_id_array) and count($tmp_id_array) >= 1)
 					{
-						array_push($sample_id_array, $value);
+						foreach($tmp_id_array as $key => $value)
+						{
+							array_push($sample_id_array, $value);
+						}
 					}
 				}
 				else

@@ -111,7 +111,7 @@ class ProjectDataSearchIO
 							
 			$project_array = Project::list_user_related_projects($user->get_user_id(), false);
 			
-			if (is_array($project_array))
+			if (is_array($project_array) and count($project_array) >= 1)
 			{
 				foreach($project_array as $key => $value)
 				{
@@ -164,9 +164,12 @@ class ProjectDataSearchIO
 				{
 					$project_id_array = array();
 					$tmp_id_array = Project::list_user_related_projects($user->get_user_id(), false);
-					foreach($tmp_id_array as $key => $value)
+					if (is_array($tmp_id_array) and count($tmp_id_array) >= 1)
 					{
-						array_push($project_id_array, $value);
+						foreach($tmp_id_array as $key => $value)
+						{
+							array_push($project_id_array, $value);
+						}
 					}
 				}
 				else

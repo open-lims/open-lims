@@ -363,7 +363,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 			}
 			else
 			{
-				if ($this->organisation_unit->is_leader_in_organisation_unit($user_id) == true)
+				if ($this->is_leader_in_organisation_unit($user_id) == true)
 				{
 					return true;
 				}
