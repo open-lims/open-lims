@@ -138,6 +138,8 @@ class ProjectCommon_IO
 				switch ($_GET[run]):
 				
 					case "log":
+					case("log_detail"):
+					case("log_add"):
 						$tab_io->activate("log");
 					break;
 					
@@ -157,18 +159,18 @@ class ProjectCommon_IO
 					
 					
 					case "admin":
-					case "set_permissions":
-					case "add_permissions":
-					case "edit_permissions":
-					case "delete_permission":
-					case "deleteproject":
-					case "cancel":
-					case "reactivate":
 						$tab_io->activate("admin");
 					break;
 					
 					default:
-						$tab_io->activate("main");
+						if (strpos($_GET[run], "admin_") === 0)
+						{
+							$tab_io->activate("admin");
+						}
+						else
+						{
+							$tab_io->activate("main");
+						}
 					break;
 				
 				endswitch;
