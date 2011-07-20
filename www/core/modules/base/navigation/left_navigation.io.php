@@ -29,6 +29,18 @@ class LeftNavigationIO
 {
 	public static function create_left_navigation()
 	{
+		global $session;
+		
+		if ($session->is_value("LEFT_NAVIGATION_ACTIVE"))
+		{
+			$active_id = $session->read_value("LEFT_NAVIGATION_ACTIVE");
+		}
+		else
+		{
+			$active_id = "LeftNavigationSymbol0";
+		}
+		
+		
 		$counter = 0;
 		$js_array = array();
 		$symbols_array = array();
@@ -47,6 +59,12 @@ class LeftNavigationIO
 						$js_array[$counter][ajax_url] = $value['class']::get_ajax_url();
 						$js_array[$counter][id] = "LeftNavigationSymbol".$key;
 						
+						if ($js_array[$counter][id] == $active_id)
+						{
+							$active_js_array[ajax_url] = $js_array[$counter][ajax_url];
+							$active_js_array[id] = $js_array[$counter][id];
+						}
+						
 						$symbols_array[$counter][icon] = $value['class']::get_icon();
 						$symbols_array[$counter][active] = $value['class']::get_active();
 						$symbols_array[$counter][id] = "LeftNavigationSymbol".$key;
@@ -55,11 +73,14 @@ class LeftNavigationIO
 				}
 			}
 		}
-		
+
 		$template = new Template("template/base/navigation/left/main.html");
 		
 		$template->set_var("symbols", $symbols_array);
 		$template->set_var("js", $js_array);
+		
+		$template->set_var("active_js_ajax_url", $active_js_array[ajax_url]);
+		$template->set_var("active_js_id", $active_js_array[id]);
 		
 		$template->output();
 	}

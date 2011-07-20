@@ -55,12 +55,20 @@ class ProjectAjax extends Ajax
 
 		if ($session->is_valid())
 		{
-			if ($session->is_value("LEFT_NAVIGATION_PROJECT_ARRAY"))
+			if ($session->is_value("LEFT_NAVIGATION_PROJECT_ID"))
+			{
+				$project_id = $session->read_value("LEFT_NAVIGATION_PROJECT_ID");
+			}
+
+			if ($session->is_value("LEFT_NAVIGATION_PROJECT_ARRAY") and $project_id == $_GET[project_id])
 			{
 				echo json_encode($session->read_value("LEFT_NAVIGATION_PROJECT_ARRAY"));
 			}
 			else
 			{
+				$session->delete_value("LEFT_NAVIGATION_PROJECT_ARRAY");
+				$session->write_value("LEFT_NAVIGATION_PROJECT_ID", $_GET[project_id], true);
+				
 				$return_array = array();
 				
 				$project = new Project($_GET[project_id]);
