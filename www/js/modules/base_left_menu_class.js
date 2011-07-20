@@ -151,103 +151,9 @@ function create_menu_tree(id, ajax_handler)
 					}
 				}
 			});
-			var click_lock = false;
 			$("#loadingAnimation").remove();
 			$("#"+id).append(return_html)
-			.click(
-				function(event) {
-					if(click_lock==true)
-					{
-						return false;
-					}
-					click_lock = true;
-					event.preventDefault();
-					var target = event.target;
-					var target_div = $(target).parents("div")[0];
-			
-					if($(target_div).hasClass("LeftNavigationFirstAnchorOpen"))
-					{
-						$(target_div).attr("class","LeftNavigationFirstAnchorClosed")	
-							.parent().children("ul").slideUp("fast", function() {
-								$(this).remove();
-								parse_array();
-								update_icons();
-								update_scrollbar();
-								click_lock = false;
-						});
-					}
-					else if($(target_div).hasClass("LeftNavigationFirstAnchorClosed"))
-					{
-						var clicked_id = $(target_div).attr("id").replace("LeftNavigationElementID","");
-						
-						var parent_layer = parseInt($(target_div).parent().parent().attr("class").replace("LeftNavigationLayer",""));
-						var layer = parent_layer + 1;
-
-						$(target_div).attr("class","LeftNavigationFirstAnchorOpen");
-						var parent_li = $(target_div).parent();
-						
-						$.ajax(
-						{
-							type: "GET",
-							url: ajax_handler,
-							data: "run=get_children&id="+clicked_id+"&session_id="+get_array['session_id'],
-							success: function(data)
-							{
-								var child_html = "<ul class='LeftNavigationLayer"+layer+"'>";
-								var child_array = $.parseJSON(data);
-								$(child_array).each(function(){ //alle arrays
-									var child_id = $(this)[1]; //id
-									var child_name = $(this)[2]; //name
-									var child_symbol = $(this)[3];
-									var child_link = $(this)[6];
-									var child_clickable = $(this)[5]; //clickable
-									var child_permission = $(this)[4]; //permission
-									
-									child_html += "<li";
-									
-									if(!child_clickable || !child_permission)
-									{
-										child_html += " class='";
-										if(!child_clickable)
-										{
-											child_html += " NotClickable";
-										}
-										if(!child_permission)
-										{
-											child_html += " NotPermitted";
-										}
-										child_html += "'";
-									} 
-									child_html += "><div id='LeftNavigationElementID"+child_id+"' class='LeftNavigationFirstAnchorClosed'><a href=''><img/></a> <a href='index.php?"+child_link+"'><img src='images/icons/"+child_symbol+"'/></a> <a href='index.php?"+child_link+"'>"+child_name+"</a></div></li>";
-								});
-								child_html += "</ul>";
-								
-								
-								$(parent_li).append(child_html)
-									.children("ul").hide().slideDown("normal",function(){
-										if(!$(parent_li).hasClass(" NotClickable"))
-										{
-											var href = $("#"+$(target_div).attr("id")+" a:nth-child(2)").attr("href");
-											if(href != "index.php?")
-											{
-												window.location.href = href;
-											}
-										}
-										
-									});
-								parse_array();
-								update_icons();
-								update_scrollbar();
-			
-					
-								
-								click_lock = false;
-							}
-						});		
-					}
-					$(parent_li).children().children("a:nth-child(1)").children().attr("src","images/animations/loading_circle_small.gif");
-				}
-			);	
+			.bind("click",handler);	
 			update_icons();
 			update_scrollbar();
 		}
@@ -293,6 +199,7 @@ function create_menu_tree(id, ajax_handler)
 		scroll_api.reinitialise();
 	}
 	
+	var inserted = 0;
 	
 	function parse_array(){
 			
@@ -336,7 +243,7 @@ function create_menu_tree(id, ajax_handler)
 			
 			if(!found)
 			{
-				var entry_index = previous_element_index +1;
+				var entry_index = previous_element_index + 1 + inserted;
 				
 				var entry_layer = $(this).parent().attr("class").replace("LeftNavigationLayer","");
 				var entry_name = $(this).children("div").children("a:nth-child(3)").text();
@@ -369,6 +276,8 @@ function create_menu_tree(id, ajax_handler)
 				new_array_element[7] = entry_open;
 				
 				array.splice(entry_index,0,new_array_element);
+				
+				inserted++;
 			}
 		});
 		
@@ -382,5 +291,99 @@ function create_menu_tree(id, ajax_handler)
 			success: function(data)
 			{}
 		});
+	}
+	
+	
+	var handler = function(event) {
+		
+		event.preventDefault();
+		$("#"+id).unbind("click");	
+
+		var target = event.target;
+		var target_div = $(target).parents("div")[0];
+
+		if($(target_div).hasClass("LeftNavigationFirstAnchorOpen"))
+		{
+			$(target_div).attr("class","LeftNavigationFirstAnchorClosed")	
+				.parent().children("ul").slideUp("fast", function() {
+					$(this).remove();
+					parse_array();
+					update_icons();
+					update_scrollbar();
+					$("#"+id).bind("click",handler);
+					console.log("fin 3");
+			});
+		}
+		else if($(target_div).hasClass("LeftNavigationFirstAnchorClosed"))
+		{
+			var clicked_id = $(target_div).attr("id").replace("LeftNavigationElementID","");
+			
+			var parent_layer = parseInt($(target_div).parent().parent().attr("class").replace("LeftNavigationLayer",""));
+			var layer = parent_layer + 1;
+
+			$(target_div).attr("class","LeftNavigationFirstAnchorOpen");
+			var parent_li = $(target_div).parent();
+			
+			$.ajax(
+			{
+				type: "GET",
+				url: ajax_handler,
+				data: "run=get_children&id="+clicked_id+"&session_id="+get_array['session_id'],
+				success: function(data)
+				{
+					var child_html = "<ul class='LeftNavigationLayer"+layer+"'>";
+					var child_array = $.parseJSON(data);
+					$(child_array).each(function(){ //alle arrays
+						var child_id = $(this)[1]; //id
+						var child_name = $(this)[2]; //name
+						var child_symbol = $(this)[3];
+						var child_link = $(this)[6];
+						var child_clickable = $(this)[5]; //clickable
+						var child_permission = $(this)[4]; //permission
+						
+						child_html += "<li";
+						
+						if(!child_clickable || !child_permission)
+						{
+							child_html += " class='";
+							if(!child_clickable)
+							{
+								child_html += " NotClickable";
+							}
+							if(!child_permission)
+							{
+								child_html += " NotPermitted";
+							}
+							child_html += "'";
+						} 
+						child_html += "><div id='LeftNavigationElementID"+child_id+"' class='LeftNavigationFirstAnchorClosed'><a href=''><img/></a> <a href='index.php?"+child_link+"'><img src='images/icons/"+child_symbol+"'/></a> <a href='index.php?"+child_link+"'>"+child_name+"</a></div></li>";
+					});
+					child_html += "</ul>";
+					
+					
+					$(parent_li).append(child_html)
+						.children("ul").hide().slideDown("normal",function(){
+							if(!$(parent_li).hasClass(" NotClickable"))
+							{
+								var href = $("#"+$(target_div).attr("id")+" a:nth-child(2)").attr("href");
+								if(href != "index.php?")
+								{
+									parse_array();
+									console.log("fin 2");
+									$("#"+id).bind("click",handler);
+									window.location.href = href;
+								}
+							}
+							
+						});
+					parse_array();
+					update_icons();
+					update_scrollbar();
+					console.log("fin");
+					$("#"+id).bind("click",handler);
+				}
+			});		
+		}
+		$(parent_li).children().children("a:nth-child(1)").children().attr("src","images/animations/loading_circle_small.gif");
 	}
 }
