@@ -89,6 +89,36 @@ class Data_Wrapper implements Data_WrapperInterface
     public static function count_list_value_templates()
     {
     	return Data_Wrapper_Access::count_list_value_templates();
-    }  
+    } 
+    
+    public static function list_value_versions($value_id, $order_by, $order_method, $start, $end)
+    {
+    	return Data_Wrapper_Access::list_value_versions($value_id, $order_by, $order_method, $start, $end);
+    }
+    
+    public static function count_value_versions($value_id)
+    {
+    	return Data_Wrapper_Access::count_value_versions($value_id);
+    }
+    
+    public static function list_file_versions($file_id, $order_by, $order_method, $start, $end)
+    {
+    	return Data_Wrapper_Access::list_file_versions($file_id, $order_by, $order_method, $start, $end);
+    }
+    
+    public static function count_file_versions($file_id)
+    {
+    	return Data_Wrapper_Access::count_file_versions($file_id);
+    }
+    
+    public static function list_item_files($sql)
+	{
+		return Data_Wrapper_Access::list_item_files($sql);
+	}
+	
+	public static function list_item_values($sql)
+	{
+		return Data_Wrapper_Access::list_item_values($sql);
+	}
 }
 ?>

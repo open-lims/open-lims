@@ -38,7 +38,7 @@ class ValueExternalVar implements ValueExternalVarInterface
      * @return mixed
      */
     public function get_var_content($address)
-    {
+    {    	
     	$number_of_statements = substr_count($address, ".");
     	
     	if ($number_of_statements >= 0)

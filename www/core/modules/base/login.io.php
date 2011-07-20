@@ -99,24 +99,7 @@ class Login_IO
 			
 		$template->output();
 	}
-	
-	/**
-	 * Logout
-	 */
-	public static function logout()
-	{
-		global $session;
 		
-		$auth = new Auth();
-		
-		if ($auth->logout($session->get_user_id(),$_GET[session_id]) == true)
-		{
- 			$template = new Template("template/base/login/logout_proceed.html");
-			$template->set_var("footer",constant("LOGIN_FOOTER"));
- 			$template->output();		
-		}
-	}
-	
 	/**
 	 * Forgot Password
 	 */
@@ -256,10 +239,6 @@ class Login_IO
 				{
 					self::forgot_password(null);
 				}
- 			break;
- 			
- 			case("logout"):		
-				self::logout();
  			break;
 				
 			case ("login_help"):

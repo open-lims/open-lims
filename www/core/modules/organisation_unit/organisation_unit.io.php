@@ -364,7 +364,18 @@ class OrganisationUnitIO
 					{
 						foreach ($value['array'] as $array_key => $array_value)
 						{
-							$button_paramquery[$array_key] = $array_value;
+							if (strpos($array_value, "%") === 0 and strpos($array_value, "%", 1) !== false)
+							{
+								$array_value_key = strtolower(str_replace("%","", $array_value));
+								if ($_GET[$array_value_key])
+								{
+									$button_paramquery[$array_key] = $_GET[$array_value_key];
+								}
+							}
+							else
+							{
+								$button_paramquery[$array_key] = $array_value;
+							}
 						}
 					}
 					
@@ -437,6 +448,8 @@ class OrganisationUnitIO
 		
 		if (is_array($organisation_unit_array))
 		{
+			$module_link_array = ModuleLink::list_links_by_type("ou_navigation");
+			
 			foreach ($organisation_unit_array as $key => $value)
 			{
 				if ($counter >= $counter_begin and $counter <= $counter_end)
@@ -445,12 +458,25 @@ class OrganisationUnitIO
 
 					$organisation_unit 	= new OrganisationUnit($value);
 					
-					$paramquery[username] 	= $_GET[username];
-					$paramquery[session_id] = $_GET[session_id];
-					$paramquery[nav] 		= "projects";
-					$paramquery[run] 		= "organ_unit";
-					$paramquery[ou_id] 		= $value;
-					$params = http_build_query($paramquery,'','&#38;');
+					$paramquery['username'] = $_GET['username'];
+					$paramquery['session_id'] = $_GET['session_id'];
+					
+					if (is_array($module_link_array[0]['array']) and count($module_link_array[0]['array']) >= 1)
+					{
+						foreach ($module_link_array[0]['array'] as $array_key => $array_value)
+						{
+							if ($array_value == "%OU_ID%")
+							{
+								$paramquery['ou_id'] = $value;
+							}
+							else
+							{
+								$paramquery[$array_key] = $array_value;
+							}
+						}
+					}
+					
+					$params = http_build_query($paramquery, '', '&#38;');
 					
 					
 					$column_array[symbol][link] = $params;

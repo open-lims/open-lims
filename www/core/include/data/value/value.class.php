@@ -62,7 +62,6 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 			$this->value_id = null;
 			$this->value = new Value_Access(null);
 			$this->value_version = new ValueVersion_Access(null);
-			parent::__construct(null);
 		}
 		else
 		{
@@ -987,6 +986,18 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 			return null;
 		}
 	}
+	
+	public function get_version_owner_id()
+	{
+		if ($this->value_version)
+		{
+			return $this->value_version->get_owner_id();
+		}
+		else
+		{
+			return null;
+		}
+	}
 	    
     /**
      * Checks if the xml-array contains one or more each-statements
@@ -1088,6 +1099,172 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
     		}
     		return $xml_return_array;
     	} 	
+    }
+    
+    public function get_value_content($history = false)
+    {
+    	if ($this->value and $this->value_id)
+    	{
+    		$value_type = new ValueType($this->value->get_type_id());
+    		$olvdl = new Olvdl($value_type->get_template_id());
+    		
+    		$xml_array = $olvdl->get_xml_array();
+    		$return_array = array();
+    		
+	    	if (is_array($xml_array) and count($xml_array) >= 1)
+	    	{
+				if ($history == true)
+				{
+					$value_version_array = ValueVersion_Access::list_entries_by_toid($this->value_id);
+					$value_version_array = array_reverse($value_version_array);
+					
+					if (is_array($value_version_array) and count($value_version_array) >= 1)
+					{
+						$counter = 0;
+						
+						foreach ($value_version_array as $key => $value)
+						{
+							$value_version = new ValueVersion_Access($value);
+							if (($value_version_value = $value_version->get_value()) != null)
+							{
+								$content_array[$counter] = unserialize($value_version_value);
+								$counter++;
+							}
+						}
+					}
+					else
+					{
+						if ($this->value_version->get_value())
+						{
+							$content_array[0] = unserialize($this->value_version->get_value());
+						}
+					}	
+				}
+				else
+				{
+					if ($this->value_version->get_value())
+					{
+						$content_array[0] = unserialize($this->value_version->get_value());
+					}
+				}
+				
+				if ($this->array_contains_each_statements($xml_array))
+				{
+					$xml_array = $this->resolve_each_statements($xml_array, $folder_id);
+				}
+				
+				foreach($xml_array as $key => $value)
+				{
+					$value[0] = trim(strtolower($value[0]));
+					$value[1] = trim(strtolower($value[1]));
+					$value[2] = trim(strtolower($value[2]));
+					
+					if ($value[1] == "print" and $value[2] != "#")
+					{
+						if ($value[3][value] and !$value[3]['var'])
+						{
+							$print_value = $value[3][value];
+							$print_value = str_replace("[high]","<sup>",$print_value);
+							$print_value = str_replace("[low]","<sub>",$print_value);
+							$print_value = str_replace("[/high]","</sup>",$print_value);
+							$print_value = str_replace("[/low]","</sub>",$print_value);
+							
+							$last_print_value = $print_value;
+						}
+						elseif (!$value[3][value] and $value[3]['var'])
+						{
+							$value_var = new ValueVar($folder_id);
+							$value_var_content = $value_var->get_content($value[3]['var']);
+									
+							if (!is_array($value_var_content))
+							{
+								$last_print_value = $value_var_content;
+							}
+						}
+						else
+						{
+							$last_print_value = "";
+						}
+					}
+					
+					if ($value[1] == "field" and $value[2] != "#")
+					{
+						if ($value[3][name])
+						{
+							$field_name = $value[3][name];
+						}
+						else
+						{
+							$field_name = "";
+						}
+						
+						if ($value[3]['vartype'])
+						{
+							$field_vartype = $value[3]['vartype'];
+						}
+						else
+						{
+							$field_vartype = "string";
+						}
+						
+						if ($value[3][type])
+						{
+							switch (trim(strtolower($value[3][type]))):
+							
+								case("textarea"):
+									$typename = "textarea";
+								break;
+								
+								default:
+									$typename = "textfield";
+								break;
+							
+							endswitch;
+						}
+						else
+						{
+							$typename = "textfield";
+						}
+						
+						if (is_array($content_array) and count($content_array) >=1)
+						{
+							foreach ($content_array as $sub_key => $sub_value)
+							{
+								$field_content[$sub_key] = $sub_value[$value[3][name]];
+							}
+							
+							$temp_array = array();
+							$temp_array[name] = $field_name;
+							$temp_array[title] = $last_print_value;
+							$temp_array[vartype] = $field_vartype;
+							$temp_array[type] = $typename;
+							$temp_array[content] = $field_content;
+							array_push($return_array, $temp_array);
+							unset($temp_array);
+						}
+					}
+				}
+				
+				return $return_array;
+	    	}
+	    	else
+	    	{
+	    		return null;
+	    	}
+    		
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+    /**
+     * @todo implementation
+     */
+    public function get_value_shape()
+    {
+    	
     }
     
     /**
@@ -1446,7 +1623,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 								// Exception
 							}
 
-							echo "</select>\n";
+							$return .= "</select>\n";
 						break;
 						
 						case (3):

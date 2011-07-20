@@ -61,24 +61,50 @@ $(document).ready(function()
 
 	<!-- FOREACH END -->
 	
-	$.ajax(
-	{
-		type: "GET",
-		url: "core/modules/base/navigation/left_navigation.ajax.php",
-		data: "run=get_active&session_id="+get_array['session_id'],
-		success: function(data)
-		{
-			if($("#"+data).hasClass("LeftNavigationSymbolInactive"))
+	<!-- IF ([[ACTIVE_JS_AJAX_URL]]) -->
+	
+		<!-- IF ([[ACTIVE_JS_ID]]) -->
+		
+			if($("#[[ACTIVE_JS_ID]]").hasClass('LeftNavigationSymbolInactive'))
 			{
 				$("#LeftNavigationSymbol0").trigger("click");
 			}
 			else
 			{
-				$("#"+data).trigger("click");
+				$.ajax(
+				{
+					type: "GET",
+					url: "[[ACTIVE_JS_AJAX_URL]]",
+					data: "run=get_name&session_id="+get_array['session_id'],
+					success: function(data)
+					{
+						$("#LeftNavigationTitle").html(data);
+					}
+				});
+				
+				$.ajax(
+				{
+					type: "GET",
+					url: "[[ACTIVE_JS_AJAX_URL]]",
+					data: "run=get_html&session_id="+get_array['session_id']+"&username="+get_array['username'],
+					success: function(data)
+					{
+						$("#LeftNavigationTree").html(data);
+					}
+				});
+				
+				$.ajax(
+				{
+					type: "GET",
+					url: "core/modules/base/navigation/left_navigation.ajax.php",
+					data: "run=set_active&session_id="+get_array['session_id']+"&id=[[ACTIVE_JS_ID]]",
+					success: function(data){}
+				});
 			}
-		}
-	});
-
+		
+		<!-- ENDIF -->
+		
+	<!-- ENDIF -->
 	
 });	
 

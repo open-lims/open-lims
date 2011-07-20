@@ -1,9 +1,9 @@
-<?php 
+<?php
 /**
- * @package sample
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -24,20 +24,57 @@
 /**
  * 
  */
-	$link[0][type]				= "home_button";
-	$link[0]['array'][nav]		= "project";
-	$link[0]['array'][run]		= "new";
-	$link[0][file]				= "projects/home_buttons/create.html";
-	$link[0][weight]			= 100;
+require_once("ajax.php");
+
+/**
+ * Login AJAX IO Class
+ * @package base
+ */
+class LoginAjax extends Ajax
+{	
+	function __construct()
+	{
+		parent::__construct();
+	}
 	
-	$link[1][type]				= "home_button";
-	$link[1]['array'][nav]		= "project";
-	$link[1][file]				= "projects/home_buttons/view_my.html";
-	$link[1][weight]			= 200;
+	public function logout()
+	{
+		global $session;
+		
+		$auth = new Auth();
+		
+		if ($auth->logout($session->get_user_id(),$_GET[session_id]) == true)
+		{
+			echo "1";
+		}
+		else
+		{
+			echo "0";
+		}
+	}
 	
-	$link[2][type]				= "ou_navigation";
-	$link[2]['array'][nav]		= "project";
-	$link[2]['array'][run]		= "organ_unit";
-	$link[2]['array'][ou_id]	= "%OU_ID%";
-	$link[2][weight]			= 0;
+	public function method_handler()
+	{
+		global $session;
+		
+		if ($session->is_valid())
+		{
+			switch($_GET[run]):
+	
+				case "login":
+
+				break;
+				
+				case "logout":
+					$this->logout();
+				break;
+			
+			endswitch;
+		}
+	}
+}
+
+$login_ajax = new LoginAjax;
+$login_ajax->method_handler();
+
 ?>

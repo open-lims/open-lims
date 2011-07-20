@@ -114,17 +114,17 @@
 			}
 			else
 			{
-				echo "Access Denied";
+				echo "Access Denied: You does not have access on this file!";
 			}
 		}
 		else
 		{
-			echo "Access Denied";
+			echo "Access Denied: Your session is outdated!";
 		}
 	}
 	else
 	{
-		echo "Access Denied";
+		echo "Access Denied: A GET Variable is missing!";
 	}
 
 ?>

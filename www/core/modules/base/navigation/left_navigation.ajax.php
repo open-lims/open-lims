@@ -37,21 +37,7 @@ class LeftNavigationAjax extends Ajax
 	{
 		parent::__construct();
 	}
-	
-	public function get_active()
-	{
-		global $session;
-
-		if ($session->is_value("LEFT_NAVIGATION_ACTIVE"))
-		{
-			echo $session->read_value("LEFT_NAVIGATION_ACTIVE");
-		}
-		else
-		{
-			echo "LeftNavigationSymbol0";
-		}
-	}
-	
+		
 	public function set_active($id)
 	{
 		global $session;	
@@ -69,10 +55,6 @@ class LeftNavigationAjax extends Ajax
 		if ($session->is_valid())
 		{
 			switch($_GET[run]):	
-				case "get_active":
-					$this->get_active();
-				break;
-				
 				case "set_active":
 					$this->set_active($_GET[id]);
 				break;

@@ -604,6 +604,295 @@ class Data_Wrapper_Access
 		return $data[result];
 	}	
 	
+	public static function list_value_versions($value_id, $order_by, $order_method, $start, $end)
+	{
+		global $db;
+		
+		if (is_numeric($value_id))
+		{
+			if ($order_by and $order_method)
+			{
+				if ($order_method == "asc")
+				{
+					$sql_order_method = "ASC";
+				}
+				else
+				{
+					$sql_order_method = "DESC";
+				}
+				
+				switch($order_by):
+							
+					case "name":
+						$sql_order_by = "ORDER BY name ".$sql_order_method;
+					break;
+					
+					case "datetime":
+						$sql_order_by = "ORDER BY datetime ".$sql_order_method;
+					break;
+					
+					case "user":
+						$sql_order_by = "ORDER BY user ".$sql_order_method;
+					break;
+								
+					default:
+						$sql_order_by = "";
+					break;
+				
+				endswitch;	
+			}
+			else
+			{
+				$sql_order_by = "";
+			}
+				
+			$sql = "SELECT ".constant("VALUE_VERSION_TABLE").".id AS id, " .
+						"".constant("VALUE_TYPE_TABLE").".name AS name," .
+						"".constant("VALUE_VERSION_TABLE").".internal_revision AS internal_revision, " .
+						"".constant("VALUE_VERSION_TABLE").".datetime AS datetime, " .
+						"".constant("VALUE_VERSION_TABLE").".owner_id AS owner_id " .
+						"FROM get_all_value_versions(".$value_id.", NULL)" .
+						"LEFT JOIN ".constant("VALUE_VERSION_TABLE")." 	ON get_all_value_versions 						= ".constant("VALUE_VERSION_TABLE").".id " .
+						"LEFT JOIN ".constant("VALUE_TABLE")." 			ON ".constant("VALUE_VERSION_TABLE").".toid 	= ".constant("VALUE_TABLE").".id " .
+						"LEFT JOIN ".constant("VALUE_TYPE_TABLE")." 	ON ".constant("VALUE_TABLE").".type_id 			= ".constant("VALUE_TYPE_TABLE").".id " .
+						"LEFT JOIN ".constant("USER_PROFILE_TABLE")." 	ON ".constant("VALUE_VERSION_TABLE").".owner_id	= ".constant("USER_PROFILE_TABLE").".id " .
+						"WHERE ".constant("VALUE_VERSION_TABLE").".id IN (SELECT * FROM get_all_value_versions(".$value_id.", NULL)) " .
+						"".$sql_order_by."";
+			
+			$return_array = array();
+			
+			$res = $db->db_query($sql);
+			
+			if (is_numeric($start) and is_numeric($end))
+			{
+				for ($i = 0; $i<=$end-1; $i++)
+				{
+					if (($data = $db->db_fetch_assoc($res)) == null)
+					{
+						break;
+					}
+					
+					if ($i >= $start)
+					{
+						array_push($return_array, $data);
+					}
+				}
+			}
+			else
+			{
+				while ($data = $db->db_fetch_assoc($res))
+				{
+					array_push($return_array, $data);
+				}
+			}
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public static function count_value_versions($value_id)
+	{
+		if (is_numeric($value_id))
+		{
+			global $db;
+						
+			$sql = "SELECT COUNT(*) AS result FROM get_all_value_versions(".$value_id.", NULL)";
+			
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+	
+			return $data[result];
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public static function list_file_versions($file_id, $order_by, $order_method, $start, $end)
+	{
+		global $db;
+
+		if (is_numeric($file_id))
+		{
+			if ($order_by and $order_method)
+			{
+				if ($order_method == "asc")
+				{
+					$sql_order_method = "ASC";
+				}
+				else
+				{
+					$sql_order_method = "DESC";
+				}
+				
+				switch($order_by):
+							
+					case "name":
+						$sql_order_by = "ORDER BY name ".$sql_order_method;
+					break;
+					
+					case "datetime":
+						$sql_order_by = "ORDER BY datetime ".$sql_order_method;
+					break;
+					
+					case "user":
+						$sql_order_by = "ORDER BY user ".$sql_order_method;
+					break;
+								
+					default:
+						$sql_order_by = "";
+					break;
+				
+				endswitch;	
+			}
+			else
+			{
+				$sql_order_by = "";
+			}
+				
+			$sql = "SELECT ".constant("FILE_VERSION_TABLE").".id AS id, " .
+						"".constant("FILE_VERSION_TABLE").".name AS name," .
+						"".constant("FILE_VERSION_TABLE").".internal_revision AS internal_revision, " .
+						"".constant("FILE_VERSION_TABLE").".datetime AS datetime, " .
+						"".constant("FILE_VERSION_TABLE").".owner_id AS owner_id " .
+						"FROM get_all_file_versions(".$file_id.", NULL) " .
+						"LEFT JOIN ".constant("FILE_VERSION_TABLE")." 	ON get_all_file_versions						= ".constant("FILE_VERSION_TABLE").".id " .
+						"LEFT JOIN ".constant("FILE_TABLE")." 			ON ".constant("FILE_VERSION_TABLE").".toid 		= ".constant("FILE_TABLE").".id " .
+						"LEFT JOIN ".constant("USER_PROFILE_TABLE")." 	ON ".constant("FILE_VERSION_TABLE").".owner_id	= ".constant("USER_PROFILE_TABLE").".id " .
+						"WHERE ".constant("FILE_VERSION_TABLE").".id IN (SELECT * FROM get_all_file_versions(".$file_id.", NULL)) " .
+						"".$sql_order_by."";
+			
+			$return_array = array();
+			
+			$res = $db->db_query($sql);
+			
+			if (is_numeric($start) and is_numeric($end))
+			{
+				for ($i = 0; $i<=$end-1; $i++)
+				{
+					if (($data = $db->db_fetch_assoc($res)) == null)
+					{
+						break;
+					}
+					
+					if ($i >= $start)
+					{
+						array_push($return_array, $data);
+					}
+				}
+			}
+			else
+			{
+				while ($data = $db->db_fetch_assoc($res))
+				{
+					array_push($return_array, $data);
+				}
+			}
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public static function count_file_versions($file_id)
+	{
+		if (is_numeric($file_id))
+		{
+			global $db;
+						
+			$sql = "SELECT COUNT(*) AS result FROM get_all_file_versions(".$file_id.", NULL)";
+			
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+	
+			return $data[result];
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public static function list_item_files($item_sql)
+	{
+		global $db;
+
+		if ($item_sql)
+		{			
+			$sql = "SELECT ".constant("FILE_VERSION_TABLE").".name AS name, " .
+							"".constant("DATA_ENTITY_TABLE").".datetime AS datetime, " .
+							"".constant("DATA_ENTITY_TABLE").".owner_id AS owner_id, " .
+							"".constant("FILE_TABLE").".id AS id " .
+						 "FROM ".constant("DATA_ENTITY_IS_ITEM_TABLE")." " .
+						"LEFT JOIN ".constant("DATA_ENTITY_TABLE")."	ON ".constant("DATA_ENTITY_IS_ITEM_TABLE").".data_entity_id	= ".constant("DATA_ENTITY_TABLE").".id " .
+						"LEFT JOIN ".constant("FILE_TABLE")." 			ON ".constant("DATA_ENTITY_TABLE").".id 					= ".constant("FILE_TABLE").".data_entity_id " .
+						"LEFT JOIN ".constant("FILE_VERSION_TABLE")." 	ON ".constant("FILE_TABLE").".id 							= ".constant("FILE_VERSION_TABLE").".toid " .
+						"LEFT JOIN ".constant("USER_PROFILE_TABLE")."	ON ".constant("DATA_ENTITY_TABLE").".owner_id				= ".constant("USER_PROFILE_TABLE").".id " .
+						"WHERE " .
+							"".constant("FILE_VERSION_TABLE").".current = 't' " .
+						"AND " .
+						"".constant("DATA_ENTITY_IS_ITEM_TABLE").".item_id IN (".$item_sql.")";
+			
+			$return_array = array();
+			
+			$res = $db->db_query($sql);
+
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array, $data);
+			}
+
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public static function list_item_values($item_sql)
+	{
+		global $db;
+		
+		if ($item_sql)
+		{			
+			$sql = "SELECT ".constant("VALUE_TYPE_TABLE").".name AS name, " .				
+							"".constant("DATA_ENTITY_TABLE").".datetime AS datetime, " .
+							"".constant("DATA_ENTITY_TABLE").".owner_id AS owner_id, " .
+							"".constant("VALUE_TABLE").".id AS id " .
+						 "FROM ".constant("DATA_ENTITY_IS_ITEM_TABLE")." " .
+						"LEFT JOIN ".constant("DATA_ENTITY_TABLE")."	ON ".constant("DATA_ENTITY_IS_ITEM_TABLE").".data_entity_id	= ".constant("DATA_ENTITY_TABLE").".id " .
+						"LEFT JOIN ".constant("VALUE_TABLE")." 			ON ".constant("DATA_ENTITY_TABLE").".id 					= ".constant("VALUE_TABLE").".data_entity_id " .
+						"LEFT JOIN ".constant("VALUE_VERSION_TABLE")." 	ON ".constant("VALUE_TABLE").".id 							= ".constant("VALUE_VERSION_TABLE").".toid " .
+						"LEFT JOIN ".constant("VALUE_TYPE_TABLE")." 	ON ".constant("VALUE_TABLE").".type_id 						= ".constant("VALUE_TYPE_TABLE").".id " .
+						"LEFT JOIN ".constant("USER_PROFILE_TABLE")."	ON ".constant("DATA_ENTITY_TABLE").".owner_id				= ".constant("USER_PROFILE_TABLE").".id " .
+						"WHERE " .
+							"".constant("VALUE_VERSION_TABLE").".current = 't' " .
+						"AND " .
+						"".constant("DATA_ENTITY_IS_ITEM_TABLE").".item_id IN (".$item_sql.")";
+
+			$return_array = array();
+			
+			$res = $db->db_query($sql);
+
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array, $data);
+			}
+
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
 }
 
 ?>

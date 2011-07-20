@@ -67,41 +67,6 @@ class ValueVar implements ValueVarInterface
     {
     	switch($word):
     	
-    		case "external":
-    			
-    			if ($number_of_statements == 0)
-    			{
-	    			$external_statement = null;
-	    		}
-	    		else
-	    		{
-	    			if ($number_of_statements == 1)
-	    			{
-	    				$external_statement = $statement_array[1];
-	    			}
-	    			else
-	    			{
-			    		$statement_array = explode(".", $address);
-			    		$statement_string = "";
-			    		for ($i=1;$i<=$number_of_statements;$i++)
-			    		{
-			    			if (!$statement_string)
-			    			{
-			    				$statement_string = $statement_array[$i];
-			    			}
-			    			else
-			    			{
-			    				$statement_string .= ".".$statement_array[$i];
-			    			}
-			    		}
-	    			}
-		    		$external_statement = $statement_string;
-	    		}
-	    		
-	    		$value_external_var = new ValueExternalVar();
-	    		return $value_external_var->get_var_content($statement_string);
-    		break;
-    	
     		case "this":
     			$this_found = false;
     			$value_var_case_array = ValueVarCase_Access::list_entries();
@@ -189,8 +154,45 @@ class ValueVar implements ValueVarInterface
 	    		$this->string_array = explode(".", $string);
     		}
     		
-    		return $this->interpret(array_shift($this->string_array));
-
+    		if ($this->string_array[0] == "external")
+    		{
+    			if ($number_of_statements == 0)
+    			{
+	    			$external_statement = null;
+	    		}
+	    		else
+	    		{
+	    			if ($number_of_statements == 1)
+	    			{
+	    				$external_statement = $statement_array[1];
+	    			}
+	    			else
+	    			{
+			    		$statement_array = explode(".", $address);
+			    		$statement_string = "";
+			    		for ($i=1;$i<=$number_of_statements;$i++)
+			    		{
+			    			if (!$statement_string)
+			    			{
+			    				$statement_string = $statement_array[$i];
+			    			}
+			    			else
+			    			{
+			    				$statement_string .= ".".$statement_array[$i];
+			    			}
+			    		}
+	    			}
+		    		$external_statement = $statement_string;
+	    		}
+	    		
+	    		$value_external_var = new ValueExternalVar();
+	    		$string = str_replace("external.","",$string);
+	    		return $value_external_var->get_var_content($string);
+    		}
+    		else
+    		{
+    			return $this->interpret(array_shift($this->string_array));
+    		}
     	}
     	elseif(is_array($this->string_array) and count($this->string_array) >= 1)
     	{

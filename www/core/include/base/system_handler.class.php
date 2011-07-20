@@ -662,7 +662,7 @@ class SystemHandler implements SystemHandlerInterface
 										}
 										
 										$module_link_id = BaseModuleFile_Access::get_id_by_module_id_and_name($register_key, "module_link.php");
-										if ($module_dialog_id != null)
+										if ($module_link_id != null)
 										{
 											$base_module_file = new BaseModuleFile_Access($module_link_id);
 											$base_module_file->set_checksum(md5_file($module_link));

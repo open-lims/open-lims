@@ -104,4 +104,8 @@ define("OU_GROUP_LEADER_GROUP", 9);
 define("OU_QUALITY_MANAGER_GROUP", 11);
 
 define("SAMPLE_EXIRY_WARNING", 7);
+
+define("LOGIN_FOOTER", "".constant("PRODUCT").", version: ".constant("PRODUCT_VERSION").", ".constant("PRODUCT_FUNCTION").", ".constant("PRODUCT_USER")." " .
+						"<br />This is free software; It comes with ABSOLUTELY NO WARRANTY." .
+						"<br />by R. Konertz, B. Tunggal, L. Eichinger et al.; 2008-2011");
 ?>

@@ -126,7 +126,7 @@ class ContentHandler_IO
 		{
 			if (Security::ip_error_count() < constant("MAX_IP_ERRORS"))
 			{
-		 		if ($session->is_valid() == true and $_GET[run] != "logout")
+		 		if ($session->is_valid() == true)
 		 		{
 					$template = new Template("template/main_header.html");
 					

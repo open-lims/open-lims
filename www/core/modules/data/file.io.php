@@ -124,7 +124,14 @@ class FileIO
 					
 					$template->set_var("thumbnail_image","");
 					
-					$paramquery = $_GET;
+					$paramquery = array();
+					$paramquery['username'] = $_GET['username'];
+					$paramquery['session_id'] = $_GET['session_id'];
+					$paramquery['file_id'] = $_GET['file_id'];
+					if ($_GET['version'])
+					{
+						$paramquery['version'] = $_GET['version'];
+					}
 					$params = http_build_query($paramquery,'','&#38;');	
 					$template->set_var("download_params",$params);
 					
@@ -535,76 +542,91 @@ class FileIO
 			
 			if ($file->is_read_access())
 			{
-				$template = new Template("template/data/file_history.html");
+				$list = new List_IO(Data_Wrapper::count_file_versions($_GET[file_id]), 20);
+
+				$list->add_row("","symbol",false,"16px");
+				$list->add_row("Name","name",true,null);
+				$list->add_row("Version","version",false,null);
+				$list->add_row("Date/Time","datetime",true,null);
+				$list->add_row("User","user",true,null);
+				$list->add_row("","delete",false,"16px");
 				
-				$file = new File($_GET[file_id]);
-				
-				$template->set_var("title",$file->get_name());
-				
-				$table_io = new TableIO("OverviewTable");
-				
-				$table_io->add_row("","symbol",false,16);
-				$table_io->add_row("Name","name",false,null);
-				$table_io->add_row("Version","version",false,null);
-				$table_io->add_row("Date/Time","datetime",false,null);
-				$table_io->add_row("Size","size",false,null);
-				
-				$content_array = array();
-				
-				$file_version_array = $file->get_file_internal_revisions();
-				
-				if (is_array($file_version_array) and count($file_version_array))
+				if ($_GET[page])
 				{
-					foreach($file_version_array as $key => $value)
+					if ($_GET[sortvalue] and $_GET[sortmethod])
 					{
-						$column_array = array();
-						
-						$file_version = new File($_GET[file_id]);
-						$file_version->open_internal_revision($value);
-						
-						$paramquery = $_GET;
-						$paramquery[file_id] = $_GET[file_id];
-						$paramquery[version] = $value;
-						$paramquery[action] = "file_detail";
-						unset($paramquery[nextpage]);
-						$params = http_build_query($paramquery,'','&#38;');
-						
-						$column_array[symbol][link] = $params;
-						$column_array[symbol][content] = "<img src='".$file_version->get_icon()."' alt='' style='border:0;' />";
-						$column_array[name][link] = $params;
-						
-						if (strlen($file_version->get_name()) > 40)
-						{
-							$column_array[name][content] = substr($file_version->get_name(), 0 , 40)."...";
-						}
-						else
-						{
-							$column_array[name][content] = $file_version->get_name();
-						}
-						
-						if ($file_version->is_current() == true)
-						{
-							$column_array[version] = $file_version->get_version()." <span class='italic'>current</span>";
-						}
-						else
-						{
-							$column_array[version] = $file_version->get_version();
-						}
-						
-						$column_array[datetime] = $file_version->get_datetime();
-						$column_array[size] = Misc::calc_size($file_version->get_size());
-						
-						array_push($content_array, $column_array);
+						$result_array = Data_Wrapper::list_file_versions($_GET[file_id], $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
 					}
-					
-					$table_io->add_content_array($content_array);
+					else
+					{
+						$result_array = Data_Wrapper::list_file_versions($_GET[file_id], null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
+					}				
 				}
 				else
 				{
-					$table_io->override_last_line("<span class='italic'>No results found!</span>");
+					if ($_GET[sortvalue] and $_GET[sortmethod])
+					{
+						$result_array = Data_Wrapper::list_file_versions($_GET[file_id], $_GET[sortvalue], $_GET[sortmethod], 0, 20);
+					}
+					else
+					{
+						$result_array = Data_Wrapper::list_file_versions($_GET[file_id], null, null, 0, 20);
+					}	
 				}
 				
-				$template->set_var("table", $table_io->get_content($_GET[page]));	
+				if (is_array($result_array) and count($result_array) >= 1)
+				{
+					foreach($result_array as $key => $value)
+					{
+						$file_version = clone $file;
+						$file_version->open_internal_revision($value[internal_revision]);
+						
+						$paramquery = $_GET;
+						$paramquery[action] = "filee_detail";
+						$paramquery[version] = $result_array[$key][internal_revision];
+						$params = http_build_query($paramquery,'','&#38;');
+						
+						$result_array[$key][symbol][link]		= $params;
+						$result_array[$key][symbol][content] 	= "<img src='".$file_version->get_icon()."' alt='' style='border:0;' />";
+						
+						$tmp_name = $result_array[$key][name];
+						unset($result_array[$key][name]);
+						$result_array[$key][name][link]		= $params;
+						$result_array[$key][name][content] 	= $tmp_name;
+						
+						if (strlen($tmp_name) > 40)
+						{
+							$result_array[$key][version] = substr($tmp_name, 0 , 40)."...";
+						}
+						else
+						{
+							$result_array[$key][version] = $tmp_name;
+						}
+						
+						$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
+						$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+						
+						$user = new User($result_array[$key][owner_id]);
+						$result_array[$key][user] = $user->get_full_name(false);
+
+						if ($file_version->is_current() == true)
+						{
+							$result_array[$key][version] = $file_version->get_version()." <span class='italic'>current</span>";
+						}
+						else
+						{
+							$result_array[$key][version] = $file_version->get_version();
+						}
+					}
+				}
+				else
+				{
+					$list->override_last_line("<span class='italic'>No results found!</span>");
+				}
+				
+				$template = new Template("template/data/file_history.html");
+
+				$template->set_var("table", $list->get_list($result_array, $_GET[page]));
 				
 				$paramquery = $_GET;
 				$paramquery[action] = "file_detail";

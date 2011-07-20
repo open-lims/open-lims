@@ -64,7 +64,7 @@ function create_menu_tree(id, ajax_handler)
 							}
 							return_html += "'";
 						}
-						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorOpen'><a href='#'><img/></a> <a href='index.php?"+link+"'><img src='images/icons/"+symbol+"'/></a> <a href='index.php?"+link+"'>"+name+"</a></div>";
+						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorOpen'><a href='#'><img/></a> <a href='index.php?"+link+"'><img src='images/icons/"+symbol+"'/ style='border: 0;'></a> <a href='index.php?"+link+"'>"+name+"</a></div>";
 					}
 					else 
 					{
@@ -82,7 +82,7 @@ function create_menu_tree(id, ajax_handler)
 							}			
 							return_html += "'";
 						}
-						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorClosed'><a href='#'><img/></a> <a href='index.php?"+link+"'><img src='images/icons/"+symbol+"'/></a> <a href='index.php?"+link+"'>"+name+"</a></div>";
+						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorClosed'><a href='#'><img/></a> <a href='index.php?"+link+"'><img src='images/icons/"+symbol+"' style='border: 0;'/></a> <a href='index.php?"+link+"'>"+name+"</a></div>";
 					}
 					
 					if(layer >= next_layer)
@@ -122,7 +122,7 @@ function create_menu_tree(id, ajax_handler)
 							return_html += "'";
 						}
 						
-						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorOpen'><a href='#'><img/></a> <a href='index.php?"+link+"'><img src='images/icons/"+symbol+"'/></a> <a href='index.php?"+link+"'>"+name+"</a></div>";
+						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorOpen'><a href='#'><img/></a> <a href='index.php?"+link+"'><img src='images/icons/"+symbol+"' style='border: 0;'/></a> <a href='index.php?"+link+"'>"+name+"</a></div>";
 					}
 					else 
 					{
@@ -142,7 +142,7 @@ function create_menu_tree(id, ajax_handler)
 							return_html += "'";
 						} 
 						
-						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorClosed'><a href='#'><img/></a> <a href='index.php?"+link+"'><img src='images/icons/"+symbol+"'/></a> <a href='index.php?"+link+"'>"+name+"</a></div>";
+						return_html += "><div id='LeftNavigationElementID"+current_id+"' class='LeftNavigationFirstAnchorClosed'><a href='#'><img/></a> <a href='index.php?"+link+"'><img src='images/icons/"+symbol+"' style='border: 0;'/></a> <a href='index.php?"+link+"'>"+name+"</a></div>";
 					}
 					
 					if(layer >= next_layer)
@@ -281,12 +281,21 @@ function create_menu_tree(id, ajax_handler)
 			}
 		});
 		
+		if (global_ajax_handler.indexOf("?") == -1)
+		{
+			var post_global_ajax_handler = global_ajax_handler+"?session_id="+get_array['session_id']+"&run=set_array";
+		}
+		else
+		{
+			var post_global_ajax_handler = global_ajax_handler+"&session_id="+get_array['session_id']+"&run=set_array";
+		}
+		
 		var json_array = encodeURIComponent(JSON.stringify(array));
 		console.log(json_array);
 		$.ajax(
 		{
 			type: "POST",
-			url: global_ajax_handler+"?session_id="+get_array['session_id']+"&run=set_array",
+			url: post_global_ajax_handler,
 			data: "array="+json_array,
 			success: function(data)
 			{}

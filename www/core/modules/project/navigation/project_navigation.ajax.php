@@ -33,7 +33,6 @@ require_once("../../base/ajax.php");
  */
 class ProjectAjax extends Ajax
 {
-	
 	function __construct()
 	{
 		parent::__construct();
@@ -44,79 +43,115 @@ class ProjectAjax extends Ajax
 		echo "Project";
 	}
 	
-	/**
-	 * Should return HTML of Menu
-	 */
 	private function get_html()
 	{
 		$template = new Template("../../../../template/projects/navigation/left.html");
-		
 		$template->output();
 	}
 	
-	
 	public function get_array()
 	{
-	global $session;
-	
-		$return_array = array();
-								
-		$project_array = Project::list_user_related_projects(null,false);
-		
-		if (is_array($project_array) and count($project_array) >= 1)
-		{
-			$counter = 0;
-			
-			foreach($project_array as $key => $value)
-			{
-				$project = new Project($value);
+		global $session;
 
-				$return_array[$counter][0] = 0;
-				$return_array[$counter][1] = $value;
-				$return_array[$counter][2] = $project->get_name();
-				$return_array[$counter][3] = "project.png";
-				$return_array[$counter][4] = true; // Permission
-				$return_array[$counter][5] = true;
-				$return_array[$counter][6] = ""; //link
-				$return_array[$counter][7] = false; //open
-				
-				$counter++;
+		if ($session->is_valid())
+		{
+			if ($session->is_value("LEFT_NAVIGATION_PROJECT_ID"))
+			{
+				$project_id = $session->read_value("LEFT_NAVIGATION_PROJECT_ID");
 			}
-			
-		echo json_encode($return_array);
-	}
+
+			if ($session->is_value("LEFT_NAVIGATION_PROJECT_ARRAY") and $project_id == $_GET[project_id])
+			{
+				echo json_encode($session->read_value("LEFT_NAVIGATION_PROJECT_ARRAY"));
+			}
+			else
+			{
+				$session->delete_value("LEFT_NAVIGATION_PROJECT_ARRAY");
+				$session->write_value("LEFT_NAVIGATION_PROJECT_ID", $_GET[project_id], true);
+				
+				$return_array = array();
+				
+				$project = new Project($_GET[project_id]);
+				if ($_GET[project_id] != ($master_project_id = $project->get_master_project_id()))
+				{
+					$project = new Project($master_project_id);
+					$project_id = $master_project_id;
+				}
+				else
+				{
+					$project_id = $_GET[project_id];
+				}
+						
+				$return_array[0][0] = 0;
+				$return_array[0][1] = $project_id;
+				$return_array[0][2] = $project->get_name();
+				$return_array[0][3] = "project.png";
+				$return_array[0][4] = true; // Permission
+				$return_array[0][5] = true;
+				
+				$paramquery['username'] = $_GET['username'];
+				$paramquery['session_id'] = $_GET['session_id'];
+				$paramquery['nav'] = "project";
+				$paramquery['run'] = "detail";
+				$paramquery['project_id'] = $project_id;
+				$params = http_build_query($paramquery, '', '&#38;');
+				
+				$return_array[0][6] = $params;
+				$return_array[0][7] = false;
+		
+				echo json_encode($return_array);
+			}
+		}
 	}
 	
 	public function set_array($array)
 	{
+		global $session;
+		
 		$var = json_decode($array);
-		echo count($var);
+		if (is_array($var))
+		{
+			$session->write_value("LEFT_NAVIGATION_PROJECT_ARRAY", $var, true);
+		}
 	}
 	
 	public function get_children($id)
 	{
-		$return_array = array();
-		$project = new Project($_GET[project_id]);
-		$project_array = $project->list_project_related_projects();
-		if (is_array($project_array) and count($project_array ) >= 1)
+		if (is_numeric($id))
 		{
-			$counter = 0;
+			$return_array = array();
 			
-			foreach($project_array as $key => $value)
+			$project = new Project($id);
+			$project_array = $project->list_project_related_projects();
+			
+			if (is_array($project_array) and count($project_array ) >= 1)
 			{
-				$project = new Project($value);
+				$counter = 0;
+				
+				foreach($project_array as $key => $value)
+				{
+					$project = new Project($value);
+						
+					$return_array[$counter][0] = -1;
+					$return_array[$counter][1] = $value;
+					$return_array[$counter][2] = $project->get_name();
+					$return_array[$counter][3] = "project.png";
+					$return_array[$counter][4] = true; // Permission
+					$return_array[$counter][5] = true;
 					
-				$return_array[$counter][0] = -1;
-				$return_array[$counter][1] = $value;
-				$return_array[$counter][2] = $project->get_name();
-				$return_array[$counter][3] = "project.png";
-				$return_array[$counter][4] = true; // Permission
-				$return_array[$counter][5] = true;
-				$return_array[$counter][6] = ""; //link
-				$return_array[$counter][7] = false; //open
-				$counter++;
+					$paramquery['username'] = $_GET['username'];
+					$paramquery['session_id'] = $_GET['session_id'];
+					$paramquery['nav'] = "project";
+					$paramquery['run'] = "detail";
+					$paramquery['project_id'] = $value;
+					$params = http_build_query($paramquery, '', '&#38;');
+					
+					$return_array[$counter][6] = $params; //link
+					$return_array[$counter][7] = false; //open
+					$counter++;
+				}
+				echo json_encode($return_array);
 			}
-			echo json_encode($return_array);
 		}
 	}
 	

@@ -99,4 +99,12 @@
 	$dialog[10][method]			= "get_barcode_report";
 	$dialog[10][internal_name]	= "sample_barcode_report";
 	$dialog[10][display_name]	= "Sample Barcode Report";
+	
+	$dialog[11][type]			= "item_report";
+	$dialog[11][class_path]		= "core/modules/sample/sample_report.io.php";
+	$dialog[11]['class']		= "SampleReportIO";
+	$dialog[11][method]			= "get_sample_item_report";
+	$dialog[11][internal_name]	= "sample_item_report";
+	$dialog[11][display_name]	= "Sample Item Report";
+	$dialog[11][weight]			= 1000;
 ?>
