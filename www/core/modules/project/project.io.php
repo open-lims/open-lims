@@ -1344,6 +1344,15 @@ class ProjectIO
 							$result[$counter][icon]	= "";
 						}
 						
+						if (!($counter % 2))
+						{
+							$result[$counter][tr_class] = " class='trLightGrey'";
+						}
+						else
+						{
+							$result[$counter][tr_class] = "";
+						}
+						
 						$counter++;
 					}
 					
@@ -1358,6 +1367,16 @@ class ProjectIO
 					{
 						$result[$counter][icon]	= "";
 					}
+					
+					if (!($counter % 2))
+					{
+						$result[$counter][tr_class] = " class='trLightGrey'";
+					}
+					else
+					{
+						$result[$counter][tr_class] = "";
+					}
+					
 					$counter++;
 				}
 				

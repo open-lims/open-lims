@@ -46,13 +46,38 @@ class Security implements SecurityInterface
  		return SystemLog::count_ip_failed_logins_with_begin($ip, $lead_time);
  	}
 
+ 	/**
+	 * Checks all GET- and POST-variables
+	 */
+ 	public static function filter_var()
+ 	{	
+ 		global $db;
+ 		
+		foreach ($_GET as $key => $value)
+		{
+			// HTML-Entities	
+			$_GET[$key] = htmlentities($_GET[$key], ENT_NOQUOTES, "UTF-8", false);
+				
+			// SQL-Injections
+			$_GET[$key] = $db->db_escape_string($_GET[$key]);
+			
+			// UTF8-Encoding
+			$_GET[$key] = mb_convert_encoding($_GET[$key], "UTF-8", "auto");
+		}
+ 		
+ 		foreach ($_POST as $key => $value)
+		{			
+			$_POST[$key] = htmlentities($_POST[$key], ENT_NOQUOTES, "UTF-8", false);
+			$_POST[$key] = $db->db_escape_string($_POST[$key]);
+			$_POST[$key] = mb_convert_encoding($_POST[$key], "UTF-8", "auto");	
+		}
+ 	}
+ 	
 	/**
 	 * Checks all GET- and POST-variables
 	 */
 	public static function protect_session()
-	{
-		global $db;
-		
+	{		
 		$module_get_array = array();
 		
 		$registered_module_array = SystemHandler::get_module_folders();
@@ -85,16 +110,7 @@ class Security implements SecurityInterface
 		}
 		
 		foreach ($_GET as $key => $value)
-		{
-			// HTML-Entities	
-			$_GET[$key] = htmlentities($_GET[$key], ENT_NOQUOTES, "UTF-8", false);
-				
-			// SQL-Injections
-			$_GET[$key] = $db->db_escape_string($_GET[$key]);
-			
-			// UTF8-Encoding
-			$_GET[$key] = mb_convert_encoding($_GET[$key], "UTF-8", "auto");
-			
+		{			
 			// GET-Values
 			switch($key):
 
@@ -134,16 +150,9 @@ class Security implements SecurityInterface
 			break;
 			
 			endswitch;
-			
 		}
 		
-		foreach ($_POST as $key => $value)
-		{			
-			$_POST[$key] = htmlentities($_POST[$key], ENT_NOQUOTES, "UTF-8", false);
-			$_POST[$key] = $db->db_escape_string($_POST[$key]);
-			$_POST[$key] = mb_convert_encoding($_POST[$key], "UTF-8", "auto");	
-		}
-		
+		self::filter_var();	
 	}
 	
 }

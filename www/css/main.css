@@ -415,11 +415,6 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 	text-decoration: none;
 }
 
-.projectStatusTable {
-	width: 100%;
-	border-spacing: 0;
-}
-
 .projectLogAttachmenTable {
 	width: 50%;
 }

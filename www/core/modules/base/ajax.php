@@ -39,6 +39,7 @@ require_once($path_prefix."../../../config/version.php");
 require_once($path_prefix."../../../config/main.php");
 require_once($path_prefix."../../db/db.php");
 
+require_once($path_prefix."../../include/base/security.class.php");
 
 require_once($path_prefix."../../include/base/template.class.php");
 
@@ -78,6 +79,8 @@ class Ajax
 	{
 		global $session, $user;
 
+		Security::filter_var();
+		
 		if ($_GET[session_id])
 		{
 			$session = new Session($_GET[session_id]);
