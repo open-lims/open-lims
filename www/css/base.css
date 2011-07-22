@@ -18,6 +18,10 @@ padding-top:2px;
 white-space: nowrap;
 }
 
+#LeftNavigationTree img {
+min-height:1%;
+}
+
 #LeftNavigationTree ul.LeftNavigationLayer0
 {
 margin: 0 0 0 2px;

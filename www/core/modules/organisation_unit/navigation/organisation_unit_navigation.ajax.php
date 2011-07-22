@@ -135,8 +135,12 @@ class OrganisationUnitAjax extends Ajax
 		$var = json_decode($array);
 		if (is_array($var))
 		{
-			$session->write_value("LEFT_NAVIGATION_OU_ARRAY", $var, true);
+			if($session->write_value("LEFT_NAVIGATION_OU_ARRAY", $var, true) == true)
+			{
+				echo "läuft";
+			}
 		}
+
 	}
 	
 	public function get_children($id)

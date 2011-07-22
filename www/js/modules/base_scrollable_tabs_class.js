@@ -38,6 +38,8 @@ function scrollable_tabs(tab_list,max_tabs,hide_arrows_if_deactivated,center_tab
 	{
 		if(num_tabs <= max_tabs)
 		{
+			$("#"+arrow_left+" img").css("display","none");
+			$("#"+arrow_right+" img").css("display","none");
 			return;
 		}
 	}

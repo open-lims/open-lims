@@ -1,5 +1,7 @@
+$.ajaxSetup({cache: false});
+
 function getQueryParams(qs)
-{
+{	
     qs = qs.split("+").join(" ");
     var params = {},
         tokens,
