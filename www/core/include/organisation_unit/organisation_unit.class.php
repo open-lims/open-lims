@@ -63,6 +63,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 {
 	private $organisation_unit_id;
 	private $organisation_unit;
+	private $in_create;
 
 	/**
 	 * @param integer $organisation_unit_id Organisation-Unit-ID
@@ -101,6 +102,8 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	{
 		global $transaction, $session;
 		
+		$this->in_create = true;
+		
 		if ($this->organisation_unit)
 		{
 			if ($name and is_numeric($type_id) and is_bool($stores_data))
@@ -113,6 +116,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 					{
 						$transaction->rollback($transaction_id);
 					}
+					$this->in_create = false;
 					throw new OrganisationUnitAlreadyExistException("",2);
 				}
 				
@@ -139,6 +143,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 						{
 							$transaction->rollback($transaction_id);
 						}
+						$this->in_create = false;
 						throw new OrganisationUnitCreationFailedException("",1);
 					}
 					
@@ -149,6 +154,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 						{
 							$transaction->rollback($transaction_id);
 						}
+						$this->in_create = false;
 						throw new OrganisationUnitCreationFailedException("",1);
 					}
 					
@@ -161,6 +167,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 						{
 							$transaction->rollback($transaction_id);
 						}
+						$this->in_create = false;
 						throw new OrganisationUnitCreationFailedException("",1);
 					}
 					else
@@ -168,6 +175,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 						$transaction->commit($transaction_id);
 					}
 					
+					$this->in_create = false;
 					return $organisation_unit_id;
 				}
 				else
@@ -176,16 +184,19 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 					{
 						$transaction->rollback($transaction_id);
 					}
+					$this->in_create = false;
 					throw new OrganisationUnitCreationFailedException("",1);
 				}
 			}
 			else
 			{
+				$this->in_create = false;
 				throw new OrganisationUnitCreationFailedException("",1);
 			}
 		}
 		else
 		{
+			$this->in_create = false;
 			throw new OrganisationUnitCreationFailedException("",1);
 		}
 		
@@ -205,6 +216,26 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 			{
 				$transaction_id = $transaction->begin();
 			
+				// Owner-Connection
+				if ($this->delete_owners() == false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+				}
+				
+				// Leader-Connection
+				if ($this->delete_leaders() == false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+				}
+				
 				// User-Connection
 				if ($this->delete_members() == false)
 				{
@@ -215,6 +246,15 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 					return false;
 				}
 				
+				// Quality-Manager-Connection
+				if ($this->delete_quality_managers() == false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+				}
 				
 				// Group-Connection
 				if ($this->delete_groups() == false)
@@ -1098,16 +1138,27 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 						}
 						else
 						{
-							$organisation_unit_change_owner_event = new OrganisationUnitChangeOwnerEvent($this->organisation_unit_id);
-							$event_handler = new EventHandler($organisation_unit_change_owner_event);
-							
-							if ($event_handler->get_success() == true)
+							if ($this->in_create == false)
 							{
-								if ($transaction_id != null)
+								$organisation_unit_change_owner_event = new OrganisationUnitChangeOwnerEvent($this->organisation_unit_id);
+								$event_handler = new EventHandler($organisation_unit_change_owner_event);
+								
+								if ($event_handler->get_success() == true)
 								{
-									$transaction->commit($transaction_id);
+									if ($transaction_id != null)
+									{
+										$transaction->commit($transaction_id);
+									}
+									return true;
 								}
-								return true;
+								else
+								{
+									if ($transaction_id != null)
+									{
+										$transaction->rollback($transaction_id);
+									}
+									return false;
+								}
 							}
 							else
 							{
@@ -1115,7 +1166,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 								{
 									$transaction->commit($transaction_id);
 								}
-								return false;
+								return true;
 							}
 						}
 					}
@@ -1844,6 +1895,37 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 		}
 	}
 	
+	/**
+	 * Deletes all owners of an OU
+	 * @return bool
+	 */
+	private function delete_owners()
+	{
+		if ($this->organisation_unit_id)
+		{
+			return OrganisationUnitHasOwner_Access::delete_by_organisation_unit_id($this->organisation_unit_id);
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * Deletes all leaders of an OU
+	 * @return bool
+	 */
+	private function delete_leaders()
+	{
+		if ($this->organisation_unit_id)
+		{
+			return OrganisationUnitHasLeader_Access::delete_by_organisation_unit_id($this->organisation_unit_id);
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 	/**
 	 * Deletes all members of an OU
@@ -1854,6 +1936,22 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 		if ($this->organisation_unit_id)
 		{
 			return OrganisationUnitHasMember_Access::delete_by_organisation_unit_id($this->organisation_unit_id);
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * Deletes all quality managers of an OU
+	 * @return bool
+	 */
+	private function delete_quality_managers()
+	{
+		if ($this->organisation_unit_id)
+		{
+			return OrganisationUnitHasQualityManager_Access::delete_by_organisation_unit_id($this->organisation_unit_id);
 		}
 		else
 		{
