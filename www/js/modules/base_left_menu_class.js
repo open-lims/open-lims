@@ -1,4 +1,5 @@
-function create_menu_tree(id, ajax_handler) {
+function create_menu_tree(id, ajax_handler) 
+{
 	var array;
 	var div_id = id;
 	var global_ajax_handler = ajax_handler;
@@ -24,7 +25,8 @@ function create_menu_tree(id, ajax_handler) {
 
 			$(array).each
 			(
-				function(i) { // alle arrays
+				function(i) // alle arrays
+				{ 
 					var layer = $(this)[0]; // level
 					var current_id = $(this)[1]; // id
 					var name = $(this)[2]; // name
@@ -66,11 +68,11 @@ function create_menu_tree(id, ajax_handler) {
 									+ current_id
 									+ "' class='LeftNavigationFirstAnchorOpen'><a href='#'><img/></a> <a href='index.php?"
 									+ link
-									+ "' style='height: 1%;'><img src='images/icons/"
+									+ " onclick='return false'><img src='images/icons/"
 									+ symbol
-									+ "'/ style='border: 0;'></a> <a href='index.php?"
+									+ "'/ style='border: 0; overflow:auto;'></a> <a href='index.php?"
 									+ link
-									+ "'>"
+									+ "' onclick='return false'>"
 									+ name
 									+ "</a></div>";
 						} 
@@ -94,11 +96,11 @@ function create_menu_tree(id, ajax_handler) {
 								+ current_id
 								+ "' class='LeftNavigationFirstAnchorClosed'><a href='#'><img/></a> <a href='index.php?"
 								+ link
-								+ "' style='height: 1%;'><img src='images/icons/"
+								+ "' onclick='return false'><img src='images/icons/"
 								+ symbol
-								+ "' style='border: 0;'/></a> <a href='index.php?"
+								+ "' style='border: 0; overflow:auto;'/></a> <a href='index.php?"
 								+ link
-								+ "'>"
+								+ "' onclick='return false'>"
 								+ name
 								+ "</a></div>";
 						}
@@ -143,11 +145,11 @@ function create_menu_tree(id, ajax_handler) {
 								+ current_id
 								+ "' class='LeftNavigationFirstAnchorOpen'><a href='#'><img/></a> <a href='index.php?"
 								+ link
-								+ "'><img src='images/icons/"
+								+ "' onclick='return false'><img src='images/icons/"
 								+ symbol
-								+ "' style='border: 0;'/></a> <a href='index.php?"
+								+ "' style='border: 0;overflow:auto;'/></a> <a href='index.php?"
 								+ link
-								+ "'>"
+								+ "' onclick='return false'>"
 								+ name
 								+ "</a></div>";
 						} else 
@@ -172,11 +174,11 @@ function create_menu_tree(id, ajax_handler) {
 								+ current_id
 								+ "' class='LeftNavigationFirstAnchorClosed'><a href='#'><img/></a> <a href='index.php?"
 								+ link
-								+ "'><img src='images/icons/"
+								+ "' onclick='return false'><img src='images/icons/"
 								+ symbol
-								+ "' style='border: 0;'/></a> <a href='index.php?"
+								+ "' style='border: 0;overflow:auto;'/></a> <a href='index.php?"
 								+ link
-								+ "'>"
+								+ "' onclick='return false'>"
 								+ name
 								+ "</a></div>";
 						}
@@ -188,7 +190,7 @@ function create_menu_tree(id, ajax_handler) {
 					}
 				});
 			$("#loadingAnimation").remove();
-			$("#" + id).append(return_html).bind("click", handler);
+			$("#" + id).append(return_html).bind("click", new_handler);
 			update_icons();
 			update_scrollbar();
 		}
@@ -346,6 +348,7 @@ function create_menu_tree(id, ajax_handler) {
 
 		var json_array = encodeURIComponent(JSON.stringify(array));
 		$.ajax({
+			async: false,
 			type : "POST",
 			url : post_global_ajax_handler,
 			data : "array=" + json_array,
@@ -355,77 +358,71 @@ function create_menu_tree(id, ajax_handler) {
 	}
 
 	
-	var handler = function(evt) {
-
+	var new_handler = function(evt)
+	{
 		evt.preventDefault();
 		$("#" + id).unbind("click");
-
 		var target = evt.target;
 		var target_div = $(target).parents("div")[0];
 
 		var follow_link = true;
 		var href = $("#" + $(target_div).attr("id") + " a:nth-child(2)").attr("href");
-
+		
 		if ($(target).attr("src") == "images/minus.png" || $(target).attr("src") == "images/plus.png") 
 		{
 			follow_link = false;
 		}
-
+		else 
+		{
+			if (href.substr(-11) === "index.php?") 
+			{
+				follow_link = false;
+			}
+		}
+		
 		if ($(target_div).hasClass("LeftNavigationFirstAnchorOpen")) 
 		{
 			$(target_div).attr("class", "LeftNavigationFirstAnchorClosed");
-			if ($(target_div).parent().children("ul").length > 0) 
-			{
-				var ul_to_slide;
-				if($(target_div).parent().children("ul").length == 2)
-				{
-					ul_to_slide = $(target_div).parent().children("ul").first();
-				}
-				else
-				{
-					ul_to_slide = $(target_div).parent().children("ul");
-				}
-				
-//				console.log(ul_to_slide);
+			var ul_to_slide = $(target_div).parent().children("ul");
+			if($(ul_to_slide).length > 0) {
 				$(ul_to_slide).slideUp("fast",
 					function() {
 						$(this).remove();
-						parse_array();
 						update_icons();
+						parse_array();
 						update_scrollbar();
-						$("#" + id).bind("click", handler);
+						$("#" + id).bind("click", new_handler);
 					});
-			} 
-			else 
+			}
+			else
 			{
-				parse_array();
 				update_icons();
 				update_scrollbar();
-				$("#" + id).bind("click", handler);
+				$("#" + id).bind("click", new_handler);
 			}
 		} 
 		else if ($(target_div).hasClass("LeftNavigationFirstAnchorClosed")) 
 		{
 			$(target_div).attr("class", "LeftNavigationFirstAnchorOpen");
-
+	
 			var clicked_id = $(target_div).attr("id").replace("LeftNavigationElementID", "");
-
+	
 			var parent_layer = parseInt($(target_div).parent().parent().attr("class").replace("LeftNavigationLayer", ""));
 			var layer = parent_layer + 1;
-
+	
 			var parent_li = $(target_div).parent();
-
+	
 			$.ajax({
 				type : "GET",
 				url : ajax_handler,
 				data : "run=get_children&id=" + clicked_id + "&session_id=" + get_array['session_id'],
 				success : function(data) {
 					var child_array = $.parseJSON(data);
-
-					if (child_array.length != 0) 
+	
+					if (child_array != null && child_array.length != 0) 
 					{
 						var child_html = "<ul class='LeftNavigationLayer"+ layer + "'>";
-
+	
 						$(child_array).each(
 							function() 
 							{ // alle arrays
@@ -435,9 +432,9 @@ function create_menu_tree(id, ajax_handler) {
 								var child_link = $(this)[6];
 								var child_clickable = $(this)[5]; // clickable
 								var child_permission = $(this)[4]; // permission
-
+	
 								child_html += "<li";
-
+	
 								if (!child_clickable || !child_permission) 
 								{
 									child_html += " class='";
@@ -453,69 +450,53 @@ function create_menu_tree(id, ajax_handler) {
 								}
 								child_html += "><div id='LeftNavigationElementID"
 									+ child_id
-									+ "' class='LeftNavigationFirstAnchorClosed'><a href=''><img/></a> <a href='index.php?"
+									+ "' class='LeftNavigationFirstAnchorClosed'><a href=''><img style='overflow:auto;'/></a> <a href='index.php?"
 									+ child_link
-									+ "'><img src='images/icons/"
+									+ "' onclick='return false'><img src='images/icons/"
 									+ child_symbol
-									+ "' style='border: 0;'/></a> <a href='index.php?"
+									+ "' style='border: 0; overflow:auto;'/></a> <a href='index.php?"
 									+ child_link
-									+ "'>"
+									+ "' onclick='return false'>"
 									+ child_name
 									+ "</a></div></li>";
 							});
 						child_html += "</ul>";
-
+						
 						$(parent_li)
 							.append(child_html)
-							.children()
+							.first()
 							.hide()
 							.slideDown("normal",function() 
+							{
+								$("#" + id).bind("click", new_handler);
+
+								if (!$(parent_li).hasClass(" NotClickable")) 
 								{
-									if (!$(parent_li).hasClass(" NotClickable")) 
+									if (follow_link) 
 									{
-										if (href.substr(-11) === "index.php?") 
-										{
-											console.log("link nicht güig");
-										}
-										else
-										{
-											if (follow_link) 
-											{
-//												parse_array();
-												update_icons();
-												update_scrollbar();
-												window.location.href = href;
-											}
-										}
+										window.location.href = href;
 									}
-								});
+								}
+							});
 						parse_array();
+						update_icons();
+						update_scrollbar();
 					} 
 					else // keine children
 					{
-						if (href.substr(-11) === "index.php?") 
+						update_icons();
+						update_scrollbar();
+						$("#" + id).bind("click", new_handler);
+						if (follow_link)
 						{
-							console.log("link nicht güig");
-						}
-						else
-						{
-							if (follow_link) 
-							{
-								update_icons();
-								update_scrollbar();
-//								parse_array();
-								$("#" + id).bind("click", handler);
-								window.location.href = href;
-							}
+							window.location.href = href;
 						}
 					}
-					update_icons();
-					update_scrollbar();
-//					parse_array();
-					$("#" + id).bind("click", handler);
+					
 				}
 			});
-		}
-		$(parent_li).children().children("a:nth-child(1)").children().attr("src", "images/animations/loading_circle_small.gif");
+			$(parent_li).children().children("a:nth-child(1)").children().attr("src", "images/animations/loading_circle_small.gif");
+		}	
 	}
+
 }
