@@ -50,9 +50,9 @@ class AdminUserIO
 		{
 			$page = 1;
 			$counter_begin = 0;
-			if ($user_array_cardinality > 25)
+			if ($user_array_cardinality > 20)
 			{
-				$counter_end = 24;
+				$counter_end = 19;
 			}
 			else
 			{
@@ -61,17 +61,17 @@ class AdminUserIO
 		}
 		else
 		{
-			if ($_GET[page] >= ceil($user_array_cardinality/25))
+			if ($_GET[page] >= ceil($user_array_cardinality/20))
 			{
-				$page = ceil($user_array_cardinality/25);
+				$page = ceil($user_array_cardinality/20);
 				$counter_end = $user_array_cardinality;
 			}
 			else
 			{
 				$page = $_GET[page];
-				$counter_end = (25*$page)-1;
+				$counter_end = (20*$page)-1;
 			}
-			$counter_begin = (25*$page)-25;
+			$counter_begin = (20*$page)-20;
 		}
 		
 		if (is_array($user_array))
