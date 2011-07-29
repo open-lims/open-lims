@@ -21,7 +21,7 @@ function create_menu_tree(id, ajax_handler)
 		{
 			array = $.parseJSON(data);
 
-			var current_layer = 0;
+			var current_layer = -2;
 
 			$(array).each
 			(
@@ -189,10 +189,12 @@ function create_menu_tree(id, ajax_handler)
 						}
 					}
 				});
+			return_html += "</li></ul>";
 			$("#loadingAnimation").remove();
 			$("#" + id).append(return_html).bind("click", new_handler);
 			update_icons();
 			update_scrollbar();
+	
 		}
 	});
 	

@@ -1,5 +1,6 @@
 @CHARSET "ISO-8859-1";
 
+/* LEFT NAVIGATION MENU */
 #LeftNavigationTree ul 
 {
 list-style-type: none;
@@ -59,6 +60,37 @@ border-top: 1px #D0D0D0 dotted;
 border-bottom: 1px #D0D0D0 dotted;
 font-weight: bold;
 padding: 2px 2px 2px 5px;
+}
+
+/* FILE SEARCH MENU */
+
+#fileSearchList
+{
+
+}
+
+#fileSearchList ul 
+{
+list-style-type: none;
+margin: 0 0 0 10px;
+padding: 0px;
+}
+
+#fileSearchList ul li div
+{
+
+border-bottom: dotted black 1px;
+padding-top: 4px;
+padding-bottom: 4px;
+}
+
+
+.searchRadioButton 
+{
+/* position:absolute; */
+/* right:0; */
+	float:right;
+
 }
 
 
