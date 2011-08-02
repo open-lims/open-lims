@@ -454,5 +454,32 @@ class SampleHasLocation_Access
 		}
 	}
 	
+	/**
+	 * @param integer $location_id
+	 * @return bool
+	 */
+	public static function delete_by_location_id($location_id)
+	{
+		global $db;
+			
+		if (is_numeric($location_id))
+		{
+			$sql = "DELETE FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE location_id = ".$location_id."";
+			$res = $db->db_query($sql);
+			
+			if ($res !== false)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 ?>

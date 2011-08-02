@@ -357,7 +357,7 @@ class Location_Access
 	{
 		global $db;
 			
-		if ($this->location_id and $additional_name)
+		if ($this->location_id)
 		{
 			$sql = "UPDATE ".constant("LOCATION_TABLE")." SET additional_name = '".$additional_name."' WHERE id = '".$this->location_id."'";
 			$res = $db->db_query($sql);
@@ -418,6 +418,97 @@ class Location_Access
 		}
 	}
 	
+	
+	/**
+	 * @param integer $id
+	 * @return bool
+	 */
+	public static function exist_id($id)
+	{
+		global $db;
+
+		if (is_numeric($id))
+		{
+			$sql = "SELECT id FROM ".constant("LOCATION_TABLE")." WHERE id = '".$id."'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[id])
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}	
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @return array
+	 */
+	public static function list_root_entries()
+	{
+		global $db;
+				
+		$return_array = array();
+		
+		$sql = "SELECT id FROM ".constant("LOCATION_TABLE")." WHERE toid IS NULL OR id = toid ORDER BY id";
+		$res = $db->db_query($sql);
+		
+		while ($data = $db->db_fetch_assoc($res))
+		{
+			array_push($return_array,$data[id]);
+		}
+		
+		if (is_array($return_array))
+		{
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}	
+	}
+	
+	/**
+	 * @param integer $id
+	 * @return array
+	 */
+	public static function list_entries_by_id($id)
+	{
+		global $db;
+
+		if (is_numeric($id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT id FROM ".constant("LOCATION_TABLE")." WHERE id != toid AND toid = '".$id."' ORDER BY id";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,$data[id]);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}	
+		}
+		else
+		{
+			return null;
+		}
+	}
 	
 	/**
 	 * @return array

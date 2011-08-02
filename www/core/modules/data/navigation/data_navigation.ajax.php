@@ -75,7 +75,7 @@ class DataAjax extends Ajax
 					{
 						$folder = Folder::get_instance($value);
 					
-						$return_array[$counter][0] = -1;
+						$return_array[$counter][0] = 0;
 						$return_array[$counter][1] = $value;
 						$return_array[$counter][2] = $folder->get_name();
 						$return_array[$counter][3] = "folder.png";

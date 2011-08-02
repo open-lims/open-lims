@@ -1,7 +1,7 @@
 function file_search()
 {
 	var get_array = getQueryParams(document.location.search);
-	var ajax_handler = "core/modules/search/search.ajax.php";
+	var ajax_handler = "core/modules/data/folder.ajax.php";
 	var id = "fileSearchList";
 	var array;
 	$.ajax(

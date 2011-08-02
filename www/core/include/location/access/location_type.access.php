@@ -181,6 +181,37 @@ class LocationType_Access
 			return false;
 		}
 	}
+
+	
+	/**
+	 * @return array
+	 */
+	public static function list_entries()
+	{
+		global $db;
+				
+		$return_array = array();
+		
+		$sql = "SELECT id,name FROM ".constant("LOCATION_TYPE_TABLE")." ORDER BY id";
+		$res = $db->db_query($sql);
+		
+		while ($data = $db->db_fetch_assoc($res))
+		{
+			$tmp_array = array();
+			$tmp_array[id] = $data[id];
+			$tmp_array[name] = $data[name];
+			array_push($return_array,$tmp_array);
+		}
+		
+		if (is_array($return_array))
+		{
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}	
+	}
 }
 	
 ?>

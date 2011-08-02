@@ -24,27 +24,88 @@
 /**
  * 
  */
-require_once("../base/ajax_init.php");
+require_once("../base/ajax.php");
 
 /**
  * Folder AJAX Class
  * @package data
  */
-class FolderAJAX extends AJAXInit
+class FolderAjax extends Ajax
 {
+	
 	function __construct()
 	{
 		parent::__construct();
 	}
-		
-	private function list_childs_by_id()
+	
+	public function get_array()
 	{
-		if ($_GET[folder_id]) {
+		global $session;
 
+		if ($session->is_valid())
+		{
+			if ($session->is_value("FILE_SEARCH_ARRAY"))
+			{
+				echo json_encode($session->read_value("FILE_SEARCH_ARRAY"));
+			}
+			else
+			{
+				$return_array = array();
+										
+				$folder = Folder::get_instance(1);
+			
+				$data_array = $folder->get_subfolder_array();
+				
+				if (is_array($data_array) and count($data_array) >= 1)
+				{
+					$counter = 0;
+					
+					foreach($data_array as $key => $value)
+					{
+						$folder = Folder::get_instance($value);
+					
+						$return_array[$counter][0] = -1;
+						$return_array[$counter][1] = $value;
+						$return_array[$counter][2] = $folder->get_name();
+						$return_array[$counter][3] = "folder.png";
+						
+						if ($folder->is_read_access() == true)
+						{
+							$return_array[$counter][4] = true;
+						}
+						else
+						{
+							$return_array[$counter][4] = false;	
+						}
+						
+						$return_array[$counter][5] = true; // Clickable
+						
+						$paramquery['username'] = $_GET['username'];
+						$paramquery['session_id'] = $_GET['session_id'];
+						$paramquery['nav'] = "data";
+						$paramquery['folder_id'] = $value;
+						$params = http_build_query($paramquery, '', '&#38;');
+						
+						$return_array[$counter][6] = $params; //link
+						$return_array[$counter][7] = false; //open
+						
+						$counter++;
+					}
+				}
+				
+				echo json_encode($return_array);
+			}
+		}
+	}
+	
+	public function get_children($id)
+	{
+		if (is_numeric($id) and $id != 0)
+		{
 			$return_array = array();
 
-			$folder = Folder::get_instance($_GET[folder_id]);
-			
+			$folder = Folder::get_instance($id);
+					
 			$folder_array = $folder->get_subfolder_array();
 			
 			if (is_array($folder_array) and count($folder_array) >= 1)
@@ -53,6 +114,7 @@ class FolderAJAX extends AJAXInit
 				
 				foreach($folder_array as $key => $value)
 				{
+		
 					$folder = Folder::get_instance($value);
 					
 					$return_array[$counter][0] = -1;
@@ -71,156 +133,43 @@ class FolderAJAX extends AJAXInit
 					
 					$return_array[$counter][5] = true; // Clickable
 					
+					$paramquery['username'] = $_GET['username'];
+					$paramquery['session_id'] = $_GET['session_id'];
+					$paramquery['nav'] = "data";
+					$paramquery['folder_id'] = $value;
+					$params = http_build_query($paramquery, '', '&#38;');
+					
+					$return_array[$counter][6] = $params; //link
+					$return_array[$counter][7] = false; //open
+					
 					$counter++;
-				}	
+					
+				}
 			}
-			return serialize($return_array);	
-		}		
-	}
-
-	private function list_menu_childs_by_id()
-	{
-		if ($_GET[session_id])
-		{
-			$session = new Session($_GET[session_id]);
-
-			if ($session->is_valid())
-			{		
-				if ($_GET[folder_id] == 1)
-				{
-					
-					if ($session->is_value("CURRENT_NAVIGATION_FOLDER"))
-					{	
-						return serialize($session->read_value("CURRENT_NAVIGATION_FOLDER"));			
-					}
-					else
-					{
-						$return_array = array();
-						
-						$folder = Folder::get_instance(1);
-					
-						$folder_array = $folder->get_subfolder_array();
-						
-						if (is_array($folder_array) and count($folder_array) >= 1)
-						{
-							$counter = 0;
-							
-							foreach($folder_array as $key => $value)
-							{
-								if ($value[type] == 0)
-								{
-									$folder = Folder::get_instance($value[id]);
-									
-									$return_array[$counter][0] = 0;
-									$return_array[$counter][1] = $value[id];
-									$return_array[$counter][2] = $folder->get_name();
-									$return_array[$counter][3] = "folder.png";
-									
-									if ($folder->is_read_access() == true)
-									{
-										$return_array[$counter][4] = true;
-									}
-									else
-									{
-										$return_array[$counter][4] = false;	
-									}
-									
-									$return_array[$counter][5] = true; // Clickable
-									
-									$counter++;
-								}	
-							}
-						}
-						return serialize($return_array);	
-					}
-				}
-				else
-				{
-					if ($_GET[folder_id])
-					{
-						$return_array = array();
-						
-						$folder = Folder::get_instance($_GET[folder_id]);
-						
-						$folder_array = $folder->get_subfolder_array();
-						
-						if (is_array($folder_array) and count($folder_array) >= 1)
-						{
-							$counter = 0;
-							
-							foreach($folder_array as $key => $value)
-							{
-								if ($value[type] == 0)
-								{
-									$folder = Folder::get_instance($value[id]);
-									
-									$return_array[$counter][0] = -1;
-									$return_array[$counter][1] = $value[id];
-									$return_array[$counter][2] = $folder->get_name();
-									$return_array[$counter][3] = "folder.png";
-									
-									if ($folder->is_read_access() == true)
-									{
-										$return_array[$counter][4] = true;
-									}
-									else
-									{
-										$return_array[$counter][4] = false;	
-									}
-									
-									$return_array[$counter][5] = true; // Clickable
-									
-									$counter++;
-								}
-							}
-						}
-						return serialize($return_array);	
-					}
-				}
-			}	
+			echo json_encode($return_array);
 		}
 	}
 	
-	private function rewrite_menu_childs_array()
-	{
-		if ($_GET[session_id])
-		{
-			$session = new Session($_GET[session_id]);
-		
-			if ($_POST[serialized_folder_array])
-			{
-				$serialized_folder_array = $_POST[serialized_folder_array];
-				
-				$serialized_folder_array = stripslashes($serialized_folder_array);
-				$folder_array = unserialize($serialized_folder_array);
-
-				$session->write_value("CURRENT_NAVIGATION_FOLDER", $folder_array, true);
-			}
-		}
-	}
-
 	public function method_handler()
 	{
-		switch($_GET[run]):
-			
-			case "list_folder_childs":
-				echo $this->list_childs_by_id();
-			break;
-			
-			case "list_menu_folder_childs":
-				echo $this->list_menu_childs_by_id();
-			break;
-			
-			case "rewrite_menu_childs_array":
-				echo $this->rewrite_menu_childs_array();
-			break;
-			
-		endswitch;
-	}
+		global $session;
+		
+		if ($session->is_valid())
+		{
+			switch($_GET[run]):	
 
+				case "get_array":
+					$this->get_array();
+				break;
+				case "get_children":
+					$this->get_children($_GET['id']);
+				break;	
+			endswitch;
+		}
+	}
 }
 
-$folder_ajax = new FolderAJAX;
+$folder_ajax = new FolderAjax;
 $folder_ajax->method_handler();
 
 ?>

@@ -494,6 +494,7 @@ class EquipmentType_Access
 		}
 	}
 	
+	
 	/**
 	 * @param integer $id
 	 * @return bool
@@ -682,5 +683,32 @@ class EquipmentType_Access
 		}
 	}
 	
+	/**
+	 * @param integer $location_id
+	 * @return bool
+	 */
+	public static function set_location_id_on_null($location_id)
+	{
+		global $db;
+
+		if (is_numeric($location_id))
+		{
+			$sql = "UPDATE ".constant("EQUIPMENT_TYPE_TABLE")." SET location_id = NULL WHERE location_id = ".$location_id."";
+			$res = $db->db_query($sql);
+			
+			if ($res !== false)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 ?>

@@ -28,6 +28,8 @@ require_once("interfaces/location.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("events/location_delete_event.class.php");
+	
 	require_once("access/location_type.access.php");
 	require_once("access/location.access.php");
 }
@@ -56,10 +58,79 @@ class Location implements LocationInterface
 	}
 	
 	/**
+	 * @param integer $toid
+	 * @param integer $type_id
+	 * @param string $name
+	 * @param string $additional_name
+	 * @param bool $show_prefix
+	 * @return integer
+	 */
+	public function create($toid, $type_id, $name, $additional_name, $show_prefix)
+	{
+		if ($this->location)
+		{
+			return $this->location->create($toid, $type_id, $name, $additional_name, $show_prefix);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function delete()
+	{
+		global $transaction;	
+
+		if ($this->location and $this->location_id)
+		{
+			$transaction_id = $transaction->begin();
+			
+			// Event
+			$location_delete_event = new LocationDeleteEvent($this->location_id);
+			$event_handler = new EventHandler($location_delete_event);
+			
+			if ($event_handler->get_success() == false)
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+			}
+			else
+			{
+				if ($this->location->delete() == true)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->commit($transaction_id);
+					}
+					return true;
+				}
+				else
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+				}
+			}	
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
 	 * @param bool $show_additional_name
 	 * @return string
 	 */
-	function get_name($show_additional_name)
+	public function get_name($show_additional_name)
 	{
 		if ($this->location_id and $this->location)
 		{
@@ -106,10 +177,174 @@ class Location implements LocationInterface
 		}
 	}
 	
+	/**
+	 * @return integer
+	 */
+	public function get_type_id()
+	{
+		if ($this->location_id and $this->location)
+		{
+			return $this->location->get_type_id();
+		}
+		else
+		{
+			return null;
+		}
+	}
 	
+	/**
+	 * @return string
+	 */
+	public function get_db_name()
+	{
+		if ($this->location_id and $this->location)
+		{
+			return $this->location->get_name();
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function get_additional_name()
+	{
+		if ($this->location_id and $this->location)
+		{
+			return $this->location->get_additional_name();
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function get_prefix()
+	{
+		if ($this->location_id and $this->location)
+		{
+			return $this->location->get_prefix();
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function get_childs()
+	{
+		if ($this->location_id)
+		{
+			return Location_Access::list_entries_by_id($this->location_id);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $type_id
+	 * @return bool
+	 */
+	public function set_type_id($type_id)
+	{
+		if ($this->location_id and $this->location)
+		{
+			return $this->location->set_type_id($type_id);
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param string $name
+	 * @return bool
+	 */
+	public function set_db_name($name)
+	{
+		if ($this->location_id and $this->location)
+		{
+			return $this->location->set_name($name);
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param string $additional_name
+	 * @return bool
+	 */
+	public function set_additional_name($additional_name)
+	{
+		if ($this->location_id and $this->location)
+		{
+			return $this->location->set_additional_name($additional_name);
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param bool $prefix
+	 * @return bool
+	 */
+	public function set_prefix($prefix)
+	{
+		if ($this->location_id and $this->location)
+		{
+			return $this->location->set_prefix($prefix);
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	
+	/**
+	 * @param integer $id
+	 * @return bool
+	 */
+	public static function exist_id($id)
+	{
+		return Location_Access::exist_id($id);
+	}
+	
+	/**
+	 * @return array
+	 */
+	public static function list_root_entries()
+	{
+		return Location_Access::list_root_entries();
+	}
+	
+	/**
+	 * @return array
+	 */
 	public static function list_entries()
 	{
 		return Location_Access::list_entries();
+	}
+
+	public static function list_types()
+	{
+		return LocationType_Access::list_entries();
 	}
 }
 ?>

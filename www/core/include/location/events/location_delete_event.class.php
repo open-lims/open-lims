@@ -1,6 +1,6 @@
 <?php
 /**
- * @package base
+ * @package location
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -22,9 +22,37 @@
  */
 
 /**
- * IMPORTANT NOTE: Modification of this file is not allowed by developers!
+ * Location Delete Event
+ * @package location
  */
-define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-11-dev &#945;");
+class LocationDeleteEvent extends Event
+{    
+	private $location_id;
+	
+	function __construct($location_id)
+    {
+    	if (is_numeric($location_id))
+    	{
+    		parent::__construct();
+    		$this->location_id = $location_id;
+    	}
+    	else
+    	{
+    		$this->location_id = null;
+    	}
+    }
+    
+    public function get_location_id()
+    {
+    	if ($this->location_id)
+    	{
+    		return $this->location_id;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+}
 
 ?>

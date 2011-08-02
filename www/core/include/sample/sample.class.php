@@ -1246,6 +1246,14 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 			}
     	}
     	
+   		if ($event_object instanceof LocationDeleteEvent)
+    	{
+    		if (SampleHasLocation_Access::delete_by_location_id($event_object->get_location_id()) == false)
+			{
+				return false;
+			}
+    	}
+    	
    		if ($event_object instanceof ItemUnlinkEvent)
     	{
     		// Do Nothing

@@ -1,6 +1,6 @@
-<?php
+<?php 
 /**
- * @package base
+ * @package location
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -22,9 +22,21 @@
  */
 
 /**
- * IMPORTANT NOTE: Modification of this file is not allowed by developers!
- */
-define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-11-dev &#945;");
-
+ * 
+ */	
+	$dialog[0][type]			= "module_admin";
+	$dialog[0][class_path]		= "core/modules/location/admin/admin_location.io.php";
+	$dialog[0]['class']			= "AdminLocationIO";
+	$dialog[0][method]			= "handler";
+	$dialog[0][internal_name]	= "locations";
+	$dialog[0][display_name]	= "Locations";
+	$dialog[0][weight]			= 20000;
+	
+	$dialog[1][type]			= "module_admin";
+	$dialog[1][class_path]		= "core/modules/location/admin/admin_location_type.io.php";
+	$dialog[1]['class']			= "AdminLocationTypeIO";
+	$dialog[1][method]			= "handler";
+	$dialog[1][internal_name]	= "location_types";
+	$dialog[1][display_name]	= "Location Types";
+	$dialog[1][weight]			= 20100;
 ?>

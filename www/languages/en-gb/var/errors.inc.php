@@ -112,6 +112,10 @@
 	$error[50][40][3][4]	= "Method-Category-ID is missing!";
 	$error[50][40][3][5]	= "Method-Type-ID is missing!";
 	
+	// Location
+	$error[60][40][1][1]	= "Location Not Found!";
+	$error[60][40][3][1]	= "Location-ID is missing!";
+	
 	
 	// Project
 	

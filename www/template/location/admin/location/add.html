@@ -1,0 +1,48 @@
+<br />
+
+<!-- CONTAINER BEGIN ("Add Location",0) -->
+
+<br />
+<form action='index.php?[[PARAMS]]' method='post' onSubmit='return submitForm(this.submitbutton)'>			
+	<table class='formTable'>
+		<tr>
+			<td>Type:</td>
+			<td>
+				<select name='type_id'>
+				
+					<!-- FOREACH BEGIN ([[TYPE_ARRAY]]) -->
+	
+						<option value='[[TYPE_ARRAY:VALUE]]' [[TYPE_ARRAY:SELECTED]]>[[TYPE_ARRAY:CONTENT]]</option>
+			
+					<!-- FOREACH END -->
+				
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Name:</td>
+			<td>
+				<input type='text' size='20' name='name' value='[[NAME]]' class='FormTextfield' />
+				<br /><span class='formError'>[[ERROR]]</span>
+			</td>
+		</tr>
+		<tr>
+			<td>Additional Name:</td>
+			<td>
+				<input type='text' size='20' name='additional_name' value='[[ADDITIONAL_NAME]]' class='FormTextfield' />
+			</td>
+		</tr>
+		<tr>
+			<td>Show Type Prefix:</td>
+			<td>
+				<input type='checkbox' name='prefix' value='1' class='FormCheckbox' checked='checked' />
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><br /><input type='submit' value='new' class='FormButton' /></td>
+		</tr>
+	</table>
+</form>
+
+<!-- CONTAINER END (0) -->

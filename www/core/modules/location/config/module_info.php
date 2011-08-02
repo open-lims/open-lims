@@ -1,6 +1,6 @@
-<?php
+<?php 
 /**
- * @package base
+ * @package location
  * @version 0.4.0.0
  * @author Roman Konertz
  * @copyright (c) 2008-2010 by Roman Konertz
@@ -22,9 +22,11 @@
  */
 
 /**
- * IMPORTANT NOTE: Modification of this file is not allowed by developers!
+ * 
  */
-define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-11-dev &#945;");
-
+	$name 					= "location";
+	$main_class				= "LocationIO";
+	
+	$no_tab					= true;
+	$no_link				= true;
 ?>

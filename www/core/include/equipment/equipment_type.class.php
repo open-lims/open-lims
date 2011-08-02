@@ -576,6 +576,14 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
 			}
     	}
     	
+   		if ($event_object instanceof LocationDeleteEvent)
+    	{
+    		if (EquipmentType_Access::set_location_id_on_null($event_object->get_location_id()) == false)
+			{
+				return false;
+			}
+    	}
+    	
     	return true;
     }
 }
