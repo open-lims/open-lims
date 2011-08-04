@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -48,7 +48,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
 	private $error_message;
 
 	/**
-	 * Gets Exception and information and stores it in SystemLog
+	 * @see ExceptionHandlerInterface::__construct()
 	 * @param object $exception
 	 * @param integer $module
 	 * @param integer $layer
@@ -117,6 +117,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
 	}
 	
 	/**
+	 * @see ExceptionHandlerInterface::get_error_no()
 	 * @return integer
 	 */
 	public function get_error_no()
@@ -132,6 +133,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
 	}
 
 	/**
+	 * @see ExceptionHandlerInterface::get_error_message()
 	 * @return string
 	 */
     public function get_error_message()

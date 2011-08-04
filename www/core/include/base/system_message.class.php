@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -42,6 +42,7 @@ class SystemMessage implements SystemMessageInterface, EventListenerInterface
 	public $system_message;
 
 	/**
+	 * @see SystemMessageInterface::__construct()
 	 * @param integer $id
 	 */
 	function __construct($id)
@@ -65,6 +66,7 @@ class SystemMessage implements SystemMessageInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see SystemMessageInterface::create()
 	 * @param integer $user_id
 	 * @param string $content
 	 * @return integer
@@ -91,6 +93,7 @@ class SystemMessage implements SystemMessageInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see SystemMessageInterface::delete()
 	 * @return bool
 	 */
 	public function delete()
@@ -106,6 +109,7 @@ class SystemMessage implements SystemMessageInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see SystemMessageInterface::get_user_id()
 	 * @return integer
 	 */
 	public function get_user_id()
@@ -118,6 +122,7 @@ class SystemMessage implements SystemMessageInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see SystemMessageInterface::get_datetime()
 	 * @return string
 	 */
 	public function get_datetime()
@@ -130,6 +135,7 @@ class SystemMessage implements SystemMessageInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see SystemMessageInterface::get_content()
 	 * @return string
 	 */
 	public function get_content()
@@ -142,6 +148,7 @@ class SystemMessage implements SystemMessageInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see SystemMessageInterface::set_content()
 	 * @param string $content
 	 * @return bool
 	 */
@@ -156,6 +163,7 @@ class SystemMessage implements SystemMessageInterface, EventListenerInterface
 	
 	
 	/**
+	 * @see SystemMessageInterface::exist_entry()
 	 * @param integer $id
 	 * @return bool
 	 */
@@ -165,6 +173,7 @@ class SystemMessage implements SystemMessageInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see SystemMessageInterface::list_entries()
 	 * @return array
 	 */
 	public static function list_entries()
@@ -173,6 +182,7 @@ class SystemMessage implements SystemMessageInterface, EventListenerInterface
 	}
 
 	/**
+	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
      */

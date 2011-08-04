@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -42,6 +42,10 @@ class EventHandler implements EventHandlerInterface
 	private $event_object;
 	private $success = false;
 	
+	/**
+	 * @see EventHandlerInterface::__construct()
+	 * @param object $event_object
+	 */
 	function __construct($event_object)
 	{
 		if (is_object($event_object))
@@ -65,6 +69,10 @@ class EventHandler implements EventHandlerInterface
 		}
 	}
 	
+	/**
+	 * @see EventHandlerInterface::get_success()
+	 * @return bool
+	 */
 	public function get_success()
 	{
 		return $this->success;

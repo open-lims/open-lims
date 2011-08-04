@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -28,9 +28,23 @@
  */
 interface ExceptionHandlerInterface
 {
+	/**
+	 * Gets Exception and information and stores it in SystemLog
+	 * @param object $exception
+	 * @param integer $module
+	 * @param integer $layer
+	 * @param integer $error_type
+	 */
 	function __construct($exception, $module, $layer, $error_type);
 	
+	/**
+	 * @return integer
+	 */
 	public function get_error_no();
+	
+	/**
+	 * @return string
+	 */
 	public function get_error_message();
 }
 ?>

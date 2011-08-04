@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -28,12 +28,34 @@
  */  
 interface CommunicatorInterface
 {
+	/**
+	 * @param string $type
+	 */
 	function __construct($type);
 	function __destruct();
 	
+	/**
+     * @param integer $user_id
+     * @return bool
+     */
 	public function set_recipient($user_id);
+	
+	/**
+     * @param string $subject
+     * @return bool
+     */
 	public function set_subject($subject);
+	
+	/**
+     * @param string $text
+     * @return bool
+     */
 	public function set_text($text);
+	
+	/**
+     * Sends information via type (only mail yet)
+     * @return bool
+     */
 	public function send();
 }
 ?>

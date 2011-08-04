@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -42,6 +42,7 @@ class PaperSize implements PaperSizeInterface
 	private $paper_size;
 	
 	/**
+	 * @see PaperSizeInterface::__construct()
 	 * @param $paper_size_id
 	 */
 	function __construct($paper_size_id)
@@ -68,6 +69,7 @@ class PaperSize implements PaperSizeInterface
 	}
 	
 	/**
+	 * @see PaperSizeInterface::create()
 	 * @param string $name
 	 * @param float $width
 	 * @param float $height
@@ -97,6 +99,7 @@ class PaperSize implements PaperSizeInterface
 	}
 	
 	/**
+	 * @see PaperSizeInterface::delete()
 	 * @return bool
 	 */
 	public function delete()
@@ -119,6 +122,7 @@ class PaperSize implements PaperSizeInterface
 	}
 	
 	/**
+	 * @see PaperSizeInterface::get_name()
 	 * @return string
 	 */
 	public function get_name()
@@ -134,6 +138,7 @@ class PaperSize implements PaperSizeInterface
 	}
 	
 	/**
+	 * @see PaperSizeInterface::get_width()
 	 * @return float
 	 */
 	public function get_width()
@@ -149,6 +154,7 @@ class PaperSize implements PaperSizeInterface
 	}
 	
 	/**
+	 * @see PaperSizeInterface::get_height()
 	 * @return float
 	 */
 	public function get_height()
@@ -164,6 +170,7 @@ class PaperSize implements PaperSizeInterface
 	}
 	
 	/**
+	 * @see PaperSizeInterface::get_margin_left()
 	 * @return float
 	 */
 	public function get_margin_left()
@@ -179,6 +186,7 @@ class PaperSize implements PaperSizeInterface
 	}
 	
 	/**
+	 * @see PaperSizeInterface::get_margin_right()
 	 * @return float
 	 */
 	public function get_margin_right()
@@ -194,6 +202,7 @@ class PaperSize implements PaperSizeInterface
 	}
 	
 	/**
+	 * @see PaperSizeInterface::get_margin_top()
 	 * @return float
 	 */
 	public function get_margin_top()
@@ -209,6 +218,7 @@ class PaperSize implements PaperSizeInterface
 	}
 	
 	/**
+	 * @see PaperSizeInterface::get_margin_bottom()
 	 * @return float
 	 */
 	public function get_margin_bottom()
@@ -224,6 +234,7 @@ class PaperSize implements PaperSizeInterface
 	}
 	
 	/**
+	 * @see PaperSizeInterface::get_base()
 	 * @return float
 	 */
 	public function get_base()
@@ -238,8 +249,8 @@ class PaperSize implements PaperSizeInterface
 		}
 	}
 	
-	
 	/**
+	 * @see PaperSizeInterface::set_name()
 	 * @param string $name
 	 * @return bool
 	 */
@@ -263,6 +274,7 @@ class PaperSize implements PaperSizeInterface
 	}
 	
 	/**
+	 * @see PaperSizeInterface::set_width()
 	 * @param float $width
 	 * @return bool
 	 */
@@ -286,6 +298,7 @@ class PaperSize implements PaperSizeInterface
 	}
 	
 	/**
+	 * @see PaperSizeInterface::set_height()
 	 * @param float $height
 	 * @return bool
 	 */
@@ -309,6 +322,7 @@ class PaperSize implements PaperSizeInterface
 	}
 	
 	/**
+	 * @see PaperSizeInterface::set_margin_left()
 	 * @param float $margin_left
 	 * @return bool
 	 */
@@ -325,6 +339,7 @@ class PaperSize implements PaperSizeInterface
 	}
 	
 	/**
+	 * @see PaperSizeInterface::set_margin_right()
 	 * @param float $margin_right
 	 * @return bool
 	 */
@@ -341,6 +356,7 @@ class PaperSize implements PaperSizeInterface
 	}
 	
 	/**
+	 * @see PaperSizeInterface::set_margin_top()
 	 * @param float $margin_top
 	 * @return bool
 	 */
@@ -357,6 +373,7 @@ class PaperSize implements PaperSizeInterface
 	}
 	
 	/**
+	 * @see PaperSizeInterface::set_margin_bottom()
 	 * @param float $margin_bottom
 	 * @return bool
 	 */
@@ -374,6 +391,7 @@ class PaperSize implements PaperSizeInterface
 	
 	
 	/**
+	 * @see PaperSizeInterface::list_entries()
 	 * @return array
 	 */
 	public static function list_entries()
@@ -382,6 +400,7 @@ class PaperSize implements PaperSizeInterface
 	}
 	
 	/**
+	 * @see PaperSizeInterface::get_size_by_id()
 	 * @param integer $id
 	 * @return array
 	 */
@@ -391,6 +410,7 @@ class PaperSize implements PaperSizeInterface
 	}
 	
 	/**
+	 * @see PaperSizeInterface::get_standard_size()
 	 * @param integer $id
 	 * @return array
 	 */

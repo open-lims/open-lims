@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -28,9 +28,24 @@
  */
 interface SystemInterface
 {
+	/**
+     * @return string
+     */
 	public static function get_base_directory();
+	
+	/**
+     * @return integer
+     */
 	public static function get_system_space();
+	
+	/**
+     * @return integer
+     */
 	public static function get_used_database_space();
+	
+	/**
+     * @return integer
+     */
 	public static function get_free_space();
 }
 ?>

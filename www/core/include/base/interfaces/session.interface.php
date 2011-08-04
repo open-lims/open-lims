@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -28,20 +28,77 @@
  */
 interface SessionInterface
 {
+	/**
+	 * @param string $session_id
+	 */
 	function __construct($session_id);
+	
 	function __destruct();
 	
+	/**
+     * Creates a new session
+     * @param integer $user_id
+     * @return string
+     */
 	public function create($user_id);
+	
+	/**
+     * Destroys current session
+     * @return bool
+     */
 	public function destroy();
+	
+	/**
+     * Checks if current session is valid
+     * @return bool
+     */
 	public function is_valid();
+	
+	/**
+     * @return integer
+     */
 	public function get_user_id();
 	
+	/**
+     * Reads a value from current session
+     * @param string $address
+     * @return mixed
+     */
 	public function read_value($address);
+	
+	/**
+     * Writes a value into current session
+     * @param string $address
+     * @param mixed $value
+     * @param bool $force_overwrite (if false, existing values will not be overwritten)
+     * @return bool
+     */
 	public function write_value($address, $value, $force_overwrite);
+	
+	/**
+     * Checks if a value exists in current session
+     * @param string $address
+     * @return bool
+     */
 	public function is_value($address);
+	
+	/**
+     * Deletes a value from current session
+     * @param string $address
+     * @return bool
+     */
 	public function delete_value($address);
 	
+	/**
+     * Checks all existing sessions; destroys them, if invalid
+     */
 	public static function check_all();
+	
+	/**
+     * Deletes all sessions of an user
+     * @param integer $user_id
+     * @return bool
+     */
 	public static function delete_user_sessions($user_id);
 }
 ?>

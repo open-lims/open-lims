@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -40,8 +40,8 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class Regional implements RegionalInterface
 {
-
 	/**
+	 * @see RegionalInterface::get_language_name()
 	 * @param integer $language_id
 	 * @return string
 	 */
@@ -59,6 +59,7 @@ class Regional implements RegionalInterface
     }
     
     /**
+     * @see RegionalInterface::get_timezone_name()
      * @param integer $timezone_id
      * @return string
      */
@@ -93,6 +94,7 @@ class Regional implements RegionalInterface
     }
     
     /**
+     * @see RegionalInterface::get_timezone_deviation()
      * @param integer $timezone_id
      * @return integer
      */
@@ -110,6 +112,7 @@ class Regional implements RegionalInterface
     }
     
     /**
+     * @see RegionalInterface::list_languages()
      * @return array
      */
     public static function list_languages()
@@ -118,6 +121,7 @@ class Regional implements RegionalInterface
     }
     
     /**
+     * @see RegionalInterface::list_timezones()
      * @return array
      */
     public static function list_timezones()

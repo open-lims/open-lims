@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -30,6 +30,9 @@ interface SystemHandlerInterface
 {
 	function __construct();
 	
+	/**
+	 * For AJAX Handler only
+	 */
 	public static function init_db_constants();
 	
 	/**
@@ -69,5 +72,19 @@ interface SystemHandlerInterface
 	 * @return bool
 	 */
 	public static function disable_module($module_id);
+	
+	/**
+	 * Checks if an include exists
+	 * @param string $include_name
+	 * @return bool
+	 */
+	public static function include_exists($include_name);
+	
+	/**
+	 * Checks if a module exists
+	 * @param string $module_name
+	 * @return bool
+	 */
+	public static function module_exists($module_name);
 }
 ?>

@@ -3,7 +3,7 @@
  * @package project
  * @version 0.4.0.0
  * @author Roman Quiring
- * @copyright (c) 2008-2010 by Roman Quiring
+ * @copyright (c) 2008-2011 by Roman Quiring
  * @license GPLv3
  * 
  * This file is part of Open-LIMS

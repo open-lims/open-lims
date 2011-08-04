@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -38,11 +38,11 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class SystemLog implements SystemLogInterface
 {
-
 	public $log_id;
 	public $system_log;
 
 	/**
+	 * @see SystemLogInterface::__construct()
 	 * @param integer $log_id
 	 */
 	function __construct($log_id)
@@ -66,7 +66,7 @@ class SystemLog implements SystemLogInterface
 	}
 	
 	/**
-	 * Creates a new entry
+	 * @see SystemLogInterface::create()
 	 * @param integer $user_id
 	 * @param integer $type_id
 	 * @param integer $content_int
@@ -75,6 +75,7 @@ class SystemLog implements SystemLogInterface
 	 * @param string $file
 	 * @param integer $line
 	 * @param string $link
+	 * @return integer
 	 */
 	public function create($user_id, $type_id, $content_int, $content_string, $content_errorno, $file, $line, $link)
 	{
@@ -101,6 +102,7 @@ class SystemLog implements SystemLogInterface
 	}
 	
 	/**
+	 * @see SystemLogInterface::get_user_id()
 	 * @return integer
 	 */
 	public function get_user_id()
@@ -116,6 +118,7 @@ class SystemLog implements SystemLogInterface
 	}
 	
 	/**
+	 * @see SystemLogInterface::get_datetime()
 	 * @return string
 	 */
 	public function get_datetime()
@@ -131,6 +134,7 @@ class SystemLog implements SystemLogInterface
 	}
 	
 	/**
+	 * @see SystemLogInterface::get_ip()
 	 * @return string
 	 */
 	public function get_ip()
@@ -146,6 +150,7 @@ class SystemLog implements SystemLogInterface
 	}
 	
 	/**
+	 * @see SystemLogInterface::get_content_int()
 	 * @return integer
 	 */
 	public function get_content_int()
@@ -161,6 +166,7 @@ class SystemLog implements SystemLogInterface
 	}
 	
 	/**
+	 * @see SystemLogInterface::get_content_string()
 	 * @return string
 	 */
 	public function get_content_string()
@@ -176,6 +182,7 @@ class SystemLog implements SystemLogInterface
 	}
 	
 	/**
+	 * @see SystemLogInterface::get_file()
 	 * @return string
 	 */
 	public function get_file()
@@ -191,6 +198,7 @@ class SystemLog implements SystemLogInterface
 	}
 	
 	/**
+	 * @see SystemLogInterface::get_line()
 	 * @return integer
 	 */
 	public function get_line()
@@ -206,6 +214,7 @@ class SystemLog implements SystemLogInterface
 	}
 	
 	/**
+	 * @see SystemLogInterface::get_link()
 	 * @return string
 	 */
 	public function get_link()
@@ -221,6 +230,7 @@ class SystemLog implements SystemLogInterface
 	}
 	
 	/**
+	 * @see SystemLogInterface::get_stack_trace()
 	 * @return string
 	 */
 	public function get_stack_trace() 
@@ -233,6 +243,7 @@ class SystemLog implements SystemLogInterface
 	}
 	
 	/**
+	 * @see SystemLogInterface::set_stack_trace()
 	 * @param string $stack_trace
 	 * @return bool
 	 */
@@ -250,7 +261,7 @@ class SystemLog implements SystemLogInterface
 
 
 	/**
-	 * Sets all entries of an user on null (during user-delete)
+	 * @see SystemLogInterface::set_user_id_on_null()
 	 * @param integer $user_id
 	 * @return bool
 	 */
@@ -260,6 +271,7 @@ class SystemLog implements SystemLogInterface
 	}
 	
 	/**
+	 * @see SystemLogInterface::list_types()
 	 * @return array
 	 */
 	public static function list_types()
@@ -268,6 +280,7 @@ class SystemLog implements SystemLogInterface
 	}
 	
 	/**
+	 * @see SystemLogInterface::get_type_name()
 	 * @param integer $id
 	 * @return string
 	 */
@@ -292,6 +305,7 @@ class SystemLog implements SystemLogInterface
 	}
 
 	/**
+	 * @see SystemLogInterface::exist_id()
 	 * @param integer $id
 	 * @return bool
 	 */
@@ -301,6 +315,7 @@ class SystemLog implements SystemLogInterface
 	}
 	
 	/**
+	 * @see SystemLogInterface::exist_ip()
 	 * @param string $ip
 	 * @return bool
 	 */
@@ -318,6 +333,7 @@ class SystemLog implements SystemLogInterface
 	}
 	
 	/**
+	 * @see SystemLogInterface::count_ip_failed_logins_with_begin()
 	 * @param string $ip
 	 * @param string $begin
 	 */
@@ -327,7 +343,7 @@ class SystemLog implements SystemLogInterface
 	}
 	
 	/**
-	 * Counts all failed logins with $ip
+	 * @see SystemLogInterface::count_ip_failed_logins()
 	 * @param string $ip
 	 * @return integer
 	 */
@@ -337,7 +353,7 @@ class SystemLog implements SystemLogInterface
 	}
 	
 	/**
-	 * Counts all successful logins with $ip
+	 * @see SystemLogInterface::count_ip_successful_logins()
 	 * @param string $ip
 	 * @return integer
 	 */
@@ -347,7 +363,7 @@ class SystemLog implements SystemLogInterface
 	}
 	
 	/**
-	 * Returns an array with all users who have loged in with $ip
+	 * @see SystemLogInterface::list_ip_users()
 	 * @param string $ip
 	 * @return array
 	 */
@@ -355,7 +371,5 @@ class SystemLog implements SystemLogInterface
 	{
 		return SystemLog_Access::list_ip_users($ip);
 	}
-
-
 }
 ?>

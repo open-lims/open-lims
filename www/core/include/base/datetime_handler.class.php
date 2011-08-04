@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -41,16 +41,8 @@ class DatetimeHandler implements DatetimeHandlerInterface
 	private $ignore_timezone;
 
 	/**
+	 * @see DatetimeHandlerInterface::__construct()
 	 * @param string $input_string 
-	 * 
-	 * Accepted Inputs
-	 * **********************
-	 * 1276862128 (microtime)
-	 * 2010-06-18
-	 * 18-06-2010 (18-06-10 is not allowed)
-	 * 2010-06-18 13:55:20
-	 * 2010-06-18 13:55:20+02
-	 * **********************
 	 */
     function __construct($input_string)
     {    	
@@ -164,7 +156,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
-     * Checks if the date is in the past
+     * @see DatetimeHandlerInterface::less_then_current()
      * @return bool
      */
     public function less_then_current()
@@ -188,7 +180,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
-     * Checks the distance between current- and another-object
+     * @see DatetimeHandlerInterface::distance()
      * @param object $date_object
      * @return integer distance in seconds
      */
@@ -206,7 +198,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
-     * Checks the distance between current- and another-object in days
+     * @see DatetimeHandlerInterface::day_distance()
      * @param object $date_object
      * @return integer distance in days
      */
@@ -225,7 +217,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
-     * Adds X Days to current object
+     * @see DatetimeHandlerInterface::add_day()
      * @param integer $day
      * @return bool
      */
@@ -262,7 +254,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
-     * Adds X Months to current object
+     * @see DatetimeHandlerInterface::add_month()
      * @param integer $month
      * @return bool
      */
@@ -303,7 +295,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
-     * Adds X Years to current object
+     * @see DatetimeHandlerInterface::add_year()
      * @param integer $year
      * @return bool
      */
@@ -335,7 +327,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
-     * Adds X Hours to current object
+     * @see DatetimeHandlerInterface::add_hour()
      * @param integer $hour
      * @return bool
      */
@@ -371,7 +363,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
-     * Adds X Minutes to current object
+     * @see DatetimeHandlerInterface::add_minute()
      * @param integer $minute
      * @return bool
      */
@@ -406,7 +398,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
-     * Adds X Seconds to current object
+     * @see DatetimeHandlerInterface::add_second()
      * @param integer $second
      * @return bool
      */
@@ -441,7 +433,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
-     * Subs X Days from current object
+     * @see DatetimeHandlerInterface::sub_day()
      * @param integer $day
      * @return bool
      */
@@ -475,7 +467,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
-     * Subs X Months from current object
+     * @see DatetimeHandlerInterface::sub_month()
      * @param integer $month
      * @return bool
      */
@@ -531,7 +523,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
-     * Subs X Years from current object
+     * @see DatetimeHandlerInterface::sub_year()
      * @param integer $year
      * @return bool
      */
@@ -562,7 +554,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
-     * Subs X Hours from current object
+     * @see DatetimeHandlerInterface::sub_hour()
      * @param integer $hour
      * @return bool
      */
@@ -598,7 +590,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
-     * Subs X Minutes from current object
+     * @see DatetimeHandlerInterface::sub_minute()
      * @param integer $minute
      * @return bool
      */
@@ -633,7 +625,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
-     * Subs X Seconds from current object
+     * @see DatetimeHandlerInterface::sub_second()
      * @param integer $second
      * @return bool
      */
@@ -668,6 +660,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
+     * @see DatetimeHandlerInterface::get_mktime()
      * @return integer
      */
     public function get_mktime()
@@ -690,7 +683,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
-     * Returns Timestamp of current object
+     * @see DatetimeHandlerInterface::get_timestamp()
      * @return string
      */
     public function get_timestamp()
@@ -746,7 +739,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
-     * Returns date of current object
+     * @see DatetimeHandlerInterface::get_date()
      * @return string
      */
     public function get_date()
@@ -778,7 +771,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
-     * Returns time of current object
+     * @see DatetimeHandlerInterface::get_time()
      * @return string
      */
     public function get_time()
@@ -810,7 +803,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
-     * Returns a formatted date/time of current object
+     * @see DatetimeHandlerInterface::get_formatted_string()
      * @param string $format Use php-function date() chars for format
      * @return string 
      */
@@ -843,6 +836,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
+     * @see DatetimeHandlerInterface::get_timezone()
      * @return integer
      */
     public function get_timezone()
@@ -865,6 +859,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     }
     
     /**
+     * @see DatetimeHandlerInterface::set_user_timezone()
      * @param integer $user_timezone
      * @return bool
      */

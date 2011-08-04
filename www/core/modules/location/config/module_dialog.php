@@ -3,7 +3,7 @@
  * @package location
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -31,12 +31,4 @@
 	$dialog[0][internal_name]	= "locations";
 	$dialog[0][display_name]	= "Locations";
 	$dialog[0][weight]			= 20000;
-	
-	$dialog[1][type]			= "module_admin";
-	$dialog[1][class_path]		= "core/modules/location/admin/admin_location_type.io.php";
-	$dialog[1]['class']			= "AdminLocationTypeIO";
-	$dialog[1][method]			= "handler";
-	$dialog[1][internal_name]	= "location_types";
-	$dialog[1][display_name]	= "Location Types";
-	$dialog[1][weight]			= 20100;
 ?>

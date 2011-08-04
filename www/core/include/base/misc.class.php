@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -34,9 +34,8 @@ require_once("interfaces/misc.interface.php");
  */
 class Misc implements MiscInterface
 {
-
 	/**
-	 * Returns a byte-value in KiB/MiB etc.
+	 * @see MiscInterface::calc_size()
 	 * @param integer $byte
 	 * @return string
 	 */
@@ -92,6 +91,10 @@ class Misc implements MiscInterface
 		 return $act_filesize;
 	}
 	
+	/**
+	 * @see MiscInterface::create_retrace_string()
+	 * @return string
+	 */
 	public static function create_retrace_string()
 	{
 		$module_retrace_array = array();
@@ -146,6 +149,11 @@ class Misc implements MiscInterface
 		return base64_encode(serialize($retrace_array));
 	}
 	
+	/**
+	 * @see MiscInterface::resovle_retrace_string()
+	 * @param string $retrace_string
+	 * @return array
+	 */
 	public static function resovle_retrace_string($retrace_string)
 	{
 		if ($retrace_string)

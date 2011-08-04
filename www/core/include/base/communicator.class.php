@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -40,6 +40,7 @@ class Communicator implements CommunicatorInterface {
 	private $text;
 
 	/**
+	 * @see CommunicatorInterface::__construct()
 	 * @param string $type Only MAIL is possbile yet
 	 */
     function __construct($type)
@@ -67,7 +68,9 @@ class Communicator implements CommunicatorInterface {
     }
     
     /**
+     * @see CommunicatorInterface::set_recipient()
      * @param integer $user_id
+     * @return bool
      */
     public function set_recipient($user_id)
     {
@@ -82,7 +85,9 @@ class Communicator implements CommunicatorInterface {
     }
     
     /**
+     * @see CommunicatorInterface::set_subject()
      * @param string $subject
+     * @return bool
      */
     public function set_subject($subject)
     {
@@ -97,7 +102,9 @@ class Communicator implements CommunicatorInterface {
     }
     
     /**
+     * @see CommunicatorInterface::set_text()
      * @param string $text
+     * @return bool
      */
     public function set_text($text)
     {
@@ -112,7 +119,7 @@ class Communicator implements CommunicatorInterface {
     }
     
     /**
-     * Sends information via type (only mail yet)
+     * @see CommunicatorInterface::send()
      * @return bool
      */
     public function send()

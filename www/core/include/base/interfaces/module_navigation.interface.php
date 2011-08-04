@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -28,14 +28,37 @@
  */
 interface ModuleNavigationInterface
 {
+	/**
+	 * @param integer $navigation_id
+	 */
 	function __construct($navigation_id);
+	
 	function __destruct();
 	
+	/**
+	 * @return bool
+	 */
 	public function upwards();
+	
+	/**
+	 * @return bool
+	 */
 	public function downwards();
+	
+	/**
+	 * @return bool
+	 */
 	public function hide();
 	
+	
+	/**
+	 * @return integer
+	 */
 	public static function get_highest_position();
+	
+	/**
+	 * @return array
+	 */
 	public static function list_module_navigations_entries();
 }
 ?>

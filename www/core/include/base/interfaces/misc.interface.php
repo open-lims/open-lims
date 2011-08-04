@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -28,6 +28,22 @@
  */
 interface MiscInterface
 {
+	/**
+	 * Returns a byte-value in KiB/MiB etc.
+	 * @param integer $byte
+	 * @return string
+	 */
 	public static function calc_size($byte);
+	
+	/**
+	 * @return string
+	 */
+	public static function create_retrace_string();
+	
+	/**
+	 * @param string $retrace_string
+	 * @return array
+	 */
+	public static function resovle_retrace_string($retrace_string);
 }
 ?>

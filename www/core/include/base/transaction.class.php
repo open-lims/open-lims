@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -35,11 +35,14 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * DB Transaction Management Class
  * @package base
  */
-class Transaction implements TransactionInterface {
-
+class Transaction implements TransactionInterface
+{
 	private $unique_id;
 	private $is_copy;
 
+	/**
+	 * @see TransactionInterface::__construct()
+	 */
     function __construct()
     {
     	if (!$GLOBALS['transaction'] or $GLOBALS['transaction'] == false)
@@ -62,7 +65,7 @@ class Transaction implements TransactionInterface {
     }
     
     /**
-     * Starts a new transaction
+     * @see TransactionInterface::begin()
      * @return string
      */
     public function begin()
@@ -83,7 +86,7 @@ class Transaction implements TransactionInterface {
     }
     
     /**
-     * Commits a transaction
+     * @see TransactionInterface::commit()
      * @param string $unique_id
      * @return bool
      */
@@ -121,7 +124,7 @@ class Transaction implements TransactionInterface {
     }
     
     /**
-     * Undo all DB-Changes since begin
+     * @see TransactionInterface::rollback()
      * @param string $unique_id
      * @return bool
      */
@@ -159,7 +162,7 @@ class Transaction implements TransactionInterface {
     }
     
     /**
-     * Undo all DB-Changes since begin (expected in difference to rollback())
+     * @see TransactionInterface::expected_rollback()
      * @param string $unique_id
      * @return bool
      */
@@ -197,7 +200,7 @@ class Transaction implements TransactionInterface {
     }
     
     /**
-     * Rollbacks current transaction during an database error
+     * @see TransactionInterface::force_rollback()
      * @return bool
      */
     public function force_rollback()
@@ -227,6 +230,7 @@ class Transaction implements TransactionInterface {
     }
     
     /**
+     * @see TransactionInterface::is_in_transction()
      * @return bool
      */
     public function is_in_transction()

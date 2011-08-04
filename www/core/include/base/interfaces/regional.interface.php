@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -28,11 +28,32 @@
  */
 interface RegionalInterface
 {
+	/**
+	 * @param integer $language_id
+	 * @return string
+	 */
 	public static function get_language_name($language_id);
+	
+	/**
+     * @param integer $timezone_id
+     * @return string
+     */
 	public static function get_timezone_name($timezone_id);
+	
+	/**
+     * @param integer $timezone_id
+     * @return integer
+     */
 	public static function get_timezone_deviation($timezone_id);
 	
+	/**
+     * @return array
+     */
 	public static function list_languages();
+	
+	/**
+     * @return array
+     */
 	public static function list_timezones();
 }
 ?>

@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -36,7 +36,7 @@ class Auth implements AuthInterface
 	private $session_id;
 	
 	/**
-	 * Logins an user via username and password; Creates Log-entries
+	 * @see AuthInterface::login()
 	 * @param string $username
 	 * @param string $password
 	 * @return bool
@@ -102,12 +102,12 @@ class Auth implements AuthInterface
     	}
     }
     
-    /**
-     * Logs an user out
-     * @param integer $user_id
+   	/**
+   	 * @see AuthInterface::logout()
+   	 * @param integer $user_id
      * @param string $session_id
      * @return bool
-     */
+   	 */
     public function logout($user_id, $session_id)
     {
     	$session = new Session($session_id);
@@ -132,7 +132,7 @@ class Auth implements AuthInterface
     }
     
     /**
-     * Sends an e-mail with a new password
+     * @see AuthInterface::forgot_password()
      * @param string $username
      * @param string $name
      * @return bool
@@ -203,7 +203,8 @@ class Auth implements AuthInterface
     }
     
     /**
-     * @return integer
+     * @see AuthInterface::get_session_id()
+     * @return string
      */
     public function get_session_id()
     {

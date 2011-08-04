@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -26,18 +26,57 @@
  * System Message Management Interface
  * @package base
  */
-interface SystemMessageInterface {
+interface SystemMessageInterface
+{
+	/**
+	 * @param integer $id
+	 */
 	function __construct($id);
+	
 	function __destruct();
 	
+	/**
+	 * @param integer $user_id
+	 * @param string $content
+	 * @return integer
+	 */
 	public function create($user_id, $content);
+	
+	/**
+	 * @return bool
+	 */
 	public function delete();
+	
+	/**
+	 * @return integer
+	 */
 	public function get_user_id();
+	
+	/**
+	 * @return string
+	 */
 	public function get_datetime();
+	
+	/**
+	 * @return string
+	 */
 	public function get_content();
+	
+	/**
+	 * @param string $content
+	 * @return bool
+	 */
 	public function set_content($content);
 	
+	/**
+	 * @param integer $id
+	 * @return bool
+	 */
 	public static function exist_entry($id);
+	
+	/**
+	 * @return array
+	 */
 	public static function list_entries();
 }
 ?>

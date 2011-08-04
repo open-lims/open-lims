@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -28,7 +28,20 @@
  */
 interface SecurityInterface
 {
+	/**
+	 * Returns the number of failed logins
+	 * @return integer
+	 */
 	public static function ip_error_count();
+	
+	/**
+	 * Checks all GET- and POST-variables
+	 */
+	public static function filter_var();
+	
+	/**
+	 * Checks all GET- and POST-variables
+	 */
 	public static function protect_session();
 }
 ?>

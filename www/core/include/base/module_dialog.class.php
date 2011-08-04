@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -38,6 +38,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 class ModuleDialog implements ModuleDialogInterface, EventListenerInterface
 {	
 	/**
+	 * @see ModuleDialogInterface::get_by_type_and_internal_name()
 	 * @param string $dialog_type
 	 * @param string $internal_array
 	 * @return array
@@ -48,6 +49,7 @@ class ModuleDialog implements ModuleDialogInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see ModuleDialogInterface::list_dialogs_by_type()
 	 * @param string $dialog_type
 	 * @return array
 	 */
@@ -57,6 +59,7 @@ class ModuleDialog implements ModuleDialogInterface, EventListenerInterface
 	}
 
 	/**
+	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
      */

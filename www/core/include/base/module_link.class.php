@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -38,7 +38,9 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 class ModuleLink implements ModuleLinkInterface, EventListenerInterface
 {		
 	/**
+	 * @see ModuleLinkInterface::list_links_by_type()
 	 * @param string $link_type
+	 * @return array
 	 */
 	public static function list_links_by_type($link_type)
 	{
@@ -46,6 +48,7 @@ class ModuleLink implements ModuleLinkInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
      */

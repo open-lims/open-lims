@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -73,6 +73,9 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class SystemHandler implements SystemHandlerInterface
 {
+	/**
+	 * @see SystemHandlerInterface::__construct
+	 */
 	function __construct()
 	{
 		$this->scan_include();
@@ -507,10 +510,16 @@ class SystemHandler implements SystemHandlerInterface
 	}
 	
 	/**
-	 * @todo use flag for navigation
-	 * @todo add register dialog (like EventHander in Include)
-	 * @todo reregister module after md5-checksum file change (hold position)
-	 * @todo lösche module_links und module_dialogs (evtl.)
+	 * Scans include folder and registers include-modules
+	 * @return bool
+	 * @throws ModuleDataCorruptException
+	 * @throws ModuleProcessFailedException
+	 * @throws ModuleDialogCreationFailedException
+	 * @throws ModuleLinkCreationFailedException
+	 * @throws ModuleRequirementFailedException
+	 * @throws ModuleFolderEmptyException
+	 * @todo FIX: highest navigation sort id
+	 * @todo LATER: create warning on empty folders
 	 */
 	private function scan_modules()
 	{
@@ -619,7 +628,7 @@ class SystemHandler implements SystemHandlerInterface
 												{
 													$transaction->rollback($transaction_id);
 												}
-												throw new IncludeProcessFailedException(null, null);
+												throw new ModuleProcessFailedException(null, null);
 											}
 										}
 										
@@ -676,7 +685,7 @@ class SystemHandler implements SystemHandlerInterface
 												{
 													$transaction->rollback($transaction_id);
 												}
-												throw new IncludeProcessFailedException(null, null);
+												throw new ModuleProcessFailedException(null, null);
 											}
 										}
 										
@@ -724,7 +733,7 @@ class SystemHandler implements SystemHandlerInterface
 												{
 													$transaction->rollback($transaction_id);
 												}
-												throw new IncludeProcessFailedException(null, null);
+												throw new ModuleProcessFailedException(null, null);
 											}
 										}
 									}
@@ -952,7 +961,7 @@ class SystemHandler implements SystemHandlerInterface
 						{
 							$transaction->rollback($transaction_id);
 						}
-						throw new IncludeProcessFailedException(null, null);
+						throw new ModuleProcessFailedException(null, null);
 					}
 				}
 			}
@@ -970,7 +979,7 @@ class SystemHandler implements SystemHandlerInterface
 
 	
 	/**
-	 * For AJAX Handler only
+	 * @see SystemHandlerInterface::init_db_constants()
 	 */
 	public static function init_db_constants()
 	{		
@@ -1009,6 +1018,7 @@ class SystemHandler implements SystemHandlerInterface
 	}
 
 	/**
+	 * @see SystemHandlerInterface::get_include_folders()
 	 * @return array;
 	 */
 	public static function get_include_folders()
@@ -1017,6 +1027,7 @@ class SystemHandler implements SystemHandlerInterface
 	}
 	
 	/**
+	 * @see SystemHandlerInterface::get_module_folders()
 	 * @return array
 	 */
 	public static function get_module_folders()
@@ -1025,6 +1036,7 @@ class SystemHandler implements SystemHandlerInterface
 	}
 	
 	/**
+	 * @see SystemHandlerInterface::get_module_name_by_module_id()
 	 * @param integer $module_id
 	 * @return string
 	 */
@@ -1034,6 +1046,7 @@ class SystemHandler implements SystemHandlerInterface
 	}
 	
 	/**
+	 * @see SystemHandlerInterface::get_module_folder_by_module_name()
 	 * @param string $module_name
 	 * @return string
 	 */
@@ -1043,6 +1056,7 @@ class SystemHandler implements SystemHandlerInterface
 	}
 		
 	/**
+	 * @see SystemHandlerInterface::list_modules()
 	 * @return array
 	 */
 	public static function list_modules()
@@ -1051,6 +1065,7 @@ class SystemHandler implements SystemHandlerInterface
 	}
 	
 	/**
+	 * @see SystemHandlerInterface::list_includes()
 	 * @return array
 	 */
 	public static function list_includes()
@@ -1059,6 +1074,7 @@ class SystemHandler implements SystemHandlerInterface
 	}
 
 	/**
+	 * @see SystemHandlerInterface::disable_module()
 	 * @param integer $module_id
 	 * @return bool
 	 */
@@ -1141,11 +1157,21 @@ class SystemHandler implements SystemHandlerInterface
 		}
 	}
 	
+	/**
+	 * @see SystemHandlerInterface::include_exists()
+	 * @param string $include_name
+	 * @return bool
+	 */
 	public static function include_exists($include_name)
 	{
 		return BaseInclude_Access::exist_entry($include_name);
 	}
 	
+	/**
+	 * @see SystemHandlerInterface::module_exists()
+	 * @param string $module_name
+	 * @return bool
+	 */
 	public static function module_exists($module_name)
 	{
 		return BaseModule_Access::exist_entry($module_name);

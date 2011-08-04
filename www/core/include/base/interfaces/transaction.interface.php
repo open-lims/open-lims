@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -29,12 +29,46 @@
 interface TransactionInterface
 {
 	function __construct();
+	
 	function __destruct();
 	
+	/**
+     * Starts a new transaction
+     * @return string
+     */
 	public function begin();
+	
+	/**
+     * Commits a transaction
+     * @param string $unique_id
+     * @return bool
+     */
 	public function commit($unique_id);
+	
+	/**
+     * Undo all DB-Changes since begin
+     * @param string $unique_id
+     * @return bool
+     */
 	public function rollback($unique_id);
+	
+	/**
+     * Undo all DB-Changes since begin (expected in difference to rollback())
+     * @param string $unique_id
+     * @return bool
+     */
 	public function expected_rollback($unique_id);
+	
+	/**
+     * Rollbacks current transaction during an database error
+     * @return bool
+     */
 	public function force_rollback();
+	
+	/**
+	 * Checks if a transaction is active
+     * @return bool
+     */
+    public function is_in_transction();
 }
 ?>

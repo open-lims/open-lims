@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -44,6 +44,7 @@ class Session implements SessionInterface
 	private $user_id;
 
 	/**
+	 * @see SessionInterface::__construct()
 	 * @param string $session_id
 	 */
     function __construct($session_id)
@@ -70,7 +71,7 @@ class Session implements SessionInterface
     }
     
     /**
-     * Creates a new session
+     * @see SessionInterface::create()
      * @param integer $user_id
      * @return string
      */
@@ -97,7 +98,7 @@ class Session implements SessionInterface
     }
     
     /**
-     * Destroys current session
+     * @see SessionInterface::destroy()
      * @return bool
      */
     public function destroy()
@@ -122,7 +123,7 @@ class Session implements SessionInterface
     }
     
     /**
-     * Checks if current session is valid
+     * @see SessionInterface::is_valid()
      * @return bool
      */
     public function is_valid()
@@ -159,6 +160,7 @@ class Session implements SessionInterface
     }
     
     /**
+     * @see SessionInterface::get_user_id()
      * @return integer
      */
     public function get_user_id()
@@ -174,7 +176,7 @@ class Session implements SessionInterface
     }
     
     /**
-     * Reads a value from current session
+     * @see SessionInterface::read_value()
      * @param string $address
      * @return mixed
      */
@@ -202,7 +204,7 @@ class Session implements SessionInterface
     }
     
     /**
-     * Writes a value into current session
+     * @see SessionInterface::write_value()
      * @param string $address
      * @param mixed $value
      * @param bool $force_overwrite (if false, existing values will not be overwritten)
@@ -239,7 +241,7 @@ class Session implements SessionInterface
     }
     
     /**
-     * Checks if a value exists in current session
+     * @see SessionInterface::is_value()
      * @param string $address
      * @return bool
      */
@@ -265,7 +267,7 @@ class Session implements SessionInterface
     }
     
     /**
-     * Deletes a value from current session
+     * @see SessionInterface::delete_value()
      * @param string $address
      * @return bool
      */
@@ -293,6 +295,7 @@ class Session implements SessionInterface
     
     
     /**
+     * @see SessionInterface::check_all()
      * Checks all existing sessions; destroys them, if invalid
      */
     public static function check_all()
@@ -325,7 +328,7 @@ class Session implements SessionInterface
     }
     
     /**
-     * Deletes all sessions of an user
+     * @see SessionInterface::delete_user_sessions()
      * @param integer $user_id
      * @return bool
      */

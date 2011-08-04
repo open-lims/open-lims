@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -36,7 +36,8 @@ class Template implements TemplateInterface
 	private $var_array;
 	
 	/**
-	 * @param string $file complete path of file
+	 * @see TemplateInterface::__construct
+	 * @param string $file
 	 */
 	function __construct($file)
 	{
@@ -69,7 +70,7 @@ class Template implements TemplateInterface
 	}
 	
 	/**
-	 * Sets a var. of template
+	 * @see TemplateInterface::set_var()
 	 * @param string $name Address
 	 * @param string $value Content
 	 */
@@ -79,7 +80,7 @@ class Template implements TemplateInterface
 	}
 			
 	/**
-	 * Writes the complete tempalte string into stdout
+	 * @see TemplateInterface::output()
 	 */
 	public function output()
 	{
@@ -97,7 +98,7 @@ class Template implements TemplateInterface
 	}
 	
 	/**
-	 * Returns the complete template string
+	 * @see TemplateInterface::get_string()
 	 * @return string
 	 */
 	public function get_string()

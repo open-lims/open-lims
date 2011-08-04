@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -28,23 +28,29 @@
  */
 interface TemplateInterface
 {
+	/**
+	 * @param string $file complete path of file
+	 */
 	function __construct($file);
+	
 	function __destruct();
 	
+	/**
+	 * Sets a var. of template
+	 * @param string $name Address
+	 * @param string $value Content
+	 */
 	public function set_var($name, $value);
+	
+	/**
+	 * Writes the complete tempalte string into stdout
+	 */
 	public function output();
+	
+	/**
+	 * Returns the complete template string
+	 * @return string
+	 */
 	public function get_string();
-	
-	// private function call_control_structures();
-	// private function call_foreach();
-	
-	// private function replace_foreach($string);
-	// private function replace_control_structure($string);
-	// private function replace_containers();
-	
-	// private function fill_string();
-	
-	// private function get_var_cardinality($var);
-	// private function get_var_value($var);
 }
 ?>

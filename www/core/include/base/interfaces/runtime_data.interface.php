@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -28,13 +28,44 @@
  */
 interface RuntimeDataInterface
 {
-	// private function ident_object($object);
-	
+	/**
+	 * Saves data from an object in array
+	 * @param object $object
+	 * @param string $address
+	 * @param mixed $data
+	 * @return bool
+	 */
 	public function write_object_data($object, $address, $data);
+	
+	/**
+   	 * Reads data of an object from array
+   	 * @param object $object
+   	 * @param string $address
+   	 * @return mixed
+   	 */
 	public function read_object_data($object, $address);
+	
+	/**
+   	 * Checks if object-data is in array
+   	 * @param object $object
+   	 * @param string $address
+   	 * @return bool
+   	 */
 	public function is_object_data($object, $address);
 	
+	/**
+   	 * Deletes all adressed object-data in array
+   	 * @param object $object
+   	 * @param string $address
+   	 * @return bool
+   	 */
 	public function clear_object_data($object, $address);
+	
+	/**
+   	 * Deletes all object-data in array
+   	 * @param object $object
+   	 * @return bool
+   	 */
 	public function clear_object($object);
 }
 ?>

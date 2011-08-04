@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -28,9 +28,33 @@
  */
 interface AuthInterface
 {
+	/**
+	 * Logins an user via username and password; Creates Log-entries
+	 * @param string $username
+	 * @param string $password
+	 * @return bool
+	 */
 	public function login($username, $password);
+	
+	 /**
+     * Logs an user out
+     * @param integer $user_id
+     * @param string $session_id
+     * @return bool
+     */
 	public function logout($user_id, $session_id);
+	
+	/**
+     * Sends an e-mail with a new password
+     * @param string $username
+     * @param string $name
+     * @return bool
+     */
 	public function forgot_password($username, $mail);
+	
+	/**
+	 * @return string
+	 */
 	public function get_session_id();
 }
 ?>

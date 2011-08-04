@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -40,6 +40,9 @@ class ModuleNavigation implements ModuleNavigationInterface, EventListenerInterf
 	private $navigation_id;
 	private $navigaiton;
 	
+	/**
+	 * @param integer $navigation_id
+	 */
 	function __construct($navigation_id)
 	{
 		if (is_numeric($navigation_id))
@@ -60,6 +63,10 @@ class ModuleNavigation implements ModuleNavigationInterface, EventListenerInterf
 		unset($this->navigation);
 	}	
 
+	/**
+	 * @see ModuleNavigationInterface::upwards()
+	 * @return bool
+	 */
 	public function upwards()
 	{
 		global $transaction;
@@ -128,6 +135,10 @@ class ModuleNavigation implements ModuleNavigationInterface, EventListenerInterf
 		}
 	}
 	
+	/**
+	 * @see ModuleNavigationInterface::downwards()
+	 * @return bool
+	 */
 	public function downwards()
 	{
 		global $transaction;
@@ -196,6 +207,10 @@ class ModuleNavigation implements ModuleNavigationInterface, EventListenerInterf
 		}
 	}
 	
+	/**
+	 * @see ModuleNavigationInterface::hide()
+	 * @return bool
+	 */
 	public function hide()
 	{
 		if ($this->navigation->get_hidden() == true)
@@ -209,12 +224,18 @@ class ModuleNavigation implements ModuleNavigationInterface, EventListenerInterf
 	}
 	
 	
+	/**
+	 * @todo debug
+	 * @see ModuleNavigationInterface::get_highest_position()
+	 * @return integer
+	 */
 	public static function get_highest_position()
 	{
 		return BaseModuleNavigation_Access::get_highest_position();
 	}
 	
  	/**
+ 	 * @see ModuleNavigationInterface::list_module_navigations_entries()
 	 * @return array
 	 */
 	public static function list_module_navigations_entries()
@@ -223,6 +244,7 @@ class ModuleNavigation implements ModuleNavigationInterface, EventListenerInterf
 	}
 
 	/**
+	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
      */

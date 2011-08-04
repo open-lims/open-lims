@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -157,6 +157,11 @@ class Base_Wrapper_Access
 		}
 	}
 	
+	/**
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
 	public static function list_base_module_navigation($start, $end)
 	{
 		global $db;
@@ -200,6 +205,9 @@ class Base_Wrapper_Access
 		return $return_array;
 	}
 	
+	/**
+	 * @return integer
+	 */
 	public static function count_base_module_navigation()
 	{
 		global $db;
@@ -213,6 +221,13 @@ class Base_Wrapper_Access
 		return $data[result];
 	}
 
+	/**
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
 	public static function list_base_module($order_by, $order_method, $start, $end)
 	{
 		global $db;
@@ -293,6 +308,9 @@ class Base_Wrapper_Access
 		return $return_array;
 	}
 	
+	/**
+	 * @return integer
+	 */
 	public static function count_base_module()
 	{
 		global $db;

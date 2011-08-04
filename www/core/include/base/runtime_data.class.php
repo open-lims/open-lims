@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -79,7 +79,7 @@ class RuntimeData implements RuntimeDataInterface
 	}
 
 	/**
-	 * Saves data from an object in array
+	 * @see RuntimeDataInterface::write_object_data()
 	 * @param object $object
 	 * @param string $address
 	 * @param mixed $data
@@ -100,7 +100,7 @@ class RuntimeData implements RuntimeDataInterface
    	}
    	
    	/**
-   	 * Reads data of an object from array
+   	 * @see RuntimeDataInterface::read_object_data()
    	 * @param object $object
    	 * @param string $address
    	 * @return mixed
@@ -126,7 +126,7 @@ class RuntimeData implements RuntimeDataInterface
    	}
    	
    	/**
-   	 * Checks if object-data is in array
+   	 * @see RuntimeDataInterface::is_object_data()
    	 * @param object $object
    	 * @param string $address
    	 * @return bool
@@ -152,7 +152,7 @@ class RuntimeData implements RuntimeDataInterface
    	}
    	
    	/**
-   	 * Deletes all adressed object-data in array
+   	 * @see RuntimeDataInterface::clear_object_data()
    	 * @param object $object
    	 * @param string $address
    	 * @return bool
@@ -179,7 +179,7 @@ class RuntimeData implements RuntimeDataInterface
    	}
    	
    	/**
-   	 * Deletes all object-data in array
+   	 * @see RuntimeDataInterface::clear_object()
    	 * @param object $object
    	 * @return bool
    	 */

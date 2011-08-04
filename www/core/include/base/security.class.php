@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz
- * @copyright (c) 2008-2010 by Roman Konertz
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -33,9 +33,8 @@ require_once("interfaces/security.interface.php");
  */
 class Security implements SecurityInterface
 {
-
 	/**
-	 * Returns the number of failed logins
+	 * @see SecurityInterface::ip_error_count()
 	 * @return integer
 	 */
  	public static function ip_error_count()
@@ -47,7 +46,7 @@ class Security implements SecurityInterface
  	}
 
  	/**
-	 * Checks all GET- and POST-variables
+	 * @see SecurityInterface::filter_var()
 	 */
  	public static function filter_var()
  	{	
@@ -74,7 +73,7 @@ class Security implements SecurityInterface
  	}
  	
 	/**
-	 * Checks all GET- and POST-variables
+	 * @see SecurityInterface::protect_session()
 	 */
 	public static function protect_session()
 	{		
