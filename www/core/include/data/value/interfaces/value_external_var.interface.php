@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -28,6 +28,10 @@
  */
 interface ValueExternalVarInterface
 {
+	/**
+     * @param string $address
+     * @return mixed
+     */
 	public function get_var_content($address);
 }
 ?>

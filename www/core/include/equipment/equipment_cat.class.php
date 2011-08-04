@@ -2,7 +2,7 @@
 /**
  * @package equipment
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -91,7 +91,7 @@ class EquipmentCat implements EquipmentCatInterface
 	{
 		if ($this->equipment_cat_id and $this->equipment_cat)
     	{
-    		if ($this->get_childs() != null)
+    		if ($this->get_children() != null)
 			{
 				return false;
 			}
@@ -157,7 +157,7 @@ class EquipmentCat implements EquipmentCatInterface
 	 * Returns the child of the current equipment-category
 	 * @return array
 	 */
-   	public function get_childs()
+   	public function get_children()
     {
     	if ($this->equipment_cat_id)
     	{

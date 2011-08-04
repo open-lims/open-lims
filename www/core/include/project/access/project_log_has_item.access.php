@@ -1,8 +1,8 @@
 <?php
 /**
- * @package item
+ * @package project
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -23,7 +23,7 @@
 
 /**
  * Item Has Project Log Access Class
- * @package item
+ * @package project
  */
 class ProjectLogHasItem_Access
 {

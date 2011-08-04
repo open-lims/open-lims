@@ -2,7 +2,7 @@
 /**
  * @package equipment
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -36,7 +36,7 @@ class AdminEquipmentCatIO
 			$content_array = array();
 			
 			$equipment_cat = new EquipmentCat($id);
-			$equipment_cat_child_array = $equipment_cat->get_childs();
+			$equipment_cat_child_array = $equipment_cat->get_children();
 			
 			if(is_array($equipment_cat_child_array) and count($equipment_cat_child_array) >= 1)
 			{

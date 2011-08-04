@@ -2,7 +2,7 @@
 /**
  * @package location
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -36,7 +36,7 @@ class AdminLocationIO
 			$content_array = array();
 			
 			$location = new Location($id);
-			$location_child_array = $location->get_childs();
+			$location_child_array = $location->get_children();
 			
 			if(is_array($location_child_array) and count($location_child_array) >= 1)
 			{

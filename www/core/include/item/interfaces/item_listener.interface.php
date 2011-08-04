@@ -2,7 +2,7 @@
 /**
  * @package item
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -97,7 +97,7 @@ interface ItemListenerInterface
 	/**
 	 * Returns the generic link of the item-type
 	 * @param string $type
-	 * @param string $id
+	 * @param integer $id
 	 * @return string
 	 */
 	public static function get_generic_link($type, $id);

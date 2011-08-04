@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -66,5 +66,49 @@ interface Data_WrapperInterface
      * @return integer
      */
 	public static function count_list_value_templates();
+	
+	/**
+	 * @param integer $value_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_value_versions($value_id, $order_by, $order_method, $start, $end);
+	
+	/**
+	 * @param integer $value_id
+	 * @return integer
+	 */
+	public static function count_value_versions($value_id);
+	
+	/**
+	 * @param integer $file_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_file_versions($file_id, $order_by, $order_method, $start, $end);
+	
+	/**
+	 * @param integer $file_id
+	 * @return integer
+	 */
+	public static function count_file_versions($file_id);
+	
+	/**
+	 * @param string $sql
+	 * @return array
+	 */
+	public static function list_item_files($sql);
+	
+	/**
+	 * @param string $sql
+	 * @return array
+	 */
+	public static function list_item_values($sql);
 }
 ?>

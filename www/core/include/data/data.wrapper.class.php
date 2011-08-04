@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -38,6 +38,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 class Data_Wrapper implements Data_WrapperInterface
 {
 	/**
+	 * @see Data_WrapperInterface::is_file_in_folder()
 	 * @param integer $folder_id
 	 * @param string $name
 	 * @return bool
@@ -48,6 +49,7 @@ class Data_Wrapper implements Data_WrapperInterface
 	}
 	
 	/**
+	 * @see Data_WrapperInterface::list_search_ffv()
 	 * @param integer $folder_id
 	 * @param string $search_string
 	 * @param string $order_by
@@ -62,6 +64,7 @@ class Data_Wrapper implements Data_WrapperInterface
 	}
 	
 	/**
+	 * @see Data_WrapperInterface::count_search_ffv()
 	 * @param integer $folder_id
 	 * @param string $search_string
 	 * @return integer
@@ -72,6 +75,7 @@ class Data_Wrapper implements Data_WrapperInterface
 	}
 	
 	/**
+	 * @see Data_WrapperInterface::list_value_templates()
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -84,6 +88,7 @@ class Data_Wrapper implements Data_WrapperInterface
     }
     
     /**
+     * @see Data_WrapperInterface::count_list_value_templates()
      * @return integer
      */
     public static function count_list_value_templates()
@@ -91,31 +96,69 @@ class Data_Wrapper implements Data_WrapperInterface
     	return Data_Wrapper_Access::count_list_value_templates();
     } 
     
+    /**
+     * @see Data_WrapperInterface::list_value_versions()
+	 * @param integer $value_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
     public static function list_value_versions($value_id, $order_by, $order_method, $start, $end)
     {
     	return Data_Wrapper_Access::list_value_versions($value_id, $order_by, $order_method, $start, $end);
     }
     
+    /**
+     * @see Data_WrapperInterface::count_value_versions()
+	 * @param integer $value_id
+	 * @return integer
+	 */
     public static function count_value_versions($value_id)
     {
     	return Data_Wrapper_Access::count_value_versions($value_id);
     }
     
+    /**
+     * @see Data_WrapperInterface::list_file_versions()
+	 * @param integer $file_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
     public static function list_file_versions($file_id, $order_by, $order_method, $start, $end)
     {
     	return Data_Wrapper_Access::list_file_versions($file_id, $order_by, $order_method, $start, $end);
     }
     
+    /**
+     * @see Data_WrapperInterface::count_file_versions()
+	 * @param integer $file_id
+	 * @return integer
+	 */
     public static function count_file_versions($file_id)
     {
     	return Data_Wrapper_Access::count_file_versions($file_id);
     }
     
+    /**
+     * @see Data_WrapperInterface::list_item_files()
+	 * @param string $sql
+	 * @return array
+	 */
     public static function list_item_files($sql)
 	{
 		return Data_Wrapper_Access::list_item_files($sql);
 	}
 	
+	/**
+	 * @see Data_WrapperInterface::list_item_values()
+	 * @param string $sql
+	 * @return array
+	 */
 	public static function list_item_values($sql)
 	{
 		return Data_Wrapper_Access::list_item_values($sql);

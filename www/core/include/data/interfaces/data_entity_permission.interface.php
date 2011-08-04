@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -46,11 +46,16 @@ interface DataEntityPermissionInterface
 	
 	/**
 	 * @param integer $intention
+	 * 	1 = read
+	 * 	2 = write
+	 * 	3 = delete
+	 * 	4 = control
 	 * @return bool
 	 */	
 	public function is_access($intention);
 	
 	/**
+	 * Returns the permission string; like: rwdc----r---r---
 	 * @return string
 	 */	
 	public function get_permission_string();

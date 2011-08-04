@@ -2,7 +2,7 @@
 /**
  * @package equipment
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -36,7 +36,7 @@ interface EquipmentTypeInterface
 	public function get_name();
 	public function set_name($name);
 	public function get_cat_name();
-	public function get_childs();
+	public function get_children();
 	
 	public static function exist_id($id);
 	public static function exist_name($name);

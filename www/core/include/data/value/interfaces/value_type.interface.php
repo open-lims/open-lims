@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -28,15 +28,45 @@
  */
 interface ValueTypeInterface
 {
+	/**
+	 * @param integer $value_type_id
+	 */
 	function __construct($value_type_id);
+	
 	function __destruct();
 	
+	/**
+	 * Creates a new value-type
+	 * @param integer $object_id
+	 * @return integer
+	 */
 	public function create($object_id);
+	
+	/**
+	 * Deletes a value-type
+	 * @return bool
+	 */
 	public function delete();
 	
+	/**
+	 * @return string
+	 */
 	public function get_name();
+	
+	/**
+	 * @return integer
+	 */
 	public function get_template_id();
 	
+	/**
+	 * @param integer $id
+	 * @return bool
+	 */
+	public static function exist_id($id);
+	
+	/**
+	 * @return array
+	 */
 	public static function list_entries();
 }
 ?>

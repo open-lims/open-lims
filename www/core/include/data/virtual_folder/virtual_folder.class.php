@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -53,6 +53,7 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 	protected $virtual_folder;
 	
 	/**
+	 * @see VirtualFolderInterface::__construct()
 	 * @param integer $virtual_folder_id
 	 */
 	function __construct($virtual_folder_id)
@@ -81,7 +82,7 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 	}
 	
 	/**
-	 * Creates a new Virtual-Folder in a given Folder
+	 * @see VirtualFolderInterface::create()
 	 * @param integer $folder_id
 	 * @param string $name
 	 * @return integer
@@ -152,7 +153,7 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 	}
 	
 	/**
-	 * Deletes a Virtual-Folder
+	 * @see VirtualFolderInterface::delete()
 	 * @return bool
 	 */
 	public final function delete()
@@ -163,7 +164,7 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 		{
 			$transaction_id = $transaction->begin();
 			
-			if ($this->unset_childs() == false)
+			if ($this->unset_children() == false)
 			{
 				if ($transaction_id != null)
 				{
@@ -217,7 +218,7 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 	}
 	
 	/**
-	 * Adds a given Folder to the current Virtual-Folder
+	 * @see VirtualFolderInterface::link_folder()
 	 * @param integer $folder_id
 	 * @return bool
 	 */
@@ -244,7 +245,7 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 	}
 	
 	/**
-	 * Removes a given Folder from the current Virtual-Folder
+	 * @see VirtualFolderInterface::unlink_folder()
 	 * @param integer $folder_id
 	 * @return bool
 	 */
@@ -273,6 +274,7 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 	}
 		
 	/**
+	 * @see VirtualFolderInterface::get_name()
 	 * @return string
 	 */
 	public function get_name()
@@ -287,7 +289,9 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 		}
 	}
 		
+	
 	/**
+	 * @see VirtualFolderInterface::get_virtual_folder_id_by_data_entity_id()
 	 * @param integer $data_entity_id
 	 * @return integer
 	 */
@@ -297,6 +301,7 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 	}
 	
 	/**
+	 * @see VirtualFolderInterface::exist_vfolder()
 	 * @param integer $virtual_folder_id
 	 * @return bool
 	 */
@@ -313,6 +318,7 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 	}
 	
 	/**
+	 * @see VirtualFolderInterface::list_entries_by_folder_id()
 	 * @param integer $folder_id
 	 * @return array
 	 */

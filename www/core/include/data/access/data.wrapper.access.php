@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -27,7 +27,7 @@
  */
 class Data_Wrapper_Access
 {
-		/**
+	/**
 	 * @param integer $folder_id
 	 * @return array
 	 */
@@ -75,7 +75,6 @@ class Data_Wrapper_Access
 	}
 
 	/**
-	 * NEW
 	 * @param integer $folder_id
 	 * @param string $name
 	 * @return bool
@@ -301,7 +300,6 @@ class Data_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
 	 * @param integer $folder_id
 	 * @param string $search_string
 	 * @param string $order_by
@@ -437,7 +435,6 @@ class Data_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
 	 * @param integer $folder_id
 	 * @param string $search_string
 	 * @return integer
@@ -500,7 +497,6 @@ class Data_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -588,7 +584,6 @@ class Data_Wrapper_Access
 	}
 
 	/**
-	 * NEW
 	 * @return array
 	 */
 	public static function count_list_value_templates()
@@ -604,6 +599,14 @@ class Data_Wrapper_Access
 		return $data[result];
 	}	
 	
+	/**
+	 * @param integer $value_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
 	public static function list_value_versions($value_id, $order_by, $order_method, $start, $end)
 	{
 		global $db;
@@ -693,6 +696,10 @@ class Data_Wrapper_Access
 		}
 	}
 	
+	/**
+	 * @param integer $value_id
+	 * @return integer
+	 */
 	public static function count_value_versions($value_id)
 	{
 		if (is_numeric($value_id))
@@ -712,6 +719,14 @@ class Data_Wrapper_Access
 		}
 	}
 	
+	/**
+	 * @param integer $file_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
 	public static function list_file_versions($file_id, $order_by, $order_method, $start, $end)
 	{
 		global $db;
@@ -800,6 +815,10 @@ class Data_Wrapper_Access
 		}
 	}
 	
+	/**
+	 * @param integer $file_id
+	 * @return integer
+	 */
 	public static function count_file_versions($file_id)
 	{
 		if (is_numeric($file_id))
@@ -819,6 +838,10 @@ class Data_Wrapper_Access
 		}
 	}
 	
+	/**
+	 * @param string $item_sql
+	 * @return array
+	 */
 	public static function list_item_files($item_sql)
 	{
 		global $db;
@@ -856,6 +879,10 @@ class Data_Wrapper_Access
 		}
 	}
 	
+	/**
+	 * @param string $item_sql
+	 * @return array
+	 */
 	public static function list_item_values($item_sql)
 	{
 		global $db;

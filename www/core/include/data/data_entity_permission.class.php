@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -40,6 +40,7 @@ class DataEntityPermission implements DataEntityPermissionInterface
 	private $folder_flag;
 	
 	/**
+	 * @see DataEntityPermissionInterface::__construct()
 	 * @param integer $permission
 	 * @param bool $automatic
 	 * @param integer $owner_id
@@ -73,6 +74,7 @@ class DataEntityPermission implements DataEntityPermissionInterface
 	}
 	
 	/**
+	 * @see DataEntityPermissionInterface::set_folder_flag()
 	 * @param integer $folder_flag
 	 * @return bool
 	 */
@@ -91,12 +93,8 @@ class DataEntityPermission implements DataEntityPermissionInterface
 	}
 	
 	/**
-	 * Checks the permission
+	 * @see DataEntityPermissionInterface::is_access()
 	 * @param integer $intention
-	 *	1 = read
-	 * 	2 = write
-	 * 	3 = delete
-	 * 	4 = control
 	 * @return bool
 	 */	
 	public function is_access($intention)
@@ -240,7 +238,7 @@ class DataEntityPermission implements DataEntityPermissionInterface
 	}
 	
 	/**
-	 * Returns the permission string; like: rwdc----r---r---
+	 * @see DataEntityPermissionInterface::get_permission_string()
 	 * @return string
 	 */	
 	public function get_permission_string()

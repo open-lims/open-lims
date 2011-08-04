@@ -2,7 +2,7 @@
 /**
  * @package sample
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -127,7 +127,7 @@ class AdminSampleTemplateIO
 			}
 
 			$folder = Folder::get_instance(constant("OLDL_FOLDER_ID"));
-			$data_entity_array = $folder->get_childs();
+			$data_entity_array = $folder->get_children();
 			
 			if (is_array($data_entity_array))
 			{								

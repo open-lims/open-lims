@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -54,6 +54,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	protected $inherit_permission;
 	
 	/**
+	 * @see DataEntityInterface::__construct()
 	 * @param integer $entity_id
 	 */
 	function __construct($entity_id)
@@ -194,6 +195,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * @see DataEntityInterface::is_read_access()
 	 * @return bool
 	 */
 	public function is_read_access()
@@ -202,6 +204,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * @see DataEntityInterface::is_write_access()
 	 * @return bool
 	 */
 	public function is_write_access()
@@ -210,6 +213,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * @see DataEntityInterface::is_delete_access()
 	 * @return bool
 	 */
 	public function is_delete_access()
@@ -218,6 +222,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * @see DataEntityInterface::is_control_access()
 	 * @return bool
 	 */
 	public function is_control_access()
@@ -226,6 +231,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * @see DataEntityInterface::can_set_automatic()
 	 * @return bool
 	 */
 	public function can_set_automatic()
@@ -234,6 +240,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * @see DataEntityInterface::can_set_data_entity()
 	 * @return bool
 	 */
 	public function can_set_data_entity()
@@ -242,6 +249,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * @see DataEntityInterface::can_set_control()
 	 * @return bool
 	 */
 	public function can_set_control()
@@ -259,6 +267,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * @see DataEntityInterface::can_set_remain()
 	 * @return bool
 	 */
 	public function can_set_remain()
@@ -267,6 +276,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * Create a new DataEntity
 	 * @param integer $owner_id
 	 * @param integer $owner_group_id
 	 * @return integer
@@ -330,6 +340,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * Deletes a DataEntity
 	 * @return bool
 	 */
 	protected function delete()
@@ -383,7 +394,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
-	 * Returns parent folder as data entity id
+	 * @see DataEntityInterface::get_parent_folder()
 	 * @return integer
 	 */
 	public final function get_parent_folder()
@@ -414,7 +425,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
-	 * Returns parent folder as folder id
+	 * @see DataEntityInterface::get_parent_folder_id()
 	 * @return integer
 	 */
 	public final function get_parent_folder_id()
@@ -445,7 +456,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
-	 * Returns a set of parent virutal folders with data entity ids
+	 * @see DataEntityInterface::get_parent_virtual_folders()
 	 * @return array
 	 */
 	public final function get_parent_virtual_folders()
@@ -478,7 +489,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
-	 * Returns a set of parent virtual folders with virtual folder ids
+	 * @see DataEntityInterface::get_parent_virtual_folder_ids()
 	 * @return array
 	 */
 	public final function get_parent_virtual_folder_ids()
@@ -511,9 +522,10 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * @see DataEntityInterface::get_children()
 	 * @return array
 	 */
-	public final function get_childs()
+	public final function get_children()
 	{
 		if ($this->data_entity_id)
 		{
@@ -526,6 +538,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * @see DataEntityInterface::get_data_entity_id()
 	 * @return integer
 	 */
 	public final function get_data_entity_id()
@@ -541,6 +554,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * @see DataEntityInterface::get_datetime()
 	 * @return string
 	 */
 	public final function get_datetime()
@@ -556,6 +570,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * @see DataEntityInterface::get_owner_id()
 	 * @return integer
 	 */
 	public final function get_owner_id()
@@ -571,6 +586,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * @see DataEntityInterface::get_owner_group_id()
 	 * @return integer
 	 */
 	public final function get_owner_group_id()
@@ -586,6 +602,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * @see DataEntityInterface::get_permission()
 	 * @return integer
 	 */
 	public final function get_permission()
@@ -601,6 +618,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * @see DataEntityInterface::get_permission_string()
 	 * @return string
 	 */
 	public final function get_permission_string()
@@ -616,6 +634,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * @see DataEntityInterface::get_automatic()
 	 * @return bool
 	 */
 	public final function get_automatic()
@@ -631,6 +650,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * @see DataEntityInterface::set_owner_id()
 	 * @param integer $owner_id
 	 * @return bool
 	 */
@@ -647,6 +667,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * @see DataEntityInterface::set_owner_group_id()
 	 * @param integer $owner_group_id
 	 * @return bool
 	 */
@@ -663,6 +684,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * @see DataEntityInterface::set_permission()
 	 * @param integer $permission
 	 * @return bool
 	 */
@@ -679,6 +701,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * @see DataEntityInterface::set_automatic()
 	 * @param bool $automatic
 	 * @return bool
 	 */
@@ -695,7 +718,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
-	 * Sets the current data entity as a child of $data_entity_id
+	 * @see DataEntityInterface::set_as_child_of()
 	 * @param integer $data_entity_id
 	 * @return bool
 	 */
@@ -727,7 +750,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
-	 * Unsets the current data entity from $data_entity_id
+	 * @see DataEntityInterface::unset_child_of()
 	 * @param integer $data_entity_id
 	 * @return bool
 	 */
@@ -752,10 +775,10 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
-	 * Unsets all childs of the current data entity
+	 * @see DataEntityInterface::unset_children()
 	 * @return bool
 	 */
-	public final function unset_childs()
+	public final function unset_children()
 	{
 		if ($this->data_entity_id)
 		{
@@ -783,6 +806,10 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		}
 	}
 	
+	/**
+	 * @see ItemListenerInterface::get_item_name()
+	 * @return string
+	 */
 	public final function get_item_name()
 	{
 		if ($this->data_entity_id)
@@ -805,6 +832,10 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		}
 	}
 	
+	/**
+	 * @see ItemListenerInterface::get_item_parents()
+	 * @return string
+	 */
 	public final function get_item_parents()
 	{
 		return null;
@@ -812,6 +843,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	
 	
 	/**
+	 * @see ItemListenerInterface::get_entry_by_item_id()
 	 * @param integer $item_id
 	 * @return integer
 	 */
@@ -819,8 +851,282 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	{
 		return DataEntityIsItem_Access::get_entry_by_item_id($item_id);
 	}
+  	
+    /**
+     * @see ItemListenerInterface::is_kind_of()
+     * @param string $type
+     * @param integer $item_id
+     * @return bool
+     */
+    public static function is_kind_of($type, $item_id)
+    {
+    	if (is_numeric($item_id))
+    	{
+    		if (($data_entity_id = DataEntityIsItem_Access::get_entry_by_item_id($item_id)) != null)
+    		{
+    			if ($type == "file")
+    			{
+	    			if (File::get_file_id_by_data_entity_id($data_entity_id) != null)
+					{
+						return true;
+					}
+    			}
+    			
+    			if ($type == "value")
+    			{
+    				if (Value::get_value_id_by_data_entity_id($data_entity_id) != null)
+					{
+						return true;
+					}
+    			}
+    			
+    			if ($type == null)
+    			{
+    				return true;
+    			}
+    			else
+    			{
+    				return false;
+    			}
+    		}
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
+    
+    /**
+     * @see ItemListenerInterface::is_type_or_category()
+     * @param integer $category_id
+     * @param integer $type_id
+     * @param integer $item_id
+     * @return bool
+     */
+    public static function is_type_or_category($category_id, $type_id, $item_id)
+    {
+    	return false;
+    }
+    
+    /**
+     * @see ItemListenerInterface::get_instance_by_item_id()
+     * @param integer $item_id
+     * @return object
+     */
+	public static function get_instance_by_item_id($item_id)
+    {
+    	if (is_numeric($item_id))
+    	{
+    		$data_entity_id = DataEntityIsItem_Access::get_entry_by_item_id($item_id);
+    		return new DataEntity($data_entity_id);
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+    /**
+     * @see ItemListenerInterface::get_generic_name()
+     * @param string $type
+     * @param array $type_array
+     * @return string
+     */
+    public static function get_generic_name($type, $type_array)
+    {
+    	if ($type == "file")
+    	{
+    		return "File";
+    	}
+    	else
+    	{
+    		if (is_array($type_array) and count($type_array) == 1)
+    		{
+				$value_type = new ValueType($type_array[0]);
+				if (($value_name = $value_type->get_name()) != null)
+				{
+					return "".$value_name;
+				}
+				else
+				{
+					return "Value";
+				}
+    		}
+    		else
+    		{
+    			return "Value";
+    		}
+    	}
+    }
+    
+    /**
+     * @see ItemListenerInterface::get_generic_symbol()
+     * @param string $type
+     * @param integer $id
+     * @return string
+     */
+    public static function get_generic_symbol($type, $id)
+    {
+   		if ($type == "file")
+    	{
+    		$file = new File($id);
+    		return "<img src='".$file->get_icon()."' alt='' style='border: 0;' />";
+    	}
+    	else
+    	{
+    		return "<img src='images/icons/value.png' alt='' style='border: 0;' />";
+    	}
+    }
+    
+    /**
+     * @see ItemListenerInterface::get_generic_link()
+     * @param string $type
+     * @param integer $id
+     * @return string
+     */
+	public static function get_generic_link($type, $id)
+	{
+		if ($type == "file")
+		{
+			$paramquery[username] = $_GET[username];
+			$paramquery[session_id] = $_GET[session_id];
+			$paramquery[nav] = "data";
+			$paramquery[action] = "file_detail";
+			$paramquery[file_id] = $id;
+			return http_build_query($paramquery, '', '&#38;');
+		}
+		else
+		{
+			$paramquery[username] = $_GET[username];
+			$paramquery[session_id] = $_GET[session_id];
+			$paramquery[nav] = "data";
+			$paramquery[action] = "value_detail";
+			$paramquery[value_id] = $id;
+			return http_build_query($paramquery, '', '&#38;');
+		}
+	}
+    
+	/**
+     * @see ItemListenerInterface::get_sql_select_array()
+     * @param string $type
+     * @return array
+     */
+    public static function get_sql_select_array($type)
+    {
+    	if ($type == "file")
+		{
+			$select_array[name] = "".constant("FILE_VERSION_TABLE").".name";
+			$select_array[type_id] = "".constant("FILE_TABLE").".id AS file_id";
+			$select_array[datetime] = "".constant("FILE_VERSION_TABLE").".datetime";
+			return $select_array;
+		}
+		else
+		{
+			$select_array[name] = "".constant("VALUE_TYPE_TABLE").".name";
+			$select_array[type_id] = "".constant("VALUE_TABLE").".id AS value_id";
+			$select_array[datetime] = "".constant("VALUE_VERSION_TABLE").".datetime";
+			return $select_array;
+		}
+    }
+    
+    /**
+     * @see ItemListenerInterface::get_sql_join()
+     * @param string $type
+     * @return string
+     */
+	public static function get_sql_join($type)
+	{
+		if ($type == "file")
+		{
+			return 	"LEFT JOIN ".constant("DATA_ENTITY_IS_ITEM_TABLE")." AS deiita_a 	ON ".constant("ITEM_TABLE").".id 	= deiita_a.item_id " .
+					"LEFT JOIN ".constant("FILE_TABLE")." 					ON deiita_a.data_entity_id 						= ".constant("FILE_TABLE").".data_entity_id " .
+					"LEFT JOIN ".constant("FILE_VERSION_TABLE")." 			ON ".constant("FILE_TABLE").".id 				= ".constant("FILE_VERSION_TABLE").".toid ";
+		}
+		else
+		{
+			return 	"LEFT JOIN ".constant("DATA_ENTITY_IS_ITEM_TABLE")." AS deiita_b  	ON ".constant("ITEM_TABLE").".id 	= deiita_b.item_id " .
+					"LEFT JOIN ".constant("VALUE_TABLE")." 					ON deiita_b.data_entity_id 						= ".constant("VALUE_TABLE").".data_entity_id " .
+					"LEFT JOIN ".constant("VALUE_TYPE_TABLE")." 			ON ".constant("VALUE_TABLE").".type_id 			= ".constant("VALUE_TYPE_TABLE").".id " .		
+					"LEFT JOIN ".constant("VALUE_VERSION_TABLE")." 			ON ".constant("VALUE_TABLE").".id 				= ".constant("VALUE_VERSION_TABLE").".toid ";
+		}
+	}
 	
 	/**
+     * @see ItemListenerInterface::get_sql_where()
+     * @param string $type
+     * @return string
+     */
+	public static function get_sql_where($type)
+	{
+		if ($type == "file")
+		{
+			return "(LOWER(TRIM(".constant("FILE_VERSION_TABLE").".name)) LIKE '{STRING}' AND ".constant("FILE_VERSION_TABLE").".current = 't')";
+		}
+		else
+		{
+			return "(LOWER(TRIM(".constant("VALUE_TYPE_TABLE").".name)) LIKE '{STRING}' AND ".constant("VALUE_VERSION_TABLE").".current = 't')";
+		}
+	}
+	
+	/**
+     * @see ItemListenerInterface::get_sql_fulltext_select_array()
+     * @param string $type
+     * @return array
+     */
+	public static function get_sql_fulltext_select_array($type)
+	{
+		if ($type == "file")
+		{
+			return null;
+		}
+		else
+		{
+			$select_array[name] = "".constant("VALUE_TYPE_TABLE").".name";
+			$select_array[type_id] = "".constant("VALUE_TABLE").".id AS value_id";
+			$select_array[datetime] = "".constant("VALUE_VERSION_TABLE").".datetime";
+			$select_array[rank] = "ts_rank_cd(".constant("VALUE_VERSION_TABLE").".text_search_vector, to_tsquery('{LANGUAGE}', '{STRING}'), 32 /* rank/(rank+1) */)";
+			return $select_array;
+		}
+	}
+	
+	/**
+     * @see ItemListenerInterface::get_sql_fulltext_join()
+     * @param string $type
+     * @return string
+     */
+	public static function get_sql_fulltext_join($type)
+	{
+		if ($type == "file")
+		{
+			return 	null;
+		}
+		else
+		{
+			return 	"LEFT JOIN ".constant("DATA_ENTITY_IS_ITEM_TABLE")." AS deiita_b  	ON ".constant("ITEM_TABLE").".id 	= deiita_b.item_id " .
+					"LEFT JOIN ".constant("VALUE_TABLE")." 					ON deiita_b.data_entity_id 						= ".constant("VALUE_TABLE").".data_entity_id " .	
+					"LEFT JOIN ".constant("VALUE_VERSION_TABLE")." 			ON ".constant("VALUE_TABLE").".id 				= ".constant("VALUE_VERSION_TABLE").".toid ";
+		}
+	}
+	
+	/**
+     * @see ItemListenerInterface::get_sql_fulltext_where()
+     * @param string $type
+     * @return string
+     */
+	public static function get_sql_fulltext_where($type)
+	{
+		if ($type == "file")
+		{
+			return null;
+		}
+		else
+		{
+			return "(".constant("VALUE_VERSION_TABLE").".text_search_vector @@ to_tsquery('{LANGUAGE}', '{STRING}') AND ".constant("VALUE_VERSION_TABLE").".current = 't')";
+		}
+	}
+
+	/**
+	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
      */
@@ -868,222 +1174,5 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
     	
     	return true;
     }
-  	
-    /**
-     * @param string $type
-     * @param integer $item_id
-     * @return bool
-     */
-    public static function is_kind_of($type, $item_id)
-    {
-    	if (is_numeric($item_id))
-    	{
-    		if (($data_entity_id = DataEntityIsItem_Access::get_entry_by_item_id($item_id)) != null)
-    		{
-    			if ($type == "file")
-    			{
-	    			if (File::get_file_id_by_data_entity_id($data_entity_id) != null)
-					{
-						return true;
-					}
-    			}
-    			
-    			if ($type == "value")
-    			{
-    				if (Value::get_value_id_by_data_entity_id($data_entity_id) != null)
-					{
-						return true;
-					}
-    			}
-    			
-    			if ($type == null)
-    			{
-    				return true;
-    			}
-    			else
-    			{
-    				return false;
-    			}
-    		}
-    	}
-    	else
-    	{
-    		return false;
-    	}
-    }
-    
-    public static function is_type_or_category($category_id, $type_id, $item_id)
-    {
-    	return false;
-    }
-    
-	public static function get_instance_by_item_id($item_id)
-    {
-    	if (is_numeric($item_id))
-    	{
-    		$data_entity_id = DataEntityIsItem_Access::get_entry_by_item_id($item_id);
-    		return new DataEntity($data_entity_id);
-    	}
-    	else
-    	{
-    		return null;
-    	}
-    }
-    
-    /**
-     * @param string $type
-     * @param array $type_array
-     * @return string
-     */
-    public static function get_generic_name($type, $type_array)
-    {
-    	if ($type == "file")
-    	{
-    		return "File";
-    	}
-    	else
-    	{
-    		if (is_array($type_array) and count($type_array) == 1)
-    		{
-				$value_type = new ValueType($type_array[0]);
-				if (($value_name = $value_type->get_name()) != null)
-				{
-					return "".$value_name;
-				}
-				else
-				{
-					return "Value";
-				}
-    		}
-    		else
-    		{
-    			return "Value";
-    		}
-    	}
-    }
-    
-    public static function get_generic_symbol($type, $id)
-    {
-   		if ($type == "file")
-    	{
-    		$file = new File($id);
-    		return "<img src='".$file->get_icon()."' alt='' style='border: 0;' />";
-    	}
-    	else
-    	{
-    		return "<img src='images/icons/value.png' alt='' style='border: 0;' />";
-    	}
-    }
-    
-	public static function get_generic_link($type, $id)
-	{
-		if ($type == "file")
-		{
-			$paramquery[username] = $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav] = "data";
-			$paramquery[action] = "file_detail";
-			$paramquery[file_id] = $id;
-			return http_build_query($paramquery, '', '&#38;');
-		}
-		else
-		{
-			$paramquery[username] = $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav] = "data";
-			$paramquery[action] = "value_detail";
-			$paramquery[value_id] = $id;
-			return http_build_query($paramquery, '', '&#38;');
-		}
-	}
-    
-    public static function get_sql_select_array($type)
-    {
-    	if ($type == "file")
-		{
-			$select_array[name] = "".constant("FILE_VERSION_TABLE").".name";
-			$select_array[type_id] = "".constant("FILE_TABLE").".id AS file_id";
-			$select_array[datetime] = "".constant("FILE_VERSION_TABLE").".datetime";
-			return $select_array;
-		}
-		else
-		{
-			$select_array[name] = "".constant("VALUE_TYPE_TABLE").".name";
-			$select_array[type_id] = "".constant("VALUE_TABLE").".id AS value_id";
-			$select_array[datetime] = "".constant("VALUE_VERSION_TABLE").".datetime";
-			return $select_array;
-		}
-    }
-    
-	public static function get_sql_join($type)
-	{
-		if ($type == "file")
-		{
-			return 	"LEFT JOIN ".constant("DATA_ENTITY_IS_ITEM_TABLE")." AS deiita_a 	ON ".constant("ITEM_TABLE").".id 	= deiita_a.item_id " .
-					"LEFT JOIN ".constant("FILE_TABLE")." 					ON deiita_a.data_entity_id 						= ".constant("FILE_TABLE").".data_entity_id " .
-					"LEFT JOIN ".constant("FILE_VERSION_TABLE")." 			ON ".constant("FILE_TABLE").".id 				= ".constant("FILE_VERSION_TABLE").".toid ";
-		}
-		else
-		{
-			return 	"LEFT JOIN ".constant("DATA_ENTITY_IS_ITEM_TABLE")." AS deiita_b  	ON ".constant("ITEM_TABLE").".id 	= deiita_b.item_id " .
-					"LEFT JOIN ".constant("VALUE_TABLE")." 					ON deiita_b.data_entity_id 						= ".constant("VALUE_TABLE").".data_entity_id " .
-					"LEFT JOIN ".constant("VALUE_TYPE_TABLE")." 			ON ".constant("VALUE_TABLE").".type_id 			= ".constant("VALUE_TYPE_TABLE").".id " .		
-					"LEFT JOIN ".constant("VALUE_VERSION_TABLE")." 			ON ".constant("VALUE_TABLE").".id 				= ".constant("VALUE_VERSION_TABLE").".toid ";
-		}
-	}
-	
-	public static function get_sql_where($type)
-	{
-		if ($type == "file")
-		{
-			return "(LOWER(TRIM(".constant("FILE_VERSION_TABLE").".name)) LIKE '{STRING}' AND ".constant("FILE_VERSION_TABLE").".current = 't')";
-		}
-		else
-		{
-			return "(LOWER(TRIM(".constant("VALUE_TYPE_TABLE").".name)) LIKE '{STRING}' AND ".constant("VALUE_VERSION_TABLE").".current = 't')";
-		}
-	}
-	
-	public static function get_sql_fulltext_select_array($type)
-	{
-		if ($type == "file")
-		{
-			return null;
-		}
-		else
-		{
-			$select_array[name] = "".constant("VALUE_TYPE_TABLE").".name";
-			$select_array[type_id] = "".constant("VALUE_TABLE").".id AS value_id";
-			$select_array[datetime] = "".constant("VALUE_VERSION_TABLE").".datetime";
-			$select_array[rank] = "ts_rank_cd(".constant("VALUE_VERSION_TABLE").".text_search_vector, to_tsquery('{LANGUAGE}', '{STRING}'), 32 /* rank/(rank+1) */)";
-			return $select_array;
-		}
-	}
-	
-	public static function get_sql_fulltext_join($type)
-	{
-		if ($type == "file")
-		{
-			return 	null;
-		}
-		else
-		{
-			return 	"LEFT JOIN ".constant("DATA_ENTITY_IS_ITEM_TABLE")." AS deiita_b  	ON ".constant("ITEM_TABLE").".id 	= deiita_b.item_id " .
-					"LEFT JOIN ".constant("VALUE_TABLE")." 					ON deiita_b.data_entity_id 						= ".constant("VALUE_TABLE").".data_entity_id " .	
-					"LEFT JOIN ".constant("VALUE_VERSION_TABLE")." 			ON ".constant("VALUE_TABLE").".id 				= ".constant("VALUE_VERSION_TABLE").".toid ";
-		}
-	}
-	
-	public static function get_sql_fulltext_where($type)
-	{
-		if ($type == "file")
-		{
-			return null;
-		}
-		else
-		{
-			return "(".constant("VALUE_VERSION_TABLE").".text_search_vector @@ to_tsquery('{LANGUAGE}', '{STRING}') AND ".constant("VALUE_VERSION_TABLE").".current = 't')";
-		}
-	}
 }
 ?>

@@ -2,7 +2,7 @@
 /**
  * @package equipment
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -94,7 +94,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     {
     	if ($this->equipment_type_id and $this->equipment_type)
     	{
-    		if ($this->get_childs() != null)
+    		if ($this->get_children() != null)
 			{
 				return false;
 			}
@@ -251,7 +251,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
      * Returns the childs of the current equipment-type
      * @return array
      */
-    public function get_childs()
+    public function get_children()
     {
     	if ($this->equipment_type_id)
     	{

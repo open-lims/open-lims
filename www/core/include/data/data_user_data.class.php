@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -41,6 +41,7 @@ class DataUserData implements DataUserDataInterface, EventListenerInterface
 	private $data_user_data;
 	
 	/**
+	 * @see DataUserDataInterface::__construct()
 	 * @param integer $user_id
 	 */
 	function __construct($user_id)
@@ -64,6 +65,7 @@ class DataUserData implements DataUserDataInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see DataUserDataInterface::get_quota()
 	 * @return integer
 	 */
 	public function get_quota()
@@ -79,6 +81,7 @@ class DataUserData implements DataUserDataInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see DataUserDataInterface::get_filesize()
 	 * @return integer
 	 */
 	public function get_filesize()
@@ -94,6 +97,7 @@ class DataUserData implements DataUserDataInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see DataUserDataInterface::set_quota()
 	 * @param integer $quota
 	 * @return bool
 	 */
@@ -110,6 +114,7 @@ class DataUserData implements DataUserDataInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see DataUserDataInterface::set_filesize()
 	 * @param integer $filesize
 	 * @return bool
 	 */
@@ -127,7 +132,8 @@ class DataUserData implements DataUserDataInterface, EventListenerInterface
 	
 	
 	/**
-	 * @return integer Used Diskspace of all uses
+	 * @see DataUserDataInterface::get_used_space()
+	 * @return integer
 	 */
 	public static function get_used_space()
 	{
@@ -135,6 +141,7 @@ class DataUserData implements DataUserDataInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
      */

@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -38,6 +38,7 @@ class Path implements PathInterface
 	private $path_array;
 
 	/**
+	 * @see PathInterface::__construct()
 	 * @param string $path
 	 */
 	function __construct($path)
@@ -60,7 +61,7 @@ class Path implements PathInterface
 	}
 
 	/**
-	 * Returns the string of the current path
+	 * @see PathInterface::get_path_string()
 	 * @return string
 	 */
 	public function get_path_string()
@@ -89,7 +90,7 @@ class Path implements PathInterface
 	}
 
 	/**
-	 * Returns an array of path elements
+	 * @see PathInterface::get_path_elements()
 	 * @return array
 	 */
 	public function get_path_elements()
@@ -98,7 +99,7 @@ class Path implements PathInterface
 	}
 	
 	/**
-	 * Returns the number of path elements
+	 * @see PathInterface::get_path_length()
 	 * @return integer
 	 */
 	public function get_path_length()
@@ -107,7 +108,7 @@ class Path implements PathInterface
 	}
 	
 	/**
-	 * Returns the last element of the path
+	 * @see PathInterface::get_last_element()
 	 * @return string
 	 */
 	public function get_last_element()
@@ -116,7 +117,7 @@ class Path implements PathInterface
 	}
 	
 	/**
-	 * Replaces a an given element of the path
+	 * @see PathInterface::replace_element_position()
 	 * @param string $replace
 	 * @param integer $position
 	 * @return bool
@@ -137,7 +138,7 @@ class Path implements PathInterface
 	}
 	
 	/**
-	 * Adds an element at the end of the path
+	 * @see PathInterface::add_element()
 	 * @param string $name
 	 * @return bool
 	 */

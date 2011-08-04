@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -54,6 +54,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	private $item_id_array = array();
 
 	/**
+	 * @see FileInterface::__construct()
 	 * @param integer $file_id
 	 */
 	function __construct($file_id)
@@ -90,6 +91,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
  	/**
+ 	 * @see DataEntityInterface::can_set_automatic()
  	 * @return bool
 	 */
 	public function can_set_automatic()
@@ -106,6 +108,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see DataEntityInterface::can_set_data_entity()
 	 * @return bool
 	 */
 	public function can_set_data_entity()
@@ -122,6 +125,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see DataEntityInterface::can_set_control()
 	 * @return bool
 	 */
 	public function can_set_control()
@@ -138,6 +142,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see DataEntityInterface::can_set_remain()
 	 * @return bool
 	 */
 	public function can_set_remain()
@@ -178,7 +183,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Opens another version of the file with internal revision id
+	 * @see FileInterface::open_internal_revision()
 	 * @param integer $internal_revision
 	 * @return bool
 	 */
@@ -215,7 +220,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 		
 	/**
-	 * Creates a new file
+	 * @see FileInterface::create()
 	 * @param string $name
 	 * @param integer $folder_id
 	 * @param string $path
@@ -308,7 +313,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Deletes a file, including all versions
+	 * @see FileInterface::delete()
 	 * @return bool
 	 */
 	public function delete()
@@ -461,7 +466,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Deletes a specific file version
+	 * @see FileInterface::delete_version()
 	 * @param integer $internal_revision
 	 * @return bool
 	 */
@@ -627,7 +632,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Returns true, if a file version exists
+	 * @see FileInterface::exist_file_version()
 	 * @param integer $internal_revision
 	 * @return bool
 	 */
@@ -644,7 +649,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}	
 	
 	/**
-	 * Uploads a stack of files
+	 * @see FileInterface::upload_file_stack()
 	 * @param integer $file_amount
 	 * @param integer $folder_id
 	 * @param array $file_array
@@ -699,7 +704,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}	
 	
 	/**
-	 * Uploads a file
+	 * @see FileInterface::upload_file()
 	 * @param integer $folder_id
 	 * @param array $file_array
 	 * @return integer
@@ -902,7 +907,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Updates a file
+	 * @see FileInterface::update_file()
 	 * @param array $file_array
 	 * @param integer $previous_version_id
 	 * @param bool $major
@@ -1174,8 +1179,10 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Moves file to another location
+	 * @see FileInterface::move()
 	 * @todo LATER: implementation - Move file is not supported in current version
+	 * @param integer $folder_id
+	 * @return bool
 	 */
 	public function move($folder_id)
 	{
@@ -1183,8 +1190,10 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Copies file to another location
+	 * @see FileInterface::copy()
 	 * @todo LATER: implementation - Copy file is not supported in current version
+	 * @param integer $folder_id
+	 * @return bool
 	 */
 	public function copy($folder_id)
 	{
@@ -1192,7 +1201,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Checks if the current opened file version is the current file version
+	 * @see FileInterface::is_current()
 	 * @return bool
 	 */
 	public function is_current()
@@ -1215,7 +1224,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Checks if the file is an image
+	 * @see FileInterface::is_image()
 	 * @return bool
 	 */
 	public function is_image()
@@ -1244,7 +1253,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Returns the content of a file
+	 * @see FileInterface::get_file_content()
 	 * @return string
 	 */
 	public function get_file_content()
@@ -1280,7 +1289,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Retruns an array of internal revisions
+	 * @see FileInterface::get_file_internal_revisions()
 	 * @return array
 	 */
 	public function get_file_internal_revisions()
@@ -1308,6 +1317,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see FileInterface::get_item_id_array()
 	 * @return array
 	 */
 	public function get_item_id_array()
@@ -1323,6 +1333,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see FileInterface::get_icon()
 	 * @return string
 	 */
 	public function get_icon()
@@ -1363,6 +1374,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see FileInterface::get_mime_type()
 	 * @return string
 	 */
 	public function get_mime_type()
@@ -1536,6 +1548,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see FileInterface::get_name()
 	 * @return string
 	 */
 	public function get_name()
@@ -1551,6 +1564,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see FileInterface::get_version()
 	 * @return integer
 	 */
 	public function get_version()
@@ -1587,6 +1601,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see FileInterface::get_internal_revision()
 	 * @return integer
 	 */
 	public function get_internal_revision()
@@ -1602,6 +1617,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see FileInterface::get_version_datetime()
 	 * @return string
 	 */
 	public function get_version_datetime()
@@ -1617,6 +1633,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see FileInterface::get_size()
 	 * @return integer
 	 */
 	public function get_size()
@@ -1632,6 +1649,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see FileInterface::get_checksum()
 	 * @return string
 	 */
 	public function get_checksum()
@@ -1648,7 +1666,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 
 
 	/**
-	 * Returns true, if a file exists
+	 * @see FileInterface::exist_file()
 	 * @param integer $file_id
 	 * @return bool
 	 */
@@ -1665,6 +1683,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see FileInterface::get_file_id_by_data_entity_id()
 	 * @param integer $data_entity_id
 	 * @return integer
 	 */
@@ -1674,6 +1693,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see FileInterface::get_icon_by_name()
 	 * @param string $name
 	 * @return string
 	 */
@@ -1706,6 +1726,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 
  	/**
+ 	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
      */

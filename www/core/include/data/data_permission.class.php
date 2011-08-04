@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -49,7 +49,8 @@ class DataPermission implements DataPermissionInterface
 	private $automatic;
 	
 	/**
-	 * @param string type file|value|folder
+	 * @see DataPermissionInterface::__construct()
+	 * @param string type
 	 * @param integer $id
 	 */
 	function __construct($type, $id)
@@ -120,7 +121,7 @@ class DataPermission implements DataPermissionInterface
 	}
 	
 	/**
-	 * Returns an array with permission-information
+	 * @see DataPermissionInterface::get_permission_array()
 	 * @return array
 	 */
 	public function get_permission_array()
@@ -164,7 +165,7 @@ class DataPermission implements DataPermissionInterface
 	}
 	
 	/**
-	 * Sets the array
+	 * @see DataPermissionInterface::set_permission_array()
 	 * @param array $array
 	 * @return bool
 	 */
@@ -256,6 +257,7 @@ class DataPermission implements DataPermissionInterface
 	}
 	
 	/**
+	 * @see DataPermissionInterface::get_owner_id()
 	 * @return integer
 	 */
 	public function get_owner_id()
@@ -264,6 +266,7 @@ class DataPermission implements DataPermissionInterface
 	}
 	
 	/**
+	 * @see DataPermissionInterface::get_owner_group_id()
 	 * @return integer
 	 */
 	public function get_owner_group_id()
@@ -272,6 +275,7 @@ class DataPermission implements DataPermissionInterface
 	}
 	
 	/**
+	 * @see DataPermissionInterface::get_automatic()
 	 * @return bool
 	 */
 	public function get_automatic()
@@ -280,6 +284,7 @@ class DataPermission implements DataPermissionInterface
 	}
 	
 	/**
+	 * @see DataPermissionInterface::set_owner_id()
 	 * @param integer $owner_id
 	 * @return bool
 	 */
@@ -312,6 +317,7 @@ class DataPermission implements DataPermissionInterface
 	}
 	
 	/**
+	 * @see DataPermissionInterface::set_owner_group_id()
 	 * @param integer $owner_group_id
 	 * @return bool
 	 */

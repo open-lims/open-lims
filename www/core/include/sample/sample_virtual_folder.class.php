@@ -2,7 +2,7 @@
 /**
  * @package sample
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -119,7 +119,7 @@ class SampleVirtualFolder extends VirtualFolder implements SampleVirtualFolderIn
     			$sample_folder_id = SampleFolder::get_folder_by_sample_id($sample_id);
     			
 	    		$folder = Folder::get_instance($event_object->get_folder_id());
-	    		$child_array = $folder->get_childs();
+	    		$child_array = $folder->get_children();
 	    		if (is_array($child_array) and count($child_array) >= 1)
 	    		{
 	    			foreach($child_array as $key => $value)

@@ -2,7 +2,8 @@
 /**
  * @package project
  * @version 0.4.0.0
- * @author Roman Quiring
+ * @author Roman Konertz <konertz@open-lims.org>
+ * @author Roman Quiring <quiring@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz, Roman Quiring
  * @license GPLv3
  * 

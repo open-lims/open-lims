@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -28,7 +28,35 @@
  */
 interface DataBrowserInterface
 {	
-
+    /**
+     * Returns an array of folder or virtual-folder content
+     * @param integer $folder_id
+     * @param integer $virtual_folder_id
+     * @param string $order_by
+     * @param string $order_method
+     * @param integer $start
+     * @param integer $end
+     * @return array
+     */
+    public static function get_data_browser_array($folder_id, $virtual_folder_id, $order_by, $order_method, $start, $end);
+    
+    /**
+     * @param integer $folder_id
+     * @param integer $virtual_folder_id
+     * @return integer
+     */
+    public static function count_data_browser_array($folder_id, $virtual_folder_id);
+    
+    /**
+     * @return integer
+     */
+    public function get_folder_id();
+    
+    /**
+     * @param integer $folder_id
+     * @return array
+     */
+    public static function get_image_browser_array($folder_id);
 }
 
 ?>

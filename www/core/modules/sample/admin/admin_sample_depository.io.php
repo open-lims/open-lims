@@ -2,7 +2,7 @@
 /**
  * @package sample
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -36,7 +36,7 @@ class AdminSampleDepositoryIO
 			$content_array = array();
 			
 			$sample_depository = new SampleDepository($id);
-			$sample_depository_child_array = $sample_depository->get_childs();
+			$sample_depository_child_array = $sample_depository->get_children();
 			
 			if(is_array($sample_depository_child_array) and count($sample_depository_child_array) >= 1)
 			{

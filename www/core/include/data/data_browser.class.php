@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -40,9 +40,13 @@ class DataBrowser implements DataBrowserInterface
 	private static $folder_id;
     
     /**
-     * Returns an array of folder or virtual-folder content
+     * @see DataBrowserInterface::get_data_browser_array()
      * @param integer $folder_id
      * @param integer $virtual_folder_id
+     * @param string $order_by
+     * @param string $order_method
+     * @param integer $start
+     * @param integer $end
      * @return array
      */
     public static function get_data_browser_array($folder_id, $virtual_folder_id, $order_by, $order_method, $start, $end)
@@ -82,6 +86,12 @@ class DataBrowser implements DataBrowserInterface
     	}	
     }
     
+    /**
+     * @see DataBrowserInterface::count_data_browser_array()
+     * @param integer $folder_id
+     * @param integer $virtual_folder_id
+     * @return integer
+     */
     public static function count_data_browser_array($folder_id, $virtual_folder_id)
     {
     	global $user;
@@ -120,6 +130,7 @@ class DataBrowser implements DataBrowserInterface
     }
 
     /**
+     * @see DataBrowserInterface::get_folder_id()
      * @return integer
      */
     public function get_folder_id()
@@ -135,6 +146,7 @@ class DataBrowser implements DataBrowserInterface
     }
     
     /**
+     * @see DataBrowserInterface::get_image_browser_array()
      * @param integer $folder_id
      * @return array
      */
@@ -149,6 +161,5 @@ class DataBrowser implements DataBrowserInterface
     		return null;
     	}
     }
- 
 }
 ?>

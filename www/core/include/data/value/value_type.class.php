@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -43,6 +43,7 @@ class ValueType implements ValueTypeInterface {
 	private $value_type_id;
 
 	/**
+	 * @see ValueTypeInterface::__construct()
 	 * @param integer $value_type_id
 	 */
 	function __construct($value_type_id)
@@ -66,7 +67,7 @@ class ValueType implements ValueTypeInterface {
 	} 
 	
 	/**
-	 * Creates a new value-type
+	 * @see ValueTypeInterface::create()
 	 * @param integer $object_id
 	 * @return integer
 	 */
@@ -165,7 +166,7 @@ class ValueType implements ValueTypeInterface {
 	}
 	
 	/**
-	 * Deletes a value-type
+	 * @see ValueTypeInterface::delete()
 	 * @return bool
 	 */
 	public function delete()
@@ -220,6 +221,7 @@ class ValueType implements ValueTypeInterface {
 	}
 	
 	/**
+	 * @see ValueTypeInterface::get_name()
 	 * @return string
 	 */
 	public function get_name()
@@ -232,6 +234,7 @@ class ValueType implements ValueTypeInterface {
 	}
 	
 	/**
+	 * @see ValueTypeInterface::get_template_id()
 	 * @return integer
 	 */
 	public function get_template_id()
@@ -243,7 +246,9 @@ class ValueType implements ValueTypeInterface {
 		}
 	}
 
+	
 	/**
+	 * @see ValueTypeInterface::exist_id()
 	 * @param integer $id
 	 * @return bool
 	 */
@@ -253,6 +258,7 @@ class ValueType implements ValueTypeInterface {
 	}
 	
 	/**
+	 * @see ValueTypeInterface::list_entries()
 	 * @return array
 	 */
 	public static function list_entries()

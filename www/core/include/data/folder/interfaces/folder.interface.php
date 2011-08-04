@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -28,36 +28,178 @@
  */
 interface FolderInterface
 {
+	/**
+	 * @return bool
+	 */
 	public function is_flag_change_permission();
+	
+	/**
+	 * @return bool
+	 */
 	public function is_flag_add_folder();
+	
+	/**
+	 * @return bool
+	 */
 	public function is_flag_cmd_folder();
+	
+	/**
+	 * @return bool
+	 */
 	public function is_flag_rename_folder();
-	
-	// public function create($name, $toid, $root, $path, $owner_id, $owner_group_id);
-	
+
+	/**
+	 * @return bool
+	 */
 	public function exist_folder();
+	
+	/**
+	 * @param string $name
+	 * @return bool
+	 */
 	public function exist_subfolder_name($name);
 	
+	/**
+	 * Deletes a folder including sub-folders and content
+	 * @param bool $recursive
+	 * @param bool $content
+	 * @return bool
+	 */
 	public function delete($recursive, $content);
+	
+	/**
+	 * @return bool
+	 */
 	public function mark_as_deleted();
+	
+	/**
+	 * @return bool
+	 */
 	public function mark_as_undeleted();
 	
+	/**
+	 * Moves a folder to another location
+	 * @param integer $destination_id
+	 * @param bool $force_exist_check
+	 * @return bool
+	 */
 	public function move_folder($destination_id, $force_exist_check);
+	
+	/**
+	 * Copies a folder to another location
+	 * @param integer $destination_id
+	 * @return bool
+	 */
 	public function copy_folder($destination_id, $force_exist_check);
 	
+	/**
+	 * @return string
+	 */
 	public function get_object_path();
+	
+	/**
+	 * @return integer
+	 */
 	public function get_object_id_path();
+	
+	/**
+	 * @return string
+	 */
 	public function get_name();
+	
+	/**
+	 * @return string
+	 */
 	public function get_path();
 	
+	/**
+	 * @param integer $user_id
+	 * @param integer $filesize
+	 * @return bool
+	 */
+	public function get_quota_access($user_id, $filesize);
+	
+	/**
+	 * @param string $name
+	 * @return bool
+	 */
 	public function set_name($name);
+	
+	/**
+	 * @param integer $flag
+	 * @return bool
+	 */
 	public function set_flag($flag);
 	
+	/**
+	 * @param integer $user_id
+	 * @param integer $filesize
+	 * @return bool
+	 */
+	public function increase_filesize($user_id, $filesize);
+	
+	/**
+	 * @param integer $user_id
+	 * @param integer $filesize
+	 * @return bool
+	 */
+	public function decrease_filesize($user_id, $filesize);
+	
+	/**
+	 * Returns an array with all subfolders
+	 * @return array
+	 */
 	public function get_subfolder_array();
+	
+	/**
+	 * Checks if images are in the current folder
+	 * @return bool
+	 */
 	public function is_folder_image_content();
 	
+	/**
+	 * @param string $path
+	 * @return integer
+	 */
 	public static function get_folder_by_path($path);
+	
+	/**
+	 * @param integer $data_entity_id
+	 * @return integer
+	 */
+	public static function get_folder_id_by_data_entity_id($data_entity_id);
+	
+	/**
+	 * @param integer $data_entity_id
+	 * @return integer
+	 */
+	public static function get_data_entity_id_by_folder_id($folder_id);
+	
+	/**
+	 * @param string $type
+	 * @param string $handling_class
+	 * @param integer $include_id
+	 * @return bool
+	 */
+	public static function register_type($type, $handling_class, $include_id);
+	
+	/**
+	 * @param integer $include_id
+	 * @return bool
+	 */
+	public static function delete_type_by_include_id($include_id);
+	
+	/**
+	 * @return array
+	 */
 	public static function list_folder();
+	
+	/**
+     * Returns a new instance of Folder or of one of its child
+     * @param integer $folder_id
+     * @return object
+     */
+    public static function get_instance($folder_id);
 }
 
 ?>

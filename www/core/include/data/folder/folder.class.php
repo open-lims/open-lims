@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -89,6 +89,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 	
 	/**
+	 * @see FolderInterface::is_flag_change_permission()
 	 * @return bool
 	 */
 	public function is_flag_change_permission()
@@ -133,6 +134,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 	
 	/**
+	 * @see FolderInterface::is_flag_add_folder()
 	 * @return bool
 	 */
 	public function is_flag_add_folder()
@@ -185,6 +187,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 	
 	/**
+	 * @see FolderInterface::is_flag_cmd_folder()
 	 * @return bool
 	 */
 	public function is_flag_cmd_folder()
@@ -228,6 +231,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 	
 	/**
+	 * @see FolderInterface::is_flag_rename_folder()
 	 * @return bool
 	 */
 	public function is_flag_rename_folder()
@@ -278,7 +282,6 @@ class Folder extends DataEntity implements FolderInterface
 	 * Creates a new folder
 	 * @param string $name
 	 * @param integer $toid
-	 * @param bool $root
 	 * @param string $path
 	 * @param integer $owner_id
 	 * @param integer $owner_group_id
@@ -371,6 +374,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 	
 	/**
+	 * @see FolderInterface::exist_folder()
 	 * @return bool
 	 */
 	public function exist_folder()
@@ -386,6 +390,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 
 	/**
+	 * @see FolderInterface::exist_subfolder_name()
 	 * @param string $name
 	 * @return bool
 	 */
@@ -393,7 +398,7 @@ class Folder extends DataEntity implements FolderInterface
 	{
 		if ($this->folder_id and $this->folder)
 		{
-			$data_entity_array = $this->get_childs();
+			$data_entity_array = $this->get_children();
 			if (is_array($data_entity_array) and count($data_entity_array) >= 1)
 			{
 				foreach($data_entity_array as $key => $value)
@@ -421,7 +426,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 	
 	/**
-	 * Deletes a folder including sub-folders and content
+	 * @see FolderInterface::delete()
 	 * @param bool $recursive
 	 * @param bool $content
 	 * @return bool
@@ -471,7 +476,7 @@ class Folder extends DataEntity implements FolderInterface
 				}
 			
 				
-				$data_entity_array = $this->get_childs();
+				$data_entity_array = $this->get_children();
 				
 				if (is_array($data_entity_array) and count($data_entity_array) >= 1)
 				{
@@ -629,6 +634,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 	
 	/**
+	 * @see FolderInterface::mark_as_deleted()
 	 * @return bool
 	 */
 	public function mark_as_deleted()
@@ -644,6 +650,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 	
 	/**
+	 * @see FolderInterface::mark_as_undeleted()
 	 * @return bool
 	 */
 	public function mark_as_undeleted()
@@ -659,7 +666,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 	
 	/**
-	 * Moves a folder to another location
+	 * @see FolderInterface::move_folder()
 	 * @param integer $destination_id
 	 * @param bool $force_exist_check
 	 * @return bool
@@ -783,7 +790,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 	
 	/**
-	 * Copies a folder to another location
+	 * @see FolderInterface::copy_folder()
 	 * @param integer $destination_id
 	 * @return bool
 	 * @todo LATER: Implementation - Copy folder is not supported in current version
@@ -794,6 +801,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 
 	/**
+	 * @see FolderInterface::get_object_path()
 	 * @return string
 	 */
 	public function get_object_path()
@@ -852,6 +860,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 	
 	/**
+	 * @see FolderInterface::get_object_id_path()
 	 * @return integer
 	 */
 	public function get_object_id_path()
@@ -878,6 +887,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 	
 	/**
+	 * @see FolderInterface::get_name()
 	 * @return string
 	 */
 	public function get_name()
@@ -893,6 +903,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 
 	/**
+	 * @see FolderInterface::get_path()
 	 * @return string
 	 */
 	public function get_path()
@@ -906,7 +917,13 @@ class Folder extends DataEntity implements FolderInterface
 			return null;
 		}	
 	}
-		
+
+	/**
+	 * @see FolderInterface::get_quota_access()
+	 * @param integer $user_id
+	 * @param integer $filesize
+	 * @return bool
+	 */
 	public function get_quota_access($user_id, $filesize)
 	{
 		$user_data = new DataUserData($user_id);
@@ -926,6 +943,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 	
 	/**
+	 * @see FolderInterface::set_name()
 	 * @param string $name
 	 * @return bool
 	 */
@@ -942,6 +960,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 
 	/**
+	 * @see FolderInterface::set_flag()
 	 * @param integer $flag
 	 * @return bool
 	 */
@@ -957,6 +976,12 @@ class Folder extends DataEntity implements FolderInterface
 		}
 	}
 
+	/**
+	 * @see FolderInterface::increase_filesize()
+	 * @param integer $user_id
+	 * @param integer $filesize
+	 * @return bool
+	 */
 	public function increase_filesize($user_id, $filesize)
 	{
 		$user_data = new DataUserData($user_id);
@@ -967,6 +992,12 @@ class Folder extends DataEntity implements FolderInterface
 		return $user_data->set_filesize($new_user_filesize);
 	}
 	
+	/**
+	 * @see FolderInterface::decrease_filesize()
+	 * @param integer $user_id
+	 * @param integer $filesize
+	 * @return bool
+	 */
 	public function decrease_filesize($user_id, $filesize)
 	{
 		if (is_numeric($user_id))
@@ -985,7 +1016,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 	
 	/**
-	 * Returns an array with all subfolders
+	 * @see FolderInterface::get_subfolder_array()
 	 * @return array
 	 */
 	public function get_subfolder_array()
@@ -994,7 +1025,7 @@ class Folder extends DataEntity implements FolderInterface
 		{
 			$subfolder_array = array();
 			
-			$data_entity_array = $this->get_childs();
+			$data_entity_array = $this->get_children();
 			if (is_array($data_entity_array) and count($data_entity_array) >= 1)
 			{
 				foreach($data_entity_array as $key => $value)
@@ -1015,14 +1046,14 @@ class Folder extends DataEntity implements FolderInterface
 	}
 
 	/**
-	 * Checks if images are in the current folder
+	 * @see FolderInterface::is_folder_image_content()
 	 * @return bool
 	 */
 	public function is_folder_image_content()
 	{
 		if ($this->folder and $this->folder_id)
 		{
-			$data_entity_array = $this->get_childs();
+			$data_entity_array = $this->get_children();
 			
 			if (is_array($data_entity_array) and count($data_entity_array) >= 1)
 			{
@@ -1049,6 +1080,7 @@ class Folder extends DataEntity implements FolderInterface
 	
 	
 	/**
+	 * @see FolderInterface::get_folder_by_path()
 	 * @param string $path
 	 * @return integer
 	 */
@@ -1065,6 +1097,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 
 	/**
+	 * @see FolderInterface::get_folder_id_by_data_entity_id()
 	 * @param integer $data_entity_id
 	 * @return integer
 	 */
@@ -1074,6 +1107,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 	
 	/**
+	 * @see FolderInterface::get_data_entity_id_by_folder_id()
 	 * @param integer $data_entity_id
 	 * @return integer
 	 */
@@ -1083,6 +1117,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 	
 	/**
+	 * @see FolderInterface::register_type()
 	 * @param string $type
 	 * @param string $handling_class
 	 * @param integer $include_id
@@ -1102,6 +1137,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 	
 	/**
+	 * @see FolderInterface::delete_type_by_include_id()
 	 * @param integer $include_id
 	 * @return bool
 	 */
@@ -1111,6 +1147,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
 	
 	/**
+	 * @see FolderInterface::list_folder()
 	 * @return array
 	 */
 	public static function list_folder()
@@ -1119,7 +1156,7 @@ class Folder extends DataEntity implements FolderInterface
 	}
     
     /**
-     * Returns a new instance of Folder or of one of its child
+     * @see FolderInterface::get_instance()
      * @param integer $folder_id
      * @return object
      */

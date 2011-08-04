@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -35,7 +35,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Manages requests of OLVDL var requests
  * @package data
  */
-class ValueVar implements ValueVarInterface
+class ValueVar implements ValueVarInterface, EventListenerInterface
 {
     private $folder_id;
     
@@ -136,6 +136,7 @@ class ValueVar implements ValueVarInterface
     }
 
     /**
+     * @see ValueVarInterface::get_content()
      * @param string $string
      * @return mixed
      */
@@ -206,6 +207,7 @@ class ValueVar implements ValueVarInterface
     
 
     /**
+     * @see ValueVarInterface::register_type()
      * @param string $name
      * @param stirng $handling_class
      * @param bool $ignore_this
@@ -226,6 +228,7 @@ class ValueVar implements ValueVarInterface
 	}
 	
 	/**
+	 * @see ValueVarInterface::delete_by_include_id()
 	 * @param integer $include_id
 	 * @return bool
 	 */
@@ -235,7 +238,9 @@ class ValueVar implements ValueVarInterface
 	}
 	
     /**
+     * @see EventListenerInterface::listen_events()
      * @param object $event_object
+     * @return bool
      */
     public static function listen_events($event_object)
     {    	

@@ -1,8 +1,8 @@
 <?php
 /**
- * @package organisation_unit
+ * @package base
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -29,7 +29,7 @@ require_once("../../base/ajax.php");
 
 /**
  * Organisation Unit AJAX IO Class
- * @package organisation_unit
+ * @package base
  */
 class AdminGeneralAjax extends Ajax
 {	

@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -69,21 +69,25 @@ interface DataEntityInterface
 	public function can_set_remain();
 	
 	/**
+	 * Returns parent folder as data entity id
 	 * @return integer
 	 */
 	public function get_parent_folder();
 	
 	/**
+	 * Returns parent folder as folder id
 	 * @return integer
 	 */
 	public function get_parent_folder_id();
 	
 	/**
+	 * Returns a set of parent virutal folders with data entity ids
 	 * @return array
 	 */
 	public function get_parent_virtual_folders();
 	
 	/**
+	 * Returns a set of parent virtual folders with virtual folder ids
 	 * @return array
 	 */
 	public function get_parent_virtual_folder_ids();
@@ -91,7 +95,7 @@ interface DataEntityInterface
 	/**
 	 * @return array
 	 */
-	public function get_childs();
+	public function get_children();
 	
 	/**
 	 * @return integer
@@ -153,21 +157,24 @@ interface DataEntityInterface
 	public function set_automatic($automatic);
 	
 	/**
+	 * Sets the current data entity as a child of $data_entity_id
 	 * @param integer $data_entity_id
 	 * @return bool
 	 */
 	public function set_as_child_of($data_entity_id);
 	
 	/**
+	 * Unsets the current data entity from $data_entity_id
 	 * @param integer $data_entity_id
 	 * @return bool
 	 */
 	public function unset_child_of($data_entity_id);
 	
 	/**
+	 * Unsets all children of the current data entity
 	 * @return bool
 	 */
-	public function unset_childs();
+	public function unset_children();
 }
 
 ?>

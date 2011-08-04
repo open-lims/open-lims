@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -28,14 +28,50 @@
  */
 interface PathInterface
 {
+	/**
+	 * @param string $path
+	 */
 	function __construct($path);
+	
 	function __destruct();
 	
+	/**
+	 * Returns the string of the current path
+	 * @return string
+	 */
 	public function get_path_string();
+	
+	/**
+	 * Returns an array of path elements
+	 * @return array
+	 */
 	public function get_path_elements();
+	
+	/**
+	 * Returns the number of path elements
+	 * @return integer
+	 */
 	public function get_path_length();
+	
+	/**
+	 * Returns the last element of the path
+	 * @return string
+	 */
 	public function get_last_element();
+	
+	/**
+	 * Replaces a an given element of the path
+	 * @param string $replace
+	 * @param integer $position
+	 * @return bool
+	 */
 	public function replace_element_position($replace, $position);
+	
+	/**
+	 * Adds an element at the end of the path
+	 * @param string $name
+	 * @return bool
+	 */
 	public function add_element($name);
 }
 

@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -58,7 +58,7 @@ interface DataUserDataInterface
 	public function set_filesize($filesize);
 	
 	/**
-	 * @return integer
+	 * @return integer Used Diskspace of all uses
 	 */
 	public static function get_used_space();
 }

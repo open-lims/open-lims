@@ -1,8 +1,8 @@
 <?php 
 /**
- * @package data
+ * @package organiser
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 

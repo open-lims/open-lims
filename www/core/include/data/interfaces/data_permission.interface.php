@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -28,17 +28,52 @@
  */
 interface DataPermissionInterface
 {	
+	/**
+	 * @param string type file|value|folder
+	 * @param integer $id
+	 */
 	function __construct($type, $id);
+	
 	function __destruct();
 	
+	/**
+	 * Returns an array with permission-information
+	 * @return array
+	 */
 	public function get_permission_array();
+	
+	/**
+	 * Sets the array
+	 * @param array $array
+	 * @return bool
+	 */
 	public function set_permission_array($array);
 	
+	/**
+	 * @return integer
+	 */
 	public function get_owner_id();
+	
+	/**
+	 * @return integer
+	 */
 	public function get_owner_group_id();
+	
+	/**
+	 * @return bool
+	 */
 	public function get_automatic();
 	
+	/**
+	 * @param integer $owner_id
+	 * @return bool
+	 */
 	public function set_owner_id($owner_id);
+	
+	/**
+	 * @param integer $owner_group_id
+	 * @return bool
+	 */
 	public function set_owner_group_id($owner_group_id);
 }
 

@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -38,6 +38,11 @@ class DataPath implements DataPathInterface
 	private $folder_id;
 	private $virtual_folder_id;
 
+	/**
+	 * @see DataPathInterface::__construct()
+	 * @param integer $folder_id
+	 * @param integer $virtual_folder_id
+	 */
     function __construct($folder_id, $virtual_folder_id)
     {
     	global $session, $user;
@@ -262,6 +267,7 @@ class DataPath implements DataPathInterface
    	}
    	   	   	
    	/**
+   	 * @see DataPathInterface::get_path()
    	 * @return string
    	 */
    	public function get_path()
@@ -277,7 +283,7 @@ class DataPath implements DataPathInterface
    	}
    	
    	/**
-   	 * Returns the path
+   	 * @see DataPathInterface::get_stack_path()
    	 * @return string
    	 */
    	public function get_stack_path() {
@@ -309,7 +315,7 @@ class DataPath implements DataPathInterface
    	}
    	
    	/**
-   	 * Removes last two entries of the stack an returns the virtual-flag from the first of them
+   	 * @see DataPathInterface::get_previous_entry_virtual()
    	 * @return bool
    	 */
    	public function get_previous_entry_virtual()
@@ -329,7 +335,7 @@ class DataPath implements DataPathInterface
    	}
    	
     /**
-   	 * Removes last two entries of the stack an returns the first of them
+   	 * @see DataPathInterface::get_previous_entry_id()
    	 * @return integer
    	 */
    	public function get_previous_entry_id()
@@ -349,7 +355,7 @@ class DataPath implements DataPathInterface
    	}
 	
 	/**
-	 * Returns the type of the last entry.
+	 * @see DataPathInterface::get_last_entry_type()
 	 * @return bool
 	 */
 	public function get_last_entry_type()
@@ -369,7 +375,7 @@ class DataPath implements DataPathInterface
 	}
 	
 	/**
-	 * Returns the id of the last entry.
+	 * @see DataPathInterface::get_last_entry_id()
 	 * @return bool
 	 */
 	public function get_last_entry_id()
@@ -389,7 +395,7 @@ class DataPath implements DataPathInterface
 	}	
 	
     /**
-	 * Deletes the stack
+	 * @see DataPathInterface::delete_stack()
 	 */
     public function delete_stack()
     {

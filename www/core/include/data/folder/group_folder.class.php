@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -66,6 +66,10 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 		parent::__destruct();
 	}
 	
+	/**
+	 * @param integer $group_id
+	 * @return bool
+	 */
 	public function create($group_id)
 	{
 		if (is_numeric($group_id))
@@ -119,6 +123,7 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 	}
 	
 	/**
+	 * @see ConcreteFolderCaseInterface::delete()
 	 * @param bool $recursive
 	 * @param bool $content
 	 * @return bool
@@ -167,7 +172,7 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 	
 	
 	/**
-	 * Checks if $folder_id is a case of Group Folder
+	 * @see ConcreteFolderCaseInterface::is_case()
 	 * @param integer $folder_id
 	 * @return bool
 	 */
@@ -191,11 +196,20 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 		}
 	}
 	
+	/**
+	 * @param integer $group_id
+	 * @return integer
+	 */
 	public static function get_folder_by_group_id($group_id)
 	{
 		return FolderIsGroupFolder_Access::get_entry_by_group_id($group_id);
 	}
 	
+	/**
+	 * @see EventListenerInterface::listen_events()
+	 * @param object $event_object
+	 * @return bool
+	 */
 	public static function listen_events($event_object)
 	{
 		if ($event_object instanceof GroupCreateEvent)

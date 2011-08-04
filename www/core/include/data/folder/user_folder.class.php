@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -66,6 +66,10 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 		parent::__destruct();
 	}
 
+	/**
+	 * @param integer $user_id
+	 * @return bool
+	 */
 	public function create($user_id)
 	{
 		if (is_numeric($user_id))
@@ -153,9 +157,8 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 		}
 	}
 	
-	// Wird über konkretisierung automatisch über Folder ausgeführt,
-	// kann aber auch direkt ausgeführt werden (wenn Klasse bekannt)
 	/**
+	 * @see ConcreteFolderCaseInterface::delete()
 	 * @param bool $recursive
 	 * @param bool $content
 	 * @return bool
@@ -204,7 +207,7 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 	
 	
 	/**
-	 * Checks if $folder_id is a case of User Folder
+	 * @see ConcreteFolderCaseInterface::is_case()
 	 * @param integer $folder_id
 	 * @return bool
 	 */
@@ -228,11 +231,20 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 		}
 	}
 	
+	/**
+	 * @param integer $user_id
+	 * @return integer
+	 */
 	public static function get_folder_by_user_id($user_id)
 	{
 		return FolderIsUserFolder_Access::get_entry_by_user_id($user_id);
 	}
 	
+	/**
+	 * @see EventListenerInterface::listen_events()
+	 * @param object $event_object
+	 * @return bool
+	 */
 	public static function listen_events($event_object)
 	{
 		if ($event_object instanceof UserCreateEvent)

@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -28,21 +28,52 @@
  */
 interface DataPathInterface
 {
+	/**
+	 * @param integer $folder_id
+	 * @param integer $virtual_folder_id
+	 */
 	function __construct($folder_id, $virtual_folder_id);	
+	
 	function __destruct();
 	
-	// private function clear_stack();
-	// private function check_stack();
-	// private function init_stack($folder_id);
-	// private function push_folder_id($folder_id);
-	// private function push_virtual_folder_id($virtual_folder_id);
-	
+	/**
+   	 * @return string
+   	 */
 	public function get_path();
+	
+	/**
+   	 * Returns the path
+   	 * @return string
+   	 */
 	public function get_stack_path();
+	
+	/**
+   	 * Removes last two entries of the stack an returns the virtual-flag from the first of them
+   	 * @return bool
+   	 */
 	public function get_previous_entry_virtual();
+	
+	/**
+   	 * Removes last two entries of the stack an returns the first of them
+   	 * @return integer
+   	 */
 	public function get_previous_entry_id();
+	
+	/**
+	 * Returns the type of the last entry.
+	 * @return bool
+	 */
 	public function get_last_entry_type();
+	
+	/**
+	 * Returns the id of the last entry.
+	 * @return bool
+	 */
 	public function get_last_entry_id();
+	
+	/**
+	 * Deletes the stack
+	 */
 	public function delete_stack();
 }
 ?>

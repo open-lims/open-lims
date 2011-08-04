@@ -2,7 +2,7 @@
 /**
  * @package data
  * @version 0.4.0.0
- * @author Roman Konertz
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
@@ -52,6 +52,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	private $autofield_array_string;
 
 	/**
+	 * @see ValueInterface::__construct();
 	 * @param integer $value_id
 	 */
     function __construct($value_id)
@@ -84,6 +85,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
     }
 	
 	/**
+	 * @see DataEntityInterface::can_set_automatic()
  	 * @return bool
 	 */
 	public function can_set_automatic()
@@ -100,6 +102,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see DataEntityInterface::can_set_data_entity()
 	 * @return bool
 	 */
 	public function can_set_data_entity()
@@ -116,6 +119,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see DataEntityInterface::can_set_control()
 	 * @return bool
 	 */
 	public function can_set_control()
@@ -132,6 +136,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see DataEntityInterface::can_set_remain()
 	 * @return bool
 	 */
 	public function can_set_remain()
@@ -148,7 +153,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
     
 	/**
-	 * Opens another version of the value with internal revision id
+	 * @see ValueInterface::open_internal_revision()
 	 * @param integer
 	 * @return bool
 	 */
@@ -185,7 +190,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
     	
 	/**
-	 * Creates a new value
+	 * @see ValueInterface::create()
 	 * @param integer $folder_id
 	 * @param integer $owner_id
 	 * @param integer $type_id
@@ -315,7 +320,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Deletes a value
+	 * @see ValueInterface::delete()
 	 * @return bool
 	 */
 	public function delete()
@@ -389,7 +394,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 
 	/**
-	 * Deletes a specific value version
+	 * @see ValueInterface::delete_version()
 	 * @param integer $internal_revision
 	 * @return bool
 	 */
@@ -486,7 +491,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}	
 	
 	/**
-	 * Returns true, if a value version exists
+	 * @see ValueInterface::exist_value_version()
 	 * @param integer $internal_revision
 	 * @return bool
 	 */
@@ -503,7 +508,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}	
 
 	/**
-	 * Updates the current value
+	 * @see ValueInterface::update()
 	 * @param array $value_array
 	 * @param integer $previous_version_id
 	 * @param bool $major
@@ -797,7 +802,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 
 	/**
-	 * Moves value to another location
+	 * @see ValueInterface::move()
 	 * @todo LATER: Move value is not supported in current version
 	 * @param integer $folder_id
 	 * @return bool
@@ -808,7 +813,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Copies value to another location
+	 * @see ValueInterface::copy()
 	 * @todo LATER: Copy value is not supported in current version
 	 * @param integer $folder_id
 	 * @return bool
@@ -819,7 +824,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 
 	/**
-	 * Checks if the current value is the current version
+	 * @see ValueInterface::is_current()
 	 * @return bool
 	 */
 	public function is_current()
@@ -842,6 +847,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 
 	/**
+	 * @see ValueInterface::get_value_internal_revisions()
 	 * @return integer
 	 */
 	public function get_value_internal_revisions()
@@ -869,6 +875,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see ValueInterface::get_type_name()
 	 * @return string
 	 */	
 	public function get_type_name()
@@ -885,7 +892,9 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see ValueInterface::get_name()
 	 * @todo LATER: individual value naming
+	 * @return string
 	 */
 	public function get_name()
 	{
@@ -893,6 +902,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see ValueInterface::get_type_id()
 	 * @return integer
 	 */
 	public function get_type_id()
@@ -908,7 +918,8 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 	
 	/**
-	 * @return string (X.Y.Z)
+	 * @see ValueInterface::get_version()
+	 * @return string
 	 */
 	public function get_version()
 	{
@@ -943,6 +954,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see ValueInterface::get_internal_revision()
 	 * @return integer
 	 */
 	public function get_internal_revision()
@@ -958,6 +970,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see ValueInterface::get_value()
 	 * @return string
 	 */
 	public function get_value()
@@ -973,6 +986,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see ValueInterface::get_checksum()
 	 * @return string
 	 */
 	public function get_checksum()
@@ -987,6 +1001,10 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 		}
 	}
 	
+	/**
+	 * @see ValueInterface::get_version_owner_id()
+	 * @return integer
+	 */
 	public function get_version_owner_id()
 	{
 		if ($this->value_version)
@@ -1000,7 +1018,6 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 	    
     /**
-     * Checks if the xml-array contains one or more each-statements
      * @param array $xml_array
      * @return bool
      */
@@ -1027,7 +1044,6 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
     }
     
     /**
-     * Resolves the each statements of the xml_array
      * @param array $xml_array
      * @return array
      */
@@ -1100,7 +1116,13 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
     		return $xml_return_array;
     	} 	
     }
-    
+
+    /**
+     * @see ValueInterface::get_value_content()
+     * (Replaces self::get_html_form)
+     * @param bool $history
+     * @return array
+     */
     public function get_value_content($history = false)
     {
     	if ($this->value and $this->value_id)
@@ -1260,7 +1282,9 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
     }
     
     /**
-     * @todo implementation
+     * @see ValueInterface::get_value_shape()
+     * @todo implementation (Replaces self::get_html_form)
+     * @return array;
      */
     public function get_value_shape()
     {
@@ -1269,7 +1293,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
     
     /**
      * Returns an HTML-String of the current value
-     * @todo remove HTML
+     * @todo replace this function
      * @param array $error_array
      * @param integer $type_id
      * @return string
@@ -1683,6 +1707,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 		
 	/**
+	 * @see ValueInterface::set_content_array()
 	 * @param array $content_array
 	 */
 	public function set_content_array($content_array)
@@ -1694,6 +1719,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see ValueInterface::set_autofield_array_string()
 	 * @param array $autofield_array_string
 	 */
 	public function set_autofield_array_string($autofield_array_string)
@@ -1706,6 +1732,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	
 	
 	/**
+	 * @see ValueInterface::list_entries_by_type_id()
 	 * @return array
 	 */
 	public static function list_entries_by_type_id($type_id)
@@ -1714,7 +1741,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Returns true, if a value ($value_id) exists
+	 * @see ValueInterface::exist_value()
 	 * @param integer $value_id
 	 * @return bool
 	 */
@@ -1731,6 +1758,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see ValueInterface::get_value_id_by_data_entity_id()
 	 * @param integer $data_entity_id
 	 * @return integer
 	 */
@@ -1740,7 +1768,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Sets the owner_id on null, where owner_id = $owner_id
+	 * @see ValueInterface::set_owner_group_id_on_null()
 	 * @param integer $owner_group_id
 	 * @return bool
 	 */
@@ -1750,7 +1778,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Checks if an value-id is a type of type-id
+	 * @see ValueInterface::is_entry_type_of()
 	 * @param integer $value_id
 	 * @param integer $type_id
 	 * @return bool
@@ -1761,6 +1789,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
      */
