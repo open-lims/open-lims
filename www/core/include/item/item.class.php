@@ -151,6 +151,7 @@ class Item implements ItemInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see ItemInterface::get_item_id()
 	 * @return integer
 	 */
 	public final function get_item_id()
@@ -166,7 +167,7 @@ class Item implements ItemInterface, EventListenerInterface
 	}
 		
 	/**
-	 * Checks if the current item is classified
+	 * @see ItemInterface::is_classified()
 	 * @return bool
 	 */
 	public final function is_classified()
@@ -191,7 +192,7 @@ class Item implements ItemInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Returns the class-ids of the current item
+	 * @see ItemInterface::get_class_ids()
 	 * @return integer
 	 */
 	public final function get_class_ids()
@@ -217,7 +218,9 @@ class Item implements ItemInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see ItemInterface::get_information()
 	 * @todo implementation
+	 * @return string
 	 */
 	public final function get_information()
 	{
@@ -225,6 +228,7 @@ class Item implements ItemInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see ItemInterface::get_datetime()
 	 * @return string
 	 */
 	public function get_datetime()
@@ -241,6 +245,7 @@ class Item implements ItemInterface, EventListenerInterface
 		
 		
 	/**
+	 * @see ItemInterface::register_type()
 	 * @param string $type
 	 * @param string $handling_class
 	 * @param integer $include_id
@@ -259,12 +264,18 @@ class Item implements ItemInterface, EventListenerInterface
 		}
 	}
 	
+	/**
+	 * @see ItemInterface::delete_type_by_include_id()
+	 * @param integer $include_id
+	 * @return bool
+	 */
 	public static function delete_type_by_include_id($include_id)
 	{
 		return ItemConcretion_Access::delete_by_include_id($include_id);
 	}
 	
 	/**
+	 * @see ItemInterface::list_types()
 	 * @return array
 	 */
 	public static function list_types()
@@ -272,13 +283,20 @@ class Item implements ItemInterface, EventListenerInterface
 		return ItemConcretion_Access::list_entries();
 	}
 	
+	/**
+	 * @see ItemInterface::get_handling_class_by_type()
+	 * @param string $type
+	 * @return string
+	 */
 	public static function get_handling_class_by_type($type)
 	{
 		return ItemConcretion_Access::get_handling_class_by_type($type);
 	}
 	
     /**
+     * @see EventListenerInterface::listen_events()
      * @param object $event_object
+     * @return bool
      */
     public static function listen_events($event_object)
     {    	

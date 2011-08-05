@@ -77,7 +77,6 @@ interface ItemListenerInterface
 	 */
 	public static function get_instance_by_item_id($item_id);
 	
-	
 	/**
 	 * Returns the generic name of the item-type
 	 * @param string $type
@@ -101,7 +100,6 @@ interface ItemListenerInterface
 	 * @return string
 	 */
 	public static function get_generic_link($type, $id);
-	
 	
 	/**
 	 * Returns the SELECT-SQL part for data-search as an array

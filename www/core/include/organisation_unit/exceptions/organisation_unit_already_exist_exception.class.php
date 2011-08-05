@@ -22,7 +22,7 @@
  */
 
 /**
- * Group Already Exist Exception
+ * Organisation Unit Already Exist Exception
  * @package organisation_unit
  */
 class OrganisationUnitAlreadyExistException extends Exception

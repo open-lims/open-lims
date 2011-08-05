@@ -28,6 +28,38 @@
  */ 		 
 interface Equipment_WrapperInterface
 {
-
+	/**
+	 * Returns a set of equipment in relations of a SQL-String
+	 * @param string $item_sql
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_item_equipments($item_sql, $order_by, $order_method, $start, $end);
+	
+	/**
+	 * Returns the number of equipments in relations of a SQL-String
+	 * @param string $item_id
+	 * @return integer
+	 */
+	public static function count_item_equipments($item_sql);
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_organisation_unit_equipments($organisation_unit_id, $order_by, $order_equipment, $start, $end);
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @return integer
+	 */
+	public static function count_organisation_unit_equipments($organisation_unit_id);
 }
 ?>

@@ -38,7 +38,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 class Manufacturer_Wrapper implements Manufacturer_WrapperInterface
 {
 	/**
-	 * Returns a list of manufacturers
+	 * @see Manufacturer_WrapperInterface::list_manufacturers()
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -51,7 +51,7 @@ class Manufacturer_Wrapper implements Manufacturer_WrapperInterface
 	}
 	
 	/**
-	 * Returns the number of manufacturers
+	 * @see Manufacturer_WrapperInterface::count_manufacturers()
 	 * @return integer
 	 */
 	public static function count_manufacturers()

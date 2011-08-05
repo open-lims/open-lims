@@ -28,9 +28,26 @@
  */ 
 interface XmlInterface
 {
+	/**
+	 * @param string $string
+	 */
 	function __construct($string);
+	
+	/**
+	 * Parses the given XML-String
+	 */
 	public function parser();
+	
+	/**
+	 * Returns the XML-String
+	 * @return string
+	 */
 	public function get_string();
+	
+	/**
+	 * Returns the XML-Array
+	 * @return array
+	 */
 	public function get_array();
 }
 ?>

@@ -27,6 +27,14 @@
  */
 class Equipment_Wrapper_Access
 {	
+	/**
+	 * @param string $item_sql
+	 * @param string $order_by
+	 * @param string $order_equipment
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
 	public static function list_item_equipments($item_sql, $order_by, $order_equipment, $start, $end)
 	{
 		global $db;
@@ -114,6 +122,10 @@ class Equipment_Wrapper_Access
 		}
 	}
 	
+	/**
+	 * @param string $item_sql
+	 * @return integer
+	 */
 	public static function count_item_equipments($item_sql)
 	{
 		global $db;
@@ -135,6 +147,14 @@ class Equipment_Wrapper_Access
 		}
 	}
 	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param string $order_by
+	 * @param string $order_equipment
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
 	public static function list_organisation_unit_equipments($organisation_unit_id, $order_by, $order_equipment, $start, $end)
 	{
 		global $db;
@@ -217,6 +237,10 @@ class Equipment_Wrapper_Access
 		}
 	}
 	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @return integer
+	 */
 	public static function count_organisation_unit_equipments($organisation_unit_id)
 	{
 		global $db;

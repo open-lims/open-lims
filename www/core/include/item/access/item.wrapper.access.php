@@ -27,6 +27,17 @@
  */
 class Item_Wrapper_Access
 {
+	/**
+	 * @param string $string
+	 * @param array $item_select_sql_array
+	 * @param string $item_join_sql
+	 * @param string $item_where_sql
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
    	public static function list_fulltext_search($string, $item_select_sql_array, $item_join_sql, $item_where_sql, $order_by, $order_method, $start, $end)
    	{
    		global $db, $user;
@@ -159,6 +170,13 @@ class Item_Wrapper_Access
 		return $return_array;
    	}
 	
+   	/**
+	 * @param string $string
+	 * @param array $item_select_sql_array
+	 * @param string $item_join_sql
+	 * @param string $item_where_sql
+	 * @return integer
+	 */
    	public static function count_fulltext_search($string, $item_select_sql_array, $item_join_sql, $item_where_sql)
    	{
    		global $db, $user;

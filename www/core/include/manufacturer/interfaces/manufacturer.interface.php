@@ -28,15 +28,47 @@
  */ 		 
 interface ManufacturerInterface
 {
+	/**
+	 * @param integer $manufacturer_id
+	 */
 	function __construct($manufacturer_id);
+	
 	function __destruct();
 	
+	/**
+	 * @param string $name
+	 * @return $name
+	 */
 	public function create($name);
+	
+	/**
+	 * @return bool
+	 */
 	public function delete();
+	
+	/**
+	 * @return string
+	 */
 	public function get_name();
 	
+	/**
+	 * @param string $name
+	 * @return bool
+	 */
 	public static function exist_name($name);
+	
+	/**
+	 * @param string $string
+	 * @return integer
+	 */
 	public static function count_entries($string);
+	
+	/**
+	 * @param integer $number_of_entries
+	 * @param integer $start_entry
+	 * @param string $start_string
+	 * @return array
+	 */
 	public static function list_manufacturers($number_of_entries, $start_entry, $start_string);
 }
 

@@ -38,7 +38,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 class Equipment_Wrapper implements Equipment_WrapperInterface
 {
 	/**
-	 * Returns a set of equipment in relations of a SQL-String
+	 * @see Equipment_WrapperInterface::list_item_equipments()
 	 * @param string $item_sql
 	 * @param string $order_by
 	 * @param string $order_method
@@ -52,7 +52,7 @@ class Equipment_Wrapper implements Equipment_WrapperInterface
 	}
 	
 	/**
-	 * Returns the number of equipments in relations of a SQL-String
+	 * @see Equipment_WrapperInterface::count_item_equipments()
 	 * @param string $item_id
 	 * @return integer
 	 */
@@ -61,11 +61,25 @@ class Equipment_Wrapper implements Equipment_WrapperInterface
 		return Equipment_Wrapper_Access::count_item_equipments($item_sql);
 	}
 	
+	/**
+	 * @see Equipment_WrapperInterface::list_organisation_unit_equipments()
+	 * @param integer $organisation_unit_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
 	public static function list_organisation_unit_equipments($organisation_unit_id, $order_by, $order_equipment, $start, $end)
 	{
 		return Equipment_Wrapper_Access::list_organisation_unit_equipments($organisation_unit_id, $order_by, $order_equipment, $start, $end);
 	}
 	
+	/**
+	 * @see Equipment_WrapperInterface::count_organisation_unit_equipments()
+	 * @param integer $organisation_unit_id
+	 * @return integer
+	 */
 	public static function count_organisation_unit_equipments($organisation_unit_id)
 	{
 		return Equipment_Wrapper_Access::count_organisation_unit_equipments($organisation_unit_id);

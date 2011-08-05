@@ -38,12 +38,13 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Item Information Management Class
  * @package item
  */
-class ItemInformation
+class ItemInformation implements ItemInformationInterface
 {
 	private $item_information_id;
 	private $item_information;
 
 	/**
+	 * @see ItemInformationInterface::__construct()
 	 * @param integer $item_information_id
 	 */
     function __construct($item_information_id)
@@ -67,7 +68,7 @@ class ItemInformation
     }
     
     /**
-     * Creates a new item-information
+     * @see ItemInformationInterface::create()
      * @param string $description
      * @param string $keywords
      * @return integer
@@ -98,7 +99,7 @@ class ItemInformation
     }
     
     /**
-     * Deletes an item-information
+     * @see ItemInformationInterface::delete()
      * @return bool
      */
     public function delete()
@@ -133,7 +134,7 @@ class ItemInformation
     }
     
     /**
-     * Links a class to the current item-information
+     * @see ItemInformationInterface::link_class()
      * @param integer $class_id
      * @return integer
      */
@@ -151,7 +152,7 @@ class ItemInformation
     }
     
     /**
-     * unlinks a class from the current item-information
+     * @see ItemInformationInterface::unlink_class()
      * @param integer $class_id
      * @return bool
      */
@@ -201,7 +202,7 @@ class ItemInformation
     }
     
     /**
-     * Links an item to the current item-information
+     * @see ItemInformationInterface::link_item()
      * @param integer $item_id
      * @return integer
      */    
@@ -219,7 +220,7 @@ class ItemInformation
     }
     
     /**
-     * Unlinks an item form the current item-information
+     * @see ItemInformationInterface::unlink_item()
      * @param integer $item_id
      * @return bool
      */
@@ -268,6 +269,7 @@ class ItemInformation
  
 	
 	/** 
+	 * @see ItemInformationInterface::list_class_information()
 	 * @param integer $class_id
 	 * @return array
 	 */
@@ -299,6 +301,7 @@ class ItemInformation
     }
 	
 	/**
+	 * @see ItemInformationInterface::list_item_information()
 	 * @param integer $item_id
 	 * @return integer
 	 */

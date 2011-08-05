@@ -44,6 +44,7 @@ class Location implements LocationInterface
 	private $location;
     
 	/**
+	 * @see LocationInterface::__construct()
 	 * @param integer $location_id
 	 */
 	function __construct($location_id)
@@ -58,6 +59,7 @@ class Location implements LocationInterface
 	}
 	
 	/**
+	 * @see LocationInterface::create()
 	 * @param integer $toid
 	 * @param integer $type_id
 	 * @param string $name
@@ -78,6 +80,7 @@ class Location implements LocationInterface
 	}
 	
 	/**
+	 * @see LocationInterface::delete()
 	 * @return bool
 	 */
 	public function delete()
@@ -127,6 +130,7 @@ class Location implements LocationInterface
 	}
 	
 	/**
+	 * @see LocationInterface::get_name()
 	 * @param bool $show_additional_name
 	 * @return string
 	 */
@@ -178,6 +182,7 @@ class Location implements LocationInterface
 	}
 	
 	/**
+	 * @see LocationInterface::get_type_id()
 	 * @return integer
 	 */
 	public function get_type_id()
@@ -193,6 +198,7 @@ class Location implements LocationInterface
 	}
 	
 	/**
+	 * @see LocationInterface::get_db_name()
 	 * @return string
 	 */
 	public function get_db_name()
@@ -208,6 +214,7 @@ class Location implements LocationInterface
 	}
 	
 	/**
+	 * @see LocationInterface::get_additional_name()
 	 * @return string
 	 */
 	public function get_additional_name()
@@ -223,6 +230,7 @@ class Location implements LocationInterface
 	}
 	
 	/**
+	 * @see LocationInterface::get_prefix()
 	 * @return bool
 	 */
 	public function get_prefix()
@@ -238,6 +246,7 @@ class Location implements LocationInterface
 	}
 	
 	/**
+	 * @see LocationInterface::get_children()
 	 * @return array
 	 */
 	public function get_children()
@@ -253,6 +262,7 @@ class Location implements LocationInterface
 	}
 	
 	/**
+	 * @see LocationInterface::set_type_id()
 	 * @param integer $type_id
 	 * @return bool
 	 */
@@ -269,6 +279,7 @@ class Location implements LocationInterface
 	}
 	
 	/**
+	 * @see LocationInterface::set_db_name()
 	 * @param string $name
 	 * @return bool
 	 */
@@ -285,6 +296,7 @@ class Location implements LocationInterface
 	}
 	
 	/**
+	 * @see LocationInterface::set_additional_name()
 	 * @param string $additional_name
 	 * @return bool
 	 */
@@ -301,6 +313,7 @@ class Location implements LocationInterface
 	}
 	
 	/**
+	 * @see LocationInterface::set_prefix()
 	 * @param bool $prefix
 	 * @return bool
 	 */
@@ -318,6 +331,7 @@ class Location implements LocationInterface
 	
 	
 	/**
+	 * @see LocationInterface::exist_id()
 	 * @param integer $id
 	 * @return bool
 	 */
@@ -327,6 +341,7 @@ class Location implements LocationInterface
 	}
 	
 	/**
+	 * @see LocationInterface::list_root_entries()
 	 * @return array
 	 */
 	public static function list_root_entries()
@@ -335,6 +350,7 @@ class Location implements LocationInterface
 	}
 	
 	/**
+	 * @see LocationInterface::list_entries()
 	 * @return array
 	 */
 	public static function list_entries()
@@ -342,6 +358,10 @@ class Location implements LocationInterface
 		return Location_Access::list_entries();
 	}
 
+	/**
+	 * @see LocationInterface::list_types()
+	 * @return array
+	 */
 	public static function list_types()
 	{
 		return LocationType_Access::list_entries();

@@ -152,7 +152,7 @@ class OrganisationUnitAjax extends Ajax
 
 			$organisation_unit = new OrganisationUnit($id);
 			
-			$organisation_unit_array = $organisation_unit->get_organisation_unit_childs();
+			$organisation_unit_array = $organisation_unit->get_organisation_unit_children();
 
 			if (is_array($organisation_unit_array) and count($organisation_unit_array) >= 1)
 			{

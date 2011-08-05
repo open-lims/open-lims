@@ -28,18 +28,64 @@
  */ 		 
 interface EquipmentCatInterface
 {
+	/**
+	 * @param integer $equipment_cat_id
+	 */
 	function __construct($equipment_cat_id);
+	
 	function __destruct();
 	
+	/**
+	 * Creates a equipment-category
+	 * @param integer $toid
+	 * @param string $name
+	 * @return integer
+	 */
 	public function create($toid, $name);
+	
+	/**
+	 * Deletes a equipment-category
+	 * @return bool
+	 */
 	public function delete();
+	
+	/**
+	 * @return string
+	 */
 	public function get_name();
+	
+	/**
+	 * @param string $name
+	 * @return bool
+	 */
 	public function set_name($name);
+	
+	/**
+	 * Returns the children of the current equipment-category
+	 * @return array
+	 */
 	public function get_children();
 	
+	/**
+     * @param integer $id
+     * @return bool
+     */
 	public static function exist_id($id);
+	
+	/**
+     * @param string $name
+     * @return bool
+     */
 	public static function exist_name($name);
+	
+	/**
+     * @return array
+     */
 	public static function list_root_entries();
+	
+	/**
+     * @return array
+     */
 	public static function list_entries();
 }
 

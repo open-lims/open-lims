@@ -38,6 +38,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 class OrganisationUnit_Wrapper implements OrganisationUnit_WrapperInterface
 {
 	/**
+	 * @see OrganisationUnit_WrapperInterface::list_organisation_unit_members()
 	 * @param integer $organisation_unit_id;
 	 * @param string $order_by
 	 * @param string $order_method
@@ -51,6 +52,7 @@ class OrganisationUnit_Wrapper implements OrganisationUnit_WrapperInterface
 	}
 	
 	/**
+	 * @see OrganisationUnit_WrapperInterface::count_organisation_unit_members()
 	 * @param integer $organisation_unit_id
 	 * @return integer
 	 */
@@ -60,6 +62,7 @@ class OrganisationUnit_Wrapper implements OrganisationUnit_WrapperInterface
 	}
 	
 	/**
+	 * @see OrganisationUnit_WrapperInterface::list_organisation_unit_leaders()
 	 * @param integer $organisation_unit_id;
 	 * @param string $order_by
 	 * @param string $order_method
@@ -73,6 +76,7 @@ class OrganisationUnit_Wrapper implements OrganisationUnit_WrapperInterface
 	}
 	
 	/**
+	 * @see OrganisationUnit_WrapperInterface::count_organisation_unit_leaders()
 	 * @param integer $organisation_unit_id
 	 * @return integer
 	 */
@@ -82,6 +86,7 @@ class OrganisationUnit_Wrapper implements OrganisationUnit_WrapperInterface
 	}
 	
 	/**
+	 * @see OrganisationUnit_WrapperInterface::list_organisation_unit_owners()
 	 * @param integer $organisation_unit_id;
 	 * @param string $order_by
 	 * @param string $order_method
@@ -95,6 +100,7 @@ class OrganisationUnit_Wrapper implements OrganisationUnit_WrapperInterface
 	}
 	
 	/**
+	 * @see OrganisationUnit_WrapperInterface::count_organisation_unit_owners()
 	 * @param integer $organisation_unit_id
 	 * @return integer
 	 */
@@ -104,6 +110,7 @@ class OrganisationUnit_Wrapper implements OrganisationUnit_WrapperInterface
 	}
 	
 	/**
+	 * @see OrganisationUnit_WrapperInterface::list_organisation_unit_quality_managers()
 	 * @param integer $organisation_unit_id;
 	 * @param string $order_by
 	 * @param string $order_method
@@ -117,6 +124,7 @@ class OrganisationUnit_Wrapper implements OrganisationUnit_WrapperInterface
 	}
 	
 	/**
+	 * @see OrganisationUnit_WrapperInterface::count_organisation_unit_quality_managers()
 	 * @param integer $organisation_unit_id
 	 * @return integer
 	 */
@@ -126,6 +134,7 @@ class OrganisationUnit_Wrapper implements OrganisationUnit_WrapperInterface
 	}
 	
 	/**
+	 * @see OrganisationUnit_WrapperInterface::list_organisation_unit_groups()
 	 * @param integer $organisation_unit_id;
 	 * @param string $order_by
 	 * @param string $order_method
@@ -139,6 +148,7 @@ class OrganisationUnit_Wrapper implements OrganisationUnit_WrapperInterface
     }
     
     /**
+     * @see OrganisationUnit_WrapperInterface::count_organisation_unit_groups()
 	 * @param integer $organisation_unit_id
 	 * @return integer
 	 */

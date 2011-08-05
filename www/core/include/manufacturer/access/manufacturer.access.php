@@ -281,6 +281,10 @@ class Manufacturer_Access
 	}
 	
 	
+	/**
+	 * @param string $string
+	 * @return integer
+	 */
 	public static function count_entries($string)
 	{
 		global $db;
@@ -309,6 +313,12 @@ class Manufacturer_Access
 		}
 	}
 	
+	/**
+	 * @param integer $number_of_entries
+	 * @param integer $start_entry
+	 * @param string $start_string
+	 * @return array
+	 */
 	public static function list_manufacturers($number_of_entries, $start_entry, $start_string)
 	{
 		global $db;
@@ -393,6 +403,11 @@ class Manufacturer_Access
 		}
 	}
 
+	/**
+	 * @param integer $user_id
+	 * @param integer $new_user_id
+	 * @return bool
+	 */
 	public static function set_user_id_by_user_id($user_id, $new_user_id)
 	{
 		global $db;

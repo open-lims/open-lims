@@ -44,6 +44,7 @@ class ItemClass implements ItemClassInterface
 	private $item_has_item_class;
 
 	/**
+	 * @see ItemClassInterface::__construct()
 	 * @param integer $class_id
 	 */
     function __construct($class_id)
@@ -70,7 +71,7 @@ class ItemClass implements ItemClassInterface
     }
     
     /**
-     * Creates a new item-class
+     * @see ItemClassInterface::create()
      * @param string $name
      * @param integer $owner_id
      * @return integer
@@ -90,7 +91,7 @@ class ItemClass implements ItemClassInterface
     }
     
     /**
-     * Deletes a item-class
+     * @see ItemClassInterface::delete()
      * @return bool
      */
 	public function delete()
@@ -163,7 +164,7 @@ class ItemClass implements ItemClassInterface
     }
     
     /**
-     * Links an item to the current item-class
+     * @see ItemClassInterface::link_item()
      * @param integer $item_id
      * @return bool
      */
@@ -188,7 +189,7 @@ class ItemClass implements ItemClassInterface
     }
  
     /**
-     * Unlinks an item from the current item-class
+     * @see ItemClassInterface::unlink_item()
      * @param integer $item_id
      * @return bool
      */   
@@ -226,7 +227,7 @@ class ItemClass implements ItemClassInterface
     }
     
     /**
-     * List all item of the current item-class
+     * @see ItemClassInterface::list_items()
      * @return array
      */
     public function list_items()
@@ -242,6 +243,7 @@ class ItemClass implements ItemClassInterface
     }
     
     /**
+     * @see ItemClassInterface::get_name()
      * @return string
      */
     public function get_name()
@@ -250,6 +252,7 @@ class ItemClass implements ItemClassInterface
     }
     
     /**
+     * @see ItemClassInterface::get_owner_id()
      * @return integer
      */
     public function get_owner_id()
@@ -258,6 +261,7 @@ class ItemClass implements ItemClassInterface
     }
     
     /**
+     * @see ItemClassInterface::get_datetime()
      * @return string
      */
     public function get_datetime()
@@ -266,6 +270,7 @@ class ItemClass implements ItemClassInterface
     }
     
     /**
+     * @see ItemClassInterface::get_colour()
      * @return string
      */
     public function get_colour()
@@ -274,6 +279,7 @@ class ItemClass implements ItemClassInterface
     }
     
     /**
+     * @see ItemClassInterface::set_name()
      * @param string $name
      * @return bool
      */
@@ -283,6 +289,7 @@ class ItemClass implements ItemClassInterface
     }
     
     /**
+     * @see ItemClassInterface::set_owner_id()
      * @param integer $owner_id
      * @return bool
      */
@@ -292,6 +299,7 @@ class ItemClass implements ItemClassInterface
     }
     
     /**
+     * @see ItemClassInterface::set_colour()
      * @param string $colour
      * @return bool
      */
@@ -302,6 +310,7 @@ class ItemClass implements ItemClassInterface
     
     
     /**
+     * @see ItemClassInterface::list_classes_by_item_id()
      * @param integer $item_id
      * @return array
      */

@@ -69,7 +69,6 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * System Handler Class
  * registers include and module files
  * @package base
- * @todo Modules
  */
 class SystemHandler implements SystemHandlerInterface
 {

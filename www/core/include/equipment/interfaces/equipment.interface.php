@@ -28,15 +28,49 @@
  */ 		 
 interface EquipmentInterface
 {
+	/**
+	 * @param integer $equipment_id
+	 */
 	function __construct($equipment_id);
 	
+	/**
+	 * Creates a new equipment
+	 * @param integer $type_id
+	 * @param integer $owner_id
+	 * @return integer
+	 */
 	public function create($type_id, $owner_id);
+	
+	/**
+	 * Deletes a equipment
+	 * @return bool
+	 */
 	public function delete();
+	
+	/**
+	 * @return integer
+	 */
 	public function get_type_id();
+	
+	/**
+	 * @return integer
+	 */
 	public function get_owner_id();
+	
+	/**
+	 * @return string
+	 */
 	public function get_datetime();
 	
+	/**
+	 * @return array
+	 */
 	public static function list_entries_by_user_id($user_id);
+	
+	/**
+	 * @param integer $type_id
+	 * @return array
+	 */
 	public static function list_entries_by_type_id($type_id);
 }
 

@@ -22,7 +22,7 @@
  */
 
 /**
- * Group Creation Failed Exception
+ * Organisation Unit Creation Failed Exception
  * @package organisation_unit
  */
 class OrganisationUnitCreationFailedException extends Exception

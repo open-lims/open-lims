@@ -36,6 +36,7 @@ interface Item_WrapperInterface
 	 * @param string $order_method
 	 * @param integer $start
 	 * @param integer $end
+	 * @return array
 	 */
 	public static function list_fulltext_search($string, $item_type_array, $language_id, $order_by, $order_method, $start, $end);
 	
@@ -43,6 +44,7 @@ interface Item_WrapperInterface
 	 * @param string $string
 	 * @param array $item_type_array
 	 * @param integer $language_id
+	 * @return integer
 	 */
 	public static function count_fulltext_search($string, $item_type_array, $language_id);
 }

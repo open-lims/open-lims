@@ -36,6 +36,7 @@ class Xml implements XmlInterface
 	private $array;
 
 	/**
+	 * @see XmlInterface::__construct()
 	 * @param string $string
 	 */
 	function __construct($string)
@@ -51,37 +52,7 @@ class Xml implements XmlInterface
 	}
 
 	/**
-	 * Cuts the XML String
-	 * @deprecated Unsafe function, will removed in further versions
-	 * @param string $part
-	 * @return bool
-	 */
-	public function cut($part)
-	{
-		$part = strtolower(trim($part));
-		
-		$searchstring = strtolower($this->string);
-				
-		$start_needle = "<".$part.">";
-		$end_needle = "</".$part.">";
-		$status_start_pos = strpos($searchstring, $start_needle); // Sucht nach StartZeichen
-		$status_end_pos = strpos($searchstring, $end_needle, $status_start_pos); // sucht nach EndZeichen
-								
-		if ($status_start_pos === false)
-		{
-			return false;
-		}		
-
-		$return_string = substr($this->string, $status_start_pos, ($status_end_pos-$status_start_pos));
-		$return_string = str_replace("<".$part.">","",$return_string); // Entfernt zuletzt StartZeichen
-
-		$this->string = $return_string;
-	
-		return true;
-	}
-
-	/**
-	 * Parses the given XML-String
+	 * @see XmlInterface::parser()
 	 */
 	public function parser()
 	{
@@ -331,7 +302,7 @@ class Xml implements XmlInterface
 	}
 	
 	/**
-	 * Returns the XML-String
+	 * @see XmlInterface::get_string()
 	 * @return string
 	 */
 	public function get_string()
@@ -347,7 +318,7 @@ class Xml implements XmlInterface
 	}
 	
 	/**
-	 * Returns the XML-Array
+	 * @see XmlInterface::get_array()
 	 * @return array
 	 */
 	public function get_array()

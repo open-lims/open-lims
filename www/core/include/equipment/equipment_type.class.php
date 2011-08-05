@@ -46,6 +46,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
 	private $equipment_type;
 
 	/**
+	 * @see EquipmentTypeInterface::__construct()
 	 * @param integer $equipment_type_id
 	 */
     function __construct($equipment_type_id)
@@ -66,7 +67,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
     
     /**
-     * Creates a new equipment-type
+     * @see EquipmentTypeInterface::create()
      * @param integer $toid
      * @param string $name
      * @param integer $cat_id
@@ -87,7 +88,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
     
     /**
-     * Deletes a equipment-type
+     * @see EquipmentTypeInterface::delete()
      * @return bool
      */
     public function delete()
@@ -125,6 +126,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
     
     /**
+     * @see EquipmentTypeInterface::get_name()
      * @return string
      */
     public function get_name()
@@ -158,6 +160,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
     
 	/**
+	 * @see EquipmentTypeInterface::get_internal_name()
      * @return string
      */
     public function get_internal_name()
@@ -173,6 +176,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
     
 	/**
+	 * @see EquipmentTypeInterface::get_manufacturer()
      * @return string
      */
     public function get_manufacturer()
@@ -188,6 +192,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
     
     /**
+     * @see EquipmentTypeInterface::get_description()
      * @return string
      */
     public function get_description()
@@ -203,7 +208,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
     
     /**
-     * Returns the cateogory-name of the current equipment-type
+     * @see EquipmentTypeInterface::get_cat_id()
      * @return string
      */
     public function get_cat_id()
@@ -219,7 +224,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
     
     /**
-     * Returns the cateogory-name of the current equipment-type
+     * @see EquipmentTypeInterface::get_cat_name()
      * @return string
      */
     public function get_cat_name()
@@ -235,6 +240,10 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     	}
     }
     
+    /**
+     * @see EquipmentTypeInterface::get_location_id()
+     * @return integer
+     */
     public function get_location_id()
     {
     	if ($this->equipment_type_id and $this->equipment_type)
@@ -248,7 +257,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
         
     /**
-     * Returns the childs of the current equipment-type
+     * @see EquipmentTypeInterface::get_children()
      * @return array
      */
     public function get_children()
@@ -264,6 +273,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
     
   	/**
+  	 * @see EquipmentTypeInterface::set_name()
      * @param string $name
      * @return bool
      */
@@ -280,6 +290,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
     
     /**
+     * @see EquipmentTypeInterface::set_manufacturer()
      * @param string $name
      * @return bool
      */
@@ -294,9 +305,9 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     		return null;
     	}
     }
-    
-    
+
 	/**
+	 * @see EquipmentTypeInterface::set_location_id()
      * @param string $name
      * @return bool
      */
@@ -313,6 +324,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
     
     /**
+     * @see EquipmentTypeInterface::add_responsible_person()
      * @param integer $user_id
      * @return bool
      */
@@ -337,6 +349,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
     
     /**
+     * @see EquipmentTypeInterface::delete_responsible_person()
      * @param integer $user_id
      * @return bool
      */
@@ -361,6 +374,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
     
     /**
+     * @see EquipmentTypeInterface::is_user_responsible()
      * @param integer $user_id
      * @return bool
      */
@@ -385,6 +399,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
     
     /**
+     * @see EquipmentTypeInterface::list_users()
      * @return array
      */
     public function list_users()
@@ -400,6 +415,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
     
     /**
+     * @see EquipmentTypeInterface::add_organisation_unit()
      * @param integer $organisation_unit_id
      * @return bool
      */
@@ -424,6 +440,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
     
     /**
+     * @see EquipmentTypeInterface::delete_organisation_unit()
      * @param integer $organisation_unit_id
      * @return bool
      */
@@ -448,6 +465,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
     
     /**
+     * @see EquipmentTypeInterface::is_organisation_unit()
      * @param integer $organisation_unit
      * @return bool
      */
@@ -472,6 +490,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
     
     /**
+     * @see EquipmentTypeInterface::list_organisation_units()
      * @return array
      */
     public function list_organisation_units()
@@ -488,6 +507,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     
     
     /**
+     * @see EquipmentTypeInterface::exist_id()
      * @param integer $id
      * @return bool
      */
@@ -497,6 +517,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
     
     /**
+     * @see EquipmentTypeInterface::exist_name()
      * @param string $name
      * @return bool
      */
@@ -506,6 +527,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
     
     /**
+     * @see EquipmentTypeInterface::list_entries_by_cat_id()
      * @return array
      */
     public static function list_entries_by_cat_id($cat_id)
@@ -514,6 +536,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
 	}
     
     /**
+     * @see EquipmentTypeInterface::list_root_entries()
      * @return array
      */
     public static function list_root_entries()
@@ -522,6 +545,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
     }
     
     /**
+     * @see EquipmentTypeInterface::list_entries_by_id()
      * @return array
      */
     public static function list_entries_by_id($id)
@@ -547,6 +571,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
 	}
     
     /**
+     * @see EquipmentTypeInterface::list_entries()
      * @return array
      */
     public static function list_entries()
@@ -555,6 +580,7 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
 	}
 	
     /**
+     * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
      */

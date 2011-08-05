@@ -22,7 +22,7 @@
  */
 
 /**
- * Group Not Found Exception
+ * Organisation Unit Not Found Exception
  * @package organisation_unit
  */
 class OrganisationUnitNotFoundException extends Exception

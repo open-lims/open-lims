@@ -43,6 +43,7 @@ class EquipmentCat implements EquipmentCatInterface
 	private $equipment_cat;
 
 	/**
+	 * @see EquipmentCatInterface::__construct()
 	 * @param integer $equipment_cat_id
 	 */
 	function __construct($equipment_cat_id)
@@ -66,7 +67,7 @@ class EquipmentCat implements EquipmentCatInterface
     }
 
 	/**
-	 * Creates a equipment-category
+	 * @see EquipmentCatInterface::create()
 	 * @param integer $toid
 	 * @param string $name
 	 * @return integer
@@ -84,7 +85,7 @@ class EquipmentCat implements EquipmentCatInterface
 	}
 	
 	/**
-	 * Deletes a equipment-category
+	 * @see EquipmentCatInterface::delete()
 	 * @return bool
 	 */
 	public function delete()
@@ -123,7 +124,8 @@ class EquipmentCat implements EquipmentCatInterface
 	}
 	
 	/**
-	 * @return integer
+	 * @see EquipmentCatInterface::get_name()
+	 * @return string
 	 */
 	public function get_name()
 	{
@@ -138,6 +140,7 @@ class EquipmentCat implements EquipmentCatInterface
 	}
 	
 	/**
+	 * @see EquipmentCatInterface::set_name()
 	 * @param string $name
 	 * @return bool
 	 */
@@ -154,7 +157,7 @@ class EquipmentCat implements EquipmentCatInterface
 	}
 
 	/**
-	 * Returns the child of the current equipment-category
+	 * @see EquipmentCatInterface::get_children()
 	 * @return array
 	 */
    	public function get_children()
@@ -169,7 +172,9 @@ class EquipmentCat implements EquipmentCatInterface
     	}
     }
     
+    
     /**
+     * @see EquipmentCatInterface::exist_id()
      * @param integer $id
      * @return bool
      */
@@ -179,6 +184,7 @@ class EquipmentCat implements EquipmentCatInterface
     }
     
     /**
+     * @see EquipmentCatInterface::exist_name()
      * @param string $name
      * @return bool
      */
@@ -188,6 +194,7 @@ class EquipmentCat implements EquipmentCatInterface
     }
     
     /**
+     * @see EquipmentCatInterface::list_root_entries()
      * @return array
      */
     public static function list_root_entries()
@@ -196,6 +203,7 @@ class EquipmentCat implements EquipmentCatInterface
     }
     
     /**
+     * @see EquipmentCatInterface::list_entries()
      * @return array
      */
     public static function list_entries()

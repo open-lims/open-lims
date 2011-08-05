@@ -28,12 +28,58 @@
  */ 	 
 interface ItemInterface
 {	
+	/**
+	 * @return integer
+	 */
+	public function get_item_id();
+	
+	/**
+	 * Checks if the current item is classified
+	 * @return bool
+	 */
 	public function is_classified();
+	
+	/**
+	 * Returns the class-ids of the current item
+	 * @return integer
+	 */
 	public function get_class_ids();
+	
+	/**
+	 * @return string
+	 */
 	public function get_information();
+	
+	/**
+	 * @return string
+	 */
 	public function get_datetime();
 	
+	/**
+	 * @param string $type
+	 * @param string $handling_class
+	 * @param integer $include_id
+	 * @return bool
+	 */
 	public static function register_type($type, $handling_class, $include_id);
+	
+	/**
+	 * @param integer $include_id
+	 * @return bool
+	 */
+	public static function delete_type_by_include_id($include_id);
+	
+	/**
+	 * @return array
+	 */
+	public static function list_types();
+	
+	/**
+	 * Returns the handling class by the type
+	 * @param string $type
+	 * @return string
+	 */
+	public static function get_handling_class_by_type($type);
 }
 
 ?>

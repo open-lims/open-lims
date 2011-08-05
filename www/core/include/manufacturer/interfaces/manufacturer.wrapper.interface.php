@@ -28,7 +28,20 @@
  */ 	 
 interface Manufacturer_WrapperInterface
 {
+	/**
+	 * Returns a list of manufacturers
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
 	public static function list_manufacturers($order_by, $order_method, $start, $end);
+	
+	/**
+	 * Returns the number of manufacturers
+	 * @return integer
+	 */
 	public static function count_manufacturers();
 }
 ?>

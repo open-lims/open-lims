@@ -66,7 +66,8 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	private $in_create;
 
 	/**
-	 * @param integer $organisation_unit_id Organisation-Unit-ID
+	 * @see OrganisationUnitInterface::__construct()
+	 * @param integer $organisation_unit_id
 	 */
 	function __construct($organisation_unit_id)
 	{
@@ -89,14 +90,12 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Creates a new Organisation-Unit including all dependencies
+	 * @see OrganisationUnitInterface::create()
 	 * @param integer $toid Parent-ID
 	 * @param string $name
 	 * @param integer $type_id
 	 * @param bool $stores_data
 	 * @return integer
-	 * @throws OrganisationUnitAlreadyExistException
-	 * @throws OrganisationUnitCreationFailedException
 	 */
 	public function create($toid, $name, $type_id, $stores_data) 
 	{
@@ -203,7 +202,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Deletes an Organisation-Unit
+	 * @see OrganisationUnitInterface::delete()
 	 * @return bool
 	 */
 	public function delete()
@@ -352,7 +351,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Checks dependencies before Organisation-Unit deletion.
+	 * @see OrganisationUnitInterface::check_delete_dependencies()
 	 * @return bool
 	 */
 	public function check_delete_dependencies()
@@ -387,7 +386,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 
 	/**
-	 * Checks permissions on Organisation-Unit
+	 * @see OrganisationUnitInterface::is_permission()
 	 * @param integer $user_id
 	 * @return bool
 	 */
@@ -424,7 +423,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Checks if the OU is on the upper position
+	 * @see OrganisationUnitInterface::is_upper_position()
 	 * @return bool
 	 */
 	public function is_upper_position()
@@ -447,7 +446,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Checks if the OU is on the lower position
+	 * @see OrganisationUnitInterface::is_lower_position()
 	 * @return bool
 	 */
 	public function is_lower_position()
@@ -470,7 +469,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Moves the OU one position upwards
+	 * @see OrganisationUnitInterface::position_upwards()
 	 * @return bool
 	 */
 	public function position_upwards()
@@ -540,7 +539,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Moves the OU one position downwards
+	 * @see OrganisationUnitInterface::position_downwards()
 	 * @return bool
 	 */
 	public function position_downwards()
@@ -610,7 +609,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Checks if an User is in the OU
+	 * @see OrganisationUnitInterface::is_user_in_organisation_unit()
 	 * @param integer $user_id User-ID
 	 * @return bool
 	 */
@@ -635,7 +634,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Creates an User in the OU
+	 * @see OrganisationUnitInterface::create_user_in_organisation_unit()
 	 * @param integer $user_id User-ID
 	 * @return bool
 	 */
@@ -667,7 +666,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Deletes an User from the OU
+	 * @see OrganisationUnitInterface::delete_user_from_organisation_unit()
 	 * @param integer $user_id User-ID
 	 * @return bool
 	 */
@@ -699,6 +698,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 
 	/**
+	 * @see OrganisationUnitInterface::get_number_of_users()
 	 * @return integer
 	 */
 	public function get_number_of_users()
@@ -714,7 +714,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Checks if a Group is in the OU
+	 * @see OrganisationUnitInterface::is_group_in_organisation_unit()
 	 * @param integer $group_id Group-ID
 	 * @return bool
 	 */
@@ -739,7 +739,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Creates a Group in the OU
+	 * @see OrganisationUnitInterface::create_group_in_organisation_unit()
 	 * @param integer $group_id Group-ID
 	 * @return bool
 	 */
@@ -801,7 +801,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Deletes a Group from the OU
+	 * @see OrganisationUnitInterface::delete_group_from_organisation_unit()
 	 * @param integer $group_id Group-ID
 	 * @return bool
 	 */
@@ -864,6 +864,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
+	 * @see OrganisationUnitInterface::get_number_of_groups()
 	 * @return integer
 	 */
 	public function get_number_of_groups()
@@ -879,7 +880,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Checks if a Leader is in the OU
+	 * @see OrganisationUnitInterface::is_leader_in_organisation_unit()
 	 * @param integer $leader_id
 	 * @return bool
 	 */
@@ -904,7 +905,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Creates a Leader in the OU
+	 * @see OrganisationUnitInterface::create_leader_in_organisation_unit()
 	 * @param integer $leader_id
 	 * @return bool
 	 */
@@ -986,7 +987,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Deletes a Leader from the OU
+	 * @see OrganisationUnitInterface::delete_leader_from_organisation_unit()
 	 * @param integer $leader_id
 	 * @return bool
 	 */
@@ -1069,6 +1070,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
+	 * @see OrganisationUnitInterface::get_number_of_leaders()
 	 * @return integer
 	 */
 	public function get_number_of_leaders()
@@ -1084,7 +1086,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Checks if an Owner is in the OU
+	 * @see OrganisationUnitInterface::is_owner_in_organisation_unit()
 	 * @param integer $owner_id
 	 * @return bool
 	 */
@@ -1109,6 +1111,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
+	 * @see OrganisationUnitInterface::create_owner_in_organisation_unit()
 	 * @param integer $owner_id
 	 * @param bool $master_owner
 	 * @return bool
@@ -1282,6 +1285,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
+	 * @see OrganisationUnitInterface::delete_owner_from_organisation_unit()
 	 * @param integer $owner_id
 	 * @return bool
 	 */
@@ -1400,6 +1404,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
+	 * @see OrganisationUnitInterface::get_number_of_owners()
 	 * @return integer
 	 */
 	public function get_number_of_owners()
@@ -1415,7 +1420,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Checks if a Quality-Manager is in the OU
+	 * @see OrganisationUnitInterface::is_quality_manager_in_organisation_unit()
 	 * @param integer $quality_manager_id
 	 * @return bool
 	 */
@@ -1440,6 +1445,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
+	 * @see OrganisationUnitInterface::create_quality_manager_in_organisation_unit()
 	 * @param integer $quality_manager_id
 	 * @return bool
 	 */
@@ -1521,7 +1527,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Deletes a Quality-Manager from the OU
+	 * @see OrganisationUnitInterface::delete_quality_manager_from_organisation_unit()
 	 * @param integer $quality_manager_id
 	 * @return bool
 	 */
@@ -1604,6 +1610,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
+	 * @see OrganisationUnitInterface::get_number_of_quality_managers()
 	 * @return integer
 	 */
 	public function get_number_of_quality_managers()
@@ -1619,6 +1626,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
+	 * @see OrganisationUnitInterface::get_type_name()
 	 * @return string Type-Name
 	 */
 	public function get_type_name()
@@ -1635,6 +1643,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
+	 * @see OrganisationUnitInterface::get_name()
 	 * @return string OU-Name
 	 */
 	public function get_name()
@@ -1650,6 +1659,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 
 	/**
+	 * @see OrganisationUnitInterface::get_icon()
 	 * @return string Icon
 	 */
 	public function get_icon()
@@ -1666,6 +1676,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 
 	/**
+	 * @see OrganisationUnitInterface::get_master_owner_id()
 	 * @return integer
 	 */
 	public function get_master_owner_id()
@@ -1689,6 +1700,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
+	 * @see OrganisationUnitInterface::get_stores_data()
 	 * @return bool Contains-Projects
 	 */
 	public function get_stores_data()
@@ -1704,6 +1716,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
+	 * @see OrganisationUnitInterface::get_hidden()
 	 * @return bool Hidden
 	 */
 	public function get_hidden()
@@ -1719,9 +1732,9 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 
 	/**
-	 * Return the status of an user
+	 * @see OrganisationUnitInterface::get_user_status()
 	 * @param integer $user_id
-	 * @return string status
+	 * @return string
 	 */
 	public function get_user_status($user_id)
 	{
@@ -1736,9 +1749,10 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 
 	/**
-	 * @return array Array of childs
+	 * @see OrganisationUnitInterface::get_organisation_unit_children()
+	 * @return array
 	 */
-	public function get_organisation_unit_childs()
+	public function get_organisation_unit_children()
 	{
 		if ($this->organisation_unit_id)
 		{
@@ -1751,6 +1765,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 		
 	/**
+	 * @see OrganisationUnitInterface::list_members()
 	 * @param integer $limit
 	 * @return array
 	 */
@@ -1767,6 +1782,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
+	 * @see OrganisationUnitInterface::list_groups()
 	 * @param integer $limit
 	 * @return array
 	 */
@@ -1783,6 +1799,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
+	 * @see OrganisationUnitInterface::list_leaders()
 	 * @param integer $limit
 	 * @return array
 	 */
@@ -1799,6 +1816,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
+	 * @see OrganisationUnitInterface::list_owners()
 	 * @param integer $limit
 	 * @return array
 	 */
@@ -1815,6 +1833,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
+	 * @see OrganisationUnitInterface::list_quality_managers()
 	 * @param integer $limit
 	 * @return array
 	 */
@@ -1831,7 +1850,8 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * @param string $name New OU-Name
+	 * @see OrganisationUnitInterface::set_name()
+	 * @param string $name
 	 * @return bool
 	 */
 	public function set_name($name)
@@ -1880,6 +1900,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
+	 * @see OrganisationUnitInterface::set_hidden()
 	 * @param bool $hidden
 	 * @return bool
 	 */
@@ -1976,9 +1997,9 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	
-	
 	/**
-	 * @param integer $user_id User-ID
+	 * @see OrganisationUnitInterface::get_number_of_organisation_units_by_user_id()
+	 * @param integer $user_id
 	 * @return integer
 	 */
 	public static function get_number_of_organisation_units_by_user_id($user_id)
@@ -1995,7 +2016,8 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}	
 	
 	/**
-	 * @param integer $group_id Group-ID
+	 * @see OrganisationUnitInterface::get_number_of_organisation_units_by_group_id()
+	 * @param integer $group_id
 	 * @return integer
 	 */
 	public static function get_number_of_organisation_units_by_group_id($group_id)
@@ -2012,8 +2034,9 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
+	 * @see OrganisationUnitInterface::get_name_by_type_id()
 	 * @param interger $type_id
-	 * @return string Name of the Type
+	 * @return string
 	 */
 	public static function get_name_by_type_id($type_id)
 	{
@@ -2029,7 +2052,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Checks if an OU exists
+	 * @see OrganisationUnitInterface::exist_name()
 	 * @param string $name
 	 * @return bool
 	 */
@@ -2047,8 +2070,8 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Checks if an OU exists
-	 * @param integer $id Organisation-Unit-ID
+	 * @see OrganisationUnitInterface::exist_organisation_unit()
+	 * @param integer $id
 	 * @return bool
 	 */
 	public static function exist_organisation_unit($id)
@@ -2057,6 +2080,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
+	 * @see OrganisationUnitInterface::list_organisation_unit_roots()
 	 * @return array List of root OUs
 	 */		
 	public static function list_organisation_unit_roots()
@@ -2065,7 +2089,8 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * @return array List of OUs
+	 * @see OrganisationUnitInterface::list_entries()
+	 * @return array
 	 */
 	public static function list_entries()
 	{
@@ -2073,8 +2098,9 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * @param integer $user_id User-ID
-	 * @return array List of user OUs
+	 * @see OrganisationUnitInterface::list_entries_by_user_id()
+	 * @param integer $user_id
+	 * @return array
 	 */
 	public static function list_entries_by_user_id($user_id)
 	{
@@ -2082,8 +2108,9 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * @param integer $group_id Group-ID
-	 * @return array List of group OUs
+	 * @see OrganisationUnitInterface::list_entries_by_group_id()
+	 * @param integer $group_id
+	 * @return array
 	 */
 	public static function list_entries_by_group_id($group_id)
 	{
@@ -2091,7 +2118,8 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * @return array Array of OU-Types
+	 * @see OrganisationUnitInterface::list_types()
+	 * @return array
 	 */
 	public static function list_types()
 	{
@@ -2174,6 +2202,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
+	 * @see OrganisationUnitInterface::count_organisation_units()
    	 * @return integer
    	 */
    	public static function count_organisation_units()
@@ -2252,7 +2281,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	}
 	
 	/**
-	 * Return the recursively created tree
+	 * @see OrganisationUnitInterface::get_organisation_unit_tree()
 	 * @return array
 	 */
 	public function get_organisation_unit_tree()
@@ -2286,6 +2315,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	// --- TREE REC BLOCK END ---
 	   
     /**
+     * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
      */

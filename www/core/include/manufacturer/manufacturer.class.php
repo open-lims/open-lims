@@ -40,6 +40,10 @@ class Manufacturer implements ManufacturerInterface, EventListenerInterface
 	private $manufacturer_id;
 	private $manufacturer;
 	
+	/**
+	 * @see ManufacturerInterface::__construct()
+	 * @param integer $manufacturer_id
+	 */
 	function __construct($manufacturer_id)
 	{
 		if (is_numeric($manufacturer_id))
@@ -60,6 +64,11 @@ class Manufacturer implements ManufacturerInterface, EventListenerInterface
 		unset($this->manufacturer);
 	}
 	
+	/**
+	 * @see ManufacturerInterface::create()
+	 * @param string $name
+	 * @return $name
+	 */
 	public function create($name)
 	{
 		global $user;
@@ -74,6 +83,10 @@ class Manufacturer implements ManufacturerInterface, EventListenerInterface
 		}
 	}
 	
+	/**
+	 * @see ManufacturerInterface::delete()
+	 * @return bool
+	 */
 	public function delete()
 	{
 		if ($this->manufacturer_id and $this->manufacturer)
@@ -86,6 +99,10 @@ class Manufacturer implements ManufacturerInterface, EventListenerInterface
 		}
 	}
 	
+	/**
+	 * @see ManufacturerInterface::get_name()
+	 * @return string
+	 */
 	public function get_name()
 	{
 		if ($this->manufacturer)
@@ -99,22 +116,40 @@ class Manufacturer implements ManufacturerInterface, EventListenerInterface
 	}
 	
 	
+	/**
+	 * @see ManufacturerInterface::exist_name()
+	 * @param string $name
+	 * @return bool
+	 */
 	public static function exist_name($name)
 	{
 		return Manufacturer_Access::exist_name($name);
 	}
 	
+	/**
+	 * @see ManufacturerInterface::count_entries()
+	 * @param string $string
+	 * @return integer
+	 */
 	public static function count_entries($string)
 	{
 		return Manufacturer_Access::count_entries($string);
 	}
 	
+	/**
+	 * @see ManufacturerInterface::list_manufacturers()
+	 * @param integer $number_of_entries
+	 * @param integer $start_entry
+	 * @param string $start_string
+	 * @return array
+	 */
 	public static function list_manufacturers($number_of_entries, $start_entry, $start_string)
 	{
 		return Manufacturer_Access::list_manufacturers($number_of_entries, $start_entry, $start_string);
 	}
 	
 	/**
+	 * @see EventListenerInterface::listen_events()
 	 * @param object $event_object
      * @return bool
      */

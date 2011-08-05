@@ -23,12 +23,89 @@
 
 
 /**
- * @todo
  * Organisation Unit Wrapper Interface
  * @package organisation_unit
  */ 
 interface OrganisationUnit_WrapperInterface
 {
-
+	/**
+	 * @param integer $organisation_unit_id;
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+    public static function list_organisation_unit_members($organisation_unit_id, $order_by, $order_method, $start, $end);
+    
+    /**
+	 * @param integer $organisation_unit_id
+	 * @return integer
+	 */
+	public static function count_organisation_unit_members($organisation_unit_id);
+	
+	/**
+	 * @param integer $organisation_unit_id;
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_organisation_unit_leaders($organisation_unit_id, $order_by, $order_method, $start, $end);
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @return integer
+	 */
+	public static function count_organisation_unit_leaders($organisation_unit_id);
+	
+	/**
+	 * @param integer $organisation_unit_id;
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_organisation_unit_owners($organisation_unit_id, $order_by, $order_method, $start, $end);
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @return integer
+	 */
+	public static function count_organisation_unit_owners($organisation_unit_id);
+	
+	/**
+	 * @param integer $organisation_unit_id;
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_organisation_unit_quality_managers($organisation_unit_id, $order_by, $order_method, $start, $end);
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @return integer
+	 */
+	public static function count_organisation_unit_quality_managers($organisation_unit_id);
+	
+	/**
+	 * @param integer $organisation_unit_id;
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_organisation_unit_groups($organisation_unit_id, $order_by, $order_method, $start, $end);
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @return integer
+	 */
+    public static function count_organisation_unit_groups($organisation_unit_id);
 }
 ?>

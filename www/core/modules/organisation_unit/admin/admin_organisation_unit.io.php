@@ -36,7 +36,7 @@ class AdminOrganisationUnitIO
 			$content_array = array();
 			
 			$organisation_unit = new OrganisationUnit($id);
-			$organisation_unit_child_array = $organisation_unit->get_organisation_unit_childs();
+			$organisation_unit_child_array = $organisation_unit->get_organisation_unit_children();
 			
 			if(is_array($organisation_unit_child_array) and count($organisation_unit_child_array) >= 1)
 			{

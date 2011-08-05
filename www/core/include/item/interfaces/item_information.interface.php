@@ -28,18 +28,65 @@
  */ 	 
 interface ItemInformationInterface
 {
+	/**
+	 * @param integer $item_information_id
+	 */
 	function __construct($item_information_id);
+	
 	function __destruct();
 	
+	/**
+     * Creates a new item-information
+     * @param string $description
+     * @param string $keywords
+     * @return integer
+     */
 	public function create($description, $keywords);
+	
+	/**
+     * Deletes an item-information
+     * @return bool
+     */
 	public function delete();
 	
+	/**
+     * Links a class to the current item-information
+     * @param integer $class_id
+     * @return integer
+     */
 	public function link_class($class_id);
+	
+	/**
+     * unlinks a class from the current item-information
+     * @param integer $class_id
+     * @return bool
+     */
 	public function unlink_class($class_id);
+	
+	/**
+     * Links an item to the current item-information
+     * @param integer $item_id
+     * @return integer
+     */
 	public function link_item($item_id);
+	
+	 /**
+     * Unlinks an item form the current item-information
+     * @param integer $item_id
+     * @return bool
+     */
 	public function unlink_item($item_id);
 	
+	/** 
+	 * @param integer $class_id
+	 * @return array
+	 */
 	public static function list_class_information($class_id);
+	
+	/**
+	 * @param integer $item_id
+	 * @return integer
+	 */
 	public static function list_item_information($item_id);
 }
 

@@ -28,6 +28,100 @@
  */ 
 interface LocationInterface
 {
-
+	/**
+	 * @param integer $location_id
+	 */
+	function __construct($location_id);
+	
+	/**
+	 * @param integer $toid
+	 * @param integer $type_id
+	 * @param string $name
+	 * @param string $additional_name
+	 * @param bool $show_prefix
+	 * @return integer
+	 */
+	public function create($toid, $type_id, $name, $additional_name, $show_prefix);
+	
+	/**
+	 * @return bool
+	 */
+	public function delete();
+	
+	/**
+	 * @param bool $show_additional_name
+	 * @return string
+	 */
+	public function get_name($show_additional_name);
+	
+	/**
+	 * @return integer
+	 */
+	public function get_type_id();
+	
+	/**
+	 * @return string
+	 */
+	public function get_db_name();
+	
+	/**
+	 * @return string
+	 */
+	public function get_additional_name();
+	
+	/**
+	 * @return bool
+	 */
+	public function get_prefix();
+	
+	/**
+	 * @return array
+	 */
+	public function get_children();
+	
+	/**
+	 * @param integer $type_id
+	 * @return bool
+	 */
+	public function set_type_id($type_id);
+	
+	/**
+	 * @param string $name
+	 * @return bool
+	 */
+	public function set_db_name($name);
+	
+	/**
+	 * @param string $additional_name
+	 * @return bool
+	 */
+	public function set_additional_name($additional_name);
+	
+	/**
+	 * @param bool $prefix
+	 * @return bool
+	 */
+	public function set_prefix($prefix);
+	
+	/**
+	 * @param integer $id
+	 * @return bool
+	 */
+	public static function exist_id($id);
+	
+	/**
+	 * @return array
+	 */
+	public static function list_root_entries();
+	
+	/**
+	 * @return array
+	 */
+	public static function list_entries();
+	
+	/**
+	 * @return array
+	 */
+	public static function list_types();
 }
 ?>

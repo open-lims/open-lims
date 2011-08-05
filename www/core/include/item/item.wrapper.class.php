@@ -38,6 +38,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 class Item_Wrapper implements Item_WrapperInterface
 {
 	/**
+	 * @see Item_WrapperInterface::list_fulltext_search()
 	 * @param string $string
 	 * @param array $item_type_array
 	 * @param integer $language_id
@@ -45,6 +46,7 @@ class Item_Wrapper implements Item_WrapperInterface
 	 * @param string $order_method
 	 * @param integer $start
 	 * @param integer $end
+	 * @return array
    	 */
 	public static function list_fulltext_search($string, $item_type_array, $language_id, $order_by, $order_method, $start, $end)
 	{
@@ -111,9 +113,11 @@ class Item_Wrapper implements Item_WrapperInterface
 	}
 	
 	/**
+	 * @see Item_WrapperInterface::count_fulltext_search()
    	 * @param string $string
 	 * @param array $item_type_array
 	 * @param integer $language_id
+	 * @return integer
    	 */
 	public static function count_fulltext_search($string, $item_type_array, $language_id)
 	{
