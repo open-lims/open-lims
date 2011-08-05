@@ -37,12 +37,17 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class ProjectVirtualFolder extends VirtualFolder implements ProjectVirtualFolderInterface, EventListenerInterface
 {
+	/**
+	 * @see ProjectVirtualFolderInterface::__construct()
+	 * @param integer $virtual_folder_id
+	 */
 	function __construct($virtual_folder_id)
 	{
 		parent::__construct($virtual_folder_id);
 	}
 	
 	/**
+	 * @see ProjectVirtualFolderInterface::set_project_vfolder()
 	 * @return bool
 	 */
 	public function set_project_vfolder()
@@ -59,6 +64,7 @@ class ProjectVirtualFolder extends VirtualFolder implements ProjectVirtualFolder
 	}
 	
 	/**
+	 * @see ProjectVirtualFolderInterface::is_project_vfolder()
 	 * @return bool
 	 */
 	public function is_project_vfolder()
@@ -74,6 +80,7 @@ class ProjectVirtualFolder extends VirtualFolder implements ProjectVirtualFolder
 	}
 	
 	/**
+	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
      */

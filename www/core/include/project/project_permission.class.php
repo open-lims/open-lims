@@ -42,6 +42,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     private $project_permission;
     
     /**
+     * @see ProjectPermissionInterface::__construct()
      * @param integer $permission_id
      */
     function __construct($permission_id)
@@ -65,7 +66,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     }
     
     /**
-     * Creates a project-permission
+     * @see ProjectPermissionInterface::create()
      * @param integer $user_id
      * @param integer $organisation_unit_id
      * @param integer $group_id
@@ -199,7 +200,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     } 
     
     /**
-     * Deletes a project-permission
+     * @see ProjectPermissionInterface::delete()
      * @return bool
      */
     public function delete()
@@ -358,7 +359,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     }
     
     /**
-     * Returns the permission array of a permission
+     * @see ProjectPermissionInterface::get_permission_array()
      * @return array
      */
     public function get_permission_array()
@@ -443,6 +444,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     }
     
     /**
+     * @see ProjectPermissionInterface::get_user_id()
      * @return integer
      */
     public function get_user_id()
@@ -458,6 +460,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     }
     
     /**
+     * @see ProjectPermissionInterface::get_organisation_unit_id()
      * @return integer
      */
     public function get_organisation_unit_id()
@@ -473,6 +476,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     }
     
     /**
+     * @see ProjectPermissionInterface::get_group_id()
      * @return integer
      */
     public function get_group_id()
@@ -488,6 +492,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     }
     
     /**
+     * @see ProjectPermissionInterface::get_owner_id()
      * @return integer
      */
     public function get_owner_id()
@@ -503,6 +508,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     }
     
     /**
+     * @see ProjectPermissionInterface::get_intention()
      * @return integer
      */
     public function get_intention()
@@ -518,6 +524,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     }
     
     /**
+     * @see ProjectPermissionInterface::set_user_id()
      * @param integer $user_id
      * @return bool
      */
@@ -607,6 +614,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     }
     
     /**
+     * @see ProjectPermissionInterface::set_organisation_unit_id()
      * @param integer $organisation_unit_id
      * @return bool
      */
@@ -696,6 +704,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     }
     
     /**
+     * @see ProjectPermissionInterface::set_group_id()
      * @param integer $group_id
      * @return bool
      */
@@ -785,6 +794,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     }
     
     /**
+     * @see ProjectPermissionInterface::set_permission()
      * @param integer $permission
      * @return bool
      */
@@ -840,6 +850,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     
     
     /**
+     * @see ProjectPermissionInterface::list_entries_by_project_id()
      * @param integer $project_id
      * @return array
      */
@@ -849,6 +860,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     }
 
 	/**
+	 * @see ProjectPermissionInterface::list_entries_by_project_id_and_intention()
 	 * @param integer $project_id
 	 * @param integer $intention
 	 * @return array
@@ -890,6 +902,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 	}
 	
 	/**
+	 * @see ProjectPermissionInterface::delete_entries_by_project_id_and_intention()
 	 * @param integer $project_id
 	 * @param integer $intention
 	 * @return array
@@ -900,6 +913,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 	}
 	
 	/**
+	 * @see ProjectPermissionInterface::delete_by_group_id()
      * Deletes a group from permission table completly.
      * Warning: This method is for group-deletion only!
      * 			Outside group-deletion is causes logical inconsistency!
@@ -912,7 +926,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 	}
 	
 	/**
-	 * Changes all owner_ids of another giver owner_id
+	 * @see ProjectPermissionInterface::reset_owner_id()
 	 * @param integer $old_owner_id
 	 * @param integer $new_owner_id
 	 * @return bool
@@ -923,6 +937,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 	}
 
     /**
+     * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
      */

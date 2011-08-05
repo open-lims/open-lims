@@ -40,6 +40,7 @@ class ProjectLogHasItem implements ProjectLogHasItemInterface, EventListenerInte
 	private $project_log_id;
 
 	/**
+	 * @see ProjectLogHasItemInterface::__construct()
 	 * @param integer $item_id
 	 */
     function __construct($project_log_id)
@@ -60,6 +61,7 @@ class ProjectLogHasItem implements ProjectLogHasItemInterface, EventListenerInte
     }
 
     /**
+     * @see ProjectLogHasItemInterface::link_item()
      * @param integer $item_id
      * @return bool
      */
@@ -79,7 +81,9 @@ class ProjectLogHasItem implements ProjectLogHasItemInterface, EventListenerInte
     	}
     }
     
+    
     /**
+     * @see ProjectLogHasItemInterface::get_items_by_log_id()
      * @param integer $log_id
      * @return array
      */   
@@ -112,6 +116,8 @@ class ProjectLogHasItem implements ProjectLogHasItemInterface, EventListenerInte
     }
     
     /**
+     * @see ProjectLogHasItemInterface::delete_by_log_id()
+     * @param integer $log_id
      * @return bool
      */
     public static function delete_by_log_id($log_id)
@@ -120,7 +126,9 @@ class ProjectLogHasItem implements ProjectLogHasItemInterface, EventListenerInte
     }
  
  	/**
+ 	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
+     * @return bool
      */
     public static function listen_events($event_object)
     {

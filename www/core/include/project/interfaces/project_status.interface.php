@@ -28,15 +28,47 @@
  */ 
 interface ProjectStatusInterface
 {
+	/**
+     * @param integer $status_id
+     */
 	function __construct($status_id);
+	
 	function __destruct();
 	
+	/**
+     * Creates a new project-status
+     * @param string $name
+     * @param string $comment
+     * @return integer
+     */
 	public function create($name, $comment);
+	
+	/**
+     * Deletes a project-status
+     * @return bool
+     */
 	public function delete();
+	
+	/**
+     * @return string
+     */
 	public function get_name();
+	
+	/**
+     * @return bool
+     */
 	public function get_blocked();
+	
+	/**
+     * @param string $name
+     * @return bool
+     */
 	public function set_name($name);
 	
+	/**
+     * @param integer $id
+     * @return bool
+     */
 	public static function exist_id($id);
 }
 ?>

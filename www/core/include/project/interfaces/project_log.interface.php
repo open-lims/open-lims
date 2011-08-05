@@ -28,22 +28,89 @@
  */ 	
 interface ProjectLogInterface
 {
+	/**
+	 * @param integer $log_id
+	 */
 	function __construct($log_id);
+	
 	function __destruct();
 	
+	/**
+	 * Creates a new log-entry
+	 * @param integer $project_id
+	 * @param string $content
+	 * @param bool $cancel
+	 * @param bool $important
+	 * @param string $action_checksum
+	 * @return integer
+	 */
 	public function create($project_id, $content, $cancel, $important, $action_checksum);
+	
+	/**
+	 * Deletes a log-entry
+	 * @return bool
+	 */
 	public function delete();
+	
+	/**
+	 * Links a project-status to the current log-entry
+	 * @param integer $status_id
+	 * @return bool
+	 */
 	public function link_status($status_id);
+	
+	/**
+	 * Returns a given project-status linked to the current log-entry
+	 * @return integer
+	 */
 	public function get_status_id();
+	
+	/**
+	 * @return string
+	 */
 	public function get_datetime();
+	
+	/**
+	 * @return string
+	 */
 	public function get_content();
+	
+	/**
+	 * @return bool
+	 */
 	public function get_cancel();
+	
+	/**
+	 * @return bool
+	 */
 	public function get_important();
+	
+	/**
+	 * @return integer
+	 */
 	public function get_owner_id();
+	
+	/**
+	 * @param string $content
+	 * @return bool
+	 */
 	public function set_content($content);
+	
+	/**
+	 * @param bool $important
+	 * @return bool
+	 */
 	public function set_important($important);
+	
+	/**
+	 * @return array
+	 */
 	public function list_items();
 	
+	/**
+	 * @param integer $project_id
+	 * @return array
+	 */
 	public static function list_entries_by_project_id($project_id);
 }
 ?>

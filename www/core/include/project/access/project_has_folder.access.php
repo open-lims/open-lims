@@ -185,6 +185,10 @@ class ProjectHasFolder_Access
 		}
 	}
 	
+	/**
+	 * @param integer $folder_id
+	 * @return integer
+	 */
 	public static function get_project_id_by_folder_id($folder_id)
 	{
 		global $db;
@@ -210,6 +214,10 @@ class ProjectHasFolder_Access
 		}
 	}
 	
+	/**
+	 * @param integer $folder_id
+	 * @return integer
+	 */
 	public static function get_project_supplementary_folder($folder_id)
 	{
 		global $db;

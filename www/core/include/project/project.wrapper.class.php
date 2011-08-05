@@ -38,7 +38,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 class Project_Wrapper implements Project_WrapperInterface
 {
 	/**
-	 * Returns a list of all project status
+	 * @see Project_WrapperInterface::list_project_status()
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -51,7 +51,7 @@ class Project_Wrapper implements Project_WrapperInterface
 	}
 	
 	/**
-	 * Retruns the number of all project status
+	 * @see Project_WrapperInterface::count_list_project_status()
 	 * @return integer
 	 */
 	public static function count_list_project_status()
@@ -60,7 +60,7 @@ class Project_Wrapper implements Project_WrapperInterface
 	}
 	
 	/**
-	 * Returns a list of all project templates
+	 * @see Project_WrapperInterface::list_project_templates()
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -73,7 +73,7 @@ class Project_Wrapper implements Project_WrapperInterface
 	}
 	
 	/**
-	 * Returns the number of all project templates
+	 * @see Project_WrapperInterface::count_list_project_templates()
 	 * @return integer
 	 */
 	public static function count_list_project_templates()
@@ -82,7 +82,7 @@ class Project_Wrapper implements Project_WrapperInterface
 	}
 	
 	/**
-	 * Return a list of all project template categories
+	 * @see Project_WrapperInterface::list_project_template_categories()
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -95,7 +95,7 @@ class Project_Wrapper implements Project_WrapperInterface
 	}
 	
 	/**
-	 * Returns the number of all project template categories
+	 * @see Project_WrapperInterface::count_list_project_template_categories()
 	 * @return integer
 	 */
 	public static function count_list_project_template_categories()
@@ -104,7 +104,7 @@ class Project_Wrapper implements Project_WrapperInterface
 	}
 	
 	/**
-	 * Returns the number of all users projects
+	 * @see Project_WrapperInterface::count_user_projects()
 	 * @return integer
 	 */
 	public static function count_user_projects($user_id)
@@ -113,7 +113,7 @@ class Project_Wrapper implements Project_WrapperInterface
 	}
 	
 	/**
-	 * Returns the number of all users running projects
+	 * @see Project_WrapperInterface::count_user_running_projects()
 	 * @return integer
 	 */
 	public static function count_user_running_projects($user_id)
@@ -122,7 +122,7 @@ class Project_Wrapper implements Project_WrapperInterface
 	}
 	
 	/**
-	 * Returns the number of all users finished projects
+	 * @see Project_WrapperInterface::count_user_finished_projects()
 	 * @return integer
 	 */
 	public static function count_user_finished_projects($user_id)
@@ -131,7 +131,7 @@ class Project_Wrapper implements Project_WrapperInterface
 	}
 	
 	/**
-	 * Return a list of all user related projects
+	 * @see Project_WrapperInterface::list_user_related_projects()
 	 * @param integer $user_id
 	 * @param string $order_by
 	 * @param string $order_method
@@ -145,7 +145,7 @@ class Project_Wrapper implements Project_WrapperInterface
 	}
 	
 	/**
-	 * Returns the number of all users related projects
+	 * @see Project_WrapperInterface::count_list_user_related_projects()
 	 * @return integer
 	 */
 	public static function count_list_user_related_projects($user_id)
@@ -153,37 +153,88 @@ class Project_Wrapper implements Project_WrapperInterface
 		return Project_Wrapper_Access::count_list_user_related_projects($user_id);
 	}
 	
+	/**
+	 * @see Project_WrapperInterface::list_projects_by_item_id()
+	 * @param integer $item_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
 	public static function list_projects_by_item_id($item_id, $order_by, $order_method, $start, $end)
 	{
 		return Project_Wrapper_Access::list_projects_by_item_id($item_id, $order_by, $order_method, $start, $end);
 	}
 	
+	/**
+	 * @see Project_WrapperInterface::count_projects_by_item_id()
+	 * @param integer $item_id
+	 * @return integer
+	 */
 	public static function count_projects_by_item_id($item_id)
 	{
 		return Project_Wrapper_Access::count_projects_by_item_id($item_id);
 	}
 	
+	/**
+	 * @see Project_WrapperInterface::list_search_projects_without_subprojects()
+	 * @param string $name
+	 * @param array $template_id
+	 * @param array $organisation_unit_array
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
 	public static function list_search_projects_without_subprojects($name, $template_array, $organisation_unit_array, $order_by, $order_method, $start, $end)
 	{
 		return Project_Wrapper_Access::list_search_projects_without_subprojects($name, $template_array, $organisation_unit_array, $order_by, $order_method, $start, $end);
 	}
 	
+	/**
+	 * @see Project_WrapperInterface::count_search_projects_without_subprojects()
+	 * @param string $name
+	 * @param array $template_id
+	 * @param array $organisation_unit_array
+	 * @return integer
+	 */
 	public static function count_search_projects_without_subprojects($name, $template_array, $organisation_unit_array)
 	{
 		return Project_Wrapper_Access::count_search_projects_without_subprojects($name, $template_array, $organisation_unit_array);
 	}
 	
+	/**
+	 * @see Project_WrapperInterface::list_search_projects_with_subprojects()
+	 * @param string $name
+	 * @param array $template_id
+	 * @param array $organisation_unit_array
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
 	public static function list_search_projects_with_subprojects($name, $template_array, $organisation_unit_array, $order_by, $order_method, $start, $end)
 	{
 		return Project_Wrapper_Access::list_search_projects_with_subprojects($name, $template_array, $organisation_unit_array, $order_by, $order_method, $start, $end);
 	}
 	
+	/**
+	 * @see Project_WrapperInterface::count_search_projects_with_subprojects()
+	 * @param string $name
+	 * @param array $template_id
+	 * @param array $organisation_unit_array
+	 * @return integer
+	 */
 	public static function count_search_projects_with_subprojects($name, $template_array, $organisation_unit_array)
 	{
 		return Project_Wrapper_Access::count_search_projects_with_subprojects($name, $template_array, $organisation_unit_array);
 	}
 	
 	/**
+	 * @see Project_WrapperInterface::list_data_search()
    	 * @param string $string
    	 * @param array $project_id_array
    	 * @param array $item_type_array
@@ -239,6 +290,7 @@ class Project_Wrapper implements Project_WrapperInterface
 	}
 	
 	/**
+	 * @see Project_WrapperInterface::count_data_search()
    	 * @param string $string
    	 * @param array $project_id_array
    	 * @param array $item_type_array

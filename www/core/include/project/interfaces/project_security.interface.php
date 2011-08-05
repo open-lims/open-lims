@@ -28,13 +28,53 @@
  */ 
 interface ProjectSecurityInterface
 {
+	/**
+     * @param integer $project_id
+     */ 
 	function __construct($project_id);
+	
 	function __destruct();
 	
+	/**
+     * Checks the permissions of the current user
+     * @param integer $itention Intention of the User (Read, Write, etc.)
+     * @param integer $ignore_admin_status If it's true, an admin-status of an user will be ignored
+     * @return bool
+     */
 	public function is_access($intention, $ignore_admin_status);
+	
+	/**
+     * Lists involved users of a project
+     * @return array
+     */
 	public function list_involved_users();
+	
+	/**
+     * Changes the owner of a project
+     * @param integer $owner_id Project Owner
+     * @return bool
+     */
 	public function change_owner_permission($owner_id);
+	
+	/**
+     * Changes the leader of a project
+     * @param integer $leader_id
+     * @return bool
+     */
 	public function change_ou_user_permission($organisation_unit_id);
+	
+	/**
+     * Changes the organisation_unit of a project
+     * @param integer $organisation_unit_id
+     * @return bool
+     */
 	public function change_organisation_unit_permission($organisation_unit_id);
+	
+	/**
+     * Sets another user-id (if the current user id is not required)
+     * @param integer $user_id
+     * @return bool
+     */
+    public function set_user_id($user_id);
 }
 ?>

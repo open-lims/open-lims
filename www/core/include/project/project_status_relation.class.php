@@ -38,6 +38,7 @@ class ProjectStatusRelation implements ProjectStatusRelationInterface
 	private $project;
 
 	/**
+	 * @see ProjectStatusRelationInterface::__construct()
 	 * @param integer $project_id
 	 * @param integer $status_id
 	 */
@@ -58,7 +59,7 @@ class ProjectStatusRelation implements ProjectStatusRelationInterface
     }
     
     /**
-     * Checks, if the class-defined status is lesser than the method one
+     * @see ProjectStatusRelationInterface::is_less()
      * @param integer $status_id
      * @return bool
      */
@@ -96,7 +97,7 @@ class ProjectStatusRelation implements ProjectStatusRelationInterface
     }
     
     /**
-     * Checks, if the class-defined status is bigger than the method one
+     * @see ProjectStatusRelationInterface::is_more()
      * @param integer $status_id
      * @return bool
      */
@@ -132,7 +133,7 @@ class ProjectStatusRelation implements ProjectStatusRelationInterface
     }
     
     /**
-     * Returns the next status of the given project
+     * @see ProjectStatusRelationInterface::get_next()
      * @return integer
      */
  	public function get_next()
@@ -170,7 +171,7 @@ class ProjectStatusRelation implements ProjectStatusRelationInterface
  	}
  	
  	/**
-     * Returns the previous status of the given project
+     * @see ProjectStatusRelationInterface::get_previous()
      * @return integer
      */
  	public function get_previous()

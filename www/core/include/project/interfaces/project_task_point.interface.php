@@ -28,13 +28,47 @@
  */ 	
 interface ProjectTaskPointInterface
 {
+	/**
+	 * @param integer $project_id
+	 */
 	function __construct($project_id);
+	
 	function __destruct();
 	
+	/**
+     * Returns the achived points of a given status
+     * @param integer $status_id
+     * @param string $datetime
+     * @return integer
+     */
 	public function get_status_achieved_points($status_id, $datetime);
+	
+	/**
+     * Returns the currently achieved points
+     * @param string $datetime
+     * @return integer
+     */
 	public function get_current_achieved_points($datetime);
+	
+	/**
+     * Returns the maximum of points of a given status
+     * @param integer $status_id
+     * @return integer
+     */
 	public function get_status_max_points($status_id);
+	
+	/**
+     * Returns the maximium-points of a given task
+     * @param integer $task_id
+     * @return integer
+     */
 	public function get_task_max_points($task_id);
+	
+	/**
+     * Returns the achieved-points of a given task
+     * @param integer $task_id
+     * @return integer
+     */
 	public function get_task_achieved_points($task_id);
 }
 ?>

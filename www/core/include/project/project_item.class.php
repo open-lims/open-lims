@@ -49,6 +49,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 	private $gid;
 
 	/**
+	 * @see ProjectItemInterface::__construct()
 	 * @param integer $project_id
 	 */
     function __construct($project_id)
@@ -75,7 +76,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
-     * Links an item to the project
+     * @see ProjectItemInterface::link_item()
      * @return bool
      */
     public function link_item()
@@ -130,7 +131,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
-     * Unlinks an item from a specific project
+     * @see ProjectItemInterface::unlink_item()
      * @return bool
      */
     public function unlink_item()
@@ -168,8 +169,8 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     	}
     }
     
-     /**
-     * Unlinks an item from all projects
+    /**
+     * @see ProjectItemInterface::unlink_item_full()
      * @return bool
      */
     public function unlink_item_full()
@@ -222,7 +223,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
-     * Set item as active
+     * @see ProjectItemInterface::set_active()
      * @param bool $active
      * @return bool
      */
@@ -249,7 +250,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
-     * Set item as required item
+     * @see ProjectItemInterface::set_required()
      * @param bool $required
      * @return bool
      */
@@ -276,6 +277,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectItemInterface::is_active()
      * @return bool
      */
     public function is_active()
@@ -293,6 +295,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectItemInterface::is_required()
      * @return bool
      */
     public function is_required()
@@ -310,6 +313,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectItemInterface::get_project_items()
      * @return array
      */
     public function get_project_items()
@@ -341,6 +345,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectItemInterface::get_project_status_items()
      * @return array
      */
     public function get_project_status_items($project_status_id)
@@ -356,6 +361,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectItemInterface::set_item_id()
      * @param integer $item_id
      * @return bool
      */
@@ -373,6 +379,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectItemInterface::set_gid()
      * @param integer $gid
      * @return bool
      */
@@ -390,6 +397,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectItemInterface::set_status_id()
      * @param integer $status_id
      * @return bool
      */
@@ -407,6 +415,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectItemInterface::set_item_status()
      * @return bool
      */
     public function set_item_status()
@@ -453,7 +462,9 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectItemInterface::unset_item_status()
      * @todo implementation
+     * @return bool
      */
     public function unset_item_status()
     {
@@ -513,7 +524,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
-     * Adds the Item to a class
+     * @see ProjectItemInterface::set_class()
      * @param string $class_name
      * @return bool
      */
@@ -569,8 +580,9 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
-     * Removes the Item from a class
+     * @see ProjectItemInterface::unset_class()
      * @todo implementation
+     * @return bool
      */
     public function unset_class()
     {
@@ -578,7 +590,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
-     * Sets Item-Information to Class or Item
+     * @see ProjectItemInterface::set_information()
      * @param string $description
      * @param string $keywords
      * @return bool
@@ -761,7 +773,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
-     * Checks if an Item needs a description
+     * @see ProjectItemInterface::is_description()
      * @return bool
      */
     public function is_description()
@@ -797,7 +809,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
-     * Checks if an Item needs keywords
+     * @see ProjectItemInterface::is_keywords()
      * @return bool
      */
     public function is_keywords()
@@ -833,7 +845,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
 	/**
-     * Checks if an Item needs a description
+     * @see ProjectItemInterface::is_description_required()
      * @return bool
      */
     public function is_description_required()
@@ -869,7 +881,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
-     * Checks if an Item needs keywords
+     * @see ProjectItemInterface::is_keywords_required()
      * @return bool
      */
     public function is_keywords_required()
@@ -905,7 +917,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
-     * Checks if an Item is classified
+     * @see ProjectItemInterface::is_classified()
      * @return bool
      */
     public function is_classified()
@@ -943,7 +955,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
-     * Creates a log-entry, that a new item is links and links the item to the log-entry
+     * @see ProjectItemInterface::create_log_entry()
      * @return bool
      */
     public function create_log_entry()
@@ -998,6 +1010,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
   
   
     /**
+     * @see ProjectItemInterface::get_gid_by_item_id_and_project_id()
      * @param integer $item_id
      * @param integer $project_id
      * @param integer $project_status_id
@@ -1009,6 +1022,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectItemInterface::get_gid_by_item_id_and_status_id()
      * @param integer $item_id
      * @param integer $project_id
      * @return array
@@ -1019,7 +1033,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
   	/**
-  	 * Returns a list of project related items
+  	 * @see ProjectItemInterface::list_projects_by_item_id()
   	 * @return array
   	 */
   	public static function list_projects_by_item_id($item_id)
@@ -1051,6 +1065,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
   	}
   	
 	/**
+	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
      */

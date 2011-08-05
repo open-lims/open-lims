@@ -153,6 +153,7 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 	}
 	
 	/**
+	 * @see DataEntityInterface::can_set_automatic()
 	 * @return bool
 	 */
 	public function can_set_automatic()
@@ -161,6 +162,7 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 	}
 	
 	/**
+	 * @see DataEntityInterface::can_set_data_entity()
 	 * @return bool
 	 */
 	public function can_set_data_entity()
@@ -169,6 +171,7 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 	}
 	
 	/**
+	 * @see DataEntityInterface::can_set_control()
 	 * @return bool
 	 */
 	public function can_set_control()
@@ -177,6 +180,7 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 	}
 	
 	/**
+	 * @see DataEntityInterface::can_set_remain()
 	 * @return bool
 	 */
 	public function can_set_remain()
@@ -248,9 +252,8 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 		}
 	}
 	
-	// Wird über konkretisierung automatisch über Folder ausgeführt,
-	// kann aber auch direkt ausgeführt werden (wenn Klasse bekannt)
 	/**
+	 * @see ConcreteFolderCaseInterface::delete()
 	 * @param bool $recursive
 	 * @param bool $content
 	 * @return bool
@@ -298,7 +301,7 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 	}
 	
 	/**
-	 * Checks if $folder_id is a case of Project Folder
+	 * @see ConcreteFolderCaseInterface::is_case()
 	 * @param integer $folder_id
 	 * @return bool
 	 */
@@ -322,6 +325,10 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 		}
 	}
 	
+	/**
+	 * @param integer $project_id
+	 * @return integer
+	 */
 	public static function get_folder_by_project_id($project_id)
 	{
 		return ProjectHasFolder_Access::get_entry_by_project_id($project_id);
@@ -344,6 +351,10 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 		}
 	}
 	
+	/**
+	 * @param integer $folder_id
+	 * @return integer
+	 */
 	public static function get_project_id_by_folder_id($folder_id)
 	{
 		return ProjectHasFolder_Access::get_project_id_by_folder_id($folder_id);

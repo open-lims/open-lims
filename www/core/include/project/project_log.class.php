@@ -42,6 +42,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 	private $log;
 
 	/**
+	 * @see ProjectLogInterface::__construct()
 	 * @param integer $log_id
 	 */
 	function __construct($log_id)
@@ -65,7 +66,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 	} 
 	
 	/**
-	 * Creates a new log-entry
+	 * @see ProjectLogInterface::create()
 	 * @param integer $project_id
 	 * @param string $content
 	 * @param bool $cancel
@@ -90,7 +91,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Deletes a log-entry
+	 * @see ProjectLogInterface::delete()
 	 * @return bool
 	 */
 	public function delete()
@@ -150,7 +151,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Links a project-status to the current log-entry
+	 * @see ProjectLogInterface::link_status()
 	 * @param integer $status_id
 	 * @return bool
 	 */
@@ -177,7 +178,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 	}
 	
 	/**
-	 * Returns a given project-status linked to the current log-entry
+	 * @see ProjectLogInterface::get_status_id()
 	 * @return integer
 	 */
 	public function get_status_id()
@@ -203,6 +204,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 	}
 
 	/**
+	 * @see ProjectLogInterface::get_datetime()
 	 * @return string
 	 */
 	public function get_datetime()
@@ -218,6 +220,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see ProjectLogInterface::get_content()
 	 * @return string
 	 */
 	public function get_content()
@@ -233,6 +236,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see ProjectLogInterface::get_cancel()
 	 * @return bool
 	 */
 	public function get_cancel()
@@ -248,6 +252,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see ProjectLogInterface::get_important()
 	 * @return bool
 	 */
 	public function get_important()
@@ -263,6 +268,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see ProjectLogInterface::get_owner_id()
 	 * @return integer
 	 */
 	public function get_owner_id()
@@ -278,6 +284,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see ProjectLogInterface::set_content()
 	 * @param string $content
 	 * @return bool
 	 */
@@ -294,6 +301,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see ProjectLogInterface::set_important()
 	 * @param bool $important
 	 * @return bool
 	 */
@@ -310,6 +318,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see ProjectLogInterface::list_items()
 	 * @return array
 	 */
 	public function list_items()
@@ -326,6 +335,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 
 
 	/**
+	 * @see ProjectLogInterface::list_entries_by_project_id()
 	 * @param integer $project_id
 	 * @return array
 	 */
@@ -335,6 +345,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 	}
 	
     /**
+     * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
      */

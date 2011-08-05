@@ -112,9 +112,8 @@ class ProjectStatusFolder extends Folder implements ConcreteFolderCaseInterface
 		}
 	}
 	
-	// Wird über konkretisierung automatisch über Folder ausgeführt,
-	// kann aber auch direkt ausgeführt werden (wenn Klasse bekannt)
 	/**
+	 * @see ConcreteFolderCaseInterface::delete()
 	 * @param bool $recursive
 	 * @param bool $content
 	 * @return bool
@@ -163,7 +162,7 @@ class ProjectStatusFolder extends Folder implements ConcreteFolderCaseInterface
 	
 	
 	/**
-	 * Checks if $folder_id is a case of Project Folder
+	 * @see ConcreteFolderCaseInterface::is_case()
 	 * @param integer $folder_id
 	 * @return bool
 	 */
@@ -187,6 +186,11 @@ class ProjectStatusFolder extends Folder implements ConcreteFolderCaseInterface
 		}
 	}
 	
+	/**
+	 * @param integer $project_id
+	 * @param integer $project_status_id
+	 * @return integer
+	 */
 	public static function get_folder_by_project_id_and_project_status_id($project_id, $project_status_id)
 	{
 		return ProjectStatusHasFolder_Access::get_entry_by_project_id_and_project_status_id($project_id, $project_status_id);

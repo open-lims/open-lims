@@ -36,6 +36,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     private $user_id;
        
     /**
+     * @see ProjectSecurityInterface::__construct()
      * @param integer $project_id
      */ 
     function __construct($project_id)
@@ -66,7 +67,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     }
     
     /**
-     * Checks the permissions of the current user
+     * @see ProjectSecurityInterface::is_access()
      * @param integer $itention Intention of the User (Read, Write, etc.)
      * @param integer $ignore_admin_status If it's true, an admin-status of an user will be ignored
      * @return bool
@@ -311,7 +312,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     }
     
     /**
-     * Lists involved users of a project
+     * @see ProjectSecurityInterface::list_involved_users()
      * @return array
      */
     public function list_involved_users()
@@ -359,7 +360,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     }
     
     /**
-     * Changes the owner of a project
+     * @see ProjectSecurityInterface::change_owner_permission()
      * @param integer $owner_id Project Owner
      * @return bool
      */
@@ -420,7 +421,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     } 
     
     /**
-     * Changes the leader of a project
+     * @see ProjectSecurityInterface::change_ou_user_permission()
      * @param integer $leader_id
      * @return bool
      */
@@ -474,7 +475,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     }
     
     /**
-     * Changes the organisation_unit of a project
+     * @see ProjectSecurityInterface::change_organisation_unit_permission()
      * @param integer $organisation_unit_id
      * @return bool
      */
@@ -564,7 +565,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     }
     
     /**
-     * Sets another user-id (if the current user id is not required)
+     * @see ProjectSecurityInterface::set_user_id()
      * @param integer $user_id
      * @return bool
      */

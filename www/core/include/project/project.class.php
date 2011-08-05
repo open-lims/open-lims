@@ -57,6 +57,7 @@ class Project implements ProjectInterface, EventListenerInterface
 	private $fulfilled_datetime_array;
 
 	/**
+	 * @see ProjectInterface::__construct()
 	 * @param integer $project_id
 	 */
 	function __construct($project_id)
@@ -80,7 +81,7 @@ class Project implements ProjectInterface, EventListenerInterface
 	}
 
 	/**
-	 * Sets the template data for project creation
+	 * @see ProjectInterface::set_template_data()
 	 * @param string $type
 	 * @param integer $type_id
 	 * @param array $array
@@ -102,7 +103,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
 
 	/**
-	 * Creates a new Project
+	 * @see ProjectInterface::create()
 	 * @param integer $organisation_unit_id
 	 * @param integer $parent_project_id
 	 * @param string $name
@@ -503,7 +504,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
 
 	/**
-	 * Deletes a project
+	 * @see ProjectInterface::delete()
 	 * @return bool
 	 */
     public function delete()
@@ -679,6 +680,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
    
     /**
+     * @see ProjectInterface::exist_subproject()
      * @return bool
      */   
    	public function exist_subproject()
@@ -703,7 +705,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
 
 	/**
-	 * Checks, if the next status is available
+	 * @see ProjectInterface::is_next_status_available()
 	 * @return integer
 	 */
     public function is_next_status_available()
@@ -738,7 +740,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
-     * Checks the fulfillment of the current project status
+     * @see ProjectInterface::is_current_status_fulfilled()
      * @return bool
      */
     public function is_current_status_fulfilled()
@@ -774,7 +776,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
-     * Returns an array with all project status
+     * @see ProjectInterface::get_all_status_array()
      * @return array
      */
     public function get_all_status_array()
@@ -903,7 +905,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
-     * Returns the id of the current status
+     * @see ProjectInterface::get_current_status_id()
      * @return integer
      */
     public function get_current_status_id()
@@ -930,7 +932,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
-     * Returns the name of the current status
+     * @see ProjectInterface::get_current_status_name()
      * @return string
      */
     public function get_current_status_name()
@@ -948,7 +950,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
-     * Returns an array with all requirements of the current status
+     * @see ProjectInterface::get_current_status_requirements()
      * @return array
      */
     public function get_current_status_requirements()
@@ -1059,7 +1061,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
-     * Retruns an array with all fulfilled requirements of the current status
+     * @see ProjectInterface::get_fulfilled_status_requirements()
      * @return array
      */
     public function get_fulfilled_status_requirements()
@@ -1133,6 +1135,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
 
 	/**
+	 * @see ProjectInterface::get_fulfilled_status_datetimes()
 	 * @return array
 	 */
 	public function get_fulfilled_status_datetimes()
@@ -1150,7 +1153,7 @@ class Project implements ProjectInterface, EventListenerInterface
 	}
     
     /**
-     * Returns the ID of the next status of the current project
+     * @see ProjectInterface::get_next_status_id()
      * @return integer
      */
     public function get_next_status_id()
@@ -1167,7 +1170,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
-     * Returns the name of the next status of the current project
+     * @see ProjectInterface::get_next_status_name()
      * @return string
      */
     public function get_next_status_name()
@@ -1186,7 +1189,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
-     * Proceed the current project to the next status
+     * @see ProjectInterface::set_next_status()
      * @param string $checksum
      * @param string $comment Optional Comment
      * @return bool
@@ -1259,7 +1262,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
-     * Returns the requirements of a given status
+     * @see ProjectInterface::get_status_requirements()
      * @param integer $status_id
      * @return array
      */
@@ -1337,7 +1340,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
      
     /**
-     * Returns subfolder of a given gid
+     * @see ProjectInterface::get_sub_folder()
      * @param integer $folder_id Folder-ID
      * @param integer $gid 
      * @param integer $status_id
@@ -1381,7 +1384,7 @@ class Project implements ProjectInterface, EventListenerInterface
     } 
     
     /**
-     * Moves the project to an organisation unit
+     * @see ProjectInterface::move_to_organisation_unit()
      * @param integer $organisation_unit_id
      * @return bool
      */    
@@ -1481,7 +1484,7 @@ class Project implements ProjectInterface, EventListenerInterface
 	}
 	
 	/**
-     * Moves the project to another project
+     * @see ProjectInterface::move_to_project()
      * @param integer $organisation_unit_id
      * @return bool
      */   
@@ -1570,6 +1573,7 @@ class Project implements ProjectInterface, EventListenerInterface
 	}
     
     /**
+     * @see ProjectInterface::mark_as_deleted()
      * @return bool
      */   
     public function mark_as_deleted()
@@ -1592,6 +1596,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectInterface::mark_as_undeleted()
      * @return bool
      */
     public function mark_as_undeleted()
@@ -1610,6 +1615,8 @@ class Project implements ProjectInterface, EventListenerInterface
     } 
     
     /**
+     * @see ProjectInterface::mark_as_canceled()
+     * @param string $comment
      * @return bool
      */
     public function mark_as_canceled($comment)
@@ -1637,6 +1644,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectInterface::mark_as_reactivated()
      * @return bool
      */
     public function mark_as_reactivated()
@@ -1666,7 +1674,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
-     * Returns a list of related projects
+     * @see ProjectInterface::list_project_related_projects()
      * @return array
      */	
 	public function list_project_related_projects()
@@ -1682,7 +1690,7 @@ class Project implements ProjectInterface, EventListenerInterface
 	}
     
     /**
-     * Returns the project-tree (as an array) of the current project
+     * @see ProjectInterface::get_project_tree()
      * @return array
      */
     public function get_project_tree()
@@ -1737,7 +1745,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
-     * Returns the id of the master-project
+     * @see ProjectInterface::get_master_project_id()
      * @return integer
      */
     public function get_master_project_id()
@@ -1778,6 +1786,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectInterface::get_name()
      * @return string
      */
     public function get_name()
@@ -1793,6 +1802,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectInterface::get_datetime()
      * @return string
      */
     public function get_datetime()
@@ -1808,6 +1818,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectInterface::get_owner_id()
      * @return integer
      */
     public function get_owner_id()
@@ -1823,6 +1834,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectInterface::get_organisation_unit_id()
      * @return integer
      * @todo recursive?
      */
@@ -1839,6 +1851,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectInterface::get_project_toid()
      * @return integer
      */
     public function get_project_toid()
@@ -1854,6 +1867,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
 
 	/**
+	 * @see ProjectInterface::get_description()
 	 * @return string
 	 */
 	public function get_description()
@@ -1892,6 +1906,7 @@ class Project implements ProjectInterface, EventListenerInterface
 	}
 
 	/**
+	 * @see ProjectInterface::get_template_id()
 	 * @return integer
 	 */
     public function get_template_id()
@@ -1907,6 +1922,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
 
 	/**
+	 * @see ProjectInterface::get_template_name()
 	 * @return string
 	 */
     public function get_template_name()
@@ -1923,6 +1939,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectInterface::get_quota()
      * @return integer
      */
     public function get_quota()
@@ -1938,6 +1955,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectInterface::get_filesize()
      * @return integer
      */
     public function get_filesize()
@@ -1953,6 +1971,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectInterface::get_deleted()
      * @return bool
      */
     public function get_deleted()
@@ -1968,6 +1987,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
 
 	/**
+	 * @see ProjectInterface::set_quota()
 	 * @param integer $quota
 	 * @return bool
 	 */
@@ -1989,6 +2009,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
 
 	/**
+	 * @see ProjectInterface::set_filesize()
 	 * @param integer $filesize
 	 * @return bool
 	 */
@@ -2009,6 +2030,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
 
 	/**
+	 * @see ProjectInterface::set_name()
 	 * @param string $name
 	 * @return bool
 	 */
@@ -2069,6 +2091,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
 
 	/**
+	 * @see ProjectInterface::set_owner_id()
 	 * @param integer $owner_id
 	 * @return bool
 	 */
@@ -2089,7 +2112,7 @@ class Project implements ProjectInterface, EventListenerInterface
       
     
     /**
-     * Returns a list of all user related projects
+     * @see ProjectInterface::list_user_related_projects()
      * @param integer $user_id
      * @param bool $analysis_only
      * @return array
@@ -2133,7 +2156,7 @@ class Project implements ProjectInterface, EventListenerInterface
 	}
 
 	/**
-	 * Returns a list of all organisation-unit related projects
+	 * @see ProjectInterface::list_organisation_unit_related_projects()
 	 * @param integer $organisation_unit_id
 	 * @param bool $include_deleted
 	 * @return array
@@ -2170,6 +2193,8 @@ class Project implements ProjectInterface, EventListenerInterface
 	}
     
     /**
+     * @see ProjectInterface::list_entries_by_template_id()
+     * @param integer $template_id
      * @return array
      */  
     public static function list_entries_by_template_id($template_id)
@@ -2178,6 +2203,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectInterface::exist_project_name()
      * @param integer $toid_organ_unit
      * @param integer $toid_project
      * @param string $name
@@ -2203,6 +2229,7 @@ class Project implements ProjectInterface, EventListenerInterface
 	}
     
     /**
+     * @see ProjectInterface::exist_project()
      * @param integer $project_id
      * @return bool
      */
@@ -2212,6 +2239,7 @@ class Project implements ProjectInterface, EventListenerInterface
    	}
          
     /**
+     * @see ProjectInterface::get_used_project_space()
      * @return integer
      */
     public static function get_used_project_space()
@@ -2252,6 +2280,7 @@ class Project implements ProjectInterface, EventListenerInterface
     }
     
     /**
+     * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
      */

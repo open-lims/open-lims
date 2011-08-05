@@ -53,6 +53,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 	private $progress;
 
 	/**
+	 * @see ProjectTaskInterface::__construct()
 	 * @param integer $task_id
 	 */
     function __construct($task_id)
@@ -95,7 +96,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     
 
     /**
-     * Creates a new status-related task
+     * @see ProjectTaskInterface::create_status_process()
      * @param integer $project_id
      * @param integer $user_id
      * @param string $comment
@@ -458,7 +459,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
-     * Creates a new process
+     * @see ProjectTaskInterface::create_process()
      * @param integer $project_id
      * @param integer $user_id
      * @param string $comment
@@ -595,7 +596,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
-     * Creates a new milestone
+     * @see ProjectTaskInterface::create_milestone()
      * @param integer $project_id
      * @param integer $user_id
      * @param string $date
@@ -1174,7 +1175,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
-     * Public Delete Method
+     * @see ProjectTaskInterface::delete()
      * @return bool
      */
     public function delete()
@@ -1208,6 +1209,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectTaskInterface::check_status_process()
      * @param integer $project_id
      * @param integer $end_status_id
      * @param bool $finalise
@@ -1257,6 +1259,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectTaskInterface::get_type()
      * @return integer
      */
     public function get_type()
@@ -1272,6 +1275,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectTaskInterface::get_type_name()
      * @return string
      */
     public function get_type_name()
@@ -1299,6 +1303,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectTaskInterface::get_project_id()
      * @return integer
      */    
     public function get_project_id()
@@ -1314,6 +1319,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectTaskInterface::get_owner_id()
      * @return integer
      */
     public function get_owner_id()
@@ -1329,6 +1335,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectTaskInterface::get_comment()
      * @return string
      */
     public function get_comment()
@@ -1344,6 +1351,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectTaskInterface::get_start_date()
      * @return string
      */
     public function get_start_date()
@@ -1359,6 +1367,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectTaskInterface::get_start_time()
      * @return string
      */
     public function get_start_time()
@@ -1374,6 +1383,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectTaskInterface::get_end_date()
      * @return string
      */
     public function get_end_date()
@@ -1389,6 +1399,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectTaskInterface::get_end_time()
      * @return string
      */
     public function get_end_time()
@@ -1411,6 +1422,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectTaskInterface::get_uf_end_time()
      * @return string
      */
     public function get_uf_end_time()
@@ -1433,6 +1445,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectTaskInterface::get_auto_connect()
      * @return bool
      */
     public function get_auto_connect()
@@ -1448,6 +1461,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectTaskInterface::get_created_at()
      * @return string
      */
     public function get_created_at()
@@ -1463,6 +1477,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectTaskInterface::get_name()
      * @return string
      */
     public function get_name()
@@ -1494,6 +1509,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectTaskInterface::get_color()
      * @return string
      */
     public function get_color()
@@ -1555,6 +1571,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }  
     
     /**
+     * @see ProjectTaskInterface::get_begin_status_id()
      * @return integer
      */
     public function get_begin_status_id()
@@ -1577,6 +1594,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectTaskInterface::get_end_status_id()
      * @return integer
      */
     public function get_end_status_id()
@@ -1599,6 +1617,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectTaskInterface::get_subtraction_points()
      * @return integer
      */
     public function get_subtraction_points()
@@ -1621,6 +1640,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectTaskInterface::get_finalise()
      * @return bool
      */
     public function get_finalise()
@@ -1643,6 +1663,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
  
  	/**
+ 	 * @see ProjectTaskInterface::get_progress()
  	 * @return float
  	 */
     public function get_progress()
@@ -1666,6 +1687,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
 
 	/**
+	 * @see ProjectTaskInterface::set_name()
 	 * @param string $name
 	 * @return bool
 	 */
@@ -1689,6 +1711,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectTaskInterface::set_start()
      * @param string $date
      * @param string $time
      * @return bool
@@ -1840,6 +1863,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectTaskInterface::set_end()
      * @param string $date
      * @param string $time
      * @param bool $whole_day
@@ -2001,6 +2025,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectTaskInterface::set_progress()
      * @param float $progress
      * @return bool
      */
@@ -2143,6 +2168,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     
     
     /**
+     * @see ProjectTaskInterface::list_tasks()
      * @param integer $project_id
      * @return array
      */
@@ -2152,7 +2178,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
       
     /**
-     * Checks all overtime tasks of an project
+     * @see ProjectTaskInterface::check_over_time_tasks()
      * @param integer $project_id
      * @return bool
      */
@@ -2184,7 +2210,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
     
     /**
-     * Lists all upcoming tasks
+     * @see ProjectTaskInterface::list_upcoming_tasks()
      * @return array
      * @todo tasks ending today
      * @todo tasks ending this week
@@ -2250,6 +2276,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     }
 
     /**
+     * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
      */

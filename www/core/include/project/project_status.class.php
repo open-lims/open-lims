@@ -44,6 +44,7 @@ class ProjectStatus implements ProjectStatusInterface
     private $status;    
     
     /**
+     * @see ProjectStatusInterface::__construct()
      * @param integer $status_id
      */
     function __construct($status_id)
@@ -66,7 +67,7 @@ class ProjectStatus implements ProjectStatusInterface
     }
     
     /**
-     * Creates a new project-status
+     * @see ProjectStatusInterface::create()
      * @param string $name
      * @param string $comment
      * @return integer
@@ -84,7 +85,7 @@ class ProjectStatus implements ProjectStatusInterface
     }
     
     /**
-     * Deletes a project-status
+     * @see ProjectStatusInterface::delete()
      * @return bool
      */
     public function delete()
@@ -115,6 +116,7 @@ class ProjectStatus implements ProjectStatusInterface
     }
     
     /**
+     * @see ProjectStatusInterface::get_name()
      * @return string
      */
     public function get_name()
@@ -130,6 +132,7 @@ class ProjectStatus implements ProjectStatusInterface
     }
     
     /**
+     * @see ProjectStatusInterface::get_blocked()
      * @return bool
      */
     public function get_blocked()
@@ -145,6 +148,7 @@ class ProjectStatus implements ProjectStatusInterface
     }
     
     /**
+     * @see ProjectStatusInterface::set_name()
      * @param string $name
      * @return bool
      */
@@ -162,6 +166,7 @@ class ProjectStatus implements ProjectStatusInterface
     
     
     /**
+     * @see ProjectStatusInterface::exist_id()
      * @param integer $id
      * @return bool
      */

@@ -28,7 +28,36 @@
  */ 	
 interface ProjectStatusRelationInterface
 {
-
-	
+	/**
+	 * @param integer $project_id
+	 * @param integer $status_id
+	 */
+    function __construct($project_id, $status_id);
+    
+    /**
+     * Checks, if the class-defined status is lesser than the method one
+     * @param integer $status_id
+     * @return bool
+     */
+    public function is_less($status_id);
+    
+    /**
+     * Checks, if the class-defined status is bigger than the method one
+     * @param integer $status_id
+     * @return bool
+     */
+    public function is_more($status_id);
+    
+    /**
+     * Returns the next status of the given project
+     * @return integer
+     */
+ 	public function get_next();
+ 	
+ 	/**
+     * Returns the previous status of the given project
+     * @return integer
+     */
+ 	public function get_previous();
 }
 ?>

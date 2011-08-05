@@ -28,6 +28,14 @@
  */ 		 
 interface ProjectItemFactoryInterface
 {
+	/**
+	 * @param integer $project_id
+	 * @param integer $item_id
+	 * @param integer $gid
+	 * @param string $keywords
+	 * @param string $description
+	 * @return bool
+	 */
 	public static function create($project_id, $item_id, $gid, $keywords, $description);
 }
 ?>

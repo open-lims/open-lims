@@ -32,6 +32,15 @@ require_once("interfaces/project_item_factory.interface.php");
  */
 class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerInterface
 {
+	/**
+	 * @see ProjectItemFactoryInterface::create()
+	 * @param integer $project_id
+	 * @param integer $item_id
+	 * @param integer $gid
+	 * @param string $keywords
+	 * @param string $description
+	 * @return bool
+	 */
 	public static function create($project_id, $item_id, $gid, $keywords, $description)
 	{
 		global $transaction;
@@ -103,7 +112,9 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
 	}
 	
 	/**
+	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
+     * @return bool
      */
     public static function listen_events($event_object)
     {

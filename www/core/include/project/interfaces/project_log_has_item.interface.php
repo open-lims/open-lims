@@ -28,12 +28,29 @@
  */ 	 
 interface ProjectLogHasItemInterface
 {
+	/**
+	 * @param integer $item_id
+	 */
 	function __construct($item_id);
+	
 	function __destruct();
 	
+	/**
+     * @param integer $item_id
+     * @return bool
+     */
 	public function link_item($item_id);
 	
+	/**
+     * @param integer $log_id
+     * @return array
+     */   
 	public static function get_items_by_log_id($log_id);
+	
+	/**
+     * @param integer $log_id
+     * @return bool
+     */
 	public static function delete_by_log_id($log_id);
 }
 

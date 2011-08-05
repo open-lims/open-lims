@@ -43,6 +43,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 	private $project_template;
 	
 	/**
+	 * @see ProjectTemplateInterface::__construct()
 	 * @param integer $project_tempalte_id
 	 */
 	function __construct($project_template_id)
@@ -69,7 +70,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 	}
 	
 	/**
-	 * Creates a new project-template
+	 * @see ProjectTemplateInterface::create()
 	 * @param integer $data_entity_id
 	 * @param integer $category_id
 	 * @param bool $parent_template
@@ -177,7 +178,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 	}
 	
 	/**
-	 * Deletes a project-tempalte
+	 * @see ProjectTemplateInterface::delete()
 	 * @return bool
 	 */
 	public function delete()
@@ -232,6 +233,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 	}
 	
 	/**
+	 * @see ProjectTemplateInterface::get_name()
 	 * @return string
 	 */
 	public function get_name()
@@ -247,6 +249,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 	}
 	
 	/**
+	 * @see ProjectTemplateInterface::get_parent_template()
 	 * @return bool
 	 */
 	public function get_parent_template()
@@ -262,7 +265,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 	}
 	
 	/**
-	 * Checks if a required-section exists in template
+	 * @see ProjectTemplateInterface::is_required_requirements()
 	 * @return bool
 	 */	
 	public function is_required_requirements()
@@ -288,7 +291,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 	}
 	
 	/**
-	 * Returns the requirements of the required-section
+	 * @see ProjectTemplateInterface::get_required_requirements()
 	 * @return array
 	 */
 	public function get_required_requirements()
@@ -353,7 +356,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 	}
 	
 	/**
-	 * Returns the requirements of a given status
+	 * @see ProjectTemplateInterface::get_status_requirements()
 	 * @param integer $status_id
 	 * @return array
 	 */
@@ -465,7 +468,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 	}
 	
 	/**
-	 * Returns all status of a project
+	 * @see ProjectTemplateInterface::get_all_status()
 	 * @return array
 	 */
 	public function get_all_status()
@@ -498,7 +501,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 	}
 	
 	/**
-	 * Returns the next status of an given status
+	 * @see ProjectTemplateInterface::get_next_status()
 	 * @param status_id
 	 * @return integer
 	 */
@@ -542,7 +545,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 	}
 
 	/**
-	 * Returns the attributes of a given gid-entry
+	 * @see ProjectTemplateInterface::get_gid_attributes()
 	 * @param integer $gid
 	 * @param integer $status_id
 	 * @return array
@@ -620,7 +623,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 	}
 	
 	/**
-	 * Returns the attributes of a giben status
+	 * @see ProjectTemplateInterface::get_status_attributes()
 	 * @param integer $status_id
 	 * @return array
 	 */
@@ -662,7 +665,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 	}
 	
 	/**
-	 * Returns an item-element selected by status and GID
+	 * @see ProjectTemplateInterface::get_status_item()
 	 * @param integer $gid
 	 * @param integer $status_id
 	 * @return array
@@ -715,7 +718,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 	}
 	
 	/**
-	 * Returns information about an class (elemtens inside class-element) from project-template
+	 * @see ProjectTemplateInterface::get_status_class()
 	 * @param integer $status_id
 	 * @param string $class_name
 	 * @return array
@@ -763,7 +766,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 
 	
 	/**
-	 * Checks a given id
+	 * @see ProjectTemplateInterface::exist_id()
 	 * @param integer $id
 	 * @return bool
 	 */
@@ -773,6 +776,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 	}
 	
 	/**
+	 * @see ProjectTemplateInterface::list_entries()
 	 * @return array
 	 */
 	public static function list_entries()
@@ -781,6 +785,8 @@ class ProjectTemplate implements ProjectTemplateInterface
 	}
 		
 	/**
+	 * @see ProjectTemplateInterface::list_entries_by_cat_id()
+	 * @param integer $cat_id
 	 * @return array
 	 */	
 	public static function list_entries_by_cat_id($cat_id)

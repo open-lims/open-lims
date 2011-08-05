@@ -28,7 +28,6 @@
 class Project_Wrapper_Access
 {
 	/**
-	 * NEW
 	 * @param integer $user_id
 	 * @param string $today
 	 * @return array
@@ -65,7 +64,6 @@ class Project_Wrapper_Access
 	}
 		
 	/**
-	 * NEW
 	 * @param integer $leader_id
 	 * @param integer $organisation_unit_id
 	 * @return bool
@@ -100,7 +98,6 @@ class Project_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -175,7 +172,6 @@ class Project_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
 	 * @return integer
 	 */
 	public static function count_list_project_status()
@@ -192,7 +188,6 @@ class Project_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -289,7 +284,6 @@ class Project_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
 	 * @return integer
 	 */
 	public static function count_list_project_templates()
@@ -306,7 +300,6 @@ class Project_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -378,7 +371,6 @@ class Project_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
 	 * @return integer
 	 */
 	public static function count_list_project_template_categories()
@@ -395,7 +387,6 @@ class Project_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
 	 * @return integer
 	 */
 	public static function count_user_projects($user_id)
@@ -428,7 +419,6 @@ class Project_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
 	 * @return integer
 	 */
 	public static function count_user_running_projects($user_id)
@@ -463,7 +453,6 @@ class Project_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
 	 * @return integer
 	 */
 	public static function count_user_finished_projects($user_id)
@@ -498,7 +487,6 @@ class Project_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
 	 * @param integer $user_id
 	 * @param string $order_by
 	 * @param string $order_method
@@ -617,7 +605,6 @@ class Project_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
 	 * @param integer $user_id
 	 * @return integer
 	 */
@@ -651,7 +638,12 @@ class Project_Wrapper_Access
 	}
 
 	/**
-	 * NEW
+	 * @param integer $item_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
 	 */
 	public static function list_projects_by_item_id($item_id, $order_by, $order_method, $start, $end)
 	{
@@ -755,7 +747,8 @@ class Project_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
+	 * @param integer $item_id
+	 * @return itneger
 	 */
 	public static function count_projects_by_item_id($item_id)
 	{
@@ -783,6 +776,10 @@ class Project_Wrapper_Access
    	 * @param string $name
    	 * @param array $template_id
    	 * @param array $organisation_unit_array
+   	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
    	 * @return array
    	 */
    	public static function list_search_projects_without_subprojects($name, $template_array, $organisation_unit_array, $order_by, $order_method, $start, $end)
@@ -964,6 +961,12 @@ class Project_Wrapper_Access
    		}
    	}
    	
+   	/**
+   	 * @param string $name
+   	 * @param array $template_id
+   	 * @param array $organisation_unit_array
+   	 * @return integer
+   	 */
    	public static function count_search_projects_without_subprojects($name, $template_array, $organisation_unit_array)
    	{
    		global $db, $user;
@@ -1065,7 +1068,16 @@ class Project_Wrapper_Access
    	}
    	
    	/**
-   	 * @todo remove double of code
+   	 * @param string $string
+   	 * @param array $project_id_array
+   	 * @param array $item_select_sql_array
+   	 * @param string $item_join_sql
+   	 * @param string $item_where_sql
+   	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+   	 * @return array
    	 */
    	public static function list_data_search($string, $project_id_array, $item_select_sql_array, $item_join_sql, $item_where_sql, $order_by, $order_method, $start, $end)
    	{
@@ -1229,7 +1241,12 @@ class Project_Wrapper_Access
    	}
 
    	/**
-   	 * @todo search in read-only projects too
+   	 * @param string $string
+   	 * @param array $project_id_array
+   	 * @param array $item_select_sql_array
+   	 * @param string $item_join_sql
+   	 * @param string $item_where_sql
+   	 * @return integer
    	 */
    	public static function count_data_search($string, $project_id_array, $item_select_sql_array, $item_join_sql, $item_where_sql)
    	{

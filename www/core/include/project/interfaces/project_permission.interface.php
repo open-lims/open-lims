@@ -28,29 +28,122 @@
  */ 	  	 
 interface ProjectPermissionInterface
 {
+	/**
+     * @param integer $permission_id
+     */
 	function __construct($permission_id);
+	
 	function __destruct();
 	
+	/**
+     * Creates a project-permission
+     * @param integer $user_id
+     * @param integer $organisation_unit_id
+     * @param integer $group_id
+     * @param integer $project_id
+     * @param integer $permission
+     * @param integer $owner_id
+     * @param integer $intention
+     * @return integer
+     */
 	public function create($user_id, $organisation_unit_id, $group_id, $project_id, $permission, $owner_id, $intention);
+	
+	/**
+     * Deletes a project-permission
+     * @return bool
+     */
 	public function delete();
 	
+	/**
+     * Returns the permission array of a permission
+     * @return array
+     */
 	public function get_permission_array();
+	
+	/**
+     * @return integer
+     */
 	public function get_user_id();
+	
+	/**
+     * @return integer
+     */
 	public function get_organisation_unit_id();
+	
+	/**
+     * @return integer
+     */
 	public function get_group_id();
+	
+	/**
+     * @return integer
+     */
 	public function get_owner_id();
+	
+	/**
+     * @return integer
+     */
 	public function get_intention();
 	
+	/**
+     * @param integer $user_id
+     * @return bool
+     */
 	public function set_user_id($user_id);
+	
+	/**
+     * @param integer $organisation_unit_id
+     * @return bool
+     */
 	public function set_organisation_unit_id($organisation_unit_id);
+	
+	/**
+     * @param integer $group_id
+     * @return bool
+     */
 	public function set_group_id($group_id);
+	
+	/**
+     * @param integer $permission
+     * @return bool
+     */
 	public function set_permission($permission);
 	
+	/**
+     * @param integer $project_id
+     * @return array
+     */
 	public static function list_entries_by_project_id($project_id);
-	public static function list_entries_by_project_id_and_intention($project_id, $intention);
-	// private static function list_entries_by_project_id_and_intention_and_group_id($project_id, $intention, $group_id);
-	// private static function list_system_setted_projects_by_organisation_id($organisation_unit_id);
 	
+	/**
+	 * @param integer $project_id
+	 * @param integer $intention
+	 * @return array
+	 */
+	public static function list_entries_by_project_id_and_intention($project_id, $intention);
+	
+	/**
+	 * @param integer $project_id
+	 * @param integer $intention
+	 * @return array
+	 */
+	public static function delete_entries_by_project_id_and_intention($project_id, $intention);
+	
+	/**
+     * Deletes a group from permission table completly.
+     * Warning: This method is for group-deletion only!
+     * 			Outside group-deletion is causes logical inconsistency!
+     * @param integer $group_id
+     * @return bool
+     */
+	public static function delete_by_group_id($group_id);
+	
+	/**
+	 * Changes all owner_ids of another giver owner_id
+	 * @param integer $old_owner_id
+	 * @param integer $new_owner_id
+	 * @return bool
+	 */
 	public static function reset_owner_id($old_owner_id, $new_owner_id);	
 }
 ?>

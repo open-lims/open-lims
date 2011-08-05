@@ -28,26 +28,117 @@
  */ 
 interface ProjectTemplateInterface
 {
+	/**
+	 * @param integer $project_tempalte_id
+	 */
 	function __construct($project_template_id);
+	
 	function __destruct();
 	
+	/**
+	 * Creates a new project-template
+	 * @param integer $data_entity_id
+	 * @param integer $category_id
+	 * @param bool $parent_template
+	 * @return bool
+	 */
 	public function create($object_id, $category_id, $parent_template);
+	
+	/**
+	 * Deletes a project-tempalte
+	 * @return bool
+	 */
 	public function delete();
 	
+	/**
+	 * @return string
+	 */
 	public function get_name();
+	
+	/**
+	 * @return bool
+	 */
 	public function get_parent_template();
+	
+	/**
+	 * Checks if a required-section exists in template
+	 * @return bool
+	 */
 	public function is_required_requirements();
+	
+	/**
+	 * Returns the requirements of the required-section
+	 * @return array
+	 */
 	public function get_required_requirements();
+	
+	/**
+	 * Returns the requirements of a given status
+	 * @param integer $status_id
+	 * @return array
+	 */
 	public function get_status_requirements($status_id);
+	
+	/**
+	 * Returns all status of a project
+	 * @return array
+	 */
 	public function get_all_status();
+	
+	/**
+	 * Returns the next status of an given status
+	 * @param status_id
+	 * @return integer
+	 */
 	public function get_next_status($status_id);
+	
+	/**
+	 * Returns the attributes of a given gid-entry
+	 * @param integer $gid
+	 * @param integer $status_id
+	 * @return array
+	 */
 	public function get_gid_attributes($gid, $status_id);
+	
+	/**
+	 * Returns the attributes of a giben status
+	 * @param integer $status_id
+	 * @return array
+	 */
 	public function get_status_attributes($status_id);
+	
+	/**
+	 * Returns an item-element selected by status and GID
+	 * @param integer $gid
+	 * @param integer $status_id
+	 * @return array
+	 */
 	public function get_status_item($gid, $status_id);
+	
+	/**
+	 * Returns information about an class (elemtens inside class-element) from project-template
+	 * @param integer $status_id
+	 * @param string $class_name
+	 * @return array
+	 */
 	public function get_status_class($status_id, $class_name);
 	
+	/**
+	 * Checks a given id
+	 * @param integer $id
+	 * @return bool
+	 */
 	public static function exist_id($id);
+	
+	/**
+	 * @return array
+	 */
 	public static function list_entries();
+	
+	/**
+	 * @param integer $cat_id
+	 * @return array
+	 */
 	public static function list_entries_by_cat_id($cat_id);
 }
 ?>

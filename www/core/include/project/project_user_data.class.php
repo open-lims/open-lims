@@ -41,6 +41,7 @@ class ProjectUserData implements ProjectUserDataInterface, EventListenerInterfac
 	private $project_user_data;
 	
 	/**
+	 * @see ProjectUserDataInterface::__construct()
 	 * @param integer $user_id
 	 */
 	function __construct($user_id)
@@ -64,6 +65,7 @@ class ProjectUserData implements ProjectUserDataInterface, EventListenerInterfac
 	}
 	
 	/**
+	 * @see ProjectUserDataInterface::get_quota()
 	 * @return integer
 	 */
 	public function get_quota()
@@ -79,6 +81,7 @@ class ProjectUserData implements ProjectUserDataInterface, EventListenerInterfac
 	}
 	
 	/**
+	 * @see ProjectUserDataInterface::set_quota()
 	 * @param integer $quota
 	 * @return integer
 	 */
@@ -95,6 +98,7 @@ class ProjectUserData implements ProjectUserDataInterface, EventListenerInterfac
 	}	
 	
 	/**
+	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
      */

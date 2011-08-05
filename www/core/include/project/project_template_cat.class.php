@@ -43,6 +43,7 @@ class ProjectTemplateCat implements ProjectTemplateCatInterface
 	private $project_template_cat;
 
     /**
+     * @see ProjectTemplateCatInterface::__construct()
 	 * @param integer $project_template_cat_id
 	 */
 	function __construct($project_template_cat_id)
@@ -66,7 +67,7 @@ class ProjectTemplateCat implements ProjectTemplateCatInterface
 	}
 	
 	/**
-	 * Creates a new project-tempalte-category
+	 * @see ProjectTemplateCatInterface::create()
 	 * @param string $name
 	 * @return integer
 	 */
@@ -83,7 +84,7 @@ class ProjectTemplateCat implements ProjectTemplateCatInterface
 	}
 	
 	/**
-	 * Deletes a project-template-category
+	 * @see ProjectTemplateCatInterface::delete()
 	 * @return bool
 	 */
 	public function delete()
@@ -114,6 +115,7 @@ class ProjectTemplateCat implements ProjectTemplateCatInterface
 	}
 	
 	/**
+	 * @see ProjectTemplateCatInterface::get_name()
 	 * @return string
 	 */
 	public function get_name()
@@ -129,6 +131,7 @@ class ProjectTemplateCat implements ProjectTemplateCatInterface
 	}
 	
 	/**
+	 * @see ProjectTemplateCatInterface::set_name()
 	 * @param string $name
 	 * @return integer
 	 */
@@ -146,6 +149,7 @@ class ProjectTemplateCat implements ProjectTemplateCatInterface
 	
 	
 	/**
+	 * @see ProjectTemplateCatInterface::exist_name()
 	 * @param string $name
 	 * @return bool
 	 */
@@ -155,6 +159,7 @@ class ProjectTemplateCat implements ProjectTemplateCatInterface
 	}
 	
 	/**
+	 * @see ProjectTemplateCatInterface::exist_id()
 	 * @param integer $id
 	 * @return bool
 	 */
@@ -164,6 +169,7 @@ class ProjectTemplateCat implements ProjectTemplateCatInterface
 	}
 	
 	/**
+	 * @see ProjectTemplateCatInterface::list_entries()
 	 * @return array
 	 */
 	public static function list_entries()

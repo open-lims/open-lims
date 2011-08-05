@@ -28,6 +28,19 @@
  */ 
 interface ProjectVirtualFolderInterface
 {
-
+	/**
+	 * @param integer $virtual_folder_id
+	 */
+	function __construct($virtual_folder_id);
+	
+	/**
+	 * @return bool
+	 */
+	public function set_project_vfolder();
+	
+	/**
+	 * @return bool
+	 */
+	public function is_project_vfolder();
 }
 ?>

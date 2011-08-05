@@ -38,6 +38,7 @@ class ProjectTaskPoint implements ProjectTaskPointInterface
 	private $project_status_array;
 
 	/**
+	 * @see ProjectTaskPointInterface::__construct()
 	 * @param integer $project_id
 	 */
     function __construct($project_id)
@@ -63,7 +64,7 @@ class ProjectTaskPoint implements ProjectTaskPointInterface
     }
     
     /**
-     * Returns the achived points of a given status
+     * @see ProjectTaskPointInterface::get_status_achieved_points()
      * @param integer $status_id
      * @param string $datetime
      * @return integer
@@ -136,7 +137,7 @@ class ProjectTaskPoint implements ProjectTaskPointInterface
     }
     
     /**
-     * Returns the currently achieved points
+     * @see ProjectTaskPointInterface::get_current_achieved_points()
      * @param string $datetime
      * @return integer
      */    
@@ -207,7 +208,7 @@ class ProjectTaskPoint implements ProjectTaskPointInterface
     }
     
     /**
-     * Returns the maximum of points of a given status
+     * @see ProjectTaskPointInterface::get_status_max_points()
      * @param integer $status_id
      * @return integer
      */ 
@@ -250,7 +251,7 @@ class ProjectTaskPoint implements ProjectTaskPointInterface
     }
     
     /**
-     * Returns the maximium-points of a given task
+     * @see ProjectTaskPointInterface::get_task_max_points()
      * @param integer $task_id
      * @return integer
      */
@@ -326,7 +327,7 @@ class ProjectTaskPoint implements ProjectTaskPointInterface
     }
     
     /**
-     * Returns the achieved-points of a given task
+     * @see ProjectTaskPointInterface::get_task_achieved_points()
      * @param integer $task_id
      * @return integer
      */
