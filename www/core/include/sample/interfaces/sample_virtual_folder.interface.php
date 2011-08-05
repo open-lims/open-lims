@@ -28,6 +28,19 @@
  */ 	 
 interface SampleVirtualFolderInterface
 {
-
+	/**
+	 * @param integer $virtual_foldeR_id
+	 */
+	function __construct($virtual_folder_id);
+	
+	/**
+	 * @return bool
+	 */
+	public function set_sample_vfolder();
+	
+	/**
+	 * @return bool
+	 */
+	public function is_sample_vfolder();
 }
 ?>

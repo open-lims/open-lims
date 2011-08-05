@@ -42,7 +42,6 @@ interface ItemListenerInterface
 	 */
 	public function get_item_parents();
 	
-	
 	/**
 	 * Returns entry ID via item ID
 	 * @param integer $item_id

@@ -35,7 +35,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * OLVDL Class
  * @package template
  */
-class Olvdl
+class Olvdl implements OlvdlInterface
 {
 	private $olvdl;
 
@@ -45,6 +45,7 @@ class Olvdl
     private $xml_array;
     
     /**
+     * @see OlvdlInterface::__construct()
      * @param integer $olvdl_id
      */
     function __construct($olvdl_id)
@@ -78,7 +79,7 @@ class Olvdl
     }   
     
     /**
-     * Creates a new OLVDL-Template in DB
+     * @see OlvdlInterface::create()
      * @param integer $data_entity_id
      * @return integer
      */
@@ -102,7 +103,7 @@ class Olvdl
     }
     
     /**
-     * Deletes an OLVDL-Template from DB
+     * @see OlvdlInterface::delete()
      * @return bool
      */
     public function delete()
@@ -118,6 +119,7 @@ class Olvdl
     }
     
     /**
+     * @see OlvdlInterface::get_xml_array()
      * @return array
      */     
     public function get_xml_array()

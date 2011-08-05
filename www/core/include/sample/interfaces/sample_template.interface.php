@@ -28,24 +28,98 @@
  */ 	 
 interface SampleTemplateInterface
 {
+	/**
+	 * @param integer $sample_template_id
+	 */
 	function __construct($sample_template_id);
+	
 	function __destruct();
 	
+	/**
+	 * Creates a new sample-template
+	 * @param integer $object_id
+	 * @param integer $category_id
+	 * @return bool
+	 */
 	public function create($object_id, $category_id);
+	
+	/**
+	 * Deletes a sample-tempalte
+	 * @return bool
+	 */
 	public function delete();
 	
+	/**
+	 * @return string
+	 */
 	public function get_name();
+	
+	/**
+	 * @return integer
+	 */
 	public function get_cat_id();
 	
+	/**
+	 * @return array
+	 */
+	public function get_information_fields();
+	
+	/**
+	 * Checks if a required-section exists in template
+	 * @return bool
+	 */
 	public function is_required_requirements();
+	
+	/**
+	 * Returns the requirements of the required-section
+	 * @return array
+	 */
 	public function get_required_requirements();
+	
+	/**
+	 * Returns the requirements of the sample
+	 * @return array
+	 */
 	public function get_requirements();
+	
+	/**
+	 * Returns the attributes of a given gid-entry
+	 * @param integer $gid
+	 * @return array
+	 */
 	public function get_gid_attributes($gid);
+	
+	/**
+	 * Returns an item-element selected by GID
+	 * @param integer $gid
+	 * @return array
+	 */
 	public function get_gid_item($gid);
+	
+	/**
+	 * Returns information about an class (elemtens inside class-element) from sample-template
+	 * @param string $class_name
+	 * @return array
+	 */
 	public function get_class($class_name);
 	
+	/**
+	 * Checks a given id
+	 * @param integer $id
+	 * @return bool
+	 */
 	public static function exist_id($id);
+	
+	/**
+	 * Returns a list of all templates in a category
+	 * @param integer $cat_id
+	 * @return array
+	 */
 	public static function list_entries_by_cat_id($cat_id);
+	
+	/**
+	 * @return array
+	 */
 	public static function list_entries();	
 }
 ?>

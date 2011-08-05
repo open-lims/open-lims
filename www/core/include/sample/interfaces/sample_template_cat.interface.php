@@ -28,16 +28,52 @@
  */ 	 
 interface SampleTemplateCatInterface
 {
+	/**
+	 * @param integer $sample_template_cat_id
+	 */
 	function __construct($sample_template_cat_id);
+	
 	function __destruct();
 	
+	/**
+	 * Creates a new sample-tempalte-category
+	 * @param string $name
+	 * @return integer
+	 */
 	public function create($name);
+	
+	/**
+	 * Deletes a sample-template-category
+	 * @return bool
+	 */
 	public function delete();
+	
+	/**
+	 * @return string
+	 */
 	public function get_name();
+	
+	/**
+	 * @param string $name
+	 * @return integer
+	 */
 	public function set_name($name);
 	
+	/**
+	 * @param string $name
+	 * @return bool
+	 */
 	public static function exist_name($name);
+	
+	/**
+	 * @param integer $id
+	 * @return bool
+	 */
 	public static function exist_id($id);
+	
+	/**
+	 * @return array
+	 */
 	public static function list_entries();
 }
 ?>

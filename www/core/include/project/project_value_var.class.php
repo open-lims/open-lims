@@ -38,6 +38,10 @@ class ProjectValueVar implements ValueVarCaseInterface
     
     private $string_array;
 	
+    /**
+     * @param string $word
+     * @return mixed
+     */
     private function interpret($word)
     {
     	switch($word):
@@ -128,6 +132,14 @@ class ProjectValueVar implements ValueVarCaseInterface
     	}
     }
 
+    /**
+	 * @see ValueVarCaseInterface::get_content()
+	 * @param array $string_array array of instructions
+	 * @param array $stack stack of instructions
+	 * @param mixed $result current result set
+	 * @param mixed $temp current temp set
+	 * @return mixed
+	 */
 	public function get_content($string_array, $stack, $result, $temp)
 	{
 		if (is_array($string_array) and is_array($stack))
@@ -155,17 +167,30 @@ class ProjectValueVar implements ValueVarCaseInterface
 		}
 	}
 	
+	/**
+	 * @see ValueVarCaseInterface::get_stack()
+	 * @return array
+	 */
 	public function get_stack()
 	{
 		return $this->stack;
 	}
 	
+	/**
+	 * @see ValueVarCaseInterface::get_string_array()
+	 * @return array
+	 */
 	public function get_string_array()
 	{
 		return $this->string_array;
 	}
 	
 	
+	/**
+	 * @see ValueVarCaseInterface::is_case()
+	 * @param integer $folder_id
+	 * @return bool
+	 */
 	public static function is_case($folder_id)
 	{
 		if (is_numeric($folder_id))
@@ -185,6 +210,10 @@ class ProjectValueVar implements ValueVarCaseInterface
 		}
 	}
 	
+	/**
+	 * @see ValueVarCaseInterface::get_instance()
+	 * @return object
+	 */
 	public static function get_instance()
 	{
 		if (self::$instance instanceof ProjectValueVar)

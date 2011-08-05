@@ -38,7 +38,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 class Sample_Wrapper implements Sample_WrapperInterface
 {
 	/**
-	 * Returns a list of all sample templates
+	 * @see Sample_WrapperInterface::list_sample_templates()
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -51,7 +51,7 @@ class Sample_Wrapper implements Sample_WrapperInterface
 	}
 	
 	/**
-	 * Returns the number of all sample templates
+	 * @see Sample_WrapperInterface::count_list_sample_templates()
 	 * @return integer
 	 */
 	public static function count_list_sample_templates()
@@ -60,7 +60,7 @@ class Sample_Wrapper implements Sample_WrapperInterface
 	}
 	
 	/**
-	 * Returns a list of all sample template categories
+	 * @see Sample_WrapperInterface::list_sample_template_categories()
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -73,7 +73,7 @@ class Sample_Wrapper implements Sample_WrapperInterface
 	}
 	
 	/**
-	 * Returns the number of all sample template categories
+	 * @see Sample_WrapperInterface::count_list_sample_template_categories()
 	 * @return integer
 	 */
 	public static function count_list_sample_template_categories()
@@ -82,6 +82,7 @@ class Sample_Wrapper implements Sample_WrapperInterface
 	}
 	
 	/**
+	 * @see Sample_WrapperInterface::list_user_samples()
 	 * @param integer $user_id
 	 * @param string $order_by
 	 * @param string $order_method
@@ -95,7 +96,7 @@ class Sample_Wrapper implements Sample_WrapperInterface
 	}
 	
 	/**
-	 * Returns the number of all users related samples
+	 * @see Sample_WrapperInterface::count_user_samples()
 	 * @param integer $user_id
 	 * @return integer
 	 */
@@ -105,7 +106,7 @@ class Sample_Wrapper implements Sample_WrapperInterface
 	}
 	
 	/**
-	 * Returns a set of sample in relations of a SQL-String
+	 * @see Sample_WrapperInterface::list_item_samples()
 	 * @param string $item_sql
 	 * @param string $order_by
 	 * @param string $order_method
@@ -119,7 +120,7 @@ class Sample_Wrapper implements Sample_WrapperInterface
 	}
 	
 	/**
-	 * Returns the number of samples in relations of a SQL-String
+	 * @see Sample_WrapperInterface::count_item_samples()
 	 * @param string $item_id
 	 * @return integer
 	 */
@@ -128,7 +129,8 @@ class Sample_Wrapper implements Sample_WrapperInterface
 		return Sample_Wrapper_Access::count_item_samples($item_sql);
 	}
 	
- 	/** Returns a set of sample in relations of a SQL-String
+ 	/** 
+ 	 * @see Sample_WrapperInterface::list_samples_by_item_id()
 	 * @param string $item_sql
 	 * @param string $order_by
 	 * @param string $order_method
@@ -142,7 +144,7 @@ class Sample_Wrapper implements Sample_WrapperInterface
 	}
 	
 	/**
-	 * Returns the number of samples in relations of a SQL-String
+	 * @see Sample_WrapperInterface::count_samples_by_item_id()
 	 * @param string $item_id
 	 * @return integer
 	 */
@@ -151,57 +153,136 @@ class Sample_Wrapper implements Sample_WrapperInterface
 		return Sample_Wrapper_Access::count_samples_by_item_id($item_id);
 	}
 
+	/** 
+	 * @see Sample_WrapperInterface::list_organisation_unit_samples()
+	 * @param integer $organisation_unit_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
 	public static function list_organisation_unit_samples($organisation_unit_id, $order_by, $order_method, $start, $end)
 	{
 		return Sample_Wrapper_Access::list_organisation_unit_samples($organisation_unit_id, $order_by, $order_method, $start, $end);
 	}
 	
+	/** 
+	 * @see Sample_WrapperInterface::count_organisation_unit_samples()
+	 * @param integer $organisation_unit_id
+	 * @return integer
+	 */
 	public static function count_organisation_unit_samples($organisation_unit_id)
 	{
 		return Sample_Wrapper_Access::count_organisation_unit_samples($organisation_unit_id);
 	}
 	
+	/** 
+	 * @see Sample_WrapperInterface::list_sample_locations()
+	 * @param integer $sample_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
 	public static function list_sample_locations($sample_id, $order_by, $order_method, $start, $end)
 	{
 		return Sample_Wrapper_Access::list_sample_locations($sample_id, $order_by, $order_method, $start, $end);
 	}
 	
+	/** 
+	 * @see Sample_WrapperInterface::count_sample_locations()
+	 * @param integer $sample_id
+	 * @return integer
+	 */
 	public static function count_sample_locations($sample_id)
 	{
 		return Sample_Wrapper_Access::count_sample_locations($sample_id);
 	}
 	
+	/** 
+	 * @see Sample_WrapperInterface::list_sample_users()
+	 * @param integer $sample_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
 	public static function list_sample_users($sample_id, $order_by, $order_method, $start, $end)
 	{
 		return Sample_Wrapper_Access::list_sample_users($sample_id, $order_by, $order_method, $start, $end);
 	}
 	
+	/** 
+	 * @see Sample_WrapperInterface::count_sample_users()
+	 * @param integer $sample_id
+	 * @return integer
+	 */
 	public static function count_sample_users($sample_id)
 	{
 		return Sample_Wrapper_Access::count_sample_users($sample_id);
 	}
 	
+	/** 
+	 * @see Sample_WrapperInterface::list_sample_organisation_units()
+	 * @param integer $sample_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
 	public static function list_sample_organisation_units($sample_id, $order_by, $order_method, $start, $end)
 	{
 		return Sample_Wrapper_Access::list_sample_organisation_units($sample_id, $order_by, $order_method, $start, $end);
 	}
 	
+	/** 
+	 * @see Sample_WrapperInterface::count_sample_organisation_units()
+	 * @param integer $sample_id
+	 * @return integer
+	 */
 	public static function count_sample_organisation_units($sample_id)
 	{
 		return Sample_Wrapper_Access::count_sample_organisation_units($sample_id);
 	}
 
+	/** 
+	 * @see Sample_WrapperInterface::list_sample_search()
+	 * @param string $name
+	 * @param array $organisation_unit_array
+	 * @param array $template_array
+	 * @param bool $in_id
+	 * @param bool $in_name
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
 	public static function list_sample_search($name, $organisation_unit_array, $template_array, $in_id, $in_name, $order_by, $order_method, $start, $end)
 	{
 		return Sample_Wrapper_Access::list_sample_search($name, $organisation_unit_array, $template_array, $in_id, $in_name, $order_by, $order_method, $start, $end);
 	}
 	
+	/** 
+	 * @see Sample_WrapperInterface::count_sample_search()
+	 * @param string $name
+	 * @param array $organisation_unit_array
+	 * @param array $template_array
+	 * @param bool $in_id
+	 * @param bool $in_name
+	 * @return integer
+	 */
 	public static function count_sample_search($name, $organisation_unit_array, $template_array, $in_id, $in_name)
 	{
 		return Sample_Wrapper_Access::count_sample_search($name, $organisation_unit_array, $template_array, $in_id, $in_name);
 	}
 	 
 	/**
+	 * @see Sample_WrapperInterface::list_data_search()
 	 * @param string $string
 	 * @param array $sample_id_array
 	 * @param array $item_type_array
@@ -257,6 +338,7 @@ class Sample_Wrapper implements Sample_WrapperInterface
 	}
 	
 	/**
+	 * @see Sample_WrapperInterface::count_data_search()
    	 * @param string $string
    	 * @param array $sample_id_array
    	 * @param array $item_type_array

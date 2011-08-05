@@ -28,7 +28,6 @@
 class Sample_Wrapper_Access
 {
 	/**
-	 * NEW
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -122,7 +121,6 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
 	 * @return integer
 	 */
 	public static function count_list_sample_templates()
@@ -139,7 +137,6 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -211,7 +208,6 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
 	 * @return integer
 	 */
 	public static function count_list_sample_template_categories()
@@ -228,13 +224,12 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
 	 * @param integer $user_id
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
 	 * @param integer $end
-	 * @return integer
+	 * @return array
 	 */
 	public static function list_user_samples($user_id, $order_by, $order_method, $start, $end)
 	{
@@ -350,7 +345,6 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
 	 * @param integer $user_id
 	 * @return integer
 	 */
@@ -378,7 +372,12 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
+	 * @param string $item_sql
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
 	 */
 	public static function list_item_samples($item_sql, $order_by, $order_method, $start, $end)
 	{
@@ -498,7 +497,8 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
+	 * @param string $item_sql
+	 * @return integer
 	 */
 	public static function count_item_samples($item_sql)
 	{
@@ -523,7 +523,12 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
+	 * @param string $item_sql
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
 	 */
 	public static function list_samples_by_item_id($item_id, $order_by, $order_method, $start, $end)
 	{
@@ -643,7 +648,8 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
+	 * @param string $item_sql
+	 * @return integer
 	 */
 	public static function count_samples_by_item_id($item_id)
 	{
@@ -668,13 +674,12 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
 	 * @param integer $organisation_unit_id
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
 	 * @param integer $end
-	 * @return integer
+	 * @return array
 	 */
 	public static function list_organisation_unit_samples($organisation_unit_id, $order_by, $order_method, $start, $end)
 	{
@@ -789,7 +794,6 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
 	 * @param integer $organisation_unit_id
 	 * @return integer
 	 */
@@ -816,7 +820,12 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
+	 * @param integer $sample_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
 	 */
 	public static function list_sample_locations($sample_id, $order_by, $order_method, $start, $end)
 	{
@@ -906,7 +915,8 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
+	 * @param integer $sample_id
+	 * @return integer
 	 */
 	public static function count_sample_locations($sample_id)
 	{
@@ -930,7 +940,12 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
+	 * @param integer $sample_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
 	 */
 	public static function list_sample_users($sample_id, $order_by, $order_method, $start, $end)
 	{
@@ -1023,7 +1038,8 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
+	 * @param integer $sample_id
+	 * @return integer
 	 */
 	public static function count_sample_users($sample_id)
 	{
@@ -1047,7 +1063,12 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
+	 * @param integer $sample_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
 	 */
 	public static function list_sample_organisation_units($sample_id, $order_by, $order_method, $start, $end)
 	{
@@ -1125,7 +1146,8 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
+	 * @param integer $sample_id
+	 * @return integer
 	 */
 	public static function count_sample_organisation_units($sample_id)
 	{
@@ -1149,7 +1171,16 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
+	 * @param string $name
+	 * @param array $organisation_unit_array
+	 * @param array $template_array
+	 * @param bool $in_id
+	 * @param bool $in_name
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
 	 */
 	public static function list_sample_search($name, $organisation_unit_array, $template_array, $in_id, $in_name, $order_by, $order_method, $start, $end)
 	{
@@ -1364,7 +1395,12 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
-	 * NEW
+	 * @param string $name
+	 * @param array $organisation_unit_array
+	 * @param array $template_array
+	 * @param bool $in_id
+	 * @param bool $in_name
+	 * @return integer
 	 */
 	public static function count_sample_search($name, $organisation_unit_array, $template_array, $in_id, $in_name)
 	{
@@ -1488,6 +1524,16 @@ class Sample_Wrapper_Access
 	}
 	
 	/**
+	 * @param string $string
+	 * @param array §sample_id_array
+	 * @param array $item_select_sql_array
+	 * @param string $item_join_sql
+	 * @param string $item_where_sql
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
    	 * @todo search in read-only projects too
    	 */
    	public static function list_data_search($string, $sample_id_array, $item_select_sql_array, $item_join_sql, $item_where_sql, $order_by, $order_method, $start, $end)
@@ -1641,6 +1687,14 @@ class Sample_Wrapper_Access
    		}
    	}
 	
+   	/**
+	 * @param string $string
+	 * @param array §sample_id_array
+	 * @param array $item_select_sql_array
+	 * @param string $item_join_sql
+	 * @param string $item_where_sql
+	 * @return integer
+   	 */
    	public static function count_data_search($string, $sample_id_array, $item_select_sql_array, $item_join_sql, $item_where_sql)
    	{
    		global $db, $user;

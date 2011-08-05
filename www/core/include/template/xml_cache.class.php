@@ -44,6 +44,7 @@ class XmlCache implements XmlCacheInterface
 	private $xml_array;
 	
 	/**
+	 * @see XmlCacheInterface::__construct()
 	 * @param integer $data_entity_id
 	 */
     function __construct($data_entity_id)
@@ -81,6 +82,7 @@ class XmlCache implements XmlCacheInterface
     }
     
     /**
+     * @see XmlCacheInterface::get_xml_array()
      * @return array
      */
     public function get_xml_array()

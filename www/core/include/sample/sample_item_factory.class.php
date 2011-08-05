@@ -32,6 +32,15 @@ require_once("interfaces/sample_item_factory.interface.php");
  */
 class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInterface
 {
+	/**
+	 * @see SampleItemFactoryInterface::create()
+	 * @param integer $sample_id
+	 * @param integer $item_id
+	 * @param integer $gid
+	 * @param string $keywords
+	 * @param string $description
+	 * @return bool
+	 */
 	public static function create($sample_id, $item_id, $gid, $keywords, $description)
 	{
 		global $transaction;
@@ -92,7 +101,9 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
 	}
 	
 	/**
+	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
+     * @return bool
      */
     public static function listen_events($event_object)
     {

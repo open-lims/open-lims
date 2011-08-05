@@ -28,12 +28,29 @@
  */ 	 
 interface OlvdlInterface
 {
+	/**
+     * @param integer $olvdl_id
+     */
 	function __construct($olvdl_id);
+	
 	function __destruct();
 	
-	public function create($object_id);
+	/**
+     * Creates a new OLVDL-Template in DB
+     * @param integer $data_entity_id
+     * @return integer
+     */
+	public function create($data_entity_id);
+	
+	/**
+     * Deletes an OLVDL-Template from DB
+     * @return bool
+     */
 	public function delete();
 	
+	/**
+     * @return array
+     */ 
 	public function get_xml_array();
 }
 ?>

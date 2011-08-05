@@ -28,26 +28,118 @@
  */ 		 
 interface SampleItemInterface
 {
+	/**
+	 * @param integer $sample_id
+	 */
 	function __construct($sample_id);
+	
 	function __destruct();
 	
+	/**
+     * Links an item to the sample
+     * @return bool
+     */
 	public function link_item();
+	
+	/**
+     * Unlinks an item from a specific sample
+     * @return bool
+     */
 	public function unlink_item();
+	
+	/**
+     * Unlinks an item from all samples
+     * @return bool
+     */
 	public function unlink_item_full();
+	
+	/**
+     * @return array
+     */
 	public function get_sample_items();
 	
+	/**
+     * @param integer $item_id
+     * @return bool
+     */
 	public function set_item_id($item_id);
+	
+	/**
+     * @param integer $gid
+     * @return bool
+     */
 	public function set_gid($gid);
 	
-	// private function exist_class($class_name);
+	/**
+     * Adds the Item to a class
+     * @param string $class_name
+     * @return bool
+     */
 	public function set_class($class_name);
+	
+	/**
+     * Removes the Item from a class
+     * @return bool
+     */
 	public function unset_class();
+	
+	/**
+     * Sets Item-Information to Class or Item
+     * @param string $description
+     * @param string $keywords
+     * @return bool
+     */
 	public function set_information($description, $keywords);
-	// private function is_item_information();
-	// private function is_class_information();
+	
+	/**
+     * Checks if an Item needs a description
+     * @return bool
+     */
 	public function is_description();
+	
+	/**
+     * Checks if an Item needs keywords
+     * @return bool
+     */
 	public function is_keywords();
+	
+	/**
+     * Checks if an Item needs a description
+     * @return bool
+     */
+    public function is_description_required();
+    
+    /**
+     * Checks if an Item needs keywords
+     * @return bool
+     */
+    public function is_keywords_required();
+	
+    /**
+     * Checks if an Item is classified
+     * @return bool
+     */
 	public function is_classified();
+	
+	/**
+     * @param integer $item_id
+     * @return array
+     */
+    public static function list_entries_by_item_id($item_id);
+    
+    /**
+     * @param integer $item_id
+     * @param integer $sample_id
+     * @return integer
+     */
+    public static function get_gid_by_item_id_and_sample_id($item_id, $sample_id);
+    
+    /**
+	 * @param integer $item_id
+	 * @param integer $gid
+	 * @return array
+	 */
+	public static function list_sample_id_by_item_id_and_gid($item_id, $gid);
 }
 
 ?>

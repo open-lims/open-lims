@@ -43,6 +43,7 @@ class SampleTemplateCat implements SampleTemplateCatInterface
 	private $sample_template_cat;
 
     /**
+     * @see SampleTemplateCatInterface::__construct()
 	 * @param integer $sample_template_cat_id
 	 */
 	function __construct($sample_template_cat_id)
@@ -66,7 +67,7 @@ class SampleTemplateCat implements SampleTemplateCatInterface
 	}
 	
 	/**
-	 * Creates a new sample-tempalte-category
+	 * @see SampleTemplateCatInterface::create()
 	 * @param string $name
 	 * @return integer
 	 */
@@ -83,7 +84,7 @@ class SampleTemplateCat implements SampleTemplateCatInterface
 	}
 	
 	/**
-	 * Deletes a sample-template-category
+	 * @see SampleTemplateCatInterface::delete()
 	 * @return bool
 	 */
 	public function delete()
@@ -114,6 +115,7 @@ class SampleTemplateCat implements SampleTemplateCatInterface
 	}
 	
 	/**
+	 * @see SampleTemplateCatInterface::get_name()
 	 * @return string
 	 */
 	public function get_name()
@@ -129,6 +131,7 @@ class SampleTemplateCat implements SampleTemplateCatInterface
 	}
 	
 	/**
+	 * @see SampleTemplateCatInterface::set_name()
 	 * @param string $name
 	 * @return integer
 	 */
@@ -146,6 +149,7 @@ class SampleTemplateCat implements SampleTemplateCatInterface
 	
 	
 	/**
+	 * @see SampleTemplateCatInterface::exist_name()
 	 * @param string $name
 	 * @return bool
 	 */
@@ -155,6 +159,7 @@ class SampleTemplateCat implements SampleTemplateCatInterface
 	}
 	
 	/**
+	 * @see SampleTemplateCatInterface::exist_id()
 	 * @param integer $id
 	 * @return bool
 	 */
@@ -164,6 +169,7 @@ class SampleTemplateCat implements SampleTemplateCatInterface
 	}
 	
 	/**
+	 * @see SampleTemplateCatInterface::list_entries()
 	 * @return array
 	 */
 	public static function list_entries()

@@ -45,6 +45,7 @@ class Oldl implements OldlInterface
     private $xml_array;
     
     /**
+     * @see OldlInterface::__construct()
      * @param integer $oldl_id
      */
     function __construct($oldl_id)
@@ -78,7 +79,7 @@ class Oldl implements OldlInterface
     }   
     
     /**
-     * Creates a new OLDL-Template in DB
+     * @see OldlInterface::create()
      * @param integer $object_id
      * @return integer
      */
@@ -102,7 +103,7 @@ class Oldl implements OldlInterface
     }
     
     /**
-     * Deletes an OLDL-Template from DB
+     * @see OldlInterface::delete()
      * @return bool
      */
     public function delete()
@@ -118,6 +119,7 @@ class Oldl implements OldlInterface
     }
     
     /**
+     * @see OldlInterface::get_xml_array()
      * @return array
      */
     public function get_xml_array()
@@ -133,7 +135,7 @@ class Oldl implements OldlInterface
     }
     
     /**
-     * Cuts an XML-Array on given element
+     * @see OldlInterface::get_cutted_xml_array()
      * @param string $element
      * @return array
      */

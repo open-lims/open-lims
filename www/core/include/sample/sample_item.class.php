@@ -47,6 +47,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 	private $item_class_id;
 
 	/**
+	 * @see SampleItemInterface::__construct()
 	 * @param integer $sample_id
 	 */
     function __construct($sample_id)
@@ -71,7 +72,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     }
     
     /**
-     * Links an item to the sample
+     * @see SampleItemInterface::link_item()
      * @return bool
      */
     public function link_item()
@@ -142,7 +143,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     }
     
     /**
-     * Unlinks an item from a specific sample
+     * @see SampleItemInterface::unlink_item()
      * @return bool
      */
     public function unlink_item()
@@ -181,7 +182,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     }
     
     /**
-     * Unlinks an item from all samples
+     * @see SampleItemInterface::unlink_item_full()
      * @return bool
      */
     public function unlink_item_full()
@@ -235,6 +236,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     }
     
     /**
+     * @see SampleItemInterface::get_sample_items()
      * @return array
      */
     public function get_sample_items()
@@ -266,6 +268,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     }
     
     /**
+     * @see SampleItemInterface::set_item_id()
      * @param integer $item_id
      * @return bool
      */
@@ -281,6 +284,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     }
     
     /**
+     * @see SampleItemInterface::set_gid()
      * @param integer $gid
      * @return bool
      */
@@ -338,7 +342,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     }
     
     /**
-     * Adds the Item to a class
+     * @see SampleItemInterface::set_class()
      * @param string $class_name
      * @return bool
      */
@@ -393,8 +397,9 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     }
     
     /**
-     * Removes the Item from a class
+     * @see SampleItemInterface::unset_class()
      * @todo implementation
+     * @return bool
      */
     public function unset_class()
     {
@@ -402,7 +407,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     }
      
     /**
-     * Sets Item-Information to Class or Item
+     * @see SampleItemInterface::set_information()
      * @param string $description
      * @param string $keywords
      * @return bool
@@ -584,7 +589,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     }
     
     /**
-     * Checks if an Item needs a description
+     * @see SampleItemInterface::is_description()
      * @return bool
      */
     public function is_description()
@@ -620,7 +625,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     }
     
     /**
-     * Checks if an Item needs keywords
+     * @see SampleItemInterface::is_keywords()
      * @return bool
      */
     public function is_keywords()
@@ -656,7 +661,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     }
     
     /**
-     * Checks if an Item needs a description
+     * @see SampleItemInterface::is_description_required()
      * @return bool
      */
     public function is_description_required()
@@ -692,7 +697,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     }
     
     /**
-     * Checks if an Item needs keywords
+     * @see SampleItemInterface::is_keywords_required()
      * @return bool
      */
     public function is_keywords_required()
@@ -728,7 +733,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     }
     
     /**
-     * Checks if an Item is classified
+     * @see SampleItemInterface::is_classified()
      * @return bool
      */
     public function is_classified()
@@ -767,6 +772,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 
     
     /**
+     * @see SampleItemInterface::list_entries_by_item_id()
      * @param integer $item_id
      * @return array
      */
@@ -776,6 +782,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     }
     
     /**
+     * @see SampleItemInterface::get_gid_by_item_id_and_sample_id()
      * @param integer $item_id
      * @param integer $sample_id
      * @return integer
@@ -786,6 +793,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     }
     
 	/**
+	 * @see SampleItemInterface::list_sample_id_by_item_id_and_gid()
 	 * @param integer $item_id
 	 * @param integer $gid
 	 * @return array
@@ -796,6 +804,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 	}
     
 	/**
+	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
      */

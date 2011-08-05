@@ -45,6 +45,7 @@ class SampleTemplate implements SampleTemplateInterface
 	private $sample_template_cat;
 
 	/**
+	 * @see SampleTemplateInterface::__construct()
 	 * @param integer $sample_template_id
 	 */
 	function __construct($sample_template_id)
@@ -68,7 +69,7 @@ class SampleTemplate implements SampleTemplateInterface
 	}
 	
 	/**
-	 * Creates a new sample-template
+	 * @see SampleTemplateInterface::create()
 	 * @param integer $object_id
 	 * @param integer $category_id
 	 * @return bool
@@ -174,7 +175,7 @@ class SampleTemplate implements SampleTemplateInterface
 	}
 	
 	/**
-	 * Deletes a sample-tempalte
+	 * @see SampleTemplateInterface::delete()
 	 * @return bool
 	 */
 	public function delete()
@@ -229,6 +230,7 @@ class SampleTemplate implements SampleTemplateInterface
 	}
 	
 	/**
+	 * @see SampleTemplateInterface::get_name()
 	 * @return string
 	 */
 	public function get_name()
@@ -244,6 +246,7 @@ class SampleTemplate implements SampleTemplateInterface
 	}
 	
 	/**
+	 * @see SampleTemplateInterface::get_cat_id()
 	 * @return integer
 	 */	
 	public function get_cat_id()
@@ -259,6 +262,7 @@ class SampleTemplate implements SampleTemplateInterface
 	}
 	
 	/**
+	 * @see SampleTemplateInterface::get_information_fields()
 	 * @return array
 	 */
 	public function get_information_fields()
@@ -303,7 +307,7 @@ class SampleTemplate implements SampleTemplateInterface
 	}
 	
 	/**
-	 * Checks if a required-section exists in template
+	 * @see SampleTemplateInterface::is_required_requirements()
 	 * @return bool
 	 */
 	public function is_required_requirements()
@@ -328,7 +332,7 @@ class SampleTemplate implements SampleTemplateInterface
 	}
 	
 	/**
-	 * Returns the requirements of the required-section
+	 * @see SampleTemplateInterface::get_required_requirements()
 	 * @return array
 	 */
 	public function get_required_requirements()
@@ -393,7 +397,7 @@ class SampleTemplate implements SampleTemplateInterface
 	}
 	
 	/**
-	 * Returns the requirements of the sample
+	 * @see SampleTemplateInterface::get_requirements()
 	 * @return array
 	 */
 	public function get_requirements()
@@ -498,7 +502,7 @@ class SampleTemplate implements SampleTemplateInterface
 	}
 	
 	/**
-	 * Returns the attributes of a given gid-entry
+	 * @see SampleTemplateInterface::get_gid_attributes()
 	 * @param integer $gid
 	 * @return array
 	 */
@@ -575,7 +579,7 @@ class SampleTemplate implements SampleTemplateInterface
 	}
 	
 	/**
-	 * Returns an item-element selected by GID
+	 * @see SampleTemplateInterface::get_gid_item()
 	 * @param integer $gid
 	 * @return array
 	 */
@@ -628,7 +632,7 @@ class SampleTemplate implements SampleTemplateInterface
 	}
 	
 	/**
-	 * Returns information about an class (elemtens inside class-element) from sample-template
+	 * @see SampleTemplateInterface::get_class()
 	 * @param string $class_name
 	 * @return array
 	 */
@@ -675,7 +679,7 @@ class SampleTemplate implements SampleTemplateInterface
 	
 		
 	/**
-	 * Checks a given id
+	 * @see SampleTemplateInterface::exist_id()
 	 * @param integer $id
 	 * @return bool
 	 */
@@ -685,7 +689,7 @@ class SampleTemplate implements SampleTemplateInterface
 	}
 		
 	/**
-	 * Returns a list of all templates in a category
+	 * @see SampleTemplateInterface::list_entries_by_cat_id()
 	 * @param integer $cat_id
 	 * @return array
 	 */
@@ -702,6 +706,7 @@ class SampleTemplate implements SampleTemplateInterface
 	}
 		
 	/**
+	 * @see SampleTemplateInterface::list_entries()
 	 * @return array
 	 */
 	public static function list_entries()

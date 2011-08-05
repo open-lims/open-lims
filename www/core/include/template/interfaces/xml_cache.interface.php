@@ -28,12 +28,14 @@
  */
 interface XmlCacheInterface
 {
+	/**
+	 * @param integer $data_entity_id
+	 */
 	function __construct($object_id);
-	public function get_xml_array();
 	
-	// private function rewrite();
-	// private function init();
-	// private function is_checksum();
-	// private function is_file();
+	/**
+     * @return array
+     */
+	public function get_xml_array();
 }
 ?>

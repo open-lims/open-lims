@@ -153,6 +153,7 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 	}
 	
 	/**
+	 * @see DataEntityInterface::can_set_automatic()
 	 * @return bool
 	 */
 	public function can_set_automatic()
@@ -161,6 +162,7 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 	}
 	
 	/**
+	 * @see DataEntityInterface::can_set_data_entity()
 	 * @return bool
 	 */
 	public function can_set_data_entity()
@@ -169,6 +171,7 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 	}
 	
 	/**
+	 * @see DataEntityInterface::can_set_control()
 	 * @return bool
 	 */
 	public function can_set_control()
@@ -177,6 +180,7 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 	}
 	
 	/**
+	 * @see DataEntityInterface::can_set_remain()
 	 * @return bool
 	 */
 	public function can_set_remain()
@@ -242,9 +246,8 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 		}
 	}
 	
-	// Wird über konkretisierung automatisch über Folder ausgeführt,
-	// kann aber auch direkt ausgeführt werden (wenn Klasse bekannt)
 	/**
+	 * @see ConcreteFolderCaseInterface::delete()
 	 * @param bool $recursive
 	 * @param bool $content
 	 * @return bool
@@ -293,7 +296,7 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 	
 	
 	/**
-	 * Checks if $folder_id is a case of Sample Folder
+	 * @see ConcreteFolderCaseInterface::is_case()
 	 * @param integer $folder_id
 	 * @return bool
 	 */
@@ -317,11 +320,19 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 		}
 	}
 	
+	/**
+	 * @param integer $sample_id
+	 * @return integer
+	 */
 	public static function get_folder_by_sample_id($sample_id)
 	{
 		return SampleHasFolder_Access::get_entry_by_sample_id($sample_id);
 	}
 
+	/**
+	 * @param integer $folder_id
+	 * @return integer
+	 */
 	public static function get_sample_id_by_folder_id($folder_id)
 	{
 		return SampleHasFolder_Access::get_sample_id_by_folder_id($folder_id);

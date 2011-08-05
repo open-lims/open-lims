@@ -41,6 +41,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
 	private $sample_id;
 
 	/**
+	 * @see SampleSecurityInterface::__construct()
 	 * @param integer $sample_id
 	 */
     function __construct($sample_id)
@@ -61,7 +62,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     }
     
    	/**
-   	 * Return true, if the user has access
+   	 * @see SampleSecurityInterface::is_access()
    	 * @param integer $intention 1 = Read, 2 = Write
    	 * @param bool $ignore_admin_status
    	 * @return bool
@@ -156,7 +157,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     }
     
     /**
-     * Returns a string with access information (e.g. "Read, Write");
+     * @see SampleSecurityInterface::get_access_string()
      * @return string
      */
     public function get_access_string()
@@ -191,7 +192,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     }
  
  	/**
- 	 * Returns an array with access-information of an users (ignores transitive permissions via projects or OUs)
+ 	 * @see SampleSecurityInterface::get_access_by_user_id()
  	 * @param integer $user_id
  	 * @return array
  	 */
@@ -231,6 +232,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     }
     
     /**
+     * @see SampleSecurityInterface::get_entry_by_user_id()
      * @param integer $user_id
      * @return integer
      */
@@ -247,6 +249,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     }
     
     /**
+     * @see SampleSecurityInterface::get_entry_by_organisation_unit_id()
      * @param integer $organisation_unit_id
      * @return integer
      */
@@ -263,7 +266,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     }
     
     /**
-     * Creates a new user-permission, including V-Folder
+     * @see SampleSecurityInterface::create_user()
      * @param integer $user_id
      * @param bool $read
      * @param bool $write
@@ -341,7 +344,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     }
     
     /**
-     * Creates a new OU-permission, including V-Folder
+     * @see SampleSecurityInterface::create_organisation_unit()
      * @param integer $organisation_unit_id
      * @return integer
      */
@@ -444,7 +447,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     }
         
     /**
-     * Deletes an user-permission
+     * @see SampleSecurityInterface::delete_user()
      * @param integer $entry_id
      * @return bool
      */
@@ -517,7 +520,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     }
     
     /**
-     * Deletes an OU-permission
+     * @see SampleSecurityInterface::delete_organisation_unit()
      * @param integer $entry_id
      * @return bool
      */
@@ -622,7 +625,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     }
     
     /**
-     * Returns a list of user-IDs
+     * @see SampleSecurityInterface::list_users()
      * @return array
      */
     public function list_users()
@@ -655,7 +658,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     }
    	
    	/**
-   	 * Returns a list of OU-IDs
+   	 * @see SampleSecurityInterface::list_organisation_units()
    	 * @return array
    	 */
     public function list_organisation_units()
@@ -688,7 +691,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     }
     
     /**
-     * Return a list of user-PKs
+     * @see SampleSecurityInterface::list_user_entries()
      * @return array
      */
     public function list_user_entries()
@@ -713,7 +716,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     }
     
     /**
-     * Returns a list of OU-PKs
+     * @see SampleSecurityInterface::list_organisation_unit_entries()
      * @return array
      */
     public function list_organisation_unit_entries()
@@ -738,7 +741,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     }
     
     /**
-     * Checks if a user has sample-permission-entry
+     * @see SampleSecurityInterface::is_user()
      * @param integer $user_id
      * @return bool
      */
@@ -764,7 +767,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     }
     
     /**
-     * Checks if a OU has sample-permission-entry
+     * @see SampleSecurityInterface::is_organisation_unit()
      * @param integer $organisation_unit_id
      * @return bool
      */
@@ -790,7 +793,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     }
     
     /**
-     * Deletes an organisation unit from n:m table completly.
+     * @see SampleSecurityInterface::delete_organisation_complete()
      * Warning: This method is for organisation-unit-deletion only!
      * 			Outside organisation-unit-deletion is causes logical inconsistency!
      * @param integer $organisation_unit_id

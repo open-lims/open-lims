@@ -53,6 +53,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	private $template_data_array;
 
 	/**
+	 * @see SampleInterface::__construct()
 	 * @param integer $sample_id Sample-ID
 	 */
     function __construct($sample_id)
@@ -88,7 +89,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     }
     
     /**
-     * Sets tempalte-date before sample creation
+     * @see SampleInterface::set_template_data()
      * @param string $type
      * @param integer $type_id
      * @param array $array
@@ -110,8 +111,8 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     }
     
     /**
+     * @see SampleInterface::create()
      * @todo sample adding via template required field via item_id
-     * Creates a new sample
      * @param integer $organisation_unit_id
      * @param integer $template_id
      * @param string $name
@@ -367,7 +368,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     }
     
 	/**
-	 * Deletes a sample
+	 * @see SampleInterface::delete()
 	 * @return bool
 	 */
 	public function delete()
@@ -513,7 +514,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 
 	
 	/**
-	 * Returns all requirements
+	 * @see SampleInterface::get_requirements()
 	 * @return array
 	 */
     public function get_requirements()
@@ -597,7 +598,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     }
     
     /**
-     * Returns fulfilled requirements
+     * @see SampleInterface::get_fulfilled_requirements()
      * @return array
      */
     public function get_fulfilled_requirements()
@@ -671,7 +672,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     }
     
     /**
-     * Returns subfolder of a given gid
+     * @see SampleInterface::get_sub_folder()
      * @param integer $folder_id Folder-ID
      * @param integer $gid 
      * @return string Sub-Folder-Path
@@ -723,7 +724,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     }
     
     /**
-     * Adds a new location to the current sample
+     * @see SampleInterface::add_location()
      * @param integer location_id
      * @return bool
      */
@@ -757,7 +758,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     }
     
     /**
-     * Returns current location
+     * @see SampleInterface::get_current_location()
      * @return integer
      */
     public function get_current_location()
@@ -793,6 +794,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     }    
     
     /**
+     * @see SampleInterface::get_name()
      * @return string
      */
     public function get_name()
@@ -808,6 +810,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     }
     
     /**
+     * @see SampleInterface::get_datetime()
      * @return string
      */
     public function get_datetime()
@@ -823,6 +826,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     }
     
     /**
+     * @see SampleInterface::get_owner_id()
      * @return integer
      */
     public function get_owner_id()
@@ -838,6 +842,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     }
     
     /**
+     * @see SampleInterface::get_manufacturer_id()
      * @return string
      */
     public function get_manufacturer_id()
@@ -853,6 +858,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     }
     
     /**
+     * @see SampleInterface::get_template_id()
      * @return integer
      */
     public function get_template_id()
@@ -868,6 +874,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     }
 	
 	/**
+	 * @see SampleInterface::get_availability()
 	 * @return bool
 	 */
 	public function get_availability()
@@ -883,6 +890,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	}
 	
 	/**
+	 * @see SampleInterface::get_date_of_expiry()
 	 * @return bool
 	 */
 	public function get_date_of_expiry()
@@ -898,7 +906,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	}
 		
 	/**
-	 * Returns the name of the current location
+	 * @see SampleInterface::get_current_location_name()
 	 * @return string
 	 */
 	public function get_current_location_name()
@@ -923,7 +931,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	}
 	
 	/**
-	 * Returns the name of template
+	 * @see SampleInterface::get_template_name()
 	 * @return string
 	 */
 	public function get_template_name()
@@ -941,7 +949,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	}
 	
 	/**
-	 * Returns the ID of the current sample as S000000X
+	 * @see SampleInterface::get_formatted_id()
 	 * @return string
 	 */
 	public function get_formatted_id()
@@ -957,6 +965,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	}
 	
 	/**
+	 * @see SampleInterface::get_organisation_unit_id()
 	 * @return integer
 	 */
 	public function get_organisation_unit_id()
@@ -981,6 +990,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     }
 	
 	/**
+	 * @see SampleInterface::set_name()
 	 * @param string $name
 	 * @return bool
 	 */
@@ -1030,6 +1040,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	}
 	
 	/**
+	 * @see SampleInterface::set_owner_id()
 	 * @param integer $owner_id
 	 * @return bool
 	 */
@@ -1046,6 +1057,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	}
 	
 	/**
+	 * @see SampleInterface::set_manufacturer_id()
 	 * @param string $supplier
 	 * @return bool
 	 */
@@ -1062,6 +1074,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	}
 	
 	/**
+	 * @see SampleInterface::set_availability()
 	 * @param bool $availability
 	 * @return bool
 	 */
@@ -1077,50 +1090,9 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     	}
 	}
 	
-	public final function get_item_name()
-	{
-		if ($this->sample_id and $this->sample)
-    	{
-    		return $this->sample->get_name();
-    	}
-    	else
-    	{
-    		return null;
-    	}
-	}
-	
-	public final function get_item_parents()
-	{
-		if ($this->item_id)
-		{
-			$parent_sample_array = SampleItem::list_entries_by_item_id($this->item_id);
-			
-			if (is_array($parent_sample_array) and count($parent_sample_array) >= 1)
-			{
-				$return_array = array();
-				
-				foreach($parent_sample_array as $key => $value)
-				{
-					$sample_is_item = new SampleIsItem_Access($value);
-    				array_push($return_array, $sample_is_item->get_item_id());
-				}
-				
-				return $return_array;
-			}
-			else
-			{
-				return null;
-			}
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	
+
 	/**
-	 * Returns true if a sample exists
+	 * @see SampleInterface::exist_sample()
 	 * @param integer $sample_id
 	 * @return bool
 	 */
@@ -1129,18 +1101,8 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 		return Sample_Access::exist_sample_by_sample_id($sample_id);
    	}
 
-	/**
-	 * Returns the sample-id of a given item-id
-	 * @param integer $item_id
-	 * @return integer
-	 */
-	public static function get_entry_by_item_id($item_id)
-	{
-		return SampleIsItem_Access::get_entry_by_item_id($item_id);
-	}
-   	
    	/**
-   	 * Lists all user-related samples
+   	 * @see SampleInterface::list_user_related_samples()
    	 * @param integer $user_id
    	 * @return array
    	 */
@@ -1173,7 +1135,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     }
     
     /**
-     * Lists all OU related samples
+     * @see SampleInterface::list_organisation_unit_related_samples()
      * @param integer $organisation_unit_id
      * @return array
      */
@@ -1206,6 +1168,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     }
     
     /**
+     * @see SampleInterface::list_entries_by_template_id()
    	 * @param integer $template_id
    	 * @return array
    	 */
@@ -1213,8 +1176,340 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     {
     	return Sample_Access::list_entries_by_template_id($template_id);;
     }
-	    
+
     /**
+     * @see ItemListenerInterface::get_item_name()
+	 * @return string
+	 */
+	public final function get_item_name()
+	{
+		if ($this->sample_id and $this->sample)
+    	{
+    		return $this->sample->get_name();
+    	}
+    	else
+    	{
+    		return null;
+    	}
+	}
+    
+    /**
+     * @see ItemListenerInterface::get_item_parents()
+	 * @return string
+	 */
+	public final function get_item_parents()
+	{
+		if ($this->item_id)
+		{
+			$parent_sample_array = SampleItem::list_entries_by_item_id($this->item_id);
+			
+			if (is_array($parent_sample_array) and count($parent_sample_array) >= 1)
+			{
+				$return_array = array();
+				
+				foreach($parent_sample_array as $key => $value)
+				{
+					$sample_is_item = new SampleIsItem_Access($value);
+    				array_push($return_array, $sample_is_item->get_item_id());
+				}
+				
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+    
+	/**
+	 * @see ItemListenerInterface::get_entry_by_item_id()
+	 * @param integer $item_id
+	 * @return integer
+	 */
+	public static function get_entry_by_item_id($item_id)
+	{
+		return SampleIsItem_Access::get_entry_by_item_id($item_id);
+	}
+    
+ 	/**
+ 	 * @see ItemListenerInterface::is_kind_of()
+	 * @param string $type
+	 * @param integer $item_id
+	 * @return bool
+	 */
+    public static function is_kind_of($type, $item_id)
+    {
+    	if (is_numeric($item_id))
+    	{
+    		if (($sample_id = SampleIsItem_Access::get_entry_by_item_id($item_id)) != null)
+    		{
+    			return true;
+    		}
+    		else
+    		{
+    			return false;
+    		}
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
+    
+    /**
+     * @see ItemListenerInterface::is_type_or_category()
+	 * @param $category_id
+	 * @param integer $type_id
+	 * @param integer $item_id
+	 * @return bool
+	 */
+    public static function is_type_or_category($category_id, $type_id, $item_id)
+    {
+    	if (is_numeric($type_id))
+    	{
+    		$sample_id = SampleIsItem_Access::get_entry_by_item_id($item_id);
+    		$sample = new Sample($sample_id);
+    		
+    		if ($sample->get_template_id() == $type_id)
+    		{
+    			return true;
+    		}
+    		else
+    		{
+    			return false;
+    		}
+    	}
+    	elseif (is_numeric($category_id))
+    	{
+    		$sample_id = SampleIsItem_Access::get_entry_by_item_id($item_id);
+    		$sample = new Sample($sample_id);
+    		$sample_template = new SampleTemplate($sample->get_template_id());
+    		
+    		if ($sample_template->get_cat_id() == $category_id)
+    		{
+    			return true;
+    		}
+    		else
+    		{
+    			return false;
+    		}
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
+    
+    /**
+     * @see ItemListenerInterface::get_instance_by_item_id()
+	 * @param integer $item_id
+	 * @return object
+	 */
+	public static function get_instance_by_item_id($item_id)
+    {
+    	if (is_numeric($item_id))
+    	{
+    		$sample_id = SampleIsItem_Access::get_entry_by_item_id($item_id);
+    		return new Sample($sample_id);
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+    /**
+     * @see ItemListenerInterface::get_generic_name()
+	 * @param string $type
+	 * @param array $type_array
+	 * @return string
+	 */
+    public static function get_generic_name($type, $type_array)
+    {
+    	if (is_array($type_array) and count($type_array) == 1)
+    	{
+			$sample_template = new SampleTemplate($type_array[0]);
+
+			if ($sample_template->get_name() != null)
+			{
+				return $sample_template->get_name();
+			}
+			else
+			{
+				if ($type == "parentsample")
+	    		{
+	    			return "Parent Sample";
+	    		}
+	    		else
+	    		{
+	    			return "Sample";
+	    		}
+			}
+    	}
+    	else
+    	{
+    		if ($type == "parentsample")
+    		{
+    			return "Parent Sample";
+    		}
+    		else
+    		{
+    			return "Sample";
+    		}
+    	}
+    }
+
+    /**
+     * @see ItemListenerInterface::get_generic_symbol()
+	 * @param string $type
+	 * @param integer $id
+	 * @return string
+	 */
+    public static function get_generic_symbol($type, $id)
+    {
+   		if ($type == "sample")
+    	{
+    		return "<img src='images/icons/sample.png' alt='' style='border: 0;' />";
+    	}
+    }
+    
+    /**
+     * @see ItemListenerInterface::get_generic_link()
+	 * @param string $type
+	 * @param integer $id
+	 * @return string
+	 */
+	public static function get_generic_link($type, $id)
+	{
+		if ($type == "sample")
+		{
+			$paramquery[username] = $_GET[username];
+			$paramquery[session_id] = $_GET[session_id];
+			$paramquery[nav] = "sample";
+			$paramquery[run] = "detail";
+			$paramquery[sample_id] = $id;
+			return http_build_query($paramquery, '', '&#38;');
+		}
+	}
+    
+	/**
+	 * @see ItemListenerInterface::get_sql_select_array()
+	 * @param string $type
+	 * @return array
+	 */
+	public static function get_sql_select_array($type)
+    {
+   		if ($type == "sample")
+		{
+			$select_array[name] = "".constant("SAMPLE_TABLE").".name";
+			$select_array[type_id] = "".constant("SAMPLE_TABLE").".id AS sample_id";
+			$select_array[datetime] = "".constant("SAMPLE_TABLE").".datetime";
+			return $select_array;
+		}
+		else
+		{
+			return null;
+		}
+    }
+    
+    /**
+     * @see ItemListenerInterface::get_sql_join()
+	 * @param string $type
+	 * @return string
+	 */
+	public static function get_sql_join($type)
+	{
+		if ($type == "sample")
+		{
+			return 	"LEFT JOIN ".constant("SAMPLE_IS_ITEM_TABLE")." 	ON ".constant("ITEM_TABLE").".id 					= ".constant("SAMPLE_IS_ITEM_TABLE").".item_id " .
+					"LEFT JOIN ".constant("SAMPLE_TABLE")." 			ON ".constant("SAMPLE_IS_ITEM_TABLE").".sample_id 	= ".constant("SAMPLE_TABLE").".id ";
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @see ItemListenerInterface::get_sql_where()
+	 * @param string $type
+	 * @return string
+	 */
+	public static function get_sql_where($type)
+	{
+		if ($type == "sample")
+		{
+			return "(LOWER(TRIM(".constant("SAMPLE_TABLE").".name)) LIKE '{STRING}')";
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @see ItemListenerInterface::get_sql_fulltext_select_array()
+	 * @param string $type
+	 * @return array
+	 */
+	public static function get_sql_fulltext_select_array($type)
+	{
+		if ($type == "sample")
+		{
+			$select_array[name] = "".constant("SAMPLE_TABLE").".name";
+			$select_array[type_id] = "".constant("SAMPLE_TABLE").".id AS sample_id";
+			$select_array[datetime] = "".constant("SAMPLE_TABLE").".datetime";
+			$select_array[rank] = "ts_rank_cd(".constant("SAMPLE_TABLE").".comment_text_search_vector, to_tsquery('{LANGUAGE}', '{STRING}'), 32 /* rank/(rank+1) */)";
+			return $select_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @see ItemListenerInterface::get_sql_fulltext_join()
+	 * @param string $type
+	 * @return string
+	 */
+	public static function get_sql_fulltext_join($type)
+	{
+		if ($type == "sample")
+		{
+			return 	"LEFT JOIN ".constant("SAMPLE_IS_ITEM_TABLE")." 	ON ".constant("ITEM_TABLE").".id 					= ".constant("SAMPLE_IS_ITEM_TABLE").".item_id " .
+					"LEFT JOIN ".constant("SAMPLE_TABLE")." 			ON ".constant("SAMPLE_IS_ITEM_TABLE").".sample_id 	= ".constant("SAMPLE_TABLE").".id ";
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @see ItemListenerInterface::get_sql_fulltext_where()
+	 * @param string $type
+	 * @return string
+	 */
+	public static function get_sql_fulltext_where($type)
+	{
+		if ($type == "sample")
+		{
+			return "".constant("SAMPLE_TABLE").".comment_text_search_vector @@ to_tsquery('{LANGUAGE}', '{STRING}')";
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+    /**
+     * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
      */
@@ -1261,221 +1556,5 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     	
     	return true;
     }
-    
- 	/**
-     * @param string $type
-     * @param integer $item_id
-     * @return bool
-     */
-    public static function is_kind_of($type, $item_id)
-    {
-    	if (is_numeric($item_id))
-    	{
-    		if (($sample_id = SampleIsItem_Access::get_entry_by_item_id($item_id)) != null)
-    		{
-    			return true;
-    		}
-    		else
-    		{
-    			return false;
-    		}
-    	}
-    	else
-    	{
-    		return false;
-    	}
-    }
-    
-    public static function is_type_or_category($category_id, $type_id, $item_id)
-    {
-    	if (is_numeric($type_id))
-    	{
-    		$sample_id = SampleIsItem_Access::get_entry_by_item_id($item_id);
-    		$sample = new Sample($sample_id);
-    		
-    		if ($sample->get_template_id() == $type_id)
-    		{
-    			return true;
-    		}
-    		else
-    		{
-    			return false;
-    		}
-    	}
-    	elseif (is_numeric($category_id))
-    	{
-    		$sample_id = SampleIsItem_Access::get_entry_by_item_id($item_id);
-    		$sample = new Sample($sample_id);
-    		$sample_template = new SampleTemplate($sample->get_template_id());
-    		
-    		if ($sample_template->get_cat_id() == $category_id)
-    		{
-    			return true;
-    		}
-    		else
-    		{
-    			return false;
-    		}
-    	}
-    	else
-    	{
-    		return false;
-    	}
-    }
-    
-	public static function get_instance_by_item_id($item_id)
-    {
-    	if (is_numeric($item_id))
-    	{
-    		$sample_id = SampleIsItem_Access::get_entry_by_item_id($item_id);
-    		return new Sample($sample_id);
-    	}
-    	else
-    	{
-    		return null;
-    	}
-    }
-    
-    /**
-     * @param string $type
-     * @param array $type_array
-     * @return string
-     */
-    public static function get_generic_name($type, $type_array)
-    {
-    	if (is_array($type_array) and count($type_array) == 1)
-    	{
-			$sample_template = new SampleTemplate($type_array[0]);
-
-			if ($sample_template->get_name() != null)
-			{
-				return $sample_template->get_name();
-			}
-			else
-			{
-				if ($type == "parentsample")
-	    		{
-	    			return "Parent Sample";
-	    		}
-	    		else
-	    		{
-	    			return "Sample";
-	    		}
-			}
-    	}
-    	else
-    	{
-    		if ($type == "parentsample")
-    		{
-    			return "Parent Sample";
-    		}
-    		else
-    		{
-    			return "Sample";
-    		}
-    	}
-    }
-
-    public static function get_generic_symbol($type, $id)
-    {
-   		if ($type == "sample")
-    	{
-    		return "<img src='images/icons/sample.png' alt='' style='border: 0;' />";
-    	}
-    }
-    
-	public static function get_generic_link($type, $id)
-	{
-		if ($type == "sample")
-		{
-			$paramquery[username] = $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav] = "sample";
-			$paramquery[run] = "detail";
-			$paramquery[sample_id] = $id;
-			return http_build_query($paramquery, '', '&#38;');
-		}
-	}
-    
-	public static function get_sql_select_array($type)
-    {
-   		if ($type == "sample")
-		{
-			$select_array[name] = "".constant("SAMPLE_TABLE").".name";
-			$select_array[type_id] = "".constant("SAMPLE_TABLE").".id AS sample_id";
-			$select_array[datetime] = "".constant("SAMPLE_TABLE").".datetime";
-			return $select_array;
-		}
-		else
-		{
-			return null;
-		}
-    }
-    
-	public static function get_sql_join($type)
-	{
-		if ($type == "sample")
-		{
-			return 	"LEFT JOIN ".constant("SAMPLE_IS_ITEM_TABLE")." 	ON ".constant("ITEM_TABLE").".id 					= ".constant("SAMPLE_IS_ITEM_TABLE").".item_id " .
-					"LEFT JOIN ".constant("SAMPLE_TABLE")." 			ON ".constant("SAMPLE_IS_ITEM_TABLE").".sample_id 	= ".constant("SAMPLE_TABLE").".id ";
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	public static function get_sql_where($type)
-	{
-		if ($type == "sample")
-		{
-			return "(LOWER(TRIM(".constant("SAMPLE_TABLE").".name)) LIKE '{STRING}')";
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	public static function get_sql_fulltext_select_array($type)
-	{
-		if ($type == "sample")
-		{
-			$select_array[name] = "".constant("SAMPLE_TABLE").".name";
-			$select_array[type_id] = "".constant("SAMPLE_TABLE").".id AS sample_id";
-			$select_array[datetime] = "".constant("SAMPLE_TABLE").".datetime";
-			$select_array[rank] = "ts_rank_cd(".constant("SAMPLE_TABLE").".comment_text_search_vector, to_tsquery('{LANGUAGE}', '{STRING}'), 32 /* rank/(rank+1) */)";
-			return $select_array;
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	public static function get_sql_fulltext_join($type)
-	{
-		if ($type == "sample")
-		{
-			return 	"LEFT JOIN ".constant("SAMPLE_IS_ITEM_TABLE")." 	ON ".constant("ITEM_TABLE").".id 					= ".constant("SAMPLE_IS_ITEM_TABLE").".item_id " .
-					"LEFT JOIN ".constant("SAMPLE_TABLE")." 			ON ".constant("SAMPLE_IS_ITEM_TABLE").".sample_id 	= ".constant("SAMPLE_TABLE").".id ";
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	public static function get_sql_fulltext_where($type)
-	{
-		if ($type == "sample")
-		{
-			return "".constant("SAMPLE_TABLE").".comment_text_search_vector @@ to_tsquery('{LANGUAGE}', '{STRING}')";
-		}
-		else
-		{
-			return null;
-		}
-	}
 }
 ?>

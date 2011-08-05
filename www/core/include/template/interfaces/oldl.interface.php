@@ -28,13 +28,36 @@
  */
 interface OldlInterface
 {
+	/**
+     * @param integer $oldl_id
+     */
 	function __construct($oldl_id);
+	
 	function __destruct();
 	 
+	/**
+     * Creates a new OLDL-Template in DB
+     * @param integer $object_id
+     * @return integer
+     */
 	public function create($object_id);
+	
+	/**
+     * Deletes an OLDL-Template from DB
+     * @return bool
+     */
 	public function delete();
-	 
-	public function get_xml_array(); 
+	
+	/**
+     * @return array
+     */
+	public function get_xml_array();
+
+	/**
+     * Cuts an XML-Array on given element
+     * @param string $element
+     * @return array
+     */
 	public function get_cutted_xml_array($element);  
 }
 
