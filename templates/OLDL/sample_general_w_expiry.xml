@@ -3,12 +3,12 @@
 <OLDL type="sample">
 	<HEAD>
 		<ID>101</ID>
-	 	<TITLE>General w. Location</TITLE>
+	 	<TITLE>General w. Date of Expiry</TITLE>
 		<DESC>General Sample Template</DESC>
 		<VERSION>draft</VERSION>
 		<AUTHOR></AUTHOR>
-		<LOCATION requirement="optional"> />
-		<MANUFACTURER requirement="optional"> />
+		<LOCATION requirement="optional" />
+		<MANUFACTURER requirement="optional" />
 		<EXPIRY />
 	</HEAD>
 	<BODY>

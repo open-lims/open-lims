@@ -7,8 +7,8 @@
 		<DESC>General Sample Template</DESC>
 		<VERSION>draft</VERSION>
 		<AUTHOR></AUTHOR>
-		<LOCATION requirement="optional"> />
-		<MANUFACTURER requirement="optional"> />
+		<LOCATION requirement="optional" />
+		<MANUFACTURER requirement="optional" />
 	</HEAD>
 	<BODY>
       <ITEM type="value">       

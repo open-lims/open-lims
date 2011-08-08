@@ -2,13 +2,13 @@
 <!DOCTYPE OLDL PUBLIC "-//OLDL 0.4//EN" "http://doctype.open-lims.org/oldl.dtd" >
 <OLDL type="sample">
 	<HEAD>
-		<ID>10003</ID>
-	 	<TITLE>RNA w. Manufacturer and Location</TITLE>
+		<ID>10001</ID>
+	 	<TITLE>RNA w. Date of Expiry</TITLE>
 		<DESC>Organisational RNA Template</DESC>
 		<VERSION>draft</VERSION>
 		<AUTHOR></AUTHOR>
-		<LOCATION />
-		<MANUFACTURER />
+		<LOCATION requirement="optional" />
+		<MANUFACTURER requirement="optional" />
 		<EXPIRY />
 	</HEAD>
 	<BODY>
