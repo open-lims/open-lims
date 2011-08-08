@@ -34,7 +34,7 @@ class Error_IO
 	 * @param object $exception
 	 * @param integer $module
 	 * @param integer $layer
-	 * @aram integer $error_type
+	 * @param integer $error_type
 	 */
 	function __construct($exception, $module, $layer, $error_type)
 	{

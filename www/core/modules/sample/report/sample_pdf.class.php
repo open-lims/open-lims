@@ -24,6 +24,7 @@
 /**
  * Default PDF Class for Sample Reports
  * @package sample
+ * @ignore
  */
 class SamplePDF extends TCPDF
 {

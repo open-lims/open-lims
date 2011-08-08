@@ -1508,7 +1508,7 @@ class SampleIO
 					}
 					else
 					{
-						$template->set_var("expiry_warning",constant("SAMPLE_EXIRY_WARNING"));
+						$template->set_var("expiry_warning",constant("SAMPLE_EXPIRY_WARNING"));
 					}
 					
 					if ($sample_desc)

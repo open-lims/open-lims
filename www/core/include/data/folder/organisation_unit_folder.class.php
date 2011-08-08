@@ -251,10 +251,14 @@ class OrganisationUnitFolder extends Folder implements ConcreteFolderCaseInterfa
 		if ($event_object instanceof OrganisationUnitChangeOwnerEvent)
     	{
     		$organisation_unit = new OrganisationUnit($event_object->get_organisation_unit_id());
-    		$organisation_unit_folder = new OrganisationUnitFolder(self::get_folder_by_organisation_unit_id($event_object->get_organisation_unit_id()));
-    		if ($organisation_unit_folder->set_owner_id($organisation_unit->get_master_owner_id()) == false)
+    		$folder_id = self::get_folder_by_organisation_unit_id($event_object->get_organisation_unit_id());
+    		if ($folder_id)
     		{
-    			return false;
+	    		$organisation_unit_folder = new OrganisationUnitFolder();
+	    		if ($organisation_unit_folder->set_owner_id($organisation_unit->get_master_owner_id()) == false)
+	    		{
+	    			return false;
+	    		}
     		}
     	}
     	

@@ -21,6 +21,9 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ *
+ */
  $user_data = new DataUserData($user->get_user_id());
  $template = new Template("template/base/home.html");
 
