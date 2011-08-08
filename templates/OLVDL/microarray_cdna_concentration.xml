@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE OLVDL PUBLIC "-//OLVDL 0.4//EN" "http://doctype.open-lims.org/olvdl.dtd" >
+<OLVDL>
+	<HEAD>
+		<ID>10003</ID>
+		<TITLE>cDNA concentration</TITLE>
+	</HEAD>
+	<BODY>
+		<FORMAT>
+			<LINE colspan="1,2">
+				<PRINT value="cDNA-Purification:"></PRINT>
+				<FIELD name="method" default="Fairplay III Microarray Labeling Kit" length="40" type="string"-></FIELD>
+			</LINE>
+			<LINE>
+				<PRINT value="cDNA-Concentration" format="bold"></PRINT>
+			</LINE>               
+			<LINE>               
+				<PRINT value=" "></PRINT>                     
+				<PRINT value="CY3" format="bold"></PRINT>                     
+				<PRINT value="CY5" format="bold"></PRINT>                     
+			</LINE>
+			<EACH var="this.item.sample.list.typeof.c2">
+				<LINE>
+					<PRINT var="item.each.getName" format="italic"></PRINT>                           
+				</LINE>
+				<LINE>
+					<PRINT value="ng/&#181;l cDNA:"></PRINT>
+					<FIELD name="cy3_cdna_con" length="8" format="field_cdna" vartype="float"></FIELD>
+					<FIELD name="cy5_cdna_con" length="8" format="field_cdna" vartype="float"></FIELD>
+				</LINE>    
+				<LINE>
+					<PRINT value="DYE-mol/kb:"></PRINT>
+					<FIELD name="cy3_cdna_dye" length="8" format="field_cdna" vartype="float"></FIELD>
+					<FIELD name="cy5_cdna_dye" length="8" format="field_cdna" vartype="float"></FIELD>
+				</LINE>                   
+				 <LINE>
+					<PRINT value="RNA:"></PRINT>
+					<FIELD name="cy3_rna" type="dropdown" var="item.each.parents.list.getName"></FIELD>
+					<FIELD name="cy5_rna" type="dropdown" var="item.each.parents.list.getName"></FIELD>
+				</LINE>
+			</EACH>                             
+		</FORMAT> 
+	 </BODY>              
+</OLVDL>

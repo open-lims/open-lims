@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE OLDL PUBLIC "-//OLDL 0.4//EN" "http://doctype.open-lims.org/oldl.dtd" >
+<OLDL type="sample">
+	<HEAD>
+		<ID>11000</ID>
+	 	<TITLE>MicroArray</TITLE>
+		<DESC>Organisational Microarray Template</DESC>
+		<VERSION>draft</VERSION>
+		<AUTHOR></AUTHOR>
+	</HEAD>
+  	<REQUIRED>  
+     	<ITEM type="parentsample"></ITEM>            
+      	<ITEM type="parentsample"></ITEM>
+  	</REQUIRED>
+	<BODY>
+	</BODY>
+</OLDL>

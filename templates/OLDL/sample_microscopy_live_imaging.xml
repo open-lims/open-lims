@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE OLDL PUBLIC "-//OLDL 0.4//EN" "http://doctype.open-lims.org/oldl.dtd" >
+<OLDL type="sample">
+	<HEAD>
+		<ID>20020</ID>
+	 	<TITLE>Microscopy - Live Imaging</TITLE>
+		<DESC>Template for live imaging microscopy</DESC>
+		<VERSION>draft</VERSION>
+		<AUTHOR></AUTHOR>
+	</HEAD>
+	<BODY>
+      <ITEM type="value">        
+            <TYPE id="20103"></TYPE>
+      </ITEM>      
+      <ITEM type="equipment" name="Add Used Hardware" occurrence="multiple">
+           <TYPE id="3"></TYPE>
+           <CATEGORY id="1003"></CATEGORY>              
+           <CATEGORY id="1007"></CATEGORY>
+      </ITEM>       
+      <ITEM type="equipment" name="Add Used Software" occurrence="multiple">
+           <TYPE id="3"></TYPE>
+           <CATEGORY id="1008"></CATEGORY>
+      </ITEM>         
+      <ITEM type="file" name="Add Main/RAW File" folder="main" occurrence="multiple"></ITEM>
+      <ITEM type="file" name="Add Shortlist RAW File" folder="shortlist raw" requirement="optional" occurrence="multiple"></ITEM>        
+      <ITEM type="file" name="Add TIF File" folder="tif" requirement="optional" occurrence="multiple"></ITEM>      
+      <ITEM type="file" name="Add Configuration File" folder="tif" requirement="optional" occurrence="multiple"></ITEM>  
+      <ITEM type="parentsample" requirement="optional" occurrence="multiple"></ITEM>         
+      <ITEM type="value" requirement="optional">        
+           <TYPE id="20001"></TYPE>
+      </ITEM> 
+	</BODY>
+</OLDL>

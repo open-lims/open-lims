@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE OLDL PUBLIC "-//OLDL 0.4//EN" "http://doctype.open-lims.org/oldl.dtd" >
+<OLDL>
+	<HEAD>
+		<ID>10002</ID>
+	 	<TITLE>MicroArray - Analysis with ArrayTools</TITLE>
+		<DESC>Template for MicroArray based projects with ArrayTools analysis</DESC>
+		<VERSION>draft</VERSION>
+		<AUTHOR>The Open-LIMS Project</AUTHOR>
+	</HEAD>
+	<REQUIRED>
+		<ITEM type="value">
+          <TYPE id="10000"></TYPE>
+    </ITEM>
+	</REQUIRED>
+	<BODY>
+		<STATUS id="1">
+			<ITEM type="sample" occurrence="multiple">
+            	<TYPE id="10000"></TYPE>
+     		</ITEM>
+		</STATUS>
+		<STATUS id="10001">
+			<ITEM type="value" id="10001">
+          		  <TYPE id="10001"></TYPE>
+      		</ITEM>   
+			<ITEM type="file" occurrence="multiple" requirement="optional" name="Add BioAnalyzer File"></ITEM>    
+			<ITEM type="equipment" occurrence="multiple"></ITEM>       
+		</STATUS>
+		<STATUS id="10002">
+  			<ITEM type="sample" occurrence="multiple">
+         		<TYPE id="11000"></TYPE>
+    		</ITEM>		
+		</STATUS>
+		<STATUS id="10003">
+			<ITEM type="value" id="10003">
+         		<TYPE id="10003"></TYPE>
+      		</ITEM>
+			<ITEM type="equipment" occurrence="multiple"></ITEM>
+		</STATUS>
+		<STATUS id="10004">
+			<ITEM type="equipment" occurrence="multiple"></ITEM>
+		</STATUS>
+		<STATUS id="10005">
+			<ITEM type="equipment" occurrence="multiple"></ITEM>
+		</STATUS>
+		<STATUS id="10006">
+		  	<ITEM type="file"></ITEM>
+			<ITEM type="equipment" occurrence="multiple"></ITEM>
+		</STATUS>
+		<STATUS id="10007">
+			<ITEM type="equipment" occurrence="multiple"></ITEM>
+		</STATUS>
+		<STATUS id="10008">
+			<ITEM type="file" occurrence="multiple"></ITEM>
+		</STATUS>
+		<STATUS id="10009">
+			<ITEM type="file" occurrence="multiple" name="Add ArrayTools Result"></ITEM>
+		</STATUS>
+	</BODY>
+</OLDL>

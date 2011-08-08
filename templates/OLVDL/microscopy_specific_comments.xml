@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE OLVDL PUBLIC "-//OLVDL 0.4//EN" "http://doctype.open-lims.org/olvdl.dtd" >
+<OLVDL>
+	<HEAD> 
+		<ID>20001</ID>
+		<TITLE>Specific Comments</TITLE>
+	</HEAD>
+	<BODY>
+		<FORMAT>            
+			<LINE>               
+				<PRINT value="specific comments:"></PRINT>
+			</LINE>                                                                 
+			<LINE colspan="2">
+				<FIELD name="specific_comments" type="textarea" size="53,15"></FIELD>                
+			</LINE>
+		</FORMAT>
+	</BODY>
+</OLVDL>

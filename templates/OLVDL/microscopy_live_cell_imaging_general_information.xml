@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE OLVDL PUBLIC "-//OLVDL 0.4//EN" "http://doctype.open-lims.org/olvdl.dtd" >
+<OLVDL>
+	<HEAD>
+		<ID>20102</ID>
+		<TITLE>general information</TITLE>		
+	</HEAD>
+	<BODY>
+		<FORMAT>
+			<LINE>
+				<PRINT value="cell name/tissue name:"></PRINT>
+				<FIELD name="cell_name"></FIELD>
+			</LINE>             
+			<LINE>
+				<PRINT value="direct immunofluorescence/tagged protein:"></PRINT>
+				<FIELD name="direct_immunofluorescence"></FIELD>
+			</LINE>                           
+			<LINE>               
+				<PRINT value="&nbsp;"></PRINT>
+			</LINE> 
+			<LINE>               
+				<PRINT value="protocol/sample preparation:"></PRINT>
+			</LINE>                                                                 
+			<LINE colspan="2">
+				<FIELD name="protocol" type="textarea" size="53,5"></FIELD>                
+			</LINE>                                                                            
+		</FORMAT>
+	</BODY>
+</OLVDL>

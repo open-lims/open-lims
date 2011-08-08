@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE OLVDL PUBLIC "-//OLVDL 0.4//EN" "http://doctype.open-lims.org/olvdl.dtd" >
+<OLVDL>
+	<HEAD>
+		<ID>20103</ID>
+		<TITLE>general information</TITLE>		
+	</HEAD>
+	<BODY>
+		<FORMAT>
+			<LINE>
+				<PRINT value="molecules:"></PRINT>
+				<FIELD name="molecules"></FIELD>
+			</LINE>             
+			<LINE>
+				<PRINT value="dyes:"></PRINT>
+				<FIELD name="dyes"></FIELD>
+			</LINE>                           
+			<LINE>               
+				<PRINT value="&nbsp;"></PRINT>
+			</LINE> 
+			<LINE>               
+				<PRINT value="protocol/sample preparation:"></PRINT>
+			</LINE>                                                                 
+			<LINE colspan="2">
+				<FIELD name="protocol" type="textarea" size="53,5"></FIELD>                
+			</LINE>                                                                             
+		</FORMAT>
+	</BODY>
+</OLVDL>

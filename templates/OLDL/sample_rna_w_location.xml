@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE OLDL PUBLIC "-//OLDL 0.4//EN" "http://doctype.open-lims.org/oldl.dtd" >
+<OLDL type="sample">
+	<HEAD>
+		<ID>10001</ID>
+	 	<TITLE>RNA w. Location</TITLE>
+		<DESC>Organisational RNA Template</DESC>
+		<VERSION>draft</VERSION>
+		<AUTHOR></AUTHOR>
+		<LOCATION />
+		<EXPIRY />
+	</HEAD>
+	<BODY>
+	</BODY>
+</OLDL>

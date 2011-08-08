@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE OLVDL PUBLIC "-//OLVDL 0.4//EN" "http://doctype.open-lims.org/olvdl.dtd" >
+<OLVDL>
+	<HEAD>
+		<ID>20101</ID>
+		<TITLE>general information</TITLE>		
+	</HEAD>
+	<BODY>
+		<FORMAT>
+			<LINE>
+				<PRINT value="cell line/tissue:"></PRINT>
+				<FIELD name="cell_name"></FIELD>
+			</LINE>
+			<LINE>
+				<PRINT value="fixation method:"></PRINT>
+				<FIELD name="fixation_method"></FIELD>
+			</LINE>               
+			<LINE>
+				<PRINT value="direct immunofluorescence/tagged protein:"></PRINT>
+				<FIELD name="direct_immunofluorescence"></FIELD>
+			</LINE>               
+			<LINE>
+				<PRINT value="primary antibody:"></PRINT>
+				<FIELD name="primary_antibody"></FIELD>
+			</LINE>               
+			<LINE>
+				<PRINT value="secodary antibody/dye:"></PRINT>
+				<FIELD name="secodary_antibody"></FIELD>
+			</LINE>               
+			<LINE>
+				<PRINT value="counterstaining:"></PRINT>
+				<FIELD name="counterstaining"></FIELD>
+			</LINE>
+			<LINE>               
+				<PRINT value="&nbsp;"></PRINT>
+			</LINE> 
+			<LINE>               
+				<PRINT value="pre-treatment:"></PRINT>
+			</LINE>                                                                 
+			<LINE colspan="2">
+				<FIELD name="pre-treatment" type="textarea" size="53,5"></FIELD>                
+			</LINE>               
+			<LINE>               
+				<PRINT value="non-standard protocol parts:"></PRINT>
+			</LINE>                                                                 
+			<LINE colspan="2">
+				<FIELD name="non-standart_pp" type="textarea" size="53,5"></FIELD>                
+			</LINE>               
+			<LINE>               
+				<PRINT value="additional dyes:"></PRINT>
+			</LINE>                                                                 
+			<LINE colspan="2">
+				<FIELD name="additional_dyes" type="textarea" size="53,5"></FIELD>                
+			</LINE>
+		</FORMAT>
+	</BODY>
+</OLVDL>

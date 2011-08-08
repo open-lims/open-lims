@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE OLVDL PUBLIC "-//OLVDL 0.4//EN" "http://doctype.open-lims.org/olvdl.dtd" >
+<OLVDL>
+	<HEAD>
+		<ID>100</ID>
+		<TITLE>general data</TITLE>	
+	</HEAD>
+	<BODY>
+		<AUTOFIELD />
+	</BODY>
+</OLVDL>

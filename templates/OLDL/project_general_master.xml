@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE OLDL PUBLIC "-//OLDL 0.4//EN" "http://doctype.open-lims.org/oldl.dtd" >
+<OLDL>
+	<HEAD>
+		<ID>100</ID>
+		<TITLE>General Master/Parent Project</TITLE>
+		<DESC>General Master/Parent Project</DESC>
+		<VERSION>draft</VERSION>
+		<AUTHOR>The Open-LIMS Project</AUTHOR>
+	</HEAD>
+ 	<REQUIRED>  
+  	</REQUIRED>
+	<BODY>
+		<STATUS id="100"></STATUS>
+	</BODY>
+</OLDL>

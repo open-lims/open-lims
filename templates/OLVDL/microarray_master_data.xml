@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE OLVDL PUBLIC "-//OLVDL 0.4//EN" "http://doctype.open-lims.org/olvdl.dtd" >
+<OLVDL>
+	<HEAD>
+		<ID>10000</ID>
+		<TITLE>master data</TITLE>	
+	</HEAD>
+	<BODY>
+		<FORMAT>
+			<LINE>
+				<PRINT value="Organism"></PRINT>
+				<FIELD name="organism" type="dropdown" var="external.biological.organism.list"></FIELD>
+			</LINE>
+			<LINE>
+				<PRINT value="Name of Strain 1:"></PRINT>
+				<FIELD name="strain1" vartype="string"></FIELD>
+			</LINE>
+			<LINE>
+				<PRINT value="Name of Strain 2:"></PRINT>
+				<FIELD name="strain2" vartype="string"></FIELD>
+			</LINE>
+		</FORMAT>
+	</BODY>
+</OLVDL>

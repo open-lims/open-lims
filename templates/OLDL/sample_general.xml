@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE OLDL PUBLIC "-//OLDL 0.4//EN" "http://doctype.open-lims.org/oldl.dtd" >
+<OLDL type="sample">
+	<HEAD>
+		<ID>100</ID>
+	 	<TITLE>General</TITLE>
+		<DESC>General Sample Template</DESC>
+		<VERSION>draft</VERSION>
+		<AUTHOR></AUTHOR>
+		<LOCATION requirement="optional"> />
+		<MANUFACTURER requirement="optional"> />
+	</HEAD>
+	<BODY>
+      <ITEM type="value">       
+            <TYPE id="100"></TYPE>
+      </ITEM>      
+	</BODY>
+</OLDL>
