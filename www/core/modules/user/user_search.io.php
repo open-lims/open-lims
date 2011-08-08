@@ -27,11 +27,18 @@
  */
 class UserSearchIO
 {
+	/**
+	 * @param integer $language_id
+	 * @return string
+	 */
 	public static function get_description($language_id)
 	{
 		return "Finds Users or Groups.";
 	}
 	
+	/**
+	 * @return string
+	 */
 	public static function get_icon()
 	{
 		return "images/icons_large/user_search_50.png";

@@ -37,6 +37,12 @@ class OrganisationUnitAjax extends Ajax
 		parent::__construct();
 	}
 	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 */
 	public function list_members($organisation_unit_id, $page, $sortvalue, $sortmethod)
 	{
 		if (is_numeric($organisation_unit_id))
@@ -91,6 +97,12 @@ class OrganisationUnitAjax extends Ajax
 		}
 	}
 		
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 */
 	public function list_owners($organisation_unit_id, $page, $sortvalue, $sortmethod)
 	{
 		if (is_numeric($organisation_unit_id))
@@ -145,6 +157,12 @@ class OrganisationUnitAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 */
 	public function list_leaders($organisation_unit_id, $page, $sortvalue, $sortmethod)
 	{
 		if (is_numeric($organisation_unit_id))
@@ -199,6 +217,12 @@ class OrganisationUnitAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 */
 	public function list_quality_managers($organisation_unit_id, $page, $sortvalue, $sortmethod)
 	{
 		if (is_numeric($organisation_unit_id))
@@ -253,6 +277,12 @@ class OrganisationUnitAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 */
 	public function list_groups($organisation_unit_id, $page, $sortvalue, $sortmethod)
 	{
 		if (is_numeric($organisation_unit_id))

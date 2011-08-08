@@ -27,6 +27,11 @@
  */
 class ItemIO
 {
+	/**
+	 * @param string $link
+	 * @param string $description
+	 * @param string $keywords
+	 */
 	public static function information($link, $description, $keywords)
 	{
 		$template = new Template("template/item/information.html");

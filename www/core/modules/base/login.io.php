@@ -102,6 +102,7 @@ class Login_IO
 		
 	/**
 	 * Forgot Password
+	 * @param integer $error_no
 	 */
 	public static function forgot_password($error_no)
 	{
@@ -131,6 +132,7 @@ class Login_IO
 	
 	/**
 	 * Proceed of Forgor Password
+	 * @param bool $success
 	 */
 	public static function forgot_password_proceed($success)
 	{

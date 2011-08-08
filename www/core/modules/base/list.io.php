@@ -41,6 +41,11 @@ class List_IO
 	
 	private $finalised;
 
+	/**
+	 * @param integer $entries
+	 * @param integer $entries_per_page
+	 * @param string $js_page_id
+	 */
     function __construct($entries, $entries_per_page, $js_page_id = null)
     {
     	$this->entries = $entries;
@@ -116,6 +121,9 @@ class List_IO
     	}
     }
 
+    /**
+     * @param string $text
+     */
 	public function override_last_line($text)
 	{
     	if ($text)
@@ -151,6 +159,11 @@ class List_IO
     	}
     }
     
+    /**
+     * @param array $array
+     * @param integer $page
+     * @return string
+     */
 	public function get_list($array, $page)
     {
     	if (!$page)

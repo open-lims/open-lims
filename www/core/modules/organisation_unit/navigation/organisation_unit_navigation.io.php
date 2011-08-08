@@ -28,16 +28,25 @@
  */
 class OrganisationUnitNavigationIO
 {	
+	/**
+	 * @return bool
+	 */
 	public static function get_active() 
 	{
 		return true;
 	}
 	
+	/**
+	 * @return string
+	 */
 	public static function get_icon()
 	{
 		return "images/icons/organisation_unit.png";
 	}
 	
+	/**
+	 * @return string
+	 */
 	public static function get_ajax_url()
 	{
 		return "core/modules/organisation_unit/navigation/organisation_unit_navigation.ajax.php";

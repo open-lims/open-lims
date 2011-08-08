@@ -105,6 +105,9 @@ class ProjectAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param array $array
+	 */
 	public function set_array($array)
 	{
 		global $session;
@@ -116,6 +119,9 @@ class ProjectAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param integer $id
+	 */
 	public function get_children($id)
 	{
 		if (is_numeric($id))

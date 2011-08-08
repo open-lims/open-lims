@@ -27,11 +27,18 @@
  */
 class SampleSearchIO
 {
+	/**
+	 * @param integer $lanugage_id
+	 * @return string
+	 */
 	public static function get_description($language_id)
 	{
 		return "Finds Samples in Organisation Units via Name, ID and/or Template.";
 	}
 	
+	/**
+	 * @return string
+	 */
 	public static function get_icon()
 	{
 		return "images/icons_large/sample_search_50.png";

@@ -28,6 +28,9 @@
  */
 class ProjectNavigationIO
 {
+	/**
+	 * @return bool
+	 */
 	public static function get_active() 
 	{
 		if (is_numeric($_GET[project_id]))
@@ -47,6 +50,9 @@ class ProjectNavigationIO
 		}
 	}
 	
+	/**
+	 * @return string
+	 */
 	public static function get_icon()
 	{
 		if(self::get_active()==true) 
@@ -59,6 +65,9 @@ class ProjectNavigationIO
 		}
 	}
 	
+	/**
+	 * @return string
+	 */
 	public static function get_ajax_url()
 	{
 		return "core/modules/project/navigation/project_navigation.ajax.php";

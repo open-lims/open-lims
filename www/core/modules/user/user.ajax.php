@@ -37,6 +37,9 @@ class UserAjax extends Ajax
 		parent::__construct();
 	}
 	
+	/**
+	 * @param string $string
+	 */
 	private function get_users_in_option($string)
 	{
 		$string = $string."*";
@@ -60,6 +63,9 @@ class UserAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param string $string
+	 */
 	private function get_groups_in_option($string)
 	{
 		$string = $string."*";

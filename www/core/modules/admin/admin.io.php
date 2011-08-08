@@ -53,6 +53,9 @@ class AdminIO
 		$template->output();
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_navigation()
 	{
 		$return_array = array();

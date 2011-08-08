@@ -32,6 +32,9 @@ require_once("report/sample_pdf.class.php");
  */
 class SampleReportIO
 {
+	/**
+	 * @return object
+	 */
 	public static function get_full_report()
 	{
 		if (class_exists("TCPDF"))
@@ -167,6 +170,9 @@ class SampleReportIO
 		}
 	}
 	
+	/**
+	 * @return object
+	 */
 	public static function get_barcode_report()
 	{
 		if (class_exists("TCPDF"))
@@ -266,6 +272,12 @@ class SampleReportIO
 		}
 	}
 	
+	/**
+	 * @param string $sql
+	 * @param integer $item_id
+	 * @param object $pdf
+	 * @return object
+	 */
 	public static function get_sample_item_report($sql, $item_id, $pdf)
 	{
 		if ($sql and is_object($pdf))

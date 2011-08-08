@@ -59,5 +59,19 @@ interface User_WrapperInterface
 	 * @return integer
 	 */
 	public static function count_search_groups($groupname);
+	
+	/**
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_users($order_by, $order_method, $start, $end);
+	
+	/**
+   	 * @return integer
+   	 */
+   	public static function count_users();
 }
 ?>

@@ -60,6 +60,7 @@ class User implements UserInterface {
 	private $user_profile;
 	
 	/**
+	 * @see UserInterface::__construct()
 	 * @param interger $user_id User-ID
 	 */
 	function __construct($user_id)
@@ -90,7 +91,7 @@ class User implements UserInterface {
 	}	
 	
 	/**
-	 * Creates a new user including all dependencies
+	 * @see UserInterface::create()
 	 * @param string $username
 	 * @param string $gener
 	 * @param string $title
@@ -238,7 +239,7 @@ class User implements UserInterface {
 	}
 	
 	/**
-	 * Deletes an user
+	 * @see UserInterface::delete()
 	 * @return bool
 	 */
 	public function delete()
@@ -367,7 +368,7 @@ class User implements UserInterface {
 	}
 	
 	/**
-	 * Checks dependencies before user deletion.
+	 * @see UserInterface::check_delete_dependencies()
 	 * @return bool
 	 */
 	public function check_delete_dependencies()
@@ -399,7 +400,7 @@ class User implements UserInterface {
 	}
 	
 	/**
-	 * Matches a given password with the database-saved password
+	 * @see UserInterface::check_password()
 	 * @param string $password
 	 * @return bool
 	 */
@@ -419,7 +420,7 @@ class User implements UserInterface {
 	}
 	
 	/**
-	 * Matches a gove mail-address with the database-saved password
+	 * @see UserInterface::check_mail()
 	 * @param string $mail
 	 * @return bool
 	 */
@@ -438,7 +439,7 @@ class User implements UserInterface {
 	}
 	
 	/**
-	 * Checks the administration-permission of an user
+	 * @see UserInterface::is_admin()
 	 * @return bool
 	 */
 	public function is_admin()
@@ -459,6 +460,7 @@ class User implements UserInterface {
 	}
 
 	/**
+	 * @see UserInterface::get_user_id()
 	 * @return interger User-ID
 	 */
 	public function get_user_id()
@@ -474,6 +476,7 @@ class User implements UserInterface {
 	}
 
 	/**
+	 * @see UserInterface::get_username()
 	 * @return string Username
 	 */
 	public function get_username()
@@ -489,7 +492,8 @@ class User implements UserInterface {
 	}
 	
 	/**
-	 * @param bool $short_version Function will return "J. Smith" instead of "Joe Smith", if it is true
+	 * @see UserInterface::get_full_name()
+	 * @param bool $short_version
 	 * @return string Full User-Name (Title, Forname and Surname)
 	 */
 	public function get_full_name($short_version)
@@ -535,6 +539,7 @@ class User implements UserInterface {
 	}
 	
 	/**
+	 * @see UserInterface::get_password()
 	 * @return string Hashed Password String
 	 */
 	public function get_password()
@@ -550,6 +555,7 @@ class User implements UserInterface {
 	}
 	
 	/**
+	 * @see UserInterface::get_last_password_change()
 	 * @return string Date of last password change
 	 */
 	public function get_last_password_change()
@@ -565,6 +571,7 @@ class User implements UserInterface {
 	}
 	
 	/**
+	 * @see UserInterface::get_boolean_user_entry()
 	 * @param string $entry Name of required entry
 	 * @return bool
 	 */
@@ -616,6 +623,7 @@ class User implements UserInterface {
 	}
 	
 	/**
+	 * @see UserInterface::get_profile()
 	 * @param string $entry Name of required entry
 	 * @return mixed
 	 */
@@ -707,6 +715,7 @@ class User implements UserInterface {
 	}
 	
 	/**
+	 * @see UserInterface::get_language_id()
 	 * @return integer Language-ID
 	 */
 	public function get_language_id()
@@ -722,6 +731,7 @@ class User implements UserInterface {
 	}
 	
 	/**
+	 * @see UserInterface::get_timezone_id()
 	 * @return integer Timezone-ID
 	 */
 	public function get_timezone_id()
@@ -737,6 +747,7 @@ class User implements UserInterface {
 	}
 	
 	/**
+	 * @see UserInterface::set_username()
 	 * @param string $username New User-Name
 	 * @return bool
 	 */
@@ -787,6 +798,7 @@ class User implements UserInterface {
 	}
 	
 	/**
+	 * @see UserInterface::set_password()
 	 * @param string $password New Password
 	 * @return bool
 	 */
@@ -803,6 +815,7 @@ class User implements UserInterface {
 	}
 	
 	/**
+	 * @see UserInterface::set_password_on_login()
 	 * @param string $password New Password
 	 * @return bool
 	 */
@@ -859,6 +872,7 @@ class User implements UserInterface {
 	}
 	
 	/**
+	 * @see UserInterface::set_last_password_change()
 	 * @param string $last_password_change New date of lase password change
 	 * @return bool
 	 */
@@ -874,8 +888,8 @@ class User implements UserInterface {
 		}
 	}
 	
-	
 	/**
+	 * @see UserInterface::set_boolean_user_entry()
 	 * @param string $entry Name of the entry
 	 * @param bool $value
 	 * @return bool
@@ -928,6 +942,7 @@ class User implements UserInterface {
 	}
 	
 	/**
+	 * @see UserInterface::set_profile()
 	 * @param string $entry Name of the entry
 	 * @param string $value
 	 * @return bool
@@ -1020,6 +1035,7 @@ class User implements UserInterface {
 	}
 
 	/**
+	 * @see UserInterface::set_language_id()
 	 * @param integer $language_id Language-ID
 	 * @return bool
 	 */
@@ -1036,6 +1052,7 @@ class User implements UserInterface {
 	}
 	
 	/**
+	 * @see UserInterface::set_timezone_id()
 	 * @param integer $timezone_id Timezone-ID
 	 * @return bool
 	 */
@@ -1053,7 +1070,7 @@ class User implements UserInterface {
 
 
 	/**
-	 * Generates a random password
+	 * @see UserInterface::generate_password()
 	 * @return string new password
 	 */
 	public static function generate_password()
@@ -1082,6 +1099,7 @@ class User implements UserInterface {
 	}
 
 	/**
+	 * @see UserInterface::get_user_id_by_username()
 	 * @param string $username
 	 * @return integer User-ID
 	 */
@@ -1092,6 +1110,7 @@ class User implements UserInterface {
 	}
 	
 	/**
+	 * @see UserInterface::get_number_of_inactive_users()
 	 * @return integer Number of inactive Users
 	 */
 	public static function get_number_of_inactive_users()
@@ -1100,6 +1119,7 @@ class User implements UserInterface {
 	}
 	
 	/**
+	 * @see UserInterface::get_number_of_locked_users()
 	 * @return integer Number of locked Users
 	 */
 	public static function get_number_of_locked_users()
@@ -1108,7 +1128,7 @@ class User implements UserInterface {
 	}
 
 	/**
-	 * Checks if an user exists
+	 * @see UserInterface::exist_username()
 	 * @param string $username
 	 * @return bool
 	 */
@@ -1126,7 +1146,7 @@ class User implements UserInterface {
 	}
 	
 	/**
-	 * Checks if an user exists
+	 * @see UserInterface::exist_user()
 	 * @param integer $user_id
 	 * @return bool
 	 */
@@ -1136,6 +1156,7 @@ class User implements UserInterface {
 	}
 
 	/**
+	 * @see UserInterface::list_entries()
 	 * @return array Array of all User-IDs
 	 */
 	public static function list_entries()
@@ -1144,6 +1165,7 @@ class User implements UserInterface {
 	}
    	
    	/**
+   	 * @see UserInterface::count_users()
    	 * @return integer
    	 */
    	public static function count_users()
@@ -1152,6 +1174,7 @@ class User implements UserInterface {
    	}
    	
    	/**
+   	 * @see UserInterface::count_administrators()
    	 * @return integer
    	 */
    	public static function count_administrators()

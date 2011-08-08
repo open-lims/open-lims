@@ -30,6 +30,12 @@ class Error_IO
 	private $exception_handler;
 	private $error_type;
 	
+	/**
+	 * @param object $exception
+	 * @param integer $module
+	 * @param integer $layer
+	 * @aram integer $error_type
+	 */
 	function __construct($exception, $module, $layer, $error_type)
 	{
 		$this->exception_handler = new ExceptionHandler($exception, $module, $layer, $error_type);
@@ -56,6 +62,9 @@ class Error_IO
 		}
 	}
 	
+	/**
+	 * @param string $message
+	 */
 	public static function fatal_error($message)
 	{
 		$template = new Template("template/login_header.html");
@@ -66,6 +75,9 @@ class Error_IO
 		$template->output();
 	}
 	
+	/**
+	 * @param string $message
+	 */
 	public static function security_out_of_box_error($message)
 	{
 		$template = new Template("template/login_header.html");

@@ -28,16 +28,25 @@
  */
 class DataNavigationIO
 {	
+	/**
+	 * @return bool
+	 */
 	public static function get_active() 
 	{
 		return true;
 	}
 	
+	/**
+	 * @return string
+	 */
 	public static function get_icon()
 	{
 		return "images/icons/folder_grey.png";
 	}
 	
+	/**
+	 * @return string
+	 */
 	public static function get_ajax_url()
 	{
 		return "core/modules/data/navigation/data_navigation.ajax.php";

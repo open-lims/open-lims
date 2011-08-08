@@ -129,6 +129,9 @@ class OrganisationUnitAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param array $array
+	 */
 	public function set_array($array)
 	{
 		global $session;
@@ -144,6 +147,9 @@ class OrganisationUnitAjax extends Ajax
 
 	}
 	
+	/**
+	 * @param integer $id
+	 */
 	public function get_children($id)
 	{
 		if (is_numeric($id) and $id != 0)

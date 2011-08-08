@@ -27,11 +27,18 @@
  */
 class ItemFulltextSearchIO
 {
+	/**
+	 * @param integer $language_id
+	 * @return string
+	 */
 	public static function get_description($language_id)
 	{
 		return "Finds Items via Fulltext-Search.";
 	}
 	
+	/**
+	 * @return string
+	 */
 	public static function get_icon()
 	{
 		return "images/icons_large/fulltext_search_50.png";

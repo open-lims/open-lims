@@ -28,7 +28,7 @@
 class SampleIO
 {
 	/**
-	 * NEW
+	 * @param integer $user_id
 	 */
 	public static function list_user_related_samples($user_id)
 	{
@@ -172,9 +172,6 @@ class SampleIO
 		$template->output();
 	}
 	
-	/**
-	 * NEW
-	 */
 	public static function list_organisation_unit_related_samples()
 	{
 		if ($_GET[ou_id])
@@ -327,8 +324,8 @@ class SampleIO
 	}
 	
 	/**
-	 * NEW
 	 * @todo error
+	 * @param integer $item_id
 	 */
 	public static function list_samples_by_item_id($item_id)
 	{
@@ -491,7 +488,7 @@ class SampleIO
 	}
 	
 	/**
-	 * NEW
+	 * @param string $sql
 	 */
 	public static function list_sample_items($sql)
 	{
@@ -664,7 +661,9 @@ class SampleIO
 	}
 	
 	/**
-	 * NEW
+	 * @param array $type_array
+	 * @param array $category_array
+	 * @param integer $organisation_id
 	 */
 	public static function create($type_array, $category_array, $organisation_unit_id)
 	{
@@ -1882,7 +1881,6 @@ class SampleIO
 	}
 	
 	/**
-	 * NEW
 	 * @param array $type_array
 	 * @param array $category_array
 	 * @param integer $organisation_unit_id
@@ -1937,7 +1935,8 @@ class SampleIO
 	}
 
 	/**
-	 * NEW
+	 * @param array $type_array
+	 * @param array $category_array
 	 */
 	public static function associate($type_array, $category_array)
 	{
@@ -2435,9 +2434,6 @@ class SampleIO
 		}
 	}
 
-	/**
-	 * NEW
-	 */
 	public static function location_history()
 	{
 		global $sample_security;

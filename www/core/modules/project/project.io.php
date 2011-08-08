@@ -1826,6 +1826,9 @@ class ProjectIO
 		}
 	}
 	
+	/**
+	 * @param integer $item_id
+	 */
 	public static function list_projects_by_item_id($item_id)
 	{
 		if (is_numeric($item_id))

@@ -27,11 +27,18 @@
  */
 class DataSearchIO
 {
+	/**
+	 * @param integer $language_id
+	 * @return string
+	 */
 	public static function get_description($language_id)
 	{
 		return "Finds Files, Values or Folders in Folders via Name or Extension.";
 	}
 	
+	/**
+	 * @return string
+	 */
 	public static function get_icon()
 	{
 		return "images/icons_large/ffv_search_50.png";

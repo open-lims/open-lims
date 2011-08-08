@@ -34,6 +34,11 @@ class Common_IO
 		return self::$in_container;
 	}
 	
+	/**
+	 * @param string $title
+	 * @param string $class
+	 * @return string
+	 */
 	public static function container_begin($title, $class)
 	{
 		self::$in_container = true;
@@ -53,6 +58,10 @@ class Common_IO
 				"<div class='".$class."Main'>";
 	}
 
+	/**
+	 * @param string $class
+	 * @return string
+	 */
 	public static function container_end($class)
 	{
 		self::$in_container = false;
@@ -71,6 +80,12 @@ class Common_IO
 				"</table></div>";
 	}
 		
+	/**
+	 * @param integer $page
+	 * @param integer $max_page
+	 * @param array $paramquery
+	 * @return string
+	 */
 	public static function page_bar($page, $max_page, $paramquery) {
 		
 			$previous_paramquery = $paramquery;
@@ -172,6 +187,11 @@ class Common_IO
 		
 	}
 	
+	/**
+	 * @param integer $results
+	 * @param integer $pages
+	 * @return string
+	 */
 	public static function results_on_page($results, $pages) {
 		
 		if ($results > 1) {
@@ -194,6 +214,12 @@ class Common_IO
 		
 	}
 	
+	/**
+	 * @param string $target
+	 * @param string $title
+	 * @param string $text
+	 * @param string $css_class
+	 */
 	public static function step_proceed($target, $title, $text, $css_class)
 	{
 		$template = new Template("template/base/step_proceed.html");

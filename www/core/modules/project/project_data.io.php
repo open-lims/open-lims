@@ -32,6 +32,9 @@ class ProjectDataIO
 		return Misc::calc_size(Project::get_used_project_space());
 	}
 	
+	/**
+	 * @param integer $user_id
+	 */
 	public static function get_user_module_detail_setting($user_id)
 	{
 		if ($user_id)

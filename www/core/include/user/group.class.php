@@ -52,6 +52,7 @@ class Group implements GroupInterface
 	private $group;
 	
 	/**
+	 * @see GroupInterface::__construct()
 	 * @param integer $group_id Group-ID
 	 */
 	function __construct($group_id)
@@ -76,7 +77,7 @@ class Group implements GroupInterface
 	}
 	
 	/**
-	 * Creates a new user including all needed dependencies
+	 * @see GroupInterface::create()
 	 * @param string $name
 	 * @return integer
 	 * @throws GroupAlreadyExistException
@@ -145,7 +146,7 @@ class Group implements GroupInterface
 	}
 	
 	/**
-	 * Deletes a group
+	 * @see GroupInterface::delete()
 	 * @return bool
 	 */
 	public function delete()
@@ -217,7 +218,7 @@ class Group implements GroupInterface
 	}
 	
 	/**
-	 * Checks if a user in group
+	 * @see GroupInterface::is_user_in_group()
 	 * @param integer $user_id User-ID
 	 * @return bool
 	 */
@@ -244,7 +245,7 @@ class Group implements GroupInterface
 	}		
 
 	/**
-	 * Links a new user to the group
+	 * @see GroupInterface::create_user_in_group()
 	 * @param integer $user_id User-ID
 	 * @return bool
 	 */
@@ -272,7 +273,7 @@ class Group implements GroupInterface
 	}
 	
 	/**
-	 * Deletes an user from the group
+	 * @see GroupInterface::delete_user_from_group()
 	 * @param integer $user_id User-ID
 	 * @return bool
 	 */
@@ -301,6 +302,7 @@ class Group implements GroupInterface
 	}
 
 	/**
+	 * @see GroupInterface::get_number_of_user_members()
 	 * @return integer Number of Members
 	 */
 	public function get_number_of_user_members()
@@ -324,6 +326,7 @@ class Group implements GroupInterface
 	}	
 	
 	/**
+	 * @see GroupInterface::get_name()
 	 * @return string Group Name
 	 */
 	public function get_name()
@@ -346,6 +349,7 @@ class Group implements GroupInterface
 	}
 	
 	/**
+	 * @see GroupInterface::set_name()
 	 * @param string $name Group Name
 	 * @return bool
 	 */
@@ -397,6 +401,7 @@ class Group implements GroupInterface
 	
 	
 	/**
+	 * @see GroupInterface::get_number_of_groups_by_user_id()
 	 * @param integer $user_id User-ID
 	 * @return integer Number of memberships of an user
 	 */
@@ -414,6 +419,7 @@ class Group implements GroupInterface
 	}
 
 	/**
+	 * @see GroupInterface::get_number_of_groups()
 	 * @return integer Number of all Groups
 	 */
 	public static function get_number_of_groups()
@@ -422,7 +428,7 @@ class Group implements GroupInterface
 	}
 
 	/**
-	 * Checks if a group exists by name
+	 * @see GroupInterface::exist_name()
 	 * @param string $name
 	 * @return bool
 	 */
@@ -439,8 +445,8 @@ class Group implements GroupInterface
 		}
 	}
 	
-	/** 
-	 * Checks if a group exists by id
+	/**
+	 * @see GroupInterface::exist_group()
 	 * @param integer $group_id
 	 * @return bool
 	 */
@@ -450,6 +456,7 @@ class Group implements GroupInterface
 	}
 	
 	/**
+	 * @see GroupInterface::list_groups()
 	 * @return array Array of all Groups
 	 */
 	public static function list_groups()
@@ -458,6 +465,7 @@ class Group implements GroupInterface
 	}
 	
 	/**
+	 * @see GroupInterface::list_user_releated_groups()
 	 * @param integer $user_id User-ID
 	 * @return array Array of all related groups
 	 */
@@ -467,6 +475,7 @@ class Group implements GroupInterface
 	}
 	
 	/**
+	 * @see GroupInterface::list_group_releated_users()
 	 * @param integer $group_id Group-ID
 	 * @return array Array of all related users
 	 */
@@ -476,7 +485,7 @@ class Group implements GroupInterface
 	}
 
 	/**
-	 * Searchs groups via groupname
+	 * @see GroupInterface::search_groups()
 	 * @param string $groupname
 	 * @return array Array of Group-IDs
 	 */
@@ -494,6 +503,7 @@ class Group implements GroupInterface
    	}
 
 	/**
+	 * @see GroupInterface::count_groups()
 	 * @return integer
 	 */
    	public static function count_groups()

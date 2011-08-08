@@ -27,6 +27,9 @@
  */
 class ProjectDataSearchIO
 {
+	/**
+	 * @param integer $language_id
+	 */
 	public static function get_description($language_id)
 	{
 		return "Finds Data in Projects uncoupled to Folder-structure.";

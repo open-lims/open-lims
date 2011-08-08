@@ -38,7 +38,10 @@ class LeftNavigationAjax extends Ajax
 	{
 		parent::__construct();
 	}
-		
+	
+	/**
+	 * @param integer $id
+	 */
 	public function set_active($id)
 	{
 		global $session;	

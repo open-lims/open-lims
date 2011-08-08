@@ -37,6 +37,9 @@ class ManufacturerAjax extends Ajax
 		parent::__construct();
 	}
 
+	/**
+	 * @param string $name
+	 */
 	public function exist_name($name)
 	{
 		if (Manufacturer::exist_name($name))
@@ -49,6 +52,9 @@ class ManufacturerAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param string $name
+	 */
 	public function add_entry($name)
 	{
 		if ($name)
@@ -69,11 +75,17 @@ class ManufacturerAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param string $string
+	 */
 	public function get_number_of_entries($string)
 	{
 		echo Manufacturer::count_entries($string);
 	}
 	
+	/**
+	 * @param integer $id
+	 */
 	public function get_name($id)
 	{
 		if (is_numeric($id))
@@ -83,6 +95,11 @@ class ManufacturerAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param integer $number_of_entries
+	 * @param integer $start_entry
+	 * @param string $start_string
+	 */
 	public function get_next_entries($number_of_entries, $start_entry, $start_string)
 	{
 		$manufacturer_array = Manufacturer::list_manufacturers($number_of_entries, $start_entry, $start_string);
@@ -114,6 +131,11 @@ class ManufacturerAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param integer $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 */
 	public function get_list($page, $sortvalue, $sortmethod)
 	{
 		global $user;

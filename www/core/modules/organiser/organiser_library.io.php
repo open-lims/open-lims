@@ -1118,6 +1118,9 @@ class OrganiserLibraryIO {
 		return $template->get_string();
 	}
 	
+	/**
+	 * @param array $calendar_array
+	 */
 	public function set_calendar_array($calendar_array)
 	{
 		if (is_array($calendar_array))
@@ -1144,6 +1147,9 @@ class OrganiserLibraryIO {
 		 */
 	}
 	
+	/**
+	 * @param array $todo_array
+	 */
 	public function set_todo_array($todo_array)
 	{
 		if (is_array($todo_array))

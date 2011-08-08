@@ -262,7 +262,6 @@ class ContentHandler_IO
 		$template = new Template("template/index_footer.html");
 		$template->output();
 	}
-	
 }
 
 ?>

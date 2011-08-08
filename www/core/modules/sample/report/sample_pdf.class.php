@@ -30,13 +30,21 @@ class SamplePDF extends TCPDF
 	private $sample_id;
 	private $sample_name;
 	
+	/**
+	 * @param integer $sample_id
+	 * @param string $sample_name
+	 * @param string $orientation
+	 * @param string $unit
+	 * @param string $format
+	 * @param bool $unicode
+	 * @param string $encoding
+	 */
 	function __construct($sample_id, $sample_name, $orientation = 'P', $unit = 'mm', $format = 'A4', $unicode = true, $encoding = "UTF-8")
 	{
 		$this->sample_id = $sample_id;
 		$this->sample_name = $sample_name;
 		parent::__construct($orientation, $unit, $format, $unicode, $encoding);
 	}
-	
 	
     public function Header()
     {

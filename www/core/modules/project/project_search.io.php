@@ -27,11 +27,17 @@
  */
 class ProjectSearchIO
 {
+	/**
+	 * @return string
+	 */
 	public static function get_description($language_id)
 	{
 		return "Finds Projects in Organisation Units via Name and/or Template.";
 	}
 	
+	/**
+	 * @return string
+	 */
 	public static function get_icon()
 	{
 		return "images/icons_large/project_search_50.png";

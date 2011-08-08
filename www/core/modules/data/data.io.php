@@ -1430,6 +1430,10 @@ class DataIO
 		
 	}
 	
+	/**
+	 * @param integer $user_id
+	 * @return array
+	 */
 	public static function get_user_module_detail_setting($user_id)
 	{
 		if ($user_id)

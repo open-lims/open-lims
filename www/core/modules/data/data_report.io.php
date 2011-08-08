@@ -27,6 +27,12 @@
  */
 class DataReportIO
 {
+	/**
+	 * @param string $sql
+	 * @param integer $item_id
+	 * @param object $pdf
+	 * @return object
+	 */
 	public static function get_data_item_report($sql, $item_id, $pdf)
 	{
 		if ($sql and is_object($pdf))

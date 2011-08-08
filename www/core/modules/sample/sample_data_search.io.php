@@ -27,11 +27,18 @@
  */
 class SampleDataSearchIO
 {
+	/**
+	 * @param integer $language_id
+	 * @return string
+	 */
 	public static function get_description($language_id)
 	{
 		return "Finds Data in Samples uncoupled to Folder-structure.";
 	}
 	
+	/**
+	 * @return string
+	 */
 	public static function get_icon()
 	{
 		return "images/icons_large/data_search_50.png";

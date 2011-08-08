@@ -38,6 +38,12 @@ class AdminOrganisationUnitAjax extends Ajax
 		parent::__construct();
 	}
 	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 */
 	public function list_members($organisation_unit_id, $page, $sortvalue, $sortmethod)
 	{
 		if (is_numeric($organisation_unit_id))
@@ -94,6 +100,10 @@ class AdminOrganisationUnitAjax extends Ajax
 		}
 	}
 		
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 */
 	public function delete_member($organisation_unit_id, $user_id)
 	{
 		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
@@ -114,6 +124,10 @@ class AdminOrganisationUnitAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 */
 	public function add_member($organisation_unit_id, $user_id)
 	{
 		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
@@ -134,6 +148,12 @@ class AdminOrganisationUnitAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 */
 	public function list_owners($organisation_unit_id, $page, $sortvalue, $sortmethod)
 	{
 		if (is_numeric($organisation_unit_id))
@@ -190,6 +210,10 @@ class AdminOrganisationUnitAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 */
 	public function delete_owner($organisation_unit_id, $user_id)
 	{
 		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
@@ -210,6 +234,10 @@ class AdminOrganisationUnitAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 */
 	public function add_owner($organisation_unit_id, $user_id)
 	{
 		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
@@ -230,6 +258,12 @@ class AdminOrganisationUnitAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 */
 	public function list_leaders($organisation_unit_id, $page, $sortvalue, $sortmethod)
 	{
 		if (is_numeric($organisation_unit_id))
@@ -286,6 +320,10 @@ class AdminOrganisationUnitAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 */
 	public function delete_leader($organisation_unit_id, $user_id)
 	{
 		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
@@ -306,6 +344,10 @@ class AdminOrganisationUnitAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 */
 	public function add_leader($organisation_unit_id, $user_id)
 	{
 		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
@@ -326,6 +368,12 @@ class AdminOrganisationUnitAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 */
 	public function list_quality_managers($organisation_unit_id, $page, $sortvalue, $sortmethod)
 	{
 		if (is_numeric($organisation_unit_id))
@@ -382,6 +430,10 @@ class AdminOrganisationUnitAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 */
 	public function delete_quality_manager($organisation_unit_id, $user_id)
 	{
 		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
@@ -402,6 +454,10 @@ class AdminOrganisationUnitAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 */
 	public function add_quality_manager($organisation_unit_id, $user_id)
 	{
 		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
@@ -422,6 +478,12 @@ class AdminOrganisationUnitAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 */
 	public function list_groups($organisation_unit_id, $page, $sortvalue, $sortmethod)
 	{
 		if (is_numeric($organisation_unit_id))
@@ -476,6 +538,10 @@ class AdminOrganisationUnitAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $group_id
+	 */
 	public function delete_group($organisation_unit_id, $group_id)
 	{
 		if (is_numeric($organisation_unit_id) and is_numeric($group_id))
@@ -496,6 +562,10 @@ class AdminOrganisationUnitAjax extends Ajax
 		}
 	}
 	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $group_id
+	 */
 	public function add_group($organisation_unit_id, $group_id)
 	{
 		if (is_numeric($organisation_unit_id) and is_numeric($group_id))

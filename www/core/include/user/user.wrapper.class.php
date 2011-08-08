@@ -38,6 +38,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 class User_Wrapper implements User_WrapperInterface
 {
 	/**
+	 * @see User_WrapperInterface::list_search_users()
 	 * @param string $username
 	 * @param string $order_by
 	 * @param string $order_method
@@ -51,6 +52,7 @@ class User_Wrapper implements User_WrapperInterface
 	}
 	
 	/**
+	 * @see User_WrapperInterface::count_search_users()
 	 * @param string $username
 	 * @return integer
 	 */
@@ -60,6 +62,7 @@ class User_Wrapper implements User_WrapperInterface
 	}
 	
 	/**
+	 * @see User_WrapperInterface::list_search_groups()
 	 * @param string $groupname
 	 * @param string $order_by
 	 * @param string $order_method
@@ -73,6 +76,7 @@ class User_Wrapper implements User_WrapperInterface
 	}
 	
 	/**
+	 * @see User_WrapperInterface::count_search_groups()
 	 * @param string $groupname
 	 * @return integer
 	 */
@@ -82,6 +86,7 @@ class User_Wrapper implements User_WrapperInterface
 	}
 	
 	/**
+	 * @see User_WrapperInterface::list_users()
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -94,6 +99,7 @@ class User_Wrapper implements User_WrapperInterface
    	}
    	
    	/**
+   	 * @see User_WrapperInterface::count_users()
    	 * @return integer
    	 */
    	public static function count_users()

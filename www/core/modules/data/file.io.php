@@ -217,6 +217,12 @@ class FileIO
 		}
 	}
 
+	/**
+	 * @param array $type_array
+	 * @param array $category_array
+	 * @param integer $organisation_unit_id
+	 * @param integer $folder_id
+	 */
 	public static function upload_as_item($type_array, $category_array, $organisation_unit_id, $folder_id)
 	{		
 		if (is_numeric($folder_id))

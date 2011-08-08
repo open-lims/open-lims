@@ -38,6 +38,10 @@ class ReportTable_IO
 	
 	private $height;
 	
+	/**
+	 * @param object $pdf
+	 * @param integer $height
+	 */
 	function __construct($pdf, $height='')
 	{
 		if (is_object($pdf))
@@ -59,6 +63,10 @@ class ReportTable_IO
 		unset($this->pdf);
 	}
 	
+	/**
+	 * @param array $header_array
+	 * @return bool
+	 */
 	public function add_header($header_array)
 	{
 		if (is_array($header_array))
@@ -72,6 +80,10 @@ class ReportTable_IO
 		}
 	}
 	
+	/**
+	 * @param array $content_array
+	 * @return bool
+	 */
 	public function add_line($content_array)
 	{
 		if (is_array($content_array))
@@ -104,6 +116,9 @@ class ReportTable_IO
 		}
 	}
 	
+	/**
+	 * @return object
+	 */
 	public function get_pdf()
 	{
 		if (is_array($this->content_array) and count($this->content_array) >= 1)

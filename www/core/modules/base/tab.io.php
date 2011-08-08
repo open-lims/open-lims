@@ -31,6 +31,9 @@ class Tab_IO
 	private $max_tabs;
 	private $tab_array;
 	
+	/**
+	 * @param integer $max_tabs
+	 */
 	function __construct($max_tabs = 7)
 	{
 		$this->max_tabs = $max_tabs;
@@ -42,6 +45,15 @@ class Tab_IO
 		unset($this->tab_array);
 	}
 	
+	/**
+	 * @param string $name
+	 * @param string $display_name
+	 * @param array $target
+	 * @param bool $active
+	 * @param bool $disabled
+	 * @param string $css_id
+	 * @return bool
+	 */
 	public function add($name, $display_name, $target, $active, $disabled = false, $css_id = null)
 	{		
 		if ($name and $display_name and ($target or $css_id))
@@ -82,6 +94,10 @@ class Tab_IO
 		}
 	}
 	
+	/**
+	 * @param string $name
+	 * @return bool
+	 */
 	public function activate($name)
 	{
 		if ($this->tab_array[$name]['name'])
@@ -99,6 +115,10 @@ class Tab_IO
 		}
 	}
 	
+	/**
+	 * @param string $name
+	 * @return bool
+	 */
 	public function disable($name)
 	{
 		if ($this->tab_array[$name]['name'])
@@ -112,6 +132,10 @@ class Tab_IO
 		}
 	}
 	
+	/**
+	 * @param string $name
+	 * @return bool
+	 */
 	public function enable($name)
 	{
 		if ($this->tab_array[$name]['name'])
@@ -130,6 +154,9 @@ class Tab_IO
 		echo $this->get_string();
 	}
 	
+	/**
+	 * @return string
+	 */
 	public function get_string()
 	{
 		$return = "";
