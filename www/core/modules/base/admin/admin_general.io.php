@@ -29,13 +29,12 @@ class AdminGeneralIO
 {	
 	public static function list_languages()
 	{
-		$template = new Template("template/base/admin/general/list_languages.html");
-		$template->output();		
+		echo "Function will be implemented soon!";	
 	}
 	
-	public static function list_timzones()
+	public static function list_timezones()
 	{
-		
+		echo "Function will be implemented soon!";
 	}
 	
 	public static function list_paper_sizes()
@@ -46,12 +45,12 @@ class AdminGeneralIO
 	
 	public static function list_measuring_units()
 	{
-		
+		echo "Function will be implemented soon!";
 	}
 	
 	public static function list_currencies()
 	{
-		
+		echo "Function will be implemented soon!";
 	}
 	
 	public static function handler()
