@@ -1,3 +1,17 @@
+<script>
+
+$(function()
+{
+	$( "#enddate" ).datepicker(
+	{
+		changeMonth: true,
+		changeYear: true,
+		dateFormat: 'yy-mm-dd'
+	});
+});
+
+</script>
+
 <br />
 
 <!-- CONTAINER BEGIN ("Add Project Task",0) -->
@@ -28,7 +42,6 @@
 			<td width='20%'>Date:</td>
 			<td>
 				<input type='text' id='enddate' name='enddate' class='FormTextfield' value='[[ENDDATE]]' />
-				<a href='#' onclick='selectDate("enddate",event)'><img src='images/icons/month.png' style='border: 0;' /></a>
 				<span class='formError'>[[ERROR1]]</span>
 			</td>
 		</tr>

@@ -2762,7 +2762,7 @@ class SampleIO
 														{
 															$transaction->commit($transaction_id);
 														}
-														Common_IO::step_proceed($params, "Add Item", "Succeed." ,null);
+														Common_IO::step_proceed($params, "Add Item", "Successful." ,null);
 													}
 													else
 													{
@@ -2781,7 +2781,7 @@ class SampleIO
 														{
 															$transaction->commit($transaction_id);
 														}
-														Common_IO::step_proceed($params, "Add Item", "Succeed." ,null);
+														Common_IO::step_proceed($params, "Add Item", "Successful." ,null);
 													}
 													else
 													{

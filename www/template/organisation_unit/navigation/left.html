@@ -1,5 +1,6 @@
 <script>
-	create_menu_tree('OrganisationUnitLeftNavigationTree', 'core/modules/organisation_unit/navigation/organisation_unit_navigation.ajax.php');
+	var get_array = getQueryParams(document.location.search);
+	create_menu_tree('OrganisationUnitLeftNavigationTree', 'core/modules/organisation_unit/navigation/organisation_unit_navigation.ajax.php?nav='+get_array['nav']+'');
 </script>
 
 <ul class='LeftNavigationLayer0' id='OrganisationUnitLeftNavigationTree'>

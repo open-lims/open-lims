@@ -311,7 +311,7 @@ class ValueIO
 				
 							if ($value->update($value_array, $previous_version_id, $major, true, false))
 							{			
-								Common_IO::step_proceed($params, "Value Update", "Value Update Succeed" ,null);			
+								Common_IO::step_proceed($params, "Value Update", "Value Update Successful" ,null);			
 							}
 							else
 							{

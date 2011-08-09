@@ -1,3 +1,23 @@
+<script>
+
+$(function()
+{
+	$( "#startdate" ).datepicker(
+	{
+		changeMonth: true,
+		changeYear: true,
+		dateFormat: 'yy-mm-dd'
+	});
+	$( "#enddate" ).datepicker(
+	{
+		changeMonth: true,
+		changeYear: true,
+		dateFormat: 'yy-mm-dd'
+	});
+});
+
+</script>
+
 <br />
 
 <!-- CONTAINER BEGIN ("Add Project Task",0) -->
@@ -28,7 +48,6 @@
 			<td width='20%'>Start Date:</td>
 			<td>
 				<input type='text' id='startdate' name='startdate' class='FormTextfield' value='[[STARTDATE]]' />
-				<a href='#' onclick='selectDate("startdate",event)'><img src='images/icons/month.png' style='border: 0;' /></a>
 				<span class='formError'>[[ERROR1]]</span>
 			</td>
 		</tr>
@@ -36,7 +55,6 @@
 			<td width='20%'>End Date:</td>
 			<td>
 				<input type='text' id='enddate' name='enddate' class='FormTextfield' value='[[ENDDATE]]' />
-				<a href='#' onclick='selectDate("enddate",event)'><img src='images/icons/month.png' style='border: 0;' /></a>
 				<span class='formError'>[[ERROR2]]</span>
 			</td>
 		</tr>

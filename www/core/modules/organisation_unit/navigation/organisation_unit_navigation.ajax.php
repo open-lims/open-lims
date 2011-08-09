@@ -57,7 +57,60 @@ class OrganisationUnitAjax extends Ajax
 
 		if ($session->is_value("LEFT_NAVIGATION_OU_ARRAY"))
 		{
-			echo json_encode($session->read_value("LEFT_NAVIGATION_OU_ARRAY"));
+			$left_navigation_array = $session->read_value("LEFT_NAVIGATION_OU_ARRAY");
+			
+			$module_link_array = ModuleLink::list_links_by_type("ou_navigation");
+			
+			if (is_array($left_navigation_array) and count($left_navigation_array) >= 1)
+			{
+				foreach ($left_navigation_array as $key => $value)
+				{
+					if ($value[5] == true and $value[6])
+					{
+						if (is_array($module_link_array) and count($module_link_array) >= 1)
+						{
+							$paramquery = array();
+							$paramquery['username'] = $_GET['username'];
+							$paramquery['session_id'] = $_GET['session_id'];
+							
+							$module_link_array_key = 0;
+							
+							foreach ($module_link_array as $array_key => $array_value)
+							{
+								if ($array_value['array']['nav'] == $_GET['nav'])
+								{
+									$module_link_array_key = $array_key;
+								}
+							}
+								
+							if (is_array($module_link_array[$module_link_array_key]['array']) and count($module_link_array[$module_link_array_key]['array']) >= 1)
+							{
+								foreach ($module_link_array[$module_link_array_key]['array'] as $array_key => $array_value)
+								{
+									if ($array_value == "%OU_ID%")
+									{
+										$paramquery['ou_id'] = $value[1];
+									}
+									else
+									{
+										$paramquery[$array_key] = $array_value;
+									}
+								}
+							}
+							
+							$params = http_build_query($paramquery, '', '&#38;');
+							
+							$left_navigation_array[$key][6] = $params; //link
+						}
+						else
+						{
+							$left_navigation_array[$key][6] = "";
+						}
+					}
+				}
+			}
+			
+			echo json_encode($left_navigation_array);
 		}
 		else
 		{
@@ -87,9 +140,19 @@ class OrganisationUnitAjax extends Ajax
 							$paramquery['username'] = $_GET['username'];
 							$paramquery['session_id'] = $_GET['session_id'];
 							
-							if (is_array($module_link_array[0]['array']) and count($module_link_array[0]['array']) >= 1)
+							$module_link_array_key = 0;
+							
+							foreach ($module_link_array as $array_key => $array_value)
 							{
-								foreach ($module_link_array[0]['array'] as $array_key => $array_value)
+								if ($array_value['array']['nav'] == $_GET['nav'])
+								{
+									$module_link_array_key = $array_key;
+								}
+							}
+								
+							if (is_array($module_link_array[$module_link_array_key]['array']) and count($module_link_array[$module_link_array_key]['array']) >= 1)
+							{
+								foreach ($module_link_array[$module_link_array_key]['array'] as $array_key => $array_value)
 								{
 									if ($array_value == "%OU_ID%")
 									{
@@ -183,9 +246,19 @@ class OrganisationUnitAjax extends Ajax
 							$paramquery['username'] = $_GET['username'];
 							$paramquery['session_id'] = $_GET['session_id'];
 							
-							if (is_array($module_link_array[0]['array']) and count($module_link_array[0]['array']) >= 1)
+							$module_link_array_key = 0;
+							
+							foreach ($module_link_array as $array_key => $array_value)
 							{
-								foreach ($module_link_array[0]['array'] as $array_key => $array_value)
+								if ($array_value['array']['nav'] == $_GET['nav'])
+								{
+									$module_link_array_key = $array_key;
+								}
+							}
+							
+							if (is_array($module_link_array[$module_link_array_key]['array']) and count($module_link_array[$module_link_array_key]['array']) >= 1)
+							{
+								foreach ($module_link_array[$module_link_array_key]['array'] as $array_key => $array_value)
 								{
 									if ($array_value == "%OU_ID%")
 									{

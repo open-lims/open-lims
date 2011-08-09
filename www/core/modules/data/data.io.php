@@ -216,6 +216,15 @@ class DataIO
 							$result_array[$key][symbol][link] = $params;
 							$result_array[$key][symbol][content] = "<img src='".$file->get_icon()."' alt='' style='border:0;' />";
 							
+							if (strlen($result_array[$key][name]) > 30)
+							{
+								$result_array[$key][name] = substr($result_array[$key][name],0,30)."...";
+							}
+							else
+							{
+								$result_array[$key][name] = $result_array[$key][name];
+							}
+							
 							$tmp_name = $result_array[$key][name];
 							unset($result_array[$key][name]);
 							$result_array[$key][name][content] = $tmp_name;
@@ -247,6 +256,15 @@ class DataIO
 							$result_array[$key][symbol][link] = $params;
 							$result_array[$key][symbol][content] = "<img src='images/fileicons/16/unknown.png' alt='' style='border:0;' />";
 							
+							if (strlen($result_array[$key][name]) > 30)
+							{
+								$result_array[$key][name] = substr($result_array[$key][name],0,30)."...";
+							}
+							else
+							{
+								$result_array[$key][name] = $result_array[$key][name];
+							}
+							
 							$tmp_name = $result_array[$key][name];
 							unset($result_array[$key][name]);
 							$result_array[$key][name][content] = $tmp_name;
@@ -276,6 +294,15 @@ class DataIO
 							$result_array[$key][symbol][content] = "<img src='images/icons/folder.png' alt='' style='border:0;' />";
 							$result_array[$key][symbol][link] = $params;
 							
+							if (strlen($result_array[$key][name]) > 30)
+							{
+								$result_array[$key][name] = substr($result_array[$key][name],0,30)."...";
+							}
+							else
+							{
+								$result_array[$key][name] = $result_array[$key][name];
+							}
+							
 							$tmp_name = $result_array[$key][name];
 							unset($result_array[$key][name]);
 							$result_array[$key][name][content] = $tmp_name;
@@ -298,7 +325,16 @@ class DataIO
 						
 						$result_array[$key][symbol][content] = "<img src='images/icons/virtual_folder.png' alt='' style='border:0;' />";
 						$result_array[$key][symbol][link] = $params;
-								
+
+						if (strlen($result_array[$key][name]) > 30)
+						{
+							$result_array[$key][name] = substr($result_array[$key][name],0,30)."...";
+						}
+						else
+						{
+							$result_array[$key][name] = $result_array[$key][name];
+						}
+						
 						$tmp_name = $result_array[$key][name];
 						unset($result_array[$key][name]);
 						$result_array[$key][name][content] = $tmp_name;

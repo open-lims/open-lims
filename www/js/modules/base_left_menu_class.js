@@ -417,7 +417,7 @@ function create_menu_tree(id, ajax_handler)
 			$.ajax({
 				type : "GET",
 				url : ajax_handler,
-				data : "run=get_children&id=" + clicked_id + "&session_id=" + get_array['session_id'],
+				data : "run=get_children&id=" + clicked_id + "&session_id=" + get_array['session_id'] + "&username=" + get_array['username'],
 				success : function(data) {
 					var child_array = $.parseJSON(data);
 	

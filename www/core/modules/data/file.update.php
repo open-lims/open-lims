@@ -34,6 +34,7 @@
 	 */
 	define("UNIT_TEST", false);
 	
+	require_once("../../../config/version.php");
 	require_once("../../../config/main.php");
 	require_once("../../db/db.php");
 	
