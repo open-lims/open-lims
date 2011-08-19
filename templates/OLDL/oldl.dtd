@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!ELEMENT OLDL (HEAD?,REQUIRED?,BODY?)>
+
+<!ELEMENT HEAD (ID|TITLE|VERSION?|AUTHOR?|DESC?|LOCATION?|MANUFACTURER?|EXPIRY?)*>
+<!ELEMENT REQUIRED (ITEM*,CLASS*)>
+<!ELEMENT BODY (ITEM|CLASS|STATUS|EXTENSION|QUALITYCHECK?)*>
+
+<!ELEMENT STATUS (ITEM|CLASS|EXTENSION|QUALITYCHECK?)*>
+
+<!ELEMENT ITEM (TYPE|INFORMATION|CATEGORY)*>
+
+<!ELEMENT CLASS (INFORMATION)*>
+
+<!ELEMENT INFORMATION EMPTY>
+
+<!ELEMENT TYPE EMPTY>
+<!ELEMENT CATEGORY EMPTY>
+
+<!ELEMENT EXTENSION EMPTY>
+
+<!ELEMENT QUALITYCHECK EMPTY>
+
+<!ELEMENT ID (#PCDATA)>
+<!ELEMENT TITLE (#PCDATA)>
+<!ELEMENT VERSION (#PCDATA)>
+<!ELEMENT AUTHOR (#PCDATA)>
+<!ELEMENT DESC (#PCDATA)>
+<!ELEMENT LOCATION EMPTY>
+<!ELEMENT MANUFACTURER EMPTY>
+<!ELEMENT EXPIRY EMPTY>
+
+<!ATTLIST 	OLDL
+	type			CDATA						#IMPLIED
+>	
+
+<!ATTLIST 	STATUS
+	id				CDATA						#REQUIRED
+	requirement		(force|optional)    		#IMPLIED
+>        
+
+<!ATTLIST 	ITEM
+	type	        CDATA    					#REQUIRED
+	classify	    (force|optional|forbidden)	#IMPLIED
+	occurrence		(once|multiple)				#IMPLIED      
+	requirement		(force|optional)			#IMPLIED   
+	class			CDATA						#IMPLIED      
+	name			CDATA						#IMPLIED      
+	gid				CDATA						#IMPLIED
+	folder			CDATA						#IMPLIED
+>           
+
+<!ATTLIST 	TYPE
+	id				CDATA						#REQUIRED
+>	
+
+<!ATTLIST 	CATEGORY
+	id				CDATA						#REQUIRED
+>	
+
+<!ATTLIST 	CLASS
+	name			CDATA						#REQUIRED
+>
+      
+<!ATTLIST 	INFORMATION
+	keywords		(keywords)					#IMPLIED	
+	description		(description)				#IMPLIED
+>	
+       
+<!ATTLIST 	EXTENSION
+	internal_name	CDATA						#REQUIRED
+>
+
+<!ATTLIST 	LOCATION
+	requirement		(force|optional)			#IMPLIED
+>
+
+<!ATTLIST 	MANUFACTURER
+	requirement		(force|optional)			#IMPLIED
+>
+
+<!ATTLIST 	EXPIRY
+	requirement		(force|optional)			#IMPLIED
+>
