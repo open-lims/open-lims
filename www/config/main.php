@@ -43,10 +43,10 @@ define("DB_SERVER",						"localhost");
 define("DB_PORT",						"");
 define("DB_USER",						"dbadmin2");
 define("DB_PASSWORD",					"dbadmin");
-define("DB_DATABASE",					"openlims_devel");
+define("DB_DATABASE",					"openlims_material");
 
 // Path Settings
-define("BASE_DIR",						"D:/web/open-lims");
+define("BASE_DIR",						"D:/web/open-lims_material");
 define("WWW_DIR",						constant("BASE_DIR")."/www");
 define("LOG_DIR",						constant("BASE_DIR")."/logs");
 
