@@ -1138,9 +1138,10 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 }
 
 .AssistantClear {
+	clear: left;
 	width: 750px;
 	border-top: 1px #D0D0D0 dotted;
-	margin-top: 80px;
+	height: 1px;
 }
 
 .CalendarTrGrey {

@@ -64,6 +64,8 @@ padding: 2px 2px 2px 5px;
 
 /* FILE SEARCH MENU */
 
+/* NEU: Abhängigkeit und Benennung */
+
 #fileSearchList
 {
 
@@ -112,7 +114,9 @@ padding-bottom: 4px;
 }
 
 #SmallTabFooter {
-	margin-top: 17px;
+	clear: left;
+	margin: -1px;
+	height: 1px;
 	width: 750px;
 	border-top: 1px #D0D0D0 dotted;
 }
