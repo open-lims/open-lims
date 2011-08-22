@@ -482,6 +482,10 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 	width: 48%;
 }
 
+.homeSumClear {
+	clear: left;
+}
+
 .homeMain {
 	width: 100%;
 }

@@ -442,6 +442,7 @@
 /* Project General */ /* Project General Box (w. write) */
 .projectGeneral {
 	float: left;
+	width: 367px;
 }
 
 .projectGeneralBegin {
@@ -531,6 +532,7 @@
 /* Project Menu Box */
 .projectMenu { /* margin-left: 31em; */
 	float: right;
+	width: 367px;
 }
 
 .projectMenuBegin {
@@ -712,6 +714,7 @@
 /* Sample */
 .sampleGeneral {
 	float: left;
+	width: 367px;
 }
 
 .sampleGeneralBegin {
@@ -801,6 +804,7 @@
 /* Sample Menu Box */
 .sampleMenu { /* margin-left: 31em; */
 	float: right;
+	width: 367px;
 }
 
 .sampleMenuBegin {

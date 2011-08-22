@@ -242,7 +242,8 @@ class TableIO {
 			$number_of_pages = ceil($number_of_results/20);
     		
 			$return = "<div class='OverviewTableLeft'>".Common_IO::results_on_page($number_of_results, $number_of_pages)."</div>" .
-						"<div class='OverviewTableRight'>".$this->bottom_right_text."</div>";
+						"<div class='OverviewTableRight'>".$this->bottom_right_text."</div>" .
+						"<div class='OverviewTableClear'>&nbsp;</div>";
     		
     			
     		$return .= "<table class='".$this->css_class."'><tr>";	
