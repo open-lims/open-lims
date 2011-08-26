@@ -271,6 +271,25 @@ class ProjectIO
 	
 	private static function create()
 	{
+		$template = new Template("template/projects/create_project.html");	
+		
+		require_once("core/modules/base/assistant.io.php");
+		
+		$assistant_io = new AssistantIO("core/modules/project/project_create.ajax.php", "ProjectCreateAssistantField", true);
+		
+		$assistant_io->add_screen("Organisation Unit");
+		$assistant_io->add_screen("Project Information");
+		$assistant_io->add_screen("Template");
+		$assistant_io->add_screen("Template Specific Information");
+		$assistant_io->add_screen("Summary");
+
+		$template->set_var("content", $assistant_io->get_content());
+		
+		$template->output();
+	}
+	
+	private static function create_old()
+	{
 		global $user, $session, $project_security;
 		
 		try
@@ -668,508 +687,22 @@ class ProjectIO
 			switch ($current_screen):
 				case 1:
 					// PAGE 1
-					if ($session->read_value("PROJECT_LAST_SCREEN") < 1)
-					{
-						$session->write_value("PROJECT_LAST_SCREEN", 1, true);
-						$last_screen = 1;
-					}
-					
-					$paramquery = $_GET;
-					$paramquery[nextpage] = 1;
-					$params = http_build_query($paramquery,'','&#38;');
-				
-					require_once("core/modules/base/assistant_bar.io.php");
-					$assistant_bar_io = new AssistantBarIO;
-					$assistant_bar_io->add_screen(1, "Organisation Unit", $paramquery);
-					$assistant_bar_io->add_screen(2, "Project Information", $paramquery);
-					$assistant_bar_io->add_screen(3, "Template", $paramquery);
-					
-					if ($project_template_specific_information == true)
-					{
-						$assistant_bar_io->add_screen(4, "Template Specific Information", $paramquery);
-					}
-					else
-					{
-						$assistant_bar_io->add_screen(4, "Template Specific Information", "");
-					}
-					
-					$assistant_bar_io->add_screen(5, "Summary", $paramquery);
-					for ($i=1; $i<=$last_screen; $i++)
-					{
-						if ($i != $current_screen) {
-							$assistant_bar_io->set_visited($i);
-						}else{
-							$assistant_bar_io->set_active($i);
-						}
-					}
-				
-					$template = new Template("template/projects/new_project_page_1.html");	
-					$template->set_var("bar",$assistant_bar_io->get_content());
-					$template->set_var("link",$params);	
-					
-					if ($session->read_value("PROJECT_TYPE") == 1 or $session->read_value("PROJECT_TYPE") == 2)
-					{
-						$template->set_var("organunit", true);
-						
-						$result = array();
-						$counter = 0;
-							
-						$organisation_unit_array = OrganisationUnit::list_entries();
-						
-						if (is_array($organisation_unit_array) and count($organisation_unit_array) >= 1)
-						{
-							foreach($organisation_unit_array as $key => $value)
-							{
-								$organisation_unit = new OrganisationUnit($value);
-						
-								if ($organisation_unit->is_permission($user->get_user_id()) and $organisation_unit->get_stores_data() == true)
-								{
-									$result[$counter][value] = $value;
-									$result[$counter][content] = $organisation_unit->get_name();		
-				
-									if ($project_organ_unit == $value)
-									{
-										$result[$counter][selected] = "selected";
-									}
-									else
-									{
-										$result[$counter][selected] = "";
-									}
-				
-									$counter++;
-								}
-							}
-						}
-						
-						if (!$result)
-						{
-							$result[$counter][value] = "0";
-							$result[$counter][content] = "NO ORGANISATION UNIT FOUND!";	
-						}
-						$template->set_var("option",$result);
-					}
-					else
-					{
-						$template->set_var("organunit", false);
-						
-						$result = array();
-						$counter = 0;
-							
-						$project = new Project(null);
-						$project_array = $project->get_project_tree();
-						
-						if (is_array($project_array) and count($project_array) >= 1)
-						{
-							foreach($project_array as $key => $value)
-							{
-								$project = new Project($value[id]);
-		
-								for($i=1;$i<=$value[layer];$i++)
-								{
-									$pre_content .= "&nbsp;";
-								}
-						
-								$result[$counter][value] = $value[id];
-								$result[$counter][content] = $pre_content."".$project->get_name();		
-			
-								if ($project_toid == $value[id])
-								{
-									$result[$counter][selected] = "selected";
-								}
-								else
-								{
-									$result[$counter][selected] = "";
-								}
-			
-								$counter++;
-								
-								unset($pre_content);
-							}
-						}
-						else
-						{
-							$result[$counter][value] = "0";
-							$result[$counter][content] = "NO PROJECT FOUND!";
-						}
-						$template->set_var("option",$result);
-					}
-					
-					if ($error[0])
-					{
-						$template->set_var("error",$error[0]);
-					}
-					else
-					{
-						$template->set_var("error","");
-					}
-					
-					$template->output();
 				break;
 		
 				case 2:
 					// PAGE 2
-					if ($session->read_value("PROJECT_LAST_SCREEN") < 2)
-					{
-						$session->write_value("PROJECT_LAST_SCREEN", 2, true);
-						$last_screen = 2;
-					}
-					
-					$paramquery = $_GET;
-					$paramquery[nextpage] = 2;
-					$params = http_build_query($paramquery,'','&#38;');
-				
-					require_once("core/modules/base/assistant_bar.io.php");
-					$assistant_bar_io = new AssistantBarIO;
-					$assistant_bar_io->add_screen(1, "Organisation Unit", $paramquery);
-					$assistant_bar_io->add_screen(2, "Project Information", $paramquery);
-					$assistant_bar_io->add_screen(3, "Template", $paramquery);
-					
-					if ($project_template_specific_information == true)
-					{
-						$assistant_bar_io->add_screen(4, "Template Specific Information", $paramquery);
-					}
-					else
-					{
-						$assistant_bar_io->add_screen(4, "Template Specific Information", "");
-					}
-					
-					$assistant_bar_io->add_screen(5, "Summary", $paramquery);
-					for ($i=1; $i<=$last_screen; $i++)
-					{
-						if ($i != $current_screen)
-						{
-							$assistant_bar_io->set_visited($i);
-						}
-						else
-						{
-							$assistant_bar_io->set_active($i);
-						}
-					}
-				
-					$template = new Template("template/projects/new_project_page_2.html");	
-					$template->set_var("bar",$assistant_bar_io->get_content());
-					$template->set_var("link",$params);	
-				
-					if ($project_name)
-					{
-						$template->set_var("name",$project_name);
-					}
-					else
-					{
-						$template->set_var("name","");
-					}
-					
-					if ($project_desc)
-					{
-						$template->set_var("desc",$project_desc);
-					}
-					else
-					{
-						$template->set_var("desc","");
-					}
-	
-					if ($error[0])
-					{
-						$template->set_var("error0",$error[0]);
-					}
-					else
-					{
-						$template->set_var("error0","");	
-					}
-					
-					if ($error[1])
-					{
-						$template->set_var("error1",$error[1]);
-					}
-					else
-					{
-						$template->set_var("error1","");
-					}
-	
-					$template->output();
 				break;
 				
 				case 3:
 					// PAGE 3
-					if ($session->read_value("PROJECT_LAST_SCREEN") < 3)
-					{
-						$session->write_value("PROJECT_LAST_SCREEN", 3, true);
-						$last_screen = 3;
-					}
-				
-					$paramquery = $_GET;
-					$paramquery[nextpage] = 3;
-					$params = http_build_query($paramquery,'','&#38;');
-				
-					require_once("core/modules/base/assistant_bar.io.php");
-					$assistant_bar_io = new AssistantBarIO;
-					$assistant_bar_io->add_screen(1, "Organisation Unit", $paramquery);
-					$assistant_bar_io->add_screen(2, "Project Information", $paramquery);
-					$assistant_bar_io->add_screen(3, "Template", $paramquery);
-					
-					if ($project_template_specific_information == true)
-					{
-						$assistant_bar_io->add_screen(4, "Template Specific Information", $paramquery);
-					}
-					else
-					{
-						$assistant_bar_io->add_screen(4, "Template Specific Information", "");
-					}
-					
-					$assistant_bar_io->add_screen(5, "Summary", $paramquery);
-					for ($i=1; $i<=$last_screen; $i++)
-					{
-						if ($i != $current_screen)
-						{
-							$assistant_bar_io->set_visited($i);
-						}
-						else
-						{
-							$assistant_bar_io->set_active($i);
-						}
-					}
-				
-					$template = new Template("template/projects/new_project_page_3.html");	
-					$template->set_var("bar",$assistant_bar_io->get_content());
-					$template->set_var("link",$params);	
-				
-					$result = array();
-					$counter = 0;
-						
-					$project_template_array = ProjectTemplateCat::list_entries();
-					
-					if (is_array($project_template_array))
-					{
-						foreach($project_template_array as $key => $value)
-						{
-							$project_template_cat = new ProjectTemplateCat($value);
-							$result[$counter][value] = "0";
-							$result[$counter][content] = $project_template_cat->get_name();		
-							$result[$counter][selected] = "";
-		
-							$counter++;
-							
-							$project_template_sub_array = ProjectTemplate::list_entries_by_cat_id($value);
-							
-							if (is_array($project_template_sub_array))
-							{
-								foreach($project_template_sub_array as $sub_key => $sub_value)
-								{
-									$project_sub_template = new ProjectTemplate($sub_value);
-									
-									if (($session->read_value("PROJECT_TYPE") == 1 or 
-										 $session->read_value("PROJECT_TYPE") == 3) and
-										($project_sub_template->get_parent_template() == false))
-									{
-										$result[$counter][value] = $sub_value;
-										$result[$counter][content] = "&nbsp;".$project_sub_template->get_name();		
-					
-										
-										if ($project_template == $sub_value)
-										{
-											$result[$counter][selected] = "selected";
-										}
-										else
-										{
-											$result[$counter][selected] = "";
-										}
-					
-										$counter++;
-									}
-									elseif (($session->read_value("PROJECT_TYPE") == 2 or 
-										 	  $session->read_value("PROJECT_TYPE") == 4) and
-										   	 ($project_sub_template->get_parent_template() == true))
-									{
-										$result[$counter][value] = $sub_value;
-										$result[$counter][content] = "&nbsp;".$project_sub_template->get_name();		
-					
-										if ($project_template == $sub_value)
-										{
-											$result[$counter][selected] = "selected";
-										}
-										else
-										{
-											$result[$counter][selected] = "";
-										}
-					
-										$counter++;
-									}
-								}
-							}
-							unset($project_template_sub_array);
-						}
-					}
-					else
-					{
-						$result[$counter][value] = "0";
-						$result[$counter][content] = "NO TEMPLATES FOUND!";		
-					}
-			
-					$template->set_var("option",$result);
-				
-					if ($error[0])
-					{
-						$template->set_var("error",$error[0]);
-					}
-					else
-					{
-						$template->set_var("error","");
-					}
-				
-					$template->output();
 				break;
 				
 				case 4:
 					// Page 4
-					if ($session->read_value("PROJECT_LAST_SCREEN") < 4)
-					{
-						$session->write_value("PROJECT_LAST_SCREEN", 4, true);
-						$last_screen = 4;
-					}
-					
-					$paramquery = $_GET;
-					$paramquery[nextpage] = 4;
-					$params = http_build_query($paramquery,'','&#38;');
-				
-					require_once("core/modules/base/assistant_bar.io.php");
-					$assistant_bar_io = new AssistantBarIO;
-					$assistant_bar_io->add_screen(1, "Organisation Unit", $paramquery);
-					$assistant_bar_io->add_screen(2, "Project Information", $paramquery);
-					$assistant_bar_io->add_screen(3, "Template", $paramquery);
-					
-					if ($project_template_specific_information == true)
-					{
-						$assistant_bar_io->add_screen(4, "Template Specific Information", $paramquery);
-					}
-					else
-					{
-						$assistant_bar_io->add_screen(4, "Template Specific Information", "");
-					}
-					
-					$assistant_bar_io->add_screen(5, "Summary", $paramquery);
-					for ($i=1; $i<=$last_screen; $i++)
-					{
-						if ($i != $current_screen)
-						{
-							$assistant_bar_io->set_visited($i);
-						}
-						else
-						{
-							$assistant_bar_io->set_active($i);
-						}
-					}
-				
-					$project_template_obj = new ProjectTemplate($project_template);
-					$required_array = $project_template_obj->get_required_requirements();
-				
-					if (is_array($required_array) and count($required_array) >= 1)
-					{
-						$value_type_id = 0;
-						$sample_count = 0;
-						$is_value = false;
-						$is_sample = false;
-						
-						foreach($required_array as $key => $value)
-						{						
-							if ($value[xml_element] == "item")
-							{
-								if ($value[type] == "value")
-								{
-									$is_value = true;
-								}
-							}
-							
-							if ($value[xml_element] == "type" and !$value[close] and $is_value == true)
-							{
-								$value_type_id = $value[id];
-							}
-						} 
-						
-						if ($is_value == true)
-						{
-							$template = new Template("template/projects/new_project_page_4_value.html");
-							$template->set_var("bar",$assistant_bar_io->get_content());
-							$template->set_var("link",$params);	
-							
-							$value_obj = new Value(null);
-							if ($project_template_data_type == "value")
-							{
-								$value_obj->set_content_array($project_template_data_array);
-							}	
-							$value_html = $value_obj->get_html_form(null, $value_type_id, null);
-							$template->set_var("content",$value_html);
-							
-							$template->set_var("template_data_type_id", $value_type_id);
-							$template->output();
-						}
-						else
-						{
-							$template = new Template("template/projects/new_project_page_4_error.html");
-							$template->set_var("bar",$assistant_bar_io->get_content());
-							$template->set_var("link",$params);	
-							$template->output();
-						}
-					}
-					else
-					{
-						$template = new Template("template/projects/new_project_page_4_error.html");
-						$template->set_var("bar",$assistant_bar_io->get_content());
-						$template->set_var("link",$params);	
-						$template->output();
-					}			
 				break;
 				
 				case 5:
 					// Page 5
-					if ($session->read_value("PROJECT_LAST_SCREEN") < 5)
-					{
-						$session->write_value("PROJECT_LAST_SCREEN", 5, true);
-						$last_screen = 5;
-					}
-					
-					$paramquery = $_GET;
-					$paramquery[nextpage] = 5;
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					require_once("core/modules/base/assistant_bar.io.php");
-					$assistant_bar_io = new AssistantBarIO;
-					$assistant_bar_io->add_screen(1, "Organisation Unit", $paramquery);
-					$assistant_bar_io->add_screen(2, "Project Information", $paramquery);
-					$assistant_bar_io->add_screen(3, "Template", $paramquery);
-					
-					if ($project_template_specific_information == true)
-					{
-						$assistant_bar_io->add_screen(4, "Template Specific Information", $paramquery);
-					}else{
-						$assistant_bar_io->add_screen(4, "Template Specific Information", "");
-					}
-					
-					$assistant_bar_io->add_screen(5, "Summary", $paramquery);
-					for ($i=1; $i<=$last_screen; $i++)
-					{
-						if ($i != $current_screen)
-						{
-							$assistant_bar_io->set_visited($i);
-						}
-						else
-						{
-							$assistant_bar_io->set_active($i);
-						}
-					}
-					
-					$template = new Template("template/projects/new_project_page_5.html");	
-					$template->set_var("bar",$assistant_bar_io->get_content());
-					$template->set_var("link",$params);	
-					
-					$project_template = new ProjectTemplate($session->read_value("PROJECT_TEMPLATE"));
-					
-					$template->set_var("name", $session->read_value("PROJECT_NAME"));
-					$template->set_var("template", $project_template->get_name());
-					$template->set_var("desc", $session->read_value("PROJECT_DESC"));
-					
-					$template->set_var("content","");
-					
-					$template->output();			
 				break;
 				
 				case 6:
@@ -1251,20 +784,6 @@ class ProjectIO
 				case 0:
 				default:
 					// Page 0
-					if ($session->read_value("SAMPLE_LAST_SCREEN") < 0)
-					{
-						$session->write_value("SAMPLE_LAST_SCREEN", 0, true);
-						$last_screen = 0;
-					}
-				
-					$paramquery = $_GET;
-					$paramquery[nextpage] = 0;
-					$params = http_build_query($paramquery,'','&#38;');
-				
-					$template = new Template("template/projects/new_project_page_0.html");	
-					$template->set_var("link",$params);	
-		
-					$template->output();
 				break;
 			endswitch;
 			

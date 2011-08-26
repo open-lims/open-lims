@@ -92,7 +92,7 @@ class ContentHandler_IO
 				if (is_array($js_modules_directory_array))
 				{
 					foreach($js_modules_directory_array as $key => $value)
-					{
+					{						
 						if ((strpos(strrev($value),"sj.") === 0))
 						{
 							if (is_file($js_modules_directory."/".$value))

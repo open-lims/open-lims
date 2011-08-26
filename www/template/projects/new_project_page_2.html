@@ -1,16 +1,22 @@
 
-<br />
+<script>
+$(document).ready(function()
+{
+	$("#AssistantPrevious").click(function(){
+		assistant.load_previous_page(null);
+	});
+	$("#AssistantNext").click(function(){
+		assistant.load_next_page(null);
+	});
+});
+</script>
 
-<!-- CONTAINER BEGIN ("Create New Project (2/5)",0) -->
-
-<form action='index.php?[[LINK]]' method='post'>
-[[BAR]]
 <br />
 <table class='formTable'>
 	<tr>
 		<td>Project name:</td>
 		<td>
-			<input name='name' value='[[NAME]]' type='text' size='30' class='FormTextfield' />
+			<input name='name' value='[[NAME]]' type='text' size='30' class='FormTextfield ProjectCreateAssistantField' />
 			<span class='formError'>[[ERROR0]]</span>
 		</td>
 	</tr>
@@ -25,7 +31,7 @@
 	</tr>
 	<tr>
 		<td colspan='2'>
-			<textarea name='desc' cols='66' rows='15' class='FormTextarea'>[[DESC]]</textarea>
+			<textarea name='desc' cols='66' rows='15' class='FormTextarea ProjectCreateAssistantField'>[[DESC]]</textarea>
 			<span class='formError'>[[ERROR1]]</span>
 		</td>
 	</tr>
@@ -34,14 +40,12 @@
 		<td colspan='2'><div class='horizontal_line'>&nbsp;</div></td>
 	</tr>	
 	<tr>
-		<td colspan='2'><br />
-			<div class='button_left'><input type='submit' value='previous' name='submitbutton' class='previous_button' /></div>
-			<div class='button_right'><input type='submit' value='next' name='submitbutton' class='next_button' /></div>
+		<td colspan='2'>
+			<br />
+			<div class='button_left'><button id='AssistantPrevious' class='AssistantButton'>previous</button></div>
+			<div class='button_right'><button id='AssistantNext' class='AssistantButton'>next</button></div>
 		</td>
 	</tr>
 </table>
 </form>
 <br />
-
-
-<!-- CONTAINER END (0) -->
