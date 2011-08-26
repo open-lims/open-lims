@@ -1,0 +1,25 @@
+<script>
+$(document).ready(function()
+{
+	var get_array = getQueryParams(document.location.search);
+	
+	$.ajax(
+	{
+		type: "GET",
+		url: "[[AJAX_HANDLER]]",
+		data: "session_id="+get_array['session_id']+"&run=get_content&page=[[AJAX_PAGE]]",
+		success: function(data)
+		{
+			if (data)
+			{
+				$("#AssistantLoading").remove();
+				$("#AssistantContent").append(data);
+			}
+		}
+	});
+
+	assistant = new Assistant("[[AJAX_HANDLER]]", parseInt([[AJAX_PAGE]]), parseInt([[MAX_PAGE]]));
+});
+</script>
+
+<div id='AssistantContent'><div id='AssistantLoading'><img src='images/animations/loading_circle_small.gif' alt='Loading...' /></div></div>

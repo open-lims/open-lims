@@ -1,8 +1,16 @@
 <script>
 $(document).ready(function()
 {
-	$("#AssistantNext").click(function(){
-		assistant.load_next_page(null);
+	$("#AssistantNext").click(function()
+	{
+		if ($("input:radio:checked[name='type']").val())
+		{
+			data_array = new Array();
+			data_array[0] = new Array();
+			data_array[0][0] = "PROJECT_TYPE";
+			data_array[0][1] = $("input:radio:checked[name='type']").val();
+			assistant.load_next_page(data_array);
+		}
 	});
 });
 </script>
@@ -14,7 +22,7 @@ $(document).ready(function()
 <table class='ProjectCreateIWantTo'>
 	<tr>
 		<td><img src='images/explanations/project.png' alt='' /></td>
-		<td><input type='radio' name='type' value='1' /></td>
+		<td><input type='radio' name='type' value='1' checked='checked' /></td>
 		<td><span class='bold'>normal project</span><br />A standard project/experiment which contains data (e.g. microscopy or microarray experiments).</td>
 	</tr>
 	<tr>
