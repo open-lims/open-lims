@@ -2,24 +2,30 @@
 <script>
 $(document).ready(function()
 {
-	$("#AssistantPrevious").click(function(){
-		assistant.load_previous_page(null);
+	$("#AssistantPrevious").click(function()
+	{
+		assistant.load_previous_page();
 	});
-	$("#AssistantNext").click(function(){
-		assistant.load_next_page(null);
+	$("#AssistantNext").click(function()
+	{
+		assistant.load_next_page();
 	});
 });
 </script>
+
+<div id="AssistantFinish" style="display:none; cursor: default"> 
+<img src='images/animations/loading_circle_small.gif' alt=''> Please wait while project creation.
+</div> 
 
 <br />
 <table class='formTable'>
 	<tr>
 		<td>Project name:</td>
-		<td>[[NAME]]</td>
+		<td>[[PROJECT_NAME]]</td>
 	</tr>
 	<tr>
 		<td>Template:</td>
-		<td>[[TEMPLATE]]</td>
+		<td>[[PROJECT_TEMPLATE]]</td>
 	</tr>
 	<tr>
 		<td colspan='2'><br /></td>
@@ -28,7 +34,7 @@ $(document).ready(function()
 		<td colspan='2'>Project Description:</td>
 	</tr>
 	<tr>
-		<td colspan='2'>[[DESC]]</td>
+		<td colspan='2'>[[PROJECT_DESCRIPTION]]</td>
 	</tr>
 	<tr>
 		<td colspan='2'><div class='horzontalLineGrey'>&nbsp;</div></td>

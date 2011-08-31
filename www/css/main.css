@@ -343,10 +343,6 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 	width: 100%;
 }
 
-.ProjectCreateSelect {
-	width: 100%;
-}
-
 .ProjectCreateIWantTo {
 	width: 70%;
 	margin-left: auto;
@@ -1163,6 +1159,11 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 {
 	padding: 40px;
 	text-align: center;	
+}
+#AssistantFinish
+{
+	font: normal 12px Arial, Helvetica, sans-serif;	
+	padding: 10px;
 }
 
 

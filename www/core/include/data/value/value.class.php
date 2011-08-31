@@ -1298,7 +1298,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
      * @param integer $type_id
      * @return string
      */
-	public function get_html_form($error_array, $type_id, $folder_id)
+	public function get_html_form($error_array, $type_id, $folder_id, $field_class = null)
 	{	
 		if ($type_id == null and $this->value_id)
 		{
@@ -1601,12 +1601,27 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 					switch ($type):
 						
 						case (1):
-							$return .= "<input type='".$typename."' name='".$field_name."' value='".$field_default."' size='".$field_length."' />\n" .
+							if ($field_class)
+							{
+								$return .= "<input type='".$typename."' name='".$field_name."' value='".$field_default."' size='".$field_length."' class='".$field_class."' />\n" .
+									"<input type='hidden' name='".$field_name."-vartype' value='".$vartype."' class='".$field_class."' />\n";
+							}
+							else
+							{
+								$return .= "<input type='".$typename."' name='".$field_name."' value='".$field_default."' size='".$field_length."' />\n" .
 									"<input type='hidden' name='".$field_name."-vartype' value='".$vartype."' />\n";
+							}
 						break;
 						
 						case (2):
-							$return .= "<select name='".$field_name."' />\n";
+							if ($field_class)
+							{
+								$return .= "<select name='".$field_name."' class='".$field_class."'>\n";
+							}
+							else
+							{
+								$return .= "<select name='".$field_name."'>\n";
+							}
 							
 							if ($value[3][value] and !$value[3]['var'])
 							{

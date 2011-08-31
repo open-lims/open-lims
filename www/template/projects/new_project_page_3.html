@@ -2,11 +2,31 @@
 <script>
 $(document).ready(function()
 {
-	$("#AssistantPrevious").click(function(){
-		assistant.load_previous_page(null);
+	function check_form()
+	{
+		if (($(".ProjectCreateAssistantField[name='project_template'] option").is(":selected")) && ($(".ProjectCreateAssistantField[name='project_template'] option:selected").attr("value") != "0"))
+		{
+			return true;
+		}
+		else
+		{
+			$("#ProjectCreateError1").html("<br />You have to select a template.");
+			return false;
+		}
+	}
+	$("#AssistantPrevious").click(function()
+	{
+		if (check_form() == true)
+		{
+			assistant.load_previous_page();
+		}
 	});
-	$("#AssistantNext").click(function(){
-		assistant.load_next_page(null);
+	$("#AssistantNext").click(function()
+	{
+		if (check_form() == true)
+		{
+			assistant.load_next_page();
+		}
 	});
 });
 </script>
@@ -18,16 +38,16 @@ $(document).ready(function()
 	</tr>
 	<tr>
 		<td>
-			<select name='template' class='ProjectCreateSelect ProjectCreateAssistantField' size='10'>
+			<select name='project_template' class='FormSelect ProjectCreateAssistantField' size='10'>
 	
 			<!-- FOREACH BEGIN ([[OPTION]]) -->
 	
-			<option value='[[OPTION:VALUE]]' [[OPTION:SELECTED]]>[[OPTION:CONTENT]]</option>
+			<option value='[[OPTION:VALUE]]' [[OPTION:SELECTED]] [[OPTION:DISABLED]]>[[OPTION:CONTENT]]</option>
 	
 			<!-- FOREACH END -->			
 				
 			</select>
-			<span class='formError'>[[ERROR]]</span>
+			<span class='FormError' id='ProjectCreateError1'></span>
 		</td>
 	</tr>
 	<tr>

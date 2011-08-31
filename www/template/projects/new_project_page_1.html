@@ -5,13 +5,20 @@
 <script>
 $(document).ready(function()
 {
-	$("#AssistantNext").click(function(){
-		assistant.load_next_page(null);
+	$("#AssistantNext").click(function()
+	{
+		if ($(".ProjectCreateAssistantField[name='project_organisation_unit'] option").is(":selected"))
+		{
+			assistant.load_next_page();
+		}
+		else
+		{
+			$("#ProjectCreateError1").html("<br />You have to select an Organisation Unit.");
+		}
 	});
 });
 </script>
 
-<form action='index.php?[[LINK]]' method='post'>
 <br />
 <table class='formTable'>
 	<tr>
@@ -19,7 +26,7 @@ $(document).ready(function()
 	</tr>
 	<tr>
 		<td>
-			<select name='organunit' class='ProjectCreateSelect ProjectCreateAssistantField' size='10'>
+			<select name='project_organisation_unit' class='FormSelect ProjectCreateAssistantField' size='10'>
 	
 			<!-- FOREACH BEGIN ([[OPTION]]) -->
 	
@@ -28,7 +35,7 @@ $(document).ready(function()
 			<!-- FOREACH END -->
 	
 			</select>
-		<span class='formError'>[[ERROR]]</span>
+		<span class='FormError' id='ProjectCreateError1'></span>
 		</td>
 	</tr>
 	<tr>
@@ -39,7 +46,6 @@ $(document).ready(function()
 		</td>
 	</tr>
 </table>
-</form>
 <br />
 
 
@@ -48,8 +54,16 @@ $(document).ready(function()
 <script>
 $(document).ready(function()
 {
-	$("#AssistantNext").click(function(){
-		assistant.load_next_page(null);
+	$("#AssistantNext").click(function()
+	{
+		if ($(".ProjectCreateAssistantField[name='project_toid'] option").is(":selected"))
+		{
+			assistant.load_next_page();
+		}
+		else
+		{
+			$("#ProjectCreateError1").html("<br />You have to select a Parent Project.");
+		}
 	});
 });
 </script>
@@ -61,7 +75,7 @@ $(document).ready(function()
 	</tr>
 	<tr>
 		<td>
-			<select name='project_toid' class='ProjectCreateSelect ProjectCreateAssistantField' size='10'>
+			<select name='project_toid' class='FormSelect ProjectCreateAssistantField' size='10'>
 	
 			<!-- FOREACH BEGIN ([[OPTION]]) -->
 	
@@ -70,7 +84,7 @@ $(document).ready(function()
 			<!-- FOREACH END -->
 	
 			</select>
-			<span class='formError'>[[ERROR]]</span>
+			<span class='FormError' id='ProjectCreateError1'></span>
 		</td>
 	</tr>
 	<tr>

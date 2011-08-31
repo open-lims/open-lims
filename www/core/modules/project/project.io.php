@@ -296,62 +296,11 @@ class ProjectIO
 		{
 			if (!$_GET[nextpage])
 			{
-				$session->delete_value("PROJECT_LAST_SCREEN");
-				$session->delete_value("PROJECT_CURRENT_SCREEN");
 				
-				$session->delete_value("PROJECT_TYPE");
-				$session->delete_value("PROJECT_ORGAN_UNIT");
-				$session->delete_value("PROJECT_TOID");
-				$session->delete_value("PROJECT_NAME");
-				$session->delete_value("PROJECT_DESC");
-				$session->delete_value("PROJECT_TEMPLATE");
-				$session->delete_value("PROJECT_TEMPLATE_DATA_TYPE");
-				$session->delete_value("PROJECT_TEMPLATE_DATA_TYPE_ID");	
-				$session->delete_value("PROJECT_TEMPLATE_DATA_ARRAY");	
-	
-				if($_GET[run] == "new_subproject")
-				{
-					if ($project_security->is_access(3, false) == false)
-					{
-						throw new ProjectException("",1);	
-					}
-					else
-					{
-						$project_type = 3;
-						if ($_GET[id])
-						{
-							$project_toid = $_GET[id];
-						}
-						else
-						{
-							$project_toid = $_GET[project_id];
-						}
-						$session->write_value("PROJECT_TYPE", $project_type, true);
-						$session->write_value("PROJECT_TOID", $project_toid, true);
-						$session->write_value("PROJECT_CURRENT_SCREEN", 2, true);
-					}
-				}
 			}
 			else
 			{	
-				$project_template = $session->read_value("PROJECT_TEMPLATE");
-				if ($_POST[template])
-				{
-					$project_template_obj = new ProjectTemplate($_POST[template]);
-				}
-				else
-				{
-					$project_template_obj = new ProjectTemplate($project_template);
-				}
 				
-				if ($project_template_obj->is_required_requirements() == true)
-				{
-					$project_template_specific_information = true;
-				}
-				else
-				{
-					$project_template_specific_information = false;
-				}
 			}
 			
 			switch ($_GET[nextpage]):
@@ -633,56 +582,8 @@ class ProjectIO
 				break;
 			
 			endswitch;
+		
 			
-			if ($session->is_value("PROJECT_CURRENT_SCREEN"))
-			{
-				$current_screen = $session->read_value("PROJECT_CURRENT_SCREEN");
-			}
-			else
-			{
-				$current_screen = 0;
-				$session->write_value("PROJECT_CURRENT_SCREEN", 0, true);
-			}
-			
-			if ($session->is_value("PROJECT_LAST_SCREEN"))
-			{
-				$last_screen = $session->read_value("PROJECT_LAST_SCREEN");
-			}
-			else
-			{
-				$session->write_value("PROJECT_LAST_SCREEN", 0, true);
-				$last_screen = 0;
-			}
-			
-			if ($_GET[nextpage])
-			{
-				$project_type 					= $session->read_value("PROJECT_TYPE");
-				$project_organ_unit 			= $session->read_value("PROJECT_ORGAN_UNIT");
-				$project_toid 					= $session->read_value("PROJECT_TOID");
-				$project_name 					= $session->read_value("PROJECT_NAME");
-				$project_desc 					= $session->read_value("PROJECT_DESC");
-				$project_template 				= $session->read_value("PROJECT_TEMPLATE");
-				$project_template_data_type  	= $session->read_value("PROJECT_TEMPLATE_DATA_TYPE");	
-				$project_template_data_type_id	= $session->read_value("PROJECT_TEMPLATE_DATA_TYPE_ID");	
-				$project_template_data_array	= $session->read_value("PROJECT_TEMPLATE_DATA_ARRAY");	
-
-				if (($session->read_value("PROJECT_TYPE") == 3 or $session->read_value("PROJECT_TYPE") == 4) and !$project_desc)
-				{
-					if ($project_toid)
-					{
-						$parent_project = new Project($project_toid);
-						$project_desc = $parent_project->get_description();
-					}
-				}
-			}
-			elseif ($_GET[run] == "new_subproject")
-			{
-				if ($_GET[project_id])
-				{
-					$parent_project = new Project($_GET[project_id]);
-					$project_desc = $parent_project->get_description();
-				}
-			}
 			
 			switch ($current_screen):
 				case 1:
@@ -706,79 +607,7 @@ class ProjectIO
 				break;
 				
 				case 6:
-					$project_owner = $user->get_user_id();
-					
-					try
-					{
-						$project = new Project(null);
-						
-						$project->set_template_data($project_template_data_type, $project_template_data_type_id, $project_template_data_array);
-														
-						if ($project_type and $project_organ_unit and $project_name and $project_desc and $project_template)
-						{
-							$new_project_id = $project->create($project_organ_unit, null, $project_name, $project_owner, $project_template, $project_desc);
-							
-							$session->delete_value("PROJECT_LAST_SCREEN");
-							$session->delete_value("PROJECT_CURRENT_SCREEN");
-							
-							$session->delete_value("PROJECT_TYPE");
-							$session->delete_value("PROJECT_ORGAN_UNIT");
-							$session->delete_value("PROJECT_TOID");
-							$session->delete_value("PROJECT_NAME");
-							$session->delete_value("PROJECT_DESC");
-							$session->delete_value("PROJECT_TEMPLATE");
-							$session->delete_value("PROJECT_TEMPLATE_DATA_TYPE");
-							$session->delete_value("PROJECT_TEMPLATE_DATA_TYPE_ID");	
-							$session->delete_value("PROJECT_TEMPLATE_DATA_ARRAY");	
-							
-							$paramquery = $_GET;
-							unset($paramquery[nextpage]);
-							$paramquery[run] = "detail";
-							$paramquery[project_id] = $new_project_id;
-							$params = http_build_query($paramquery, '', '&#38;');
-							
-							Common_IO::step_proceed($params, "Create New Project", "Operation Successful", null);		
-						}
-						elseif($project_type and $project_toid and $project_name and $project_desc and $project_template)
-						{
-							$new_project_id = $project->create(null, $project_toid, $project_name, $project_owner, $project_template, $project_desc);
-							
-							$session->delete_value("PROJECT_LAST_SCREEN");
-							$session->delete_value("PROJECT_CURRENT_SCREEN");
-							
-							$session->delete_value("PROJECT_TYPE");
-							$session->delete_value("PROJECT_ORGAN_UNIT");
-							$session->delete_value("PROJECT_TOID");
-							$session->delete_value("PROJECT_NAME");
-							$session->delete_value("PROJECT_DESC");
-							$session->delete_value("PROJECT_TEMPLATE");
-							$session->delete_value("PROJECT_TEMPLATE_DATA_TYPE");
-							$session->delete_value("PROJECT_TEMPLATE_DATA_TYPE_ID");	
-							$session->delete_value("PROJECT_TEMPLATE_DATA_ARRAY");	
-							
-							$paramquery = $_GET;
-							unset($paramquery[nextpage]);
-							$paramquery[run] = "detail";
-							$paramquery[project_id] = $new_project_id;
-							$params = http_build_query($paramquery, '', '&#38;');
-							
-							Common_IO::step_proceed($params, "Create New Project", "Operation Successful", null);
-						}
-						else
-						{
-							$paramquery = $_GET;
-							unset($paramquery[nextpage]);
-							unset($paramquery[run]);
-							$params = http_build_query($paramquery);	
-		
-							Common_IO::step_proceed($params, "Create New Project", "Operation Failed", null);
-						}
-					}
-					catch (ProjectCreationFailedException $e)
-					{
-						$error_io = new Error_IO($e, 200, 30, 1);
-						$error_io->display_error();
-					}					
+					// Page 6
 				break;
 				
 				case 0:

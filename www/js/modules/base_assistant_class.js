@@ -1,6 +1,6 @@
 
 
-Assistant = function(ajax_handler, init_page, end_page)
+Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 {	
 	var page = init_page;
 	var max_page = init_page;
@@ -41,13 +41,11 @@ Assistant = function(ajax_handler, init_page, end_page)
 			$(".AssistantElement"+new_key+" > a > span.AssistantElementImage > img").attr("src", "images/numbers/"+new_key+"_blue.png");
 			$(".AssistantElement"+new_key+" > a > span.AssistantElementImage > img").addClass("AssistantElementImageActive");
 			
+			$("#AssistantContent").empty();
+			$("#AssistantContent").html("<div id='AssistantLoading'><img src='images/animations/loading_circle_small.gif' alt='Loading...' /></div>");
+			
 			load_page(new_key);
 		});
-	}
-	
-	function set_not_clickable(key)
-	{
-		
 	}
 	
 	function load_page(new_page)
@@ -69,6 +67,33 @@ Assistant = function(ajax_handler, init_page, end_page)
 		});
 	}
 	
+	function read_data()
+	{
+		var return_array = new Array();
+		var array_counter = 0;
+		
+		$("."+form_field_name+":radio:checked").each(function()
+		{
+			return_array[array_counter] = new Array();
+			return_array[array_counter][0] = $(this).attr("name");
+			return_array[array_counter][1] = $(this).val();
+			array_counter++;
+		});
+		
+		$("."+form_field_name+"").each(function()
+		{	
+			if (($(this).is(":input") == true) && ($(this).is(":radio") == false))
+			{
+				return_array[array_counter] = new Array();
+				return_array[array_counter][0] = $(this).attr("name");
+				return_array[array_counter][1] = $(this).val();
+				array_counter++;
+			}
+		});
+		
+		return return_array;
+	}
+	
 	function set_data(page, data)
 	{
 		var json_array = encodeURIComponent(JSON.stringify(data));
@@ -77,6 +102,7 @@ Assistant = function(ajax_handler, init_page, end_page)
 		{
 			type: "POST",
 			url: ajax_handler+"?session_id="+get_array['session_id']+"&run=set_data",
+			async: false,
 			data: "page="+page+"&data="+json_array,
 			success: function(data)
 			{
@@ -84,26 +110,43 @@ Assistant = function(ajax_handler, init_page, end_page)
 			}
 		});
 	}
+		
 	
-	
-	this.load_next_page = function(data)
+	this.load_next_page = function()
 	{
 		if (page < end_page)
 		{
-			$("#AssistantContent").empty();
-			$("#AssistantContent").html("<div id='AssistantLoading'><img src='images/animations/loading_circle_small.gif' alt='Loading...' /></div>");
+			var data = read_data();
+			var current_page = page;
 			
 			if (data)
 			{
 				set_data(page, data)
 			}
 			
-			page = page + 1;
+			$("#AssistantContent").empty();
+			$("#AssistantContent").html("<div id='AssistantLoading'><img src='images/animations/loading_circle_small.gif' alt='Loading...' /></div>");
+
+			$.ajax(
+			{
+				type: "GET",
+				url: ajax_handler,
+				async: false,
+				data: "session_id="+get_array['session_id']+"&run=get_next_page&page="+page,
+				success: function(data)
+				{
+					page = parseInt(data);
+				}
+			});
+						
 			set_active(page);
 			
 			if (page > 1)
 			{
-				set_visited(page-1);
+				for (var i=current_page; i<=(page-1); i++)
+				{
+					set_visited(i);
+				}
 			}
 			
 			if (max_page < page)
@@ -116,23 +159,69 @@ Assistant = function(ajax_handler, init_page, end_page)
 		}
 		else
 		{
+			$.fn.center = function () {
+				this.css("position","absolute");
+				this.css("top", ( $(window).height() - this.height() ) / 2+$(window).scrollTop() + "px");
+				this.css("left", ( $(window).width() - this.width() ) / 2+$(window).scrollLeft() + "px");
+				return this;
+			}
+
+			$.blockUI({ message: $('#AssistantFinish'), css: { width: '275px' } }); 
+			$('.blockUI.blockMsg').center();
 			
+			$.ajax(
+			{
+				type: "GET",
+				url: ajax_handler,
+				async: false,
+				data: "username="+get_array['username']+"&session_id="+get_array['session_id']+"&run=run",
+				success: function(data)
+				{
+					if (data != '0')
+					{
+						window.setTimeout('window.location = "'+data+'"',1500);
+					}
+					else
+					{
+						$.unblockUI;
+					}
+				}
+			});
 		}
 	}
 	
-	this.load_previous_page = function(data)
+	this.load_previous_page = function()
 	{
 		if (page > 1)
 		{
+			var data = read_data();
+			var current_page = page;
+			
+			if (data)
+			{
+				set_data(page, data)
+			}
+			
 			$("#AssistantContent").empty();
 			$("#AssistantContent").html("<div id='AssistantLoading'><img src='images/animations/loading_circle_small.gif' alt='Loading...' /></div>");
 			
-			page = page - 1;
+			$.ajax(
+			{
+				type: "GET",
+				url: ajax_handler,
+				async: false,
+				data: "session_id="+get_array['session_id']+"&run=get_previous_page&page="+page,
+				success: function(data)
+				{
+					page = parseInt(data);
+				}
+			});
+			
 			set_active(page);
 			
 			if (page < end_page)
 			{
-				set_visited(page+1);
+				set_visited(current_page);
 			}
 			
 			load_page(page);

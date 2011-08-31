@@ -3,14 +3,7 @@ $(document).ready(function()
 {
 	$("#AssistantNext").click(function()
 	{
-		if ($("input:radio:checked[name='type']").val())
-		{
-			data_array = new Array();
-			data_array[0] = new Array();
-			data_array[0][0] = "PROJECT_TYPE";
-			data_array[0][1] = $("input:radio:checked[name='type']").val();
-			assistant.load_next_page(data_array);
-		}
+		assistant.load_next_page();
 	});
 });
 </script>
@@ -22,22 +15,22 @@ $(document).ready(function()
 <table class='ProjectCreateIWantTo'>
 	<tr>
 		<td><img src='images/explanations/project.png' alt='' /></td>
-		<td><input type='radio' name='type' value='1' checked='checked' /></td>
+		<td><input type='radio' name='project_type' value='1' class='ProjectCreateAssistantField' checked='checked' /></td>
 		<td><span class='bold'>normal project</span><br />A standard project/experiment which contains data (e.g. microscopy or microarray experiments).</td>
 	</tr>
 	<tr>
 		<td><img src='images/explanations/parent_project.png' alt='' /></td>
-		<td><input type='radio' name='type' value='2' /></td>
+		<td><input type='radio' name='project_type' value='2' class='ProjectCreateAssistantField' /></td>
 		<td><span class='bold'>parent/master project</span><br />A project which summerises different projects/experiments as subprojects under it.</td>
 	</tr>
 	<tr>
 		<td><img src='images/explanations/sub_project.png' alt='' /></td>
-		<td><input type='radio' name='type' value='3' /></td>
+		<td><input type='radio' name='project_type' value='3' class='ProjectCreateAssistantField' /></td>
 		<td><span class='bold'>sub-project</span><br />A (normal) project related to an parent-project (for experimental structure, e.g. timelines).</td>
 	</tr>
 	<tr>
 		<td><img src='images/explanations/sub_parent_project.png' alt='' /></td>
-		<td><input type='radio' name='type' value='4' /></td>
+		<td><input type='radio' name='project_type' value='4' class='ProjectCreateAssistantField' /></td>
 		<td><span class='bold'>sub-parent-project</span><br />A project which summerises different projects as subprojects related to an higher parent project.</td>
 	</tr>
 	<tr>

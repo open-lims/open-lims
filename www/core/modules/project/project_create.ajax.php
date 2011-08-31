@@ -31,20 +31,15 @@ require_once("../base/ajax.php");
  * @package project
  */
 class ProjectCreateAjax extends Ajax
-{
+{	
 	function __construct()
 	{
 		parent::__construct();
 	}
 	
-	private function get_target()
-	{
-		
-	}
-	
 	private function get_content($page)
 	{
-		global $session;
+		global $session, $user;
 		
 		switch ($page):
 
@@ -58,6 +53,8 @@ class ProjectCreateAjax extends Ajax
 				
 				if ($session->read_value("PROJECT_TYPE") == 1 or $session->read_value("PROJECT_TYPE") == 2)
 				{
+					$project_organ_unit = $session->read_value("PROJECT_ORGANISATION_UNIT");
+					
 					$template->set_var("organunit", true);
 					
 					$result = array();
@@ -99,6 +96,8 @@ class ProjectCreateAjax extends Ajax
 				}
 				else
 				{
+					$project_toid = $session->read_value("PROJECT_TOID");
+					
 					$template->set_var("organunit", false);
 					
 					$result = array();
@@ -143,62 +142,40 @@ class ProjectCreateAjax extends Ajax
 					}
 					$template->set_var("option",$result);
 				}
-				
-				if ($error[0])
-				{
-					$template->set_var("error",$error[0]);
-				}
-				else
-				{
-					$template->set_var("error","");
-				}
-				
+
 				return $template->get_string();
 			break;
 		
 			case "2":
+				$project_name = $session->read_value("PROJECT_NAME");
+				$project_desc = $session->read_value("PROJECT_DESCRIPTION");
+				
 				$template = new Template("../../../template/projects/new_project_page_2.html");	
 			
 				if ($project_name)
 				{
-					$template->set_var("name",$project_name);
+					$template->set_var("project_name",$project_name);
 				}
 				else
 				{
-					$template->set_var("name","");
+					$template->set_var("project_name","");
 				}
 				
 				if ($project_desc)
 				{
-					$template->set_var("desc",$project_desc);
+					$template->set_var("project_description",$project_desc);
 				}
 				else
 				{
-					$template->set_var("desc","");
-				}
-
-				if ($error[0])
-				{
-					$template->set_var("error0",$error[0]);
-				}
-				else
-				{
-					$template->set_var("error0","");	
-				}
-				
-				if ($error[1])
-				{
-					$template->set_var("error1",$error[1]);
-				}
-				else
-				{
-					$template->set_var("error1","");
+					$template->set_var("project_description","");
 				}
 
 				return $template->get_string();
 			break;
 			
 			case "3":
+				$project_template = $session->read_value("PROJECT_TEMPLATE");
+				
 				$template = new Template("../../../template/projects/new_project_page_3.html");	
 			
 				$result = array();
@@ -214,6 +191,7 @@ class ProjectCreateAjax extends Ajax
 						$result[$counter][value] = "0";
 						$result[$counter][content] = $project_template_cat->get_name();		
 						$result[$counter][selected] = "";
+						$result[$counter][disabled] = "disabled='disabled'";
 	
 						$counter++;
 						
@@ -242,6 +220,7 @@ class ProjectCreateAjax extends Ajax
 										$result[$counter][selected] = "";
 									}
 				
+									$result[$counter][disabled] = "";
 									$counter++;
 								}
 								elseif (($session->read_value("PROJECT_TYPE") == 2 or 
@@ -260,6 +239,7 @@ class ProjectCreateAjax extends Ajax
 										$result[$counter][selected] = "";
 									}
 				
+									$result[$counter][disabled] = "";
 									$counter++;
 								}
 							}
@@ -271,23 +251,19 @@ class ProjectCreateAjax extends Ajax
 				{
 					$result[$counter][value] = "0";
 					$result[$counter][content] = "NO TEMPLATES FOUND!";		
+					$result[$counter][disabled] = "disabled='disabled'";
 				}
 		
 				$template->set_var("option",$result);
-			
-				if ($error[0])
-				{
-					$template->set_var("error",$error[0]);
-				}
-				else
-				{
-					$template->set_var("error","");
-				}
-			
+				
 				return $template->get_string();
 			break;
 			
 			case "4":
+				$project_template = $session->read_value("PROJECT_TEMPLATE");
+				$project_template_data_type = $session->read_value("PROJECT_TEMPLATE_DATA_TYPE");
+				$project_template_data_array = $session->read_value("PROJECT_TEMPLATE_DATA_ARRAY");	
+				
 				$project_template_obj = new ProjectTemplate($project_template);
 				$required_array = $project_template_obj->get_required_requirements();
 			
@@ -316,17 +292,17 @@ class ProjectCreateAjax extends Ajax
 					
 					if ($is_value == true)
 					{
-						$template = new Template("../../template/projects/new_project_page_4_value.html");
+						$template = new Template("../../../template/projects/new_project_page_4_value.html");
 						
 						$value_obj = new Value(null);
 						if ($project_template_data_type == "value")
 						{
 							$value_obj->set_content_array($project_template_data_array);
 						}	
-						$value_html = $value_obj->get_html_form(null, $value_type_id, null);
+						$value_html = $value_obj->get_html_form(null, $value_type_id, null, "ProjectCreateAssistantField");
 						$template->set_var("content",$value_html);
 						
-						$template->set_var("template_data_type_id", $value_type_id);
+						$template->set_var("project_template_data_type_id", $value_type_id);
 						return $template->get_string();
 					}
 					else
@@ -347,9 +323,9 @@ class ProjectCreateAjax extends Ajax
 				
 				$project_template = new ProjectTemplate($session->read_value("PROJECT_TEMPLATE"));
 				
-				$template->set_var("name", $session->read_value("PROJECT_NAME"));
-				$template->set_var("template", $project_template->get_name());
-				$template->set_var("desc", $session->read_value("PROJECT_DESC"));
+				$template->set_var("project_name", $session->read_value("PROJECT_NAME"));
+				$template->set_var("project_template", $project_template->get_name());
+				$template->set_var("project_description", $session->read_value("PROJECT_DESCRIPTION"));
 				
 				$template->set_var("content","");
 				
@@ -364,14 +340,232 @@ class ProjectCreateAjax extends Ajax
 
 	}
 
-	private function set_data($page, $data)
+	private function get_next_page($page)
 	{
+		global $session;
 		
+		if ($page == 3)
+		{
+			$project_template = $session->read_value("PROJECT_TEMPLATE");
+			$project_template_obj = new ProjectTemplate($project_template);
+			
+			if ($project_template_obj->is_required_requirements() == true)
+			{
+				return 4;
+			}
+			else
+			{
+				return 5;
+			}
+		}
+		else
+		{
+			return ($page+1);
+		}
 	}
 	
-	private function run()
+	private function get_previous_page($page)
 	{
+		global $session;
 		
+		if ($page == 5)
+		{
+			$project_template = $session->read_value("PROJECT_TEMPLATE");
+			$project_template_obj = new ProjectTemplate($project_template);
+			
+			if ($project_template_obj->is_required_requirements() == true)
+			{
+				return 4;
+			}
+			else
+			{
+				return 3;
+			}
+		}
+		else
+		{
+			return ($page-1);
+		}
+	}
+	
+	private function set_data($page, $data)
+	{
+		global $session;
+		
+		$data_array = json_decode($data);
+		
+		if (is_array($data_array) and count($data_array) >= 1)
+		{
+			switch($page):
+				case "0":
+					foreach($data_array as $key => $value)
+					{
+						if ($value[0] == "project_type")
+						{
+							$session->write_value("PROJECT_TYPE",$value[1],true);
+						}
+					}
+				break;
+				
+				case "1":
+					if ($session->read_value("PROJECT_TYPE") == 1 or $session->read_value("PROJECT_TYPE") == 2)
+					{
+						foreach($data_array as $key => $value)
+						{
+							if ($value[0] == "project_organisation_unit")
+							{
+								$session->write_value("PROJECT_ORGANISATION_UNIT",$value[1],true);
+							}
+						}
+					}
+					else
+					{
+						foreach($data_array as $key => $value)
+						{
+							if ($value[0] == "project_toid")
+							{
+								$session->write_value("PROJECT_TOID",$value[1],true);
+							}
+						}
+					}
+				break;
+				
+				case "2":
+					foreach($data_array as $key => $value)
+					{
+						if ($value[0] == "project_name")
+						{
+							$session->write_value("PROJECT_NAME",$value[1],true);
+						}
+						if ($value[0] == "project_description")
+						{
+							$session->write_value("PROJECT_DESCRIPTION",$value[1],true);
+						}
+					}
+				break;
+				
+				case "3":
+					foreach($data_array as $key => $value)
+					{
+						if ($value[0] == "project_template")
+						{
+							$session->write_value("PROJECT_TEMPLATE",$value[1],true);
+						}
+					}
+				break;
+				
+				case "4":
+					foreach($data_array as $key => $value)
+					{
+						switch($value[0]):
+							
+							case "project_template_data_type_id":
+								$session->write_value("PROJECT_TEMPLATE_DATA_TYPE_ID", $value[1], true);	
+							break;
+							
+							case "project_template_data_type":
+								$session->write_value("PROJECT_TEMPLATE_DATA_TYPE", $value[1], true);	
+							break;
+								
+							default:
+								if (strpos($value[0], "-vartype") === false)
+								{
+									$template_data_array[$value[0]] = $value[1];
+								}
+							break;
+						
+						endswitch;
+					}
+					
+					if (is_array($template_data_array) and count($template_data_array) >= 1)
+					{
+						$session->write_value("PROJECT_TEMPLATE_DATA_ARRAY", $template_data_array, true);
+					}
+				break;
+			endswitch;
+		}
+	}
+	
+	private function run($username, $session_id)
+	{
+		global $session, $user;
+		
+		$project_owner = $user->get_user_id();
+
+		$project_type 					= $session->read_value("PROJECT_TYPE");
+		$project_organ_unit 			= $session->read_value("PROJECT_ORGANISATION_UNIT");
+		$project_toid 					= $session->read_value("PROJECT_TOID");
+		$project_name 					= $session->read_value("PROJECT_NAME");
+		$project_desc 					= $session->read_value("PROJECT_DESCRIPTION");
+		$project_template 				= $session->read_value("PROJECT_TEMPLATE");
+		$project_template_data_type  	= $session->read_value("PROJECT_TEMPLATE_DATA_TYPE");	
+		$project_template_data_type_id	= $session->read_value("PROJECT_TEMPLATE_DATA_TYPE_ID");	
+		$project_template_data_array	= $session->read_value("PROJECT_TEMPLATE_DATA_ARRAY");	
+		
+		try
+		{
+			$project = new Project(null);
+			
+			$project->set_template_data($project_template_data_type, $project_template_data_type_id, $project_template_data_array);
+											
+			if ($project_type and $project_organ_unit and $project_name and $project_desc and $project_template)
+			{
+				$new_project_id = $project->create($project_organ_unit, null, $project_name, $project_owner, $project_template, $project_desc);
+				
+				$session->delete_value("PROJECT_TYPE");
+				$session->delete_value("PROJECT_ORGANISATION_UNIT");
+				$session->delete_value("PROJECT_NAME");
+				$session->delete_value("PROJECT_DESCRIPTION");
+				$session->delete_value("PROJECT_TEMPLATE");
+				$session->delete_value("PROJECT_TEMPLATE_DATA_TYPE");
+				$session->delete_value("PROJECT_TEMPLATE_DATA_TYPE_ID");	
+				$session->delete_value("PROJECT_TEMPLATE_DATA_ARRAY");		
+				
+				$paramquery = array();
+				$paramquery['username'] = $username;
+				$paramquery['session_id'] = $session_id;
+				$paramquery['nav'] = "project";
+				$paramquery['run'] = "detail";
+				$paramquery['project_id'] = $new_project_id;
+				$params = http_build_query($paramquery, '', '&');
+				
+				return "index.php?".$params;
+			}
+			elseif($project_type and $project_toid and $project_name and $project_desc and $project_template)
+			{
+				$new_project_id = $project->create(null, $project_toid, $project_name, $project_owner, $project_template, $project_desc);
+				
+				$session->delete_value("PROJECT_LAST_SCREEN");
+				$session->delete_value("PROJECT_CURRENT_SCREEN");
+				
+				$session->delete_value("PROJECT_TYPE");
+				$session->delete_value("PROJECT_TOID");
+				$session->delete_value("PROJECT_NAME");
+				$session->delete_value("PROJECT_DESCRIPTION");
+				$session->delete_value("PROJECT_TEMPLATE");
+				$session->delete_value("PROJECT_TEMPLATE_DATA_TYPE");
+				$session->delete_value("PROJECT_TEMPLATE_DATA_TYPE_ID");	
+				$session->delete_value("PROJECT_TEMPLATE_DATA_ARRAY");	
+				
+				$paramquery = array();
+				$paramquery['username'] = $username;
+				$paramquery['session_id'] = $session_id;
+				$paramquery['nav'] = "project";
+				$paramquery['run'] = "detail";
+				$paramquery['project_id'] = $new_project_id;
+				$params = http_build_query($paramquery, '', '&');
+				
+				return "index.php?".$params;
+			}
+			else
+			{
+				return 0;
+			}
+		}
+		catch (ProjectCreationFailedException $e)
+		{
+			return 0;
+		}					
 	}
 	
 	public function handler()
@@ -382,16 +576,24 @@ class ProjectCreateAjax extends Ajax
 		{
 			switch($_GET['run']):
 			
-				case "get_target":
-				
-				break;
-			
 				case "get_content":
 					echo $this->get_content($_GET['page']);
 				break;
 				
+				case "get_next_page":
+					echo $this->get_next_page($_GET['page']);
+				break;
+				
+				case "get_previous_page":
+					echo $this->get_previous_page($_GET['page']);
+				break;
+				
 				case "set_data":
 					echo $this->set_data($_POST['page'], $_POST['data']);
+				break;
+				
+				case "run":
+					echo $this->run($_GET[username], $_GET[session_id]);
 				break;
 				
 			endswitch;

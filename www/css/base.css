@@ -271,3 +271,12 @@ padding-bottom: 4px;
 	margin: 10px;
 	width: 50px;
 }
+
+
+.FormError {
+	font: normal 0.8em Verdana, Helvatica, sans-serif;
+	color: red;
+}
+.FormSelect {
+	width: 100%;
+}

@@ -2,11 +2,13 @@
 <script>
 $(document).ready(function()
 {
-	$("#AssistantPrevious").click(function(){
-		assistant.load_previous_page(null);
+	$("#AssistantPrevious").click(function()
+	{
+		assistant.load_previous_page();
 	});
-	$("#AssistantNext").click(function(){
-		assistant.load_next_page(null);
+	$("#AssistantNext").click(function()
+	{
+		assistant.load_next_page();
 	});
 });
 </script>
@@ -22,5 +24,5 @@ $(document).ready(function()
 		</td>
 	</tr>
 </table>
-<input type='hidden' name='template_data_type' value='value' />
-<input type='hidden' name='template_data_type_id' value='[[TEMPLATE_DATA_TYPE_ID]]' />
+<input type='hidden' name='project_template_data_type' value='value' class='ProjectCreateAssistantField' />
+<input type='hidden' name='project_template_data_type_id' value='[[PROJECT_TEMPLATE_DATA_TYPE_ID]]' class='ProjectCreateAssistantField' />

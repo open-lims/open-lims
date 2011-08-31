@@ -2,11 +2,46 @@
 <script>
 $(document).ready(function()
 {
-	$("#AssistantPrevious").click(function(){
-		assistant.load_previous_page(null);
+	function check_form()
+	{
+		$("#ProjectCreateError1").html("");
+		$("#ProjectCreateError2").html("");
+		
+		if ($(".ProjectCreateAssistantField[name='project_name']").val())
+		{
+			if ($(".ProjectCreateAssistantField[name='project_description']").val())
+			{
+				return true;
+			}
+			else
+			{
+				$("#ProjectCreateError2").html("<br />You have to enter a description.");
+				return false;
+			}
+		}
+		else
+		{
+			$("#ProjectCreateError1").html("<br />You have to enter a name.");
+			if (!$(".ProjectCreateAssistantField[name='project_description']").val())
+			{
+				$("#ProjectCreateError2").html("<br />You have to enter a description.");
+			}
+			return false;
+		}
+	}
+	$("#AssistantPrevious").click(function()
+	{
+		if (check_form() == true)
+		{
+			assistant.load_previous_page();
+		}
 	});
-	$("#AssistantNext").click(function(){
-		assistant.load_next_page(null);
+	$("#AssistantNext").click(function()
+	{
+		if (check_form() == true)
+		{
+			assistant.load_next_page();
+		}
 	});
 });
 </script>
@@ -16,8 +51,8 @@ $(document).ready(function()
 	<tr>
 		<td>Project name:</td>
 		<td>
-			<input name='name' value='[[NAME]]' type='text' size='30' class='FormTextfield ProjectCreateAssistantField' />
-			<span class='formError'>[[ERROR0]]</span>
+			<input name='project_name' value='[[PROJECT_NAME]]' type='text' size='30' class='FormTextfield ProjectCreateAssistantField' />
+			<span class='FormError' id='ProjectCreateError1'></span>
 		</td>
 	</tr>
 	<tr>
@@ -31,8 +66,8 @@ $(document).ready(function()
 	</tr>
 	<tr>
 		<td colspan='2'>
-			<textarea name='desc' cols='66' rows='15' class='FormTextarea ProjectCreateAssistantField'>[[DESC]]</textarea>
-			<span class='formError'>[[ERROR1]]</span>
+			<textarea name='project_description' cols='66' rows='15' class='FormTextarea ProjectCreateAssistantField'>[[PROJECT_DESCRIPTION]]</textarea>
+			<span class='FormError' id='ProjectCreateError2'></span>
 		</td>
 	</tr>
 	
