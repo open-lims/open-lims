@@ -210,7 +210,7 @@ class Session implements SessionInterface
      * @param bool $force_overwrite (if false, existing values will not be overwritten)
      * @return bool
      */
-    public function write_value($address, $value, $force_overwrite)
+    public function write_value($address, $value, $force_overwrite = true)
     {
     	if ($address and isset($value) and $this->session_id)
     	{

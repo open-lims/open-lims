@@ -1,7 +1,17 @@
-
 <script>
 $(document).ready(function()
 {
+	$( "#AssistantError" ).dialog(
+	{
+		autoOpen: false,
+		buttons: 
+		{
+			"OK": function()
+			{
+                  $( this ).dialog( "close" );
+			}
+		}
+	});
 	$("#AssistantPrevious").click(function()
 	{
 		assistant.load_previous_page();
@@ -12,6 +22,10 @@ $(document).ready(function()
 	});
 });
 </script>
+
+<div id="AssistantError" title="Error" style='display: none;'>
+An error occours during project creation!
+</div>
 
 <div id="AssistantFinish" style="display:none; cursor: default"> 
 <img src='images/animations/loading_circle_small.gif' alt=''> Please wait while project creation.

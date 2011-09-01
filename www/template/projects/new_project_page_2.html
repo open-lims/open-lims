@@ -11,13 +11,51 @@ $(document).ready(function()
 		{
 			if ($(".ProjectCreateAssistantField[name='project_description']").val())
 			{
-				return true;
+				var success;
+				
+				$.ajax(
+				{
+					type: "GET",
+					url: "/core/modules/project/project_create.ajax.php",
+					async: false,
+					data: "session_id="+get_array['session_id']+"&run=check_data&name="+$(".ProjectCreateAssistantField[name='project_name']").val(),
+					success: function(data)
+					{
+						if (data == '1')
+						{
+							$("#ProjectCreateError1").html("<br />This project already exists.");
+							success = false;
+						}
+						else
+						{
+							success = true;
+						}
+					}
+				});
+				
+				return success;
 			}
 			else
 			{
 				$("#ProjectCreateError2").html("<br />You have to enter a description.");
+				$.ajax(
+				{
+					type: "GET",
+					url: "/core/modules/project/project_create.ajax.php",
+					async: false,
+					data: "session_id="+get_array['session_id']+"&run=check_data&name="+$(".ProjectCreateAssistantField[name='project_name']").val(),
+					success: function(data)
+					{
+						if (data == '1')
+						{
+							$("#ProjectCreateError1").html("<br />This project already exists.");
+						}
+					}
+				});
 				return false;
 			}
+			
+			
 		}
 		else
 		{

@@ -29,7 +29,15 @@ class ManufacturerIO
 {
 	public static function dialog()
 	{
-		$template = new Template("template/manufacturer/dialog.html");
+		if ($GLOBALS['autoload_prefix'])
+		{
+			$path_prefix = $GLOBALS['autoload_prefix'];
+		}
+		else
+		{
+			$path_prefix = "";
+		}
+		$template = new Template($GLOBALS['autoload_prefix']."template/manufacturer/dialog.html");
 		return $template->get_string();
 	}
 	

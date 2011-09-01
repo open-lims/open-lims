@@ -1,6 +1,6 @@
 <?php
 /**
- * @package data
+ * @package item
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -22,10 +22,10 @@
  */
 
 /**
- * File As Item Upload Event
- * @package data
+ * Item Add Event
+ * @package item
  */
-class FileAsItemUploadEvent extends Event
+class ItemAddEvent extends Event
 {    
 	private $item_id;
 	private $get_array;

@@ -486,6 +486,30 @@ class ProjectCreateAjax extends Ajax
 		}
 	}
 	
+	private function check_name($name)
+	{
+		global $session;
+		
+		$project_toid = $session->read_value("PROJECT_TOID");
+		
+		if (is_numeric($project_toid))
+		{
+			if (Project::exist_project_name(null,$session->read_value("PROJECT_TOID"),$name) == true)
+			{
+				return "1";
+			}
+		}
+		else
+		{
+			if (Project::exist_project_name($session->read_value("PROJECT_ORGANISATION_UNIT"),null,$name) == true)
+			{
+				return "1";
+			}
+		}
+		
+		return "0";
+	}
+	
 	private function run($username, $session_id)
 	{
 		global $session, $user;
@@ -592,8 +616,12 @@ class ProjectCreateAjax extends Ajax
 					echo $this->set_data($_POST['page'], $_POST['data']);
 				break;
 				
+				case "check_data":
+					echo $this->check_name($_GET['name']);
+				break;
+				
 				case "run":
-					echo $this->run($_GET[username], $_GET[session_id]);
+					echo $this->run($_GET['username'], $_GET['session_id']);
 				break;
 				
 			endswitch;

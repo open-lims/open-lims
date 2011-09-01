@@ -165,25 +165,28 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 				this.css("left", ( $(window).width() - this.width() ) / 2+$(window).scrollLeft() + "px");
 				return this;
 			}
-
-			$.blockUI({ message: $('#AssistantFinish'), css: { width: '275px' } }); 
-			$('.blockUI.blockMsg').center();
 			
 			$.ajax(
 			{
 				type: "GET",
 				url: ajax_handler,
-				async: false,
 				data: "username="+get_array['username']+"&session_id="+get_array['session_id']+"&run=run",
+				beforeSend: function()
+				{
+					$.blockUI({ message: $('#AssistantFinish'), css: { width: '275px' } }); 
+					$('.blockUI.blockMsg').center();
+				},
 				success: function(data)
 				{
 					if (data != '0')
 					{
-						window.setTimeout('window.location = "'+data+'"',1500);
+						window.setTimeout('window.location = "'+data+'"',500);
 					}
 					else
 					{
-						$.unblockUI;
+						$.unblockUI();
+						$( "#AssistantError" ).dialog( "open" );
+						return false;
 					}
 				}
 			});

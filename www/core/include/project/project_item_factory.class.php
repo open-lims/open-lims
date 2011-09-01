@@ -120,7 +120,7 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
     {
     	global $transaction;
     	
-    	if ($event_object instanceof FileAsItemUploadEvent)
+    	if ($event_object instanceof ItemAddEvent)
     	{
     		$get_array = $event_object->get_get_array();
     		$post_array = $event_object->get_post_array();
@@ -145,7 +145,7 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
     			}
     		}
     	}
-    	
+    	    	
     	return true;
     }
     

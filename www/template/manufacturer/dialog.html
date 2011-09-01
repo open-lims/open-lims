@@ -67,6 +67,7 @@ $(document).ready(function()
 						if (data)
 						{
 							$("#ManufactuerNameField").val(data);
+							$("#ManufactuerIdField").val($("input[@name='Manufacturer']:checked").val());
 						}
 					}
 				});
