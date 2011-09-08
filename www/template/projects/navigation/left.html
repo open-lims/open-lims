@@ -1,7 +1,5 @@
 <script>
 	var get_array = getQueryParams(document.location.search);
-	create_menu_tree('ProjectLeftNavigationTree', 'core/modules/project/navigation/project_navigation.ajax.php?project_id='+get_array['project_id']+'');
+	var tn3 = new base_tree_nav("LeftNavigationTree","LeftNavigationProject","core/modules/project/navigation/project_navigation.ajax.php?project_id="+get_array['project_id']+"");
+	tn3.init();
 </script>
-
-<ul class='LeftNavigationLayer0' id='ProjectLeftNavigationTree'>
-</ul>

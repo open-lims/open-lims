@@ -1,33 +1,59 @@
 @CHARSET "ISO-8859-1";
 
-/* LEFT NAVIGATION MENU */
-#LeftNavigationTree ul 
+
+/* BASE TREE NAVIGATION */
+
+.BaseTreeList
 {
 list-style-type: none;
 margin: 0 0 0 10px;
 padding: 0px;
-
 }
+
+.BaseTreeEntry 
+{
+/* table-layout:fixed; */
+border-collapse: collapse;
+}
+
+.BaseTreeEntry td
+{
+height:19px;
+}
+
+.BaseTreeEntry img
+{
+border: 0;
+}
+
+.BaseTreeEntry a
+{
+text-decoration: none;
+color: black;
+}
+
+.BaseTreeEntry a:hover
+{
+text-decoration: underline;
+}
+
+.BaseTreeEntry a:focus
+{
+outline: none;
+}
+
+
+/* LEFT NAVIGATION MENU */
 
 #LeftNavigationTree
 {
 padding-top:2px;
 }
 
-#LeftNavigationTree ul li div
-{
-white-space: nowrap;
-}
-
 #LeftNavigationTree img {
 min-height:1%;
 }
 
-#LeftNavigationTree ul.LeftNavigationLayer0
-{
-margin: 0 0 0 2px;
-}
-	
 #LeftNavigation
 {
 width: 200px;
@@ -46,7 +72,7 @@ margin: 2px 2px 0 2px;
 
 #LeftNavigationSymbolArea div img
 {
-	margin: 4px 4px 4px 4px;
+margin: 4px 4px 4px 4px;
 }
 
 #LeftNavigationSymbolAreaClear
@@ -62,37 +88,37 @@ font-weight: bold;
 padding: 2px 2px 2px 5px;
 }
 
+
 /* FILE SEARCH MENU */
 
-/* NEU: Abhängigkeit und Benennung */
-
-#fileSearchList
+#fileSearchList a
 {
-
+text-decoration: none;
+color: black;
 }
 
-#fileSearchList ul 
+#fileSearchList a:hover
 {
-list-style-type: none;
-margin: 0 0 0 10px;
-padding: 0px;
+text-decoration: underline;
+color: black;
+}
+
+#fileSearchList a:focus
+{
+outline: none;
+}
+
+#fileSearchList a:visited
+{
+color: black;
 }
 
 #fileSearchList ul li div
 {
-
 border-bottom: dotted black 1px;
 padding-top: 4px;
 padding-bottom: 4px;
-}
-
-
-.searchRadioButton 
-{
-/* position:absolute; */
-/* right:0; */
-	float:right;
-
+position:relative;
 }
 
 

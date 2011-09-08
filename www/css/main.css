@@ -28,6 +28,7 @@ html,body {
 	position: absolute;
 	bottom: 0;
 	width: 980px;
+	display: none;
 }
 
 #container {
