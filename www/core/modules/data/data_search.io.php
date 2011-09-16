@@ -148,7 +148,7 @@ class DataSearchIO
 				}	
 			}
 			
-			$list = new List_IO(Data_Wrapper::count_search_ffv($folder_id, $name), 20);
+			$list = new ListStat_IO(Data_Wrapper::count_search_ffv($folder_id, $name), 20);
 			
 			if (is_array($result_array) and count($result_array) >= 1)
 			{

@@ -49,6 +49,16 @@ class Data_Wrapper implements Data_WrapperInterface
 	}
 	
 	/**
+	 * @see Data_WrapperInterface::has_folder_children()
+	 * @param integer $folder_id
+	 * @return bool
+	 */
+	public static function has_folder_children($folder_id)
+	{
+		return Data_Wrapper_Access::has_folder_children($folder_id);
+	}
+	
+	/**
 	 * @see Data_WrapperInterface::list_search_ffv()
 	 * @param integer $folder_id
 	 * @param string $search_string
@@ -149,9 +159,14 @@ class Data_Wrapper implements Data_WrapperInterface
 	 * @param string $sql
 	 * @return array
 	 */
-    public static function list_item_files($sql)
+    public static function list_item_files($sql, $order_by, $order_method, $start, $end)
 	{
-		return Data_Wrapper_Access::list_item_files($sql);
+		return Data_Wrapper_Access::list_item_files($sql, $order_by, $order_method, $start, $end);
+	}
+	
+	public static function count_item_files($sql)
+	{
+	 	return Data_Wrapper_Access::count_item_files($sql);
 	}
 	
 	/**

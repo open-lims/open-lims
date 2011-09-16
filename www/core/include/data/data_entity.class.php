@@ -843,6 +843,16 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	
 	
 	/**
+	 * @see ItemListenerInterface::clone_item()
+	 * @param integer $item_id
+	 * @return integer
+	 */
+	public static function clone_item($item_id)
+	{
+		return null;
+	}
+	
+	/**
 	 * @see ItemListenerInterface::get_entry_by_item_id()
 	 * @param integer $item_id
 	 * @return integer

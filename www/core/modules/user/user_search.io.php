@@ -105,7 +105,7 @@ class UserSearchIO
 			
 			if ($type == 1)
 			{
-				$list = new List_IO(User_Wrapper::count_search_users($string), 20);
+				$list = new ListStat_IO(User_Wrapper::count_search_users($string), 20);
 	
 				$list->add_row("","symbol",false,16);
 				$list->add_row("Username","username",false,null);
@@ -169,7 +169,7 @@ class UserSearchIO
 			}
 			else
 			{
-				$list = new List_IO(User_Wrapper::count_search_groups($string), 20);
+				$list = new ListStat_IO(User_Wrapper::count_search_groups($string), 20);
 	
 				$list->add_row("","symbol",false,16);
 				$list->add_row("Group Name","name",true,null);

@@ -40,7 +40,7 @@ class AdminGeneralAjax extends Ajax
 	
 	public function list_languages($page, $sortvalue, $sortmethod)
 	{		
-		$list = new List_IO(Base_Wrapper::count_languages(), 20, "OrganisationUnitAdminListPage");
+		$list = new ListStat_IO(Base_Wrapper::count_languages(), 20, "OrganisationUnitAdminListPage");
 
 		$list->add_row("","symbol",false,"16px");
 		$list->add_row("Name","name",true,null,"BaseGeneralAdminListSortName");
@@ -93,7 +93,7 @@ class AdminGeneralAjax extends Ajax
 	
 	public function list_paper_sizes($page, $sortvalue, $sortmethod)
 	{
-		$list = new List_IO(Base_Wrapper::count_paper_sizes(), 20, "OrganisationUnitAdminListPage");
+		$list = new ListStat_IO(Base_Wrapper::count_paper_sizes(), 20, "OrganisationUnitAdminListPage");
 
 		$list->add_row("","symbol",false,"16px");
 		$list->add_row("Name","name",true,null,"BaseGeneralAdminListSortName");

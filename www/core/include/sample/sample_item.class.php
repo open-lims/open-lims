@@ -236,6 +236,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     }
     
     /**
+     * @todo overhaul
      * @see SampleItemInterface::get_sample_items()
      * @return array
      */

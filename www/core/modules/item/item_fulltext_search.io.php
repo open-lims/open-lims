@@ -174,7 +174,7 @@ class ItemFulltextSearchIO
 				}	
 			}
 			
-			$list = new List_IO(Item_Wrapper::count_fulltext_search($string, $item_type_array, null), 20);
+			$list = new ListStat_IO(Item_Wrapper::count_fulltext_search($string, $item_type_array, null), 20);
 			
 			if (is_array($result_array) and count($result_array) >= 1)
 			{

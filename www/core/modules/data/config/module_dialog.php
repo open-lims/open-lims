@@ -107,4 +107,12 @@
 	$dialog[10][internal_name]	= "data_item_report";
 	$dialog[10][display_name]	= "Data Item Report";
 	$dialog[10][weight]			= 100;
+	
+	$dialog[11][type]			= "item_assistant_list";
+	$dialog[11][class_path]		= "core/modules/data/file.io.php";
+	$dialog[11]['class']		= "FileIO";
+	$dialog[11][method]			= "list_file_items";
+	$dialog[11][internal_name]	= "data";
+	$dialog[11][display_name]	= "Data";
+	$dialog[11][weight]			= 100;
 ?>

@@ -26,6 +26,18 @@
  */ 
 function register_project($include_id)
 {	
+	if (Item::delete_holder_by_include_id($include_id))
+	{
+		if (Item::register_holder("project", "Project", $include_id) == false)
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+	
 	if (Folder::delete_type_by_include_id($include_id))
 	{
 		if (Folder::register_type("project_folder", "ProjectFolder", $include_id) == false)

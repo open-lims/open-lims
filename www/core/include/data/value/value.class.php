@@ -1286,7 +1286,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
      * @todo implementation (Replaces self::get_html_form)
      * @return array;
      */
-    public function get_value_shape()
+    public function get_value_shape($field_class = null, $field_name_prefix = null)
     {
     	
     }
@@ -1298,7 +1298,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
      * @param integer $type_id
      * @return string
      */
-	public function get_html_form($error_array, $type_id, $folder_id, $field_class = null)
+	public function get_html_form($error_array, $type_id, $folder_id, $field_class = null, $field_name_prefix = null)
 	{	
 		if ($type_id == null and $this->value_id)
 		{
@@ -1521,7 +1521,14 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 					
 					if ($value[3][name])
 					{
-						$field_name = $value[3][name];
+						if ($field_name_prefix)
+						{
+							$field_name = $field_name_prefix."-".$value[3][name];
+						}
+						else
+						{
+							$field_name = $value[3][name];
+						}
 					}
 					
 					if ($content_array and !$_POST[$value[3][name]])
@@ -1666,12 +1673,27 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 						break;
 						
 						case (3):
-							$return .= "<select type='".$typename."' name='".$field_name."' />\n";
+							if ($field_class)
+							{
+								$return .= "<select type='".$typename."' name='".$field_name."' class='".$field_class."'>\n";
+							}
+							else
+							{
+								$return .= "<select type='".$typename."' name='".$field_name."'>\n";
+							}
 						break;
 						
 						default:
-							$return .= "<textarea name='".$field_name."' cols='".$field_cols."' rows='".$field_rows."' >".$field_default."</textarea>\n" .
-										"<input type='hidden' name='".$field_name."-vartype' value='".$vartype."' />\n";
+							if ($field_class)
+							{
+								$return .= "<textarea name='".$field_name."' cols='".$field_cols."' rows='".$field_rows."' class='".$field_class."'>".$field_default."</textarea>\n" .
+											"<input type='hidden' name='".$field_name."-vartype' value='".$vartype."' />\n";
+							}
+							else
+							{
+								$return .= "<textarea name='".$field_name."' cols='".$field_cols."' rows='".$field_rows."'>".$field_default."</textarea>\n" .
+											"<input type='hidden' name='".$field_name."-vartype' value='".$vartype."' />\n";
+							}
 						break;
 					
 					endswitch;

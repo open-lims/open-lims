@@ -36,7 +36,7 @@ class ProjectIO
 			$user_id = $user->get_user_id();
 		}
 			
-		$list = new List_IO(Project_Wrapper::count_list_user_related_projects($user_id), 20);
+		$list = new ListStat_IO(Project_Wrapper::count_list_user_related_projects($user_id), 20);
 		
 		$list->add_row("", "symbol", false, "16px");
 		$list->add_row("Name", "name", true, null);
@@ -845,7 +845,7 @@ class ProjectIO
 	{
 		if (is_numeric($item_id))
 		{
-			$list = new List_IO(Project_Wrapper::count_projects_by_item_id($item_id), 20);
+			$list = new ListStat_IO(Project_Wrapper::count_projects_by_item_id($item_id), 20);
 
 			$list->add_row("","symbol",false,16);
 			$list->add_row("Name","name",true,null);
@@ -1180,7 +1180,6 @@ class ProjectIO
 								$session->write_value("stack_array", $path_stack_array, true);
 							}
 							
-							$sql = " SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$_GET[project_id]."";
 							$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_list", $_GET[dialog]);
 							
 							if (file_exists($module_dialog[class_path]))
@@ -1189,7 +1188,7 @@ class ProjectIO
 								
 								if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
 								{
-									$module_dialog['class']::$module_dialog[method]($sql);
+									$module_dialog['class']::$module_dialog[method]("project", $_GET[project_id], true);
 								}
 								else
 								{

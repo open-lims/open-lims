@@ -269,7 +269,7 @@ class SampleSearchIO
 
 			/* --------------- */
 			
-			$list = new List_IO(Sample_Wrapper::count_sample_search($name, $organisation_unit_array, $template_array, $in_id, $in_name), 20);
+			$list = new ListStat_IO(Sample_Wrapper::count_sample_search($name, $organisation_unit_array, $template_array, $in_id, $in_name), 20);
 
 			$list->add_row("","symbol",false,"16px");
 			$list->add_row("Smpl. ID","id",true,"11%");

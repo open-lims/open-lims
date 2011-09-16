@@ -1,0 +1,45 @@
+<script>
+$(document).ready(function()
+{
+	$("#AssistantNext").click(function()
+	{
+		if ($(".SampleCloneAssistantField[name='sample_source_sample'] option").is(":selected"))
+		{
+			assistant.load_next_page();
+		}
+		else
+		{
+			$("#SampleCloneError1").html("<br />You have to select a source sample.");
+		}
+	});
+});
+</script>
+
+<br />
+<table class='formTable'>
+	<tr>
+		<td><span class='bold'>Source Sample:</span></td>
+	</tr>
+	<tr>
+		<td>
+			<select name='sample_source_sample' class='FormSelect SampleCloneAssistantField' size='10'>
+	
+			<!-- FOREACH BEGIN ([[OPTION]]) -->
+	
+				<option value='[[OPTION:VALUE]]' [[OPTION:SELECTED]]>[[OPTION:CONTENT]]</option>
+	
+			<!-- FOREACH END -->
+			
+			</select>
+			<span class='FormError' id='SampleCloneError1'></span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<br />
+			<div class='button_left'><button id='AssistantPrevious' class='AssistantButtonDisabled' disabled='disabled'>previous</button></div>
+			<div class='button_right'><button id='AssistantNext' class='AssistantButton'>next</button></div>
+		</td>
+	</tr>
+</table>
+<br />

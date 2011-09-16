@@ -25,7 +25,8 @@
  * 
  */
 	$classes['ItemListenerInterface']		= $path_prefix."core/include/item/interfaces/item_listener.interface.php";
-
+	$classes['ItemHolderInterface']			= $path_prefix."core/include/item/interfaces/item_holder.interface.php";
+	
 	$classes['ItemUnlinkEvent']				= $path_prefix."core/include/item/events/item_unlink_event.class.php";
 	$classes['ItemAddEvent']				= $path_prefix."core/include/item/events/item_add_event.class.php";
 	

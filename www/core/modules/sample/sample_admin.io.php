@@ -269,7 +269,7 @@ class SampleAdminIO
 			if ($sample->get_owner_id() == $user->get_user_id() or
 				$user->is_admin() == true)
 			{
-				$list = new List_IO(Sample_Wrapper::count_sample_users($_GET[sample_id]), 20);
+				$list = new ListStat_IO(Sample_Wrapper::count_sample_users($_GET[sample_id]), 20);
 	
 				$list->add_row("","symbol",false,"16px");
 				$list->add_row("Username","username",true,null);
@@ -629,7 +629,7 @@ class SampleAdminIO
 			if ($sample->get_owner_id() == $user->get_user_id() or
 				$user->is_admin() == true)
 			{
-				$list = new List_IO(Sample_Wrapper::count_sample_organisation_units($_GET[sample_id]), 20);
+				$list = new ListStat_IO(Sample_Wrapper::count_sample_organisation_units($_GET[sample_id]), 20);
 	
 				$list->add_row("","symbol",false,"16px");
 				$list->add_row("Name","name",true,null);

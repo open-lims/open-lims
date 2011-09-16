@@ -217,6 +217,54 @@ class FileIO
 		}
 	}
 
+	public static function list_file_items($item_holder_type, $item_holder_id, $as_page = true, $in_assistant = false, $form_field_name = null)
+	{
+		global $session, $user;
+
+		$argument_array = array();
+		$argument_array[0][0] = "item_holder_type";
+		$argument_array[0][1] = $item_holder_type;
+		$argument_array[1][0] = "item_holder_id";
+		$argument_array[1][1] = $item_holder_id;
+		$argument_array[2][0] = "as_page";
+		$argument_array[2][1] = $as_page;
+		$argument_array[3][0] = "in_assistant";
+		$argument_array[3][1] = $in_assistant;
+		
+		$list = new List_IO("/core/modules/data/file.ajax.php", "list_file_items", $argument_array, "DataAjaxFiles");
+		
+		if ($in_assistant == false)
+		{			
+			$list->add_row("","symbol",false,16);
+			$list->add_row("Name","name",true,null);
+			$list->add_row("Size","size",true,null);
+			$list->add_row("Date/Time","datetime",true,null);
+		}
+		else
+		{			
+			$list->add_row("","checkbox",false,16, $form_field_name);
+			$list->add_row("","symbol",false,16);
+			$list->add_row("Name","name",false,null);
+			$list->add_row("Size","size",false,null);
+			$list->add_row("Date/Time","datetime",false,null);
+		}
+		
+		if ($GLOBALS['autoload_prefix'])
+		{
+			$path_prefix = $GLOBALS['autoload_prefix'];
+		}
+		else
+		{
+			$path_prefix = "";
+		}
+		
+		$template = new Template($path_prefix."template/data/file_list.html");	
+		
+		$list->run();
+		
+		return $template->get_string();
+	}
+	
 	/**
 	 * @param array $type_array
 	 * @param array $category_array
@@ -548,7 +596,7 @@ class FileIO
 			
 			if ($file->is_read_access())
 			{
-				$list = new List_IO(Data_Wrapper::count_file_versions($_GET[file_id]), 20);
+				$list = new ListStat_IO(Data_Wrapper::count_file_versions($_GET[file_id]), 20);
 
 				$list->add_row("","symbol",false,"16px");
 				$list->add_row("Name","name",true,null);

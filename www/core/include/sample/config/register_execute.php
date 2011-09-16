@@ -26,6 +26,18 @@
  */ 
 function register_sample($include_id)
 {	
+	if (Item::delete_holder_by_include_id($include_id))
+	{
+		if (Item::register_holder("sample", "Sample", $include_id) == false)
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+	
 	if (Item::delete_type_by_include_id($include_id))
 	{
 		if (Item::register_type("sample", "Sample", $include_id) == false)

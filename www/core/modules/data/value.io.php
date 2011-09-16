@@ -501,7 +501,7 @@ class ValueIO
 			
 			if ($value_obj->is_read_access())
 			{
-				$list = new List_IO(Data_Wrapper::count_value_versions($_GET[value_id]), 20);
+				$list = new ListStat_IO(Data_Wrapper::count_value_versions($_GET[value_id]), 20);
 
 				$list->add_row("","symbol",false,"16px");
 				$list->add_row("Name","name",true,null);

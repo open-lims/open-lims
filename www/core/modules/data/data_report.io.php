@@ -116,7 +116,7 @@ class DataReportIO
 			}
 			
 			// Files
-			$file_array = Data_Wrapper::list_item_files($sql);
+			$file_array = Data_Wrapper::list_item_files($sql, null, null, null, null);
 			
 			if (is_array($file_array) and count($file_array) >= 1)
 			{	

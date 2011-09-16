@@ -44,7 +44,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Project Management Class
  * @package project
  */
-class Project implements ProjectInterface, EventListenerInterface
+class Project implements ProjectInterface, EventListenerInterface, ItemHolderInterface
 {
 	private $project_id;
 
@@ -2362,7 +2362,16 @@ class Project implements ProjectInterface, EventListenerInterface
     	
     	return true;
     }
-       
+
+    /**
+     * @see ItemHolderInterface::get_item_list_sql()
+	 * @param integer $holder_id
+	 * @return string
+	 */
+	public static function get_item_list_sql($holder_id)
+	{
+		return " SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$holder_id."";
+	}
 }
 
 ?>

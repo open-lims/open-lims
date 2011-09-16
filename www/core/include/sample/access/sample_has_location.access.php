@@ -391,7 +391,7 @@ class SampleHasLocation_Access
 			return null;
 		}
 	}
-	
+		
 	/**
 	 * @param integer $location_id
 	 * @return array

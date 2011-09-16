@@ -70,4 +70,11 @@
 	$dialog[5][display_name]	= "Equipment Item Reportt";
 	$dialog[5][weight]			= 500;
 	
+	$dialog[6][type]			= "item_assistant_list";
+	$dialog[6][class_path]		= "core/modules/equipment/equipment.io.php";
+	$dialog[6]['class']			= "EquipmentIO";
+	$dialog[6][method]			= "list_equipment_items";
+	$dialog[6][internal_name]	= "equipment";
+	$dialog[6][display_name]	= "Equipment";
+	$dialog[6][weight]			= 200;
 ?>

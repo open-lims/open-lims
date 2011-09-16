@@ -29,7 +29,7 @@ class AdminValueTemplateIO
 {
 	public static function home()
 	{
-		$list = new List_IO(Data_Wrapper::count_list_value_templates(), 20);
+		$list = new ListStat_IO(Data_Wrapper::count_list_value_templates(), 20);
 		
 		$list->add_row("ID", "id", true, null);
 		$list->add_row("Name", "name", true, null);

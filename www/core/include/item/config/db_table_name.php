@@ -29,6 +29,7 @@
 	define("ITEM_CONCRETION_TABLE", 				"core_item_concretion");
 	define("ITEM_HAS_ITEM_CLASS_TABLE", 			"core_item_has_item_classes");
 	define("ITEM_HAS_ITEM_INFORMATION_TABLE", 		"core_item_has_item_information");
+	define("ITEM_HOLDER_TABLE", 					"core_item_holders");
 	define("ITEM_INFORMATION_TABLE", 				"core_item_information");
 	define("ITEM_TABLE", 							"core_items");
 ?>

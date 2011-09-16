@@ -28,7 +28,7 @@
 class DataIO
 {
 	/**
-	 * Remove Exception Dependency
+	 * @todo IMPORTANT: Remove Exception Dependency
 	 */
 	public static function browser()
 	{
@@ -106,7 +106,7 @@ class DataIO
 			// !!!!! ---------- !!!!!!!!!!!!!1
 			$folder = Folder::get_instance($folder_id);	
 
-			$list = new List_IO(DataBrowser::count_data_browser_array($folder_id, $virtual_folder_id), 20);
+			$list = new ListStat_IO(DataBrowser::count_data_browser_array($folder_id, $virtual_folder_id), 20);
 
 			$list->set_top_right_text($data_path->get_stack_path());
 			
@@ -476,7 +476,7 @@ class DataIO
 			$error_io->display_error();
 		}
 	}
-
+	
 	public static function image_browser_multi()
 	{
 		if ($_GET[folder_id])

@@ -80,7 +80,8 @@ class Equipment_Wrapper_Access
 			$sql = "SELECT ".constant("EQUIPMENT_TABLE").".id AS id, " .
 							"".constant("EQUIPMENT_TYPE_TABLE").".name AS name, " .
 							"".constant("EQUIPMENT_CAT_TABLE").".name AS category, " .
-							"".constant("EQUIPMENT_TABLE").".datetime AS datetime " .
+							"".constant("EQUIPMENT_TABLE").".datetime AS datetime, " .
+							"".constant("EQUIPMENT_IS_ITEM_TABLE").".item_id AS item_id " .
 							"FROM ".constant("EQUIPMENT_TABLE")." " .
 							"LEFT JOIN ".constant("EQUIPMENT_IS_ITEM_TABLE")." 	ON ".constant("EQUIPMENT_TABLE").".id 			= ".constant("EQUIPMENT_IS_ITEM_TABLE").".equipment_id " .
 							"LEFT JOIN ".constant("EQUIPMENT_TYPE_TABLE")." 		ON ".constant("EQUIPMENT_TABLE").".type_id 	= ".constant("EQUIPMENT_TYPE_TABLE").".id " .

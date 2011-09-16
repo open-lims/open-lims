@@ -29,6 +29,7 @@ require_once("interfaces/sample.interface.php");
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
 	require_once("exceptions/sample_not_found_exception.class.php");
+	require_once("exceptions/sample_clone_failed_exception.class.php");
 	require_once("exceptions/sample_creation_failed_exception.class.php");
 	
 	require_once("access/sample.access.php");
@@ -42,7 +43,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Sample Management Class
  * @package sample
  */
-class Sample extends Item implements SampleInterface, EventListenerInterface, ItemListenerInterface
+class Sample extends Item implements SampleInterface, EventListenerInterface, ItemListenerInterface, ItemHolderInterface
 {
 	private $sample;
 	
@@ -52,6 +53,9 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	private $template_data_type_id;
 	private $template_data_array;
 
+	private $sample_folder_id;
+	private $sample_folder_object;
+	
 	/**
 	 * @see SampleInterface::__construct()
 	 * @param integer $sample_id Sample-ID
@@ -111,6 +115,145 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     }
     
     /**
+     * @param string $transaction_id
+     * @param integer $sample_id
+     * @param integer $template_id
+     * @return mixed
+     */
+    private function create_sample_folder($transaction_id, $sample_id, $template_id)
+    {
+    	global $user, $transaction;
+    	
+    	if ($transaction_id and is_numeric($sample_id) and is_numeric($template_id))
+    	{
+	    	// Create Sample Folder
+	    	$base_folder_id = constant("SAMPLE_FOLDER_ID");
+			$base_folder = Folder::get_instance($base_folder_id);
+	
+			$path = new Path($base_folder->get_path());
+			$path->add_element($sample_id);
+					
+			$sample_folder = new SampleFolder(null);
+			if (($folder_id = $sample_folder->create($sample_id)) == null)
+			{
+				$sample_folder->delete(true, true);
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				throw new SampleCreationFailedException("",1);
+			}
+			$folder = Folder::get_instance($folder_id);
+
+			// Create Subfolders
+			$sub_folder_name_array = array();
+    		$sample_template = new SampleTemplate($template_id);
+	    			
+    		$folder_array = array();
+    		$requirement_array = $sample_template->get_requirements();
+    			
+    		if (is_array($requirement_array) and count($requirement_array) >= 1)
+    		{
+    			foreach($requirement_array as $key => $value)
+    			{
+    				if (($value[type] == "file" or $value[type] == "value") and $value[folder])
+    				{
+						if (!in_array($value[folder], $folder_array))
+						{
+							array_push($folder_array, $value[folder]);
+						}
+					}	
+    			}	
+    				
+    			if (is_array($folder_array) and count($folder_array) >= 1)
+    			{
+    				foreach($folder_array as $key => $value)
+    				{
+    					$folder_name = strtolower(trim($value));
+    					$folder_name = str_replace(" ","-",$folder_name);
+		
+						$folder_path = new Path($folder->get_path());
+						$folder_path->add_element($folder_name);
+
+						$sub_folder = Folder::get_instance(null);
+						if (($sub_folder_id = $sub_folder->create($value, $folder_id, $folder_path->get_path_string(), $user->get_user_id(), null)) == null)
+						{
+							$sample_folder->delete(true, true);
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							throw new SampleCreationFailedException("",1);
+						}
+							
+						if ($sub_folder->set_flag(1024) == false)
+						{
+							$sample_folder->delete(true, true);
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							throw new SampleCreationFailedException("",1);
+						}
+						
+						$sub_folder_name_array[$sub_folder_id] = strtolower(trim($value));
+    				}
+    			}
+    		}
+    		
+    		$this->sample_folder_id = $folder_id;
+    		$this->sample_folder_object = $sample_folder;
+    		
+    		return $sub_folder_name_array;
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
+    
+    /**
+     * @param string $transaction_id
+     * @param integer $sample_id
+     * @return bool
+     */
+    private function create_sample_item($transaction_id, $sample_id)
+    {
+    	global $transction;
+    	
+    	if ($transaction_id and is_numeric($sample_id))
+    	{
+    		// Create Item
+			if (($this->item_id = parent::create()) == null)
+			{
+				$this->sample_folder_object->delete(true, true);
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				throw new SampleCreationFailedException("",1);
+			}
+				
+    		$sample_is_item = new SampleIsItem_Access(null);
+			if ($sample_is_item->create($sample_id, $this->item_id) == false)
+			{
+				$this->sample_folder_object->delete(true, true);
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				throw new SampleCreationFailedException("",1);
+			}
+			
+			return true;
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
+    
+    /**
      * @see SampleInterface::create()
      * @todo sample adding via template required field via item_id
      * @param integer $organisation_unit_id
@@ -140,31 +283,31 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					}
 
 					// Create Sample Folder
-	    			$base_folder_id = constant("SAMPLE_FOLDER_ID");
-					$base_folder = Folder::get_instance($base_folder_id);
-
-					$path = new Path($base_folder->get_path());
-					$path->add_element($sample_id);
-					
-					$sample_folder = new SampleFolder(null);
-					if (($folder_id = $sample_folder->create($sample_id)) == null)
-					{
-						$sample_folder->delete(true, true);
+	    			if ($this->create_sample_folder($transaction_id, $sample_id, $template_id) === false)
+	    			{
 						if ($transaction_id != null)
 						{
 							$transaction->rollback($transaction_id);
 						}
 						throw new SampleCreationFailedException("",1);
-					}
-					$folder = Folder::get_instance($folder_id);
-
-						    			
+	    			}
+    			
+	    			if ($this->create_sample_item($transaction_id, $sample_id) == false)
+	    			{
+	    				$this->sample_folder_object->delete(true, true);
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						throw new SampleCreationFailedException("",1);
+	    			}
+	    			
 	    			// Create Permissions and V-Folders
 	    			$sample_security = new SampleSecurity($sample_id);
 	    		
 	    			if ($sample_security->create_user($user->get_user_id(), true, true) == null)
 	    			{
-	    				$sample_folder->delete(true, true);
+	    				$this->sample_folder_object->delete(true, true);
 						if ($transaction_id != null)
 						{
 							$transaction->rollback($transaction_id);
@@ -176,69 +319,14 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	    			{
 	    				if ($sample_security->create_organisation_unit($organisation_unit_id) == null)
 	    				{
-	    					$sample_folder->delete(true, true);
+	    					$this->sample_folder_object->delete(true, true);
 							if ($transaction_id != null)
 							{
 								$transaction->rollback($transaction_id);
 							}
 							throw new SampleCreationFailedException("",1);
 	    				}
-	    			}
-	    			
-	    			// Create Subfolders
-	    			$sample_template = new SampleTemplate($template_id);
-	    			
-	    			$folder_array = array();
-	    			$requirement_array = $sample_template->get_requirements();
-	    			
-	    			if (is_array($requirement_array) and count($requirement_array) >= 1)
-	    			{
-	    				foreach($requirement_array as $key => $value)
-	    				{
-	    					if (($value[type] == "file" or $value[type] == "value") and $value[folder])
-	    					{
-								if (!in_array($value[folder], $folder_array))
-								{
-									array_push($folder_array, $value[folder]);
-								}
-							}
-	    					
-	    				}	
-	    				
-	    				if (is_array($folder_array) and count($folder_array) >= 1)
-	    				{
-	    					foreach($folder_array as $key => $value)
-	    					{
-	    						$folder_name = strtolower(trim($value));
-	    						$folder_name = str_replace(" ","-",$folder_name);
-			
-								$folder_path = new Path($folder->get_path());
-								$folder_path->add_element($folder_name);
-
-								$sub_folder = Folder::get_instance(null);
-								if ($sub_folder->create($value, $folder_id, $folder_path->get_path_string(), $user->get_user_id(), null) == null)
-								{
-									$sample_folder->delete(true, true);
-									if ($transaction_id != null)
-									{
-										$transaction->rollback($transaction_id);
-									}
-									throw new SampleCreationFailedException("",1);
-								}
-								
-								if ($sub_folder->set_flag(1024) == false)
-								{
-									$sample_folder->delete(true, true);
-									if ($transaction_id != null)
-									{
-										$transaction->rollback($transaction_id);
-									}
-									throw new SampleCreationFailedException("",1);
-								}
-	    					}
-	    				}
-	    			}
-	    			
+	    			}    			
 	    			
 	    			if (is_numeric($location_id))
 	    			{
@@ -246,7 +334,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 		    			$sample_has_locaiton_access = new SampleHasLocation_Access(null);
 		    			if ($sample_has_locaiton_access->create($sample_id, $location_id, $user->get_user_id()) == null)
 		    			{
-		    				$sample_folder->delete(true, true);
+		    				$this->sample_folder_object->delete(true, true);
 							if ($transaction_id != null)
 							{
 								$transaction->rollback($transaction_id);
@@ -254,29 +342,6 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 							throw new SampleCreationFailedException("",1);
 		    			}
 	    			}
-	    			
-	    			
-	    			// Create Item
-					if (($this->item_id = parent::create()) == null)
-					{
-						$sample_folder->delete(true, true);
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						throw new SampleCreationFailedException("",1);
-					}
-					
-					$sample_is_item = new SampleIsItem_Access(null);
-					if ($sample_is_item->create($sample_id, $this->item_id) == false)
-					{
-						$sample_folder->delete(true, true);
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						throw new SampleCreationFailedException("",1);
-					}
 		
 					// Create Required Value or Sample
 					if (is_array($this->template_data_array) and count($this->template_data_array) >= 1)
@@ -303,9 +368,9 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 						if ($this->template_data_type == "value")
 						{
 							$value = new Value(null);				
-							if ($value->create($folder_id, $user->get_user_id(), $this->template_data_type_id, $this->template_data_array) == null)
+							if ($value->create($this->sample_folder_id, $user->get_user_id(), $this->template_data_type_id, $this->template_data_array) == null)
 							{
-								$sample_folder->delete(true, true);
+								$this->sample_folder_object->delete(true, true);
 								if ($transaction_id != null)
 								{
 									$transaction->rollback($transaction_id);
@@ -317,7 +382,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 							
 							if ($sample_item->set_gid(1) == false)
 							{
-								$sample_folder->delete(true, true);
+								$this->sample_folder_object->delete(true, true);
 								if ($transaction_id != null)
 								{
 									$transaction->rollback($transaction_id);
@@ -329,7 +394,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 							
 							if ($sample_item->link_item() == false)
 							{
-								$sample_folder->delete(true, true);
+								$this->sample_folder_object->delete(true, true);
 								if ($transaction_id != null)
 								{
 									$transaction->rollback($transaction_id);
@@ -364,6 +429,329 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     	else
     	{
     		throw new SampleCreationFailedException("",1);
+    	}
+    }
+    
+    /**
+     * @see SampleInterface::clone_sample()
+     * @param integer $source_sample_id
+     * @param string $name
+     * @param integer $manufacturer_id
+     * @param integer $location_id
+     * @param string $desc
+     * @param integer $language_id
+     * @param string $date_of_expiry
+     * @param integer $expiry_warning
+     * @param array $value_array
+     * @param array $item_array
+     * @return integer
+     */
+    public function clone_sample($source_sample_id, $name, $manufacturer_id, $location_id, $desc, $language_id, $date_of_expiry, $expiry_warning, $value_array, $item_array)
+    {
+    	global $user, $transaction;
+    	
+    	if (is_numeric($source_sample_id) and $name)
+    	{
+    		$source_sample = new Sample($source_sample_id);
+    		$source_sample_security = new SampleSecurity($source_sample_id);
+    		$source_sample_folder_id = SampleFolder::get_folder_by_sample_id($source_sample_id);
+    		
+    		$transaction_id = $transaction->begin();
+	    		
+    		if (($sample_id = $this->sample->create($name, $user->get_user_id(), $source_sample->get_template_id(), $manufacturer_id, $desc, $language_id, $date_of_expiry, $expiry_warning)) != null)
+    		{
+    			if ($desc)
+				{
+					$this->sample->set_comment_text_search_vector($desc, "english");
+				}
+
+    			// Create Sample Folder
+	    		if (($sub_folder_name_array = $this->create_sample_folder($transaction_id, $sample_id, $source_sample->get_template_id())) === false)
+	    		{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					throw new SampleCreationFailedException("",1);
+	    		}
+    			
+	    		if ($this->create_sample_item($transaction_id, $sample_id) == false)
+	    		{
+	    			$this->sample_folder_object->delete(true, true);
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					throw new SampleCreationFailedException("",1);
+	    		}
+    			
+    			
+	    		$sample_security = new SampleSecurity($sample_id);
+				
+				$source_sample_user_list = $source_sample_security->list_users();
+				
+				if (is_array($source_sample_user_list) and count($source_sample_user_list) >= 1)
+				{
+					foreach($source_sample_user_list as $key => $value)
+					{
+						if ($sample_security->create_user($value, true, true) == null)
+		    			{
+		    				$this->sample_folder_object->delete(true, true);
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							throw new SampleCreationFailedException("",1);
+		    			}
+					}
+				}
+				
+				$source_sample_organisation_list = $source_sample_security->list_organisation_units();
+				
+				if (is_array($source_sample_organisation_list) and count($source_sample_organisation_list) >= 1)
+				{
+					foreach($source_sample_organisation_list as $key => $value)
+					{
+						if ($sample_security->create_organisation_unit($value) == null)
+	    				{
+	    					$this->sample_folder_object->delete(true, true);
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							throw new SampleCreationFailedException("",1);
+	    				}
+					}
+				}
+				
+				
+				// Locations
+				$source_sample_location_array = SampleHasLocation_Access::list_entries_by_sample_id($source_sample_id);
+				$end_sample_has_location_access = new SampleHasLocation_Access(end($source_sample_location_array));
+				
+				if (is_array($source_sample_location_array) and count($source_sample_location_array) >= 1)
+				{
+					if ($location_id != $end_sample_has_location_access->get_location_id())
+					{
+						$add_new_location = true;
+					}
+					else
+					{
+						$add_new_location = false;
+					}
+					
+					foreach ($source_sample_location_array as $key => $value)
+					{
+						$current_sample_has_location_access = new SampleHasLocation_Access($value);
+						$sample_has_location_access = new SampleHasLocation_Access(null);
+		    			if ($sample_has_location_access->create($sample_id, $current_sample_has_location_access->get_location_id(), $user->get_user_id()) == null)
+		    			{
+		    				$this->sample_folder_object->delete(true, true);
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							throw new SampleCreationFailedException("",1);
+		    			}
+					}
+				}
+				else
+				{
+					$add_new_location = true;
+				}
+				
+    			if (is_numeric($location_id) and $add_new_location == true)
+    			{
+	    			// Create First Location
+	    			$sample_has_location_access = new SampleHasLocation_Access(null);
+	    			if ($sample_has_location_access->create($sample_id, $location_id, $user->get_user_id()) == null)
+	    			{
+	    				$this->sample_folder_object->delete(true, true);
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						throw new SampleCreationFailedException("",1);
+	    			}
+    			}
+    			
+    			if (is_array($value_array) and count($item_array) >= 1)
+    			{
+    				$value_item_array = array();
+    				$value_data_array = array();
+    				
+    				foreach($value_array as $key => $value)
+    				{
+    					$key = str_replace("value-","",$key);
+    					$key_array = explode("-", $key, 2);
+    					
+    					if ($key_array[0] == "item")
+    					{
+    						$value_item_array[$key_array[1]] = $value;
+    					}
+    					elseif(is_numeric($key_array[0]))
+    					{
+    						$value_data_array[$key_array[0]][$key_array[1]] = $value;
+    					}
+    				}
+    				
+    				if (is_array($value_item_array) and count($value_item_array) >= 1)
+    				{
+    					foreach ($value_item_array as $key => $value)
+    					{
+    						$gid = SampleItem::get_gid_by_item_id_and_sample_id($value, $source_sample_id);
+    						$data_entity_id = DataEntity::get_entry_by_item_id($value);
+    						$value_id = Value::get_value_id_by_data_entity_id($data_entity_id);
+    						if (is_numeric($value_id))
+    						{
+    							$value_obj = new Value($value_id);
+    							$parent_folder_id = $value_obj->get_parent_folder_id();
+    							$value_type_id = $value_obj->get_type_id();
+    							
+    							if ($parent_folder_id == $source_sample_folder_id)
+    							{
+    								$new_folder_id = $this->sample_folder_id;
+    							}
+    							else
+    							{
+    								$folder_name = Folder::get_name_by_id($parent_folder_id);
+    								$new_folder_id = array_search(trim(strtolower($folder_name)),$sub_folder_name_array);
+    							}
+    							
+    							if (is_numeric($new_folder_id) and is_numeric($value_type_id))
+    							{
+    								$new_value_obj = new Value(null);
+    								$new_value_obj->create($new_folder_id, $user->get_user_id(), $value_type_id, $value_data_array[$key]);
+    								$new_value_item_id = $new_value_obj->get_item_id();
+    								
+    								$sample_item = new SampleItem($sample_id);
+    								$sample_item->set_item_id($new_value_item_id);
+    								$sample_item->set_gid($gid);
+    								$sample_item->link_item();
+    							}
+    						}
+    					}
+    				}
+    			}
+    			
+
+    			if (is_array($item_array) and count($item_array) >= 1)
+    			{
+    				$item_type_array = array();
+    				$item_data_array = array();
+    				
+    				foreach($item_array as $key => $value)
+    				{
+    					if ($value[1] == "1")
+    					{
+    						$item_explode_array = explode("-", $value[0]);
+    						
+    						if (!in_array($item_explode_array[0], $item_type_array))
+    						{
+    							array_push($item_type_array, $item_explode_array[0]);
+    						}
+    						if (!is_array($item_data_array[$item_explode_array[0]]))
+    						{
+    							$item_data_array[$item_explode_array[0]] = array();
+    						}
+    						array_push($item_data_array[$item_explode_array[0]], $item_explode_array[1]);
+    					}
+    				}
+    				
+    				if (is_array($item_type_array) and count($item_type_array) >= 1)
+    				{
+    					foreach($item_type_array as $key => $value)
+    					{
+    						if ($value == "file")
+    						{
+    							if (is_array($item_data_array[$value]) and count($item_data_array[$value]) >= 1)
+    							{
+    								foreach($item_data_array[$value] as $data_key => $data_value)
+	    							{
+			    						$gid = SampleItem::get_gid_by_item_id_and_sample_id($data_value, $source_sample_id);
+	    								
+	    								$data_entity_id = DataEntity::get_entry_by_item_id($data_value);
+		    							$file_id = File::get_file_id_by_data_entity_id($data_entity_id);
+		    							
+		    							if ($file_id)
+		    							{
+			    							$file_obj = new File($file_id);
+			    							$parent_folder_id = $file_obj->get_parent_folder_id();
+			    							    							
+			    							if ($parent_folder_id == $source_sample_folder_id)
+			    							{
+			    								$new_folder_id = $this->sample_folder_id;
+			    							}
+			    							else
+			    							{
+			    								$folder_name = Folder::get_name_by_id($parent_folder_id);
+			    								$new_folder_id = array_search(trim(strtolower($folder_name)),$sub_folder_name_array);
+			    							}
+			    							
+			    							if (is_numeric($new_folder_id))
+			    							{
+			    								$file_obj->copy($new_folder_id);
+			    								$new_file_item_id = $file_obj->get_item_id();
+			    								
+			    								$sample_item = new SampleItem($sample_id);
+			    								$sample_item->set_item_id($new_file_item_id);
+			    								$sample_item->set_gid($gid);
+			    								$sample_item->link_item();
+			    							}
+		    							}
+	    							}
+    							}
+    						}
+    						else
+    						{
+    							if (is_array($item_data_array[$value]) and count($item_data_array[$value]) >= 1)
+    							{
+    								$handling_class = Item::get_handling_class_by_type($value);
+    								
+    								if ($handling_class)
+    								{
+	    								foreach($item_data_array[$value] as $data_key => $data_value)
+	    								{
+	    									$gid = SampleItem::get_gid_by_item_id_and_sample_id($data_value, $source_sample_id);
+	    									
+	    									$new_item_id = $handling_class::clone_item($data_value);
+	    									
+	    									if ($new_item_id)
+	    									{
+	    										$sample_item = new SampleItem($sample_id);
+			    								$sample_item->set_item_id($new_item_id);
+			    								$sample_item->set_gid($gid);
+			    								$sample_item->link_item();
+	    									}
+	    								}
+    								}
+    							}
+    						}
+    					}
+    				}
+    			}
+    			
+    			if ($transaction_id != null)
+				{
+					$transaction->commit($transaction_id);
+				}
+	
+				$this->__construct($sample_id);
+    			return $sample_id;	
+    			
+    		}
+    		else
+    		{
+    			if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+    			throw new SampleCloneFailedException();
+    		}
+    	}
+    	else
+    	{
+    		throw new SampleCloneFailedException();
     	}
     }
     
@@ -809,6 +1197,18 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     	}
     }
     
+    public function get_description()
+    {
+    	if ($this->sample_id and $this->sample)
+    	{
+    		return $this->sample->get_comment();
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
     /**
      * @see SampleInterface::get_datetime()
      * @return string
@@ -1102,6 +1502,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
    	}
 
    	/**
+   	 * @todo overhaul
    	 * @see SampleInterface::list_user_related_samples()
    	 * @param integer $user_id
    	 * @return array
@@ -1226,6 +1627,16 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 		}
 	}
     
+	/**
+	 * @see ItemListenerInterface::clone_item()
+	 * @param integer $item_id
+	 * @return integer
+	 */
+	public static function clone_item($item_id)
+	{
+		return $item_id;
+	}
+	
 	/**
 	 * @see ItemListenerInterface::get_entry_by_item_id()
 	 * @param integer $item_id
@@ -1556,5 +1967,16 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     	
     	return true;
     }
+    
+	/**
+     * @see ItemHolderInterface::get_item_list_sql()
+	 * @param integer $holder_id
+	 * @return string
+	 */
+	public static function get_item_list_sql($holder_id)
+	{
+		return " SELECT item_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = ".$holder_id."";
+	}
+	
 }
 ?>

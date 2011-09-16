@@ -29,7 +29,7 @@ class AdminSampleTemplateCatIO
 {
 	public static function home()
 	{
-		$list = new List_IO(Sample_Wrapper::count_list_sample_template_categories(), 20);
+		$list = new ListStat_IO(Sample_Wrapper::count_list_sample_template_categories(), 20);
 		
 		$list->add_row("Name", "name", true, null);
 		$list->add_row("Edit", "edit", false, "10%");

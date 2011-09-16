@@ -56,7 +56,7 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 		{
 			type: "GET",
 			url: ajax_handler,
-			data: "session_id="+get_array['session_id']+"&run=get_content&page="+page,
+			data: "session_id="+get_array['session_id']+"&run=get_content&form_field_name="+form_field_name+"&page="+page,
 			success: function(data)
 			{
 				if (data)
@@ -80,9 +80,27 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 			array_counter++;
 		});
 		
+		$("."+form_field_name+":checkbox").each(function()
+		{
+			if ($(this).is(":checkbox:checked"))
+			{
+				return_array[array_counter] = new Array();
+				return_array[array_counter][0] = $(this).attr("name");
+				return_array[array_counter][1] = $(this).val();
+				array_counter++;
+			}
+			else
+			{
+				return_array[array_counter] = new Array();
+				return_array[array_counter][0] = $(this).attr("name");
+				return_array[array_counter][1] = 0;
+				array_counter++;
+			}
+		});
+		
 		$("."+form_field_name+"").each(function()
 		{	
-			if (($(this).is(":input") == true) && ($(this).is(":radio") == false))
+			if (($(this).is(":input") == true) && ($(this).is(":radio") == false) && ($(this).is(":checkbox") == false))
 			{
 				return_array[array_counter] = new Array();
 				return_array[array_counter][0] = $(this).attr("name");
@@ -180,6 +198,7 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 				{
 					if (data != '0')
 					{
+						// console.log(data);
 						window.setTimeout('window.location = "'+data+'"',500);
 					}
 					else

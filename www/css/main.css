@@ -1141,8 +1141,8 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 {
 	clear: left;
 	width: 750px;
-	border-top: 1px #D0D0D0 dotted;
-	height: 1px;
+	border-bottom: 1px #D0D0D0 dotted;
+	height: 4px;
 }
 .AssistantButton,
 .AssistantButtonDisabled

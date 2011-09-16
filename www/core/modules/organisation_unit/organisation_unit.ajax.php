@@ -49,7 +49,7 @@ class OrganisationUnitAjax extends Ajax
 		{
 			global $user;
 			
-			$list = new List_IO(OrganisationUnit_Wrapper::count_organisation_unit_members($organisation_unit_id), 20, "OrganisationUnitListPage");
+			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_members($organisation_unit_id), 20, "OrganisationUnitListPage");
 	
 			$list->add_row("","symbol",false,"16px");
 			$list->add_row("Username","username",true,null,"OrganisationUnitListSortUsername");
@@ -109,7 +109,7 @@ class OrganisationUnitAjax extends Ajax
 		{
 			global $user;
 			
-			$list = new List_IO(OrganisationUnit_Wrapper::count_organisation_unit_owners($organisation_unit_id), 20, "OrganisationUnitListPage");
+			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_owners($organisation_unit_id), 20, "OrganisationUnitListPage");
 	
 			$list->add_row("","symbol",false,"16px");
 			$list->add_row("Username","username",true,null,"OrganisationUnitListSortUsername");
@@ -169,7 +169,7 @@ class OrganisationUnitAjax extends Ajax
 		{
 			global $user;
 			
-			$list = new List_IO(OrganisationUnit_Wrapper::count_organisation_unit_leaders($organisation_unit_id), 20, "OrganisationUnitListPage");
+			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_leaders($organisation_unit_id), 20, "OrganisationUnitListPage");
 	
 			$list->add_row("","symbol",false,"16px");
 			$list->add_row("Username","username",true,null,"OrganisationUnitListSortUsername");
@@ -229,7 +229,7 @@ class OrganisationUnitAjax extends Ajax
 		{
 			global $user;
 			
-			$list = new List_IO(OrganisationUnit_Wrapper::count_organisation_unit_quality_managers($organisation_unit_id), 20, "OrganisationUnitListPage");
+			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_quality_managers($organisation_unit_id), 20, "OrganisationUnitListPage");
 	
 			$list->add_row("","symbol",false,"16px");
 			$list->add_row("Username","username",true,null,"OrganisationUnitListSortUsername");
@@ -289,7 +289,7 @@ class OrganisationUnitAjax extends Ajax
 		{
 			global $user;
 			
-			$list = new List_IO(OrganisationUnit_Wrapper::count_organisation_unit_groups($organisation_unit_id), 20, "OrganisationUnitListPage");
+			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_groups($organisation_unit_id), 20, "OrganisationUnitListPage");
 	
 			$list->add_row("","symbol",false,"16px");
 			$list->add_row("Groupname","groupname",true,null,"OrganisationUnitListSortGroupname");

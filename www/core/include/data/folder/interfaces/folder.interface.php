@@ -176,6 +176,13 @@ interface FolderInterface
 	public static function get_data_entity_id_by_folder_id($folder_id);
 	
 	/**
+	 * Returns folder name by id without create an instance (due to performance reasons)
+	 * @param integer $folder_id
+	 * @return string
+	 */
+	public static function get_name_by_id($folder_id);
+	
+	/**
 	 * @param string $type
 	 * @param string $handling_class
 	 * @param integer $include_id

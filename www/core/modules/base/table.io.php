@@ -23,7 +23,7 @@
  
 /**
  * @package base
- * @deprecated use List_IO as Table/List Handler Class
+ * @deprecated use ListStat_IO as Table/List Handler Class
  */
 class TableIO {
 

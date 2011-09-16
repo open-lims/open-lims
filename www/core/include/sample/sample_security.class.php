@@ -366,13 +366,16 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     			$virtual_folder = new VirtualFolder(null);
     			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
     			
-    			foreach($virtual_folder_array as $key => $value)
+    			if (is_array($virtual_folder_array))
     			{
-    				$virtual_folder = new SampleVirtualFolder($value);
-    				if ($virtual_folder->is_sample_vfolder() == true)
-    				{
-    					$virtual_folder_id = $value;
-    				}
+	    			foreach($virtual_folder_array as $key => $value)
+	    			{
+	    				$virtual_folder = new SampleVirtualFolder($value);
+	    				if ($virtual_folder->is_sample_vfolder() == true)
+	    				{
+	    					$virtual_folder_id = $value;
+	    				}
+	    			}
     			}
     			   			
     			if ($virtual_folder_id)
@@ -400,13 +403,16 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
 		    			$virtual_folder = new VirtualFolder(null);
 		    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
 		    			
-		    			foreach($virtual_folder_array as $key => $value)
+		    			if (is_array($virtual_folder_array))
 		    			{
-		    				$virtual_folder = new SampleVirtualFolder($value);
-		    				if ($virtual_folder->is_sample_vfolder() == true)
-		    				{
-		    					$virtual_folder_id = $value;
-		    				}
+			    			foreach($virtual_folder_array as $key => $value)
+			    			{
+			    				$virtual_folder = new SampleVirtualFolder($value);
+			    				if ($virtual_folder->is_sample_vfolder() == true)
+			    				{
+			    					$virtual_folder_id = $value;
+			    				}
+			    			}
 		    			}
 		    			
 		    			if (is_numeric($virtual_folder_id))
@@ -625,6 +631,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     }
     
     /**
+     * @todo PERFORMANCE: avoid foreach
      * @see SampleSecurityInterface::list_users()
      * @return array
      */
@@ -658,6 +665,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     }
    	
    	/**
+   	 * @todo PERFORMANCE: avoid foreach
    	 * @see SampleSecurityInterface::list_organisation_units()
    	 * @return array
    	 */

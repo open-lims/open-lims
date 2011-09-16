@@ -80,6 +80,26 @@ interface ItemInterface
 	 * @return string
 	 */
 	public static function get_handling_class_by_type($type);
+	
+	/**
+	 * @param string $name
+	 * @param string $handling_class
+	 * @param integer $include_id
+	 * @return bool
+	 */
+	public static function register_holder($name, $handling_class, $include_id);
+	
+	/**
+	 * @param integer $include_id
+	 * @return bool
+	 */
+	public static function delete_holder_by_include_id($include_id);
+	
+	/**
+	 * @param string $name
+	 * @return string
+	 */
+	public static function get_holder_handling_class_by_name($name);
 }
 
 ?>

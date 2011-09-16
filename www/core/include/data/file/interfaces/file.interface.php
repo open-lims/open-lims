@@ -109,6 +109,7 @@ interface FileInterface
 	
 	/**
 	 * Copies file to another location
+	 * Copies the current version only.
 	 * @param integer $folder_id
 	 * @return bool
 	 */

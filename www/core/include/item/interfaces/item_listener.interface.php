@@ -43,6 +43,13 @@ interface ItemListenerInterface
 	public function get_item_parents();
 	
 	/**
+	 * Clones the item and returns its ID
+	 * @param integer $item_id
+	 * @return integer
+	 */
+	public static function clone_item($item_id);
+	
+	/**
 	 * Returns entry ID via item ID
 	 * @param integer $item_id
 	 * @return integer

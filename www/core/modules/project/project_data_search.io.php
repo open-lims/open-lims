@@ -236,7 +236,7 @@ class ProjectDataSearchIO
 				}	
 			}
 											
-			$list = new List_IO(Project_Wrapper::count_data_search($string, $project_id_array, $item_type_array), 20);
+			$list = new ListStat_IO(Project_Wrapper::count_data_search($string, $project_id_array, $item_type_array), 20);
 			
 			if (is_array($result_array) and count($result_array) >= 1)
 			{
