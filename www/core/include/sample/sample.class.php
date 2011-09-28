@@ -367,7 +367,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 						
 						if ($this->template_data_type == "value")
 						{
-							$value = new Value(null);				
+							$value = Value::get_instance(null);				
 							if ($value->create($this->sample_folder_id, $user->get_user_id(), $this->template_data_type_id, $this->template_data_array) == null)
 							{
 								$this->sample_folder_object->delete(true, true);
@@ -604,7 +604,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     						$value_id = Value::get_value_id_by_data_entity_id($data_entity_id);
     						if (is_numeric($value_id))
     						{
-    							$value_obj = new Value($value_id);
+    							$value_obj = Value::get_instance($value_id);
     							$parent_folder_id = $value_obj->get_parent_folder_id();
     							$value_type_id = $value_obj->get_type_id();
     							
@@ -620,7 +620,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     							
     							if (is_numeric($new_folder_id) and is_numeric($value_type_id))
     							{
-    								$new_value_obj = new Value(null);
+    								$new_value_obj = Value::get_instance(null);
     								$new_value_obj->create($new_folder_id, $user->get_user_id(), $value_type_id, $value_data_array[$key]);
     								$new_value_item_id = $new_value_obj->get_item_id();
     								
@@ -675,7 +675,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 		    							
 		    							if ($file_id)
 		    							{
-			    							$file_obj = new File($file_id);
+			    							$file_obj = File::get_instance($file_id);
 			    							$parent_folder_id = $file_obj->get_parent_folder_id();
 			    							    							
 			    							if ($parent_folder_id == $source_sample_folder_id)

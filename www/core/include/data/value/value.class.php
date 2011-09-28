@@ -42,6 +42,8 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class Value extends DataEntity implements ValueInterface, EventListenerInterface
 {
+	private static $value_object_array;
+	
 	private $value_id;
 	
 	private $value;
@@ -1843,5 +1845,30 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
     	return true;
     }
     
+	/**
+     * @see ValueInterface::get_instance()
+     * @param integer $file_id
+     * @return object
+     */
+    public static function get_instance($value_id)
+    {    
+    	if (is_numeric($value_id) and $value_id > 0)
+    	{
+			if (self::$value_object_array[$value_id])
+			{
+				return self::$value_object_array[$value_id];
+			}
+			else
+			{
+				$value = new Value($value_id);
+				self::$value_object_array[$value_id] = $value;
+				return $value;
+			}
+    	}
+    	else
+    	{
+    		return new Value(null);
+    	}
+    }
 }
 ?>

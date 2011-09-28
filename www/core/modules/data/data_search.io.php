@@ -162,7 +162,7 @@ class DataSearchIO
 					
 					if (is_numeric($value[file_id]))
 					{
-						$file = new File($value[file_id]);
+						$file = File::get_instance($value[file_id]);
 						
 						$paramquery = $_GET;
 						$paramquery[nav] = "file";
@@ -203,7 +203,7 @@ class DataSearchIO
 					
 					if (is_numeric($value[value_id]))
 					{
-						$value_obj = new Value($value[value_id]);
+						$value_obj = Value::get_instance($value[value_id]);
 						
 						$paramquery = $_GET;
 						$paramquery[nav] = "value";

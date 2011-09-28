@@ -148,7 +148,7 @@ class AdminProjectTemplateIO
 				{
 					if (($file_id = File::get_file_id_by_data_entity_id($value)) != null)
 					{
-						$file = new File($file_id);
+						$file = File::get_instance($file_id);
 						$result[$counter][value] = $value;
 						$result[$counter][content] = $file->get_name();
 						$counter++;

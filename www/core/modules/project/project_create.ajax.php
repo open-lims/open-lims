@@ -294,7 +294,7 @@ class ProjectCreateAjax extends Ajax
 					{
 						$template = new Template("../../../template/projects/new_project_page_4_value.html");
 						
-						$value_obj = new Value(null);
+						$value_obj = Value::get_instance(null);
 						if ($project_template_data_type == "value")
 						{
 							$value_obj->set_content_array($project_template_data_array);

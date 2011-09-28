@@ -175,6 +175,12 @@ interface DataEntityInterface
 	 * @return bool
 	 */
 	public function unset_children();
+	
+	/**
+     * @param integer $entity_id
+     * @return object
+     */
+    public static function get_instance($entity_id);
 }
 
 ?>

@@ -94,7 +94,7 @@ class FileAjax extends Ajax
 						}
 					} 
 					
-					$file = new File($list_array[$key][id]);
+					$file = File::get_instance($list_array[$key][id]);
 					$list_array[$key][symbol] = "<img src='".$file->get_icon()."' alt='' style='border:0;' />";
 					
 					$list_array[$key][size] = Misc::calc_size($list_array[$key][size]);

@@ -97,7 +97,7 @@
 			
 			if (!empty($_FILES['file-1']['name']))
 			{				
-				$file = new File($_GET[file_id]);
+				$file = File::get_instance($_GET[file_id]);
 				$session_file_array[1] = $file->update_file($_FILES['file-1'], $previous_version_id, $major, $current);
 				$session->write_value("FILE_UPLOAD_".$_GET[unique_id], $session_file_array, true);
 				$session->write_value("FILE_UPLOAD_FINISHED_".$_GET[unique_id], true, true);

@@ -33,7 +33,7 @@ class FileIO
 		{
 			if ($_GET[file_id])
 			{
-				$file = new File($_GET[file_id]);
+				$file = File::get_instance($_GET[file_id]);
 				
 				if ($file->is_read_access())
 				{
@@ -73,7 +73,7 @@ class FileIO
 						
 						foreach($file_version_array as $key => $value)
 						{
-							$file_version = new File($_GET[file_id]);
+							$file_version = File::get_instance($_GET[file_id]);
 							$file_version->open_internal_revision($value);
 							
 							$result[$counter][version] = $file_version->get_internal_revision();
@@ -393,7 +393,7 @@ class FileIO
 	{
 		if ($_GET[file_id])
 		{		
-			$file = new File($_GET[file_id]);
+			$file = File::get_instance($_GET[file_id]);
 			
 			if ($file->is_write_access())
 			{
@@ -448,7 +448,7 @@ class FileIO
 	{		
 		if ($_GET[file_id])
 		{
-			$file = new File($_GET[file_id]);
+			$file = File::get_instance($_GET[file_id]);
 			
 			if ($file->is_delete_access())
 			{
@@ -473,7 +473,7 @@ class FileIO
 				}
 				else
 				{
-					$file = new File($_GET[file_id]);
+					$file = File::get_instance($_GET[file_id]);
 					
 					if ($file->delete() == true)
 					{
@@ -515,7 +515,7 @@ class FileIO
 	{		
 		if ($_GET[file_id] and $_GET[version])
 		{
-			$file = new File($_GET[file_id]);
+			$file = File::get_instance($_GET[file_id]);
 			
 			if ($file->is_delete_access())
 			{
@@ -540,7 +540,7 @@ class FileIO
 				}
 				else
 				{
-					$file = new File($_GET[file_id]);
+					$file = File::get_instance($_GET[file_id]);
 					
 					if (($return_value = $file->delete_version($_GET[version])) != 0)
 					{
@@ -592,7 +592,7 @@ class FileIO
 	{
 		if ($_GET[file_id])
 		{
-			$file = new File($_GET[file_id]);
+			$file = File::get_instance($_GET[file_id]);
 			
 			if ($file->is_read_access())
 			{

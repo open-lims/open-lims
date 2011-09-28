@@ -45,7 +45,7 @@ class DataReportIO
 			{				
 				foreach ($value_array as $key => $value)
 				{
-					$value_object = new Value($value['id']);
+					$value_object = Value::get_instance($value['id']);
 					$value_object_value_array = $value_object->get_value_content(false);
 					
 					$pdf->addPage();
@@ -138,7 +138,7 @@ class DataReportIO
 												
 				foreach ($file_array as $key => $value)
 				{
-					$file = new File($value['id']);
+					$file = File::get_instance($value['id']);
 					$owner = new User($value['owner_id']);
 					$datetime_handler = new DatetimeHandler($value['datetime']);
 					

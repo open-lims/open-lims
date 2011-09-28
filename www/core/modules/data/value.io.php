@@ -38,7 +38,7 @@ class ValueIO
 		{
 			if ($_GET[value_id])
 			{
-				$value = new Value($_GET[value_id]);
+				$value = Value::get_instance($_GET[value_id]);
 				
 				if ($value->is_read_access())
 				{
@@ -108,7 +108,7 @@ class ValueIO
 								
 								foreach($value_version_array as $key => $fe_value)
 								{
-									$value_version = new Value($_GET[value_id]);
+									$value_version = Value::get_instance($_GET[value_id]);
 									$value_version->open_internal_revision($fe_value);
 									
 									$result[$counter][version] = $value_version->get_internal_revision();
@@ -197,7 +197,7 @@ class ValueIO
 								
 								foreach($value_version_array as $key => $fe_value)
 								{
-									$value_version = new Value($_GET[value_id]);
+									$value_version = Value::get_instance($_GET[value_id]);
 									$value_version->open_internal_revision($fe_value);
 									
 									$result[$counter][version] = $value_version->get_internal_revision();
@@ -361,7 +361,7 @@ class ValueIO
 				
 				if (count($type_array) == 0)
 				{
-					$value_obj = new Value(null);
+					$value_obj = Value::get_instance(null);
 					$value_type_array = ValueType::list_entries();
 					
 					foreach($value_type_array as $key => $value)
@@ -428,7 +428,7 @@ class ValueIO
 			}
 			else
 			{		
-				$value = new Value(null);
+				$value = Value::get_instance(null);
 				$value_type = new ValueType($type_id);
 				
 				if (!$_GET[nextpage] or $_GET[nextpage] == "1")
@@ -497,7 +497,7 @@ class ValueIO
 		
 		if ($_GET[value_id])
 		{
-			$value_obj = new Value($_GET[value_id]);
+			$value_obj = Value::get_instance($_GET[value_id]);
 			
 			if ($value_obj->is_read_access())
 			{
@@ -609,7 +609,7 @@ class ValueIO
 	{
 		if ($_GET[value_id] and $_GET[version])
 		{
-			$value = new Value($_GET[value_id]);
+			$value = Value::get_instance($_GET[value_id]);
 			
 			if ($value->is_delete_access())
 			{

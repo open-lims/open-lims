@@ -125,7 +125,7 @@ class XmlCache implements XmlCacheInterface
 			$transaction_id = $transaction->begin();
 
     		$file_id = File::get_file_id_by_data_entity_id($this->data_entity_id);
-    		$file = new File($file_id);
+    		$file = File::get_instance($file_id);
     		
     		$folder = Folder::get_instance($file->get_parent_folder());
 			$folder_path = $folder->get_path();

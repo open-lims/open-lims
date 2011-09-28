@@ -29,25 +29,29 @@
 interface FolderInterface
 {
 	/**
+	 * @param bool $inherit
 	 * @return bool
 	 */
-	public function is_flag_change_permission();
+	public function can_change_permission($inherit = false);
 	
 	/**
+	 * @param bool $inherit
 	 * @return bool
 	 */
-	public function is_flag_add_folder();
+	public function can_add_folder($inherit = false);
 	
 	/**
+	 * @param bool $inherit
 	 * @return bool
 	 */
-	public function is_flag_cmd_folder();
+	public function can_command_folder($inherit = false);
 	
 	/**
+	 * @param bool $inherit
 	 * @return bool
 	 */
-	public function is_flag_rename_folder();
-
+	public function can_rename_folder($inherit = false);
+	
 	/**
 	 * @return bool
 	 */

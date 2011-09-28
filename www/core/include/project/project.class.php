@@ -309,7 +309,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					}			
 					
 					// Create Project Description
-					$value = new Value(null);
+					$value = Value::get_instance(null);
 					if ($value->create($folder_id, $owner_id, 2, $description) == null)
 					{
 						$project_folder->delete(true, true);
@@ -348,7 +348,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					// Create Project Master Data
 					if ($this->template_data_array and is_numeric($this->template_data_type_id))
 					{
-						$value = new Value(null);				
+						$value = Value::get_instance(null);				
 						
 						if ($value->create($folder_id, $owner_id, $this->template_data_type_id, $this->template_data_array) == null)
 						{
@@ -1893,7 +1893,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 				}
 			}
 			
-			$value = new Value($description_id);
+			$value = Value::get_instance($description_id);
 			if ($value->get_type_id() == 2)
 			{
 				return unserialize($value->get_value());

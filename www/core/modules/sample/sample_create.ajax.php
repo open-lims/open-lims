@@ -355,7 +355,7 @@ class SampleCreateAjax extends Ajax
 						{
 							$template = new Template("../../../template/samples/new_sample_page_4_value.html");
 							
-							$value_obj = new Value(null);
+							$value_obj = Value::get_instance(null);
 							if ($sample_template_data_type == "value")
 							{
 								$value->set_content_array($sample_template_data_array);

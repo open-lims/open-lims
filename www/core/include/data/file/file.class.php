@@ -45,6 +45,8 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class File extends DataEntity implements FileInterface, EventListenerInterface
 {
+	private static $file_object_array;
+	
 	private $file_id;
 	
 	private $file;
@@ -1867,6 +1869,32 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
     	}
     	
     	return true;
+    }
+    
+	/**
+     * @see FileInterface::get_instance()
+     * @param integer $file_id
+     * @return object
+     */
+    public static function get_instance($file_id)
+    {    
+    	if (is_numeric($file_id) and $file_id > 0)
+    	{
+			if (self::$file_object_array[$file_id])
+			{
+				return self::$file_object_array[$file_id];
+			}
+			else
+			{
+				$file = new File($file_id);
+				self::$file_object_array[$file_id] = $file;
+				return $file;
+			}
+    	}
+    	else
+    	{
+    		return new File(null);
+    	}
     }
 }
 ?>

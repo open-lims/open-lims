@@ -75,7 +75,7 @@
 			}	
 	
 			
-			$file = new File(null);
+			$file = File::get_instance(null);
 			$file_upload_successful = $file->upload_file_stack($file_amount, $folder_id, $_FILES, $_GET[unique_id]);
 	
 			if ($file_upload_successful == true)

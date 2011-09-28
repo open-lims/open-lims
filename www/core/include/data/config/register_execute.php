@@ -42,6 +42,11 @@ function register_data($include_id)
 	
 	if (Folder::delete_type_by_include_id($include_id))
 	{
+		if (Folder::register_type("system_folder", "SystemFolder", $include_id) == false)
+		{
+			return false;
+		}
+		
 		if (Folder::register_type("user_folder", "UserFolder", $include_id) == false)
 		{
 			return false;

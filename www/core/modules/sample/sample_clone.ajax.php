@@ -286,7 +286,7 @@ class SampleCloneAjax extends Ajax
 					
 					foreach($value_array as $key => $value)
 					{
-						$value_obj = new Value($value);
+						$value_obj = Value::get_instance($value);
 						$content_array[$content_counter]['headline'] = $value_obj->get_name();
 						$content_array[$content_counter]['html'] = $value_obj->get_html_form(null, null, null, "SampleCloneAssistantField", "value-".$key);
 						$content_array[$content_counter]['item_name'] = "value-item-".$key;

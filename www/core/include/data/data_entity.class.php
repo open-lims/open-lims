@@ -39,6 +39,8 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class DataEntity extends Item implements DataEntityInterface, EventListenerInterface, ItemListenerInterface
 {
+	private static $data_entity_object_array;
+	
 	private $data_entity;
 	
 	protected $data_entity_permission;
@@ -52,6 +54,9 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	protected $set_data_entity = false;
 	
 	protected $inherit_permission;
+	
+	protected $parent_folder_id;
+	protected $parent_folder_object;
 	
 	/**
 	 * @see DataEntityInterface::__construct()
@@ -76,6 +81,11 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		}
 		
 		$this->data_entity_permission = new DataEntityPermission($this->data_entity->get_permission(), $this->data_entity->get_automatic(), $this->data_entity->get_owner_id(), $this->data_entity->get_owner_group_id());
+		
+		if (!self::$data_entity_object_array[$entity_id])
+		{
+			self::$data_entity_object_array[$entity_id] = $this;
+		}
 		
 		if ($this->data_entity_permission->is_access(1))
 		{
@@ -112,70 +122,69 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		{
 			$this->control_access = false;
 		}
+
+		$this->parent_folder_id = $this->calc_parent_folder_id();
 		
-		if ($this->data_entity->get_automatic() == true and 
-			$this->data_entity->read_access == false and
-			$this->data_entity->write_access == false and
-			$this->data_entity->delete_access == false and 
-			$this->data_entity->control_access == false)
-		{
-			if ($parent_folder_id = $this->get_parent_folder_id())
-			{
-				$folder = Folder::get_instance($parent_folder_id);
-				if ($folder->get_inherit_permission() == true)
+		// Can create folder als methode => flag nur noch für corrupt (über parent folder object)
+
+		if (is_a($this, "SystemFolder") == false and is_numeric($this->parent_folder_id))
+		{	
+			$this->parent_folder_object = Folder::get_instance($this->parent_folder_id);
+			
+			if ($this->parent_folder_object->get_inherit_permission() == true and is_a($this->parent_folder_object, "SystemFolder") == false)
+			{				
+				$this->inherit_permission = true;
+				
+				if ($this->parent_folder_object->is_read_access(true) == true)
 				{
-					$this->inherit_permission = true;
-					if ($folder->is_read_access() == true)
-					{
-						$this->read_access = true;
-					}
-					if ($folder->is_write_access() == true)
-					{
-						$this->write_access = true;
-					}
-					if ($folder->is_delete_access() == true)
-					{
-						$this->delete_access = true;
-					}
-					if ($folder->is_control_access() == true)
-					{
-						$this->control_access = true;
-					}
-					if ($folder->can_set_data_entity() == true)
-					{
-						$this->set_data_entity = true;
-					}
+					$this->read_access = true;
 				}
-				elseif (is_subclass_of($folder, "Folder") == true)
+				else
 				{
-					$this->inherit_permission = true;
-					if ($folder->is_read_access() == true)
-					{
-						$this->read_access = true;
-					}
-					if ($folder->is_write_access() == true)
-					{
-						$this->write_access = true;
-					}
-					if ($folder->is_delete_access() == true)
-					{
-						$this->delete_access = true;
-					}
-					if ($folder->is_control_access() == true)
-					{
-						$this->control_access = true;
-					}
-					if ($folder->can_set_data_entity() == true)
-					{
-						$this->set_data_entity = true;
-					}
+					$this->read_access = false;
+				}
+				
+				if ($this->parent_folder_object->is_write_access(true) == true)
+				{
+					$this->write_access = true;
+				}
+				else
+				{
+					$this->write_access = false;
+				}
+				
+				if ($this->parent_folder_object->is_delete_access(true) == true)
+				{
+					$this->delete_access = true;
+				}
+				else
+				{
+					$this->delete_access = false;
+				}
+				
+				if ($this->parent_folder_object->is_control_access(true) == true)
+				{
+					$this->control_access = true;
+				}
+				else
+				{
+					$this->control_access = false;
+				}
+				
+				if ($this->parent_folder_object->can_set_data_entity() == true)
+				{
+					$this->set_data_entity = true;
 				}
 			}
 			else
 			{
 				$this->inherit_permission = false;
 			}
-		} 
+		}
+		else
+		{
+			$this->inherit_permission = false;
+		}
 	}
 
 	/**
@@ -189,7 +198,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	/**
 	 * @return bool
 	 */
-	protected final function get_inherit_permission()
+	protected function get_inherit_permission()
 	{
 		return $this->inherit_permission;
 	}
@@ -198,7 +207,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 * @see DataEntityInterface::is_read_access()
 	 * @return bool
 	 */
-	public function is_read_access()
+	public function is_read_access($inherit = false)
 	{
 		return $this->read_access;
 	}
@@ -207,7 +216,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 * @see DataEntityInterface::is_write_access()
 	 * @return bool
 	 */
-	public function is_write_access()
+	public function is_write_access($inherit = false)
 	{
 		return $this->write_access;
 	}
@@ -216,7 +225,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 * @see DataEntityInterface::is_delete_access()
 	 * @return bool
 	 */
-	public function is_delete_access()
+	public function is_delete_access($inherit = false)
 	{
 		return $this->delete_access;
 	}
@@ -225,7 +234,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 * @see DataEntityInterface::is_control_access()
 	 * @return bool
 	 */
-	public function is_control_access()
+	public function is_control_access($inherit = false)
 	{
 		return $this->control_access;
 	}
@@ -424,11 +433,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		}
 	}
 	
-	/**
-	 * @see DataEntityInterface::get_parent_folder_id()
-	 * @return integer
-	 */
-	public final function get_parent_folder_id()
+	private function calc_parent_folder_id()
 	{
 		if ($this->data_entity_id)
 		{
@@ -453,6 +458,19 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		{
 			return null;
 		}
+	}
+	
+	/**
+	 * @see DataEntityInterface::get_parent_folder_id()
+	 * @return integer
+	 */
+	public final function get_parent_folder_id()
+	{
+		if (!$this->parent_folder_id)
+		{
+			$this->parent_folder_id = $this->calc_parent_folder_id();
+		}
+		return $this->parent_folder_id;
 	}
 	
 	/**
@@ -816,13 +834,13 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		{
 			if (($file_id = File::get_file_id_by_data_entity_id($this->data_entity_id)) != null)
 			{
-				$file = new File($file_id);
+				$file = File::get_instance($file_id);
 	    		return $file->get_name();
 			}
 					
 	    	if (($value_id = Value::get_value_id_by_data_entity_id($this->data_entity_id)) != null)
 			{
-				$value = new Value($value_id);
+				$value = Value::get_instance($value_id);
 	    		return $value->get_name();
 			}
 		}
@@ -979,7 +997,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
     {
    		if ($type == "file")
     	{
-    		$file = new File($id);
+    		$file = File::get_instance($id);
     		return "<img src='".$file->get_icon()."' alt='' style='border: 0;' />";
     	}
     	else
@@ -1148,7 +1166,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
     		{
     			if (($file_id = File::get_file_id_by_data_entity_id($data_entity_id)) != null)
 				{
-					$file = new File($file_id);
+					$file = File::get_instance($file_id);
     				if ($file->delete() == false)
     				{
     					return false;
@@ -1157,7 +1175,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 				
     			if (($value_id = Value::get_value_id_by_data_entity_id($data_entity_id)) != null)
 				{
-					$value = new Value($value_id);
+					$value = Value::get_instance($value_id);
     				if ($value->delete() == false)
     				{
     					return false;
@@ -1183,6 +1201,32 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
     	}
     	
     	return true;
+    }
+    
+	/**
+     * @see DataEntityInterface::get_instance()
+     * @param integer $entity_id
+     * @return object
+     */
+    public static function get_instance($entity_id)
+    {
+    	if (is_numeric($entity_id) and $entity_id > 0)
+    	{
+			if (self::$data_entity_object_array[$entity_id])
+			{
+				return self::$data_entity_object_array[$entity_id];
+			}
+			else
+			{
+				$data_entity = new DataEntity($entity_id);
+				self::$data_entity_object_array[$entity_id] = $data_entity;
+				return $data_entity;
+			}
+    	}
+    	else
+    	{
+    		return new DataEntity(null);
+    	}
     }
 }
 ?>

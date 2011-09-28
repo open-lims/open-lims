@@ -46,6 +46,11 @@ class Folder extends DataEntity implements FolderInterface
 	private $folder_id;
 	private $folder;
 
+	private $folder_change_permission;
+	private $folder_add_folder;
+	private $folder_command_folder;
+	private $folder_rename_folder;
+	
 	/**
 	 * Get instance via static::get_instance($folder_id)
 	 * @param integer $folder_id
@@ -66,12 +71,61 @@ class Folder extends DataEntity implements FolderInterface
 			if ($this->folder->get_id() != null)
 			{
 				parent::__construct($this->folder->get_data_entity_id());
-				
+
 				$this->data_entity_permission->set_folder_flag($this->folder->get_flag());
 				
 				if ($this->data_entity_permission->is_access(1))
 				{
 					$this->read_access = true;
+				}
+				
+				if (is_object($this->parent_folder_object))
+				{
+					if ($this->parent_folder_object->get_inherit_permission() == true)
+					{
+						if ($this->parent_folder_object->can_change_permission(true) == true)
+						{
+							$this->folder_change_permission = true;
+						}
+						else
+						{
+							$this->folder_change_permission = false;
+						}
+						
+						if ($this->parent_folder_object->can_add_folder(true) == true)
+						{
+							$this->folder_add_folder = true;
+						}
+						else
+						{
+							$this->folder_add_folder = false;
+						}
+						
+						if ($this->parent_folder_object->can_command_folder(true) == true)
+						{
+							$this->folder_command_folder = true;
+						}
+						else
+						{
+							$this->folder_command_folder = false;
+						}
+						
+						if ($this->parent_folder_object->can_rename_folder(true) == true)
+						{
+							$this->folder_rename_folder = true;
+						}
+						else
+						{
+							$this->folder_rename_folder = false;
+						}
+					}
+					else
+					{
+						$this->folder_change_permission = true;
+						$this->folder_add_folder = true;
+						$this->folder_command_folder = true;
+						$this->folder_rename_folder = true;
+					}
 				}
 			}
 			else
@@ -87,197 +141,47 @@ class Folder extends DataEntity implements FolderInterface
 	{
 		// Empty
 	}
-	
+				
 	/**
-	 * @see FolderInterface::is_flag_change_permission()
+	 * @see FolderInterface::can_change_permission()
+	 * @param bool $inherit
 	 * @return bool
 	 */
-	public function is_flag_change_permission()
+	public function can_change_permission($inherit = false)
 	{
-		if ($this->folder and $this->folder_id)
-		{
-			if ($this->is_control_access() == true)
-			{
-				$flag = $this->folder->get_flag();
-				
-				if ($flag)
-				{
-					if ($flag == 1 or
-						$flag == 2 or
-						$flag == 4 or
-						$flag == 8 or
-						$flag == 16 or
-						$flag == 32 or
-						$flag == 512)
-					{
-						return false;
-					}
-					else
-					{
-						return true;
-					}
-				}
-				else
-				{
-					return true;
-				}
-			}
-			else
-			{
-				return false;	
-			}
-		}
-		else
-		{
-			return false;
-		}
+		return $this->folder_change_permission;
 	}
 	
 	/**
-	 * @see FolderInterface::is_flag_add_folder()
+	 * @see FolderInterface::can_add_folder()
+	 * @param bool $inherit
 	 * @return bool
 	 */
-	public function is_flag_add_folder()
+	public function can_add_folder($inherit = false)
 	{
-		global $user;
-		
-		// CMD = Copy, Move, Delete
-		
-		if ($this->folder and $this->folder_id)
-		{
-			if ($this->is_write_access() == true)
-			{
-				$flag = $this->folder->get_flag();
-				
-				if ($flag)
-				{
-					if ($flag == 64 or
-						$flag == 128 or
-						$flag == 512)
-					{
-						return true;
-					}
-					else
-					{
-						if ($user->is_admin())
-						{
-							return true;
-						}
-						else
-						{
-							return false;
-						}
-					}
-					
-				}
-				else
-				{
-					return true;
-				}
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
+		return $this->folder_add_folder;
 	}
 	
 	/**
-	 * @see FolderInterface::is_flag_cmd_folder()
+	 * @see FolderInterface::can_command_folder()
+	 * @param bool $inherit
 	 * @return bool
 	 */
-	public function is_flag_cmd_folder()
+	public function can_command_folder($inherit = false)
 	{
-		global $user;
-		
-		// CMD = Copy, Move, Delete
-		
-		if ($this->folder and $this->folder_id)
-		{
-			if ($this->is_delete_access() == true)
-			{
-				$flag = $this->folder->get_flag();
-				
-				if ($flag)
-				{
-					if ($flag == 0 or
-						$flag == 64)
-					{
-						return true;
-					}
-					else
-					{
-						return false;
-					}
-				}
-				else
-				{
-					return true;
-				}
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
+		return $this->folder_command_folder;
 	}
 	
 	/**
-	 * @see FolderInterface::is_flag_rename_folder()
+	 * @see FolderInterface::can_rename_folder()
+	 * @param bool $inherit
 	 * @return bool
 	 */
-	public function is_flag_rename_folder()
+	public function can_rename_folder($inherit = false)
 	{
-		global $user;
-		
-		if ($this->folder and $this->folder_id)
-		{
-			if ($this->is_delete_access() == true)
-			{
-				$flag = $this->folder->get_flag();
-				
-				if ($flag)
-				{
-					if ($flag == 64)
-					{
-						return true;
-					}
-					else
-					{
-						if ($user->is_admin())
-						{
-							return true;
-						}
-						else
-						{
-							return false;
-						}
-					}
-				}
-				else
-				{
-					return true;
-				}
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
+		return $this->folder_rename_folder;
 	}
-		
+	
 	/**
 	 * Creates a new folder
 	 * @param string $name
@@ -372,7 +276,7 @@ class Folder extends DataEntity implements FolderInterface
 			return null;
 		}
 	}
-	
+		
 	/**
 	 * @see FolderInterface::exist_folder()
 	 * @return bool
@@ -485,7 +389,7 @@ class Folder extends DataEntity implements FolderInterface
 						// Files
 						if (($file_id = File::get_file_id_by_data_entity_id($value)) != null)
 						{
-							$file = new File($file_id);
+							$file = File::get_instance($file_id);
 							$file_delete = $file->delete();
 							if ($file_delete == false)
 							{
@@ -507,7 +411,7 @@ class Folder extends DataEntity implements FolderInterface
 						// Values
 						if (($value_id = Value::get_value_id_by_data_entity_id($value)) != null)
 						{
-							$value_obj = new Value($value);
+							$value_obj = Value::get_instance($value);
 							if ($value_obj->delete() == false)
 							{
 								if ($transaction_id != null)
@@ -811,7 +715,7 @@ class Folder extends DataEntity implements FolderInterface
 			$path = "";
 			$folder_id = $this->folder_id;
 			$folder_array = array();
-			$data_entity = new DataEntity($this->data_entity_id);
+			$data_entity = DataEntity::get_instance($this->data_entity_id);
 			
 			$return_array = array();
 			array_push($return_array,$this->folder_id);
@@ -837,7 +741,7 @@ class Folder extends DataEntity implements FolderInterface
 					return "database consistency error";
 				}
 				
-				$data_entity = new DataEntity($parent_data_entity_id);
+				$data_entity = DataEntity::get_instance($parent_data_entity_id);
 				$folder_id = Folder_Access::get_entry_by_data_entity_id($parent_data_entity_id);
 				$folder_access = new Folder($folder_id);
 				
@@ -867,14 +771,14 @@ class Folder extends DataEntity implements FolderInterface
 	{
 		if ($this->folder_id)
 		{
-			$data_entity = new DataEntity($this->data_entity_id);
+			$data_entity = DataEntity::get_instance($this->data_entity_id);
 			
 			$return_array = array();
 			array_push($return_array,$this->folder_id);
 			
 			while (($parent_data_entity_id = $data_entity->get_parent_folder()) != null)
 			{
-				$data_entity = new DataEntity($parent_data_entity_id);
+				$data_entity = DataEntity::get_instance($parent_data_entity_id);
 				array_push($return_array,Folder_Access::get_entry_by_data_entity_id($parent_data_entity_id));
 			}
 			
@@ -1061,7 +965,7 @@ class Folder extends DataEntity implements FolderInterface
 				{
 					if (($file_id = File::get_file_id_by_data_entity_id($value)) != null)
 					{
-						$file = new File($file_id);
+						$file = File::get_instance($file_id);
 						if ($file->is_image() == true)
 						{
 							return true;

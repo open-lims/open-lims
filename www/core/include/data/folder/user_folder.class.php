@@ -67,6 +67,74 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 	}
 
 	/**
+	 * @see FolderInterface::can_add_folder()
+	 * @param bool $inherit
+	 * @return bool
+	 */
+	public function can_change_permission($inherit = false)
+	{
+		if ($inherit == true)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @see FolderInterface::can_add_folder()
+	 * @param bool $inherit
+	 * @return bool
+	 */
+	public function can_add_folder($inherit = false)
+	{
+		if ($inherit == true)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @see FolderInterface::can_command_folder()
+	 * @param bool $inherit
+	 * @return bool
+	 */
+	public function can_command_folder($inherit = false)
+	{
+		if ($inherit == true)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @see FolderInterface::can_rename_folder()
+	 * @param bool $inherit
+	 * @return bool
+	 */
+	public function can_rename_folder($inherit = false)
+	{
+		if ($inherit == true)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
 	 * @param integer $user_id
 	 * @return bool
 	 */

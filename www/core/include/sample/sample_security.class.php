@@ -115,7 +115,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
 		    						}
 	    						}
 	    					}
-
+/*
 	    					$parent_virtual_folder_array = $sample_folder_data_entity->get_parent_virtual_folder_ids();
 	    					
 	    					if (is_array($parent_virtual_folder_array) and count($parent_virtual_folder_array) >= 1)
@@ -130,7 +130,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
 	    								return true;
 	    							}
 	    						}
-	    					}
+	    					} */
 	    					
 	    					return false;
 	    				}

@@ -16,7 +16,7 @@ List = function(ajax_handler, ajax_run, argument_array, css_main_id, css_page_id
 		$.ajax(
 		{
 			type: "POST",
-			url: ajax_handler+"?session_id="+get_array['session_id']+"&run="+ajax_run+"&sortvalue="+sort_value+"&sortmethod="+sort_method+"&page="+page,
+			url: ajax_handler+"?username="+get_array['username']+"&session_id="+get_array['session_id']+"&run="+ajax_run+"&sortvalue="+sort_value+"&sortmethod="+sort_method+"&page="+page,
 			data: "row_array="+row_array+"&argument_array="+argument_array+"&css_page_id="+css_page_id+"&css_row_sort_id="+css_row_sort_id,
 			success: function(data)
 			{
