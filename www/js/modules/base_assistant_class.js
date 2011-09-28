@@ -31,6 +31,13 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 		
 		$(".AssistantElement"+key+"").click(function()
 		{
+			var data = read_data();
+			
+			if (data)
+			{
+				set_data(page, data);
+			}
+			
 			var new_key = $(this).attr("class").replace(/AssistantElement/g, "");
 				new_key = $.trim(new_key);
 			var current_active_image = $(".AssistantElementImageActive").attr("src").replace("blue", "dgrey");
@@ -128,7 +135,16 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 			}
 		});
 	}
+	
+	this.save_data = function()
+	{
+		var data = read_data();
 		
+		if (data)
+		{
+			set_data(page, data);
+		}
+	}
 	
 	this.load_next_page = function()
 	{
@@ -139,7 +155,7 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 			
 			if (data)
 			{
-				set_data(page, data)
+				set_data(page, data);
 			}
 			
 			$("#AssistantContent").empty();
@@ -220,7 +236,7 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 			
 			if (data)
 			{
-				set_data(page, data)
+				set_data(page, data);
 			}
 			
 			$("#AssistantContent").empty();

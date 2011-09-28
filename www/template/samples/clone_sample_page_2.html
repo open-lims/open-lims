@@ -5,22 +5,45 @@ $(document).ready(function()
 	{
 		var return_value = true;
 		
-		$("#SampleCreateError1").html("");
-		$("#SampleCreateError2").html("");
-		$("#SampleCreateError3").html("");
-		$("#SampleCreateError4").html("");
+		$("#SampleCloneError1").html("");
+		$("#SampleCloneError2").html("");
+		$("#SampleCloneError3").html("");
+		$("#SampleCloneError4").html("");
 		
-		if (!$(".SampleCreateAssistantField[name='sample_name']").val())
+		if (!$(".SampleCloneAssistantField[name='sample_name']").val())
 		{
-			$("#SampleCreateError1").html("You have to enter a sample name.");
+			$("#SampleCloneError1").html("You have to enter a sample name.");
 			return_value = false;
+		}
+		else
+		{
+			$.ajax(
+			{
+				type: "GET",
+				url: "/core/modules/sample/sample_clone.ajax.php",
+				async: false,
+				data: "session_id="+get_array['session_id']+"&run=check_name&name="+$(".SampleCloneAssistantField[name='sample_name']").val(),
+				success: function(data)
+				{
+					if (data == '1')
+					{
+						$("#SampleCloneError1").html("<br />This is the same name like the source sample<br />Choose a new name to avoid confusion<br />Click 'next' or 'previous' to proceed.");
+						$("#SampleCloneAssistantFieldNameWarning").attr("value","1");
+						return_value = false;
+					}
+					else
+					{
+						$("#SampleCloneAssistantFieldNameWarning").attr("value","1");
+					}
+				}
+			});
 		}
 		
 		<!-- IF ([[CHECK_MANUFACTURER]]) -->
 		
-		if (!$(".SampleCreateAssistantField[name='sample_manufacturer_name']").val())
+		if (!$(".SampleCloneAssistantField[name='sample_manufacturer_name']").val())
 		{
-			$("#SampleCreateError2").html("You have to select a manufacturer.");
+			$("#SampleCloneError2").html("You have to select a manufacturer.");
 			return_value = false;
 		}
 		
@@ -28,9 +51,9 @@ $(document).ready(function()
 		
 		<!-- IF ([[CHECK_EXPIRY]]) -->
 		
-		if (!$(".SampleCreateAssistantField[name='sample_expiry']").val())
+		if (!$(".SampleCloneAssistantField[name='sample_expiry']").val())
 		{
-			$("#SampleCreateError3").html("You have to set a date of expiry.");
+			$("#SampleCloneError3").html("You have to set a date of expiry.");
 			return_value = false;
 		}
 		
@@ -38,16 +61,15 @@ $(document).ready(function()
 		
 		<!-- IF ([[CHECK_LOCATION]]) -->
 		
-		if (!$(".SampleCreateAssistantField[name='sample_location']").val())
+		if (!$(".SampleCloneAssistantField[name='sample_location']").val())
 		{
-			$("#SampleCreateError4").html("You have to select a sample location");
+			$("#SampleCloneError4").html("You have to select a sample location");
 			return_value = false;
 		}
 		
 		<!-- ENDIF -->
 		
-		// return return_value;
-		return true;
+		return return_value;
 	}
 	$("#AssistantPrevious").click(function()
 	{
@@ -55,12 +77,20 @@ $(document).ready(function()
 		{
 			assistant.load_previous_page();
 		}
+		else
+		{
+			assistant.save_data();
+		}
 	});
 	$("#AssistantNext").click(function()
 	{
 		if (check_form() == true)
 		{
 			assistant.load_next_page();
+		}
+		else
+		{
+			assistant.save_data();
 		}
 	});
 	
@@ -175,6 +205,7 @@ $(document).ready(function()
 	</tr>
 	<tr>
 		<td colspan='2'>
+			<input type='hidden' name='sample_name_warning' value='0' class='SampleCloneAssistantField' id='SampleCloneAssistantFieldNameWarning' />
 			<br />
 			<div class='button_left'><button id='AssistantPrevious' class='AssistantButtonDisabled'>previous</button></div>
 			<div class='button_right'><button id='AssistantNext' class='AssistantButton'>next</button></div>

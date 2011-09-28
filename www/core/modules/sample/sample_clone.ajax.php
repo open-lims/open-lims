@@ -37,6 +37,32 @@ class SampleCloneAjax extends Ajax
 		parent::__construct();
 	}
 	
+	private function check_name($name)
+	{
+		global $session;
+		
+		$sample_source_sample 	= $session->read_value("SAMPLE_CLONE_SOURCE_SAMPLE");
+		$sample_name_warning	= $session->read_value("SAMPLE_CLONE_NAME_WARNING");
+		
+		if ($sample_source_sample and !$sample_name_warning)
+		{
+			$source_sample = new Sample($sample_source_sample);
+			
+			if (trim(strtolower($source_sample->get_name())) == trim(strtolower($name)))
+			{
+				return "1";
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			return "0";
+		}	
+	}
+	
 	private function get_content($page, $form_field_name)
 	{
 		global $session, $user;
@@ -445,6 +471,13 @@ class SampleCloneAjax extends Ajax
 						{
 							$session->write_value("SAMPLE_CLONE_NAME",$value[1],true);
 						}
+						if ($value[0] == "sample_name_warning")
+						{
+							if (trim($value[1]) == "1")
+							{
+								$session->write_value("SAMPLE_CLONE_NAME_WARNING",true,true);
+							}
+						}
 						if ($value[0] == "sample_manufacturer_name")
 						{
 							$session->write_value("SAMPLE_CLONE_MANUFACTURER_NAME",$value[1],true);
@@ -528,6 +561,7 @@ class SampleCloneAjax extends Ajax
 				$session->delete_value("SAMPLE_CLONE_DESCRIPTION");
 				$session->delete_value("SAMPLE_CLONE_TEMPLATE_ARRAY");		
 				$session->delete_value("SAMPLE_CLONE_ITEM_ARRAY");
+				$session->delete_value("SAMPLE_CLONE_NAME_WARNING");
 				
 				$paramquery = array();
 				$paramquery['username'] = $username;
@@ -557,6 +591,10 @@ class SampleCloneAjax extends Ajax
 		if ($session->is_valid())
 		{
 			switch($_GET['run']):
+			
+				case "check_name":
+					echo $this->check_name($_GET['name']);
+				break;
 			
 				case "get_content":
 					echo $this->get_content($_GET['page'], $_GET['form_field_name']);

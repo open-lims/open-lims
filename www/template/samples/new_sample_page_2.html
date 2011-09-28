@@ -20,12 +20,20 @@ $(document).ready(function()
 		{
 			assistant.load_previous_page();
 		}
+		else
+		{
+			assistant.save_data();
+		}
 	});
 	$("#AssistantNext").click(function()
 	{
 		if (check_form() == true)
 		{
 			assistant.load_next_page();
+		}
+		else
+		{
+			assistant.save_data();
 		}
 	});
 });
