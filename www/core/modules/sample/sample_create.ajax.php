@@ -651,7 +651,7 @@ class SampleCreateAjax extends Ajax
 	private function run($username, $session_id)
 	{
 		global $session, $user;
-		
+			
 		$sample_add_role				= $session->read_value("SAMPLE_ADD_ROLE");
 		
 		$sample_item_retrace 			= $session->read_value("SAMPLE_ITEM_RETRACE");

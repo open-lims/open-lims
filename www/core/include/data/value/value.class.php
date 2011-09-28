@@ -1635,12 +1635,19 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 							if ($value[3][value] and !$value[3]['var'])
 							{
 		
-								$value_array = explode(",",$value[3]['value']);
-								$value_array_length = substr_count($value[3]['value'],",");
+								$value_array = explode(";;",$value[3]['value']);
+								$value_array_length = substr_count($value[3]['value'],";;");
 								
 								for ($i=0;$i<=$value_array_length;$i++)
 								{
-									$return .= "<option>".$value_array[$i]."</option>\n";
+									if (trim(strtolower($value_array[$i])) == trim(strtolower($field_default)))
+									{
+										$return .= "<option selected='selected'>".trim($value_array[$i])."</option>\n";
+									}
+									else
+									{
+										$return .= "<option>".trim($value_array[$i])."</option>\n";
+									}
 								}
 							}
 							elseif (!$value[3][value] and $value[3]['var'])

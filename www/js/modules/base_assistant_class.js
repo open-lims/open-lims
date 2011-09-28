@@ -196,9 +196,8 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 				},
 				success: function(data)
 				{
-					if (data != '0')
+					if ((data != '0') && ((data + '').indexOf("index.php?",0) == 0))
 					{
-						// console.log(data);
 						window.setTimeout('window.location = "'+data+'"',500);
 					}
 					else
