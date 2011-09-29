@@ -117,45 +117,172 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */ 
 
-function utf8_decode (str_data) {
-    // Converts a UTF-8 encoded string to ISO-8859-1  
+
+//utf_8_decode() removed by open-lims-team to maintain object oriented paradigm
+function unserialize (data) {
+    // Takes a string representation of variable and recreates it  
     // 
-    // version: 1103.1210
-    // discuss at: http://phpjs.org/functions/utf8_decode    // +   original by: Webtoolkit.info (http://www.webtoolkit.info/)
-    // +      input by: Aman Gupta
-    // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-    // +   improved by: Norman "zEh" Fuchs
-    // +   bugfixed by: hitwork    // +   bugfixed by: Onno Marsman
-    // +      input by: Brett Zamir (http://brett-zamir.me)
-    // +   bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-    // *     example 1: utf8_decode('Kevin van Zonneveld');
-    // *     returns 1: 'Kevin van Zonneveld'    var tmp_arr = [],
-    var i = 0,
-        ac = 0,
-        c1 = 0,
-        c2 = 0,        c3 = 0, tmp_arr = [];
- 
-    str_data += '';
- 
-    while (i < str_data.length) {        c1 = str_data.charCodeAt(i);
-        if (c1 < 128) {
-            tmp_arr[ac++] = String.fromCharCode(c1);
-            i++;
-        } else if (c1 > 191 && c1 < 224) {            c2 = str_data.charCodeAt(i + 1);
-            tmp_arr[ac++] = String.fromCharCode(((c1 & 31) << 6) | (c2 & 63));
-            i += 2;
-        } else {
-            c2 = str_data.charCodeAt(i + 1);            c3 = str_data.charCodeAt(i + 2);
-            tmp_arr[ac++] = String.fromCharCode(((c1 & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
-            i += 3;
+    // version: 1109.2015
+    // discuss at: http://phpjs.org/functions/unserialize    // +     original by: Arpad Ray (mailto:arpad@php.net)
+    // +     improved by: Pedro Tainha (http://www.pedrotainha.com)
+    // +     bugfixed by: dptr1988
+    // +      revised by: d3x
+    // +     improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)    // +        input by: Brett Zamir (http://brett-zamir.me)
+    // +     improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // +     improved by: Chris
+    // +     improved by: James
+    // +        input by: Martin (http://www.erlenwiese.de/)    // +     bugfixed by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // +     improved by: Le Torbi
+    // +     input by: kilops
+    // +     bugfixed by: Brett Zamir (http://brett-zamir.me)
+    // -      depends on: utf8_decode    // %            note: We feel the main purpose of this function should be to ease the transport of data between php & js
+    // %            note: Aiming for PHP-compatibility, we have to translate objects to arrays
+    // *       example 1: unserialize('a:3:{i:0;s:5:"Kevin";i:1;s:3:"van";i:2;s:9:"Zonneveld";}');
+    // *       returns 1: ['Kevin', 'van', 'Zonneveld']
+    // *       example 2: unserialize('a:3:{s:9:"firstName";s:5:"Kevin";s:7:"midName";s:3:"van";s:7:"surName";s:9:"Zonneveld";}');    // *       returns 2: {firstName: 'Kevin', midName: 'van', surName: 'Zonneveld'}
+    var that = this;
+    var utf8Overhead = function (chr) {
+        // http://phpjs.org/functions/unserialize:571#comment_95906
+        var code = chr.charCodeAt(0);        
+        if (code < 0x0080) {
+            return 0;
         }
-    } 
-    return tmp_arr.join('');
+        if (code < 0x0800) {
+            return 1;        
+        }
+        return 2;
+    };
+ 
+    var error = function (type, msg, filename, line) {
+        throw new that.window[type](msg, filename, line);
+    };
+    var read_until = function (data, offset, stopchr) {
+        var buf = [];        
+        var chr = data.slice(offset, offset + 1);
+        var i = 2;
+        while (chr != stopchr) {
+            if ((i + offset) > data.length) {
+                error('Error', 'Invalid');            
+            }
+            buf.push(chr);
+            chr = data.slice(offset + (i - 1), offset + i);
+            i += 1;
+        }       
+        return [buf.length, buf.join('')];
+    };
+    var read_chrs = function (data, offset, length) {
+        var buf;
+        buf = [];
+        for (var i = 0; i < length; i++) {
+            var chr = data.slice(offset + (i - 1), offset + i);
+            buf.push(chr);
+            length -= utf8Overhead(chr);        
+        }
+        return [buf.length, buf.join('')];
+    };
+    var _unserialize = function (data, offset) {
+        var readdata;        
+        var readData;
+        var chrs = 0;
+        var ccount;
+        var stringlength;
+        var keyandchrs;        
+        var keys;
+ 
+        if (!offset) {
+            offset = 0;
+        }        
+        var dtype = (data.slice(offset, offset + 1)).toLowerCase();
+ 
+        var dataoffset = offset + 2;
+        var typeconvert = function (x) {
+            return x;        
+        };
+ 
+        switch (dtype) {
+        case 'i':
+            typeconvert = function (x) {                
+        		return parseInt(x, 10);
+            };
+            readData = read_until(data, dataoffset, ';');
+            chrs = readData[0];
+            readdata = readData[1];            
+            dataoffset += chrs + 1;
+            break;
+        case 'b':
+            typeconvert = function (x) {
+                return parseInt(x, 10) !== 0;           
+            };
+            readData = read_until(data, dataoffset, ';');
+            chrs = readData[0];
+            readdata = readData[1];
+            dataoffset += chrs + 1;            
+            break;
+        case 'd':
+            typeconvert = function (x) {
+                return parseFloat(x);
+            };            
+            readData = read_until(data, dataoffset, ';');
+            chrs = readData[0];
+            readdata = readData[1];
+            dataoffset += chrs + 1;
+            break;        case 'n':
+            readdata = null;
+            break;
+        case 's':
+            ccount = read_until(data, dataoffset, ':');            
+            chrs = ccount[0];
+            stringlength = ccount[1];
+            dataoffset += chrs + 2;
+ 
+            readData = read_chrs(data, dataoffset + 1, parseInt(stringlength, 10));            
+            chrs = readData[0];
+            readdata = readData[1];
+            dataoffset += chrs + 2;
+            if (chrs != parseInt(stringlength, 10) && chrs != readdata.length) {
+                error('SyntaxError', 'String length mismatch');            
+            }
+ 
+            // Length was calculated on an utf-8 encoded string
+            // so wait with decoding
+            break;
+        case 'a':
+            readdata = {};
+ 
+            keyandchrs = read_until(data, dataoffset, ':');           
+            chrs = keyandchrs[0];
+            keys = keyandchrs[1];
+            dataoffset += chrs + 2;
+ 
+            for (var i = 0; i < parseInt(keys, 10); i++) {                
+            	var kprops = _unserialize(data, dataoffset);
+                var kchrs = kprops[1];
+                var key = kprops[2];
+                dataoffset += kchrs;
+                var vprops = _unserialize(data, dataoffset);
+                var vchrs = vprops[1];
+                var value = vprops[2];
+                dataoffset += vchrs;
+                readdata[key] = value;
+            }
+            dataoffset += 1;
+            break;       
+        default:
+            error('SyntaxError', 'Unknown / Unhandled data type(s): ' + dtype);
+            break;
+        }
+        return [dtype, dataoffset - offset, typeconvert(readdata)];    
+        };
+ 
+    return _unserialize((data + ''), 0)[2];
 }
+
+
+//utf_8_decode() removed by open-lims-team to prevent encoding errors
 function base64_decode (data) {
     // Decodes string using MIME base64 algorithm  
     // 
-    // version: 1103.1210
+    // version: 1109.2015
     // discuss at: http://phpjs.org/functions/base64_decode    // +   original by: Tyler Akins (http://rumkin.com)
     // +   improved by: Thunder.m
     // +      input by: Aman Gupta
@@ -176,11 +303,13 @@ function base64_decode (data) {
         tmp_arr = [];
  
     if (!data) {
-        return data;    }
+        return data;    
+    }
  
     data += '';
  
-    do { // unpack four hexets into three octets using index points in b64        h1 = b64.indexOf(data.charAt(i++));
+    do { // unpack four hexets into three octets using index points in b64        
+    	h1 = b64.indexOf(data.charAt(i++));
         h2 = b64.indexOf(data.charAt(i++));
         h3 = b64.indexOf(data.charAt(i++));
         h4 = b64.indexOf(data.charAt(i++));
@@ -192,12 +321,14 @@ function base64_decode (data) {
         if (h3 == 64) {
             tmp_arr[ac++] = String.fromCharCode(o1);
         } else if (h4 == 64) {
-            tmp_arr[ac++] = String.fromCharCode(o1, o2);        } else {
+            tmp_arr[ac++] = String.fromCharCode(o1, o2);        
+        } else {
             tmp_arr[ac++] = String.fromCharCode(o1, o2, o3);
         }
     } while (i < data.length);
      dec = tmp_arr.join('');
-    dec = this.utf8_decode(dec);
  
     return dec;
 }
+
+

@@ -1,0 +1,56 @@
+@CHARSET "ISO-8859-1";
+
+/* BASE UPLOAD*/
+
+#UploadUI
+{
+font-family:arial;
+padding: 10px 10px 10px 10px;
+}
+
+#FileListContainer
+{
+margin-top: 10px;
+text-align:left;
+}
+
+#FileList
+{
+list-style-type:none;
+text-align:left;
+padding: 0 0 0 0;
+margin: 0 0 0 0;
+}
+
+#FileList li
+{
+padding: 1px 0 1px 0;
+height:18px;
+vertical-align: middle;
+}
+
+.FileListImage
+{
+height:16px;
+width:16px;
+margin-left:5px;
+padding-bottom:2px;
+vertical-align: middle;
+}
+
+.FileListProgressInfo
+{
+font-size:10px;
+margin-left:5px;
+vertical-align: middle;
+}
+
+.UploadProgressbar
+{
+margin: 10px 0 10px 0;	
+}
+
+#UploadInfo
+{
+margin-bottom:5px;	
+}
