@@ -69,7 +69,8 @@ class SampleCloneAjax extends Ajax
 		
 		switch ($page):		
 			case "1":
-				$sample_source_sample = $session->read_value("SAMPLE_CLONE_SOURCE_SAMPLE");
+				$sample_source_sample 	= $session->read_value("SAMPLE_CLONE_SOURCE_SAMPLE");
+				$sample_type_array 		= $session->read_value("SAMPLE_CLONE_TYPE_ARRAY");
 				
 				$template = new Template("../../../template/samples/clone_sample_page_1.html");	
 	
@@ -78,22 +79,32 @@ class SampleCloneAjax extends Ajax
 					
 				$user_sample_array = Sample::list_user_related_samples($user->get_user_id());
 				
-				foreach($user_sample_array as $key => $value)
+				if (!is_array($sample_type_array) or count($sample_type_array) == 0)
 				{
-					$sample = new Sample($value);
-			
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $sample->get_name();		
-
-					if ($sample_source_sample == $value)
+					$sample_type_array = null;
+				}
+				
+				if (is_array($user_sample_array) and count($user_sample_array) >= 1)
+				{
+					foreach($user_sample_array as $key => $value)
 					{
-						$result[$counter][selected] = "selected";
+						$sample = new Sample($value);
+						
+						if ($sample_type_array == null or in_array($sample->get_template_id(), $sample_type_array))
+						{
+							$result[$counter][value] = $value;
+							$result[$counter][content] = $sample->get_name();
+							if ($_POST[sample] == $value)
+							{
+								$result[$counter][selected] = "selected";
+							}
+							else
+							{
+								$result[$counter][selected] = "";
+							}
+							$counter++;
+						}
 					}
-					else
-					{
-						$result[$counter][selected] = "";
-					}
-					$counter++;
 				}
 				
 				if (!$result)
@@ -531,17 +542,24 @@ class SampleCloneAjax extends Ajax
 	{
 		global $session, $user;
 		
-		$sample_source_sample 		= $session->read_value("SAMPLE_CLONE_SOURCE_SAMPLE");
+		$sample_clone_role				= $session->read_value("SAMPLE_CLONE_ROLE");
 		
-		$sample_name				= $session->read_value("SAMPLE_CLONE_NAME");
-		$sample_manufacturer		= $session->read_value("SAMPLE_CLONE_MANUFACTURER_ID");	
-		$sample_manufacturer_name	= $session->read_value("SAMPLE_CLONE_MANUFACTURER_NAME");			
-		$sample_location			= $session->read_value("SAMPLE_CLONE_LOCATION");
-		$sample_expiry				= $session->read_value("SAMPLE_CLONE_EXPIRY");
-		$sample_expiry_warning		= $session->read_value("SAMPLE_CLONE_EXPIRY_WARNING");
-		$sample_description			= $session->read_value("SAMPLE_CLONE_DESCRIPTION");
-		$sample_template_array		= $session->read_value("SAMPLE_CLONE_TEMPLATE_ARRAY");
-		$sample_item_array			= $session->read_value("SAMPLE_CLONE_ITEM_ARRAY");
+		$sample_item_retrace 			= $session->read_value("SAMPLE_ITEM_RETRACE");
+		$sample_item_get_array			= $session->read_value("SAMPLE_ITEM_GET_ARRAY");
+		$sample_item_keywords			= $session->read_value("SAMPLE_ITEM_KEYWORDS");
+		$sample_item_description		= $session->read_value("SAMPLE_ITEM_DESCRIPTION");
+		
+		$sample_source_sample 			= $session->read_value("SAMPLE_CLONE_SOURCE_SAMPLE");
+		
+		$sample_name					= $session->read_value("SAMPLE_CLONE_NAME");
+		$sample_manufacturer			= $session->read_value("SAMPLE_CLONE_MANUFACTURER_ID");	
+		$sample_manufacturer_name		= $session->read_value("SAMPLE_CLONE_MANUFACTURER_NAME");			
+		$sample_location				= $session->read_value("SAMPLE_CLONE_LOCATION");
+		$sample_expiry					= $session->read_value("SAMPLE_CLONE_EXPIRY");
+		$sample_expiry_warning			= $session->read_value("SAMPLE_CLONE_EXPIRY_WARNING");
+		$sample_description				= $session->read_value("SAMPLE_CLONE_DESCRIPTION");
+		$sample_template_array			= $session->read_value("SAMPLE_CLONE_TEMPLATE_ARRAY");
+		$sample_item_array				= $session->read_value("SAMPLE_CLONE_ITEM_ARRAY");
 
 		
 		try
@@ -549,9 +567,19 @@ class SampleCloneAjax extends Ajax
 			$sample = new Sample(null);
 			
 			if (($sample_id = $sample->clone_sample($sample_source_sample, $sample_name, $sample_manufacturer, $sample_location, $sample_description, null, $sample_expiry, $sample_expiry_warning, $sample_template_array, $sample_item_array)) != null)
-			{				
+			{	
+				$session->delete_value("SAMPLE_CLONE_ROLE");
+			
+				$session->delete_value("SAMPLE_ITEM_RETRACE");
+				$session->delete_value("SAMPLE_ITEM_GET_ARRAY");
+				$session->delete_value("SAMPLE_ITEM_KEYWORDS");
+				$session->delete_value("SAMPLE_ITEM_DESCRIPTION");
+				$session->delete_value("SAMPLE_ITEM_TYPE_ARRAY");
+				
 				$session->delete_value("SAMPLE_CLONE_SOURCE_SAMPLE");
 				
+				$session->delete_value("SAMPLE_CLONE_TYPE_ARRAY");
+				$session->delete_value("SAMPLE_CLONE_CATEGORY_ARRAY");
 				$session->delete_value("SAMPLE_CLONE_NAME");
 				$session->delete_value("SAMPLE_CLONE_MANUFACTURER_ID");
 				$session->delete_value("SAMPLE_CLONE_MANUFACTURER_NAME");
@@ -563,15 +591,60 @@ class SampleCloneAjax extends Ajax
 				$session->delete_value("SAMPLE_CLONE_ITEM_ARRAY");
 				$session->delete_value("SAMPLE_CLONE_NAME_WARNING");
 				
-				$paramquery = array();
-				$paramquery['username'] = $username;
-				$paramquery['session_id'] = $session_id;
-				$paramquery['nav'] = "sample";
-				$paramquery['run'] = "detail";
-				$paramquery['sample_id'] = $sample_id;
-				$params = http_build_query($paramquery, '', '&');
-				
-				return "index.php?".$params;
+				if ($sample_clone_role == "item" or $sample_add_role == "item_parent")
+				{
+					// Special Parent Sample Case
+					if ($sample_add_role == "item_parent")
+					{
+						$parent_sample = new Sample($sample_item_get_array['sample_id']);
+						$sample_item_get_array['sample_id'] = $sample_id;
+						$sample_item_get_array['key'] = ($sample_item_get_array['key']*-1);
+						$event_item_id = $parent_sample->get_item_id();
+					}
+					else
+					{
+						$event_item_id = $sample->get_item_id();
+					}
+					
+					$post_array = array();
+					$post_array['keywords'] = $sample_item_keywords;
+					$post_array['description'] = $sample_item_description;
+					
+					$item_add_event = new ItemAddEvent($event_item_id, $sample_item_get_array, $post_array);
+					$event_handler = new EventHandler($item_add_event);
+					if ($event_handler->get_success() == true)
+					{
+						if ($sample_item_retrace)
+						{
+							$params = http_build_query(Misc::resovle_retrace_string($sample_item_retrace),'','&');
+							return "index.php?".$params;
+						}
+						else
+						{
+							$paramquery['username'] = $username;
+							$paramquery['session_id'] = $session_id;
+							$paramquery['nav'] = "home";
+							$params = http_build_query($paramquery,'','&');
+							return "index.php?".$params;
+						}
+					}
+					else
+					{
+						return "0";
+					}
+				}
+				else
+				{
+					$paramquery = array();
+					$paramquery['username'] = $username;
+					$paramquery['session_id'] = $session_id;
+					$paramquery['nav'] = "sample";
+					$paramquery['run'] = "detail";
+					$paramquery['sample_id'] = $sample_id;
+					$params = http_build_query($paramquery, '', '&');
+					
+					return "index.php?".$params;
+				}
 			}
 			else
 			{				

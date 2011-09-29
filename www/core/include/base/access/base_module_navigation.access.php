@@ -503,6 +503,25 @@ class BaseModuleNavigation_Access
 	/**
 	 * @return array
 	 */
+	public static function list_ids()
+	{
+		global $db;
+		
+		$result_array = array();
+		
+		$sql = "SELECT id FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." ORDER BY position";
+		$res = $db->db_query($sql);
+		while ($data = $db->db_fetch_assoc($res))
+		{
+			array_push($result_array, $data[id]);
+		}
+		
+		return $result_array;
+	}
+	
+	/**
+	 * @return array
+	 */
 	public static function list_entries()
 	{
 		global $db;
@@ -519,6 +538,40 @@ class BaseModuleNavigation_Access
 		}
 		
 		return $result_array;
+	}
+	
+	public static function count_entries()
+	{
+		global $db;
+		
+		$sql = "SELECT COUNT(id) AS result FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")."";
+		$res = $db->db_query($sql);
+		$data = $db->db_fetch_assoc($res);
+		
+		return $data[result];
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public static function check_position()
+	{
+		global $db;
+		
+		$result_array = array();
+		
+		$sql = "SELECT MAX(position) AS maximum FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")."";
+		$res = $db->db_query($sql);
+		$data = $db->db_fetch_assoc($res);
+		
+		if ($data[maximum] == self::count_entries())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**

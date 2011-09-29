@@ -240,9 +240,10 @@ class ModuleNavigation implements ModuleNavigationInterface, EventListenerInterf
 	 */
 	public static function list_module_navigations_entries()
 	{
+		self::clean_up();
 		return BaseModuleNavigation_Access::list_entries();
 	}
-
+	
 	/**
 	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
@@ -284,6 +285,26 @@ class ModuleNavigation implements ModuleNavigationInterface, EventListenerInterf
     	
     	return true;
     }
+    
+	/**
+	 * @todo implementation
+	 * Checks the sort-ID of the menu-entries and resorts them
+	 * @return bool
+	 */
+	private static function clean_up()
+	{
+		if (BaseModuleNavigation_Access::check_position() == false)
+		{
+			$entry_array = BaseModuleNavigation_Access::list_ids();
+			$number_of_entries = BaseModuleNavigation_Access::count_entries();
+			
+			for($i=1;$i<=$number_of_entries;$i++)
+			{
+				$base_module_navigation = new BaseModuleNavigation_Access($entry_array[$i-1]);
+				$base_module_navigation->set_position($i);
+			}
+		}
+	}
 }
 
 ?>

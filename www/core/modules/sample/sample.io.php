@@ -434,18 +434,7 @@ class SampleIO
 	public static function create($type_array, $category_array, $organisation_unit_id)
 	{
 		global $session;
-		
-		if(($_GET[run] == "new_sample_sample" or $_GET[run] == "new_parent_sample") and $_GET[sample_id])
-		{
-			$sample_id = $_GET[sample_id];
-			
-			$sample_item = new SampleItem($sample_id);
-			$sample_item->set_gid($_GET[key]);
-			
-			$description_required = $sample_item->is_description();
-			$keywords_required = $sample_item->is_keywords();
-		}
-		
+				
 		if($_GET[run] == "item_add")
 		{	
 			if ($session->is_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]) == true)
@@ -508,8 +497,65 @@ class SampleIO
 		$template->output();
 	}
 		
-	public static function clone_sample()
+	public static function clone_sample($type_array, $category_array)
 	{
+		global $session;
+		
+		if($_GET[run] == "item_add")
+		{	
+			if ($session->is_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]) == true)
+			{
+				$session->write_value("SAMPLE_ITEM_KEYWORDS", $session->read_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]));
+			}
+			else
+			{
+				$session->write_value("SAMPLE_ITEM_KEYWORDS", null);
+			}
+			
+			if ($session->is_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]) == true)
+			{
+				$session->write_value("SAMPLE_ITEM_DESCRIPTION", $session->read_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]));
+			}
+			else
+			{
+				$session->write_value("SAMPLE_ITEM_DESCRIPTION", null);
+			}
+			
+			if ($_GET[dialog] == "parentsample")
+			{
+				$session->write_value("SAMPLE_CLONE_ROLE", "item_parent", true);
+			}
+			else
+			{
+				$session->write_value("SAMPLE_CLONE_ROLE", "item", true);
+			}
+			
+			$session->write_value("SAMPLE_ITEM_RETRACE", $_GET['retrace']);
+			$session->write_value("SAMPLE_ITEM_GET_ARRAY", $_GET);
+			$session->write_value("SAMPLE_ITEM_TYPE_ARRAY", $type_array);
+			$session->write_value("SAMPLE_ORGANISATION_UNIT", $organisation_unit_id);
+		}
+		else
+		{
+			$session->write_value("SAMPLE_CLONE_ROLE", "sample", true);
+			
+			$session->delete_value("SAMPLE_RETRACE");
+			$session->delete_value("SAMPLE_ITEM_GET_ARRAY");
+			$session->delete_value("SAMPLE_ITEM_KEYWORDS");
+			$session->delete_value("SAMPLE_ITEM_TYPE_ARRAY");
+			$session->delete_value("SAMPLE_ITEM_DESCRIPTION");
+		}
+		
+		if ($type_array)
+		{
+			$session->write_value("SAMPLE_CLONE_TYPE_ARRAY", $type_array, true);
+		}
+		
+		if ($category_array)
+		{
+			$session->write_value("SAMPLE_CLONE_CATEGORY_ARRAY", $type_array, true);
+		}
+		
 		$template = new Template("template/samples/clone_sample.html");	
 		
 		require_once("core/modules/base/assistant.io.php");
@@ -574,9 +620,13 @@ class SampleIO
 			{
 				return self::create($type_array, $category_array, $organisation_unit_id);
 			}
-			else
+			elseif ($_GET[selectpage] == 2)
 			{
 				return self::associate($type_array, $category_array);
+			}
+			else
+			{
+				return self::clone_sample($type_array, $category_array);
 			}
 		}
 	}
@@ -1211,7 +1261,7 @@ class SampleIO
 				break;
 				
 				case ("clone"):
-					self::clone_sample();
+					self::clone_sample(null, null);
 				break;
 				
 				case ("organ_unit"):

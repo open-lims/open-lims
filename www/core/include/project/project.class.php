@@ -281,7 +281,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	    						$folder_name = strtolower(trim($sub_value));
 	    						$folder_name = str_replace(" ","-",$folder_name);
 	    										
-								$folder_path = new Path($status_folder->get_path());
+								$folder_path = new Path($projet_status_folder->get_path());
 								$folder_path->add_element($folder_name);
 								
 								$sub_folder = Folder::get_instance(null);
