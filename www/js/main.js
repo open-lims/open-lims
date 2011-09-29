@@ -15,3 +15,5 @@ function getQueryParams(qs)
 
     return params;
 }
+
+var get_array = getQueryParams(document.location.search);

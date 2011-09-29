@@ -201,6 +201,7 @@ function base_upload(unique_id, session_id)
 	    		json_state = data;
 	    	}
 		});
+		console.log(json_state);
 		if(json_state != "No Array")
 		{
 			if(json_state.substr(0,6) == "ALL_OK")
