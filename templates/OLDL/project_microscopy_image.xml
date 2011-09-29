@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE OLDL PUBLIC "-//OLDL 0.4//EN" "http://doctype.open-lims.org/oldl.dtd" >
+<OLDL>
+	<HEAD>
+		<ID>20001</ID>
+	 	<TITLE>Microscopy - Image</TITLE>
+		<DESC>Standard-Template for Microsopy Imaging Experiments</DESC>
+		<VERSION>draft</VERSION>
+		<AUTHOR>The Open-LIMS Project</AUTHOR>
+	</HEAD>
+	<REQUIRED>
+	</REQUIRED>
+	<BODY>
+		<STATUS id="20001">
+			<ITEM type="sample" name="Add Specimen">
+            	<TYPE id="20100"></TYPE>
+            	<TYPE id="20110"></TYPE>
+            	<TYPE id="20120"></TYPE>
+     		</ITEM>
+		</STATUS>
+		<STATUS id="20002">
+			<ITEM type="equipment" name="Add Used Hardware" occurrence="multiple">
+		         <TYPE id="3"></TYPE>
+		         <CATEGORY id="1003"></CATEGORY>              
+		         <CATEGORY id="1007"></CATEGORY>
+		    </ITEM>       
+		    <ITEM type="equipment" name="Add Used Software" occurrence="multiple">
+		         <TYPE id="3"></TYPE>
+		         <CATEGORY id="1008"></CATEGORY>
+		    </ITEM>   
+		</STATUS>
+		<STATUS id="20003">
+  			<ITEM type="file" name="Add Main/RAW File" folder="main" occurrence="multiple"></ITEM>
+      		<ITEM type="file" name="Add Shortlist RAW File" folder="shortlist raw" requirement="optional" occurrence="multiple"></ITEM>        
+		    <ITEM type="file" name="Add TIF File" folder="tif" requirement="optional" occurrence="multiple"></ITEM>      
+		    <ITEM type="file" name="Add Configuration File" folder="tif" requirement="optional" occurrence="multiple"></ITEM>
+		    <ITEM type="value" requirement="optional">            
+		         <TYPE id="20001"></TYPE>
+		    </ITEM> 
+		</STATUS>
+	</BODY>
+</OLDL>
