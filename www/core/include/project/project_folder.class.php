@@ -153,6 +153,30 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 	}
 	
 	/**
+	 * @return bool
+	 */
+	protected function get_inherit_permission()
+	{
+		return true;
+	}
+	
+	/**
+	 * @see DataEntityInterface::is_write_access()
+	 * @return bool
+	 */
+	public function is_write_access($inherit = false)
+	{
+		if ($inherit == true)
+		{
+			return $this->write_access;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
 	 * @see DataEntityInterface::can_set_automatic()
 	 * @return bool
 	 */
@@ -184,6 +208,53 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 	 * @return bool
 	 */
 	public function can_set_remain()
+	{
+		return false;
+	}
+	
+	/**
+	 * @see FolderInterface::can_add_folder()
+	 * @param bool $inherit
+	 * @return bool
+	 */
+	public function can_change_permission($inherit = false)
+	{
+		return true;
+	}
+	
+	/**
+	 * @see FolderInterface::can_add_folder()
+	 * @param bool $inherit
+	 * @return bool
+	 */
+	public function can_add_folder($inherit = false)
+	{
+		return false;
+	}
+	
+	/**
+	 * @see FolderInterface::can_command_folder()
+	 * @param bool $inherit
+	 * @return bool
+	 */
+	public function can_command_folder($inherit = false)
+	{
+		if ($inherit == true)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @see FolderInterface::can_rename_folder()
+	 * @param bool $inherit
+	 * @return bool
+	 */
+	public function can_rename_folder($inherit = false)
 	{
 		return false;
 	}

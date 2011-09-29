@@ -44,7 +44,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Project Management Class
  * @package project
  */
-class Project implements ProjectInterface, EventListenerInterface
+class Project implements ProjectInterface, EventListenerInterface, ItemHolderInterface
 {
 	private $project_id;
 
@@ -309,7 +309,7 @@ class Project implements ProjectInterface, EventListenerInterface
 					}			
 					
 					// Create Project Description
-					$value = new Value(null);
+					$value = Value::get_instance(null);
 					if ($value->create($folder_id, $owner_id, 2, $description) == null)
 					{
 						$project_folder->delete(true, true);
@@ -348,7 +348,7 @@ class Project implements ProjectInterface, EventListenerInterface
 					// Create Project Master Data
 					if ($this->template_data_array and is_numeric($this->template_data_type_id))
 					{
-						$value = new Value(null);				
+						$value = Value::get_instance(null);				
 						
 						if ($value->create($folder_id, $owner_id, $this->template_data_type_id, $this->template_data_array) == null)
 						{
@@ -1893,7 +1893,7 @@ class Project implements ProjectInterface, EventListenerInterface
 				}
 			}
 			
-			$value = new Value($description_id);
+			$value = Value::get_instance($description_id);
 			if ($value->get_type_id() == 2)
 			{
 				return unserialize($value->get_value());
@@ -2362,7 +2362,16 @@ class Project implements ProjectInterface, EventListenerInterface
     	
     	return true;
     }
-       
+
+    /**
+     * @see ItemHolderInterface::get_item_list_sql()
+	 * @param integer $holder_id
+	 * @return string
+	 */
+	public static function get_item_list_sql($holder_id)
+	{
+		return " SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$holder_id."";
+	}
 }
 
 ?>

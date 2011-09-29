@@ -112,6 +112,40 @@ class Data_Wrapper_Access
 			return true;
 		}
 	}
+
+	/**
+	 * @param integer $folder_id
+	 * @return bool
+	 */
+	public static function has_folder_children($folder_id)
+	{
+		global $db;
+		
+		if (is_numeric($folder_id))
+		{			
+			$sql = "SELECT sub_folder.id " . 
+					"FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." " .
+					"JOIN ".constant("FOLDER_TABLE")." AS current_folder	ON ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_pid	= current_folder.data_entity_id " .
+					"JOIN ".constant("FOLDER_TABLE")." AS sub_folder 		ON ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_cid	= sub_folder.data_entity_id " .
+						"WHERE current_folder.id = ".$folder_id."";	
+
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[id])
+			{
+				return true;
+			}
+			else
+			{
+				return true;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
 	
 	/**
 	 * @param integer $data_entity_pid
@@ -842,7 +876,7 @@ class Data_Wrapper_Access
 	 * @param string $item_sql
 	 * @return array
 	 */
-	public static function list_item_files($item_sql)
+	public static function list_item_files($item_sql, $order_by, $order_method, $start, $end)
 	{
 		global $db;
 
@@ -851,7 +885,9 @@ class Data_Wrapper_Access
 			$sql = "SELECT ".constant("FILE_VERSION_TABLE").".name AS name, " .
 							"".constant("DATA_ENTITY_TABLE").".datetime AS datetime, " .
 							"".constant("DATA_ENTITY_TABLE").".owner_id AS owner_id, " .
-							"".constant("FILE_TABLE").".id AS id " .
+							"".constant("FILE_VERSION_TABLE").".size AS size, " .
+							"".constant("FILE_TABLE").".id AS id, " .
+							"".constant("DATA_ENTITY_IS_ITEM_TABLE").".item_id AS item_id " .
 						 "FROM ".constant("DATA_ENTITY_IS_ITEM_TABLE")." " .
 						"LEFT JOIN ".constant("DATA_ENTITY_TABLE")."	ON ".constant("DATA_ENTITY_IS_ITEM_TABLE").".data_entity_id	= ".constant("DATA_ENTITY_TABLE").".id " .
 						"LEFT JOIN ".constant("FILE_TABLE")." 			ON ".constant("DATA_ENTITY_TABLE").".id 					= ".constant("FILE_TABLE").".data_entity_id " .
@@ -865,13 +901,58 @@ class Data_Wrapper_Access
 			$return_array = array();
 			
 			$res = $db->db_query($sql);
-
-			while ($data = $db->db_fetch_assoc($res))
+			
+			if (is_numeric($start) and is_numeric($end))
 			{
-				array_push($return_array, $data);
+				for ($i = 0; $i<=$end-1; $i++)
+				{
+					if (($data = $db->db_fetch_assoc($res)) == null)
+					{
+						break;
+					}
+					
+					if ($i >= $start)
+					{
+						array_push($return_array, $data);
+					}
+				}
 			}
-
+			else
+			{
+				while ($data = $db->db_fetch_assoc($res))
+				{
+					array_push($return_array, $data);
+				}
+			}
 			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param string $item_sql
+	 * @return array
+	 */
+	public static function count_item_files($item_sql)
+	{
+		global $db;
+
+		if ($item_sql)
+		{			
+			$sql = "SELECT COUNT(".constant("FILE_TABLE").".id) AS result " .
+						 "FROM ".constant("DATA_ENTITY_IS_ITEM_TABLE")." " .
+						"LEFT JOIN ".constant("DATA_ENTITY_TABLE")."	ON ".constant("DATA_ENTITY_IS_ITEM_TABLE").".data_entity_id	= ".constant("DATA_ENTITY_TABLE").".id " .
+						"LEFT JOIN ".constant("FILE_TABLE")." 			ON ".constant("DATA_ENTITY_TABLE").".id 					= ".constant("FILE_TABLE").".data_entity_id " .
+						"WHERE " .
+						"".constant("DATA_ENTITY_IS_ITEM_TABLE").".item_id IN (".$item_sql.")";
+			
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+	
+			return $data[result];
 		}
 		else
 		{

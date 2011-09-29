@@ -203,6 +203,12 @@ interface ValueInterface
 	 * @return bool
 	 */
 	public static function is_entry_type_of($value_id, $type_id);
+	
+	/**
+     * @param integer $value_id
+     * @return object
+     */
+    public static function get_instance($value_id);
 }
 
 ?>

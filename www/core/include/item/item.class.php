@@ -32,6 +32,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	
 	require_once("access/item.access.php");	
 	require_once("access/item_concretion.access.php");
+	require_once("access/item_holder.access.php");
 }
 
 /**
@@ -293,6 +294,46 @@ class Item implements ItemInterface, EventListenerInterface
 		return ItemConcretion_Access::get_handling_class_by_type($type);
 	}
 	
+	/**
+	 * @see ItemInterface::register_holder()
+	 * @param string $name
+	 * @param string $handling_class
+	 * @param integer $include_id
+	 * @return bool
+	 */
+	public static function register_holder($name, $handling_class, $include_id)
+	{
+		$item_holder = new ItemHolder_Access(null);
+		if ($item_holder->create($name, $handling_class, $include_id) != null)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @see ItemInterface::delete_holder_by_include_id()
+	 * @param integer $include_id
+	 * @return bool
+	 */
+	public static function delete_holder_by_include_id($include_id)
+	{
+		return ItemHolder_Access::delete_by_include_id($include_id);
+	}
+	
+	/**
+	 * @see ItemInterface::get_holder_handling_class_by_name()
+	 * @param string $name
+	 * @return string
+	 */
+	public static function get_holder_handling_class_by_name($name)
+	{
+		return ItemHolder_Access::get_handling_class_by_name($name);
+	}
+	
     /**
      * @see EventListenerInterface::listen_events()
      * @param object $event_object
@@ -303,6 +344,10 @@ class Item implements ItemInterface, EventListenerInterface
     	if ($event_object instanceof IncludeDeleteEvent)
     	{
 			if (ItemConcretion_Access::delete_by_include_id($event_object->get_include_id()) == false)
+			{
+				return false;
+			}
+    		if (ItemHolder_Access::delete_by_include_id($event_object->get_include_id()) == false)
 			{
 				return false;
 			}

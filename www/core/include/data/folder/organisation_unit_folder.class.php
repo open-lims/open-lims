@@ -67,6 +67,67 @@ class OrganisationUnitFolder extends Folder implements ConcreteFolderCaseInterfa
 	}
 	
 	/**
+	 * @see FolderInterface::can_add_folder()
+	 * @param bool $inherit
+	 * @return bool
+	 */
+	public function can_change_permission($inherit = false)
+	{
+		if ($inherit == true)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @see FolderInterface::can_add_folder()
+	 * @param bool $inherit
+	 * @return bool
+	 */
+	public function can_add_folder($inherit = false)
+	{
+		return true;
+	}
+	
+	/**
+	 * @see FolderInterface::can_command_folder()
+	 * @param bool $inherit
+	 * @return bool
+	 */
+	public function can_command_folder($inherit = false)
+	{
+		if ($inherit == true)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @see FolderInterface::can_rename_folder()
+	 * @param bool $inherit
+	 * @return bool
+	 */
+	public function can_rename_folder($inherit = false)
+	{
+		if ($inherit == true)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
 	 * @param integer $organisation_unit_id
 	 * @return bool
 	 */

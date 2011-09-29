@@ -29,7 +29,7 @@ class AdminSampleTemplateIO
 {
 	public static function home()
 	{
-		$list = new List_IO(Sample_Wrapper::count_list_sample_templates(), 20);
+		$list = new ListStat_IO(Sample_Wrapper::count_list_sample_templates(), 20);
 		
 		$list->add_row("ID", "id", true, null);
 		$list->add_row("Name", "name", true, null);
@@ -138,7 +138,7 @@ class AdminSampleTemplateIO
 				{
 					if (($file_id = File::get_file_id_by_data_entity_id($value)) != null)
 					{
-						$file = new File($file_id);
+						$file = File::get_instance($file_id);
 						$result[$counter][value] = $value;
 						$result[$counter][content] = $file->get_name();
 						$counter++;

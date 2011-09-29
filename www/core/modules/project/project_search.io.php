@@ -245,7 +245,7 @@ class ProjectSearchIO
 			
 			/* --------------- */
 			
-			$list = new List_IO(Project_Wrapper::count_search_projects_without_subprojects($name, $template_array, $organisation_unit_array, $in_id, $in_name), 20);
+			$list = new ListStat_IO(Project_Wrapper::count_search_projects_without_subprojects($name, $template_array, $organisation_unit_array, $in_id, $in_name), 20);
 
 			$list->add_row("","symbol",false,16);
 			$list->add_row("Name","name",true,null);

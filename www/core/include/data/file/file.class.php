@@ -31,7 +31,6 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("exceptions/file_not_found_exception.class.php");
 	require_once("exceptions/file_version_not_found_exception.class.php");
 
-	require_once("events/file_as_item_upload_event.class.php");
 	require_once("events/file_delete_event.class.php");
 	require_once("events/file_upload_event.class.php");
 	require_once("events/file_upload_precheck_event.class.php");
@@ -46,6 +45,8 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class File extends DataEntity implements FileInterface, EventListenerInterface
 {
+	private static $file_object_array;
+	
 	private $file_id;
 	
 	private $file;
@@ -218,7 +219,68 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 			return false;
 		}
 	}
+
+	private function create_shape($folder_id, $owner_id)
+	{
+		global $user, $transaction;
 		
+		if (is_numeric($folder_id))
+		{
+			$transaction_id = $transaction->begin();
+			
+			if ($owner_id == null)
+			{
+				$owner_id = $user->get_user_id();
+			}
+			
+			$folder = Folder::get_instance($folder_id);
+					
+			if (($data_entity_id = parent::create($owner_id, null)) != null)
+			{
+				if (parent::set_as_child_of($folder->get_data_entity_id()) == false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return null;
+				}
+			
+				$this->file = new File_Access(null);
+				$file_id = $this->file->create($data_entity_id);
+				
+				if ($file_id != null)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->commit($transaction_id);
+					}
+					return $file_id;
+				}
+				else
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return null;
+				}
+			}
+			else
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 	/**
 	 * @see FileInterface::create()
 	 * @param string $name
@@ -249,53 +311,30 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 			$size = filesize($path);
 			$checksum = md5_file($path);
 			
-			$folder = Folder::get_instance($folder_id);
-					
-			if (($data_entity_id = parent::create($owner_id, null)) != null)
+			$file_id = $this->create_shape($folder_id, $owner_id);
+				
+			if ($file_id != null)
 			{
-				if (parent::set_as_child_of($folder->get_data_entity_id()) == false)
+				$file_version_access = new FileVersion_access(null);
+				$file_version_id = $file_version_access->create($file_id, $name, 1, $size, $checksum, null, null, 1, true, $owner_id);
+				
+				if ($file_version_id != null)
 				{
 					if ($transaction_id != null)
 					{
-						$transaction->rollback($transaction_id);
+						$transaction->commit($transaction_id);
 					}
-					return null;
-				}
-			
-				$file_access = new File_Access(null);
-				$file_id = $file_access->create($data_entity_id);
-				
-				if ($file_id != null)
-				{
-					$file_version_access = new FileVersion_access(null);
-					$file_version_id = $file_version_access->create($file_id, $name, 1, $size, $checksum, null, null, 1, true, $owner_id);
-					
-					if ($file_version_id != null)
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
-						return $file_id;
-					}
-					else
-					{
-						$file_access->delete();
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						return null;
-					}
+					return $file_id;
 				}
 				else
 				{
+					$this->file->delete();
 					if ($transaction_id != null)
 					{
 						$transaction->rollback($transaction_id);
 					}
 					return null;
-				}	
+				}
 			}
 			else
 			{
@@ -304,7 +343,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 					$transaction->rollback($transaction_id);
 				}
 				return null;
-			}
+			}	
 		}
 		else
 		{
@@ -1191,13 +1230,102 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	
 	/**
 	 * @see FileInterface::copy()
-	 * @todo LATER: implementation - Copy file is not supported in current version
 	 * @param integer $folder_id
 	 * @return bool
 	 */
 	public function copy($folder_id)
 	{
+		global $transaction, $user;
 		
+		if (is_numeric($folder_id) and $this->file and $this->file_version and $this->file_id)
+		{
+			$old_data_entity_id = $this->data_entity_id;
+			$old_file_name = $this->get_name();
+			
+			$source_folder = Folder::get_instance($this->get_parent_folder_id());			
+			$folder = Folder::get_instance($folder_id);
+			
+			// Create File
+ 			if (($file_id = $this->create_shape($folder_id, $user->get_user_id())) == null)
+ 			{
+ 				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+ 			}
+ 			$data_entity_id = $this->get_data_entity_id();
+
+ 			// Alle Versionen kopieren
+ 			$current_file_version_id = FileVersion_Access::get_current_entry_by_toid($this->file_id);
+ 			$current_file_version = new FileVersion_Access($current_file_version_id);
+ 			
+ 			$extension_array = explode(".",$current_file_version->get_name());
+			$extension_array_length = substr_count($current_file_version->get_name(),".");
+			
+			if ($extension_array_length == 0)
+			{
+				$extension = "";
+			}
+			else
+			{
+				$extension = ".".$extension_array[$extension_array_length];
+			}
+ 			
+ 			$current_file_path = constant("BASE_DIR")."/".$source_folder->get_path()."/".$old_data_entity_id."-".$current_file_version->get_internal_revision()."".$extension;
+ 			
+ 			$size = filesize($current_file_path);
+			$checksum = md5_file($current_file_path);
+ 			
+			if ($file_id != null)
+			{
+				$file_version_access = new FileVersion_access(null);
+				$file_version_id = $file_version_access->create($file_id, $old_file_name, 1, $size, $checksum, null, null, 1, true, $user->get_user_id());
+				
+				if ($file_version_id == null)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return null;
+				}
+			}
+			else
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				return null;
+			}	
+			
+			$new_file_path = constant("BASE_DIR")."/".$folder->get_path()."/".$data_entity_id."-1".$extension;
+			
+			
+			// Rename file with the object id
+			if (copy($current_file_path, $new_file_path) == true)
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->commit($transaction_id);
+				}
+				$this->__construct($file_id);
+				return true;
+			}
+			else
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**
@@ -1741,6 +1869,32 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
     	}
     	
     	return true;
+    }
+    
+	/**
+     * @see FileInterface::get_instance()
+     * @param integer $file_id
+     * @return object
+     */
+    public static function get_instance($file_id)
+    {    
+    	if (is_numeric($file_id) and $file_id > 0)
+    	{
+			if (self::$file_object_array[$file_id])
+			{
+				return self::$file_object_array[$file_id];
+			}
+			else
+			{
+				$file = new File($file_id);
+				self::$file_object_array[$file_id] = $file;
+				return $file;
+			}
+    	}
+    	else
+    	{
+    		return new File(null);
+    	}
     }
 }
 ?>

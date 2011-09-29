@@ -48,7 +48,7 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 		global $user;
 		
 		if (is_numeric($folder_id))
-  		{
+  		{  			
   			parent::__construct($folder_id);
   			$this->sample_folder = new SampleHasFolder_Access($folder_id);
   			$this->sample_id = $this->sample_folder->get_sample_id();
@@ -64,76 +64,104 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 					$permission_bin = strrev($permission_bin);		
   				}
   				
-  				if ($this->read_access == false)
+				
+  				// Read-Access
+  				if ($this->get_automatic() == true)
   				{
-  					if ($this->get_automatic() == true)
-  					{
-  						if ($sample_security->is_access(1, false))
-						{
-							$this->read_access = true;
-						}
-  					}
-  					else
-  					{
-	  					if ($permission_bin{8} == "1" and $sample_security->is_access(1, false))
-						{
-							$this->read_access = true;
-						}
-  					}
+  					if ($sample_security->is_access(1, false))
+					{
+						$this->read_access = true;
+					}
+					else
+					{
+						$this->read_access = false;
+					}
+  				}
+  				else
+  				{
+	  				if ($permission_bin{8} == "1" and $sample_security->is_access(1, false))
+					{
+						$this->read_access = true;
+					}
+					else
+					{
+						$this->read_access = false;
+					}
+  				}
+
+  				
+				// Write-Access
+  				if ($this->get_automatic() == true)
+  				{
+  					if ($sample_security->is_access(2, false))
+					{
+						$this->write_access = true;
+					}
+					else
+					{
+						$this->write_access = false;
+					}
+  				}
+  				else
+  				{
+	  				if ($permission_bin{9} == "1" and $sample_security->is_access(2, false))
+					{
+						$this->write_access = true;
+					}
+					else
+					{
+						$this->write_access = false;
+					}
   				}
   				
-  				if ($this->write_access == false)
-  				{
-  					if ($this->get_automatic() == true)
-  					{
-  						if ($sample_security->is_access(2, false))
-						{
-							$this->write_access = true;
-						}
-  					}
-  					else
-  					{
-	  					if ($permission_bin{9} == "1" and $sample_security->is_access(2, false))
-						{
-							$this->write_access = true;
-						}
-  					}
-  				}
   				
-  				if ($this->delete_access == false)
+  				// Delete-Access
+  				if ($user->is_admin() == true)
   				{
-  					if ($user->is_admin() == true)
-  					{
-  						if ($sample_security->is_access(5, false))
-						{
-							$this->delete_access = true;
-						}
-  					}
-  					else
-  					{
-	  					if ($permission_bin{10} == "1" and $user->is_admin() == true)
-						{
-							$this->delete_access = true;
-						}
-  					}
+  					if ($sample_security->is_access(5, false))
+					{
+						$this->delete_access = true;
+					}
+					else
+					{
+						$this->delete_access = false;
+					}
   				}
-  				
-  				if ($this->control_access == false)
+  				else
   				{
-  					if ($user->is_admin() == true)
-  					{
-  						if ($sample_security->is_access(7, false))
-						{
-							$this->control_access = true;
-						}
-  					}
-  					else
-  					{
-	  					if ($permission_bin{11} == "1" and $user->is_admin() == true)
-						{
-							$this->control_access = true;
-						}
-  					}
+	  				if ($permission_bin{10} == "1" and $user->is_admin() == true)
+					{
+						$this->delete_access = true;
+					}
+					else
+					{
+						$this->delete_access = false;
+					}
+  				}
+
+  				
+  				// Control-Access
+  				if ($user->is_admin() == true)
+  				{
+  					if ($sample_security->is_access(7, false))
+					{
+						$this->control_access = true;
+					}
+					else
+					{
+						$this->control_access = false;
+					}
+  				}
+  				else
+  				{
+	  				if ($permission_bin{11} == "1" and $user->is_admin() == true)
+					{
+						$this->control_access = true;
+					}
+					else
+					{
+						$this->control_access = false;
+					}
   				}
   			}
   		}
@@ -152,6 +180,14 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 		parent::__destruct();
 	}
 	
+	/**
+	 * @return bool
+	 */
+	protected function get_inherit_permission()
+	{
+		return true;
+	}
+		
 	/**
 	 * @see DataEntityInterface::can_set_automatic()
 	 * @return bool
@@ -184,6 +220,53 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 	 * @return bool
 	 */
 	public function can_set_remain()
+	{
+		return false;
+	}
+
+	/**
+	 * @see FolderInterface::can_add_folder()
+	 * @param bool $inherit
+	 * @return bool
+	 */
+	public function can_change_permission($inherit = false)
+	{
+		return true;
+	}
+	
+	/**
+	 * @see FolderInterface::can_add_folder()
+	 * @param bool $inherit
+	 * @return bool
+	 */
+	public function can_add_folder($inherit = false)
+	{
+		return false;
+	}
+	
+	/**
+	 * @see FolderInterface::can_command_folder()
+	 * @param bool $inherit
+	 * @return bool
+	 */
+	public function can_command_folder($inherit = false)
+	{
+		if ($inherit == true)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @see FolderInterface::can_rename_folder()
+	 * @param bool $inherit
+	 * @return bool
+	 */
+	public function can_rename_folder($inherit = false)
 	{
 		return false;
 	}

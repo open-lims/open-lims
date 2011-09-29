@@ -85,8 +85,18 @@ class ValueExternalVar implements ValueExternalVarInterface
 	    	
 	    	switch($current_statement):
 		    	case "biological":
-		    		require_once("external/biological/biological_main.php");
-		    		require_once("external/biological/var_value.class.php");
+				    
+		    		if ($GLOBALS['autoload_prefix'])
+					{
+						$path_prefix = $GLOBALS['autoload_prefix'];
+					}
+					else
+					{
+						$path_prefix = "";
+					}
+		    		
+		    		require_once($path_prefix."external/biological/biological_main.php");
+		    		require_once($path_prefix."external/biological/var_value.class.php");
 		    		$bio_var_value = new BioVarValue();
 		    		return $bio_var_value->get_var_content($external_statement);
 		    	break;

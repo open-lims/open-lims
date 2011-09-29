@@ -193,11 +193,11 @@ class EquipmentIO
 		}
 		return null;
 	}
-	
+		
 	/**
 	 * @param string $sql
 	 */
-	public static function list_equipment_item_handler($sql)
+	public static function list_equipment_item_handler($item_holder_type, $item_holder_id, $in_page = true)
 	{
 		switch ($_GET[action]):
 		
@@ -206,7 +206,7 @@ class EquipmentIO
 			break;
 			
 			default:
-				self::list_equipment_items($sql);
+				self::list_equipment_items($item_holder_type, $item_holder_id, $in_page, false);
 			break;
 		
 		endswitch;
@@ -216,76 +216,57 @@ class EquipmentIO
 	 * @todo error on missing $sql
 	 * @param string $sql
 	 */
-	public static function list_equipment_items($sql)
-	{
-		if ($sql)
-		{
-			$list = new List_IO(Equipment_Wrapper::count_item_equipments($sql), 20);
+	public static function list_equipment_items($item_holder_type, $item_holder_id, $as_page = true, $in_assistant = false, $form_field_name = null)
+	{			
+		$argument_array = array();
+		$argument_array[0][0] = "item_holder_type";
+		$argument_array[0][1] = $item_holder_type;
+		$argument_array[1][0] = "item_holder_id";
+		$argument_array[1][1] = $item_holder_id;
+		$argument_array[2][0] = "as_page";
+		$argument_array[2][1] = $as_page;
+		$argument_array[3][0] = "in_assistant";
+		$argument_array[3][1] = $in_assistant;
 
-			$list->add_row("","symbol",false,16);
+		$list = new List_IO("/core/modules/equipment/equipment.ajax.php", "list_equipment_items", $argument_array, "EquipmentAjax");
+		
+		if ($in_assistant == false)
+		{
+			$list->add_row("","symbol",false,"16px");
 			$list->add_row("Equipment Name","name",true,null);
 			$list->add_row("Category","category",true,null);
 			$list->add_row("Date/Time","datetime",true,null);
-			
-			if ($_GET[page])
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = Equipment_Wrapper::list_item_equipments($sql, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
-				}
-				else
-				{
-					$result_array = Equipment_Wrapper::list_item_equipments($sql, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
-				}				
-			}
-			else
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = Equipment_Wrapper::list_item_equipments($sql, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
-				}
-				else
-				{
-					$result_array = Equipment_Wrapper::list_item_equipments($sql, null, null, 0, 20);
-				}	
-			}
-			
-			if (is_array($result_array) and count($result_array) >= 1)
-			{
-				foreach($result_array as $key => $value)
-				{
-					$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
-					$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
-
-					$paramquery = $_GET;
-					$paramquery[action] = "detail";
-					$paramquery[id] = $result_array[$key][id];
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$result_array[$key][symbol][link]		= $params;
-					$result_array[$key][symbol][content] 	= "<img src='images/icons/equipment.png' alt='N' border='0' />";
-				
-					$equipment_name = $result_array[$key][name];
-					unset($result_array[$key][name]);
-					$result_array[$key][name][link] 		= $params;
-					$result_array[$key][name][content]		= $equipment_name;
-				}
-			}
-			else
-			{
-				$list->override_last_line("<span class='italic'>No results found!</span>");
-			}
-			
-			$template = new Template("template/equipment/list.html");
-
-			$template->set_var("table", $list->get_list($result_array, $_GET[page]));
-			
-			$template->output();
 		}
 		else
 		{
-			// Error
+			$list->add_row("","checkbox",false,"16px", $form_field_name);
+			$list->add_row("","symbol",false,"16px");
+			$list->add_row("Equipment Name","name",false,null);
+			$list->add_row("Category","category",false,null);
+			$list->add_row("Date/Time","datetime",false,null);
 		}
+		
+		if ($GLOBALS['autoload_prefix'])
+		{
+			$path_prefix = $GLOBALS['autoload_prefix'];
+		}
+		else
+		{
+			$path_prefix = "";
+		}
+		
+		if ($in_assistant == false)
+		{
+			$template = new Template($path_prefix."template/equipment/list.html");
+		}
+		else
+		{
+			$template = new Template($path_prefix."template/equipment/list_without_border.html");
+		}
+		
+		$template->output();
+		
+		$list->run();
 	}
 	
 	/**
@@ -310,7 +291,7 @@ class EquipmentIO
 	{
 		if ($_GET[ou_id])
 		{
-			$list = new List_IO(Equipment_Wrapper::count_organisation_unit_equipments($_GET[ou_id]), 20);
+			$list = new ListStat_IO(Equipment_Wrapper::count_organisation_unit_equipments($_GET[ou_id]), 20);
 
 			$list->add_row("","symbol",false,16);
 			$list->add_row("Equipment Name","name",true,null);

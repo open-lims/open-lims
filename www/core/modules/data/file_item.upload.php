@@ -75,7 +75,7 @@
 			}	
 	
 			
-			$file = new File(null);
+			$file = File::get_instance(null);
 			$file_upload_successful = $file->upload_file_stack($file_amount, $folder_id, $_FILES, $_GET[unique_id]);
 	
 			if ($file_upload_successful == true)
@@ -87,8 +87,8 @@
 				{
 					foreach($item_id_array as $key => $value)
 					{
-						$file_as_item_upload_event = new FileAsItemUploadEvent($value, $_GET, $_POST);
-						$event_handler = new EventHandler($file_as_item_upload_event);
+						$item_add_event = new ItemAddEvent($value, $_GET, $_POST);
+						$event_handler = new EventHandler($item_add_event);
 					}
 				}
 				$session->write_value("FILE_UPLOAD_FINISHED_".$_GET[unique_id], true, true);

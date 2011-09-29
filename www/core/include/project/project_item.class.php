@@ -313,6 +313,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
+     * @todo overhaul
      * @see ProjectItemInterface::get_project_items()
      * @return array
      */

@@ -35,6 +35,7 @@
 	define("FOLDER_CONCRETION_TABLE", 					"core_folder_concretion");
 	define("FOLDER_IS_GROUP_FOLDER_TABLE", 				"core_folder_is_group_folder");
 	define("FOLDER_IS_ORGANISATION_UNIT_FOLDER_TABLE", 	"core_folder_is_organisation_unit_folder");
+	define("FOLDER_IS_SYSTEM_FOLDER_TABLE", 			"core_folder_is_system_folder");
 	define("FOLDER_IS_USER_FOLDER_TABLE", 				"core_folder_is_user_folder");
 	define("FOLDER_TABLE", 								"core_folders");
 

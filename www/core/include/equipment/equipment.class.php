@@ -266,6 +266,36 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 	}
 	
 	/**
+	 * @see ItemListenerInterface::clone_item()
+	 * @param integer $item_id
+	 * @return integer
+	 */
+	public static function clone_item($item_id)
+	{
+		global $user;
+		
+		if (is_numeric($item_id))
+		{
+			$equipment_id = self::get_entry_by_item_id($item_id);
+			$current_equipment = new Equipment($equipment_id);
+			$new_equipment = new Equipment(null);
+			
+			if ($new_equipment->create($current_equipment->get_type_id(), $user->get_user_id()) != null)
+			{
+				return $new_equipment->get_item_id();
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @see ItemListenerInterface::get_item_name()
 	 * @return string
 	 */

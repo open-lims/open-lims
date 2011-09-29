@@ -42,6 +42,8 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class Value extends DataEntity implements ValueInterface, EventListenerInterface
 {
+	private static $value_object_array;
+	
 	private $value_id;
 	
 	private $value;
@@ -1286,7 +1288,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
      * @todo implementation (Replaces self::get_html_form)
      * @return array;
      */
-    public function get_value_shape()
+    public function get_value_shape($field_class = null, $field_name_prefix = null)
     {
     	
     }
@@ -1298,7 +1300,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
      * @param integer $type_id
      * @return string
      */
-	public function get_html_form($error_array, $type_id, $folder_id)
+	public function get_html_form($error_array, $type_id, $folder_id, $field_class = null, $field_name_prefix = null)
 	{	
 		if ($type_id == null and $this->value_id)
 		{
@@ -1521,7 +1523,14 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 					
 					if ($value[3][name])
 					{
-						$field_name = $value[3][name];
+						if ($field_name_prefix)
+						{
+							$field_name = $field_name_prefix."-".$value[3][name];
+						}
+						else
+						{
+							$field_name = $value[3][name];
+						}
 					}
 					
 					if ($content_array and !$_POST[$value[3][name]])
@@ -1601,22 +1610,44 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 					switch ($type):
 						
 						case (1):
-							$return .= "<input type='".$typename."' name='".$field_name."' value='".$field_default."' size='".$field_length."' />\n" .
+							if ($field_class)
+							{
+								$return .= "<input type='".$typename."' name='".$field_name."' value='".$field_default."' size='".$field_length."' class='".$field_class."' />\n" .
+									"<input type='hidden' name='".$field_name."-vartype' value='".$vartype."' class='".$field_class."' />\n";
+							}
+							else
+							{
+								$return .= "<input type='".$typename."' name='".$field_name."' value='".$field_default."' size='".$field_length."' />\n" .
 									"<input type='hidden' name='".$field_name."-vartype' value='".$vartype."' />\n";
+							}
 						break;
 						
 						case (2):
-							$return .= "<select name='".$field_name."' />\n";
+							if ($field_class)
+							{
+								$return .= "<select name='".$field_name."' class='".$field_class."'>\n";
+							}
+							else
+							{
+								$return .= "<select name='".$field_name."'>\n";
+							}
 							
 							if ($value[3][value] and !$value[3]['var'])
 							{
 		
-								$value_array = explode(",",$value[3]['value']);
-								$value_array_length = substr_count($value[3]['value'],",");
+								$value_array = explode(";;",$value[3]['value']);
+								$value_array_length = substr_count($value[3]['value'],";;");
 								
 								for ($i=0;$i<=$value_array_length;$i++)
 								{
-									$return .= "<option>".$value_array[$i]."</option>\n";
+									if (trim(strtolower($value_array[$i])) == trim(strtolower($field_default)))
+									{
+										$return .= "<option selected='selected'>".trim($value_array[$i])."</option>\n";
+									}
+									else
+									{
+										$return .= "<option>".trim($value_array[$i])."</option>\n";
+									}
 								}
 							}
 							elseif (!$value[3][value] and $value[3]['var'])
@@ -1651,12 +1682,27 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 						break;
 						
 						case (3):
-							$return .= "<select type='".$typename."' name='".$field_name."' />\n";
+							if ($field_class)
+							{
+								$return .= "<select type='".$typename."' name='".$field_name."' class='".$field_class."'>\n";
+							}
+							else
+							{
+								$return .= "<select type='".$typename."' name='".$field_name."'>\n";
+							}
 						break;
 						
 						default:
-							$return .= "<textarea name='".$field_name."' cols='".$field_cols."' rows='".$field_rows."' >".$field_default."</textarea>\n" .
-										"<input type='hidden' name='".$field_name."-vartype' value='".$vartype."' />\n";
+							if ($field_class)
+							{
+								$return .= "<textarea name='".$field_name."' cols='".$field_cols."' rows='".$field_rows."' class='".$field_class."'>".$field_default."</textarea>\n" .
+											"<input type='hidden' name='".$field_name."-vartype' value='".$vartype."' />\n";
+							}
+							else
+							{
+								$return .= "<textarea name='".$field_name."' cols='".$field_cols."' rows='".$field_rows."'>".$field_default."</textarea>\n" .
+											"<input type='hidden' name='".$field_name."-vartype' value='".$vartype."' />\n";
+							}
 						break;
 					
 					endswitch;
@@ -1806,5 +1852,30 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
     	return true;
     }
     
+	/**
+     * @see ValueInterface::get_instance()
+     * @param integer $file_id
+     * @return object
+     */
+    public static function get_instance($value_id)
+    {    
+    	if (is_numeric($value_id) and $value_id > 0)
+    	{
+			if (self::$value_object_array[$value_id])
+			{
+				return self::$value_object_array[$value_id];
+			}
+			else
+			{
+				$value = new Value($value_id);
+				self::$value_object_array[$value_id] = $value;
+				return $value;
+			}
+    	}
+    	else
+    	{
+    		return new Value(null);
+    	}
+    }
 }
 ?>

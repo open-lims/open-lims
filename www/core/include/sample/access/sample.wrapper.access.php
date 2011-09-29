@@ -354,9 +354,9 @@ class Sample_Wrapper_Access
 		
 		if (is_numeric($user_id))
 		{	
-			$sql = "SELECT COUNT(".constant("SAMPLE_TABLE").".id) AS result " .
+			$sql = "SELECT COUNT(DISTINCT ".constant("SAMPLE_TABLE").".id) AS result " .
 						"FROM ".constant("SAMPLE_TABLE")." " .
-						"LEFT JOIN ".constant("SAMPLE_HAS_USER_TABLE")." ON ".constant("SAMPLE_TABLE").".id = ".constant("SAMPLE_HAS_USER_TABLE").".sample_id " .
+						"JOIN ".constant("SAMPLE_HAS_USER_TABLE")." ON ".constant("SAMPLE_TABLE").".id = ".constant("SAMPLE_HAS_USER_TABLE").".sample_id " .
 						"WHERE (".constant("SAMPLE_HAS_USER_TABLE").".write = 't' AND user_id = ".$user_id.") " .
 							"OR owner_id = ".$user_id."";
 			
@@ -441,7 +441,8 @@ class Sample_Wrapper_Access
 						"".constant("SAMPLE_TABLE").".date_of_expiry AS date_of_expiry, " .
 						"".constant("SAMPLE_TABLE").".expiry_warning AS expiry_warning, " .
 						"".constant("SAMPLE_TABLE").".available AS av, " .
-						"".constant("SAMPLE_TABLE").".owner_id AS owner " .
+						"".constant("SAMPLE_TABLE").".owner_id AS owner, " .
+						"".constant("SAMPLE_IS_ITEM_TABLE").".item_id AS item_id " .
 						"FROM ".constant("SAMPLE_TABLE")." " .
 						"LEFT JOIN ".constant("SAMPLE_IS_ITEM_TABLE")." 		ON ".constant("SAMPLE_TABLE").".id 							= ".constant("SAMPLE_IS_ITEM_TABLE").".sample_id " .
 						"LEFT JOIN ".constant("SAMPLE_TEMPLATE_TABLE")." 		ON ".constant("SAMPLE_TABLE").".template_id 				= ".constant("SAMPLE_TEMPLATE_TABLE").".id " .

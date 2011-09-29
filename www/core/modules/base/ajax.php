@@ -62,10 +62,18 @@ $transaction = new Transaction();
 require_once($path_prefix."../../include/user/group.class.php");	
 require_once($path_prefix."../../include/user/user.class.php");
 
+require_once($path_prefix."../../include/base/misc.class.php");
+
 require_once($path_prefix."../../include/base/session.class.php");
 
 require_once($path_prefix."../../modules/base/common.io.php");
 require_once($path_prefix."../../modules/base/list.io.php");
+require_once($path_prefix."../../modules/base/list_request.io.php");
+
+/**
+ * @deprecated remove later
+ */
+require_once($path_prefix."../../modules/base/list_stat.io.php");
 
 SystemHandler::init_db_constants();
 

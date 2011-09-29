@@ -29,7 +29,7 @@ class AdminBaseModuleIO
 {
 	public static function home()
 	{
-		$list = new List_IO(0, 20);
+		$list = new ListStat_IO(0, 20);
 		
 		$list->add_row("Name", "name", true, null);
 		$list->add_row("Dialogs", "dialogs", true, null);

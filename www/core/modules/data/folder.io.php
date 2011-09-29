@@ -35,7 +35,7 @@ class FolderIO
 		{
 			$folder = Folder::get_instance($_GET[folder_id]);
 			
-			if ($folder->is_flag_add_folder())
+			if ($folder->can_add_folder())
 			{
 				if ($_GET[nextpage] == 1)
 				{
@@ -132,7 +132,7 @@ class FolderIO
 		{
 			$folder = Folder::get_instance($_GET[folder_id]);
 		
-			if ($folder->is_flag_cmd_folder())
+			if ($folder->can_command_folder())
 			{
 				if ($_GET[nextpage] == 1)
 				{
@@ -197,7 +197,7 @@ class FolderIO
 		{
 			$folder = Folder::get_instance($_GET[folder_id]);
 		
-			if ($folder->is_flag_cmd_folder())
+			if ($folder->can_command_folder())
 			{
 				if ($_GET[nextpage] == 1)
 				{
@@ -269,14 +269,14 @@ class FolderIO
 		{
 			$folder = Folder::get_instance($_GET[folder_id]);
 		
-			if ($folder->is_flag_change_permission() or 
-				$folder->is_flag_add_folder() or 
-				$folder->is_flag_cmd_folder() or 
-				$folder->is_flag_rename_folder())
+			if ($folder->can_change_permission() or 
+				$folder->can_add_folder() or 
+				$folder->can_command_folder() or 
+				$folder->can_rename_folder())
 			{
 				$template = new Template("template/data/folder_administration.html");
 				
-				if ($folder->is_flag_change_permission())
+				if ($folder->can_change_permission())
 				{
 					$template->set_var("change_permission", true);
 				}
@@ -285,7 +285,7 @@ class FolderIO
 					$template->set_var("change_permission", false);
 				}
 				
-				if ($folder->is_flag_add_folder())
+				if ($folder->can_add_folder())
 				{
 					$template->set_var("add", true);
 				}
@@ -294,7 +294,7 @@ class FolderIO
 					$template->set_var("add", false);
 				}
 				
-				if ($folder->is_flag_cmd_folder())
+				if ($folder->can_command_folder())
 				{
 					$template->set_var("cmd", true);
 				}
@@ -303,7 +303,7 @@ class FolderIO
 					$template->set_var("cmd", false);
 				}
 				
-				if ($folder->is_flag_rename_folder())
+				if ($folder->can_rename_folder())
 				{
 					$template->set_var("rename", true);
 				}

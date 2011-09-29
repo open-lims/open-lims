@@ -29,7 +29,7 @@ class AdminProjectTemplateCatIO
 {
 	public static function home()
 	{
-		$list = new List_IO(Project_Wrapper::count_list_project_template_categories(), 20);
+		$list = new ListStat_IO(Project_Wrapper::count_list_project_template_categories(), 20);
 		
 		$list->add_row("Name", "name", true, null);
 		$list->add_row("Edit", "edit", false, "10%");

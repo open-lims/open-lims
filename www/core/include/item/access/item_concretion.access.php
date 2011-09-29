@@ -77,6 +77,9 @@ class ItemConcretion_Access
 	}
 	
 	/**
+	 * @param string $type
+	 * @param string $handling_class
+	 * @param integer $include_id
 	 * @return integer
 	 */
 	public function create($type, $handling_class, $include_id)
@@ -302,6 +305,7 @@ class ItemConcretion_Access
 	}
 	
 	/**
+	 * @param string $type
 	 * @return array
 	 */
 	public static function get_handling_class_by_type($type)

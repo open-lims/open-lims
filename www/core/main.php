@@ -159,9 +159,14 @@ class Main
 		require_once("modules/content_handler.io.php");
 		require_once("modules/base/common.io.php");
 		require_once("modules/base/error.io.php");
-		require_once("modules/base/table.io.php");
 		require_once("modules/base/list.io.php");
 		require_once("modules/base/tab.io.php");
+		
+		/**
+		 * @deprecated remove later
+		 */
+		require_once("modules/base/table.io.php");
+		require_once("modules/base/list_stat.io.php");
 		
 		ContentHandler_IO::main();
 	}	

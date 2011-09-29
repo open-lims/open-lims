@@ -28,7 +28,7 @@
 class DataIO
 {
 	/**
-	 * Remove Exception Dependency
+	 * @todo IMPORTANT: Remove Exception Dependency
 	 */
 	public static function browser()
 	{
@@ -106,7 +106,7 @@ class DataIO
 			// !!!!! ---------- !!!!!!!!!!!!!1
 			$folder = Folder::get_instance($folder_id);	
 
-			$list = new List_IO(DataBrowser::count_data_browser_array($folder_id, $virtual_folder_id), 20);
+			$list = new ListStat_IO(DataBrowser::count_data_browser_array($folder_id, $virtual_folder_id), 20);
 
 			$list->set_top_right_text($data_path->get_stack_path());
 			
@@ -202,7 +202,7 @@ class DataIO
 					// Special
 					if ($result_array[$key][file_id])
 					{						
-						$file = new File($result_array[$key][file_id]);
+						$file = File::get_instance($result_array[$key][file_id]);
 
 						if ($file->is_read_access() == true)
 						{
@@ -242,7 +242,7 @@ class DataIO
 					}
 					elseif ($result_array[$key][value_id])
 					{
-						$value = new Value($result_array[$key][value_id]);
+						$value = Value::get_instance($result_array[$key][value_id]);
 
 						if ($value->is_read_access() == true)
 						{
@@ -373,10 +373,13 @@ class DataIO
 					$template->set_var("folder_image", false);
 				}
 				
-				if ($folder->is_flag_change_permission() or 
-					$folder->is_flag_add_folder() or 
-					$folder->is_flag_cmd_folder() or 
-					$folder->is_flag_rename_folder())
+				if (($folder->can_change_permission() or 
+					$folder->can_add_folder() or 
+					$folder->can_command_folder() or 
+					$folder->can_rename_folder()) and
+					($folder->is_write_access() or 
+					$folder->is_delete_access() or
+					$folder->is_control_access()))
 				{
 					$template->set_var("folder_administration", true);
 				}
@@ -476,7 +479,7 @@ class DataIO
 			$error_io->display_error();
 		}
 	}
-
+	
 	public static function image_browser_multi()
 	{
 		if ($_GET[folder_id])
@@ -543,7 +546,7 @@ class DataIO
 							{
 								$content_array[$counter][display_image] = true;
 								
-								$file = new File($image_browser_array[$current_address]);
+								$file = File::get_instance($image_browser_array[$current_address]);
 						
 								$paramquery[session_id] = $_GET[session_id];
 								$paramquery[file_id] = $image_browser_array[$current_address];
@@ -638,7 +641,7 @@ class DataIO
 				
 					if ($image_browser_array[$page])
 					{
-						$file = new File($image_browser_array[$page]);
+						$file = File::get_instance($image_browser_array[$page]);
 				
 						$template = new Template("template/data/data_image_browser_detail.html");
 						
@@ -664,7 +667,7 @@ class DataIO
 							
 							foreach($file_version_array as $key => $value)
 							{
-								$file_version = new File($image_browser_array[$page]);
+								$file_version = File::get_instance($image_browser_array[$page]);
 								$file_version->open_internal_revision($value);
 								
 								$result[$counter][version] = $file_version->get_internal_revision();
@@ -771,7 +774,7 @@ class DataIO
 				if ($_GET[file_id])
 				{
 					$id = $_GET[file_id];
-					$object = new File($id);
+					$object = File::get_instance($id);
 					$type = "file";
 					$title = $object->get_name();
 				}
@@ -779,7 +782,7 @@ class DataIO
 				if ($_GET[value_id])
 				{
 					$id = $_GET[value_id];
-					$object = new Value($id);
+					$object = Value::get_instance($id);
 					$type = "value";
 					$title = $object->get_type_name();
 				}
@@ -1054,14 +1057,14 @@ class DataIO
 				if ($_GET[file_id])
 				{
 					$id = $_GET[file_id];
-					$object = new File($id);
+					$object = File::get_instance($id);
 					$type = "file";
 					$title = $object->get_name();
 				}
 				if ($_GET[value_id])
 				{
 					$id = $_GET[value_id];
-					$object = new Value($id);
+					$object = Value::get_instance($id);
 					$type = "value";
 					$title = $object->get_type_name();
 				}
@@ -1177,14 +1180,14 @@ class DataIO
 				if ($_GET[file_id])
 				{
 					$id = $_GET[file_id];
-					$object = new File($id);
+					$object = File::get_instance($id);
 					$type = "file";
 					$title = $object->get_name();
 				}
 				if ($_GET[value_id])
 				{
 					$id = $_GET[value_id];
-					$object = new Value($id);
+					$object = Value::get_instance($id);
 					$type = "value";
 					$title = $object->get_type_name();
 				}

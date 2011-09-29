@@ -560,5 +560,35 @@ class Folder_Access
 			return null;
 		}
 	}
+	
+	/**
+	 * @param integer $folder_id
+	 * @return string
+	 */
+	public static function get_name_by_id($folder_id)
+	{
+		global $db;
+
+		if (is_numeric($folder_id))
+		{
+			$sql = "SELECT name FROM ".constant("FOLDER_TABLE")." WHERE id = '".$folder_id."'";
+
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[name])
+			{
+				return $data[name];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
 }
 ?>

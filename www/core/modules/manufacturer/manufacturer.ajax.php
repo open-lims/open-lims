@@ -140,7 +140,7 @@ class ManufacturerAjax extends Ajax
 	{
 		global $user;
 		
-		$list = new List_IO(Manufacturer_Wrapper::count_manufacturers(), 20,"ManufacturerListPage");
+		$list = new ListStat_IO(Manufacturer_Wrapper::count_manufacturers(), 20,"ManufacturerListPage");
 
 		$list->add_row("","symbol",false,"16px");
 		$list->add_row("Name","name",true,null,"ManufacturerListSortName");

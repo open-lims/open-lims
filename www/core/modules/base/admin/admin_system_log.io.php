@@ -38,7 +38,7 @@ class AdminSystemLogIO
 			$type_id = 1;
 		}
 		
-		$list = new List_IO(Base_Wrapper::count_list_system_log($type_id), 20);
+		$list = new ListStat_IO(Base_Wrapper::count_list_system_log($type_id), 20);
 		
 		$list->add_row("User", "user", true, null);
 		$list->add_row("Date/Time", "datetime", true, null);

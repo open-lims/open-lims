@@ -1,12 +1,24 @@
 
-<br />
-
-<!-- CONTAINER BEGIN ("Create New Project (1/5)",0) -->
 
 <!-- IF ([[ORGANUNIT]]) -->
 
-<form action='index.php?[[LINK]]' method='post'>
-[[BAR]]
+<script>
+$(document).ready(function()
+{
+	$("#AssistantNext").click(function()
+	{
+		if ($(".ProjectCreateAssistantField[name='project_organisation_unit'] option").is(":selected"))
+		{
+			assistant.load_next_page();
+		}
+		else
+		{
+			$("#ProjectCreateError1").html("<br />You have to select an Organisation Unit.");
+		}
+	});
+});
+</script>
+
 <br />
 <table class='formTable'>
 	<tr>
@@ -14,7 +26,7 @@
 	</tr>
 	<tr>
 		<td>
-			<select name='organunit' class='ProjectCreateSelect' size='10' />
+			<select name='project_organisation_unit' class='FormSelect ProjectCreateAssistantField' size='10'>
 	
 			<!-- FOREACH BEGIN ([[OPTION]]) -->
 	
@@ -23,25 +35,39 @@
 			<!-- FOREACH END -->
 	
 			</select>
-		<span class='formError'>[[ERROR]]</span>
+		<span class='FormError' id='ProjectCreateError1'></span>
 		</td>
 	</tr>
 	<tr>
-		<td><br />
-			<div class='button_left'><input type='submit' value='previous' name='submitbutton' class='previous_button_disabled' disabled /></div>
-			<div class='button_right'><input type='submit' value='next' name='submitbutton' class='next_button' /></div>
+		<td>
+			<br />
+			<div class='button_left'><button id='AssistantPrevious' class='AssistantButtonDisabled' disabled='disabled'>previous</button></div>
+			<div class='button_right'><button id='AssistantNext' class='AssistantButton'>next</button></div>
 		</td>
 	</tr>
 </table>
-</form>
 <br />
 
 
 <!-- ELSE -->
 
+<script>
+$(document).ready(function()
+{
+	$("#AssistantNext").click(function()
+	{
+		if ($(".ProjectCreateAssistantField[name='project_toid'] option").is(":selected"))
+		{
+			assistant.load_next_page();
+		}
+		else
+		{
+			$("#ProjectCreateError1").html("<br />You have to select a Parent Project.");
+		}
+	});
+});
+</script>
 
-<form action='index.php?[[LINK]]' method='post'>
-[[BAR]]
 <br />
 <table class='formTable'>
 	<tr>
@@ -49,7 +75,7 @@
 	</tr>
 	<tr>
 		<td>
-			<select name='project_toid' class='ProjectCreateSelect' size='10' />
+			<select name='project_toid' class='FormSelect ProjectCreateAssistantField' size='10'>
 	
 			<!-- FOREACH BEGIN ([[OPTION]]) -->
 	
@@ -58,20 +84,18 @@
 			<!-- FOREACH END -->
 	
 			</select>
-			<span class='formError'>[[ERROR]]</span>
+			<span class='FormError' id='ProjectCreateError1'></span>
 		</td>
 	</tr>
 	<tr>
-		<td><br />
-			<div class='button_left'><input type='submit' value='previous' name='submitbutton' class='previous_button_disabled' disabled /></div>
-			<div class='button_right'><input type='submit' value='next' name='submitbutton' class='next_button' /></div>
+		<td>
+			<br />
+			<div class='button_left'><button id='AssistantPrevious' class='AssistantButtonDisabled' disabled='disabled'>previous</button></div>
+			<div class='button_right'><button id='AssistantNext' class='AssistantButton'>next</button></div>
 		</td>
 	</tr>
 </table>
-</form>
 <br />
 
 <!-- ENDIF -->
 
-
-<!-- CONTAINER END (0) -->

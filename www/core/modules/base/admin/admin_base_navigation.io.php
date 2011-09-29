@@ -29,7 +29,7 @@ class AdminBaseNavigationIO
 {
 	public static function home()
 	{
-		$list = new List_IO((Base_Wrapper::count_base_module_navigation()+1), 20);
+		$list = new ListStat_IO((Base_Wrapper::count_base_module_navigation()+1), 20);
 		
 		$list->add_row("Displayed-Name (en-GB)", "name", false, null);
 		$list->add_row("Module", "module", false, null);

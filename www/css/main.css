@@ -344,10 +344,6 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 	width: 100%;
 }
 
-.ProjectCreateSelect {
-	width: 100%;
-}
-
 .ProjectCreateIWantTo {
 	width: 70%;
 	margin-left: auto;
@@ -1119,35 +1115,60 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 
 /* ------------------ */ /* Neu */ /* ------------------ */
 
-.Assistant {
+.Assistant
+{
 	width: 730px;
 	padding: 5px 10px 5px 10px;
 }
-
-.AssistantElement {
+.AssistantElement a
+{
 	display: block;
 	float: left;
 	text-align: center;
 	text-decoration: none;
 }
-
-.AssistantElementImage {
+.AssistantElementImage
+{
 	display: block;
 	padding: 2px;
 }
-
-.AssistantElementText {
+.AssistantElementText
+{
 	display: block;
 	font: bold 10px Verdana, Tahoma, Helvetica, sans-serif;
 	color: #505050;
 }
-
-.AssistantClear {
+.AssistantClear
+{
 	clear: left;
 	width: 750px;
-	border-top: 1px #D0D0D0 dotted;
-	height: 1px;
+	border-bottom: 1px #D0D0D0 dotted;
+	height: 4px;
 }
+.AssistantButton,
+.AssistantButtonDisabled
+{
+	background-color: white;
+	border: 1px #C0C0C0 solid;
+	width: 70px;
+}
+.AssistantButton:hover
+{
+	background-color: #E0E0E0;
+}
+#AssistantLoading
+{
+	padding: 40px;
+	text-align: center;	
+}
+#AssistantFinish
+{
+	font: normal 12px Arial, Helvetica, sans-serif;	
+	padding: 10px;
+}
+
+
+
 
 .CalendarTrGrey {
 	background-color: #E0E0E0;

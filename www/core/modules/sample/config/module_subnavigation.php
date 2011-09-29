@@ -35,13 +35,36 @@ $new_sample_params = http_build_query($new_sample_paramquery,'','&#38;');
 $sub_menu[0][params] = $new_sample_params;
 $sub_menu[0][title] = "New Sample";
 
+
+$new_sample_paramquery[username] = $_GET[username];
+$new_sample_paramquery[session_id] = $_GET[session_id];
+$new_sample_paramquery[nav] = "sample";
+$new_sample_paramquery[run] = "clone";
+$new_sample_params = http_build_query($new_sample_paramquery,'','&#38;');
+
+$sub_menu[1][params] = $new_sample_params;
+$sub_menu[1][title] = "Clone Sample";
+
+
 $my_samples_paramquery[username] = $_GET[username];
 $my_samples_paramquery[session_id] = $_GET[session_id];
 $my_samples_paramquery[nav] = "sample";
 $my_samples_params = http_build_query($my_samples_paramquery,'','&#38;');
 
-$sub_menu[1][params] = $my_samples_params;
-$sub_menu[1][title] = "My Samples";
+$sub_menu[2][params] = $my_samples_params;
+$sub_menu[2][title] = "My Samples";
+
+
+$manufacturer_paramquery[username] = $_GET[username];
+$manufacturer_paramquery[session_id] = $_GET[session_id];
+$manufacturer_paramquery[nav] = "sample";
+$manufacturer_paramquery[run] = "common_dialog";
+$manufacturer_paramquery[dialog] = "list_manufacturers";
+$manufacturer_params = http_build_query($manufacturer_paramquery,'','&#38;');
+
+$sub_menu[3][params] = $manufacturer_params;
+$sub_menu[3][title] = "Manufacturer List";
+
 
 $mini_search_paramquery[username] = $_GET[username];
 $mini_search_paramquery[session_id] = $_GET[session_id];
@@ -51,16 +74,7 @@ $mini_search_paramquery[dialog] = "sample_search";
 $mini_search_paramquery[nextpage] = "1";
 $mini_search_params = http_build_query($mini_search_paramquery,'','&#38;');
 
-$manufacturer_paramquery[username] = $_GET[username];
-$manufacturer_paramquery[session_id] = $_GET[session_id];
-$manufacturer_paramquery[nav] = "sample";
-$manufacturer_paramquery[run] = "common_dialog";
-$manufacturer_paramquery[dialog] = "list_manufacturers";
-$manufacturer_params = http_build_query($manufacturer_paramquery,'','&#38;');
 
-$sub_menu[2][params] = $manufacturer_params;
-$sub_menu[2][title] = "Manufacturer List";
-			
 $template->set_var("sub_menu", $sub_menu);
 $template->set_var("search_bar", true);
 $template->set_var("mini_search_params", $mini_search_params);

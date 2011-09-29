@@ -63,7 +63,7 @@ class DataPermission implements DataPermissionInterface
 			
 				case("file"):
 					$this->file_id = $id;
-					$this->file = new File($id);
+					$this->file = File::get_instance($id);
 					
 					$this->automatic = $this->file->get_automatic();
 					$this->permission = $this->file->get_permission();
@@ -73,7 +73,7 @@ class DataPermission implements DataPermissionInterface
 				
 				case("value"):
 					$this->value_id = $id;
-					$this->value = new Value($id);
+					$this->value = Value::get_instance($id);
 					
 					$this->automatic = $this->value->get_automatic();
 					$this->permission = $this->value->get_permission();

@@ -73,7 +73,7 @@
 			{	
 				$file_amount = $_POST[file_amount];		
 			}
-			$file = new File(null);
+			$file = File::get_instance(null);
 			$file->upload_file_stack($file_amount, $_GET[folder_id], $_FILES, $_GET[unique_id]);
 			$session->write_value("FILE_UPLOAD_FINISHED_".$_GET[unique_id], true, true);
 		}

@@ -236,7 +236,7 @@ class SampleDataSearchIO
 				}	
 			}
 											
-			$list = new List_IO(Sample_Wrapper::count_data_search($string, $sample_id_array, $item_type_array), 20);
+			$list = new ListStat_IO(Sample_Wrapper::count_data_search($string, $sample_id_array, $item_type_array), 20);
 			
 			if (is_array($result_array) and count($result_array) >= 1)
 			{

@@ -1,21 +1,86 @@
-
-<br />
-
-<!-- CONTAINER BEGIN ("Create New Sample (3/5)",0) -->
-
 <script>
-$(function()
-{
-	$( "#datepicker" ).datepicker(
-	{
-		changeMonth: true,
-		changeYear: true,
-		dateFormat: 'yy-mm-dd'
-	});
-});
-
 $(document).ready(function()
 {
+	function check_form()
+	{
+		var return_value = true;
+		
+		$("#SampleCreateError1").html("");
+		$("#SampleCreateError2").html("");
+		$("#SampleCreateError3").html("");
+		$("#SampleCreateError4").html("");
+		
+		if (!$(".SampleCreateAssistantField[name='sample_name']").val())
+		{
+			$("#SampleCreateError1").html("You have to enter a sample name.");
+			return_value = false;
+		}
+		
+		<!-- IF ([[CHECK_MANUFACTURER]]) -->
+		
+		if (!$(".SampleCreateAssistantField[name='sample_manufacturer_name']").val())
+		{
+			$("#SampleCreateError2").html("You have to select a manufacturer.");
+			return_value = false;
+		}
+		
+		<!-- ENDIF -->
+		
+		<!-- IF ([[CHECK_EXPIRY]]) -->
+		
+		if (!$(".SampleCreateAssistantField[name='sample_expiry']").val())
+		{
+			$("#SampleCreateError3").html("You have to set a date of expiry.");
+			return_value = false;
+		}
+		
+		<!-- ENDIF -->
+		
+		<!-- IF ([[CHECK_LOCATION]]) -->
+		
+		if (!$(".SampleCreateAssistantField[name='sample_location']").val())
+		{
+			$("#SampleCreateError4").html("You have to select a sample location");
+			return_value = false;
+		}
+		
+		<!-- ENDIF -->
+		
+		return return_value;
+	}
+	$("#AssistantPrevious").click(function()
+	{
+		if (check_form() == true)
+		{
+			assistant.load_previous_page();
+		}
+		else
+		{
+			assistant.save_data();
+		}
+	});
+	$("#AssistantNext").click(function()
+	{
+		if (check_form() == true)
+		{
+			assistant.load_next_page();
+		}
+		else
+		{
+			assistant.save_data();
+		}
+	});
+	
+	$(function()
+	{
+		$( "#datepicker" ).datepicker(
+		{
+			changeMonth: true,
+			changeYear: true,
+			dateFormat: 'yy-mm-dd'
+		});
+	});
+	
 	$('#warning').hide();
 	$('#show_warning').click(function()
 	{
@@ -45,8 +110,6 @@ $(document).ready(function()
 
 [[MANUFACTURER_HTML]]
 
-<form action='index.php?[[LINK]]' method='post'>
-[[BAR]]
 <br />
 <table class='formTable'>
 	<tr>
@@ -55,8 +118,8 @@ $(document).ready(function()
 	<tr>
 		<td>Name:</td>
 		<td>
-			<input type='text' name='name' class='sampleTextfield' value='[[NAME]]' />
-			<span class='formError'><br />[[ERROR0]]</span>
+			<input type='text' name='sample_name' class='sampleTextfield SampleCreateAssistantField' value='[[NAME]]' />
+			<span class='FormError' id='SampleCreateError1'></span>
 		</td>
 	</tr>
 	
@@ -64,9 +127,9 @@ $(document).ready(function()
 	<tr>
 		<td>Supplier/Source/Manufacturer:</td>
 		<td>
-			<input type='text' name='manufacturer_name' class='sampleTextfield' value='[[MANUFACTURER_NAME]]' id='ManufactuerNameField' />
-			<input type='hidden' name='manufacturer' value='[[MANUFACTURER]]' id='manufactuerIdField' />
-			<span class='formError'><br />[[ERROR1]]</span>
+			<input type='text' name='sample_manufacturer_name' class='sampleTextfield SampleCreateAssistantField' value='[[MANUFACTURER_NAME]]' id='ManufactuerNameField' />
+			<input type='hidden' name='sample_manufacturer_id' value='[[MANUFACTURER]]' id='ManufactuerIdField' class='SampleCreateAssistantField' />
+			<span class='FormError' id='SampleCreateError2'></span>
 		</td>
 	</tr>
 	<!-- ENDIF -->
@@ -75,15 +138,14 @@ $(document).ready(function()
 	<tr>
 		<td>Date of Expiry: (<a href='#' id='show_warning'>lead time</a>)</td>
 		<td>
-			<input type='text' name='expiry' class='sampleTextfield' value='[[EXPIRY]]' id='datepicker' />
-			<span class='formError'><br />[[ERROR2]]</span>
+			<input type='text' name='sample_expiry' class='sampleTextfield SampleCreateAssistantField' value='[[EXPIRY]]' id='datepicker' />
+			<span class='FormError' id='SampleCreateError3'></span>
 		</td>
 	</tr>
 	<tr id='warning'>
 		<td>Lead-Time (in days):</td>
 		<td>
-			<input type='text' name='expiry_warning' class='sampleTextfield' value='[[EXPIRY_WARNING]]' />
-			<span class='formError'><br />[[ERROR2]]</span>
+			<input type='text' name='sample_expiry_warning' class='sampleTextfield SampleCreateAssistantField' value='[[EXPIRY_WARNING]]' />
 		</td>
 	</tr>
 	<!-- ENDIF -->
@@ -92,7 +154,7 @@ $(document).ready(function()
 	<tr>
 		<td>Location:</td>
 		<td>
-			<select name='location' class='sampleSelect'>
+			<select name='sample_location' class='sampleSelect SampleCreateAssistantField'>
 			
 			<!-- FOREACH BEGIN ([[LOCATION]]) -->
 	
@@ -101,7 +163,7 @@ $(document).ready(function()
 			<!-- FOREACH END -->	
 				
 			</select>
-			<span class='formError'><br />[[ERROR3]]</span>
+			<span class='FormError' id='SampleCreateError4'></span>
 		</td>
 	</tr>
 	<!-- ENDIF -->
@@ -113,7 +175,7 @@ $(document).ready(function()
 		<td colspan='2'>Description/Comment (optional)</td>
 	</tr>
 	<tr>
-		<td colspan='2'><textarea name='desc' cols='66' rows='10' class='FormTextarea'>[[DESC]]</textarea></td>
+		<td colspan='2'><textarea name='sample_description' cols='66' rows='10' class='FormTextarea SampleCreateAssistantField'>[[DESC]]</textarea></td>
 	</tr>
 	<tr>
 		<td colspan='2'><div class='horizontal_line'>&nbsp;</div></td>
@@ -121,13 +183,8 @@ $(document).ready(function()
 	<tr>
 		<td colspan='2'>
 			<br />
-			<div class='button_left'><input type='submit' value='previous' name='submitbutton' class='previous_button' /></div>
-			<div class='button_right'><input type='submit' value='next' name='submitbutton' class='next_button' /></div>
+			<div class='button_left'><button id='AssistantPrevious' class='AssistantButtonDisabled'>previous</button></div>
+			<div class='button_right'><button id='AssistantNext' class='AssistantButton'>next</button></div>
 		</td>
 	</tr>
 </table>
-<input type='hidden' value='[[DESCRIPTION]]' name='description' />
-<input type='hidden' value='[[KEYWORDS]]' name='keywords' />
-</form>
-
-<!-- CONTAINER END (0) -->

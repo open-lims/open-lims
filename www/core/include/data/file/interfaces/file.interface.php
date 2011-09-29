@@ -109,6 +109,7 @@ interface FileInterface
 	
 	/**
 	 * Copies file to another location
+	 * Copies the current version only.
 	 * @param integer $folder_id
 	 * @return bool
 	 */
@@ -201,5 +202,11 @@ interface FileInterface
 	 * @return string
 	 */
 	public static function get_icon_by_name($name);
+	
+	/**
+     * @param integer $file_id
+     * @return object
+     */
+    public static function get_instance($file_id);
 }
 ?>

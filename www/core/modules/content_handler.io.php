@@ -51,7 +51,8 @@ class ContentHandler_IO
 						{
 							if (is_file($css_directory."/".$value))
 							{
-								$index_css .= "<link rel='stylesheet' type='text/css' href='css/".$value."' title='Style' />\n";
+								$unique_id = uniqid();
+								$index_css .= "<link rel='stylesheet' type='text/css' href='css/".$value."?".$unique_id."' title='Style' />\n";
 							}	
 						}
 					}	
@@ -77,7 +78,7 @@ class ContentHandler_IO
 						{
 							if (is_file($js_lib_directory."/".$value))
 							{
-								$index_js .= "<script type='text/javascript' src='js/lib/".$value."'></script>\n";
+								$index_js .= "<script type='text/javascript' src='js/lib/".$value."?".$unique_id."'></script>\n";
 							}	
 						}
 					}	
@@ -92,12 +93,12 @@ class ContentHandler_IO
 				if (is_array($js_modules_directory_array))
 				{
 					foreach($js_modules_directory_array as $key => $value)
-					{
+					{						
 						if ((strpos(strrev($value),"sj.") === 0))
 						{
 							if (is_file($js_modules_directory."/".$value))
 							{
-								$index_js .= "<script type='text/javascript' src='js/modules/".$value."'></script>\n";
+								$index_js .= "<script type='text/javascript' src='js/modules/".$value."?".$unique_id."'></script>\n";
 							}	
 						}
 					}	

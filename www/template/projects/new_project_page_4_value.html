@@ -1,22 +1,28 @@
-<br />
 
-<!-- CONTAINER BEGIN ("Create New Sample (4/5)",0) -->
+<script>
+$(document).ready(function()
+{
+	$("#AssistantPrevious").click(function()
+	{
+		assistant.load_previous_page();
+	});
+	$("#AssistantNext").click(function()
+	{
+		assistant.load_next_page();
+	});
+});
+</script>
 
-<form action='index.php?[[LINK]]' method='post'>
-[[BAR]]
 <br />
 	[[CONTENT]]
 	<table class='formTable'>
 	<tr>
-		<td><br />
-			<div class='button_left'><input type='submit' value='previous' name='submitbutton' class='previous_button' /></div>
-			<div class='button_right'><input type='submit' value='next' name='submitbutton' class='next_button' /></div>
+		<td>
+			<br />
+			<div class='button_left'><button id='AssistantPrevious' class='AssistantButton'>previous</button></div>
+			<div class='button_right'><button id='AssistantNext' class='AssistantButton'>next</button></div>
 		</td>
 	</tr>
 </table>
-<input type='hidden' name='template_data_type' value='value' />
-<input type='hidden' name='template_data_type_id' value='[[TEMPLATE_DATA_TYPE_ID]]' />
-</form>
-
-
-<!-- CONTAINER END (0) -->
+<input type='hidden' name='project_template_data_type' value='value' class='ProjectCreateAssistantField' />
+<input type='hidden' name='project_template_data_type_id' value='[[PROJECT_TEMPLATE_DATA_TYPE_ID]]' class='ProjectCreateAssistantField' />

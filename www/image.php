@@ -82,7 +82,7 @@
 		
 		if ($session->is_valid() == true)
 		{
-			$file = new File($_GET[file_id]);
+			$file = File::get_instance($_GET[file_id]);
 			
 			if ($_GET[version])
 			{

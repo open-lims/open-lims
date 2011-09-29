@@ -27,15 +27,12 @@
  */
 class SampleIO
 {
-	/**
-	 * @param integer $user_id
-	 */
 	public static function list_user_related_samples($user_id)
 	{
 		global $user;
 		
-		$list = new List_IO(Sample_Wrapper::count_user_samples($user->get_user_id()), 20);
-
+		$list = new List_IO("/core/modules/sample/sample.ajax.php", "list_user_related_samples", "0", "SampleAjaxMySamples");
+		
 		$list->add_row("","symbol",false,"16px");
 		$list->add_row("Smpl. ID","id",true,"11%");
 		$list->add_row("Sample Name","name",true,null);
@@ -44,139 +41,18 @@ class SampleIO
 		$list->add_row("Curr. Loc.","location",true,null);
 		$list->add_row("AV","av",false,"16px");
 		
-		if ($_GET[page])
-		{
-			if ($_GET[sortvalue] and $_GET[sortmethod])
-			{
-				$result_array = Sample_Wrapper::list_user_samples($user->get_user_id(), $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
-			}
-			else
-			{
-				$result_array = Sample_Wrapper::list_user_samples($user->get_user_id(), null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
-			}				
-		}
-		else
-		{
-			if ($_GET[sortvalue] and $_GET[sortmethod])
-			{
-				$result_array = Sample_Wrapper::list_user_samples($user->get_user_id(), $_GET[sortvalue], $_GET[sortmethod], 0, 20);
-			}
-			else
-			{
-				$result_array = Sample_Wrapper::list_user_samples($user->get_user_id(), null, null, 0, 20);
-			}	
-		}
-		
-		if (is_array($result_array) and count($result_array) >= 1)
-		{
-			$today_end = new DatetimeHandler(date("Y-m-d")." 23:59:59");
-			
-			foreach($result_array as $key => $value)
-			{
-				$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
-				$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y");
-
-				if ($result_array[$key][av] == "f")
-				{
-					$result_array[$key][av] = "<img src='images/icons/grey_point.png' alt='' />";
-				}
-				else
-				{
-					if ($result_array[$key][date_of_expiry] and $result_array[$key][expiry_warning])
-					{
-						$date_of_expiry = new DatetimeHandler($result_array[$key][date_of_expiry]." 23:59:59");
-						$warning_day = clone $date_of_expiry;
-						$warning_day->sub_day($result_array[$key][expiry_warning]);
-					
-						if ($date_of_expiry->distance($today_end) > 0)
-						{
-							$result_array[$key][av] = "<img src='images/icons/red_point.png' alt='' />";
-						}
-						else
-						{
-							if ($warning_day->distance($today_end) > 0)
-							{
-								$result_array[$key][av] = "<img src='images/icons/yellow_point.png' alt='' />";
-							}
-							else
-							{
-								$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
-							}
-						}
-					}
-					else
-					{
-						$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
-					}
-				}
-				
-				if (strlen($result_array[$key][name]) > 17)
-				{
-					$result_array[$key][name] = substr($result_array[$key][name],0,17)."...";
-				}
-				else
-				{
-					$result_array[$key][name] = $result_array[$key][name];
-				}
-				
-				if (strlen($result_array[$key][template]) > 25)
-				{
-					$result_array[$key][template] = substr($result_array[$key][template],0,25)."...";
-				}
-				else
-				{
-					$result_array[$key][template] = $result_array[$key][template];
-				}
-				
-				$sample_id = $result_array[$key][id];
-				$sample_security = new SampleSecurity($sample_id);
-				
-				if ($sample_security->is_access(1, false))
-				{
-					$paramquery = array();
-					$paramquery[username] = $_GET[username];
-					$paramquery[session_id] = $_GET[session_id];
-					$paramquery[nav] = "sample";
-					$paramquery[run] = "detail";
-					$paramquery[sample_id] = $sample_id;
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$result_array[$key][symbol][link]		= $params;
-					$result_array[$key][symbol][content] 	= "<img src='images/icons/sample.png' alt='' style='border:0;' />";
-				
-					unset($result_array[$key][id]);
-					$result_array[$key][id][link] 			= $params;
-					$result_array[$key][id][content]		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
-				
-					$sample_name = $result_array[$key][name];
-					unset($result_array[$key][name]);
-					$result_array[$key][name][link] 		= $params;
-					$result_array[$key][name][content]		= $sample_name;
-				}
-				else
-				{
-					$result_array[$key][symbol]	= "<img src='core/images/denied_overlay.php?image=images/icons/sample.png' alt='N' border='0' />";
-					$result_array[$key][id]		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
-				}
-			}
-		}
-		else
-		{
-			$list->override_last_line("<span class='italic'>No results found!</span>");
-		}
-		
 		$template = new Template("template/samples/list_user.html");	
-
-		$template->set_var("table", $list->get_list($result_array, $_GET[page]));
 		
 		$template->output();
+		
+		$list->run();
 	}
-	
+		
 	public static function list_organisation_unit_related_samples()
 	{
 		if ($_GET[ou_id])
 		{
-			$list = new List_IO(Sample_Wrapper::count_organisation_unit_samples($_GET[ou_id]), 12);
+			$list = new ListStat_IO(Sample_Wrapper::count_organisation_unit_samples($_GET[ou_id]), 12);
 
 			$list->add_row("","symbol",false,"16px");
 			$list->add_row("Smpl. ID","id",true,"11%");
@@ -331,7 +207,7 @@ class SampleIO
 	{
 		if (is_numeric($item_id))
 		{
-			$list = new List_IO(Sample_Wrapper::count_samples_by_item_id($item_id), 20);
+			$list = new ListStat_IO(Sample_Wrapper::count_samples_by_item_id($item_id), 20);
 
 			$list->add_row("","symbol",false,"16px");
 			$list->add_row("Smpl. ID","id",true,"11%");
@@ -490,174 +366,64 @@ class SampleIO
 	/**
 	 * @param string $sql
 	 */
-	public static function list_sample_items($sql)
+	public static function list_sample_items($item_holder_type, $item_holder_id, $an_page = true, $in_assistant = false, $form_field_name = null)
 	{
-		if ($sql)
-		{
-			$list = new List_IO(Sample_Wrapper::count_item_samples($sql), 20);
+		$argument_array = array();
+		$argument_array[0][0] = "item_holder_type";
+		$argument_array[0][1] = $item_holder_type;
+		$argument_array[1][0] = "item_holder_id";
+		$argument_array[1][1] = $item_holder_id;
+		$argument_array[2][0] = "as_page";
+		$argument_array[2][1] = $as_page;
+		$argument_array[3][0] = "in_assistant";
+		$argument_array[3][1] = $in_assistant;
 
+		$list = new List_IO("/core/modules/sample/sample.ajax.php", "list_sample_items", $argument_array, "SampleAjax");
+		
+		if ($in_assistant == false)
+		{
 			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Smpl. ID","id",true,"11%");
+			$list->add_row("Smpl. ID","sid",true,"11%");
 			$list->add_row("Sample Name","name",true,null);
 			$list->add_row("Date","datetime",true,null);
 			$list->add_row("Type/Tmpl.","template",true,null);
 			$list->add_row("Curr. Loc.","location",true,null);
 			$list->add_row("Owner","owner",true,null);
 			$list->add_row("AV","av",false,"16px");
-			
-			if ($_GET[page])
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = Sample_Wrapper::list_item_samples($sql, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
-				}
-				else
-				{
-					$result_array = Sample_Wrapper::list_item_samples($sql, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
-				}				
-			}
-			else
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = Sample_Wrapper::list_item_samples($sql, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
-				}
-				else
-				{
-					$result_array = Sample_Wrapper::list_item_samples($sql, null, null, 0, 20);
-				}	
-			}
-			
-			if (is_array($result_array) and count($result_array) >= 1)
-			{
-				$today_end = new DatetimeHandler(date("Y-m-d")." 23:59:59");
-				
-				foreach($result_array as $key => $value)
-				{
-					$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
-					$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y");
-				
-					if ($result_array[$key][owner])
-					{
-						$user = new User($result_array[$key][owner]);
-					}
-					else
-					{
-						$user = new User(1);
-					}
-					
-					$result_array[$key][owner] = $user->get_full_name(true);
-					
-					if ($result_array[$key][av] == "f")
-					{
-						$result_array[$key][av] = "<img src='images/icons/grey_point.png' alt='' />";
-					}
-					else
-					{
-						if ($result_array[$key][date_of_expiry] and $result_array[$key][expiry_warning])
-						{
-							$date_of_expiry = new DatetimeHandler($result_array[$key][date_of_expiry]." 23:59:59");
-							$warning_day = clone $date_of_expiry;
-							$warning_day->sub_day($result_array[$key][expiry_warning]);
-						
-							if ($date_of_expiry->distance($today_end) > 0)
-							{
-								$result_array[$key][av] = "<img src='images/icons/red_point.png' alt='' />";
-							}
-							else
-							{
-								if ($warning_day->distance($today_end) > 0)
-								{
-									$result_array[$key][av] = "<img src='images/icons/yellow_point.png' alt='' />";
-								}
-								else
-								{
-									$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
-								}
-							}
-						}
-						else
-						{
-							$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
-						}
-					}
-					
-					if (strlen($result_array[$key][name]) > 17)
-					{
-						$result_array[$key][name] = substr($result_array[$key][name],0,17)."...";
-					}
-					else
-					{
-						$result_array[$key][name] = $result_array[$key][name];
-					}
-					
-					if (strlen($result_array[$key][template]) > 25)
-					{
-						$result_array[$key][template] = substr($result_array[$key][template],0,25)."...";
-					}
-					else
-					{
-						$result_array[$key][template] = $result_array[$key][template];
-					}
-					
-					$sample_id = $result_array[$key][id];
-					$sample_security = new SampleSecurity($sample_id);
-					
-					if ($sample_security->is_access(1, false))
-					{
-						$paramquery = array();
-						$paramquery[username] = $_GET[username];
-						$paramquery[session_id] = $_GET[session_id];
-						$paramquery[nav] = "sample";
-						$paramquery[run] = "detail";
-						$paramquery[sample_id] = $sample_id;
-						$params = http_build_query($paramquery,'','&#38;');
-						
-						$result_array[$key][symbol][link]		= $params;
-						$result_array[$key][symbol][content] 	= "<img src='images/icons/sample.png' alt='' style='border:0;' />";
-					
-						unset($result_array[$key][id]);
-						$result_array[$key][id][link] 			= $params;
-						$result_array[$key][id][content]		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
-					
-						$sample_name = $result_array[$key][name];
-						unset($result_array[$key][name]);
-						$result_array[$key][name][link] 		= $params;
-						$result_array[$key][name][content]		= $sample_name;
-					}
-					else
-					{
-						$result_array[$key][symbol]	= "<img src='core/images/denied_overlay.php?image=images/icons/sample.png' alt='N' border='0' />";
-						$result_array[$key][id]		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
-					}
-				}
-			}
-			else
-			{
-				$list->override_last_line("<span class='italic'>No results found!</span>");
-			}
-			
-			$template = new Template("template/samples/list.html");
-
-			$add_sample_paramquery = $_GET;
-			$add_sample_paramquery[username] = $_GET[username];
-			$add_sample_paramquery[session_id] = $_GET[session_id];
-			$add_sample_paramquery[run] = "item_add";
-			$add_sample_paramquery[dialog] = "sample";
-			$add_sample_paramquery[retrace] = Misc::create_retrace_string();
-			unset($add_sample_paramquery[key]);
-			unset($add_sample_paramquery[nextpage]);
-			$add_sample_params = http_build_query($add_sample_paramquery,'','&#38;');
-			
-			$template->set_var("add_sample_params", $add_sample_params);
-			$template->set_var("table", $list->get_list($result_array, $_GET[page]));
-			
-			$template->output();
 		}
 		else
 		{
-			// Error
+			$list->add_row("","checkbox",false,"16px", $form_field_name);
+			$list->add_row("","symbol",false,"16px");
+			$list->add_row("Smpl. ID","sid",false,"11%");
+			$list->add_row("Sample Name","name",false,null);
+			$list->add_row("Date","datetime",false,null);
+			$list->add_row("Type/Tmpl.","template",false,null);
+			$list->add_row("Curr. Loc.","location",false,null);
+			$list->add_row("Owner","owner",false,null);
 		}
+		
+		if ($GLOBALS['autoload_prefix'])
+		{
+			$path_prefix = $GLOBALS['autoload_prefix'];
+		}
+		else
+		{
+			$path_prefix = "";
+		}
+		
+		if ($in_assistant == false)
+		{
+			$template = new Template($path_prefix."template/samples/list.html");
+		}
+		else
+		{
+			$template = new Template($path_prefix."template/samples/list_without_border.html");
+		}
+		
+		$template->output();
+		
+		$list->run();
 	}
 	
 	/**
@@ -667,1217 +433,98 @@ class SampleIO
 	 */
 	public static function create($type_array, $category_array, $organisation_unit_id)
 	{
-		global $user, $session, $sample_security;
+		global $session;
 		
-		try
+		if(($_GET[run] == "new_sample_sample" or $_GET[run] == "new_parent_sample") and $_GET[sample_id])
 		{
-			if(($_GET[run] == "new_sample_sample" or $_GET[run] == "new_parent_sample") and $_GET[sample_id])
-			{
-				$sample_id = $_GET[sample_id];
-				
-				$sample_item = new SampleItem($sample_id);
-				$sample_item->set_gid($_GET[key]);
-				
-				$description_required = $sample_item->is_description();
-				$keywords_required = $sample_item->is_keywords();
-			}
-					
-			if (!$_GET[nextpage])
-			{
-				$session->delete_value("SAMPLE_LAST_SCREEN");
-				$session->delete_value("SAMPLE_CURRENT_SCREEN");
-				
-				$session->delete_value("SAMPLE_ORGAN_UNIT");
-				$session->delete_value("SAMPLE_TEMPLATE");
-				$session->delete_value("SAMPLE_NAME");
-				$session->delete_value("SAMPLE_MANUFACTURER");
-				$session->delete_value("SAMPLE_MANUFACTURER_NAME");
-				$session->delete_value("SAMPLE_LOCATION");
-				$session->delete_value("SAMPLE_EXPIRY");
-				$session->delete_value("SAMPLE_EXPIRY_WARNING");
-				$session->delete_value("SAMPLE_DESC");		
-				$session->delete_value("SAMPLE_TEMPLATE_DATA_TYPE");
-				$session->delete_value("SAMPLE_TEMPLATE_DATA_TYPE_ID");	
-				$session->delete_value("SAMPLE_TEMPALTE_DATA_ARRAY");
-				
-				if($_GET[run] == "item_add")
-				{	
-					$session->write_value("SAMPLE_ORGAN_UNIT", $organisation_unit_id, true);
-					$session->write_value("SAMPLE_CURRENT_SCREEN", 2, true);
-				}
-			}
-			else
-			{
-				$sample_template		= $session->read_value("SAMPLE_TEMPLATE");
-				$sample_template_obj 	= new SampleTemplate($sample_template);
-				if ($sample_template_obj->is_required_requirements() == true)
-				{
-					$sample_template_specific_information = true;
-				}
-				else
-				{
-					$sample_template_specific_information = false;
-				}
-			}	
-	
-	
-			switch ($_GET[nextpage]) :
-				case 1:
-					if (!$_GET[tpage])
-					{
-						if (is_numeric($_POST[organ_unit]) and $_POST[organ_unit] != 0)
-						{
-							$session->write_value("SAMPLE_ORGAN_UNIT",$_POST[organ_unit], true);
-							$session->write_value("SAMPLE_CURRENT_SCREEN", 2, true);
-						}
-						else
-						{
-							$error[0] = "Select an orangisation unit!";
-						}
-					}
-					else
-					{
-						$session->write_value("SAMPLE_CURRENT_SCREEN", $_GET[tpage], true);
-						if (is_numeric($_POST[organ_unit]))
-						{
-							$session->write_value("SAMPLE_ORGAN_UNIT",$_POST[organ_unit], true);	
-						}
-						unset($_GET[tpage]);
-					}
-				break;
-				
-				case 2:
-					if (!$_GET[tpage])
-					{
-						if ($_POST[submitbutton] == "previous")
-						{
-							$session->write_value("SAMPLE_CURRENT_SCREEN", 1, true);
-							if (is_numeric($_POST[template]))
-							{
-								$session->write_value("SAMPLE_TEMPLATE",$_POST[template],true);
-								$sample_template_obj = new SampleTemplate($_POST[template]);
-							}
-						}
-						else
-						{
-							if (is_numeric($_POST[template]) and $_POST[template] != 0)
-							{
-								$session->write_value("SAMPLE_TEMPLATE",$_POST[template],true);
-								$session->write_value("SAMPLE_CURRENT_SCREEN", 3, true);
-								$sample_template_obj = new SampleTemplate($_POST[template]);
-							}
-							else
-							{
-								$error[0] = "Select a template!";
-							}
-						}
-					}
-					else
-					{
-						$session->write_value("SAMPLE_CURRENT_SCREEN", $_GET[tpage], true);
-						if (is_numeric($_POST[template]))
-						{
-							$session->write_value("SAMPLE_TEMPLATE",$_POST[template],true);
-						}
-						unset($_GET[tpage]);
-					}
-				break;
-				
-				case 3:
-					if (!$_GET[tpage])
-					{
-						if ($_POST[submitbutton] == "previous")
-						{
-							$session->write_value("SAMPLE_CURRENT_SCREEN", 2, true);
-							if ($_POST[name])
-							{
-								$session->write_value("SAMPLE_NAME", $_POST[name], true);
-							}
-							if ($_POST[manufacturer])
-							{
-								$session->write_value("SAMPLE_MANUFACTURER", $_POST[manufacturer], true);
-							}
-							if ($_POST[manufacturer_name])
-							{
-								$session->write_value("SAMPLE_MANUFACTURER_NAME", $_POST[manufacturer_name], true);
-							}
-							if ($_POST[location])
-							{
-								$session->write_value("SAMPLE_LOCATION", $_POST[location], true);
-							}
-							if ($_POST[expiry])
-							{
-								$session->write_value("SAMPLE_EXPIRY", $_POST[expiry], true);
-							}
-							if ($_POST[expiry])
-							{
-								$session->write_value("SAMPLE_EXPIRY_WARNING", $_POST[expiry], true);
-							}
-							if ($_POST[desc])
-							{
-								$session->write_value("SAMPLE_DESC", $_POST[desc], true);
-							}
-						}
-						else
-						{
-							$information_fields = $sample_template_obj->get_information_fields();
-
-							if ($information_fields[manufacturer][name] and $information_fields[manufacturer][requirement] != "optional")
-							{
-								$check_manufacturer = true;
-							}
-							else
-							{
-								$check_manufacturer = false;
-							}
-							
-							if ($information_fields[expiry][name] and $information_fields[expiry][requirement] != "optional")
-							{
-								$check_expiry = true;
-							}
-							else
-							{
-								$check_expiry = false;
-							}
-							
-							if ($information_fields[location][name] and $information_fields[location][requirement] != "optional")
-							{
-								$check_location = true;
-							}
-							else
-							{
-								$check_location = false;
-							}
-							
-							if (!$_POST[manufacturer] and $check_manufacturer == true)
-							{
-								$error[1] = "Enter a manufacturer!";	
-							}
-							if (!$_POST[expiry] and $check_expiry == true)
-							{
-								$error[2] = "Enter a date of expiry!";	
-							}
-							if (!$_POST[location] and $check_location == true)
-							{
-								$error[3] = "Select a location!";	
-							}
-							
-							if ($_POST[name])
-							{
-								if (!$error[1] and !$error[2] and !$error[3])
-								{
-									if ($sample_template_specific_information == true)
-									{
-										$session->write_value("SAMPLE_CURRENT_SCREEN", 4, true);
-									}
-									else
-									{
-										$session->write_value("SAMPLE_CURRENT_SCREEN", 5, true);	
-									}
-								}
-							}
-							else
-							{
-								if (!$_POST[name])
-								{
-									$error[0] = "Enter a name!";	
-								}
-							}
-							if ($_POST[name]) 
-							{
-								$session->write_value("SAMPLE_NAME", $_POST[name], true);
-							}
-							if ($_POST[manufacturer])
-							{
-								$session->write_value("SAMPLE_MANUFACTURER", $_POST[manufacturer], true);
-							}
-							if ($_POST[manufacturer_name])
-							{
-								$session->write_value("SAMPLE_MANUFACTURER_NAME", $_POST[manufacturer_name], true);
-							}
-							if ($_POST[location])
-							{
-								$session->write_value("SAMPLE_LOCATION", $_POST[location], true);
-							}
-							if ($_POST[expiry])
-							{
-								$session->write_value("SAMPLE_EXPIRY", $_POST[expiry], true);
-							}
-							if ($_POST[expiry_warning])
-							{
-								$session->write_value("SAMPLE_EXPIRY_WARNING", $_POST[expiry_warning], true);
-							}
-							if ($_POST[desc])
-							{
-								$session->write_value("SAMPLE_DESC", $_POST[desc], true);
-							}
-						}
-					}
-					else
-					{
-						$session->write_value("SAMPLE_CURRENT_SCREEN", $_GET[tpage], true);
-						if ($_POST[name])
-						{
-							$session->write_value("SAMPLE_NAME", $_POST[name], true);
-						}
-						if ($_POST[manufacturer])
-						{
-							$session->write_value("SAMPLE_MANUFACTURER", $_POST[manufacturer], true);
-						}
-						if ($_POST[manufacturer_name])
-						{
-							$session->write_value("SAMPLE_MANUFACTURER_NAME", $_POST[manufacturer_name], true);
-						}
-						if ($_POST[location])
-						{
-							$session->write_value("SAMPLE_LOCATION", $_POST[location], true);
-						}
-						if ($_POST[expiry])
-						{
-							$session->write_value("SAMPLE_EXPIRY", $_POST[expiry], true);
-						}
-						if ($_POST[expiry_warning])
-						{
-							$session->write_value("SAMPLE_EXPIRY_WARNING", $_POST[expiry_warning], true);
-						}
-						if ($_POST[desc])
-						{
-							$session->write_value("SAMPLE_DESC", $_POST[desc], true);
-						}
-						unset($_GET[tpage]);
-					}
-				break;
-				
-				case 4:
-					if (!$_GET[tpage])
-					{
-						if ($_POST[submitbutton] == "previous")
-						{
-							$session->write_value("SAMPLE_CURRENT_SCREEN", 3, true);
-							if ($_POST[template_data_type])
-							{
-								$session->write_value("SAMPLE_TEMPLATE_DATA_TYPE", $_POST[template_data_type], true);	
-								
-								$template_data_array = array();
-								
-								foreach($_POST as $key => $value)
-								{
-									if (strpos($key, "-vartype") === false and $key != "submitbutton" and $key != "template_data_type")
-									{
-										$template_data_array[$key] = $value;
-									}
-									else
-									{
-										// type-check
-									}
-								}
-								
-								$session->write_value("SAMPLE_TEMPLATE_DATA_TYPE_ID", $_POST[template_data_type_id], true);
-								$session->write_value("SAMPLE_TEMPALTE_DATA_ARRAY", $template_data_array, true);
-							}
-						}
-						else
-						{
-							if ($_POST[template_data_type])
-							{
-								$session->write_value("SAMPLE_CURRENT_SCREEN", 5, true);
-								
-								$session->write_value("SAMPLE_TEMPLATE_DATA_TYPE", $_POST[template_data_type], true);	
-								
-								$template_data_array = array();
-								
-								foreach($_POST as $key => $value)
-								{
-									if (strpos($key, "-vartype") === false and $key != "submitbutton" and $key != "template_data_type")
-									{
-										$template_data_array[$key] = $value;
-									}
-									else
-									{
-										// type-check
-									}
-								}
-								
-								$session->write_value("SAMPLE_TEMPLATE_DATA_TYPE_ID", $_POST[template_data_type_id], true);
-								$session->write_value("SAMPLE_TEMPALTE_DATA_ARRAY", $template_data_array, true);	
-							}
-						}
-					}
-					else
-					{
-						$session->write_value("SAMPLE_CURRENT_SCREEN", $_GET[tpage], true);
-						
-						$session->write_value("SAMPLE_TEMPLATE_DATA_TYPE", $_POST[template_data_type], true);	
-								
-						$template_data_array = array();
-						
-						foreach($_POST as $key => $value)
-						{
-							if (strpos($key, "-vartype") === false and $key != "submitbutton" and $key != "template_data_type")
-							{
-								$template_data_array[$key] = $value;
-							}
-							else
-							{
-								// type-check
-							}
-						}
-						
-						$session->write_value("SAMPLE_TEMPLATE_DATA_TYPE_ID", $_POST[template_data_type_id], true);
-						$session->write_value("SAMPLE_TEMPALTE_DATA_ARRAY", $template_data_array, true);
-						
-						unset($_GET[tpage]);
-					}
-				break;
-				
-				case 5:
-					if (!$_GET[tpage])
-					{
-						if ($_POST[submitbutton] == "previous")
-						{
-							if ($sample_template_specific_information == true)
-							{
-								$session->write_value("SAMPLE_CURRENT_SCREEN", 4, true);
-							}
-							else
-							{
-								$session->write_value("SAMPLE_CURRENT_SCREEN", 3, true);	
-							}
-						}
-						elseif ($_POST[submitbutton] == "finish")
-						{
-							$session->write_value("SAMPLE_CURRENT_SCREEN", 6, true);
-						}
-					}
-					else
-					{
-						$session->write_value("SAMPLE_CURRENT_SCREEN", $_GET[tpage], true);
-						unset($_GET[tpage]);
-					}
-				break;
+			$sample_id = $_GET[sample_id];
 			
-			endswitch;
-	
-			if ($session->is_value("SAMPLE_CURRENT_SCREEN"))
-			{
-				$current_screen = $session->read_value("SAMPLE_CURRENT_SCREEN");
-			}
-			else
-			{
-				$current_screen = 1;
-				$session->write_value("SAMPLE_CURRENT_SCREEN", 1, true);
-			}
+			$sample_item = new SampleItem($sample_id);
+			$sample_item->set_gid($_GET[key]);
 			
-			if ($session->is_value("SAMPLE_LAST_SCREEN"))
-			{
-				$last_screen = $session->read_value("SAMPLE_LAST_SCREEN");
-			}
-			
-			if ($_GET[nextpage])
-			{
-				$sample_organ_unit 				= $session->read_value("SAMPLE_ORGAN_UNIT");
-				$sample_template				= $session->read_value("SAMPLE_TEMPLATE");
-				$sample_name					= $session->read_value("SAMPLE_NAME");
-				$sample_manufacturer			= $session->read_value("SAMPLE_MANUFACTURER");	
-				$sample_manufacturer_name		= $session->read_value("SAMPLE_MANUFACTURER_NAME");			
-				$sample_location				= $session->read_value("SAMPLE_LOCATION");
-				$sample_expiry					= $session->read_value("SAMPLE_EXPIRY");
-				$sample_expiry_warning			= $session->read_value("SAMPLE_EXPIRY_WARNING");
-				$sample_desc					= $session->read_value("SAMPLE_DESC");
-				$sample_template_data_type  	= $session->read_value("SAMPLE_TEMPLATE_DATA_TYPE");	
-				$sample_template_data_type_id	= $session->read_value("SAMPLE_TEMPLATE_DATA_TYPE_ID");	
-				$sample_template_data_array		= $session->read_value("SAMPLE_TEMPALTE_DATA_ARRAY");	
-			}
-					
-			switch ($current_screen):
-				case 1:
-				
-					// Page 1
-					if ($session->read_value("SAMPLE_LAST_SCREEN") < 1)
-					{
-						$session->write_value("SAMPLE_LAST_SCREEN", 1, true);
-						$last_screen = 1;
-					}
-					
-					$paramquery = $_GET;
-					$paramquery[nextpage] = 1;
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					// Assistant Bar Begin			
-					require_once("core/modules/base/assistant_bar.io.php");
-					$assistant_bar_io = new AssistantBarIO;
-					if (is_numeric($sample_toid) or is_numeric($sample_project_toid))
-					{
-						$assistant_bar_io->add_screen(1, "Organisation Unit", "");
-					}
-					else
-					{
-						$assistant_bar_io->add_screen(1, "Organisation Unit", $paramquery);
-					}
-					
-					$assistant_bar_io->add_screen(2, "Sample Type", $paramquery);
-					$assistant_bar_io->add_screen(3, "Sample Information", $paramquery);
-					if ($sample_template_specific_information == true)
-					{
-						$assistant_bar_io->add_screen(4, "Sample Specific Information", $paramquery);
-					}
-					else
-					{
-						$assistant_bar_io->add_screen(4, "Sample Specific Information", "");
-					}
-					
-					$assistant_bar_io->add_screen(5, "Summary", $paramquery);
-					for ($i=1; $i<=$last_screen; $i++)
-					{
-						if ($i != $current_screen)
-						{
-							$assistant_bar_io->set_visited($i);
-						}
-						else
-						{
-							$assistant_bar_io->set_active($i);
-						}
-					}
-					// Assistant Bar End
-				
-					$template = new Template("template/samples/new_sample_page_1.html");	
-					$template->set_var("bar",$assistant_bar_io->get_content());
-					$template->set_var("link",$params);	
-		
-					if ($error[0])
-					{
-						$template->set_var("error",$error[0]);
-					}
-					else
-					{
-						$template->set_var("error","");
-					}
-		
-					$result = array();
-					$counter = 0;
-						
-					$organisation_unit_array = OrganisationUnit::list_entries();
-					
-					foreach($organisation_unit_array as $key => $value)
-					{
-						$organisation_unit = new OrganisationUnit($value);
-				
-						if ($organisation_unit->is_permission($user->get_user_id()) and $organisation_unit->get_stores_data() == true)
-						{
-							$result[$counter][value] = $value;
-							$result[$counter][content] = $organisation_unit->get_name();		
-		
-							if ($sample_organ_unit == $value)
-							{
-								$result[$counter][selected] = "selected";
-							}
-							else
-							{
-								$result[$counter][selected] = "";
-							}
-							$counter++;
-						}
-					}
-					
-					if (!$result)
-					{
-						$result[$counter][value] = "0";
-						$result[$counter][content] = "NO ORGANISATION UNIT FOUND!";
-					}
-			
-					$template->set_var("option",$result);
-					
-					$template->output();
-				break;
-			
-				case 2:
-					// Page 2
-					if ($session->read_value("SAMPLE_LAST_SCREEN") < 2)
-					{
-						$session->write_value("SAMPLE_LAST_SCREEN", 2, true);
-						$last_screen = 2;
-					}
-					
-					$paramquery = $_GET;
-					$paramquery[nextpage] = 2;
-					unset($paramquery[idk_unique_id]);
-					$params = http_build_query($paramquery,'','&#38;');
-								
-					// Assistant Bar Begin			
-					require_once("core/modules/base/assistant_bar.io.php");
-					$assistant_bar_io = new AssistantBarIO;
-					if (is_numeric($sample_toid) or is_numeric($sample_project_toid))
-					{
-						$assistant_bar_io->add_screen(1, "Organisation Unit", "");
-					}
-					else
-					{
-						$assistant_bar_io->add_screen(1, "Organisation Unit", $paramquery);
-					}
-					
-					$assistant_bar_io->add_screen(2, "Sample Type", $paramquery);
-					$assistant_bar_io->add_screen(3, "Sample Information", $paramquery);
-					if ($sample_template_specific_information == true)
-					{
-						$assistant_bar_io->add_screen(4, "Sample Specific Information", $paramquery);
-					}
-					else
-					{
-						$assistant_bar_io->add_screen(4, "Sample Specific Information", "");
-					}
-					
-					$assistant_bar_io->add_screen(5, "Summary", $paramquery);
-					for ($i=1; $i<=$last_screen; $i++)
-					{
-						if ($i != $current_screen)
-						{
-							$assistant_bar_io->set_visited($i);
-						}
-						else
-						{
-							$assistant_bar_io->set_active($i);
-						}
-					}
-					// Assistant Bar End
-	
-					$template = new Template("template/samples/new_sample_page_2.html");	
-					$template->set_var("bar",$assistant_bar_io->get_content());
-					$template->set_var("link",$params);	
-					
-					if ($error[0])
-					{
-						$template->set_var("error",$error[0]);
-					}
-					else
-					{
-						$template->set_var("error","");
-					}
-
-					if (!is_array($type_array) or count($type_array) == 0)
-					{
-						$type_array = null;
-					}
-					
-					$result = array();
-					$counter = 0;
-						
-					$sample_template_array = SampleTemplate::list_entries();
-					
-					if (is_array($sample_template_array))
-					{
-						foreach($sample_template_array as $key => $value)
-						{
-							if ($type_array == null or in_array($value, $type_array))
-							{
-								$sample_sub_template = new SampleTemplate($value);
-								
-								$result[$counter][value] = $value;
-								$result[$counter][content] = $sample_sub_template->get_name();		
-			
-								if ($sample_template == $value)
-								{
-									$result[$counter][selected] = "selected";
-								}
-								else
-								{
-									$result[$counter][selected] = "";
-								}
-								$counter++;
-							}
-						}
-					}
-					else
-					{
-						$result[$counter][value] = "0";
-						$result[$counter][content] = "NO TEMPLATES FOUND!";
-					}
-					$template->set_var("option",$result);
-					
-					if ($session->is_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]) == true)
-					{
-						$template->set_var("keywords", $session->read_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]));
-					}
-					else
-					{
-						$template->set_var("keywords", "");
-					}
-					
-					if ($session->is_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]) == true)
-					{
-						$template->set_var("description", $session->read_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]));
-					}
-					else
-					{
-						$template->set_var("description", "");
-					}
-					
-					$template->output();
-				break;
-				
-				case 3:
-					// Page 3
-					if ($session->read_value("SAMPLE_LAST_SCREEN") < 3)
-					{
-						$session->write_value("SAMPLE_LAST_SCREEN", 3, true);
-						$last_screen = 3;
-					}
-					
-					$paramquery = $_GET;
-					$paramquery[nextpage] = 3;
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					// Assistant Bar Begin			
-					require_once("core/modules/base/assistant_bar.io.php");
-					$assistant_bar_io = new AssistantBarIO;
-					if (is_numeric($sample_toid) or is_numeric($sample_project_toid))
-					{
-						$assistant_bar_io->add_screen(1, "Organisation Unit", "");
-					}
-					else
-					{
-						$assistant_bar_io->add_screen(1, "Organisation Unit", $paramquery);
-					}
-					
-					$assistant_bar_io->add_screen(2, "Sample Type", $paramquery);
-					$assistant_bar_io->add_screen(3, "Sample Information", $paramquery);
-					if ($sample_template_specific_information == true)
-					{
-						$assistant_bar_io->add_screen(4, "Sample Specific Information", $paramquery);
-					}
-					else
-					{
-						$assistant_bar_io->add_screen(4, "Sample Specific Information", "");
-					}
-					
-					$assistant_bar_io->add_screen(5, "Summary", $paramquery);
-					for ($i=1; $i<=$last_screen; $i++){
-						if ($i != $current_screen)
-						{
-							$assistant_bar_io->set_visited($i);
-						}
-						else
-						{
-							$assistant_bar_io->set_active($i);
-						}
-					}
-					// Assistant Bar End
-	
-					$template = new Template("template/samples/new_sample_page_3.html");
-					$template->set_var("bar",$assistant_bar_io->get_content());
-					$template->set_var("link",$params);	
-				
-					if ($error[0])
-					{
-						$template->set_var("error0",$error[0]);
-					}
-					else
-					{
-						$template->set_var("error0","");
-					}
-					
-					if ($error[1])
-					{
-						$template->set_var("error1",$error[1]);
-					}
-					else
-					{
-						$template->set_var("error1","");
-					}
-					
-					if ($error[2])
-					{
-						$template->set_var("error2",$error[2]);
-					}
-					else
-					{
-						$template->set_var("error2","");
-					}
-					
-					if ($error[3])
-					{
-						$template->set_var("error3",$error[3]);
-					}
-					else
-					{
-						$template->set_var("error3","");
-					}
-					
-					if ($sample_name)
-					{
-						$template->set_var("name",$sample_name);
-					}
-					else
-					{
-						$template->set_var("name","");
-					}
-					
-					$information_fields = $sample_template_obj->get_information_fields();
-
-					if ($information_fields[manufacturer][name])
-					{
-						require_once("core/modules/manufacturer/manufacturer.io.php");
-						$template->set_var("show_manufacturer",true);
-						$template->set_var("manufacturer_html",ManufacturerIO::dialog());
-					}
-					else
-					{
-						$template->set_var("show_manufacturer",false);
-						$template->set_var("manufacturer_html","");
-					}
-					
-					if ($information_fields[expiry][name])
-					{
-						$template->set_var("show_expiry",true);
-					}
-					else
-					{
-						$template->set_var("show_expiry",false);
-					}
-					
-					if ($information_fields[location][name])
-					{
-						$template->set_var("show_location",true);
-						
-						$result = array();
-						$counter = 0;
-							
-						$sample_location_array = Location::list_entries();
-						
-						if (is_array($sample_location_array) and count($sample_location_array) >= 1)
-						{
-							foreach($sample_location_array as $key => $value)
-							{
-								$sample_location_obj = new Location($value);
-												
-								$result[$counter][value] = $value;
-								$result[$counter][content] = $sample_location_obj->get_name(true);		
-			
-								if ($sample_location == $value)
-								{
-									$result[$counter][selected] = "selected";
-								}
-								else
-								{
-									$result[$counter][selected] = "";
-								}
-								$counter++;
-							}
-						}
-						else
-						{
-							$result[$counter][value] = "0";
-							$result[$counter][content] = "NO LOCATIONS FOUND!";
-						}
-						$template->set_var("location",$result);
-					}
-					else
-					{
-						$template->set_var("show_location",false);
-					}
-					
-					if ($sample_manufacturer)
-					{
-						$template->set_var("manufacturer",$sample_manufacturer);
-					}
-					else
-					{
-						$template->set_var("manufacturer","");
-					}
-					
-					if ($sample_manufacturer_name)
-					{
-						$template->set_var("manufacturer_name",$sample_manufacturer_name);
-					}
-					else
-					{
-						$template->set_var("manufacturer_name","");
-					}
-					
-					if ($sample_expiry)
-					{
-						$template->set_var("expiry",$sample_expiry);
-					}
-					else
-					{
-						$template->set_var("expiry","");
-					}
-					
-					if ($sample_expiry_warning)
-					{
-						$template->set_var("expiry_warning",$sample_expiry_warning);
-					}
-					else
-					{
-						$template->set_var("expiry_warning",constant("SAMPLE_EXPIRY_WARNING"));
-					}
-					
-					if ($sample_desc)
-					{
-						$template->set_var("desc",$sample_desc);
-					}
-					else
-					{
-						$template->set_var("desc","");
-					}
-					
-					$template->set_var("keywords", $_POST[keywords]);
-					$template->set_var("description", $_POST[description]);
-					$template->output();
-				break;
-				
-				case 4:
-					// Page 4
-					if ($session->read_value("SAMPLE_LAST_SCREEN") < 4)
-					{
-						$session->write_value("SAMPLE_LAST_SCREEN", 4, true);
-						$last_screen = 4;
-					}
-				
-					$paramquery = $_GET;
-					$paramquery[nextpage] = 4;
-					$params = http_build_query($paramquery,'','&#38;');
-				
-					// Assistant Bar Begin			
-					require_once("core/modules/base/assistant_bar.io.php");
-					$assistant_bar_io = new AssistantBarIO;
-					if (is_numeric($sample_toid) or is_numeric($sample_project_toid))
-					{
-						$assistant_bar_io->add_screen(1, "Organisation Unit", "");
-					}
-					else
-					{
-						$assistant_bar_io->add_screen(1, "Organisation Unit", $paramquery);
-					}
-					
-					$assistant_bar_io->add_screen(2, "Sample Type", $paramquery);
-					$assistant_bar_io->add_screen(3, "Sample Information", $paramquery);
-					
-					if ($sample_template_specific_information == true)
-					{
-						$assistant_bar_io->add_screen(4, "Sample Specific Information", $paramquery);
-					}
-					else
-					{
-						$assistant_bar_io->add_screen(4, "Sample Specific Information", "");
-					}
-					
-					$assistant_bar_io->add_screen(5, "Summary", $paramquery);
-					for ($i=1; $i<=$last_screen; $i++)
-					{
-						if ($i != $current_screen)
-						{
-							$assistant_bar_io->set_visited($i);
-						}
-						else
-						{
-							$assistant_bar_io->set_active($i);
-						}
-					}
-					// Assistant Bar End
-				
-					$sample_template_obj = new SampleTemplate($sample_template);
-					$required_array = $sample_template_obj->get_required_requirements();
-					
-					if (is_array($required_array) and count($required_array) >= 1)
-					{
-						$value_type_id = 0;
-						$sample_count = 0;
-						$is_value = false;
-						$is_sample = false;
-						
-						foreach($required_array as $key => $value)
-						{						
-							if ($value[xml_element] == "item")
-							{
-								if ($value[type] == "value")
-								{
-									$is_value = true;
-								}
-								elseif($value[type] == "parentsample")
-								{
-									$is_sample = true;
-									$sample_count++;
-								}
-							}
-							
-							if ($value[xml_element] == "type" and !$value[close] and $is_value == true)
-							{
-								$value_type_id = $value[id];
-							}
-						} 
-						
-						if ($is_value == true xor $is_sample == true)
-						{
-							if ($is_value == true)
-							{
-								$template = new Template("template/samples/new_sample_page_4_value.html");
-								$template->set_var("bar",$assistant_bar_io->get_content());
-								$template->set_var("link",$params);	
-								
-								$value_obj = new Value(null);
-								if ($sample_template_data_type == "value")
-								{
-									$value->set_content_array($sample_template_data_array);
-								}	
-								$value_html = $value_obj->get_html_form(null, $value_type_id, null);
-								$template->set_var("content",$value_html);
-								
-								$template->set_var("template_data_type_id", $value_type_id);
-								$template->set_var("keywords", $_POST[keywords]);
-								$template->set_var("description", $_POST[description]);
-								$template->output();
-							}
-							else
-							{
-								$template = new Template("template/samples/new_sample_page_4_sample.html");
-								$template->set_var("bar",$assistant_bar_io->get_content());
-								$template->set_var("link",$params);	
-								
-								if ($sample_count > 0)
-								{
-									$result = array();
-									$sample_array = Sample::list_user_related_samples($user->get_user_id());
-									
-									for($i=0;$i<=$sample_count-1;$i++)
-									{
-										$result[$i][id] = $i+1;
-										
-										if ($sample_template_data_type == "sample")
-										{
-											if ($sample_template_data_array['sample-'.$result[$i][id].''])
-											{
-												$selected_id = $sample_template_data_array['sample-'.$result[$i][id].''];
-											}
-										}	
-										
-										if (is_array($sample_array) and count($sample_array) >= 1)
-										{
-											$counter = 0;
-											
-											foreach($sample_array as $key => $value)
-											{
-												$sample = new Sample($value);
-												
-												$result[$i][$counter][value] = $value;
-												$result[$i][$counter][content] = $sample->get_name();
-												if ($selected_id == $value)
-												{
-													$result[$i][$counter][selected] = "selected";
-												}
-												else
-												{
-													$result[$i][$counter][selected] = "";
-												}
-												
-												$counter++;
-											}
-										}
-										else
-										{
-											$result[$i][0][value] = 0;
-											$result[$i][0][content] = "You have no samples";
-											$result[$i][0][selected] = "";
-										}
-										unset($selected_id);
-									}
-									$template->set_var("sample", $result);
-								}	
-								$template->set_var("keywords", $_POST[keywords]);
-								$template->set_var("description", $_POST[description]);	
-								$template->output();
-							}
-						}
-						else
-						{
-							$template = new Template("template/samples/new_sample_page_4_error.html");
-							$template->set_var("bar",$assistant_bar_io->get_content());
-							$template->set_var("link",$params);
-							$template->set_var("keywords", $_POST[keywords]);
-							$template->set_var("description", $_POST[description]);	
-							$template->output();
-						}
-					}
-					else
-					{
-						$template = new Template("template/samples/new_sample_page_4_error.html");
-						$template->set_var("bar",$assistant_bar_io->get_content());
-						$template->set_var("link",$params);	
-						$template->output();
-					}
-				break;
-				
-				case 5:
-					// Page 5
-					if ($session->read_value("SAMPLE_LAST_SCREEN") < 5)
-					{
-						$session->write_value("SAMPLE_LAST_SCREEN", 5, true);
-						$last_screen = 5;
-					}
-					
-					$paramquery = $_GET;
-					$paramquery[nextpage] = 5;
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					// Assistant Bar Begin			
-					require_once("core/modules/base/assistant_bar.io.php");
-					$assistant_bar_io = new AssistantBarIO;
-					if (is_numeric($sample_toid) or is_numeric($sample_project_toid))
-					{
-						$assistant_bar_io->add_screen(1, "Organisation Unit", "");
-					}
-					else
-					{
-						$assistant_bar_io->add_screen(1, "Organisation Unit", $paramquery);
-					}
-					$assistant_bar_io->add_screen(2, "Sample Type", $paramquery);
-					$assistant_bar_io->add_screen(3, "Sample Information", $paramquery);
-					if ($sample_template_specific_information == true)
-					{
-						$assistant_bar_io->add_screen(4, "Sample Specific Information", $paramquery);
-					}
-					else
-					{
-						$assistant_bar_io->add_screen(4, "Sample Specific Information", "");
-					}
-					$assistant_bar_io->add_screen(5, "Summary", $paramquery);
-					for ($i=1; $i<=$last_screen; $i++)
-					{
-						if ($i != $current_screen)
-						{
-							$assistant_bar_io->set_visited($i);
-						}
-						else
-						{
-							$assistant_bar_io->set_active($i);
-						}
-					}
-					// Assistant Bar End
-	
-					$template = new Template("template/samples/new_sample_page_5.html");
-					$template->set_var("bar",$assistant_bar_io->get_content());
-					$template->set_var("link",$params);	
-				
-					$organisation_unit = new OrganisationUnit($sample_organ_unit);
-					$template->set_var("organ_unit",$organisation_unit->get_name());
-				
-					$sample_template_obj = new SampleTemplate($sample_template);
-					$template->set_var("template",$sample_template_obj->get_name());
-				
-					$template->set_var("name",$sample_name);
-					
-					if ($sample_manufacturer)
-					{
-						$template->set_var("manufacturer",$sample_manufacturer_name);
-					}
-					else
-					{
-						$template->set_var("manufacturer",false);
-					}
-					
-					if ($sample_location)
-					{
-						$sample_location_obj = new Location($sample_location);
-						$template->set_var("location",$sample_location_obj->get_name(true));
-					}
-					else
-					{
-						$template->set_var("location",false);
-					}
-				
-					if ($sample_expiry)
-					{
-						$template->set_var("date_of_expiry",$sample_expiry);
-					}
-					else
-					{
-						$template->set_var("date_of_expiry",false);
-					}
-					
-					if ($sample_desc)
-					{
-						$sample_desc_display = str_replace("\n", "<br />", $sample_desc);
-						$template->set_var("desc",$sample_desc_display);
-					}
-					else
-					{
-						$template->set_var("desc","<span class='italic'>None</span>");
-					}
-				
-					$template->set_var("keywords", $_POST[keywords]);
-					$template->set_var("description", $_POST[description]);
-			
-					$template->output();
-				break;
-				
-				case 6:
-					try
-					{
-						$sample = new Sample(null);
-		
-						$sample->set_template_data($sample_template_data_type, $sample_template_data_type_id, $sample_template_data_array);
-		
-						if (($sample_id = $sample->create($sample_organ_unit, $sample_template, $sample_name, $sample_manufacturer, $sample_location, $sample_desc, null, $sample_expiry, $sample_expiry_warning)) != null)
-						{
-							$session->delete_value("SAMPLE_LAST_SCREEN");
-							$session->delete_value("SAMPLE_CURRENT_SCREEN");
-	
-							if ($_GET[run] == "item_add")
-							{
-								return $sample->get_item_id();				
-							}
-							else
-							{
-								$paramquery = $_GET;
-								unset($paramquery[nextpage]);
-								$paramquery[run] = "detail";
-								$paramquery[sample_id] = $sample_id;
-								$params = http_build_query($paramquery);
-								
-								Common_IO::step_proceed($params, "Add Sample", "Operation Successful", null);
-							}
-						}
-						else
-						{
-
-							$paramquery = $_GET;
-							unset($paramquery[nextpage]);
-							$paramquery[run] = "mysamples";
-							$params = http_build_query($paramquery);
-							
-							$session->delete_value("SAMPLE_LAST_SCREEN");
-							$session->delete_value("SAMPLE_CURRENT_SCREEN");
-							Common_IO::step_proceed($params, "Add Sample", "Operation Failed", null);
-						}
-					
-						$session->delete_value("SAMPLE_LAST_SCREEN");
-						$session->delete_value("SAMPLE_CURRENT_SCREEN");
-						
-						$session->delete_value("SAMPLE_ORGAN_UNIT");
-						$session->delete_value("SAMPLE_TEMPLATE");
-						$session->delete_value("SAMPLE_NAME");
-						$session->delete_value("SAMPLE_MANUFACTURER");
-						$session->delete_value("SAMPLE_MANUFACTURER_NAME");
-						$session->delete_value("SAMPLE_LOCATION");
-						$session->delete_value("SAMPLE_EXPIRY");
-						$session->delete_value("SAMPLE_EXPIRY_WARNING");
-						$session->delete_value("SAMPLE_DESC");		
-						$session->delete_value("SAMPLE_TEMPLATE_DATA_TYPE");
-						$session->delete_value("SAMPLE_TEMPLATE_DATA_TYPE_ID");	
-						$session->delete_value("SAMPLE_TEMPALTE_DATA_ARRAY");
-					}
-					catch (SampleCreationFailedException $e)
-					{
-						$error_io = new Error_IO($e, 250, 30, 1);
-						$error_io->display_error();
-					}
-				break;	
-			endswitch;
+			$description_required = $sample_item->is_description();
+			$keywords_required = $sample_item->is_keywords();
 		}
-		catch (SampleSecurityException $e)
+		
+		if($_GET[run] == "item_add")
+		{	
+			if ($session->is_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]) == true)
+			{
+				$session->write_value("SAMPLE_ITEM_KEYWORDS", $session->read_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]));
+			}
+			else
+			{
+				$session->write_value("SAMPLE_ITEM_KEYWORDS", null);
+			}
+			
+			if ($session->is_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]) == true)
+			{
+				$session->write_value("SAMPLE_ITEM_DESCRIPTION", $session->read_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]));
+			}
+			else
+			{
+				$session->write_value("SAMPLE_ITEM_DESCRIPTION", null);
+			}
+			
+			if ($_GET[dialog] == "parentsample")
+			{
+				$session->write_value("SAMPLE_ADD_ROLE", "item_parent", true);
+			}
+			else
+			{
+				$session->write_value("SAMPLE_ADD_ROLE", "item", true);
+			}
+			
+			$session->write_value("SAMPLE_ITEM_RETRACE", $_GET['retrace']);
+			$session->write_value("SAMPLE_ITEM_GET_ARRAY", $_GET);
+			$session->write_value("SAMPLE_ITEM_TYPE_ARRAY", $type_array);
+			$session->write_value("SAMPLE_ORGANISATION_UNIT", $organisation_unit_id);
+		}
+		else
 		{
-			$error_io = new Error_IO($e, 250, 40, 2);
-			$error_io->display_error();
-		}		
+			$session->write_value("SAMPLE_ADD_ROLE", "sample", true);
+			
+			$session->delete_value("SAMPLE_RETRACE");
+			$session->delete_value("SAMPLE_ITEM_GET_ARRAY");
+			$session->delete_value("SAMPLE_ITEM_KEYWORDS");
+			$session->delete_value("SAMPLE_ITEM_TYPE_ARRAY");
+			$session->delete_value("SAMPLE_ITEM_DESCRIPTION");
+		}
+		
+		$template = new Template("template/samples/create_sample.html");	
+		
+		require_once("core/modules/base/assistant.io.php");
+		
+		$assistant_io = new AssistantIO("core/modules/sample/sample_create.ajax.php", "SampleCreateAssistantField", false);
+		
+		$assistant_io->add_screen("Organisation Unit");
+		$assistant_io->add_screen("Sample Type");
+		$assistant_io->add_screen("Sample Information");
+		$assistant_io->add_screen("Sample Specific Information");
+		$assistant_io->add_screen("Summary");
+
+		$template->set_var("content", $assistant_io->get_content());
+		
+		$template->output();
+	}
+		
+	public static function clone_sample()
+	{
+		$template = new Template("template/samples/clone_sample.html");	
+		
+		require_once("core/modules/base/assistant.io.php");
+		
+		$assistant_io = new AssistantIO("core/modules/sample/sample_clone.ajax.php", "SampleCloneAssistantField", false);
+		
+		$assistant_io->add_screen("Source Sample");
+		$assistant_io->add_screen("Sample Information");
+		$assistant_io->add_screen("Sample Values");
+		$assistant_io->add_screen("Sample Items");
+		$assistant_io->add_screen("Summary");
+
+		$template->set_var("content", $assistant_io->get_content());
+		
+		$template->output();
 	}
 	
 	/**
@@ -2442,7 +1089,7 @@ class SampleIO
 		{
 			if ($sample_security->is_access(1, false))
 			{
-				$list = new List_IO(Sample_Wrapper::count_sample_locations($_GET[sample_id]), 20);
+				$list = new ListStat_IO(Sample_Wrapper::count_sample_locations($_GET[sample_id]), 20);
 	
 				$list->add_row("","symbol",false,"16px");
 				$list->add_row("Name","name",true,null);
@@ -2563,6 +1210,10 @@ class SampleIO
 					self::create(null,null,null);
 				break;
 				
+				case ("clone"):
+					self::clone_sample();
+				break;
+				
 				case ("organ_unit"):
 					self::list_organisation_unit_related_samples();
 				break;
@@ -2660,7 +1311,6 @@ class SampleIO
 								$session->write_value("stack_array", $path_stack_array, true);
 							}
 							
-							$sql = " SELECT item_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = ".$_GET[sample_id]."";
 							$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_list", $_GET[dialog]);
 							
 							if (file_exists($module_dialog[class_path]))
@@ -2669,7 +1319,7 @@ class SampleIO
 								
 								if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
 								{
-									$module_dialog['class']::$module_dialog[method]($sql);
+									$module_dialog['class']::$module_dialog[method]("sample", $_GET[sample_id], true, false);
 								}
 								else
 								{
@@ -2752,45 +1402,21 @@ class SampleIO
 													$params = http_build_query($paramquery,'','&#38;');
 												}
 												
-												if ($_GET[dialog] == "parentsample")
+												if (SampleItemFactory::create($_GET[sample_id], $return_value, $_GET[key], $_POST[keywords], $_POST[description]) == true)
 												{
-													$parent_sample_id = Sample::get_entry_by_item_id($return_value);
-													
-													if (SampleItemFactory::create($parent_sample_id, $sample->get_item_id(), ($_GET[key]*-1), $_POST[keywords], $_POST[description]) == true)
+													if ($transaction_id != null)
 													{
-														if ($transaction_id != null)
-														{
-															$transaction->commit($transaction_id);
-														}
-														Common_IO::step_proceed($params, "Add Item", "Successful." ,null);
+														$transaction->commit($transaction_id);
 													}
-													else
-													{
-														if ($transaction_id != null)
-														{
-															$transaction->rollback($transaction_id);
-														}
-														Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
-													}
+													Common_IO::step_proceed($params, "Add Item", "Successful." ,null);
 												}
 												else
 												{
-													if (SampleItemFactory::create($_GET[sample_id], $return_value, $_GET[key], $_POST[keywords], $_POST[description]) == true)
+													if ($transaction_id != null)
 													{
-														if ($transaction_id != null)
-														{
-															$transaction->commit($transaction_id);
-														}
-														Common_IO::step_proceed($params, "Add Item", "Successful." ,null);
+														$transaction->rollback($transaction_id);
 													}
-													else
-													{
-														if ($transaction_id != null)
-														{
-															$transaction->rollback($transaction_id);
-														}
-														Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
-													}
+													Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
 												}
 											}
 											else

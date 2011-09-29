@@ -107,4 +107,12 @@
 	$dialog[11][internal_name]	= "sample_item_report";
 	$dialog[11][display_name]	= "Sample Item Report";
 	$dialog[11][weight]			= 1000;
+	
+	$dialog[12][type]			= "item_assistant_list";
+	$dialog[12][class_path]		= "core/modules/sample/sample.io.php";
+	$dialog[12]['class']		= "SampleIO";
+	$dialog[12][method]			= "list_sample_items";
+	$dialog[12][internal_name]	= "sample";
+	$dialog[12][display_name]	= "Sample";
+	$dialog[12][weight]			= 300;
 ?>

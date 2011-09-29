@@ -29,25 +29,29 @@
 interface FolderInterface
 {
 	/**
+	 * @param bool $inherit
 	 * @return bool
 	 */
-	public function is_flag_change_permission();
+	public function can_change_permission($inherit = false);
 	
 	/**
+	 * @param bool $inherit
 	 * @return bool
 	 */
-	public function is_flag_add_folder();
+	public function can_add_folder($inherit = false);
 	
 	/**
+	 * @param bool $inherit
 	 * @return bool
 	 */
-	public function is_flag_cmd_folder();
+	public function can_command_folder($inherit = false);
 	
 	/**
+	 * @param bool $inherit
 	 * @return bool
 	 */
-	public function is_flag_rename_folder();
-
+	public function can_rename_folder($inherit = false);
+	
 	/**
 	 * @return bool
 	 */
@@ -174,6 +178,13 @@ interface FolderInterface
 	 * @return integer
 	 */
 	public static function get_data_entity_id_by_folder_id($folder_id);
+	
+	/**
+	 * Returns folder name by id without create an instance (due to performance reasons)
+	 * @param integer $folder_id
+	 * @return string
+	 */
+	public static function get_name_by_id($folder_id);
 	
 	/**
 	 * @param string $type

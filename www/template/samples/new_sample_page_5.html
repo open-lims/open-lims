@@ -1,43 +1,70 @@
 
-<br />
+<script>
+$(document).ready(function()
+{
+	$( "#AssistantError" ).dialog(
+	{
+		autoOpen: false,
+		buttons: 
+		{
+			"OK": function()
+			{
+                  $( this ).dialog( "close" );
+			}
+		}
+	});
+	$("#AssistantPrevious").click(function()
+	{
+		assistant.load_previous_page();
+	});
+	$("#AssistantNext").click(function()
+	{
+		assistant.load_next_page();
+	});
+});
+</script>
 
-<!-- CONTAINER BEGIN ("Create New Sample (5/5)",0) -->
+<div id="AssistantError" title="Error" style='display: none;'>
+An error occours during sample creation!
+</div>
 
-<form action='index.php?[[LINK]]' method='post'>
-[[BAR]]
+<div id="AssistantFinish" style="display:none; cursor: default"> 
+<img src='images/animations/loading_circle_small.gif' alt=''> Please wait while sample creation.
+</div> 
+
 <br />
 <table class='formTable'>
 	<tr>
 		<td>Organisation Unit:</td>
-		<td>[[ORGAN_UNIT]]</td>
+		<td>[[SAMPLE_ORGANISATION_UNIT]]</td>
 	</tr>
 	<tr>
 		<td>Template:</td>
-		<td>[[TEMPLATE]]</td>
+		<td>[[SAMPLE_TEMPLATE]]</td>
 	</tr>
 	<tr>
 		<td>Name:</td>
-		<td>[[NAME]]</td>
+		<td>[[SAMPLE_NAME]]</td>
 	</tr>
 	
-	<!-- IF ([[MANUFACTURER]]) -->
+	<!-- IF ([[SAMPLE_MANUFACTURER]]) -->
 	<tr>
 		<td>Manufacturer:</td>
-		<td>[[MANUFACTURER]]</td>
+		<td>[[SAMPLE_MANUFACTURER]]</td>
 	</tr>
 	<!-- ENDIF -->
 	
-	<!-- IF ([[LOCATION]]) -->
+	<!-- IF ([[SAMPLE_LOCATION]]) -->
 	<tr>
 		<td>Location:</td>
-		<td>[[LOCATION]]</td>
+		<td>[[SAMPLE_LOCATION]]</td>
 	</tr>
 	<!-- ENDIF -->
 	
-	<!-- IF ([[DATE_OF_EXPIRY]]) -->
+	<!-- IF ([[SAMPLE_DATE_OF_EXPIRY]]) -->
 	<tr>
 		<td>Date of Expiry:</td>
-		<td>[[DATE_OF_EXPIRY]]</td>
+		<td>[[SAMPLE_DATE_OF_EXPIRY]]</td>
 	</tr>
 	<!-- ENDIF -->
 	
@@ -48,7 +75,7 @@
 		<td colspan='2'>Description/Comment:</td>
 	</tr>
 	<tr>
-		<td colspan='2'>[[DESC]]</td>
+		<td colspan='2'>[[SAMPLE_DESCRIPTION]]</td>
 	</tr>
 	<tr>
 		<td colspan='2'><div class='horizontal_line'>&nbsp;</div></td>
@@ -56,13 +83,8 @@
 	<tr>
 		<td colspan='2'>
 			<br />
-			<div class='button_left'><input type='submit' value='previous' name='submitbutton' class='previous_button' /></div>
-			<div class='button_right'><input type='submit' value='finish' name='submitbutton' class='next_button' /></div>
+			<div class='button_left'><button id='AssistantPrevious' class='AssistantButtonDisabled'>previous</button></div>
+			<div class='button_right'><button id='AssistantNext' class='AssistantButton'>next</button></div>
 		</td>
 	</tr>
 </table>
-<input type='hidden' value='[[DESCRIPTION]]' name='description' />
-<input type='hidden' value='[[KEYWORDS]]' name='keywords' />
-</form>
-
-<!-- CONTAINER END (0) -->

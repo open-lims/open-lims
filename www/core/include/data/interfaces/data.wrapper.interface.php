@@ -37,6 +37,12 @@ interface Data_WrapperInterface
 	
 	/**
 	 * @param integer $folder_id
+	 * @return bool
+	 */
+	public static function has_folder_children($folder_id);
+	
+	/**
+	 * @param integer $folder_id
 	 * @param string $search_string
 	 * @param string $order_by
 	 * @param string $order_method
@@ -103,7 +109,7 @@ interface Data_WrapperInterface
 	 * @param string $sql
 	 * @return array
 	 */
-	public static function list_item_files($sql);
+	public static function list_item_files($sql, $order_by, $order_method, $start, $end);
 	
 	/**
 	 * @param string $sql
