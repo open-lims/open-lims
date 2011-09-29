@@ -19,10 +19,10 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-function base_upload(uid, sid) 
+function base_upload(unique_id, session_id) 
 {
-	var unique_id = uid;
-	var session_id = sid;
+	var unique_id_local = unique_id;
+	var session_id_local = session_id;
 	var num_files_to_upload;
 	var num_uploaded_files = 0;
 	var track_uploads = [];	
@@ -73,8 +73,12 @@ function base_upload(uid, sid)
 		});
 		if(files.length == 0) 
 		{
-			$("#ErrorMessage").html("No File selected!");
+			$("#ErrorMessage").html(upload_status_array[0]);
 			return false;
+		}
+		else
+		{
+			$("#ErrorMessage").html("");
 		}
 		num_files_to_upload = files.length;
 		$("#uploader_file_amount").attr("value",num_files_to_upload);
@@ -136,7 +140,7 @@ function base_upload(uid, sid)
 		{
 			if(check_upload_progress()) // all complete
 			{
-				$("#UploadInfo").html("Checking for Errors...");
+				$("#UploadInfo").html(upload_status_array[1]);
 				php_upload_size_script = false;
 				if(check_upload_state())
 				{
@@ -158,22 +162,22 @@ function base_upload(uid, sid)
 			{
 				if(errors_occurred == 1)
 				{
-					$("#UploadInfo").html("An Error occurred. See the Log for details.");
+					$("#UploadInfo").html(upload_status_array[2]);
 				}
 				else
 				{
-					$("#UploadInfo").html(errors_occurred+" Errors occurred. See the Log for details.");
+					$("#UploadInfo").html(upload_status_array[3].replace("VAR",errors_occurred));
 				}
 			}
 			else
 			{
 				if(num_files_to_upload == 1)
 				{
-					$("#UploadInfo").html("The File was successfully uploaded.");
+					$("#UploadInfo").html(upload_status_array[4]);
 				}
 				else
 				{
-					$("#UploadInfo").html("All "+num_files_to_upload+" Files were successfully uploaded.");
+					$("#UploadInfo").html(upload_status_array[5].replace("VAR",num_files_to_upload));
 				}
 			}
 			$("#FinishUpload").removeAttr("disabled");
@@ -190,7 +194,7 @@ function base_upload(uid, sid)
 		{
 			async: false,
 	    	type : "GET",
-	    	url : "core/modules/data/file_check.upload.php?session_id="+session_id+"&unique_id="+unique_id,
+	    	url : "core/modules/data/file_check.upload.php?session_id="+session_id_local+"&unique_id="+unique_id_local,
 	    	data : null,
 	    	success : function(data) 
 	    	{
@@ -205,11 +209,10 @@ function base_upload(uid, sid)
 				done = true;
 			}
 			var state = jQuery.parseJSON(json_state);
-			var finished = true;
 			for (var int = 1; int <= num_files_to_upload; int++) 
 			{
 				var code = state[int];
-				if(code != 0) //code already set for this upload or upload not started?
+				if(code != 0)
 				{
 					if(code == 1)
 					{ //finished
@@ -220,14 +223,6 @@ function base_upload(uid, sid)
 						set_upload_error(int, code);
 					}
 				}
-				else if(code == 0)
-				{
-					finished = false;
-				}
-			}
-			if(num_uploaded_files == num_files_to_upload && finished)
-			{
-				done = true;
 			}
 		}
 		if(done)
@@ -247,7 +242,7 @@ function base_upload(uid, sid)
 		{
 			async: false,
 	    	type : "GET",
-	    	url : "core/modules/data/file_check.upload.progress.php?uid="+unique_id,
+	    	url : "core/modules/data/file_check.upload.progress.php?unique_id="+unique_id_local,
 	    	data : null,
 	    	success : function(data) 
 	    	{
@@ -268,11 +263,11 @@ function base_upload(uid, sid)
 		    		$("#FileListItem"+parseInt(num_uploaded_files + 1)).children(".FileListProgressInfo").html(speed+" kb/s");
 		    		if(time_left != 1)
 		    		{
-			    		$("#UploadInfo").html(time_left+" seconds remaining");
+			    		$("#UploadInfo").html(upload_status_array[6].replace("VAR",time_left));
 		    		}
 		    		else
 		    		{
-			    		$("#UploadInfo").html(time_left+" second remaining");
+			    		$("#UploadInfo").html(upload_status_array[7]);
 		    		}
 		    		if(total_complete > num_uploaded_files) //new upload complete
 		    		{
@@ -417,20 +412,20 @@ function base_upload(uid, sid)
 		var url_retrace = current_url.split("&retrace=");
 		if(url_retrace.length == 2)
 		{
+			var retrace = current_url.split("&nav=")[0];
 			var decoded = base64_decode(url_retrace[1]);
 			var unserialized = unserialize(decoded);
-			var nav = unserialized['nav'];
-			var run = unserialized['run'];
-			var project_id = unserialized['project_id'];
-			var url_root = current_url.split("&nav=")[0];
-			var retrace = url_root+"&nav="+nav+"&run="+run+"&project_id="+project_id;
+			for (var key in unserialized) {
+				var value = unserialized[key];
+				retrace += "&"+key+"="+value;
+			}
 			return retrace;
 		}
 		var url_split = current_url.split("&action=file_add");
 		if(url_split.length == 2)
 		{
 			return url_split[0];
-		}
+		}	
 	}
 
 }

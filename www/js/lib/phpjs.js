@@ -117,6 +117,8 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */ 
 
+
+//utf_8_decode() removed by open-lims-team to maintain object oriented paradigm
 function unserialize (data) {
     // Takes a string representation of variable and recreates it  
     // 
@@ -179,11 +181,13 @@ function unserialize (data) {
         return [buf.length, buf.join('')];
     };
     var _unserialize = function (data, offset) {
-        var readdata;        var readData;
+        var readdata;        
+        var readData;
         var chrs = 0;
         var ccount;
         var stringlength;
-        var keyandchrs;        var keys;
+        var keyandchrs;        
+        var keys;
  
         if (!offset) {
             offset = 0;
@@ -241,7 +245,6 @@ function unserialize (data) {
  
             // Length was calculated on an utf-8 encoded string
             // so wait with decoding
-//            readdata = that.utf8_decode(readdata);            
             break;
         case 'a':
             readdata = {};
@@ -327,3 +330,5 @@ function base64_decode (data) {
  
     return dec;
 }
+
+

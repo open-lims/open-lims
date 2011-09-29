@@ -45,13 +45,4 @@ function tooltip(element_id, message)
 	});
 }
 
-var upload_error_array = [];
-upload_error_array[0] = "";
-upload_error_array[1] = "";
-upload_error_array[2] = "A non-specific error occurs during upload!";
-upload_error_array[3] = "A non-specific error occurs during upload!";
-upload_error_array[4] = "This file is too large!";
-upload_error_array[5] = "This file equals previous version or already exists!";
-upload_error_array[6] = "You have exceeded your quota!";
-upload_error_array[7] = "This file-type is forbidden!";
-upload_error_array[8] = "permission denied!";
+
