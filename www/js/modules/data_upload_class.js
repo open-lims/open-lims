@@ -93,7 +93,7 @@ function base_upload(unique_id, session_id)
 		var file_list = $("<ul id='FileList'></ul>");
 		$(file_list_container).append(file_list);
 		for (var int = 0; int < num_files_to_upload; int++) {
-			$("<li id='FileListItem"+parseInt(int+1)+"'>"+files[int]+"<span class='FileListImageContainer'></span><span class='FileListProgressInfo'></span></li>").appendTo(file_list);
+			$("<li id='FileListItem"+parseInt(int+1)+"'>"+parseInt(int+1)+". "+files[int]+"<span class='FileListImageContainer'></span><span class='FileListProgressInfo'></span></li>").appendTo(file_list);
 		}
 		var upload_info = $("<div id='UploadInfo'></div>");
 		var ok_button = $("<button id='FinishUpload'>OK</button>")
@@ -107,7 +107,7 @@ function base_upload(unique_id, session_id)
 			.append(global_upload_progressbar)
 			.append(upload_info)
 			.append(ok_button);
-		$.blockUI({ message: block_ui_content });
+		$.blockUI({ message: block_ui_content , css: {"width":"550px"}});
 		init_scrollbar();
 		$("#UploadForm").submit();
 		started = new Date().getTime();
@@ -201,7 +201,6 @@ function base_upload(unique_id, session_id)
 	    		json_state = data;
 	    	}
 		});
-		console.log(json_state);
 		if(json_state != "No Array")
 		{
 			if(json_state.substr(0,6) == "ALL_OK")
@@ -403,7 +402,7 @@ function base_upload(unique_id, session_id)
 	
 	function proceed() 
 	{
-		$.unblockUI();
+		$("#FinishUpload").attr("disabled", "true");
 		$(location).attr("href",get_retrace());
 	}
 	

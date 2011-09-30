@@ -12,7 +12,6 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 		set_clickable(1);
 	}
 	
-	
 	function set_visited(key)
 	{
 		$(".AssistantElement"+key+" > a > span.AssistantElementImage > img").attr("src", "images/numbers/"+key+"_dgrey.png");
