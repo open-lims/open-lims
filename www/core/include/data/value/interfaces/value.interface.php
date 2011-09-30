@@ -160,6 +160,11 @@ interface ValueInterface
      */
     public function get_value_shape();
 	
+    /**
+     * @return string
+     */
+    public function get_autofield_array();
+    
 	/**
 	 * @param array $content_array
 	 */

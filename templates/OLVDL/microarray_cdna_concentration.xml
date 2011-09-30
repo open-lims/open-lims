@@ -38,6 +38,9 @@
 					<FIELD name="cy3_rna" type="dropdown" var="item.each.parents.list.getName"></FIELD>
 					<FIELD name="cy5_rna" type="dropdown" var="item.each.parents.list.getName"></FIELD>
 				</LINE>
+				<LINE>
+					<PRINT value="&nbsp;"></PRINT>                           
+				</LINE>
 			</EACH>                             
 		</FORMAT> 
 	 </BODY>              

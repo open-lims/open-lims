@@ -26,7 +26,7 @@
  * @package data
  */
 class ValueIO
-{
+{		
 	/**
 	 * NEW
 	 */
@@ -39,7 +39,7 @@ class ValueIO
 			if ($_GET[value_id])
 			{
 				$value = Value::get_instance($_GET[value_id]);
-				
+	
 				if ($value->is_read_access())
 				{
 					if ($_GET[version])
@@ -263,7 +263,9 @@ class ValueIO
 							
 							$template->set_var("title", $value->get_type_name());
 							
-							$template->set_var("value",$value->get_html_form(null, null, null));
+							require_once("value_form.io.php");
+							$value_form_io = new ValueFormIO($_GET[value_id]);
+							$template->set_var("value",$value_form_io->get_content());
 				
 							$template->output();
 						}
@@ -443,7 +445,9 @@ class ValueIO
 					
 					$template->set_var("title", $value_type->get_name());
 					
-					$template->set_var("value",$value->get_html_form(null, $type_id, $folder_id));
+					require_once("value_form.io.php");
+					$value_form_io = new ValueFormIO(null, $type_id, $folder_id);
+					$template->set_var("value",$value_form_io->get_content());
 		
 					$template->set_var("type_id", $type_id);
 		

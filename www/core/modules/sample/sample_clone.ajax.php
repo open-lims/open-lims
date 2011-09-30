@@ -321,11 +321,17 @@ class SampleCloneAjax extends Ajax
 					$content_array = array();
 					$content_counter = 0;
 					
+					require_once("../../../core/modules/data/value_form.io.php");
+					
 					foreach($value_array as $key => $value)
 					{
 						$value_obj = Value::get_instance($value);
+						$value_form_io = new ValueFormIO($value, null, null);
+						$value_form_io->set_field_prefix("value-".$key);
+						$value_form_io->set_field_class("SampleCloneAssistantField");
+						
 						$content_array[$content_counter]['headline'] = $value_obj->get_name();
-						$content_array[$content_counter]['html'] = $value_obj->get_html_form(null, null, null, "SampleCloneAssistantField", "value-".$key);
+						$content_array[$content_counter]['html'] = $value_form_io->get_content();
 						$content_array[$content_counter]['item_name'] = "value-item-".$key;
 						$content_array[$content_counter]['item_value'] = $value_obj->get_item_id();
 						$content_counter++;
