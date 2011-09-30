@@ -3,7 +3,6 @@
 <!-- CONTAINER BEGIN ("Update File",0) -->
 
 <iframe src='core/modules/data/file.update.php?[[PARAMS]]' name='hidden_uploader' style='display: none;'></iframe>
-<iframe src='core/modules/data/file_check.upload.php?[[PARAMS]]' name='hidden_upload_checker' style='display: none;'></iframe>
 
 <div class='file_upload_container'>
 <br />
@@ -22,12 +21,9 @@
 			<td></td>
 		</tr>
 		<tr>
-			<td><input type='file' name='file-1' id='file-1' value='' /></td>
+		<td><input type='hidden' id='UPLOAD_IDENTIFIER' name='UPLOAD_IDENTIFIER' value='[[UNIQUE_ID]]'/>
+			<input type='file' name='file-1' id='file-1' value=''  class='FileInput'/></td>
 		</tr>
-		<tr>
-			<td><span class='formError' id='file-1-error'></span></td>
-		</tr>
-	
 		<tr id='uploader_break'>
 			<td><input type='checkbox' name='current' value='1' checked='checked' /> New file is current version</td>
 		</tr>
@@ -49,17 +45,12 @@
 </table>
 
 <script language='javascript'>
-var upload_reload = false;
-uploader = new Uploader();
-uploader.setUniqueId('[[UNIQUE_ID]]');
-uploader.setSessionId('[[SESSION_ID]]');
-uploader.setRetrace('[[RETRACE]]');
+var uploader = new base_upload('[[UNIQUE_ID]]','[[SESSION_ID]]');
 </script>
 
 </form>
 <br />
 <br />
 </div>
-<div id='AjaxProceed'></div>
 
 <!-- CONTAINER END (0) -->

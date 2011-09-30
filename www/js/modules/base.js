@@ -44,3 +44,5 @@ function tooltip(element_id, message)
 		$("#tooltip").css("top", e.pageY + offsetY).css("left", e.pageX + offsetX);
 	});
 }
+
+

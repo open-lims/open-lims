@@ -1,6 +1,5 @@
 @CHARSET "ISO-8859-1";
 
-
 /* BASE TREE NAVIGATION */
 
 .BaseTreeList
@@ -123,23 +122,26 @@ position:relative;
 
 
 /* Small Tabs (ÜA) */
-#SmallTabContainer {
+#SmallTabContainer 
+{
 	width: 750px;
 	font: normal 1em Verdana, Helvetica, sans-serif;
 }
 
-#SmallTabContainer a {
+#SmallTabContainer a 
+{
 	color: #404040;
 }
 
 #SmallTabContainer a:hover,
 #SmallTabContainer a:active,
 #SmallTabContainer a:focus
-	{
+{
 	color: #404040;
 }
 
-#SmallTabFooter {
+#SmallTabFooter 
+{
 	clear: left;
 	margin: -1px;
 	height: 1px;
@@ -147,13 +149,15 @@ position:relative;
 	border-top: 1px #D0D0D0 dotted;
 }
 
-.SmallTabList {
+.SmallTabList 
+{
 	width: 750px;
 	padding: 0;
 	margin: 0;
 }
 
-.SmallTabList li {
+.SmallTabList li 
+{
 	list-style: none;
 	padding: 0;
 	margin: 0;
@@ -161,7 +165,8 @@ position:relative;
 	width: 101px;
 }
 
-.SmallTabList li a.SmallTab {
+.SmallTabList li a.SmallTab 
+{
 	display: block;
 	font: normal 12px Verdana, Tahoma, Helvatica, sans-serif;
 	background-image: url(../images/tabs/small_tab.png);
@@ -179,13 +184,14 @@ position:relative;
 .SmallTabList li a.SmallTab:hover,
 .SmallTabList li a.SmallTab:active,
 .SmallTabList li a.SmallTab:focus
-	{
+{
 	background-image: url(../images/tabs/small_tab_active.png);
 	background-repeat: no-repeat;
 	background-position: bottom center;
 }
 
-.SmallTabList li a.SmallTabActive {
+.SmallTabList li a.SmallTabActive 
+{
 	display: block;
 	font: normal 12px Verdana, Tahoma, Helvatica, sans-serif;
 	background-image: url(../images/tabs/small_tab_active.png);
@@ -200,7 +206,8 @@ position:relative;
 	text-decoration: none;
 }
 
-.SmallTabList li span.SmallTabInactive {
+.SmallTabList li span.SmallTabInactive 
+{
 	display: block;
 	font: normal 12px Verdana, Tahoma, Helvatica, sans-serif;
 	color: #C0C0C0;

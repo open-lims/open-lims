@@ -3,7 +3,12 @@
  * @package data
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
+<<<<<<< HEAD
  * @copyright (c) 2008-2011 by Roman Konertz
+=======
+ * @author Roman Quiring <quiring@open-lims.org>
+ * @copyright (c) 2008-2011 by Roman Konertz, Roman Quiring
+>>>>>>> uploader
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -37,6 +42,7 @@ class FileAjax extends Ajax
 		parent::__construct();
 	}
 	
+
 	public static function list_file_items($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -111,8 +117,11 @@ class FileAjax extends Ajax
 			$list_request->set_array($list_array);
 			
 			return $list_request->get_page($page);
+			
 		}
+		
 	}
+	
 	
 	public function method_handler()
 	{
@@ -128,7 +137,7 @@ class FileAjax extends Ajax
 				
 				default:
 				break;
-			
+
 			endswitch;
 		}
 	}
@@ -136,4 +145,5 @@ class FileAjax extends Ajax
 
 $file_ajax = new FileAjax;
 $file_ajax->method_handler();
+
 ?>

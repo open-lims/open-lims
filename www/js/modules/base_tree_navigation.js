@@ -488,7 +488,7 @@ function base_tree_nav(id, name, ajax_handler)
 								$(ul).append(li);
 							}
 						);
-						$(".jspContainer").css("height",max_menu_height); //temporäre höhe für flüssige animation
+						$(".jspContainer").css("height",max_menu_height-5); //temporäre höhe für flüssige animation
 						$(ul).hide().appendTo(parent_li).slideDown("normal", function()
 						{
 							update_icons();

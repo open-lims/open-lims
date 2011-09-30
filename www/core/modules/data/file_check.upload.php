@@ -1,22 +1,3 @@
-<html>
-<head>
-<script type="text/javascript" src="../../../js/phpjs/phpjs.js"></script>
-<script type="text/javascript" src="../../../js/yajsl_php.js"></script>
-<script type="text/javascript" src="../../../js/yajsl.js"></script>
-<script type="text/javascript" src="../../../js/ol_core.js"></script>
-</head>
-<body>
-<script language='javascript'>
-	if (parent.uploader.getUploadReload() == true)
-	{
-		local_uploader = new Uploader();
-		function atload()
-		{
-			location.reload(true);
-		}
-		window.onload=atload;
-	}
-</script>
 <?php
 /**
  * @package data
@@ -76,86 +57,19 @@
 	{
 		$session = new Session($_GET[session_id]);
 		$file_upload_status = $session->read_value("FILE_UPLOAD_".$_GET[unique_id]);
+		
 	
 		if (is_array($file_upload_status) and count($file_upload_status) > 0)
 		{
-			if ($session->is_value("FILE_UPLOAD_FINISHED_".$_GET[unique_id]) == false)
+			if ($session->is_value("FILE_UPLOAD_FINISHED_".$_GET[unique_id]) == true)
 			{
 				// $session->write_value("FILE_UPLOAD_FINISHED_".$_GET[unique_id], false, true);
-			}
-			
-			$upload_error_array = array();
-			
-			$number_of_complete_uploads = 0;
-			$number_of_total_uploads = count($file_upload_status);
-			
-			$upload_complete = true;
-			$upload_error = false;
-			
-			foreach ($file_upload_status as $key => $value)
-			{	
-				if ($value == 0)
-				{
-					$upload_complete = false;
-				}
-				else
-				{
-					$number_of_complete_uploads++;
-				}
-				
-				if ($value > 1)
-				{
-					$upload_error = true;
-					$upload_error_array[$key] = $value;
-				}
-				
-			}
-			
-			if ($upload_complete == false)
-			{
-				echo "<script language='javascript'>" .
-						"parent.uploader.setNumberOfUploads(".$number_of_total_uploads.",".$number_of_complete_uploads.");" .
-						"</script>";
+				echo "ALL_OK";
+				echo json_encode($file_upload_status);
 			}
 			else
 			{
-				if ($upload_error == true)
-				{
-					echo "<script language='javascript'>";
-					echo "parent.uploader.stop(".$number_of_total_uploads.");";
-					
-					if ($_GET[run] == "update" or $_GET[run] == "update_minor")
-					{
-						$type = "update";
-					}
-					else
-					{
-						$type = "upload";
-					}
-					
-					if (is_array($upload_error_array))
-					{
-						foreach ($upload_error_array as $key => $value)
-						{
-							echo "parent.uploader.enableField(".$key.");";
-							echo "parent.uploader.error(".$key.", ".$value.", '".$type."');";
-						}
-					}
-					echo "</script>";
-				}
-				else
-				{
-					echo "<script language='javascript'>" .
-						"parent.uploader.setNumberOfUploads(".$number_of_total_uploads.",".$number_of_complete_uploads.");" .						
-						"</script>";	
-					
-					if ($session->read_value("FILE_UPLOAD_FINISHED_".$_GET[unique_id]) == true)
-					{
-						echo "<script language='javascript'>" .
-							"parent.uploader.proceed();" .
-							"</script>";		
-					}	
-				}
+				echo json_encode($file_upload_status);
 			}
 		}
 		else
@@ -166,5 +80,3 @@
 	$db->db_close();
 
 ?>
-</body>
-</html>
