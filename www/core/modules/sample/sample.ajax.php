@@ -41,7 +41,7 @@ class SampleAjax extends Ajax
 	{
 		global $user;
 		
-		$list_request = new ListRequest_IO(Sample_Wrapper::count_user_samples($user->get_user_id()), $css_page_id, $css_row_sort_id);
+		$list_request = new ListRequest_IO();
 		$list_request->set_row_array($json_row_array);
 		
 		$list_array = Sample_Wrapper::list_user_samples($user->get_user_id(), $sortvalue, $sortmethod, ($page*20)-20, ($page*20));
@@ -141,7 +141,7 @@ class SampleAjax extends Ajax
 		}
 		else
 		{
-			$list_request->empty_message("You have no samples!");
+			$list_request->empty_message("<span class='italic'>You have no samples at the moment!</span>");
 		}
 		
 		$list_request->set_array($list_array);
@@ -161,15 +161,14 @@ class SampleAjax extends Ajax
 		
 		if ($sql)
 		{
+			$list_request = new ListRequest_IO();
+			
 			if ($argument_array[2][1] == true)
-			{			
-				$list_request = new ListRequest_IO(Sample_Wrapper::count_item_samples($sql), $css_page_id, $css_row_sort_id);
+			{	
 				$list_array = Sample_Wrapper::list_item_samples($sql, $sortvalue, $sortmethod, ($page*20)-20, ($page*20));
 			}
 			else
 			{
-				$number_of_entries = Sample_Wrapper::count_item_samples($sql);
-				$list_request = new ListRequest_IO($number_of_entries, $css_page_id, $css_row_sort_id, $number_of_entries, null, false, false);	
 				$list_array = Sample_Wrapper::list_item_samples($sql, $sortvalue, $sortmethod, 0, null);
 			}
 			
@@ -315,7 +314,7 @@ class SampleAjax extends Ajax
 			}
 			else
 			{
-				
+				$list_request->empty_message("<span class='italic'>No samples found!</span>");
 			}
 			
 			$list_request->set_array($list_array);

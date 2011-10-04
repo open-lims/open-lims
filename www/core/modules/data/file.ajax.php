@@ -55,15 +55,14 @@ class FileAjax extends Ajax
 		
 		if ($sql)
 		{
+			$list_request = new ListRequest_IO();
+			
 			if ($argument_array[2][1] == true)
 			{
-				$list_request = new ListRequest_IO(Data_Wrapper::count_item_files($sql), $css_page_id, $css_row_sort_id);
 				$list_array = Data_Wrapper::list_item_files($sql, $sortvalue, $sortmethod, ($page*20)-20, ($page*20));
 			}
 			else
 			{
-				$number_of_entries = Data_Wrapper::count_item_files($sql);
-				$list_request = new ListRequest_IO($number_of_entries, $css_page_id, $css_row_sort_id, $number_of_entries, null, false, false);	
 				$list_array = Data_Wrapper::list_item_files($sql, $sortvalue, $sortmethod, 0, null);
 			}
 			$list_request->set_row_array($json_row_array);

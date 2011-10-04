@@ -31,7 +31,7 @@ class SampleIO
 	{
 		global $user;
 		
-		$list = new List_IO("/core/modules/sample/sample.ajax.php", "list_user_related_samples", "0", "SampleAjaxMySamples");
+		$list = new List_IO(Sample_Wrapper::count_user_samples($user->get_user_id()), "/core/modules/sample/sample.ajax.php", "list_user_related_samples", "0", "SampleAjaxMySamples");
 		
 		$list->add_row("","symbol",false,"16px");
 		$list->add_row("Smpl. ID","id",true,"11%");
@@ -43,9 +43,11 @@ class SampleIO
 		
 		$template = new Template("template/samples/list_user.html");	
 		
+		$template->set_var("list", $list->get_list());
+		
 		$template->output();
 		
-		$list->run();
+		
 	}
 		
 	public static function list_organisation_unit_related_samples()
@@ -366,8 +368,23 @@ class SampleIO
 	/**
 	 * @param string $sql
 	 */
-	public static function list_sample_items($item_holder_type, $item_holder_id, $an_page = true, $in_assistant = false, $form_field_name = null)
+	public static function list_sample_items($item_holder_type, $item_holder_id, $an_page = true, $in_assistant = false, $form_field_name = null, $number_of_entries = 20)
 	{
+		if ($GLOBALS['autoload_prefix'])
+		{
+			$path_prefix = $GLOBALS['autoload_prefix'];
+		}
+		else
+		{
+			$path_prefix = "";
+		}
+		
+		$handling_class = Item::get_holder_handling_class_by_name($item_holder_type);
+		if ($handling_class)
+		{
+			$sql = $handling_class::get_item_list_sql($item_holder_id);
+		}
+		
 		$argument_array = array();
 		$argument_array[0][0] = "item_holder_type";
 		$argument_array[0][1] = $item_holder_type;
@@ -377,11 +394,13 @@ class SampleIO
 		$argument_array[2][1] = $as_page;
 		$argument_array[3][0] = "in_assistant";
 		$argument_array[3][1] = $in_assistant;
-
-		$list = new List_IO("/core/modules/sample/sample.ajax.php", "list_sample_items", $argument_array, "SampleAjax");
 		
 		if ($in_assistant == false)
 		{
+			$list = new List_IO(Sample_Wrapper::count_item_samples($sql), "/core/modules/sample/sample.ajax.php", "list_sample_items", $argument_array, "SampleAjax", 20, true, true);
+			
+			$template = new Template($path_prefix."template/samples/list.html");
+			
 			$list->add_row("","symbol",false,"16px");
 			$list->add_row("Smpl. ID","sid",true,"11%");
 			$list->add_row("Sample Name","name",true,null);
@@ -393,6 +412,10 @@ class SampleIO
 		}
 		else
 		{
+			$list = new List_IO(Sample_Wrapper::count_item_samples($sql), "/core/modules/sample/sample.ajax.php", "list_sample_items", $argument_array, "SampleAjax", 20, false, false);
+			
+			$template = new Template($path_prefix."template/samples/list_without_border.html");
+			
 			$list->add_row("","checkbox",false,"16px", $form_field_name);
 			$list->add_row("","symbol",false,"16px");
 			$list->add_row("Smpl. ID","sid",false,"11%");
@@ -403,27 +426,9 @@ class SampleIO
 			$list->add_row("Owner","owner",false,null);
 		}
 		
-		if ($GLOBALS['autoload_prefix'])
-		{
-			$path_prefix = $GLOBALS['autoload_prefix'];
-		}
-		else
-		{
-			$path_prefix = "";
-		}
-		
-		if ($in_assistant == false)
-		{
-			$template = new Template($path_prefix."template/samples/list.html");
-		}
-		else
-		{
-			$template = new Template($path_prefix."template/samples/list_without_border.html");
-		}
+		$template->set_var("list", $list->get_list());
 		
 		$template->output();
-		
-		$list->run();
 	}
 	
 	/**

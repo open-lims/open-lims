@@ -1,4 +1,4 @@
-List = function(ajax_handler, ajax_run, argument_array, css_main_id, css_page_id, css_row_sort_id, row_array)
+List = function(ajax_handler, ajax_run, argument_array, css_main_id, number_of_pages, row_array)
 {
 	var sort_array = new Array();
 	
@@ -8,16 +8,41 @@ List = function(ajax_handler, ajax_run, argument_array, css_main_id, css_page_id
 	
 	var get_array = getQueryParams(document.location.search);
 	
+	var parsed_row_array = $.parseJSON(row_array);
+	var colspan = parsed_row_array.length;
+	
 	function load_content(sort_value, sort_method, page)
 	{
 		$("#"+css_main_id).contents().detach();
-		$("#"+css_main_id).append("<div id='AssistantLoading'><img src='images/animations/loading_circle_small.gif' alt='Loading...' /></div>");
+		$("#"+css_main_id).append("<tr><td colspan='"+colspan+"'><div id='AssistantLoading'><img src='images/animations/loading_circle_small.gif' alt='Loading...' /></div></td></tr>");
+		
+		$.ajax(
+		{
+			type: "GET",
+			url: "core/modules/base/list.ajax.php",
+			data: "username="+get_array['username']+"&session_id="+get_array['session_id']+"&run=get_page_bar&page="+page+"&number_of_pages="+number_of_pages+"&css_page_id="+css_main_id+"Page",
+			async: false,
+			success: function(data)
+			{
+				$("#"+css_main_id+"PageBar").html(data);
+				
+				$("."+css_main_id+"Page").each(function()
+				{
+					$(this).click(function()
+					{
+						var id = $(this).attr("id");
+						page = id.replace(css_main_id+"Page","");
+						load_content(sort_value, sort_method, page);
+					});
+				}); 
+			}
+		});
 		
 		$.ajax(
 		{
 			type: "POST",
 			url: ajax_handler+"?username="+get_array['username']+"&session_id="+get_array['session_id']+"&run="+ajax_run+"&sortvalue="+sort_value+"&sortmethod="+sort_method+"&page="+page,
-			data: "row_array="+row_array+"&argument_array="+argument_array+"&css_page_id="+css_page_id+"&css_row_sort_id="+css_row_sort_id,
+			data: "row_array="+row_array+"&argument_array="+argument_array,
 			success: function(data)
 			{
 				$("#"+css_main_id).contents().detach();
@@ -56,42 +81,68 @@ List = function(ajax_handler, ajax_run, argument_array, css_main_id, css_page_id
 		}
 	}
 	
-	$("."+css_row_sort_id).each().live('click', function()
+	function change_symbol(id, symbol)
 	{
-		var id = $(this).attr("id");
-		sort_value = id.replace(css_row_sort_id,"");
-		
-		var sort_method_key = check_array(sort_value);
-		if (sort_method_key != -1)
+		$("."+css_main_id+"Row").each(function()
 		{
-			if (sort_array[sort_method_key][1] == "asc")
-			{	
-				sort_array[sort_method_key][1] = "desc";
-				sort_method = "desc";
+			var local_id = $(this).attr("id");
+			
+			if (local_id == id)
+			{
+				if (symbol == "upside")
+				{
+					$("#"+local_id+" > a > img").attr("src","images/upside.png");
+				}
+				else
+				{
+					$("#"+local_id+" > a > img").attr("src","images/downside.png");
+				}
 			}
 			else
 			{
-				sort_array[sort_method_key][1] = "asc";
-				sort_method = "asc";
+				$("#"+local_id+" > a > img").attr("src","images/nosort.png");
 			}
-		}
-		else
-		{
-			sort_array_length = sort_array.length;
-			
-			sort_array[sort_array_length] = new Array();
-			sort_array[sort_array_length][0] = sort_value;
-			sort_array[sort_array_length][1] = "asc";
-			sort_method = "asc";
-		}
-		
-		load_content(sort_value, sort_method, page);
-	});
+		});
+	}
 	
-	$("."+css_page_id).each().live('click', function()
+	$("."+css_main_id+"Row").each(function()
 	{
-		var id = $(this).attr("id");
-		page = id.replace(css_page_id,"");
-		load_content(sort_value, sort_method, page);
+		$(this).click(function()
+		{			
+			var id = $(this).attr("id");
+			sort_value = id.replace(css_main_id+"Row","");
+			
+			var sort_method_key = check_array(sort_value);
+			if (sort_method_key != -1)
+			{
+				if (sort_array[sort_method_key][1] == "asc")
+				{	
+					sort_array[sort_method_key][1] = "desc";
+					sort_method = "desc";
+					
+					change_symbol(id, "downside");
+				}
+				else
+				{
+					sort_array[sort_method_key][1] = "asc";
+					sort_method = "asc";
+					
+					change_symbol(id, "upside");
+				}
+			}
+			else
+			{
+				sort_array_length = sort_array.length;
+				
+				sort_array[sort_array_length] = new Array();
+				sort_array[sort_array_length][0] = sort_value;
+				sort_array[sort_array_length][1] = "asc";
+				sort_method = "asc";
+				
+				change_symbol(id, "upside");
+			}
+			
+			load_content(sort_value, sort_method, page);
+		});
 	});
 }
