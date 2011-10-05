@@ -115,7 +115,7 @@ class EquipmentAjax extends Ajax
 			}
 			else
 			{
-				
+				$list_request->empty_message("<span class='italic'>No Equipment found!</span>");
 			}
 			
 			$list_request->set_array($list_array);

@@ -11,8 +11,10 @@ List = function(ajax_handler, ajax_run, argument_array, css_main_id, number_of_p
 	var parsed_row_array = $.parseJSON(row_array);
 	var colspan = parsed_row_array.length;
 	
-	function load_content(sort_value, sort_method, page)
+	function load_content(sort_value, sort_method, local_page)
 	{
+		page = local_page;
+		
 		$("#"+css_main_id).contents().detach();
 		$("#"+css_main_id).append("<tr><td colspan='"+colspan+"'><div id='AssistantLoading'><img src='images/animations/loading_circle_small.gif' alt='Loading...' /></div></td></tr>");
 		

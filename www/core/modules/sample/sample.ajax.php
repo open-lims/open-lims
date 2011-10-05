@@ -52,6 +52,34 @@ class SampleAjax extends Ajax
 			
 			foreach($list_array as $key => $value)
 			{
+				$tmp_name = $list_array[$key][name];
+				unset($list_array[$key][name]);
+				
+				if (strlen($tmp_name) > 17)
+				{
+					$list_array[$key][name][label] = $tmp_name;
+					$list_array[$key][name][content] = substr($tmp_name,0,17)."...";
+				}
+				else
+				{
+					$list_array[$key][name][label] = $tmp_name;
+					$list_array[$key][name][content] = $tmp_name;
+				}
+				
+				$tmp_template = $list_array[$key][template];
+				unset($list_array[$key][template]);
+				
+				if (strlen($list_array[$key][template]) > 25)
+				{
+					$list_array[$key][template][label] = $tmp_template;
+					$list_array[$key][template][content] = substr($tmp_template,0,25)."...";
+				}
+				else
+				{
+					$list_array[$key][template][label] = $tmp_template;
+					$list_array[$key][template][content] = $tmp_template;
+				}
+				
 				$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
 				$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y");
 
@@ -89,27 +117,6 @@ class SampleAjax extends Ajax
 					}
 				}
 				
-				$tmp_name = $list_array[$key][name];
-				unset($list_array[$key][name]);
-				
-				if (strlen($tmp_name) > 17)
-				{
-					$list_array[$key][name][label] = $tmp_name;
-					$list_array[$key][name][content] = substr($tmp_name,0,17)."...";
-				}
-				else
-				{
-					$list_array[$key][name][content] = $tmp_name;
-				}
-				
-				if (strlen($list_array[$key][template]) > 25)
-				{
-					$tmp_template = $list_array[$key][template];
-					unset($list_array[$key][template]);
-					$list_array[$key][template][label] = $tmp_template;
-					$list_array[$key][template][content] = substr($tmp_template,0,25)."...";
-				}
-				
 				$sample_id = $list_array[$key][id];
 				$sample_security = new SampleSecurity($sample_id);
 				
@@ -141,7 +148,7 @@ class SampleAjax extends Ajax
 		}
 		else
 		{
-			$list_request->empty_message("<span class='italic'>You have no samples at the moment!</span>");
+			$list_request->empty_message("<span class='italic'>You have no Samples at the moment!</span>");
 		}
 		
 		$list_request->set_array($list_array);
@@ -180,24 +187,34 @@ class SampleAjax extends Ajax
 				
 				foreach($list_array as $key => $value)
 				{
-					if (strlen($list_array[$key][name]) > 17)
+					$tmp_name = $list_array[$key][name];
+					unset($list_array[$key][name]);
+					
+					if (strlen($tmp_name) > 17)
 					{
-						$list_array[$key][name] = substr($list_array[$key][name],0,17)."...";
+						$list_array[$key][name][label] = $tmp_name;
+						$list_array[$key][name][content] = substr($tmp_name,0,17)."...";
 					}
 					else
 					{
-						$list_array[$key][name] = $list_array[$key][name];
+						$list_array[$key][name][label] = $tmp_name;
+						$list_array[$key][name][content] = $tmp_name;
 					}
+					
+					$tmp_template = $list_array[$key][template];
+					unset($list_array[$key][template]);
 					
 					if (strlen($list_array[$key][template]) > 25)
 					{
-						$list_array[$key][template] = substr($list_array[$key][template],0,25)."...";
+						$list_array[$key][template][label] = $tmp_template;
+						$list_array[$key][template][content] = substr($tmp_template,0,25)."...";
 					}
 					else
 					{
-						$list_array[$key][template] = $list_array[$key][template];
-					}			
-					
+						$list_array[$key][template][label] = $tmp_template;
+						$list_array[$key][template][content] = $tmp_template;
+					}
+									
 					if ($argument_array[3][1] == true)
 					{
 						$row_array = json_decode($json_row_array);
@@ -284,10 +301,7 @@ class SampleAjax extends Ajax
 							$list_array[$key][sid][link] 			= $params;
 							$list_array[$key][sid][content]		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
 						
-							$sample_name = $list_array[$key][name];
-							unset($list_array[$key][name]);
 							$list_array[$key][name][link] 		= $params;
-							$list_array[$key][name][content]		= $sample_name;
 						}
 						else
 						{
@@ -314,7 +328,188 @@ class SampleAjax extends Ajax
 			}
 			else
 			{
-				$list_request->empty_message("<span class='italic'>No samples found!</span>");
+				$list_request->empty_message("<span class='italic'>No Samples found!</span>");
+			}
+			
+			$list_request->set_array($list_array);
+			
+			return $list_request->get_page($page);
+		}
+		else
+		{
+			// Error
+		}
+	}
+	
+	private function list_samples_by_item_id($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
+	{
+		$argument_array = json_decode($json_argument_array);
+		$item_id = $argument_array[0][1];
+		
+		if (is_numeric($item_id))
+		{
+			$list_request = new ListRequest_IO();
+			
+			if ($argument_array[2][1] == true)
+			{	
+				$list_array = Sample_Wrapper::list_samples_by_item_id($item_id, $sortvalue, $sortmethod, ($page*20)-20, ($page*20));
+			}
+			else
+			{
+				$list_array = Sample_Wrapper::list_samples_by_item_id($item_id, $sortvalue, $sortmethod, 0, null);
+			}
+			
+			$list_request->set_row_array($json_row_array);
+						
+			if (is_array($list_array) and count($list_array) >= 1)
+			{				
+				$today_begin = new DatetimeHandler(date("Y-m-d")." 00:00:00");
+				$today_end = new DatetimeHandler(date("Y-m-d")." 23:59:59");
+				
+				foreach($list_array as $key => $value)
+				{
+					$tmp_name = $list_array[$key][name];
+					unset($list_array[$key][name]);
+					
+					if (strlen($tmp_name) > 17)
+					{
+						$list_array[$key][name][label] = $tmp_name;
+						$list_array[$key][name][content] = substr($tmp_name,0,17)."...";
+					}
+					else
+					{
+						$list_array[$key][name][label] = $tmp_name;
+						$list_array[$key][name][content] = $tmp_name;
+					}
+					
+					$tmp_template = $list_array[$key][template];
+					unset($list_array[$key][template]);
+					
+					if (strlen($list_array[$key][template]) > 25)
+					{
+						$list_array[$key][template][label] = $tmp_template;
+						$list_array[$key][template][content] = substr($tmp_template,0,25)."...";
+					}
+					else
+					{
+						$list_array[$key][template][label] = $tmp_template;
+						$list_array[$key][template][content] = $tmp_template;
+					}
+					
+					if ($argument_array[1][1] == true)
+					{
+						$row_array = json_decode($json_row_array);
+						if (is_array($row_array) and count($row_array) >= 1)
+						{
+							foreach ($row_array as $row_key => $row_value)
+							{
+								if ($row_value[1] == "checkbox")
+								{
+									if ($row_value[4])
+									{
+										$checkbox_class = $row_value[4];
+										break;
+									}
+								}
+							}
+						}
+						
+						if ($checkbox_class)
+						{
+							$list_array[$key][checkbox] = "<input type='checkbox' name='parent-sample-".$list_array[$key][id]."' value='1' class='".$checkbox_class."' checked='checked' />";
+						}
+						else
+						{
+							$list_array[$key][checkbox] = "<input type='checkbox' name='parent-sample-".$list_array[$key][id]."' value='1' checked='checked' />";
+						}
+						
+						$list_array[$key][symbol] = "<img src='images/icons/sample.png' alt='' style='border:0;' />";
+						$list_array[$key][sid] = "S".str_pad($list_array[$key][id], 8 ,'0', STR_PAD_LEFT);
+					}
+					else
+					{					
+						if ($list_array[$key][av] == "f")
+						{
+							$list_array[$key][av] = "<img src='images/icons/grey_point.png' alt='' />";
+						}
+						else
+						{
+							if ($list_array[$key][date_of_expiry] and $list_array[$key][expiry_warning])
+							{
+								$date_of_expiry = new DatetimeHandler($list_array[$key][date_of_expiry]." 23:59:59");
+								$warning_day = clone $date_of_expiry;
+								$warning_day->sub_day($list_array[$key][expiry_warning]);
+							
+								if ($date_of_expiry->distance($today_end) > 0)
+								{
+									$list_array[$key][av] = "<img src='images/icons/red_point.png' alt='' />";
+								}
+								else
+								{
+									if ($warning_day->distance($today_end) > 0)
+									{
+										$list_array[$key][av] = "<img src='images/icons/yellow_point.png' alt='' />";
+									}
+									else
+									{
+										$list_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
+									}
+								}
+							}
+							else
+							{
+								$list_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
+							}
+						}
+	
+											
+						$sample_id = $list_array[$key][id];
+						$sample_security = new SampleSecurity($sample_id);
+						
+						if ($sample_security->is_access(1, false))
+						{
+							$paramquery = array();
+							$paramquery[username] = $_GET[username];
+							$paramquery[session_id] = $_GET[session_id];
+							$paramquery[nav] = "sample";
+							$paramquery[run] = "detail";
+							$paramquery[sample_id] = $sample_id;
+							$params = http_build_query($paramquery,'','&#38;');
+							
+							$list_array[$key][symbol][link]		= $params;
+							$list_array[$key][symbol][content] 	= "<img src='images/icons/sample.png' alt='' style='border:0;' />";
+						
+							unset($list_array[$key][id]);
+							$list_array[$key][sid][link] 		= $params;
+							$list_array[$key][sid][content]		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
+						
+							$list_array[$key][name][link] 		= $params;
+						}
+						else
+						{
+							$list_array[$key][symbol]	= "<img src='core/images/denied_overlay.php?image=images/icons/sample.png' alt='N' border='0' />";
+							$list_array[$key][sid]		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
+						}
+					}
+					
+					$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
+					$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y");
+				
+					if ($list_array[$key][owner])
+					{
+						$user = new User($list_array[$key][owner]);
+					}
+					else
+					{
+						$user = new User(1);
+					}
+					
+					$list_array[$key][owner] = $user->get_full_name(true);
+				}
+			}
+			else
+			{
+				$list_request->empty_message("<span class='italic'>No Samples found!</span>");
 			}
 			
 			$list_request->set_array($list_array);
@@ -341,6 +536,10 @@ class SampleAjax extends Ajax
 				
 				case "list_sample_items":
 					echo $this->list_sample_items($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				break;
+				
+				case "list_samples_by_item_id":
+					echo $this->list_samples_by_item_id($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
 				default:

@@ -42,7 +42,6 @@ class FileAjax extends Ajax
 		parent::__construct();
 	}
 	
-
 	public static function list_file_items($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -110,7 +109,7 @@ class FileAjax extends Ajax
 			}
 			else
 			{
-				
+				$list_request->empty_message("<span class='italic'>No Files found!</span>");
 			}
 			
 			$list_request->set_array($list_array);
@@ -120,7 +119,6 @@ class FileAjax extends Ajax
 		}
 		
 	}
-	
 	
 	public function method_handler()
 	{

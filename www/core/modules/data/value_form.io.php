@@ -43,6 +43,12 @@ class ValueFormIO
 		if ($value_id)
 		{
 			$value_obj = Value::get_instance($value_id);
+			
+			if (is_array($value_obj_content_array))
+			{
+				$value_obj->set_content_array($value_obj_content_array);
+			}
+			
 			$this->shape_array = $value_obj->get_value_shape();
 			$this->content_array = $value_obj->get_value_content(false);
 		}

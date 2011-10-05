@@ -94,7 +94,7 @@ class SampleCloneAjax extends Ajax
 						{
 							$result[$counter][value] = $value;
 							$result[$counter][content] = $sample->get_name();
-							if ($_POST[sample] == $value)
+							if ($sample_source_sample == $value)
 							{
 								$result[$counter][selected] = "selected";
 							}
@@ -295,7 +295,26 @@ class SampleCloneAjax extends Ajax
 			break;
 			
 			case "3":
-				$sample_source_sample 		= $session->read_value("SAMPLE_CLONE_SOURCE_SAMPLE");
+				$sample_source_sample 	= $session->read_value("SAMPLE_CLONE_SOURCE_SAMPLE");
+				$sample_template_array 	= $session->read_value("SAMPLE_CLONE_TEMPLATE_ARRAY");
+				
+				if (is_array($sample_template_array) and count($sample_template_array) >= 1)
+				{
+					foreach($sample_template_array as $key => $value)
+    				{
+    					$key = str_replace("value-","",$key);
+    					$key_array = explode("-", $key, 2);
+    					
+    					if ($key_array[0] == "item")
+    					{
+    						$value_item_array[$key_array[1]] = $value;
+    					}
+    					elseif(is_numeric($key_array[0]))
+    					{
+    						$value_data_array[$key_array[0]][$key_array[1]] = $value;
+    					}
+    				}
+				}
 				
 				$sample_item = new SampleItem($sample_source_sample);
 				$sample_item_array = $sample_item->get_sample_items();
@@ -326,7 +345,7 @@ class SampleCloneAjax extends Ajax
 					foreach($value_array as $key => $value)
 					{
 						$value_obj = Value::get_instance($value);
-						$value_form_io = new ValueFormIO($value, null, null);
+						$value_form_io = new ValueFormIO($value, null, null, $value_data_array[$key]);
 						$value_form_io->set_field_prefix("value-".$key);
 						$value_form_io->set_field_class("SampleCloneAssistantField");
 						
@@ -351,6 +370,8 @@ class SampleCloneAjax extends Ajax
 			case "4":
 				$sample_source_sample 		= $session->read_value("SAMPLE_CLONE_SOURCE_SAMPLE");
 				
+				$source_sample = new Sample($sample_source_sample);
+				
 				$template = new Template("../../../template/samples/clone_sample_page_4.html");	
 				
 				$module_dialog_array = ModuleDialog::list_dialogs_by_type("item_assistant_list");
@@ -366,6 +387,32 @@ class SampleCloneAjax extends Ajax
 							if (class_exists($value['class']) and method_exists($value['class'], $value[method]))
 							{
 								echo $value['class']::$value[method]("sample", $sample_source_sample, false, true, $form_field_name);
+							}
+							else
+							{
+								// Error
+							}
+						}
+						else
+						{
+							// Error
+						}
+					}
+				}
+				
+				$module_dialog_array = ModuleDialog::list_dialogs_by_type("item_parent_assistant_list");
+		
+				if (is_array($module_dialog_array) and count($module_dialog_array) >= 1)
+				{
+					foreach ($module_dialog_array as $key => $value)
+					{		
+						if (file_exists("../../../".$value[class_path]))
+						{	
+							require_once("../../../".$value[class_path]);
+							
+							if (class_exists($value['class']) and method_exists($value['class'], $value[method]))
+							{
+								echo $value['class']::$value[method]($source_sample->get_item_id(), true, $form_field_name);
 							}
 							else
 							{

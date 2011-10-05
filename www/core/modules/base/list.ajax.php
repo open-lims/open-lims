@@ -47,7 +47,7 @@ class ListAjax extends Ajax
 			$previous_page = $page - 1;
 			
 
-			$pagebar .= "<td><a href='#' class='".$css_page_id."' id='".$css_page_id."Page".$previous_page."'><img src='images/icons/previous.png' alt='Previous' border='0' /></a></td>";
+			$pagebar .= "<td><a href='#' class='".$css_page_id."' id='".$css_page_id."".$previous_page."'><img src='images/icons/previous.png' alt='Previous' border='0' /></a></td>";
 		}	
 		
 		$displayed = false;

@@ -1183,13 +1183,20 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 				}
 				else
 				{
-					if ($this->value_version->get_value())
+					if (is_array($this->content_array) and count($this->content_array >= 1))
 					{
-						$content_array[0] = unserialize($this->value_version->get_value());
+						$content_array[0] = $this->content_array;
 					}
 					else
 					{
-						$content_array[0] = $this->content_array;
+						if ($this->value_version->get_value())
+						{
+							$content_array[0] = unserialize($this->value_version->get_value());
+						}
+						else
+						{
+							$content_array[0] = null;
+						}
 					}
 				}
 								

@@ -110,4 +110,12 @@
 	$dialog[10][internal_name]	= "projects";
 	$dialog[10][display_name]	= "Projects";
 	$dialog[10][weight]			= 300;
+	
+	$dialog[11][type]			= "item_parent_assistant_list";
+	$dialog[11][class_path]		= "core/modules/project/project.io.php";
+	$dialog[11]['class']		= "ProjectIO";
+	$dialog[11][method]			= "list_projects_by_item_id";
+	$dialog[11][internal_name]	= "project";
+	$dialog[11][display_name]	= "Project";
+	$dialog[11][weight]			= 100;
 ?>

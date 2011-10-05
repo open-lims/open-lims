@@ -120,6 +120,36 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
     {
     	global $transaction;
     	
+   		if ($event_object instanceof ItemAddHolderEvent)
+    	{
+    		$type = $event_object->get_type();
+    		
+    		if ($type == "project")
+    		{
+    			$project_id = $event_object->get_id();
+    			$item_id = $event_object->get_item_id();
+    			$gid = $event_object->get_gid();
+    			
+    			$transaction_id = $transaction->begin();
+    			
+    			if (self::create($project_id, $item_id, $gid, null, null) == false)
+    			{
+    				if ($transaction_id != null)
+	    			{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+    			}
+    			else
+    			{
+    				if ($transaction_id != null)
+	    			{
+						$transaction->commit($transaction_id);
+					}
+    			}
+    		}
+    	}
+    	
     	if ($event_object instanceof ItemAddEvent)
     	{
     		$get_array = $event_object->get_get_array();

@@ -841,9 +841,63 @@ class ProjectIO
 	/**
 	 * @param integer $item_id
 	 */
-	public static function list_projects_by_item_id($item_id)
+	public static function list_projects_by_item_id($item_id, $in_assistant = false, $form_field_name = null)
 	{
+		if ($GLOBALS['autoload_prefix'])
+		{
+			$path_prefix = $GLOBALS['autoload_prefix'];
+		}
+		else
+		{
+			$path_prefix = "";
+		}
+		
 		if (is_numeric($item_id))
+		{
+			$argument_array = array();
+			$argument_array[0][0] = "item_id";
+			$argument_array[0][1] = $item_id;
+			$argument_array[1][0] = "in_assistant";
+			$argument_array[1][1] = $in_assistant;
+			
+			if ($in_assistant == false)
+			{
+				$list = new List_IO(Project_Wrapper::count_projects_by_item_id($item_id), "/core/modules/project/project.ajax.php", "list_projects_by_item_id", $argument_array, "ProjectParentAjax", 20, true, true);
+				
+				$template = new Template($path_prefix."template/projects/list_projects_by_item.html");
+				
+				$list->add_row("","symbol",false,16);
+				$list->add_row("Name","name",true,null);
+				$list->add_row("Date/Time","datetime",true,null);
+				$list->add_row("Template","template",true,null);
+				$list->add_row("Owner","owner",true,null);
+				$list->add_row("Status","status",true,null);
+			}
+			else
+			{
+				$list = new List_IO(Project_Wrapper::count_projects_by_item_id($item_id), "/core/modules/project/project.ajax.php", "list_projects_by_item_id", $argument_array, "ProjectParentAjax", 20, false, false);
+				
+				$template = new Template($path_prefix."template/projects/list_projects_by_item_without_border.html");
+				
+				$list->add_row("","checkbox",false,"16px", $form_field_name);
+				$list->add_row("","symbol",false,16);
+				$list->add_row("Name","name",false,null);
+				$list->add_row("Date/Time","datetime",false,null);
+				$list->add_row("Template","template",false,null);
+				$list->add_row("Owner","owner",false,null);
+				$list->add_row("Status","status",false,null);
+			}
+		
+			$template->set_var("list", $list->get_list());
+			
+			$template->output();
+		}
+		else
+		{
+			// Error
+		}
+			
+		if (false == true)
 		{
 			$list = new ListStat_IO(Project_Wrapper::count_projects_by_item_id($item_id), 20);
 
