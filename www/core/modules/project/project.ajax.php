@@ -37,7 +37,180 @@ class ProjectAjax extends Ajax
 		parent::__construct();
 	}
 	
-	private function list_projects_by_item_id($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
+	private function list_user_related_projects($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	{
+		$argument_array = json_decode($json_argument_array);
+		
+		$user_id = $argument_array[0][1];
+		
+		if (is_numeric($user_id))
+		{
+			$list_request = new ListRequest_IO();
+			$list_request->set_row_array($json_row_array);
+		
+			if (!is_numeric($entries_per_page) or $entries_per_page < 1)
+			{
+				$entries_per_page = 20;
+			}
+			
+			$list_array = Project_Wrapper::list_user_related_projects($user_id, $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+
+			if (is_array($list_array) and count($list_array) >= 1)
+			{
+				foreach($list_array as $key => $value)
+				{
+					$tmp_name = trim($list_array[$key][name]);
+					unset($list_array[$key][name]);
+					
+					if (strlen($tmp_name) > 32)
+					{
+						$list_array[$key][name][label] = $tmp_name;
+						$list_array[$key][name][content] = substr($tmp_name,0,32)."...";
+					}
+					else
+					{
+						$list_array[$key][name][label] = $tmp_name;
+						$list_array[$key][name][content] = $tmp_name;
+					}
+
+					$tmp_template = trim($list_array[$key][template]);
+					unset($list_array[$key][template]);
+					
+					if (strlen($tmp_template) > 22)
+					{
+						$list_array[$key][template][label] = $tmp_template;
+						$list_array[$key][template][content] = substr($tmp_template,0,22)."...";
+					}
+					else
+					{
+						$list_array[$key][template][label] = $tmp_template;
+						$list_array[$key][template][content] = $tmp_template;
+					}
+					
+					$list_array[$key][symbol] = "<img src='images/icons/project.png' alt='N' border='0' />";
+					
+					
+					$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
+					$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+					
+					$proejct_paramquery = array();
+					$project_paramquery[username] = $_GET[username];
+					$project_paramquery[session_id] = $_GET[session_id];
+					$project_paramquery[nav] = "project";
+					$project_paramquery[run] = "detail";
+					$project_paramquery[project_id] = $value[id];
+					$project_params = http_build_query($project_paramquery, '', '&#38;');
+					
+					$list_array[$key][name][link] = $project_params;
+				}
+				
+			}
+			else
+			{
+				$list_request->empty_message("<span class='italic'>You have no Projects at the moment!</span>");
+			}
+
+			$list_request->set_array($list_array);
+			
+			return $list_request->get_page($page);
+		}
+	}
+	
+	private function list_organisation_unit_related_projects($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	{
+		$argument_array = json_decode($json_argument_array);
+		
+		$organisation_unit_id = $argument_array[0][1];
+		
+		if (is_numeric($organisation_unit_id))
+		{
+			$list_request = new ListRequest_IO();
+			$list_request->set_row_array($json_row_array);
+		
+			if (!is_numeric($entries_per_page) or $entries_per_page < 1)
+			{
+				$entries_per_page = 20;
+			}
+			
+			$list_array = Project_Wrapper::list_organisation_unit_related_projects($organisation_unit_id, $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+		
+			if (is_array($list_array) and count($list_array) >= 1)
+			{
+				foreach($list_array as $key => $value)
+				{
+					$tmp_name = trim($list_array[$key][name]);
+					unset($list_array[$key][name]);
+
+					if (strlen($tmp_name) > 32)
+					{
+						$list_array[$key][name][label] = $tmp_name;
+						$list_array[$key][name][content] = substr($tmp_name,0,32)."...";
+					}
+					else
+					{
+						$list_array[$key][name][label] = $tmp_name;
+						$list_array[$key][name][content] = $tmp_name;
+					}
+
+					$tmp_template = trim($list_array[$key][template]);
+					unset($list_array[$key][template]);
+					
+					if (strlen($tmp_template) > 22)
+					{
+						$list_array[$key][template][label] = $tmp_template;
+						$list_array[$key][template][content] = substr($tmp_template,0,22)."...";
+					}
+					else
+					{
+						$list_array[$key][template][label] = $tmp_template;
+						$list_array[$key][template][content] = $tmp_template;
+					}
+					
+					$list_array[$key][symbol] = "<img src='images/icons/project.png' alt='N' border='0' />";
+					
+					
+					$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
+					$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+					
+					$proejct_paramquery = array();
+					$project_paramquery[username] = $_GET[username];
+					$project_paramquery[session_id] = $_GET[session_id];
+					$project_paramquery[nav] = "project";
+					$project_paramquery[run] = "detail";
+					$project_paramquery[project_id] = $value[id];
+					$project_params = http_build_query($project_paramquery, '', '&#38;');
+					
+					$list_array[$key][name][link] = $project_params;
+					
+					if ($list_array[$key][owner_id])
+					{
+						$user = new User($list_array[$key][owner_id]);
+					}
+					else
+					{
+						$user = new User(1);
+					}
+					
+					$list_array[$key][owner] = $user->get_full_name(true);
+				}
+				
+			}
+			else
+			{
+				$list_request->empty_message("<span class='italic'>No Projects found!</span>");
+			}
+			
+			$list_request->set_array($list_array);
+			
+			return $list_request->get_page($page);
+		}
+		else
+		{
+			// Error
+		}
+	}
+	
+	private function list_projects_by_item_id($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
 		$item_id = $argument_array[0][1];
@@ -46,9 +219,14 @@ class ProjectAjax extends Ajax
 		{
 			$list_request = new ListRequest_IO();
 			
+			if (!is_numeric($entries_per_page) or $entries_per_page < 1)
+			{
+				$entries_per_page = 20;
+			}
+			
 			if ($argument_array[2][1] == true)
 			{	
-				$list_array = Project_Wrapper::list_projects_by_item_id($item_id, $sortvalue, $sortmethod, ($page*20)-20, ($page*20));
+				$list_array = Project_Wrapper::list_projects_by_item_id($item_id, $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
 			}
 			else
 			{
@@ -61,13 +239,13 @@ class ProjectAjax extends Ajax
 			{				
 				foreach($list_array as $key => $value)
 				{
-					$tmp_name = $list_array[$key][name];
+					$tmp_name = trim($list_array[$key][name]);
 					unset($list_array[$key][name]);
 					
-					if (strlen($tmp_name) > 35)
+					if (strlen($tmp_name) > 32)
 					{
 						$list_array[$key][name][label] = $tmp_name;
-						$list_array[$key][name][content] = substr($tmp_name,0,35)."...";
+						$list_array[$key][name][content] = substr($tmp_name,0,32)."...";
 					}
 					else
 					{
@@ -75,13 +253,13 @@ class ProjectAjax extends Ajax
 						$list_array[$key][name][content] = $tmp_name;
 					}
 
-					$tmp_template = $list_array[$key][template];
+					$tmp_template = trim($list_array[$key][template]);
 					unset($list_array[$key][template]);
 					
-					if (strlen($list_array[$key][template]) > 25)
+					if (strlen($tmp_template) > 22)
 					{
 						$list_array[$key][template][label] = $tmp_template;
-						$list_array[$key][template][content] = substr($tmp_template,0,25)."...";
+						$list_array[$key][template][content] = substr($tmp_template,0,22)."...";
 					}
 					else
 					{
@@ -109,11 +287,11 @@ class ProjectAjax extends Ajax
 						
 						if ($checkbox_class)
 						{
-							$list_array[$key][checkbox] = "<input type='checkbox' name='parent-project-".$list_array[$key][id]."' value='1' class='".$checkbox_class."' checked='checked' />";
+							$list_array[$key][checkbox] = "<input type='checkbox' name='parent-project-".$list_array[$key][id]."' value='1' class='".$checkbox_class."' />";
 						}
 						else
 						{
-							$list_array[$key][checkbox] = "<input type='checkbox' name='parent-project-".$list_array[$key][id]."' value='1' checked='checked' />";
+							$list_array[$key][checkbox] = "<input type='checkbox' name='parent-project-".$list_array[$key][id]."' value='1' />";
 						}
 						
 						$list_array[$key][symbol] 	= "<img src='images/icons/project.png' alt='' style='border:0;' />";
@@ -182,8 +360,16 @@ class ProjectAjax extends Ajax
 		{
 			switch($_GET[run]):
 				
+				case "list_user_related_projects":
+					echo $this->list_user_related_projects($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				break;
+			
+				case "list_organisation_unit_related_projects":
+					echo $this->list_organisation_unit_related_projects($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				break;
+				
 				case "list_projects_by_item_id":
-					echo $this->list_projects_by_item_id($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+					echo $this->list_projects_by_item_id($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
 				default:

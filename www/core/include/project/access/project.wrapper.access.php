@@ -638,6 +638,145 @@ class Project_Wrapper_Access
 	}
 
 	/**
+	 * @param integer $organisation_unit_id
+	 * @return integer
+	 */
+	public static function count_organisation_unit_related_projects($organisation_unit_id)
+	{
+		global $db;
+		
+		if (is_numeric($organisation_unit_id))
+		{
+			$sql = "SELECT COUNT(DISTINCT ".constant("PROJECT_TABLE").".id) AS result " .
+					"FROM ".constant("PROJECT_TABLE")." " .
+					"WHERE (toid_organ_unit = ".$organisation_unit_id." OR " .
+							"(SELECT * FROM project_permission_organisation_unit(".constant("PROJECT_TABLE").".id, ".$organisation_unit_id.")) = TRUE)" .
+							"AND toid_organ_unit IS NOT NULL";
+				
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+	
+			return $data[result];
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_organisation_unit_related_projects($organisation_unit_id, $order_by, $order_method, $start, $end)
+	{
+		global $db;
+		
+		if (is_numeric($organisation_unit_id))
+		{
+			if ($order_by and $order_method)
+			{
+				if ($order_method == "asc")
+				{
+					$sql_order_method = "ASC";
+				}
+				else
+				{
+					$sql_order_method = "DESC";
+				}
+				
+				switch($order_by):	
+					case "name":
+						$sql_order_by = "ORDER BY name ".$sql_order_method. "";
+					break;
+					
+					case "owner":
+						$sql_order_by = "ORDER BY ".constant("USER_PROFILE_TABLE").".surname ".$sql_order_method. "";
+					break;
+				
+					case "datetime":
+						$sql_order_by = "ORDER BY datetime ".$sql_order_method. "";
+					break;
+					
+					case "template":
+						$sql_order_by = "ORDER BY template ".$sql_order_method. "";
+					break;
+					
+					case "status":
+						$sql_order_by = "ORDER BY status ".$sql_order_method. "";
+					break;
+				
+					default:
+						$sql_order_by = "ORDER BY name ".$sql_order_method. "";
+					break;
+				endswitch;
+			}
+			else
+			{
+				$sql_order_by = "ORDER BY name ASC";
+			}
+				
+			$sql = "SELECT ".constant("PROJECT_TABLE").".id AS id, " .
+					"".constant("PROJECT_TABLE").".name AS name, " .
+					"".constant("PROJECT_TABLE").".datetime AS datetime," .
+					"".constant("PROJECT_TABLE").".owner_id AS owner_id," .
+					"".constant("PROJECT_TEMPLATE_TABLE").".name AS template, " .
+					"".constant("PROJECT_STATUS_TABLE").".name AS status, " .
+					"".constant("PROJECT_STATUS_TABLE").".id AS status_id " .
+					"FROM ".constant("PROJECT_TABLE")." " .
+					"JOIN ".constant("USER_PROFILE_TABLE")." 				ON ".constant("PROJECT_TABLE").".owner_id						= ".constant("USER_PROFILE_TABLE").".id " .
+					"JOIN ".constant("PROJECT_TEMPLATE_TABLE")." 			ON ".constant("PROJECT_TABLE").".template_id 					= ".constant("PROJECT_TEMPLATE_TABLE").".id " .
+					"JOIN ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." 	ON ".constant("PROJECT_TABLE").".id 							= ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE").".project_id " .
+					"JOIN ".constant("PROJECT_STATUS_TABLE")." 				ON ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE").".status_id 	= ".constant("PROJECT_STATUS_TABLE").".id " .					
+					"WHERE " .
+							"".constant("PROJECT_TABLE").".id IN (" .
+									"SELECT DISTINCT ".constant("PROJECT_TABLE").".id AS id " .
+									"FROM ".constant("PROJECT_TABLE")." " .
+									"WHERE (toid_organ_unit = ".$organisation_unit_id." OR " .
+											"(SELECT * FROM project_permission_organisation_unit(".constant("PROJECT_TABLE").".id, ".$organisation_unit_id.")) = TRUE) " .
+											"AND toid_organ_unit IS NOT NULL)".
+							"AND ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE").".datetime = " .
+									"(SELECT MAX(datetime) FROM ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." WHERE ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE").".project_id = ".constant("PROJECT_TABLE").".id)" .
+					"".$sql_order_by."";
+			
+			$return_array = array();
+			
+			$res = $db->db_query($sql);
+			
+			if (is_numeric($start) and is_numeric($end))
+			{
+				for ($i = 0; $i<=$end-1; $i++)
+				{
+					if (($data = $db->db_fetch_assoc($res)) == null)
+					{
+						break;
+					}
+					if ($i >= $start)
+					{
+						array_push($return_array, $data);
+					}
+				}	
+			}
+			else
+			{
+				while ($data = $db->db_fetch_assoc($res))
+				{
+					array_push($return_array, $data);
+				}
+			}
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @param integer $item_id
 	 * @param string $order_by
 	 * @param string $order_method

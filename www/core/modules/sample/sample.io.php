@@ -54,8 +54,14 @@ class SampleIO
 	{
 		if ($_GET[ou_id])
 		{
-			$list = new ListStat_IO(Sample_Wrapper::count_organisation_unit_samples($_GET[ou_id]), 12);
-
+			$organisation_unit_id = $_GET['ou_id'];
+			
+			$argument_array = array();
+			$argument_array[0][0] = "organisation_unit_id";
+			$argument_array[0][1] = $organisation_unit_id;
+			
+			$list = new List_IO(Sample_Wrapper::count_organisation_unit_samples($organisation_unit_id), "/core/modules/sample/sample.ajax.php", "list_organisation_unit_related_samples", $argument_array, "SampleAjaxMySamples", 12);
+			
 			$list->add_row("","symbol",false,"16px");
 			$list->add_row("Smpl. ID","id",true,"11%");
 			$list->add_row("Sample Name","name",true,null);
@@ -63,141 +69,20 @@ class SampleIO
 			$list->add_row("Type/Tmpl.","template",true,null);
 			$list->add_row("Curr. Loc.","location",true,null);
 			$list->add_row("AV","av",false,"16px");
-		
-			if ($_GET[page])
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = Sample_Wrapper::list_organisation_unit_samples($_GET[ou_id], $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*12)-12, ($_GET[page]*12));
-				}
-				else
-				{
-					$result_array = Sample_Wrapper::list_organisation_unit_samples($_GET[ou_id], null, null, ($_GET[page]*12)-12, ($_GET[page]*12));
-				}				
-			}
-			else
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = Sample_Wrapper::list_organisation_unit_samples($_GET[ou_id], $_GET[sortvalue], $_GET[sortmethod], 0, 12);
-				}
-				else
-				{
-					$result_array = Sample_Wrapper::list_organisation_unit_samples($_GET[ou_id], null, null, 0, 12);
-				}	
-			}
-			
-			if (is_array($result_array) and count($result_array) >= 1)
-			{
-				$today_end = new DatetimeHandler(date("Y-m-d")." 23:59:59");
-				
-				foreach($result_array as $key => $value)
-				{
-					$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
-					$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y");
-	
-					if ($result_array[$key][av] == "f")
-					{
-						$result_array[$key][av] = "<img src='images/icons/grey_point.png' alt='' />";
-					}
-					else
-					{
-						if ($result_array[$key][date_of_expiry] and $result_array[$key][expiry_warning])
-						{
-							$date_of_expiry = new DatetimeHandler($result_array[$key][date_of_expiry]." 23:59:59");
-							$warning_day = clone $date_of_expiry;
-							$warning_day->sub_day($result_array[$key][expiry_warning]);
 						
-							if ($date_of_expiry->distance($today_end) > 0)
-							{
-								$result_array[$key][av] = "<img src='images/icons/red_point.png' alt='' />";
-							}
-							else
-							{
-								if ($warning_day->distance($today_end) > 0)
-								{
-									$result_array[$key][av] = "<img src='images/icons/yellow_point.png' alt='' />";
-								}
-								else
-								{
-									$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
-								}
-							}
-						}
-						else
-						{
-							$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
-						}
-					}
-					
-					if (strlen($result_array[$key][name]) > 17)
-					{
-						$result_array[$key][name] = substr($result_array[$key][name],0,17)."...";
-					}
-					else
-					{
-						$result_array[$key][name] = $result_array[$key][name];
-					}
-					
-					if (strlen($result_array[$key][template]) > 25)
-					{
-						$result_array[$key][template] = substr($result_array[$key][template],0,25)."...";
-					}
-					else
-					{
-						$result_array[$key][template] = $result_array[$key][template];
-					}
-					
-					$sample_id = $result_array[$key][id];
-					$sample_security = new SampleSecurity($sample_id);
-					
-					if ($sample_security->is_access(1, false))
-					{
-						$paramquery = array();
-						$paramquery[username] = $_GET[username];
-						$paramquery[session_id] = $_GET[session_id];
-						$paramquery[nav] = "sample";
-						$paramquery[run] = "detail";
-						$paramquery[sample_id] = $sample_id;
-						$params = http_build_query($paramquery,'','&#38;');
-						
-						$result_array[$key][symbol][link]		= $params;
-						$result_array[$key][symbol][content] 	= "<img src='images/icons/sample.png' alt='' style='border:0;' />";
-					
-						unset($result_array[$key][id]);
-						$result_array[$key][id][link] 			= $params;
-						$result_array[$key][id][content]		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
-					
-						$sample_name = $result_array[$key][name];
-						unset($result_array[$key][name]);
-						$result_array[$key][name][link] 		= $params;
-						$result_array[$key][name][content]		= $sample_name;
-					}
-					else
-					{
-						$result_array[$key][symbol]	= "<img src='core/images/denied_overlay.php?image=images/icons/sample.png' alt='N' border='0' />";
-						$result_array[$key][id]		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
-					}
-				}
-			}
-			else
-			{
-				$list->override_last_line("<span class='italic'>No Samples found!</span>");
-			}
-			
 			require_once("core/modules/organisation_unit/organisation_unit.io.php");
 			$organisation_unit_io = new OrganisationUnitIO;
 			$organisation_unit_io->detail();
 			
 			$template = new Template("template/samples/list.html");
 
-			$template->set_var("table", $list->get_list($result_array, $_GET[page]));
+			$template->set_var("list", $list->get_list());
 			
 			$template->output();
 		}
 		else
 		{
-			// Error
+			// Error	
 		}
 	}
 	

@@ -35,8 +35,12 @@ class ProjectIO
 		{
 			$user_id = $user->get_user_id();
 		}
-			
-		$list = new ListStat_IO(Project_Wrapper::count_list_user_related_projects($user_id), 20);
+
+		$argument_array = array();
+		$argument_array[0][0] = "user_id";
+		$argument_array[0][1] = $user_id;
+		
+		$list = new List_IO(Project_Wrapper::count_list_user_related_projects($user_id), "/core/modules/project/project.ajax.php", "list_user_related_projects", $argument_array, "ProjectAjaxMyProjects");
 		
 		$list->add_row("", "symbol", false, "16px");
 		$list->add_row("Name", "name", true, null);
@@ -45,74 +49,19 @@ class ProjectIO
 		$list->add_row("Template", "template", true, null);
 		$list->add_row("Status", "status", true, null);
 
-		if ($_GET[page])
+		$template = new Template("template/projects/list_user.html");
+	
+		if ($user_id == $user->get_user_id())
 		{
-			if ($_GET[sortvalue] and $_GET[sortmethod])
-			{
-				$result_array = Project_Wrapper::list_user_related_projects($user_id, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
-			}
-			else
-			{
-				$result_array = Project_Wrapper::list_user_related_projects($user_id, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
-			}				
+			$template->set_var("title","My Projects");
 		}
 		else
 		{
-			if ($_GET[sortvalue] and $_GET[sortmethod])
-			{
-				$result_array = Project_Wrapper::list_user_related_projects($user_id, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
-			}
-			else
-			{
-				$result_array = Project_Wrapper::list_user_related_projects($user_id, null, null, 0, 20);
-			}	
+			$template->set_var("title","Projects of ".$user->get_username());
 		}
-		
-		if (is_array($result_array) and count($result_array) >= 1)
-		{
-			foreach($result_array as $key => $value)
-			{
-				
-				if (true == true) {
-					$result_array[$key][symbol] = "<img src='images/icons/projects.png' alt='S' border='0' />";	
-				}else{
-					$result_array[$key][symbol] = "<img src='images/icons/project.png' alt='N' border='0' />";
-				}
-				
-				$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
-				$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
-				
-				$proejct_paramquery = array();
-				$project_paramquery[username] = $_GET[username];
-				$project_paramquery[session_id] = $_GET[session_id];
-				$project_paramquery[nav] = "project";
-				$project_paramquery[run] = "detail";
-				$project_paramquery[project_id] = $value[id];
-				$project_params = http_build_query($project_paramquery, '', '&#38;');
-				
-				$tmp_project_name = $result_array[$key][name];
-				unset($result_array[$key][name]);
-				$result_array[$key][name][content] = $tmp_project_name;
-				$result_array[$key][name][link] = $project_params;
-						
-
-				if (strlen($value[template]) > 20) {
-					$result_array[$key][template] = substr($result_array[$key][template],0,20).".";
-				}
-
-			}
-			
-		}else{
-			$list->override_last_line("<span class='italic'>No results found!</span>");
-		}
-		
-		
-		$template = new Template("template/projects/user_related_projects.html");
-
-		$template->set_var("title","My Projects");
-
-		$template->set_var("table", $list->get_list($result_array, $_GET[page]));	
-
+	
+		$template->set_var("list", $list->get_list());
+	
 		$template->output();
 	}
 	
@@ -121,147 +70,32 @@ class ProjectIO
 	 */
 	private static function list_organisation_unit_related_projects()
 	{
-		if ($_GET[ou_id])
+		if ($_GET['ou_id'])
 		{
-			$content_array = array();
+			$organisation_unit_id = $_GET['ou_id'];
+			
+			$argument_array = array();
+			$argument_array[0][0] = "organisation_unit_id";
+			$argument_array[0][1] = $organisation_unit_id;
+			
+			$list = new List_IO(Project_Wrapper::count_organisation_unit_related_projects($organisation_unit_id), "/core/modules/project/project.ajax.php", "list_organisation_unit_related_projects", $argument_array, "ProjectAjaxOrganisationUnit", 12);
 		
-			$table_io = new TableIO("OverviewTable");
+			$list->add_row("","symbol",false,"16px");
+			$list->add_row("Name","name",true,null);
+			$list->add_row("Owner","owner",true,null);
+			$list->add_row("Date/Time","datetime",true,null);
+			$list->add_row("Template","template",true,null);
+			$list->add_row("Status","status",true,null);
 		
-			$table_io->add_row("","symbol",false,16);
-			$table_io->add_row("Name","name",false,null);
-			$table_io->add_row("Owner","owner",false,null);
-			$table_io->add_row("Date/Time","datetime",false,null);
-			$table_io->add_row("Template","template",false,null);
-			$table_io->add_row("Status","status",false,null);
-		
-			$project_array = Project::list_organisation_unit_related_projects($_GET[ou_id], false);
-		
-			$project_array_cardinality = count($project_array);
-		
-			$counter = 0;
-	
-			if (!$_GET[page] or $_GET[page] == 1)
-			{
-				$page = 1;
-				$counter_begin = 0;
-				if ($project_array_cardinality > 25)
-				{
-					$counter_end = 24;
-				}
-				else
-				{
-					$counter_end = $project_array_cardinality-1;
-				}
-			}
-			else
-			{
-				if ($_GET[page] >= ceil($project_array_cardinality/25))
-				{
-					$page = ceil($project_array_cardinality/25);
-					$counter_end = $project_array_cardinality;
-				}
-				else
-				{
-					$page = $_GET[page];
-					$counter_end = (25*$page)-1;
-				}
-				$counter_begin = (25*$page)-25;
-			}
-	
-			if (is_array($project_array) and count($project_array) >= 1)
-			{	
-				$content_array = array();
-
-				foreach ($project_array as $key => $value)
-				{	
-					if ($counter >= $counter_begin and $counter <= $counter_end)
-					{
-						$column_array = array();
-				
-						$project = new Project($value);
-						$project_security = new ProjectSecurity($value);
-						
-						if ($project_security->is_access(1, false) == true)
-						{					
-							if ($value[subprojects] == true)
-							{
-								$symbol = "<img src='images/icons/projects.png' alt='S' border='0' />";	
-							}
-							else
-							{
-								$symbol = "<img src='images/icons/project.png' alt='N' border='0' />";
-							}
-						}
-						else
-						{
-							if ($value[subprojects] == true)
-							{
-								$symbol = "<img src='core/images/denied_overlay.php?image=images/icons/projects.png' alt='S' border='0' />";	
-							}
-							else
-							{
-								$symbol = "<img src='core/images/denied_overlay.php?image=images/icons/project.png' alt='N' border='0' />";
-							}
-						}
-						
-						if (strlen($project->get_template_name()) > 20)
-						{
-							$project_template = substr($project->get_template_name(),0,20).".";
-						}
-						else
-						{
-							$project_template = $project->get_template_name();;
-						}
-	
-						$paramquery = $_GET;
-						$paramquery[username] = $_GET[username];
-						$paramquery[session_id] = $_GET[session_id];
-						$paramquery[nav] = "project";
-						$paramquery[run] = "detail";
-						$paramquery[project_id] = $value;
-						$params = http_build_query($paramquery,'','&#38;');
-						
-						$owner = new User($project->get_owner_id());
-						
-						if ($project_security->is_access(1, false) == true)
-						{	
-							$column_array[symbol][link] = $params;
-							$column_array[name][link] = $params;
-						}
-						else
-						{
-							$column_array[symbol][link] = "";
-							$column_array[name][link] = "";
-						}
-						
-						$column_array[symbol][content] = $symbol;
-						$column_array[name][content] = $project->get_name();
-						$column_array[owner] = $owner->get_full_name(true);
-						$column_array[datetime] = $project->get_datetime();
-						$column_array[template] = $project_template;
-						$column_array[status] = $project->get_current_status_name();
-						
-						array_push($content_array, $column_array);
-					}
-					$counter++;
-				}
-				$table_io->add_content_array($content_array);
-			}
-			else
-			{			
-				$table_io->override_last_line("<span class='italic'>No Projects Found!</span>");
-			}
-	
 			require_once("core/modules/organisation_unit/organisation_unit.io.php");
 			$organisation_unit_io = new OrganisationUnitIO;
 			$organisation_unit_io->detail();
-
-			$template = new Template("template/projects/organisation_unit_related_projects.html");	
-
-			$template->set_var("table", $table_io->get_table($page ,$project_array_cardinality));		
 			
+			$template = new Template("template/projects/list_organisation_unit.html");	
+
+			$template->set_var("list", $list->get_list());
+	
 			$template->output();
-			
 		}
 		else
 		{

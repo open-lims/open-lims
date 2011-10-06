@@ -1,4 +1,4 @@
-List = function(ajax_handler, ajax_run, argument_array, css_main_id, number_of_pages, row_array)
+List = function(ajax_handler, ajax_run, argument_array, css_main_id, number_of_pages, entries_per_page, row_array)
 {
 	var sort_array = new Array();
 	
@@ -11,12 +11,29 @@ List = function(ajax_handler, ajax_run, argument_array, css_main_id, number_of_p
 	var parsed_row_array = $.parseJSON(row_array);
 	var colspan = parsed_row_array.length;
 	
+	this.reload = function()
+	{
+		load_content(sort_value, sort_method, page);
+	}
+	
 	function load_content(sort_value, sort_method, local_page)
 	{
+		var local_height = $("#"+css_main_id).height();
+		
 		page = local_page;
 		
 		$("#"+css_main_id).contents().detach();
 		$("#"+css_main_id).append("<tr><td colspan='"+colspan+"'><div id='AssistantLoading'><img src='images/animations/loading_circle_small.gif' alt='Loading...' /></div></td></tr>");
+		
+		if (local_height > 150)
+		{
+			$("#"+css_main_id).height(local_height);
+		}
+		else
+		{
+			$("#"+css_main_id).height(150);
+		}
+		
 		
 		$.ajax(
 		{
@@ -44,11 +61,12 @@ List = function(ajax_handler, ajax_run, argument_array, css_main_id, number_of_p
 		{
 			type: "POST",
 			url: ajax_handler+"?username="+get_array['username']+"&session_id="+get_array['session_id']+"&run="+ajax_run+"&sortvalue="+sort_value+"&sortmethod="+sort_method+"&page="+page,
-			data: "row_array="+row_array+"&argument_array="+argument_array,
+			data: "row_array="+row_array+"&argument_array="+argument_array+"&entries_per_page="+entries_per_page+"",
 			success: function(data)
-			{
+			{				
 				$("#"+css_main_id).contents().detach();
 				$("#"+css_main_id).append(data);
+				$("#"+css_main_id).height("auto");
 			}
 		});
 	}

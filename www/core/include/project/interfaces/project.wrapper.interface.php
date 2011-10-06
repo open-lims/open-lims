@@ -107,9 +107,26 @@ interface Project_WrapperInterface
 	
 	/**
 	 * Returns the number of all users related projects
+	 * @param integer $user_id
 	 * @return integer
 	 */
 	public static function count_list_user_related_projects($user_id);
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @return integer
+	 */
+	public static function count_organisation_unit_related_projects($organisation_unit_id);
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_organisation_unit_related_projects($organisation_unit_id, $order_by, $order_method, $start, $end);
 	
 	/**
 	 * @param integer $item_id

@@ -191,8 +191,9 @@ class List_IO
     	$template->set_var("argument_array", json_encode($this->argument_array));
     	$template->set_Var("css_main_id", $this->css_main_id);
     	$template->set_var("number_of_pages", $number_of_pages);
+    	$template->set_var("entries_per_page", $this->entries_per_page);
     	$template->set_var("row_array", json_encode($this->rows));
-    	
+
     	$template->set_var("list_div", "<tbody id='".$this->css_main_id."'></tbody></table>");
     	
     	if ($this->display_footer == true)
