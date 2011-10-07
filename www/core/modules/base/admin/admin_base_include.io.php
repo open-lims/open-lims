@@ -22,9 +22,32 @@
  */
 
 /**
- * IMPORTANT NOTE: Modification of this file is not allowed by developers!
+ * Base Include Admin IO Class
+ * @package base
  */
-define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-18-dev &#945;");
+class AdminBaseIncludeIO
+{
+	public static function home()
+	{		
+		$list = new List_IO("/core/modules/base/admin/admin_base_include.ajax.php", "list_includes", "count_includes", "0", "BaseAdminIncludeAjax");
 
-?>
+		$list->add_row("Name","name",true,null);
+		$list->add_row("Folder","folder",true,null);
+		$list->add_row("Event Listeners","eventlisteners",true,null);
+		
+		$template = new Template("template/base/admin/base_include/list.html");	
+		
+		$template->set_var("list", $list->get_list());
+		
+		$template->output();
+	}
+	
+	public static function handler()
+	{
+		switch($_GET[action]):		
+			default:
+				self::home();
+			break;
+		endswitch;
+	}
+}

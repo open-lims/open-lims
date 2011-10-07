@@ -46,8 +46,6 @@ class SampleIO
 		$template->set_var("list", $list->get_list());
 		
 		$template->output();
-		
-		
 	}
 		
 	public static function list_organisation_unit_related_samples()

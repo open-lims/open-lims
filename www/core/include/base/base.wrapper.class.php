@@ -114,7 +114,7 @@ class Base_Wrapper implements Base_WrapperInterface
 	 */
 	public static function list_base_include($order_by, $order_method, $start, $end)
 	{
-		return null;
+		return Base_Wrapper_Access::list_base_include($order_by, $order_method, $start, $end);
 	}
 	
 	/**
@@ -124,7 +124,7 @@ class Base_Wrapper implements Base_WrapperInterface
 	 */
 	public static function count_base_include()
 	{
-		return null;
+		return Base_Wrapper_Access::count_base_include();
 	}
 	
 	/**
