@@ -271,6 +271,7 @@ function base_tree_nav(id, name, ajax_handler)
 						new_array_element[5] = entry_clickable;
 						new_array_element[6] = entry_link;
 						new_array_element[7] = entry_open;
+					//	new_array_element[8] = //
 	
 						new_array.push(new_array_element);
 					}
@@ -503,10 +504,10 @@ function base_tree_nav(id, name, ajax_handler)
 					}
 					else
 					{
-						$(parent_li).children("div").addClass("Leaf");
+//						$(parent_li).children("div").addClass("Leaf");
 						update_icons();
 						parse_array();
-						$("#" + tree_id).bind("click",handler);
+						$("#" + tree_id).bind("click",handler);s
 						if (follow_link_now) 
 						{
 							window.location.href = href;

@@ -1728,6 +1728,18 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 								"</div>";
 					
 					$return .= "<script language='javascript'>" .
+								"var auto_field = new autofield('";
+					if ($this->autofield_array_string)
+					{		
+						$return .= $this->autofield_array_string;
+					}
+					elseif($local_autofield_array_string)
+					{
+							$return .= $local_autofield_array_string;
+					}
+					$return .=	"');</script>";
+					/*
+					$return .= "<script language='javascript'>" .
 								"auto_field = new AutoField();";
 					
 					if ($this->autofield_array_string)
@@ -1741,7 +1753,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 						
 					$return .= "auto_field.initialize();" .
 								"</script>";
-					
+					*/
 				}
 			}
     	}

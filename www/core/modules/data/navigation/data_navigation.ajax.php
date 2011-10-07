@@ -100,6 +100,7 @@ class DataAjax extends Ajax
 						
 						$return_array[$counter][6] = $params; //link
 						$return_array[$counter][7] = false; //open
+						$return_array[$counter][8] = Data_Wrapper::has_folder_children($value); //has children
 						
 						$counter++;
 					}
@@ -170,7 +171,7 @@ class DataAjax extends Ajax
 					
 					$return_array[$counter][6] = $params; //link
 					$return_array[$counter][7] = false; //open
-					
+					$return_array[$counter][8] = Data_Wrapper::has_folder_children($value); //has children
 					$counter++;
 					
 				}
