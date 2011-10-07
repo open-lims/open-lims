@@ -1477,7 +1477,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 				
 				$ext = $name_array[$name_array_length];
 				
-				$path = "images/fileicons/16/";
+				$path = $GLOBALS['autoload_prefix']."images/fileicons/16/";
 				
 				$file = $path."".$ext.".png";
 				

@@ -146,11 +146,36 @@ class Project_Wrapper implements Project_WrapperInterface
 	
 	/**
 	 * @see Project_WrapperInterface::count_list_user_related_projects()
+	 * @param integer $user_id
 	 * @return integer
 	 */
 	public static function count_list_user_related_projects($user_id)
 	{
 		return Project_Wrapper_Access::count_list_user_related_projects($user_id);
+	}
+	
+	/**
+	 * @see Project_WrapperInterface::count_organisation_unit_related_projects()
+	 * @param integer $organisation_unit_id
+	 * @return integer
+	 */
+	public static function count_organisation_unit_related_projects($organisation_unit_id)
+	{
+		return Project_Wrapper_Access::count_organisation_unit_related_projects($organisation_unit_id);
+	}
+	
+	/**
+	 * @see Project_WrapperInterface::list_organisation_unit_related_projects()
+	 * @param integer $organisation_unit_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_organisation_unit_related_projects($organisation_unit_id, $order_by, $order_method, $start, $end)
+	{
+		return Project_Wrapper_Access::list_organisation_unit_related_projects($organisation_unit_id, $order_by, $order_method, $start, $end);
 	}
 	
 	/**

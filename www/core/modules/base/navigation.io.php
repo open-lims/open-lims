@@ -27,9 +27,6 @@
  */
 class Navigation_IO
 {
-	/**
-	 * @todo JQUERY: use JQuery drop-down menu, if more than 8 entries
-	 */
 	public static function main()
 	{
 		global $user;
@@ -38,7 +35,6 @@ class Navigation_IO
 		
 		$template = new Template("template/base/navigation/main/main_navigation_header.html");
 		$template->output();
-
 
 		$module_navigation_array = ModuleNavigation::list_module_navigations_entries();
 		
@@ -301,9 +297,6 @@ class Navigation_IO
 		}
 	}
 	
-	/**
-	 * @todo ambiguous std. navigation exception
-	 */
 	public static function left()
 	{
 		if ($_GET[nav] and $_GET[nav] != "static" and $_GET[nav] != "home")

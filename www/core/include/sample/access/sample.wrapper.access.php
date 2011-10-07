@@ -296,7 +296,7 @@ class Sample_Wrapper_Access
 						"LEFT JOIN ".constant("LOCATION_TYPE_TABLE")." 			ON ".constant("LOCATION_TABLE").".type_id 					= ".constant("LOCATION_TYPE_TABLE").".id " .
 						"WHERE " .
 							"(".constant("SAMPLE_TABLE").".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE ".constant("SAMPLE_HAS_USER_TABLE").".write = 't' AND ".constant("SAMPLE_HAS_USER_TABLE").".user_id = ".$user_id.") " .
-							"OR owner_id = ".$user_id.") " .
+							"OR ".constant("SAMPLE_TABLE").".owner_id = ".$user_id.") " .
 							"AND " .
 								"(".constant("SAMPLE_HAS_LOCATION_TABLE").".primary_key IN " .
 									"( " .
@@ -309,7 +309,7 @@ class Sample_Wrapper_Access
 								"OR ".constant("SAMPLE_TABLE").".id NOT IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_LOCATION_TABLE").") " .
 								") " .
 							"".$sql_order_by."";
-			
+
 			$return_array = array();
 		
 			$res = $db->db_query($sql);
@@ -356,8 +356,8 @@ class Sample_Wrapper_Access
 		{	
 			$sql = "SELECT COUNT(DISTINCT ".constant("SAMPLE_TABLE").".id) AS result " .
 						"FROM ".constant("SAMPLE_TABLE")." " .
-						"JOIN ".constant("SAMPLE_HAS_USER_TABLE")." ON ".constant("SAMPLE_TABLE").".id = ".constant("SAMPLE_HAS_USER_TABLE").".sample_id " .
-						"WHERE (".constant("SAMPLE_HAS_USER_TABLE").".write = 't' AND user_id = ".$user_id.") " .
+						"LEFT JOIN ".constant("SAMPLE_HAS_USER_TABLE")." ON ".constant("SAMPLE_TABLE").".id = ".constant("SAMPLE_HAS_USER_TABLE").".sample_id " .
+						"WHERE ".constant("SAMPLE_TABLE").".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE ".constant("SAMPLE_HAS_USER_TABLE").".write = 't' AND ".constant("SAMPLE_HAS_USER_TABLE").".user_id = ".$user_id.") " .
 							"OR owner_id = ".$user_id."";
 			
 			$res = $db->db_query($sql);

@@ -49,15 +49,14 @@ class EquipmentAjax extends Ajax
 		
 		if ($sql)
 		{
+			$list_request = new ListRequest_IO();
+			
 			if ($argument_array[2][1] == true)
-			{		
-				$list_request = new ListRequest_IO(Equipment_Wrapper::count_item_equipments($sql), $css_page_id, $css_row_sort_id);
+			{	
 				$list_array = Equipment_Wrapper::list_item_equipments($sql, $sortvalue, $sortmethod, ($page*20)-20, ($page*20));
 			}
 			else
-			{
-				$number_of_entries = Equipment_Wrapper::count_item_equipments($sql);
-				$list_request = new ListRequest_IO($number_of_entries, $css_page_id, $css_row_sort_id, $number_of_entries, null, false, false);	
+			{	
 				$list_array = Equipment_Wrapper::list_item_equipments($sql, $sortvalue, $sortmethod, 0, null);
 			}
 			$list_request->set_row_array($json_row_array);
@@ -116,7 +115,7 @@ class EquipmentAjax extends Ajax
 			}
 			else
 			{
-				
+				$list_request->empty_message("<span class='italic'>No Equipment found!</span>");
 			}
 			
 			$list_request->set_array($list_array);

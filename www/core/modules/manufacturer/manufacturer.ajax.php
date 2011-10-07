@@ -136,41 +136,21 @@ class ManufacturerAjax extends Ajax
 	 * @param string $sortvalue
 	 * @param string $sortmethod
 	 */
-	public function get_list($page, $sortvalue, $sortmethod)
+	public function get_list($json_row_array, $argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		global $user;
 		
-		$list = new ListStat_IO(Manufacturer_Wrapper::count_manufacturers(), 20,"ManufacturerListPage");
-
-		$list->add_row("","symbol",false,"16px");
-		$list->add_row("Name","name",true,null,"ManufacturerListSortName");
-		$list->add_row("User","user",true,null,"ManufacturerListSortUser");
-		$list->add_row("","delete",false,"16px");
+		$list_request = new ListRequest_IO();
+		$list_request->set_row_array($json_row_array);
 		
-		if ($page)
+		if (!is_numeric($entries_per_page) or $entries_per_page < 1)
 		{
-			if ($sortvalue and $sortmethod)
-			{
-				$result_array = Manufacturer_Wrapper::list_manufacturers($sortvalue, $sortmethod, ($page*20)-20, ($page*20));
-			}
-			else
-			{
-				$result_array = Manufacturer_Wrapper::list_manufacturers(null, null, ($page*20)-20, ($page*20));
-			}				
-		}
-		else
-		{
-			if ($sortvalue and $sortmethod)
-			{
-				$result_array = Manufacturer_Wrapper::list_manufacturers($sortvalue, $sortmethod, 0, 20);
-			}
-			else
-			{
-				$result_array = Manufacturer_Wrapper::list_manufacturers(null, null, 0, 20);
-			}	
+			$entries_per_page = 20;
 		}
 		
-		if (is_array($result_array) and count($result_array) >= 1)
+		$list_array = Manufacturer_Wrapper::list_manufacturers($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+				
+		if (is_array($list_array) and count($list_array) >= 1)
 		{
 			if ($user->is_admin() == true)
 			{
@@ -181,25 +161,35 @@ class ManufacturerAjax extends Ajax
 				$is_admin = false;
 			}
 			
-			foreach($result_array as $key => $value)
+			foreach($list_array as $key => $value)
 			{
-				$result_array[$key][symbol] = "<img src='images/icons/manufacturer.png' alt='' />";
+				$list_array[$key][symbol] = "<img src='images/icons/manufacturer.png' alt='' />";
 				
-				$user = new User($result_array[$key][user_id]);
-				$result_array[$key][user] = $user->get_full_name(false);
+				$user = new User($list_array[$key][user_id]);
+				$list_array[$key][user] = $user->get_full_name(false);
 				
 				if ($is_admin == true)
 				{
-					$result_array[$key][delete] = "<a href='#' class='ManufacturerListDelete' id='ManufacturerListDelete".$result_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+					$list_array[$key][delete] = "<a href='#' class='ManufacturerListDelete' id='ManufacturerListDelete".$list_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
 				}
 			}
 		}
 		else
 		{
-			$list->override_last_line("<span class='italic'>No results found!</span>");
+			$list_request->empty_message("<span class='italic'>No results found!</span>");
 		}
 		
-		echo $list->get_list($result_array, $page);
+		$list_request->set_array($list_array);
+		
+		return $list_request->get_page($page);
+	}
+	
+	/**
+	 * @return integer
+	 */
+	public function get_list_count()
+	{
+		return Manufacturer_Wrapper::count_manufacturers();
 	}
 	
 	public function delete($id)
@@ -253,7 +243,11 @@ class ManufacturerAjax extends Ajax
 				break;
 				
 				case "get_list":
-					$this->get_list($_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+					echo $this->get_list($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				break;
+				
+				case "get_list_count":
+					echo $this->get_list_count();
 				break;
 				
 				case "delete":

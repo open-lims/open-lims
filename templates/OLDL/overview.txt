@@ -1,0 +1,24 @@
+PROJECT
+ID			NAME											VERSION		STATUS
+100			General Master/Parent Project					draft		OK
+10001		MicroArray - Standard							draft		OK
+10002		MicroArray - Analysis with ArrayTools			draft		OK
+19000		MicroArray - Parent Project						draft		OK
+20001		Microscopy - Image								draft		OK
+
+
+SAMPLE
+ID			NAME											VERSION		STATUS
+100			General											draft		OK
+101			General w. Date of Expiry						draft		OK
+10000		RNA												draft		OK
+10001		RNA w. Date of Expiry							draft		OK
+11000		MicroArray										draft		OK
+11001		MicroArray w. Location							draft 		OK
+20000		Microscopy - Fixed Sample						-			Deprecated
+20010		Microscopy - Live Cell Imaging					-			Deprecated
+20020		Microscopy - Live Imaging						-			Deprecated
+20100		Microscopy Specimen - Fixed Sample				draft		OK
+20110		Microscopy Specimen - Live Cell Imaging		draft		OK
+20120		Microscopy Specimen - Live Imaging				draft		OK
+20130		Microscopy Specimen - Scanning Electron (SEM)	-			Reserved

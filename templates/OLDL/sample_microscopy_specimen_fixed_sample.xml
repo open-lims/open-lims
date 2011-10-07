@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE OLDL PUBLIC "-//OLDL 0.4//EN" "http://doctype.open-lims.org/oldl.dtd" >
+<OLDL type="sample">
+	<HEAD>
+		<ID>20100</ID>
+	 	<TITLE>Microscopy Specimen - Fixed Sample</TITLE>
+		<DESC>Template for fixed-sample microscopy coverslip</DESC>
+		<VERSION>draft</VERSION>
+		<AUTHOR></AUTHOR>
+	</HEAD>
+	<REQUIRED>
+		<ITEM type="value">
+          <TYPE id="20101"></TYPE>
+    	</ITEM>
+	</REQUIRED>
+	<BODY>
+      <ITEM type="parentsample" requirement="optional" occurrence="multiple"></ITEM>      
+	</BODY>
+</OLDL>

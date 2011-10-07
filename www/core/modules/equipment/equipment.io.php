@@ -217,7 +217,22 @@ class EquipmentIO
 	 * @param string $sql
 	 */
 	public static function list_equipment_items($item_holder_type, $item_holder_id, $as_page = true, $in_assistant = false, $form_field_name = null)
-	{			
+	{	
+		if ($GLOBALS['autoload_prefix'])
+		{
+			$path_prefix = $GLOBALS['autoload_prefix'];
+		}
+		else
+		{
+			$path_prefix = "";
+		}
+		
+		$handling_class = Item::get_holder_handling_class_by_name($item_holder_type);
+		if ($handling_class)
+		{
+			$sql = $handling_class::get_item_list_sql($item_holder_id);
+		}
+		
 		$argument_array = array();
 		$argument_array[0][0] = "item_holder_type";
 		$argument_array[0][1] = $item_holder_type;
@@ -228,10 +243,12 @@ class EquipmentIO
 		$argument_array[3][0] = "in_assistant";
 		$argument_array[3][1] = $in_assistant;
 
-		$list = new List_IO("/core/modules/equipment/equipment.ajax.php", "list_equipment_items", $argument_array, "EquipmentAjax");
-		
 		if ($in_assistant == false)
 		{
+			$list = new List_IO(Equipment_Wrapper::count_item_equipments($sql), "/core/modules/equipment/equipment.ajax.php", "list_equipment_items", $argument_array, "EquipmentAjax", 20, true, true);
+			
+			$template = new Template($path_prefix."template/equipment/list.html");
+			
 			$list->add_row("","symbol",false,"16px");
 			$list->add_row("Equipment Name","name",true,null);
 			$list->add_row("Category","category",true,null);
@@ -239,6 +256,10 @@ class EquipmentIO
 		}
 		else
 		{
+			$list = new List_IO(Equipment_Wrapper::count_item_equipments($sql), "/core/modules/equipment/equipment.ajax.php", "list_equipment_items", $argument_array, "EquipmentAjax", 20, false, false);
+			
+			$template = new Template($path_prefix."template/equipment/list_without_border.html");
+			
 			$list->add_row("","checkbox",false,"16px", $form_field_name);
 			$list->add_row("","symbol",false,"16px");
 			$list->add_row("Equipment Name","name",false,null);
@@ -246,27 +267,9 @@ class EquipmentIO
 			$list->add_row("Date/Time","datetime",false,null);
 		}
 		
-		if ($GLOBALS['autoload_prefix'])
-		{
-			$path_prefix = $GLOBALS['autoload_prefix'];
-		}
-		else
-		{
-			$path_prefix = "";
-		}
-		
-		if ($in_assistant == false)
-		{
-			$template = new Template($path_prefix."template/equipment/list.html");
-		}
-		else
-		{
-			$template = new Template($path_prefix."template/equipment/list_without_border.html");
-		}
+		$template->set_var("list", $list->get_list());
 		
 		$template->output();
-		
-		$list->run();
 	}
 	
 	/**

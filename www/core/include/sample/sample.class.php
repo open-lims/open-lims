@@ -644,7 +644,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     				{
     					if ($value[1] == "1")
     					{
-    						$item_explode_array = explode("-", $value[0]);
+    						$item_explode_array = explode("-", $value[0], 2);
     						
     						if (!in_array($item_explode_array[0], $item_type_array))
     						{
@@ -662,7 +662,29 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     				{
     					foreach($item_type_array as $key => $value)
     					{
-    						if ($value == "file")
+    						if ($value == "parent")
+    						{
+    							foreach($item_data_array[$value] as $data_key => $data_value)
+	    						{
+	    							$parent_item_explode_array = explode("-", $data_value, 2);
+	    							
+	    							if ($parent_item_explode_array[0] and $parent_item_explode_array[1])
+	    							{
+							  			$item_add_holder_event = new ItemAddHolderEvent($parent_item_explode_array[1], $parent_item_explode_array[0], $this->item_id);
+										$event_handler = new EventHandler($item_add_holder_event);
+											
+										if ($event_handler->get_success() == false)
+										{
+											if ($transaction_id != null)
+											{
+												$transaction->rollback($transaction_id);
+											}
+											return false;
+										}
+	    							}
+	    						}
+    						}
+    						elseif ($value == "file")
     						{
     							if (is_array($item_data_array[$value]) and count($item_data_array[$value]) >= 1)
     							{

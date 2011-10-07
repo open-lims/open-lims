@@ -294,13 +294,10 @@ class ProjectCreateAjax extends Ajax
 					{
 						$template = new Template("../../../template/projects/new_project_page_4_value.html");
 						
-						$value_obj = Value::get_instance(null);
-						if ($project_template_data_type == "value")
-						{
-							$value_obj->set_content_array($project_template_data_array);
-						}	
-						$value_html = $value_obj->get_html_form(null, $value_type_id, null, "ProjectCreateAssistantField");
-						$template->set_var("content",$value_html);
+						require_once("../../../core/modules/data/value_form.io.php");
+						$value_form_io = new ValueFormIO(null, $value_type_id, null, $project_template_data_array);
+						$value_form_io->set_field_class("ProjectCreateAssistantField");
+						$template->set_var("content",$value_form_io->get_content());
 						
 						$template->set_var("project_template_data_type_id", $value_type_id);
 						return $template->get_string();

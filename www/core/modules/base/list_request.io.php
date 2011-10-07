@@ -26,34 +26,30 @@
  * @package base
  */
 class ListRequest_IO
-{
-	private $entries;
-	private $css_page_id;
-	private $css_row_sort_id;
-	private $entries_per_page;
+{	
+	private $empty_message;
 	
-	private $display_header;
-	private $display_footer;
+	private $first_line_entry;
 	
 	private $array;
 	private $rows;
-	
-    function __construct($entries, $css_page_id, $css_row_sort_id, $entries_per_page = 20, $global_class_id = null, $display_header = true, $display_footer = true)
-    {
-    	if (is_numeric($entries) and $css_page_id)
-    	{
-    		$this->entries = $entries;
-    		$this->css_page_id = $css_page_id;
-    		$this->css_row_sort_id = $css_row_sort_id;
-    		$this->entries_per_page = $entries_per_page;
-    		$this->display_header = $display_header;
-    		$this->display_footer = $display_footer;
-    	}
-    }
 
     public function empty_message($message)
     {
-    	
+    	$this->empty_message = $message;
+    }
+    
+    public function add_first_line($array)
+    {
+   		if (is_array($array))
+    	{
+    		$this->first_line_entry = $array;
+    		return true;
+    	}
+    	else
+    	{
+    		return false;
+    	}
     }
     
    	public function get_page($page)
@@ -65,117 +61,6 @@ class ListRequest_IO
     	
     	if (is_array($this->rows))
     	{
-    		if (count($this->array) >= 1)
-    		{
-				$number_of_pages = ceil($this->entries/$this->entries_per_page);
-    		}
-    		else
-    		{
-    			$number_of_pages = 1;
-    		}
-    		
-			// !!! CSS !!!
-			if ($this->display_header == true)
-			{
-				$return = "<div class='OverviewTableLeft'>".Common_IO::results_on_page($this->entries, $number_of_pages)."</div>" .
-							"<div class='OverviewTableRight'>".$this->top_right_text."</div>" .
-							"<div class='OverviewTableClear'>&nbsp;</div>";
-			}
-    		
-    			
-    		$return .= "<table class='OverviewTable'><tr>";	
-    			
-			foreach ($this->rows as $key => $value)
-			{
-				if ($value[3] == true)
-				{
-					$paramquery = $_GET;
-					unset($paramquery[sortvalue]);
-					unset($paramquery[sortmethod]);
-					$params = http_build_query($paramquery, '', '&#38;');
-					
-					if ($value[2] != null)
-					{
-						if ($_GET[sortvalue] == $value[1])
-						{
-							if (!$_GET[sortmethod] or $_GET[sortmethod] == "asc")
-							{
-								$return .= "<th width='".$value[2]."' class='".$this->css_row_sort_id."' id='".$this->css_row_sort_id."".$value[1]."'>" .
-												"<a href='#'>".$value[0]."</a>" .
-												"&nbsp;<a href='#'>" .
-														"<img src='images/downside.png' alt='' border='0' />" .
-												"</a>" .
-												"</th>";
-							}
-							else
-							{
-								$return .= "<th width='".$value[2]."' class='".$this->css_row_sort_id."' id='".$this->css_row_sort_id."".$value[1]."'>" .
-												"<a href='#'>".$value[0]."</a>" .
-												"&nbsp;<a href='#'>" .
-														"<img src='images/upside.png' alt='' border='0' />" .
-												"</a>" .
-												"</th>";
-							}
-						}
-						else
-						{
-							$return .= "<th width='".$value[2]."' class='".$this->css_row_sort_id."' id='".$this->css_row_sort_id."".$value[1]."'>" .
-											"<a href='#'>".$value[0]."</a>" .
-											"&nbsp;<a href='#'>" .
-													"<img src='images/nosort.png' alt='' border='0' />" .
-											"</a>" .
-											"</th>";
-						}
-					}
-					else
-					{
-						if ($_GET[sortvalue] == $value[1])
-						{
-							if (!$_GET[sortmethod] or $_GET[sortmethod] == "asc")
-							{
-								$return .= "<th class='".$this->css_row_sort_id."' id='".$this->css_row_sort_id."".$value[1]."'>" .
-												"<a href='#'>".$value[0]."</a>" .
-												"&nbsp;<a href='#'>" .
-														"<img src='images/downside.png' alt='' border='0' />" .
-												"</a>" .
-												"</th>";
-							}
-							else
-							{
-								$return .= "<th class='".$this->css_row_sort_id."' id='".$this->css_row_sort_id."".$value[1]."'>" .
-												"<a href='#'>".$value[0]."</a>" .
-												"&nbsp;<a href='#'>" .
-														"<img src='images/upside.png' alt='' border='0' />" .
-												"</a>" .
-												"</th>";
-							}
-						}
-						else
-						{
-							$return .= "<th class='".$this->css_row_sort_id."' id='".$this->css_row_sort_id."".$value[1]."'>" .
-											"<a href='#'>".$value[0]."</a>" .
-											"&nbsp;<a href='#'>" .
-													"<img src='images/nosort.png' alt='' border='0' />" .
-											"</a>" .
-											"</th>";
-						}
-					}
-				}
-				else
-				{
-					if ($value[2] != null)
-					{
-						$return .= "<th width='".$value[2]."'>".$value[0]."</th>";
-					}
-					else
-					{
-						$return .= "<th>".$value[0]."</th>";
-					}
-				}	
-			}
-    		
-    		$return .= "</tr>";
-
     		if (is_array($this->first_line_entry))
     		{
     			$return .= "<tr class ='trLightGrey'>";
@@ -208,7 +93,7 @@ class ListRequest_IO
 				$return .= "</tr>";
     		}
     		
-			if (is_array($this->array))
+			if (is_array($this->array) and count($this->array) >= 1)
 			{
 			
 				$color_count = 0;
@@ -278,10 +163,14 @@ class ListRequest_IO
 						
 					}
 									
-					$return .= "<tr>";
+					$return .= "</tr>";
 					
 					$color_count++;	
 				}
+			}
+			else
+			{
+				$return .= "<tr><td colspan='".count($this->rows)."'>".$this->empty_message."</td></tr>";
 			}
 			
 
@@ -289,121 +178,7 @@ class ListRequest_IO
 			{
 				$return .= "<tr><td colspan='".count($this->rows)."'>".$this->last_line_text."</td></tr>";
 			}
-
-			$return .= "</table>";
-			
-			if ($this->display_footer == true)
-			{
-				$return .= "<div class='ResultNextPageBar'>";
-		
-				$return .= "<table style='display: inline;'><tr><td><span class='smallTextBlack'>Page ".$page." of ".$number_of_pages."</span></td>";
-		
-				// Previous
-				if ($page == 1)
-				{
-					$return .= "<td><img src='images/icons/previous_d.png' alt='Previous' border='0' /></td>";		
-				}
-				else
-				{
 					
-					$previous_page = $page - 1;
-					
-					if ($this->css_page_id)
-					{
-						$return .= "<td><a href='#' class='".$this->css_page_id."' id='".$this->css_page_id."".$previous_page."'><img src='images/icons/previous.png' alt='Previous' border='0' /></a></td>";
-					}
-				}	
-				
-				$displayed = false;
-							
-				for ($i=1;$i<=$number_of_pages;$i++)
-				{
-					$display = false;
-					
-					if ($max_page < 5)
-					{
-						$display = true;
-					}
-					else
-					{
-	
-						if ($i <= 2) {
-							$display = true;
-						}
-						
-						if ($i > $max_page-2) {
-							$display = true;
-						}
-						
-						if ($display == false and $page+1 == $i) {
-							$display = true;
-						}
-						
-						if ($display == false and $page-1 == $i) {
-							$display = true;
-						}
-						
-						if ($display == false and $page == $i) {
-							$display = true;
-						}
-						if ($i == $page+10 and $display == false) {
-							$display = true;
-						}
-						
-						if ($i == $page-10 and $display == false) {
-							$display = true;
-						}
-	
-					}
-					
-					if ($display == true)
-					{
-						if ($page == $i)
-						{
-							if ($this->css_page_id)
-							{
-								$return .= "<td><span class='bold'><a href='#' class='".$this->css_page_id."' id='".$this->css_page_id."".$i."'>".$i."</a></span></td>";
-							}
-						}
-						else
-						{
-							if ($this->css_page_id)
-							{
-								$return .= "<td><a href='#' class='".$this->css_page_id."' id='".$this->css_page_id."".$i."'>".$i."</a></td>";	
-							}
-						}						
-						$displayed = true;
-					}
-					elseif ($displayed == true)
-					{
-						$return .= "<td>..</td>";
-					}
-					
-					if ($display == false)
-					{
-						$displayed = false;
-					}
-				}
-	
-				// Next
-				if($page == $number_of_pages)
-				{
-					$return .= "<td><img src='images/icons/next_d.png' alt='Next' border='0' /></td>";		
-				}
-				else
-				{
-					$next_page = $page + 1;
-					
-					if ($this->css_page_id)
-					{
-						$return .= "<td><a href='#' class='".$this->css_page_id."' id='".$this->css_page_id."".$next_page."'><img src='images/icons/next.png' alt='Previous' border='0' /></a></td>";
-					}
-				}
-				
-				$return .= "</tr></table>";
-				
-				$return .= "</div>";
-			}			
 			return $return;	
     			
     	}
@@ -412,8 +187,6 @@ class ListRequest_IO
    	public function set_row_array($json_row_array)
    	{
    		$this->rows = json_decode($json_row_array);
-   		
-   		// print_r($row_array);
    	}
    	
    	public function set_array($array)

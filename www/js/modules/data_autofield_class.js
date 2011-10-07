@@ -56,15 +56,16 @@ function autofield(field_array_string)
     			var field_input = $("<input type='textfield' name='af-"+field_array[int][3]+"'/>");
     			$(field_input).attr("value",field_array[int][2]);
     			$(td2).append(field_input);
-    			var vartype_input = $("<input type='hidden' name='af-"+field_array[3]+"-vartype'/>");
+    			var vartype_input = $("<input type='hidden' name='af-"+field_array[int][3]+"-vartype'/>");
     			$(vartype_input).attr("value",field_array[int][1]);
     			$(td3).append(vartype_input);
-    			var name_input = $("<input type='hidden' name='af-"+field_array[3]+"-name'/>");
+    			var name_input = $("<input type='hidden' name='af-"+field_array[int][3]+"-name'/>");
     			$(name_input).attr("value",field_array[int][3]);
     			$(td4).append(name_input);
     			$(tr).append(td1)
     			$(tr).append(td2);
     			$(tr).append(td3);
+    			$(tr).append(td4);
     			$(table).append(tr);
     		}	
     	}

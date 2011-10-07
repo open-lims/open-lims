@@ -1121,19 +1121,36 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 
     /**
      * @see ValueInterface::get_value_content()
-     * (Replaces self::get_html_form)
      * @param bool $history
      * @return array
      */
-    public function get_value_content($history = false)
+    public function get_value_content($history = false, $value_type_id = null, $folder_id = null)
     {
-    	if ($this->value and $this->value_id)
+    	if (($this->value and $this->value_id) or ($history == false and is_numeric($value_type_id)))
     	{
-    		$value_type = new ValueType($this->value->get_type_id());
+    		if ($folder_id == null and $this->value_id)
+			{
+				$folder_id = $this->get_parent_folder_id();
+			}
+    		
+    		if (is_numeric($value_type_id))
+    		{
+    			$value_type = new ValueType($value_type_id);
+    		}
+    		else
+    		{
+    			$value_type = new ValueType($this->value->get_type_id());
+    		}
+    		
     		$olvdl = new Olvdl($value_type->get_template_id());
     		
     		$xml_array = $olvdl->get_xml_array();
     		$return_array = array();
+    		
+    		if ($this->array_contains_each_statements($xml_array))
+			{
+				$xml_array = $this->resolve_each_statements($xml_array, $folder_id);
+			}
     		
 	    	if (is_array($xml_array) and count($xml_array) >= 1)
 	    	{
@@ -1166,17 +1183,23 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 				}
 				else
 				{
-					if ($this->value_version->get_value())
+					if (is_array($this->content_array) and count($this->content_array >= 1))
 					{
-						$content_array[0] = unserialize($this->value_version->get_value());
+						$content_array[0] = $this->content_array;
+					}
+					else
+					{
+						if ($this->value_version->get_value())
+						{
+							$content_array[0] = unserialize($this->value_version->get_value());
+						}
+						else
+						{
+							$content_array[0] = null;
+						}
 					}
 				}
-				
-				if ($this->array_contains_each_statements($xml_array))
-				{
-					$xml_array = $this->resolve_each_statements($xml_array, $folder_id);
-				}
-				
+								
 				foreach($xml_array as $key => $value)
 				{
 					$value[0] = trim(strtolower($value[0]));
@@ -1285,55 +1308,356 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
     
     /**
      * @see ValueInterface::get_value_shape()
-     * @todo implementation (Replaces self::get_html_form)
-     * @return array;
+     * @return array
      */
-    public function get_value_shape($field_class = null, $field_name_prefix = null)
+    public function get_value_shape($value_type_id = null, $folder_id = null)
     {
-    	
-    }
-    
-    /**
-     * Returns an HTML-String of the current value
-     * @todo replace this function
-     * @param array $error_array
-     * @param integer $type_id
-     * @return string
-     */
-	public function get_html_form($error_array, $type_id, $folder_id, $field_class = null, $field_name_prefix = null)
-	{	
-		if ($type_id == null and $this->value_id)
-		{
-			$type_id = $this->value->get_type_id();
-		}
-		
-		if ($folder_id == null and $this->value_id)
-		{
-			$folder_id = $this->get_parent_folder_id();
-		}
-		
-		$value_type = new ValueType($type_id);
-    	$olvdl = new Olvdl($value_type->get_template_id());
-    	
-    	$xml_array = $olvdl->get_xml_array();
-    	
-    	if (is_array($xml_array) and count($xml_array) >= 1)
-    	{
-			if ($this->value_version->get_value())
+    	if (($this->value and $this->value_id) or is_numeric($value_type_id))
+    	{			
+			if ($folder_id == null and $this->value_id)
 			{
-				$content_array = unserialize($this->value_version->get_value());
+				$folder_id = $this->get_parent_folder_id();
 			}
-			else
-			{
-				$content_array = $this->content_array;
-			}
-			
-			if ($this->array_contains_each_statements($xml_array))
+    		
+    		if (is_numeric($value_type_id))
+    		{
+    			$value_type = new ValueType($value_type_id);
+    		}
+    		else
+    		{
+    			$value_type = new ValueType($this->value->get_type_id());
+    		}
+    		
+    		$olvdl = new Olvdl($value_type->get_template_id());
+    		
+    		$xml_array = $olvdl->get_xml_array();
+    		$return_array = array();
+    		$format_counter = 0;
+    		
+    		if ($this->array_contains_each_statements($xml_array))
 			{
 				$xml_array = $this->resolve_each_statements($xml_array, $folder_id);
 			}
-			
-			if (is_array($content_array) and count($content_array) >= 1)
+    		
+	    	if (is_array($xml_array) and count($xml_array) >= 1)
+	    	{
+	    		foreach($xml_array as $key => $value)
+				{
+					$value[0] = trim(strtolower($value[0]));
+					$value[1] = trim(strtolower($value[1]));
+					$value[2] = trim(strtolower($value[2]));
+					
+					if ($value[1] == "format" and $value[2] != "#")
+					{	
+						$in_format = true;
+						$line_counter = 0;
+						$format_max_column = 0;
+						
+						$return_array[$format_counter] = array();
+						$return_array[$format_counter]['type'] = "format";
+						
+						if ($value[3][colspan])
+						{
+							$colspan_array = array();
+							$colspan_array = explode(",",$value[3][colspan]);
+							$colspan_array_count = 0;
+						}
+					}
+					
+					if ($value[1] == "format" and $value[2] == "#")
+					{
+						if ($in_format == true)
+						{
+							$return_array[$format_counter]['max_column'] = $format_max_column;
+							
+							$in_format = false;
+							$format_counter++;
+							$element_counter = 0;
+							
+							if ($colspan_array)
+							{
+								unset($colspan_array);
+								unset($colspan_array_count);
+							}
+						}
+					}
+					
+					if ($value[1] == "line" and $value[2] != "#")
+					{
+						if ($in_format == true)
+						{
+							$in_line = true;
+							$element_counter = 0;
+							$line_max_column = 0;
+							
+							$return_array[$format_counter][$line_counter] = array();
+							$return_array[$format_counter][$line_counter]['type'] = "line";
+							
+							if ($value[3][colspan])
+							{
+								$colspan_array = array();
+								$colspan_array = explode(",",$value[3][colspan]);
+								$return_array[$format_counter][$line_counter]['colspan'] = array();
+								$return_array[$format_counter][$line_counter]['colspan'] = $colspan_array;
+							}
+						}
+					}
+					
+					if ($value[1] == "line" and $value[2] == "#")
+					{
+						if ($in_format == true and $in_line == true)
+						{
+							$return_array[$format_counter][$line_counter]['max_column'] = $line_max_column;
+							
+							if ($format_max_column < $line_max_column)
+							{
+								$format_max_column = $line_max_column;
+							}
+							
+							$in_line = false;
+							$line_counter++;
+							$element_counter = 0;
+							
+							if ($colspan_array)
+							{
+								unset($colspan_array);
+								unset($colspan_array_count);
+							}
+						}
+						else
+						{
+							$return .= "<br />\n";
+						}
+					}
+					
+					if ($value[1] == "print" and $value[2] != "#")
+					{	
+						$element_array = array();
+						
+						if ($value[3]['format'])
+						{
+							$element_array['format'] = $value[3]['format'];
+						}
+						
+						if ($value[3]['width'])
+						{
+							$element_array['width'] = $value[3]['width'];
+						}
+						
+						$element_array['value'] = array();
+						
+						if ($value[3]['value'] and !$value[3]['var'])
+						{
+							array_push($element_array['value'], $value[3][value]);
+						}
+						elseif (!$value[3]['value'] and $value[3]['var'])
+						{
+							$value_var = new ValueVar($folder_id);
+							$value_var_content = $value_var->get_content($value[3]['var']);
+									
+							if (!is_array($value_var_content))
+							{
+								 array_push($element_array['value'], $value_var_content);
+							}
+							else
+							{
+								array_push($element_array['value'], "Error: Array is given");
+							}
+						}
+						
+						if ($in_line == true and $in_format == true)
+						{
+							$return_array[$format_counter][$line_counter][$element_counter]['type'] = "element";
+							$return_array[$format_counter][$line_counter][$element_counter]['element'] = "print";
+							$return_array[$format_counter][$line_counter][$element_counter]['content'] = $element_array;
+							$element_counter++;
+							$line_max_column++;
+						}
+						else
+						{
+							$return_array[$format_counter]['type'] = "element";
+							$return_array[$format_counter]['element'] = "print";
+							$return_array[$format_counter]['content'] = $element_array;
+							$format_counter++;
+						}
+						
+						unset($element_array);
+					}
+					
+					if ($value[1] == "field" and $value[2] != "#")
+					{
+						if ($value[3]['name'])
+						{
+							$element_array['name'] = $value[3]['name'];
+						}
+						
+						if ($value[3]['display_name'])
+						{
+							$element_array['display_name'] = $value[3]['display_name'];
+						}
+						
+						if ($value[3]['default'])
+						{
+							$element_array['default'] = $value[3]['default'];
+						}
+
+						if ($value[3]['format'])
+						{
+							$element_array['format'] = $value[3]['format'];
+						}
+						
+						if ($value[3]['set'])
+						{
+							$element_array['set'] = $value[3]['set'];
+						}
+						
+						if ($value[3]['vartype'])
+						{
+							$element_array['vartype'] = $value[3]['vartype'];
+						}
+						else
+						{
+							$element_array['vartype'] = "string";
+						}
+						
+						if ($value[3]['length'])
+						{
+							$element_array['length'] =  $value[3]['length'];
+						}
+						else
+						{
+							$element_array['length'] = 30;
+						}
+						
+						if ($value[3]['size'])
+						{
+							$sizeArray = explode(",",$value[3][size]);
+							$field_cols = $sizeArray[0];
+							$field_rows = $sizeArray[1];
+							unset($sizeArray);
+						}
+						else
+						{
+							$field_cols = 64;
+							$field_rows = 15;
+						}
+						
+						$element_array['size'] = array();
+						$element_array['size']['cols'] = $field_cols;
+						$element_array['size']['rows'] = $field_rows;
+						
+						$element_array['value'] = array();
+						
+						if ($value[3]['type'])
+						{
+							switch (trim(strtolower($value[3]['type']))):
+							
+								case("textarea"):
+									$element_array['type'] = "textarea";
+								break;
+														
+								case("checkbox"):
+									$element_array['type'] = "checkbox";
+								break;
+								
+								case("dropdown"):
+									$element_array['type'] = "dropdown";
+									
+									if ($value[3]['value'] and !$value[3]['var'])
+									{
+										$value_array = explode(";;",$value[3]['value']);
+										$value_array_length = substr_count($value[3]['value'],";;");
+										
+										for ($i=0;$i<=$value_array_length;$i++)
+										{
+											array_push($element_array['value'],$value_array[$i]);
+										}
+									}
+									elseif (!$value[3]['value'] and $value[3]['var'])
+									{
+										$value_var = new ValueVar($folder_id);
+										$value_var_content = $value_var->get_content($value[3]['var']);
+										
+										if (is_array($value_var_content) and count($value_var_content) >= 1)
+										{
+											foreach ($value_var_content as $value_var_key => $value_var_value)
+											{
+												if (!is_array($value_var_value))
+												{
+													array_push($element_array['value'],$value_var_value);
+												}
+											}
+										}
+									}
+								break;
+								
+								default:
+									$element_array['type'] = "textfield";
+								break;
+							
+							endswitch;
+						}
+						else
+						{
+							$element_array['type'] = "textfield";
+						}
+						
+						if ($in_line == true and $in_format == true)
+						{
+							$return_array[$format_counter][$line_counter][$element_counter]['type'] = "element";
+							$return_array[$format_counter][$line_counter][$element_counter]['element'] = "field";
+							$return_array[$format_counter][$line_counter][$element_counter]['content'] = $element_array;
+							$element_counter++;
+							$line_max_column++;
+						}
+						else
+						{
+							$return_array[$format_counter]['type'] = "element";
+							$return_array[$format_counter]['element'] = "field";
+							$return_array[$format_counter]['content'] = $element_array;
+							$format_counter++;
+						}
+					}
+					
+					if ($value[1] == "autofield" and $value[2] != "#")
+					{
+						if ($in_line == true and $in_format == true)
+						{
+							$return_array[$format_counter][$line_counter][$element_counter]['type'] = "autofield";
+							$element_counter++;
+						}
+						else
+						{
+							$return_array[$format_counter]['type'] = "autofield";
+							$format_counter++;
+						}
+					}
+				}
+				
+				return $return_array;
+	    	}
+	    	else
+	    	{
+	    		return null;
+	    	}
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+    /**
+     * @see ValueInterface::get_autofield_array()
+     * @return string
+     */
+    public function get_autofield_array()
+    {
+    	if ($this->value and $this->value_id)
+    	{
+			$content_array = unserialize($this->value_version->get_value());
+    		
+	   		if (is_array($content_array) and count($content_array) >= 1)
 			{
 				$autofield_array = array();
 				$autofield_counter = 0;
@@ -1341,7 +1665,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 				$value_array = array();
 				
 				foreach ($content_array as $fe_key => $fe_value)
-				{
+				{		
 					if (strpos($fe_key, "af-") !== false)
 					{
 						if (strpos($fe_key, "-vartype") !== false)
@@ -1358,10 +1682,6 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 							$autofield_array[$autofield_counter][2] = $fe_value;
 						}
 					}
-					else
-					{
-						$value_array[$fe_key] = $fe_value;
-					}
 				}
 			
 				if (is_array($autofield_array) and count($autofield_array) >= 1)
@@ -1369,401 +1689,15 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 					$local_autofield_array_string = serialize($autofield_array);
 				}
 			
-				$content_array = $value_array;			
-			}
-							
-			$in_format = false;
-			$in_line = false;
-			
-			foreach($xml_array as $key => $value)
-			{
-				$value[0] = trim(strtolower($value[0]));
-				$value[1] = trim(strtolower($value[1]));
-				$value[2] = trim(strtolower($value[2]));
-				
-				if ($value[1] == "format" and $value[2] != "#")
-				{
-					$return .= "<table class='formTable'>\n";	
-					$in_format = true;
-					
-					if ($value[3][colspan])
-					{
-						$colspan_array = array();
-						$colspan_array = explode(",",$value[3][colspan]);
-						$colspan_array_count = 0;
-					}
-				}
-				
-				if ($value[1] == "format" and $value[2] == "#")
-				{
-					$return .= "</table>\n";
-					$in_format = false;
-					
-					if ($colspan_array)
-					{
-						unset($colspan_array);
-						unset($colspan_array_count);
-					}
-				}
-				
-				if ($value[1] == "line" and $value[2] != "#")
-				{
-					if ($in_format == true)
-					{
-						$return .= "<tr>\n";	
-						$in_line = true;
-						
-						if ($value[3][colspan])
-						{
-							$colspan_array = array();
-							$colspan_array = explode(",",$value[3][colspan]);
-							$colspan_array_count = 0;
-						}
-					}
-				}
-				
-				if ($value[1] == "line" and $value[2] == "#")
-				{
-					if ($in_format == true)
-					{
-						$return .= "</tr>\n";
-						$in_line = false;
-						
-						if ($colspan_array)
-						{
-							unset($colspan_array);
-							unset($colspan_array_count);
-						}
-					}
-					else
-					{
-						$return .= "<br />\n";
-					}
-				}
-				
-				if ($value[1] == "print" and $value[2] != "#")
-				{
-					if ($in_line == true and $in_format == true)
-					{
-						if ($colspan_array)
-						{
-							$return .= "<td colspan='".$colspan_array[$colspan_array_count]."'>\n";
-							$colspan_array_count++;
-						}
-						else
-						{
-							$return .= "<td>\n";
-						}
-					}
-
-					if ($value[3][format])
-					{
-						$return .= "<span class='".$value[3][format]."'>\n";
-					}
-					else
-					{
-						$return .= "<span>";
-					}
-					
-					if ($value[3][value] and !$value[3]['var'])
-					{
-						$print_value = $value[3][value];
-						$print_value = str_replace("[high]","<sup>",$print_value);
-						$print_value = str_replace("[low]","<sub>",$print_value);
-						$print_value = str_replace("[/high]","</sup>",$print_value);
-						$print_value = str_replace("[/low]","</sub>",$print_value);
-						
-						$return .= $print_value;
-					}
-					elseif (!$value[3][value] and $value[3]['var'])
-					{
-						$value_var = new ValueVar($folder_id);
-						$value_var_content = $value_var->get_content($value[3]['var']);
-								
-						if (!is_array($value_var_content))
-						{
-							$return .= $value_var_content;
-						}
-						else
-						{
-							$return .= "<div class='italic'>Error: Array is given</div>";
-							print_r($value_var_content);
-						}
-					}
-					else
-					{
-						$return .= "";
-					}
-					
-					
-					if ($value[3][newline] == "true")
-					{
-						$return .= "<br />\n";
-					}
-					
-					$return .= "</span>\n";
-					
-					if ($in_line == true and $in_format == true)
-					{
-						$return .= "</td>\n";
-					}
-				}
-				
-				if ($value[1] == "field" and $value[2] != "#")
-				{
-					if ($colspan_array)
-					{
-						$return .= "<td colspan='".$colspan_array[$colspan_array_count]."'>";
-						$colspan_array_count++;
-					}
-					else
-					{
-						$return .= "<td>";
-					}
-					
-					if ($value[3][name])
-					{
-						if ($field_name_prefix)
-						{
-							$field_name = $field_name_prefix."-".$value[3][name];
-						}
-						else
-						{
-							$field_name = $value[3][name];
-						}
-					}
-					
-					if ($content_array and !$_POST[$value[3][name]])
-					{
-						$field_default = $content_array[$value[3][name]];
-					}
-					elseif($value[3]['default'])
-					{
-						$field_default = $value[3]['default'];
-					}
-					else
-					{
-						$field_default = $_POST[$value[3][name]];
-					}
-					
-					if ($value[3][length])
-					{
-						$field_length = $value[3][length];
-					}
-					else
-					{
-						$field_length = 30;
-					}
-					
-					if ($value[3][size])
-					{
-						$sizeArray = explode(",",$value[3][size]);
-						$field_cols = $sizeArray[0];
-						$field_rows = $sizeArray[1];
-						unset($sizeArray);
-					}
-					else
-					{
-						$field_cols = 64;
-						$field_rows = 15;
-					}
-					
-					if ($value[3][type])
-					{
-						switch (trim(strtolower($value[3][type]))):
-						
-							case("textarea"):
-								$type = 4;
-							break;
-													
-							case("checkbox"):
-								$type = 3;
-								$typename = "checkbox";
-							break;
-							
-							case("dropdown"):
-								$type = 2;
-							break;
-							
-							default:
-								$type = 1;
-								$typename = "textfield";
-							break;
-						
-						endswitch;
-					}
-					else
-					{
-						$type = 1;
-						$typename = "textfield";
-					}
-					
-					if ($value[3]['vartype'])
-					{
-						$vartype = $value[3]['vartype'];
-					}
-					else
-					{
-						$vartype = "string";
-					}
-					
-					switch ($type):
-						
-						case (1):
-							if ($field_class)
-							{
-								$return .= "<input type='".$typename."' name='".$field_name."' value='".$field_default."' size='".$field_length."' class='".$field_class."' />\n" .
-									"<input type='hidden' name='".$field_name."-vartype' value='".$vartype."' class='".$field_class."' />\n";
-							}
-							else
-							{
-								$return .= "<input type='".$typename."' name='".$field_name."' value='".$field_default."' size='".$field_length."' />\n" .
-									"<input type='hidden' name='".$field_name."-vartype' value='".$vartype."' />\n";
-							}
-						break;
-						
-						case (2):
-							if ($field_class)
-							{
-								$return .= "<select name='".$field_name."' class='".$field_class."'>\n";
-							}
-							else
-							{
-								$return .= "<select name='".$field_name."'>\n";
-							}
-							
-							if ($value[3][value] and !$value[3]['var'])
-							{
-		
-								$value_array = explode(";;",$value[3]['value']);
-								$value_array_length = substr_count($value[3]['value'],";;");
-								
-								for ($i=0;$i<=$value_array_length;$i++)
-								{
-									if (trim(strtolower($value_array[$i])) == trim(strtolower($field_default)))
-									{
-										$return .= "<option selected='selected'>".trim($value_array[$i])."</option>\n";
-									}
-									else
-									{
-										$return .= "<option>".trim($value_array[$i])."</option>\n";
-									}
-								}
-							}
-							elseif (!$value[3][value] and $value[3]['var'])
-							{
-								$value_var = new ValueVar($folder_id);
-								$value_var_content = $value_var->get_content($value[3]['var']);
-
-								if (is_array($value_var_content) and count($value_var_content) >= 1) {
-	
-									foreach ($value_var_content as $value_var_key => $value_var_value)
-									{
-										if (!is_array($value_var_value))
-										{
-											if ($value_var_key == $field_default)
-											{
-												$return .= "<option value='".$value_var_key."' selected='selected'>".$value_var_value."</option>\n";
-											}
-											else
-											{
-												$return .= "<option value='".$value_var_key."'>".$value_var_value."</option>\n";
-											}
-										}
-									}
-								}
-							}
-							else
-							{
-								// Exception
-							}
-
-							$return .= "</select>\n";
-						break;
-						
-						case (3):
-							if ($field_class)
-							{
-								$return .= "<select type='".$typename."' name='".$field_name."' class='".$field_class."'>\n";
-							}
-							else
-							{
-								$return .= "<select type='".$typename."' name='".$field_name."'>\n";
-							}
-						break;
-						
-						default:
-							if ($field_class)
-							{
-								$return .= "<textarea name='".$field_name."' cols='".$field_cols."' rows='".$field_rows."' class='".$field_class."'>".$field_default."</textarea>\n" .
-											"<input type='hidden' name='".$field_name."-vartype' value='".$vartype."' />\n";
-							}
-							else
-							{
-								$return .= "<textarea name='".$field_name."' cols='".$field_cols."' rows='".$field_rows."'>".$field_default."</textarea>\n" .
-											"<input type='hidden' name='".$field_name."-vartype' value='".$vartype."' />\n";
-							}
-						break;
-					
-					endswitch;
-					
-					if ($value[3][set])
-					{
-						$return .= "<input type='hidden' name='".$field_name."-set' value='".$value[3][set]."' />\n";
-					}
-					
-					$return .= "".$error_array[$field_name]."</td>\n";
-					
-					unset($field_name);
-					unset($field_default);
-				}
-				
-				if ($value[1] == "autofield" and $value[2] != "#")
-				{
-					$return .= "<div class='autofield'>" .
-								"<div class='autofield_header'>Dynamic Values</div>" .
-								"<div id='autofield_area'></div>" .
-								"<div id='autofield_footer'></div>" .
-								"<button type='button' id='autofield_edit' class='autofield_button'>edit</button>" .
-								"</div>";
-					
-					$return .= "<script language='javascript'>" .
-								"var auto_field = new autofield('";
-					if ($this->autofield_array_string)
-					{		
-						$return .= $this->autofield_array_string;
-					}
-					elseif($local_autofield_array_string)
-					{
-							$return .= $local_autofield_array_string;
-					}
-					$return .=	"');</script>";
-					/*
-					$return .= "<script language='javascript'>" .
-								"auto_field = new AutoField();";
-					
-					if ($this->autofield_array_string)
-					{		
-						$return .= "auto_field.setFieldArray('".$this->autofield_array_string."');";
-					}
-					elseif($local_autofield_array_string)
-					{
-							$return .= "auto_field.setFieldArray('".$local_autofield_array_string."');";
-					}
-						
-					$return .= "auto_field.initialize();" .
-								"</script>";
-					*/
-				}
+				return $local_autofield_array_string;		
 			}
     	}
     	else
     	{
-    		// Exeption
+    		return null;
     	}
-		return $return;
-	}
-		
+    }
+    		
 	/**
 	 * @see ValueInterface::set_content_array()
 	 * @param array $content_array
