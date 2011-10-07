@@ -1,6 +1,6 @@
 @CHARSET "ISO-8859-1";
 
-/* BASE UPLOAD*/
+/* DATA UPLOAD*/
 
 #UploadUI
 {
@@ -53,4 +53,37 @@ margin: 10px 0 10px 0;
 #UploadInfo
 {
 margin-bottom:5px;	
+}
+
+/* DATA AUTOFIELD */
+
+#af-description-tr
+{
+font-size:10px;	
+}
+
+.AutoFieldDuplicateNameError
+{
+border: solid red 1px;	
+}
+
+#AutofieldButtonContainer
+{
+margin-top:10px;
+}
+
+#DataAutofieldAddField
+{
+margin-left:10px;
+}
+
+#DataAutofieldClose
+{
+margin-left:10px;
+}
+
+#DataAutofieldAdmin
+{
+/* position:absolute; */
+/* right:20px; */
 }

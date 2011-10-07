@@ -1665,7 +1665,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 				$value_array = array();
 				
 				foreach ($content_array as $fe_key => $fe_value)
-				{
+				{		
 					if (strpos($fe_key, "af-") !== false)
 					{
 						if (strpos($fe_key, "-vartype") !== false)
@@ -1681,10 +1681,6 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 						{
 							$autofield_array[$autofield_counter][2] = $fe_value;
 						}
-					}
-					else
-					{
-						$value_array[$fe_key] = $fe_value;
 					}
 				}
 			

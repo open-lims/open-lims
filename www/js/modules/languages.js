@@ -39,6 +39,6 @@ function get_local_array(type)
 			break;
 	}
 }
-
+//THESE HAVE TO EXIST
 var upload_error_array = get_local_array("upload_error");
 var upload_status_array = get_local_array("upload_status");

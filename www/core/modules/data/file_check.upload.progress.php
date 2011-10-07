@@ -37,7 +37,7 @@ if(function_exists('uploadprogress_get_info'))
 	 		$total_uploads = $status['files_uploaded'];
 	    	$percent = round($status['bytes_uploaded']/$status['bytes_total']*100); 
 	    	$time_left = $status["est_sec"];
-			$speed = number_format(($status["speed_average"] / 1024), 1, ",", ".");
+			$speed = number_format(($status["speed_average"] / 1024), 1, ",", "."); //kilobytes
 					
 	        echo $percent." ".$time_left." ".$speed." ".$total_uploads;
 	    }
