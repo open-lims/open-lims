@@ -161,6 +161,13 @@ class SampleAjax extends Ajax
 		return $list_request->get_page($page);
 	}
 	
+	private function count_user_related_samples()
+	{
+		global $user;
+		
+		return Sample_Wrapper::count_user_samples($user->get_user_id());
+	}
+	
 	private function list_organisation_unit_related_samples($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -291,6 +298,22 @@ class SampleAjax extends Ajax
 		else
 		{
 			// Error
+		}
+	}
+	
+	private function count_organisation_unit_related_samples($json_argument_array)
+	{
+		$argument_array = json_decode($json_argument_array);
+		
+		$organisation_unit_id = $argument_array[0][1];
+		
+		if (is_numeric($organisation_unit_id))
+		{
+			return Sample_Wrapper::count_organisation_unit_samples($organisation_unit_id);
+		}
+		else
+		{
+			return null;
 		}
 	}
 	
@@ -484,6 +507,26 @@ class SampleAjax extends Ajax
 		}
 	}
 	
+	private function count_sample_items($json_argument_array)
+	{
+		$argument_array = json_decode($json_argument_array);
+		
+		$handling_class = Item::get_holder_handling_class_by_name($argument_array[0][1]);
+		if ($handling_class)
+		{
+			$sql = $handling_class::get_item_list_sql($argument_array[1][1]);
+		}
+		
+		if ($sql)
+		{
+			return Sample_Wrapper::count_item_samples($sql);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 	private function list_samples_by_item_id($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -669,6 +712,21 @@ class SampleAjax extends Ajax
 			// Error
 		}
 	}
+
+	private function count_samples_by_item_id($json_argument_array)
+	{
+		$argument_array = json_decode($json_argument_array);
+		$item_id = $argument_array[0][1];
+		
+		if (is_numeric($item_id))
+		{
+			return Sample_Wrapper::count_samples_by_item_id($item_id);
+		}
+		else
+		{
+			return null;
+		}
+	}
 	
 	public function method_handler()
 	{
@@ -682,16 +740,32 @@ class SampleAjax extends Ajax
 					echo $this->list_user_related_samples($_POST[row_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
+				case "count_user_related_samples":
+					echo $this->count_user_related_samples();
+				break;
+				
 				case "list_organisation_unit_related_samples":
 					echo $this->list_organisation_unit_related_samples($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				break;
+				
+				case "count_organisation_unit_related_samples":
+					echo $this->count_organisation_unit_related_samples($_POST[argument_array]);
 				break;
 				
 				case "list_sample_items":
 					echo $this->list_sample_items($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
+				case "count_sample_items":
+					echo $this->count_sample_items($_POST[argument_array]);
+				break;
+				
 				case "list_samples_by_item_id":
 					echo $this->list_samples_by_item_id($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				break;
+				
+				case "count_samples_by_item_id":
+					echo $this->count_samples_by_item_id($_POST[argument_array]);
 				break;
 				
 				default:

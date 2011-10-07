@@ -31,7 +31,7 @@ class SampleIO
 	{
 		global $user;
 		
-		$list = new List_IO(Sample_Wrapper::count_user_samples($user->get_user_id()), "/core/modules/sample/sample.ajax.php", "list_user_related_samples", "0", "SampleAjaxMySamples");
+		$list = new List_IO("/core/modules/sample/sample.ajax.php", "list_user_related_samples", "count_user_related_samples", "0", "SampleAjaxMySamples");
 		
 		$list->add_row("","symbol",false,"16px");
 		$list->add_row("Smpl. ID","id",true,"11%");
@@ -60,7 +60,7 @@ class SampleIO
 			$argument_array[0][0] = "organisation_unit_id";
 			$argument_array[0][1] = $organisation_unit_id;
 			
-			$list = new List_IO(Sample_Wrapper::count_organisation_unit_samples($organisation_unit_id), "/core/modules/sample/sample.ajax.php", "list_organisation_unit_related_samples", $argument_array, "SampleAjaxMySamples", 12);
+			$list = new List_IO("/core/modules/sample/sample.ajax.php", "list_organisation_unit_related_samples", "count_organisation_unit_related_samples", $argument_array, "SampleAjaxMySamples", 12);
 			
 			$list->add_row("","symbol",false,"16px");
 			$list->add_row("Smpl. ID","id",true,"11%");
@@ -111,7 +111,7 @@ class SampleIO
 			
 			if ($in_assistant == false)
 			{
-				$list = new List_IO(Sample_Wrapper::count_samples_by_item_id($item_id), "/core/modules/sample/sample.ajax.php", "list_samples_by_item_id", $argument_array, "SampleParentAjax", 20, true, true);
+				$list = new List_IO("/core/modules/sample/sample.ajax.php", "list_samples_by_item_id", "count_samples_by_item_id", $argument_array, "SampleParentAjax", 20, true, true);
 				
 				$template = new Template($path_prefix."template/samples/list_parents.html");
 				
@@ -182,7 +182,7 @@ class SampleIO
 		
 		if ($in_assistant == false)
 		{
-			$list = new List_IO(Sample_Wrapper::count_item_samples($sql), "/core/modules/sample/sample.ajax.php", "list_sample_items", $argument_array, "SampleAjax", 20, true, true);
+			$list = new List_IO("/core/modules/sample/sample.ajax.php", "list_sample_items", "count_sample_items",  $argument_array, "SampleAjax", 20, true, true);
 			
 			$template = new Template($path_prefix."template/samples/list.html");
 			

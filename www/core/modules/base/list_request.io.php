@@ -29,12 +29,27 @@ class ListRequest_IO
 {	
 	private $empty_message;
 	
+	private $first_line_entry;
+	
 	private $array;
 	private $rows;
 
     public function empty_message($message)
     {
     	$this->empty_message = $message;
+    }
+    
+    public function add_first_line($array)
+    {
+   		if (is_array($array))
+    	{
+    		$this->first_line_entry = $array;
+    		return true;
+    	}
+    	else
+    	{
+    		return false;
+    	}
     }
     
    	public function get_page($page)

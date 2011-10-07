@@ -1,4 +1,25 @@
-List = function(ajax_handler, ajax_run, argument_array, css_main_id, number_of_pages, entries_per_page, row_array)
+/*
+ * version: 0.4.0.0
+ * author: Roman Konertz <konertz@open-lims.org>
+ * copyright: (c) 2008-2011 by Roman Konertz
+ * license: GPLv3
+ * 
+ * This file is part of Open-LIMS
+ * Available at http://www.open-lims.org
+ * 
+ * This program is free software;
+ * you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation;
+ * version 3 of the License.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program;
+ * if not, see <http://www.gnu.org/licenses/>.
+ */
+
+List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, css_main_id, entries_per_page, row_array)
 {
 	var sort_array = new Array();
 	
@@ -11,9 +32,44 @@ List = function(ajax_handler, ajax_run, argument_array, css_main_id, number_of_p
 	var parsed_row_array = $.parseJSON(row_array);
 	var colspan = parsed_row_array.length;
 	
+	var number_of_entries = 0;
+	var number_of_pages = 0;
+	
 	this.reload = function()
 	{
 		load_content(sort_value, sort_method, page);
+	}
+	
+	function count_entries()
+	{
+		if (ajax_handler.indexOf("?") == -1) 
+		{
+			var post_ajax_handler = ajax_handler + "?session_id="+ get_array['session_id'] + "&run="+ajax_count_run;
+		} 
+		else 
+		{
+			var post_ajax_handler = ajax_handler + "&session_id="+ get_array['session_id'] + "&run="+ajax_count_run;
+		}
+		
+		$.ajax(
+		{
+			type: "POST",
+			url: post_ajax_handler,
+			data: "argument_array="+argument_array,
+			async: false,
+			success: function(data)
+			{		
+				number_of_entries = parseInt(data);
+				if (number_of_entries == 0)
+				{
+					number_of_pages = 1;
+				}
+				else
+				{
+					number_of_pages = Math.ceil(number_of_entries/entries_per_page);
+				}
+			}
+		});
 	}
 	
 	function load_content(sort_value, sort_method, local_page)
@@ -34,6 +90,7 @@ List = function(ajax_handler, ajax_run, argument_array, css_main_id, number_of_p
 			$("#"+css_main_id).height(150);
 		}
 		
+		count_entries();
 		
 		$.ajax(
 		{
@@ -57,10 +114,32 @@ List = function(ajax_handler, ajax_run, argument_array, css_main_id, number_of_p
 			}
 		});
 		
+		
+		$.ajax(
+		{
+			type: "GET",
+			url: "core/modules/base/list.ajax.php",
+			data: "username="+get_array['username']+"&session_id="+get_array['session_id']+"&run=get_page_information&number_of_entries="+number_of_entries+"&number_of_pages="+number_of_pages+"",
+			async: false,
+			success: function(data)
+			{
+				$("#"+css_main_id).parent().parent().children(".ListPageInformation").html(data);
+			}
+		});
+		
+		if (ajax_handler.indexOf("?") == -1) 
+		{
+			var post_ajax_handler = ajax_handler + "?username="+get_array['username']+"&session_id="+get_array['session_id']+"&run="+ajax_run+"&sortvalue="+sort_value+"&sortmethod="+sort_method+"&page="+page;
+		} 
+		else 
+		{
+			var post_ajax_handler = ajax_handler + "&username="+get_array['username']+"&session_id="+get_array['session_id']+"&run="+ajax_run+"&sortvalue="+sort_value+"&sortmethod="+sort_method+"&page="+page;
+		}
+		
 		$.ajax(
 		{
 			type: "POST",
-			url: ajax_handler+"?username="+get_array['username']+"&session_id="+get_array['session_id']+"&run="+ajax_run+"&sortvalue="+sort_value+"&sortmethod="+sort_method+"&page="+page,
+			url: post_ajax_handler,
 			data: "row_array="+row_array+"&argument_array="+argument_array+"&entries_per_page="+entries_per_page+"",
 			success: function(data)
 			{				

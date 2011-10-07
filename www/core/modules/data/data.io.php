@@ -104,11 +104,17 @@ class DataIO
 					
 				
 			// !!!!! ---------- !!!!!!!!!!!!!1
-			$folder = Folder::get_instance($folder_id);	
+			
 
-			$list = new ListStat_IO(DataBrowser::count_data_browser_array($folder_id, $virtual_folder_id), 20);
+			$argument_array = array();
+			$argument_array[0][0] = "folder_id";
+			$argument_array[0][1] = $folder_id;
+			$argument_array[1][0] = "virtual_folder_id";
+			$argument_array[1][1] = $virtual_folder_id;
+			
+			$list = new List_IO("/core/modules/data/data.ajax.php?nav=".$_GET['nav'], "list_data_browser", "count_data_browser", $argument_array, "DataBrowserAjax");
 
-			$list->set_top_right_text($data_path->get_stack_path());
+			// $list->set_top_right_text($data_path->get_stack_path());
 			
 			$list->add_row("","symbol",false,16);
 			$list->add_row("Name","name",true,null);
@@ -118,238 +124,10 @@ class DataIO
 			$list->add_row("Size","size",true,null);
 			$list->add_row("Owner","owner",true,null);
 			$list->add_row("Permission","permission",false,null);
+		
+			// !!! [...] !!!
 			
-			if ($_GET[page])
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = DataBrowser::get_data_browser_array($folder_id, $virtual_folder_id, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
-				}
-				else
-				{
-					$result_array = DataBrowser::get_data_browser_array($folder_id, $virtual_folder_id, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
-				}				
-			}
-			else
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = DataBrowser::get_data_browser_array($folder_id, $virtual_folder_id, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
-				}
-				else
-				{
-					$result_array = DataBrowser::get_data_browser_array($folder_id, $virtual_folder_id, null, null, 0, 20);
-				}	
-			}
-			
-			if ($folder_id != 1 or $virtual_folder_id != null)
-			{
-				$column_array = array();
-				
-				
-				if ($data_path->get_previous_entry_virtual() == true)
-				{			
-					$paramquery = $_GET;
-					$paramquery[vfolder_id] = $data_path->get_previous_entry_id();
-					unset($paramquery[folder_id]);
-					unset($paramquery[nextpage]);
-					unset($paramquery[page]);
-					$params = http_build_query($paramquery,'','&#38;');
-				}
-				else
-				{
-					$paramquery = $_GET;
-					$paramquery[folder_id] = $data_path->get_previous_entry_id();
-					unset($paramquery[nextpage]);
-					unset($paramquery[vfolder_id]);
-					unset($paramquery[page]);
-					$params = http_build_query($paramquery,'','&#38;');
-				}		
-				
-				$first_line_array[symbol][link] = $params;
-				$first_line_array[symbol][content] = "<img src='images/icons/parent_folder.png' alt='' style='border:0;' />";
-				$first_line_array[name][link] = $params;
-				$first_line_array[name][content] = "[parent folder]";
-				$first_line_array[type] = "Parent Folder";
-				$first_line_array[version] = "";
-				$first_line_array[datetime] = "";
-				$first_line_array[size] = "";
-				$first_line_array[owner] = "";
-				$first_line_array[permission] = "";
-				
-				$list->add_first_line($first_line_array);
-			} 
-			
-			if (is_array($result_array) and count($result_array) >= 1)
-			{
-				foreach($result_array as $key => $value)
-				{
-					// Common
-					$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
-					$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
-					
-					if ($result_array[$key][owner_id])
-					{
-						$user = new User($result_array[$key][owner_id]);
-					}
-					else
-					{
-						$user = new User(1);
-					}
-					
-					$result_array[$key][owner] = $user->get_full_name(true);
-
-					// Special
-					if ($result_array[$key][file_id])
-					{						
-						$file = File::get_instance($result_array[$key][file_id]);
-
-						if ($file->is_read_access() == true)
-						{
-							$paramquery = $_GET;
-							$paramquery[file_id] = $result_array[$key][file_id];
-							$paramquery[action] = "file_detail";
-							unset($paramquery[nextpage]);
-							unset($paramquery[version]);
-							$params = http_build_query($paramquery,'','&#38;');
-						
-							$result_array[$key][symbol][link] = $params;
-							$result_array[$key][symbol][content] = "<img src='".$file->get_icon()."' alt='' style='border:0;' />";
-							
-							if (strlen($result_array[$key][name]) > 30)
-							{
-								$result_array[$key][name] = substr($result_array[$key][name],0,30)."...";
-							}
-							else
-							{
-								$result_array[$key][name] = $result_array[$key][name];
-							}
-							
-							$tmp_name = $result_array[$key][name];
-							unset($result_array[$key][name]);
-							$result_array[$key][name][content] = $tmp_name;
-							$result_array[$key][name][link] = $params;
-						}
-						else
-						{
-							$result_array[$key][symbol] = "<img src='core/images/denied_overlay.php?image=".$file->get_icon()."' alt='' border='0' />";
-						}
-						
-						$result_array[$key][type] = "File";
-						$result_array[$key][version] = $file->get_version();
-						$result_array[$key][size] = Misc::calc_size($result_array[$key][size]);
-						$result_array[$key][permission] = $file->get_permission_string();
-					}
-					elseif ($result_array[$key][value_id])
-					{
-						$value = Value::get_instance($result_array[$key][value_id]);
-
-						if ($value->is_read_access() == true)
-						{
-							$paramquery = $_GET;
-							$paramquery[value_id] = $result_array[$key][value_id];
-							$paramquery[action] = "value_detail";
-							unset($paramquery[nextpage]);
-							unset($paramquery[version]);
-							$params = http_build_query($paramquery,'','&#38;');
-						
-							$result_array[$key][symbol][link] = $params;
-							$result_array[$key][symbol][content] = "<img src='images/fileicons/16/unknown.png' alt='' style='border:0;' />";
-							
-							if (strlen($result_array[$key][name]) > 30)
-							{
-								$result_array[$key][name] = substr($result_array[$key][name],0,30)."...";
-							}
-							else
-							{
-								$result_array[$key][name] = $result_array[$key][name];
-							}
-							
-							$tmp_name = $result_array[$key][name];
-							unset($result_array[$key][name]);
-							$result_array[$key][name][content] = $tmp_name;
-							$result_array[$key][name][link] = $params;
-						}
-						else
-						{
-							$result_array[$key][symbol] = "<img src='core/images/denied_overlay.php?image=images/fileicons/16/unknown.png' alt='' border='0' />";
-						}
-						
-						$result_array[$key][type] = "Value";
-						$result_array[$key][version] = $value->get_version();
-						$result_array[$key][permission] = $value->get_permission_string();
-					}
-					elseif ($result_array[$key][folder_id])
-					{	
-						$sub_folder = Folder::get_instance($result_array[$key][folder_id]);				
-						if ($sub_folder->is_read_access() == true)
-						{
-							$paramquery = $_GET;
-							$paramquery[folder_id] = $result_array[$key][folder_id];
-							unset($paramquery[nextpage]);
-							unset($paramquery[vfolder_id]);
-							unset($paramquery[page]);
-							$params = http_build_query($paramquery,'','&#38;');
-							
-							$result_array[$key][symbol][content] = "<img src='images/icons/folder.png' alt='' style='border:0;' />";
-							$result_array[$key][symbol][link] = $params;
-							
-							if (strlen($result_array[$key][name]) > 30)
-							{
-								$result_array[$key][name] = substr($result_array[$key][name],0,30)."...";
-							}
-							else
-							{
-								$result_array[$key][name] = $result_array[$key][name];
-							}
-							
-							$tmp_name = $result_array[$key][name];
-							unset($result_array[$key][name]);
-							$result_array[$key][name][content] = $tmp_name;
-							$result_array[$key][name][link] = $params;
-						}
-						else
-						{
-							$result_array[$key][symbol] = "<img src='core/images/denied_overlay.php?image=images/icons/folder.png' alt='' border='0' />";
-						}
-						
-						$result_array[$key][type] = "Folder";
-						$result_array[$key][permission] = $folder->get_permission_string();
-					}
-					elseif ($result_array[$key][virtual_folder_id])
-					{
-						$paramquery = $_GET;
-						$paramquery[vfolder_id] = $result_array[$key][virtual_folder_id];
-						unset($paramquery[nextpage]);
-						$params = http_build_query($paramquery,'','&#38;');
-						
-						$result_array[$key][symbol][content] = "<img src='images/icons/virtual_folder.png' alt='' style='border:0;' />";
-						$result_array[$key][symbol][link] = $params;
-
-						if (strlen($result_array[$key][name]) > 30)
-						{
-							$result_array[$key][name] = substr($result_array[$key][name],0,30)."...";
-						}
-						else
-						{
-							$result_array[$key][name] = $result_array[$key][name];
-						}
-						
-						$tmp_name = $result_array[$key][name];
-						unset($result_array[$key][name]);
-						$result_array[$key][name][content] = $tmp_name;
-						$result_array[$key][name][link] = $params;
-						
-						$result_array[$key][type] = "Virtual Folder";
-						$result_array[$key][permission] = "automatic";
-					}
-				}
-				
-			}else{
-				$list->override_last_line("<span class='italic'>No results found!</span>");
-			}
-
-			
+			$folder = Folder::get_instance($folder_id);	
 			
 			$template = new Template("template/data/data_browser.html");
 	
@@ -444,7 +222,7 @@ class DataIO
 	
 			$template->set_var("title","Data Browser");
 			
-			$template->set_var("table", $list->get_list($result_array, $_GET[page]));	
+			$template->set_var("list", $list->get_list());
 			
 			$template->output();
 		}
@@ -453,29 +231,14 @@ class DataIO
 			$error_io = new Error_IO($e, 20, 40, 1);
 			$error_io->display_error();
 		}
-		catch (ProjectException $e)
-		{
-			$error_io = new Error_IO($e, 200, 40, 1);
-			$error_io->display_error();
-		}
-		catch (SampleException $e)
-		{
-			$error_io = new Error_IO($e, 250, 40, 1);
-			$error_io->display_error();
-		}
 		catch (DataSecurityException $e)
 		{
 			$error_io = new Error_IO($e, 20, 40, 2);
 			$error_io->display_error();
 		}
-		catch (ProjectSecurityException $e)
+		catch (Exception $e)
 		{
-			$error_io = new Error_IO($e, 200, 40, 2);
-			$error_io->display_error();
-		}
-		catch (SampleSecurityException $e)
-		{
-			$error_io = new Error_IO($e, 250, 40, 2);
+			$error_io = new Error_IO($e, 0, 0, 0);
 			$error_io->display_error();
 		}
 	}

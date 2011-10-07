@@ -133,6 +133,11 @@ class ListAjax extends Ajax
 		return $pagebar;
 	}
 	
+	public function get_page_information($results, $pages)
+	{
+		return Common_IO::results_on_page($results, $pages);
+	}
+	
 	public function handler()
 	{
 		global $session;
@@ -143,6 +148,10 @@ class ListAjax extends Ajax
 			
 				case "get_page_bar":
 					echo $this->get_page_bar($_GET['page'], $_GET['number_of_pages'], $_GET['css_page_id']);
+				break;
+				
+				case "get_page_information":
+					echo $this->get_page_information($_GET['number_of_entries'], $_GET['number_of_pages']);
 				break;
 				
 			endswitch;

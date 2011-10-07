@@ -1,78 +1,6 @@
 <script>
 $(document).ready(function()
 {
-	var get_array = getQueryParams(document.location.search);
-	
-	function load_content(sortvalue, sortmethod, page)
-	{
-		$.ajax(
-		{
-			type: "GET",
-			url: "core/modules/manufacturer/manufacturer.ajax.php",
-			data: "session_id="+get_array['session_id']+"&run=get_list&sortvalue="+sortvalue+"&sortmethod="+sortmethod+"&page="+page,
-			success: function(data)
-			{
-				$("#ManufacturerAjaxContent").contents().detach();
-				$("#ManufacturerAjaxContent").append(data);
-			}
-		});
-	}
-	
-	var sortvalue = "";
-	var sortmethod = "";
-	var page = 0;
-	
-	load_content(sortvalue, sortmethod, page);
-	
-	var name_sortmethod = "asc";
-	
-	$("#ManufacturerListSortName").live('click', function()
-	{
-		sortvalue = "name";
-		
-		load_content(sortvalue, name_sortmethod, page);
-		
-		if (name_sortmethod == "asc")
-		{
-			name_sortmethod = "desc";
-			sortmethod = "asc";
-		}
-		else
-		{
-			name_sortmethod = "asc";
-			sortmethod = "desc";
-		}
-
-	});
-	
-	var user_sortmethod = "asc";
-	
-	$("#ManufacturerListSortUser").live('click', function()
-	{
-		
-		sortvalue = "user";
-		
-		load_content(sortvalue, user_sortmethod, page);
-		
-		if (user_sortmethod == "asc")
-		{
-			user_sortmethod = "desc";
-			sortmethod = "asc";
-		}
-		else
-		{
-			user_sortmethod = "asc";
-			sortmethod = "desc";
-		}
-		
-	});
-
-	$(".ManufacturerListPage").each().live('click', function()
-	{
-		var id = $(this).attr("id");
-		page = id.replace("ManufacturerListPage","");
-		load_content(sortvalue, sortmethod, page);
-	});
 	
 	$(".ManufacturerListDelete").each().live('click', function()
 	{
@@ -87,11 +15,12 @@ $(document).ready(function()
 			{
 				if (data == 1)
 				{
-					load_content(sortvalue, sortmethod, page);
+					list.reload();
 				}
 			}
 		});
 	});
+	
 	
 	$('#ManufactuerAdd').click(function()
 	{
@@ -102,9 +31,8 @@ $(document).ready(function()
 	
 	$("#ManufacturerAddDialog").bind( "dialogbeforeclose", function(event, ui) 
 	{
-		load_content(sortvalue, sortmethod, page);
-	});
-	
+		list.reload();
+	}); 
 });
 </script>
 
@@ -119,8 +47,7 @@ $(document).ready(function()
 
 </div>
 
-<div id='ManufacturerAjaxContent'>
-
+[[LIST]]
 
 </div>
 

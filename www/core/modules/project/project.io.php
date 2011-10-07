@@ -40,7 +40,7 @@ class ProjectIO
 		$argument_array[0][0] = "user_id";
 		$argument_array[0][1] = $user_id;
 		
-		$list = new List_IO(Project_Wrapper::count_list_user_related_projects($user_id), "/core/modules/project/project.ajax.php", "list_user_related_projects", $argument_array, "ProjectAjaxMyProjects");
+		$list = new List_IO("/core/modules/project/project.ajax.php", "list_user_related_projects", "count_user_related_projects", $argument_array, "ProjectAjaxMyProjects");
 		
 		$list->add_row("", "symbol", false, "16px");
 		$list->add_row("Name", "name", true, null);
@@ -78,7 +78,7 @@ class ProjectIO
 			$argument_array[0][0] = "organisation_unit_id";
 			$argument_array[0][1] = $organisation_unit_id;
 			
-			$list = new List_IO(Project_Wrapper::count_organisation_unit_related_projects($organisation_unit_id), "/core/modules/project/project.ajax.php", "list_organisation_unit_related_projects", $argument_array, "ProjectAjaxOrganisationUnit", 12);
+			$list = new List_IO("/core/modules/project/project.ajax.php", "list_organisation_unit_related_projects", "count_organisation_unit_related_projects", $argument_array, "ProjectAjaxOrganisationUnit", 12);
 		
 			$list->add_row("","symbol",false,"16px");
 			$list->add_row("Name","name",true,null);
@@ -696,7 +696,7 @@ class ProjectIO
 			
 			if ($in_assistant == false)
 			{
-				$list = new List_IO(Project_Wrapper::count_projects_by_item_id($item_id), "/core/modules/project/project.ajax.php", "list_projects_by_item_id", $argument_array, "ProjectParentAjax", 20, true, true);
+				$list = new List_IO("/core/modules/project/project.ajax.php", "list_projects_by_item_id", "count_projects_by_item_id", $argument_array, "ProjectParentAjax", 20, true, true);
 				
 				$template = new Template($path_prefix."template/projects/list_projects_by_item.html");
 				

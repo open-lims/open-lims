@@ -62,10 +62,10 @@ class ProjectAjax extends Ajax
 					$tmp_name = trim($list_array[$key][name]);
 					unset($list_array[$key][name]);
 					
-					if (strlen($tmp_name) > 32)
+					if (strlen($tmp_name) > 28)
 					{
 						$list_array[$key][name][label] = $tmp_name;
-						$list_array[$key][name][content] = substr($tmp_name,0,32)."...";
+						$list_array[$key][name][content] = substr($tmp_name,0,28)."...";
 					}
 					else
 					{
@@ -76,15 +76,29 @@ class ProjectAjax extends Ajax
 					$tmp_template = trim($list_array[$key][template]);
 					unset($list_array[$key][template]);
 					
-					if (strlen($tmp_template) > 22)
+					if (strlen($tmp_template) > 20)
 					{
 						$list_array[$key][template][label] = $tmp_template;
-						$list_array[$key][template][content] = substr($tmp_template,0,22)."...";
+						$list_array[$key][template][content] = substr($tmp_template,0,20)."...";
 					}
 					else
 					{
 						$list_array[$key][template][label] = $tmp_template;
 						$list_array[$key][template][content] = $tmp_template;
+					}
+					
+					$tmp_status= trim($list_array[$key][status]);
+					unset($list_array[$key][status]);
+					
+					if (strlen($tmp_status) > 15)
+					{
+						$list_array[$key][status][label] = $tmp_status;
+						$list_array[$key][status][content] = substr($tmp_status,0,15)."...";
+					}
+					else
+					{
+						$list_array[$key][status][label] = $tmp_status;
+						$list_array[$key][status][content] = $tmp_status;
 					}
 					
 					$list_array[$key][symbol] = "<img src='images/icons/project.png' alt='N' border='0' />";
@@ -116,6 +130,22 @@ class ProjectAjax extends Ajax
 		}
 	}
 	
+	private function count_user_related_projects($json_argument_array)
+	{
+		$argument_array = json_decode($json_argument_array);
+		
+		$user_id = $argument_array[0][1];
+		
+		if (is_numeric($user_id))
+		{
+			return Project_Wrapper::count_list_user_related_projects($user_id);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 	private function list_organisation_unit_related_projects($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -138,13 +168,13 @@ class ProjectAjax extends Ajax
 			{
 				foreach($list_array as $key => $value)
 				{
-					$tmp_name = trim($list_array[$key][name]);
+				$tmp_name = trim($list_array[$key][name]);
 					unset($list_array[$key][name]);
-
-					if (strlen($tmp_name) > 32)
+					
+					if (strlen($tmp_name) > 28)
 					{
 						$list_array[$key][name][label] = $tmp_name;
-						$list_array[$key][name][content] = substr($tmp_name,0,32)."...";
+						$list_array[$key][name][content] = substr($tmp_name,0,28)."...";
 					}
 					else
 					{
@@ -155,15 +185,29 @@ class ProjectAjax extends Ajax
 					$tmp_template = trim($list_array[$key][template]);
 					unset($list_array[$key][template]);
 					
-					if (strlen($tmp_template) > 22)
+					if (strlen($tmp_template) > 20)
 					{
 						$list_array[$key][template][label] = $tmp_template;
-						$list_array[$key][template][content] = substr($tmp_template,0,22)."...";
+						$list_array[$key][template][content] = substr($tmp_template,0,20)."...";
 					}
 					else
 					{
 						$list_array[$key][template][label] = $tmp_template;
 						$list_array[$key][template][content] = $tmp_template;
+					}
+					
+					$tmp_status= trim($list_array[$key][status]);
+					unset($list_array[$key][status]);
+					
+					if (strlen($tmp_status) > 15)
+					{
+						$list_array[$key][status][label] = $tmp_status;
+						$list_array[$key][status][content] = substr($tmp_status,0,15)."...";
+					}
+					else
+					{
+						$list_array[$key][status][label] = $tmp_status;
+						$list_array[$key][status][content] = $tmp_status;
 					}
 					
 					$list_array[$key][symbol] = "<img src='images/icons/project.png' alt='N' border='0' />";
@@ -210,6 +254,22 @@ class ProjectAjax extends Ajax
 		}
 	}
 	
+	private function count_organisation_unit_related_projects($json_argument_array)
+	{
+		$argument_array = json_decode($json_argument_array);
+		
+		$organisation_unit_id = $argument_array[0][1];
+		
+		if (is_numeric($organisation_unit_id))
+		{
+			return Project_Wrapper::count_organisation_unit_related_projects($organisation_unit_id);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 	private function list_projects_by_item_id($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -239,13 +299,13 @@ class ProjectAjax extends Ajax
 			{				
 				foreach($list_array as $key => $value)
 				{
-					$tmp_name = trim($list_array[$key][name]);
+				$tmp_name = trim($list_array[$key][name]);
 					unset($list_array[$key][name]);
 					
-					if (strlen($tmp_name) > 32)
+					if (strlen($tmp_name) > 28)
 					{
 						$list_array[$key][name][label] = $tmp_name;
-						$list_array[$key][name][content] = substr($tmp_name,0,32)."...";
+						$list_array[$key][name][content] = substr($tmp_name,0,28)."...";
 					}
 					else
 					{
@@ -256,15 +316,29 @@ class ProjectAjax extends Ajax
 					$tmp_template = trim($list_array[$key][template]);
 					unset($list_array[$key][template]);
 					
-					if (strlen($tmp_template) > 22)
+					if (strlen($tmp_template) > 20)
 					{
 						$list_array[$key][template][label] = $tmp_template;
-						$list_array[$key][template][content] = substr($tmp_template,0,22)."...";
+						$list_array[$key][template][content] = substr($tmp_template,0,20)."...";
 					}
 					else
 					{
 						$list_array[$key][template][label] = $tmp_template;
 						$list_array[$key][template][content] = $tmp_template;
+					}
+					
+					$tmp_status= trim($list_array[$key][status]);
+					unset($list_array[$key][status]);
+					
+					if (strlen($tmp_status) > 15)
+					{
+						$list_array[$key][status][label] = $tmp_status;
+						$list_array[$key][status][content] = substr($tmp_status,0,15)."...";
+					}
+					else
+					{
+						$list_array[$key][status][label] = $tmp_status;
+						$list_array[$key][status][content] = $tmp_status;
 					}
 					
 					if ($argument_array[1][1] == true)
@@ -352,6 +426,21 @@ class ProjectAjax extends Ajax
 		}
 	}
 	
+	private function count_projects_by_item_id($json_argument_array)
+	{
+		$argument_array = json_decode($json_argument_array);
+		$item_id = $argument_array[0][1];
+		
+		if (is_numeric($item_id))
+		{
+			return Project_Wrapper::count_projects_by_item_id($item_id);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 	public function method_handler()
 	{
 		global $session;
@@ -363,13 +452,25 @@ class ProjectAjax extends Ajax
 				case "list_user_related_projects":
 					echo $this->list_user_related_projects($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
+				
+				case "count_user_related_projects":
+					echo $this->count_user_related_projects($_POST[argument_array]);
+				break;
 			
 				case "list_organisation_unit_related_projects":
 					echo $this->list_organisation_unit_related_projects($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
+				case "count_organisation_unit_related_projects":
+					echo $this->count_organisation_unit_related_projects($_POST[argument_array]);
+				break;
+				
 				case "list_projects_by_item_id":
 					echo $this->list_projects_by_item_id($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				break;
+				
+				case "count_projects_by_item_id":
+					echo $this->count_projects_by_item_id($_POST[argument_array]);
 				break;
 				
 				default:

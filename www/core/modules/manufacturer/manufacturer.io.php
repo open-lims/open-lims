@@ -49,8 +49,18 @@ class ManufacturerIO
 	
 	public static function list_manufacturers()
 	{
+		$list = new List_IO("/core/modules/manufacturer/manufacturer.ajax.php", "get_list", "get_list_count", "0", "ManufacturerListPage");
+		
+		$list->add_row("","symbol",false,"16px");
+		$list->add_row("Name","name",true,null);
+		$list->add_row("User","user",true,null);
+		$list->add_row("","delete",false,"16px");
+		
 		$template = new Template("template/manufacturer/list.html");
+		
 		$template->set_var("ADD_DIALOG", self::add());
+		$template->set_var("list", $list->get_list());
+		
 		$template->output();
 	}
 }

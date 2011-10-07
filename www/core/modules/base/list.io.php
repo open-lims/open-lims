@@ -27,7 +27,6 @@
  */
 class List_IO
 {	
-	private $entries;
 	private $entries_per_page;
 	
 	private $display_header;
@@ -35,20 +34,21 @@ class List_IO
 	
 	private $ajax_handler;
 	private $ajax_run;
+	private $ajax_count_run;
 	private $argument_array;
 	private $css_main_id;
 	
 	private $rows = array();
 	
-    function __construct($entries, $ajax_handler, $ajax_run, $argument_array, $css_main_id, $entries_per_page = 20, $display_header = true, $display_footer = true)
+    function __construct($ajax_handler, $ajax_run, $ajax_count_run, $argument_array, $css_main_id, $entries_per_page = 20, $display_header = true, $display_footer = true)
     {
-    	if (is_numeric($entries) and $ajax_handler and $ajax_run)
+    	if ($ajax_handler and $ajax_run and $ajax_count_run)
     	{
-    		$this->entries = $entries;
     		$this->entries_per_page = $entries_per_page;
     		
     		$this->ajax_handler = $ajax_handler;
     		$this->ajax_run = $ajax_run;
+    		$this->ajax_count_run = $ajax_count_run;
     		
     		$this->argument_array = $argument_array;
     		$this->css_main_id = $css_main_id;
@@ -115,15 +115,6 @@ class List_IO
 		}
 	
     	$template = new Template($path_prefix."template/base/list/list.html");	
-		
-   		if ($this->entries >= 1 and $this->entries_per_page >= 1)
-    	{
-			$number_of_pages = ceil($this->entries/$this->entries_per_page);
-    	}
-    	else
-    	{
-    		$number_of_pages = 1;
-    	}
     		
     	if ($this->display_header == true)
 		{
@@ -181,16 +172,16 @@ class List_IO
 		
 		$head .= "</tr></thead>";	
 		
-    	$template->set_var("top_left_text", Common_IO::results_on_page($this->entries, $number_of_pages));
+    	$template->set_var("top_left_text", "");
     	$template->set_var("top_right_text", "");
     	
     	$template->set_var("head", $head);
 		    	
     	$template->set_var("ajax_handler", $this->ajax_handler);
     	$template->set_var("ajax_run", $this->ajax_run);
+    	$template->set_var("ajax_count_run", $this->ajax_count_run);
     	$template->set_var("argument_array", json_encode($this->argument_array));
     	$template->set_Var("css_main_id", $this->css_main_id);
-    	$template->set_var("number_of_pages", $number_of_pages);
     	$template->set_var("entries_per_page", $this->entries_per_page);
     	$template->set_var("row_array", json_encode($this->rows));
 
