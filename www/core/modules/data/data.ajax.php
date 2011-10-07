@@ -37,8 +37,9 @@ class DataAjax extends Ajax
 		parent::__construct();
 	}
 	
-	private function list_data_browser($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	private function list_data_browser($json_row_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
+		$_GET = unserialize($get_array);		
 		$argument_array = json_decode($json_argument_array);
 		
 		$folder_id = $argument_array[0][1];
@@ -310,7 +311,7 @@ class DataAjax extends Ajax
 			switch($_GET[run]):
 				
 				case "list_data_browser":
-					echo $this->list_data_browser($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+					echo $this->list_data_browser($_POST[row_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
 				case "count_data_browser":

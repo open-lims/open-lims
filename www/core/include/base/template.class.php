@@ -695,7 +695,14 @@ class Template implements TemplateInterface
 					$container_end = str_replace("\"","",$container_end);
 					$container_end = str_replace(")","",$container_end);
 					
-					$this->string = substr_replace($this->string, Common_IO::container_end($container_end), $start_position, ($end_position-$start_position)+3);
+					if ($container_end)
+					{
+						$this->string = substr_replace($this->string, Common_IO::container_end($container_end), $start_position, ($end_position-$start_position)+3);
+					}
+					else
+					{
+						$this->string = substr_replace($this->string, Common_IO::container_end(), $start_position, ($end_position-$start_position)+3);
+					}
 				}
 			}
 			$start_position 	= $end_position+1;

@@ -201,6 +201,7 @@ class List_IO
     	$template->set_var("ajax_run", $this->ajax_run);
     	$template->set_var("ajax_count_run", $this->ajax_count_run);
     	$template->set_var("argument_array", json_encode($this->argument_array));
+    	$template->set_var("get_array", serialize($_GET));
     	$template->set_Var("css_main_id", $this->css_main_id);
     	$template->set_var("entries_per_page", $this->entries_per_page);
     	$template->set_var("row_array", json_encode($this->rows));
