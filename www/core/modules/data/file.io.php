@@ -248,7 +248,7 @@ class FileIO
 		
 		if ($in_assistant == false)
 		{	
-			$list = new List_IO(Data_Wrapper::count_item_files($sql), "/core/modules/data/file.ajax.php", "list_file_items", $argument_array, "DataAjaxFiles", 20, true, true);
+			$list = new List_IO("DataFileItem", "/core/modules/data/file.ajax.php", "list_file_items", "count_file_items", $argument_array, "DataAjaxFiles", 20, true, true);
 			
 			$list->add_row("","symbol",false,16);
 			$list->add_row("Name","name",true,null);
@@ -257,7 +257,7 @@ class FileIO
 		}
 		else
 		{	
-			$list = new List_IO(Data_Wrapper::count_item_files($sql), "/core/modules/data/file.ajax.php", "list_file_items", $argument_array, "DataAjaxFiles", 20, false, false);
+			$list = new List_IO("DataFileItem", "/core/modules/data/file.ajax.php", "list_file_items", "count_file_items", $argument_array, "DataAjaxFiles", 20, false, false);
 			
 			$list->add_row("","checkbox",false,16, $form_field_name);
 			$list->add_row("","symbol",false,16);

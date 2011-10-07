@@ -676,18 +676,26 @@ class Template implements TemplateInterface
 										
 					$container_begin_array = explode(",",$container_begin);
 					
-					$this->string = substr_replace($this->string, Common_IO::container_begin($container_begin_array[0],$container_begin_array[1]), $start_position, ($end_position-$start_position)+3);
-					
+					if ($container_begin_array[2])
+					{
+						$this->string = substr_replace($this->string, Common_IO::container_begin($container_begin_array[0],$container_begin_array[1],$container_begin_array[2]), $start_position, ($end_position-$start_position)+3);
+					}
+					elseif($container_begin_array[1])
+					{
+						$this->string = substr_replace($this->string, Common_IO::container_begin($container_begin_array[0],$container_begin_array[1]), $start_position, ($end_position-$start_position)+3);
+					}
+					else
+					{
+						$this->string = substr_replace($this->string, Common_IO::container_begin($container_begin_array[0]), $start_position, ($end_position-$start_position)+3);
+					}
 				}
 				elseif (trim(strtolower($command_array[1])) == "end")
 				{
-					
 					$container_end = str_replace("(","",$command_array[2]);
 					$container_end = str_replace("\"","",$container_end);
 					$container_end = str_replace(")","",$container_end);
 					
 					$this->string = substr_replace($this->string, Common_IO::container_end($container_end), $start_position, ($end_position-$start_position)+3);
-					
 				}
 			}
 			$start_position 	= $end_position+1;

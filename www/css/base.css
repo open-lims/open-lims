@@ -1,5 +1,3 @@
-@CHARSET "ISO-8859-1";
-
 /* BASE TREE NAVIGATION */
 
 .BaseTreeList
@@ -55,7 +53,7 @@ min-height:1%;
 
 #LeftNavigation
 {
-width: 200px;
+width: 190px;
 float: left;
 font-family: arial;
 font-size: 11px;
@@ -312,4 +310,111 @@ position:relative;
 }
 .FormSelect {
 	width: 100%;
+}
+
+.ContentBoxBegin {
+	margin: 0;
+	padding: 0;
+	border-spacing: 0;
+	border-collapse: collapse;
+}
+
+.ContentBoxBegin td {
+	padding: 0px;
+}
+
+.ContentBoxBeginLeft {
+	width: 15px;
+	min-height: 10px;
+	background: #C0C0C0;
+	margin: 0;
+	padding: 0;
+	vertical-align: top;
+}
+
+.ContentBoxBeginRight {
+	width: 15px;
+	min-height: 10px;
+	background: #C0C0C0;
+	margin: 0;
+	padding: 0;
+	vertical-align: top;
+	text-align: right;
+}
+
+.ContentBoxBeginTitle {
+	background: #C0C0C0;
+	text-align: center;
+	color: white;
+	font: bold 1em Verdana, Helvetica, sans-serif;
+}
+
+.ContentBoxMain {
+	border-left: 1px #C0C0C0 solid;
+	border-right: 1px #C0C0C0 solid;
+	margin-bottom: 0;
+	padding-bottom: 0;
+	padding-top: 5px;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.ContentBoxEnd {
+	margin: 0;
+	padding: 0;
+	border-spacing: 0;
+	border-collapse: collapse;
+}
+
+.ContentBoxEnd td {
+	padding: 0px;
+}
+
+.ContentBoxEndLeft {
+	width: 10px;
+	height: 10px;
+	margin: 0;
+	padding: 0;
+	vertical-align: bottom;
+}
+
+.ContentBoxEndRight {
+	width: 10px;
+	height: 10px;
+	margin: 0;
+	padding: 0;
+	vertical-align: bottom;
+	text-align: right;
+}
+
+.ContentBoxEndBorder {
+	font: normal 1px sans-serif;
+	vertical-align: bottom;
+	border-bottom: 1px #C0C0C0 solid;
+	height: 10px;
+}
+
+
+.HomeLeft
+{
+	float: left;
+}
+.HomeLeft div.ContentBoxMain
+{
+	min-height: 350px;
+}
+.HomeRight
+{
+	float: right;
+}
+.HomeRight div.ContentBoxMain
+{
+	min-height: 350px;
+}
+.LoginBox
+{
+	width: 450px;
+	margin-left: auto;
+	margin-right: auto;
+	font: normal 0.8em Verdana, Helvetica, sans-serif;
 }

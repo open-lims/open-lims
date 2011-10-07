@@ -40,7 +40,18 @@ class List_IO
 	
 	private $rows = array();
 	
-    function __construct($ajax_handler, $ajax_run, $ajax_count_run, $argument_array, $css_main_id, $entries_per_page = 20, $display_header = true, $display_footer = true)
+	/**
+	 * @param string $list_name A system wide unique list name
+	 * @param string $ajax_handler Path to AJAX Handler
+	 * @param string $ajax_run Function which returns the list
+	 * @param string $ajax_count_run Function which returns the number of entries
+	 * @param array $argument_array Array with specific arguments
+	 * @param string $css_main_id CSS ID which will be used for the <tbody> element in the table
+	 * @param integer $entries_per_page
+	 * @param bool $display_header
+	 * @param bool $display_footer
+	 */
+    function __construct($list_name, $ajax_handler, $ajax_run, $ajax_count_run, $argument_array, $css_main_id, $entries_per_page = 20, $display_header = true, $display_footer = true)
     {
     	if ($ajax_handler and $ajax_run and $ajax_count_run)
     	{
@@ -58,7 +69,7 @@ class List_IO
     	}
     }
     
- 	public function add_row($title, $address, $sortable, $width, $row_css_id = null)
+ 	public function add_row($title, $address, $sortable, $width, $row_css_id = null, $hideable = true)
     {
     	if ($address)
     	{
@@ -91,6 +102,15 @@ class List_IO
     		else
     		{
     			$row_array[4] = null;
+    		} 
+    		
+    		if ($hideable == true)
+    		{
+    			$row_array[5] = true;
+    		}
+    		else
+    		{
+    			$row_array[5] = false;
     		} 
     		
     		array_push($this->rows, $row_array);

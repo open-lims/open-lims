@@ -39,43 +39,40 @@ class Common_IO
 	 * @param string $class
 	 * @return string
 	 */
-	public static function container_begin($title, $class)
+	public static function container_begin($title, $class = "ContentBox", $width = 100)
 	{
 		self::$in_container = true;
-		if (!$class)
-		{
-			$class = "boxRound";
-		}
 
+		$pixel = 750/100*$width;
+		$main_pixel = $pixel - 6;
+		
 		return "<div class='".$class."'>" .
-				"<table class='".$class."Begin'>" .
+				"<table class='ContentBoxBegin' style='width: ".$pixel."px;'>" .
 				"<tr>" .
-				"<td class='".$class."BeginLeft'><img src='images/corners/corner_top_left.png' alt='' /></td>" .
-				"<td class='".$class."BeginTitle'>".$title."</td>" .
-				"<td class='".$class."BeginRight'><img src='images/corners/corner_top_right.png' alt='' /></td>" .
+				"<td class='ContentBoxBeginLeft'><img src='images/corners/corner_top_left.png' alt='' /></td>" .
+				"<td class='ContentBoxBeginTitle'>".$title."</td>" .
+				"<td class='ContentBoxBeginRight'><img src='images/corners/corner_top_right.png' alt='' /></td>" .
 				"</tr>" .
 				"</table>" .
-				"<div class='".$class."Main'>";
+				"<div class='ContentBoxMain' style='width: ".$main_pixel."px;'>";
 	}
 
 	/**
 	 * @param string $class
 	 * @return string
 	 */
-	public static function container_end($class)
+	public static function container_end($width = 100)
 	{
 		self::$in_container = false;
-		if (!$class)
-		{
-			$class = "boxRound";
-		}
 
+		$pixel = 750/100*$width;
+		
 		return "</div>" .
-				"<table class='".$class."End'>" .
+				"<table class='ContentBoxEnd' style='width: ".$pixel."px;'>" .
 				"<tr>" .
-				"<td class='".$class."EndLeft'><img src='images/corners/corner_bottom_left.png' alt='' /></td>" .
-				"<td class='".$class."EndBorder'>&nbsp;</td>" .
-				"<td class='".$class."EndRight'><img src='images/corners/corner_bottom_right.png' alt='' /></td>" .
+				"<td class='ContentBoxEndLeft'><img src='images/corners/corner_bottom_left.png' alt='' /></td>" .
+				"<td class='ContentBoxEndBorder'>&nbsp;</td>" .
+				"<td class='ContentBoxEndRight'><img src='images/corners/corner_bottom_right.png' alt='' /></td>" .
 				"</tr>" .
 				"</table></div>";
 	}

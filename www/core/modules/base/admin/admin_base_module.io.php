@@ -59,7 +59,7 @@ class AdminBaseModuleIO
 			}	
 		}
 		
-	if (is_array($result_array) and count($result_array) >= 1)
+		if (is_array($result_array) and count($result_array) >= 1)
 		{		
 			foreach($result_array as $key => $value)
 			{	

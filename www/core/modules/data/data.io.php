@@ -27,9 +27,6 @@
  */
 class DataIO
 {
-	/**
-	 * @todo IMPORTANT: Remove Exception Dependency
-	 */
 	public static function browser()
 	{
 		global $content;
@@ -112,7 +109,7 @@ class DataIO
 			$argument_array[1][0] = "virtual_folder_id";
 			$argument_array[1][1] = $virtual_folder_id;
 			
-			$list = new List_IO("/core/modules/data/data.ajax.php?nav=".$_GET['nav'], "list_data_browser", "count_data_browser", $argument_array, "DataBrowserAjax");
+			$list = new List_IO("DataBrowser", "/core/modules/data/data.ajax.php?nav=".$_GET['nav'], "list_data_browser", "count_data_browser", $argument_array, "DataBrowserAjax");
 
 			// $list->set_top_right_text($data_path->get_stack_path());
 			

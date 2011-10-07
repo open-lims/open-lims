@@ -1,3 +1,22 @@
+
+/* Project Detail */
+
+.ProjectDetailGeneral
+{
+	float: left;
+}
+.ProjectDetailGeneral div.ContentBoxMain
+{
+	min-height: 400px;
+}
+.ProjectDetailMenu
+{
+	float: right;
+}
+.ProjectDetailMenu div.ContentBoxMain
+{
+	min-height: 400px;
+}
 .ProjectDetailStatusTable
 {
 	width: 100%;
@@ -10,11 +29,13 @@
 	line-height: 22px;
 }
 
+
+/* Project Task */
+
 .ProjectTaskDetailTable
 {
 	margin: 0 10px;
 }
-
 .ProjectTaskGanttTable
 {
 	border-collapse: collapse;
@@ -22,13 +43,11 @@
 	margin-left: auto;
 	margin-right: auto;
 }
-
 .ProjectTaskGanttTable tr
 {
 	margin: 0;
 	padding: 0;
 }
-
 .ProjectTaskGanttTable th
 {
 	margin: 0;
@@ -37,13 +56,11 @@
 	background-color: #E0E0E0;
 	border-left: 1px white dotted;
 }
-
 .ProjectTaskGanttTable td
 {
 	margin: 0;
 	padding: 2px 0;
 }
-
 .ProjectTaskGanttBlockEnd
 {
 	border-bottom: 1px #E0E0E0 dotted;

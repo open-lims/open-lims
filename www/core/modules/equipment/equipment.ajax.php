@@ -128,6 +128,26 @@ class EquipmentAjax extends Ajax
 		}
 	}
 	
+	private function count_equipment_items($json_argument_array)
+	{
+		$argument_array = json_decode($json_argument_array);
+		
+		$handling_class = Item::get_holder_handling_class_by_name($argument_array[0][1]);
+		if ($handling_class)
+		{
+			$sql = $handling_class::get_item_list_sql($argument_array[1][1]);
+		}
+		
+		if ($sql)
+		{
+			return Equipment_Wrapper::count_item_equipments($sql);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 	public function method_handler()
 	{
 		global $session;
@@ -138,6 +158,10 @@ class EquipmentAjax extends Ajax
 	
 				case "list_equipment_items":
 					echo $this->list_equipment_items($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				break;
+				
+				case "count_equipment_items":
+					echo $this->count_equipment_items($_POST[argument_array]);
 				break;
 				
 				default:

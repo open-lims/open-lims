@@ -29,7 +29,7 @@ class AdminBaseIncludeIO
 {
 	public static function home()
 	{		
-		$list = new List_IO("/core/modules/base/admin/admin_base_include.ajax.php", "list_includes", "count_includes", "0", "BaseAdminIncludeAjax");
+		$list = new List_IO("BaseAdminIncludeHome" ,"/core/modules/base/admin/admin_base_include.ajax.php", "list_includes", "count_includes", "0", "BaseAdminIncludeAjax");
 
 		$list->add_row("Name","name",true,null);
 		$list->add_row("Folder","folder",true,null);
