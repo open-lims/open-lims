@@ -41,12 +41,12 @@ define("TIMEZONE_ID",					26);
 define("DB_TYPE",						"postgres");
 define("DB_SERVER",						"localhost");
 define("DB_PORT",						"");
-define("DB_USER",						"dbadmin");
+define("DB_USER",						"dbadmin2");
 define("DB_PASSWORD",					"dbadmin");
 define("DB_DATABASE",					"open-lims");
 
 // Path Settings
-define("BASE_DIR",						"D:/open-lims");
+define("BASE_DIR",						"D:/web/open-lims");
 define("WWW_DIR",						constant("BASE_DIR")."/www");
 define("LOG_DIR",						constant("BASE_DIR")."/logs");
 
