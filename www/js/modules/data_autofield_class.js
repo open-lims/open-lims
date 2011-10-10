@@ -26,14 +26,22 @@ function autofield(field_array_string)
     if (typeof(autofield_prototype_called) == "undefined")
     {
     	autofield_prototype_called = true;
-    	if(field_array_string != undefined && field_array_string != '')
+    	field_array = new Array();
+    	if(field_array_string != undefined && field_array_string != "[AUTOFIELD_STRING]")
     	{
-        	field_array = unserialize(field_array_string);
-        	console.log(field_array);
-    	}
-    	else
-    	{
-    		field_array = new Array();
+    		var temp_array = unserialize(field_array_string);
+        	for (key in temp_array) {
+				var title = temp_array[key][0];
+				var type = temp_array[key][1];
+				var value = temp_array[key][2];
+				var name = temp_array[key][3];
+				var field = new Array(3);
+				field[0] = title;
+				field[1] = type;
+				field[2] = value;
+				field[3] = name;
+				field_array.push(field);
+			}
     	}
     	init();
     	$("#autofield_edit").click(function(evt){
@@ -49,10 +57,17 @@ function autofield(field_array_string)
     	{
         	for (var int = 0; int < field_array.length; int++) {
     			var tr = $("<tr id='af-name-"+int+"'></tr>");
-    			var td1 = $("<td>"+field_array[int][0]+"</td>");
+    			var td0 = $("<td>"+field_array[int][0]+"</td>");
+    			
     			var td2 = $("<td></td>");
     			var td3 = $("<td></td>");
     			var td4 = $("<td></td>");
+    			var td1 = $("<td></td>");
+    			
+    			var title_input = $("<input type='hidden' name='af-"+field_array[int][3]+"-title'/>");
+    			$(title_input).attr("value",field_array[int][0]);
+    			$(td1).append(title_input);
+    			
     			var field_input = $("<input type='textfield' name='af-"+field_array[int][3]+"'/>");
     			$(field_input).attr("value",field_array[int][2]);
     			$(td2).append(field_input);
@@ -62,10 +77,13 @@ function autofield(field_array_string)
     			var name_input = $("<input type='hidden' name='af-"+field_array[int][3]+"-name'/>");
     			$(name_input).attr("value",field_array[int][3]);
     			$(td4).append(name_input);
-    			$(tr).append(td1)
+    	
+    			$(tr).append(td0);
+    			
     			$(tr).append(td2);
+    			$(tr).append(td1);
     			$(tr).append(td3);
-    			$(tr).append(td4);
+    			$(tr).append(td4);		
     			$(table).append(tr);
     		}	
     	}

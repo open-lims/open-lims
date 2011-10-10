@@ -1158,8 +1158,6 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 }
 #AssistantLoading
 {
-	margin-top: 10%;
-	padding-bottom: 50px;
 	text-align: center;	
 }
 #AssistantFinish

@@ -79,16 +79,14 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, css_main
 		page = local_page;
 		
 		$("#"+css_main_id).contents().detach();
-		$("#"+css_main_id).append("<tr><td colspan='"+colspan+"'><div id='AssistantLoading'><img src='images/animations/loading_circle_small.gif' alt='Loading...' /></div></td></tr>");
 		
-		if (local_height > 150)
-		{
-			$("#"+css_main_id).height(local_height);
-		}
-		else
-		{
-			$("#"+css_main_id).height(150);
-		}
+		var margin = parseInt(local_height / 2);
+		margin = Math.floor(margin);
+		margin -= 8;
+		
+		$("#"+css_main_id).append("<tr><td colspan='"+colspan+"'><div style='text-align:center; margin-top:"+margin+"px;'><img src='images/animations/loading_circle_small.gif' alt='Loading...' /></div></td></tr>");
+		
+		$("#"+css_main_id).height(local_height);
 		
 		count_entries();
 		
@@ -142,10 +140,28 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, css_main
 			url: post_ajax_handler,
 			data: "row_array="+row_array+"&argument_array="+argument_array+"&entries_per_page="+entries_per_page+"",
 			success: function(data)
-			{				
+			{	
 				$("#"+css_main_id).contents().detach();
 				$("#"+css_main_id).append(data);
 				$("#"+css_main_id).height("auto");
+				
+//				var new_height = $("#"+css_main_id).height();
+//				
+//				
+//				$("#"+css_main_id).height(local_height);
+//				
+//				if(new_height >= local_height)
+//				{
+//					$("#"+css_main_id).fadeIn().animate({height:new_height},5000);
+//				}
+//				else
+//				{
+//					$("#"+css_main_id).slideUp("slow");
+//				}
+//				
+//				
+//				console.log(local_height+" "+new_height);
+				
 			}
 		});
 	}

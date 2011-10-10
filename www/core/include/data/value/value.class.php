@@ -1674,8 +1674,13 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 						}
 						elseif(strpos($fe_key, "-name") !== false)
 						{
-							$autofield_array[$autofield_counter][0] = $fe_value;
+							$autofield_array[$autofield_counter][3] = $fe_value;
 							$autofield_counter++;
+						}
+						elseif(strpos($fe_key, "-title") !== false)
+						{
+							$autofield_array[$autofield_counter][0] = $fe_value;
+							//$autofield_counter++;
 						}
 						else
 						{
