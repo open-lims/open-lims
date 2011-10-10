@@ -120,6 +120,26 @@ class FileAjax extends Ajax
 		
 	}
 	
+	public static function count_file_items($json_argument_array)
+	{
+		$argument_array = json_decode($json_argument_array);
+		
+		$handling_class = Item::get_holder_handling_class_by_name($argument_array[0][1]);
+		if ($handling_class)
+		{
+			$sql = $handling_class::get_item_list_sql($argument_array[1][1]);
+		}
+		
+		if ($sql)
+		{
+			return Data_Wrapper::count_item_files($sql);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 	public function method_handler()
 	{
 		global $session;

@@ -73,7 +73,7 @@ class AdminIO
 		{
 			switch($_GET[run]):
 				
-			case "general_admin":
+				case "general_admin":
 					require_once("core/modules/base/admin/admin_general.io.php");
 					AdminGeneralIO::handler();
 				break;

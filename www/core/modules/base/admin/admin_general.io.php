@@ -62,14 +62,14 @@ class AdminGeneralIO
 		$paramquery[action] = "list_languages";
 		$params = http_build_query($paramquery,'','&#38;');
 		
-		$tab_io->add("languages", "Languages", $params, false);
+		// $tab_io->add("languages", "Languages", $params, false);
 		
 		
 		$paramquery = $_GET;
 		$paramquery[action] = "list_timezones";
 		$params = http_build_query($paramquery,'','&#38;');
 		
-		$tab_io->add("timezones", "Timezones", $params, false);
+		// $tab_io->add("timezones", "Timezones", $params, false);
 		
 		
 		$paramquery = $_GET;
@@ -83,14 +83,14 @@ class AdminGeneralIO
 		$paramquery[action] = "list_measuring_units";
 		$params = http_build_query($paramquery,'','&#38;');
 		
-		$tab_io->add("measuring-units", "Measur. Un.", $params, false);  
+		// $tab_io->add("measuring-units", "Measur. Un.", $params, false);  
 		
 				
 		$paramquery = $_GET;
 		$paramquery[action] = "list_currencies";
 		$params = http_build_query($paramquery,'','&#38;');
 		
-		$tab_io->add("currencies", "Currencies", $params, false);
+		// $tab_io->add("currencies", "Currencies", $params, false);
 		
 		
 		switch($_GET[action]):
@@ -112,7 +112,8 @@ class AdminGeneralIO
 			break;
 		
 			default:
-				$tab_io->activate("languages");
+				// $tab_io->activate("languages");
+				$tab_io->activate("paper-sizes");
 			break;
 		
 		endswitch;
@@ -137,7 +138,8 @@ class AdminGeneralIO
 			break;
 		
 			default:
-				self::list_languages();
+				// self::list_languages();
+				self::list_paper_sizes();
 			break;
 		endswitch;
 	}

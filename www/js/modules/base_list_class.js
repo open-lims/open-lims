@@ -19,7 +19,7 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, css_main_id, entries_per_page, row_array)
+List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get_array, css_main_id, entries_per_page, row_array)
 {
 	var sort_array = new Array();
 	
@@ -41,20 +41,11 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, css_main
 	}
 	
 	function count_entries()
-	{
-		if (ajax_handler.indexOf("?") == -1) 
-		{
-			var post_ajax_handler = ajax_handler + "?session_id="+ get_array['session_id'] + "&run="+ajax_count_run;
-		} 
-		else 
-		{
-			var post_ajax_handler = ajax_handler + "&session_id="+ get_array['session_id'] + "&run="+ajax_count_run;
-		}
-		
+	{		
 		$.ajax(
 		{
 			type: "POST",
-			url: post_ajax_handler,
+			url: ajax_handler+"?session_id="+ get_array['session_id'] + "&run="+ajax_count_run,
 			data: "argument_array="+argument_array,
 			async: false,
 			success: function(data)
@@ -125,20 +116,11 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, css_main
 			}
 		});
 		
-		if (ajax_handler.indexOf("?") == -1) 
-		{
-			var post_ajax_handler = ajax_handler + "?username="+get_array['username']+"&session_id="+get_array['session_id']+"&run="+ajax_run+"&sortvalue="+sort_value+"&sortmethod="+sort_method+"&page="+page;
-		} 
-		else 
-		{
-			var post_ajax_handler = ajax_handler + "&username="+get_array['username']+"&session_id="+get_array['session_id']+"&run="+ajax_run+"&sortvalue="+sort_value+"&sortmethod="+sort_method+"&page="+page;
-		}
-		
 		$.ajax(
 		{
 			type: "POST",
-			url: post_ajax_handler,
-			data: "row_array="+row_array+"&argument_array="+argument_array+"&entries_per_page="+entries_per_page+"",
+			url: ajax_handler+"?username="+get_array['username']+"&session_id="+get_array['session_id']+"&run="+ajax_run+"&sortvalue="+sort_value+"&sortmethod="+sort_method+"&page="+page,
+			data: "row_array="+row_array+"&argument_array="+argument_array+"&entries_per_page="+entries_per_page+"&get_array="+json_get_array,
 			success: function(data)
 			{	
 				$("#"+css_main_id).contents().detach();

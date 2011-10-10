@@ -245,7 +245,7 @@ class EquipmentIO
 
 		if ($in_assistant == false)
 		{
-			$list = new List_IO(Equipment_Wrapper::count_item_equipments($sql), "/core/modules/equipment/equipment.ajax.php", "list_equipment_items", $argument_array, "EquipmentAjax", 20, true, true);
+			$list = new List_IO("EquipmentItem", "/core/modules/equipment/equipment.ajax.php", "list_equipment_items", "count_equipment_items", $argument_array, "EquipmentAjax", 20, true, true);
 			
 			$template = new Template($path_prefix."template/equipment/list.html");
 			
@@ -256,7 +256,7 @@ class EquipmentIO
 		}
 		else
 		{
-			$list = new List_IO(Equipment_Wrapper::count_item_equipments($sql), "/core/modules/equipment/equipment.ajax.php", "list_equipment_items", $argument_array, "EquipmentAjax", 20, false, false);
+			$list = new List_IO("EquipmentItem", "/core/modules/equipment/equipment.ajax.php", "list_equipment_items", "count_equipment_items", $argument_array, "EquipmentAjax", 20, false, false);
 			
 			$template = new Template($path_prefix."template/equipment/list_without_border.html");
 			

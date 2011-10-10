@@ -52,7 +52,7 @@ function error_handler($code, $message, $file, $line)
 				if (class_exists("Common_IO"))
 				{
 					echo "<br />";
-					echo Common_IO::container_begin("PHP Script Error",null);
+					echo Common_IO::container_begin("PHP Script Error");
 				}
 				else
 				{
@@ -81,7 +81,7 @@ function error_handler($code, $message, $file, $line)
 			{
 				if (class_exists("Common_IO"))
 				{
-					echo Common_IO::container_end(null);
+					echo Common_IO::container_end();
 				}
 			}
 		

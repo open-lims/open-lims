@@ -29,7 +29,7 @@ class AdminBaseModuleIO
 {
 	public static function home()
 	{
-		$list = new ListStat_IO(0, 20);
+		$list = new ListStat_IO(Base_Wrapper::count_base_module(), 20);
 		
 		$list->add_row("Name", "name", true, null);
 		$list->add_row("Dialogs", "dialogs", true, null);
@@ -59,7 +59,7 @@ class AdminBaseModuleIO
 			}	
 		}
 		
-	if (is_array($result_array) and count($result_array) >= 1)
+		if (is_array($result_array) and count($result_array) >= 1)
 		{		
 			foreach($result_array as $key => $value)
 			{	

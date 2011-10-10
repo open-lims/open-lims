@@ -1,3 +1,26 @@
+
+/* Sample Detail */
+
+.SampleDetailGeneral
+{
+	float: left;
+}
+.SampleDetailGeneral div.ContentBoxMain
+{
+	min-height: 400px;
+}
+.SampleDetailMenu
+{
+	float: right;
+}
+.SampleDetailMenu div.ContentBoxMain
+{
+	min-height: 400px;
+}
+
+
+/* Sample Barcode */
+
 .SampleBarcode {
 	width: 95%;
 	padding: 10px;
@@ -15,6 +38,9 @@
 .SampleBarcodeImage {
 	clear: both;
 }
+
+
+/* Sample Structure */
 
 .SampleStructureArea {
 	border-bottom: 1px #D0D0D0 dotted;
