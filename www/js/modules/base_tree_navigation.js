@@ -77,7 +77,7 @@ function base_tree_nav(id, name, ajax_handler)
     	inserted_element_event_handler = event_handler;
     }
 
-    function get_list_element(layer,current_id,name,open,symbol,link,clickable,permission) 
+    function get_list_element(layer,current_id,name,open,symbol,link,clickable,permission,is_folder) 
     {
 		var li = $("<li></li>");
 		if (!clickable) 
@@ -110,6 +110,10 @@ function base_tree_nav(id, name, ajax_handler)
 		{
 			$(div).addClass(tree_name+"Closed");
 		}
+		if(is_folder)
+		{
+			$(div).addClass(tree_name+"IsEmptyFolder");
+		}
 		if(element_to_insert.length > 0 && clickable && permission)
 		{
 			for ( var int = 0; int < element_to_insert.length; int++) {
@@ -128,8 +132,7 @@ function base_tree_nav(id, name, ajax_handler)
 	{
 		$("."+tree_name+"Open > table > tbody > tr > td:nth-child(1) > a:nth-child(1) > img").attr("src","images/minus.png");
 		$("."+tree_name+"Closed > table > tbody > tr > td:nth-child(1) > a:nth-child(1) > img").attr("src", "images/plus.png");
-		
-		$(".Leaf > table > tbody > tr > td:nth-child(1) > a:nth-child(1) > img").attr("src", "images/icons/dot.png");
+		$("."+tree_name+"IsEmptyFolder > table > tbody > tr > td:nth-child(1) > a:nth-child(1) > img").attr("src", "images/icons/dot.png");
 		
 		$(".NotPermitted").each(function(){
 			var src = $(this).children("div").children("table").children("tbody").children("tr").children("td:nth-child(2)").children("a").children("img").attr("src");
@@ -251,6 +254,12 @@ function base_tree_nav(id, name, ajax_handler)
 							entry_open = false;
 						}
 						
+						var is_empty_folder = false;
+						if ($(this).children("div").hasClass(tree_name+"IsEmptyFolder")) 
+						{
+							is_empty_folder = true;
+						}
+						
 						var entry_clickable = true;
 						var entry_permission = true;
 						if ($(this).hasClass("NotClickable")) 
@@ -271,7 +280,7 @@ function base_tree_nav(id, name, ajax_handler)
 						new_array_element[5] = entry_clickable;
 						new_array_element[6] = entry_link;
 						new_array_element[7] = entry_open;
-					//	new_array_element[8] = //
+						new_array_element[8] = is_empty_folder;
 	
 						new_array.push(new_array_element);
 					}
@@ -346,7 +355,9 @@ function base_tree_nav(id, name, ajax_handler)
 						var link = $(this)[6];
 						var clickable = $(this)[5]; 
 						var permission = $(this)[4];
-						var li = get_list_element(layer,current_id,name,open,symbol,link,clickable,permission);
+						var is_empty_folder = !$(this)[8];
+						console.log(name+" is empty: "+is_empty_folder);
+						var li = get_list_element(layer,current_id,name,open,symbol,link,clickable,permission,is_empty_folder);
 						function recursively_check_where_to_insert() 
 						{
 							if(open_elements_list.length > 0)
@@ -410,6 +421,7 @@ function base_tree_nav(id, name, ajax_handler)
 		
 		var href = $(target_div).children("table").children("tbody").children("tr").children("td:nth-child(2)").children("a").attr("href");
 		follow_link_now = true;
+		close_open_entry = false;
 		if(follow_link)
 		{
 			if($(target_div).parent().hasClass("NotClickable") || $(target_div).parent().hasClass("NotPermitted"))
@@ -419,6 +431,7 @@ function base_tree_nav(id, name, ajax_handler)
 			if ($(target).attr("src") == "images/minus.png" || $(target).attr("src") == "images/plus.png") 
 			{
 				follow_link_now = false;
+				close_open_entry = true;
 			}
 			else 
 			{
@@ -435,25 +448,38 @@ function base_tree_nav(id, name, ajax_handler)
 	
 		if ($(target_div).hasClass(tree_name+"Open")) 
 		{
-			$(target_div).attr("class", tree_name+"Closed");
-			var num_children = $(target_div).parent().children("ul").size();
-			var ul_to_slide = $(target_div).parent().children("ul");
-			if(num_children > 0)
+			if(close_open_entry)
 			{
-				$(ul_to_slide).slideUp("fast",
-					function() {
-						$(this).remove();
-						update_icons();
-						update_scrollbar();
-						parse_array();
-						$("#" + tree_id).bind("click",handler);
-					}
-				);
+				$(target_div).attr("class", tree_name+"Closed");
+				var num_children = $(target_div).parent().children("ul").size();
+				var ul_to_slide = $(target_div).parent().children("ul");
+				if(num_children > 0)
+				{
+					$(ul_to_slide).slideUp("fast",
+						function() {
+							$(this).remove();
+							update_icons();
+							update_scrollbar();
+							parse_array();
+							$("#" + tree_id).bind("click",handler);
+						}
+					);
+				}
+				else
+				{
+					update_icons();
+				}
 			}
 			else
 			{
 				update_icons();
+				update_scrollbar();
+				parse_array();
 				$("#" + tree_id).bind("click",handler);
+				if (follow_link_now) 
+				{
+					window.location.href = href;
+				}
 			}
 		} 
 		else if ($(target_div).hasClass(tree_name+"Closed")) 
@@ -504,10 +530,9 @@ function base_tree_nav(id, name, ajax_handler)
 					}
 					else
 					{
-//						$(parent_li).children("div").addClass("Leaf");
 						update_icons();
 						parse_array();
-						$("#" + tree_id).bind("click",handler);s
+						$("#" + tree_id).bind("click",handler);
 						if (follow_link_now) 
 						{
 							window.location.href = href;

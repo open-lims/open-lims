@@ -40,6 +40,16 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 		load_content(sort_value, sort_method, page);
 	}
 	
+	this.get_argument_array = function()
+	{
+		return argument_array;
+	}
+	
+	this.set_argument_array = function(array)
+	{
+		argument_array = array;
+	}
+	
 	function count_entries()
 	{		
 		$.ajax(
@@ -242,4 +252,5 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 			load_content(sort_value, sort_method, page);
 		});
 	});
+	
 }

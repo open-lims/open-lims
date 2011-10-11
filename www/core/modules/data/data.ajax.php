@@ -232,6 +232,7 @@ class DataAjax extends Ajax
 							unset($list_array[$key][name]);
 							$list_array[$key][name][content] = $tmp_name;
 							$list_array[$key][name][link] = $params;
+							$list_array[$key][name]['class'] = "DataBrowserIsFolder";
 						}
 						else
 						{
