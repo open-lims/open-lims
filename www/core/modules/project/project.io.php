@@ -1065,7 +1065,10 @@ class ProjectIO
 						    		array_unshift($path_stack_array, $temp_array);
 						    	}
 								
-								$session->write_value("stack_array", $path_stack_array, true);
+						    	if (!$_GET[folder_id])
+						    	{
+									$session->write_value("stack_array", $path_stack_array, true);
+						    	}
 							}
 							
 							$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_list", $_GET[dialog]);

@@ -17,7 +17,7 @@ $(document).ready(function()
 			{
 				if (data)
 				{
-					$("#ManufacturerDialogContent").html(data);
+					$("#ManufacturerDialogContentTbody").html(data);
 					$.ajax(
 					{
 						type: "GET",
@@ -27,7 +27,7 @@ $(document).ready(function()
 						{
 							if (parseInt(data) > max_entries)
 							{
-								$("#ManufacturerDialogContent").append("<tr><td colspan='2'><div id='ManufacturerDialogContentMore'><a href='#'>more...</a></div></td></tr>");
+								$("#ManufacturerDialogContentTbody").append("<tr><td colspan='2'><div id='ManufacturerDialogContentMore'><a href='#'>more...</a></div></td></tr>");
 								$( "#ManufacturerDialogContentMore" ).click(function()
 								{	
 									max_entries = max_entries + 25;
@@ -39,7 +39,7 @@ $(document).ready(function()
 				}
 				else
 				{
-					$("#ManufacturerDialogContent").html("<tr><td colspan='2'>No Entries found!</td></tr>");
+					$("#ManufacturerDialogContentTbody").html("<tr><td colspan='2'>No Entries found!</td></tr>");
 				}
 			}
 		});
@@ -91,7 +91,7 @@ $(document).ready(function()
 		{
 			var data = $("#ManufacturerDialogContent").html();
 			
-			$("#ManufacturerDialogContent").html("<thead><tr id='ManufacturerDialogNewFieldTr'>"+
+			$("#ManufacturerDialogContent").html("<thead id='ManufacturerDialogNewFieldThead'><tr id='ManufacturerDialogNewFieldTr'>"+
 													"<td><input type='text' id='ManufacturerDialogNewField' /></td>"+
 													"<td><a href='#' id='ManufacturerDialogNewFieldButtonAdd'><img src='images/icons/add.png' alt='+' class='ManufacturerDialogNewFieldButton' /></a>"+
 														"<a href='#' id='ManufacturerDialogNewFieldButtonCancel'><img src='images/icons/cancel.png' alt='X'' class='ManufacturerDialogNewFieldButton' /></a></td>"+
@@ -125,7 +125,7 @@ $(document).ready(function()
 			{
 				type: "POST",
 				url: "core/modules/manufacturer/manufacturer.ajax.php?session_id="+get_array['session_id']+"&run=exist_name",
-				data: "name="+$("MmanufacturerDialogNewField").val(),
+				data: "name="+$("#ManufacturerDialogNewField").val(),
 				success: function(data)
 				{
 					if (data == 0)
@@ -139,6 +139,7 @@ $(document).ready(function()
 							{
 								if (data == 1)
 								{
+									$("#ManufacturerDialogNewFieldThead").detach();
 									reload_content();
 								}
 							}
@@ -150,7 +151,7 @@ $(document).ready(function()
 		
 		$( "#ManufacturerDialogNewFieldButtonCancel" ).click(function()
 		{
-			$("#ManufacturerDialogNewFieldTr").detach();
+			$("#ManufacturerDialogNewFieldThead").detach();
 		});
 		
 	});
@@ -170,5 +171,7 @@ $(document).ready(function()
 	</div>
 	<div style='border-bottom: 1px #D0D0D0 solid; margin: 5px 0;'></div>
 	<table id='ManufacturerDialogContent' width='100%'>
+		<tbody id='ManufacturerDialogContentTbody'>
+		</tbody>
 	</table>
 </div>

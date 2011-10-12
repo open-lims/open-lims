@@ -284,9 +284,24 @@ class ValueIO
 						{
 							$major = true;
 						}
-						else
+						elseif($_POST[submitbutton] == "minor")
 						{
 							$major = false;
+						}
+						else
+						{
+							// Internet Explorer Crap
+							/**
+							 * @todo find workaround
+							 */
+							if (stripos($_POST[submitbutton], "minor") !== false)
+							{
+								$major = false;
+							}
+							else
+							{
+								$major = true;
+							}
 						}
 			
 						if ($_GET[version])
