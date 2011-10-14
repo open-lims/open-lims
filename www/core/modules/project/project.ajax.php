@@ -299,7 +299,7 @@ class ProjectAjax extends Ajax
 			{				
 				foreach($list_array as $key => $value)
 				{
-				$tmp_name = trim($list_array[$key][name]);
+					$tmp_name = trim($list_array[$key][name]);
 					unset($list_array[$key][name]);
 					
 					if (strlen($tmp_name) > 28)
@@ -373,7 +373,7 @@ class ProjectAjax extends Ajax
 					else
 					{
 						$project_id = $list_array[$key][id];
-						$project_security = new ProjectSecurity($sample_id);
+						$project_security = new ProjectSecurity($project_id);
 						
 						if ($project_security->is_access(1, false))
 						{

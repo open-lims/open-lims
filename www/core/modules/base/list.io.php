@@ -158,7 +158,7 @@ class List_IO
 				
 				if ($value[2] != null)
 				{
-					$head .= "<th width='".$value[2]."' class='".$this->css_main_id."Row' id='".$this->css_main_id."Row".$value[1]."'>" .
+					$head .= "<th width='".$value[2]."'  style='width:".$value[2].";' class='".$this->css_main_id."Row' id='".$this->css_main_id."Row".$value[1]."'>" .
 									"<a href='#'>".$value[0]."</a>" .
 									"&nbsp;<a href='#'>" .
 											"<img src='images/nosort.png' alt='' border='0' />" .
@@ -180,7 +180,7 @@ class List_IO
 			{
 				if ($value[2] != null)
 				{
-					$head .= "<th width='".$value[2]."'>".$value[0]."</th>";
+					$head .= "<th width='".$value[2]."' style='width:".$value[2].";'>".$value[0]."</th>";
 				}
 				else
 				{

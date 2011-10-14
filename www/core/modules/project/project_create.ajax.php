@@ -82,6 +82,8 @@ class ProjectCreateAjax extends Ajax
 									$result[$counter][selected] = "";
 								}
 			
+								$result[$counter][disabled] = "";
+								
 								$counter++;
 							}
 						}
@@ -91,6 +93,8 @@ class ProjectCreateAjax extends Ajax
 					{
 						$result[$counter][value] = "0";
 						$result[$counter][content] = "NO ORGANISATION UNIT FOUND!";	
+						$result[$counter][selected] = "";
+						$result[$counter][disabled] = "disabled='disabled'";
 					}
 					$template->set_var("option",$result);
 				}
@@ -129,6 +133,8 @@ class ProjectCreateAjax extends Ajax
 								$result[$counter][selected] = "";
 							}
 		
+							$result[$counter][disabled] = "";
+							
 							$counter++;
 							
 							unset($pre_content);
@@ -139,6 +145,7 @@ class ProjectCreateAjax extends Ajax
 						$result[$counter][value] = "0";
 						$result[$counter][content] = "NO PROJECT FOUND!";
 						$result[$counter][selected] = "";
+						$result[$counter][disabled] = "disabled='disabled'";
 					}
 					$template->set_var("option",$result);
 				}
@@ -250,7 +257,8 @@ class ProjectCreateAjax extends Ajax
 				else
 				{
 					$result[$counter][value] = "0";
-					$result[$counter][content] = "NO TEMPLATES FOUND!";		
+					$result[$counter][content] = "NO TEMPLATES FOUND!";	
+					$result[$counter][selected] = "";	
 					$result[$counter][disabled] = "disabled='disabled'";
 				}
 		
