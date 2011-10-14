@@ -75,9 +75,9 @@ class DataSearchIO
 					if ($_GET[nextpage] == "1")
 					{
 						$name = $_POST[name];
-						if ($_GET[folder_id])
+						if ($_POST[folder_id])
 						{
-							$folder_id = $_GET[folder_id];
+							$folder_id = $_POST[folder_id];
 						}
 						else
 						{
