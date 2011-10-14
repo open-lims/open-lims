@@ -40,6 +40,16 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 		load_content(sort_value, sort_method, page);
 	}
 	
+	this.get_argument_array = function()
+	{
+		return argument_array;
+	}
+	
+	this.set_argument_array = function(array)
+	{
+		argument_array = array;
+	}
+	
 	function count_entries()
 	{		
 		$.ajax(
@@ -126,24 +136,6 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 				$("#"+css_main_id).contents().detach();
 				$("#"+css_main_id).append(data);
 				$("#"+css_main_id).height("auto");
-				
-//				var new_height = $("#"+css_main_id).height();
-//				
-//				
-//				$("#"+css_main_id).height(local_height);
-//				
-//				if(new_height >= local_height)
-//				{
-//					$("#"+css_main_id).fadeIn().animate({height:new_height},5000);
-//				}
-//				else
-//				{
-//					$("#"+css_main_id).slideUp("slow");
-//				}
-//				
-//				
-//				console.log(local_height+" "+new_height);
-				
 			}
 		});
 	}
@@ -242,4 +234,5 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 			load_content(sort_value, sort_method, page);
 		});
 	});
+	
 }

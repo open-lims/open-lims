@@ -115,17 +115,39 @@ class ListRequest_IO
 					{
 						$return .= "<td>";
 						
-						if ($row_value[4])
+						if ($content[$row_value[1]]['class'])
 						{
-							if ($this->array[$key]['id'])
+							if ($row_value[4])
 							{
-								$return .= "<div class='".$row_value[4]."' id='".$row_value[4]."".$this->array[$key]['id']."'>";
+								if ($this->array[$key]['id'])
+								{
+									$return .= "<div class='".$row_value[4]." ".$content[$row_value[1]]['class']."' id='".$row_value[4]."".$this->array[$key]['id']."'>";
+								}
+								else
+								{
+									$return .= "<div class='".$row_value[4]." ".$content[$row_value[1]]['class']."'>";
+								}
 							}
 							else
 							{
-								$return .= "<div class='".$row_value[4]."'>";
+								$return .= "<div class='".$content[$row_value[1]]['class']."'>";
 							}
 						}
+						else
+						{
+							if ($row_value[4])
+							{
+								if ($this->array[$key]['id'])
+								{
+									$return .= "<div class='".$row_value[4]."' id='".$row_value[4]."".$this->array[$key]['id']."'>";
+								}
+								else
+								{
+									$return .= "<div class='".$row_value[4]."'>";
+								}
+							}
+						}
+						
 						
 						// !! LABEL !!
 						if (is_array($content[$row_value[1]]))
