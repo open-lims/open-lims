@@ -138,7 +138,7 @@ class Data_Wrapper_Access
 			}
 			else
 			{
-				return true;
+				return false;
 			}
 		}
 		else

@@ -47,7 +47,7 @@ class FileIO
 					
 					$template = new Template("template/data/file_detail.html");
 					
-					$folder = Folder::get_instance($file->get_parent_folder());
+					$folder = Folder::get_instance($file->get_parent_folder_id());
 					
 					if ($_GET[version] and is_numeric($_GET[version]))
 					{

@@ -102,6 +102,9 @@ class SampleCloneAjax extends Ajax
 							{
 								$result[$counter][selected] = "";
 							}
+							
+							$result[$counter][disabled] = "";
+							
 							$counter++;
 						}
 					}
@@ -111,6 +114,8 @@ class SampleCloneAjax extends Ajax
 				{
 					$result[$counter][value] = "0";
 					$result[$counter][content] = "NO SAMPLE FOUND!";
+					$result[$counter][selected] = "";
+					$result[$counter][disabled] = "disabled='disabled'";
 				}
 		
 				$template->set_var("option",$result);

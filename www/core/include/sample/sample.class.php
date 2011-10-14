@@ -185,16 +185,6 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 							}
 							throw new SampleCreationFailedException("",1);
 						}
-							
-						if ($sub_folder->set_flag(1024) == false)
-						{
-							$sample_folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							throw new SampleCreationFailedException("",1);
-						}
 						
 						$sub_folder_name_array[$sub_folder_id] = strtolower(trim($value));
     				}

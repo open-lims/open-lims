@@ -298,11 +298,6 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 				{
 					return null;
 				}
-				if ($this->set_flag(32) == false)
-				{
-					$this->delete(true, true);
-					return null;
-				}
 				
 				// Virtual Folders (Event)
 				$sample_folder_create_event = new SampleFolderCreateEvent($folder_id);

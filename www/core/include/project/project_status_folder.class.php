@@ -141,11 +141,6 @@ class ProjectStatusFolder extends Folder implements ConcreteFolderCaseInterface
 				{
 					return null;
 				}
-				if ($this->set_flag(256) == false)
-				{
-					$this->delete(true, true);
-					return null;
-				}
 				
 				return $folder_id;
 			}

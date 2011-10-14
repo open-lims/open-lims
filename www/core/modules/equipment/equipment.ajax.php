@@ -37,9 +37,17 @@ class EquipmentAjax extends Ajax
 		parent::__construct();
 	}
 	
-	private function list_equipment_items($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
+	private function list_equipment_items($json_row_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
 	{		
-		$argument_array = json_decode($json_argument_array);
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}	
+		
+		if ($json_argument_array)
+		{
+			$argument_array = json_decode($json_argument_array);
+		}
 		
 		$handling_class = Item::get_holder_handling_class_by_name($argument_array[0][1]);
 		if ($handling_class)
@@ -157,7 +165,7 @@ class EquipmentAjax extends Ajax
 			switch($_GET[run]):
 	
 				case "list_equipment_items":
-					echo $this->list_equipment_items($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+					echo $this->list_equipment_items($_POST[row_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
 				case "count_equipment_items":

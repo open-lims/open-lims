@@ -3,7 +3,7 @@ $(document).ready(function()
 {
 	$("#AssistantNext").click(function()
 	{
-		if ($(".SampleCreateAssistantField[name='sample_organisation_unit'] option").is(":selected"))
+		if ($(".SampleCreateAssistantField[name='sample_organisation_unit'] option").is(":selected") && $(".SampleCreateAssistantField[name='sample_organisation_unit'] option").val() != "0")
 		{
 			assistant.load_next_page();
 		}
@@ -26,7 +26,7 @@ $(document).ready(function()
 	
 			<!-- FOREACH BEGIN ([[OPTION]]) -->
 	
-				<option value='[[OPTION:VALUE]]' [[OPTION:SELECTED]]>[[OPTION:CONTENT]]</option>
+				<option value='[[OPTION:VALUE]]' [[OPTION:SELECTED]] [[OPTION:DISABLED]]>[[OPTION:CONTENT]]</option>
 	
 			<!-- FOREACH END -->
 			

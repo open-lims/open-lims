@@ -39,8 +39,15 @@ class DataAjax extends Ajax
 	
 	private function list_data_browser($json_row_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
-		$_GET = unserialize($get_array);		
-		$argument_array = json_decode($json_argument_array);
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}	
+		
+		if ($json_argument_array)
+		{
+			$argument_array = json_decode($json_argument_array);
+		}
 		
 		$folder_id = $argument_array[0][1];
 		$virtual_folder_id = $argument_array[1][1];
@@ -59,18 +66,7 @@ class DataAjax extends Ajax
 		
 			if ($folder_id != 1 or $virtual_folder_id != null)
 			{
-				if ($virtual_folder_id)
-				{
-					$data_path = new DataPath(null, $virtual_folder_id);
-				}
-				elseif ($folder_id)
-				{
-					$data_path = new DataPath($folder_id, null);
-				}
-				else
-				{
-					$data_path = new DataPath(null, null);
-				}
+				$data_path = new DataPath(null, null);
 				
 				if ($data_path->get_previous_entry_virtual() == true)
 				{			

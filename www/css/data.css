@@ -87,3 +87,35 @@ margin-left:10px;
 /* position:absolute; */
 /* right:20px; */
 }
+
+/* FILE SEARCH MENU */
+
+#FileSearchList a
+{
+text-decoration: none;
+color: black;
+}
+
+#FileSearchList a:hover, 
+#FileSearchList a:focus,
+#FileSearchList a:visited,
+#FileSearchList a:active
+{
+text-decoration: underline;
+color: black;
+outline: none;
+}
+
+
+#FileSearchList ul li div
+{
+padding-top: 6px;
+padding-bottom: 4px;
+position:relative;
+border-bottom: dotted black 1px;
+}
+
+#FileSearchList ul li div table
+{
+width:100%;
+}

@@ -85,40 +85,6 @@ font-weight: bold;
 padding: 2px 2px 2px 5px;
 }
 
-
-/* FILE SEARCH MENU */
-
-#fileSearchList a
-{
-text-decoration: none;
-color: black;
-}
-
-#fileSearchList a:hover
-{
-text-decoration: underline;
-color: black;
-}
-
-#fileSearchList a:focus
-{
-outline: none;
-}
-
-#fileSearchList a:visited
-{
-color: black;
-}
-
-#fileSearchList ul li div
-{
-border-bottom: dotted black 1px;
-padding-top: 4px;
-padding-bottom: 4px;
-position:relative;
-}
-
-
 /* Small Tabs (ÜA) */
 #SmallTabContainer 
 {

@@ -211,16 +211,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						throw new ProjectCreationFailedException("",1);
 					}
 					
-					if ($supplementary_folder->set_flag(128) == false)
-					{
-						$project_folder->delete(true, true);
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						throw new ProjectCreationFailedException("",1);
-					}
-					
 					// Status Folder
 					$folder_array = array();
 					
@@ -286,16 +276,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 								
 								$sub_folder = Folder::get_instance(null);
 								if ($sub_folder->create($sub_value, $status_folder_id, $folder_path->get_path_string(), $user->get_user_id(), null) == null)
-								{
-									$project_folder->delete(true, true);
-									if ($transaction_id != null)
-									{
-										$transaction->rollback($transaction_id);
-									}
-									throw new ProjectCreationFailedException("",1);
-								}
-								
-								if ($sub_folder->set_flag(2048) == false)
 								{
 									$project_folder->delete(true, true);
 									if ($transaction_id != null)

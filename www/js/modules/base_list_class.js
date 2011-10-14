@@ -192,8 +192,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array,
 					// $("#"+css_main_id).html(data).hide().fadeIn("fast");
 					list_click_handler();
 				}
-
-			}
+				
 		});
 
 		// innere hilfsfunktion für load_content

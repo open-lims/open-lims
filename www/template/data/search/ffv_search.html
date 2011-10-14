@@ -23,21 +23,30 @@
 	</tr>
 	<tr>
 		<td>
-			<div id='fileSearchList'>
+			<div id='FileSearchList'>
 					<script type="text/javascript">
-						var tree_search = new base_tree_nav("fileSearchList","FileSearch","core/modules/data/folder.ajax.php");
+						var tree_search = new base_tree_nav("FileSearchList","FileSearch","core/modules/data/folder.ajax.php");
 						tree_search.set_scrollbar(false);
 						tree_search.set_follow_link(false);
 						tree_search.set_writeback(false);
 						var handler = function(element)
 						{
-							$(".searchRadioButton").attr("checked",false);
+							var parent = $(element).parent();
+							
+							$(".SearchRadioButton").each(function(){
+// 								$(this).removeAttr("checked");
+								var empty_radio = $("<input type='radio' class='SearchRadioButton OptionalTreeElement' />"); //checked='checked' 
+								$(this).parent().append(empty_radio);
+								
+								$(this).remove();
+							});
 							var current_id = $(element).attr("id");
-							var new_radio = $("<input type='radio' id='"+current_id+"' value='"+current_id+"' name='folder_id' class='optionalTreeElement searchRadioButton' checked/>");
-							$(element).parent().append(new_radio);
-							$(element).remove();
+							var new_radio = $("<input type='radio' id='"+current_id+"' value='"+current_id+"' name='folder_id' class='SearchRadioButton OptionalTreeElement' checked='checked' />"); 
+							$(new_radio).attr("checked","checked"); //extrawurst für safari
+							$(parent).children().remove();
+							$(parent).append(new_radio);
 						}
-						tree_search.add_element_to_insert($("<input type='radio' class='searchRadioButton'></input>"), handler);
+						tree_search.add_element_to_insert($("<input type='radio' class='SearchRadioButton OptionalTreeElement' />"), handler);
 						tree_search.init();
 					</script> 
 			</div>

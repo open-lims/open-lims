@@ -7,7 +7,7 @@ $(document).ready(function()
 {
 	$("#AssistantNext").click(function()
 	{
-		if ($(".ProjectCreateAssistantField[name='project_organisation_unit'] option").is(":selected"))
+		if ($(".ProjectCreateAssistantField[name='project_organisation_unit'] option").is(":selected") && $(".ProjectCreateAssistantField[name='project_organisation_unit'] option").val() != "0")
 		{
 			assistant.load_next_page();
 		}
@@ -30,7 +30,7 @@ $(document).ready(function()
 	
 			<!-- FOREACH BEGIN ([[OPTION]]) -->
 	
-			<option value='[[OPTION:VALUE]]' [[OPTION:SELECTED]]>[[OPTION:CONTENT]]</option>
+			<option value='[[OPTION:VALUE]]' [[OPTION:SELECTED]] [[OPTION:DISABLED]]>[[OPTION:CONTENT]]</option>
 	
 			<!-- FOREACH END -->
 	
@@ -56,7 +56,7 @@ $(document).ready(function()
 {
 	$("#AssistantNext").click(function()
 	{
-		if ($(".ProjectCreateAssistantField[name='project_toid'] option").is(":selected"))
+		if ($(".ProjectCreateAssistantField[name='project_toid'] option").is(":selected")  && $(".ProjectCreateAssistantField[name='project_toid'] option").val() != "0")
 		{
 			assistant.load_next_page();
 		}
@@ -79,7 +79,7 @@ $(document).ready(function()
 	
 			<!-- FOREACH BEGIN ([[OPTION]]) -->
 	
-			<option value='[[OPTION:VALUE]]' [[OPTION:SELECTED]]>[[OPTION:CONTENT]]</option>
+			<option value='[[OPTION:VALUE]]' [[OPTION:SELECTED]] [[OPTION:DISABLED]]>[[OPTION:CONTENT]]</option>
 	
 			<!-- FOREACH END -->
 	

@@ -69,6 +69,9 @@ class SampleCreateAjax extends Ajax
 						{
 							$result[$counter][selected] = "";
 						}
+						
+						$result[$counter][disabled] = "";
+						
 						$counter++;
 					}
 				}
@@ -77,6 +80,8 @@ class SampleCreateAjax extends Ajax
 				{
 					$result[$counter][value] = "0";
 					$result[$counter][content] = "NO ORGANISATION UNIT FOUND!";
+					$result[$counter][selected] = "";
+					$result[$counter][disabled] = "disabled='disabled'";
 				}
 		
 				$template->set_var("option",$result);
@@ -119,6 +124,9 @@ class SampleCreateAjax extends Ajax
 							{
 								$result[$counter][selected] = "";
 							}
+							
+							$result[$counter][disabled] = "";
+							
 							$counter++;
 						}
 					}
@@ -127,6 +135,8 @@ class SampleCreateAjax extends Ajax
 				{
 					$result[$counter][value] = "0";
 					$result[$counter][content] = "NO TEMPLATES FOUND!";
+					$result[$counter][selected] = "";
+					$result[$counter][disabled] = "disabled='disabled'";
 				}
 				$template->set_var("option",$result);
 				

@@ -152,11 +152,6 @@ class OrganisationUnitFolder extends Folder implements ConcreteFolderCaseInterfa
 				{
 					return false;
 				}
-				if ($this->set_flag(8) == false)
-				{
-					$this->delete(true, true);
-					return false;
-				}
 									
 				// Virtual Folders (Event)
 				$organisation_unit_folder_create_event = new OrganisationUnitFolderCreateEvent($folder_id);

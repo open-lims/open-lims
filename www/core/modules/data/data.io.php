@@ -97,17 +97,20 @@ class DataIO
 			if ($folder_id == null and $virtual_folder_id == null)
 			{
 				$folder_id = $data_browser->get_folder_id();
-			}
-					
 				
-			// !!!!! ---------- !!!!!!!!!!!!!1
-			
-
+				$argument_array = array();
+				$argument_array[0][0] = "folder_id";
+				$argument_array[0][1] = $folder_id;
+				$argument_array[1][0] = "virtual_folder_id";
+				$argument_array[1][1] = null;
+			}
+	
 			$argument_array = array();
 			$argument_array[0][0] = "folder_id";
 			$argument_array[0][1] = $folder_id;
 			$argument_array[1][0] = "virtual_folder_id";
-			$argument_array[1][1] = $virtual_folder_id;
+			$argument_array[1][1] = $virtual_folder_id;	
+
 			
 			$list = new List_IO("DataBrowser", "/core/modules/data/data.ajax.php", "list_data_browser", "count_data_browser", $argument_array, "DataBrowserAjax");
 
