@@ -356,7 +356,9 @@ function base_tree_nav(id, name, ajax_handler)
 						var clickable = $(this)[5]; 
 						var permission = $(this)[4];
 						var is_empty_folder = !$(this)[8];
-						console.log(name+" is empty: "+is_empty_folder);
+						
+//						console.log(name+" is empty: "+is_empty_folder);
+						
 						var li = get_list_element(layer,current_id,name,open,symbol,link,clickable,permission,is_empty_folder);
 						function recursively_check_where_to_insert() 
 						{

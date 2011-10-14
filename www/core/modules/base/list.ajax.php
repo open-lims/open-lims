@@ -24,7 +24,8 @@
 /**
  * 
  */
-require_once("../base/ajax.php");
+require_once("..//base/ajax.php");
+require_once("../../include/data/folder/access/folder.access.php");
 
 /**
  * List AJAX IO Class
@@ -143,6 +144,11 @@ class ListAjax extends Ajax
 		return Common_IO::results_on_page($results, $pages);
 	}
 	
+	public function get_folder_name_by_id($folder_id)
+	{
+		return Folder_Access::get_name_by_id($folder_id);
+	}
+	
 	public function handler()
 	{
 		global $session;
@@ -157,6 +163,10 @@ class ListAjax extends Ajax
 				
 				case "get_page_information":
 					echo $this->get_page_information($_GET['number_of_entries'], $_GET['number_of_pages']);
+				break;
+				
+				case "get_folder_name_by_id":
+					echo $this->get_folder_name_by_id($_GET['folder_id']);
 				break;
 				
 			endswitch;
