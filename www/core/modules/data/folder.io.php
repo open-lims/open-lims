@@ -97,10 +97,6 @@ class FolderIO
 							
 					if ($new_folder->create($_POST[name], $_GET[folder_id], null, $user->get_user_id(), null))
 					{
-						if (!$user->is_admin())
-						{
-							$new_folder->set_flag(64);
-						}
 						Common_IO::step_proceed($params, "Add Folder", "Operation Successful", null);
 					}
 					else

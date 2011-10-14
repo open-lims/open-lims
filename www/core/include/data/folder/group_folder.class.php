@@ -152,12 +152,7 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 				{
 					return false;
 				}
-				if ($this->set_flag(4) == false)
-				{
-					$this->delete(true, true);
-					return false;
-				}
-										
+														
 				// Virtual Folders (Event)
 				$group_folder_create_event = new GroupFolderCreateEvent($folder_id);
 				$event_handler = new EventHandler($group_folder_create_event);

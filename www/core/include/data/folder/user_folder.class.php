@@ -158,11 +158,6 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 				{
 					return false;
 				}
-				if ($this->set_flag(2) == false)
-				{
-					$this->delete(true, true);
-					return false;
-				}
 				
 				// _Public
 				$public_path = new Path($path->get_path_string());
@@ -174,13 +169,7 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 					$this->delete();
 					return false;
 				}
-				
-				if ($public_folder->set_flag(512) == false)
-				{
-					$this->delete();
-					return false;
-				}
-				
+						
 				
 				// _Private
 				
@@ -193,12 +182,7 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 					$this->delete();
 					return false;
 				}
-				
-				if ($private_folder->set_flag(512) == false)
-				{
-					$this->delete();
-					return false;
-				}
+
 				
 				// Virtual Folders (Event)
 				$user_folder_create_event = new UserFolderCreateEvent($folder_id);
