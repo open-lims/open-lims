@@ -292,11 +292,6 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 				{
 					return null;
 				}
-				if ($this->set_flag(16) == false)
-				{
-					$this->delete(true, true);
-					return null;
-				}
 				
 				// Virtual Folder				
 				$project_folder_create_event = new ProjectFolderCreateEvent($folder_id);
