@@ -30,12 +30,13 @@
 	require_once("config/main.php");
 	require_once("core/db/db.php");
 	
-	require_once("core/include/base/transaction.class.php");
-	require_once("core/include/base/events/event.class.php");
-	require_once("core/include/base/system_handler.class.php");
-	require_once("core/include/base/session.class.php");
+	require_once("core/include/base/system/transaction.class.php");
+	require_once("core/include/base/system/events/event.class.php");
+	require_once("core/include/base/system/system_handler.class.php");
+	
+	require_once("core/include/base/security/session.class.php");
 
-	require_once("core/include/base/autoload.function.php");	
+	require_once("core/include/base/system/autoload.function.php");	
 
 	// External Libraries
 	require_once("libraries/tcpdf/config/lang/eng.php");

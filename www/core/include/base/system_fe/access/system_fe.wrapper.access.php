@@ -22,10 +22,10 @@
  */
  
 /**
- * Base Access Class
+ * Base System Frontend Access Class
  * @package base
  */
-class Base_Wrapper_Access
+class SystemFE_Wrapper_Access
 {
 	/**
 	 * @param integer $type_id
@@ -426,103 +426,7 @@ class Base_Wrapper_Access
 
 		return $data[result];
 	}
-	
-	/**
-	 * @param string $order_by
-	 * @param string $order_method
-	 * @param integer $start
-	 * @param integer $end
-	 * @return array
-	 */
-	public static function list_paper_sizes($order_by, $order_method, $start, $end)
-	{
-		global $db;
-	
-		if ($order_by and $order_method)
-		{
-			if ($order_method == "asc")
-			{
-				$sql_order_method = "ASC";
-			}
-			else
-			{
-				$sql_order_method = "DESC";
-			}
-			
-			switch($order_by):
-			
-				case "name":
-					$sql_order_by = "ORDER BY name ".$sql_order_method;
-				break;
-						
-				default:
-					$sql_order_by = "ORDER BY name ASC";
-				break;
-			
-			endswitch;
-		}
-		else
-		{
-			$sql_order_by = "ORDER BY name ASC";
-		}
-		
-		$sql = "SELECT ".constant("PAPER_SIZE_TABLE").".id, " .
-					"".constant("PAPER_SIZE_TABLE").".name, " .
-					"".constant("PAPER_SIZE_TABLE").".width, " .
-					"".constant("PAPER_SIZE_TABLE").".height, " .
-					"".constant("PAPER_SIZE_TABLE").".margin_left, " .
-					"".constant("PAPER_SIZE_TABLE").".margin_right, " .
-					"".constant("PAPER_SIZE_TABLE").".margin_top, " .
-					"".constant("PAPER_SIZE_TABLE").".margin_bottom, " .
-					"".constant("PAPER_SIZE_TABLE").".base, " .
-					"".constant("PAPER_SIZE_TABLE").".standard " .
-					"FROM ".constant("PAPER_SIZE_TABLE")." " .
-					"".$sql_order_by."";
-		
-		$return_array = array();
-		
-		$res = $db->db_query($sql);
-		
-		if (is_numeric($start) and is_numeric($end))
-		{
-			for ($i = 0; $i<=$end-1; $i++)
-			{
-				if (($data = $db->db_fetch_assoc($res)) == null)
-				{
-					break;
-				}
-				
-				if ($i >= $start)
-				{
-					array_push($return_array, $data);
-				}
-			}
-		}
-		else
-		{
-			while ($data = $db->db_fetch_assoc($res))
-			{
-				array_push($return_array, $data);
-			}
-		}
-		return $return_array;
-	}
-	
-	/**
-	 * @return integer
-	 */
-	public static function count_paper_sizes()
-	{
-		global $db;
 
-		$sql = "SELECT COUNT(".constant("PAPER_SIZE_TABLE").".id) AS result " .
-					 "FROM ".constant("PAPER_SIZE_TABLE")."";
-			
-		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
-
-		return $data[result];
-	}
 }
 
 ?>

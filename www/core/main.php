@@ -65,23 +65,25 @@ class Main
 			
 			set_error_handler('error_handler');
 			
-			require_once("include/base/events/event.class.php");
-			require_once("include/base/system_handler.class.php");
+			require_once("include/base/system/events/event.class.php");
+			require_once("include/base/system/system_handler.class.php");
 			
-			require_once("include/base/autoload.function.php");
+			require_once("include/base/system/autoload.function.php");
 			
 			if ($connection_result == true)
 			{
-				require_once("include/base/transaction.class.php");
+				require_once("include/base/system/transaction.class.php");
 				
 				$transaction = new Transaction();
 				
-				require_once("include/base/security.class.php");
-				require_once("include/base/system_log.class.php");
+				require_once("include/base/security/security.class.php");
+				require_once("include/base/security/session.class.php");
+				
+				require_once("include/base/system/runtime_data.class.php");
+				
+				require_once("include/base/system_fe/system_log.class.php");
 				require_once("include/base/misc.class.php");
-				require_once("include/base/session.class.php");
-				require_once("include/base/runtime_data.class.php");
-	
+
 				Security::protect_session();
 		
 				$misc = new Misc();

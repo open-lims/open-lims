@@ -40,7 +40,7 @@ class AdminGeneralAjax extends Ajax
 	
 	public function list_languages($page, $sortvalue, $sortmethod)
 	{		
-		$list = new ListStat_IO(Base_Wrapper::count_languages(), 20, "OrganisationUnitAdminListPage");
+		$list = new ListStat_IO(Environment_Wrapper::count_languages(), 20, "OrganisationUnitAdminListPage");
 
 		$list->add_row("","symbol",false,"16px");
 		$list->add_row("Name","name",true,null,"BaseGeneralAdminListSortName");
@@ -52,22 +52,22 @@ class AdminGeneralAjax extends Ajax
 		{
 			if ($sortvalue and $sortmethod)
 			{
-				$result_array = Base_Wrapper::list_languages($sortvalue, $sortmethod, ($page*20)-20, ($page*20));
+				$result_array = Environment_Wrapper::list_languages($sortvalue, $sortmethod, ($page*20)-20, ($page*20));
 			}
 			else
 			{
-				$result_array = Base_Wrapper::list_languages(null, null, ($page*20)-20, ($page*20));
+				$result_array = Environment_Wrapper::list_languages(null, null, ($page*20)-20, ($page*20));
 			}				
 		}
 		else
 		{
 			if ($sortvalue and $sortmethod)
 			{
-				$result_array = Base_Wrapper::list_languages($sortvalue, $sortmethod, 0, 20);
+				$result_array = Environment_Wrapper::list_languages($sortvalue, $sortmethod, 0, 20);
 			}
 			else
 			{
-				$result_array = Base_Wrapper::list_languages(null, null, 0, 20);
+				$result_array = Environment_Wrapper::list_languages(null, null, 0, 20);
 			}	
 		}
 		
@@ -93,7 +93,7 @@ class AdminGeneralAjax extends Ajax
 	
 	public function list_paper_sizes($page, $sortvalue, $sortmethod)
 	{
-		$list = new ListStat_IO(Base_Wrapper::count_paper_sizes(), 20, "OrganisationUnitAdminListPage");
+		$list = new ListStat_IO(Environment_Wrapper::count_paper_sizes(), 20, "OrganisationUnitAdminListPage");
 
 		$list->add_row("","symbol",false,"16px");
 		$list->add_row("Name","name",true,null,"BaseGeneralAdminListSortName");
@@ -110,22 +110,22 @@ class AdminGeneralAjax extends Ajax
 		{
 			if ($sortvalue and $sortmethod)
 			{
-				$result_array = Base_Wrapper::list_paper_sizes($sortvalue, $sortmethod, ($page*20)-20, ($page*20));
+				$result_array = Environment_Wrapper::list_paper_sizes($sortvalue, $sortmethod, ($page*20)-20, ($page*20));
 			}
 			else
 			{
-				$result_array = Base_Wrapper::list_paper_sizes(null, null, ($page*20)-20, ($page*20));
+				$result_array = Environment_Wrapper::list_paper_sizes(null, null, ($page*20)-20, ($page*20));
 			}				
 		}
 		else
 		{
 			if ($sortvalue and $sortmethod)
 			{
-				$result_array = Base_Wrapper::list_paper_sizes($sortvalue, $sortmethod, 0, 20);
+				$result_array = Environment_Wrapper::list_paper_sizes($sortvalue, $sortmethod, 0, 20);
 			}
 			else
 			{
-				$result_array = Base_Wrapper::list_paper_sizes(null, null, 0, 20);
+				$result_array = Environment_Wrapper::list_paper_sizes(null, null, 0, 20);
 			}	
 		}
 		
