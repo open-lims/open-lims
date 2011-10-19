@@ -45,45 +45,5 @@ interface SystemFE_WrapperInterface
      * @return integer
      */
 	public static function count_list_system_log($type_id);
-	
-	/**
-	 * @param integer $start
-	 * @param integer $end
-	 * @return array
-	 */
-	public static function list_base_module_navigation($start, $end);
-	
-	/**
-	 * @return integer
-	 */
-	public static function count_base_module_navigation();
-	
-	/**
-	 * @param string $order_by
-	 * @param string $order_method
-	 * @param integer $start
-	 * @param integer $end
-	 * @return array
-	 */
-	public static function list_base_module($order_by, $order_method, $start, $end);
-	
-	/**
-	 * @return integer
-	 */
-	public static function count_base_module();
-	
-	/**
-	 * @param string $order_by
-	 * @param string $order_method
-	 * @param integer $start
-	 * @param integer $end
-	 * @return array
-	 */
-	public static function list_base_include($order_by, $order_method, $start, $end);
-	
-	/**
-	 * @return integer
-	 */
-	public static function count_base_include();
 }
 ?>

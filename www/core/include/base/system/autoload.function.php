@@ -70,6 +70,8 @@ function __autoload($classname)
 	$classes['ModuleLink']					= $path_prefix."core/include/base/system/module_link.class.php";
 	$classes['ModuleNavigation']			= $path_prefix."core/include/base/system/module_navigation.class.php";
 	
+	$classes['System_Wrapper']				= $path_prefix."core/include/base/system/system.wrapper.class.php";
+	
 	
 	// System Frontend
 	$classes['SystemMessage']				= $path_prefix."core/include/base/system_fe/system_message.class.php";

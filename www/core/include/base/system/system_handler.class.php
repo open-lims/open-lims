@@ -890,7 +890,7 @@ class SystemHandler implements SystemHandlerInterface
 				}
 			}
 
-			// Delete legacy includes
+			// Delete legacy modules
 			$legacy_module_array = array_diff($registered_module_array, $found_module_array);			
 			if (is_array($legacy_module_array) and count($legacy_module_array) >= 1)
 			{
@@ -953,6 +953,16 @@ class SystemHandler implements SystemHandlerInterface
 						}
 						throw new ModuleProcessFailedException(null, null);
 					}
+					
+					if (BaseModuleDialog_Access::delete_by_module_id($legacy_key) == false)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						throw new ModuleProcessFailedException(null, null);
+					}
+					
 					$base_module = new BaseModule_Access($legacy_key);
 					if ($base_module->delete() == false)
 					{

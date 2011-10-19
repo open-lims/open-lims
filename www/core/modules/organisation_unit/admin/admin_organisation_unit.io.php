@@ -714,7 +714,7 @@ class AdminOrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
-			require_once("core/modules/user/user.io.php");
+			require_once("core/modules/base/user.io.php");
 			
 			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_member.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
@@ -736,7 +736,7 @@ class AdminOrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
-			require_once("core/modules/user/user.io.php");
+			require_once("core/modules/base/user.io.php");
 			
 			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_group.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
@@ -758,7 +758,7 @@ class AdminOrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
-			require_once("core/modules/user/user.io.php");
+			require_once("core/modules/base/user.io.php");
 			
 			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_owner.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
@@ -780,7 +780,7 @@ class AdminOrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
-			require_once("core/modules/user/user.io.php");
+			require_once("core/modules/base/user.io.php");
 			
 			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_leader.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
@@ -802,7 +802,7 @@ class AdminOrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
-			require_once("core/modules/user/user.io.php");
+			require_once("core/modules/base/user.io.php");
 			
 			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_quality_manager.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");

@@ -37,6 +37,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Regional Class
  * Handles Languages and Timezones
  * @package base
+ * @todo put methods into their classes and create new methods for information about the current loged on user
  */
 class Regional implements RegionalInterface
 {
