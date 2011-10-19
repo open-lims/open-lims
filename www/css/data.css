@@ -1,5 +1,28 @@
 @CHARSET "ISO-8859-1";
 
+/* DATA BROWSER */
+.DataBrowserFileHover
+{
+background-color:#c3c3c3;
+}
+
+.DataBrowserFileSelected
+{
+background-color:#66ccff;
+border: solid black 1px;
+filter: alpha(opacity=80);
+width:100%;
+-moz-opacity:0.8; 
+}
+
+#DataBrowserFileDialog
+{
+background-color:#ffffff;
+border:solid black 1px;
+border-top:none;
+}
+
+
 /* DATA UPLOAD*/
 
 #UploadUI
@@ -55,6 +78,7 @@ margin: 10px 0 10px 0;
 margin-bottom:5px;	
 }
 
+
 /* DATA AUTOFIELD */
 
 #af-description-tr
@@ -87,6 +111,7 @@ margin-left:10px;
 /* position:absolute; */
 /* right:20px; */
 }
+
 
 /* FILE SEARCH MENU */
 

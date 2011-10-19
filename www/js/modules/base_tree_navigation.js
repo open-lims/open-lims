@@ -39,6 +39,7 @@ function base_tree_nav(id, name, ajax_handler)
 	
 	var element_to_insert = new Array();
 	var inserted_element_event_handler = function(){};
+	var follow_link_handler = function(){};
 	
 	var max_menu_height;
   
@@ -52,6 +53,7 @@ function base_tree_nav(id, name, ajax_handler)
 	    base_tree_nav.prototype.add_element_to_insert = add_element_to_insert;
 	    base_tree_nav.prototype.set_loading_animation = set_loading_animation;
 	    base_tree_nav.prototype.set_follow_link = set_follow_link;
+	    base_tree_nav.prototype.set_follow_link_handler = set_follow_link_handler;
     }
 
     function set_loading_animation(bool)
@@ -69,6 +71,10 @@ function base_tree_nav(id, name, ajax_handler)
     
     function set_writeback(bool){
 	    write_back_array = bool;
+    }
+    
+    function set_follow_link_handler(handler){
+	    follow_link_handler = handler;
     }
     
     function add_element_to_insert($element, event_handler)
@@ -155,13 +161,13 @@ function base_tree_nav(id, name, ajax_handler)
 		
 		var content_div_height = $("#content").css("height").replace("px", "");
 		max_menu_height = content_div_height;
+
 		var offset_bottom = 8; 
 		
 		if (max_menu_height < 500) 
 		{
 			max_menu_height = 500;
 		}
-		
 		var list_height = parseInt($("#"+tree_id).children("ul").css("height").replace("px",""));
 		var scroll_height = list_height + offset_bottom;
 
@@ -492,9 +498,9 @@ function base_tree_nav(id, name, ajax_handler)
 				update_scrollbar();
 				parse_array();
 				$("#" + tree_id).bind("click",handler);
-				if (follow_link_now) 
+				if(follow_link_now) 
 				{
-					window.location.href = href;
+					load_linked_contents(href);
 				}
 			}
 		} 
@@ -513,7 +519,7 @@ function base_tree_nav(id, name, ajax_handler)
 				data : "run=get_children&id=" + clicked_id + "&session_id=" + get_array['session_id'] + "&username=" + get_array['username'],
 				success : function(data) {
 					var child_array = $.parseJSON(data);
-					if (child_array != null && child_array.length != 0) 
+					if(child_array != null && child_array.length != 0) 
 					{
 						var ul = $("<ul class='" + tree_name + "Layer" + layer + " BaseTreeList'></ul>");				
 						
@@ -542,9 +548,9 @@ function base_tree_nav(id, name, ajax_handler)
 							update_scrollbar();
 							parse_array();
 							$("#" + tree_id).bind("click",handler);
-							if (follow_link_now) 
+							if(follow_link_now) 
 							{
-								window.location.href = href;
+								load_linked_contents(href);
 							}
 						});	
 					}
@@ -553,9 +559,9 @@ function base_tree_nav(id, name, ajax_handler)
 						update_icons();
 						parse_array();
 						$("#" + tree_id).bind("click",handler);
-						if (follow_link_now) 
+						if(follow_link_now) 
 						{
-							window.location.href = href;
+							load_linked_contents(href);
 						}
 					}
 				}
@@ -566,4 +572,12 @@ function base_tree_nav(id, name, ajax_handler)
 			}
 		}
 	}
+    
+    function load_linked_contents(href){
+    	var success = follow_link_handler(href);
+    	if(!success)
+    	{
+    		window.location.href = href;
+    	}
+    }
 }

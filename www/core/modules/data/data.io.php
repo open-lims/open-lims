@@ -131,6 +131,7 @@ class DataIO
 			
 			$template = new Template("template/data/data_browser.html");
 	
+			/*
 			if ($folder_id and !$virtual_folder_id)
 			{
 				if ($folder->is_write_access() == true)
@@ -169,12 +170,12 @@ class DataIO
 				$template->set_var("item_administration", false);
 			}
 			else
-			{
+			{ */
 				$template->set_var("add_file", false);
 				$template->set_var("folder_image", false);
 				$template->set_var("folder_administration", false);
 				$template->set_var("item_administration", false);
-			}
+			// } 
 			
 			$paramquery = $_GET;
 			$paramquery[action] = "image_browser_detail";

@@ -64,10 +64,21 @@ class DataAjax extends Ajax
 			
 			$list_array = DataBrowser::get_data_browser_array($folder_id, $virtual_folder_id, $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
 		
-			if ($folder_id != 1 or $virtual_folder_id != null)
+			if ($folder_id)
+			{
+				$data_path = new DataPath($folder_id, null);
+			}
+			elseif($virtual_folder_id)
+			{
+				$data_path = new DataPath(null, $virtual_folder_id);
+			}
+			else
 			{
 				$data_path = new DataPath(null, null);
-				
+			}
+			
+			if ($folder_id != 1 or $virtual_folder_id != null)
+			{
 				if ($data_path->get_previous_entry_virtual() == true)
 				{			
 					$paramquery = $_GET;
