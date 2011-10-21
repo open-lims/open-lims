@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE OLDL PUBLIC "-//OLDL 0.4//EN" "http://doctype.open-lims.org/oldl.dtd" >
+<OLDL>
+	<HEAD>
+		<ID>29000</ID>
+	 	<TITLE>Microscopy - Image (Parent/Master)</TITLE>
+		<DESC>Master/Parent-Template for Microsopy Imaging Experiments</DESC>
+		<VERSION>draft</VERSION>
+		<AUTHOR>The Open-LIMS Project</AUTHOR>
+	</HEAD>
+ 	<REQUIRED>  
+  	</REQUIRED>
+	<BODY>
+		<STATUS id="100">
+			<ITEM type="file" name="Add Shortlist RAW File" folder="shortlist raw" requirement="optional" occurrence="multiple"></ITEM>  
+			<ITEM type="file" name="Add TIF File" folder="tif" requirement="optional" occurrence="multiple"></ITEM>
+		</STATUS>
+	</BODY>
+</OLDL>
