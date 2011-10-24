@@ -25,6 +25,8 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 	var max_page = init_page;
 	var clickable_array;
 
+	var original_error_message;
+	
 	if (init_page == 1)
 	{
 		set_active(1);
@@ -167,7 +169,7 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 	this.load_next_page = function()
 	{
 		if (page < end_page)
-		{
+		{			
 			var data = read_data();
 			var current_page = page;
 			
@@ -236,9 +238,26 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 					}
 					else
 					{
-						$.unblockUI();
-						$( "#AssistantError" ).dialog( "open" );
-						return false;
+						if (!original_error_message)
+						{
+							original_error_message = $("#AssistantError").html();
+						}
+						
+						if ((data + '').indexOf("EXCEPTION",0) == 0)
+						{
+							var exception_message = data.replace("EXCEPTION: ","");
+							$("#AssistantError").html(exception_message);
+							$.unblockUI();
+							$("#AssistantError" ).dialog( "open" );
+							return false;
+						}
+						else
+						{
+							$("#AssistantError").html(original_error_message);
+							$.unblockUI();
+							$("#AssistantError" ).dialog( "open" );
+							return false;
+						}
 					}
 				}
 			});

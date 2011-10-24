@@ -259,11 +259,16 @@ class SessionValue_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".constant("SESSION_VALUE_TABLE")." WHERE session_id = '".$session_id."'";
+			$sql = "SELECT id,address,value FROM ".constant("SESSION_VALUE_TABLE")." WHERE session_id = '".$session_id."'";
 			$res = $db->db_query($sql);
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				$temp_array = array();
+				$temp_array['id'] = $data['id'];
+				$temp_array['address'] = $data['address'];
+				$temp_array['value'] = $data['value'];
+				array_push($return_array,$temp_array);
+				unset($temp_array);
 			}
 				
 			if (is_array($return_array))

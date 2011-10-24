@@ -1,6 +1,6 @@
 <?php
 /**
- * @package base
+ * @package project
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -21,30 +21,16 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /**
- * Exception Handler Interface
- * @package base
+ * Project Create Permission Group Exception
+ * @package project
  */
-interface DeprExceptionHandlerInterface
+class ProjectCreatePermissionGroupException extends ProjectException
 {
-	/**
-	 * Gets Exception and information and stores it in SystemLog
-	 * @param object $exception
-	 * @param integer $module
-	 * @param integer $layer
-	 * @param integer $error_type
-	 */
-	function __construct($exception, $module, $layer, $error_type);
-	
-	/**
-	 * @return integer
-	 */
-	public function get_error_no();
-	
-	/**
-	 * @return string
-	 */
-	public function get_error_message();
+    function __construct($message)
+    {
+    	parent::__construct($message);	
+    }   
 }
+
 ?>

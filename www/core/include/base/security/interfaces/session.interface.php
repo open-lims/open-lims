@@ -60,6 +60,11 @@ interface SessionInterface
 	public function get_user_id();
 	
 	/**
+     * @return integer
+     */
+	public function get_session_id();
+	
+	/**
      * Reads a value from current session
      * @param string $address
      * @return mixed
@@ -89,10 +94,18 @@ interface SessionInterface
      */
 	public function delete_value($address);
 	
+	
 	/**
      * Checks all existing sessions; destroys them, if invalid
      */
 	public static function check_all();
+	
+	/**
+     * @param string $session_id
+     * @return array
+     * Returns an array with all session data
+     */
+    public static function list_all_session_values($session_id);
 	
 	/**
      * Deletes all sessions of an user

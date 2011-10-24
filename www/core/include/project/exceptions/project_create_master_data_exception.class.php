@@ -22,15 +22,15 @@
  */
 
 /**
- * Project Creation Failed Exception
+ * Project Create MasterData Exception
  * @package project
  */
-class ProjectCreationFailedException extends Exception
+class ProjectCreateMasterDataException extends ProjectException
 {
-    function __construct($message, $code)
+    function __construct($message)
     {
-    	parent::__construct($message, $code);	
-    }  
+    	parent::__construct($message);	
+    }   
 }
 
 ?>

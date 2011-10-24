@@ -28,8 +28,6 @@ require_once("interfaces/project.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	require_once("exceptions/project_creation_failed_exception.class.php");
-	
 	require_once("access/project.access.php");
 	
 	require_once("access/project_has_item.access.php");
@@ -111,15 +109,27 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	 * @param integer $template_id
 	 * @param string $description
 	 * @return integer
+	 * @throws ProjectCreateException
+	 * @throws ProjectCreateProjectExistsException
+	 * @throws ProjectCreateStatusException
+	 * @throws ProjectCreateFolderException
+	 * @throws ProjectCreateStatusFolderException
+	 * @throws ProjectCreateStatusSubFolderException
+	 * @throws ProjectCreateSupplementaryFolderException
+	 * @throws ProjectCreateDescriptionException
+	 * @throws ProjectCreateMasterDataException
+	 * @throws ProjectCreatePermissionUserException
+	 * @throws ProjectCreatePermissionLeaderException
+	 * @throws ProjectCreatePermissionGroupException
+	 * @throws ProjectCreatePermissionOrganisationUnitException
+	 * @throws ProjectCreatePermissionQualityManagerException
 	 */
 	public function create($organisation_unit_id, $parent_project_id, $name, $owner_id, $template_id, $description)
 	{
 		global $transaction;
-
+		
 		if ($organisation_unit_id xor $parent_project_id)
 		{
-			$transaction_id = $transaction->begin();
-			
 			if ($name and $owner_id and $template_id and $description and $this->project)
 			{
 				if ($organisation_unit_id)
@@ -130,31 +140,38 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					{						
 						if (self::exist_project_name($organisation_unit_id, null, $name) == true)
 						{
-							throw new ProjectCreationFailedException("",1);
+							throw new ProjectCreateProjectExistsException("Project already exists in this Organisation Unit");
 						}
 					}
 					else
 					{
-						throw new ProjectCreationFailedException("",1);
+						throw new ProjectCreateException("Cannot access on this Organisation Unit");
 					}
 				}
 				else
 				{	
 					if (self::exist_project_name(null, $parent_project_id , $name) == true)
 					{
-						throw new ProjectCreationFailedException("",1);
-					
+						throw new ProjectCreateProjectExistsException("Project already exists in this Project");
 					}
 				}
+				
+				$transaction_id = $transaction->begin();
 				
 				$user = new User($owner_id);
 				$project_user = new ProjectUserData($owner_id);
 				$project_quota = $project_user->get_quota();
 		
 				// Create Project
-				$project_id = $this->project->create($organisation_unit_id, $parent_project_id, $name, $owner_id, $template_id, $project_quota);
-				
-				if ($project_id)
+				if (($project_id = $this->project->create($organisation_unit_id, $parent_project_id, $name, $owner_id, $template_id, $project_quota)) == null)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id, false);
+					}
+					throw new ProjectCreateException("Could not create Project in DB");
+				}
+				else
 				{
 					$this->__construct($project_id);
 					
@@ -166,9 +183,9 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					{
 						if ($transaction_id != null)
 						{
-							$transaction->rollback($transaction_id);
+							$transaction->rollback($transaction_id, false);
 						}
-						throw new ProjectCreationFailedException("",1);
+						throw new ProjectCreateStatusException("Could not create status");
 					}
 					
 					if ($organisation_unit_id)
@@ -191,9 +208,9 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						$project_folder->delete(true, true);
 						if ($transaction_id != null)
 						{
-							$transaction->rollback($transaction_id);
+							$transaction->rollback($transaction_id, false);
 						}
-						throw new ProjectCreationFailedException("",1);
+						throw new ProjectCreateFolderException("Could not create main folder");
 					}
 					
 					// Create Supplementary Folder
@@ -206,9 +223,9 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						$project_folder->delete();
 						if ($transaction_id != null)
 						{
-							$transaction->rollback($transaction_id);
+							$transaction->rollback($transaction_id, false);
 						}
-						throw new ProjectCreationFailedException("",1);
+						throw new ProjectCreateSupplementaryFolderException("Could not create supplementary folder");
 					}
 					
 					// Status Folder
@@ -241,9 +258,9 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 							$project_folder->delete(true, true);
 							if ($transaction_id != null)
 							{
-								$transaction->rollback($transaction_id);
+								$transaction->rollback($transaction_id, false);
 							}
-							throw new ProjectCreationFailedException("",1);
+							throw new ProjectCreateStatusFolderException("Could not create status folder");
 						}
 
 						$project_status = new ProjectStatus($value);
@@ -280,9 +297,9 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 									$project_folder->delete(true, true);
 									if ($transaction_id != null)
 									{
-										$transaction->rollback($transaction_id);
+										$transaction->rollback($transaction_id, false);
 									}
-									throw new ProjectCreationFailedException("",1);
+									throw new ProjectCreateStatusSubFolderException("Could not create status sub folder");
 								}
 	    					}
 	    				}	
@@ -295,9 +312,9 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						$project_folder->delete(true, true);
 						if ($transaction_id != null)
 						{
-							$transaction->rollback($transaction_id);
+							$transaction->rollback($transaction_id, false);
 						}
-						throw new ProjectCreationFailedException("",1);
+						throw new ProjectCreateDescriptionException("Could not create description value");
 					}
 					
 					$project_item = new ProjectItem($project_id);
@@ -310,9 +327,9 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						$project_folder->delete(true, true);
 						if ($transaction_id != null)
 						{
-							$transaction->rollback($transaction_id);
+							$transaction->rollback($transaction_id, false);
 						}
-						throw new ProjectCreationFailedException("",1);
+						throw new ProjectCreateDescriptionException("Could not create description item link");
 					}
 					
 					if ($project_item->set_required(true) == false)
@@ -320,9 +337,9 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						$project_folder->delete(true, true);
 						if ($transaction_id != null)
 						{
-							$transaction->rollback($transaction_id);
+							$transaction->rollback($transaction_id, false);
 						}
-						throw new ProjectCreationFailedException("",1);
+						throw new ProjectCreateDescriptionException("Could not create description item role");
 					}
 					
 					// Create Project Master Data
@@ -335,9 +352,9 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 							$project_folder->delete(true, true);
 							if ($transaction_id != null)
 							{
-								$transaction->rollback($transaction_id);
+								$transaction->rollback($transaction_id, false);
 							}
-							throw new ProjectCreationFailedException("",1);
+							throw new ProjectCreateMasterDataException("Could not create master-data value");
 						}
 						
 						$project_item = new ProjectItem($project_id);
@@ -350,9 +367,9 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 							$project_folder->delete(true, true);
 							if ($transaction_id != null)
 							{
-								$transaction->rollback($transaction_id);
+								$transaction->rollback($transaction_id, false);
 							}	
-							throw new ProjectCreationFailedException("",1);
+							throw new ProjectCreateMasterDataException("Could not create master-data item link");
 						}
 						
 						if ($project_item->set_required(true) == false)
@@ -360,9 +377,9 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 							$project_folder->delete(true, true);
 							if ($transaction_id != null)
 							{
-								$transaction->rollback($transaction_id);
+								$transaction->rollback($transaction_id, false);
 							}
-							throw new ProjectCreationFailedException("",1);
+							throw new ProjectCreateMasterDataException("Could not create master-data item role");
 						}
 					}
 
@@ -371,16 +388,15 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					{
 						$organisation_unit = new OrganisationUnit($organisation_unit_id);
 	
-						// Project Permissions
 						$project_permission = new ProjectPermission(null);
 						if ($project_permission->create($owner_id, null, null, $project_id, constant("PROJECT_USER_STD_PERMISSION"), null, 1) == null)
 						{
 							$project_folder->delete(true, true);
 							if ($transaction_id != null)
 							{
-								$transaction->rollback($transaction_id);
+								$transaction->rollback($transaction_id, false);
 							}
-							throw new ProjectCreationFailedException("",1);
+							throw new ProjectCreatePermissionUserException("Could not create user/owner permission");
 						}
 					
 						$leader_array = $organisation_unit->list_leaders();
@@ -395,25 +411,22 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 									$project_folder->delete(true, true);
 									if ($transaction_id != null)
 									{
-										$transaction->rollback($transaction_id);
+										$transaction->rollback($transaction_id, false);
 									}
-									throw new ProjectCreationFailedException("",1);
+									throw new ProjectCreatePermissionLeaderException("Could not create leader permission");
 								}
 							}
 						}
-						
-						
-						// Virtual-Folder von OrganUnits und Groups
-					
+											
 						$project_permission = new ProjectPermission(null);
 						if ($project_permission->create(null, $organisation_unit_id, null, $project_id, constant("PROJECT_OU_STD_PERMISSION"), null, 3) == null)
 						{
 							$project_folder->delete(true, true);
 							if ($transaction_id != null)
 							{
-								$transaction->rollback($transaction_id);
+								$transaction->rollback($transaction_id, false);
 							}
-							throw new ProjectCreationFailedException("",1);
+							throw new ProjectCreatePermissionOrganisationUnitException("Could not create Organisation Unit permission");
 						}
 					
 						
@@ -429,9 +442,9 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 									$project_folder->delete(true, true);
 									if ($transaction_id != null)
 									{
-										$transaction->rollback($transaction_id);
+										$transaction->rollback($transaction_id, false);
 									}
-									throw new ProjectCreationFailedException("",1);
+									throw new ProjectCreatePermissionQualityManagerException("Could not create quality-manager permission");
 								}
 							}
 						}
@@ -448,9 +461,9 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 									$project_folder->delete(true, true);
 									if ($transaction_id != null)
 									{
-										$transaction->rollback($transaction_id);
+										$transaction->rollback($transaction_id, false);
 									}
-									throw new ProjectCreationFailedException("",1);
+									throw new ProjectCreatePermissionGroupException("Could not create group permissions");
 								}
 							}
 						}
@@ -463,23 +476,15 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					}
 					return $project_id;
 				}
-				else
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					throw new ProjectCreationFailedException("",1);
-				}
 			}
 			else
 			{
-				throw new ProjectCreationFailedException("",1);
+				throw new ProjectCreateException("Needed values are missing");
 			}
 		}
 		else
 		{
-			throw new ProjectCreationFailedException("",1);
+			throw new ProjectCreateException("Project target is ambiguous");
 		}
     }
 

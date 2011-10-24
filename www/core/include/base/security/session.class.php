@@ -109,7 +109,7 @@ class Session implements SessionInterface
     		
     		foreach($session_value_array as $key => $value)
     		{
-    			$session_value_access = new SessionValue_Access($value);
+    			$session_value_access = new SessionValue_Access($value['id']);
     			$session_value_access->delete();
     		}
     		
@@ -168,6 +168,22 @@ class Session implements SessionInterface
     	if ($this->user_id)
     	{
     		return $this->user_id;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+ 	/**
+     * @see SessionInterface::get_session_id()
+     * @return integer
+     */
+    public function get_session_id()
+    {
+    	if ($this->session_id)
+    	{
+    		return $this->session_id;
     	}
     	else
     	{
@@ -325,6 +341,24 @@ class Session implements SessionInterface
 				}	
 			}	
 		}	
+    }
+    
+    /**
+     * @see SessionInterface::list_all_session_values()
+     * @param string $session_id
+     * @return array
+     * Returns an array with all session data
+     */
+    public static function list_all_session_values($session_id)
+    {
+    	if ($session_id)
+    	{
+    		return SessionValue_Access::list_entries_by_session_id($session_id);
+    	}
+    	else
+    	{
+    		return null;
+    	}
     }
     
     /**

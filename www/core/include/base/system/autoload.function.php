@@ -38,7 +38,7 @@ function __autoload($classname)
 	}
 	
 	$classes['Communicator']				= $path_prefix."core/include/base/communicator.class.php";
-	$classes['ExceptionHandler']			= $path_prefix."core/include/base/exception_handler.class.php";
+	$classes['DeprExceptionHandler']			= $path_prefix."core/include/base/exception_handler.class.php";
 	
 	
 	// Neu
@@ -62,9 +62,11 @@ function __autoload($classname)
 	// System
 	$classes['EventListenerInterface']		= $path_prefix."core/include/base/system/interfaces/event_listener.interface.php"; 
 	
+	$classes['BaseException']				= $path_prefix."core/include/base/system/exceptions/base_exception.class.php";
 	$classes['IdMissingException']			= $path_prefix."core/include/base/system/exceptions/id_missing_exception.class.php";
 	
 	$classes['EventHandler']				= $path_prefix."core/include/base/system/event_handler.class.php";
+	$classes['ExceptionHandler']			= $path_prefix."core/include/base/system/exception_handler.class.php";
 	$classes['System']						= $path_prefix."core/include/base/system/system.class.php";
 	$classes['ModuleDialog']				= $path_prefix."core/include/base/system/module_dialog.class.php";
 	$classes['ModuleLink']					= $path_prefix."core/include/base/system/module_link.class.php";
@@ -74,6 +76,7 @@ function __autoload($classname)
 	
 	
 	// System Frontend
+	$classes['SystemLog']					= $path_prefix."core/include/base/system_fe/system_log.class.php";
 	$classes['SystemMessage']				= $path_prefix."core/include/base/system_fe/system_message.class.php";
 	
 	$classes['SystemFE_Wrapper']			= $path_prefix."core/include/base/system_fe/system_fe.wrapper.class.php";

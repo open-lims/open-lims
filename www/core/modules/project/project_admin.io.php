@@ -2291,11 +2291,11 @@ class ProjectAdminIO
 				if ($project_security->is_access(7, false) == true or
 					$project->get_owner_id() == $user->get_user_id())
 				{
-					$template->set_var("rename", true);
+					$template->set_var("owner_permission", true);
 				}
 				else
 				{
-					$template->set_var("rename", false);
+					$template->set_var("owner_permission", false);
 				}
 				
 				if ($project_security->is_access(6, false) == true)

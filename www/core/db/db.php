@@ -168,6 +168,11 @@ class Database
  	{
  		return $this->sql->sql_database_size();
  	}
+ 	
+	public function db_last_error()
+ 	{
+ 		return $this->sql->sql_last_error();
+ 	}
 }
 
 ?>

@@ -32,7 +32,7 @@ require_once("interfaces/exception_handler.interface.php");
  * Handles Exceptions with SystemLog
  * @package base
  */
-class ExceptionHandler implements ExceptionHandlerInterface
+class DeprExceptionHandler implements DeprExceptionHandlerInterface
 {
 	private $module;
 	private $layer;
@@ -48,7 +48,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
 	private $error_message;
 
 	/**
-	 * @see ExceptionHandlerInterface::__construct()
+	 * @see DeprExceptionHandlerInterface::__construct()
 	 * @param object $exception
 	 * @param integer $module
 	 * @param integer $layer
@@ -117,7 +117,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
 	}
 	
 	/**
-	 * @see ExceptionHandlerInterface::get_error_no()
+	 * @see DeprExceptionHandlerInterface::get_error_no()
 	 * @return integer
 	 */
 	public function get_error_no()
@@ -133,7 +133,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
 	}
 
 	/**
-	 * @see ExceptionHandlerInterface::get_error_message()
+	 * @see DeprExceptionHandlerInterface::get_error_message()
 	 * @return string
 	 */
     public function get_error_message()

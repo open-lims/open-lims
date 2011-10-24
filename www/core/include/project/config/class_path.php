@@ -24,7 +24,23 @@
 /**
  * 
  */
-	$classes['ProjectException']			= $path_prefix."core/include/project/exceptions/project_exception.class.php";
+	$classes['ProjectException']									= $path_prefix."core/include/project/exceptions/project_exception.class.php";
+	
+	$classes['ProjectCreateException']								= $path_prefix."core/include/project/exceptions/project_create_exception.class.php";
+	$classes['ProjectCreateProjectExistsException']					= $path_prefix."core/include/project/exceptions/project_create_project_exists_exception.class.php";
+	$classes['ProjectCreateStatusException']						= $path_prefix."core/include/project/exceptions/project_create_status_exception.class.php";
+	$classes['ProjectCreateFolderException']						= $path_prefix."core/include/project/exceptions/project_create_folder_exception.class.php";
+	$classes['ProjectCreateStatusFolderException']					= $path_prefix."core/include/project/exceptions/project_create_status_folder_exception.class.php";
+	$classes['ProjectCreateStatusSubFolderException']				= $path_prefix."core/include/project/exceptions/project_create_status_sub_folder_exception.class.php";
+	$classes['ProjectCreateSupplementaryFolderException']			= $path_prefix."core/include/project/exceptions/project_create_supplementary_folder_exception.class.php";
+	$classes['ProjectCreateDescriptionException']					= $path_prefix."core/include/project/exceptions/project_create_description_exception.class.php";
+	$classes['ProjectCreateMasterDataException']					= $path_prefix."core/include/project/exceptions/project_create_master_data_exception.class.php";
+	$classes['ProjectCreatePermissionUserException']				= $path_prefix."core/include/project/exceptions/project_create_permission_user_exception.class.php";
+	$classes['ProjectCreatePermissionLeaderException']				= $path_prefix."core/include/project/exceptions/project_create_permission_leader_exception.class.php";
+	$classes['ProjectCreatePermissionGroupException']				= $path_prefix."core/include/project/exceptions/project_create_permission_group_exception.class.php";
+	$classes['ProjectCreatePermissionOrganisationUnitException']	= $path_prefix."core/include/project/exceptions/project_create_permission_organisation_unit_exception.class.php";
+	$classes['ProjectCreatePermissionQualityManagerException']		= $path_prefix."core/include/project/exceptions/project_create_permission_quality_manager_exception.class.php";
+	
 	$classes['ProjectSecurityException']	= $path_prefix."core/include/project/exceptions/project_security_exception.class.php";
 		
 	$classes['Project'] 					= $path_prefix."core/include/project/project.class.php";

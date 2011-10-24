@@ -38,7 +38,7 @@ class Error_IO
 	 */
 	function __construct($exception, $module, $layer, $error_type)
 	{
-		$this->exception_handler = new ExceptionHandler($exception, $module, $layer, $error_type);
+		$this->exception_handler = new DeprExceptionHandler($exception, $module, $layer, $error_type);
 		$this->error_type = $error_type;
 	}
 	
