@@ -57,13 +57,21 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	/**
 	 * @see ProjectInterface::__construct()
 	 * @param integer $project_id
+	 * @throws ProjectNotFoundException
 	 */
 	function __construct($project_id)
 	{
 		if ($project_id == null)
 		{
-			$this->project_id = null;
-			$this->project = new Project_Access(null);
+			if (Project_Access::exist_project_by_project_id($project_id) == true)
+			{
+				$this->project_id = null;
+				$this->project = new Project_Access(null);
+			}
+			else
+			{
+				throw new ProjectNotFoundException();
+			}
 		}
 		else
 		{

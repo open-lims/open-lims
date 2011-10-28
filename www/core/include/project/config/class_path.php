@@ -27,7 +27,6 @@
 	$classes['ProjectException']									= $path_prefix."core/include/project/exceptions/project.exception.class.php";
 	
 	$classes['ProjectNotFoundException']							= $path_prefix."core/include/project/exceptions/project_not_found.exception.class.php";
-	$classes['ProjectMoveException']								= $path_prefix."core/include/project/exceptions/project_move.exception.class.php";
 	$classes['ProjectSetNextStatusException']						= $path_prefix."core/include/project/exceptions/project_set_next_status.exception.class.php";
 	$classes['ProjectUserSetQuotaException']						= $path_prefix."core/include/project/exceptions/project_user_set_quota.exception.class.php";
 	$classes['ProjectValueVarFailedException']						= $path_prefix."core/include/project/exceptions/project_value_var_failed.exception.class.php";
@@ -57,6 +56,11 @@
 	$classes['ProjectDeleteStatusException']						= $path_prefix."core/include/project/exceptions/project_delete_status.exception.class.php";
 	$classes['ProjectDeleteTaskException']							= $path_prefix."core/include/project/exceptions/project_delete_task.exception.class.php";
 	
+	$classes['ProjectMoveException']								= $path_prefix."core/include/project/exceptions/project_move.exception.class.php";
+	$classes['ProjectMoveFolderException']							= $path_prefix."core/include/project/exceptions/project_move_folder.exception.class.php";
+	$classes['ProjectMovePermissionException']						= $path_prefix."core/include/project/exceptions/project_move_permission.exception.class.php";
+	$classes['ProjectMoveProjectExistsException']					= $path_prefix."core/include/project/exceptions/project_move_project_exists.exception.class.php";
+	
 	$classes['ProjectSecurityException']							= $path_prefix."core/include/project/exceptions/project_security.exception.class.php";
 	$classes['ProjectSecurityAccessDeniedException']				= $path_prefix."core/include/project/exceptions/project_security_access_denied.exception.class.php";
 	$classes['ProjectSecurityInternalException']					= $path_prefix."core/include/project/exceptions/project_security_internal.exception.class.php";
@@ -71,6 +75,8 @@
 	$classes['ProjectLogCreateException']							= $path_prefix."core/include/project/exceptions/project_log_create.exception.class.php";
 	$classes['ProjectLogDeleteException']							= $path_prefix."core/include/project/exceptions/project_log_delete.exception.class.php";
 	$classes['ProjectLogNotFoundException']							= $path_prefix."core/include/project/exceptions/project_log_not_found.exception.class.php";
+	$classes['ProjectLogItemLinkException']							= $path_prefix."core/include/project/exceptions/project_log_item_link.exception.class.php";
+	$classes['ProjectLogItemDeleteException']						= $path_prefix."core/include/project/exceptions/project_log_item_delete.exception.class.php";
 	
 	$classes['ProjectPermissionException']							= $path_prefix."core/include/project/exceptions/project_permission.exception.class.php";
 	$classes['ProjectPermissionCreateException']					= $path_prefix."core/include/project/exceptions/project_permission_create.exception.class.php";

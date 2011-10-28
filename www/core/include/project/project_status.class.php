@@ -28,8 +28,6 @@ require_once("interfaces/project_status.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	require_once("exceptions/project_status_not_found_exception.class.php");
-	
 	require_once("access/project_status.access.php");
 	require_once("access/project_has_project_status.access.php");
 }

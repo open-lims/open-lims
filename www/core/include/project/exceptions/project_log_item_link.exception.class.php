@@ -22,14 +22,14 @@
  */
 
 /**
- * Project Move Exception
+ * Project Log Item Link Exception
  * @package project
  */
-class ProjectMoveException extends ProjectException
+class ProjectLogItemLinkException extends ProjectLogException
 {
-    function __construct($write_hdd_sql = true, $message = null)
+    function __construct($message = null)
     {
-    	parent::__construct(true, false, $write_hdd_sql, $message, null);	
+    	parent::__construct(true, false, true, $message);	
     }   
 }
 

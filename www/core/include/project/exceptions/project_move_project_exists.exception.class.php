@@ -22,14 +22,14 @@
  */
 
 /**
- * Project Move Exception
+ * Project Move Project Exists Exception
  * @package project
  */
-class ProjectMoveException extends ProjectException
+class ProjectMoveProjectExistsException extends ProjectMoveException
 {
-    function __construct($write_hdd_sql = true, $message = null)
+    function __construct($message = null)
     {
-    	parent::__construct(true, false, $write_hdd_sql, $message, null);	
+    	parent::__construct(false, $message);	
     }   
 }
 
