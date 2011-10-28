@@ -22,15 +22,15 @@
  */
 
 /**
- * Project Security Exception
+ * Project Task Create Attach Exception
  * @package project
  */
-class ProjectSecurityException extends Exception
+class ProjectTaskCreateAttachException extends ProjectTaskCreateException
 {
-    function __construct($message, $code)
+    function __construct($message = null)
     {
-    	parent::__construct($message, $code);	
-    }     
+    	parent::__construct($message);	
+    }   
 }
 
 ?>

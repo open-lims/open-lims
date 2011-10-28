@@ -22,15 +22,15 @@
  */
 
 /**
- * Project Template Not Found Exception
+ * Project Task Not Found Exception
  * @package project
  */
-class ProjectTemplateNotFoundException extends Exception
+class ProjectTaskNotFoundException extends ProjectTaskException
 {
-    function __construct($message, $code)
+    function __construct($message = null)
     {
-    	parent::__construct($message, $code);	
-    }     
+    	parent::__construct(true, false, false, $message);	
+    }   
 }
 
 ?>

@@ -22,14 +22,14 @@
  */
 
 /**
- * Project Exception
+ * Project Permission Delete User Exception
  * @package project
  */
-class ProjectCreateException extends ProjectException
+class ProjectPermissionDeleteUserException extends ProjectPermissionDeleteException
 {
-    function __construct($message)
+    function __construct($message = null)
     {
-    	parent::__construct(true, true, true, $message, null);	
+    	parent::__construct($message);	
     }   
 }
 

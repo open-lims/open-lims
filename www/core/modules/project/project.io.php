@@ -849,7 +849,7 @@ class ProjectIO
 			{
 				if (Project::exist_project($_GET[project_id]) == false)
 				{
-					throw new ProjectSecurityException("",1);
+					throw new ProjectNotFoundException();
 				}
 				else
 				{
@@ -1304,10 +1304,17 @@ class ProjectIO
 	
 			endswitch;
 		}
-		catch (ProjectSecurityException $e)
+		catch (ProjectNotFoundException $e)
 		{
-			$error_io = new Error_IO($e, 200, 40, 1);
-			$error_io->display_error();
+			
+		}
+		catch (ProjectSecurityAccessDeniedException $e)
+		{
+			/**
+			 * @todo new error handler
+			 */
+			//$error_io = new Error_IO($e, 200, 40, 1);
+			//$error_io->display_error();
 		}
 	}
 	

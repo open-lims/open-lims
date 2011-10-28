@@ -311,7 +311,7 @@ class AdminProjectStatusIO
 			{
 				if (ProjectStatus::exist_id($_GET[id]) == false)
 				{
-					throw new ProjectStatusNotFoundException("",2);
+					// throw new ProjectStatusNotFoundException("",2);
 				}
 			}
 			
@@ -335,8 +335,8 @@ class AdminProjectStatusIO
 		}
 		catch (ProjectStatusNotFoundException $e)
 		{
-			$error_io = new Error_IO($e, 200, 40, 1);
-			$error_io->display_error();
+			//$error_io = new Error_IO($e, 200, 40, 1);
+			//$error_io->display_error();
 		}
 	}
 	

@@ -22,15 +22,15 @@
  */
 
 /**
- * Project Template Category Not Found Exception
+ * Project Delete Log Exception
  * @package project
  */
-class ProjectTemplateCategoryNotFoundException extends Exception
+class ProjectDeleteLogException extends ProjectDeleteException
 {
-    function __construct($message, $code)
+    function __construct($message)
     {
-    	parent::__construct($message, $code);	
-    }     
+    	parent::__construct($message);	
+    }   
 }
 
 ?>

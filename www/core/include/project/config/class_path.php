@@ -24,25 +24,87 @@
 /**
  * 
  */
-	$classes['ProjectException']									= $path_prefix."core/include/project/exceptions/project_exception.class.php";
+	$classes['ProjectException']									= $path_prefix."core/include/project/exceptions/project.exception.class.php";
 	
-	$classes['ProjectCreateException']								= $path_prefix."core/include/project/exceptions/project_create_exception.class.php";
-	$classes['ProjectCreateProjectExistsException']					= $path_prefix."core/include/project/exceptions/project_create_project_exists_exception.class.php";
-	$classes['ProjectCreateStatusException']						= $path_prefix."core/include/project/exceptions/project_create_status_exception.class.php";
-	$classes['ProjectCreateFolderException']						= $path_prefix."core/include/project/exceptions/project_create_folder_exception.class.php";
-	$classes['ProjectCreateStatusFolderException']					= $path_prefix."core/include/project/exceptions/project_create_status_folder_exception.class.php";
-	$classes['ProjectCreateStatusSubFolderException']				= $path_prefix."core/include/project/exceptions/project_create_status_sub_folder_exception.class.php";
-	$classes['ProjectCreateSupplementaryFolderException']			= $path_prefix."core/include/project/exceptions/project_create_supplementary_folder_exception.class.php";
-	$classes['ProjectCreateDescriptionException']					= $path_prefix."core/include/project/exceptions/project_create_description_exception.class.php";
-	$classes['ProjectCreateMasterDataException']					= $path_prefix."core/include/project/exceptions/project_create_master_data_exception.class.php";
-	$classes['ProjectCreatePermissionUserException']				= $path_prefix."core/include/project/exceptions/project_create_permission_user_exception.class.php";
-	$classes['ProjectCreatePermissionLeaderException']				= $path_prefix."core/include/project/exceptions/project_create_permission_leader_exception.class.php";
-	$classes['ProjectCreatePermissionGroupException']				= $path_prefix."core/include/project/exceptions/project_create_permission_group_exception.class.php";
-	$classes['ProjectCreatePermissionOrganisationUnitException']	= $path_prefix."core/include/project/exceptions/project_create_permission_organisation_unit_exception.class.php";
-	$classes['ProjectCreatePermissionQualityManagerException']		= $path_prefix."core/include/project/exceptions/project_create_permission_quality_manager_exception.class.php";
+	$classes['ProjectNotFoundException']							= $path_prefix."core/include/project/exceptions/project_not_found.exception.class.php";
+	$classes['ProjectMoveException']								= $path_prefix."core/include/project/exceptions/project_move.exception.class.php";
+	$classes['ProjectSetNextStatusException']						= $path_prefix."core/include/project/exceptions/project_set_next_status.exception.class.php";
+	$classes['ProjectUserSetQuotaException']						= $path_prefix."core/include/project/exceptions/project_user_set_quota.exception.class.php";
+	$classes['ProjectValueVarFailedException']						= $path_prefix."core/include/project/exceptions/project_value_var_failed.exception.class.php";
 	
-	$classes['ProjectSecurityException']	= $path_prefix."core/include/project/exceptions/project_security_exception.class.php";
-		
+	$classes['ProjectCreateException']								= $path_prefix."core/include/project/exceptions/project_create.exception.class.php";
+	$classes['ProjectCreateProjectExistsException']					= $path_prefix."core/include/project/exceptions/project_create_project_exists.exception.class.php";
+	$classes['ProjectCreateStatusException']						= $path_prefix."core/include/project/exceptions/project_create_status.exception.class.php";
+	$classes['ProjectCreateFolderException']						= $path_prefix."core/include/project/exceptions/project_create_folder.exception.class.php";
+	$classes['ProjectCreateStatusFolderException']					= $path_prefix."core/include/project/exceptions/project_create_status_folder.exception.class.php";
+	$classes['ProjectCreateStatusSubFolderException']				= $path_prefix."core/include/project/exceptions/project_create_status_sub_folder.exception.class.php";
+	$classes['ProjectCreateSupplementaryFolderException']			= $path_prefix."core/include/project/exceptions/project_create_supplementary_folder.exception.class.php";
+	$classes['ProjectCreateDescriptionException']					= $path_prefix."core/include/project/exceptions/project_create_description.exception.class.php";
+	$classes['ProjectCreateMasterDataException']					= $path_prefix."core/include/project/exceptions/project_create_master_data.exception.class.php";
+	$classes['ProjectCreatePermissionUserException']				= $path_prefix."core/include/project/exceptions/project_create_permission_user.exception.class.php";
+	$classes['ProjectCreatePermissionLeaderException']				= $path_prefix."core/include/project/exceptions/project_create_permission_leader.exception.class.php";
+	$classes['ProjectCreatePermissionGroupException']				= $path_prefix."core/include/project/exceptions/project_create_permission_group.exception.class.php";
+	$classes['ProjectCreatePermissionOrganisationUnitException']	= $path_prefix."core/include/project/exceptions/project_create_permission_organisation_unit.exception.class.php";
+	$classes['ProjectCreatePermissionQualityManagerException']		= $path_prefix."core/include/project/exceptions/project_create_permission_quality_manager.exception.class.php";
+	
+	$classes['ProjectDeleteException']								= $path_prefix."core/include/project/exceptions/project_delete.exception.class.php";
+	$classes['ProjectDeleteContainsSubProjectsException']			= $path_prefix."core/include/project/exceptions/project_delete_contains_sub_projects.exception.class.php";
+	$classes['ProjectDeleteFolderException']						= $path_prefix."core/include/project/exceptions/project_delete_folder.exception.class.php";
+	$classes['ProjectDeleteItemException']							= $path_prefix."core/include/project/exceptions/project_delete_item.exception.class.php";
+	$classes['ProjectDeleteLinkException']							= $path_prefix."core/include/project/exceptions/project_delete_link.exception.class.php";
+	$classes['ProjectDeleteLogException']							= $path_prefix."core/include/project/exceptions/project_delete_log.exception.class.php";
+	$classes['ProjectDeletePermissionException']					= $path_prefix."core/include/project/exceptions/project_delete_permission.exception.class.php";
+	$classes['ProjectDeleteStatusException']						= $path_prefix."core/include/project/exceptions/project_delete_status.exception.class.php";
+	$classes['ProjectDeleteTaskException']							= $path_prefix."core/include/project/exceptions/project_delete_task.exception.class.php";
+	
+	$classes['ProjectSecurityException']							= $path_prefix."core/include/project/exceptions/project_security.exception.class.php";
+	$classes['ProjectSecurityAccessDeniedException']				= $path_prefix."core/include/project/exceptions/project_security_access_denied.exception.class.php";
+	$classes['ProjectSecurityInternalException']					= $path_prefix."core/include/project/exceptions/project_security_internal.exception.class.php";
+	$classes['ProjectSecurityChangeException']						= $path_prefix."core/include/project/exceptions/project_security_change.exception.class.php";
+	
+	$classes['ProjectItemException']								= $path_prefix."core/include/project/exceptions/project_item.exception.class.php";
+	$classes['ProjectItemLinkException']							= $path_prefix."core/include/project/exceptions/project_item_link.exception.class.php";
+	$classes['ProjectItemUnlinkException']							= $path_prefix."core/include/project/exceptions/project_item_unlink.exception.class.php";
+	$classes['ProjectItemNotFoundException']						= $path_prefix."core/include/project/exceptions/project_item_not_found.exception.class.php";
+	
+	$classes['ProjectLogException']									= $path_prefix."core/include/project/exceptions/project_log.exception.class.php";
+	$classes['ProjectLogCreateException']							= $path_prefix."core/include/project/exceptions/project_log_create.exception.class.php";
+	$classes['ProjectLogDeleteException']							= $path_prefix."core/include/project/exceptions/project_log_delete.exception.class.php";
+	$classes['ProjectLogNotFoundException']							= $path_prefix."core/include/project/exceptions/project_log_not_found.exception.class.php";
+	
+	$classes['ProjectPermissionException']							= $path_prefix."core/include/project/exceptions/project_permission.exception.class.php";
+	$classes['ProjectPermissionCreateException']					= $path_prefix."core/include/project/exceptions/project_permission_create.exception.class.php";
+	$classes['ProjectPermissionCreateUserException']				= $path_prefix."core/include/project/exceptions/project_permission_create_user.exception.class.php";
+	$classes['ProjectPermissionCreateOrganisationUnitException']	= $path_prefix."core/include/project/exceptions/project_permission_create_organisation_unit.exception.class.php";
+	$classes['ProjectPermissionCreateGroupException']				= $path_prefix."core/include/project/exceptions/project_permission_create_group.exception.class.php";
+	$classes['ProjectPermissionCreateVirtualFolderException']		= $path_prefix."core/include/project/exceptions/project_permission_create_virtual_folder.exception.class.php";
+	$classes['ProjectPermissionDeleteException']					= $path_prefix."core/include/project/exceptions/project_permission_delete.exception.class.php";
+	$classes['ProjectPermissionDeleteUserException']				= $path_prefix."core/include/project/exceptions/project_permission_delete_user.exception.class.php";
+	$classes['ProjectPermissionDeleteOrganisationUnitException']	= $path_prefix."core/include/project/exceptions/project_permission_delete_organisation_unit.exception.class.php";
+	$classes['ProjectPermissionDeleteGroupException']				= $path_prefix."core/include/project/exceptions/project_permission_delete_group.exception.class.php";
+	$classes['ProjectPermissionDeleteVirtualFolderException']		= $path_prefix."core/include/project/exceptions/project_permission_delete_virtual_folder.exception.class.php";
+	$classes['ProjectPermissionNotFoundException']					= $path_prefix."core/include/project/exceptions/project_permission_not_found.exception.class.php";
+	
+	$classes['ProjectStatusException']								= $path_prefix."core/include/project/exceptions/project_status.exception.class.php";
+	$classes['ProjectStatusCreateException']						= $path_prefix."core/include/project/exceptions/project_status_create.exception.class.php";
+	$classes['ProjectStatusDeleteException']						= $path_prefix."core/include/project/exceptions/project_status_delete.exception.class.php";
+	$classes['ProjectStatusNotFoundException']						= $path_prefix."core/include/project/exceptions/project_status_not_found.exception.class.php";
+	
+	$classes['ProjectTaskException']								= $path_prefix."core/include/project/exceptions/project_task.exception.class.php";
+	$classes['ProjectTaskCreateException']							= $path_prefix."core/include/project/exceptions/project_task_create.exception.class.php";
+	$classes['ProjectTaskCreateAttachException']					= $path_prefix."core/include/project/exceptions/project_task_create_attach.exception.class.php";
+	$classes['ProjectTaskDeleteException']							= $path_prefix."core/include/project/exceptions/project_task_delete.exception.class.php";
+	$classes['ProjectTaskNotFoundException']						= $path_prefix."core/include/project/exceptions/project_task_not_found.exception.class.php";
+	
+	$classes['ProjectTemplateException']							= $path_prefix."core/include/project/exceptions/project_template.exception.class.php";
+	$classes['ProjectTemplateCreateException']						= $path_prefix."core/include/project/exceptions/project_template_create.exception.class.php";
+	$classes['ProjectTemplateDeleteException']						= $path_prefix."core/include/project/exceptions/project_template_delete.exception.class.php";
+	$classes['ProjectTemplateNotFoundException']					= $path_prefix."core/include/project/exceptions/project_template_not_found.exception.class.php";
+	$classes['ProjectTemplateCategoryCreateException']				= $path_prefix."core/include/project/exceptions/project_template_category_create.exception.class.php";
+	$classes['ProjectTemplateCategoryDeleteException']				= $path_prefix."core/include/project/exceptions/project_template_category_delete.exception.class.php";	
+	$classes['ProjectTemplateCategoryNotFoundException']			= $path_prefix."core/include/project/exceptions/project_template_category_not_found.exception.class.php";	
+	
+	
 	$classes['Project'] 					= $path_prefix."core/include/project/project.class.php";
 	$classes['ProjectFolder'] 				= $path_prefix."core/include/project/project_folder.class.php";
 	$classes['ProjectVirtualFolder'] 		= $path_prefix."core/include/project/project_virtual_folder.class.php";

@@ -22,15 +22,15 @@
  */
 
 /**
- * Project Status Not Found Exception
+ * Project Permission Delete Virtual Folder Exception
  * @package project
  */
-class ProjectStatusNotFoundException extends Exception
+class ProjectPermissionDeleteVirtualFolderException extends ProjectPermissionDeleteException
 {
-    function __construct($message, $code)
+    function __construct($message = null)
     {
-    	parent::__construct($message, $code);	
-    }     
+    	parent::__construct($message);	
+    }   
 }
 
 ?>

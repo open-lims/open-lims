@@ -491,6 +491,15 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	/**
 	 * @see ProjectInterface::delete()
 	 * @return bool
+	 * @throws ProjectDeleteException
+	 * @throws ProjectDeleteContainsSubProjectsException
+	 * @throws ProjectDeleteFolderException
+	 * @throws ProjectDeleteItemException
+	 * @throws ProjectDeleteLinkException
+	 * @throws ProjectDeleteLogException
+	 * @throws ProjectDeletePermissionException
+	 * @throws ProjectDeleteStatusException
+	 * @throws ProjectDeleteTaskException
 	 */
     public function delete()
     {
