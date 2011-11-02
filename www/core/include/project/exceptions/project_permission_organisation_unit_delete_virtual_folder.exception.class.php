@@ -22,14 +22,14 @@
  */
 
 /**
- * Project Create Description Exception
+ * Project Permission Organisation Unit Delete Virtual Folder Exception
  * @package project
  */
-class ProjectCreateDescriptionException extends ProjectException
+class ProjectPermissionOrganisationUnitDeleteVirtualFolderException extends ProjectPermissionOrganisationUnitDeleteException
 {
     function __construct($message = null)
     {
-    	parent::__construct($message);	
+    	parent::__construct($message);
     }   
 }
 

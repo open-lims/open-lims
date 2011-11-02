@@ -88,7 +88,7 @@ class ProjectAdminIO
 					{	
 						$column_array = array();
 				
-						$project_permission = new ProjectPermission($value);
+						$project_permission = ProjectPermission::get_instance($value);
 				
 						$user_id = $project_permission->get_user_id();
 						$group_id = $project_permission->get_group_id();
@@ -518,7 +518,7 @@ class ProjectAdminIO
 						$paramquery[run] = "admin_permission";
 						$params = http_build_query($paramquery);
 						
-						$project_permission = new ProjectPermission(null);
+						$project_permission = new ProjectPermissionUser(null);
 						
 						$new_permssion = 0;
 						
@@ -551,7 +551,7 @@ class ProjectAdminIO
 							$new_permission = $new_permission + 64;
 						}
 						
-						if ($project_permission->create($_POST[user], null, null, $project_id, $new_permission, $user->get_user_id(), null))
+						if ($project_permission->create($_POST[user], $project_id, $new_permission, $user->get_user_id(), null))
 						{
 							Common_IO::step_proceed($params, "Add Permission", "Operation Successful", null);
 						}
@@ -759,7 +759,7 @@ class ProjectAdminIO
 					$paramquery[run] = "admin_permission";
 					$params = http_build_query($paramquery);
 					
-					$project_permission = new ProjectPermission(null);
+					$project_permission = new ProjectPermissionGroup(null);
 					
 					$new_permssion = 0;
 					
@@ -792,7 +792,7 @@ class ProjectAdminIO
 						$new_permission = $new_permission + 64;
 					}
 					
-					if ($project_permission->create(null, null, $_POST[group], $project_id, $new_permission, $user->get_user_id(), null))
+					if ($project_permission->create($_POST[group], $project_id, $new_permission, $user->get_user_id(), null))
 					{
 						Common_IO::step_proceed($params, "Add Permission", "Operation Successful", null);
 					}
@@ -998,7 +998,7 @@ class ProjectAdminIO
 						$paramquery[run] = "admin_permission";
 						$params = http_build_query($paramquery);
 						
-						$project_permission = new ProjectPermission(null);
+						$project_permission = new ProjectPermissionOrganisationUnit(null);
 						
 						$new_permssion = 0;
 						
@@ -1031,7 +1031,7 @@ class ProjectAdminIO
 							$new_permission = $new_permission + 64;
 						}
 						
-						if ($project_permission->create(null, $_POST[ou], null, $project_id, $new_permission, $user->get_user_id(), null))
+						if ($project_permission->create($_POST[ou],$project_id, $new_permission, $user->get_user_id(), null))
 						{
 							Common_IO::step_proceed($params, "Add Permission", "Operation Successful", null);
 						}
@@ -1068,7 +1068,7 @@ class ProjectAdminIO
 				$project_id = $_GET[project_id];
 				$project = new Project($project_id);
 				$project_security = new ProjectSecurity($project_id);
-				$project_permission = new ProjectPermission($_GET[id]);
+				$project_permission = ProjectPermission::get_instance($_GET[id]);
 				
 				if ($user->get_user_id() == $project->get_owner_id() or
 					$project_security->is_access(2, false) == true or
@@ -1348,7 +1348,7 @@ class ProjectAdminIO
 						$paramquery[run] = "admin_permission";
 						$params = http_build_query($paramquery);
 						
-						$project_permission = new ProjectPermission($_GET[id]);
+						$project_permission = ProjectPermission::get_instance($_GET[id]);
 						
 						if ($project_permission->delete())
 						{							
@@ -1932,7 +1932,7 @@ class ProjectAdminIO
 					$paramquery[run] = "detail";
 					$params = http_build_query($paramquery);
 					
-					$project_permission = new ProjectPermission($_GET[id]);
+					$project_permission = ProjectPermission::get_instance($_GET[id]);
 					
 					if ($project->mark_as_deleted())
 					{							
@@ -1998,7 +1998,7 @@ class ProjectAdminIO
 					unset($paramquery[run]);
 					$params = http_build_query($paramquery);
 					
-					$project_permission = new ProjectPermission($_GET[id]);
+					$project_permission = ProjectPermission::get_instance($_GET[id]);
 					
 					if ($project->delete())
 					{							
@@ -2064,7 +2064,7 @@ class ProjectAdminIO
 					$paramquery[run] = "detail";
 					$params = http_build_query($paramquery);
 					
-					$project_permission = new ProjectPermission($_GET[id]);
+					$project_permission = ProjectPermission::get_instance($_GET[id]);
 					
 					if ($project->mark_as_undeleted())
 					{							
@@ -2213,7 +2213,7 @@ class ProjectAdminIO
 					$paramquery[run] = "detail";
 					$params = http_build_query($paramquery);
 					
-					$project_permission = new ProjectPermission($_GET[id]);
+					$project_permission = ProjectPermission::get_instance($_GET[id]);
 					
 					if ($project->mark_as_reactivated())
 					{							

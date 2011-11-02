@@ -61,12 +61,12 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	 */
 	function __construct($project_id)
 	{
-		if ($project_id == null)
+		if (is_numeric($project_id))
 		{
 			if (Project_Access::exist_project_by_project_id($project_id) == true)
 			{
-				$this->project_id = null;
-				$this->project = new Project_Access(null);
+				$this->project_id = $project_id;
+				$this->project = new Project_Access($project_id);
 			}
 			else
 			{
@@ -75,8 +75,8 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 		}
 		else
 		{
-			$this->project_id = $project_id;
-			$this->project = new Project_Access($project_id);
+			$this->project_id = null;
+			$this->project = new Project_Access(null);
 		}
 	}
 	
@@ -396,8 +396,8 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					{
 						$organisation_unit = new OrganisationUnit($organisation_unit_id);
 	
-						$project_permission = new ProjectPermission(null);
-						if ($project_permission->create($owner_id, null, null, $project_id, constant("PROJECT_USER_STD_PERMISSION"), null, 1) == null)
+						$project_permission = new ProjectPermissionUser(null);
+						if ($project_permission->create($owner_id, $project_id, constant("PROJECT_USER_STD_PERMISSION"), null, 1) == null)
 						{
 							$project_folder->delete(true, true);
 							if ($transaction_id != null)
@@ -413,8 +413,8 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						{
 							foreach($leader_array as $key => $value)
 							{
-								$project_permission = new ProjectPermission(null);
-								if ($project_permission->create($value, null, null, $project_id, constant("PROJECT_LEADER_STD_PERMISSION"), null, 2) == null)
+								$project_permission = new ProjectPermissionUser(null);
+								if ($project_permission->create($value, $project_id, constant("PROJECT_LEADER_STD_PERMISSION"), null, 2) == null)
 								{
 									$project_folder->delete(true, true);
 									if ($transaction_id != null)
@@ -426,8 +426,8 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 							}
 						}
 											
-						$project_permission = new ProjectPermission(null);
-						if ($project_permission->create(null, $organisation_unit_id, null, $project_id, constant("PROJECT_OU_STD_PERMISSION"), null, 3) == null)
+						$project_permission = new ProjectPermissionOrganisationUnit(null);
+						if ($project_permission->create($organisation_unit_id, $project_id, constant("PROJECT_OU_STD_PERMISSION"), null, 3) == null)
 						{
 							$project_folder->delete(true, true);
 							if ($transaction_id != null)
@@ -444,8 +444,8 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						{
 							foreach($quality_manager_array as $key => $value)
 							{
-								$project_permission = new ProjectPermission(null);
-								if ($project_permission->create($value, null, null, $project_id, constant("PROJECT_QM_STD_PERMISSION"), null, 5) == null)
+								$project_permission = new ProjectPermissionUser(null);
+								if ($project_permission->create($value, $project_id, constant("PROJECT_QM_STD_PERMISSION"), null, 5) == null)
 								{
 									$project_folder->delete(true, true);
 									if ($transaction_id != null)
@@ -463,8 +463,8 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						{
 							foreach($group_array as $key => $value)
 							{
-								$project_permission = new ProjectPermission(null);
-								if ($project_permission->create(null, null, $value, $project_id, constant("PROJECT_GROUP_STD_PERMISSION"), null, 4) == null)
+								$project_permission = new ProjectPermissionGroup(null);
+								if ($project_permission->create($value, $project_id, constant("PROJECT_GROUP_STD_PERMISSION"), null, 4) == null)
 								{
 									$project_folder->delete(true, true);
 									if ($transaction_id != null)
@@ -522,7 +522,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 				if ($transaction_id != null)
 				{
 					$transaction->rollback($transaction_id);
-					return false;
+					throw new ProjectDeleteContainsSubProjectsException();
 				}
     		}
     		
@@ -535,14 +535,14 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     		{
 	    		foreach ($project_permission_array as $key => $value)
 	    		{
-	    			$project_permission = new ProjectPermission($value);
+	    			$project_permission = ProjectPermission::get_instance($value);
 	    			if ($project_permission->delete() == false)
 	    			{
 	    				if ($transaction_id != null)
 	    				{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new ProjectDeletePermissionException();
 	    			}
 	    		}
     		}
@@ -555,13 +555,18 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	    		foreach ($project_log_array as $key => $value)
 	    		{
 	    			$project_log = new ProjectLog($value);
-	    			if ($project_log->delete() == false)
+	    			
+	    			try
+	    			{
+	    				$project_log->delete();
+	    			}
+	    			catch (ProjectLogDeleteException $e)
 	    			{
 	    				if ($transaction_id != null)
 	    				{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new ProjectDeleteLogException();
 	    			}
 	    		}
     		}
@@ -574,13 +579,18 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	    		foreach ($project_has_project_status_array as $key => $value)
 	    		{
 	    			$project_has_project_status = new ProjectHasProjectStatus_Access($value);
-	    			if ($project_has_project_status->delete() == false)
+	    			
+	    			try
+	    			{
+	    				$project_has_project_status->delete();
+	    			}
+	    			catch (ProjectStatusDeleteException $e)
 	    			{
 	    				if ($transaction_id != null)
 	    				{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new ProjectDeleteStatusException();
 	    			}
 	    		}
     		}
@@ -599,7 +609,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	    				{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new ProjectDeleteLinkException();
 	    			}
 	    		}
     		}
@@ -619,7 +629,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new ProjectDeleteItemException();
 					}
 				}
 			}	
@@ -638,7 +648,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     					{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new ProjectDeleteTaskException();
     				}
     			}
     		} 
@@ -650,7 +660,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     			{
 					$transaction->rollback($transaction_id);
 				}
-				return false;
+				throw new ProjectDeleteException("Database delete failed");
     		}
     		else
     		{
@@ -663,7 +673,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	    			{
 						$transaction->rollback($transaction_id);
 					}
-					return false;
+					throw new ProjectDeleteFolderException();
 	    		}
 	    		else
 	    		{
@@ -677,7 +687,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     	}
     	else
     	{
-    		return false;
+    		throw new ProjectDeleteException("Project ID was missing.");
     	}
     }
    
@@ -1195,6 +1205,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
      * @param string $checksum
      * @param string $comment Optional Comment
      * @return bool
+     * @throws ProjectSetNextStatusException
      */
     public function set_next_status($checksum, $comment)
     {
@@ -1216,7 +1227,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					{
 						$transaction->rollback($transaction_id);
 					}
-					return false;
+					throw new ProjectSetNextStatusException();
 				}
 				
 				$project_log = new ProjectLog(null);
@@ -1236,7 +1247,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new ProjectSetNextStatusException();
 					}
 				}
 				else
@@ -1245,7 +1256,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					{
 						$transaction->rollback($transaction_id);
 					}
-					return false;
+					throw new ProjectSetNextStatusException();
 				}
 			}
 			else
@@ -1254,12 +1265,12 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 				{
 					$transaction->rollback($transaction_id);
 				}
-				return false;
+				throw new ProjectSetNextStatusException();
 			}
 		}
 		else
 		{
-			return false;
+			throw new ProjectSetNextStatusException();
 		}
     }
     
@@ -1389,6 +1400,11 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
      * @see ProjectInterface::move_to_organisation_unit()
      * @param integer $organisation_unit_id
      * @return bool
+     * @throws ProjectMoveException
+     * @throws ProjectMoveProjectExistsException
+     * @throws ProjectMovePermissionException
+     * @throws ProjectMoveFolderException
+     * @todo OrganisationUnitSecuriyException werfen
      */    
 	public function move_to_organisation_unit($organisation_unit_id)
 	{
@@ -1413,7 +1429,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new ProjectMoveFolderException();
 					}
 					
 					if ($this->project->set_toid_project(null) == false)
@@ -1422,7 +1438,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new ProjectMoveException();
 					}
 					
 					if ($this->project->set_toid_organ_unit($organisation_unit_id) == false)
@@ -1431,7 +1447,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new ProjectMoveException();
 					}			
 					
 					$project_security = new ProjectSecurity($this->project_id);
@@ -1442,7 +1458,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new ProjectMovePermissionException();
 					}
 					
 					if ($project_security->change_ou_user_permission($organisation_unit_id) == false)
@@ -1451,7 +1467,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new ProjectMovePermissionException();
 					}
 					
 					if ($project_security->change_organisation_unit_permission($organisation_unit_id) == false)
@@ -1460,7 +1476,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new ProjectMovePermissionException();
 					}
 					
 					if ($transaction_id != null)
@@ -1471,17 +1487,18 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 				}
 				else
 				{
-					return false;
+					throw new ProjectMoveProjectExistsException();
 				}
 			}
 			else
 			{
-				return false;
+				// replace with OU exception
+				throw new ProjectMoveException();
 			}		
 		}
 		else
 		{
-			return false;
+			throw new ProjectMoveException();
 		}
 	}
 	
@@ -1489,6 +1506,11 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
      * @see ProjectInterface::move_to_project()
      * @param integer $organisation_unit_id
      * @return bool
+     * @throws ProjectMoveException
+     * @throws ProjectMoveProjectExistsException
+     * @throws ProjectMovePermissionException
+     * @throws ProjectMoveFolderException
+     * @throws ProjectSecurityAccessDeniedException
      */   
 	public function move_to_project($project_id)
 	{
@@ -1510,14 +1532,14 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					{
 						foreach($project_permission_array as $key => $value)
 						{
-							$project_permission = new ProjectPermission($value);
+							$project_permission = ProjectPermission::get_instance($value);
 							if ($project_permission->delete() == false)
 							{
 								if ($transaction_id != null)
 								{
 									$transaction->rollback($transaction_id);
 								}
-								return false;
+								throw new ProjectMovePermissionException();
 							}
 						}
 					}
@@ -1528,7 +1550,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new ProjectMoveException();
 					}
 					
 					if ($this->project->set_toid_project($project_id) == false)
@@ -1537,7 +1559,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new ProjectMoveException();
 					}
 					
 					$folder_id = ProjectFolder::get_folder_by_project_id($this->project_id);
@@ -1549,7 +1571,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new ProjectMoveFolderException();
 					}
 					
 					if ($transaction_id != null)
@@ -1560,17 +1582,17 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 				}
 				else
 				{
-					return false;
+					throw new ProjectMoveProjectExistsException();
 				}
 			}
 			else
 			{
-				return false;
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			return false;
+			throw new ProjectMoveException();
 		}		
 	}
     

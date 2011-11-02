@@ -22,14 +22,14 @@
  */
 
 /**
- * Project Create Description Exception
+ * Project Permission Group Create Exception
  * @package project
  */
-class ProjectCreateDescriptionException extends ProjectException
+class ProjectPermissionGroupCreateException extends ProjectPermissionGroupException
 {
     function __construct($message = null)
     {
-    	parent::__construct($message);	
+    	parent::__construct($message);
     }   
 }
 

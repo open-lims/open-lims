@@ -27,33 +27,7 @@
  * @package project
  */ 	  	 
 interface ProjectPermissionInterface
-{
-	/**
-     * @param integer $permission_id
-     */
-	function __construct($permission_id);
-	
-	function __destruct();
-	
-	/**
-     * Creates a project-permission
-     * @param integer $user_id
-     * @param integer $organisation_unit_id
-     * @param integer $group_id
-     * @param integer $project_id
-     * @param integer $permission
-     * @param integer $owner_id
-     * @param integer $intention
-     * @return integer
-     */
-	public function create($user_id, $organisation_unit_id, $group_id, $project_id, $permission, $owner_id, $intention);
-	
-	/**
-     * Deletes a project-permission
-     * @return bool
-     */
-	public function delete();
-	
+{		
 	/**
      * Returns the permission array of a permission
      * @return array

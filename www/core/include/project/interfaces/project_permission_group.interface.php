@@ -20,17 +20,27 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
+ 
 
 /**
- * Project Create Description Exception
+ * Project Permission Group Interface
  * @package project
- */
-class ProjectCreateDescriptionException extends ProjectException
-{
-    function __construct($message = null)
-    {
-    	parent::__construct($message);	
-    }   
-}
+ */ 	  	 
+interface ProjectPermissionGroupInterface
+{		
+	/**
+	 * @param integer $group_id
+	 * @param integer $project_id
+	 * @param integer $permission
+	 * @param integer $owner_id
+	 * @param integer $intention
+	 * @return bool
+	 */
+	public function create($group_id, $project_id, $permission, $owner_id, $intention);
 
+	/**
+	 * @return bool
+	 */
+	public function delete();
+}
 ?>

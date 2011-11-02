@@ -20,17 +20,26 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
+ 
 
 /**
- * Project Permission Delete Virtual Folder Exception
+ * Project Permission User Interface
  * @package project
- */
-class ProjectPermissionDeleteVirtualFolderException extends ProjectPermissionDeleteException
-{
-    function __construct($message = null)
-    {
-    	parent::__construct($message);	
-    }   
+ */ 	  	 
+interface ProjectPermissionUserInterface
+{	
+	/**
+	 * @param integer $user_id
+	 * @param integer $project_id
+	 * @param integer $permission
+	 * @param integer $intention
+	 * @return integer
+	 */	
+	public function create($user_id, $project_id, $permission, $owner_id, $intention);
+	
+	/**
+	 * @param return bool
+	 */
+	public function delete();
 }
-
 ?>

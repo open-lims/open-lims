@@ -20,17 +20,14 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
+ 
 
 /**
- * Project Create Description Exception
+ * Project Permission Case Interface
  * @package project
- */
-class ProjectCreateDescriptionException extends ProjectException
-{
-    function __construct($message = null)
-    {
-    	parent::__construct($message);	
-    }   
+ */ 	  	 
+interface ProjectPermissionCaseInterface
+{		
+	 public static function is_case($permission_id);
 }
-
 ?>

@@ -882,5 +882,91 @@ class ProjectPermission_Access
 		}
 	}
 	
+	/**
+	 * @param integer $permission_id
+	 * @return bool
+	 */
+	public static function is_user_entry($permission_id)
+	{
+		global $db;
+		
+		if (is_numeric($permission_id))
+		{			
+			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE user_id IS NOT NULL AND id = ".$permission_id."";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data['id'])
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param integer $permission_id
+	 * @return bool
+	 */
+	public static function is_group_entry($permission_id)
+	{
+		global $db;
+		
+		if (is_numeric($permission_id))
+		{			
+			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE group_id IS NOT NULL AND id = ".$permission_id."";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data['id'])
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param integer $permission_id
+	 * @return bool
+	 */
+	public static function is_organisation_unit_entry($permission_id)
+	{
+		global $db;
+		
+		if (is_numeric($permission_id))
+		{			
+			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE organisation_unit_id IS NOT NULL AND id = ".$permission_id."";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data['id'])
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 ?>

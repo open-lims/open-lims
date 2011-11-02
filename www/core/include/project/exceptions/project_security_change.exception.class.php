@@ -27,7 +27,7 @@
  */
 class ProjectSecurityChangeException extends ProjectSecurityException
 {
-    function __construct($message)
+    function __construct($message = null)
     {
     	parent::__construct(false, false, false, $message);	
     }     

@@ -553,11 +553,12 @@ class ProjectIO
 							$project_log->create($_GET[project_id], $_POST[comment], false, false, md5(rand(0,50000)));
 						}
 						
-						if ($project->set_next_status(null,null))
+						try
 						{
+							$project->set_next_status(null,null);
 							Common_IO::step_proceed($params, "Proceed to next status", "Operation Successful" ,null);
 						}
-						else
+						catch (ProjectSetNextStatusException $e)
 						{
 							Common_IO::step_proceed($params, "Proceed to next status", "Operation Failed" ,null);	
 							$project_log->delete();

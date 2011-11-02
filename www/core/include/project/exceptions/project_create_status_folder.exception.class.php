@@ -27,7 +27,7 @@
  */
 class ProjectCreateStatusFolderException extends ProjectException
 {
-    function __construct($message)
+    function __construct($message = null)
     {
     	parent::__construct($message);	
     }   

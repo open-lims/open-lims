@@ -22,14 +22,14 @@
  */
 
 /**
- * Project Permission Create Virtual Folder Exception
+ * Project Permission Group Create Virtual Folder Exception
  * @package project
  */
-class ProjectPermissionCreateVirtualFolderException extends ProjectPermissionCreateException
+class ProjectPermissionGroupCreateVirtualFolderException extends ProjectPermissionGroupCreateException
 {
     function __construct($message = null)
     {
-    	parent::__construct($message);	
+    	parent::__construct($message);
     }   
 }
 

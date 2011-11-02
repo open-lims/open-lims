@@ -22,14 +22,14 @@
  */
 
 /**
- * Project Permission Delete User Exception
+ * Project Permission User Delete Virtual Folder Exception
  * @package project
  */
-class ProjectPermissionDeleteUserException extends ProjectPermissionDeleteException
+class ProjectPermissionUserDeleteVirtualFolderException extends ProjectPermissionUserDeleteException
 {
     function __construct($message = null)
     {
-    	parent::__construct($message);	
+    	parent::__construct($message);
     }   
 }
 

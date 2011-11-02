@@ -98,7 +98,7 @@ class ProjectSecurity implements ProjectSecurityInterface
 	    		{
 		    		foreach($project_permission_array as $key => $value)
 		    		{
-		    			$project_permission = new ProjectPermission($value);
+		    			$project_permission = ProjectPermission::get_instance($value);
 	
 		    			if (($user_id = $project_permission->get_user_id()) != null)
 		    			{
@@ -327,7 +327,7 @@ class ProjectSecurity implements ProjectSecurityInterface
 	    	{
 	    		foreach($project_permission_array as $key => $value)
 	    		{
-    				$project_permission = new ProjectPermission($value);
+    				$project_permission = ProjectPermission::get_instance($value);
 	
 	    			if (($user_id = $project_permission->get_user_id()) != null)
 	    			{
@@ -376,7 +376,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     		
     		if (count($project_permission_array) > 0 and is_numeric($project_permission_array[0]))
     		{
-	    		$project_permission = new ProjectPermission($project_permission_array[0]);
+	    		$project_permission = ProjectPermission::get_instance($project_permission_array[0]);
 	    		if ($project_permission->set_user_id($owner_id) == true)
 	    		{
 	    			if ($transaction_id != null)
@@ -396,8 +396,8 @@ class ProjectSecurity implements ProjectSecurityInterface
     		}
     		else
     		{
-    			$project_permission = new ProjectPermission(null);
-				if ($project_permission->create($owner_id, null, null, $this->project_id, constant("PROJECT_USER_STD_PERMISSION"), null, 1) != null) {
+    			$project_permission = new ProjectPermissionUser(null);
+				if ($project_permission->create($owner_id, $this->project_id, constant("PROJECT_USER_STD_PERMISSION"), null, 1) != null) {
 					if ($transaction_id != null)
 					{
 						$transaction->commit($transaction_id);
@@ -439,8 +439,8 @@ class ProjectSecurity implements ProjectSecurityInterface
 				{
 					foreach($leader_array as $key => $value)
 					{
-						$project_permission = new ProjectPermission(null);
-						if ($project_permission->create($value, null, null, $project_id, constant("PROJECT_LEADER_STD_PERMISSION"), null, 2) == null)
+						$project_permission = new ProjectPermissionUser(null);
+						if ($project_permission->create($value, $project_id, constant("PROJECT_LEADER_STD_PERMISSION"), null, 2) == null)
 						{
 							return false;
 						}
@@ -453,8 +453,8 @@ class ProjectSecurity implements ProjectSecurityInterface
 				{
 					foreach($quality_manager_array as $key => $value)
 					{
-						$project_permission = new ProjectPermission(null);
-						if ($project_permission->create($value, null, null, $project_id, constant("PROJECT_QM_STD_PERMISSION"), null, 5) == null)
+						$project_permission = new ProjectPermissionUser(null);
+						if ($project_permission->create($value, $project_id, constant("PROJECT_QM_STD_PERMISSION"), null, 5) == null)
 						{
 							return false;
 						}
@@ -495,7 +495,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     		{
     			foreach($project_permission_ou_group_array as $key => $value)
     			{
-    				$project_permission = new ProjectPermission($value);
+    				$project_permission = ProjectPermission::get_instance($value);
     				if ($project_permission->delete() == false)
     				{
     					if ($transaction_id != null)
@@ -511,7 +511,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     	
     		if (count($project_permission_array) > 0 and is_numeric($project_permission_array[0]))
     		{
-    			$project_permission = new ProjectPermission($project_permission_array[0]);
+    			$project_permission = ProjectPermission::get_instance($project_permission_array[0]);
 				if (($return_value = $project_permission->set_organisation_unit_id($organisation_unit_id)) == false)
 				{
 					if ($transaction_id != null)

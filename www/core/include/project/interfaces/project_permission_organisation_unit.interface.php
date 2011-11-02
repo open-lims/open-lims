@@ -20,17 +20,27 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
+ 
 
 /**
- * Project Permission Delete Exception
+ * Project Permission Organisation Unit Interface
  * @package project
- */
-class ProjectPermissionDeleteException extends ProjectPermissionException
-{
-    function __construct($message = null)
-    {
-    	parent::__construct(true, false, true, $message);	
-    }   
+ */ 	  	 
+interface ProjectPermissionOrganisationUnitInterface
+{	
+	/**	
+	 * @param integer $organisation_unit_id
+	 * @param integer $project_id
+	 * @param integer $permission
+	 * @param integer $owner_id
+	 * @param integer $intention
+	 * @return integer
+	 */
+	public function create($organisation_unit_id, $project_id, $permission, $owner_id, $intention);
+	
+	/**
+	 * @return bool
+	 */
+	public function delete();
 }
-
 ?>
