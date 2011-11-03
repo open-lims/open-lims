@@ -110,7 +110,11 @@
 	
 	$classes['ProjectTemplateException']										= $path_prefix."core/include/project/exceptions/project_template.exception.class.php";
 	$classes['ProjectTemplateCreateException']									= $path_prefix."core/include/project/exceptions/project_template_create.exception.class.php";
+	$classes['ProjectTemplateCreateOLDLNotFoundException']						= $path_prefix."core/include/project/exceptions/project_template_create_oldl_not_found.exception.class.php";
+	$classes['ProjectTemplateCreateOLDLCreateException']						= $path_prefix."core/include/project/exceptions/project_template_create_oldl_create.exception.class.php";
 	$classes['ProjectTemplateDeleteException']									= $path_prefix."core/include/project/exceptions/project_template_delete.exception.class.php";
+	$classes['ProjectTemplateDeleteInUseException']								= $path_prefix."core/include/project/exceptions/project_template_delete_in_use.exception.class.php";
+	$classes['ProjectTemplateDeleteOLDLDeleteException']						= $path_prefix."core/include/project/exceptions/project_template_delete_oldl_delete.exception.class.php";
 	$classes['ProjectTemplateNotFoundException']								= $path_prefix."core/include/project/exceptions/project_template_not_found.exception.class.php";
 	$classes['ProjectTemplateCategoryCreateException']							= $path_prefix."core/include/project/exceptions/project_template_category_create.exception.class.php";
 	$classes['ProjectTemplateCategoryDeleteException']							= $path_prefix."core/include/project/exceptions/project_template_category_delete.exception.class.php";	

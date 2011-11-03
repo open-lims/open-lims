@@ -43,18 +43,26 @@ class ProjectTemplateCat implements ProjectTemplateCatInterface
     /**
      * @see ProjectTemplateCatInterface::__construct()
 	 * @param integer $project_template_cat_id
+	 * @throws ProjectTemplateCategoryNotFoundException
 	 */
 	function __construct($project_template_cat_id)
 	{
-		if ($project_template_cat_id == null)
+		if (is_numeric($project_template_cat_id))
 		{
-			$this->project_template_cat_id = null;
-			$this->project_template_cat = new ProjectTemplateCat_Access(null);
+			if (ProjectTemplateCat_Access::exist_id($project_template_cat_id) == true)
+			{
+				$this->project_template_cat_id = $project_template_cat_id;
+				$this->project_template_cat = new ProjectTemplateCat_Access($project_template_cat_id);
+			}
+			else
+			{
+				throw new ProjectTemplateCategoryNotFoundException();
+			}
 		}
 		else
 		{
-			$this->project_template_cat_id = $project_template_cat_id;
-			$this->project_template_cat = new ProjectTemplateCat_Access($project_template_cat_id);
+			$this->project_template_cat_id = null;
+			$this->project_template_cat = new ProjectTemplateCat_Access(null);
 		}
 	}
 	
@@ -68,6 +76,7 @@ class ProjectTemplateCat implements ProjectTemplateCatInterface
 	 * @see ProjectTemplateCatInterface::create()
 	 * @param string $name
 	 * @return integer
+	 * @throws ProjectTemplateCategoryCreateException
 	 */
 	public function create($name)
 	{
@@ -77,13 +86,14 @@ class ProjectTemplateCat implements ProjectTemplateCatInterface
 		}
 		else
 		{
-			return null;
+			throw new ProjectTemplateCategoryCreateException();
 		}
 	}
 	
 	/**
 	 * @see ProjectTemplateCatInterface::delete()
 	 * @return bool
+	 * @throws ProjectTemplateCategoryDeleteException
 	 */
 	public function delete()
 	{
@@ -98,7 +108,7 @@ class ProjectTemplateCat implements ProjectTemplateCatInterface
 				}
 				else
 				{
-					return false;
+					throw new ProjectTemplateCategoryDeleteException();
 				}
 			}
 			else
@@ -108,7 +118,7 @@ class ProjectTemplateCat implements ProjectTemplateCatInterface
 		}
 		else
 		{
-			return null;
+			throw new ProjectTemplateCategoryDeleteException();
 		}
 	}
 	

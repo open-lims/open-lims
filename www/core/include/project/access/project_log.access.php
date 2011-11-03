@@ -529,7 +529,7 @@ class ProjectLog_Access
 	 * @param integer $id
 	 * @return bool
 	 */
-	public static function exist($id)
+	public static function exist_id($id)
 	{
 		global $db;
 

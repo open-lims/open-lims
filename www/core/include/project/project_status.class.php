@@ -44,17 +44,26 @@ class ProjectStatus implements ProjectStatusInterface
     /**
      * @see ProjectStatusInterface::__construct()
      * @param integer $status_id
+     * @throws ProjectStatusNotFoundException
      */
     function __construct($status_id)
     {
-    	if ($status_id == null) {
-    		$this->status_id = null;
-    		$this->status = new ProjectStatus_Access(null);
+    	if (is_numeric($status_id))
+		{
+			if (ProjectStatus_Access::exist_id($status_id) == true)
+			{
+				$this->status_id = $status_id;
+    			$this->status = new ProjectStatus_Access($status_id);
+			}
+			else
+			{
+				throw new ProjectStatusNotFoundException();
+			}
     	}
     	else
     	{
-    		$this->status_id = $status_id;
-    		$this->status = new ProjectStatus_Access($status_id);
+    		$this->status_id = null;
+    		$this->status = new ProjectStatus_Access(null);
     	}
     }
     
@@ -69,6 +78,7 @@ class ProjectStatus implements ProjectStatusInterface
      * @param string $name
      * @param string $comment
      * @return integer
+     * @throws ProjectStatusCreateException
      */
     public function create($name, $comment)
     {
@@ -78,13 +88,14 @@ class ProjectStatus implements ProjectStatusInterface
     	}
     	else
     	{
-    		return null;
+    		throw new ProjectStatusCreateException();
     	}
     }
     
     /**
      * @see ProjectStatusInterface::delete()
      * @return bool
+     * @throws ProjectStatusDeleteException;
      */
     public function delete()
     {
@@ -99,7 +110,7 @@ class ProjectStatus implements ProjectStatusInterface
     			}
     			else
     			{
-    				return false;
+    				throw new ProjectStatusDeleteException();
     			}
     		}
     		else
@@ -109,7 +120,7 @@ class ProjectStatus implements ProjectStatusInterface
     	}
     	else
     	{
-    		return false;
+    		throw new ProjectStatusDeleteException();
     	}
     }
     

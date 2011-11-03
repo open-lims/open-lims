@@ -2039,9 +2039,9 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	 */
     public function set_filesize($filesize)
     {
-    	if ($this->project_id and $this->project and $filesize)
+    	if ($this->project_id and $this->project)
     	{
-    		if ($filesize == null)
+    		if ($filesize == null or !is_numeric($filesize))
     		{
     			$filesize = "0";
     		}

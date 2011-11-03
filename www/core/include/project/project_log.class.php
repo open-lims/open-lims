@@ -48,9 +48,9 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 	 */
 	function __construct($log_id)
 	{
-		if ($log_id)
+		if (is_numeric($log_id))
 		{
-			if (ProjectLog_Access::exist($log_id) == true)
+			if (ProjectLog_Access::exist_id($log_id) == true)
 			{
 				$this->log_id = $log_id;
 				$this->log = new ProjectLog_Access($log_id);

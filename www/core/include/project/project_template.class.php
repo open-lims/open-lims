@@ -43,18 +43,26 @@ class ProjectTemplate implements ProjectTemplateInterface
 	/**
 	 * @see ProjectTemplateInterface::__construct()
 	 * @param integer $project_tempalte_id
+	 * @throws ProjectTemplateNotFoundException
 	 */
 	function __construct($project_template_id)
 	{
-		if ($project_template_id == null)
+		if (is_numeric($project_template_id))
 		{
-			$this->project_template_id = null;
-			$this->project_template = new ProjectTemplate_Access(null);
+			if (ProjectTemplate_Access::exist_id($project_template_id) == true)
+			{
+				$this->project_template_id = $project_template_id;
+				$this->project_template = new ProjectTemplate_Access($project_template_id);
+			}
+			else
+			{
+				throw new ProjectTemplateNotFoundException();
+			}
 		}
 		else
 		{
-			$this->project_template_id = $project_template_id;
-			$this->project_template = new ProjectTemplate_Access($project_template_id);
+			$this->project_template_id = null;
+			$this->project_template = new ProjectTemplate_Access(null);
 		}
 	}
 	
@@ -73,6 +81,9 @@ class ProjectTemplate implements ProjectTemplateInterface
 	 * @param integer $category_id
 	 * @param bool $parent_template
 	 * @return bool
+	 * @throws ProjectTemplateCreateException
+	 * @throws ProjectTemplateCreateOLDLNotFoundException
+	 * @throws ProjectTemplateCreateOLDLCreateException
 	 */
 	public function create($data_entity_id, $category_id, $parent_template)
 	{
@@ -132,7 +143,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 				
 				if ($oldl_found == false or $title_found == false)
 				{
-					return false;
+					throw new ProjectTemplateCreateOLDLNotFoundException();
 				}
 				
 				$transaction_id = $transaction->begin();
@@ -144,7 +155,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 					{
 						$transaction->rollback($transaction_id);
 					}
-					return false;
+					throw new ProjectTemplateCreateOLDLCreateException();
 				}
 		
 				if ($this->project_template->create($id, $title, $category_id, $parent_template, $oldl_id) == false)
@@ -153,7 +164,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 					{
 						$transaction->rollback($transaction_id);
 					}
-					return false;
+					throw new ProjectTemplateCreateException("DB Failed");
 				}
 				else
 				{
@@ -166,18 +177,21 @@ class ProjectTemplate implements ProjectTemplateInterface
 			}
 			else
 			{
-				return false;
+				throw new ProjectTemplateCreateException("XML File Empty or Corrupt");
 			}
 		}
 		else
 		{
-			return false;
+			throw new ProjectTemplateCreateException("Missing Information");
 		}
 	}
 	
 	/**
 	 * @see ProjectTemplateInterface::delete()
 	 * @return bool
+	 * @throws ProjectTemplateDeleteException
+	 * @throws ProjectTemplateDeleteInUseException
+	 * @throws ProjectTemplateDeleteOLDLDeleteExcepion
 	 */
 	public function delete()
 	{
@@ -190,7 +204,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 			{
 				if (count($project_array) != 0)
 				{
-					return false;
+					throw new ProjectTemplateDeleteInUseException();
 				}
 			}
 			
@@ -204,7 +218,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 				{
 					$transaction->rollback($transaction_id);
 				}
-				return false;
+				throw new ProjectTemplateDeleteException("DB delete failed");
 			}
 			
 			if ($oldl->delete() == false)
@@ -213,7 +227,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 				{
 					$transaction->rollback($transaction_id);
 				}
-				return false;
+				throw new ProjectTemplateDeleteOLDLDeleteException();
 			}
 			else
 			{
@@ -226,7 +240,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 		}
 		else
 		{
-			return false;
+			throw new ProjectTemplateDeleteException("Missing Information");
 		}
 	}
 	
