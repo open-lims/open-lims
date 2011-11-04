@@ -232,8 +232,8 @@ class AdminSampleTemplateIO
 		else
 		{
 			$exception = new Exception("", 3);
-			$error_io = new Error_IO($exception, 250, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 250, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -265,8 +265,8 @@ class AdminSampleTemplateIO
 		}
 		catch (SampleTemplateNotFoundException $e)
 		{
-			$error_io = new Error_IO($e, 250, 40, 1);
-			$error_io->display_error();
+			// $error_io = new Error_IO($e, 250, 40, 1);
+			// $error_io->display_error();
 		}
 	}
 	

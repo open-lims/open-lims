@@ -22,15 +22,15 @@
  */
 
 /**
- * Group Creation Failed Exception
+ * User Exception
  * @package base
  */
-class GroupCreationFailedException extends Exception
-{    
-	function __construct($message, $code)
+class UserException extends BaseException
+{
+    function __construct($write_log = false, $write_hdd_session = false, $write_hdd_sql = false, $message = null, $additional_information = null)
     {
-    	parent::__construct($message, $code);	
-    } 
+    	parent::__construct($write_log, $write_hdd_session, $write_hdd_sql, $message, $additional_information);	
+    }   
 }
 
 ?>

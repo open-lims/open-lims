@@ -272,15 +272,15 @@ class AdminSystemLogIO
 			else
 			{
 				$exception = new Exception("", 10);
-				$error_io = new Error_IO($exception, 1, 40, 1);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 1);
+				// $error_io->display_error();
 			}
 		}
 		else
 		{
 			$exception = new Exception("", 10);
-			$error_io = new Error_IO($exception, 1, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -346,15 +346,15 @@ class AdminSystemLogIO
 			else
 			{
 				$exception = new Exception("", 11);
-				$error_io = new Error_IO($exception, 1, 40, 1);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 1);
+				// $error_io->display_error();
 			}
 		}
 		else
 		{
 			$exception = new Exception("", 11);
-			$error_io = new Error_IO($exception, 1, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3);
+			// $error_io->display_error();
 		}
 	}
 		

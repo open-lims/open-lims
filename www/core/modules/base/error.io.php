@@ -27,7 +27,7 @@
  */
 class Error_IO
 {
-	private $exception_handler;
+	private $exception;
 	private $error_type;
 	
 	/**
@@ -36,30 +36,35 @@ class Error_IO
 	 * @param integer $layer
 	 * @param integer $error_type
 	 */
-	function __construct($exception, $module, $layer, $error_type)
+	function __construct($exception, $error_type, $module = null, $layer = null)
 	{
-		$this->exception_handler = new DeprExceptionHandler($exception, $module, $layer, $error_type);
+		$this->exception = $exception;
 		$this->error_type = $error_type;
 	}
 	
 	public function display_error()
 	{
-		if ($this->exception_handler)
+		if ($this->error_type == 2)
 		{
-			if ($this->error_type == 2)
-			{
-				$template = new Template("template/base/error/security_in_box.html");
-			}
-			else
-			{
-				$template = new Template("template/base/error/error_in_box.html");
-			}	
-				
-			$template->set_var("error_code", $this->exception_handler->get_error_no());	
-			$template->set_var("error_msg", $this->exception_handler->get_error_message());
-	
-			$template->output();
+			$template = new Template("template/base/error/security_in_box.html");
 		}
+		else
+		{
+			$template = new Template("template/base/error/error_in_box.html");
+		}	
+		
+		$error_message = $this->exception->getMessage();
+		
+		if ($error_message)
+		{
+			$template->set_var("error_msg", $error_message);
+		}
+		else
+		{
+			$template->set_var("error_msg", "A non-specific error occured");
+		}
+
+		$template->output();
 	}
 	
 	/**

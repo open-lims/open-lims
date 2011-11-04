@@ -22,14 +22,14 @@
  */
 
 /**
- * Group Creation Failed Exception
+ * User Not Found Exception
  * @package base
  */
-class GroupCreationFailedException extends Exception
+class UserNotFoundException extends UserException
 {    
-	function __construct($message, $code)
+	function __construct()
     {
-    	parent::__construct($message, $code);	
+    	parent::__construct(true, false, false, "User not found", null);	
     } 
 }
 

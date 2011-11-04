@@ -1,6 +1,6 @@
 <?php
 /**
- * @package user
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -28,9 +28,11 @@ require_once("interfaces/group.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	/**
+	 * @deprecated redefinde exceptions
+	 */
 	require_once("exceptions/group_already_exist_exception.class.php");
 	require_once("exceptions/group_creation_failed_exception.class.php");
-	require_once("exceptions/group_not_found_exception.class.php");
 	
 	require_once("events/group_create_event.class.php");
 	require_once("events/group_delete_event.class.php");
@@ -43,7 +45,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 
 /**
  * Group Management Class
- * @package user
+ * @package base
  */
 class Group implements GroupInterface
 {

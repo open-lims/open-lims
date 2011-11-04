@@ -80,15 +80,15 @@ class SampleAdminIO
 			else
 			{
 				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 250, 40, 2);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 250, 40, 2);
+				// $error_io->display_error();
 			}
 		}
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 250, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 250, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -153,22 +153,22 @@ class SampleAdminIO
 				else
 				{
 					$exception = new Exception("", 1);
-					$error_io = new Error_IO($exception, 250, 40, 2);
-					$error_io->display_error();
+					// $error_io = new Error_IO($exception, 250, 40, 2);
+					// $error_io->display_error();
 				}
 			}
 			else
 			{
 				$exception = new Exception("", 2);
-				$error_io = new Error_IO($exception, 250, 40, 3);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 250, 40, 3);
+				// $error_io->display_error();
 			}
 		}
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 250, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 250, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -244,15 +244,15 @@ class SampleAdminIO
 			else
 			{
 				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 250, 40, 2);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 250, 40, 2);
+				// $error_io->display_error();
 			}
 		}
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 250, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 250, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -375,15 +375,15 @@ class SampleAdminIO
 			else
 			{
 				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 250, 40, 2);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 250, 40, 2);
+				// $error_io->display_error();
 			}
 		}
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 250, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 250, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -525,15 +525,15 @@ class SampleAdminIO
 			else
 			{
 				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 250, 40, 2);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 250, 40, 2);
+				// $error_io->display_error();
 			}
 		}
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 250, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 250, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -597,22 +597,22 @@ class SampleAdminIO
 				else
 				{
 					$exception = new Exception("", 1);
-					$error_io = new Error_IO($exception, 250, 40, 2);
-					$error_io->display_error();
+					// $error_io = new Error_IO($exception, 250, 40, 2);
+					// $error_io->display_error();
 				}
 			}
 			else
 			{
 				$exception = new Exception("", 0);
-				$error_io = new Error_IO($exception, 250, 40, 3);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 250, 40, 3);
+				// $error_io->display_error();
 			}
 		}
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 250, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 250, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -705,15 +705,15 @@ class SampleAdminIO
 			else
 			{
 				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 250, 40, 2);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 250, 40, 2);
+				// $error_io->display_error();
 			}
 		}
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 250, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 250, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -811,15 +811,15 @@ class SampleAdminIO
 			else
 			{
 				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 250, 40, 2);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 250, 40, 2);
+				// $error_io->display_error();
 			}
 		}
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 250, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 250, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -883,22 +883,22 @@ class SampleAdminIO
 				else
 				{
 					$exception = new Exception("", 1);
-					$error_io = new Error_IO($exception, 250, 40, 2);
-					$error_io->display_error();
+					// $error_io = new Error_IO($exception, 250, 40, 2);
+					// $error_io->display_error();
 				}
 			}
 			else
 			{
 				$exception = new Exception("", 0);
-				$error_io = new Error_IO($exception, 250, 40, 3);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 250, 40, 3);
+				// $error_io->display_error();
 			}
 		}
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 250, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 250, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 

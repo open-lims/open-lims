@@ -27,15 +27,17 @@
  */
 class ProjectAdminIO
 {
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
+	 */
 	public static function permission()
 	{
-		global $user;
+		global $project_security, $user;
 		
 		if ($_GET[project_id])
 		{
 			$project_id = $_GET[project_id];
-			
-			$project_security = new ProjectSecurity($project_id);
 			$project = new Project($project_id);
 			$project_permission_array = ProjectPermission::list_entries_by_project_id($project_id);
 			
@@ -317,28 +319,26 @@ class ProjectAdminIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
+	 */
 	public static function permission_add_user()
 	{
-		global $user;
+		global $project_security, $user;
 
 		if ($_GET[project_id])
 		{
 			$project_id = $_GET[project_id];		
-	
-			$project_security = new ProjectSecurity($project_id);
 			$project = new Project($project_id);
 			
 			if ($user->get_user_id() == $project->get_owner_id() or
@@ -564,262 +564,271 @@ class ProjectAdminIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
+	 */
 	public static function permission_add_group()
 	{
-		global $user;
+		global $project_security, $user;
 
 		if ($_GET[project_id])
 		{
 			$project_id = $_GET[project_id];		
-	
-			$project_security = new ProjectSecurity($project_id);
+
 			$project = new Project($project_id);
 			
-			if ($_GET[nextpage] == 1)
+			if ($user->get_user_id() == $project->get_owner_id() or
+				$project_security->is_access(2, false) == true or
+				$project_security->is_access(4, false) == true or
+				$project_security->is_access(7, false) == true)
 			{
-				if (is_numeric($_POST[group]))
+				if ($_GET[nextpage] == 1)
+				{
+					if (is_numeric($_POST[group]))
+					{
+						$page_1_passed = true;
+					}
+					else
+					{
+						$page_1_passed = false;
+						$error = "You must select a group.";
+					}
+				}
+				elseif($_GET[nextpage] > 1)
 				{
 					$page_1_passed = true;
 				}
 				else
 				{
 					$page_1_passed = false;
-					$error = "You must select a group.";
-				}
-			}
-			elseif($_GET[nextpage] > 1)
-			{
-				$page_1_passed = true;
-			}
-			else
-			{
-				$page_1_passed = false;
-				$error = "";
-			}
-			
-			if ($page_1_passed == false)
-			{
-				$template = new Template("template/projects/admin/permission_add_group.html");
-				
-				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
-				$params = http_build_query($paramquery,'','&#38;');
-				
-				$template->set_var("params",$params);
-				
-				$template->set_var("error",$error);
-				
-				$group_array = Group::list_groups();
-				
-				$result = array();
-				$counter = 0;
-				
-				foreach($group_array as $key => $value)
-				{
-					$group = new Group($value);
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $group->get_name();
-					$counter++;
+					$error = "";
 				}
 				
-				$template->set_var("option",$result);
-				
-				$template->output();
-			}
-			else
-			{
-				if ($_GET[nextpage] == 2)
+				if ($page_1_passed == false)
 				{
-					if ($_POST[re] == "1" or 
-						$_POST[sr] == "1" or 
-						$_POST[wr] == "1" or 
-						$_POST[sw] == "1" or 
-						$_POST[ra] == "1" or 
-						$_POST[de] == "1" or 
-						$_POST[sp] == "1")
+					$template = new Template("template/projects/admin/permission_add_group.html");
+					
+					$paramquery = $_GET;
+					$paramquery[nextpage] = "1";
+					$params = http_build_query($paramquery,'','&#38;');
+					
+					$template->set_var("params",$params);
+					
+					$template->set_var("error",$error);
+					
+					$group_array = Group::list_groups();
+					
+					$result = array();
+					$counter = 0;
+					
+					foreach($group_array as $key => $value)
+					{
+						$group = new Group($value);
+						$result[$counter][value] = $value;
+						$result[$counter][content] = $group->get_name();
+						$counter++;
+					}
+					
+					$template->set_var("option",$result);
+					
+					$template->output();
+				}
+				else
+				{
+					if ($_GET[nextpage] == 2)
+					{
+						if ($_POST[re] == "1" or 
+							$_POST[sr] == "1" or 
+							$_POST[wr] == "1" or 
+							$_POST[sw] == "1" or 
+							$_POST[ra] == "1" or 
+							$_POST[de] == "1" or 
+							$_POST[sp] == "1")
+						{
+							$page_2_passed = true;
+						}
+						else
+						{
+							$page_2_passed = false;
+							$error = "You must select min. one permission.";
+						}
+					}
+					elseif($_GET[nextpage] > 2)
 					{
 						$page_2_passed = true;
 					}
 					else
 					{
 						$page_2_passed = false;
-						$error = "You must select min. one permission.";
+						$error = "";
+					}
+					
+					if ($page_2_passed == false)
+					{
+						$template = new Template("template/projects/admin/permission_add_edit.html");
+						
+						$template->set_var("add_edit","Add");
+						
+						$new_group = new Group($_POST[group]);
+						
+						$paramquery = $_GET;
+						$paramquery[nextpage] = "2";
+						$params = http_build_query($paramquery,'','&#38;');
+						
+						$template->set_var("params",$params);
+						
+						$template->set_var("name",$new_group->get_name());
+						$template->set_var("type","user");
+						
+						$template->set_var("error",$error);
+						
+						if ($project_security->is_access(2, false) or $project->get_owner_id() == $user->get_user_id())
+						{				
+							$template->set_var("disabled_re", "");
+						}
+						else
+						{
+							$template->set_var("disabled_re", "disabled");	
+						}
+						
+						if ($project_security->is_access(7, false) or $project->get_owner_id() == $user->get_user_id())
+						{
+							$template->set_var("disabled_sr", "");
+						}
+						else
+						{
+							$template->set_var("disabled_sr", "disabled");		
+						}
+						
+						if ($project_security->is_access(4, false) or $project->get_owner_id() == $user->get_user_id())
+						{
+							$template->set_var("disabled_wr", "");
+						}
+						else
+						{
+							$template->set_var("disabled_wr", "disabled");		
+						}
+						
+						if ($project_security->is_access(7, false) or $project->get_owner_id() == $user->get_user_id())
+						{
+							$template->set_var("disabled_sw", "");
+						}
+						else
+						{
+							$template->set_var("disabled_sw", "disabled");		
+						}
+						
+						if ($project_security->is_access(7, false))
+						{
+							$template->set_var("disabled_ra", "");	
+							$template->set_var("disabled_de", "");	
+							$template->set_var("disabled_sp", "");
+						}
+						else
+						{
+							$template->set_var("disabled_ra", "disabled");	
+							$template->set_var("disabled_de", "disabled");	
+							$template->set_var("disabled_sp", "disabled");						
+						}
+						
+						$template->set_var("checked_re", "");
+						$template->set_var("checked_sr", "");
+						$template->set_var("checked_wr", "");
+						$template->set_var("checked_sw", "");
+						$template->set_var("checked_ra", "");	
+						$template->set_var("checked_de", "");	
+						$template->set_var("checked_sp", "");
+						
+						$template->set_var("user","");
+						$template->set_var("group",$_POST[group]);
+						$template->set_var("ou","");
+						
+						$template->output();
+					}
+					else
+					{
+						$paramquery = $_GET;
+						unset($paramquery[nextpage]);
+						unset($paramquery[id]);
+						$paramquery[run] = "admin_permission";
+						$params = http_build_query($paramquery);
+						
+						$project_permission = new ProjectPermissionGroup(null);
+						
+						$new_permssion = 0;
+						
+						if ($_POST[re] == "1")
+						{
+							$new_permission = $new_permission + 1;
+						}
+						if ($_POST[sr] == "1")
+						{
+							$new_permission = $new_permission + 2;
+						}
+						if ($_POST[wr] == "1")
+						{
+							$new_permission = $new_permission + 4;
+						}
+						if ($_POST[sw] == "1")
+						{
+							$new_permission = $new_permission + 8;
+						}
+						if ($_POST[ra] == "1") 
+						{
+							$new_permission = $new_permission + 16;
+						}
+						if ($_POST[de] == "1")
+						{
+							$new_permission = $new_permission + 32;
+						}
+						if ($_POST[sp] == "1")
+						{
+							$new_permission = $new_permission + 64;
+						}
+						
+						if ($project_permission->create($_POST[group], $project_id, $new_permission, $user->get_user_id(), null))
+						{
+							Common_IO::step_proceed($params, "Add Permission", "Operation Successful", null);
+						}
+						else
+						{
+							Common_IO::step_proceed($params, "Add Permission", "Operation Failed" ,null);	
+						}
 					}
 				}
-				elseif($_GET[nextpage] > 2)
-				{
-					$page_2_passed = true;
-				}
-				else
-				{
-					$page_2_passed = false;
-					$error = "";
-				}
-				
-				if ($page_2_passed == false)
-				{
-					$template = new Template("template/projects/admin/permission_add_edit.html");
-					
-					$template->set_var("add_edit","Add");
-					
-					$new_group = new Group($_POST[group]);
-					
-					$paramquery = $_GET;
-					$paramquery[nextpage] = "2";
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$template->set_var("params",$params);
-					
-					$template->set_var("name",$new_group->get_name());
-					$template->set_var("type","user");
-					
-					$template->set_var("error",$error);
-					
-					if ($project_security->is_access(2, false) or $project->get_owner_id() == $user->get_user_id())
-					{				
-						$template->set_var("disabled_re", "");
-					}
-					else
-					{
-						$template->set_var("disabled_re", "disabled");	
-					}
-					
-					if ($project_security->is_access(7, false) or $project->get_owner_id() == $user->get_user_id())
-					{
-						$template->set_var("disabled_sr", "");
-					}
-					else
-					{
-						$template->set_var("disabled_sr", "disabled");		
-					}
-					
-					if ($project_security->is_access(4, false) or $project->get_owner_id() == $user->get_user_id())
-					{
-						$template->set_var("disabled_wr", "");
-					}
-					else
-					{
-						$template->set_var("disabled_wr", "disabled");		
-					}
-					
-					if ($project_security->is_access(7, false) or $project->get_owner_id() == $user->get_user_id())
-					{
-						$template->set_var("disabled_sw", "");
-					}
-					else
-					{
-						$template->set_var("disabled_sw", "disabled");		
-					}
-					
-					if ($project_security->is_access(7, false))
-					{
-						$template->set_var("disabled_ra", "");	
-						$template->set_var("disabled_de", "");	
-						$template->set_var("disabled_sp", "");
-					}
-					else
-					{
-						$template->set_var("disabled_ra", "disabled");	
-						$template->set_var("disabled_de", "disabled");	
-						$template->set_var("disabled_sp", "disabled");						
-					}
-					
-					$template->set_var("checked_re", "");
-					$template->set_var("checked_sr", "");
-					$template->set_var("checked_wr", "");
-					$template->set_var("checked_sw", "");
-					$template->set_var("checked_ra", "");	
-					$template->set_var("checked_de", "");	
-					$template->set_var("checked_sp", "");
-					
-					$template->set_var("user","");
-					$template->set_var("group",$_POST[group]);
-					$template->set_var("ou","");
-					
-					$template->output();
-				}
-				else
-				{
-					$paramquery = $_GET;
-					unset($paramquery[nextpage]);
-					unset($paramquery[id]);
-					$paramquery[run] = "admin_permission";
-					$params = http_build_query($paramquery);
-					
-					$project_permission = new ProjectPermissionGroup(null);
-					
-					$new_permssion = 0;
-					
-					if ($_POST[re] == "1")
-					{
-						$new_permission = $new_permission + 1;
-					}
-					if ($_POST[sr] == "1")
-					{
-						$new_permission = $new_permission + 2;
-					}
-					if ($_POST[wr] == "1")
-					{
-						$new_permission = $new_permission + 4;
-					}
-					if ($_POST[sw] == "1")
-					{
-						$new_permission = $new_permission + 8;
-					}
-					if ($_POST[ra] == "1") 
-					{
-						$new_permission = $new_permission + 16;
-					}
-					if ($_POST[de] == "1")
-					{
-						$new_permission = $new_permission + 32;
-					}
-					if ($_POST[sp] == "1")
-					{
-						$new_permission = $new_permission + 64;
-					}
-					
-					if ($project_permission->create($_POST[group], $project_id, $new_permission, $user->get_user_id(), null))
-					{
-						Common_IO::step_proceed($params, "Add Permission", "Operation Successful", null);
-					}
-					else
-					{
-						Common_IO::step_proceed($params, "Add Permission", "Operation Failed" ,null);	
-					}
-				}
+			}
+			else
+			{
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
+	 */
 	public static function permission_add_organisation_unit()
 	{
-		global $user;
+		global $project_security, $user;
 
 		if ($_GET[project_id])
 		{
 			$project_id = $_GET[project_id];		
-	
-			$project_security = new ProjectSecurity($project_id);
 			$project = new Project($project_id);
 			
 			if ($user->get_user_id() == $project->get_owner_id() or
@@ -1044,22 +1053,23 @@ class ProjectAdminIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
+	 * @throws ProjectPermissionIDMissingException
+	 */
 	public static function permission_edit()
 	{
-		global $user;
+		global $project_security, $user;
 		
 		if ($_GET[project_id])
 		{
@@ -1067,7 +1077,6 @@ class ProjectAdminIO
 			{
 				$project_id = $_GET[project_id];
 				$project = new Project($project_id);
-				$project_security = new ProjectSecurity($project_id);
 				$project_permission = ProjectPermission::get_instance($_GET[id]);
 				
 				if ($user->get_user_id() == $project->get_owner_id() or
@@ -1283,35 +1292,33 @@ class ProjectAdminIO
 				}
 				else
 				{
-					$exception = new Exception("", 1);
-					$error_io = new Error_IO($exception, 200, 40, 2);
-					$error_io->display_error();
+					throw new ProjectSecurityAccessDeniedException();
 				}
 			}
 			else
 			{
-				$exception = new Exception("", 0);
-				$error_io = new Error_IO($exception, 200, 40, 3);
-				$error_io->display_error();
+				throw new ProjectPermissonIDMissingException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}	
 	}
 	
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
+	 * @throws ProjectPermissionIDMissingException
+	 */
 	public static function permission_delete()
 	{
-		global $user;
+		global $project_security, $user;
 		
 		if ($_GET[project_id])
 		{
 			if ($_GET[id])
 			{
-				$project_security = new ProjectSecurity($_GET[project_id]);
 				$project = new Project($_GET[project_id]);
 			
 				if ($user->get_user_id() == $project->get_owner_id() or
@@ -1362,26 +1369,24 @@ class ProjectAdminIO
 				}
 				else
 				{
-					$exception = new Exception("", 1);
-					$error_io = new Error_IO($exception, 200, 40, 2);
-					$error_io->display_error();
+					throw new ProjectSecurityAccessDeniedException();
 				}
 			}
 			else
 			{
-				$exception = new Exception("", 0);
-				$error_io = new Error_IO($exception, 200, 40, 3);
-				$error_io->display_error();
+				throw new ProjectPermissionIDMissingException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
+	 */
 	public static function rename()
 	{
 		global $project_security, $user;
@@ -1477,19 +1482,19 @@ class ProjectAdminIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
+	 */
 	public static function chown()
 	{
 		global $project_security;
@@ -1567,19 +1572,19 @@ class ProjectAdminIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}		
 	}
 	
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
+	 */
 	public static function move()
 	{
 		global $project_security, $user;
@@ -1797,19 +1802,19 @@ class ProjectAdminIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
+	 */
 	public static function quota()
 	{
 		global $project_security;
@@ -1880,19 +1885,19 @@ class ProjectAdminIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
+	 */
 	public static function delete()
 	{
 		global $project_security;
@@ -1946,19 +1951,19 @@ class ProjectAdminIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
+	 */
 	public static function full_delete()
 	{
 		global $user;
@@ -2012,19 +2017,19 @@ class ProjectAdminIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
+	 */
 	public static function restore()
 	{
 		global $user;
@@ -2078,19 +2083,19 @@ class ProjectAdminIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
+	 */
 	public static function cancel()
 	{
 		global $project_security, $user;
@@ -2163,19 +2168,19 @@ class ProjectAdminIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
+	 */
 	public static function reactivate()
 	{		
 		if ($_GET[project_id])
@@ -2227,19 +2232,19 @@ class ProjectAdminIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
+	 */
 	public static function menu()
 	{
 		global $user, $project_security;
@@ -2437,16 +2442,12 @@ class ProjectAdminIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 

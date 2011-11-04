@@ -22,14 +22,14 @@
  */
 
 /**
- * Project Log Item Delete Exception
+ * Project Not Found Exception
  * @package project
  */
-class ProjectLogItemDeleteException extends ProjectLogException
+class ProjectPermissionIDMissingException extends ProjectPermissionException
 {
-    function __construct($message = null)
+    function __construct()
     {
-    	parent::__construct(true, false, true, $message);	
+    	parent::__construct(true, false, false, "Project Permission ID is missing");	
     }   
 }
 

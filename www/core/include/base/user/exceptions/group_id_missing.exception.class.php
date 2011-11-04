@@ -22,14 +22,14 @@
  */
 
 /**
- * Group Creation Failed Exception
+ * Group ID Missing Exception
  * @package base
  */
-class GroupCreationFailedException extends Exception
+class GroupIDMissingException extends GroupException
 {    
-	function __construct($message, $code)
+	function __construct()
     {
-    	parent::__construct($message, $code);	
+    	parent::__construct(true, false, false, "Group ID is missing", null);	
     } 
 }
 

@@ -351,8 +351,8 @@ class AdminEquipmentTypeIO
 		else
 		{
 			$exception = new Exception("", 5);
-			$error_io = new Error_IO($exception, 50, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 50, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -403,8 +403,8 @@ class AdminEquipmentTypeIO
 		else
 		{
 			$exception = new Exception("", 5);
-			$error_io = new Error_IO($exception, 50, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 50, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -532,8 +532,8 @@ class AdminEquipmentTypeIO
 		else
 		{
 			$exception = new Exception("", 5);
-			$error_io = new Error_IO($exception, 50, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 50, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -643,8 +643,8 @@ class AdminEquipmentTypeIO
 		else
 		{
 			$exception = new Exception("", 5);
-			$error_io = new Error_IO($exception, 50, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 50, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -734,8 +734,8 @@ class AdminEquipmentTypeIO
 		else
 		{
 			$exception = new Exception("", 5);
-			$error_io = new Error_IO($exception, 50, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 50, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -785,8 +785,8 @@ class AdminEquipmentTypeIO
 		else
 		{
 			$exception = new Exception("", 5);
-			$error_io = new Error_IO($exception, 50, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 50, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -876,8 +876,8 @@ class AdminEquipmentTypeIO
 		else
 		{
 			$exception = new Exception("", 5);
-			$error_io = new Error_IO($exception, 50, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 50, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -927,8 +927,8 @@ class AdminEquipmentTypeIO
 		else
 		{
 			$exception = new Exception("", 5);
-			$error_io = new Error_IO($exception, 50, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 50, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -998,8 +998,8 @@ class AdminEquipmentTypeIO
 		else
 		{
 			$exception = new Exception("", 5);
-			$error_io = new Error_IO($exception, 50, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 50, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -1060,8 +1060,8 @@ class AdminEquipmentTypeIO
 		}
 		catch (EquipmentTypeNotFoundException $e)
 		{
-			$error_io = new Error_IO($e, 50, 40, 1);
-			$error_io->display_error();
+			// $error_io = new Error_IO($e, 50, 40, 1);
+			// $error_io->display_error();
 		}
 	}
 	

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package user
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -23,7 +23,7 @@
 
 /**
  * Group Admin IO Class
- * @package user
+ * @package base
  */
 class AdminGroupIO
 {
@@ -220,13 +220,13 @@ class AdminGroupIO
 			}
 			catch (GroupCreationFailedException $e)
 			{
-				$error_io = new Error_IO($e, 3, 30, 1);
-				$error_io->display_error();
+				// $error_io = new Error_IO($e, 1);
+				// $error_io->display_error();
 			}
 			catch (GroupAlreadyExistException $e)
 			{
-				$error_io = new Error_IO($e, 3, 30, 1);
-				$error_io->display_error();
+				// $error_io = new Error_IO($e, 1);
+				// $error_io->display_error();
 			}
 		}
 	}
@@ -279,8 +279,8 @@ class AdminGroupIO
 		else
 		{
 			$exception = new Exception("", 2);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -391,8 +391,8 @@ class AdminGroupIO
 		else
 		{
 			$exception = new Exception("", 2);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3);
+			// $error_io->display_error();
 		}
 	}
 
@@ -482,8 +482,8 @@ class AdminGroupIO
 		else
 		{
 			$exception = new Exception("", 2);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -533,8 +533,8 @@ class AdminGroupIO
 		else
 		{
 			$exception = new Exception("", 2);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -624,8 +624,8 @@ class AdminGroupIO
 		else
 		{
 			$exception = new Exception("", 2);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -675,8 +675,8 @@ class AdminGroupIO
 		else
 		{
 			$exception = new Exception("", 2);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -757,8 +757,8 @@ class AdminGroupIO
 		else
 		{
 			$exception = new Exception("", 2);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -770,7 +770,7 @@ class AdminGroupIO
 			{
 				if (Group::exist_group($_GET[id]) == false)
 				{
-					throw new GroupNotFoundException("",3);
+					throw new GroupNotFoundException();
 				}
 			}
 		
@@ -814,8 +814,8 @@ class AdminGroupIO
 		}
 		catch (GroupNotFoundException $e)
 		{
-			$error_io = new Error_IO($e, 3, 40, 1);
-			$error_io->display_error();
+			// $error_io = new Error_IO($e, 1);
+			// $error_io->display_error();
 		}
 	}
 	

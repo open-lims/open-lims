@@ -1,6 +1,6 @@
 <?php
 /**
- * @package user
+ * @package project
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -22,15 +22,15 @@
  */
 
 /**
- * User Not Found Exception
- * @package user
+ * Project Not Found Exception
+ * @package project
  */
-class UserNotFoundException extends Exception
-{    
-	function __construct($message, $code)
+class ProjectTemplateCategoryIDMissingException extends ProjectTemplateException
+{
+    function __construct()
     {
-    	parent::__construct($message, $code);	
-    } 
+    	parent::__construct(true, false, false, "Project Template Category ID is missing");	
+    }   
 }
 
 ?>

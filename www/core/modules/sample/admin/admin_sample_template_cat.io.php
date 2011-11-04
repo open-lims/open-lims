@@ -228,8 +228,8 @@ class AdminSampleTemplateCatIO
 		else
 		{
 			$exception = new Exception("", 5);
-			$error_io = new Error_IO($exception, 250, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 250, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -313,8 +313,8 @@ class AdminSampleTemplateCatIO
 		else
 		{
 			$exception = new Exception("", 5);
-			$error_io = new Error_IO($exception, 250, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 250, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -350,8 +350,8 @@ class AdminSampleTemplateCatIO
 		}
 		catch (SampleTemplateCategoryNotFoundException $e)
 		{
-			$error_io = new Error_IO($e, 250, 40, 1);
-			$error_io->display_error();
+			// $error_io = new Error_IO($e, 250, 40, 1);
+			// $error_io->display_error();
 		}
 	}
 	

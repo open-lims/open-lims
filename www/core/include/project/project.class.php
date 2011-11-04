@@ -396,8 +396,12 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					{
 						$organisation_unit = new OrganisationUnit($organisation_unit_id);
 	
-						$project_permission = new ProjectPermissionUser(null);
-						if ($project_permission->create($owner_id, $project_id, constant("PROJECT_USER_STD_PERMISSION"), null, 1) == null)
+						try
+						{
+							$project_permission = new ProjectPermissionUser(null);
+							$project_permission->create($owner_id, $project_id, constant("PROJECT_USER_STD_PERMISSION"), null, 1);
+						}
+						catch (ProjectPermissionUserException $e)
 						{
 							$project_folder->delete(true, true);
 							if ($transaction_id != null)
@@ -413,8 +417,12 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						{
 							foreach($leader_array as $key => $value)
 							{
-								$project_permission = new ProjectPermissionUser(null);
-								if ($project_permission->create($value, $project_id, constant("PROJECT_LEADER_STD_PERMISSION"), null, 2) == null)
+								try
+								{
+									$project_permission = new ProjectPermissionUser(null);
+									$project_permission->create($value, $project_id, constant("PROJECT_LEADER_STD_PERMISSION"), null, 2);
+								}
+								catch (ProjectPermissionUserException $e)
 								{
 									$project_folder->delete(true, true);
 									if ($transaction_id != null)
@@ -425,9 +433,13 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 								}
 							}
 						}
-											
-						$project_permission = new ProjectPermissionOrganisationUnit(null);
-						if ($project_permission->create($organisation_unit_id, $project_id, constant("PROJECT_OU_STD_PERMISSION"), null, 3) == null)
+
+						try
+						{
+							$project_permission = new ProjectPermissionOrganisationUnit(null);
+							$project_permission->create($organisation_unit_id, $project_id, constant("PROJECT_OU_STD_PERMISSION"), null, 3);
+						}
+						catch (ProjectPermissionOrganisationUnitException $e)
 						{
 							$project_folder->delete(true, true);
 							if ($transaction_id != null)
@@ -444,8 +456,12 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						{
 							foreach($quality_manager_array as $key => $value)
 							{
-								$project_permission = new ProjectPermissionUser(null);
-								if ($project_permission->create($value, $project_id, constant("PROJECT_QM_STD_PERMISSION"), null, 5) == null)
+								try
+								{
+									$project_permission = new ProjectPermissionUser(null);
+									$project_permission->create($value, $project_id, constant("PROJECT_QM_STD_PERMISSION"), null, 5);
+								}
+								catch (ProjectPermissionUserException $e)
 								{
 									$project_folder->delete(true, true);
 									if ($transaction_id != null)
@@ -463,8 +479,12 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						{
 							foreach($group_array as $key => $value)
 							{
-								$project_permission = new ProjectPermissionGroup(null);
-								if ($project_permission->create($value, $project_id, constant("PROJECT_GROUP_STD_PERMISSION"), null, 4) == null)
+								try
+								{
+									$project_permission = new ProjectPermissionGroup(null);
+									$project_permission->create($value, $project_id, constant("PROJECT_GROUP_STD_PERMISSION"), null, 4);
+								}
+								catch (ProjectPermissionGroupException $e)
 								{
 									$project_folder->delete(true, true);
 									if ($transaction_id != null)
@@ -535,8 +555,12 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     		{
 	    		foreach ($project_permission_array as $key => $value)
 	    		{
-	    			$project_permission = ProjectPermission::get_instance($value);
-	    			if ($project_permission->delete() == false)
+	    			try
+	    			{
+	    				$project_permission = ProjectPermission::get_instance($value);
+	    				$project_permission->delete();
+	    			}
+	    			catch (ProjectPermissionException $e)
 	    			{
 	    				if ($transaction_id != null)
 	    				{
@@ -1532,8 +1556,12 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					{
 						foreach($project_permission_array as $key => $value)
 						{
-							$project_permission = ProjectPermission::get_instance($value);
-							if ($project_permission->delete() == false)
+							try
+							{
+								$project_permission = ProjectPermission::get_instance($value);
+								$project_permission->delete();
+							}
+							catch (ProjectPermissionException $e)
 							{
 								if ($transaction_id != null)
 								{

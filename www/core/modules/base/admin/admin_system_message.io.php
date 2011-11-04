@@ -244,15 +244,15 @@ class AdminSystemMessageIO
 			else
 			{
 				$exception = new Exception("", 12);
-				$error_io = new Error_IO($exception, 1, 40, 1);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 1);
+				// $error_io->display_error();
 			}
 		}
 		else
 		{
 			$exception = new Exception("", 12);
-			$error_io = new Error_IO($exception, 1, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 1);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -332,15 +332,15 @@ class AdminSystemMessageIO
 			else
 			{
 				$exception = new Exception("", 12);
-				$error_io = new Error_IO($exception, 1, 40, 1);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 1, 40, 1);
+				// $error_io->display_error();
 			}
 		}
 		else
 		{
 			$exception = new Exception("", 12);
-			$error_io = new Error_IO($exception, 1, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 1, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	

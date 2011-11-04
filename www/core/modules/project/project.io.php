@@ -66,40 +66,48 @@ class ProjectIO
 	}
 	
 	/**
-	 * @todo Error - No $_GET[ou_id]
+	 * @throws OrganisationUnitIDMissingException
+	 * @throws OrganisationUnitNotFoundException
 	 */
 	private static function list_organisation_unit_related_projects()
 	{
 		if ($_GET['ou_id'])
 		{
-			$organisation_unit_id = $_GET['ou_id'];
+			try
+			{
+				$organisation_unit_id = $_GET['ou_id'];
+				
+				$argument_array = array();
+				$argument_array[0][0] = "organisation_unit_id";
+				$argument_array[0][1] = $organisation_unit_id;
+				
+				$list = new List_IO("ProjectOrganisationUnitRelated", "/core/modules/project/project.ajax.php", "list_organisation_unit_related_projects", "count_organisation_unit_related_projects", $argument_array, "ProjectAjaxOrganisationUnit", 12);
 			
-			$argument_array = array();
-			$argument_array[0][0] = "organisation_unit_id";
-			$argument_array[0][1] = $organisation_unit_id;
+				$list->add_row("","symbol",false,"16px");
+				$list->add_row("Name","name",true,null);
+				$list->add_row("Owner","owner",true,null);
+				$list->add_row("Date/Time","datetime",true,null);
+				$list->add_row("Template","template",true,null);
+				$list->add_row("Status","status",true,null);
 			
-			$list = new List_IO("ProjectOrganisationUnitRelated", "/core/modules/project/project.ajax.php", "list_organisation_unit_related_projects", "count_organisation_unit_related_projects", $argument_array, "ProjectAjaxOrganisationUnit", 12);
-		
-			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Name","name",true,null);
-			$list->add_row("Owner","owner",true,null);
-			$list->add_row("Date/Time","datetime",true,null);
-			$list->add_row("Template","template",true,null);
-			$list->add_row("Status","status",true,null);
-		
-			require_once("core/modules/organisation_unit/organisation_unit.io.php");
-			$organisation_unit_io = new OrganisationUnitIO;
-			$organisation_unit_io->detail();
-			
-			$template = new Template("template/projects/list_organisation_unit.html");	
-
-			$template->set_var("list", $list->get_list());
+				require_once("core/modules/organisation_unit/organisation_unit.io.php");
+				$organisation_unit_io = new OrganisationUnitIO;
+				$organisation_unit_io->detail();
+				
+				$template = new Template("template/projects/list_organisation_unit.html");	
 	
-			$template->output();
+				$template->set_var("list", $list->get_list());
+		
+				$template->output();
+			}
+			catch (OrganisationUnitNotFoundException $e)
+			{
+				throw $e;
+			}
 		}
 		else
 		{
-			// ! ERROR !
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
@@ -121,7 +129,11 @@ class ProjectIO
 		
 		$template->output();
 	}
-		
+
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecuriyAccessDeniedException
+	 */
 	private static function detail()
 	{
 		global $project_security;
@@ -398,19 +410,19 @@ class ProjectIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecurityAccessDeniedxception();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecuriyAccessDeniedException
+	 */
 	private static function proceed()
 	{
 		global $project_security;
@@ -568,19 +580,19 @@ class ProjectIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecuriyAccessDeniedException
+	 */
 	private static function structure()
 	{
 		global $project_security;
@@ -660,20 +672,17 @@ class ProjectIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
 	/**
+	 * @todo specific exception
 	 * @param integer $item_id
 	 */
 	public static function list_projects_by_item_id($item_id, $in_assistant = false, $form_field_name = null)
@@ -729,117 +738,13 @@ class ProjectIO
 		}
 		else
 		{
-			// Error
-		}
-			
-		if (false == true)
-		{
-			$list = new ListStat_IO(Project_Wrapper::count_projects_by_item_id($item_id), 20);
-
-			$list->add_row("","symbol",false,16);
-			$list->add_row("Name","name",true,null);
-			$list->add_row("Date/Time","datetime",true,null);
-			$list->add_row("Template","template",true,null);
-			$list->add_row("Owner","owner",true,null);
-			$list->add_row("Status","status",true,null);
-
-			if ($_GET[page])
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = Project_Wrapper::list_projects_by_item_id($item_id, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
-				}
-				else
-				{
-					$result_array = Project_Wrapper::list_projects_by_item_id($item_id, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
-				}				
-			}
-			else
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = Project_Wrapper::list_projects_by_item_id($item_id, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
-				}
-				else
-				{
-					$result_array = Project_Wrapper::list_projects_by_item_id($item_id, null, null, 0, 20);
-				}	
-			}
-			
-			if (is_array($result_array) and count($result_array) >= 1)
-			{
-				$today_begin = new DatetimeHandler(date("Y-m-d")." 00:00:00");
-				$today_end = new DatetimeHandler(date("Y-m-d")." 23:59:59");
-				
-				foreach($result_array as $key => $value)
-				{
-					$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
-					$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y");
-				
-					if ($result_array[$key][owner])
-					{
-						$user = new User($result_array[$key][owner]);
-					}
-					else
-					{
-						$user = new User(1);
-					}
-					
-					$result_array[$key][owner] = $user->get_full_name(true);
-					
-					if (strlen($result_array[$key][template]) > 25)
-					{
-						$result_array[$key][template] = substr($result_array[$key][template],0,25)."...";
-					}
-					else
-					{
-						$result_array[$key][template] = $result_array[$key][template];
-					}
-					
-					$project_id = $result_array[$key][id];
-					$project_security = new ProjectSecurity($sample_id);
-					
-					if ($project_security->is_access(1, false))
-					{
-						$paramquery = array();
-						$paramquery[username] = $_GET[username];
-						$paramquery[session_id] = $_GET[session_id];
-						$paramquery[nav] = "project";
-						$paramquery[run] = "detail";
-						$paramquery[project_id] = $project_id;
-						$params = http_build_query($paramquery,'','&#38;');
-						
-						$result_array[$key][symbol][link]		= $params;
-						$result_array[$key][symbol][content] 	= "<img src='images/icons/project.png' alt='' style='border:0;' />";
-					
-						$project_name = $result_array[$key][name];
-						unset($result_array[$key][name]);
-						$result_array[$key][name][link] 		= $params;
-						$result_array[$key][name][content]		= $project_name;
-					}
-					else
-					{
-						$result_array[$key][symbol]	= "<img src='core/images/denied_overlay.php?image=images/icons/project.png' alt='N' border='0' />";
-					}
-				}
-			}
-			else
-			{
-				$list->override_last_line("<span class='italic'>No results found!</span>");
-			}
-			
-			$template = new Template("template/projects/list_projects_by_item.html");
-
-			$template->set_var("table", $list->get_list($result_array, $_GET[page]));
-			
-			$template->output();
-		}
-		else
-		{
-			// Error
+			throw new ProjectException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectSecurityAccessDeniedException
+	 */
 	public static function method_handler()
 	{
 		global $project_security, $session, $transaction;
@@ -848,19 +753,12 @@ class ProjectIO
 		{
 			if ($_GET[project_id])
 			{
-				if (Project::exist_project($_GET[project_id]) == false)
-				{
-					throw new ProjectNotFoundException();
-				}
-				else
-				{
-					$project_security = new ProjectSecurity($_GET[project_id]);
+				$project_security = new ProjectSecurity($_GET[project_id]);
 					
-					if ($_GET[run] != "new_subproject")
-					{
-	 					require_once("project_common.io.php");
-	 					ProjectCommon_IO::tab_header();
-					}
+				if ($_GET[run] != "new_subproject")
+				{
+ 					require_once("project_common.io.php");
+ 					ProjectCommon_IO::tab_header();
 				}
 			}
 			else
@@ -1099,9 +997,7 @@ class ProjectIO
 					}
 					else
 					{
-						$exception = new Exception("", 1);
-						$error_io = new Error_IO($exception, 200, 40, 2);
-						$error_io->display_error();
+						throw new ProjectSecurityAccessDeniedException();
 					}
 				break;
 				
@@ -1225,9 +1121,7 @@ class ProjectIO
 					}
 					else
 					{
-						$exception = new Exception("", 1);
-						$error_io = new Error_IO($exception, 200, 40, 2);
-						$error_io->display_error();
+						throw new ProjectSecurityAccessDeniedException();
 					}
 				break;
 				
@@ -1305,17 +1199,25 @@ class ProjectIO
 	
 			endswitch;
 		}
+		catch (ProjectIDMissingException $e)
+		{
+			$error_io = new Error_IO($e, 1);
+			$error_io->display_error();
+		}
 		catch (ProjectNotFoundException $e)
 		{
-			
+			$error_io = new Error_IO($e, 1);
+			$error_io->display_error();
 		}
 		catch (ProjectSecurityAccessDeniedException $e)
 		{
-			/**
-			 * @todo new error handler
-			 */
-			//$error_io = new Error_IO($e, 200, 40, 1);
-			//$error_io->display_error();
+			$error_io = new Error_IO($e, 2);
+			$error_io->display_error();
+		}
+		catch (ProjectException $e)
+		{
+			$error_io = new Error_IO($e, 1);
+			$error_io->display_error();
 		}
 	}
 	

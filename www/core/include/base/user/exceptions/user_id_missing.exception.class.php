@@ -21,30 +21,16 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /**
- * Exception Handler Interface
+ * User ID Missing Exception
  * @package base
  */
-interface DeprExceptionHandlerInterface
-{
-	/**
-	 * Gets Exception and information and stores it in SystemLog
-	 * @param object $exception
-	 * @param integer $module
-	 * @param integer $layer
-	 * @param integer $error_type
-	 */
-	function __construct($exception, $module, $layer, $error_type);
-	
-	/**
-	 * @return integer
-	 */
-	public function get_error_no();
-	
-	/**
-	 * @return string
-	 */
-	public function get_error_message();
+class UserIDMissingException extends UserException
+{    
+	function __construct()
+    {
+    	parent::__construct(true, false, false, "User ID is missing", null);	
+    } 
 }
+
 ?>

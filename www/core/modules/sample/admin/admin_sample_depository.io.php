@@ -255,8 +255,8 @@ class AdminSampleDepositoryIO
 		else
 		{
 			$exception = new Exception("", 4);
-			$error_io = new Error_IO($exception, 250, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 250, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -307,8 +307,8 @@ class AdminSampleDepositoryIO
 		else
 		{
 			$exception = new Exception("", 4);
-			$error_io = new Error_IO($exception, 250, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 250, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -392,8 +392,8 @@ class AdminSampleDepositoryIO
 		else
 		{
 			$exception = new Exception("", 4);
-			$error_io = new Error_IO($exception, 250, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 250, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -431,8 +431,8 @@ class AdminSampleDepositoryIO
 		}
 		catch (SampleDepositoryNotFoundException $e)
 		{
-			$error_io = new Error_IO($e, 250, 40, 1);
-			$error_io->display_error();
+			// $error_io = new Error_IO($e, 250, 40, 1);
+			// $error_io->display_error();
 		}
 	}
 	

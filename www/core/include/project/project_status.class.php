@@ -84,7 +84,14 @@ class ProjectStatus implements ProjectStatusInterface
     {
     	if ($this->status)
     	{
-    		return $this->status->create($name, $comment);	
+    		if (($return_value = $this->status->create($name, $comment)) != null)
+    		{
+    			return $return_value;
+    		}
+    		else
+    		{
+    			throw new ProjectStatusCreateException();
+    		}
     	}
     	else
     	{
@@ -106,7 +113,14 @@ class ProjectStatus implements ProjectStatusInterface
     		{
     			if (count($project_relation_array) == 0)
     			{
-    				return $this->status->delete();
+    				if ($this->status->delete() == true)
+    				{
+    					return true;
+    				}
+    				else
+    				{
+    					throw new ProjectStatusDeleteException();
+    				}
     			}
     			else
     			{
@@ -115,7 +129,14 @@ class ProjectStatus implements ProjectStatusInterface
     		}
     		else
     		{
-    			return $this->status->delete();
+    			if ($this->status->delete() == true)
+    			{
+    				return true;
+    			}
+    			else
+    			{
+    				throw new ProjectStatusDeleteException();
+    			}
     		}
     	}
     	else

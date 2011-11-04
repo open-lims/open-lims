@@ -228,18 +228,18 @@ class DataIO
 		}
 		catch (DataException $e)
 		{
-			$error_io = new Error_IO($e, 20, 40, 1);
-			$error_io->display_error();
+			// $error_io = new Error_IO($e, 20, 40, 1);
+			// $error_io->display_error();
 		}
 		catch (DataSecurityException $e)
 		{
-			$error_io = new Error_IO($e, 20, 40, 2);
-			$error_io->display_error();
+			// $error_io = new Error_IO($e, 20, 40, 2);
+			// $error_io->display_error();
 		}
 		catch (Exception $e)
 		{
-			$error_io = new Error_IO($e, 0, 0, 0);
-			$error_io->display_error();
+			// $error_io = new Error_IO($e, 0, 0, 0);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -354,22 +354,22 @@ class DataIO
 				else
 				{
 					$exception = new Exception("", 4);
-					$error_io = new Error_IO($exception, 20, 40, 1);
-					$error_io->display_error();
+					// $error_io = new Error_IO($exception, 20, 40, 1);
+					// $error_io->display_error();
 				}
 			}
 			else
 			{
 				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 20, 40, 2);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 20, 40, 2);
+				// $error_io->display_error();
 			}
 		}
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 20, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 20, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 
@@ -507,22 +507,22 @@ class DataIO
 				else
 				{
 					$exception = new Exception("", 4);
-					$error_io = new Error_IO($exception, 20, 40, 1);
-					$error_io->display_error();
+					// $error_io = new Error_IO($exception, 20, 40, 1);
+					// $error_io->display_error();
 				}
 			}
 			else
 			{
 				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 20, 40, 2);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 20, 40, 2);
+				// $error_io->display_error();
 			}
 		}
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 20, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 20, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 
@@ -800,14 +800,14 @@ class DataIO
 				
 				endswitch;
 				
-				$error_io = new Error_IO($exception, 20, 40, 2);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 20, 40, 2);
+				// $error_io->display_error();
 			}
 		}
 		catch (IdMissingException $e)
 		{
-			$error_io = new Error_IO($e, 20, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($e, 20, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 
@@ -923,14 +923,14 @@ class DataIO
 				
 				endswitch;
 				
-				$error_io = new Error_IO($exception, 20, 40, 2);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 20, 40, 2);
+				// $error_io->display_error();
 			}
 		}
 		catch (IdMissingException $e)
 		{
-			$error_io = new Error_IO($e, 20, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($e, 20, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -1046,14 +1046,14 @@ class DataIO
 				
 				endswitch;
 				
-				$error_io = new Error_IO($exception, 20, 40, 2);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 20, 40, 2);
+				// $error_io->display_error();
 			}
 		}
 		catch (IdMissingException $e)
 		{
-			$error_io = new Error_IO($e, 20, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($e, 20, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 
@@ -1216,18 +1216,18 @@ class DataIO
 		}
 		catch (FileNotFoundException $e)
 		{
-			$error_io = new Error_IO($e, 20, 40, 1);
-			$error_io->display_error();
+			// $error_io = new Error_IO($e, 20, 40, 1);
+			// $error_io->display_error();
 		}
 		catch (ValueNotFoundException $e)
 		{
-			$error_io = new Error_IO($e, 20, 40, 1);
-			$error_io->display_error();
+			// $error_io = new Error_IO($e, 20, 40, 1);
+			// $error_io->display_error();
 		}
 		catch (FolderNotFoundException $e)
 		{
-			$error_io = new Error_IO($e, 20, 40, 1);
-			$error_io->display_error();
+			// $error_io = new Error_IO($e, 20, 40, 1);
+			// $error_io->display_error();
 		}
 		
 	}
@@ -1336,8 +1336,8 @@ class DataIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 }

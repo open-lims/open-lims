@@ -1,6 +1,6 @@
 <?php
 /**
- * @package user
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -23,7 +23,7 @@
 
 /**
  * Group Access Class
- * @package user
+ * @package base
  */
 class Group_Access
 {

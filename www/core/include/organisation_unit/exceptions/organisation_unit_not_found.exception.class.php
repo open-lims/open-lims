@@ -1,6 +1,6 @@
 <?php
 /**
- * @package base
+ * @package organisation_unit
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -22,14 +22,14 @@
  */
 
 /**
- * Group Creation Failed Exception
- * @package base
+ * Organisation Unit Not Found Exception
+ * @package organisation_unit
  */
-class GroupCreationFailedException extends Exception
+class OrganisationUnitNotFoundException extends OrganisationUnitException
 {    
-	function __construct($message, $code)
+	function __construct()
     {
-    	parent::__construct($message, $code);	
+    	parent::__construct(true, false, false, "Organisation Unit not found", null);	
     } 
 }
 

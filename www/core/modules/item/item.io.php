@@ -150,8 +150,8 @@ class ItemIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 20, 30, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 20, 30, 3);
+			// $error_io->display_error();
 		}
 	}
 	

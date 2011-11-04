@@ -346,21 +346,21 @@ class ValueIO
 				else
 				{
 					$exception = new Exception("", 3);
-					$error_io = new Error_IO($exception, 20, 40, 2);
-					$error_io->display_error();
+					// $error_io = new Error_IO($exception, 20, 40, 2);
+					// $error_io->display_error();
 				}
 			}
 			else
 			{
 				$exception = new Exception("", 3);
-				$error_io = new Error_IO($exception, 20, 40, 3);
-				$error_io->display_error();			
+				// $error_io = new Error_IO($exception, 20, 40, 3);
+				// $error_io->display_error();			
 			}
 		}
 		catch(ValueVersionNotFoundException $e)
 		{
-			$error_io = new Error_IO($e, 20, 40, 1);
-			$error_io->display_error();
+			// $error_io = new Error_IO($e, 20, 40, 1);
+			// $error_io->display_error();
 		}
 	}	
 
@@ -611,15 +611,15 @@ class ValueIO
 			else
 			{
 				$exception = new Exception("", 3);
-				$error_io = new Error_IO($exception, 20, 40, 2);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 20, 40, 2);
+				// $error_io->display_error();
 			}	
 		}
 		else
 		{
 			$exception = new Exception("", 3);
-			$error_io = new Error_IO($exception, 20, 40, 3);
-			$error_io->display_error();	
+			// $error_io = new Error_IO($exception, 20, 40, 3);
+			// $error_io->display_error();	
 		}
 	}
 	
@@ -690,15 +690,15 @@ class ValueIO
 			else
 			{
 				$exception = new Exception("", 3);
-				$error_io = new Error_IO($exception, 20, 40, 2);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 20, 40, 2);
+				// $error_io->display_error();
 			}
 		}
 		else
 		{
 			$exception = new Exception("", 3);
-			$error_io = new Error_IO($exception, 20, 40, 3);
-			$error_io->display_error();	
+			// $error_io = new Error_IO($exception, 20, 40, 3);
+			// $error_io->display_error();	
 		}
 	}
 		

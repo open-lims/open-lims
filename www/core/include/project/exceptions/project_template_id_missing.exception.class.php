@@ -1,6 +1,6 @@
 <?php
 /**
- * @package base
+ * @package project
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -22,15 +22,15 @@
  */
 
 /**
- * Group Creation Failed Exception
- * @package base
+ * Project Not Found Exception
+ * @package project
  */
-class GroupCreationFailedException extends Exception
-{    
-	function __construct($message, $code)
+class ProjectTemplateIDMissingException extends ProjectTemplateException
+{
+    function __construct()
     {
-    	parent::__construct($message, $code);	
-    } 
+    	parent::__construct(true, false, false, "Project Template ID is missing");	
+    }   
 }
 
 ?>

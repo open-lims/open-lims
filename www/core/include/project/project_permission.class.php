@@ -47,16 +47,23 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
      */
     protected function __construct($permission_id)
     {
-    	if ($permission_id == null)
+    	if (is_numeric($permission_id))
+		{
+			if (ProjectPermission_Access::exist_id($permission_id) == true)
+			{
+				$this->permission_id = $permission_id;
+   	   			$this->project_permission = new ProjectPermission_Access($permission_id);
+			}
+			else
+			{
+				throw new ProjectPermissionNotFoundException();
+			}
+    	}
+    	else
     	{
-   	   		$this->permission_id = null;
+    		$this->permission_id = null;
    	   		$this->project_permission = new ProjectPermission_Access(null);
-   	   	}
-   	   	else
-   	   	{
-   	   		$this->permission_id = $permission_id;
-   	   		$this->project_permission = new ProjectPermission_Access($permission_id);
-   	   	}
+    	}
     }
     
     /**

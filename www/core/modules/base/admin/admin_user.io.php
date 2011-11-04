@@ -1,6 +1,6 @@
 <?php
 /**
- * @package user
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -23,7 +23,7 @@
 
 /**
  * User Admin IO Class
- * @package user
+ * @package base
  */
 class AdminUserIO
 {
@@ -363,13 +363,13 @@ class AdminUserIO
 			}
 			catch (UserCreationFailedException $e)
 			{
-				$error_io = new Error_IO($e, 3, 30, 1);
-				$error_io->display_error();
+				// $error_io = new Error_IO($e, 3, 30, 1);
+				// $error_io->display_error();
 			}
 			catch (UserAlreadyExistException $e)
 			{
-				$error_io = new Error_IO($e, 3, 30, 1);
-				$error_io->display_error();
+				// $error_io = new Error_IO($e, 3, 30, 1);
+				// $error_io->display_error();
 			}
 		}
 	}
@@ -424,15 +424,15 @@ class AdminUserIO
 			else
 			{
 				$exception = new Exception("", 2);
-				$error_io = new Error_IO($exception, 3, 40, 1);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 3, 40, 1);
+				// $error_io->display_error();
 			}
 		}
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -752,8 +752,8 @@ class AdminUserIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -843,8 +843,8 @@ class AdminUserIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -894,8 +894,8 @@ class AdminUserIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -985,8 +985,8 @@ class AdminUserIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -1036,8 +1036,8 @@ class AdminUserIO
 		else
 		{
 			$exception = new Exception("", 2);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -1118,8 +1118,8 @@ class AdminUserIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -1192,8 +1192,8 @@ class AdminUserIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -1258,8 +1258,8 @@ class AdminUserIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 		
@@ -1345,8 +1345,8 @@ class AdminUserIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -1423,8 +1423,8 @@ class AdminUserIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -1499,8 +1499,8 @@ class AdminUserIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 3, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -1512,7 +1512,7 @@ class AdminUserIO
 			{
 				if (User::exist_user($_GET[id]) == false)
 				{
-					throw new UserNotFoundException("",1);
+					throw new UserNotFoundException();
 				}
 			}
 			
@@ -1581,8 +1581,8 @@ class AdminUserIO
 		}
 		catch (UserNotFoundException $e)
 		{
-			$error_io = new Error_IO($e, 3, 40, 1);
-			$error_io->display_error();
+			// $error_io = new Error_IO($e, 3, 40, 1);
+			// $error_io->display_error();
 		}
 	}
 	

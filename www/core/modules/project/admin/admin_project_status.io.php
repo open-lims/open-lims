@@ -221,8 +221,8 @@ class AdminProjectStatusIO
 		else
 		{
 			$exception = new Exception("", 2);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 200, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -298,8 +298,8 @@ class AdminProjectStatusIO
 		else
 		{
 			$exception = new Exception("", 2);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 200, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -335,8 +335,8 @@ class AdminProjectStatusIO
 		}
 		catch (ProjectStatusNotFoundException $e)
 		{
-			//$error_io = new Error_IO($e, 200, 40, 1);
-			//$error_io->display_error();
+			//// $error_io = new Error_IO($e, 200, 40, 1);
+			//// $error_io->display_error();
 		}
 	}
 	

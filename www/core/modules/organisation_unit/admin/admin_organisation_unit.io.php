@@ -400,21 +400,21 @@ class AdminOrganisationUnitIO
 				}
 				catch (OrganisationUnitAlreadyExistException $e)
 				{
-					$error_io = new Error_IO($e, 40, 30, 1);
-					$error_io->display_error();
+					// $error_io = new Error_IO($e, 40, 30, 1);
+					// $error_io->display_error();
 				}
 				catch (OrganisationUnitCreationFailedException $e)
 				{
-					$error_io = new Error_IO($e, 40, 30, 1);
-					$error_io->display_error();
+					// $error_io = new Error_IO($e, 40, 30, 1);
+					// $error_io->display_error();
 				}
 			}
 		}
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 40, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -468,15 +468,15 @@ class AdminOrganisationUnitIO
 			else
 			{
 				$exception = new Exception("", 2);
-				$error_io = new Error_IO($exception, 40, 40, 1);
-				$error_io->display_error();
+				// $error_io = new Error_IO($exception, 40, 40, 1);
+				// $error_io->display_error();
 			}
 		}
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 40, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -703,8 +703,8 @@ class AdminOrganisationUnitIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 40, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 
@@ -725,8 +725,8 @@ class AdminOrganisationUnitIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 40, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -747,8 +747,8 @@ class AdminOrganisationUnitIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 40, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 		
@@ -769,8 +769,8 @@ class AdminOrganisationUnitIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 40, 40, 3);
+			// $error_io->display_error();
 		}
 	}	
 	
@@ -791,8 +791,8 @@ class AdminOrganisationUnitIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 40, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -813,8 +813,8 @@ class AdminOrganisationUnitIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 40, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -832,8 +832,8 @@ class AdminOrganisationUnitIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 40, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -913,8 +913,8 @@ class AdminOrganisationUnitIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 40, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 		
@@ -941,8 +941,8 @@ class AdminOrganisationUnitIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 40, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -969,8 +969,8 @@ class AdminOrganisationUnitIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 40, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -1006,8 +1006,8 @@ class AdminOrganisationUnitIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 40, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -1019,7 +1019,7 @@ class AdminOrganisationUnitIO
 			{
 				if (OrganisationUnit::exist_organisation_unit($_GET[id]) == false)
 				{
-					throw new OrganisationUnitNotFoundException("",1);
+					throw new OrganisationUnitNotFoundException();
 				}
 
 				if ($_GET[action] != "delete" and 
@@ -1168,8 +1168,8 @@ class AdminOrganisationUnitIO
 		}
 		catch (OrganisationUnitNotFoundException $e)
 		{
-			$error_io = new Error_IO($e, 40, 40, 1);
-			$error_io->display_error();
+			// $error_io = new Error_IO($e, 40, 40, 1);
+			// $error_io->display_error();
 		}
 	}
 	

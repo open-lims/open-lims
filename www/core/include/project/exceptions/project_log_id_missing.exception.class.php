@@ -22,15 +22,15 @@
  */
 
 /**
- * Project Security Internal Exception
+ * Project Not Found Exception
  * @package project
  */
-class ProjectSecurityInternalException extends ProjectSecurityException
+class ProjectLogIDMissingException extends ProjectLogException
 {
-    function __construct($write_log = false, $write_hdd_session = false, $write_hdd_sql = false, $message = null)
+    function __construct()
     {
-    	parent::__construct($write_log, $write_hdd_session, $write_hdd_sql, $message, null);	
-    }     
+    	parent::__construct(true, false, false, "Project Log ID is missing");	
+    }   
 }
 
 ?>

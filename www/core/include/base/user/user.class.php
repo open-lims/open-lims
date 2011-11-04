@@ -1,6 +1,6 @@
 <?php
 /**
- * @package user
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -28,9 +28,11 @@ require_once("interfaces/user.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	/**
+	 * @deprecated redefinde exceptions
+	 */
 	require_once("exceptions/user_already_exist_exception.class.php");
 	require_once("exceptions/user_creation_failed_exception.class.php");
-	require_once("exceptions/user_not_found_exception.class.php");
 	
 	require_once("events/user_create_event.class.php");
 	require_once("events/user_delete_event.class.php");
@@ -48,7 +50,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 
 /**
  * User Management Class
- * @package user
+ * @package base
  */
 class User implements UserInterface {
 	

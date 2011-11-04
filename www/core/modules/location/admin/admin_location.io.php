@@ -291,8 +291,8 @@ class AdminLocationIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 60, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 60, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -447,8 +447,8 @@ class AdminLocationIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 60, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 60, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -499,8 +499,8 @@ class AdminLocationIO
 		else
 		{
 			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 60, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 60, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -538,8 +538,8 @@ class AdminLocationIO
 		}
 		catch (Exception $e)
 		{
-			$error_io = new Error_IO($e, 60, 40, 1);
-			$error_io->display_error();
+			// $error_io = new Error_IO($e, 60, 40, 1);
+			// $error_io->display_error();
 		}
 	}
 }

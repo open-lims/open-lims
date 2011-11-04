@@ -256,8 +256,8 @@ class AdminEquipmentCatIO
 		else
 		{
 			$exception = new Exception("", 4);
-			$error_io = new Error_IO($exception, 50, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 50, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -308,8 +308,8 @@ class AdminEquipmentCatIO
 		else
 		{
 			$exception = new Exception("", 4);
-			$error_io = new Error_IO($exception, 50, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 50, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -393,8 +393,8 @@ class AdminEquipmentCatIO
 		else
 		{
 			$exception = new Exception("", 4);
-			$error_io = new Error_IO($exception, 50, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 50, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -431,8 +431,8 @@ class AdminEquipmentCatIO
 		}
 		catch (EquipmentCategoryNotFoundException $e)
 		{
-			$error_io = new Error_IO($e, 50, 40, 1);
-			$error_io->display_error();
+			// $error_io = new Error_IO($e, 50, 40, 1);
+			// $error_io->display_error();
 		}
 	}
 	

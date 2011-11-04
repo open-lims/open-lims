@@ -83,17 +83,25 @@ class ProjectUserData implements ProjectUserDataInterface, EventListenerInterfac
 	/**
 	 * @see ProjectUserDataInterface::set_quota()
 	 * @param integer $quota
-	 * @return integer
+	 * @return bool
+	 * @throws ProjectUserSetQuotaException
 	 */
 	public function set_quota($quota)
 	{
 		if ($this->user_id)
 		{
-			return $this->project_user_data->set_quota($quota);
+			if ($this->project_user_data->set_quota($quota) == true)
+			{
+				return true;
+			}
+			else
+			{
+				throw new ProjectUserSetQuotaException();
+			}
 		}
 		else
 		{
-			return null;
+			throw new ProjectUserSetQuotaException();
 		}
 	}	
 	

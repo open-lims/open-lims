@@ -27,6 +27,10 @@
  */
 class ProjectTaskIO
 {
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecuriyAccessDeniedException
+	 */
 	public static function add()
 	{
 		global $user, $project_security;
@@ -682,19 +686,19 @@ class ProjectTaskIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecuriyAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectTaskIDMissingException
+	 * @throws ProjectSecuriyAccessDeniedException
+	 */
 	public static function delete()
 	{
 		global $project_security;
@@ -745,19 +749,19 @@ class ProjectTaskIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecuriyAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 0);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectTaskIDMissingException();
 		}
 	}
 
+	/**
+	 * @throws ProjectTaskIDMissingException
+	 * @throws ProjectSecuriyAccessDeniedException
+	 */
 	public static function edit_start()
 	{
 		global $project_security;
@@ -863,19 +867,19 @@ class ProjectTaskIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecuriyAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 0);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectTaskIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectTaskIDMissingException
+	 * @throws ProjectSecuriyAccessDeniedException
+	 */
 	public static function edit_end()
 	{
 		global $project_security;
@@ -1001,19 +1005,19 @@ class ProjectTaskIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecuriyAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 0);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectTaskIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectTaskIDMissingException
+	 * @throws ProjectSecuriyAccessDeniedException
+	 */
 	public static function detail()
 	{
 		global $user, $project_security;
@@ -1124,19 +1128,19 @@ class ProjectTaskIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecuriyAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 0);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectTaskIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecuriyAccessDeniedException
+	 */
 	public static function table_view()
 	{
 		global $project_security;
@@ -1227,19 +1231,19 @@ class ProjectTaskIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecuriyAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecuriyAccessDeniedException
+	 */
 	public static function gantt_view()
 	{
 		global $project_security;
@@ -1491,19 +1495,19 @@ class ProjectTaskIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecuriyAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecuriyAccessDeniedException
+	 */
 	public static function calendar_view() {
 		
 		global $project_security;
@@ -1591,16 +1595,12 @@ class ProjectTaskIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecuriyAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 		

@@ -224,8 +224,8 @@ class AdminValueTemplateIO
 		else
 		{
 			$exception = new Exception("", 6);
-			$error_io = new Error_IO($exception, 20, 40, 3);
-			$error_io->display_error();
+			// $error_io = new Error_IO($exception, 20, 40, 3);
+			// $error_io->display_error();
 		}
 	}
 	
@@ -259,8 +259,8 @@ class AdminValueTemplateIO
 		}
 		catch (ValueTypeNotFoundException $e)
 		{
-			$error_io = new Error_IO($e, 20, 40, 1);
-			$error_io->display_error();
+			// $error_io = new Error_IO($e, 20, 40, 1);
+			// $error_io->display_error();
 		}
 	}
 	

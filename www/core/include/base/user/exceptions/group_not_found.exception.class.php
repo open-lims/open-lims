@@ -1,6 +1,6 @@
 <?php
 /**
- * @package project
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -22,15 +22,15 @@
  */
 
 /**
- * Project Value Var Failed Exception
- * @package project
+ * Group Not Found Exception
+ * @package base
  */
-class ProjectValueVarFailedException extends ProjectException
-{
-    function __construct($message = null)
+class GroupNotFoundException extends GroupException
+{    
+	function __construct()
     {
-    	parent::__construct(true, false, false, $message, null);	
-    }   
+    	parent::__construct(true, false, false, "Group not found", null);	
+    } 
 }
 
 ?>

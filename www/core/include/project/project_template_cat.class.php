@@ -82,7 +82,14 @@ class ProjectTemplateCat implements ProjectTemplateCatInterface
 	{
 		if ($this->project_template_cat and $name)
 		{
-			return $this->project_template_cat->create($name);
+			if (($return_value = $this->project_template_cat->create($name)) != null)
+			{
+				return $return_value;
+			}
+			else
+			{
+				throw new ProjectTemplateCategoryCreateException();
+			}
 		}
 		else
 		{
@@ -104,7 +111,14 @@ class ProjectTemplateCat implements ProjectTemplateCatInterface
 			{
 				if (count($project_template_array) == 0)
 				{
-					return $this->project_template_cat->delete();
+					if ($this->project_template_cat->delete() == true)
+					{
+						return true;
+					}
+					else
+					{
+						throw new ProjectTemplateCategoryDeleteException();
+					}
 				}
 				else
 				{
@@ -113,7 +127,14 @@ class ProjectTemplateCat implements ProjectTemplateCatInterface
 			}
 			else
 			{
-				return $this->project_template_cat->delete();
+				if ($this->project_template_cat->delete() == true)
+				{
+					return true;
+				}
+				else
+				{
+					throw new ProjectTemplateCategoryDeleteException();
+				}
 			}
 		}
 		else
