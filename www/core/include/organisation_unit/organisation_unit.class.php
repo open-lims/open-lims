@@ -30,7 +30,6 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
 	require_once("exceptions/organisation_unit_already_exist_exception.class.php");
 	require_once("exceptions/organisation_unit_creation_failed_exception.class.php");
-	require_once("exceptions/organisation_unit_not_found_exception.class.php");
 	
 	require_once("events/organisation_unit_create_event.class.php");
 	require_once("events/organisation_unit_delete_event.class.php");

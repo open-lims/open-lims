@@ -24,6 +24,10 @@
 /**
  * 
  */
+	$classes['OrganisationUnitException']			= $path_prefix."core/include/organisation_unit/exceptions/organisation_unit.exception.class.php";
+	$classes['OrganisationUnitNotFoundException']	= $path_prefix."core/include/organisation_unit/exceptions/organisation_unit_not_found.exception.class.php";
+	$classes['OrganisationUnitIDMissingException']	= $path_prefix."core/include/organisation_unit/exceptions/organisation_unit_id_missing.exception.class.php";
+
 	$classes['OrganisationUnit']			= $path_prefix."core/include/organisation_unit/organisation_unit.class.php";
 	$classes['OrganisationUnit_Wrapper']	= $path_prefix."core/include/organisation_unit/organisation_unit.wrapper.class.php";
 ?>
