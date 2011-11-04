@@ -1,6 +1,32 @@
 @CHARSET "ISO-8859-1";
 
 /* DATA BROWSER */
+
+#DataBrowserAddFileDialog
+{
+font-family:arial;
+font-size:12px;
+background-color:#ffffff;
+border:solid black 1px;
+padding: 2px 2px 2px 2px;
+}
+
+#DataBrowserAddFileDialog a
+{
+text-decoration:none;
+color:black;
+}
+
+#DataBrowserAddFileDialog a:hover
+{
+text-decoration:underline;
+}
+
+#DataBrowserFileUploadContainer
+{
+text-align:left;
+}
+
 .DataBrowserFileHover
 {
 background-color:#c3c3c3;
@@ -8,20 +34,34 @@ background-color:#c3c3c3;
 
 .DataBrowserFileSelected
 {
-background-color:#66ccff;
-border: solid black 1px;
-filter: alpha(opacity=80);
-width:100%;
--moz-opacity:0.8; 
+background-color:#4ba5ff;
+outline: solid black 1px;
+
+/* zoom: 1; */
+/* filter: alpha(opacity=50); */
+/* opacity: 0.5; */
 }
 
 #DataBrowserFileDialog
 {
-background-color:#ffffff;
+font-family:arial;
+font-size:12px;
+background-color:#4ba5ff;
 border:solid black 1px;
 border-top:none;
+padding: 0 2px 2px 2px;
 }
 
+#DataBrowserFileDialog a
+{
+text-decoration:none;
+color:black;
+}
+
+#DataBrowserFileDialog a:hover
+{
+text-decoration:underline;
+}
 
 /* DATA UPLOAD*/
 

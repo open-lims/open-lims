@@ -35,6 +35,7 @@ function base_upload(unique_id, session_id)
     if (typeof(base_upload_prototype_called) == "undefined")
     {
     	base_upload_prototype_called = true;
+    	base_upload.prototype.start_upload = start_upload;
     	init();
     }
 	
@@ -49,10 +50,6 @@ function base_upload(unique_id, session_id)
 				var new_element = $("<tr id='lastFileInput'><td><input type='file' name='file-"+field_num+"' id='file-"+field_num+"' value='' class='FileInput'/></td></tr>")
 				$("#lastFileInput").attr("id","").after(new_element);
 			}
-		});
-		$("#uploader_upload").click(function(evt){
-			evt.preventDefault();
-			start_upload();
 		});
 	}
 	
@@ -425,7 +422,11 @@ function base_upload(unique_id, session_id)
 		if(url_split.length == 2)
 		{
 			return url_split[0];
-		}	
+		}
+		//got hit from data browser
+		current_url = current_url.split("&nav=data")[0];
+		current_url += "&nav=data";
+		return current_url;
 	}
 
 }

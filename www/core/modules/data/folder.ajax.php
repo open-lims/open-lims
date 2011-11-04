@@ -151,6 +151,103 @@ class FolderAjax extends Ajax
 		}
 	}
 	
+	private function get_data_browser_link_html_and_button_handler($action) 
+	{
+		$html;
+		$html_caption;
+		$button_handler;
+		$button_handler_caption;
+		$template;
+		$paramquery = $_GET;	
+		unset($paramquery[run]);
+		switch($action):
+			case "folder_delete":
+				$paramquery[sure] = "true";
+				$paramquery[nextpage] = "1";
+				$params = http_build_query($paramquery);
+				$template = new Template("../../../template/data/folder_delete_window.html");
+				$template->set_var("params", $params);
+				$button_handler = "var form_url = $('#FolderDeleteWindowForm').attr('action'); $.post(form_url,function(){close_ui_window_and_reload();});";
+				$button_handler_caption = "Delete";
+				$html_caption = "Delete Folder";
+				$html = $template->get_string();
+			break;
+			case "folder_rename":
+				$template = new Template("../../../template/data/folder_rename_window.html");
+				$button_handler = "";
+				$button_handler_caption = "Rename";
+				$html_caption = "Rename Folder";
+				$html = $template->get_string();
+			break;
+			case "permission":
+				require_once("data.io.php");
+				if(isset($_GET[permissions]))
+				{
+					$success = DataIO::change_permission(json_decode($_GET[permissions]), "Folder");
+					return $success;
+				}
+				else
+				{
+					$permission = DataIO::permission_window();
+					$button_handler = "
+						var json = '{';
+						$('#DataBrowserLoadedAjaxContent').find('input').each(function(){
+							if($(this).attr('type') != 'hidden') 
+							{
+								if($(this).is(':checkbox:checked'))
+								{
+									json += '\"'+$(this).attr('name')+'\":\"'+$(this).attr('value')+'\",';
+								}
+								else
+								{
+									json += '\"'+$(this).attr('name')+'\":\"0\",';
+								}
+							}
+						});
+						json = json.substr(0,json.length-1); //cut last ,
+						json += '}';
+						$.ajax({
+							type : \"GET\",
+							url : \"../../../core/modules/data/folder.ajax.php\",
+							data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&folder_id=".$_GET['folder_id']."&nav=data&run=get_data_browser_link_html_and_button_handler&action=permission&permissions=\"+json,
+							success : function(data) {
+								close_ui_window_and_reload();
+							}
+						});
+					";
+					$button_handler_caption = "Change";
+					$html_caption = "Change permission";
+					$html = $permission;	
+				}
+			break;
+		endswitch;
+		$array = array("content"=>$html , "content_caption"=>$html_caption , "handler"=>$button_handler , "handler_caption"=>$button_handler_caption);
+		return json_encode($array);
+	}
+	
+	private function add_file($folder_id)
+	{ //auslagern in file.ajax
+		$button_handler = "close_ui_window_and_reload();";
+		$button_handler_caption = "Add";
+		$html_caption = "Add File";
+		$html = "add file!";
+		$array = array("content"=>$html , "content_caption"=>$html_caption , "handler"=>$button_handler , "handler_caption"=>$button_handler_caption);
+		return json_encode($array);
+	}
+	
+	private function add_folder($folder_id)
+	{
+		//$new_folder = Folder::get_instance(null);
+		//$new_folder->create($_POST[name], $_GET[folder_id], null, $user->get_user_id(), null);
+		
+		$button_handler = "close_ui_window_and_reload();";
+		$button_handler_caption = "Add";
+		$html_caption = "Add Folder";
+		$html = "add folder!";
+		$array = array("content"=>$html , "contnt_caption"=>$html_caption , "handler"=>$button_handler , "handler_caption"=>$button_handler_caption);
+		return json_encode($array);
+	}
+	
 	public function method_handler()
 	{
 		global $session;
@@ -161,10 +258,19 @@ class FolderAjax extends Ajax
 
 				case "get_array":
 					$this->get_array();
-				break;
+					break;
 				case "get_children":
 					$this->get_children($_GET['id']);
-				break;	
+					break;	
+				case "get_data_browser_link_html_and_button_handler":
+					echo $this->get_data_browser_link_html_and_button_handler($_GET[action]);
+					break;
+				case "add_file":
+					echo $this->add_file($_GET[folder_id]);
+					break;
+				case "add_folder":
+					echo $this->add_folder($_GET[folder_id]);
+					break;
 			endswitch;
 		}
 	}

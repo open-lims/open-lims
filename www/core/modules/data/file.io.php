@@ -29,6 +29,8 @@ class FileIO
 {
 	public static function detail()
 	{
+		global $user;
+		
 		try
 		{
 			if ($_GET[file_id])
@@ -59,7 +61,7 @@ class FileIO
 						$internal_revision = $file->get_internal_revision();
 					}
 					
-					$user = new User($file->get_owner_id());
+					$user_owner = new User($file->get_owner_id());
 					
 					$file_version_array = $file->get_file_internal_revisions();
 					
@@ -117,7 +119,7 @@ class FileIO
 					$template->set_var("creation_datetime",$file->get_datetime());
 					$template->set_var("version_datetime",$file->get_version_datetime());
 					$template->set_var("mime_type",$file->get_mime_type());
-					$template->set_var("owner",$user->get_full_name(false));
+					$template->set_var("owner",$user_owner->get_full_name(false));
 					$template->set_var("checksum",$file->get_checksum());
 					$template->set_var("permission",$file->get_permission_string());
 					$template->set_var("comment","");
