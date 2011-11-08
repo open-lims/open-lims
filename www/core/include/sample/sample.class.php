@@ -28,7 +28,6 @@ require_once("interfaces/sample.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	require_once("exceptions/sample_not_found_exception.class.php");
 	require_once("exceptions/sample_clone_failed_exception.class.php");
 	require_once("exceptions/sample_creation_failed_exception.class.php");
 	
@@ -59,24 +58,32 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	/**
 	 * @see SampleInterface::__construct()
 	 * @param integer $sample_id Sample-ID
+	 * @throws SampleNotFoundException
 	 */
     function __construct($sample_id)
     {
-    	if ($sample_id == null)
-    	{
-    		$this->sample_id = null;
+    	if (is_numeric($sample_id))
+		{
+			if (Sample_Access::exist_sample_by_sample_id($sample_id) == true)
+			{
+				$this->sample_id = $sample_id;
+	    		$this->sample = new Sample_Access($sample_id);
+	    		
+	    		$sample_is_item = new SampleIsItem_Access($sample_id);
+	    		$this->item_id = $sample_is_item->get_item_id();
+	    		parent::__construct($this->item_id);
+			}
+			else
+			{
+				throw new SampleNotFoundException();
+			}
+		}
+		else
+		{
+			$this->sample_id = null;
     		$this->sample = new Sample_Access(null);
     		parent::__construct(null);
-    	}
-    	else
-    	{
-    		$this->sample_id = $sample_id;
-    		$this->sample = new Sample_Access($sample_id);
-    		
-    		$sample_is_item = new SampleIsItem_Access($sample_id);
-    		$this->item_id = $sample_is_item->get_item_id();
-    		parent::__construct($this->item_id);
-    	}
+		}
     }
     
     function __destruct()

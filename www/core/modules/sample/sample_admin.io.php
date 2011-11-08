@@ -27,6 +27,10 @@
  */
 class SampleAdminIO
 {
+	/**
+	 * @throws SampleIDMissingException
+	 * @throws SampleSecurityAccessDeniedException
+	 */
 	public static function delete()
 	{
 		global $user;
@@ -79,99 +83,19 @@ class SampleAdminIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				// $error_io = new Error_IO($exception, 250, 40, 2);
-				// $error_io->display_error();
+				throw new SampleSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 250, 40, 3);
-			// $error_io->display_error();
+			throw new SampleIDMissingException();
 		}
 	}
-	
-	public static function delete_project_association()
-	{
-		global $user;
-		
-		if ($_GET[sample_id])
-		{
-			if ($_GET[project_id])
-			{
-				$sample = new Sample($_GET[sample_id]);
-				$project_id = $_GET[project_id];		
-				$project_item = new ProjectItem($project_id);
-			
-				if ($sample->get_owner_id() == $user->get_user_id() or
-					$user->is_admin() == true)
-				{
-					if ($_GET[sure] != "true")
-					{
-						$template = new Template("template/samples/int_admin/delete_project_association.html");
-						
-						$paramquery = $_GET;
-						$paramquery[sure] = "true";
-						$params = http_build_query($paramquery);
-						
-						$template->set_var("yes_params", $params);
-								
-						$paramquery = $_GET;
-						unset($paramquery[nextpage]);
-						unset($paramquery[id]);
-						$paramquery[run] = "admin";
-						$params = http_build_query($paramquery);
-						
-						$template->set_var("no_params", $params);
-						
-						$template->output();
-					}
-					else
-					{
-						$paramquery = $_GET;
-						unset($paramquery[nextpage]);
-						unset($paramquery[sure]);
-						unset($paramquery[run]);
-						$paramquery[nav] = "sample";
-						$params = http_build_query($paramquery);
-			
-						$item_id = $sample->get_item_id();
-						
-						$project_item->set_item_id($item_id);
-						
-						if ($project_item->unlink_item())
-						{							
-							Common_IO::step_proceed($params, "Delete Project Association", "Operation Successful" ,null);
-						}
-						else
-						{							
-							Common_IO::step_proceed($params, "Delete Project Association", "Operation Failed" ,null);
-						}			
-					}
-				}
-				else
-				{
-					$exception = new Exception("", 1);
-					// $error_io = new Error_IO($exception, 250, 40, 2);
-					// $error_io->display_error();
-				}
-			}
-			else
-			{
-				$exception = new Exception("", 2);
-				// $error_io = new Error_IO($exception, 250, 40, 3);
-				// $error_io->display_error();
-			}
-		}
-		else
-		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 250, 40, 3);
-			// $error_io->display_error();
-		}
-	}
-	
+
+	/**
+	 * @throws SampleIDMissingException
+	 * @throws SampleSecurityAccessDeniedException
+	 */
 	public static function rename()
 	{
 		global $user;
@@ -243,19 +167,19 @@ class SampleAdminIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				// $error_io = new Error_IO($exception, 250, 40, 2);
-				// $error_io->display_error();
+				throw new SampleSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 250, 40, 3);
-			// $error_io->display_error();
+			throw new SampleIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws SampleIDMissingException
+	 * @throws SampleSecurityAccessDeniedException
+	 */
 	public static function user_permission()
 	{
 		global $user;
@@ -374,19 +298,19 @@ class SampleAdminIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				// $error_io = new Error_IO($exception, 250, 40, 2);
-				// $error_io->display_error();
+				throw new SampleSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 250, 40, 3);
-			// $error_io->display_error();
+			throw new SampleIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws SampleIDMissingException
+	 * @throws SampleSecurityAccessDeniedException
+	 */
 	public static function user_permission_add()
 	{
 		global $user;
@@ -524,19 +448,20 @@ class SampleAdminIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				// $error_io = new Error_IO($exception, 250, 40, 2);
-				// $error_io->display_error();
+				throw new SampleSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 250, 40, 3);
-			// $error_io->display_error();
+			throw new SampleIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws SampleIDMissingException
+	 * @throws SampleSecurityAccessDeniedException
+	 * @throws SamplePermissionUserIDMissingException
+	 */
 	public static function user_permission_delete()
 	{
 		global $user;
@@ -596,26 +521,24 @@ class SampleAdminIO
 				}
 				else
 				{
-					$exception = new Exception("", 1);
-					// $error_io = new Error_IO($exception, 250, 40, 2);
-					// $error_io->display_error();
+					throw new SampleSecurityAccessDeniedException();
 				}
 			}
 			else
 			{
-				$exception = new Exception("", 0);
-				// $error_io = new Error_IO($exception, 250, 40, 3);
-				// $error_io->display_error();
+				throw new SamplePermissionUserIDMissingException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 250, 40, 3);
-			// $error_io->display_error();
+			throw new SampleIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws SampleIDMissingException
+	 * @throws SampleSecurityAccessDeniedException
+	 */
 	public static function ou_permission()
 	{
 		global $user;
@@ -704,19 +627,19 @@ class SampleAdminIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				// $error_io = new Error_IO($exception, 250, 40, 2);
-				// $error_io->display_error();
+				throw new SampleSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 250, 40, 3);
-			// $error_io->display_error();
+			throw new SampleIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws SampleIDMissingException
+	 * @throws SampleSecurityAccessDeniedException
+	 */
 	public static function ou_permission_add()
 	{
 		global $user;
@@ -810,19 +733,20 @@ class SampleAdminIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				// $error_io = new Error_IO($exception, 250, 40, 2);
-				// $error_io->display_error();
+				throw new SampleSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 250, 40, 3);
-			// $error_io->display_error();
+			throw new SampleIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws SampleIDMissingException
+	 * @throws SampleSecurityAccessDeniedException
+	 * @throws SamplePermissionOrganisationUnitIDMissingException
+	 */
 	public static function ou_permission_delete()
 	{
 		global $user;
@@ -882,23 +806,17 @@ class SampleAdminIO
 				}
 				else
 				{
-					$exception = new Exception("", 1);
-					// $error_io = new Error_IO($exception, 250, 40, 2);
-					// $error_io->display_error();
+					throw new SampleSecurityAccessDeniedException();
 				}
 			}
 			else
 			{
-				$exception = new Exception("", 0);
-				// $error_io = new Error_IO($exception, 250, 40, 3);
-				// $error_io->display_error();
+				throw new SamplePermissionOrganisationUnitIDMissingException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 250, 40, 3);
-			// $error_io->display_error();
+			throw new SampleIDMissingException();
 		}
 	}
 

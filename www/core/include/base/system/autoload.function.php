@@ -63,6 +63,7 @@ function __autoload($classname)
 	$classes['BaseException']				= $path_prefix."core/include/base/system/exceptions/base_exception.class.php";
 	$classes['IdMissingException']			= $path_prefix."core/include/base/system/exceptions/id_missing_exception.class.php";
 	
+	$classes['ErrorLanguage']				= $path_prefix."core/include/base/system/error_language.class.php";
 	$classes['EventHandler']				= $path_prefix."core/include/base/system/event_handler.class.php";
 	$classes['ExceptionHandler']			= $path_prefix."core/include/base/system/exception_handler.class.php";
 	$classes['System']						= $path_prefix."core/include/base/system/system.class.php";

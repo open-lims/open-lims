@@ -58,6 +58,9 @@ class ProjectDataIO
 		}
 	}
 	
+	/**
+	 * @throws UserIDMissingException
+	 */
 	public static function change()
 	{
 		if ($_GET[id])
@@ -134,9 +137,7 @@ class ProjectDataIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 3, 40, 3);
-			// $error_io->display_error();
+			throw new UserIDMissingException();
 		}
 	}
 }

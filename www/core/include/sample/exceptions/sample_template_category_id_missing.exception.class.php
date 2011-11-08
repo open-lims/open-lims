@@ -22,15 +22,15 @@
  */
 
 /**
- * Sample Exception
+ * Sample Not Found Exception
  * @package sample
  */
-class SampleException extends Exception
+class SampleTemplateCategoryIDMissingException extends SampleTemplateException
 {
-    function __construct($message, $code)
+    function __construct()
     {
-    	parent::__construct($message, $code);	
-    }  
+    	parent::__construct(true, false, false, "Sample Template Category ID is missing");	
+    }   
 }
 
 ?>

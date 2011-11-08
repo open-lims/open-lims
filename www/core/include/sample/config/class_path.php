@@ -24,8 +24,26 @@
 /**
  * 
  */
-	$classes['SampleException']				= $path_prefix."core/include/sample/exceptions/sample_exception.class.php";
-	$classes['SampleSecurityException']		= $path_prefix."core/include/sample/exceptions/sample_security_exception.class.php";
+	$classes['SampleException']										= $path_prefix."core/include/sample/exceptions/sample.exception.class.php";
+	
+	$classes['SampleIDMissingException']							= $path_prefix."core/include/sample/exceptions/sample_id_missing.exception.class.php";
+	$classes['SampleNotFoundException']								= $path_prefix."core/include/sample/exceptions/sample_not_found.exception.class.php";
+	
+	$classes['SampleSecurityException']								= $path_prefix."core/include/sample/exceptions/sample_security.exception.class.php";
+	$classes['SampleSecurityAccessDeniedException']					= $path_prefix."core/include/sample/exceptions/sample_security_access_denied.exception.class.php";
+	
+	$classes['SamplePermissionException']							= $path_prefix."core/include/sample/exceptions/sample_permission.exception.class.php";
+	$classes['SamplePermissionUserException']						= $path_prefix."core/include/sample/exceptions/sample_permission_user.exception.class.php";
+	$classes['SamplePermissionUserIDMissingException']				= $path_prefix."core/include/sample/exceptions/sample_permission_user_id_missing.exception.class.php";
+	$classes['SamplePermissionOrganisationUnitException']			= $path_prefix."core/include/sample/exceptions/sample_permission_organisation_unit.exception.class.php";
+	$classes['SamplePermissionOrganisationUnitIDMissingException']	= $path_prefix."core/include/sample/exceptions/sample_permission_organisation_unit_id_missing.exception.class.php";
+	
+	$classes['SampleTemplateException']								= $path_prefix."core/include/sample/exceptions/sample_template.exception.class.php";
+	$classes['SampleTemplateIDMissingException']					= $path_prefix."core/include/sample/exceptions/sample_template_id_missing.exception.class.php";
+	$classes['SampleTemplateNotFoundException']						= $path_prefix."core/include/sample/exceptions/sample_template_not_found.exception.class.php";
+	$classes['SampleTemplateCategoryIDMissingException']			= $path_prefix."core/include/sample/exceptions/sample_template_category_id_missing.exception.class.php";
+	$classes['SampleTemplateCategoryNotFoundException']				= $path_prefix."core/include/sample/exceptions/sample_template_category_not_found.exception.class.php";
+	
 	
 	$classes['Sample']						= $path_prefix."core/include/sample/sample.class.php";
 	$classes['SampleFolder']				= $path_prefix."core/include/sample/sample_folder.class.php";

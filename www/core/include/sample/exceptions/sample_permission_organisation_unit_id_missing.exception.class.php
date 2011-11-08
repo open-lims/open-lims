@@ -1,6 +1,6 @@
 <?php
 /**
- * @package project
+ * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -22,15 +22,15 @@
  */
 
 /**
- * Project Security Access Denied Exception
- * @package project
+ * Sample Permission Organisation Unit ID Missing Exception
+ * @package sample
  */
-class ProjectSecurityAccessDeniedException extends ProjectSecurityException
+class SamplePermissionOrganisationUnitIDMissingException extends SamplePermissionOrganisationUnitException
 {
-    function __construct()
+    function __construct($message = null)
     {
-    	parent::__construct(true, false, false, null);	
-    }     
+    	parent::__construct($message);
+    }   
 }
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package project
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -21,16 +21,17 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * Project Security Access Denied Exception
- * @package project
- */
-class ProjectSecurityAccessDeniedException extends ProjectSecurityException
-{
-    function __construct()
-    {
-    	parent::__construct(true, false, false, null);	
-    }     
-}
 
+/**
+ * Error Language Interface
+ * @package base
+ */
+interface ErrorLanguageInterface
+{
+	/**
+	 * @param string $class_name
+	 * @return string
+	 */
+	public static function get_message($class_name);
+}
 ?>

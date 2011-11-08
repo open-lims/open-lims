@@ -28,7 +28,6 @@
 class Error_IO
 {
 	private $exception;
-	private $error_type;
 	
 	/**
 	 * @param object $exception
@@ -36,10 +35,9 @@ class Error_IO
 	 * @param integer $layer
 	 * @param integer $error_type
 	 */
-	function __construct($exception, $error_type, $module = null, $layer = null)
+	function __construct($exception)
 	{
 		$this->exception = $exception;
-		$this->error_type = $error_type;
 	}
 	
 	public function display_error()
@@ -53,7 +51,7 @@ class Error_IO
 			$template = new Template("template/base/error/error_in_box.html");
 		}	
 		
-		$error_message = $this->exception->getMessage();
+		$error_message = ErrorLanguage::get_message(get_class($this->exception));
 		
 		if ($error_message)
 		{

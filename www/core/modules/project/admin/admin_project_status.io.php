@@ -174,6 +174,9 @@ class AdminProjectStatusIO
 		}
 	}
 	
+	/**
+	 * @throws ProjectStatusIDMissingException
+	 */
 	public static function delete()
 	{
 		if ($_GET[id])
@@ -220,12 +223,13 @@ class AdminProjectStatusIO
 		}
 		else
 		{
-			$exception = new Exception("", 2);
-			// $error_io = new Error_IO($exception, 200, 40, 3);
-			// $error_io->display_error();
+			throw new ProjectStatusIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectStatusIDMissingException
+	 */
 	public static function edit()
 	{
 		if ($_GET[id])
@@ -297,47 +301,29 @@ class AdminProjectStatusIO
 		}
 		else
 		{
-			$exception = new Exception("", 2);
-			// $error_io = new Error_IO($exception, 200, 40, 3);
-			// $error_io->display_error();
+			throw new ProjectStatusIDMissingException();
 		}
 	}
-	
+
 	public static function handler()
 	{
-		try
-		{
-			if ($_GET[id])
-			{
-				if (ProjectStatus::exist_id($_GET[id]) == false)
-				{
-					// throw new ProjectStatusNotFoundException("",2);
-				}
-			}
+		switch($_GET[action]):
+			case "add":
+				self::create();
+			break;
 			
-			switch($_GET[action]):
-				case "add":
-					self::create();
-				break;
-				
-				case "edit":
-					self::edit();
-				break;
-				
-				case "delete":
-					self::delete();
-				break;
-							
-				default:
-					self::home();
-				break;
-			endswitch;
-		}
-		catch (ProjectStatusNotFoundException $e)
-		{
-			//// $error_io = new Error_IO($e, 200, 40, 1);
-			//// $error_io->display_error();
-		}
+			case "edit":
+				self::edit();
+			break;
+			
+			case "delete":
+				self::delete();
+			break;
+						
+			default:
+				self::home();
+			break;
+		endswitch;
 	}
 	
 }

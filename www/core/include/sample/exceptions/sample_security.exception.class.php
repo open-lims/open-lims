@@ -25,12 +25,12 @@
  * Sample Security Exception
  * @package sample
  */
-class SampleSecurityException extends Exception
+class SampleSecurityException extends SampleException
 {
-    function __construct($message, $code)
+    function __construct($write_log = false, $write_hdd_session = false, $write_hdd_sql = false, $message = null)
     {
-    	parent::__construct($message, $code);	
-    }    
+    	parent::__construct($write_log, $write_hdd_session, $write_hdd_sql, $message, null);	
+    }
 }
 
 ?>

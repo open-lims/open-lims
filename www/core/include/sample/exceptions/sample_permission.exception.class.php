@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * @package sample
  * @version 0.4.0.0
@@ -22,15 +22,15 @@
  */
 
 /**
- * Sample Template Not Found Exception
+ * Sample Permission Exception
  * @package sample
  */
-class SampleTemplateNotFoundException extends Exception
+class SamplePermissionException extends SampleException
 {
-    function __construct($message, $code)
+    function __construct($write_log = false, $write_hdd_session = false, $write_hdd_sql = false, $message = null)
     {
-    	parent::__construct($message, $code);	
-    }  
+    	parent::__construct($write_log, $write_hdd_session, $write_hdd_sql, $message, null);	
+    }   
 }
 
 ?>

@@ -25,12 +25,12 @@
  * Sample Not Found Exception
  * @package sample
  */
-class SampleNotFoundException extends Exception
+class SampleNotFoundException extends SampleException
 {
-    function __construct($message, $code)
+    function __construct()
     {
-    	parent::__construct($message, $code);	
-    }  
+    	parent::__construct(true, false, false, "Sample not found", null);	
+    }
 }
 
 ?>

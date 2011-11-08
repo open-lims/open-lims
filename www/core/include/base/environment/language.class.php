@@ -24,7 +24,7 @@
 /**
  * 
  */
-require_once("interfaces/language.interface.php");
+//require_once("interfaces/language.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
@@ -36,7 +36,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Saves calculated data via runtime and avoids recalculation
  * @package base
  */
-class Language implements LanguageInterface
+class Language // implements LanguageInterface
 {
 	private $language_id;
 	private $language;
@@ -44,7 +44,7 @@ class Language implements LanguageInterface
 	/**
 	 * @param integer $language_id
 	 */
-	function __construct($lauguage_id)
+	function __construct($language_id)
 	{
 		if (is_numeric($language_id))
 		{
@@ -62,6 +62,24 @@ class Language implements LanguageInterface
 	{
 		unset($this->language_id);
 		unset($this->language);
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function get_folder_name()
+	{
+		if ($this->language and $this->language_id)
+		{
+			$iso_639 = $this->language->get_iso_639();
+			$iso_3166 = $this->language->get_iso_3166();
+			
+			return strtolower(trim($iso_639))."-".strtolower(trim($iso_3166));
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package project
+ * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -22,10 +22,10 @@
  */
 
 /**
- * Project Security Access Denied Exception
- * @package project
+ * Sample Security Access Denied Exception
+ * @package sample
  */
-class ProjectSecurityAccessDeniedException extends ProjectSecurityException
+class SampleSecurityAccessDeniedException extends SampleSecurityException
 {
     function __construct()
     {
