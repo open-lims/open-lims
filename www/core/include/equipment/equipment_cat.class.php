@@ -28,8 +28,6 @@ require_once("interfaces/equipment_cat.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	require_once("exceptions/equipment_category_not_found_exception.class.php");
-	
 	require_once("access/equipment_cat.access.php");
 }
 
@@ -45,13 +43,21 @@ class EquipmentCat implements EquipmentCatInterface
 	/**
 	 * @see EquipmentCatInterface::__construct()
 	 * @param integer $equipment_cat_id
+	 * @throws EquipmentCategoryNotFoundException
 	 */
 	function __construct($equipment_cat_id)
 	{
-    	if ($equipment_cat_id)
-    	{
-			$this->equipment_cat_id = $equipment_cat_id;
-			$this->equipment_cat = new EquipmentCat_Access($equipment_cat_id);
+		if (is_numeric($equipment_cat_id))
+		{
+			if (EquipmentCat_Access::exist_id($equipment_cat_id) == true)
+			{
+				$this->equipment_cat_id = $equipment_cat_id;
+				$this->equipment_cat = new EquipmentCat_Access($equipment_cat_id);
+			}
+			else
+			{
+				throw new EquipmentCategoryNotFoundException();
+			}
 		}
 		else
 		{

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package data
+ * @package location
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -22,15 +22,15 @@
  */
 
 /**
- * File Not Found Exception
- * @package data
+ * Location Not Found Exception
+ * @package location
  */
-class FileNotFoundException extends Exception
+class LocationNotFoundException extends LocationException
 {
-    function __construct($message, $code)
+    function __construct()
     {
-    	parent::__construct($message, $code);	
-    }    
+    	parent::__construct(true, false, false, "Location not found", null);	
+    }
 }
 
 ?>

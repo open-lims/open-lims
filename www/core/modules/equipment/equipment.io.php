@@ -364,12 +364,12 @@ class EquipmentIO
 		}
 		else
 		{
-			// Error
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
 	/**
-	 * @todo error on missing id
+	 * @throws EquipmentIDMissingException
 	 */
 	public static function detail()
 	{
@@ -380,12 +380,12 @@ class EquipmentIO
 		}
 		else
 		{
-			// Error
+			throw new EquipmentIDMissingException();
 		}
 	}
 	
 	/**
-	 * @todo error on missing id
+	 * @throws EquipmentTypeIDMissingException
 	 */
 	public static function type_detail($type_id, $owner_id)
 	{
@@ -472,7 +472,7 @@ class EquipmentIO
 		}
 		else
 		{
-			// Error
+			throw new EquipmentTypeIDMissingException();
 		}
 	}
 }

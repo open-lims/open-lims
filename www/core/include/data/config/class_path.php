@@ -27,9 +27,35 @@
 	$classes['ConcreteFolderCaseInterface']	= $path_prefix."core/include/data/folder/interfaces/concrete_folder_case.interface.php";		
 	$classes['ValueVarCaseInterface']		= $path_prefix."core/include/data/value/interfaces/value_var_case.interface.php";	
 
-	$classes['DataException']				= $path_prefix."core/include/data/exceptions/data_exception.class.php";
+	
+	$classes['DataException']						= $path_prefix."core/include/data/exceptions/data.exception.class.php";
+	
+	$classes['FolderException']						= $path_prefix."core/include/data/folder/exceptions/folder.exception.class.php";
+	$classes['FolderNotFoundException']				= $path_prefix."core/include/data/folder/exceptions/folder_not_found.exception.class.php";
+	$classes['FolderIDMissingException']			= $path_prefix."core/include/data/folder/exceptions/folder_id_missing.exception.class.php";
+	
+	$classes['FileException']						= $path_prefix."core/include/data/file/exceptions/file.exception.class.php";
+	$classes['FileNotFoundException']				= $path_prefix."core/include/data/file/exceptions/file_not_found.exception.class.php";
+	$classes['FileIDMissingException']				= $path_prefix."core/include/data/file/exceptions/file_id_missing.exception.class.php";
+	$classes['FileVersionNotFoundException']		= $path_prefix."core/include/data/file/exceptions/file_version_not_found.exception.class.php";
+	$classes['FileVersionIDMissingException']		= $path_prefix."core/include/data/file/exceptions/file_veriosn_id_missing.exception.class.php";
+	
+	$classes['ValueException']						= $path_prefix."core/include/data/value/exceptions/value.exception.class.php";
+	$classes['ValueNotFoundException']				= $path_prefix."core/include/data/value/exceptions/value_not_found.exception.class.php";
+	$classes['ValueIDMissingException']				= $path_prefix."core/include/data/value/exceptions/value_id_missing.exception.class.php";
+	$classes['ValueVersionNotFoundException']		= $path_prefix."core/include/data/value/exceptions/value_version_not_found.exception.class.php";
+	$classes['ValueVersionIDMissingException']		= $path_prefix."core/include/data/value/exceptions/value_version_id_missing.exception.class.php";
+	$classes['ValueTypeException']					= $path_prefix."core/include/data/value/exceptions/value_type.exception.class.php";
+	$classes['ValueTypeNotFoundException']			= $path_prefix."core/include/data/value/exceptions/value_type_not_found.exception.class.php";
+	$classes['ValueTypeIDMissingException']			= $path_prefix."core/include/data/value/exceptions/value_type_id_missing.exception.class.php";
+
+	/**
+	 * @deprecated new
+	 */
 	$classes['DataSecurityException']		= $path_prefix."core/include/data/exceptions/data_security_exception.class.php";
 
+	
+	
 	$classes['DataEntity']					= $path_prefix."core/include/data/data_entity.class.php";
 	$classes['DataEntityPermission']		= $path_prefix."core/include/data/data_entity_permission.class.php";
 	$classes['DataBrowser']					= $path_prefix."core/include/data/data_browser.class.php";

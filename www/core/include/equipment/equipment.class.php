@@ -44,17 +44,25 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 	/**
 	 * @see EquipmentInterface::__construct()
 	 * @param integer $equipment_id
+	 * @throws EquipmentNotFoundException
 	 */
 	function __construct($equipment_id)
 	{
-		if ($equipment_id)
+		if (is_numeric($equipment_id))
 		{
-			$this->equipment_id = $equipment_id;
-			$this->equipment = new Equipment_Access($equipment_id);
-			
-			$equipment_is_item = new EquipmentIsItem_Access($equipment_id);
-			$this->item_id = $equipment_is_item->get_item_id();
-    		parent::__construct($this->item_id);
+			if (Equipment_Access::exist_id($equipment_id) == true)
+			{
+				$this->equipment_id = $equipment_id;
+				$this->equipment = new Equipment_Access($equipment_id);
+				
+				$equipment_is_item = new EquipmentIsItem_Access($equipment_id);
+				$this->item_id = $equipment_is_item->get_item_id();
+	    		parent::__construct($this->item_id);
+			}
+			else
+			{
+				throw new EquipmentNotFoundException();
+			}
 		}
 		else
 		{

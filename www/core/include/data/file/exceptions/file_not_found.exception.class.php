@@ -22,14 +22,14 @@
  */
 
 /**
- * Value Not Found Exception
+ * File Not Found Exception
  * @package data
  */
-class ValueVersionNotFoundException extends Exception
+class FileNotFoundException extends FileException
 {
-    function __construct($message, $code)
+    function __construct()
     {
-    	parent::__construct($message, $code);	
+    	parent::__construct(true, false, false, "File not found!", null);	
     }    
 }
 

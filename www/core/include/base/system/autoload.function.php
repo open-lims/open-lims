@@ -82,13 +82,13 @@ function __autoload($classname)
 	
 	
 	// User
-	$classes['UserException']				= $path_prefix."core/include/base/user/exception/user.exception.php";
-	$classes['UserNotFoundException']		= $path_prefix."core/include/base/user/exception/user_not_found.exception.php";
-	$classes['UserIDMissingException']		= $path_prefix."core/include/base/user/exception/user_id_missing.exception.php";
+	$classes['UserException']				= $path_prefix."core/include/base/user/exceptions/user.exception.class.php";
+	$classes['UserNotFoundException']		= $path_prefix."core/include/base/user/exceptions/user_not_found.exception.class.php";
+	$classes['UserIDMissingException']		= $path_prefix."core/include/base/user/exceptions/user_id_missing.exception.class.php";
 	
-	$classes['GroupException']				= $path_prefix."core/include/base/user/exception/group.exception.php";
-	$classes['GroupNotFoundException']		= $path_prefix."core/include/base/user/exception/group_not_found.exception.php";
-	$classes['GroupIDMissingException']		= $path_prefix."core/include/base/user/exception/group_id_missing.exception.php";
+	$classes['GroupException']				= $path_prefix."core/include/base/user/exceptions/group.exception.php";
+	$classes['GroupNotFoundException']		= $path_prefix."core/include/base/user/exceptions/group_not_found.exception.php";
+	$classes['GroupIDMissingException']		= $path_prefix."core/include/base/user/exceptions/group_id_missing.exception.php";
 	
 	$classes['User'] 						= $path_prefix."core/include/base/user/user.class.php";
 	$classes['Group'] 						= $path_prefix."core/include/base/user/group.class.php";

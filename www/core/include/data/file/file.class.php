@@ -28,9 +28,6 @@ require_once("interfaces/file.interface.php");
  
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	require_once("exceptions/file_not_found_exception.class.php");
-	require_once("exceptions/file_version_not_found_exception.class.php");
-
 	require_once("events/file_delete_event.class.php");
 	require_once("events/file_upload_event.class.php");
 	require_once("events/file_upload_precheck_event.class.php");
@@ -57,25 +54,33 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	/**
 	 * @see FileInterface::__construct()
 	 * @param integer $file_id
+	 * @throws FileNotFoundException
 	 */
 	function __construct($file_id)
 	{
-		if ($file_id == null)
+		if (is_numeric($file_id))
+		{
+			if (File_Access::exist_file_by_file_id($file_id) == true)
+			{
+				$this->file_id = $file_id;
+				$this->file = new File_Access($file_id);
+				
+				$file_version_id = FileVersion_Access::get_current_entry_by_toid($file_id);
+				$this->file_version = new FileVersion_Access($file_version_id);
+	
+				parent::__construct($this->file->get_data_entity_id());
+			}
+			else
+			{
+				throw new FileNotFoundException();
+			}
+		}
+		else
 		{
 			$this->file_id = null;
 			$this->file = new File_Access(null);
 			$this->file_version = new FileVersion_Access(null);
 			parent::__construct(null);
-		}
-		else
-		{
-			$this->file_id = $file_id;
-			$this->file = new File_Access($file_id);
-			
-			$file_version_id = FileVersion_Access::get_current_entry_by_toid($file_id);
-			$this->file_version = new FileVersion_Access($file_version_id);
-
-			parent::__construct($this->file->get_data_entity_id());
 		}
 	}
 	
@@ -187,14 +192,22 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	 * @see FileInterface::open_internal_revision()
 	 * @param integer $internal_revision
 	 * @return bool
+	 * @throws FileVersionNotFoundException
 	 */
 	public function open_internal_revision($internal_revision)
 	{
 		if (is_numeric($internal_revision) and $this->file_id)
 		{
-			$file_version_id =FileVersion_Access::get_entry_by_toid_and_internal_revision($this->file_id, $internal_revision);
-			$this->file_version = new FileVersion_Access($file_version_id);
-			return true;
+			if (FileVersion_Access::exist_internal_revision($this->file_id, $internal_revision) == true)
+			{
+				$file_version_id =FileVersion_Access::get_entry_by_toid_and_internal_revision($this->file_id, $internal_revision);
+				$this->file_version = new FileVersion_Access($file_version_id);
+				return true;
+			}
+			else
+			{
+				throw new FileVersionNotFoundException();
+			}
 		}
 		else
 		{

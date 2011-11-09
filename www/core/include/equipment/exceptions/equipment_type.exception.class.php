@@ -1,6 +1,6 @@
 <?php
 /**
- * @package data
+ * @package equipment
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -22,15 +22,15 @@
  */
 
 /**
- * Folder Not Found Exception
- * @package data
+ * Equipment Type Exception
+ * @package equipment
  */
-class FolderNotFoundException extends Exception
+class EquipmentTypeException extends EquipmentException
 {
-    function __construct($message, $code)
+    function __construct($write_log = false, $write_hdd_session = false, $write_hdd_sql = false, $message = null)
     {
-    	parent::__construct($message, $code);	
-    }    
+    	parent::__construct($write_log, $write_hdd_session, $write_hdd_sql, $message, null);	
+    }   
 }
 
 ?>

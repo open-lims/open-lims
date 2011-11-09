@@ -28,8 +28,6 @@ require_once("interfaces/folder.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	require_once("exceptions/folder_not_found_exception.class.php");
-	
 	require_once("access/folder.access.php");
 	
 	require_once("access/folder_concretion.access.php");
@@ -54,24 +52,19 @@ class Folder extends DataEntity implements FolderInterface
 	/**
 	 * Get instance via static::get_instance($folder_id)
 	 * @param integer $folder_id
+	 * @throws FolderNotFoundException
 	 */
 	function __construct($folder_id)
-	{		
-		if ($folder_id == null)
+	{	
+		if (is_numeric($folder_id))
 		{
-			$this->folder_id 			= null;
-			$this->folder				= new Folder_Access(null);
-			parent::__construct(null);
-		}
-		else
-		{				
-			$this->folder_id 			= $folder_id;
-			$this->folder				= new Folder_Access($folder_id);
-			
-			if ($this->folder->get_id() != null)
+			if (Folder_Access::exist_id($folder_id) == true)
 			{
+				$this->folder_id 			= $folder_id;
+				$this->folder				= new Folder_Access($folder_id);
+	
 				parent::__construct($this->folder->get_data_entity_id());
-
+	
 				$this->data_entity_permission->set_folder_flag($this->folder->get_flag());
 				
 				if ($this->data_entity_permission->is_access(1))
@@ -130,10 +123,14 @@ class Folder extends DataEntity implements FolderInterface
 			}
 			else
 			{
-				$this->folder_id 			= null;
-				$this->folder				= new Folder_Access(null);
-				parent::__construct(null);
+				throw new FolderNotFoundException();
 			}
+		}	
+		else
+		{
+			$this->folder_id 			= null;
+			$this->folder				= new Folder_Access(null);
+			parent::__construct(null);
 		}
 	} 
 	

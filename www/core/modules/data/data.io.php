@@ -31,216 +31,198 @@ class DataIO
 	{
 		global $content;
 		
-		try
+		$data_browser = new DataBrowser();
+
+		if ($_GET[clear] == "delete_stack")
 		{
-			$data_browser = new DataBrowser();
-	
-			if ($_GET[clear] == "delete_stack")
-			{
-				$data_path = new DataPath(null, null);
-				$data_path->delete_stack();
-				unset($_GET[clear]);
-				unset($_GET[vfolder_id]);
-			}
+			$data_path = new DataPath(null, null);
+			$data_path->delete_stack();
+			unset($_GET[clear]);
+			unset($_GET[vfolder_id]);
+		}
+		
+		if ($_GET[vfolder_id])
+		{
 			
-			if ($_GET[vfolder_id])
+			if (VirtualFolder::exist_vfolder($_GET[vfolder_id]) == false)
 			{
-				
-				if (VirtualFolder::exist_vfolder($_GET[vfolder_id]) == false)
-				{
-					throw new DataException("",1);
-				}
-				else
-				{
-					$virtual_folder_id = $_GET[vfolder_id];
-					$folder_id = null;
-					$data_path = new DataPath(null, $_GET[vfolder_id]);
-				}
-			}
-			elseif ($_GET[folder_id])
-			{
-				$folder = Folder::get_instance($_GET[folder_id]);
-				
-				if ($folder->exist_folder() == false)
-				{
-					throw new DataException("",1);
-				}
-				else
-				{
-					if ($folder->is_read_access() == false)
-					{
-						throw new DataSecurityException("",1);
-					}
-					else
-					{
-						$virtual_folder_id = null;
-						$folder_id = $_GET[folder_id];
-						$data_path = new DataPath($_GET[folder_id], null);
-					}
-				}
+				throw new DataException();
 			}
 			else
 			{
-				$data_path = new DataPath(null, null);
-				if ($data_path->get_last_entry_type() == true)
+				$virtual_folder_id = $_GET[vfolder_id];
+				$folder_id = null;
+				$data_path = new DataPath(null, $_GET[vfolder_id]);
+			}
+		}
+		elseif ($_GET[folder_id])
+		{
+			$folder = Folder::get_instance($_GET[folder_id]);
+			
+			if ($folder->exist_folder() == false)
+			{
+				throw new DataException();
+			}
+			else
+			{
+				if ($folder->is_read_access() == false)
 				{
-					$virtual_folder_id = $data_path->get_last_entry_id();
-					$folder_id = null;
+					throw new DataSecurityException("",1);
 				}
 				else
 				{
 					$virtual_folder_id = null;
-					$folder_id = $data_path->get_last_entry_id();
+					$folder_id = $_GET[folder_id];
+					$data_path = new DataPath($_GET[folder_id], null);
 				}
 			}
-
-			if ($folder_id == null and $virtual_folder_id == null)
+		}
+		else
+		{
+			$data_path = new DataPath(null, null);
+			if ($data_path->get_last_entry_type() == true)
 			{
-				$folder_id = $data_browser->get_folder_id();
-				
-				$argument_array = array();
-				$argument_array[0][0] = "folder_id";
-				$argument_array[0][1] = $folder_id;
-				$argument_array[1][0] = "virtual_folder_id";
-				$argument_array[1][1] = null;
+				$virtual_folder_id = $data_path->get_last_entry_id();
+				$folder_id = null;
 			}
-	
+			else
+			{
+				$virtual_folder_id = null;
+				$folder_id = $data_path->get_last_entry_id();
+			}
+		}
+
+		if ($folder_id == null and $virtual_folder_id == null)
+		{
+			$folder_id = $data_browser->get_folder_id();
+			
 			$argument_array = array();
 			$argument_array[0][0] = "folder_id";
 			$argument_array[0][1] = $folder_id;
 			$argument_array[1][0] = "virtual_folder_id";
-			$argument_array[1][1] = $virtual_folder_id;	
+			$argument_array[1][1] = null;
+		}
 
-			
-			$list = new List_IO("DataBrowser", "/core/modules/data/data.ajax.php", "list_data_browser", "count_data_browser", $argument_array, "DataBrowserAjax");
+		$argument_array = array();
+		$argument_array[0][0] = "folder_id";
+		$argument_array[0][1] = $folder_id;
+		$argument_array[1][0] = "virtual_folder_id";
+		$argument_array[1][1] = $virtual_folder_id;	
 
-			// $list->set_top_right_text($data_path->get_stack_path());
-			
-			$list->add_row("","symbol",false,16);
-			$list->add_row("Name","name",true,null);
-			$list->add_row("Type","type",true,null);
-			$list->add_row("Ver.","version",false,null);
-			$list->add_row("Date/Time","datetime",true,null);
-			$list->add_row("Size","size",true,null);
-			$list->add_row("Owner","owner",true,null);
-			$list->add_row("Permission","permission",false,null);
 		
-			// !!! [...] !!!
-			
-			$folder = Folder::get_instance($folder_id);	
-			
-			$template = new Template("template/data/data_browser.html");
+		$list = new List_IO("DataBrowser", "/core/modules/data/data.ajax.php", "list_data_browser", "count_data_browser", $argument_array, "DataBrowserAjax");
+
+		// $list->set_top_right_text($data_path->get_stack_path());
+		
+		$list->add_row("","symbol",false,16);
+		$list->add_row("Name","name",true,null);
+		$list->add_row("Type","type",true,null);
+		$list->add_row("Ver.","version",false,null);
+		$list->add_row("Date/Time","datetime",true,null);
+		$list->add_row("Size","size",true,null);
+		$list->add_row("Owner","owner",true,null);
+		$list->add_row("Permission","permission",false,null);
 	
-			if ($folder_id and !$virtual_folder_id)
+		// !!! [...] !!!
+		
+		$folder = Folder::get_instance($folder_id);	
+		
+		$template = new Template("template/data/data_browser.html");
+
+		if ($folder_id and !$virtual_folder_id)
+		{
+			if ($folder->is_write_access() == true)
 			{
-				if ($folder->is_write_access() == true)
-				{
-					$template->set_var("add_file", true);
-				}
-				else
-				{
-					$template->set_var("add_file", false);
-				}
-				
-				if ($folder->is_folder_image_content() == true)
-				{
-					$template->set_var("folder_image", true);
-				}
-				else
-				{
-					$template->set_var("folder_image", false);
-				}
-				
-				if (($folder->can_change_permission() or 
-					$folder->can_add_folder() or 
-					$folder->can_command_folder() or 
-					$folder->can_rename_folder()) and
-					($folder->is_write_access() or 
-					$folder->is_delete_access() or
-					$folder->is_control_access()))
-				{
-					$template->set_var("folder_administration", true);
-				}
-				else
-				{
-					$template->set_var("folder_administration", false);
-				}
-				
-				$template->set_var("item_administration", false);
+				$template->set_var("add_file", true);
 			}
 			else
 			{
 				$template->set_var("add_file", false);
-				$template->set_var("folder_image", false);
-				$template->set_var("folder_administration", false);
-				$template->set_var("item_administration", false);
 			}
 			
-			$paramquery = $_GET;
-			$paramquery[action] = "image_browser_detail";
-			$paramquery[folder_id] = $folder_id;
-			unset($paramquery[nextpage]);
-			$params = http_build_query($paramquery,'','&#38;');
-							
-			$template->set_var("folder_image_params", $params);
+			if ($folder->is_folder_image_content() == true)
+			{
+				$template->set_var("folder_image", true);
+			}
+			else
+			{
+				$template->set_var("folder_image", false);
+			}
 			
+			if (($folder->can_change_permission() or 
+				$folder->can_add_folder() or 
+				$folder->can_command_folder() or 
+				$folder->can_rename_folder()) and
+				($folder->is_write_access() or 
+				$folder->is_delete_access() or
+				$folder->is_control_access()))
+			{
+				$template->set_var("folder_administration", true);
+			}
+			else
+			{
+				$template->set_var("folder_administration", false);
+			}
 			
-			$paramquery = $_GET;
-			$paramquery[action] = "file_add";
-			$paramquery[folder_id] = $folder_id;
-			unset($paramquery[nextpage]);
-			$params = http_build_query($paramquery,'','&#38;');
-							
-			$template->set_var("add_file_params", $params);
-	
-	
-			$paramquery = $_GET;
-			$paramquery[clear] = "delete_stack";
-			unset($paramquery[folder_id]);
-			unset($paramquery[vfolder_id]);
-			$params = http_build_query($paramquery,'','&#38;');
-							
-			$template->set_var("home_folder_params", $params);
-			
-	
-			$paramquery = $_GET;
-			$paramquery[action] = "folder_administration";
-			$paramquery[folder_id] = $folder_id;
-			unset($paramquery[nextpage]);
-			$params = http_build_query($paramquery,'','&#38;');
-							
-			$template->set_var("folder_administration_params", $params);
-			
-			$paramquery = $_GET;
-			$paramquery[action] = "item_administration_folder";
-			$paramquery[folder_id] = $folder_id;
-			unset($paramquery[nextpage]);
-			$params = http_build_query($paramquery,'','&#38;');
-							
-			$template->set_var("item_administration_params", $params);		
-	
-	
-			$template->set_var("title","Data Browser");
-			
-			$template->set_var("list", $list->get_list());
-			
-			$template->output();
+			$template->set_var("item_administration", false);
 		}
-		catch (DataException $e)
+		else
 		{
-			// $error_io = new Error_IO($e, 20, 40, 1);
-			// $error_io->display_error();
+			$template->set_var("add_file", false);
+			$template->set_var("folder_image", false);
+			$template->set_var("folder_administration", false);
+			$template->set_var("item_administration", false);
 		}
-		catch (DataSecurityException $e)
-		{
-			// $error_io = new Error_IO($e, 20, 40, 2);
-			// $error_io->display_error();
-		}
-		catch (Exception $e)
-		{
-			// $error_io = new Error_IO($e, 0, 0, 0);
-			// $error_io->display_error();
-		}
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "image_browser_detail";
+		$paramquery[folder_id] = $folder_id;
+		unset($paramquery[nextpage]);
+		$params = http_build_query($paramquery,'','&#38;');
+						
+		$template->set_var("folder_image_params", $params);
+		
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "file_add";
+		$paramquery[folder_id] = $folder_id;
+		unset($paramquery[nextpage]);
+		$params = http_build_query($paramquery,'','&#38;');
+						
+		$template->set_var("add_file_params", $params);
+
+
+		$paramquery = $_GET;
+		$paramquery[clear] = "delete_stack";
+		unset($paramquery[folder_id]);
+		unset($paramquery[vfolder_id]);
+		$params = http_build_query($paramquery,'','&#38;');
+						
+		$template->set_var("home_folder_params", $params);
+		
+
+		$paramquery = $_GET;
+		$paramquery[action] = "folder_administration";
+		$paramquery[folder_id] = $folder_id;
+		unset($paramquery[nextpage]);
+		$params = http_build_query($paramquery,'','&#38;');
+						
+		$template->set_var("folder_administration_params", $params);
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "item_administration_folder";
+		$paramquery[folder_id] = $folder_id;
+		unset($paramquery[nextpage]);
+		$params = http_build_query($paramquery,'','&#38;');
+						
+		$template->set_var("item_administration_params", $params);		
+
+
+		$template->set_var("title","Data Browser");
+		
+		$template->set_var("list", $list->get_list());
+		
+		$template->output();
 	}
 	
 	public static function image_browser_multi()

@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * @package location
  * @version 0.4.0.0
@@ -22,11 +22,15 @@
  */
 
 /**
- * 
+ * Location ID Missing Exception
+ * @package location
  */
-	$classes['LocationException'] 			= $path_prefix."core/include/location/exception/location.exception.class.php";
-	$classes['LocationNotFoundException'] 	= $path_prefix."core/include/location/exception/location_not_found.exception.class.php";
-	$classes['LocationIDMissingException'] 	= $path_prefix."core/include/location/exception/location_id_missing.exception.class.php";
+class LocationIDMissingException extends LocationException
+{
+    function __construct()
+    {
+    	parent::__construct(true, false, false, "Location ID is missing", null);	
+    }
+}
 
-	$classes['Location'] = $path_prefix."core/include/location/location.class.php";
 ?>

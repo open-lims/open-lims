@@ -167,6 +167,9 @@ class AdminEquipmentCatIO
 		$template->output();
 	}
 
+	/**
+	 * @throws EquipmentCategoryIDMissingException
+	 */
 	public static function create()
 	{
 		if (($_GET[action] == "add_child" and $_GET[id]) or $_GET[action] == "add")
@@ -255,12 +258,13 @@ class AdminEquipmentCatIO
 		}
 		else
 		{
-			$exception = new Exception("", 4);
-			// $error_io = new Error_IO($exception, 50, 40, 3);
-			// $error_io->display_error();
+			throw new EquipmentCategoryIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws EquipmentCategoryIDMissingException
+	 */
 	public static function delete()
 	{
 		if ($_GET[id])
@@ -307,12 +311,13 @@ class AdminEquipmentCatIO
 		}
 		else
 		{
-			$exception = new Exception("", 4);
-			// $error_io = new Error_IO($exception, 50, 40, 3);
-			// $error_io->display_error();
+			throw new EquipmentCategoryIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws EquipmentCategoryIDMissingException
+	 */
 	public static function edit()
 	{
 		if ($_GET[id])
@@ -392,48 +397,30 @@ class AdminEquipmentCatIO
 		}
 		else
 		{
-			$exception = new Exception("", 4);
-			// $error_io = new Error_IO($exception, 50, 40, 3);
-			// $error_io->display_error();
+			throw new EquipmentCategoryIDMissingException();
 		}
 	}
 	
 	public static function handler()
 	{
-		try
-		{
-			if ($_GET[id])
-			{
-				if (EquipmentCat::exist_id($_GET[id]) == false)
-				{
-					throw new EquipmentCategoryNotFoundException("",4);
-				}
-			}
-
-			switch($_GET[action]):
-				case "add":
-				case "add_child":
-					self::create();
-				break;
-				
-				case "edit":
-					self::edit();
-				break;
-				
-				case "delete":
-					self::delete();
-				break;
-							
-				default:
-					self::home();
-				break;
-			endswitch;
-		}
-		catch (EquipmentCategoryNotFoundException $e)
-		{
-			// $error_io = new Error_IO($e, 50, 40, 1);
-			// $error_io->display_error();
-		}
+		switch($_GET[action]):
+			case "add":
+			case "add_child":
+				self::create();
+			break;
+			
+			case "edit":
+				self::edit();
+			break;
+			
+			case "delete":
+				self::delete();
+			break;
+						
+			default:
+				self::home();
+			break;
+		endswitch;
 	}
 	
 }

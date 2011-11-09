@@ -177,6 +177,9 @@ class AdminValueTemplateIO
 		}
 	}
 	
+	/**
+	 * @throws ValueTypeIDMissingExcpetion
+	 */
 	public static function delete()
 	{
 		if ($_GET[id])
@@ -223,45 +226,27 @@ class AdminValueTemplateIO
 		}
 		else
 		{
-			$exception = new Exception("", 6);
-			// $error_io = new Error_IO($exception, 20, 40, 3);
-			// $error_io->display_error();
+			throw new ValueTypeIDMissingExcpetion();
 		}
 	}
 	
 	public static function handler()
-	{
-		try
-		{
-			if ($_GET[id])
-			{
-				if (ValueType::exist_id($_GET[id]) == false)
-				{
-					throw new ValueTypeNotFoundException("",7);
-				}
-			}
+	{			
+		switch($_GET[action]):
 			
-			switch($_GET[action]):
-				
-				case "add":
-					self::create();
-				break;
-				
-				case "delete":
-					self::delete();
-				break;
-							
-				default:
-					self::home();
-				break;
+			case "add":
+				self::create();
+			break;
 			
-			endswitch;
-		}
-		catch (ValueTypeNotFoundException $e)
-		{
-			// $error_io = new Error_IO($e, 20, 40, 1);
-			// $error_io->display_error();
-		}
+			case "delete":
+				self::delete();
+			break;
+						
+			default:
+				self::home();
+			break;
+		
+		endswitch;
 	}
 	
 }

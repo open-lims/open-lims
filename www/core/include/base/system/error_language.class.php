@@ -92,12 +92,12 @@ class ErrorLanguage implements ErrorLanguageInterface
 			}
 			else
 			{
-				return "A non specific error occurs!";
+				return null;
 			}
 		}
 		else
 		{
-			return "A non specific error occurs!";
+			return null;
 		}
 	}
 }

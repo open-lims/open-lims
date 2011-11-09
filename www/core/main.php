@@ -148,8 +148,15 @@ class Main
 		{
 			if ($_GET[session_id])
 			{
-				$session = new Session($_GET[session_id]);
-				$user = new User($session->get_user_id());
+				try 
+				{
+					$session = new Session($_GET[session_id]);
+					$user = new User($session->get_user_id());
+				}
+				catch (UserException $e)
+				{
+					$GLOBALS['fatal_error'] = "User initialisation failed!";
+				}
 			}
 			else
 			{

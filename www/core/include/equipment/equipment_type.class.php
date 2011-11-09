@@ -28,8 +28,6 @@ require_once("interfaces/equipment_type.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	require_once("exceptions/equipment_type_not_found_exception.class.php");
-	
 	require_once("access/equipment_type.access.php");
 	require_once("access/equipment_cat.access.php");
 	require_once("access/equipment_has_responsible_person.access.php");
@@ -48,13 +46,24 @@ class EquipmentType implements EquipmentTypeInterface, EventListenerInterface
 	/**
 	 * @see EquipmentTypeInterface::__construct()
 	 * @param integer $equipment_type_id
+	 * @throws EquipmentTyoeNotFoundException
 	 */
     function __construct($equipment_type_id)
     {
-    	if ($equipment_type_id) {
-			$this->equipment_type_id = $equipment_type_id;
-			$this->equipment_type = new EquipmentType_Access($equipment_type_id);
-		}else{
+    	if (is_numeric($equipment_type_id))
+		{
+			if (EquipmentType_Access::exist_id($equipment_type_id) == true)
+			{
+				$this->equipment_type_id = $equipment_type_id;
+				$this->equipment_type = new EquipmentType_Access($equipment_type_id);
+			}
+			else
+			{
+				throw new EquipmentTypeNotFoundException();
+			}
+		}
+		else
+		{
 			$this->equipment_type_id = null;
 			$this->equipment_type = new EquipmentType_Access(null);
 		}

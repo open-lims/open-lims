@@ -1,6 +1,6 @@
-<?php 
+<?php
 /**
- * @package location
+ * @package data
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -22,11 +22,15 @@
  */
 
 /**
- * 
+ * Folder ID Missing Exception
+ * @package data
  */
-	$classes['LocationException'] 			= $path_prefix."core/include/location/exception/location.exception.class.php";
-	$classes['LocationNotFoundException'] 	= $path_prefix."core/include/location/exception/location_not_found.exception.class.php";
-	$classes['LocationIDMissingException'] 	= $path_prefix."core/include/location/exception/location_id_missing.exception.class.php";
+class FolderIDMissingException extends FolderException
+{
+    function __construct()
+    {
+    	parent::__construct(true, false, false, "Folder ID Missing!", null);	
+    }    
+}
 
-	$classes['Location'] = $path_prefix."core/include/location/location.class.php";
 ?>

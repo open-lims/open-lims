@@ -200,37 +200,28 @@ class AdminGroupIO
 			unset($paramquery[action]);
 			$params = http_build_query($paramquery);
 			
-			try
-			{	
-				$group = new Group($_POST[group]);
 				
-				$paramquery = $_GET;
-				unset($paramquery[action]);
-				unset($paramquery[nextpage]);
-				$params = http_build_query($paramquery,'','&#38;');
-				
-				if ($group->create($_POST[name]))
-				{
-					Common_IO::step_proceed($params, "Add Group", "Operation Successful", null);
-				}
-				else
-				{
-					Common_IO::step_proceed($params, "Add Group", "Operation Failed" ,null);	
-				}
-			}
-			catch (GroupCreationFailedException $e)
+			$group = new Group($_POST[group]);
+			
+			$paramquery = $_GET;
+			unset($paramquery[action]);
+			unset($paramquery[nextpage]);
+			$params = http_build_query($paramquery,'','&#38;');
+			
+			if ($group->create($_POST[name]))
 			{
-				// $error_io = new Error_IO($e, 1);
-				// $error_io->display_error();
+				Common_IO::step_proceed($params, "Add Group", "Operation Successful", null);
 			}
-			catch (GroupAlreadyExistException $e)
+			else
 			{
-				// $error_io = new Error_IO($e, 1);
-				// $error_io->display_error();
+				Common_IO::step_proceed($params, "Add Group", "Operation Failed" ,null);	
 			}
 		}
 	}
 	
+	/**
+	 * @throws GroupIDMissingException
+	 */
 	public static function delete()
 	{
 		if ($_GET[id])
@@ -278,12 +269,13 @@ class AdminGroupIO
 		}
 		else
 		{
-			$exception = new Exception("", 2);
-			// $error_io = new Error_IO($exception, 3);
-			// $error_io->display_error();
+			throw new GroupIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws GroupIDMissingException
+	 */
 	public static function detail()
 	{
 		if ($_GET[id])
@@ -390,12 +382,13 @@ class AdminGroupIO
 		}
 		else
 		{
-			$exception = new Exception("", 2);
-			// $error_io = new Error_IO($exception, 3);
-			// $error_io->display_error();
+			throw new GroupIDMissingException();
 		}
 	}
 
+	/**
+	 * @throws GroupIDMissingException
+	 */
 	public static function add_user()
 	{
 		if ($_GET[id])
@@ -481,63 +474,73 @@ class AdminGroupIO
 		}
 		else
 		{
-			$exception = new Exception("", 2);
-			// $error_io = new Error_IO($exception, 3);
-			// $error_io->display_error();
+			throw new GroupIDMissingException();
 		}
 	}
 	
+	/**
+	 * @todo new exception for missing key (or rebuild)
+	 * @throws GroupIDMissingException
+	 */
 	public static function delete_user()
 	{
-		if ($_GET[id] and $_GET[key])
+		if ($_GET[id])
 		{
-			if ($_GET[sure] != "true")
+			if ($_GET[key])
 			{
-				$template = new Template("template/user/admin/group/delete_user.html");
-				
-				$paramquery = $_GET;
-				$paramquery[sure] = "true";
-				$params = http_build_query($paramquery);
-				
-				$template->set_var("yes_params", $params);
-						
-				$paramquery = $_GET;
-				unset($paramquery[key]);
-				$paramquery[action] = "detail";
-				$params = http_build_query($paramquery);
-				
-				$template->set_var("no_params", $params);
-				
-				$template->output();
+				if ($_GET[sure] != "true")
+				{
+					$template = new Template("template/user/admin/group/delete_user.html");
+					
+					$paramquery = $_GET;
+					$paramquery[sure] = "true";
+					$params = http_build_query($paramquery);
+					
+					$template->set_var("yes_params", $params);
+							
+					$paramquery = $_GET;
+					unset($paramquery[key]);
+					$paramquery[action] = "detail";
+					$params = http_build_query($paramquery);
+					
+					$template->set_var("no_params", $params);
+					
+					$template->output();
+				}
+				else
+				{
+					$paramquery = $_GET;
+					unset($paramquery[key]);
+					unset($paramquery[sure]);
+					$paramquery[action] = "detail";
+					$params = http_build_query($paramquery);
+					
+					$group = new Group($_GET[id]);		
+							
+					if ($group->delete_user_from_group($_GET[key]))
+					{							
+						Common_IO::step_proceed($params, "Delete User", "Operation Successful" ,null);
+					}
+					else
+					{							
+						Common_IO::step_proceed($params, "Delete User", "Operation Failed" ,null);
+					}			
+				}
 			}
 			else
 			{
-				$paramquery = $_GET;
-				unset($paramquery[key]);
-				unset($paramquery[sure]);
-				$paramquery[action] = "detail";
-				$params = http_build_query($paramquery);
 				
-				$group = new Group($_GET[id]);		
-						
-				if ($group->delete_user_from_group($_GET[key]))
-				{							
-					Common_IO::step_proceed($params, "Delete User", "Operation Successful" ,null);
-				}
-				else
-				{							
-					Common_IO::step_proceed($params, "Delete User", "Operation Failed" ,null);
-				}			
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 2);
-			// $error_io = new Error_IO($exception, 3);
-			// $error_io->display_error();
+			throw new GroupIDMissingException();
 		}
 	}
 	
+	/**
+	 * @todo IMPORTANT: remove bad dependency
+	 */
 	public static function add_organisation_unit()
 	{
 		if ($_GET[id])
@@ -623,12 +626,13 @@ class AdminGroupIO
 		}
 		else
 		{
-			$exception = new Exception("", 2);
-			// $error_io = new Error_IO($exception, 3);
-			// $error_io->display_error();
+			throw new GroupIDMissingException();
 		}
 	}
 	
+	/**
+	 * @todo IMPORTANT: remove bad dependency
+	 */
 	public static function delete_organisation_unit()
 	{
 		if ($_GET[id] and $_GET[key])
@@ -674,12 +678,13 @@ class AdminGroupIO
 		}
 		else
 		{
-			$exception = new Exception("", 2);
-			// $error_io = new Error_IO($exception, 3);
-			// $error_io->display_error();
+			throw new GroupIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws GroupIDMissingException
+	 */
 	public static function rename()
 	{
 		if ($_GET[id])
@@ -756,67 +761,49 @@ class AdminGroupIO
 		}
 		else
 		{
-			$exception = new Exception("", 2);
-			// $error_io = new Error_IO($exception, 3);
-			// $error_io->display_error();
+			throw new GroupIDMissingException();
 		}
 	}
 	
 	public static function handler()
-	{
-		try
-		{
-			if ($_GET[id])
-			{
-				if (Group::exist_group($_GET[id]) == false)
-				{
-					throw new GroupNotFoundException();
-				}
-			}
-		
-			switch($_GET[action]):
-				case "add":
-					self::create();
-				break;
-				
-				case "delete":
-					self::delete();
-				break;
-				
-				case "detail":
-					self::detail();
-				break;
-				
-				case "add_user":
-					self::add_user();
-				break;
-				
-				case "delete_user":
-					self::delete_user();
-				break;
-				
-				case "add_organisation_unit":
-					self::add_organisation_unit();
-				break;
-				
-				case "delete_organisation_unit":
-					self::delete_organisation_unit();
-				break;
-				
-				case "rename":
-					self::rename();
-				break;
-				
-				default:
-					self::home();
-				break;
-			endswitch;
-		}
-		catch (GroupNotFoundException $e)
-		{
-			// $error_io = new Error_IO($e, 1);
-			// $error_io->display_error();
-		}
+	{		
+		switch($_GET[action]):
+			case "add":
+				self::create();
+			break;
+			
+			case "delete":
+				self::delete();
+			break;
+			
+			case "detail":
+				self::detail();
+			break;
+			
+			case "add_user":
+				self::add_user();
+			break;
+			
+			case "delete_user":
+				self::delete_user();
+			break;
+			
+			case "add_organisation_unit":
+				self::add_organisation_unit();
+			break;
+			
+			case "delete_organisation_unit":
+				self::delete_organisation_unit();
+			break;
+			
+			case "rename":
+				self::rename();
+			break;
+			
+			default:
+				self::home();
+			break;
+		endswitch;
 	}
 	
 	public static function home_dialog()

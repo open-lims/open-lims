@@ -64,24 +64,32 @@ class User implements UserInterface {
 	/**
 	 * @see UserInterface::__construct()
 	 * @param interger $user_id User-ID
+	 * @throws UserNotFoundException
 	 */
 	function __construct($user_id)
 	{
-		if ($user_id == null)
+		if (is_numeric($user_id))
+		{
+			if (User_Access::exist_user($user_id) == true)
+			{
+				$this->user_id = $user_id;
+				$this->user = new User_Access($user_id);
+				$this->user_admin_setting = new UserAdminSetting_Access($user_id);
+				$this->user_profile_setting = new UserProfileSetting_Access($user_id);
+				$this->user_profile = new UserProfile_Access($user_id);
+			}
+			else
+			{
+				throw new UserNotFoundException();
+			}
+		}
+		else
 		{
 			$this->user_id = null;
 			$this->user = new User_Access(null);
 			$this->user_admin_setting = null;
 			$this->user_profile_setting = null;
 			$this->user_profile = new UserProfile_Access(null);
-		}
-		else
-		{
-			$this->user_id = $user_id;
-			$this->user = new User_Access($user_id);
-			$this->user_admin_setting = new UserAdminSetting_Access($user_id);
-			$this->user_profile_setting = new UserProfileSetting_Access($user_id);
-			$this->user_profile = new UserProfile_Access($user_id);
 		}
 	}
 	

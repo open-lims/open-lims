@@ -56,22 +56,29 @@ class Group implements GroupInterface
 	/**
 	 * @see GroupInterface::__construct()
 	 * @param integer $group_id Group-ID
+	 * @throws GroupNotFoundException
 	 */
 	function __construct($group_id)
 	{
-		if ($group_id == null)
+		if (is_numeric($group_id))
+		{
+			if (Group_Access::exist_group($group_id) == true)
+			{
+				$this->group_id = $group_id;
+				$this->group = new Group_Access($group_id);
+			}
+			else
+			{
+				throw new GroupNotFoundException();
+			}
+		}
+		else
 		{
 			$this->group_id = null;
 			$this->group = new Group_Access(null);
 		}
-		else
-		{
-			$this->group_id = $group_id;
-			$this->group = new Group_Access($group_id);
-		}
 	}
 	
-
 	function __destruct()
 	{
 		unset($this->group_id);

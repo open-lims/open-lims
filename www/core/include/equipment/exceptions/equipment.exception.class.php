@@ -1,6 +1,6 @@
 <?php
 /**
- * @package data
+ * @package equipment
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -22,15 +22,15 @@
  */
 
 /**
- * Value Not Found Exception
- * @package data
+ * Equipment Exception
+ * @package equipment
  */
-class ValueNotFoundException extends Exception
+class EquipmentException extends BaseException
 {
-    function __construct($message, $code)
+    function __construct($write_log = false, $write_hdd_session = false, $write_hdd_sql = false, $message = null, $additional_information = null)
     {
-    	parent::__construct($message, $code);	
-    }    
+    	parent::__construct($write_log, $write_hdd_session, $write_hdd_sql, $message, $additional_information);	
+    }  
 }
 
 ?>

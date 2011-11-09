@@ -67,19 +67,27 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	/**
 	 * @see OrganisationUnitInterface::__construct()
 	 * @param integer $organisation_unit_id
+	 * @throws OrganisationUnitNotFoundException
 	 */
 	function __construct($organisation_unit_id)
 	{
-		if ($organisation_unit_id == null)
+		if (is_numeric($organisation_unit_id))
 		{
-    		$this->organisation_unit_id = null;
-			$this->organisation_unit	= new OrganisationUnit_Access(null);
+			if (OrganisationUnit_Access::exist_organisation_unit($organisation_unit_id) == true)
+			{
+				$this->organisation_unit_id = $organisation_unit_id;
+				$this->organisation_unit = new OrganisationUnit_Access($organisation_unit_id);
+			}
+			else
+			{
+				throw new OrganisationUnitNotFoundException();
+			}
 		}
 		else
-		{		
-			$this->organisation_unit_id = $organisation_unit_id;
-			$this->organisation_unit	= new OrganisationUnit_Access($organisation_unit_id);
-    	}
+		{
+			$this->organisation_unit_id = null;
+			$this->organisation_unit = new OrganisationUnit_Access(null);
+		}
 	}
 	
 	function __destruct()

@@ -40,27 +40,47 @@ class Error_IO
 		$this->exception = $exception;
 	}
 	
+	public function get_error_message()
+	{
+		$language_error_message = ErrorLanguage::get_message(get_class($this->exception));
+		$exception_error_message = $this->exception->getMessage();
+		
+		if ($language_error_message == null)
+		{
+			if ($exception_error_message == null)
+			{
+				return "A non-specfic error occurs!";
+			}
+			else
+			{
+				return $exception_error_message;
+			}
+		}
+		else
+		{
+			return $language_error_message;
+		}
+	}
+	
 	public function display_error()
 	{
-		if ($this->error_type == 2)
+		if (method_exists($this->exception, "is_security"))
 		{
-			$template = new Template("template/base/error/security_in_box.html");
+			if ($this->exception->is_security() == true)
+			{
+				$template = new Template("template/base/error/security_in_box.html");
+			}
+			else
+			{
+				$template = new Template("template/base/error/error_in_box.html");
+			}
 		}
 		else
 		{
 			$template = new Template("template/base/error/error_in_box.html");
 		}	
-		
-		$error_message = ErrorLanguage::get_message(get_class($this->exception));
-		
-		if ($error_message)
-		{
-			$template->set_var("error_msg", $error_message);
-		}
-		else
-		{
-			$template->set_var("error_msg", "A non-specific error occured");
-		}
+
+		$template->set_var("error_msg", $this->get_error_message());
 
 		$template->output();
 	}

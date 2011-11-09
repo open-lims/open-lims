@@ -472,6 +472,35 @@ class Folder_Access
 
 	
 	/**
+ 	 * @param integer $folder_id
+	 * @return bool
+	 */
+	public static function exist_id($folder_id)
+	{
+		global $db;
+			
+		if (is_numeric($folder_id))
+		{
+			$sql = "SELECT id FROM ".constant("FOLDER_TABLE")." WHERE id = ".$folder_id."";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[id])
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
 	 * @param string $path
 	 * @return integer
 	 */

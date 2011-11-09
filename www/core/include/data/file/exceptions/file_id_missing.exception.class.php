@@ -1,6 +1,6 @@
 <?php
 /**
- * @package equipment
+ * @package data
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -22,15 +22,15 @@
  */
 
 /**
- * Equipment Category Not Found Exception
- * @package equipment
+ * File ID Missing Exception
+ * @package data
  */
-class EquipmentCategoryNotFoundException extends Exception
-{    
-	function __construct($message, $code)
+class FileIDMissingException extends FileException
+{
+    function __construct()
     {
-    	parent::__construct($message, $code);	
-    } 
+    	parent::__construct(true, false, false, "File ID is missing!", null);	
+    }    
 }
 
 ?>

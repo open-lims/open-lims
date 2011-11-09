@@ -25,11 +25,11 @@
  * Value Type Not Found Exception
  * @package data
  */
-class ValueTypeNotFoundException extends Exception
+class ValueTypeNotFoundException extends ValueTypeException
 {
-    function __construct($message, $code)
+    function __construct()
     {
-    	parent::__construct($message, $code);	
+    	parent::__construct(true, false, false, "Value Type not found!");	
     }    
 }
 

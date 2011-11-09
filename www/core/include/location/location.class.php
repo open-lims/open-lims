@@ -46,13 +46,24 @@ class Location implements LocationInterface
 	/**
 	 * @see LocationInterface::__construct()
 	 * @param integer $location_id
+	 * @throws LocationNotFoundException
 	 */
 	function __construct($location_id)
 	{
-		if ($location_id) {
-			$this->location_id = $location_id;
-			$this->location = new Location_Access($location_id);
-		}else{
+		if (is_numeric($location_id))
+		{
+			if (Location_Access::exist_id($location_id) == true)
+			{
+				$this->location_id = $location_id;
+				$this->location = new Location_Access($location_id);
+			}
+			else
+			{
+				throw new LocationNotFoundException();
+			}
+		}
+		else
+		{
 			$this->location_id = null;
 			$this->location = new Location_Access(null);
 		}

@@ -27,6 +27,9 @@
  */
 class OrganisationUnitIO
 {
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function detail()
 	{
 		global $user;
@@ -394,9 +397,7 @@ class OrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 40, 40, 3);
-			// $error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 
@@ -505,6 +506,9 @@ class OrganisationUnitIO
 		$template->output();
 	}
 	
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function list_owners()
 	{
 		if ($_GET[ou_id])
@@ -518,12 +522,13 @@ class OrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 40, 40, 3);
-			// $error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function list_leaders()
 	{
 		if ($_GET[ou_id])
@@ -537,12 +542,13 @@ class OrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 40, 40, 3);
-			// $error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function list_members()
 	{
 		if ($_GET[ou_id])
@@ -556,12 +562,13 @@ class OrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 40, 40, 3);
-			// $error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function list_quality_managers()
 	{
 		if ($_GET[ou_id])
@@ -575,12 +582,13 @@ class OrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 40, 40, 3);
-			// $error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function list_groups()
 	{
 		if ($_GET[ou_id])
@@ -594,9 +602,7 @@ class OrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 40, 40, 3);
-			// $error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	

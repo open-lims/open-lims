@@ -190,6 +190,9 @@ class AdminEquipmentTypeIO
 		$template->output();
 	}
 
+	/**
+	 * @throws EquipmentTypeIDMissingException
+	 */
 	public static function create()
 	{
 		if (($_GET[action] == "add_child" and $_GET[id]) or $_GET[action] == "add")
@@ -350,12 +353,13 @@ class AdminEquipmentTypeIO
 		}
 		else
 		{
-			$exception = new Exception("", 5);
-			// $error_io = new Error_IO($exception, 50, 40, 3);
-			// $error_io->display_error();
+			throw new EquipmentTypeIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws EquipmentTypeIDMissingException
+	 */
 	public static function delete()
 	{
 		if ($_GET[id])
@@ -402,12 +406,13 @@ class AdminEquipmentTypeIO
 		}
 		else
 		{
-			$exception = new Exception("", 5);
-			// $error_io = new Error_IO($exception, 50, 40, 3);
-			// $error_io->display_error();
+			throw new EquipmentTypeIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws EquipmentTypeIDMissingException
+	 */
 	public static function detail()
 	{
 		if ($_GET[id])
@@ -531,12 +536,13 @@ class AdminEquipmentTypeIO
 		}
 		else
 		{
-			$exception = new Exception("", 5);
-			// $error_io = new Error_IO($exception, 50, 40, 3);
-			// $error_io->display_error();
+			throw new EquipmentTypeIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws EquipmentTypeIDMissingException
+	 */
 	public static function rename()
 	{
 		if ($_GET[id])
@@ -642,12 +648,13 @@ class AdminEquipmentTypeIO
 		}
 		else
 		{
-			$exception = new Exception("", 5);
-			// $error_io = new Error_IO($exception, 50, 40, 3);
-			// $error_io->display_error();
+			throw new EquipmentTypeIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws EquipmentTypeIDMissingException
+	 */
 	public static function add_user()
 	{
 		if ($_GET[id])
@@ -733,63 +740,73 @@ class AdminEquipmentTypeIO
 		}
 		else
 		{
-			$exception = new Exception("", 5);
-			// $error_io = new Error_IO($exception, 50, 40, 3);
-			// $error_io->display_error();
+			throw new EquipmentTypeIDMissingException();
 		}
 	}
 	
+	/**
+	 * @todo create Exception for missing (user) id (or rebuild)
+	 * @throws EquipmentTypeIDMissingException
+	 */
 	public static function delete_user()
 	{
-		if ($_GET[id] and $_GET[key])
+		if ($_GET[id])
 		{
-			if ($_GET[sure] != "true")
+			if ($_GET[key])
 			{
-				$template = new Template("template/equipment/admin/equipment_type/delete_user.html");
-				
-				$paramquery = $_GET;
-				$paramquery[sure] = "true";
-				$params = http_build_query($paramquery);
-				
-				$template->set_var("yes_params", $params);
-						
-				$paramquery = $_GET;
-				unset($paramquery[key]);
-				$paramquery[action] = "detail";
-				$params = http_build_query($paramquery);
-				
-				$template->set_var("no_params", $params);
-				
-				$template->output();
+				if ($_GET[sure] != "true")
+				{
+					$template = new Template("template/equipment/admin/equipment_type/delete_user.html");
+					
+					$paramquery = $_GET;
+					$paramquery[sure] = "true";
+					$params = http_build_query($paramquery);
+					
+					$template->set_var("yes_params", $params);
+							
+					$paramquery = $_GET;
+					unset($paramquery[key]);
+					$paramquery[action] = "detail";
+					$params = http_build_query($paramquery);
+					
+					$template->set_var("no_params", $params);
+					
+					$template->output();
+				}
+				else
+				{
+					$paramquery = $_GET;
+					unset($paramquery[key]);
+					unset($paramquery[sure]);
+					$paramquery[action] = "detail";
+					$params = http_build_query($paramquery);
+					
+					$equipment_type = new EquipmentType($_GET[id]);	
+							
+					if ($equipment_type->delete_responsible_person($_GET[key]))
+					{							
+						Common_IO::step_proceed($params, "Equipment Type", "Operation Successful" ,null);
+					}
+					else
+					{							
+						Common_IO::step_proceed($params, "Equipment Type", "Operation Failed" ,null);
+					}			
+				}
 			}
 			else
 			{
-				$paramquery = $_GET;
-				unset($paramquery[key]);
-				unset($paramquery[sure]);
-				$paramquery[action] = "detail";
-				$params = http_build_query($paramquery);
-				
-				$equipment_type = new EquipmentType($_GET[id]);	
-						
-				if ($equipment_type->delete_responsible_person($_GET[key]))
-				{							
-					Common_IO::step_proceed($params, "Equipment Type", "Operation Successful" ,null);
-				}
-				else
-				{							
-					Common_IO::step_proceed($params, "Equipment Type", "Operation Failed" ,null);
-				}			
+				// error
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 5);
-			// $error_io = new Error_IO($exception, 50, 40, 3);
-			// $error_io->display_error();
+			throw new EquipmentTypeIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws EquipmentTypeIDMissingException
+	 */
 	public static function add_organisation_unit()
 	{
 		if ($_GET[id])
@@ -875,63 +892,73 @@ class AdminEquipmentTypeIO
 		}
 		else
 		{
-			$exception = new Exception("", 5);
-			// $error_io = new Error_IO($exception, 50, 40, 3);
-			// $error_io->display_error();
+			throw new EquipmentTypeIDMissingException();
 		}
 	}
 	
+	/**
+	 * @todo create Exception for missing (user) id (or rebuild)
+	 * @throws EquipmentTypeIDMissingException
+	 */
 	public static function delete_organisation_unit()
 	{
-		if ($_GET[id] and $_GET[key])
+		if ($_GET[id])
 		{
-			if ($_GET[sure] != "true")
+			if ($_GET[key])
 			{
-				$template = new Template("template/equipment/admin/equipment_type/delete_organisation_unit.html");
-				
-				$paramquery = $_GET;
-				$paramquery[sure] = "true";
-				$params = http_build_query($paramquery);
-				
-				$template->set_var("yes_params", $params);
-						
-				$paramquery = $_GET;
-				unset($paramquery[key]);
-				$paramquery[action] = "detail";
-				$params = http_build_query($paramquery);
-				
-				$template->set_var("no_params", $params);
-				
-				$template->output();
+				if ($_GET[sure] != "true")
+				{
+					$template = new Template("template/equipment/admin/equipment_type/delete_organisation_unit.html");
+					
+					$paramquery = $_GET;
+					$paramquery[sure] = "true";
+					$params = http_build_query($paramquery);
+					
+					$template->set_var("yes_params", $params);
+							
+					$paramquery = $_GET;
+					unset($paramquery[key]);
+					$paramquery[action] = "detail";
+					$params = http_build_query($paramquery);
+					
+					$template->set_var("no_params", $params);
+					
+					$template->output();
+				}
+				else
+				{
+					$paramquery = $_GET;
+					unset($paramquery[key]);
+					unset($paramquery[sure]);
+					$paramquery[action] = "detail";
+					$params = http_build_query($paramquery);
+					
+					$equipment_type = new EquipmentType($_GET[id]);
+							
+					if ($equipment_type->delete_organisation_unit($_GET[key]))
+					{							
+						Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
+					}
+					else
+					{							
+						Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Failed" ,null);
+					}			
+				}
 			}
 			else
 			{
-				$paramquery = $_GET;
-				unset($paramquery[key]);
-				unset($paramquery[sure]);
-				$paramquery[action] = "detail";
-				$params = http_build_query($paramquery);
-				
-				$equipment_type = new EquipmentType($_GET[id]);
-						
-				if ($equipment_type->delete_organisation_unit($_GET[key]))
-				{							
-					Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
-				}
-				else
-				{							
-					Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Failed" ,null);
-				}			
+				// error
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 5);
-			// $error_io = new Error_IO($exception, 50, 40, 3);
-			// $error_io->display_error();
+			throw new EquipmentTypeIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws EquipmentTypeIDMissingException
+	 */
 	public static function change_location()
 	{
 		if ($_GET[id])
@@ -997,72 +1024,54 @@ class AdminEquipmentTypeIO
 		}
 		else
 		{
-			$exception = new Exception("", 5);
-			// $error_io = new Error_IO($exception, 50, 40, 3);
-			// $error_io->display_error();
+			throw new EquipmentTypeIDMissingException();
 		}
 	}
 	
 	public static function handler()
 	{
-		try
-		{
-			if ($_GET[id])
-			{
-				if (EquipmentType::exist_id($_GET[id]) == false)
-				{
-					throw new EquipmentTypeNotFoundException("",5);
-				}
-			}
+		switch($_GET[action]):
+			case "add":
+			case "add_child":
+				self::create();
+			break;
+			
+			case "delete":
+				self::delete();
+			break;
+			
+			case "detail":
+				self::detail();
+			break;
+			
+			case "rename":
+				self::rename();
+			break;
+			
+			case "change_location":
+				self::change_location();
+			break;
+			
+			case "add_user":
+				self::add_user();
+			break;
 
-			switch($_GET[action]):
-				case "add":
-				case "add_child":
-					self::create();
-				break;
-				
-				case "delete":
-					self::delete();
-				break;
-				
-				case "detail":
-					self::detail();
-				break;
-				
-				case "rename":
-					self::rename();
-				break;
-				
-				case "change_location":
-					self::change_location();
-				break;
-				
-				case "add_user":
-					self::add_user();
-				break;
+			case "delete_user":
+				self::delete_user();
+			break;
+			
+			case "add_ou":
+				self::add_organisation_unit();
+			break;
 
-				case "delete_user":
-					self::delete_user();
-				break;
-				
-				case "add_ou":
-					self::add_organisation_unit();
-				break;
-
-				case "delete_ou":
-					self::delete_organisation_unit();
-				break;
-				
-				default:
-					self::home();
-				break;
-			endswitch;
-		}
-		catch (EquipmentTypeNotFoundException $e)
-		{
-			// $error_io = new Error_IO($e, 50, 40, 1);
-			// $error_io->display_error();
-		}
+			case "delete_ou":
+				self::delete_organisation_unit();
+			break;
+			
+			default:
+				self::home();
+			break;
+		endswitch;
 	}
 	
 }

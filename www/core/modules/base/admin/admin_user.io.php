@@ -339,41 +339,32 @@ class AdminUserIO
 			unset($paramquery[nextpage]);
 			unset($paramquery[action]);
 			$params = http_build_query($paramquery);
+
+			$user = new User(null);
+			$new_password = $user->create($_POST[username], 
+								$_POST[gender], 
+								$_POST[title], 
+								$_POST[forename], 
+								$_POST[surname], 
+								$_POST[mail], 
+								$_POST[can_change_password], 
+								$_POST[must_change_password], 
+								$_POST[disabled]);
 			
-			try
-			{
-				$user = new User(null);
-				$new_password = $user->create($_POST[username], 
-									$_POST[gender], 
-									$_POST[title], 
-									$_POST[forename], 
-									$_POST[surname], 
-									$_POST[mail], 
-									$_POST[can_change_password], 
-									$_POST[must_change_password], 
-									$_POST[disabled]);
-				
-				
-				$template = new Template("template/user/admin/user/add_proceed.html");
-				
-				$template->set_var("params", $params);
-				$template->set_var("new_password", $new_password);
-				
-				$template->output();
-			}
-			catch (UserCreationFailedException $e)
-			{
-				// $error_io = new Error_IO($e, 3, 30, 1);
-				// $error_io->display_error();
-			}
-			catch (UserAlreadyExistException $e)
-			{
-				// $error_io = new Error_IO($e, 3, 30, 1);
-				// $error_io->display_error();
-			}
+			
+			$template = new Template("template/user/admin/user/add_proceed.html");
+			
+			$template->set_var("params", $params);
+			$template->set_var("new_password", $new_password);
+			
+			$template->output();
 		}
 	}
 	
+	/**
+	 * @todo new exception for in use
+	 * @throws UserIDMissingException
+	 */
 	public static function delete()
 	{
 		if ($_GET[id])
@@ -430,12 +421,13 @@ class AdminUserIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 3, 40, 3);
-			// $error_io->display_error();
+			throw new UserIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws UserIDMissingException
+	 */
 	public static function detail()
 	{
 		global $user;
@@ -751,12 +743,13 @@ class AdminUserIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 3, 40, 3);
-			// $error_io->display_error();
+			throw new UserIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws UserIDMissingException
+	 */
 	public static function add_group()
 	{
 		if ($_GET[id])
@@ -842,63 +835,74 @@ class AdminUserIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 3, 40, 3);
-			// $error_io->display_error();
+			throw new UserIDMissingException();
 		}
 	}
 	
+	/**
+	 * @todo new exception for missing key (or rebuild)
+	 * @throws UserIDMissingException
+	 */
 	public static function delete_group()
 	{
-		if ($_GET[id] and $_GET[key])
+		if ($_GET[id])
 		{
-			if ($_GET[sure] != "true")
+			if ($_GET[key])
 			{
-				$template = new Template("template/user/admin/user/delete_group.html");
-				
-				$paramquery = $_GET;
-				$paramquery[sure] = "true";
-				$params = http_build_query($paramquery);
-				
-				$template->set_var("yes_params", $params);
-						
-				$paramquery = $_GET;
-				unset($paramquery[key]);
-				$paramquery[action] = "detail";
-				$params = http_build_query($paramquery);
-				
-				$template->set_var("no_params", $params);
-				
-				$template->output();
+				if ($_GET[sure] != "true")
+				{
+					$template = new Template("template/user/admin/user/delete_group.html");
+					
+					$paramquery = $_GET;
+					$paramquery[sure] = "true";
+					$params = http_build_query($paramquery);
+					
+					$template->set_var("yes_params", $params);
+							
+					$paramquery = $_GET;
+					unset($paramquery[key]);
+					$paramquery[action] = "detail";
+					$params = http_build_query($paramquery);
+					
+					$template->set_var("no_params", $params);
+					
+					$template->output();
+				}
+				else
+				{
+					$paramquery = $_GET;
+					unset($paramquery[key]);
+					unset($paramquery[sure]);
+					$paramquery[action] = "detail";
+					$params = http_build_query($paramquery);
+					
+					$group = new Group($_GET[key]);		
+							
+					if ($group->delete_user_from_group($_GET[id]))
+					{							
+						Common_IO::step_proceed($params, "Delete Group", "Operation Successful" ,null);
+					}
+					else
+					{							
+						Common_IO::step_proceed($params, "Delete Group", "Operation Failed" ,null);
+					}			
+				}
 			}
 			else
 			{
-				$paramquery = $_GET;
-				unset($paramquery[key]);
-				unset($paramquery[sure]);
-				$paramquery[action] = "detail";
-				$params = http_build_query($paramquery);
-				
-				$group = new Group($_GET[key]);		
-						
-				if ($group->delete_user_from_group($_GET[id]))
-				{							
-					Common_IO::step_proceed($params, "Delete Group", "Operation Successful" ,null);
-				}
-				else
-				{							
-					Common_IO::step_proceed($params, "Delete Group", "Operation Failed" ,null);
-				}			
+				// Error
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 3, 40, 3);
-			// $error_io->display_error();
+			throw new UserIDMissingException();
 		}
 	}
 	
+	/**
+	 * @todo IMPORTANT: bad dependency
+	 * @throws UserIDMissingException
+	 */
 	public static function add_organisation_unit()
 	{
 		if ($_GET[id])
@@ -984,63 +988,73 @@ class AdminUserIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 3, 40, 3);
-			// $error_io->display_error();
+			throw new UserIDMissingException();
 		}
 	}
 	
+	/**
+	 * @todo IMPORTANT: bad dependency
+	 * @throws UserIDMissingException
+	 */
 	public static function delete_organisation_unit()
 	{
-		if ($_GET[id] and $_GET[key])
+		if ($_GET[id])
 		{
-			if ($_GET[sure] != "true")
+			if ($_GET[key])
 			{
-				$template = new Template("template/user/admin/user/delete_organisation_unit.html");
-				
-				$paramquery = $_GET;
-				$paramquery[sure] = "true";
-				$params = http_build_query($paramquery);
-				
-				$template->set_var("yes_params", $params);
-						
-				$paramquery = $_GET;
-				unset($paramquery[key]);
-				$paramquery[action] = "detail";
-				$params = http_build_query($paramquery);
-				
-				$template->set_var("no_params", $params);
-				
-				$template->output();
+				if ($_GET[sure] != "true")
+				{
+					$template = new Template("template/user/admin/user/delete_organisation_unit.html");
+					
+					$paramquery = $_GET;
+					$paramquery[sure] = "true";
+					$params = http_build_query($paramquery);
+					
+					$template->set_var("yes_params", $params);
+							
+					$paramquery = $_GET;
+					unset($paramquery[key]);
+					$paramquery[action] = "detail";
+					$params = http_build_query($paramquery);
+					
+					$template->set_var("no_params", $params);
+					
+					$template->output();
+				}
+				else
+				{
+					$paramquery = $_GET;
+					unset($paramquery[key]);
+					unset($paramquery[sure]);
+					$paramquery[action] = "detail";
+					$params = http_build_query($paramquery);
+					
+					$organisation_unit = new OrganisationUnit($_GET[key]);	
+							
+					if ($organisation_unit->delete_user_from_organisation_unit($_GET[id]))
+					{							
+						Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
+					}
+					else
+					{							
+						Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Failed" ,null);
+					}			
+				}
 			}
 			else
 			{
-				$paramquery = $_GET;
-				unset($paramquery[key]);
-				unset($paramquery[sure]);
-				$paramquery[action] = "detail";
-				$params = http_build_query($paramquery);
-				
-				$organisation_unit = new OrganisationUnit($_GET[key]);	
-						
-				if ($organisation_unit->delete_user_from_organisation_unit($_GET[id]))
-				{							
-					Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
-				}
-				else
-				{							
-					Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Failed" ,null);
-				}			
+				// Error
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 2);
-			// $error_io = new Error_IO($exception, 3, 40, 3);
-			// $error_io->display_error();
+			throw new UserIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws UserIDMissingException
+	 */
 	public static function rename()
 	{
 		if ($_GET[id])
@@ -1117,12 +1131,13 @@ class AdminUserIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 3, 40, 3);
-			// $error_io->display_error();
+			throw new UserIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws UserIDMissingException
+	 */
 	public static function change_mail()
 	{
 		if ($_GET[id])
@@ -1191,12 +1206,13 @@ class AdminUserIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 3, 40, 3);
-			// $error_io->display_error();
+			throw new UserIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws UserIDMissingException
+	 */
 	public static function change_password()
 	{
 		if ($_GET[id])
@@ -1257,12 +1273,13 @@ class AdminUserIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 3, 40, 3);
-			// $error_io->display_error();
+			throw new UserIDMissingException();
 		}
 	}
-		
+	
+	/**
+	 * @throws UserIDMissingException
+	 */
 	public static function change_boolean_entry()
 	{
 		if ($_GET[id])
@@ -1344,12 +1361,13 @@ class AdminUserIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 3, 40, 3);
-			// $error_io->display_error();
+			throw new UserIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws UserIDMissingException
+	 */
 	public static function change_language()
 	{
 		if ($_GET[id])
@@ -1422,12 +1440,13 @@ class AdminUserIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 3, 40, 3);
-			// $error_io->display_error();
+			throw new UserIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws UserIDMissingException
+	 */
 	public static function change_timezone()
 	{
 		if ($_GET[id])
@@ -1498,92 +1517,74 @@ class AdminUserIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 3, 40, 3);
-			// $error_io->display_error();
+			throw new UserIDMissingException();
 		}
 	}
 	
 	public static function handler()
-	{
-		try
-		{
-			if ($_GET[id])
-			{
-				if (User::exist_user($_GET[id]) == false)
-				{
-					throw new UserNotFoundException();
-				}
-			}
+	{			
+		switch($_GET[action]):
+			case "add":
+				self::create();
+			break;
 			
-			switch($_GET[action]):
-				case "add":
-					self::create();
-				break;
-				
-				case "delete":
-					self::delete();
-				break;
-				
-				case "detail":
-					self::detail();
-				break;
-				
-				case "add_group":
-					self::add_group();
-				break;
-				
-				case "delete_group":
-					self::delete_group();
-				break;
-				
-				case "add_organisation_unit":
-					self::add_organisation_unit();
-				break;
-				
-				case "delete_organisation_unit":
-					self::delete_organisation_unit();
-				break;
-				
-				case "rename":
-					self::rename();
-				break;
-				
-				case "change_mail":
-					self::change_mail();
-				break;
-				
-				case "change_password":
-					self::change_password();
-				break;
-				
-				case "change_user_quota":
-				case "change_project_quota":
-					self::change_quota();
-				break;
-				
-				case "change_boolean_entry":
-					self::change_boolean_entry();
-				break;
-				
-				case "change_language":
-					self::change_language();
-				break;
-				
-				case "change_timezone":
-					self::change_timezone();
-				break;
-				
-				default:
-					self::home();
-				break;
-			endswitch;
-		}
-		catch (UserNotFoundException $e)
-		{
-			// $error_io = new Error_IO($e, 3, 40, 1);
-			// $error_io->display_error();
-		}
+			case "delete":
+				self::delete();
+			break;
+			
+			case "detail":
+				self::detail();
+			break;
+			
+			case "add_group":
+				self::add_group();
+			break;
+			
+			case "delete_group":
+				self::delete_group();
+			break;
+			
+			case "add_organisation_unit":
+				self::add_organisation_unit();
+			break;
+			
+			case "delete_organisation_unit":
+				self::delete_organisation_unit();
+			break;
+			
+			case "rename":
+				self::rename();
+			break;
+			
+			case "change_mail":
+				self::change_mail();
+			break;
+			
+			case "change_password":
+				self::change_password();
+			break;
+			
+			case "change_user_quota":
+			case "change_project_quota":
+				self::change_quota();
+			break;
+			
+			case "change_boolean_entry":
+				self::change_boolean_entry();
+			break;
+			
+			case "change_language":
+				self::change_language();
+			break;
+			
+			case "change_timezone":
+				self::change_timezone();
+			break;
+			
+			default:
+				self::home();
+			break;
+		endswitch;
 	}
 	
 	public static function home_dialog()

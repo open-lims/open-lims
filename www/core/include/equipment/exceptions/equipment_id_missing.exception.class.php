@@ -1,6 +1,6 @@
 <?php
 /**
- * @package data
+ * @package equipment
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -22,15 +22,15 @@
  */
 
 /**
- * Data Exception
- * @package data
+ * Equipment ID Missing Exception
+ * @package equipment
  */
-class DataException extends Exception
+class EquipmentIDMissingException extends EquipmentException
 {
-    function __construct($message, $code)
+    function __construct()
     {
-    	parent::__construct($message, $code);	
-    }    
+    	parent::__construct(true, false, false, "Equipment ID is missing", null);	
+    }
 }
 
 ?>
