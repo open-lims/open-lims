@@ -20,16 +20,16 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 /**
- * Data Security Exception
+ * Folder Is Empty Exception
  * @package data
  */
-class DataSecurityException extends Exception
+class FolderIsEmptyException extends FolderException
 {
-    function __construct($message, $code)
+    function __construct($message = null)
     {
-    	parent::__construct($message, $code);	
+    	parent::__construct(true, false, false, $message, null);	
     }    
 }
 

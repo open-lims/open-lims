@@ -29,10 +29,17 @@
 
 	
 	$classes['DataException']						= $path_prefix."core/include/data/exceptions/data.exception.class.php";
+	$classes['DataSecurityException']				= $path_prefix."core/include/data/exceptions/data_security.exception.class.php";
+	$classes['DataSecurityAccessDeniedException']	= $path_prefix."core/include/data/exceptions/data_security_access_denied.exception.class.php";
+	
+	$classes['DataEntityException']					= $path_prefix."core/include/data/exceptions/data_entity.exception.class.php";
+	$classes['DataEntityNotFoundException']			= $path_prefix."core/include/data/exceptions/data_entity_not_found.exception.class.php";
+	$classes['DataEntityIDMissingException']		= $path_prefix."core/include/data/exceptions/data_entity_id_missing.exception.class.php";
 	
 	$classes['FolderException']						= $path_prefix."core/include/data/folder/exceptions/folder.exception.class.php";
 	$classes['FolderNotFoundException']				= $path_prefix."core/include/data/folder/exceptions/folder_not_found.exception.class.php";
 	$classes['FolderIDMissingException']			= $path_prefix."core/include/data/folder/exceptions/folder_id_missing.exception.class.php";
+	$classes['FolderIsEmptyException']				= $path_prefix."core/include/data/folder/exceptions/folder_is_empty.exception.class.php";
 	
 	$classes['FileException']						= $path_prefix."core/include/data/file/exceptions/file.exception.class.php";
 	$classes['FileNotFoundException']				= $path_prefix."core/include/data/file/exceptions/file_not_found.exception.class.php";
@@ -49,11 +56,9 @@
 	$classes['ValueTypeNotFoundException']			= $path_prefix."core/include/data/value/exceptions/value_type_not_found.exception.class.php";
 	$classes['ValueTypeIDMissingException']			= $path_prefix."core/include/data/value/exceptions/value_type_id_missing.exception.class.php";
 
-	/**
-	 * @deprecated new
-	 */
-	$classes['DataSecurityException']		= $path_prefix."core/include/data/exceptions/data_security_exception.class.php";
-
+	$classes['VirtualFolderException']				= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder.exception.class.php";
+	$classes['VirtualFolderNotFoundException']		= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder_not_found.exception.class.php";
+	$classes['VirtualFolderIDMissingException']		= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder_id_missing.exception.class.php";
 	
 	
 	$classes['DataEntity']					= $path_prefix."core/include/data/data_entity.class.php";

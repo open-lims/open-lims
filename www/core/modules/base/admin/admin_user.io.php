@@ -362,8 +362,8 @@ class AdminUserIO
 	}
 	
 	/**
-	 * @todo new exception for in use
 	 * @throws UserIDMissingException
+	 * @throws UserDeleteException
 	 */
 	public static function delete()
 	{
@@ -414,9 +414,7 @@ class AdminUserIO
 			}
 			else
 			{
-				$exception = new Exception("", 2);
-				// $error_io = new Error_IO($exception, 3, 40, 1);
-				// $error_io->display_error();
+				throw new UserDeleteException();
 			}
 		}
 		else

@@ -195,152 +195,136 @@ class AdminSystemMessageIO
 		}
 	}
 	
+	/**
+	 * @throws SystemMessageIDMissingException
+	 */
 	public static function delete()
 	{
 		if ($_GET[id])
 		{
-			if (SystemMessage::exist_entry($_GET[id]))
+			$system_message = new SystemMessage($_GET[id]);
+		
+			if ($_GET[sure] != "true")
 			{
-				$system_message = new SystemMessage($_GET[id]);
-			
-				if ($_GET[sure] != "true")
-				{
-					$template = new Template("template/base/admin/system_message/delete.html");
-					
-					$paramquery = $_GET;
-					$paramquery[sure] = "true";
-					$params = http_build_query($paramquery);
-					
-					$template->set_var("yes_params", $params);
-							
-					$paramquery = $_GET;
-					unset($paramquery[sure]);
-					unset($paramquery[action]);
-					unset($paramquery[id]);
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$template->set_var("no_params", $params);
-					
-					$template->output();
-				}
-				else
-				{
-					$paramquery = $_GET;
-					unset($paramquery[sure]);
-					unset($paramquery[action]);
-					unset($paramquery[id]);
-					$params = http_build_query($paramquery,'','&#38;');
-									
-					if ($system_message->delete())
-					{							
-						Common_IO::step_proceed($params, "Delete System Message", "Operation Successful" ,null);
-					}
-					else
-					{							
-						Common_IO::step_proceed($params, "Delete System Message", "Operation Failed" ,null);
-					}		
-				}
+				$template = new Template("template/base/admin/system_message/delete.html");
+				
+				$paramquery = $_GET;
+				$paramquery[sure] = "true";
+				$params = http_build_query($paramquery);
+				
+				$template->set_var("yes_params", $params);
+						
+				$paramquery = $_GET;
+				unset($paramquery[sure]);
+				unset($paramquery[action]);
+				unset($paramquery[id]);
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$template->set_var("no_params", $params);
+				
+				$template->output();
 			}
 			else
 			{
-				$exception = new Exception("", 12);
-				// $error_io = new Error_IO($exception, 1);
-				// $error_io->display_error();
+				$paramquery = $_GET;
+				unset($paramquery[sure]);
+				unset($paramquery[action]);
+				unset($paramquery[id]);
+				$params = http_build_query($paramquery,'','&#38;');
+								
+				if ($system_message->delete())
+				{							
+					Common_IO::step_proceed($params, "Delete System Message", "Operation Successful" ,null);
+				}
+				else
+				{							
+					Common_IO::step_proceed($params, "Delete System Message", "Operation Failed" ,null);
+				}		
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 12);
-			// $error_io = new Error_IO($exception, 1);
-			// $error_io->display_error();
+			throw new SystemMessageIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws SystemMessageIDMissingException
+	 */
 	public static function edit()
 	{
 		if ($_GET[id])
 		{
-			if (SystemMessage::exist_entry($_GET[id]))
+			$system_message = new SystemMessage($_GET[id]);
+		
+			if ($_GET[nextpage] == 1)
 			{
-				$system_message = new SystemMessage($_GET[id]);
-			
-				if ($_GET[nextpage] == 1)
-				{
-					$page_1_passed = true;
-					
-					if (!$_POST[content])
-					{
-						$page_1_passed = false;
-						$error = "You must enter a text";
-					}
-				}
-				else
+				$page_1_passed = true;
+				
+				if (!$_POST[content])
 				{
 					$page_1_passed = false;
-					$error = "";
-				}
-		
-				if ($page_1_passed == false)
-				{
-					$template = new Template("template/base/admin/system_message/edit.html");
-					
-					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$template->set_var("params",$params);
-					
-					if ($error)
-					{
-						$template->set_var("error", $error);
-					}
-					else
-					{
-						$template->set_var("error", "");	
-					}
-					
-					$content = str_replace("\\", "", $system_message->get_content());
-								
-					if ($_POST[content])
-					{
-						$template->set_var("content", $_POST[content]);
-					}
-					else
-					{
-						$template->set_var("content", $content);
-					}
-								
-					$template->output();
-				}
-				else
-				{
-					$paramquery = $_GET;
-					unset($paramquery[nextpage]);
-					unset($paramquery[action]);
-					$params = http_build_query($paramquery);
-	
-					if ($system_message->set_content($_POST[content]))
-					{
-						Common_IO::step_proceed($params, "Add System Message", "Operation Successful", null);
-					}
-					else
-					{
-						Common_IO::step_proceed($params, "Add System Message", "Operation Failed" ,null);	
-					}			
+					$error = "You must enter a text";
 				}
 			}
 			else
 			{
-				$exception = new Exception("", 12);
-				// $error_io = new Error_IO($exception, 1, 40, 1);
-				// $error_io->display_error();
+				$page_1_passed = false;
+				$error = "";
+			}
+	
+			if ($page_1_passed == false)
+			{
+				$template = new Template("template/base/admin/system_message/edit.html");
+				
+				$paramquery = $_GET;
+				$paramquery[nextpage] = "1";
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$template->set_var("params",$params);
+				
+				if ($error)
+				{
+					$template->set_var("error", $error);
+				}
+				else
+				{
+					$template->set_var("error", "");	
+				}
+				
+				$content = str_replace("\\", "", $system_message->get_content());
+							
+				if ($_POST[content])
+				{
+					$template->set_var("content", $_POST[content]);
+				}
+				else
+				{
+					$template->set_var("content", $content);
+				}
+							
+				$template->output();
+			}
+			else
+			{
+				$paramquery = $_GET;
+				unset($paramquery[nextpage]);
+				unset($paramquery[action]);
+				$params = http_build_query($paramquery);
+
+				if ($system_message->set_content($_POST[content]))
+				{
+					Common_IO::step_proceed($params, "Add System Message", "Operation Successful", null);
+				}
+				else
+				{
+					Common_IO::step_proceed($params, "Add System Message", "Operation Failed" ,null);	
+				}			
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 12);
-			// $error_io = new Error_IO($exception, 1, 40, 3);
-			// $error_io->display_error();
+			throw new SystemMessageIDMissingException();
 		}
 	}
 	

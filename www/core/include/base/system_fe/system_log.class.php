@@ -44,18 +44,26 @@ class SystemLog implements SystemLogInterface
 	/**
 	 * @see SystemLogInterface::__construct()
 	 * @param integer $log_id
+	 * @throws SystemLogNotFoundException
 	 */
 	function __construct($log_id)
 	{
-		if ($log_id == null)
+		if (is_numeric($log_id))
 		{
-			$this->log_id = null;
-			$this->system_log = new SystemLog_Access(null);
+			if (SystemLog_Access::exist_id($log_id) == true)
+			{
+				$this->log_id = $log_id;
+				$this->system_log = new SystemLog_Access($log_id);
+			}
+			else
+			{
+				throw new SystemLogNotFoundException();
+			}
 		}
 		else
 		{
-			$this->log_id = $log_id;
-			$this->system_log = new SystemLog_Access($log_id);
+			$this->log_id = null;
+			$this->system_log = new SystemLog_Access(null);
 		}
 	}
 	

@@ -27,6 +27,9 @@
  */
 class DataIO
 {
+	/**
+	 * @throws DataSecuriyAccessDeniedException
+	 */
 	public static function browser()
 	{
 		global $content;
@@ -43,38 +46,25 @@ class DataIO
 		
 		if ($_GET[vfolder_id])
 		{
+			$virtual_folder = new VirtualFolder($_GET[vfolder_id]);
 			
-			if (VirtualFolder::exist_vfolder($_GET[vfolder_id]) == false)
-			{
-				throw new DataException();
-			}
-			else
-			{
-				$virtual_folder_id = $_GET[vfolder_id];
-				$folder_id = null;
-				$data_path = new DataPath(null, $_GET[vfolder_id]);
-			}
+			$virtual_folder_id = $_GET[vfolder_id];
+			$folder_id = null;
+			$data_path = new DataPath(null, $_GET[vfolder_id]);
 		}
 		elseif ($_GET[folder_id])
 		{
 			$folder = Folder::get_instance($_GET[folder_id]);
 			
-			if ($folder->exist_folder() == false)
+			if ($folder->is_read_access() == false)
 			{
-				throw new DataException();
+				throw new DataSecurityAccessDeniedException();
 			}
 			else
 			{
-				if ($folder->is_read_access() == false)
-				{
-					throw new DataSecurityException("",1);
-				}
-				else
-				{
-					$virtual_folder_id = null;
-					$folder_id = $_GET[folder_id];
-					$data_path = new DataPath($_GET[folder_id], null);
-				}
+				$virtual_folder_id = null;
+				$folder_id = $_GET[folder_id];
+				$data_path = new DataPath($_GET[folder_id], null);
 			}
 		}
 		else
@@ -225,6 +215,11 @@ class DataIO
 		$template->output();
 	}
 	
+	/**
+	 * @throws FolderIDMissingException
+	 * @throws FolderIsEmptyException
+	 * @throws DataSecuriyAccessDeniedException
+	 */
 	public static function image_browser_multi()
 	{
 		if ($_GET[folder_id])
@@ -335,26 +330,25 @@ class DataIO
 				}
 				else
 				{
-					$exception = new Exception("", 4);
-					// $error_io = new Error_IO($exception, 20, 40, 1);
-					// $error_io->display_error();
+					throw new FolderIsEmptyException();
 				}
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				// $error_io = new Error_IO($exception, 20, 40, 2);
-				// $error_io->display_error();
+				throw new DataSecuriyAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 20, 40, 3);
-			// $error_io->display_error();
+			throw new FolderIDMissingException();
 		}
 	}
 
+	/**
+	 * @throws FolderIDMissingException
+	 * @throws FolderIsEmptyException
+	 * @throws DataSecuriyAccessDeniedException
+	 */
 	public static function image_browser_detail()
 	{
 		if ($_GET[folder_id])
@@ -488,759 +482,489 @@ class DataIO
 				}
 				else
 				{
-					$exception = new Exception("", 4);
-					// $error_io = new Error_IO($exception, 20, 40, 1);
-					// $error_io->display_error();
+					throw new FolderIsEmptyException();
 				}
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				// $error_io = new Error_IO($exception, 20, 40, 2);
-				// $error_io->display_error();
+				throw new DataSecuriyAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 20, 40, 3);
-			// $error_io->display_error();
+			throw new FolderIDMissingException();
 		}
 	}
 
+	/**
+	 * @throws FolderIDMissingException
+	 * @throws DataSecuriyAccessDeniedException
+	 */
 	public static function permission()
 	{
 		global $user;
 		
-		try
+		if ($_GET[file_id] xor $_GET[value_id])
 		{
-			if ($_GET[file_id] xor $_GET[value_id])
+			if ($_GET[file_id])
 			{
-				if ($_GET[file_id])
-				{
-					$id = $_GET[file_id];
-					$object = File::get_instance($id);
-					$type = "file";
-					$title = $object->get_name();
-				}
-				
-				if ($_GET[value_id])
-				{
-					$id = $_GET[value_id];
-					$object = Value::get_instance($id);
-					$type = "value";
-					$title = $object->get_type_name();
-				}
+				$id = $_GET[file_id];
+				$object = File::get_instance($id);
+				$type = "file";
+				$title = $object->get_name();
+			}
+			
+			if ($_GET[value_id])
+			{
+				$id = $_GET[value_id];
+				$object = Value::get_instance($id);
+				$type = "value";
+				$title = $object->get_type_name();
+			}
+		}
+		else
+		{
+			if ($_GET[folder_id])
+			{
+				$id = $_GET[folder_id];
+				$object = Folder::get_instance($id);
+				$type = "folder";
+				$title = $object->get_name();
 			}
 			else
 			{
-				if ($_GET[folder_id])
+				throw new FolderIDMissingException();
+			}
+		}
+		
+		if ($object->is_control_access() == true)
+		{
+			$full_access = true;
+			
+		}
+		else{
+			$full_access = false;
+		}
+		
+		if ($object->get_owner_id() == $user->get_user_id())
+		{
+			$user_access = true;
+		}
+		else
+		{
+			$user_access = false;
+		}
+		
+		if ($full_access == true or $user_access == true)
+		{
+			$data_permission = new DataPermission($type, $id);
+			
+			if (!$_GET[nextpage])
+			{
+				$template = new Template("template/data/data_permission.html");
+				
+				$paramquery = $_GET;
+				$paramquery[nextpage] = "1";
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$template->set_var("params", $params);
+				
+				$paramquery = $_GET;
+				$paramquery[action] = "chown";
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$template->set_var("params_chown", $params);
+				
+				$paramquery = $_GET;
+				$paramquery[action] = "chgroup";
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$template->set_var("params_chgroup", $params);
+				
+				$template->set_var("title", $title);
+				
+				$user = new User($data_permission->get_owner_id());
+				$group = new Group($data_permission->get_owner_group_id());
+				
+				$template->set_var("owner", $user->get_full_name(false));
+				$template->set_var("owner_group", $group->get_name());
+
+				if ($object->can_set_automatic())
 				{
-					$id = $_GET[folder_id];
-					$object = Folder::get_instance($id);
-					$type = "folder";
-					$title = $object->get_name();
+					$disable_automatic = false;
 				}
 				else
 				{
-					throw new IdMissingException("", 0);
+					$disable_automatic = true;
 				}
-			}
-			
-			if ($object->is_control_access() == true)
-			{
-				$full_access = true;
 				
-			}
-			else{
-				$full_access = false;
-			}
-			
-			if ($object->get_owner_id() == $user->get_user_id())
-			{
-				$user_access = true;
-			}
-			else
-			{
-				$user_access = false;
-			}
-			
-			if ($full_access == true or $user_access == true)
-			{
-				$data_permission = new DataPermission($type, $id);
-				
-				if (!$_GET[nextpage])
+				if ($object->can_set_data_entity())
 				{
-					$template = new Template("template/data/data_permission.html");
-					
-					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$template->set_var("params", $params);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "chown";
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$template->set_var("params_chown", $params);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "chgroup";
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$template->set_var("params_chgroup", $params);
-					
-					$template->set_var("title", $title);
-					
-					$user = new User($data_permission->get_owner_id());
-					$group = new Group($data_permission->get_owner_group_id());
-					
-					$template->set_var("owner", $user->get_full_name(false));
-					$template->set_var("owner_group", $group->get_name());
-
-					if ($object->can_set_automatic())
-					{
-						$disable_automatic = false;
-					}
-					else
-					{
-						$disable_automatic = true;
-					}
-					
-					if ($object->can_set_data_entity())
-					{
-						$disable_project = false;
-					}
-					else
-					{
-						$disable_project = true;
-					}
-					
-					if ($object->can_set_control())
-					{
-						$disable_control = false;
-					}
-					else
-					{
-						$disable_control = true;
-					}
-					
-					if ($object->can_set_remain())
-					{
-						$disable_remain = false;
-					}
-					else
-					{
-						$disable_remain = true;
-					}
-					
+					$disable_project = false;
+				}
+				else
+				{
+					$disable_project = true;
+				}
+				
+				if ($object->can_set_control())
+				{
+					$disable_control = false;
+				}
+				else
+				{
+					$disable_control = true;
+				}
+				
+				if ($object->can_set_remain())
+				{
+					$disable_remain = false;
+				}
+				else
+				{
+					$disable_remain = true;
+				}
+				
+				if ($disable_automatic == true)
+				{
+					$template->set_var("disabled_automatic","disabled='disabled'");
+				}
+				else
+				{
+					$template->set_var("disabled_automatic","");
+				}
+				
+				if ($data_permission->get_automatic() == true) {
+					$template->set_var("checked_automatic","checked='checked'");
 					if ($disable_automatic == true)
 					{
-						$template->set_var("disabled_automatic","disabled='disabled'");
+						$template->set_var("hidden_automatic","<input type='hidden' name='automatic' value='1' />");
 					}
 					else
 					{
-						$template->set_var("disabled_automatic","");
+						$template->set_var("hidden_automatic","");
 					}
-					
-					if ($data_permission->get_automatic() == true) {
-						$template->set_var("checked_automatic","checked='checked'");
-						if ($disable_automatic == true)
+				}else{
+					$template->set_var("checked_automatic","");
+					$template->set_var("hidden_automatic","");
+				}
+				
+				
+				
+				$permission_array = $data_permission->get_permission_array();
+	
+				for ($i=1;$i<=4;$i++)
+				{
+					for ($j=1;$j<=4;$j++)
+					{
+						$checked_name = "checked_".$i."_".$j;
+						$disabled_name = "disabled_".$i."_".$j;
+						$hidden_name = "hidden_".$i."_".$j;
+						
+						if ($i==3 and $disable_project == true)
 						{
-							$template->set_var("hidden_automatic","<input type='hidden' name='automatic' value='1' />");
+							$template->set_var($disabled_name,"disabled='disabled'");
+							$disabled = true;
 						}
 						else
 						{
-							$template->set_var("hidden_automatic","");
-						}
-					}else{
-						$template->set_var("checked_automatic","");
-						$template->set_var("hidden_automatic","");
-					}
-					
-					
-					
-					$permission_array = $data_permission->get_permission_array();
-		
-					for ($i=1;$i<=4;$i++)
-					{
-						for ($j=1;$j<=4;$j++)
-						{
-							$checked_name = "checked_".$i."_".$j;
-							$disabled_name = "disabled_".$i."_".$j;
-							$hidden_name = "hidden_".$i."_".$j;
-							
-							if ($i==3 and $disable_project == true)
+							if (($j==3 or $j==4) and $disable_control == true)
 							{
 								$template->set_var($disabled_name,"disabled='disabled'");
 								$disabled = true;
 							}
 							else
 							{
-								if (($j==3 or $j==4) and $disable_control == true)
+								if ($disable_remain == true)
 								{
 									$template->set_var($disabled_name,"disabled='disabled'");
 									$disabled = true;
 								}
 								else
 								{
-									if ($disable_remain == true)
-									{
-										$template->set_var($disabled_name,"disabled='disabled'");
-										$disabled = true;
-									}
-									else
-									{
-										$template->set_var($disabled_name,"");
-										$disabled = false;
-									}
+									$template->set_var($disabled_name,"");
+									$disabled = false;
 								}
 							}
-							
-							if ($permission_array[$i][$j] == true)
+						}
+						
+						if ($permission_array[$i][$j] == true)
+						{
+							$template->set_var($checked_name,"checked='checked'");
+							if ($disabled == true)
 							{
-								$template->set_var($checked_name,"checked='checked'");
-								if ($disabled == true)
-								{
-									$template->set_var($hidden_name, "<input type='hidden' name='".$checked_name."' value='1' />");
-								}
-								else
-								{
-									$template->set_var($hidden_name, "");
-								}
+								$template->set_var($hidden_name, "<input type='hidden' name='".$checked_name."' value='1' />");
 							}
 							else
 							{
-								$template->set_var($checked_name,"");
 								$template->set_var($hidden_name, "");
 							}
-							$disabled = false;
 						}
+						else
+						{
+							$template->set_var($checked_name,"");
+							$template->set_var($hidden_name, "");
+						}
+						$disabled = false;
 					}
-	
+				}
+
+				$paramquery = $_GET;
+				$paramquery[nav] = "data";
+				unset($paramquery[action]);
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$template->set_var("back_link", $params);
+				
+				$template->output();	
+			}
+			else
+			{
+				if ($_POST[save])
+				{
 					$paramquery = $_GET;
-					$paramquery[nav] = "data";
-					unset($paramquery[action]);
+					unset($paramquery[nextpage]);
 					$params = http_build_query($paramquery,'','&#38;');
-					
-					$template->set_var("back_link", $params);
-					
-					$template->output();	
 				}
 				else
 				{
-					if ($_POST[save])
+					if ($type == folder)
 					{
 						$paramquery = $_GET;
+						unset($paramquery[action]);
 						unset($paramquery[nextpage]);
 						$params = http_build_query($paramquery,'','&#38;');
 					}
 					else
 					{
-						if ($type == folder)
-						{
-							$paramquery = $_GET;
-							unset($paramquery[action]);
-							unset($paramquery[nextpage]);
-							$params = http_build_query($paramquery,'','&#38;');
-						}
-						else
-						{
-							$paramquery = $_GET;
-							unset($paramquery[action]);
-							unset($paramquery[nextpage]);
-							$params = http_build_query($paramquery,'','&#38;');
-						}
-					}
-					
-					if ($data_permission->set_permission_array($_POST) == true)
-					{
-						Common_IO::step_proceed($params, "Permission: ".$title."", "Changes saved succesful" ,null);
-					}
-					else
-					{
-						Common_IO::step_proceed($params, "Permission: ".$title."", "Operation failed" ,null);
+						$paramquery = $_GET;
+						unset($paramquery[action]);
+						unset($paramquery[nextpage]);
+						$params = http_build_query($paramquery,'','&#38;');
 					}
 				}
-			}
-			else
-			{
-				switch ($type):
 				
-					case "folder":
-						$exception = new Exception("", 1);
-					break;
-					
-					case "file":
-						$exception = new Exception("", 2);
-					break;
-					
-					case "value":
-						$exception = new Exception("", 3);
-					break;
-				
-				endswitch;
-				
-				// $error_io = new Error_IO($exception, 20, 40, 2);
-				// $error_io->display_error();
-			}
-		}
-		catch (IdMissingException $e)
-		{
-			// $error_io = new Error_IO($e, 20, 40, 3);
-			// $error_io->display_error();
-		}
-	}
-
-	public static function change_owner()
-	{
-		try
-		{
-			if ($_GET[file_id] xor $_GET[value_id])
-			{
-				if ($_GET[file_id])
+				if ($data_permission->set_permission_array($_POST) == true)
 				{
-					$id = $_GET[file_id];
-					$object = File::get_instance($id);
-					$type = "file";
-					$title = $object->get_name();
-				}
-				if ($_GET[value_id])
-				{
-					$id = $_GET[value_id];
-					$object = Value::get_instance($id);
-					$type = "value";
-					$title = $object->get_type_name();
-				}
-			}
-			else
-			{
-				if ($_GET[folder_id])
-				{
-					$id = $_GET[folder_id];
-					$object = Folder::get_instance($id);
-					$type = "folder";
-					$title = $object->get_name();
+					Common_IO::step_proceed($params, "Permission: ".$title."", "Changes saved succesful" ,null);
 				}
 				else
 				{
-					throw new IdMissingException("", 0);
+					Common_IO::step_proceed($params, "Permission: ".$title."", "Operation failed" ,null);
 				}
 			}
-			
-			if ($object->is_control_access() == true)
-			{
-				$data_permission = new DataPermission($type, $id);
-				
-				if (!$_GET[nextpage])
-				{
-					$template = new Template("template/data/data_change_owner.html");
-					
-					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$template->set_var("params",$params);
-					
-					$template->set_var("title",$title);
-					$template->set_var("error","");
-					
-					$user_array = User::list_entries();
-					
-					$result = array();
-					$counter = 0;
-					
-					foreach($user_array as $key => $value)
-					{
-						$user = new User($value);
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $user->get_username()." (".$user->get_full_name(false).")";
-						$counter++;
-					}
-					
-					$template->set_var("option",$result);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "permission";
-					unset($paramquery[nextpage]);
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$template->set_var("back_link", $params);
-					
-					$template->output();
-				}
-				else
-				{
-					$paramquery = $_GET;
-					$paramquery[action] = "permission";
-					unset($paramquery[nextpage]);
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					if ($data_permission->set_owner_id($_POST[user]) == true)
-					{
-						Common_IO::step_proceed($params, "Permission: ".$title."", "Changes saved succesful" ,null);
-					}
-					else
-					{
-						Common_IO::step_proceed($params, "Permission: ".$title."", "Operation failed" ,null);
-					}
-				}
-			}
-			else
-			{
-				switch ($type):
-				
-					case "folder":
-						$exception = new Exception("", 1);
-					break;
-					
-					case "file":
-						$exception = new Exception("", 2);
-					break;
-					
-					case "value":
-						$exception = new Exception("", 3);
-					break;
-				
-				endswitch;
-				
-				// $error_io = new Error_IO($exception, 20, 40, 2);
-				// $error_io->display_error();
-			}
-		}
-		catch (IdMissingException $e)
-		{
-			// $error_io = new Error_IO($e, 20, 40, 3);
-			// $error_io->display_error();
-		}
-	}
-	
-	public static function change_group()
-	{
-		try
-		{
-			if ($_GET[file_id] xor $_GET[value_id])
-			{
-				if ($_GET[file_id])
-				{
-					$id = $_GET[file_id];
-					$object = File::get_instance($id);
-					$type = "file";
-					$title = $object->get_name();
-				}
-				if ($_GET[value_id])
-				{
-					$id = $_GET[value_id];
-					$object = Value::get_instance($id);
-					$type = "value";
-					$title = $object->get_type_name();
-				}
-			}
-			else
-			{
-				if ($_GET[folder_id])
-				{
-					$id = $_GET[folder_id];
-					$object = Folder::get_instance($id);
-					$type = "folder";
-					$title = $object->get_name();
-				}
-				else
-				{
-					throw new IdMissingException("", 0);
-				}
-			}
-			
-			if ($object->is_control_access() == true)
-			{
-				$data_permission = new DataPermission($type, $id);
-				
-				if (!$_GET[nextpage])
-				{
-					$template = new Template("template/data/data_change_group.html");
-					
-					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$template->set_var("params",$params);
-					
-					$template->set_var("title",$title);
-					$template->set_var("error","");
-					
-					$group_array = Group::list_groups();
-					
-					$result = array();
-					$counter = 0;
-					
-					foreach($group_array as $key => $value)
-					{
-						$group = new Group($value);
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $group->get_name();
-						$counter++;
-					}
-					
-					$template->set_var("option",$result);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "permission";
-					unset($paramquery[nextpage]);
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$template->set_var("back_link", $params);
-					
-					$template->output();
-				}
-				else
-				{
-					$paramquery = $_GET;
-					$paramquery[action] = "permission";
-					unset($paramquery[nextpage]);
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					if ($data_permission->set_owner_group_id($_POST[group]) == true)
-					{
-						Common_IO::step_proceed($params, "Permission: ".$title."", "Changes saved succesful" ,null);
-					}
-					else
-					{
-						Common_IO::step_proceed($params, "Permission: ".$title."", "Operation failed" ,null);
-					}
-				}
-			}
-			else
-			{
-				switch ($type):
-				
-					case "folder":
-						$exception = new Exception("", 1);
-					break;
-					
-					case "file":
-						$exception = new Exception("", 2);
-					break;
-					
-					case "value":
-						$exception = new Exception("", 3);
-					break;
-				
-				endswitch;
-				
-				// $error_io = new Error_IO($exception, 20, 40, 2);
-				// $error_io->display_error();
-			}
-		}
-		catch (IdMissingException $e)
-		{
-			// $error_io = new Error_IO($e, 20, 40, 3);
-			// $error_io->display_error();
-		}
-	}
-
-	public static function method_handler()
-	{	
-		try
-		{
-			if ($_GET[file_id])
-			{
-				if (File::exist_file($_GET[file_id]) == false) {
-					throw new FileNotFoundException("",2);
-				}
-			}
-			
-			if ($_GET[value_id])
-			{
-				if (Value::exist_value($_GET[value_id]) == false)
-				{
-					throw new ValueNotFoundException("",3);
-				}
-			}
-			
-			if ($_GET[folder_id])
-			{
-				$folder = Folder::get_instance($_GET[folder_id]);
-				if ($folder->exist_folder() == false)
-				{
-					throw new FolderNotFoundException("",1);
-				}
-			}
-			
-			switch($_GET[action]):
-				case("permission"):
-					self::permission();
-				break;
-				
-				case("chown"):
-					self::change_owner();
-				break;
-				
-				case("chgroup"):
-					self::change_group();
-				break;
-	
-				case("image_browser_detail"):
-					self::image_browser_detail();
-				break;
-				
-				case("image_browser_multi"):
-					self::image_browser_multi();
-				break;
-	
-				
-				case("value_detail"):
-					require_once("value.io.php");
-					ValueIO::detail();
-				break;
-				
-				case("value_history"):
-					require_once("value.io.php");
-					ValueIO::history();
-				break;
-					
-				case("value_delete_version"):
-					require_once("value.io.php");
-					ValueIO::delete_version();
-				break;
-
-				
-				case("file_add"):
-					require_once("file.io.php");
-					FileIO::upload();
-				break;
-				
-				case("file_update"):
-				case("file_update_minor"):
-					require_once("file.io.php");
-					FileIO::update();
-				break;
-	
-				case("file_detail"):
-					require_once("file.io.php");
-					FileIO::detail();
-				break;
-				
-				case("file_history"):
-					require_once("file.io.php");
-					FileIO::history();
-				break;
-				
-				case("file_delete"):
-					require_once("file.io.php");
-					FileIO::delete();
-				break;
-				
-				case("file_delete_version"):
-					require_once("file.io.php");
-					FileIO::delete_version();
-				break;
-				
-				
-				case("folder_add"):
-					require_once("folder.io.php");
-					FolderIO::add();	
-				break;
-				
-				case("folder_delete"):
-					require_once("folder.io.php");
-					FolderIO::delete();
-				break;
-				
-				case("folder_move"):
-					require_once("folder.io.php");
-					FolderIO::move();
-				break;
-	
-				case("folder_administration"):
-					require_once("folder.io.php");
-					FolderIO::folder_administration();	
-				break;
-				
-				// Search
-				/**
-				 * @todo errors, exceptions
-				 */
-				case("search"):
-					if ($_GET[dialog])
-					{
-						$module_dialog = ModuleDialog::get_by_type_and_internal_name("search", $_GET[dialog]);
-						
-						if (file_exists($module_dialog[class_path]))
-						{
-							require_once($module_dialog[class_path]);
-							
-							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
-							{
-								$module_dialog['class']::$module_dialog[method]();
-							}
-							else
-							{
-								// Error
-							}
-						}
-						else
-						{
-							// Error
-						}
-					}
-					else
-					{
-						// error
-					}
-				break;
-				
-				default:
-					self::browser();
-				break;
-				
-			endswitch;	
-		}
-		catch (FileNotFoundException $e)
-		{
-			// $error_io = new Error_IO($e, 20, 40, 1);
-			// $error_io->display_error();
-		}
-		catch (ValueNotFoundException $e)
-		{
-			// $error_io = new Error_IO($e, 20, 40, 1);
-			// $error_io->display_error();
-		}
-		catch (FolderNotFoundException $e)
-		{
-			// $error_io = new Error_IO($e, 20, 40, 1);
-			// $error_io->display_error();
-		}
-		
-	}
-	
-	/**
-	 * @param integer $user_id
-	 * @return array
-	 */
-	public static function get_user_module_detail_setting($user_id)
-	{
-		if ($user_id)
-		{
-			$data_user_data = new DataUserData($user_id);
-			
-			$paramquery = $_GET;
-			$paramquery[run] = "module_value_change";
-			$paramquery[dialog] = "user_quota";
-			$paramquery[retrace] = Misc::create_retrace_string();
-			$params = http_build_query($paramquery, '', '&#38;');
-			
-			$return_array = array();
-			$return_array[value] = Misc::calc_size($data_user_data->get_quota());
-			$return_array[params] = $params;
-			return $return_array;	
 		}
 		else
 		{
-			return null;
+			throw new DataSecuriyAccessDeniedException();
+		}
+	}
+
+	/**
+	 * @throws FolderIDMissingException
+	 */
+	public static function change_owner()
+	{
+		if ($_GET[file_id] xor $_GET[value_id])
+		{
+			if ($_GET[file_id])
+			{
+				$id = $_GET[file_id];
+				$object = File::get_instance($id);
+				$type = "file";
+				$title = $object->get_name();
+			}
+			if ($_GET[value_id])
+			{
+				$id = $_GET[value_id];
+				$object = Value::get_instance($id);
+				$type = "value";
+				$title = $object->get_type_name();
+			}
+		}
+		else
+		{
+			if ($_GET[folder_id])
+			{
+				$id = $_GET[folder_id];
+				$object = Folder::get_instance($id);
+				$type = "folder";
+				$title = $object->get_name();
+			}
+			else
+			{
+				throw new IdMissingException("", 0);
+			}
+		}
+		
+		if ($object->is_control_access() == true)
+		{
+			$data_permission = new DataPermission($type, $id);
+			
+			if (!$_GET[nextpage])
+			{
+				$template = new Template("template/data/data_change_owner.html");
+				
+				$paramquery = $_GET;
+				$paramquery[nextpage] = "1";
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$template->set_var("params",$params);
+				
+				$template->set_var("title",$title);
+				$template->set_var("error","");
+				
+				$user_array = User::list_entries();
+				
+				$result = array();
+				$counter = 0;
+				
+				foreach($user_array as $key => $value)
+				{
+					$user = new User($value);
+					$result[$counter][value] = $value;
+					$result[$counter][content] = $user->get_username()." (".$user->get_full_name(false).")";
+					$counter++;
+				}
+				
+				$template->set_var("option",$result);
+				
+				$paramquery = $_GET;
+				$paramquery[action] = "permission";
+				unset($paramquery[nextpage]);
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$template->set_var("back_link", $params);
+				
+				$template->output();
+			}
+			else
+			{
+				$paramquery = $_GET;
+				$paramquery[action] = "permission";
+				unset($paramquery[nextpage]);
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				if ($data_permission->set_owner_id($_POST[user]) == true)
+				{
+					Common_IO::step_proceed($params, "Permission: ".$title."", "Changes saved succesful" ,null);
+				}
+				else
+				{
+					Common_IO::step_proceed($params, "Permission: ".$title."", "Operation failed" ,null);
+				}
+			}
+		}
+		else
+		{
+			throw new DataSecuriyAccessDeniedException();
 		}
 	}
 	
+	/**
+	 * @throws FolderIDMissingException
+	 */
+	public static function change_group()
+	{
+		if ($_GET[file_id] xor $_GET[value_id])
+		{
+			if ($_GET[file_id])
+			{
+				$id = $_GET[file_id];
+				$object = File::get_instance($id);
+				$type = "file";
+				$title = $object->get_name();
+			}
+			if ($_GET[value_id])
+			{
+				$id = $_GET[value_id];
+				$object = Value::get_instance($id);
+				$type = "value";
+				$title = $object->get_type_name();
+			}
+		}
+		else
+		{
+			if ($_GET[folder_id])
+			{
+				$id = $_GET[folder_id];
+				$object = Folder::get_instance($id);
+				$type = "folder";
+				$title = $object->get_name();
+			}
+			else
+			{
+				throw new IdMissingException("", 0);
+			}
+		}
+		
+		if ($object->is_control_access() == true)
+		{
+			$data_permission = new DataPermission($type, $id);
+			
+			if (!$_GET[nextpage])
+			{
+				$template = new Template("template/data/data_change_group.html");
+				
+				$paramquery = $_GET;
+				$paramquery[nextpage] = "1";
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$template->set_var("params",$params);
+				
+				$template->set_var("title",$title);
+				$template->set_var("error","");
+				
+				$group_array = Group::list_groups();
+				
+				$result = array();
+				$counter = 0;
+				
+				foreach($group_array as $key => $value)
+				{
+					$group = new Group($value);
+					$result[$counter][value] = $value;
+					$result[$counter][content] = $group->get_name();
+					$counter++;
+				}
+				
+				$template->set_var("option",$result);
+				
+				$paramquery = $_GET;
+				$paramquery[action] = "permission";
+				unset($paramquery[nextpage]);
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$template->set_var("back_link", $params);
+				
+				$template->output();
+			}
+			else
+			{
+				$paramquery = $_GET;
+				$paramquery[action] = "permission";
+				unset($paramquery[nextpage]);
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				if ($data_permission->set_owner_group_id($_POST[group]) == true)
+				{
+					Common_IO::step_proceed($params, "Permission: ".$title."", "Changes saved succesful" ,null);
+				}
+				else
+				{
+					Common_IO::step_proceed($params, "Permission: ".$title."", "Operation failed" ,null);
+				}
+			}
+		}
+		else
+		{
+			throw new DataSecuriyAccessDeniedException();
+		}
+	}
+
+	/**
+	 * @throws UserIDMissingException
+	 */
 	public static function change_quota()
 	{
 		if ($_GET[id])
@@ -1317,9 +1041,166 @@ class DataIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			// $error_io = new Error_IO($exception, 3, 40, 3);
-			// $error_io->display_error();
+			throw new UserIDMissingException();
+		}
+	}
+	
+	public static function method_handler()
+	{			
+		switch($_GET[action]):
+			case("permission"):
+				self::permission();
+			break;
+			
+			case("chown"):
+				self::change_owner();
+			break;
+			
+			case("chgroup"):
+				self::change_group();
+			break;
+
+			case("image_browser_detail"):
+				self::image_browser_detail();
+			break;
+			
+			case("image_browser_multi"):
+				self::image_browser_multi();
+			break;
+
+			
+			case("value_detail"):
+				require_once("value.io.php");
+				ValueIO::detail();
+			break;
+			
+			case("value_history"):
+				require_once("value.io.php");
+				ValueIO::history();
+			break;
+				
+			case("value_delete_version"):
+				require_once("value.io.php");
+				ValueIO::delete_version();
+			break;
+
+			
+			case("file_add"):
+				require_once("file.io.php");
+				FileIO::upload();
+			break;
+			
+			case("file_update"):
+			case("file_update_minor"):
+				require_once("file.io.php");
+				FileIO::update();
+			break;
+
+			case("file_detail"):
+				require_once("file.io.php");
+				FileIO::detail();
+			break;
+			
+			case("file_history"):
+				require_once("file.io.php");
+				FileIO::history();
+			break;
+			
+			case("file_delete"):
+				require_once("file.io.php");
+				FileIO::delete();
+			break;
+			
+			case("file_delete_version"):
+				require_once("file.io.php");
+				FileIO::delete_version();
+			break;
+			
+			
+			case("folder_add"):
+				require_once("folder.io.php");
+				FolderIO::add();	
+			break;
+			
+			case("folder_delete"):
+				require_once("folder.io.php");
+				FolderIO::delete();
+			break;
+			
+			case("folder_move"):
+				require_once("folder.io.php");
+				FolderIO::move();
+			break;
+
+			case("folder_administration"):
+				require_once("folder.io.php");
+				FolderIO::folder_administration();	
+			break;
+			
+			// Search
+			/**
+			 * @todo errors, exceptions
+			 */
+			case("search"):
+				if ($_GET[dialog])
+				{
+					$module_dialog = ModuleDialog::get_by_type_and_internal_name("search", $_GET[dialog]);
+					
+					if (file_exists($module_dialog[class_path]))
+					{
+						require_once($module_dialog[class_path]);
+						
+						if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+						{
+							$module_dialog['class']::$module_dialog[method]();
+						}
+						else
+						{
+							// Error
+						}
+					}
+					else
+					{
+						// Error
+					}
+				}
+				else
+				{
+					// error
+				}
+			break;
+			
+			default:
+				self::browser();
+			break;
+			
+		endswitch;	
+	}
+	
+	/**
+	 * @param integer $user_id
+	 * @return array
+	 */
+	public static function get_user_module_detail_setting($user_id)
+	{
+		if ($user_id)
+		{
+			$data_user_data = new DataUserData($user_id);
+			
+			$paramquery = $_GET;
+			$paramquery[run] = "module_value_change";
+			$paramquery[dialog] = "user_quota";
+			$paramquery[retrace] = Misc::create_retrace_string();
+			$params = http_build_query($paramquery, '', '&#38;');
+			
+			$return_array = array();
+			$return_array[value] = Misc::calc_size($data_user_data->get_quota());
+			$return_array[params] = $params;
+			return $return_array;	
+		}
+		else
+		{
+			return null;
 		}
 	}
 }

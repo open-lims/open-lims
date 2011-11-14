@@ -44,18 +44,26 @@ class SystemMessage implements SystemMessageInterface, EventListenerInterface
 	/**
 	 * @see SystemMessageInterface::__construct()
 	 * @param integer $id
+	 * @throws SystemMessageNotFoundException
 	 */
 	function __construct($id)
 	{
-		if ($id == null)
+		if (is_numeric($id))
 		{
-			$this->id = null;
-			$this->system_message = new SystemMessage_Access(null);
+			if (SystemMessage_Access::exist_id($id) == true)
+			{
+				$this->id = $id;
+				$this->system_message = new SystemMessage_Access($id);
+			}
+			else
+			{
+				throw new SystemMessagNotFoundException();
+			}
 		}
 		else
 		{
-			$this->id = $id;
-			$this->system_message = new SystemMessage_Access($id);
+			$this->id = null;
+			$this->system_message = new SystemMessage_Access(null);
 		}
 	}
 	

@@ -75,6 +75,13 @@ function __autoload($classname)
 	
 	
 	// System Frontend
+	$classes['SystemLogException']				= $path_prefix."core/include/base/system_fe/exceptions/system_log.exception.class.php";
+	$classes['SystemLogNotFoundException']		= $path_prefix."core/include/base/system_fe/exceptions/system_log_not_found.exception.class.php";
+	$classes['SystemLogIDMissingException']		= $path_prefix."core/include/base/system_fe/exceptions/system_log_id_missing.exception.class.php";
+	$classes['SystemMessageException']			= $path_prefix."core/include/base/system_fe/exceptions/system_message.exception.class.php";
+	$classes['SystemMessageNotFoundException']	= $path_prefix."core/include/base/system_fe/exceptions/system_message_not_found.exception.class.php";
+	$classes['SystemMessageIDMissingException']	= $path_prefix."core/include/base/system_fe/exceptions/system_message_id_missing.exception.class.php";
+	
 	$classes['SystemLog']					= $path_prefix."core/include/base/system_fe/system_log.class.php";
 	$classes['SystemMessage']				= $path_prefix."core/include/base/system_fe/system_message.class.php";
 	
@@ -85,6 +92,7 @@ function __autoload($classname)
 	$classes['UserException']				= $path_prefix."core/include/base/user/exceptions/user.exception.class.php";
 	$classes['UserNotFoundException']		= $path_prefix."core/include/base/user/exceptions/user_not_found.exception.class.php";
 	$classes['UserIDMissingException']		= $path_prefix."core/include/base/user/exceptions/user_id_missing.exception.class.php";
+	$classes['UserDeleteException']			= $path_prefix."core/include/base/user/exceptions/user_delete.exception.class.php";
 	
 	$classes['GroupException']				= $path_prefix."core/include/base/user/exceptions/group.exception.php";
 	$classes['GroupNotFoundException']		= $path_prefix."core/include/base/user/exceptions/group_not_found.exception.php";

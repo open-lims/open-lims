@@ -61,17 +61,25 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	/**
 	 * @see DataEntityInterface::__construct()
 	 * @param integer $entity_id
+	 * @throws DataEntityNotFoundException
 	 */
 	function __construct($entity_id)
 	{
 		if (is_numeric($entity_id) and $entity_id > 0)
 		{
-			$this->data_entity_id = $entity_id;
-			$this->data_entity = new DataEntity_Access($entity_id);
-			
-			$data_entity_is_item = new DataEntityIsItem_Access($entity_id);
-   	   		$this->item_id = $data_entity_is_item->get_item_id();
-    		parent::__construct($this->item_id);
+			if (DataEntity_Access::exist_id($entity_id) == true)
+			{
+				$this->data_entity_id = $entity_id;
+				$this->data_entity = new DataEntity_Access($entity_id);
+				
+				$data_entity_is_item = new DataEntityIsItem_Access($entity_id);
+	   	   		$this->item_id = $data_entity_is_item->get_item_id();
+	    		parent::__construct($this->item_id);
+			}
+			else
+			{
+				throw new DataEntityNotFoundException();
+			}
 		}
 		else
 		{
