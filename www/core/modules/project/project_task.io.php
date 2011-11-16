@@ -1149,11 +1149,21 @@ class ProjectTaskIO
 		{
 			if ($project_security->is_access(1, false) == true)
 			{
-				$project_task_array = ProjectTask::list_tasks($_GET[project_id]);
+				$argument_array = array();
+				$argument_array[0][0] = "project_id";
+				$argument_array[0][1] = $_GET[project_id];
+				
+				$list = new List_IO("ProjectTaskTableList", "/core/modules/project/project_task.ajax.php", "list_project_tasks", "count_project_tasks", $argument_array, "ProjectTaskTableList");
+
+				$list->add_row("Name/Task","name",true,null);
+				$list->add_row("Type","type",true,null);
+				$list->add_row("Start Date","start_date",true,null);
+				$list->add_row("End Date","end_date",true,null);
+				$list->add_row("End Time","end_time",true,null);
+				$list->add_row("Progress","progress",false,null);
 				
 				$template = new Template("template/projects/tasks/table_view.html");
-				
-				
+			
 				$table_view_paramquery = $_GET;
 				$table_view_paramquery[show] = "table";
 				$table_view_params = http_build_query($table_view_paramquery, '', '&#38;');
@@ -1171,62 +1181,9 @@ class ProjectTaskIO
 				$cal_view_params = http_build_query($cal_view_paramquery, '', '&#38;');
 				
 				$template->set_var("cal_view_params", $cal_view_params);
-				
-				
-				$table_io = new TableIO("OverviewTable");
-				
-				$table_io->add_row("Name/Task","name",false,null);
-				$table_io->add_row("Type","type",false,null);
-				$table_io->add_row("Start Date","startdate",false,null);
-				$table_io->add_row("End Date","enddate",false,null);
-				$table_io->add_row("End Time","endtime",false,null);
-				$table_io->add_row("Progress","progress",false,null);
-				
-				if (is_array($project_task_array) and count($project_task_array) >= 1)
-				{
-					$content_array = array();	
-					
-					foreach($project_task_array as $key => $value)
-					{
-						$column_array = array();
+			
+				$template->set_var("list", $list->get_list());
 		
-						$project_task = new ProjectTask($value);
-						
-						if ($project_task->get_type() != 3)
-						{
-							$start_date = new DatetimeHandler($project_task->get_start_date());
-							$end_date = new DatetimeHandler($project_task->get_end_date());
-							
-							$paramquery = $_GET;
-							$paramquery[run] = "task_detail";
-							$paramquery[id] = $value;
-							$params = http_build_query($paramquery,'','&#38;');
-							
-							$column_array[name][link] = $params;
-							$column_array[name][content] = $project_task->get_name();
-							$column_array[type] = $project_task->get_type_name();
-							
-							$column_array[startdate] = $start_date->get_formatted_string("jS M Y");
-							$column_array[enddate] = $end_date->get_formatted_string("jS M Y");
-							
-							$column_array[endtime] = $project_task->get_end_time();
-							
-							$column_array[progress] = "<img src='core/images/status_bar.php?length=100&height=15&linecolor=A0A0A0&color=".$project_task->get_color()."&value=".$project_task->get_progress()."' />";
-							
-							array_push($content_array, $column_array);
-						}
-					}
-				}
-				else
-				{
-					$content_array = null;
-					$table_io->override_last_line("<span class='italic'>No Tasks Found!</span>");
-				}
-				
-				$table_io->add_content_array($content_array);
-		
-				$template->set_var("table", $table_io->get_content($_GET[page]));	
-						
 				$template->output();
 			}
 			else

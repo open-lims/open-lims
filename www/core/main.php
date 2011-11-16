@@ -174,7 +174,6 @@ class Main
 		/**
 		 * @deprecated remove later
 		 */
-		require_once("modules/base/table.io.php");
 		require_once("modules/base/list_stat.io.php");
 		
 		ContentHandler_IO::main();

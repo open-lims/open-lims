@@ -203,6 +203,53 @@ class Project_Wrapper implements Project_WrapperInterface
 	}
 	
 	/**
+	 * @see Project_WrapperInterface::list_project_permissions()
+	 * @param integer $project_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_project_permissions($project_id, $order_by, $order_method, $start, $end)
+	{
+		return Project_Wrapper_Access::list_project_permissions($project_id, $order_by, $order_method, $start, $end);
+	}
+	
+	/**
+	 * @see Project_WrapperInterface::count_project_permissions()
+	 * @param integer $project_id
+	 */
+	public static function count_project_permissions($project_id)
+	{
+		return Project_Wrapper_Access::count_project_permissions($project_id);
+	}
+	
+	/**
+	 * @see Project_WrapperInterface::list_project_tasks()
+	 * @param integer $project_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_project_tasks($project_id, $order_by, $order_method, $start, $end)
+	{
+		return Project_Wrapper_Access::list_project_tasks($project_id, $order_by, $order_method, $start, $end);
+	}
+	
+	/**
+	 * @see Project_WrapperInterface::count_project_tasks()
+	 * @param integer $project_id
+	 * @return integer
+	 */
+	public static function count_project_tasks($project_id)
+	{
+		return Project_Wrapper_Access::count_project_tasks($project_id);
+	}
+	
+	/**
 	 * @see Project_WrapperInterface::list_search_projects_without_subprojects()
 	 * @param string $name
 	 * @param array $template_id

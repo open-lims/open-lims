@@ -316,9 +316,6 @@ class User_Wrapper_Access
 		{
 			$sql_order_by = "ORDER BY ".constant("USER_TABLE").".id";
 		}
-			
-		$username = strtolower(trim($username));
-   		$username = str_replace("*","%",$username);
    			
    		$return_array = array();
    				
@@ -374,6 +371,97 @@ class User_Wrapper_Access
 		return $data[result];
    	}
    	
+   	/**
+   	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+   	public static function list_groups($order_by, $order_method, $start, $end)
+   	{
+   		global $db;
+   		
+   		if ($order_by and $order_method)
+		{
+			if ($order_method == "asc")
+			{
+				$sql_order_method = "ASC";
+			}
+			else
+			{
+				$sql_order_method = "DESC";
+			}
+			
+			switch($order_by):
+									
+				case "name":
+					$sql_order_by = "ORDER BY ".constant("GROUP_TABLE").".name ".$sql_order_method;
+				break;
+				
+				default:
+					$sql_order_by = "ORDER BY ".constant("GROUP_TABLE").".id ".$sql_order_method;
+				break;
+			
+			endswitch;
+		}
+		else
+		{
+			$sql_order_by = "ORDER BY ".constant("GROUP_TABLE").".id";
+		}
+   			
+   		$return_array = array();
+   				
+   		$sql = "SELECT ".constant("GROUP_TABLE").".id AS id, " .
+   				"".constant("GROUP_TABLE").".name AS name " .
+   				"FROM ".constant("GROUP_TABLE")." " .
+   				"".$sql_order_by."";  
+   						
+   		$return_array = array();
+   			
+   		$res = $db->db_query($sql);
+   			
+		if (is_numeric($start) and is_numeric($end))
+		{
+			for ($i = 0; $i<=$end-1; $i++)
+			{
+				if (($data = $db->db_fetch_assoc($res)) == null)
+				{
+					break;
+				}
+				
+				if ($i >= $start)
+				{
+					array_push($return_array, $data);
+				}
+			}
+		}
+		else
+		{
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array, $data);
+			}
+		}
+		return $return_array;
+   	}
+   	
+   	/**
+   	 * @return integer
+   	 */
+   	public static function count_groups()
+   	{
+   		global $db;
+   				
+   		$sql = "SELECT COUNT(".constant("GROUP_TABLE").".id) AS result " .
+   				"FROM ".constant("GROUP_TABLE")."";  
+   						
+   		$res = $db->db_query($sql);
+   		$data = $db->db_fetch_assoc($res);
+	
+		return $data[result];
+   	}
+   		
 	/**
 	 * @return integer
 	 */

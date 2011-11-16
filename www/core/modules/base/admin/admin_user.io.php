@@ -28,101 +28,14 @@
 class AdminUserIO
 {
 	public static function home()
-	{
-		$content_array = array();
+	{		
+		$list = new List_IO("UserAdministration", "/core/modules/base/admin/admin_user.ajax.php", "list_users", "count_users", null, "UserAdministration");
 		
-		$table_io = new TableIO("OverviewTable");
-		
-		$table_io->add_row("","symbol",false,16);
-		$table_io->add_row("Username","username",false,null);
-		$table_io->add_row("Name","name",false,null);
-		$table_io->add_row("Groups","groups",false,null);
-		$table_io->add_row("Organ. Units","ou",false,null);
-		$table_io->add_row("D","delete",false,16);
-		
-		$user_array = User::list_entries();
-		
-		$user_array_cardinality = count($user_array);
-		
-		$counter = 0;
-
-		if (!$_GET[page] or $_GET[page] == 1)
-		{
-			$page = 1;
-			$counter_begin = 0;
-			if ($user_array_cardinality > 20)
-			{
-				$counter_end = 19;
-			}
-			else
-			{
-				$counter_end = $user_array_cardinality-1;
-			}
-		}
-		else
-		{
-			if ($_GET[page] >= ceil($user_array_cardinality/20))
-			{
-				$page = ceil($user_array_cardinality/20);
-				$counter_end = $user_array_cardinality;
-			}
-			else
-			{
-				$page = $_GET[page];
-				$counter_end = (20*$page)-1;
-			}
-			$counter_begin = (20*$page)-20;
-		}
-		
-		if (is_array($user_array))
-		{
-			foreach ($user_array as $key => $value)
-			{
-				if ($counter >= $counter_begin and $counter <= $counter_end)
-				{
-					$column_array = array();
-					
-					$user 			= new User($value);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "detail";
-					$paramquery[id] = $value;
-					$params = http_build_query($paramquery,'','&#38;');
-										
-					$column_array[symbol][link] = $params;
-					$column_array[symbol][content] = "<img src='images/icons/user.png' alt='' style='border: 0;' />";
-					$column_array[username][link] = $params;
-					$column_array[username][content] = $user->get_username();
-					$column_array[name] = $user->get_full_name(false);
-					$column_array[groups] = Group::get_number_of_groups_by_user_id($value);
-					$column_array[ou] = OrganisationUnit::get_number_of_organisation_units_by_user_id($value);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "delete";
-					$paramquery[id] = $value;
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					if ($value == 1)
-					{
-						$column_array[delete] = "<img src='images/icons/delete_user_na.png' alt='' style='border: 0;' />";
-					}
-					else
-					{
-						$column_array[delete][link] = $params;
-						$column_array[delete][content] = "<img src='images/icons/delete_user.png' alt='' style='border: 0;' />";
-					}
-					array_push($content_array, $column_array);
-				}
-				$counter++;	
-			}
-		}
-		else
-		{
-			$content_array = null;
-			$table_io->override_last_line("<span class='italic'>No Users Found!</span>");
-		}
-		
-		$table_io->add_content_array($content_array);
+		$list->add_row("","symbol",false,"16px");
+		$list->add_row("Username","username",true,null);
+		$list->add_row("Name","fullname",true,null);
+		$list->add_row("Groups","groups",false,null);
+		$list->add_row("D","delete",false,"16px");
 		
 		$template = new Template("template/user/admin/user/list.html");
 		
@@ -133,9 +46,9 @@ class AdminUserIO
 		
 		$template->set_var("add_params", $params);
 		
-		$template->set_var("table", $table_io->get_table($page ,$user_array_cardinality));	
+		$template->set_var("list", $list->get_list());
 		
-		$template->output();
+		$template->output();	
 	}
 	
 	public static function create()

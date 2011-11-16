@@ -107,5 +107,21 @@ interface OrganisationUnit_WrapperInterface
 	 * @return integer
 	 */
     public static function count_organisation_unit_groups($organisation_unit_id);
+    
+    /**
+	 * @param integer $user_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+    public static function list_organisation_units_by_user_id($user_id, $order_by, $order_method, $start, $end);
+    
+    /**
+     * @param integer $user_id
+     * @return integer
+	 */
+	public static function count_organisation_units_by_user_id($user_id);
 }
 ?>

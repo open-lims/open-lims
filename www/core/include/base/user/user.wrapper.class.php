@@ -106,5 +106,27 @@ class User_Wrapper implements User_WrapperInterface
    	{
    		return User_Wrapper_Access::count_users();
    	}
+
+   	/**
+ 	 * @see User_WrapperInterface::list_groups()
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_groups($order_by, $order_method, $start, $end)
+   	{
+   		return User_Wrapper_Access::list_groups($order_by, $order_method, $start, $end);
+   	}
+   	
+   	/**
+   	 * @see User_WrapperInterface::count_groups()
+   	 * @return integer
+   	 */
+   	public static function count_groups()
+   	{
+   		return User_Wrapper_Access::count_groups();
+   	}
 }
 ?>

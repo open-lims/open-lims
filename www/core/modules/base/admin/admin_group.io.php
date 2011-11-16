@@ -29,99 +29,12 @@ class AdminGroupIO
 {
 	public static function home()
 	{
-		$content_array = array();
+		$list = new List_IO("GroupAdministration", "/core/modules/base/admin/admin_group.ajax.php", "list_groups", "count_groups", null, "GroupAdministration");
 		
-		$table_io = new TableIO("OverviewTable");
-		
-		$table_io->add_row("","symbol",false,16);
-		$table_io->add_row("Name","name",false,null);
-		$table_io->add_row("Members (User)","user",false,null);
-		$table_io->add_row("Members (OU)","ou",false,null);
-		$table_io->add_row("D","delete",false,16);
-		
-		
-		$group_array = Group::list_groups();
-		
-		$group_array_cardinality = count($group_array);
-		
-		$counter = 0;
-
-		if (!$_GET[page] or $_GET[page] == 1)
-		{
-			$page = 1;
-			$counter_begin = 0;
-			if ($group_array_cardinality > 25)
-			{
-				$counter_end = 24;
-			}
-			else
-			{
-				$counter_end = $group_array_cardinality-1;
-			}
-		}
-		else
-		{
-			if ($_GET[page] >= ceil($group_array_cardinality/25))
-			{
-				$page = ceil($group_array_cardinality/25);
-				$counter_end = $group_array_cardinality;
-			}
-			else
-			{
-				$page = $_GET[page];
-				$counter_end = (25*$page)-1;
-			}
-			$counter_begin = (25*$page)-25;
-		}
-		
-		if (is_array($group_array))
-		{
-			foreach ($group_array as $key => $value)
-			{
-				if ($counter >= $counter_begin and $counter <= $counter_end)
-				{
-					$column_array = array();
-					
-					$group 			= new Group($value);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "detail";
-					$paramquery[id] = $value;
-					$params = http_build_query($paramquery,'','&#38;');
-										
-					$column_array[symbol][link] = $params;	
-					$column_array[symbol][content] = "<img src='images/icons/groups.png' alt='' style='border: 0;' />";
-					$column_array[name][link] = $params;	
-					$column_array[name][content] = $group->get_name();
-					$column_array[user] = $group->get_number_of_user_members();
-					$column_array[ou] = OrganisationUnit::get_number_of_organisation_units_by_group_id($value);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "delete";
-					$paramquery[id] = $value;
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					if ($value < 100)
-					{
-						$column_array[delete] = "<img src='images/icons/delete_group_na.png' alt='' style='border: 0;' />";
-					}
-					else
-					{
-						$column_array[delete][link] = $params;
-						$column_array[delete][content] = "<img src='images/icons/delete_group.png' alt='' style='border: 0;' />";
-					}
-					array_push($content_array, $column_array);
-				}
-				$counter++;	
-			}
-		}
-		else
-		{
-			$content_array = null;
-			$table_io->override_last_line("<span class='italic'>No Groups Found!</span>");
-		}
-		
-		$table_io->add_content_array($content_array);
+		$list->add_row("","symbol",false,"16px");
+		$list->add_row("Name","name",true,null);
+		$list->add_row("Users","users",false,null);
+		$list->add_row("D","delete",false,"16px");
 		
 		$template = new Template("template/user/admin/group/list.html");
 		
@@ -132,7 +45,7 @@ class AdminGroupIO
 		
 		$template->set_var("add_params", $params);
 		
-		$template->set_var("table", $table_io->get_table($page ,$group_array_cardinality));	
+		$template->set_var("list", $list->get_list());
 		
 		$template->output();
 	}

@@ -61,7 +61,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     {
     	if (is_numeric($task_id))
     	{
-    		if (ProjectTask_Access::exist_id($project_template_id) == true)
+    		if (ProjectTask_Access::exist_id($task_id) == true)
 			{
 				$this->task_id = $task_id;
 				$this->task = new ProjectTask_Access($task_id);

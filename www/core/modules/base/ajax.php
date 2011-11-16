@@ -41,7 +41,7 @@ require_once($path_prefix."../../db/db.php");
 
 require_once($path_prefix."../../include/base/security/security.class.php");
 
-global $db, $transaction;
+global $db, $transaction, $runtime_data;
 
 $db = new Database(constant("DB_TYPE"));
 $db->db_connect(constant("DB_SERVER"),constant("DB_PORT"),constant("DB_USER"),constant("DB_PASSWORD"),constant("DB_DATABASE"));
@@ -64,6 +64,9 @@ require_once($path_prefix."../../include/base/misc.class.php");
 
 require_once($path_prefix."../../include/base/security/session.class.php");
 
+require_once($path_prefix."../../include/base/system/runtime_data.class.php");
+
+$runtime_data = new RuntimeData();
 
 require_once($path_prefix."../../modules/base/common.io.php");
 require_once($path_prefix."../../modules/base/list.io.php");

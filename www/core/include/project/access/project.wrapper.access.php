@@ -911,6 +911,287 @@ class Project_Wrapper_Access
 		}
 	}
 	
+	/**
+	 * @param integer $project_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_project_permissions($project_id, $order_by, $order_method, $start, $end)
+	{
+		global $db;
+		
+		if (is_numeric($project_id))
+		{
+			if ($order_by and $order_method)
+			{
+				if ($order_method == "asc")
+				{
+					$sql_order_method = "ASC";
+				}
+				else
+				{
+					$sql_order_method = "DESC";
+				}
+				
+				switch($order_by):
+						
+					case "name":
+						$sql_order_by = "ORDER BY name ".$sql_order_method;
+					break;
+					
+					case "type":
+						$sql_order_by = "ORDER BY ".constant("PROJECT_PERMISSION_TABLE").".user_id ".$sql_order_method." , " .
+											"".constant("PROJECT_PERMISSION_TABLE").".group_id ".$sql_order_method." , " .
+											"".constant("PROJECT_PERMISSION_TABLE").".organisation_unit_id ".$sql_order_method;
+					break;
+					
+					case "fullname":
+						$sql_order_by = "ORDER BY fullname ".$sql_order_method;
+					break;
+					
+					case "createdby":
+						$sql_order_by = "ORDER BY owner_table.surname ".$sql_order_method;
+					break;
+					
+					default:
+						$sql_order_by = "ORDER BY ".constant("PROJECT_PERMISSION_TABLE").".id ".$sql_order_method;
+					break;
+				
+				endswitch;
+			}
+			else
+			{
+				$sql_order_by = "ORDER BY ".constant("PROJECT_PERMISSION_TABLE").".id";
+			}
+				
+			$sql = "SELECT ".constant("PROJECT_PERMISSION_TABLE").".id AS id, " .
+						"CONCAT( " .
+								"CONCAT ( " .
+										"".constant("USER_TABLE").".username ," .
+										"".constant("GROUP_TABLE").".name" .
+										"), " .
+								"".constant("ORGANISATION_UNIT_TABLE").".name" .
+								") AS name, " .
+						"CONCAT( " .
+								"CONCAT ( " .
+										"user_table.surname ," .
+										"".constant("GROUP_TABLE").".name" .
+										"), " .
+								"".constant("ORGANISATION_UNIT_TABLE").".name" .
+								") AS fullname " .
+						"FROM ".constant("PROJECT_PERMISSION_TABLE")." " .
+						"LEFT JOIN ".constant("USER_TABLE")." 							ON ".constant("PROJECT_PERMISSION_TABLE").".user_id 				= ".constant("USER_TABLE").".id ".
+						"LEFT JOIN ".constant("GROUP_TABLE")." 							ON ".constant("PROJECT_PERMISSION_TABLE").".group_id 				= ".constant("GROUP_TABLE").".id " .
+						"LEFT JOIN ".constant("ORGANISATION_UNIT_TABLE")." 				ON ".constant("PROJECT_PERMISSION_TABLE").".organisation_unit_id	= ".constant("ORGANISATION_UNIT_TABLE").".id " .
+						"LEFT JOIN ".constant("USER_PROFILE_TABLE")." AS user_table 	ON ".constant("PROJECT_PERMISSION_TABLE").".user_id					= user_table.id " .
+						"LEFT JOIN ".constant("USER_PROFILE_TABLE")." AS owner_table 	ON ".constant("PROJECT_PERMISSION_TABLE").".owner_id				= owner_table.id " .
+						"WHERE ".constant("PROJECT_PERMISSION_TABLE").".project_id = ".$project_id." " .
+						"".$sql_order_by."";
+			
+			$return_array = array();
+			
+			$res = $db->db_query($sql);
+			
+			if (is_numeric($start) and is_numeric($end))
+			{
+				for ($i = 0; $i<=$end-1; $i++)
+				{
+					if (($data = $db->db_fetch_assoc($res)) == null)
+					{
+						break;
+					}
+					
+					if ($i >= $start)
+					{
+						array_push($return_array, $data);
+					}
+				}
+			}
+			else
+			{
+				while ($data = $db->db_fetch_assoc($res))
+				{
+					array_push($return_array, $data);
+				}
+			}
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $project_id
+	 * @return integer
+	 */
+	public static function count_project_permissions($project_id)
+	{
+		global $db;
+		
+		if (is_numeric($project_id))
+		{
+			$sql = "SELECT COUNT(DISTINCT ".constant("PROJECT_PERMISSION_TABLE").".id) AS result " .
+						"FROM ".constant("PROJECT_PERMISSION_TABLE")." " .
+						"WHERE ".constant("PROJECT_PERMISSION_TABLE").".project_id = ".$project_id." ";
+						
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+	
+			return $data[result];
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $project_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_project_tasks($project_id, $order_by, $order_method, $start, $end)
+	{
+		global $db;
+		
+		if (is_numeric($project_id))
+		{
+			if ($order_by and $order_method)
+			{
+				if ($order_method == "asc")
+				{
+					$sql_order_method = "ASC";
+				}
+				else
+				{
+					$sql_order_method = "DESC";
+				}
+				
+				switch($order_by):
+						
+					case "name":
+						$sql_order_by = "ORDER BY name ".$sql_order_method;
+					break;
+					
+					case "type":
+						$sql_order_by = "ORDER BY ".constant("PROJECT_TASK_STATUS_PROCESS_TABLE").".task_id ".$sql_order_method.", ". 
+													"".constant("PROJECT_TASK_PROCESS_TABLE").".task_id ".$sql_order_method."," .
+													"".constant("PROJECT_TASK_MILESTONE_TABLE").".task_id ".$sql_order_method;
+					break;
+					
+					case "start_date":
+						$sql_order_by = "ORDER BY start_date ".$sql_order_method;
+					break;
+					
+					case "end_date":
+						$sql_order_by = "ORDER BY end_date ".$sql_order_method;
+					break;
+					
+					case "end_time":
+						$sql_order_by = "ORDER BY end_time ".$sql_order_method.", whole_day";
+					break;
+					
+					default:
+						$sql_order_by = "ORDER BY start_date ".$sql_order_method;
+					break;
+				
+				endswitch;
+			}
+			else
+			{
+				$sql_order_by = "ORDER BY start_date ".$sql_order_method;
+			}
+				
+			$sql = "SELECT ".constant("PROJECT_TASK_TABLE").".id AS id, " .
+						"CONCAT(" .
+							"CONCAT(" .
+								"".constant("PROJECT_TASK_PROCESS_TABLE").".name, " .
+								"".constant("PROJECT_TASK_MILESTONE_TABLE").".name " .
+							")," .
+							"".constant("PROJECT_STATUS_TABLE").".name" .
+						") AS name, " .
+						"".constant("PROJECT_TASK_TABLE").".start_date AS start_date, " .
+						"".constant("PROJECT_TASK_TABLE").".end_date AS end_date, " .
+						"".constant("PROJECT_TASK_TABLE").".end_time AS end_time, " .
+						"".constant("PROJECT_TASK_TABLE").".whole_day AS whole_day, " .
+						"".constant("PROJECT_TASK_STATUS_PROCESS_TABLE").".task_id AS is_status_process, " .
+						"".constant("PROJECT_TASK_PROCESS_TABLE").".task_id AS is_process, " .
+						"".constant("PROJECT_TASK_MILESTONE_TABLE").".task_id AS is_milestone " .
+ 						"FROM ".constant("PROJECT_TASK_TABLE")." " .
+						"LEFT JOIN ".constant("PROJECT_TASK_STATUS_PROCESS_TABLE")." 	ON ".constant("PROJECT_TASK_TABLE").".id 							= ".constant("PROJECT_TASK_STATUS_PROCESS_TABLE").".task_id ".
+						"LEFT JOIN ".constant("PROJECT_STATUS_TABLE")." 				ON ".constant("PROJECT_TASK_STATUS_PROCESS_TABLE").".end_status_id 	= ".constant("PROJECT_STATUS_TABLE").".id ".
+						"LEFT JOIN ".constant("PROJECT_TASK_PROCESS_TABLE")." 			ON ".constant("PROJECT_TASK_TABLE").".id 							= ".constant("PROJECT_TASK_PROCESS_TABLE").".task_id ".
+						"LEFT JOIN ".constant("PROJECT_TASK_MILESTONE_TABLE")." 		ON ".constant("PROJECT_TASK_TABLE").".id 							= ".constant("PROJECT_TASK_MILESTONE_TABLE").".task_id ".
+						"WHERE ".constant("PROJECT_TASK_TABLE").".project_id = ".$project_id." " .
+						"".$sql_order_by."";
+			
+			$return_array = array();
+			
+			$res = $db->db_query($sql);
+			
+			if (is_numeric($start) and is_numeric($end))
+			{
+				for ($i = 0; $i<=$end-1; $i++)
+				{
+					if (($data = $db->db_fetch_assoc($res)) == null)
+					{
+						break;
+					}
+					
+					if ($i >= $start)
+					{
+						array_push($return_array, $data);
+					}
+				}
+			}
+			else
+			{
+				while ($data = $db->db_fetch_assoc($res))
+				{
+					array_push($return_array, $data);
+				}
+			}
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $project_id
+	 * @return integer
+	 */
+	public static function count_project_tasks($project_id)
+	{
+		global $db;
+		
+		if (is_numeric($project_id))
+		{
+			$sql = "SELECT COUNT(".constant("PROJECT_TASK_TABLE").".id) AS result " .
+						"FROM ".constant("PROJECT_TASK_TABLE")." " .
+						"WHERE ".constant("PROJECT_TASK_TABLE").".project_id = ".$project_id." ";
+						
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+	
+			return $data[result];
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
  	/**
    	 * @param string $name
    	 * @param array $template_id

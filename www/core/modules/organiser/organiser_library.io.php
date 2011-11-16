@@ -1047,75 +1047,7 @@ class OrganiserLibraryIO {
 	
 	private function todo_view()
 	{
-		global $user;
-		
-		$table_io = new TableIO("OverviewTable");
-		
-		$table_io->add_row("","symbol",false,16);
-		$table_io->add_row("Name","name",false,null);
-		$table_io->add_row("End Date","date",false,null);
-		$table_io->add_row("End Time","time",false,null);
-		$table_io->add_row("User","user",false,null);
-		$table_io->add_row("","status",false,16);
-		
-		$template = new Template("template/organiser/views/todo.html");
-		
-		$content_array = array();	
-		
-		if (is_array($this->todo_array) and count($this->todo_array) >= 1)
-		{
-			foreach($this->todo_array as $key => $value)
-			{
-				$column_array = array();
-				
-				$user = new User($value[user_id]);
-				
-				$todo_datetime_handler = new DatetimeHandler($value[enddate]." ".$value[endtime]);
-				$today_datetime_handler = new DatetimeHandler(date("Y-m-d H:i:s"));
-				
-				if ($value[symbol])
-				{
-					$column_array[symbol] = "<img src='".$value[symbol]."' alt='' />";
-				}
-				else
-				{
-					$column_array[symbol] = "<img src='images/icons/todo.png' alt='' />";
-				}
-				
-				$column_array[name] = $value[name];
-				$column_array[date] = $todo_datetime_handler->get_formatted_string("j-n-Y");
-				$column_array[time] = $todo_datetime_handler->get_formatted_string("H:i");
-				$column_array[user] = $user->get_full_name(false);
-				
-				if ($value[done] == true)
-				{
-					$column_array[status] = "<img src='images/icons/status_ok.png' alt='' />";
-				}
-				else
-				{
-					if ($todo_datetime_handler->distance($today_datetime_handler) > 0)
-					{
-						$column_array[status] = "<img src='images/icons/notice.png' alt='' />";
-					}
-					else
-					{
-						$column_array[status] = "";
-					}	
-				}
-				array_push($content_array, $column_array);
-			}
-		}
-		else
-		{
-			$content_array = null;
-			$table_io->override_last_line("<span class='italic'>No entries found!</span>");
-		}
-		
-		$table_io->add_content_array($content_array);	
-			
-		$template->set_var("table", $table_io->get_content($_GET[page]));	
-		
-		return $template->get_string();
+		// Later
 	}
 	
 	/**

@@ -45,8 +45,27 @@ class ProjectAdminIO
 				$project_security->is_access(2, false) == true or
 				$project_security->is_access(4, false) == true or
 				$project_security->is_access(7, false) == true)
-			{
-				$table_io = new TableIO("OverviewTable");
+			{		
+				$argument_array = array();
+				$argument_array[0][0] = "project_id";
+				$argument_array[0][1] = $_GET[project_id];
+				
+				$list = new List_IO("ProjectPermission", "/core/modules/project/project_admin.ajax.php", "list_project_permissions", "count_project_permissions", $argument_array, "ProjectAjaxMyProjects");
+				
+				$list->add_row("", "symbol", false, "16px");
+				$list->add_row("User/Group","name",true,null);
+				$list->add_row("Type","type",true,null);
+				$list->add_row("Full Name","fullname",true,null);
+				$list->add_row("Created by","createdby",true,null);
+				$list->add_row("RE","re",false,"25px");
+				$list->add_row("SR","sr",false,"25px");
+				$list->add_row("WR","wr",false,"25px");
+				$list->add_row("SW","sw",false,"25px");
+				$list->add_row("RA","ra",false,"25px");
+				$list->add_row("DE","de",false,"25px");
+				$list->add_row("SP","sp",false,"25px");
+				$list->add_row("E","e",false,"16px");
+				$list->add_row("D","d",false,"16px");
 				
 				$template = new Template("template/projects/admin/permission.html");
 				
@@ -68,252 +87,7 @@ class ProjectAdminIO
 				
 				$template->set_var("add_ou_params", $add_ou_params);
 				
-				$table_io->add_row("User/Group","name",false,null);
-				$table_io->add_row("Type","type",false,null);
-				$table_io->add_row("Full Name","fullname",false,null);
-				$table_io->add_row("Created by","createdby",false,null);
-				$table_io->add_row("RE","re",false,25);
-				$table_io->add_row("SR","sr",false,25);
-				$table_io->add_row("WR","wr",false,25);
-				$table_io->add_row("SW","sw",false,25);
-				$table_io->add_row("RA","ra",false,25);
-				$table_io->add_row("DE","de",false,25);
-				$table_io->add_row("SP","sp",false,25);
-				$table_io->add_row("E","e",false,16);
-				$table_io->add_row("D","d",false,16);
-				
-				$content_array = array();	
-					
-				if (is_array($project_permission_array) and count($project_permission_array) >= 1)
-				{	
-					foreach ($project_permission_array as $key => $value)
-					{	
-						$column_array = array();
-				
-						$project_permission = ProjectPermission::get_instance($value);
-				
-						$user_id = $project_permission->get_user_id();
-						$group_id = $project_permission->get_group_id();
-						$organ_unit_id = $project_permission->get_organisation_unit_id();
-						
-						if ($user_id)
-						{
-							$permission_user = new User($user_id);
-							$column_array[name] = $permission_user->get_username();
-							$column_array[type] = "user";
-							$column_array[fullname] = $permission_user->get_full_name(false);
-						}
-						elseif($group_id)
-						{
-							$group = new Group($group_id);
-							$column_array[name] = $group->get_name();
-							$column_array[type] = "group";
-							$column_array[fullname] = $group->get_name();
-						}
-						else
-						{
-							$organisation_unit = new OrganisationUnit($organ_unit_id);
-							$column_array[name] = $organisation_unit->get_name();
-							$column_array[type] = "organisation unit";
-							$column_array[fullname] = $organisation_unit->get_name();
-						}
-				
-						if ($project_permission->get_owner_id() == null)
-						{
-							$column_array[createdby] = "system";
-						}
-						else
-						{
-							$created_by = new User($project_permission->get_owner_id());
-							$column_array[createdby] = $created_by->get_username();
-						}
-						
-						$permission_array = $project_permission->get_permission_array();
-						
-						if ($project_security->is_access(2, false) or $project->get_owner_id() == $user->get_user_id())
-						{				
-							if ($permission_array[read] == true)
-							{
-								$column_array[re] = "<img src='images/icons/permission_ok_active.png' alt='' />";
-							}
-							else
-							{
-								$column_array[re] = "<img src='images/icons/permission_denied_active.png' alt='' />";
-							}
-						}
-						else
-						{
-							if ($permission_array[read] == true)
-							{
-								$column_array[re] = "<img src='images/icons/permission_ok_active_na.png' alt='' />";
-							}
-							else
-							{
-								$column_array[re] = "<img src='images/icons/permission_denied_active_na.png' alt='' />";
-							}
-						}
-						
-						if ($project_security->is_access(7, false) or $project->get_owner_id() == $user->get_user_id())
-						{
-							if ($permission_array[set_readable] == true)
-							{
-								$column_array[sr] = "<img src='images/icons/permission_ok_active.png' alt='' />";
-							}
-							else
-							{
-								$column_array[sr] = "<img src='images/icons/permission_denied_active.png' alt='' />";
-							}
-						}
-						else
-						{
-							if ($permission_array[set_readable] == true)
-							{
-								$column_array[sr] = "<img src='images/icons/permission_ok_active_na.png' alt='' />";
-							}
-							else
-							{
-								$column_array[sr] = "<img src='images/icons/permission_denied_active_na.png' alt='' />";
-							}
-						}
-						
-						if ($project_security->is_access(4, false) or $project->get_owner_id() == $user->get_user_id())
-						{
-							if ($permission_array[write] == true)
-							{
-								$column_array[wr] = "<img src='images/icons/permission_ok_active.png' alt='' />";
-							}
-							else
-							{
-								$column_array[wr] = "<img src='images/icons/permission_denied_active.png' alt='' />";
-							}
-						}
-						else
-						{
-							if ($permission_array[write] == true)
-							{
-								$column_array[wr] = "<img src='images/icons/permission_ok_active_na.png' alt='' />";
-							}
-							else
-							{
-								$column_array[wr] = "<img src='images/icons/permission_denied_active_na.png' alt='' />";
-							}
-						}
-						
-						if ($project_security->is_access(7, false) or $project->get_owner_id() == $user->get_user_id())
-						{
-							if ($permission_array[set_writeable] == true)
-							{
-								$column_array[sw] = "<img src='images/icons/permission_ok_active.png' alt='' />";
-							}
-							else
-							{
-								$column_array[sw] = "<img src='images/icons/permission_denied_active.png' alt='' />";
-							}
-						}
-						else
-						{
-							if ($permission_array[set_writeable] == true)
-							{
-								$column_array[sw] = "<img src='images/icons/permission_ok_active_na.png' alt='' />";
-							}
-							else
-							{
-								$column_array[sw] = "<img src='images/icons/permission_denied_active_na.png' alt='' />";
-							}
-						}
-						
-						if ($project_security->is_access(7, false))
-						{
-							if ($permission_array[reactivate] == true)
-							{
-								$column_array[ra] = "<img src='images/icons/permission_ok_active.png' alt='' />";
-							}
-							else
-							{
-								$column_array[ra] = "<img src='images/icons/permission_denied_active.png' alt='' />";
-							}
-							
-							if ($permission_array[delete] == true)
-							{
-								$column_array[de] = "<img src='images/icons/permission_ok_active.png' alt='' />";
-							}
-							else
-							{
-								$column_array[de] = "<img src='images/icons/permission_denied_active.png' alt='' />";
-							}
-							
-							if ($permission_array[set_permissions] == true)
-							{
-								$column_array[sp] = "<img src='images/icons/permission_ok_active.png' alt='' />";
-							}
-							else
-							{
-								$column_array[sp] = "<img src='images/icons/permission_denied_active.png' alt='' />";
-							}
-						}
-						else
-						{
-							if ($permission_array[reactivate] == true)
-							{
-								$column_array[ra] = "<img src='images/icons/permission_ok_active_na.png' alt='' />";
-							}
-							else
-							{
-								$column_array[ra] = "<img src='images/icons/permission_denied_active_na.png' alt='' />";
-							}
-							
-							if ($permission_array[delete] == true) {
-								$column_array[de] = "<img src='images/icons/permission_ok_active_na.png' alt='' />";
-							}
-							else
-							{
-								$column_array[de] = "<img src='images/icons/permission_denied_active_na.png' alt='' />";
-							}
-							
-							if ($permission_array[set_permissions] == true)
-							{
-								$column_array[sp] = "<img src='images/icons/permission_ok_active_na.png' alt='' />";
-							}
-							else
-							{
-								$column_array[sp] = "<img src='images/icons/permission_denied_active_na.png' alt='' />";
-							}
-						}
-						
-						$edit_paramquery = $_GET;
-						$edit_paramquery[run] = "admin_permission_edit";
-						$edit_paramquery[id] = $value;
-						$edit_params = http_build_query($edit_paramquery,'','&#38;');
-						
-						$column_array[e][link] = $edit_params;
-						$column_array[e][content] = "E";
-						
-						if ($project_permission->get_intention() == null)
-						{
-							$delete_paramquery = $_GET;
-							$delete_paramquery[run] = "admin_permission_delete";
-							$delete_paramquery[id] = $value;
-							unset($delete_paramquery[sure]);
-							$delete_params = http_build_query($delete_paramquery,'','&#38;');
-							
-							$column_array[d][link] = $delete_params;
-							$column_array[d][content] = "D";
-						}
-						else
-						{
-							$column_array[d][content] = "";
-						}
-						array_push($content_array, $column_array);
-					}
-					
-					$table_io->add_content_array($content_array);	
-				}
-				else
-				{
-					$table_io->override_last_line("<span class='italic'>No results found!</span>");
-				}
-
-				$template->set_var("table", $table_io->get_content($_GET[page]));		
+				$template->set_var("list", $list->get_list());
 		
 				$template->output();
 			}
