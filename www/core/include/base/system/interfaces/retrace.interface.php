@@ -21,16 +21,22 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
+
 /**
- * Value Id Missing Exception
+ * Retace Interface
  * @package base
  */
-class IdMissingException extends Exception
+interface RetraceInterface
 {
-    function __construct($message, $code)
-    {
-    	parent::__construct($message, $code);	
-    }    
+	/**
+	 * @return string
+	 */
+	public static function create_retrace_string();
+	
+	/**
+	 * @param string $retrace_string
+	 * @return array
+	 */
+	public static function resovle_retrace_string($retrace_string);
 }
-
 ?>

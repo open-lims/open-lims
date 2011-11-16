@@ -28,7 +28,6 @@
  * @param string $message
  * @param string $file
  * @param integer $line
- * @todo overhaul
  */
 function error_handler($code, $message, $file, $line)
 {
@@ -38,65 +37,16 @@ function error_handler($code, $message, $file, $line)
 	{
 		if (stripos($message, "Failed to connect to mailserver") === false and stripos($message, "pg_query()") === false)
 		{
-			if (class_exists("Common_IO"))
+			if (class_exists("BasePHPErrorException"))
 			{
-				$in_container = Common_IO::get_in_container();
-			}
-			else
-			{
-				$in_container = false;
-			}
-		
-			if ($in_container == false)
-			{	
-				if (class_exists("Common_IO"))
-				{
-					echo "<br />";
-					echo Common_IO::container_begin("PHP Script Error");
-				}
-				else
-				{
-					echo "<br />";
-					echo "<span class='bold'>PHP Script Error<span>";
-					echo "<br />";
-				}
-			}
-		
-			echo "<br /><span class='bold'>PHP Script Error</span>";
-		
-			switch ($code):
-				case 2:
-					echo "<br />Type: Warning";
-				break;
+				$e = new BasePHPErrorException("PHP Error occurs in: ".$file." on Line ".$line." with Message: ".$message."");
 				
-				default:
-					echo "<br />Type: Error";
-				break;						        
-			endswitch;
-			
-			echo "<br />in: <span class='bold'>".$file."</span> on Line <span class='bold'>".$line."</span>";
-			echo "<br />Message: ".$message;
-		
-			if ($in_container == false)
-			{
-				if (class_exists("Common_IO"))
+				if (class_exists("Error_IO"))
 				{
-					echo Common_IO::container_end();
+					new ErrorIO();
+					$error_io = new Error_IO($e);
+					$error_io->display_error();
 				}
-			}
-		
-			if (class_exists('Database') and $db)
-			{
-				if (isset($session->user_id))
-				{
-					$user_id = $session->user_id;
-				}
-				else
-				{
-					$user_id = null;
-				}
-				$system_log = new SystemLog(null);
-				$system_log->create($user_id, 3, $code, $message, null, $file, $line, serialize($_GET));	
 			}
 			die();
 		}

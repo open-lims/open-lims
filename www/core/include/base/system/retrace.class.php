@@ -25,74 +25,16 @@
 /**
  * 
  */
-require_once("interfaces/misc.interface.php");
+require_once("interfaces/retrace.interface.php");
 
 /**
- * Misc Class
- * Contains misc. static methods
+ * Retrace Class
  * @package base
  */
-class Misc implements MiscInterface
-{
+class Retrace implements RetraceInterface
+{	
 	/**
-	 * @see MiscInterface::calc_size()
-	 * @param integer $byte
-	 * @return string
-	 */
-	public static function calc_size($byte)
-	{
-		if ($byte == 0)
-		{
-		 	$act_filesize = "0&nbsp;Byte";
-		}else
-		{
-		 	$tmp_filesize = floor($byte/1024);
-		 	
-		 	if ($tmp_filesize == 0)
-		 	{
-		 		$act_filesize = $byte."&nbsp;Byte";
-		 	}
-		 	else
-		 	{
-		 		$tmp_filesize = floor($tmp_filesize/1024);
-		 		
-		 		if ($tmp_filesize == 0)
-		 		{
-		 			$rounder = $byte/1024;
-		 			$act_filesize = round($rounder,2)."&nbsp;KiB";
-		 		}
-		 		else
-		 		{
-		 			$tmp_filesize = floor($tmp_filesize/1024);
-		 			if ($tmp_filesize == 0) 
-		 			{
-		 			
-		 				$rounder = $byte/1048576;
-		 				$act_filesize = round($rounder,2)."&nbsp;MiB";
-		 			}
-		 			else
-		 			{
-		 				$tmp_filesize = floor($tmp_filesize/1024);
-		 				if ($tmp_filesize == 0)
-		 				{
-		 					$rounder = $byte/1073741824;
-		 					$act_filesize = round($rounder,2)."&nbsp;GiB";
-		 				}
-		 				else
-		 				{
-		 					$tmp_filesize = floor($tmp_filesize/1024);
-		 					$rounder = $byte/1099511627776;
-		 					$act_filesize = round($rounder,2)."&nbsp;TiB";	
-		 				}
-		 			}
-		 		}
-		 	}
-		 }
-		 return $act_filesize;
-	}
-	
-	/**
-	 * @see MiscInterface::create_retrace_string()
+	 * @see RetraceInterface::create_retrace_string()
 	 * @return string
 	 */
 	public static function create_retrace_string()
@@ -150,7 +92,7 @@ class Misc implements MiscInterface
 	}
 	
 	/**
-	 * @see MiscInterface::resovle_retrace_string()
+	 * @see RetraceInterface::resovle_retrace_string()
 	 * @param string $retrace_string
 	 * @return array
 	 */

@@ -641,7 +641,7 @@ class SampleIO
 						$paramquery[sample_id] = $_GET[sample_id];
 						$paramquery[dialog] = $value[type];
 						$paramquery[key] = $key;
-						$paramquery[retrace] = Misc::create_retrace_string();
+						$paramquery[retrace] = Retrace::create_retrace_string();
 						unset($paramquery[nextpage]);
 						$params = http_build_query($paramquery,'','&#38;');
 
@@ -1236,7 +1236,7 @@ class SampleIO
 										{
 											if ($_GET[retrace])
 											{
-												$params = http_build_query(Misc::resovle_retrace_string($_GET[retrace]),'','&#38;');
+												$params = http_build_query(Retrace::resovle_retrace_string($_GET[retrace]),'','&#38;');
 											}
 											else
 											{

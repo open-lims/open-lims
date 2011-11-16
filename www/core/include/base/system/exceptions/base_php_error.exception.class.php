@@ -21,29 +21,16 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /**
- * Misc Interface
+ * Base PHP Error Exception
  * @package base
  */
-interface MiscInterface
+class BasePHPErrorException extends BaseException
 {
-	/**
-	 * Returns a byte-value in KiB/MiB etc.
-	 * @param integer $byte
-	 * @return string
-	 */
-	public static function calc_size($byte);
-	
-	/**
-	 * @return string
-	 */
-	public static function create_retrace_string();
-	
-	/**
-	 * @param string $retrace_string
-	 * @return array
-	 */
-	public static function resovle_retrace_string($retrace_string);
+    function __construct($message = null)
+    {
+    	parent::__construct(true, false, false, $message, null);
+    }
 }
+
 ?>

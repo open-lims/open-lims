@@ -152,8 +152,8 @@ class ProjectIO
 				$template->set_var("created_at",$project->get_datetime());
 				$template->set_var("template",$project->get_template_name());
 				$template->set_var("permissions","");
-				$template->set_var("size",Misc::calc_size($project->get_filesize()));
-				$template->set_var("quota",Misc::calc_size($project->get_quota()));
+				$template->set_var("size",Convert::convert_byte_1024($project->get_filesize()));
+				$template->set_var("quota",Convert::convert_byte_1024($project->get_quota()));
 				
 				$owner_paramquery = array();
 				$owner_paramquery[username] = $_GET[username];
@@ -319,7 +319,7 @@ class ProjectIO
 							$paramquery[project_id] = $_GET[project_id];
 							$paramquery[dialog] = $value[type];
 							$paramquery[key] = $key;
-							$paramquery[retrace] = Misc::create_retrace_string();
+							$paramquery[retrace] = Retrace::create_retrace_string();
 							unset($paramquery[nextpage]);
 							$params = http_build_query($paramquery,'','&#38;');
 	
@@ -368,7 +368,7 @@ class ProjectIO
 				$paramquery[run] = "common_dialog";
 				$paramquery[folder_id] = ProjectFolder::get_supplementary_folder($_GET[project_id]);
 				$paramquery[dialog] = "file_add";
-				$paramquery[retrace] = Misc::create_retrace_string();
+				$paramquery[retrace] = Retrace::create_retrace_string();
 				unset($paramquery[nextpage]);
 				$supplementary_params = http_build_query($paramquery,'','&#38;');
 				
@@ -1049,7 +1049,7 @@ class ProjectIO
 										{
 											if ($_GET[retrace])
 											{
-												$params = http_build_query(Misc::resovle_retrace_string($_GET[retrace]),'','&#38;');
+												$params = http_build_query(Retrace::resovle_retrace_string($_GET[retrace]),'','&#38;');
 											}
 											else
 											{

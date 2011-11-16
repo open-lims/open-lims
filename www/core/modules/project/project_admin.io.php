@@ -2119,7 +2119,7 @@ class ProjectAdminIO
 				}
 				else
 				{
-					$template->set_var("quota", Misc::calc_size($project->get_quota()));
+					$template->set_var("quota", Convert::convert_byte_1024($project->get_quota()));
 				}
 			
 				$permission_paramquery = $_GET;

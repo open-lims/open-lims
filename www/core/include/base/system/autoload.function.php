@@ -37,10 +37,6 @@ function __autoload($classname)
 		$path_prefix = "";
 	}
 	
-	$classes['Communicator']				= $path_prefix."core/include/base/communicator.class.php";	
-	
-	// Neu
-	
 	// Environment
 	$classes['DatetimeHandler']				= $path_prefix."core/include/base/environment/datetime_handler.class.php";
 	$classes['Language']					= $path_prefix."core/include/base/environment/language.class.php";
@@ -60,16 +56,19 @@ function __autoload($classname)
 	// System
 	$classes['EventListenerInterface']		= $path_prefix."core/include/base/system/interfaces/event_listener.interface.php"; 
 	
-	$classes['BaseException']				= $path_prefix."core/include/base/system/exceptions/base_exception.class.php";
-	$classes['IdMissingException']			= $path_prefix."core/include/base/system/exceptions/id_missing_exception.class.php";
+	$classes['BaseException']				= $path_prefix."core/include/base/system/exceptions/base.exception.class.php";
+	$classes['BasePHPErrorException']		= $path_prefix."core/include/base/system/exceptions/base_php_error.exception.class.php";
 	
+	$classes['Convert']				= $path_prefix."core/include/base/system/convert.class.php";
 	$classes['ErrorLanguage']				= $path_prefix."core/include/base/system/error_language.class.php";
 	$classes['EventHandler']				= $path_prefix."core/include/base/system/event_handler.class.php";
 	$classes['ExceptionHandler']			= $path_prefix."core/include/base/system/exception_handler.class.php";
 	$classes['System']						= $path_prefix."core/include/base/system/system.class.php";
+	$classes['Mail']						= $path_prefix."core/include/base/mail.class.php";	
 	$classes['ModuleDialog']				= $path_prefix."core/include/base/system/module_dialog.class.php";
 	$classes['ModuleLink']					= $path_prefix."core/include/base/system/module_link.class.php";
 	$classes['ModuleNavigation']			= $path_prefix."core/include/base/system/module_navigation.class.php";
+	$classes['Retrace']						= $path_prefix."core/include/base/system/retrace.class.php";
 	
 	$classes['System_Wrapper']				= $path_prefix."core/include/base/system/system.wrapper.class.php";
 	

@@ -154,11 +154,11 @@ class Auth implements AuthInterface
 	    			{
 	    				$new_password = User::generate_password();
 	    			
-	    				$communicator = new Communicator("MAIL");
-	    				$communicator->set_recipient($user_id);
-	    				$communicator->set_subject("Your New Open-LIMS Password");
-	    				$communicator->set_text("Your new password: ".$new_password);
-	    				$success = $communicator->send();
+	    				$mail = new Mail();
+	    				$mail->set_recipient($user_id);
+	    				$mail->set_subject("Your New Open-LIMS Password");
+	    				$mail->set_text("Your new password: ".$new_password);
+	    				$success = $mail->send();
 	    			
 		    			if ($success == true)
 		    			{

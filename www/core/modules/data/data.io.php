@@ -793,7 +793,7 @@ class DataIO
 			}
 			else
 			{
-				throw new IdMissingException("", 0);
+				throw new FolderIDMissingException();
 			}
 		}
 		
@@ -894,7 +894,7 @@ class DataIO
 			}
 			else
 			{
-				throw new IdMissingException("", 0);
+				throw new FolderIDMissingException();
 			}
 		}
 		
@@ -1019,7 +1019,7 @@ class DataIO
 			{
 				if ($_GET[retrace])
 				{
-					$params = http_build_query(Misc::resovle_retrace_string($_GET[retrace]),'','&#38;');
+					$params = http_build_query(Retrace::resovle_retrace_string($_GET[retrace]),'','&#38;');
 				}
 				else
 				{
@@ -1190,11 +1190,11 @@ class DataIO
 			$paramquery = $_GET;
 			$paramquery[run] = "module_value_change";
 			$paramquery[dialog] = "user_quota";
-			$paramquery[retrace] = Misc::create_retrace_string();
+			$paramquery[retrace] = Retrace::create_retrace_string();
 			$params = http_build_query($paramquery, '', '&#38;');
 			
 			$return_array = array();
-			$return_array[value] = Misc::calc_size($data_user_data->get_quota());
+			$return_array[value] = Convert::convert_byte_1024($data_user_data->get_quota());
 			$return_array[params] = $params;
 			return $return_array;	
 		}

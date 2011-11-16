@@ -496,8 +496,6 @@ class ValueIO
 	 */
 	public static function history()
 	{
-		global $misc;
-		
 		if ($_GET[value_id])
 		{
 			$value_obj = Value::get_instance($_GET[value_id]);

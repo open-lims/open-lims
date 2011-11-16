@@ -101,7 +101,7 @@ class FileAjax extends Ajax
 					$file = File::get_instance($list_array[$key][id]);
 					$list_array[$key][symbol] = "<img src='".$file->get_icon()."' alt='' style='border:0;' />";
 					
-					$list_array[$key][size] = Misc::calc_size($list_array[$key][size]);
+					$list_array[$key][size] = Convert::convert_byte_1024($list_array[$key][size]);
 					
 					$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
 					$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");

@@ -29,7 +29,7 @@ class ProjectDataIO
 {
 	public static function get_used_project_space()
 	{
-		return Misc::calc_size(Project::get_used_project_space());
+		return Convert::convert_byte_1024(Project::get_used_project_space());
 	}
 	
 	/**
@@ -44,11 +44,11 @@ class ProjectDataIO
 			$paramquery = $_GET;
 			$paramquery[run] = "module_value_change";
 			$paramquery[dialog] = "project_quota";
-			$paramquery[retrace] = Misc::create_retrace_string();
+			$paramquery[retrace] = Retrace::create_retrace_string();
 			$params = http_build_query($paramquery, '', '&#38;');
 			
 			$return_array = array();
-			$return_array[value] = Misc::calc_size($project_user_data->get_quota());
+			$return_array[value] = Convert::convert_byte_1024($project_user_data->get_quota());
 			$return_array[params] = $params;
 			return $return_array;	
 		}
@@ -115,7 +115,7 @@ class ProjectDataIO
 			{
 				if ($_GET[retrace])
 				{
-					$params = http_build_query(Misc::resovle_retrace_string($_GET[retrace]),'','&#38;');
+					$params = http_build_query(Retrace::resovle_retrace_string($_GET[retrace]),'','&#38;');
 				}
 				else
 				{

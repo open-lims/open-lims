@@ -105,7 +105,7 @@ class FileIO
 				$template->set_var("name",$file->get_name());
 				$template->set_var("path",$folder->get_object_path());
 				
-				$template->set_var("size",Misc::calc_size($file->get_size()));
+				$template->set_var("size",Convert::convert_byte_1024($file->get_size()));
 				$template->set_var("size_in_byte",$file->get_size());
 				
 				$template->set_var("creation_datetime",$file->get_datetime());
@@ -132,14 +132,14 @@ class FileIO
 				$paramquery = $_GET;
 				$paramquery[action] = "file_update";
 				$paramquery[version] = $internal_revision;
-				$paramquery[retrace] = Misc::create_retrace_string();
+				$paramquery[retrace] = Retrace::create_retrace_string();
 				$params = http_build_query($paramquery,'','&#38;');	
 				$template->set_var("update_params",$params);
 				
 				$paramquery = $_GET;
 				$paramquery[action] = "file_update_minor";
 				$paramquery[version] = $file->get_internal_revision();
-				$paramquery[retrace] = Misc::create_retrace_string();
+				$paramquery[retrace] = Retrace::create_retrace_string();
 				$params = http_build_query($paramquery,'','&#38;');	
 				$template->set_var("update_minor_params",$params);
 				

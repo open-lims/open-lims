@@ -60,8 +60,6 @@ $transaction = new Transaction();
 require_once($path_prefix."../../include/base/user/group.class.php");	
 require_once($path_prefix."../../include/base/user/user.class.php");
 
-require_once($path_prefix."../../include/base/misc.class.php");
-
 require_once($path_prefix."../../include/base/security/session.class.php");
 
 require_once($path_prefix."../../include/base/system/runtime_data.class.php");

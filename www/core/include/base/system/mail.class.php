@@ -24,37 +24,18 @@
 /**
  * 
  */
-require_once("interfaces/communicator.interface.php");
+require_once("interfaces/mail.interface.php");
 
 /**
- * Communicator Class
+ * Mail Class
  * Sends information via mail
  * @package base
  */
-class Communicator implements CommunicatorInterface {
-
-	private $type;
-
+class Mail implements MailInterface
+{
 	private $user_id;
 	private $subject;
 	private $text;
-
-	/**
-	 * @see CommunicatorInterface::__construct()
-	 * @param string $type Only MAIL is possbile yet
-	 */
-    function __construct($type)
-    {
-    	switch($type):
-	    	case "MAIL":
-	    		$this->type = 1;
-	    	break;    	
-	    	
-	    	default:
-	    		$this->type = null;
-	    	break;
-    	endswitch;
-    }
     
     function __destruct()
     {
@@ -74,7 +55,7 @@ class Communicator implements CommunicatorInterface {
      */
     public function set_recipient($user_id)
     {
-    	if ($this->type != null and is_numeric($user_id))
+    	if (is_numeric($user_id))
     	{
     		$this->user_id = $user_id;
     	}
@@ -91,14 +72,7 @@ class Communicator implements CommunicatorInterface {
      */
     public function set_subject($subject)
     {
-    	if ($this->type != null)
-    	{
-    		$this->subject = $subject;
-    	}
-    	else
-    	{
-    		return false;
-    	}
+    	$this->subject = $subject;
     }
     
     /**
@@ -108,14 +82,7 @@ class Communicator implements CommunicatorInterface {
      */
     public function set_text($text)
     {
-    	if ($this->type != null)
-    	{
-    		$this->text = $text;
-    	}
-    	else
-    	{
-    		return false;
-    	}
+    	$this->text = $text;
     }
     
     /**
@@ -124,31 +91,21 @@ class Communicator implements CommunicatorInterface {
      */
     public function send()
     {
-    	if ($this->type != null and $this->user_id and $this->subject and $this->text)
+    	if ($this->user_id and $this->subject and $this->text)
     	{
-    		switch($this->type):
-    		
-	    		case 1:
-	    			$user = new User($this->user_id);
-	    			$mail = $user->get_profile("mail");
-	    			
-	    			$header = "From: ".constant("SENDMAIL_FROM")."\r\n";
-	    			
-	    			if (!@mail($mail, $this->subject, $this->text, $header))
-	    			{
-	    				return false;
-	    			}
-	    			else
-	    			{
-	    				return true;
-	    			}
-	    		break;
-    		
-	    		default:
-	    			return false;
-	    		break;
-    		
-    		endswitch;	
+    		$user = new User($this->user_id);
+    		$mail = $user->get_profile("mail");
+    			
+    		$header = "From: ".constant("SENDMAIL_FROM")."\r\n";
+    			
+    		if (@mail($mail, $this->subject, $this->text, $header) == true)
+    		{
+    			return true;
+    		}
+    		else
+    		{
+    			return false;
+    		}
     	}
     	else
     	{

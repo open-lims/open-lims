@@ -23,15 +23,11 @@
 
 
 /**
- * Communicator Interface
+ * Mail Interface
  * @package base
  */  
-interface CommunicatorInterface
+interface MailInterface
 {
-	/**
-	 * @param string $type
-	 */
-	function __construct($type);
 	function __destruct();
 	
 	/**

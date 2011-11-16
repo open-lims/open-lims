@@ -29,7 +29,7 @@ class ContentHandler_IO
 {
 	public static function main()
 	{
-		global $session, $user, $misc, $transaction;
+		global $session, $user, $transaction;
 
 		$template = new Template("template/index_header.html");
 	

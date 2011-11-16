@@ -54,14 +54,14 @@ class Main
 
 		if ($GLOBALS['fatal_error'] == null)
 		{
-			global $db, $misc, $runtime_data, $transaction;
+			global $db, $runtime_data, $transaction;
 			
 			require_once("core/db/db.php");
 			
 			$db = new Database(constant("DB_TYPE"));
 			@$connection_result = $db->db_connect(constant("DB_SERVER"),constant("DB_PORT"),constant("DB_USER"),constant("DB_PASSWORD"),constant("DB_DATABASE"));
 					
-			require_once("include/base/error_handler.php");
+			require_once("include/base/system/error_handler.php");
 			
 			set_error_handler('error_handler');
 			
@@ -82,11 +82,9 @@ class Main
 				require_once("include/base/system/runtime_data.class.php");
 				
 				require_once("include/base/system_fe/system_log.class.php");
-				require_once("include/base/misc.class.php");
 
 				Security::protect_session();
-		
-				$misc = new Misc();
+				
 				$runtime_data = new RuntimeData();
 				
 				try
