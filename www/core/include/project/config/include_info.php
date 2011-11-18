@@ -27,9 +27,8 @@
 	$name 			= "project";
 	
 	$requires[0] 	= "base";
-	$requires[1] 	= "user";
-	$requires[2] 	= "organisation_unit";
-	$requires[3] 	= "data";
-	$requires[4] 	= "item";
-	$requires[5] 	= "template";
+	$requires[1] 	= "organisation_unit";
+	$requires[2] 	= "data";
+	$requires[3] 	= "item";
+	$requires[4] 	= "template";
 ?>

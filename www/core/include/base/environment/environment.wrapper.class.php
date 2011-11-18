@@ -39,7 +39,6 @@ class Environment_Wrapper implements Environment_WrapperInterface
 {
 	/**
 	 * @see SystemFE_WrapperInterface::list_languages()
-	 * @todo implementation
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -48,22 +47,20 @@ class Environment_Wrapper implements Environment_WrapperInterface
 	 */
 	public static function list_languages($order_by, $order_method, $start, $end)
 	{
-		return null;
+		return Environment_Wrapper_Access::list_languages();
 	}
 	
 	/**
 	 * @see SystemFE_WrapperInterface::count_languages()
-	 * @todo implementation
 	 * @return integer
 	 */
 	public static function count_languages()
 	{
-		return null;
+		return Environment_Wrapper_Access::count_languages();
 	}
 	
 	/**
 	 * @see SystemFE_WrapperInterface::list_timezones()
-	 * @todo implementation
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -72,17 +69,16 @@ class Environment_Wrapper implements Environment_WrapperInterface
 	 */
 	public static function list_timezones($order_by, $order_method, $start, $end)
 	{
-		return null;
+		return Environment_Wrapper_Access::list_timezones();
 	}
 	
 	/**
 	 * @see SystemFE_WrapperInterface::count_timezones()
-	 * @todo implementation
 	 * @return integer
 	 */
 	public static function count_timezones()
 	{
-		return null;
+		return Environment_Wrapper_Access::count_timezones();
 	}
 	
 	/**
@@ -109,7 +105,6 @@ class Environment_Wrapper implements Environment_WrapperInterface
 	
 	/**
 	 * @see SystemFE_WrapperInterface::list_measuring_units()
-	 * @todo implementation
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -118,22 +113,20 @@ class Environment_Wrapper implements Environment_WrapperInterface
 	 */
 	public static function list_measuring_units($order_by, $order_method, $start, $end)
 	{
-		return null;
+		return Environment_Wrapper_Access::list_measuring_units($order_by, $order_method, $start, $end);
 	}
 	
 	/**
 	 * @see SystemFE_WrapperInterface::count_measuring_units()
-	 * @todo implementation
 	 * @return integer
 	 */
 	public static function count_measuring_units()
 	{
-		return null;
+		return Environment_Wrapper_Access::count_measuring_units();
 	}
 	
 	/**
 	 * @see SystemFE_WrapperInterface::list_currencies()
-	 * @todo implementation
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -142,16 +135,15 @@ class Environment_Wrapper implements Environment_WrapperInterface
 	 */
 	public static function list_currencies($order_by, $order_method, $start, $end)
 	{
-		return null;
+		return Environment_Wrapper_Access::list_currencies($order_by, $order_method, $start, $end);
 	}
 	
 	/**
 	 * @see SystemFE_WrapperInterface::count_currencies()
-	 * @todo implementation
 	 * @return integer
 	 */
 	public static function count_currencies()
 	{
-		return null;
+		return Environment_Wrapper_Access::count_currencies();
 	}
 }

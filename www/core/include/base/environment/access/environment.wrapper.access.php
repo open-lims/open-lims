@@ -28,6 +28,64 @@
 class Environment_Wrapper_Access
 {	
 	/**
+	 * @todo implementation
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_languages($order_by, $order_method, $start, $end)
+	{
+		return null;
+	}
+	
+	/**
+	 * @return integer
+	 */
+	public static function count_languages()
+	{
+		global $db;
+
+		$sql = "SELECT COUNT(".constant("LANGUAGE_TABLE").".id) AS result " .
+					 "FROM ".constant("LANGUAGE_TABLE")."";
+			
+		$res = $db->db_query($sql);
+		$data = $db->db_fetch_assoc($res);
+
+		return $data[result];
+	}
+	
+	/**
+	 * @todo implementation
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_timezones($order_by, $order_method, $start, $end)
+	{
+		return null;
+	}
+	
+	/**
+	 * @return integer
+	 */
+	public static function count_timezones()
+	{
+		global $db;
+
+		$sql = "SELECT COUNT(".constant("TIMEZONE_TABLE").".id) AS result " .
+					 "FROM ".constant("TIMEZONE_TABLE")."";
+			
+		$res = $db->db_query($sql);
+		$data = $db->db_fetch_assoc($res);
+
+		return $data[result];
+	}
+	
+	/**
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -123,6 +181,65 @@ class Environment_Wrapper_Access
 
 		return $data[result];
 	}
+	
+	/**
+	 * @todo implementation
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_measuring_units($order_by, $order_method, $start, $end)
+	{
+		return null;
+	}
+	
+	/**
+	 * @return integer
+	 */
+	public static function count_measuring_units()
+	{
+		global $db;
+
+		$sql = "SELECT COUNT(".constant("MEASURING_UNIT_TABLE").".id) AS result " .
+					 "FROM ".constant("MEASURING_UNIT_TABLE")."";
+			
+		$res = $db->db_query($sql);
+		$data = $db->db_fetch_assoc($res);
+
+		return $data[result];
+	}
+	
+	/**
+	 * @todo implementation
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_currencies($order_by, $order_method, $start, $end)
+	{
+		return null;
+	}
+	
+	/**
+	 * @return integer
+	 */
+	public static function count_currencies()
+	{
+		global $db;
+
+		$sql = "SELECT COUNT(".constant("CURRENCY_TABLE").".id) AS result " .
+					 "FROM ".constant("CURRENCY_TABLE")."";
+			
+		$res = $db->db_query($sql);
+		$data = $db->db_fetch_assoc($res);
+
+		return $data[result];
+	}
+	
 }
 
 ?>

@@ -123,8 +123,11 @@ class Sample_Access
 	 * @param string $name
 	 * @param integer $owner_id
 	 * @param integer $template_id
-	 * @param string $supplier
+	 * @param string $manufacturer_id
 	 * @param string $comment
+	 * @param integer $language_id
+	 * @param string $date_of_expiry
+	 * @param integer $expiry_warning
 	 * @return integer
 	 */
 	public function create($name, $owner_id, $template_id, $manufacturer_id, $comment, $language_id, $date_of_expiry, $expiry_warning)
@@ -433,7 +436,7 @@ class Sample_Access
 			
 		if ($this->sample_id and $datetime)
 		{
-			$sql = "UPDATE ".constant(":SAMPLE_TABLE")." SET datetime = '".$datetime."' WHERE id = '".$this->sample_id."'";
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET datetime = '".$datetime."' WHERE id = '".$this->sample_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))

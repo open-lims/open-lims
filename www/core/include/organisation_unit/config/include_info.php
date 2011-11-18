@@ -27,5 +27,4 @@
 	$name 			= "organisation_unit";
 		
 	$requires[0] 	= "base";
-	$requires[1]	= "user";
 ?>
