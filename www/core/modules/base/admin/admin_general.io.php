@@ -29,7 +29,19 @@ class AdminGeneralIO
 {	
 	public static function list_languages()
 	{
-		echo "Function will be implemented soon!";	
+		$list = new List_IO("AdminGeneralLanguage", "/core/modules/base/admin/admin_general.ajax.php", "list_languages", "count_languages", $argument_array, "AdminGeneralLanguage");
+		
+		$list->add_row("","symbol",false,"16px");
+		$list->add_row("Name","language_name",true,null);
+		$list->add_row("English Name","english_name",true,null);
+		$list->add_row("ISO 639","iso_639",true,null);
+		$list->add_row("ISO 3166","iso_3166",true,null);
+		
+		$template = new Template("template/base/admin/general/list_languages.html");
+		
+		$template->set_var("list", $list->get_list());
+		
+		$template->output();
 	}
 	
 	public static function list_timezones()
@@ -112,8 +124,7 @@ class AdminGeneralIO
 			break;
 		
 			default:
-				// $tab_io->activate("languages");
-				$tab_io->activate("paper-sizes");
+				$tab_io->activate("languages");
 			break;
 		
 		endswitch;
@@ -138,8 +149,7 @@ class AdminGeneralIO
 			break;
 		
 			default:
-				// self::list_languages();
-				self::list_paper_sizes();
+				self::list_languages();
 			break;
 		endswitch;
 	}

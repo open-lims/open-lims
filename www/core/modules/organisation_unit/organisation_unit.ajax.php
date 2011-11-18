@@ -335,7 +335,7 @@ class OrganisationUnitAjax extends Ajax
 		}
 	}
 	
-	public function list_organisation_units_by_user_id($json_row_array, $json_argument_array,  $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	public function list_organisation_units_by_user_id($json_row_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		if ($get_array)
 		{

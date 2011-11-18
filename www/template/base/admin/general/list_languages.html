@@ -1,41 +1,7 @@
-<script>
-
-$(document).ready(function()
-{
-	var get_array = getQueryParams(document.location.search);
-	
-	function load_content(sortvalue, sortmethod, page)
-	{
-		$.ajax(
-		{
-			type: "GET",
-			url: "core/modules/base/admin/admin_general.ajax.php",
-			data: "session_id="+get_array['session_id']+"&run=list_languages&sortvalue="+sortvalue+"&sortmethod="+sortmethod+"&page="+page,
-			success: function(data)
-			{
-				$("#BaseAdminAjaxContent").contents().detach();
-				$("#BaseAdminAjaxContent").append(data);
-			}
-		});
-	}
-	
-	var sortvalue = "";
-	var sortmethod = "";
-	var page = 0;
-	
-	load_content(sortvalue, sortmethod, page);
-	
-});
-
-</script>
-
 <br />
 
 <!-- CONTAINER BEGIN ("Languages") -->
 
-<div id='BaseAdminAjaxContent'>
-
-
-</div>
+[[LIST]]
 
 <!-- CONTAINER END () -->

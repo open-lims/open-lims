@@ -38,52 +38,41 @@ class AdminGeneralAjax extends Ajax
 		parent::__construct();
 	}
 	
-	public function list_languages($page, $sortvalue, $sortmethod)
+	public function list_languages($json_row_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{		
-		$list = new ListStat_IO(Environment_Wrapper::count_languages(), 20, "OrganisationUnitAdminListPage");
-
-		$list->add_row("","symbol",false,"16px");
-		$list->add_row("Name","name",true,null,"BaseGeneralAdminListSortName");
-		$list->add_row("English Name","english_name",true,null,"BaseGeneralAdminListSortEnglishName");
-		$list->add_row("ISO 639/3166","iso",false,null);
-
+		$argument_array = json_decode($json_argument_array);
 		
-		if ($page)
+		$list_request = new ListRequest_IO();
+		$list_request->set_row_array($json_row_array);
+	
+		if (!is_numeric($entries_per_page) or $entries_per_page < 1)
 		{
-			if ($sortvalue and $sortmethod)
-			{
-				$result_array = Environment_Wrapper::list_languages($sortvalue, $sortmethod, ($page*20)-20, ($page*20));
-			}
-			else
-			{
-				$result_array = Environment_Wrapper::list_languages(null, null, ($page*20)-20, ($page*20));
-			}				
-		}
-		else
-		{
-			if ($sortvalue and $sortmethod)
-			{
-				$result_array = Environment_Wrapper::list_languages($sortvalue, $sortmethod, 0, 20);
-			}
-			else
-			{
-				$result_array = Environment_Wrapper::list_languages(null, null, 0, 20);
-			}	
+			$entries_per_page = 20;
 		}
 		
-		if (is_array($result_array) and count($result_array) >= 1)
+		$list_array = Environment_Wrapper::list_languages($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+	
+		
+		if (is_array($list_array) and count($list_array) >= 1)
 		{
-			foreach($result_array as $key => $value)
+			foreach($list_array as $key => $value)
 			{
-				
+				$list_array[$key][symbol] = "<img src='images/icons/language.png' alt='N' border='0' />";
 			}
 		}
 		else
 		{
-			$list->override_last_line("<span class='italic'>No results found!</span>");
+			$list_request->override_last_line("<span class='italic'>No results found!</span>");
 		}
 			
-		echo $list->get_list($result_array, $page);
+		$list_request->set_array($list_array);
+		
+		return $list_request->get_page($page);
+	}
+	
+	public function count_languages($json_argument_array)
+	{
+		return Environment_Wrapper::count_languages();
 	}
 	
 	public function list_timezones($page, $sortvalue, $sortmethod)
@@ -299,8 +288,13 @@ class AdminGeneralAjax extends Ajax
 			switch($_GET[run]):
 	
 				case "list_languages":
-					$this->list_languages($_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+					echo $this->list_languages($_POST[row_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
+				
+				case "count_languages":
+					echo $this->count_languages($_POST[argument_array]);
+				break;
+				
 				
 				case "list_timezones":
 					$this->list_timezones($_GET[page], $_GET[sortvalue], $_GET[sortmethod]);

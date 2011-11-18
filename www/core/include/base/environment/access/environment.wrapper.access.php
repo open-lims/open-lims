@@ -28,7 +28,6 @@
 class Environment_Wrapper_Access
 {	
 	/**
-	 * @todo implementation
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -37,7 +36,83 @@ class Environment_Wrapper_Access
 	 */
 	public static function list_languages($order_by, $order_method, $start, $end)
 	{
-		return null;
+		global $db;
+	
+		if ($order_by and $order_method)
+		{
+			if ($order_method == "asc")
+			{
+				$sql_order_method = "ASC";
+			}
+			else
+			{
+				$sql_order_method = "DESC";
+			}
+			
+			switch($order_by):
+			
+				case "english_name":
+					$sql_order_by = "ORDER BY english_name ".$sql_order_method;
+				break;
+				
+				case "language_name":
+					$sql_order_by = "ORDER BY language_name ".$sql_order_method;
+				break;
+				
+				case "iso_639":
+					$sql_order_by = "ORDER BY iso_639 ".$sql_order_method;
+				break;
+				
+				case "iso_3166":
+					$sql_order_by = "ORDER BY iso_3166 ".$sql_order_method;
+				break;
+						
+				default:
+					$sql_order_by = "ORDER BY english_name ASC";
+				break;
+			
+			endswitch;
+		}
+		else
+		{
+			$sql_order_by = "ORDER BY english_name ASC";
+		}
+		
+		$sql = "SELECT ".constant("LANGUAGE_TABLE").".id, " .
+					"".constant("LANGUAGE_TABLE").".english_name, " .
+					"".constant("LANGUAGE_TABLE").".language_name, " .
+					"".constant("LANGUAGE_TABLE").".iso_639, " .
+					"".constant("LANGUAGE_TABLE").".iso_3166 " .
+					"FROM ".constant("LANGUAGE_TABLE")." " .
+					"".$sql_order_by."";
+		
+		$return_array = array();
+		
+		$res = $db->db_query($sql);
+		
+		if (is_numeric($start) and is_numeric($end))
+		{
+			for ($i = 0; $i<=$end-1; $i++)
+			{
+				if (($data = $db->db_fetch_assoc($res)) == null)
+				{
+					break;
+				}
+				
+				if ($i >= $start)
+				{
+					array_push($return_array, $data);
+				}
+			}
+		}
+		else
+		{
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array, $data);
+			}
+		}
+		return $return_array;
 	}
 	
 	/**
@@ -57,7 +132,6 @@ class Environment_Wrapper_Access
 	}
 	
 	/**
-	 * @todo implementation
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -66,7 +140,73 @@ class Environment_Wrapper_Access
 	 */
 	public static function list_timezones($order_by, $order_method, $start, $end)
 	{
-		return null;
+		global $db;
+	
+		if ($order_by and $order_method)
+		{
+			if ($order_method == "asc")
+			{
+				$sql_order_method = "ASC";
+			}
+			else
+			{
+				$sql_order_method = "DESC";
+			}
+			
+			switch($order_by):
+			
+				case "title":
+					$sql_order_by = "ORDER BY title ".$sql_order_method;
+				break;
+				
+				case "deviation":
+					$sql_order_by = "ORDER BY deviation ".$sql_order_method;
+				break;
+						
+				default:
+					$sql_order_by = "ORDER BY title ASC";
+				break;
+			
+			endswitch;
+		}
+		else
+		{
+			$sql_order_by = "ORDER BY title ASC";
+		}
+		
+		$sql = "SELECT ".constant("TIMEZONE_TABLE").".id, " .
+					"".constant("TIMEZONE_TABLE").".title, " .
+					"".constant("TIMEZONE_TABLE").".deviation " .
+					"FROM ".constant("TIMEZONE_TABLE")." " .
+					"".$sql_order_by."";
+		
+		$return_array = array();
+		
+		$res = $db->db_query($sql);
+		
+		if (is_numeric($start) and is_numeric($end))
+		{
+			for ($i = 0; $i<=$end-1; $i++)
+			{
+				if (($data = $db->db_fetch_assoc($res)) == null)
+				{
+					break;
+				}
+				
+				if ($i >= $start)
+				{
+					array_push($return_array, $data);
+				}
+			}
+		}
+		else
+		{
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array, $data);
+			}
+		}
+		return $return_array;
 	}
 	
 	/**
@@ -212,7 +352,6 @@ class Environment_Wrapper_Access
 	}
 	
 	/**
-	 * @todo implementation
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -221,7 +360,74 @@ class Environment_Wrapper_Access
 	 */
 	public static function list_currencies($order_by, $order_method, $start, $end)
 	{
-		return null;
+		global $db;
+	
+		if ($order_by and $order_method)
+		{
+			if ($order_method == "asc")
+			{
+				$sql_order_method = "ASC";
+			}
+			else
+			{
+				$sql_order_method = "DESC";
+			}
+			
+			switch($order_by):
+			
+				case "name":
+					$sql_order_by = "ORDER BY name ".$sql_order_method;
+				break;
+				
+				case "iso_4217":
+					$sql_order_by = "ORDER BY iso_4217 ".$sql_order_method;
+				break;
+						
+				default:
+					$sql_order_by = "ORDER BY name ASC";
+				break;
+			
+			endswitch;
+		}
+		else
+		{
+			$sql_order_by = "ORDER BY name ASC";
+		}
+		
+		$sql = "SELECT ".constant("CURRENCY_TABLE").".id, " .
+					"".constant("CURRENCY_TABLE").".name, " .
+					"".constant("CURRENCY_TABLE").".symbol, " .
+					"".constant("CURRENCY_TABLE").".iso_4217 " .
+					"FROM ".constant("CURRENCY_TABLE")." " .
+					"".$sql_order_by."";
+		
+		$return_array = array();
+		
+		$res = $db->db_query($sql);
+		
+		if (is_numeric($start) and is_numeric($end))
+		{
+			for ($i = 0; $i<=$end-1; $i++)
+			{
+				if (($data = $db->db_fetch_assoc($res)) == null)
+				{
+					break;
+				}
+				
+				if ($i >= $start)
+				{
+					array_push($return_array, $data);
+				}
+			}
+		}
+		else
+		{
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array, $data);
+			}
+		}
+		return $return_array;
 	}
 	
 	/**

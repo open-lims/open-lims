@@ -47,7 +47,7 @@ class Environment_Wrapper implements Environment_WrapperInterface
 	 */
 	public static function list_languages($order_by, $order_method, $start, $end)
 	{
-		return Environment_Wrapper_Access::list_languages();
+		return Environment_Wrapper_Access::list_languages($order_by, $order_method, $start, $end);
 	}
 	
 	/**
