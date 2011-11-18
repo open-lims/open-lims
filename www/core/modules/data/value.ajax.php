@@ -136,7 +136,6 @@ class ValueAjax extends Ajax
 				$counter++;
 			}
 			$template->set_var("option",$options);
-			
 			$html = $template->get_string();			
 			$html_caption = "Add Value";
 			$button_handler = "
@@ -179,27 +178,31 @@ class ValueAjax extends Ajax
 				$('#DataBrowserAddValue').change(function(){
 					load_additional_content();
 				});
-				
 				function load_additional_content()
 				{
 					var value_id = $('#DataBrowserAddValue option:selected').val();
 					$.ajax({
 						type : \"GET\",
 						url : \"../../../core/modules/data/value.ajax.php\",
-						data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&run=add_value&value_id=\"+value_id, //&folder_id=".$_GET['folder_id']."
+						data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&run=add_value&value_id=\"+value_id,
 						success : function(data) {
+							$('#AjaxLoadedContent').find('.jspVerticalBar').show();
 							$('#AjaxLoadedContent').children('.jspContainer').children('.jspPane').html(data);
 							scrollAPI.reinitialise();
 							var content_height = scrollAPI.getContentHeight();
-							if(content_height > 300)
+							if(content_height > 320)
 							{	
-								$('#AjaxLoadedContent').children('.jspContainer').css('height',300);
+								$('#AjaxLoadedContent').children('.jspContainer').css('height',320);
 							}
 							else
 							{
 								$('#AjaxLoadedContent').children('.jspContainer').css('height',content_height);
 							} 
 							scrollAPI.reinitialise();
+							if($('#AjaxLoadedContent').find('.jspDrag').height() == content_height)
+							{
+								$('#AjaxLoadedContent').find('.jspVerticalBar').hide();
+							}
 							if($('#AjaxLoadedContent').find('.autofield').length > 0)
 							{
 								var auto_field = new autofield(undefined);

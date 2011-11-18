@@ -52,6 +52,12 @@ class DataAjax extends Ajax
 		$folder_id = $argument_array[0][1];
 		$virtual_folder_id = $argument_array[1][1];
 		
+		if (!$folder_id and !$virtual_folder_id)
+		{
+			$data_path = new DataPath(null,null);
+			$folder_id = $data_path->get_folder_id();
+		}
+		
 		if (is_numeric($folder_id) or is_numeric($virtual_folder_id))
 		{
 			$list_request = new ListRequest_IO();

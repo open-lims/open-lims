@@ -145,7 +145,7 @@ class List_IO
 			$template->set_var("display_header", false);
 		}
     	
-		$head .= "<table class='OverviewTable'><thead><tr>";
+		$head .= "<table class='ListTable'><thead><tr>";
 		
 		foreach ($this->rows as $key => $value)
 		{

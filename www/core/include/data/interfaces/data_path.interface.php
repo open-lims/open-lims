@@ -75,5 +75,10 @@ interface DataPathInterface
 	 * Deletes the stack
 	 */
 	public function delete_stack();
+	
+	/**
+     * @return integer
+     */
+    public function get_folder_id();
 }
 ?>

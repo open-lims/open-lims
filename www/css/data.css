@@ -93,11 +93,20 @@ background-color:#c3c3c3;
 .DataBrowserFileSelected
 {
 background-color:#fcfcfc;
-outline: solid #669acc 2px;
+}
 
-/* zoom: 1; */
-/* filter: alpha(opacity=50); */
-/* opacity: 0.5; */
+.ListTable #DataBrowserAjax tr td
+{
+padding: 0px 4px;
+border-bottom:solid white 2px;
+border-top:solid white 2px;
+}
+
+.ListTable #DataBrowserAjax .trLightGrey td
+{
+padding: 0px 4px;
+border-bottom:solid #e0e0e0 2px;
+border-top:solid #e0e0e0 2px;
 }
 
 #DataBrowserFileDialog

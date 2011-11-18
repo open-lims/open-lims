@@ -159,11 +159,11 @@ class DataBrowserAjax extends Ajax
 		$folder = Folder::get_instance($folder_id);
 		if($folder->is_write_access())
 		{
-		//	if($folder->can_add_folder())
-		//	{
+			if($folder->can_add_folder())
+			{
 				$add_folder_link = "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=data&folder_id=".$folder_id."&run=add_folder";
 				$html .= "<img src='images/icons/upload.png' alt='' /><a href=\"javascript:data_browser.open_link_in_ui('folder','".$add_folder_link."');\">Add Folder</a><br/>";
-		//	}
+			}
 			$add_file_link = "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=data&folder_id=".$folder_id."&run=add_file";
 			$add_value_link = "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=data&folder_id=".$folder_id."&run=add_value";
 			$html .= "<img src='images/icons/upload.png' alt='' /><a href=\"javascript:data_browser.open_link_in_ui('file','".$add_file_link."');\">Add File(s)</a><br/>";
