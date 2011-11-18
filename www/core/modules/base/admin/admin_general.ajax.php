@@ -75,6 +75,44 @@ class AdminGeneralAjax extends Ajax
 		return Environment_Wrapper::count_languages();
 	}
 	
+	public function list_currencies($json_row_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	{
+		$argument_array = json_decode($json_argument_array);
+		
+		$list_request = new ListRequest_IO();
+		$list_request->set_row_array($json_row_array);
+	
+		if (!is_numeric($entries_per_page) or $entries_per_page < 1)
+		{
+			$entries_per_page = 20;
+		}
+		
+		$list_array = Environment_Wrapper::list_currencies($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+	
+		
+		if (is_array($list_array) and count($list_array) >= 1)
+		{
+			foreach($list_array as $key => $value)
+			{
+				$list_array[$key][symbol] = "<img src='images/icons/currency.png' alt='N' border='0' />";
+			}
+		}
+		else
+		{
+			$list_request->override_last_line("<span class='italic'>No results found!</span>");
+		}
+			
+		$list_request->set_array($list_array);
+		
+		return $list_request->get_page($page);
+	}
+	
+	public function count_currencies($json_argument_array)
+	{
+		return Environment_Wrapper::count_currencies();
+	}
+	
+	
 	public function list_timezones($page, $sortvalue, $sortmethod)
 	{
 		
@@ -153,11 +191,6 @@ class AdminGeneralAjax extends Ajax
 	}
 	
 	public function list_measuring_units($page, $sortvalue, $sortmethod)
-	{
-		
-	}
-	
-	public function list_currencies($page, $sortvalue, $sortmethod)
 	{
 		
 	}
@@ -295,6 +328,14 @@ class AdminGeneralAjax extends Ajax
 					echo $this->count_languages($_POST[argument_array]);
 				break;
 				
+				case "list_currencies":
+					echo $this->list_currencies($_POST[row_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				break;
+				
+				case "count_currencies":
+					echo $this->count_currencies($_POST[argument_array]);
+				break;
+				
 				
 				case "list_timezones":
 					$this->list_timezones($_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
@@ -322,10 +363,6 @@ class AdminGeneralAjax extends Ajax
 				
 				case "list_measuring_units":
 					$this->list_measuring_units($_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
-				break;
-				
-				case "list_currencies":
-					$this->list_currencies($_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 							
 				default:

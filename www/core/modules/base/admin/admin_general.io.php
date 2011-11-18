@@ -62,7 +62,18 @@ class AdminGeneralIO
 	
 	public static function list_currencies()
 	{
-		echo "Function will be implemented soon!";
+		$list = new List_IO("AdminGeneralCurrency", "/core/modules/base/admin/admin_general.ajax.php", "list_currencies", "count_currencies", $argument_array, "AdminGeneralCurrency");
+		
+		$list->add_row("","symbol",false,"16px");
+		$list->add_row("Name","name",true,null);
+		$list->add_row("Symbol","currency_symbol",false,null);
+		$list->add_row("ISO 4217","iso_4217",true,null);
+		
+		$template = new Template("template/base/admin/general/list_currencies.html");
+		
+		$template->set_var("list", $list->get_list());
+		
+		$template->output();
 	}
 	
 	public static function handler()

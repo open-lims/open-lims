@@ -396,7 +396,7 @@ class Environment_Wrapper_Access
 		
 		$sql = "SELECT ".constant("CURRENCY_TABLE").".id, " .
 					"".constant("CURRENCY_TABLE").".name, " .
-					"".constant("CURRENCY_TABLE").".symbol, " .
+					"".constant("CURRENCY_TABLE").".symbol AS currency_symbol, " .
 					"".constant("CURRENCY_TABLE").".iso_4217 " .
 					"FROM ".constant("CURRENCY_TABLE")." " .
 					"".$sql_order_by."";
