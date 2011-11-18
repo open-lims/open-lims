@@ -68,7 +68,7 @@ class DataBrowserAjax extends Ajax
 			$download_link = "download.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&file_id=".$file_id;
 			$html .= "<img src='images/icons/download.png' alt='' /><a href='".$download_link."' class='DataBrowserDialogLinkFollowDirectly'>Download</a><br/>";
 			$history_link = "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=data&file_id=".$file_id."&action=file_history";
-			$html .= "<a href='".$history_link."' class='DataBrowserDialogLinkFollowDirectly'>History</a><br/>";
+			$html .= "<img src='images/icons/history.png' alt='' /><a href='".$history_link."' class='DataBrowserDialogLinkFollowDirectly'>History</a><br/>";
 		}
 		if ($file->is_write_access())
 		{
@@ -91,7 +91,7 @@ class DataBrowserAjax extends Ajax
 		if ($file->is_read_access())
 		{
 			$open_link = "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=data&file_id=".$file_id."&action=file_detail";
-			$html .= "<img src='images/icons/open_data.png' alt='' /><a href='".$open_link."' class='DataBrowserDialogLinkFollowDirectly'>Open</a><br/>";
+			$html .= "<img src='images/icons/file_open.png' alt='' /><a href='".$open_link."' class='DataBrowserDialogLinkFollowDirectly'>Open</a><br/>";
 		}
 		return $html;
 	}
@@ -120,7 +120,7 @@ class DataBrowserAjax extends Ajax
 		if($folder->is_read_access())
 		{
 			$open_link = "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=data&folder_id=".$folder_id;
-			$html .= "<img src='images/icons/open_data.png' alt='' /><a href='".$open_link."' class='DataBrowserDialogLinkFollowDirectly'>Open</a><br/>";
+			$html .= "<img src='images/icons/file_open.png' alt='' /><a href='".$open_link."' class='DataBrowserDialogLinkFollowDirectly'>Open</a><br/>";
 		}
 		return $html;
 	}
@@ -133,7 +133,7 @@ class DataBrowserAjax extends Ajax
 		if($value->is_read_access())
 		{
 			$history_link = "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=data&value_id=".$value_id."&action=value_history";
-			$html .= "<a href='".$history_link."' class='DataBrowserDialogLinkFollowDirectly'>History</a><br/>";
+			$html .= "<img src='images/icons/history.png' alt='' /><a href='".$history_link."' class='DataBrowserDialogLinkFollowDirectly'>History</a><br/>";
 		}
 		if($value->is_control_access() == true or $value->get_owner_id() == $user->get_user_id())
 		{
@@ -148,39 +148,42 @@ class DataBrowserAjax extends Ajax
 		if($value->is_read_access())
 		{
 			$open_link = "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=data&value_id=".$value_id."&action=value_detail";
-			$html .= "<img src='images/icons/open_data.png' alt='' /><a href='".$open_link."' class='DataBrowserDialogLinkFollowDirectly'>Open / Edit</a><br/>";
+			$html .= "<img src='images/icons/file_open.png' alt='' /><a href='".$open_link."' class='DataBrowserDialogLinkFollowDirectly'>Open / Edit</a><br/>";
 		}
 		return $html;
 	}
 	
-	public function get_file_add_menu($folder_path)
+	private function get_browser_menu($folder_id)
 	{
-		$data_path = new DataPath(null, null);
-				
-		if($data_path->get_last_entry_type() == 1)
-		{ //folder
-			
-			if($data_path->get_last_entry_id())
-			{
-		
-			}	
-		}
-		$html = "";
-		$folder_id = Folder::get_folder_by_path($folder_path);
+		$return_array = array("add"=>true,"add_list"=>"","image_browser"=>false);
 		$folder = Folder::get_instance($folder_id);
 		if($folder->is_write_access())
 		{
+		//	if($folder->can_add_folder())
+		//	{
+				$add_folder_link = "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=data&folder_id=".$folder_id."&run=add_folder";
+				$html .= "<img src='images/icons/upload.png' alt='' /><a href=\"javascript:data_browser.open_link_in_ui('folder','".$add_folder_link."');\">Add Folder</a><br/>";
+		//	}
 			$add_file_link = "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=data&folder_id=".$folder_id."&run=add_file";
-			$add_folder_link = "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=data&folder_id=".$folder_id."&run=add_folder";
-			$html .= "<a href=\"javascript:data_browser.open_link_in_ui('folder','".$add_file_link."');\">Add File</a><br/>";
-			$html .= "<a href=\"javascript:data_browser.open_link_in_ui('folder','".$add_folder_link."');\">Add Folder</a><br/>";
+			$add_value_link = "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=data&folder_id=".$folder_id."&run=add_value";
+			$html .= "<img src='images/icons/upload.png' alt='' /><a href=\"javascript:data_browser.open_link_in_ui('file','".$add_file_link."');\">Add File(s)</a><br/>";
+			$html .= "<img src='images/icons/upload.png' alt='' /><a href=\"javascript:data_browser.open_link_in_ui('value','".$add_value_link."');\">Add Value</a><br/>";
+			$return_array["add_list"] = $html;
 		}
-		return $html;
+		else
+		{
+			$return_array["add"] = false;
+		}
+		
+		//check image browser
+		
+		return json_encode($return_array);
 	}
 	
-	public function get_folder_add_menu($folder_path)
+	private function delete_stack()
 	{
-
+		$data_path = new DataPath(null, null);
+		$data_path->delete_stack();
 	}
 	
 	public function method_handler()
@@ -211,8 +214,12 @@ class DataBrowserAjax extends Ajax
 					echo $this->get_context_sensitive_value_menu($_GET[file_id]);
 				break;
 				
-				case "get_file_add_menu":
-					echo $this->get_file_add_menu($_GET[folder_path]);
+				case "get_browser_menu":
+					echo $this->get_browser_menu($_GET[folder_id]);
+				break;
+				
+				case "delete_stack":
+					echo $this->delete_stack();
 				break;
 				
 				default:

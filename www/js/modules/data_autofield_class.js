@@ -26,7 +26,9 @@ function autofield(field_array_string)
     if (typeof(autofield_prototype_called) == "undefined")
     {
     	autofield_prototype_called = true;
+    	autofield.prototype.init = init;
     	field_array = new Array();
+    	
     	if(field_array_string != undefined && field_array_string != "[AUTOFIELD_STRING]")
     	{
     		var temp_array = unserialize(field_array_string);
@@ -44,14 +46,16 @@ function autofield(field_array_string)
 			}
     	}
     	init();
-    	$("#autofield_edit").click(function(evt){
-    		evt.preventDefault();
-    		open_edit_view();
-    	});
     }
     
     function init()
     {
+    	$("#autofield_edit")
+    		.unbind("click")
+    		.click(function(evt){
+    		evt.preventDefault();
+    		open_edit_view();
+    	});
     	var table = $("<table id='DataAutofieldTable'></table>")	
     	if(field_array.length > 0)
     	{

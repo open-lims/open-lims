@@ -35,6 +35,11 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 	var number_of_pages = 0;
 
 	this.reload = function() {
+		count_entries();
+		if(number_of_pages < page)
+		{
+			page = 1;
+		}
 		load_content(sort_value, sort_method, page);
 	}
 
@@ -124,9 +129,18 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 				$("#" + css_main_id).html(data);
 				var new_height = $("#" + css_main_id).height();
 				$("#" + css_main_id).children().remove();
+				$("#"+css_main_id).css({"display":"block","display":"table-row-group"});
 				$("#" + css_main_id).append("<div class='ListLoadingContents'></div>"); // element must not be empty to animate height
 				if (new_height != last_height) 
 				{
+					if($.browser.msie)
+					{
+						if($.browser.version == 7.0 || $.browser.version == 9.0)
+						{ //we got an ie version that does not support tbody animation
+							$("#" + css_main_id).html(data);
+							return true;
+						}
+					}
 					$("#" + css_main_id).height(last_height);
 					$("#" + css_main_id).animate({
 						"height" : new_height

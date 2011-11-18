@@ -49,11 +49,17 @@ class ValueAjax extends Ajax
 		unset($paramquery[run]);
 		switch($action):
 			case "value_delete":
-				$paramquery[sure] = "true";
-				$paramquery[nextpage] = "1";
-				$params = http_build_query($paramquery);
 				$template = new Template("../../../template/data/value_delete_window.html");
-				$button_handler = "close_ui_window_and_reload();";
+				$button_handler = "
+					$.ajax({
+						type : \"GET\",
+						url : \"../../../core/modules/data/value.ajax.php\",
+						data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&value_id=".$_GET['value_id']."&run=delete_value\",
+						success : function(data) {
+							close_ui_window_and_reload();
+						}
+					});
+				";
 				$button_handler_caption = "Delete";
 				$html_caption = "Delete Value";
 				$html = $template->get_string();
@@ -104,6 +110,129 @@ class ValueAjax extends Ajax
 		return json_encode($array);
 	}
 	
+	private function add_value($folder_id, $type_id, $value_array)
+	{
+		if($type_id == null) //first call
+		{
+			$paramquery = $_GET;
+			$params = http_build_query($paramquery);
+			$template = new Template("../../../template/data/value_add_window.html");
+			$template->set_var("params", $params);
+			require_once("../../include/data/value/access/value_type.access.php");
+			$types = ValueType_Access::list_entries();
+			$options = array();
+			$counter = 0;
+			foreach($types as $key => $value)
+			{	
+				if($value == 2)
+				{
+					continue;
+				}
+				$value_type = new ValueType($value);
+				$options[$counter][value] = $value; 
+				$options[$counter][content] = $value_type->get_name();		
+				$options[$counter][selected] = "";
+				$options[$counter][disabled] = "";
+				$counter++;
+			}
+			$template->set_var("option",$options);
+			
+			$html = $template->get_string();			
+			$html_caption = "Add Value";
+			$button_handler = "
+				//parse all values and their respective names to a json array
+				var value_id = $('#DataBrowserAddValue option:selected').val();
+				var json = '{'
+				$('#AjaxLoadedContent').find('input').each(function(){
+					var name = $(this).attr('name');
+					var value = $(this).val();
+					json += '\"'+name+'\":\"'+value+'\",'
+				});	
+				$('#AjaxLoadedContent').find('select').each(function(){
+					var name = $(this).attr('name');
+					var value = $(this).children('option:selected').val();
+					json += '\"'+name+'\":\"'+value+'\",'
+				});	
+				$('#AjaxLoadedContent').find('textarea').each(function(){
+					var name = $(this).attr('name');
+					var value = $(this).val();
+					json += '\"'+name+'\":\"'+value+'\",'
+				});	
+				json = json.substr(0,json.length-1);
+				json += '}'	
+				
+				//hand the array to this same function (third call)
+				$.ajax({
+						type : \"GET\",
+						url : \"../../../core/modules/data/value.ajax.php\",
+						data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&folder_id=".$_GET['folder_id']."&run=add_value&value_id=\"+value_id+\"&value_array=\"+json,
+						success : function(data){
+							close_ui_window_and_reload();
+						}
+					});
+			";
+			$additional_script = "
+				//load the template corresponding to the selected value id (second call)
+				$('#AjaxLoadedContent').jScrollPane();
+				load_additional_content();
+				var scrollAPI = $('#AjaxLoadedContent').data('jsp');
+				$('#DataBrowserAddValue').change(function(){
+					load_additional_content();
+				});
+				
+				function load_additional_content()
+				{
+					var value_id = $('#DataBrowserAddValue option:selected').val();
+					$.ajax({
+						type : \"GET\",
+						url : \"../../../core/modules/data/value.ajax.php\",
+						data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&run=add_value&value_id=\"+value_id, //&folder_id=".$_GET['folder_id']."
+						success : function(data) {
+							$('#AjaxLoadedContent').children('.jspContainer').children('.jspPane').html(data);
+							scrollAPI.reinitialise();
+							var content_height = scrollAPI.getContentHeight();
+							if(content_height > 300)
+							{	
+								$('#AjaxLoadedContent').children('.jspContainer').css('height',300);
+							}
+							else
+							{
+								$('#AjaxLoadedContent').children('.jspContainer').css('height',content_height);
+							} 
+							scrollAPI.reinitialise();
+							if($('#AjaxLoadedContent').find('.autofield').length > 0)
+							{
+								var auto_field = new autofield(undefined);
+								auto_field.init();
+							}
+						}
+					});
+				}
+			";
+			$button_handler_caption = "Add";
+			$array = array("content"=>$html , "content_caption"=>$html_caption , "handler"=>$button_handler , "handler_caption"=>$button_handler_caption, "additional_script"=>$additional_script);
+			return json_encode($array);
+		}
+		else if($folder_id == null) //second call (from additional script; loads template)
+		{
+			require_once("value_form.io.php");
+			$value_form_io = new ValueFormIO(null, $type_id, $folder_id);
+			return $value_form_io->get_content();
+		}
+		else if($value_array != null)//third call (from add button; creates value)
+		{
+			$values = json_decode($value_array, true);
+			require_once("value.io.php");
+			$new_value = ValueIO::add_value_item_window($type_id, $folder_id, $values);
+			return $new_value;
+		}
+	}
+	
+	private function delete_value($value_id) {
+		$value = Value::get_instance($_GET[value_id]);
+		$value->delete();
+	}
+	
 	public function method_handler()
 	{
 		global $session;
@@ -114,6 +243,15 @@ class ValueAjax extends Ajax
 				case "get_data_browser_link_html_and_button_handler":
 					echo $this->get_data_browser_link_html_and_button_handler($_GET[action]);
 				break;
+				
+				case "add_value":
+					echo $this->add_value($_GET[folder_id],$_GET[value_id], $_GET[value_array]);
+				break;
+				
+				case "delete_value":
+					echo $this->delete_value($_GET[value_id]);
+				break;
+				
 			endswitch;
 		}
 	}

@@ -124,6 +124,7 @@ class DataIO
 			$list->add_row("Size","size",true,null);
 			$list->add_row("Owner","owner",true,null);
 			$list->add_row("Permission","permission",false,null);
+			$list->add_row("","delete_checkbox",false,"16px");
 		
 			// !!! [...] !!!
 			

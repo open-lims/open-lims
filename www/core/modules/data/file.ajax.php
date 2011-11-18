@@ -224,8 +224,17 @@ class FileAjax extends Ajax
 				$paramquery[sure] = "true";
 				$params = http_build_query($paramquery);
 				$template = new Template("../../../template/data/file_delete_window.html");
-				$template->set_var("yes_params", $params);
-				$button_handler = "$.get('index.php?".$params."', function(){close_ui_window_and_reload();});";
+				$template->set_var("params", $params);
+				$button_handler = "
+					$.ajax({
+						type : \"GET\",
+						url : \"../../../core/modules/data/file.ajax.php\",
+						data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&file_id=".$_GET['file_id']."&run=delete_file\",
+						success : function(data) {
+							close_ui_window_and_reload();
+						}
+					});
+				";
 				$button_handler_caption = "Delete";
 				$html_caption = "Delete File";
 				$html = $template->get_string();
@@ -233,6 +242,30 @@ class FileAjax extends Ajax
 		endswitch;
 		$array = array("content"=>$html , "content_caption"=>$html_caption , "handler"=>$button_handler , "handler_caption"=>$button_handler_caption);
 		return json_encode($array);
+	}
+	
+	private function add_file($folder_id)
+	{
+		$paramquery = $_GET;
+		$unique_id = uniqid();
+		$paramquery[unique_id] = $unique_id;
+		$params = http_build_query($paramquery);
+		$template = new Template("../../../template/data/file_upload_window.html");
+		$template->set_var("params", $params);
+		$template->set_var("unique_id", $unique_id);
+		$template->set_var("session_id", $_GET[session_id]);
+		$button_handler = "uploader.start_upload();"; //"close_ui_window_and_reload();";
+		$button_handler_caption = "Add";
+		$html_caption = "Add File";
+		$html = $template->get_string();
+		$additional_script = "uploader.init();";
+		$array = array("content"=>$html , "content_caption"=>$html_caption , "handler"=>$button_handler , "handler_caption"=>$button_handler_caption, "additional_script"=>$additional_script);
+		return json_encode($array);
+	}
+	
+	private function delete_file($file_id) {
+		$file = File::get_instance($file_id);
+		$file->delete();
 	}
 	
 	public function method_handler()
@@ -249,6 +282,14 @@ class FileAjax extends Ajax
 				
 				case "get_data_browser_link_html_and_button_handler":
 					echo $this->get_data_browser_link_html_and_button_handler($_GET[action], $_GET[file_id]);
+				break;
+				
+				case "add_file":
+					echo $this->add_file($_GET[folder_id]);
+				break;
+				
+				case "delete_file":
+					echo $this->delete_file($_GET[file_id]);
 				break;
 				
 				default:

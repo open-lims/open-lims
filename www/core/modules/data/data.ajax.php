@@ -119,7 +119,7 @@ class DataAjax extends Ajax
 					// Common
 					$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
 					$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
-					
+										
 					if ($list_array[$key][owner_id])
 					{
 						$user = new User($list_array[$key][owner_id]);
@@ -138,11 +138,12 @@ class DataAjax extends Ajax
 
 						if ($file->is_read_access() == true)
 						{
-							$paramquery = $_GET;
+							$paramquery = array();
+							$paramquery[session_id] = $_GET[session_id];
+							$paramquery[username] = $_GET[username];
+							$paramquery[nav] = $_GET[nav];
 							$paramquery[file_id] = $list_array[$key][file_id];
 							$paramquery[action] = "file_detail";
-							unset($paramquery[nextpage]);
-							unset($paramquery[version]);
 							$params = http_build_query($paramquery,'','&#38;');
 						
 							$list_array[$key][symbol][link] = $params;
@@ -171,6 +172,15 @@ class DataAjax extends Ajax
 						$list_array[$key][version] = $file->get_version();
 						$list_array[$key][size] = Misc::calc_size($list_array[$key][size]);
 						$list_array[$key][permission] = $file->get_permission_string();
+						
+						if($file->is_delete_access())
+						{
+							$list_array[$key][delete_checkbox] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name=''></input>";
+						}
+						else
+						{
+							$list_array[$key][delete_checkbox] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name='' disabled='disabled'></input>";
+						}
 					}
 					elseif ($list_array[$key][value_id])
 					{
@@ -178,12 +188,14 @@ class DataAjax extends Ajax
 
 						if ($value->is_read_access() == true)
 						{
-							$paramquery = $_GET;
+							$paramquery = array();
+							$paramquery[session_id] = $_GET[session_id];
+							$paramquery[username] = $_GET[username];
+							$paramquery[nav] = $_GET[nav];
 							$paramquery[value_id] = $list_array[$key][value_id];
 							$paramquery[action] = "value_detail";
-							unset($paramquery[nextpage]);
-							unset($paramquery[version]);
 							$params = http_build_query($paramquery,'','&#38;');
+						
 						
 							$list_array[$key][symbol][link] = $params;
 							$list_array[$key][symbol][content] = "<img src='images/fileicons/16/unknown.png' alt='' style='border:0;' />";
@@ -210,6 +222,15 @@ class DataAjax extends Ajax
 						$list_array[$key][type] = "Value";
 						$list_array[$key][version] = $value->get_version();
 						$list_array[$key][permission] = $value->get_permission_string();
+						
+						if($value->is_delete_access())
+						{
+							$list_array[$key][delete_checkbox] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name=''></input>";
+						}
+						else
+						{
+							$list_array[$key][delete_checkbox] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name='' disabled='disabled'></input>";
+						}
 					}
 					elseif ($list_array[$key][folder_id])
 					{	
@@ -248,6 +269,15 @@ class DataAjax extends Ajax
 						
 						$list_array[$key][type] = "Folder";
 						$list_array[$key][permission] = $sub_folder->get_permission_string();
+						
+						if($sub_folder->is_delete_access())
+						{
+							$list_array[$key][delete_checkbox] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name=''></input>";
+						}
+						else
+						{
+							$list_array[$key][delete_checkbox] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name='' disabled='disabled'></input>";
+						}
 					}
 					elseif ($list_array[$key][virtual_folder_id])
 					{
@@ -275,6 +305,8 @@ class DataAjax extends Ajax
 						
 						$list_array[$key][type] = "Virtual Folder";
 						$list_array[$key][permission] = "automatic";
+						
+						$list_array[$key][delete_checkbox] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name='' disabled='disabled'></input>";
 					}
 				}
 			}

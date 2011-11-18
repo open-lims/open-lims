@@ -210,7 +210,7 @@ class List_IO
     	
     	if ($this->display_footer == true)
 		{
-			$pagebar = "<div class='ResultNextPageBar' id='".$this->css_main_id."PageBar'></div>";	
+			$pagebar = "<div id='".$this->css_main_id."ActionSelect'></div><div class='ResultNextPageBar' id='".$this->css_main_id."PageBar'></div>";	
 			$template->set_var("pagebar", $pagebar);
 		}			
 		else

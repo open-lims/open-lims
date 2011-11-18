@@ -167,7 +167,16 @@ class FolderAjax extends Ajax
 				$params = http_build_query($paramquery);
 				$template = new Template("../../../template/data/folder_delete_window.html");
 				$template->set_var("params", $params);
-				$button_handler = "var form_url = $('#FolderDeleteWindowForm').attr('action'); $.post(form_url,function(){close_ui_window_and_reload();});";
+				$button_handler = "
+					$.ajax({
+						type : \"GET\",
+						url : \"../../../core/modules/data/folder.ajax.php\",
+						data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&folder_id=".$_GET['folder_id']."&run=delete_folder\",
+						success : function(data) {
+							close_ui_window_and_reload();
+						}
+					});
+				";
 				$button_handler_caption = "Delete";
 				$html_caption = "Delete Folder";
 				$html = $template->get_string();
@@ -181,12 +190,12 @@ class FolderAjax extends Ajax
 			break;
 			case "permission":
 				require_once("data.io.php");
-				if(isset($_GET[permissions]))
+				if(isset($_GET[permissions])) //second call
 				{
 					$success = DataIO::change_permission(json_decode($_GET[permissions]), "Folder");
 					return $success;
 				}
-				else
+				else //first call
 				{
 					$permission = DataIO::permission_window();
 					$button_handler = "
@@ -217,7 +226,7 @@ class FolderAjax extends Ajax
 					";
 					$button_handler_caption = "Change";
 					$html_caption = "Change permission";
-					$html = $permission;	
+					$html = $permission;
 				}
 			break;
 		endswitch;
@@ -225,27 +234,50 @@ class FolderAjax extends Ajax
 		return json_encode($array);
 	}
 	
-	private function add_file($folder_id)
-	{ //auslagern in file.ajax
-		$button_handler = "close_ui_window_and_reload();";
-		$button_handler_caption = "Add";
-		$html_caption = "Add File";
-		$html = "add file!";
-		$array = array("content"=>$html , "content_caption"=>$html_caption , "handler"=>$button_handler , "handler_caption"=>$button_handler_caption);
-		return json_encode($array);
+	private function add_folder($folder_id, $folder_name)
+	{
+		global $session;
+		if($folder_name == null) //first call
+		{
+			$button_handler = "
+				var new_name = $('#NewFolderName').val();
+				$.ajax({
+					type : \"GET\",
+					url : \"../../../core/modules/data/folder.ajax.php\",
+					data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&folder_id=".$_GET['folder_id']."&run=add_folder&folder_name=\"+new_name,
+					success : function(data) {
+						close_ui_window_and_reload();
+					}
+				});
+			";
+			$button_handler_caption = "Add";
+			$html_caption = "Add Folder";
+			$template = new Template("../../../template/data/folder_add_window.html");
+			$html = $template->get_string();
+			$array = array("content"=>$html , "content_caption"=>$html_caption , "handler"=>$button_handler , "handler_caption"=>$button_handler_caption);
+			return json_encode($array);
+		}
+		else //second call
+		{
+			$internal_name = trim(strtolower(str_replace(" ","_",$folder_name)));
+	  		$base_folder = Folder::get_instance($folder_id);
+			$path = new Path($base_folder->get_path());
+			$path->add_element($internal_name);
+			$folder = Folder::get_instance(null);
+			if (($folder_id = $folder->create($folder_name, $folder_id, $path->get_path_string(), $session->get_user_id(), null)) == null)
+			{
+			 	return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 	}
 	
-	private function add_folder($folder_id)
-	{
-		//$new_folder = Folder::get_instance(null);
-		//$new_folder->create($_POST[name], $_GET[folder_id], null, $user->get_user_id(), null);
-		
-		$button_handler = "close_ui_window_and_reload();";
-		$button_handler_caption = "Add";
-		$html_caption = "Add Folder";
-		$html = "add folder!";
-		$array = array("content"=>$html , "contnt_caption"=>$html_caption , "handler"=>$button_handler , "handler_caption"=>$button_handler_caption);
-		return json_encode($array);
+	private function delete_folder($folder_id) {
+		$folder = Folder::get_instance($folder_id);
+		$folder->delete(true, true); //?
 	}
 	
 	public function method_handler()
@@ -265,11 +297,11 @@ class FolderAjax extends Ajax
 				case "get_data_browser_link_html_and_button_handler":
 					echo $this->get_data_browser_link_html_and_button_handler($_GET[action]);
 					break;
-				case "add_file":
-					echo $this->add_file($_GET[folder_id]);
-					break;
 				case "add_folder":
-					echo $this->add_folder($_GET[folder_id]);
+					echo $this->add_folder($_GET[folder_id],$_GET[folder_name]);
+					break;
+				case "delete_folder":
+					echo $this->delete_folder($_GET[folder_id]);
 					break;
 			endswitch;
 		}

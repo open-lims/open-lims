@@ -36,6 +36,7 @@ function base_upload(unique_id, session_id)
     {
     	base_upload_prototype_called = true;
     	base_upload.prototype.start_upload = start_upload;
+    	base_upload.prototype.init = init;
     	init();
     }
 	
@@ -105,6 +106,7 @@ function base_upload(unique_id, session_id)
 			.append(upload_info)
 			.append(ok_button);
 		$.blockUI({ message: block_ui_content , css: {"width":"550px"}});
+		$('.blockUI.blockMsg').center();
 		init_scrollbar();
 		$("#UploadForm").submit();
 		started = new Date().getTime();
