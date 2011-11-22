@@ -85,8 +85,11 @@ class ListRequest_IO
 					}
 					else
 					{
+						if($this->first_line_entry[$value[1]] == "")
+						{
+							$this->first_line_entry[$value[1]] = "&nbsp;"; //we all love IE
+						}
 						$return .= "<td>".$this->first_line_entry[$value[1]]."</td>";
-						
 					}
 				}
 				

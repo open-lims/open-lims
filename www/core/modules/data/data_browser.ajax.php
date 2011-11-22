@@ -167,7 +167,7 @@ class DataBrowserAjax extends Ajax
 			$add_file_link = "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=data&folder_id=".$folder_id."&run=add_file";
 			$add_value_link = "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=data&folder_id=".$folder_id."&run=add_value";
 			$html .= "<img src='images/icons/upload.png' alt='' /><a href=\"javascript:data_browser.open_link_in_ui('file','".$add_file_link."');\">Add File(s)</a><br/>";
-			$html .= "<img src='images/icons/upload.png' alt='' /><a href=\"javascript:data_browser.open_link_in_ui('value','".$add_value_link."');\">Add Value</a><br/>";
+			$html .= "<img src='images/icons/upload.png' alt='' /><a href=\"javascript:data_browser.open_link_in_ui('value','".$add_value_link."');\">Add Values</a><br/>";
 			$return_array["add_list"] = $html;
 		}
 		else

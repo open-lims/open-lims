@@ -61,10 +61,10 @@ function data_browser()
 			current_folder_id = argument_parts[0].replace("[[\"folder_id\",","").replace(/"/g,"");
 			current_virtual_folder_id = argument_parts[1].replace("\"virtual_folder_id\",","").replace(/]/g,"").replace(/"/g,"");
 			
-			init_menu(current_folder_id);
-			init_menu_handler();
 			init_list_handler();
 			init_base_tree_nav_link_handler();
+			init_menu(current_folder_id);
+			init_menu_handler();
 			
 			if(click_from_left_nav_menu)
 			{
@@ -106,40 +106,50 @@ function data_browser()
 			
 			$(this)
 				.unbind("mouseover mouseleave click")
-				.mouseover(function(event){
-					$(this)
-					.addClass("DataBrowserFileHover")
-					.children().css({"margin-bottom":"2px",
-						"padding":"0px 4px",
-						"border-bottom":"solid #c3c3c3 2px",
-						"border-top":"solid #c3c3c3 2px"
-					});
-				})
-				.mouseleave(function(){
-					
-					var color = "white";
-					if($(this).hasClass("trLightGrey"))
+				.mouseover(function(event)
+				{
+					var text = $(this).children("td:nth-child(3)").text();
+					if(!$(this).hasClass("DataBrowserFileSelected") && text != "Virtual Folder" && text != "Parent Folder")
 					{
-						color = "#e0e0e0";
-					}
-		
-					$(this)
-						.removeClass("DataBrowserFileHover");
-					$(this).children().each(function()	
+						$(this)
+						.addClass("DataBrowserFileHover")
+						.children().css(
 						{
-							if($(this).hasClass("ListTableColumnFirstEntry"))
+							"margin-bottom":"2px",
+							"padding":"0px 4px",
+							"border-bottom":"solid #c3c3c3 2px",
+							"border-top":"solid #c3c3c3 2px"
+						});	
+					}
+				})
+				.mouseleave(function()
+				{
+					$(this).removeClass("DataBrowserFileHover");
+					if(!$(this).hasClass("DataBrowserFileSelected"))
+					{
+						var color = "white";
+						if($(this).hasClass("trLightGrey"))
+						{
+							color = "#e0e0e0";
+						}
+						$(this).children().each(function()	
 							{
-								$(this).css("border-left","solid "+color+" 2px");
-							}
-							else if($(this).hasClass("ListTableColumnLastEntry"))
-							{
-								$(this).css("border-right","solid "+color+" 2px");
-							}
-							$(this).css({"border-top":"solid "+color+" 2px",
-								"border-bottom":"solid "+color+" 2px"
+								if($(this).hasClass("ListTableColumnFirstEntry"))
+								{
+									$(this).css("border-left","solid "+color+" 2px");
+								}
+								else if($(this).hasClass("ListTableColumnLastEntry"))
+								{
+									$(this).css("border-right","solid "+color+" 2px");
+								}
+								$(this).css(
+								{
+									"border-top":"solid "+color+" 2px",
+									"border-bottom":"solid "+color+" 2px"
+								});
 							});
-						});
-					})
+					}		
+				})
 				.click(function(evt)
 				{
 					evt.preventDefault();
@@ -196,7 +206,8 @@ function data_browser()
 						}
 					 }
 				})
-				.children("td:nth-child(2)").each(function(){ //bind thumbnail handler
+				.children("td:nth-child(2)").each(function()
+				{ //bind thumbnail handler
 					var filename = $(this).children().text();
 					if(is_image(filename))
 					{
@@ -212,13 +223,15 @@ function data_browser()
 	function delete_selected_files()
 	{
 		var action = $("#DataBrowserActionSelect").children("option:selected").val();
-		$(".DataBrowserDeleteCheckbox:checked").each(function(){
+		$(".DataBrowserDeleteCheckbox:checked").each(function()
+		{
 			var type = $(this).parent().parent().parent().children("td:nth-child(3)").children();
 			if($(type).text() == "Folder")
 			{
 				var link = $(this).parent().parent().parent().children("td:nth-child(2)").children().children().attr("href");
 				var folder_id = link.split("&folder_id=")[1];
-				$.ajax({
+				$.ajax(
+				{
 					async : false,
 					type : "GET",
 					url : "core/modules/data/folder.ajax.php",
@@ -231,7 +244,8 @@ function data_browser()
 				var link = $(this).parent().parent().parent().children("td:nth-child(2)").children().attr("href");
 				var split = link.split("&nav=data&value_id=");
 				var value_id = split[1].replace("&action=value_detail","");
-				$.ajax({
+				$.ajax(
+				{
 					async : false,
 					type : "GET",
 					url : "core/modules/data/value.ajax.php",
@@ -244,7 +258,8 @@ function data_browser()
 				var link = $(this).parent().parent().parent().children("td:nth-child(2)").children().attr("href");
 				var split = link.split("&nav=data&file_id=");
 				var file_id = split[1].replace("&action=file_detail","");
-				$.ajax({
+				$.ajax(
+				{
 					async : false,
 					type : "GET",
 					url : "core/modules/data/file.ajax.php",
@@ -260,11 +275,13 @@ function data_browser()
 	 */
 	function show_current_dir_path()
 	{
-		$.ajax({
+		$.ajax(
+		{
 			type : "GET",
 			url : "core/modules/data/data_browser.ajax.php",
 			data : "username="+get_array['username']+"&session_id="+ get_array['session_id']+"&run=get_data_browser_path&folder_id="+current_folder_id+"&virtual_folder_id="+current_virtual_folder_id,
-			success : function(data) {
+			success : function(data) 
+			{
 				$(data_browser_table).parent().parent().children(".OverviewTableRight").html(data);
 			}
 		});
@@ -275,11 +292,13 @@ function data_browser()
 	 */
 	function show_current_dir_path_and_clear_stack()
 	{
-		$.ajax({
+		$.ajax(
+		{
 			type : "GET",
 			url : "core/modules/data/data_browser.ajax.php",
 			data : "username="+get_array['username']+"&session_id="+ get_array['session_id']+"&run=get_data_browser_path_cleared&folder_id="+current_folder_id+"&virtual_folder_id="+current_virtual_folder_id,
-			success : function(data) {
+			success : function(data) 
+			{
 				$(data_browser_table).parent().parent().children(".OverviewTableRight").html(data);
 			}
 		});
@@ -386,7 +405,8 @@ function data_browser()
 		
 		$(element)
 			.addClass("DataBrowserFileSelected")
-			.children("td").each(function(){				
+			.children("td").each(function()
+			{				
 				if($(this).hasClass("ListTableColumnFirstEntry"))
 				{
 					$(this).css("border-left","solid #669acc 2px");
@@ -395,13 +415,21 @@ function data_browser()
 				{
 					$(this).css("border-right","solid #669acc 2px");
 				}
-				$(this).css({"border-top":"solid #669acc 2px",
+				$(this).css(
+				{
+					"border-top":"solid #669acc 2px",
 					"border-bottom":"solid #669acc 2px"
 				});
 			});
 
 		$(dialog)
-			.css({"width":dialog_width,"position":"absolute","top":offset_y,"left":offset_x})
+			.css(
+			{
+				"width":dialog_width,
+				"position":"absolute",
+				"top":offset_y,
+				"left":offset_x
+			})
 			.hide()
 			.appendTo("#main");
 		return true;
@@ -415,11 +443,16 @@ function data_browser()
 		$("#DataBrowserFileDialog").remove();
 		$(".DataBrowserFileSelected")
 			.removeClass("DataBrowserFileSelected")
-			.children("td").each(function(){
+			.children("td").each(function()
+			{
 				var color = "white";
 				if($(this).parent().hasClass("trLightGrey"))
 				{
 					color = "#e0e0e0";
+				}
+				if($(this).parent().hasClass("DataBrowserFileHover"))
+				{
+					color = "#c3c3c3";
 				}
 				if($(this).hasClass("ListTableColumnFirstEntry"))
 				{
@@ -429,28 +462,32 @@ function data_browser()
 				{
 					$(this).css("border-right","solid "+color+" 2px");
 				}
-				$(this).css({"border-top":"solid "+color+" 2px","border-bottom":"solid "+color+" 2px"});
+				$(this).css(
+				{
+					"border-top":"solid "+color+" 2px",
+					"border-bottom":"solid "+color+" 2px"
+				});
 			});
 	}
 	
 	/**
 	 * Sets the content of the dropdown menu
-	 * @param file_id the id of the selected file
+	 * @param item_id the id of the selected item
 	 * @param type the type (folder, file, value)
 	 */
-	function load_context_sensitive_dialog(file_id, type)
+	function load_context_sensitive_dialog(item_id, type)
 	{
 		var data;
 		switch(type)
 		{
 			case "folder":
-				data = "username="+get_array['username']+"&session_id="+ get_array['session_id']+"&run=get_context_sensitive_folder_menu&file_id="+file_id;
+				data = "username="+get_array['username']+"&session_id="+ get_array['session_id']+"&run=get_context_sensitive_folder_menu&file_id="+item_id;
 				break;
 			case "file":
-				data = "username="+get_array['username']+"&session_id="+ get_array['session_id']+"&run=get_context_sensitive_file_menu&file_id="+file_id;
+				data = "username="+get_array['username']+"&session_id="+ get_array['session_id']+"&run=get_context_sensitive_file_menu&file_id="+item_id;
 				break;
 			case "value":
-				data = "username="+get_array['username']+"&session_id="+ get_array['session_id']+"&run=get_context_sensitive_value_menu&file_id="+file_id;
+				data = "username="+get_array['username']+"&session_id="+ get_array['session_id']+"&run=get_context_sensitive_value_menu&file_id="+item_id;
 				break;
 			default: 
 				break;
@@ -460,11 +497,13 @@ function data_browser()
 			type : "GET",
 			url : "core/modules/data/data_browser.ajax.php",
 			data : data,
-			success : function(data) {
+			success : function(data) 
+			{
 				if(data != "")
 				{
 					$("#DataBrowserFileDialog")
-						.click(function(evt){
+						.click(function(evt)
+						{
 							evt.preventDefault();
 							var target = evt.target;
 							var href = $(target).attr("href");
@@ -485,7 +524,7 @@ function data_browser()
 	}
 	
 	/**
-	 * Opens a link in a popup dialog and assigns event handlers to the buttons respective to the selected template
+	 * Opens a link in a popup dialog and assigns event handlers to the buttons
 	 * @param type the type (folder, file, value)
 	 * @param link the url
 	 */
@@ -520,7 +559,8 @@ function data_browser()
 			type : "GET",
 			url : url,
 			data : data_params,
-			success : function(data) {
+			success : function(data) 
+			{
 				var json = $.parseJSON(data);
 				var click_handler = json["handler"];
 				var click_handler_caption = json["handler_caption"];
@@ -541,14 +581,24 @@ function data_browser()
 					"maxHeight" : "500" , 
 					"position" : position,
 					"width" : dialog_width, 
-					"close" : function(){$(container).remove();},
+					"close" : function(){
+						$(container).remove();
+					},
 					"buttons" : [
-					     {text : click_handler_caption , click : function(){
+					{
+						text : click_handler_caption , 
+						click : function()
+						{
 					    	eval(click_handler);
-					     }} , 
-			             {text : "Cancel", click : function(){
+					    }
+					} , 
+			        {
+				    	text : "Cancel", 
+				    	click : function()
+				    	{
 			         		$(container).dialog("close").remove();
-			             }}]
+			            }
+					}]
 				});
 				if(additional_script != undefined)
 				{
@@ -576,7 +626,12 @@ function data_browser()
 	function open_add_dialog()
 	{
 		close_data_browser_file_dialog();
-		$("#DataBrowserMenuAdd").css({"border":"solid #669acc 2px","border-bottom":"solid white 2px","z-index":"99"});
+		$("#DataBrowserMenuAdd").css(
+		{
+			"border":"solid #669acc 2px",
+			"border-bottom":"solid white 2px",
+			"z-index":"99"
+		});
 		$("#DataBrowserAddFileDialog").slideDown(200);
 		$("#DataBrowserAddFileCornerContainer").show();
 		$("#DataBrowserAddFileCorner").show();
@@ -587,7 +642,7 @@ function data_browser()
 	 */
 	function close_add_dialog()
 	{
-		$("#DataBrowserMenuAdd").css({"outline":"none","border":"solid white 2px"});
+		$("#DataBrowserMenuAdd").css("border","solid white 2px");
 		$("#DataBrowserAddFileDialog").hide();
 		$("#DataBrowserAddFileCornerContainer").hide();
 		$("#DataBrowserAddFileCorner").hide();
@@ -603,7 +658,8 @@ function data_browser()
 			type : "GET",
 			url : "core/modules/data/data_browser.ajax.php",
 			data : "username="+get_array['username']+"&session_id="+get_array['session_id']+"&run=get_browser_menu&folder_id="+folder_id,
-			success : function(data) {
+			success : function(data) 
+			{
 				var json = $.parseJSON(data);
 				var add = json["add"];
 				var image_browser = json["image_browser"];
@@ -612,36 +668,44 @@ function data_browser()
 					var pos = $("#DataBrowserMenuAdd").position();
 					var height = $("#DataBrowserMenuAdd").height();
 					var width = $("#DataBrowserMenuAdd").width();
-					var offset_x = pos.left;
-					var offset_y = pos.top + height + 6;
+					var offset_x = Math.floor(pos.left);
+					var offset_y = Math.floor(pos.top) + height + 6;
+					
 					var dialog = $("<div id='DataBrowserAddFileDialog'></div>")
 						.css({"position":"absolute","top":offset_y,"left":offset_x,"z-index":"98"})
 						.appendTo("#main")
 						.html(json["add_list"])
 						.hide();
-					
-					if($.browser.msie && $.browser.version >= 9.0) //ie9 has a pixel bug
-					{
-						var corner_container = $("<div id='DataBrowserAddFileCornerContainer'></div>")
-						.css({"position":"absolute","top":offset_y-height+2,"left":offset_x+width+9,"z-index":"100","width":"15px","height":"15px", "background-color":"white","margin":"0","padding":"0"})
+
+					var corner_offset_x = offset_x + width + 18;
+					var corner_offset_y = offset_y - height + 2;
+					var corner_container = $("<div id='DataBrowserAddFileCornerContainer'></div>")
+						.css(
+						{
+							"position":"absolute",
+							"top":corner_offset_y + 1,
+							"left":corner_offset_x,
+							"z-index":"100",
+							"width":height-1,
+							"height":height-1, 
+							"background-color":"white",
+							"margin":"0",
+							"padding":"0"
+						})
 						.hide()
 						.appendTo("#main");
 					var corner = $("<div id='DataBrowserAddFileCorner'></div>")
-						.css({"position":"absolute","top":offset_y-height+1,"left":offset_x+width+9,"z-index":"101","width":"14px","height":"14px"})
+						.css(
+						{
+							"position":"absolute",
+							"top":corner_offset_y,
+							"left":corner_offset_x,
+							"z-index":"101",
+							"width":height-2,
+							"height":height-2
+						})
 						.hide()
 						.appendTo("#main");
-					}
-					else if($.browser.mozilla || $.browser.webkit)
-					{
-						var corner_container = $("<div id='DataBrowserAddFileCornerContainer'></div>")
-							.css({"position":"absolute","top":offset_y-height+3,"left":offset_x+width+10,"z-index":"100","width":"15px","height":"15px", "background-color":"white","margin":"0","padding":"0"})
-							.hide()
-							.appendTo("#main");
-						var corner = $("<div id='DataBrowserAddFileCorner'></div>")
-							.css({"position":"absolute","top":offset_y-height+2,"left":offset_x+width+10,"z-index":"101","width":"14px","height":"14px"})
-							.hide()
-							.appendTo("#main");
-					}
 					
 					$("#DataBrowserMenuAdd").children("img").attr("src","images/icons/add.png");
 					$("#DataBrowserMenuAdd").removeClass("Deactivated");
@@ -672,10 +736,12 @@ function data_browser()
 	 */
 	function init_menu_handler()
 	{
-		$(".DataBrowserAjaxPage").click(function(event) 
-		{ 
-			init(); //re-init on page change
-		});
+		$(".DataBrowserAjaxPage")
+			.unbind("click")
+			.click(function(event) 
+			{ 
+				init(); //re-init on page change
+			});
 		
 		$("#DataBrowserMenuAdd")
 			.unbind("click")
@@ -705,7 +771,8 @@ function data_browser()
 					type : "GET",
 					url : "core/modules/data/data_browser.ajax.php",
 					data : "username="+get_array['username']+"&session_id="+get_array['session_id']+"&run=delete_stack",
-					success : function(data) {
+					success : function(data) 
+					{
 						load_folder(null, null);
 					}
 				});
@@ -713,7 +780,8 @@ function data_browser()
 		
 		$("#DataBrowserAction")
 			.unbind("click")
-			.click(function(){
+			.click(function()
+			{
 				var container = $("<div>Do you really want to delete the selected files?</div>")
 				$(container).css({"text-align":"center","padding-top":"20px"});
 				$(container).dialog({"title" : "Confirm" ,  
@@ -741,23 +809,34 @@ function data_browser()
 	{
 		var offsetX = 20;
 		var offsetY = 10;
-		$(element).hover(function(e){
+		$(element).hover(function(e)
+		{
 			$("<div id='thumbnail'>"+image+"</div>")
-				.css("position","absolute")
-				.css("background-color","white")
-				.css("border","solid black 1px")
-				.css("padding","2px 4px 2px 4px")
-				.css({"font-family":"arial","font-size":"12px"})
-				.css("top", e.pageY + offsetY)
-				.css("left", e.pageX + offsetX)
+				.css(
+				{
+					"position":"absolute",
+					"background-color":"white",
+					"border":"solid black 1px",
+					"padding":"2px 4px 2px 4px",
+					"font-family":"arial",
+					"font-size":"12px",
+					"top": e.pageY + offsetY,
+					"left": e.pageX + offsetX
+				})
 				.hide()
 				.appendTo('body')
 				.fadeIn(300);
-		},function(){
+		},function()
+		{
 			$('#thumbnail').remove();
 		});
-		$(element).mousemove(function(e) {
-			$("#thumbnail").css("top", e.pageY + offsetY).css("left", e.pageX + offsetX);
+		$(element).mousemove(function(e) 
+		{
+			$("#thumbnail").css(
+			{
+				"top": e.pageY + offsetY,
+				"left": e.pageX + offsetX
+			});
 		});
 	}
 	
