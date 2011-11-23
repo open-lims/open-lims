@@ -456,6 +456,68 @@ class MeasuringUnit_Access
 			return false;
 		}
 	}
+
 	
+	/**
+	 * @param integer $id
+	 * @return bool
+	 */
+	public static function exist_id($id)
+	{
+		global $db;
+			
+		if (is_numeric($id))
+		{
+			$sql = "SELECT id FROM ".constant("MEASURING_UNIT_TABLE")." WHERE id = '".$id."'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[id])
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @return array
+	 */
+	public static function list_entries()
+	{
+		global $db;
+			
+		$return_array = array();
+		
+		$sql = "SELECT id,name,type,unit_symbol FROM ".constant("MEASURING_UNIT_TABLE")." ORDER BY name";
+		$res = $db->db_query($sql);
+		
+		while ($data = $db->db_fetch_assoc($res))
+		{
+			$temp_array = array();
+			$temp_array[id] = $data[id];
+			$temp_array[name] = $data[name];
+			$temp_array[type] = $data[type];
+			$temp_array[unit_symbol] = $data[unit_symbol];
+			array_push($return_array,$temp_array);
+			unset($temp_array);
+		}
+		
+		if (is_array($return_array))
+		{
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
 }
 ?>

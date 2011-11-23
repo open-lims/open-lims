@@ -38,8 +38,18 @@ function __autoload($classname)
 	}
 	
 	// Environment
+	$classes['BaseEnvironmentException']						= $path_prefix."core/include/base/environment/exceptions/base_environment.exception.class.php";
+	$classes['BaseEnvironmentCurrencyException']				= $path_prefix."core/include/base/environment/exceptions/base_environment_currency.exception.class.php";
+	$classes['BaseEnvironmentCurrencyIDMissingException']		= $path_prefix."core/include/base/environment/exceptions/base_environment_currency_id_missing.exception.class.php";
+	$classes['BaseEnvironmentCurrencyNotFoundException']		= $path_prefix."core/include/base/environment/exceptions/base_environment_currency_not_found.exception.class.php";
+	$classes['BaseEnvironmentMeasuringUnitException']			= $path_prefix."core/include/base/environment/exceptions/base_environment_measuring_unit.exception.class.php";
+	$classes['BaseEnvironmentMeasuringUnitIDMissingException']	= $path_prefix."core/include/base/environment/exceptions/base_environment_measuring_unit_id_missing.exception.class.php";
+	$classes['BaseEnvironmentMeasuringUnitNotFoundException']	= $path_prefix."core/include/base/environment/exceptions/base_environment_measuring_unit_not_found.exception.class.php";
+	
+	$classes['Currency']					= $path_prefix."core/include/base/environment/currency.class.php";
 	$classes['DatetimeHandler']				= $path_prefix."core/include/base/environment/datetime_handler.class.php";
 	$classes['Language']					= $path_prefix."core/include/base/environment/language.class.php";
+	$classes['MeasuringUnit']				= $path_prefix."core/include/base/environment/measuring_unit.class.php";
 	$classes['PaperSize']					= $path_prefix."core/include/base/environment/paper_size.class.php";
 	$classes['Regional']					= $path_prefix."core/include/base/environment/regional.class.php";
 	

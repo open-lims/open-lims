@@ -155,7 +155,7 @@ class Environment_Wrapper_Access
 			
 			switch($order_by):
 			
-				case "title":
+				case "name":
 					$sql_order_by = "ORDER BY title ".$sql_order_method;
 				break;
 				
@@ -164,18 +164,18 @@ class Environment_Wrapper_Access
 				break;
 						
 				default:
-					$sql_order_by = "ORDER BY title ASC";
+					$sql_order_by = "ORDER BY deviation ASC";
 				break;
 			
 			endswitch;
 		}
 		else
 		{
-			$sql_order_by = "ORDER BY title ASC";
+			$sql_order_by = "ORDER BY deviation ASC";
 		}
 		
 		$sql = "SELECT ".constant("TIMEZONE_TABLE").".id, " .
-					"".constant("TIMEZONE_TABLE").".title, " .
+					"".constant("TIMEZONE_TABLE").".title AS name, " .
 					"".constant("TIMEZONE_TABLE").".deviation " .
 					"FROM ".constant("TIMEZONE_TABLE")." " .
 					"".$sql_order_by."";
@@ -323,7 +323,6 @@ class Environment_Wrapper_Access
 	}
 	
 	/**
-	 * @todo implementation
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -332,7 +331,74 @@ class Environment_Wrapper_Access
 	 */
 	public static function list_measuring_units($order_by, $order_method, $start, $end)
 	{
-		return null;
+		global $db;
+	
+		if ($order_by and $order_method)
+		{
+			if ($order_method == "asc")
+			{
+				$sql_order_method = "ASC";
+			}
+			else
+			{
+				$sql_order_method = "DESC";
+			}
+			
+			switch($order_by):
+			
+				case "name":
+					$sql_order_by = "ORDER BY name ".$sql_order_method;
+				break;
+				
+				case "type":
+					$sql_order_by = "ORDER BY type ".$sql_order_method;
+				break;
+						
+				default:
+					$sql_order_by = "ORDER BY type ASC";
+				break;
+			
+			endswitch;
+		}
+		else
+		{
+			$sql_order_by = "ORDER BY type ASC";
+		}
+		
+		$sql = "SELECT ".constant("MEASURING_UNIT_TABLE").".id, " .
+					"".constant("MEASURING_UNIT_TABLE").".name, " .
+					"".constant("MEASURING_UNIT_TABLE").".type, " .
+					"".constant("MEASURING_UNIT_TABLE").".unit_symbol " .
+					"FROM ".constant("MEASURING_UNIT_TABLE")." " .
+					"".$sql_order_by."";
+		
+		$return_array = array();
+		
+		$res = $db->db_query($sql);
+		
+		if (is_numeric($start) and is_numeric($end))
+		{
+			for ($i = 0; $i<=$end-1; $i++)
+			{
+				if (($data = $db->db_fetch_assoc($res)) == null)
+				{
+					break;
+				}
+				
+				if ($i >= $start)
+				{
+					array_push($return_array, $data);
+				}
+			}
+		}
+		else
+		{
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array, $data);
+			}
+		}
+		return $return_array;
 	}
 	
 	/**

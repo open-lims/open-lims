@@ -46,7 +46,17 @@ class AdminGeneralIO
 	
 	public static function list_timezones()
 	{
-		echo "Function will be implemented soon!";
+		$list = new List_IO("AdminGeneralTimezone", "/core/modules/base/admin/admin_general.ajax.php", "list_timezones", "count_timezones", $argument_array, "AdminGeneralTimezone");
+		
+		$list->add_row("","symbol",false,"16px");
+		$list->add_row("Name","name",true,null);
+		$list->add_row("Deviation","deviation",true,null);
+		
+		$template = new Template("template/base/admin/general/list_timezones.html");
+		
+		$template->set_var("list", $list->get_list());
+		
+		$template->output();
 	}
 	
 	public static function list_paper_sizes()
@@ -57,7 +67,18 @@ class AdminGeneralIO
 	
 	public static function list_measuring_units()
 	{
-		echo "Function will be implemented soon!";
+		$list = new List_IO("AdminGeneralMeasuringUnit", "/core/modules/base/admin/admin_general.ajax.php", "list_measuring_units", "count_measuring_units", $argument_array, "AdminGeneralMeasuringUnit");
+		
+		$list->add_row("","symbol",false,"16px");
+		$list->add_row("Name","name",true,null);
+		$list->add_row("Type","type",true,null);
+		$list->add_row("Symbol","unit_symbol",false,null);
+		
+		$template = new Template("template/base/admin/general/list_measuring_units.html");
+		
+		$template->set_var("list", $list->get_list());
+		
+		$template->output();
 	}
 	
 	public static function list_currencies()

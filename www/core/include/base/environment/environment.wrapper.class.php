@@ -69,7 +69,7 @@ class Environment_Wrapper implements Environment_WrapperInterface
 	 */
 	public static function list_timezones($order_by, $order_method, $start, $end)
 	{
-		return Environment_Wrapper_Access::list_timezones();
+		return Environment_Wrapper_Access::list_timezones($order_by, $order_method, $start, $end);
 	}
 	
 	/**

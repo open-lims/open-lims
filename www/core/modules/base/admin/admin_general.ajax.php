@@ -112,11 +112,125 @@ class AdminGeneralAjax extends Ajax
 		return Environment_Wrapper::count_currencies();
 	}
 	
-	
-	public function list_timezones($page, $sortvalue, $sortmethod)
+	public function list_timezones($json_row_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
+		$argument_array = json_decode($json_argument_array);
 		
+		$list_request = new ListRequest_IO();
+		$list_request->set_row_array($json_row_array);
+	
+		if (!is_numeric($entries_per_page) or $entries_per_page < 1)
+		{
+			$entries_per_page = 20;
+		}
+		
+		$list_array = Environment_Wrapper::list_timezones($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+	
+		
+		if (is_array($list_array) and count($list_array) >= 1)
+		{
+			foreach($list_array as $key => $value)
+			{
+				$list_array[$key][symbol] = "<img src='images/icons/timezone.png' alt='N' border='0' />";
+				
+				if ($list_array[$key][deviation] > 0)
+				{
+					$list_array[$key][deviation] = "GMT+".$list_array[$key][deviation];
+				}
+				elseif ($list_array[$key][deviation] < 0)
+				{
+					$list_array[$key][deviation] = "GMT".$list_array[$key][deviation];
+				}
+				else
+				{
+					$list_array[$key][deviation] = "GTM+/-0";
+				}
+			}
+		}
+		else
+		{
+			$list_request->override_last_line("<span class='italic'>No results found!</span>");
+		}
+			
+		$list_request->set_array($list_array);
+		
+		return $list_request->get_page($page);
 	}
+	
+	public function count_timezones($json_argument_array)
+	{
+		return Environment_Wrapper::count_timezones();
+	}
+	
+	public function list_measuring_units($json_row_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	{
+		$argument_array = json_decode($json_argument_array);
+		
+		$list_request = new ListRequest_IO();
+		$list_request->set_row_array($json_row_array);
+	
+		if (!is_numeric($entries_per_page) or $entries_per_page < 1)
+		{
+			$entries_per_page = 20;
+		}
+		
+		$list_array = Environment_Wrapper::list_measuring_units($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+	
+		
+		if (is_array($list_array) and count($list_array) >= 1)
+		{
+			foreach($list_array as $key => $value)
+			{
+				$list_array[$key][symbol] = "<img src='images/icons/measuring_unit.png' alt='N' border='0' />";
+				
+				switch ($list_array[$key][type]):
+				
+					case 1:
+						$list_array[$key][type] = "length";
+					break;
+					
+					case 2:
+						$list_array[$key][type] = "mass";
+					break;
+					
+					case 3:
+						$list_array[$key][type] = "electric current";
+					break;
+					
+					case 4:
+						$list_array[$key][type] = "thermodynamic temperature";
+					break;
+					
+					case 5:
+						$list_array[$key][type] = "amount of substance";
+					break;
+					
+					case 6:
+						$list_array[$key][type] = "luminous intensity";
+					break;
+					
+					case 7:
+						$list_array[$key][type] = "time";
+					break;
+				
+				endswitch;
+			}
+		}
+		else
+		{
+			$list_request->override_last_line("<span class='italic'>No results found!</span>");
+		}
+			
+		$list_request->set_array($list_array);
+		
+		return $list_request->get_page($page);
+	}
+	
+	public function count_measuring_units($json_argument_array)
+	{
+		return Environment_Wrapper::count_measuring_units();
+	}
+	
 	
 	public function list_paper_sizes($page, $sortvalue, $sortmethod)
 	{
@@ -188,11 +302,6 @@ class AdminGeneralAjax extends Ajax
 		}
 			
 		echo $list->get_list($result_array, $page);
-	}
-	
-	public function list_measuring_units($page, $sortvalue, $sortmethod)
-	{
-		
 	}
 	
 	public function add_paper_size($name, $width, $height, $margin_left, $margin_right, $margin_top, $margin_bottom)
@@ -336,10 +445,22 @@ class AdminGeneralAjax extends Ajax
 					echo $this->count_currencies($_POST[argument_array]);
 				break;
 				
-				
 				case "list_timezones":
-					$this->list_timezones($_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+					echo $this->list_timezones($_POST[row_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
+				
+				case "count_timezones":
+					echo $this->count_timezones($_POST[argument_array]);
+				break;
+				
+				case "list_measuring_units":
+					echo $this->list_measuring_units($_POST[row_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				break;
+				
+				case "count_measuring_units":
+					echo $this->count_measuring_units($_POST[argument_array]);
+				break;
+				
 				
 				case "list_paper_sizes":
 					$this->list_paper_sizes($_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
@@ -359,10 +480,6 @@ class AdminGeneralAjax extends Ajax
 				
 				case "delete_paper_size":
 					$this->delete_paper_size($_GET[id]);
-				break;
-				
-				case "list_measuring_units":
-					$this->list_measuring_units($_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 							
 				default:
