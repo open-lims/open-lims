@@ -59,7 +59,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
     {
     	if (is_numeric($value_id))
     	{
-    		if (ValueVersion_Access::exist_value_by_value_id($value_id) == true)
+    		if (Value_Access::exist_value_by_value_id($value_id) == true)
     		{
     			$this->value_id = $value_id;
 				$this->value = new Value_Access($value_id);
