@@ -53,25 +53,31 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 		argument_array = array;
 	}
 
-	function count_entries() {
+	function count_entries() 
+	{
 		$.ajax({
 			type : "POST",
 			url : ajax_handler + "?session_id=" + get_array['session_id']
 					+ "&run=" + ajax_count_run,
 			data : "argument_array=" + argument_array,
 			async : false,
-			success : function(data) {
+			success : function(data) 
+			{
 				number_of_entries = parseInt(data);
-				if (number_of_entries == 0) {
+				if (number_of_entries == 0) 
+				{
 					number_of_pages = 1;
-				} else {
+				} 
+				else 
+				{
 					number_of_pages = Math.ceil(number_of_entries / entries_per_page);
 				}
 			}
 		});
 	}
 
-	function load_content(sort_value, sort_method, local_page) {
+	function load_content(sort_value, sort_method, local_page) 
+	{
 		var local_height = $("#" + css_main_id).height();
 
 		page = local_page;

@@ -91,6 +91,23 @@ class DataPath implements DataPathInterface
     		{
     			$this->path_stack_array = $session->read_value("stack_array");
     			$this->clear_stack();
+    			
+    			$current_path_stack_array = $this->path_stack_array;
+		   		$previous_entry = array_pop($current_path_stack_array);
+		   		
+		   		if ($previous_entry != null and is_array($previous_entry))
+		   		{
+		   			if ($previous_entry[virtual] == true)
+		   			{
+		   				$this->folder_id = null;
+	    				$this->virtual_folder_id = $previous_entry[id];
+		   			}
+		   			else
+		   			{
+		   				$this->folder_id = $previous_entry[id];
+	    				$this->virtual_folder_id = null;
+		   			}
+		   		}
     		}
     		else
     		{

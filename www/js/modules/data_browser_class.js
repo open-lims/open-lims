@@ -211,7 +211,7 @@ function data_browser()
 					var filename = $(this).children().text();
 					if(is_image(filename))
 					{
-						show_thumbnail($(this).children(),"some image");
+						show_thumbnail($(this).children(),"image");
 					}			
 				});
 		});

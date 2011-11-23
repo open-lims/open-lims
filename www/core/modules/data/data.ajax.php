@@ -334,9 +334,15 @@ class DataAjax extends Ajax
 	private function count_data_browser($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
-		
+				
 		$folder_id = $argument_array[0][1];
 		$virtual_folder_id = $argument_array[1][1];
+		
+		if (!$folder_id and !$virtual_folder_id)
+		{
+			$data_path = new DataPath(null,null);
+			$folder_id = $data_path->get_folder_id();
+		}
 		
 		if (is_numeric($folder_id) or is_numeric($virtual_folder_id))
 		{
