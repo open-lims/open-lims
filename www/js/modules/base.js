@@ -20,6 +20,7 @@
  */
 
 /**
+ * Appends a tooltip with a given message to the cursor if a given element is hovered.
  * @param element_id the id of the element to tooltip
  * @param message the tooltip message
  */
