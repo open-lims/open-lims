@@ -42,6 +42,8 @@ function base_tree_nav(id, name, ajax_handler)
 	var inserted_element_event_handler = function(){};
 	
 	var max_menu_height;
+	
+	var follow_link_handler = function(){};
   
     // initialize the member function references for the class prototype
     if (typeof(_file_tree_nav_prototype_called) == "undefined")
@@ -53,6 +55,7 @@ function base_tree_nav(id, name, ajax_handler)
 	    base_tree_nav.prototype.add_element_to_insert = add_element_to_insert;
 	    base_tree_nav.prototype.set_loading_animation = set_loading_animation;
 	    base_tree_nav.prototype.set_follow_link = set_follow_link;
+	    base_tree_nav.prototype.set_follow_link_handler = set_follow_link_handler;	
     }
     
     /**
@@ -181,6 +184,14 @@ function base_tree_nav(id, name, ajax_handler)
     function set_follow_link(bool)
     {
     	follow_link = bool;
+    }
+    
+    /**
+     * Sets an event handler before following links. 
+     * @param handler the event handler.
+     */
+    function set_follow_link_handler(handler){
+	    follow_link_handler = handler;
     }
     
     /**
@@ -556,8 +567,7 @@ function base_tree_nav(id, name, ajax_handler)
 				parse_array();
 				$("#" + tree_id).bind("click",handler);
 				if (follow_link_now) 
-				{
-					window.location.href = href;
+				{load_linked_contents(href);
 				}
 			}
 		} 
@@ -612,7 +622,7 @@ function base_tree_nav(id, name, ajax_handler)
 							$("#" + tree_id).bind("click",handler);
 							if (follow_link_now) 
 							{
-								window.location.href = href;
+								load_linked_contents(href);
 							}
 						});	
 					}
@@ -623,7 +633,7 @@ function base_tree_nav(id, name, ajax_handler)
 						$("#" + tree_id).bind("click",handler);
 						if (follow_link_now) 
 						{
-							window.location.href = href;
+							load_linked_contents(href);
 						}
 					}
 				}
@@ -636,4 +646,16 @@ function base_tree_nav(id, name, ajax_handler)
 			}
 		}
 	}
+    
+    /**
+     * Passes an url to the (optional) event handler and opens it.
+     * @param href the url tp pass.
+     */
+    function load_linked_contents(href){
+    	var success = follow_link_handler(href);
+    	if(!success)
+    	{
+    		window.location.href = href;
+    	}
+    }
 }
