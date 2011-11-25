@@ -64,6 +64,10 @@ function base_upload(unique_id, session_id)
 		});
 	}
 	
+	/**
+	 * Initialise the upload. Submits form data and enters upload loop.
+	 * @returns {Boolean} false if no files were selected.
+	 */
 	function start_upload()
 	{
 		var files = new Array();
@@ -113,7 +117,7 @@ function base_upload(unique_id, session_id)
 			.attr("disabled","true")
 			.click(function()
 			{
-				proceed();
+				$(location).attr("href",get_retrace());
 			});
 		
 		$(block_ui_content)
@@ -129,6 +133,10 @@ function base_upload(unique_id, session_id)
 		upload_loop();
 	}
 	
+	/**
+	 * Initialise the scrollbar.
+	 * @returns {Boolean} false if scrollbar is not necessary.
+	 */
 	function init_scrollbar()
 	{
 		var list_item_height = parseInt($("#FileList > li").css("height").replace("px",""));
@@ -147,13 +155,18 @@ function base_upload(unique_id, session_id)
 		scroll_api.reinitialise();
 	}
 
+	/**
+	 * Main upload loop. Exits if all files are uploaded.
+	 * @returns {Boolean} true if all uploads are complete.
+	 */
 	function upload_loop()
 	{
 		var done = false;
-		if($("#FileListItem"+parseInt(num_uploaded_files + 1)).children(".FileListImageContainer").html() == "")
+		var current_item = $("#FileListItem"+parseInt(num_uploaded_files + 1)).children(".FileListImageContainer");
+		if($(current_item).html() == "")
 		{
 			image = $("<img class='FileListImage' src='images/animations/loading_circle_small.gif'/>");
-			$("#FileListItem"+parseInt(num_uploaded_files + 1)).children(".FileListImageContainer").append(image);
+			$(current_item).append(image);
 		}
 		
 		if(php_upload_size_script)
@@ -206,6 +219,11 @@ function base_upload(unique_id, session_id)
 		setTimeout(upload_loop,250);
 	}
 	
+	/**
+	 * Checks for the state of the uploads the old-fashioned way. 
+	 * Marks finished uploads as complete and updates progressbar.
+	 * @returns {Boolean} true if all uploads are complete, otherwise false.
+	 */
 	function check_upload_state()
 	{
 		var done = false;
@@ -257,6 +275,11 @@ function base_upload(unique_id, session_id)
 		}
 	}
 	
+	/**
+	 * Checks for the progress of the uploads via PHP uploadprogress extension. 
+	 * Marks finished uploads as complete and updates progress bar (accurately) as well as time left.
+	 * @returns {Boolean} false if either PHP extension is not installed or upload in progress. True if all complete.
+	 */
 	function check_upload_progress()
 	{
 		var done = false;
@@ -342,6 +365,11 @@ function base_upload(unique_id, session_id)
 		}
 	}
 	
+	/**
+	 * Marks an upload as complete.
+	 * @param num the number of the file that is uploaded.
+	 * @param definitive whether the upload is definitely complete or if it needs an error check.
+	 */
 	function set_upload_complete(num, definitive)
 	{
 		if(track_uploads[num-1] != 1)
@@ -379,6 +407,11 @@ function base_upload(unique_id, session_id)
 		}	
 	}
 	
+	/**
+	 * Marks an upload as failed due to an error. 
+	 * @param num the number of the file that was not successfully uploaded.
+	 * @param code The error code.
+	 */
 	function set_upload_error(num, code)
 	{
 		if(track_uploads[num-1] != 1)
@@ -408,12 +441,19 @@ function base_upload(unique_id, session_id)
 		update_scrollbar();
 	}
 	
+	/**
+	 * Updates the progressbar.
+	 */
 	function update_progressbar()
 	{
 		var global_percentage = 100 / (num_files_to_upload / num_uploaded_files);
 		$('#GlobalProgressBar').progressbar('option', 'value', global_percentage);	
 	}
 	
+	/**
+	 * Updates the scrollbar.
+	 * @returns {Boolean} false if there is no need for a scroll bar.
+	 */
 	function update_scrollbar()
 	{
 		if(scroll_api == undefined)
@@ -429,12 +469,10 @@ function base_upload(unique_id, session_id)
 		}
 	}
 	
-	function proceed() 
-	{
-		$("#FinishUpload").attr("disabled", "true");
-		$(location).attr("href",get_retrace());
-	}
-	
+	/**
+	 * Gets the retrace url to jump to when the upload is finished.
+	 * @returns string the url.
+	 */
 	function get_retrace() 
 	{
 		var current_url = $(location).attr("href");
