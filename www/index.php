@@ -34,7 +34,7 @@
  require_once("config/main.php");
 
 
- require_once("core/include/base/template.class.php");
+ require_once("core/include/base/system/template.class.php");
 
  require_once("core/main.php");
  $main = new Main();

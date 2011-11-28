@@ -176,7 +176,7 @@ class DataAjax extends Ajax
 						
 						$list_array[$key][type] = "File";
 						$list_array[$key][version] = $file->get_version();
-						$list_array[$key][size] = Misc::calc_size($list_array[$key][size]);
+						$list_array[$key][size] = Convert::convert_byte_1024($list_array[$key][size]);
 						$list_array[$key][permission] = $file->get_permission_string();
 						
 						if($file->is_delete_access())

@@ -29,9 +29,6 @@ require_once("interfaces/value.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	require_once("exceptions/value_not_found_exception.class.php");
-	require_once("exceptions/value_version_not_found_exception.class.php");
-	
 	require_once("access/value.access.php");
 	require_once("access/value_version.access.php");
 }
@@ -56,26 +53,34 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	/**
 	 * @see ValueInterface::__construct();
 	 * @param integer $value_id
+	 * @throws ValueNotFoundException
 	 */
     function __construct($value_id)
     {
-		if ($value_id == null)
-		{
-			parent::__construct(null);
+    	if (is_numeric($value_id))
+    	{
+    		if (Value_Access::exist_value_by_value_id($value_id) == true)
+    		{
+    			$this->value_id = $value_id;
+				$this->value = new Value_Access($value_id);
+				
+				$value_version_id = ValueVersion_Access::get_current_entry_by_toid($value_id);
+				$this->value_version = new ValueVersion_Access($value_version_id);
+	
+				parent::__construct($this->value->get_data_entity_id());
+    		}
+    		else
+    		{
+    			throw new ValueNotFoundException();
+    		}
+    	}
+    	else
+    	{
+    		parent::__construct(null);
 			$this->value_id = null;
 			$this->value = new Value_Access(null);
 			$this->value_version = new ValueVersion_Access(null);
-		}
-		else
-		{
-			$this->value_id = $value_id;
-			$this->value = new Value_Access($value_id);
-			
-			$value_version_id = ValueVersion_Access::get_current_entry_by_toid($value_id);
-			$this->value_version = new ValueVersion_Access($value_version_id);
-
-			parent::__construct($this->value->get_data_entity_id());
-		}
+    	}
     }
     
     function __destruct()
@@ -158,14 +163,22 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	 * @see ValueInterface::open_internal_revision()
 	 * @param integer
 	 * @return bool
+	 * @throws ValueVersionNotFoundException
 	 */
 	public function open_internal_revision($internal_revision)
 	{
 		if (is_numeric($internal_revision) and $this->value_id)
 		{
-			$value_version_id = ValueVersion_Access::get_entry_by_toid_and_internal_revision($this->value_id, $internal_revision);
-			$this->value_version = new ValueVersion_Access($value_version_id);
-			return true;
+			if (ValueVersion_Access::exist_internal_revision($this->value_id, $internal_revision) == true)
+			{
+				$value_version_id = ValueVersion_Access::get_entry_by_toid_and_internal_revision($this->value_id, $internal_revision);
+				$this->value_version = new ValueVersion_Access($value_version_id);
+				return true;
+			}
+			else
+			{
+				throw new ValueVersionNotFoundException();
+			}
 		}
 		else
 		{

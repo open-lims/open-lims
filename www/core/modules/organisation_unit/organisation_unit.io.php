@@ -27,6 +27,9 @@
  */
 class OrganisationUnitIO
 {
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function detail()
 	{
 		global $user;
@@ -394,9 +397,7 @@ class OrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 
@@ -404,107 +405,26 @@ class OrganisationUnitIO
 	{
 		global $user;
 	
-		$content_array = array();
+		$argument_array = array();
+		$argument_array[0][0] = "user_id";
+		$argument_array[0][1] = $user->get_user_id();;
 		
-		$table_io = new TableIO("OverviewTable");
+		$list = new List_IO("OrganisationUnitUserHasOUList", "/core/modules/organisation_unit/organisation_unit.ajax.php", "list_organisation_units_by_user_id", "count_organisation_units_by_user_id", $argument_array, "OrganisationUnitUserHasOU");
 		
-		$table_io->add_row("","symbol",false,16);
-		$table_io->add_row("Name","name",false,null);
-		$table_io->add_row("My Status","mystatus",false,null);
-		
-		$organisation_unit_array = OrganisationUnit::list_entries_by_user_id($user->get_user_id());
-		
-		$organisation_unit_array_cardinality = count($organisation_unit_array);
-		
-		$counter = 0;
-
-		if (!$_GET[page] or $_GET[page] == 1)
-		{
-			$page = 1;
-			$counter_begin = 0;
-			if ($organisation_unit_array_cardinality > 25)
-			{
-				$counter_end = 24;
-			}
-			else
-			{
-				$counter_end = $organisation_unit_array_cardinality-1;
-			}
-		}
-		else
-		{
-			if ($_GET[page] >= ceil($organisation_unit_array_cardinality/25))
-			{
-				$page = ceil($organisation_unit_array_cardinality/25);
-				$counter_end = $organisation_unit_array_cardinality;
-			}
-			else
-			{
-				$page = $_GET[page];
-				$counter_end = (25*$page)-1;
-			}
-			$counter_begin = (25*$page)-25;
-		}
-		
-		if (is_array($organisation_unit_array))
-		{
-			$module_link_array = ModuleLink::list_links_by_type("ou_navigation");
-			
-			foreach ($organisation_unit_array as $key => $value)
-			{
-				if ($counter >= $counter_begin and $counter <= $counter_end)
-				{
-					$column_array = array();
-
-					$organisation_unit 	= new OrganisationUnit($value);
-					
-					$paramquery['username'] = $_GET['username'];
-					$paramquery['session_id'] = $_GET['session_id'];
-					
-					if (is_array($module_link_array[0]['array']) and count($module_link_array[0]['array']) >= 1)
-					{
-						foreach ($module_link_array[0]['array'] as $array_key => $array_value)
-						{
-							if ($array_value == "%OU_ID%")
-							{
-								$paramquery['ou_id'] = $value;
-							}
-							else
-							{
-								$paramquery[$array_key] = $array_value;
-							}
-						}
-					}
-					
-					$params = http_build_query($paramquery, '', '&#38;');
-					
-					
-					$column_array[symbol][link] = $params;
-					$column_array[symbol][content] = "<img src='images/icons/".$organisation_unit->get_icon()."' alt='N' border='0' />";
-					$column_array[name][link] = $params;
-					$column_array[name][content] = $organisation_unit->get_name();
-					$column_array[mystatus] = $organisation_unit->get_user_status($user->get_user_id());
-	
-					array_push($content_array, $column_array);
-				}
-				$counter++;	
-			}
-		}
-		else
-		{
-			$content_array = null;
-			$table_io->override_last_line("<span class='italic'>No Organisation Units Found!</span>");
-		}
+		$list->add_row("","symbol",false,"16px");
+		$list->add_row("Name","name",true,null);
+		$list->add_row("My Status/Role","mystatus",false,null);
 		
 		$template = new Template("template/organisation_unit/user_related_organisation_units.html");
 		
-		$table_io->add_content_array($content_array);	
-			
-		$template->set_var("table", $table_io->get_table($page ,$organisation_unit_array_cardinality));		
+		$template->set_var("list", $list->get_list());
 
 		$template->output();
 	}
 	
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function list_owners()
 	{
 		if ($_GET[ou_id])
@@ -518,12 +438,13 @@ class OrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function list_leaders()
 	{
 		if ($_GET[ou_id])
@@ -537,12 +458,13 @@ class OrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function list_members()
 	{
 		if ($_GET[ou_id])
@@ -556,12 +478,13 @@ class OrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function list_quality_managers()
 	{
 		if ($_GET[ou_id])
@@ -575,12 +498,13 @@ class OrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function list_groups()
 	{
 		if ($_GET[ou_id])
@@ -594,9 +518,7 @@ class OrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	

@@ -28,8 +28,6 @@ require_once("interfaces/sample_template.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	require_once("exceptions/sample_template_not_found_exception.class.php");
-	
 	require_once("access/sample_template.access.php");
 }
 
@@ -47,18 +45,26 @@ class SampleTemplate implements SampleTemplateInterface
 	/**
 	 * @see SampleTemplateInterface::__construct()
 	 * @param integer $sample_template_id
+	 * @throws SampleTemplateNotFoundException
 	 */
 	function __construct($sample_template_id)
 	{
-		if ($sample_template_id == null)
+		if (is_numeric($sample_template_id))
 		{
-			$this->sample_template_id = null;
-			$this->sample_template = new SampleTemplate_Access(null);
+			if (SampleTemplate_Access::exist_id($sample_template_id) == true)
+			{
+				$this->sample_template_id = $sample_template_id;
+				$this->sample_template = new SampleTemplate_Access($sample_template_id);
+			}
+			else
+			{
+				throw new SampleTemplateNotFoundException();
+			}
 		}
 		else
 		{
-			$this->sample_template_id = $sample_template_id;
-			$this->sample_template = new SampleTemplate_Access($sample_template_id);
+			$this->sample_template_id = null;
+			$this->sample_template = new SampleTemplate_Access(null);
 		}
 	}
 	

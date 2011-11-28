@@ -24,5 +24,9 @@
 /**
  * 
  */
+	$classes['LocationException'] 			= $path_prefix."core/include/location/exception/location.exception.class.php";
+	$classes['LocationNotFoundException'] 	= $path_prefix."core/include/location/exception/location_not_found.exception.class.php";
+	$classes['LocationIDMissingException'] 	= $path_prefix."core/include/location/exception/location_id_missing.exception.class.php";
+
 	$classes['Location'] = $path_prefix."core/include/location/location.class.php";
 ?>

@@ -156,5 +156,29 @@ class OrganisationUnit_Wrapper implements OrganisationUnit_WrapperInterface
 	{
 		return OrganisationUnit_Wrapper_Access::count_organisation_unit_groups($organisation_unit_id);
 	}
+
+	/**
+	 * @see OrganisationUnit_WrapperInterface::list_organisation_units_by_user_id()
+	 * @param integer $user_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+    public static function list_organisation_units_by_user_id($user_id, $order_by, $order_method, $start, $end)
+    {
+    	return OrganisationUnit_Wrapper_Access::list_organisation_units_by_user_id($user_id, $order_by, $order_method, $start, $end);
+    }
+    
+    /**
+     * @see OrganisationUnit_WrapperInterface::count_organisation_units_by_user_id()
+     * @param integer $user_id
+     * @return integer
+	 */
+	public static function count_organisation_units_by_user_id($user_id)
+	{
+		return OrganisationUnit_Wrapper_Access::count_organisation_units_by_user_id($user_id);
+	}
 }
 ?>

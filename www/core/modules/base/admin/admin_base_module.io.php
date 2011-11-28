@@ -29,7 +29,7 @@ class AdminBaseModuleIO
 {
 	public static function home()
 	{
-		$list = new ListStat_IO(Base_Wrapper::count_base_module(), 20);
+		$list = new ListStat_IO(System_Wrapper::count_base_module(), 20);
 		
 		$list->add_row("Name", "name", true, null);
 		$list->add_row("Dialogs", "dialogs", true, null);
@@ -40,22 +40,22 @@ class AdminBaseModuleIO
 		{
 			if ($_GET[sortvalue] and $_GET[sortmethod])
 			{
-				$result_array = Base_Wrapper::list_base_module($_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
+				$result_array = System_Wrapper::list_base_module($_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
 			}
 			else
 			{
-				$result_array = Base_Wrapper::list_base_module(null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
+				$result_array = System_Wrapper::list_base_module(null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
 			}				
 		}
 		else
 		{
 			if ($_GET[sortvalue] and $_GET[sortmethod])
 			{
-				$result_array = Base_Wrapper::list_base_module($_GET[sortvalue], $_GET[sortmethod], 0, 20);
+				$result_array = System_Wrapper::list_base_module($_GET[sortvalue], $_GET[sortmethod], 0, 20);
 			}
 			else
 			{
-				$result_array = Base_Wrapper::list_base_module(null, null, 0, 20);
+				$result_array = System_Wrapper::list_base_module(null, null, 0, 20);
 			}	
 		}
 		

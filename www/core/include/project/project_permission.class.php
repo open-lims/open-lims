@@ -38,35 +38,35 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class ProjectPermission implements ProjectPermissionInterface, EventListenerInterface
 {
-    private $permission_id;
-    private $project_permission;
+    protected $permission_id;
+    protected $project_permission;
     
     /**
      * @see ProjectPermissionInterface::__construct()
      * @param integer $permission_id
      */
-    function __construct($permission_id)
+    protected function __construct($permission_id)
     {
-    	if ($permission_id == null)
+    	if (is_numeric($permission_id))
+		{
+			if (ProjectPermission_Access::exist_id($permission_id) == true)
+			{
+				$this->permission_id = $permission_id;
+   	   			$this->project_permission = new ProjectPermission_Access($permission_id);
+			}
+			else
+			{
+				throw new ProjectPermissionNotFoundException();
+			}
+    	}
+    	else
     	{
-   	   		$this->permission_id = null;
+    		$this->permission_id = null;
    	   		$this->project_permission = new ProjectPermission_Access(null);
-   	   	}
-   	   	else
-   	   	{
-   	   		$this->permission_id = $permission_id;
-   	   		$this->project_permission = new ProjectPermission_Access($permission_id);
-   	   	}
-    }
-    
-    function __destruct()
-    {
-    	unset($this->permission_id);
-    	unset($this->project_permission);
+    	}
     }
     
     /**
-     * @see ProjectPermissionInterface::create()
      * @param integer $user_id
      * @param integer $organisation_unit_id
      * @param integer $group_id
@@ -76,286 +76,17 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
      * @param integer $intention
      * @return integer
      */
-    public function create($user_id, $organisation_unit_id, $group_id, $project_id, $permission, $owner_id, $intention)
+    protected function create($user_id, $organisation_unit_id, $group_id, $project_id, $permission, $owner_id, $intention)
     {
-    	global $transaction;
-    	
-    	$transaction_id = $transaction->begin();
-    	
-    	$permission_id = $this->project_permission->create($user_id, $organisation_unit_id, $group_id, $project_id, $permission, $owner_id, $intention);
-    	
-    	if ($permission_id != null)
-    	{
-    		$this->__construct($permission_id);
-    		
-    		$project_folder_id = ProjectFolder::get_folder_by_project_id($project_id);
-    		
-    		if($user_id)
-    		{
-    			$permission_string = strrev(decbin($permission));
-    			
-    			if ($permission_string{2} == 1 or $permission_string{3} == 1  or $permission_string{7} == 1)
-    			{
-	    			$folder_id = UserFolder::get_folder_by_user_id($user_id);
-	    			
-	    			$virtual_folder = new VirtualFolder(null);
-	    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
-	    			
-	    			foreach($virtual_folder_array as $key => $value)
-	    			{
-	    				$virtual_folder = new ProjectVirtualFolder($value);
-	    				if ($virtual_folder->is_project_vfolder() == true)
-	    				{
-	    					$virtual_folder_id = $value;
-	    				}
-	    			}
-	
-	    			if (is_numeric($virtual_folder_id))
-	    			{
-	    				$virtual_folder = new VirtualFolder($virtual_folder_id);
-	    				if ($virtual_folder->link_folder($project_folder_id) == false)
-	    				{
-	    					if ($transaction_id != null)
-	    					{
-								$transaction->rollback($transaction_id);
-							}
-				    		return null;
-	    				}
-	    			}
-    			}
-    		}
-    		elseif($organisation_unit_id)
-    		{
-    			$folder_id = OrganisationUnitFolder::get_folder_by_organisation_unit_id($organisation_unit_id);
-    			
-    			$virtual_folder = new VirtualFolder(null);
-    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
-    			
-    			foreach($virtual_folder_array as $key => $value)
-    			{
-    				$virtual_folder = new ProjectVirtualFolder($value);
-    				if ($virtual_folder->is_project_vfolder() == true)
-    				{
-    					$virtual_folder_id = $value;
-    				}
-    			}
-    			   			
-    			if (is_numeric($virtual_folder_id))
-    			{
-    				$virtual_folder = new VirtualFolder($virtual_folder_id);
-    				if ($virtual_folder->link_folder($project_folder_id) == false)
-    				{
-    					if ($transaction_id != null)
-    					{
-							$transaction->rollback($transaction_id);
-						}
-			    		return null;
-    				}
-    			}
-    		}
-    		elseif($group_id)
-    		{
-    			$folder_id = GroupFolder::get_folder_by_group_id($group_id);
-    			
-    			$virtual_folder = new VirtualFolder(null);
-    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
-    			
-    			foreach($virtual_folder_array as $key => $value)
-    			{
-    				$virtual_folder = new ProjectVirtualFolder($value);
-    				if ($virtual_folder->is_project_vfolder() == true)
-    				{
-    					$virtual_folder_id = $value;
-    				}
-    			}
-    			
-    			if (is_numeric($virtual_folder_id))
-    			{
-    				$virtual_folder = new VirtualFolder($virtual_folder_id);
-    				if ($virtual_folder->link_folder($project_folder_id) == false)
-    				{
-    					if ($transaction_id != null)
-    					{
-							$transaction->rollback($transaction_id);
-						}
-			    		return null;
-    				}
-    			}
-    		}
-    		
-    		if ($transaction_id != null)
-    		{
-				$transaction->commit($transaction_id);
-			}
-    		return $permission_id;	
-    	}
-    	else
-    	{
-    		if ($transaction_id != null)
-    		{
-				$transaction->rollback($transaction_id);
-			}
-    		return null;
-    	}
+    	return $this->project_permission->create($user_id, $organisation_unit_id, $group_id, $project_id, $permission, $owner_id, $intention);
     } 
     
     /**
-     * @see ProjectPermissionInterface::delete()
      * @return bool
      */
-    public function delete()
+    protected function delete()
     {
-    	global $transaction;
-    	
-    	if ($this->permission_id and $this->project_permission)
-    	{
-			$transaction_id = $transaction->begin();
-
-			$project_id = $this->project_permission->get_project_id();
-
-    		$project_folder_id = ProjectFolder::get_folder_by_project_id($project_id);
-    		
-    		if ($this->project_permission->get_user_id())
-    		{
-    			$permission_string = strrev(decbin($this->project_permission->get_permission()));
-    			
-    			if ($permission_string{2} == 1 or $permission_string{3} == 1  or $permission_string{7} == 1)
-    			{
-					if (ProjectPermission_Access::count_entries_with_project_id_and_user_id($project_id, $this->project_permission->get_user_id()) <= 1)
-					{
-		    			$folder_id = UserFolder::get_folder_by_user_id($this->project_permission->get_user_id());
-		    			
-		    			$virtual_folder = new VirtualFolder(null);
-		    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
-		    			
-		    			foreach($virtual_folder_array as $key => $value)
-		    			{
-		    				$virtual_folder = new ProjectVirtualFolder($value);
-		    				if ($virtual_folder->is_project_vfolder() == true)
-		    				{
-		    					$virtual_folder_id = $value;
-		    				}
-		    			}
-		    			
-		    			if ($virtual_folder_id)
-		    			{
-		    				$virtual_folder = new VirtualFolder($virtual_folder_id);
-		    				$vfolder_return = $virtual_folder->unlink_folder($project_folder_id);
-		    			}
-		    			else
-		    			{
-		    				$vfolder_return = true;
-		    			}
-					}
-					else
-					{
-						$vfolder_return = true;
-					}
-    			}
-    			else
-    			{
-    				$vfolder_return = true;
-    			}
-    		}
-    		elseif($this->project_permission->get_organisation_unit_id())
-    		{
-    			if (ProjectPermission_Access::count_entries_with_project_id_and_organisation_unit_id($project_id, $this->project_permission->get_organisation_unit_id()) <= 1)
-    			{
-	    			$folder_id = OrganisationUnitFolder::get_folder_by_organisation_unit_id($this->project_permission->get_organisation_unit_id());
-	    			
-	    			$virtual_folder = new VirtualFolder(null);
-	    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
-	    			
-	    			foreach($virtual_folder_array as $key => $value)
-	    			{
-	    				$virtual_folder = new ProjectVirtualFolder($value);
-	    				if ($virtual_folder->is_project_vfolder() == true)
-	    				{
-	    					$virtual_folder_id = $value;
-	    				}
-	    			}
-	    			
-	    			if ($virtual_folder_id)
-	    			{
-	    				$virtual_folder = new VirtualFolder($virtual_folder_id);
-	    				$vfolder_return = $virtual_folder->unlink_folder($project_folder_id);
-	    			}
-	    			else
-	    			{
-	    				$vfolder_return = true;
-	    			}
-    			}
-    			else
-    			{
-					$vfolder_return = true;
-				}
-    		}
-    		elseif($this->project_permission->get_group_id())
-    		{
-    			if (ProjectPermission_Access::count_entries_with_project_id_and_group_id($project_id, $this->project_permission->get_group_id()) <= 1)
-    			{
-	    			$folder_id = GroupFolder::get_folder_by_group_id($this->project_permission->get_group_id());
-	    			
-	    			$virtual_folder = new VirtualFolder(null);
-	    			$virtual_folder_array = $virtual_folder->list_entries_by_folder_id($folder_id);
-	    			
-	    			foreach($virtual_folder_array as $key => $value)
-	    			{
-	    				$virtual_folder = new ProjectVirtualFolder($value);
-	    				if ($virtual_folder->is_project_vfolder() == true)
-	    				{
-	    					$virtual_folder_id = $value;
-	    				}
-	    			}
-	    			
-	    			if ($virtual_folder_id)
-	    			{
-	    				$virtual_folder = new VirtualFolder($virtual_folder_id);
-	    				$vfolder_return = $virtual_folder->unlink_folder($project_folder_id);
-	    			}
-	    			else
-	    			{
-	    				$vfolder_return = true;
-	    			}
-    			}
-    			else
-    			{
-					$vfolder_return = true;
-				}
-    		}
-
-    		if ($vfolder_return == true)
-    		{
-    			if ($this->project_permission->delete() == true)
-    			{
-    				if ($transaction_id != null)
-    				{
-						$transaction->commit($transaction_id);
-					}
-					return true;
-    			}
-    			else
-    			{
-    				if ($transaction_id != null)
-    				{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
-    			}
-    		}
-    		else
-    		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->rollback($transaction_id);
-				}
-    			return false;
-    		}
-    	}
-    	else
-    	{
-    		return false;
-    	}
+    	return $this->project_permission->delete();
     }
     
     /**
@@ -975,10 +706,10 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     		$project_array = Project::list_organisation_unit_related_projects($event_object->get_organisation_unit_id(), true);
     		if (is_array($project_array) and count($project_array) >= 1)
     		{
-    			$project_permission = new ProjectPermission(null);
+    			$project_permission = new ProjectPermissionUser(null);
     			foreach($project_array as $key => $value)
     			{
-    				if ($project_permission->create($event_object->get_leader_id(), null, null, $value, constant("PROJECT_LEADER_STD_PERMISSION"), null, 2) == null)
+    				if ($project_permission->create($event_object->get_leader_id(), $value, constant("PROJECT_LEADER_STD_PERMISSION"), null, 2) == null)
 					{
 						return false;
 					}
@@ -1001,7 +732,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     				{
     					foreach($permission_array as $permission_key => $permission_value)
     					{
-    						$project_permission = new ProjectPermission($permission_value);
+    						$project_permission = self::get_instace($permission_value);
     						if ($project_permission->delete() == false)
     						{
     							return false;
@@ -1020,10 +751,10 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     		$project_array = Project::list_organisation_unit_related_projects($event_object->get_organisation_unit_id(), true);
     		if (is_array($project_array) and count($project_array) >= 1)
     		{
-    			$project_permission = new ProjectPermission(null);
+    			$project_permission = new ProjectPermissionUser(null);
     			foreach($project_array as $key => $value)
     			{
-    				if ($project_permission->create($event_object->get_quality_manager_id(), null, null, $value, constant("PROJECT_QM_STD_PERMISSION"), null, 5) == null)
+    				if ($project_permission->create($event_object->get_quality_manager_id(), $value, constant("PROJECT_QM_STD_PERMISSION"), null, 5) == null)
 					{
 						return false;
 					}
@@ -1046,7 +777,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     				{
     					foreach($permission_array as $permission_key => $permission_value)
     					{
-    						$project_permission = new ProjectPermission($permission_value);
+    						$project_permission = self::get_instace($permission_value);
     						if ($project_permission->delete() == false)
     						{
     							return false;
@@ -1068,8 +799,8 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 			{
 				foreach($project_array as $key => $value)
 				{
-					$project_permission = new ProjectPermission(null);
-					if ($project_permission->create(null, null, $event_object->get_group_id(), $value, constant("PROJECT_GROUP_STD_PERMISSION"), null, 4) == null)
+					$project_permission = new ProjectPermissionGroup(null);
+					if ($project_permission->create($event_object->get_group_id(), $value, constant("PROJECT_GROUP_STD_PERMISSION"), null, 4) == null)
 					{
 						return false;
 					}							
@@ -1093,7 +824,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 					{
 						foreach($project_permission_array as $sub_key => $sub_value)
 						{
-							$project_permission = new ProjectPermission($sub_value);
+							$project_permission = self::get_instance($sub_value);
 							if ($project_permission->delete() == false)
 							{
 								return false;
@@ -1106,6 +837,25 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     	
     	return true;
     }
+
+    /**
+     * @return object
+     */
+	public static function get_instance($permission_id)
+	{
+		if (ProjectPermissionUser::is_case($permission_id) == true)
+		{
+			return new ProjectPermissionUser($permission_id);
+		}
+		elseif (ProjectPermissionGroup::is_case($permission_id) == true)
+		{
+			return new ProjectPermissionGroup($permission_id);
+		}
+		elseif (ProjectPermissionOrganisationUnit::is_case($permission_id) == true)
+		{
+			return new ProjectPermissionOrganisationUnit($permission_id);
+		}
+	}
 }
 
 ?>

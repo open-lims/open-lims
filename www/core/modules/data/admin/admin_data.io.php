@@ -32,8 +32,8 @@ class AdminDataIO
 		$template = new Template("template/data/admin/home_dialog.html");
 		
 		$template->set_var("base_dir", System::get_base_directory());
-		$template->set_var("system_space", Misc::calc_size(System::get_system_space()));
-		$template->set_var("user_used_space", Misc::calc_size(DataUserData::get_used_space()));
+		$template->set_var("system_space", Convert::convert_byte_1024(System::get_system_space()));
+		$template->set_var("user_used_space", Convert::convert_byte_1024(DataUserData::get_used_space()));
 		
 		$additional_quota_dialog_array = ModuleDialog::list_dialogs_by_type("additional_quota");
 		
@@ -56,8 +56,8 @@ class AdminDataIO
 			$template->set_var("additional_quota_array", $additional_quota_array);
 		}
 		
-		$template->set_var("db_used_space", Misc::calc_size(System::get_used_database_space()));
-		$template->set_var("free_space", Misc::calc_size(System::get_free_space()));
+		$template->set_var("db_used_space", Convert::convert_byte_1024(System::get_used_database_space()));
+		$template->set_var("free_space", Convert::convert_byte_1024(System::get_free_space()));
 		
 		return $template->get_string();
 	}

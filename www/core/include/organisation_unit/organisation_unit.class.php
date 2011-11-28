@@ -30,7 +30,6 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
 	require_once("exceptions/organisation_unit_already_exist_exception.class.php");
 	require_once("exceptions/organisation_unit_creation_failed_exception.class.php");
-	require_once("exceptions/organisation_unit_not_found_exception.class.php");
 	
 	require_once("events/organisation_unit_create_event.class.php");
 	require_once("events/organisation_unit_delete_event.class.php");
@@ -68,19 +67,27 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 	/**
 	 * @see OrganisationUnitInterface::__construct()
 	 * @param integer $organisation_unit_id
+	 * @throws OrganisationUnitNotFoundException
 	 */
 	function __construct($organisation_unit_id)
 	{
-		if ($organisation_unit_id == null)
+		if (is_numeric($organisation_unit_id))
 		{
-    		$this->organisation_unit_id = null;
-			$this->organisation_unit	= new OrganisationUnit_Access(null);
+			if (OrganisationUnit_Access::exist_organisation_unit($organisation_unit_id) == true)
+			{
+				$this->organisation_unit_id = $organisation_unit_id;
+				$this->organisation_unit = new OrganisationUnit_Access($organisation_unit_id);
+			}
+			else
+			{
+				throw new OrganisationUnitNotFoundException();
+			}
 		}
 		else
-		{		
-			$this->organisation_unit_id = $organisation_unit_id;
-			$this->organisation_unit	= new OrganisationUnit_Access($organisation_unit_id);
-    	}
+		{
+			$this->organisation_unit_id = null;
+			$this->organisation_unit = new OrganisationUnit_Access(null);
+		}
 	}
 	
 	function __destruct()

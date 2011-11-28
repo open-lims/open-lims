@@ -66,40 +66,48 @@ class ProjectIO
 	}
 	
 	/**
-	 * @todo Error - No $_GET[ou_id]
+	 * @throws OrganisationUnitIDMissingException
+	 * @throws OrganisationUnitNotFoundException
 	 */
 	private static function list_organisation_unit_related_projects()
 	{
 		if ($_GET['ou_id'])
 		{
-			$organisation_unit_id = $_GET['ou_id'];
+			try
+			{
+				$organisation_unit_id = $_GET['ou_id'];
+				
+				$argument_array = array();
+				$argument_array[0][0] = "organisation_unit_id";
+				$argument_array[0][1] = $organisation_unit_id;
+				
+				$list = new List_IO("ProjectOrganisationUnitRelated", "/core/modules/project/project.ajax.php", "list_organisation_unit_related_projects", "count_organisation_unit_related_projects", $argument_array, "ProjectAjaxOrganisationUnit", 12);
 			
-			$argument_array = array();
-			$argument_array[0][0] = "organisation_unit_id";
-			$argument_array[0][1] = $organisation_unit_id;
+				$list->add_row("","symbol",false,"16px");
+				$list->add_row("Name","name",true,null);
+				$list->add_row("Owner","owner",true,null);
+				$list->add_row("Date/Time","datetime",true,null);
+				$list->add_row("Template","template",true,null);
+				$list->add_row("Status","status",true,null);
 			
-			$list = new List_IO("ProjectOrganisationUnitRelated", "/core/modules/project/project.ajax.php", "list_organisation_unit_related_projects", "count_organisation_unit_related_projects", $argument_array, "ProjectAjaxOrganisationUnit", 12);
-		
-			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Name","name",true,null);
-			$list->add_row("Owner","owner",true,null);
-			$list->add_row("Date/Time","datetime",true,null);
-			$list->add_row("Template","template",true,null);
-			$list->add_row("Status","status",true,null);
-		
-			require_once("core/modules/organisation_unit/organisation_unit.io.php");
-			$organisation_unit_io = new OrganisationUnitIO;
-			$organisation_unit_io->detail();
-			
-			$template = new Template("template/projects/list_organisation_unit.html");	
-
-			$template->set_var("list", $list->get_list());
+				require_once("core/modules/organisation_unit/organisation_unit.io.php");
+				$organisation_unit_io = new OrganisationUnitIO;
+				$organisation_unit_io->detail();
+				
+				$template = new Template("template/projects/list_organisation_unit.html");	
 	
-			$template->output();
+				$template->set_var("list", $list->get_list());
+		
+				$template->output();
+			}
+			catch (OrganisationUnitNotFoundException $e)
+			{
+				throw $e;
+			}
 		}
 		else
 		{
-			// ! ERROR !
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
@@ -121,7 +129,11 @@ class ProjectIO
 		
 		$template->output();
 	}
-		
+
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecuriyAccessDeniedException
+	 */
 	private static function detail()
 	{
 		global $project_security;
@@ -140,8 +152,8 @@ class ProjectIO
 				$template->set_var("created_at",$project->get_datetime());
 				$template->set_var("template",$project->get_template_name());
 				$template->set_var("permissions","");
-				$template->set_var("size",Misc::calc_size($project->get_filesize()));
-				$template->set_var("quota",Misc::calc_size($project->get_quota()));
+				$template->set_var("size",Convert::convert_byte_1024($project->get_filesize()));
+				$template->set_var("quota",Convert::convert_byte_1024($project->get_quota()));
 				
 				$owner_paramquery = array();
 				$owner_paramquery[username] = $_GET[username];
@@ -307,7 +319,7 @@ class ProjectIO
 							$paramquery[project_id] = $_GET[project_id];
 							$paramquery[dialog] = $value[type];
 							$paramquery[key] = $key;
-							$paramquery[retrace] = Misc::create_retrace_string();
+							$paramquery[retrace] = Retrace::create_retrace_string();
 							unset($paramquery[nextpage]);
 							$params = http_build_query($paramquery,'','&#38;');
 	
@@ -356,7 +368,7 @@ class ProjectIO
 				$paramquery[run] = "common_dialog";
 				$paramquery[folder_id] = ProjectFolder::get_supplementary_folder($_GET[project_id]);
 				$paramquery[dialog] = "file_add";
-				$paramquery[retrace] = Misc::create_retrace_string();
+				$paramquery[retrace] = Retrace::create_retrace_string();
 				unset($paramquery[nextpage]);
 				$supplementary_params = http_build_query($paramquery,'','&#38;');
 				
@@ -398,19 +410,19 @@ class ProjectIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecurityAccessDeniedxception();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecuriyAccessDeniedException
+	 */
 	private static function proceed()
 	{
 		global $project_security;
@@ -553,11 +565,12 @@ class ProjectIO
 							$project_log->create($_GET[project_id], $_POST[comment], false, false, md5(rand(0,50000)));
 						}
 						
-						if ($project->set_next_status(null,null))
+						try
 						{
+							$project->set_next_status(null,null);
 							Common_IO::step_proceed($params, "Proceed to next status", "Operation Successful" ,null);
 						}
-						else
+						catch (ProjectSetNextStatusException $e)
 						{
 							Common_IO::step_proceed($params, "Proceed to next status", "Operation Failed" ,null);	
 							$project_log->delete();
@@ -567,19 +580,19 @@ class ProjectIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecuriyAccessDeniedException
+	 */
 	private static function structure()
 	{
 		global $project_security;
@@ -659,20 +672,17 @@ class ProjectIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
 	/**
+	 * @todo specific exception
 	 * @param integer $item_id
 	 */
 	public static function list_projects_by_item_id($item_id, $in_assistant = false, $form_field_name = null)
@@ -728,363 +738,245 @@ class ProjectIO
 		}
 		else
 		{
-			// Error
-		}
-			
-		if (false == true)
-		{
-			$list = new ListStat_IO(Project_Wrapper::count_projects_by_item_id($item_id), 20);
-
-			$list->add_row("","symbol",false,16);
-			$list->add_row("Name","name",true,null);
-			$list->add_row("Date/Time","datetime",true,null);
-			$list->add_row("Template","template",true,null);
-			$list->add_row("Owner","owner",true,null);
-			$list->add_row("Status","status",true,null);
-
-			if ($_GET[page])
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = Project_Wrapper::list_projects_by_item_id($item_id, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
-				}
-				else
-				{
-					$result_array = Project_Wrapper::list_projects_by_item_id($item_id, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
-				}				
-			}
-			else
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = Project_Wrapper::list_projects_by_item_id($item_id, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
-				}
-				else
-				{
-					$result_array = Project_Wrapper::list_projects_by_item_id($item_id, null, null, 0, 20);
-				}	
-			}
-			
-			if (is_array($result_array) and count($result_array) >= 1)
-			{
-				$today_begin = new DatetimeHandler(date("Y-m-d")." 00:00:00");
-				$today_end = new DatetimeHandler(date("Y-m-d")." 23:59:59");
-				
-				foreach($result_array as $key => $value)
-				{
-					$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
-					$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y");
-				
-					if ($result_array[$key][owner])
-					{
-						$user = new User($result_array[$key][owner]);
-					}
-					else
-					{
-						$user = new User(1);
-					}
-					
-					$result_array[$key][owner] = $user->get_full_name(true);
-					
-					if (strlen($result_array[$key][template]) > 25)
-					{
-						$result_array[$key][template] = substr($result_array[$key][template],0,25)."...";
-					}
-					else
-					{
-						$result_array[$key][template] = $result_array[$key][template];
-					}
-					
-					$project_id = $result_array[$key][id];
-					$project_security = new ProjectSecurity($sample_id);
-					
-					if ($project_security->is_access(1, false))
-					{
-						$paramquery = array();
-						$paramquery[username] = $_GET[username];
-						$paramquery[session_id] = $_GET[session_id];
-						$paramquery[nav] = "project";
-						$paramquery[run] = "detail";
-						$paramquery[project_id] = $project_id;
-						$params = http_build_query($paramquery,'','&#38;');
-						
-						$result_array[$key][symbol][link]		= $params;
-						$result_array[$key][symbol][content] 	= "<img src='images/icons/project.png' alt='' style='border:0;' />";
-					
-						$project_name = $result_array[$key][name];
-						unset($result_array[$key][name]);
-						$result_array[$key][name][link] 		= $params;
-						$result_array[$key][name][content]		= $project_name;
-					}
-					else
-					{
-						$result_array[$key][symbol]	= "<img src='core/images/denied_overlay.php?image=images/icons/project.png' alt='N' border='0' />";
-					}
-				}
-			}
-			else
-			{
-				$list->override_last_line("<span class='italic'>No results found!</span>");
-			}
-			
-			$template = new Template("template/projects/list_projects_by_item.html");
-
-			$template->set_var("table", $list->get_list($result_array, $_GET[page]));
-			
-			$template->output();
-		}
-		else
-		{
-			// Error
+			throw new ProjectException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectSecurityAccessDeniedException
+	 */
 	public static function method_handler()
 	{
 		global $project_security, $session, $transaction;
-		
-		try
+
+		if ($_GET[project_id])
 		{
-			if ($_GET[project_id])
-			{
-				if (Project::exist_project($_GET[project_id]) == false)
-				{
-					throw new ProjectSecurityException("",1);
-				}
-				else
-				{
-					$project_security = new ProjectSecurity($_GET[project_id]);
+			$project_security = new ProjectSecurity($_GET[project_id]);
 					
-					if ($_GET[run] != "new_subproject")
-					{
-	 					require_once("project_common.io.php");
-	 					ProjectCommon_IO::tab_header();
-					}
-				}
-			}
-			else
+			if ($_GET[run] != "new_subproject")
 			{
-				$project_security = new ProjectSecurity(null);
+ 				require_once("project_common.io.php");
+ 				ProjectCommon_IO::tab_header();
 			}
+		}
+		else
+		{
+			$project_security = new ProjectSecurity(null);
+		}
 			
-			switch($_GET[run]):
-			
-				case ("new"):
-					self::create();
-				break;
-				
-				case ("myprojects"):
-				case ("workon"):
-				case ("accessdata"):
-				case ("analyse"):
-					self::list_user_related_projects(null);
-				break;
-				
-				case("userprojects"):
-					self::list_user_related_projects($_GET[id]);
-				break;		
-	
-				case("organ_unit"):
-					self::list_organisation_unit_related_projects();
-				break;
-	
-				case ("new_subproject"):
-					self::create();
-				break;
-				
-				case ("detail"):
-					self::detail();
-				break;
+		switch($_GET[run]):
 		
-				case("proceed"):
-					self::proceed();
-				break;
+			case ("new"):
+				self::create();
+			break;
+			
+			case ("myprojects"):
+			case ("workon"):
+			case ("accessdata"):
+			case ("analyse"):
+				self::list_user_related_projects(null);
+			break;
+			
+			case("userprojects"):
+				self::list_user_related_projects($_GET[id]);
+			break;		
+
+			case("organ_unit"):
+				self::list_organisation_unit_related_projects();
+			break;
+
+			case ("new_subproject"):
+				self::create();
+			break;
+			
+			case ("detail"):
+				self::detail();
+			break;
 	
-				case("structure"):
-					self::structure();
-				break;
-				
-				// Project Log
-				
-				case("log"):
-					require_once("project_log.io.php");
-					ProjectLogIO::list_project_related_logs();
-				break;
-				
-				case("log_detail"):
-					require_once("project_log.io.php");
-					ProjectLogIO::detail();
-				break;
-				
-				case("log_add"):
-					require_once("project_log.io.php");
-					ProjectLogIO::add_comment();
-				break;
-				
-				// Tasks and Schedule
-				
-				case ("add_task"):
-					require_once("project_task.io.php");
-					ProjectTaskIO::add();
-				break;
-				
-				case ("schedule"):
-				case ("show_tasks"):
-					require_once("project_task.io.php");
-					ProjectTaskIO::show();
-				break;
-				
-				case ("task_detail"):
-					require_once("project_task.io.php");
-					ProjectTaskIO::detail();
-				break;
-				
-				case ("task_delete"):
-					require_once("project_task.io.php");
-					ProjectTaskIO::delete();
-				break;
-				
-				case ("task_edit_start"):
-					require_once("project_task.io.php");
-					ProjectTaskIO::edit_start();
-				break;
-				
-				case ("task_edit_end"):
-					require_once("project_task.io.php");
-					ProjectTaskIO::edit_end();
-				break;
-				
+			case("proceed"):
+				self::proceed();
+			break;
+
+			case("structure"):
+				self::structure();
+			break;
+			
+			// Project Log
+			
+			case("log"):
+				require_once("project_log.io.php");
+				ProjectLogIO::list_project_related_logs();
+			break;
+			
+			case("log_detail"):
+				require_once("project_log.io.php");
+				ProjectLogIO::detail();
+			break;
+			
+			case("log_add"):
+				require_once("project_log.io.php");
+				ProjectLogIO::add_comment();
+			break;
+			
+			// Tasks and Schedule
+			
+			case ("add_task"):
+				require_once("project_task.io.php");
+				ProjectTaskIO::add();
+			break;
+			
+			case ("schedule"):
+			case ("show_tasks"):
+				require_once("project_task.io.php");
+				ProjectTaskIO::show();
+			break;
+			
+			case ("task_detail"):
+				require_once("project_task.io.php");
+				ProjectTaskIO::detail();
+			break;
+			
+			case ("task_delete"):
+				require_once("project_task.io.php");
+				ProjectTaskIO::delete();
+			break;
+			
+			case ("task_edit_start"):
+				require_once("project_task.io.php");
+				ProjectTaskIO::edit_start();
+			break;
+			
+			case ("task_edit_end"):
+				require_once("project_task.io.php");
+				ProjectTaskIO::edit_end();
+			break;
+			
+						
+			// Administration
+			
+			case("admin"):
+				require_once("project_admin.io.php");
+				ProjectAdminIO::menu();
+			break;
+			
+			case("admin_delete"):
+				require_once("project_admin.io.php");
+				ProjectAdminIO::delete();
+			break;
+			
+			case("admin_full_delete"):
+				require_once("project_admin.io.php");
+				ProjectAdminIO::full_delete();
+			break;
+			
+			case("admin_restore"):
+				require_once("project_admin.io.php");
+				ProjectAdminIO::restore();
+			break;
+			
+			case("admin_cancel"):
+				require_once("project_admin.io.php");
+				ProjectAdminIO::cancel();
+			break;
+			
+			case("admin_reactivate"):
+				require_once("project_admin.io.php");
+				ProjectAdminIO::reactivate();
+			break;
+			
+			case("admin_rename"):
+				require_once("project_admin.io.php");
+				ProjectAdminIO::rename();
+			break;
+			
+			case("admin_chown"):
+				require_once("project_admin.io.php");
+				ProjectAdminIO::chown();
+			break;
+			
+			case("admin_move"):
+				require_once("project_admin.io.php");
+				ProjectAdminIO::move();
+			break;
+			
+			case("admin_quota"):
+				require_once("project_admin.io.php");
+				ProjectAdminIO::quota();
+			break;
+			
+			// Administration - Permission
+			
+			case("admin_permission"):
+				require_once("project_admin.io.php");
+				$project_admin_io = new ProjectAdminIO();
+				ProjectAdminIO::permission();
+			break;
+			
+			case("admin_permission_add_user"):
+				require_once("project_admin.io.php");
+				ProjectAdminIO::permission_add_user();
+			break;
+			
+			case("admin_permission_add_group"):
+				require_once("project_admin.io.php");
+				ProjectAdminIO::permission_add_group();
+			break;
+			
+			case("admin_permission_add_ou"):
+				require_once("project_admin.io.php");
+				ProjectAdminIO::permission_add_organisation_unit();
+			break;
+			
+			case("admin_permission_edit"):
+				require_once("project_admin.io.php");
+				ProjectAdminIO::permission_edit();
+			break;
+			
+			case("admin_permission_delete"):
+				require_once("project_admin.io.php");
+				ProjectAdminIO::permission_delete();
+			break;
 							
-				// Administration
-				
-				case("admin"):
-					require_once("project_admin.io.php");
-					ProjectAdminIO::menu();
-				break;
-				
-				case("admin_delete"):
-					require_once("project_admin.io.php");
-					ProjectAdminIO::delete();
-				break;
-				
-				case("admin_full_delete"):
-					require_once("project_admin.io.php");
-					ProjectAdminIO::full_delete();
-				break;
-				
-				case("admin_restore"):
-					require_once("project_admin.io.php");
-					ProjectAdminIO::restore();
-				break;
-				
-				case("admin_cancel"):
-					require_once("project_admin.io.php");
-					ProjectAdminIO::cancel();
-				break;
-				
-				case("admin_reactivate"):
-					require_once("project_admin.io.php");
-					ProjectAdminIO::reactivate();
-				break;
-				
-				case("admin_rename"):
-					require_once("project_admin.io.php");
-					ProjectAdminIO::rename();
-				break;
-				
-				case("admin_chown"):
-					require_once("project_admin.io.php");
-					ProjectAdminIO::chown();
-				break;
-				
-				case("admin_move"):
-					require_once("project_admin.io.php");
-					ProjectAdminIO::move();
-				break;
-				
-				case("admin_quota"):
-					require_once("project_admin.io.php");
-					ProjectAdminIO::quota();
-				break;
-				
-				// Administration - Permission
-				
-				case("admin_permission"):
-					require_once("project_admin.io.php");
-					$project_admin_io = new ProjectAdminIO();
-					ProjectAdminIO::permission();
-				break;
-				
-				case("admin_permission_add_user"):
-					require_once("project_admin.io.php");
-					ProjectAdminIO::permission_add_user();
-				break;
-				
-				case("admin_permission_add_group"):
-					require_once("project_admin.io.php");
-					ProjectAdminIO::permission_add_group();
-				break;
-				
-				case("admin_permission_add_ou"):
-					require_once("project_admin.io.php");
-					ProjectAdminIO::permission_add_organisation_unit();
-				break;
-				
-				case("admin_permission_edit"):
-					require_once("project_admin.io.php");
-					ProjectAdminIO::permission_edit();
-				break;
-				
-				case("admin_permission_delete"):
-					require_once("project_admin.io.php");
-					ProjectAdminIO::permission_delete();
-				break;
-								
-				// Item Lister
-				/**
-				 * @todo errors, exceptions
-				 */
-				case("item_list"):
-					if ($project_security->is_access(1, false) == true)
+			// Item Lister
+			/**
+			 * @todo errors, exceptions
+			 */
+			case("item_list"):
+				if ($project_security->is_access(1, false) == true)
+				{
+					if ($_GET[dialog])
 					{
-						if ($_GET[dialog])
+						if ($_GET[dialog] == "data")
 						{
-							if ($_GET[dialog] == "data")
-							{
-								$path_stack_array = array();
-								
-								$folder_id = ProjectFolder::get_folder_by_project_id($_GET[project_id]);
-						    	$folder = Folder::get_instance($folder_id);
-						    	$init_array = $folder->get_object_id_path();
-						    	
-						    	foreach($init_array as $key => $value)
-						    	{
-						    		$temp_array = array();
-						    		$temp_array[virtual] = false;
-						    		$temp_array[id] = $value;
-						    		array_unshift($path_stack_array, $temp_array);
-						    	}
-								
-						    	if (!$_GET[folder_id])
-						    	{
-									$session->write_value("stack_array", $path_stack_array, true);
-						    	}
-							}
+							$path_stack_array = array();
 							
-							$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_list", $_GET[dialog]);
+							$folder_id = ProjectFolder::get_folder_by_project_id($_GET[project_id]);
+					    	$folder = Folder::get_instance($folder_id);
+					    	$init_array = $folder->get_object_id_path();
+					    	
+					    	foreach($init_array as $key => $value)
+					    	{
+					    		$temp_array = array();
+					    		$temp_array[virtual] = false;
+					    		$temp_array[id] = $value;
+					    		array_unshift($path_stack_array, $temp_array);
+					    	}
 							
-							if (file_exists($module_dialog[class_path]))
+					    	if (!$_GET[folder_id])
+					    	{
+								$session->write_value("stack_array", $path_stack_array, true);
+					    	}
+						}
+						
+						$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_list", $_GET[dialog]);
+						
+						if (file_exists($module_dialog[class_path]))
+						{
+							require_once($module_dialog[class_path]);
+							
+							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
 							{
-								require_once($module_dialog[class_path]);
-								
-								if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
-								{
-									$module_dialog['class']::$module_dialog[method]("project", $_GET[project_id], true);
-								}
-								else
-								{
-									// Error
-								}
+								$module_dialog['class']::$module_dialog[method]("project", $_GET[project_id], true);
 							}
 							else
 							{
@@ -1093,118 +985,116 @@ class ProjectIO
 						}
 						else
 						{
-							// error
+							// Error
 						}
 					}
 					else
 					{
-						$exception = new Exception("", 1);
-						$error_io = new Error_IO($exception, 200, 40, 2);
-						$error_io->display_error();
+						// error
 					}
-				break;
-				
-				// Item Add
-				case("item_add"):
-					if ($project_security->is_access(3, false) == true)
+				}
+				else
+				{
+					throw new ProjectSecurityAccessDeniedException();
+				}
+			break;
+			
+			// Item Add
+			case("item_add"):
+				if ($project_security->is_access(3, false) == true)
+				{
+					if ($_GET[dialog])
 					{
-						if ($_GET[dialog])
+						$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_add", $_GET[dialog]);
+
+						if (is_array($module_dialog) and $module_dialog[class_path])
 						{
-							$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_add", $_GET[dialog]);
-	
-							if (is_array($module_dialog) and $module_dialog[class_path])
+							if (file_exists($module_dialog[class_path]))
 							{
-								if (file_exists($module_dialog[class_path]))
+								require_once($module_dialog[class_path]);
+								
+								if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
 								{
-									require_once($module_dialog[class_path]);
+									$project = new Project($_GET[project_id]);
+									$project_item = new ProjectItem($_GET[project_id]);
+									$project_item->set_status_id($project->get_current_status_id());
+									$project_item->set_gid($_GET[key]);
 									
-									if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+									$description_required = $project_item->is_description_required();
+									$keywords_required = $project_item->is_keywords_required();
+									
+									if (($description_required and !$_POST[description] and !$_GET[idk_unique_id]) or ($keywords_required and !$_POST[keywords] and !$_GET[idk_unique_id]))
 									{
-										$project = new Project($_GET[project_id]);
-										$project_item = new ProjectItem($_GET[project_id]);
-										$project_item->set_status_id($project->get_current_status_id());
-										$project_item->set_gid($_GET[key]);
-										
-										$description_required = $project_item->is_description_required();
-										$keywords_required = $project_item->is_keywords_required();
-										
-										if (($description_required and !$_POST[description] and !$_GET[idk_unique_id]) or ($keywords_required and !$_POST[keywords] and !$_GET[idk_unique_id]))
-										{
-											require_once("core/modules/item/item.io.php");
-											ItemIO::information(http_build_query($_GET), $description_required, $keywords_required);
-										}
-										else
-										{
-											$transaction_id = $transaction->begin();
-											
-											$current_status_requirements = $project->get_current_status_requirements($project->get_current_status_id());
-																						
-											$folder_id = ProjectStatusFolder::get_folder_by_project_id_and_project_status_id($_GET[project_id],$project->get_current_status_id());
-											
-											$sub_folder_id = $project->get_sub_folder($_GET[key], $project->get_current_status_id());
-											
-											if (is_numeric($sub_folder_id))
-											{
-												$folder_id = $sub_folder_id;
-											}
-											
-											$return_value = $module_dialog['class']::$module_dialog[method]($current_status_requirements[$_GET[key]][type_id], $current_status_requirements[$_GET[key]][category_id], $project->get_organisation_unit_id(), $folder_id);
-											
-											if (is_numeric($return_value))
-											{
-												if ($_GET[retrace])
-												{
-													$params = http_build_query(Misc::resovle_retrace_string($_GET[retrace]),'','&#38;');
-												}
-												else
-												{
-													$paramquery[username] = $_GET[username];
-													$paramquery[session_id] = $_GET[session_id];
-													$paramquery[nav] = "home";
-													$params = http_build_query($paramquery,'','&#38;');
-												}
-												
-												
-												if (ProjectItemFactory::create($_GET[project_id], $return_value, $_GET[key], $_POST[keywords], $_POST[description]) == true)
-												{
-													if ($transaction_id != null)
-													{
-														$transaction->commit($transaction_id);
-													}
-													Common_IO::step_proceed($params, "Add Item", "Successful." ,null);
-												}
-												else
-												{
-													if ($transaction_id != null)
-													{
-														$transaction->rollback($transaction_id);
-													}
-													Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
-												}
-											}
-											else
-											{
-												if ($return_value === false)
-												{
-													if ($transaction_id != null)
-													{
-														$transaction->rollback($transaction_id);
-													}
-													throw new ModuleDialogFailedException("",1);
-												}
-												else
-												{
-													if ($transaction_id != null)
-													{
-														$transaction->commit($transaction_id);
-													}
-												}
-											}
-										}
+										require_once("core/modules/item/item.io.php");
+										ItemIO::information(http_build_query($_GET), $description_required, $keywords_required);
 									}
 									else
 									{
-										throw new ModuleDialogCorruptException(null, null);
+										$transaction_id = $transaction->begin();
+										
+										$current_status_requirements = $project->get_current_status_requirements($project->get_current_status_id());
+																					
+										$folder_id = ProjectStatusFolder::get_folder_by_project_id_and_project_status_id($_GET[project_id],$project->get_current_status_id());
+										
+										$sub_folder_id = $project->get_sub_folder($_GET[key], $project->get_current_status_id());
+										
+										if (is_numeric($sub_folder_id))
+										{
+											$folder_id = $sub_folder_id;
+										}
+										
+										$return_value = $module_dialog['class']::$module_dialog[method]($current_status_requirements[$_GET[key]][type_id], $current_status_requirements[$_GET[key]][category_id], $project->get_organisation_unit_id(), $folder_id);
+										
+										if (is_numeric($return_value))
+										{
+											if ($_GET[retrace])
+											{
+												$params = http_build_query(Retrace::resovle_retrace_string($_GET[retrace]),'','&#38;');
+											}
+											else
+											{
+												$paramquery[username] = $_GET[username];
+												$paramquery[session_id] = $_GET[session_id];
+												$paramquery[nav] = "home";
+												$params = http_build_query($paramquery,'','&#38;');
+											}
+											
+											
+											if (ProjectItemFactory::create($_GET[project_id], $return_value, $_GET[key], $_POST[keywords], $_POST[description]) == true)
+											{
+												if ($transaction_id != null)
+												{
+													$transaction->commit($transaction_id);
+												}
+												Common_IO::step_proceed($params, "Add Item", "Successful." ,null);
+											}
+											else
+											{
+												if ($transaction_id != null)
+												{
+													$transaction->rollback($transaction_id);
+												}
+												Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
+											}
+										}
+										else
+										{
+											if ($return_value === false)
+											{
+												if ($transaction_id != null)
+												{
+													$transaction->rollback($transaction_id);
+												}
+												throw new ModuleDialogFailedException("",1);
+											}
+											else
+											{
+												if ($transaction_id != null)
+												{
+													$transaction->commit($transaction_id);
+												}
+											}
+										}
 									}
 								}
 								else
@@ -1214,43 +1104,41 @@ class ProjectIO
 							}
 							else
 							{
-								throw new ModuleDialogNotFoundException(null, null);
+								throw new ModuleDialogCorruptException(null, null);
 							}
 						}
 						else
 						{
-							throw new ModuleDialogMissingException(null, null);
+							throw new ModuleDialogNotFoundException(null, null);
 						}
 					}
 					else
 					{
-						$exception = new Exception("", 1);
-						$error_io = new Error_IO($exception, 200, 40, 2);
-						$error_io->display_error();
+						throw new ModuleDialogMissingException(null, null);
 					}
-				break;
-				
-				// Common Dialogs
-				/**
-				 * @todo errors, exceptions
-				 */
-				case("common_dialog"):
-					if ($_GET[dialog])
+				}
+				else
+				{
+					throw new ProjectSecurityAccessDeniedException();
+				}
+			break;
+			
+			// Common Dialogs
+			/**
+			 * @todo errors, exceptions
+			 */
+			case("common_dialog"):
+				if ($_GET[dialog])
+				{
+					$module_dialog = ModuleDialog::get_by_type_and_internal_name("common_dialog", $_GET[dialog]);
+					
+					if (file_exists($module_dialog[class_path]))
 					{
-						$module_dialog = ModuleDialog::get_by_type_and_internal_name("common_dialog", $_GET[dialog]);
+						require_once($module_dialog[class_path]);
 						
-						if (file_exists($module_dialog[class_path]))
+						if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
 						{
-							require_once($module_dialog[class_path]);
-							
-							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
-							{
-								$module_dialog['class']::$module_dialog[method]();
-							}
-							else
-							{
-								// Error
-							}
+							$module_dialog['class']::$module_dialog[method]();
 						}
 						else
 						{
@@ -1259,31 +1147,31 @@ class ProjectIO
 					}
 					else
 					{
-						// error
+						// Error
 					}
-				break;
-				
-				// Search
-				/**
-				 * @todo errors, exceptions
-				 */
-				case("search"):
-					if ($_GET[dialog])
+				}
+				else
+				{
+					// error
+				}
+			break;
+			
+			// Search
+			/**
+			 * @todo errors, exceptions
+			 */
+			case("search"):
+				if ($_GET[dialog])
+				{
+					$module_dialog = ModuleDialog::get_by_type_and_internal_name("search", $_GET[dialog]);
+					
+					if (file_exists($module_dialog[class_path]))
 					{
-						$module_dialog = ModuleDialog::get_by_type_and_internal_name("search", $_GET[dialog]);
+						require_once($module_dialog[class_path]);
 						
-						if (file_exists($module_dialog[class_path]))
+						if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
 						{
-							require_once($module_dialog[class_path]);
-							
-							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
-							{
-								$module_dialog['class']::$module_dialog[method]();
-							}
-							else
-							{
-								// Error
-							}
+							$module_dialog['class']::$module_dialog[method]();
 						}
 						else
 						{
@@ -1292,23 +1180,22 @@ class ProjectIO
 					}
 					else
 					{
-						// error
+						// Error
 					}
-				break;
-				
-				// Default
-				
-				default:
-					self::list_user_related_projects(null);
-				break;
-	
-			endswitch;
-		}
-		catch (ProjectSecurityException $e)
-		{
-			$error_io = new Error_IO($e, 200, 40, 1);
-			$error_io->display_error();
-		}
+				}
+				else
+				{
+					// error
+				}
+			break;
+			
+			// Default
+			
+			default:
+				self::list_user_related_projects(null);
+			break;
+
+		endswitch;
 	}
 	
 }

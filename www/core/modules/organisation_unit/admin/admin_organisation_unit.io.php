@@ -274,6 +274,9 @@ class AdminOrganisationUnitIO
 		$template->output();
 	}
 	
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function create()
 	{
 		if (($_GET[action] == "add_child" and $_GET[id]) or $_GET[action] == "add")
@@ -362,62 +365,51 @@ class AdminOrganisationUnitIO
 				unset($paramquery[action]);
 				$params = http_build_query($paramquery);
 				
-				try
-				{
-					$organisation_unit = new OrganisationUnit(null);
-					
-					if ($_GET[action] == "add_child" and is_numeric($_GET[id]))
-					{
-						$toid = $_GET[id];
-					}
-					else
-					{
-						$toid = null;
-					}	
-					
-					if ($_POST[contains_projects] == "1")
-					{
-						$stores_data = true;
-					}
-					else
-					{
-						$stores_data = false;
-					}
+				$organisation_unit = new OrganisationUnit(null);
 				
-					$paramquery = $_GET;
-					unset($paramquery[action]);
-					unset($paramquery[nextpage]);
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					if ($organisation_unit->create($toid, $_POST[name], $_POST[type], $stores_data))
-					{
-						Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Successful", null);
-					}
-					else
-					{
-						Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Failed" ,null);	
-					}
-				}
-				catch (OrganisationUnitAlreadyExistException $e)
+				if ($_GET[action] == "add_child" and is_numeric($_GET[id]))
 				{
-					$error_io = new Error_IO($e, 40, 30, 1);
-					$error_io->display_error();
+					$toid = $_GET[id];
 				}
-				catch (OrganisationUnitCreationFailedException $e)
+				else
 				{
-					$error_io = new Error_IO($e, 40, 30, 1);
-					$error_io->display_error();
+					$toid = null;
+				}	
+				
+				if ($_POST[contains_projects] == "1")
+				{
+					$stores_data = true;
+				}
+				else
+				{
+					$stores_data = false;
+				}
+			
+				$paramquery = $_GET;
+				unset($paramquery[action]);
+				unset($paramquery[nextpage]);
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				if ($organisation_unit->create($toid, $_POST[name], $_POST[type], $stores_data))
+				{
+					Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Successful", null);
+				}
+				else
+				{
+					Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Failed" ,null);	
 				}
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
+	/**
+	 * @todo dependency exception
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function delete()
 	{
 		if ($_GET[id])
@@ -467,19 +459,18 @@ class AdminOrganisationUnitIO
 			}
 			else
 			{
-				$exception = new Exception("", 2);
-				$error_io = new Error_IO($exception, 40, 40, 1);
-				$error_io->display_error();
+				
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function detail()
 	{
 		global $user;
@@ -702,19 +693,20 @@ class AdminOrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function detail_member()
 	{
 		if ($_GET[id])
 		{
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
-			require_once("core/modules/user/user.io.php");
+			require_once("core/modules/base/user.io.php");
 			
 			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_member.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
@@ -724,19 +716,20 @@ class AdminOrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function detail_group()
 	{
 		if ($_GET[id])
 		{
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
-			require_once("core/modules/user/user.io.php");
+			require_once("core/modules/base/user.io.php");
 			
 			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_group.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
@@ -746,19 +739,20 @@ class AdminOrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
-		
+
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function detail_owner()
 	{
 		if ($_GET[id])
 		{
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
-			require_once("core/modules/user/user.io.php");
+			require_once("core/modules/base/user.io.php");
 			
 			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_owner.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
@@ -768,19 +762,20 @@ class AdminOrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}	
 	
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function detail_leader()
 	{
 		if ($_GET[id])
 		{
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
-			require_once("core/modules/user/user.io.php");
+			require_once("core/modules/base/user.io.php");
 			
 			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_leader.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
@@ -790,19 +785,20 @@ class AdminOrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function detail_quality_manager()
 	{
 		if ($_GET[id])
 		{
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
-			require_once("core/modules/user/user.io.php");
+			require_once("core/modules/base/user.io.php");
 			
 			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_quality_manager.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
@@ -812,12 +808,13 @@ class AdminOrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function detail_address()
 	{
 		if ($_GET[id])
@@ -831,12 +828,13 @@ class AdminOrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function rename()
 	{
 		if ($_GET[id])
@@ -912,12 +910,13 @@ class AdminOrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
-		
+
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function upwards()
 	{
 		if ($_GET[id])
@@ -940,12 +939,13 @@ class AdminOrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function downwards()
 	{
 		if ($_GET[id])
@@ -968,12 +968,13 @@ class AdminOrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws OrganisationUnitIDMissingException
+	 */
 	public static function toogle_visible()
 	{
 		if ($_GET[id])
@@ -1005,172 +1006,157 @@ class AdminOrganisationUnitIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 40, 40, 3);
-			$error_io->display_error();
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
 	public static function handler()
 	{
-		try
+		if ($_GET[id])
 		{
-			if ($_GET[id])
+			if ($_GET[action] != "delete" and 
+				$_GET[action] != "add_child" and 
+				$_GET[action] != "upwards"  and 
+				$_GET[action] != "downwards")
 			{
-				if (OrganisationUnit::exist_organisation_unit($_GET[id]) == false)
-				{
-					throw new OrganisationUnitNotFoundException("",1);
-				}
-
-				if ($_GET[action] != "delete" and 
-					$_GET[action] != "add_child" and 
-					$_GET[action] != "upwards"  and 
-					$_GET[action] != "downwards")
-				{
-					$tab_io = new Tab_IO();
+				$tab_io = new Tab_IO();
+			
+				$paramquery = $_GET;
+				$paramquery[action] = "detail";
+				$params = http_build_query($paramquery,'','&#38;');
 				
-					$paramquery = $_GET;
-					$paramquery[action] = "detail";
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$tab_io->add("general", "General", $params, false);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "detail_owner";
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$tab_io->add("owners", "Owners", $params, false);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "detail_leader";
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$tab_io->add("leaders", "Leaders", $params, false);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "detail_member";
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$tab_io->add("members", "Members", $params, false);  
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "detail_qm";
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$tab_io->add("qm", "Q.-Managers", $params, false);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "detail_group";
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$tab_io->add("groups", "Groups", $params, false);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "detail_address";
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$tab_io->add("addresses", "Addresses", $params, false);
-					
-					switch($_GET[action]):
+				$tab_io->add("general", "General", $params, false);
+				
+				$paramquery = $_GET;
+				$paramquery[action] = "detail_owner";
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$tab_io->add("owners", "Owners", $params, false);
+				
+				$paramquery = $_GET;
+				$paramquery[action] = "detail_leader";
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$tab_io->add("leaders", "Leaders", $params, false);
+				
+				$paramquery = $_GET;
+				$paramquery[action] = "detail_member";
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$tab_io->add("members", "Members", $params, false);  
+				
+				$paramquery = $_GET;
+				$paramquery[action] = "detail_qm";
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$tab_io->add("qm", "Q.-Managers", $params, false);
+				
+				$paramquery = $_GET;
+				$paramquery[action] = "detail_group";
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$tab_io->add("groups", "Groups", $params, false);
+				
+				$paramquery = $_GET;
+				$paramquery[action] = "detail_address";
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$tab_io->add("addresses", "Addresses", $params, false);
+				
+				switch($_GET[action]):
 
-						case "detail_owner":
-							$tab_io->activate("owners");
-						break;
-						
-						case "detail_leader":
-							$tab_io->activate("leaders");
-						break;
-						
-						case "detail_member":
-							$tab_io->activate("members");
-						break;
-						
-						case "detail_qm":
-							$tab_io->activate("qm");
-						break;
-						
-						case "detail_group":
-							$tab_io->activate("groups");
-						break;
-						
-						case "detail_address":
-							$tab_io->activate("addresses");
-						break;
-						
-						default:
-							$tab_io->activate("general");
-						break;
+					case "detail_owner":
+						$tab_io->activate("owners");
+					break;
 					
-					endswitch;
-						
-					$tab_io->output();
-				}
+					case "detail_leader":
+						$tab_io->activate("leaders");
+					break;
+					
+					case "detail_member":
+						$tab_io->activate("members");
+					break;
+					
+					case "detail_qm":
+						$tab_io->activate("qm");
+					break;
+					
+					case "detail_group":
+						$tab_io->activate("groups");
+					break;
+					
+					case "detail_address":
+						$tab_io->activate("addresses");
+					break;
+					
+					default:
+						$tab_io->activate("general");
+					break;
+				
+				endswitch;
+					
+				$tab_io->output();
 			}
-		
-			switch($_GET[action]):
-				case "add":
-				case "add_child":
-					self::create();
-				break;
-				
-				case "delete":
-					self::delete();
-				break;
-				
-				case "detail":
-					self::detail();
-				break;
+		}
+	
+		switch($_GET[action]):
+			case "add":
+			case "add_child":
+				self::create();
+			break;
+			
+			case "delete":
+				self::delete();
+			break;
+			
+			case "detail":
+				self::detail();
+			break;
 
-				case "detail_owner":
-					self::detail_owner();
-				break;
-				
-				case "detail_leader":
-					self::detail_leader();
-				break;
-				
-				case "detail_member":
-					self::detail_member();
-				break;
-				
-				case "detail_qm":
-					self::detail_quality_manager();
-				break;
-				
-				case "detail_group":
-					self::detail_group();
-				break;
-				
-				case "detail_address":
-					self::detail_address();
-				break;
-				
-				case "rename":
-					self::rename();
-				break;
-				
-				case "upwards":
-					self::upwards();
-				break;
-				
-				case "downwards":
-					self::downwards();
-				break;
-				
-				case "toogle_visible":
-					self::toogle_visible();
-				break;
-				
-				default:
-					self::home();
-				break;
-			endswitch;
-		}
-		catch (OrganisationUnitNotFoundException $e)
-		{
-			$error_io = new Error_IO($e, 40, 40, 1);
-			$error_io->display_error();
-		}
+			case "detail_owner":
+				self::detail_owner();
+			break;
+			
+			case "detail_leader":
+				self::detail_leader();
+			break;
+			
+			case "detail_member":
+				self::detail_member();
+			break;
+			
+			case "detail_qm":
+				self::detail_quality_manager();
+			break;
+			
+			case "detail_group":
+				self::detail_group();
+			break;
+			
+			case "detail_address":
+				self::detail_address();
+			break;
+			
+			case "rename":
+				self::rename();
+			break;
+			
+			case "upwards":
+				self::upwards();
+			break;
+			
+			case "downwards":
+				self::downwards();
+			break;
+			
+			case "toogle_visible":
+				self::toogle_visible();
+			break;
+			
+			default:
+				self::home();
+			break;
+		endswitch;
 	}
 	
 	public static function home_dialog()

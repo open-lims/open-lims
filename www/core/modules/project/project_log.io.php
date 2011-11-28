@@ -27,6 +27,10 @@
  */
 class ProjectLogIO
 {
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
+	 */
 	public static function list_project_related_logs()
 	{
 		global $project_security;
@@ -144,127 +148,133 @@ class ProjectLogIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
 	/**
 	 * @todo implementing list-behav. of concrete items
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectLogIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
 	 */
 	public static function detail()
 	{
 		global $project_security;
 		
-		if ($_GET[project_id] and $_GET[id])
-		{	
-			if ($project_security->is_access(1, false) == true)
-			{
+		if ($_GET[project_id])
+		{
+			if ($_GET[id])
+			{	
 				$project_log = new ProjectLog($_GET[id]);
 				
-				$item_array = $project_log->list_items();
-				$item_type_array = Item::list_types();
-				
-				if (is_array($item_array) and count($item_array) >= 1)
+				if ($project_security->is_access(1, false) == true)
 				{
-					$result = array();
-					$counter = 0;
+					$item_array = $project_log->list_items();
+					$item_type_array = Item::list_types();
 					
-					foreach($item_array as $key => $value)
+					if (is_array($item_array) and count($item_array) >= 1)
 					{
-						if (is_array($item_type_array) and count($item_type_array) >= 1)
+						$result = array();
+						$counter = 0;
+						
+						foreach($item_array as $key => $value)
 						{
-							foreach ($item_type_array as $item_type => $item_handling_class)
+							if (is_array($item_type_array) and count($item_type_array) >= 1)
 							{
-								if ($item_handling_class::is_kind_of($item_type, $value) == true)
+								foreach ($item_type_array as $item_type => $item_handling_class)
 								{
-									if (class_exists($item_handling_class))
+									if ($item_handling_class::is_kind_of($item_type, $value) == true)
 									{
-									// Verhalten müssen IO Klassen der Items selbst zur verfügung stellen
+										if (class_exists($item_handling_class))
+										{
+										// Verhalten müssen IO Klassen der Items selbst zur verfügung stellen
+										}
 									}
 								}
 							}
+							
+							$counter++;
 						}
-						
-						$counter++;
 					}
+					else
+					{
+						$result = false;
+					}
+					
+					$template = new Template("template/projects/project_log_detail.html");
+				
+					$user = new User($project_log->get_owner_id());
+				
+					$template->set_var("datetime",$project_log->get_datetime());
+					$template->set_var("user",$user->get_full_name(false));
+		
+					if (($content = $project_log->get_content()) != null)
+					{
+						$template->set_var("content",$content);
+					}
+					else
+					{
+						$template->set_var("content",false);
+					}
+					
+					$status_id = $project_log->get_status_id();
+					
+					if ($status_id != null)
+					{
+						$project_status = new ProjectStatus($status_id);
+						$template->set_var("status",$project_status->get_name());
+					}
+					else
+					{
+						$template->set_var("status",false);
+					}
+					
+					if ($project_log->get_important() == true)
+					{
+						$template->set_var("important",true);
+					}
+					else
+					{
+						$template->set_var("important",false);
+					}
+		
+					$template->set_var("item",$result);
+					
+					$paramquery = $_GET;
+					$paramquery[run]  = "log";
+					unset($paramquery[id]);
+					$params = http_build_query($paramquery,'','&#38;');
+					
+					$template->set_var("back_link",$params);
+				
+					$template->output();
 				}
 				else
 				{
-					$result = false;
+					throw new ProjectSecurityAccessDeniedException();
 				}
-				
-				$template = new Template("template/projects/project_log_detail.html");
-			
-				$user = new User($project_log->get_owner_id());
-			
-				$template->set_var("datetime",$project_log->get_datetime());
-				$template->set_var("user",$user->get_full_name(false));
-	
-				if (($content = $project_log->get_content()) != null)
-				{
-					$template->set_var("content",$content);
-				}
-				else
-				{
-					$template->set_var("content",false);
-				}
-				
-				$status_id = $project_log->get_status_id();
-				
-				if ($status_id != null)
-				{
-					$project_status = new ProjectStatus($status_id);
-					$template->set_var("status",$project_status->get_name());
-				}
-				else
-				{
-					$template->set_var("status",false);
-				}
-				
-				if ($project_log->get_important() == true)
-				{
-					$template->set_var("important",true);
-				}
-				else
-				{
-					$template->set_var("important",false);
-				}
-	
-				$template->set_var("item",$result);
-				
-				$paramquery = $_GET;
-				$paramquery[run]  = "log";
-				unset($paramquery[id]);
-				$params = http_build_query($paramquery,'','&#38;');
-				
-				$template->set_var("back_link",$params);
-			
-				$template->output();
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectLogIDMissingException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 
+	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
+	 */
 	public static function add_comment()
 	{
 		global $project_security;
@@ -354,16 +364,12 @@ class ProjectLogIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 200, 40, 2);
-				$error_io->display_error();
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectIDMissingException();
 		}
 	}
 	

@@ -38,7 +38,7 @@ class AdminSystemLogIO
 			$type_id = 1;
 		}
 		
-		$list = new ListStat_IO(Base_Wrapper::count_list_system_log($type_id), 20);
+		$list = new ListStat_IO(SystemFE_Wrapper::count_list_system_log($type_id), 20);
 		
 		$list->add_row("User", "user", true, null);
 		$list->add_row("Date/Time", "datetime", true, null);
@@ -50,22 +50,22 @@ class AdminSystemLogIO
 		{
 			if ($_GET[sortvalue] and $_GET[sortmethod])
 			{
-				$result_array = Base_Wrapper::list_system_log($type_id, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
+				$result_array = SystemFE_Wrapper::list_system_log($type_id, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
 			}
 			else
 			{
-				$result_array = Base_Wrapper::list_system_log($type_id, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
+				$result_array = SystemFE_Wrapper::list_system_log($type_id, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
 			}				
 		}
 		else
 		{
 			if ($_GET[sortvalue] and $_GET[sortmethod])
 			{
-				$result_array = Base_Wrapper::list_system_log($type_id, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
+				$result_array = SystemFE_Wrapper::list_system_log($type_id, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
 			}
 			else
 			{
-				$result_array = Base_Wrapper::list_system_log($type_id, null, null, 0, 20);
+				$result_array = SystemFE_Wrapper::list_system_log($type_id, null, null, 0, 20);
 			}	
 		}
 		
@@ -168,193 +168,178 @@ class AdminSystemLogIO
 		$template->output();
 	}
 
+	/**
+	 * @throws SystemLogIDMissingException
+	 */
 	public static function detail()
 	{
 		if ($_GET[id])
 		{
-			if (SystemLog::exist_id($_GET[id]))
-			{
-				$system_log = new SystemLog($_GET[id]);
-				$user = new User($system_log->get_user_id());
-				$datetime_handler = new DatetimeHandler($system_log->get_datetime());
 			
-				$template = new Template("template/base/admin/system_log/detail.html");
-				
-				$template->set_var("datetime", $datetime_handler->get_formatted_string("dS M Y H:i"));
-	
-				if ($system_log->get_user_id())
-				{
-					$template->set_var("username", $user->get_username()." (".$user->get_full_name(false).")");
-				}
-				else
-				{
-					$template->set_var("username", "");
-				}
-	
-				if ($system_log->get_ip())
-				{
-					$template->set_var("ip", $system_log->get_ip());
-				}
-				else
-				{
-					$template->set_var("ip", "");
-				}
-				
-				if ($system_log->get_file())
-				{
-					$template->set_var("file", $system_log->get_file());
-				}
-				else
-				{
-					$template->set_var("file", "");
-				}
-				
-				if ($system_log->get_line())
-				{
-					$template->set_var("line", $system_log->get_line());
-				}
-				else
-				{
-					$template->set_var("line", "");
-				}
-				
-				if ($system_log->get_content_int())
-				{
-					$template->set_var("content_int", $system_log->get_content_int());
-				}
-				else
-				{
-					$template->set_var("content_int", "");
-				}
-				
-				if ($system_log->get_content_string())
-				{
-					$template->set_var("content_string", $system_log->get_content_string());
-				}
-				else
-				{
-					$template->set_var("content_string", "");
-				}
-				
-				if ($system_log->get_link())
-				{
-					$unserialized_string = unserialize($system_log->get_link());
-					
-					if (is_array($unserialized_string))
-					{
-						if (count($unserialized_string) >= 1)
-						{
-							$string = "";
-							
-							foreach($unserialized_string as $key => $value)
-							{
-								$string .= $key." => ".$value."<br />";
-							}
-							
-							$template->set_var("get", $string);
-						}
-						else
-						{
-							$template->set_var("get", "");
-						}
-					}
-					else
-					{
-						$template->set_var("get", $system_log->get_link());
-					}
-				}
-				else
-				{
-					$template->set_var("get", "");
-				}
-				$template->output();
+			$system_log = new SystemLog($_GET[id]);
+			$user = new User($system_log->get_user_id());
+			$datetime_handler = new DatetimeHandler($system_log->get_datetime());
+		
+			$template = new Template("template/base/admin/system_log/detail.html");
+			
+			$template->set_var("datetime", $datetime_handler->get_formatted_string("dS M Y H:i"));
+
+			if ($system_log->get_user_id())
+			{
+				$template->set_var("username", $user->get_username()." (".$user->get_full_name(false).")");
 			}
 			else
 			{
-				$exception = new Exception("", 10);
-				$error_io = new Error_IO($exception, 1, 40, 1);
-				$error_io->display_error();
+				$template->set_var("username", "");
 			}
+
+			if ($system_log->get_ip())
+			{
+				$template->set_var("ip", $system_log->get_ip());
+			}
+			else
+			{
+				$template->set_var("ip", "");
+			}
+			
+			if ($system_log->get_file())
+			{
+				$template->set_var("file", $system_log->get_file());
+			}
+			else
+			{
+				$template->set_var("file", "");
+			}
+			
+			if ($system_log->get_line())
+			{
+				$template->set_var("line", $system_log->get_line());
+			}
+			else
+			{
+				$template->set_var("line", "");
+			}
+			
+			if ($system_log->get_content_int())
+			{
+				$template->set_var("content_int", $system_log->get_content_int());
+			}
+			else
+			{
+				$template->set_var("content_int", "");
+			}
+			
+			if ($system_log->get_content_string())
+			{
+				$template->set_var("content_string", $system_log->get_content_string());
+			}
+			else
+			{
+				$template->set_var("content_string", "");
+			}
+			
+			if ($system_log->get_link())
+			{
+				$unserialized_string = unserialize($system_log->get_link());
+				
+				if (is_array($unserialized_string))
+				{
+					if (count($unserialized_string) >= 1)
+					{
+						$string = "";
+						
+						foreach($unserialized_string as $key => $value)
+						{
+							$string .= $key." => ".$value."<br />";
+						}
+						
+						$template->set_var("get", $string);
+					}
+					else
+					{
+						$template->set_var("get", "");
+					}
+				}
+				else
+				{
+					$template->set_var("get", $system_log->get_link());
+				}
+			}
+			else
+			{
+				$template->set_var("get", "");
+			}
+			$template->output();
 		}
 		else
 		{
-			$exception = new Exception("", 10);
-			$error_io = new Error_IO($exception, 1, 40, 3);
-			$error_io->display_error();
+			throw new SystemLogIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws SystemLogIDMissingException
+	 */
 	public static function ip_info()
 	{
 		if ($_GET[id])
 		{
-			if (SystemLog::exist_ip($_GET[id]))
-			{
-				$ip = $_GET[id];
-				$successful_logins = SystemLog::count_ip_successful_logins($ip);
-				$failed_logins = SystemLog::count_ip_failed_logins($ip);
+			$ip = $_GET[id];
+			$successful_logins = SystemLog::count_ip_successful_logins($ip);
+			$failed_logins = SystemLog::count_ip_failed_logins($ip);
+		
+			$template = new Template("template/base/admin/system_log/ip_info.html");
 			
-				$template = new Template("template/base/admin/system_log/ip_info.html");
-				
-				$template->set_var("ip", $ip);
-				
-				if ($successful_logins)
-				{
-					$template->set_var("successful_logins", $successful_logins);
-				}
-				else
-				{
-					$template->set_var("successful_logins", 0);
-				}
-				
-				if ($failed_logins)
-				{
-					$template->set_var("failed_logins", $failed_logins);
-				}
-				else
-				{
-					$template->set_var("failed_logins", 0);
-				}
-				
-				$user_array = SystemLog::list_ip_users($ip);
-				$user_content_array = array();
-				
-				$counter = 0;
-				
-				if (is_array($user_array) and count($user_array) >= 1)
-				{
-					foreach($user_array as $key => $value)
-					{
-						$user = new User($value);
-						
-						$user_content_array[$counter][username] = $user->get_username();
-						$user_content_array[$counter][fullname] = $user->get_full_name(false);
-						
-						$counter++;
-					}
-					$template->set_var("no_user", false);
-				}
-				else
-				{
-					$template->set_var("no_user", true);
-				}
-				
-				$template->set_var("user", $user_content_array);
-				
-				$template->output();
+			$template->set_var("ip", $ip);
+			
+			if ($successful_logins)
+			{
+				$template->set_var("successful_logins", $successful_logins);
 			}
 			else
 			{
-				$exception = new Exception("", 11);
-				$error_io = new Error_IO($exception, 1, 40, 1);
-				$error_io->display_error();
+				$template->set_var("successful_logins", 0);
 			}
+			
+			if ($failed_logins)
+			{
+				$template->set_var("failed_logins", $failed_logins);
+			}
+			else
+			{
+				$template->set_var("failed_logins", 0);
+			}
+			
+			$user_array = SystemLog::list_ip_users($ip);
+			$user_content_array = array();
+			
+			$counter = 0;
+			
+			if (is_array($user_array) and count($user_array) >= 1)
+			{
+				foreach($user_array as $key => $value)
+				{
+					$user = new User($value);
+					
+					$user_content_array[$counter][username] = $user->get_username();
+					$user_content_array[$counter][fullname] = $user->get_full_name(false);
+					
+					$counter++;
+				}
+				$template->set_var("no_user", false);
+			}
+			else
+			{
+				$template->set_var("no_user", true);
+			}
+			
+			$template->set_var("user", $user_content_array);
+			
+			$template->output();
 		}
 		else
 		{
-			$exception = new Exception("", 11);
-			$error_io = new Error_IO($exception, 1, 40, 3);
-			$error_io->display_error();
+			throw new SystemLogIDMissingException();
 		}
 	}
 		

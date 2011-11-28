@@ -28,8 +28,6 @@ require_once("interfaces/project_template_cat.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	require_once("exceptions/project_template_category_not_found_exception.class.php");
-	
 	require_once("access/project_template_cat.access.php");
 }
 
@@ -45,18 +43,26 @@ class ProjectTemplateCat implements ProjectTemplateCatInterface
     /**
      * @see ProjectTemplateCatInterface::__construct()
 	 * @param integer $project_template_cat_id
+	 * @throws ProjectTemplateCategoryNotFoundException
 	 */
 	function __construct($project_template_cat_id)
 	{
-		if ($project_template_cat_id == null)
+		if (is_numeric($project_template_cat_id))
 		{
-			$this->project_template_cat_id = null;
-			$this->project_template_cat = new ProjectTemplateCat_Access(null);
+			if (ProjectTemplateCat_Access::exist_id($project_template_cat_id) == true)
+			{
+				$this->project_template_cat_id = $project_template_cat_id;
+				$this->project_template_cat = new ProjectTemplateCat_Access($project_template_cat_id);
+			}
+			else
+			{
+				throw new ProjectTemplateCategoryNotFoundException();
+			}
 		}
 		else
 		{
-			$this->project_template_cat_id = $project_template_cat_id;
-			$this->project_template_cat = new ProjectTemplateCat_Access($project_template_cat_id);
+			$this->project_template_cat_id = null;
+			$this->project_template_cat = new ProjectTemplateCat_Access(null);
 		}
 	}
 	
@@ -70,22 +76,31 @@ class ProjectTemplateCat implements ProjectTemplateCatInterface
 	 * @see ProjectTemplateCatInterface::create()
 	 * @param string $name
 	 * @return integer
+	 * @throws ProjectTemplateCategoryCreateException
 	 */
 	public function create($name)
 	{
 		if ($this->project_template_cat and $name)
 		{
-			return $this->project_template_cat->create($name);
+			if (($return_value = $this->project_template_cat->create($name)) != null)
+			{
+				return $return_value;
+			}
+			else
+			{
+				throw new ProjectTemplateCategoryCreateException();
+			}
 		}
 		else
 		{
-			return null;
+			throw new ProjectTemplateCategoryCreateException();
 		}
 	}
 	
 	/**
 	 * @see ProjectTemplateCatInterface::delete()
 	 * @return bool
+	 * @throws ProjectTemplateCategoryDeleteException
 	 */
 	public function delete()
 	{
@@ -96,21 +111,35 @@ class ProjectTemplateCat implements ProjectTemplateCatInterface
 			{
 				if (count($project_template_array) == 0)
 				{
-					return $this->project_template_cat->delete();
+					if ($this->project_template_cat->delete() == true)
+					{
+						return true;
+					}
+					else
+					{
+						throw new ProjectTemplateCategoryDeleteException();
+					}
 				}
 				else
 				{
-					return false;
+					throw new ProjectTemplateCategoryDeleteException();
 				}
 			}
 			else
 			{
-				return $this->project_template_cat->delete();
+				if ($this->project_template_cat->delete() == true)
+				{
+					return true;
+				}
+				else
+				{
+					throw new ProjectTemplateCategoryDeleteException();
+				}
 			}
 		}
 		else
 		{
-			return null;
+			throw new ProjectTemplateCategoryDeleteException();
 		}
 	}
 	

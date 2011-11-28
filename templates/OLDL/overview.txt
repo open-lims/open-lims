@@ -5,6 +5,7 @@ ID			NAME											VERSION		STATUS
 10002		MicroArray - Analysis with ArrayTools			draft		OK
 19000		MicroArray - Parent Project						draft		OK
 20001		Microscopy - Image								draft		OK
+29000		Microscopy - Image (Parent/Master)				draft		OK
 
 
 SAMPLE

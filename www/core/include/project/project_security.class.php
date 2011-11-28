@@ -98,7 +98,7 @@ class ProjectSecurity implements ProjectSecurityInterface
 	    		{
 		    		foreach($project_permission_array as $key => $value)
 		    		{
-		    			$project_permission = new ProjectPermission($value);
+		    			$project_permission = ProjectPermission::get_instance($value);
 	
 		    			if (($user_id = $project_permission->get_user_id()) != null)
 		    			{
@@ -327,7 +327,7 @@ class ProjectSecurity implements ProjectSecurityInterface
 	    	{
 	    		foreach($project_permission_array as $key => $value)
 	    		{
-    				$project_permission = new ProjectPermission($value);
+    				$project_permission = ProjectPermission::get_instance($value);
 	
 	    			if (($user_id = $project_permission->get_user_id()) != null)
 	    			{
@@ -363,6 +363,7 @@ class ProjectSecurity implements ProjectSecurityInterface
      * @see ProjectSecurityInterface::change_owner_permission()
      * @param integer $owner_id Project Owner
      * @return bool
+     * @throws ProjectSecurityChangeException
      */
     public function change_owner_permission($owner_id)
     {
@@ -376,7 +377,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     		
     		if (count($project_permission_array) > 0 and is_numeric($project_permission_array[0]))
     		{
-	    		$project_permission = new ProjectPermission($project_permission_array[0]);
+	    		$project_permission = ProjectPermission::get_instance($project_permission_array[0]);
 	    		if ($project_permission->set_user_id($owner_id) == true)
 	    		{
 	    			if ($transaction_id != null)
@@ -391,32 +392,34 @@ class ProjectSecurity implements ProjectSecurityInterface
 	    			{
 						$transaction->rollback($transaction_id);
 					}
-					return false;
+					throw new ProjectSecurityChangeException();
 	    		}
     		}
     		else
     		{
-    			$project_permission = new ProjectPermission(null);
-				if ($project_permission->create($owner_id, null, null, $this->project_id, constant("PROJECT_USER_STD_PERMISSION"), null, 1) != null) {
+    			try
+    			{
+    				$project_permission = new ProjectPermissionUser(null);
+					$project_permission->create($owner_id, $this->project_id, constant("PROJECT_USER_STD_PERMISSION"), null, 1);
 					if ($transaction_id != null)
 					{
 						$transaction->commit($transaction_id);
 					}
 					return true;
-				}
-				else
-				{
-					if ($transaction_id != null)
-					{
+    			}
+    			catch(ProjectPermissionUserException $e)
+    			{
+    				if ($transaction_id != null)
+    				{
 						$transaction->rollback($transaction_id);
 					}
-					return false;
-				}
+					throw new ProjectSecurityChangeException();
+    			}
     		}
     	}
     	else
     	{
-    		return false;
+    		throw new ProjectSecurityChangeException("Missing Information");
     	}
     } 
     
@@ -424,6 +427,7 @@ class ProjectSecurity implements ProjectSecurityInterface
      * @see ProjectSecurityInterface::change_ou_user_permission()
      * @param integer $leader_id
      * @return bool
+     * @throws ProjectSecurityChangeException
      */
     public function change_ou_user_permission($organisation_unit_id)
     {
@@ -439,11 +443,19 @@ class ProjectSecurity implements ProjectSecurityInterface
 				{
 					foreach($leader_array as $key => $value)
 					{
-						$project_permission = new ProjectPermission(null);
-						if ($project_permission->create($value, null, null, $project_id, constant("PROJECT_LEADER_STD_PERMISSION"), null, 2) == null)
+						try
 						{
-							return false;
+							$project_permission = new ProjectPermissionUser(null);
+							$project_permission->create($value, $project_id, constant("PROJECT_LEADER_STD_PERMISSION"), null, 2);
 						}
+	    				catch(ProjectPermissionUserException $e)
+	    				{
+	    					if ($transaction_id != null)
+	    					{
+								$transaction->rollback($transaction_id);
+							}
+							throw new ProjectSecurityChangeException();
+	    				}
 					}
 				}
 				
@@ -453,11 +465,19 @@ class ProjectSecurity implements ProjectSecurityInterface
 				{
 					foreach($quality_manager_array as $key => $value)
 					{
-						$project_permission = new ProjectPermission(null);
-						if ($project_permission->create($value, null, null, $project_id, constant("PROJECT_QM_STD_PERMISSION"), null, 5) == null)
+						try
 						{
-							return false;
+							$project_permission = new ProjectPermissionUser(null);
+							$project_permission->create($value, $project_id, constant("PROJECT_QM_STD_PERMISSION"), null, 5);
 						}
+	    				catch(ProjectPermissionUserException $e)
+	    				{
+	    					if ($transaction_id != null)
+	    					{
+								$transaction->rollback($transaction_id);
+							}
+							throw new ProjectSecurityChangeException();
+	    				}
 					}
 				}
 				
@@ -465,12 +485,12 @@ class ProjectSecurity implements ProjectSecurityInterface
     		}
     		else
     		{
-    			return false;
+    			throw new ProjectSecurityChangeException("Cannot delete Entries");
     		}
     	}
     	else
     	{
-    		return false;
+    		throw new ProjectSecurityChangeException("Missing Information");
     	}
     }
     
@@ -478,6 +498,7 @@ class ProjectSecurity implements ProjectSecurityInterface
      * @see ProjectSecurityInterface::change_organisation_unit_permission()
      * @param integer $organisation_unit_id
      * @return bool
+     * @throws ProjectSecurityChangeException
      */
     public function change_organisation_unit_permission($organisation_unit_id)
     {
@@ -495,14 +516,18 @@ class ProjectSecurity implements ProjectSecurityInterface
     		{
     			foreach($project_permission_ou_group_array as $key => $value)
     			{
-    				$project_permission = new ProjectPermission($value);
-    				if ($project_permission->delete() == false)
+    				try
+    				{
+    					$project_permission = ProjectPermission::get_instance($value);    					
+    					$project_permission->delete() == false;
+    				}
+    				catch(ProjectPermissionException $e)
     				{
     					if ($transaction_id != null)
     					{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new ProjectSecurityChangeException();
     				}
     			}
     		}
@@ -511,27 +536,31 @@ class ProjectSecurity implements ProjectSecurityInterface
     	
     		if (count($project_permission_array) > 0 and is_numeric($project_permission_array[0]))
     		{
-    			$project_permission = new ProjectPermission($project_permission_array[0]);
+    			$project_permission = ProjectPermission::get_instance($project_permission_array[0]);
 				if (($return_value = $project_permission->set_organisation_unit_id($organisation_unit_id)) == false)
 				{
 					if ($transaction_id != null)
 					{
 						$transaction->rollback($transaction_id);
 					}
-					return false;
+					throw new ProjectSecurityChangeException();
 				}
     		}
     		else
     		{
-    			$project_permission = new ProjectPermission(null);
-				if (($return_value = $project_permission->create(null, $organisation_unit_id, null, $this->project_id, constant("PROJECT_OU_STD_PERMISSION"), null, 3)) == null)
-				{
-					if ($transaction_id != null)
-					{
+    			try
+    			{
+    				$project_permission = new ProjectPermissionOrganisationUnit(null);
+    				$return_value = $project_permission->create($organisation_unit_id, $this->project_id, constant("PROJECT_OU_STD_PERMISSION"), null, 3);
+    			}
+    			catch(ProjectPermissionOrganisationUnitException $e)
+    			{
+    				if ($transaction_id != null)
+    				{
 						$transaction->rollback($transaction_id);
 					}
-					return false;
-				}
+					throw new ProjectSecurityChangeException();
+    			}
     		}
     	
     		$group_array = $organisation_unit->list_groups();
@@ -540,15 +569,19 @@ class ProjectSecurity implements ProjectSecurityInterface
 			{
 				foreach($group_array as $key => $value)
 				{
-					$project_permission = new ProjectPermission(null);
-					if ($project_permission->create(null, null, $value, $this->project_id, constant("PROJECT_GROUP_STD_PERMISSION"), null, 4) == null)
+					try
 					{
-						if ($transaction_id != null)
-						{
+						$project_permission = new ProjectPermissionGroup(null);
+						$project_permission->create($value, $this->project_id, constant("PROJECT_GROUP_STD_PERMISSION"), null, 4);
+					}
+	    			catch(ProjectPermissionGroupException $e)
+	    			{
+	    				if ($transaction_id != null)
+	    				{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
-					}
+						throw new ProjectSecurityChangeException();
+	    			}
 				}
 			}
     	
@@ -560,7 +593,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     	}
     	else
     	{
-    		return false;
+    		throw new ProjectSecurityChangeException("Missing Information");
     	}
     }
     

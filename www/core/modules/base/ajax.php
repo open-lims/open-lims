@@ -39,32 +39,32 @@ require_once($path_prefix."../../../config/version.php");
 require_once($path_prefix."../../../config/main.php");
 require_once($path_prefix."../../db/db.php");
 
-require_once($path_prefix."../../include/base/security.class.php");
+require_once($path_prefix."../../include/base/security/security.class.php");
 
-require_once($path_prefix."../../include/base/template.class.php");
-
-global $db, $transaction;
+global $db, $transaction, $runtime_data;
 
 $db = new Database(constant("DB_TYPE"));
 $db->db_connect(constant("DB_SERVER"),constant("DB_PORT"),constant("DB_USER"),constant("DB_PASSWORD"),constant("DB_DATABASE"));
 
-require_once($path_prefix."../../include/base/events/event.class.php");
-require_once($path_prefix."../../include/base/system_handler.class.php");
 
 $GLOBALS['autoload_prefix'] = $path_prefix."../../../";
 
-require_once($path_prefix."../../include/base/autoload.function.php");
-
-require_once($path_prefix."../../include/base/transaction.class.php");
+require_once($path_prefix."../../include/base/system/template.class.php");
+require_once($path_prefix."../../include/base/system/events/event.class.php");
+require_once($path_prefix."../../include/base/system/system_handler.class.php");
+require_once($path_prefix."../../include/base/system/autoload.function.php");
+require_once($path_prefix."../../include/base/system/transaction.class.php");
 				
 $transaction = new Transaction();
 
-require_once($path_prefix."../../include/user/group.class.php");	
-require_once($path_prefix."../../include/user/user.class.php");
+require_once($path_prefix."../../include/base/user/group.class.php");	
+require_once($path_prefix."../../include/base/user/user.class.php");
 
-require_once($path_prefix."../../include/base/misc.class.php");
+require_once($path_prefix."../../include/base/security/session.class.php");
 
-require_once($path_prefix."../../include/base/session.class.php");
+require_once($path_prefix."../../include/base/system/runtime_data.class.php");
+
+$runtime_data = new RuntimeData();
 
 require_once($path_prefix."../../modules/base/common.io.php");
 require_once($path_prefix."../../modules/base/list.io.php");

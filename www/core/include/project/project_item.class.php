@@ -78,6 +78,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     /**
      * @see ProjectItemInterface::link_item()
      * @return bool
+     * @throws ProjectItemLinkException
      */
     public function link_item()
     {    	
@@ -92,7 +93,11 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 				$project_has_item = new ProjectHasItem_Access(null);
 	    		if ($project_has_item->create($this->project_id, $this->item_id, null) == null)
 	    		{
-	    			
+	    			if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					throw new ProjectItemLinkException(true, "Database entry failed");
 	    		}
 	    		
 				$project_item_link_event = new ProjectItemLinkEvent($this->item_id, $project_folder_id);
@@ -104,7 +109,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 					{
 						$transaction->rollback($transaction_id);
 					}
-					return false;
+					throw new ProjectItemLinkException(true, "Event failed");
 				}
 				else
 				{
@@ -121,18 +126,19 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
   				{
 					$transaction->rollback($transaction_id);
 				}
-				return false;
+				throw new ProjectItemLinkException(true, "No Project-Folder were found");
 			}
     	}
     	else
     	{
-    		return false;
+    		throw new ProjectItemLinkException();
     	}
     }
     
     /**
      * @see ProjectItemInterface::unlink_item()
      * @return bool
+     * @throws ProjectItemUnlinkException
      */
     public function unlink_item()
     {    	
@@ -149,29 +155,26 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 					
 				if ($event_handler->get_success() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
+					throw new ProjectItemUnlinkExecption(true, "Event failed");
 				}
 				
     			return true;
     		}
     		else
     		{
-    			return false;
+    			throw new ProjectItemUnlinkExecption(true, "DB failed");
     		}
     	}
     	else
     	{
-    		return false;
+    		throw new ProjectItemUnlinkExecption();
     	}
     }
     
     /**
      * @see ProjectItemInterface::unlink_item_full()
      * @return bool
+     * @throws ProjectItemUnlinkException
      */
     public function unlink_item_full()
     {
@@ -196,7 +199,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 	  						{
 								$transaction->rollback($transaction_id);
 							}
-							return false;
+							throw new ProjectItemUnlinkExecption(true, "Database delete failed");
 	  					}
 	  				} 
 	  				
@@ -213,12 +216,12 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
   			}
   			else
   			{
-  				return false;
+  				throw new ProjectItemUnlinkExecption(false, "Item not linked");
   			}
     	}
     	else
     	{
-    		return false;
+    		throw new ProjectItemUnlinkExecption();
     	}
     }
     

@@ -28,8 +28,6 @@ require_once("interfaces/value_type.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	require_once("exceptions/value_type_not_found_exception.class.php");
-	
 	require_once("access/value_type.access.php");
 }
 
@@ -45,18 +43,26 @@ class ValueType implements ValueTypeInterface {
 	/**
 	 * @see ValueTypeInterface::__construct()
 	 * @param integer $value_type_id
+	 * @throws ValueTypeNotFoundException
 	 */
 	function __construct($value_type_id)
 	{
-		if ($value_type_id == null)
+		if (is_numeric($value_type_id))
 		{
-			$this->value_type_id = null;
-			$this->value_type = new ValueType_Access(null);
+			if (ValueType_Access::exist_id($value_type_id) == true)
+			{
+				$this->value_type_id = $value_type_id;
+				$this->value_type = new ValueType_Access($value_type_id);
+			}
+			else
+			{
+				throw new ValueTypeNotFoundException();
+			}
 		}
 		else
 		{
-			$this->value_type_id = $value_type_id;
-			$this->value_type = new ValueType_Access($value_type_id);
+			$this->value_type_id = null;
+			$this->value_type = new ValueType_Access(null);
 		}
 	}   
 	

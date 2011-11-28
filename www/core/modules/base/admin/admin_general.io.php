@@ -29,12 +29,34 @@ class AdminGeneralIO
 {	
 	public static function list_languages()
 	{
-		echo "Function will be implemented soon!";	
+		$list = new List_IO("AdminGeneralLanguage", "/core/modules/base/admin/admin_general.ajax.php", "list_languages", "count_languages", $argument_array, "AdminGeneralLanguage");
+		
+		$list->add_row("","symbol",false,"16px");
+		$list->add_row("Name","language_name",true,null);
+		$list->add_row("English Name","english_name",true,null);
+		$list->add_row("ISO 639","iso_639",true,null);
+		$list->add_row("ISO 3166","iso_3166",true,null);
+		
+		$template = new Template("template/base/admin/general/list_languages.html");
+		
+		$template->set_var("list", $list->get_list());
+		
+		$template->output();
 	}
 	
 	public static function list_timezones()
 	{
-		echo "Function will be implemented soon!";
+		$list = new List_IO("AdminGeneralTimezone", "/core/modules/base/admin/admin_general.ajax.php", "list_timezones", "count_timezones", $argument_array, "AdminGeneralTimezone");
+		
+		$list->add_row("","symbol",false,"16px");
+		$list->add_row("Name","name",true,null);
+		$list->add_row("Deviation","deviation",true,null);
+		
+		$template = new Template("template/base/admin/general/list_timezones.html");
+		
+		$template->set_var("list", $list->get_list());
+		
+		$template->output();
 	}
 	
 	public static function list_paper_sizes()
@@ -45,12 +67,34 @@ class AdminGeneralIO
 	
 	public static function list_measuring_units()
 	{
-		echo "Function will be implemented soon!";
+		$list = new List_IO("AdminGeneralMeasuringUnit", "/core/modules/base/admin/admin_general.ajax.php", "list_measuring_units", "count_measuring_units", $argument_array, "AdminGeneralMeasuringUnit");
+		
+		$list->add_row("","symbol",false,"16px");
+		$list->add_row("Name","name",true,null);
+		$list->add_row("Type","type",true,null);
+		$list->add_row("Symbol","unit_symbol",false,null);
+		
+		$template = new Template("template/base/admin/general/list_measuring_units.html");
+		
+		$template->set_var("list", $list->get_list());
+		
+		$template->output();
 	}
 	
 	public static function list_currencies()
 	{
-		echo "Function will be implemented soon!";
+		$list = new List_IO("AdminGeneralCurrency", "/core/modules/base/admin/admin_general.ajax.php", "list_currencies", "count_currencies", $argument_array, "AdminGeneralCurrency");
+		
+		$list->add_row("","symbol",false,"16px");
+		$list->add_row("Name","name",true,null);
+		$list->add_row("Symbol","currency_symbol",false,null);
+		$list->add_row("ISO 4217","iso_4217",true,null);
+		
+		$template = new Template("template/base/admin/general/list_currencies.html");
+		
+		$template->set_var("list", $list->get_list());
+		
+		$template->output();
 	}
 	
 	public static function handler()
@@ -62,14 +106,14 @@ class AdminGeneralIO
 		$paramquery[action] = "list_languages";
 		$params = http_build_query($paramquery,'','&#38;');
 		
-		// $tab_io->add("languages", "Languages", $params, false);
+		$tab_io->add("languages", "Languages", $params, false);
 		
 		
 		$paramquery = $_GET;
 		$paramquery[action] = "list_timezones";
 		$params = http_build_query($paramquery,'','&#38;');
 		
-		// $tab_io->add("timezones", "Timezones", $params, false);
+		$tab_io->add("timezones", "Timezones", $params, false);
 		
 		
 		$paramquery = $_GET;
@@ -83,14 +127,14 @@ class AdminGeneralIO
 		$paramquery[action] = "list_measuring_units";
 		$params = http_build_query($paramquery,'','&#38;');
 		
-		// $tab_io->add("measuring-units", "Measur. Un.", $params, false);  
+		$tab_io->add("measuring-units", "Measur. Un.", $params, false);  
 		
 				
 		$paramquery = $_GET;
 		$paramquery[action] = "list_currencies";
 		$params = http_build_query($paramquery,'','&#38;');
 		
-		// $tab_io->add("currencies", "Currencies", $params, false);
+		$tab_io->add("currencies", "Currencies", $params, false);
 		
 		
 		switch($_GET[action]):
@@ -112,8 +156,7 @@ class AdminGeneralIO
 			break;
 		
 			default:
-				// $tab_io->activate("languages");
-				$tab_io->activate("paper-sizes");
+				$tab_io->activate("languages");
 			break;
 		
 		endswitch;
@@ -138,8 +181,7 @@ class AdminGeneralIO
 			break;
 		
 			default:
-				// self::list_languages();
-				self::list_paper_sizes();
+				self::list_languages();
 			break;
 		endswitch;
 	}

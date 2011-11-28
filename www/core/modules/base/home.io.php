@@ -40,7 +40,7 @@
  if ($user_quota == 0) {
  	$quota = "unlimited";
  } else{
- 	$quota = Misc::calc_size($user_quota); 	
+ 	$quota = Convert::convert_byte_1024($user_quota); 	
  }
  
  if ($user_quota != 0) {
@@ -69,7 +69,7 @@
  	$diskspace_per_display = "";
  }
  
- $act_filesize = Misc::calc_size($user_filesize);
+ $act_filesize = Convert::convert_byte_1024($user_filesize);
  
 
  $sum_running_projects = Project_Wrapper::count_user_running_projects($user->get_user_id());

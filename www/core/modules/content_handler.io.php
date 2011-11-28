@@ -29,7 +29,7 @@ class ContentHandler_IO
 {
 	public static function main()
 	{
-		global $session, $user, $misc, $transaction;
+		global $session, $user, $transaction;
 
 		$template = new Template("template/index_header.html");
 	
@@ -150,7 +150,7 @@ class ContentHandler_IO
 					
  					if ($session->read_value("must_change_password") == true)
  					{
- 						require_once("core/modules/user/user.io.php");
+ 						require_once("core/modules/base/user.io.php");
 						UserIO::change_password_on_login();
  					}
  					else
@@ -166,6 +166,11 @@ class ContentHandler_IO
 								{
 									require_once("core/modules/base/base.io.php");
 									BaseIO::method_handler();
+								}
+								elseif($_GET[nav] == "user")
+								{
+									require_once("core/modules/base/user.io.php");
+									UserIO::method_handler();
 								}
 								else
 								{
@@ -199,8 +204,7 @@ class ContentHandler_IO
 									
 									if ($module_found == false)
 									{
-										$error_io = new Error_IO($e, 0, 0, 0);
-										$error_io->display_error();
+										// throw exception
 									}
 								}
 							}
@@ -209,34 +213,15 @@ class ContentHandler_IO
 								include("core/modules/base/home.io.php");
 							}
 						}
-						catch(ModuleDialogCorruptException $e)
-						{
-							/**
-							 * @todo Error-Code
-							 */
-							$error_io = new Error_IO($e, 0, 0, 0);
-							$error_io->display_error();
-						}
-						catch(ModuleDialogNotFoundException $e)
-						{
-							/**
-							 * @todo Error-Code
-							 */
-							$error_io = new Error_IO($e, 0, 0, 0);
-							$error_io->display_error();
-						}
-						catch(ModuleDialogMissingException $e)
-						{
-							/**
-							 * @todo Error-Code
-							 */
-							$error_io = new Error_IO($e, 0, 0, 0);
-							$error_io->display_error();
-						}
 						catch(DatabaseQueryFailedException $e)
 						{
 							$transaction->force_rollback();
-							$error_io = new Error_IO($e, 2, 10, 1);
+							$error_io = new Error_IO($e);
+							$error_io->display_error();
+						}
+ 						catch(BaseException $e)
+						{
+							$error_io = new Error_IO($e);
 							$error_io->display_error();
 						}
  					}

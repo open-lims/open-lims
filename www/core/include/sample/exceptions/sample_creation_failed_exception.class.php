@@ -22,6 +22,8 @@
  */
 
 /**
+ * @deprecated replace
+ * @todo replace
  * Sample Creation Failed Exception
  * @package sample
  */

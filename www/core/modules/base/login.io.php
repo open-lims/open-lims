@@ -184,7 +184,16 @@ class Login_IO
 						$session_id = $auth->get_session_id();
 						$session = new Session($session_id);
 						$user = new User($session->get_user_id());
-											
+						
+						if (is_numeric($_POST[language]))
+						{
+							$session->write_value("LANGUAGE", $_POST[language]);
+						}
+						else
+						{
+							$session->write_value("LANGUAGE", 1);
+						}
+										
 						if ($user->get_boolean_user_entry("user_locked") == false)
 						{
 				 			$template = new Template("template/base/login/proceed.html");

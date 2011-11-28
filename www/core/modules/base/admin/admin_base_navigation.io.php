@@ -29,7 +29,7 @@ class AdminBaseNavigationIO
 {
 	public static function home()
 	{
-		$list = new ListStat_IO((Base_Wrapper::count_base_module_navigation()+1), 20);
+		$list = new ListStat_IO((System_Wrapper::count_base_module_navigation()+1), 20);
 		
 		$list->add_row("Displayed-Name (en-GB)", "name", false, null);
 		$list->add_row("Module", "module", false, null);
@@ -46,11 +46,11 @@ class AdminBaseNavigationIO
 
 		if ($_GET[page])
 		{
-			$result_array = Base_Wrapper::list_base_module_navigation(($_GET[page]*20)-20, ($_GET[page]*20));			
+			$result_array = System_Wrapper::list_base_module_navigation(($_GET[page]*20)-20, ($_GET[page]*20));			
 		}
 		else
 		{
-			$result_array = Base_Wrapper::list_base_module_navigation(0, 20);		
+			$result_array = System_Wrapper::list_base_module_navigation(0, 20);		
 		}
 		
 		array_unshift($result_array, $home_array);

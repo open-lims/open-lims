@@ -181,6 +181,9 @@ class AdminSampleTemplateCatIO
 		}
 	}
 	
+	/**
+	 * @throws SampleTemplateCategoryIDMissingException
+	 */
 	public static function delete()
 	{
 		if ($_GET[id])
@@ -227,12 +230,13 @@ class AdminSampleTemplateCatIO
 		}
 		else
 		{
-			$exception = new Exception("", 5);
-			$error_io = new Error_IO($exception, 250, 40, 3);
-			$error_io->display_error();
+			throw new SampleTemplateCategoryIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws SampleTemplateCategoryIDMissingException
+	 */
 	public static function edit()
 	{
 		if ($_GET[id])
@@ -312,47 +316,29 @@ class AdminSampleTemplateCatIO
 		}
 		else
 		{
-			$exception = new Exception("", 5);
-			$error_io = new Error_IO($exception, 250, 40, 3);
-			$error_io->display_error();
+			throw new SampleTemplateCategoryIDMissingException();
 		}
 	}
 	
 	public static function handler()
-	{
-		try
-		{
-			if ($_GET[id])
-			{
-				if (SampleTemplateCat::exist_id($_GET[id]) == false)
-				{
-					throw new SampleTemplateCategoryNotFoundException("",4);
-				}
-			}
-			
-			switch($_GET[action]):
-				case "add":
-					self::create();
-				break;
+	{			
+		switch($_GET[action]):
+			case "add":
+				self::create();
+			break;
 
-				case "delete":
-					self::delete();
-				break;
-	
-				case "edit":
-					self::edit();
-				break;	
-					
-				default:
-					self::home();
-				break;
-			endswitch;
-		}
-		catch (SampleTemplateCategoryNotFoundException $e)
-		{
-			$error_io = new Error_IO($e, 250, 40, 1);
-			$error_io->display_error();
-		}
+			case "delete":
+				self::delete();
+			break;
+
+			case "edit":
+				self::edit();
+			break;	
+				
+			default:
+				self::home();
+			break;
+		endswitch;
 	}
 	
 }

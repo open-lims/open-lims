@@ -27,224 +27,196 @@
  */
 class DataIO
 {
+	/**
+	 * @throws DataSecuriyAccessDeniedException
+	 */
 	public static function browser()
 	{
 		global $content;
 		
-		try
+		$data_browser = new DataBrowser();
+
+		if ($_GET[clear] == "delete_stack")
 		{
-			$data_browser = new DataBrowser();
-	
-			if ($_GET[clear] == "delete_stack")
-			{
-				$data_path = new DataPath(null, null);
-				$data_path->delete_stack();
-				unset($_GET[clear]);
-				unset($_GET[vfolder_id]);
-			}
+			$data_path = new DataPath(null, null);
+			$data_path->delete_stack();
+			unset($_GET[clear]);
+			unset($_GET[vfolder_id]);
+		}
+		
+		if ($_GET[vfolder_id])
+		{
+			$virtual_folder = new VirtualFolder($_GET[vfolder_id]);
 			
-			if ($_GET[vfolder_id])
+			$virtual_folder_id = $_GET[vfolder_id];
+			$folder_id = null;
+			$data_path = new DataPath(null, $_GET[vfolder_id]);
+		}
+		elseif ($_GET[folder_id])
+		{
+			$folder = Folder::get_instance($_GET[folder_id]);
+			
+			if ($folder->is_read_access() == false)
 			{
-				
-				if (VirtualFolder::exist_vfolder($_GET[vfolder_id]) == false)
-				{
-					throw new DataException("",1);
-				}
-				else
-				{
-					$virtual_folder_id = $_GET[vfolder_id];
-					$folder_id = null;
-					$data_path = new DataPath(null, $_GET[vfolder_id]);
-				}
-			}
-			elseif ($_GET[folder_id])
-			{
-				$folder = Folder::get_instance($_GET[folder_id]);
-				
-				if ($folder->exist_folder() == false)
-				{
-					throw new DataException("",1);
-				}
-				else
-				{
-					if ($folder->is_read_access() == false)
-					{
-						throw new DataSecurityException("",1);
-					}
-					else
-					{
-						$virtual_folder_id = null;
-						$folder_id = $_GET[folder_id];
-						$data_path = new DataPath($_GET[folder_id], null);
-					}
-				}
+				throw new DataSecurityAccessDeniedException();
 			}
 			else
 			{
-				$data_path = new DataPath(null, null);
-				if ($data_path->get_last_entry_type() == true)
-				{
-					$virtual_folder_id = $data_path->get_last_entry_id();
-					$folder_id = null;
-				}
-				else
-				{
-					$virtual_folder_id = null;
-					$folder_id = $data_path->get_last_entry_id();
-				}
+				$virtual_folder_id = null;
+				$folder_id = $_GET[folder_id];
+				$data_path = new DataPath($_GET[folder_id], null);
 			}
-
-			if ($folder_id == null and $virtual_folder_id == null)
+		}
+		else
+		{
+			$data_path = new DataPath(null, null);
+			if ($data_path->get_last_entry_type() == true)
 			{
-				$folder_id = $data_browser->get_folder_id();
-				
-				$argument_array = array();
-				$argument_array[0][0] = "folder_id";
-				$argument_array[0][1] = $folder_id;
-				$argument_array[1][0] = "virtual_folder_id";
-				$argument_array[1][1] = null;
+				$virtual_folder_id = $data_path->get_last_entry_id();
+				$folder_id = null;
 			}
-	
+			else
+			{
+				$virtual_folder_id = null;
+				$folder_id = $data_path->get_last_entry_id();
+			}
+		}
+
+		if ($folder_id == null and $virtual_folder_id == null)
+		{
+			$folder_id = $data_browser->get_folder_id();
+			
 			$argument_array = array();
 			$argument_array[0][0] = "folder_id";
 			$argument_array[0][1] = $folder_id;
 			$argument_array[1][0] = "virtual_folder_id";
-			$argument_array[1][1] = $virtual_folder_id;	
+			$argument_array[1][1] = null;
+		}
+
+		$argument_array = array();
+		$argument_array[0][0] = "folder_id";
+		$argument_array[0][1] = $folder_id;
+		$argument_array[1][0] = "virtual_folder_id";
+		$argument_array[1][1] = $virtual_folder_id;	
 
 			
-			$list = new List_IO("DataBrowser", "/core/modules/data/data.ajax.php", "list_data_browser", "count_data_browser", $argument_array, "DataBrowserAjax");
+		$list->add_row("","symbol",false,16);
+		$list->add_row("Name","name",true,null);
+		$list->add_row("Type","type",true,null);
+		$list->add_row("Ver.","version",false,null);
+		$list->add_row("Date/Time","datetime",true,null);
+		$list->add_row("Size","size",true,null);
+		$list->add_row("Owner","owner",true,null);
+		$list->add_row("Permission","permission",false,null);
+		$list->add_row("","delete_checkbox",false,"16px");
 
-			// $list->set_top_right_text($data_path->get_stack_path());
-			
-			$list->add_row("","symbol",false,16);
-			$list->add_row("Name","name",true,null);
-			$list->add_row("Type","type",true,null);
-			$list->add_row("Ver.","version",false,null);
-			$list->add_row("Date/Time","datetime",true,null);
-			$list->add_row("Size","size",true,null);
-			$list->add_row("Owner","owner",true,null);
-			$list->add_row("Permission","permission",false,null);
-			$list->add_row("","delete_checkbox",false,"16px");
+		// !!! [...] !!!
 		
-			// !!! [...] !!!
-			
-			$folder = Folder::get_instance($folder_id);	
-			
-			$template = new Template("template/data/data_browser.html");
-	
-			/*
-			if ($folder_id and !$virtual_folder_id)
+		$folder = Folder::get_instance($folder_id);	
+		
+		$template = new Template("template/data/data_browser.html");
+
+		if ($folder_id and !$virtual_folder_id)
+		{
+			if ($folder->is_write_access() == true)
 			{
-				if ($folder->is_write_access() == true)
-				{
-					$template->set_var("add_file", true);
-				}
-				else
-				{
-					$template->set_var("add_file", false);
-				}
-				
-				if ($folder->is_folder_image_content() == true)
-				{
-					$template->set_var("folder_image", true);
-				}
-				else
-				{
-					$template->set_var("folder_image", false);
-				}
-				
-				if (($folder->can_change_permission() or 
-					$folder->can_add_folder() or 
-					$folder->can_command_folder() or 
-					$folder->can_rename_folder()) and
-					($folder->is_write_access() or 
-					$folder->is_delete_access() or
-					$folder->is_control_access()))
-				{
-					$template->set_var("folder_administration", true);
-				}
-				else
-				{
-					$template->set_var("folder_administration", false);
-				}
-				
-				$template->set_var("item_administration", false);
+				$template->set_var("add_file", true);
 			}
 			else
-			{ */
+			{
 				$template->set_var("add_file", false);
+			}
+			
+			if ($folder->is_folder_image_content() == true)
+			{
+				$template->set_var("folder_image", true);
+			}
+			else
+			{
 				$template->set_var("folder_image", false);
+			}
+			
+			if (($folder->can_change_permission() or 
+				$folder->can_add_folder() or 
+				$folder->can_command_folder() or 
+				$folder->can_rename_folder()) and
+				($folder->is_write_access() or 
+				$folder->is_delete_access() or
+				$folder->is_control_access()))
+			{
+				$template->set_var("folder_administration", true);
+			}
+			else
+			{
 				$template->set_var("folder_administration", false);
-				$template->set_var("item_administration", false);
-			// } 
+			}
 			
-			$paramquery = $_GET;
-			$paramquery[action] = "image_browser_detail";
-			$paramquery[folder_id] = $folder_id;
-			unset($paramquery[nextpage]);
-			$params = http_build_query($paramquery,'','&#38;');
-							
-			$template->set_var("folder_image_params", $params);
-			
-			
-			$paramquery = $_GET;
-			$paramquery[action] = "file_add";
-			$paramquery[folder_id] = $folder_id;
-			unset($paramquery[nextpage]);
-			$params = http_build_query($paramquery,'','&#38;');
-							
-			$template->set_var("add_file_params", $params);
-	
-	
-			$paramquery = $_GET;
-			$paramquery[clear] = "delete_stack";
-			unset($paramquery[folder_id]);
-			unset($paramquery[vfolder_id]);
-			$params = http_build_query($paramquery,'','&#38;');
-							
-			$template->set_var("home_folder_params", $params);
-			
-	
-			$paramquery = $_GET;
-			$paramquery[action] = "folder_administration";
-			$paramquery[folder_id] = $folder_id;
-			unset($paramquery[nextpage]);
-			$params = http_build_query($paramquery,'','&#38;');
-							
-			$template->set_var("folder_administration_params", $params);
-			
-			$paramquery = $_GET;
-			$paramquery[action] = "item_administration_folder";
-			$paramquery[folder_id] = $folder_id;
-			unset($paramquery[nextpage]);
-			$params = http_build_query($paramquery,'','&#38;');
-							
-			$template->set_var("item_administration_params", $params);		
-	
-	
-			$template->set_var("title","Data Browser");
-			
-			$template->set_var("list", $list->get_list());
-			
-			$template->output();
+			$template->set_var("item_administration", false);
 		}
-		catch (DataException $e)
+		else
 		{
-			$error_io = new Error_IO($e, 20, 40, 1);
-			$error_io->display_error();
+			$template->set_var("add_file", false);
+			$template->set_var("folder_image", false);
+			$template->set_var("folder_administration", false);
+			$template->set_var("item_administration", false);
 		}
-		catch (DataSecurityException $e)
-		{
-			$error_io = new Error_IO($e, 20, 40, 2);
-			$error_io->display_error();
-		}
-		catch (Exception $e)
-		{
-			$error_io = new Error_IO($e, 0, 0, 0);
-			$error_io->display_error();
-		}
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "image_browser_detail";
+		$paramquery[folder_id] = $folder_id;
+		unset($paramquery[nextpage]);
+		$params = http_build_query($paramquery,'','&#38;');
+						
+		$template->set_var("folder_image_params", $params);
+		
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "file_add";
+		$paramquery[folder_id] = $folder_id;
+		unset($paramquery[nextpage]);
+		$params = http_build_query($paramquery,'','&#38;');
+						
+		$template->set_var("add_file_params", $params);
+
+
+		$paramquery = $_GET;
+		$paramquery[clear] = "delete_stack";
+		unset($paramquery[folder_id]);
+		unset($paramquery[vfolder_id]);
+		$params = http_build_query($paramquery,'','&#38;');
+						
+		$template->set_var("home_folder_params", $params);
+		
+
+		$paramquery = $_GET;
+		$paramquery[action] = "folder_administration";
+		$paramquery[folder_id] = $folder_id;
+		unset($paramquery[nextpage]);
+		$params = http_build_query($paramquery,'','&#38;');
+						
+		$template->set_var("folder_administration_params", $params);
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "item_administration_folder";
+		$paramquery[folder_id] = $folder_id;
+		unset($paramquery[nextpage]);
+		$params = http_build_query($paramquery,'','&#38;');
+						
+		$template->set_var("item_administration_params", $params);		
+
+
+		$template->set_var("title","Data Browser");
+		
+		$template->set_var("list", $list->get_list());
+		
+		$template->output();
 	}
 	
+	/**
+	 * @throws FolderIDMissingException
+	 * @throws FolderIsEmptyException
+	 * @throws DataSecuriyAccessDeniedException
+	 */
 	public static function image_browser_multi()
 	{
 		if ($_GET[folder_id])
@@ -355,26 +327,25 @@ class DataIO
 				}
 				else
 				{
-					$exception = new Exception("", 4);
-					$error_io = new Error_IO($exception, 20, 40, 1);
-					$error_io->display_error();
+					throw new FolderIsEmptyException();
 				}
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 20, 40, 2);
-				$error_io->display_error();
+				throw new DataSecuriyAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 20, 40, 3);
-			$error_io->display_error();
+			throw new FolderIDMissingException();
 		}
 	}
 
+	/**
+	 * @throws FolderIDMissingException
+	 * @throws FolderIsEmptyException
+	 * @throws DataSecuriyAccessDeniedException
+	 */
 	public static function image_browser_detail()
 	{
 		if ($_GET[folder_id])
@@ -508,308 +479,281 @@ class DataIO
 				}
 				else
 				{
-					$exception = new Exception("", 4);
-					$error_io = new Error_IO($exception, 20, 40, 1);
-					$error_io->display_error();
+					throw new FolderIsEmptyException();
 				}
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 20, 40, 2);
-				$error_io->display_error();
+				throw new DataSecuriyAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 20, 40, 3);
-			$error_io->display_error();
+			throw new FolderIDMissingException();
 		}
 	}
 
+	/**
+	 * @throws FolderIDMissingException
+	 * @throws DataSecuriyAccessDeniedException
+	 */
 	public static function permission()
 	{
 		global $user;
 		
-		try
+		if ($_GET[file_id] xor $_GET[value_id])
 		{
-			if ($_GET[file_id] xor $_GET[value_id])
+			if ($_GET[file_id])
 			{
-				if ($_GET[file_id])
-				{
-					$id = $_GET[file_id];
-					$object = File::get_instance($id);
-					$type = "file";
-					$title = $object->get_name();
-				}
-				
-				if ($_GET[value_id])
-				{
-					$id = $_GET[value_id];
-					$object = Value::get_instance($id);
-					$type = "value";
-					$title = $object->get_type_name();
-				}
+				$id = $_GET[file_id];
+				$object = File::get_instance($id);
+				$type = "file";
+				$title = $object->get_name();
+			}
+			
+			if ($_GET[value_id])
+			{
+				$id = $_GET[value_id];
+				$object = Value::get_instance($id);
+				$type = "value";
+				$title = $object->get_type_name();
+			}
+		}
+		else
+		{
+			if ($_GET[folder_id])
+			{
+				$id = $_GET[folder_id];
+				$object = Folder::get_instance($id);
+				$type = "folder";
+				$title = $object->get_name();
 			}
 			else
 			{
-				if ($_GET[folder_id])
+				throw new FolderIDMissingException();
+			}
+		}
+		
+		if ($object->is_control_access() == true)
+		{
+			$full_access = true;
+			
+		}
+		else{
+			$full_access = false;
+		}
+		
+		if ($object->get_owner_id() == $user->get_user_id())
+		{
+			$user_access = true;
+		}
+		else
+		{
+			$user_access = false;
+		}
+		
+		if ($full_access == true or $user_access == true)
+		{
+			$data_permission = new DataPermission($type, $id);
+			
+			if (!$_GET[nextpage])
+			{
+				$template = new Template("template/data/data_permission.html");
+				
+				$paramquery = $_GET;
+				$paramquery[nextpage] = "1";
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$template->set_var("params", $params);
+				
+				$paramquery = $_GET;
+				$paramquery[action] = "chown";
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$template->set_var("params_chown", $params);
+				
+				$paramquery = $_GET;
+				$paramquery[action] = "chgroup";
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$template->set_var("params_chgroup", $params);
+				
+				$template->set_var("title", $title);
+				
+				$user = new User($data_permission->get_owner_id());
+				$group = new Group($data_permission->get_owner_group_id());
+				
+				$template->set_var("owner", $user->get_full_name(false));
+				$template->set_var("owner_group", $group->get_name());
+
+				if ($object->can_set_automatic())
 				{
-					$id = $_GET[folder_id];
-					$object = Folder::get_instance($id);
-					$type = "folder";
-					$title = $object->get_name();
+					$disable_automatic = false;
 				}
 				else
 				{
-					throw new IdMissingException("", 0);
+					$disable_automatic = true;
 				}
-			}
-			
-			if ($object->is_control_access() == true)
-			{
-				$full_access = true;
 				
-			}
-			else{
-				$full_access = false;
-			}
-			
-			if ($object->get_owner_id() == $user->get_user_id())
-			{
-				$user_access = true;
-			}
-			else
-			{
-				$user_access = false;
-			}
-			
-			if ($full_access == true or $user_access == true)
-			{
-				$data_permission = new DataPermission($type, $id);
-				
-				if (!$_GET[nextpage])
+				if ($object->can_set_data_entity())
 				{
-					$template = new Template("template/data/data_permission.html");
-					
-					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$template->set_var("params", $params);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "chown";
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$template->set_var("params_chown", $params);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "chgroup";
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$template->set_var("params_chgroup", $params);
-					
-					$template->set_var("title", $title);
-					
-					$user = new User($data_permission->get_owner_id());
-					$group = new Group($data_permission->get_owner_group_id());
-					
-					$template->set_var("owner", $user->get_full_name(false));
-					$template->set_var("owner_group", $group->get_name());
-
-					if ($object->can_set_automatic())
-					{
-						$disable_automatic = false;
-					}
-					else
-					{
-						$disable_automatic = true;
-					}
-					
-					if ($object->can_set_data_entity())
-					{
-						$disable_project = false;
-					}
-					else
-					{
-						$disable_project = true;
-					}
-					
-					if ($object->can_set_control())
-					{
-						$disable_control = false;
-					}
-					else
-					{
-						$disable_control = true;
-					}
-					
-					if ($object->can_set_remain())
-					{
-						$disable_remain = false;
-					}
-					else
-					{
-						$disable_remain = true;
-					}
-					
+					$disable_project = false;
+				}
+				else
+				{
+					$disable_project = true;
+				}
+				
+				if ($object->can_set_control())
+				{
+					$disable_control = false;
+				}
+				else
+				{
+					$disable_control = true;
+				}
+				
+				if ($object->can_set_remain())
+				{
+					$disable_remain = false;
+				}
+				else
+				{
+					$disable_remain = true;
+				}
+				
+				if ($disable_automatic == true)
+				{
+					$template->set_var("disabled_automatic","disabled='disabled'");
+				}
+				else
+				{
+					$template->set_var("disabled_automatic","");
+				}
+				
+				if ($data_permission->get_automatic() == true) {
+					$template->set_var("checked_automatic","checked='checked'");
 					if ($disable_automatic == true)
 					{
-						$template->set_var("disabled_automatic","disabled='disabled'");
+						$template->set_var("hidden_automatic","<input type='hidden' name='automatic' value='1' />");
 					}
 					else
 					{
-						$template->set_var("disabled_automatic","");
+						$template->set_var("hidden_automatic","");
 					}
-					
-					if ($data_permission->get_automatic() == true) {
-						$template->set_var("checked_automatic","checked='checked'");
-						if ($disable_automatic == true)
+				}else{
+					$template->set_var("checked_automatic","");
+					$template->set_var("hidden_automatic","");
+				}
+				
+				
+				
+				$permission_array = $data_permission->get_permission_array();
+	
+				for ($i=1;$i<=4;$i++)
+				{
+					for ($j=1;$j<=4;$j++)
+					{
+						$checked_name = "checked_".$i."_".$j;
+						$disabled_name = "disabled_".$i."_".$j;
+						$hidden_name = "hidden_".$i."_".$j;
+						
+						if ($i==3 and $disable_project == true)
 						{
-							$template->set_var("hidden_automatic","<input type='hidden' name='automatic' value='1' />");
+							$template->set_var($disabled_name,"disabled='disabled'");
+							$disabled = true;
 						}
 						else
 						{
-							$template->set_var("hidden_automatic","");
-						}
-					}else{
-						$template->set_var("checked_automatic","");
-						$template->set_var("hidden_automatic","");
-					}
-					
-					
-					
-					$permission_array = $data_permission->get_permission_array();
-		
-					for ($i=1;$i<=4;$i++)
-					{
-						for ($j=1;$j<=4;$j++)
-						{
-							$checked_name = "checked_".$i."_".$j;
-							$disabled_name = "disabled_".$i."_".$j;
-							$hidden_name = "hidden_".$i."_".$j;
-							
-							if ($i==3 and $disable_project == true)
+							if (($j==3 or $j==4) and $disable_control == true)
 							{
 								$template->set_var($disabled_name,"disabled='disabled'");
 								$disabled = true;
 							}
 							else
 							{
-								if (($j==3 or $j==4) and $disable_control == true)
+								if ($disable_remain == true)
 								{
 									$template->set_var($disabled_name,"disabled='disabled'");
 									$disabled = true;
 								}
 								else
 								{
-									if ($disable_remain == true)
-									{
-										$template->set_var($disabled_name,"disabled='disabled'");
-										$disabled = true;
-									}
-									else
-									{
-										$template->set_var($disabled_name,"");
-										$disabled = false;
-									}
+									$template->set_var($disabled_name,"");
+									$disabled = false;
 								}
 							}
-							
-							if ($permission_array[$i][$j] == true)
+						}
+						
+						if ($permission_array[$i][$j] == true)
+						{
+							$template->set_var($checked_name,"checked='checked'");
+							if ($disabled == true)
 							{
-								$template->set_var($checked_name,"checked='checked'");
-								if ($disabled == true)
-								{
-									$template->set_var($hidden_name, "<input type='hidden' name='".$checked_name."' value='1' />");
-								}
-								else
-								{
-									$template->set_var($hidden_name, "");
-								}
+								$template->set_var($hidden_name, "<input type='hidden' name='".$checked_name."' value='1' />");
 							}
 							else
 							{
-								$template->set_var($checked_name,"");
 								$template->set_var($hidden_name, "");
 							}
-							$disabled = false;
 						}
+						else
+						{
+							$template->set_var($checked_name,"");
+							$template->set_var($hidden_name, "");
+						}
+						$disabled = false;
 					}
-	
+				}
+
+				$paramquery = $_GET;
+				$paramquery[nav] = "data";
+				unset($paramquery[action]);
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$template->set_var("back_link", $params);
+				
+				$template->output();	
+			}
+			else
+			{
+				if ($_POST[save])
+				{
 					$paramquery = $_GET;
-					$paramquery[nav] = "data";
-					unset($paramquery[action]);
+					unset($paramquery[nextpage]);
 					$params = http_build_query($paramquery,'','&#38;');
-					
-					$template->set_var("back_link", $params);
-					
-					$template->output();	
 				}
 				else
 				{
-					if ($_POST[save])
+					if ($type == folder)
 					{
 						$paramquery = $_GET;
+						unset($paramquery[action]);
 						unset($paramquery[nextpage]);
 						$params = http_build_query($paramquery,'','&#38;');
 					}
 					else
 					{
-						if ($type == folder)
-						{
-							$paramquery = $_GET;
-							unset($paramquery[action]);
-							unset($paramquery[nextpage]);
-							$params = http_build_query($paramquery,'','&#38;');
-						}
-						else
-						{
-							$paramquery = $_GET;
-							unset($paramquery[action]);
-							unset($paramquery[nextpage]);
-							$params = http_build_query($paramquery,'','&#38;');
-						}
-					}
-					
-					if ($data_permission->set_permission_array($_POST) == true)
-					{
-						Common_IO::step_proceed($params, "Permission: ".$title."", "Changes saved succesful" ,null);
-					}
-					else
-					{
-						Common_IO::step_proceed($params, "Permission: ".$title."", "Operation failed" ,null);
+						$paramquery = $_GET;
+						unset($paramquery[action]);
+						unset($paramquery[nextpage]);
+						$params = http_build_query($paramquery,'','&#38;');
 					}
 				}
-			}
-			else
-			{
-				switch ($type):
 				
-					case "folder":
-						$exception = new Exception("", 1);
-					break;
-					
-					case "file":
-						$exception = new Exception("", 2);
-					break;
-					
-					case "value":
-						$exception = new Exception("", 3);
-					break;
-				
-				endswitch;
-				
-				$error_io = new Error_IO($exception, 20, 40, 2);
-				$error_io->display_error();
+				if ($data_permission->set_permission_array($_POST) == true)
+				{
+					Common_IO::step_proceed($params, "Permission: ".$title."", "Changes saved succesful" ,null);
+				}
+				else
+				{
+					Common_IO::step_proceed($params, "Permission: ".$title."", "Operation failed" ,null);
+				}
 			}
 		}
-		catch (IdMissingException $e)
+		else
 		{
-			$error_io = new Error_IO($e, 20, 40, 3);
-			$error_io->display_error();
+			throw new DataSecuriyAccessDeniedException();
 		}
 	}
 	
@@ -1139,454 +1083,211 @@ class DataIO
 		}
 	}
 
+	/**
+	 * @throws FolderIDMissingException
+	 */
 	public static function change_owner()
 	{
-		try
-		{
-			if ($_GET[file_id] xor $_GET[value_id])
-			{
-				if ($_GET[file_id])
-				{
-					$id = $_GET[file_id];
-					$object = File::get_instance($id);
-					$type = "file";
-					$title = $object->get_name();
-				}
-				if ($_GET[value_id])
-				{
-					$id = $_GET[value_id];
-					$object = Value::get_instance($id);
-					$type = "value";
-					$title = $object->get_type_name();
-				}
-			}
-			else
-			{
-				if ($_GET[folder_id])
-				{
-					$id = $_GET[folder_id];
-					$object = Folder::get_instance($id);
-					$type = "folder";
-					$title = $object->get_name();
-				}
-				else
-				{
-					throw new IdMissingException("", 0);
-				}
-			}
-			
-			if ($object->is_control_access() == true)
-			{
-				$data_permission = new DataPermission($type, $id);
-				
-				if (!$_GET[nextpage])
-				{
-					$template = new Template("template/data/data_change_owner.html");
-					
-					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$template->set_var("params",$params);
-					
-					$template->set_var("title",$title);
-					$template->set_var("error","");
-					
-					$user_array = User::list_entries();
-					
-					$result = array();
-					$counter = 0;
-					
-					foreach($user_array as $key => $value)
-					{
-						$user = new User($value);
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $user->get_username()." (".$user->get_full_name(false).")";
-						$counter++;
-					}
-					
-					$template->set_var("option",$result);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "permission";
-					unset($paramquery[nextpage]);
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$template->set_var("back_link", $params);
-					
-					$template->output();
-				}
-				else
-				{
-					$paramquery = $_GET;
-					$paramquery[action] = "permission";
-					unset($paramquery[nextpage]);
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					if ($data_permission->set_owner_id($_POST[user]) == true)
-					{
-						Common_IO::step_proceed($params, "Permission: ".$title."", "Changes saved succesful" ,null);
-					}
-					else
-					{
-						Common_IO::step_proceed($params, "Permission: ".$title."", "Operation failed" ,null);
-					}
-				}
-			}
-			else
-			{
-				switch ($type):
-				
-					case "folder":
-						$exception = new Exception("", 1);
-					break;
-					
-					case "file":
-						$exception = new Exception("", 2);
-					break;
-					
-					case "value":
-						$exception = new Exception("", 3);
-					break;
-				
-				endswitch;
-				
-				$error_io = new Error_IO($exception, 20, 40, 2);
-				$error_io->display_error();
-			}
-		}
-		catch (IdMissingException $e)
-		{
-			$error_io = new Error_IO($e, 20, 40, 3);
-			$error_io->display_error();
-		}
-	}
-	
-	public static function change_group()
-	{
-		try
-		{
-			if ($_GET[file_id] xor $_GET[value_id])
-			{
-				if ($_GET[file_id])
-				{
-					$id = $_GET[file_id];
-					$object = File::get_instance($id);
-					$type = "file";
-					$title = $object->get_name();
-				}
-				if ($_GET[value_id])
-				{
-					$id = $_GET[value_id];
-					$object = Value::get_instance($id);
-					$type = "value";
-					$title = $object->get_type_name();
-				}
-			}
-			else
-			{
-				if ($_GET[folder_id])
-				{
-					$id = $_GET[folder_id];
-					$object = Folder::get_instance($id);
-					$type = "folder";
-					$title = $object->get_name();
-				}
-				else
-				{
-					throw new IdMissingException("", 0);
-				}
-			}
-			
-			if ($object->is_control_access() == true)
-			{
-				$data_permission = new DataPermission($type, $id);
-				
-				if (!$_GET[nextpage])
-				{
-					$template = new Template("template/data/data_change_group.html");
-					
-					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$template->set_var("params",$params);
-					
-					$template->set_var("title",$title);
-					$template->set_var("error","");
-					
-					$group_array = Group::list_groups();
-					
-					$result = array();
-					$counter = 0;
-					
-					foreach($group_array as $key => $value)
-					{
-						$group = new Group($value);
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $group->get_name();
-						$counter++;
-					}
-					
-					$template->set_var("option",$result);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "permission";
-					unset($paramquery[nextpage]);
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$template->set_var("back_link", $params);
-					
-					$template->output();
-				}
-				else
-				{
-					$paramquery = $_GET;
-					$paramquery[action] = "permission";
-					unset($paramquery[nextpage]);
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					if ($data_permission->set_owner_group_id($_POST[group]) == true)
-					{
-						Common_IO::step_proceed($params, "Permission: ".$title."", "Changes saved succesful" ,null);
-					}
-					else
-					{
-						Common_IO::step_proceed($params, "Permission: ".$title."", "Operation failed" ,null);
-					}
-				}
-			}
-			else
-			{
-				switch ($type):
-				
-					case "folder":
-						$exception = new Exception("", 1);
-					break;
-					
-					case "file":
-						$exception = new Exception("", 2);
-					break;
-					
-					case "value":
-						$exception = new Exception("", 3);
-					break;
-				
-				endswitch;
-				
-				$error_io = new Error_IO($exception, 20, 40, 2);
-				$error_io->display_error();
-			}
-		}
-		catch (IdMissingException $e)
-		{
-			$error_io = new Error_IO($e, 20, 40, 3);
-			$error_io->display_error();
-		}
-	}
-
-	public static function method_handler()
-	{	
-		try
+		if ($_GET[file_id] xor $_GET[value_id])
 		{
 			if ($_GET[file_id])
 			{
-				if (File::exist_file($_GET[file_id]) == false) {
-					throw new FileNotFoundException("",2);
-				}
+				$id = $_GET[file_id];
+				$object = File::get_instance($id);
+				$type = "file";
+				$title = $object->get_name();
 			}
-			
 			if ($_GET[value_id])
 			{
-				if (Value::exist_value($_GET[value_id]) == false)
-				{
-					throw new ValueNotFoundException("",3);
-				}
+				$id = $_GET[value_id];
+				$object = Value::get_instance($id);
+				$type = "value";
+				$title = $object->get_type_name();
 			}
-			
-			if ($_GET[folder_id])
-			{
-				$folder = Folder::get_instance($_GET[folder_id]);
-				if ($folder->exist_folder() == false)
-				{
-					throw new FolderNotFoundException("",1);
-				}
-			}
-			
-			switch($_GET[action]):
-				case("permission"):
-					self::permission();
-				break;
-				
-				case("chown"):
-					self::change_owner();
-				break;
-				
-				case("chgroup"):
-					self::change_group();
-				break;
-	
-				case("image_browser_detail"):
-					self::image_browser_detail();
-				break;
-				
-				case("image_browser_multi"):
-					self::image_browser_multi();
-				break;
-	
-				
-				case("value_detail"):
-					require_once("value.io.php");
-					ValueIO::detail();
-				break;
-				
-				case("value_history"):
-					require_once("value.io.php");
-					ValueIO::history();
-				break;
-					
-				case("value_delete_version"):
-					require_once("value.io.php");
-					ValueIO::delete_version();
-				break;
-
-				
-				case("file_add"):
-					require_once("file.io.php");
-					FileIO::upload();
-				break;
-				
-				case("file_update"):
-				case("file_update_minor"):
-					require_once("file.io.php");
-					FileIO::update();
-				break;
-	
-				case("file_detail"):
-					require_once("file.io.php");
-					FileIO::detail();
-				break;
-				
-				case("file_history"):
-					require_once("file.io.php");
-					FileIO::history();
-				break;
-				
-				case("file_delete"):
-					require_once("file.io.php");
-					FileIO::delete();
-				break;
-				
-				case("file_delete_version"):
-					require_once("file.io.php");
-					FileIO::delete_version();
-				break;
-				
-				
-				case("folder_add"):
-					require_once("folder.io.php");
-					FolderIO::add();	
-				break;
-				
-				case("folder_delete"):
-					require_once("folder.io.php");
-					FolderIO::delete();
-				break;
-				
-				case("folder_move"):
-					require_once("folder.io.php");
-					FolderIO::move();
-				break;
-	
-				case("folder_administration"):
-					require_once("folder.io.php");
-					FolderIO::folder_administration();	
-				break;
-				
-				// Search
-				/**
-				 * @todo errors, exceptions
-				 */
-				case("search"):
-					if ($_GET[dialog])
-					{
-						$module_dialog = ModuleDialog::get_by_type_and_internal_name("search", $_GET[dialog]);
-						
-						if (file_exists($module_dialog[class_path]))
-						{
-							require_once($module_dialog[class_path]);
-							
-							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
-							{
-								$module_dialog['class']::$module_dialog[method]();
-							}
-							else
-							{
-								// Error
-							}
-						}
-						else
-						{
-							// Error
-						}
-					}
-					else
-					{
-						// error
-					}
-				break;
-				
-				default:
-					self::browser();
-				break;
-				
-			endswitch;	
-		}
-		catch (FileNotFoundException $e)
-		{
-			$error_io = new Error_IO($e, 20, 40, 1);
-			$error_io->display_error();
-		}
-		catch (ValueNotFoundException $e)
-		{
-			$error_io = new Error_IO($e, 20, 40, 1);
-			$error_io->display_error();
-		}
-		catch (FolderNotFoundException $e)
-		{
-			$error_io = new Error_IO($e, 20, 40, 1);
-			$error_io->display_error();
-		}
-		
-	}
-	
-	/**
-	 * @param integer $user_id
-	 * @return array
-	 */
-	public static function get_user_module_detail_setting($user_id)
-	{
-		if ($user_id)
-		{
-			$data_user_data = new DataUserData($user_id);
-			
-			$paramquery = $_GET;
-			$paramquery[run] = "module_value_change";
-			$paramquery[dialog] = "user_quota";
-			$paramquery[retrace] = Misc::create_retrace_string();
-			$params = http_build_query($paramquery, '', '&#38;');
-			
-			$return_array = array();
-			$return_array[value] = Misc::calc_size($data_user_data->get_quota());
-			$return_array[params] = $params;
-			return $return_array;	
 		}
 		else
 		{
-			return null;
+			if ($_GET[folder_id])
+			{
+				$id = $_GET[folder_id];
+				$object = Folder::get_instance($id);
+				$type = "folder";
+				$title = $object->get_name();
+			}
+			else
+			{
+				throw new FolderIDMissingException();
+			}
+		}
+		
+		if ($object->is_control_access() == true)
+		{
+			$data_permission = new DataPermission($type, $id);
+			
+			if (!$_GET[nextpage])
+			{
+				$template = new Template("template/data/data_change_owner.html");
+				
+				$paramquery = $_GET;
+				$paramquery[nextpage] = "1";
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$template->set_var("params",$params);
+				
+				$template->set_var("title",$title);
+				$template->set_var("error","");
+				
+				$user_array = User::list_entries();
+				
+				$result = array();
+				$counter = 0;
+				
+				foreach($user_array as $key => $value)
+				{
+					$user = new User($value);
+					$result[$counter][value] = $value;
+					$result[$counter][content] = $user->get_username()." (".$user->get_full_name(false).")";
+					$counter++;
+				}
+				
+				$template->set_var("option",$result);
+				
+				$paramquery = $_GET;
+				$paramquery[action] = "permission";
+				unset($paramquery[nextpage]);
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$template->set_var("back_link", $params);
+				
+				$template->output();
+			}
+			else
+			{
+				$paramquery = $_GET;
+				$paramquery[action] = "permission";
+				unset($paramquery[nextpage]);
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				if ($data_permission->set_owner_id($_POST[user]) == true)
+				{
+					Common_IO::step_proceed($params, "Permission: ".$title."", "Changes saved succesful" ,null);
+				}
+				else
+				{
+					Common_IO::step_proceed($params, "Permission: ".$title."", "Operation failed" ,null);
+				}
+			}
+		}
+		else
+		{
+			throw new DataSecuriyAccessDeniedException();
 		}
 	}
 	
+	/**
+	 * @throws FolderIDMissingException
+	 */
+	public static function change_group()
+	{
+		if ($_GET[file_id] xor $_GET[value_id])
+		{
+			if ($_GET[file_id])
+			{
+				$id = $_GET[file_id];
+				$object = File::get_instance($id);
+				$type = "file";
+				$title = $object->get_name();
+			}
+			if ($_GET[value_id])
+			{
+				$id = $_GET[value_id];
+				$object = Value::get_instance($id);
+				$type = "value";
+				$title = $object->get_type_name();
+			}
+		}
+		else
+		{
+			if ($_GET[folder_id])
+			{
+				$id = $_GET[folder_id];
+				$object = Folder::get_instance($id);
+				$type = "folder";
+				$title = $object->get_name();
+			}
+			else
+			{
+				throw new FolderIDMissingException();
+			}
+		}
+		
+		if ($object->is_control_access() == true)
+		{
+			$data_permission = new DataPermission($type, $id);
+			
+			if (!$_GET[nextpage])
+			{
+				$template = new Template("template/data/data_change_group.html");
+				
+				$paramquery = $_GET;
+				$paramquery[nextpage] = "1";
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$template->set_var("params",$params);
+				
+				$template->set_var("title",$title);
+				$template->set_var("error","");
+				
+				$group_array = Group::list_groups();
+				
+				$result = array();
+				$counter = 0;
+				
+				foreach($group_array as $key => $value)
+				{
+					$group = new Group($value);
+					$result[$counter][value] = $value;
+					$result[$counter][content] = $group->get_name();
+					$counter++;
+				}
+				
+				$template->set_var("option",$result);
+				
+				$paramquery = $_GET;
+				$paramquery[action] = "permission";
+				unset($paramquery[nextpage]);
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$template->set_var("back_link", $params);
+				
+				$template->output();
+			}
+			else
+			{
+				$paramquery = $_GET;
+				$paramquery[action] = "permission";
+				unset($paramquery[nextpage]);
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				if ($data_permission->set_owner_group_id($_POST[group]) == true)
+				{
+					Common_IO::step_proceed($params, "Permission: ".$title."", "Changes saved succesful" ,null);
+				}
+				else
+				{
+					Common_IO::step_proceed($params, "Permission: ".$title."", "Operation failed" ,null);
+				}
+			}
+		}
+		else
+		{
+			throw new DataSecuriyAccessDeniedException();
+		}
+	}
+
+	/**
+	 * @throws UserIDMissingException
+	 */
 	public static function change_quota()
 	{
 		if ($_GET[id])
@@ -1641,7 +1342,7 @@ class DataIO
 			{
 				if ($_GET[retrace])
 				{
-					$params = http_build_query(Misc::resovle_retrace_string($_GET[retrace]),'','&#38;');
+					$params = http_build_query(Retrace::resovle_retrace_string($_GET[retrace]),'','&#38;');
 				}
 				else
 				{
@@ -1663,9 +1364,166 @@ class DataIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 3, 40, 3);
-			$error_io->display_error();
+			throw new UserIDMissingException();
+		}
+	}
+	
+	public static function method_handler()
+	{			
+		switch($_GET[action]):
+			case("permission"):
+				self::permission();
+			break;
+			
+			case("chown"):
+				self::change_owner();
+			break;
+			
+			case("chgroup"):
+				self::change_group();
+			break;
+
+			case("image_browser_detail"):
+				self::image_browser_detail();
+			break;
+			
+			case("image_browser_multi"):
+				self::image_browser_multi();
+			break;
+
+			
+			case("value_detail"):
+				require_once("value.io.php");
+				ValueIO::detail();
+			break;
+			
+			case("value_history"):
+				require_once("value.io.php");
+				ValueIO::history();
+			break;
+				
+			case("value_delete_version"):
+				require_once("value.io.php");
+				ValueIO::delete_version();
+			break;
+
+			
+			case("file_add"):
+				require_once("file.io.php");
+				FileIO::upload();
+			break;
+			
+			case("file_update"):
+			case("file_update_minor"):
+				require_once("file.io.php");
+				FileIO::update();
+			break;
+
+			case("file_detail"):
+				require_once("file.io.php");
+				FileIO::detail();
+			break;
+			
+			case("file_history"):
+				require_once("file.io.php");
+				FileIO::history();
+			break;
+			
+			case("file_delete"):
+				require_once("file.io.php");
+				FileIO::delete();
+			break;
+			
+			case("file_delete_version"):
+				require_once("file.io.php");
+				FileIO::delete_version();
+			break;
+			
+			
+			case("folder_add"):
+				require_once("folder.io.php");
+				FolderIO::add();	
+			break;
+			
+			case("folder_delete"):
+				require_once("folder.io.php");
+				FolderIO::delete();
+			break;
+			
+			case("folder_move"):
+				require_once("folder.io.php");
+				FolderIO::move();
+			break;
+
+			case("folder_administration"):
+				require_once("folder.io.php");
+				FolderIO::folder_administration();	
+			break;
+			
+			// Search
+			/**
+			 * @todo errors, exceptions
+			 */
+			case("search"):
+				if ($_GET[dialog])
+				{
+					$module_dialog = ModuleDialog::get_by_type_and_internal_name("search", $_GET[dialog]);
+					
+					if (file_exists($module_dialog[class_path]))
+					{
+						require_once($module_dialog[class_path]);
+						
+						if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+						{
+							$module_dialog['class']::$module_dialog[method]();
+						}
+						else
+						{
+							// Error
+						}
+					}
+					else
+					{
+						// Error
+					}
+				}
+				else
+				{
+					// error
+				}
+			break;
+			
+			default:
+				self::browser();
+			break;
+			
+		endswitch;	
+	}
+	
+	/**
+	 * @param integer $user_id
+	 * @return array
+	 */
+	public static function get_user_module_detail_setting($user_id)
+	{
+		if ($user_id)
+		{
+			$data_user_data = new DataUserData($user_id);
+			
+			$paramquery = $_GET;
+			$paramquery[run] = "module_value_change";
+			$paramquery[dialog] = "user_quota";
+			$paramquery[retrace] = Retrace::create_retrace_string();
+			$params = http_build_query($paramquery, '', '&#38;');
+			
+			$return_array = array();
+			$return_array[value] = Convert::convert_byte_1024($data_user_data->get_quota());
+			$return_array[params] = $params;
+			return $return_array;	
+		}
+		else
+		{
+			return null;
 		}
 	}
 }

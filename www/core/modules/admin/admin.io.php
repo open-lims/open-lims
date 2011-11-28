@@ -65,6 +65,9 @@ class AdminIO
 		return $return_array;
 	}
 	
+	/**
+	 * @todo IMPORTANT: remove bad dependency
+	 */
 	public static function method_handler()
 	{
 		global $user;
@@ -201,7 +204,9 @@ class AdminIO
 		}
 		else
 		{
-			
+			/**
+			 * @todo remove
+			 */
 			if ($_GET[run] == "organisation_unit" and 
 				is_numeric($_GET[id]))
 			{
@@ -220,23 +225,17 @@ class AdminIO
 					}
 					else
 					{
-						$exception = new Exception("", 1);
-						$error_io = new Error_IO($exception, 1, 40, 2);
-						$error_io->display_error();
+						throw new Exception();
 					}
 				}
 				else
 				{
-					$exception = new Exception("", 1);
-					$error_io = new Error_IO($exception, 1, 40, 2);
-					$error_io->display_error();
+					throw new Exception();
 				}	
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 1, 40, 2);
-				$error_io->display_error();
+				throw new Exception();
 			}
 		}
 		

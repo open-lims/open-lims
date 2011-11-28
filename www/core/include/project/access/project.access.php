@@ -561,7 +561,7 @@ class Project_Access
 	{
 		global $db;
 
-		if ($this->project_id and $filesize)
+		if ($this->project_id and is_numeric($filesize))
 		{
 			
 			$sql = "UPDATE ".constant("PROJECT_TABLE")." SET filesize = '".$filesize."' WHERE id = ".$this->project_id."";

@@ -48,7 +48,7 @@ class AdminBaseIncludeAjax extends Ajax
 			$entries_per_page = 20;
 		}
 		
-		$list_array = Base_Wrapper::list_base_include($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+		$list_array = System_Wrapper::list_base_include($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
 		
 		if (is_array($list_array) and count($list_array) >= 1)
 		{
@@ -72,7 +72,7 @@ class AdminBaseIncludeAjax extends Ajax
 	
 	private function count_includes()
 	{
-		return Base_Wrapper::count_base_include();
+		return System_Wrapper::count_base_include();
 	}
 	
 	public function method_handler()

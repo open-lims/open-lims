@@ -27,6 +27,10 @@
  */
 class FolderIO
 {
+	/**
+	 * @throws FolderIDMissingException
+	 * @throws DataSecurityAccessDeniedException
+	 */
 	public static function add()
 	{
 		global $user;
@@ -107,19 +111,19 @@ class FolderIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 20, 40, 2);
-				$error_io->display_error();
+				throw new DataSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 20, 40, 3);
-			$error_io->display_error();
+			throw new FolderIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws FolderIDMissingException
+	 * @throws DataSecurityAccessDeniedException
+	 */
 	public static function delete()
 	{
 		global $user;
@@ -174,19 +178,19 @@ class FolderIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 20, 40, 2);
-				$error_io->display_error();
+				throw new DataSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 20, 40, 3);
-			$error_io->display_error();
+			throw new FolderIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws FolderIDMissingException
+	 * @throws DataSecurityAccessDeniedException
+	 */
 	public static function move()
 	{		
 		if ($_GET[folder_id])
@@ -236,16 +240,12 @@ class FolderIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 20, 40, 2);
-				$error_io->display_error();
+				throw new DataSecurityAccessDeniedException();
 			}	
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 20, 40, 3);
-			$error_io->display_error();
+			throw new FolderIDMissingException();
 		}
 	}
 	
@@ -257,6 +257,11 @@ class FolderIO
 		
 	}
 	
+	/**
+	 * @deprecated will be removed during AJAX Data Browser
+	 * @throws FolderIDMissingException
+	 * @throws DataSecurityAccessDeniedException
+	 */
 	public static function folder_administration()
 	{
 		global $user;
@@ -343,16 +348,12 @@ class FolderIO
 			}
 			else
 			{
-				$exception = new Exception("", 1);
-				$error_io = new Error_IO($exception, 20, 40, 2);
-				$error_io->display_error();
+				throw new DataSecurityAccessDeniedException();
 			}
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 20, 40, 3);
-			$error_io->display_error();
+			throw new FolderIDMissingException();
 		}
 	}
 

@@ -55,29 +55,37 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 	/**
 	 * @see ProjectTaskInterface::__construct()
 	 * @param integer $task_id
+	 * @throws ProjectTaskNotFoundException
 	 */
     function __construct($task_id)
     {
-    	if ($task_id)
+    	if (is_numeric($task_id))
     	{
-			$this->task_id = $task_id;
-			$this->task = new ProjectTask_Access($task_id);
-			
-			switch ($this->task->get_type_id()):
-			
-				case 1:
-					$this->task_type = new ProjectTaskStatusProcess_Access($task_id);
-				break;
+    		if (ProjectTask_Access::exist_id($task_id) == true)
+			{
+				$this->task_id = $task_id;
+				$this->task = new ProjectTask_Access($task_id);
 				
-				case 2:
-					$this->task_type = new ProjectTaskProcess_Access($task_id);
-				break;
+				switch ($this->task->get_type_id()):
 				
-				case 3:
-					$this->task_type = new ProjectTaskMilestone_Access($task_id);
-				break;
-			
-			endswitch;			
+					case 1:
+						$this->task_type = new ProjectTaskStatusProcess_Access($task_id);
+					break;
+					
+					case 2:
+						$this->task_type = new ProjectTaskProcess_Access($task_id);
+					break;
+					
+					case 3:
+						$this->task_type = new ProjectTaskMilestone_Access($task_id);
+					break;
+				
+				endswitch;		
+			}
+			else
+			{
+				throw new ProjectTaskNotFoundException();
+			}
 		}
 		else
 		{
@@ -109,10 +117,11 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
      * @param bool $finalise
      * @param bool $auto_connect
      * @return integer
+     * @throws ProjectTaskCreateException
+     * @throws ProjectTaskCreateAttachException
      */
     public function create_status_process($project_id, $user_id, $comment, $start_date, $start_time, $end_date, $end_time, $whole_day, $end_status_id, $finalise, $auto_connect)
     {
-    	
     	global $transaction;
     	
     	if (is_numeric($project_id) and is_numeric($user_id) and $end_date and ($end_time or $whole_day == true) and $end_status_id)
@@ -142,7 +151,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 	    				{
 							$transaction->rollback($transaction_id);
 						}
-						return null;
+						throw new ProjectTaskCreateException("Could not create Status Task");
 	    			}
 	
 	    			if (is_array($task_array) and count($task_array) >= 1)
@@ -246,7 +255,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 		    										{
 														$transaction->rollback($transaction_id);
 													}
-													return null;
+													throw new ProjectTaskCreateAttachException("Could not set start date (whole day)");
 		    									}
 		    								}
 		    								else
@@ -260,7 +269,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 		    										{
 														$transaction->rollback($transaction_id);
 													}
-													return null;
+													throw new ProjectTaskCreateAttachException("Could not set start date (time)");
 		    									}
 		    									
 		    									if ($current_task_object->set_start_time($new_start_datetime_handler->get_formatted_string("H:i:s")) == false)
@@ -269,7 +278,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 		    										{
 														$transaction->rollback($transaction_id);
 													}
-													return null;
+													throw new ProjectTaskCreateAttachException("Could not set start time (time)");
 		    									}
 		    								}
 		    								
@@ -279,7 +288,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 							    				{
 													$transaction->rollback($transaction_id);
 												}
-												return null;
+												throw new ProjectTaskCreateAttachException("Could not set start status id");
 							    			}
 							    			
 							    			// Change later tasks
@@ -297,7 +306,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 							    						{
 															$transaction->rollback($transaction_id);
 														}
-														return null;
+														throw new ProjectTaskCreateAttachException("Could not set previous task id");
 							    					}
 							    				}
 							    			}
@@ -310,7 +319,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 		    									{
 													$transaction->rollback($transaction_id);
 												}
-												return null;
+												throw new ProjectTaskCreateAttachException("Could not create task link");
 		    								}
 	    								}					
 	    							} 
@@ -333,7 +342,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 						    					{
 													$transaction->rollback($transaction_id);
 												}
-												return null;
+												throw new ProjectTaskCreateAttachException("Could not set start date (whole day)");
 						    				}
 						    			}
 						    			else
@@ -347,7 +356,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 						    					{
 													$transaction->rollback($transaction_id);
 												}
-												return null;
+												throw new ProjectTaskCreateAttachException("Could not set start date (time)");
 						    				}
 						    				
 		    								if ($task_object->set_start_time($new_end_datetime_handler->get_formatted_string("H:i:s")) == false)
@@ -356,7 +365,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 		    									{
 													$transaction->rollback($transaction_id);
 												}
-												return null;
+												throw new ProjectTaskCreateAttachException("Could not set start time (time)");
 		    								}
 						    			}
 
@@ -366,7 +375,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 						    				{
 												$transaction->rollback($transaction_id);
 											}
-											return null;
+											throw new ProjectTaskCreateAttachException("Could not start status id");
 						    			}
 						    			
 						    			
@@ -383,7 +392,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 						    						{
 														$transaction->rollback($transaction_id);
 													}
-													return null;
+													throw new ProjectTaskCreateAttachException("Could not set previous task");
 						    					}
 						    				}
 						    			}
@@ -396,7 +405,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 	    									{
 												$transaction->rollback($transaction_id);
 											}
-											return null;
+											throw new ProjectTaskCreateAttachException("Could not create task link");
 	    								}				    			
 	    							}
 	    						}
@@ -416,7 +425,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     				{
 						$transaction->rollback($transaction_id);
 					}
-    				return null;
+    				throw new ProjectTaskCreateException("Could not create parent Task");
     			}
     		}
     		else
@@ -439,7 +448,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 	    				{
 							$transaction->rollback($transaction_id);
 						}
-						return null;
+						throw new ProjectTaskCreateException("Could not create Status Task");
 	    			}
     			}
     			else
@@ -448,13 +457,13 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     				{
 						$transaction->rollback($transaction_id);
 					}
-					return null;
+					throw new ProjectTaskCreateException("Could not create parent Task");
     			}
     		}
     	}
     	else
     	{
-    		return null;
+    		throw new ProjectTaskCreateException("Information Missing");
     	}
     }
     
@@ -471,6 +480,8 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
      * @param string $name
      * @param bool $auto_connect
      * @return integer
+     * @throws ProjectTaskCreateException
+     * @throws ProjectTaskCreateAttachException
      */
     public function create_process($project_id, $user_id, $comment, $start_date, $start_time, $end_date, $end_time, $whole_day, $name, $auto_connect)
     {
@@ -496,7 +507,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 	    				{
 							$transaction->rollback($transaction_id);
 						}
-						return null;
+						throw new ProjectTaskCreateException("Could not create task");
 	    			}
 	    			
 	    			if (is_array($task_array) and count($task_array) >= 1)
@@ -534,7 +545,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 	    								{
 											$transaction->rollback($transaction_id);
 										}
-										return null;
+										throw new ProjectTaskCreateAttachException("Could not create task link");
 	    							}
 	    						}
 	    					}
@@ -553,7 +564,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     				{
 						$transaction->rollback($transaction_id);
 					}
-					return null;
+					throw new ProjectTaskCreateException("Could not create parent task");
     			}
     		}
     		else
@@ -576,7 +587,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 	    				{
 							$transaction->rollback($transaction_id);
 						}
-						return null;
+						throw new ProjectTaskCreateException("Could not create task");
 	    			}
     			}
     			else
@@ -585,13 +596,13 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     				{
 						$transaction->rollback($transaction_id);
 					}
-					return null;
+					throw new ProjectTaskCreateException("Could not create parent task");
     			}
     		}
     	}
     	else
     	{
-    		return null;
+    		throw new ProjectTaskCreateException("Information Missing");
     	}
     }
     
@@ -604,6 +615,8 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
      * @param string $name
      * @param bool $auto_connect
      * @return integer
+     * @throws ProjectTaskCreateException
+     * @throws ProjectTaskCreateAttachException
      */
     public function create_milestone($project_id, $user_id, $comment, $date, $time, $name, $auto_connect)
     {
@@ -638,7 +651,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 	    				{
 							$transaction->rollback($transaction_id);
 						}
-						return null;
+						throw new ProjectTaskCreateException("Could not create task");
 	    			}
 	    			
 	    			if (is_array($task_array) and count($task_array) >= 1)
@@ -676,7 +689,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 		    								{
 												$transaction->rollback($transaction_id);
 											}
-											return null;
+											throw new ProjectTaskCreateAttachException("Could not create task link");
 		    							}
 		    						}
 	    						break;
@@ -709,7 +722,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 		    								{
 												$transaction->rollback($transaction_id);
 											}
-											return null;
+											throw new ProjectTaskCreateAttachException("Could not create task link");
 		    							}
 		    						}
 	    						break;
@@ -725,7 +738,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     			}
     			else
     			{
-    				return null;
+    				throw new ProjectTaskCreateException("Could not parent create task");
     			}	
     		}
     		else
@@ -748,7 +761,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 	    				{
 							$transaction->rollback($transaction_id);
 						}
-						return null;
+						throw new ProjectTaskCreateException("Could not create task");
 	    			}	
     			}
     			else
@@ -757,19 +770,21 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 					{
 						$transaction->rollback($transaction_id);
 					}
-					return null;
+					throw new ProjectTaskCreateException("Could not create parent task");
     			}
     		}
     	}
     	else
     	{
-    		return null;
+    		throw new ProjectTaskCreateException("Missing Information");
     	}
     }
     
     /**
-     * Deletes a status procedd
+     * @todo specify exceptions
+     * Deletes a status process
      * @return bool
+     * @throws ProjectTaskDeleteException
      */
     private function delete_status_process()
     {
@@ -802,7 +817,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     								{
 										$transaction->rollback($transaction_id);
 									}
-									return false;
+									throw new ProjectTaskDeleteException("Could not set end status");
     							}
     							
     							if ($project_task_access->set_end_date($this->task->get_end_date()) == false)
@@ -811,7 +826,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     								{
 										$transaction->rollback($transaction_id);
 									}
-									return false;
+									throw new ProjectTaskDeleteException("Could not set end date");
     							}
     							
     							if ($this->task->get_whole_day() == false)
@@ -822,7 +837,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 		    							{
 											$transaction->rollback($transaction_id);
 										}
-										return false;
+										throw new ProjectTaskDeleteException("Could not set end time");
 		    						}			
     							}
     							else
@@ -833,7 +848,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 		    							{
 											$transaction->rollback($transaction_id);
 										}
-										return false;
+										throw new ProjectTaskDeleteException("Could not set whole day");
 		    						}
     							}
     						break;
@@ -845,7 +860,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 	    							{
 										$transaction->rollback($transaction_id);
 									}
-									return false;
+									throw new ProjectTaskDeleteException("Could not set end date");
 	    						}
 	    						
 	    						if ($this->task->get_whole_day() == false)
@@ -856,7 +871,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 		    							{
 											$transaction->rollback($transaction_id);
 										}
-										return false;
+										throw new ProjectTaskDeleteException("Could not set end time");
 		    						}
 	    						}
 	    						else
@@ -867,7 +882,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 		    							{
 											$transaction->rollback($transaction_id);
 										}
-										return false;
+										throw new ProjectTaskDeleteException("Could not set end whole day");
 		    						}
 	    						}	
     						break;
@@ -894,7 +909,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     						{
 								$transaction->rollback($transaction_id);
 							}
-							return false;
+							throw new ProjectTaskDeleteException("Could not remove task link");
     					}
     				}
     			}
@@ -912,7 +927,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 	    						{
 									$transaction->rollback($transaction_id);
 								}
-	    						return false;
+	    						throw new ProjectTaskDeleteException("Could not remove task link");
 	    					}
 						}
 					}
@@ -928,7 +943,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							return false;
+							throw new ProjectTaskDeleteException("Could not remove task link");
 						}
 					}
 				}
@@ -948,7 +963,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     						{
 								$transaction->rollback($transaction_id);
 							}
-    						return false;
+    						throw new ProjectTaskDeleteException("Could not remove task link");
     					}
     				}	
     			}
@@ -966,7 +981,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     						{
 								$transaction->rollback($transaction_id);
 							}
-    						return false;
+    						throw new ProjectTaskDeleteException("Could not remove task link");
     					}
     				}
     			}   
@@ -986,18 +1001,20 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 				{
 					$transaction->rollback($transaction_id);
 				}
-				return false;
+				throw new ProjectTaskDeleteException("Could not delete task in DB");
 			}
     	}
     	else
     	{
-    		return false;
+    		throw new ProjectTaskDeleteException("Missing Information");
     	}
     }
     
     /**
+     * @todo specify exceptions
      * Deletes a process or a milestone
      * @return bool
+     * @throws ProjectTaskDeleteException
      */
     private function delete_process_or_milestone()
     {
@@ -1028,7 +1045,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     							{
 									$transaction->rollback($transaction_id);
 								}
-								return false;
+								throw new ProjectTaskDeleteException("Could not set end date");
     						}
     						
     						if ($this->task->get_whole_day() == false)
@@ -1039,7 +1056,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 	    							{
 										$transaction->rollback($transaction_id);
 									}
-									return false;
+									throw new ProjectTaskDeleteException("Could not set end time");
 	    						}
     						}
     						else
@@ -1050,7 +1067,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     								{
 										$transaction->rollback($transaction_id);
 									}
-									return false;
+									throw new ProjectTaskDeleteException("Could not set whole day");
     							}
     						}
     					}
@@ -1076,7 +1093,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     						{
 								$transaction->rollback($transaction_id);
 							}
-							return false;
+							throw new ProjectTaskDeleteException("Could not remove task link");
     					}
     				}
     			}
@@ -1092,7 +1109,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     						{
 								$transaction->rollback($transaction_id);
 							}
-							return false;
+							throw new ProjectTaskDeleteException("Could not remove task link");
     					}
 					}
 				}
@@ -1107,7 +1124,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 							{
 								$transaction->rollback($transaction_id);
 							}
-							return false;
+							throw new ProjectTaskDeleteException("Could not remove task link");
 						}
 					}
 				}
@@ -1127,7 +1144,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     						{
 								$transaction->rollback($transaction_id);
 							}
-							return false;
+							throw new ProjectTaskDeleteException("Could not remove task link");
     					}
     				}
     			}
@@ -1145,7 +1162,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     						{
 								$transaction->rollback($transaction_id);
 							}
-							return false;
+							throw new ProjectTaskDeleteException("Could not remove task link");
     					}
     				}
     			}   
@@ -1165,41 +1182,50 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 				{
 					$transaction->rollback($transaction_id);
 				}
-				return false;
+				throw new ProjectTaskDeleteException("Could not delete task in DB");
 			}
     	}
     	else
     	{
-    		return false;
+    		throw new ProjectTaskDeleteException("Missing Information");
     	}
     }
     
     /**
      * @see ProjectTaskInterface::delete()
      * @return bool
+     * @throws ProjectTaskDeleteException
+     * @throws ProjectTaskException
      */
     public function delete()
     {
     	if ($this->task_id and $this->task and $this->task_type)
     	{
-	    	switch ($this->task->get_type_id()):
-	    		case 1:
-	    			$delete_successful = $this->delete_status_process();
-	    		break;
-	    		
-	    		case 2:
-	    		case 3:
-	    			$delete_successful = $this->delete_process_or_milestone();
-	    		break;
-	    	endswitch;
-	    	
-	    	if ($delete_successful == true)
+	    	try
 	    	{
-	    		return $this->task->delete();	    		
+	    		switch ($this->task->get_type_id()):
+		    		case 1:
+		    			$this->delete_status_process();
+		    		break;
+		    		
+		    		case 2:
+		    		case 3:
+		    			$this->delete_process_or_milestone();
+		    		break;
+		    	endswitch;
+		    	
+	    		if ($this->task->delete() == true)
+	    		{
+	    			return true;
+	    		}   
+	    		else
+	    		{
+	    			throw new ProjectTaskDeleteException("Could not delete parent task in DB");
+	    		} 		
 	    	}
-	    	else
+	    	catch (ProjectTaskException $e)
 	    	{
-	    		return false;
+	    		throw $e;
 	    	}
     	}
     	else

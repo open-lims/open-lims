@@ -166,6 +166,9 @@ class AdminLocationIO
 		$template->output();
 	}
 	
+	/**
+	 * @throws LocationIDMissingException
+	 */
 	public static function add()
 	{
 		if (($_GET[action] == "add_child" and $_GET[id]) or $_GET[action] == "add")
@@ -290,12 +293,13 @@ class AdminLocationIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 60, 40, 3);
-			$error_io->display_error();
+			throw new LocationIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws LocationIDMissingException
+	 */
 	public static function edit()
 	{
 		if ($_GET[id])
@@ -446,12 +450,13 @@ class AdminLocationIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 60, 40, 3);
-			$error_io->display_error();
+			throw new LocationIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws LocationIDMissingException
+	 */
 	public static function delete()
 	{	
 		if ($_GET[id])
@@ -498,49 +503,31 @@ class AdminLocationIO
 		}
 		else
 		{
-			$exception = new Exception("", 1);
-			$error_io = new Error_IO($exception, 60, 40, 3);
-			$error_io->display_error();
+			throw new LocationIDMissingException();
 		}
 	}
 	
 	public static function handler()
 	{
-		try
-		{
-			if ($_GET[id])
-			{
-				if (Location::exist_id($_GET[id]) == false)
-				{
-					throw new Exception("",1);
-				}
-			}
-
-			switch($_GET[action]):
-				case "add":
-				case "add_child":
-					self::add();
-				break;
-				
-				case "edit":
-					self::edit();
-				break;
-				
-				case "delete":
-					self::delete();
-				break;
-							
-				default:
-					self::home();
-				break;
+		switch($_GET[action]):
+			case "add":
+			case "add_child":
+				self::add();
+			break;
 			
-			endswitch;
-		}
-		catch (Exception $e)
-		{
-			$error_io = new Error_IO($e, 60, 40, 1);
-			$error_io->display_error();
-		}
+			case "edit":
+				self::edit();
+			break;
+			
+			case "delete":
+				self::delete();
+			break;
+						
+			default:
+				self::home();
+			break;
+		
+		endswitch;
 	}
 }
 

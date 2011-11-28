@@ -75,9 +75,9 @@ class DataSearchIO
 					if ($_GET[nextpage] == "1")
 					{
 						$name = $_POST[name];
-						if ($_GET[folder_id])
+						if ($_POST[folder_id])
 						{
-							$folder_id = $_GET[folder_id];
+							$folder_id = $_POST[folder_id];
 						}
 						else
 						{
@@ -197,7 +197,7 @@ class DataSearchIO
 						$result_array[$key][type] = "File";
 						
 						$result_array[$key][version] = $file->get_version();
-						$result_array[$key][size] = Misc::calc_size($file->get_size());
+						$result_array[$key][size] = Convert::convert_byte_1024($file->get_size());
 						$result_array[$key][permission] = $file->get_permission_string();
 					}
 					

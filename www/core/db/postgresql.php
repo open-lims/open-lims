@@ -145,6 +145,10 @@ class Postgresql
  		return pg_fetch_assoc($res);
  	}
  
+ 	public function sql_last_error()
+ 	{
+ 		return pg_last_error();
+ 	}
  }
   
 ?>

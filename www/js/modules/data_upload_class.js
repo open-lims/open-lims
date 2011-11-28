@@ -1,4 +1,4 @@
-/*
+/**
  * version: 0.4.0.0
  * author: Roman Quiring <quiring@open-lims.org>
  * copyright: (c) 2008-2011 by Roman Quiring
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
+
 
 function base_upload(unique_id, session_id) 
 {
@@ -40,24 +41,43 @@ function base_upload(unique_id, session_id)
     	init();
     }
 	
+    /**
+     * Initialise.
+     */
 	function init()
 	{
-		$("#uploader_add_fields").click(function(evt){
+		$("#uploader_add_fields").click(function(evt)
+		{
 			evt.preventDefault();
 			var num_fields_to_add = $("#uploader_number_of_fields").attr("value");
-			for (var int = 1; int <= num_fields_to_add; int++) {
+			for (var int = 1; int <= num_fields_to_add; int++) 
+			{
 				var current_fields = $(".FileInput").length;
 				var field_num = current_fields +1;
 				var new_element = $("<tr id='lastFileInput'><td><input type='file' name='file-"+field_num+"' id='file-"+field_num+"' value='' class='FileInput'/></td></tr>")
 				$("#lastFileInput").attr("id","").after(new_element);
 			}
 		});
+<<<<<<< HEAD
+=======
+		
+		$("#uploader_upload").click(function(evt)
+		{
+			evt.preventDefault();
+			start_upload();
+		});
+>>>>>>> 0e1c77d4ddb8c7429401628074271e0fccb013c1
 	}
 	
+	/**
+	 * Initialise the upload. Submits form data and enters upload loop.
+	 * @returns {Boolean} false if no files were selected.
+	 */
 	function start_upload()
 	{
 		var files = new Array();
-		$(".FileInput").each(function(){
+		$(".FileInput").each(function()
+		{
 			var file = $(this).attr("value");
 			if(file != "")
 			{
@@ -78,41 +98,54 @@ function base_upload(unique_id, session_id)
 		{
 			$("#ErrorMessage").html("");
 		}
+		
 		num_files_to_upload = files.length;
 		$("#uploader_file_amount").attr("value",num_files_to_upload);
 		for (var int = 0; int < num_files_to_upload; int++) 
 		{
 			track_uploads[int] = -1;
 		}
+		
 		var block_ui_content = $("<div id='UploadUI'>Upload</div>");
 		var global_upload_progressbar = $("<div id='GlobalProgressBar' class='UploadProgressbar'></div>");
 		$(global_upload_progressbar).progressbar();
+		
 		var file_list_container = $("<div id='FileListContainer'></div>");
-		var file_list = $("<ul id='FileList'></ul>");
-		$(file_list_container).append(file_list);
-		for (var int = 0; int < num_files_to_upload; int++) {
+		var file_list = $("<ul id='FileList'></ul>").appendTo(file_list_container);
+		for (var int = 0; int < num_files_to_upload; int++)
+		{
 			$("<li id='FileListItem"+parseInt(int+1)+"'>"+parseInt(int+1)+". "+files[int]+"<span class='FileListImageContainer'></span><span class='FileListProgressInfo'></span></li>").appendTo(file_list);
 		}
+		
 		var upload_info = $("<div id='UploadInfo'></div>");
 		var ok_button = $("<button id='FinishUpload'>OK</button>")
 			.attr("disabled","true")
 			.click(function()
 			{
-				proceed();
+				$(location).attr("href",get_retrace());
 			});
+		
 		$(block_ui_content)
 			.append(file_list_container)
 			.append(global_upload_progressbar)
 			.append(upload_info)
 			.append(ok_button);
 		$.blockUI({ message: block_ui_content , css: {"width":"550px"}});
+<<<<<<< HEAD
 		$('.blockUI.blockMsg').center();
+=======
+		
+>>>>>>> 0e1c77d4ddb8c7429401628074271e0fccb013c1
 		init_scrollbar();
 		$("#UploadForm").submit();
 		started = new Date().getTime();
 		upload_loop();
 	}
 	
+	/**
+	 * Initialise the scrollbar.
+	 * @returns {Boolean} false if scrollbar is not necessary.
+	 */
 	function init_scrollbar()
 	{
 		var list_item_height = parseInt($("#FileList > li").css("height").replace("px",""));
@@ -123,18 +156,28 @@ function base_upload(unique_id, session_id)
 		}
 		$("#FileListContainer").jScrollPane();
 		scroll_api = $("#FileList").parent().parent().parent().data("jsp");
-		$(".jspContainer").css("height",scroll_height+"px").css("border","dotted #D0D0D0 1px");
+		$(".jspContainer").css(
+		{
+			"height":scroll_height,
+			"border":"dotted #D0D0D0 1px"
+		});
 		scroll_api.reinitialise();
 	}
 
+	/**
+	 * Main upload loop. Exits if all files are uploaded.
+	 * @returns {Boolean} true if all uploads are complete.
+	 */
 	function upload_loop()
 	{
 		var done = false;
-		if($("#FileListItem"+parseInt(num_uploaded_files + 1)).children(".FileListImageContainer").html() == "")
+		var current_item = $("#FileListItem"+parseInt(num_uploaded_files + 1)).children(".FileListImageContainer");
+		if($(current_item).html() == "")
 		{
 			image = $("<img class='FileListImage' src='images/animations/loading_circle_small.gif'/>");
-			$("#FileListItem"+parseInt(num_uploaded_files + 1)).children(".FileListImageContainer").append(image);
+			$(current_item).append(image);
 		}
+		
 		if(php_upload_size_script)
 		{
 			if(check_upload_progress()) // all complete
@@ -185,6 +228,11 @@ function base_upload(unique_id, session_id)
 		setTimeout(upload_loop,250);
 	}
 	
+	/**
+	 * Checks for the state of the uploads the old-fashioned way. 
+	 * Marks finished uploads as complete and updates progressbar.
+	 * @returns {Boolean} true if all uploads are complete, otherwise false.
+	 */
 	function check_upload_state()
 	{
 		var done = false;
@@ -200,6 +248,7 @@ function base_upload(unique_id, session_id)
 	    		json_state = data;
 	    	}
 		});
+		
 		if(json_state != "No Array")
 		{
 			if(json_state.substr(0,6) == "ALL_OK")
@@ -208,6 +257,7 @@ function base_upload(unique_id, session_id)
 				done = true;
 			}
 			var state = jQuery.parseJSON(json_state);
+			
 			for (var int = 1; int <= num_files_to_upload; int++) 
 			{
 				var code = state[int];
@@ -234,6 +284,11 @@ function base_upload(unique_id, session_id)
 		}
 	}
 	
+	/**
+	 * Checks for the progress of the uploads via PHP uploadprogress extension. 
+	 * Marks finished uploads as complete and updates progress bar (accurately) as well as time left.
+	 * @returns {Boolean} false if either PHP extension is not installed or upload in progress. True if all complete.
+	 */
 	function check_upload_progress()
 	{
 		var done = false;
@@ -260,6 +315,7 @@ function base_upload(unique_id, session_id)
 		    		
 		    		$("#GlobalProgressBar").progressbar('option', 'value', parseInt(percent));
 		    		$("#FileListItem"+parseInt(num_uploaded_files + 1)).children(".FileListProgressInfo").html(speed+" kb/s");
+		    		
 		    		if(time_left != 1)
 		    		{
 			    		$("#UploadInfo").html(upload_status_array[6].replace("VAR",time_left));
@@ -268,6 +324,7 @@ function base_upload(unique_id, session_id)
 		    		{
 			    		$("#UploadInfo").html(upload_status_array[7]);
 		    		}
+		    		
 		    		if(total_complete > num_uploaded_files) //new upload complete
 		    		{
 		    			for (var int = num_uploaded_files + 1; int <= total_complete; int++) 
@@ -317,6 +374,11 @@ function base_upload(unique_id, session_id)
 		}
 	}
 	
+	/**
+	 * Marks an upload as complete.
+	 * @param num the number of the file that is uploaded.
+	 * @param definitive whether the upload is definitely complete or if it needs an error check.
+	 */
 	function set_upload_complete(num, definitive)
 	{
 		if(track_uploads[num-1] != 1)
@@ -324,6 +386,7 @@ function base_upload(unique_id, session_id)
 			num_uploaded_files++;
 			track_uploads[num-1] = 1;
 		}
+		
 		var image;
 		if($("#FileListItem"+num).children(".FileListImageContainer").html() == "")
 		{
@@ -334,6 +397,7 @@ function base_upload(unique_id, session_id)
 		{
 			image = $("#FileListItem"+num).children(".FileListImageContainer").children(".FileListImage");
 		}
+		
 		if(definitive)
 		{
 			$(image).attr("src","images/icons/permission_ok_active.png");
@@ -342,14 +406,21 @@ function base_upload(unique_id, session_id)
 		{
 			$(image).attr("src","images/icons/permission_ok_active_na.png");	
 		}
+		
 		update_progressbar();
 		update_scrollbar();
+		
 		if(php_upload_size_script)
 		{
 			$("#FileListItem"+num).children(".FileListProgressInfo").html("");
 		}	
 	}
 	
+	/**
+	 * Marks an upload as failed due to an error. 
+	 * @param num the number of the file that was not successfully uploaded.
+	 * @param code The error code.
+	 */
 	function set_upload_error(num, code)
 	{
 		if(track_uploads[num-1] != 1)
@@ -361,6 +432,7 @@ function base_upload(unique_id, session_id)
 			errors_occurred++;
 		}
 		
+		var image;
 		if($("#FileListItem"+num).children(".FileListImageContainer").html() == "")
 		{
 			image = $("<img class='FileListImage'/>");
@@ -378,12 +450,19 @@ function base_upload(unique_id, session_id)
 		update_scrollbar();
 	}
 	
+	/**
+	 * Updates the progressbar.
+	 */
 	function update_progressbar()
 	{
 		var global_percentage = 100 / (num_files_to_upload / num_uploaded_files);
 		$('#GlobalProgressBar').progressbar('option', 'value', global_percentage);	
 	}
 	
+	/**
+	 * Updates the scrollbar.
+	 * @returns {Boolean} false if there is no need for a scroll bar.
+	 */
 	function update_scrollbar()
 	{
 		if(scroll_api == undefined)
@@ -399,12 +478,10 @@ function base_upload(unique_id, session_id)
 		}
 	}
 	
-	function proceed() 
-	{
-		$("#FinishUpload").attr("disabled", "true");
-		$(location).attr("href",get_retrace());
-	}
-	
+	/**
+	 * Gets the retrace url to jump to when the upload is finished.
+	 * @returns string the url.
+	 */
 	function get_retrace() 
 	{
 		var current_url = $(location).attr("href");
@@ -414,12 +491,14 @@ function base_upload(unique_id, session_id)
 			var retrace = current_url.split("&nav=")[0];
 			var decoded = base64_decode(url_retrace[1]);
 			var unserialized = unserialize(decoded);
-			for (var key in unserialized) {
+			for (var key in unserialized)
+			{
 				var value = unserialized[key];
 				retrace += "&"+key+"="+value;
 			}
 			return retrace;
 		}
+		
 		var url_split = current_url.split("&action=file_add");
 		if(url_split.length == 2)
 		{

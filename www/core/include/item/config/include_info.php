@@ -27,6 +27,5 @@
 	$name 			= "item";
 	
 	$requires[0] 	= "base";
-	$requires[1] 	= "user";
-	$requires[2] 	= "organisation_unit";
+	$requires[1] 	= "organisation_unit";
 ?>

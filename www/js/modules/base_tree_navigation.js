@@ -1,4 +1,4 @@
-/*
+/**
  * version: 0.4.0.0
  * author: Roman Quiring <quiring@open-lims.org>
  * copyright: (c) 2008-2011 by Roman Quiring
@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
+
 
 function base_tree_nav(id, name, ajax_handler)
 {
@@ -39,9 +40,10 @@ function base_tree_nav(id, name, ajax_handler)
 	
 	var element_to_insert = new Array();
 	var inserted_element_event_handler = function(){};
-	var follow_link_handler = function(){};
 	
 	var max_menu_height;
+	
+	var follow_link_handler = function(){};
   
     // initialize the member function references for the class prototype
     if (typeof(_file_tree_nav_prototype_called) == "undefined")
@@ -53,36 +55,178 @@ function base_tree_nav(id, name, ajax_handler)
 	    base_tree_nav.prototype.add_element_to_insert = add_element_to_insert;
 	    base_tree_nav.prototype.set_loading_animation = set_loading_animation;
 	    base_tree_nav.prototype.set_follow_link = set_follow_link;
-	    base_tree_nav.prototype.set_follow_link_handler = set_follow_link_handler;
+	    base_tree_nav.prototype.set_follow_link_handler = set_follow_link_handler;	
+    }
+    
+    /**
+     * Initialise.
+     */
+    function init()
+    {   
+    	$("#"+tree_id).unbind("click"); //unbind all existing handlers
+	    if(loading_animation)
+	    {
+	    	$("<div id='loadingAnimation'><img src='images/animations/loading_circle_small.gif'/></div>")
+		  		.css({"text-align":"center","margin-top":"10px"}).appendTo("#"+tree_id);
+	    }
+	  
+	    if(scrollbar)
+	    {
+	    	if(!$("#"+tree_id).parent().hasClass("jspPane"))
+	    	{
+	    		$("#"+tree_id).parent().jScrollPane();
+	    	}
+    		scroll_api = $("#"+tree_id).parent().parent().parent().data("jsp");
+	    }
+	    
+		var return_html = $("<ul class='" + tree_name + "Layer0 BaseTreeList' style='margin-left:2px;'></ul>");
+		
+		var previous_open_element = undefined;
+		var previous_open_element_layer = undefined;
+		
+		var open_elements_list = new Array();
+		
+		$.ajax(
+	    {
+	    	type : "GET",
+	    	url : ajax_handler,
+	    	data : "run=get_array&session_id=" + get_array['session_id'] + "&username=" + get_array['username'],
+	    	success : function(data) 
+	    	{
+	    		array = $.parseJSON(data);
+				$(array).each(function(i)
+				{ 
+					var layer = $(this)[0];
+					var current_id = $(this)[1];
+					var name = $(this)[2];
+					var open = $(this)[7];
+					var symbol = $(this)[3];
+					var link = $(this)[6];
+					var clickable = $(this)[5]; 
+					var permission = $(this)[4];
+					var is_empty_folder = $(this)[8];
+					if(is_empty_folder == undefined)
+					{
+						is_empty_folder = false;
+					}
+					else
+					{
+						is_empty_folder = !is_empty_folder;	
+					}
+					
+					var li = get_list_element(layer,current_id,name,open,symbol,link,clickable,permission,is_empty_folder);
+					
+					function recursively_check_where_to_insert() 
+					{
+						if(open_elements_list.length > 0)
+						{
+							var last_element = open_elements_list[open_elements_list.length-1];
+
+							if(last_element[1] == layer - 1)
+							{
+								$(last_element[0]).append(li);
+							}
+							else
+							{
+								open_elements_list.pop();
+								recursively_check_where_to_insert();
+							}
+						}
+						else
+						{
+							$(return_html).append(li);
+						}
+					}
+					recursively_check_where_to_insert();
+									
+					if(open)
+					{
+						var next_layer = parseInt(layer) + 1;
+						var ul = $("<ul class='" + tree_name + "Layer" + next_layer + " BaseTreeList'></ul>");
+						$(li).append(ul);
+						var new_open_element = new Array(2);
+						new_open_element[0] = ul;
+						new_open_element[1] = layer;
+						open_elements_list.push(new_open_element);
+					}
+				});
+				$("#" + tree_id)
+					.html(return_html) //overwrites loading animation
+					.bind("click", handler);
+				update_icons();
+				update_scrollbar();
+	    	}
+	    });
     }
 
+    /**
+     * Set whether to display a loading animation.
+     * @param bool
+     */
     function set_loading_animation(bool)
     {
     	loading_animation = bool;
     }
   
-    function set_scrollbar(bool){
+    /**
+     * Set whether to display a scrollbar.
+     * @param bool
+     */
+    function set_scrollbar(bool)
+    {
 	    scrollbar = bool;
     }
     
-    function set_follow_link(bool){
+    /**
+     * Set whether to follow clicked links directly.
+     * @param bool
+     */
+    function set_follow_link(bool)
+    {
     	follow_link = bool;
     }
     
-    function set_writeback(bool){
-	    write_back_array = bool;
-    }
-    
+    /**
+     * Sets an event handler before following links. 
+     * @param handler the event handler.
+     */
     function set_follow_link_handler(handler){
 	    follow_link_handler = handler;
     }
     
+    /**
+     * Set whether the current menu stucture should be written back to the server to be available on reload.
+     * @param bool
+     */
+    function set_writeback(bool)
+    {
+	    write_back_array = bool;
+    }
+    
+    /**
+     * Adds an element to the end of the list and assigns an event handler to it.
+     * @param $element the html element
+     * @param event_handler the event handler function
+     */
     function add_element_to_insert($element, event_handler)
     {
     	element_to_insert.push($element);
     	inserted_element_event_handler = event_handler;
     }
 
+    /**
+     * Creates an element in the tree defined by the specified parameters.
+     * @param layer the layer of the element
+     * @param current_id the id of the element
+     * @param name the name of the element
+     * @param open whether the element is open or not
+     * @param symbol the image of the element
+     * @param link the link to the element
+     * @param clickable whether a click on the element has an effect 
+     * @param permission whether the user has permission to access the element
+     * @param is_folder whether the element is a folder
+     * @returns the list element
+     */
     function get_list_element(layer,current_id,name,open,symbol,link,clickable,permission,is_folder) 
     {
 		var li = $("<li></li>");
@@ -96,7 +240,8 @@ function base_tree_nav(id, name, ajax_handler)
 		}
 		
 		var div = $("<div id='" + tree_name + "ElementID" + current_id + "'>" 
-			+ "<table class='BaseTreeEntry'><tr><td style='width:16px; margin:1px;'><a href='#'><img src='images/plus.png' alt=''/></a></td>" 
+			+ "<table class='BaseTreeEntry'><tr>"
+			+ "<td style='width:16px; margin:1px;'><a href='#'><img src='images/plus.png' alt=''/></a></td>" 
 			+ "<td style='width:16px; margin:1px;'><a href='index.php?"
 			+ link
 			+ "' onclick='return false'><img src='images/icons/"
@@ -108,6 +253,7 @@ function base_tree_nav(id, name, ajax_handler)
 			+ name
 			+ "</a></td>"
 			+ "</tr></table></div>");
+		
 		if(open)
 		{
 			$(div).addClass(tree_name+"Open")
@@ -116,13 +262,16 @@ function base_tree_nav(id, name, ajax_handler)
 		{
 			$(div).addClass(tree_name+"Closed");
 		}
+		
 		if(is_folder)
 		{
 			$(div).addClass(tree_name+"IsEmptyFolder");
 		}
+		
 		if(element_to_insert.length > 0 && clickable && permission)
 		{
-			for ( var int = 0; int < element_to_insert.length; int++) {
+			for ( var int = 0; int < element_to_insert.length; int++) 
+			{
 				var td = $("<td style='text-align:right;'></td>").appendTo($(div).children("table").children("tbody").children("tr"));
 				var element = element_to_insert[int].clone()
 					.attr("id",current_id)
@@ -130,17 +279,22 @@ function base_tree_nav(id, name, ajax_handler)
 					.appendTo(td);
 			}
 		}
+		
 		$(li).append(div);
 		return li;
     }
     
+    /**
+     * Upldates the icons in the tree.
+     */
 	function update_icons() 
 	{
 		$("."+tree_name+"Open > table > tbody > tr > td:nth-child(1) > a:nth-child(1) > img").attr("src","images/minus.png");
 		$("."+tree_name+"Closed > table > tbody > tr > td:nth-child(1) > a:nth-child(1) > img").attr("src", "images/plus.png");
 		$("."+tree_name+"IsEmptyFolder > table > tbody > tr > td:nth-child(1) > a:nth-child(1) > img").attr("src", "images/dot.png");
 		
-		$(".NotPermitted").each(function(){
+		$(".NotPermitted").each(function()
+		{
 			var src = $(this).children("div").children("table").children("tbody").children("tr").children("td:nth-child(2)").children("a").children("img").attr("src");
 			if(src.indexOf("core/images/denied_overlay.php?image=")==-1)
 			{
@@ -152,7 +306,11 @@ function base_tree_nav(id, name, ajax_handler)
 		});
 	}
   
-	var update_scrollbar = function() 
+	/**
+	 * Updates the scrollbar.
+	 * @returns {Boolean} false if no scrollbar is needed.
+	 */
+	function update_scrollbar() 
 	{
 		if(!scrollbar)
 		{
@@ -161,13 +319,13 @@ function base_tree_nav(id, name, ajax_handler)
 		
 		var content_div_height = $("#content").css("height").replace("px", "");
 		max_menu_height = content_div_height;
-
 		var offset_bottom = 8; 
 		
 		if (max_menu_height < 500) 
 		{
 			max_menu_height = 500;
 		}
+		
 		var list_height = parseInt($("#"+tree_id).children("ul").css("height").replace("px",""));
 		var scroll_height = list_height + offset_bottom;
 
@@ -179,10 +337,15 @@ function base_tree_nav(id, name, ajax_handler)
 		{
 			scroll_api.scrollToY(0);
 		}
+		
 		$(".jspContainer").css("height", scroll_height);
 		scroll_api.reinitialise();
 	}
 	
+	/**
+	 * Parses the current tree structure to an array and writes it back to the server.
+	 * @returns {Boolean} false if the array should not be written back.
+	 */
 	function parse_array() 
 	{
 		if(!write_back_array)
@@ -195,9 +358,8 @@ function base_tree_nav(id, name, ajax_handler)
 		var entry_index = -1;
 		var new_array = new Array();
 
-		// check for deleted elements
 		for (var int = 0; int < array.length; int++) 
-		{
+		{ // check for deleted elements
 			var array_id = array[int][1];
 			if ($("#"+tree_name+"ElementID" + array_id).length == 0) 
 			{
@@ -206,12 +368,11 @@ function base_tree_nav(id, name, ajax_handler)
 			}
 		}
 
-		// check for new elements
 		$("#" + tree_id)
 			.find("li")
 			.each(
 				function() 
-				{
+				{ // check for new elements
 					var entry_id = $(this).children("div").attr("id").replace(tree_name+"ElementID", "");
 	
 					var found = false;
@@ -309,7 +470,8 @@ function base_tree_nav(id, name, ajax_handler)
 		}
 
 		var json_array = encodeURIComponent(JSON.stringify(array));
-		$.ajax({
+		$.ajax(
+		{
 			async: false,
 			type : "POST",
 			url : post_ajax_handler,
@@ -317,107 +479,12 @@ function base_tree_nav(id, name, ajax_handler)
 			success : function(data){}
 		});
 	}
-	
-    function init()
-    {   
-    	$("#"+tree_id).unbind("click"); //unbind all existing handlers
-	    if(loading_animation)
-	    {
-	    	$("<div id='loadingAnimation'><img src='images/animations/loading_circle_small.gif'/></div>")
-		  		.css({"text-align":"center","margin-top":"10px"}).appendTo("#"+tree_id);
-	    }
-	  
-	    if(scrollbar)
-	    {
-	    	if(!$("#"+tree_id).parent().hasClass("jspPane"))
-	    	{
-	    		$("#"+tree_id).parent().jScrollPane();
-	    	}
-    		scroll_api = $("#"+tree_id).parent().parent().parent().data("jsp");
-	    }
-	    
-		var return_html = $("<ul class='" + tree_name + "Layer0 BaseTreeList' style='margin-left:2px;'></ul>");
-		
-		var previous_open_element = undefined;
-		var previous_open_element_layer = undefined;
-		
-		var open_elements_list = new Array();
-		
-		$.ajax(
-	    {
-	    	type : "GET",
-	    	url : ajax_handler,
-	    	data : "run=get_array&session_id=" + get_array['session_id'] + "&username=" + get_array['username'],
-	    	success : function(data) 
-	    	{
-	    		array = $.parseJSON(data);
-				$(array).each
-				(
-					function(i)
-					{ 
-						var layer = $(this)[0];
-						var current_id = $(this)[1];
-						var name = $(this)[2];
-						var open = $(this)[7];
-						var symbol = $(this)[3];
-						var link = $(this)[6];
-						var clickable = $(this)[5]; 
-						var permission = $(this)[4];
-						var is_empty_folder = $(this)[8];
-						
-						if(is_empty_folder == undefined)
-						{
-							is_empty_folder = false;
-						}
-						else
-						{
-							is_empty_folder = !is_empty_folder;	
-						}
-						
-						var li = get_list_element(layer,current_id,name,open,symbol,link,clickable,permission,is_empty_folder);
-						function recursively_check_where_to_insert() 
-						{
-							if(open_elements_list.length > 0)
-							{
-								var last_element = open_elements_list[open_elements_list.length-1];
-
-								if(last_element[1] == layer - 1)
-								{
-									$(last_element[0]).append(li);
-								}
-								else
-								{
-									open_elements_list.pop();
-									recursively_check_where_to_insert();
-								}
-							}
-							else
-							{
-								$(return_html).append(li);
-							}
-						}
-						recursively_check_where_to_insert();
-										
-						if(open)
-						{
-							var next_layer = parseInt(layer) + 1;
-							var ul = $("<ul class='" + tree_name + "Layer" + next_layer + " BaseTreeList'></ul>");
-							$(li).append(ul);
-							var new_open_element = new Array(2);
-							new_open_element[0] = ul;
-							new_open_element[1] = layer;
-							open_elements_list.push(new_open_element);
-						}
-					}
-				);
-				$("#" + tree_id).html(return_html) //overwrites loading animation
-					.bind("click", handler);
-				update_icons();
-				update_scrollbar();
-	    	}
-	    });
-    }
     
+	/**
+	 * The event handler to be bound to the menu.
+	 * @param evt the event, gets passed automatically.
+	 * @returns false if the event does not require an action.
+	 */
     var handler = function(evt)
 	{
 		evt.preventDefault();
@@ -435,9 +502,11 @@ function base_tree_nav(id, name, ajax_handler)
 			$("#" + tree_id).bind("click",handler);
 			return false;
 		}
+		
 		var href = $(target_div).children("table").children("tbody").children("tr").children("td:nth-child(2)").children("a").attr("href");
 		follow_link_now = true;
 		close_open_entry = false;
+		
 		if(follow_link)
 		{
 			if($(target_div).parent().hasClass("NotClickable") || $(target_div).parent().hasClass("NotPermitted"))
@@ -476,15 +545,14 @@ function base_tree_nav(id, name, ajax_handler)
 				var ul_to_slide = $(target_div).parent().children("ul");
 				if(num_children > 0)
 				{
-					$(ul_to_slide).slideUp("fast",
-						function() {
-							$(this).remove();
-							update_icons();
-							update_scrollbar();
-							parse_array();
-							$("#" + tree_id).bind("click",handler);
-						}
-					);
+					$(ul_to_slide).slideUp("fast", function() 
+					{
+						$(this).remove();
+						update_icons();
+						update_scrollbar();
+						parse_array();
+						$("#" + tree_id).bind("click",handler);
+					});
 				}
 				else
 				{
@@ -498,9 +566,8 @@ function base_tree_nav(id, name, ajax_handler)
 				update_scrollbar();
 				parse_array();
 				$("#" + tree_id).bind("click",handler);
-				if(follow_link_now) 
-				{
-					load_linked_contents(href);
+				if (follow_link_now) 
+				{load_linked_contents(href);
 				}
 			}
 		} 
@@ -513,19 +580,20 @@ function base_tree_nav(id, name, ajax_handler)
 			var layer = parent_layer + 1;
 			var parent_li = $(target_div).parent();
 			
-			$.ajax({
+			$.ajax(
+			{
 				type : "GET",
 				url : ajax_handler,
 				data : "run=get_children&id=" + clicked_id + "&session_id=" + get_array['session_id'] + "&username=" + get_array['username'],
-				success : function(data) {
+				success : function(data) 
+				{
 					var child_array = $.parseJSON(data);
-					if(child_array != null && child_array.length != 0) 
+					if (child_array != null && child_array.length != 0) 
 					{
 						var ul = $("<ul class='" + tree_name + "Layer" + layer + " BaseTreeList'></ul>");				
 						
-						$(child_array).each(
-							function() 
-							{
+						$(child_array).each(function() 
+						{
 								var child_id = $(this)[1];
 								var child_name = $(this)[2];
 								var child_symbol = $(this)[3];
@@ -534,13 +602,17 @@ function base_tree_nav(id, name, ajax_handler)
 								var child_permission = $(this)[4];
 								var is_empty_folder = $(this)[8];
 								if(is_empty_folder == undefined)
+								{
 									is_empty_folder = false;
+								}
 								else
+								{
 									is_empty_folder = !is_empty_folder;
+								}
 								var li = get_list_element(layer, child_id, child_name, false, child_symbol, child_link, child_clickable, child_permission, is_empty_folder);
 								$(ul).append(li);
-							}
-						);
+						});
+						
 						$(".jspContainer").css("height",max_menu_height-5); //temporäre höhe für flüssige animation
 						$(ul).hide().appendTo(parent_li).slideDown("normal", function()
 						{
@@ -548,7 +620,7 @@ function base_tree_nav(id, name, ajax_handler)
 							update_scrollbar();
 							parse_array();
 							$("#" + tree_id).bind("click",handler);
-							if(follow_link_now) 
+							if (follow_link_now) 
 							{
 								load_linked_contents(href);
 							}
@@ -559,20 +631,26 @@ function base_tree_nav(id, name, ajax_handler)
 						update_icons();
 						parse_array();
 						$("#" + tree_id).bind("click",handler);
-						if(follow_link_now) 
+						if (follow_link_now) 
 						{
 							load_linked_contents(href);
 						}
 					}
 				}
 			});
-			if($(parent_li).children().children().children().children().children("td:nth-child(1)").children().children().attr("src") != "images/dot.png")
+			
+			var image = $(parent_li).children().children().children().children().children("td:nth-child(1)").children().children();
+			if($(image).attr("src") != "images/dot.png")
 			{
-				$(parent_li).children().children().children().children().children("td:nth-child(1)").children().children().attr("src", "images/animations/loading_circle_small.gif");
+				$(image).attr("src", "images/animations/loading_circle_small.gif");
 			}
 		}
 	}
     
+    /**
+     * Passes an url to the (optional) event handler and opens it.
+     * @param href the url tp pass.
+     */
     function load_linked_contents(href){
     	var success = follow_link_handler(href);
     	if(!success)

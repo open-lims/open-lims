@@ -44,13 +44,21 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 	/**
 	 * @see ProjectLogInterface::__construct()
 	 * @param integer $log_id
+	 * @throws ProjectLogNotFoundException
 	 */
 	function __construct($log_id)
 	{
-		if ($log_id)
+		if (is_numeric($log_id))
 		{
-			$this->log_id = $log_id;
-			$this->log = new ProjectLog_Access($log_id);
+			if (ProjectLog_Access::exist_id($log_id) == true)
+			{
+				$this->log_id = $log_id;
+				$this->log = new ProjectLog_Access($log_id);
+			}
+			else
+			{
+				throw new ProjectLogNotFoundException();
+			}
 		}
 		else
 		{
@@ -73,6 +81,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 	 * @param bool $important
 	 * @param string $action_checksum
 	 * @return integer
+	 * @throws ProjectLogCreateException
 	 */
 	public function create($project_id, $content, $cancel, $important, $action_checksum)
 	{
@@ -80,19 +89,26 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 		
 		if (is_numeric($project_id))
 		{
-			$log_id = $this->log->create($project_id, $content, $cancel, $important, $user->get_user_id(), $action_checksum);
-			$this->__construct($log_id);
-			return $log_id;
+			if (($log_id = $this->log->create($project_id, $content, $cancel, $important, $user->get_user_id(), $action_checksum)) != null)
+			{
+				$this->__construct($log_id);
+				return $log_id;
+			}
+			else
+			{
+				throw ProjectLogCreateException();
+			}
 		}
 		else
 		{
-			return null;
+			throw ProjectLogCreateException();
 		}
 	}
 	
 	/**
 	 * @see ProjectLogInterface::delete()
 	 * @return bool
+	 * @throws ProjectLogDeleteException
 	 */
 	public function delete()
 	{
@@ -113,7 +129,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 					{
 						$transaction->rollback($transaction_id);
 					}
-					return false;
+					throw ProjectLogDeleteException();
 				}
 			}
 
@@ -123,7 +139,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 				{
 					$transaction->rollback($transaction_id);
 				}
-				return false;
+				throw ProjectLogDeleteException();
 			}
 			
 			if ($this->log->delete() == false)
@@ -132,7 +148,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 				{
 					$transaction->rollback($transaction_id);
 				}
-				return false;
+				throw ProjectLogDeleteException();
 			}
 			else
 			{
@@ -146,7 +162,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 		}
 		else
 		{
-			return false;
+			throw ProjectLogDeleteException();
 		}
 	}
 	

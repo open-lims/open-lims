@@ -145,6 +145,37 @@ interface Project_WrapperInterface
 	public static function count_projects_by_item_id($item_id);
 	
 	/**
+	 * @param integer $project_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_project_permissions($project_id, $order_by, $order_method, $start, $end);
+	
+	/**
+	 * @param integer $project_id
+	 */
+	public static function count_project_permissions($project_id);
+	
+	/**
+	 * @param integer $project_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_project_tasks($project_id, $order_by, $order_method, $start, $end);
+	
+	/**
+	 * @param integer $project_id
+	 * @return integer
+	 */
+	public static function count_project_tasks($project_id);
+	
+	/**
 	 * @param string $name
 	 * @param array $template_id
 	 * @param array $organisation_unit_array

@@ -299,7 +299,7 @@ class Navigation_IO
 	
 	public static function left()
 	{
-		if ($_GET[nav] and $_GET[nav] != "static" and $_GET[nav] != "home")
+		if ($_GET[nav] and $_GET[nav] != "static" and $_GET[nav] != "home" and $_GET[nav] != "user")
 		{
 			$module_array = SystemHandler::list_modules();
 			

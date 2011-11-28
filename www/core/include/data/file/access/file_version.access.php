@@ -812,6 +812,36 @@ class FileVersion_Access
 	}
 	
 	
+ 	/**
+	 * @param integer $file_id
+	 * @param integer $internal_revision
+	 * @return bool
+	 */
+	public static function exist_internal_revision($file_id, $internal_revision)
+	{
+		global $db;
+
+		if (is_numeric($file_id) and is_numeric($internal_revision))
+		{
+			$sql = "SELECT id FROM ".constant("FILE_VERSION_TABLE")." WHERE toid = '".$file_id."' AND internal_revision = '".$internal_revision."'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[id])
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}	
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	/**
 	 * @param integer $toid
 	 * @return array

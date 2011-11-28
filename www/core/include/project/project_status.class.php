@@ -28,8 +28,6 @@ require_once("interfaces/project_status.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	require_once("exceptions/project_status_not_found_exception.class.php");
-	
 	require_once("access/project_status.access.php");
 	require_once("access/project_has_project_status.access.php");
 }
@@ -46,17 +44,26 @@ class ProjectStatus implements ProjectStatusInterface
     /**
      * @see ProjectStatusInterface::__construct()
      * @param integer $status_id
+     * @throws ProjectStatusNotFoundException
      */
     function __construct($status_id)
     {
-    	if ($status_id == null) {
-    		$this->status_id = null;
-    		$this->status = new ProjectStatus_Access(null);
+    	if (is_numeric($status_id))
+		{
+			if (ProjectStatus_Access::exist_id($status_id) == true)
+			{
+				$this->status_id = $status_id;
+    			$this->status = new ProjectStatus_Access($status_id);
+			}
+			else
+			{
+				throw new ProjectStatusNotFoundException();
+			}
     	}
     	else
     	{
-    		$this->status_id = $status_id;
-    		$this->status = new ProjectStatus_Access($status_id);
+    		$this->status_id = null;
+    		$this->status = new ProjectStatus_Access(null);
     	}
     }
     
@@ -71,22 +78,31 @@ class ProjectStatus implements ProjectStatusInterface
      * @param string $name
      * @param string $comment
      * @return integer
+     * @throws ProjectStatusCreateException
      */
     public function create($name, $comment)
     {
     	if ($this->status)
     	{
-    		return $this->status->create($name, $comment);	
+    		if (($return_value = $this->status->create($name, $comment)) != null)
+    		{
+    			return $return_value;
+    		}
+    		else
+    		{
+    			throw new ProjectStatusCreateException();
+    		}
     	}
     	else
     	{
-    		return null;
+    		throw new ProjectStatusCreateException();
     	}
     }
     
     /**
      * @see ProjectStatusInterface::delete()
      * @return bool
+     * @throws ProjectStatusDeleteException;
      */
     public function delete()
     {
@@ -97,21 +113,35 @@ class ProjectStatus implements ProjectStatusInterface
     		{
     			if (count($project_relation_array) == 0)
     			{
-    				return $this->status->delete();
+    				if ($this->status->delete() == true)
+    				{
+    					return true;
+    				}
+    				else
+    				{
+    					throw new ProjectStatusDeleteException();
+    				}
     			}
     			else
     			{
-    				return false;
+    				throw new ProjectStatusDeleteException();
     			}
     		}
     		else
     		{
-    			return $this->status->delete();
+    			if ($this->status->delete() == true)
+    			{
+    				return true;
+    			}
+    			else
+    			{
+    				throw new ProjectStatusDeleteException();
+    			}
     		}
     	}
     	else
     	{
-    		return false;
+    		throw new ProjectStatusDeleteException();
     	}
     }
     

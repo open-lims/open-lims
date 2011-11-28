@@ -54,37 +54,37 @@ class Main
 
 		if ($GLOBALS['fatal_error'] == null)
 		{
-			global $db, $misc, $runtime_data, $transaction;
+			global $db, $runtime_data, $transaction;
 			
 			require_once("core/db/db.php");
 			
 			$db = new Database(constant("DB_TYPE"));
 			@$connection_result = $db->db_connect(constant("DB_SERVER"),constant("DB_PORT"),constant("DB_USER"),constant("DB_PASSWORD"),constant("DB_DATABASE"));
 					
-			require_once("include/base/error_handler.php");
+			require_once("include/base/system/error_handler.php");
 			
 			set_error_handler('error_handler');
 			
-			require_once("include/base/events/event.class.php");
-			require_once("include/base/system_handler.class.php");
+			require_once("include/base/system/events/event.class.php");
+			require_once("include/base/system/system_handler.class.php");
 			
-			require_once("include/base/autoload.function.php");
+			require_once("include/base/system/autoload.function.php");
 			
 			if ($connection_result == true)
 			{
-				require_once("include/base/transaction.class.php");
+				require_once("include/base/system/transaction.class.php");
 				
 				$transaction = new Transaction();
 				
-				require_once("include/base/security.class.php");
-				require_once("include/base/system_log.class.php");
-				require_once("include/base/misc.class.php");
-				require_once("include/base/session.class.php");
-				require_once("include/base/runtime_data.class.php");
-	
+				require_once("include/base/security/security.class.php");
+				require_once("include/base/security/session.class.php");
+				
+				require_once("include/base/system/runtime_data.class.php");
+				
+				require_once("include/base/system_fe/system_log.class.php");
+
 				Security::protect_session();
-		
-				$misc = new Misc();
+				
 				$runtime_data = new RuntimeData();
 				
 				try
@@ -146,8 +146,15 @@ class Main
 		{
 			if ($_GET[session_id])
 			{
-				$session = new Session($_GET[session_id]);
-				$user = new User($session->get_user_id());
+				try 
+				{
+					$session = new Session($_GET[session_id]);
+					$user = new User($session->get_user_id());
+				}
+				catch (UserException $e)
+				{
+					$GLOBALS['fatal_error'] = "User initialisation failed!";
+				}
 			}
 			else
 			{
@@ -165,7 +172,6 @@ class Main
 		/**
 		 * @deprecated remove later
 		 */
-		require_once("modules/base/table.io.php");
 		require_once("modules/base/list_stat.io.php");
 		
 		ContentHandler_IO::main();

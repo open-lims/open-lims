@@ -45,18 +45,26 @@ class SampleTemplateCat implements SampleTemplateCatInterface
     /**
      * @see SampleTemplateCatInterface::__construct()
 	 * @param integer $sample_template_cat_id
+	 * @throws SampleTemplateCategoryNotFoundException
 	 */
 	function __construct($sample_template_cat_id)
 	{
-		if ($sample_template_cat_id == null)
+		if (is_numeric($sample_template_cat_id))
 		{
-			$this->sample_template_cat_id = null;
-			$this->sample_template_cat = new SampleTemplateCat_Access(null);
+			if (SampleTemplateCat_Access::exist_id($sample_template_cat_id) == true)
+			{
+				$this->sample_template_cat_id = $sample_template_cat_id;
+				$this->sample_template_cat = new SampleTemplateCat_Access($sample_template_cat_id);
+			}
+			else
+			{
+				throw new SampleTemplateCategoryNotFoundException();
+			}
 		}
 		else
 		{
-			$this->sample_template_cat_id = $sample_template_cat_id;
-			$this->sample_template_cat = new SampleTemplateCat_Access($sample_template_cat_id);
+			$this->sample_template_cat_id = null;
+			$this->sample_template_cat = new SampleTemplateCat_Access(null);
 		}
 	}
 	

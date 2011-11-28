@@ -181,6 +181,9 @@ class AdminProjectTemplateCatIO
 		}
 	}
 	
+	/**
+	 * @throws ProjectTemplateCategoryIDMissingException
+	 */
 	public static function delete()
 	{
 		if ($_GET[id])
@@ -227,12 +230,13 @@ class AdminProjectTemplateCatIO
 		}
 		else
 		{
-			$exception = new Exception("", 4);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectTemplateCategoryIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ProjectTemplateCategoryIDMissingException
+	 */
 	public static function edit()
 	{
 		if ($_GET[id])
@@ -311,47 +315,29 @@ class AdminProjectTemplateCatIO
 		}
 		else
 		{
-			$exception = new Exception("", 4);
-			$error_io = new Error_IO($exception, 200, 40, 3);
-			$error_io->display_error();
+			throw new ProjectTemplateCategoryIDMissingException();
 		}
 	}
 	
 	public static function handler()
 	{
-		try
-		{
-			if ($_GET[id])
-			{
-				if (ProjectTemplateCat::exist_id($_GET[id]) == false)
-				{
-					throw new ProjectTemplateCategoryNotFoundException("",4);
-				}
-			}
-			
-			switch($_GET[action]):
-				case "add":
-					self::create();
-				break;
+		switch($_GET[action]):
+			case "add":
+				self::create();
+			break;
 
-				case "delete":
-					self::delete();
-				break;
-	
-				case "edit":
-					self::edit();
-				break;	
-					
-				default:
-					self::home();
-				break;
-			endswitch;
-		}
-		catch (ProjectTemplateCategoryNotFoundException $e)
-		{
-			$error_io = new Error_IO($e, 200, 40, 1);
-			$error_io->display_error();
-		}
+			case "delete":
+				self::delete();
+			break;
+
+			case "edit":
+				self::edit();
+			break;	
+				
+			default:
+				self::home();
+			break;
+		endswitch;
 	}
 	
 }

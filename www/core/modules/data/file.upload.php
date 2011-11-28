@@ -38,16 +38,16 @@
 	require_once("../../../config/main.php");
 	require_once("../../db/db.php");
 	
-	require_once("../../include/base/transaction.class.php");
+	require_once("../../include/base/system/transaction.class.php");
 
-	require_once("../../include/base/events/event.class.php");
-	require_once("../../include/base/system_handler.class.php");
+	require_once("../../include/base/system/events/event.class.php");
+	require_once("../../include/base/system/system_handler.class.php");
 		
-	require_once("../../include/base/session.class.php");
+	require_once("../../include/base/security/session.class.php");
 
 	$GLOBALS['autoload_prefix'] = "../../../";
 
-	require_once("../../include/base/autoload.function.php");
+	require_once("../../include/base/system/autoload.function.php");
 
 
 	if ($_GET[username] and $_GET[session_id] and $_FILES)

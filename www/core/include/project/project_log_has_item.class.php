@@ -64,6 +64,7 @@ class ProjectLogHasItem implements ProjectLogHasItemInterface, EventListenerInte
      * @see ProjectLogHasItemInterface::link_item()
      * @param integer $item_id
      * @return bool
+     * @throws ProjectLogItemLinkException
      */
     public function link_item($item_id)
     {
@@ -76,8 +77,12 @@ class ProjectLogHasItem implements ProjectLogHasItemInterface, EventListenerInte
 			}
 			else
 			{
-				return false;
+				throw new ProjectLogItemLinkException();
 			}
+    	}
+    	else
+    	{
+    		throw new ProjectLogItemLinkException();
     	}
     }
     
