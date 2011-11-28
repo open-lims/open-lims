@@ -21,6 +21,15 @@
 
 List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get_array, css_main_id, entries_per_page, row_array)
 {
+	if (ajax_handler.indexOf("?") == -1) 
+	{
+		ajax_handler = ajax_handler+"?";
+	} 
+	else 
+	{
+		ajax_handler = ajax_handler+"&";
+	}
+	
 	var sort_array = new Array();
 	
 	var sort_value = "";
@@ -55,7 +64,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 		$.ajax(
 		{
 			type: "POST",
-			url: ajax_handler+"?session_id="+ get_array['session_id'] + "&run="+ajax_count_run,
+			url: ajax_handler+"session_id="+ get_array['session_id'] + "&run="+ajax_count_run,
 			data: "argument_array="+argument_array,
 			async: false,
 			success: function(data)
@@ -129,7 +138,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 		$.ajax(
 		{
 			type: "POST",
-			url: ajax_handler+"?username="+get_array['username']+"&session_id="+get_array['session_id']+"&run="+ajax_run+"&sortvalue="+sort_value+"&sortmethod="+sort_method+"&page="+page,
+			url: ajax_handler+"username="+get_array['username']+"&session_id="+get_array['session_id']+"&run="+ajax_run+"&sortvalue="+sort_value+"&sortmethod="+sort_method+"&page="+page,
 			data: "row_array="+row_array+"&argument_array="+argument_array+"&entries_per_page="+entries_per_page+"&get_array="+json_get_array,
 			success: function(data)
 			{	

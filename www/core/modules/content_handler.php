@@ -27,7 +27,7 @@
  */
 class ContentHandler_IO
 {
-	public static function main()
+	public static function io()
 	{
 		global $session, $user, $transaction;
 
@@ -183,16 +183,26 @@ class ContentHandler_IO
 										{
 											if ($_GET[nav] == $value[name])
 											{
-												$module_path = "core/modules/".$value[folder]."/".$value[name].".io.php";
-												if (file_exists($module_path))
+												$module_request_handler = "core/modules/".$value[folder]."/".$value[name].".request.php";
+												if (file_exists($module_request_handler))
 												{
-													require_once($module_path);
-													$value['class']::method_handler();
+													require_once($module_request_handler);
+													$value['class']::io_handler();
 													$module_found = true;
 												}
 												else
 												{
-													throw new ModuleDataCorruptExeception(null, null);
+													$module_path = "core/modules/".$value[folder]."/".$value[name].".io.php";
+													if (file_exists($module_path))
+													{
+														require_once($module_path);
+														$value['class']::method_handler();
+														$module_found = true;
+													}
+													else
+													{
+														throw new ModuleDataCorruptExeception(null, null);
+													}
 												}
 											}
 										}
@@ -247,6 +257,27 @@ class ContentHandler_IO
 		
 		$template = new Template("template/index_footer.html");
 		$template->output();
+	}
+	
+	public static function ajax()
+	{
+		$module_array = SystemHandler::list_modules();
+		
+		if (is_array($module_array) and count($module_array) >= 1)
+		{
+			foreach($module_array as $key => $value)
+			{
+				if ($_GET[nav] == $value[name])
+				{
+					$module_request_handler = "core/modules/".$value[folder]."/".$value[name].".request.php";
+					if (file_exists($module_request_handler))
+					{
+						require_once($module_request_handler);
+						$value['class']::ajax_handler();
+					}
+				}
+			}
+		}
 	}
 }
 

@@ -24,8 +24,8 @@
 /**
  * 
  */
-$GLOBALS['autoload_prefix'] = "../";
-require_once("../../base/ajax.php");
+$GLOBALS['autoload_prefix'] = "../../";
+require_once("../../../base/ajax.php");
 
 /**
  * Project AJAX IO Class
@@ -45,7 +45,7 @@ class ProjectAjax extends Ajax
 	
 	private function get_html()
 	{
-		$template = new Template("../../../../template/projects/navigation/left.html");
+		$template = new Template("../../../../../template/projects/navigation/left.html");
 		$template->output();
 	}
 	

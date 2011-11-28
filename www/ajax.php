@@ -21,10 +21,23 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * IMPORTANT NOTE: Modification of this file is not allowed by developers!
- */
-define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-26-dev &#945;");
+ /**
+  * 
+  */
+ set_time_limit(0);
 
+ header("Content-Type: text/html; charset=utf-8");
+
+ define("UNIT_TEST", false);
+
+ require_once("config/version.php");
+ require_once("config/main.php");
+
+ require_once("core/include/base/system/template.class.php");
+
+ require_once("core/main.php");
+ $main = new Main("ajax");
+
+ $main->init();	
+ 
 ?>

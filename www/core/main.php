@@ -27,11 +27,15 @@
  */
 class Main
 {
+	private $type;
+	
 	/**
 	 * Checks basic requirements, includes basic files, creates global classes and starts Database-Connection
 	 */
-	function __construct()
+	function __construct($type = "io")
 	{
+		$this->type = $type;
+		
 		if (version_compare(PHP_VERSION, '5.3.0', 'le'))
 		{
     		$GLOBALS['fatal_error'] = "PHP 5.3.0 is minimum required!";
@@ -89,7 +93,7 @@ class Main
 				
 				try
 				{
-					$system_handler = new SystemHandler();
+					$system_handler = new SystemHandler(false);
 				}
 				catch(IncludeDataCorruptException $e)
 				{
@@ -136,7 +140,7 @@ class Main
 	}
 		
 	/**
-	 * Initalisation of Controller
+	 * Initalisation of IO Controller
 	 */
 	public function init()
 	{
@@ -163,20 +167,28 @@ class Main
 			}
 		}
 		
-		require_once("modules/content_handler.io.php");
+		require_once("modules/content_handler.php");
 		require_once("modules/base/common.io.php");
 		require_once("modules/base/error.io.php");
 		require_once("modules/base/list.io.php");
-		require_once("modules/base/tab.io.php");
 		
-		/**
-		 * @deprecated remove later
-		 */
-		require_once("modules/base/list_stat.io.php");
+		if ($this->type == "io")
+		{
+			require_once("modules/base/tab.io.php");
 		
-		ContentHandler_IO::main();
-	}	
-	
+			/**
+			 * @deprecated remove later
+			 */
+			require_once("modules/base/list_stat.io.php");
+			
+			ContentHandler_IO::io();
+		}
+		elseif ($this->type == "ajax")
+		{
+			require_once("modules/base/list_request.io.php");
+			ContentHandler_IO::ajax();
+		}
+	}
 }
 
 ?>

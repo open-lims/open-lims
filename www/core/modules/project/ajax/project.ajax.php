@@ -22,22 +22,12 @@
  */
 
 /**
- * 
- */
-require_once("../base/ajax.php");
-
-/**
  * Project AJAX IO Class
  * @package project
  */
-class ProjectAjax extends Ajax
-{
-	function __construct()
-	{
-		parent::__construct();
-	}
-	
-	private function list_user_related_projects($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+class ProjectAjax
+{	
+	public static function list_user_related_projects($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
 		
@@ -130,7 +120,7 @@ class ProjectAjax extends Ajax
 		}
 	}
 	
-	private function count_user_related_projects($json_argument_array)
+	public static function count_user_related_projects($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
 		
@@ -146,7 +136,7 @@ class ProjectAjax extends Ajax
 		}
 	}
 	
-	private function list_organisation_unit_related_projects($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	public static function list_organisation_unit_related_projects($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
 		
@@ -254,7 +244,7 @@ class ProjectAjax extends Ajax
 		}
 	}
 	
-	private function count_organisation_unit_related_projects($json_argument_array)
+	public static function count_organisation_unit_related_projects($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
 		
@@ -270,7 +260,7 @@ class ProjectAjax extends Ajax
 		}
 	}
 	
-	private function list_projects_by_item_id($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	public static function list_projects_by_item_id($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
 		$item_id = $argument_array[0][1];
@@ -426,7 +416,7 @@ class ProjectAjax extends Ajax
 		}
 	}
 	
-	private function count_projects_by_item_id($json_argument_array)
+	public static function count_projects_by_item_id($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
 		$item_id = $argument_array[0][1];
@@ -440,47 +430,5 @@ class ProjectAjax extends Ajax
 			return null;
 		}
 	}
-	
-	public function method_handler()
-	{
-		global $session;
-		
-		if ($session->is_valid())
-		{
-			switch($_GET[run]):
-				
-				case "list_user_related_projects":
-					echo $this->list_user_related_projects($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
-				break;
-				
-				case "count_user_related_projects":
-					echo $this->count_user_related_projects($_POST[argument_array]);
-				break;
-			
-				case "list_organisation_unit_related_projects":
-					echo $this->list_organisation_unit_related_projects($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
-				break;
-				
-				case "count_organisation_unit_related_projects":
-					echo $this->count_organisation_unit_related_projects($_POST[argument_array]);
-				break;
-				
-				case "list_projects_by_item_id":
-					echo $this->list_projects_by_item_id($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
-				break;
-				
-				case "count_projects_by_item_id":
-					echo $this->count_projects_by_item_id($_POST[argument_array]);
-				break;
-				
-				default:
-				break;
-			
-			endswitch;
-		}
-	}
 }
-
-$project_ajax = new ProjectAjax;
-$project_ajax->method_handler();
 ?>

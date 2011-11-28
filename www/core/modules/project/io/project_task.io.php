@@ -1153,7 +1153,7 @@ class ProjectTaskIO
 				$argument_array[0][0] = "project_id";
 				$argument_array[0][1] = $_GET[project_id];
 				
-				$list = new List_IO("ProjectTaskTableList", "/core/modules/project/project_task.ajax.php", "list_project_tasks", "count_project_tasks", $argument_array, "ProjectTaskTableList");
+				$list = new List_IO("ProjectTaskTableList", "/core/modules/project/ajax/project_task.ajax.php", "list_project_tasks", "count_project_tasks", $argument_array, "ProjectTaskTableList");
 
 				$list->add_row("Name/Task","name",true,null);
 				$list->add_row("Type","type",true,null);

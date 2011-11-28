@@ -309,7 +309,7 @@ class Navigation_IO
 				{
 					if ($_GET[nav] == $value[name])
 					{
-						$module_path = "core/modules/".$value[folder]."/".$value[name].".io.php";
+						$module_path = "core/modules/".$value[folder]."/".$value[name].".request.php";
 						if (file_exists($module_path))
 						{
 							require_once($module_path);
@@ -343,6 +343,10 @@ class Navigation_IO
 							{
 								self::get_left_standard_navigation();
 							}
+						}
+						else
+						{
+							self::get_left_standard_navigation();
 						}
 					}
 				}

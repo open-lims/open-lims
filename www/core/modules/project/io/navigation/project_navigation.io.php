@@ -70,7 +70,7 @@ class ProjectNavigationIO
 	 */
 	public static function get_ajax_url()
 	{
-		return "core/modules/project/navigation/project_navigation.ajax.php";
+		return "core/modules/project/ajax/navigation/project_navigation.ajax.php";
 	}
 }
 
