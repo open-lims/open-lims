@@ -428,5 +428,14 @@ class DataPath implements DataPathInterface
     {
     	return $this->folder_id;
     }
+    
+	/**
+     * @see DataPathInterface::get_virtual_folder_id()
+     * @return integer
+     */
+    public function get_virtual_folder_id()
+    {
+    	return $this->virtual_folder_id;
+    }
 }
 ?>

@@ -80,5 +80,10 @@ interface DataPathInterface
      * @return integer
      */
     public function get_folder_id();
+    
+    /**
+     * @return integer
+     */
+    public function get_virtual_folder_id();
 }
 ?>

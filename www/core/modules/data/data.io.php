@@ -1440,27 +1440,6 @@ class DataIO
 				FileIO::delete_version();
 			break;
 			
-			
-			case("folder_add"):
-				require_once("folder.io.php");
-				FolderIO::add();	
-			break;
-			
-			case("folder_delete"):
-				require_once("folder.io.php");
-				FolderIO::delete();
-			break;
-			
-			case("folder_move"):
-				require_once("folder.io.php");
-				FolderIO::move();
-			break;
-
-			case("folder_administration"):
-				require_once("folder.io.php");
-				FolderIO::folder_administration();	
-			break;
-			
 			// Search
 			/**
 			 * @todo errors, exceptions

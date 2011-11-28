@@ -342,6 +342,7 @@ class DataAjax extends Ajax
 		{
 			$data_path = new DataPath(null,null);
 			$folder_id = $data_path->get_folder_id();
+			$virtual_folder_id = $data_path->get_virtual_folder_id();
 		}
 		
 		if (is_numeric($folder_id) or is_numeric($virtual_folder_id))
