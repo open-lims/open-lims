@@ -36,8 +36,6 @@ function base_upload(unique_id, session_id)
     if (typeof(base_upload_prototype_called) == "undefined")
     {
     	base_upload_prototype_called = true;
-    	base_upload.prototype.start_upload = start_upload;
-    	base_upload.prototype.init = init;
     	init();
     }
 	
@@ -58,15 +56,12 @@ function base_upload(unique_id, session_id)
 				$("#lastFileInput").attr("id","").after(new_element);
 			}
 		});
-<<<<<<< HEAD
-=======
 		
 		$("#uploader_upload").click(function(evt)
 		{
 			evt.preventDefault();
 			start_upload();
 		});
->>>>>>> 0e1c77d4ddb8c7429401628074271e0fccb013c1
 	}
 	
 	/**
@@ -131,11 +126,7 @@ function base_upload(unique_id, session_id)
 			.append(upload_info)
 			.append(ok_button);
 		$.blockUI({ message: block_ui_content , css: {"width":"550px"}});
-<<<<<<< HEAD
-		$('.blockUI.blockMsg').center();
-=======
 		
->>>>>>> 0e1c77d4ddb8c7429401628074271e0fccb013c1
 		init_scrollbar();
 		$("#UploadForm").submit();
 		started = new Date().getTime();
@@ -503,11 +494,7 @@ function base_upload(unique_id, session_id)
 		if(url_split.length == 2)
 		{
 			return url_split[0];
-		}
-		//got hit from data browser
-		current_url = current_url.split("&nav=data")[0];
-		current_url += "&nav=data";
-		return current_url;
+		}	
 	}
 
 }

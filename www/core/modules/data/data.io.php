@@ -99,7 +99,8 @@ class DataIO
 		$argument_array[1][0] = "virtual_folder_id";
 		$argument_array[1][1] = $virtual_folder_id;	
 
-			
+		$list = new List_IO("DataBrowser", "/core/modules/data/data.ajax.php", "list_data_browser", "count_data_browser", $argument_array, "DataBrowserAjax");	
+		
 		$list->add_row("","symbol",false,16);
 		$list->add_row("Name","name",true,null);
 		$list->add_row("Type","type",true,null);
