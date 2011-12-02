@@ -179,7 +179,7 @@ class Navigation_IO
 				
 		$info_paramquery[username] = $_GET[username];
 		$info_paramquery[session_id] = $_GET[session_id];
-		$info_paramquery[nav] = "static";
+		$info_paramquery[nav] = "base";
 		$info_paramquery[run] = "system_info";
 		$info_params = http_build_query($info_paramquery,'','&#38;');
 		
@@ -204,29 +204,34 @@ class Navigation_IO
 			
 			$my_profile_paramquery[username] = $_GET[username];
 			$my_profile_paramquery[session_id] = $_GET[session_id];
-			$my_profile_paramquery[nav] = "user";
+			$my_profile_paramquery[nav] = "base";
+			$my_profile_paramquery[run] = "user_profile";
 			$my_profile_params = http_build_query($my_profile_paramquery,'','&#38;');
 			
 			$sub_menu[0][params] = $my_profile_params;
 			$sub_menu[0][title] = "My Profile";
-			
-			$my_organisation_units_paramquery[username] = $_GET[username];
-			$my_organisation_units_paramquery[session_id] = $_GET[session_id];
-			$my_organisation_units_paramquery[nav] = "static";
-			$my_organisation_units_paramquery[run] = "myorgan";
-			$my_organisation_units_params = http_build_query($my_organisation_units_paramquery,'','&#38;');
-			
-			$sub_menu[1][params] = $my_organisation_units_params;
-			$sub_menu[1][title] = "My Organisation Units";
-			
+						
 			$system_messages_paramquery[username] = $_GET[username];
 			$system_messages_paramquery[session_id] = $_GET[session_id];
-			$system_messages_paramquery[nav] = "static";
+			$system_messages_paramquery[nav] = "base";
 			$system_messages_paramquery[run] = "sysmsg";
 			$system_messages_params = http_build_query($system_messages_paramquery,'','&#38;');
 			
-			$sub_menu[2][params] = $system_messages_params;
-			$sub_menu[2][title] = "System Messages";
+			$sub_menu[1][params] = $system_messages_params;
+			$sub_menu[1][title] = "System Messages";
+			
+			// DIALOG !!!
+			
+			$my_organisation_units_paramquery[username] = $_GET[username];
+			$my_organisation_units_paramquery[session_id] = $_GET[session_id];
+			$my_organisation_units_paramquery[nav] = "base";
+			$my_organisation_units_paramquery[run] = "myorgan";
+			$my_organisation_units_params = http_build_query($my_organisation_units_paramquery,'','&#38;');
+			
+			$sub_menu[2][params] = $my_organisation_units_params;
+			$sub_menu[2][title] = "My Organisation Units";
+			
+			
 			
 			$template->set_var("sub_menu", $sub_menu);
 			$template->set_var("search_bar", false);
@@ -299,7 +304,7 @@ class Navigation_IO
 	
 	public static function left()
 	{
-		if ($_GET[nav] and $_GET[nav] != "static" and $_GET[nav] != "home" and $_GET[nav] != "user")
+		if ($_GET[nav] and $_GET[nav] != "home" and $_GET[nav] != "base")
 		{
 			$module_array = SystemHandler::list_modules();
 			

@@ -25,7 +25,7 @@
  * 
  */
 	$name 					= "admin";
-	$main_class				= "AdminIO";
+	$main_class				= "AdminRequest";
 	
 	$required_include[0] 	= "base";
 	

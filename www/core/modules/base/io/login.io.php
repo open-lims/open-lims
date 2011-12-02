@@ -31,33 +31,8 @@ class Login_IO
 	 * Login
 	 * @param integer $error_no
 	 */
-	public static function login($error_no)
+	public static function login()
 	{
-		if ($error_no != null)
-		{
-			switch($error_no):
-				case 1:
-					$error = "Your username or your password are wrong.";
-				break;
-				
-				case 2:
-					$error = "You must enter an username.";
-				break;
-				
-				case 3:
-					$error = "Your must enter a password.";
-				break;
-				
-				case 4:
-					$error = "This user is locked by administrator.";
-				break;
-			endswitch;
-		}
-		else
-		{
-			$error = "";
-		}
-
 		$template = new Template("template/base/login/login.html");
 
 		$template->set_var("footer",constant("LOGIN_FOOTER"));
@@ -78,24 +53,6 @@ class Login_IO
 		}
 		
 		$template->set_var("option",$result);
-
-		if ($_POST[username])
-		{
-			$template->set_var("username", $_POST[username]);
-		}
-		else
-		{
-			$template->set_var("username", "");
-		}
-		
-		if ($error)
-		{
-			$template->set_var("error",$error);
-		}
-		else
-		{
-			$template->set_var("error","");
-		}
 			
 		$template->output();
 	}
@@ -175,59 +132,6 @@ class Login_IO
 		$template->output();
 		
 		switch ($_GET[run]):
-		
-			case ("login"):				
-				if ($_POST[username] and $_POST[password])
-				{
-					if ($auth->login($_POST[username], $_POST[password]) == true)
-					{
-						$session_id = $auth->get_session_id();
-						$session = new Session($session_id);
-						$user = new User($session->get_user_id());
-						
-						if (is_numeric($_POST[language]))
-						{
-							$session->write_value("LANGUAGE", $_POST[language]);
-						}
-						else
-						{
-							$session->write_value("LANGUAGE", 1);
-						}
-										
-						if ($user->get_boolean_user_entry("user_locked") == false)
-						{
-				 			$template = new Template("template/base/login/proceed.html");
-							$template->set_var("username",$_POST[username]);
-							$template->set_var("session_id",$session_id);
-							$template->set_var("footer",constant("LOGIN_FOOTER"));
-				 			$template->output();		
-						}
-						else
-						{
-							self::login(4);
-						}
-					}
-					else
-					{
-						self::login(1);
-					}
-				}
-				else
-				{
-					if ($_POST[submit] and !$_POST[username])
-					{
-						self::login(2);
-					}
-					elseif($_POST[submit] and $_POST[username] and !$_POST[password])
-					{
-						self::login(3);
-					}
-					else
-					{
-						self::login(null);
-					}
-				}
-			break;
 			
 			case ("forgot"):
 				if ($_POST[username] and $_POST[mail])
@@ -261,7 +165,7 @@ class Login_IO
 			break;
 			
 			default:
-				self::login(null);					
+				self::login();					
 			break;
 			
 		endswitch;

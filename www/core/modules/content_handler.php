@@ -138,7 +138,7 @@ class ContentHandler_IO
 					$template->output();
 					
 					// Navigation
-					require_once("base/navigation.io.php");
+					require_once("base/io/navigation.io.php");
 					Navigation_IO::main();
 					Navigation_IO::left();
 					
@@ -150,7 +150,7 @@ class ContentHandler_IO
 					
  					if ($session->read_value("must_change_password") == true)
  					{
- 						require_once("core/modules/base/user.io.php");
+ 						require_once("core/modules/base/io/user.io.php");
 						UserIO::change_password_on_login();
  					}
  					else
@@ -160,17 +160,7 @@ class ContentHandler_IO
 							{
 								if($_GET[nav] == "home")
 								{
-									include("core/modules/base/home.io.php");
-								}
-								elseif($_GET[nav] == "static")
-								{
-									require_once("core/modules/base/base.io.php");
-									BaseIO::method_handler();
-								}
-								elseif($_GET[nav] == "user")
-								{
-									require_once("core/modules/base/user.io.php");
-									UserIO::method_handler();
+									include("core/modules/base/io/home.io.php");
 								}
 								else
 								{
@@ -209,7 +199,7 @@ class ContentHandler_IO
 									}
 									else
 									{
-										include("core/modules/base/home.io.php");
+										include("core/modules/base/io/home.io.php");
 									}
 									
 									if ($module_found == false)
@@ -220,7 +210,7 @@ class ContentHandler_IO
 							}
 							else
 							{
-								include("core/modules/base/home.io.php");
+								include("core/modules/base/io/home.io.php");
 							}
 						}
 						catch(DatabaseQueryFailedException $e)
@@ -241,7 +231,7 @@ class ContentHandler_IO
 		 		}
 		 		else
 		 		{
-		 			require_once("base/login.io.php");
+		 			require_once("base/io/login.io.php");
 		 			Login_IO::output();	 			
 		 		}
 			}
@@ -259,25 +249,42 @@ class ContentHandler_IO
 		$template->output();
 	}
 	
+	/**
+	 * @todo Login
+	 */
 	public static function ajax()
 	{
-		$module_array = SystemHandler::list_modules();
+		global $session;
 		
-		if (is_array($module_array) and count($module_array) >= 1)
+		if ($session->is_valid() == true)
 		{
-			foreach($module_array as $key => $value)
+			$module_array = SystemHandler::list_modules();
+			
+			if (is_array($module_array) and count($module_array) >= 1)
 			{
-				if ($_GET[nav] == $value[name])
+				foreach($module_array as $key => $value)
 				{
-					$module_request_handler = "core/modules/".$value[folder]."/".$value[name].".request.php";
-					if (file_exists($module_request_handler))
+					if ($_GET[nav] == $value[name])
 					{
-						require_once($module_request_handler);
-						$value['class']::ajax_handler();
+						$module_request_handler = "core/modules/".$value[folder]."/".$value[name].".request.php";
+						if (file_exists($module_request_handler))
+						{
+							require_once($module_request_handler);
+							$value['class']::ajax_handler();
+						}
 					}
 				}
 			}
 		}
+		else
+		{
+			if ($_GET[run] == "login")
+			{
+				require_once("core/modules/base/base.request.php");
+				BaseRequest::ajax_handler();
+			}
+		}
+		
 	}
 }
 

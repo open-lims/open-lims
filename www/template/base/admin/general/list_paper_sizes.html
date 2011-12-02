@@ -9,7 +9,7 @@ $(document).ready(function()
 		$.ajax(
 		{
 			type: "GET",
-			url: "core/modules/base/admin/admin_general.ajax.php",
+			url: "core/modules/base/ajax/admin/admin_general.ajax.php",
 			data: "session_id="+get_array['session_id']+"&run=list_paper_sizes&sortvalue="+sortvalue+"&sortmethod="+sortmethod+"&page="+page,
 			success: function(data)
 			{
@@ -49,7 +49,7 @@ $(document).ready(function()
 					$.ajax(
 					{
 						type: "POST",
-						url: "core/modules/base/admin/admin_general.ajax.php?session_id="+get_array['session_id']+"&run=add_paper_size",
+						url: "core/modules/base/ajax/admin/admin_general.ajax.php?session_id="+get_array['session_id']+"&run=add_paper_size",
 						data: "name="+name+"&width="+width+"&height="+height+"&margin_left="+margin_left+"&margin_right="+margin_right+"&margin_top="+margin_top+"&margin_bottom="+margin_bottom+"",
 						success: function(data)
 						{
@@ -66,7 +66,7 @@ $(document).ready(function()
 					$.ajax(
 					{
 						type: "POST",
-						url: "core/modules/base/admin/admin_general.ajax.php?session_id="+get_array['session_id']+"&run=set_paper_size",
+						url: "core/modules/base/ajax/admin/admin_general.ajax.php?session_id="+get_array['session_id']+"&run=set_paper_size",
 						data: "id="+$("#AddPaperSizeDialogId").html()+"&name="+name+"&width="+width+"&height="+height+"&margin_left="+margin_left+"&margin_right="+margin_right+"&margin_top="+margin_top+"&margin_bottom="+margin_bottom+"",
 						success: function(data)
 						{
@@ -119,7 +119,7 @@ $(document).ready(function()
 		$.ajax(
 		{
 			type: "GET",
-			url: "core/modules/base/admin/admin_general.ajax.php",
+			url: "core/modules/base/ajax/admin/admin_general.ajax.php",
 			data: "session_id="+get_array['session_id']+"&run=get_paper_size&id="+id,
 			success: function(data)
 			{
@@ -158,7 +158,7 @@ $(document).ready(function()
 		$.ajax(
 		{
 			type: "GET",
-			url: "core/modules/base/admin/admin_general.ajax.php",
+			url: "core/modules/base/ajax/admin/admin_general.ajax.php",
 			data: "session_id="+get_array['session_id']+"&run=delete_paper_size&id="+id,
 			success: function(data)
 			{

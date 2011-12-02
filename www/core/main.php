@@ -93,7 +93,14 @@ class Main
 				
 				try
 				{
-					$system_handler = new SystemHandler(false);
+					if ($type == "io")
+					{
+						$system_handler = new SystemHandler(true);
+					}
+					else
+					{
+						$system_handler = new SystemHandler(false);
+					}
 				}
 				catch(IncludeDataCorruptException $e)
 				{
@@ -168,24 +175,24 @@ class Main
 		}
 		
 		require_once("modules/content_handler.php");
-		require_once("modules/base/common.io.php");
-		require_once("modules/base/error.io.php");
-		require_once("modules/base/list.io.php");
+		require_once("modules/base/common/io/common.io.php");
+		require_once("modules/base/common/io/error.io.php");
+		require_once("modules/base/common/io/list.io.php");
 		
 		if ($this->type == "io")
 		{
-			require_once("modules/base/tab.io.php");
+			require_once("modules/base/common/io/tab.io.php");
 		
 			/**
 			 * @deprecated remove later
 			 */
-			require_once("modules/base/list_stat.io.php");
+			require_once("modules/base/common/io/list_stat.io.php");
 			
 			ContentHandler_IO::io();
 		}
 		elseif ($this->type == "ajax")
 		{
-			require_once("modules/base/list_request.io.php");
+			require_once("modules/base/common/io/list_request.io.php");
 			ContentHandler_IO::ajax();
 		}
 	}

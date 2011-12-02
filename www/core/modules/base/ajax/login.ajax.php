@@ -22,22 +22,60 @@
  */
 
 /**
- * 
- */
-require_once("ajax.php");
-
-/**
  * Login AJAX IO Class
  * @package base
  */
-class LoginAjax extends Ajax
+class LoginAjax
 {	
-	function __construct()
+	public static function login($username, $password, $language)
 	{
-		parent::__construct();
+		if ($username and $password)
+		{
+			$auth = new Auth();
+			
+			if ($auth->login($username, $password) == true)
+			{
+				$session_id = $auth->get_session_id();
+				$session = new Session($session_id);
+				$user = new User($session->get_user_id());
+				
+				if (is_numeric($language))
+				{
+					$session->write_value("LANGUAGE", $language);
+				}
+				else
+				{
+					$session->write_value("LANGUAGE", 1);
+				}
+								
+				if ($user->get_boolean_user_entry("user_locked") == false)
+				{
+		 			return "index.php?username=".$username."&session_id=".$session_id;	
+				}
+				else
+				{
+					return "This user is locked by administrator.";
+				}
+			}
+			else
+			{
+				return "Your username or your password are wrong.";
+			}
+		}
+		else
+		{
+			if ($username and !$password)
+			{
+				return "Your must enter a password.";
+			}
+			else
+			{
+				return "You must enter an username.";
+			}
+		}
 	}
 	
-	public function logout()
+	public static function logout()
 	{
 		global $session;
 		
@@ -45,36 +83,12 @@ class LoginAjax extends Ajax
 		
 		if ($auth->logout($session->get_user_id(),$_GET[session_id]) == true)
 		{
-			echo "1";
+			return 1;
 		}
 		else
 		{
-			echo "0";
-		}
-	}
-	
-	public function method_handler()
-	{
-		global $session;
-		
-		if ($session->is_valid())
-		{
-			switch($_GET[run]):
-	
-				case "login":
-
-				break;
-				
-				case "logout":
-					$this->logout();
-				break;
-			
-			endswitch;
+			return 0;
 		}
 	}
 }
-
-$login_ajax = new LoginAjax;
-$login_ajax->method_handler();
-
 ?>

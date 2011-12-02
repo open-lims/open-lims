@@ -250,6 +250,11 @@ padding: 2px 2px 2px 5px;
 	text-align: center;
 }
 
+#BaseLoginWindow
+{
+	font: normal 12px Arial, Helvetica, sans-serif;	
+	padding: 10px;
+}
 #BaseLogoutQuestion
 {
 	font: normal 12px Arial, Helvetica, sans-serif;	

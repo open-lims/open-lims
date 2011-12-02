@@ -196,35 +196,6 @@ class BaseIO
 		$template = new Template("template/base/license.html");
 		$template->output();
 	}
-	
-	public static function method_handler()
-	{
-		switch ($_GET[run]):
-		
-			case "myorgan":
-				require_once("core/modules/organisation_unit/organisation_unit.io.php");
-				OrganisationUnitIO::list_user_related_organisation_units();
-			break;
-			
-			case "sysmsg":
-				self::list_system_messages();
-			break;
-			
-			case "system_info":
-				self::system_info();
-			break;
-			
-			case "software_info":
-				self::software_info();
-			break;
-			
-			case "license":
-				self::license();
-			break;
-			
-		endswitch;
-	}
-	
 }
 
 ?>

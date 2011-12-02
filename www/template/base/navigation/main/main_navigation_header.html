@@ -24,8 +24,8 @@ $(document).ready(function()
 		$.ajax(
 		{
 			type: "GET",
-			url: "core/modules/base/login.ajax.php",
-			data: "session_id="+get_array['session_id']+"&run=logout",
+			url: "ajax.php",
+			data: "nav=base&run=logout&session_id="+get_array['session_id']+"",
 			success: function(data)
 			{
 				if (data == "1")

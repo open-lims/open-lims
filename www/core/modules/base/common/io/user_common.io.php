@@ -22,32 +22,22 @@
  */
 
 /**
- * Base Include Admin IO Class
+ * User IO Class
  * @package base
  */
-class AdminBaseIncludeIO
+class UserCommonIO
 {
-	public static function home()
-	{		
-		$list = new List_IO("BaseAdminIncludeHome" ,"/core/modules/base/admin/admin_base_include.ajax.php", "list_includes", "count_includes", "0", "BaseAdminIncludeAjax");
-
-		$list->add_row("Name","name",true,null);
-		$list->add_row("Folder","folder",true,null);
-		$list->add_row("Event Listeners","eventlisteners",true,null);
-		
-		$template = new Template("template/base/admin/base_include/list.html");	
-		
-		$template->set_var("list", $list->get_list());
-		
-		$template->output();
+	public static function user_select_dialog()
+	{
+		$template = new Template("template/user/user_select_dialog.html");
+		return $template->get_string();
 	}
 	
-	public static function handler()
+	public static function group_select_dialog()
 	{
-		switch($_GET[action]):		
-			default:
-				self::home();
-			break;
-		endswitch;
+		$template = new Template("template/user/group_select_dialog.html");
+		return $template->get_string();
 	}
 }
+
+?>

@@ -52,21 +52,21 @@ class UserIO
 		}
 				
 		$paramquery_personal = $_GET;
-		$paramquery_personal[run] = "change_personal";
+		$paramquery_personal[run] = "user_change_personal";
 		$param_personal = http_build_query($paramquery_personal);
 		
 		$template->set_var("params_change_personal",$param_personal);
 		
 		
 		$paramquery_my_settings = $_GET;
-		$paramquery_my_settings[run] = "change_my_settings";
+		$paramquery_my_settings[run] = "user_change_my_settings";
 		$param_my_settings = http_build_query($paramquery_my_settings);
 			
 		$template->set_var("params_my_settings",$param_my_settings);
 		
 		
 		$paramquery_password = $_GET;
-		$paramquery_password[run] = "change_password";
+		$paramquery_password[run] = "user_change_password";
 		$param_password = http_build_query($paramquery_password);
 			
 		$template->set_var("params_change_password",$param_password);
@@ -144,7 +144,7 @@ class UserIO
 		{
 			$paramquery = $_GET;
 			unset($paramquery[nextpage]);
-			unset($paramquery[run]);
+			$paramquery[run] = "user_profile";
 			$params = http_build_query($paramquery);
 			
 			Common_IO::step_proceed($params, "Change Personal Data", "Data Changed",null);
@@ -351,7 +351,7 @@ class UserIO
 		$template = new Template("template/user/user_settings.html");
 		
 		$paramquery = $_GET;
-		$paramquery[run] = "change_language";
+		$paramquery[run] = "user_change_language";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("default_language", Regional::get_language_name($user->get_language_id()));
@@ -359,7 +359,7 @@ class UserIO
 		
 		
 		$paramquery = $_GET;
-		$paramquery[run] = "change_timezone";
+		$paramquery[run] = "user_change_timezone";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("timezone", Regional::get_timezone_name($user->get_timezone_id()));
@@ -439,7 +439,7 @@ class UserIO
 		{
 			$paramquery = $_GET;
 			unset($paramquery[nextpage]);
-			unset($paramquery[run]);
+			$paramquery[run] = "user_profile";
 			$params = http_build_query($paramquery);
 			
 			Common_IO::step_proceed($params, "Change Password", "Password Changed",null);
@@ -518,7 +518,7 @@ class UserIO
 		else
 		{
 			$paramquery = $_GET;
-			$paramquery[run] = "change_my_settings";
+			$paramquery[run] = "user_change_my_settings";
 			unset($paramquery[nextpage]);
 			$params = http_build_query($paramquery,'','&#38;');
 			
@@ -585,7 +585,7 @@ class UserIO
 		else
 		{
 			$paramquery = $_GET;
-			$paramquery[run] = "change_my_settings";
+			$paramquery[run] = "user_change_my_settings";
 			unset($paramquery[nextpage]);
 			$params = http_build_query($paramquery,'','&#38;');
 			
@@ -970,51 +970,7 @@ class UserIO
 			
 		}
 	}
-	
-	public static function method_handler()
-	{
-		switch($_GET[run]):
-			case ("details"):
-				self::details();
-			break;
-			
-			case("change_personal"):
-				self::change_personal();
-			break;
-			
-			case("change_my_settings"):
-				self::change_my_settings();
-			break;
-			
-			case("change_password"):
-				self::change_password();
-			break;
-			
-			case("change_language"):
-				self::change_language();
-			break;
-			
-			case("change_timezone"):
-				self::change_timezone();
-			break;
-			
-			default:
-				self::profile();
-			break;
-		endswitch;	
-	}
-	
-	public static function user_select_dialog()
-	{
-		$template = new Template("template/user/user_select_dialog.html");
-		return $template->get_string();
-	}
-	
-	public static function group_select_dialog()
-	{
-		$template = new Template("template/user/group_select_dialog.html");
-		return $template->get_string();
-	}
+
 }
 
 ?>

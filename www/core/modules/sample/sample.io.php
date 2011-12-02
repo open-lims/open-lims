@@ -281,7 +281,7 @@ class SampleIO
 		
 		$template = new Template("template/samples/create_sample.html");	
 		
-		require_once("core/modules/base/assistant.io.php");
+		require_once("core/modules/base/common/io/assistant.io.php");
 		
 		$assistant_io = new AssistantIO("core/modules/sample/sample_create.ajax.php", "SampleCreateAssistantField", false);
 		
@@ -357,7 +357,7 @@ class SampleIO
 		
 		$template = new Template("template/samples/clone_sample.html");	
 		
-		require_once("core/modules/base/assistant.io.php");
+		require_once("core/modules/base/common/io/assistant.io.php");
 		
 		$assistant_io = new AssistantIO("core/modules/sample/sample_clone.ajax.php", "SampleCloneAssistantField", false);
 		

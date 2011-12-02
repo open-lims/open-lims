@@ -27,7 +27,7 @@ $(document).ready(function()
 		$.ajax(
 		{
 			type: "GET",
-			url: "core/modules/base/user.ajax.php",
+			url: "core/modules/base/common/ajax/user_common.ajax.php",
 			data: "session_id="+get_array['session_id']+"&run=get_users_in_option",
 			success: function(data)
 			{
@@ -46,7 +46,7 @@ $(document).ready(function()
 		$.ajax(
 		{
 			type: "GET",
-			url: "core/modules/base/user.ajax.php",
+			url: "core/modules/base/common/ajax/user_common.ajax.php",
 			data: "session_id="+get_array['session_id']+"&run=get_users_in_option&string="+$("#UserSelectDialogSearchField").val(),
 			success: function(data)
 			{

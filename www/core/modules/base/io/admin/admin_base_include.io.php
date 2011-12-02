@@ -22,36 +22,32 @@
  */
 
 /**
- * Admin IO Class
+ * Base Include Admin IO Class
  * @package base
  */
-class AdminIO
+class AdminBaseIncludeIO
 {
 	public static function home()
-	{
-		$template = new Template("template/admin/home.html");
+	{		
+		$list = new List_IO("BaseAdminIncludeHome" ,"/core/modules/base/ajax/admin/admin_base_include.ajax.php", "list_includes", "count_includes", "0", "BaseAdminIncludeAjax");
+
+		$list->add_row("Name","name",true,null);
+		$list->add_row("Folder","folder",true,null);
+		$list->add_row("Event Listeners","eventlisteners",true,null);
 		
-		$module_dialog_array = ModuleDialog::list_dialogs_by_type("admin_home_box");
+		$template = new Template("template/base/admin/base_include/list.html");	
 		
-		if (is_array($module_dialog_array) and count($module_dialog_array) >= 1)
-		{
-			$content = "";
-			
-			foreach ($module_dialog_array as $key => $value)
-			{
-				require_once($value['class_path']);
-				$content .= $value['class']::$value['method']();
-			}
-			
-			$template->set_var("content", $content);
-		}
-		else
-		{
-			$template->set_var("content", "");
-		}
+		$template->set_var("list", $list->get_list());
 		
 		$template->output();
-	}	
-}
+	}
 	
-?>
+	public static function handler()
+	{
+		switch($_GET[action]):		
+			default:
+				self::home();
+			break;
+		endswitch;
+	}
+}

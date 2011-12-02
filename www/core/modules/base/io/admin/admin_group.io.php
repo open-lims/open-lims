@@ -29,7 +29,7 @@ class AdminGroupIO
 {
 	public static function home()
 	{
-		$list = new List_IO("GroupAdministration", "/core/modules/base/admin/admin_group.ajax.php", "list_groups", "count_groups", null, "GroupAdministration");
+		$list = new List_IO("GroupAdministration", "/core/modules/base/ajax/admin/admin_group.ajax.php", "list_groups", "count_groups", null, "GroupAdministration");
 		
 		$list->add_row("","symbol",false,"16px");
 		$list->add_row("Name","name",true,null);

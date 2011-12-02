@@ -706,12 +706,12 @@ class AdminOrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
-			require_once("core/modules/base/user.io.php");
+			require_once("core/modules/base/common/io/user_common.io.php");
 			
 			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_member.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("ORGANISATION_UNIT_ID", $_GET[id]);
-			$template->set_var("ADD_DIALOG", UserIO::user_select_dialog());
+			$template->set_var("ADD_DIALOG", UserCommonIO::user_select_dialog());
 			$template->output();
 		}
 		else
@@ -729,7 +729,7 @@ class AdminOrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
-			require_once("core/modules/base/user.io.php");
+			require_once("core/modules/base/io/user.io.php");
 			
 			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_group.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
@@ -752,12 +752,12 @@ class AdminOrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
-			require_once("core/modules/base/user.io.php");
+			require_once("core/modules/base/common/io/user_common.io.php");
 			
 			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_owner.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("ORGANISATION_UNIT_ID", $_GET[id]);
-			$template->set_var("ADD_DIALOG", UserIO::user_select_dialog());
+			$template->set_var("ADD_DIALOG", UserCommonIO::user_select_dialog());
 			$template->output();
 		}
 		else
@@ -775,12 +775,12 @@ class AdminOrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
-			require_once("core/modules/base/user.io.php");
+			require_once("core/modules/base/common/io/user_common.io.php");
 			
 			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_leader.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("ORGANISATION_UNIT_ID", $_GET[id]);
-			$template->set_var("ADD_DIALOG", UserIO::user_select_dialog());
+			$template->set_var("ADD_DIALOG", UserCommonIO::user_select_dialog());
 			$template->output();
 		}
 		else
@@ -798,12 +798,12 @@ class AdminOrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
-			require_once("core/modules/base/user.io.php");
+			require_once("core/modules/base/common/io/user_common.io.php");
 			
 			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_quality_manager.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("ORGANISATION_UNIT_ID", $_GET[id]);
-			$template->set_var("ADD_DIALOG", UserIO::user_select_dialog());
+			$template->set_var("ADD_DIALOG", UserCommonIO::user_select_dialog());
 			$template->output();
 		}
 		else

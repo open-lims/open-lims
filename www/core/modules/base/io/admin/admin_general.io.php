@@ -29,7 +29,7 @@ class AdminGeneralIO
 {	
 	public static function list_languages()
 	{
-		$list = new List_IO("AdminGeneralLanguage", "/core/modules/base/admin/admin_general.ajax.php", "list_languages", "count_languages", $argument_array, "AdminGeneralLanguage");
+		$list = new List_IO("AdminGeneralLanguage", "/core/modules/base/ajax/admin/admin_general.ajax.php", "list_languages", "count_languages", $argument_array, "AdminGeneralLanguage");
 		
 		$list->add_row("","symbol",false,"16px");
 		$list->add_row("Name","language_name",true,null);
@@ -46,7 +46,7 @@ class AdminGeneralIO
 	
 	public static function list_timezones()
 	{
-		$list = new List_IO("AdminGeneralTimezone", "/core/modules/base/admin/admin_general.ajax.php", "list_timezones", "count_timezones", $argument_array, "AdminGeneralTimezone");
+		$list = new List_IO("AdminGeneralTimezone", "/core/modules/base/ajax/admin/admin_general.ajax.php", "list_timezones", "count_timezones", $argument_array, "AdminGeneralTimezone");
 		
 		$list->add_row("","symbol",false,"16px");
 		$list->add_row("Name","name",true,null);
@@ -67,7 +67,7 @@ class AdminGeneralIO
 	
 	public static function list_measuring_units()
 	{
-		$list = new List_IO("AdminGeneralMeasuringUnit", "/core/modules/base/admin/admin_general.ajax.php", "list_measuring_units", "count_measuring_units", $argument_array, "AdminGeneralMeasuringUnit");
+		$list = new List_IO("AdminGeneralMeasuringUnit", "/core/modules/base/ajax/admin/admin_general.ajax.php", "list_measuring_units", "count_measuring_units", $argument_array, "AdminGeneralMeasuringUnit");
 		
 		$list->add_row("","symbol",false,"16px");
 		$list->add_row("Name","name",true,null);
@@ -83,7 +83,7 @@ class AdminGeneralIO
 	
 	public static function list_currencies()
 	{
-		$list = new List_IO("AdminGeneralCurrency", "/core/modules/base/admin/admin_general.ajax.php", "list_currencies", "count_currencies", $argument_array, "AdminGeneralCurrency");
+		$list = new List_IO("AdminGeneralCurrency", "/core/modules/base/ajax/admin/admin_general.ajax.php", "list_currencies", "count_currencies", $argument_array, "AdminGeneralCurrency");
 		
 		$list->add_row("","symbol",false,"16px");
 		$list->add_row("Name","name",true,null);

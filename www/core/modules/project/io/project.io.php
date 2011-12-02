@@ -115,7 +115,7 @@ class ProjectIO
 	{
 		$template = new Template("template/projects/create_project.html");	
 		
-		require_once("core/modules/base/assistant.io.php");
+		require_once("core/modules/base/common/io/assistant.io.php");
 		
 		$assistant_io = new AssistantIO("core/modules/project/ajax/project_create.ajax.php", "ProjectCreateAssistantField", true);
 		
