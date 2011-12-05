@@ -47,7 +47,7 @@
 	$dialog[2][display_name]	= "Parent Sample";
 		
 	$dialog[3][type]			= "module_admin";
-	$dialog[3][class_path]		= "core/modules/sample/admin/admin_sample_template_cat.io.php";
+	$dialog[3][class_path]		= "core/modules/sample/io/admin/admin_sample_template_cat.io.php";
 	$dialog[3]['class']			= "AdminSampleTemplateCatIO";
 	$dialog[3][method]			= "handler";
 	$dialog[3][internal_name]	= "sample_template_cat";
@@ -55,7 +55,7 @@
 	$dialog[3][weight]			= 2100;
 	
 	$dialog[4][type]			= "module_admin";
-	$dialog[4][class_path]		= "core/modules/sample/admin/admin_sample_template.io.php";
+	$dialog[4][class_path]		= "core/modules/sample/io/admin/admin_sample_template.io.php";
 	$dialog[4]['class']			= "AdminSampleTemplateIO";
 	$dialog[4][method]			= "handler";
 	$dialog[4][internal_name]	= "sample_template";
