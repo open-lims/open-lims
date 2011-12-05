@@ -25,7 +25,7 @@
  * 
  */
 	$name 					= "sample";
-	$main_class				= "SampleIO";
+	$main_class				= "SampleRequest";
 	
 	$required_include[0] 	= "sample";
 	

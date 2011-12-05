@@ -588,6 +588,28 @@ class SystemHandler implements SystemHandlerInterface
 							{
 								$found_module_array[$register_key] = $value;
 								
+								$config_file_checksum = BaseModuleFile_Access::get_checksum_by_module_id_and_name($register_key, "module_info.php");
+								if ($config_file_checksum != md5_file($config_file))
+								{
+									$base_module = new BaseModule_Access($register_key);
+									if ($base_module->set_name($name) == false)
+									{
+										if ($transaction_id != null)
+										{
+											$transaction->rollback($transaction_id);
+										}
+										throw new ModuleProcessFailedException(null, null);
+									}
+									if ($base_module->set_class($main_class) == false)
+									{
+										if ($transaction_id != null)
+										{
+											$transaction->rollback($transaction_id);
+										}
+										throw new ModuleProcessFailedException(null, null);
+									}
+								}
+								
 								// Check Files
 								if ($no_dialog != true)
 								{

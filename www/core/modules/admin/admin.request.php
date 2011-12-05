@@ -33,7 +33,7 @@ class AdminRequest
 	public static function get_navigation()
 	{
 		$return_array = array();
-		$return_array['class_path'] = "core/modules/admin/navigation/admin_navigation.io.php";
+		$return_array['class_path'] = "core/modules/admin/io/navigation/admin_navigation.io.php";
 		$return_array['class'] = "AdminNavigationIO";
 		$return_array['method'] = "navigation";
 		return $return_array;
@@ -171,7 +171,7 @@ class AdminRequest
 				break;
 				
 				default:
-					require_once("admin.io.php");
+					require_once("io/admin.io.php");
 					AdminIO::home();
 				break;
 				

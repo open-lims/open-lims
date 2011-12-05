@@ -20,7 +20,7 @@ $(document).ready(function()
 			$.ajax(
 			{
 				type: "GET",
-				url: "/core/modules/sample/sample_clone.ajax.php",
+				url: "/core/modules/sample/ajax/sample_clone.ajax.php",
 				async: false,
 				data: "session_id="+get_array['session_id']+"&run=check_name&name="+$(".SampleCloneAssistantField[name='sample_name']").val(),
 				success: function(data)

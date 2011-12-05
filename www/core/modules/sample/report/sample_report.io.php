@@ -24,7 +24,7 @@
 /**
  * 
  */
-require_once("report/sample_pdf.class.php");
+require_once("sample_pdf.class.php");
 
 /**
  * Sample Report IO Class
