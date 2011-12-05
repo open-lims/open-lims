@@ -179,39 +179,7 @@ class AdminRequest
 		}
 		else
 		{
-			/**
-			 * @todo remove
-			 */
-			if ($_GET[run] == "organisation_unit" and 
-				is_numeric($_GET[id]))
-			{
-				$organisation_unit = new OrganisationUnit($_GET[id]);
-				
-				if ($organisation_unit->is_owner_in_organisation_unit($user->get_user_id()) == true)
-				{
-					if ($_GET[action] == "detail" or 
-						$_GET[action] == "add_user" or 
-						$_GET[action] == "delete_user" or
-						$_GET[action] == "add_group" or
-						$_GET[action] == "delete_group")
-					{
-						require_once("admin_organisation_unit.io.php");
-						AdminOrganisationUnitIO::handler();
-					}
-					else
-					{
-						throw new Exception();
-					}
-				}
-				else
-				{
-					throw new Exception();
-				}	
-			}
-			else
-			{
-				throw new Exception();
-			}
+			// Error
 		}
 		
 	}

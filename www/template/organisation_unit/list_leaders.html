@@ -8,7 +8,7 @@ $(document).ready(function()
 		$.ajax(
 		{
 			type: "GET",
-			url: "core/modules/organisation_unit/organisation_unit.ajax.php",
+			url: "core/modules/organisation_unit/ajax/organisation_unit.ajax.php",
 			data: "session_id="+get_array['session_id']+"&run=list_leaders&organisation_unit_id=[[ORGANISATION_UNIT_ID]]&sortvalue="+sortvalue+"&sortmethod="+sortmethod+"&page="+page,
 			success: function(data)
 			{

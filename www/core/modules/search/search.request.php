@@ -22,47 +22,17 @@
  */
 
 /**
- * Search IO Class
+ * Search Request Class
  * @package search
  */
-class SearchIO
+class SearchRequest
 {
-	private static function main()
+	public static function ajax_handler()
 	{
-		$template = new Template("template/search/main.html");
 		
-		$module_dialog_array = ModuleDialog::list_dialogs_by_type("search");
-		
-		if (is_array($module_dialog_array) and count($module_dialog_array) >= 1)
-		{
-			$counter = 0;
-			$search_array = array();
-			
-			foreach ($module_dialog_array as $key => $value)
-			{
-				require_once($value[class_path]);
-				
-				$paramquery[username] 	= $_GET[username];
-				$paramquery[session_id] = $_GET[session_id];
-				$paramquery[nav]		= "search";
-				$paramquery[run]		= "search";
-				$paramquery[dialog]		= $value[internal_name];
-				$params 				= http_build_query($paramquery,'','&#38;');
-				
-				$search_array[$counter][params] = $params;
-				$search_array[$counter][title] = $value[display_name];
-				$search_array[$counter][icon] = $value['class']::get_icon();
-				$search_array[$counter][description] = $value['class']::get_description(null);
-				$counter++;
-			}
-			
-			$template->set_var("search_array", $search_array);
-		}
-
-		$template->output();		
 	}
-		
-	public static function method_handler()
+	
+	public static function io_handler()
 	{	
 		switch($_GET[run]):
 			
@@ -133,10 +103,10 @@ class SearchIO
 			break;
 						
 			default:
-				self::main();
+				require_once("io/search.io.php");
+				SearchIO::main();
 			break;
 		endswitch;
 	}
-	
 }
 ?>

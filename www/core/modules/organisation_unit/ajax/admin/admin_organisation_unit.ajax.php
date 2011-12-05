@@ -24,13 +24,14 @@
 /**
  * 
  */
-require_once("../base/ajax.php");
+$GLOBALS['autoload_prefix'] = "../../";
+require_once("../../../base/ajax.php");
 
 /**
  * Organisation Unit AJAX IO Class
  * @package organisation_unit
  */
-class OrganisationUnitAjax extends Ajax
+class AdminOrganisationUnitAjax extends Ajax
 {	
 	function __construct()
 	{
@@ -49,11 +50,12 @@ class OrganisationUnitAjax extends Ajax
 		{
 			global $user;
 			
-			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_members($organisation_unit_id), 20, "OrganisationUnitListPage");
+			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_members($organisation_unit_id), 20, "OrganisationUnitAdminListPage");
 	
 			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Username","username",true,null,"OrganisationUnitListSortUsername");
-			$list->add_row("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
+			$list->add_row("Username","username",true,null,"OrganisationUnitAdminListSortUsername");
+			$list->add_row("Fullname","fullname",true,null,"OrganisationUnitAdminListSortFullname");
+			$list->add_row("","delete",false,"16px");
 			
 			if ($page)
 			{
@@ -86,6 +88,7 @@ class OrganisationUnitAjax extends Ajax
 					$result_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
 					$result_array[$key]['username'] = $user->get_username();
 					$result_array[$key]['fullname'] = $user->get_full_name(false);
+					$result_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$result_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
 				}
 			}
 			else
@@ -99,6 +102,54 @@ class OrganisationUnitAjax extends Ajax
 		
 	/**
 	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 */
+	public function delete_member($organisation_unit_id, $user_id)
+	{
+		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
+		{
+			$organisation_unit = new OrganisationUnit($organisation_unit_id);
+			if ($organisation_unit->delete_user_from_organisation_unit($user_id) == true)
+			{
+				echo "1";
+			}
+			else
+			{
+				echo "0";
+			}
+		}
+		else
+		{
+			echo "0";
+		}
+	}
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 */
+	public function add_member($organisation_unit_id, $user_id)
+	{
+		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
+		{
+			$organisation_unit = new OrganisationUnit($organisation_unit_id);
+			if ($organisation_unit->create_user_in_organisation_unit($user_id) == true)
+			{
+				echo "1";
+			}
+			else
+			{
+				echo "0";
+			}
+		}
+		else
+		{
+			echo "0";
+		}
+	}
+	
+	/**
+	 * @param integer $organisation_unit_id
 	 * @param integer $page
 	 * @param string $sortvalue
 	 * @param string $sortmethod
@@ -109,11 +160,12 @@ class OrganisationUnitAjax extends Ajax
 		{
 			global $user;
 			
-			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_owners($organisation_unit_id), 20, "OrganisationUnitListPage");
+			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_owners($organisation_unit_id), 20, "OrganisationUnitAdminListPage");
 	
 			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Username","username",true,null,"OrganisationUnitListSortUsername");
-			$list->add_row("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
+			$list->add_row("Username","username",true,null,"OrganisationUnitAdminListSortUsername");
+			$list->add_row("Fullname","fullname",true,null,"OrganisationUnitAdminListSortFullname");
+			$list->add_row("","delete",false,"16px");
 			
 			if ($page)
 			{
@@ -146,6 +198,7 @@ class OrganisationUnitAjax extends Ajax
 					$result_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
 					$result_array[$key]['username'] = $user->get_username();
 					$result_array[$key]['fullname'] = $user->get_full_name(false);
+					$result_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$result_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
 				}
 			}
 			else
@@ -154,6 +207,54 @@ class OrganisationUnitAjax extends Ajax
 			}
 			
 			echo $list->get_list($result_array, $page);
+		}
+	}
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 */
+	public function delete_owner($organisation_unit_id, $user_id)
+	{
+		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
+		{
+			$organisation_unit = new OrganisationUnit($organisation_unit_id);
+			if ($organisation_unit->delete_owner_from_organisation_unit($user_id) == true)
+			{
+				echo "1";
+			}
+			else
+			{
+				echo "0";
+			}
+		}
+		else
+		{
+			echo "0";
+		}
+	}
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 */
+	public function add_owner($organisation_unit_id, $user_id)
+	{
+		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
+		{
+			$organisation_unit = new OrganisationUnit($organisation_unit_id);
+			if ($organisation_unit->create_owner_in_organisation_unit($user_id) == true)
+			{
+				echo "1";
+			}
+			else
+			{
+				echo "0";
+			}
+		}
+		else
+		{
+			echo "0";
 		}
 	}
 	
@@ -169,11 +270,12 @@ class OrganisationUnitAjax extends Ajax
 		{
 			global $user;
 			
-			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_leaders($organisation_unit_id), 20, "OrganisationUnitListPage");
+			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_leaders($organisation_unit_id), 20, "OrganisationUnitAdminListPage");
 	
 			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Username","username",true,null,"OrganisationUnitListSortUsername");
-			$list->add_row("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
+			$list->add_row("Username","username",true,null,"OrganisationUnitAdminListSortUsername");
+			$list->add_row("Fullname","fullname",true,null,"OrganisationUnitAdminListSortFullname");
+			$list->add_row("","delete",false,"16px");
 			
 			if ($page)
 			{
@@ -206,6 +308,7 @@ class OrganisationUnitAjax extends Ajax
 					$result_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
 					$result_array[$key]['username'] = $user->get_username();
 					$result_array[$key]['fullname'] = $user->get_full_name(false);
+					$result_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$result_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
 				}
 			}
 			else
@@ -214,6 +317,54 @@ class OrganisationUnitAjax extends Ajax
 			}
 			
 			echo $list->get_list($result_array, $page);
+		}
+	}
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 */
+	public function delete_leader($organisation_unit_id, $user_id)
+	{
+		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
+		{
+			$organisation_unit = new OrganisationUnit($organisation_unit_id);
+			if ($organisation_unit->delete_leader_from_organisation_unit($user_id) == true)
+			{
+				echo "1";
+			}
+			else
+			{
+				echo "0";
+			}
+		}
+		else
+		{
+			echo "0";
+		}
+	}
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 */
+	public function add_leader($organisation_unit_id, $user_id)
+	{
+		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
+		{
+			$organisation_unit = new OrganisationUnit($organisation_unit_id);
+			if ($organisation_unit->create_leader_in_organisation_unit($user_id) == true)
+			{
+				echo "1";
+			}
+			else
+			{
+				echo "0";
+			}
+		}
+		else
+		{
+			echo "0";
 		}
 	}
 	
@@ -229,11 +380,12 @@ class OrganisationUnitAjax extends Ajax
 		{
 			global $user;
 			
-			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_quality_managers($organisation_unit_id), 20, "OrganisationUnitListPage");
+			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_quality_managers($organisation_unit_id), 20, "OrganisationUnitAdminListPage");
 	
 			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Username","username",true,null,"OrganisationUnitListSortUsername");
-			$list->add_row("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
+			$list->add_row("Username","username",true,null,"OrganisationUnitAdminListSortUsername");
+			$list->add_row("Fullname","fullname",true,null,"OrganisationUnitAdminListSortFullname");
+			$list->add_row("","delete",false,"16px");
 			
 			if ($page)
 			{
@@ -266,6 +418,7 @@ class OrganisationUnitAjax extends Ajax
 					$result_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
 					$result_array[$key]['username'] = $user->get_username();
 					$result_array[$key]['fullname'] = $user->get_full_name(false);
+					$result_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$result_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
 				}
 			}
 			else
@@ -274,6 +427,54 @@ class OrganisationUnitAjax extends Ajax
 			}
 			
 			echo $list->get_list($result_array, $page);
+		}
+	}
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 */
+	public function delete_quality_manager($organisation_unit_id, $user_id)
+	{
+		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
+		{
+			$organisation_unit = new OrganisationUnit($organisation_unit_id);
+			if ($organisation_unit->delete_quality_manager_from_organisation_unit($user_id) == true)
+			{
+				echo "1";
+			}
+			else
+			{
+				echo "0";
+			}
+		}
+		else
+		{
+			echo "0";
+		}
+	}
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 */
+	public function add_quality_manager($organisation_unit_id, $user_id)
+	{
+		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
+		{
+			$organisation_unit = new OrganisationUnit($organisation_unit_id);
+			if ($organisation_unit->create_quality_manager_in_organisation_unit($user_id) == true)
+			{
+				echo "1";
+			}
+			else
+			{
+				echo "0";
+			}
+		}
+		else
+		{
+			echo "0";
 		}
 	}
 	
@@ -289,10 +490,11 @@ class OrganisationUnitAjax extends Ajax
 		{
 			global $user;
 			
-			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_groups($organisation_unit_id), 20, "OrganisationUnitListPage");
+			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_groups($organisation_unit_id), 20, "OrganisationUnitAdminListPage");
 	
 			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Groupname","groupname",true,null,"OrganisationUnitListSortGroupname");
+			$list->add_row("Groupname","groupname",true,null,"OrganisationUnitAdminListSortGroupname");
+			$list->add_row("","delete",false,"16px");
 			
 			if ($page)
 			{
@@ -324,6 +526,7 @@ class OrganisationUnitAjax extends Ajax
 					$group = new Group($value['id']);
 					$result_array[$key]['symbol'] = "<img src='images/icons/groups.png' alt='' />";
 					$result_array[$key]['groupname'] = $group->get_name();
+					$result_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$result_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
 				}
 			}
 			else
@@ -335,133 +538,51 @@ class OrganisationUnitAjax extends Ajax
 		}
 	}
 	
-	public function list_organisation_units_by_user_id($json_row_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $group_id
+	 */
+	public function delete_group($organisation_unit_id, $group_id)
 	{
-		if ($get_array)
+		if (is_numeric($organisation_unit_id) and is_numeric($group_id))
 		{
-			$_GET = unserialize($get_array);	
-		}	
-		
-		$argument_array = json_decode($json_argument_array);
-		
-		$user_id = $argument_array[0][1];
-		
-		if (is_numeric($user_id))
-		{
-			$list_request = new ListRequest_IO();
-			$list_request->set_row_array($json_row_array);
-		
-			if (!is_numeric($entries_per_page) or $entries_per_page < 1)
+			$organisation_unit = new OrganisationUnit($organisation_unit_id);
+			if ($organisation_unit->delete_group_from_organisation_unit($group_id) == true)
 			{
-				$entries_per_page = 20;
-			}
-			
-			$list_array = OrganisationUnit_Wrapper::list_organisation_units_by_user_id($user_id, $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
-
-			if (is_array($list_array) and count($list_array) >= 1)
-			{
-				$module_link_array = ModuleLink::list_links_by_type("ou_navigation");
-				
-				foreach($list_array as $key => $value)
-				{	
-					$paramquery['username'] = $_GET['username'];
-					$paramquery['session_id'] = $_GET['session_id'];
-					
-					if (is_array($module_link_array[0]['array']) and count($module_link_array[0]['array']) >= 1)
-					{
-						foreach ($module_link_array[0]['array'] as $array_key => $array_value)
-						{
-							if ($array_value == "%OU_ID%")
-							{
-								$paramquery['ou_id'] = $list_array[$key][id];
-							}
-							else
-							{
-								$paramquery[$array_key] = $array_value;
-							}
-						}
-					}
-					
-					$params = http_build_query($paramquery, '', '&#38;');
-					
-					$tmp_symbol = $list_array[$key][symbol];
-					unset($list_array[$key][symbol]);
-					$list_array[$key][symbol][link] = $params;
-					$list_array[$key][symbol][content] = "<img src='images/icons/".$tmp_symbol."' alt='N' border='0' />";
-					
-					$tmp_name = $list_array[$key][name];
-					unset($list_array[$key][name]);
-					$list_array[$key][name][link] = $params;
-					$list_array[$key][name][content] = $tmp_name;
-					
-					if ($list_array[$key][is_member])
-					{
-						$my_status_string = "Member";
-					}
-					
-					if ($list_array[$key][is_owner])
-					{
-						if ($my_status_string)
-						{
-							$my_status_string .= ", Owner";
-						}
-						else
-						{
-							$my_status_string = "Owner";
-						}
-					}
-					
-					if ($list_array[$key][is_leader])
-					{
-						if ($my_status_string)
-						{
-							$my_status_string .= ", Leader";
-						}
-						else
-						{
-							$my_status_string = "Leader";
-						}
-					}
-					
-					if ($list_array[$key][is_quality_manager])
-					{
-						if ($my_status_string)
-						{
-							$my_status_string .= ", Quality Manager";
-						}
-						else
-						{
-							$my_status_string = "Quality Manager";
-						}
-					}
-					
-					$list_array[$key][mystatus] = $my_status_string;
-				}
+				echo "1";
 			}
 			else
 			{
-				$list_request->empty_message("<span class='italic'>No Organisation Unit found!</span>");
+				echo "0";
 			}
-
-			$list_request->set_array($list_array);
-			
-			return $list_request->get_page($page);
-		}
-	}
-	
-	public function count_organisation_units_by_user_id($json_argument_array)
-	{
-		$argument_array = json_decode($json_argument_array);
-		
-		$user_id = $argument_array[0][1];
-		
-		if (is_numeric($user_id))
-		{
-			return OrganisationUnit_Wrapper::count_organisation_units_by_user_id($user_id);
 		}
 		else
 		{
-			return null;
+			echo "0";
+		}
+	}
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $group_id
+	 */
+	public function add_group($organisation_unit_id, $group_id)
+	{
+		if (is_numeric($organisation_unit_id) and is_numeric($group_id))
+		{
+			$organisation_unit = new OrganisationUnit($organisation_unit_id);
+			if ($organisation_unit->create_group_in_organisation_unit($group_id) == true)
+			{
+				echo "1";
+			}
+			else
+			{
+				echo "0";
+			}
+		}
+		else
+		{
+			echo "0";
 		}
 	}
 	
@@ -477,28 +598,60 @@ class OrganisationUnitAjax extends Ajax
 					$this->list_members($_GET[organisation_unit_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
+				case "delete_member":
+					$this->delete_member($_GET[organisation_unit_id], $_GET[user_id]);
+				break;
+				
+				case "add_member":
+					$this->add_member($_GET[organisation_unit_id], $_GET[user_id]);
+				break;
+				
 				case "list_owners":
 					$this->list_owners($_GET[organisation_unit_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				break;
+
+				case "delete_owner":
+					$this->delete_owner($_GET[organisation_unit_id], $_GET[user_id]);
+				break;
+				
+				case "add_owner":
+					$this->add_owner($_GET[organisation_unit_id], $_GET[user_id]);
 				break;
 				
 				case "list_leaders":
 					$this->list_leaders($_GET[organisation_unit_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
+				case "delete_leader":
+					$this->delete_leader($_GET[organisation_unit_id], $_GET[user_id]);
+				break;
+				
+				case "add_leader":
+					$this->add_leader($_GET[organisation_unit_id], $_GET[user_id]);
+				break;
+				
 				case "list_quality_managers":
 					$this->list_quality_managers($_GET[organisation_unit_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
-
+				
+				case "delete_quality_manager":
+					$this->delete_quality_manager($_GET[organisation_unit_id], $_GET[user_id]);
+				break;
+				
+				case "add_quality_manager":
+					$this->add_quality_manager($_GET[organisation_unit_id], $_GET[user_id]);
+				break;
+				
 				case "list_groups":
 					$this->list_groups($_GET[organisation_unit_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
-				case "list_organisation_units_by_user_id":
-					echo $this->list_organisation_units_by_user_id($_POST[row_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				case "delete_group":
+					$this->delete_group($_GET[organisation_unit_id], $_GET[group_id]);
 				break;
 				
-				case "count_organisation_units_by_user_id":
-					echo $this->count_organisation_units_by_user_id($_POST[argument_array]);
+				case "add_group":
+					$this->add_group($_GET[organisation_unit_id], $_GET[group_id]);
 				break;
 				
 				default:
@@ -509,7 +662,7 @@ class OrganisationUnitAjax extends Ajax
 	}
 }
 
-$organisation_unit_ajax = new OrganisationUnitAjax;
-$organisation_unit_ajax->method_handler();
+$admin_organisation_unit_ajax = new AdminOrganisationUnitAjax;
+$admin_organisation_unit_ajax->method_handler();
 
 ?>

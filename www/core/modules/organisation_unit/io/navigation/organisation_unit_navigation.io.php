@@ -1,9 +1,10 @@
 <?php 
 /**
- * @package organisation_unit
+ * @package organisation unit
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2011 by Roman Konertz
+ * @author Roman Quiring <quiring@open-lims.org>
+ * @copyright (c) 2008-2011 by Roman Konertz, Roman Quiring
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -22,12 +23,34 @@
  */
 
 /**
- * 
+ * Organisation Unit Navigation IO Class
+ * @package organisation unit
  */
-	$name 					= "organisation_unit";
-	$main_class				= "OrganisationUnitRequest";
+class OrganisationUnitNavigationIO
+{	
+	/**
+	 * @return bool
+	 */
+	public static function get_active() 
+	{
+		return true;
+	}
 	
-	$required_include[0] 	= "organisation_unit";
+	/**
+	 * @return string
+	 */
+	public static function get_icon()
+	{
+		return "images/icons/organisation_unit.png";
+	}
 	
-	$no_tab					= true;
+	/**
+	 * @return string
+	 */
+	public static function get_ajax_url()
+	{
+		return "core/modules/organisation_unit/ajax/navigation/organisation_unit_navigation.ajax.php";
+	}
+}
+
 ?>

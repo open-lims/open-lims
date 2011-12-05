@@ -47,15 +47,7 @@ class BaseRequest
 	public static function io_handler()
 	{
 		switch ($_GET[run]):
-		
-			/**
-			 * @todo IMPORTANT: remove
-			 */
-			case "myorgan":
-				require_once("core/modules/organisation_unit/organisation_unit.io.php");
-				OrganisationUnitIO::list_user_related_organisation_units();
-			break;
-			
+					
 			// BASE
 			case "sysmsg":
 				require_once("io/base.io.php");
@@ -75,6 +67,35 @@ class BaseRequest
 			case "license":
 				require_once("io/base.io.php");
 				BaseIO::license();
+			break;
+			
+			case "base_user_lists";
+				if ($_GET[dialog])
+				{
+					$module_dialog = ModuleDialog::get_by_type_and_internal_name("base_user_lists", $_GET[dialog]);
+					
+					if (file_exists($module_dialog[class_path]))
+					{
+						require_once($module_dialog[class_path]);
+						
+						if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+						{
+							$module_dialog['class']::$module_dialog[method]();
+						}
+						else
+						{
+							// Error
+						}
+					}
+					else
+					{
+						// Error
+					}
+				}
+				else
+				{
+					// error
+				}
 			break;
 			
 			

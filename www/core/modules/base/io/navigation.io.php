@@ -220,18 +220,29 @@ class Navigation_IO
 			$sub_menu[1][params] = $system_messages_params;
 			$sub_menu[1][title] = "System Messages";
 			
-			// DIALOG !!!
+			// Dialogs
 			
-			$my_organisation_units_paramquery[username] = $_GET[username];
-			$my_organisation_units_paramquery[session_id] = $_GET[session_id];
-			$my_organisation_units_paramquery[nav] = "base";
-			$my_organisation_units_paramquery[run] = "myorgan";
-			$my_organisation_units_params = http_build_query($my_organisation_units_paramquery,'','&#38;');
+			$module_dialog_array = ModuleDialog::list_dialogs_by_type("base_user_lists");
 			
-			$sub_menu[2][params] = $my_organisation_units_params;
-			$sub_menu[2][title] = "My Organisation Units";
-			
-			
+			if (is_array($module_dialog_array) and count($module_dialog_array) >= 1)
+			{
+				foreach ($module_dialog_array as $key => $value)
+				{
+					$paramquery[username] 	= $_GET[username];
+					$paramquery[session_id] = $_GET[session_id];
+					$paramquery[nav]		= "base";
+					$paramquery[run]		= "base_user_lists";
+					$paramquery[dialog]		= $value[internal_name];
+					$params 				= http_build_query($paramquery,'','&#38;');
+					
+					$temp_array = array();
+					$temp_array[params] = $params;
+					$temp_array[title] = $value[display_name];
+					array_push($sub_menu, $temp_array);
+					unset($temp_array);
+				}
+			}
+
 			
 			$template->set_var("sub_menu", $sub_menu);
 			$template->set_var("search_bar", false);

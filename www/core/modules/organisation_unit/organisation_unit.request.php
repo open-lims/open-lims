@@ -1,10 +1,9 @@
-<?php 
+<?php
 /**
- * @package organisation unit
+ * @package organisation_unit
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @author Roman Quiring <quiring@open-lims.org>
- * @copyright (c) 2008-2011 by Roman Konertz, Roman Quiring
+ * @copyright (c) 2008-2011 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -23,34 +22,19 @@
  */
 
 /**
- * Organisation Unit Navigation IO Class
- * @package organisation unit
+ * Organisation Unit Request Class
+ * @package organisation_unit
  */
-class OrganisationUnitNavigationIO
+class OrganisationUnitRequest
 {	
-	/**
-	 * @return bool
-	 */
-	public static function get_active() 
+	public static function ajax_handler()
 	{
-		return true;
+		
 	}
 	
-	/**
-	 * @return string
-	 */
-	public static function get_icon()
+	public static function io_handler()
 	{
-		return "images/icons/organisation_unit.png";
-	}
-	
-	/**
-	 * @return string
-	 */
-	public static function get_ajax_url()
-	{
-		return "core/modules/organisation_unit/navigation/organisation_unit_navigation.ajax.php";
+		
 	}
 }
-
 ?>

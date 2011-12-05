@@ -74,7 +74,7 @@ class SampleIO
 				$list->add_row("Curr. Loc.","location",true,null);
 				$list->add_row("AV","av",false,"16px");
 							
-				require_once("core/modules/organisation_unit/organisation_unit.io.php");
+				require_once("core/modules/organisation_unit/io/organisation_unit.io.php");
 				$organisation_unit_io = new OrganisationUnitIO;
 				$organisation_unit_io->detail();
 				

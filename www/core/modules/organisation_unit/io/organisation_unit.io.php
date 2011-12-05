@@ -409,7 +409,7 @@ class OrganisationUnitIO
 		$argument_array[0][0] = "user_id";
 		$argument_array[0][1] = $user->get_user_id();;
 		
-		$list = new List_IO("OrganisationUnitUserHasOUList", "/core/modules/organisation_unit/organisation_unit.ajax.php", "list_organisation_units_by_user_id", "count_organisation_units_by_user_id", $argument_array, "OrganisationUnitUserHasOU");
+		$list = new List_IO("OrganisationUnitUserHasOUList", "/core/modules/organisation_unit/ajax/organisation_unit.ajax.php", "list_organisation_units_by_user_id", "count_organisation_units_by_user_id", $argument_array, "OrganisationUnitUserHasOU");
 		
 		$list->add_row("","symbol",false,"16px");
 		$list->add_row("Name","name",true,null);

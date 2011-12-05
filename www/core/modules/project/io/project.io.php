@@ -90,7 +90,7 @@ class ProjectIO
 				$list->add_row("Template","template",true,null);
 				$list->add_row("Status","status",true,null);
 			
-				require_once("core/modules/organisation_unit/organisation_unit.io.php");
+				require_once("core/modules/organisation_unit/io/organisation_unit.io.php");
 				$organisation_unit_io = new OrganisationUnitIO;
 				$organisation_unit_io->detail();
 				

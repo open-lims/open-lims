@@ -25,8 +25,8 @@
 /**
  * 
  */
-$GLOBALS['autoload_prefix'] = "../";
-require_once("../../base/ajax.php");
+$GLOBALS['autoload_prefix'] = "../../";
+require_once("../../../base/ajax.php");
 
 /**
  * Organiser AJAX IO Class
@@ -46,7 +46,7 @@ class OrganisationUnitAjax extends Ajax
 	
 	private function get_html()
 	{
-		$template = new Template("../../../../template/organisation_unit/navigation/left.html");
+		$template = new Template("../../../../../template/organisation_unit/navigation/left.html");
 		
 		$template->output();
 	}
