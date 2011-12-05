@@ -34,6 +34,7 @@
 	require_once("core/include/base/system/events/event.class.php");
 	require_once("core/include/base/system/system_handler.class.php");
 	
+	require_once("core/include/base/security/security.class.php");
 	require_once("core/include/base/security/session.class.php");
 
 	require_once("core/include/base/system/autoload.function.php");	
@@ -44,8 +45,12 @@
 	
 	if ($_GET[session_id])
 	{
+		global $db;
+		
 		$db = new Database(constant("DB_TYPE"));
 		$db->db_connect(constant("DB_SERVER"),constant("DB_PORT"),constant("DB_USER"),constant("DB_PASSWORD"),constant("DB_DATABASE"));
+		
+		Security::protect_session();
 		
 		$transaction = new Transaction();
 		
