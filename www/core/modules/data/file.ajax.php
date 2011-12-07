@@ -49,7 +49,7 @@ class FileAjax extends Ajax
 		$handling_class = Item::get_holder_handling_class_by_name($argument_array[0][1]);
 		if ($handling_class)
 		{
-			$sql = $handling_class::get_item_list_sql($argument_array[1][1]);
+			$sql = $handling_class.get_item_list_sql($argument_array[1][1]);
 		}
 		
 		if ($sql)
@@ -127,7 +127,7 @@ class FileAjax extends Ajax
 		$handling_class = Item::get_holder_handling_class_by_name($argument_array[0][1]);
 		if ($handling_class)
 		{
-			$sql = $handling_class::get_item_list_sql($argument_array[1][1]);
+			$sql = $handling_class.get_item_list_sql($argument_array[1][1]);
 		}
 		
 		if ($sql)
@@ -254,7 +254,21 @@ class FileAjax extends Ajax
 		$template->set_var("params", $params);
 		$template->set_var("unique_id", $unique_id);
 		$template->set_var("session_id", $_GET[session_id]);
-		$button_handler = "uploader.start_upload();"; //"close_ui_window_and_reload();";
+		$button_handler = "
+			uploader.start_upload();
+			function check_if_uploader_finished()
+			{
+				if(uploader.is_finished() == true)
+				{
+					close_ui_window_and_reload();
+				}
+				else
+				{
+					setTimeout(check_if_uploader_finished , 200);
+				}
+			}
+			check_if_uploader_finished();
+			";
 		$button_handler_caption = "Add";
 		$html_caption = "Add File";
 		$html = $template->get_string();
