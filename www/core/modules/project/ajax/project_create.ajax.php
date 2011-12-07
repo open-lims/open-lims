@@ -45,12 +45,12 @@ class ProjectCreateAjax extends Ajax
 		switch ($page):
 
 			case "0":						
-				$template = new Template("../../../template/projects/new_project_page_0.html");	
+				$template = new Template("../../../../template/projects/new_project_page_0.html");	
 				return $template->get_string();
 			break;
 		
 			case "1":
-				$template = new Template("../../../template/projects/new_project_page_1.html");	
+				$template = new Template("../../../../template/projects/new_project_page_1.html");	
 				
 				if ($session->read_value("PROJECT_TYPE") == 1 or $session->read_value("PROJECT_TYPE") == 2)
 				{
@@ -158,7 +158,7 @@ class ProjectCreateAjax extends Ajax
 				$project_name = $session->read_value("PROJECT_NAME");
 				$project_desc = $session->read_value("PROJECT_DESCRIPTION");
 				
-				$template = new Template("../../../template/projects/new_project_page_2.html");	
+				$template = new Template("../../../../template/projects/new_project_page_2.html");	
 			
 				if ($project_name)
 				{
@@ -184,7 +184,7 @@ class ProjectCreateAjax extends Ajax
 			case "3":
 				$project_template = $session->read_value("PROJECT_TEMPLATE");
 				
-				$template = new Template("../../../template/projects/new_project_page_3.html");	
+				$template = new Template("../../../../template/projects/new_project_page_3.html");	
 			
 				$result = array();
 				$counter = 0;
@@ -301,9 +301,9 @@ class ProjectCreateAjax extends Ajax
 					
 					if ($is_value == true)
 					{
-						$template = new Template("../../../template/projects/new_project_page_4_value.html");
+						$template = new Template("../../../../template/projects/new_project_page_4_value.html");
 						
-						require_once("../../../core/modules/data/value_form.io.php");
+						require_once("../../../../core/modules/data/value_form.io.php");
 						$value_form_io = new ValueFormIO(null, $value_type_id, null, $project_template_data_array);
 						$value_form_io->set_field_class("ProjectCreateAssistantField");
 						$template->set_var("content",$value_form_io->get_content());
@@ -313,19 +313,19 @@ class ProjectCreateAjax extends Ajax
 					}
 					else
 					{
-						$template = new Template("../../../template/projects/new_project_page_4_error.html");
+						$template = new Template("../../../../template/projects/new_project_page_4_error.html");
 						return $template->get_string();
 					}
 				}
 				else
 				{
-					$template = new Template("../../../template/projects/new_project_page_4_error.html");
+					$template = new Template("../../../../template/projects/new_project_page_4_error.html");
 					return $template->get_string();
 				}			
 			break;
 			
 			case "5":
-				$template = new Template("../../../template/projects/new_project_page_5.html");	
+				$template = new Template("../../../../template/projects/new_project_page_5.html");	
 				
 				$project_template = new ProjectTemplate($session->read_value("PROJECT_TEMPLATE"));
 				

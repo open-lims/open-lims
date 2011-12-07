@@ -89,7 +89,7 @@ class ProjectRequest
 		switch($_GET[run]):
 		
 			case ("new"):
-				require_once("project.io.php");
+				require_once("io/project.io.php");
 				ProjectIO::create();
 			break;
 			

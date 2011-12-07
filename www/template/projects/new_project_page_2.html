@@ -16,7 +16,7 @@ $(document).ready(function()
 				$.ajax(
 				{
 					type: "GET",
-					url: "/core/modules/project/project_create.ajax.php",
+					url: "/core/modules/project/ajax/project_create.ajax.php",
 					async: false,
 					data: "session_id="+get_array['session_id']+"&run=check_data&name="+$(".ProjectCreateAssistantField[name='project_name']").val(),
 					success: function(data)
@@ -41,7 +41,7 @@ $(document).ready(function()
 				$.ajax(
 				{
 					type: "GET",
-					url: "/core/modules/project/project_create.ajax.php",
+					url: "/core/modules/project/ajax/project_create.ajax.php",
 					async: false,
 					data: "session_id="+get_array['session_id']+"&run=check_data&name="+$(".ProjectCreateAssistantField[name='project_name']").val(),
 					success: function(data)

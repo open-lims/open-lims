@@ -40,6 +40,8 @@ class ProjectAdminAjax extends Ajax
 	
 	private function list_project_permissions($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
+		global $user;
+		
 		$argument_array = json_decode($json_argument_array);
 		
 		$project_id = $argument_array[0][1];
@@ -58,6 +60,7 @@ class ProjectAdminAjax extends Ajax
 
 			if (is_array($list_array) and count($list_array) >= 1)
 			{
+				$project = new Project($project_id);
 				$project_security = new ProjectSecurity($project_id);
 				
 				foreach($list_array as $key => $value)
