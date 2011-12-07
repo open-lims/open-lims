@@ -53,10 +53,12 @@ class ExceptionHandler  // implements ExceptionHandlerInterface
 	 */
 	function __construct($exception)
 	{
-		global $db, $session;
+		global $db, $transaction, $session;
 		
 		if (is_object($exception))
 		{
+			$transaction->force_rollback(false);
+			
 			if ($exception instanceof BaseException)
 			{
 				$error_id = uniqid();
@@ -140,8 +142,8 @@ class ExceptionHandler  // implements ExceptionHandlerInterface
 		
 		$trace_as_string = $exception->getTraceAsString();
 		$trace_as_string = str_replace('\\','\\\\',$trace_as_string);
-		$trace_as_string = str_replace('\'','\\\'',$trace_as_string);
-				
+		$trace_as_string = str_replace('\'','\"',$trace_as_string);
+		
 		$system_log = new SystemLog(null);
    		$system_log->create($user_id,2,1,$exception->getMessage(),$exception->getCode(),$file,$exception->getLine(),null);
    		$system_log->set_stack_trace($trace_as_string);

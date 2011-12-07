@@ -54,6 +54,8 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	
 	private $fulfilled_datetime_array;
 
+	private static $project_delete_array = array();
+	
 	/**
 	 * @see ProjectInterface::__construct()
 	 * @param integer $project_id
@@ -70,7 +72,10 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 			}
 			else
 			{
-				throw new ProjectNotFoundException();
+				if (in_array($project_id, self::$project_delete_array) == false)
+				{
+					throw new ProjectNotFoundException();
+				}
 			}
 		}
 		else
@@ -536,6 +541,8 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     	if ($this->project_id)
     	{
     		$transaction_id = $transaction->begin();
+
+    		array_push(self::$project_delete_array, $this->project_id);
     		
     		if ($this->exist_subproject() == true)
     		{

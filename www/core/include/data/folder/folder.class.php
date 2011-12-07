@@ -376,7 +376,6 @@ class Folder extends DataEntity implements FolderInterface
 					}
 				}
 			
-				
 				$data_entity_array = $this->get_children();
 				
 				if (is_array($data_entity_array) and count($data_entity_array) >= 1)
@@ -433,7 +432,7 @@ class Folder extends DataEntity implements FolderInterface
 						}
 					}
 				}
-				
+												
 				$path = constant("BASE_DIR")."/".$this->folder->get_path();
 				
 				if (file_exists($path))
@@ -451,7 +450,7 @@ class Folder extends DataEntity implements FolderInterface
 						}
 					}
 				}
-
+				
 				$linked_virtual_folder_array = $this->get_parent_virtual_folders();
 				if (is_array($linked_virtual_folder_array) and count($linked_virtual_folder_array))
 				{

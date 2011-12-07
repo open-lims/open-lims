@@ -58,9 +58,9 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 	 */
 	function __construct($virtual_folder_id)
 	{
-		if (is_numeric($folder_id))
+		if (is_numeric($virtual_folder_id))
 		{
-			if (VirtualFolder_Access::exist_virtual_folder_by_virtual_folder_id($folder_id) == true)
+			if (VirtualFolder_Access::exist_virtual_folder_by_virtual_folder_id($virtual_folder_id) == true)
 			{
 				$this->virtual_folder_id 	= $virtual_folder_id;
 				$this->virtual_folder		= new VirtualFolder_Access($virtual_folder_id);

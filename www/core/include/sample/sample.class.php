@@ -55,6 +55,8 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	private $sample_folder_id;
 	private $sample_folder_object;
 	
+	private static $sample_delete_array = array();
+	
 	/**
 	 * @see SampleInterface::__construct()
 	 * @param integer $sample_id Sample-ID
@@ -75,7 +77,10 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 			}
 			else
 			{
-				throw new SampleNotFoundException();
+				if (in_array($sample_id, self::$sample_delete_array) == false)
+				{
+					throw new SampleNotFoundException();
+				}
 			}
 		}
 		else
@@ -785,6 +790,8 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 		if ($this->sample_id and $this->sample)
 		{
 			$transaction_id = $transaction->begin();
+			
+			array_push(self::$sample_delete_array, $this->sample_id);
 			
 			$tmp_sample_id = $this->sample_id;
 		
