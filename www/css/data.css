@@ -1,5 +1,190 @@
 @CHARSET "ISO-8859-1";
 
+/* DATA BROWSER */
+
+#DataBrowserMenuAdd
+{
+border:solid white 2px;
+padding:2px 8px;
+position:relative;
+border-top-left-radius:10px;
+border-top-right-radius:10px;
+-moz-border-radius-topleft:10px;
+-moz-border-radius-topright:10px;
+-webkit-border-top-left-radius:10px;
+-webkit-border-top-right-radius:10px;
+}
+
+.DataBrowserMenuItem /* replaces boxIcon in main.css */
+{
+display:inline;
+margin-right: 1em;
+}
+
+.DataBrowserMenuItem:hover
+{ 
+cursor:pointer;
+}
+
+.DataBrowserMenuItem:hover span
+{
+text-decoration:underline;	
+}
+
+.Deactivated:hover span
+{
+text-decoration:none;	
+}
+
+.Deactivated:hover
+{
+cursor:default;
+}
+
+.Deactivated
+{
+color:grey;
+}
+
+#DataBrowserAddFileCorner
+{
+border-bottom-left-radius:10px;
+-moz-border-radius-bottomleft:10px;
+-webkit-border-bottom-left-radius:10px;
+border-left:solid #669acc 2px;
+border-bottom:solid #669acc 2px;
+}
+
+.DataBrowserMenuImage
+{
+vertical-align:middle;
+padding-bottom:1px;
+}
+
+#DataBrowserAddFileDialog
+{
+font-family:arial;
+font-size:12px;
+background-color:#ffffff;
+border:solid #669acc 2px;
+padding: 2px 6px 2px 6px;
+-moz-border-radius-bottomleft:10px;
+-moz-border-radius-bottomright:10px;
+border-bottom-left-radius:10px;
+border-bottom-right-radius:10px;
+-webkit-border-bottom-left-radius:10px;
+-webkit-border-bottom-right-radius:10px;
+border-top-right-radius:10px;
+-moz-border-radius-topright:10px;
+-webkit-border-top-right-radius:10px;
+}
+
+#DataBrowserAddFileDialog a
+{
+text-decoration:none;
+color:black;
+}
+
+#DataBrowserAddFileDialog a:hover
+{
+text-decoration:underline;
+}
+
+#DataBrowserAddFileDialog img
+{
+margin-right:5px;
+}
+
+#DataBrowserFileUploadContainer
+{
+text-align:left;
+}
+
+.DataBrowserFileHover
+{
+background-color:#c3c3c3;
+
+}
+.ListTable #DataBrowserAjax .DataBrowserFileHover td
+{
+cursor:pointer;
+}
+
+.DataBrowserFileSelected
+{
+background-color:#fcfcfc;
+}
+
+.ListTable #DataBrowserAjax .DataBrowserFileSelected td
+{
+cursor:default;
+}
+
+.ListTable #DataBrowserAjax tr td
+{
+padding: 0px 4px;
+border-bottom:solid white 2px;
+border-top:solid white 2px;
+vertical-align:middle;
+cursor:default;
+}
+
+.ListTable #DataBrowserAjax .trLightGrey td
+{
+padding: 0px 4px;
+border-bottom:solid #e0e0e0 2px;
+border-top:solid #e0e0e0 2px;
+vertical-align:middle;
+}
+
+#DataBrowserFileDialog
+{
+font-family:arial;
+font-size:12px;
+background-color:#fcfcfc;
+border:solid #669acc 2px;
+border-top:none;
+padding: 0 2px 2px 2px;
+-moz-border-radius-bottomleft:10px;
+-moz-border-radius-bottomright:10px;
+border-bottom-left-radius:10px;
+border-bottom-right-radius:10px;
+-webkit-border-bottom-left-radius:10px;
+-webkit-border-bottom-right-radius:10px;
+}
+
+#DataBrowserFileDialog a
+{
+margin-left:5px;
+text-decoration:none;
+color:black;
+}
+
+#DataBrowserFileDialog a:hover
+{
+text-decoration:underline;
+}
+
+
+#DataBrowserAjaxActionSelect 
+{
+text-align:right;
+margin:2px 2px 0 2px;
+}
+
+#DataBrowserActionSelect
+{
+vertical-align:middle;
+}
+
+#DataBrowserAction
+{
+height:22px;
+width:30px;
+padding: 0;
+vertical-align:middle;
+}
+
 /* DATA UPLOAD*/
 
 #UploadUI
@@ -55,6 +240,7 @@ margin: 10px 0 10px 0;
 margin-bottom:5px;	
 }
 
+
 /* DATA AUTOFIELD */
 
 #af-description-tr
@@ -87,6 +273,7 @@ margin-left:10px;
 /* position:absolute; */
 /* right:20px; */
 }
+
 
 /* FILE SEARCH MENU */
 

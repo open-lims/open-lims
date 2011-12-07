@@ -40,6 +40,7 @@ class ListAjax extends Ajax
 	
 	public function get_page_bar($page, $number_of_pages, $css_page_id)
 	{
+		
 		$pagebar .= "<table style='display: inline;'><tr><td><span class='smallTextBlack'>Page ".$page." of ".$number_of_pages."</span></td>";
 	
 		// Previous
@@ -133,8 +134,6 @@ class ListAjax extends Ajax
 		}
 		
 		$pagebar .= "</tr></table>";
-		
-		$pagebar .= "</div>";
 		
 		return $pagebar;
 	}

@@ -206,7 +206,7 @@ class DataPermission implements DataPermissionInterface
 		$return_value = false;
 		
 		if ($this->type == "file")
-		{
+		{			
 			if ($array[automatic] == "1")
 			{
  				$return_value = $this->file->set_automatic(true);

@@ -99,10 +99,7 @@ class DataIO
 		$argument_array[1][0] = "virtual_folder_id";
 		$argument_array[1][1] = $virtual_folder_id;	
 
-		
-		$list = new List_IO("DataBrowser", "/core/modules/data/data.ajax.php", "list_data_browser", "count_data_browser", $argument_array, "DataBrowserAjax");
-
-		// $list->set_top_right_text($data_path->get_stack_path());
+		$list = new List_IO("DataBrowser", "/core/modules/data/data.ajax.php", "list_data_browser", "count_data_browser", $argument_array, "DataBrowserAjax");	
 		
 		$list->add_row("","symbol",false,16);
 		$list->add_row("Name","name",true,null);
@@ -112,7 +109,8 @@ class DataIO
 		$list->add_row("Size","size",true,null);
 		$list->add_row("Owner","owner",true,null);
 		$list->add_row("Permission","permission",false,null);
-	
+		$list->add_row("","delete_checkbox",false,"16px");
+
 		// !!! [...] !!!
 		
 		$folder = Folder::get_instance($folder_id);	
@@ -759,6 +757,332 @@ class DataIO
 			throw new DataSecuriyAccessDeniedException();
 		}
 	}
+	
+	public static function permission_window()
+	{
+		
+		global $user;
+		
+		try
+		{
+			if ($_GET[file_id] xor $_GET[value_id])
+			{
+				if ($_GET[file_id])
+				{
+					$id = $_GET[file_id];
+					$object = File::get_instance($id);
+					$type = "file";
+					$title = $object->get_name();
+				}
+				
+				if ($_GET[value_id])
+				{
+					$id = $_GET[value_id];
+					$object = Value::get_instance($id);
+					$type = "value";
+					$title = $object->get_type_name();
+				}
+			}
+			else
+			{
+				if ($_GET[folder_id])
+				{
+					$id = $_GET[folder_id];
+					$object = Folder::get_instance($id);
+					$type = "folder";
+					$title = $object->get_name();
+				}
+				else
+				{
+					throw new IdMissingException("", 0);
+				}
+			}
+			
+			if ($object->is_control_access() == true)
+			{
+				$full_access = true;
+				
+			}
+			else{
+				$full_access = false;
+			}
+			
+			if ($object->get_owner_id() == $user->get_user_id())
+			{
+				$user_access = true;
+			}
+			else
+			{
+				$user_access = false;
+			}
+			
+			if ($full_access == true or $user_access == true)
+			{
+				$data_permission = new DataPermission($type, $id);
+						
+				if (!$_GET[nextpage])
+				{
+					
+					$template = new Template("../../../template/data/data_permission_window.html");
+					
+					$paramquery = $_GET;
+					unset($paramquery[run]);
+					unset($paramquery[action]);
+					unset($paramquery[nextpage]);
+					$paramquery[nextpage] = "1";
+					$params = http_build_query($paramquery,'','&#38;');
+					
+					$template->set_var("params", $params);
+					
+			//		$paramquery = $_GET;
+					$paramquery[action] = "chown";
+					$params = http_build_query($paramquery,'','&#38;');
+					
+					$template->set_var("params_chown", $params);
+					
+			//		$paramquery = $_GET;
+					$paramquery[action] = "chgroup";
+					$params = http_build_query($paramquery,'','&#38;');
+					
+					$template->set_var("params_chgroup", $params);
+					
+					$template->set_var("title", $title);
+					
+					$user = new User($data_permission->get_owner_id());
+					$group = new Group($data_permission->get_owner_group_id());
+					
+					$template->set_var("owner", $user->get_full_name(false));
+					$template->set_var("owner_group", $group->get_name());
+
+					
+					
+					if ($object->can_set_automatic())
+					{
+						$disable_automatic = false;
+					}
+					else
+					{
+						$disable_automatic = true;
+					}
+					
+					if ($object->can_set_data_entity())
+					{
+						$disable_project = false;
+					}
+					else
+					{
+						$disable_project = true;
+					}
+					
+					if ($object->can_set_control())
+					{
+						$disable_control = false;
+					}
+					else
+					{
+						$disable_control = true;
+					}
+					
+					if ($object->can_set_remain())
+					{
+						$disable_remain = false;
+					}
+					else
+					{
+						$disable_remain = true;
+					}
+					
+					if ($disable_automatic == true)
+					{
+						$template->set_var("disabled_automatic","disabled='disabled'");
+					}
+					else
+					{
+						$template->set_var("disabled_automatic","");
+					}
+					
+					if ($data_permission->get_automatic() == true) {
+						$template->set_var("checked_automatic","checked='checked'");
+						if ($disable_automatic == true)
+						{
+							$template->set_var("hidden_automatic","<input type='hidden' name='automatic' value='1' />");
+						}
+						else
+						{
+							$template->set_var("hidden_automatic","");
+						}
+					}else{
+						$template->set_var("checked_automatic","");
+						$template->set_var("hidden_automatic","");
+					}
+					
+
+					$permission_array = $data_permission->get_permission_array();
+		
+					for ($i=1;$i<=4;$i++)
+					{
+						for ($j=1;$j<=4;$j++)
+						{
+							$checked_name = "checked_".$i."_".$j;
+							$disabled_name = "disabled_".$i."_".$j;
+							$hidden_name = "hidden_".$i."_".$j;
+							
+							if ($i==3 and $disable_project == true)
+							{
+								$template->set_var($disabled_name,"disabled='disabled'");
+								$disabled = true;
+							}
+							else
+							{
+								if (($j==3 or $j==4) and $disable_control == true)
+								{
+									$template->set_var($disabled_name,"disabled='disabled'");
+									$disabled = true;
+								}
+								else
+								{
+									if ($disable_remain == true)
+									{
+										$template->set_var($disabled_name,"disabled='disabled'");
+										$disabled = true;
+									}
+									else
+									{
+										$template->set_var($disabled_name,"");
+										$disabled = false;
+									}
+								}
+							}
+							
+							if ($permission_array[$i][$j] == true)
+							{
+								$template->set_var($checked_name,"checked='checked'");
+								if ($disabled == true)
+								{
+									$template->set_var($hidden_name, "<input type='hidden' name='".$checked_name."' value='1' />");
+								}
+								else
+								{
+									$template->set_var($hidden_name, "");
+								}
+							}
+							else
+							{
+								$template->set_var($checked_name,"");
+								$template->set_var($hidden_name, "");
+							}
+							$disabled = false;
+						}
+					}
+	
+					$paramquery = $_GET;
+					$paramquery[nav] = "data";
+					unset($paramquery[action]);
+					$params = http_build_query($paramquery,'','&#38;');
+					
+			//		$template->set_var("back_link", $params);
+					
+					return $template->get_string();	
+				}
+				else
+				{
+					
+					if ($_POST[save])
+					{
+						$paramquery = $_GET;
+						unset($paramquery[nextpage]);
+						$params = http_build_query($paramquery,'','&#38;');
+					}
+					else
+					{
+						if ($type == folder)
+						{
+							$paramquery = $_GET;
+							unset($paramquery[action]);
+							unset($paramquery[nextpage]);
+							$params = http_build_query($paramquery,'','&#38;');
+						}
+						else
+						{
+							$paramquery = $_GET;
+							unset($paramquery[action]);
+							unset($paramquery[nextpage]);
+							$params = http_build_query($paramquery,'','&#38;');
+						}
+					} 
+					
+					if ($data_permission->set_permission_array($_POST) == true)
+					{
+						Common_IO::step_proceed($params, "Permission: ".$title."", "Changes saved succesful" ,null);
+					}
+					else
+					{
+						Common_IO::step_proceed($params, "Permission: ".$title."", "Operation failed" ,null);
+					}
+				}
+			}
+			else
+			{
+				switch ($type):
+				
+					case "folder":
+						$exception = new Exception("", 1);
+					break;
+					
+					case "file":
+						$exception = new Exception("", 2);
+					break;
+					
+					case "value":
+						$exception = new Exception("", 3);
+					break;
+				
+				endswitch;
+				
+				$error_io = new Error_IO($exception, 20, 40, 2);
+				$error_io->display_error();
+			}
+		}
+		catch (IdMissingException $e)
+		{
+			$error_io = new Error_IO($e, 20, 40, 3);
+			$error_io->display_error();
+		}
+	}
+	
+	public function change_permission($permission_array, $type)
+	{
+		$permissions = (array)$permission_array;
+		switch($type):
+			case "File": 
+				$id = $_GET[file_id];
+			break;
+			case "Folder": 
+				$id = $_GET[folder_id];
+			break;
+			case "Value": 
+				$id = $_GET[value_id];
+			break;
+			
+		endswitch;
+		$type = strtolower($type);
+		$id = intval($id);
+		echo $id;
+		$data_permission = new DataPermission($type, $id);
+		
+		$paramquery = $_GET;
+		unset($paramquery[action]);
+		unset($paramquery[nextpage]);
+		$params = http_build_query($paramquery,'','&#38;');
+		if ($data_permission->set_permission_array($permissions) == true)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 	/**
 	 * @throws FolderIDMissingException
@@ -1114,27 +1438,6 @@ class DataIO
 			case("file_delete_version"):
 				require_once("file.io.php");
 				FileIO::delete_version();
-			break;
-			
-			
-			case("folder_add"):
-				require_once("folder.io.php");
-				FolderIO::add();	
-			break;
-			
-			case("folder_delete"):
-				require_once("folder.io.php");
-				FolderIO::delete();
-			break;
-			
-			case("folder_move"):
-				require_once("folder.io.php");
-				FolderIO::move();
-			break;
-
-			case("folder_administration"):
-				require_once("folder.io.php");
-				FolderIO::folder_administration();	
 			break;
 			
 			// Search

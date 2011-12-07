@@ -52,6 +52,12 @@ class DataAjax extends Ajax
 		$folder_id = $argument_array[0][1];
 		$virtual_folder_id = $argument_array[1][1];
 		
+		if (!$folder_id and !$virtual_folder_id)
+		{
+			$data_path = new DataPath(null,null);
+			$folder_id = $data_path->get_folder_id();
+		}
+		
 		if (is_numeric($folder_id) or is_numeric($virtual_folder_id))
 		{
 			$list_request = new ListRequest_IO();
@@ -64,10 +70,21 @@ class DataAjax extends Ajax
 			
 			$list_array = DataBrowser::get_data_browser_array($folder_id, $virtual_folder_id, $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
 		
-			if ($folder_id != 1 or $virtual_folder_id != null)
+			if ($folder_id)
+			{
+				$data_path = new DataPath($folder_id, null);
+			}
+			elseif($virtual_folder_id)
+			{
+				$data_path = new DataPath(null, $virtual_folder_id);
+			}
+			else
 			{
 				$data_path = new DataPath(null, null);
-				
+			}
+			
+			if ($folder_id != 1 or $virtual_folder_id != null)
+			{
 				if ($data_path->get_previous_entry_virtual() == true)
 				{			
 					$paramquery = $_GET;
@@ -108,7 +125,7 @@ class DataAjax extends Ajax
 					// Common
 					$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
 					$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
-					
+										
 					if ($list_array[$key][owner_id])
 					{
 						$user = new User($list_array[$key][owner_id]);
@@ -127,11 +144,12 @@ class DataAjax extends Ajax
 
 						if ($file->is_read_access() == true)
 						{
-							$paramquery = $_GET;
+							$paramquery = array();
+							$paramquery[session_id] = $_GET[session_id];
+							$paramquery[username] = $_GET[username];
+							$paramquery[nav] = $_GET[nav];
 							$paramquery[file_id] = $list_array[$key][file_id];
 							$paramquery[action] = "file_detail";
-							unset($paramquery[nextpage]);
-							unset($paramquery[version]);
 							$params = http_build_query($paramquery,'','&#38;');
 						
 							$list_array[$key][symbol][link] = $params;
@@ -160,6 +178,15 @@ class DataAjax extends Ajax
 						$list_array[$key][version] = $file->get_version();
 						$list_array[$key][size] = Convert::convert_byte_1024($list_array[$key][size]);
 						$list_array[$key][permission] = $file->get_permission_string();
+						
+						if($file->is_delete_access())
+						{
+							$list_array[$key][delete_checkbox] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name=''></input>";
+						}
+						else
+						{
+							$list_array[$key][delete_checkbox] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name='' disabled='disabled'></input>";
+						}
 					}
 					elseif ($list_array[$key][value_id])
 					{
@@ -167,12 +194,14 @@ class DataAjax extends Ajax
 
 						if ($value->is_read_access() == true)
 						{
-							$paramquery = $_GET;
+							$paramquery = array();
+							$paramquery[session_id] = $_GET[session_id];
+							$paramquery[username] = $_GET[username];
+							$paramquery[nav] = $_GET[nav];
 							$paramquery[value_id] = $list_array[$key][value_id];
 							$paramquery[action] = "value_detail";
-							unset($paramquery[nextpage]);
-							unset($paramquery[version]);
 							$params = http_build_query($paramquery,'','&#38;');
+						
 						
 							$list_array[$key][symbol][link] = $params;
 							$list_array[$key][symbol][content] = "<img src='images/fileicons/16/unknown.png' alt='' style='border:0;' />";
@@ -199,6 +228,15 @@ class DataAjax extends Ajax
 						$list_array[$key][type] = "Value";
 						$list_array[$key][version] = $value->get_version();
 						$list_array[$key][permission] = $value->get_permission_string();
+						
+						if($value->is_delete_access())
+						{
+							$list_array[$key][delete_checkbox] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name=''></input>";
+						}
+						else
+						{
+							$list_array[$key][delete_checkbox] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name='' disabled='disabled'></input>";
+						}
 					}
 					elseif ($list_array[$key][folder_id])
 					{	
@@ -237,6 +275,15 @@ class DataAjax extends Ajax
 						
 						$list_array[$key][type] = "Folder";
 						$list_array[$key][permission] = $sub_folder->get_permission_string();
+						
+						if($sub_folder->is_delete_access())
+						{
+							$list_array[$key][delete_checkbox] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name=''></input>";
+						}
+						else
+						{
+							$list_array[$key][delete_checkbox] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name='' disabled='disabled'></input>";
+						}
 					}
 					elseif ($list_array[$key][virtual_folder_id])
 					{
@@ -264,6 +311,8 @@ class DataAjax extends Ajax
 						
 						$list_array[$key][type] = "Virtual Folder";
 						$list_array[$key][permission] = "automatic";
+						
+						$list_array[$key][delete_checkbox] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name='' disabled='disabled'></input>";
 					}
 				}
 			}
@@ -285,9 +334,16 @@ class DataAjax extends Ajax
 	private function count_data_browser($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
-		
+				
 		$folder_id = $argument_array[0][1];
 		$virtual_folder_id = $argument_array[1][1];
+		
+		if (!$folder_id and !$virtual_folder_id)
+		{
+			$data_path = new DataPath(null,null);
+			$folder_id = $data_path->get_folder_id();
+			$virtual_folder_id = $data_path->get_virtual_folder_id();
+		}
 		
 		if (is_numeric($folder_id) or is_numeric($virtual_folder_id))
 		{

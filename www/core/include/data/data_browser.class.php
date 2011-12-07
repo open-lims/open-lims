@@ -116,12 +116,12 @@ class DataBrowser implements DataBrowserInterface
 	    	}
 	    	
 	    	$folder = Folder::get_instance(self::$folder_id);
-	    	return Data_Wrapper_Access::count_list_data_entity_childs($folder->get_data_entity_id(), $order_by, $order_method, $start, $end);
+	    	return Data_Wrapper_Access::count_list_data_entity_childs($folder->get_data_entity_id());
     	}
     	elseif(!$folder_id and $virtual_folder_id)
     	{
     		$virtual_folder = new VirtualFolder($virtual_folder_id);
-    		return Data_Wrapper_Access::count_list_data_entity_childs($virtual_folder->get_data_entity_id(), $order_by, $order_method, $start, $end);
+    		return Data_Wrapper_Access::count_list_data_entity_childs($virtual_folder->get_data_entity_id());
     	}
     	else
     	{

@@ -407,7 +407,7 @@ class Folder extends DataEntity implements FolderInterface
 						// Values
 						if (($value_id = Value::get_value_id_by_data_entity_id($value)) != null)
 						{
-							$value_obj = Value::get_instance($value);
+							$value_obj = Value::get_instance($value_id);
 							if ($value_obj->delete() == false)
 							{
 								if ($transaction_id != null)

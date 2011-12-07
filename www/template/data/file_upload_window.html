@@ -1,22 +1,18 @@
-<br />
-
-<!-- CONTAINER BEGIN ("File Upload") -->
-
 <iframe src='core/modules/data/file.upload.php?[[PARAMS]]' name='hidden_uploader' style='display: none;'></iframe>
 
 <div class='file_upload_container'>
 <br />
 <br />
 
-<form id='UploadForm' enctype='multipart/form-data' action='core/modules/data/file_item.upload.php?[[PARAMS]]' method='post' target='hidden_uploader'>
+<form id='UploadForm' enctype='multipart/form-data' action='core/modules/data/file.upload.php?[[PARAMS]]' method='post' target='hidden_uploader'>
 <table class='formTable'>
 	<tbody id='uploader_tbody'>
 		<tr>
 			<td><span class='smallText'>Notice: You can leave upload-fields empty</span><br /><br /></td>
 		</tr>					
-		<tr>
+	<!--	<tr>
 			<td>1. file</td>
-		</tr>
+		</tr> -->
 		<tr id='lastFileInput'>
 			<td>
 				<input type='hidden' id='UPLOAD_IDENTIFIER' name='UPLOAD_IDENTIFIER' value='[[UNIQUE_ID]]'/>
@@ -28,15 +24,11 @@
 		</tr>
 		<tr>
 			<td>I want to add <input type='textfield' size='2' value='1' id='uploader_number_of_fields' class='FormTexfield' /> more file(s) <button type='button' id='uploader_add_fields' class='FormButton'>OK</button></td>
-		</tr>		
+		</tr>
 		<tr>
 			<td>
 				<br />
 				<input type='hidden' name='file_amount' id='uploader_file_amount' value='1' />
-				<input type='hidden' value='[[DESCRIPTION]]' name='description' />
-				<input type='hidden' value='[[KEYWORDS]]' name='keywords' />
-				
-				<button type='submit' id='uploader_upload' class='FormButton' onclick='javascript:uploader.start_upload();'>Upload</button>
 			</td>
 		</tr>
 		<tr>
@@ -53,5 +45,3 @@
 <br />
 <br />
 </div>
-
-<!-- CONTAINER END () -->

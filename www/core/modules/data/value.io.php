@@ -427,14 +427,13 @@ class ValueIO
 				$template->output();
 			}
 			else
-			{		
+			{	
 				$value = Value::get_instance(null);
 				$value_type = new ValueType($type_id);
 				
 				if (!$_GET[nextpage] or $_GET[nextpage] == "1")
-				{
+				{	
 					$template = new Template("template/data/value_add.html");
-							
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "2";
 					$params = http_build_query($paramquery,'','&#38;');
@@ -488,6 +487,14 @@ class ValueIO
 		{
 			throw new FolderIDMissingException();
 		}
+	}
+	
+	public static function add_value_item_window($type_id, $folder_id, $value_array)
+	{
+		global $user;
+		$value = Value::get_instance(null);
+		$value_add_successful = $value->create($folder_id, $user->get_user_id(), $type_id, $value_array);
+		return $value_add_successful;
 	}
 
 	/**

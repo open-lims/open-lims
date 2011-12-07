@@ -283,7 +283,7 @@ class Data_Wrapper_Access
 	public static function count_list_data_entity_childs($data_entity_pid)
 	{
 		global $db;
-		
+
 		if (is_numeric($data_entity_pid))
 		{
 			$sql = "SELECT  COUNT(".constant("DATA_ENTITY_TABLE").".id) AS result " .
@@ -293,7 +293,7 @@ class Data_Wrapper_Access
 
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
-	
+			
 			return $data[result];
 		}
 		else

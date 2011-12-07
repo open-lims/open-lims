@@ -85,8 +85,11 @@ class ListRequest_IO
 					}
 					else
 					{
+						if($this->first_line_entry[$value[1]] == "")
+						{
+							$this->first_line_entry[$value[1]] = "&nbsp;"; //we all love IE
+						}
 						$return .= "<td>".$this->first_line_entry[$value[1]]."</td>";
-						
 					}
 				}
 				
@@ -111,9 +114,27 @@ class ListRequest_IO
 									
 					$content = $value;
 					
+					$row_count = count($this->rows);
+					$current_row_count = 1;
+					
 					foreach ($this->rows as $row_key => $row_value)
 					{
-						$return .= "<td>";
+						if ($current_row_count == 1)
+						{
+							$return .= "<td class='ListTableColumnFirstEntry'>";
+						}	
+						elseif ($current_row_count == $row_count)
+						{
+							$return .= "<td class='ListTableColumnLastEntry'>";
+						}	
+						else
+						{
+							$return .= "<td>";
+						}		
+						
+						$current_row_count++;
+						
+						$content_string = "";
 						
 						if ($content[$row_value[1]]['class'])
 						{
@@ -121,16 +142,16 @@ class ListRequest_IO
 							{
 								if ($this->array[$key]['id'])
 								{
-									$return .= "<div class='".$row_value[4]." ".$content[$row_value[1]]['class']."' id='".$row_value[4]."".$this->array[$key]['id']."'>";
+									$content_string .= "<div class='".$row_value[4]." ".$content[$row_value[1]]['class']."' id='".$row_value[4]."".$this->array[$key]['id']."'>";
 								}
 								else
 								{
-									$return .= "<div class='".$row_value[4]." ".$content[$row_value[1]]['class']."'>";
+									$content_string .= "<div class='".$row_value[4]." ".$content[$row_value[1]]['class']."'>";
 								}
 							}
 							else
 							{
-								$return .= "<div class='".$content[$row_value[1]]['class']."'>";
+								$content_string .= "<div class='".$content[$row_value[1]]['class']."'>";
 							}
 						}
 						else
@@ -139,11 +160,11 @@ class ListRequest_IO
 							{
 								if ($this->array[$key]['id'])
 								{
-									$return .= "<div class='".$row_value[4]."' id='".$row_value[4]."".$this->array[$key]['id']."'>";
+									$content_string .= "<div class='".$row_value[4]."' id='".$row_value[4]."".$this->array[$key]['id']."'>";
 								}
 								else
 								{
-									$return .= "<div class='".$row_value[4]."'>";
+									$content_string .= "<div class='".$row_value[4]."'>";
 								}
 							}
 						}
@@ -154,33 +175,40 @@ class ListRequest_IO
 						{
 							if ($content[$row_value[1]][label])
 							{
-								$return .= "<span title='".$content[$row_value[1]][label]."'>";
+								$content_string .= "<span title='".$content[$row_value[1]][label]."'>";
 							}
 							
 							if ($content[$row_value[1]][link] and $content[$row_value[1]][content])
 							{
-								$return .= "<a href='index.php?".$content[$row_value[1]][link]."'>".$content[$row_value[1]][content]."</a>";
+								$content_string .= "<a href='index.php?".$content[$row_value[1]][link]."'>".$content[$row_value[1]][content]."</a>";
 							}
 							elseif(!$content[$row_value[1]][link] and $content[$row_value[1]][content])
 							{
-								$return .= $content[$row_value[1]][content];
+								$content_string .= $content[$row_value[1]][content];
 							}
 
 							if ($content[$row_value[1]][label])
 							{
-								$return .= "</span>";
+								$content_string .= "</span>";
 							}
 						}
 						else
 						{
-							$return .= $content[$row_value[1]];
+							$content_string .= $content[$row_value[1]];
 						}
 						
 						if ($row_value[4])
 						{
-							$return .= "</div>";
+							$content_string .= "</div>";
 						}
 						
+						if ($content_string == "")
+						{
+							$content_string = "&nbsp;";
+							// I hate IE !
+						}
+						
+						$return .= $content_string;
 						$return .= "</td>";
 						
 					}

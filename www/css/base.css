@@ -1,3 +1,47 @@
+/* BASE LIST */
+
+.ListTable
+{
+	width: 100%;
+	border-collapse: separate;
+	border-spacing:0px;
+	border-collapse: expression('separate', cellSpacing = '0px');
+}
+.ListTable th 
+{
+	font-weight: bold;
+	text-align: left;
+	border-bottom: 1px #C0C0C0 dotted;
+	color: black;
+}
+
+.ListTable th a 
+{
+	text-decoration: none;
+	color: black !important;
+}
+
+.ListTable td 
+{
+	margin-bottom: 2px;
+	padding: 4px 4px;
+}
+
+.ListTable tr 
+{
+	vertical-align: top;
+}
+
+.ListTableColumnFirstEntry
+{
+border-left:solid white 2px;
+}
+
+.ListTableColumnLastEntry
+{
+border-right:solid white 2px;
+}
+
 /* BASE TREE NAVIGATION */
 
 .BaseTreeList

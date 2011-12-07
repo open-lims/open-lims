@@ -91,10 +91,27 @@ class DataPath implements DataPathInterface
     		{
     			$this->path_stack_array = $session->read_value("stack_array");
     			$this->clear_stack();
+    			
+    			$current_path_stack_array = $this->path_stack_array;
+		   		$previous_entry = array_pop($current_path_stack_array);
+		   		
+		   		if ($previous_entry != null and is_array($previous_entry))
+		   		{
+		   			if ($previous_entry[virtual] == true)
+		   			{
+		   				$this->folder_id = null;
+	    				$this->virtual_folder_id = $previous_entry[id];
+		   			}
+		   			else
+		   			{
+		   				$this->folder_id = $previous_entry[id];
+	    				$this->virtual_folder_id = null;
+		   			}
+		   		}
     		}
     		else
     		{
-		    	$folder_id = UserFolder::get_folder_by_user_id($user->get_user_id());
+		    	$folder_id = UserFolder::get_folder_by_user_id($session->get_user_id());
 		    	$folder = Folder::get_instance($folder_id);
 		    	$this->init_stack($folder_id);
 	    		$this->path = $folder->get_object_path();
@@ -403,5 +420,22 @@ class DataPath implements DataPathInterface
     	$session->delete_value("stack_array");
     }
     
+    /**
+     * @see DataPathInterface::get_folder_id()
+     * @return integer
+     */
+    public function get_folder_id()
+    {
+    	return $this->folder_id;
+    }
+    
+	/**
+     * @see DataPathInterface::get_virtual_folder_id()
+     * @return integer
+     */
+    public function get_virtual_folder_id()
+    {
+    	return $this->virtual_folder_id;
+    }
 }
 ?>

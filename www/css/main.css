@@ -137,6 +137,7 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 }
 
 .boxIconBar {
+	padding-bottom:5px;
 	border-bottom: 1px #C0C0C0 solid;
 	margin: 3px;
 }
