@@ -107,7 +107,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 
 		$.ajax({
 			type : "GET",
-			url : "core/modules/base/list.ajax.php",
+			url : "core/modules/base/ajax/list.ajax.php",
 			data : "username=" + get_array['username'] + "&session_id="
 					+ get_array['session_id'] + "&run=get_page_bar&page="
 					+ page + "&number_of_pages=" + number_of_pages
@@ -128,7 +128,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 
 		$.ajax({
 			type : "GET",
-			url : "core/modules/base/list.ajax.php",
+			url : "core/modules/base/ajax/list.ajax.php",
 			data : "username="+get_array['username']+"&session_id="+get_array['session_id']+"&run=get_page_information&number_of_entries="+number_of_entries+"&number_of_pages="+number_of_pages+"",
 			async : false,
 			success : function(data) {
