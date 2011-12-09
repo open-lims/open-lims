@@ -25,7 +25,7 @@
  * 
  */
 	$dialog[0][type]			= "common_dialog";
-	$dialog[0][class_path]		= "core/modules/manufacturer/manufacturer.io.php";
+	$dialog[0][class_path]		= "core/modules/manufacturer/io/manufacturer.io.php";
 	$dialog[0]['class']			= "ManufacturerIO";
 	$dialog[0][method]			= "list_manufacturers";
 	$dialog[0][internal_name]	= "list_manufacturers";

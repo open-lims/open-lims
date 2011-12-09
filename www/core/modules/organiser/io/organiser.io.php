@@ -29,7 +29,7 @@
  */
 class OrganiserIO
 {
-	private static function personal_organiser()
+	public static function personal_organiser()
 	{
 		
 		// Function Test Array
@@ -112,11 +112,6 @@ class OrganiserIO
 		$template->set_var("content", $organiser_library_io->get_content());
 		
 		$template->output();
-	}
-	
-	public static function method_handler()
-	{
-		self::personal_organiser();
 	}
 
 	public static function list_upcoming_appointments()

@@ -88,58 +88,7 @@ class ItemIO
 		}
 		
 		$template->output();	
-	}
-	
-	/**
-	 * @todo method is not used at the moment
-	 */
-	private static function administration_folder()
-	{
-		
-	}
-	
-	public static function method_handler()
-	{
-		switch($_GET[run]):
-
-			case("administration_folder"):
-				$this->administration_folder();
-			break;
-			
-			case("administaration"):
-				
-			break;
-			
-			case("add_class"):
-				
-			break;
-
-			case("edit_class"):
-				
-			break;
-			
-			case("delete_class"):
-				
-			break;
-			
-			case("add_information"):
-				
-			break;
-			
-			case("edit_information"):
-				
-			break;
-			
-			case("delete_information"):
-				
-			break;
-
-			default:
-			break;
-			
-		endswitch;
-	}
-	
+	}	
 }
 
 ?>

@@ -25,7 +25,7 @@
  * 
  */	
 	$dialog[0][type]			= "search";
-	$dialog[0][class_path]		= "core/modules/item/item_fulltext_search.io.php";
+	$dialog[0][class_path]		= "core/modules/item/io/item_fulltext_search.io.php";
 	$dialog[0]['class']			= "ItemFulltextSearchIO";
 	$dialog[0][method]			= "search";
 	$dialog[0][internal_name]	= "item_fulltext_search";

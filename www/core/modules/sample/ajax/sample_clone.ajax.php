@@ -185,7 +185,7 @@ class SampleCloneAjax extends Ajax
 				
 				if ($information_fields[manufacturer][name])
 				{
-					require_once("../../../../core/modules/manufacturer/manufacturer.io.php");
+					require_once("../../../../core/modules/manufacturer/io/manufacturer.io.php");
 					$template->set_var("show_manufacturer",true);
 					$template->set_var("manufacturer_html",ManufacturerIO::dialog());
 				}

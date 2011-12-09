@@ -1,6 +1,6 @@
-<?php 
+<?php
 /**
- * @package location
+ * @package organiser
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -22,13 +22,20 @@
  */
 
 /**
- * 
- */	
-	$dialog[0][type]			= "module_admin";
-	$dialog[0][class_path]		= "core/modules/location/io/admin/admin_location.io.php";
-	$dialog[0]['class']			= "AdminLocationIO";
-	$dialog[0][method]			= "handler";
-	$dialog[0][internal_name]	= "locations";
-	$dialog[0][display_name]	= "Locations";
-	$dialog[0][weight]			= 20000;
+ * Organiser Request Class
+ * @package organiser
+ */
+class OrganiserRequest
+{	
+	public static function ajax_handler()
+	{
+		
+	}
+	
+	public static function io_handler()
+	{
+		require_once("io/organiser.io.php");
+		OrganiserIO::personal_organiser();
+	}
+}
 ?>

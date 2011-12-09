@@ -49,7 +49,7 @@ class ManufacturerIO
 	
 	public static function list_manufacturers()
 	{
-		$list = new List_IO("Manufacturer", "/core/modules/manufacturer/manufacturer.ajax.php", "get_list", "get_list_count", "0", "ManufacturerListPage");
+		$list = new List_IO("Manufacturer", "/core/modules/manufacturer/ajax/manufacturer.ajax.php", "get_list", "get_list_count", "0", "ManufacturerListPage");
 		
 		$list->add_column("","symbol",false,"16px");
 		$list->add_column("Name","name",true,null);

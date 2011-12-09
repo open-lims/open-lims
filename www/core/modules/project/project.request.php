@@ -355,7 +355,7 @@ class ProjectRequest
 									
 									if (($description_required and !$_POST[description] and !$_GET[idk_unique_id]) or ($keywords_required and !$_POST[keywords] and !$_GET[idk_unique_id]))
 									{
-										require_once("core/modules/item/item.io.php");
+										require_once("core/modules/item/io/item.io.php");
 										ItemIO::information(http_build_query($_GET), $description_required, $keywords_required);
 									}
 									else

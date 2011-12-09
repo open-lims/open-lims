@@ -182,17 +182,7 @@ class ContentHandler_IO
 												}
 												else
 												{
-													$module_path = "core/modules/".$value[folder]."/".$value[name].".io.php";
-													if (file_exists($module_path))
-													{
-														require_once($module_path);
-														$value['class']::method_handler();
-														$module_found = true;
-													}
-													else
-													{
-														throw new ModuleDataCorruptExeception(null, null);
-													}
+													throw new ModuleDataCorruptExeception(null, null);
 												}
 											}
 										}
@@ -249,9 +239,6 @@ class ContentHandler_IO
 		$template->output();
 	}
 	
-	/**
-	 * @todo Login
-	 */
 	public static function ajax()
 	{
 		global $session;

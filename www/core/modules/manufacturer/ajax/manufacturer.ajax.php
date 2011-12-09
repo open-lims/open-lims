@@ -24,7 +24,8 @@
 /**
  * 
  */
-require_once("../base/ajax.php");
+$GLOBALS['autoload_prefix'] = "../";
+require_once("../../base/ajax.php");
 
 /**
  * Manufacturer AJAX IO Class
@@ -109,7 +110,7 @@ class ManufacturerAjax extends Ajax
 			$content_array = array();
 			$counter = 0;
 			
-			$template = new Template("../../../template/manufacturer/ajax/dialog_list.html");
+			$template = new Template("../../../../template/manufacturer/ajax/dialog_list.html");
 		
 			foreach($manufacturer_array as $key => $value)
 			{
