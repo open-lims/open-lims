@@ -21,23 +21,14 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * 
- */
-require_once("../base/ajax.php");
 
 /**
  * Equipment AJAX IO Class
  * @package equipment
  */
-class EquipmentAjax extends Ajax
-{
-	function __construct()
-	{
-		parent::__construct();
-	}
-	
-	private function list_equipment_items($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
+class EquipmentAjax
+{	
+	public function list_equipment_items($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
 	{		
 		if ($get_array)
 		{
@@ -56,7 +47,7 @@ class EquipmentAjax extends Ajax
 		}
 		
 		if ($sql)
-		{
+		{			
 			$list_request = new ListRequest_IO();
 			
 			if ($argument_array[2][1] == true)
@@ -68,7 +59,7 @@ class EquipmentAjax extends Ajax
 				$list_array = Equipment_Wrapper::list_item_equipments($sql, $sortvalue, $sortmethod, 0, null);
 			}
 			$list_request->set_column_array($json_column_array);
-								
+			
 			if (is_array($list_array) and count($list_array) >= 1)
 			{
 				foreach($list_array as $key => $value)
@@ -136,7 +127,7 @@ class EquipmentAjax extends Ajax
 		}
 	}
 	
-	private function count_equipment_items($json_argument_array)
+	public function count_equipment_items($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
 		
@@ -155,31 +146,5 @@ class EquipmentAjax extends Ajax
 			return null;
 		}
 	}
-	
-	public function method_handler()
-	{
-		global $session;
-		
-		if ($session->is_valid())
-		{
-			switch($_GET[run]):
-	
-				case "list_equipment_items":
-					echo $this->list_equipment_items($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
-				break;
-				
-				case "count_equipment_items":
-					echo $this->count_equipment_items($_POST[argument_array]);
-				break;
-				
-				default:
-				break;
-			
-			endswitch;
-		}
-	}
 }
-
-$equipment_ajax = new EquipmentAjax;
-$equipment_ajax->method_handler();
 ?>

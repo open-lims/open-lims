@@ -130,12 +130,6 @@ class SampleRequest
 				require_once("io/sample_admin.io.php");
 				SampleAdminIO::ou_permission_delete();
 			break;
-
-			
-			case("list_ou_equipment"):
-				require_once("core/modules/equipment/equipment.io.php");
-				EquipmentIO::list_organisation_unit_related_equipment_handler();
-			break;
 				
 			
 			// Item Lister

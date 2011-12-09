@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * @package equipment
  * @version 0.4.0.0
@@ -22,12 +22,32 @@
  */
 
 /**
- * 
+ * Equipment Request Class
+ * @package equipment
  */
-	$name 					= "equipment";
-	$main_class				= "EquipmentRequest";
+class EquipmentRequest
+{	
+	public static function ajax_handler()
+	{
+		switch($_GET[run]):
+			
+			case "list_equipment_items":
+				require_once("ajax/equipment.ajax.php");
+				echo EquipmentAjax::list_equipment_items($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "count_equipment_items":
+				require_once("ajax/equipment.ajax.php");
+				echo EquipmentAjax::count_equipment_items($_POST[argument_array]);
+			break;
+				
+		endswitch;
+	}
 	
-	$required_include[0] 	= "equipment";
-	
-	$no_tab					= true;
+	public static function io_handler()
+	{
+
+	}
+
+}
 ?>
