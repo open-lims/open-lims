@@ -234,7 +234,7 @@ function data_browser()
 				{
 					async : false,
 					type : "GET",
-					url : "core/modules/data/folder.ajax.php",
+					url : "core/modules/data/ajax/folder.ajax.php",
 					data : "username="+get_array['username']+"&session_id="+get_array['session_id']+"&run=delete_folder&folder_id="+folder_id,
 					success : function(data) {}
 				});
@@ -248,7 +248,7 @@ function data_browser()
 				{
 					async : false,
 					type : "GET",
-					url : "core/modules/data/value.ajax.php",
+					url : "core/modules/data/ajax/value.ajax.php",
 					data : "username="+get_array['username']+"&session_id="+get_array['session_id']+"&run=delete_value&value_id="+value_id,
 					success : function(data) {}
 				});
@@ -262,7 +262,7 @@ function data_browser()
 				{
 					async : false,
 					type : "GET",
-					url : "core/modules/data/file.ajax.php",
+					url : "core/modules/data/ajax/file.ajax.php",
 					data : "username="+get_array['username']+"&session_id="+get_array['session_id']+"&run=delete_file&file_id="+file_id,
 					success : function(data) {}
 				});
@@ -278,7 +278,7 @@ function data_browser()
 		$.ajax(
 		{
 			type : "GET",
-			url : "core/modules/data/data_browser.ajax.php",
+			url : "core/modules/data/ajax/data_browser.ajax.php",
 			data : "username="+get_array['username']+"&session_id="+ get_array['session_id']+"&run=get_data_browser_path&folder_id="+current_folder_id+"&virtual_folder_id="+current_virtual_folder_id,
 			success : function(data) 
 			{
@@ -295,7 +295,7 @@ function data_browser()
 		$.ajax(
 		{
 			type : "GET",
-			url : "core/modules/data/data_browser.ajax.php",
+			url : "core/modules/data/ajax/data_browser.ajax.php",
 			data : "username="+get_array['username']+"&session_id="+ get_array['session_id']+"&run=get_data_browser_path_cleared&folder_id="+current_folder_id+"&virtual_folder_id="+current_virtual_folder_id,
 			success : function(data) 
 			{
@@ -495,7 +495,7 @@ function data_browser()
 		
 		$.ajax({
 			type : "GET",
-			url : "core/modules/data/data_browser.ajax.php",
+			url : "core/modules/data/ajax/data_browser.ajax.php",
 			data : data,
 			success : function(data) 
 			{
@@ -543,13 +543,13 @@ function data_browser()
 		switch(type)
 		{
 			case "folder":
-				url = "core/modules/data/folder.ajax.php";
+				url = "core/modules/data/ajax/folder.ajax.php";
 				break;
 			case "file":
-				url = "core/modules/data/file.ajax.php";
+				url = "core/modules/data/ajax/file.ajax.php";
 				break;
 			case "value":
-				url = "core/modules/data/value.ajax.php";
+				url = "core/modules/data/ajax/value.ajax.php";
 				break;
 			default: 
 				break;
@@ -656,7 +656,7 @@ function data_browser()
 	{
 		$.ajax({
 			type : "GET",
-			url : "core/modules/data/data_browser.ajax.php",
+			url : "core/modules/data/ajax/data_browser.ajax.php",
 			data : "username="+get_array['username']+"&session_id="+get_array['session_id']+"&run=get_browser_menu&folder_id="+folder_id,
 			success : function(data) 
 			{
@@ -769,7 +769,7 @@ function data_browser()
 				$.ajax({
 					async:false,
 					type : "GET",
-					url : "core/modules/data/data_browser.ajax.php",
+					url : "core/modules/data/ajax/data_browser.ajax.php",
 					data : "username="+get_array['username']+"&session_id="+get_array['session_id']+"&run=delete_stack",
 					success : function(data) 
 					{

@@ -25,7 +25,8 @@
 /**
  * 
  */
-require_once("../base/ajax.php");
+$GLOBALS['autoload_prefix'] = "../";
+require_once("../../base/ajax.php");
 
 /**
  * Folder AJAX Class
@@ -165,12 +166,12 @@ class FolderAjax extends Ajax
 				$paramquery[sure] = "true";
 				$paramquery[nextpage] = "1";
 				$params = http_build_query($paramquery);
-				$template = new Template("../../../template/data/folder_delete_window.html");
+				$template = new Template("../../../../template/data/folder_delete_window.html");
 				$template->set_var("params", $params);
 				$button_handler = "
 					$.ajax({
 						type : \"GET\",
-						url : \"../../../core/modules/data/folder.ajax.php\",
+						url : \"../../../../core/modules/data/ajax/folder.ajax.php\",
 						data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&folder_id=".$_GET['folder_id']."&run=delete_folder\",
 						success : function(data) {
 							close_ui_window_and_reload();
@@ -182,14 +183,14 @@ class FolderAjax extends Ajax
 				$html = $template->get_string();
 			break;
 			case "folder_rename":
-				$template = new Template("../../../template/data/folder_rename_window.html");
+				$template = new Template("../../../../template/data/folder_rename_window.html");
 				$button_handler = "";
 				$button_handler_caption = "Rename";
 				$html_caption = "Rename Folder";
 				$html = $template->get_string();
 			break;
 			case "permission":
-				require_once("data.io.php");
+				require_once("../../../../core/modules/data/io/data.io.php");
 				if(isset($_GET[permissions])) //second call
 				{
 					$success = DataIO::change_permission(json_decode($_GET[permissions]), "Folder");
@@ -217,7 +218,7 @@ class FolderAjax extends Ajax
 						json += '}';
 						$.ajax({
 							type : \"GET\",
-							url : \"../../../core/modules/data/folder.ajax.php\",
+							url : \"../../../../core/modules/data/ajax/folder.ajax.php\",
 							data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&folder_id=".$_GET['folder_id']."&nav=data&run=get_data_browser_link_html_and_button_handler&action=permission&permissions=\"+json,
 							success : function(data) {
 								close_ui_window_and_reload();
@@ -243,7 +244,7 @@ class FolderAjax extends Ajax
 				var new_name = $('#NewFolderName').val();
 				$.ajax({
 					type : \"GET\",
-					url : \"../../../core/modules/data/folder.ajax.php\",
+					url : \"../../../../core/modules/data/ajax/folder.ajax.php\",
 					data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&folder_id=".$_GET['folder_id']."&run=add_folder&folder_name=\"+new_name,
 					success : function(data) {
 						close_ui_window_and_reload();
@@ -252,7 +253,7 @@ class FolderAjax extends Ajax
 			";
 			$button_handler_caption = "Add";
 			$html_caption = "Add Folder";
-			$template = new Template("../../../template/data/folder_add_window.html");
+			$template = new Template("../../../../template/data/folder_add_window.html");
 			$html = $template->get_string();
 			$array = array("content"=>$html , "content_caption"=>$html_caption , "handler"=>$button_handler , "handler_caption"=>$button_handler_caption);
 			return json_encode($array);

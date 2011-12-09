@@ -366,7 +366,7 @@ class SampleCreateAjax extends Ajax
 						{
 							$template = new Template("../../../../template/samples/new_sample_page_4_value.html");
 							
-							require_once("../../../../core/modules/data/value_form.io.php");
+							require_once("../../../../core/modules/data/io/value_form.io.php");
 							$value_form_io = new ValueFormIO(null, $value_type_id, null, $sample_template_data_array);
 							$value_form_io->set_field_class("SampleCreateAssistantField");
 							$template->set_var("content",$value_form_io->get_content());

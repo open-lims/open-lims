@@ -29,7 +29,8 @@
 /**
  * 
  */
-require_once("../base/ajax.php");
+$GLOBALS['autoload_prefix'] = "../";
+require_once("../../base/ajax.php");
 
 /**
  * File AJAX IO Class
@@ -155,7 +156,7 @@ class FileAjax extends Ajax
 				$paramquery[unique_id] = $unique_id;
 				$paramquery[file_id] = $file_id;
 				$params = http_build_query($paramquery, '', '&#38;');
-				$template = new Template("../../../template/data/file_update_window.html");
+				$template = new Template("../../../../template/data/file_update_window.html");
 				$template->set_var("params", $params);
 				$template->set_var("unique_id", $unique_id);
 				$template->set_var("session_id", $_GET[session_id]);
@@ -169,7 +170,7 @@ class FileAjax extends Ajax
 				$paramquery[unique_id] = $unique_id;
 				$paramquery[file_id] = $file_id;
 				$params = http_build_query($paramquery, '', '&#38;');
-				$template = new Template("../../../template/data/file_update_window.html");
+				$template = new Template("../../../../template/data/file_update_window.html");
 				$template->set_var("params", $params);
 				$template->set_var("unique_id", $unique_id);
 				$template->set_var("session_id", $_GET[session_id]);
@@ -179,7 +180,7 @@ class FileAjax extends Ajax
 				$html = $template->get_string();
 				break;	
 			case "permission":
-				require_once("data.io.php");
+				require_once("../../../../core/modules/data/io/data.io.php");
 				
 				if(isset($_GET[permissions]))
 				{
@@ -208,7 +209,7 @@ class FileAjax extends Ajax
 						json += '}';
 						$.ajax({
 							type : \"GET\",
-							url : \"../../../core/modules/data/file.ajax.php\",
+							url : \"../../../../core/modules/data/ajax/file.ajax.php\",
 							data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&file_id=".$_GET['file_id']."&nav=data&run=get_data_browser_link_html_and_button_handler&action=permission&permissions=\"+json,
 							success : function(data) {
 								close_ui_window_and_reload();
@@ -223,12 +224,12 @@ class FileAjax extends Ajax
 			case "file_delete":
 				$paramquery[sure] = "true";
 				$params = http_build_query($paramquery);
-				$template = new Template("../../../template/data/file_delete_window.html");
+				$template = new Template("../../../../template/data/file_delete_window.html");
 				$template->set_var("params", $params);
 				$button_handler = "
 					$.ajax({
 						type : \"GET\",
-						url : \"../../../core/modules/data/file.ajax.php\",
+						url : \"../../../../core/modules/data/ajax/file.ajax.php\",
 						data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&file_id=".$_GET['file_id']."&run=delete_file\",
 						success : function(data) {
 							close_ui_window_and_reload();
@@ -250,7 +251,7 @@ class FileAjax extends Ajax
 		$unique_id = uniqid();
 		$paramquery[unique_id] = $unique_id;
 		$params = http_build_query($paramquery);
-		$template = new Template("../../../template/data/file_upload_window.html");
+		$template = new Template("../../../../template/data/file_upload_window.html");
 		$template->set_var("params", $params);
 		$template->set_var("unique_id", $unique_id);
 		$template->set_var("session_id", $_GET[session_id]);

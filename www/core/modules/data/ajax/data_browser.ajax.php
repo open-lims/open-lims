@@ -21,7 +21,8 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once("../base/ajax.php");
+$GLOBALS['autoload_prefix'] = "../";
+require_once("../../base/ajax.php");
 
 /**
  * Data Browser AJAX IO Class

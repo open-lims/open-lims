@@ -346,7 +346,7 @@ class SampleCloneAjax extends Ajax
 					$content_array = array();
 					$content_counter = 0;
 					
-					require_once("../../../../core/modules/data/value_form.io.php");
+					require_once("../../../../core/modules/data/io/value_form.io.php");
 					
 					foreach($value_array as $key => $value)
 					{

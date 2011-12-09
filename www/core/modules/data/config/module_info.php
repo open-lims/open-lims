@@ -25,7 +25,7 @@
  * 
  */
 	$name 					= "data";
-	$main_class				= "DataIO";
+	$main_class				= "DataRequest";
 	
 	$required_include[0] 	= "data";
 	

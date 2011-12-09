@@ -99,7 +99,7 @@ class DataIO
 		$argument_array[1][0] = "virtual_folder_id";
 		$argument_array[1][1] = $virtual_folder_id;	
 
-		$list = new List_IO("DataBrowser", "/core/modules/data/data.ajax.php", "list_data_browser", "count_data_browser", $argument_array, "DataBrowserAjax");	
+		$list = new List_IO("DataBrowser", "/core/modules/data/ajax/data.ajax.php", "list_data_browser", "count_data_browser", $argument_array, "DataBrowserAjax");	
 		
 		$list->add_column("","symbol",false,16);
 		$list->add_column("Name","name",true,null);
@@ -823,7 +823,7 @@ class DataIO
 				if (!$_GET[nextpage])
 				{
 					
-					$template = new Template("../../../template/data/data_permission_window.html");
+					$template = new Template("../../../../template/data/data_permission_window.html");
 					
 					$paramquery = $_GET;
 					unset($paramquery[run]);
@@ -1050,7 +1050,7 @@ class DataIO
 		}
 	}
 	
-	public function change_permission($permission_array, $type)
+	public static function change_permission($permission_array, $type)
 	{
 		$permissions = (array)$permission_array;
 		switch($type):
@@ -1367,117 +1367,6 @@ class DataIO
 		{
 			throw new UserIDMissingException();
 		}
-	}
-	
-	public static function method_handler()
-	{			
-		switch($_GET[action]):
-			case("permission"):
-				self::permission();
-			break;
-			
-			case("chown"):
-				self::change_owner();
-			break;
-			
-			case("chgroup"):
-				self::change_group();
-			break;
-
-			case("image_browser_detail"):
-				self::image_browser_detail();
-			break;
-			
-			case("image_browser_multi"):
-				self::image_browser_multi();
-			break;
-
-			
-			case("value_detail"):
-				require_once("value.io.php");
-				ValueIO::detail();
-			break;
-			
-			case("value_history"):
-				require_once("value.io.php");
-				ValueIO::history();
-			break;
-				
-			case("value_delete_version"):
-				require_once("value.io.php");
-				ValueIO::delete_version();
-			break;
-
-			
-			case("file_add"):
-				require_once("file.io.php");
-				FileIO::upload();
-			break;
-			
-			case("file_update"):
-			case("file_update_minor"):
-				require_once("file.io.php");
-				FileIO::update();
-			break;
-
-			case("file_detail"):
-				require_once("file.io.php");
-				FileIO::detail();
-			break;
-			
-			case("file_history"):
-				require_once("file.io.php");
-				FileIO::history();
-			break;
-			
-			case("file_delete"):
-				require_once("file.io.php");
-				FileIO::delete();
-			break;
-			
-			case("file_delete_version"):
-				require_once("file.io.php");
-				FileIO::delete_version();
-			break;
-			
-			// Search
-			/**
-			 * @todo errors, exceptions
-			 */
-			case("search"):
-				if ($_GET[dialog])
-				{
-					$module_dialog = ModuleDialog::get_by_type_and_internal_name("search", $_GET[dialog]);
-					
-					if (file_exists($module_dialog[class_path]))
-					{
-						require_once($module_dialog[class_path]);
-						
-						if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
-						{
-							$module_dialog['class']::$module_dialog[method]();
-						}
-						else
-						{
-							// Error
-						}
-					}
-					else
-					{
-						// Error
-					}
-				}
-				else
-				{
-					// error
-				}
-			break;
-			
-			default:
-				self::browser();
-			break;
-			
-		endswitch;	
 	}
 	
 	/**

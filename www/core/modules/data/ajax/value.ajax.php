@@ -24,7 +24,8 @@
 /**
  * 
  */
-require_once("../base/ajax.php");
+$GLOBALS['autoload_prefix'] = "../";
+require_once("../../base/ajax.php");
 
 /**
  * Value AJAX IO Class
@@ -49,11 +50,11 @@ class ValueAjax extends Ajax
 		unset($paramquery[run]);
 		switch($action):
 			case "value_delete":
-				$template = new Template("../../../template/data/value_delete_window.html");
+				$template = new Template("../../../../template/data/value_delete_window.html");
 				$button_handler = "
 					$.ajax({
 						type : \"GET\",
-						url : \"../../../core/modules/data/value.ajax.php\",
+						url : \"../../../../core/modules/data/ajax/value.ajax.php\",
 						data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&value_id=".$_GET['value_id']."&run=delete_value\",
 						success : function(data) {
 							close_ui_window_and_reload();
@@ -65,7 +66,7 @@ class ValueAjax extends Ajax
 				$html = $template->get_string();
 			break;
 			case "permission":
-				require_once("data.io.php");
+				require_once("../../../../core/modules/data/io/data.io.php");
 				if(isset($_GET[permissions]))
 				{
 					$success = DataIO::change_permission(json_decode($_GET[permissions]), "Value");
@@ -93,7 +94,7 @@ class ValueAjax extends Ajax
 						json += '}';
 						$.ajax({
 							type : \"GET\",
-							url : \"../../../core/modules/data/value.ajax.php\",
+							url : \"../../../../core/modules/data/ajax/value.ajax.php\",
 							data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&value_id=".$_GET['value_id']."&nav=data&run=get_data_browser_link_html_and_button_handler&action=permission&permissions=\"+json,
 							success : function(data) {
 								close_ui_window_and_reload();
@@ -116,9 +117,9 @@ class ValueAjax extends Ajax
 		{
 			$paramquery = $_GET;
 			$params = http_build_query($paramquery);
-			$template = new Template("../../../template/data/value_add_window.html");
+			$template = new Template("../../../../template/data/value_add_window.html");
 			$template->set_var("params", $params);
-			require_once("../../include/data/value/access/value_type.access.php");
+			require_once("../../../include/data/value/access/value_type.access.php");
 			$types = ValueType_Access::list_entries();
 			$options = array();
 			$counter = 0;
@@ -163,7 +164,7 @@ class ValueAjax extends Ajax
 				//hand the array to this same function (third call)
 				$.ajax({
 						type : \"GET\",
-						url : \"../../../core/modules/data/value.ajax.php\",
+						url : \"../../../core/modules/data/ajax/value.ajax.php\",
 						data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&folder_id=".$_GET['folder_id']."&run=add_value&value_id=\"+value_id+\"&value_array=\"+json,
 						success : function(data){
 							close_ui_window_and_reload();
@@ -183,7 +184,7 @@ class ValueAjax extends Ajax
 					var value_id = $('#DataBrowserAddValue option:selected').val();
 					$.ajax({
 						type : \"GET\",
-						url : \"../../../core/modules/data/value.ajax.php\",
+						url : \"../../../core/modules/data/ajax/value.ajax.php\",
 						data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&run=add_value&value_id=\"+value_id,
 						success : function(data) {
 							$('#AjaxLoadedContent').find('.jspVerticalBar').show();
@@ -218,14 +219,14 @@ class ValueAjax extends Ajax
 		}
 		else if($folder_id == null) //second call (from additional script; loads template)
 		{
-			require_once("value_form.io.php");
+			require_once("../../../../core/modules/data/io/value_form.io.php");
 			$value_form_io = new ValueFormIO(null, $type_id, $folder_id);
 			return $value_form_io->get_content();
 		}
 		else if($value_array != null)//third call (from add button; creates value)
 		{
 			$values = json_decode($value_array, true);
-			require_once("value.io.php");
+			require_once("../../../../core/modules/data/io/value.io.php");
 			$new_value = ValueIO::add_value_item_window($type_id, $folder_id, $values);
 			return $new_value;
 		}
