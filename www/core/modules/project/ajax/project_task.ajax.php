@@ -22,23 +22,12 @@
  */
 
 /**
- * 
- */
-$GLOBALS['autoload_prefix'] = "../";
-require_once("../../base/ajax.php");
-
-/**
  * Project Task AJAX IO Class
  * @package project
  */
-class ProjectTaskAjax extends Ajax
-{
-	function __construct()
-	{
-		parent::__construct();
-	}
-	
-	private function list_project_tasks($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+class ProjectTaskAjax
+{	
+	public static function list_project_tasks($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
 		
@@ -123,7 +112,7 @@ class ProjectTaskAjax extends Ajax
 		}
 	}
 	
-	private function count_project_tasks($json_argument_array)
+	public static function count_project_tasks($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
 		
@@ -138,31 +127,5 @@ class ProjectTaskAjax extends Ajax
 			return null;
 		}
 	}
-	
-	public function method_handler()
-	{
-		global $session;
-		
-		if ($session->is_valid())
-		{
-			switch($_GET[run]):
-				
-				case "list_project_tasks":
-					echo $this->list_project_tasks($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
-				break;
-				
-				case "count_project_tasks":
-					echo $this->count_project_tasks($_POST[argument_array]);
-				break;
-				
-				default:
-				break;
-			
-			endswitch;
-		}
-	}
 }
-
-$project_task_ajax = new ProjectTaskAjax;
-$project_task_ajax->method_handler();
 ?>

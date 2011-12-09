@@ -31,7 +31,7 @@ class SampleIO
 	{
 		global $user;
 		
-		$list = new List_IO("SampleUserRelated", "/core/modules/sample/ajax/sample.ajax.php", "list_user_related_samples", "count_user_related_samples", "0", "SampleAjaxMySamples");
+		$list = new List_IO("SampleUserRelated", "ajax.php?nav=sample", "list_user_related_samples", "count_user_related_samples", "0", "SampleAjaxMySamples");
 		
 		$list->add_column("","symbol",false,"16px");
 		$list->add_column("Smpl. ID","id",true,"11%");
@@ -64,7 +64,7 @@ class SampleIO
 				$argument_array[0][0] = "organisation_unit_id";
 				$argument_array[0][1] = $organisation_unit_id;
 				
-				$list = new List_IO("SampleOrganisationUnitRelated", "/core/modules/sample/ajax/sample.ajax.php", "list_organisation_unit_related_samples", "count_organisation_unit_related_samples", $argument_array, "SampleAjaxMySamples", 12);
+				$list = new List_IO("SampleOrganisationUnitRelated", "ajax.php?nav=sample", "list_organisation_unit_related_samples", "count_organisation_unit_related_samples", $argument_array, "SampleAjaxMySamples", 12);
 				
 				$list->add_column("","symbol",false,"16px");
 				$list->add_column("Smpl. ID","id",true,"11%");
@@ -120,7 +120,7 @@ class SampleIO
 			
 			if ($in_assistant == false)
 			{
-				$list = new List_IO("SampleByItem", "/core/modules/sample/ajax/sample.ajax.php", "list_samples_by_item_id", "count_samples_by_item_id", $argument_array, "SampleParentAjax", 20, true, true);
+				$list = new List_IO("SampleByItem", "ajax.php?nav=sample", "list_samples_by_item_id", "count_samples_by_item_id", $argument_array, "SampleParentAjax", 20, true, true);
 				
 				$template = new Template($path_prefix."template/samples/list_parents.html");
 				
@@ -135,7 +135,7 @@ class SampleIO
 			}
 			else
 			{
-				$list = new List_IO("SampleByItem", "/core/modules/sample/ajax/sample.ajax.php", "list_samples_by_item_id", "count_samples_by_item_id", $argument_array, "SampleParentAjax", 20, false, false);
+				$list = new List_IO("SampleByItem", "ajax.php?nav=sample", "list_samples_by_item_id", "count_samples_by_item_id", $argument_array, "SampleParentAjax", 20, false, false);
 				
 				$template = new Template($path_prefix."template/samples/list_parents_without_border.html");
 				
@@ -191,7 +191,7 @@ class SampleIO
 		
 		if ($in_assistant == false)
 		{
-			$list = new List_IO("SampleItem", "/core/modules/sample/ajax/sample.ajax.php", "list_sample_items", "count_sample_items",  $argument_array, "SampleAjax", 20, true, true);
+			$list = new List_IO("SampleItem", "ajax.php?nav=sample", "list_sample_items", "count_sample_items",  $argument_array, "SampleAjax", 20, true, true);
 			
 			$template = new Template($path_prefix."template/samples/list.html");
 			
@@ -206,7 +206,7 @@ class SampleIO
 		}
 		else
 		{
-			$list = new List_IO("SampleItem", "/core/modules/sample/ajax/sample.ajax.php", "list_sample_items", "count_sample_items", $argument_array, "SampleAjax", 20, false, false);
+			$list = new List_IO("SampleItem", "ajax.php?nav=sample", "list_sample_items", "count_sample_items", $argument_array, "SampleAjax", 20, false, false);
 			
 			$template = new Template($path_prefix."template/samples/list_without_border.html");
 			

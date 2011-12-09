@@ -29,7 +29,52 @@ class SampleRequest
 {
 	public static function ajax_handler()
 	{
+		switch($_GET[run]):
+	
+			case "list_user_related_samples":
+				require_once("ajax/sample.ajax.php");
+				echo SampleAjax::list_user_related_samples($_POST[column_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "count_user_related_samples":
+				require_once("ajax/sample.ajax.php");
+				echo SampleAjax::count_user_related_samples();
+			break;
+			
+			case "list_organisation_unit_related_samples":
+				require_once("ajax/sample.ajax.php");
+				echo SampleAjax::list_organisation_unit_related_samples($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "count_organisation_unit_related_samples":
+				require_once("ajax/sample.ajax.php");
+				echo SampleAjax::count_organisation_unit_related_samples($_POST[argument_array]);
+			break;
+			
+			case "list_sample_items":
+				require_once("ajax/sample.ajax.php");
+				echo SampleAjax::list_sample_items($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "count_sample_items":
+				require_once("ajax/sample.ajax.php");
+				echo SampleAjax::count_sample_items($_POST[argument_array]);
+			break;
+			
+			case "list_samples_by_item_id":
+				require_once("ajax/sample.ajax.php");
+				echo SampleAjax::list_samples_by_item_id($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "count_samples_by_item_id":
+				require_once("ajax/sample.ajax.php");
+				echo SampleAjax::count_samples_by_item_id($_POST[argument_array]);
+			break;
+			
+			default:
+			break;
 		
+		endswitch;
 	}
 	
 	/**

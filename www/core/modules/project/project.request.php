@@ -61,6 +61,26 @@ class ProjectRequest
 				echo ProjectAjax::count_projects_by_item_id($_POST[argument_array]);
 			break;
 				
+			case "list_project_tasks":
+				require_once("ajax/project_task.ajax.php");
+				echo ProjectTaskAjax::list_project_tasks($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "count_project_tasks":
+				require_once("ajax/project_task.ajax.php");
+				echo ProjectTaskAjax::count_project_tasks($_POST[argument_array]);
+			break;
+			
+			case "list_project_permissions":
+				require_once("ajax/project_admin.ajax.php");
+				echo ProjectAdminAjax::list_project_permissions($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "count_project_permissions":
+				require_once("ajax/project_admin.ajax.php");
+				echo ProjectAdminAjax::count_project_permissions($_POST[argument_array]);
+			break;
+			
 		endswitch;
 	}
 	

@@ -50,7 +50,7 @@ class ProjectAdminIO
 				$argument_array[0][0] = "project_id";
 				$argument_array[0][1] = $_GET[project_id];
 				
-				$list = new List_IO("ProjectPermission", "/core/modules/project/ajax/project_admin.ajax.php", "list_project_permissions", "count_project_permissions", $argument_array, "ProjectAjaxMyProjects");
+				$list = new List_IO("ProjectPermission", "ajax.php?nav=project", "list_project_permissions", "count_project_permissions", $argument_array, "ProjectAjaxMyProjects");
 				
 				$list->add_column("", "symbol", false, "16px");
 				$list->add_column("User/Group","name",true,null);
