@@ -249,10 +249,10 @@ class EquipmentIO
 			
 			$template = new Template($path_prefix."template/equipment/list.html");
 			
-			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Equipment Name","name",true,null);
-			$list->add_row("Category","category",true,null);
-			$list->add_row("Date/Time","datetime",true,null);
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Equipment Name","name",true,null);
+			$list->add_column("Category","category",true,null);
+			$list->add_column("Date/Time","datetime",true,null);
 		}
 		else
 		{
@@ -260,11 +260,11 @@ class EquipmentIO
 			
 			$template = new Template($path_prefix."template/equipment/list_without_border.html");
 			
-			$list->add_row("","checkbox",false,"16px", $form_field_name);
-			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Equipment Name","name",false,null);
-			$list->add_row("Category","category",false,null);
-			$list->add_row("Date/Time","datetime",false,null);
+			$list->add_column("","checkbox",false,"16px", $form_field_name);
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Equipment Name","name",false,null);
+			$list->add_column("Category","category",false,null);
+			$list->add_column("Date/Time","datetime",false,null);
 		}
 		
 		$template->set_var("list", $list->get_list());
@@ -296,9 +296,9 @@ class EquipmentIO
 		{
 			$list = new ListStat_IO(Equipment_Wrapper::count_organisation_unit_equipments($_GET[ou_id]), 20);
 
-			$list->add_row("","symbol",false,16);
-			$list->add_row("Equipment Name","name",true,null);
-			$list->add_row("Category","category",true,null);
+			$list->add_column("","symbol",false,16);
+			$list->add_column("Equipment Name","name",true,null);
+			$list->add_column("Category","category",true,null);
 			
 			if ($_GET[page])
 			{

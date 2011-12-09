@@ -247,14 +247,14 @@ class DataSearchIO
 				$list->override_last_line("<span class='italic'>No results found!</span>");
 			}
 	
-			$list->add_row("", "symbol", false, "16px");
-			$list->add_row("Name", "name", true, null);
-			$list->add_row("Type", "type", false, null);
-			$list->add_row("Version", "version", false, null);
-			$list->add_row("Datetime", "datetime", true, null);
-			$list->add_row("Size", "size", true, null);
-			$list->add_row("Owner", "owner", true, null);
-			$list->add_row("Permission", "permission", false, null);
+			$list->add_column("", "symbol", false, "16px");
+			$list->add_column("Name", "name", true, null);
+			$list->add_column("Type", "type", false, null);
+			$list->add_column("Version", "version", false, null);
+			$list->add_column("Datetime", "datetime", true, null);
+			$list->add_column("Size", "size", true, null);
+			$list->add_column("Owner", "owner", true, null);
+			$list->add_column("Permission", "permission", false, null);
 			
 			$folder = Folder::get_instance($folder_id);
 			

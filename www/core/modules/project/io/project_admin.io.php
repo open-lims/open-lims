@@ -52,20 +52,20 @@ class ProjectAdminIO
 				
 				$list = new List_IO("ProjectPermission", "/core/modules/project/ajax/project_admin.ajax.php", "list_project_permissions", "count_project_permissions", $argument_array, "ProjectAjaxMyProjects");
 				
-				$list->add_row("", "symbol", false, "16px");
-				$list->add_row("User/Group","name",true,null);
-				$list->add_row("Type","type",true,null);
-				$list->add_row("Full Name","fullname",true,null);
-				$list->add_row("Created by","createdby",true,null);
-				$list->add_row("RE","re",false,"25px");
-				$list->add_row("SR","sr",false,"25px");
-				$list->add_row("WR","wr",false,"25px");
-				$list->add_row("SW","sw",false,"25px");
-				$list->add_row("RA","ra",false,"25px");
-				$list->add_row("DE","de",false,"25px");
-				$list->add_row("SP","sp",false,"25px");
-				$list->add_row("E","e",false,"16px");
-				$list->add_row("D","d",false,"16px");
+				$list->add_column("", "symbol", false, "16px");
+				$list->add_column("User/Group","name",true,null);
+				$list->add_column("Type","type",true,null);
+				$list->add_column("Full Name","fullname",true,null);
+				$list->add_column("Created by","createdby",true,null);
+				$list->add_column("RE","re",false,"25px");
+				$list->add_column("SR","sr",false,"25px");
+				$list->add_column("WR","wr",false,"25px");
+				$list->add_column("SW","sw",false,"25px");
+				$list->add_column("RA","ra",false,"25px");
+				$list->add_column("DE","de",false,"25px");
+				$list->add_column("SP","sp",false,"25px");
+				$list->add_column("E","e",false,"16px");
+				$list->add_column("D","d",false,"16px");
 				
 				$template = new Template("template/projects/admin/permission.html");
 				

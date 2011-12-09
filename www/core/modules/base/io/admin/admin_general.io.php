@@ -31,11 +31,11 @@ class AdminGeneralIO
 	{
 		$list = new List_IO("AdminGeneralLanguage", "/core/modules/base/ajax/admin/admin_general.ajax.php", "list_languages", "count_languages", $argument_array, "AdminGeneralLanguage");
 		
-		$list->add_row("","symbol",false,"16px");
-		$list->add_row("Name","language_name",true,null);
-		$list->add_row("English Name","english_name",true,null);
-		$list->add_row("ISO 639","iso_639",true,null);
-		$list->add_row("ISO 3166","iso_3166",true,null);
+		$list->add_column("","symbol",false,"16px");
+		$list->add_column("Name","language_name",true,null);
+		$list->add_column("English Name","english_name",true,null);
+		$list->add_column("ISO 639","iso_639",true,null);
+		$list->add_column("ISO 3166","iso_3166",true,null);
 		
 		$template = new Template("template/base/admin/general/list_languages.html");
 		
@@ -48,9 +48,9 @@ class AdminGeneralIO
 	{
 		$list = new List_IO("AdminGeneralTimezone", "/core/modules/base/ajax/admin/admin_general.ajax.php", "list_timezones", "count_timezones", $argument_array, "AdminGeneralTimezone");
 		
-		$list->add_row("","symbol",false,"16px");
-		$list->add_row("Name","name",true,null);
-		$list->add_row("Deviation","deviation",true,null);
+		$list->add_column("","symbol",false,"16px");
+		$list->add_column("Name","name",true,null);
+		$list->add_column("Deviation","deviation",true,null);
 		
 		$template = new Template("template/base/admin/general/list_timezones.html");
 		
@@ -69,10 +69,10 @@ class AdminGeneralIO
 	{
 		$list = new List_IO("AdminGeneralMeasuringUnit", "/core/modules/base/ajax/admin/admin_general.ajax.php", "list_measuring_units", "count_measuring_units", $argument_array, "AdminGeneralMeasuringUnit");
 		
-		$list->add_row("","symbol",false,"16px");
-		$list->add_row("Name","name",true,null);
-		$list->add_row("Type","type",true,null);
-		$list->add_row("Symbol","unit_symbol",false,null);
+		$list->add_column("","symbol",false,"16px");
+		$list->add_column("Name","name",true,null);
+		$list->add_column("Type","type",true,null);
+		$list->add_column("Symbol","unit_symbol",false,null);
 		
 		$template = new Template("template/base/admin/general/list_measuring_units.html");
 		
@@ -85,10 +85,10 @@ class AdminGeneralIO
 	{
 		$list = new List_IO("AdminGeneralCurrency", "/core/modules/base/ajax/admin/admin_general.ajax.php", "list_currencies", "count_currencies", $argument_array, "AdminGeneralCurrency");
 		
-		$list->add_row("","symbol",false,"16px");
-		$list->add_row("Name","name",true,null);
-		$list->add_row("Symbol","currency_symbol",false,null);
-		$list->add_row("ISO 4217","iso_4217",true,null);
+		$list->add_column("","symbol",false,"16px");
+		$list->add_column("Name","name",true,null);
+		$list->add_column("Symbol","currency_symbol",false,null);
+		$list->add_column("ISO 4217","iso_4217",true,null);
 		
 		$template = new Template("template/base/admin/general/list_currencies.html");
 		

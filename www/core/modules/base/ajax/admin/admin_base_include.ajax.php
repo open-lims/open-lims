@@ -38,10 +38,10 @@ class AdminBaseIncludeAjax extends Ajax
 		parent::__construct();
 	}
 	
-	private function list_includes($json_row_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	private function list_includes($json_column_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$list_request = new ListRequest_IO();
-		$list_request->set_row_array($json_row_array);
+		$list_request->set_column_array($json_column_array);
 		
 		if (!is_numeric($entries_per_page) or $entries_per_page < 1)
 		{
@@ -84,7 +84,7 @@ class AdminBaseIncludeAjax extends Ajax
 			switch($_GET[run]):
 	
 				case "list_includes":
-					echo $this->list_includes($_POST[row_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+					echo $this->list_includes($_POST[column_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
 				case "count_includes":

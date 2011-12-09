@@ -511,12 +511,12 @@ class ValueIO
 			{
 				$list = new ListStat_IO(Data_Wrapper::count_value_versions($_GET[value_id]), 20);
 
-				$list->add_row("","symbol",false,"16px");
-				$list->add_row("Name","name",true,null);
-				$list->add_row("Version","version",false,null);
-				$list->add_row("Date/Time","datetime",true,null);
-				$list->add_row("User","user",true,null);
-				$list->add_row("","delete",false,"16px");
+				$list->add_column("","symbol",false,"16px");
+				$list->add_column("Name","name",true,null);
+				$list->add_column("Version","version",false,null);
+				$list->add_column("Date/Time","datetime",true,null);
+				$list->add_column("User","user",true,null);
+				$list->add_column("","delete",false,"16px");
 				
 				if ($_GET[page])
 				{

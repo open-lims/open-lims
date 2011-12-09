@@ -27,7 +27,7 @@
  */
 class ProjectAjax
 {	
-	public static function list_user_related_projects($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	public static function list_user_related_projects($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
 		
@@ -36,7 +36,7 @@ class ProjectAjax
 		if (is_numeric($user_id))
 		{
 			$list_request = new ListRequest_IO();
-			$list_request->set_row_array($json_row_array);
+			$list_request->set_column_array($json_column_array);
 		
 			if (!is_numeric($entries_per_page) or $entries_per_page < 1)
 			{
@@ -136,7 +136,7 @@ class ProjectAjax
 		}
 	}
 	
-	public static function list_organisation_unit_related_projects($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	public static function list_organisation_unit_related_projects($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
 		
@@ -145,7 +145,7 @@ class ProjectAjax
 		if (is_numeric($organisation_unit_id))
 		{
 			$list_request = new ListRequest_IO();
-			$list_request->set_row_array($json_row_array);
+			$list_request->set_column_array($json_column_array);
 		
 			if (!is_numeric($entries_per_page) or $entries_per_page < 1)
 			{
@@ -260,7 +260,7 @@ class ProjectAjax
 		}
 	}
 	
-	public static function list_projects_by_item_id($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	public static function list_projects_by_item_id($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
 		$item_id = $argument_array[0][1];
@@ -283,7 +283,7 @@ class ProjectAjax
 				$list_array = Project_Wrapper::list_projects_by_item_id($item_id, $sortvalue, $sortmethod, 0, null);
 			}
 			
-			$list_request->set_row_array($json_row_array);
+			$list_request->set_column_array($json_column_array);
 						
 			if (is_array($list_array) and count($list_array) >= 1)
 			{				
@@ -333,10 +333,10 @@ class ProjectAjax
 					
 					if ($argument_array[1][1] == true)
 					{
-						$row_array = json_decode($json_row_array);
-						if (is_array($row_array) and count($row_array) >= 1)
+						$column_array = json_decode($json_column_array);
+						if (is_array($column_array) and count($column_array) >= 1)
 						{
-							foreach ($row_array as $row_key => $row_value)
+							foreach ($column_array as $row_key => $row_value)
 							{
 								if ($row_value[1] == "checkbox")
 								{

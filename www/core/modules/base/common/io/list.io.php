@@ -38,7 +38,7 @@ class List_IO
 	private $argument_array;
 	private $css_main_id;
 	
-	private $rows = array();
+	private $columns = array();
 	
 	/**
 	 * @param string $list_name A system wide unique list name
@@ -69,51 +69,51 @@ class List_IO
     	}
     }
     
- 	public function add_row($title, $address, $sortable, $width, $row_css_id = null, $hideable = true)
+ 	public function add_column($title, $address, $sortable, $width, $column_css_id = null, $hideable = true)
     {
     	if ($address)
     	{
-    		$row_array = array();
-    		$row_array[0] = $title;
-    		$row_array[1] = $address;
+    		$column_array = array();
+    		$column_array[0] = $title;
+    		$column_array[1] = $address;
     		
     		if ($width != null)
     		{
-    			$row_array[2] = $width;
+    			$column_array[2] = $width;
     		}
     		else
     		{
-    			$row_array[2] = null;
+    			$column_array[2] = null;
     		}
     			    		
     		if ($sortable == true)
     		{
-    			$row_array[3] = true;
+    			$column_array[3] = true;
     		}
     		else
     		{
-    			$row_array[3] = false;
+    			$column_array[3] = false;
     		}
     		
-    		if ($row_css_id)
+    		if ($column_css_id)
     		{
-    			$row_array[4] = $row_css_id;
+    			$column_array[4] = $column_css_id;
     		}
     		else
     		{
-    			$row_array[4] = null;
+    			$column_array[4] = null;
     		} 
     		
     		if ($hideable == true)
     		{
-    			$row_array[5] = true;
+    			$column_array[5] = true;
     		}
     		else
     		{
-    			$row_array[5] = false;
+    			$column_array[5] = false;
     		} 
     		
-    		array_push($this->rows, $row_array);
+    		array_push($this->columns, $column_array);
     	}
     	else
     	{
@@ -147,7 +147,7 @@ class List_IO
     	
 		$head .= "<table class='ListTable'><thead><tr>";
 		
-		foreach ($this->rows as $key => $value)
+		foreach ($this->columns as $key => $value)
 		{
 			if ($value[3] == true)
 			{
@@ -158,7 +158,7 @@ class List_IO
 				
 				if ($value[2] != null)
 				{
-					$head .= "<th width='".$value[2]."'  style='width:".$value[2].";' class='".$this->css_main_id."Row' id='".$this->css_main_id."Row".$value[1]."'>" .
+					$head .= "<th width='".$value[2]."'  style='width:".$value[2].";' class='".$this->css_main_id."Column' id='".$this->css_main_id."Column".$value[1]."'>" .
 									"<a href='#'>".$value[0]."</a>" .
 									"&nbsp;<a href='#'>" .
 											"<img src='images/nosort.png' alt='' border='0' />" .
@@ -168,7 +168,7 @@ class List_IO
 				else
 				{
 					
-					$head .= "<th class='".$this->css_main_id."Row' id='".$this->css_main_id."Row".$value[1]."'>" .
+					$head .= "<th class='".$this->css_main_id."Column' id='".$this->css_main_id."Column".$value[1]."'>" .
 									"<a href='#'>".$value[0]."</a>" .
 									"&nbsp;<a href='#'>" .
 											"<img src='images/nosort.png' alt='' border='0' />" .
@@ -204,7 +204,7 @@ class List_IO
     	$template->set_var("get_array", serialize($_GET));
     	$template->set_Var("css_main_id", $this->css_main_id);
     	$template->set_var("entries_per_page", $this->entries_per_page);
-    	$template->set_var("row_array", json_encode($this->rows));
+    	$template->set_var("column_array", json_encode($this->columns));
 
     	$template->set_var("list_div", "<tbody id='".$this->css_main_id."'></tbody></table>");
     	

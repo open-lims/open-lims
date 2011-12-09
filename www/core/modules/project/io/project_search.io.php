@@ -247,12 +247,12 @@ class ProjectSearchIO
 			
 			$list = new ListStat_IO(Project_Wrapper::count_search_projects_without_subprojects($name, $template_array, $organisation_unit_array, $in_id, $in_name), 20);
 
-			$list->add_row("","symbol",false,16);
-			$list->add_row("Name","name",true,null);
-			$list->add_row("Organisation Unit","organisation_unit",true,null);
-			$list->add_row("Date/Time","datetime",true,null);
-			$list->add_row("Template","template",true,null);
-			$list->add_row("Status","status",true,null);
+			$list->add_column("","symbol",false,16);
+			$list->add_column("Name","name",true,null);
+			$list->add_column("Organisation Unit","organisation_unit",true,null);
+			$list->add_column("Date/Time","datetime",true,null);
+			$list->add_column("Template","template",true,null);
+			$list->add_column("Status","status",true,null);
 			
 			if ($_GET[page])
 			{

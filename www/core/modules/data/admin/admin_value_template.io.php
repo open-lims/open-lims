@@ -31,10 +31,10 @@ class AdminValueTemplateIO
 	{
 		$list = new ListStat_IO(Data_Wrapper::count_list_value_templates(), 20);
 		
-		$list->add_row("ID", "id", true, null);
-		$list->add_row("Name", "name", true, null);
-		$list->add_row("File", "file", true, null);
-		$list->add_row("Delete", "delete", false, "7%");
+		$list->add_column("ID", "id", true, null);
+		$list->add_column("Name", "name", true, null);
+		$list->add_column("File", "file", true, null);
+		$list->add_column("Delete", "delete", false, "7%");
 		
 		if ($_GET[page])
 		{

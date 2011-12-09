@@ -234,9 +234,9 @@ class ListRequest_IO
     	}
    	}
    	
-   	public function set_row_array($json_row_array)
+   	public function set_column_array($json_column_array)
    	{
-   		$this->rows = json_decode($json_row_array);
+   		$this->rows = json_decode($json_column_array);
    	}
    	
    	public function set_array($array)

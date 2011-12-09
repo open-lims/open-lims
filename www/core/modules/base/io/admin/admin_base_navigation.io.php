@@ -31,12 +31,12 @@ class AdminBaseNavigationIO
 	{
 		$list = new ListStat_IO((System_Wrapper::count_base_module_navigation()+1), 20);
 		
-		$list->add_row("Displayed-Name (en-GB)", "name", false, null);
-		$list->add_row("Module", "module", false, null);
-		$list->add_row("Colour", "colour", false, null);
-		$list->add_row("UW", "uw", false, null);
-		$list->add_row("DW", "dw", false, null);
-		$list->add_row("Show/Hide", "hide", false, "80px");
+		$list->add_column("Displayed-Name (en-GB)", "name", false, null);
+		$list->add_column("Module", "module", false, null);
+		$list->add_column("Colour", "colour", false, null);
+		$list->add_column("UW", "uw", false, null);
+		$list->add_column("DW", "dw", false, null);
+		$list->add_column("Show/Hide", "hide", false, "80px");
 
 		$home_array = array();
 		$home_array[name] = "Home";

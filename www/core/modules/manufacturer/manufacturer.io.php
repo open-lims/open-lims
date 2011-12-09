@@ -51,10 +51,10 @@ class ManufacturerIO
 	{
 		$list = new List_IO("Manufacturer", "/core/modules/manufacturer/manufacturer.ajax.php", "get_list", "get_list_count", "0", "ManufacturerListPage");
 		
-		$list->add_row("","symbol",false,"16px");
-		$list->add_row("Name","name",true,null);
-		$list->add_row("User","user",true,null);
-		$list->add_row("","delete",false,"16px");
+		$list->add_column("","symbol",false,"16px");
+		$list->add_column("Name","name",true,null);
+		$list->add_column("User","user",true,null);
+		$list->add_column("","delete",false,"16px");
 		
 		$template = new Template("template/manufacturer/list.html");
 		

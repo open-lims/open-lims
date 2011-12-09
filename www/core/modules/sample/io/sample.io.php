@@ -33,13 +33,13 @@ class SampleIO
 		
 		$list = new List_IO("SampleUserRelated", "/core/modules/sample/ajax/sample.ajax.php", "list_user_related_samples", "count_user_related_samples", "0", "SampleAjaxMySamples");
 		
-		$list->add_row("","symbol",false,"16px");
-		$list->add_row("Smpl. ID","id",true,"11%");
-		$list->add_row("Sample Name","name",true,null);
-		$list->add_row("Date/Time","datetime",true,null);
-		$list->add_row("Type/Tmpl.","template",true,null);
-		$list->add_row("Curr. Loc.","location",true,null);
-		$list->add_row("AV","av",false,"16px");
+		$list->add_column("","symbol",false,"16px");
+		$list->add_column("Smpl. ID","id",true,"11%");
+		$list->add_column("Sample Name","name",true,null);
+		$list->add_column("Date/Time","datetime",true,null);
+		$list->add_column("Type/Tmpl.","template",true,null);
+		$list->add_column("Curr. Loc.","location",true,null);
+		$list->add_column("AV","av",false,"16px");
 		
 		$template = new Template("template/samples/list_user.html");	
 		
@@ -66,13 +66,13 @@ class SampleIO
 				
 				$list = new List_IO("SampleOrganisationUnitRelated", "/core/modules/sample/ajax/sample.ajax.php", "list_organisation_unit_related_samples", "count_organisation_unit_related_samples", $argument_array, "SampleAjaxMySamples", 12);
 				
-				$list->add_row("","symbol",false,"16px");
-				$list->add_row("Smpl. ID","id",true,"11%");
-				$list->add_row("Sample Name","name",true,null);
-				$list->add_row("Date/Time","datetime",true,null);
-				$list->add_row("Type/Tmpl.","template",true,null);
-				$list->add_row("Curr. Loc.","location",true,null);
-				$list->add_row("AV","av",false,"16px");
+				$list->add_column("","symbol",false,"16px");
+				$list->add_column("Smpl. ID","id",true,"11%");
+				$list->add_column("Sample Name","name",true,null);
+				$list->add_column("Date/Time","datetime",true,null);
+				$list->add_column("Type/Tmpl.","template",true,null);
+				$list->add_column("Curr. Loc.","location",true,null);
+				$list->add_column("AV","av",false,"16px");
 							
 				require_once("core/modules/organisation_unit/io/organisation_unit.io.php");
 				$organisation_unit_io = new OrganisationUnitIO;
@@ -124,14 +124,14 @@ class SampleIO
 				
 				$template = new Template($path_prefix."template/samples/list_parents.html");
 				
-				$list->add_row("","symbol",false,"16px");
-				$list->add_row("Smpl. ID","sid",true,"11%");
-				$list->add_row("Sample Name","name",true,null);
-				$list->add_row("Date","datetime",true,null);
-				$list->add_row("Type/Tmpl.","template",true,null);
-				$list->add_row("Curr. Loc.","location",true,null);
-				$list->add_row("Owner","owner",true,null);
-				$list->add_row("AV","av",false,"16px");
+				$list->add_column("","symbol",false,"16px");
+				$list->add_column("Smpl. ID","sid",true,"11%");
+				$list->add_column("Sample Name","name",true,null);
+				$list->add_column("Date","datetime",true,null);
+				$list->add_column("Type/Tmpl.","template",true,null);
+				$list->add_column("Curr. Loc.","location",true,null);
+				$list->add_column("Owner","owner",true,null);
+				$list->add_column("AV","av",false,"16px");
 			}
 			else
 			{
@@ -139,14 +139,14 @@ class SampleIO
 				
 				$template = new Template($path_prefix."template/samples/list_parents_without_border.html");
 				
-				$list->add_row("","checkbox",false,"16px", $form_field_name);
-				$list->add_row("","symbol",false,"16px");
-				$list->add_row("Smpl. ID","sid",false,"11%");
-				$list->add_row("Sample Name","name",false,null);
-				$list->add_row("Date","datetime",false,null);
-				$list->add_row("Type/Tmpl.","template",false,null);
-				$list->add_row("Curr. Loc.","location",false,null);
-				$list->add_row("Owner","owner",false,null);
+				$list->add_column("","checkbox",false,"16px", $form_field_name);
+				$list->add_column("","symbol",false,"16px");
+				$list->add_column("Smpl. ID","sid",false,"11%");
+				$list->add_column("Sample Name","name",false,null);
+				$list->add_column("Date","datetime",false,null);
+				$list->add_column("Type/Tmpl.","template",false,null);
+				$list->add_column("Curr. Loc.","location",false,null);
+				$list->add_column("Owner","owner",false,null);
 			}
 		
 			$template->set_var("list", $list->get_list());
@@ -195,14 +195,14 @@ class SampleIO
 			
 			$template = new Template($path_prefix."template/samples/list.html");
 			
-			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Smpl. ID","sid",true,"11%");
-			$list->add_row("Sample Name","name",true,null);
-			$list->add_row("Date","datetime",true,null);
-			$list->add_row("Type/Tmpl.","template",true,null);
-			$list->add_row("Curr. Loc.","location",true,null);
-			$list->add_row("Owner","owner",true,null);
-			$list->add_row("AV","av",false,"16px");
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Smpl. ID","sid",true,"11%");
+			$list->add_column("Sample Name","name",true,null);
+			$list->add_column("Date","datetime",true,null);
+			$list->add_column("Type/Tmpl.","template",true,null);
+			$list->add_column("Curr. Loc.","location",true,null);
+			$list->add_column("Owner","owner",true,null);
+			$list->add_column("AV","av",false,"16px");
 		}
 		else
 		{
@@ -210,14 +210,14 @@ class SampleIO
 			
 			$template = new Template($path_prefix."template/samples/list_without_border.html");
 			
-			$list->add_row("","checkbox",false,"16px", $form_field_name);
-			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Smpl. ID","sid",false,"11%");
-			$list->add_row("Sample Name","name",false,null);
-			$list->add_row("Date","datetime",false,null);
-			$list->add_row("Type/Tmpl.","template",false,null);
-			$list->add_row("Curr. Loc.","location",false,null);
-			$list->add_row("Owner","owner",false,null);
+			$list->add_column("","checkbox",false,"16px", $form_field_name);
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Smpl. ID","sid",false,"11%");
+			$list->add_column("Sample Name","name",false,null);
+			$list->add_column("Date","datetime",false,null);
+			$list->add_column("Type/Tmpl.","template",false,null);
+			$list->add_column("Curr. Loc.","location",false,null);
+			$list->add_column("Owner","owner",false,null);
 		}
 		
 		$template->set_var("list", $list->get_list());
@@ -948,10 +948,10 @@ class SampleIO
 			{
 				$list = new ListStat_IO(Sample_Wrapper::count_sample_locations($_GET[sample_id]), 20);
 	
-				$list->add_row("","symbol",false,"16px");
-				$list->add_row("Name","name",true,null);
-				$list->add_row("Date","datetime",true,null);
-				$list->add_row("User","user",true,null);
+				$list->add_column("","symbol",false,"16px");
+				$list->add_column("Name","name",true,null);
+				$list->add_column("Date","datetime",true,null);
+				$list->add_column("User","user",true,null);
 				
 				if ($_GET[page])
 				{

@@ -33,7 +33,7 @@ class ProjectRequest
 			
 			case "list_user_related_projects":
 				require_once("ajax/project.ajax.php");
-				echo ProjectAjax::list_user_related_projects($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo ProjectAjax::list_user_related_projects($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 			break;
 			
 			case "count_user_related_projects":
@@ -43,7 +43,7 @@ class ProjectRequest
 		
 			case "list_organisation_unit_related_projects":
 				require_once("ajax/project.ajax.php");
-				echo ProjectAjax::list_organisation_unit_related_projects($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo ProjectAjax::list_organisation_unit_related_projects($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 			break;
 			
 			case "count_organisation_unit_related_projects":
@@ -53,7 +53,7 @@ class ProjectRequest
 			
 			case "list_projects_by_item_id":
 				require_once("ajax/project.ajax.php");
-				echo ProjectAjax::list_projects_by_item_id($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo ProjectAjax::list_projects_by_item_id($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 			break;
 			
 			case "count_projects_by_item_id":

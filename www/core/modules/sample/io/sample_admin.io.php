@@ -195,12 +195,12 @@ class SampleAdminIO
 			{
 				$list = new ListStat_IO(Sample_Wrapper::count_sample_users($_GET[sample_id]), 20);
 	
-				$list->add_row("","symbol",false,"16px");
-				$list->add_row("Username","username",true,null);
-				$list->add_row("Full Name","name",true,null);
-				$list->add_row("Read","read",true,"70px");
-				$list->add_row("Write","write",true,"70px");
-				$list->add_row("Delete","delete",false,"70px");
+				$list->add_column("","symbol",false,"16px");
+				$list->add_column("Username","username",true,null);
+				$list->add_column("Full Name","name",true,null);
+				$list->add_column("Read","read",true,"70px");
+				$list->add_column("Write","write",true,"70px");
+				$list->add_column("Delete","delete",false,"70px");
 				
 				if ($_GET[page])
 				{
@@ -554,9 +554,9 @@ class SampleAdminIO
 			{
 				$list = new ListStat_IO(Sample_Wrapper::count_sample_organisation_units($_GET[sample_id]), 20);
 	
-				$list->add_row("","symbol",false,"16px");
-				$list->add_row("Name","name",true,null);
-				$list->add_row("Delete","delete",false,"70px");
+				$list->add_column("","symbol",false,"16px");
+				$list->add_column("Name","name",true,null);
+				$list->add_column("Delete","delete",false,"70px");
 				
 				if ($_GET[page])
 				{

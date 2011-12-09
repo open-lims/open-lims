@@ -52,10 +52,10 @@ class AdminOrganisationUnitAjax extends Ajax
 			
 			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_members($organisation_unit_id), 20, "OrganisationUnitAdminListPage");
 	
-			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Username","username",true,null,"OrganisationUnitAdminListSortUsername");
-			$list->add_row("Fullname","fullname",true,null,"OrganisationUnitAdminListSortFullname");
-			$list->add_row("","delete",false,"16px");
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Username","username",true,null,"OrganisationUnitAdminListSortUsername");
+			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitAdminListSortFullname");
+			$list->add_column("","delete",false,"16px");
 			
 			if ($page)
 			{
@@ -162,10 +162,10 @@ class AdminOrganisationUnitAjax extends Ajax
 			
 			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_owners($organisation_unit_id), 20, "OrganisationUnitAdminListPage");
 	
-			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Username","username",true,null,"OrganisationUnitAdminListSortUsername");
-			$list->add_row("Fullname","fullname",true,null,"OrganisationUnitAdminListSortFullname");
-			$list->add_row("","delete",false,"16px");
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Username","username",true,null,"OrganisationUnitAdminListSortUsername");
+			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitAdminListSortFullname");
+			$list->add_column("","delete",false,"16px");
 			
 			if ($page)
 			{
@@ -272,10 +272,10 @@ class AdminOrganisationUnitAjax extends Ajax
 			
 			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_leaders($organisation_unit_id), 20, "OrganisationUnitAdminListPage");
 	
-			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Username","username",true,null,"OrganisationUnitAdminListSortUsername");
-			$list->add_row("Fullname","fullname",true,null,"OrganisationUnitAdminListSortFullname");
-			$list->add_row("","delete",false,"16px");
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Username","username",true,null,"OrganisationUnitAdminListSortUsername");
+			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitAdminListSortFullname");
+			$list->add_column("","delete",false,"16px");
 			
 			if ($page)
 			{
@@ -382,10 +382,10 @@ class AdminOrganisationUnitAjax extends Ajax
 			
 			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_quality_managers($organisation_unit_id), 20, "OrganisationUnitAdminListPage");
 	
-			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Username","username",true,null,"OrganisationUnitAdminListSortUsername");
-			$list->add_row("Fullname","fullname",true,null,"OrganisationUnitAdminListSortFullname");
-			$list->add_row("","delete",false,"16px");
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Username","username",true,null,"OrganisationUnitAdminListSortUsername");
+			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitAdminListSortFullname");
+			$list->add_column("","delete",false,"16px");
 			
 			if ($page)
 			{
@@ -492,9 +492,9 @@ class AdminOrganisationUnitAjax extends Ajax
 			
 			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_groups($organisation_unit_id), 20, "OrganisationUnitAdminListPage");
 	
-			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Groupname","groupname",true,null,"OrganisationUnitAdminListSortGroupname");
-			$list->add_row("","delete",false,"16px");
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Groupname","groupname",true,null,"OrganisationUnitAdminListSortGroupname");
+			$list->add_column("","delete",false,"16px");
 			
 			if ($page)
 			{

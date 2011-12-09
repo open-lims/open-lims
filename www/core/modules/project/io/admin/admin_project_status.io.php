@@ -31,10 +31,10 @@ class AdminProjectStatusIO
 	{	
 		$list = new ListStat_IO(Project_Wrapper::count_list_project_status(), 20);
 		
-		$list->add_row("ID", "id", true, null);
-		$list->add_row("Name", "name", true, null);
-		$list->add_row("Edit", "edit", false, "15%");
-		$list->add_row("Delete", "delete", false, "15%");
+		$list->add_column("ID", "id", true, null);
+		$list->add_column("Name", "name", true, null);
+		$list->add_column("Edit", "edit", false, "15%");
+		$list->add_column("Delete", "delete", false, "15%");
 		
 		if ($_GET[page])
 		{

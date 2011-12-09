@@ -351,20 +351,20 @@ class FileIO
 		{	
 			$list = new List_IO("DataFileItem", "/core/modules/data/file.ajax.php", "list_file_items", "count_file_items", $argument_array, "DataAjaxFiles", 20, true, true);
 			
-			$list->add_row("","symbol",false,16);
-			$list->add_row("Name","name",true,null);
-			$list->add_row("Size","size",true,null);
-			$list->add_row("Date/Time","datetime",true,null);
+			$list->add_column("","symbol",false,16);
+			$list->add_column("Name","name",true,null);
+			$list->add_column("Size","size",true,null);
+			$list->add_column("Date/Time","datetime",true,null);
 		}
 		else
 		{	
 			$list = new List_IO("DataFileItem", "/core/modules/data/file.ajax.php", "list_file_items", "count_file_items", $argument_array, "DataAjaxFiles", 20, false, false);
 			
-			$list->add_row("","checkbox",false,16, $form_field_name);
-			$list->add_row("","symbol",false,16);
-			$list->add_row("Name","name",false,null);
-			$list->add_row("Size","size",false,null);
-			$list->add_row("Date/Time","datetime",false,null);
+			$list->add_column("","checkbox",false,16, $form_field_name);
+			$list->add_column("","symbol",false,16);
+			$list->add_column("Name","name",false,null);
+			$list->add_column("Size","size",false,null);
+			$list->add_column("Date/Time","datetime",false,null);
 		}
 				
 		$template = new Template($path_prefix."template/data/file_list.html");	
@@ -718,12 +718,12 @@ class FileIO
 			{
 				$list = new ListStat_IO(Data_Wrapper::count_file_versions($_GET[file_id]), 20);
 
-				$list->add_row("","symbol",false,"16px");
-				$list->add_row("Name","name",true,null);
-				$list->add_row("Version","version",false,null);
-				$list->add_row("Date/Time","datetime",true,null);
-				$list->add_row("User","user",true,null);
-				$list->add_row("","delete",false,"16px");
+				$list->add_column("","symbol",false,"16px");
+				$list->add_column("Name","name",true,null);
+				$list->add_column("Version","version",false,null);
+				$list->add_column("Date/Time","datetime",true,null);
+				$list->add_column("User","user",true,null);
+				$list->add_column("","delete",false,"16px");
 				
 				if ($_GET[page])
 				{

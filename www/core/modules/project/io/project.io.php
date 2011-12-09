@@ -42,12 +42,12 @@ class ProjectIO
 		
 		$list = new List_IO("ProjectUserRelated", "ajax.php?nav=project", "list_user_related_projects", "count_user_related_projects", $argument_array, "ProjectAjaxMyProjects");
 		
-		$list->add_row("", "symbol", false, "16px");
-		$list->add_row("Name", "name", true, null);
-		$list->add_row("Organisation Unit", "organisation_unit", true, null);
-		$list->add_row("Date/Time", "datetime", true, null);
-		$list->add_row("Template", "template", true, null);
-		$list->add_row("Status", "status", true, null);
+		$list->add_column("", "symbol", false, "16px");
+		$list->add_column("Name", "name", true, null);
+		$list->add_column("Organisation Unit", "organisation_unit", true, null);
+		$list->add_column("Date/Time", "datetime", true, null);
+		$list->add_column("Template", "template", true, null);
+		$list->add_column("Status", "status", true, null);
 
 		$template = new Template("template/projects/list_user.html");
 	
@@ -83,12 +83,12 @@ class ProjectIO
 				
 				$list = new List_IO("ProjectOrganisationUnitRelated", "ajax.php?nav=project", "list_organisation_unit_related_projects", "count_organisation_unit_related_projects", $argument_array, "ProjectAjaxOrganisationUnit", 12);
 			
-				$list->add_row("","symbol",false,"16px");
-				$list->add_row("Name","name",true,null);
-				$list->add_row("Owner","owner",true,null);
-				$list->add_row("Date/Time","datetime",true,null);
-				$list->add_row("Template","template",true,null);
-				$list->add_row("Status","status",true,null);
+				$list->add_column("","symbol",false,"16px");
+				$list->add_column("Name","name",true,null);
+				$list->add_column("Owner","owner",true,null);
+				$list->add_column("Date/Time","datetime",true,null);
+				$list->add_column("Template","template",true,null);
+				$list->add_column("Status","status",true,null);
 			
 				require_once("core/modules/organisation_unit/io/organisation_unit.io.php");
 				$organisation_unit_io = new OrganisationUnitIO;
@@ -710,12 +710,12 @@ class ProjectIO
 				
 				$template = new Template($path_prefix."template/projects/list_projects_by_item.html");
 				
-				$list->add_row("","symbol",false,16);
-				$list->add_row("Name","name",true,null);
-				$list->add_row("Date/Time","datetime",true,null);
-				$list->add_row("Template","template",true,null);
-				$list->add_row("Owner","owner",true,null);
-				$list->add_row("Status","status",true,null);
+				$list->add_column("","symbol",false,16);
+				$list->add_column("Name","name",true,null);
+				$list->add_column("Date/Time","datetime",true,null);
+				$list->add_column("Template","template",true,null);
+				$list->add_column("Owner","owner",true,null);
+				$list->add_column("Status","status",true,null);
 			}
 			else
 			{
@@ -723,13 +723,13 @@ class ProjectIO
 				
 				$template = new Template($path_prefix."template/projects/list_projects_by_item_without_border.html");
 				
-				$list->add_row("","checkbox",false,"16px", $form_field_name);
-				$list->add_row("","symbol",false,16);
-				$list->add_row("Name","name",false,null);
-				$list->add_row("Date/Time","datetime",false,null);
-				$list->add_row("Template","template",false,null);
-				$list->add_row("Owner","owner",false,null);
-				$list->add_row("Status","status",false,null);
+				$list->add_column("","checkbox",false,"16px", $form_field_name);
+				$list->add_column("","symbol",false,16);
+				$list->add_column("Name","name",false,null);
+				$list->add_column("Date/Time","datetime",false,null);
+				$list->add_column("Template","template",false,null);
+				$list->add_column("Owner","owner",false,null);
+				$list->add_column("Status","status",false,null);
 			}
 		
 			$template->set_var("list", $list->get_list());

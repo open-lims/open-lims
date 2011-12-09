@@ -52,9 +52,9 @@ class OrganisationUnitAjax extends Ajax
 			
 			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_members($organisation_unit_id), 20, "OrganisationUnitListPage");
 	
-			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Username","username",true,null,"OrganisationUnitListSortUsername");
-			$list->add_row("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Username","username",true,null,"OrganisationUnitListSortUsername");
+			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
 			
 			if ($page)
 			{
@@ -112,9 +112,9 @@ class OrganisationUnitAjax extends Ajax
 			
 			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_owners($organisation_unit_id), 20, "OrganisationUnitListPage");
 	
-			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Username","username",true,null,"OrganisationUnitListSortUsername");
-			$list->add_row("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Username","username",true,null,"OrganisationUnitListSortUsername");
+			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
 			
 			if ($page)
 			{
@@ -172,9 +172,9 @@ class OrganisationUnitAjax extends Ajax
 			
 			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_leaders($organisation_unit_id), 20, "OrganisationUnitListPage");
 	
-			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Username","username",true,null,"OrganisationUnitListSortUsername");
-			$list->add_row("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Username","username",true,null,"OrganisationUnitListSortUsername");
+			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
 			
 			if ($page)
 			{
@@ -232,9 +232,9 @@ class OrganisationUnitAjax extends Ajax
 			
 			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_quality_managers($organisation_unit_id), 20, "OrganisationUnitListPage");
 	
-			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Username","username",true,null,"OrganisationUnitListSortUsername");
-			$list->add_row("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Username","username",true,null,"OrganisationUnitListSortUsername");
+			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
 			
 			if ($page)
 			{
@@ -292,8 +292,8 @@ class OrganisationUnitAjax extends Ajax
 			
 			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_groups($organisation_unit_id), 20, "OrganisationUnitListPage");
 	
-			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Groupname","groupname",true,null,"OrganisationUnitListSortGroupname");
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Groupname","groupname",true,null,"OrganisationUnitListSortGroupname");
 			
 			if ($page)
 			{
@@ -336,7 +336,7 @@ class OrganisationUnitAjax extends Ajax
 		}
 	}
 	
-	public function list_organisation_units_by_user_id($json_row_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	public function list_organisation_units_by_user_id($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		if ($get_array)
 		{
@@ -350,7 +350,7 @@ class OrganisationUnitAjax extends Ajax
 		if (is_numeric($user_id))
 		{
 			$list_request = new ListRequest_IO();
-			$list_request->set_row_array($json_row_array);
+			$list_request->set_column_array($json_column_array);
 		
 			if (!is_numeric($entries_per_page) or $entries_per_page < 1)
 			{
@@ -495,7 +495,7 @@ class OrganisationUnitAjax extends Ajax
 				break;
 				
 				case "list_organisation_units_by_user_id":
-					echo $this->list_organisation_units_by_user_id($_POST[row_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+					echo $this->list_organisation_units_by_user_id($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
 				case "count_organisation_units_by_user_id":

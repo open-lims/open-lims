@@ -107,9 +107,9 @@ class UserSearchIO
 			{
 				$list = new ListStat_IO(User_Wrapper::count_search_users($string), 20);
 	
-				$list->add_row("","symbol",false,16);
-				$list->add_row("Username","username",false,null);
-				$list->add_row("Full Name","fullname",false,null);
+				$list->add_column("","symbol",false,16);
+				$list->add_column("Username","username",false,null);
+				$list->add_column("Full Name","fullname",false,null);
 				
 				if ($_GET[page])
 				{
@@ -171,9 +171,9 @@ class UserSearchIO
 			{
 				$list = new ListStat_IO(User_Wrapper::count_search_groups($string), 20);
 	
-				$list->add_row("","symbol",false,16);
-				$list->add_row("Group Name","name",true,null);
-				$list->add_row("Users","users",true,null);
+				$list->add_column("","symbol",false,16);
+				$list->add_column("Group Name","name",true,null);
+				$list->add_column("Users","users",true,null);
 				
 				if ($_GET[page])
 				{

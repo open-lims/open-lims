@@ -31,10 +31,10 @@ class AdminGroupIO
 	{
 		$list = new List_IO("GroupAdministration", "/core/modules/base/ajax/admin/admin_group.ajax.php", "list_groups", "count_groups", null, "GroupAdministration");
 		
-		$list->add_row("","symbol",false,"16px");
-		$list->add_row("Name","name",true,null);
-		$list->add_row("Users","users",false,null);
-		$list->add_row("D","delete",false,"16px");
+		$list->add_column("","symbol",false,"16px");
+		$list->add_column("Name","name",true,null);
+		$list->add_column("Users","users",false,null);
+		$list->add_column("D","delete",false,"16px");
 		
 		$template = new Template("template/user/admin/group/list.html");
 		

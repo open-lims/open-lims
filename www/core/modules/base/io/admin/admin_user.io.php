@@ -31,11 +31,11 @@ class AdminUserIO
 	{		
 		$list = new List_IO("UserAdministration", "/core/modules/base/ajax/admin/admin_user.ajax.php", "list_users", "count_users", null, "UserAdministration");
 		
-		$list->add_row("","symbol",false,"16px");
-		$list->add_row("Username","username",true,null);
-		$list->add_row("Name","fullname",true,null);
-		$list->add_row("Groups","groups",false,null);
-		$list->add_row("D","delete",false,"16px");
+		$list->add_column("","symbol",false,"16px");
+		$list->add_column("Username","username",true,null);
+		$list->add_column("Name","fullname",true,null);
+		$list->add_column("Groups","groups",false,null);
+		$list->add_column("D","delete",false,"16px");
 		
 		$template = new Template("template/user/admin/user/list.html");
 		

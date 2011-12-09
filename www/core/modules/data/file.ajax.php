@@ -42,7 +42,7 @@ class FileAjax extends Ajax
 		parent::__construct();
 	}
 	
-	public static function list_file_items($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
+	public static function list_file_items($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
 		
@@ -64,7 +64,7 @@ class FileAjax extends Ajax
 			{
 				$list_array = Data_Wrapper::list_item_files($sql, $sortvalue, $sortmethod, 0, null);
 			}
-			$list_request->set_row_array($json_row_array);
+			$list_request->set_column_array($json_column_array);
 					
 			if (is_array($list_array) and count($list_array) >= 1)
 			{
@@ -72,10 +72,10 @@ class FileAjax extends Ajax
 				{
 					if ($argument_array[3][1] == true)
 					{
-						$row_array = json_decode($json_row_array);
-						if (is_array($row_array) and count($row_array) >= 1)
+						$column_array = json_decode($json_column_array);
+						if (is_array($column_array) and count($column_array) >= 1)
 						{
-							foreach ($row_array as $row_key => $row_value)
+							foreach ($column_array as $row_key => $row_value)
 							{
 								if ($row_value[1] == "checkbox")
 								{
@@ -277,7 +277,7 @@ class FileAjax extends Ajax
 			switch($_GET[run]):
 	
 				case "list_file_items":
-					echo $this->list_file_items($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+					echo $this->list_file_items($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
 				case "get_data_browser_link_html_and_button_handler":

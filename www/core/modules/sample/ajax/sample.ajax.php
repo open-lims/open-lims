@@ -38,12 +38,12 @@ class SampleAjax extends Ajax
 		parent::__construct();
 	}
 	
-	private function list_user_related_samples($json_row_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	private function list_user_related_samples($json_column_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		global $user;
 		
 		$list_request = new ListRequest_IO();
-		$list_request->set_row_array($json_row_array);
+		$list_request->set_column_array($json_column_array);
 		
 		if (!is_numeric($entries_per_page) or $entries_per_page < 1)
 		{
@@ -169,7 +169,7 @@ class SampleAjax extends Ajax
 		return Sample_Wrapper::count_user_samples($user->get_user_id());
 	}
 	
-	private function list_organisation_unit_related_samples($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	private function list_organisation_unit_related_samples($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
 		
@@ -178,7 +178,7 @@ class SampleAjax extends Ajax
 		if (is_numeric($organisation_unit_id))
 		{
 			$list_request = new ListRequest_IO();
-			$list_request->set_row_array($json_row_array);
+			$list_request->set_column_array($json_column_array);
 		
 			if (!is_numeric($entries_per_page) or $entries_per_page < 1)
 			{
@@ -318,7 +318,7 @@ class SampleAjax extends Ajax
 		}
 	}
 	
-	private function list_sample_items($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	private function list_sample_items($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
 		
@@ -346,7 +346,7 @@ class SampleAjax extends Ajax
 				$list_array = Sample_Wrapper::list_item_samples($sql, $sortvalue, $sortmethod, 0, null);
 			}
 			
-			$list_request->set_row_array($json_row_array);
+			$list_request->set_column_array($json_column_array);
 									
 			if (is_array($list_array) and count($list_array) >= 1)
 			{
@@ -384,10 +384,10 @@ class SampleAjax extends Ajax
 									
 					if ($argument_array[3][1] == true)
 					{
-						$row_array = json_decode($json_row_array);
-						if (is_array($row_array) and count($row_array) >= 1)
+						$column_array = json_decode($json_column_array);
+						if (is_array($column_array) and count($column_array) >= 1)
 						{
-							foreach ($row_array as $row_key => $row_value)
+							foreach ($column_array as $row_key => $row_value)
 							{
 								if ($row_value[1] == "checkbox")
 								{
@@ -528,7 +528,7 @@ class SampleAjax extends Ajax
 		}
 	}
 	
-	private function list_samples_by_item_id($json_row_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	private function list_samples_by_item_id($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
 		$item_id = $argument_array[0][1];
@@ -551,7 +551,7 @@ class SampleAjax extends Ajax
 				$list_array = Sample_Wrapper::list_samples_by_item_id($item_id, $sortvalue, $sortmethod, 0, null);
 			}
 			
-			$list_request->set_row_array($json_row_array);
+			$list_request->set_column_array($json_column_array);
 						
 			if (is_array($list_array) and count($list_array) >= 1)
 			{				
@@ -590,10 +590,10 @@ class SampleAjax extends Ajax
 					
 					if ($argument_array[1][1] == true)
 					{
-						$row_array = json_decode($json_row_array);
-						if (is_array($row_array) and count($row_array) >= 1)
+						$column_array = json_decode($json_column_array);
+						if (is_array($column_array) and count($column_array) >= 1)
 						{
-							foreach ($row_array as $row_key => $row_value)
+							foreach ($column_array as $row_key => $row_value)
 							{
 								if ($row_value[1] == "checkbox")
 								{
@@ -738,7 +738,7 @@ class SampleAjax extends Ajax
 			switch($_GET[run]):
 	
 				case "list_user_related_samples":
-					echo $this->list_user_related_samples($_POST[row_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+					echo $this->list_user_related_samples($_POST[column_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
 				case "count_user_related_samples":
@@ -746,7 +746,7 @@ class SampleAjax extends Ajax
 				break;
 				
 				case "list_organisation_unit_related_samples":
-					echo $this->list_organisation_unit_related_samples($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+					echo $this->list_organisation_unit_related_samples($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
 				case "count_organisation_unit_related_samples":
@@ -754,7 +754,7 @@ class SampleAjax extends Ajax
 				break;
 				
 				case "list_sample_items":
-					echo $this->list_sample_items($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+					echo $this->list_sample_items($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
 				case "count_sample_items":
@@ -762,7 +762,7 @@ class SampleAjax extends Ajax
 				break;
 				
 				case "list_samples_by_item_id":
-					echo $this->list_samples_by_item_id($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+					echo $this->list_samples_by_item_id($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
 				case "count_samples_by_item_id":

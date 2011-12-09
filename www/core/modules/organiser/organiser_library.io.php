@@ -938,8 +938,8 @@ class OrganiserLibraryIO {
 		
 		$date_array = $this->mktime_has_date($mktime, $mktime+86399);
 		$rows = count($date_array);
-		$row_array = array();
-		$row_array_count = 0;
+		$column_array = array();
+		$column_array_count = 0;
 		
 		if ($datetime_handler->get_formatted_string("Y-m-d") == $today_datetime_handler->get_formatted_string("Y-m-d"))
 		{
@@ -960,35 +960,35 @@ class OrganiserLibraryIO {
 			{
 				foreach ($date_array as $key => $value)
 				{
-					if (!in_array($value, $row_array))
+					if (!in_array($value, $column_array))
 					{
 						if ($this->calendar_array[$value][link])
 						{
-							$content_array[$i][$row_array_count][name] = "<a href='index.php?".$this->calendar_array[$value][link]."'>".$this->calendar_array[$value][name]."</a>";
+							$content_array[$i][$column_array_count][name] = "<a href='index.php?".$this->calendar_array[$value][link]."'>".$this->calendar_array[$value][name]."</a>";
 						}
 						else
 						{
-							$content_array[$i][$row_array_count][name] = $this->calendar_array[$value][name];
+							$content_array[$i][$column_array_count][name] = $this->calendar_array[$value][name];
 						}
-						$content_array[$i][$row_array_count][value] = $this->calendar_array[$value][color];
-						$content_array[$i][$row_array_count][datebegin] = true;
+						$content_array[$i][$column_array_count][value] = $this->calendar_array[$value][color];
+						$content_array[$i][$column_array_count][datebegin] = true;
 						
 						$start_datetime_handler = new DatetimeHandler($this->calendar_array[$value][start_date]." ".$this->calendar_array[$value][start_time]);
 						$end_datetime_handler = new DatetimeHandler($this->calendar_array[$value][end_date]." ".$this->calendar_array[$value][end_time]);
 						
-						$content_array[$i][$row_array_count][range] = $start_datetime_handler->get_formatted_string("j-n-Y (H:i)")." - ".$end_datetime_handler->get_formatted_string("j-n-Y (H:i)");
+						$content_array[$i][$column_array_count][range] = $start_datetime_handler->get_formatted_string("j-n-Y (H:i)")." - ".$end_datetime_handler->get_formatted_string("j-n-Y (H:i)");
 						
-						$row_array_count++;
-						array_push($row_array, $value);
+						$column_array_count++;
+						array_push($column_array, $value);
 					}
 				}
 				for ($j=0; $j<=($rows-1); $j++)
 				{
 					if (!$content_array[$i][$j][content])
 					{
-						if (isset($row_array[$j]) and in_array($row_array[$j], $date_array))
+						if (isset($column_array[$j]) and in_array($column_array[$j], $date_array))
 						{
-							$content_array[$i][$j][value] = $this->calendar_array[$row_array[$j]][color];
+							$content_array[$i][$j][value] = $this->calendar_array[$column_array[$j]][color];
 							if ($content_array[$i][$j][datebegin] != true)
 							{
 								$content_array[$i][$j][datebegin] = false;

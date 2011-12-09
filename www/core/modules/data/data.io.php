@@ -101,15 +101,15 @@ class DataIO
 
 		$list = new List_IO("DataBrowser", "/core/modules/data/data.ajax.php", "list_data_browser", "count_data_browser", $argument_array, "DataBrowserAjax");	
 		
-		$list->add_row("","symbol",false,16);
-		$list->add_row("Name","name",true,null);
-		$list->add_row("Type","type",true,null);
-		$list->add_row("Ver.","version",false,null);
-		$list->add_row("Date/Time","datetime",true,null);
-		$list->add_row("Size","size",true,null);
-		$list->add_row("Owner","owner",true,null);
-		$list->add_row("Permission","permission",false,null);
-		$list->add_row("","delete_checkbox",false,"16px");
+		$list->add_column("","symbol",false,16);
+		$list->add_column("Name","name",true,null);
+		$list->add_column("Type","type",true,null);
+		$list->add_column("Ver.","version",false,null);
+		$list->add_column("Date/Time","datetime",true,null);
+		$list->add_column("Size","size",true,null);
+		$list->add_column("Owner","owner",true,null);
+		$list->add_column("Permission","permission",false,null);
+		$list->add_column("","delete_checkbox",false,"16px");
 
 		// !!! [...] !!!
 		

@@ -71,44 +71,44 @@ class ListStat_IO
      * @param integer $width
      * @return bool
      */
-    public function add_row($title, $address, $sortable, $width, $js_sort_id = null)
+    public function add_column($title, $address, $sortable, $width, $js_sort_id = null)
     {
     	if ($this->finalised == false)
     	{
 	    	if ($address)
 	    	{
-	    		$row_array = array();
-	    		$row_array[title] = $title;
-	    		$row_array[address] = $address;
+	    		$column_array = array();
+	    		$column_array[title] = $title;
+	    		$column_array[address] = $address;
 	    		
 	    		if ($width != null)
 	    		{
-	    			$row_array[width] = $width;
+	    			$column_array[width] = $width;
 	    		}
 	    		else
 	    		{
-	    			$row_array[width] = null;
+	    			$column_array[width] = null;
 	    		}
 	    			    		
 	    		if ($sortable == true)
 	    		{
-	    			$row_array[sortable] = true;
+	    			$column_array[sortable] = true;
 	    		}
 	    		else
 	    		{
-	    			$row_array[sortable] = false;
+	    			$column_array[sortable] = false;
 	    		}
 	    		
 	    		if ($js_sort_id != null)
 	    		{
-	    			$row_array[js_sort_id] = $js_sort_id;
+	    			$column_array[js_sort_id] = $js_sort_id;
 	    		}
 	    		else
 	    		{
-	    			$row_array[js_sort_id] = null;
+	    			$column_array[js_sort_id] = null;
 	    		}
 	    		
-	    		array_push($this->rows,$row_array);
+	    		array_push($this->rows,$column_array);
 	    	}
 	    	else
 	    	{

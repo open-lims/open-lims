@@ -223,11 +223,11 @@ class ItemFulltextSearchIO
 				$list->override_last_line("<span class='italic'>No results found!</span>");
 			}
 
-			$list->add_row("", "symbol", false, "16px");
-			$list->add_row("Name", "name", true, null);
-			$list->add_row("Type", "type", false, null);
-			$list->add_row("Datetime", "datetime", true, null);
-			$list->add_row("Rank", "rank", true, null);
+			$list->add_column("", "symbol", false, "16px");
+			$list->add_column("Name", "name", true, null);
+			$list->add_column("Type", "type", false, null);
+			$list->add_column("Datetime", "datetime", true, null);
+			$list->add_column("Rank", "rank", true, null);
 			
 			$template = new Template("template/item/search/full_text_search_result.html");
 		

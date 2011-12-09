@@ -271,13 +271,13 @@ class SampleSearchIO
 			
 			$list = new ListStat_IO(Sample_Wrapper::count_sample_search($name, $organisation_unit_array, $template_array, $in_id, $in_name), 20);
 
-			$list->add_row("","symbol",false,"16px");
-			$list->add_row("Smpl. ID","id",true,"11%");
-			$list->add_row("Sample Name","name",true,null);
-			$list->add_row("Date","datetime",true,null);
-			$list->add_row("Type/Tmpl.","template",true,null);
-			$list->add_row("Curr. Loc.","location",true,null);
-			$list->add_row("AV","av",false,"16px");
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Smpl. ID","id",true,"11%");
+			$list->add_column("Sample Name","name",true,null);
+			$list->add_column("Date","datetime",true,null);
+			$list->add_column("Type/Tmpl.","template",true,null);
+			$list->add_column("Curr. Loc.","location",true,null);
+			$list->add_column("AV","av",false,"16px");
 			
 			if ($_GET[page])
 			{

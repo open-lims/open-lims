@@ -31,10 +31,10 @@ class AdminBaseModuleIO
 	{
 		$list = new ListStat_IO(System_Wrapper::count_base_module(), 20);
 		
-		$list->add_row("Name", "name", true, null);
-		$list->add_row("Dialogs", "dialogs", true, null);
-		$list->add_row("Links", "links", true, null);
-		$list->add_row("Disable", "disable", false, "80px");
+		$list->add_column("Name", "name", true, null);
+		$list->add_column("Dialogs", "dialogs", true, null);
+		$list->add_column("Links", "links", true, null);
+		$list->add_column("Disable", "disable", false, "80px");
 		
 		if ($_GET[page])
 		{

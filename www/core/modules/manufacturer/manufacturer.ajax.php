@@ -136,12 +136,12 @@ class ManufacturerAjax extends Ajax
 	 * @param string $sortvalue
 	 * @param string $sortmethod
 	 */
-	public function get_list($json_row_array, $argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	public function get_list($json_column_array, $argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		global $user;
 		
 		$list_request = new ListRequest_IO();
-		$list_request->set_row_array($json_row_array);
+		$list_request->set_column_array($json_column_array);
 		
 		if (!is_numeric($entries_per_page) or $entries_per_page < 1)
 		{
@@ -243,7 +243,7 @@ class ManufacturerAjax extends Ajax
 				break;
 				
 				case "get_list":
-					echo $this->get_list($_POST[row_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+					echo $this->get_list($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
 				case "get_list_count":

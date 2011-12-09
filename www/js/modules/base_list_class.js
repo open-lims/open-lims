@@ -21,7 +21,7 @@
  */
 
 
-List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get_array, css_main_id, entries_per_page, row_array)
+List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get_array, css_main_id, entries_per_page, column_array)
 {
 	if (ajax_handler.indexOf("?") == -1) 
 	{
@@ -39,8 +39,8 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 
 	var get_array = getQueryParams(document.location.search);
 
-	var parsed_row_array = $.parseJSON(row_array);
-	var colspan = parsed_row_array.length;
+	var parsed_column_array = $.parseJSON(column_array);
+	var colspan = parsed_column_array.length;
 
 	var number_of_entries = 0;
 	var number_of_pages = 0;
@@ -139,7 +139,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 		$.ajax({
 			type : "POST",
 			url : ajax_handler + "username=" + get_array['username']+"&session_id="+get_array['session_id']+"&run="+ajax_run + "&sortvalue="+sort_value+"&sortmethod="+sort_method+"&page="+page,
-			data : "row_array="+row_array+"&argument_array="+argument_array+"&entries_per_page="+entries_per_page+"&get_array="+json_get_array,
+			data : "column_array="+column_array+"&argument_array="+argument_array+"&entries_per_page="+entries_per_page+"&get_array="+json_get_array,
 			success : function(data) {
 				var last_height = $("#" + css_main_id).height();
 				$("#" + css_main_id).height("auto");
@@ -194,7 +194,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 	}
 
 	function change_symbol(id, symbol) {
-		$("." + css_main_id + "Row").each(
+		$("." + css_main_id + "Column").each(
 				function() {
 					var local_id = $(this).attr("id");
 
@@ -213,10 +213,10 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 				});
 	}
 
-	$("." + css_main_id + "Row").each(function() {
+	$("." + css_main_id + "Column").each(function() {
 		$(this).click(function() {
 			var id = $(this).attr("id");
-			sort_value = id.replace(css_main_id + "Row", "");
+			sort_value = id.replace(css_main_id + "Column", "");
 
 			var sort_method_key = check_array(sort_value);
 			if (sort_method_key != -1) {

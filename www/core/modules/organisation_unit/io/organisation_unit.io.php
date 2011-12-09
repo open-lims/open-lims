@@ -411,9 +411,9 @@ class OrganisationUnitIO
 		
 		$list = new List_IO("OrganisationUnitUserHasOUList", "/core/modules/organisation_unit/ajax/organisation_unit.ajax.php", "list_organisation_units_by_user_id", "count_organisation_units_by_user_id", $argument_array, "OrganisationUnitUserHasOU");
 		
-		$list->add_row("","symbol",false,"16px");
-		$list->add_row("Name","name",true,null);
-		$list->add_row("My Status/Role","mystatus",false,null);
+		$list->add_column("","symbol",false,"16px");
+		$list->add_column("Name","name",true,null);
+		$list->add_column("My Status/Role","mystatus",false,null);
 		
 		$template = new Template("template/organisation_unit/user_related_organisation_units.html");
 		

@@ -31,9 +31,9 @@ class AdminBaseIncludeIO
 	{		
 		$list = new List_IO("BaseAdminIncludeHome" ,"/core/modules/base/ajax/admin/admin_base_include.ajax.php", "list_includes", "count_includes", "0", "BaseAdminIncludeAjax");
 
-		$list->add_row("Name","name",true,null);
-		$list->add_row("Folder","folder",true,null);
-		$list->add_row("Event Listeners","eventlisteners",true,null);
+		$list->add_column("Name","name",true,null);
+		$list->add_column("Folder","folder",true,null);
+		$list->add_column("Event Listeners","eventlisteners",true,null);
 		
 		$template = new Template("template/base/admin/base_include/list.html");	
 		

@@ -38,12 +38,12 @@ class AdminGeneralAjax extends Ajax
 		parent::__construct();
 	}
 	
-	public function list_languages($json_row_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	public function list_languages($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{		
 		$argument_array = json_decode($json_argument_array);
 		
 		$list_request = new ListRequest_IO();
-		$list_request->set_row_array($json_row_array);
+		$list_request->set_column_array($json_column_array);
 	
 		if (!is_numeric($entries_per_page) or $entries_per_page < 1)
 		{
@@ -75,12 +75,12 @@ class AdminGeneralAjax extends Ajax
 		return Environment_Wrapper::count_languages();
 	}
 	
-	public function list_currencies($json_row_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	public function list_currencies($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
 		
 		$list_request = new ListRequest_IO();
-		$list_request->set_row_array($json_row_array);
+		$list_request->set_column_array($json_column_array);
 	
 		if (!is_numeric($entries_per_page) or $entries_per_page < 1)
 		{
@@ -112,12 +112,12 @@ class AdminGeneralAjax extends Ajax
 		return Environment_Wrapper::count_currencies();
 	}
 	
-	public function list_timezones($json_row_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	public function list_timezones($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
 		
 		$list_request = new ListRequest_IO();
-		$list_request->set_row_array($json_row_array);
+		$list_request->set_column_array($json_column_array);
 	
 		if (!is_numeric($entries_per_page) or $entries_per_page < 1)
 		{
@@ -162,12 +162,12 @@ class AdminGeneralAjax extends Ajax
 		return Environment_Wrapper::count_timezones();
 	}
 	
-	public function list_measuring_units($json_row_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	public function list_measuring_units($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
 		
 		$list_request = new ListRequest_IO();
-		$list_request->set_row_array($json_row_array);
+		$list_request->set_column_array($json_column_array);
 	
 		if (!is_numeric($entries_per_page) or $entries_per_page < 1)
 		{
@@ -236,16 +236,16 @@ class AdminGeneralAjax extends Ajax
 	{
 		$list = new ListStat_IO(Environment_Wrapper::count_paper_sizes(), 20, "OrganisationUnitAdminListPage");
 
-		$list->add_row("","symbol",false,"16px");
-		$list->add_row("Name","name",true,null,"BaseGeneralAdminListSortName");
-		$list->add_row("Width","width",false,null);
-		$list->add_row("Height","height",false,null);
-		$list->add_row("Left-M.","margin_left",false,null);
-		$list->add_row("Right-M.","margin_right",false,null);
-		$list->add_row("Top-M.","margin_top",false,null);
-		$list->add_row("Bottom-M.","margin_bottom",false,null);
-		$list->add_row("","edit",false,"20px");
-		$list->add_row("","delete",false,"20px");
+		$list->add_column("","symbol",false,"16px");
+		$list->add_column("Name","name",true,null,"BaseGeneralAdminListSortName");
+		$list->add_column("Width","width",false,null);
+		$list->add_column("Height","height",false,null);
+		$list->add_column("Left-M.","margin_left",false,null);
+		$list->add_column("Right-M.","margin_right",false,null);
+		$list->add_column("Top-M.","margin_top",false,null);
+		$list->add_column("Bottom-M.","margin_bottom",false,null);
+		$list->add_column("","edit",false,"20px");
+		$list->add_column("","delete",false,"20px");
 		
 		if ($page)
 		{
@@ -430,7 +430,7 @@ class AdminGeneralAjax extends Ajax
 			switch($_GET[run]):
 	
 				case "list_languages":
-					echo $this->list_languages($_POST[row_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+					echo $this->list_languages($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
 				case "count_languages":
@@ -438,7 +438,7 @@ class AdminGeneralAjax extends Ajax
 				break;
 				
 				case "list_currencies":
-					echo $this->list_currencies($_POST[row_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+					echo $this->list_currencies($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
 				case "count_currencies":
@@ -446,7 +446,7 @@ class AdminGeneralAjax extends Ajax
 				break;
 				
 				case "list_timezones":
-					echo $this->list_timezones($_POST[row_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+					echo $this->list_timezones($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
 				case "count_timezones":
@@ -454,7 +454,7 @@ class AdminGeneralAjax extends Ajax
 				break;
 				
 				case "list_measuring_units":
-					echo $this->list_measuring_units($_POST[row_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+					echo $this->list_measuring_units($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 				break;
 				
 				case "count_measuring_units":

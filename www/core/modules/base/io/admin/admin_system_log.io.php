@@ -40,11 +40,11 @@ class AdminSystemLogIO
 		
 		$list = new ListStat_IO(SystemFE_Wrapper::count_list_system_log($type_id), 20);
 		
-		$list->add_row("User", "user", true, null);
-		$list->add_row("Date/Time", "datetime", true, null);
-		$list->add_row("IP", "ip", true, null);
-		$list->add_row("Info", "info", true, null);
-		$list->add_row("File", "file", true, null);
+		$list->add_column("User", "user", true, null);
+		$list->add_column("Date/Time", "datetime", true, null);
+		$list->add_column("IP", "ip", true, null);
+		$list->add_column("Info", "info", true, null);
+		$list->add_column("File", "file", true, null);
 				
 		if ($_GET[page])
 		{
