@@ -161,11 +161,6 @@ class ProjectRequest
 				require_once("io/project.io.php");
 				ProjectIO::detail();
 			break;
-	
-			case("proceed"):
-				require_once("io/project.io.php");
-				ProjectIO::proceed();
-			break;
 
 			case("structure"):
 				require_once("io/project.io.php");

@@ -30,19 +30,7 @@ $(document).ready(function()
 									$("#ProjectDetailProceed").html(data_array[1]);
 									if (data_array[0] == "0")
 									{
-										var buttons = $('#ProjectDetailProceed').dialog('option', 'buttons');
-
-										for (var i = 0; i < buttons.length; ++i)
-										{
-											console.log(i);
-											var dialog_button = $(buttons[i]);
-											console.log(buttons[i]);
-											if (dialog_button.text() == "OK")
-											{
-												
-												dialog_button.attr('disabled', 'disabled').addClass('ui-state-disabled');
-											}
-										}
+										
 									}
 									else
 									{

@@ -409,7 +409,7 @@ class OrganisationUnitIO
 		$argument_array[0][0] = "user_id";
 		$argument_array[0][1] = $user->get_user_id();;
 		
-		$list = new List_IO("OrganisationUnitUserHasOUList", "/core/modules/organisation_unit/ajax/organisation_unit.ajax.php", "list_organisation_units_by_user_id", "count_organisation_units_by_user_id", $argument_array, "OrganisationUnitUserHasOU");
+		$list = new List_IO("OrganisationUnitUserHasOUList", "ajax.php?nav=organisation_unit", "list_organisation_units_by_user_id", "count_organisation_units_by_user_id", $argument_array, "OrganisationUnitUserHasOU");
 		
 		$list->add_column("","symbol",false,"16px");
 		$list->add_column("Name","name",true,null);
@@ -431,9 +431,21 @@ class OrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[ou_id]);
 			
+			$argument_array = array();
+			$argument_array[0][0] = "organisation_unit_id";
+			$argument_array[0][1] = $_GET[ou_id];
+			
+			$list = new List_IO("OrganisationUnitListOwners", "ajax.php?nav=organisation_unit", "list_owners", "count_owners", $argument_array, "OrganisationUnitListOwners");
+	
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Username","username",true,null,"OrganisationUnitListSortUsername");
+			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
+				
 			$template = new Template("template/organisation_unit/list_owners.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
-			$template->set_var("ORGANISATION_UNIT_ID", $_GET[ou_id]);
+				
+			$template->set_var("list", $list->get_list());
+		
 			$template->output();
 		}
 		else
@@ -451,9 +463,21 @@ class OrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[ou_id]);
 			
+			$argument_array = array();
+			$argument_array[0][0] = "organisation_unit_id";
+			$argument_array[0][1] = $_GET[ou_id];
+			
+			$list = new List_IO("OrganisationUnitListLeaders", "ajax.php?nav=organisation_unit", "list_leaders", "count_leaders", $argument_array, "OrganisationUnitListLeaders");
+	
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Username","username",true,null,"OrganisationUnitListSortUsername");
+			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
+				
 			$template = new Template("template/organisation_unit/list_leaders.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
-			$template->set_var("ORGANISATION_UNIT_ID", $_GET[ou_id]);
+				
+			$template->set_var("list", $list->get_list());
+		
 			$template->output();
 		}
 		else
@@ -471,9 +495,21 @@ class OrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[ou_id]);
 			
+			$argument_array = array();
+			$argument_array[0][0] = "organisation_unit_id";
+			$argument_array[0][1] = $_GET[ou_id];
+			
+			$list = new List_IO("OrganisationUnitListMembers", "ajax.php?nav=organisation_unit", "list_members", "count_members", $argument_array, "OrganisationUnitListMembers");
+	
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Username","username",true,null,"OrganisationUnitListSortUsername");
+			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
+				
 			$template = new Template("template/organisation_unit/list_members.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
-			$template->set_var("ORGANISATION_UNIT_ID", $_GET[ou_id]);
+				
+			$template->set_var("list", $list->get_list());
+		
 			$template->output();
 		}
 		else
@@ -491,9 +527,21 @@ class OrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[ou_id]);
 			
+			$argument_array = array();
+			$argument_array[0][0] = "organisation_unit_id";
+			$argument_array[0][1] = $_GET[ou_id];
+			
+			$list = new List_IO("OrganisationUnitListQualityManagers", "ajax.php?nav=organisation_unit", "list_quality_managers", "count_quality_managers", $argument_array, "OrganisationUnitListQualityManagers");
+	
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Username","username",true,null,"OrganisationUnitListSortUsername");
+			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
+				
 			$template = new Template("template/organisation_unit/list_quality_managers.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
-			$template->set_var("ORGANISATION_UNIT_ID", $_GET[ou_id]);
+				
+			$template->set_var("list", $list->get_list());
+		
 			$template->output();
 		}
 		else
@@ -511,9 +559,20 @@ class OrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[ou_id]);
 			
+			$argument_array = array();
+			$argument_array[0][0] = "organisation_unit_id";
+			$argument_array[0][1] = $_GET[ou_id];
+			
+			$list = new List_IO("OrganisationUnitListGroups", "ajax.php?nav=organisation_unit", "list_groups", "count_groups", $argument_array, "OrganisationUnitListGroups");
+	
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Groupname","groupname",true,null,"OrganisationUnitListSortGroupname");
+				
 			$template = new Template("template/organisation_unit/list_groups.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
-			$template->set_var("ORGANISATION_UNIT_ID", $_GET[ou_id]);
+				
+			$template->set_var("list", $list->get_list());
+		
 			$template->output();
 		}
 		else

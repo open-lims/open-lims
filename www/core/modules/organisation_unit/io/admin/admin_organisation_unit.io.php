@@ -729,12 +729,12 @@ class AdminOrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
-			require_once("core/modules/base/io/user.io.php");
+			require_once("core/modules/base/common/io/user_common.io.php");
 			
 			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_group.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("ORGANISATION_UNIT_ID", $_GET[id]);
-			$template->set_var("ADD_DIALOG", UserIO::group_select_dialog());
+			$template->set_var("ADD_DIALOG", UserCommonIO::group_select_dialog());
 			$template->output();
 		}
 		else

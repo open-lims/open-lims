@@ -29,7 +29,69 @@ class OrganisationUnitRequest
 {	
 	public static function ajax_handler()
 	{
-		
+		switch($_GET[run]):
+	
+			case "list_members":
+				require_once("ajax/organisation_unit.ajax.php");
+				echo OrganisationUnitAjax::list_members($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id], $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "count_members":
+				require_once("ajax/organisation_unit.ajax.php");
+				echo OrganisationUnitAjax::count_members($_POST[argument_array]);
+			break;
+			
+			case "list_owners":
+				require_once("ajax/organisation_unit.ajax.php");
+				echo OrganisationUnitAjax::list_owners($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id], $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "count_owners":
+				require_once("ajax/organisation_unit.ajax.php");
+				echo OrganisationUnitAjax::count_owners($_POST[argument_array]);
+			break;
+			
+			case "list_leaders":
+				require_once("ajax/organisation_unit.ajax.php");
+				echo OrganisationUnitAjax::list_leaders($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id], $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "count_leaders":
+				require_once("ajax/organisation_unit.ajax.php");
+				echo OrganisationUnitAjax::count_leaders($_POST[argument_array]);
+			break;
+			
+			case "list_quality_managers":
+				require_once("ajax/organisation_unit.ajax.php");
+				echo OrganisationUnitAjax::list_quality_managers($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id], $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "count_quality_managers":
+				require_once("ajax/organisation_unit.ajax.php");
+				echo OrganisationUnitAjax::count_quality_managers($_POST[argument_array]);
+			break;
+			
+			case "list_groups":
+				require_once("ajax/organisation_unit.ajax.php");
+				echo OrganisationUnitAjax::list_groups($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id], $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "count_groups":
+				require_once("ajax/organisation_unit.ajax.php");
+				echo OrganisationUnitAjax::count_groups($_POST[argument_array]);
+			break;
+			
+			case "list_organisation_units_by_user_id":
+				require_once("ajax/organisation_unit.ajax.php");
+				echo OrganisationUnitAjax::list_organisation_units_by_user_id($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id], $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "count_organisation_units_by_user_id":
+				require_once("ajax/organisation_unit.ajax.php");
+				echo OrganisationUnitAjax::count_organisation_units_by_user_id($_POST[argument_array]);
+			break;
+			
+		endswitch;
 	}
 	
 	public static function io_handler()
