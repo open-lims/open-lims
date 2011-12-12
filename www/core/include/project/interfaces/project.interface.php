@@ -128,11 +128,9 @@ interface ProjectInterface
 	
 	 /**
      * Proceed the current project to the next status
-     * @param string $checksum
-     * @param string $comment Optional Comment
      * @return bool
      */
-	public function set_next_status($checksum, $comment);
+	public function set_next_status();
 	
 	/**
      * Returns the requirements of a given status

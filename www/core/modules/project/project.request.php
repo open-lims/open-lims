@@ -60,7 +60,28 @@ class ProjectRequest
 				require_once("ajax/project.ajax.php");
 				echo ProjectAjax::count_projects_by_item_id($_POST[argument_array]);
 			break;
-				
+
+			case "get_project_status_bar":
+				require_once("ajax/project.ajax.php");
+				echo ProjectAjax::get_project_status_bar($_POST[get_array]);
+			break;
+			
+			case "get_project_menu":
+				require_once("ajax/project.ajax.php");
+				echo ProjectAjax::get_project_menu($_POST[get_array]);
+			break;
+			
+			case "get_project_proceed":
+				require_once("ajax/project.ajax.php");
+				echo ProjectAjax::get_project_proceed($_POST[get_array]);
+			break;
+			
+			case "proceed_project":
+				require_once("ajax/project.ajax.php");
+				echo ProjectAjax::proceed_project($_POST[get_array]);
+			break;
+			
+			
 			case "list_project_tasks":
 				require_once("ajax/project_task.ajax.php");
 				echo ProjectTaskAjax::list_project_tasks($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);

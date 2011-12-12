@@ -1233,44 +1233,53 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     
     /**
      * @see ProjectInterface::set_next_status()
-     * @param string $checksum
-     * @param string $comment Optional Comment
      * @return bool
      * @throws ProjectSetNextStatusException
      */
-    public function set_next_status($checksum, $comment)
+    public function set_next_status()
     {
     	global $transaction;
 
 		if ($this->project_id)
 		{
-			$transaction_id = $transaction->begin();
-	
-			$current_status_id = $this->get_current_status_id();
-			$next_status_id = $this->get_next_status_id();
-			
-			$project_has_project_status = new ProjectHasProjectStatus_Access(null);
-			if ($project_has_project_status->create($this->project_id, $next_status_id) != null)
+			if ($this->is_current_status_fulfilled())
 			{
-				if (ProjectTask::check_over_time_tasks($this->project_id) == false)
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					throw new ProjectSetNextStatusException();
-				}
+				$transaction_id = $transaction->begin();
+		
+				$current_status_id = $this->get_current_status_id();
+				$next_status_id = $this->get_next_status_id();
 				
-				$project_log = new ProjectLog(null);
-				if ($project_log->create($this->project_id, null, false, false, md5(rand(0,32768))) != null)
+				$project_has_project_status = new ProjectHasProjectStatus_Access(null);
+				if ($project_has_project_status->create($this->project_id, $next_status_id) != null)
 				{
-					if ($project_log->link_status($next_status_id) == true)
+					if (ProjectTask::check_over_time_tasks($this->project_id) == false)
 					{
 						if ($transaction_id != null)
 						{
-							$transaction->commit($transaction_id);
+							$transaction->rollback($transaction_id);
 						}
-						return true;
+						throw new ProjectSetNextStatusException();
+					}
+					
+					$project_log = new ProjectLog(null);
+					if ($project_log->create($this->project_id, null, false, false, md5(rand(0,32768))) != null)
+					{
+						if ($project_log->link_status($next_status_id) == true)
+						{
+							if ($transaction_id != null)
+							{
+								$transaction->commit($transaction_id);
+							}
+							return true;
+						}
+						else
+						{
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							throw new ProjectSetNextStatusException();
+						}
 					}
 					else
 					{
@@ -1292,10 +1301,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
 				throw new ProjectSetNextStatusException();
 			}
 		}

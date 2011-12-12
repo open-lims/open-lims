@@ -430,5 +430,379 @@ class ProjectAjax
 			return null;
 		}
 	}
+	
+	public static function get_project_status_bar($get_array)
+	{
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}
+		
+		if ($_GET[project_id])
+		{
+			$project = new Project($_GET[project_id]);
+			
+			$template = new Template("template/projects/ajax/detail_status.html");
+		
+			// Status Bar
+			$all_status_array = $project->get_all_status_array();				
+			$result = array();
+			$counter = 0;
+			
+			if (is_array($all_status_array) and count($all_status_array) >= 1)
+			{
+				foreach($all_status_array as $key => $value)
+				{						
+					$project_status = new ProjectStatus($value[id]);
+					
+					if ($value[optional] == true)
+					{
+						$result[$counter][name] = $project_status->get_name()." (optional)";
+					}
+					else
+					{
+						$result[$counter][name] = $project_status->get_name();	
+					}
+					
+					if ($value[status] == 3)
+					{
+						$result[$counter][icon] = "<img src='images/icons/status_cancel.png' alt='R' />";
+					}
+					elseif($value[status] == 2)
+					{
+						$result[$counter][icon] = "<img src='images/icons/status_ok.png' alt='R' />";
+					}elseif($value[status] == 1)
+					{
+						$result[$counter][icon]	= "<img src='images/icons/status_run.png' alt='R' />";
+					}
+					else
+					{
+						$result[$counter][icon]	= "";
+					}
+					
+					if (!($counter % 2))
+					{
+						$result[$counter][tr_class] = " class='trLightGrey'";
+					}
+					else
+					{
+						$result[$counter][tr_class] = "";
+					}
+					
+					$counter++;
+				}
+				
+				$project_status = new ProjectStatus(2);
+				$result[$counter][name] = $project_status->get_name();
+				
+				if ($project->get_current_status_id() == 2)
+				{
+					$result[$counter][icon] = "<img src='images/icons/status_ok.png' alt='R' />";
+				}
+				else
+				{
+					$result[$counter][icon]	= "";
+				}
+				
+				if (!($counter % 2))
+				{
+					$result[$counter][tr_class] = " class='trLightGrey'";
+				}
+				else
+				{
+					$result[$counter][tr_class] = "";
+				}
+				
+				$counter++;
+			}
+			
+			$template->set_var("status",$result);
+			
+			$template->output();
+		}
+	}
+	
+	public static function get_project_menu($get_array)
+	{
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}
+		
+		if ($_GET[project_id])
+		{
+			$project = new Project($_GET[project_id]);
+			$project_security = new ProjectSecurity($_GET[project_id]);
+			
+			$template = new Template("template/projects/ajax/detail_menu.html");
+			
+			switch ($project->is_next_status_available()):
+				case(0):
+					if ($project->get_current_status_id() == 0)
+					{
+						$template->set_var("proceed",3);
+					}
+					else
+					{
+						$template->set_var("proceed",4);
+					}
+				break;
+				
+				case(1):
+					if ($project_security->is_access(2, false) == true)
+					{
+						if ($project->is_current_status_fulfilled())
+						{
+							$template->set_var("proceed",1);
+						}
+						else
+						{
+							$template->set_var("proceed",2);
+						}
+					}
+				break;
+				
+				case(2):
+					if ($project_security->is_access(2, false) == true)
+					{
+						if ($project->is_current_status_fulfilled())
+						{
+							$template->set_var("proceed",5);
+						}
+						else
+						{
+							$template->set_var("proceed",6);
+						}
+					}
+				break;
+						
+				default:
+					$template->set_var("proceed",7);
+				break;
+			endswitch;		
+			
+			$template->set_var("next_status_name",$project->get_next_status_name());
+			
+			
+			if ($project_security->is_access(2, false) == true)
+			{
+				// Status Buttons
+				
+				$project_template = new ProjectTemplate($project->get_template_id());
+				$current_status_requirements 	= $project->get_current_status_requirements($project->get_current_status_id());
+				$current_fulfilled_requirements = $project->get_fulfilled_status_requirements();
+							
+				$result = array();
+				$counter = 0;
+				
+				if (is_array($current_status_requirements) and count($current_status_requirements) >= 1)
+				{
+					foreach($current_status_requirements as $key => $value)
+					{
+						$paramquery = array();
+						$paramquery[username] = $_GET[username];
+						$paramquery[session_id] = $_GET[session_id];
+						$paramquery[nav] = "project";
+						$paramquery[run] = "item_add";
+						$paramquery[project_id] = $_GET[project_id];
+						$paramquery[dialog] = $value[type];
+						$paramquery[key] = $key;
+						$paramquery[retrace] = Retrace::create_retrace_string();
+						unset($paramquery[nextpage]);
+						$params = http_build_query($paramquery,'','&#38;');
+	
+						$result[$counter][name] = $value[name];
+	
+						if ($current_fulfilled_requirements[$key] == true)
+						{
+							if ($value[occurrence] == "multiple")
+							{
+								$result[$counter][status] = 2;
+							}
+							else
+							{
+								$result[$counter][status] = 0;
+							}
+						}
+						else
+						{
+							$result[$counter][status] = 1;
+						}
+	
+						if ($value[requirement] == "optional")
+						{
+							$result[$counter][name] = $result[$counter][name]." (optional)";
+						}
+						
+						$result[$counter][params] = $params;					
+						
+						$counter++;
+					}		
+				}
+				
+				$template->set_var("status_action",$result);
+				
+				$template->set_var("write",true);
+			}
+			else
+			{
+				$template->set_var("write",false);
+			}
+			
+			$paramquery = array();
+			$paramquery[username] = $_GET[username];
+			$paramquery[session_id] = $_GET[session_id];
+			$paramquery[nav] = "project";
+			$paramquery[run] = "common_dialog";
+			$paramquery[folder_id] = ProjectFolder::get_supplementary_folder($_GET[project_id]);
+			$paramquery[dialog] = "file_add";
+			$paramquery[retrace] = Retrace::create_retrace_string();
+			unset($paramquery[nextpage]);
+			$supplementary_params = http_build_query($paramquery,'','&#38;');
+			
+			$template->set_var("supplementary_params",$supplementary_params);
+			
+			
+			$log_paramquery = $_GET;
+			$log_paramquery[run] = "log_add";
+			unset($log_paramquery[nextpage]);
+			$log_params = http_build_query($log_paramquery,'','&#38;');
+			
+			$template->set_var("log_params",$log_params);
+			
+			
+			$add_task_paramquery = $_GET;
+			$add_task_paramquery[run] = "add_task";
+			unset($add_task_paramquery[nextpage]);
+			$add_task_params = http_build_query($add_task_paramquery,'','&#38;');
+			
+			$template->set_var("add_task_params",$add_task_params);
+			
+			
+			$show_tasks_paramquery = $_GET;
+			$show_tasks_paramquery[run] = "show_tasks";
+			unset($show_tasks_paramquery[nextpage]);
+			$show_tasks_params = http_build_query($show_tasks_paramquery,'','&#38;');
+			
+			$template->set_var("show_tasks_params",$show_tasks_params);
+			
+			
+			$subproject_paramquery = $_GET;
+			$subproject_paramquery[run] = "new_subproject";
+			unset($subproject_paramquery[nextpage]);
+			$subproject_params = http_build_query($subproject_paramquery,'','&#38;');
+			
+			$template->set_var("add_subproject_params",$subproject_params);
+			
+			$template->output();
+		}
+	}
+	
+	/**
+	 * @param array $get_array
+	 * @throws ProjectSecurityAccessDeniedException
+	 * @throws ProjectIDMissingException
+	 */
+	public static function get_project_proceed($get_array)
+	{
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}
+		
+		if ($_GET[project_id])
+		{
+			$project_security = new ProjectSecurity($_GET[project_id]);
+			
+			if ($project_security->is_access(3, false) == true)
+			{
+				$project = new Project($_GET[project_id]);
+				
+				if ($project->is_current_status_fulfilled())
+				{
+					echo "1:";
+				}
+				else
+				{
+					echo "0:";
+				}
+				
+				$template = new Template("template/projects/ajax/proceed.html");
+							
+				$project_template = new ProjectTemplate($project->get_template_id());
+				$current_status_requirements 	= $project->get_current_status_requirements();
+				$current_fulfilled_requirements = $project->get_fulfilled_status_requirements();
+				
+				$result = array();
+				$counter = 0;
+				
+				if (is_array($current_status_requirements) and count($current_status_requirements) >= 1)
+				{
+					foreach($current_status_requirements as $key => $value)
+					{
+						$result[$counter][name] = $value[name];
+						if ($current_fulfilled_requirements[$key] == true)
+						{
+							$result[$counter][status] = 0;
+						}
+						else
+						{
+							if ($value[requirement] != "optional")
+							{
+								$result[$counter][status] = 1;
+							}
+							else
+							{
+								$result[$counter][status] = 2;
+							}
+						}
+						$counter++;
+					}			
+				}
+				else
+				{
+					$result[$counter][icon] = "";
+					$result[$counter][name] = "No Requirements";
+				}
+	
+				$template->set_var("status_action",$result);
+				
+	
+				$template->output();
+			}
+			else
+			{
+				throw new ProjectSecurityAccessDeniedException();
+			}
+		}
+		else
+		{
+			throw new ProjectIDMissingException();
+		}
+	}
+	
+	public static function proceed_project($get_array)
+	{
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}
+		
+		if ($_GET[project_id])
+		{
+			$project = new Project($_GET[project_id]);
+			
+			try
+			{
+				$project->set_next_status();
+				return "1";
+			}
+			catch (ProjectSetNextStatusException $e)
+			{
+				return "0";
+			}
+		}
+	}
+	
 }
 ?>
