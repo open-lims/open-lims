@@ -169,10 +169,12 @@ class FolderAjax extends Ajax
 				$template = new Template("../../../../template/data/folder_delete_window.html");
 				$template->set_var("params", $params);
 				$button_handler = "
+					var new_name = $('#RenameFolderInput').val();
+					
 					$.ajax({
 						type : \"GET\",
 						url : \"../../../../core/modules/data/ajax/folder.ajax.php\",
-						data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&folder_id=".$_GET['folder_id']."&run=delete_folder\",
+						data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&folder_id=".$_GET['folder_id']."&run=delete_folder&new_name=\"+new_name,
 						success : function(data) {
 							close_ui_window_and_reload();
 						}
@@ -184,7 +186,17 @@ class FolderAjax extends Ajax
 			break;
 			case "folder_rename":
 				$template = new Template("../../../../template/data/folder_rename_window.html");
-				$button_handler = "";
+				$button_handler = "
+					var new_name = $('#RenameFolderInput').val();
+					$.ajax({
+						type : \"POST\",
+						url : \"../../../../core/modules/data/ajax/folder.ajax.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&folder_id=".$_GET['folder_id']."&run=folder_rename\",
+						data : \"new_name=\"+new_name,
+						success : function(data) {
+							close_ui_window_and_reload();
+						}
+					});
+				";
 				$button_handler_caption = "Rename";
 				$html_caption = "Rename Folder";
 				$html = $template->get_string();
@@ -276,6 +288,12 @@ class FolderAjax extends Ajax
 		}
 	}
 	
+	private function rename_folder($folder_id, $folder_name)
+	{
+		$folder = Folder::get_instance($folder_id);
+		$folder->set_name($folder_name);
+	}
+	
 	private function delete_folder($folder_id) {
 		$folder = Folder::get_instance($folder_id);
 		$folder->delete(true, true); //?
@@ -303,6 +321,9 @@ class FolderAjax extends Ajax
 					break;
 				case "delete_folder":
 					echo $this->delete_folder($_GET[folder_id]);
+					break;
+				case "folder_rename":
+					echo $this->rename_folder($_GET[folder_id], $_POST['new_name']);
 					break;
 			endswitch;
 		}
