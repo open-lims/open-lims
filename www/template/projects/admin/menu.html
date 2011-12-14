@@ -1,3 +1,62 @@
+<script>
+$(document).ready(function()
+{
+	$("#ProjectDeleteButton").click(function()
+	{
+		$("#ProjectDeleteWindow").dialog("open");
+		return false;
+	});
+	
+	$("#ProjectDeleteWindow").dialog(
+	{
+		autoOpen: false,
+		height: 200,
+		width: 400,
+		buttons: 
+		{
+			"Yes": function()
+			{
+				$(this).dialog( "close" );
+			},
+			"No": function()
+			{
+		        $(this).dialog( "close" );
+			}
+		}
+	});
+
+	$("#ProjectCancelButton").click(function()
+	{
+		$("#ProjectCancelWindow").dialog("open");
+		return false;
+	});
+	
+	$("#ProjectCancelWindow").dialog(
+	{
+		autoOpen: false,
+		height: 200,
+		width: 400,
+		buttons: 
+		{
+			"Yes": function()
+			{
+				$(this).dialog( "close" );
+			},
+			"No": function()
+			{
+		        $(this).dialog( "close" );
+			}
+		}
+	});
+});
+</script>
+
+<div id="ProjectDeleteWindow" title="Delete Project" style='display: none;'>
+</div>
+
+<div id="ProjectCancelWindow" title="Cancel Project" style='display: none;'>
+</div>
+
 <br />
 		
 <!-- CONTAINER BEGIN (Project Administration") -->
@@ -28,11 +87,11 @@
 
 		<tr>
 			<td><img src='images/icons/delete.png' alt='' /></td>
-			<td colspan='3'><a href='index.php?[[FULL_DELETE_PARAMS]]'>full delete</a></td>
+			<td colspan='3'><a href='#'  id='ProjectDeleteButton'>full delete</a></td>
 		</tr>
 		<tr>
 			<td><img src='images/icons/restore.png' alt='' /></td>
-			<td colspan='3'><a href='index.php?[[RESTORE_PARAMS]]'>restore project</a></td>
+			<td colspan='3'><a href='#'  id='ProjectDeleteButton'>restore project</a></td>
 		</tr>
 	
 	<!-- ENDIF -->
@@ -43,7 +102,7 @@
 
 	<tr>
 		<td><img src='images/icons/delete.png' alt='' /></td>
-		<td colspan='3'><a href='index.php?[[DELETE_PARAMS]]'>delete</a></td>
+		<td colspan='3'><a href='#' id='ProjectDeleteButton'>delete</a></td>
 	</tr>
 	
 	<!-- ELSE -->
@@ -64,7 +123,7 @@
 		
 			<tr>
 				<td><img src='images/icons/reactivate_project.png' alt='' /></td>
-				<td colspan='3'><a href='index.php?[[REACTIVATE_PARAMS]]'>reactivate project</a></td>
+				<td colspan='3'><a href='#' id='ProjectCancelButton'>reactivate project</a></td>
 			</tr>
 		
 		<!-- ELSE -->
@@ -82,7 +141,7 @@
 
 			<tr>
 				<td><img src='images/icons/cancel_project.png' alt='' /></td>
-				<td colspan='3'><a href='index.php?[[CANCEL_PARAMS]]'>cancel project</a></td>
+				<td colspan='3'><a href='#' id='ProjectCancelButton'>cancel project</a></td>
 			</tr>
 						
 		<!-- ELSE -->

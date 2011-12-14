@@ -27,7 +27,7 @@ $(document).ready(function()
 								if (data)
 								{
 									var data_array = data.split(":")
-									$("#ProjectDetailProceed").html(data_array[1]);
+									$("#ProjectDetailProceedWindow").html(data_array[1]);
 									if (data_array[0] == "0")
 									{
 										
@@ -39,7 +39,7 @@ $(document).ready(function()
 								}
 							}
 						});
-						$("#ProjectDetailProceed").dialog("open");
+						$("#ProjectDetailProceedWindow").dialog("open");
 						return false;
 					});
 				}
@@ -67,7 +67,7 @@ $(document).ready(function()
 	reload_menu();
 	reload_status();
 	
-	$("#ProjectDetailProceed").dialog(
+	$("#ProjectDetailProceedWindow").dialog(
 	{
 		autoOpen: false,
 		height: 400,
@@ -104,7 +104,7 @@ $(document).ready(function()
 });
 </script>
 
-<div id="ProjectDetailProceed" title="Proceed with Project" style='display: none;'>
+<div id="ProjectDetailProceedWindow" title="Proceed with Project" style='display: none;'>
 </div>
 
 <br />
