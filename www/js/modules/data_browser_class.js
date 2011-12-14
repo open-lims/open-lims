@@ -782,7 +782,7 @@ function data_browser()
 			.unbind("click")
 			.click(function()
 			{
-				var container = $("<div>Do you really want to delete the selected files?</div>")
+				var container = $("<div>Do you really want to delete the selected items?</div>")
 				$(container).css({"text-align":"center","padding-top":"20px"});
 				$(container).dialog({"title" : "Confirm" ,  
 					"close" : function(){$(container).remove();},

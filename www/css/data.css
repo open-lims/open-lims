@@ -185,6 +185,17 @@ padding: 0;
 vertical-align:middle;
 }
 
+#RenameFolderContainer
+{
+width:100%;
+text-align:center;
+}
+
+#RenameFolderContainer input
+{
+margin-top:5px;
+}
+
 /* DATA UPLOAD*/
 
 #UploadUI

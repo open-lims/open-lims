@@ -180,16 +180,16 @@ class FileAjax extends Ajax
 				$html = $template->get_string();
 				break;	
 			case "permission":
-				require_once("../../../../core/modules/data/io/data.io.php");
+				require_once("data.ajax.php");
 				
 				if(isset($_GET[permissions]))
 				{
-					$success = DataIO::change_permission(json_decode($_GET[permissions]), "File");
+					$success = DataAjax::change_permission(json_decode($_GET[permissions]), "File");
 					return $success;
 				}
 				else
 				{
-					$permission = DataIO::permission_window();
+					$permission = DataAjax::permission_window();
 					$button_handler = "
 						var json = '{';
 						$('#DataBrowserLoadedAjaxContent').find('input').each(function(){
