@@ -67,7 +67,7 @@ class Common_IO
 
 		$pixel = 750/100*$width;
 		
-		return "</div>" .
+		return "&nbsp;</div>" .
 				"<table class='ContentBoxEnd' style='width: ".$pixel."px;'>" .
 				"<tr>" .
 				"<td class='ContentBoxEndLeft'><img src='images/corners/corner_bottom_left.png' alt='' /></td>" .
