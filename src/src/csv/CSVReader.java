@@ -13,7 +13,7 @@ public class CSVReader extends CSVFile{
 	{
 		super(delimiter, line_break);
 		this.reader = reader;
-		this.header = readLine();
+		read_header(readLine());
 	}
 	
 	public String[] readLine()
