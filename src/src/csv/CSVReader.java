@@ -42,4 +42,14 @@ public class CSVReader extends CSVFile{
 		return null;
 	}
 	
+	public String[] readLine(int index)
+	{
+		String[] row = null;
+		while(current_line <= index)
+		{
+			row = readLine();
+		}
+		return row;
+	}
+	
 }

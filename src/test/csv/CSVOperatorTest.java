@@ -82,12 +82,12 @@ public class CSVOperatorTest {
 		BufferedWriter bw = DataResource.getWriter(new File("./new5.csv"));
 		CSVWriter w = new CSVWriter(bw, ",", "\r\n");
 		
-		BufferedReader br = DataResource.getResourceFromFileIdAsStream(2973);
-		CSVReader r = new CSVReader(br, ";","\r\n");
+		BufferedReader br = DataResource.getResourceFromFileIdAsStream(2987);
+		CSVReader r = new CSVReader(br, ",","\r\n");
 		
 		Treshold t = new Treshold() {
 			public boolean check_field(String field) {
-				if(field.equals("1"))
+				if(field.equals("01108"))
 					return true;
 				return false;
 			}
@@ -99,7 +99,7 @@ public class CSVOperatorTest {
 		};
 		Treshold t2 = new Treshold() {
 			public boolean check_field(String field) {
-				if(field.equals("bonk"))
+				if(field.equals("\"emp\""))
 					return true;
 				return false;
 			}
@@ -107,7 +107,7 @@ public class CSVOperatorTest {
 			public String[] apply_changes(String[] row, int column_index) {
 				
 				BufferedReader br = DataResource.getResourceFromFileIdAsStream(2973);
-				CSVReader r = new CSVReader(br, ";","\r\n");
+				CSVReader r = new CSVReader(br, ",","\r\n");
 				
 				String[] switched_row = null;
 				while(r.current_line < 3)
