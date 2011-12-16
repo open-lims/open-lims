@@ -155,7 +155,8 @@ class ContentHandler_IO
  					}
  					else
  					{
- 						try {
+ 						try
+ 						{
 							if ($_GET[nav])
 							{
 								if($_GET[nav] == "home")
@@ -243,35 +244,46 @@ class ContentHandler_IO
 	{
 		global $session;
 		
-		if ($session->is_valid() == true)
-		{
-			$module_array = SystemHandler::list_modules();
-			
-			if (is_array($module_array) and count($module_array) >= 1)
+		try
+ 		{
+			if ($session->is_valid() == true)
 			{
-				foreach($module_array as $key => $value)
+				$module_array = SystemHandler::list_modules();
+				
+				if (is_array($module_array) and count($module_array) >= 1)
 				{
-					if ($_GET[nav] == $value[name])
+					foreach($module_array as $key => $value)
 					{
-						$module_request_handler = "core/modules/".$value[folder]."/".$value[name].".request.php";
-						if (file_exists($module_request_handler))
+						if ($_GET[nav] == $value[name])
 						{
-							require_once($module_request_handler);
-							$value['class']::ajax_handler();
+							$module_request_handler = "core/modules/".$value[folder]."/".$value[name].".request.php";
+							if (file_exists($module_request_handler))
+							{
+								require_once($module_request_handler);
+								$value['class']::ajax_handler();
+							}
 						}
 					}
 				}
 			}
-		}
-		else
-		{
-			if ($_GET[run] == "login")
+			else
 			{
-				require_once("core/modules/base/base.request.php");
-				BaseRequest::ajax_handler();
+				if ($_GET[run] == "login")
+				{
+					require_once("core/modules/base/base.request.php");
+					BaseRequest::ajax_handler();
+				}
 			}
+ 		}
+ 		catch(DatabaseQueryFailedException $e)
+		{
+			echo "EXCEPTION: DatabaseQueryFailedException";
 		}
-		
+ 		catch(BaseException $e)
+		{
+			$error_io = new Error_IO($e);
+			echo "EXCEPTION: ".$error_io->get_error_message();
+		}
 	}
 }
 

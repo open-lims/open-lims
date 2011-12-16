@@ -46,6 +46,23 @@
 	padding: 5px;
 }
 
+/* Project Admin */
+
+#ProjectAdminMenu {
+	min-height: 280px;
+	width: 100%;
+	background-image: url(../images/backgrounds/settings.png);
+	background-repeat: no-repeat;
+	background-position: bottom right;
+}
+
+#ProjectAdminMenuTable {
+	margin-top: 1em;
+	width: 40em;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 
 /* Project Task */
 

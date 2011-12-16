@@ -60,3 +60,93 @@ function tooltip(element_id, message)
 		});
 	});
 }
+
+function base_dialog(type, url, data_params, open_id)
+{
+	$("#"+open_id).click(function()
+	{
+		$.ajax(
+		{
+			type : type,
+			url : url,
+			data : data_params,
+			async: false,
+			success : function(data) 
+			{
+				if (data)
+				{
+					var json = $.parseJSON(data);
+					
+					var continue_button_click_handler 	= json["continue_handler"];
+					var cancel_button_click_handler 	= json["cancel_handler"];			
+					var additional_script 				= json["additional_script"];
+					
+					var continue_button_caption = json["continue_caption"];
+					var cancel_button_caption 	= json["cancel_caption"];
+					
+					var html_content 			= json["content"];
+					var html_content_caption 	= json["content_caption"];
+					var container 				= json["container"];
+					
+					var dialog_width 			= json["width"];
+					var dialog_height 			= json["height"];
+						
+					var dialog_min_width 		= json["min_width"];
+					var dialog_min_height 		= json["min_height"];
+					
+					var dialog_vposition 		= json["vposition"];
+					var dialog_hposition 		= json["hposition"];
+					var position 				= [dialog_hposition,dialog_vposition];
+					
+					$(container).dialog(
+					{
+						"title" : html_content_caption ,  
+						"minHeight" : dialog_min_width , 
+						"maxHeight" : dialog_min_height , 
+						"position" : position,
+						"height" : dialog_height,
+						"width" : dialog_width, 
+						"buttons" : [
+						{
+							text : continue_button_caption , 
+							click : function()
+							{
+								if (continue_button_click_handler)
+								{
+									eval(continue_button_click_handler);
+								}
+								else
+								{
+									$(container).dialog("close");
+								}
+						    }
+						} , 
+				        {
+					    	text : cancel_button_caption, 
+					    	click : function()
+							{
+								if (cancel_button_click_handler)
+								{
+									eval(cancel_button_click_handler);
+								}
+								else
+								{
+									$(container).dialog("close");
+								}
+						    }
+						}]
+					});
+					
+					if(additional_script != undefined)
+					{
+						eval(additional_script);
+					}
+					
+					$(container).html(html_content);
+					$(container).dialog("open");
+				}
+			}
+		});
+	});
+	return false;
+}

@@ -309,20 +309,7 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 	vertical-align: top;
 }
 
-.ProjectReorgaContainer {
-	min-height: 15em;
-	width: 100%;
-	background-image: url(../images/backgrounds/settings.png);
-	background-repeat: no-repeat;
-	background-position: bottom right;
-}
 
-.ProjectReorgaTable {
-	margin-top: 1em;
-	width: 40em;
-	margin-left: auto;
-	margin-right: auto;
-}
 
 .ProjectInactive {
 	color: #909090;
