@@ -25,7 +25,7 @@
  * 
  */
 	$name 					= "base";
-	$main_class				= "BaseIO";
+	$main_class				= "BaseRequest";
 	
 	$required_include[0] 	= "base";
 	

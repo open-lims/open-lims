@@ -66,14 +66,14 @@ require_once($path_prefix."../../include/base/system/runtime_data.class.php");
 
 $runtime_data = new RuntimeData();
 
-require_once($path_prefix."../../modules/base/common.io.php");
-require_once($path_prefix."../../modules/base/list.io.php");
-require_once($path_prefix."../../modules/base/list_request.io.php");
+require_once($path_prefix."../../modules/base/common/io/common.io.php");
+require_once($path_prefix."../../modules/base/common/io/list.io.php");
+require_once($path_prefix."../../modules/base/common/io/list_request.io.php");
 
 /**
  * @deprecated remove later
  */
-require_once($path_prefix."../../modules/base/list_stat.io.php");
+require_once($path_prefix."../../modules/base/common/io/list_stat.io.php");
 
 SystemHandler::init_db_constants();
 

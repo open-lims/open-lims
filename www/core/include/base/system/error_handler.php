@@ -43,7 +43,6 @@ function error_handler($code, $message, $file, $line)
 				
 				if (class_exists("Error_IO"))
 				{
-					new ErrorIO();
 					$error_io = new Error_IO($e);
 					$error_io->display_error();
 				}

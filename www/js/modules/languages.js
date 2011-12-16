@@ -21,6 +21,7 @@ upload_status_array_english[6] = "VAR seconds remaining";
 upload_status_array_english[7] = "1 second remaining";
 
 
+
 function get_local_array(type)
 {
 	var local_language = "english"; //get & set the local language here

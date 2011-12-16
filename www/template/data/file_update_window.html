@@ -1,0 +1,45 @@
+<iframe src='core/modules/data/file.update.php?[[PARAMS]]' name='hidden_uploader' style='display: none;'></iframe>
+
+<div class='file_upload_container'>
+<br />
+<br />
+<form id='UploadForm' enctype='multipart/form-data' action='core/modules/data/file.update.php?[[PARAMS]]' method='post' target='hidden_uploader'>
+<table class='file_update_table'>
+
+	<tbody id='uploader_tbody'>
+		<tr>
+			<td><br /><br /><span class='smallTextBlack'>Upload your new file here. The old file will be stored as a previous version.</span><br /><br /></td>
+		</tr>				
+		<tr>
+			<td>file</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>
+				<input type='hidden' id='UPLOAD_IDENTIFIER' name='UPLOAD_IDENTIFIER' value='[[UNIQUE_ID]]'/>
+				<input type='file' name='file-1' id='file-1' value=''  class='FileInput'/>
+			</td>
+		</tr>
+		<tr id='uploader_break'>
+			<td>
+				<input type='checkbox' name='current' value='1' checked='checked' /> New file is current version
+			</td>
+		</tr>						
+		<tr>
+			<td>
+				<input type='hidden' name='file_amount' id='uploader_file_amount' value='1' />
+			</td>
+		</tr>
+	
+	</tbody>
+	
+</table>
+
+<script language='javascript'>
+var uploader = new base_upload('[[UNIQUE_ID]]','[[SESSION_ID]]');
+</script>
+
+</form>
+<br />
+<br />
+</div>

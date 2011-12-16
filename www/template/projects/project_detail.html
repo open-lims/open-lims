@@ -1,3 +1,112 @@
+<script>
+$(document).ready(function()
+{
+	function reload_menu()
+	{
+		$.ajax(
+		{
+			type: "POST",
+			url: "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=get_project_menu",
+			data: 'get_array=[[GET_ARRAY]]',
+			success: function(data)
+			{		
+				if (data)
+				{
+					$("#ProjectDetailMenu").hide().html(data).fadeIn("slow");
+
+					$("#ProjectDetailProceedButton").click(function()
+					{
+						$.ajax(
+						{
+							type: "POST",
+							url: "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=get_project_proceed",
+							data: 'get_array=[[GET_ARRAY]]',
+							async: false,
+							success: function(data)
+							{
+								if (data)
+								{
+									var data_array = data.split(":")
+									$("#ProjectDetailProceed").html(data_array[1]);
+									if (data_array[0] == "0")
+									{
+										
+									}
+									else
+									{
+										
+									}
+								}
+							}
+						});
+						$("#ProjectDetailProceed").dialog("open");
+						return false;
+					});
+				}
+			}
+		});
+	}
+
+	function reload_status()
+	{
+		$.ajax(
+		{
+			type: "POST",
+			url: "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=get_project_status_bar",
+			data: 'get_array=[[GET_ARRAY]]',
+			success: function(data)
+			{		
+				if (data)
+				{
+					$("#ProjectDetailStatus").hide().html(data).fadeIn("slow");
+				}
+			}
+		});
+	}
+
+	reload_menu();
+	reload_status();
+	
+	$("#ProjectDetailProceed").dialog(
+	{
+		autoOpen: false,
+		height: 400,
+		width: 400,
+		buttons: 
+		{
+			"OK": function()
+			{
+				$.ajax(
+				{
+					type: "POST",
+					url: "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=proceed_project",
+					data: 'get_array=[[GET_ARRAY]]',
+					async: false,
+					success: function(data)
+					{		
+						if (data)
+						{
+							$("#ProjectDetailStatus").fadeOut("slow");
+							$("#ProjectDetailMenu").fadeOut("slow");
+							reload_menu();
+							reload_status();
+						}
+					}
+				});
+				$(this).dialog( "close" );
+			},
+			"Cancel": function()
+			{
+		          $(this).dialog( "close" );
+			}
+		}
+	});
+});
+</script>
+
+<div id="ProjectDetailProceed" title="Proceed with Project" style='display: none;'>
+</div>
+
 <br />
 
 <!-- CONTAINER BEGIN ("Detail: [[TITLE]]","ProjectDetailGeneral", 49) -->
@@ -29,169 +138,17 @@
 
 <br />
 		
-<table class='ProjectDetailStatusTable'>
+<div id='ProjectDetailStatus'>
 
-	<!-- FOREACH BEGIN ([[STATUS]]) -->
-	
-	<tr[[STATUS:TR_CLASS]]>
-		<td>[[STATUS:NAME]]</td>
-		<td>[[STATUS:ICON]]</td>
-	</tr>
-	
-	<!-- FOREACH END -->	
-	
-</table>
+</div>
 
 <!-- CONTAINER END (49) -->
 
 
 <!-- CONTAINER BEGIN ("I want to...","ProjectDetailMenu",49) -->
 
+<div id='ProjectDetailMenu'>
 
-	<!-- IF ([[PROCEED]] == 1) -->
-	
-		<a href='index.php?[[PROCEED_PARAMS]]' class='projectEasyButton'>
-			<span class='projectEasyIcon'><img src='images/icons_30/proceed.png' alt='' border='0' /></span>
-			<span class='projectEasyText'>proceed to [[NEXT_STATUS_NAME]]</span>
-		</a>
-	
-	<!-- ELSEIF ([[PROCEED]] == 2) -->
-	
-		<a href='index.php?[[PROCEED_PARAMS]]' class='projectEasyButton'>
-			<span class='projectEasyIcon'><img src='images/icons_30/proceed_na.png' alt='' border='0' /></span>
-			<span class='projectEasyText'>proceed to [[NEXT_STATUS_NAME]]</span>
-		</a>
-		
-	<!-- ELSEIF ([[PROCEED]] == 3) -->
-	
-		<a class='projectEasyButton'>
-			<span class='projectEasyIcon'><img src='images/icons_30/proceed_na.png' alt='' border='0' /></span>
-			<span class='projectEasyText'>project canceled</span>
-		</a>
-	
-	<!-- ELSEIF ([[PROCEED]] == 4) -->
-	
-		<a class='projectEasyButton'>
-			<span class='projectEasyIcon'><img src='images/icons_30/proceed_na.png' alt='' border='0' /></span>
-			<span class='projectEasyText'>project finished</span>
-		</a>
-	
-	<!-- ELSEIF ([[PROCEED]] == 5) -->
-	
-		<a href='index.php?[[PROCEED_PARAMS]]' class='projectEasyButton'>
-			<span class='projectEasyIcon'><img src='images/icons_30/proceed_hold.png' alt='' border='0' /></span>
-			<span class='projectEasyText'>proceed to [[NEXT_STATUS_NAME]] (blocked)</span>
-		</a>
-	
-	<!-- ELSEIF ([[PROCEED]] == 6) -->
-	
-		<a href='index.php?[[PROCEED_PARAMS]]' class='projectEasyButton'>
-			<span class='projectEasyIcon'><img src='images/icons_30/proceed_na.png' alt='' border='0' /></span>
-			<span class='projectEasyText'>proceed to [[NEXT_STATUS_NAME]] (blocked)</span>
-		</a>
-	
-	<!-- ELSE -->
-	
-		<a class='projectEasyButton'>
-			<span class='projectEasyIcon'><img src='images/icons_30/proceed_na.png' alt='' border='0' /></span>
-			<span class='projectEasyText'>proceed to [[NEXT_STATUS_NAME]]</span>
-		</a>
-	
-	<!-- ENDIF -->
-
-	<div class='horizontal_line'></div>
-
-	<!-- FOREACH BEGIN ([[STATUS_ACTION]]) -->
-	
-		<!-- IF ([[STATUS_ACTION:STATUS]] == 1) -->
-	
-			<a href='index.php?[[STATUS_ACTION:PARAMS]]' class='projectEasyButton'>
-				<span class='projectEasyIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
-				<span class='projectEasyText'>[[STATUS_ACTION:NAME]]</span>
-			</a>
-		
-		<!-- ELSEIF ([[STATUS_ACTION:STATUS]] == 2) -->
-		
-			<a href='index.php?[[STATUS_ACTION:PARAMS]]' class='projectEasyButton'>
-				<span class='projectEasyIcon'><img src='images/icons_30/add_done.png' alt='' border='0' /></span>
-				<span class='projectEasyText'>[[STATUS_ACTION:NAME]]</span>
-			</a>
-		
-		<!-- ELSE -->
-		
-			<a class='projectEasyButton'>
-				<span class='projectEasyIcon'><img src='images/icons_30/add_done_na.png' alt='' border='0' /></span>
-				<span class='projectEasyText'>[[STATUS_ACTION:NAME]]</span>
-			</a>
-					
-		<!-- ENDIF -->
-	
-	<!-- FOREACH END -->	
-
-
-<div class='horizontal_line'></div>
-
-<!-- IF ([[WRITE]] == 1) -->
-
-	<a href='index.php?[[SUPPLEMENTARY_PARAMS]]' class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>add a supplementary file</span>
-	</a>
-				
-	<a href='index.php?[[LOG_PARAMS]]' class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>add a comment to log</span>
-	</a>
-					
-	<div class='horizontal_line'></div>
-				
-	<a href='index.php?[[ADD_TASK_PARAMS]]' class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/add_limit.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>add a task</span>
-	</a>
-
-<!-- ELSE -->
-
-	<a class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/add_na.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>add a supplementary file</span>
-	</a>
-				
-	<a class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/add_na.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>add a comment to log</span>
-	</a>
-					
-	<div class='horizontal_line'></div>
-				
-	<a class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/add_limit_na.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>add a task</span>
-	</a>
-	
-<!-- ENDIF -->
-					
-<a href='index.php?[[SHOW_TASKS_PARAMS]]' class='projectEasyButton'>
-	<span class='projectEasyIcon'><img src='images/icons_30/time.png' alt='' border='0' /></span>
-	<span class='projectEasyText'>show the tasks</span>
-</a>
-			
-<div class='horizontal_line'></div>
-
-<!-- IF ([[WRITE]] == 1) -->
-			
-	<a href='index.php?[[ADD_SUBPROJECT_PARAMS]]' class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>add a sub-project</span>
-	</a>
-	
-<!-- ELSE -->	
-
-	<a class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/add_na.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>add a sub-project</span>
-	</a>
-	
-<!-- ENDIF -->
+</div>
 
 <!-- CONTAINER END (49) -->

@@ -1,0 +1,28 @@
+<table class='ProdectDetailProceedTable'>
+	<tr>
+		<th>required action</th>
+		<th>status</th>
+	</tr>
+				
+	<!-- FOREACH BEGIN (STATUS_ACTION) -->
+	
+		<!-- IF ([[STATUS_ACTION:STATUS]] == 1) -->					
+			<tr>
+				<td>[[STATUS_ACTION:NAME]]</td>
+				<td><img src='images/icons/status_cancel.png' alt='X' /></td>
+			</tr>
+		<!-- ELSEIF ([[STATUS_ACTION:STATUS]] == 2) -->
+			<tr>
+				<td>[[STATUS_ACTION:NAME]]</td>
+				<td><img src='images/icons/notice.png' alt='X' /></td>
+			</tr>
+		<!-- ELSE -->
+			<tr>
+				<td>[[STATUS_ACTION:NAME]]</td>
+				<td><img src='images/icons/status_ok.png' alt='V' /></td>
+			</tr>
+		<!-- ENDIF -->
+
+	<!-- FOREACH END -->
+										
+</table>

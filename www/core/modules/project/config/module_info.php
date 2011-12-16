@@ -25,7 +25,7 @@
  * 
  */
 	$name 					= "project";
-	$main_class				= "ProjectIO";
+	$main_class				= "ProjectRequest";
 	
 	$required_include[0] 	= "project";
 	

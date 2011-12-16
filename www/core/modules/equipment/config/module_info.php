@@ -25,7 +25,7 @@
  * 
  */
 	$name 					= "equipment";
-	$main_class				= "EquipmentIO";
+	$main_class				= "EquipmentRequest";
 	
 	$required_include[0] 	= "equipment";
 	

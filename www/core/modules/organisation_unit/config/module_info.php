@@ -25,7 +25,7 @@
  * 
  */
 	$name 					= "organisation_unit";
-	$main_class				= "OrganisationUnitIO";
+	$main_class				= "OrganisationUnitRequest";
 	
 	$required_include[0] 	= "organisation_unit";
 	

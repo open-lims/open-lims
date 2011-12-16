@@ -25,7 +25,7 @@
  * 
  */
 	$name 					= "organiser";
-	$main_class				= "OrganiserIO";
+	$main_class				= "OrganiserRequest";
 	
 	$required_include[0] 	= "user";
 	

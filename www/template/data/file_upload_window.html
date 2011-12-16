@@ -1,0 +1,47 @@
+<iframe src='core/modules/data/file.upload.php?[[PARAMS]]' name='hidden_uploader' style='display: none;'></iframe>
+
+<div class='file_upload_container'>
+<br />
+<br />
+
+<form id='UploadForm' enctype='multipart/form-data' action='core/modules/data/file.upload.php?[[PARAMS]]' method='post' target='hidden_uploader'>
+<table class='formTable'>
+	<tbody id='uploader_tbody'>
+		<tr>
+			<td><span class='smallText'>Notice: You can leave upload-fields empty</span><br /><br /></td>
+		</tr>					
+	<!--	<tr>
+			<td>1. file</td>
+		</tr> -->
+		<tr id='lastFileInput'>
+			<td>
+				<input type='hidden' id='UPLOAD_IDENTIFIER' name='UPLOAD_IDENTIFIER' value='[[UNIQUE_ID]]'/>
+				<input type='file' name='file-1' id='file-1' value='' class='FileInput'/>
+			</td>
+		</tr>
+		<tr id='uploader_break'>
+			<td><br /></td>
+		</tr>
+		<tr>
+			<td>I want to add <input type='textfield' size='2' value='1' id='uploader_number_of_fields' class='FormTexfield' /> more file(s) <button type='button' id='uploader_add_fields' class='FormButton'>OK</button></td>
+		</tr>
+		<tr>
+			<td>
+				<br />
+				<input type='hidden' name='file_amount' id='uploader_file_amount' value='1' />
+			</td>
+		</tr>
+		<tr>
+			<td id='ErrorMessage'></td>
+		</tr>
+	</tbody>
+</table>
+
+<script language='javascript'>
+	var uploader = new base_upload('[[UNIQUE_ID]]','[[SESSION_ID]]');
+</script>
+
+</form>
+<br />
+<br />
+</div>

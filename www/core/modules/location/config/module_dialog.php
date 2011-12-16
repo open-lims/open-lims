@@ -25,7 +25,7 @@
  * 
  */	
 	$dialog[0][type]			= "module_admin";
-	$dialog[0][class_path]		= "core/modules/location/admin/admin_location.io.php";
+	$dialog[0][class_path]		= "core/modules/location/io/admin/admin_location.io.php";
 	$dialog[0]['class']			= "AdminLocationIO";
 	$dialog[0][method]			= "handler";
 	$dialog[0][internal_name]	= "locations";

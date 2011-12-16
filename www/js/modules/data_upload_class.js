@@ -32,10 +32,14 @@ function base_upload(unique_id, session_id)
 	var started = 0;
 	var scroll_api = undefined;
 	var scroll_height = 100;
+	var finished = false;
 	
     if (typeof(base_upload_prototype_called) == "undefined")
     {
     	base_upload_prototype_called = true;
+    	base_upload.prototype.init = init;
+    	base_upload.prototype.start_upload = start_upload;
+    	base_upload.prototype.is_finished = is_finished;
     	init();
     }
 	
@@ -117,7 +121,15 @@ function base_upload(unique_id, session_id)
 			.attr("disabled","true")
 			.click(function()
 			{
-				$(location).attr("href",get_retrace());
+				var retrace = get_retrace();
+				if(retrace == undefined)
+				{
+					$.unblockUI();
+				}
+				else
+				{
+					$(location).attr("href",retrace);
+				}
 			});
 		
 		$(block_ui_content)
@@ -190,6 +202,7 @@ function base_upload(unique_id, session_id)
 		}
 		if(done)
 		{
+			finished = true;
 			update_scrollbar();
 			if(errors_occurred > 0)
 			{
@@ -497,4 +510,13 @@ function base_upload(unique_id, session_id)
 		}	
 	}
 
+	/**
+	 * Returns whether all uploads are finished. Called from data_browser to determine when to reload the list after an upload.
+	 * @returns {Boolean} true if the uploads are done.
+	 */
+	function is_finished()
+	{
+		return finished;
+	}
+	
 }

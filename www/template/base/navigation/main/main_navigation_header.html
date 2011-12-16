@@ -2,14 +2,7 @@
 $(document).ready(function()
 {
 	var get_array = getQueryParams(document.location.search);
-	
-	$.fn.center = function () {
-		this.css("position","absolute");
-		this.css("top", ( $(window).height() - this.height() ) / 2+$(window).scrollTop() + "px");
-		this.css("left", ( $(window).width() - this.width() ) / 2+$(window).scrollLeft() + "px");
-		return this;
-	}
-	
+		
 	$('#BaseLogout').click(function()
 	{
 		$.blockUI({ message: $('#BaseLogoutQuestion'), css: { width: '275px' } }); 
@@ -24,8 +17,8 @@ $(document).ready(function()
 		$.ajax(
 		{
 			type: "GET",
-			url: "core/modules/base/login.ajax.php",
-			data: "session_id="+get_array['session_id']+"&run=logout",
+			url: "ajax.php",
+			data: "nav=base&run=logout&session_id="+get_array['session_id']+"",
 			success: function(data)
 			{
 				if (data == "1")

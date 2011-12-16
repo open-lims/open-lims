@@ -9,7 +9,7 @@ $(document).ready(function()
 		$.ajax(
 		{
 			type: "GET",
-			url: "core/modules/manufacturer/manufacturer.ajax.php",
+			url: "core/modules/manufacturer/ajax/manufacturer.ajax.php",
 			data: "session_id="+get_array['session_id']+"&run=delete&id="+id,
 			success: function(data)
 			{

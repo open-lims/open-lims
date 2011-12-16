@@ -25,7 +25,7 @@
  * 
  */
 	$name 					= "search";
-	$main_class				= "SearchIO";
+	$main_class				= "SearchRequest";
 	
 	$tab_name				= "Search";
 	$tab_colour				= "orange";

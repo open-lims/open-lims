@@ -42,7 +42,7 @@ $(document).ready(function()
 		$.ajax(
 		{
 			type: "GET",
-			url: "core/modules/base/navigation/left_navigation.ajax.php",
+			url: "core/modules/base/ajax/navigation/left_navigation.ajax.php",
 			data: "run=set_active&session_id="+get_array['session_id']+"&id=[[JS:ID]]",
 			success: function(data){}
 		});
@@ -99,7 +99,7 @@ $(document).ready(function()
 				$.ajax(
 				{
 					type: "GET",
-					url: "core/modules/base/navigation/left_navigation.ajax.php",
+					url: "core/modules/base/ajax/navigation/left_navigation.ajax.php",
 					data: "run=set_active&session_id="+get_array['session_id']+"&id=[[ACTIVE_JS_ID]]",
 					success: function(data){}
 				});

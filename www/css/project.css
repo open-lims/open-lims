@@ -29,6 +29,23 @@
 	line-height: 22px;
 }
 
+/* Project Proceed */
+.ProdectDetailProceedTable
+{
+	width: 100%;	
+}
+.ProdectDetailProceedTable th
+{
+	text-align: left;
+	font-weight: bold;
+	padding: 5px;
+	border-bottom: 1px #B0B0B0 dotted;
+}
+.ProdectDetailProceedTable td
+{
+	padding: 5px;
+}
+
 
 /* Project Task */
 

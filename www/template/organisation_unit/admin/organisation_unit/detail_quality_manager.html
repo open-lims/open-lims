@@ -8,7 +8,7 @@ $(document).ready(function()
 		$.ajax(
 		{
 			type: "GET",
-			url: "core/modules/organisation_unit/admin/admin_organisation_unit.ajax.php",
+			url: "core/modules/organisation_unit/ajax/admin/admin_organisation_unit.ajax.php",
 			data: "session_id="+get_array['session_id']+"&run=list_quality_managers&organisation_unit_id=[[ORGANISATION_UNIT_ID]]&sortvalue="+sortvalue+"&sortmethod="+sortmethod+"&page="+page,
 			success: function(data)
 			{
@@ -82,7 +82,7 @@ $(document).ready(function()
 		$.ajax(
 		{
 			type: "GET",
-			url: "core/modules/organisation_unit/admin/admin_organisation_unit.ajax.php",
+			url: "core/modules/organisation_unit/ajax/admin/admin_organisation_unit.ajax.php",
 			data: "session_id="+get_array['session_id']+"&run=delete_quality_manager&organisation_unit_id=[[ORGANISATION_UNIT_ID]]&user_id="+id,
 			success: function(data)
 			{
@@ -114,7 +114,7 @@ $(document).ready(function()
 				$.ajax(
 				{
 					type: "GET",
-					url: "core/modules/organisation_unit/admin/admin_organisation_unit.ajax.php",
+					url: "core/modules/organisation_unit/ajax/admin/admin_organisation_unit.ajax.php",
 					data: "session_id="+get_array['session_id']+"&run=add_quality_manager&organisation_unit_id=[[ORGANISATION_UNIT_ID]]&user_id="+user_id,
 					success: function(data)
 					{

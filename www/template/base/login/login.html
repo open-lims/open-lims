@@ -1,3 +1,66 @@
+<script>
+$(document).ready(function()
+{
+	$('#BaseLoginUsername').bind('keypress', function(e)
+	{
+        if(e.keyCode == 13)
+        {
+        	login();
+        }
+	});
+
+	$('#BaseLoginPassword').bind('keypress', function(e)
+	{
+        if(e.keyCode == 13)
+        {
+        	login();
+        }
+	});
+
+	
+	$('#BaseLoginLogin').click(function()
+	{
+		login();
+	});
+
+	function login()
+	{
+		$.blockUI({ message: $('#BaseLoginWindow'), css: { width: '275px' } }); 
+		$('.blockUI.blockMsg').center();
+
+		$("#BaseLoginWindow").html("<img src='images/animations/loading_circle_small.gif' alt=''> Please wait while login.");
+			
+		$.ajax(
+		{
+			type: "POST",
+			url: "ajax.php?nav=base&run=login",
+			data: "username="+$("#BaseLoginUsername").val()+"&password="+$("#BaseLoginPassword").val()+"&language="+$("#BaseLoginLanguage").val()+"",
+			success: function(data)
+			{
+				if ((data != '0') && ((data + '').indexOf("index.php?",0) == 0))
+				{
+					$("#BaseLoginError").html("");
+					window.setTimeout('window.location = "'+data+'"',1500);
+				}
+				else
+				{
+					if (data != 0)
+					{
+						$("#BaseLoginError").html(data);
+					}
+					else
+					{
+						$("#BaseLoginError").html("");
+					}
+					$.unblockUI();
+				    return false; 
+				}
+			}
+		}); 
+	}
+});
+</script>
+
 <div id='login_wrapper'>
 
 <!-- CONTAINER BEGIN ("Login","LoginBox",60) -->
@@ -9,45 +72,43 @@
 			<img src='images/icons_large/logon.png' alt='logon image' />
 		</div>
 		<div class='login_field'>
-			<form action='index.php?run=login' method='post'>
-				<table>
-					<tr>
-						<td>Username:</td>
-						<td><input name='username' type='text' size='20' value='[[USERNAME]]' class='login' /></td>
-					</tr>
-					<tr>
-						<td>Password:</td>
-						<td><input name='password' type='password' size='20' class='login' /></td>
-					</tr>
-					<tr>
-						<td>Language:</td>
-						<td>
-							<select class='login' name='language'>
-								<option value='default' selected='selected'>User Default</option>
-								<option value='0'>-------------</option>
-								
-								<!-- FOREACH BEGIN ([[OPTION]]) -->
-		
-									<option value='[[OPTION:VALUE]]'>[[OPTION:CONTENT]]</option>
+			<table>
+				<tr>
+					<td>Username:</td>
+					<td><input name='username' type='text' size='20' class='login' id='BaseLoginUsername' /></td>
+				</tr>
+				<tr>
+					<td>Password:</td>
+					<td><input name='password' type='password' size='20' class='login' id='BaseLoginPassword' /></td>
+				</tr>
+				<tr>
+					<td>Language:</td>
+					<td>
+						<select class='login' name='language' id='BaseLoginLanguage'>
+							<option value='default' selected='selected'>User Default</option>
+							<option value='0'>-------------</option>
 							
-								<!-- FOREACH END -->
-								
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td colspan='2'><span class='formError'>[[ERROR]]</span></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td><input type='submit' name='submit' value='Login' class='login_button' /></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td><span class='smallLoginText'><a href='index.php?run=forgot'>forgot password?</a></span></td>
-					</tr>
-				</table>
-			</form>
+							<!-- FOREACH BEGIN ([[OPTION]]) -->
+	
+								<option value='[[OPTION:VALUE]]'>[[OPTION:CONTENT]]</option>
+						
+							<!-- FOREACH END -->
+							
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan='2'><div class='formError' id='BaseLoginError'></div></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type='submit' name='submit' value='Login' class='login_button' id='BaseLoginLogin' /></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><span class='smallLoginText'><a href='index.php?run=forgot'>forgot password?</a></span></td>
+				</tr>
+			</table>
 		</div>
 	</div>
 	<br />
@@ -60,4 +121,7 @@
  					
 <div class='info_login_container'>[[FOOTER]]</div>
 <div id='login_footer'></div>
+</div>
+
+<div id="BaseLoginWindow" style="display:none; cursor: default">
 </div>
