@@ -1,20 +1,17 @@
-package test;
+package base;
+
+import static org.junit.Assert.assertTrue;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import base.DBLink;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
 
-public class DBTest {
+public class DBLinkTest {
 
-	public static void test()
-	{
-		testStatement();
-	}
-	
-	private static void testStatement() 
+	@Test
+	public void testStatement() 
 	{
 		ResultSet rs = DBLink.executeQuery("SELECT * FROM bio_organisms WHERE id='10090'");
 		try 
@@ -32,5 +29,4 @@ public class DBTest {
 			e.printStackTrace();
 		}
 	}
-	
 }
