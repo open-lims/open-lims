@@ -27,6 +27,17 @@
  */
 class ProjectAdminAjax
 {
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 */
 	public static function list_project_permissions($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		global $user;
@@ -284,6 +295,10 @@ class ProjectAdminAjax
 		}
 	}
 	
+	/**
+	 * @param string $json_argument_array
+	 * @return integer
+	 */
 	public static function count_project_permissions($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -297,6 +312,464 @@ class ProjectAdminAjax
 		else
 		{
 			return null;
+		}
+	}
+	
+	/**
+	 * @param string $get_array
+	 * @return string
+	 * @throws ProjectSecurityAccessDeniedException
+	 * @throws ProjectIDMissingException
+	 */
+	public static function get_project_admin_menu($get_array)
+	{
+		global $user;
+		
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}
+		
+		if ($_GET[project_id])
+		{
+			$project = new Project($_GET[project_id]);
+			$project_security = new ProjectSecurity($_GET[project_id]);
+			$project_owner = new User($project->get_owner_id());
+			$organisation_unit_id = $project->get_organisation_unit_id();
+			$parent_project_id = $project->get_project_toid();
+			
+			if ($user->get_user_id() == $project->get_owner_id() or
+				$project_security->is_access(2, false) == true or
+				$project_security->is_access(3, false) == true or
+				$project_security->is_access(4, false) == true or
+				$project_security->is_access(5, false) == true or
+				$project_security->is_access(6, false) == true or
+				$project_security->is_access(7, false) == true)
+			{
+				if ($organisation_unit_id)
+				{
+					$organisation_unit = new OrganisationUnit($organisation_unit_id);
+					$parent = $organisation_unit->get_name();
+					$parent_type = "Organisation Unit";
+				}
+				else
+				{
+					$parent_project = new Project($parent_project_id);
+					$parent = $parent_project->get_name();
+					$parent_type = "Project";
+				}
+			
+				$template = new Template("template/projects/ajax/admin/menu.html");
+				
+				$template->set_var("name", $project->get_name());
+				$template->set_var("owner", $project_owner->get_full_name(false));
+				$template->set_var("parent", $parent);
+				$template->set_var("parent_type", $parent_type);
+				
+				if ($user->is_admin())
+				{
+					$template->set_var("admin", true);
+				}
+				else
+				{
+					$template->set_var("admin", false);
+				}
+				
+				if ($project_security->is_access(7, false) == true or
+					$project->get_owner_id() == $user->get_user_id())
+				{
+					$template->set_var("owner_permission", true);
+				}
+				else
+				{
+					$template->set_var("owner_permission", false);
+				}
+				
+				if ($project_security->is_access(6, false) == true)
+				{
+					$template->set_var("delete", true);
+				}
+				else
+				{
+					$template->set_var("delete", false);
+				}
+				
+				if ($project_security->is_access(3, false) == true)
+				{
+					$template->set_var("write", true);
+				}
+				else
+				{
+					$template->set_var("write", false);
+				}
+				
+				if ($project->get_current_status_id() == 0)
+				{
+					$template->set_var("project_canceled", true);
+				}
+				else
+				{
+					$template->set_var("project_canceled", false);
+				}
+				
+				if ($project->get_deleted() == true)
+				{
+					$template->set_var("project_deleted", true);
+				}
+				else
+				{
+					$template->set_var("project_deleted", false);
+				}
+				
+				if ($project->get_quota() == 0)
+				{
+					$template->set_var("quota", "unlimited");
+				}
+				else
+				{
+					$template->set_var("quota", Convert::convert_byte_1024($project->get_quota()));
+				}
+			
+				$permission_paramquery = $_GET;
+				$permission_paramquery[run] = "admin_permission";
+				unset($permission_paramquery[nextpage]);
+				unset($permission_paramquery[sure]);
+				$permission_params = http_build_query($permission_paramquery,'','&#38;');
+				
+				$template->set_var("permission_params", $permission_params);
+				
+				
+				$rename_paramquery = $_GET;
+				$rename_paramquery[run] = "admin_rename";
+				unset($rename_paramquery[nextpage]);
+				unset($rename_paramquery[sure]);
+				$rename_params = http_build_query($rename_paramquery,'','&#38;');
+				
+				$template->set_var("rename_params", $rename_params);
+				
+				
+				$chown_paramquery = $_GET;
+				$chown_paramquery[run] = "admin_chown";
+				unset($chown_paramquery[nextpage]);
+				unset($chown_paramquery[sure]);
+				$chown_params = http_build_query($chown_paramquery,'','&#38;');
+				
+				$template->set_var("chown_params", $chown_params);
+				
+				
+				$move_paramquery = $_GET;
+				$move_paramquery[run] = "admin_move";
+				unset($move_paramquery[nextpage]);
+				unset($move_paramquery[sure]);
+				$move_params = http_build_query($move_paramquery,'','&#38;');
+				
+				$template->set_var("move_params", $move_params);
+				
+				
+				$chquota_paramquery = $_GET;
+				$chquota_paramquery[run] = "admin_quota";
+				unset($chquota_paramquery[nextpage]);
+				unset($chquota_paramquery[sure]);
+				$chquota_params = http_build_query($chquota_paramquery,'','&#38;');
+				
+				$template->set_var("chquota_params", $chquota_params);
+				
+				
+				return $template->get_string();
+			}
+			else
+			{
+				throw new ProjectSecurityAccessDeniedException();
+			}
+		}
+		else
+		{
+			throw new ProjectIDMissingException();
+		}
+	}
+	
+	/**
+	 * @param string $get_array
+	 * @return string
+	 */
+	public static function delete($get_array)
+	{
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}
+		
+		if ($_GET['project_id'])
+		{
+			$project = new Project($_GET['project_id']);
+			
+			if ($project->get_deleted() == true)
+			{
+				$project_deleted = "true";
+			}
+			else
+			{
+				$project_deleted = "false";		
+			}
+			
+			$template = new Template("template/projects/admin/delete_window.html");
+			
+			$array['continue_caption'] = "Yes";
+			$array['cancel_caption'] = "No";
+			$array['content_caption'] = "Delete Project";
+			$array['height'] = 200;
+			$array['width'] = 400;
+			$array['content'] = $template->get_string();
+			$array['container'] = "#ProjectDeleteWindow";
+			
+			$array['continue_handler'] = "
+				$.ajax(
+				{
+					type : \"POST\",
+					url : \"ajax.php?session_id=".$_GET['session_id']."&nav=project&run=delete_handler\",
+					data : 'get_array=".$get_array."',
+					beforeSend: function()
+					{
+						$(\"#ProjectDeleteWindow\").dialog(\"close\");
+						$(\"#ProjectDeleteProceed\").html(\"<div id='AssistantLoading'><img src='images/animations/loading_circle_small.gif' alt='Loading...' />Please wait while deleting</div>\");
+						$.blockUI({ message: $('#ProjectDeleteProceed'), css: { width: '275px' } }); 
+						$('.blockUI.blockMsg').center();
+					},
+					success : function(data) 
+					{
+						if ((data + '').indexOf(\"EXCEPTION:\",0) == 0)
+						{
+							var exception_message = data.replace(\"EXCEPTION: \",\"\");
+							$.unblockUI();
+							ErrorDialog(\"Error\", exception_message);
+						}
+						else
+						{
+							$.unblockUI();
+							if (".$project_deleted." == true)
+							{
+								window.setTimeout('window.location = \"index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=project\"',500);
+							}
+							else
+							{
+								reload_admin_menu();
+							}
+						}
+					}
+				});
+				";
+			
+			return json_encode($array);
+		}
+	}
+	
+	/**
+	 * @param string $get_array
+	 * @return string
+	 */
+	public static function delete_handler($get_array)
+	{
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}
+		
+		if ($_GET['project_id'])
+		{
+			$project = new Project($_GET['project_id']);
+
+			if ($project->get_deleted() == true)
+			{
+				$project->delete();
+			}
+			else
+			{
+				$project->mark_as_deleted();				
+			}
+		}
+	}
+	
+	/**
+	 * @param string $get_array
+	 * @return string
+	 */
+	public static function restore($get_array)
+	{
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}
+		
+		if ($_GET['project_id'])
+		{
+			$project = new Project($_GET['project_id']);
+			
+			if ($project->get_deleted() == true)
+			{
+				$template = new Template("template/projects/admin/restore_window.html");
+				
+				$array['continue_caption'] = "Yes";
+				$array['cancel_caption'] = "No";
+				$array['content_caption'] = "Restore Project";
+				$array['height'] = 200;
+				$array['width'] = 400;
+				$array['content'] = $template->get_string();
+				$array['container'] = "#ProjectRestoreWindow";
+				
+				$array['continue_handler'] = "
+					$.ajax(
+					{
+						type : \"POST\",
+						url : \"ajax.php?session_id=".$_GET['session_id']."&nav=project&run=restore_handler\",
+						data : 'get_array=".$get_array."',
+						success : function(data) 
+						{
+							$(\"#ProjectRestoreWindow\").dialog(\"close\");
+							if ((data + '').indexOf(\"EXCEPTION:\",0) == 0)
+							{
+								var exception_message = data.replace(\"EXCEPTION: \",\"\");
+								ErrorDialog(\"Error\", exception_message);
+							}
+							else
+							{
+								reload_admin_menu();
+							}
+						}
+					});
+					";
+				
+				return json_encode($array);
+			}
+		}
+	}
+	
+	/**
+	 * @param string $get_array
+	 * @return string
+	 * @throws ProjectException
+	 */
+	public static function restore_handler($get_array)
+	{
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}
+		
+		if ($_GET['project_id'])
+		{
+			$project = new Project($_GET['project_id']);
+
+			if ($project->get_deleted() == true)
+			{
+				if ($project->mark_as_undeleted() == false)
+				{
+					throw new ProjectException();
+				}
+			}
+			else
+			{
+				throw new ProjectException();
+			}
+		}
+	}
+	
+	/**
+	 * @param string $get_array
+	 * @return string
+	 */
+	public static function cancel($get_array)
+	{
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}
+		
+		if ($_GET['project_id'])
+		{
+			$project = new Project($_GET['project_id']);
+			
+			if ($project->get_current_status_id() == 0)
+			{
+				$template = new Template("template/projects/admin/reactivate_window.html");
+				$array['content_caption'] = "Reactivate Project";
+				$array['height'] = 200;
+				$array['width'] = 400;
+				$process_name = "reactivating";
+			}
+			else
+			{
+				$template = new Template("template/projects/admin/cancel_window.html");
+				$array['content_caption'] = "Cancel Project";
+				$array['height'] = 430;
+				$array['width'] = 400;
+				$process_name = "canceling";
+			}
+
+			$array['continue_caption'] = "Yes";
+			$array['cancel_caption'] = "No";
+			$array['content'] = $template->get_string();
+			$array['container'] = "#ProjectCancelWindow";
+			
+			$array['continue_handler'] = "
+				var comment = $(\"#ProjectCancelWindowReason\").val();
+			
+				$.ajax(
+				{
+					type : \"POST\",
+					url : \"ajax.php?session_id=".$_GET['session_id']."&nav=project&run=cancel_handler\",
+					data : 'get_array=".$get_array."&comment='+comment,
+					success : function(data) 
+					{
+						$(\"#ProjectCancelWindow\").dialog(\"close\");
+						if ((data + '').indexOf(\"EXCEPTION:\",0) == 0)
+						{
+							var exception_message = data.replace(\"EXCEPTION: \",\"\");
+							ErrorDialog(\"Error\", exception_message);
+						}
+						else
+						{
+							reload_admin_menu();
+						}
+					}
+				});
+				";
+			
+			return json_encode($array);
+		}
+	}
+	
+	/**
+	 * @param string $get_array
+	 * @param string $comment
+	 * @return stirng
+	 * @throws ProjectException
+	 */
+	public static function cancel_handler($get_array, $comment)
+	{
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}
+		
+		if ($_GET['project_id'])
+		{
+			$project = new Project($_GET['project_id']);
+
+			if ($project->get_current_status_id() == 0)
+			{
+				if ($project->mark_as_reactivated() == false)
+				{
+					throw new ProjectException();
+				}
+			}
+			else
+			{
+				if ($project->mark_as_canceled($comment) == false)
+				{
+					throw new ProjectException();
+				}
+				
+			}
 		}
 	}
 }

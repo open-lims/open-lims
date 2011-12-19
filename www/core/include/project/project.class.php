@@ -1679,6 +1679,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     } 
     
     /**
+     * @todo transaction
      * @see ProjectInterface::mark_as_canceled()
      * @param string $comment
      * @return bool
@@ -1690,6 +1691,12 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 			$project_has_project_status = new ProjectHasProjectStatus_Access(null);
 			if ($project_has_project_status->create($this->project_id, 0) != null)
 			{
+				if ($comment)
+				{
+					$project_log = new ProjectLog(null);
+					$project_log->create($this->project_id, $comment, false, false, md5(rand(0,32768)));
+				}
+				
 				$project_log = new ProjectLog(null);
 				$project_log->create($this->project_id, null, true, true, md5(rand(0,32768)));
 				$project_log->link_status(0);

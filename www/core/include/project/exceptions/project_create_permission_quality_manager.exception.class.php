@@ -25,7 +25,7 @@
  * Project Create Permission Quality Manager Exception
  * @package project
  */
-class ProjectCreatePermissionQualityManagerException extends ProjectException
+class ProjectCreatePermissionQualityManagerException extends ProjectCreateException
 {
     function __construct($message = null)
     {

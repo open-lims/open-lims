@@ -25,7 +25,7 @@
  * Project Create Description Exception
  * @package project
  */
-class ProjectCreateDescriptionException extends ProjectException
+class ProjectCreateDescriptionException extends ProjectCreateException
 {
     function __construct($message = null)
     {

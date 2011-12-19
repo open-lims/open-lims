@@ -23,16 +23,12 @@ $(document).ready(function()
 						$("#ProjectAdminMenuContent").html(data).hide().fadeIn("slow");
 					}
 
-					$("#ProjectDeleteError").dialog({
-						autoOpen: false,
-						buttons: 
-						{
-							"OK": function()
-							{
-				                  $( this ).dialog( "close" );
-							}
-						}
+					$("#ProjectRestoreWindow").dialog({
+						autoOpen: false
 					});
+
+					base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=restore", 'get_array=[[GET_ARRAY]]', "ProjectRestoreButton");
+
 					
 					$("#ProjectDeleteWindow").dialog({
 						autoOpen: false
@@ -40,10 +36,6 @@ $(document).ready(function()
 
 					base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=delete", 'get_array=[[GET_ARRAY]]', "ProjectDeleteButton");
 
-
-					$("#ProjectCancelError").dialog({
-						autoOpen: false
-					});
 					
 					$("#ProjectCancelWindow").dialog({
 						autoOpen: false
@@ -59,7 +51,7 @@ $(document).ready(function()
 });
 </script>
 
-<div id="ProjectDeleteError" title="Error" style='display: none;'>
+<div id="ProjectRestoreWindow" title="Delete Project" style='display: none;'>
 </div>
 
 <div id="ProjectDeleteWindow" title="Delete Project" style='display: none;'>
@@ -67,9 +59,6 @@ $(document).ready(function()
 
 <div id="ProjectDeleteProceed" style="display:none; cursor: default">&nbsp;
 </div> 
-
-<div id="ProjectCancelError" title="Error" style='display: none;'>
-</div>
 
 <div id="ProjectCancelWindow" title="Cancel Project" style='display: none;'>
 </div>

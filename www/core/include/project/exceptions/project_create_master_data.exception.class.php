@@ -25,7 +25,7 @@
  * Project Create MasterData Exception
  * @package project
  */
-class ProjectCreateMasterDataException extends ProjectException
+class ProjectCreateMasterDataException extends ProjectCreateException
 {
     function __construct($message = null)
     {

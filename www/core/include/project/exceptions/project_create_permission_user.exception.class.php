@@ -25,7 +25,7 @@
  * Project Create Permission User Exception
  * @package project
  */
-class ProjectCreatePermissionUserException extends ProjectException
+class ProjectCreatePermissionUserException extends ProjectCreateException
 {
     function __construct($message = null)
     {
