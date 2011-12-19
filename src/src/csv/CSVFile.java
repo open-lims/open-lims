@@ -5,8 +5,8 @@ import java.util.HashMap;
 
 public class CSVFile {
 
-	private String[] header = null;
-	private HashMap<String, Integer> column_indices;
+	protected String[] header;
+	protected HashMap<String, Integer> column_indices;
 	
 	private String delimiter;
 	private String line_break;
@@ -19,16 +19,6 @@ public class CSVFile {
 	{
 		this.delimiter = delimiter;
 		this.line_break = line_break;
-	}
-	
-	protected void read_header(String[] header)
-	{
-		this.header = header;
-		column_indices = new HashMap<String, Integer>(header.length);
-		for (int i = 0; i < header.length; i++) 
-		{
-			column_indices.put(header[i], i);
-		}
 	}
 
 	public String[] get_header() 

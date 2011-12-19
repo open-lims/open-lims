@@ -1,4 +1,4 @@
-package csv.interfaces;
+package tresholds.interfaces;
 
 public interface Treshold {
 
@@ -7,7 +7,7 @@ public interface Treshold {
 	 * @param field a string containing the value of the field to check against.
 	 * @return false if the value is within the threshold limits, true if the threshold has been reached.
 	 */
-	public boolean check_field(String field);
+	public boolean check_field(String field, int column_index);
 	
 	/**
 	 * Applies all operations implicated by the threshold.
@@ -15,6 +15,10 @@ public interface Treshold {
 	 * @param column_index the column index in the row array where the threshold has been reached.
 	 * @return a new String array, representing the row and all applied changes.
 	 */
-	public String[] apply_changes(String[] row, int column_index);
+	public String[] apply_changes(String[] row, int column_index, int row_index);
 	
+	/**
+	 * Destroys all treshold-specific assets.
+	 */
+	public void destroy();
 }

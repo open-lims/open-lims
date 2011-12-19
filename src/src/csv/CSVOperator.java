@@ -1,14 +1,29 @@
 package csv;
 
 import java.util.HashMap;
-import java.util.List;
 
-import csv.interfaces.Treshold;
+import tresholds.interfaces.Treshold;
 
 public class CSVOperator {
 
 	public void write_plain_csv(CSVReader csv_reader, CSVWriter csv_writer)
 	{
+		String[] header = csv_reader.get_header();
+		String header_row = "";
+		for (int i = 0; i < header.length; i++) 
+		{
+			if(i < header.length - 1)
+			{
+				header_row += header[i] + csv_writer.get_delimiter();
+			}
+			else
+			{
+				header_row += header[i];
+			}
+		}
+		header_row += csv_writer.get_line_break();
+		csv_writer.writeLine(header_row);
+		
 		String[] columns;
 		while((columns = csv_reader.readLine()) != null)
 		{
@@ -56,17 +71,27 @@ public class CSVOperator {
 		rewrite(csv_reader, csv_writer, order, deletes, null);
 	}
 	
-	public void rewrite_csv_with_tresholds(CSVReader csv_reader, CSVWriter csv_writer, String[] order, String[] deletes, List<Treshold> tresholds)
+	public void rewrite_csv_with_tresholds(CSVReader csv_reader, CSVWriter csv_writer, String[] order, String[] deletes, Treshold[] tresholds)
 	{
 		rewrite(csv_reader, csv_writer, order, deletes, tresholds);
+		
+		for (Treshold treshold : tresholds) 
+		{
+			treshold.destroy();
+		}
 	}
 	
-	public void rewrite_csv_with_tresholds(CSVReader csv_reader, CSVWriter csv_writer, Integer[] order, Integer[] deletes, List<Treshold> tresholds)
+	public void rewrite_csv_with_tresholds(CSVReader csv_reader, CSVWriter csv_writer, Integer[] order, Integer[] deletes, Treshold[] tresholds)
 	{
 		rewrite(csv_reader, csv_writer, order, deletes, tresholds);
+		
+		for (Treshold treshold : tresholds) 
+		{
+			treshold.destroy();
+		}
 	}
 	
-	private void rewrite(CSVReader csv_reader, CSVWriter csv_writer, String[] order, String[] deletes, List<Treshold> tresholds)
+	private void rewrite(CSVReader csv_reader, CSVWriter csv_writer, String[] order, String[] deletes, Treshold[] tresholds)
 	{
 		HashMap<Integer, Integer> real_indices_to_desired_column_indices = get_real_indices_to_desired_column_indices(csv_reader, csv_writer, order, deletes);
 		
@@ -77,7 +102,7 @@ public class CSVOperator {
 		csv_writer.close();
 	}
 	
-	private void rewrite(CSVReader csv_reader, CSVWriter csv_writer, Integer[] order, Integer[] deletes, List<Treshold> tresholds)
+	private void rewrite(CSVReader csv_reader, CSVWriter csv_writer, Integer[] order, Integer[] deletes, Treshold[] tresholds)
 	{
 		HashMap<Integer, Integer> real_indices_to_desired_column_indices = get_real_indices_to_desired_column_indices(csv_reader, csv_writer, order, deletes);
 		
@@ -90,13 +115,22 @@ public class CSVOperator {
 	
 	private HashMap<Integer, Integer> get_real_indices_to_desired_column_indices(CSVReader reader, CSVWriter writer, String[] order, String[] deletes)
 	{
+		if(order == null)
+		{
+			order = new String[0];
+		}
+		else if(deletes == null)
+		{
+			deletes = new String[0];
+		}
+		
 		HashMap<Integer, Integer> real_indices_to_desired_column_indices = null;
 		
 		String[] header = reader.get_header();
 		
 		int new_column_count = header.length;
 		
-		if(order == null && deletes == null)
+		if(order.length == 0 && deletes.length == 0)
 		{
 			real_indices_to_desired_column_indices = new HashMap<Integer, Integer>(header.length);
 			for (int i = 0; i < header.length; i++) 
@@ -104,7 +138,7 @@ public class CSVOperator {
 				real_indices_to_desired_column_indices.put(i, i);
 			}
 		}
-		else if(order == null)
+		else if(order.length == 0)
 		{
 			new_column_count = header.length - deletes.length;
 			
@@ -120,7 +154,7 @@ public class CSVOperator {
 				real_indices_to_desired_column_indices.put(original_index, -1);
 			}
 		}
-		else if(deletes == null)
+		else if(deletes.length == 0)
 		{
 			real_indices_to_desired_column_indices = new HashMap<Integer, Integer>(order.length);
 			
@@ -251,7 +285,7 @@ public class CSVOperator {
 		writer.writeLine(header_row);
 	}
 	
-	private void rewrite_rows(CSVReader reader, CSVWriter writer, HashMap<Integer, Integer> real_indices_to_desired_column_indices, List<Treshold> tresholds)
+	private void rewrite_rows(CSVReader reader, CSVWriter writer, HashMap<Integer, Integer> real_indices_to_desired_column_indices, Treshold[] tresholds)
 	{
 		String[] columns;
 		String[] new_columns;
@@ -271,19 +305,16 @@ public class CSVOperator {
 			if(tresholds != null)
 			{
 				for (int i = 0; i < new_columns.length; i++) {
-					
 					boolean treshold_reached = false;
-					
-					for (Treshold treshold : tresholds) {
-						treshold_reached = treshold.check_field(columns[i]);
+					for (int j = 0; j < tresholds.length; j++) {
+						treshold_reached = tresholds[j].check_field(columns[i], i);
 						if(treshold_reached)
 						{
-							String[] new_row = treshold.apply_changes(new_columns, i);
+							String[] new_row = tresholds[j].apply_changes(new_columns, i, reader.current_line);
 							new_columns = new_row;
 							break;
 						}
 					}
-					
 					if(treshold_reached)
 					{
 						break;
@@ -305,6 +336,7 @@ public class CSVOperator {
 			}
 			row += writer.get_line_break();
 			writer.writeLine(row);
+//			System.out.println("wrote row "+writer.current_line);
 		}
 	}
 		

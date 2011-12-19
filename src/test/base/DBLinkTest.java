@@ -13,15 +13,13 @@ public class DBLinkTest {
 	@Test
 	public void testStatement() 
 	{
-		ResultSet rs = DBLink.executeQuery("SELECT * FROM bio_organisms WHERE id='10090'");
+		ResultSet rs = DBLink.executeQuery("SELECT * FROM core_files WHERE id='2103'");
 		try 
 		{
 			while (rs.next()) 
 			{
-				assertTrue("Identifier should be 'mouse'",rs.getString("identifer").equals("mouse"));
-				assertTrue("Long name should be 'Mus Musculus'",rs.getString("longname").equals("Mus Musculus"));
-				assertTrue("Short name should be 'M. Musculus'",rs.getString("shortname").equals("M. Musculus"));
-				assertTrue("Entry should be 'MOUSE'",rs.getString("entry").equals("MOUSE"));
+				assertTrue("Data Entity ID should be '10080'",rs.getInt("data_entity_id") == 10080);
+				assertTrue("Flag should be '0'",rs.getInt("flag") == 0);
 			}
 		} 
 		catch (SQLException e) 
