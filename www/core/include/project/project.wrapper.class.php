@@ -139,9 +139,9 @@ class Project_Wrapper implements Project_WrapperInterface
 	 * @param integer $end
 	 * @return array
 	 */
-	public static function list_user_related_projects($user_id, $order_by, $order_method, $start, $end)
+	public static function list_user_related_projects($user_id, $admin, $order_by, $order_method, $start, $end)
 	{
-		return Project_Wrapper_Access::list_user_related_projects($user_id, $order_by, $order_method, $start, $end);
+		return Project_Wrapper_Access::list_user_related_projects($user_id, $admin, $order_by, $order_method, $start, $end);
 	}
 	
 	/**
@@ -149,9 +149,9 @@ class Project_Wrapper implements Project_WrapperInterface
 	 * @param integer $user_id
 	 * @return integer
 	 */
-	public static function count_list_user_related_projects($user_id)
+	public static function count_list_user_related_projects($user_id, $admin)
 	{
-		return Project_Wrapper_Access::count_list_user_related_projects($user_id);
+		return Project_Wrapper_Access::count_list_user_related_projects($user_id, $admin);
 	}
 	
 	/**
@@ -159,9 +159,9 @@ class Project_Wrapper implements Project_WrapperInterface
 	 * @param integer $organisation_unit_id
 	 * @return integer
 	 */
-	public static function count_organisation_unit_related_projects($organisation_unit_id)
+	public static function count_organisation_unit_related_projects($organisation_unit_id, $admin)
 	{
-		return Project_Wrapper_Access::count_organisation_unit_related_projects($organisation_unit_id);
+		return Project_Wrapper_Access::count_organisation_unit_related_projects($organisation_unit_id, $admin);
 	}
 	
 	/**
@@ -173,9 +173,9 @@ class Project_Wrapper implements Project_WrapperInterface
 	 * @param integer $end
 	 * @return array
 	 */
-	public static function list_organisation_unit_related_projects($organisation_unit_id, $order_by, $order_method, $start, $end)
+	public static function list_organisation_unit_related_projects($organisation_unit_id, $admin, $order_by, $order_method, $start, $end)
 	{
-		return Project_Wrapper_Access::list_organisation_unit_related_projects($organisation_unit_id, $order_by, $order_method, $start, $end);
+		return Project_Wrapper_Access::list_organisation_unit_related_projects($organisation_unit_id, $admin, $order_by, $order_method, $start, $end);
 	}
 	
 	/**
@@ -187,9 +187,9 @@ class Project_Wrapper implements Project_WrapperInterface
 	 * @param integer $end
 	 * @return array
 	 */
-	public static function list_projects_by_item_id($item_id, $order_by, $order_method, $start, $end)
+	public static function list_projects_by_item_id($item_id, $admin, $order_by, $order_method, $start, $end)
 	{
-		return Project_Wrapper_Access::list_projects_by_item_id($item_id, $order_by, $order_method, $start, $end);
+		return Project_Wrapper_Access::list_projects_by_item_id($item_id, $admin, $order_by, $order_method, $start, $end);
 	}
 	
 	/**
@@ -197,9 +197,9 @@ class Project_Wrapper implements Project_WrapperInterface
 	 * @param integer $item_id
 	 * @return integer
 	 */
-	public static function count_projects_by_item_id($item_id)
+	public static function count_projects_by_item_id($item_id, $admin)
 	{
-		return Project_Wrapper_Access::count_projects_by_item_id($item_id);
+		return Project_Wrapper_Access::count_projects_by_item_id($item_id, $admin);
 	}
 	
 	/**

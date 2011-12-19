@@ -5,6 +5,26 @@ html,body {
 	height: 100%;
 }
 
+.italic {
+	font-style: italic;
+}
+
+.underline {
+	text-decoration: underline;
+}
+
+.crossed {
+	text-decoration: line-through;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.center {
+	text-align: center;
+}
+
 #main {
 	position: relative;
 	width: 980px;
@@ -208,21 +228,7 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 	margin-right: 0.5em;
 }
 
-.italic {
-	font-style: italic;
-}
 
-.underline {
-	text-decoration: underline;
-}
-
-.bold {
-	font-weight: bold;
-}
-
-.center {
-	text-align: center;
-}
 
 .red {
 	color: red;

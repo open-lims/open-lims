@@ -494,6 +494,8 @@ class ProjectAdminAjax
 	 */
 	public static function delete($get_array)
 	{
+		global $user;
+		
 		if ($get_array)
 		{
 			$_GET = unserialize($get_array);	
@@ -503,7 +505,7 @@ class ProjectAdminAjax
 		{
 			$project = new Project($_GET['project_id']);
 			
-			if ($project->get_deleted() == true)
+			if ($project->get_deleted() == true or $user->is_admin() == false)
 			{
 				$project_deleted = "true";
 			}
