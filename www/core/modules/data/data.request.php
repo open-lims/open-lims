@@ -29,7 +29,19 @@ class DataRequest
 {
 	public static function ajax_handler()
 	{
-		
+		switch($_GET[run]):
+			
+			case "list_data_browser":
+				require_once("ajax/data.ajax.php");
+				echo DataAjax::list_data_browser($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "count_data_browser":
+				require_once("ajax/data.ajax.php");
+				echo DataAjax::count_data_browser($_POST[argument_array]);
+			break;
+			
+		endswitch;
 	}
 	
 	public static function io_handler()

@@ -25,7 +25,7 @@
  * Project Create Status Exception
  * @package project
  */
-class ProjectCreateStatusException extends ProjectException
+class ProjectCreateStatusException extends ProjectCreateException
 {
     function __construct($message = null)
     {

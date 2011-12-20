@@ -1,180 +1,72 @@
+<script>
+$(document).ready(function()
+{
+	reload_admin_menu = function()
+	{
+		$.ajax(
+		{
+			type: "POST",
+			url: "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=get_project_admin_menu",
+			data: 'get_array=[[GET_ARRAY]]',	
+			success: function(data)
+			{		
+				if (data)
+				{
+					if ($("#ProjectAdminMenuContent").children().size() > 0)
+					{
+						$("#ProjectAdminMenuContent").fadeOut("slow");
+						$("#ProjectAdminMenuContent").html(data);
+						$("#ProjectAdminMenuContent").fadeIn("slow");
+					}
+					else
+					{
+						$("#ProjectAdminMenuContent").html(data).hide().fadeIn("slow");
+					}
+
+					$("#ProjectRestoreWindow").dialog({
+						autoOpen: false
+					});
+
+					base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=restore", 'get_array=[[GET_ARRAY]]', "ProjectRestoreButton");
+
+					
+					$("#ProjectDeleteWindow").dialog({
+						autoOpen: false
+					});
+
+					base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=delete", 'get_array=[[GET_ARRAY]]', "ProjectDeleteButton");
+
+					
+					$("#ProjectCancelWindow").dialog({
+						autoOpen: false
+					});
+
+					base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=cancel", 'get_array=[[GET_ARRAY]]', "ProjectCancelButton");
+				}
+			}
+		});
+	}
+
+	reload_admin_menu();
+});
+</script>
+
+<div id="ProjectRestoreWindow" title="Delete Project" style='display: none;'>
+</div>
+
+<div id="ProjectDeleteWindow" title="Delete Project" style='display: none;'>
+</div>
+
+<div id="ProjectDeleteProceed" style="display:none; cursor: default">&nbsp;
+</div> 
+
+<div id="ProjectCancelWindow" title="Cancel Project" style='display: none;'>
+</div>
+
 <br />
 		
 <!-- CONTAINER BEGIN (Project Administration") -->
 	
-<div class='ProjectReorgaContainer'>
-<table class='ProjectReorgaTable'>
-	
-<!-- IF ([[SET_PERMISSIONS_PERMISSION]]) -->
-	
-	<tr>
-		<td width='18px'><img src='images/icons/permissions.png' alt='' /></td>
-		<td colspan='3'><a href='index.php?[[PERMISSION_PARAMS]]'>set project permissions</a></td>
-	</tr>
-			
-<!-- ELSE -->
-		
-	<tr>
-		<td width='18px'><img src='images/icons/permissions_na.png' alt='' /></td>
-		<td colspan='3'><span class='ProjectOptionsFontDeactivated'>set project permissions</span></td>
-	</tr>
-			
-<!-- ENDIF -->
-	
-		
-<!-- IF ([[PROJECT_DELETED]]) -->	
-
-	<!-- IF ([[ADMIN]]) -->
-
-		<tr>
-			<td><img src='images/icons/delete.png' alt='' /></td>
-			<td colspan='3'><a href='index.php?[[FULL_DELETE_PARAMS]]'>full delete</a></td>
-		</tr>
-		<tr>
-			<td><img src='images/icons/restore.png' alt='' /></td>
-			<td colspan='3'><a href='index.php?[[RESTORE_PARAMS]]'>restore project</a></td>
-		</tr>
-	
-	<!-- ENDIF -->
-
-<!-- ELSE -->
-
-	<!-- IF ([[DELETE]]) -->
-
-	<tr>
-		<td><img src='images/icons/delete.png' alt='' /></td>
-		<td colspan='3'><a href='index.php?[[DELETE_PARAMS]]'>delete</a></td>
-	</tr>
-	
-	<!-- ELSE -->
-		
-		<tr>
-			<td><img src='images/icons/delete.png' alt='' /></td>
-			<td colspan='3'><span class='ProjectOptionsFontDeactivated'>delete</a></td>
-		</tr>
-			
-	<!-- ENDIF -->
-				
-<!-- ENDIF -->
-	
-	
-<!-- IF ([[PROJECT_CANCELED]]) -->	
-			
-		<!-- IF ([[ADMIN]]) -->	
-		
-			<tr>
-				<td><img src='images/icons/reactivate_project.png' alt='' /></td>
-				<td colspan='3'><a href='index.php?[[REACTIVATE_PARAMS]]'>reactivate project</a></td>
-			</tr>
-		
-		<!-- ELSE -->
-
-			<tr>
-				<td><img src='images/icons/cancel_project.png' alt='' /></td>
-				<td colspan='3'><span class='ProjectOptionsFontDeactivated'>cancel project</a></td>
-			</tr>
-				
-		<!-- ENDIF -->
-		
-<!-- ELSE -->
-
-		<!-- IF ([[WRITE]]) -->				
-
-			<tr>
-				<td><img src='images/icons/cancel_project.png' alt='' /></td>
-				<td colspan='3'><a href='index.php?[[CANCEL_PARAMS]]'>cancel project</a></td>
-			</tr>
-						
-		<!-- ELSE -->
-
-			<tr>
-				<td><img src='images/icons/cancel_project.png' alt='' /></td>
-				<td colspan='3'><span class='ProjectOptionsFontDeactivated'>cancel project</a></td>
-			</tr>
-
-		<!-- ENDIF -->
-
-<!-- ENDIF -->
-	
-				
-	<tr>
-		<td colspan='4'><br /></td>
-	</tr>
-	<tr>
-		<td><img src='images/icons/project.png' alt='' /></td>
-		<td>Name:</td>
-		<td>[[NAME]]</td>
-						
-				
-		<!-- IF ([[OWNER_PERMISSION]]) -->	
-		
-			<td><a href='index.php?[[RENAME_PARAMS]]'>change</a></td>
-			
-		<!-- ELSE -->
-		
-			<td></td>
-		
-		<!-- ENDIF -->
-				
-	</tr>
-	<tr>
-		<td><img src='images/icons/user.png' alt='' /></td>
-		<td>Owner:</td>
-		<td>[[OWNER]]</td>
-					
-				
-		<!-- IF ([[ADMIN]]) -->
-			
-			<td><a href='index.php?[[CHOWN_PARAMS]]'>change</a></td>
-			
-		<!-- ELSE -->
-			
-			<td></td>
-			
-		<!-- ENDIF -->
-							
-	</tr>
-	<tr>
-		<td><img src='images/icons/parent.png' alt='' /></td>
-		<td>Parent:</td>
-		<td>[[PARENT]]</td>
-						
-		<!-- IF ([[OWNER_PERMISSION]]) -->
-				
-			<td><a href='index.php?[[MOVE_PARAMS]]'>change</a></td>
-				
-		<!-- ELSE -->
-			
-			<td></td>
-			
-		<!-- ENDIF -->
-				
-	</tr>
-	<tr>
-		<td></td>
-		<td>Parent Type:</td>
-		<td>[[PARENT_TYPE]]</td>
-	</tr>
-	<tr>
-		<td><img src='images/icons/quota.png' alt='' /></td>
-		<td>Project Quota:</td>
-		<td>[[QUOTA]]</td>
-										
-		<!-- IF ([[ADMIN]]) -->
-			
-			<td><a href='index.php?[[CHQUOTA_PARAMS]]'>change</a></td>
-			
-		<!-- ELSE -->
-			
-			<td></td>
-					
-		<!-- ENDIF -->
-
-	</tr>					
-	<tr>
-		<td colspan='4'><br /></td>
-	</tr>
-</table>
-</div>
+<div id='ProjectAdminMenu'><div id='ProjectAdminMenuContent'></div></div>
 
 <!-- CONTAINER END () -->

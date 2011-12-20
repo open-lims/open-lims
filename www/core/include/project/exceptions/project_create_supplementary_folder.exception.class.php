@@ -25,7 +25,7 @@
  * Project Create Supplementary Folder Exception
  * @package project
  */
-class ProjectCreateSupplementaryFolderException extends ProjectException
+class ProjectCreateSupplementaryFolderException extends ProjectCreateException
 {
     function __construct($message = null)
     {

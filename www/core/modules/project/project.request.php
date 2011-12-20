@@ -31,6 +31,8 @@ class ProjectRequest
 	{
 		switch($_GET[run]):
 			
+			// Project
+			
 			case "list_user_related_projects":
 				require_once("ajax/project.ajax.php");
 				echo ProjectAjax::list_user_related_projects($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
@@ -81,6 +83,46 @@ class ProjectRequest
 				echo ProjectAjax::proceed_project($_POST[get_array]);
 			break;
 			
+			
+			// Admin
+			
+			case "get_project_admin_menu":
+				require_once("ajax/project_admin.ajax.php");
+				echo ProjectAdminAjax::get_project_admin_menu($_POST[get_array]);
+			break;
+			
+			case "delete":
+				require_once("ajax/project_admin.ajax.php");
+				echo ProjectAdminAjax::delete($_POST[get_array]);
+			break;
+			
+			case "delete_handler":
+				require_once("ajax/project_admin.ajax.php");
+				echo ProjectAdminAjax::delete_handler($_POST[get_array]);
+			break;
+			
+			case "restore":
+				require_once("ajax/project_admin.ajax.php");
+				echo ProjectAdminAjax::restore($_POST[get_array]);
+			break;
+			
+			case "restore_handler":
+				require_once("ajax/project_admin.ajax.php");
+				echo ProjectAdminAjax::restore_handler($_POST[get_array]);
+			break;
+			
+			case "cancel":
+				require_once("ajax/project_admin.ajax.php");
+				echo ProjectAdminAjax::cancel($_POST[get_array]);
+			break;
+			
+			case "cancel_handler":
+				require_once("ajax/project_admin.ajax.php");
+				echo ProjectAdminAjax::cancel_handler($_POST[get_array], $_POST[comment]);
+			break;
+			
+			
+			// Tasks
 			
 			case "list_project_tasks":
 				require_once("ajax/project_task.ajax.php");
@@ -223,31 +265,6 @@ class ProjectRequest
 			case("admin"):
 				require_once("io/project_admin.io.php");
 				ProjectAdminIO::menu();
-			break;
-			
-			case("admin_delete"):
-				require_once("io/project_admin.io.php");
-				ProjectAdminIO::delete();
-			break;
-			
-			case("admin_full_delete"):
-				require_once("io/project_admin.io.php");
-				ProjectAdminIO::full_delete();
-			break;
-			
-			case("admin_restore"):
-				require_once("io/project_admin.io.php");
-				ProjectAdminIO::restore();
-			break;
-			
-			case("admin_cancel"):
-				require_once("io/project_admin.io.php");
-				ProjectAdminIO::cancel();
-			break;
-			
-			case("admin_reactivate"):
-				require_once("io/project_admin.io.php");
-				ProjectAdminIO::reactivate();
 			break;
 			
 			case("admin_rename"):

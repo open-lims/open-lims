@@ -230,25 +230,18 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 						window.setTimeout('window.location = "'+data+'"',500);
 					}
 					else
-					{
-						if (!original_error_message)
-						{
-							original_error_message = $("#AssistantError").html();
-						}
-						
+					{						
 						if ((data + '').indexOf("EXCEPTION",0) == 0)
 						{
 							var exception_message = data.replace("EXCEPTION: ","");
-							$("#AssistantError").html(exception_message);
 							$.unblockUI();
-							$("#AssistantError" ).dialog( "open" );
+							ErrorDialog("Error", exception_message);
 							return false;
 						}
 						else
 						{
-							$("#AssistantError").html(original_error_message);
 							$.unblockUI();
-							$("#AssistantError" ).dialog( "open" );
+							ErrorDialog("Error", "An error occured");
 							return false;
 						}
 					}

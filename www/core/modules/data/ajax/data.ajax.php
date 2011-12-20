@@ -22,23 +22,12 @@
  */
 
 /**
- * 
- */
-$GLOBALS['autoload_prefix'] = "../";
-require_once("../../base/ajax.php");
-
-/**
  * Data AJAX IO Class
  * @package data
  */
-class DataAjax extends Ajax
-{
-	function __construct()
-	{
-		parent::__construct();
-	}
-	
-	private function list_data_browser($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+class DataAjax
+{	
+	public static function list_data_browser($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		if ($get_array)
 		{
@@ -332,7 +321,7 @@ class DataAjax extends Ajax
 		}
 	}
 	
-	private function count_data_browser($json_argument_array)
+	public static function count_data_browser($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
 				
@@ -596,31 +585,5 @@ class DataAjax extends Ajax
 			return false;
 		}
 	}
-	
-	public function method_handler()
-	{
-		global $session;
-		
-		if ($session->is_valid())
-		{
-			switch($_GET[run]):
-				
-				case "list_data_browser":
-					echo $this->list_data_browser($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
-				break;
-				
-				case "count_data_browser":
-					echo $this->count_data_browser($_POST[argument_array]);
-				break;
-				
-				default:
-				break;
-			
-			endswitch;
-		}
-	}
 }
-
-$data_ajax = new DataAjax;
-$data_ajax->method_handler();
 ?>
