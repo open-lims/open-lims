@@ -27,6 +27,17 @@
  */
 class ProjectAjax
 {	
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 */
 	public static function list_user_related_projects($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -120,6 +131,10 @@ class ProjectAjax
 		}
 	}
 	
+	/**
+	 * @param string $json_argument_array
+	 * @return integer
+	 */
 	public static function count_user_related_projects($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -136,6 +151,17 @@ class ProjectAjax
 		}
 	}
 	
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 */
 	public static function list_organisation_unit_related_projects($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -244,6 +270,10 @@ class ProjectAjax
 		}
 	}
 	
+	/**
+	 * @param string $json_argument_array
+	 * @return integer
+	 */
 	public static function count_organisation_unit_related_projects($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -260,6 +290,17 @@ class ProjectAjax
 		}
 	}
 	
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 */
 	public static function list_projects_by_item_id($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -416,6 +457,10 @@ class ProjectAjax
 		}
 	}
 	
+	/**
+	 * @param string $json_argument_array
+	 * @return integer
+	 */
 	public static function count_projects_by_item_id($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -431,6 +476,10 @@ class ProjectAjax
 		}
 	}
 	
+	/**
+	 * @param string $get_array
+	 * @return string
+	 */
 	public static function get_project_status_bar($get_array)
 	{
 		if ($get_array)
@@ -522,6 +571,10 @@ class ProjectAjax
 		}
 	}
 	
+	/**
+	 * @param string $get_array
+	 * @return string
+	 */
 	public static function get_project_menu($get_array)
 	{
 		if ($get_array)
@@ -700,6 +753,7 @@ class ProjectAjax
 	
 	/**
 	 * @param array $get_array
+	 * @return string
 	 * @throws ProjectSecurityAccessDeniedException
 	 * @throws ProjectIDMissingException
 	 */
@@ -781,6 +835,10 @@ class ProjectAjax
 		}
 	}
 	
+	/**
+	 * @param string $get_array
+	 * @return string
+	 */
 	public static function proceed_project($get_array)
 	{
 		if ($get_array)
@@ -803,6 +861,5 @@ class ProjectAjax
 			}
 		}
 	}
-	
 }
 ?>

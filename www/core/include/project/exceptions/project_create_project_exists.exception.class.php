@@ -25,7 +25,7 @@
  * Project Create Project Exists Exception
  * @package project
  */
-class ProjectCreateProjectExistsException extends ProjectException
+class ProjectCreateProjectExistsException extends ProjectCreateException
 {
     function __construct($message = null)
     {

@@ -25,7 +25,7 @@
  * Project Create Permission Group Exception
  * @package project
  */
-class ProjectCreatePermissionGroupException extends ProjectException
+class ProjectCreatePermissionGroupException extends ProjectCreateException
 {
     function __construct($message = null)
     {

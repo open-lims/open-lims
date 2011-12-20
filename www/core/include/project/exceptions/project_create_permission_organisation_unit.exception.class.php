@@ -25,7 +25,7 @@
  * Project Create Permission Organisation Unit Exception
  * @package project
  */
-class ProjectCreatePermissionOrganisationUnitException extends ProjectException
+class ProjectCreatePermissionOrganisationUnitException extends ProjectCreateException
 {
     function __construct($message = null)
     {

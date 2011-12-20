@@ -592,110 +592,14 @@ class ProjectCreateAjax extends Ajax
 				return 0;
 			}
 		}
-		catch (ProjectCreateProjectExistsException $e)
-		{
-			/**
-			 * @todo language
-			 */
-			return "EXCEPTION: Project already exists";
-		}
-		catch (ProjectCreateStatusException $e)
-		{
-			/**
-			 * @todo language
-			 */
-			return "EXCEPTION: Could not create initial project status";
-		}
-		catch (ProjectCreateFolderException $e)
-		{
-			/**
-			 * @todo language
-			 */
-			return "EXCEPTION: Could not create project main folder";
-		}
-		catch (ProjectCreateStatusFolderException $e)
-		{
-			/**
-			 * @todo language
-			 */
-			return "EXCEPTION: Could not create status folder";
-		}
-		catch (ProjectCreateStatusSubFolderException $e)
-		{
-			/**
-			 * @todo language
-			 */
-			return "EXCEPTION: Could not create status sub folder";
-		}
-		catch (ProjectCreateSupplementaryFolderException $e)
-		{
-			/**
-			 * @todo language
-			 */
-			return "EXCEPTION: Could not create supplementary folder";
-		}
-		catch (ProjectCreateDescriptionException $e)
-		{
-			/**
-			 * @todo language
-			 */
-			return "EXCEPTION: Could not create project description";
-		}
-		catch (ProjectCreateMasterDataException $e)
-		{
-			/**
-			 * @todo language
-			 */
-			return "EXCEPTION: Could not create project master-data";
-		}
-		catch (ProjectCreatePermissionUserException $e)
-		{
-			/**
-			 * @todo language
-			 */
-			return "EXCEPTION: Could not create user/owner permission";
-		}
-		catch (ProjectCreatePermissionLeaderException $e)
-		{
-			/**
-			 * @todo language
-			 */
-			return "EXCEPTION: Could not create Organisation Unit leader permission";
-		}
-		catch (ProjectCreatePermissionGroupException $e)
-		{
-			/**
-			 * @todo language
-			 */
-			return "EXCEPTION: Could not create group permission";
-		}
-		catch (ProjectCreatePermissionOrganisationUnitException $e)
-		{
-			/**
-			 * @todo language
-			 */
-			return "EXCEPTION: Could not create Organisation Unit permission";
-		}
-		catch (ProjectCreatePermissionQualityManagerException $e)
-		{
-			/**
-			 * @todo language
-			 */
-			return "EXCEPTION: Could not create quality-manager permission";
-		}
 		catch (ProjectCreateException $e)
 		{
 			/**
-			 * @todo language
+			 * @todo: remove after using new AJAX handler
 			 */
-			return "EXCEPTION: An Exception was thrown. Message: \"".$e->getMessage()."\"";
-		}	
-		catch (Exception $e)
-		{
-			/**
-			 * @todo language
-			 */
-			return "EXCEPTION: An Exception was thrown. Message: \"".$e->getMessage()."\"";
+			require_once("../../base/common/io/error.io.php");
+			$error_io = new Error_IO($e);
+			return "EXCEPTION: ".$error_io->get_error_message();
 		}				
 	}
 	

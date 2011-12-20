@@ -25,7 +25,7 @@
  * Project Create Permission Leader Exception
  * @package project
  */
-class ProjectCreatePermissionLeaderException extends ProjectException
+class ProjectCreatePermissionLeaderException extends ProjectCreateException
 {
     function __construct($message = null)
     {
