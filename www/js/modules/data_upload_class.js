@@ -36,7 +36,6 @@ function base_upload(unique_id, session_id)
 	
     if (typeof(base_upload_prototype_called) == "undefined")
     {
-    	base_upload_prototype_called = true;
     	base_upload.prototype.init = init;
     	base_upload.prototype.start_upload = start_upload;
     	base_upload.prototype.is_finished = is_finished;

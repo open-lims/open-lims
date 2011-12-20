@@ -609,7 +609,7 @@ function data_browser()
 	}
 	
 	/**
-	 * Closes the popup dialog
+	 * Closes the popup dialog and reloads the browser
 	 */
 	function close_ui_window_and_reload()
 	{
@@ -618,6 +618,14 @@ function data_browser()
 			.dialog("close")
 			.remove();
 		reinit();
+	}
+	
+	/**
+	 * Closes the popup dialog
+	 */
+	function fadeout_ui_window()
+	{
+		$(".ui-dialog").fadeOut(400);
 	}
 	
 	/**
@@ -788,6 +796,8 @@ function data_browser()
 					"close" : function(){$(container).remove();},
 					"buttons" : [
 					     {text : "Yes" , click : function(){
+					    	var options = { buttons: {}};
+					    	$(container).dialog('option', options);
 					    	$(container).html("<img src='images/loading.gif' alt=''></img>");
 					    	delete_selected_files();
 					    	$(container).dialog("close").remove();
