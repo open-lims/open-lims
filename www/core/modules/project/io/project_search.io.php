@@ -80,7 +80,7 @@ class ProjectSearchIO
 		
 		if ($no_error == false)
 		{
-			$template = new Template("template/projects/search/search.html");
+			$template = new Template("template/project/search/search.html");
 			
 			$paramquery = $_GET;
 			unset($paramquery[page]);
@@ -310,7 +310,7 @@ class ProjectSearchIO
 				$list->override_last_line("<span class='italic'>No results found!</span>");
 			}
 			
-			$template = new Template("template/projects/search/search_result.html");
+			$template = new Template("template/project/search/search_result.html");
 			
 			$paramquery = $_GET;
 			$paramquery[nextpage] = "2";

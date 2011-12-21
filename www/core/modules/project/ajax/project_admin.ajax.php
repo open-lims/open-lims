@@ -359,7 +359,7 @@ class ProjectAdminAjax
 					$parent_type = "Project";
 				}
 			
-				$template = new Template("template/projects/ajax/admin/menu.html");
+				$template = new Template("template/project/ajax/admin/menu.html");
 				
 				$template->set_var("name", $project->get_name());
 				$template->set_var("owner", $project_owner->get_full_name(false));
@@ -514,7 +514,7 @@ class ProjectAdminAjax
 				$project_deleted = "false";		
 			}
 			
-			$template = new Template("template/projects/admin/delete_window.html");
+			$template = new Template("template/project/admin/delete_window.html");
 			
 			$array['continue_caption'] = "Yes";
 			$array['cancel_caption'] = "No";
@@ -608,7 +608,7 @@ class ProjectAdminAjax
 			
 			if ($project->get_deleted() == true)
 			{
-				$template = new Template("template/projects/admin/restore_window.html");
+				$template = new Template("template/project/admin/restore_window.html");
 				
 				$array['continue_caption'] = "Yes";
 				$array['cancel_caption'] = "No";
@@ -692,7 +692,7 @@ class ProjectAdminAjax
 			
 			if ($project->get_current_status_id() == 0)
 			{
-				$template = new Template("template/projects/admin/reactivate_window.html");
+				$template = new Template("template/project/admin/reactivate_window.html");
 				$array['content_caption'] = "Reactivate Project";
 				$array['height'] = 200;
 				$array['width'] = 400;
@@ -700,7 +700,7 @@ class ProjectAdminAjax
 			}
 			else
 			{
-				$template = new Template("template/projects/admin/cancel_window.html");
+				$template = new Template("template/project/admin/cancel_window.html");
 				$array['content_caption'] = "Cancel Project";
 				$array['height'] = 430;
 				$array['width'] = 400;
