@@ -18,7 +18,7 @@ private BufferedWriter writer;
 		try 
 		{
 			writer.write(line);
-			current_line++;
+			current_line_num++;
 			return true;
 		} 
 		catch (IOException e) 

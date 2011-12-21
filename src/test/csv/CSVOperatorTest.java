@@ -20,8 +20,8 @@ public class CSVOperatorTest {
 		BufferedWriter bw = DataResource.getWriter(file);
 		CSVWriter w = new CSVWriter(bw, ",", "\r\n");
 		
-		BufferedReader br = DataResource.getResourceFromFileIdAsStream(2993);
-		CSVReader r = new CSVReader(br, ";","\r\n");
+		BufferedReader br = DataResource.getResourceFromFileIdAsStream(3017);
+		CSVReader r = new CSVReader(br, ",","\r\n");
 		
 		CSVOperator op = new CSVOperator();
 		op.write_plain_csv(r, w);
@@ -35,10 +35,10 @@ public class CSVOperatorTest {
 		BufferedWriter bw = DataResource.getWriter(new File("./new2.csv"));
 		CSVWriter w = new CSVWriter(bw, ",", "\r\n");
 		
-		BufferedReader br = DataResource.getResourceFromFileIdAsStream(2993);
+		BufferedReader br = DataResource.getResourceFromFileIdAsStream(3017);
 		CSVReader r = new CSVReader(br, ",", "\r\n");
 		
-		Integer[] order = {14,13,12,11,10,9,8,7,6,5,4,3,2,1,0};
+		Integer[] order = {61,60,59,58,57,56,55,54,53,52,51,50,49,48,47,46,45,44,43,42,41,40,39,38,37,36,35,34,33,32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0};
 		CSVOperator op = new CSVOperator();
 		op.rewrite_csv_in_new_order(r, w, order);
 	}
@@ -49,10 +49,10 @@ public class CSVOperatorTest {
 		BufferedWriter bw = DataResource.getWriter(new File("./new3.csv"));
 		CSVWriter w = new CSVWriter(bw, ",", "\r\n");
 		
-		BufferedReader br = DataResource.getResourceFromFileIdAsStream(2993);
+		BufferedReader br = DataResource.getResourceFromFileIdAsStream(3017);
 		CSVReader r = new CSVReader(br, ",", "\r\n");
 		
-		String[] deletes = {"ch1_b_med","ch2_b_med","ch1_f_sat", "ch2_f_sat"};
+		String[] deletes = {"Array Row","Array Column","Spot Row", "Name"};
 		CSVOperator op = new CSVOperator();
 		op.rewrite_csv_with_deletes(r, w, deletes);
 	}
@@ -63,7 +63,7 @@ public class CSVOperatorTest {
 		BufferedWriter bw = DataResource.getWriter(new File("./new4.csv"));
 		CSVWriter w = new CSVWriter(bw, ",", "\r\n");
 		
-		BufferedReader br = DataResource.getResourceFromFileIdAsStream(2993);
+		BufferedReader br = DataResource.getResourceFromFileIdAsStream(3017);
 		CSVReader r = new CSVReader(br, ",","\r\n");
 		
 		Integer[] deletes = {11,12,13,14};
@@ -80,7 +80,7 @@ public class CSVOperatorTest {
 		BufferedWriter bw = DataResource.getWriter(new File("./new5.csv"));
 		CSVWriter w = new CSVWriter(bw, ",", "\r\n");
 		
-		BufferedReader br = DataResource.getResourceFromFileIdAsStream(2993);
+		BufferedReader br = DataResource.getResourceFromFileIdAsStream(3017);
 		CSVReader r = new CSVReader(br, ",", "\r\n");
 		
 		Treshold t1 = new Treshold() {
@@ -108,7 +108,7 @@ public class CSVOperatorTest {
 		
 		Treshold t2 = new Treshold() {
 			
-			private BufferedReader br = DataResource.getResourceFromFileIdAsStream(2994);
+			private BufferedReader br = DataResource.getResourceFromFileIdAsStream(3018);
 			private CSVReader r = new CSVReader(br, ",","\r\n");
 			
 			public boolean check_field(String field, int column_index) {

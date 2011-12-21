@@ -260,12 +260,18 @@ public class CSVOperator {
 		String[] header = reader.get_header();
 		String[] new_header = new String[new_column_count];
 		
+		int num_deletes = 0;
+		
 		for (int i = 0; i < header.length; i++) 
 		{	
 			int desired_index = real_indices_to_desired_column_indices.get(i);
 			if(desired_index != -1)
 			{
-				new_header[desired_index] = header[i];
+				new_header[desired_index - num_deletes] = header[i];
+			}
+			else
+			{
+				num_deletes++;
 			}
 		}
 		
@@ -290,35 +296,39 @@ public class CSVOperator {
 		String[] columns;
 		String[] new_columns;
 		int new_column_count = writer.get_new_column_count();
+
 		while((columns = reader.readLine()) != null)
 		{
-			new_columns = new String[new_column_count];
-			for (int i = 0; i < columns.length; i++) 
-			{
-				int desired_index = real_indices_to_desired_column_indices.get(i);
-				if(desired_index != -1)
-				{
-					new_columns[desired_index] = columns[i];
-				}
-			}
-			
+
 			if(tresholds != null)
 			{
-				for (int i = 0; i < new_columns.length; i++) {
+				for (int i = 0; i < columns.length; i++) {
 					boolean treshold_reached = false;
 					for (int j = 0; j < tresholds.length; j++) {
 						treshold_reached = tresholds[j].check_field(columns[i], i);
 						if(treshold_reached)
 						{
-							String[] new_row = tresholds[j].apply_changes(new_columns, i, reader.current_line);
-							new_columns = new_row;
+							String[] new_row = tresholds[j].apply_changes(columns, i, reader.current_line_num);
+							columns = new_row;
 							break;
 						}
 					}
-					if(treshold_reached)
-					{
-						break;
-					}
+				}
+			}
+			
+			new_columns = new String[new_column_count];
+			int num_deletes = 0;
+			
+			for (int i = 0; i < columns.length; i++) 
+			{
+				int desired_index = real_indices_to_desired_column_indices.get(i);
+				if(desired_index != -1)
+				{
+					new_columns[desired_index - num_deletes] = columns[i];
+				}
+				else
+				{
+					num_deletes++;
 				}
 			}
 			

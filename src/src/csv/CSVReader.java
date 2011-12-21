@@ -10,6 +10,11 @@ public class CSVReader extends CSVFile{
 
 	private BufferedReader reader;
 	
+	private String[] current_line;
+	
+	public int channel;
+	
+	
 	public CSVReader(BufferedReader reader, String delimiter, String line_break)
 	{
 		super(delimiter, line_break);
@@ -23,12 +28,12 @@ public class CSVReader extends CSVFile{
 		{
 			LinkedList<String> row = new LinkedList<String>();
 			String line = "";
-			if((line = reader.readLine()) == null)
+			if((line = reader.readLine()) == null || line.equals("END DATA"))
 			{
 				reader.close();
 				return null;
 			}
-			current_line++;
+			current_line_num++;
 			StringTokenizer tokenizer = new StringTokenizer(line, get_delimiter());
 			while(tokenizer.hasMoreTokens())
 			{
@@ -45,12 +50,11 @@ public class CSVReader extends CSVFile{
 	
 	public String[] readLine(int index)
 	{
-		String[] row = null;
-		while(current_line <= index)
+		while(current_line_num < index)
 		{
-			row = readLine();
+			current_line = readLine();
 		}
-		return row;
+		return current_line;
 	}
 	
 	private void read_header()
@@ -66,9 +70,17 @@ public class CSVReader extends CSVFile{
 					ch1 = reader.readLine();
 					String[] ch1_split = ch1.split(",");
 					ch1 = ch1_split[3];
+					if(ch1.equals("Cyanine 5"))
+					{
+						channel = 1;
+					}
+					else
+					{
+						channel = 2;
+					}
 					String ch2 = reader.readLine();
-					String[] ch2_split = ch2.split(",");
-					ch2 = ch2_split[3];
+//					String[] ch2_split = ch2.split(",");
+//					ch2 = ch2_split[3];
 				}
 				else if(line.equals("BEGIN DATA"))
 				{
@@ -82,6 +94,8 @@ public class CSVReader extends CSVFile{
 		}
 		
 		header = readLine();
+		current_line_num--; //header is not considered a row
+
 		column_indices = new HashMap<String, Integer>(header.length);
 		for (int i = 0; i < header.length; i++) 
 		{

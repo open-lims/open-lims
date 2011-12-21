@@ -11,7 +11,7 @@ public class CSVFile {
 	private String delimiter;
 	private String line_break;
 	
-	protected Integer current_line = 0;
+	protected Integer current_line_num = 0;
 	
 	private int new_column_count = 0;
 
