@@ -37,13 +37,13 @@ class ManufacturerIO
 		{
 			$path_prefix = "";
 		}
-		$template = new Template($GLOBALS['autoload_prefix']."template/manufacturer/dialog.html");
+		$template = new HTMLTemplate("manufacturer/dialog.html");
 		return $template->get_string();
 	}
 	
 	public static function add()
 	{
-		$template = new Template("template/manufacturer/add.html");
+		$template = new HTMLTemplate("manufacturer/add.html");
 		return $template->get_string();
 	}
 	
@@ -56,7 +56,7 @@ class ManufacturerIO
 		$list->add_column("User","user",true,null);
 		$list->add_column("","delete",false,"16px");
 		
-		$template = new Template("template/manufacturer/list.html");
+		$template = new HTMLTemplate("manufacturer/list.html");
 		
 		$template->set_var("ADD_DIALOG", self::add());
 		$template->set_var("list", $list->get_list());

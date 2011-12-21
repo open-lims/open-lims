@@ -38,7 +38,7 @@ class OrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[ou_id]);
 			
-			$template = new Template("template/organisation_unit/organisation_unit_detail.html");
+			$template = new HTMLTemplate("organisation_unit/organisation_unit_detail.html");
 			
 			$template->set_var("title",$organisation_unit->get_name());
 			
@@ -357,7 +357,7 @@ class OrganisationUnitIO
 				
 				foreach ($module_link_array as $key => $value)
 				{
-					$button_template = new Template("template/".$value[file]);
+					$button_template = new HTMLTemplate($value[file]);
 				
 					$button_paramquery = array();
 					$button_paramquery[username] = $_GET[username];
@@ -415,7 +415,7 @@ class OrganisationUnitIO
 		$list->add_column("Name","name",true,null);
 		$list->add_column("My Status/Role","mystatus",false,null);
 		
-		$template = new Template("template/organisation_unit/user_related_organisation_units.html");
+		$template = new HTMLTemplate("organisation_unit/user_related_organisation_units.html");
 		
 		$template->set_var("list", $list->get_list());
 
@@ -441,7 +441,7 @@ class OrganisationUnitIO
 			$list->add_column("Username","username",true,null,"OrganisationUnitListSortUsername");
 			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
 				
-			$template = new Template("template/organisation_unit/list_owners.html");
+			$template = new HTMLTemplate("organisation_unit/list_owners.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 				
 			$template->set_var("list", $list->get_list());
@@ -473,7 +473,7 @@ class OrganisationUnitIO
 			$list->add_column("Username","username",true,null,"OrganisationUnitListSortUsername");
 			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
 				
-			$template = new Template("template/organisation_unit/list_leaders.html");
+			$template = new HTMLTemplate("organisation_unit/list_leaders.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 				
 			$template->set_var("list", $list->get_list());
@@ -505,7 +505,7 @@ class OrganisationUnitIO
 			$list->add_column("Username","username",true,null,"OrganisationUnitListSortUsername");
 			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
 				
-			$template = new Template("template/organisation_unit/list_members.html");
+			$template = new HTMLTemplate("organisation_unit/list_members.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 				
 			$template->set_var("list", $list->get_list());
@@ -537,7 +537,7 @@ class OrganisationUnitIO
 			$list->add_column("Username","username",true,null,"OrganisationUnitListSortUsername");
 			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
 				
-			$template = new Template("template/organisation_unit/list_quality_managers.html");
+			$template = new HTMLTemplate("organisation_unit/list_quality_managers.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 				
 			$template->set_var("list", $list->get_list());
@@ -568,7 +568,7 @@ class OrganisationUnitIO
 			$list->add_column("","symbol",false,"16px");
 			$list->add_column("Groupname","groupname",true,null,"OrganisationUnitListSortGroupname");
 				
-			$template = new Template("template/organisation_unit/list_groups.html");
+			$template = new HTMLTemplate("organisation_unit/list_groups.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 				
 			$template->set_var("list", $list->get_list());

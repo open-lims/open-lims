@@ -79,14 +79,14 @@ class AssistantIO
 	{
 		$return = "";
 
-		$template = new Template("template/base/assistant/header.html");
+		$template = new HTMLTemplate("base/assistant/header.html");
 		$return .= $template->get_string();
 		
 		$element_width = floor(730/count($this->screen_array));
 		
 		foreach($this->screen_array as $key => $value)
 		{
-			$template = new Template("template/base/assistant/element.html");
+			$template = new HTMLTemplate("base/assistant/element.html");
 			$template->set_var("id", ($key+1));
 			$template->set_var("width", $element_width);
 			$template->set_var("image", ($key+1)."_lgrey.png");
@@ -94,10 +94,10 @@ class AssistantIO
 			$return .= $template->get_string();	
 		}
 		
-		$template = new Template("template/base/assistant/footer.html");
+		$template = new HTMLTemplate("base/assistant/footer.html");
 		$return .= $template->get_string();
 		
-		$template = new Template("template/base/assistant/content.html");
+		$template = new HTMLTemplate("base/assistant/content.html");
 		
 		$template->set_var("ajax_handler", $this->ajax_handler);
 		

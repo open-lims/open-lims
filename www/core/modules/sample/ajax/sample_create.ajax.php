@@ -46,7 +46,7 @@ class SampleCreateAjax extends Ajax
 			case "1":
 				$sample_organ_unit = $session->read_value("SAMPLE_ORGANISATION_UNIT");
 				
-				$template = new Template("../../../../template/samples/new_sample_page_1.html");	
+				$template = new HTMLTemplate("sample/new_sample_page_1.html");	
 	
 				$result = array();
 				$counter = 0;
@@ -94,7 +94,7 @@ class SampleCreateAjax extends Ajax
 				$sample_template 	= $session->read_value("SAMPLE_TEMPLATE");
 				$type_array 		= $session->read_value("SAMPLE_ITEM_TYPE_ARRAY");
 				
-				$template = new Template("../../../../template/samples/new_sample_page_2.html");	
+				$template = new HTMLTemplate("sample/new_sample_page_2.html");	
 
 				if (!is_array($type_array) or count($type_array) == 0)
 				{
@@ -175,7 +175,7 @@ class SampleCreateAjax extends Ajax
 				$sample_template_obj = new SampleTemplate($sample_template);
 				$information_fields = $sample_template_obj->get_information_fields();
 
-				$template = new Template("../../../../template/samples/new_sample_page_3.html");
+				$template = new HTMLTemplate("sample/new_sample_page_3.html");
 				
 				if ($information_fields[manufacturer][name] and $information_fields[manufacturer][requirement] != "optional")
 				{
@@ -364,7 +364,7 @@ class SampleCreateAjax extends Ajax
 					{
 						if ($is_value == true)
 						{
-							$template = new Template("../../../../template/samples/new_sample_page_4_value.html");
+							$template = new HTMLTemplate("sample/new_sample_page_4_value.html");
 							
 							require_once("../../../../core/modules/data/io/value_form.io.php");
 							$value_form_io = new ValueFormIO(null, $value_type_id, null, $sample_template_data_array);
@@ -376,7 +376,7 @@ class SampleCreateAjax extends Ajax
 						}
 						else
 						{
-							$template = new Template("../../../../template/samples/new_sample_page_4_sample.html");
+							$template = new HTMLTemplate("sample/new_sample_page_4_sample.html");
 							
 							if ($sample_count > 0)
 							{
@@ -432,13 +432,13 @@ class SampleCreateAjax extends Ajax
 					}
 					else
 					{
-						$template = new Template("../../../../template/samples/new_sample_page_4_error.html");
+						$template = new HTMLTemplate("sample/new_sample_page_4_error.html");
 						return $template->get_string();
 					}
 				}
 				else
 				{
-					$template = new Template("../../../../template/samples/new_sample_page_4_error.html");	
+					$template = new HTMLTemplate("sample/new_sample_page_4_error.html");	
 					return $template->get_string();
 				}		
 			break;
@@ -454,7 +454,7 @@ class SampleCreateAjax extends Ajax
 				$sample_expiry_warning		= $session->read_value("SAMPLE_EXPIRY_WARNING");
 				$sample_description			= $session->read_value("SAMPLE_DESCRIPTION");
 				
-				$template = new Template("../../../../template/samples/new_sample_page_5.html");
+				$template = new HTMLTemplate("sample/new_sample_page_5.html");
 			
 				$organisation_unit = new OrganisationUnit($sample_organ_unit);
 				$template->set_var("sample_organisation_unit",$organisation_unit->get_name());

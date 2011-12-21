@@ -37,7 +37,7 @@ class AdminUserIO
 		$list->add_column("Groups","groups",false,null);
 		$list->add_column("D","delete",false,"16px");
 		
-		$template = new Template("template/user/admin/user/list.html");
+		$template = new HTMLTemplate("user/admin/user/list.html");
 		
 		$paramquery = $_GET;
 		$paramquery[action] = "add";
@@ -97,7 +97,7 @@ class AdminUserIO
 
 		if ($page_1_passed == false)
 		{
-			$template = new Template("template/user/admin/user/add.html");
+			$template = new HTMLTemplate("user/admin/user/add.html");
 			
 			$paramquery = $_GET;
 			$paramquery[nextpage] = "1";
@@ -265,7 +265,7 @@ class AdminUserIO
 								$_POST[disabled]);
 			
 			
-			$template = new Template("template/user/admin/user/add_proceed.html");
+			$template = new HTMLTemplate("user/admin/user/add_proceed.html");
 			
 			$template->set_var("params", $params);
 			$template->set_var("new_password", $new_password);
@@ -289,7 +289,7 @@ class AdminUserIO
 			{
 				if ($_GET[sure] != "true")
 				{
-					$template = new Template("template/user/admin/user/delete.html");
+					$template = new HTMLTemplate("user/admin/user/delete.html");
 					
 					$paramquery = $_GET;
 					$paramquery[sure] = "true";
@@ -347,7 +347,7 @@ class AdminUserIO
 		{
 			$user_id = $_GET[id];
 				
-			$template = new Template("template/user/admin/user/detail.html");
+			$template = new HTMLTemplate("user/admin/user/detail.html");
 			
 			$current_user = new User($user_id);
 			$user_data = new DataUserData($user_id);
@@ -698,7 +698,7 @@ class AdminUserIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("template/user/admin/user/add_group.html");
+				$template = new HTMLTemplate("user/admin/user/add_group.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -762,7 +762,7 @@ class AdminUserIO
 			{
 				if ($_GET[sure] != "true")
 				{
-					$template = new Template("template/user/admin/user/delete_group.html");
+					$template = new HTMLTemplate("user/admin/user/delete_group.html");
 					
 					$paramquery = $_GET;
 					$paramquery[sure] = "true";
@@ -851,7 +851,7 @@ class AdminUserIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("template/user/admin/user/add_organisation_unit.html");
+				$template = new HTMLTemplate("user/admin/user/add_organisation_unit.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -915,7 +915,7 @@ class AdminUserIO
 			{
 				if ($_GET[sure] != "true")
 				{
-					$template = new Template("template/user/admin/user/delete_organisation_unit.html");
+					$template = new HTMLTemplate("user/admin/user/delete_organisation_unit.html");
 					
 					$paramquery = $_GET;
 					$paramquery[sure] = "true";
@@ -1004,7 +1004,7 @@ class AdminUserIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("template/user/admin/user/rename.html");
+				$template = new HTMLTemplate("user/admin/user/rename.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -1079,7 +1079,7 @@ class AdminUserIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("template/user/admin/user/change_mail.html");
+				$template = new HTMLTemplate("user/admin/user/change_mail.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -1152,7 +1152,7 @@ class AdminUserIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("template/user/admin/user/change_password.html");
+				$template = new HTMLTemplate("user/admin/user/change_password.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -1296,7 +1296,7 @@ class AdminUserIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("template/user/admin/user/change_language.html");
+				$template = new HTMLTemplate("user/admin/user/change_language.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -1375,7 +1375,7 @@ class AdminUserIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("template/user/admin/user/change_timezone.html");
+				$template = new HTMLTemplate("user/admin/user/change_timezone.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -1500,7 +1500,7 @@ class AdminUserIO
 	
 	public static function home_dialog()
 	{
-		$template = new Template("template/user/admin/user/home_dialog.html");
+		$template = new HTMLTemplate("user/admin/user/home_dialog.html");
 		
 		$paramquery 			= array();
 		$paramquery[username] 	= $_GET[username];

@@ -50,11 +50,16 @@ $db->db_connect(constant("DB_SERVER"),constant("DB_PORT"),constant("DB_USER"),co
 $GLOBALS['autoload_prefix'] = $path_prefix."../../../";
 
 require_once($path_prefix."../../include/base/system/template.class.php");
+require_once($path_prefix."../../include/base/system/html_template.class.php");
+require_once($path_prefix."../../include/base/system/js_template.class.php");
 require_once($path_prefix."../../include/base/system/events/event.class.php");
 require_once($path_prefix."../../include/base/system/system_handler.class.php");
 require_once($path_prefix."../../include/base/system/autoload.function.php");
 require_once($path_prefix."../../include/base/system/transaction.class.php");
-				
+
+Template::set_fallback_folder("xhtml");
+Template::set_current_folder("xhtml");
+
 $transaction = new Transaction();
 
 require_once($path_prefix."../../include/base/user/group.class.php");	

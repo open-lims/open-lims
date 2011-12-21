@@ -102,7 +102,7 @@ class DataSearchIO
 		
 		if ($no_error == false)
 		{
-			$template = new Template("template/data/search/ffv_search.html");
+			$template = new HTMLTemplate("data/search/ffv_search.html");
 			
 			$paramquery = $_GET;
 			unset($paramquery[page]);
@@ -258,7 +258,7 @@ class DataSearchIO
 			
 			$folder = Folder::get_instance($folder_id);
 			
-			$template = new Template("template/data/search/ffv_search_result.html");
+			$template = new HTMLTemplate("data/search/ffv_search_result.html");
 		
 			$paramquery = $_GET;
 			$paramquery[nextpage] = "2";

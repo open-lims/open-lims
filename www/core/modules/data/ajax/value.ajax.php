@@ -50,7 +50,7 @@ class ValueAjax extends Ajax
 		unset($paramquery[run]);
 		switch($action):
 			case "value_delete":
-				$template = new Template("../../../../template/data/value_delete_window.html");
+				$template = new HTMLTemplate("data/value_delete_window.html");
 				$button_handler = "
 					$.ajax({
 						type : \"GET\",
@@ -117,7 +117,7 @@ class ValueAjax extends Ajax
 		{
 			$paramquery = $_GET;
 			$params = http_build_query($paramquery);
-			$template = new Template("../../../../template/data/value_add_window.html");
+			$template = new HTMLTemplate("data/value_add_window.html");
 			$template->set_var("params", $params);
 			require_once("../../../include/data/value/access/value_type.access.php");
 			$types = ValueType_Access::list_entries();

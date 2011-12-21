@@ -321,7 +321,7 @@ class OrganiserLibraryIO {
 			}
 		}
 				
-		$template = new Template("template/organiser/views/year.html");
+		$template = new HTMLTemplate("organiser/views/year.html");
 		
 		$paramquery_prev = $_GET;
 		$paramquery_prev[page] = $prev_year;
@@ -543,7 +543,7 @@ class OrganiserLibraryIO {
 			}
 		}
 		
-		$template = new Template("template/organiser/views/month.html");
+		$template = new HTMLTemplate("organiser/views/month.html");
 		
 		$paramquery_prev = $_GET;
 		$paramquery_prev[page] = date("m-Y", $prev_month_datetime_handler->get_mktime());
@@ -714,7 +714,7 @@ class OrganiserLibraryIO {
 			$color_count++;
 		}
 		
-		$template = new Template("template/organiser/views/week.html");
+		$template = new HTMLTemplate("organiser/views/week.html");
 		
 		$paramquery_prev = $_GET;
 		$paramquery_prev[page] = date("W-Y", $prev_week_datetime_handler->get_mktime());
@@ -883,7 +883,7 @@ class OrganiserLibraryIO {
 			$color_count++;
 		}
 		
-		$template = new Template("template/organiser/views/work_week.html");
+		$template = new HTMLTemplate("organiser/views/work_week.html");
 		
 		$paramquery_prev = $_GET;
 		$paramquery_prev[page] = date("W-Y", $prev_week_datetime_handler->get_mktime());
@@ -1026,7 +1026,7 @@ class OrganiserLibraryIO {
 			$color_count++;
 		}
 		
-		$template = new Template("template/organiser/views/day.html");
+		$template = new HTMLTemplate("organiser/views/day.html");
 		
 		$paramquery_prev = $_GET;
 		$paramquery_prev[page] = date("j-m-Y", $prev_day_datetime_handler->get_mktime());
@@ -1107,7 +1107,7 @@ class OrganiserLibraryIO {
 	
 	public function get_content()
 	{
-		$template = new Template("template/organiser/abstract_header.html");
+		$template = new HTMLTemplate("organiser/abstract_header.html");
 		
 		if ($this->year == true)
 		{

@@ -46,6 +46,8 @@ class ProjectAjax
 		
 		if (is_numeric($user_id))
 		{
+			$user = new User($user_id);
+			
 			$list_request = new ListRequest_IO();
 			$list_request->set_column_array($json_column_array);
 		
@@ -54,7 +56,7 @@ class ProjectAjax
 				$entries_per_page = 20;
 			}
 			
-			$list_array = Project_Wrapper::list_user_related_projects($user_id, $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+			$list_array = Project_Wrapper::list_user_related_projects($user_id, $user->is_admin(), $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
 
 			if (is_array($list_array) and count($list_array) >= 1)
 			{
@@ -73,7 +75,7 @@ class ProjectAjax
 						$list_array[$key][name][label] = $tmp_name;
 						$list_array[$key][name][content] = $tmp_name;
 					}
-
+					
 					$tmp_template = trim($list_array[$key][template]);
 					unset($list_array[$key][template]);
 					
@@ -100,6 +102,13 @@ class ProjectAjax
 					{
 						$list_array[$key][status][label] = $tmp_status;
 						$list_array[$key][status][content] = $tmp_status;
+					}
+					
+					if ($list_array[$key][deleted] == "t")
+					{
+						$list_array[$key][name][content] = "<span class='crossed'>".$list_array[$key][name][content]."</span>";
+						$list_array[$key][template][content] = "<span class='crossed'>".$list_array[$key][template][content]."</span>";
+						$list_array[$key][status][content] = "<span class='crossed'>".$list_array[$key][status][content]."</span>";
 					}
 					
 					$list_array[$key][symbol] = "<img src='images/icons/project.png' alt='N' border='0' />";
@@ -136,14 +145,15 @@ class ProjectAjax
 	 * @return integer
 	 */
 	public static function count_user_related_projects($json_argument_array)
-	{
+	{		
 		$argument_array = json_decode($json_argument_array);
 		
 		$user_id = $argument_array[0][1];
+		$user = new User($user_id);
 		
 		if (is_numeric($user_id))
 		{
-			return Project_Wrapper::count_list_user_related_projects($user_id);
+			return Project_Wrapper::count_list_user_related_projects($user_id, $user->is_admin());
 		}
 		else
 		{
@@ -164,12 +174,14 @@ class ProjectAjax
 	 */
 	public static function list_organisation_unit_related_projects($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
+		global $user;
+		
 		$argument_array = json_decode($json_argument_array);
 		
 		$organisation_unit_id = $argument_array[0][1];
 		
 		if (is_numeric($organisation_unit_id))
-		{
+		{			
 			$list_request = new ListRequest_IO();
 			$list_request->set_column_array($json_column_array);
 		
@@ -178,7 +190,7 @@ class ProjectAjax
 				$entries_per_page = 20;
 			}
 			
-			$list_array = Project_Wrapper::list_organisation_unit_related_projects($organisation_unit_id, $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+			$list_array = Project_Wrapper::list_organisation_unit_related_projects($organisation_unit_id, $user->is_admin(), $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
 		
 			if (is_array($list_array) and count($list_array) >= 1)
 			{
@@ -224,6 +236,13 @@ class ProjectAjax
 					{
 						$list_array[$key][status][label] = $tmp_status;
 						$list_array[$key][status][content] = $tmp_status;
+					}
+					
+					if ($list_array[$key][deleted] == "t")
+					{
+						$list_array[$key][name][content] = "<span class='crossed'>".$list_array[$key][name][content]."</span>";
+						$list_array[$key][template][content] = "<span class='crossed'>".$list_array[$key][template][content]."</span>";
+						$list_array[$key][status][content] = "<span class='crossed'>".$list_array[$key][status][content]."</span>";
 					}
 					
 					$list_array[$key][symbol] = "<img src='images/icons/project.png' alt='N' border='0' />";
@@ -276,13 +295,15 @@ class ProjectAjax
 	 */
 	public static function count_organisation_unit_related_projects($json_argument_array)
 	{
+		global $user;
+		
 		$argument_array = json_decode($json_argument_array);
 		
 		$organisation_unit_id = $argument_array[0][1];
 		
 		if (is_numeric($organisation_unit_id))
 		{
-			return Project_Wrapper::count_organisation_unit_related_projects($organisation_unit_id);
+			return Project_Wrapper::count_organisation_unit_related_projects($organisation_unit_id, $user->is_admin());
 		}
 		else
 		{
@@ -303,6 +324,8 @@ class ProjectAjax
 	 */
 	public static function list_projects_by_item_id($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
+		global $user;
+		
 		$argument_array = json_decode($json_argument_array);
 		$item_id = $argument_array[0][1];
 		
@@ -317,11 +340,11 @@ class ProjectAjax
 			
 			if ($argument_array[2][1] == true)
 			{	
-				$list_array = Project_Wrapper::list_projects_by_item_id($item_id, $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+				$list_array = Project_Wrapper::list_projects_by_item_id($item_id, $user->is_admin(), $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
 			}
 			else
 			{
-				$list_array = Project_Wrapper::list_projects_by_item_id($item_id, $sortvalue, $sortmethod, 0, null);
+				$list_array = Project_Wrapper::list_projects_by_item_id($item_id, $user->is_admin(), $sortvalue, $sortmethod, 0, null);
 			}
 			
 			$list_request->set_column_array($json_column_array);
@@ -370,6 +393,13 @@ class ProjectAjax
 					{
 						$list_array[$key][status][label] = $tmp_status;
 						$list_array[$key][status][content] = $tmp_status;
+					}
+					
+					if ($list_array[$key][deleted] == "t")
+					{
+						$list_array[$key][name][content] = "<span class='crossed'>".$list_array[$key][name][content]."</span>";
+						$list_array[$key][template][content] = "<span class='crossed'>".$list_array[$key][template][content]."</span>";
+						$list_array[$key][status][content] = "<span class='crossed'>".$list_array[$key][status][content]."</span>";
 					}
 					
 					if ($argument_array[1][1] == true)
@@ -463,12 +493,14 @@ class ProjectAjax
 	 */
 	public static function count_projects_by_item_id($json_argument_array)
 	{
+		global $user;
+		
 		$argument_array = json_decode($json_argument_array);
 		$item_id = $argument_array[0][1];
 		
 		if (is_numeric($item_id))
 		{
-			return Project_Wrapper::count_projects_by_item_id($item_id);
+			return Project_Wrapper::count_projects_by_item_id($item_id, $user->is_admin());
 		}
 		else
 		{
@@ -491,7 +523,7 @@ class ProjectAjax
 		{
 			$project = new Project($_GET[project_id]);
 			
-			$template = new Template("template/projects/ajax/detail_status.html");
+			$template = new HTMLTemplate("project/ajax/detail_status.html");
 		
 			// Status Bar
 			$all_status_array = $project->get_all_status_array();				
@@ -587,7 +619,7 @@ class ProjectAjax
 			$project = new Project($_GET[project_id]);
 			$project_security = new ProjectSecurity($_GET[project_id]);
 			
-			$template = new Template("template/projects/ajax/detail_menu.html");
+			$template = new HTMLTemplate("project/ajax/detail_menu.html");
 			
 			switch ($project->is_next_status_available()):
 				case(0):
@@ -781,7 +813,7 @@ class ProjectAjax
 					echo "0:";
 				}
 				
-				$template = new Template("template/projects/ajax/proceed.html");
+				$template = new HTMLTemplate("project/ajax/proceed.html");
 							
 				$project_template = new ProjectTemplate($project->get_template_id());
 				$current_status_requirements 	= $project->get_current_status_requirements();

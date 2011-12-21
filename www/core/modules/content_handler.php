@@ -31,7 +31,7 @@ class ContentHandler_IO
 	{
 		global $session, $user, $transaction;
 
-		$template = new Template("template/index_header.html");
+		$template = new HTMLTemplate("index_header.html");
 	
 		if (file_exists(constant("WWW_DIR")))
 		{
@@ -129,7 +129,7 @@ class ContentHandler_IO
 			{
 		 		if ($session->is_valid() == true)
 		 		{
-					$template = new Template("template/main_header.html");
+					$template = new HTMLTemplate("main_header.html");
 					
 					$template->set_var("release",constant("PRODUCT")." ".constant("PRODUCT_VERSION"));
 					$template->set_var("user",constant("PRODUCT_USER"));
@@ -217,7 +217,7 @@ class ContentHandler_IO
 						}
  					}
 			 		
-			 		$template = new Template("template/main_footer.html");
+			 		$template = new HTMLTemplate("main_footer.html");
 			 		$template->output();
 		 		}
 		 		else
@@ -236,7 +236,7 @@ class ContentHandler_IO
 			Error_IO::fatal_error($GLOBALS['fatal_error']);	
 		}
 		
-		$template = new Template("template/index_footer.html");
+		$template = new HTMLTemplate("index_footer.html");
 		$template->output();
 	}
 	

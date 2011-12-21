@@ -115,7 +115,7 @@ class DataIO
 		
 		$folder = Folder::get_instance($folder_id);	
 		
-		$template = new Template("template/data/data_browser.html");
+		$template = new HTMLTemplate("data/data_browser.html");
 
 		if ($folder_id and !$virtual_folder_id)
 		{
@@ -250,7 +250,7 @@ class DataIO
 						}
 					}
 				
-					$template = new Template("template/data/data_image_browser_multi.html");
+					$template = new HTMLTemplate("data/data_image_browser_multi.html");
 					
 					$paramquery = $_GET;
 					$paramquery[nav] = "data";
@@ -380,7 +380,7 @@ class DataIO
 					{
 						$file = File::get_instance($image_browser_array[$page]);
 				
-						$template = new Template("template/data/data_image_browser_detail.html");
+						$template = new HTMLTemplate("data/data_image_browser_detail.html");
 						
 						if ($_GET[version] and is_numeric($_GET[version])) 
 						{
@@ -559,7 +559,7 @@ class DataIO
 			
 			if (!$_GET[nextpage])
 			{
-				$template = new Template("template/data/data_permission.html");
+				$template = new HTMLTemplate("data/data_permission.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -837,7 +837,7 @@ class DataIO
 			
 			if (!$_GET[nextpage])
 			{
-				$template = new Template("template/data/data_change_owner.html");
+				$template = new HTMLTemplate("data/data_change_owner.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -938,7 +938,7 @@ class DataIO
 			
 			if (!$_GET[nextpage])
 			{
-				$template = new Template("template/data/data_change_group.html");
+				$template = new HTMLTemplate("data/data_change_group.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -1030,7 +1030,7 @@ class DataIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("template/data/admin/user/change_user_quota.html");
+				$template = new HTMLTemplate("data/admin/user/change_user_quota.html");
 
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";

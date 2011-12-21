@@ -98,7 +98,7 @@ class ProjectDataSearchIO
 		
 		if ($no_error == false)
 		{
-			$template = new Template("template/projects/search/data_search.html");
+			$template = new HTMLTemplate("project/search/data_search.html");
 			
 			$template->set_var("error", "");
 			
@@ -293,7 +293,7 @@ class ProjectDataSearchIO
 			
 			// print_r($result_array);
 			
-			$template = new Template("template/projects/search/data_search_result.html");
+			$template = new HTMLTemplate("project/search/data_search_result.html");
 		
 			$paramquery = $_GET;
 			$paramquery[nextpage] = "2";

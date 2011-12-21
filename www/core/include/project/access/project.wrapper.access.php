@@ -45,7 +45,8 @@ class Project_Wrapper_Access
 							"WHERE ".constant("PROJECT_PERMISSION_TABLE").".user_id IS NOT NULL " .
 								"AND ".constant("PROJECT_PERMISSION_TABLE").".user_id = ".$user_id." " .
 								"AND ".constant("PROJECT_PERMISSION_TABLE").".permission > 1 " .
-								"AND ".constant("PROJECT_TASK_TABLE").".end_date < '".$date."'";
+								"AND ".constant("PROJECT_TASK_TABLE").".end_date < '".$date."' " .
+								"AND ".constant("PROJECT_TABLE").".deleted = 'f'";
 			
 			$return_array = array();
 				
@@ -405,8 +406,9 @@ class Project_Wrapper_Access
 							"(SELECT * FROM project_permission_organisation_unit(".constant("PROJECT_TABLE").".id, ".constant("PROJECT_TABLE").".toid_organ_unit)) = TRUE OR " .
 							"(SELECT * FROM project_permission_group(".constant("PROJECT_TABLE").".id, ".constant("GROUP_HAS_USER_TABLE").".group_id)) = TRUE OR " .
 							"(SELECT * FROM project_permission_group(".constant("PROJECT_TABLE").".id, ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE").".group_id)) = TRUE)" .
-							"AND toid_organ_unit IS NOT NULL";
-				
+							"AND toid_organ_unit IS NOT NULL " .
+							"AND ".constant("PROJECT_TABLE").".deleted = 'f'";	
+			
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 	
@@ -439,8 +441,9 @@ class Project_Wrapper_Access
 							"(SELECT * FROM project_permission_group(".constant("PROJECT_TABLE").".id, ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE").".group_id)) = TRUE)" .
 							"AND toid_organ_unit IS NOT NULL " .
 							"AND ".constant("PROJECT_TABLE").".id NOT IN " .
-									"(SELECT project_id FROM ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." WHERE status_id = 2 OR status_id = 0 ORDER BY datetime DESC)";
-
+									"(SELECT project_id FROM ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." WHERE status_id = 2 OR status_id = 0 ORDER BY datetime DESC) " .
+							"AND ".constant("PROJECT_TABLE").".deleted = 'f'";	
+			
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 
@@ -473,7 +476,8 @@ class Project_Wrapper_Access
 							"(SELECT * FROM project_permission_group(".constant("PROJECT_TABLE").".id, ".constant("GROUP_HAS_USER_TABLE").".group_id)) = TRUE OR " .
 							"(SELECT * FROM project_permission_group(".constant("PROJECT_TABLE").".id, ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE").".group_id)) = TRUE)" .
 							"AND toid_organ_unit IS NOT NULL " .
-							"AND ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE").".status_id = 2 ";
+							"AND ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE").".status_id = 2 " .
+							"AND ".constant("PROJECT_TABLE").".deleted = 'f'";	
 
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
@@ -488,18 +492,28 @@ class Project_Wrapper_Access
 	
 	/**
 	 * @param integer $user_id
+	 * @param bool $admin
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
 	 * @param integer $end
 	 * @return array
 	 */
-	public static function list_user_related_projects($user_id, $order_by, $order_method, $start, $end)
+	public static function list_user_related_projects($user_id, $admin, $order_by, $order_method, $start, $end)
 	{
 		global $db;
 		
 		if (is_numeric($user_id))
 		{
+			if ($admin == true)
+			{
+				$admin_sql = "";
+			}
+			else
+			{
+				$admin_sql = "AND ".constant("PROJECT_TABLE").".deleted = 'f'";
+			}
+			
 			if ($order_by and $order_method)
 			{
 				if ($order_method == "asc")
@@ -548,7 +562,8 @@ class Project_Wrapper_Access
 					"".constant("ORGANISATION_UNIT_TABLE").".name AS organisation_unit, " .
 					"".constant("PROJECT_TEMPLATE_TABLE").".name AS template, " .
 					"".constant("PROJECT_STATUS_TABLE").".name AS status, " .
-					"".constant("PROJECT_STATUS_TABLE").".id AS status_id " .
+					"".constant("PROJECT_STATUS_TABLE").".id AS status_id, " .
+					"".constant("PROJECT_TABLE").".deleted AS deleted " .
 					"FROM ".constant("PROJECT_TABLE")." " .
 					"JOIN ".constant("ORGANISATION_UNIT_TABLE")." 			ON ".constant("PROJECT_TABLE").".toid_organ_unit 				= ".constant("ORGANISATION_UNIT_TABLE").".id " .
 					"JOIN ".constant("PROJECT_TEMPLATE_TABLE")." 			ON ".constant("PROJECT_TABLE").".template_id 					= ".constant("PROJECT_TEMPLATE_TABLE").".id " .
@@ -569,6 +584,7 @@ class Project_Wrapper_Access
 											"AND toid_organ_unit IS NOT NULL)".
 							"AND ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE").".datetime = " .
 									"(SELECT MAX(datetime) FROM ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." WHERE ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE").".project_id = ".constant("PROJECT_TABLE").".id)" .
+					"".$admin_sql." ";
 					"".$sql_order_by."";
 			
 			$return_array = array();
@@ -606,14 +622,24 @@ class Project_Wrapper_Access
 	
 	/**
 	 * @param integer $user_id
+	 * @param bool $admin
 	 * @return integer
 	 */
-	public static function count_list_user_related_projects($user_id)
+	public static function count_list_user_related_projects($user_id, $admin)
 	{
 		global $db;
 		
 		if (is_numeric($user_id))
 		{
+			if ($admin == true)
+			{
+				$admin_sql = "";
+			}
+			else
+			{
+				$admin_sql = "AND ".constant("PROJECT_TABLE").".deleted = 'f'";
+			}
+			
 			$sql = "SELECT COUNT(DISTINCT ".constant("PROJECT_TABLE").".id) AS result " .
 					"FROM ".constant("PROJECT_TABLE")." " .
 					"LEFT JOIN ".constant("GROUP_HAS_USER_TABLE")." ON ".$user_id." = ".constant("GROUP_HAS_USER_TABLE").".user_id " .
@@ -624,7 +650,8 @@ class Project_Wrapper_Access
 							"(SELECT * FROM project_permission_organisation_unit(".constant("PROJECT_TABLE").".id, ".constant("PROJECT_TABLE").".toid_organ_unit)) = TRUE OR " .
 							"(SELECT * FROM project_permission_group(".constant("PROJECT_TABLE").".id, ".constant("GROUP_HAS_USER_TABLE").".group_id)) = TRUE OR " .
 							"(SELECT * FROM project_permission_group(".constant("PROJECT_TABLE").".id, ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE").".group_id)) = TRUE)" .
-							"AND toid_organ_unit IS NOT NULL";
+							"AND toid_organ_unit IS NOT NULL " .
+							"".$admin_sql."";
 				
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
@@ -641,17 +668,27 @@ class Project_Wrapper_Access
 	 * @param integer $organisation_unit_id
 	 * @return integer
 	 */
-	public static function count_organisation_unit_related_projects($organisation_unit_id)
+	public static function count_organisation_unit_related_projects($organisation_unit_id, $admin)
 	{
 		global $db;
 		
 		if (is_numeric($organisation_unit_id))
 		{
+			if ($admin == true)
+			{
+				$admin_sql = "";
+			}
+			else
+			{
+				$admin_sql = "AND ".constant("PROJECT_TABLE").".deleted = 'f'";
+			}
+			
 			$sql = "SELECT COUNT(DISTINCT ".constant("PROJECT_TABLE").".id) AS result " .
 					"FROM ".constant("PROJECT_TABLE")." " .
 					"WHERE (toid_organ_unit = ".$organisation_unit_id." OR " .
 							"(SELECT * FROM project_permission_organisation_unit(".constant("PROJECT_TABLE").".id, ".$organisation_unit_id.")) = TRUE)" .
-							"AND toid_organ_unit IS NOT NULL";
+							"AND toid_organ_unit IS NOT NULL ".
+							"".$admin_sql.""; 
 				
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
@@ -672,12 +709,21 @@ class Project_Wrapper_Access
 	 * @param integer $end
 	 * @return array
 	 */
-	public static function list_organisation_unit_related_projects($organisation_unit_id, $order_by, $order_method, $start, $end)
+	public static function list_organisation_unit_related_projects($organisation_unit_id, $admin, $order_by, $order_method, $start, $end)
 	{
 		global $db;
 		
 		if (is_numeric($organisation_unit_id))
 		{
+			if ($admin == true)
+			{
+				$admin_sql = "";
+			}
+			else
+			{
+				$admin_sql = "AND ".constant("PROJECT_TABLE").".deleted = 'f'";
+			}
+			
 			if ($order_by and $order_method)
 			{
 				if ($order_method == "asc")
@@ -726,7 +772,8 @@ class Project_Wrapper_Access
 					"".constant("PROJECT_TABLE").".owner_id AS owner_id," .
 					"".constant("PROJECT_TEMPLATE_TABLE").".name AS template, " .
 					"".constant("PROJECT_STATUS_TABLE").".name AS status, " .
-					"".constant("PROJECT_STATUS_TABLE").".id AS status_id " .
+					"".constant("PROJECT_STATUS_TABLE").".id AS status_id, " .
+					"".constant("PROJECT_TABLE").".deleted AS deleted " .
 					"FROM ".constant("PROJECT_TABLE")." " .
 					"JOIN ".constant("USER_PROFILE_TABLE")." 				ON ".constant("PROJECT_TABLE").".owner_id						= ".constant("USER_PROFILE_TABLE").".id " .
 					"JOIN ".constant("PROJECT_TEMPLATE_TABLE")." 			ON ".constant("PROJECT_TABLE").".template_id 					= ".constant("PROJECT_TEMPLATE_TABLE").".id " .
@@ -741,6 +788,7 @@ class Project_Wrapper_Access
 											"AND toid_organ_unit IS NOT NULL)".
 							"AND ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE").".datetime = " .
 									"(SELECT MAX(datetime) FROM ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." WHERE ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE").".project_id = ".constant("PROJECT_TABLE").".id)" .
+					"".$admin_sql." " .
 					"".$sql_order_by."";
 			
 			$return_array = array();
@@ -784,12 +832,21 @@ class Project_Wrapper_Access
 	 * @param integer $end
 	 * @return array
 	 */
-	public static function list_projects_by_item_id($item_id, $order_by, $order_method, $start, $end)
+	public static function list_projects_by_item_id($item_id, $admin, $order_by, $order_method, $start, $end)
 	{
 		global $db;
 		
 		if (is_numeric($item_id))
 		{
+			if ($admin == true)
+			{
+				$admin_sql = "";
+			}
+			else
+			{
+				$admin_sql = "AND ".constant("PROJECT_TABLE").".deleted = 'f'";
+			}
+			
 			if ($order_by and $order_method)
 			{
 				if ($order_method == "asc")
@@ -839,7 +896,8 @@ class Project_Wrapper_Access
 						"".constant("PROJECT_TABLE").".datetime AS datetime," .
 						"".constant("PROJECT_TEMPLATE_TABLE").".name AS template, " .
 						"".constant("PROJECT_STATUS_TABLE").".name AS status, " .
-						"".constant("PROJECT_TABLE").".owner_id AS owner " .
+						"".constant("PROJECT_TABLE").".owner_id AS owner, " .
+						"".constant("PROJECT_TABLE").".deleted AS deleted " .
 						"FROM ".constant("PROJECT_TABLE")." " .
 						"JOIN ".constant("PROJECT_HAS_ITEM_TABLE")." 				ON ".constant("PROJECT_TABLE").".id 										= ".constant("PROJECT_HAS_ITEM_TABLE").".project_id ".
 						"JOIN ".constant("PROJECT_TEMPLATE_TABLE")." 				ON ".constant("PROJECT_TABLE").".template_id 								= ".constant("PROJECT_TEMPLATE_TABLE").".id " .
@@ -849,6 +907,7 @@ class Project_Wrapper_Access
 						"WHERE ".constant("PROJECT_HAS_ITEM_TABLE").".item_id = ".$item_id." " .
 						"AND ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE").".datetime = " .
 									"(SELECT MAX(datetime) FROM ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." WHERE ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE").".project_id = ".constant("PROJECT_TABLE").".id)" .
+						"".$admin_sql." " .
 						"".$sql_order_by."";
 			
 			$return_array = array();
@@ -889,16 +948,26 @@ class Project_Wrapper_Access
 	 * @param integer $item_id
 	 * @return itneger
 	 */
-	public static function count_projects_by_item_id($item_id)
+	public static function count_projects_by_item_id($item_id, $admin)
 	{
 		global $db;
 		
 		if (is_numeric($item_id))
 		{
+			if ($admin == true)
+			{
+				$admin_sql = "";
+			}
+			else
+			{
+				$admin_sql = "AND ".constant("PROJECT_TABLE").".deleted = 'f'";
+			}
+			
 			$sql = "SELECT COUNT(DISTINCT ".constant("PROJECT_TABLE").".id) AS result " .
 						"FROM ".constant("PROJECT_TABLE")." " .
 						"JOIN ".constant("PROJECT_HAS_ITEM_TABLE")." ON ".constant("PROJECT_TABLE").".id = ".constant("PROJECT_HAS_ITEM_TABLE").".project_id ".
-						"WHERE ".constant("PROJECT_HAS_ITEM_TABLE").".item_id = ".$item_id." ";
+						"WHERE ".constant("PROJECT_HAS_ITEM_TABLE").".item_id = ".$item_id." " .
+						"".$admin_sql."";
 						
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);

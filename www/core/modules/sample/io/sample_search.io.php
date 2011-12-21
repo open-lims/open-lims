@@ -90,7 +90,7 @@ class SampleSearchIO
 		
 		if ($no_error == false)
 		{
-			$template = new Template("template/samples/search/search.html");
+			$template = new HTMLTemplate("sample/search/search.html");
 			
 			$paramquery = $_GET;
 			unset($paramquery[page]);
@@ -400,7 +400,7 @@ class SampleSearchIO
 				$list->override_last_line("<span class='italic'>No results found!</span>");
 			}
 			
-			$template = new Template("template/samples/search/search_result.html");
+			$template = new HTMLTemplate("sample/search/search_result.html");
 			
 			$paramquery = $_GET;
 			$paramquery[nextpage] = "2";

@@ -103,20 +103,20 @@ interface Project_WrapperInterface
 	 * @param integer $end
 	 * @return array
 	 */
-	public static function list_user_related_projects($user_id, $order_by, $order_method, $start, $end);
+	public static function list_user_related_projects($user_id, $admin, $order_by, $order_method, $start, $end);
 	
 	/**
 	 * Returns the number of all users related projects
 	 * @param integer $user_id
 	 * @return integer
 	 */
-	public static function count_list_user_related_projects($user_id);
+	public static function count_list_user_related_projects($user_id, $admin);
 	
 	/**
 	 * @param integer $organisation_unit_id
 	 * @return integer
 	 */
-	public static function count_organisation_unit_related_projects($organisation_unit_id);
+	public static function count_organisation_unit_related_projects($organisation_unit_id, $admin);
 	
 	/**
 	 * @param integer $organisation_unit_id
@@ -126,7 +126,7 @@ interface Project_WrapperInterface
 	 * @param integer $end
 	 * @return array
 	 */
-	public static function list_organisation_unit_related_projects($organisation_unit_id, $order_by, $order_method, $start, $end);
+	public static function list_organisation_unit_related_projects($organisation_unit_id, $admin, $order_by, $order_method, $start, $end);
 	
 	/**
 	 * @param integer $item_id
@@ -136,13 +136,13 @@ interface Project_WrapperInterface
 	 * @param integer $end
 	 * @return array
 	 */
-	public static function list_projects_by_item_id($item_id, $order_by, $order_method, $start, $end);
+	public static function list_projects_by_item_id($item_id, $admin, $order_by, $order_method, $start, $end);
 	
 	/**
 	 * @param integer $item_id
 	 * @return integer
 	 */
-	public static function count_projects_by_item_id($item_id);
+	public static function count_projects_by_item_id($item_id, $admin);
 	
 	/**
 	 * @param integer $project_id

@@ -34,7 +34,7 @@ class ItemIO
 	 */
 	public static function information($link, $description, $keywords)
 	{
-		$template = new Template("template/item/information.html");
+		$template = new HTMLTemplate("item/information.html");
 		
 		$template->set_var("link", $link);
 		

@@ -85,7 +85,7 @@ class ValueIO
 				{
 					if ($value->get_type_id() == 2)
 					{
-						$template = new Template("template/data/value_project_description_detail.html");
+						$template = new HTMLTemplate("data/value_project_description_detail.html");
 					
 						$value_version_array = $value->get_value_internal_revisions();
 							
@@ -174,7 +174,7 @@ class ValueIO
 					}
 					else
 					{
-						$template = new Template("template/data/value_detail.html");
+						$template = new HTMLTemplate("data/value_detail.html");
 					
 						$value_version_array = $value->get_value_internal_revisions();
 							
@@ -396,7 +396,7 @@ class ValueIO
 			
 			if (!$type_id)
 			{
-				$template = new Template("template/data/value_select_list.html");
+				$template = new HTMLTemplate("data/value_select_list.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -433,7 +433,7 @@ class ValueIO
 				
 				if (!$_GET[nextpage] or $_GET[nextpage] == "1")
 				{	
-					$template = new Template("template/data/value_add.html");
+					$template = new HTMLTemplate("data/value_add.html");
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "2";
 					$params = http_build_query($paramquery,'','&#38;');
@@ -581,7 +581,7 @@ class ValueIO
 					$list->override_last_line("<span class='italic'>No results found!</span>");
 				}
 				
-				$template = new Template("template/data/value_history.html");
+				$template = new HTMLTemplate("data/value_history.html");
 	
 				$template->set_var("title",$value_obj->get_type_name());
 				
@@ -623,7 +623,7 @@ class ValueIO
 				{
 					if ($_GET[sure] != "true")
 					{
-						$template = new Template("template/data/value_delete_version.html");
+						$template = new HTMLTemplate("data/value_delete_version.html");
 						
 						$paramquery = $_GET;
 						$paramquery[sure] = "true";

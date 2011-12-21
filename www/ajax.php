@@ -34,7 +34,12 @@
  require_once("config/main.php");
 
  require_once("core/include/base/system/template.class.php");
+ require_once("core/include/base/system/html_template.class.php");
+ require_once("core/include/base/system/js_template.class.php");
 
+ Template::set_fallback_folder("xhtml");
+ Template::set_current_folder("xhtml");
+ 
  require_once("core/main.php");
  $main = new Main("ajax");
 

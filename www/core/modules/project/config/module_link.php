@@ -27,12 +27,12 @@
 	$link[0][type]				= "home_button";
 	$link[0]['array'][nav]		= "project";
 	$link[0]['array'][run]		= "new";
-	$link[0][file]				= "projects/home_buttons/create.html";
+	$link[0][file]				= "project/home_buttons/create.html";
 	$link[0][weight]			= 100;
 	
 	$link[1][type]				= "home_button";
 	$link[1]['array'][nav]		= "project";
-	$link[1][file]				= "projects/home_buttons/view_my.html";
+	$link[1][file]				= "project/home_buttons/view_my.html";
 	$link[1][weight]			= 200;
 	
 	$link[2][type]				= "ou_navigation";
