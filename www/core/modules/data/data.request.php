@@ -45,7 +45,7 @@ class DataRequest
 	}
 	
 	public static function io_handler()
-	{
+	{	
 		switch($_GET[action]):
 			case("permission"):
 				require_once("io/data.io.php");

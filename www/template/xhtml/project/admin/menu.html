@@ -14,9 +14,11 @@ $(document).ready(function()
 				{
 					if ($("#ProjectAdminMenuContent").children().size() > 0)
 					{
-						$("#ProjectAdminMenuContent").fadeOut("slow");
-						$("#ProjectAdminMenuContent").html(data);
-						$("#ProjectAdminMenuContent").fadeIn("slow");
+						$("#ProjectAdminMenuContent").fadeOut("slow",function()
+						{
+							$("#ProjectAdminMenuContent").html(data);
+							$("#ProjectAdminMenuContent").fadeIn("slow");
+						});
 					}
 					else
 					{

@@ -748,14 +748,14 @@ function data_browser()
 		list.reinit_page_handler();
 		$(".DataBrowserAjaxPage").bind("click",function(event) 
 		{ 
-			init(); //re-init on page change
+			reinit_without_reload(); //re-init on page change
 		});
 		
 		$(".DataBrowserAjaxColumn").unbind("click");
 		list.reinit_sort_handler();
 		$(".DataBrowserAjaxColumn").bind("click",function(event) 
 		{ 
-			init(); //re-init on page change
+			reinit_without_reload(); //re-init on page change
 		});
 		
 		
@@ -867,6 +867,17 @@ function data_browser()
 		close_data_browser_file_dialog();
 		close_add_dialog();
 		list.reload();
+		init();
+	}
+	
+	/**
+	 * Closes all open dialogs and reinitialises all event handlers
+	 */
+	function reinit_without_reload()
+	{
+		$("#DataBrowserAddFileDialog").remove();
+		close_data_browser_file_dialog();
+		close_add_dialog();
 		init();
 	}
 	
