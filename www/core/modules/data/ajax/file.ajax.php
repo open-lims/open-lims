@@ -257,6 +257,7 @@ class FileAjax extends Ajax
 		$template->set_var("session_id", $_GET[session_id]);
 		$button_handler = "
 			uploader.start_upload();
+			fadeout_ui_window();
 			function check_if_uploader_finished()
 			{
 				if(uploader.is_finished() == true)
@@ -273,7 +274,7 @@ class FileAjax extends Ajax
 		$button_handler_caption = "Add";
 		$html_caption = "Add File";
 		$html = $template->get_string();
-		$additional_script = "uploader.init();";
+		$additional_script = "uploader = new base_upload(\"".$unique_id."\",\"".$_GET[session_id]."\");";
 		$array = array("content"=>$html , "content_caption"=>$html_caption , "handler"=>$button_handler , "handler_caption"=>$button_handler_caption, "additional_script"=>$additional_script);
 		return json_encode($array);
 	}
