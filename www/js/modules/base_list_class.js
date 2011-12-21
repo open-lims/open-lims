@@ -45,7 +45,8 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 	var number_of_entries = 0;
 	var number_of_pages = 0;
 
-	this.reload = function() {
+	this.reload = function() 
+	{
 		count_entries();
 		if(number_of_pages < page)
 		{
@@ -53,6 +54,81 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 		}
 		load_content(sort_value, sort_method, page);
 	}
+	
+	this.reinit_sort_handler = function()
+	{
+		$("." + css_main_id + "Column").each(function() 	
+		{
+			$(this).bind("click", function() 
+			{
+				var id = $(this).attr("id");
+				sort_value = id.replace(css_main_id + "Column", "");
+
+				var sort_method_key = check_array(sort_value);
+				if (sort_method_key != -1) 
+				{
+					if (sort_array[sort_method_key][1] == "asc") 
+					{
+						sort_array[sort_method_key][1] = "desc";
+						sort_method = "desc";
+
+						change_symbol(id, "downside");
+					} 
+					else 
+					{
+						sort_array[sort_method_key][1] = "asc";
+						sort_method = "asc";
+
+						change_symbol(id, "upside");
+					}
+				}
+				else
+				{
+					sort_array_length = sort_array.length;
+
+					sort_array[sort_array_length] = new Array();
+					sort_array[sort_array_length][0] = sort_value;
+					sort_array[sort_array_length][1] = "asc";
+					sort_method = "asc";
+
+					change_symbol(id, "upside");
+				}
+
+				load_content(sort_value, sort_method, page);
+			});
+		});
+	}
+
+	reinit_page_handler = function(local_page) 
+	{
+		if(local_page != undefined)
+		{
+			page = local_page;
+		}
+		
+		$.ajax({
+			type : "GET",
+			url : "core/modules/base/ajax/list.ajax.php",
+			data : "username=" + get_array['username'] + "&session_id="
+					+ get_array['session_id'] + "&run=get_page_bar&page="
+					+ page + "&number_of_pages=" + number_of_pages
+					+ "&css_page_id=" + css_main_id + "Page",
+			async : false,
+			success : function(data) {
+				$("#" + css_main_id + "PageBar").html(data);
+
+				$("." + css_main_id + "Page").each(function() {
+					$(this).bind("click",function() {
+						var id = $(this).attr("id");
+						page = id.replace(css_main_id + "Page", "");
+						load_content(sort_value, sort_method, page);
+					});
+				});
+			}
+		});
+	}
+	
+	this.reinit_page_handler = reinit_page_handler;
 
 	this.get_argument_array = function()
 	{
@@ -105,26 +181,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 
 		count_entries();
 
-		$.ajax({
-			type : "GET",
-			url : "core/modules/base/ajax/list.ajax.php",
-			data : "username=" + get_array['username'] + "&session_id="
-					+ get_array['session_id'] + "&run=get_page_bar&page="
-					+ page + "&number_of_pages=" + number_of_pages
-					+ "&css_page_id=" + css_main_id + "Page",
-			async : false,
-			success : function(data) {
-				$("#" + css_main_id + "PageBar").html(data);
-
-				$("." + css_main_id + "Page").each(function() {
-					$(this).click(function() {
-						var id = $(this).attr("id");
-						page = id.replace(css_main_id + "Page", "");
-						load_content(sort_value, sort_method, page);
-					});
-				});
-			}
-		});
+		reinit_page_handler(page);
 
 		$.ajax({
 			type : "GET",
@@ -213,37 +270,6 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 				});
 	}
 
-	$("." + css_main_id + "Column").each(function() {
-		$(this).click(function() {
-			var id = $(this).attr("id");
-			sort_value = id.replace(css_main_id + "Column", "");
 
-			var sort_method_key = check_array(sort_value);
-			if (sort_method_key != -1) {
-				if (sort_array[sort_method_key][1] == "asc") {
-					sort_array[sort_method_key][1] = "desc";
-					sort_method = "desc";
-
-					change_symbol(id, "downside");
-				} else {
-					sort_array[sort_method_key][1] = "asc";
-					sort_method = "asc";
-
-					change_symbol(id, "upside");
-				}
-			} else {
-				sort_array_length = sort_array.length;
-
-				sort_array[sort_array_length] = new Array();
-				sort_array[sort_array_length][0] = sort_value;
-				sort_array[sort_array_length][1] = "asc";
-				sort_method = "asc";
-
-				change_symbol(id, "upside");
-			}
-
-			load_content(sort_value, sort_method, page);
-		});
-	});
-
+	this.reinit_sort_handler();
 }

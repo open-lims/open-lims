@@ -744,12 +744,20 @@ function data_browser()
 	 */
 	function init_menu_handler()
 	{
-		$(".DataBrowserAjaxPage")
-			.unbind("click")
-			.click(function(event) 
-			{ 
-				init(); //re-init on page change
-			});
+		$(".DataBrowserAjaxPage").unbind("click");
+		list.reinit_page_handler();
+		$(".DataBrowserAjaxPage").bind("click",function(event) 
+		{ 
+			init(); //re-init on page change
+		});
+		
+		$(".DataBrowserAjaxColumn").unbind("click");
+		list.reinit_sort_handler();
+		$(".DataBrowserAjaxColumn").bind("click",function(event) 
+		{ 
+			init(); //re-init on page change
+		});
+		
 		
 		$("#DataBrowserMenuAdd")
 			.unbind("click")
