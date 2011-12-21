@@ -260,7 +260,7 @@ class AdminOrganisationUnitIO
 			$content_array[$last_counter][show_line] = true;
 		}
 		
-		$template = new Template("template/organisation_unit/admin/organisation_unit/list.html");
+		$template = new HTMLTemplate("organisation_unit/admin/organisation_unit/list.html");
 		
 		$paramquery = $_GET;
 		$paramquery[action] = "add";
@@ -306,7 +306,7 @@ class AdminOrganisationUnitIO
 	
 			if ($page_1_passed == false)
 			{
-				$template = new Template("template/organisation_unit/admin/organisation_unit/add.html");
+				$template = new HTMLTemplate("organisation_unit/admin/organisation_unit/add.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -421,7 +421,7 @@ class AdminOrganisationUnitIO
 			{
 				if ($_GET[sure] != "true")
 				{
-					$template = new Template("template/organisation_unit/admin/organisation_unit/delete.html");
+					$template = new HTMLTemplate("organisation_unit/admin/organisation_unit/delete.html");
 					
 					$paramquery = $_GET;
 					$paramquery[sure] = "true";
@@ -479,7 +479,7 @@ class AdminOrganisationUnitIO
 		{
 			$organisation_unit_id = $_GET[id];
 		
-			$template = new Template("template/organisation_unit/admin/organisation_unit/detail.html");
+			$template = new HTMLTemplate("organisation_unit/admin/organisation_unit/detail.html");
 			
 			if ($user->is_admin())
 			{
@@ -708,7 +708,7 @@ class AdminOrganisationUnitIO
 			
 			require_once("core/modules/base/common/io/user_common.io.php");
 			
-			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_member.html");
+			$template = new HTMLTemplate("organisation_unit/admin/organisation_unit/detail_member.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("ORGANISATION_UNIT_ID", $_GET[id]);
 			$template->set_var("ADD_DIALOG", UserCommonIO::user_select_dialog());
@@ -731,7 +731,7 @@ class AdminOrganisationUnitIO
 			
 			require_once("core/modules/base/common/io/user_common.io.php");
 			
-			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_group.html");
+			$template = new HTMLTemplate("organisation_unit/admin/organisation_unit/detail_group.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("ORGANISATION_UNIT_ID", $_GET[id]);
 			$template->set_var("ADD_DIALOG", UserCommonIO::group_select_dialog());
@@ -754,7 +754,7 @@ class AdminOrganisationUnitIO
 			
 			require_once("core/modules/base/common/io/user_common.io.php");
 			
-			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_owner.html");
+			$template = new HTMLTemplate("organisation_unit/admin/organisation_unit/detail_owner.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("ORGANISATION_UNIT_ID", $_GET[id]);
 			$template->set_var("ADD_DIALOG", UserCommonIO::user_select_dialog());
@@ -777,7 +777,7 @@ class AdminOrganisationUnitIO
 			
 			require_once("core/modules/base/common/io/user_common.io.php");
 			
-			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_leader.html");
+			$template = new HTMLTemplate("organisation_unit/admin/organisation_unit/detail_leader.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("ORGANISATION_UNIT_ID", $_GET[id]);
 			$template->set_var("ADD_DIALOG", UserCommonIO::user_select_dialog());
@@ -800,7 +800,7 @@ class AdminOrganisationUnitIO
 			
 			require_once("core/modules/base/common/io/user_common.io.php");
 			
-			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_quality_manager.html");
+			$template = new HTMLTemplate("organisation_unit/admin/organisation_unit/detail_quality_manager.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("ORGANISATION_UNIT_ID", $_GET[id]);
 			$template->set_var("ADD_DIALOG", UserCommonIO::user_select_dialog());
@@ -821,7 +821,7 @@ class AdminOrganisationUnitIO
 		{
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
-			$template = new Template("template/organisation_unit/admin/organisation_unit/detail_address.html");
+			$template = new HTMLTemplate("organisation_unit/admin/organisation_unit/detail_address.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("CLIENT", SystemHandler::module_exists("client"));
 			$template->output();
@@ -872,7 +872,7 @@ class AdminOrganisationUnitIO
 			
 			if ($page_1_passed == false)
 			{
-				$template = new Template("template/organisation_unit/admin/organisation_unit/rename.html");
+				$template = new HTMLTemplate("organisation_unit/admin/organisation_unit/rename.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -1161,7 +1161,7 @@ class AdminOrganisationUnitIO
 	
 	public static function home_dialog()
 	{
-		$template = new Template("template/organisation_unit/admin/organisation_unit/home_dialog.html");
+		$template = new HTMLTemplate("organisation_unit/admin/organisation_unit/home_dialog.html");
 	
 		$paramquery 			= array();
 		$paramquery[username] 	= $_GET[username];

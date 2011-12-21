@@ -386,7 +386,7 @@ class DataAjax
 			
 			$data_permission = new DataPermission($type, $id);
 											
-			$template = new Template("../../../../template/data/data_permission_window.html");
+			$template = new HTMLTemplate("data/data_permission_window.html");
 			
 			$paramquery = $_GET;
 			unset($paramquery[run]);

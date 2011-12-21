@@ -33,7 +33,7 @@ class Login_IO
 	 */
 	public static function login()
 	{
-		$template = new Template("template/base/login/login.html");
+		$template = new HTMLTemplate("base/login/login.html");
 
 		$template->set_var("footer",constant("LOGIN_FOOTER"));
 
@@ -72,7 +72,7 @@ class Login_IO
 			endswitch;
 		}
 		
-		$template = new Template("template/base/login/forgot_password.html");
+		$template = new HTMLTemplate("base/login/forgot_password.html");
 
 		$template->set_var("footer",constant("LOGIN_FOOTER"));
 		
@@ -93,7 +93,7 @@ class Login_IO
 	 */
 	public static function forgot_password_proceed($success)
 	{
-		$template = new Template("template/base/login/forgot_password_proceed.html");
+		$template = new HTMLTemplate("base/login/forgot_password_proceed.html");
 		
 		if ($success == true)
 		{
@@ -110,7 +110,7 @@ class Login_IO
 	
 	public static function login_info()
 	{
-		$template = new Template("template/base/login/info.html");
+		$template = new HTMLTemplate("base/login/info.html");
 		$template->set_var("version",constant("PRODUCT_VERSION"));
 		$template->set_var("product_name",constant("PRODUCT"));
 		$template->set_var("footer",constant("LOGIN_FOOTER"));
@@ -119,7 +119,7 @@ class Login_IO
 	
 	public static function login_help()
 	{
-		$template = new Template("template/base/login/help.html");
+		$template = new HTMLTemplate("base/login/help.html");
 		$template->set_var("footer",constant("LOGIN_FOOTER"));
 		$template->output();
 	}
@@ -128,7 +128,7 @@ class Login_IO
 	{
 		$auth = new Auth();
 		
-		$template = new Template("template/login_header.html");
+		$template = new HTMLTemplate("login_header.html");
 		$template->output();
 		
 		switch ($_GET[run]):

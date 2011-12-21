@@ -45,7 +45,7 @@ class BaseIO
 		$entry_count = count($system_message_array);
 		$number_of_pages = ceil($entry_count/SYSTEM_MESSAGE_ENTRIES_PER_PAGE);
 		
-		$template = new Template("template/base/list_system_messages.html");	
+		$template = new HTMLTemplate("base/list_system_messages.html");	
 		
 		if (is_array($system_message_array) and count($system_message_array) >= 1)
 		{
@@ -103,7 +103,7 @@ class BaseIO
 	
 	public static function system_info()
 	{
-		$template = new Template("template/base/system_info.html");
+		$template = new HTMLTemplate("base/system_info.html");
 		
 		$template->set_var("product", constant("PRODUCT"));
 		$template->set_var("product_version", constant("PRODUCT_VERSION"));
@@ -177,7 +177,7 @@ class BaseIO
 	
 	public static function software_info()
 	{
-		$template = new Template("template/base/software_info.html");
+		$template = new HTMLTemplate("base/software_info.html");
 		
 		$template->set_var("product", constant("PRODUCT"));
 		$template->set_var("product_version", constant("PRODUCT_VERSION"));
@@ -193,7 +193,7 @@ class BaseIO
 	
 	public static function license()
 	{
-		$template = new Template("template/base/license.html");
+		$template = new HTMLTemplate("base/license.html");
 		$template->output();
 	}
 }

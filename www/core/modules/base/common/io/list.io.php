@@ -134,7 +134,7 @@ class List_IO
 			$path_prefix = "";
 		}
 	
-    	$template = new Template($path_prefix."template/base/list/list.html");	
+    	$template = new HTMLTemplate($path_prefix."base/list/list.html");	
     		
     	if ($this->display_header == true)
 		{

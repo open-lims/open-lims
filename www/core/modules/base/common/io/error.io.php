@@ -68,16 +68,16 @@ class Error_IO
 		{
 			if ($this->exception->is_security() == true)
 			{
-				$template = new Template("template/base/error/security_in_box.html");
+				$template = new HTMLTemplate("base/error/security_in_box.html");
 			}
 			else
 			{
-				$template = new Template("template/base/error/error_in_box.html");
+				$template = new HTMLTemplate("base/error/error_in_box.html");
 			}
 		}
 		else
 		{
-			$template = new Template("template/base/error/error_in_box.html");
+			$template = new HTMLTemplate("base/error/error_in_box.html");
 		}	
 
 		$template->set_var("error_msg", $this->get_error_message());
@@ -90,10 +90,10 @@ class Error_IO
 	 */
 	public static function fatal_error($message)
 	{
-		$template = new Template("template/login_header.html");
+		$template = new HTMLTemplate("login_header.html");
 		$template->output();
 		
-		$template = new Template("template/base/error/fatal.html");
+		$template = new HTMLTemplate("base/error/fatal.html");
 		$template->set_var("message", $message);
 		$template->output();
 	}
@@ -103,10 +103,10 @@ class Error_IO
 	 */
 	public static function security_out_of_box_error($message)
 	{
-		$template = new Template("template/login_header.html");
+		$template = new HTMLTemplate("login_header.html");
 		$template->output();
 		
-		$template = new Template("template/base/error/security_out_of_box.html");
+		$template = new HTMLTemplate("base/error/security_out_of_box.html");
 		$template->set_var("message", $message);
 		$template->output();
 	}

@@ -49,7 +49,7 @@ class ProjectIO
 		$list->add_column("Template", "template", true, null);
 		$list->add_column("Status", "status", true, null);
 
-		$template = new Template("template/project/list_user.html");
+		$template = new HTMLTemplate("project/list_user.html");
 	
 		if ($user_id == $user->get_user_id())
 		{
@@ -94,7 +94,7 @@ class ProjectIO
 				$organisation_unit_io = new OrganisationUnitIO;
 				$organisation_unit_io->detail();
 				
-				$template = new Template("template/project/list_organisation_unit.html");	
+				$template = new HTMLTemplate("project/list_organisation_unit.html");	
 	
 				$template->set_var("list", $list->get_list());
 		
@@ -113,7 +113,7 @@ class ProjectIO
 	
 	public static function create()
 	{
-		$template = new Template("template/project/create_project.html");	
+		$template = new HTMLTemplate("project/create_project.html");	
 		
 		require_once("core/modules/base/common/io/assistant.io.php");
 		
@@ -145,7 +145,7 @@ class ProjectIO
 				$project = new Project($_GET[project_id]);
 				$project_owner = new User($project->get_owner_id());
 			
-				$template = new Template("template/project/project_detail.html");
+				$template = new HTMLTemplate("project/project_detail.html");
 				
 				$template->set_var("get_array", serialize($_GET));
 				
@@ -196,7 +196,7 @@ class ProjectIO
 				$project = new Project($_GET[project_id]);
 				$project_structure_array = $project->get_project_tree();
 				
-				$template = new Template("template/project/project_structure.html");
+				$template = new HTMLTemplate("project/project_structure.html");
 				
 				if (is_array($project_structure_array) and count($project_structure_array) >= 1)
 				{
@@ -300,7 +300,7 @@ class ProjectIO
 			{
 				$list = new List_IO("ProjectByItem", "ajax.php?nav=project", "list_projects_by_item_id", "count_projects_by_item_id", $argument_array, "ProjectParentAjax", 20, true, true);
 				
-				$template = new Template($path_prefix."template/project/list_projects_by_item.html");
+				$template = new HTMLTemplate("project/list_projects_by_item.html");
 				
 				$list->add_column("","symbol",false,16);
 				$list->add_column("Name","name",true,null);
@@ -313,7 +313,7 @@ class ProjectIO
 			{
 				$list = new List_IO("ProjectByItem", "/core/modules/project/ajax/project.ajax.php", "list_projects_by_item_id", "count_projects_by_item_id", $argument_array, "ProjectParentAjax", 20, false, false);
 				
-				$template = new Template($path_prefix."template/project/list_projects_by_item_without_border.html");
+				$template = new HTMLTemplate("project/list_projects_by_item_without_border.html");
 				
 				$list->add_column("","checkbox",false,"16px", $form_field_name);
 				$list->add_column("","symbol",false,16);

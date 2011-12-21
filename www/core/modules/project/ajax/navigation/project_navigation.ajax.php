@@ -45,7 +45,7 @@ class ProjectAjax extends Ajax
 	
 	private function get_html()
 	{
-		$template = new Template("../../../../../template/project/navigation/left.html");
+		$template = new HTMLTemplate("project/navigation/left.html");
 		$template->output();
 	}
 	

@@ -81,7 +81,7 @@ class AdminSampleTemplateIO
 			$list->override_last_line("<span class='italic'>No results found!</span>");
 		}
 		
-		$template = new Template("template/sample/admin/sample_template/list.html");	
+		$template = new HTMLTemplate("sample/admin/sample_template/list.html");	
 	
 		$paramquery = $_GET;
 		$paramquery[action] = "add";
@@ -109,7 +109,7 @@ class AdminSampleTemplateIO
 
 		if ($page_1_passed == false)
 		{
-			$template = new Template("template/sample/admin/sample_template/add.html");
+			$template = new HTMLTemplate("sample/admin/sample_template/add.html");
 			
 			$paramquery = $_GET;
 			$paramquery[nextpage] = "1";
@@ -194,7 +194,7 @@ class AdminSampleTemplateIO
 		{
 			if ($_GET[sure] != "true")
 			{
-				$template = new Template("template/sample/admin/sample_template/delete.html");
+				$template = new HTMLTemplate("sample/admin/sample_template/delete.html");
 				
 				$paramquery = $_GET;
 				$paramquery[sure] = "true";

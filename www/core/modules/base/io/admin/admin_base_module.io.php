@@ -95,7 +95,7 @@ class AdminBaseModuleIO
 			$list->override_last_line("<span class='italic'>No results found!</span>");
 		}
 		
-		$template = new Template("template/base/admin/base_module/list.html");
+		$template = new HTMLTemplate("base/admin/base_module/list.html");
 
 		$template->set_var("table", $list->get_list($result_array, $_GET[page]));
 		

@@ -41,7 +41,7 @@ class SampleIO
 		$list->add_column("Curr. Loc.","location",true,null);
 		$list->add_column("AV","av",false,"16px");
 		
-		$template = new Template("template/sample/list_user.html");	
+		$template = new HTMLTemplate("sample/list_user.html");	
 		
 		$template->set_var("list", $list->get_list());
 		
@@ -78,7 +78,7 @@ class SampleIO
 				$organisation_unit_io = new OrganisationUnitIO;
 				$organisation_unit_io->detail();
 				
-				$template = new Template("template/sample/list.html");
+				$template = new HTMLTemplate("sample/list.html");
 	
 				$template->set_var("list", $list->get_list());
 				
@@ -122,7 +122,7 @@ class SampleIO
 			{
 				$list = new List_IO("SampleByItem", "ajax.php?nav=sample", "list_samples_by_item_id", "count_samples_by_item_id", $argument_array, "SampleParentAjax", 20, true, true);
 				
-				$template = new Template($path_prefix."template/sample/list_parents.html");
+				$template = new HTMLTemplate("sample/list_parents.html");
 				
 				$list->add_column("","symbol",false,"16px");
 				$list->add_column("Smpl. ID","sid",true,"11%");
@@ -137,7 +137,7 @@ class SampleIO
 			{
 				$list = new List_IO("SampleByItem", "ajax.php?nav=sample", "list_samples_by_item_id", "count_samples_by_item_id", $argument_array, "SampleParentAjax", 20, false, false);
 				
-				$template = new Template($path_prefix."template/sample/list_parents_without_border.html");
+				$template = new HTMLTemplate("sample/list_parents_without_border.html");
 				
 				$list->add_column("","checkbox",false,"16px", $form_field_name);
 				$list->add_column("","symbol",false,"16px");
@@ -193,7 +193,7 @@ class SampleIO
 		{
 			$list = new List_IO("SampleItem", "ajax.php?nav=sample", "list_sample_items", "count_sample_items",  $argument_array, "SampleAjax", 20, true, true);
 			
-			$template = new Template($path_prefix."template/sample/list.html");
+			$template = new HTMLTemplate("sample/list.html");
 			
 			$list->add_column("","symbol",false,"16px");
 			$list->add_column("Smpl. ID","sid",true,"11%");
@@ -208,7 +208,7 @@ class SampleIO
 		{
 			$list = new List_IO("SampleItem", "ajax.php?nav=sample", "list_sample_items", "count_sample_items", $argument_array, "SampleAjax", 20, false, false);
 			
-			$template = new Template($path_prefix."template/sample/list_without_border.html");
+			$template = new HTMLTemplate("sample/list_without_border.html");
 			
 			$list->add_column("","checkbox",false,"16px", $form_field_name);
 			$list->add_column("","symbol",false,"16px");
@@ -279,7 +279,7 @@ class SampleIO
 			$session->delete_value("SAMPLE_ITEM_DESCRIPTION");
 		}
 		
-		$template = new Template("template/sample/create_sample.html");	
+		$template = new HTMLTemplate("sample/create_sample.html");	
 		
 		require_once("core/modules/base/common/io/assistant.io.php");
 		
@@ -359,7 +359,7 @@ class SampleIO
 			$session->write_value("SAMPLE_CLONE_CATEGORY_ARRAY", $type_array, true);
 		}
 		
-		$template = new Template("template/sample/clone_sample.html");	
+		$template = new HTMLTemplate("sample/clone_sample.html");	
 		
 		require_once("core/modules/base/common/io/assistant.io.php");
 		
@@ -400,7 +400,7 @@ class SampleIO
 				$session->write_value("ADD_ITEM_TEMP_DESCRIPTION_".$unique_id, $_POST[description], true);
 			}
 			
-			$template = new Template("template/sample/add_as_item.html");
+			$template = new HTMLTemplate("sample/add_as_item.html");
 		
 			$result = array();
 			$counter = 0;
@@ -444,7 +444,7 @@ class SampleIO
 					
 		if ($_GET[nextpage] < 2)
 		{
-			$template = new Template("template/sample/associate.html");
+			$template = new HTMLTemplate("sample/associate.html");
 			
 			$paramquery = $_GET;
 			$paramquery[nextpage] = 2;
@@ -535,7 +535,7 @@ class SampleIO
 				$sample = new Sample($_GET[sample_id]);
 				$owner = new User($sample->get_owner_id());
 			
-				$template = new Template("template/sample/detail.html");
+				$template = new HTMLTemplate("sample/detail.html");
 				
 				$paper_size_array = PaperSize::list_entries();
 				$template->set_var("paper_size_array", $paper_size_array);
@@ -792,7 +792,7 @@ class SampleIO
 				
 				if ($page_1_passed == false)
 				{
-					$template = new Template("template/sample/move.html");
+					$template = new HTMLTemplate("sample/move.html");
 						
 					$paramquery = $_GET;
 					$paramquery[nextpage] = "1";
@@ -871,7 +871,7 @@ class SampleIO
 			{
 				if ($_GET[sure] != "true")
 				{
-					$template = new Template("template/sample/set_availability.html");
+					$template = new HTMLTemplate("sample/set_availability.html");
 					
 					$paramquery = $_GET;
 					$paramquery[sure] = "true";
@@ -1002,7 +1002,7 @@ class SampleIO
 					$list->override_last_line("<span class='italic'>No results found!</span>");
 				}
 	
-				$template = new Template("template/sample/location_history.html");
+				$template = new HTMLTemplate("sample/location_history.html");
 				
 				$sample = new Sample($_GET[sample_id]);
 				

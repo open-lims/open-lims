@@ -39,7 +39,7 @@ class FileIO
 			
 			if ($file->is_read_access())
 			{
-				$template = new Template("template/data/file_detail.html");
+				$template = new HTMLTemplate("data/file_detail.html");
 				
 				$folder = Folder::get_instance($file->get_parent_folder_id());
 				
@@ -53,7 +53,7 @@ class FileIO
 						}
 					}
 					
-					$template = new Template("template/data/file_detail.html");
+					$template = new HTMLTemplate("data/file_detail.html");
 					
 					$folder = Folder::get_instance($file->get_parent_folder_id());
 					
@@ -367,7 +367,7 @@ class FileIO
 			$list->add_column("Date/Time","datetime",false,null);
 		}
 				
-		$template = new Template($path_prefix."template/data/file_list.html");	
+		$template = new HTMLTemplate("data/file_list.html");	
 		
 		$template->set_var("list", $list->get_list());
 		
@@ -385,7 +385,7 @@ class FileIO
 	{		
 		if (is_numeric($folder_id))
 		{
-			$template = new Template("template/data/file_upload_item.html");
+			$template = new HTMLTemplate("data/file_upload_item.html");
 			
 			$unique_id = uniqid();
 			
@@ -454,7 +454,7 @@ class FileIO
 			
 			if ($folder->is_write_access() == true)
 			{
-				$template = new Template("template/data/file_upload.html");
+				$template = new HTMLTemplate("data/file_upload.html");
 				
 				$unique_id = uniqid();
 				
@@ -509,7 +509,7 @@ class FileIO
 			
 			if ($file->is_write_access())
 			{
-				$template = new Template("template/data/file_update.html");
+				$template = new HTMLTemplate("data/file_update.html");
 				
 				$unique_id = uniqid();
 				
@@ -566,7 +566,7 @@ class FileIO
 			{
 				if ($_GET[sure] != "true")
 				{
-					$template = new Template("template/data/file_delete.html");
+					$template = new HTMLTemplate("data/file_delete.html");
 					
 					$paramquery = $_GET;
 					$paramquery[sure] = "true";
@@ -636,7 +636,7 @@ class FileIO
 				{
 					if ($_GET[sure] != "true")
 					{
-						$template = new Template("template/data/file_delete_version.html");
+						$template = new HTMLTemplate("data/file_delete_version.html");
 						
 						$paramquery = $_GET;
 						$paramquery[sure] = "true";
@@ -798,7 +798,7 @@ class FileIO
 					$list->override_last_line("<span class='italic'>No results found!</span>");
 				}
 				
-				$template = new Template("template/data/file_history.html");
+				$template = new HTMLTemplate("data/file_history.html");
 
 				$template->set_var("table", $list->get_list($result_array, $_GET[page]));
 				

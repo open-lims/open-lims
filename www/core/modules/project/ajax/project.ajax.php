@@ -523,7 +523,7 @@ class ProjectAjax
 		{
 			$project = new Project($_GET[project_id]);
 			
-			$template = new Template("template/project/ajax/detail_status.html");
+			$template = new HTMLTemplate("project/ajax/detail_status.html");
 		
 			// Status Bar
 			$all_status_array = $project->get_all_status_array();				
@@ -619,7 +619,7 @@ class ProjectAjax
 			$project = new Project($_GET[project_id]);
 			$project_security = new ProjectSecurity($_GET[project_id]);
 			
-			$template = new Template("template/project/ajax/detail_menu.html");
+			$template = new HTMLTemplate("project/ajax/detail_menu.html");
 			
 			switch ($project->is_next_status_available()):
 				case(0):
@@ -813,7 +813,7 @@ class ProjectAjax
 					echo "0:";
 				}
 				
-				$template = new Template("template/project/ajax/proceed.html");
+				$template = new HTMLTemplate("project/ajax/proceed.html");
 							
 				$project_template = new ProjectTemplate($project->get_template_id());
 				$current_status_requirements 	= $project->get_current_status_requirements();

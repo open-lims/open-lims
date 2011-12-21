@@ -51,7 +51,7 @@ class EquipmentIO
 		{
 			$equipment_array = EquipmentType::list_entries();
 		
-			$template = new Template("template/equipment/add.html");
+			$template = new HTMLTemplate("equipment/add.html");
 			
 			$paramquery = $_GET;
 			$paramquery[nextpage] = 2;
@@ -247,7 +247,7 @@ class EquipmentIO
 		{
 			$list = new List_IO("EquipmentItem", "ajax.php?nav=equipment", "list_equipment_items", "count_equipment_items", $argument_array, "EquipmentAjax", 20, true, true);
 			
-			$template = new Template($path_prefix."template/equipment/list.html");
+			$template = new HTMLTemplate("equipment/list.html");
 			
 			$list->add_column("","symbol",false,"16px");
 			$list->add_column("Equipment Name","name",true,null);
@@ -258,7 +258,7 @@ class EquipmentIO
 		{
 			$list = new List_IO("EquipmentItem", "ajax.php?nav=equipment", "list_equipment_items", "count_equipment_items", $argument_array, "EquipmentAjax", 20, false, false);
 			
-			$template = new Template($path_prefix."template/equipment/list_without_border.html");
+			$template = new HTMLTemplate("equipment/list_without_border.html");
 			
 			$list->add_column("","checkbox",false,"16px", $form_field_name);
 			$list->add_column("","symbol",false,"16px");
@@ -356,7 +356,7 @@ class EquipmentIO
 				$list->override_last_line("<span class='italic'>No results found!</span>");
 			}
 			
-			$template = new Template("template/equipment/list_organisation_unit.html");
+			$template = new HTMLTemplate("equipment/list_organisation_unit.html");
 
 			$template->set_var("table", $list->get_list($result_array, $_GET[page]));
 			
@@ -394,7 +394,7 @@ class EquipmentIO
 			$equipment_type = new EquipmentType($type_id);
 			$equipment_owner = new User($owner_id);
 						
-			$template = new Template("template/equipment/detail.html");
+			$template = new HTMLTemplate("equipment/detail.html");
 
 			$template->set_var("name", $equipment_type->get_name());
 			$template->set_var("category", $equipment_type->get_cat_name());

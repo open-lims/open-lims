@@ -35,7 +35,7 @@ class AdminBaseIncludeIO
 		$list->add_column("Folder","folder",true,null);
 		$list->add_column("Event Listeners","eventlisteners",true,null);
 		
-		$template = new Template("template/base/admin/base_include/list.html");	
+		$template = new HTMLTemplate("base/admin/base_include/list.html");	
 		
 		$template->set_var("list", $list->get_list());
 		

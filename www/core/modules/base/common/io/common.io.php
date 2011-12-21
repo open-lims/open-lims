@@ -219,7 +219,7 @@ class Common_IO
 	 */
 	public static function step_proceed($target, $title, $text, $css_class)
 	{
-		$template = new Template("template/base/step_proceed.html");
+		$template = new HTMLTemplate("base/step_proceed.html");
 		
 		$template->set_var("target",$target);
 		$template->set_var("title",$title);

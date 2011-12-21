@@ -75,7 +75,7 @@ class LeftNavigationIO
 			}
 		}
 
-		$template = new Template("template/base/navigation/left/main.html");
+		$template = new HTMLTemplate("base/navigation/left/main.html");
 		
 		$template->set_var("symbols", $symbols_array);
 		$template->set_var("js", $js_array);

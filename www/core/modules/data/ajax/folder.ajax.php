@@ -166,7 +166,7 @@ class FolderAjax extends Ajax
 				$paramquery[sure] = "true";
 				$paramquery[nextpage] = "1";
 				$params = http_build_query($paramquery);
-				$template = new Template("../../../../template/data/folder_delete_window.html");
+				$template = new HTMLTemplate("data/folder_delete_window.html");
 				$template->set_var("params", $params);
 				$button_handler = "
 					var new_name = $('#RenameFolderInput').val();
@@ -185,7 +185,7 @@ class FolderAjax extends Ajax
 				$html = $template->get_string();
 			break;
 			case "folder_rename":
-				$template = new Template("../../../../template/data/folder_rename_window.html");
+				$template = new HTMLTemplate("data/folder_rename_window.html");
 				$button_handler = "
 					var new_name = $('#RenameFolderInput').val();
 					$.ajax({
@@ -265,7 +265,7 @@ class FolderAjax extends Ajax
 			";
 			$button_handler_caption = "Add";
 			$html_caption = "Add Folder";
-			$template = new Template("../../../../template/data/folder_add_window.html");
+			$template = new HTMLTemplate("data/folder_add_window.html");
 			$html = $template->get_string();
 			$array = array("content"=>$html , "content_caption"=>$html_caption , "handler"=>$button_handler , "handler_caption"=>$button_handler_caption);
 			return json_encode($array);

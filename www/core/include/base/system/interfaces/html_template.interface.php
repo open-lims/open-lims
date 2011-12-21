@@ -26,7 +26,7 @@
  * Template Engine Interface
  * @package base
  */
-interface TemplateInterface
+interface HTMLTemplateInterface
 {
 	/**
 	 * @param string $file complete path of file

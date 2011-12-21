@@ -97,7 +97,7 @@ class AdminLocationIO
 	
 	public static function home()
 	{
-		$template = new Template("template/location/admin/location/list.html");	
+		$template = new HTMLTemplate("location/admin/location/list.html");	
 
 		$content_array = array();
 		
@@ -191,7 +191,7 @@ class AdminLocationIO
 	
 			if ($page_1_passed == false)
 			{
-				$template = new Template("template/location/admin/location/add.html");
+				$template = new HTMLTemplate("location/admin/location/add.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -324,7 +324,7 @@ class AdminLocationIO
 	
 			if ($page_1_passed == false)
 			{
-				$template = new Template("template/location/admin/location/edit.html");
+				$template = new HTMLTemplate("location/admin/location/edit.html");
 				
 				$paramquery = $_GET;
 				$paramquery[nextpage] = "1";
@@ -463,7 +463,7 @@ class AdminLocationIO
 		{
 			if ($_GET[sure] != "true")
 			{
-				$template = new Template("template/location/admin/location/delete.html");
+				$template = new HTMLTemplate("location/admin/location/delete.html");
 				
 				$paramquery = $_GET;
 				$paramquery[sure] = "true";

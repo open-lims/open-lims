@@ -73,7 +73,7 @@ class SampleCloneAjax extends Ajax
 				$sample_source_sample 	= $session->read_value("SAMPLE_CLONE_SOURCE_SAMPLE");
 				$sample_type_array 		= $session->read_value("SAMPLE_CLONE_TYPE_ARRAY");
 				
-				$template = new Template("../../../../template/sample/clone_sample_page_1.html");	
+				$template = new HTMLTemplate("sample/clone_sample_page_1.html");	
 	
 				$result = array();
 				$counter = 0;
@@ -138,7 +138,7 @@ class SampleCloneAjax extends Ajax
 				$sample_template_obj = new SampleTemplate($source_sample->get_template_id());
 				$information_fields = $sample_template_obj->get_information_fields();
 
-				$template = new Template("../../../../template/sample/clone_sample_page_2.html");
+				$template = new HTMLTemplate("sample/clone_sample_page_2.html");
 				
 				if ($information_fields[manufacturer][name] and $information_fields[manufacturer][requirement] != "optional")
 				{
@@ -339,7 +339,7 @@ class SampleCloneAjax extends Ajax
 					}
 				}
 												
-				$template = new Template("../../../../template/sample/clone_sample_page_3.html");	
+				$template = new HTMLTemplate("sample/clone_sample_page_3.html");	
 				
 				if (is_array($value_array) and count($value_array) >= 1)
 				{
@@ -378,7 +378,7 @@ class SampleCloneAjax extends Ajax
 				
 				$source_sample = new Sample($sample_source_sample);
 				
-				$template = new Template("../../../../template/sample/clone_sample_page_4.html");	
+				$template = new HTMLTemplate("sample/clone_sample_page_4.html");	
 				
 				$module_dialog_array = ModuleDialog::list_dialogs_by_type("item_assistant_list");
 		
@@ -445,7 +445,7 @@ class SampleCloneAjax extends Ajax
 				$sample_expiry_warning		= $session->read_value("SAMPLE_CLONE_EXPIRY_WARNING");
 				$sample_description			= $session->read_value("SAMPLE_CLONE_DESCRIPTION");
 				
-				$template = new Template("../../../../template/sample/clone_sample_page_5.html");
+				$template = new HTMLTemplate("sample/clone_sample_page_5.html");
 			
 				$organisation_unit = new OrganisationUnit($sample_organ_unit);
 				$template->set_var("sample_organisation_unit",$organisation_unit->get_name());

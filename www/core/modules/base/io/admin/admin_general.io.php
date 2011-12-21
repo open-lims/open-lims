@@ -37,7 +37,7 @@ class AdminGeneralIO
 		$list->add_column("ISO 639","iso_639",true,null);
 		$list->add_column("ISO 3166","iso_3166",true,null);
 		
-		$template = new Template("template/base/admin/general/list_languages.html");
+		$template = new HTMLTemplate("base/admin/general/list_languages.html");
 		
 		$template->set_var("list", $list->get_list());
 		
@@ -52,7 +52,7 @@ class AdminGeneralIO
 		$list->add_column("Name","name",true,null);
 		$list->add_column("Deviation","deviation",true,null);
 		
-		$template = new Template("template/base/admin/general/list_timezones.html");
+		$template = new HTMLTemplate("base/admin/general/list_timezones.html");
 		
 		$template->set_var("list", $list->get_list());
 		
@@ -61,7 +61,7 @@ class AdminGeneralIO
 	
 	public static function list_paper_sizes()
 	{
-		$template = new Template("template/base/admin/general/list_paper_sizes.html");
+		$template = new HTMLTemplate("base/admin/general/list_paper_sizes.html");
 		$template->output();
 	}
 	
@@ -74,7 +74,7 @@ class AdminGeneralIO
 		$list->add_column("Type","type",true,null);
 		$list->add_column("Symbol","unit_symbol",false,null);
 		
-		$template = new Template("template/base/admin/general/list_measuring_units.html");
+		$template = new HTMLTemplate("base/admin/general/list_measuring_units.html");
 		
 		$template->set_var("list", $list->get_list());
 		
@@ -90,7 +90,7 @@ class AdminGeneralIO
 		$list->add_column("Symbol","currency_symbol",false,null);
 		$list->add_column("ISO 4217","iso_4217",true,null);
 		
-		$template = new Template("template/base/admin/general/list_currencies.html");
+		$template = new HTMLTemplate("base/admin/general/list_currencies.html");
 		
 		$template->set_var("list", $list->get_list());
 		
