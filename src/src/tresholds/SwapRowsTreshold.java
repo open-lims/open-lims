@@ -49,7 +49,7 @@ public class SwapRowsTreshold implements Treshold {
 
 		String[] row_to_switch = reader.readLine(row_index);
 		
-		boolean recursive_call_occurred = false;
+//		boolean recursive_call_occurred = false;
 		
 		for (int i = 0; i < row_to_switch.length; i++) 
 		{
@@ -57,6 +57,8 @@ public class SwapRowsTreshold implements Treshold {
 			{
 				if(current_associated_file_index < associated_files.length -1)
 				{
+					current_associated_file_index++;
+					
 					CSVReader r = open_readers.get(associated_files[current_associated_file_index]);
 					if(r == null)
 					{
@@ -68,20 +70,21 @@ public class SwapRowsTreshold implements Treshold {
 					
 //					if(current_associated_file_index == current_associated_file_index_backup) 
 //					{
-//						System.out.println("swapping row "+row_index+" (treshold reached in column "+column_index+") - reading file "+associated_files[current_associated_file_index]);
+						System.out.println(current_associated_file_index+"swapping row "+row_index+" (treshold reached in column "+column_index+") - reading file "+associated_files[current_associated_file_index]);
 //					}
 					
-					current_associated_file_index++;
+
 					
 					row_to_switch = apply_changes(row, column_index, row_index);
 					
 					recursive_call_occurred = true;
+					
 				}
 				else
 				{
 					if(recursive_call_occurred) 
 					{
-						System.out.println("correct value for row "+row_index+", column "+column_index+" could not be found in associated files!");
+						System.out.println(current_associated_file_index+"correct value for row "+row_index+", column "+column_index+" could not be found in associated files!");
 					}
 				}
 			}
