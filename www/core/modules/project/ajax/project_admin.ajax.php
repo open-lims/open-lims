@@ -539,9 +539,12 @@ class ProjectAdminAjax
 	/**
 	 * @param string $get_array
 	 * @return string
+	 * @throws ProjectSecurityAccessDeniedException;
 	 */
 	public static function delete_handler($get_array)
 	{
+		global $user;
+		
 		if ($get_array)
 		{
 			$_GET = unserialize($get_array);	
@@ -549,15 +552,32 @@ class ProjectAdminAjax
 		
 		if ($_GET['project_id'])
 		{
+			
 			$project = new Project($_GET['project_id']);
 
 			if ($project->get_deleted() == true)
 			{
-				$project->delete();
+				if ($user->is_admin() == true)
+				{
+					$project->delete();
+				}
+				else
+				{
+					throw new ProjectSecurityAccessDeniedException();
+				}
 			}
 			else
 			{
-				$project->mark_as_deleted();				
+				$project_security = new ProjectSecurity($_GET[project_id]);
+				
+				if ($project_security->is_access(6, false) == true)
+				{
+					$project->mark_as_deleted();		
+				}
+				else
+				{
+					throw new ProjectSecurityAccessDeniedException();
+				}		
 			}
 		}
 	}
@@ -604,9 +624,12 @@ class ProjectAdminAjax
 	 * @param string $get_array
 	 * @return string
 	 * @throws ProjectException
+	 * @throws ProjectSecurityAccessDeniedException
 	 */
 	public static function restore_handler($get_array)
 	{
+		global $user;
+		
 		if ($get_array)
 		{
 			$_GET = unserialize($get_array);	
@@ -616,16 +639,23 @@ class ProjectAdminAjax
 		{
 			$project = new Project($_GET['project_id']);
 
-			if ($project->get_deleted() == true)
+			if ($user->is_admin() == true)
 			{
-				if ($project->mark_as_undeleted() == false)
+				if ($project->get_deleted() == true)
+				{
+					if ($project->mark_as_undeleted() == false)
+					{
+						throw new ProjectException();
+					}
+				}
+				else
 				{
 					throw new ProjectException();
 				}
 			}
 			else
 			{
-				throw new ProjectException();
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 	}
@@ -682,9 +712,12 @@ class ProjectAdminAjax
 	 * @param string $comment
 	 * @return stirng
 	 * @throws ProjectException
+	 * @throws ProjectSecurityAccessDeniedException
 	 */
 	public static function cancel_handler($get_array, $comment)
 	{
+		global $user;
+		
 		if ($get_array)
 		{
 			$_GET = unserialize($get_array);	
@@ -696,18 +729,33 @@ class ProjectAdminAjax
 
 			if ($project->get_current_status_id() == 0)
 			{
-				if ($project->mark_as_reactivated() == false)
+				if ($user->is_admin() == true)
 				{
-					throw new ProjectException();
+					if ($project->mark_as_reactivated() == false)
+					{
+						throw new ProjectException();
+					}
+				}
+				else
+				{
+					throw new ProjectSecurityAccessDeniedException();
 				}
 			}
 			else
 			{
-				if ($project->mark_as_canceled($comment) == false)
-				{
-					throw new ProjectException();
-				}
+				$project_security = new ProjectSecurity($_GET[project_id]);
 				
+				if ($project_security->is_access(3, false) == true)
+				{
+					if ($project->mark_as_canceled($comment) == false)
+					{
+						throw new ProjectException();
+					}
+				}
+				else
+				{
+					throw new ProjectSecurityAccessDeniedException();
+				}
 			}
 		}
 	}

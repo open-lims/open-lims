@@ -71,6 +71,26 @@ class SampleRequest
 				echo SampleAjax::count_samples_by_item_id($_POST[argument_array]);
 			break;
 			
+			case "get_sample_menu":
+				require_once("ajax/sample.ajax.php");
+				echo SampleAjax::get_sample_menu($_POST[get_array]);
+			break;
+			
+			case "get_sample_information":
+				require_once("ajax/sample.ajax.php");
+				echo SampleAjax::get_sample_information($_POST[get_array]);
+			break;
+			
+			case "delete":
+				require_once("ajax/sample.ajax.php");
+				echo SampleAjax::delete($_POST[get_array]);
+			break;
+			
+			case "delete_handler":
+				require_once("ajax/sample.ajax.php");
+				echo SampleAjax::delete_handler($_POST[get_array]);
+			break;
+			
 			default:
 			break;
 		

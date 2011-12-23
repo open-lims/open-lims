@@ -882,14 +882,15 @@ class ProjectAjax
 		{
 			$project = new Project($_GET[project_id]);
 			
-			try
+			$project_security = new ProjectSecurity($_GET[project_id]);
+			
+			if ($project_security->is_access(3, false) == true)
 			{
 				$project->set_next_status();
-				return "1";
 			}
-			catch (ProjectSetNextStatusException $e)
+			else
 			{
-				return "0";
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 	}

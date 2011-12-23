@@ -27,6 +27,16 @@
  */
 class SampleAjax
 {
+	/**
+	 * @param string $json_column_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 */
 	public static function list_user_related_samples($json_column_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		global $user;
@@ -150,7 +160,10 @@ class SampleAjax
 		
 		return $list_request->get_page($page);
 	}
-	
+
+	/**
+	 * @return integer
+	 */
 	public static function count_user_related_samples()
 	{
 		global $user;
@@ -158,6 +171,17 @@ class SampleAjax
 		return Sample_Wrapper::count_user_samples($user->get_user_id());
 	}
 	
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 */
 	public static function list_organisation_unit_related_samples($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -291,6 +315,10 @@ class SampleAjax
 		}
 	}
 	
+	/**
+	 * @param string $json_argument_array
+	 * @return integer
+	 */
 	public static function count_organisation_unit_related_samples($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -307,6 +335,17 @@ class SampleAjax
 		}
 	}
 	
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 */
 	public static function list_sample_items($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -497,6 +536,10 @@ class SampleAjax
 		}
 	}
 	
+	/**
+	 * @param string $json_argument_array
+	 * @return integer
+	 */
 	public static function count_sample_items($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -517,6 +560,17 @@ class SampleAjax
 		}
 	}
 	
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 */
 	public static function list_samples_by_item_id($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -703,6 +757,10 @@ class SampleAjax
 		}
 	}
 
+	/**
+	 * @param string $json_argument_array
+	 * @return integer
+	 */
 	public static function count_samples_by_item_id($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -715,6 +773,355 @@ class SampleAjax
 		else
 		{
 			return null;
+		}
+	}
+	
+	/**
+	 * @param string $get_array
+	 */
+	public static function get_sample_menu($get_array)
+	{
+		global $user;
+		
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}
+		
+		if ($_GET[sample_id])
+		{
+			$sample_security = new SampleSecurity($_GET[sample_id]);
+			
+			if ($sample_security->is_access(1, false))
+			{
+				$sample = new Sample($_GET[sample_id]);
+				
+				$template = new HTMLTemplate("sample/ajax/detail_menu.html");
+				
+				if ($sample->get_availability() == true)
+				{
+					$template->set_var("new_status", "not available");
+				}
+				else
+				{
+					$template->set_var("new_status", "available");
+				}
+				
+				if ($sample->get_owner_id() == $user->get_user_id() or $user->is_admin() == true)
+				{
+					$template->set_var("is_owner", true);
+				}
+				else
+				{
+					$template->set_var("is_owner", false);	
+				}
+				
+				if ($user->is_admin() == true)
+				{
+					$template->set_var("is_admin", true);
+				}
+				else
+				{
+					$template->set_var("is_admin", false);	
+				}
+				
+				$sample_template 				= new SampleTemplate($sample->get_template_id());
+				$current_requirements 			= $sample->get_requirements();
+				$current_fulfilled_requirements = $sample->get_fulfilled_requirements();
+				
+				$result = array();
+				$counter = 0;
+				
+				if (is_array($current_requirements) and count($current_requirements) >= 1)
+				{
+					foreach($current_requirements as $key => $value)
+					{						
+						$paramquery = array();
+						$paramquery[username] = $_GET[username];
+						$paramquery[session_id] = $_GET[session_id];
+						$paramquery[nav] = "sample";
+						$paramquery[run] = "item_add";
+						$paramquery[sample_id] = $_GET[sample_id];
+						$paramquery[dialog] = $value[type];
+						$paramquery[key] = $key;
+						$paramquery[retrace] = Retrace::create_retrace_string();
+						unset($paramquery[nextpage]);
+						$params = http_build_query($paramquery,'','&#38;');
+
+						$result[$counter][name] = $value[name];
+
+						if ($current_fulfilled_requirements[$key] == true)
+						{
+							if ($value[occurrence] == "multiple")
+							{
+								$result[$counter][status] = 2;
+							}
+							else
+							{
+								$result[$counter][status] = 0;
+							}
+						}
+						else
+						{
+							$result[$counter][status] = 1;
+						}
+
+						if ($value[requirement] == "optional")
+						{
+							$result[$counter][name] = $result[$counter][name]." (optional)";
+						}
+						
+						$result[$counter][params] = $params;
+												
+						if ($sample_security->is_access(2, false))
+						{
+							$result[$counter][permission] = true;
+						}
+						else
+						{
+							$result[$counter][permission] = false;
+						}
+						$counter++;
+					}			
+				}
+				
+				$template->set_var("action",$result);
+			
+				$move_paramquery = $_GET;
+				$move_paramquery[run] = "move";
+				unset($move_paramquery[nextpage]);
+				$move_params = http_build_query($move_paramquery,'','&#38;');
+				
+				$template->set_var("move_params",$move_params);
+				
+				
+				$availability_paramquery = $_GET;
+				$availability_paramquery[run] = "set_availability";
+				unset($availability_paramquery[nextpage]);
+				$availability_params = http_build_query($availability_paramquery,'','&#38;');
+				
+				$template->set_var("availability_params",$availability_params);
+			
+			
+				$rename_paramquery = $_GET;
+				$rename_paramquery[run] = "rename";
+				unset($rename_paramquery[nextpage]);
+				$rename_params = http_build_query($rename_paramquery,'','&#38;');
+			
+				$template->set_var("rename_params",$rename_params);
+			
+				$user_permissions_paramquery = $_GET;
+				$user_permissions_paramquery[run] = "admin_permission_user";
+				unset($user_permissions_paramquery[nextpage]);
+				$user_permissions_params = http_build_query($user_permissions_paramquery,'','&#38;');
+				
+				$template->set_var("user_permissions_params",$user_permissions_params);
+				
+				$ou_permissions_paramquery = $_GET;
+				$ou_permissions_paramquery[run] = "admin_permission_ou";
+				unset($ou_permissions_paramquery[nextpage]);
+				$ou_permissions_params = http_build_query($ou_permissions_paramquery,'','&#38;');
+				
+				$template->set_var("ou_permissions_params",$ou_permissions_params);
+				
+				$delete_paramquery = $_GET;
+				$delete_paramquery[run] = "delete";
+				unset($delete_paramquery[nextpage]);
+				$delete_params = http_build_query($delete_paramquery,'','&#38;');
+				
+				$template->set_var("delete_params",$delete_params);
+				
+	
+				$add_subsample_paramquery = $_GET;
+				$add_subsample_paramquery[run] = "new_subsample";
+				unset($add_subsample_paramquery[nextpage]);
+				$add_subsample_params = http_build_query($add_subsample_paramquery,'','&#38;');
+				
+				$template->set_var("add_subsample_params",$add_subsample_params);
+				
+				$template->output();
+			}
+		}
+	}
+	
+	/**
+	 * @param string $get_array
+	 */
+	public static function get_sample_information($get_array)
+	{
+		global $user;
+		
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}
+		
+		if ($_GET[sample_id])
+		{
+			$sample_security = new SampleSecurity($_GET[sample_id]);
+			
+			if ($sample_security->is_access(1, false))
+			{
+				$sample = new Sample($_GET[sample_id]);
+				$owner = new User($sample->get_owner_id());	
+				
+				$template = new HTMLTemplate("sample/ajax/detail_information.html");
+				
+				$template->set_var("id", $sample->get_formatted_id());
+				$template->set_var("name", $sample->get_name());
+				$template->set_var("owner", $owner->get_full_name(false));
+				$template->set_var("template", $sample->get_template_name());
+				$template->set_var("permissions", $sample_security->get_access_string());
+			
+				$datetime = new DatetimeHandler($sample->get_datetime());
+				$template->set_var("datetime", $datetime->get_formatted_string("dS M Y H:i"));
+				
+				if ($sample->get_date_of_expiry())
+				{
+					$date_of_expiry = new DatetimeHandler($sample->get_date_of_expiry());
+					$template->set_var("date_of_expiry", $date_of_expiry->get_formatted_string("dS M Y"));
+				}
+				else
+				{
+					$template->set_var("date_of_expiry", false);
+				}
+				
+				if ($sample->get_current_location_name())
+				{
+					$template->set_var("location", $sample->get_current_location_name());
+				}
+				else
+				{
+					$template->set_var("location", false);
+				}
+				
+				if ($sample->get_manufacturer_id())
+				{
+					$manufacturer = new Manufacturer($sample->get_manufacturer_id());
+					$template->set_var("manufacturer", $manufacturer->get_name());
+				}
+				else
+				{
+					$template->set_var("manufacturer", false);
+				}
+				
+				if ($sample->get_availability() == true)
+				{
+					$template->set_var("status", "available");
+				}
+				else
+				{
+					$template->set_var("status", "not available");
+				}
+				
+				if ($sample->get_owner_id() == $user->get_user_id() or $user->is_admin() == true)
+				{
+					$template->set_var("is_owner", true);
+				}
+				else
+				{
+					$template->set_var("is_owner", false);	
+				}
+				
+				if ($user->is_admin() == true)
+				{
+					$template->set_var("is_admin", true);
+				}
+				else
+				{
+					$template->set_var("is_admin", false);	
+				}
+				
+				$owner_paramquery = array();
+				$owner_paramquery[username] = $_GET[username];
+				$owner_paramquery[session_id] = $_GET[session_id];
+				$owner_paramquery[nav] = "sample";
+				$owner_paramquery[run] = "common_dialog";
+				$owner_paramquery[dialog] = "user_detail";
+				$owner_paramquery[id] = $sample->get_owner_id();
+				$owner_params = http_build_query($owner_paramquery,'','&#38;');
+				
+				$template->set_var("owner_params", $owner_params);	
+				
+				$location_history_paramquery = $_GET;
+				$location_history_paramquery[run] = "location_history";
+				$location_history_params = http_build_query($location_history_paramquery,'','&#38;');
+				
+				$template->set_var("location_history_params", $location_history_params);	
+								
+				$template->output();
+			}
+		}
+	}
+	
+	/**
+	 * @param string $get_array
+	 */
+	public static function delete($get_array)
+	{
+		global $user;
+		
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}
+		
+		if ($_GET['sample_id'])
+		{
+			$project = new Sample($_GET['sample_id']);
+						
+			$template = new HTMLTemplate("sample/int_admin/delete_window.html");
+			
+			$array['continue_caption'] = "Yes";
+			$array['cancel_caption'] = "No";
+			$array['content_caption'] = "Delete Sample";
+			$array['height'] = 200;
+			$array['width'] = 400;
+			$array['content'] = $template->get_string();
+			$array['container'] = "#SampleDeleteWindow";
+			
+			$continue_handler_template = new JSTemplate("sample/int_admin/js/delete_continue_handler.js");
+			$continue_handler_template->set_var("username", $_GET['username']);
+			$continue_handler_template->set_var("session_id", $_GET['session_id']);
+			$continue_handler_template->set_var("get_array", $get_array);
+			
+			$array['continue_handler'] = $continue_handler_template->get_string();
+			
+			return json_encode($array);
+		}
+	}
+	
+	/**
+	 * @param string $get_array
+	 * @throws SampleException
+	 * @throws SampleSecurityException
+	 */
+	public static function delete_handler($get_array)
+	{
+		global $user;
+		
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}
+		
+		if ($_GET['sample_id'])
+		{
+			if ($user->is_admin())
+			{
+				$sample = new Sample($_GET['sample_id']);
+				if ($sample->delete() == false)
+				{
+					/**
+					 * @todo change to Exception-System
+					 */
+					throw new SampleException();
+				}
+			}
+			else
+			{
+				throw new SampleSecurityAccessDeniedExcpetion();
+			}
 		}
 	}
 }

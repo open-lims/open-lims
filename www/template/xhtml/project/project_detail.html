@@ -84,7 +84,12 @@ $(document).ready(function()
 					async: false,
 					success: function(data)
 					{		
-						if (data)
+						if ((data + '').indexOf("EXCEPTION:",0) == 0)
+						{
+							var exception_message = data.replace("EXCEPTION: ","");
+							ErrorDialog("Error", exception_message);
+						}
+						else
 						{
 							$("#ProjectDetailStatus").fadeOut("slow");
 							$("#ProjectDetailMenu").fadeOut("slow");

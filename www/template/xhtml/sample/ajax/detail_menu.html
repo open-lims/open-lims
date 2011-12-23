@@ -1,0 +1,93 @@
+<div id="SampleDeleteWindow" title="Delete Project" style='display: none;'>
+</div>
+
+<div id="SampleDeleteProceed" class="BaseBlockUIProceed" style="display:none; cursor: default">&nbsp;
+</div> 
+
+<!-- FOREACH BEGIN ([[ACTION]]) -->
+	
+	<!-- IF ([[ACTION:PERMISSION]]) -->
+
+		<!-- IF ([[ACTION:STATUS]] == 1) -->
+	
+			<a href='index.php?[[ACTION:PARAMS]]' class='projectEasyButton'>
+				<span class='projectEasyIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
+				<span class='projectEasyText'>[[ACTION:NAME]]</span>
+			</a>
+		
+		<!-- ELSEIF ([[ACTION:STATUS]] == 2) -->
+		
+			<a href='index.php?[[ACTION:PARAMS]]' class='projectEasyButton'>
+				<span class='projectEasyIcon'><img src='images/icons_30/add_done.png' alt='' border='0' /></span>
+				<span class='projectEasyText'>[[ACTION:NAME]]</span>
+			</a>
+		
+		<!-- ELSE -->
+		
+			<a class='projectEasyButton'>
+				<span class='projectEasyIcon'><img src='images/icons_30/add_done_na.png' alt='' border='0' /></span>
+				<span class='projectEasyText'>[[ACTION:NAME]]</span>
+			</a>
+					
+		<!-- ENDIF -->
+		
+	<!-- ELSE -->
+	
+		<a class='projectEasyButton'>
+			<span class='projectEasyIcon'><img src='images/icons_30/add_na.png' alt='' border='0' /></span>
+			<span class='projectEasyText'>[[ACTION:NAME]]</span>
+		</a>
+	
+	<!-- ENDIF -->
+
+<!-- FOREACH END -->	
+
+
+<div class='horizontal_line'></div>
+
+<a href='index.php?[[MOVE_PARAMS]]' class='projectEasyButton'>
+	<span class='projectEasyIcon'><img src='images/icons_30/sample_move.png' alt='' border='0' /></span>
+	<span class='projectEasyText'>move sample</span>
+</a>
+
+<a href='index.php?[[AVAILABILITY_PARAMS]]' class='projectEasyButton'>
+	<span class='projectEasyIcon'><img src='images/icons_30/sample_status.png' alt='' border='0' /></span>
+	<span class='projectEasyText'>set [[NEW_STATUS]]</span>
+</a>
+
+<!-- IF ([[IS_OWNER]]) -->
+
+	<div class='horizontal_line'></div>
+
+	<a href='index.php?[[RENAME_PARAMS]]' class='projectEasyButton'>
+		<span class='projectEasyIcon'><img src='images/icons_30/sample_rename.png' alt='' border='0' /></span>
+		<span class='projectEasyText'>rename sample</span>
+	</a>
+
+	<a href='index.php?[[USER_PERMISSIONS_PARAMS]]' class='projectEasyButton'>
+		<span class='projectEasyIcon'><img src='images/icons_30/users.png' alt='' border='0' /></span>
+		<span class='projectEasyText'>set user permissions</span>
+	</a>
+	
+	<a href='index.php?[[OU_PERMISSIONS_PARAMS]]' class='projectEasyButton'>
+		<span class='projectEasyIcon'><img src='images/icons_30/organ_units.png' alt='' border='0' /></span>
+		<span class='projectEasyText'>set organisation unit permissions</span>
+	</a>
+	
+<!-- ENDIF -->
+
+<!-- IF ([[IS_ADMIN]]) -->
+
+	<a href='#' class='projectEasyButton' id='SampleDetailDeleteButton'>
+		<span class='projectEasyIcon'><img src='images/icons_30/delete_sample.png' alt='' border='0' /></span>
+		<span class='projectEasyText'>delete sample</span>
+	</a>
+
+<!-- ENDIF -->
+
+<div class='horizontal_line'></div>
+						
+<a href='index.php?[[ADD_SUBSAMPLE_PARAMS]]' class='projectEasyButton'>
+	<span class='projectEasyIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
+	<span class='projectEasyText'>add a sub-sample</span>
+</a>

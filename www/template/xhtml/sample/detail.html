@@ -1,8 +1,61 @@
 <br />
 
 <script>
-	
-	var get_array = getQueryParams(document.location.search);
+$(document).ready(function()
+{
+	function reload_menu()
+	{
+		$.ajax(
+		{
+			type: "POST",
+			url: "ajax.php?session_id="+get_array['session_id']+"&nav=sample&run=get_sample_menu",
+			data: 'get_array=[[GET_ARRAY]]',
+			success: function(data)
+			{		
+				if (data)
+				{
+					if ($("#SampleDetailMenu").children().size() > 0)
+					{
+						$("#SampleDetailMenu").fadeOut("slow",function()
+						{
+							$("#SampleDetailMenu").html(data);
+							$("#SampleDetailMenu").fadeIn("slow");
+							base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=sample&run=delete", 'get_array=[[GET_ARRAY]]', "SampleDetailDeleteButton");
+						});
+					}
+					else
+					{
+						$("#SampleDetailMenu").hide().html(data).fadeIn("slow");
+						base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=sample&run=delete", 'get_array=[[GET_ARRAY]]', "SampleDetailDeleteButton");
+					}
+
+					$("#SampleDeleteWindow").dialog({
+						autoOpen: false
+					});
+				}
+			}
+		});
+	}
+
+	function reload_information()
+	{
+		$.ajax(
+		{
+			type: "POST",
+			url: "ajax.php?session_id="+get_array['session_id']+"&nav=sample&run=get_sample_information",
+			data: 'get_array=[[GET_ARRAY]]',
+			success: function(data)
+			{		
+				if (data)
+				{
+					$("#SampleDetailGeneralInformation").hide().html(data).fadeIn("slow");
+				}
+			}
+		});
+	}
+
+	reload_menu();
+	reload_information();
 
 	$(function() 
 	{
@@ -57,6 +110,7 @@
 			return false;
 		});
 	});
+});
 </script>
 
 
@@ -87,150 +141,13 @@
 
 <div class='horizontal_line'></div>
 
-<table class='SampleGeneralTable'>
-	<tr>
-		<td>Sample-ID:</td>
-		<td>[[ID]]</td>
-	</tr>
-	<tr>
-		<td>Sample-Name:</td>
-		<td>[[NAME]]</td>
-	</tr>
-	<tr>
-		<td>Owner:</td>
-		<td><a href='index.php?[[OWNER_PARAMS]]'>[[OWNER]]</a></td>
-	</tr>
-	
-	<!-- IF ([[LOCATION]]) -->
-	<tr>
-		<td>Current Location:</td>
-		<td>[[LOCATION]] (<a href='index.php?[[LOCATION_HISTORY_PARAMS]]'>History</a>)</td>
-	</tr>
-	<!-- ENDIF -->
-	
-	<!-- IF ([[MANUFACTURER]]) -->
-	<tr>
-		<td>Manufacturer:</td>
-		<td>[[MANUFACTURER]]</td>
-	</tr>
-	<!-- ENDIF -->
-	
-	<!-- IF ([[DATE_OF_EXPIRY]]) -->
-	<tr>
-		<td>Date of Expiry:</td>
-		<td>[[DATE_OF_EXPIRY]]</td>
-	</tr>
-	<!-- ENDIF -->
-	
-	<tr>
-		<td>Date/Time:</td>
-		<td>[[DATETIME]]</td>
-	</tr>
-	<tr>
-		<td>Template:</td>
-		<td>[[TEMPLATE]]</td>
-	</tr>
-	<tr>
-		<td>Status:</td>
-		<td>[[STATUS]]</td>
-	</tr>
-	<tr>
-		<td>Permissions:</td>
-		<td>[[PERMISSIONS]]</td>
-	</tr>
-</table>
+<div id='SampleDetailGeneralInformation'></div>
 
 <!-- CONTAINER END (49) -->
 
 
 <!-- CONTAINER BEGIN ("I want to...","SampleDetailMenu", 49) -->
 
-	<!-- FOREACH BEGIN ([[ACTION]]) -->
-	
-		<!-- IF ([[ACTION:PERMISSION]]) -->
-	
-			<!-- IF ([[ACTION:STATUS]] == 1) -->
-		
-				<a href='index.php?[[ACTION:PARAMS]]' class='projectEasyButton'>
-					<span class='projectEasyIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
-					<span class='projectEasyText'>[[ACTION:NAME]]</span>
-				</a>
-			
-			<!-- ELSEIF ([[ACTION:STATUS]] == 2) -->
-			
-				<a href='index.php?[[ACTION:PARAMS]]' class='projectEasyButton'>
-					<span class='projectEasyIcon'><img src='images/icons_30/add_done.png' alt='' border='0' /></span>
-					<span class='projectEasyText'>[[ACTION:NAME]]</span>
-				</a>
-			
-			<!-- ELSE -->
-			
-				<a class='projectEasyButton'>
-					<span class='projectEasyIcon'><img src='images/icons_30/add_done_na.png' alt='' border='0' /></span>
-					<span class='projectEasyText'>[[ACTION:NAME]]</span>
-				</a>
-						
-			<!-- ENDIF -->
-			
-		<!-- ELSE -->
-		
-			<a class='projectEasyButton'>
-				<span class='projectEasyIcon'><img src='images/icons_30/add_na.png' alt='' border='0' /></span>
-				<span class='projectEasyText'>[[ACTION:NAME]]</span>
-			</a>
-		
-		<!-- ENDIF -->
-	
-	<!-- FOREACH END -->	
-
-
-<div class='horizontal_line'></div>
-
-<a href='index.php?[[MOVE_PARAMS]]' class='projectEasyButton'>
-	<span class='projectEasyIcon'><img src='images/icons_30/sample_move.png' alt='' border='0' /></span>
-	<span class='projectEasyText'>move sample</span>
-</a>
-
-<a href='index.php?[[AVAILABILITY_PARAMS]]' class='projectEasyButton'>
-	<span class='projectEasyIcon'><img src='images/icons_30/sample_status.png' alt='' border='0' /></span>
-	<span class='projectEasyText'>set [[NEW_STATUS]]</span>
-</a>
-
-<!-- IF ([[IS_OWNER]]) -->
-
-	<div class='horizontal_line'></div>
-
-	<a href='index.php?[[RENAME_PARAMS]]' class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/sample_rename.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>rename sample</span>
-	</a>
-
-	<a href='index.php?[[USER_PERMISSIONS_PARAMS]]' class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/users.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>set user permissions</span>
-	</a>
-	
-	<a href='index.php?[[OU_PERMISSIONS_PARAMS]]' class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/organ_units.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>set organisation unit permissions</span>
-	</a>
-	
-<!-- ENDIF -->
-
-<!-- IF ([[IS_ADMIN]]) -->
-
-	<a href='index.php?[[DELETE_PARAMS]]' class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/delete_sample.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>delete sample</span>
-	</a>
-
-<!-- ENDIF -->
-
-<div class='horizontal_line'></div>
-						
-<a href='index.php?[[ADD_SUBSAMPLE_PARAMS]]' class='projectEasyButton'>
-	<span class='projectEasyIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
-	<span class='projectEasyText'>add a sub-sample</span>
-</a>
+<div id='SampleDetailMenu'></div>
 
 <!-- CONTAINER END (49) -->
