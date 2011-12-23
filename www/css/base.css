@@ -314,13 +314,47 @@ padding: 2px 2px 2px 5px;
 }
 
 
-.FormError {
+/* Forms */
+.FormButton
+{
+	background-color: white;
+	border: 1px #C0C0C0 solid;
+}
+
+.FormCheck
+{
+	background-color: white;
+}
+
+.FormTextarea
+{
+	background-color: white;
+	border: 1px #C0C0C0 solid
+}
+
+.FormTextfield
+{
+	background-color: white;
+	border: 1px #C0C0C0 solid
+}
+
+.FormRadio
+{
+	background-color: white;
+}
+
+.FormSelect
+{
+	background-color: white;
+	border: 1px #C0C0C0 solid;
+	width: 100%;
+}
+.FormError
+{
 	font: normal 0.8em Verdana, Helvatica, sans-serif;
 	color: red;
 }
-.FormSelect {
-	width: 100%;
-}
+
 
 .ContentBoxBegin {
 	margin: 0;

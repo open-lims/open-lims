@@ -303,33 +303,6 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 }
 
 /* Forms */
-.FormButton {
-	background-color: white;
-	border: 1px #C0C0C0 solid;
-}
-
-.FormCheck {
-	background-color: white;
-}
-
-.FormTextarea {
-	background-color: white;
-	border: 1px #C0C0C0 solid
-}
-
-.FormTextfield {
-	background-color: white;
-	border: 1px #C0C0C0 solid
-}
-
-.FormRadio {
-	background-color: white;
-}
-
-.FormSelect {
-	background-color: white;
-	border: 1px #C0C0C0 solid;
-}
 
 .button_left {
 	float: left;
@@ -553,26 +526,6 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 }
 
 
-/* Search */
-.SearchContainer {
-	min-height: 23em;
-	width: 100%;
-	background-image: url(../images/backgrounds/search.png);
-	background-repeat: no-repeat;
-	background-position: bottom right;
-	overflow: hidden;
-}
-
-.SearchTable {
-	width: 25em;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.SearchTable tr {
-	vertical-align: top;
-}
-
 
 .ResultNextPageBar {
 	text-align: right;
@@ -593,36 +546,6 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 	width: 100%;
 }
 
-.sample_container {
-	width: 35em;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.sample_image {
-	float: left;
-	width: 7em;
-}
-
-.sample_text {
-	float: right;
-	width: 27em;
-}
-
-.sample_under {
-	padding-top: 7em;
-	font: normal 0.8em Verdana, Helvetica, sans-serif;
-}
-
-.sampleSelect {
-	width: 272px;
-	border: 1px #C0C0C0 solid;
-}
-
-.sampleTextfield {
-	width: 270px;
-	border: 1px #C0C0C0 solid;
-}
 
 
 /* ------------------ */ /* Neu */ /* ------------------ */
@@ -674,143 +597,7 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 }
 
 
-.CalendarTrGrey
-{
-	background-color: #E0E0E0;
-}
-.CalendarHead
-{
-	margin-left: auto;
-	margin-right: auto;
-	text-align: center;
-	font-weight: bold;
-	width: 16em;
-}
-.CalendarToday 
-{
-	text-decoration: underline;
-}
-.CalendarYearTable 
-{
-	width: 100%;
-}
-.CalendarYearTable a
-{
-	text-decoration: none;
-}
-.CalendarYearTable tr
-{
-	vertical-align: top;
-}
-.CalendarYearMonth
-{
-	border: 1px #C0C0C0 solid;
-	height: 140px;
-	font-size: 12px;
-}
-.CalendarYearMonthTitle
-{
-	text-align: center;
-	color: white;
-	background-color: #C0C0C0;
-}
-.CalendarYearWeek
-{
-	color: #A0A0A0;
-}
-.CalendarYearWDay
-{
-	font-size: 8px;
-	color: black;
-}
-.CalendarYearDate
-{
-	font-weight: bold;
-}
-.CalendarMonthTable
-{
-	width: 100%;
-}
-.CalendarMonthTable th
-{
-	text-align: left;
-	border-bottom: 1px #C0C0C0 solid;
-}
-.CalendarMonthTable tr
-{
-	vertical-align: top;
-}
-.CalendarMonthTable td
-{
-	height: 60px;
-	border-bottom: 1px #C0C0C0 solid;
-	border-left: 1px #C0C0C0 solid;
-}
-.CalendarMonthDateImage
-{
-	float: right;
-}
-.CalendarToday
-{
-	font-weight: bold;
-}
-.CalendarWeekTable
-{
-	width: 100%;
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-.CalendarWeekTable th
-{
-	text-align: left;
-	border-bottom: 1px #C0C0C0 solid;
-}
-.CalendarWeekTable tr
-{
-	vertical-align: top;
-}
-.CalendarWeekTable td
-{
-	min-height: 30px;
-	height: 30px;
-	margin: 0;
-	padding: 0 0 0 2px;
-	border-left: 1px #B0B0B0 solid;
-}
-.CalendarWeekEntry
-{
-	margin: 3px 0;
-}
-.CalendarDayTable
-{
-	width: 100%;
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-.CalendarDayTable th
-{
-	text-align: left;
-}
-.CalendarDayTable tr
-{
-	vertical-align: top;
-	margin: 0;
-	padding: 0;
-}
-.CalendarDayTable td
-{
-	min-height: 30px;
-	height: 30px;
-	margin: 0;
-	padding: 0 0 0 2px;
-	border-left: 1px #B0B0B0 solid;
-}
-.CalendarDayDateImage
-{
-	float: left;
-	margin: 0 4px 0 0;
-	padding: 0;
-}
+
 
 .HomeTodayArea
 {
@@ -918,96 +705,6 @@ ul.FileDetailAdminMenu li a
 	text-align: center;
 }
 .ImageBrowserMultiInfo
-{
-	font-size: 10px;
-}
-
-.SearchMain
-{
-	margin-left: auto;
-	margin-right: auto;
-	width: 705px;
-}
-.SearchMainLeft
-{
-	float: left;
-	width: 350px;
-}
-.SearchMainClear
-{
-	clear: both;
-}
-.SearchMainButton
-{
-	display: block;
-	height: 60px;
-	margin-top: 2px;
-	margin-bottom: 2px;
-}
-.SearchMainButton
-{
-	border: 0;
-	text-decoration: none;
-}
-.SearchMainButton:hover
-{
-	background: #99b2cc;
-	text-decoration: none;
-	color: black;
-}
-a.SearchMainButton:hover span span
-{
-	color: black;
-}
-.SearchMainButtonImage
-{
-	display: block;
-	float: left;
-	margin: 4px;
-}
-.SearchMainButtonText
-{
-	display: block;
-	padding: 4px;
-}
-.SearchMainButtonTitle
-{
-	display: block;
-	font-weight: bold;
-}
-.SearchMainButtonDesc
-{
-	display: block;
-	font-size: 11px;
-}
-.SearchCommonSelect
-{
-	width: 300px;
-}
-.SearchDataSwitcher
-{
-	border-top: 1px #D0D0D0 solid;
-	border-left: 1px #D0D0D0 solid;
-	border-right: 1px #D0D0D0 solid;
-	width: 80px;
-	text-align: center;
-	float: left;
-}
-.SearchDataSwitcher a
-{
-	text-decoration: none;
-}
-.SmallSearch
-{
-	width: 100%;
-	border-bottom: 1px #C0C0C0 solid;
-}
-.SmallSearchTable
-{
-	margin-left: auto;
-	margin-right: auto;
-}
-.SmallSearchInfo
 {
 	font-size: 10px;
 }
