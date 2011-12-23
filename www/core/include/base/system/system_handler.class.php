@@ -77,9 +77,12 @@ class SystemHandler implements SystemHandlerInterface
 	 */
 	function __construct($recheck = true)
 	{
-		$this->scan_include($recheck);
+		if (file_exists(constant("INCLUDE_DIR")))
+		{
+			$this->scan_include($recheck);
+		}
 		
-		if ($recheck == true)
+		if ($recheck == true and file_exists(constant("MODULES_DIR")))
 		{
 			$this->scan_modules();
 		}

@@ -116,6 +116,8 @@ class ContentHandler_IO
 		}
 		else
 		{
+			$template->set_var("INDEX_CSS","<link rel=\"stylesheet\" type=\"text/css\" href=\"css/base.css\" title=\"Style\" />\n<link rel=\"stylesheet\" type=\"text/css\" href=\"css/login.css\" title=\"Style\" />");
+			$template->set_var("INDEX_JS","");
 			$GLOBALS['fatal_error'] = "Main folder not found!";
 		}
 		

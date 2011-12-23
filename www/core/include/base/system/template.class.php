@@ -63,10 +63,10 @@ class Template implements TemplateInterface
 			}
 			else
 			{
-				if (file_exists($file) == true)
+				if (file_exists("template/".self::$fallback_folder."/".$file_path) == true)
 				{
-					$this->open_file($file);
-					$this->file_path = $file_path;
+					$this->open_file("template/".self::$fallback_folder."/".$file_path);
+					$this->file_path = "template/".self::$fallback_folder."/".$file_path;
 				}
 				else
 				{

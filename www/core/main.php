@@ -55,7 +55,7 @@ class Main
 		{
 			$GLOBALS['fatal_error'] = "Extension \"GD\" is missing!";
 		}
-
+		
 		if ($GLOBALS['fatal_error'] == null)
 		{
 			global $db, $runtime_data, $transaction;
