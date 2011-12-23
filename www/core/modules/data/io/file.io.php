@@ -321,15 +321,6 @@ class FileIO
 	public static function list_file_items($item_holder_type, $item_holder_id, $as_page = true, $in_assistant = false, $form_field_name = null)
 	{
 		global $session, $user;
-
-		if ($GLOBALS['autoload_prefix'])
-		{
-			$path_prefix = $GLOBALS['autoload_prefix'];
-		}
-		else
-		{
-			$path_prefix = "";
-		}
 		
 		$handling_class = Item::get_holder_handling_class_by_name($item_holder_type);
 		if ($handling_class)

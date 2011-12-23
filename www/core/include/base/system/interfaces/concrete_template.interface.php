@@ -26,7 +26,7 @@
  * Template Engine Interface
  * @package base
  */
-interface HTMLTemplateInterface
+interface ConcreteTemplateInterface
 {
 	/**
 	 * @param string $file complete path of file
@@ -34,23 +34,5 @@ interface HTMLTemplateInterface
 	function __construct($file);
 	
 	function __destruct();
-	
-	/**
-	 * Sets a var. of template
-	 * @param string $name Address
-	 * @param string $value Content
-	 */
-	public function set_var($name, $value);
-	
-	/**
-	 * Writes the complete tempalte string into stdout
-	 */
-	public function output();
-	
-	/**
-	 * Returns the complete template string
-	 * @return string
-	 */
-	public function get_string();
 }
 ?>

@@ -29,14 +29,6 @@ class ManufacturerIO
 {
 	public static function dialog()
 	{
-		if ($GLOBALS['autoload_prefix'])
-		{
-			$path_prefix = $GLOBALS['autoload_prefix'];
-		}
-		else
-		{
-			$path_prefix = "";
-		}
 		$template = new HTMLTemplate("manufacturer/dialog.html");
 		return $template->get_string();
 	}

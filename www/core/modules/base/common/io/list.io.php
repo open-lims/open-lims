@@ -124,17 +124,8 @@ class List_IO
     public function get_list()
     {
 		$page = 1;
-    	
-    	if ($GLOBALS['autoload_prefix'])
-		{
-			$path_prefix = $GLOBALS['autoload_prefix'];
-		}
-		else
-		{
-			$path_prefix = "";
-		}
 	
-    	$template = new HTMLTemplate($path_prefix."base/list/list.html");	
+    	$template = new HTMLTemplate("base/list/list.html");	
     		
     	if ($this->display_header == true)
 		{

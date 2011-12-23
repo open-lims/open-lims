@@ -18,32 +18,31 @@ $(document).ready(function()
 						{
 							$("#ProjectAdminMenuContent").html(data);
 							$("#ProjectAdminMenuContent").fadeIn("slow");
+							base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=restore", 'get_array=[[GET_ARRAY]]', "ProjectRestoreButton");
+							base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=delete", 'get_array=[[GET_ARRAY]]', "ProjectDeleteButton");
+							base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=cancel", 'get_array=[[GET_ARRAY]]', "ProjectCancelButton");
 						});
 					}
 					else
 					{
 						$("#ProjectAdminMenuContent").html(data).hide().fadeIn("slow");
+						base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=restore", 'get_array=[[GET_ARRAY]]', "ProjectRestoreButton");
+						base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=delete", 'get_array=[[GET_ARRAY]]', "ProjectDeleteButton");
+						base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=cancel", 'get_array=[[GET_ARRAY]]', "ProjectCancelButton");
 					}
 
 					$("#ProjectRestoreWindow").dialog({
 						autoOpen: false
 					});
-
-					base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=restore", 'get_array=[[GET_ARRAY]]', "ProjectRestoreButton");
-
-					
+			
 					$("#ProjectDeleteWindow").dialog({
 						autoOpen: false
 					});
 
-					base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=delete", 'get_array=[[GET_ARRAY]]', "ProjectDeleteButton");
-
-					
 					$("#ProjectCancelWindow").dialog({
 						autoOpen: false
 					});
 
-					base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=cancel", 'get_array=[[GET_ARRAY]]', "ProjectCancelButton");
 				}
 			}
 		});

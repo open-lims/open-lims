@@ -78,7 +78,7 @@ class UserSearchIO
 		
 		if ($no_error == false)
 		{
-			$template = new HTMLTemplate("user/search/search.html");
+			$template = new HTMLTemplate("base/user/search/search.html");
 			
 			$paramquery = $_GET;
 			unset($paramquery[page]);
@@ -227,7 +227,7 @@ class UserSearchIO
 				}
 			}
 						
-			$template = new HTMLTemplate("user/search/search_result.html");
+			$template = new HTMLTemplate("base/user/search/search_result.html");
 			
 			$paramquery = $_GET;
 			$paramquery[nextpage] = "2";

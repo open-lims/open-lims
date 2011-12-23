@@ -524,42 +524,13 @@ class ProjectAdminAjax
 			$array['content'] = $template->get_string();
 			$array['container'] = "#ProjectDeleteWindow";
 			
-			$array['continue_handler'] = "
-				$.ajax(
-				{
-					type : \"POST\",
-					url : \"ajax.php?session_id=".$_GET['session_id']."&nav=project&run=delete_handler\",
-					data : 'get_array=".$get_array."',
-					beforeSend: function()
-					{
-						$(\"#ProjectDeleteWindow\").dialog(\"close\");
-						$(\"#ProjectDeleteProceed\").html(\"<div id='AssistantLoading'><img src='images/animations/loading_circle_small.gif' alt='Loading...' />Please wait while deleting</div>\");
-						$.blockUI({ message: $('#ProjectDeleteProceed'), css: { width: '275px' } }); 
-						$('.blockUI.blockMsg').center();
-					},
-					success : function(data) 
-					{
-						if ((data + '').indexOf(\"EXCEPTION:\",0) == 0)
-						{
-							var exception_message = data.replace(\"EXCEPTION: \",\"\");
-							$.unblockUI();
-							ErrorDialog(\"Error\", exception_message);
-						}
-						else
-						{
-							$.unblockUI();
-							if (".$project_deleted." == true)
-							{
-								window.setTimeout('window.location = \"index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=project\"',500);
-							}
-							else
-							{
-								reload_admin_menu();
-							}
-						}
-					}
-				});
-				";
+			$continue_handler_template = new JSTemplate("project/admin/js/delete_continue_handler.js");
+			$continue_handler_template->set_var("username", $_GET['username']);
+			$continue_handler_template->set_var("session_id", $_GET['session_id']);
+			$continue_handler_template->set_var("get_array", $get_array);
+			$continue_handler_template->set_var("project_deleted", $project_deleted);
+			
+			$array['continue_handler'] = $continue_handler_template->get_string();
 			
 			return json_encode($array);
 		}
@@ -618,27 +589,11 @@ class ProjectAdminAjax
 				$array['content'] = $template->get_string();
 				$array['container'] = "#ProjectRestoreWindow";
 				
-				$array['continue_handler'] = "
-					$.ajax(
-					{
-						type : \"POST\",
-						url : \"ajax.php?session_id=".$_GET['session_id']."&nav=project&run=restore_handler\",
-						data : 'get_array=".$get_array."',
-						success : function(data) 
-						{
-							$(\"#ProjectRestoreWindow\").dialog(\"close\");
-							if ((data + '').indexOf(\"EXCEPTION:\",0) == 0)
-							{
-								var exception_message = data.replace(\"EXCEPTION: \",\"\");
-								ErrorDialog(\"Error\", exception_message);
-							}
-							else
-							{
-								reload_admin_menu();
-							}
-						}
-					});
-					";
+				$continue_handler_template = new JSTemplate("project/admin/js/restore_continue_handler.js");
+				$continue_handler_template->set_var("session_id", $_GET['session_id']);
+				$continue_handler_template->set_var("get_array", $get_array);
+				
+				$array['continue_handler'] = $continue_handler_template->get_string();
 				
 				return json_encode($array);
 			}
@@ -712,29 +667,11 @@ class ProjectAdminAjax
 			$array['content'] = $template->get_string();
 			$array['container'] = "#ProjectCancelWindow";
 			
-			$array['continue_handler'] = "
-				var comment = $(\"#ProjectCancelWindowReason\").val();
+			$continue_handler_template = new JSTemplate("project/admin/js/cancel_continue_handler.js");
+			$continue_handler_template->set_var("session_id", $_GET['session_id']);
+			$continue_handler_template->set_var("get_array", $get_array);
 			
-				$.ajax(
-				{
-					type : \"POST\",
-					url : \"ajax.php?session_id=".$_GET['session_id']."&nav=project&run=cancel_handler\",
-					data : 'get_array=".$get_array."&comment='+comment,
-					success : function(data) 
-					{
-						$(\"#ProjectCancelWindow\").dialog(\"close\");
-						if ((data + '').indexOf(\"EXCEPTION:\",0) == 0)
-						{
-							var exception_message = data.replace(\"EXCEPTION: \",\"\");
-							ErrorDialog(\"Error\", exception_message);
-						}
-						else
-						{
-							reload_admin_menu();
-						}
-					}
-				});
-				";
+			$array['continue_handler'] = $continue_handler_template->get_string();
 			
 			return json_encode($array);
 		}
