@@ -2,51 +2,51 @@
 
 <!-- IF ([[PROCEED]] == 1) -->
 	
-	<a href='#' class='projectEasyButton' id='ProjectDetailProceedButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/proceed.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>proceed to [[NEXT_STATUS_NAME]]</span>
+	<a href='#' class='BaseWantToButton' id='ProjectDetailProceedButton'>
+		<span class='BaseWantToIcon'><img src='images/icons_30/proceed.png' alt='' border='0' /></span>
+		<span class='BaseWantToText'>proceed to [[NEXT_STATUS_NAME]]</span>
 	</a>
 
 <!-- ELSEIF ([[PROCEED]] == 2) -->
 
-	<a href='#' class='projectEasyButton' id='ProjectDetailProceedButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/proceed_na.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>proceed to [[NEXT_STATUS_NAME]]</span>
+	<a href='#' class='BaseWantToButton' id='ProjectDetailProceedButton'>
+		<span class='BaseWantToIcon'><img src='images/icons_30/proceed_na.png' alt='' border='0' /></span>
+		<span class='BaseWantToText'>proceed to [[NEXT_STATUS_NAME]]</span>
 	</a>
 	
 <!-- ELSEIF ([[PROCEED]] == 3) -->
 
-	<a class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/proceed_na.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>project canceled</span>
+	<a class='BaseWantToButton'>
+		<span class='BaseWantToIcon'><img src='images/icons_30/proceed_na.png' alt='' border='0' /></span>
+		<span class='BaseWantToText'>project canceled</span>
 	</a>
 
 <!-- ELSEIF ([[PROCEED]] == 4) -->
 
-	<a class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/proceed_na.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>project finished</span>
+	<a class='BaseWantToButton'>
+		<span class='BaseWantToIcon'><img src='images/icons_30/proceed_na.png' alt='' border='0' /></span>
+		<span class='BaseWantToText'>project finished</span>
 	</a>
 
 <!-- ELSEIF ([[PROCEED]] == 5) -->
 
-	<a href='#' class='projectEasyButton' id='ProjectDetailProceedButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/proceed_hold.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>proceed to [[NEXT_STATUS_NAME]] (blocked)</span>
+	<a href='#' class='BaseWantToButton' id='ProjectDetailProceedButton'>
+		<span class='BaseWantToIcon'><img src='images/icons_30/proceed_hold.png' alt='' border='0' /></span>
+		<span class='BaseWantToText'>proceed to [[NEXT_STATUS_NAME]] (blocked)</span>
 	</a>
 
 <!-- ELSEIF ([[PROCEED]] == 6) -->
 
-	<a href='#' class='projectEasyButton' id='ProjectDetailProceedButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/proceed_na.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>proceed to [[NEXT_STATUS_NAME]] (blocked)</span>
+	<a href='#' class='BaseWantToButton' id='ProjectDetailProceedButton'>
+		<span class='BaseWantToIcon'><img src='images/icons_30/proceed_na.png' alt='' border='0' /></span>
+		<span class='BaseWantToText'>proceed to [[NEXT_STATUS_NAME]] (blocked)</span>
 	</a>
 
 <!-- ELSE -->
 
-	<a class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/proceed_na.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>proceed to [[NEXT_STATUS_NAME]]</span>
+	<a class='BaseWantToButton'>
+		<span class='BaseWantToIcon'><img src='images/icons_30/proceed_na.png' alt='' border='0' /></span>
+		<span class='BaseWantToText'>proceed to [[NEXT_STATUS_NAME]]</span>
 	</a>
 
 <!-- ENDIF -->
@@ -57,23 +57,23 @@
 	
 	<!-- IF ([[STATUS_ACTION:STATUS]] == 1) -->
 
-		<a href='index.php?[[STATUS_ACTION:PARAMS]]' class='projectEasyButton'>
-			<span class='projectEasyIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
-			<span class='projectEasyText'>[[STATUS_ACTION:NAME]]</span>
+		<a href='index.php?[[STATUS_ACTION:PARAMS]]' class='BaseWantToButton'>
+			<span class='BaseWantToIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
+			<span class='BaseWantToText'>[[STATUS_ACTION:NAME]]</span>
 		</a>
 	
 	<!-- ELSEIF ([[STATUS_ACTION:STATUS]] == 2) -->
 	
-		<a href='index.php?[[STATUS_ACTION:PARAMS]]' class='projectEasyButton'>
-			<span class='projectEasyIcon'><img src='images/icons_30/add_done.png' alt='' border='0' /></span>
-			<span class='projectEasyText'>[[STATUS_ACTION:NAME]]</span>
+		<a href='index.php?[[STATUS_ACTION:PARAMS]]' class='BaseWantToButton'>
+			<span class='BaseWantToIcon'><img src='images/icons_30/add_done.png' alt='' border='0' /></span>
+			<span class='BaseWantToText'>[[STATUS_ACTION:NAME]]</span>
 		</a>
 	
 	<!-- ELSE -->
 	
-		<a class='projectEasyButton'>
-			<span class='projectEasyIcon'><img src='images/icons_30/add_done_na.png' alt='' border='0' /></span>
-			<span class='projectEasyText'>[[STATUS_ACTION:NAME]]</span>
+		<a class='BaseWantToButton'>
+			<span class='BaseWantToIcon'><img src='images/icons_30/add_done_na.png' alt='' border='0' /></span>
+			<span class='BaseWantToText'>[[STATUS_ACTION:NAME]]</span>
 		</a>
 				
 	<!-- ENDIF -->
@@ -85,63 +85,63 @@
 
 <!-- IF ([[WRITE]] == 1) -->
 
-	<a href='index.php?[[SUPPLEMENTARY_PARAMS]]' class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>add a supplementary file</span>
+	<a href='index.php?[[SUPPLEMENTARY_PARAMS]]' class='BaseWantToButton'>
+		<span class='BaseWantToIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
+		<span class='BaseWantToText'>add a supplementary file</span>
 	</a>
 				
-	<a href='index.php?[[LOG_PARAMS]]' class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>add a comment to log</span>
+	<a href='index.php?[[LOG_PARAMS]]' class='BaseWantToButton'>
+		<span class='BaseWantToIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
+		<span class='BaseWantToText'>add a comment to log</span>
 	</a>
 					
 	<div class='horizontal_line'></div>
 				
-	<a href='index.php?[[ADD_TASK_PARAMS]]' class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/add_limit.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>add a task</span>
+	<a href='index.php?[[ADD_TASK_PARAMS]]' class='BaseWantToButton'>
+		<span class='BaseWantToIcon'><img src='images/icons_30/add_limit.png' alt='' border='0' /></span>
+		<span class='BaseWantToText'>add a task</span>
 	</a>
 
 <!-- ELSE -->
 
-	<a class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/add_na.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>add a supplementary file</span>
+	<a class='BaseWantToButton'>
+		<span class='BaseWantToIcon'><img src='images/icons_30/add_na.png' alt='' border='0' /></span>
+		<span class='BaseWantToText'>add a supplementary file</span>
 	</a>
 				
-	<a class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/add_na.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>add a comment to log</span>
+	<a class='BaseWantToButton'>
+		<span class='BaseWantToIcon'><img src='images/icons_30/add_na.png' alt='' border='0' /></span>
+		<span class='BaseWantToText'>add a comment to log</span>
 	</a>
 					
 	<div class='horizontal_line'></div>
 				
-	<a class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/add_limit_na.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>add a task</span>
+	<a class='BaseWantToButton'>
+		<span class='BaseWantToIcon'><img src='images/icons_30/add_limit_na.png' alt='' border='0' /></span>
+		<span class='BaseWantToText'>add a task</span>
 	</a>
 	
 <!-- ENDIF -->
 					
-<a href='index.php?[[SHOW_TASKS_PARAMS]]' class='projectEasyButton'>
-	<span class='projectEasyIcon'><img src='images/icons_30/time.png' alt='' border='0' /></span>
-	<span class='projectEasyText'>show the tasks</span>
+<a href='index.php?[[SHOW_TASKS_PARAMS]]' class='BaseWantToButton'>
+	<span class='BaseWantToIcon'><img src='images/icons_30/time.png' alt='' border='0' /></span>
+	<span class='BaseWantToText'>show the tasks</span>
 </a>
 			
 <div class='horizontal_line'></div>
 
 <!-- IF ([[WRITE]] == 1) -->
 			
-	<a href='index.php?[[ADD_SUBPROJECT_PARAMS]]' class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>add a sub-project</span>
+	<a href='index.php?[[ADD_SUBPROJECT_PARAMS]]' class='BaseWantToButton'>
+		<span class='BaseWantToIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
+		<span class='BaseWantToText'>add a sub-project</span>
 	</a>
 	
 <!-- ELSE -->	
 
-	<a class='projectEasyButton'>
-		<span class='projectEasyIcon'><img src='images/icons_30/add_na.png' alt='' border='0' /></span>
-		<span class='projectEasyText'>add a sub-project</span>
+	<a class='BaseWantToButton'>
+		<span class='BaseWantToIcon'><img src='images/icons_30/add_na.png' alt='' border='0' /></span>
+		<span class='BaseWantToText'>add a sub-project</span>
 	</a>
 	
 <!-- ENDIF -->

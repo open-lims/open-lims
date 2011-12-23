@@ -428,8 +428,37 @@ padding: 2px 2px 2px 5px;
 	margin-right: auto;
 	font: normal 0.8em Verdana, Helvetica, sans-serif;
 }
+
 .BaseBlockUIProceed
 {
 	margin: 10px;
 	font: normal 12px Verdana, Helvetica, sans-serif;
+}
+
+.BaseWantToButton {
+	display: block;
+	clear: left;
+	height: 36px;
+	text-decoration: none;
+}
+
+.BaseWantToButton:hover {
+	background: #99b2cc;
+	text-decoration: none;
+}
+
+.BaseWantToIcon {
+	display: block;
+	float: left;
+	width: 35px;
+	margin: 5px;
+}
+
+.BaseWantToText {
+	display: block;
+	margin-left: 45px;
+	padding-top: 10px;
+	font: bold 1em Verdana, Helvetica, sans-serif;
+	color: black;
+	text-decoration: none;
 }
