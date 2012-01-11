@@ -120,7 +120,7 @@ public class CSVOperatorTest {
 			}
 
 			public String[] apply_changes(String[] row, int column_index, int row_index) {
-				String[] row_to_switch = r.readLine(row_index);
+				String[] row_to_switch = r.read_line(row_index);
 				row_to_switch[row_to_switch.length-1] = "THIS ENTIRE ROW HAS BEEN CHANGED";
 				return row_to_switch;
 			}

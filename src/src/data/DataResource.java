@@ -1,6 +1,6 @@
 package data;
 
-import io.Config;
+import io.DBConfig;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -101,11 +101,11 @@ public class DataResource {
 
 		if(file_extension == "")
 		{
-			absolute_path = Config.getConfig("baseFolder")+"/"+path+"/"+data_entity_id+"-"+version;
+			absolute_path = DBConfig.get_config("baseFolder")+"/"+path+"/"+data_entity_id+"-"+version;
 		}
 		else
 		{
-			absolute_path = Config.getConfig("baseFolder")+"/"+path+"/"+data_entity_id+"-"+version+"."+file_extension;
+			absolute_path = DBConfig.get_config("baseFolder")+"/"+path+"/"+data_entity_id+"-"+version+"."+file_extension;
 		}
 
 		BufferedReader br = null;

@@ -7,46 +7,30 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 
 /**
- * Basic config IO.
+ * Abstract config IO.
  * @author Roman Quiring
  */
-public class Config 
-{
+public class AbstractConfig {
 	
-	private static String[] allowedKeys = {"dbms", 
-										   "sqlDriver", 
-										   "dbServer", 
-										   "dbPort", 
-										   "dbName", 
-										   "dbUser", 
-										   "dbPassword", 
-										   "csvSeparator", 
-										   "csvNewline",
-										   "baseFolder"};
-	
-	private static HashMap<String, String> config = new HashMap<String, String>(allowedKeys.length);
-	
-	/**
-	 * Static constructor.
-	 */
-	static
-	{
+	protected AbstractConfig(String[]allowedKeys, String configFile, HashMap<String, String> config)
+	{		
 		for (int i = 0; i < allowedKeys.length; i++) 
 		{
 			config.put(allowedKeys[i], null);
 		}
-		parseConfig(config);
+		
+		parse_config(config, configFile);
 	}
 	
 	/**
 	 * Parses the config file to a HashMap.
 	 * Only the keys that are already present in the HashMap will be assigned a value.
 	 */
-	private static void parseConfig(HashMap<String, String> config)
+	private void parse_config(HashMap<String, String> config, String config_file)
 	{
 		try
 		{
-			FileInputStream fstream = new FileInputStream("config.conf");
+			FileInputStream fstream = new FileInputStream(config_file);
 			DataInputStream in = new DataInputStream(fstream);
 			InputStreamReader isr = new InputStreamReader(in);
 			BufferedReader br = new BufferedReader(isr);
@@ -65,6 +49,10 @@ public class Config
 				}
 				String key = pair[0].trim();
 				String value = pair[1].trim();
+				if(value.isEmpty())
+				{
+					value = null;
+				}
 				if(config.containsKey(key))
 				{
 					config.put(key, value);
@@ -82,14 +70,4 @@ public class Config
 		}
 	}
 	
-	/**
-	 * Returns the configuration value for a specific parameter.
-	 * @param parameter the parameter.
-	 * @return the value of the parameter.
-	 */
-	public static String getConfig(String parameter)
-	{
-		return config.get(parameter);
-	}
-		
 }

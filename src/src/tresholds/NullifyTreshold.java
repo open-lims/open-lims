@@ -2,12 +2,26 @@ package tresholds;
 
 import tresholds.interfaces.Treshold;
 
+/**
+ * Treshold implementation that replaces a threshold String with NULL.
+ * @author Roman Quiring
+ */
 public class NullifyTreshold implements Treshold {
 
-	@Override
+	private String treshold;
+	
+	/**
+	 * Constructor
+	 * @param treshold the String to be replaced by NULL.
+	 */
+	public NullifyTreshold(String treshold) 
+	{
+		this.treshold = treshold;
+	}
+	
 	public boolean check_field(String field, int column_index) 
 	{
-		if(field.equals("\"emp\""))
+		if(field.equals(treshold))
 		{
 			return true;
 		}

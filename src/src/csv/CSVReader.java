@@ -1,10 +1,14 @@
 package csv;
 
+import io.CSVConfig;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
+
+import metadata.interfaces.MetadataReader;
 
 public class CSVReader extends CSVFile{
 
@@ -12,26 +16,53 @@ public class CSVReader extends CSVFile{
 	
 	private String[] current_line;
 	
-	public int channel;
+	private String data_begin = CSVConfig.get_config("csvDataBegin");
+	private String data_end = CSVConfig.get_config("csvDataEnd");
 	
+	private MetadataReader[] metadata_readers = null;
 	
 	public CSVReader(BufferedReader reader, String delimiter, String line_break)
 	{
 		super(delimiter, line_break);
 		this.reader = reader;
-		read_header();
+		
+		if(data_begin != null)
+		{
+			read_header();
+		}
 	}
 	
-	public String[] readLine()
+	public CSVReader(BufferedReader reader, String delimiter, String line_break, MetadataReader[] metadata_readers)
+	{
+		super(delimiter, line_break);
+		this.reader = reader;
+		
+		this.metadata_readers = metadata_readers;
+		
+		if(data_begin != null)
+		{
+			read_header();
+		}
+	}
+	
+	public String[] read_line()
 	{
 		try 
 		{
 			LinkedList<String> row = new LinkedList<String>();
 			String line = "";
-			if((line = reader.readLine()) == null || line.equals("END DATA"))
+			if((line = reader.readLine()) == null)
 			{
 				reader.close();
 				return null;
+			}
+			else if(data_end != null)
+			{
+				if(line.equals(data_end))
+				{
+					reader.close();
+					return null;
+				}
 			}
 			current_line_num++;
 			StringTokenizer tokenizer = new StringTokenizer(line, get_delimiter());
@@ -48,11 +79,11 @@ public class CSVReader extends CSVFile{
 		return null;
 	}
 	
-	public String[] readLine(int index)
+	public String[] read_line(int index)
 	{
 		while(current_line_num < index)
 		{
-			current_line = readLine();
+			current_line = read_line();
 		}
 		return current_line;
 	}
@@ -64,27 +95,33 @@ public class CSVReader extends CSVFile{
 		{
 			while((line = reader.readLine()) != null)
 			{
-				if(line.equals("BEGIN IMAGE INFO"))
-				{
-					String ch1 = reader.readLine();
-					ch1 = reader.readLine();
-					String[] ch1_split = ch1.split(",");
-					ch1 = ch1_split[3];
-					if(ch1.equals("Cyanine 5"))
-					{
-						channel = 1;
-					}
-					else
-					{
-						channel = 2;
-					}
-					String ch2 = reader.readLine();
-//					String[] ch2_split = ch2.split(",");
-//					ch2 = ch2_split[3];
-				}
-				else if(line.equals("BEGIN DATA"))
+				if(line.equals(data_begin))
 				{
 					break;
+				}
+				
+				if(metadata_readers != null)
+				{
+					for (int i = 0; i < metadata_readers.length; i++) 
+					{
+						if(line.equals(metadata_readers[i].get_metadata_begin()))
+						{
+							LinkedList<String> metadata = new LinkedList<String>();
+							while((line = reader.readLine()) != null && !line.equals(metadata_readers[i].get_metadata_end()))
+							{
+								metadata.add(line);
+							}
+							String[] data = new String[metadata.size()];
+							int count = 0;
+							for (String string : metadata) 
+							{
+								data[count] = string;
+								count++;
+							}
+							metadata_readers[i].read_metadata(data);
+							break;
+						}
+					}
 				}
 			}
 		} 
@@ -93,7 +130,7 @@ public class CSVReader extends CSVFile{
 			e.printStackTrace();
 		}
 		
-		header = readLine();
+		header = read_line();
 		current_line_num--; //header is not considered a row
 
 		column_indices = new HashMap<String, Integer>(header.length);

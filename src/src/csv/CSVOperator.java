@@ -25,7 +25,7 @@ public class CSVOperator {
 		csv_writer.writeLine(header_row);
 		
 		String[] columns;
-		while((columns = csv_reader.readLine()) != null)
+		while((columns = csv_reader.read_line()) != null)
 		{
 			String row = "";
 			for (int i = 0; i < columns.length; i++) {
@@ -91,6 +91,24 @@ public class CSVOperator {
 		}
 	}
 	
+	//experimental
+	public void rewrite_csv_with_tresholds_new(CSVReader csv_reader, CSVWriter csv_writer, String[] order, Treshold[] tresholds)
+	{
+		HashMap<Integer, Integer> real_indices_to_desired_column_indices = get_real_indices_to_desired_column_indices_new(csv_reader, csv_writer, order);
+		
+		rewrite_header(csv_reader, csv_writer, real_indices_to_desired_column_indices);
+		
+		rewrite_rows(csv_reader, csv_writer, real_indices_to_desired_column_indices, tresholds);
+		
+		csv_reader.close();
+		csv_writer.close();
+		
+		for (Treshold treshold : tresholds) 
+		{
+			treshold.destroy();
+		}
+	}
+	
 	private void rewrite(CSVReader csv_reader, CSVWriter csv_writer, String[] order, String[] deletes, Treshold[] tresholds)
 	{
 		HashMap<Integer, Integer> real_indices_to_desired_column_indices = get_real_indices_to_desired_column_indices(csv_reader, csv_writer, order, deletes);
@@ -99,6 +117,7 @@ public class CSVOperator {
 		
 		rewrite_rows(csv_reader, csv_writer, real_indices_to_desired_column_indices, tresholds);
 		
+		csv_reader.close();
 		csv_writer.close();
 	}
 	
@@ -110,6 +129,7 @@ public class CSVOperator {
 		
 		rewrite_rows(csv_reader, csv_writer, real_indices_to_desired_column_indices, tresholds);
 		
+		csv_reader.close();
 		csv_writer.close();
 	}
 	
@@ -297,7 +317,7 @@ public class CSVOperator {
 		String[] new_columns;
 		int new_column_count = writer.get_new_column_count();
 
-		while((columns = reader.readLine()) != null)
+		while((columns = reader.read_line()) != null)
 		{
 
 			if(tresholds != null)
@@ -348,6 +368,32 @@ public class CSVOperator {
 			writer.writeLine(row);
 //			System.out.println("wrote row "+writer.current_line);
 		}
+	}
+	
+	
+	//experimental
+	private HashMap<Integer, Integer> get_real_indices_to_desired_column_indices_new(CSVReader reader, CSVWriter writer, String[] order)
+	{
+		HashMap<Integer, Integer> real_indices_to_desired_column_indices = null;
+		
+		String[] header = reader.get_header();
+		
+		real_indices_to_desired_column_indices = new HashMap<Integer, Integer>(header.length);
+		
+		
+		for (int i = 0; i < header.length; i++) 
+		{
+			real_indices_to_desired_column_indices.put(i, -1);
+		}
+		
+		for (int i = 0; i < order.length; i++) {
+			int index = reader.get_column_index(order[i]);
+			real_indices_to_desired_column_indices.put(index, i);
+		}
+		
+		writer.set_new_column_count(order.length);
+		
+		return real_indices_to_desired_column_indices;
 	}
 		
 }

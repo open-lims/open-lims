@@ -1,6 +1,6 @@
 package base;
 
-import io.Config;
+import io.DBConfig;
 
 import java.io.InputStream;
 import java.sql.Connection;
@@ -16,13 +16,13 @@ import java.sql.Statement;
  */
 public class DBLink 
 {
-	private static String dbms = Config.getConfig("dbms");;
-	private static String sqlDriver = Config.getConfig("sqlDriver");;
-	private static String dbServer = Config.getConfig("dbServer");
-	private static String dbPort = Config.getConfig("dbPort");
-	private static String dbName = Config.getConfig("dbName");;
-	private static String dbUser = Config.getConfig("dbUser");;
-	private static String dbPassword = Config.getConfig("dbPassword");;
+	private static String dbms = DBConfig.get_config("dbms");;
+	private static String sqlDriver = DBConfig.get_config("sqlDriver");;
+	private static String dbServer = DBConfig.get_config("dbServer");
+	private static String dbPort = DBConfig.get_config("dbPort");
+	private static String dbName = DBConfig.get_config("dbName");;
+	private static String dbUser = DBConfig.get_config("dbUser");;
+	private static String dbPassword = DBConfig.get_config("dbPassword");;
 	
 	/**
 	 * Static constructor.

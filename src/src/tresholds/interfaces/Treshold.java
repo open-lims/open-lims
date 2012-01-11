@@ -1,5 +1,10 @@
 package tresholds.interfaces;
 
+/**
+ * Interface for implementing tresholds.
+ * Looks at a field of a csv table and applies changes to the field or the entire row if necessary.
+ * @author Roman Quiring
+ */
 public interface Treshold {
 
 	/**
