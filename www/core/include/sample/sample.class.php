@@ -918,7 +918,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	 * @throws SampleDeleteFolderException
 	 */
 	public function delete()
-	{
+	{		
 		global $transaction;
 		
 		if ($this->sample_id and $this->sample)
@@ -942,7 +942,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 						{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new SampleDeleteLocationException("Could not delete a location");
 					}
 				}
 			}
@@ -960,7 +960,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 						{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new SampleDeleteOrganisationUnitException("Could not delete an organisation unit");
 					}
 				}
 			}
@@ -976,7 +976,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 						{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new SampleDeleteUserException("Could not delete an user");
 					}
 				}
 			}
@@ -996,7 +996,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 						{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new SampleDeleteItemException("Could not delete related items");
 					}
 				}
 			}	
@@ -1009,7 +1009,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					{
 						$transaction->rollback($transaction_id);
 					}
-					return false;
+					throw new SampleDeleteAsItemException("Could not delete sample-item entry");
 				}
 			}
     		
@@ -1020,7 +1020,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 				{
 					$transaction->rollback($transaction_id);
 				}
-				return false;
+				throw new SampleDeleteAsItemException("Could not delete sample-item entry");
 			}
 			
 			if ($this->sample->delete() == false)
@@ -1029,7 +1029,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 				{
 					$transaction->rollback($transaction_id);
 				}
-				return false;
+				throw new SampleDeleteException("Could not delete sample");
 			}
 			else
 			{
@@ -1042,7 +1042,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	    			{
 						$transaction->rollback($transaction_id);
 					}
-					return false;
+					throw new SampleDeleteFolderException("Could not delete sample-folder");
 	    		}
 	    		else
 	    		{
@@ -1056,7 +1056,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 		}
 		else
 		{
-			return false;
+			throw new SampleDeleteException("Could not delete sample");
 		}	
 	}
 
