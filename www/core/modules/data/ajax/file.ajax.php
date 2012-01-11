@@ -50,7 +50,7 @@ class FileAjax extends Ajax
 		$handling_class = Item::get_holder_handling_class_by_name($argument_array[0][1]);
 		if ($handling_class)
 		{
-			$sql = $handling_class.get_item_list_sql($argument_array[1][1]);
+			$sql = $handling_class::get_item_list_sql($argument_array[1][1]);
 		}
 		
 		if ($sql)

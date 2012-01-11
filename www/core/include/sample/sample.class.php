@@ -28,9 +28,6 @@ require_once("interfaces/sample.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	require_once("exceptions/sample_clone_failed_exception.class.php");
-	require_once("exceptions/sample_creation_failed_exception.class.php");
-	
 	require_once("access/sample.access.php");
 	require_once("access/sample_is_item.access.php");
 	require_once("access/sample_has_location.access.php");
@@ -131,6 +128,8 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
      * @param integer $sample_id
      * @param integer $template_id
      * @return mixed
+     * @throws SampleCreateFolderException
+     * @throws SampleCreateSubFolderException
      */
     private function create_sample_folder($transaction_id, $sample_id, $template_id)
     {
@@ -153,7 +152,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 				{
 					$transaction->rollback($transaction_id);
 				}
-				throw new SampleCreationFailedException("",1);
+				throw new SampleCreateFolderException("Could not create main folder");
 			}
 			$folder = Folder::get_instance($folder_id);
 
@@ -195,7 +194,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new SampleCreationFailedException("",1);
+							throw new SampleCreateSubFolderException("Could not create sub folder");
 						}
 						
 						$sub_folder_name_array[$sub_folder_id] = strtolower(trim($value));
@@ -210,7 +209,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     	}
     	else
     	{
-    		return false;
+    		throw new SampleCreateFolderException("Could not create main folder");
     	}
     }
     
@@ -218,6 +217,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
      * @param string $transaction_id
      * @param integer $sample_id
      * @return bool
+     * @throws SampleCreateAsItemException
      */
     private function create_sample_item($transaction_id, $sample_id)
     {
@@ -233,7 +233,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 				{
 					$transaction->rollback($transaction_id);
 				}
-				throw new SampleCreationFailedException("",1);
+				throw new SampleCreateAsItemException("Could not create sample-item");
 			}
 				
     		$sample_is_item = new SampleIsItem_Access(null);
@@ -244,14 +244,14 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 				{
 					$transaction->rollback($transaction_id);
 				}
-				throw new SampleCreationFailedException("",1);
+				throw new SampleCreateAsItemException("Could not create sample-item");
 			}
 			
 			return true;
     	}
     	else
     	{
-    		return false;
+    		throw new SampleCreateAsItemException("Could not create sample-item");
     	}
     }
     
@@ -265,10 +265,18 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
      * @param integer $location_id
      * @param string $desc
      * @return integer Sample-ID
-     * @throws SampleCreationFailedException
+     * @throws SampleCreateException
+     * @throws SampleCreateFolderException
+     * @throws SampleCreateSubFolderException
+     * @throws SampleCreateAsItemException
+     * @throws SampleCreateUserException
+     * @throws SampleCreateOrganisationUnitException
+     * @throws SampleCreateLocationException
+     * @throws SampleCreateItemSampleException
+     * @throws SampleCreateItemValueException
      */
     public function create($organisation_unit_id, $template_id, $name, $manufacturer_id, $location_id, $desc, $language_id, $date_of_expiry, $expiry_warning)
-    {
+    {    	
     	global $user, $transaction;
     	
     	if ($this->sample)
@@ -285,23 +293,39 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					}
 
 					// Create Sample Folder
-	    			if ($this->create_sample_folder($transaction_id, $sample_id, $template_id) === false)
-	    			{
+					try
+					{
+						$this->create_sample_folder($transaction_id, $sample_id, $template_id);
+					}
+					catch(SampleCreateFolderException $e)
+					{
 						if ($transaction_id != null)
 						{
 							$transaction->rollback($transaction_id);
 						}
-						throw new SampleCreationFailedException("",1);
-	    			}
+						throw $e;
+					}
+	    			catch(SampleCreateSubFolderException $e)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						throw $e;
+					}
+	    			
     			
-	    			if ($this->create_sample_item($transaction_id, $sample_id) == false)
+					try
+					{
+						$this->create_sample_item($transaction_id, $sample_id);
+					}
+					catch(SampleCreateAsItemException $e)
 	    			{
-	    				$this->sample_folder_object->delete(true, true);
 						if ($transaction_id != null)
 						{
 							$transaction->rollback($transaction_id);
 						}
-						throw new SampleCreationFailedException("",1);
+						throw $e;
 	    			}
 	    			
 	    			// Create Permissions and V-Folders
@@ -314,7 +338,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 						{
 							$transaction->rollback($transaction_id);
 						}
-						throw new SampleCreationFailedException("",1);
+						throw new SampleCreateUserException("Could not create user permission");
 	    			}
 	    			
 	    			if (is_numeric($organisation_unit_id))
@@ -326,7 +350,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new SampleCreationFailedException("",1);
+							throw new SampleCreateOrganisationUnitException("Could not create organisation-unit permission");
 	    				}
 	    			}    			
 	    			
@@ -341,7 +365,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new SampleCreationFailedException("",1);
+							throw new SampleCreateLocationException("Could not create first location");
 		    			}
 	    			}
 		
@@ -361,7 +385,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 										{
 											$transaction->rollback($transaction_id);
 										}
-										throw new SampleCreationFailedException("",1);
+										throw new SampleCreateItemSampleException("Could not create required sample relation");
 									}
 								}
 							}
@@ -377,7 +401,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 								{
 									$transaction->rollback($transaction_id);
 								}
-								throw new SampleCreationFailedException("",1);
+								throw new SampleCreateItemValueException("Could not create required value");
 							}
 							
 							$sample_item = new SampleItem($sample_id);
@@ -389,7 +413,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 								{
 									$transaction->rollback($transaction_id);
 								}
-								throw new SampleCreationFailedException("",1);
+								throw new SampleCreateItemValueException("Could not create required value");
 							}
 							
 							$sample_item->set_item_id($value->get_item_id());
@@ -401,7 +425,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 								{
 									$transaction->rollback($transaction_id);
 								}
-								throw new SampleCreationFailedException("",1);
+								throw new SampleCreateItemValueException("Could not create required value");
 							}
 						}
 					}
@@ -420,17 +444,17 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	    			{
 						$transaction->rollback($transaction_id);
 					}
-	    			throw new SampleCreationFailedException("",1);
+	    			throw new SampleCreateException("Could not create Sample");
 	    		}
 	    	}
 	    	else
 	    	{
-	    		throw new SampleCreationFailedException("",1);
+	    		throw new SampleCreateException("Missing information!");
 	    	}
     	}
     	else
     	{
-    		throw new SampleCreationFailedException("",1);
+    		throw new SampleCreateException("No instance!");
     	}
     }
     
@@ -447,6 +471,19 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
      * @param array $value_array
      * @param array $item_array
      * @return integer
+     * @throws SampleCloneException
+     * @throws SampleCloneCreateException
+     * @throws SampleCloneCreateFolderException
+     * @throws SampleCloneCreateSubFolderException
+     * @throws SampleCloneCreateAsItemException
+     * @throws SampleCloneCreateLocationException
+     * @throws SampleCloneUserException
+     * @throws SampleCloneOrganisationUnitException
+     * @throws SampleCloneLocationException
+     * @throws SampleCloneValueException
+     * @throws SampleCloneFileException
+     * @throws SampleCloneParentException
+     * @throws SampleCloneItemException
      */
     public function clone_sample($source_sample_id, $name, $manufacturer_id, $location_id, $desc, $language_id, $date_of_expiry, $expiry_warning, $value_array, $item_array)
     {
@@ -468,23 +505,40 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 				}
 
     			// Create Sample Folder
-	    		if (($sub_folder_name_array = $this->create_sample_folder($transaction_id, $sample_id, $source_sample->get_template_id())) === false)
+    			try
+    			{
+	    			$sub_folder_name_array = $this->create_sample_folder($transaction_id, $sample_id, $source_sample->get_template_id());
+    			}
+	    		catch (SampleCreateFolderException $e)
 	    		{
 					if ($transaction_id != null)
 					{
 						$transaction->rollback($transaction_id);
 					}
-					throw new SampleCreationFailedException("",1);
+					throw new SampleCloneCreateFolderException("Could not create main folder");
+	    		}
+	    		catch (SampleCreateSubFolderException $e)
+	    		{
+	    			if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					throw new SampleCloneCreateSubFolderException("Could not create sub folder");
 	    		}
     			
-	    		if ($this->create_sample_item($transaction_id, $sample_id) == false)
+	    		
+	    		try
+	    		{
+	    			$this->create_sample_item($transaction_id, $sample_id);
+	    		}
+	    		catch (SampleCreateAsItemException $e)
 	    		{
 	    			$this->sample_folder_object->delete(true, true);
 					if ($transaction_id != null)
 					{
 						$transaction->rollback($transaction_id);
 					}
-					throw new SampleCreationFailedException("",1);
+					throw new SampleCloneCreateAsItemException("Could not create sample-item");
 	    		}
     			
     			
@@ -503,7 +557,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new SampleCreationFailedException("",1);
+							throw new SampleCloneUserException("Could not clone user permission");
 		    			}
 					}
 				}
@@ -521,7 +575,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new SampleCreationFailedException("",1);
+							throw new SampleCloneOrganisationUnitException("Could not clone organisation unit permission");
 	    				}
 					}
 				}
@@ -553,7 +607,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 							{
 								$transaction->rollback($transaction_id);
 							}
-							throw new SampleCreationFailedException("",1);
+							throw new SampleCloneLocationException("Could not clone location");
 		    			}
 					}
 				}
@@ -573,7 +627,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 						{
 							$transaction->rollback($transaction_id);
 						}
-						throw new SampleCreationFailedException("",1);
+						throw new SampleCloneCreateLocationException("Could not create location");
 	    			}
     			}
     			
@@ -623,13 +677,41 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     							if (is_numeric($new_folder_id) and is_numeric($value_type_id))
     							{
     								$new_value_obj = Value::get_instance(null);
-    								$new_value_obj->create($new_folder_id, $user->get_user_id(), $value_type_id, $value_data_array[$key]);
+    								
+    								if ($new_value_obj->create($new_folder_id, $user->get_user_id(), $value_type_id, $value_data_array[$key]) == null)
+    								{
+    									$this->sample_folder_object->delete(true, true);
+										if ($transaction_id != null)
+										{
+											$transaction->rollback($transaction_id);
+										}
+										throw new SampleCloneValueException("Could not clone value");
+    								}
+    								
     								$new_value_item_id = $new_value_obj->get_item_id();
     								
     								$sample_item = new SampleItem($sample_id);
-    								$sample_item->set_item_id($new_value_item_id);
     								$sample_item->set_gid($gid);
-    								$sample_item->link_item();
+    								
+    								if ($sample_item->set_item_id($new_value_item_id) == false)
+    								{
+    									$this->sample_folder_object->delete(true, true);
+										if ($transaction_id != null)
+										{
+											$transaction->rollback($transaction_id);
+										}
+										throw new SampleCloneValueException("Could not clone value");
+    								}
+    								
+    								if ($sample_item->link_item() == false)
+    								{
+    									$this->sample_folder_object->delete(true, true);
+										if ($transaction_id != null)
+										{
+											$transaction->rollback($transaction_id);
+										}
+										throw new SampleCloneValueException("Could not clone value");
+    								}
     							}
     						}
     					}
@@ -677,11 +759,12 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 											
 										if ($event_handler->get_success() == false)
 										{
+											$this->sample_folder_object->delete(true, true);
 											if ($transaction_id != null)
 											{
 												$transaction->rollback($transaction_id);
 											}
-											return false;
+											throw new SampleCloneParentException("Could not clone parent");
 										}
 	    							}
 	    						}
@@ -714,13 +797,40 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 			    							
 			    							if (is_numeric($new_folder_id))
 			    							{
-			    								$file_obj->copy($new_folder_id);
+			    								if ($file_obj->copy($new_folder_id) == false)
+			    								{
+			    									$this->sample_folder_object->delete(true, true);
+													if ($transaction_id != null)
+													{
+														$transaction->rollback($transaction_id);
+													}
+													throw new SampleCloneFileException("Could not clone files");
+			    								}
+			    								
 			    								$new_file_item_id = $file_obj->get_item_id();
 			    								
 			    								$sample_item = new SampleItem($sample_id);
-			    								$sample_item->set_item_id($new_file_item_id);
 			    								$sample_item->set_gid($gid);
-			    								$sample_item->link_item();
+			    								
+			    								if ($sample_item->set_item_id($new_file_item_id) == false)
+			    								{
+			    									$this->sample_folder_object->delete(true, true);
+													if ($transaction_id != null)
+													{
+														$transaction->rollback($transaction_id);
+													}
+													throw new SampleCloneFileException("Could not clone files");
+			    								}
+			    								
+			    								if ($sample_item->link_item() == false)
+			    								{
+			    									$this->sample_folder_object->delete(true, true);
+													if ($transaction_id != null)
+													{
+														$transaction->rollback($transaction_id);
+													}
+													throw new SampleCloneFileException("Could not clone files");
+			    								}
 			    							}
 		    							}
 	    							}
@@ -743,9 +853,27 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	    									if ($new_item_id)
 	    									{
 	    										$sample_item = new SampleItem($sample_id);
-			    								$sample_item->set_item_id($new_item_id);
-			    								$sample_item->set_gid($gid);
-			    								$sample_item->link_item();
+	    										$sample_item->set_gid($gid);
+	    										
+			    								if ($sample_item->set_item_id($new_item_id) == false)
+			    								{
+			    									$this->sample_folder_object->delete(true, true);
+													if ($transaction_id != null)
+													{
+														$transaction->rollback($transaction_id);
+													}
+													throw new SampleCloneItemException("Could not clone item");
+			    								}
+			    								
+			    								if ($sample_item->link_item() == false)
+			    								{
+			    									$this->sample_folder_object->delete(true, true);
+													if ($transaction_id != null)
+													{
+														$transaction->rollback($transaction_id);
+													}
+													throw new SampleCloneItemException("Could not clone item");
+			    								}
 	    									}
 	    								}
     								}
@@ -762,7 +890,6 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	
 				$this->__construct($sample_id);
     			return $sample_id;	
-    			
     		}
     		else
     		{
@@ -770,18 +897,25 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 				{
 					$transaction->rollback($transaction_id);
 				}
-    			throw new SampleCloneFailedException();
+    			throw new SampleCloneException("Could not clone Sample!");
     		}
     	}
     	else
     	{
-    		throw new SampleCloneFailedException();
+    		throw new SampleCloneException("Could not clone Sample!");
     	}
     }
     
 	/**
 	 * @see SampleInterface::delete()
 	 * @return bool
+	 * @throws SampleDeleteException
+	 * @throws SampleDeleteLocationException
+	 * @throws SampleDeleteUserException
+	 * @throws SampleDeleteOrganisationUnitException
+	 * @throws SampleDeleteItemException
+	 * @throws SampleDeleteAsItemException
+	 * @throws SampleDeleteFolderException
 	 */
 	public function delete()
 	{

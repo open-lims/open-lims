@@ -29,6 +29,38 @@
 	$classes['SampleIDMissingException']							= $path_prefix."core/include/sample/exceptions/sample_id_missing.exception.class.php";
 	$classes['SampleNotFoundException']								= $path_prefix."core/include/sample/exceptions/sample_not_found.exception.class.php";
 	
+	$classes['SampleCreateException']								= $path_prefix."core/include/sample/exceptions/sample_create.exception.class.php";
+	$classes['SampleCreateFolderException']							= $path_prefix."core/include/sample/exceptions/sample_create_folder.exception.class.php";
+	$classes['SampleCreateSubFolderException']						= $path_prefix."core/include/sample/exceptions/sample_create_sub_folder.exception.class.php";
+	$classes['SampleCreateAsItemException']							= $path_prefix."core/include/sample/exceptions/sample_create_as_item.exception.class.php";
+	$classes['SampleCreateUserException']							= $path_prefix."core/include/sample/exceptions/sample_create_user.exception.class.php";
+	$classes['SampleCreateOrganisationUnitException']				= $path_prefix."core/include/sample/exceptions/sample_create_organisation_unit.exception.class.php";
+	$classes['SampleCreateLocationException']						= $path_prefix."core/include/sample/exceptions/sample_create_location.exception.class.php";
+	$classes['SampleCreateItemSampleException']						= $path_prefix."core/include/sample/exceptions/sample_create_item_sample.exception.class.php";
+	$classes['SampleCreateItemValueException']						= $path_prefix."core/include/sample/exceptions/sample_create_item_value.exception.class.php";
+	
+	$classes['SampleCloneException']								= $path_prefix."core/include/sample/exceptions/sample_clone.exception.class.php";
+	$classes['SampleCloneCreateException']							= $path_prefix."core/include/sample/exceptions/sample_clone_create.exception.class.php";
+	$classes['SampleCloneCreateFolderException']					= $path_prefix."core/include/sample/exceptions/sample_clone_create_folder.exception.class.php";
+	$classes['SampleCloneCreateSubFolderException']					= $path_prefix."core/include/sample/exceptions/sample_clone_create_sub_folder.exception.class.php";
+	$classes['SampleCloneCreateAsItemException']					= $path_prefix."core/include/sample/exceptions/sample_clone_create_as_item.exception.class.php";
+	$classes['SampleCloneCreateLocationException']					= $path_prefix."core/include/sample/exceptions/sample_clone_create_location.exception.class.php";
+	$classes['SampleCloneUserException']							= $path_prefix."core/include/sample/exceptions/sample_clone_user.exception.class.php";
+	$classes['SampleCloneOrganisationUnitException']				= $path_prefix."core/include/sample/exceptions/sample_clone_organisation_unit.exception.class.php";
+	$classes['SampleCloneLocationException']						= $path_prefix."core/include/sample/exceptions/sample_clone_location.exception.class.php";
+	$classes['SampleCloneValueException']							= $path_prefix."core/include/sample/exceptions/sample_clone_value.exception.class.php";
+	$classes['SampleCloneFileException']							= $path_prefix."core/include/sample/exceptions/sample_clone_file.exception.class.php";
+	$classes['SampleCloneParentException']							= $path_prefix."core/include/sample/exceptions/sample_clone_parent.exception.class.php";
+	$classes['SampleCloneItemException']							= $path_prefix."core/include/sample/exceptions/sample_clone_item.exception.class.php";
+	
+	$classes['SampleDeleteException']								= $path_prefix."core/include/sample/exceptions/sample_delete.exception.class.php";
+	$classes['SampleDeleteLocationException']						= $path_prefix."core/include/sample/exceptions/sample_delete_location.exception.class.php";
+	$classes['SampleDeleteUserException']							= $path_prefix."core/include/sample/exceptions/sample_delete_user.exception.class.php";
+	$classes['SampleDeleteOrganisationUnitException']				= $path_prefix."core/include/sample/exceptions/sample_delete_organisation_unit.exception.class.php";
+	$classes['SampleDeleteItemException']							= $path_prefix."core/include/sample/exceptions/sample_delete_item.exception.class.php";
+	$classes['SampleDeleteAsItemException']							= $path_prefix."core/include/sample/exceptions/sample_delete_as_item.exception.class.php";
+	$classes['SampleDeleteFolderException']							= $path_prefix."core/include/sample/exceptions/sample_delete_folder.exception.class.php";
+	
 	$classes['SampleSecurityException']								= $path_prefix."core/include/sample/exceptions/sample_security.exception.class.php";
 	$classes['SampleSecurityAccessDeniedException']					= $path_prefix."core/include/sample/exceptions/sample_security_access_denied.exception.class.php";
 	

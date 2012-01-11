@@ -1301,7 +1301,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 					{
 						$transaction->rollback($transaction_id);
 					}
-					return null;
+					return false;
 				}
 			}
 			else
@@ -1310,7 +1310,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 				{
 					$transaction->rollback($transaction_id);
 				}
-				return null;
+				return false;
 			}	
 			
 			$new_file_path = constant("BASE_DIR")."/".$folder->get_path()."/".$data_entity_id."-1".$extension;

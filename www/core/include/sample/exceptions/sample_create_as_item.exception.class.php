@@ -22,17 +22,15 @@
  */
 
 /**
- * @deprecated replace
- * @todo replace
- * Sample Creation Failed Exception
+ * Sample Create As Item Exception
  * @package sample
  */
-class SampleCreationFailedException extends Exception
+class SampleCreateAsItemException extends SampleCreateException
 {
-    function __construct($message, $code)
+    function __construct($message = null)
     {
-    	parent::__construct($message, $code);	
-    }  
+    	parent::__construct($message);	
+    }   
 }
 
 ?>
