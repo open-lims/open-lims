@@ -918,7 +918,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	 * @throws SampleDeleteFolderException
 	 */
 	public function delete()
-	{		
+	{
 		global $transaction;
 		
 		if ($this->sample_id and $this->sample)

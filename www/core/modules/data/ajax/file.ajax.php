@@ -190,32 +190,13 @@ class FileAjax extends Ajax
 				else
 				{
 					$permission = DataAjax::permission_window();
-					$button_handler = "
-						var json = '{';
-						$('#DataBrowserLoadedAjaxContent').find('input').each(function(){
-							if($(this).attr('type') != 'hidden') 
-							{
-								if($(this).is(':checkbox:checked'))
-								{
-									json += '\"'+$(this).attr('name')+'\":\"'+$(this).attr('value')+'\",';
-								}
-								else
-								{
-									json += '\"'+$(this).attr('name')+'\":\"0\",';
-								}
-							}
-						});
-						json = json.substr(0,json.length-1); //cut last ,
-						json += '}';
-						$.ajax({
-							type : \"GET\",
-							url : \"../../../../core/modules/data/ajax/file.ajax.php\",
-							data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&file_id=".$_GET['file_id']."&nav=data&run=get_data_browser_link_html_and_button_handler&action=permission&permissions=\"+json,
-							success : function(data) {
-								close_ui_window_and_reload();
-							}
-						});
-					";
+					
+					$button_handler_template = new JSTemplate("data/js/file_permission_window.js");
+					$button_handler_template->set_var("username", $_GET['username']);
+					$button_handler_template->set_var("session_id", $_GET['session_id']);
+					$button_handler_template->set_var("file_id", $_GET['file_id']);
+					$button_handler = $button_handler_template->get_string();
+					
 					$button_handler_caption = "Change";
 					$html_caption = "Change permission";
 					$html = $permission;	
