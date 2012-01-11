@@ -1199,7 +1199,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					}
 					else
 					{
-						$parent_sample_array = SampleItem::list_sample_id_by_item_id_and_gid($this->item_id, ($gid*-1));
+						$parent_sample_array = SampleItem::list_item_id_by_sample_id_and_gid($this->sample_id, ($gid*-1));
 						if (is_array($parent_sample_array) and count($parent_sample_array) >= 1)
 						{
 							$fulfilled_array[$key] = true;

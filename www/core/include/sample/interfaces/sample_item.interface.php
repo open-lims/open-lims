@@ -135,11 +135,11 @@ interface SampleItemInterface
     public static function get_gid_by_item_id_and_sample_id($item_id, $sample_id);
     
     /**
-	 * @param integer $item_id
+	 * @param integer $sample_id
 	 * @param integer $gid
 	 * @return array
 	 */
-	public static function list_sample_id_by_item_id_and_gid($item_id, $gid);
+	public static function list_item_id_by_sample_id_and_gid($sample_id, $gid);
 }
 
 ?>

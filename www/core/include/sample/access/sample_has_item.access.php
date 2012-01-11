@@ -357,20 +357,20 @@ class SampleHasItem_Access
 	 * @param integer $gid
 	 * @return array
 	 */
-	public static function list_sample_id_by_item_id_and_gid($item_id, $gid)
+	public static function list_item_id_by_sample_id_and_gid($sample_id, $gid)
 	{
 		global $db;
 		
-		if (is_numeric($item_id) and is_numeric($gid))
+		if (is_numeric($sample_id) and is_numeric($gid))
 		{
 			$return_array = array();
 			
-			$sql = "SELECT sample_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND gid = ".$gid."";
+			$sql = "SELECT item_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = ".$sample_id." AND gid = ".$gid."";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[sample_id]);
+				array_push($return_array,$data[item_id]);
 			}
 			
 			if (is_array($return_array))
