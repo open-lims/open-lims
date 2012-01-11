@@ -143,7 +143,12 @@ class Main
 	 */
 	function __destruct()
 	{
-		@$db->db_close();
+		global $db;
+		
+		if (@is_object($db))
+		{
+			@$db->db_close();
+		}
 	}
 		
 	/**
