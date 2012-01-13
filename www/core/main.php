@@ -71,6 +71,9 @@ class Main
 			
 			require_once("include/base/system/events/event.class.php");
 			require_once("include/base/system/system_handler.class.php");
+			require_once("include/base/system/system_config.class.php");
+			
+			SystemConfig::load_module_config();
 			
 			require_once("include/base/system/autoload.function.php");
 			
