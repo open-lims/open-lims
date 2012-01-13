@@ -716,7 +716,7 @@ class SampleCreateAjax extends Ajax
 				{
 					$parent_sample = new Sample($sample_item_get_array['sample_id']);
 					$sample_item_get_array['sample_id'] = $sample_id;
-					$sample_item_get_array['key'] = ($sample_item_get_array['key']*-1);
+					$sample_item_get_array['parent'] = "1";
 					$event_item_id = $parent_sample->get_item_id();
 				}
 				else

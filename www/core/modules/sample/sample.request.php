@@ -326,7 +326,7 @@ class SampleRequest
 												$parent_sample_id = Sample::get_entry_by_item_id($return_value);
 												if ($parent_sample_id)
 												{
-													if (SampleItemFactory::create($parent_sample_id, $sample->get_item_id() , $_GET[key], $_POST[keywords], $_POST[description]) == true)
+													if (SampleItemFactory::create($parent_sample_id, $sample->get_item_id() , $_GET[key], $_POST[keywords], $_POST[description], true) == true)
 													{
 														if ($transaction_id != null)
 														{

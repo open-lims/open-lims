@@ -34,6 +34,7 @@ class SampleHasItem_Access
 	private $sample_id;
 	private $item_id;
 	private $gid;
+	private $parent;
 
 	/**
 	 * @param integer $primary_key
@@ -59,6 +60,15 @@ class SampleHasItem_Access
 				$this->sample_id		= $data[sample_id];
 				$this->item_id			= $data[item_id];
 				$this->gid				= $data[gid];
+				
+				if ($data['parent'] == 't')
+				{
+					$this->parent = true;
+				}
+				else
+				{
+					$this->parent = false;
+				}
 			}
 			else
 			{
@@ -100,8 +110,8 @@ class SampleHasItem_Access
 				$gid_insert = "NULL";
 			}
 			
-			$sql_write = "INSERT INTO ".constant("SAMPLE_HAS_ITEM_TABLE")." (primary_key,sample_id,item_id,gid) " .
-					"VALUES (nextval('".self::SAMPLE_HAS_ITEM_PK_SEQUENCE."'::regclass),".$sample_id.",".$item_id.",".$gid_insert.")";
+			$sql_write = "INSERT INTO ".constant("SAMPLE_HAS_ITEM_TABLE")." (primary_key,sample_id,item_id,gid,parent) " .
+					"VALUES (nextval('".self::SAMPLE_HAS_ITEM_PK_SEQUENCE."'::regclass),".$sample_id.",".$item_id.",".$gid_insert.",NULL)";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
@@ -202,6 +212,21 @@ class SampleHasItem_Access
 	}
 	
 	/**
+	 * @return bool
+	 */
+	public function get_parent()
+	{
+		if (isset($this->parent))
+		{
+			return $this->parent;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
 	 * @param integer $sample_id
 	 * @return bool
 	 */
@@ -289,6 +314,44 @@ class SampleHasItem_Access
 	}
 	
 	/**
+	 * @param bool $parent
+	 * @return bool
+	 */
+	public function set_parent($parent)
+	{
+		global $db;
+
+		if ($this->primary_key and isset($parent))
+		{
+			if ($parent == true)
+			{
+				$parent_insert = "t";
+			}
+			else
+			{
+				$parent_insert = "f";
+			}
+			
+			$sql = "UPDATE ".constant("SAMPLE_HAS_ITEM_TABLE")." SET parent = '".$parent_insert."' WHERE primary_key = '".$this->primary_key."'";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->parent = $parent;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}	
+	}
+	
+	/**
 	 * @param integer $item_id
 	 * @param integer $sample_id
 	 * @return integer
@@ -321,6 +384,8 @@ class SampleHasItem_Access
 	}
 	
 	/**
+	 * List ths gids of given items of sample
+	 * Ignores parent entries
 	 * @param integer $item_id
 	 * @param integer $sample_id
 	 * @return integer
@@ -333,7 +398,7 @@ class SampleHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT gid FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND sample_id = ".$sample_id."";
+			$sql = "SELECT gid FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND sample_id = ".$sample_id." AND parent='f'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 				
@@ -353,24 +418,25 @@ class SampleHasItem_Access
 	}
 	
 	/**
+	 * Returns a list of items by a given sample-id and a given gid which are parent entries
 	 * @param integer $item_id
 	 * @param integer $gid
 	 * @return array
 	 */
-	public static function list_item_id_by_sample_id_and_gid($sample_id, $gid)
+	public static function list_sample_id_by_item_id_and_gid_and_parent($item_id, $gid)
 	{
 		global $db;
 		
-		if (is_numeric($sample_id) and is_numeric($gid))
+		if (is_numeric($item_id) and is_numeric($gid))
 		{
 			$return_array = array();
 			
-			$sql = "SELECT item_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = ".$sample_id." AND gid = ".$gid."";
+			$sql = "SELECT sample_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND gid = ".$gid." AND parent = 't'";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[item_id]);
+				array_push($return_array,$data[sample_id]);
 			}
 			
 			if (is_array($return_array))
