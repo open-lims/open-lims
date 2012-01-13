@@ -280,18 +280,12 @@ public class CSVOperator {
 		String[] header = reader.get_header();
 		String[] new_header = new String[new_column_count];
 		
-		int num_deletes = 0;
-		
 		for (int i = 0; i < header.length; i++) 
 		{	
 			int desired_index = real_indices_to_desired_column_indices.get(i);
 			if(desired_index != -1)
 			{
-				new_header[desired_index - num_deletes] = header[i];
-			}
-			else
-			{
-				num_deletes++;
+				new_header[desired_index] = header[i];
 			}
 		}
 		
@@ -319,7 +313,6 @@ public class CSVOperator {
 
 		while((columns = reader.read_line()) != null)
 		{
-
 			if(tresholds != null)
 			{
 				for (int i = 0; i < columns.length; i++) {
@@ -337,18 +330,13 @@ public class CSVOperator {
 			}
 			
 			new_columns = new String[new_column_count];
-			int num_deletes = 0;
 			
 			for (int i = 0; i < columns.length; i++) 
 			{
 				int desired_index = real_indices_to_desired_column_indices.get(i);
 				if(desired_index != -1)
 				{
-					new_columns[desired_index - num_deletes] = columns[i];
-				}
-				else
-				{
-					num_deletes++;
+					new_columns[desired_index] = columns[i];
 				}
 			}
 			
@@ -380,13 +368,13 @@ public class CSVOperator {
 		
 		real_indices_to_desired_column_indices = new HashMap<Integer, Integer>(header.length);
 		
-		
 		for (int i = 0; i < header.length; i++) 
 		{
 			real_indices_to_desired_column_indices.put(i, -1);
 		}
 		
-		for (int i = 0; i < order.length; i++) {
+		for (int i = 0; i < order.length; i++) 
+		{
 			int index = reader.get_column_index(order[i]);
 			real_indices_to_desired_column_indices.put(index, i);
 		}

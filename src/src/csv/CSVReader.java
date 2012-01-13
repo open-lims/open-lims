@@ -1,7 +1,5 @@
 package csv;
 
-import io.CSVConfig;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,16 +13,15 @@ public class CSVReader extends CSVFile{
 	private BufferedReader reader;
 	
 	private String[] current_line;
-	
-	private String data_begin = CSVConfig.get_config("csvDataBegin");
-	private String data_end = CSVConfig.get_config("csvDataEnd");
-	
+
 	private MetadataReader[] metadata_readers = null;
 	
-	public CSVReader(BufferedReader reader, String delimiter, String line_break)
+	public CSVReader(BufferedReader reader, String delimiter, String line_break, String data_begin_tag, String data_end_tag)
 	{
 		super(delimiter, line_break);
 		this.reader = reader;
+		this.data_begin = data_begin_tag;
+		this.data_end = data_end_tag;
 		
 		if(data_begin != null)
 		{
@@ -32,10 +29,12 @@ public class CSVReader extends CSVFile{
 		}
 	}
 	
-	public CSVReader(BufferedReader reader, String delimiter, String line_break, MetadataReader[] metadata_readers)
+	public CSVReader(BufferedReader reader, String delimiter, String line_break, String data_begin_tag, String data_end_tag, MetadataReader[] metadata_readers)
 	{
 		super(delimiter, line_break);
 		this.reader = reader;
+		this.data_begin = data_begin_tag;
+		this.data_end = data_end_tag;
 		
 		this.metadata_readers = metadata_readers;
 		

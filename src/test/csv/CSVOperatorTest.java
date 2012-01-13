@@ -21,7 +21,7 @@ public class CSVOperatorTest {
 		CSVWriter w = new CSVWriter(bw, ",", "\r\n");
 		
 		BufferedReader br = DataResource.getResourceFromFileIdAsStream(3017);
-		CSVReader r = new CSVReader(br, ",","\r\n");
+		CSVReader r = new CSVReader(br, ",","\r\n", "BEGIN DATA", "END DATA");
 		
 		CSVOperator op = new CSVOperator();
 		op.write_plain_csv(r, w);
@@ -36,7 +36,7 @@ public class CSVOperatorTest {
 		CSVWriter w = new CSVWriter(bw, ",", "\r\n");
 		
 		BufferedReader br = DataResource.getResourceFromFileIdAsStream(3017);
-		CSVReader r = new CSVReader(br, ",", "\r\n");
+		CSVReader r = new CSVReader(br, ",", "\r\n", "BEGIN DATA", "END DATA");
 		
 		Integer[] order = {61,60,59,58,57,56,55,54,53,52,51,50,49,48,47,46,45,44,43,42,41,40,39,38,37,36,35,34,33,32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0};
 		CSVOperator op = new CSVOperator();
@@ -50,7 +50,7 @@ public class CSVOperatorTest {
 		CSVWriter w = new CSVWriter(bw, ",", "\r\n");
 		
 		BufferedReader br = DataResource.getResourceFromFileIdAsStream(3017);
-		CSVReader r = new CSVReader(br, ",", "\r\n");
+		CSVReader r = new CSVReader(br, ",", "\r\n", "BEGIN DATA", "END DATA");
 		
 		String[] deletes = {"Array Row","Array Column","Spot Row", "Name"};
 		CSVOperator op = new CSVOperator();
@@ -64,7 +64,7 @@ public class CSVOperatorTest {
 		CSVWriter w = new CSVWriter(bw, ",", "\r\n");
 		
 		BufferedReader br = DataResource.getResourceFromFileIdAsStream(3017);
-		CSVReader r = new CSVReader(br, ",","\r\n");
+		CSVReader r = new CSVReader(br, ",","\r\n", "BEGIN DATA", "END DATA");
 		
 		Integer[] deletes = {11,12,13,14};
 		Integer[] order = {10,9,8,7,6,5,4,3,2,1,0};
@@ -81,7 +81,7 @@ public class CSVOperatorTest {
 		CSVWriter w = new CSVWriter(bw, ",", "\r\n");
 		
 		BufferedReader br = DataResource.getResourceFromFileIdAsStream(3017);
-		CSVReader r = new CSVReader(br, ",", "\r\n");
+		CSVReader r = new CSVReader(br, ",", "\r\n", "BEGIN DATA", "END DATA");
 		
 		Treshold t1 = new Treshold() {
 			public boolean check_field(String field, int column_index) {
@@ -109,7 +109,7 @@ public class CSVOperatorTest {
 		Treshold t2 = new Treshold() {
 			
 			private BufferedReader br = DataResource.getResourceFromFileIdAsStream(3018);
-			private CSVReader r = new CSVReader(br, ",","\r\n");
+			private CSVReader r = new CSVReader(br, ",","\r\n", "BEGIN DATA", "END DATA");
 			
 			public boolean check_field(String field, int column_index) {
 				if(column_index == 6) {

@@ -11,6 +11,9 @@ public class CSVFile {
 	private String delimiter;
 	private String line_break;
 	
+	protected String data_begin = null;
+	protected String data_end = null;
+	
 	protected Integer current_line_num = 0;
 	
 	private int new_column_count = 0;
@@ -34,6 +37,11 @@ public class CSVFile {
 	public String get_line_break()
 	{
 		return line_break;
+	}
+	
+	public boolean has_metadata()
+	{
+		return has_metadata;
 	}
 	
 	public int get_column_index(String column)

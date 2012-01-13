@@ -27,14 +27,14 @@ public class SwapRowsTreshold implements Treshold {
 	 * @param associated_files an Array of associated file ids, ordered by priority.
 	 * @param treshold the value to look for.
 	 */
-	public SwapRowsTreshold(int[] associated_files, String treshold)
+	public SwapRowsTreshold(int[] associated_files, String treshold, String delimiter, String line_break, String data_begin_tag, String data_end_tag)
 	{
 		this.treshold = treshold;
 		this.associated_files = associated_files;
 		for (int i = 0; i < associated_files.length; i++) 
 		{
 			BufferedReader br = DataResource.getResourceFromFileIdAsStream(associated_files[i]);
-			CSVReader r =  new CSVReader(br, ",","\r\n");
+			CSVReader r =  new CSVReader(br, delimiter, line_break, data_begin_tag, data_end_tag);
 			
 			open_readers.put(associated_files[i],r);
 		}

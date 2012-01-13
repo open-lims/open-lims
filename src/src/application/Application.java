@@ -1,14 +1,9 @@
 package application;
-import io.CSVConfig;
 import io.DBConfig;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
 
 import metadata.BiochemistryMetadataReader;
 import metadata.interfaces.MetadataReader;
@@ -29,36 +24,29 @@ public class Application {
 	 */
 	public Application() 
 	{
-		new CSVConfig();
 		new DBConfig();		
 	}
 	
-	private void convert_csv(int file_id, File destination, Treshold[] tresholds, String[] allowed_cols)
+	private void convert_csv(int file_id, File destination, Treshold[] tresholds, String[] allowed_cols_in_order)
 	{		
 		BiochemistryMetadataReader biodata_reader = new BiochemistryMetadataReader();
 		MetadataReader[] metadata_readers = new MetadataReader[]{biodata_reader};
 		
 		BufferedReader br = DataResource.getResourceFromFileIdAsStream(file_id);
-		CSVReader r = new CSVReader(br, CSVConfig.get_config("csvSeparatorSource"), CSVConfig.get_config("csvNewlineSource").replace("\\r", "\r").replace("\\n", "\n"),metadata_readers);
+		CSVReader r = new CSVReader(br, ",", "\r\n", "BEGIN DATA", "END DATA", metadata_readers);
 		
 		BufferedWriter bw = DataResource.getWriter(destination);
-		CSVWriter w = new CSVWriter(bw, CSVConfig.get_config("csvSeparatorTarget"), CSVConfig.get_config("csvNewlineTarget").replace("\\r", "\r").replace("\\n", "\n"));
+		CSVWriter w = new CSVWriter(bw, ",", "\r\n");
 		
-		Integer[] deletes = calculate_deleted_indices(r, allowed_cols);
-		
-		String[] order = {};
-			
-		
-		if(biodata_reader.get_channel() == 1)
+		if(biodata_reader.get_channel() == 2)
 		{ //change order
-			System.out.println("channel is 1");
+			allowed_cols_in_order = new String[]{"Index","Array Row","Array Column","Spot Row","Spot Column","Ch2 Median","Ch2 F % Sat.","Ch1 Median","Ch1 F % Sat."};
 		}
 		
 		CSVOperator op = new CSVOperator();
-		op.rewrite_csv_with_tresholds_new(r, w, order, tresholds);
-		
+		op.rewrite_csv_with_tresholds_new(r, w, allowed_cols_in_order, tresholds);
 	}
-	
+	/*
 	private Integer[] calculate_deleted_indices(CSVReader reader, String[] allowed_cols)
 	{
 		int[] allowed_indices = new int[allowed_cols.length];
@@ -95,7 +83,7 @@ public class Application {
 		}
 		return deletes;
 	}
-	
+	*/
 	
 	public static void main(String[] args) 
 	{
@@ -106,7 +94,7 @@ public class Application {
 		
 		//tresholds to check
 		int[] associated_files = {3018, 3019, 3021, 3022};
-		Treshold t1 = new SwapRowsTreshold(associated_files, "65535");
+		Treshold t1 = new SwapRowsTreshold(associated_files, "65535", ",", "\r\n", "BEGIN DATA", "END DATA");
 		Treshold t2 = new NullifyTreshold("\"emp\"");
 		Treshold[] tresholds = {t1, t2};
 		
@@ -114,7 +102,7 @@ public class Application {
 		String[] allowed_cols = {"Index","Array Row","Array Column","Spot Row","Spot Column","Ch1 Median","Ch1 F % Sat.","Ch2 Median","Ch2 F % Sat."};
 		
 		//desired output location
-		File destination = new File("./app.csv");
+		File destination = new File("./app2.csv");
 		
 		app.convert_csv(file_id, destination, tresholds, allowed_cols);
 	}

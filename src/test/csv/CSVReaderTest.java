@@ -15,7 +15,7 @@ public class CSVReaderTest {
 		
 		//read test.csv
 		BufferedReader br = DataResource.getResourceFromFileIdAsStream(3017);
-		CSVReader r = new CSVReader(br, ",","\r\n");
+		CSVReader r = new CSVReader(br, ",","\r\n", "BEGIN DATA", "END DATA");
 		String[] columns;
 		int row_count = 0;
 		while((columns = r.read_line()) != null) //read file linewise
