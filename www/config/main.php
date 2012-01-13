@@ -78,8 +78,6 @@ define("ENABLE_DB_LOG_ON_ROLLBACK",		true);
 define("ENABLE_DB_LOG_ON_EXP_ROLLBACK",	false);							
 define("ENABLE_DB_LOG_ON_COMMIT",		false);	
 
-// User Standard Settings
-
 // Session-Time and IP Errors
 define("MAX_SESSION_PERIOD",			36000);	// in seconds
 define("MAX_IP_ERRORS",					10);
