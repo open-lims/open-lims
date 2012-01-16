@@ -84,6 +84,19 @@ class ProjectRequest
 			break;
 			
 			
+			// Log
+			
+			case "log_create":
+				require_once("ajax/project_log.ajax.php");
+				echo ProjectLogAjax::create($_POST[get_array]);
+			break;
+			
+			case "log_create_handler":
+				require_once("ajax/project_log.ajax.php");
+				echo ProjectLogAjax::create_handler($_POST[get_array], $_POST[comment], false);
+			break;
+			
+			
 			// Admin
 			
 			case "get_project_admin_menu":

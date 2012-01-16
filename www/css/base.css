@@ -496,3 +496,16 @@ padding: 2px 2px 2px 5px;
 	color: black;
 	text-decoration: none;
 }
+.BaseWantToHeadline
+{
+	color: #0F0F0F;
+	font: normal 10px Verdana, Helvetica, sans-serif;
+}
+.BaseWantToLine {
+	margin: 0 0 2px 0;
+	padding: 2px 0 0 0;
+	height: 1px;
+	border-bottom: 1px #C0C0C0 dotted;
+	font-size: 10px;
+	clear: both;
+}

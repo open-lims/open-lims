@@ -352,7 +352,7 @@ class ProjectLogIO
 					
 					$project_log = new ProjectLog(null);
 					
-					if ($project_log->create($_GET[project_id], $_POST[text], false, $important, md5(rand(0,50000))))
+					if ($project_log->create($_GET[project_id], $_POST[text], false, $important))
 					{
 						Common_IO::step_proceed($params, "Project Log", "comment added successful",null);
 					}

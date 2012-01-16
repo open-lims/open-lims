@@ -725,7 +725,14 @@ class ProjectAjax
 					}		
 				}
 				
-				$template->set_var("status_action",$result);
+				if ($counter > 0)
+				{
+					$template->set_var("status_action",$result);
+				}
+				else
+				{
+					$template->set_var("status_action",false);
+				}
 				
 				$template->set_var("write",true);
 			}
