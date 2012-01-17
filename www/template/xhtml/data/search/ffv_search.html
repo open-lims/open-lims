@@ -25,7 +25,7 @@
 		<td>
 			<div id='FileSearchList'>
 					<script type="text/javascript">
-						var tree_search = new base_tree_nav("FileSearchList","FileSearch","core/modules/data/ajax/folder.ajax.php");
+						var tree_search = new base_tree_nav("FileSearchList","FileSearch","ajax.php?nav=data&session_id="+get_array['session_id']+"&run=navigation_folder");
 						tree_search.set_scrollbar(false);
 						tree_search.set_follow_link(false);
 						tree_search.set_writeback(false);

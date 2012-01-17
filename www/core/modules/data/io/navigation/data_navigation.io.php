@@ -49,7 +49,7 @@ class DataNavigationIO
 	 */
 	public static function get_ajax_url()
 	{
-		return "core/modules/data/ajax/navigation/data_navigation.ajax.php";
+		return "ajax.php?nav=data&session_id=".$_GET['session_id']."&run=navigation_data";
 	}
 }
 

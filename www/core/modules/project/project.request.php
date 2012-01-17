@@ -144,6 +144,37 @@ class ProjectRequest
 				echo ProjectAdminAjax::count_project_permissions($_POST[argument_array]);
 			break;
 			
+			//navigation
+			
+			case "navigation":
+				require_once 'ajax/navigation/project_navigation.ajax.php';
+					
+					switch($_GET['action']):
+	
+					case "get_name":
+						echo ProjectNavigationAjax::get_name();
+					break;
+					
+					case "get_html":
+						echo ProjectNavigationAjax::get_html();
+					break;
+					
+					case "get_array":
+						echo ProjectNavigationAjax::get_array();
+					break;
+					
+					case "set_array":
+						echo ProjectNavigationAjax::set_array($_POST['array']);
+					break;
+				
+					case "get_children":
+						echo ProjectNavigationAjax::get_children($_POST['id']);
+					break;	
+				
+				endswitch;
+				
+			break;
+			
 		endswitch;
 	}
 	

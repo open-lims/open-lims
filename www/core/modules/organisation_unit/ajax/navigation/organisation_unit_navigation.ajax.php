@@ -22,36 +22,27 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * 
- */
-$GLOBALS['autoload_prefix'] = "../../";
-require_once("../../../base/ajax.php");
 
 /**
  * Organiser AJAX IO Class
  * @package organisation_unit
  */
-class OrganisationUnitAjax extends Ajax
+class OrganisationUnitNavigationAjax
 {
-	function __construct()
-	{
-		parent::__construct();
-	}
 	
-	private function get_name()
+	public static function get_name()
 	{
 		echo "OrganisationUnit";
 	}
 	
-	private function get_html()
+	public static function get_html()
 	{
 		$template = new HTMLTemplate("organisation_unit/navigation/left.html");
 		
 		$template->output();
 	}
 	
-	public function get_array()
+	public static function get_array()
 	{
 		global $session;
 
@@ -195,7 +186,7 @@ class OrganisationUnitAjax extends Ajax
 	/**
 	 * @param array $array
 	 */
-	public function set_array($array)
+	public static function set_array($array)
 	{
 		global $session;
 		
@@ -213,7 +204,7 @@ class OrganisationUnitAjax extends Ajax
 	/**
 	 * @param integer $id
 	 */
-	public function get_children($id)
+	public static function get_children($id)
 	{
 		if (is_numeric($id) and $id != 0)
 		{
@@ -297,39 +288,6 @@ class OrganisationUnitAjax extends Ajax
 			echo json_encode($return_array);
 		}
 	}
-	
-	public function method_handler()
-	{
-		global $session;
-		
-		if ($session->is_valid())
-		{
-			switch($_GET[run]):	
-				case "get_name":
-					$this->get_name();
-				break;
-				
-				case "get_html":
-					$this->get_html();
-				break;
-							
-				case "get_array":
-					$this->get_array();
-				break;
-				
-				case "set_array":
-					$this->set_array($_POST['array']);
-				break;
-				
-				case "get_children":
-					$this->get_children($_GET['id']);
-				break;	
-			endswitch;
-		}
-	}
+
 }
-
-$organisation_unit_ajax = new OrganisationUnitAjax;
-$organisation_unit_ajax->method_handler();
-
 ?>

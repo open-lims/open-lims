@@ -41,6 +41,156 @@ class DataRequest
 				echo DataAjax::count_data_browser($_POST[argument_array]);
 			break;
 			
+			case "list_file_items":
+				require_once("ajax/file.ajax.php");
+				echo FileAjax::list_file_items($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			//data browser
+			
+			case "get_data_browser_path":
+				require_once("ajax/data_browser.ajax.php");
+				echo DataBrowserAjax::get_data_browser_path($_POST[folder_id],$_POST[virtual_folder_id]);
+			break;
+			
+			case "get_data_browser_path_cleared":
+				require_once("ajax/data_browser.ajax.php");
+				echo DataBrowserAjax::get_data_browser_path_cleared($_POST[folder_id],$_POST[virtual_folder_id]);
+			break;
+			
+			case "get_context_sensitive_file_menu":
+				require_once("ajax/data_browser.ajax.php");
+				echo DataBrowserAjax::get_context_sensitive_file_menu($_POST[file_id]);
+			break;
+			
+			case "get_context_sensitive_folder_menu":
+				require_once("ajax/data_browser.ajax.php");
+				echo DataBrowserAjax::get_context_sensitive_folder_menu($_POST[file_id]);
+			break;
+			
+			case "get_context_sensitive_value_menu":
+				require_once("ajax/data_browser.ajax.php");
+				echo DataBrowserAjax::get_context_sensitive_value_menu($_POST[file_id]);
+			break;
+			
+			case "get_browser_menu":
+				require_once("ajax/data_browser.ajax.php");
+				echo DataBrowserAjax::get_browser_menu($_POST[folder_id]);
+			break;
+			
+			case "delete_stack":
+				require_once("ajax/data_browser.ajax.php");
+				echo DataBrowserAjax::delete_stack();
+			break;
+			
+			//file
+			
+			case "file_add":
+				require_once("ajax/file.ajax.php");
+				echo FileAjax::add_file($_POST[folder_id]);
+			break;
+
+			case "file_delete":
+				require_once("ajax/file.ajax.php");
+				echo FileAjax::get_data_browser_link_html_and_button_handler("file_delete");
+			break;
+			
+			case "file_update":
+				require_once("ajax/file.ajax.php");
+				echo FileAjax::get_data_browser_link_html_and_button_handler("file_update");
+			break;
+			
+			case "file_update_minor":
+				require_once("ajax/file.ajax.php");
+				echo FileAjax::get_data_browser_link_html_and_button_handler("file_update_minor");
+			break;
+			
+			case "file_permission":
+				require_once("ajax/file.ajax.php");
+				echo FileAjax::get_data_browser_link_html_and_button_handler("permission");
+			break;
+			
+			//value
+			
+			case "value_add":
+				require_once("ajax/value.ajax.php");
+				echo ValueAjax::get_data_browser_link_html_and_button_handler("value_add");
+			break;
+			
+			case "value_delete":
+				require_once("ajax/value.ajax.php");
+				echo ValueAjax::get_data_browser_link_html_and_button_handler("value_delete");
+			break;
+			
+			case "value_permission":
+				require_once("ajax/value.ajax.php");
+				echo ValueAjax::get_data_browser_link_html_and_button_handler("permission");
+			break;
+			
+			//folder
+			
+			case "folder_add":
+				require_once("ajax/folder.ajax.php");
+				echo FolderAjax::get_data_browser_link_html_and_button_handler("folder_add");
+			break;
+			
+			case "folder_delete":
+				require_once("ajax/folder.ajax.php");
+				echo FolderAjax::get_data_browser_link_html_and_button_handler("folder_delete");
+			break;
+			
+			case "folder_rename":
+				require_once("ajax/folder.ajax.php");
+				echo FolderAjax::get_data_browser_link_html_and_button_handler("folder_rename");
+			break;
+			
+			case "folder_permission":
+				require_once("ajax/folder.ajax.php");
+				echo FolderAjax::get_data_browser_link_html_and_button_handler("permission");
+			break;
+			
+			
+			//navigation
+			
+			case "navigation_data":
+				require_once("ajax/navigation/data_navigation.ajax.php");
+				switch($_GET['action']):
+					case "get_name":
+						echo DataNavigationAjax::get_name();
+					break;
+					
+					case "get_html":
+						echo DataNavigationAjax::get_html();
+					break;
+					
+					case "get_array":
+						echo DataNavigationAjax::get_array();
+					break;
+					
+					case "set_array":
+						echo DataNavigationAjax::set_array($_POST['array']);
+					break;
+				
+					case "get_children":
+						echo DataNavigationAjax::get_children($_POST['id']);
+					break;
+				endswitch;
+			break;
+			
+			case "navigation_folder":
+				require_once("ajax/folder.ajax.php");
+				
+				switch($_GET['action']):
+					case "get_array":
+						echo FolderAjax::get_array();
+					break;
+					
+					case "get_children":
+						echo FolderAjax::get_children($_POST['id']);
+					break;
+				endswitch;
+			break;
+			
 		endswitch;
 	}
 	

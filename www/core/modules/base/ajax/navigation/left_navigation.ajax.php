@@ -22,22 +22,13 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * 
- */
-$GLOBALS['autoload_prefix'] = "../../";
-require_once("../../../base/ajax.php");
 
 /**
  * Left Nav AJAX IO Class
  * @package base
  */
-class LeftNavigationAjax extends Ajax
+class LeftNavigationAjax
 {
-	function __construct()
-	{
-		parent::__construct();
-	}
 	
 	/**
 	 * @param integer $id
@@ -52,22 +43,7 @@ class LeftNavigationAjax extends Ajax
 		}
 	}
 	
-	public function method_handler()
-	{
-		global $session;
-		
-		if ($session->is_valid())
-		{
-			switch($_GET[run]):	
-				case "set_active":
-					$this->set_active($_GET[id]);
-				break;
-			endswitch;
-		}
-	}
 }
 
-$left_navigation_ajax = new LeftNavigationAjax;
-$left_navigation_ajax->method_handler();
 
 ?>

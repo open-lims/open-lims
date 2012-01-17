@@ -41,6 +41,17 @@ class BaseRequest
 				echo LoginAjax::logout();
 			break;
 			
+			case"left_navigation":
+				require_once("ajax/navigation/left_navigation.ajax.php");
+				
+				switch($_GET['action']):
+					case "set_active":
+						echo LeftNavigationAjax::set_active($_POST['id']);
+					break;
+				endswitch;
+				
+			break;
+			
 		endswitch;
 	}
 	
@@ -133,7 +144,7 @@ class BaseRequest
 			case("user_change_timezone"):
 				require_once("io/user.io.php");
 				UserIO::change_timezone();
-			break;
+			break;		
 			
 		endswitch;
 	}
