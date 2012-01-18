@@ -266,19 +266,6 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 	vertical-align: top;
 }
 
-.ProjectLogTable {
-	padding-bottom: 0.3em;
-	padding-top: 0.3em;
-	width: 99%;
-	border-bottom: 1px #C0C0C0 solid;
-}
-
-.ProjectLogListTable {
-	padding-bottom: 0.3em;
-	padding-top: 0.3em;
-	width: 100%;
-}
-
 .ProjectCreateIWantTo {
 	width: 70%;
 	margin-left: auto;
@@ -291,15 +278,6 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 
 .ProjectCreateIWantTo td {
 	padding-bottom: 1.5em;
-}
-
-
-.projectLogAttachmenTable {
-	width: 50%;
-}
-
-.projectLogAttachmenTable th {
-	text-align: left;
 }
 
 /* Forms */

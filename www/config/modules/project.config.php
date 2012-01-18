@@ -1,6 +1,6 @@
 <?php
 /**
- * @package base
+ * @package project
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -20,11 +20,21 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
-
+ 	
 /**
- * IMPORTANT NOTE: Modification of this file is not allowed by developers!
- */
-define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-37-dev &#945;");
+ * 
+ */ 
+define("PROJECT_FOLDER_ID",				4);
+
+define("PROJECT_USER_STD_QUOTA",		1073741824);
+
+// Standard Permissions of new Projects
+define("PROJECT_USER_STD_PERMISSION",	15);	// The Owner
+define("PROJECT_LEADER_STD_PERMISSION",	51);	// The Leader of the organ. Unit
+define("PROJECT_QM_STD_PERMISSION",		1);		// The Qualit Manager
+define("PROJECT_GROUP_STD_PERMISSION",	1);		// The group(s) of the organ. Unit
+define("PROJECT_OU_STD_PERMISSION",		1);		// The organ. Unit
+
+define("PROJECT_LOG_ENTRIES_PER_PAGE", 	6);
 
 ?>

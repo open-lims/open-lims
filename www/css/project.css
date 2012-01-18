@@ -64,6 +64,37 @@
 }
 
 
+/* Project Log */
+
+.ProjectLogEntry
+{
+	margin: 3px;
+	border-bottom: 1px #C0C0C0 dotted;
+	padding-bottom: 5px;
+}
+.ProjectLogEntryHeader
+{
+	margin-bottom: 7px;
+}
+.ProjectLogEntryHeader span
+{
+	border-bottom: 1px #C0C0C0 dotted;
+}
+.ProjectLogEntryHeaderDatetime
+{
+	font-size: 14px;
+	font-weight: bold;
+}
+.ProjectLogEntryContent
+{
+	text-align: justify;
+}
+.ProjectLogEntryFooter
+{
+	margin-top: 7px;
+}
+
+
 /* Project Task */
 
 .ProjectTaskDetailTable

@@ -40,7 +40,6 @@ class ListAjax extends Ajax
 	
 	public function get_page_bar($page, $number_of_pages, $css_page_id)
 	{
-		
 		$pagebar .= "<table style='display: inline;'><tr><td><span class='smallTextBlack'>Page ".$page." of ".$number_of_pages."</span></td>";
 	
 		// Previous
@@ -50,10 +49,7 @@ class ListAjax extends Ajax
 		}
 		else
 		{
-			
 			$previous_page = $page - 1;
-			
-
 			$pagebar .= "<td><a href='#' class='".$css_page_id."' id='".$css_page_id."".$previous_page."'><img src='images/icons/previous.png' alt='Previous' border='0' /></a></td>";
 		}	
 		
@@ -69,34 +65,39 @@ class ListAjax extends Ajax
 			}
 			else
 			{
-
-				if ($i <= 2) {
+				if ($i <= 2)
+				{
 					$display = true;
 				}
 				
-				if ($i > $max_page-2) {
+				if ($i > $max_page-2)
+				{
 					$display = true;
 				}
 				
-				if ($display == false and $page+1 == $i) {
+				if ($display == false and $page+1 == $i)
+				{
 					$display = true;
 				}
 				
-				if ($display == false and $page-1 == $i) {
+				if ($display == false and $page-1 == $i)
+				{
 					$display = true;
 				}
 				
-				if ($display == false and $page == $i) {
+				if ($display == false and $page == $i)
+				{
 					$display = true;
 				}
-				if ($i == $page+10 and $display == false) {
+				if ($i == $page+10 and $display == false)
+				{
 					$display = true;
 				}
 				
-				if ($i == $page-10 and $display == false) {
+				if ($i == $page-10 and $display == false)
+				{
 					$display = true;
 				}
-
 			}
 			
 			if ($display == true)

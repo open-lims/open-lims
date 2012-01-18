@@ -710,7 +710,7 @@ class ProjectAdminAjax
 	/**
 	 * @param string $get_array
 	 * @param string $comment
-	 * @return stirng
+	 * @return string
 	 * @throws ProjectException
 	 * @throws ProjectSecurityAccessDeniedException
 	 */

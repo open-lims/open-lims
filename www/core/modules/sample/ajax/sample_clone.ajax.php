@@ -650,14 +650,14 @@ class SampleCloneAjax extends Ajax
 			$session->delete_value("SAMPLE_CLONE_ITEM_ARRAY");
 			$session->delete_value("SAMPLE_CLONE_NAME_WARNING");
 			
-			if ($sample_clone_role == "item" or $sample_add_role == "item_parent")
+			if ($sample_clone_role == "item" or $sample_clone_role == "item_parent")
 			{
 				// Special Parent Sample Case
-				if ($sample_add_role == "item_parent")
+				if ($sample_clone_role == "item_parent")
 				{
 					$parent_sample = new Sample($sample_item_get_array['sample_id']);
 					$sample_item_get_array['sample_id'] = $sample_id;
-					$sample_item_get_array['key'] = ($sample_item_get_array['key']*-1);
+					$sample_item_get_array['parent'] = "1";
 					$event_item_id = $parent_sample->get_item_id();
 				}
 				else

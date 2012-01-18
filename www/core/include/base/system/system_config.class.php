@@ -22,9 +22,34 @@
  */
 
 /**
- * IMPORTANT NOTE: Modification of this file is not allowed by developers!
+ * 
  */
-define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-37-dev &#945;");
+require_once("interfaces/system_config.interface.php");
 
-?>
+/**
+ * System Config Class
+ * @package base
+ */
+class SystemConfig implements SystemConfigInterface
+{
+	public static function load_module_config()
+	{
+		$module_config_dir = constant("WWW_DIR")."/config/modules";
+		
+		if (is_dir($module_config_dir))
+		{
+			$module_config_dir_array = scandir($module_config_dir);
+			if (is_array($module_config_dir_array) and count($module_config_dir_array) >= 1)
+			{
+				foreach($module_config_dir_array as $key => $value)
+				{
+					$config_file = $module_config_dir."/".$value;
+					if (is_file($config_file))
+					{
+						require_once($config_file);
+					}
+				}
+			}
+		}
+	}
+}

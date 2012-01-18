@@ -1,6 +1,6 @@
 <?php
 /**
- * @package base
+ * @package data
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -20,11 +20,16 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
-
+ 	
 /**
- * IMPORTANT NOTE: Modification of this file is not allowed by developers!
- */
-define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-37-dev &#945;");
+ * 
+ */ 
+define("USER_STD_QUOTA",				53687091200);
+define("QUOTA_WARNING",					90);
+
+define("TEMP_FOLDER_ID",				6);
+define("ORGANISATION_UNIT_FOLDER_ID",	3);
+define("USER_FOLDER_ID",				8);
+define("GROUP_FOLDER_ID",				9);
 
 ?>

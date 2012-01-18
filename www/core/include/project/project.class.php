@@ -1262,7 +1262,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					}
 					
 					$project_log = new ProjectLog(null);
-					if ($project_log->create($this->project_id, null, false, false, md5(rand(0,32768))) != null)
+					if ($project_log->create($this->project_id, null) != null)
 					{
 						if ($project_log->link_status($next_status_id) == true)
 						{
@@ -1645,7 +1645,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     	if ($this->project_id and $this->project)
     	{			
 			$project_log = new ProjectLog(null);
-			$project_log->create($this->project_id, "Project Deleted", false, true, md5(rand(0,32768)));
+			$project_log->create($this->project_id, "Project Deleted", false, true);
 			
 			$folder_id = ProjectFolder::get_folder_by_project_id($this->project_id);
 			$folder = Folder::get_instance($folder_id);
@@ -1668,7 +1668,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     	if ($this->project_id and $this->project)
     	{	
     		$project_log = new ProjectLog(null);
-			$project_log->create($this->project_id, "Project Restored", false, true, md5(rand(0,32768)));
+			$project_log->create($this->project_id, "Project Restored", false, true);
     				
 			return $this->project->set_deleted(false);
 		}
@@ -1694,11 +1694,11 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 				if ($comment)
 				{
 					$project_log = new ProjectLog(null);
-					$project_log->create($this->project_id, $comment, false, false, md5(rand(0,32768)));
+					$project_log->create($this->project_id, $comment);
 				}
 				
 				$project_log = new ProjectLog(null);
-				$project_log->create($this->project_id, null, true, true, md5(rand(0,32768)));
+				$project_log->create($this->project_id, null, true, true);
 				$project_log->link_status(0);
 			
 				return true;
@@ -1728,7 +1728,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 			if ($project_has_project_status->delete() == true)
 			{	
 				$project_log = new ProjectLog(null);
-				$project_log->create($this->project_id, "Project Reactivated", false, true, md5(rand(0,32768)));
+				$project_log->create($this->project_id, "Project Reactivated", false, true);
 				$project_log->link_status(0);
 			
 				return true;

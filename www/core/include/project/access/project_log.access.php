@@ -37,7 +37,6 @@ class ProjectLog_Access
 	private $cancel;
 	private $important;
 	private $owner_id;
-	private $action_checksum;
 
 	/**
 	 * @param integer $log_id
@@ -115,11 +114,11 @@ class ProjectLog_Access
 	 * @param string $action_checksum
 	 * @return integer
 	 */
-	public function create($project_id, $content, $cancel, $important, $owner_id, $action_checksum)
+	public function create($project_id, $content, $cancel, $important, $owner_id)
 	{
 		global $db;
 		
-		if (is_numeric($project_id) and $owner_id and strlen($action_checksum) == 32)
+		if (is_numeric($project_id) and $owner_id)
 		{
 			if ($cancel == true)
 			{
@@ -150,8 +149,8 @@ class ProjectLog_Access
 			
 			$datetime = date("Y-m-d H:i:s");
 			
-			$sql_write = "INSERT INTO ".constant("PROJECT_LOG_TABLE")." (id, project_id, datetime, content, cancel, important, owner_id, action_checksum) " .
-					"VALUES (nextval('".self::PROJECT_LOG_PK_SEQUENCE."'::regclass),".$project_id.",'".$datetime."',".$content_insert.",'".$cancel_insert."','".$important_insert."',".$owner_id.",'".$action_checksum."')";
+			$sql_write = "INSERT INTO ".constant("PROJECT_LOG_TABLE")." (id, project_id, datetime, content, cancel, important, owner_id) " .
+					"VALUES (nextval('".self::PROJECT_LOG_PK_SEQUENCE."'::regclass),".$project_id.",'".$datetime."',".$content_insert.",'".$cancel_insert."','".$important_insert."',".$owner_id.")";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
@@ -281,21 +280,6 @@ class ProjectLog_Access
 		if ($this->owner_id)
 		{
 			return $this->owner_id;
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @return string
-	 */
-	public function get_action_checksum()
-	{
-		if ($this->action_checksum)
-		{
-			return $this->action_checksum;
 		}
 		else
 		{
@@ -482,35 +466,6 @@ class ProjectLog_Access
 			if ($db->db_affected_rows($res))
 			{
 				$this->owner_id = $owner_id;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	/**
-	 * @param string $action_checksum
-	 * @return bool
-	 */
-	public function set_action_checksum($action_checksum)
-	{
-		global $db;
-		
-		if ($this->log_id and strlen($action_checksum) == 32)
-		{
-			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET action_checksum = '".$action_checksum."' WHERE id = '".$this->log_id."'";
-			$res = $db->db_query($sql);
-			
-			if ($db->db_affected_rows($res))
-			{
-				$this->action_checksum = $action_checksum;
 				return true;
 			}
 			else

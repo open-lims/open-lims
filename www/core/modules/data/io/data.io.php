@@ -28,6 +28,7 @@
 class DataIO
 {
 	/**
+	 * @todo remove legacy code
 	 * @throws DataSecuriyAccessDeniedException
 	 */
 	public static function browser()

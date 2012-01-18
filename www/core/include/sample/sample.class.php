@@ -405,17 +405,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 							}
 							
 							$sample_item = new SampleItem($sample_id);
-							
-							if ($sample_item->set_gid(1) == false)
-							{
-								$this->sample_folder_object->delete(true, true);
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
-								throw new SampleCreateItemValueException("Could not create required value");
-							}
-							
+														
 							$sample_item->set_item_id($value->get_item_id());
 							
 							if ($sample_item->link_item() == false)
@@ -1199,7 +1189,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					}
 					else
 					{
-						$parent_sample_array = SampleItem::list_sample_id_by_item_id_and_gid($this->item_id, ($gid*-1));
+						$parent_sample_array = SampleItem::list_sample_id_by_item_id_and_gid_and_parent($this->item_id, $gid);
 						if (is_array($parent_sample_array) and count($parent_sample_array) >= 1)
 						{
 							$fulfilled_array[$key] = true;

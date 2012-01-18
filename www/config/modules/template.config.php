@@ -1,6 +1,6 @@
 <?php
 /**
- * @package base
+ * @package template
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -20,11 +20,13 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
-
+ 	
 /**
- * IMPORTANT NOTE: Modification of this file is not allowed by developers!
- */
-define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-37-dev &#945;");
+ * 
+ */ 
+define("TEMPLATE_FOLDER_ID",			7);
+
+define("OLDL_FOLDER_ID",				51);
+define("OLVDL_FOLDER_ID",				52);
 
 ?>

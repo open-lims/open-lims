@@ -1,4 +1,4 @@
-<?php
+<?php 
 /**
  * @package base
  * @version 0.4.0.0
@@ -21,10 +21,13 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * IMPORTANT NOTE: Modification of this file is not allowed by developers!
- */
-define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-37-dev &#945;");
 
+/**
+ * System Config Interface
+ * @package base
+ */
+interface SystemConfigInterface
+{
+	public static function load_module_config();
+}
 ?>

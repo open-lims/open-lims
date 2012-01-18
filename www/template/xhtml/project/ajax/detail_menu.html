@@ -51,7 +51,14 @@
 
 <!-- ENDIF -->
 
-<div class='horizontal_line'></div>
+<!-- IF ([[STATUS_ACTION]]) -->
+
+<div class='BaseWantToLine'></div>
+<div class='BaseWantToLine'></div>
+
+<div class='BaseWantToHeadline'>Required Steps</div>
+
+<!-- ENDIF -->
 
 <!-- FOREACH BEGIN ([[STATUS_ACTION]]) -->
 	
@@ -81,7 +88,10 @@
 <!-- FOREACH END -->	
 
 
-<div class='horizontal_line'></div>
+<div class='BaseWantToLine'></div>
+<div class='BaseWantToLine'></div>
+
+<div class='BaseWantToHeadline'>Optional Steps</div>
 
 <!-- IF ([[WRITE]] == 1) -->
 
@@ -90,12 +100,12 @@
 		<span class='BaseWantToText'>add a supplementary file</span>
 	</a>
 				
-	<a href='index.php?[[LOG_PARAMS]]' class='BaseWantToButton'>
+	<a href='#' class='BaseWantToButton'  id='ProjectLogCreateButton'>
 		<span class='BaseWantToIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
 		<span class='BaseWantToText'>add a comment to log</span>
 	</a>
 					
-	<div class='horizontal_line'></div>
+	<div class='BaseWantToLine'></div>
 				
 	<a href='index.php?[[ADD_TASK_PARAMS]]' class='BaseWantToButton'>
 		<span class='BaseWantToIcon'><img src='images/icons_30/add_limit.png' alt='' border='0' /></span>
@@ -114,7 +124,7 @@
 		<span class='BaseWantToText'>add a comment to log</span>
 	</a>
 					
-	<div class='horizontal_line'></div>
+	<div class='BaseWantToLine'></div>
 				
 	<a class='BaseWantToButton'>
 		<span class='BaseWantToIcon'><img src='images/icons_30/add_limit_na.png' alt='' border='0' /></span>
@@ -128,7 +138,7 @@
 	<span class='BaseWantToText'>show the tasks</span>
 </a>
 			
-<div class='horizontal_line'></div>
+<div class='BaseWantToLine'></div>
 
 <!-- IF ([[WRITE]] == 1) -->
 			

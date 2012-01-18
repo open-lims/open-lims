@@ -56,6 +56,9 @@ require_once($path_prefix."../../include/base/system/events/event.class.php");
 require_once($path_prefix."../../include/base/system/system_handler.class.php");
 require_once($path_prefix."../../include/base/system/autoload.function.php");
 require_once($path_prefix."../../include/base/system/transaction.class.php");
+require_once($path_prefix."../../include/base/system/system_config.class.php");
+			
+SystemConfig::load_module_config();
 
 Template::set_fallback_folder("xhtml");
 Template::set_current_folder("xhtml");

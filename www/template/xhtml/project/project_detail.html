@@ -42,6 +42,12 @@ $(document).ready(function()
 						$("#ProjectDetailProceedWindow").dialog("open");
 						return false;
 					});
+					
+					$("#ProjectLogCreateWindow").dialog({
+						autoOpen: false
+					});
+					
+					base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=log_create", 'get_array=[[GET_ARRAY]]', "ProjectLogCreateButton");
 				}
 			}
 		});
@@ -102,12 +108,19 @@ $(document).ready(function()
 			},
 			"Cancel": function()
 			{
-		          $(this).dialog( "close" );
+		        $(this).dialog( "close" );
 			}
 		}
 	});
 });
 </script>
+
+<div id="ProjectLogCreateWindow" title="Create New Log Entry" style='display: none;'>
+</div>
+
+<div id="ProjectLogCreateSuccessfulWindow" title="Create New Log Entry" style='display: none;'>
+Project entry has been successfully created.
+</div>
 
 <div id="ProjectDetailProceedWindow" title="Proceed with Project" style='display: none;'>
 </div>
