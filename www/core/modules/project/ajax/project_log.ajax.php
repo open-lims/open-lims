@@ -260,7 +260,21 @@ class ProjectLogAjax
 			$content = $project_log->get_content();
 			$content = str_replace("\n","<br />",$content);
 			
-			$return_json_array[0] = $content;
+			if (($content = $project_log->get_content()) != null)
+			{
+				$content = str_replace("\n","<br />", $content);
+				if (strlen($content) > 500)
+				{
+					$content = substr($content,500,strlen($content));
+				}
+				
+				$return_json_array[0] = $content;
+			}
+			else
+			{
+				$return_json_array[0] = false;
+			}
+			
 			$return_json_array[1] = "";
 			$return_json_array[2] = "";
 			$return_json_array[3] = "show less";

@@ -43,7 +43,15 @@ $(document).ready(function()
 					success: function(data)
 					{
 						var json_data = $.parseJSON(data);
-						$("#ProjectLogEntry"+id+" > div.ProjectLogEntryContent").html(json_data[0]);
+
+						var temp_div = $("<div></div>").html(json_data[0]).hide().appendTo("#ProjectLogEntry"+id+" > div.ProjectLogEntryContent");
+						var original_height = $(temp_div).height();
+						$(temp_div).remove();
+
+						$("#ProjectLogEntry"+id+" > div.ProjectLogEntryContent").animate({"height": original_height},"slow",function(){
+							$(this).html(json_data[0]);
+						});
+						
 						$("#ProjectLogEntry"+id+" > div.ProjectLogEntryStatus").html(json_data[1]);
 						$("#ProjectLogEntry"+id+" > div.ProjectLogEntryItems").html(json_data[2]);
 						$("#ProjectLogEntry"+id+" > div.ProjectLogEntryFooter > a#ProjectLogEntryFooterMore"+id).html(json_data[3]);
@@ -60,8 +68,24 @@ $(document).ready(function()
 					data: 'id='+id,
 					success: function(data)
 					{
+						var height = $("#ProjectLogEntry"+id+" > div.ProjectLogEntryContent").height();
 						var json_data = $.parseJSON(data);
-						$("#ProjectLogEntry"+id+" > div.ProjectLogEntryContent").slideDown("slow").html(json_data[0]);
+						
+						var current_content = $("#ProjectLogEntry"+id+" > div.ProjectLogEntryContent").html();
+						current_content = current_content.substr(0, current_content.length - 3);
+						
+						$("#ProjectLogEntry"+id+" > div.ProjectLogEntryContent").html(current_content);			
+						$("#ProjectLogEntry"+id+" > div.ProjectLogEntryContent").append(json_data[0]).css("height", "100%");
+
+						var new_height = $("#ProjectLogEntry"+id+" > div.ProjectLogEntryContent").height();
+											
+						$("#ProjectLogEntry"+id+" > div.ProjectLogEntryContent").css({
+							"height":height,
+							"overflow":"hidden"
+						});
+						
+						$("#ProjectLogEntry"+id+" > div.ProjectLogEntryContent").animate({"height": new_height},"slow");
+						
 						$("#ProjectLogEntry"+id+" > div.ProjectLogEntryStatus").html(json_data[1]);
 						$("#ProjectLogEntry"+id+" > div.ProjectLogEntryItems").html(json_data[2]);
 						$("#ProjectLogEntry"+id+" > div.ProjectLogEntryFooter > a#ProjectLogEntryFooterMore"+id).html(json_data[3]);
