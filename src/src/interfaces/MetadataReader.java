@@ -1,4 +1,4 @@
-package metadata.interfaces;
+package interfaces;
 
 /**
  * Interface for reading metadata from a csv header.

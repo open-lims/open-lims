@@ -1,4 +1,4 @@
-package tresholds.interfaces;
+package interfaces;
 
 /**
  * Interface for implementing tresholds.
