@@ -45,6 +45,22 @@
 {
 	padding: 5px;
 }
+#ProjectDetailProceedComment
+{
+	border-top: 1px #C0C0C0 dotted;
+	padding: 5px;
+}
+#ProjectDetailProceedCommentButton
+{
+	text-decoration: none;
+	font-size: 10px;	
+}
+#ProjectDetailProceedCommentButtonText
+{
+	float: left;
+	display: block;
+	margin: 3px;
+}
 
 /* Project Admin */
 
