@@ -1,0 +1,47 @@
+<script>
+$(document).ready(function()
+{
+	var page = 1;
+	
+	load_log = function(local_page)
+	{
+		if (local_page != -1)
+		{
+			page = local_page;
+		}
+		
+		$.ajax(
+		{
+			type: "POST",
+			url: "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=log_get_list",
+			data: 'get_array=[[GET_ARRAY]]&page='+page,
+			success: function(data)
+			{	
+				if (data)
+				{
+					$("#ProjectLog").html(data);
+				}
+			}
+		});
+	}
+	
+	load_log(page);
+});
+</script>
+
+<div id="ProjectLogCreateWindow" title="Create New Log Entry" style='display: none;'>
+</div>
+
+<br />
+
+<!-- CONTAINER BEGIN ("Project Log") -->
+
+<div class='boxIconBar'>
+
+<div class='boxIcon'><img src='images/icons/add.png' alt='' />&nbsp;<a href='#' id='ProjectLogCreateButton'>Add a Log-Entry</a></div>
+
+</div>
+
+<div id='ProjectLog'></div>
+
+<!-- CONTAINER END () -->

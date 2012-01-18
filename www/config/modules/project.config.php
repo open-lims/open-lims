@@ -35,4 +35,6 @@ define("PROJECT_QM_STD_PERMISSION",		1);		// The Qualit Manager
 define("PROJECT_GROUP_STD_PERMISSION",	1);		// The group(s) of the organ. Unit
 define("PROJECT_OU_STD_PERMISSION",		1);		// The organ. Unit
 
+define("PROJECT_LOG_ENTRIES_PER_PAGE", 	6);
+
 ?>

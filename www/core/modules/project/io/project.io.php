@@ -113,7 +113,7 @@ class ProjectIO
 	
 	public static function create()
 	{
-		$template = new HTMLTemplate("project/create_project.html");	
+		$template = new HTMLTemplate("project/new_project.html");	
 		
 		require_once("core/modules/base/common/io/assistant.io.php");
 		

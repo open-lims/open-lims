@@ -1,10 +1,15 @@
 var comment = $("#ProjectLogCreateWindowReason").val();
+var important = 0;
+if ($("#ProjectLogCreateWindowImportant").is(":checkbox:checked"))
+{
+	important = 1;
+}
 			
 $.ajax(
 {
 	type : "POST",
 	url : "ajax.php?session_id=[[SESSION_ID]]&nav=project&run=log_create_handler",
-	data : 'get_array=[[GET_ARRAY]]&comment='+comment,
+	data : 'get_array=[[GET_ARRAY]]&comment='+comment+'&important='+important,
 	success : function(data) 
 	{
 		$("#ProjectLogCreateWindow").dialog("close");
@@ -26,6 +31,13 @@ $.ajax(
 						}
 					}
 				});
+			}
+			else
+			{
+				if(typeof load_log == 'function')
+				{ 
+					load_log(-1);
+				}
 			}
 		}
 	}

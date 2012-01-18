@@ -83,7 +83,8 @@ class Common_IO
 	 * @param array $paramquery
 	 * @return string
 	 */
-	public static function page_bar($page, $max_page, $paramquery) {
+	public static function page_bar($page, $max_page, $paramquery)
+	{
 		
 			$previous_paramquery = $paramquery;
 			$previous_paramquery[page] = $page-1;

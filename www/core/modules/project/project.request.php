@@ -29,6 +29,23 @@ class ProjectRequest
 {	
 	public static function ajax_handler()
 	{
+		global $project_security;
+	
+		if ($_GET[project_id])
+		{
+			$project_security = new ProjectSecurity($_GET[project_id]);
+					
+			if ($_GET[run] != "new_subproject")
+			{
+ 				require_once("io/project_common.io.php");
+ 				ProjectCommon_IO::tab_header();
+			}
+		}
+		else
+		{
+			$project_security = new ProjectSecurity(null);
+		}
+		
 		switch($_GET[run]):
 			
 			// Project
@@ -86,6 +103,11 @@ class ProjectRequest
 			
 			// Log
 			
+			case "log_get_list":
+				require_once("ajax/project_log.ajax.php");
+				echo ProjectLogAjax::get_list($_POST[get_array], $_POST[page]);
+			break;
+			
 			case "log_create":
 				require_once("ajax/project_log.ajax.php");
 				echo ProjectLogAjax::create($_POST[get_array]);
@@ -93,7 +115,17 @@ class ProjectRequest
 			
 			case "log_create_handler":
 				require_once("ajax/project_log.ajax.php");
-				echo ProjectLogAjax::create_handler($_POST[get_array], $_POST[comment], false);
+				echo ProjectLogAjax::create_handler($_POST[get_array], $_POST[comment], $_POST[important]);
+			break;
+			
+			case "log_get_more":
+				require_once("ajax/project_log.ajax.php");
+				echo ProjectLogAjax::get_more($_POST[id]);
+			break;
+			
+			case "log_get_less":
+				require_once("ajax/project_log.ajax.php");
+				echo ProjectLogAjax::get_less($_POST[id]);
 			break;
 			
 			
@@ -228,17 +260,7 @@ class ProjectRequest
 				require_once("io/project_log.io.php");
 				ProjectLogIO::list_project_related_logs();
 			break;
-			
-			case("log_detail"):
-				require_once("io/project_log.io.php");
-				ProjectLogIO::detail();
-			break;
-			
-			case("log_add"):
-				require_once("io/project_log.io.php");
-				ProjectLogIO::add_comment();
-			break;
-			
+						
 			// Tasks and Schedule
 			
 			case ("add_task"):

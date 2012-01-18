@@ -1,0 +1,131 @@
+<script>
+$(document).ready(function()
+{
+	$.ajax({
+		type : "GET",
+		url : "core/modules/base/ajax/list.ajax.php",
+		data : "username=" + get_array['username'] + "&session_id="
+				+ get_array['session_id'] + "&run=get_page_bar&page="
+				+ [[PAGE]] + "&number_of_pages=" + [[NUMBER_OF_PAGES]]
+				+ "&css_page_id=ProjectLogPage",
+		async : false,
+		success : function(data)
+		{
+			$("#ProjectLogPageBar").html(data);
+
+			$(".ProjectLogPage").each(function() {
+				$(this).bind("click",function()
+				{
+					var id = $(this).attr("id");
+					page = id.replace("ProjectLogPage", "");
+					load_log(page);
+				});
+			});
+		}
+	});
+		
+	base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=log_create", 'get_array=[[GET_ARRAY]]', "ProjectLogCreateButton");
+	
+	$(".ProjectLogEntryFooterMore").each(function()
+	{
+		$(this).click(function()
+		{
+			var id = $(this).attr("id");
+			id = id.replace("ProjectLogEntryFooterMore", "");
+			
+			if ($(this).parent().hasClass("ProjectLogEntryMore"))
+			{
+				$.ajax(
+				{
+					type: "POST",
+					url: "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=log_get_less",
+					data: 'id='+id,
+					success: function(data)
+					{
+						var json_data = $.parseJSON(data);
+						$("#ProjectLogEntry"+id+" > div.ProjectLogEntryContent").html(json_data[0]);
+						$("#ProjectLogEntry"+id+" > div.ProjectLogEntryStatus").html(json_data[1]);
+						$("#ProjectLogEntry"+id+" > div.ProjectLogEntryItems").html(json_data[2]);
+						$("#ProjectLogEntry"+id+" > div.ProjectLogEntryFooter > a#ProjectLogEntryFooterMore"+id).html(json_data[3]);
+						$("#ProjectLogEntryFooterMore"+id).parent().removeClass("ProjectLogEntryMore").addClass("ProjectLogEntryLess");
+					}
+				});
+			}
+			else
+			{
+				$.ajax(
+				{
+					type: "POST",
+					url: "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=log_get_more",
+					data: 'id='+id,
+					success: function(data)
+					{
+						var json_data = $.parseJSON(data);
+						$("#ProjectLogEntry"+id+" > div.ProjectLogEntryContent").slideDown("slow").html(json_data[0]);
+						$("#ProjectLogEntry"+id+" > div.ProjectLogEntryStatus").html(json_data[1]);
+						$("#ProjectLogEntry"+id+" > div.ProjectLogEntryItems").html(json_data[2]);
+						$("#ProjectLogEntry"+id+" > div.ProjectLogEntryFooter > a#ProjectLogEntryFooterMore"+id).html(json_data[3]);
+						$("#ProjectLogEntryFooterMore"+id).parent().removeClass("ProjectLogEntryLess").addClass("ProjectLogEntryMore");
+					}
+				});
+			}
+		});
+	});
+});
+</script>
+
+<!-- FOREACH BEGIN ([[LOG_ARRAY]]) -->
+
+	<div class='ProjectLogEntry ProjectLogEntryLess' id='ProjectLogEntry[[LOG_ARRAY:ID]]'>
+	
+		<div class='ProjectLogEntryHeader'>
+			<span>on <span class='ProjectLogEntryHeaderDatetime'>[[LOG_ARRAY:DATE]]</span> at <span class='ProjectLogEntryHeaderDatetime'>[[LOG_ARRAY:TIME]]</span> by [[LOG_ARRAY:USER]]</span>
+			<!-- IF ([[LOG_ARRAY:CONTENT]]) -->
+				&nbsp;<img src='images/icons/edit.png' alt='Contains Text' /> 
+			<!-- ENDIF -->
+			<!-- IF ([[LOG_ARRAY:STATUS]]) -->
+				&nbsp;<img src='images/icons/status_run.png' alt='Status' /> 
+			<!-- ENDIF -->
+			<!-- IF ([[LOG_ARRAY:ITEMS]]) -->
+				&nbsp;<img src='images/icons/attachment.png' alt='Items' /> 
+			<!-- ENDIF -->
+			<!-- IF ([[LOG_ARRAY:IMPORTANT]]) -->
+				&nbsp;<img src='images/icons/notice.png' alt='Important' /> 
+			<!-- ENDIF -->
+		</div>
+	
+		<!-- IF ([[LOG_ARRAY:CONTENT]]) -->
+			
+			<div class='ProjectLogEntryContent'>[[LOG_ARRAY:CONTENT]]</div>
+	
+		<!-- ENDIF -->	
+		
+		<!-- IF ([[LOG_ARRAY:STATUS]]) -->
+	
+			<div class='ProjectLogEntryStatus'>project status was set to: [[LOG_ARRAY:STATUS]]</div>
+		
+		<!-- ENDIF -->	
+		
+		<!-- IF ([[LOG_ARRAY:ITEMS]]) -->
+	
+			<div class='ProjectLogEntryItems'>[[LOG_ARRAY:ITEMS]]</div>
+		
+		<!-- ENDIF -->						
+		
+		<!-- IF ([[LOG_ARRAY:SHOW_MORE]]) -->
+								
+			<div class='ProjectLogEntryFooter'><a href='#' class='ProjectLogEntryFooterMore' id='ProjectLogEntryFooterMore[[LOG_ARRAY:ID]]'>show more</a></div>	
+			
+		<!-- ENDIF -->	
+	
+	</div>
+
+<!-- FOREACH END -->
+
+<!-- IF ([[NO_LOG]]) -->
+
+<span class='italic'>No Log-Entries Found!</span>
+
+<!-- ENDIF -->	
+
+[[PAGE_BAR]]

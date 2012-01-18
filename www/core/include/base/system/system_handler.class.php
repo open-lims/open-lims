@@ -611,6 +611,25 @@ class SystemHandler implements SystemHandlerInterface
 										}
 										throw new ModuleProcessFailedException(null, null);
 									}
+									
+									$module_info_id = BaseModuleFile_Access::get_id_by_module_id_and_name($register_key, "module_info.php");
+									if ($module_info_id != null)
+									{
+										$base_module_file = new BaseModuleFile_Access($module_info_id);
+										$base_module_file->set_checksum(md5_file($config_file));
+									}
+									else
+									{
+										$base_module_file = new BaseModuleFile_Access(null);
+										if ($base_module_file->create($register_key, "module_info.php", md5_file($config_file)) == null)
+										{
+											if ($transaction_id != null)
+											{
+												$transaction->rollback($transaction_id);
+											}
+											throw new ModuleProcessFailedException(null, null);
+										}
+									}
 								}
 								
 								// Check Files
@@ -618,7 +637,7 @@ class SystemHandler implements SystemHandlerInterface
 								{
 									$module_dialog_checksum = BaseModuleFile_Access::get_checksum_by_module_id_and_name($register_key, "module_dialog.php");
 									if ($module_dialog_checksum != md5_file($module_dialog))
-									{										
+									{									
 										include($module_dialog);
 										
 										if (BaseModuleDialog_Access::delete_by_module_id($register_key) == false)
