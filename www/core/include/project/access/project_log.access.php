@@ -521,7 +521,7 @@ class ProjectLog_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".constant("PROJECT_LOG_TABLE")." WHERE project_id = ".$project_id." ORDER BY datetime DESC";
+			$sql = "SELECT id FROM ".constant("PROJECT_LOG_TABLE")." WHERE project_id = ".$project_id." ORDER BY datetime DESC, id DESC";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))

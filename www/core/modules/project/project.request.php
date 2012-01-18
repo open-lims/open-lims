@@ -97,7 +97,7 @@ class ProjectRequest
 			
 			case "proceed_project":
 				require_once("ajax/project.ajax.php");
-				echo ProjectAjax::proceed_project($_POST[get_array]);
+				echo ProjectAjax::proceed_project($_POST[get_array], $_POST[comment]);
 			break;
 			
 			
