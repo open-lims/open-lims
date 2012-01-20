@@ -95,6 +95,34 @@ $(document).ready(function()
 			}
 		});
 	});
+	
+	$(".ProjectLogEntryDelete").each(function()
+	{
+		$(this).click(function()
+		{
+			var id = $(this).attr("id");
+			id = id.replace("ProjectLogEntryDelete", "");
+			
+			$.ajax(
+			{
+				type: "POST",
+				url: "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=log_delete",
+				data: 'id='+id,
+				success: function(data)
+				{
+					if ((data + '').indexOf("EXCEPTION:",0) == 0)
+					{
+						var exception_message = data.replace("EXCEPTION: ","");
+						ErrorDialog("Error", exception_message);
+					}
+					else
+					{
+						load_log(-1);
+					}
+				}
+			});
+		});
+	});
 });
 </script>
 
@@ -103,20 +131,28 @@ $(document).ready(function()
 	<div class='ProjectLogEntry ProjectLogEntryLess' id='ProjectLogEntry[[LOG_ARRAY:ID]]'>
 	
 		<div class='ProjectLogEntryHeader'>
+			<div class='ProjectLogEntryHeaderLeft'>
 			<span>on <span class='ProjectLogEntryHeaderDatetime'>[[LOG_ARRAY:DATE]]</span> at <span class='ProjectLogEntryHeaderDatetime'>[[LOG_ARRAY:TIME]]</span> by [[LOG_ARRAY:USER]]</span>
 			<!-- IF ([[LOG_ARRAY:CONTENT]]) -->
-				&nbsp;<img src='images/icons/edit.png' alt='Contains Text' /> 
+				&nbsp;<img src='images/icons/edit.png' alt='Contains Text' style='border:0;' /> 
 			<!-- ENDIF -->
 			<!-- IF ([[LOG_ARRAY:STATUS]]) -->
-				&nbsp;<img src='images/icons/status_run.png' alt='Status' /> 
+				&nbsp;<img src='images/icons/status_run.png' alt='Status' style='border:0;' /> 
 			<!-- ENDIF -->
 			<!-- IF ([[LOG_ARRAY:ITEMS]]) -->
-				&nbsp;<img src='images/icons/attachment.png' alt='Items' /> 
+				&nbsp;<img src='images/icons/attachment.png' alt='Items' style='border:0;' /> 
 			<!-- ENDIF -->
 			<!-- IF ([[LOG_ARRAY:IMPORTANT]]) -->
-				&nbsp;<img src='images/icons/notice.png' alt='Important' /> 
+				&nbsp;<img src='images/icons/notice.png' alt='Important' style='border:0;' /> 
 			<!-- ENDIF -->
+			</div>
+			<div class='ProjectLogEntryHeaderRight'>
+			<!-- IF ([[LOG_ARRAY:DELETE]]) -->
+				<a href='#' class='ProjectLogEntryDelete' id='ProjectLogEntryDelete[[LOG_ARRAY:ID]]'><img src='images/icons/delete.png' alt='Delete' style='border:0;' /></a>
+			<!-- ENDIF -->
+			</div>
 		</div>
+		<div class='ProjectLogEntryHeaderClear'></div>
 	
 		<!-- IF ([[LOG_ARRAY:CONTENT]]) -->
 			

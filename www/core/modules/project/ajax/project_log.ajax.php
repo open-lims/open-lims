@@ -27,9 +27,16 @@
  */
 class ProjectLogAjax
 {	
+	/**
+	 * @param string $get_array
+	 * @param intger $page
+	 * @return integer
+	 * @throws ProjectSecurityAccessDeniedException
+	 * @throws ProjectIDMissingException
+	 */
 	public static function get_list($get_array, $page)
 	{
-		global $project_security;
+		global $project_security, $user;
 		
 		if ($get_array)
 		{
@@ -153,8 +160,18 @@ class ProjectLogAjax
 						
 						$result[$counter][detail_params] = $detail_params;
 						
+						if ($user->is_admin())
+						{
+							$result[$counter][delete] = true;
+						}
+						else
+						{
+							$result[$counter][delete] = false;
+						}
+						
 						$counter++;
 					}
+					
 					$template->set_var("log_array", $result);
 				}
 				else
@@ -249,6 +266,11 @@ class ProjectLogAjax
 		}
 	}
 	
+	/**
+	 * @param integer $id
+	 * @return string
+	 * @throws ProjectLogIDMissingException
+	 */
 	public static function get_more($id)
 	{
 		if (is_numeric($id))
@@ -281,8 +303,17 @@ class ProjectLogAjax
 			
 			return json_encode($return_json_array);
 		}
+		else
+		{
+			throw new ProjectLogIDMissingException();
+		}
 	}
 	
+	/**
+	 * @param integer $id
+	 * @return string
+	 * @throws ProjectLogIDMissingException
+	 */
 	public static function get_less($id)
 	{
 		if (is_numeric($id))
@@ -341,6 +372,36 @@ class ProjectLogAjax
 			
 			return json_encode($return_json_array);
 		}
+		else
+		{
+			throw new ProjectLogIDMissingException();
+		}
 	}
 	
+	/**
+	 * @param integer $id
+	 * @return string
+	 * @throws ProjectLogIDMissingException
+	 */
+	public static function delete($id)
+	{
+		global $user;
+		
+		if (is_numeric($id))
+		{
+			if ($user->is_admin())
+			{
+				$project_log = new ProjectLog($id);
+				$project_log->delete();
+			}
+			else
+			{
+				throw new ProjectSecurityAccessDeniedException();
+			}
+		}
+		else
+		{
+			throw new ProjectLogIDMissingException();
+		}
+	}
 }

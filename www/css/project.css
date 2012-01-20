@@ -78,9 +78,19 @@
 	border-bottom: 1px #C0C0C0 dotted;
 	padding-bottom: 5px;
 }
-.ProjectLogEntryHeader
+.ProjectLogEntryHeaderLeft
 {
-	margin-bottom: 7px;
+	float: left;
+}
+.ProjectLogEntryHeaderRight
+{
+	float: right;
+}
+.ProjectLogEntryHeaderClear
+{
+	height: 1px;
+	margin-bottom: 6px;
+	clear:both;
 }
 .ProjectLogEntryHeader span
 {

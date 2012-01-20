@@ -31,14 +31,17 @@ class ProjectRequest
 	{
 		global $project_security;
 	
-		if ($_GET[project_id])
+		if ($_POST['get_array'])
 		{
-			$project_security = new ProjectSecurity($_GET[project_id]);
+			$get_array = unserialize($_POST['get_array']);	
 					
-			if ($_GET[run] != "new_subproject")
+			if ($get_array['project_id'])
 			{
- 				require_once("io/project_common.io.php");
- 				ProjectCommon_IO::tab_header();
+				$project_security = new ProjectSecurity($get_array[project_id]);
+			}
+			else
+			{
+				$project_security = new ProjectSecurity(null);
 			}
 		}
 		else
@@ -126,6 +129,11 @@ class ProjectRequest
 			case "log_get_less":
 				require_once("ajax/project_log.ajax.php");
 				echo ProjectLogAjax::get_less($_POST[id]);
+			break;
+			
+			case "log_delete":
+				require_once("ajax/project_log.ajax.php");
+				echo ProjectLogAjax::delete($_POST[id]);
 			break;
 			
 			
