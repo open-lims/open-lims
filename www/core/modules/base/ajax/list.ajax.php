@@ -22,23 +22,12 @@
  */
 
 /**
- * 
- */
-$GLOBALS['autoload_prefix'] = "../";
-require_once("../../base/ajax.php");
-
-/**
  * List AJAX IO Class
  * @package base
  */
-class ListAjax extends Ajax
+class ListAjax
 {
-	function __construct()
-	{
-		parent::__construct();
-	}
-	
-	public function get_page_bar($page, $number_of_pages, $css_page_id)
+	public static function get_page_bar($page, $number_of_pages, $css_page_id)
 	{
 		$pagebar .= "<table style='display: inline;'><tr><td><span class='smallTextBlack'>Page ".$page." of ".$number_of_pages."</span></td>";
 	
@@ -139,33 +128,9 @@ class ListAjax extends Ajax
 		return $pagebar;
 	}
 	
-	public function get_page_information($results, $pages)
+	public static function get_page_information($results, $pages)
 	{
 		return Common_IO::results_on_page($results, $pages);
 	}
-	
-	public function handler()
-	{
-		global $session;
-		
-		if ($session->is_valid())
-		{
-			switch($_GET['run']):
-			
-				case "get_page_bar":
-					echo $this->get_page_bar($_GET['page'], $_GET['number_of_pages'], $_GET['css_page_id']);
-				break;
-				
-				case "get_page_information":
-					echo $this->get_page_information($_GET['number_of_entries'], $_GET['number_of_pages']);
-				break;
-				
-			endswitch;
-		}
-	}
 }
-
-$list_ajax = new ListAjax();
-$list_ajax->handler();
-
 ?>

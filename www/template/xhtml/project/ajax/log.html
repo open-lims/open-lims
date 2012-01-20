@@ -2,12 +2,9 @@
 $(document).ready(function()
 {
 	$.ajax({
-		type : "GET",
-		url : "core/modules/base/ajax/list.ajax.php",
-		data : "username=" + get_array['username'] + "&session_id="
-				+ get_array['session_id'] + "&run=get_page_bar&page="
-				+ [[PAGE]] + "&number_of_pages=" + [[NUMBER_OF_PAGES]]
-				+ "&css_page_id=ProjectLogPage",
+		type : "POST",
+		url : "ajax.php?username="+get_array['username']+"&session_id="+get_array['session_id']+"&nav=base&run=list_get_page_bar",
+		data : "page=[[PAGE]]&number_of_pages=[[NUMBER_OF_PAGES]]&css_page_id=ProjectLogPage",
 		async : false,
 		success : function(data)
 		{

@@ -107,12 +107,9 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 		}
 		
 		$.ajax({
-			type : "GET",
-			url : "core/modules/base/ajax/list.ajax.php",
-			data : "username=" + get_array['username'] + "&session_id="
-					+ get_array['session_id'] + "&run=get_page_bar&page="
-					+ page + "&number_of_pages=" + number_of_pages
-					+ "&css_page_id=" + css_main_id + "Page",
+			type : "POST",
+			url : "ajax.php?username="+get_array['username']+"&session_id="+get_array['session_id']+"&nav=base&run=list_get_page_bar",
+			data : "page="+page+"&number_of_pages="+number_of_pages+"&css_page_id="+css_main_id+"Page",
 			async : false,
 			success : function(data) {
 				$("#" + css_main_id + "PageBar").html(data);
@@ -145,7 +142,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 		$.ajax(
 		{
 			type: "POST",
-			url: ajax_handler+"session_id="+ get_array['session_id'] + "&run="+ajax_count_run,
+			url: ajax_handler+"session_id="+get_array['session_id']+"&run="+ajax_count_run,
 			data: "argument_array="+argument_array,
 			async: false,
 			success: function(data)
@@ -184,9 +181,9 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 		reinit_page_handler(page);
 
 		$.ajax({
-			type : "GET",
-			url : "core/modules/base/ajax/list.ajax.php",
-			data : "username="+get_array['username']+"&session_id="+get_array['session_id']+"&run=get_page_information&number_of_entries="+number_of_entries+"&number_of_pages="+number_of_pages+"",
+			type : "POST",
+			url : "ajax.php?username="+get_array['username']+"&session_id="+get_array['session_id']+"&nav=base&run=list_get_page_information",
+			data : "number_of_entries="+number_of_entries+"&number_of_pages="+number_of_pages+"",
 			async : false,
 			success : function(data) {
 				$("#" + css_main_id).parent().parent().children(".ListPageInformation").html(data);

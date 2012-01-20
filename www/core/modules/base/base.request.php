@@ -41,7 +41,7 @@ class BaseRequest
 				echo LoginAjax::logout();
 			break;
 			
-			case"left_navigation":
+			case "left_navigation":
 				require_once("ajax/navigation/left_navigation.ajax.php");
 				
 				switch($_GET['action']):
@@ -49,7 +49,19 @@ class BaseRequest
 						echo LeftNavigationAjax::set_active($_POST['id']);
 					break;
 				endswitch;
-				
+			break;
+			
+			
+			// Lists
+			
+			case "list_get_page_information":
+				require_once("ajax/list.ajax.php");
+				echo ListAjax::get_page_information($_POST['number_of_entries'], $_POST['number_of_pages']);
+			break;
+			
+			case "list_get_page_bar":
+				require_once("ajax/list.ajax.php");
+				echo ListAjax::get_page_bar($_POST['page'], $_POST['number_of_pages'], $_POST['css_page_id']);
 			break;
 			
 		endswitch;
