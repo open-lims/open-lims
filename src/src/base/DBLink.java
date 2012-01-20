@@ -85,13 +85,37 @@ public class DBLink
 	{
 		ResultSet results = null;
 		Connection connection = getDBConnection();
-		try {
+		try 
+		{
 			Statement statement = connection.createStatement();
 			results = statement.executeQuery(sql);
-		} catch (SQLException e) {
+			connection.close();
+		} 
+		catch (SQLException e) 
+		{
 			e.printStackTrace();
 		}
+		
 		return results;
+	}
+	
+	/**
+	 * Executes a SQL Update on the database.
+	 * @param sql the SQL statement.
+	 */
+	public static void updateQuery(String sql)
+	{
+		Connection connection = getDBConnection();
+		try 
+		{
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(sql);
+			connection.close();
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -130,13 +154,12 @@ public class DBLink
 			{
 				concur_constant = ResultSet.CONCUR_UPDATABLE;
 			}
-			
-			System.out.println(type_constant+" "+concur_constant);
-			
+						
 			PreparedStatement ps = connection.prepareStatement(sql,type_constant,concur_constant);  
 			
-			results = ps.executeQuery(
-					);
+			results = ps.executeQuery();
+			
+			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
