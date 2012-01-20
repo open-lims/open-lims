@@ -2,7 +2,7 @@ package csv;
 
 import java.util.HashMap;
 
-import tresholds.interfaces.Treshold;
+import interfaces.Treshold;
 
 public class CSVOperator {
 

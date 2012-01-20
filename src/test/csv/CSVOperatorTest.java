@@ -6,7 +6,7 @@ import java.io.File;
 
 import org.junit.Test;
 
-import tresholds.interfaces.Treshold;
+import interfaces.Treshold;
 
 import data.DataResource;
 

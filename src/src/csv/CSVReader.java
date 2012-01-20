@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 
-import metadata.interfaces.MetadataReader;
+import interfaces.MetadataReader;
 
 public class CSVReader extends CSVFile{
 

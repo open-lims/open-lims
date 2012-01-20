@@ -24,7 +24,6 @@ public class DBConfig extends AbstractConfig
 	 */
 	public DBConfig() 
 	{
-
 		super(allowedKeys, "DBConfig.conf", config);
 	}
 	

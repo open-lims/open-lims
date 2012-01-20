@@ -39,11 +39,6 @@ public class CSVFile {
 		return line_break;
 	}
 	
-	public boolean has_metadata()
-	{
-		return has_metadata;
-	}
-	
 	public int get_column_index(String column)
 	{
 		return column_indices.get(column);

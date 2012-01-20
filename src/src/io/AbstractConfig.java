@@ -18,7 +18,6 @@ public class AbstractConfig {
 		{
 			config.put(allowedKeys[i], null);
 		}
-		
 		parse_config(config, configFile);
 	}
 	
