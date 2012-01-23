@@ -2,7 +2,6 @@ package jobs;
 
 import io.JobConfig;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.Callable;
 
@@ -20,18 +19,19 @@ public class Job implements Callable<Integer>
 		this.job_id = id;
 	}
 
-	@Override
 	public Integer call() throws Exception 
 	{
-
-//		JobsAccess.set_job_started(job_id);
+		if(JobsAccess.get_job_status(job_id) == 5)
+		{
+			return 5;
+		}
 		
-		execute();
+		JobsAccess.set_job_started(job_id);
 		
-		return 0;
+		return execute();
 	}
 	
-	private void execute()
+	private int execute()
 	{
 		String file_path = get_file_path();
 		try 
@@ -39,14 +39,16 @@ public class Job implements Callable<Integer>
 			Process process = Runtime.getRuntime().exec(new String[]{"java","-jar",file_path,""+job_id+""});
 			process.waitFor();
 			System.out.println("job "+job_id+" finished!");
+			
 			//get standard and error output to prevent blocking
 			InputStream in = process.getInputStream();
 			InputStream err = process.getErrorStream();
-
+			return 3;
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();
+			return 4;
 		} 
 	}
 	
@@ -86,5 +88,4 @@ public class Job implements Callable<Integer>
 		return root+path+file;
 	}
 	
-
 }
