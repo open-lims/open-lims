@@ -1110,13 +1110,7 @@ class SampleAjax
 			if ($user->is_admin())
 			{
 				$sample = new Sample($_GET['sample_id']);
-				if ($sample->delete() == false)
-				{
-					/**
-					 * @todo change to Exception-System
-					 */
-					throw new SampleException();
-				}
+				$sample->delete();
 			}
 			else
 			{

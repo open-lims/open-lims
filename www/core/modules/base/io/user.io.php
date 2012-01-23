@@ -681,10 +681,7 @@ class UserIO
 			$template->output();
 		}
 	}
-	
-	/**
-	 * @todo error
-	 */
+
 	public static function user_details()
 	{
 		if ($_GET[id])
@@ -891,13 +888,10 @@ class UserIO
 		}
 		else
 		{
-			// Error
+			throw new UserIDMissingException();
 		}
 	}
 
-	/**
-	 * @todo error
-	 */
 	public static function group_details()
 	{
 		if ($_GET[id])
@@ -967,7 +961,7 @@ class UserIO
 		}
 		else
 		{
-			
+			throw new GroupIDMissingException();
 		}
 	}
 

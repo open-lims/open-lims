@@ -81,7 +81,6 @@ class System_Wrapper implements System_WrapperInterface
 	
 	/**
 	 * @see System_WrapperInterface::list_base_include()
-	 * @todo implementation
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
@@ -95,7 +94,6 @@ class System_Wrapper implements System_WrapperInterface
 	
 	/**
 	 * @see System_WrapperInterface::count_base_include()
-	 * @todo implementation
 	 * @return integer
 	 */
 	public static function count_base_include()
