@@ -18,7 +18,7 @@ public class JobHandler
 
 	private ExecutorService threadPool = Executors.newFixedThreadPool(2);
 	
-	private Map<Integer, Future<Integer>> map = new HashMap<Integer,Future<Integer>>();
+	private Map<Integer, Future<Integer>> threadPoolMap = new HashMap<Integer,Future<Integer>>();
 	
 	private boolean running = true;
 	
@@ -29,14 +29,43 @@ public class JobHandler
 		this.id = id;
 		init_configs();
 		
-//		ServicesAccess.set_status(id, 1);
+		ServicesAccess.set_status(id, 1);
 		
 		while(running)
 		{
-			clear_finished_jobs();
-			add_new_jobs();
-			give_lifesigns();
-			
+			int status = ServicesAccess.get_status(id);
+			System.out.println("status: "+status);
+			if(status == 1)
+			{ //alles ok
+				clear_finished_jobs();
+				add_new_jobs();
+				give_lifesigns();
+			}
+			else if(status == 2)
+			{ //soft shutdown
+				System.out.println("soft shutdown");
+				//alle unbearbeiteten jobs entfernen
+				Integer[] pending_jobs = JobsAccess.get_pending_jobs();
+				for (int i = 0; i < pending_jobs.length; i++) {
+					System.out.println("removing job "+pending_jobs[i]+" from queue");
+					JobsAccess.set_job_status(pending_jobs[i], 5);
+				}
+				//pool shutdown sobald alle fertig
+				threadPool.shutdown();
+				break;
+			}
+			else if(status == 3)
+			{ //hard shutdown
+				System.out.println("hard shutdown");
+				//alle threads killen, pool shutdown	
+				threadPool.shutdownNow();
+				break;
+			}
+			else if(status == 4)
+			{ //fehler
+				System.out.println("error!");
+				break;
+			}			
 			try {
 				Thread.sleep(5000);
 			} 
@@ -61,8 +90,8 @@ public class JobHandler
 
 			Job job = new Job(job_id);
 			Future<Integer> future = threadPool.submit(job);
-			map.put(job_id, future);
-//			JobsAccess.set_job_status(job_id, 1);
+			threadPoolMap.put(job_id, future);
+			JobsAccess.set_job_status(job_id, 1);
 		}
 	}
 	
@@ -70,34 +99,34 @@ public class JobHandler
 	{
 		LinkedList<Integer> to_remove = new LinkedList<Integer>();
 		
-		for (Integer job_id : map.keySet()) 
+		for (Integer job_id : threadPoolMap.keySet()) 
 		{
-			Future<Integer> future = map.get(job_id);
+			Future<Integer> future = threadPoolMap.get(job_id);
 			
 			try 
 			{
 				int result = future.get();
 				System.out.println("job with id "+job_id+" terminated with code "+result);
-//				JobsAccess.set_job_ended(job_id, false);
+				JobsAccess.set_job_ended(job_id, false);
 				to_remove.add(job_id);
 			} 
 			catch (Exception e) 
 			{
-//				JobsAccess.set_job_ended(job_id, true);
+				JobsAccess.set_job_ended(job_id, true);
 				e.printStackTrace();
 			}
 		}
 		
 		for (Integer job_id : to_remove) 
 		{
-			map.remove(job_id);
+			threadPoolMap.remove(job_id);
 		}
 	}
 	
 	private void give_lifesigns() 
 	{
 		//give lifesigns for open jobs
-		for (Integer job_id : map.keySet()) 
+		for (Integer job_id : threadPoolMap.keySet()) 
 		{
 			JobsAccess.set_lifesign(job_id);
 		}
@@ -106,44 +135,14 @@ public class JobHandler
 		ServicesAccess.set_lifesign(id);
 	}
 	
-	private void shutdown_if_needed()
-	{
-		int status = ServicesAccess.get_status(id);
-		
-		if(status == 1)
-		{ //alles ok
-			
-		}
-		else if(status == 2)
-		{ //soft shutdown
-			//alle unbearbeiteten jobs entfernen
-			//pool shutdown sobald alle fertig
-		}
-		else if(status == 3)
-		{ //hard shutdown
-			//alle threads killen, pool shutdown	
-		}
-		else if(status == 4)
-		{ //fehler
-			//?
-		}
-	}
-	
 	private void init_configs() 
 	{
 		new DBConfig();
 		new JobConfig();
 	}
 	
-	private void shutDown() 
-	{
-		threadPool.shutdown();
-	}
-
-
 	public static void main(String[] args) {
-		JobHandler handler = new JobHandler(1);
-		handler.shutDown();
+		new JobHandler(1);
 	}
 }
 

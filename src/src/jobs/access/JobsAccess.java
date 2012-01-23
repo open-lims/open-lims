@@ -86,4 +86,41 @@ public class JobsAccess
 		return -1;
 	}
 	
+	public static Integer[] get_pending_jobs()
+	{
+		String sql = "SELECT * FROM core_jobs WHERE status=1";
+		ResultSet rs = DBLink.executeQuery(sql);
+		ArrayList<Integer> pending_jobs = new ArrayList<Integer>();
+		try 
+		{
+			while(rs.next())
+			{
+				pending_jobs.add(rs.getInt("id"));
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		Integer[] array = new Integer[pending_jobs.size()];
+		return pending_jobs.toArray(array);
+	}
+	
+	public static int get_job_status(int job_id)
+	{
+		String sql = "SELECT * FROM core_jobs WHERE id="+job_id;
+		ResultSet rs = DBLink.executeQuery(sql);
+		try 
+		{
+			while(rs.next())
+			{
+				return rs.getInt("status");
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		return -1;
+	}
 }
