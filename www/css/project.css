@@ -45,6 +45,12 @@
 {
 	padding: 5px;
 }
+#ProjectDetailProceedComment
+{
+	border-top: 1px #C0C0C0 dotted;
+	padding: 5px;
+	font-size: 10px;
+}
 
 /* Project Admin */
 
@@ -61,6 +67,47 @@
 	width: 40em;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+
+/* Project Log */
+
+.ProjectLogEntry
+{
+	margin: 3px;
+	border-bottom: 1px #C0C0C0 dotted;
+	padding-bottom: 5px;
+}
+.ProjectLogEntryHeaderLeft
+{
+	float: left;
+}
+.ProjectLogEntryHeaderRight
+{
+	float: right;
+}
+.ProjectLogEntryHeaderClear
+{
+	height: 1px;
+	margin-bottom: 6px;
+	clear:both;
+}
+.ProjectLogEntryHeader span
+{
+	border-bottom: 1px #C0C0C0 dotted;
+}
+.ProjectLogEntryHeaderDatetime
+{
+	font-size: 14px;
+	font-weight: bold;
+}
+.ProjectLogEntryContent
+{
+	text-align: justify;
+}
+.ProjectLogEntryFooter
+{
+	margin-top: 7px;
 }
 
 

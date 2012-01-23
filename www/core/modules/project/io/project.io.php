@@ -113,7 +113,7 @@ class ProjectIO
 	
 	public static function create()
 	{
-		$template = new HTMLTemplate("project/create_project.html");	
+		$template = new HTMLTemplate("project/new_project.html");	
 		
 		require_once("core/modules/base/common/io/assistant.io.php");
 		
@@ -278,16 +278,7 @@ class ProjectIO
 	 * @param integer $item_id
 	 */
 	public static function list_projects_by_item_id($item_id, $in_assistant = false, $form_field_name = null)
-	{
-		if ($GLOBALS['autoload_prefix'])
-		{
-			$path_prefix = $GLOBALS['autoload_prefix'];
-		}
-		else
-		{
-			$path_prefix = "";
-		}
-		
+	{		
 		if (is_numeric($item_id))
 		{
 			$argument_array = array();

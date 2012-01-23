@@ -29,6 +29,26 @@ class ProjectRequest
 {	
 	public static function ajax_handler()
 	{
+		global $project_security;
+	
+		if ($_POST['get_array'])
+		{
+			$get_array = unserialize($_POST['get_array']);	
+					
+			if ($get_array['project_id'])
+			{
+				$project_security = new ProjectSecurity($get_array[project_id]);
+			}
+			else
+			{
+				$project_security = new ProjectSecurity(null);
+			}
+		}
+		else
+		{
+			$project_security = new ProjectSecurity(null);
+		}
+		
 		switch($_GET[run]):
 			
 			// Project
@@ -80,7 +100,40 @@ class ProjectRequest
 			
 			case "proceed_project":
 				require_once("ajax/project.ajax.php");
-				echo ProjectAjax::proceed_project($_POST[get_array]);
+				echo ProjectAjax::proceed_project($_POST[get_array], $_POST[comment]);
+			break;
+			
+			
+			// Log
+			
+			case "log_get_list":
+				require_once("ajax/project_log.ajax.php");
+				echo ProjectLogAjax::get_list($_POST[get_array], $_POST[page]);
+			break;
+			
+			case "log_create":
+				require_once("ajax/project_log.ajax.php");
+				echo ProjectLogAjax::create($_POST[get_array]);
+			break;
+			
+			case "log_create_handler":
+				require_once("ajax/project_log.ajax.php");
+				echo ProjectLogAjax::create_handler($_POST[get_array], $_POST[comment], $_POST[important]);
+			break;
+			
+			case "log_get_more":
+				require_once("ajax/project_log.ajax.php");
+				echo ProjectLogAjax::get_more($_POST[id]);
+			break;
+			
+			case "log_get_less":
+				require_once("ajax/project_log.ajax.php");
+				echo ProjectLogAjax::get_less($_POST[id]);
+			break;
+			
+			case "log_delete":
+				require_once("ajax/project_log.ajax.php");
+				echo ProjectLogAjax::delete($_POST[id]);
 			break;
 			
 			
@@ -142,6 +195,37 @@ class ProjectRequest
 			case "count_project_permissions":
 				require_once("ajax/project_admin.ajax.php");
 				echo ProjectAdminAjax::count_project_permissions($_POST[argument_array]);
+			break;
+			
+			//navigation
+			
+			case "navigation":
+				require_once 'ajax/navigation/project_navigation.ajax.php';
+					
+					switch($_GET['action']):
+	
+					case "get_name":
+						echo ProjectNavigationAjax::get_name();
+					break;
+					
+					case "get_html":
+						echo ProjectNavigationAjax::get_html();
+					break;
+					
+					case "get_array":
+						echo ProjectNavigationAjax::get_array();
+					break;
+					
+					case "set_array":
+						echo ProjectNavigationAjax::set_array($_POST['array']);
+					break;
+				
+					case "get_children":
+						echo ProjectNavigationAjax::get_children($_POST['id']);
+					break;	
+				
+				endswitch;
+				
 			break;
 			
 		endswitch;
@@ -215,17 +299,7 @@ class ProjectRequest
 				require_once("io/project_log.io.php");
 				ProjectLogIO::list_project_related_logs();
 			break;
-			
-			case("log_detail"):
-				require_once("io/project_log.io.php");
-				ProjectLogIO::detail();
-			break;
-			
-			case("log_add"):
-				require_once("io/project_log.io.php");
-				ProjectLogIO::add_comment();
-			break;
-			
+						
 			// Tasks and Schedule
 			
 			case ("add_task"):

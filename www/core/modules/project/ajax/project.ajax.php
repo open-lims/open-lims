@@ -725,7 +725,14 @@ class ProjectAjax
 					}		
 				}
 				
-				$template->set_var("status_action",$result);
+				if ($counter > 0)
+				{
+					$template->set_var("status_action",$result);
+				}
+				else
+				{
+					$template->set_var("status_action",false);
+				}
 				
 				$template->set_var("write",true);
 			}
@@ -806,11 +813,11 @@ class ProjectAjax
 				
 				if ($project->is_current_status_fulfilled())
 				{
-					echo "1:";
+					echo "1::;::";
 				}
 				else
 				{
-					echo "0:";
+					echo "0::;::";
 				}
 				
 				$template = new HTMLTemplate("project/ajax/proceed.html");
@@ -871,7 +878,7 @@ class ProjectAjax
 	 * @param string $get_array
 	 * @return string
 	 */
-	public static function proceed_project($get_array)
+	public static function proceed_project($get_array, $comment)
 	{
 		if ($get_array)
 		{
@@ -882,14 +889,24 @@ class ProjectAjax
 		{
 			$project = new Project($_GET[project_id]);
 			
-			try
+			$project_security = new ProjectSecurity($_GET[project_id]);
+			
+			if ($project_security->is_access(3, false) == true)
 			{
+				if ($comment and $comment != "undefined")
+				{
+					$project_log = new ProjectLog(null);
+					if ($project_log->create($_GET[project_id], $comment) == null)
+					{
+						throw new ProjectSetNextStatusException();
+					}
+				}
+				
 				$project->set_next_status();
-				return "1";
 			}
-			catch (ProjectSetNextStatusException $e)
+			else
 			{
-				return "0";
+				throw new ProjectSecurityAccessDeniedException();
 			}
 		}
 	}

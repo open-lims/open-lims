@@ -26,7 +26,7 @@ $(document).ready(function()
 							{
 								if (data)
 								{
-									var data_array = data.split(":")
+									var data_array = data.split("::;::");
 									$("#ProjectDetailProceedWindow").html(data_array[1]);
 									if (data_array[0] == "0")
 									{
@@ -42,6 +42,12 @@ $(document).ready(function()
 						$("#ProjectDetailProceedWindow").dialog("open");
 						return false;
 					});
+					
+					$("#ProjectLogCreateWindow").dialog({
+						autoOpen: false
+					});
+					
+					base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=log_create", 'get_array=[[GET_ARRAY]]', "ProjectLogCreateButton");
 				}
 			}
 		});
@@ -70,21 +76,28 @@ $(document).ready(function()
 	$("#ProjectDetailProceedWindow").dialog(
 	{
 		autoOpen: false,
-		height: 400,
+		height: 470,
 		width: 400,
 		buttons: 
 		{
 			"OK": function()
 			{
+				var comment = $("#ProjectDetailProceedCommentTextarea").val();
+				
 				$.ajax(
 				{
 					type: "POST",
 					url: "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=proceed_project",
-					data: 'get_array=[[GET_ARRAY]]',
+					data: 'get_array=[[GET_ARRAY]]&comment='+comment,
 					async: false,
 					success: function(data)
 					{		
-						if (data)
+						if ((data + '').indexOf("EXCEPTION:",0) == 0)
+						{
+							var exception_message = data.replace("EXCEPTION: ","");
+							ErrorDialog("Error", exception_message);
+						}
+						else
 						{
 							$("#ProjectDetailStatus").fadeOut("slow");
 							$("#ProjectDetailMenu").fadeOut("slow");
@@ -97,12 +110,19 @@ $(document).ready(function()
 			},
 			"Cancel": function()
 			{
-		          $(this).dialog( "close" );
+		        $(this).dialog( "close" );
 			}
 		}
 	});
 });
 </script>
+
+<div id="ProjectLogCreateWindow" title="Create New Log Entry" style='display: none;'>
+</div>
+
+<div id="ProjectLogCreateSuccessfulWindow" title="Create New Log Entry" style='display: none;'>
+Project entry has been successfully created.
+</div>
 
 <div id="ProjectDetailProceedWindow" title="Proceed with Project" style='display: none;'>
 </div>

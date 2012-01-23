@@ -139,7 +139,7 @@ interface SampleItemInterface
 	 * @param integer $gid
 	 * @return array
 	 */
-	public static function list_sample_id_by_item_id_and_gid($item_id, $gid);
+	public static function list_sample_id_by_item_id_and_gid_and_parent($item_id, $gid);
 }
 
 ?>

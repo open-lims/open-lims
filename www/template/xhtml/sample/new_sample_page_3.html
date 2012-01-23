@@ -118,7 +118,7 @@ $(document).ready(function()
 	<tr>
 		<td>Name:</td>
 		<td>
-			<input type='text' name='sample_name' class='sampleTextfield SampleCreateAssistantField' value='[[NAME]]' />
+			<input type='text' name='sample_name' class='FormTextfield SamplePageTextfield SampleCreateAssistantField' value='[[NAME]]' />
 			<span class='FormError' id='SampleCreateError1'></span>
 		</td>
 	</tr>
@@ -127,7 +127,7 @@ $(document).ready(function()
 	<tr>
 		<td>Supplier/Source/Manufacturer:</td>
 		<td>
-			<input type='text' name='sample_manufacturer_name' class='sampleTextfield SampleCreateAssistantField' value='[[MANUFACTURER_NAME]]' id='ManufactuerNameField' />
+			<input type='text' name='sample_manufacturer_name' class='FormTextfield SamplePageTextfield SampleCreateAssistantField' value='[[MANUFACTURER_NAME]]' id='ManufactuerNameField' />
 			<input type='hidden' name='sample_manufacturer_id' value='[[MANUFACTURER]]' id='ManufactuerIdField' class='SampleCreateAssistantField' />
 			<span class='FormError' id='SampleCreateError2'></span>
 		</td>
@@ -138,14 +138,14 @@ $(document).ready(function()
 	<tr>
 		<td>Date of Expiry: (<a href='#' id='show_warning'>lead time</a>)</td>
 		<td>
-			<input type='text' name='sample_expiry' class='sampleTextfield SampleCreateAssistantField' value='[[EXPIRY]]' id='datepicker' />
+			<input type='text' name='sample_expiry' class='FormTextfield SamplePageTextfield SampleCreateAssistantField' value='[[EXPIRY]]' id='datepicker' />
 			<span class='FormError' id='SampleCreateError3'></span>
 		</td>
 	</tr>
 	<tr id='warning'>
 		<td>Lead-Time (in days):</td>
 		<td>
-			<input type='text' name='sample_expiry_warning' class='sampleTextfield SampleCreateAssistantField' value='[[EXPIRY_WARNING]]' />
+			<input type='text' name='sample_expiry_warning' class='FormTextfield SamplePageTextfield SampleCreateAssistantField' value='[[EXPIRY_WARNING]]' />
 		</td>
 	</tr>
 	<!-- ENDIF -->
@@ -154,7 +154,7 @@ $(document).ready(function()
 	<tr>
 		<td>Location:</td>
 		<td>
-			<select name='sample_location' class='sampleSelect SampleCreateAssistantField'>
+			<select name='sample_location' class='FormSelect SamplePageSelect SampleCreateAssistantField'>
 			
 			<!-- FOREACH BEGIN ([[LOCATION]]) -->
 	

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package base
+ * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -21,36 +21,16 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /**
- * Template Engine Interface
- * @package base
+ * Sample Create As Item Exception
+ * @package sample
  */
-interface HTMLTemplateInterface
+class SampleCreateAsItemException extends SampleCreateException
 {
-	/**
-	 * @param string $file complete path of file
-	 */
-	function __construct($file);
-	
-	function __destruct();
-	
-	/**
-	 * Sets a var. of template
-	 * @param string $name Address
-	 * @param string $value Content
-	 */
-	public function set_var($name, $value);
-	
-	/**
-	 * Writes the complete tempalte string into stdout
-	 */
-	public function output();
-	
-	/**
-	 * Returns the complete template string
-	 * @return string
-	 */
-	public function get_string();
+    function __construct($message = null)
+    {
+    	parent::__construct($message);	
+    }   
 }
+
 ?>

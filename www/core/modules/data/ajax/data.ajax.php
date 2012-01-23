@@ -351,19 +351,19 @@ class DataAjax
 		
 		try
 		{
-			if ($_GET[file_id] xor $_GET[value_id])
+			if ($_POST[file_id] xor $_POST[value_id])
 			{
-				if ($_GET[file_id])
+				if ($_POST[file_id])
 				{
-					$id = $_GET[file_id];
+					$id = $_POST[file_id];
 					$object = File::get_instance($id);
 					$type = "file";
 					$title = $object->get_name();
 				}
 				
-				if ($_GET[value_id])
+				if ($_POST[value_id])
 				{
-					$id = $_GET[value_id];
+					$id = $_POST[value_id];
 					$object = Value::get_instance($id);
 					$type = "value";
 					$title = $object->get_type_name();
@@ -371,9 +371,9 @@ class DataAjax
 			}
 			else
 			{
-				if ($_GET[folder_id])
+				if ($_POST[folder_id])
 				{
-					$id = $_GET[folder_id];
+					$id = $_POST[folder_id];
 					$object = Folder::get_instance($id);
 					$type = "folder";
 					$title = $object->get_name();
@@ -557,13 +557,13 @@ class DataAjax
 		$permissions = (array)$permission_array;
 		switch($type):
 			case "File": 
-				$id = $_GET[file_id];
+				$id = $_POST[file_id];
 			break;
 			case "Folder": 
-				$id = $_GET[folder_id];
+				$id = $_POST[folder_id];
 			break;
 			case "Value": 
-				$id = $_GET[value_id];
+				$id = $_POST[value_id];
 			break;
 			
 		endswitch;

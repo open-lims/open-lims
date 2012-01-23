@@ -22,17 +22,15 @@
  */
 
 /**
- * @deprecated replace
- * @todo replace
- * Sample Clone Failed Exception
+ * Sample Delete Exception
  * @package sample
  */
-class SampleCloneFailedException extends Exception
+class SampleDeleteException extends SampleException
 {
-    function __construct()
+    function __construct($message = null)
     {
-    	parent::__construct("", 0);	
-    }  
+    	parent::__construct(true, true, true, $message, null);	
+    }   
 }
 
 ?>

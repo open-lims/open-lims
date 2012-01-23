@@ -1,0 +1,1 @@
+uploader = new base_upload("[[UNIQUE_ID]]","[[SESSION_ID]]");

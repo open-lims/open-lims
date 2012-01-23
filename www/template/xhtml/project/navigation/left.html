@@ -1,5 +1,4 @@
 <script>
-	var get_array = getQueryParams(document.location.search);
-	var tn3 = new base_tree_nav("LeftNavigationTree","LeftNavigationProject","core/modules/project/ajax/navigation/project_navigation.ajax.php?project_id="+get_array['project_id']+"");
+	var tn3 = new base_tree_nav("LeftNavigationTree","LeftNavigationProject","ajax.php?username="+get_array['username']+"&session_id="+get_array['session_id']+"&nav=project&run=navigation&project_id="+get_array['project_id']+"");
 	tn3.init();
 </script>

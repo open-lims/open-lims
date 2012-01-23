@@ -55,7 +55,7 @@ class Main
 		{
 			$GLOBALS['fatal_error'] = "Extension \"GD\" is missing!";
 		}
-
+		
 		if ($GLOBALS['fatal_error'] == null)
 		{
 			global $db, $runtime_data, $transaction;
@@ -71,6 +71,9 @@ class Main
 			
 			require_once("include/base/system/events/event.class.php");
 			require_once("include/base/system/system_handler.class.php");
+			require_once("include/base/system/system_config.class.php");
+			
+			SystemConfig::load_module_config();
 			
 			require_once("include/base/system/autoload.function.php");
 			
@@ -143,7 +146,12 @@ class Main
 	 */
 	function __destruct()
 	{
-		@$db->db_close();
+		global $db;
+		
+		if (@is_object($db))
+		{
+			@$db->db_close();
+		}
 	}
 		
 	/**

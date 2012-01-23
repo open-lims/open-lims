@@ -19,13 +19,12 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-
 function base_tree_nav(id, name, ajax_handler)
 {
 	var tree_id = id;
 	var tree_name = name;
 	var ajax_handler = ajax_handler;
-	 
+
 	var loading_animation = true;
 	
 	var scrollbar = true;
@@ -88,9 +87,9 @@ function base_tree_nav(id, name, ajax_handler)
 		
 		$.ajax(
 	    {
-	    	type : "GET",
-	    	url : ajax_handler,
-	    	data : "run=get_array&session_id=" + get_array['session_id'] + "&username=" + get_array['username'],
+	    	type : "POST",
+	    	url : ajax_handler+"&action=get_array",
+	    	data : "",
 	    	success : function(data) 
 	    	{
 	    		array = $.parseJSON(data);
@@ -460,21 +459,12 @@ function base_tree_nav(id, name, ajax_handler)
 			array.splice(entry_index + g, 0, new_array[g]);
 		}
 
-		if (ajax_handler.indexOf("?") == -1) 
-		{
-			var post_ajax_handler = ajax_handler + "?session_id="+ get_array['session_id'] + "&run=set_array";
-		} 
-		else 
-		{
-			var post_ajax_handler = ajax_handler + "&session_id="+ get_array['session_id'] + "&run=set_array";
-		}
-
 		var json_array = encodeURIComponent(JSON.stringify(array));
 		$.ajax(
 		{
 			async: false,
 			type : "POST",
-			url : post_ajax_handler,
+			url : ajax_handler+"&action=set_array",
 			data : "array=" + json_array,
 			success : function(data){}
 		});
@@ -582,9 +572,9 @@ function base_tree_nav(id, name, ajax_handler)
 			
 			$.ajax(
 			{
-				type : "GET",
-				url : ajax_handler,
-				data : "run=get_children&id=" + clicked_id + "&session_id=" + get_array['session_id'] + "&username=" + get_array['username'],
+				type : "POST",
+				url : ajax_handler+"&action=get_children",
+				data : "id="+clicked_id,
 				success : function(data) 
 				{
 					var child_array = $.parseJSON(data);

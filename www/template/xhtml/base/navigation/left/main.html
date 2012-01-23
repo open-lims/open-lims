@@ -19,9 +19,9 @@ $(document).ready(function()
 		
 		$.ajax(
 		{
-			type: "GET",
-			url: "[[JS:AJAX_URL]]",
-			data: "run=get_name&session_id="+get_array['session_id'],
+			type: "POST",
+			url: "[[JS:AJAX_URL]]&action=get_name",
+			data: "",
 			success: function(data)
 			{
 				$("#LeftNavigationTitle").html(data);
@@ -30,9 +30,9 @@ $(document).ready(function()
 		
 		$.ajax(
 		{
-			type: "GET",
-			url: "[[JS:AJAX_URL]]",
-			data: "run=get_html&session_id="+get_array['session_id']+"&username="+get_array['username'],
+			type: "POST",
+			url: "[[JS:AJAX_URL]]&action=get_html",
+			data: "",
 			success: function(data)
 			{
 				$("#LeftNavigationTree").html(data);
@@ -41,18 +41,18 @@ $(document).ready(function()
 		
 		$.ajax(
 		{
-			type: "GET",
-			url: "core/modules/base/ajax/navigation/left_navigation.ajax.php",
-			data: "run=set_active&session_id="+get_array['session_id']+"&id=[[JS:ID]]",
+			type: "POST",
+			url: "ajax.php?nav=base&session_id="+get_array['session_id']+"&run=left_navigation&action=set_active",
+			data: "id=[[JS:ID]]",
 			success: function(data){}
 		});
 	});
 	
 	$.ajax(
 	{
-		type: "GET",
-		url: "[[JS:AJAX_URL]]",
-		data: "run=get_name&session_id="+get_array['session_id'],
+		type: "POST",
+		url: "[[JS:AJAX_URL]]&action=get_name",
+		data: "",
 		success: function(data)
 		{
 			tooltip("[[JS:ID]]",data);
@@ -76,9 +76,9 @@ $(document).ready(function()
 				
 				$.ajax(
 				{
-					type: "GET",
-					url: "[[ACTIVE_JS_AJAX_URL]]",
-					data: "run=get_name&session_id="+get_array['session_id'],
+					type: "POST",
+					url: "[[ACTIVE_JS_AJAX_URL]]&action=get_name",
+					data: "",
 					success: function(data)
 					{
 						$("#LeftNavigationTitle").html(data);
@@ -87,9 +87,9 @@ $(document).ready(function()
 				
 				$.ajax(
 				{
-					type: "GET",
-					url: "[[ACTIVE_JS_AJAX_URL]]",
-					data: "run=get_html&session_id="+get_array['session_id']+"&username="+get_array['username'],
+					type: "POST",
+					url: "[[ACTIVE_JS_AJAX_URL]]&action=get_html",
+					data: "",
 					success: function(data)
 					{
 						$("#LeftNavigationTree").html(data);
@@ -98,9 +98,9 @@ $(document).ready(function()
 				
 				$.ajax(
 				{
-					type: "GET",
-					url: "core/modules/base/ajax/navigation/left_navigation.ajax.php",
-					data: "run=set_active&session_id="+get_array['session_id']+"&id=[[ACTIVE_JS_ID]]",
+					type: "POST",
+					url: "ajax.php?nav=base&session_id="+get_array['session_id']+"&run=left_navigation&action=set_active",
+					data: "id=[[JS:ID]]",
 					success: function(data){}
 				});
 			}

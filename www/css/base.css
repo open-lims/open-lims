@@ -294,11 +294,6 @@ padding: 2px 2px 2px 5px;
 	text-align: center;
 }
 
-#BaseLoginWindow
-{
-	font: normal 12px Arial, Helvetica, sans-serif;	
-	padding: 10px;
-}
 #BaseLogoutQuestion
 {
 	font: normal 12px Arial, Helvetica, sans-serif;	
@@ -319,13 +314,47 @@ padding: 2px 2px 2px 5px;
 }
 
 
-.FormError {
+/* Forms */
+.FormButton
+{
+	background-color: white;
+	border: 1px #C0C0C0 solid;
+}
+
+.FormCheck
+{
+	background-color: white;
+}
+
+.FormTextarea
+{
+	background-color: white;
+	border: 1px #C0C0C0 solid
+}
+
+.FormTextfield
+{
+	background-color: white;
+	border: 1px #C0C0C0 solid
+}
+
+.FormRadio
+{
+	background-color: white;
+}
+
+.FormSelect
+{
+	background-color: white;
+	border: 1px #C0C0C0 solid;
+	width: 100%;
+}
+.FormError
+{
 	font: normal 0.8em Verdana, Helvatica, sans-serif;
 	color: red;
 }
-.FormSelect {
-	width: 100%;
-}
+
 
 .ContentBoxBegin {
 	margin: 0;
@@ -432,4 +461,51 @@ padding: 2px 2px 2px 5px;
 	margin-left: auto;
 	margin-right: auto;
 	font: normal 0.8em Verdana, Helvetica, sans-serif;
+}
+
+.BaseBlockUIProceed
+{
+	margin: 10px;
+	font: normal 12px Verdana, Helvetica, sans-serif;
+}
+
+.BaseWantToButton {
+	display: block;
+	clear: left;
+	height: 36px;
+	text-decoration: none;
+}
+
+.BaseWantToButton:hover {
+	background: #99b2cc;
+	text-decoration: none;
+}
+
+.BaseWantToIcon {
+	display: block;
+	float: left;
+	width: 35px;
+	margin: 5px;
+}
+
+.BaseWantToText {
+	display: block;
+	margin-left: 45px;
+	padding-top: 10px;
+	font: bold 1em Verdana, Helvetica, sans-serif;
+	color: black;
+	text-decoration: none;
+}
+.BaseWantToHeadline
+{
+	color: #0F0F0F;
+	font: normal 10px Verdana, Helvetica, sans-serif;
+}
+.BaseWantToLine {
+	margin: 0 0 2px 0;
+	padding: 2px 0 0 0;
+	height: 1px;
+	border-bottom: 1px #C0C0C0 dotted;
+	font-size: 10px;
+	clear: both;
 }

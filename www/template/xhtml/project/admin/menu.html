@@ -14,34 +14,35 @@ $(document).ready(function()
 				{
 					if ($("#ProjectAdminMenuContent").children().size() > 0)
 					{
-						$("#ProjectAdminMenuContent").fadeOut("slow");
-						$("#ProjectAdminMenuContent").html(data);
-						$("#ProjectAdminMenuContent").fadeIn("slow");
+						$("#ProjectAdminMenuContent").fadeOut("slow",function()
+						{
+							$("#ProjectAdminMenuContent").html(data);
+							$("#ProjectAdminMenuContent").fadeIn("slow");
+							base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=restore", 'get_array=[[GET_ARRAY]]', "ProjectRestoreButton");
+							base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=delete", 'get_array=[[GET_ARRAY]]', "ProjectDeleteButton");
+							base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=cancel", 'get_array=[[GET_ARRAY]]', "ProjectCancelButton");
+						});
 					}
 					else
 					{
 						$("#ProjectAdminMenuContent").html(data).hide().fadeIn("slow");
+						base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=restore", 'get_array=[[GET_ARRAY]]', "ProjectRestoreButton");
+						base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=delete", 'get_array=[[GET_ARRAY]]', "ProjectDeleteButton");
+						base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=cancel", 'get_array=[[GET_ARRAY]]', "ProjectCancelButton");
 					}
 
 					$("#ProjectRestoreWindow").dialog({
 						autoOpen: false
 					});
-
-					base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=restore", 'get_array=[[GET_ARRAY]]', "ProjectRestoreButton");
-
-					
+			
 					$("#ProjectDeleteWindow").dialog({
 						autoOpen: false
 					});
 
-					base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=delete", 'get_array=[[GET_ARRAY]]', "ProjectDeleteButton");
-
-					
 					$("#ProjectCancelWindow").dialog({
 						autoOpen: false
 					});
 
-					base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=cancel", 'get_array=[[GET_ARRAY]]', "ProjectCancelButton");
 				}
 			}
 		});
@@ -57,7 +58,7 @@ $(document).ready(function()
 <div id="ProjectDeleteWindow" title="Delete Project" style='display: none;'>
 </div>
 
-<div id="ProjectDeleteProceed" style="display:none; cursor: default">&nbsp;
+<div id="ProjectDeleteProceed" class="BaseBlockUIProceed" style="display:none; cursor: default">&nbsp;
 </div> 
 
 <div id="ProjectCancelWindow" title="Cancel Project" style='display: none;'>

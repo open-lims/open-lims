@@ -35,10 +35,13 @@ class ContentHandler_IO
 	
 		if (file_exists(constant("WWW_DIR")))
 		{
+			$unique_id = uniqid();
+			
 			$css_directory = constant("WWW_DIR")."/css";
 			if (file_exists($css_directory))
 			{
 				$css_directory_array = scandir($css_directory);
+				
 				
 				
 				if (is_array($css_directory_array))
@@ -51,8 +54,14 @@ class ContentHandler_IO
 						{
 							if (is_file($css_directory."/".$value))
 							{
-								$unique_id = uniqid();
-								$index_css .= "<link rel='stylesheet' type='text/css' href='css/".$value."?".$unique_id."' title='Style' />\n";
+								if (constant("AVOID_CSS_CACHE") == true)
+								{
+									$index_css .= "<link rel='stylesheet' type='text/css' href='css/".$value."?".$unique_id."' title='Style' />\n";
+								}
+								else
+								{
+									$index_css .= "<link rel='stylesheet' type='text/css' href='css/".$value."' title='Style' />\n";
+								}
 							}	
 						}
 					}	
@@ -78,7 +87,14 @@ class ContentHandler_IO
 						{
 							if (is_file($js_lib_directory."/".$value))
 							{
-								$index_js .= "<script type='text/javascript' src='js/lib/".$value."?".$unique_id."'></script>\n";
+								if (constant("AVOID_JS_CACHE") == true)
+								{
+									$index_js .= "<script type='text/javascript' src='js/lib/".$value."?".$unique_id."'></script>\n";
+								}
+								else
+								{
+									$index_js .= "<script type='text/javascript' src='js/lib/".$value."'></script>\n";
+								}
 							}	
 						}
 					}	
@@ -98,7 +114,14 @@ class ContentHandler_IO
 						{
 							if (is_file($js_modules_directory."/".$value))
 							{
-								$index_js .= "<script type='text/javascript' src='js/modules/".$value."?".$unique_id."'></script>\n";
+								if (constant("AVOID_JS_CACHE") == true)
+								{
+									$index_js .= "<script type='text/javascript' src='js/modules/".$value."?".$unique_id."'></script>\n";
+								}
+								else
+								{
+									$index_js .= "<script type='text/javascript' src='js/modules/".$value."'></script>\n";
+								}
 							}	
 						}
 					}	
@@ -116,6 +139,8 @@ class ContentHandler_IO
 		}
 		else
 		{
+			$template->set_var("INDEX_CSS","<link rel=\"stylesheet\" type=\"text/css\" href=\"css/base.css\" title=\"Style\" />\n<link rel=\"stylesheet\" type=\"text/css\" href=\"css/login.css\" title=\"Style\" />");
+			$template->set_var("INDEX_JS","");
 			$GLOBALS['fatal_error'] = "Main folder not found!";
 		}
 		

@@ -1,0 +1,137 @@
+.CalendarTrGrey
+{
+	background-color: #E0E0E0;
+}
+.CalendarHead
+{
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	font-weight: bold;
+	width: 16em;
+}
+.CalendarToday 
+{
+	text-decoration: underline;
+}
+.CalendarYearTable 
+{
+	width: 100%;
+}
+.CalendarYearTable a
+{
+	text-decoration: none;
+}
+.CalendarYearTable tr
+{
+	vertical-align: top;
+}
+.CalendarYearMonth
+{
+	border: 1px #C0C0C0 solid;
+	height: 140px;
+	font-size: 12px;
+}
+.CalendarYearMonthTitle
+{
+	text-align: center;
+	color: white;
+	background-color: #C0C0C0;
+}
+.CalendarYearWeek
+{
+	color: #A0A0A0;
+}
+.CalendarYearWDay
+{
+	font-size: 8px;
+	color: black;
+}
+.CalendarYearDate
+{
+	font-weight: bold;
+}
+.CalendarMonthTable
+{
+	width: 100%;
+}
+.CalendarMonthTable th
+{
+	text-align: left;
+	border-bottom: 1px #C0C0C0 solid;
+}
+.CalendarMonthTable tr
+{
+	vertical-align: top;
+}
+.CalendarMonthTable td
+{
+	height: 60px;
+	border-bottom: 1px #C0C0C0 solid;
+	border-left: 1px #C0C0C0 solid;
+}
+.CalendarMonthDateImage
+{
+	float: right;
+}
+.CalendarToday
+{
+	font-weight: bold;
+}
+.CalendarWeekTable
+{
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+.CalendarWeekTable th
+{
+	text-align: left;
+	border-bottom: 1px #C0C0C0 solid;
+}
+.CalendarWeekTable tr
+{
+	vertical-align: top;
+}
+.CalendarWeekTable td
+{
+	min-height: 30px;
+	height: 30px;
+	margin: 0;
+	padding: 0 0 0 2px;
+	border-left: 1px #B0B0B0 solid;
+}
+.CalendarWeekEntry
+{
+	margin: 3px 0;
+}
+.CalendarDayTable
+{
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+.CalendarDayTable th
+{
+	text-align: left;
+}
+.CalendarDayTable tr
+{
+	vertical-align: top;
+	margin: 0;
+	padding: 0;
+}
+.CalendarDayTable td
+{
+	min-height: 30px;
+	height: 30px;
+	margin: 0;
+	padding: 0 0 0 2px;
+	border-left: 1px #B0B0B0 solid;
+}
+.CalendarDayDateImage
+{
+	float: left;
+	margin: 0 4px 0 0;
+	padding: 0;
+}

@@ -79,17 +79,16 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 	 * @param string $content
 	 * @param bool $cancel
 	 * @param bool $important
-	 * @param string $action_checksum
 	 * @return integer
 	 * @throws ProjectLogCreateException
 	 */
-	public function create($project_id, $content, $cancel, $important, $action_checksum)
+	public function create($project_id, $content, $cancel = false, $important = false)
 	{
 		global $user;
 		
 		if (is_numeric($project_id))
 		{
-			if (($log_id = $this->log->create($project_id, $content, $cancel, $important, $user->get_user_id(), $action_checksum)) != null)
+			if (($log_id = $this->log->create($project_id, $content, $cancel, $important, $user->get_user_id())) != null)
 			{
 				$this->__construct($log_id);
 				return $log_id;

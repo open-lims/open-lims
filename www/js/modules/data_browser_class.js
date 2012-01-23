@@ -153,6 +153,7 @@ function data_browser()
 				.click(function(evt)
 				{
 					evt.preventDefault();
+					evt.stopPropagation();
 					if(($(evt.target)[0] == $(link)[0]))
 					{ //clicked on a link
 						if(linked_folder_id == undefined && linked_virtual_folder_id == undefined)
@@ -233,9 +234,9 @@ function data_browser()
 				$.ajax(
 				{
 					async : false,
-					type : "GET",
-					url : "core/modules/data/ajax/folder.ajax.php",
-					data : "username="+get_array['username']+"&session_id="+get_array['session_id']+"&run=delete_folder&folder_id="+folder_id,
+					type : "POST",
+					url : "ajax.php?nav=data&session_id="+get_array['session_id']+"&run=folder_delete",
+					data : "folder_id="+folder_id+"&sure=true",
 					success : function(data) {}
 				});
 			}
@@ -247,9 +248,9 @@ function data_browser()
 				$.ajax(
 				{
 					async : false,
-					type : "GET",
-					url : "core/modules/data/ajax/value.ajax.php",
-					data : "username="+get_array['username']+"&session_id="+get_array['session_id']+"&run=delete_value&value_id="+value_id,
+					type : "POST",
+					url : "ajax.php?nav=data&session_id="+get_array['session_id']+"&run=value_delete",
+					data : "value_id="+value_id+"&sure=true",
 					success : function(data) {}
 				});
 			}
@@ -261,9 +262,9 @@ function data_browser()
 				$.ajax(
 				{
 					async : false,
-					type : "GET",
-					url : "core/modules/data/ajax/file.ajax.php",
-					data : "username="+get_array['username']+"&session_id="+get_array['session_id']+"&run=delete_file&file_id="+file_id,
+					type : "POST",
+					url : "ajax.php?nav=data&session_id="+get_array['session_id']+"&run=file_delete",
+					data : "file_id="+file_id+"&sure=true",
 					success : function(data) {}
 				});
 			}
@@ -277,9 +278,9 @@ function data_browser()
 	{
 		$.ajax(
 		{
-			type : "GET",
-			url : "core/modules/data/ajax/data_browser.ajax.php",
-			data : "username="+get_array['username']+"&session_id="+ get_array['session_id']+"&run=get_data_browser_path&folder_id="+current_folder_id+"&virtual_folder_id="+current_virtual_folder_id,
+			type : "POST",
+			url : "ajax.php?nav=data&session_id="+get_array['session_id']+"&run=get_data_browser_path",
+			data : "folder_id="+current_folder_id+"&virtual_folder_id="+current_virtual_folder_id,
 			success : function(data) 
 			{
 				$(data_browser_table).parent().parent().children(".OverviewTableRight").html(data);
@@ -294,9 +295,9 @@ function data_browser()
 	{
 		$.ajax(
 		{
-			type : "GET",
-			url : "core/modules/data/ajax/data_browser.ajax.php",
-			data : "username="+get_array['username']+"&session_id="+ get_array['session_id']+"&run=get_data_browser_path_cleared&folder_id="+current_folder_id+"&virtual_folder_id="+current_virtual_folder_id,
+			type : "POST",
+			url : "ajax.php?nav=data&session_id="+get_array['session_id']+"&run=get_data_browser_path_cleared",
+			data : "folder_id="+current_folder_id+"&virtual_folder_id="+current_virtual_folder_id,
 			success : function(data) 
 			{
 				$(data_browser_table).parent().parent().children(".OverviewTableRight").html(data);
@@ -365,6 +366,7 @@ function data_browser()
 	 */
 	function open_data_browser_file_dialog(element)
 	{
+		
 		close_data_browser_file_dialog();
 		close_add_dialog();
 		
@@ -432,6 +434,9 @@ function data_browser()
 			})
 			.hide()
 			.appendTo("#main");
+
+		bindDialogCloseClickHandler();
+		
 		return true;
 	}
 	
@@ -471,31 +476,44 @@ function data_browser()
 	}
 	
 	/**
+	 * Applies a click handler to the body listening for clicks outside the data browser to close open dialogs.
+	 */
+	function bindDialogCloseClickHandler(){
+		$("body").click(function(evt)
+		{
+			close_data_browser_file_dialog();
+			close_add_dialog();
+			$("body").unbind("click");
+		});
+	}
+	
+	/**
 	 * Sets the content of the dropdown menu
 	 * @param item_id the id of the selected item
 	 * @param type the type (folder, file, value)
 	 */
 	function load_context_sensitive_dialog(item_id, type)
 	{
-		var data;
+		var data = "file_id="+item_id;
+		var action;
 		switch(type)
 		{
 			case "folder":
-				data = "username="+get_array['username']+"&session_id="+ get_array['session_id']+"&run=get_context_sensitive_folder_menu&file_id="+item_id;
+				action = "get_context_sensitive_folder_menu";
 				break;
 			case "file":
-				data = "username="+get_array['username']+"&session_id="+ get_array['session_id']+"&run=get_context_sensitive_file_menu&file_id="+item_id;
+				action = "get_context_sensitive_file_menu";
 				break;
 			case "value":
-				data = "username="+get_array['username']+"&session_id="+ get_array['session_id']+"&run=get_context_sensitive_value_menu&file_id="+item_id;
+				action = "get_context_sensitive_value_menu";
 				break;
 			default: 
 				break;
 		}
 		
 		$.ajax({
-			type : "GET",
-			url : "core/modules/data/ajax/data_browser.ajax.php",
+			type : "POST",
+			url : "ajax.php?session_id="+get_array['session_id']+"&nav=data&run="+action,
 			data : data,
 			success : function(data) 
 			{
@@ -513,7 +531,10 @@ function data_browser()
 							}
 							else
 							{
-								open_link_in_ui(type, href);
+								var split = href.split(/&(.+)/);
+								var action = split[0];
+								var additional_params = split[1];
+								open_link_in_ui(action, additional_params);
 							}
 						})
 						.html(data);
@@ -528,37 +549,16 @@ function data_browser()
 	 * @param type the type (folder, file, value)
 	 * @param link the url
 	 */
-	function open_link_in_ui(type, link)
+	function open_link_in_ui(action, additional_params)
 	{
 		close_data_browser_file_dialog();
 		close_add_dialog();
-		
-		var data_params = link.replace("index.php?","");
-		if(data_params.indexOf("run=add_file") == -1 && data_params.indexOf("run=add_folder") == -1 && data_params.indexOf("run=add_value") == -1)
-		{
-			data_params += "&run=get_data_browser_link_html_and_button_handler";		
-		}
-		
-		var url;
-		switch(type)
-		{
-			case "folder":
-				url = "core/modules/data/ajax/folder.ajax.php";
-				break;
-			case "file":
-				url = "core/modules/data/ajax/file.ajax.php";
-				break;
-			case "value":
-				url = "core/modules/data/ajax/value.ajax.php";
-				break;
-			default: 
-				break;
-		}
+		url = "ajax.php?session_id="+get_array['session_id']+"&nav=data&"+action;
 		
 		$.ajax({
-			type : "GET",
+			type : "POST",
 			url : url,
-			data : data_params,
+			data : additional_params,
 			success : function(data) 
 			{
 				var json = $.parseJSON(data);
@@ -640,9 +640,24 @@ function data_browser()
 			"border-bottom":"solid white 2px",
 			"z-index":"99"
 		});
-		$("#DataBrowserAddFileDialog").slideDown(200);
+		$("#DataBrowserAddFileDialog")
+			.unbind("click")
+			.click(function(evt)
+			{
+				evt.preventDefault();
+				evt.stopPropagation();
+				var target = evt.target;
+				var href = $(target).attr("href");
+				var split = href.split(/&(.+)/);
+				var action = split[0];
+				var additional_params = split[1];
+				open_link_in_ui(action, additional_params);
+			})
+			.slideDown(200);
 		$("#DataBrowserAddFileCornerContainer").show();
 		$("#DataBrowserAddFileCorner").show();
+		
+		bindDialogCloseClickHandler();
 	}
 	
 	/**
@@ -663,9 +678,9 @@ function data_browser()
 	function init_menu(folder_id)
 	{
 		$.ajax({
-			type : "GET",
-			url : "core/modules/data/ajax/data_browser.ajax.php",
-			data : "username="+get_array['username']+"&session_id="+get_array['session_id']+"&run=get_browser_menu&folder_id="+folder_id,
+			type : "POST",
+			url : "ajax.php?nav=data&session_id="+get_array['session_id']+"&run=get_browser_menu",
+			data : "folder_id="+folder_id,
 			success : function(data) 
 			{
 				var json = $.parseJSON(data);
@@ -676,8 +691,8 @@ function data_browser()
 					var pos = $("#DataBrowserMenuAdd").position();
 					var height = $("#DataBrowserMenuAdd").height();
 					var width = $("#DataBrowserMenuAdd").width();
-					var offset_x = Math.floor(pos.left);
-					var offset_y = Math.floor(pos.top) + height + 6;
+					var offset_x = pos.left;
+					var offset_y = pos.top + height + 6;
 					
 					var dialog = $("<div id='DataBrowserAddFileDialog'></div>")
 						.css({"position":"absolute","top":offset_y,"left":offset_x,"z-index":"98"})
@@ -744,12 +759,20 @@ function data_browser()
 	 */
 	function init_menu_handler()
 	{
-		$(".DataBrowserAjaxPage")
-			.unbind("click")
-			.click(function(event) 
-			{ 
-				init(); //re-init on page change
-			});
+		$(".DataBrowserAjaxPage").unbind("click");
+		list.reinit_page_handler();
+		$(".DataBrowserAjaxPage").bind("click",function(event) 
+		{ 
+			reinit_without_reload(); //re-init on page change
+		});
+		
+		$(".DataBrowserAjaxColumn").unbind("click");
+		list.reinit_sort_handler();
+		$(".DataBrowserAjaxColumn").bind("click",function(event) 
+		{ 
+			reinit_without_reload(); //re-init on page change
+		});
+		
 		
 		$("#DataBrowserMenuAdd")
 			.unbind("click")
@@ -758,6 +781,7 @@ function data_browser()
 				if(!$(this).hasClass("Deactivated"))
 				{
 					event.preventDefault();
+					event.stopPropagation();
 					if($("#DataBrowserAddFileDialog").is(':visible'))
 					{
 						close_add_dialog();
@@ -776,9 +800,9 @@ function data_browser()
 				event.preventDefault();
 				$.ajax({
 					async:false,
-					type : "GET",
-					url : "core/modules/data/ajax/data_browser.ajax.php",
-					data : "username="+get_array['username']+"&session_id="+get_array['session_id']+"&run=delete_stack",
+					type : "POST",
+					url : "ajax.php?nav=data&session_id="+get_array['session_id']+"&run=delete_stack",
+					data : "",
 					success : function(data) 
 					{
 						load_folder(null, null);
@@ -859,6 +883,17 @@ function data_browser()
 		close_data_browser_file_dialog();
 		close_add_dialog();
 		list.reload();
+		init();
+	}
+	
+	/**
+	 * Closes all open dialogs and reinitialises all event handlers
+	 */
+	function reinit_without_reload()
+	{
+		$("#DataBrowserAddFileDialog").remove();
+		close_data_browser_file_dialog();
+		close_add_dialog();
 		init();
 	}
 	

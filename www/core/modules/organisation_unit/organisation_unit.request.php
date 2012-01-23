@@ -91,6 +91,35 @@ class OrganisationUnitRequest
 				echo OrganisationUnitAjax::count_organisation_units_by_user_id($_POST[argument_array]);
 			break;
 			
+			
+			
+			case "navigation":
+				require_once("ajax/navigation/organisation_unit_navigation.ajax.php");
+				switch($_GET['action']):
+
+					case "get_name":
+						echo OrganisationUnitNavigationAjax::get_name();
+					break;
+					
+					case "get_html":
+						echo OrganisationUnitNavigationAjax::get_html();
+					break;
+					
+					case "get_array":
+						echo OrganisationUnitNavigationAjax::get_array();
+					break;
+					
+					case "set_array":
+						echo OrganisationUnitNavigationAjax::set_array($_POST['array']);
+					break;
+				
+					case "get_children":
+						echo OrganisationUnitNavigationAjax::get_children($_POST['id']);
+					break;
+					
+				endswitch;
+			break;
+			
 		endswitch;
 	}
 	

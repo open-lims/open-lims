@@ -25,9 +25,9 @@
  * 
  */
 	$dialog[0][type]			= "item_list";
-	$dialog[0][class_path]		= "core/modules/data/io/data.io.php";
-	$dialog[0]['class']			= "DataIO";
-	$dialog[0][method]			= "method_handler";
+	$dialog[0][class_path]		= "core/modules/data/data.request.php";
+	$dialog[0]['class']			= "DataRequest";
+	$dialog[0][method]			= "io_handler";
 	$dialog[0][internal_name]	= "data";
 	$dialog[0][display_name]	= "Data";
 	$dialog[0][weight]			= 300;

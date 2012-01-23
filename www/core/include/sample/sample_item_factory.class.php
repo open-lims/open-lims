@@ -39,9 +39,10 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
 	 * @param integer $gid
 	 * @param string $keywords
 	 * @param string $description
+	 * @param bool $parent
 	 * @return bool
 	 */
-	public static function create($sample_id, $item_id, $gid, $keywords, $description)
+	public static function create($sample_id, $item_id, $gid, $keywords, $description, $parent = false)
 	{
 		global $transaction;
 		
@@ -51,6 +52,7 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
 			$sample_item = new SampleItem($sample_id);
 			
 			$sample_item->set_gid($gid);
+			$sample_item->set_parent($parent);
 			
 			if ($sample_item->set_item_id($item_id) == false)
 			{
@@ -147,7 +149,16 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
     		{
     			$transaction_id = $transaction->begin();
     			
-    			if (self::create($get_array[sample_id], $event_object->get_item_id(), $get_array[key], $post_array[keywords], $post_array[description]) == false)
+    			if ($get_array['parent'] == "1")
+    			{
+    				$parent = true;
+    			}
+    			else
+    			{
+    				$parent = false;
+    			}
+    			
+    			if (self::create($get_array[sample_id], $event_object->get_item_id(), $get_array[key], $post_array[keywords], $post_array[description], $parent) == false)
     			{
     				if ($transaction_id != null)
 	    			{

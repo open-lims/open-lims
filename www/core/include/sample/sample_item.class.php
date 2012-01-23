@@ -43,6 +43,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 	private $item_id;
 	
 	private $gid;
+	private $parent;
 	
 	private $item_class_id;
 
@@ -90,6 +91,15 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 	    		if (is_numeric($this->gid))
 		    	{
 		    		$primary_key = $sample_has_item->create($this->sample_id, $this->item_id, $this->gid);
+		    		
+		    		if ($this->parent == true)
+		    		{
+		    			$sample_has_item->set_parent(true);
+		    		}
+		    		else
+		    		{
+		    			$sample_has_item->set_parent(false);
+		    		}
 		    	}
 		    	else
 		    	{
@@ -279,7 +289,9 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     	{
     		$this->item_id = $item_id;
     		return true;
-    	}else{
+    	}
+    	else
+    	{
     		return false;
     	}
     }
@@ -295,7 +307,22 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     	{
     		$this->gid = $gid;
     		return true;
-    	}else{
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
+    
+    public function set_parent($parent)
+    {
+   		if (isset($parent)) 
+    	{
+    		$this->parent = $parent;
+    		return true;
+    	}
+    	else
+    	{
     		return false;
     	}
     }
@@ -794,14 +821,14 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     }
     
 	/**
-	 * @see SampleItemInterface::list_sample_id_by_item_id_and_gid()
-	 * @param integer $item_id
+	 * @see SampleItemInterface::list_sample_id_by_item_id_and_gid_and_parent()
+	 * @param integer $sample_id
 	 * @param integer $gid
 	 * @return array
 	 */
-	public static function list_sample_id_by_item_id_and_gid($item_id, $gid)
+	public static function list_sample_id_by_item_id_and_gid_and_parent($item_id, $gid)
 	{
-		return SampleHasItem_Access::list_sample_id_by_item_id_and_gid($item_id, $gid);
+		return SampleHasItem_Access::list_sample_id_by_item_id_and_gid_and_parent($item_id, $gid);
 	}
     
 	/**

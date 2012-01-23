@@ -22,25 +22,13 @@
  */
 
 /**
- * 
- */
-$GLOBALS['autoload_prefix'] = "../";
-require_once("../../base/ajax.php");
-
-/**
  * List AJAX IO Class
  * @package base
  */
-class ListAjax extends Ajax
+class ListAjax
 {
-	function __construct()
+	public static function get_page_bar($page, $number_of_pages, $css_page_id)
 	{
-		parent::__construct();
-	}
-	
-	public function get_page_bar($page, $number_of_pages, $css_page_id)
-	{
-		
 		$pagebar .= "<table style='display: inline;'><tr><td><span class='smallTextBlack'>Page ".$page." of ".$number_of_pages."</span></td>";
 	
 		// Previous
@@ -50,10 +38,7 @@ class ListAjax extends Ajax
 		}
 		else
 		{
-			
 			$previous_page = $page - 1;
-			
-
 			$pagebar .= "<td><a href='#' class='".$css_page_id."' id='".$css_page_id."".$previous_page."'><img src='images/icons/previous.png' alt='Previous' border='0' /></a></td>";
 		}	
 		
@@ -69,34 +54,39 @@ class ListAjax extends Ajax
 			}
 			else
 			{
-
-				if ($i <= 2) {
+				if ($i <= 2)
+				{
 					$display = true;
 				}
 				
-				if ($i > $max_page-2) {
+				if ($i > $max_page-2)
+				{
 					$display = true;
 				}
 				
-				if ($display == false and $page+1 == $i) {
+				if ($display == false and $page+1 == $i)
+				{
 					$display = true;
 				}
 				
-				if ($display == false and $page-1 == $i) {
+				if ($display == false and $page-1 == $i)
+				{
 					$display = true;
 				}
 				
-				if ($display == false and $page == $i) {
+				if ($display == false and $page == $i)
+				{
 					$display = true;
 				}
-				if ($i == $page+10 and $display == false) {
+				if ($i == $page+10 and $display == false)
+				{
 					$display = true;
 				}
 				
-				if ($i == $page-10 and $display == false) {
+				if ($i == $page-10 and $display == false)
+				{
 					$display = true;
 				}
-
 			}
 			
 			if ($display == true)
@@ -138,33 +128,9 @@ class ListAjax extends Ajax
 		return $pagebar;
 	}
 	
-	public function get_page_information($results, $pages)
+	public static function get_page_information($results, $pages)
 	{
 		return Common_IO::results_on_page($results, $pages);
 	}
-	
-	public function handler()
-	{
-		global $session;
-		
-		if ($session->is_valid())
-		{
-			switch($_GET['run']):
-			
-				case "get_page_bar":
-					echo $this->get_page_bar($_GET['page'], $_GET['number_of_pages'], $_GET['css_page_id']);
-				break;
-				
-				case "get_page_information":
-					echo $this->get_page_information($_GET['number_of_entries'], $_GET['number_of_pages']);
-				break;
-				
-			endswitch;
-		}
-	}
 }
-
-$list_ajax = new ListAjax();
-$list_ajax->handler();
-
 ?>

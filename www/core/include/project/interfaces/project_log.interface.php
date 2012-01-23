@@ -44,7 +44,7 @@ interface ProjectLogInterface
 	 * @param string $action_checksum
 	 * @return integer
 	 */
-	public function create($project_id, $content, $cancel, $important, $action_checksum);
+	public function create($project_id, $content, $cancel = false, $important = false);
 	
 	/**
 	 * Deletes a log-entry

@@ -1,6 +1,5 @@
 
 /* Sample Detail */
-
 .SampleDetailGeneral
 {
 	float: left;
@@ -17,40 +16,62 @@
 {
 	min-height: 400px;
 }
+#SampleDetailGeneralInformationTable
+{
+	
+}
 
-
-/* Sample Barcode */
-
-.SampleBarcode {
-	width: 95%;
+/* Add As Item */
+#SampleAddAsItemContainer
+{
+	width: 350px;
+	margin-left: auto;
+	margin-right: auto;
+}
+#SampleAddAsItemContainerImage
+{
+	float: left;
 	padding: 10px;
 }
-
-.SampleBarcodeTitle {
-	float: left;
-	font-weight: bold;
-}
-
-.SampleBarcodePrint {
+#SampleAddAsItemContainerMenu
+{
 	float: right;
 }
 
-.SampleBarcodeImage {
-	clear: both;
+#SampleAddAsItemContainerButtonArea
+{
+	padding-top: 80px;
+	text-align: right;
+	font: normal 0.8em Verdana, Helvetica, sans-serif;
+}
+
+/* Sample Add Fields */
+.SamplePageSelect
+{
+	width: 272px;
+}
+.SamplePageTextfield
+{
+	width: 270px;
 }
 
 
-/* Sample Structure */
-
-.SampleStructureArea {
-	border-bottom: 1px #D0D0D0 dotted;
-	padding: 5px;
+/* Sample Barcode */
+.SampleBarcode
+{
+	width: 95%;
+	padding: 10px;
 }
-
-.SampleStructureTitle {
+.SampleBarcodeTitle
+{
+	float: left;
 	font-weight: bold;
 }
-
-.SampleStructureElement {
-	padding: 3px 0 3px 0;
+.SampleBarcodePrint
+{
+	float: right;
+}
+.SampleBarcodeImage 
+{
+	clear: both;
 }

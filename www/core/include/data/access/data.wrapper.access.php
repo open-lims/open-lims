@@ -201,10 +201,14 @@ class Data_Wrapper_Access
 					break;
 					
 					default:
-						$sql_order_by = "ORDER BY ".constant("FILE_TABLE").".id, ".constant("VALUE_TABLE").".id, ".constant("FOLDER_TABLE").".id, ".constant("VIRTUAL_FOLDER_TABLE").".id";
+						$sql_order_by = "ORDER BY ".constant("FOLDER_TABLE").".id, ".constant("VIRTUAL_FOLDER_TABLE").".id, ".constant("VALUE_TABLE").".id, ".constant("FILE_TABLE").".id, datetime";
 					break;
 				
 				endswitch;
+			}
+			else
+			{
+				$sql_order_by = "ORDER BY ".constant("FOLDER_TABLE").".id, ".constant("VIRTUAL_FOLDER_TABLE").".id, ".constant("VALUE_TABLE").".id, ".constant("FILE_TABLE").".id, datetime";
 			}
 			
 			$sql = "SELECT CONCAT( " .

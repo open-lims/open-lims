@@ -22,17 +22,15 @@
  */
 
 /**
- * @deprecated replace
- * @todo replace
- * Sample Creation Failed Exception
+ * Sample Delete Location Exception
  * @package sample
  */
-class SampleCreationFailedException extends Exception
+class SampleDeleteLocationException extends SampleDeleteException
 {
-    function __construct($message, $code)
+    function __construct($message = null)
     {
-    	parent::__construct($message, $code);	
-    }  
+    	parent::__construct($message);	
+    }   
 }
 
 ?>

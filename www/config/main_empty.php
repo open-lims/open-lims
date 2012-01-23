@@ -26,7 +26,13 @@
  */ 	
 
 // Debug Mode
-define("DEBUG", 						true);
+define("DEBUG", 						false);
+
+// Avoid CSS Cache
+define("AVOID_CSS_CACHE", 				false);
+
+// Avoid JS Cache
+define("AVOID_JS_CACHE", 				false);
 
 // General
 define("PRODUCT_USER", 					"");
@@ -72,38 +78,10 @@ define("ENABLE_DB_LOG_ON_ROLLBACK",		true);
 define("ENABLE_DB_LOG_ON_EXP_ROLLBACK",	false);							
 define("ENABLE_DB_LOG_ON_COMMIT",		false);	
 
-// Standard Permissions of new Projects
-define("PROJECT_USER_STD_PERMISSION",	15);	// The Owner
-define("PROJECT_LEADER_STD_PERMISSION",	51);	// The Leader of the organ. Unit
-define("PROJECT_QM_STD_PERMISSION",		1);		// The Qualit Manager
-define("PROJECT_GROUP_STD_PERMISSION",	1);		// The group(s) of the organ. Unit
-define("PROJECT_OU_STD_PERMISSION",		1);		// The organ. Unit
-
-// User Standard Settings
-define("PROJECT_USER_STD_QUOTA",		1073741824);
-define("USER_STD_QUOTA",				53687091200);
-define("QUOTA_WARNING",					90);
-
 // Session-Time and IP Errors
 define("MAX_SESSION_PERIOD",			36000);
 define("MAX_IP_ERRORS",					50);
 define("IP_ERROR_LEAD_TIME",			36000);
-
-define("ORGANISATION_UNIT_FOLDER_ID",	3);
-define("PROJECT_FOLDER_ID",				4);
-define("SAMPLE_FOLDER_ID",				5);
-define("TEMP_FOLDER_ID",				6);
-define("TEMPLATE_FOLDER_ID",			7);
-define("USER_FOLDER_ID",				8);
-define("GROUP_FOLDER_ID",				9);
-
-define("OLDL_FOLDER_ID",				51);
-define("OLVDL_FOLDER_ID",				52);
-
-define("OU_GROUP_LEADER_GROUP", 9);
-define("OU_QUALITY_MANAGER_GROUP", 11);
-
-define("SAMPLE_EXPIRY_WARNING", 7);
 
 define("LOGIN_FOOTER", "".constant("PRODUCT").", version: ".constant("PRODUCT_VERSION").", ".constant("PRODUCT_FUNCTION").", ".constant("PRODUCT_USER")." " .
 						"<br />This is free software; It comes with ABSOLUTELY NO WARRANTY." .

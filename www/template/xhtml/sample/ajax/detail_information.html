@@ -1,0 +1,52 @@
+<table id='SampleDetailGeneralInformationTable'>
+	<tr>
+		<td>Sample-ID:</td>
+		<td>[[ID]]</td>
+	</tr>
+	<tr>
+		<td>Sample-Name:</td>
+		<td>[[NAME]]</td>
+	</tr>
+	<tr>
+		<td>Owner:</td>
+		<td><a href='index.php?[[OWNER_PARAMS]]'>[[OWNER]]</a></td>
+	</tr>
+	
+	<!-- IF ([[LOCATION]]) -->
+	<tr>
+		<td>Current Location:</td>
+		<td>[[LOCATION]] (<a href='index.php?[[LOCATION_HISTORY_PARAMS]]'>History</a>)</td>
+	</tr>
+	<!-- ENDIF -->
+	
+	<!-- IF ([[MANUFACTURER]]) -->
+	<tr>
+		<td>Manufacturer:</td>
+		<td>[[MANUFACTURER]]</td>
+	</tr>
+	<!-- ENDIF -->
+	
+	<!-- IF ([[DATE_OF_EXPIRY]]) -->
+	<tr>
+		<td>Date of Expiry:</td>
+		<td>[[DATE_OF_EXPIRY]]</td>
+	</tr>
+	<!-- ENDIF -->
+	
+	<tr>
+		<td>Date/Time:</td>
+		<td>[[DATETIME]]</td>
+	</tr>
+	<tr>
+		<td>Template:</td>
+		<td>[[TEMPLATE]]</td>
+	</tr>
+	<tr>
+		<td>Status:</td>
+		<td>[[STATUS]]</td>
+	</tr>
+	<tr>
+		<td>Permissions:</td>
+		<td>[[PERMISSIONS]]</td>
+	</tr>
+</table>

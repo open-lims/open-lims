@@ -96,6 +96,10 @@ $LANG_EXCEPTION['ProjectPermissionGroupDeleteVirtualFolderException'] 				= "Der
 $LANG_EXCEPTION['ProjectPermissionNotFoundException'] 								= "Projekt-Recht wurde nicht gefunden!";
 $LANG_EXCEPTION['ProjectPermissionIDMissingException'] 								= "Die Projekt-Rechte-ID fehlt!";
 
+$LANG_EXCEPTION['ProjectSecurityException'] 										= "Projekt Sicherheitsverletzung!";
+$LANG_EXCEPTION['ProjectSecurityChangeException'] 									= "Projekt Sicherheitsänderung fehlgeschlagen!";
+$LANG_EXCEPTION['ProjectSecurityAccessDeniedException'] 							= "Projekt-Zugriff verweigert!";
+
 $LANG_EXCEPTION['ProjectStatusException'] 											= "Ein Projekt-Status Fehler ist aufgetreten!";
 $LANG_EXCEPTION['ProjectStatusCreateException'] 									= "Der Projekt-Status konnte nicht erstellt werden!";
 $LANG_EXCEPTION['ProjectStatusDeleteException'] 									= "Der Projekt-Status konnte nicht gelöscht werden!";

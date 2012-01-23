@@ -220,7 +220,7 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 				data: "username="+get_array['username']+"&session_id="+get_array['session_id']+"&run=run",
 				beforeSend: function()
 				{
-					$.blockUI({ message: $('#AssistantFinish'), css: { width: '275px' } }); 
+					$.blockUI({ message: $('#AssistantFinish') , css: { width: '275px' }} ); 
 					$('.blockUI.blockMsg').center();
 				},
 				success: function(data)

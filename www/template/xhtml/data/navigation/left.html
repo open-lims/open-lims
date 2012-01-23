@@ -1,4 +1,4 @@
 <script>
-	var tree_nav = new base_tree_nav("LeftNavigationTree","LeftNavigationData","core/modules/data/ajax/navigation/data_navigation.ajax.php");
+	var tree_nav = new base_tree_nav("LeftNavigationTree","LeftNavigationData","ajax.php?username="+get_array['username']+"&session_id="+get_array['session_id']+"&nav=data&run=navigation_data");
 	tree_nav.init();
 </script>

@@ -1,3 +1,20 @@
+<script>
+$(document).ready(function()
+{
+	$("#ProjectDetailProceedCommentChechbox").click(function()
+	{
+		if ($("#ProjectDetailProceedCommentChechbox").is(":checkbox:checked"))
+		{
+			$("#ProjectDetailProceedCommentArea").html("<textarea id='ProjectDetailProceedCommentTextarea' name='reason' cols='65' rows='6' class='FormTextarea'></textarea>");
+		}
+		else
+		{
+			$("#ProjectDetailProceedCommentArea").html("");
+		}
+	});
+});
+</script>
+
 <table class='ProdectDetailProceedTable'>
 	<tr>
 		<th>required action</th>
@@ -26,3 +43,8 @@
 	<!-- FOREACH END -->
 										
 </table>
+
+<div id='ProjectDetailProceedComment'>
+	<input type='checkbox' id='ProjectDetailProceedCommentChechbox' />&nbsp;Add an optional comment
+	<div id='ProjectDetailProceedCommentArea'></div>	
+</div>

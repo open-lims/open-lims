@@ -26,7 +26,6 @@ function autofield(field_array_string)
 	
     if (typeof(autofield_prototype_called) == "undefined")
     {
-    	autofield_prototype_called = true;
     	field_array = new Array();
     	if(field_array_string != undefined && field_array_string != "[AUTOFIELD_STRING]")
     	{

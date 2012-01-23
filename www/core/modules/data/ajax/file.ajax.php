@@ -27,22 +27,11 @@
  */
 
 /**
- * 
- */
-$GLOBALS['autoload_prefix'] = "../";
-require_once("../../base/ajax.php");
-
-/**
  * File AJAX IO Class
  * @package data
  */
-class FileAjax extends Ajax
+class FileAjax 
 {
-	function __construct()
-	{
-		parent::__construct();
-	}
-	
 	public static function list_file_items($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -50,7 +39,7 @@ class FileAjax extends Ajax
 		$handling_class = Item::get_holder_handling_class_by_name($argument_array[0][1]);
 		if ($handling_class)
 		{
-			$sql = $handling_class.get_item_list_sql($argument_array[1][1]);
+			$sql = $handling_class::get_item_list_sql($argument_array[1][1]);
 		}
 		
 		if ($sql)
@@ -141,7 +130,7 @@ class FileAjax extends Ajax
 		}
 	}
 	
-	private function get_data_browser_link_html_and_button_handler($action, $file_id) //id really necessary?
+	public static function get_data_browser_link_html_and_button_handler($action)
 	{
 		$html;
 		$html_caption;
@@ -154,13 +143,14 @@ class FileAjax extends Ajax
 			case "file_update":
 				$unique_id = uniqid();
 				$paramquery[unique_id] = $unique_id;
-				$paramquery[file_id] = $file_id;
+				$paramquery[file_id] = $_POST['file_id'];
 				$params = http_build_query($paramquery, '', '&#38;');
 				$template = new HTMLTemplate("data/file_update_window.html");
 				$template->set_var("params", $params);
 				$template->set_var("unique_id", $unique_id);
 				$template->set_var("session_id", $_GET[session_id]);
-				$button_handler = "uploader.start_upload();";
+				$button_handler_template = new JSTemplate("data/js/file_update_window.js");
+				$button_handler = $button_handler_template->get_string();
 				$button_handler_caption = "Upload";
 				$html_caption = "Upload newer version";
 				$html = $template->get_string();
@@ -168,13 +158,14 @@ class FileAjax extends Ajax
 			case "file_update_minor":
 				$unique_id = uniqid();
 				$paramquery[unique_id] = $unique_id;
-				$paramquery[file_id] = $file_id;
+				$paramquery[file_id] = $_POST['file_id'];
 				$params = http_build_query($paramquery, '', '&#38;');
 				$template = new HTMLTemplate("data/file_update_window.html");
 				$template->set_var("params", $params);
 				$template->set_var("unique_id", $unique_id);
 				$template->set_var("session_id", $_GET[session_id]);
-				$button_handler = "uploader.start_upload();";
+				$button_handler_template = new JSTemplate("data/js/file_update_window.js");
+				$button_handler = $button_handler_template->get_string();
 				$button_handler_caption = "Upload";
 				$html_caption = "Upload minor version";
 				$html = $template->get_string();
@@ -182,70 +173,46 @@ class FileAjax extends Ajax
 			case "permission":
 				require_once("data.ajax.php");
 				
-				if(isset($_GET[permissions]))
+				if(isset($_POST[permissions])) //second call
 				{
-					$success = DataAjax::change_permission(json_decode($_GET[permissions]), "File");
+					$success = DataAjax::change_permission(json_decode($_POST[permissions]), "File");
 					return $success;
 				}
-				else
+				else //first call
 				{
 					$permission = DataAjax::permission_window();
-					$button_handler = "
-						var json = '{';
-						$('#DataBrowserLoadedAjaxContent').find('input').each(function(){
-							if($(this).attr('type') != 'hidden') 
-							{
-								if($(this).is(':checkbox:checked'))
-								{
-									json += '\"'+$(this).attr('name')+'\":\"'+$(this).attr('value')+'\",';
-								}
-								else
-								{
-									json += '\"'+$(this).attr('name')+'\":\"0\",';
-								}
-							}
-						});
-						json = json.substr(0,json.length-1); //cut last ,
-						json += '}';
-						$.ajax({
-							type : \"GET\",
-							url : \"../../../../core/modules/data/ajax/file.ajax.php\",
-							data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&file_id=".$_GET['file_id']."&nav=data&run=get_data_browser_link_html_and_button_handler&action=permission&permissions=\"+json,
-							success : function(data) {
-								close_ui_window_and_reload();
-							}
-						});
-					";
+					$button_handler_template = new JSTemplate("data/js/file_permission_window.js");
+					$button_handler_template->set_var("session_id", $_GET['session_id']);
+					$button_handler_template->set_var("file_id", $_GET['file_id']);
+					$button_handler = $button_handler_template->get_string();
 					$button_handler_caption = "Change";
 					$html_caption = "Change permission";
 					$html = $permission;	
 				}
 				break;
 			case "file_delete":
-				$paramquery[sure] = "true";
-				$params = http_build_query($paramquery);
-				$template = new HTMLTemplate("data/file_delete_window.html");
-				$template->set_var("params", $params);
-				$button_handler = "
-					$.ajax({
-						type : \"GET\",
-						url : \"../../../../core/modules/data/ajax/file.ajax.php\",
-						data : \"username=".$_GET['username']."&session_id=".$_GET['session_id']."&file_id=".$_GET['file_id']."&run=delete_file\",
-						success : function(data) {
-							close_ui_window_and_reload();
-						}
-					});
-				";
-				$button_handler_caption = "Delete";
-				$html_caption = "Delete File";
-				$html = $template->get_string();
+				if(isset($_POST['sure']))
+				{					
+					self::delete_file($_POST['file_id']);
+				}
+				else
+				{
+					$template = new HTMLTemplate("data/file_delete_window.html");
+					$button_handler_template = new JSTemplate("data/js/file_delete_window.js");
+					$button_handler_template->set_var("session_id", $_GET['session_id']);
+					$button_handler_template->set_var("file_id", $_GET['file_id']);
+					$button_handler = $button_handler_template->get_string();
+					$button_handler_caption = "Delete";
+					$html_caption = "Delete File";
+					$html = $template->get_string();
+				}
 				break;
 		endswitch;
 		$array = array("content"=>$html , "content_caption"=>$html_caption , "handler"=>$button_handler , "handler_caption"=>$button_handler_caption);
 		return json_encode($array);
 	}
 	
-	private function add_file($folder_id)
+	public static function add_file($folder_id)
 	{
 		$paramquery = $_GET;
 		$unique_id = uniqid();
@@ -255,68 +222,24 @@ class FileAjax extends Ajax
 		$template->set_var("params", $params);
 		$template->set_var("unique_id", $unique_id);
 		$template->set_var("session_id", $_GET[session_id]);
-		$button_handler = "
-			uploader.start_upload();
-			fadeout_ui_window();
-			function check_if_uploader_finished()
-			{
-				if(uploader.is_finished() == true)
-				{
-					close_ui_window_and_reload();
-				}
-				else
-				{
-					setTimeout(check_if_uploader_finished , 200);
-				}
-			}
-			check_if_uploader_finished();
-			";
+		$button_handler_template = new JSTemplate("data/js/file_upload_window.js");
+		$button_handler = $button_handler_template->get_string();
 		$button_handler_caption = "Add";
 		$html_caption = "Add File";
 		$html = $template->get_string();
-		$additional_script = "uploader = new base_upload(\"".$unique_id."\",\"".$_GET[session_id]."\");";
+		$additional_script_template = new JSTemplate("data/js/file_upload_window_additional.js");
+		$additional_script_template->set_var("session_id", $_GET['session_id']);
+		$additional_script_template->set_var("unique_id", $unique_id);
+		$additional_script = $additional_script_template->get_string();
 		$array = array("content"=>$html , "content_caption"=>$html_caption , "handler"=>$button_handler , "handler_caption"=>$button_handler_caption, "additional_script"=>$additional_script);
 		return json_encode($array);
 	}
 	
-	private function delete_file($file_id) {
+	private static function delete_file($file_id) 
+	{
 		$file = File::get_instance($file_id);
 		$file->delete();
 	}
-	
-	public function method_handler()
-	{
-		global $session;
-		
-		if ($session->is_valid())
-		{
-			switch($_GET[run]):
-	
-				case "list_file_items":
-					echo $this->list_file_items($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
-				break;
-				
-				case "get_data_browser_link_html_and_button_handler":
-					echo $this->get_data_browser_link_html_and_button_handler($_GET[action], $_GET[file_id]);
-				break;
-				
-				case "add_file":
-					echo $this->add_file($_GET[folder_id]);
-				break;
-				
-				case "delete_file":
-					echo $this->delete_file($_GET[file_id]);
-				break;
-				
-				default:
-				break;
-
-			endswitch;
-		}
-	}
 }
-
-$file_ajax = new FileAjax;
-$file_ajax->method_handler();
 
 ?>

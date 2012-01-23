@@ -71,6 +71,26 @@ class SampleRequest
 				echo SampleAjax::count_samples_by_item_id($_POST[argument_array]);
 			break;
 			
+			case "get_sample_menu":
+				require_once("ajax/sample.ajax.php");
+				echo SampleAjax::get_sample_menu($_POST[get_array]);
+			break;
+			
+			case "get_sample_information":
+				require_once("ajax/sample.ajax.php");
+				echo SampleAjax::get_sample_information($_POST[get_array]);
+			break;
+			
+			case "delete":
+				require_once("ajax/sample.ajax.php");
+				echo SampleAjax::delete($_POST[get_array]);
+			break;
+			
+			case "delete_handler":
+				require_once("ajax/sample.ajax.php");
+				echo SampleAjax::delete_handler($_POST[get_array]);
+			break;
+			
 			default:
 			break;
 		
@@ -283,6 +303,9 @@ class SampleRequest
 										
 										$return_value = $module_dialog['class']::$module_dialog[method]($current_requirements[$_GET[key]][type_id], $current_requirements[$_GET[key]][category_id], null, $folder_id);
 										
+										/**
+										 * @todo remove after rebuild all item add dialogs (including "associate sample")
+										 */
 										if (is_numeric($return_value))
 										{
 											if ($_GET[retrace])
@@ -297,21 +320,56 @@ class SampleRequest
 												$params = http_build_query($paramquery,'','&#38;');
 											}
 											
-											if (SampleItemFactory::create($_GET[sample_id], $return_value, $_GET[key], $_POST[keywords], $_POST[description]) == true)
+											// EVIL !!
+											if ($_GET[dialog] == "parentsample")
 											{
-												if ($transaction_id != null)
+												$parent_sample_id = Sample::get_entry_by_item_id($return_value);
+												if ($parent_sample_id)
 												{
-													$transaction->commit($transaction_id);
+													if (SampleItemFactory::create($parent_sample_id, $sample->get_item_id() , $_GET[key], $_POST[keywords], $_POST[description], true) == true)
+													{
+														if ($transaction_id != null)
+														{
+															$transaction->commit($transaction_id);
+														}
+														Common_IO::step_proceed($params, "Add Item", "Successful." ,null);
+													}
+													else
+													{
+														if ($transaction_id != null)
+														{
+															$transaction->rollback($transaction_id);
+														}
+														Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
+													}
 												}
-												Common_IO::step_proceed($params, "Add Item", "Successful." ,null);
+												else
+												{
+													if ($transaction_id != null)
+													{
+														$transaction->rollback($transaction_id);
+													}
+													Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
+												}
 											}
 											else
 											{
-												if ($transaction_id != null)
+												if (SampleItemFactory::create($_GET[sample_id], $return_value, $_GET[key], $_POST[keywords], $_POST[description]) == true)
 												{
-													$transaction->rollback($transaction_id);
+													if ($transaction_id != null)
+													{
+														$transaction->commit($transaction_id);
+													}
+													Common_IO::step_proceed($params, "Add Item", "Successful." ,null);
 												}
-												Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
+												else
+												{
+													if ($transaction_id != null)
+													{
+														$transaction->rollback($transaction_id);
+													}
+													Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
+												}
 											}
 										}
 										else
