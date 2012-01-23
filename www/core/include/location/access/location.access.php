@@ -79,7 +79,8 @@ class Location_Access
 	
 	function __destruct()
 	{
-		if ($this->location_id) {
+		if ($this->location_id)
+		{
 			unset($this->location_id);
 			unset($this->toid);
 			unset($this->type_id);

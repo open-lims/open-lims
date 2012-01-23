@@ -1,0 +1,27 @@
+<script>
+$(document).ready(function()
+{
+	base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=job&run=start_test", 'get_array=[[GET_ARRAY]]', "JobTestStart");
+});
+</script>
+
+<br />
+
+<div id="JobTestStartWindow" title="Create New Log Entry" style='display: none;'>
+</div>
+
+<!-- CONTAINER BEGIN ("Jobs") -->
+
+<!-- IF ([[ADMIN]]) -->
+
+<div class='boxIconBar'>
+
+<div class='boxIcon'><img src='images/icons/add.png' alt='' />&nbsp;<a href='#' id='JobTestStart'>Start Test Job(s)</a></div>
+
+</div>
+
+<!-- END IF -->
+
+[[LIST]]
+
+<!-- CONTAINER END () -->
