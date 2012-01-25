@@ -61,8 +61,8 @@ class DataSearchAjax
 						$file = File::get_instance($value[file_id]);
 						
 						$paramquery = $_GET;
-						$paramquery[nav] = "file";
-						$paramquery[run] = "detail";
+						$paramquery[nav] = "data";
+						$paramquery[action] = "file_detail";
 						$paramquery[file_id] = $value[file_id];
 						unset($paramquery[sortvalue]);
 						unset($paramquery[sortmethod]);
@@ -102,8 +102,8 @@ class DataSearchAjax
 						$value_obj = Value::get_instance($value[value_id]);
 						
 						$paramquery = $_GET;
-						$paramquery[nav] = "value";
-						$paramquery[run] = "detail";
+						$paramquery[nav] = "data";
+						$paramquery[action] = "value_detail";
 						$paramquery[value_id] = $value[value_id];
 						unset($paramquery[sortvalue]);
 						unset($paramquery[sortmethod]);
