@@ -232,8 +232,8 @@ class SampleSearchIO
 				{
 					$template_array = array();
 					$template_array[0] = $_POST[template];
-					$project_template = new ProjectTemplate($_POST[template]);
-					$search_template_name = $project_template->get_name();
+					$sample_template = new SampleTemplate($_POST[template]);
+					$search_template_name = $sample_template->get_name();
 				}
 			}
 			
@@ -269,8 +269,21 @@ class SampleSearchIO
 
 			/* --------------- */
 			
-			$list = new ListStat_IO(Sample_Wrapper::count_sample_search($name, $organisation_unit_array, $template_array, $in_id, $in_name), 20);
-
+			
+			$argument_array = array();
+			$argument_array[0][0] = "name";
+			$argument_array[0][1] = $name;
+			$argument_array[1][0] = "organisation_unit_array";
+			$argument_array[1][1] = $organisation_unit_array;
+			$argument_array[2][0] = "template_array";
+			$argument_array[2][1] = $template_array;
+			$argument_array[3][0] = "in_id";
+			$argument_array[3][1] = $in_id;
+			$argument_array[4][0] = "in_name";
+			$argument_array[4][1] = $in_name;
+					
+			$list = new List_IO("SampleSearch", "ajax.php?nav=sample", "search_sample_list_samples", "search_sample_count_samples", $argument_array, "SampleSearch");
+		
 			$list->add_column("","symbol",false,"16px");
 			$list->add_column("Smpl. ID","id",true,"11%");
 			$list->add_column("Sample Name","name",true,null);
@@ -278,127 +291,6 @@ class SampleSearchIO
 			$list->add_column("Type/Tmpl.","template",true,null);
 			$list->add_column("Curr. Loc.","location",true,null);
 			$list->add_column("AV","av",false,"16px");
-			
-			if ($_GET[page])
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = Sample_Wrapper::list_sample_search($name, $organisation_unit_array, $template_array, $in_id, $in_name, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
-				}
-				else
-				{
-					$result_array = Sample_Wrapper::list_sample_search($name, $organisation_unit_array, $template_array, $in_id, $in_name, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
-				}				
-			}
-			else
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = Sample_Wrapper::list_sample_search($name, $organisation_unit_array, $template_array, $in_id, $in_name, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
-				}
-				else
-				{
-					$result_array = Sample_Wrapper::list_sample_search($name, $organisation_unit_array, $template_array, $in_id, $in_name, null, null, 0, 20);
-				}	
-			}
-
-			if (is_array($result_array) and count($result_array) >= 1)
-			{
-				$today_end = new DatetimeHandler(date("Y-m-d")." 23:59:59");
-				
-				foreach($result_array as $key => $value)
-				{
-					$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
-					$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y");
-	
-					if ($result_array[$key][av] == "f")
-					{
-						$result_array[$key][av] = "<img src='images/icons/grey_point.png' alt='' />";
-					}
-					else
-					{
-						if ($result_array[$key][date_of_expiry] and $result_array[$key][expiry_warning])
-						{
-							$date_of_expiry = new DatetimeHandler($result_array[$key][date_of_expiry]." 23:59:59");
-							$warning_day = clone $date_of_expiry;
-							$warning_day->sub_day($result_array[$key][expiry_warning]);
-						
-							if ($date_of_expiry->distance($today_end) > 0)
-							{
-								$result_array[$key][av] = "<img src='images/icons/red_point.png' alt='' />";
-							}
-							else
-							{
-								if ($warning_day->distance($today_end) > 0)
-								{
-									$result_array[$key][av] = "<img src='images/icons/yellow_point.png' alt='' />";
-								}
-								else
-								{
-									$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
-								}
-							}
-						}
-						else
-						{
-							$result_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
-						}
-					}
-					
-					if (strlen($result_array[$key][name]) > 17)
-					{
-						$result_array[$key][name] = substr($result_array[$key][name],0,17)."...";
-					}
-					else
-					{
-						$result_array[$key][name] = $result_array[$key][name];
-					}
-					
-					if (strlen($result_array[$key][template]) > 25)
-					{
-						$result_array[$key][template] = substr($result_array[$key][template],0,25)."...";
-					}
-					else
-					{
-						$result_array[$key][template] = $result_array[$key][template];
-					}
-					
-					$sample_id = $result_array[$key][id];
-					$sample_security = new SampleSecurity($sample_id);
-					
-					if ($sample_security->is_access(1, false))
-					{
-						$paramquery = array();
-						$paramquery[username] = $_GET[username];
-						$paramquery[session_id] = $_GET[session_id];
-						$paramquery[nav] = "sample";
-						$paramquery[run] = "detail";
-						$paramquery[sample_id] = $sample_id;
-						$params = http_build_query($paramquery,'','&#38;');
-						
-						$result_array[$key][symbol][link]		= $params;
-						$result_array[$key][symbol][content] 	= "<img src='images/icons/sample.png' alt='' style='border:0;' />";
-					
-						unset($result_array[$key][id]);
-						$result_array[$key][id][link] 			= $params;
-						$result_array[$key][id][content]		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
-					
-						$sample_name = $result_array[$key][name];
-						unset($result_array[$key][name]);
-						$result_array[$key][name][link] 		= $params;
-						$result_array[$key][name][content]		= $sample_name;
-					}
-					else
-					{
-						$result_array[$key][symbol]	= "<img src='core/images/denied_overlay.php?image=images/icons/sample.png' alt='N' border='0' />";
-						$result_array[$key][id]		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
-					}
-				}
-			}
-			else
-			{
-				$list->override_last_line("<span class='italic'>No results found!</span>");
-			}
 			
 			$template = new HTMLTemplate("sample/search/search_result.html");
 			
@@ -415,7 +307,7 @@ class SampleSearchIO
 			$template->set_var("organisation_units", $search_organisation_unit_name);
 			$template->set_var("templates", $search_template_name);
 				
-			$template->set_var("table", $list->get_list($result_array, $_GET[page]));		
+			$template->set_var("list", $list->get_list());		
 	
 			$template->output();	
 		}

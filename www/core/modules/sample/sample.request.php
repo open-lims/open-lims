@@ -91,6 +91,31 @@ class SampleRequest
 				echo SampleAjax::delete_handler($_POST[get_array]);
 			break;
 			
+			
+			// Search
+			
+			case "search_sample_list_samples":
+				require_once("ajax/sample_search.ajax.php");
+				echo SampleSearchAjax::list_samples($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "search_sample_count_samples":
+				require_once("ajax/sample_search.ajax.php");
+				echo SampleSearchAjax::count_samples($_POST[argument_array]);
+			break;
+			
+			case "search_sample_data_list_samples":
+				require_once("ajax/sample_data_search.ajax.php");
+				echo SampleDataSearchAjax::list_samples($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "search_sample_data_count_samples":
+				require_once("ajax/sample_data_search.ajax.php");
+				echo SampleDataSearchAjax::count_samples($_POST[argument_array]);
+			break;
+			
+			
+			
 			default:
 			break;
 		

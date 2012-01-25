@@ -213,85 +213,22 @@ class ProjectDataSearchIO
 			$session->write_value("SEARCH_DATA_ITEM_TYPE", $item_type_array, true);
 			$session->write_value("SEARCH_DATA_PROJECT_ID", $project_id_array, true);
 
-			if ($_GET[page])
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = Project_Wrapper::list_data_search($string, $project_id_array, $item_type_array, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
-				}
-				else
-				{
-					$result_array = Project_Wrapper::list_data_search($string, $project_id_array, $item_type_array, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
-				}				
-			}
-			else
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = Project_Wrapper::list_data_search($string, $project_id_array, $item_type_array, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
-				}
-				else
-				{
-					$result_array = Project_Wrapper::list_data_search($string, $project_id_array, $item_type_array, null, null, 0, 20);
-				}	
-			}
-											
-			$list = new ListStat_IO(Project_Wrapper::count_data_search($string, $project_id_array, $item_type_array), 20);
 			
-			if (is_array($result_array) and count($result_array) >= 1)
-			{
-				$item_type_array = Item::list_types();
-				
-				foreach($result_array as $key => $value)
-				{
-					$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
-					$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
-					
-					$project_paramquery = array();
-					$project_paramquery[username] = $_GET[username];
-					$project_paramquery[session_id] = $_GET[session_id];
-					$project_paramquery[nav] = "project";
-					$project_paramquery[run] = "detail";
-					$project_paramquery[project_id] = $value[project_id];
-					$project_params = http_build_query($project_paramquery, '', '&#38;');
-					
-					$tmp_project_name = $result_array[$key][project_name];
-					unset($result_array[$key][project_name]);
-					$result_array[$key][project_name][content] = $tmp_project_name;
-					$result_array[$key][project_name][link] = $project_params;
-					
-					if (is_array($item_type_array) and count($item_type_array) >= 1)
-					{
-						foreach($item_type_array as $item_key => $item_value)
-						{
-							if($value[$item_key."_id"] != null)
-							{
-								$result_array[$key][type] = $item_value::get_generic_name($item_key, null);
-								
-								$tmp_item_name = $result_array[$key][name];
-								unset($result_array[$key][name]);
-								$result_array[$key][name][content] = $tmp_item_name;
-								$result_array[$key][name][link] = $item_value::get_generic_link($item_key, $value[$item_key."_id"]);
-								
-								$result_array[$key][symbol][content] = $item_value::get_generic_symbol($item_key, $value[$item_key."_id"]);
-								$result_array[$key][symbol][link] = $item_value::get_generic_link($item_key, $value[$item_key."_id"]);
-							}
-						}
-					}
-				}
-			}
-			else
-			{
-				$list->override_last_line("<span class='italic'>No results found!</span>");
-			}
+			$argument_array = array();
+			$argument_array[0][0] = "string";
+			$argument_array[0][1] = $string;
+			$argument_array[1][0] = "project_id_array";
+			$argument_array[1][1] = $project_id_array;
+			$argument_array[2][0] = "item_type_array";
+			$argument_array[2][1] = $item_type_array;
+
+			$list = new List_IO("ProjectDataSearch", "ajax.php?nav=project", "search_project_data_list_projects", "search_project_data_count_projects", $argument_array, "ProjectDataSearch");
 
 			$list->add_column("", "symbol", false, "16px");
 			$list->add_column("Name", "name", true, null);
 			$list->add_column("Type", "type", false, null);
 			$list->add_column("Datetime", "datetime", true, null);
 			$list->add_column("Project", "project_name", true, null);
-			
-			// print_r($result_array);
 			
 			$template = new HTMLTemplate("project/search/data_search_result.html");
 		
@@ -303,7 +240,7 @@ class ProjectDataSearchIO
 			
 			$template->set_var("string", $string);
 				
-			$template->set_var("table", $list->get_list($result_array, $_GET[page]));		
+			$template->set_var("list", $list->get_list());	
 	
 			$template->output();
 		}

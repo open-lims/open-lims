@@ -245,70 +245,24 @@ class ProjectSearchIO
 			
 			/* --------------- */
 			
-			$list = new ListStat_IO(Project_Wrapper::count_search_projects_without_subprojects($name, $template_array, $organisation_unit_array, $in_id, $in_name), 20);
-
-			$list->add_column("","symbol",false,16);
+			
+			$argument_array = array();
+			$argument_array[0][0] = "name";
+			$argument_array[0][1] = $name;
+			$argument_array[1][0] = "template_array";
+			$argument_array[1][1] = $template_array;
+			$argument_array[2][0] = "organisation_unit_array";
+			$argument_array[2][1] = $organisation_unit_array;
+		
+			$list = new List_IO("ProjectSearch", "ajax.php?nav=project", "search_project_list_projects", "search_project_count_projects", $argument_array, "ProjectSearch");
+		
+			$list->add_column("","symbol",false,"16px");
 			$list->add_column("Name","name",true,null);
 			$list->add_column("Organisation Unit","organisation_unit",true,null);
 			$list->add_column("Date/Time","datetime",true,null);
 			$list->add_column("Template","template",true,null);
 			$list->add_column("Status","status",true,null);
 			
-			if ($_GET[page])
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = Project_Wrapper::list_search_projects_without_subprojects($name, $template_array, $organisation_unit_array, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
-				}
-				else
-				{
-					$result_array = Project_Wrapper::list_search_projects_without_subprojects($name, $template_array, $organisation_unit_array, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
-				}				
-			}
-			else
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = Project_Wrapper::list_search_projects_without_subprojects($name, $template_array, $organisation_unit_array, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
-				}
-				else
-				{
-					$result_array = Project_Wrapper::list_search_projects_without_subprojects($name, $template_array, $organisation_unit_array, null, null, 0, 20);
-				}	
-			}
-			
-			if (is_array($result_array) and count($result_array) >= 1)
-			{
-				foreach ($result_array as $key => $value)
-				{
-					$result_array[$key][symbol] = "<img src='images/icons/project.png' alt='N' border='0' />";
-					
-					$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
-					$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
-					
-					$proejct_paramquery = array();
-					$project_paramquery[username] = $_GET[username];
-					$project_paramquery[session_id] = $_GET[session_id];
-					$project_paramquery[nav] = "project";
-					$project_paramquery[run] = "detail";
-					$project_paramquery[project_id] = $value[id];
-					$project_params = http_build_query($project_paramquery, '', '&#38;');
-					
-					$tmp_project_name = $result_array[$key][name];
-					unset($result_array[$key][name]);
-					$result_array[$key][name][content] = $tmp_project_name;
-					$result_array[$key][name][link] = $project_params;
-							
-	
-					if (strlen($value[template]) > 20) {
-						$result_array[$key][template] = substr($result_array[$key][template],0,20).".";
-					}
-				}
-			}
-			else
-			{
-				$list->override_last_line("<span class='italic'>No results found!</span>");
-			}
 			
 			$template = new HTMLTemplate("project/search/search_result.html");
 			
@@ -325,7 +279,7 @@ class ProjectSearchIO
 			$template->set_var("organisation_units", $search_organisation_unit_name);
 			$template->set_var("templates", $search_template_name);
 				
-			$template->set_var("table", $list->get_list($result_array, $_GET[page]));
+			$template->set_var("list", $list->get_list());
 	
 			$template->output();
 		}

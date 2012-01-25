@@ -197,7 +197,31 @@ class ProjectRequest
 				echo ProjectAdminAjax::count_project_permissions($_POST[argument_array]);
 			break;
 			
-			//navigation
+			
+			// Search
+			
+			case "search_project_list_projects":
+				require_once("ajax/project_search.ajax.php");
+				echo ProjectSearchAjax::list_projects($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "search_project_count_projects":
+				require_once("ajax/project_search.ajax.php");
+				echo ProjectSearchAjax::count_projects($_POST[argument_array]);
+			break;
+			
+			case "search_project_data_list_projects":
+				require_once("ajax/project_data_search.ajax.php");
+				echo ProjectDataSearchAjax::list_projects($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "search_project_data_count_projects":
+				require_once("ajax/project_data_search.ajax.php");
+				echo ProjectDataSearchAjax::count_projects($_POST[argument_array]);
+			break;
+			
+			
+			// Navigation
 			
 			case "navigation":
 				require_once 'ajax/navigation/project_navigation.ajax.php';
