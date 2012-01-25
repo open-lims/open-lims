@@ -119,7 +119,7 @@ class FileIO
 					$template->set_var("name",$file->get_name());
 					$template->set_var("path",$folder->get_object_path());
 					
-					$template->set_var("size",Misc::calc_size($file->get_size()));
+					$template->set_var("size",Convert::convert_byte_1024($file->get_size()));
 					$template->set_var("size_in_byte",$file->get_size());
 					
 					$template->set_var("creation_datetime",$file->get_datetime());
@@ -146,14 +146,14 @@ class FileIO
 					$paramquery = $_GET;
 					$paramquery[action] = "file_update";
 					$paramquery[version] = $internal_revision;
-					$paramquery[retrace] = Misc::create_retrace_string();
+					$paramquery[retrace] = Retrace::create_retrace_string();
 					$params = http_build_query($paramquery,'','&#38;');	
 					$template->set_var("update_params",$params);
 					
 					$paramquery = $_GET;
 					$paramquery[action] = "file_update_minor";
 					$paramquery[version] = $file->get_internal_revision();
-					$paramquery[retrace] = Misc::create_retrace_string();
+					$paramquery[retrace] = Retrace::create_retrace_string();
 					$params = http_build_query($paramquery,'','&#38;');	
 					$template->set_var("update_minor_params",$params);
 					
@@ -707,7 +707,11 @@ class FileIO
 			
 			if ($file->is_read_access())
 			{
-				$list = new ListStat_IO(Data_Wrapper::count_file_versions($_GET[file_id]), 20);
+				$argument_array = array();
+				$argument_array[0][0] = "file_id";
+				$argument_array[0][1] = $_GET[file_id];
+	
+				$list = new List_IO("DataFileVersionHistory", "ajax.php?nav=data", "file_list_versions", "file_count_versions", $argument_array, "DataFileVersionHistory");
 
 				$list->add_column("","symbol",false,"16px");
 				$list->add_column("Name","name",true,null);
@@ -716,89 +720,11 @@ class FileIO
 				$list->add_column("User","user",true,null);
 				$list->add_column("","delete",false,"16px");
 				
-				if ($_GET[page])
-				{
-					if ($_GET[sortvalue] and $_GET[sortmethod])
-					{
-						$result_array = Data_Wrapper::list_file_versions($_GET[file_id], $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
-					}
-					else
-					{
-						$result_array = Data_Wrapper::list_file_versions($_GET[file_id], null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
-					}				
-				}
-				else
-				{
-					if ($_GET[sortvalue] and $_GET[sortmethod])
-					{
-						$result_array = Data_Wrapper::list_file_versions($_GET[file_id], $_GET[sortvalue], $_GET[sortmethod], 0, 20);
-					}
-					else
-					{
-						$result_array = Data_Wrapper::list_file_versions($_GET[file_id], null, null, 0, 20);
-					}	
-				}
-				
-				if (is_array($result_array) and count($result_array) >= 1)
-				{
-					foreach($result_array as $key => $value)
-					{
-						$file_version = clone $file;
-						$file_version->open_internal_revision($value[internal_revision]);
-						
-						$paramquery = $_GET;
-						$paramquery[action] = "filee_detail";
-						$paramquery[version] = $result_array[$key][internal_revision];
-						$params = http_build_query($paramquery,'','&#38;');
-						
-						$result_array[$key][symbol][link]		= $params;
-						$result_array[$key][symbol][content] 	= "<img src='".$file_version->get_icon()."' alt='' style='border:0;' />";
-						
-						$tmp_name = $result_array[$key][name];
-						unset($result_array[$key][name]);
-						$result_array[$key][name][link]		= $params;
-						$result_array[$key][name][content] 	= $tmp_name;
-						
-						if (strlen($tmp_name) > 40)
-						{
-							$result_array[$key][version] = substr($tmp_name, 0 , 40)."...";
-						}
-						else
-						{
-							$result_array[$key][version] = $tmp_name;
-						}
-						
-						$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
-						$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
-						
-						$user = new User($result_array[$key][owner_id]);
-						$result_array[$key][user] = $user->get_full_name(false);
-
-						if ($file_version->is_current() == true)
-						{
-							$result_array[$key][version] = $file_version->get_version()." <span class='italic'>current</span>";
-						}
-						else
-						{
-							$result_array[$key][version] = $file_version->get_version();
-						}
-					}
-				}
-				else
-				{
-					$list->override_last_line("<span class='italic'>No results found!</span>");
-				}
-				
 				$template = new HTMLTemplate("data/file_history.html");
 
-				$template->set_var("table", $list->get_list($result_array, $_GET[page]));
-				
-				$paramquery = $_GET;
-				$paramquery[action] = "file_detail";
-				$params = http_build_query($paramquery,'','&#38;');	
-				
-				$template->set_var("back_link",$params);
-				
+				$template->set_var("title", $file->get_name());	
+				$template->set_var("list", $list->get_list());	
+								
 				$template->output();
 			}
 			else

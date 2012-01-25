@@ -3,6 +3,7 @@
  * @package data
  * @version 0.4.0.0
  * @author Roman Quiring <quiring@open-lims.org>
+ * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz, Roman Quiring
  * @license GPLv3
  * 
@@ -27,6 +28,98 @@
  */
 class ValueAjax
 {
+	public static function list_versions($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	{
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}
+		
+		$argument_array = json_decode($json_argument_array);
+		$value_id = $argument_array[0][1];
+		
+		if (is_numeric($value_id))
+		{
+			$value_obj = Value::get_instance($value_id);
+			
+			if ($value_obj->is_read_access())
+			{
+				$list_request = new ListRequest_IO();
+				$list_request->set_column_array($json_column_array);
+			
+				if (!is_numeric($entries_per_page) or $entries_per_page < 1)
+				{
+					$entries_per_page = 20;
+				}
+							
+				$list_array = Data_Wrapper::list_value_versions($value_id, $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+			
+				if (is_array($list_array) and count($list_array) >= 1)
+				{
+					foreach($list_array as $key => $value)
+					{
+						$paramquery = $_GET;
+						$paramquery[action] = "value_detail";
+						$paramquery[version] = $list_array[$key][internal_revision];
+						$params = http_build_query($paramquery,'','&#38;');
+						
+						$list_array[$key][symbol][link]		= $params;
+						$list_array[$key][symbol][content] 	= "<img src='images/icons/value.png' alt='N' border='0' />";
+					
+						$tmp_name = $list_array[$key][name];
+						unset($list_array[$key][name]);
+						$list_array[$key][name][link]		= $params;
+						$list_array[$key][name][content] 	= $tmp_name;
+						
+						$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
+						$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+						
+						$user = new User($list_array[$key][owner_id]);
+						$list_array[$key][user] = $user->get_full_name(false);
+						
+						$value_version_obj = clone $value_obj;
+						$value_version_obj->open_internal_revision($value[internal_revision]);
+						if ($value_version_obj->is_current() == true)
+						{
+							$list_array[$key][version] = $value_version_obj->get_version()." <span class='italic'>current</span>";
+						}
+						else
+						{
+							$list_array[$key][version] = $value_version_obj->get_version();
+						}
+					}
+				}
+				else
+				{
+					$list_request->empty_message("<span class='italic'>No results found!</span>");
+				}
+				
+				$list_request->set_array($list_array);
+			
+				return $list_request->get_page($page);
+			}
+			else
+			{
+				throw new DataSecurityAccessDeniedException();
+			}
+		}
+	}
+	
+	public static function count_versions($json_argument_array)
+	{
+		$argument_array = json_decode($json_argument_array);
+		$value_id = $argument_array[0][1];
+		
+		if (is_numeric($value_id))
+		{
+			return Data_Wrapper::count_value_versions($value_id);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 	public static function get_data_browser_link_html_and_button_handler($action) 
 	{
 		$html;
@@ -134,11 +227,11 @@ class ValueAjax
 		return $new_value;
 	}
 	
-	private static function delete_value($value_id) {
+	private static function delete_value($value_id)
+	{
 		$value = Value::get_instance($value_id);
 		$value->delete();
 	}
-
 }
 
 ?>

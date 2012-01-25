@@ -87,6 +87,16 @@ class DataRequest
 			
 			// File
 			
+			case "file_list_versions":
+				require_once("ajax/file.ajax.php");
+				echo FileAjax::list_versions($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "file_count_versions":
+				require_once("ajax/file.ajax.php");
+				echo FileAjax::count_versions($_POST[argument_array]);
+			break;
+			
 			case "file_add":
 				require_once("ajax/file.ajax.php");
 				echo FileAjax::add_file($_POST[folder_id]);
@@ -114,6 +124,16 @@ class DataRequest
 			
 			
 			// Value
+			
+			case "value_list_versions":
+				require_once("ajax/value.ajax.php");
+				echo ValueAjax::list_versions($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "value_count_versions":
+				require_once("ajax/value.ajax.php");
+				echo ValueAjax::count_versions($_POST[argument_array]);
+			break;
 			
 			case "value_add":
 				require_once("ajax/value.ajax.php");

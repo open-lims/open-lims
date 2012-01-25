@@ -777,6 +777,95 @@ class SampleAjax
 	}
 	
 	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 */
+	public static function list_location_history($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	{
+		global $sample_security;
+		
+		$argument_array = json_decode($json_argument_array);
+		$sample_id = $argument_array[0][1];
+		
+		if (is_numeric($sample_id))
+		{
+			if ($sample_security->is_access(1, false))
+			{
+			
+				$list_request = new ListRequest_IO();
+				$list_request->set_column_array($json_column_array);
+			
+				if (!is_numeric($entries_per_page) or $entries_per_page < 1)
+				{
+					$entries_per_page = 20;
+				}
+							
+				$list_array = Sample_Wrapper::list_sample_locations($sample_id, $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+				
+				if (is_array($list_array) and count($list_array) >= 1)
+				{
+					foreach($list_array as $key => $value)
+					{
+						$list_array[$key][symbol] = "<img src='images/icons/sample.png' alt='' style='border:0;' />";
+						
+						$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
+						$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+					
+						if ($list_array[$key][user])
+						{
+							$user = new User($list_array[$key][user]);
+						}
+						else
+						{
+							$user = new User(1);
+						}
+						
+						$list_array[$key][user] = $user->get_full_name(false);
+					}
+				}
+				else
+				{
+					$list_request->empty_message("<span class='italic'>No results found!</span>");
+				}
+				
+				$list_request->set_array($list_array);
+				
+				return $list_request->get_page($page);
+			}
+			else
+			{
+				throw new SampleSecurityAccessDeniedException();
+			}
+		}
+	}
+	
+	/**
+	 * @param string $json_argument_array
+	 * @return integer
+	 */
+	public static function count_location_history($json_argument_array)
+	{
+		$argument_array = json_decode($json_argument_array);
+		$sample_id = $argument_array[0][1];
+		
+		if (is_numeric($sample_id))
+		{
+			return Sample_Wrapper::count_sample_locations($sample_id);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @param string $get_array
 	 */
 	public static function get_sample_menu($get_array)

@@ -29,6 +29,26 @@ class SampleRequest
 {
 	public static function ajax_handler()
 	{
+		global $sample_security;
+		
+		if ($_POST['get_array'])
+		{
+			$get_array = unserialize($_POST['get_array']);	
+					
+			if ($get_array['sample_id'])
+			{
+				$sample_security = new SampleSecurity($get_array['sample_id']);
+			}
+			else
+			{
+				$sample_security = new SampleSecurity(null);
+			}
+		}
+		else
+		{
+			$sample_security = new SampleSecurity(null);
+		}
+
 		switch($_GET[run]):
 	
 			case "list_user_related_samples":
@@ -69,6 +89,16 @@ class SampleRequest
 			case "count_samples_by_item_id":
 				require_once("ajax/sample.ajax.php");
 				echo SampleAjax::count_samples_by_item_id($_POST[argument_array]);
+			break;
+			
+			case "list_location_history":
+				require_once("ajax/sample.ajax.php");
+				echo SampleAjax::list_location_history($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "count_location_history":
+				require_once("ajax/sample.ajax.php");
+				echo SampleAjax::count_location_history($_POST[argument_array]);
 			break;
 			
 			case "get_sample_menu":
@@ -115,9 +145,28 @@ class SampleRequest
 			break;
 			
 			
+			// Admin
 			
-			default:
+			case "admin_list_user_permissions":
+				require_once("ajax/sample_admin.ajax.php");
+				echo SampleAdminAjax::list_user_permissions($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 			break;
+			
+			case "admin_count_user_permissions":
+				require_once("ajax/sample_admin.ajax.php");
+				echo SampleAdminAjax::count_user_permissions($_POST[argument_array]);
+			break;
+			
+			case "admin_list_organisation_unit_permissions":
+				require_once("ajax/sample_admin.ajax.php");
+				echo SampleAdminAjax::list_organisation_unit_permissions($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "admin_count_organisation_unit_permissions":
+				require_once("ajax/sample_admin.ajax.php");
+				echo SampleAdminAjax::count_organisation_unit_permissions($_POST[argument_array]);
+			break;
+			
 		
 		endswitch;
 	}

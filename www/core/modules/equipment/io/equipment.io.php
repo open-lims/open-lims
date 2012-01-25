@@ -285,71 +285,19 @@ class EquipmentIO
 	{
 		if ($_GET[ou_id])
 		{
-			$list = new ListStat_IO(Equipment_Wrapper::count_organisation_unit_equipments($_GET[ou_id]), 20);
-
+			$argument_array = array();
+			$argument_array[0][0] = "organisation_unit_id";
+			$argument_array[0][1] = $_GET[ou_id];
+					
+			$list = new List_IO("EquipmentOrganisationUnit", "ajax.php?nav=equipment", "list_organisation_unit_related_equipment", "count_organisation_unit_related_equipment", $argument_array, "EquipmentOrganisationUnit");
+		
 			$list->add_column("","symbol",false,16);
 			$list->add_column("Equipment Name","name",true,null);
 			$list->add_column("Category","category",true,null);
 			
-			if ($_GET[page])
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = Equipment_Wrapper::list_organisation_unit_equipments($_GET[ou_id], $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
-				}
-				else
-				{
-					$result_array = Equipment_Wrapper::list_organisation_unit_equipments($_GET[ou_id], null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
-				}				
-			}
-			else
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = Equipment_Wrapper::list_organisation_unit_equipments($_GET[ou_id], $_GET[sortvalue], $_GET[sortmethod], 0, 20);
-				}
-				else
-				{
-					$result_array = Equipment_Wrapper::list_organisation_unit_equipments($_GET[ou_id], null, null, 0, 20);
-				}	
-			}
-			
-			if (is_array($result_array) and count($result_array) >= 1)
-			{
-				foreach($result_array as $key => $value)
-				{
-					$paramquery = $_GET;
-					$paramquery[action] = "detail";
-					$paramquery[id] = $result_array[$key][id];
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$result_array[$key][symbol][link]		= $params;
-					$result_array[$key][symbol][content] 	= "<img src='images/icons/equipment.png' alt='N' border='0' />";
-				
-					if ($result_array[$key][organisation_unit_id] != $_GET[ou_id])
-					{
-						$equipment_name = $result_array[$key][name];
-						unset($result_array[$key][name]);
-						$result_array[$key][name][link] 		= $params;
-						$result_array[$key][name][content]		= $equipment_name." (CH)";
-					}
-					else
-					{
-						$equipment_name = $result_array[$key][name];
-						unset($result_array[$key][name]);
-						$result_array[$key][name][link] 		= $params;
-						$result_array[$key][name][content]		= $equipment_name;
-					}
-				}
-			}
-			else
-			{
-				$list->override_last_line("<span class='italic'>No results found!</span>");
-			}
-			
 			$template = new HTMLTemplate("equipment/list_organisation_unit.html");
 
-			$template->set_var("table", $list->get_list($result_array, $_GET[page]));
+			$template->set_var("list", $list->get_list());	
 			
 			$template->output();
 		}

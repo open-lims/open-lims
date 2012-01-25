@@ -730,62 +730,17 @@ class SampleIO
 		{
 			if ($sample_security->is_access(1, false))
 			{
-				$list = new ListStat_IO(Sample_Wrapper::count_sample_locations($_GET[sample_id]), 20);
-	
+				$argument_array = array();
+				$argument_array[0][0] = "sample_id";
+				$argument_array[0][1] = $_GET[sample_id];
+				
+				$list = new List_IO("SampleLocationHistory", "ajax.php?nav=sample", "list_location_history", "count_location_history", $argument_array, "SampleLocationHistory");
+		
 				$list->add_column("","symbol",false,"16px");
 				$list->add_column("Name","name",true,null);
 				$list->add_column("Date","datetime",true,null);
 				$list->add_column("User","user",true,null);
-				
-				if ($_GET[page])
-				{
-					if ($_GET[sortvalue] and $_GET[sortmethod])
-					{
-						$result_array = Sample_Wrapper::list_sample_locations($_GET[sample_id], $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
-					}
-					else
-					{
-						$result_array = Sample_Wrapper::list_sample_locations($_GET[sample_id], null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
-					}				
-				}
-				else
-				{
-					if ($_GET[sortvalue] and $_GET[sortmethod])
-					{
-						$result_array = Sample_Wrapper::list_sample_locations($_GET[sample_id], $_GET[sortvalue], $_GET[sortmethod], 0, 20);
-					}
-					else
-					{
-						$result_array = Sample_Wrapper::list_sample_locations($_GET[sample_id], null, null, 0, 20);
-					}	
-				}
-				
-				if (is_array($result_array) and count($result_array) >= 1)
-				{
-					foreach($result_array as $key => $value)
-					{
-						$result_array[$key][symbol] = "<img src='images/icons/sample.png' alt='' style='border:0;' />";
-						
-						$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
-						$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
-					
-						if ($result_array[$key][user])
-						{
-							$user = new User($result_array[$key][user]);
-						}
-						else
-						{
-							$user = new User(1);
-						}
-						
-						$result_array[$key][user] = $user->get_full_name(false);
-					}
-				}
-				else
-				{
-					$list->override_last_line("<span class='italic'>No results found!</span>");
-				}
-	
+
 				$template = new HTMLTemplate("sample/location_history.html");
 				
 				$sample = new Sample($_GET[sample_id]);
@@ -793,15 +748,7 @@ class SampleIO
 				$template->set_var("sample_id",$sample->get_formatted_id());
 				$template->set_var("sample_name","(".$sample->get_name().")");
 				
-				$template->set_var("table", $list->get_list($result_array, $_GET[page]));
-				
-				$paramquery = $_GET;
-				$paramquery[run] = "detail";
-				unset($paramquery[sortvalue]);
-				unset($paramquery[sortmethod]);
-				$params = http_build_query($paramquery,'','&#38;');	
-				
-				$template->set_var("back_link",$params);
+				$template->set_var("list", $list->get_list());
 				
 				$template->output();
 			}

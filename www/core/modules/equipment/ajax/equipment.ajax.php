@@ -28,6 +28,17 @@
  */
 class EquipmentAjax
 {	
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $get_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 */
 	public function list_equipment_items($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
 	{		
 		if ($get_array)
@@ -127,6 +138,10 @@ class EquipmentAjax
 		}
 	}
 	
+	/**
+	 * @param string $json_argument_array
+	 * @return integer
+	 */
 	public function count_equipment_items($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -140,6 +155,92 @@ class EquipmentAjax
 		if ($sql)
 		{
 			return Equipment_Wrapper::count_item_equipments($sql);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $get_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 */
+	public function list_organisation_unit_related_equipment($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
+	{
+		$argument_array = json_decode($json_argument_array);
+		$organisation_unit_id = $argument_array[0][1];
+		
+		if (is_numeric($organisation_unit_id))
+		{
+			$list_request = new ListRequest_IO();
+			$list_request->set_column_array($json_column_array);
+		
+			if (!is_numeric($entries_per_page) or $entries_per_page < 1)
+			{
+				$entries_per_page = 20;
+			}
+						
+			$list_array = Equipment_Wrapper::list_organisation_unit_equipments($organisation_unit_id, $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+			
+			if (is_array($list_array) and count($list_array) >= 1)
+			{
+				foreach($list_array as $key => $value)
+				{
+					$paramquery = $_GET;
+					$paramquery[action] = "detail";
+					$paramquery[id] = $list_array[$key][id];
+					$params = http_build_query($paramquery,'','&#38;');
+					
+					$list_array[$key][symbol][link]		= $params;
+					$list_array[$key][symbol][content] 	= "<img src='images/icons/equipment.png' alt='N' border='0' />";
+				
+					if ($list_array[$key][organisation_unit_id] != $_GET[ou_id])
+					{
+						$equipment_name = $list_array[$key][name];
+						unset($list_array[$key][name]);
+						$list_array[$key][name][link] 		= $params;
+						$list_array[$key][name][content]		= $equipment_name." (CH)";
+					}
+					else
+					{
+						$equipment_name = $list_array[$key][name];
+						unset($list_array[$key][name]);
+						$list_array[$key][name][link] 		= $params;
+						$list_array[$key][name][content]		= $equipment_name;
+					}
+				}
+			}
+			else
+			{
+				$list_request->empty_message("<span class='italic'>No results found!</span>");
+			}
+			
+			$list_request->set_array($list_array);
+			
+			return $list_request->get_page($page);
+		}
+	}
+	
+	/**
+	 * @param string $json_argument_array
+	 * @return integer
+	 */
+	public function count_organisation_unit_related_equipment($json_argument_array)
+	{
+		$argument_array = json_decode($json_argument_array);
+		$organisation_unit_id = $argument_array[0][1];
+		
+		if (is_numeric($organisation_unit_id))
+		{
+			return Equipment_Wrapper::count_organisation_unit_equipments($organisation_unit_id);
 		}
 		else
 		{
