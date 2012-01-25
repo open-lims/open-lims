@@ -225,7 +225,6 @@ class ModuleNavigation implements ModuleNavigationInterface, EventListenerInterf
 	
 	
 	/**
-	 * @todo debug
 	 * @see ModuleNavigationInterface::get_highest_position()
 	 * @return integer
 	 */

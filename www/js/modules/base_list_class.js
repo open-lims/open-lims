@@ -44,8 +44,8 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 
 	var number_of_entries = 0;
 	var number_of_pages = 0;
-
-	this.reload = function() 
+	
+	reload = function() 
 	{
 		count_entries();
 		if(number_of_pages < page)
@@ -55,7 +55,13 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 		load_content(sort_value, sort_method, page);
 	}
 	
-	this.reinit_sort_handler = function()
+	autoreload = function(time)
+	{
+		setTimeout("reload()",time);
+		setTimeout("autoreload("+time+")",time);
+	}
+	
+	reinit_sort_handler = function()
 	{
 		$("." + css_main_id + "Column").each(function() 	
 		{
@@ -124,19 +130,24 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 			}
 		});
 	}
-	
-	this.reinit_page_handler = reinit_page_handler;
 
-	this.get_argument_array = function()
+	get_argument_array = function()
 	{
 		return argument_array;
 	}
 		
-	this.set_argument_array = function(array)
+	set_argument_array = function(array)
 	{
 		argument_array = array;
 	}
 
+	this.reload = reload;
+	this.autoreload = autoreload;
+	this.reinit_sort_handler = reinit_sort_handler;
+	this.reinit_page_handler = reinit_page_handler;
+	this.get_argument_array = get_argument_array;
+	this.set_argument_array = set_argument_array;
+	
 	function count_entries()
 	{		
 		$.ajax(
