@@ -124,129 +124,15 @@ class DataSearchIO
 
 			$session->write_value("SEARCH_FFV_NAME", $name, true);
 			$session->write_value("SEARCH_FFV_FOLDER_ID", $folder_id, true);
-			
-			if ($_GET[page])
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = Data_Wrapper::list_search_ffv($folder_id, $name, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
-				}
-				else
-				{
-					$result_array = Data_Wrapper::list_search_ffv($folder_id, $name, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
-				}				
-			}
-			else
-			{
-				if ($_GET[sortvalue] and $_GET[sortmethod])
-				{
-					$result_array = Data_Wrapper::list_search_ffv($folder_id, $name, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
-				}
-				else
-				{
-					$result_array = Data_Wrapper::list_search_ffv($folder_id, $name, null, null, 0, 20);
-				}	
-			}
-			
-			$list = new ListStat_IO(Data_Wrapper::count_search_ffv($folder_id, $name), 20);
-			
-			if (is_array($result_array) and count($result_array) >= 1)
-			{
-				foreach($result_array as $key => $value)
-				{
-					$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
-					$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+
+			$argument_array = array();
+			$argument_array[0][0] = "folder_id";
+			$argument_array[0][1] = $folder_id;
+			$argument_array[1][0] = "name";
+			$argument_array[1][1] = $name;
 					
-					$owner = new User($value[owner]);
-					$result_array[$key][owner] = $owner->get_full_name(true);
-					
-					if (is_numeric($value[file_id]))
-					{
-						$file = File::get_instance($value[file_id]);
-						
-						$paramquery = $_GET;
-						$paramquery[nav] = "file";
-						$paramquery[run] = "detail";
-						$paramquery[file_id] = $value[file_id];
-						unset($paramquery[sortvalue]);
-						unset($paramquery[sortmethod]);
-						unset($paramquery[nextpage]);
-						$params = http_build_query($paramquery, '', '&#38;');
-						
-						$tmp_name = $value[name];
-						if (strlen($tmp_name) > 20)
-						{
-							$tmp_name = substr($tmp_name,0 ,20)."...";
-						}
-						unset($result_array[$key][name]);
-						$result_array[$key][name][content] = $tmp_name;
-						
-						if ($file->is_read_access() == true)
-						{
-							$result_array[$key][symbol][link] = $params;
-							$result_array[$key][symbol][content] = "<img src='".File::get_icon_by_name($value[name])."' alt='' style='border:0;' />";
-							$result_array[$key][name][link] = $params;
-						}
-						else
-						{
-							$result_array[$key][symbol][link] = "";
-							$result_array[$key][symbol][content] = "<img src='core/images/denied_overlay.php?image=".File::get_icon_by_name($value[name])."' alt='' border='0' />";
-							$result_array[$key][name][link] = "";
-						}
-						
-						$result_array[$key][type] = "File";
-						
-						$result_array[$key][version] = $file->get_version();
-						$result_array[$key][size] = Convert::convert_byte_1024($file->get_size());
-						$result_array[$key][permission] = $file->get_permission_string();
-					}
-					
-					if (is_numeric($value[value_id]))
-					{
-						$value_obj = Value::get_instance($value[value_id]);
-						
-						$paramquery = $_GET;
-						$paramquery[nav] = "value";
-						$paramquery[run] = "detail";
-						$paramquery[value_id] = $value[value_id];
-						unset($paramquery[sortvalue]);
-						unset($paramquery[sortmethod]);
-						unset($paramquery[nextpage]);
-						$item_params = http_build_query($paramquery, '', '&#38;');
-						
-						$tmp_name = $value[name];
-						if (strlen($tmp_name) > 20)
-						{
-							$tmp_name = substr($tmp_name,0 ,20)."...";
-						}
-						unset($result_array[$key][name]);
-						$result_array[$key][name][content] = $tmp_name;
-						
-						if ($value_obj->is_read_access() == true)
-						{
-							$result_array[$key][symbol][link] = $params;
-							$result_array[$key][symbol][content] = "<img src='images/fileicons/16/unknown.png' alt='' style='border: 0;'>";
-							$result_array[$key][name][link] = $params;
-						}
-						else
-						{
-							$result_array[$key][symbol][link] = "";
-							$result_array[$key][symbol][content] = "<img src='core/images/denied_overlay.php?image=images/fileicons/16/unknown.png' alt='' border='0' />";
-							$result_array[$key][name][link] = "";
-						}
-						
-						$result_array[$key][type] = "Value";
-						
-						$result_array[$key][version] = $value_obj->get_version();
-						$result_array[$key][permission] = $value_obj->get_permission_string();
-					}
-				}	
-			}
-			else
-			{
-				$list->override_last_line("<span class='italic'>No results found!</span>");
-			}
-	
+			$list = new List_IO("DataSearch", "ajax.php?nav=data", "search_data_list_data", "search_data_count_data", $argument_array, "DataSearch");
+		
 			$list->add_column("", "symbol", false, "16px");
 			$list->add_column("Name", "name", true, null);
 			$list->add_column("Type", "type", false, null);
@@ -269,7 +155,7 @@ class DataSearchIO
 			$template->set_var("name", $name);
 			$template->set_var("folder", $folder->get_name());
 				
-			$template->set_var("table", $list->get_list($result_array, $_GET[page]));		
+			$template->set_var("list", $list->get_list());	
 	
 			$template->output();
 		}

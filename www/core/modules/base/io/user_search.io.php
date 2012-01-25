@@ -103,128 +103,29 @@ class UserSearchIO
 			
 			$content_array = array();
 			
+			$argument_array = array();
+			$argument_array[0][0] = "string";
+			$argument_array[0][1] = $string;
+			
 			if ($type == 1)
 			{
-				$list = new ListStat_IO(User_Wrapper::count_search_users($string), 20);
-	
-				$list->add_column("","symbol",false,16);
-				$list->add_column("Username","username",false,null);
-				$list->add_column("Full Name","fullname",false,null);
+				$list = new List_IO("UserUserSearch", "ajax.php?nav=base", "search_user_list_users", "search_user_count_users", $argument_array, "UserUserSearch");
 				
-				if ($_GET[page])
-				{
-					if ($_GET[sortvalue] and $_GET[sortmethod])
-					{
-						$result_array = User_Wrapper::list_search_users($string, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
-					}
-					else
-					{
-						$result_array = User_Wrapper::list_search_users($string, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
-					}				
-				}
-				else
-				{
-					if ($_GET[sortvalue] and $_GET[sortmethod])
-					{
-						$result_array = User_Wrapper::list_search_users($string, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
-					}
-					else
-					{
-						$result_array = User_Wrapper::list_search_users($string, null, null, 0, 20);
-					}	
-				}
+				$list->add_column("","symbol",false,16);
+				$list->add_column("Username","username",true,null);
+				$list->add_column("Full Name","fullname",true,null);
 				
 				$type_name = "User";
-				
-				if (is_array($result_array) and count($result_array) >= 1)
-				{
-					foreach ($result_array as $key => $value)
-					{
-						$result_array[$key][symbol] = "<img src='images/icons/user.png' alt='N' border='0' />";
-	
-						$user_paramquery = array();
-						$user_paramquery[username] = $_GET[username];
-						$user_paramquery[session_id] = $_GET[session_id];
-						$user_paramquery[nav] = "search";
-						$user_paramquery[run] = "common_dialog";
-						$user_paramquery[dialog] = "user_detail";
-						$user_paramquery[id] = $value[id];
-						$user_params = http_build_query($user_paramquery, '', '&#38;');
-						
-						$tmp_username = $result_array[$key][username];
-						unset($result_array[$key][username]);
-						$result_array[$key][username][content] = $tmp_username;
-						$result_array[$key][username][link] = $user_params;
-						
-						if ($result_array[$key][id] == 1)
-						{
-							$result_array[$key][fullname] = "Administrator";
-						}
-					}
-				}
-				else
-				{
-					$list->override_last_line("<span class='italic'>No results found!</span>");
-				}
 			}
 			else
-			{
-				$list = new ListStat_IO(User_Wrapper::count_search_groups($string), 20);
-	
+			{	
+				$list = new List_IO("UserGroupSearch", "ajax.php?nav=base", "search_user_list_groups", "search_user_count_groups", $argument_array, "UserGroupSearch");
+				
 				$list->add_column("","symbol",false,16);
 				$list->add_column("Group Name","name",true,null);
 				$list->add_column("Users","users",true,null);
-				
-				if ($_GET[page])
-				{
-					if ($_GET[sortvalue] and $_GET[sortmethod])
-					{
-						$result_array = User_Wrapper::list_search_groups($string, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
-					}
-					else
-					{
-						$result_array = User_Wrapper::list_search_groups($string, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
-					}				
-				}
-				else
-				{
-					if ($_GET[sortvalue] and $_GET[sortmethod])
-					{
-						$result_array = User_Wrapper::list_search_groups($string, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
-					}
-					else
-					{
-						$result_array = User_Wrapper::list_search_groups($string, null, null, 0, 20);
-					}	
-				}
-				
+
 				$type_name = "Group";
-				
-				if (is_array($result_array) and count($result_array) >= 1)
-				{
-					foreach ($result_array as $key => $value)
-					{
-						$result_array[$key][symbol] = "<img src='images/icons/groups.png' alt='N' border='0' />";
-	
-						$group_paramquery = array();
-						$group_paramquery[username] = $_GET[username];
-						$group_paramquery[session_id] = $_GET[session_id];
-						$group_paramquery[nav] = "search";
-						$group_paramquery[run] = "common_dialog";
-						$group_paramquery[dialog] = "group_detail";
-						$group_paramquery[id] = $value[id];
-						$group_params = http_build_query($group_paramquery, '', '&#38;');
-						
-						$tmp_name = $result_array[$key][name];
-						unset($result_array[$key][name]);
-						$result_array[$key][name][content] = $tmp_name;
-						$result_array[$key][name][link] = $group_params;
-					}
-				}
-				else
-				{
-					$list->override_last_line("<span class='italic'>No results found!</span>");
-				}
 			}
 						
 			$template = new HTMLTemplate("base/user/search/search_result.html");
@@ -241,7 +142,7 @@ class UserSearchIO
 			$template->set_var("string", $string);
 			$template->set_var("type", $type_name);
 			
-			$template->set_var("table", $list->get_list($result_array, $_GET[page]));
+			$template->set_var("list", $list->get_list());	
 	
 			$template->output();
 		}

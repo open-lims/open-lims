@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * @package item
  * @version 0.4.0.0
@@ -22,13 +22,33 @@
  */
 
 /**
- * 
+ * Item Request Class
+ * @package item
  */
-	$name 					= "item";
-	$main_class				= "ItemRequest";
+class ItemRequest
+{
+	public static function ajax_handler()
+	{
+		switch($_GET[run]):
+			
+			// Search
+			
+			case "search_fulltext_list_items":
+				require_once("ajax/item_fulltext_search.ajax.php");
+				echo ItemFulltextSearchAjax::list_items($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "search_fulltext_count_items":
+				require_once("ajax/item_fulltext_search.ajax.php");
+				echo ItemFulltextSearchAjax::count_items($_POST[argument_array]);
+			break;
+
+		endswitch;
+	}
 	
-	$required_include[0] 	= "item";
-	
-	$no_tab					= true;
-	$no_link				= true;
+	public static function io_handler()
+	{
+		
+	}
+}
 ?>

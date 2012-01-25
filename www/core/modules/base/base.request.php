@@ -64,6 +64,29 @@ class BaseRequest
 				echo ListAjax::get_page_bar($_POST['page'], $_POST['number_of_pages'], $_POST['css_page_id']);
 			break;
 			
+			
+			// Search
+			
+			case "search_user_list_users":
+				require_once("ajax/user_search.ajax.php");
+				echo UserSearchAjax::list_users($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "search_user_count_users":
+				require_once("ajax/user_search.ajax.php");
+				echo UserSearchAjax::count_users($_POST[argument_array]);
+			break;
+			
+			case "search_user_list_groups":
+				require_once("ajax/user_search.ajax.php");
+				echo UserSearchAjax::list_groups($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "search_user_count_groups":
+				require_once("ajax/user_search.ajax.php");
+				echo UserSearchAjax::count_groups($_POST[argument_array]);
+			break;
+			
 		endswitch;
 	}
 	

@@ -46,7 +46,8 @@ class DataRequest
 				echo FileAjax::list_file_items($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
 			break;
 			
-			//data browser
+			
+			// Data Browser
 			
 			case "get_data_browser_path":
 				require_once("ajax/data_browser.ajax.php");
@@ -83,7 +84,8 @@ class DataRequest
 				echo DataBrowserAjax::delete_stack();
 			break;
 			
-			//file
+			
+			// File
 			
 			case "file_add":
 				require_once("ajax/file.ajax.php");
@@ -110,7 +112,8 @@ class DataRequest
 				echo FileAjax::get_data_browser_link_html_and_button_handler("permission");
 			break;
 			
-			//value
+			
+			// Value
 			
 			case "value_add":
 				require_once("ajax/value.ajax.php");
@@ -127,7 +130,8 @@ class DataRequest
 				echo ValueAjax::get_data_browser_link_html_and_button_handler("permission");
 			break;
 			
-			//folder
+			
+			// Folder
 			
 			case "folder_add":
 				require_once("ajax/folder.ajax.php");
@@ -150,7 +154,20 @@ class DataRequest
 			break;
 			
 			
-			//navigation
+			// Search 
+			
+			case "search_data_list_data":
+				require_once("ajax/data_search.ajax.php");
+				echo DataSearchAjax::list_data($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "search_data_count_data":
+				require_once("ajax/data_search.ajax.php");
+				echo DataSearchAjax::count_data($_POST[argument_array]);
+			break;
+			
+			
+			// Navigation
 			
 			case "navigation_data":
 				require_once("ajax/navigation/data_navigation.ajax.php");
@@ -190,7 +207,7 @@ class DataRequest
 					break;
 				endswitch;
 			break;
-			
+					
 		endswitch;
 	}
 	

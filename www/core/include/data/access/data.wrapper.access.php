@@ -396,12 +396,14 @@ class Data_Wrapper_Access
 			}
 			
 			$sql = "SELECT ".constant("DATA_ENTITY_TABLE").".id AS id, " .
-						"CONCAT(".constant("FILE_VERSION_TABLE").".name, ".constant("VALUE_TYPE_TABLE").".name) AS name, " .
+						"CONCAT(".constant("FILE_VERSION_TABLE").".name, CONCAT(".constant("VALUE_TYPE_TABLE").".name,".constant("FOLDER_TABLE").".name)) AS name, " .
 						"".constant("DATA_ENTITY_TABLE").".datetime AS datetime, " .
 						"".constant("DATA_ENTITY_TABLE").".owner_id AS owner, " .
 						"".constant("FILE_TABLE").".id AS file_id, " .
-						"".constant("VALUE_TABLE").".id AS value_id " .
+						"".constant("VALUE_TABLE").".id AS value_id, " .
+						"".constant("FOLDER_TABLE").".id AS folder_id " .
 						"FROM ".constant("DATA_ENTITY_TABLE")." " .
+						"LEFT JOIN ".constant("FOLDER_TABLE")." 		ON ".constant("DATA_ENTITY_TABLE").".id 		= ".constant("FOLDER_TABLE").".data_entity_id " .
 						"LEFT JOIN ".constant("FILE_TABLE")." 			ON ".constant("DATA_ENTITY_TABLE").".id 		= ".constant("FILE_TABLE").".data_entity_id " .
 						"LEFT JOIN ".constant("FILE_VERSION_TABLE")."	ON ".constant("FILE_TABLE").".id 				= ".constant("FILE_VERSION_TABLE").".toid " .
 						"LEFT JOIN ".constant("VALUE_TABLE")." 			ON ".constant("DATA_ENTITY_TABLE").".id 		= ".constant("VALUE_TABLE").".data_entity_id " .
@@ -437,9 +439,9 @@ class Data_Wrapper_Access
 											"SELECT max(internal_revision) " .
 											"FROM ".constant("VALUE_VERSION_TABLE")." " .
 											"WHERE toid = ".constant("VALUE_TABLE").".id " .
-											")" .
+											") OR ".constant("FOLDER_TABLE").".id IS NOT NULL " .
 										") ".
-								"AND (".constant("FILE_VERSION_TABLE").".name LIKE '".$search_string."' OR ".constant("VALUE_TYPE_TABLE").".name LIKE '".$search_string."') " .
+								"AND (".constant("FILE_VERSION_TABLE").".name LIKE '".$search_string."' OR ".constant("VALUE_TYPE_TABLE").".name LIKE '".$search_string."' OR ".constant("FOLDER_TABLE").".name LIKE '".$search_string."') " .
 								"".$sql_order_by."";
 						
 			$return_array = array();
@@ -488,6 +490,7 @@ class Data_Wrapper_Access
 			
 			$sql = "SELECT COUNT(".constant("DATA_ENTITY_TABLE").".id) AS result " .
 						"FROM ".constant("DATA_ENTITY_TABLE")." " .
+						"LEFT JOIN ".constant("FOLDER_TABLE")." 		ON ".constant("DATA_ENTITY_TABLE").".id 		= ".constant("FOLDER_TABLE").".data_entity_id " .
 						"LEFT JOIN ".constant("FILE_TABLE")." 			ON ".constant("DATA_ENTITY_TABLE").".id 		= ".constant("FILE_TABLE").".data_entity_id " .
 						"LEFT JOIN ".constant("FILE_VERSION_TABLE")."	ON ".constant("FILE_TABLE").".id 				= ".constant("FILE_VERSION_TABLE").".toid " .
 						"LEFT JOIN ".constant("VALUE_TABLE")." 			ON ".constant("DATA_ENTITY_TABLE").".id 		= ".constant("VALUE_TABLE").".data_entity_id " .
@@ -522,9 +525,9 @@ class Data_Wrapper_Access
 											"SELECT max(internal_revision) " .
 											"FROM ".constant("VALUE_VERSION_TABLE")." " .
 											"WHERE toid = ".constant("VALUE_TABLE").".id " .
-											")" .
+											") OR ".constant("FOLDER_TABLE").".id IS NOT NULL " .
 										") ".
-								"AND (".constant("FILE_VERSION_TABLE").".name LIKE '".$search_string."' OR ".constant("VALUE_TYPE_TABLE").".name LIKE '".$search_string."') " .
+								"AND (".constant("FILE_VERSION_TABLE").".name LIKE '".$search_string."' OR ".constant("VALUE_TYPE_TABLE").".name LIKE '".$search_string."' OR ".constant("FOLDER_TABLE").".name LIKE '".$search_string."') " .
 								"".$sql_order_by."";
 			
 			$res = $db->db_query($sql);
