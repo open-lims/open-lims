@@ -2,6 +2,7 @@
 $(document).ready(function()
 {
 	base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=job&run=start_test", 'get_array=[[GET_ARRAY]]', "JobTestStart");
+	list.autoreload(5000);
 });
 </script>
 
@@ -20,7 +21,7 @@ $(document).ready(function()
 
 </div>
 
-<!-- END IF -->
+<!-- ENDIF -->
 
 [[LIST]]
 

@@ -29,6 +29,8 @@ class JobIO
 {
 	public static function list_jobs()
 	{
+		global $user;
+		
 		$list = new List_IO("JobList", "ajax.php?nav=job", "list_jobs", "count_jobs", $argument_array, "JobList");
 		
 		$list->add_column("", "symbol", false, "16px");
@@ -38,7 +40,16 @@ class JobIO
 		$list->add_column("Created at", "created_at", true, null);
 		
 		$template = new HTMLTemplate("job/list.html");
-	
+		
+		if ($user->is_admin())
+		{
+			$template->set_var("admin", true);
+		}
+		else
+		{
+			$template->set_var("admin", false);
+		}
+		
 		$template->set_var("list", $list->get_list());
 		
 		$template->output();

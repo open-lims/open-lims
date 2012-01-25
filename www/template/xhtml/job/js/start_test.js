@@ -18,5 +18,9 @@ $.ajax(
 			var exception_message = data.replace("EXCEPTION: ","");
 			ErrorDialog("Error", exception_message);
 		}
+		else
+		{
+			list.reload();
+		}
 	}
 });
