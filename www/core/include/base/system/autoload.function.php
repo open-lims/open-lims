@@ -60,6 +60,8 @@ function __autoload($classname)
 	$classes['AuthForgotPasswordSendFailedException']	= $path_prefix."core/include/base/security/exceptions/auth_forgot_password_send_failed_exception.class.php";
 	$classes['AuthUserNotFoundException']				= $path_prefix."core/include/base/security/exceptions/auth_user_not_found_exception.class.php";
 	
+	$classes['BaseUserAccessDeniedException']			= $path_prefix."core/include/base/security/exceptions/base_user_access_denied.exception.class.php";
+	
 	$classes['Auth'] 						= $path_prefix."core/include/base/security/auth.class.php";
 	
 	

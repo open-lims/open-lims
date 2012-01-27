@@ -137,7 +137,7 @@ class ProjectRequest
 			break;
 			
 			
-			// Admin
+			// Int Admin
 			
 			case "get_project_admin_menu":
 				require_once("ajax/project_admin.ajax.php");
@@ -172,6 +172,39 @@ class ProjectRequest
 			case "cancel_handler":
 				require_once("ajax/project_admin.ajax.php");
 				echo ProjectAdminAjax::cancel_handler($_POST[get_array], $_POST[comment]);
+			break;
+			
+			
+			// Ext. Admin
+			
+			case "admin_project_status_list_status":
+				require_once("ajax/admin/admin_project_status.ajax.php");
+				echo AdminProjectStatusAjax::list_status($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "admin_project_status_count_status":
+				require_once("ajax/admin/admin_project_status.ajax.php");
+				echo AdminProjectStatusAjax::count_status($_POST[argument_array]);
+			break;
+			
+			case "admin_project_template_cat_list_categories":
+				require_once("ajax/admin/admin_project_template_cat.ajax.php");
+				echo AdminProjectTemplateCatAjax::list_categories($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "admin_project_template_cat_count_categories":
+				require_once("ajax/admin/admin_project_template_cat.ajax.php");
+				echo AdminProjectTemplateCatAjax::count_categories($_POST[argument_array]);
+			break;
+			
+			case "admin_project_template_list_templates":
+				require_once("ajax/admin/admin_project_template.ajax.php");
+				echo AdminProjectTemplateAjax::list_templates($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "admin_project_template_count_templates":
+				require_once("ajax/admin/admin_project_template.ajax.php");
+				echo AdminProjectTemplateAjax::count_templates($_POST[argument_array]);
 			break;
 			
 			

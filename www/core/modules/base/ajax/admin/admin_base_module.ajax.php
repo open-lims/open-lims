@@ -22,13 +22,14 @@
  */
 
 /**
- * Admin Base Include AJAX IO Class
+ * Admin Base Module AJAX IO Class
  * @package base
  */
-class AdminBaseIncludeAjax
+class AdminBaseModuleAjax
 {	
 	/**
 	 * @param string $json_column_array
+	 * @param string $get_array
 	 * @param string $css_page_id
 	 * @param string $css_row_sort_id
 	 * @param string $entries_per_page
@@ -38,39 +39,65 @@ class AdminBaseIncludeAjax
 	 * @return string
 	 * @throws BaseUserAccessDeniedException
 	 */
-	public static function list_includes($json_column_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	public static function list_modules($json_column_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		global $user;
 		
 		if ($user->is_admin())
 		{
+			if ($get_array)
+			{
+				$_GET = unserialize($get_array);	
+			}
+			
 			$list_request = new ListRequest_IO();
 			$list_request->set_column_array($json_column_array);
-			
+		
 			if (!is_numeric($entries_per_page) or $entries_per_page < 1)
 			{
 				$entries_per_page = 20;
 			}
-			
-			$list_array = System_Wrapper::list_base_include($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+						
+			$list_array = System_Wrapper::list_base_module($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
 			
 			if (is_array($list_array) and count($list_array) >= 1)
-			{
-				$today_end = new DatetimeHandler(date("Y-m-d")." 23:59:59");
-				
+			{		
 				foreach($list_array as $key => $value)
-				{
-					
-				}	
+				{	
+					if ($list_array[$key][name] != "base")
+					{
+						$paramquery = $_GET;
+						$paramquery[id] = $list_array[$key][id];
+						$paramquery[action] = "disable";
+						unset($paramquery[sortvalue]);
+						unset($paramquery[sortmethod]);
+						unset($paramquery[nextpage]);
+						$params = http_build_query($paramquery, '', '&#38;');
+			
+						$list_array[$key][disable][link] = $params;
+						
+						if ($list_array[$key][disabled] == 't')
+						{
+							$list_array[$key][disable][content] = "<img src='images/icons/grey_point.png' alt='hide' style='border: 0;' />";
+						}
+						else
+						{
+							$list_array[$key][disable][content] = "<img src='images/icons/green_point.png' alt='hide' style='border: 0;' />";
+						}					
+					}
+					else
+					{
+						$list_array[$key][disable] = "<img src='images/icons/green_point.png' alt='hide' style='border: 0;' />";
+					}
+				}
 			}
 			else
 			{
-				$list_request->empty_message("<span class='italic'>No includes found!</span>");
-				// Hmm, when this message appears, something went wrong.
+				$list_request->empty_message("<span class='italic'>No results found!</span>");
 			}
-			
+
 			$list_request->set_array($list_array);
-			
+		
 			return $list_request->get_page($page);
 		}
 		else
@@ -80,16 +107,16 @@ class AdminBaseIncludeAjax
 	}
 	
 	/**
-	 * @return integer
+	 * @return intger
 	 * @throws BaseUserAccessDeniedException
 	 */
-	public static function count_includes()
+	public static function count_modules()
 	{
 		global $user;
 		
 		if ($user->is_admin())
 		{
-			return System_Wrapper::count_base_include();
+			return System_Wrapper::count_base_module();
 		}
 		else
 		{

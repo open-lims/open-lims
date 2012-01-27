@@ -1,30 +1,7 @@
 <script>
 
 $(document).ready(function()
-{
-	var get_array = getQueryParams(document.location.search);
-	
-	function load_content(sortvalue, sortmethod, page)
-	{
-		$.ajax(
-		{
-			type: "GET",
-			url: "core/modules/base/ajax/admin/admin_general.ajax.php",
-			data: "session_id="+get_array['session_id']+"&run=list_paper_sizes&sortvalue="+sortvalue+"&sortmethod="+sortmethod+"&page="+page,
-			success: function(data)
-			{
-				$("#BaseAdminAjaxContent").contents().detach();
-				$("#BaseAdminAjaxContent").append(data);
-			}
-		});
-	}
-	
-	var sortvalue = "";
-	var sortmethod = "";
-	var page = 0;
-	
-	load_content(sortvalue, sortmethod, page);
-	
+{	
 	$("#AddPaperSizeDialog").dialog(
 	{
 		autoOpen: false,
@@ -36,7 +13,7 @@ $(document).ready(function()
 			},
 			"OK": function()
 			{
-				var name 			=  $("#AddPaperSizeDialogGeneralNameField").val();
+				var name 			= $("#AddPaperSizeDialogGeneralNameField").val();
 				var width 			= $("#AddPaperSizeDialogGeneralWidthField").val();
 				var height 			= $("#AddPaperSizeDialogGeneralHeightField").val();
 				var margin_left 	= $("#AddPaperSizeDialogGeneralMarginLeftField").val();
@@ -49,13 +26,13 @@ $(document).ready(function()
 					$.ajax(
 					{
 						type: "POST",
-						url: "core/modules/base/ajax/admin/admin_general.ajax.php?session_id="+get_array['session_id']+"&run=add_paper_size",
+						url: "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=admin_general_add_paper_size",
 						data: "name="+name+"&width="+width+"&height="+height+"&margin_left="+margin_left+"&margin_right="+margin_right+"&margin_top="+margin_top+"&margin_bottom="+margin_bottom+"",
 						success: function(data)
 						{
 							if (data == "1")
 							{
-								load_content(sortvalue, sortmethod, page);
+								list.reload();
 								$("#AddPaperSizeDialog").dialog( "close" );
 							}
 						}
@@ -66,13 +43,13 @@ $(document).ready(function()
 					$.ajax(
 					{
 						type: "POST",
-						url: "core/modules/base/ajax/admin/admin_general.ajax.php?session_id="+get_array['session_id']+"&run=set_paper_size",
+						url: "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=admin_general_set_paper_size",
 						data: "id="+$("#AddPaperSizeDialogId").html()+"&name="+name+"&width="+width+"&height="+height+"&margin_left="+margin_left+"&margin_right="+margin_right+"&margin_top="+margin_top+"&margin_bottom="+margin_bottom+"",
 						success: function(data)
 						{
 							if (data == "1")
 							{
-								load_content(sortvalue, sortmethod, page);
+								list.reload();
 								$("#AddPaperSizeDialog").dialog( "close" );
 							}
 						}
@@ -118,9 +95,9 @@ $(document).ready(function()
 		
 		$.ajax(
 		{
-			type: "GET",
-			url: "core/modules/base/ajax/admin/admin_general.ajax.php",
-			data: "session_id="+get_array['session_id']+"&run=get_paper_size&id="+id,
+			type: "POST",
+			url: "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=admin_general_get_paper_size",
+			data: "id="+id,
 			success: function(data)
 			{
 				array = $.parseJSON(data);
@@ -157,14 +134,14 @@ $(document).ready(function()
 		id = id.replace("BaseAdminPaperSizeDelete","");
 		$.ajax(
 		{
-			type: "GET",
-			url: "core/modules/base/ajax/admin/admin_general.ajax.php",
-			data: "session_id="+get_array['session_id']+"&run=delete_paper_size&id="+id,
+			type: "POST",
+			url: "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=admin_general_delete_paper_size",
+			data: "id="+id,
 			success: function(data)
 			{
 				if (data == 1)
 				{
-					load_content(sortvalue, sortmethod, page);
+					list.reload();
 				}
 			}
 		});
@@ -205,7 +182,7 @@ $(document).ready(function()
 
 </div>
 
-<div id='BaseAdminAjaxContent'>
+[[LIST]]
 
 
 </div>

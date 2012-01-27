@@ -29,58 +29,14 @@ class AdminSampleTemplateIO
 {
 	public static function home()
 	{
-		$list = new ListStat_IO(Sample_Wrapper::count_list_sample_templates(), 20);
+		$list = new List_IO("SampleAdminTemplate", "ajax.php?nav=sample", "admin_sample_template_list_templates", "admin_sample_template_count_templates", "0", "SampleAdminTemplate");
 		
 		$list->add_column("ID", "id", true, null);
 		$list->add_column("Name", "name", true, null);
 		$list->add_column("File", "file", true, null);
 		$list->add_column("Category", "category", true, null);
 		$list->add_column("Delete", "delete", false, "7%");
-		
-		if ($_GET[page])
-		{
-			if ($_GET[sortvalue] and $_GET[sortmethod])
-			{
-				$result_array = Sample_Wrapper::list_sample_templates($_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
-			}
-			else
-			{
-				$result_array = Sample_Wrapper::list_sample_templates(null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
-			}				
-		}
-		else
-		{
-			if ($_GET[sortvalue] and $_GET[sortmethod])
-			{
-				$result_array = Sample_Wrapper::list_sample_templates($_GET[sortvalue], $_GET[sortmethod], 0, 20);
-			}
-			else
-			{
-				$result_array = Sample_Wrapper::list_sample_templates(null, null, 0, 20);
-			}	
-		}
-		
-		if (is_array($result_array) and count($result_array) >= 1)
-		{		
-			foreach($result_array as $key => $value)
-			{
-				$paramquery = $_GET;
-				$paramquery[id] = $result_array[$key][id];
-				$paramquery[action] = "delete";
-				unset($paramquery[sortvalue]);
-				unset($paramquery[sortmethod]);
-				unset($paramquery[nextpage]);
-				$params = http_build_query($paramquery, '', '&#38;');
 
-				$result_array[$key][delete][link] = $params;
-				$result_array[$key][delete][content] = "delete";
-			}
-		}
-		else
-		{
-			$list->override_last_line("<span class='italic'>No results found!</span>");
-		}
-		
 		$template = new HTMLTemplate("sample/admin/sample_template/list.html");	
 	
 		$paramquery = $_GET;
@@ -90,7 +46,7 @@ class AdminSampleTemplateIO
 		
 		$template->set_var("add_params", $params);
 	
-		$template->set_var("table", $list->get_list($result_array, $_GET[page]));			
+		$template->set_var("list", $list->get_list());			
 		
 		$template->output();
 	}

@@ -38,86 +38,17 @@ class AdminSystemLogIO
 			$type_id = 1;
 		}
 		
-		$list = new ListStat_IO(SystemFE_Wrapper::count_list_system_log($type_id), 20);
-		
+		$argument_array = array();
+		$argument_array[0][0] = "type_id";
+		$argument_array[0][1] = $type_id;
+
+		$list = new List_IO("BaseAdminSystemLog", "ajax.php?nav=base", "admin_list_system_log", "admin_count_system_log", $argument_array, "BaseAdminSystemLog");
+				
 		$list->add_column("User", "user", true, null);
 		$list->add_column("Date/Time", "datetime", true, null);
 		$list->add_column("IP", "ip", true, null);
 		$list->add_column("Info", "info", true, null);
 		$list->add_column("File", "file", true, null);
-				
-		if ($_GET[page])
-		{
-			if ($_GET[sortvalue] and $_GET[sortmethod])
-			{
-				$result_array = SystemFE_Wrapper::list_system_log($type_id, $_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
-			}
-			else
-			{
-				$result_array = SystemFE_Wrapper::list_system_log($type_id, null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
-			}				
-		}
-		else
-		{
-			if ($_GET[sortvalue] and $_GET[sortmethod])
-			{
-				$result_array = SystemFE_Wrapper::list_system_log($type_id, $_GET[sortvalue], $_GET[sortmethod], 0, 20);
-			}
-			else
-			{
-				$result_array = SystemFE_Wrapper::list_system_log($type_id, null, null, 0, 20);
-			}	
-		}
-		
-		if (is_array($result_array) and count($result_array) >= 1)
-		{		
-			foreach($result_array as $key => $value)
-			{	
-				$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
-				$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
-
-				if (strlen($result_array[$key][info]) > 20)
-				{
-					$result_array[$key][info] = substr($result_array[$key][info],0,20)."...";
-				}
-				
-				if (strlen($result_array[$key][file]) > 20)
-				{
-					$result_array[$key][file] = substr($result_array[$key][file],0,20)."...";
-				}
-				
-				$paramquery = $_GET;
-				$paramquery[id] = $result_array[$key][id];
-				$paramquery[action] = "detail";
-				unset($paramquery[sortvalue]);
-				unset($paramquery[sortmethod]);
-				unset($paramquery[nextpage]);
-				$params = http_build_query($paramquery, '', '&#38;');
-
-				$tmp_datetime = $result_array[$key][datetime];
-				unset($result_array[$key][datetime]);
-				$result_array[$key][datetime][link] = $params;
-				$result_array[$key][datetime][content] = $tmp_datetime;
-				
-				
-				$paramquery = $_GET;
-				$paramquery[id] = $result_array[$key][ip];
-				$paramquery[action] = "ip_info";
-				unset($paramquery[sortvalue]);
-				unset($paramquery[sortmethod]);
-				unset($paramquery[nextpage]);
-				$params = http_build_query($paramquery, '', '&#38;');
-
-				$tmp_ip = $result_array[$key][ip];
-				unset($result_array[$key][ip]);				
-				$result_array[$key][ip][link] = $params;
-				$result_array[$key][ip][content] = $tmp_ip;
-			}
-		}
-		else
-		{
-			$list->override_last_line("<span class='italic'>No results found!</span>");
-		}
 		
 		$template = new HTMLTemplate("base/admin/system_log/list.html");
 										
@@ -147,7 +78,6 @@ class AdminSystemLogIO
 		
 		$template->set_var("option",$result);
 		
-		
 		$result = array();
 		$counter = 0;
 		
@@ -163,7 +93,7 @@ class AdminSystemLogIO
 		
 		$template->set_var("get",$result);
 		
-		$template->set_var("table", $list->get_list($result_array, $_GET[page]));			
+		$template->set_var("list", $list->get_list());	
 		
 		$template->output();
 	}

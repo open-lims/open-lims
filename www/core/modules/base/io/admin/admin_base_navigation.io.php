@@ -29,7 +29,7 @@ class AdminBaseNavigationIO
 {
 	public static function home()
 	{
-		$list = new ListStat_IO((System_Wrapper::count_base_module_navigation()+1), 20);
+		$list = new List_IO("BaseAdminNavigationHome" ,"ajax.php?nav=base", "admin_list_navigation", "admin_count_navigation", "0", "BaseAdminNavigationHome");
 		
 		$list->add_column("Displayed-Name (en-GB)", "name", false, null);
 		$list->add_column("Module", "module", false, null);
@@ -38,100 +38,9 @@ class AdminBaseNavigationIO
 		$list->add_column("DW", "dw", false, null);
 		$list->add_column("Show/Hide", "hide", false, "80px");
 
-		$home_array = array();
-		$home_array[name] = "Home";
-		$home_array[module] = "base";
-		$home_array[colour] = "blue";
-		$home_array[hidden] = "f";
-
-		if ($_GET[page])
-		{
-			$result_array = System_Wrapper::list_base_module_navigation(($_GET[page]*20)-20, ($_GET[page]*20));			
-		}
-		else
-		{
-			$result_array = System_Wrapper::list_base_module_navigation(0, 20);		
-		}
-		
-		array_unshift($result_array, $home_array);
-		
-		if (is_array($result_array) and count($result_array) >= 1)
-		{		
-			foreach($result_array as $key => $value)
-			{	
-				if ($result_array[$key][module] != "base")
-				{
-					$paramquery = $_GET;
-					$paramquery[id] = $result_array[$key][id];
-					$paramquery[action] = "hide";
-					unset($paramquery[sortvalue]);
-					unset($paramquery[sortmethod]);
-					unset($paramquery[nextpage]);
-					$params = http_build_query($paramquery, '', '&#38;');
-	
-					$result_array[$key][hide][link] = $params;
-					
-					if ($result_array[$key][hidden] == 't')
-					{
-						$result_array[$key][hide][content] = "<img src='images/icons/grey_point.png' alt='hide' style='border: 0;' />";
-					}
-					else
-					{
-						$result_array[$key][hide][content] = "<img src='images/icons/green_point.png' alt='hide' style='border: 0;' />";
-					}
-					
-					if ($result_array[$key][position] != 1)
-					{
-						$paramquery = $_GET;
-						$paramquery[id] = $result_array[$key][id];
-						$paramquery[action] = "upwards";
-						unset($paramquery[sortvalue]);
-						unset($paramquery[sortmethod]);
-						unset($paramquery[nextpage]);
-						$params = http_build_query($paramquery, '', '&#38;');
-		
-						$result_array[$key][uw][link] = $params;
-						$result_array[$key][uw][content] = "<img src='images/icons/upward.png' alt='uw' style='border: 0;' />";
-					}
-					else
-					{
-						$result_array[$key][uw] = "<img src='images/icons/upward_na.png' alt='uw' style='border: 0;' />";
-					}
-					
-					if ($result_array[$key][position] != ModuleNavigation::get_highest_position())
-					{
-						$paramquery = $_GET;
-						$paramquery[id] = $result_array[$key][id];
-						$paramquery[action] = "downwards";
-						unset($paramquery[sortvalue]);
-						unset($paramquery[sortmethod]);
-						unset($paramquery[nextpage]);
-						$params = http_build_query($paramquery, '', '&#38;');
-		
-						$result_array[$key][dw][link] = $params;
-						$result_array[$key][dw][content] = "<img src='images/icons/downward.png' alt='dw' style='border: 0;' />";
-					}
-					else
-					{
-						$result_array[$key][dw] = "<img src='images/icons/downward_na.png' alt='dw' style='border: 0;' />";
-					}
-				}
-				else
-				{
-					$result_array[$key][hide] = "<img src='images/icons/green_point.png' alt='hide' style='border: 0;' />";
-					$result_array[$key][uw] = "<img src='images/icons/upward_na.png' alt='uw' style='border: 0;' />";
-					$result_array[$key][dw] = "<img src='images/icons/downward_na.png' alt='dw' style='border: 0;' />";
-				}
-			}
-		}
-		else
-		{
-			$list->override_last_line("<span class='italic'>No results found!</span>");
-		}
-		
 		$template = new HTMLTemplate("base/admin/base_navigation/list.html");
 
-		$template->set_var("table", $list->get_list($result_array, $_GET[page]));
+		$template->set_var("list", $list->get_list());
 		
 		$template->output();
 	}

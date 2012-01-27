@@ -22,32 +22,16 @@
  */
 
 /**
- * Base Include Admin IO Class
+ * Base User Access Denies Exception
+ * Thrown when a user has no permission to access and no special exception exists
  * @package base
  */
-class AdminBaseIncludeIO
+class BaseUserAccessDeniedException extends BaseException
 {
-	public static function home()
-	{		
-		$list = new List_IO("BaseAdminIncludeHome" ,"ajax.php?nav=base", "admin_list_includes", "admin_count_includes", "0", "BaseAdminIncludeAjax");
-
-		$list->add_column("Name","name",true,null);
-		$list->add_column("Folder","folder",true,null);
-		$list->add_column("Event Listeners","eventlisteners",true,null);
-		
-		$template = new HTMLTemplate("base/admin/base_include/list.html");	
-		
-		$template->set_var("list", $list->get_list());
-		
-		$template->output();
-	}
-	
-	public static function handler()
-	{
-		switch($_GET[action]):		
-			default:
-				self::home();
-			break;
-		endswitch;
-	}
+    function __construct($message = null)
+    {
+    	parent::__construct(true, false, false, $message, null);
+    }
 }
+
+?>

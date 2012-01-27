@@ -29,75 +29,16 @@ class AdminBaseModuleIO
 {
 	public static function home()
 	{
-		$list = new ListStat_IO(System_Wrapper::count_base_module(), 20);
+		$list = new List_IO("BaseAdminModuleHome" ,"ajax.php?nav=base", "admin_list_modules", "admin_count_modules", "0", "BaseAdminModuleHome");
 		
 		$list->add_column("Name", "name", true, null);
 		$list->add_column("Dialogs", "dialogs", true, null);
 		$list->add_column("Links", "links", true, null);
 		$list->add_column("Disable", "disable", false, "80px");
-		
-		if ($_GET[page])
-		{
-			if ($_GET[sortvalue] and $_GET[sortmethod])
-			{
-				$result_array = System_Wrapper::list_base_module($_GET[sortvalue], $_GET[sortmethod], ($_GET[page]*20)-20, ($_GET[page]*20));
-			}
-			else
-			{
-				$result_array = System_Wrapper::list_base_module(null, null, ($_GET[page]*20)-20, ($_GET[page]*20));
-			}				
-		}
-		else
-		{
-			if ($_GET[sortvalue] and $_GET[sortmethod])
-			{
-				$result_array = System_Wrapper::list_base_module($_GET[sortvalue], $_GET[sortmethod], 0, 20);
-			}
-			else
-			{
-				$result_array = System_Wrapper::list_base_module(null, null, 0, 20);
-			}	
-		}
-		
-		if (is_array($result_array) and count($result_array) >= 1)
-		{		
-			foreach($result_array as $key => $value)
-			{	
-				if ($result_array[$key][name] != "base")
-				{
-					$paramquery = $_GET;
-					$paramquery[id] = $result_array[$key][id];
-					$paramquery[action] = "disable";
-					unset($paramquery[sortvalue]);
-					unset($paramquery[sortmethod]);
-					unset($paramquery[nextpage]);
-					$params = http_build_query($paramquery, '', '&#38;');
-	
-					$result_array[$key][disable][link] = $params;
-					
-					if ($result_array[$key][disabled] == 't')
-					{
-						$result_array[$key][disable][content] = "<img src='images/icons/grey_point.png' alt='hide' style='border: 0;' />";
-					}
-					else
-					{
-						$result_array[$key][disable][content] = "<img src='images/icons/green_point.png' alt='hide' style='border: 0;' />";
-					}					
-				}
-				else
-				{
-					$result_array[$key][disable] = "<img src='images/icons/green_point.png' alt='hide' style='border: 0;' />";
-				}
-			}
-		}
-		else
-		{
-			$list->override_last_line("<span class='italic'>No results found!</span>");
-		}
-		
+
 		$template = new HTMLTemplate("base/admin/base_module/list.html");
 
-		$template->set_var("table", $list->get_list($result_array, $_GET[page]));
+		$template->set_var("list", $list->get_list());
 		
 		$template->output();
 	}

@@ -22,475 +22,611 @@
  */
 
 /**
- * 
- */
-$GLOBALS['autoload_prefix'] = "../../";
-require_once("../../../base/ajax.php");
-
-/**
  * Organisation Unit AJAX IO Class
  * @package base
  */
-class AdminGeneralAjax extends Ajax
+class AdminGeneralAjax
 {	
-	function __construct()
-	{
-		parent::__construct();
-	}
-	
-	public function list_languages($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
-	{		
-		$argument_array = json_decode($json_argument_array);
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $get_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function list_languages($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	{	
+		global $user;
 		
-		$list_request = new ListRequest_IO();
-		$list_request->set_column_array($json_column_array);
-	
-		if (!is_numeric($entries_per_page) or $entries_per_page < 1)
-		{
-			$entries_per_page = 20;
-		}
-		
-		$list_array = Environment_Wrapper::list_languages($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
-	
-		
-		if (is_array($list_array) and count($list_array) >= 1)
-		{
-			foreach($list_array as $key => $value)
-			{
-				$list_array[$key][symbol] = "<img src='images/icons/language.png' alt='N' border='0' />";
-			}
-		}
-		else
-		{
-			$list_request->override_last_line("<span class='italic'>No results found!</span>");
-		}
+		if ($user->is_admin())
+		{	
+			$argument_array = json_decode($json_argument_array);
 			
-		$list_request->set_array($list_array);
+			$list_request = new ListRequest_IO();
+			$list_request->set_column_array($json_column_array);
 		
-		return $list_request->get_page($page);
-	}
-	
-	public function count_languages($json_argument_array)
-	{
-		return Environment_Wrapper::count_languages();
-	}
-	
-	public function list_currencies($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
-	{
-		$argument_array = json_decode($json_argument_array);
-		
-		$list_request = new ListRequest_IO();
-		$list_request->set_column_array($json_column_array);
-	
-		if (!is_numeric($entries_per_page) or $entries_per_page < 1)
-		{
-			$entries_per_page = 20;
-		}
-		
-		$list_array = Environment_Wrapper::list_currencies($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
-	
-		
-		if (is_array($list_array) and count($list_array) >= 1)
-		{
-			foreach($list_array as $key => $value)
+			if (!is_numeric($entries_per_page) or $entries_per_page < 1)
 			{
-				$list_array[$key][symbol] = "<img src='images/icons/currency.png' alt='N' border='0' />";
+				$entries_per_page = 20;
 			}
-		}
-		else
-		{
-			$list_request->override_last_line("<span class='italic'>No results found!</span>");
-		}
 			
-		$list_request->set_array($list_array);
+			$list_array = Environment_Wrapper::list_languages($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
 		
-		return $list_request->get_page($page);
-	}
-	
-	public function count_currencies($json_argument_array)
-	{
-		return Environment_Wrapper::count_currencies();
-	}
-	
-	public function list_timezones($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
-	{
-		$argument_array = json_decode($json_argument_array);
-		
-		$list_request = new ListRequest_IO();
-		$list_request->set_column_array($json_column_array);
-	
-		if (!is_numeric($entries_per_page) or $entries_per_page < 1)
-		{
-			$entries_per_page = 20;
-		}
-		
-		$list_array = Environment_Wrapper::list_timezones($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
-	
-		
-		if (is_array($list_array) and count($list_array) >= 1)
-		{
-			foreach($list_array as $key => $value)
+			
+			if (is_array($list_array) and count($list_array) >= 1)
 			{
-				$list_array[$key][symbol] = "<img src='images/icons/timezone.png' alt='N' border='0' />";
-				
-				if ($list_array[$key][deviation] > 0)
+				foreach($list_array as $key => $value)
 				{
-					$list_array[$key][deviation] = "GMT+".$list_array[$key][deviation];
+					$list_array[$key][symbol] = "<img src='images/icons/language.png' alt='N' border='0' />";
 				}
-				elseif ($list_array[$key][deviation] < 0)
+			}
+			else
+			{
+				$list_request->override_last_line("<span class='italic'>No results found!</span>");
+			}
+				
+			$list_request->set_array($list_array);
+			
+			return $list_request->get_page($page);
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
+	}
+	
+	/**
+	 * @param string $json_argument_array
+	 * @return integer
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function count_languages($json_argument_array)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			return Environment_Wrapper::count_languages();
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
+	}
+	
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $get_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function list_currencies($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			$argument_array = json_decode($json_argument_array);
+			
+			$list_request = new ListRequest_IO();
+			$list_request->set_column_array($json_column_array);
+		
+			if (!is_numeric($entries_per_page) or $entries_per_page < 1)
+			{
+				$entries_per_page = 20;
+			}
+			
+			$list_array = Environment_Wrapper::list_currencies($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+		
+			
+			if (is_array($list_array) and count($list_array) >= 1)
+			{
+				foreach($list_array as $key => $value)
 				{
-					$list_array[$key][deviation] = "GMT".$list_array[$key][deviation];
+					$list_array[$key][symbol] = "<img src='images/icons/currency.png' alt='N' border='0' />";
+				}
+			}
+			else
+			{
+				$list_request->override_last_line("<span class='italic'>No results found!</span>");
+			}
+				
+			$list_request->set_array($list_array);
+			
+			return $list_request->get_page($page);
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
+	}
+	
+	/**
+	 * @param string $json_argument_array
+	 * @return integer
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function count_currencies($json_argument_array)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			return Environment_Wrapper::count_currencies();
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
+	}
+	
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $get_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function list_timezones($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			$argument_array = json_decode($json_argument_array);
+			
+			$list_request = new ListRequest_IO();
+			$list_request->set_column_array($json_column_array);
+		
+			if (!is_numeric($entries_per_page) or $entries_per_page < 1)
+			{
+				$entries_per_page = 20;
+			}
+			
+			$list_array = Environment_Wrapper::list_timezones($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+		
+			
+			if (is_array($list_array) and count($list_array) >= 1)
+			{
+				foreach($list_array as $key => $value)
+				{
+					$list_array[$key][symbol] = "<img src='images/icons/timezone.png' alt='N' border='0' />";
+					
+					if ($list_array[$key][deviation] > 0)
+					{
+						$list_array[$key][deviation] = "GMT+".$list_array[$key][deviation];
+					}
+					elseif ($list_array[$key][deviation] < 0)
+					{
+						$list_array[$key][deviation] = "GMT".$list_array[$key][deviation];
+					}
+					else
+					{
+						$list_array[$key][deviation] = "GTM+/-0";
+					}
+				}
+			}
+			else
+			{
+				$list_request->override_last_line("<span class='italic'>No results found!</span>");
+			}
+				
+			$list_request->set_array($list_array);
+			
+			return $list_request->get_page($page);
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
+	}
+	
+	/**
+	 * @param string $json_argument_array
+	 * @return integer
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function count_timezones($json_argument_array)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			return Environment_Wrapper::count_timezones();
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
+	}
+	
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $get_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return integer
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function list_measuring_units($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			$argument_array = json_decode($json_argument_array);
+			
+			$list_request = new ListRequest_IO();
+			$list_request->set_column_array($json_column_array);
+		
+			if (!is_numeric($entries_per_page) or $entries_per_page < 1)
+			{
+				$entries_per_page = 20;
+			}
+			
+			$list_array = Environment_Wrapper::list_measuring_units($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+		
+			
+			if (is_array($list_array) and count($list_array) >= 1)
+			{
+				foreach($list_array as $key => $value)
+				{
+					$list_array[$key][symbol] = "<img src='images/icons/measuring_unit.png' alt='N' border='0' />";
+					
+					switch ($list_array[$key][type]):
+					
+						case 1:
+							$list_array[$key][type] = "length";
+						break;
+						
+						case 2:
+							$list_array[$key][type] = "mass";
+						break;
+						
+						case 3:
+							$list_array[$key][type] = "electric current";
+						break;
+						
+						case 4:
+							$list_array[$key][type] = "thermodynamic temperature";
+						break;
+						
+						case 5:
+							$list_array[$key][type] = "amount of substance";
+						break;
+						
+						case 6:
+							$list_array[$key][type] = "luminous intensity";
+						break;
+						
+						case 7:
+							$list_array[$key][type] = "time";
+						break;
+					
+					endswitch;
+				}
+			}
+			else
+			{
+				$list_request->override_last_line("<span class='italic'>No results found!</span>");
+			}
+				
+			$list_request->set_array($list_array);
+			
+			return $list_request->get_page($page);
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
+	}
+	
+	/**
+	 * @param string $json_argument_array´
+	 * @return integer
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function count_measuring_units($json_argument_array)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			return Environment_Wrapper::count_measuring_units();
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
+	}
+	
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $get_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function list_paper_sizes($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			$list_request = new ListRequest_IO();
+			$list_request->set_column_array($json_column_array);
+		
+			if (!is_numeric($entries_per_page) or $entries_per_page < 1)
+			{
+				$entries_per_page = 20;
+			}
+						
+			$list_array = Environment_Wrapper::list_paper_sizes($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+					
+			if (is_array($list_array) and count($list_array) >= 1)
+			{
+				foreach($list_array as $key => $value)
+				{
+					$list_array[$key][symbol] = "<img src='images/icons/text.png' alt='' />";
+					
+					if ($value['standard'] == 't')
+					{
+						$list_array[$key][name] = $list_array[$key][name]." <img src='images/icons/status_ok.png' alt='Standard' />";
+					}
+					
+					$list_array[$key][width] = $list_array[$key][width]." mm";
+					$list_array[$key][height] = $list_array[$key][height]." mm";
+					$list_array[$key][margin_left] = $list_array[$key][margin_left]." mm";
+					$list_array[$key][margin_right] = $list_array[$key][margin_right]." mm";
+					$list_array[$key][margin_top] = $list_array[$key][margin_top]." mm";
+					$list_array[$key][margin_bottom] = $list_array[$key][margin_bottom]." mm";
+					
+					$list_array[$key]['edit'] = "<a href='#' class='BaseAdminPaperSizeEdit' id='BaseAdminPaperSizeEdit".$list_array[$key][id]."'><img src='images/icons/edit.png' alt='' style='border: 0;' /></a>";
+					
+					if ($value['base'] == 'f')
+					{
+						$list_array[$key]['delete'] = "<a href='#' class='BaseAdminPaperSizeDelete' id='BaseAdminPaperSizeDelete".$list_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+					}
+				}
+			}
+			else
+			{
+				$list_request->empty_message("<span class='italic'>No results found!</span>");
+			}
+			
+			$list_request->set_array($list_array);
+		
+			return $list_request->get_page($page);
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
+	}
+	
+	/**
+	 * @param string $json_argument_array
+	 * @return integer
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function count_paper_sizes($json_argument_array)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			return Environment_Wrapper::count_paper_sizes();
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
+	}
+	
+	/**
+	 * @param string $name
+	 * @param string $width
+	 * @param string $height
+	 * @param string $margin_left
+	 * @param string $margin_right
+	 * @param string $margin_top
+	 * @param string $margin_bottom
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function add_paper_size($name, $width, $height, $margin_left, $margin_right, $margin_top, $margin_bottom)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			$paper_size = new PaperSize(null);
+			if ($paper_size->create($name, $width, $height, $margin_left, $margin_right, $margin_top, $margin_bottom) == true)
+			{
+				return "1";
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
+	}
+	
+	/**
+	 * @param string $id
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function get_paper_size($id)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			if (is_numeric($id))
+			{
+				$paper_size = new PaperSize($id);
+				
+				$return_array = array();
+				
+				$return_array[0] = $paper_size->get_base();
+				$return_array[1] = $paper_size->get_name();
+				$return_array[2] = $paper_size->get_width();
+				$return_array[3] = $paper_size->get_height();
+				$return_array[4] = $paper_size->get_margin_left();
+				$return_array[5] = $paper_size->get_margin_right();
+				$return_array[6] = $paper_size->get_margin_top();
+				$return_array[7] = $paper_size->get_margin_bottom();
+				
+				return json_encode($return_array);
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
+	}
+	
+	/**
+	 * @param string $id
+	 * @param string $name
+	 * @param string $width
+	 * @param string $height
+	 * @param string $margin_left
+	 * @param string $margin_right
+	 * @param string $margin_top
+	 * @param string $margin_bottom
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function set_paper_size($id, $name, $width, $height, $margin_left, $margin_right, $margin_top, $margin_bottom)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			if (is_numeric($id) and $name and is_numeric($width) and is_numeric($height) and is_numeric($margin_left) and is_numeric($margin_right) and is_numeric($margin_top) and is_numeric($margin_bottom))
+			{
+				$paper_size = new PaperSize($id);
+				
+				if ($paper_size->set_name($name) == false)
+				{
+					return "0";
+				}
+				
+				if ($paper_size->set_width($width) == false)
+				{
+					return "0";
+				}
+				
+				if ($paper_size->set_height($height) == false)
+				{
+					return "0";
+				}
+				
+				if ($paper_size->set_margin_left($margin_left) == false)
+				{
+					return "0";
+				}
+				
+				if ($paper_size->set_margin_right($margin_right) == false)
+				{
+					return "0";
+				}
+				
+				if ($paper_size->set_margin_top($margin_top) == false)
+				{
+					return "0";
+				}
+				
+				if ($paper_size->set_margin_bottom($margin_bottom) == false)
+				{
+					return "0";
+				}
+				
+				return "1";
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
+	}
+	
+	/**
+	 * @param string $id
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function delete_paper_size($id)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			if (is_numeric($id))
+			{
+				$paper_size = new PaperSize($id);
+				if ($paper_size->delete() == true)
+				{
+					return "1";
 				}
 				else
 				{
-					$list_array[$key][deviation] = "GTM+/-0";
+					return "0";
 				}
-			}
-		}
-		else
-		{
-			$list_request->override_last_line("<span class='italic'>No results found!</span>");
-		}
-			
-		$list_request->set_array($list_array);
-		
-		return $list_request->get_page($page);
-	}
-	
-	public function count_timezones($json_argument_array)
-	{
-		return Environment_Wrapper::count_timezones();
-	}
-	
-	public function list_measuring_units($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
-	{
-		$argument_array = json_decode($json_argument_array);
-		
-		$list_request = new ListRequest_IO();
-		$list_request->set_column_array($json_column_array);
-	
-		if (!is_numeric($entries_per_page) or $entries_per_page < 1)
-		{
-			$entries_per_page = 20;
-		}
-		
-		$list_array = Environment_Wrapper::list_measuring_units($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
-	
-		
-		if (is_array($list_array) and count($list_array) >= 1)
-		{
-			foreach($list_array as $key => $value)
-			{
-				$list_array[$key][symbol] = "<img src='images/icons/measuring_unit.png' alt='N' border='0' />";
-				
-				switch ($list_array[$key][type]):
-				
-					case 1:
-						$list_array[$key][type] = "length";
-					break;
-					
-					case 2:
-						$list_array[$key][type] = "mass";
-					break;
-					
-					case 3:
-						$list_array[$key][type] = "electric current";
-					break;
-					
-					case 4:
-						$list_array[$key][type] = "thermodynamic temperature";
-					break;
-					
-					case 5:
-						$list_array[$key][type] = "amount of substance";
-					break;
-					
-					case 6:
-						$list_array[$key][type] = "luminous intensity";
-					break;
-					
-					case 7:
-						$list_array[$key][type] = "time";
-					break;
-				
-				endswitch;
-			}
-		}
-		else
-		{
-			$list_request->override_last_line("<span class='italic'>No results found!</span>");
-		}
-			
-		$list_request->set_array($list_array);
-		
-		return $list_request->get_page($page);
-	}
-	
-	public function count_measuring_units($json_argument_array)
-	{
-		return Environment_Wrapper::count_measuring_units();
-	}
-	
-	
-	public function list_paper_sizes($page, $sortvalue, $sortmethod)
-	{
-		$list = new ListStat_IO(Environment_Wrapper::count_paper_sizes(), 20, "OrganisationUnitAdminListPage");
-
-		$list->add_column("","symbol",false,"16px");
-		$list->add_column("Name","name",true,null,"BaseGeneralAdminListSortName");
-		$list->add_column("Width","width",false,null);
-		$list->add_column("Height","height",false,null);
-		$list->add_column("Left-M.","margin_left",false,null);
-		$list->add_column("Right-M.","margin_right",false,null);
-		$list->add_column("Top-M.","margin_top",false,null);
-		$list->add_column("Bottom-M.","margin_bottom",false,null);
-		$list->add_column("","edit",false,"20px");
-		$list->add_column("","delete",false,"20px");
-		
-		if ($page)
-		{
-			if ($sortvalue and $sortmethod)
-			{
-				$result_array = Environment_Wrapper::list_paper_sizes($sortvalue, $sortmethod, ($page*20)-20, ($page*20));
 			}
 			else
 			{
-				$result_array = Environment_Wrapper::list_paper_sizes(null, null, ($page*20)-20, ($page*20));
-			}				
-		}
-		else
-		{
-			if ($sortvalue and $sortmethod)
-			{
-				$result_array = Environment_Wrapper::list_paper_sizes($sortvalue, $sortmethod, 0, 20);
-			}
-			else
-			{
-				$result_array = Environment_Wrapper::list_paper_sizes(null, null, 0, 20);
-			}	
-		}
-		
-		if (is_array($result_array) and count($result_array) >= 1)
-		{
-			foreach($result_array as $key => $value)
-			{
-				$result_array[$key][symbol] = "<img src='images/icons/text.png' alt='' />";
-				
-				if ($value['standard'] == 't')
-				{
-					$result_array[$key][name] = $result_array[$key][name]." <img src='images/icons/status_ok.png' alt='Standard' />";
-				}
-				
-				$result_array[$key][width] = $result_array[$key][width]." mm";
-				$result_array[$key][height] = $result_array[$key][height]." mm";
-				$result_array[$key][margin_left] = $result_array[$key][margin_left]." mm";
-				$result_array[$key][margin_right] = $result_array[$key][margin_right]." mm";
-				$result_array[$key][margin_top] = $result_array[$key][margin_top]." mm";
-				$result_array[$key][margin_bottom] = $result_array[$key][margin_bottom]." mm";
-				
-				$result_array[$key]['edit'] = "<a href='#' class='BaseAdminPaperSizeEdit' id='BaseAdminPaperSizeEdit".$result_array[$key][id]."'><img src='images/icons/edit.png' alt='' style='border: 0;' /></a>";
-				
-				if ($value['base'] == 'f')
-				{
-					$result_array[$key]['delete'] = "<a href='#' class='BaseAdminPaperSizeDelete' id='BaseAdminPaperSizeDelete".$result_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
-				}
+				return "0";
 			}
 		}
 		else
 		{
-			$list->override_last_line("<span class='italic'>No results found!</span>");
-		}
-			
-		echo $list->get_list($result_array, $page);
-	}
-	
-	public function add_paper_size($name, $width, $height, $margin_left, $margin_right, $margin_top, $margin_bottom)
-	{
-		$paper_size = new PaperSize(null);
-		if ($paper_size->create($name, $width, $height, $margin_left, $margin_right, $margin_top, $margin_bottom) == true)
-		{
-			echo "1";
-		}
-		else
-		{
-			echo "0";
+			throw new BaseUserAccessDeniedException();	
 		}
 	}
-	
-	public function get_paper_size($id)
-	{
-		if (is_numeric($id))
-		{
-			$paper_size = new PaperSize($id);
-			
-			$return_array = array();
-			
-			$return_array[0] = $paper_size->get_base();
-			$return_array[1] = $paper_size->get_name();
-			$return_array[2] = $paper_size->get_width();
-			$return_array[3] = $paper_size->get_height();
-			$return_array[4] = $paper_size->get_margin_left();
-			$return_array[5] = $paper_size->get_margin_right();
-			$return_array[6] = $paper_size->get_margin_top();
-			$return_array[7] = $paper_size->get_margin_bottom();
-			
-			echo json_encode($return_array);
-		}
-		else
-		{
-			echo null;
-		}
-	}
-	
-	public function set_paper_size($id, $name, $width, $height, $margin_left, $margin_right, $margin_top, $margin_bottom)
-	{
-		if (is_numeric($id) and $name and is_numeric($width) and is_numeric($height) and is_numeric($margin_left) and is_numeric($margin_right) and is_numeric($margin_top) and is_numeric($margin_bottom))
-		{
-			$paper_size = new PaperSize($id);
-			
-			if ($paper_size->set_name($name) == false)
-			{
-				echo "0";
-			}
-			
-			if ($paper_size->set_width($width) == false)
-			{
-				echo "0";
-			}
-			
-			if ($paper_size->set_height($height) == false)
-			{
-				echo "0";
-			}
-			
-			if ($paper_size->set_margin_left($margin_left) == false)
-			{
-				echo "0";
-			}
-			
-			if ($paper_size->set_margin_right($margin_right) == false)
-			{
-				echo "0";
-			}
-			
-			if ($paper_size->set_margin_top($margin_top) == false)
-			{
-				echo "0";
-			}
-			
-			if ($paper_size->set_margin_bottom($margin_bottom) == false)
-			{
-				echo "0";
-			}
-			
-			echo "1";
-		}
-		else
-		{
-			echo "0";
-		}
-	}
-	
-	public function delete_paper_size($id)
-	{
-		if (is_numeric($id))
-		{
-			$paper_size = new PaperSize($id);
-			if ($paper_size->delete() == true)
-			{
-				echo "1";
-			}
-			else
-			{
-				echo "0";
-			}
-		}
-		else
-		{
-			echo "0";
-		}
-	}
-	
-	public function add_currency()
-	{
-		
-	}
-	
-	public function delete_currency($id)
-	{
-		
-	}
-	
-	public function method_handler()
-	{
-		global $session;
-		
-		if ($session->is_valid())
-		{
-			switch($_GET[run]):
-	
-				case "list_languages":
-					echo $this->list_languages($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
-				break;
-				
-				case "count_languages":
-					echo $this->count_languages($_POST[argument_array]);
-				break;
-				
-				case "list_currencies":
-					echo $this->list_currencies($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
-				break;
-				
-				case "count_currencies":
-					echo $this->count_currencies($_POST[argument_array]);
-				break;
-				
-				case "list_timezones":
-					echo $this->list_timezones($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
-				break;
-				
-				case "count_timezones":
-					echo $this->count_timezones($_POST[argument_array]);
-				break;
-				
-				case "list_measuring_units":
-					echo $this->list_measuring_units($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
-				break;
-				
-				case "count_measuring_units":
-					echo $this->count_measuring_units($_POST[argument_array]);
-				break;
-				
-				
-				case "list_paper_sizes":
-					$this->list_paper_sizes($_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
-				break;
-				
-				case "add_paper_size":
-					$this->add_paper_size($_POST[name], $_POST[width], $_POST[height], $_POST[margin_left], $_POST[margin_right], $_POST[margin_top], $_POST[margin_bottom]);
-				break;
-				
-				case "get_paper_size":
-					$this->get_paper_size($_GET[id]);
-				break;
-				
-				case "set_paper_size":
-					$this->set_paper_size($_POST[id], $_POST[name], $_POST[width], $_POST[height], $_POST[margin_left], $_POST[margin_right], $_POST[margin_top], $_POST[margin_bottom]);
-				break;
-				
-				case "delete_paper_size":
-					$this->delete_paper_size($_GET[id]);
-				break;
-							
-				default:
-				break;
-			
-			endswitch;
-		}
-	}	
 }
-
-$admin_general_ajax = new AdminGeneralAjax;
-$admin_general_ajax->method_handler();
-
 ?>

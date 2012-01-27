@@ -145,7 +145,7 @@ class SampleRequest
 			break;
 			
 			
-			// Admin
+			// Int. Admin
 			
 			case "admin_list_user_permissions":
 				require_once("ajax/sample_admin.ajax.php");
@@ -167,6 +167,28 @@ class SampleRequest
 				echo SampleAdminAjax::count_organisation_unit_permissions($_POST[argument_array]);
 			break;
 			
+			
+			// Ext. Admin
+			
+			case "admin_sample_template_categorie_list_categories":
+				require_once("ajax/admin/admin_sample_template_cat.ajax.php");
+				echo AdminSampleTemplateCatAjax::list_categories($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "admin_sample_template_categorie_count_categories":
+				require_once("ajax/admin/admin_sample_template_cat.ajax.php");
+				echo AdminSampleTemplateCatAjax::count_categories($_POST[argument_array]);
+			break;
+			
+			case "admin_sample_template_list_templates":
+				require_once("ajax/admin/admin_sample_template.ajax.php");
+				echo AdminSampleTemplateAjax::list_templates($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "admin_sample_template_count_templates":
+				require_once("ajax/admin/admin_sample_template.ajax.php");
+				echo AdminSampleTemplateAjax::count_templates($_POST[argument_array]);
+			break;
 		
 		endswitch;
 	}
