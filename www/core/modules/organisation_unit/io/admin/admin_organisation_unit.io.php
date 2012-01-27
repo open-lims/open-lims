@@ -704,14 +704,29 @@ class AdminOrganisationUnitIO
 	{
 		if ($_GET[id])
 		{
+			$argument_array = array();
+			$argument_array[0][0] = "organisation_unit_id";
+			$argument_array[0][1] = $_GET[id];
+			
+			$list = new List_IO("OrganisationUnitAdminMember" ,"ajax.php?nav=organisation_unit", "admin_list_members", "admin_count_members", $argument_array, "OrganisationUnitAdminMember");
+			
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Username","username",true,null,"OrganisationUnitAdminListSortUsername");
+			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitAdminListSortFullname");
+			$list->add_column("","delete",false,"16px");
+			
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
 			require_once("core/modules/base/common/io/user_common.io.php");
 			
 			$template = new HTMLTemplate("organisation_unit/admin/organisation_unit/detail_member.html");
+			
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("ORGANISATION_UNIT_ID", $_GET[id]);
 			$template->set_var("ADD_DIALOG", UserCommonIO::user_select_dialog());
+			
+			$template->set_var("list", $list->get_list());
+			
 			$template->output();
 		}
 		else
@@ -727,14 +742,28 @@ class AdminOrganisationUnitIO
 	{
 		if ($_GET[id])
 		{
+			$argument_array = array();
+			$argument_array[0][0] = "organisation_unit_id";
+			$argument_array[0][1] = $_GET[id];
+			
+			$list = new List_IO("OrganisationUnitAdminGroup" ,"ajax.php?nav=organisation_unit", "admin_list_groups", "admin_count_groups", $argument_array, "OrganisationUnitAdminGroup");
+			
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Groupname","groupname",true,null,"OrganisationUnitAdminListSortGroupname");
+			$list->add_column("","delete",false,"16px");
+			
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
 			require_once("core/modules/base/common/io/user_common.io.php");
 			
 			$template = new HTMLTemplate("organisation_unit/admin/organisation_unit/detail_group.html");
+			
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("ORGANISATION_UNIT_ID", $_GET[id]);
 			$template->set_var("ADD_DIALOG", UserCommonIO::group_select_dialog());
+			
+			$template->set_var("list", $list->get_list());
+			
 			$template->output();
 		}
 		else
@@ -750,14 +779,29 @@ class AdminOrganisationUnitIO
 	{
 		if ($_GET[id])
 		{
+			$argument_array = array();
+			$argument_array[0][0] = "organisation_unit_id";
+			$argument_array[0][1] = $_GET[id];
+			
+			$list = new List_IO("OrganisationUnitAdminOwner" ,"ajax.php?nav=organisation_unit", "admin_list_owners", "admin_count_owners", $argument_array, "OrganisationUnitAdminOwner");
+			
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Username","username",true,null,"OrganisationUnitAdminListSortUsername");
+			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitAdminListSortFullname");
+			$list->add_column("","delete",false,"16px");
+			
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
 			require_once("core/modules/base/common/io/user_common.io.php");
 			
 			$template = new HTMLTemplate("organisation_unit/admin/organisation_unit/detail_owner.html");
+			
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("ORGANISATION_UNIT_ID", $_GET[id]);
 			$template->set_var("ADD_DIALOG", UserCommonIO::user_select_dialog());
+			
+			$template->set_var("list", $list->get_list());
+			
 			$template->output();
 		}
 		else
@@ -773,14 +817,29 @@ class AdminOrganisationUnitIO
 	{
 		if ($_GET[id])
 		{
+			$argument_array = array();
+			$argument_array[0][0] = "organisation_unit_id";
+			$argument_array[0][1] = $_GET[id];
+			
+			$list = new List_IO("OrganisationUnitAdminLeader" ,"ajax.php?nav=organisation_unit", "admin_list_leaders", "admin_count_leaders", $argument_array, "OrganisationUnitAdminLeader");
+			
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Username","username",true,null,"OrganisationUnitAdminListSortUsername");
+			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitAdminListSortFullname");
+			$list->add_column("","delete",false,"16px");
+			
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
 			require_once("core/modules/base/common/io/user_common.io.php");
 			
 			$template = new HTMLTemplate("organisation_unit/admin/organisation_unit/detail_leader.html");
+			
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("ORGANISATION_UNIT_ID", $_GET[id]);
 			$template->set_var("ADD_DIALOG", UserCommonIO::user_select_dialog());
+			
+			$template->set_var("list", $list->get_list());
+			
 			$template->output();
 		}
 		else
@@ -796,6 +855,17 @@ class AdminOrganisationUnitIO
 	{
 		if ($_GET[id])
 		{
+			$argument_array = array();
+			$argument_array[0][0] = "organisation_unit_id";
+			$argument_array[0][1] = $_GET[id];
+			
+			$list = new List_IO("OrganisationUnitAdminQualityManager" ,"ajax.php?nav=organisation_unit", "admin_list_quality_managers", "admin_count_quality_managers", $argument_array, "OrganisationUnitAdminQualityManager");
+			
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Username","username",true,null,"OrganisationUnitAdminListSortUsername");
+			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitAdminListSortFullname");
+			$list->add_column("","delete",false,"16px");
+			
 			$organisation_unit = new OrganisationUnit($_GET[id]);
 			
 			require_once("core/modules/base/common/io/user_common.io.php");
@@ -804,6 +874,9 @@ class AdminOrganisationUnitIO
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
 			$template->set_var("ORGANISATION_UNIT_ID", $_GET[id]);
 			$template->set_var("ADD_DIALOG", UserCommonIO::user_select_dialog());
+			
+			$template->set_var("list", $list->get_list());
+			
 			$template->output();
 		}
 		else

@@ -78,11 +78,6 @@ require_once($path_prefix."../../modules/base/common/io/common.io.php");
 require_once($path_prefix."../../modules/base/common/io/list.io.php");
 require_once($path_prefix."../../modules/base/common/io/list_request.io.php");
 
-/**
- * @deprecated remove later
- */
-require_once($path_prefix."../../modules/base/common/io/list_stat.io.php");
-
 SystemHandler::init_db_constants();
 
 /**

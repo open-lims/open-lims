@@ -732,7 +732,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     				{
     					foreach($permission_array as $permission_key => $permission_value)
     					{
-    						$project_permission = self::get_instace($permission_value);
+    						$project_permission = self::get_instance($permission_value);
     						if ($project_permission->delete() == false)
     						{
     							return false;
@@ -777,7 +777,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     				{
     					foreach($permission_array as $permission_key => $permission_value)
     					{
-    						$project_permission = self::get_instace($permission_value);
+    						$project_permission = self::get_instance($permission_value);
     						if ($project_permission->delete() == false)
     						{
     							return false;

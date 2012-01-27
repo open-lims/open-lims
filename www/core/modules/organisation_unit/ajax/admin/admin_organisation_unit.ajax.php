@@ -22,647 +22,843 @@
  */
 
 /**
- * 
- */
-$GLOBALS['autoload_prefix'] = "../../";
-require_once("../../../base/ajax.php");
-
-/**
  * Organisation Unit AJAX IO Class
  * @package organisation_unit
  */
-class AdminOrganisationUnitAjax extends Ajax
-{	
-	function __construct()
-	{
-		parent::__construct();
-	}
-	
+class AdminOrganisationUnitAjax 
+{		
 	/**
-	 * @param integer $organisation_unit_id
-	 * @param integer $page
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $get_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
 	 * @param string $sortvalue
 	 * @param string $sortmethod
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
 	 */
-	public function list_members($organisation_unit_id, $page, $sortvalue, $sortmethod)
+	public static function list_members($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
-		if (is_numeric($organisation_unit_id))
-		{
-			global $user;
-			
-			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_members($organisation_unit_id), 20, "OrganisationUnitAdminListPage");
-	
-			$list->add_column("","symbol",false,"16px");
-			$list->add_column("Username","username",true,null,"OrganisationUnitAdminListSortUsername");
-			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitAdminListSortFullname");
-			$list->add_column("","delete",false,"16px");
-			
-			if ($page)
-			{
-				if ($sortvalue and $sortmethod)
-				{
-					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_members($organisation_unit_id, $sortvalue, $sortmethod, ($page*20)-20, ($page*20));
-				}
-				else
-				{
-					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_members($organisation_unit_id, null, null, ($page*20)-20, ($page*20));
-				}				
-			}
-			else
-			{
-				if ($sortvalue and $sortmethod)
-				{
-					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_members($organisation_unit_id, $sortvalue, $sortmethod, 0, 20);
-				}
-				else
-				{
-					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_members($organisation_unit_id, null, null, 0, 20);
-				}	
-			}
-			
-			if (is_array($result_array) and count($result_array) >= 1)
-			{
-				foreach($result_array as $key => $value)
-				{
-					$user = new User($value['id']);
-					$result_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
-					$result_array[$key]['username'] = $user->get_username();
-					$result_array[$key]['fullname'] = $user->get_full_name(false);
-					$result_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$result_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
-				}
-			}
-			else
-			{
-				$list->override_last_line("<span class='italic'>No results found!</span>");
-			}
-			
-			echo $list->get_list($result_array, $page);
-		}
-	}
+		global $user;
 		
-	/**
-	 * @param integer $organisation_unit_id
-	 * @param integer $user_id
-	 */
-	public function delete_member($organisation_unit_id, $user_id)
-	{
-		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
+		if ($user->is_admin())
 		{
-			$organisation_unit = new OrganisationUnit($organisation_unit_id);
-			if ($organisation_unit->delete_user_from_organisation_unit($user_id) == true)
+			if ($get_array)
 			{
-				echo "1";
+				$_GET = unserialize($get_array);	
 			}
-			else
-			{
-				echo "0";
-			}
-		}
-		else
-		{
-			echo "0";
-		}
-	}
-	
-	/**
-	 * @param integer $organisation_unit_id
-	 * @param integer $user_id
-	 */
-	public function add_member($organisation_unit_id, $user_id)
-	{
-		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
-		{
-			$organisation_unit = new OrganisationUnit($organisation_unit_id);
-			if ($organisation_unit->create_user_in_organisation_unit($user_id) == true)
-			{
-				echo "1";
-			}
-			else
-			{
-				echo "0";
-			}
-		}
-		else
-		{
-			echo "0";
-		}
-	}
-	
-	/**
-	 * @param integer $organisation_unit_id
-	 * @param integer $page
-	 * @param string $sortvalue
-	 * @param string $sortmethod
-	 */
-	public function list_owners($organisation_unit_id, $page, $sortvalue, $sortmethod)
-	{
-		if (is_numeric($organisation_unit_id))
-		{
-			global $user;
 			
-			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_owners($organisation_unit_id), 20, "OrganisationUnitAdminListPage");
-	
-			$list->add_column("","symbol",false,"16px");
-			$list->add_column("Username","username",true,null,"OrganisationUnitAdminListSortUsername");
-			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitAdminListSortFullname");
-			$list->add_column("","delete",false,"16px");
+			$argument_array = json_decode($json_argument_array);
+			$organisation_unit_id = $argument_array[0][1];
 			
-			if ($page)
+			if (is_numeric($organisation_unit_id))
 			{
-				if ($sortvalue and $sortmethod)
+				$type_id = $argument_array[0][1];
+	
+				$list_request = new ListRequest_IO();
+				$list_request->set_column_array($json_column_array);
+			
+				if (!is_numeric($entries_per_page) or $entries_per_page < 1)
 				{
-					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_owners($organisation_unit_id, $sortvalue, $sortmethod, ($page*20)-20, ($page*20));
+					$entries_per_page = 20;
 				}
-				else
-				{
-					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_owners($organisation_unit_id, null, null, ($page*20)-20, ($page*20));
-				}				
-			}
-			else
-			{
-				if ($sortvalue and $sortmethod)
-				{
-					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_owners($organisation_unit_id, $sortvalue, $sortmethod, 0, 20);
-				}
-				else
-				{
-					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_owners($organisation_unit_id, null, null, 0, 20);
-				}	
-			}
-			
-			if (is_array($result_array) and count($result_array) >= 1)
-			{
-				foreach($result_array as $key => $value)
-				{
-					$user = new User($value['id']);
-					$result_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
-					$result_array[$key]['username'] = $user->get_username();
-					$result_array[$key]['fullname'] = $user->get_full_name(false);
-					$result_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$result_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
-				}
-			}
-			else
-			{
-				$list->override_last_line("<span class='italic'>No results found!</span>");
-			}
-			
-			echo $list->get_list($result_array, $page);
-		}
-	}
-	
-	/**
-	 * @param integer $organisation_unit_id
-	 * @param integer $user_id
-	 */
-	public function delete_owner($organisation_unit_id, $user_id)
-	{
-		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
-		{
-			$organisation_unit = new OrganisationUnit($organisation_unit_id);
-			if ($organisation_unit->delete_owner_from_organisation_unit($user_id) == true)
-			{
-				echo "1";
-			}
-			else
-			{
-				echo "0";
-			}
-		}
-		else
-		{
-			echo "0";
-		}
-	}
-	
-	/**
-	 * @param integer $organisation_unit_id
-	 * @param integer $user_id
-	 */
-	public function add_owner($organisation_unit_id, $user_id)
-	{
-		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
-		{
-			$organisation_unit = new OrganisationUnit($organisation_unit_id);
-			if ($organisation_unit->create_owner_in_organisation_unit($user_id) == true)
-			{
-				echo "1";
-			}
-			else
-			{
-				echo "0";
-			}
-		}
-		else
-		{
-			echo "0";
-		}
-	}
-	
-	/**
-	 * @param integer $organisation_unit_id
-	 * @param integer $page
-	 * @param string $sortvalue
-	 * @param string $sortmethod
-	 */
-	public function list_leaders($organisation_unit_id, $page, $sortvalue, $sortmethod)
-	{
-		if (is_numeric($organisation_unit_id))
-		{
-			global $user;
-			
-			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_leaders($organisation_unit_id), 20, "OrganisationUnitAdminListPage");
-	
-			$list->add_column("","symbol",false,"16px");
-			$list->add_column("Username","username",true,null,"OrganisationUnitAdminListSortUsername");
-			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitAdminListSortFullname");
-			$list->add_column("","delete",false,"16px");
-			
-			if ($page)
-			{
-				if ($sortvalue and $sortmethod)
-				{
-					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_leaders($organisation_unit_id, $sortvalue, $sortmethod, ($page*20)-20, ($page*20));
-				}
-				else
-				{
-					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_leaders($organisation_unit_id, null, null, ($page*20)-20, ($page*20));
-				}				
-			}
-			else
-			{
-				if ($sortvalue and $sortmethod)
-				{
-					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_leaders($organisation_unit_id, $sortvalue, $sortmethod, 0, 20);
-				}
-				else
-				{
-					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_leaders($organisation_unit_id, null, null, 0, 20);
-				}	
-			}
-			
-			if (is_array($result_array) and count($result_array) >= 1)
-			{
-				foreach($result_array as $key => $value)
-				{
-					$user = new User($value['id']);
-					$result_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
-					$result_array[$key]['username'] = $user->get_username();
-					$result_array[$key]['fullname'] = $user->get_full_name(false);
-					$result_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$result_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
-				}
-			}
-			else
-			{
-				$list->override_last_line("<span class='italic'>No results found!</span>");
-			}
-			
-			echo $list->get_list($result_array, $page);
-		}
-	}
-	
-	/**
-	 * @param integer $organisation_unit_id
-	 * @param integer $user_id
-	 */
-	public function delete_leader($organisation_unit_id, $user_id)
-	{
-		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
-		{
-			$organisation_unit = new OrganisationUnit($organisation_unit_id);
-			if ($organisation_unit->delete_leader_from_organisation_unit($user_id) == true)
-			{
-				echo "1";
-			}
-			else
-			{
-				echo "0";
-			}
-		}
-		else
-		{
-			echo "0";
-		}
-	}
-	
-	/**
-	 * @param integer $organisation_unit_id
-	 * @param integer $user_id
-	 */
-	public function add_leader($organisation_unit_id, $user_id)
-	{
-		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
-		{
-			$organisation_unit = new OrganisationUnit($organisation_unit_id);
-			if ($organisation_unit->create_leader_in_organisation_unit($user_id) == true)
-			{
-				echo "1";
-			}
-			else
-			{
-				echo "0";
-			}
-		}
-		else
-		{
-			echo "0";
-		}
-	}
-	
-	/**
-	 * @param integer $organisation_unit_id
-	 * @param integer $page
-	 * @param string $sortvalue
-	 * @param string $sortmethod
-	 */
-	public function list_quality_managers($organisation_unit_id, $page, $sortvalue, $sortmethod)
-	{
-		if (is_numeric($organisation_unit_id))
-		{
-			global $user;
-			
-			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_quality_managers($organisation_unit_id), 20, "OrganisationUnitAdminListPage");
-	
-			$list->add_column("","symbol",false,"16px");
-			$list->add_column("Username","username",true,null,"OrganisationUnitAdminListSortUsername");
-			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitAdminListSortFullname");
-			$list->add_column("","delete",false,"16px");
-			
-			if ($page)
-			{
-				if ($sortvalue and $sortmethod)
-				{
-					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_quality_managers($organisation_unit_id, $sortvalue, $sortmethod, ($page*20)-20, ($page*20));
-				}
-				else
-				{
-					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_quality_managers($organisation_unit_id, null, null, ($page*20)-20, ($page*20));
-				}				
-			}
-			else
-			{
-				if ($sortvalue and $sortmethod)
-				{
-					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_quality_managers($organisation_unit_id, $sortvalue, $sortmethod, 0, 20);
-				}
-				else
-				{
-					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_quality_managers($organisation_unit_id, null, null, 0, 20);
-				}	
-			}
-			
-			if (is_array($result_array) and count($result_array) >= 1)
-			{
-				foreach($result_array as $key => $value)
-				{
-					$user = new User($value['id']);
-					$result_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
-					$result_array[$key]['username'] = $user->get_username();
-					$result_array[$key]['fullname'] = $user->get_full_name(false);
-					$result_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$result_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
-				}
-			}
-			else
-			{
-				$list->override_last_line("<span class='italic'>No results found!</span>");
-			}
-			
-			echo $list->get_list($result_array, $page);
-		}
-	}
-	
-	/**
-	 * @param integer $organisation_unit_id
-	 * @param integer $user_id
-	 */
-	public function delete_quality_manager($organisation_unit_id, $user_id)
-	{
-		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
-		{
-			$organisation_unit = new OrganisationUnit($organisation_unit_id);
-			if ($organisation_unit->delete_quality_manager_from_organisation_unit($user_id) == true)
-			{
-				echo "1";
-			}
-			else
-			{
-				echo "0";
-			}
-		}
-		else
-		{
-			echo "0";
-		}
-	}
-	
-	/**
-	 * @param integer $organisation_unit_id
-	 * @param integer $user_id
-	 */
-	public function add_quality_manager($organisation_unit_id, $user_id)
-	{
-		if (is_numeric($organisation_unit_id) and is_numeric($user_id))
-		{
-			$organisation_unit = new OrganisationUnit($organisation_unit_id);
-			if ($organisation_unit->create_quality_manager_in_organisation_unit($user_id) == true)
-			{
-				echo "1";
-			}
-			else
-			{
-				echo "0";
-			}
-		}
-		else
-		{
-			echo "0";
-		}
-	}
-	
-	/**
-	 * @param integer $organisation_unit_id
-	 * @param integer $page
-	 * @param string $sortvalue
-	 * @param string $sortmethod
-	 */
-	public function list_groups($organisation_unit_id, $page, $sortvalue, $sortmethod)
-	{
-		if (is_numeric($organisation_unit_id))
-		{
-			global $user;
-			
-			$list = new ListStat_IO(OrganisationUnit_Wrapper::count_organisation_unit_groups($organisation_unit_id), 20, "OrganisationUnitAdminListPage");
-	
-			$list->add_column("","symbol",false,"16px");
-			$list->add_column("Groupname","groupname",true,null,"OrganisationUnitAdminListSortGroupname");
-			$list->add_column("","delete",false,"16px");
-			
-			if ($page)
-			{
-				if ($sortvalue and $sortmethod)
-				{
-					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_groups($organisation_unit_id, $sortvalue, $sortmethod, ($page*20)-20, ($page*20));
-				}
-				else
-				{
-					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_groups($organisation_unit_id, null, null, ($page*20)-20, ($page*20));
-				}				
-			}
-			else
-			{
-				if ($sortvalue and $sortmethod)
-				{
-					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_groups($organisation_unit_id, $sortvalue, $sortmethod, 0, 20);
-				}
-				else
-				{
-					$result_array = OrganisationUnit_Wrapper::list_organisation_unit_groups($organisation_unit_id, null, null, 0, 20);
-				}	
-			}
-			
-			if (is_array($result_array) and count($result_array) >= 1)
-			{
-				foreach($result_array as $key => $value)
-				{
-					$group = new Group($value['id']);
-					$result_array[$key]['symbol'] = "<img src='images/icons/groups.png' alt='' />";
-					$result_array[$key]['groupname'] = $group->get_name();
-					$result_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$result_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
-				}
-			}
-			else
-			{
-				$list->override_last_line("<span class='italic'>No results found!</span>");
-			}
-			
-			echo $list->get_list($result_array, $page);
-		}
-	}
-	
-	/**
-	 * @param integer $organisation_unit_id
-	 * @param integer $group_id
-	 */
-	public function delete_group($organisation_unit_id, $group_id)
-	{
-		if (is_numeric($organisation_unit_id) and is_numeric($group_id))
-		{
-			$organisation_unit = new OrganisationUnit($organisation_unit_id);
-			if ($organisation_unit->delete_group_from_organisation_unit($group_id) == true)
-			{
-				echo "1";
-			}
-			else
-			{
-				echo "0";
-			}
-		}
-		else
-		{
-			echo "0";
-		}
-	}
-	
-	/**
-	 * @param integer $organisation_unit_id
-	 * @param integer $group_id
-	 */
-	public function add_group($organisation_unit_id, $group_id)
-	{
-		if (is_numeric($organisation_unit_id) and is_numeric($group_id))
-		{
-			$organisation_unit = new OrganisationUnit($organisation_unit_id);
-			if ($organisation_unit->create_group_in_organisation_unit($group_id) == true)
-			{
-				echo "1";
-			}
-			else
-			{
-				echo "0";
-			}
-		}
-		else
-		{
-			echo "0";
-		}
-	}
-	
-	public function method_handler()
-	{
-		global $session;
-		
-		if ($session->is_valid())
-		{
-			switch($_GET[run]):
-	
-				case "list_members":
-					$this->list_members($_GET[organisation_unit_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
-				break;
+							
+				$list_array = OrganisationUnit_Wrapper::list_organisation_unit_members($organisation_unit_id, $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
 				
-				case "delete_member":
-					$this->delete_member($_GET[organisation_unit_id], $_GET[user_id]);
-				break;
+				if (is_array($list_array) and count($list_array) >= 1)
+				{
+					foreach($list_array as $key => $value)
+					{
+						$user = new User($value['id']);
+						$list_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
+						$list_array[$key]['username'] = $user->get_username();
+						$list_array[$key]['fullname'] = $user->get_full_name(false);
+						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+					}
+				}
+				else
+				{
+					$list_request->empty_message("<span class='italic'>No results found!</span>");
+				}
 				
-				case "add_member":
-					$this->add_member($_GET[organisation_unit_id], $_GET[user_id]);
-				break;
-				
-				case "list_owners":
-					$this->list_owners($_GET[organisation_unit_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
-				break;
+				$list_request->set_array($list_array);
+			
+				return $list_request->get_page($page);
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();
+		}
+	}
 
-				case "delete_owner":
-					$this->delete_owner($_GET[organisation_unit_id], $_GET[user_id]);
-				break;
-				
-				case "add_owner":
-					$this->add_owner($_GET[organisation_unit_id], $_GET[user_id]);
-				break;
-				
-				case "list_leaders":
-					$this->list_leaders($_GET[organisation_unit_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
-				break;
-				
-				case "delete_leader":
-					$this->delete_leader($_GET[organisation_unit_id], $_GET[user_id]);
-				break;
-				
-				case "add_leader":
-					$this->add_leader($_GET[organisation_unit_id], $_GET[user_id]);
-				break;
-				
-				case "list_quality_managers":
-					$this->list_quality_managers($_GET[organisation_unit_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
-				break;
-				
-				case "delete_quality_manager":
-					$this->delete_quality_manager($_GET[organisation_unit_id], $_GET[user_id]);
-				break;
-				
-				case "add_quality_manager":
-					$this->add_quality_manager($_GET[organisation_unit_id], $_GET[user_id]);
-				break;
-				
-				case "list_groups":
-					$this->list_groups($_GET[organisation_unit_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
-				break;
-				
-				case "delete_group":
-					$this->delete_group($_GET[organisation_unit_id], $_GET[group_id]);
-				break;
-				
-				case "add_group":
-					$this->add_group($_GET[organisation_unit_id], $_GET[group_id]);
-				break;
-				
-				default:
-				break;
+	/**
+	 * @param string $json_argument_array
+	 * @return integer
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function count_members($json_argument_array)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			$argument_array = json_decode($json_argument_array);
+			$organisation_unit_id = $argument_array[0][1];
 			
-			endswitch;
+			if (is_numeric($organisation_unit_id))
+			{
+				return OrganisationUnit_Wrapper::count_organisation_unit_members($organisation_unit_id);
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();
+		}
+	}
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function delete_member($organisation_unit_id, $user_id)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			if (is_numeric($organisation_unit_id) and is_numeric($user_id))
+			{
+				$organisation_unit = new OrganisationUnit($organisation_unit_id);
+				if ($organisation_unit->delete_user_from_organisation_unit($user_id) == true)
+				{
+					return "1";
+				}
+				else
+				{
+					return "0";
+				}
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();
+		}
+	}
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function add_member($organisation_unit_id, $user_id)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			if (is_numeric($organisation_unit_id) and is_numeric($user_id))
+			{
+				$organisation_unit = new OrganisationUnit($organisation_unit_id);
+				if ($organisation_unit->create_user_in_organisation_unit($user_id) == true)
+				{
+					return "1";
+				}
+				else
+				{
+					return "0";
+				}
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();
+		}
+	}
+	
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $get_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function list_owners($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			if ($get_array)
+			{
+				$_GET = unserialize($get_array);	
+			}
+			
+			$argument_array = json_decode($json_argument_array);
+			$organisation_unit_id = $argument_array[0][1];
+			
+			if (is_numeric($organisation_unit_id))
+			{
+				$type_id = $argument_array[0][1];
+	
+				$list_request = new ListRequest_IO();
+				$list_request->set_column_array($json_column_array);
+			
+				if (!is_numeric($entries_per_page) or $entries_per_page < 1)
+				{
+					$entries_per_page = 20;
+				}
+							
+				$list_array = OrganisationUnit_Wrapper::list_organisation_unit_owners($organisation_unit_id, $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+			
+				if (is_array($list_array) and count($list_array) >= 1)
+				{
+					foreach($list_array as $key => $value)
+					{
+						$user = new User($value['id']);
+						$list_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
+						$list_array[$key]['username'] = $user->get_username();
+						$list_array[$key]['fullname'] = $user->get_full_name(false);
+						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+					}
+				}
+				else
+				{
+					$list_request->empty_message("<span class='italic'>No results found!</span>");
+				}
+				
+				$list_request->set_array($list_array);
+			
+				return $list_request->get_page($page);
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();
+		}
+	}
+	
+	/**
+	 * @param string $json_argument_array
+	 * @return integer
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function count_owners($json_argument_array)
+	{
+		global $user;
+			
+		if ($user->is_admin())
+		{
+			$argument_array = json_decode($json_argument_array);
+			$organisation_unit_id = $argument_array[0][1];
+			
+			if (is_numeric($organisation_unit_id))
+			{
+				return OrganisationUnit_Wrapper::count_organisation_unit_owners($organisation_unit_id);
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();
+		}
+	}
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function delete_owner($organisation_unit_id, $user_id)
+	{
+		global $user;
+			
+		if ($user->is_admin())
+		{
+			if (is_numeric($organisation_unit_id) and is_numeric($user_id))
+			{
+				$organisation_unit = new OrganisationUnit($organisation_unit_id);
+				if ($organisation_unit->delete_owner_from_organisation_unit($user_id) == true)
+				{
+					return "1";
+				}
+				else
+				{
+					return "0";
+				}
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();
+		}	
+	}
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function add_owner($organisation_unit_id, $user_id)
+	{
+		global $user;
+			
+		if ($user->is_admin())
+		{
+			if (is_numeric($organisation_unit_id) and is_numeric($user_id))
+			{
+				$organisation_unit = new OrganisationUnit($organisation_unit_id);
+				if ($organisation_unit->create_owner_in_organisation_unit($user_id) == true)
+				{
+					return "1";
+				}
+				else
+				{
+					return "0";
+				}
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();
+		}
+	}
+	
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $get_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function list_leaders($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			if ($get_array)
+			{
+				$_GET = unserialize($get_array);	
+			}
+			
+			$argument_array = json_decode($json_argument_array);
+			$organisation_unit_id = $argument_array[0][1];
+			
+			if (is_numeric($organisation_unit_id))
+			{
+				$type_id = $argument_array[0][1];
+	
+				$list_request = new ListRequest_IO();
+				$list_request->set_column_array($json_column_array);
+			
+				if (!is_numeric($entries_per_page) or $entries_per_page < 1)
+				{
+					$entries_per_page = 20;
+				}
+							
+				$list_array = OrganisationUnit_Wrapper::list_organisation_unit_leaders($organisation_unit_id, $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+			
+				if (is_array($list_array) and count($list_array) >= 1)
+				{
+					foreach($list_array as $key => $value)
+					{
+						$user = new User($value['id']);
+						$list_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
+						$list_array[$key]['username'] = $user->get_username();
+						$list_array[$key]['fullname'] = $user->get_full_name(false);
+						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+					}
+				}
+				else
+				{
+					$list_request->empty_message("<span class='italic'>No results found!</span>");
+				}
+				
+				$list_request->set_array($list_array);
+			
+				return $list_request->get_page($page);
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();
+		}
+	}
+	
+	/**
+	 * @param unknown_type $json_argument_array
+	 * @return integer
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function count_leaders($json_argument_array)
+	{
+		global $user;
+			
+		if ($user->is_admin())
+		{
+			$argument_array = json_decode($json_argument_array);
+			$organisation_unit_id = $argument_array[0][1];
+			
+			if (is_numeric($organisation_unit_id))
+			{
+				return OrganisationUnit_Wrapper::count_organisation_unit_leaders($organisation_unit_id);
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();
+		}
+	}
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function delete_leader($organisation_unit_id, $user_id)
+	{
+		global $user;
+			
+		if ($user->is_admin())
+		{
+			if (is_numeric($organisation_unit_id) and is_numeric($user_id))
+			{
+				$organisation_unit = new OrganisationUnit($organisation_unit_id);
+				if ($organisation_unit->delete_leader_from_organisation_unit($user_id) == true)
+				{
+					return "1";
+				}
+				else
+				{
+					return "0";
+				}
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();
+		}
+	}
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function add_leader($organisation_unit_id, $user_id)
+	{
+		global $user;
+			
+		if ($user->is_admin())
+		{
+			if (is_numeric($organisation_unit_id) and is_numeric($user_id))
+			{
+				$organisation_unit = new OrganisationUnit($organisation_unit_id);
+				if ($organisation_unit->create_leader_in_organisation_unit($user_id) == true)
+				{
+					return "1";
+				}
+				else
+				{
+					return "0";
+				}
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();
+		}
+	}
+	
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $get_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function list_quality_managers($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			if ($get_array)
+			{
+				$_GET = unserialize($get_array);	
+			}
+			
+			$argument_array = json_decode($json_argument_array);
+			$organisation_unit_id = $argument_array[0][1];
+			
+			if (is_numeric($organisation_unit_id))
+			{
+				$type_id = $argument_array[0][1];
+	
+				$list_request = new ListRequest_IO();
+				$list_request->set_column_array($json_column_array);
+			
+				if (!is_numeric($entries_per_page) or $entries_per_page < 1)
+				{
+					$entries_per_page = 20;
+				}
+							
+				$list_array = OrganisationUnit_Wrapper::list_organisation_unit_quality_managers($organisation_unit_id, $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+			
+				if (is_array($list_array) and count($list_array) >= 1)
+				{
+					foreach($list_array as $key => $value)
+					{
+						$user = new User($value['id']);
+						$list_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
+						$list_array[$key]['username'] = $user->get_username();
+						$list_array[$key]['fullname'] = $user->get_full_name(false);
+						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+					}
+				}
+				else
+				{
+					$list_request->empty_message("<span class='italic'>No results found!</span>");
+				}
+				
+				$list_request->set_array($list_array);
+			
+				return $list_request->get_page($page);
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();
+		}
+	}
+	
+	/**
+	 * @param string $json_argument_array
+	 * @return integer
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function count_quality_managers($json_argument_array)
+	{
+		global $user;
+			
+		if ($user->is_admin())
+		{
+			$argument_array = json_decode($json_argument_array);
+			$organisation_unit_id = $argument_array[0][1];
+			
+			if (is_numeric($organisation_unit_id))
+			{
+				return OrganisationUnit_Wrapper::count_organisation_unit_quality_managers($organisation_unit_id);
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();
+		}
+	}
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function delete_quality_manager($organisation_unit_id, $user_id)
+	{
+		global $user;
+			
+		if ($user->is_admin())
+		{
+			if (is_numeric($organisation_unit_id) and is_numeric($user_id))
+			{
+				$organisation_unit = new OrganisationUnit($organisation_unit_id);
+				if ($organisation_unit->delete_quality_manager_from_organisation_unit($user_id) == true)
+				{
+					return "1";
+				}
+				else
+				{
+					return "0";
+				}
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();
+		}
+	}
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $user_id
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function add_quality_manager($organisation_unit_id, $user_id)
+	{
+		global $user;
+			
+		if ($user->is_admin())
+		{
+			if (is_numeric($organisation_unit_id) and is_numeric($user_id))
+			{
+				$organisation_unit = new OrganisationUnit($organisation_unit_id);
+				if ($organisation_unit->create_quality_manager_in_organisation_unit($user_id) == true)
+				{
+					return "1";
+				}
+				else
+				{
+					return "0";
+				}
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();
+		}
+	}
+
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $get_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function list_groups($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			if ($get_array)
+			{
+				$_GET = unserialize($get_array);	
+			}
+			
+			$argument_array = json_decode($json_argument_array);
+			$organisation_unit_id = $argument_array[0][1];
+			
+			if (is_numeric($organisation_unit_id))
+			{
+				$type_id = $argument_array[0][1];
+	
+				$list_request = new ListRequest_IO();
+				$list_request->set_column_array($json_column_array);
+			
+				if (!is_numeric($entries_per_page) or $entries_per_page < 1)
+				{
+					$entries_per_page = 20;
+				}
+							
+				$list_array = OrganisationUnit_Wrapper::list_organisation_unit_groups($organisation_unit_id, $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+			
+				if (is_array($list_array) and count($list_array) >= 1)
+				{
+					foreach($list_array as $key => $value)
+					{
+						$group = new Group($value['id']);
+						$list_array[$key]['symbol'] = "<img src='images/icons/groups.png' alt='' />";
+						$list_array[$key]['groupname'] = $group->get_name();
+						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+					}
+				}
+				else
+				{
+					$list_request->empty_message("<span class='italic'>No results found!</span>");
+				}
+				
+				$list_request->set_array($list_array);
+			
+				return $list_request->get_page($page);
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();
+		}
+	}
+	
+	/**
+	 * @param string $json_argument_array
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function count_groups($json_argument_array)
+	{
+		global $user;
+			
+		if ($user->is_admin())
+		{
+			$argument_array = json_decode($json_argument_array);
+			$organisation_unit_id = $argument_array[0][1];
+			
+			if (is_numeric($organisation_unit_id))
+			{
+				return OrganisationUnit_Wrapper::count_organisation_unit_groups($organisation_unit_id);
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();
+		}
+	}
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $group_id
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function delete_group($organisation_unit_id, $group_id)
+	{
+		global $user;
+			
+		if ($user->is_admin())
+		{
+			if (is_numeric($organisation_unit_id) and is_numeric($group_id))
+			{
+				$organisation_unit = new OrganisationUnit($organisation_unit_id);
+				if ($organisation_unit->delete_group_from_organisation_unit($group_id) == true)
+				{
+					return "1";
+				}
+				else
+				{
+					return "0";
+				}
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();
+		}
+	}
+	
+	/**
+	 * @param integer $organisation_unit_id
+	 * @param integer $group_id
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function add_group($organisation_unit_id, $group_id)
+	{
+		global $user;
+			
+		if ($user->is_admin())
+		{
+			if (is_numeric($organisation_unit_id) and is_numeric($group_id))
+			{
+				$organisation_unit = new OrganisationUnit($organisation_unit_id);
+				if ($organisation_unit->create_group_in_organisation_unit($group_id) == true)
+				{
+					return "1";
+				}
+				else
+				{
+					return "0";
+				}
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();
 		}
 	}
 }
-
-$admin_organisation_unit_ajax = new AdminOrganisationUnitAjax;
-$admin_organisation_unit_ajax->method_handler();
-
 ?>

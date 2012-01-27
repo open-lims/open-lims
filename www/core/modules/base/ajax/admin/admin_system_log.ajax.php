@@ -29,7 +29,6 @@
 class AdminSystemLogAjax
 {
 	/**
-	 * @todo throw a system-access-denied exception
 	 * @param string $json_column_array
 	 * @param string $json_argument_array
 	 * @param string $get_array
@@ -40,6 +39,7 @@ class AdminSystemLogAjax
 	 * @param string $sortvalue
 	 * @param string $sortmethod
 	 * @return string
+	 * @throws BaseUserAccessDeniedException
 	 */
 	public static function list_system_log($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
@@ -130,9 +130,9 @@ class AdminSystemLogAjax
 	}
 	
 	/**
-	 * @todo throw a system-access-denied exception
 	 * @param string $json_argument_array
 	 * @return integer
+	 * @throws BaseUserAccessDeniedException
 	 */
 	public static function count_system_log($json_argument_array)
 	{

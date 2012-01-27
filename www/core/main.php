@@ -190,12 +190,6 @@ class Main
 		if ($this->type == "io")
 		{
 			require_once("modules/base/common/io/tab.io.php");
-		
-			/**
-			 * @deprecated remove later
-			 */
-			require_once("modules/base/common/io/list_stat.io.php");
-			
 			ContentHandler_IO::io();
 		}
 		elseif ($this->type == "ajax")

@@ -187,6 +187,19 @@ class DataRequest
 			break;
 			
 			
+			// Admin
+			
+			case "admin_list_value_templates":
+				require_once("ajax/admin/admin_value_template.ajax.php");
+				echo AdminValueTemplateAjax::list_templates($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "admin_count_value_templates":
+				require_once("ajax/admin/admin_value_template.ajax.php");
+				echo AdminValueTemplateAjax::count_templates($_POST[argument_array]);
+			break;	
+
+			
 			// Navigation
 			
 			case "navigation_data":
