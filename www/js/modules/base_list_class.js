@@ -232,6 +232,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 				} 
 				else 
 				{
+					$("#" + css_main_id).height(last_height)
 					$("#" + css_main_id).html(data);
 				}
 			}
@@ -258,7 +259,8 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 		}
 	}
 
-	function change_symbol(id, symbol) {
+	function change_symbol(id, symbol) 
+	{
 		$("." + css_main_id + "Column").each(
 				function() {
 					var local_id = $(this).attr("id");
