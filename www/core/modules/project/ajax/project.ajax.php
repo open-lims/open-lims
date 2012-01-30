@@ -609,6 +609,8 @@ class ProjectAjax
 	 */
 	public static function get_project_menu($get_array)
 	{
+		global $project_security;
+		
 		if ($get_array)
 		{
 			$_GET = unserialize($get_array);	
@@ -617,7 +619,6 @@ class ProjectAjax
 		if ($_GET[project_id])
 		{
 			$project = new Project($_GET[project_id]);
-			$project_security = new ProjectSecurity($_GET[project_id]);
 			
 			$template = new HTMLTemplate("project/ajax/detail_menu.html");
 			
@@ -798,6 +799,8 @@ class ProjectAjax
 	 */
 	public static function get_project_proceed($get_array)
 	{
+		global $project_security;
+		
 		if ($get_array)
 		{
 			$_GET = unserialize($get_array);	
@@ -805,8 +808,6 @@ class ProjectAjax
 		
 		if ($_GET[project_id])
 		{
-			$project_security = new ProjectSecurity($_GET[project_id]);
-			
 			if ($project_security->is_access(3, false) == true)
 			{
 				$project = new Project($_GET[project_id]);
@@ -880,6 +881,8 @@ class ProjectAjax
 	 */
 	public static function proceed_project($get_array, $comment)
 	{
+		global $project_security;
+		
 		if ($get_array)
 		{
 			$_GET = unserialize($get_array);	
@@ -888,8 +891,6 @@ class ProjectAjax
 		if ($_GET[project_id])
 		{
 			$project = new Project($_GET[project_id]);
-			
-			$project_security = new ProjectSecurity($_GET[project_id]);
 			
 			if ($project_security->is_access(3, false) == true)
 			{
