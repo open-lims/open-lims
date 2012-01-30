@@ -539,7 +539,6 @@ class DataIO
 		if ($object->is_control_access() == true)
 		{
 			$full_access = true;
-			
 		}
 		else{
 			$full_access = false;
@@ -758,8 +757,6 @@ class DataIO
 			throw new DataSecuriyAccessDeniedException();
 		}
 	}
-	
-	
 	
 	public static function change_permission($permission_array, $type)
 	{
