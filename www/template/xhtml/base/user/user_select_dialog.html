@@ -26,9 +26,9 @@ $(document).ready(function()
 	{
 		$.ajax(
 		{
-			type: "GET",
-			url: "core/modules/base/common/ajax/user_common.ajax.php",
-			data: "session_id="+get_array['session_id']+"&run=get_users_in_option",
+			type: "POST",
+			url: "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=get_users_in_option",
+			data: "",
 			success: function(data)
 			{
 				if (data)
@@ -45,9 +45,9 @@ $(document).ready(function()
 	{
 		$.ajax(
 		{
-			type: "GET",
-			url: "core/modules/base/common/ajax/user_common.ajax.php",
-			data: "session_id="+get_array['session_id']+"&run=get_users_in_option&string="+$("#UserSelectDialogSearchField").val(),
+			type: "POST",
+			url: "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=get_users_in_option",
+			data: "string="+$("#UserSelectDialogSearchField").val(),
 			success: function(data)
 			{
 				if (data)

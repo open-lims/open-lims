@@ -22,23 +22,12 @@
  */
 
 /**
- * 
- */
-$GLOBALS['autoload_prefix'] = "../";
-require_once("../../base/ajax.php");
-
-/**
  * Sample Create AJAX IO Class
  * @package sample
  */
-class SampleCreateAjax extends Ajax
+class SampleCreateAjax
 {	
-	function __construct()
-	{
-		parent::__construct();
-	}
-	
-	private function get_content($page)
+	public static function get_content($page)
 	{
 		global $session, $user;
 		
@@ -215,7 +204,7 @@ class SampleCreateAjax extends Ajax
 				
 				if ($information_fields[manufacturer][name])
 				{
-					require_once("../../../../core/modules/manufacturer/io/manufacturer.io.php");
+					require_once("core/modules/manufacturer/io/manufacturer.io.php");
 					$template->set_var("show_manufacturer",true);
 					$template->set_var("manufacturer_html",ManufacturerIO::dialog());
 				}
@@ -366,7 +355,7 @@ class SampleCreateAjax extends Ajax
 						{
 							$template = new HTMLTemplate("sample/new_sample_page_4_value.html");
 							
-							require_once("../../../../core/modules/data/io/value_form.io.php");
+							require_once("core/modules/data/io/value_form.io.php");
 							$value_form_io = new ValueFormIO(null, $value_type_id, null, $sample_template_data_array);
 							$value_form_io->set_field_class("SampleCreateAssistantField");
 							$template->set_var("content",$value_form_io->get_content());
@@ -513,7 +502,7 @@ class SampleCreateAjax extends Ajax
 
 	}
 
-	private function get_next_page($page)
+	public static function get_next_page($page)
 	{
 		global $session;
 		
@@ -537,7 +526,7 @@ class SampleCreateAjax extends Ajax
 		}
 	}
 	
-	private function get_previous_page($page)
+	public static function get_previous_page($page)
 	{
 		global $session;
 		
@@ -561,7 +550,7 @@ class SampleCreateAjax extends Ajax
 		}
 	}
 	
-	private function set_data($page, $data)
+	public static function set_data($page, $data)
 	{
 		global $session;
 		
@@ -656,7 +645,7 @@ class SampleCreateAjax extends Ajax
 		}
 	}
 	
-	private function run($username, $session_id)
+	public static function run($username, $session_id)
 	{
 		global $session, $user;
 			
@@ -680,135 +669,87 @@ class SampleCreateAjax extends Ajax
 		$sample_template_data_type_id	= $session->read_value("SAMPLE_TEMPLATE_DATA_TYPE_ID");	
 		$sample_template_data_array		= $session->read_value("SAMPLE_TEMPLATE_DATA_ARRAY");	
 		
-		try
-		{
-			$sample = new Sample(null);
+		$sample = new Sample(null);
 
-			$sample->set_template_data($sample_template_data_type, $sample_template_data_type_id, $sample_template_data_array);
+		$sample->set_template_data($sample_template_data_type, $sample_template_data_type_id, $sample_template_data_array);
 
-			$sample_id = $sample->create($sample_organ_unit, $sample_template, $sample_name, $sample_manufacturer, $sample_location, $sample_desc, null, $sample_expiry, $sample_expiry_warning);
+		$sample_id = $sample->create($sample_organ_unit, $sample_template, $sample_name, $sample_manufacturer, $sample_location, $sample_desc, null, $sample_expiry, $sample_expiry_warning);
 
-			$session->delete_value("SAMPLE_ADD_ROLE");
+		$session->delete_value("SAMPLE_ADD_ROLE");
+	
+		$session->delete_value("SAMPLE_ITEM_RETRACE");
+		$session->delete_value("SAMPLE_ITEM_GET_ARRAY");
+		$session->delete_value("SAMPLE_ITEM_KEYWORDS");
+		$session->delete_value("SAMPLE_ITEM_DESCRIPTION");
+		$session->delete_value("SAMPLE_ITEM_TYPE_ARRAY");
 		
-			$session->delete_value("SAMPLE_ITEM_RETRACE");
-			$session->delete_value("SAMPLE_ITEM_GET_ARRAY");
-			$session->delete_value("SAMPLE_ITEM_KEYWORDS");
-			$session->delete_value("SAMPLE_ITEM_DESCRIPTION");
-			$session->delete_value("SAMPLE_ITEM_TYPE_ARRAY");
-			
-			$session->delete_value("SAMPLE_ORGANISATION_UNIT");
-			$session->delete_value("SAMPLE_TEMPLATE");
-			$session->delete_value("SAMPLE_NAME");
-			$session->delete_value("SAMPLE_MANUFACTURER_ID");
-			$session->delete_value("SAMPLE_MANUFACTURER_NAME");
-			$session->delete_value("SAMPLE_LOCATION");
-			$session->delete_value("SAMPLE_EXPIRY");
-			$session->delete_value("SAMPLE_EXPIRY_WARNING");
-			$session->delete_value("SAMPLE_DESCRIPTION");		
-			$session->delete_value("SAMPLE_TEMPLATE_DATA_TYPE");
-			$session->delete_value("SAMPLE_TEMPLATE_DATA_TYPE_ID");	
-			$session->delete_value("SAMPLE_TEMPLATE_DATA_ARRAY");
-			
-			if ($sample_add_role == "item" or $sample_add_role == "item_parent")
+		$session->delete_value("SAMPLE_ORGANISATION_UNIT");
+		$session->delete_value("SAMPLE_TEMPLATE");
+		$session->delete_value("SAMPLE_NAME");
+		$session->delete_value("SAMPLE_MANUFACTURER_ID");
+		$session->delete_value("SAMPLE_MANUFACTURER_NAME");
+		$session->delete_value("SAMPLE_LOCATION");
+		$session->delete_value("SAMPLE_EXPIRY");
+		$session->delete_value("SAMPLE_EXPIRY_WARNING");
+		$session->delete_value("SAMPLE_DESCRIPTION");		
+		$session->delete_value("SAMPLE_TEMPLATE_DATA_TYPE");
+		$session->delete_value("SAMPLE_TEMPLATE_DATA_TYPE_ID");	
+		$session->delete_value("SAMPLE_TEMPLATE_DATA_ARRAY");
+		
+		if ($sample_add_role == "item" or $sample_add_role == "item_parent")
+		{
+			// Special Parent Sample Case
+			if ($sample_add_role == "item_parent")
 			{
-				// Special Parent Sample Case
-				if ($sample_add_role == "item_parent")
+				$parent_sample = new Sample($sample_item_get_array['sample_id']);
+				$sample_item_get_array['sample_id'] = $sample_id;
+				$sample_item_get_array['parent'] = "1";
+				$event_item_id = $parent_sample->get_item_id();
+			}
+			else
+			{
+				$event_item_id = $sample->get_item_id();
+			}
+			
+			$post_array = array();
+			$post_array['keywords'] = $sample_item_keywords;
+			$post_array['description'] = $sample_item_description;
+			
+			$item_add_event = new ItemAddEvent($event_item_id, $sample_item_get_array, $post_array);
+			$event_handler = new EventHandler($item_add_event);
+			if ($event_handler->get_success() == true)
+			{
+				if ($sample_item_retrace)
 				{
-					$parent_sample = new Sample($sample_item_get_array['sample_id']);
-					$sample_item_get_array['sample_id'] = $sample_id;
-					$sample_item_get_array['parent'] = "1";
-					$event_item_id = $parent_sample->get_item_id();
+					$params = http_build_query(Retrace::resovle_retrace_string($sample_item_retrace),'','&');
+					return "index.php?".$params;
 				}
 				else
 				{
-					$event_item_id = $sample->get_item_id();
-				}
-				
-				$post_array = array();
-				$post_array['keywords'] = $sample_item_keywords;
-				$post_array['description'] = $sample_item_description;
-				
-				$item_add_event = new ItemAddEvent($event_item_id, $sample_item_get_array, $post_array);
-				$event_handler = new EventHandler($item_add_event);
-				if ($event_handler->get_success() == true)
-				{
-					if ($sample_item_retrace)
-					{
-						$params = http_build_query(Retrace::resovle_retrace_string($sample_item_retrace),'','&');
-						return "index.php?".$params;
-					}
-					else
-					{
-						$paramquery['username'] = $username;
-						$paramquery['session_id'] = $session_id;
-						$paramquery['nav'] = "home";
-						$params = http_build_query($paramquery,'','&');
-						return "index.php?".$params;
-					}
-				}
-				else
-				{
-					return "0";
+					$paramquery['username'] = $username;
+					$paramquery['session_id'] = $session_id;
+					$paramquery['nav'] = "home";
+					$params = http_build_query($paramquery,'','&');
+					return "index.php?".$params;
 				}
 			}
 			else
 			{
-				$paramquery = array();
-				$paramquery['username'] = $username;
-				$paramquery['session_id'] = $session_id;
-				$paramquery['nav'] = "sample";
-				$paramquery['run'] = "detail";
-				$paramquery['sample_id'] = $sample_id;
-				$params = http_build_query($paramquery, '', '&');
-				
-				return "index.php?".$params;
+				return "0";
 			}
 		}
-		catch (SampleCreateException $e)
+		else
 		{
-			/**
-			 * @todo: remove after using new AJAX handler
-			 */
-			require_once("../../base/common/io/error.io.php");
-			$error_io = new Error_IO($e);
-			return "EXCEPTION: ".$error_io->get_error_message();
-		}
-	}
-	
-	public function handler()
-	{
-		global $session;
-		
-		if ($session->is_valid())
-		{
-			switch($_GET['run']):
+			$paramquery = array();
+			$paramquery['username'] = $username;
+			$paramquery['session_id'] = $session_id;
+			$paramquery['nav'] = "sample";
+			$paramquery['run'] = "detail";
+			$paramquery['sample_id'] = $sample_id;
+			$params = http_build_query($paramquery, '', '&');
 			
-				case "get_content":
-					echo $this->get_content($_GET['page']);
-				break;
-				
-				case "get_next_page":
-					echo $this->get_next_page($_GET['page']);
-				break;
-				
-				case "get_previous_page":
-					echo $this->get_previous_page($_GET['page']);
-				break;
-				
-				case "set_data":
-					echo $this->set_data($_POST['page'], $_POST['data']);
-				break;
-				
-				case "run":
-					echo $this->run($_GET['username'], $_GET['session_id']);
-				break;
-				
-			endswitch;
+			return "index.php?".$params;
 		}
 	}
 }
-
-$sample_create_ajax = new SampleCreateAjax();
-$sample_create_ajax->handler();
-
 ?>

@@ -88,6 +88,19 @@ class BaseRequest
 			break;
 			
 			
+			// User
+
+			case "get_users_in_option":
+				require_once("common/ajax/user_common.ajax.php");
+				echo UserAjax::get_users_in_option($_POST['string']);
+			break;
+			
+			case "get_groups_in_option":
+				require_once("common/ajax/user_common.ajax.php");
+				echo UserAjax::get_groups_in_option($_POST['string']);
+			break;
+			
+			
 			// Admin
 			
 			case "admin_list_includes":
