@@ -3,6 +3,12 @@ package jobs;
 import io.DBConfig;
 import io.JobConfig;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -15,63 +21,106 @@ import jobs.access.ServicesAccess;
 
 public class JobHandler 
 {
-
 	private ExecutorService threadPool = Executors.newFixedThreadPool(2);
 	
 	private Map<Integer, Future<Integer>> threadPoolMap = new HashMap<Integer,Future<Integer>>();
-	
-	private boolean running = true;
+		
+	private PrintWriter log;
 	
 	private int id;
 	
 	public JobHandler(int id) 
 	{
 		this.id = id;
+		
 		init_configs();
 		
-		ServicesAccess.set_status(id, 1);
+		if(init_log())
+		{
+			ServicesAccess.set_status(id, 1);
+
+			write_to_log("Job Handler started.");
+			
+			handle_jobs();
 		
-		while(running)
+			write_to_log("Job Handler terminated.");
+			log.close();
+		}
+		else
+		{
+			ServicesAccess.set_status(id, 4);
+		}
+	
+		System.exit(0);
+	}
+	
+	private void handle_jobs()
+	{
+		for(;;)
 		{
 			int status = ServicesAccess.get_status(id);
-			System.out.println("status: "+status);
 			if(status == 1)
-			{ //alles ok
+			{ //everything ok
 				clear_finished_jobs();
 				add_new_jobs();
 				give_lifesigns();
 			}
 			else if(status == 2)
 			{ //soft shutdown
-				System.out.println("soft shutdown");
-				//alle unbearbeiteten jobs entfernen
-				Integer[] pending_jobs = JobsAccess.get_pending_jobs();
-				for (int i = 0; i < pending_jobs.length; i++) {
-					System.out.println("removing job "+pending_jobs[i]+" from queue");
-					JobsAccess.set_job_status(pending_jobs[i], 5);
-				}
-				//pool shutdown sobald alle fertig
+				write_to_log("attempting to shut down softly.");
+								
+				//finish all jobs in queue and shutdown pool
 				threadPool.shutdown();
+				
+				//reset status of pending jobs to "new"
+				Integer[] pending_jobs = JobsAccess.get_pending_jobs();
+				for (int i = 0; i < pending_jobs.length; i++) 
+				{
+					int pending_job_id = pending_jobs[i];
+					JobsAccess.set_job_status(pending_job_id, 0);
+				}
+				
+				//wait for running jobs to terminate
+				while(threadPoolMap.size() > 0) 
+				{
+					clear_finished_jobs();
+				}
+
 				break;
 			}
 			else if(status == 3)
 			{ //hard shutdown
-				System.out.println("hard shutdown");
-				//alle threads killen, pool shutdown	
+				write_to_log("attempting to shut down hard.");
+				
+				//kill threads, shutdown pool 	
 				threadPool.shutdownNow();
+				
+				for (Integer job_id : threadPoolMap.keySet()) 
+				{
+					if(JobsAccess.get_job_status(job_id) == 1)
+					{ //reset status of pending jobs to "new"
+						JobsAccess.set_job_status(job_id, 0); 
+					}
+					else if(JobsAccess.get_job_status(job_id) == 3)
+					{ //set status of finished jobs to "finished"
+						JobsAccess.set_job_ended(job_id, false);
+					}
+					else
+					{ //set status of running and faulty jobs to "error"
+						JobsAccess.set_job_ended(job_id, true);
+					}
+				}
 				break;
-			}
-			else if(status == 4)
-			{ //fehler
-				System.out.println("error!");
-				break;
-			}			
+			}		
 			try {
 				Thread.sleep(5000);
 			} 
 			catch (InterruptedException e) 
 			{
-				e.printStackTrace();
+				write_to_log("the handler thread was interrupted!");
+				e.printStackTrace(log);
+				ServicesAccess.set_status(id, 4);
+				return;
 			}
 		}
 	}
@@ -80,18 +129,16 @@ public class JobHandler
 	{
 		Integer[] new_jobs = JobsAccess.check_for_new_jobs();
 		
-		System.out.println(new_jobs.length+" new jobs found");
-		
 		for (int i = 0; i < new_jobs.length; i++) 
 		{
 			int job_id = new_jobs[i];
 			
-			System.out.println("adding job with id "+job_id+" to thread pool");
+			write_to_log("adding job "+job_id+" to thread pool.");
 
 			Job job = new Job(job_id);
+			JobsAccess.set_job_status(job_id, 1);
 			Future<Integer> future = threadPool.submit(job);
 			threadPoolMap.put(job_id, future);
-			JobsAccess.set_job_status(job_id, 1);
 		}
 	}
 	
@@ -101,13 +148,34 @@ public class JobHandler
 		
 		for (Integer job_id : threadPoolMap.keySet()) 
 		{
+			//if the status is 0, a soft shutdown was requested. delete job from queue.
+			if(JobsAccess.get_job_status(job_id) == 0) 
+			{
+				write_to_log("removing job "+job_id+" from queue.");
+				to_remove.add(job_id);
+			}
+			
 			Future<Integer> future = threadPoolMap.get(job_id);
+			
+			//prevent blocking
+			if(!future.isDone()) 
+			{
+				continue;
+			}
 			
 			try 
 			{
 				int result = future.get();
-				System.out.println("job with id "+job_id+" terminated with code "+result);
-				JobsAccess.set_job_ended(job_id, false);
+				if(result == 3)
+				{
+					write_to_log("job "+job_id+" terminated successfully.");
+					JobsAccess.set_job_ended(job_id, false);
+				}
+				else if(result == 4)
+				{
+					write_to_log("job "+job_id+" terminated with an error.");
+					JobsAccess.set_job_ended(job_id, true);
+				}
 				to_remove.add(job_id);
 			} 
 			catch (Exception e) 
@@ -141,8 +209,32 @@ public class JobHandler
 		new JobConfig();
 	}
 	
-	public static void main(String[] args) {
-		new JobHandler(1);
+	private boolean init_log()
+	{
+		try 
+		{
+			FileWriter logFile = new FileWriter(JobConfig.get_config("logDir")+"/job_log.txt");
+			log = new PrintWriter(logFile);
+			return true;
+		} 
+		catch (IOException e1) 
+		{
+			e1.printStackTrace();
+		}
+		return false;
+	}
+	
+	private void write_to_log(String text) 
+	{
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date date = new Date();
+		log.println(dateFormat.format(date)+": "+text);
+//		System.out.println(dateFormat.format(date)+": "+text);
+	}
+	
+	public static void main(String[] args) 
+	{
+		new JobHandler(1); //TODO assign id
 	}
 }
 

@@ -2,7 +2,6 @@ package jobs;
 
 import io.JobConfig;
 
-import java.io.InputStream;
 import java.util.concurrent.Callable;
 
 import jobs.access.BinaryAccess;
@@ -21,9 +20,9 @@ public class Job implements Callable<Integer>
 
 	public Integer call() throws Exception 
 	{
-		if(JobsAccess.get_job_status(job_id) == 5)
+		if(JobsAccess.get_job_status(job_id) == 0)
 		{
-			return 5;
+			return 0;
 		}
 		
 		JobsAccess.set_job_started(job_id);
@@ -38,18 +37,17 @@ public class Job implements Callable<Integer>
 		{
 			Process process = Runtime.getRuntime().exec(new String[]{"java","-jar",file_path,""+job_id+""});
 			process.waitFor();
-			System.out.println("job "+job_id+" finished!");
 			
-			//get standard and error output to prevent blocking
-			InputStream in = process.getInputStream();
-			InputStream err = process.getErrorStream();
+			//get the return value of the job TODO use for error indication
+			//int result = process.exitValue();
+			
 			return 3;
 		} 
 		catch (Exception e) 
 		{
-			e.printStackTrace();
+			//when shutting down hard we get here
 			return 4;
-		} 
+		}
 	}
 	
 	private String get_file_path()
