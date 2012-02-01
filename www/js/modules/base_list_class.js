@@ -45,6 +45,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 	var number_of_entries = 0;
 	var number_of_pages = 0;
 	
+
 	reload = function() 
 	{
 		count_entries();
@@ -147,6 +148,54 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 	this.reinit_page_handler = reinit_page_handler;
 	this.get_argument_array = get_argument_array;
 	this.set_argument_array = set_argument_array;
+	
+	
+	function make_resizable()
+	{		
+		var num_cols = $(".ListTable > thead > tr > th").size();
+		
+		for (var int = 0; int < num_cols; int++) 
+		{
+			$("<div class='dragHandle"+int+"'></div>")
+			.css({
+				"position": "absolute",
+				"width": "2px",
+				"height" : $(".ListTable").height(),
+				"background-color": "red",
+				"cursor": "e-resize"
+			})
+			.data("col", "dragHandle"+int)
+			.draggable({
+				 axis: "x",
+				 start: function () 
+				 {
+					 
+				 },
+				 stop: function (event, ui) 
+				 {
+					 
+					 var oldPos  = ($( this ).data("draggable").originalPosition.left);
+					 var newPos = ui.position.left;
+					 var diff = oldPos - newPos;
+					 
+				 }
+			})
+			.insertBefore(".ListTable");
+		}
+		
+	
+		$(".ListTable > thead > tr > th").each(function(i){
+			var num = i + 1;
+			var sliderPosition = $(this).position().left + $(this).outerWidth();
+					
+			$(".dragHandle"+i).css({
+				"left": sliderPosition
+			});
+
+		});
+	
+	}
+	make_resizable();
 	
 	function count_entries()
 	{		
