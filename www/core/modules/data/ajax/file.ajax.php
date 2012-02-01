@@ -315,8 +315,10 @@ class FileAjax
 		$parent_folder = Folder::get_instance($folder_id);
 		if ($parent_folder->is_write_access())
 		{
-			$paramquery = $_GET;
+			$paramquery = array();
 			$unique_id = uniqid();
+			$paramquery[session_id] = $_GET[session_id];
+			$paramquery[folder_id] = $folder_id;
 			$paramquery[unique_id] = $unique_id;
 			$params = http_build_query($paramquery);
 			$template = new HTMLTemplate("data/file_upload_window.html");

@@ -23,8 +23,8 @@
  	
 /**
  * 
- */ 
-$server['main_folder']							= "D:/web/open-lims";
+ */
+$server['main_folder']							= "D:/open-lims";
 $server['timezone']								= "Europe/Berlin";
 $server['timezone_id']							= 26;
 
