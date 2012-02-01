@@ -43,7 +43,7 @@
 
 	require_once("core/include/base/system/autoload.function.php");	
 	
-	if ($_GET[session_id] and $_GET[file_id])
+	if ($_GET['session_id'] and $_GET['file_id'])
 	{
 		global $db;
 		
@@ -70,8 +70,35 @@
 		
 		if ($session->is_valid() == true)
 		{
-			$image_cache = new ImageCache($_GET[file_id]);
-			$file_path = constant("BASE_DIR")."/filesystem/temp/".$image_cache->get_image(700);
+			$image_cache = new ImageCache($_GET['file_id']);
+			
+			if ($_GET['max_width'])
+			{
+				$image_cache->set_max_width($_GET['max_width']);
+			}
+			
+			if ($_GET['max_height'])
+			{
+				$image_cache->set_max_height($_GET['max_height']);
+			}
+			
+			if ($_GET['width'])
+			{
+				$file_path = constant("BASE_DIR")."/filesystem/temp/".$image_cache->get_image($_GET['width']);
+			}
+			elseif($_GET['height'])
+			{
+				$file_path = constant("BASE_DIR")."/filesystem/temp/".$image_cache->get_image(null, $_GET['height']);
+			}
+			else
+			{
+				$file_path = constant("BASE_DIR")."/filesystem/temp/".$image_cache->get_image();
+			}
+			
+			if (!$file_path)
+			{
+				$file_path = constant("WWW_DIR")."/images/access.jpg";
+			}
 		}
 		else
 		{

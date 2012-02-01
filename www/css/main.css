@@ -388,20 +388,17 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 
 
 /* Files */
-.filebox {
-	width: 60em;
-	display: table;
-}
 
 .filebox_left {
+	width: 340px;
 	float: left;
-	width: 29em;
 }
 
 .filebox_right {
+	float: right;
 	text-align: center;
-	width: 29em;
-	margin-left: 30em;
+	width: 340px;
+	margin: 5px 10px;
 }
 
 #file_chmod_container {
@@ -599,7 +596,7 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 
 .FileDetailMenu
 {
-	
+	clear: both;
 }
 .FileDetailLeft
 {

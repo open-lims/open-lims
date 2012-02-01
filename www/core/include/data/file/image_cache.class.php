@@ -43,6 +43,9 @@ class ImageCache // implements ImageCacheInterface, EventListenerInterface
 	private $file_version_extension;
 	private $internal_revision;
 	
+	private $max_width = null;
+	private $max_height = null;
+	
 	/**
 	 * @see ImageCacheInterface::__construct()
 	 * @param integer $file_id
@@ -83,14 +86,20 @@ class ImageCache // implements ImageCacheInterface, EventListenerInterface
 	 * @param integer $height
 	 * @return string
 	 */
-	public function get_image($width, $height = null)
+	public function get_image($width = null, $height = null)
 	{
-		if ($width != null)
+		if (is_numeric($width) and $width >= 1)
 		{
+			if ($this->max_width != null and $this->max_width < $width)
+			{
+				$width = $this->max_width;
+			}
+			
 			if (($image_cache_id = FileImageCache_Access::get_width_cached($this->file_version_id, $width)) != null)
 			{
 				$file_image_cache = new FileImageCache_Access($image_cache_id);
 				$height = $file_image_cache->get_height();
+				$file_image_cache->set_last_access(date("Y-m-d H:i:s"));
 				
 				if ($this->file_version_extension)
 				{
@@ -106,12 +115,18 @@ class ImageCache // implements ImageCacheInterface, EventListenerInterface
 				return $this->register_image($width, null);
 			}
 		}
-		elseif ($height != null)
+		elseif (is_numeric($height) and $height >= 1)
 		{
+			if ($this->max_height != null and $this->max_height < $height)
+			{
+				$height = $this->max_height;
+			}
+			
 			if (($image_cache_id = FileImageCache_Access::get_height_cached($this->file_version_id, $height)) != null)
 			{
 				$file_image_cache = new FileImageCache_Access($image_cache_id);
 				$width = $file_image_cache->get_width();
+				$file_image_cache->set_last_access(date("Y-m-d H:i:s"));
 				
 				if ($this->file_version_extension)
 				{
@@ -129,16 +144,37 @@ class ImageCache // implements ImageCacheInterface, EventListenerInterface
 		}
 		else
 		{
-			return null;
+			$image = $this->open_image();
+			$width = $image->getImageWidth();		
+			return $this->get_image($width);
 		}
 	}
 	
-	private function register_image($width, $height)
+	/**
+	 * @param integer $width
+	 */
+	public function set_max_width($width)
 	{
-		if ($this->file_id and ($width or $height))
+		$this->max_width = $width;
+	}
+	
+	/**
+	 * @param integer $height
+	 */
+	public function set_max_height($height)
+	{
+		$this->max_height = $height;
+	}
+	
+	/**
+	 * @return object
+	 */
+	private function open_image()
+	{
+		if ($this->file_id)
 		{
 			$file = File::get_instance($this->file_id);
-				
+					
 			if ($this->internal_revision)
 			{
 				$file->open_internal_revision($this->internal_revision);
@@ -156,51 +192,56 @@ class ImageCache // implements ImageCacheInterface, EventListenerInterface
 				$file_path = constant("BASE_DIR")."/".$folder_path."/".$file->get_data_entity_id()."-".$file->get_internal_revision().".".$extension_array[$extension_array_length];
 				if (file_exists($file_path))
 				{
-					$image = new Imagick($file_path);
-					
-					if ($image->getImageFormat() != "PNG")
-					{
-						$image->setImageFormat("jpg");	
-					}
-					
-					if ($width)
-					{
-						$image->thumbnailImage($width,0);
-					}
-					elseif ($height)
-					{
-						$image->thumbnailImage(0,$height);
-					}
-					else
-					{
-						return null;
-					}
-					
-					if ($this->file_version_extension)
-					{
-						$cached_file_name = $this->file_version_id."-".$image->getImageWidth()."-".$image->getImageHeight().".".$this->file_version_extension;
-					}
-					else
-					{
-						$cached_file_name = $this->file_version_id."-".$image->getImageWidth()."-".$image->getImageHeight()."";
-					}
-					
-					$image->writeImage(constant("BASE_DIR")."/filesystem/temp/".$cached_file_name);
-					
-					$file_image_cache = new FileImageCache_Access(null);
-					$file_image_cache->create($this->file_version_id, $image->getImageWidth(), $image->getImageHeight());
-					
-					return $cached_file_name;
+					return new Imagick($file_path);
 				}
-				else
-				{
-					return null;
-				}
+			}
+		}
+	}
+	
+	/**
+	 * @param integer $width
+	 * @param intger $height
+	 * @return string
+	 */
+	private function register_image($width, $height)
+	{
+		if ($this->file_id and ($width or $height))
+		{
+			$image = $this->open_image();
+			
+			if ($image->getImageFormat() != "PNG")
+			{
+				$image->setImageFormat("jpg");	
+			}
+			
+			if ($width)
+			{
+				$image->thumbnailImage($width,0);
+			}
+			elseif ($height)
+			{
+				$image->thumbnailImage(0,$height);
 			}
 			else
 			{
 				return null;
 			}
+			
+			if ($this->file_version_extension)
+			{
+				$cached_file_name = $this->file_version_id."-".$image->getImageWidth()."-".$image->getImageHeight().".".$this->file_version_extension;
+			}
+			else
+			{
+				$cached_file_name = $this->file_version_id."-".$image->getImageWidth()."-".$image->getImageHeight()."";
+			}
+			
+			$image->writeImage(constant("BASE_DIR")."/filesystem/temp/".$cached_file_name);
+			
+			$file_image_cache = new FileImageCache_Access(null);
+			$file_image_cache->create($this->file_version_id, $image->getImageWidth(), $image->getImageHeight(), filesize(constant("BASE_DIR")."/filesystem/temp/".$cached_file_name));
+
+			return $cached_file_name;
 		}
 		else
 		{

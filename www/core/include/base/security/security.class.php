@@ -120,7 +120,6 @@ class Security implements SecurityInterface
 			case("run"):
 			case("dialog"):
 			case("retrace");
-			case("unique_id");
 				
 			case("action"):
 			case("aspect"):
@@ -140,6 +139,13 @@ class Security implements SecurityInterface
 			case("tpage"):
 			case("view"):
 			case("clear");
+			
+			case("unique_id");
+			case("height");
+			case("width");
+			case("max_height");
+			case("max_width");
+			
 			break;
 			
 			default:

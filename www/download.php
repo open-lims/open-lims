@@ -43,7 +43,7 @@
 
 	require_once("core/include/base/system/autoload.function.php");	
 		
-	if ($_GET[username] and $_GET[session_id] and $_GET[file_id])
+	if ($_GET[session_id] and $_GET[file_id])
 	{
 		global $db;
 		

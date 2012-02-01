@@ -33,7 +33,9 @@ class FileImageCache_Access
 	
 	private $file_version_id;
 	private $width;
+	private $height;
 	private $size;
+	private $last_access;
 	
 	/**
 	 * @param integer $id
@@ -59,6 +61,8 @@ class FileImageCache_Access
 				$this->file_version_id	= $data[file_version_id];
 				$this->width			= $data[width];
 				$this->height			= $data[height];
+				$this->size				= $data[height];
+				$this->last_access		= $data[last_access];
 			}
 			else
 			{
@@ -76,6 +80,8 @@ class FileImageCache_Access
 			unset($this->file_version_id);
 			unset($this->width);
 			unset($this->height);
+			unset($this->size);
+			unset($this->last_access);
 		}
 	}
 	
@@ -83,16 +89,19 @@ class FileImageCache_Access
 	 * @param integer $file_version_id
 	 * @param integer $width
 	 * @param integer $height
+	 * @param integer $size
 	 * @return integer
 	 */
-	public function create($file_version_id, $width, $height)
+	public function create($file_version_id, $width, $height, $size)
 	{
 		global $db;
 		
 		if (is_numeric($file_version_id) and is_numeric($width) and is_numeric($height))
 		{
-			$sql_write = "INSERT INTO ".constant("FILE_IMAGE_CACHE_TABLE")." (id,file_version_id,width,height) " .
-					"VALUES (nextval('".self::FILE_IMAGE_CACHE_PK_SEQUENCE."'::regclass),".$file_version_id.",".$width.",".$height.")";
+			$datetime = date("Y-m-d H:i:s");
+			
+			$sql_write = "INSERT INTO ".constant("FILE_IMAGE_CACHE_TABLE")." (id,file_version_id,width,height,size,last_access) " .
+					"VALUES (nextval('".self::FILE_IMAGE_CACHE_PK_SEQUENCE."'::regclass),".$file_version_id.",".$width.",".$height.",".$size.",'".$datetime."')";
 					
 			$res_write = $db->db_query($sql_write);	
 			
@@ -195,6 +204,36 @@ class FileImageCache_Access
 	}
 	
 	/**
+	 * @return integer
+	 */
+	public function get_size()
+	{
+		if ($this->size)
+		{
+			return $this->size;
+		}
+		else
+		{
+			return null;
+		}	
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function get_last_access()
+	{
+		if ($this->last_access)
+		{
+			return $this->last_access;
+		}
+		else
+		{
+			return null;
+		}	
+	}
+	
+	/**
 	 * @param integer $file_version_id
 	 * @return bool
 	 */
@@ -268,6 +307,64 @@ class FileImageCache_Access
 			if ($db->db_affected_rows($res))
 			{
 				$this->height = $height;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param integer $size
+	 * @return bool
+	 */
+	public function set_size($size)
+	{		
+		global $db;
+		
+		if ($this->id and is_numeric($size))
+		{
+			$sql = "UPDATE ".constant("FILE_IMAGE_CACHE_TABLE")." SET size = ".$size." WHERE id = ".$this->id."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->size = $size;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param string $last_access
+	 * @return bool
+	 */
+	public function set_last_access($last_access)
+	{		
+		global $db;
+		
+		if ($this->id and $last_access)
+		{
+			$sql = "UPDATE ".constant("FILE_IMAGE_CACHE_TABLE")." SET last_access = '".$last_access."' WHERE id = ".$this->id."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->last_access = $last_access;
 				return true;
 			}
 			else
