@@ -120,6 +120,7 @@ class Security implements SecurityInterface
 			case("run"):
 			case("dialog"):
 			case("retrace");
+			case("unique_id");
 				
 			case("action"):
 			case("aspect"):

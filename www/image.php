@@ -27,7 +27,11 @@
 	define("UNIT_TEST", false);
 
 	require_once("config/version.php");
-	require_once("config/main.php");
+	require_once("core/include/base/system/system_config.class.php");
+
+ 	SystemConfig::load_system_config("config/main.php");
+ 	SystemConfig::load_module_config();
+ 	
 	require_once("core/db/db.php");
 	
 	require_once("core/include/base/system/transaction.class.php");
@@ -43,9 +47,11 @@
 	{
 		global $db;
 		
-		$db = new Database(constant("DB_TYPE"));
-		$db->db_connect(constant("DB_SERVER"),constant("DB_PORT"),constant("DB_USER"),constant("DB_PASSWORD"),constant("DB_DATABASE"));
+		$database = SystemConfig::get_database();
 		
+		$db = new Database($database['type']);
+		$db->db_connect($database[0]['server'],$database[0]['port'],$database['user'],$database['password'],$database['database']);
+			
 		Security::protect_session();
 		
 		$transaction = new Transaction();

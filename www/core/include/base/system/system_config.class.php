@@ -32,6 +32,55 @@ require_once("interfaces/system_config.interface.php");
  */
 class SystemConfig implements SystemConfigInterface
 {
+	private static $database;
+	
+	public static function load_system_config($file)
+	{
+		if (file_exists($file))
+		{
+			require_once($file);
+			
+			if (is_array($server) and is_array($database))
+			{
+				self::$database = $database;
+
+				define("BASE_DIR",						$server['main_folder']);
+				define("WWW_DIR",						constant("BASE_DIR")."/www");
+				define("LOG_DIR",						constant("BASE_DIR")."/logs");
+				define("BIN_DIR",						constant("BASE_DIR")."/bin");
+				define("INCLUDE_DIR",					constant("WWW_DIR")."/core/include");
+				define("MODULES_DIR",					constant("WWW_DIR")."/core/modules");
+				
+				define("TIMEZONE",						$server['timezone']);
+				define("TIMEZONE_ID",					$server['timezone_id']);
+				
+				define("DEBUG", 						$server['behaviour']['debug_mode']);
+				define("AVOID_CSS_CACHE", 				$server['behaviour']['avoid_css_cache']);
+				define("AVOID_JS_CACHE", 				$server['behaviour']['avoid_js_cache']);
+				define("ENABLE_DB_LOG_ON_ROLLBACK",		$server['behaviour']['on_db_rollback']);
+				define("ENABLE_DB_LOG_ON_EXP_ROLLBACK",	$server['behaviour']['on_db_expected_rollback']);							
+				define("ENABLE_DB_LOG_ON_COMMIT",		$server['behaviour']['on_db_commit']);	
+				
+				define("OS",							$server['os']);
+				define("PRODUCT_USER", 					$server['user']);
+				define("PRODUCT_FUNCTION", 				$server['function']);
+				define("HTML_TITLE",					$server['html_title']);
+				
+				define("MAX_SESSION_PERIOD",			$server['security']['session_timeout']);
+				define("MAX_IP_ERRORS",					$server['security']['max_ip_failed_logins']);
+				define("IP_ERROR_LEAD_TIME",			$server['security']['max_ip_lead_time']);
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	public static function load_module_config()
 	{
 		$module_config_dir = constant("WWW_DIR")."/config/modules";
@@ -51,5 +100,10 @@ class SystemConfig implements SystemConfigInterface
 				}
 			}
 		}
+	}
+	
+	public static function get_database()
+	{
+		return self::$database;
 	}
 }
