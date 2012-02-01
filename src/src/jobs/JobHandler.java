@@ -45,6 +45,8 @@ public class JobHandler
 		
 			write_to_log("Job Handler terminated.");
 			log.close();
+			
+			ServicesAccess.set_status(id, 0);
 		}
 		else
 		{
@@ -234,7 +236,7 @@ public class JobHandler
 	
 	public static void main(String[] args) 
 	{
-		new JobHandler(1); //TODO assign id
+		new JobHandler(1); //TODO assign id => args 1
 	}
 }
 

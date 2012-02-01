@@ -39,9 +39,15 @@ public class Job implements Callable<Integer>
 			process.waitFor();
 			
 			//get the return value of the job TODO use for error indication
-			//int result = process.exitValue();
-			
-			return 3;
+			int result = process.exitValue();
+			if(result == 0)
+			{
+				return 3;
+			}
+			else
+			{
+				return 4;
+			}
 		} 
 		catch (Exception e) 
 		{
