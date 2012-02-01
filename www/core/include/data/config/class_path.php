@@ -69,7 +69,10 @@
 	$classes['DataUserData']				= $path_prefix."core/include/data/data_user_data.class.php";
 	
 	$classes['File']						= $path_prefix."core/include/data/file/file.class.php";
+	$classes['ImageCache']					= $path_prefix."core/include/data/file/image_cache.class.php";
+	
 	$classes['Folder']						= $path_prefix."core/include/data/folder/folder.class.php";
+	
 	$classes['SystemFolder']				= $path_prefix."core/include/data/folder/system_folder.class.php";
 	$classes['UserFolder']					= $path_prefix."core/include/data/folder/user_folder.class.php";
 	$classes['GroupFolder']					= $path_prefix."core/include/data/folder/group_folder.class.php";

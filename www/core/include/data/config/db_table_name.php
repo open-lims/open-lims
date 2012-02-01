@@ -29,6 +29,7 @@
 	define("DATA_ENTITY_TABLE", 						"core_data_entities");
 	define("DATA_USER_DATA_TABLE", 						"core_data_user_data");
 	
+	define("FILE_IMAGE_CACHE_TABLE", 					"core_file_image_cache");
 	define("FILE_VERSION_TABLE", 						"core_file_versions");
 	define("FILE_TABLE", 								"core_files");
 	
