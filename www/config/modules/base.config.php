@@ -1,6 +1,6 @@
 <?php
 /**
- * @package base
+ * @package data
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2012 by Roman Konertz
@@ -20,11 +20,11 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
-
+ 	
 /**
- * IMPORTANT NOTE: Modification of this file is not allowed by developers!
- */
-define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-43-dev &#945;");
-
+ * 
+ */ 
+define("LOGIN_FOOTER", "".constant("PRODUCT").", version: ".constant("PRODUCT_VERSION").", ".constant("PRODUCT_FUNCTION").", ".constant("PRODUCT_USER")." " .
+						"<br />This is free software; It comes with ABSOLUTELY NO WARRANTY." .
+						"<br />by R. Konertz, B. Tunggal, L. Eichinger et al.; 2008-2011");
 ?>

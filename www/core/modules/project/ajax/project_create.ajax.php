@@ -22,23 +22,12 @@
  */
 
 /**
- * 
- */
-$GLOBALS['autoload_prefix'] = "../";
-require_once("../../base/ajax.php");
-
-/**
  * Project Create AJAX IO Class
  * @package project
  */
-class ProjectCreateAjax extends Ajax
+class ProjectCreateAjax
 {	
-	function __construct()
-	{
-		parent::__construct();
-	}
-	
-	private function get_content($page)
+	public static function get_content($page)
 	{
 		global $session, $user;
 		
@@ -303,7 +292,7 @@ class ProjectCreateAjax extends Ajax
 					{
 						$template = new HTMLTemplate("project/new_project_page_4_value.html");
 						
-						require_once("../../../../core/modules/data/io/value_form.io.php");
+						require_once("core/modules/data/io/value_form.io.php");
 						$value_form_io = new ValueFormIO(null, $value_type_id, null, $project_template_data_array);
 						$value_form_io->set_field_class("ProjectCreateAssistantField");
 						$template->set_var("content",$value_form_io->get_content());
@@ -341,12 +330,12 @@ class ProjectCreateAjax extends Ajax
 			default:
 				return "Error: The requested page does not exist!";
 			break;
-			
+						
 		endswitch;
 
 	}
 
-	private function get_next_page($page)
+	public static function get_next_page($page)
 	{
 		global $session;
 		
@@ -370,7 +359,7 @@ class ProjectCreateAjax extends Ajax
 		}
 	}
 	
-	private function get_previous_page($page)
+	public static function get_previous_page($page)
 	{
 		global $session;
 		
@@ -394,7 +383,7 @@ class ProjectCreateAjax extends Ajax
 		}
 	}
 	
-	private function set_data($page, $data)
+	public static function set_data($page, $data)
 	{
 		global $session;
 		
@@ -492,7 +481,7 @@ class ProjectCreateAjax extends Ajax
 		}
 	}
 	
-	private function check_name($name)
+	public static function check_data($name)
 	{
 		global $session;
 		
@@ -516,7 +505,7 @@ class ProjectCreateAjax extends Ajax
 		return "0";
 	}
 	
-	private function run($username, $session_id)
+	public static function run($username, $session_id)
 	{
 		global $session, $user;
 		
@@ -531,116 +520,64 @@ class ProjectCreateAjax extends Ajax
 		$project_template_data_type  	= $session->read_value("PROJECT_TEMPLATE_DATA_TYPE");	
 		$project_template_data_type_id	= $session->read_value("PROJECT_TEMPLATE_DATA_TYPE_ID");	
 		$project_template_data_array	= $session->read_value("PROJECT_TEMPLATE_DATA_ARRAY");	
+
+		$project = new Project(null);
 		
-		try
+		$project->set_template_data($project_template_data_type, $project_template_data_type_id, $project_template_data_array);
+										
+		if ($project_type and $project_organ_unit and $project_name and $project_desc and $project_template)
 		{
-			$project = new Project(null);
+			$new_project_id = $project->create($project_organ_unit, null, $project_name, $project_owner, $project_template, $project_desc);
 			
-			$project->set_template_data($project_template_data_type, $project_template_data_type_id, $project_template_data_array);
-											
-			if ($project_type and $project_organ_unit and $project_name and $project_desc and $project_template)
-			{
-				$new_project_id = $project->create($project_organ_unit, null, $project_name, $project_owner, $project_template, $project_desc);
-				
-				$session->delete_value("PROJECT_TYPE");
-				$session->delete_value("PROJECT_ORGANISATION_UNIT");
-				$session->delete_value("PROJECT_NAME");
-				$session->delete_value("PROJECT_DESCRIPTION");
-				$session->delete_value("PROJECT_TEMPLATE");
-				$session->delete_value("PROJECT_TEMPLATE_DATA_TYPE");
-				$session->delete_value("PROJECT_TEMPLATE_DATA_TYPE_ID");	
-				$session->delete_value("PROJECT_TEMPLATE_DATA_ARRAY");		
-				
-				$paramquery = array();
-				$paramquery['username'] = $username;
-				$paramquery['session_id'] = $session_id;
-				$paramquery['nav'] = "project";
-				$paramquery['run'] = "detail";
-				$paramquery['project_id'] = $new_project_id;
-				$params = http_build_query($paramquery, '', '&');
-				
-				return "index.php?".$params;
-			}
-			elseif($project_type and $project_toid and $project_name and $project_desc and $project_template)
-			{
-				$new_project_id = $project->create(null, $project_toid, $project_name, $project_owner, $project_template, $project_desc);
-				
-				$session->delete_value("PROJECT_LAST_SCREEN");
-				$session->delete_value("PROJECT_CURRENT_SCREEN");
-				
-				$session->delete_value("PROJECT_TYPE");
-				$session->delete_value("PROJECT_TOID");
-				$session->delete_value("PROJECT_NAME");
-				$session->delete_value("PROJECT_DESCRIPTION");
-				$session->delete_value("PROJECT_TEMPLATE");
-				$session->delete_value("PROJECT_TEMPLATE_DATA_TYPE");
-				$session->delete_value("PROJECT_TEMPLATE_DATA_TYPE_ID");	
-				$session->delete_value("PROJECT_TEMPLATE_DATA_ARRAY");	
-				
-				$paramquery = array();
-				$paramquery['username'] = $username;
-				$paramquery['session_id'] = $session_id;
-				$paramquery['nav'] = "project";
-				$paramquery['run'] = "detail";
-				$paramquery['project_id'] = $new_project_id;
-				$params = http_build_query($paramquery, '', '&');
-				
-				return "index.php?".$params;
-			}
-			else
-			{
-				return 0;
-			}
+			$session->delete_value("PROJECT_TYPE");
+			$session->delete_value("PROJECT_ORGANISATION_UNIT");
+			$session->delete_value("PROJECT_NAME");
+			$session->delete_value("PROJECT_DESCRIPTION");
+			$session->delete_value("PROJECT_TEMPLATE");
+			$session->delete_value("PROJECT_TEMPLATE_DATA_TYPE");
+			$session->delete_value("PROJECT_TEMPLATE_DATA_TYPE_ID");	
+			$session->delete_value("PROJECT_TEMPLATE_DATA_ARRAY");		
+			
+			$paramquery = array();
+			$paramquery['username'] = $username;
+			$paramquery['session_id'] = $session_id;
+			$paramquery['nav'] = "project";
+			$paramquery['run'] = "detail";
+			$paramquery['project_id'] = $new_project_id;
+			$params = http_build_query($paramquery, '', '&');
+			
+			return "index.php?".$params;
 		}
-		catch (ProjectCreateException $e)
+		elseif($project_type and $project_toid and $project_name and $project_desc and $project_template)
 		{
-			/**
-			 * @todo: remove after using new AJAX handler
-			 */
-			require_once("../../base/common/io/error.io.php");
-			$error_io = new Error_IO($e);
-			return "EXCEPTION: ".$error_io->get_error_message();
+			$new_project_id = $project->create(null, $project_toid, $project_name, $project_owner, $project_template, $project_desc);
+			
+			$session->delete_value("PROJECT_LAST_SCREEN");
+			$session->delete_value("PROJECT_CURRENT_SCREEN");
+			
+			$session->delete_value("PROJECT_TYPE");
+			$session->delete_value("PROJECT_TOID");
+			$session->delete_value("PROJECT_NAME");
+			$session->delete_value("PROJECT_DESCRIPTION");
+			$session->delete_value("PROJECT_TEMPLATE");
+			$session->delete_value("PROJECT_TEMPLATE_DATA_TYPE");
+			$session->delete_value("PROJECT_TEMPLATE_DATA_TYPE_ID");	
+			$session->delete_value("PROJECT_TEMPLATE_DATA_ARRAY");	
+			
+			$paramquery = array();
+			$paramquery['username'] = $username;
+			$paramquery['session_id'] = $session_id;
+			$paramquery['nav'] = "project";
+			$paramquery['run'] = "detail";
+			$paramquery['project_id'] = $new_project_id;
+			$params = http_build_query($paramquery, '', '&');
+			
+			return "index.php?".$params;
+		}
+		else
+		{
+			return 0;
 		}				
 	}
-	
-	public function handler()
-	{
-		global $session;
-		
-		if ($session->is_valid())
-		{
-			switch($_GET['run']):
-			
-				case "get_content":
-					echo $this->get_content($_GET['page']);
-				break;
-				
-				case "get_next_page":
-					echo $this->get_next_page($_GET['page']);
-				break;
-				
-				case "get_previous_page":
-					echo $this->get_previous_page($_GET['page']);
-				break;
-				
-				case "set_data":
-					echo $this->set_data($_POST['page'], $_POST['data']);
-				break;
-				
-				case "check_data":
-					echo $this->check_name($_GET['name']);
-				break;
-				
-				case "run":
-					echo $this->run($_GET['username'], $_GET['session_id']);
-				break;
-				
-			endswitch;
-		}
-	}
 }
-
-$project_create_ajax = new ProjectCreateAjax();
-$project_create_ajax->handler();
-
 ?>

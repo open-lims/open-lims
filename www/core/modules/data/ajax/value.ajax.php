@@ -221,16 +221,31 @@ class ValueAjax
 	
 	private static function add_value($folder_id, $type_id, $value_array)
 	{
-		$values = json_decode($value_array, true);
-		require_once("core/modules/data/io/value.io.php");
-		$new_value = ValueIO::add_value_item_window($type_id, $folder_id, $values);
-		return $new_value;
+		$parent_folder = Folder::get_instance($folder_id);
+		if ($parent_folder->is_write_access())
+		{
+			$values = json_decode($value_array, true);
+			require_once("core/modules/data/io/value.io.php");
+			$new_value = ValueIO::add_value_item_window($type_id, $folder_id, $values);
+			return $new_value;
+		}
+		else
+		{
+			throw new DataSecurityAccessDeniedException();
+		}
 	}
 	
 	private static function delete_value($value_id)
 	{
 		$value = Value::get_instance($value_id);
-		$value->delete();
+		if ($value->is_delete_access())
+		{
+			$value->delete();
+		}
+		else
+		{
+			throw new DataSecurityAccessDeniedException();
+		}
 	}
 }
 

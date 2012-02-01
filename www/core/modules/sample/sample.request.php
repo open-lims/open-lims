@@ -190,6 +190,71 @@ class SampleRequest
 				echo AdminSampleTemplateAjax::count_templates($_POST[argument_array]);
 			break;
 		
+			// Create Sample
+			
+			case "create_sample":
+				require_once 'ajax/sample_create.ajax.php';
+					
+					switch($_GET['action']):
+	
+					case "get_content":
+						echo SampleCreateAjax::get_content($_POST['page']);
+					break;
+					
+					case "get_next_page":
+						echo SampleCreateAjax::get_next_page($_POST['page']);
+					break;
+					
+					case "get_previous_page":
+						echo SampleCreateAjax::get_previous_page($_POST['page']);
+					break;
+					
+					case "set_data":
+						echo SampleCreateAjax::set_data($_POST['page'], $_POST['data']);
+					break;
+					
+					case "run":
+						echo SampleCreateAjax::run($_GET['username'], $_GET['session_id']);
+					break;
+				
+				endswitch;
+			break;
+			
+			
+			// Clone Sample
+			
+			case "clone_sample":
+				require_once 'ajax/sample_clone.ajax.php';
+					
+					switch($_GET['action']):
+	
+					case "get_content":
+						echo SampleCloneAjax::get_content($_POST['page'], $_POST['form_field_name']);
+					break;
+					
+					case "get_next_page":
+						echo SampleCloneAjax::get_next_page($_POST['page']);
+					break;
+					
+					case "get_previous_page":
+						echo SampleCloneAjax::get_previous_page($_POST['page']);
+					break;
+					
+					case "set_data":
+						echo SampleCloneAjax::set_data($_POST['page'], $_POST['data']);
+					break;
+					
+					case "check_data":
+						echo SampleCloneAjax::check_data($_POST['name']);
+					break;
+					
+					case "run":
+						echo SampleCloneAjax::run($_GET['username'], $_GET['session_id']);
+					break;
+				
+				endswitch;
+			break;
+			
 		endswitch;
 	}
 	

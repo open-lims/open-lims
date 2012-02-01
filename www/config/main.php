@@ -23,68 +23,75 @@
  	
 /**
  * 
- */ 	
-
-// Debug Mode
-define("DEBUG", 						true);
-
-// Avoid CSS Cache
-define("AVOID_CSS_CACHE", 				true);
-
-// Avoid JS Cache
-define("AVOID_JS_CACHE", 				true);
-
-// General
-define("PRODUCT_USER", 					"University of Cologne");
-define("PRODUCT_FUNCTION", 				"development server");
-define("HTML_TITLE",					"Open-LIMS (development server)");
-define("ACCOUNTMAIL",					"roman.konertz@uni-koeln.de");
-define("SENDMAIL_FROM",					"roman.konertz@uni-koeln.de");
-define("TIMEZONE",						"Europe/Berlin");
-define("TIMEZONE_ID",					26);
-
-// Database Settings
-define("DB_TYPE",						"postgres");
-define("DB_SERVER",						"localhost");
-define("DB_PORT",						"");
-define("DB_USER",						"dbadmin");
-define("DB_PASSWORD",					"dbadmin");
-define("DB_DATABASE",					"open-lims");
-
-// Path Settings
-define("BASE_DIR",						"D:/open-lims");
-define("WWW_DIR",						constant("BASE_DIR")."/www");
-define("LOG_DIR",						constant("BASE_DIR")."/logs");
-
-define("INCLUDE_DIR",					constant("WWW_DIR")."/core/include");
-define("MODULES_DIR",					constant("WWW_DIR")."/core/modules");
-
-// ! The following settings only needed by enabled serivce system !
-define("OS",							"WIN32");
-define("BIN_DIR",						constant("BASE_DIR")."/bin");									
-
-define("SERVICE_ENABLE",				false);
-define("SERVICE_JS_ENABLE",				false);							
-define("SERVICE_JS_JOB_ID",				1);	
-
-define("SERVICE_JAVA_HOME",				"");
-define("SERVICE_JAVA_VM",				"java");
-define("SERVICE_JAVA_XMS",				"64M");
-define("SERVICE_JAVA_XMX",				"128M");
-// ! Settings end !
-
-// SQL Log
-define("ENABLE_DB_LOG_ON_ROLLBACK",		true);
-define("ENABLE_DB_LOG_ON_EXP_ROLLBACK",	false);							
-define("ENABLE_DB_LOG_ON_COMMIT",		false);	
-
-// Session-Time and IP Errors
-define("MAX_SESSION_PERIOD",			36000);	// in seconds
-define("MAX_IP_ERRORS",					10);
-define("IP_ERROR_LEAD_TIME",			36000);	// in seconds
+ */
+$server['main_folder']							= "D:/open-lims";
+$server['timezone']								= "Europe/Berlin";
+$server['timezone_id']							= 26;
 
 
-define("LOGIN_FOOTER", "".constant("PRODUCT").", version: ".constant("PRODUCT_VERSION").", ".constant("PRODUCT_FUNCTION").", ".constant("PRODUCT_USER")." " .
-						"<br />This is free software; It comes with ABSOLUTELY NO WARRANTY." .
-						"<br />by R. Konertz, B. Tunggal, L. Eichinger et al.; 2008-2011");
+$database['type'] 								= "postgres";
+$database['database'] 						= "open-lims";
+$database['user'] 							= "dbadmin";
+$database['password']						= "dbadmin";
+
+// Primary Database Server
+$database['server']							= "localhost";
+$database['port'] 							= "";
+
+// Secondary Database Server
+// $database[1]['server']						= "localhost";
+// $database[1]['port'] 						= "";
+
+
+$server['os']									= "win";
+$server['user']									= "University of Cologne";
+$server['function']								= "development server";
+$server['html_title']							= "Open-LIMS (development server)";
+
+
+$mail['enable'] 								= true;
+$mail['enable_smtp'] 							= false;
+$mail['from'] 									= "roman.konertz@uni-koeln.de";
+
+// Primary SMTP
+$mail[0]['smtp']['server'] 						= "";
+$mail[0]['smtp']['port'] 						= "";
+$mail[0]['smtp']['username'] 					= "";
+$mail[0]['smtp']['password'] 					= "";
+
+// Secondary SMTP
+// $mail[1]['smtp']['server'] 					= "";
+// $mail[1]['smtp']['port'] 					= "";
+///$mail[1]['smtp']['username'] 				= "";
+// $mail[1]['smtp']['password'] 				= "";
+
+
+$ldap['enable']									= false;
+
+
+$server['binary']['enable']						= false;
+$server['binary']['java']['home']				= "";
+$server['binary']['java']['vm']					= "";
+$server['binary']['java']['xms']				= "";
+$server['binary']['java']['xmx']				= "";
+
+
+$server['imagick']['enable']					= true;	
+
+
+$server['update_check']['enable']				= false;
+$server['update_check']['url']					= "http://update.open-lims.org/check.php";
+
+
+$server['security']['session_timeout']			= 36000;
+$server['security']['max_ip_failed_logins']		= 10;
+$server['security']['max_ip_lead_time']			= 36000;
+
+
+$server['behaviour']['debug_mode']				= true;
+$server['behaviour']['avoid_css_cache']			= true;
+$server['behaviour']['avoid_js_cache']			= true;
+$server['behaviour']['on_db_rollback']			= true;
+$server['behaviour']['on_db_expected_rollback']	= false;
+$server['behaviour']['on_db_commit']			= false;
 ?>

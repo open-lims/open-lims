@@ -17,7 +17,7 @@ $(document).ready(function()
 				$.ajax(
 				{
 					type: "POST",
-					url: "core/modules/manufacturer/ajax/manufacturer.ajax.php?session_id="+get_array['session_id']+"&run=exist_name",
+					url: "ajax.php?session_id="+get_array['session_id']+"&nav=manufacturer&run=exist_name",
 					data: "name="+$("#ManufacturerAddDialogField").val(),
 					success: function(data)
 					{
@@ -26,7 +26,7 @@ $(document).ready(function()
 							$.ajax(
 							{
 								type: "POST",
-								url: "core/modules/manufacturer/ajax/manufacturer.ajax.php?session_id="+get_array['session_id']+"&run=add_entry",
+								url: "ajax.php?session_id="+get_array['session_id']+"&nav=manufacturer&run=add_entry",
 								data: "name="+$("#ManufacturerAddDialogField").val(),
 								success: function(data)
 								{
@@ -50,7 +50,7 @@ $(document).ready(function()
 		$.ajax(
 		{
 			type: "POST",
-			url: "core/modules/manufacturer/ajax/manufacturer.ajax.php?session_id="+get_array['session_id']+"&run=exist_name",
+			url: "ajax.php?session_id="+get_array['session_id']+"&nav=manufacturer&run=exist_name",
 			data: "name="+$("#ManufacturerAddDialogField").val(),
 			success: function(data)
 			{

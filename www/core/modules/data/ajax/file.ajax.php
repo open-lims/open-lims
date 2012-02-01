@@ -312,31 +312,46 @@ class FileAjax
 	
 	public static function add_file($folder_id)
 	{
-		$paramquery = $_GET;
-		$unique_id = uniqid();
-		$paramquery[unique_id] = $unique_id;
-		$params = http_build_query($paramquery);
-		$template = new HTMLTemplate("data/file_upload_window.html");
-		$template->set_var("params", $params);
-		$template->set_var("unique_id", $unique_id);
-		$template->set_var("session_id", $_GET[session_id]);
-		$button_handler_template = new JSTemplate("data/js/file_upload_window.js");
-		$button_handler = $button_handler_template->get_string();
-		$button_handler_caption = "Add";
-		$html_caption = "Add File";
-		$html = $template->get_string();
-		$additional_script_template = new JSTemplate("data/js/file_upload_window_additional.js");
-		$additional_script_template->set_var("session_id", $_GET['session_id']);
-		$additional_script_template->set_var("unique_id", $unique_id);
-		$additional_script = $additional_script_template->get_string();
-		$array = array("content"=>$html , "content_caption"=>$html_caption , "handler"=>$button_handler , "handler_caption"=>$button_handler_caption, "additional_script"=>$additional_script);
-		return json_encode($array);
+		$parent_folder = Folder::get_instance($folder_id);
+		if ($parent_folder->is_write_access())
+		{
+			$paramquery = $_GET;
+			$unique_id = uniqid();
+			$paramquery[unique_id] = $unique_id;
+			$params = http_build_query($paramquery);
+			$template = new HTMLTemplate("data/file_upload_window.html");
+			$template->set_var("params", $params);
+			$template->set_var("unique_id", $unique_id);
+			$template->set_var("session_id", $_GET[session_id]);
+			$button_handler_template = new JSTemplate("data/js/file_upload_window.js");
+			$button_handler = $button_handler_template->get_string();
+			$button_handler_caption = "Add";
+			$html_caption = "Add File";
+			$html = $template->get_string();
+			$additional_script_template = new JSTemplate("data/js/file_upload_window_additional.js");
+			$additional_script_template->set_var("session_id", $_GET['session_id']);
+			$additional_script_template->set_var("unique_id", $unique_id);
+			$additional_script = $additional_script_template->get_string();
+			$array = array("content"=>$html , "content_caption"=>$html_caption , "handler"=>$button_handler , "handler_caption"=>$button_handler_caption, "additional_script"=>$additional_script);
+			return json_encode($array);
+		}
+		else
+		{
+			throw new DataSecurityAccessDeniedException();
+		}
 	}
 	
 	private static function delete_file($file_id) 
 	{
 		$file = File::get_instance($file_id);
-		$file->delete();
+		if ($file->is_delete_access())
+		{
+			$file->delete();
+		}
+		else
+		{
+			throw new DataSecurityAccessDeniedException();
+		}
 	}
 }
 

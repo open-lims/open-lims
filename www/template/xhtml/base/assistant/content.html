@@ -5,9 +5,9 @@ $(document).ready(function()
 	
 	$.ajax(
 	{
-		type: "GET",
-		url: "[[AJAX_HANDLER]]",
-		data: "session_id="+get_array['session_id']+"&run=get_content&page=[[AJAX_PAGE]]",
+		type: "POST",
+		url: "[[AJAX_HANDLER]]&session_id="+get_array['session_id']+"&action=get_content",
+		data: "page=[[AJAX_PAGE]]",
 		success: function(data)
 		{
 			if (data)

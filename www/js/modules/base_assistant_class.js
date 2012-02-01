@@ -81,9 +81,9 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 		
 		$.ajax(
 		{
-			type: "GET",
-			url: ajax_handler,
-			data: "session_id="+get_array['session_id']+"&run=get_content&form_field_name="+form_field_name+"&page="+page,
+			type: "POST",
+			url: ajax_handler+"&session_id="+get_array['session_id']+"&action=get_content",
+			data: "form_field_name="+form_field_name+"&page="+page,
 			success: function(data)
 			{
 				if (data)
@@ -146,7 +146,7 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 		$.ajax(
 		{
 			type: "POST",
-			url: ajax_handler+"?session_id="+get_array['session_id']+"&run=set_data",
+			url: ajax_handler+"&session_id="+get_array['session_id']+"&action=set_data",
 			async: false,
 			data: "page="+page+"&data="+json_array,
 			success: function(data)
@@ -183,10 +183,10 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 
 			$.ajax(
 			{
-				type: "GET",
-				url: ajax_handler,
+				type: "POST",
+				url: ajax_handler+"&session_id="+get_array['session_id']+"&action=get_next_page",
 				async: false,
-				data: "session_id="+get_array['session_id']+"&run=get_next_page&page="+page,
+				data: "page="+page,
 				success: function(data)
 				{
 					page = parseInt(data);
@@ -215,9 +215,9 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 		{
 			$.ajax(
 			{
-				type: "GET",
-				url: ajax_handler,
-				data: "username="+get_array['username']+"&session_id="+get_array['session_id']+"&run=run",
+				type: "POST",
+				url: ajax_handler+"&username="+get_array['username']+"&session_id="+get_array['session_id']+"&action=run",
+				data: "",
 				beforeSend: function()
 				{
 					$.blockUI({ message: $('#AssistantFinish') , css: { width: '275px' }} ); 
@@ -267,10 +267,10 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 			
 			$.ajax(
 			{
-				type: "GET",
-				url: ajax_handler,
+				type: "POST",
+				url: ajax_handler+"&session_id="+get_array['session_id']+"&action=get_previous_page",
 				async: false,
-				data: "session_id="+get_array['session_id']+"&run=get_previous_page&page="+page,
+				data: "page="+page,
 				success: function(data)
 				{
 					page = parseInt(data);
