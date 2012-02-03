@@ -101,13 +101,13 @@ class ImageCache // implements ImageCacheInterface, EventListenerInterface
 				$height = $file_image_cache->get_height();
 				$file_image_cache->set_last_access(date("Y-m-d H:i:s"));
 				
-				if ($this->file_version_extension)
+				if (strtolower($this->file_version_extension) == "png")
 				{
-					return $this->file_version_id."-".$width."-".$height.".".$this->file_version_extension;
+					return $this->file_version_id."-".$width."-".$height.".png";
 				}
 				else
 				{
-					return $this->file_version_id."-".$width."-".$height."";
+					return $this->file_version_id."-".$width."-".$height.".jpg";
 				}
 			}
 			else
@@ -128,13 +128,13 @@ class ImageCache // implements ImageCacheInterface, EventListenerInterface
 				$width = $file_image_cache->get_width();
 				$file_image_cache->set_last_access(date("Y-m-d H:i:s"));
 				
-				if ($this->file_version_extension)
+				if (strtolower($this->file_version_extension) == "png")
 				{
-					return $this->file_version_id."-".$width."-".$height.".".$this->file_version_extension;
+					return $this->file_version_id."-".$width."-".$height.".png";
 				}
 				else
 				{
-					return $this->file_version_id."-".$width."-".$height."";
+					return $this->file_version_id."-".$width."-".$height.".jpg";
 				}
 			}
 			else
@@ -192,7 +192,14 @@ class ImageCache // implements ImageCacheInterface, EventListenerInterface
 				$file_path = constant("BASE_DIR")."/".$folder_path."/".$file->get_data_entity_id()."-".$file->get_internal_revision().".".$extension_array[$extension_array_length];
 				if (file_exists($file_path))
 				{
-					return new Imagick($file_path);
+					try
+					{
+						return new Imagick($file_path);
+					}
+					catch(ImagickException $e)
+					{
+						die("Unsupported File or Internal Error");
+					}
 				}
 			}
 		}
@@ -209,11 +216,6 @@ class ImageCache // implements ImageCacheInterface, EventListenerInterface
 		{
 			$image = $this->open_image();
 			
-			if ($image->getImageFormat() != "PNG")
-			{
-				$image->setImageFormat("jpg");	
-			}
-			
 			if ($width)
 			{
 				$image->thumbnailImage($width,0);
@@ -227,15 +229,16 @@ class ImageCache // implements ImageCacheInterface, EventListenerInterface
 				return null;
 			}
 			
-			if ($this->file_version_extension)
+			if ($image->getImageFormat() != "PNG")
 			{
-				$cached_file_name = $this->file_version_id."-".$image->getImageWidth()."-".$image->getImageHeight().".".$this->file_version_extension;
+				$image->setImageFormat("jpg");	
+				$cached_file_name = $this->file_version_id."-".$image->getImageWidth()."-".$image->getImageHeight().".jpg";
 			}
 			else
 			{
-				$cached_file_name = $this->file_version_id."-".$image->getImageWidth()."-".$image->getImageHeight()."";
+				$cached_file_name = $this->file_version_id."-".$image->getImageWidth()."-".$image->getImageHeight().".png";
 			}
-			
+
 			$image->writeImage(constant("BASE_DIR")."/filesystem/temp/".$cached_file_name);
 			
 			$file_image_cache = new FileImageCache_Access(null);
@@ -248,5 +251,80 @@ class ImageCache // implements ImageCacheInterface, EventListenerInterface
 			return null;
 		}
 	}
+	
+	/**
+	 * @see EventListenerInterface::listen_events()
+     * @param object $event_object
+     * @return bool
+     */
+    public static function listen_events($event_object)
+    {
+   		if ($event_object instanceof FileDeleteEvent)
+    	{    		
+    		$file_version_array = FileVersion_Access::list_entries_by_toid($event_object->get_file_id());
+    		    		
+    		if (is_array($file_version_array))
+    		{
+    			foreach($file_version_array as $key => $value)
+    			{    				
+    				if (self::delete_file_version_entries($value) == false)
+    				{
+    					return false;
+    				}
+    			}
+    		}
+    	}
+    	
+    	if ($event_object instanceof FileVersionDeleteEvent)
+    	{
+    		if (self::delete_file_version_entries($event_object->get_file_version_id()) == false)
+    		{
+    			return false;
+    		}
+    	}
+    	
+    	return true;
+    }
+    
+    private static function delete_file_version_entries($file_version_id)
+    {
+    	if (is_numeric($file_version_id))
+    	{
+    		$entry_array = FileImageCache_Access::list_all_file_version_entries($file_version_id);
+    		
+    		if (is_array($entry_array) and count($entry_array) >= 1)
+    		{
+    			foreach ($entry_array as $key => $value)
+    			{
+    				if (file_exists(constant("BASE_DIR")."/filesystem/temp/".$file_version_id."-".$value['width']."-".$value['height'].".jpg"))
+					{
+						if (unlink(constant("BASE_DIR")."/filesystem/temp/".$file_version_id."-".$value['width']."-".$value['height'].".jpg") == false)
+						{
+							return false;
+						}
+					}
+					elseif(file_exists(constant("BASE_DIR")."/filesystem/temp/".$file_version_id."-".$value['width']."-".$value['height'].".png"))
+					{
+						if (unlink(constant("BASE_DIR")."/filesystem/temp/".$file_version_id."-".$value['width']."-".$value['height'].".png") == false)
+						{
+							return false;
+						}
+					}
+					
+					$file_image_cache = new FileImageCache_Access($value['id']);
+					if ($file_image_cache->delete() == false)
+					{
+						return false;
+					}
+    			}
+    		}
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    	
+    	return true;
+    }
 }
 ?>

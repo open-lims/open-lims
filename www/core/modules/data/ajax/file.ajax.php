@@ -281,7 +281,7 @@ class FileAjax
 					$permission = DataAjax::permission_window();
 					$button_handler_template = new JSTemplate("data/js/file_permission_window.js");
 					$button_handler_template->set_var("session_id", $_GET['session_id']);
-					$button_handler_template->set_var("file_id", $_GET['file_id']);
+					$button_handler_template->set_var("file_id", $_POST['file_id']);
 					$button_handler = $button_handler_template->get_string();
 					$button_handler_caption = "Change";
 					$html_caption = "Change permission";
@@ -298,7 +298,7 @@ class FileAjax
 					$template = new HTMLTemplate("data/file_delete_window.html");
 					$button_handler_template = new JSTemplate("data/js/file_delete_window.js");
 					$button_handler_template->set_var("session_id", $_GET['session_id']);
-					$button_handler_template->set_var("file_id", $_GET['file_id']);
+					$button_handler_template->set_var("file_id", $_POST['file_id']);
 					$button_handler = $button_handler_template->get_string();
 					$button_handler_caption = "Delete";
 					$html_caption = "Delete File";

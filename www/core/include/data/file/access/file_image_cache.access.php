@@ -438,5 +438,66 @@ class FileImageCache_Access
 			return null;
 		}
 	}
+
+	/**
+	 * @return integer
+	 */
+	public static function get_cache_size()
+	{
+		global $db;
+		
+		$sql = "SELECT SUM(size) AS result FROM ".constant("FILE_IMAGE_CACHE_TABLE")."";
+		$res = $db->db_query($sql);
+		$data = $db->db_fetch_assoc($res);
+		
+		if ($data['result'])
+		{
+			return $data['result'];
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $file_version_id
+	 * @return integer
+	 */
+	public static function list_all_file_version_entries($file_version_id)
+	{
+		global $db;
+		
+		if (is_numeric($file_version_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT id,height,width FROM ".constant("FILE_IMAGE_CACHE_TABLE")." WHERE file_version_id='".$file_version_id."'";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				$temp_array = array();
+				$temp_array['id'] = $data['id'];
+				$temp_array['height'] = $data['height'];
+				$temp_array['width'] = $data['width'];
+				array_push($return_array,$temp_array);
+				unset($temp_array);	
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
 }
 ?>

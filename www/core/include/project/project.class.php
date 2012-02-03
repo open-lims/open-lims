@@ -2425,6 +2425,21 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     		}
     	}
     	
+    	if ($event_object instanceof FileVersionDeleteEvent)
+    	{
+    		$folder_id = $event_object->get_folder_id();
+    		if (($project_id = ProjectFolder::get_project_id_by_folder_id($folder_id)) != null)
+    		{
+    			$project = new Project($project_id);							
+				$new_project_filesize = $project->get_filesize() - $event_object->get_filesize();
+
+				if ($project->set_filesize($new_project_filesize) == false)
+				{
+					return false;
+				}
+    		}
+    	}
+    	
     	return true;
     }
 
