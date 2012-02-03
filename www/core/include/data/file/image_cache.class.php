@@ -99,6 +99,12 @@ class ImageCache // implements ImageCacheInterface, EventListenerInterface
 			{
 				$file_image_cache = new FileImageCache_Access($image_cache_id);
 				$height = $file_image_cache->get_height();
+				
+				if ($this->max_height < $height)
+				{
+					return $this->get_image(null, $this->max_height);
+				}
+				
 				$file_image_cache->set_last_access(date("Y-m-d H:i:s"));
 				
 				if (strtolower($this->file_version_extension) == "png")
@@ -126,6 +132,12 @@ class ImageCache // implements ImageCacheInterface, EventListenerInterface
 			{
 				$file_image_cache = new FileImageCache_Access($image_cache_id);
 				$width = $file_image_cache->get_width();
+				
+				if ($this->max_width < $width)
+				{
+					return $this->get_image($this->max_width);
+				}
+				
 				$file_image_cache->set_last_access(date("Y-m-d H:i:s"));
 				
 				if (strtolower($this->file_version_extension) == "png")
@@ -253,6 +265,15 @@ class ImageCache // implements ImageCacheInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @todo save max-values in reg
+	 * @todo run 1 time a day (cron)
+	 */
+	private function check_cache()
+	{
+		
+	}
+	
+	/**
 	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
@@ -286,6 +307,10 @@ class ImageCache // implements ImageCacheInterface, EventListenerInterface
     	return true;
     }
     
+    /**
+     * @param integer $file_version_id
+     * @return bool
+     */
     private static function delete_file_version_entries($file_version_id)
     {
     	if (is_numeric($file_version_id))

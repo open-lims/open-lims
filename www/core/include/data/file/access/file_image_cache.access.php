@@ -461,6 +461,27 @@ class FileImageCache_Access
 	}
 	
 	/**
+	 * @return integer
+	 */
+	public static function get_number_of_images()
+	{
+		global $db;
+		
+		$sql = "SELECT COUNT(id) AS result FROM ".constant("FILE_IMAGE_CACHE_TABLE")."";
+		$res = $db->db_query($sql);
+		$data = $db->db_fetch_assoc($res);
+		
+		if ($data['result'])
+		{
+			return $data['result'];
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @param integer $file_version_id
 	 * @return integer
 	 */
@@ -483,6 +504,68 @@ class FileImageCache_Access
 				$temp_array['width'] = $data['width'];
 				array_push($return_array,$temp_array);
 				unset($temp_array);	
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public static function get_outdated_files_by_date($date)
+	{
+		global $db;
+		
+		if ($date)
+		{
+			$return_array = array();
+			
+			$sql = "SELECT id FROM ".constant("FILE_IMAGE_CACHE_TABLE")." WHERE last_access < '".$date."'";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,$data['id']);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public static function get_outdated_files_by_number($number)
+	{
+		global $db;
+		
+		if (is_numeric($number))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT id FROM ".constant("FILE_IMAGE_CACHE_TABLE")." ORDER BY last_access ASC LIMIT ".$number;
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
