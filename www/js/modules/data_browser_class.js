@@ -102,7 +102,18 @@ function data_browser()
 			{
 				linked_folder_id = linked_folder_id.split("&")[0];
 			}
+			
 			var linked_virtual_folder_id = href.split("&vfolder_id=")[1];
+			if(linked_virtual_folder_id != undefined)
+			{
+				linked_virtual_folder_id = linked_virtual_folder_id.split("&")[0];
+			}
+			
+			var linked_file_id  = href.split("&file_id=")[1];
+			if(linked_file_id != undefined)
+			{
+				linked_file_id = linked_file_id.split("&")[0];
+			}
 			
 			$(this)
 				.unbind("mouseover mouseleave click")
@@ -177,7 +188,7 @@ function data_browser()
 						}
 					}
 					else
-					 { 
+					{ 
 						if($(evt.target).hasClass("DataBrowserDeleteCheckbox"))
 						{ //clicked checkbox
 							var box = $(evt.target);
@@ -211,8 +222,8 @@ function data_browser()
 				{ //bind thumbnail handler
 					var filename = $(this).children().text();
 					if(is_image(filename))
-					{
-						show_thumbnail($(this).children(),"<div><img src='image.php?session_id="+get_array['session_id']+"&file_id=2265&max_width=100&max_height=100' alt='' /></div>");
+					{						
+						show_thumbnail($(this).children(),"<div><img src='image.php?session_id="+get_array['session_id']+"&file_id="+linked_file_id+"&max_width=100&max_height=100' alt='' /></div>");
 					}			
 				});
 		});

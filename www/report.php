@@ -24,6 +24,8 @@
 	/**
 	 * @ignore
 	 */
+	global $db;
+
 	define("UNIT_TEST", false);
 
 	require_once("config/version.php");
@@ -32,6 +34,11 @@
  	SystemConfig::load_system_config("config/main.php");
  	
 	require_once("core/db/db.php");
+	
+	$database = SystemConfig::get_database();
+		
+	$db = new Database($database['type']);
+	$db->db_connect($database[0]['server'],$database[0]['port'],$database['user'],$database['password'],$database['database']);
 	
 	require_once("core/include/base/system/transaction.class.php");
 	require_once("core/include/base/system/events/event.class.php");
@@ -49,14 +56,7 @@
 	require_once("libraries/tcpdf/tcpdf.php");
 	
 	if ($_GET[session_id])
-	{
-		global $db;
-		
-		$database = SystemConfig::get_database();
-		
-		$db = new Database($database['type']);
-		$db->db_connect($database[0]['server'],$database[0]['port'],$database['user'],$database['password'],$database['database']);
-			
+	{	
 		Security::protect_session();
 		
 		$transaction = new Transaction();

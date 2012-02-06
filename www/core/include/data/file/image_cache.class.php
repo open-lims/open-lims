@@ -263,16 +263,7 @@ class ImageCache // implements ImageCacheInterface, EventListenerInterface
 			return null;
 		}
 	}
-	
-	/**
-	 * @todo save max-values in reg
-	 * @todo run 1 time a day (cron)
-	 */
-	private function check_cache()
-	{
 		
-	}
-	
 	/**
 	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
@@ -302,6 +293,11 @@ class ImageCache // implements ImageCacheInterface, EventListenerInterface
     		{
     			return false;
     		}
+    	}
+    	
+    	if ($event_object instanceof CronEvent)
+    	{
+    		
     	}
     	
     	return true;
