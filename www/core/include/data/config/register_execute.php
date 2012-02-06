@@ -80,6 +80,29 @@ function register_data($include_id)
 		return false;
 	}
 
+	if (!Registry::is_value("data_user_default_quota"))
+	{
+		$registry = new Registry(null);
+		$registry->create("data_user_default_quota", $include_id, "53687091200");
+	}
+	
+	if (!Registry::is_value("data_quota_warning"))
+	{
+		$registry = new Registry(null);
+		$registry->create("data_quota_warning", $include_id, "90");
+	}
+	
+	if (!Registry::is_value("data_max_cached_images"))
+	{
+		$registry = new Registry(null);
+		$registry->create("data_max_cached_images", $include_id, "100000");
+	}
+	
+	if (!Registry::is_value("data_max_cache_period"))
+	{
+		$registry = new Registry(null);
+		$registry->create("data_max_cache_period", $include_id, "30");
+	}
 	
 	return true;
 }

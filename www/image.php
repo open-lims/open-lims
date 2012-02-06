@@ -30,7 +30,6 @@
 	require_once("core/include/base/system/system_config.class.php");
 
  	SystemConfig::load_system_config("config/main.php");
- 	SystemConfig::load_module_config();
  	
 	require_once("core/db/db.php");
 	
@@ -42,6 +41,8 @@
 	require_once("core/include/base/security/session.class.php");
 
 	require_once("core/include/base/system/autoload.function.php");	
+	
+	SystemConfig::load_module_config();
 	
 	if ($_GET['session_id'] and $_GET['file_id'])
 	{

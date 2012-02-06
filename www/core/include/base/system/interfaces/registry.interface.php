@@ -21,12 +21,51 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
+
 /**
- * 
+ * Registry Interface
+ * @package base
  */
-	$event_listener[0] = "SystemMessage";
-	$event_listener[1] = "ModuleNavigation";
-	$event_listener[2] = "ModuleLink";
-	$event_listener[3] = "ModuleDialog";
-	$event_listener[4] = "Registry";
+interface RegistryInterface
+{
+	/**
+	 * @param integer $id
+	 */
+	function __construct($id);
+	
+	function __destruct();
+	
+	/**
+	 * @param string $name
+	 * @param integer $include_id
+	 * @param string $value
+	 * @return integer
+	 */
+	public function create($name, $include_id, $value);
+	
+	/**
+	 * @return bool
+	 */
+	public function delete();
+	
+	
+	/**
+	 * @param string $name
+	 * @return string
+	 */
+	public static function is_value($name);
+	
+	/**
+	 * @param string $name
+	 * @return string
+	 */
+	public static function get_value($name);
+	
+	/**
+	 * @param string $name
+	 * @param string $value
+	 * @return bool
+	 */
+	public static function set_value($name, $value);
+}
 ?>

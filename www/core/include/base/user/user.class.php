@@ -184,7 +184,7 @@ class User implements UserInterface {
 						$user_admin_setting->set_user_locked(false);
 					}
 										
-					$user_profile_setting->set_timezone_id(constant("TIMEZONE_ID"));
+					$user_profile_setting->set_timezone_id(Registry::get_value("base_timezone_id"));
 					
 					if ($this->user_profile->create($user_id, $gender, $title, $forename, $surname, $mail) == null)
 					{

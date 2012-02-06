@@ -267,7 +267,7 @@ class SampleCloneAjax
 				}
 				else
 				{
-					$template->set_var("expiry_warning",constant("SAMPLE_EXPIRY_WARNING"));
+					$template->set_var("expiry_warning",(int)Registry::get_value("sample_default_expiry_warning"));
 				}
 				
 				if ($sample_description)

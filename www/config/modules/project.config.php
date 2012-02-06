@@ -25,16 +25,6 @@
  * 
  */ 
 define("PROJECT_FOLDER_ID",				4);
-
-define("PROJECT_USER_STD_QUOTA",		1073741824);
-
-// Standard Permissions of new Projects
-define("PROJECT_USER_STD_PERMISSION",	15);	// The Owner
-define("PROJECT_LEADER_STD_PERMISSION",	51);	// The Leader of the organ. Unit
-define("PROJECT_QM_STD_PERMISSION",		1);		// The Qualit Manager
-define("PROJECT_GROUP_STD_PERMISSION",	1);		// The group(s) of the organ. Unit
-define("PROJECT_OU_STD_PERMISSION",		1);		// The organ. Unit
-
 define("PROJECT_LOG_ENTRIES_PER_PAGE", 	6);
 
 ?>

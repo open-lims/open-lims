@@ -107,8 +107,12 @@ class BaseIO
 		
 		$template->set_var("product", constant("PRODUCT"));
 		$template->set_var("product_version", constant("PRODUCT_VERSION"));
-		$template->set_var("product_user", constant("PRODUCT_USER"));
-		$template->set_var("product_function", constant("PRODUCT_FUNCTION"));
+		
+		$product_user = Registry::get_value("base_product_user");
+		$product_function = Registry::get_value("base_product_function");
+		
+		$template->set_var("product_user", $product_user);
+		$template->set_var("product_function", $product_function);
 
 		$paramquery = $_GET;
 		$paramquery[run] = "software_info";

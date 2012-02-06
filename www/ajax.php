@@ -34,7 +34,6 @@
  require_once("core/include/base/system/system_config.class.php");
 
  SystemConfig::load_system_config("config/main.php");
- SystemConfig::load_module_config();
 
  require_once("core/include/base/system/template.class.php");
  require_once("core/include/base/system/html_template.class.php");

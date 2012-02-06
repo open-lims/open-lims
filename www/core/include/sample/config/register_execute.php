@@ -79,6 +79,12 @@ function register_sample($include_id)
 		return false;
 	}
 	
+	if (!Registry::is_value("sample_default_expiry_warning"))
+	{
+		$registry = new Registry(null);
+		$registry->create("sample_default_expiry_warning", $include_id, "7");
+	}
+	
 	return true;
 }
 $result = register_sample($key);

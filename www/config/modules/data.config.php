@@ -24,9 +24,6 @@
 /**
  * 
  */ 
-define("USER_STD_QUOTA",				53687091200);
-define("QUOTA_WARNING",					90);
-
 define("TEMP_FOLDER_ID",				6);
 define("ORGANISATION_UNIT_FOLDER_ID",	3);
 define("USER_FOLDER_ID",				8);

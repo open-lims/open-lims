@@ -25,28 +25,19 @@
  * 
  */
 $server['main_folder']							= "D:/web/open-lims";
-$server['timezone']								= "Europe/Berlin";
-$server['timezone_id']							= 26;
-
 
 $database['type'] 								= "postgres";
-$database['database'] 						= "open-lims";
-$database['user'] 							= "dbadmin";
-$database['password']						= "dbadmin";
+$database['database'] 							= "open-lims";
+$database['user'] 								= "dbadmin";
+$database['password']							= "dbadmin";
 
 // Primary Database Server
-$database['server']							= "localhost";
-$database['port'] 							= "";
+$database['server']								= "localhost";
+$database['port'] 								= "";
 
 // Secondary Database Server
 // $database[1]['server']						= "localhost";
 // $database[1]['port'] 						= "";
-
-
-$server['os']									= "win";
-$server['user']									= "University of Cologne";
-$server['function']								= "development server";
-$server['html_title']							= "Open-LIMS (development server)";
 
 
 $mail['enable'] 								= true;
@@ -77,15 +68,6 @@ $server['binary']['java']['xmx']				= "";
 
 
 $server['imagick']['enable']					= true;	
-
-
-$server['update_check']['enable']				= false;
-$server['update_check']['url']					= "http://update.open-lims.org/check.php";
-
-
-$server['security']['session_timeout']			= 36000;
-$server['security']['max_ip_failed_logins']		= 10;
-$server['security']['max_ip_lead_time']			= 36000;
 
 
 $server['behaviour']['debug_mode']				= true;

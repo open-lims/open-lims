@@ -76,6 +76,8 @@ class Main
 			
 			require_once("include/base/system/autoload.function.php");
 			
+			SystemConfig::load_module_config();
+			
 			if ($connection_result == true)
 			{
 				require_once("include/base/system/transaction.class.php");

@@ -23,8 +23,11 @@
  	
 /**
  * 
- */ 
-define("LOGIN_FOOTER", "".constant("PRODUCT").", version: ".constant("PRODUCT_VERSION").", ".constant("PRODUCT_FUNCTION").", ".constant("PRODUCT_USER")." " .
+ */
+$product_user = Registry::get_value("base_product_user");
+$product_function = Registry::get_value("base_product_function");
+
+define("LOGIN_FOOTER", "".constant("PRODUCT").", version: ".constant("PRODUCT_VERSION").", ".$product_function.", ".$product_user." " .
 						"<br />This is free software; It comes with ABSOLUTELY NO WARRANTY." .
 						"<br />by R. Konertz, B. Tunggal, L. Eichinger et al.; 2008-2011");
 ?>

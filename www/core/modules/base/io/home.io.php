@@ -61,7 +61,7 @@
 	 	
 	 }
 	 
-	if (round($user_filesize/$user_quota*100,0) >= constant("QUOTA_WARNING")) {
+	if (round($user_filesize/$user_quota*100,0) >= (int)Registry::get_value("data_quota_warning")) {
 		$quotaWarn = " <img src='images/icons/notice.png' alt='W' />";
 	}
  }else{

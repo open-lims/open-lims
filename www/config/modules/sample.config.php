@@ -25,7 +25,4 @@
  * 
  */ 
 define("SAMPLE_FOLDER_ID",				5);
-
-define("SAMPLE_EXPIRY_WARNING", 7);
-
 ?>

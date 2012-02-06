@@ -137,8 +137,9 @@ class Session implements SessionInterface
 			$session_mktime = mktime((int)$session_time[0],(int)$session_time[1],(int)$session_time[2],(int)$session_date[1],(int)$session_date[2],(int)$session_date[0]);
 			
 			$current_mktime = mktime();
+			$session_timeout = Registry::get_value("base_session_timeout");
 			
-			$max_session_mktime = $session_mktime+constant("MAX_SESSION_PERIOD");
+			$max_session_mktime = $session_mktime+(int)$session_timeout;
 			
 			if ($current_mktime > $max_session_mktime)
 			{
@@ -331,8 +332,9 @@ class Session implements SessionInterface
 				$session_mktime = mktime($session_time[0],$session_time[1],$session_time[2],$session_date[1],$session_date[2],$session_date[0]);
 				
 				$current_mktime = mktime();
+				$session_timeout = Registry::get_value("base_session_timeout");
 				
-				$max_session_mktime = $session_mktime+constant("MAX_SESSION_PERIOD");
+				$max_session_mktime = $session_mktime+(int)$session_timeout;
 				
 				if ($current_mktime > $max_session_mktime)
 				{
