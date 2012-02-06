@@ -1,6 +1,6 @@
-<?php 
+<?php
 /**
- * @package project
+ * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2012 by Roman Konertz
@@ -22,22 +22,27 @@
  */
 
 /**
- * 
+ * Sample Home IO Class
+ * @package sample
  */
-	$link[0][type]				= "home_button";
-	$link[0]['array'][nav]		= "project";
-	$link[0]['array'][run]		= "new";
-	$link[0][file]				= "project/home/buttons/create.html";
-	$link[0][weight]			= 100;
+class SampleHomeIO
+{
+	public static function samples()
+	{
+		global $user;
+		
+		$template = new HTMLTemplate("sample/home/summary/my_samples.html");
+		$template->set_var("samples",Sample_Wrapper::count_user_samples($user->get_user_id()));
+		return $template->get_string();
+	}
 	
-	$link[1][type]				= "home_button";
-	$link[1]['array'][nav]		= "project";
-	$link[1][file]				= "project/home/buttons/view_my.html";
-	$link[1][weight]			= 200;
-	
-	$link[2][type]				= "ou_navigation";
-	$link[2]['array'][nav]		= "project";
-	$link[2]['array'][run]		= "organ_unit";
-	$link[2]['array'][ou_id]	= "%OU_ID%";
-	$link[2][weight]			= 0;
+	/**
+	 * Reserved for further usage
+	 */
+	public static function empty_space()
+	{
+		$template = new HTMLTemplate("sample/home/summary/empty.html");
+		return $template->get_string();
+	}
+}
 ?>

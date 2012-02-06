@@ -438,7 +438,35 @@ padding: 2px 2px 2px 5px;
 	height: 10px;
 }
 
-
+/* Home */
+#HomeWelcome
+{
+	float: left;
+}
+#HomeDate
+{
+	float: right;
+}
+#HomeSummary
+{
+	width: 100%;
+}
+#HomeSummaryLeft
+{
+	float: left;
+	width: 355px;
+	padding: 0 5px;
+}
+#HomeSummaryRight
+{
+	float: right;
+	width: 355px;
+	padding: 0 5px;
+}
+#HomeSummaryClear
+{
+	clear: both;
+}
 .HomeLeft
 {
 	float: left;
@@ -455,6 +483,8 @@ padding: 2px 2px 2px 5px;
 {
 	min-height: 350px;
 }
+
+
 .LoginBox
 {
 	width: 450px;

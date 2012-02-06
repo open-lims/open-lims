@@ -24,66 +24,46 @@
 /**
  *
  */
- $user_data = new DataUserData($user->get_user_id());
- $template = new HTMLTemplate("base/home.html");
+$template = new HTMLTemplate("base/home.html");
 
- $homeDate = date("l, jS F Y");
+$template->set_var("USERNAME",$user->get_full_name(false));
+$template->set_var("DATE",date("l, jS F Y"));
 
- $template->set_var("USERNAME",$user->get_full_name(false));
- $template->set_var("DATE",$homeDate);
-
- $project = new Project(null);
-  
- $user_filesize = $user_data->get_filesize();
- $user_quota = $user_data->get_quota();
- 
- if ($user_quota == 0) {
- 	$quota = "unlimited";
- } else{
- 	$quota = Convert::convert_byte_1024($user_quota); 	
- }
- 
- if ($user_quota != 0) {
-	 $diskspace_per = $user_filesize / $user_quota*100;
-	 
-	 if ($diskspace_per == 0) {
-	 	$diskspace_per_display = "(0%)";
-	 }else{
-	 	
-	 	
-	 	$diskspace_per = floor($diskspace_per);
-	 	
-	 	if ($diskspace_per == 0) {
-	 		$diskspace_per_display = "(> 1%)";	
-	 	}else{
-	 		$diskspace_per_display = "(".$diskspace_per."%)";
-	 	}
-	 	
-	 }
-	 
-	if (round($user_filesize/$user_quota*100,0) >= (int)Registry::get_value("data_quota_warning")) {
-		$quotaWarn = " <img src='images/icons/notice.png' alt='W' />";
-	}
- }else{
- 	$quotaWarn = "";
- 	$diskspace_per_display = "";
- }
- 
- $act_filesize = Convert::convert_byte_1024($user_filesize);
- 
-
- $sum_running_projects = Project_Wrapper::count_user_running_projects($user->get_user_id());
- $sum_finished_projects = Project_Wrapper::count_user_finished_projects($user->get_user_id());
- $sum_projects = Project_Wrapper::count_user_projects($user->get_user_id());
- $sum_samples = Sample_Wrapper::count_user_samples($user->get_user_id());
- 
- $template->set_var("RUNNING_PROJECTS",$sum_running_projects."/".$sum_projects);
- $template->set_var("FINISHED_PROJECTS",$sum_finished_projects."/".$sum_projects);
- $template->set_var("SAMPLES",$sum_samples);
- $template->set_var("USED_DISKSPACE",$act_filesize." ".$diskspace_per_display."".$quotaWarn);
- $template->set_var("QUOTA",$quota);
-	 
+$home_summery_left_array = ModuleDialog::list_dialogs_by_type("home_summary_left");
 	
+if (is_array($home_summery_left_array) and count($home_summery_left_array) >= 1)
+{
+	$content_array = array();
+	$counter = 0;
+	
+	foreach ($home_summery_left_array as $key => $value)
+	{
+		require_once($value['class_path']);
+		$content_array[$counter][content] = $value['class']::$value['method']();
+		$counter++;
+	}
+	
+	$template->set_var("HOME_SUMMARY_LEFT_ARRAY" ,$content_array);
+}
+
+$home_summery_right_array = ModuleDialog::list_dialogs_by_type("home_summary_right");
+	
+if (is_array($home_summery_right_array) and count($home_summery_right_array) >= 1)
+{
+	$content_array = array();
+	$counter = 0;
+	
+	foreach ($home_summery_right_array as $key => $value)
+	{
+		require_once($value['class_path']);
+		$content_array[$counter][content] = $value['class']::$value['method']();
+		$counter++;
+	}
+	
+	$template->set_var("HOME_SUMMARY_RIGHT_ARRAY" ,$content_array);
+}
+
+
 // Menu
 
 $module_link_array = ModuleLink::list_links_by_type("home_button");
