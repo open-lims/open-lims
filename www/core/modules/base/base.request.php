@@ -30,7 +30,12 @@ class BaseRequest
 	public static function ajax_handler()
 	{
 		switch($_GET[run]):
-			
+
+			case "cron":
+				require_once("ajax/cron.ajax.php");
+				echo CronAjax::run();
+			break;
+		
 			case "login":
 				require_once("ajax/login.ajax.php");
 				echo LoginAjax::login($_POST[username], $_POST[password], $_POST[language]);

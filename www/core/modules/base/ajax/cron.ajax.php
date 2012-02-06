@@ -22,9 +22,14 @@
  */
 
 /**
- * IMPORTANT NOTE: Modification of this file is not allowed by developers!
+ * Cron AJAX IO Class
+ * @package base
  */
-define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-46-dev &#945;");
-
+class CronAjax
+{
+	public static function run()
+	{
+		Cron::run();
+	}
+}
 ?>

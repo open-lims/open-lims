@@ -72,6 +72,7 @@ function __autoload($classname)
 	$classes['BasePHPErrorException']		= $path_prefix."core/include/base/system/exceptions/base_php_error.exception.class.php";
 	
 	$classes['Convert']						= $path_prefix."core/include/base/system/convert.class.php";
+	$classes['Cron']						= $path_prefix."core/include/base/system/cron.class.php";
 	$classes['ErrorLanguage']				= $path_prefix."core/include/base/system/error_language.class.php";
 	$classes['EventHandler']				= $path_prefix."core/include/base/system/event_handler.class.php";
 	$classes['ExceptionHandler']			= $path_prefix."core/include/base/system/exception_handler.class.php";

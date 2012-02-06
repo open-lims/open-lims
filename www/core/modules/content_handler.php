@@ -146,10 +146,21 @@ class ContentHandler_IO
 		
 	 	$template->set_var("INDEX_TITLE",Registry::get_value("base_html_title"));
 	
+		if (Cron::check() == true)
+		{
+			$template->set_var("CRON",true);
+		}
+		else
+		{
+			$template->set_var("CRON",false);
+		}
+	 	
 		$template->output();
 		
 		if ($GLOBALS['fatal_error'] == null)
 		{
+			
+			
 			$max_ip_errors = (int)Registry::get_value(base_max_ip_failed_logins);
 			
 			if (Security::ip_error_count() < $max_ip_errors)
@@ -299,7 +310,7 @@ class ContentHandler_IO
 			}
 			else
 			{
-				if ($_GET[run] == "login")
+				if ($_GET[run] == "login" or $_GET[run] == "cron")
 				{
 					require_once("core/modules/base/base.request.php");
 					BaseRequest::ajax_handler();

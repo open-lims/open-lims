@@ -21,10 +21,18 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * IMPORTANT NOTE: Modification of this file is not allowed by developers!
- */
-define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-46-dev &#945;");
 
+/**
+ * Cron Interface
+ * @package base
+ */
+interface CronInterface
+{
+	public static function run();
+	
+	/**
+	 * @return bool
+	 */
+	public static function check();
+}
 ?>
