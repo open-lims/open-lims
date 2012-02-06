@@ -27,7 +27,11 @@
  */
 class CronEvent extends Event
 {   
-	function __construct($cron_id)
+	private $cron_id;
+	private $daily;
+	private $weekly;
+	
+	function __construct($cron_id, $daily = false, $weekly = false)
     {
     	if (is_numeric($cron_id))
     	{
@@ -37,6 +41,9 @@ class CronEvent extends Event
     	{
     		$this->cron_id = null;
     	}
+    	
+    	$this->daily = $daily;
+    	$this->weekly = $weekly;
     }
     
     public function get_cron_id()
@@ -44,6 +51,30 @@ class CronEvent extends Event
     	if ($this->cron_id)
     	{
     		return $this->cron_id;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+	public function get_daily()
+    {
+    	if ($this->daily)
+    	{
+    		return $this->daily;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+	public function get_weeky()
+    {
+    	if ($this->weekly)
+    	{
+    		return $this->weekly;
     	}
     	else
     	{

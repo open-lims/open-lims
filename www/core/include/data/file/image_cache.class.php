@@ -297,7 +297,39 @@ class ImageCache // implements ImageCacheInterface, EventListenerInterface
     	
     	if ($event_object instanceof CronEvent)
     	{
-    		
+    		if ($event_object->get_daily() == true)
+    		{
+    			$max_cached_images = (int)Registry::get_value("data_max_cached_images");
+    			
+    			$outdated_files = FileImageCache_Access::get_outdated_files_by_number($max_cached_images);
+    			
+    			if (is_array($outdated_files) and count($max_cached_images) >= 1)
+    			{
+    				foreach($outdated_files as $key => $value)
+    				{
+	    				if (file_exists(constant("BASE_DIR")."/filesystem/temp/".$value['file_version_id']."-".$value['width']."-".$value['height'].".jpg"))
+						{
+							if (unlink(constant("BASE_DIR")."/filesystem/temp/".$value['file_version_id']."-".$value['width']."-".$value['height'].".jpg") == false)
+							{
+								return false;
+							}
+						}
+						elseif(file_exists(constant("BASE_DIR")."/filesystem/temp/".$value['file_version_id']."-".$value['width']."-".$value['height'].".png"))
+						{
+							if (unlink(constant("BASE_DIR")."/filesystem/temp/".$value['file_version_id']."-".$value['width']."-".$value['height'].".png") == false)
+							{
+								return false;
+							}
+						}
+						
+						$file_image_cache = new FileImageCache_Access($value['id']);
+						if ($file_image_cache->delete() == false)
+						{
+							return false;
+						}
+    				}
+    			}
+    		}
     	}
     	
     	return true;

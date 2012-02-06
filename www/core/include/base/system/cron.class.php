@@ -60,23 +60,59 @@ class Cron implements CronInterface
 	{
 		if (self::check() == true)
 		{
-			$cron_event = new CronEvent(self::$last_run_id);
+			$last_run_daily_datetime = Registry::get_value("base_cron_last_run_daily_datetime");
+			$last_run_weekly_datetime = Registry::get_value("base_cron_last_run_weekly_datetime");
+			
+			$last_run_daily_datetime_handler = new DatetimeHandler($last_run_daily_datetime);
+			$last_run_weekly_datetime_handler = new DatetimeHandler($last_run_weekly_datetime);
+			$current_datetime_handler = new DatetimeHandler(date("Y-m-d H:i:s"));
+			
+			if ($last_run_daily_datetime_handler->distance($current_datetime_handler) >= 86400)
+			{
+				$daily = true;
+			}
+			else
+			{
+				$daily = false;
+			}
+			
+			if ($last_run_weekly_datetime_handler->distance($current_datetime_handler) >= 604800)
+			{
+				$weekly = true;
+			}
+			else
+			{
+				$weekly = false;
+			}
+			
+			
+			$cron_event = new CronEvent(self::$last_run_id, $daily, $weekly);
 			$event_handler = new EventHandler($cron_event);
 			
 			if ($event_handler->get_success() == true)
 			{
-				 if ((self::$last_run_id+1) > 256)
-				 {
-				 	Registry::set_value("base_cron_last_run_id", 1);
-				 	self::$last_run_id = 1;
-				 }
-				 else
-				 {
-				 	Registry::set_value("base_cron_last_run_id", (self::$last_run_id+1));
-				 	self::$last_run_id = (self::$last_run_id+1);
-				 }
-				 Registry::set_value("base_cron_last_run_datetime", date("Y-m-d H:i:s"));
-				 self::$last_run_datetime = date("Y-m-d H:i:s");
+				if ((self::$last_run_id+1) > 256)
+				{
+					Registry::set_value("base_cron_last_run_id", 1);
+					self::$last_run_id = 1;
+				}
+				else
+				{
+					Registry::set_value("base_cron_last_run_id", (self::$last_run_id+1));
+					self::$last_run_id = (self::$last_run_id+1);
+				}
+				Registry::set_value("base_cron_last_run_datetime", date("Y-m-d H:i:s"));
+				self::$last_run_datetime = date("Y-m-d H:i:s");
+				 
+				if ($daily == true)
+				{
+				 	Registry::set_value("base_cron_last_run_daily_datetime", date("Y-m-d H:i:s"));
+				}
+				 
+				if ($weekly == true)
+				{
+				 	Registry::set_value("base_cron_last_run_weekly_datetime", date("Y-m-d H:i:s"));
+				}
 			}
 		}
 	}
