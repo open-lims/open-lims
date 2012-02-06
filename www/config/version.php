@@ -25,6 +25,6 @@
  * IMPORTANT NOTE: Modification of this file is not allowed by developers!
  */
 define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-44-dev &#945;");
+define("PRODUCT_VERSION", "0.3.9.9-45-dev &#945;");
 
 ?>
