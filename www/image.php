@@ -71,7 +71,14 @@
 		
 		if ($session->is_valid() == true)
 		{
-			$image_cache = new ImageCache($_GET['file_id']);
+			try
+			{
+				$image_cache = new ImageCache($_GET['file_id']);
+			}
+			catch(Exception $e)
+			{
+				die("Exception");
+			}
 			
 			if ($_GET['max_width'])
 			{

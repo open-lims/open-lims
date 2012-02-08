@@ -90,6 +90,104 @@ class System_Wrapper_Access
 
 		return $data[result];
 	}
+	
+	/**
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_base_registry($order_by, $order_method, $start, $end)
+	{
+		global $db;
+	
+		if ($order_by and $order_method)
+		{
+			if ($order_method == "asc")
+			{
+				$sql_order_method = "ASC";
+			}
+			else
+			{
+				$sql_order_method = "DESC";
+			}
+			
+			switch($order_by):
+			
+				case "name":
+					$sql_order_by = "ORDER BY name ".$sql_order_method;
+				break;
+				
+				case "value":
+					$sql_order_by = "ORDER BY value ".$sql_order_method;
+				break;
+				
+				case "include":
+					$sql_order_by = "ORDER BY include ".$sql_order_method;
+				break;
+			
+				default:
+					$sql_order_by = "ORDER BY include,name ASC";
+				break;
+			
+			endswitch;
+		}
+		else
+		{
+			$sql_order_by = "ORDER BY name ASC";
+		}
+		
+		$sql = "SELECT ".constant("BASE_REGISTRY_TABLE").".id, " .
+							"".constant("BASE_REGISTRY_TABLE").".name AS name, " .
+							"".constant("BASE_REGISTRY_TABLE").".value AS value, " .
+							"".constant("BASE_INCLUDE_TABLE").".name AS include " .
+					 "FROM ".constant("BASE_REGISTRY_TABLE")." " .
+					"LEFT JOIN ".constant("BASE_INCLUDE_TABLE")." ON ".constant("BASE_REGISTRY_TABLE").".include_id = ".constant("BASE_INCLUDE_TABLE").".id " .
+					"".$sql_order_by."";
+		
+		$return_array = array();
+		
+		$res = $db->db_query($sql);
+		
+		if (is_numeric($start) and is_numeric($end))
+		{
+			for ($i = 0; $i<=$end-1; $i++)
+			{
+				if (($data = $db->db_fetch_assoc($res)) == null)
+				{
+					break;
+				}
+				
+				if ($i >= $start)
+				{
+					array_push($return_array, $data);
+				}
+			}
+		}
+		else
+		{
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array, $data);
+			}
+		}
+		return $return_array;
+	}
+	
+	/**
+	 * @return integer
+	 */
+	public static function count_base_registry()
+	{
+		global $db;
+
+		$sql = "SELECT COUNT(".constant("BASE_REGISTRY_TABLE").".id) AS result " .
+					 "FROM ".constant("BASE_REGISTRY_TABLE")."";
+			
+		$res = $db->db_query($sql);
+		$data = $db->db_fetch_assoc($res);
+
+		return $data[result];
+	}
 
 	/**
 	 * @param string $order_by

@@ -1,0 +1,23 @@
+<script>
+$(document).ready(function()
+{
+	$(".BaseAdminRegistryEditButton").each().live("click", function()
+	{		
+		var id = $(this).attr("id");
+			id = id.replace("BaseAdminRegistryEditButton","");
+			
+		base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=admin_registry_edit&id="+id, '', null);
+	});
+});
+</script>
+
+<br />
+
+<div id="BaseAdminRegistryEditWindow" title="Create New Log Entry" style='display: none;'>
+</div>
+			
+<!-- CONTAINER BEGIN ("Registry") -->
+
+[[LIST]]	
+
+<!-- CONTAINER END () -->

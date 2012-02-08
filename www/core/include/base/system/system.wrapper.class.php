@@ -58,6 +58,26 @@ class System_Wrapper implements System_WrapperInterface
 	}
 
 	/**
+	 * @see System_WrapperInterface::list_base_module_navigation()
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_base_registry($order_by, $order_method, $start, $end)
+	{
+		return System_Wrapper_Access::list_base_registry($order_by, $order_method, $start, $end);
+	}
+	
+	/**
+	 * @see System_WrapperInterface::count_base_module_navigation()
+	 * @return integer
+	 */
+	public static function count_base_registry()
+	{
+		return System_Wrapper_Access::count_base_registry();
+	}
+	
+	/**
 	 * @see System_WrapperInterface::list_base_module()
 	 * @param string $order_by
 	 * @param string $order_method

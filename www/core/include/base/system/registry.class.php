@@ -100,6 +100,30 @@ class Registry implements RegistryInterface, EventListenerInterface
 		}
 	}
 	
+	public function get_registry_value()
+	{
+		if ($this->registry and $this->registry_id)
+		{
+			return $this->registry->get_value();
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public function set_registry_value($value)
+	{
+		if ($this->registry and $this->registry_id and $value)
+		{
+			return $this->registry->set_value($value);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 	
 	/**
 	 * @see RegistryInterface::is_value()

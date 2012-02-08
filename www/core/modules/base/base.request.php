@@ -138,6 +138,26 @@ class BaseRequest
 				echo AdminBaseNavigationAjax::count_navigation($_POST[argument_array]);
 			break;
 			
+			case "admin_list_registry":
+				require_once("ajax/admin/admin_base_registry.ajax.php");
+				echo AdminBaseRegistryAjax::list_registry($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "admin_count_registry":
+				require_once("ajax/admin/admin_base_registry.ajax.php");
+				echo AdminBaseRegistryAjax::count_registry($_POST[argument_array]);
+			break;
+			
+			case "admin_registry_edit":
+				require_once("ajax/admin/admin_base_registry.ajax.php");
+				echo AdminBaseRegistryAjax::edit($_GET[id]);
+			break;
+			
+			case "admin_registry_edit_handler":
+				require_once("ajax/admin/admin_base_registry.ajax.php");
+				echo AdminBaseRegistryAjax::edit_handler($_POST[id], $_POST[value]);
+			break;
+			
 			case "admin_list_users":
 				require_once("ajax/admin/admin_user.ajax.php");
 				echo AdminUserAjax::list_users($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);

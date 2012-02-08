@@ -536,6 +536,10 @@ class FileImageCache_Access
 			$data_count = $db->db_fetch_assoc($res_count);
 			
 			$limit = $data_count['result']-$number;
+			if ($limit <= 0)
+			{
+				return null;
+			}
 			
 			$return_array = array();
 			

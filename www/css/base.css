@@ -14,119 +14,105 @@
 	border-bottom: 1px #C0C0C0 dotted;
 	color: black;
 }
-
 .ListTable th a 
 {
 	text-decoration: none;
 	color: black !important;
 }
-
 .ListTable td 
 {
 	margin-bottom: 2px;
 	padding: 4px 4px;
 }
-
 .ListTable tr 
 {
 	vertical-align: top;
 }
-
 .ListTableColumnFirstEntry
 {
-border-left:solid white 2px;
+	border-left:solid white 2px;
 }
-
 .ListTableColumnLastEntry
 {
-border-right:solid white 2px;
+	border-right:solid white 2px;
 }
 
 /* BASE TREE NAVIGATION */
-
 .BaseTreeList
 {
-list-style-type: none;
-margin: 0 0 0 10px;
-padding: 0px;
+	list-style-type: none;
+	margin: 0 0 0 10px;
+	padding: 0px;
 }
-
 .BaseTreeEntry 
 {
-/* table-layout:fixed; */
-border-collapse: collapse;
+	/* table-layout:fixed; */
+	border-collapse: collapse;
 }
-
 .BaseTreeEntry td
 {
-height:19px;
+	height:19px;
 }
-
 .BaseTreeEntry img
 {
-border: 0;
+	border: 0;
 }
-
 .BaseTreeEntry a
 {
-text-decoration: none;
-color: black;
+	text-decoration: none;
+	color: black;
 }
-
 .BaseTreeEntry a:hover
 {
-text-decoration: underline;
+	text-decoration: underline;
 }
-
 .BaseTreeEntry a:focus
 {
-outline: none;
+	outline: none;
 }
-
 
 /* LEFT NAVIGATION MENU */
-
 #LeftNavigationTree
 {
-padding-top:2px;
+	padding-top:2px;
 }
-
-#LeftNavigationTree img {
-min-height:1%;
+#LeftNavigationTree img
+{
+	min-height:1%;
 }
 
 #LeftNavigation
 {
-width: 190px;
-float: left;
-font-family: arial;
-font-size: 11px;
+	width: 190px;
+	float: left;
+	font-family: arial;
+	font-size: 11px;
 }
 
 #LeftNavigationSymbolArea div
 {
-float: left;
-height:24px;
-width:24px;
-margin: 2px 2px 0 2px;
+	float: left;
+	height:24px;
+	width:24px;
+	margin: 2px 2px 0 2px;
 }
 
 #LeftNavigationSymbolArea div img
 {
-margin: 4px 4px 4px 4px;
+	margin: 4px 4px 4px 4px;
 }
 
 #LeftNavigationSymbolAreaClear
 {
-clear: left;
-border-top: 1px #D0D0D0 dotted;
+	clear: left;
+	border-top: 1px #D0D0D0 dotted;
 }
 
 #LeftNavigationTitle
 {
-border-bottom: 1px #D0D0D0 dotted;
-font-weight: bold;
-padding: 2px 2px 2px 5px;
+	border-bottom: 1px #D0D0D0 dotted;
+	font-weight: bold;
+	padding: 2px 2px 2px 5px;
 }
 
 /* Small Tabs (ÜA) */
@@ -355,19 +341,19 @@ padding: 2px 2px 2px 5px;
 	color: red;
 }
 
-
-.ContentBoxBegin {
+.ContentBoxBegin
+{
 	margin: 0;
 	padding: 0;
 	border-spacing: 0;
 	border-collapse: collapse;
 }
-
-.ContentBoxBegin td {
+.ContentBoxBegin td
+{
 	padding: 0px;
 }
-
-.ContentBoxBeginLeft {
+.ContentBoxBeginLeft
+{
 	width: 15px;
 	min-height: 10px;
 	background: #C0C0C0;
@@ -375,8 +361,8 @@ padding: 2px 2px 2px 5px;
 	padding: 0;
 	vertical-align: top;
 }
-
-.ContentBoxBeginRight {
+.ContentBoxBeginRight
+{
 	width: 15px;
 	min-height: 10px;
 	background: #C0C0C0;
@@ -385,15 +371,15 @@ padding: 2px 2px 2px 5px;
 	vertical-align: top;
 	text-align: right;
 }
-
-.ContentBoxBeginTitle {
+.ContentBoxBeginTitle
+{
 	background: #C0C0C0;
 	text-align: center;
 	color: white;
 	font: bold 1em Verdana, Helvetica, sans-serif;
 }
-
-.ContentBoxMain {
+.ContentBoxMain
+{
 	border-left: 1px #C0C0C0 solid;
 	border-right: 1px #C0C0C0 solid;
 	margin-bottom: 0;
@@ -402,27 +388,27 @@ padding: 2px 2px 2px 5px;
 	padding-left: 2px;
 	padding-right: 2px;
 }
-
-.ContentBoxEnd {
+.ContentBoxEnd
+{
 	margin: 0;
 	padding: 0;
 	border-spacing: 0;
 	border-collapse: collapse;
 }
-
-.ContentBoxEnd td {
+.ContentBoxEnd td
+{
 	padding: 0px;
 }
-
-.ContentBoxEndLeft {
+.ContentBoxEndLeft
+{
 	width: 10px;
 	height: 10px;
 	margin: 0;
 	padding: 0;
 	vertical-align: bottom;
 }
-
-.ContentBoxEndRight {
+.ContentBoxEndRight
+{
 	width: 10px;
 	height: 10px;
 	margin: 0;
@@ -430,8 +416,8 @@ padding: 2px 2px 2px 5px;
 	vertical-align: bottom;
 	text-align: right;
 }
-
-.ContentBoxEndBorder {
+.ContentBoxEndBorder
+{
 	font: normal 1px sans-serif;
 	vertical-align: bottom;
 	border-bottom: 1px #C0C0C0 solid;
@@ -457,11 +443,19 @@ padding: 2px 2px 2px 5px;
 	width: 355px;
 	padding: 0 5px;
 }
+#HomeSummaryLeft table tr td
+{
+	padding: 3px 0;
+}
 #HomeSummaryRight
 {
 	float: right;
 	width: 355px;
 	padding: 0 5px;
+}
+#HomeSummaryRight table tr td
+{
+	padding: 3px 0;
 }
 #HomeSummaryClear
 {
@@ -483,7 +477,71 @@ padding: 2px 2px 2px 5px;
 {
 	min-height: 350px;
 }
+.HomeTodayArea
+{
+	width: 98%;
+	padding: 0 3px;
+	border-bottom: 1px #D0D0D0 dotted;
+}
+.HomeTodayHeadline
+{
+	margin: 3px 0;
+	font-size: 10px;
+}
+.HomeTodayEntry
+{
+	
+}
+.HomeTodayOverdueEntry
+{
+	color: red;
+}
 
+.Assistant
+{
+	width: 730px;
+	padding: 5px 10px 5px 10px;
+}
+.AssistantElement a
+{
+	display: block;
+	float: left;
+	text-align: center;
+	text-decoration: none;
+}
+.AssistantElementImage
+{
+	display: block;
+	padding: 2px;
+}
+.AssistantElementText
+{
+	display: block;
+	font: bold 10px Verdana, Tahoma, Helvetica, sans-serif;
+	color: #505050;
+}
+.AssistantClear
+{
+	clear: left;
+	width: 750px;
+	border-bottom: 1px #D0D0D0 dotted;
+	height: 4px;
+}
+.AssistantButton,
+.AssistantButtonDisabled
+{
+	background-color: white;
+	border: 1px #C0C0C0 solid;
+	width: 70px;
+}
+.AssistantButton:hover
+{
+	background-color: #E0E0E0;
+}
+#AssistantLoading
+{
+	text-align: center;	
+}
 
 .LoginBox
 {
@@ -498,27 +556,27 @@ padding: 2px 2px 2px 5px;
 	margin: 10px;
 	font: normal 12px Verdana, Helvetica, sans-serif;
 }
-
-.BaseWantToButton {
+.BaseWantToButton
+{
 	display: block;
 	clear: left;
 	height: 36px;
 	text-decoration: none;
 }
-
-.BaseWantToButton:hover {
+.BaseWantToButton:hover
+{
 	background: #99b2cc;
 	text-decoration: none;
 }
-
-.BaseWantToIcon {
+.BaseWantToIcon
+{
 	display: block;
 	float: left;
 	width: 35px;
 	margin: 5px;
 }
-
-.BaseWantToText {
+.BaseWantToText
+{
 	display: block;
 	margin-left: 45px;
 	padding-top: 10px;
@@ -531,7 +589,8 @@ padding: 2px 2px 2px 5px;
 	color: #0F0F0F;
 	font: normal 10px Verdana, Helvetica, sans-serif;
 }
-.BaseWantToLine {
+.BaseWantToLine
+{
 	margin: 0 0 2px 0;
 	padding: 2px 0 0 0;
 	height: 1px;
