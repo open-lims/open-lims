@@ -102,8 +102,8 @@ class DataIO
 
 		$list = new List_IO("DataBrowser", "ajax.php?nav=data", "list_data_browser", "count_data_browser", $argument_array, "DataBrowserAjax");	
 		
-		$list->add_column("","symbol",false,16);
-		$list->add_column("Name","name",true,null);
+		$list->add_column("","symbol",false,"16px");
+		$list->add_column("Name","name",true,"30%");
 		$list->add_column("Type","type",true,null);
 		$list->add_column("Ver.","version",false,null);
 		$list->add_column("Date/Time","datetime",true,null);

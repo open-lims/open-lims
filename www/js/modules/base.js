@@ -29,7 +29,9 @@ function tooltip(element_id, message)
 	var offsetX = 20;
 	var offsetY = 10;
 	
-	$("#"+element_id).hover(function(e)
+	$("#"+element_id)
+	.unbind("mouseover mouseout mousemove")
+	.mouseover(function(e)
 	{
 		$("<div id='tooltip'>"+message+"</div>")
 			.css(
@@ -41,17 +43,18 @@ function tooltip(element_id, message)
 				"font-family":"arial",
 				"font-size":"12px",
 				"top": e.pageY + offsetY,
-				"left": e.pageX + offsetX
+				"left": e.pageX + offsetX,
+				"z-index": 1000
 			})
 			.hide()
 			.appendTo('body')
 			.fadeIn(300);
-	},function()
+	})
+	.mouseout(function(e)
 	{
 		$('#tooltip').remove();
-	});
-	
-	$("#"+element_id).mousemove(function(e) 
+	})	
+	.mousemove(function(e) 
 	{
 		$("#tooltip").css(
 		{
