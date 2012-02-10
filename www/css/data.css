@@ -133,9 +133,24 @@ cursor:default;
 .ListTable #DataBrowserAjax .trLightGrey td
 {
 padding: 0px 4px;
-border-bottom:solid #e0e0e0 2px;
 border-top:solid #e0e0e0 2px;
+border-bottom:solid #e0e0e0 2px;
 vertical-align:middle;
+}
+
+.trLightGrey .ListTableColumnFirstEntry
+{
+border-left:solid #e0e0e0 2px;
+}
+
+.trLightGrey .ListTableColumnLastEntry
+{
+border-right:solid #e0e0e0 2px;
+}
+
+#DataBrowserAjax tr:first-child
+{
+height:21px;
 }
 
 #DataBrowserFileDialog

@@ -113,13 +113,24 @@ function data_browser()
 					{
 						$(this)
 						.addClass("DataBrowserFileHover")
-						.children().css(
-						{
-							"margin-bottom":"2px",
-							"padding":"0px 4px",
-							"border-bottom":"solid #c3c3c3 2px",
-							"border-top":"solid #c3c3c3 2px"
-						});	
+						.children().each(function(){
+							if($(this).hasClass("ListTableColumnFirstEntry"))
+							{
+								$(this).css("border-left","solid #c3c3c3 2px");
+							}
+							else if($(this).hasClass("ListTableColumnLastEntry"))
+							{
+								$(this).css("border-right","solid #c3c3c3 2px");
+							}
+							$(this).css({
+								"margin-bottom":"2px",
+								"padding":"0px 4px",
+								"border-bottom":"solid #c3c3c3 2px",
+								"border-top":"solid #c3c3c3 2px"
+							});	
+						});
+						
+						
 					}
 				})
 				.mouseleave(function()
@@ -153,7 +164,7 @@ function data_browser()
 				.click(function(evt)
 				{
 					evt.preventDefault();
-					evt.stopPropagation();
+					evt.stopImmediatePropagation();
 					if(($(evt.target)[0] == $(link)[0]))
 					{ //clicked on a link
 						if(linked_folder_id == undefined && linked_virtual_folder_id == undefined)
@@ -366,7 +377,6 @@ function data_browser()
 	 */
 	function open_data_browser_file_dialog(element)
 	{
-		
 		close_data_browser_file_dialog();
 		close_add_dialog();
 		
@@ -404,7 +414,6 @@ function data_browser()
 				return false;
 			}
 		}
-		
 		$(element)
 			.addClass("DataBrowserFileSelected")
 			.children("td").each(function()
@@ -435,7 +444,7 @@ function data_browser()
 			.hide()
 			.appendTo("#main");
 
-		bindDialogCloseClickHandler();
+		setTimeout(bind_dialog_close_click_handler, 20);
 		
 		return true;
 	}
@@ -478,7 +487,7 @@ function data_browser()
 	/**
 	 * Applies a click handler to the body listening for clicks outside the data browser to close open dialogs.
 	 */
-	function bindDialogCloseClickHandler(){
+	function bind_dialog_close_click_handler(){
 		$("body").click(function(evt)
 		{
 			close_data_browser_file_dialog();
@@ -647,6 +656,10 @@ function data_browser()
 				evt.preventDefault();
 				evt.stopPropagation();
 				var target = evt.target;
+				if(!$(target).is("a"))
+				{
+					return false;
+				}
 				var href = $(target).attr("href");
 				var split = href.split(/&(.+)/);
 				var action = split[0];
@@ -657,7 +670,7 @@ function data_browser()
 		$("#DataBrowserAddFileCornerContainer").show();
 		$("#DataBrowserAddFileCorner").show();
 		
-		bindDialogCloseClickHandler();
+		bind_dialog_close_click_handler();
 	}
 	
 	/**
@@ -781,7 +794,7 @@ function data_browser()
 				if(!$(this).hasClass("Deactivated"))
 				{
 					event.preventDefault();
-					event.stopPropagation();
+					event.stopImmediatePropagation();
 					if($("#DataBrowserAddFileDialog").is(':visible'))
 					{
 						close_add_dialog();
@@ -855,7 +868,10 @@ function data_browser()
 					"font-family":"arial",
 					"font-size":"12px",
 					"top": e.pageY + offsetY,
-					"left": e.pageX + offsetX
+					"left": e.pageX + offsetX,
+					"border-radius": "5px",
+					"-moz-border-radius": "5px",
+					"-webkit-border-radius": "5px"
 				})
 				.hide()
 				.appendTo('body')

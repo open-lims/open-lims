@@ -1,11 +1,27 @@
+/* TOOLTIP */
+
+#tooltip
+{
+	position:absolute;
+	background-color:white;
+	border: solid black 1px;
+	padding: 2px 4px 2px 4px;
+	font-family: arial;
+	font-size: 12px;
+	z-index: 1000;
+	border-radius:5px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+}
+
 /* BASE LIST */
 
 .ListTable
 {
 	width: 100%;
-/* 	border-collapse: separate; */
+	border-collapse: separate;
 	border-spacing:0px;
-/* 	border-collapse: expression('separate', cellSpacing = '0px'); */
+	border-collapse: expression('separate', cellSpacing = '0px');
 /* 	table-layout:fixed; */
 }
 .ListTable th 
@@ -51,6 +67,7 @@
 	z-index: 95;
 	padding-left: 4px;
 	border:solid white 2px;
+	border-bottom: 1px #C0C0C0 dotted;
 	background-color:#ffffff;
 	position:relative;
 	border-top-left-radius:10px;
