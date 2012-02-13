@@ -28,4 +28,5 @@
 	$event_listener[1] = "ModuleNavigation";
 	$event_listener[2] = "ModuleLink";
 	$event_listener[3] = "ModuleDialog";
+	$event_listener[4] = "Registry";
 ?>

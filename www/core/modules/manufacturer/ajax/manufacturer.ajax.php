@@ -22,26 +22,15 @@
  */
 
 /**
- * 
- */
-$GLOBALS['autoload_prefix'] = "../";
-require_once("../../base/ajax.php");
-
-/**
  * Manufacturer AJAX IO Class
  * @package manufacturer
  */
-class ManufacturerAjax extends Ajax
+class ManufacturerAjax
 {
-	function __construct()
-	{
-		parent::__construct();
-	}
-
 	/**
 	 * @param string $name
 	 */
-	public function exist_name($name)
+	public static function exist_name($name)
 	{
 		if (Manufacturer::exist_name($name))
 		{
@@ -56,7 +45,7 @@ class ManufacturerAjax extends Ajax
 	/**
 	 * @param string $name
 	 */
-	public function add_entry($name)
+	public static function add_entry($name)
 	{
 		if ($name)
 		{
@@ -79,7 +68,7 @@ class ManufacturerAjax extends Ajax
 	/**
 	 * @param string $string
 	 */
-	public function get_number_of_entries($string)
+	public static function get_number_of_entries($string)
 	{
 		echo Manufacturer::count_entries($string);
 	}
@@ -87,7 +76,7 @@ class ManufacturerAjax extends Ajax
 	/**
 	 * @param integer $id
 	 */
-	public function get_name($id)
+	public static function get_name($id)
 	{
 		if (is_numeric($id))
 		{
@@ -101,7 +90,7 @@ class ManufacturerAjax extends Ajax
 	 * @param integer $start_entry
 	 * @param string $start_string
 	 */
-	public function get_next_entries($number_of_entries, $start_entry, $start_string)
+	public static function get_next_entries($number_of_entries, $start_entry, $start_string)
 	{
 		$manufacturer_array = Manufacturer::list_manufacturers($number_of_entries, $start_entry, $start_string);
 				
@@ -137,7 +126,7 @@ class ManufacturerAjax extends Ajax
 	 * @param string $sortvalue
 	 * @param string $sortmethod
 	 */
-	public function get_list($json_column_array, $argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	public static function list_manufacturers($json_column_array, $argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		global $user;
 		
@@ -188,12 +177,12 @@ class ManufacturerAjax extends Ajax
 	/**
 	 * @return integer
 	 */
-	public function get_list_count()
+	public static function count_manufacturers()
 	{
 		return Manufacturer_Wrapper::count_manufacturers();
 	}
 	
-	public function delete($id)
+	public static function delete($id)
 	{
 		global $user;
 		
@@ -214,55 +203,5 @@ class ManufacturerAjax extends Ajax
 			echo 0;
 		}
 	}
-	
-	public function method_handler()
-	{
-		global $session;
-		
-		if ($session->is_valid())
-		{
-			switch($_GET[run]):
-	
-				case "exist_name":
-					$this->exist_name($_POST[name]);
-				break;
-				
-				case "add_entry":
-					$this->add_entry($_POST[name]);
-				break;
-			
-				case "get_number_of_entries":
-					$this->get_number_of_entries($_GET[string]);
-				break;
-				
-				case "get_name":
-					$this->get_name($_GET[id]);
-				break;
-				
-				case "get_next_entries":
-					$this->get_next_entries($_GET[number], $_GET[start], $_GET[string]);
-				break;
-				
-				case "get_list":
-					echo $this->get_list($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
-				break;
-				
-				case "get_list_count":
-					echo $this->get_list_count();
-				break;
-				
-				case "delete":
-					$this->delete($_GET[id]);
-				break;
-				
-				default:
-				break;
-			
-			endswitch;
-		}
-	}
 }
-
-$manufacturer_ajax = new ManufacturerAjax;
-$manufacturer_ajax->method_handler();
 ?>

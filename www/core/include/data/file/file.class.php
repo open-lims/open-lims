@@ -379,9 +379,19 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 			$folder_id = $this->get_parent_folder_id();
 			$folder = Folder::get_instance($folder_id);
 
-			$file_version_array = FileVersion_Access::list_entries_by_toid($this->file_id);
+			$file_delete_event = new FileDeleteEvent($this->file_id, $folder_id, 0);
+			$event_handler = new EventHandler($file_delete_event);
+
+			if ($event_handler->get_success() == false)
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+			}
 			
-			unset($this->file_version);
+			$file_version_array = FileVersion_Access::list_entries_by_toid($this->file_id);
 			
 			if (is_array($file_version_array) and count($file_version_array) >= 1)
 			{
@@ -422,19 +432,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 					}
 				}
 				
-				$folder->decrease_filesize($this->get_owner_id(), $file_size);
-				
-				$file_delete_event = new FileDeleteEvent($folder_id, $file_size);
-				$event_handler = new EventHandler($file_delete_event);
-				
-				if ($event_handler->get_success() == false)
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return 0;
-				}
+				$folder->decrease_filesize($this->get_owner_id(), $file_size);				
 			
 				$file_delete = $this->file->delete();
 				
@@ -542,6 +540,18 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 				if ($number_of_root_major_versions > 1)
 				{
 					$file_version_id = FileVersion_Access::get_entry_by_toid_and_internal_revision($this->file_id, $internal_revision);
+
+					$file_delete_event = new FileVersionDeleteEvent($file_version_id, $folder_id, $this->file_version->get_size());
+					$event_handler = new EventHandler($file_delete_event);
+					
+					if ($event_handler->get_success() == false)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return 0;
+					}
 					
 					$minor_file_array = FileVersion_Access::list_entries_by_previous_version_id($file_version_id);
 					
@@ -571,18 +581,6 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	
 					// Minimise Filesize
 					$folder->decrease_filesize($this->file_version->get_owner_id(), $this->file_version->get_size());
-					
-					$file_delete_event = new FileDeleteEvent($folder_id, $this->file_version->get_size());
-					$event_handler = new EventHandler($file_delete_event);
-					
-					if ($event_handler->get_success() == false)
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						return 0;
-					}
 					
 					// Datei Löschen
 							

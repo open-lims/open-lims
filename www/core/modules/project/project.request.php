@@ -282,7 +282,41 @@ class ProjectRequest
 					break;	
 				
 				endswitch;
+			break;
+			
+			
+			// Create Project
+			
+			case "create_project":
+				require_once 'ajax/project_create.ajax.php';
+					
+					switch($_GET['action']):
+	
+					case "get_content":
+						echo ProjectCreateAjax::get_content($_POST['page']);
+					break;
+					
+					case "get_next_page":
+						echo ProjectCreateAjax::get_next_page($_POST['page']);
+					break;
+					
+					case "get_previous_page":
+						echo ProjectCreateAjax::get_previous_page($_POST['page']);
+					break;
+					
+					case "set_data":
+						echo ProjectCreateAjax::set_data($_POST['page'], $_POST['data']);
+					break;
+					
+					case "check_data":
+						echo ProjectCreateAjax::check_data($_POST['name']);
+					break;
+					
+					case "run":
+						echo ProjectCreateAjax::run($_GET['username'], $_GET['session_id']);
+					break;
 				
+				endswitch;
 			break;
 			
 		endswitch;

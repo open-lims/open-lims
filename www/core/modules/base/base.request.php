@@ -30,7 +30,12 @@ class BaseRequest
 	public static function ajax_handler()
 	{
 		switch($_GET[run]):
-			
+
+			case "cron":
+				require_once("ajax/cron.ajax.php");
+				echo CronAjax::run();
+			break;
+		
 			case "login":
 				require_once("ajax/login.ajax.php");
 				echo LoginAjax::login($_POST[username], $_POST[password], $_POST[language]);
@@ -88,6 +93,19 @@ class BaseRequest
 			break;
 			
 			
+			// User
+
+			case "get_users_in_option":
+				require_once("common/ajax/user_common.ajax.php");
+				echo UserAjax::get_users_in_option($_POST['string']);
+			break;
+			
+			case "get_groups_in_option":
+				require_once("common/ajax/user_common.ajax.php");
+				echo UserAjax::get_groups_in_option($_POST['string']);
+			break;
+			
+			
 			// Admin
 			
 			case "admin_list_includes":
@@ -118,6 +136,26 @@ class BaseRequest
 			case "admin_count_navigation":
 				require_once("ajax/admin/admin_base_navigation.ajax.php");
 				echo AdminBaseNavigationAjax::count_navigation($_POST[argument_array]);
+			break;
+			
+			case "admin_list_registry":
+				require_once("ajax/admin/admin_base_registry.ajax.php");
+				echo AdminBaseRegistryAjax::list_registry($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "admin_count_registry":
+				require_once("ajax/admin/admin_base_registry.ajax.php");
+				echo AdminBaseRegistryAjax::count_registry($_POST[argument_array]);
+			break;
+			
+			case "admin_registry_edit":
+				require_once("ajax/admin/admin_base_registry.ajax.php");
+				echo AdminBaseRegistryAjax::edit($_GET[id]);
+			break;
+			
+			case "admin_registry_edit_handler":
+				require_once("ajax/admin/admin_base_registry.ajax.php");
+				echo AdminBaseRegistryAjax::edit_handler($_POST[id], $_POST[value]);
 			break;
 			
 			case "admin_list_users":

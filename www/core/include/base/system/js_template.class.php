@@ -46,3 +46,4 @@ class JSTemplate extends Template implements ConcreteTemplateInterface
 		parent::__destruct();
 	}
 }
+?>

@@ -22,26 +22,15 @@
  */
 
 /**
- * 
- */
-$GLOBALS['autoload_prefix'] = "../../";
-require_once("../../../base/ajax.php");
-
-/**
  * User AJAX IO Class
  * @package base
  */
-class UserAjax extends Ajax
+class UserAjax
 {
-	function __construct()
-	{
-		parent::__construct();
-	}
-	
 	/**
 	 * @param string $string
 	 */
-	private function get_users_in_option($string)
+	public static function get_users_in_option($string)
 	{
 		$string = $string."*";
 		
@@ -56,18 +45,18 @@ class UserAjax extends Ajax
 				$return .= "<option id='User".$value['id']."'>".$value['fullname']." (".$value['username'].")</option>";
 			}
 			
-			echo $return;
+			return $return;
 		}
 		else
 		{
-			echo "<option></option>";
+			return "<option></option>";
 		}
 	}
 	
 	/**
 	 * @param string $string
 	 */
-	private function get_groups_in_option($string)
+	public static function get_groups_in_option($string)
 	{
 		$string = $string."*";
 		
@@ -82,34 +71,12 @@ class UserAjax extends Ajax
 				$return .= "<option id='Group".$value['id']."'>".$value['name']."</option>";
 			}
 			
-			echo $return;
+			return $return;
 		}
 		else
 		{
-			echo "<option></option>";
-		}
-	}
-	
-	public function method_handler()
-	{
-		global $session;
-		
-		if ($session->is_valid())
-		{
-			switch($_GET[run]):	
-				case "get_users_in_option":
-					$this->get_users_in_option($_GET['string']);
-				break;
-				
-				case "get_groups_in_option":
-					$this->get_groups_in_option($_GET['string']);
-				break;
-			endswitch;
+			return "<option></option>";
 		}
 	}
 }
-
-$user_ajax = new UserAjax;
-$user_ajax->method_handler();
-
 ?>

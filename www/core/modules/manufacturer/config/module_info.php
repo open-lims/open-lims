@@ -25,7 +25,7 @@
  * 
  */
 	$name 					= "manufacturer";
-	$main_class				= "ManufacturerIO";
+	$main_class				= "ManufacturerRequest";
 	
 	$required_include[0] 	= "manufacturer";
 	

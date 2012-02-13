@@ -118,4 +118,20 @@
 	$dialog[11][internal_name]	= "project";
 	$dialog[11][display_name]	= "Project";
 	$dialog[11][weight]			= 100;
+	
+	$dialog[12][type]			= "home_summary_left";
+	$dialog[12][class_path]		= "core/modules/project/io/project_home.io.php";
+	$dialog[12]['class']		= "ProjectHomeIO";
+	$dialog[12][method]			= "running_projects";
+	$dialog[12][internal_name]	= "project";
+	$dialog[12][display_name]	= "Project";
+	$dialog[12][weight]			= 100;
+	
+	$dialog[13][type]			= "home_summary_left";
+	$dialog[13][class_path]		= "core/modules/project/io/project_home.io.php";
+	$dialog[13]['class']		= "ProjectHomeIO";
+	$dialog[13][method]			= "finished_projects";
+	$dialog[13][internal_name]	= "project";
+	$dialog[13][display_name]	= "Project";
+	$dialog[13][weight]			= 200;
 ?>

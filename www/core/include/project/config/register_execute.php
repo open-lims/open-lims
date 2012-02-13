@@ -67,6 +67,42 @@ function register_project($include_id)
 		return false;
 	}
 	
+	if (!Registry::is_value("project_user_default_quota"))
+	{
+		$registry = new Registry(null);
+		$registry->create("project_user_default_quota", $include_id, "1073741824");
+	}
+	
+	if (!Registry::is_value("project_user_default_permission"))
+	{
+		$registry = new Registry(null);
+		$registry->create("project_user_default_permission", $include_id, "15");
+	}
+	
+	if (!Registry::is_value("project_leader_default_permission"))
+	{
+		$registry = new Registry(null);
+		$registry->create("project_leader_default_permission", $include_id, "51");
+	}
+	
+	if (!Registry::is_value("project_quality_manager_default_permission"))
+	{
+		$registry = new Registry(null);
+		$registry->create("project_quality_manager_default_permission", $include_id, "1");
+	}
+	
+	if (!Registry::is_value("project_group_default_permission"))
+	{
+		$registry = new Registry(null);
+		$registry->create("project_group_default_permission", $include_id, "1");
+	}
+	
+	if (!Registry::is_value("project_organisation_unit_default_permission"))
+	{
+		$registry = new Registry(null);
+		$registry->create("project_organisation_unit_default_permission", $include_id, "1");
+	}
+	
 	return true;
 }
 $result = register_project($key);

@@ -40,7 +40,7 @@ class Security implements SecurityInterface
  	public static function ip_error_count()
  	{	
  		$ip = $_SERVER['REMOTE_ADDR'];
- 		$lead_time = date("Y-m-d H:i:s", (mktime()-constant("IP_ERROR_LEAD_TIME")));
+ 		$lead_time = date("Y-m-d H:i:s", (mktime()-(int)Registry::get_value(base_max_ip_lead_time)));
  		
  		return SystemLog::count_ip_failed_logins_with_begin($ip, $lead_time);
  	}
@@ -139,6 +139,13 @@ class Security implements SecurityInterface
 			case("tpage"):
 			case("view"):
 			case("clear");
+			
+			case("unique_id");
+			case("height");
+			case("width");
+			case("max_height");
+			case("max_width");
+			
 			break;
 			
 			default:

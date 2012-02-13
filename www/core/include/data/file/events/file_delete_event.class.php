@@ -26,22 +26,37 @@
  * @package data
  */
 class FileDeleteEvent extends Event
-{    
+{
+	private $file_id;    
 	private $folder_id;
 	private $filesize;
 	
-	function __construct($folder_id, $filesize)
+	function __construct($file_id, $folder_id, $filesize)
     {
-    	if (is_numeric($folder_id) and is_numeric($filesize))
+    	if (is_numeric($file_id) and is_numeric($folder_id) and is_numeric($filesize))
     	{
     		parent::__construct();
+    		$this->file_id = $file_id;
     		$this->folder_id = $folder_id;
     		$this->filesize = $filesize;
     	}
     	else
     	{
+    		$this->file_id = null;
     		$this->folder_id = null;
     		$this->filesize = null;
+    	}
+    }
+    
+ 	public function get_file_id()
+    {
+    	if ($this->file_id)
+    	{
+    		return $this->file_id;
+    	}
+    	else
+    	{
+    		return null;
     	}
     }
     

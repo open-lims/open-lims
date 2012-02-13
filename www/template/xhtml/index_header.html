@@ -25,6 +25,24 @@
 
 [[INDEX_JS]]
 
+
+<!-- IF ([[CRON]]) -->
+
+<script type="text/javascript">
+$(document).ready(function()
+{
+	$.ajax(
+	{
+		type: "POST",
+		url: "ajax.php?nav=base&run=cron",
+		success: function(data)
+		{}
+	});
+});
+</script>
+
+<!-- ENDIF -->
+
 <link href="images/open-lims.ico" rel="shortcut icon" />
 
 <title>[[INDEX_TITLE]]</title>

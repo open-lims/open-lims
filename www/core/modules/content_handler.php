@@ -144,21 +144,38 @@ class ContentHandler_IO
 			$GLOBALS['fatal_error'] = "Main folder not found!";
 		}
 		
-	 	$template->set_var("INDEX_TITLE",constant("HTML_TITLE"));
+	 	$template->set_var("INDEX_TITLE",Registry::get_value("base_html_title"));
 	
+		if (Cron::check() == true)
+		{
+			$template->set_var("CRON",true);
+		}
+		else
+		{
+			$template->set_var("CRON",false);
+		}
+	 	
 		$template->output();
 		
 		if ($GLOBALS['fatal_error'] == null)
 		{
-			if (Security::ip_error_count() < constant("MAX_IP_ERRORS"))
+			
+			
+			$max_ip_errors = (int)Registry::get_value(base_max_ip_failed_logins);
+			
+			if (Security::ip_error_count() < $max_ip_errors)
 			{
 		 		if ($session->is_valid() == true)
 		 		{
 					$template = new HTMLTemplate("main_header.html");
 					
 					$template->set_var("release",constant("PRODUCT")." ".constant("PRODUCT_VERSION"));
-					$template->set_var("user",constant("PRODUCT_USER"));
-					$template->set_var("servertype",constant("PRODUCT_FUNCTION"));
+					
+					$product_user = Registry::get_value("base_product_user");
+					$product_function = Registry::get_value("base_product_function");
+					
+					$template->set_var("user",$product_user);
+					$template->set_var("servertype",$product_function);
 
 					$template->output();
 					
@@ -293,7 +310,7 @@ class ContentHandler_IO
 			}
 			else
 			{
-				if ($_GET[run] == "login")
+				if ($_GET[run] == "login" or $_GET[run] == "cron")
 				{
 					require_once("core/modules/base/base.request.php");
 					BaseRequest::ajax_handler();

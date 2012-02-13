@@ -117,7 +117,7 @@ class ProjectIO
 		
 		require_once("core/modules/base/common/io/assistant.io.php");
 		
-		$assistant_io = new AssistantIO("core/modules/project/ajax/project_create.ajax.php", "ProjectCreateAssistantField", true);
+		$assistant_io = new AssistantIO("ajax.php?nav=project&run=create_project", "ProjectCreateAssistantField", true);
 		
 		$assistant_io->add_screen("Organisation Unit");
 		$assistant_io->add_screen("Project Information");

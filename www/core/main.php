@@ -62,8 +62,10 @@ class Main
 			
 			require_once("core/db/db.php");
 			
-			$db = new Database(constant("DB_TYPE"));
-			@$connection_result = $db->db_connect(constant("DB_SERVER"),constant("DB_PORT"),constant("DB_USER"),constant("DB_PASSWORD"),constant("DB_DATABASE"));
+			$database = SystemConfig::get_database();
+			
+			$db = new Database($database['type']);
+			@$connection_result = $db->db_connect($database[0]['server'],$database[0]['port'],$database['user'],$database['password'],$database['database']);
 					
 			require_once("include/base/system/error_handler.php");
 			
@@ -71,11 +73,10 @@ class Main
 			
 			require_once("include/base/system/events/event.class.php");
 			require_once("include/base/system/system_handler.class.php");
-			require_once("include/base/system/system_config.class.php");
-			
-			SystemConfig::load_module_config();
 			
 			require_once("include/base/system/autoload.function.php");
+			
+			SystemConfig::load_module_config();
 			
 			if ($connection_result == true)
 			{

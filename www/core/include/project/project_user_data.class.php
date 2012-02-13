@@ -115,7 +115,7 @@ class ProjectUserData implements ProjectUserDataInterface, EventListenerInterfac
     	if ($event_object instanceof UserCreateEvent)
     	{
     		$project_user_data_access = new ProjectUserData_Access(null);
-    		if ($project_user_data_access->create($event_object->get_user_id(),constant("PROJECT_USER_STD_QUOTA")) == false)
+    		if ($project_user_data_access->create($event_object->get_user_id(),(int)Registry::get_value("project_user_default_quota")) == false)
     		{
     			return false;
     		}

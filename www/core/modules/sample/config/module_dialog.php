@@ -123,4 +123,20 @@
 	$dialog[13][internal_name]	= "sample";
 	$dialog[13][display_name]	= "Sample";
 	$dialog[13][weight]			= 200;
+	
+	$dialog[14][type]			= "home_summary_right";
+	$dialog[14][class_path]		= "core/modules/sample/io/sample_home.io.php";
+	$dialog[14]['class']		= "SampleHomeIO";
+	$dialog[14][method]			= "samples";
+	$dialog[14][internal_name]	= "sample";
+	$dialog[14][display_name]	= "Sample";
+	$dialog[14][weight]			= 100;
+	
+	$dialog[15][type]			= "home_summary_right";
+	$dialog[15][class_path]		= "core/modules/sample/io/sample_home.io.php";
+	$dialog[15]['class']		= "SampleHomeIO";
+	$dialog[15][method]			= "empty_space";
+	$dialog[15][internal_name]	= "sample";
+	$dialog[15][display_name]	= "Sample";
+	$dialog[15][weight]			= 200;
 ?>

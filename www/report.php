@@ -24,11 +24,21 @@
 	/**
 	 * @ignore
 	 */
+	global $db;
+
 	define("UNIT_TEST", false);
 
 	require_once("config/version.php");
-	require_once("config/main.php");
+	require_once("core/include/base/system/system_config.class.php");
+
+ 	SystemConfig::load_system_config("config/main.php");
+ 	
 	require_once("core/db/db.php");
+	
+	$database = SystemConfig::get_database();
+		
+	$db = new Database($database['type']);
+	$db->db_connect($database[0]['server'],$database[0]['port'],$database['user'],$database['password'],$database['database']);
 	
 	require_once("core/include/base/system/transaction.class.php");
 	require_once("core/include/base/system/events/event.class.php");
@@ -39,17 +49,14 @@
 
 	require_once("core/include/base/system/autoload.function.php");	
 
+	SystemConfig::load_module_config();
+	
 	// External Libraries
 	require_once("libraries/tcpdf/config/lang/eng.php");
 	require_once("libraries/tcpdf/tcpdf.php");
 	
 	if ($_GET[session_id])
-	{
-		global $db;
-		
-		$db = new Database(constant("DB_TYPE"));
-		$db->db_connect(constant("DB_SERVER"),constant("DB_PORT"),constant("DB_USER"),constant("DB_PASSWORD"),constant("DB_DATABASE"));
-		
+	{	
 		Security::protect_session();
 		
 		$transaction = new Transaction();

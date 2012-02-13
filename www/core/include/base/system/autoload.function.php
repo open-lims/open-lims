@@ -71,7 +71,8 @@ function __autoload($classname)
 	$classes['BaseException']				= $path_prefix."core/include/base/system/exceptions/base.exception.class.php";
 	$classes['BasePHPErrorException']		= $path_prefix."core/include/base/system/exceptions/base_php_error.exception.class.php";
 	
-	$classes['Convert']				= $path_prefix."core/include/base/system/convert.class.php";
+	$classes['Convert']						= $path_prefix."core/include/base/system/convert.class.php";
+	$classes['Cron']						= $path_prefix."core/include/base/system/cron.class.php";
 	$classes['ErrorLanguage']				= $path_prefix."core/include/base/system/error_language.class.php";
 	$classes['EventHandler']				= $path_prefix."core/include/base/system/event_handler.class.php";
 	$classes['ExceptionHandler']			= $path_prefix."core/include/base/system/exception_handler.class.php";
@@ -80,6 +81,7 @@ function __autoload($classname)
 	$classes['ModuleDialog']				= $path_prefix."core/include/base/system/module_dialog.class.php";
 	$classes['ModuleLink']					= $path_prefix."core/include/base/system/module_link.class.php";
 	$classes['ModuleNavigation']			= $path_prefix."core/include/base/system/module_navigation.class.php";
+	$classes['Registry']					= $path_prefix."core/include/base/system/registry.class.php";
 	$classes['Retrace']						= $path_prefix."core/include/base/system/retrace.class.php";
 	
 	$classes['System_Wrapper']				= $path_prefix."core/include/base/system/system.wrapper.class.php";

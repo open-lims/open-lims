@@ -875,3 +875,4 @@ class Template implements TemplateInterface
 		}
 	}
 }
+?>

@@ -242,9 +242,13 @@ class ProjectLogAjax
 	 * @param string $comment
 	 * @param string $important
 	 * @return string
+	 * @throws ProjectSecurityAccessDeniedException
+	 * @throws ProjectIDMissingException
 	 */
 	public static function create_handler($get_array, $comment, $important)
 	{
+		global $project_security;
+		
 		if ($get_array)
 		{
 			$_GET = unserialize($get_array);	
@@ -252,129 +256,28 @@ class ProjectLogAjax
 		
 		if ($_GET['project_id'])
 		{
-			if ($important == "1")
+			if ($project_security->is_access(3, false) == true)
 			{
-				$important = true;
-			}
-			else
-			{
-				$important = false;
-			}
-			
-			$project_log = new ProjectLog(null);
-			$project_log->create($_GET['project_id'], $comment, false, $important);
-		}
-	}
-	
-	/**
-	 * @param integer $id
-	 * @return string
-	 * @throws ProjectLogIDMissingException
-	 */
-	public static function get_more($id)
-	{
-		if (is_numeric($id))
-		{
-			$return_json_array = array();
-			
-			$project_log = new ProjectLog($id);
-			
-			$content = $project_log->get_content();
-			$content = str_replace("\n","<br />",$content);
-			
-			if (($content = $project_log->get_content()) != null)
-			{
-				$content = str_replace("\n","<br />", $content);
-				if (strlen($content) > 500)
+				if ($important == "1")
 				{
-					$content = substr($content,500,strlen($content));
-				}
-				
-				$return_json_array[0] = $content;
-			}
-			else
-			{
-				$return_json_array[0] = false;
-			}
-			
-			$return_json_array[1] = "";
-			$return_json_array[2] = "";
-			$return_json_array[3] = "show less";
-			
-			return json_encode($return_json_array);
-		}
-		else
-		{
-			throw new ProjectLogIDMissingException();
-		}
-	}
-	
-	/**
-	 * @param integer $id
-	 * @return string
-	 * @throws ProjectLogIDMissingException
-	 */
-	public static function get_less($id)
-	{
-		if (is_numeric($id))
-		{
-			$return_json_array = array();
-			
-			$project_log = new ProjectLog($id);
-			
-			if (($content = $project_log->get_content()) != null)
-			{
-				$content = str_replace("\n","<br />", $content);
-				if (strlen($content) > 500)
-				{
-					$content = substr($content,0,500)."...";
-				}
-				
-				$return_json_array[0] = $content;
-			}
-			else
-			{
-				$return_json_array[0] = false;
-			}
-			
-			$status_id = $project_log->get_status_id();
-			
-			if ($status_id != null)
-			{
-				$project_status = new ProjectStatus($status_id);
-				$return_json_array[1] = $project_status->get_name();
-			}
-			else
-			{
-				$return_json_array[1] = false;
-			}
-			
-			$item_array = $project_log->list_items();
-			$number_of_items = count($item_array);
-			
-			if ($number_of_items == 0)
-			{
-				$return_json_array[2] = false;
-			}
-			else
-			{
-				if ($number_of_items == 1)
-				{
-					$return_json_array[2] = $number_of_items." Item was added";
+					$important = true;
 				}
 				else
 				{
-					$return_json_array[2] = $number_of_items." Items were added";
+					$important = false;
 				}
+				
+				$project_log = new ProjectLog(null);
+				$project_log->create($_GET['project_id'], $comment, false, $important);
 			}
-			
-			$return_json_array[3] = "Show more";
-			
-			return json_encode($return_json_array);
+			else
+			{
+				throw new ProjectSecurityAccessDeniedException();
+			}
 		}
 		else
 		{
-			throw new ProjectLogIDMissingException();
+			throw new ProjectIDMissingException();
 		}
 	}
 	
@@ -382,6 +285,139 @@ class ProjectLogAjax
 	 * @param integer $id
 	 * @return string
 	 * @throws ProjectLogIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
+	 */
+	public static function get_more($id)
+	{
+		global $project_security;
+		
+		if ($project_security->is_access(3, false) == true)
+		{
+			if (is_numeric($id))
+			{
+				$return_json_array = array();
+				
+				$project_log = new ProjectLog($id);
+				
+				$content = $project_log->get_content();
+				$content = str_replace("\n","<br />",$content);
+				
+				if (($content = $project_log->get_content()) != null)
+				{
+					$content = str_replace("\n","<br />", $content);
+					if (strlen($content) > 500)
+					{
+						$content = substr($content,500,strlen($content));
+					}
+					
+					$return_json_array[0] = $content;
+				}
+				else
+				{
+					$return_json_array[0] = false;
+				}
+				
+				$return_json_array[1] = "";
+				$return_json_array[2] = "";
+				$return_json_array[3] = "show less";
+				
+				return json_encode($return_json_array);
+			}
+			else
+			{
+				throw new ProjectLogIDMissingException();
+			}
+		}
+		else
+		{
+			throw new ProjectSecurityAccessDeniedException();
+		}
+	}
+	
+	/**
+	 * @param integer $id
+	 * @return string
+	 * @throws ProjectLogIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
+	 */
+	public static function get_less($id)
+	{
+		global $project_security;
+		
+		if ($project_security->is_access(3, false) == true)
+		{
+			if (is_numeric($id))
+			{
+				$return_json_array = array();
+				
+				$project_log = new ProjectLog($id);
+				
+				if (($content = $project_log->get_content()) != null)
+				{
+					$content = str_replace("\n","<br />", $content);
+					if (strlen($content) > 500)
+					{
+						$content = substr($content,0,500)."...";
+					}
+					
+					$return_json_array[0] = $content;
+				}
+				else
+				{
+					$return_json_array[0] = false;
+				}
+				
+				$status_id = $project_log->get_status_id();
+				
+				if ($status_id != null)
+				{
+					$project_status = new ProjectStatus($status_id);
+					$return_json_array[1] = $project_status->get_name();
+				}
+				else
+				{
+					$return_json_array[1] = false;
+				}
+				
+				$item_array = $project_log->list_items();
+				$number_of_items = count($item_array);
+				
+				if ($number_of_items == 0)
+				{
+					$return_json_array[2] = false;
+				}
+				else
+				{
+					if ($number_of_items == 1)
+					{
+						$return_json_array[2] = $number_of_items." Item was added";
+					}
+					else
+					{
+						$return_json_array[2] = $number_of_items." Items were added";
+					}
+				}
+				
+				$return_json_array[3] = "Show more";
+				
+				return json_encode($return_json_array);
+			}
+			else
+			{
+				throw new ProjectLogIDMissingException();
+			}
+		}
+		else
+		{
+			throw new ProjectSecurityAccessDeniedException();
+		}
+	}
+	
+	/**
+	 * @param integer $id
+	 * @return string
+	 * @throws ProjectLogIDMissingException
+	 * @throws ProjectSecurityAccessDeniedException
 	 */
 	public static function delete($id)
 	{

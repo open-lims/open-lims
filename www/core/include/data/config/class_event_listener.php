@@ -31,4 +31,5 @@
 	$event_listener[4] = "DataUserData";
 	$event_listener[5] = "File";
 	$event_listener[6] = "Value";
+	$event_listener[7] = "ImageCache";
 ?>

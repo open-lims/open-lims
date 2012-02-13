@@ -351,28 +351,7 @@ class DataAjax
 			$data_permission = new DataPermission($type, $id);
 											
 			$template = new HTMLTemplate("data/data_permission_window.html");
-			
-			$paramquery = $_GET;
-			unset($paramquery[run]);
-			unset($paramquery[action]);
-			unset($paramquery[nextpage]);
-			$paramquery[nextpage] = "1";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("params", $params);
-			
-	//		$paramquery = $_GET;
-			$paramquery[action] = "chown";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("params_chown", $params);
-			
-	//		$paramquery = $_GET;
-			$paramquery[action] = "chgroup";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("params_chgroup", $params);
-			
+				
 			$template->set_var("title", $title);
 			
 			$user = new User($data_permission->get_owner_id());
@@ -381,8 +360,6 @@ class DataAjax
 			$template->set_var("owner", $user->get_full_name(false));
 			$template->set_var("owner_group", $group->get_name());
 
-			
-			
 			if ($object->can_set_automatic())
 			{
 				$disable_automatic = false;
@@ -518,35 +495,64 @@ class DataAjax
 	
 	public static function change_permission($permission_array, $type)
 	{
+		global $user;
+		
 		$permissions = (array)$permission_array;
 		switch($type):
 			case "File": 
 				$id = $_POST[file_id];
+				$object = File::get_instance($id);
 			break;
 			case "Folder": 
 				$id = $_POST[folder_id];
+				$object = Folder::get_instance($id);
 			break;
 			case "Value": 
 				$id = $_POST[value_id];
+				$object = Value::get_instance($id);
 			break;
-			
 		endswitch;
-		$type = strtolower($type);
-		$id = intval($id);
-		echo $id;
-		$data_permission = new DataPermission($type, $id);
 		
-		$paramquery = $_GET;
-		unset($paramquery[action]);
-		unset($paramquery[nextpage]);
-		$params = http_build_query($paramquery,'','&#38;');
-		if ($data_permission->set_permission_array($permissions) == true)
+		if ($object->is_control_access() == true)
 		{
-			return true;
+			$full_access = true;
+		}
+		else{
+			$full_access = false;
+		}
+		
+		if ($object->get_owner_id() == $user->get_user_id())
+		{
+			$user_access = true;
 		}
 		else
 		{
-			return false;
+			$user_access = false;
+		}
+		
+		if ($full_access == true or $user_access == true)
+		{
+			$type = strtolower($type);
+			$id = intval($id);
+			echo $id;
+			$data_permission = new DataPermission($type, $id);
+			
+			$paramquery = $_GET;
+			unset($paramquery[action]);
+			unset($paramquery[nextpage]);
+			$params = http_build_query($paramquery,'','&#38;');
+			if ($data_permission->set_permission_array($permissions) == true)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			throw new DataSecurityAccessDeniedException();
 		}
 	}
 }

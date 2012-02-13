@@ -8,9 +8,9 @@ $(document).ready(function()
 		id = id.replace("ManufacturerListDelete","");
 		$.ajax(
 		{
-			type: "GET",
-			url: "core/modules/manufacturer/ajax/manufacturer.ajax.php",
-			data: "session_id="+get_array['session_id']+"&run=delete&id="+id,
+			type: "POST",
+			url: "ajax.php?session_id="+get_array['session_id']+"&nav=manufacturer&run=delete",
+			data: "id="+id,
 			success: function(data)
 			{
 				if (data == 1)

@@ -106,8 +106,6 @@ class HTMLTemplate extends Template implements ConcreteTemplateInterface
 			}
 			$start_position 	= $end_position+1;
 		}
-	
 	}
 }
-
 ?>

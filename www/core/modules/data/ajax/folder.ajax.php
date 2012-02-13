@@ -90,7 +90,7 @@ class FolderAjax
 		}
 	}
 	
-	public static  function get_children($id)
+	public static function get_children($id)
 	{
 		if (is_numeric($id) and $id != 0)
 		{
@@ -142,7 +142,7 @@ class FolderAjax
 		}
 	}
 	
-	public static  function get_data_browser_link_html_and_button_handler($action) 
+	public static function get_data_browser_link_html_and_button_handler($action) 
 	{
 		$html;
 		$html_caption;
@@ -238,28 +238,50 @@ class FolderAjax
 	
 		$internal_name = trim(strtolower(str_replace(" ","_",$folder_name)));
   		$base_folder = Folder::get_instance($folder_id);
-		$path = new Path($base_folder->get_path());
-		$path->add_element($internal_name);
-		$folder = Folder::get_instance(null);
-		if (($folder_id = $folder->create($folder_name, $folder_id, $path->get_path_string(), $session->get_user_id(), null)) == null)
+  		
+  		if ($base_folder->can_add_folder())
 		{
-		 	return true;
+			$path = new Path($base_folder->get_path());
+			$path->add_element($internal_name);
+			$folder = Folder::get_instance(null);
+			if (($folder_id = $folder->create($folder_name, $folder_id, $path->get_path_string(), $session->get_user_id(), null)) == null)
+			{
+			 	return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		else
 		{
-			return false;
+			throw new DataSecurityAccessDeniedException();
 		}
 	}
 	
-	private static  function rename_folder($folder_id, $folder_name)
+	private static function rename_folder($folder_id, $folder_name)
 	{
 		$folder = Folder::get_instance($folder_id);
-		$folder->set_name($folder_name);
+		if ($folder->can_rename_folder())
+		{
+			$folder->set_name($folder_name);
+		}
+		else
+		{
+			throw new DataSecurityAccessDeniedException();
+		}
 	}
 	
-	private static  function delete_folder($folder_id) {
+	private static function delete_folder($folder_id) {
 		$folder = Folder::get_instance($folder_id);
-		$folder->delete(true, true); //?
+		if ($folder->can_command_folder())
+		{
+			$folder->delete(true, true);
+		}
+		else
+		{
+			throw new DataSecurityAccessDeniedException();
+		}
 	}
 
 }

@@ -22,68 +22,76 @@
  */
  	
 /**
- * @ignore
- */ 	
+ * 
+ */
+$server['main_folder']							= "/var/open-lims/www";
+$server['timezone']								= "Europe/Berlin";
+$server['timezone_id']							= 26;
 
-// Debug Mode
-define("DEBUG", 						false);
 
-// Avoid CSS Cache
-define("AVOID_CSS_CACHE", 				false);
+$database['type'] 								= "postgres";
+$database['database'] 							= "open-lims";
+$database['user'] 								= "";
+$database['password']							= "";
 
-// Avoid JS Cache
-define("AVOID_JS_CACHE", 				false);
+// Primary Database Server
+$database['server']								= "localhost";
+$database['port'] 								= "";
 
-// General
-define("PRODUCT_USER", 					"");
-define("PRODUCT_FUNCTION", 				"");
-define("HTML_TITLE",					"");
-define("ACCOUNTMAIL",					"");
-define("SENDMAIL_FROM",					"");
-define("TIMEZONE",						"Europe/Berlin");
-define("TIMEZONE_ID",					26);
+// Secondary Database Server
+// $database[1]['server']						= "localhost";
+// $database[1]['port'] 						= "";
 
-// Database Settings
-define("DB_TYPE",						"");
-define("DB_SERVER",						"");
-define("DB_PORT",						"");
-define("DB_USER",						"");
-define("DB_PASSWORD",					"");
-define("DB_DATABASE",					"");
 
-// Path Settings
-define("BASE_DIR",						"");
-define("WWW_DIR",						constant("BASE_DIR")."/www");
-define("LOG_DIR",						constant("BASE_DIR")."/logs");
+$server['os']									= "linux";
+$server['user']									= "John Doe & Co.";
+$server['function']								= "test server";
+$server['html_title']							= "Open-LIMS";
 
-define("INCLUDE_DIR",					constant("WWW_DIR")."/core/include");
-define("MODULES_DIR",					constant("WWW_DIR")."/core/modules");
 
-// ! The following settings only needed by enabled serivce system !
-define("OS",							"WIN32");
-define("BIN_DIR",						constant("BASE_DIR")."/bin");									
+$mail['enable'] 								= true;
+$mail['enable_smtp'] 							= false;
+$mail['from'] 									= "roman.konertz@uni-koeln.de";
 
-define("SERVICE_ENABLE",				false);
-define("SERVICE_JS_ENABLE",				false);							
-define("SERVICE_JS_JOB_ID",				1);	
+// Primary SMTP
+$mail[0]['smtp']['server'] 						= "";
+$mail[0]['smtp']['port'] 						= "";
+$mail[0]['smtp']['username'] 					= "";
+$mail[0]['smtp']['password'] 					= "";
 
-define("SERVICE_JAVA_HOME",				"");
-define("SERVICE_JAVA_VM",				"java");
-define("SERVICE_JAVA_XMS",				"64M");
-define("SERVICE_JAVA_XMX",				"128M");
-// ! Settings end !
+// Secondary SMTP
+// $mail[1]['smtp']['server'] 					= "";
+// $mail[1]['smtp']['port'] 					= "";
+///$mail[1]['smtp']['username'] 				= "";
+// $mail[1]['smtp']['password'] 				= "";
 
-// SQL Log
-define("ENABLE_DB_LOG_ON_ROLLBACK",		true);
-define("ENABLE_DB_LOG_ON_EXP_ROLLBACK",	false);							
-define("ENABLE_DB_LOG_ON_COMMIT",		false);	
 
-// Session-Time and IP Errors
-define("MAX_SESSION_PERIOD",			36000);
-define("MAX_IP_ERRORS",					50);
-define("IP_ERROR_LEAD_TIME",			36000);
+$ldap['enable']									= false;
 
-define("LOGIN_FOOTER", "".constant("PRODUCT").", version: ".constant("PRODUCT_VERSION").", ".constant("PRODUCT_FUNCTION").", ".constant("PRODUCT_USER")." " .
-						"<br />This is free software; It comes with ABSOLUTELY NO WARRANTY." .
-						"<br />by R. Konertz, B. Tunggal, L. Eichinger et al.; 2008-2011");
+
+$server['binary']['enable']						= false;
+$server['binary']['java']['home']				= "";
+$server['binary']['java']['vm']					= "";
+$server['binary']['java']['xms']				= "";
+$server['binary']['java']['xmx']				= "";
+
+
+$server['imagick']['enable']					= true;	
+
+
+$server['update_check']['enable']				= false;
+$server['update_check']['url']					= "http://update.open-lims.org/check.php";
+
+
+$server['security']['session_timeout']			= 36000;
+$server['security']['max_ip_failed_logins']		= 10;
+$server['security']['max_ip_lead_time']			= 36000;
+
+
+$server['behaviour']['debug_mode']				= false;
+$server['behaviour']['avoid_css_cache']			= false;
+$server['behaviour']['avoid_js_cache']			= false;
+$server['behaviour']['on_db_rollback']			= true;
+$server['behaviour']['on_db_expected_rollback']	= false;
+$server['behaviour']['on_db_commit']			= false;
 ?>

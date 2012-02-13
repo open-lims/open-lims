@@ -115,4 +115,20 @@
 	$dialog[11][internal_name]	= "data";
 	$dialog[11][display_name]	= "Data";
 	$dialog[11][weight]			= 100;
+	
+	$dialog[12][type]			= "home_summary_left";
+	$dialog[12][class_path]		= "core/modules/data/io/data_home.io.php";
+	$dialog[12]['class']		= "DataHomeIO";
+	$dialog[12][method]			= "quota";
+	$dialog[12][internal_name]	= "data";
+	$dialog[12][display_name]	= "Data";
+	$dialog[12][weight]			= 300;
+	
+	$dialog[13][type]			= "home_summary_right";
+	$dialog[13][class_path]		= "core/modules/data/io/data_home.io.php";
+	$dialog[13]['class']		= "DataHomeIO";
+	$dialog[13][method]			= "used_diskspace";
+	$dialog[13][internal_name]	= "data";
+	$dialog[13][display_name]	= "Data";
+	$dialog[13][weight]			= 300;
 ?>

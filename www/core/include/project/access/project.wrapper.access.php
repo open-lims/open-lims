@@ -584,7 +584,7 @@ class Project_Wrapper_Access
 											"AND toid_organ_unit IS NOT NULL)".
 							"AND ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE").".datetime = " .
 									"(SELECT MAX(datetime) FROM ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." WHERE ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE").".project_id = ".constant("PROJECT_TABLE").".id)" .
-					"".$admin_sql." ";
+					"".$admin_sql." " .
 					"".$sql_order_by."";
 			
 			$return_array = array();

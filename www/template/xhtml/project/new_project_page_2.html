@@ -15,10 +15,10 @@ $(document).ready(function()
 				
 				$.ajax(
 				{
-					type: "GET",
-					url: "/core/modules/project/ajax/project_create.ajax.php",
+					type: "POST",
+					url: "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=create_project&action=check_data",
 					async: false,
-					data: "session_id="+get_array['session_id']+"&run=check_data&name="+$(".ProjectCreateAssistantField[name='project_name']").val(),
+					data: "name="+$(".ProjectCreateAssistantField[name='project_name']").val(),
 					success: function(data)
 					{
 						if (data == '1')
@@ -40,10 +40,10 @@ $(document).ready(function()
 				$("#ProjectCreateError2").html("<br />You have to enter a description.");
 				$.ajax(
 				{
-					type: "GET",
-					url: "/core/modules/project/ajax/project_create.ajax.php",
+					type: "POST",
+					url: "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=create_project&action=check_data",
 					async: false,
-					data: "session_id="+get_array['session_id']+"&run=check_data&name="+$(".ProjectCreateAssistantField[name='project_name']").val(),
+					data: "name="+$(".ProjectCreateAssistantField[name='project_name']").val(),
 					success: function(data)
 					{
 						if (data == '1')

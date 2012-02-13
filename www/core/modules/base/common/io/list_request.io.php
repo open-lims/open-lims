@@ -102,8 +102,7 @@ class ListRequest_IO
 				$color_count = 0;
 			
 				foreach ($this->array as $key => $value)
-				{
-	    		
+				{					
 	    			if ($color_count % 2) {
 						$tr_class = " class ='trLightGrey'";
 					}else{
@@ -136,7 +135,7 @@ class ListRequest_IO
 						
 						$content_string = "";
 						
-						if ($content[$row_value[1]]['class'])
+						if (is_array($content[$row_value[1]]) and $content[$row_value[1]]['class'])
 						{
 							if ($row_value[4])
 							{

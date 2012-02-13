@@ -44,124 +44,7 @@ class FileIO
 				$folder = Folder::get_instance($file->get_parent_folder_id());
 				
 				if ($_GET[version] and is_numeric($_GET[version]))
-				{
-					if ($_GET[version])
-					{
-						if ($file->exist_file_version($_GET[version]) == false)
-						{
-							throw new FileVersionNotFoundException("",5);
-						}
-					}
-					
-					$template = new HTMLTemplate("data/file_detail.html");
-					
-					$folder = Folder::get_instance($file->get_parent_folder_id());
-					
-					if ($_GET[version] and is_numeric($_GET[version]))
-					{
-						$file->open_internal_revision($_GET[version]);
-						$internal_revision = $_GET[version];
-					}
-					else
-					{
-						$internal_revision = $file->get_internal_revision();
-					}
-					
-					$user_owner = new User($file->get_owner_id());
-					
-					$file_version_array = $file->get_file_internal_revisions();
-					
-					if (is_array($file_version_array) and count($file_version_array) > 0)
-					{	
-						$result = array();
-						$counter = 1;
-					
-						$result[0][version] = 0;
-						$result[0][text] = "----------------------------------------------";
-						
-						foreach($file_version_array as $key => $value)
-						{
-							$file_version = File::get_instance($_GET[file_id]);
-							$file_version->open_internal_revision($value);
-							
-							$result[$counter][version] = $file_version->get_internal_revision();
-							$result[$counter][text] = "Version ".$file_version->get_version()." - ".$file_version->get_datetime();
-							$counter++;
-						}
-						$template->set_var("version_option",$result);
-					}
-					
-					$result = array();
-					$counter = 0;
-					
-					foreach($_GET as $key => $value)
-					{
-						if ($key != "version")
-						{
-							$result[$counter][value] = $value;
-							$result[$counter][key] = $key;
-							$counter++;
-						}
-					}
-					
-					$template->set_var("get",$result);
-					
-					$template->set_var("version",$file->get_version());
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "file_history";
-					$params = http_build_query($paramquery,'','&#38;');	
-					
-					$template->set_var("version_list_link",$params);
-					
-					$template->set_var("title",$file->get_name());
-					
-					$template->set_var("name",$file->get_name());
-					$template->set_var("path",$folder->get_object_path());
-					
-					$template->set_var("size",Convert::convert_byte_1024($file->get_size()));
-					$template->set_var("size_in_byte",$file->get_size());
-					
-					$template->set_var("creation_datetime",$file->get_datetime());
-					$template->set_var("version_datetime",$file->get_version_datetime());
-					$template->set_var("mime_type",$file->get_mime_type());
-					$template->set_var("owner",$user_owner->get_full_name(false));
-					$template->set_var("checksum",$file->get_checksum());
-					$template->set_var("permission",$file->get_permission_string());
-					$template->set_var("comment","");
-					
-					$template->set_var("thumbnail_image","");
-					
-					$paramquery = array();
-					$paramquery['username'] = $_GET['username'];
-					$paramquery['session_id'] = $_GET['session_id'];
-					$paramquery['file_id'] = $_GET['file_id'];
-					if ($_GET['version'])
-					{
-						$paramquery['version'] = $_GET['version'];
-					}
-					$params = http_build_query($paramquery,'','&#38;');	
-					$template->set_var("download_params",$params);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "file_update";
-					$paramquery[version] = $internal_revision;
-					$paramquery[retrace] = Retrace::create_retrace_string();
-					$params = http_build_query($paramquery,'','&#38;');	
-					$template->set_var("update_params",$params);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "file_update_minor";
-					$paramquery[version] = $file->get_internal_revision();
-					$paramquery[retrace] = Retrace::create_retrace_string();
-					$params = http_build_query($paramquery,'','&#38;');	
-					$template->set_var("update_minor_params",$params);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "permission";
-					$params = http_build_query($paramquery,'','&#38;');	
-					$template->set_var("set_permission_params",$params);
-					
+				{	
 					$file->open_internal_revision($_GET[version]);
 					$internal_revision = $_GET[version];
 				}
@@ -170,6 +53,9 @@ class FileIO
 					$internal_revision = $file->get_internal_revision();
 				}
 				
+				$template = new HTMLTemplate("data/file_detail.html");
+				
+				$folder = Folder::get_instance($file->get_parent_folder_id());
 				$user = new User($file->get_owner_id());
 				
 				$file_version_array = $file->get_file_internal_revisions();
@@ -233,17 +119,28 @@ class FileIO
 				$template->set_var("permission",$file->get_permission_string());
 				$template->set_var("comment","");
 				
-				$template->set_var("thumbnail_image","");
+				if ($file->is_image() == true)
+				{
+					$template->set_var("thumbnail_image","<img src='image.php?session_id=".$_GET[session_id]."&file_id=".$_GET[file_id]."&max_width=340&max_height=350' alt='' />");
+				}
+				else
+				{
+					$template->set_var("thumbnail_image","");
+				}
 				
 				$paramquery = array();
 				$paramquery['username'] = $_GET['username'];
 				$paramquery['session_id'] = $_GET['session_id'];
 				$paramquery['file_id'] = $_GET['file_id'];
+				
 				if ($_GET['version'])
 				{
 					$paramquery['version'] = $_GET['version'];
 				}
+				
 				$params = http_build_query($paramquery,'','&#38;');	
+				
+				
 				$template->set_var("download_params",$params);
 				
 				$paramquery = $_GET;
