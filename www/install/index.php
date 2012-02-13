@@ -80,10 +80,16 @@ else
 		require_once("../core/include/base/system/system_handler.class.php");
 		require_once("../core/include/base/system/transaction.class.php");
 		require_once("../core/include/base/security/security.class.php");
+		
+		require_once("../core/include/base/system/template.class.php");
+ 		require_once("../core/include/base/system/html_template.class.php");
 				
 		$transaction = new Transaction();
 		
 		Security::protect_session();
+		
+		$template = new HTMLTemplate("header.html", "install/template");
+		$template->output();
 		
 		$sql = "SELECT id FROM core_base_includes";
 		@$res = $db->db_query($sql);
@@ -98,6 +104,9 @@ else
 			// Install
 			echo "Install a new Open-LIMS instance";
 		}
+		
+		$template = new HTMLTemplate("footer.html", "install/template");
+		$template->output();
 	}
 	else
 	{
