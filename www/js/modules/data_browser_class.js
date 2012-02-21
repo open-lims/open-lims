@@ -90,7 +90,7 @@ function data_browser()
 				return true; 
 			}
 
-			var link = $(this).children("td:nth-child(2)").children();
+			var link = $(this).children("td:nth-child(3)").children();
 			if ($(link).is("div")) 
 			{
 				link = $(link).children("a");
@@ -119,7 +119,7 @@ function data_browser()
 				.unbind("mouseover mouseleave click")
 				.mouseover(function(event)
 				{
-					var text = $(this).children("td:nth-child(3)").text();
+					var text = $(this).children("td:nth-child(4)").text();
 					if(!$(this).hasClass("DataBrowserFileSelected") && text != "Virtual Folder" && text != "Parent Folder")
 					{
 						$(this)
@@ -229,7 +229,7 @@ function data_browser()
 						}
 					 }
 				})
-				.children("td:nth-child(2)").each(function()
+				.children("td:nth-child(3)").each(function()
 				{ //bind thumbnail handler
 					var filename = $(this).children().text();
 					if(is_image(filename))
@@ -248,10 +248,11 @@ function data_browser()
 		var action = $("#DataBrowserActionSelect").children("option:selected").val();
 		$(".DataBrowserDeleteCheckbox:checked").each(function()
 		{
-			var type = $(this).parent().parent().parent().children("td:nth-child(3)").children();
+			var type = $(this).parent().parent().children("td:nth-child(4)");
+			
 			if($(type).text() == "Folder")
 			{
-				var link = $(this).parent().parent().parent().children("td:nth-child(2)").children().children().attr("href");
+				var link = $(this).parent().parent().children("td:nth-child(3)").children().children().attr("href");
 				var folder_id = link.split("&folder_id=")[1];
 				$.ajax(
 				{
@@ -264,7 +265,7 @@ function data_browser()
 			}
 			else if($(type).text() == "Value")
 			{
-				var link = $(this).parent().parent().parent().children("td:nth-child(2)").children().attr("href");
+				var link = $(this).parent().parent().children("td:nth-child(3)").children().attr("href");
 				var split = link.split("&nav=data&value_id=");
 				var value_id = split[1].replace("&action=value_detail","");
 				$.ajax(
@@ -278,7 +279,7 @@ function data_browser()
 			}
 			else
 			{
-				var link = $(this).parent().parent().parent().children("td:nth-child(2)").children().attr("href");
+				var link = $(this).parent().parent().children("td:nth-child(3)").children().attr("href");
 				var split = link.split("&nav=data&file_id=");
 				var file_id = split[1].replace("&action=file_detail","");
 				$.ajax(
@@ -399,22 +400,22 @@ function data_browser()
 		var offset_y = pos.top + height - 2;
 		var dialog = $("<div id='DataBrowserFileDialog'>Permission denied.</div>");
 		
-		if($(element).children("td:nth-child(2)").children().hasClass("DataBrowserIsFolder"))
+		if($(element).children("td:nth-child(3)").children().hasClass("DataBrowserIsFolder"))
 		{
-			var link = $(element).children("td:nth-child(2)").children().children().attr("href");
+			var link = $(element).children("td:nth-child(3)").children().children().attr("href");
 			var folder_id = link.split("&folder_id=")[1];
 			load_context_sensitive_dialog(folder_id,"folder");
 		}
 		else
 		{
-			var link = $(element).children("td:nth-child(2)").children().attr("href");
-			if($(element).children("td:nth-child(3)").text() == "File")
+			var link = $(element).children("td:nth-child(3)").children().attr("href");
+			if($(element).children("td:nth-child(4)").text() == "File")
 			{
 				var split = link.split("&nav=data&file_id=");
 				var file_id = split[1].replace("&action=file_detail","");
 				load_context_sensitive_dialog(file_id,"file");
 			}
-			else if($(element).children("td:nth-child(3)").text() == "Value")
+			else if($(element).children("td:nth-child(4)").text() == "Value")
 			{
 				var split = link.split("&nav=data&value_id=");
 				var value_id = split[1].replace("&action=value_detail","");
@@ -701,6 +702,8 @@ function data_browser()
 	 */
 	function init_menu(folder_id)
 	{
+		$(".ListTable > thead > tr > th:first").append("<input type='checkbox' id='DataBrowserActionMasterCheckbox' name='' value=''></input>")
+		
 		$.ajax({
 			type : "POST",
 			url : "ajax.php?nav=data&session_id="+get_array['session_id']+"&run=get_browser_menu",
@@ -838,6 +841,10 @@ function data_browser()
 			.unbind("click")
 			.click(function()
 			{
+				if($(".DataBrowserDeleteCheckbox:checked").length === 0)
+				{
+					return;
+				}
 				var container = $("<div>Do you really want to delete the selected items?</div>")
 				$(container).css({"text-align":"center","padding-top":"20px"});
 				$(container).dialog({"title" : "Confirm" ,  
@@ -855,6 +862,24 @@ function data_browser()
 			         		$(container).dialog("close").remove();
 			             }}]
 				});
+			});
+		
+		$("#DataBrowserActionMasterCheckbox")
+			.click(function()
+			{
+				if($(this).attr("checked"))
+				{
+					$(".DataBrowserDeleteCheckbox").each(function(){
+						if($(this).attr("disabled") !== true)
+						{
+							$(this).attr("checked","checked");
+						}
+					});
+				}
+				else
+				{
+					$(".DataBrowserDeleteCheckbox").removeAttr("checked");
+				}
 			});
 	}
 	

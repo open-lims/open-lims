@@ -256,8 +256,10 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 		if($(".resizable").size() === 0)
 		{
 			init();
+			init_column_options();
 		}
 		
+
 		$(".ListTableOptionsEntryCheckbox").not(":checked").each(function(){
 			var index = $(this).attr("name");
 			
@@ -269,27 +271,27 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 			});
 			$("#dragHandle"+index).hide();
 		});
-		
-		$(".resizable").each(function(){
-			var width = $(this).data("initialWidth");
-			var index = $(this).data("colIndex");
 			
-			$(".ListTable > tbody > tr").each(function(){
-				var col = $(this).children("td").get(index);
-				
-				if($(col).width() >= width)
-				{
-					shorten_text($(col), width, index);
-				}
-			});
-		});	
+//		$(".resizable").each(function(){
+//			var width = $(this).data("initialWidth");
+//			var index = $(this).data("colIndex");
+//			
+//			$(".ListTable > tbody > tr").each(function(){
+//				var col = $(this).children("td").get(index);
+//				
+//				if($(col).width() >= width)
+//				{
+//					shorten_text($(col), width, index);
+//				}
+//			});
+//		});	
 		
 		function init()
-		{
+		{			
 			var num_cols = $(".ListTable > thead > tr > th").size();
 
 			var free_width = table_width;
-			var columns_to_resize = 0;
+//			var columns_to_resize = 0;
 			var preset_width_columns = 0;
 			
 			for (var int = 0; int < num_cols; int++) 
@@ -298,36 +300,50 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 
 				if($(column).attr("width") === "")
 				{
-					columns_to_resize++;
+//					columns_to_resize++;
 					init_slider(int);
 					$(column).addClass("resizable");
 				}
 				else if($(column).attr("width").indexOf("%") != -1)
 				{
 					preset_width_columns++;
-					columns_to_resize++;
-					var percentage = $(column).attr("width").replace("%","");
-					var absolute_width = Math.floor(table_width * percentage / 100);				
-//					$(column).width(absolute_width);
+//					columns_to_resize++;
+//					var percentage = $(column).attr("width").replace("%","");
+//					var absolute_width = Math.floor(table_width * percentage / 100);				
+////					$(column).width(absolute_width);
 //					$(column).removeAttr("width");
-					$(column).attr("width", absolute_width);
-					free_width -= absolute_width;
+//					$(column).attr("width", absolute_width);
+//					free_width -= absolute_width;
 					$(column).addClass("presetWidth");
 					$(column).addClass("resizable");
 					init_slider(int);
 				}
 				else
 				{
+//					$(column).width(20);
 					free_width -= $(column).outerWidth();
-					$(column).width("1%"); //inhibits resize of outer columns
+//					$(column).width("1%"); //inhibits resize of outer columns
 				}
 			}
+			var fixed_width = 0;
+			
+			$(".presetWidth").each(function(){
+				var percentage = $(this).attr("width").replace("%","");
+				var absolute_width = Math.floor(free_width * percentage / 100);
+//				$(this).width(absolute_width);
+//				$(this).removeAttr("width");
+				$(column).attr("width", absolute_width);
+				
+				fixed_width += absolute_width;
+			});
+			free_width -= fixed_width;
+			
+			free_width -= $(".resizable").size() * 8;
 			
 			var num_cols_to_resize = $(".resizable").size() - $(".presetWidth").size();
-			
+
 			var free_column_width = Math.floor(free_width / num_cols_to_resize);
 			
-			$(".ListTable > tbody > tr > td").hide();
 
 			$(".resizable").each(function(){
 				if(!$(this).hasClass("presetWidth"))
@@ -341,10 +357,6 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 				$(this).data("initialWidth", width);
 				$(this).data("colIndex", col_index);
 			});
-			
-			$(".ListTable > tbody > tr > td").show();
-
-			init_column_options();
 		}
 		
 		function init_slider(int)
@@ -366,14 +378,16 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 					"position": "absolute"
 				});
 			
-			var html_div = $("<div>"+head_col_text+"</div>")
+			var html_div = $("<div class='ResizableColumnHelper'>"+head_col_text+"</div>")
+//				.css("width","100%")
 				.append(handle)
 				.data("originalWidth", $(head_col).width())
 				.data("draggedColIndex", int)
 				.resizable({
 					handles: "e",
 					minWidth: head_col_text_width,
-					containment: $(".ListTable > thead > tr:first"),
+//					alsoResize: head_col,
+//					containment: $(".ListTable > thead > tr:first"),
 					start:  function(event, ui)
 					{
 						$(html_div).css("outline","dotted #669acc 2px");
@@ -384,19 +398,21 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 						
 						var old_width = $(this).data("originalWidth");
 						var new_width = $(this).width();
-							
 						
 						$(head_col).width(new_width); //this is where the magic happens
+
+						var diff = Math.floor(old_width - new_width);
+						var next_col = $(".ListTable > thead > tr > th").get(dragged_col_index + 1);
+						var next_col_width_original = $(next_col).children("div").data("originalWidth");
+						$(next_col).width(next_col_width_original + diff);		
 						
-						if($(".ListTable").width() > table_width)
-						{
-							//have to invoke mouseup as resizable currently has no valid cancel event
-							new_width = old_width;
-							$(head_col).width(new_width);
-							$(html_div).trigger("mouseup"); 
-						}
-						
-						$(html_div).width("100%");
+//						if($(".ListTable").width() > table_width)
+//						{
+//							//have to invoke mouseup as resizable currently has no valid cancel event
+//							new_width = old_width;
+////							$(head_col).width(new_width);
+//							$(html_div).trigger("mouseup"); 
+//						}
 						
 						lengthen_text(new_width, dragged_col_index);
 											
@@ -408,7 +424,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 							});
 						}
 						
-						$(this).data("originalWidth", new_width);
+//						$(this).data("originalWidth", new_width);
 					},
 					stop:  function(event, ui)
 					{
@@ -522,14 +538,40 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 		
 		function init_column_options()
 		{
+			var options_container = null;
 			
-			var dialog_pos_x = $(".ListTable").position().left;
-			var dialog_pos_y = $(".ListTable").position().top + $(".ListTable > thead > tr").height();
+			if(window.location.href.indexOf("nav=data") === -1)
+			{
+				options_container = $(".ListTable > thead > tr > th:first");
+			}
+			else
+			{
+				options_container = $(".ListTable > thead > tr > th:nth-child(2)");
+			}
+			
+			$(options_container)
+				.html("<img src='images/icons/visible.png' alt=''/>")
+				.attr("id","ListTableOptionsTrigger")
+				.click(function(){
+					if($(this).hasClass("active"))
+					{
+						close_display_options_dialog();
+					}
+					else
+					{
+						open_display_options_dialog();
+					}
+				});
+			
+			tooltip("ListTableOptionsTrigger", "Show Display Options");
+			
+			var dialog_pos_x = $("#ListTableOptionsTrigger").position().left;
+			var dialog_pos_y = $("#ListTableOptionsTrigger").position().top + $("#ListTableOptionsTrigger").height();
 			
 			var options = $("<div id='ListTableOptions'></div>")
 				.css({
 					"left": dialog_pos_x,
-					"top": dialog_pos_y
+					"top": dialog_pos_y + 3
 				})
 				.appendTo("#main")
 				.hide();
@@ -548,7 +590,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 							"margin-top": "2px"
 						})
 						.click(function(){
-							if($(".ListTableOptionsEntryCheckbox:checked").size() >= 2)
+							if($(".ListTableOptionsEntryCheckbox:checked").size() >= 0)
 							{
 								if($(this).attr("checked"))
 								{
@@ -572,22 +614,6 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 				}
 			});
 			
-			$(".ListTable > thead > tr > th:first")
-				.html("<img src='images/icons/visible.png' alt=''/>")
-				.attr("id","ListTableOptionsTrigger")
-				.click(function(){
-					if($(this).hasClass("active"))
-					{
-						close_display_options_dialog();
-					}
-					else
-					{
-						open_display_options_dialog();
-					}
-				});
-			
-			tooltip("ListTableOptionsTrigger", "Show Display Options");
-			
 			var corner_pos_x = $("#ListTableOptionsTrigger").position().left + $("#ListTableOptionsTrigger").outerWidth() - 3;
 			var corner_pos_y = $("#ListTableOptionsTrigger").position().top + 9;
 			
@@ -598,8 +624,8 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 					"top": corner_pos_y,
 					"left": corner_pos_x,
 					"z-index": "96",
-					"width": "12px",
-					"height": "12px", 
+					"width": "13px",
+					"height": "13px", 
 					"background-color": "white",
 					"margin": "0",
 					"padding": "0"

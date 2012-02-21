@@ -102,6 +102,7 @@ class DataIO
 
 		$list = new List_IO("DataBrowser", "ajax.php?nav=data", "list_data_browser", "count_data_browser", $argument_array, "DataBrowserAjax");	
 		
+		$list->add_column("","delete_checkbox",false,"20px"); 
 		$list->add_column("","symbol",false,"16px");
 		$list->add_column("Name","name",true,"30%");
 		$list->add_column("Type","type",true,null);
@@ -110,7 +111,7 @@ class DataIO
 		$list->add_column("Size","size",true,null);
 		$list->add_column("Owner","owner",true,null);
 		$list->add_column("Permission","permission",false,null);
-		$list->add_column("","delete_checkbox",false,"16px");
+				
 
 		// !!! [...] !!!
 		

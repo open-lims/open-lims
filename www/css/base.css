@@ -16,13 +16,16 @@
 
 /* BASE LIST */
 
+
 .ListTable
 {
-	width: 100%;
+	width: 744px;
 	border-collapse: separate;
-	border-spacing:0px;
+	border-spacing:1px 0px;
 	border-collapse: expression('separate', cellSpacing = '0px');
-/* 	table-layout:fixed; */
+	table-layout:fixed;
+	white-space: nowrap;
+	overflow: hidden;
 }
 .ListTable th 
 {
@@ -31,6 +34,7 @@
 	border-bottom: 1px #C0C0C0 dotted;
 	color: black;
 	white-space: nowrap;
+	overflow: hidden;
 }
 .ListTable th a 
 {
@@ -60,7 +64,7 @@
 #ListTableOptionsTrigger
 {
 	z-index: 95;
-	padding-left: 4px;
+/* 	padding-left: 4px; */
 	border:solid white 2px;
 	border-bottom: 1px #C0C0C0 dotted;
 	background-color:#ffffff;

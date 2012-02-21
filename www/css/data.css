@@ -184,7 +184,7 @@ text-decoration:underline;
 
 #DataBrowserAjaxActionSelect 
 {
-text-align:right;
+float: left;
 margin:2px 2px 0 2px;
 }
 
@@ -199,6 +199,11 @@ height:22px;
 width:30px;
 padding: 0;
 vertical-align:middle;
+}
+
+.DataBrowserDeleteCheckbox
+{
+margin-left: 0;	
 }
 
 #RenameFolderContainer
