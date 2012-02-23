@@ -1,3 +1,10 @@
-<li>
-	<a href='index.php?[[PARAMS]]' class='NavigationMainNavigationTabGreen'>[[TITLE]]</a>
+<li class='Green'>
+	<a href='index.php?[[PARAMS]]'>
+		<span class='NavigationButton NavigationButtonLeft'></span>
+		<span class='NavigationButton NavigationButtonContent'>[[TITLE]]</span>
+		<!-- IF ([[DOWN]]) -->
+		<span class='NavigationButton NavigationButtonDown'><img src='images/down.png' alt='' /></span>
+		<!-- ENDIF -->
+		<span class='NavigationButton NavigationButtonRight'></span>
+	</a>
 </li>

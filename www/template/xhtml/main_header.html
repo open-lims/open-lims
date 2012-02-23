@@ -1,7 +1,66 @@
-<div id='top'>
-<div id='headtitle'><img src='images/logo.png' alt='Logo' height='40px' /></div>
-<div id='version_information'>[[RELEASE]]
-<br />[[USER]]
-<br />[[SERVERTYPE]]
-</div>
-<div class='clearbox'></div>
+<script>
+$(document).ready(function()
+{
+	var get_array = getQueryParams(document.location.search);
+		
+	$('#BaseLogout').click(function()
+	{
+		$.blockUI({ message: $('#BaseLogoutQuestion'), css: { width: '275px' } }); 
+		$('.blockUI.blockMsg').center();
+	});
+	
+	$('#yes').click(function()
+	{ 
+		$("#BaseLogoutQuestion").empty();
+		$("#BaseLogoutQuestion").html("<img src='images/animations/loading_circle_small.gif' alt=''> Please wait while logout.");
+		
+		$.ajax(
+		{
+			type: "GET",
+			url: "ajax.php",
+			data: "nav=base&run=logout&session_id="+get_array['session_id']+"",
+			success: function(data)
+			{
+				if (data == "1")
+				{
+					window.setTimeout('window.location = "index.php"',1500);
+				}
+			}
+		});
+    }); 
+
+    $('#no').click(function()
+    { 
+        $.unblockUI(); 
+        return false; 
+    }); 
+});
+</script>
+<div id='Header'>&nbsp;
+			<div id='HeaderLogo'><img src='../images/logo.png' alt='Logo' /></div>
+			<div id='HeaderRight'>
+				<ul id='HeaderMenu'>
+				
+					<!-- IF ([[SUB_MENU]]) -->
+		
+							<!-- FOREACH BEGIN ([[SUB_MENU]]) -->
+			
+								<li><a href='index.php?[[SUB_MENU:PARAMS]]'>[[SUB_MENU:TITLE]]</a></li>
+								<li>|</li>
+								
+							<!-- FOREACH END -->
+					
+					<!-- ENDIF -->
+				
+					<li><a href='index.php?[[MY_PROFILE_PARAMS]]'>My Profile</a></li>
+					<li>|</li>
+					<li><a href='index.php?[[SYSTEM_MESSAGES_PARAMS]]'>System Messages</a></li>
+					<li>|</li>
+					<li><a href='index.php?[[ABOUT_PARAMS]]'>About</a></li>
+					<li>|</li>
+					<li><a href='#' id='BaseLogout'>Logout ([[USERNAME]])</a></li>
+				</ul>
+				<div id='HeaderSearch'><input type='text' /><button type='submit'></button></div>
+			</div>
+			<div id='HeaderClear'></div>
+		</div>

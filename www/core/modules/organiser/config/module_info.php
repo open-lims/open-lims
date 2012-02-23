@@ -30,7 +30,7 @@
 	$required_include[0] 	= "user";
 	
 	$tab_name				= "Organiser";
-	$tab_colour				= "lightblue";
+	$tab_colour				= "blue";
 
 	$no_link				= true;
 ?>
