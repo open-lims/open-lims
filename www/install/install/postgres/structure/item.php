@@ -1,5 +1,7 @@
 <?php
 
+$check_statement = "SELECT id FROM core_items";
+
 $statement = array();
 
 $statement[] = "CREATE TABLE core_item_class_has_item_information

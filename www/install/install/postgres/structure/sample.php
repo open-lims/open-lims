@@ -1,5 +1,7 @@
 <?php
 
+$check_statement = "SELECT id FROM core_samples";
+
 $statement = array();
 
 $statement[] = "CREATE TABLE core_sample_has_folder

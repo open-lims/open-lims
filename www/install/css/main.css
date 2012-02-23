@@ -41,3 +41,23 @@ html,body
 {
 	margin: 10px;
 }
+
+#InstallContainer
+{
+	width: 50%;
+	margin-left: auto;
+	margin-right: auto;
+}
+#InstallTable
+{
+	width: 100%;
+}
+#InstallTable th
+{
+	text-align: left;
+	border-bottom: 1px #C0C0C0 dotted;
+}
+#InstallTable td
+{
+	text-align: left;
+}

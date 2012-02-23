@@ -1,5 +1,7 @@
 <?php
 
+$check_statement = "SELECT id FROM core_oldl_templates";
+
 $statement = array();
 
 $statement[] = "CREATE TABLE core_oldl_templates

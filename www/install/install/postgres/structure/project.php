@@ -1,5 +1,7 @@
 <?php
 
+$check_statement = "SELECT id FROM core_projects";
+
 $statement = array();
 
 $statement[] = "CREATE TABLE core_project_has_folder

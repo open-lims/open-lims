@@ -1,5 +1,7 @@
 <?php
 
+$check_statement = "SELECT id FROM core_organisation_units";
+
 $statement = array();
 
 $statement[] = "CREATE TABLE core_organisation_unit_types

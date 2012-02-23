@@ -1,0 +1,27 @@
+<div id='InstallContainer'>
+<table id='InstallTable'>
+	<tr>
+		<th>Module</th>
+		<th>Installed Version</th>
+		<th>Available Version</th>
+		<th></th>
+	</tr>
+	
+	<!-- FOREACH BEGIN ([[MODULES]]) -->
+	
+	<tr>
+		<td>[[MODULES:NAME]]</td>
+		<td>[[MODULES:IV]]</td>
+		<td>[[MODULES:AV]]</td>
+		<td></td>
+	</tr>
+	
+	<!-- FOREACH END -->
+
+</table>
+<br />
+<input type='checkbox' checked='checked' /> Install Default Templates<br />
+<input type='checkbox' /> Install Example Data<br />
+<br />
+<button id='InstallStart'>Start Installation</button>
+</div>

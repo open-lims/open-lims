@@ -89,26 +89,19 @@ else
 		
 		Security::protect_session(true);
 		
-		$template = new HTMLTemplate("header.html", "install/template");
-		$template->output();
+		switch($_GET[run]):
 		
-		try
-		{
-			$sql = "SELECT id FROM core_base_includes";
-			$res = @$db->db_query($sql);
+			case "get_modules":
+				require_once("classes/install.ajax.php");
+				echo InstallAjax::get_modules();
+			break;
 			
-			// Update
-			echo "Update an existing Open-LIMS instance";
-		}
-		catch(DatabaseQueryFailedException $e)
-		{
-			require_once("classes/install.io.php");
-			InstallIO::install();
-		}
-	
+			case "install":
+				require_once("classes/install.ajax.php");
+				echo InstallAjax::install($_POST['module']);
+			break;
 		
-		$template = new HTMLTemplate("footer.html", "install/template");
-		$template->output();
+		endswitch;
 	}
 	else
 	{
