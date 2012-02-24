@@ -253,6 +253,10 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 	{		
 		var table_width = 744; //$(".ListTable > thead").width() returns an incorrect width if columns contain long text
 		
+		var all_widths = new Array();
+		
+		var fixed_widths = new Array();
+		
 		if($(".resizable").size() === 0)
 		{
 			init();
@@ -323,6 +327,8 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 //					$(column).width(20);
 					free_width -= $(column).outerWidth();
 //					$(column).width("1%"); //inhibits resize of outer columns
+					
+					fixed_widths.push([int, $(column).outerWidth()]);
 				}
 			}
 			var fixed_width = 0;
@@ -369,20 +375,32 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 			$(head_col).html(head_col_text_calc);
 			var head_col_text_width = $(head_col).find("span").width();
 			
+			//this should be in init
+//			if($(head_col).width() < head_col_text_width)
+//			{
+//				var diff = head_col_text_width - $(head_col).outerWidth();
+//				var next = head_col = $(".ListTable > thead > tr > th").get(int + 1);
+//				$(next).width($(next).width() - diff);
+////				console.log($(head_col));
+//				$(head_col).width(head_col_text_width);
+//			}
+
+			
 			var handle = $("<span></span>")
 				.css({
 					"background-color": "#669acc",
 					"width": "2px",
 					"height": "100%",
-					"right": "0",
+					"right": "-1px",
 					"position": "absolute"
 				});
 			
 			var html_div = $("<div class='ResizableColumnHelper'>"+head_col_text+"</div>")
-//				.css("width","100%")
+//				.css("min-width",head_col_text_width)
 				.append(handle)
 				.data("originalWidth", $(head_col).width())
 				.data("draggedColIndex", int)
+				.data("minWidth", head_col_text_width)
 				.resizable({
 					handles: "e",
 					minWidth: head_col_text_width,
@@ -391,6 +409,16 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 					start:  function(event, ui)
 					{
 						$(html_div).css("outline","dotted #669acc 2px");
+//							.css("min-width",head_col_text_width);
+						
+						
+//						for(var int = 0; int < all_widths.length; int++)
+//						{
+//							var col = $(".ListTable > thead > tr > th").get(int);
+//							$(col).width(all_widths[int]);
+//							$(col).children().width("100%");
+//						}
+						
 					},
 					resize: function(event, ui)
 					{
@@ -399,36 +427,68 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 						var old_width = $(this).data("originalWidth");
 						var new_width = $(this).width();
 						
-						$(head_col).width(new_width); //this is where the magic happens
-
-						var diff = Math.floor(old_width - new_width);
+						var x = $(".resizable").size() * 2;
+						
+						$(head_col).width(new_width - x); // ?
+						
+						var diff = old_width - new_width;
 						var next_col = $(".ListTable > thead > tr > th").get(dragged_col_index + 1);
 						var next_col_width_original = $(next_col).children("div").data("originalWidth");
-						$(next_col).width(next_col_width_original + diff);		
+
+						$(next_col).width(next_col_width_original + diff);
 						
-//						if($(".ListTable").width() > table_width)
-//						{
-//							//have to invoke mouseup as resizable currently has no valid cancel event
-//							new_width = old_width;
-////							$(head_col).width(new_width);
-//							$(html_div).trigger("mouseup"); 
-//						}
+						var next_col_width = $(next_col).outerWidth();
+						var next_col_min_width = $(next_col).children().data("minWidth");
 						
-						lengthen_text(new_width, dragged_col_index);
-											
-						if($(head_col).width() >= new_width)
+			
+							
+						
+						if(next_col_width <= next_col_min_width)
 						{
-							$(".ListTable > tbody > tr").each(function(){
-								var body_col = $(this).children("td").get(dragged_col_index);
-								shorten_text(body_col, new_width, dragged_col_index);
-							});
+							$(html_div).trigger("mouseup"); 	
+							var diff2 = next_col_min_width - next_col_width;
+							$(head_col).width($(head_col).width() - diff2 - (x + 1));
+							$(next_col).width(next_col_min_width);
 						}
 						
-//						$(this).data("originalWidth", new_width);
+
+												
+//						lengthen_text(new_width, dragged_col_index);
+//											
+//						if($(head_col).width() >= new_width)
+//						{
+//							$(".ListTable > tbody > tr").each(function(){
+//								var body_col = $(this).children("td").get(dragged_col_index);
+//								shorten_text(body_col, new_width, dragged_col_index);
+//							});
+//						}
+						
+
+						
+						$(".ResizableColumnHelper").each(function(){
+							$(this).width($(this).parent().width());
+						});
 					},
 					stop:  function(event, ui)
 					{
-						$(html_div).css("outline","none");
+						$(html_div).css("outline","none");//.css("min-width","100%");
+						
+//						$(".ResizableColumnHelper").each(function(){
+//							$(this).width($(this).parent().width());
+//						});
+						
+//						$(html_div).width($(head_col).width());
+						
+//						$(html_div).parent().data("originalWidth", $(html_div).parent().width());
+//						
+//						var dragged_col_index = $(html_div).parent().data("draggedColIndex");
+//						var next_col = $(".ListTable > thead > tr > th").get(dragged_col_index + 1);
+//						$(next_col).data("originalWidth", $(next_col).width());
+						
+						all_widths = new Array();
+						$(".ListTable > thead > tr > th").each(function(){
+							all_widths.push($(this).width());
+						});
 					}
 				});
 			$(head_col).html(html_div);
@@ -693,13 +753,24 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 	
 		function hide_column(i)
 		{
-			 var header_col = $(".ListTable > thead > tr > th").get(i);
-			 $(header_col).fadeOut("fast");
-			 $(".ListTable > tbody > tr").each(function(){
-				 var body_col = $(this).children("td").get(i);
-				 $(body_col).fadeOut("fast");
-			 });
-			 $("#dragHandle"+i).fadeOut("fast");
+			var header_col = $(".ListTable > thead > tr > th").get(i);
+			 
+			$(header_col).fadeOut("fast");
+			$(".ListTable > tbody > tr").each(function(){
+				var body_col = $(this).children("td").get(i);
+				$(body_col).fadeOut("fast");
+			});
+			$("#dragHandle"+i).fadeOut("fast");
+			
+
+//			for(var int = 0; int < fixed_widths.length; int++)
+//			{
+//				var index = fixed_widths[int][0];
+//				var width = fixed_widths[int][1];
+//				
+//				var col = $(".ListTable > thead > tr > th").get(index);
+//				$(col).width(width);
+//			}
 		}
 		
 		function show_column(i)

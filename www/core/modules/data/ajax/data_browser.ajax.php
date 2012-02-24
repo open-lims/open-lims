@@ -149,7 +149,7 @@ class DataBrowserAjax
 	
 	public static function get_browser_menu($folder_id)
 	{
-		$return_array = array("add"=>true,"add_list"=>"","image_browser"=>false);
+		$return_array = array("add"=>true,"add_list"=>"","image_browser"=>true);
 		$folder = Folder::get_instance($folder_id);
 		if($folder->is_write_access())
 		{

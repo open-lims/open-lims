@@ -865,6 +865,7 @@ function data_browser()
 			});
 		
 		$("#DataBrowserActionMasterCheckbox")
+			.unbind("click")
 			.click(function()
 			{
 				if($(this).attr("checked"))
@@ -881,6 +882,17 @@ function data_browser()
 					$(".DataBrowserDeleteCheckbox").removeAttr("checked");
 				}
 			});
+		
+		$("#DataBrowserMenuImageBrowser")
+		.unbind("click")
+		.click(function()
+		{
+			if($(this).hasClass("Deactivated"))
+			{
+				return false;
+			}
+			image_browser();
+		});
 	}
 	
 	/**
