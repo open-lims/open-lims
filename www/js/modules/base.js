@@ -26,6 +26,8 @@
  */
 function tooltip(element_id, message)
 {
+	$('#tooltip').remove();
+	
 	var offsetX = 15;
 	var offsetY = 10;
 	
