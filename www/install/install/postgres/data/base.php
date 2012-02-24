@@ -2,8 +2,41 @@
 
 $statement = array();
 
-// Include
+// Register Module
 $statement[] = "INSERT INTO core_base_includes VALUES (nextval('core_base_includes_id_seq'::regclass), 'base', 'base', '0.3.9.9-5');";
+
+// Register Table
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_base_event_listeners', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_base_include_files', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_base_include_functions', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_base_include_tables', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_base_includes', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_base_module_dialogs', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_base_module_files', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_base_module_links', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_base_module_navigation', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_base_modules', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_currencies', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_group_has_users', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_groups', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_languages', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_measuring_units', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_paper_sizes', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_session_values', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_sessions', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_system_log', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_system_log_types', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_system_messages', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_timezones', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_user_admin_settings', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_user_profile_settings', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_user_profiles', NULL);";
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_users', NULL);";
+
+// Register Functions
+$statement[] = "INSERT INTO core_base_include_functions (id,include,function_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','concat', NULL);";
+$statement[] = "INSERT INTO core_base_include_functions (id,include,function_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','higher', NULL);";
+$statement[] = "INSERT INTO core_base_include_functions (id,include,function_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','nameconcat', NULL);";
 
 // Registry
 $statement[] = "INSERT INTO core_base_registry (id, name, include_id, value) VALUES (nextval('core_base_registry_id_seq'::regclass), 'base_timezone_id', (SELECT id FROM core_base_includes WHERE name='base'), '26');";
@@ -41,8 +74,8 @@ $statement[] = "INSERT INTO core_group_has_users (primary_key,group_id,user_id) 
 $statement[] = "INSERT INTO core_group_has_users (primary_key,group_id,user_id) VALUES (nextval('core_group_has_users_primary_key_seq'::regclass), 11, 1)";
 
 // Currencies
-$statement[] = "INSERT INTO core_currencies (id,name,symbol,iso_4217) VALUES (nextval('core_currencies_id_seq'::regclass), 'Euro', '€', 'EUR')";
-$statement[] = "INSERT INTO core_currencies (id,name,symbol,iso_4217) VALUES (nextval('core_currencies_id_seq'::regclass), 'US-Dollar', '$', 'USD')";
+$statement[] = "INSERT INTO core_currencies (id,name,symbol,iso_4217) VALUES (nextval('core_currencies_id_seq'::regclass), 'Euro', '', 'EUR')";
+$statement[] = "INSERT INTO core_currencies (id,name,symbol,iso_4217) VALUES (nextval('core_currencies_id_seq'::regclass), 'US-Dollar', '', 'USD')";
 
 // Measuring Units
 $statement[] = "INSERT INTO core_measuring_units (id,toid,name,type,base,unit_symbol,calculation) VALUES (1,NULL,'Meter',1,'t','m',NULL)";

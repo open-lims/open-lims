@@ -483,4 +483,35 @@ $statement[] = "ALTER TABLE ONLY core_user_profiles ADD CONSTRAINT core_user_pro
       REFERENCES core_users (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
+
+// FUNCTIONS
+
+$statement[] = "CREATE OR REPLACE FUNCTION concat(text, text)
+  RETURNS text AS
+\$BODY\$SELECT
+CASE WHEN \$1 IS NULL THEN \$2
+WHEN \$2 IS NULL THEN \$1
+ELSE \$1 || \$2
+END\$BODY\$
+  LANGUAGE sql VOLATILE
+  COST 100;";
+
+$statement[] = "CREATE OR REPLACE FUNCTION higher(double precision, double precision)
+  RETURNS double precision AS
+\$BODY\$SELECT
+CASE WHEN \$1 < \$2 THEN \$2
+WHEN \$2 < \$1 THEN \$1
+ELSE \$1
+END\$BODY\$
+  LANGUAGE sql VOLATILE
+  COST 100;";
+  
+$statement[] = "CREATE OR REPLACE FUNCTION nameconcat(text, text)
+  RETURNS text AS
+\$BODY\$SELECT
+CASE WHEN \$1 IS NULL THEN \$2
+WHEN \$2 IS NULL THEN \$1
+ELSE \$1 || ' ' || \$2 END\$BODY\$
+  LANGUAGE sql VOLATILE
+  COST 100;";
 ?>

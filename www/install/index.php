@@ -97,8 +97,8 @@ else
 			$sql = "SELECT id FROM core_base_includes";
 			$res = @$db->db_query($sql);
 			
-			// Update
-			echo "Update an existing Open-LIMS instance";
+			require_once("classes/install.io.php");
+			InstallIO::install();
 		}
 		catch(DatabaseQueryFailedException $e)
 		{

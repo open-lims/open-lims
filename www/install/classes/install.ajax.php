@@ -12,6 +12,8 @@ class InstallAjax
 	{
 		global $db, $transaction;
 
+		$return = "-1";
+		
 		if (file_exists("install/postgres/structure/".$module.".php"))
 		{
 			include("install/postgres/structure/".$module.".php");
@@ -21,7 +23,7 @@ class InstallAjax
 				$sql = $check_statement;
 				$res = @$db->db_query($sql);
 				
-				return "0";
+				$return = "0";
 			}
 			catch(DatabaseQueryFailedException $e)
 			{
@@ -37,13 +39,28 @@ class InstallAjax
 				
 				$transaction->commit($transaction_id);
 				
-				return "1";
+				$return = "1";
 			}
 		}
-		else
+		
+		if (file_exists("install/postgres/data/".$module.".php") and $return == "1")
 		{
-			return "-1";
+			include("install/postgres/data/".$module.".php");
+			
+			$transaction_id = $transaction->begin();
+			
+			if (is_array($statement) and count($statement) >= 1)
+			{
+				foreach ($statement as $statement_key => $statement_value)
+				{
+					$db->db_query($statement_value);
+				}
+			}
+			
+			$transaction->commit($transaction_id);
 		}
+		
+		return $return;
 	}
 	
 	public static function update($module)
