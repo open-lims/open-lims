@@ -3,8 +3,8 @@ class InstallAjax
 {
 	public static function get_modules()
 	{
-		// $order = array("base", "organisation_unit", "item", "data", "parser", "template", "location", "manufacturer", "project", "sample", "equipment");
-		$order = array("base");
+		$order = array("base", "organisation_unit", "item", "parser", "template", "data", "location", "manufacturer", "project", "sample", "equipment");
+		//$order = array("base");
 		return json_encode($order);
 	}
 	
@@ -42,7 +42,7 @@ class InstallAjax
 		}
 		else
 		{
-			return "0";
+			return "-1";
 		}
 	}
 	

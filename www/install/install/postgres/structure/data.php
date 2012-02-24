@@ -285,6 +285,7 @@ $statement[] = "CREATE INDEX core_virtual_folders_name_ix
   USING btree
   (name COLLATE pg_catalog. \"default\" );";
 
+
 // FOREIGN KEYS
 
 $statement[] = "ALTER TABLE ONLY core_data_entities ADD CONSTRAINT core_data_entities_owner_group_id_fkey FOREIGN KEY (owner_group_id)
@@ -341,7 +342,7 @@ $statement[] = "ALTER TABLE ONLY core_files ADD CONSTRAINT core_files_data_entit
 
 $statement[] = "ALTER TABLE ONLY core_folder_concretion ADD CONSTRAINT core_folder_concretion_include_id_fkey FOREIGN KEY (include_id)
       REFERENCES core_base_includes (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+      ON UPDATE NO ACTION ON DELETE CASCADE DEFERRABLE INITIALLY IMMEDIATE";
 
 $statement[] = "ALTER TABLE ONLY core_folder_is_group_folder ADD CONSTRAINT core_folder_is_group_folder_folder_id_fkey FOREIGN KEY (folder_id)
       REFERENCES core_folders (id) MATCH SIMPLE
@@ -412,7 +413,13 @@ $statement[] = "ALTER TABLE ONLY core_virtual_folders ADD CONSTRAINT core_virtua
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
 
+// FOREIGN KEYS (EXTENDS TEMPLATE)
 
+$statement[] = "ALTER TABLE ONLY core_oldl_templates ADD CONSTRAINT core_oldl_templates_data_entity_id_fkey FOREIGN KEY (data_entity_id)
+      REFERENCES core_data_entities (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
-
+$statement[] = "ALTER TABLE ONLY core_olvdl_templates ADD CONSTRAINT core_olvdl_templates_data_entity_id_fkey FOREIGN KEY (data_entity_id)
+      REFERENCES core_data_entities (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 ?>

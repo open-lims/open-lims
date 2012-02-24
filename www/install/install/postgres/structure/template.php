@@ -8,10 +8,7 @@ $statement[] = "CREATE TABLE core_oldl_templates
 (
   id serial NOT NULL,
   data_entity_id integer,
-  CONSTRAINT core_oldl_templates_pkey PRIMARY KEY (id ),
-  CONSTRAINT core_oldl_templates_data_entity_id_fkey FOREIGN KEY (data_entity_id)
-      REFERENCES core_data_entities (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE
+  CONSTRAINT core_oldl_templates_pkey PRIMARY KEY (id )
 )
 WITH (
   OIDS=FALSE
@@ -21,10 +18,7 @@ $statement[] = "CREATE TABLE core_olvdl_templates
 (
   id serial NOT NULL,
   data_entity_id integer,
-  CONSTRAINT core_olvdl_templates_pkey PRIMARY KEY (id ),
-  CONSTRAINT core_olvdl_templates_data_entity_id_fkey FOREIGN KEY (data_entity_id)
-      REFERENCES core_data_entities (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE
+  CONSTRAINT core_olvdl_templates_pkey PRIMARY KEY (id )
 )
 WITH (
   OIDS=FALSE
@@ -55,5 +49,4 @@ $statement[] = "CREATE TABLE core_xml_cache_elements
 WITH (
   OIDS=FALSE
 );";
-
 ?>
