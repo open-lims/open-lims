@@ -38,6 +38,15 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 class Data_Wrapper implements Data_WrapperInterface
 {
 	/**
+	 * @param integer $folder_id
+	 * @return array
+	 */
+	public static function get_images_in_folder($folder_id)
+	{
+		return Data_Wrapper_Access::get_images_in_folder($folder_id);
+	}
+	
+	/**
 	 * @see Data_WrapperInterface::is_file_in_folder()
 	 * @param integer $folder_id
 	 * @param string $name
