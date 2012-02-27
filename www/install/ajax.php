@@ -100,6 +100,11 @@ else
 				require_once("classes/install.ajax.php");
 				echo InstallAjax::install($_POST['module']);
 			break;
+			
+			case "update":
+				require_once("classes/install.ajax.php");
+				echo InstallAjax::update($_POST['module']);
+			break;
 		
 		endswitch;
 	}

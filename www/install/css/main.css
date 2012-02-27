@@ -44,7 +44,7 @@ html,body
 
 #InstallContainer
 {
-	width: 50%;
+	width: 70%;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -60,4 +60,8 @@ html,body
 #InstallTable td
 {
 	text-align: left;
+}
+.DisabledText
+{
+	color: #A0A0A0;	
 }
