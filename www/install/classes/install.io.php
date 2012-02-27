@@ -3,6 +3,8 @@ class InstallIO
 {
 	public static function install()
 	{
+		global $db;
+		
 		$module_array = array();
 		$module_array[] = "base";
 		$module_array[] = "data";
@@ -32,9 +34,30 @@ class InstallIO
 				{
 					$version = "not available";
 				}
-				
+
+				if (file_exists("install/postgres/structure/".$value.".php"))
+				{
+					
+					include("install/postgres/structure/".$value.".php");
+					
+					try
+					{
+						$sql = $check_statement;
+						$res = @$db->db_query($sql);
+						
+						$module_display_array[$counter][iv] = "installed";
+					}
+					catch(DatabaseQueryFailedException $e)
+					{
+						$module_display_array[$counter][iv] = "not installed";
+					}
+				}
+				else
+				{
+					$module_display_array[$counter][iv] = "not installed";
+				}
+								
 				$module_display_array[$counter][name] = $value;
-				$module_display_array[$counter][iv] = "not installed";
 				$module_display_array[$counter][av] = $version;
 				$counter++;
 				

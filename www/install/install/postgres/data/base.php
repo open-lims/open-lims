@@ -68,10 +68,10 @@ $statement[] = "SELECT pg_catalog.setval('core_users_id_seq', 100, true);";
 // Groups
 $statement[] = "INSERT INTO core_groups (id,name) VALUES (1, 'Administrators')";
 $statement[] = "INSERT INTO core_groups (id,name) VALUES (2, 'Member-Administrators')";
-$statement[] = "INSERT INTO core_groups (id,name) VALUES (11, 'Users')";
+$statement[] = "INSERT INTO core_groups (id,name) VALUES (10, 'Users')";
 $statement[] = "SELECT pg_catalog.setval('core_groups_id_seq', 100, true);";
 $statement[] = "INSERT INTO core_group_has_users (primary_key,group_id,user_id) VALUES (nextval('core_group_has_users_primary_key_seq'::regclass), 1, 1)";
-$statement[] = "INSERT INTO core_group_has_users (primary_key,group_id,user_id) VALUES (nextval('core_group_has_users_primary_key_seq'::regclass), 11, 1)";
+$statement[] = "INSERT INTO core_group_has_users (primary_key,group_id,user_id) VALUES (nextval('core_group_has_users_primary_key_seq'::regclass), 10, 1)";
 
 // Currencies
 $statement[] = "INSERT INTO core_currencies (id,name,symbol,iso_4217) VALUES (nextval('core_currencies_id_seq'::regclass), 'Euro', '', 'EUR')";

@@ -422,4 +422,163 @@ $statement[] = "ALTER TABLE ONLY core_oldl_templates ADD CONSTRAINT core_oldl_te
 $statement[] = "ALTER TABLE ONLY core_olvdl_templates ADD CONSTRAINT core_olvdl_templates_data_entity_id_fkey FOREIGN KEY (data_entity_id)
       REFERENCES core_data_entities (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+
+// FUNCTIONS
+
+$statement[] = "CREATE OR REPLACE FUNCTION get_all_file_versions(integer, integer)
+  RETURNS SETOF integer AS
+\$BODY\$DECLARE
+file_record RECORD;
+rec_return RECORD;
+BEGIN
+	
+	IF \$2 IS NULL THEN
+
+		FOR file_record IN SELECT id FROM core_file_versions WHERE previous_version_id=id AND toid=\$1 ORDER BY version
+		LOOP
+
+			IF file_record.id IS NOT NULL THEN
+
+				RETURN NEXT file_record.id;
+
+				FOR rec_return IN select * from get_all_file_versions(\$1, file_record.id) AS subid
+				LOOP
+					RETURN NEXT rec_return.subid;
+				END LOOP;
+
+			ELSE
+				RETURN;
+			END IF;
+
+		END LOOP;
+
+	ELSE
+
+		FOR file_record IN SELECT id FROM core_file_versions WHERE previous_version_id=\$2 AND toid=\$1 AND previous_version_id != id ORDER BY version
+		LOOP
+
+			IF file_record.id IS NOT NULL THEN
+				
+				RETURN NEXT file_record.id;
+
+				FOR rec_return IN select * from get_all_file_versions(\$1, file_record.id) AS subid
+				LOOP
+					RETURN NEXT rec_return.subid;
+				END LOOP;
+
+			ELSE
+				RETURN;
+			END IF;
+
+		END LOOP;
+
+	END IF;
+
+	RETURN;	
+
+END;\$BODY\$
+  LANGUAGE plpgsql VOLATILE
+  COST 100
+  ROWS 1000;";
+
+$statement[] = "CREATE OR REPLACE FUNCTION get_all_value_versions(integer, integer)
+  RETURNS SETOF integer AS
+\$BODY\$DECLARE
+value_record RECORD;
+rec_return RECORD;
+BEGIN
+	
+	IF \$2 IS NULL THEN
+
+		FOR value_record IN SELECT id FROM core_value_versions WHERE previous_version_id=id AND toid=\$1 ORDER BY version
+		LOOP
+
+			IF value_record.id IS NOT NULL THEN
+
+				RETURN NEXT value_record.id;
+
+				FOR rec_return IN select * from get_all_value_versions(\$1, value_record.id) AS subid
+				LOOP
+					RETURN NEXT rec_return.subid;
+				END LOOP;
+
+			ELSE
+				RETURN;
+			END IF;
+
+		END LOOP;
+
+	ELSE
+
+		FOR value_record IN SELECT id FROM core_value_versions WHERE previous_version_id=\$2 AND toid=\$1 AND previous_version_id != id ORDER BY version
+		LOOP
+
+			IF value_record.id IS NOT NULL THEN
+				
+				RETURN NEXT value_record.id;
+
+				FOR rec_return IN select * from get_all_value_versions(\$1, value_record.id) AS subid
+				LOOP
+					RETURN NEXT rec_return.subid;
+				END LOOP;
+
+			ELSE
+				RETURN;
+			END IF;
+
+		END LOOP;
+
+	END IF;
+
+	RETURN;	
+
+END;
+
+\$BODY\$
+  LANGUAGE plpgsql VOLATILE
+  COST 100
+  ROWS 1000;";
+
+$statement[] = "CREATE OR REPLACE FUNCTION search_get_sub_folders(integer)
+  RETURNS SETOF integer AS
+\$BODY\$DECLARE
+folder_record RECORD;
+rec_return RECORD;
+BEGIN
+	
+
+	IF \$1 IS NOT NULL THEN
+
+		FOR folder_record IN SELECT data_entity_cid FROM core_data_entity_has_data_entities WHERE data_entity_pid = \$1 AND (data_entity_cid IN (SELECT data_entity_id FROM core_folders))
+		LOOP
+
+			IF folder_record.data_entity_cid IS NOT NULL THEN
+
+				RETURN NEXT folder_record.data_entity_cid;
+
+				FOR rec_return IN select * from search_get_sub_folders(folder_record.data_entity_cid) AS subid
+				LOOP
+					RETURN NEXT rec_return.subid;
+				END LOOP;
+
+			ELSE
+				RETURN;
+			END IF;
+
+		END LOOP;
+
+	ELSE
+
+		RETURN;
+
+	END IF;
+
+	RETURN;	
+
+END;\$BODY\$
+  LANGUAGE plpgsql VOLATILE
+  COST 100
+  ROWS 1000;";
+
 ?>

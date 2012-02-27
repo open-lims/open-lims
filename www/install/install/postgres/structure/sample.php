@@ -227,4 +227,40 @@ $statement[] = "ALTER TABLE ONLY core_samples ADD CONSTRAINT core_samples_templa
 $statement[] = "ALTER TABLE ONLY core_virtual_folder_is_sample ADD CONSTRAINT core_virtual_folder_is_sample_id_fkey FOREIGN KEY (id)
       REFERENCES core_virtual_folders (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+
+// FUNCTIONS
+
+$statement[] = "CREATE OR REPLACE FUNCTION get_sample_id_by_folder_id(folder_id integer)
+  RETURNS integer AS
+\$BODY\$DECLARE
+sample_id INTEGER;
+parent_folder_id INTEGER;
+BEGIN
+	
+
+	IF \$1 IS NOT NULL THEN
+
+		SELECT core_sample_has_folder.sample_id INTO sample_id FROM core_sample_has_folder WHERE core_sample_has_folder.folder_id = \$1;
+		IF sample_id IS NOT NULL THEN
+			RETURN sample_id;
+		ELSE
+			SELECT core_folders.id INTO parent_folder_id FROM core_folders WHERE core_folders.data_entity_id =
+				(SELECT data_entity_pid FROM core_data_entity_has_data_entities WHERE data_entity_cid = (SELECT data_entity_id FROM core_folders WHERE id=folder_id) AND (data_entity_pid IN (SELECT data_entity_id FROM core_folders)));
+
+			RETURN get_sample_id_by_folder_id(parent_folder_id);
+		END IF;
+
+		
+
+	ELSE
+
+		RETURN NULL;
+
+	END IF;
+
+END;\$BODY\$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;";
+
 ?>

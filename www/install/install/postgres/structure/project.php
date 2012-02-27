@@ -433,4 +433,276 @@ $statement[] = "ALTER TABLE ONLY core_projects ADD CONSTRAINT core_projects_toid
 $statement[] = "ALTER TABLE ONLY core_virtual_folder_is_project ADD CONSTRAINT core_virtual_folder_is_project_id_fkey FOREIGN KEY (id)
       REFERENCES core_virtual_folders (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+// FUNCTIONS
+
+$statement[] = "CREATE OR REPLACE FUNCTION get_project_id_by_folder_id(folder_id integer)
+  RETURNS integer AS
+\$BODY\$DECLARE
+project_id INTEGER;
+parent_folder_id INTEGER;
+BEGIN
+	
+
+	IF \$1 IS NOT NULL THEN
+
+		SELECT core_project_has_folder.project_id INTO project_id FROM core_project_has_folder WHERE core_project_has_folder.folder_id = \$1;
+		IF project_id IS NOT NULL THEN
+			RETURN project_id;
+		ELSE
+			SELECT core_folders.id INTO parent_folder_id FROM core_folders WHERE core_folders.data_entity_id =
+				(SELECT data_entity_pid FROM core_data_entity_has_data_entities WHERE data_entity_cid = (SELECT data_entity_id FROM core_folders WHERE id=folder_id) AND (data_entity_pid IN (SELECT data_entity_id FROM core_folders)));
+
+			RETURN get_project_id_by_folder_id(parent_folder_id);
+		END IF;
+
+		
+
+	ELSE
+
+		RETURN NULL;
+
+	END IF;
+
+END;\$BODY\$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;";
+
+$statement[] = "CREATE OR REPLACE FUNCTION get_project_supplementary_folder(folder_id integer)
+  RETURNS integer AS
+\$BODY\$DECLARE
+supplementary_folder_id INTEGER;
+BEGIN
+	
+
+	IF \$1 IS NOT NULL THEN
+
+		SELECT core_folders.id INTO supplementary_folder_id FROM core_folders WHERE core_folders.data_entity_id IN
+				(SELECT data_entity_cid FROM core_data_entity_has_data_entities WHERE data_entity_pid = (SELECT data_entity_id FROM core_folders WHERE id=folder_id) AND (data_entity_cid IN (SELECT data_entity_id FROM core_folders)))
+				AND TRIM(LOWER(name)) = 'supplementary';
+
+		RETURN supplementary_folder_id;
+
+	ELSE
+
+		RETURN NULL;
+
+	END IF;
+
+END;\$BODY\$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;";
+
+$statement[] = "CREATE OR REPLACE FUNCTION project_permission_group(project_id integer, group_id integer)
+  RETURNS boolean AS
+\$BODY\$DECLARE
+	permission_rec RECORD;
+	position1_rec RECORD; 
+	position4_rec RECORD;   
+	position5_rec RECORD;         
+BEGIN
+	FOR permission_rec IN SELECT CAST(permission::BIT(7) AS TEXT) AS permission FROM core_project_permissions WHERE core_project_permissions.project_id = \$1 AND core_project_permissions.group_id = \$2
+LOOP
+
+	SELECT INTO position1_rec SUBSTRING(permission_rec.permission FROM 1 FOR 1) AS resultchar;
+	SELECT INTO position4_rec SUBSTRING(permission_rec.permission FROM 4 FOR 1) AS resultchar;
+	SELECT INTO position5_rec SUBSTRING(permission_rec.permission FROM 5 FOR 1) AS resultchar;
+
+IF position1_rec.resultchar = '1' THEN
+	RETURN TRUE;
+ELSE
+
+	IF position4_rec.resultchar = '1' THEN
+		RETURN TRUE;
+	ELSE
+
+		IF position5_rec.resultchar = '1' THEN
+			RETURN TRUE;
+		END IF;
+
+	END IF;
+
+END IF;
+END LOOP;
+RETURN FALSE;
+END;\$BODY\$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;";
+
+$statement[] = "CREATE OR REPLACE FUNCTION project_permission_organisation_unit(project_id integer, organisation_unit_id integer)
+  RETURNS boolean AS
+\$BODY\$DECLARE
+	permission_rec RECORD;
+	position1_rec RECORD; 
+	position4_rec RECORD;   
+	position5_rec RECORD;         
+BEGIN
+	FOR permission_rec IN SELECT CAST(permission::BIT(7) AS TEXT) AS permission FROM core_project_permissions WHERE core_project_permissions.project_id = \$1 AND core_project_permissions.organisation_unit_id = \$2
+LOOP
+
+	SELECT INTO position1_rec SUBSTRING(permission_rec.permission FROM 1 FOR 1) AS resultchar;
+	SELECT INTO position4_rec SUBSTRING(permission_rec.permission FROM 4 FOR 1) AS resultchar;
+	SELECT INTO position5_rec SUBSTRING(permission_rec.permission FROM 5 FOR 1) AS resultchar;
+
+IF position1_rec.resultchar = '1' THEN
+	RETURN TRUE;
+ELSE
+
+	IF position4_rec.resultchar = '1' THEN
+		RETURN TRUE;
+	ELSE
+
+		IF position5_rec.resultchar = '1' THEN
+			RETURN TRUE;
+		END IF;
+
+	END IF;
+
+END IF;
+END LOOP;
+RETURN FALSE;
+END;\$BODY\$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;";
+
+$statement[] = "CREATE OR REPLACE FUNCTION project_permission_user(project_id integer, user_id integer)
+  RETURNS boolean AS
+\$BODY\$DECLARE
+	permission_rec RECORD;
+	position1_rec RECORD; 
+	position4_rec RECORD;   
+	position5_rec RECORD;         
+BEGIN
+	FOR permission_rec IN SELECT CAST(permission::BIT(7) AS TEXT) AS permission FROM core_project_permissions WHERE core_project_permissions.project_id = \$1 AND core_project_permissions.user_id = \$2
+LOOP
+
+	SELECT INTO position1_rec SUBSTRING(permission_rec.permission FROM 1 FOR 1) AS resultchar;
+	SELECT INTO position4_rec SUBSTRING(permission_rec.permission FROM 4 FOR 1) AS resultchar;
+	SELECT INTO position5_rec SUBSTRING(permission_rec.permission FROM 5 FOR 1) AS resultchar;
+
+IF position1_rec.resultchar = '1' THEN
+	RETURN TRUE;
+ELSE
+
+	IF position4_rec.resultchar = '1' THEN
+		RETURN TRUE;
+	ELSE
+
+		IF position5_rec.resultchar = '1' THEN
+			RETURN TRUE;
+		END IF;
+
+	END IF;
+
+END IF;
+END LOOP;
+RETURN FALSE;
+END;\$BODY\$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;";
+
+$statement[] = "CREATE OR REPLACE FUNCTION search_get_project_subprojects(integer, integer, integer)
+  RETURNS SETOF integer AS
+\$BODY\$DECLARE
+project_record RECORD;
+rec_return RECORD;
+BEGIN
+	
+	IF \$3 IS NULL THEN
+
+	IF \$1 IS NOT NULL THEN
+
+		FOR project_record IN SELECT id FROM core_projects WHERE toid_organ_unit=\$1 AND toid_project IS NULL
+		LOOP
+
+			IF project_record.id IS NOT NULL THEN
+
+				RETURN NEXT project_record.id;
+
+				FOR rec_return IN select * from search_get_project_subprojects(NULL, project_record.id, NULL) AS subid
+				LOOP
+					RETURN NEXT rec_return.subid;
+				END LOOP;
+
+			ELSE
+				RETURN;
+			END IF;
+
+		END LOOP;
+
+	ELSE
+
+		FOR project_record IN SELECT id FROM core_projects WHERE toid_project=\$2 AND toid_organ_unit IS NULL
+		LOOP
+
+			IF project_record.id IS NOT NULL THEN
+
+				RETURN NEXT project_record.id;
+
+				FOR rec_return IN select * from search_get_project_subprojects(NULL, project_record.id, NULL) AS subid
+				LOOP
+					RETURN NEXT rec_return.subid;
+				END LOOP;
+
+			ELSE
+				RETURN;
+			END IF;
+
+		END LOOP;
+
+	END IF;
+
+	ELSE
+
+	IF \$1 IS NOT NULL THEN
+
+		FOR project_record IN SELECT id FROM core_projects WHERE toid_organ_unit=\$1 AND toid_project IS NULL AND template_id = \$3
+		LOOP
+
+			IF project_record.id IS NOT NULL THEN
+
+				RETURN NEXT project_record.id;
+
+				FOR rec_return IN select * from search_get_project_subprojects(NULL, project_record.id, NULL) AS subid
+				LOOP
+					RETURN NEXT rec_return.subid;
+				END LOOP;
+
+			ELSE
+				RETURN;
+			END IF;
+
+		END LOOP;
+
+	ELSE
+
+		FOR project_record IN SELECT id FROM core_projects WHERE toid_project=\$2 AND toid_organ_unit IS NULL AND template_id = \$3
+		LOOP
+
+			IF project_record.id IS NOT NULL THEN
+
+				RETURN NEXT project_record.id;
+
+				FOR rec_return IN select * from search_get_project_subprojects(NULL, project_record.id, NULL) AS subid
+				LOOP
+					RETURN NEXT rec_return.subid;
+				END LOOP;
+
+			ELSE
+				RETURN;
+			END IF;
+
+		END LOOP;
+
+	END IF;
+
+	END IF;
+
+	RETURN;	
+
+END;\$BODY\$
+  LANGUAGE plpgsql VOLATILE
+  COST 100
+  ROWS 1000;";
+
 ?>

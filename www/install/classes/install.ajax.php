@@ -43,7 +43,7 @@ class InstallAjax
 			}
 		}
 		
-		if (file_exists("install/postgres/data/".$module.".php") and $return == "1")
+		if (file_exists("install/postgres/data/".$module.".php") and $return != "0")
 		{
 			include("install/postgres/data/".$module.".php");
 			

@@ -133,11 +133,6 @@ $statement[] = "ALTER TABLE ONLY core_organisation_unit_has_leaders ADD CONSTRAI
       REFERENCES core_organisation_units (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
-
-
-
-
-
 $statement[] = "ALTER TABLE ONLY core_organisation_unit_has_groups ADD CONSTRAINT core_organisation_unit_has_groups_group_id_fkey FOREIGN KEY (group_id)
       REFERENCES core_groups (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
@@ -146,5 +141,50 @@ $statement[] = "ALTER TABLE ONLY core_organisation_unit_has_groups ADD CONSTRAIN
       REFERENCES core_organisation_units (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
+
+// FUNCTIONS
+
+$statement[] = "CREATE OR REPLACE FUNCTION get_organisation_unit_childs(integer)
+  RETURNS SETOF integer AS
+\$BODY\$DECLARE
+organisation_unit_record RECORD;
+rec_record RECORD;
+BEGIN
+
+	IF \$1 IS NOT NULL THEN
+
+		RETURN NEXT \$1;
+		
+		FOR organisation_unit_record IN SELECT id FROM core_organisation_units WHERE toid=\$1 AND id != toid
+		LOOP
+
+			IF organisation_unit_record.id IS NOT NULL THEN
+
+				FOR rec_record IN SELECT * FROM get_organisation_unit_childs(organisation_unit_record.id) AS id
+				LOOP
+
+					RETURN NEXT rec_record.id;
+
+				END LOOP;
+
+			ELSE
+				RETURN;
+			END IF;
+
+		END LOOP;
+
+	ELSE
+
+		RETURN;
+
+	END IF;
+
+	RETURN;	
+
+END;\$BODY\$
+  LANGUAGE plpgsql VOLATILE
+  COST 100
+  ROWS 1000;
+";
 
 ?>
