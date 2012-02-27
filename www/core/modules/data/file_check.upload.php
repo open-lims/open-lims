@@ -35,9 +35,13 @@
 	require_once("../../include/base/system/system_config.class.php");
 
  	SystemConfig::load_system_config("../../../config/main.php");
- 	SystemConfig::load_module_config();
-	
+ 		
 	require_once("../../db/db.php");
+	
+	$database = SystemConfig::get_database();
+	
+	$db = new Database($database['type']);
+	$db->db_connect($database[0]['server'],$database[0]['port'],$database['user'],$database['password'],$database['database']);
 	
 	require_once("../../include/base/system/transaction.class.php");
 	
@@ -51,14 +55,12 @@
 
 	require_once("../../include/base/system/autoload.function.php");
 
-	$database = SystemConfig::get_database();
-		
-	$db = new Database($database['type']);
-	$db->db_connect($database[0]['server'],$database[0]['port'],$database['user'],$database['password'],$database['database']);
-
+	SystemHandler::init_db_constants();
+	
+	SystemConfig::load_module_config();
+	
 	Security::protect_session();
 	
-	SystemHandler::init_db_constants();
 	
 	$user = new User(1);
 
