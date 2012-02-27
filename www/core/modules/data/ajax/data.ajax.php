@@ -591,5 +591,18 @@ class DataAjax
 			throw new DataSecurityAccessDeniedException();
 		}
 	}
+	
+	public static function get_allowed_image_types()
+	{
+		$array = array();
+		$array[] = "jpg";
+		$array[] = "jpeg";
+		$array[] = "png";
+		$array[] = "tif";
+		$array[] = "tiff";
+		$array[] = "bmp";
+		$array[] = "gif";
+		return json_encode($array);
+	}
 }
 ?>

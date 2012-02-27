@@ -32,6 +32,7 @@ class BaseInclude_Access
 	private $id;
 	private $name;
 	private $folder;
+	private $version;
 	
 	/**
 	 * @param integer $id
@@ -55,6 +56,7 @@ class BaseInclude_Access
 				$this->id 			= $id;
 				$this->name			= $data[name];
 				$this->folder		= $data[folder];
+				$this->version		= $data[version];
 			}
 			else
 			{
@@ -70,6 +72,7 @@ class BaseInclude_Access
 			unset($this->id);
 			unset($this->name);
 			unset($this->folder);
+			unset($this->version);
 		}
 	}
 	
@@ -84,8 +87,8 @@ class BaseInclude_Access
 
 		if ($name and $folder)
 		{
-	 		$sql_write = "INSERT INTO ".constant("BASE_INCLUDE_TABLE")." (id, name, folder) " .
-								"VALUES (nextval('".self::BASE_INCLUDE_PK_SEQUENCE."'::regclass),'".$name."','".$folder."')";		
+	 		$sql_write = "INSERT INTO ".constant("BASE_INCLUDE_TABLE")." (id, name, folder, version) " .
+								"VALUES (nextval('".self::BASE_INCLUDE_PK_SEQUENCE."'::regclass),'".$name."','".$folder."', NULL)";		
 				
 			$res_write = $db->db_query($sql_write);
 			
@@ -142,7 +145,7 @@ class BaseInclude_Access
 	}
 	
 	/**
-	 * @return string;
+	 * @return string
 	 */
 	public function get_name()
 	{
@@ -157,13 +160,28 @@ class BaseInclude_Access
 	}
 	
 	/**
-	 * @return string;
+	 * @return string
 	 */
 	public function get_folder()
 	{
 		if ($this->folder)
 		{
 			return $this->folder;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function get_version()
+	{
+		if ($this->version)
+		{
+			return $this->version;
 		}
 		else
 		{
@@ -216,6 +234,35 @@ class BaseInclude_Access
 			if ($db->db_affected_rows($res))
 			{
 				$this->folder = $folder;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param string $version;
+	 * @return bool
+	 */
+	public function set_version($version)
+	{
+		global $db;
+
+		if ($this->id and $version)
+		{
+			$sql = "UPDATE ".constant("BASE_INCLUDE_TABLE")." SET version = '".$version."' WHERE id = ".$this->id."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->version = $version;
 				return true;
 			}
 			else
