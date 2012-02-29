@@ -250,8 +250,8 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 
 	
 	function make_resizable()
-	{		
-		var table_width = 744; //$(".ListTable > thead").width() returns an incorrect width if columns contain long text
+	{
+		var table_width = $(".ListTable > thead").width();
 		
 		var all_widths = new Array();
 		
@@ -694,36 +694,113 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 	
 		function hide_column(i)
 		{
-			var header_col = $(".ListTable > thead > tr > th").get(i);
-			 
-			$(header_col).fadeOut("fast");
-			$(".ListTable > tbody > tr").each(function(){
-				var body_col = $(this).children("td").get(i);
-				$(body_col).fadeOut("fast");
-			});
-			$("#dragHandle"+i).fadeOut("fast");
 			
-
-//			for(var int = 0; int < fixed_widths.length; int++)
-//			{
-//				var index = fixed_widths[int][0];
-//				var width = fixed_widths[int][1];
-//				
-//				var col = $(".ListTable > thead > tr > th").get(index);
-//				$(col).width(width);
-//			}
+			var col_to_hide = $(".ListTable > thead > tr > th").get(i);
+			var col_to_add_width_to = $(".ListTable > thead > tr > th").get(i - 1);
+			
+			var width = $(col_to_hide).width();
+			
+			$(col_to_hide)
+				.animate({
+					"width": 0
+				}, 500, function(){		
+					
+					$(this)
+						.css("padding", 0)
+						.hide();
+					
+					$(".ListTable > tbody > tr").each(function(){
+						var body_col = $(this).children("td").get(i);
+						$(body_col).hide();
+					});
+				});
+			
+			$(col_to_hide).children()
+//				.data("hidden")
+				.data("originalWidth", width)
+				.data("widthAddedTo", i - 1);
+			
+			
+			$(col_to_add_width_to).animate({
+				"width": $(col_to_add_width_to).width() + width,
+			}, 500, function(){
+				
+				var new_width = $(this).width() + 2; 
+				$(this).width(new_width);
+				
+				$(".ListTable > tbody > tr").each(function(){
+					var body_col = $(this).children("td").get(i - 1);
+					resize_text(body_col, new_width)
+				});
+			});
+			
+			
+			
+			
+//			var header_col = $(".ListTable > thead > tr > th").get(i);
+//			 
+//			$(header_col).fadeOut("fast");
+//			$(".ListTable > tbody > tr").each(function(){
+//				var body_col = $(this).children("td").get(i);
+//				$(body_col).fadeOut("fast");
+//			});
+//			$("#dragHandle"+i).fadeOut("fast");
+//
+////			for(var int = 0; int < fixed_widths.length; int++)
+////			{
+////				var index = fixed_widths[int][0];
+////				var width = fixed_widths[int][1];
+////				
+////				var col = $(".ListTable > thead > tr > th").get(index);
+////				$(col).width(width);
+////			}
 		}
 		
 		function show_column(i)
 		{
-			 var header_col = $(".ListTable > thead > tr > th").get(i);
-			 $(header_col).fadeIn("slow");
-			 $(".ListTable > tbody > tr").each(function(){
-				 var body_col = $(this).children("td").get(i);
-				 $(body_col).fadeIn("slow");
-				 	
-			 });
-			 $("#dragHandle"+i).fadeIn("slow");
+			var col_to_show = $(".ListTable > thead > tr > th").get(i);
+			var col_to_remove_width_from = $(col_to_show).data("widthAddedTo");
+		
+			
+			var original_width = $(col_to_show).children().data("originalWidth");
+				
+			$(col_to_show)
+				.show()
+				.animate({
+					"width": original_width
+				}, 500, function(){		
+					
+				});
+			
+			$(col_to_remove_width_from)
+				.animate({
+					"width": $(this).width() - original_width
+				}, 500, function(){		
+					
+				});
+			
+//			var width = $(col_to_show).data("originalWidth");
+//			$(col_to_show)
+////			.show();
+////			.css("padding","2px")
+//			.animate({
+//				"width": width,
+//			}, 500);
+////			
+//			$(col_to_remove_width_from).animate({
+//				"width": $(this).width() - width
+//			}, 500);
+			
+			
+			
+//			 var header_col = $(".ListTable > thead > tr > th").get(i);
+//			 $(header_col).fadeIn("slow");
+//			 $(".ListTable > tbody > tr").each(function(){
+//				 var body_col = $(this).children("td").get(i);
+//				 $(body_col).fadeIn("slow");
+//				 	
+//			 });
+//			 $("#dragHandle"+i).fadeIn("slow");
 		}
 	}
 
