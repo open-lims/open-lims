@@ -589,11 +589,15 @@ class SystemHandler implements SystemHandlerInterface
 							// Is include registered ?
 							if (($register_key = array_search($value, $registered_module_array)) !== false)
 							{
+								$config_info_changed = false;
+								
 								$found_module_array[$register_key] = $value;
 								
 								$config_file_checksum = BaseModuleFile_Access::get_checksum_by_module_id_and_name($register_key, "module_info.php");
 								if ($config_file_checksum != md5_file($config_file))
 								{
+									$config_info_changed = true;
+									
 									$base_module = new BaseModule_Access($register_key);
 									if ($base_module->set_name($name) == false)
 									{
@@ -690,9 +694,8 @@ class SystemHandler implements SystemHandlerInterface
 								}
 								
 								if ($no_link != true)
-								{
-
-									$module_link_checksum = BaseModuleFile_Access::get_checksum_by_module_id_and_name($register_key, "module_link.php");
+								{									
+									$module_link_checksum = BaseModuleFile_Access::get_checksum_by_module_id_and_name($register_key, "module_link.php");							
 									if ($module_link_checksum != md5_file($module_link))
 									{										
 										include($module_link);
@@ -748,8 +751,7 @@ class SystemHandler implements SystemHandlerInterface
 								
 								if ($no_tab != true)
 								{
-									$module_info_checksum = BaseModuleFile_Access::get_checksum_by_module_id_and_name($register_key, "module_info.php");
-									if ($module_info_checksum != md5_file($config_file))
+									if ($config_info_changed == true)
 									{
 										if (BaseModuleNavigation_Access::delete_by_module_id($register_key) == false)
 										{
@@ -758,7 +760,7 @@ class SystemHandler implements SystemHandlerInterface
 												$transaction->rollback($transaction_id);
 											}
 											throw new ModuleProcessFailedException(null, null);
-										}
+										}										
 										
 										$position = BaseModuleNavigation_Access::get_highest_position();
 										$base_module_navigation = new BaseModuleNavigation_Access(null);
@@ -769,25 +771,6 @@ class SystemHandler implements SystemHandlerInterface
 												$transaction->rollback($transaction_id);
 											}
 											throw new ModuleProcessFailedException(null, null);
-										}
-										
-										$module_info_id = BaseModuleFile_Access::get_id_by_module_id_and_name($register_key, "module_info.php");
-										if ($module_info_id != null)
-										{
-											$base_module_file = new BaseModuleFile_Access($module_info_id);
-											$base_module_file->set_checksum(md5_file($config_file));
-										}
-										else
-										{
-											$base_module_file = new BaseModuleFile_Access(null);
-											if ($base_module_file->create($register_key, "module_info.php", md5_file($config_file)) == null)
-											{
-												if ($transaction_id != null)
-												{
-													$transaction->rollback($transaction_id);
-												}
-												throw new ModuleProcessFailedException(null, null);
-											}
 										}
 									}
 								}
