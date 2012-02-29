@@ -66,7 +66,6 @@ $database = SystemConfig::get_database();
 
 $db = new Database($database['type']);
 @$connection_result = $db->db_connect($database[0]['server'],$database[0]['port'],$database['user'],$database['password'],$database['database']);
-
 if ($connection_result === false)
 {
 	die ("Database-Connection failed. Insert config-values first or check config/main.php");

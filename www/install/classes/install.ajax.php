@@ -1,4 +1,29 @@
 <?php
+/**
+ * @package install
+ * @version 0.4.0.0
+ * @author Roman Konertz <konertz@open-lims.org>
+ * @copyright (c) 2008-2012 by Roman Konertz
+ * @license GPLv3
+ * 
+ * This file is part of Open-LIMS
+ * Available at http://www.open-lims.org
+ * 
+ * This program is free software;
+ * you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation;
+ * version 3 of the License.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program;
+ * if not, see <http://www.gnu.org/licenses/>.
+ */
+ 	
+/**
+ * @package install
+ */
 class InstallAjax
 {
 	private static $installed_module_array = array();
@@ -15,7 +40,14 @@ class InstallAjax
 			$res = @$db->db_query($sql);
 			while($data = $db->db_fetch_assoc($res))
 			{
-				self::$installed_module_array[$data['name']] = $data['db_version'];
+				if (!$data['db_version'])
+				{
+					self::$installed_module_array[$data['name']] = "0.3.9.9-4";
+				}
+				else
+				{
+					self::$installed_module_array[$data['name']] = $data['db_version'];
+				}
 			}
 		}
 		catch(DatabaseQueryFailedException $e)
@@ -85,7 +117,7 @@ class InstallAjax
 	
 	public static function install($module)
 	{
-		global $db, $transaction;
+		global $db, $db_check, $transaction;
 
 		$return = "-1";
 		
@@ -98,7 +130,7 @@ class InstallAjax
 			try
 			{
 				$sql = $check_statement;
-				$res = @$db->db_query($sql);
+				$res = @$db_check->db_query($sql);
 				
 				$return = "0";
 			}

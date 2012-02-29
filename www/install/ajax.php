@@ -58,7 +58,7 @@ if (!extension_loaded("gd"))
 	die("Extension \"GD\" is missing!");
 }
 
-global $db, $runtime_data, $transaction;
+global $db, $db_check, $runtime_data, $transaction;
 
 require_once("../core/db/db.php");
 
@@ -66,6 +66,9 @@ $database = SystemConfig::get_database();
 
 $db = new Database($database['type']);
 @$connection_result = $db->db_connect($database[0]['server'],$database[0]['port'],$database['user'],$database['password'],$database['database']);
+
+$db_check = new Database($database['type']);
+@$connection_result_check = $db_check->db_connect($database[0]['server'],$database[0]['port'],$database['user'],$database['password'],$database['database']);
 
 if ($connection_result === false)
 {
