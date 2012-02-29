@@ -111,21 +111,25 @@ class InstallIO
 			
 			if ($install == true and $update == true)
 			{
+				$template->set_var("template_disabled", "disabled='disabled'");
 				$template->set_var("button_disabled", "");
 				$template->set_var("button", "Start Update/Installation");
 			}
 			elseif ($install == true and $update == false)
 			{
+				$template->set_var("template_disabled", "disabled='disabled'");
 				$template->set_var("button_disabled", "");
 				$template->set_var("button", "Start Installation");
 			}
 			elseif ($install == false and $update == true)
 			{
+				$template->set_var("template_disabled", "disabled='disabled'");
 				$template->set_var("button_disabled", "");
 				$template->set_var("button", "Start Update");
 			}
 			else
 			{
+				$template->set_var("template_disabled", "disabled='disabled'");
 				$template->set_var("button_disabled", "disabled='disabled'");
 				$template->set_var("button", "Everything is up to date");
 			}
