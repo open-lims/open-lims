@@ -80,10 +80,21 @@ else
 	
 	if (is_array($hosts) and in_array($ip, $hosts) == true)
 	{
+		define("SYSTEM_LOG_TABLE", 			"core_system_log");
+		define("USER_TABLE", 				"core_users");
+		define("USER_ADMIN_SETTING_TABLE", 	"core_user_admin_settings");
+		define("USER_PROFILE_SETTING_TABLE","core_user_profile_settings");
+		define("USER_PROFILE_TABLE", 		"core_user_profiles");
+		define("SESSION_TABLE", 			"core_sessions");
+		
 		require_once("../core/include/base/system/events/event.class.php");
 		require_once("../core/include/base/system/system_handler.class.php");
 		require_once("../core/include/base/system/transaction.class.php");
 		require_once("../core/include/base/security/security.class.php");
+		require_once("../core/include/base/security/session.class.php");
+		require_once("../core/include/base/security/auth.class.php");
+		require_once("../core/include/base/system_fe/system_log.class.php");
+		require_once("../core/include/base/user/user.class.php");
 		
 		require_once("../core/include/base/system/template.class.php");
  		require_once("../core/include/base/system/html_template.class.php");
@@ -107,6 +118,16 @@ else
 			case "update":
 				require_once("classes/install.ajax.php");
 				echo InstallAjax::update($_POST['module']);
+			break;
+			
+			case "get_table_row":
+				require_once("classes/install.ajax.php");
+				echo InstallAjax::get_table_row($_POST['module']);
+			break;
+			
+			case "login":
+				require_once("classes/login.ajax.php");
+				echo LoginAjax::login($_POST[username], $_POST[password]);
 			break;
 		
 		endswitch;

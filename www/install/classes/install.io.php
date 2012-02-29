@@ -47,9 +47,6 @@ class InstallIO
 		
 		if (is_array($module_array) and count($module_array) >= 1)
 		{
-			$module_display_array = array();
-			$counter = 0;
-			
 			try
 			{
 				// Version >= 0.3.9.9-5
@@ -84,7 +81,6 @@ class InstallIO
 
 				if (file_exists("install/postgres/structure/".$value.".php"))
 				{
-					
 					include("install/postgres/structure/".$value.".php");
 					
 					try
@@ -94,47 +90,23 @@ class InstallIO
 						
 						if ($installed_module_array[$value])
 						{
-							$module_display_array[$counter][iv] = $installed_module_array[$value];
-							
-							if ($installed_module_array[$value] == $version)
+							if ($installed_module_array[$value] != $version)
 							{
-								$module_display_array[$counter][status] = "up to date";
-							}
-							else
-							{
-								$module_display_array[$counter][status] = "update required";
 								$update = true;
 							}
 						}
 						else
 						{
-							$module_display_array[$counter][iv] = "<= 0.3.9.9-4";
-							$module_display_array[$counter][status] = "update required";
 							$update = true;
 						}
 					}
 					catch(DatabaseQueryFailedException $e)
 					{
-						$module_display_array[$counter][iv] = "none";
-						$module_display_array[$counter][status] = "not installed";
 						$install = true;
 					}
 					
 					$module_display_array[$counter][av] = $version;
 				}
-				else
-				{
-					$module_display_array[$counter][av] = "none";
-					$module_display_array[$counter][iv] = "none";
-					$module_display_array[$counter][status] = "OK";
-				}
-
-				$module_display_array[$counter][fv] = constant("PRODUCT_VERSION");
-				$module_display_array[$counter][name] = $value;
-				
-				$counter++;
-				
-				unset($version);
 			}
 			
 			if ($install == true and $update == true)
@@ -159,9 +131,35 @@ class InstallIO
 			}
 			
 			$template->set_var("version", constant("PRODUCT_VERSION"));
-			$template->set_var("modules", $module_display_array);
 		}
 		
+		$template->output();
+	}
+	
+	public static function update()
+	{
+		if ($_GET['session_id'])
+		{
+			$session = new Session($_GET['session_id'], true);
+		}
+		else
+		{
+			$session = new Session(null, true);
+		}
+		
+		if ($session->is_valid())
+		{
+			self::install();
+		}
+		else
+		{
+			self::login();
+		}
+	}
+	
+	public static function login()
+	{
+		$template = new HTMLTemplate("login.html", "install/template");
 		$template->output();
 	}
 }

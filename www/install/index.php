@@ -76,10 +76,13 @@ else
 	
 	if (is_array($hosts) and in_array($ip, $hosts) == true)
 	{
+		define("SESSION_TABLE", 			"core_sessions");
+		
 		require_once("../core/include/base/system/events/event.class.php");
 		require_once("../core/include/base/system/system_handler.class.php");
 		require_once("../core/include/base/system/transaction.class.php");
 		require_once("../core/include/base/security/security.class.php");
+		require_once("../core/include/base/security/session.class.php");
 		
 		require_once("../core/include/base/system/template.class.php");
  		require_once("../core/include/base/system/html_template.class.php");
@@ -97,7 +100,7 @@ else
 			$res = @$db->db_query($sql);
 			
 			require_once("classes/install.io.php");
-			InstallIO::install();
+			InstallIO::update();
 		}
 		catch(DatabaseQueryFailedException $e)
 		{

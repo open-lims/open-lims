@@ -61,6 +61,15 @@ html,body
 {
 	text-align: left;
 }
+
+#InstallLoginContainer
+{
+	width: 50%;
+	margin-top: 35px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 .DisabledText
 {
 	color: #A0A0A0;	

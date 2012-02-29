@@ -1,3 +1,37 @@
+<script>
+$(document).ready(function()
+{
+	$.ajax(
+	{
+		type: "POST",
+		url: "ajax.php?run=get_modules",
+		data: '',
+		success: function(data)
+		{	
+			if (data)
+			{
+				var modules = $.parseJSON(data);
+				
+				for(var i = 0; i<=(modules.length-1); i++)
+				{
+					$.ajax(
+					{
+						type: "POST",
+						url: "ajax.php?run=get_table_row",
+						data: 'module='+modules[i][0],
+						async: false,
+						success: function(data)
+						{	
+							$("#InstallTable tr:last").after(data);
+						}
+					});
+				}
+			} 
+		}
+	});
+});
+</script>
+
 <div id='InstallContainer'>
 	<div id='InstallGlobal'>
 		<table id='InstallGlobalTable'>
@@ -15,20 +49,8 @@
 			<th>Available DB-Version</th>
 			<th>File-Version</th>
 			<th>Status</th>
+			<th></th>
 		</tr>
-		
-		<!-- FOREACH BEGIN ([[MODULES]]) -->
-		
-		<tr>
-			<td>[[MODULES:NAME]]</td>
-			<td>[[MODULES:IV]]</td>
-			<td>[[MODULES:AV]]</td>
-			<td>[[MODULES:FV]]</td>
-			<td>[[MODULES:STATUS]]</td>
-		</tr>
-		
-		<!-- FOREACH END -->
-	
 	</table>
 	<br />
 	<input type='checkbox' checked='checked' /> Install Default Templates<br />

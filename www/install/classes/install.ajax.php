@@ -100,6 +100,12 @@ class InstallAjax
 							$return_array[$counter][1] = "update";
 							$counter++;
 						}
+						else
+						{
+							$return_array[$counter][0] = $value;
+							$return_array[$counter][1] = "ok";
+							$counter++;
+						}
 					}
 					catch(DatabaseQueryFailedException $e)
 					{
@@ -239,6 +245,74 @@ class InstallAjax
 		{
 			return "0";
 		}
+	}
+	
+	public static function get_table_row($module)
+	{
+		global $db;
+		
+		self::get_version();
+		
+		$template = new HTMLTemplate("table_row.html", "install/template");
+		
+		if (file_exists("information/".$module.".php"))
+		{
+			include("information/".$module.".php");
+		}
+		else
+		{
+			$version = "not available";
+		}
+
+		if (file_exists("install/postgres/structure/".$module.".php"))
+		{
+			
+			include("install/postgres/structure/".$module.".php");
+			
+			try
+			{
+				$sql = $check_statement;
+				$res = @$db->db_query($sql);
+
+				$iv = self::$installed_module_array[$module];
+				
+				if (self::$installed_module_array[$module] == $version)
+				{
+					$status = "up to date";
+					$status_image = "<img src='images/ok.png' alt='' />";
+				}
+				else
+				{
+					$status = "update required";
+					$status_image = "";
+				}
+			}
+			catch(DatabaseQueryFailedException $e)
+			{
+				$iv = "none";
+				$status = "not installed";
+				$install = true;
+				$status_image = "";
+			}
+			
+			$av = $version;
+		}
+		else
+		{
+			$av = "none";
+			$iv = "none";
+			$status = "OK";
+			$status_image = "";
+		}
+
+		$template->set_var("av", $av);
+		$template->set_var("iv", $iv);
+		$template->set_var("fv", constant("PRODUCT_VERSION"));
+		$template->set_var("status", $status);
+		$template->set_var("status_image", $status_image);
+		$template->set_var("name", $module);
+		
+		return $template->get_string();
 	}
 }
 ?>
