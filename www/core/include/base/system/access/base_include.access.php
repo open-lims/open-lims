@@ -32,7 +32,7 @@ class BaseInclude_Access
 	private $id;
 	private $name;
 	private $folder;
-	private $version;
+	private $db_version;
 	
 	/**
 	 * @param integer $id
@@ -56,7 +56,7 @@ class BaseInclude_Access
 				$this->id 			= $id;
 				$this->name			= $data[name];
 				$this->folder		= $data[folder];
-				$this->version		= $data[version];
+				$this->db_version	= $data[db_version];
 			}
 			else
 			{
@@ -72,7 +72,7 @@ class BaseInclude_Access
 			unset($this->id);
 			unset($this->name);
 			unset($this->folder);
-			unset($this->version);
+			unset($this->db_version);
 		}
 	}
 	
@@ -87,7 +87,7 @@ class BaseInclude_Access
 
 		if ($name and $folder)
 		{
-	 		$sql_write = "INSERT INTO ".constant("BASE_INCLUDE_TABLE")." (id, name, folder, version) " .
+	 		$sql_write = "INSERT INTO ".constant("BASE_INCLUDE_TABLE")." (id, name, folder, db_version) " .
 								"VALUES (nextval('".self::BASE_INCLUDE_PK_SEQUENCE."'::regclass),'".$name."','".$folder."', NULL)";		
 				
 			$res_write = $db->db_query($sql_write);
@@ -177,11 +177,11 @@ class BaseInclude_Access
 	/**
 	 * @return string
 	 */
-	public function get_version()
+	public function get_db_version()
 	{
-		if ($this->version)
+		if ($this->db_version)
 		{
-			return $this->version;
+			return $this->db_version;
 		}
 		else
 		{
@@ -248,21 +248,21 @@ class BaseInclude_Access
 	}
 	
 	/**
-	 * @param string $version;
+	 * @param string $db_version;
 	 * @return bool
 	 */
-	public function set_version($version)
+	public function set_db_version($db_version)
 	{
 		global $db;
 
-		if ($this->id and $version)
+		if ($this->id and $db_version)
 		{
-			$sql = "UPDATE ".constant("BASE_INCLUDE_TABLE")." SET version = '".$version."' WHERE id = ".$this->id."";
+			$sql = "UPDATE ".constant("BASE_INCLUDE_TABLE")." SET db_version = '".$db_version."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
 			{
-				$this->version = $version;
+				$this->db_version = $db_version;
 				return true;
 			}
 			else
