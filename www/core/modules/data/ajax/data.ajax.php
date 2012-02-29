@@ -105,7 +105,7 @@ class DataAjax
 				$first_line_array[owner] = "";
 				$first_line_array[permission] = "";
 				
-				$list_request->add_first_line($first_line_array);
+				$list_request->add_first_line($first_line_array, "DataBrowserParentFolderRow");
 			} 
 			
 			if (is_array($list_array) and count($list_array) >= 1)
