@@ -159,9 +159,12 @@ class ContentHandler_IO
 		
 		if ($GLOBALS['fatal_error'] == null)
 		{
-			
-			
 			$max_ip_errors = (int)Registry::get_value(base_max_ip_failed_logins);
+			
+			if (!is_numeric($max_ip_errors) or $max_ip_errors < 3)
+			{
+				$max_ip_errors = 3;
+			}
 			
 			if (Security::ip_error_count() < $max_ip_errors)
 			{
