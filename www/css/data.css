@@ -137,6 +137,16 @@ border-top:solid #e0e0e0 2px;
 vertical-align:middle;
 }
 
+.trLightGrey .ListTableColumnFirstEntry
+{
+border-left:solid #e0e0e0 2px;
+}
+
+.trLightGrey .ListTableColumnLastEntry
+{
+border-right:solid #e0e0e0 2px;
+}
+
 #DataBrowserFileDialog
 {
 font-family:arial;
@@ -168,7 +178,7 @@ text-decoration:underline;
 
 #DataBrowserAjaxActionSelect 
 {
-text-align:right;
+float: left;
 margin:2px 2px 0 2px;
 }
 
@@ -184,6 +194,12 @@ width:30px;
 padding: 0;
 vertical-align:middle;
 }
+
+.DataBrowserDeleteCheckbox
+{
+margin-left: 0;	
+}
+
 
 #RenameFolderContainer
 {
