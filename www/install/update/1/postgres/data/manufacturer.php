@@ -1,6 +1,6 @@
 <?php
 /**
- * @package base
+ * @package install
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2012 by Roman Konertz
@@ -20,11 +20,14 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
-
+ 	
 /**
- * IMPORTANT NOTE: Modification of this file is not allowed by developers!
+ * 
  */
-define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-49-dev &#945;");
+$statement = array();
+
+$statement[] = "UPDATE core_base_includes SET db_version = '0.3.9.9-5' WHERE name='manufacturer'";
+
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'manufacturer','core_manufacturers', NULL);";
 
 ?>

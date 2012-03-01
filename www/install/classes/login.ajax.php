@@ -1,6 +1,6 @@
 <?php
 /**
- * @package base
+ * @package install
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2012 by Roman Konertz
@@ -20,11 +20,41 @@
  * You should have received a copy of the GNU General Public License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
-
+ 	
 /**
- * IMPORTANT NOTE: Modification of this file is not allowed by developers!
+ * @package install
  */
-define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-49-dev &#945;");
-
+class LoginAjax
+{
+	public static function login($username, $password)
+	{
+		if ($username and $password)
+		{
+			$auth = new Auth();
+			
+			if ($auth->login($username, $password) == true)
+			{
+				$session_id = $auth->get_session_id();
+				$session = new Session($session_id);
+				
+		 		return "index.php?session_id=".$session_id;	
+			}
+			else
+			{
+				return "Your username or your password are wrong.";
+			}
+		}
+		else
+		{
+			if ($username and !$password)
+			{
+				return "Your must enter a password.";
+			}
+			else
+			{
+				return "You must enter an username.";
+			}
+		}
+	}
+}
 ?>
