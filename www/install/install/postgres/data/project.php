@@ -57,6 +57,11 @@ $statement[] = "INSERT INTO core_base_include_functions (id,include,function_nam
 $statement[] = "INSERT INTO core_base_include_functions (id,include,function_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'project','project_permission_user', NULL);";
 $statement[] = "INSERT INTO core_base_include_functions (id,include,function_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'project','search_get_project_subprojects', NULL);";
 
+$statement[] = "INSERT INTO core_project_status (id,name,analysis,blocked,comment)";
+$statement[] = "SELECT pg_catalog.setval(''core_project_status_id_seq', 999999000, true);";
+
+$statement[] = "INSERT INTO core_project_template_cats (id,name)";
+
 $statement[] = "INSERT INTO core_data_entities (id,datetime,owner_id,owner_group_id,permission,automatic) VALUES (4, '2011-01-01 08:00:00+01', 1, NULL, NULL, 't')";
 $statement[] = "INSERT INTO core_items (id,datetime) VALUES (4, '2011-01-01 08:00:00+01')";
 $statement[] = "INSERT INTO core_data_entity_is_item (data_entity_id,item_id) VALUES (4,4)";

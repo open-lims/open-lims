@@ -37,6 +37,10 @@ $statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_v
 $statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'organisation_unit','core_organisation_unit_types', NULL);";
 $statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'organisation_unit','core_organisation_units', NULL);";
 
+$statement[] = "INSERT INTO core_organisation_unit_types (id,name,icon) VALUES (nextval('core_organisation_unit_types_id_seq'::regclass),'root','root.png')";
+$statement[] = "INSERT INTO core_organisation_unit_types (id,name,icon) VALUES (nextval('core_organisation_unit_types_id_seq'::regclass),'institute','institutes.png')";
+$statement[] = "INSERT INTO core_organisation_unit_types (id,name,icon) VALUES (nextval('core_organisation_unit_types_id_seq'::regclass),'lab-group','ou_groups.png')";
+
 $statement[] = "INSERT INTO core_base_include_functions (id,include,function_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'organisation_unit','get_organisation_unit_childs', NULL);";
 
 $statement[] = "INSERT INTO core_groups (id,name) VALUES (9, 'Group-Leaders')";
