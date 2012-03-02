@@ -197,9 +197,9 @@ vertical-align:middle;
 
 .DataBrowserDeleteCheckbox
 {
-margin-left: 0;	
+margin: 0;
+padding: 0;
 }
-
 
 #RenameFolderContainer
 {

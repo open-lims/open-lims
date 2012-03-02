@@ -39,11 +39,6 @@ function data_browser()
 			current_folder_id = argument_parts[0].replace("[[\"folder_id\",","").replace(/"/g,"");
 			current_virtual_folder_id = argument_parts[1].replace("\"virtual_folder_id\",","").replace(/]/g,"").replace(/"/g,"");
 			
-			//hack for resizing the "parent folder"-column
-			var entry_height = $(".ListTable > tbody > tr:nth-child(2)").height();
-			$(".DataBrowserParentFolderRow").height(entry_height);
-
-			
 			init_list_handler();
 			init_base_tree_nav_link_handler();
 			init_menu(current_folder_id);
@@ -684,7 +679,18 @@ function data_browser()
 	 */
 	function init_menu(folder_id)
 	{
-		$(".ListTable > thead > tr > th:first").append("<input type='checkbox' id='DataBrowserActionMasterCheckbox' name='' value=''></input>")
+		var master_checkbox = $("<input type='checkbox' id='DataBrowserActionMasterCheckbox' name='' value=''></input>")
+			.css({
+				"margin": 0,
+				"padding": 0
+			});
+					
+		var first_th = $(".ListTable > thead > tr > th:first")
+			.css("text-align","center")
+			.html(master_checkbox);
+
+		//IE7 is an idiot when centering text within a td
+		$(first_th).width($(first_th).width());
 		
 		$.ajax({
 			type : "POST",

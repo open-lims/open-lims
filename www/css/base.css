@@ -38,6 +38,7 @@
 }
 .ListTable td 
 {
+	height:22px;
 	margin-bottom: 2px;
 	padding: 4px 4px;
 }
