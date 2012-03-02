@@ -39,6 +39,11 @@ function data_browser()
 			current_folder_id = argument_parts[0].replace("[[\"folder_id\",","").replace(/"/g,"");
 			current_virtual_folder_id = argument_parts[1].replace("\"virtual_folder_id\",","").replace(/]/g,"").replace(/"/g,"");
 			
+			//hack for resizing the "parent folder"-column
+			var entry_height = $(".ListTable > tbody > tr:nth-child(2)").height();
+			$(".DataBrowserParentFolderRow").height(entry_height);
+
+			
 			init_list_handler();
 			init_base_tree_nav_link_handler();
 			init_menu(current_folder_id);
