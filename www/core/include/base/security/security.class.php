@@ -117,12 +117,12 @@ class Security implements SecurityInterface
 			switch($key):
 
 			case("nav"):
-			case("vnav"):
+			case("vnav"): // in Left Menu
 			case("username"):
 			case("session_id"):
 			case("run"):
 			case("dialog"):
-			case("retrace");
+			case("retrace"):
 				
 			case("action"):
 			case("aspect"):
@@ -134,20 +134,20 @@ class Security implements SecurityInterface
 			case("sortvalue"):
 			case("sure"):
 			case("nextpage"):
-			case("selectpage");
+			case("selectpage"):
 			case("page"):
-			case("pageref");
+			case("pageref"):
 			case("show"):
 			case("change_nav"):
 			case("tpage"):
 			case("view"):
-			case("clear");
+			case("clear"):
 			
-			case("unique_id");
-			case("height");
-			case("width");
-			case("max_height");
-			case("max_width");
+			case("unique_id"):
+			case("height"):
+			case("width"):
+			case("max_height"):
+			case("max_width"):
 			
 			break;
 			
