@@ -21,7 +21,7 @@
 {
 	width: 100%;
 	border-collapse: separate;
-	border-spacing:1px 0px;
+	border-spacing:0px;
 	border-collapse: expression('separate', cellSpacing = '0px');
 	table-layout:fixed;
 	white-space: nowrap;

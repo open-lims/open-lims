@@ -680,7 +680,7 @@ function data_browser()
 	 */
 	function init_menu(folder_id)
 	{
-		$(".ListTable > thead > tr > th:first").append("<input type='checkbox' id='DataBrowserActionMasterCheckbox' name='' value=''></input>")
+		$(".ListTable > thead > tr > th:first").html("<input type='checkbox' id='DataBrowserActionMasterCheckbox' name='' value=''></input>")
 		
 		$.ajax({
 			type : "POST",

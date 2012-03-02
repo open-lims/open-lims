@@ -372,7 +372,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 				
 				var index = $(this).parent().children().index($(this));
 								
-				if(fixed_widths.indexOf(index) !== -1)
+				if($.inArray(index,fixed_widths) !== -1)
 				{
 					return true;
 				}
@@ -417,7 +417,8 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 					"width": "1px",
 					"height": "100%",
 					"right": "0px",
-					"position": "absolute"
+					"position": "absolute",
+					"z-index":1000
 				});
 			
 			var helper_div = $("<div class='ResizableColumnHelper'>"+$(head_col).html()+"</div>")
@@ -734,7 +735,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 			
 			
 			$(col_to_add_width_to).animate({
-				"width": $(col_to_add_width_to).width() + width,
+				"width": $(col_to_add_width_to).width() + width
 			}, 500, function(){
 
 				var remaining_width = $(col_to_hide).outerWidth();
