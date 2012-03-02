@@ -310,7 +310,7 @@ class OrganisationUnitFolder extends Folder implements ConcreteFolderCaseInterfa
     		$folder_id = self::get_folder_by_organisation_unit_id($event_object->get_organisation_unit_id());
     		if ($folder_id)
     		{
-	    		$organisation_unit_folder = new OrganisationUnitFolder();
+	    		$organisation_unit_folder = new OrganisationUnitFolder($folder_id);
 	    		if ($organisation_unit_folder->set_owner_id($organisation_unit->get_master_owner_id()) == false)
 	    		{
 	    			return false;

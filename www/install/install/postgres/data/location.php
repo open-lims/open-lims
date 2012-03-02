@@ -39,6 +39,7 @@ $statement[] = "INSERT INTO core_location_types (id,name) VALUES (nextval('core_
 $statement[] = "INSERT INTO core_location_types (id,name) VALUES (nextval('core_location_types_id_seq'::regclass), 'Freezer');";
 $statement[] = "INSERT INTO core_location_types (id,name) VALUES (nextval('core_location_types_id_seq'::regclass), 'Refrigerator');";
 $statement[] = "INSERT INTO core_location_types (id,name) VALUES (nextval('core_location_types_id_seq'::regclass), 'Deep Freezer');";
-$statement[] = "INSERT INTO core_location_types (id,name) VALUES (nextval('core_location_types_id_seq'::regclass), 'Ice chest');";
+$statement[] = "INSERT INTO core_location_types (id,name) VALUES (nextval('core_location_types_id_seq'::regclass), 'Ice-chest');";
+$statement[] = "INSERT INTO core_location_types (id,name) VALUES (nextval('core_location_types_id_seq'::regclass), 'Cold-room');";
 
 ?>

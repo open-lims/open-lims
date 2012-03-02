@@ -307,7 +307,6 @@ class AdminEquipmentTypeIO
 				$result = array();
 				$counter = 1;
 				
-				$location = new Location($value);
 				$result[0][value] = 0;
 				$result[0][content] = "none";
 				

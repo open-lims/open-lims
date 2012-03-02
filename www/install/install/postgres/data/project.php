@@ -79,6 +79,8 @@ $statement[] = "INSERT INTO core_project_template_cats (id,name) VALUES (nextval
 $statement[] = "INSERT INTO core_project_template_cats (id,name) VALUES (nextval('core_project_template_cats_id_seq'::regclass), 'MicroArray');";
 $statement[] = "INSERT INTO core_project_template_cats (id,name) VALUES (nextval('core_project_template_cats_id_seq'::regclass), 'Microscopy');";
 
+$statement[] = "INSERT INTO core_value_types (id,name,template_id) VALUES (2,'project description',NULL)";
+
 $statement[] = "INSERT INTO core_data_entities (id,datetime,owner_id,owner_group_id,permission,automatic) VALUES (4, '2011-01-01 08:00:00+01', 1, NULL, NULL, 't')";
 $statement[] = "INSERT INTO core_items (id,datetime) VALUES (4, '2011-01-01 08:00:00+01')";
 $statement[] = "INSERT INTO core_data_entity_is_item (data_entity_id,item_id) VALUES (4,4)";

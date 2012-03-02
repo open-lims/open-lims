@@ -134,9 +134,7 @@ class DataAjax
 
 						if ($file->is_read_access() == true)
 						{
-							$paramquery = array();
-							$paramquery[session_id] = $_GET[session_id];
-							$paramquery[username] = $_GET[username];
+							$paramquery = $_GET;
 							$paramquery[nav] = $_GET[nav];
 							$paramquery[file_id] = $list_array[$key][file_id];
 							$paramquery[action] = "file_detail";
@@ -184,9 +182,7 @@ class DataAjax
 
 						if ($value->is_read_access() == true)
 						{
-							$paramquery = array();
-							$paramquery[session_id] = $_GET[session_id];
-							$paramquery[username] = $_GET[username];
+							$paramquery = $_GET;
 							$paramquery[nav] = $_GET[nav];
 							$paramquery[value_id] = $list_array[$key][value_id];
 							$paramquery[action] = "value_detail";
