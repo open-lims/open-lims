@@ -57,10 +57,27 @@ $statement[] = "INSERT INTO core_base_include_functions (id,include,function_nam
 $statement[] = "INSERT INTO core_base_include_functions (id,include,function_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'project','project_permission_user', NULL);";
 $statement[] = "INSERT INTO core_base_include_functions (id,include,function_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'project','search_get_project_subprojects', NULL);";
 
-$statement[] = "INSERT INTO core_project_status (id,name,analysis,blocked,comment)";
-$statement[] = "SELECT pg_catalog.setval(''core_project_status_id_seq', 999999000, true);";
+$statement[] = "INSERT INTO core_project_status (id,name,analysis,blocked,comment) VALUES (0,'canceled','f','f',NULL);";
+$statement[] = "INSERT INTO core_project_status (id,name,analysis,blocked,comment) VALUES (1,'creating','f','f',NULL);";
+$statement[] = "INSERT INTO core_project_status (id,name,analysis,blocked,comment) VALUES (2,'finished','f','f',NULL);";
+$statement[] = "INSERT INTO core_project_status (id,name,analysis,blocked,comment) VALUES (100,'in progress','f','f',NULL);";
+$statement[] = "INSERT INTO core_project_status (id,name,analysis,blocked,comment) VALUES (10001,'RNA','f','f',NULL);";
+$statement[] = "INSERT INTO core_project_status (id,name,analysis,blocked,comment) VALUES (10002,'MicroArray','f','f',NULL);";
+$statement[] = "INSERT INTO core_project_status (id,name,analysis,blocked,comment) VALUES (10003,'cDNA','f','f',NULL);";
+$statement[] = "INSERT INTO core_project_status (id,name,analysis,blocked,comment) VALUES (10004,'hybridisation','f','f',NULL);";
+$statement[] = "INSERT INTO core_project_status (id,name,analysis,blocked,comment) VALUES (10005,'washing','f','f',NULL);";
+$statement[] = "INSERT INTO core_project_status (id,name,analysis,blocked,comment) VALUES (10006,'scanning','f','f',NULL);";
+$statement[] = "INSERT INTO core_project_status (id,name,analysis,blocked,comment) VALUES (10007,'spotfinding','f','f',NULL);";
+$statement[] = "INSERT INTO core_project_status (id,name,analysis,blocked,comment) VALUES (10008,'manual curation','f','f',NULL);";
+$statement[] = "INSERT INTO core_project_status (id,name,analysis,blocked,comment) VALUES (10009,'analysis','t','f',NULL);";
+$statement[] = "INSERT INTO core_project_status (id,name,analysis,blocked,comment) VALUES (20001,'sample description','f','f',NULL);";
+$statement[] = "INSERT INTO core_project_status (id,name,analysis,blocked,comment) VALUES (20002,'specify experiment','f','f',NULL);";
+$statement[] = "INSERT INTO core_project_status (id,name,analysis,blocked,comment) VALUES (20003,'import data','f','f',NULL);";
+$statement[] = "SELECT pg_catalog.setval('core_project_status_id_seq', 999999000, true);";
 
-$statement[] = "INSERT INTO core_project_template_cats (id,name)";
+$statement[] = "INSERT INTO core_project_template_cats (id,name) VALUES (nextval('core_project_template_cats_id_seq'::regclass), 'General');";
+$statement[] = "INSERT INTO core_project_template_cats (id,name) VALUES (nextval('core_project_template_cats_id_seq'::regclass), 'MicroArray');";
+$statement[] = "INSERT INTO core_project_template_cats (id,name) VALUES (nextval('core_project_template_cats_id_seq'::regclass), 'Microscopy');";
 
 $statement[] = "INSERT INTO core_data_entities (id,datetime,owner_id,owner_group_id,permission,automatic) VALUES (4, '2011-01-01 08:00:00+01', 1, NULL, NULL, 't')";
 $statement[] = "INSERT INTO core_items (id,datetime) VALUES (4, '2011-01-01 08:00:00+01')";
