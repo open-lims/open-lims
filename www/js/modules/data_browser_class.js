@@ -113,7 +113,7 @@ function data_browser()
 							}
 							$(this).css({
 								"margin-bottom":"2px",
-								"padding":"0px 4px",
+								"padding":"2px 2px",
 								"border-bottom":"solid #c3c3c3 2px",
 								"border-top":"solid #c3c3c3 2px"
 							});	

@@ -122,7 +122,7 @@ cursor:default;
 
 .ListTable #DataBrowserAjax tr td
 {
-padding: 0px 4px;
+padding: 2px 2px;
 border-bottom:solid white 2px;
 border-top:solid white 2px;
 vertical-align:middle;
@@ -131,7 +131,7 @@ cursor:default;
 
 .ListTable #DataBrowserAjax .trLightGrey td
 {
-padding: 0px 4px;
+padding: 2px 2px;
 border-bottom:solid #e0e0e0 2px;
 border-top:solid #e0e0e0 2px;
 vertical-align:middle;
