@@ -1,0 +1,100 @@
+html,body
+{
+	margin: 0;
+	padding: 0;
+	background-color: #f3f3f3;
+	height: 100%;
+}
+#Main
+{
+	font: normal 12px Arial, Helvetica, sans-serif;
+	position: relative;
+	width: 980px;
+	margin: 0 auto;
+	padding: 0;
+	background-color: #f3f3f3;
+	background-image: url("../../images/shades/shade.png");
+	background-position: center top;
+	background-repeat: repeat-y;
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+}
+
+#Footer
+{
+	font-size: 10px;
+	color: #A0A0A0;
+	background-color: white;
+	position: absolute;
+	bottom: 0;
+	width: 968px;
+	text-align: right;
+}
+
+#Container
+{
+	background-color: white;
+	margin: 0 auto;
+	padding: 0;
+	width: 968px;
+}
+
+#LoginHeaderLogo
+{
+	padding: 20px 0 20px 25px;
+}
+
+#LoginHeader
+{
+	height: 235px;
+	width: 	968px;
+	background-image: url("panorama.jpg");
+	background-position: center top;
+	background-repeat: no-repeat;
+}
+
+#LoginContainer
+{
+	color: #272725;
+	width: 370px;
+	margin: 20px auto;
+}
+#LoginTitle
+{
+	font-size: 13px;
+	font-weight: bold;	
+	margin-bottom: 10px;
+}
+#LoginTable
+{
+	width: 100%; 
+	font-weight: bold;	
+	margin: 0;
+	padding: 0;
+	border-collapse: separate;
+	border-spacing: 0;
+}
+#LoginTable td
+{
+	padding: 7px 0;
+}
+#LoginTable a
+{
+	font-weight: normal;	
+}
+
+.BaseTextfield
+{
+	border: 1px #D0D0D0 solid;
+}
+.BaseButton
+{
+	background: white;
+	border: 1px #D0D0D0 solid;
+}
+.LoginTextfield,
+.LoginLanguageSelect
+{
+	width: 220px;
+}
