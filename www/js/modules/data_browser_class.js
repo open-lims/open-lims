@@ -388,14 +388,16 @@ function data_browser()
 			var link = $(element).children("td:nth-child(3)").children().attr("href");
 			if($(element).children("td:nth-child(4)").text() == "File")
 			{
-				var split = link.split("&nav=data&file_id=");
-				var file_id = split[1].replace("&action=file_detail","");
+				var split_before = link.split("&file_id=");
+				var split_after = split_before[1].split("&");
+				var file_id = split_after[0];
 				load_context_sensitive_dialog(file_id,"file");
 			}
 			else if($(element).children("td:nth-child(4)").text() == "Value")
 			{
-				var split = link.split("&nav=data&value_id=");
-				var value_id = split[1].replace("&action=value_detail","");
+				var split_before = link.split("&value_id=");
+				var split_after = split_before[1].split("&");
+				var value_id = split_after[0];
 				load_context_sensitive_dialog(value_id,"value");
 			}
 			else
