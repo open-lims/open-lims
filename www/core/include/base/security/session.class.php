@@ -148,7 +148,7 @@ class Session implements SessionInterface
 			{
 				$session_timeout = Registry::get_value("base_session_timeout");
 				
-				if (!is_numeric(session_timeout) or $session_timeout < 300)
+				if (!is_numeric($session_timeout) or $session_timeout < 300)
 				{
 					$session_timeout = 3600;
 				}

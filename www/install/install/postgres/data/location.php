@@ -32,4 +32,14 @@ $statement[] = "INSERT INTO core_base_includes VALUES (nextval('core_base_includ
 $statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'location','core_location_types', NULL);";
 $statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'location','core_locations', NULL);";
 
+$statement[] = "INSERT INTO core_location_types (id,name) VALUES (nextval('core_location_types_id_seq'::regclass), 'Building');";
+$statement[] = "INSERT INTO core_location_types (id,name) VALUES (nextval('core_location_types_id_seq'::regclass), 'Floor');";
+$statement[] = "INSERT INTO core_location_types (id,name) VALUES (nextval('core_location_types_id_seq'::regclass), 'Room');";
+$statement[] = "INSERT INTO core_location_types (id,name) VALUES (nextval('core_location_types_id_seq'::regclass), 'Lab');";
+$statement[] = "INSERT INTO core_location_types (id,name) VALUES (nextval('core_location_types_id_seq'::regclass), 'Freezer');";
+$statement[] = "INSERT INTO core_location_types (id,name) VALUES (nextval('core_location_types_id_seq'::regclass), 'Refrigerator');";
+$statement[] = "INSERT INTO core_location_types (id,name) VALUES (nextval('core_location_types_id_seq'::regclass), 'Deep Freezer');";
+$statement[] = "INSERT INTO core_location_types (id,name) VALUES (nextval('core_location_types_id_seq'::regclass), 'Ice-chest');";
+$statement[] = "INSERT INTO core_location_types (id,name) VALUES (nextval('core_location_types_id_seq'::regclass), 'Cold-room');";
+
 ?>

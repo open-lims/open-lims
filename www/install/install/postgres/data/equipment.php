@@ -35,4 +35,15 @@ $statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_v
 $statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'equipment','core_equipment_has_responsible_persons', NULL);";
 $statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'equipment','core_equipment_is_item', NULL);";
 $statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'equipment','core_equipment_types', NULL);";
+
+$statement[] = "INSERT INTO core_equipment_cats (id,toid,name) VALUES (1,1,'other');";
+$statement[] = "INSERT INTO core_equipment_cats (id,toid,name) VALUES (1000,1,'Hardware');";
+$statement[] = "INSERT INTO core_equipment_cats (id,toid,name) VALUES (1001,1,'Software');";
+$statement[] = "SELECT pg_catalog.setval('core_equipment_cats_id_seq', 100000, true);";
+
+$statement[] = "INSERT INTO core_equipment_types (id,toid,name,cat_id,location_id,description,manufacturer) VALUES (1,1,'manual',1,NULL,NULL,NULL);";
+$statement[] = "INSERT INTO core_equipment_types (id,toid,name,cat_id,location_id,description,manufacturer) VALUES (2,2,'external',1,NULL,NULL,NULL);";
+$statement[] = "INSERT INTO core_equipment_types (id,toid,name,cat_id,location_id,description,manufacturer) VALUES (3,3,'other',1,NULL,NULL,NULL);";
+$statement[] = "SELECT pg_catalog.setval('core_equipment_types_id_seq', 999999000, true);";
+
 ?>

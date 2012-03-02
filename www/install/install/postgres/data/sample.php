@@ -42,6 +42,11 @@ $statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_v
 
 $statement[] = "INSERT INTO core_base_include_functions (id,include,function_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'sample','get_sample_id_by_folder_id', NULL);";
 
+$statement[] = "INSERT INTO core_sample_template_cats (id,name) VALUES(nextval('core_sample_template_cats_id_seq'::regclass),'General');";
+$statement[] = "INSERT INTO core_sample_template_cats (id,name) VALUES(nextval('core_sample_template_cats_id_seq'::regclass),'MicroArray');";
+$statement[] = "INSERT INTO core_sample_template_cats (id,name) VALUES(nextval('core_sample_template_cats_id_seq'::regclass),'Microscopy');";
+$statement[] = "INSERT INTO core_sample_template_cats (id,name) VALUES(nextval('core_sample_template_cats_id_seq'::regclass),'RNA');";
+
 $statement[] = "INSERT INTO core_data_entities (id,datetime,owner_id,owner_group_id,permission,automatic) VALUES (5, '2011-01-01 08:00:00+01', 1, NULL, NULL, 't')";
 $statement[] = "INSERT INTO core_items (id,datetime) VALUES (5, '2011-01-01 08:00:00+01')";
 $statement[] = "INSERT INTO core_data_entity_is_item (data_entity_id,item_id) VALUES (5,5)";
