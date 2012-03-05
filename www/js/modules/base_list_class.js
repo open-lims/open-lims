@@ -403,7 +403,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 					.data("textWidth", body_col_text_width)
 					.data("originalText", body_col_text);
 				
-				resize_text(this, $(this).width());
+//				resize_text(this, $(this).width());
 			});
 		}
 		
@@ -417,8 +417,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 					"width": "1px",
 					"height": "100%",
 					"right": "0px",
-					"position": "absolute",
-					"z-index":1000
+					"position": "absolute"
 				});
 			
 			var helper_div = $("<div class='ResizableColumnHelper'>"+$(head_col).html()+"</div>")

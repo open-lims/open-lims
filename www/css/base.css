@@ -27,6 +27,7 @@
 	white-space: nowrap;
 	overflow: hidden;
 }
+
 .ListTable th 
 {
 	font-weight: bold;
@@ -36,6 +37,7 @@
 	white-space: nowrap;
 	overflow: hidden;
 }
+
 .ListTable th a 
 {
 	text-decoration: none;
