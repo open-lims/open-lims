@@ -151,6 +151,8 @@ $statement[] = "INSERT INTO core_folder_is_system_folder (folder_id) VALUES (52)
 
 $statement[] = "INSERT INTO core_folder_is_user_folder (user_id, folder_id) VALUES (1,10000)";
 
+$statement[] = "INSERT INTO core_data_user_data (user_id,quota,filesize) VALUES (1,NULL,0)";
+
 $statement[] = "INSERT INTO core_folder_is_group_folder (group_id, folder_id) VALUES (1,101)";
 $statement[] = "INSERT INTO core_folder_is_group_folder (group_id, folder_id) VALUES (2,102)";
 $statement[] = "INSERT INTO core_folder_is_group_folder (group_id, folder_id) VALUES (9,109)";
