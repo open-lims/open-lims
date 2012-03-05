@@ -37,7 +37,7 @@ class ProjectRequest
 					
 			if ($get_array['project_id'])
 			{
-				$project_security = new ProjectSecurity($get_array[project_id]);
+				$project_security = new ProjectSecurity($get_array['project_id']);
 			}
 			else
 			{
