@@ -140,6 +140,15 @@ $statement[] = "INSERT INTO core_data_entity_has_data_entities (data_entity_pid,
 $statement[] = "INSERT INTO core_data_entity_has_data_entities (data_entity_pid,data_entity_cid) VALUES (10000,10001)";
 $statement[] = "INSERT INTO core_data_entity_has_data_entities (data_entity_pid,data_entity_cid) VALUES (10000,10002)";
 
+$statement[] = "INSERT INTO core_folder_is_system_folder (folder_id) VALUES (1)";
+$statement[] = "INSERT INTO core_folder_is_system_folder (folder_id) VALUES (3)";
+$statement[] = "INSERT INTO core_folder_is_system_folder (folder_id) VALUES (6)";
+$statement[] = "INSERT INTO core_folder_is_system_folder (folder_id) VALUES (7)";
+$statement[] = "INSERT INTO core_folder_is_system_folder (folder_id) VALUES (8)";
+$statement[] = "INSERT INTO core_folder_is_system_folder (folder_id) VALUES (9)";
+$statement[] = "INSERT INTO core_folder_is_system_folder (folder_id) VALUES (51)";
+$statement[] = "INSERT INTO core_folder_is_system_folder (folder_id) VALUES (52)";
+
 $statement[] = "INSERT INTO core_folder_is_user_folder (user_id, folder_id) VALUES (1,10000)";
 
 $statement[] = "INSERT INTO core_folder_is_group_folder (group_id, folder_id) VALUES (1,101)";

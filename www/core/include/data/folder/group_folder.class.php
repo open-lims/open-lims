@@ -45,11 +45,35 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
   	 */
 	function __construct($folder_id)
 	{
+		global $user;
+		
 		if (is_numeric($folder_id))
   		{
   			parent::__construct($folder_id);
   			$this->group_folder = new FolderIsGroupFolder_Access($folder_id);
   			$this->group_id = $this->group_folder->get_group_id();
+  			
+  			$group = new Group($this->group_id);
+			if ($group->is_user_in_group($user->get_user_id()) == true)
+			{
+				if ($this->read_access == false)
+  				{
+					$this->data_entity_permission->set_read_permission();
+	  				if ($this->data_entity_permission->is_access(1))
+					{
+						$this->read_access = true;
+					}
+  				}
+  				
+  				if ($this->write_access == false)
+  				{
+					$this->data_entity_permission->set_write_permission();
+	  				if ($this->data_entity_permission->is_access(2))
+					{
+						$this->write_access = true;
+					}
+  				}
+			}
   		}
   		else
   		{

@@ -89,5 +89,6 @@ $statement[] = "INSERT INTO core_data_entity_is_item (data_entity_id,item_id) VA
 $statement[] = "INSERT INTO core_virtual_folders (id,data_entity_id,name) VALUES (nextval('core_virtual_folders_id_seq'::regclass),currval('core_data_entities_id_seq'::regclass), 'samples')";
 $statement[] = "INSERT INTO core_data_entity_has_data_entities (data_entity_pid,data_entity_cid) VALUES (111,currval('core_data_entities_id_seq'::regclass))";
 
+$statement[] = "INSERT INTO core_folder_is_system_folder (folder_id) VALUES (5)";
 
 ?>
