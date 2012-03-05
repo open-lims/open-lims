@@ -75,6 +75,11 @@ function data_browser()
 			}
 			var href = $(link).attr("href");
 			
+			if(href === undefined)
+			{
+				return false;
+			}
+			
 			var linked_folder_id  = href.split("&folder_id=")[1];
 			if(linked_folder_id != undefined)
 			{
@@ -223,14 +228,22 @@ function data_browser()
 	 */
 	function delete_selected_files()
 	{
+	
+		
 		var action = $("#DataBrowserActionSelect").children("option:selected").val();
 		$(".DataBrowserDeleteCheckbox:checked").each(function()
 		{
-			var type = $(this).parent().parent().parent().children("td:nth-child(4)").children();
-			if($(type).text() == "Folder")
+			var type = $(this).parent().parent().children("td:nth-child(4)").text();
+			if(type == "Folder")
 			{
-				var link = $(this).parent().parent().parent().children("td:nth-child(3)").children().children().attr("href");
-				var folder_id = link.split("&folder_id=")[1];
+				var link = $(this).parent().parent().children("td:nth-child(3)").children().children().attr("href");
+				
+				var folder_id  = link.split("&folder_id=")[1];
+				if(folder_id != undefined)
+				{
+					folder_id = folder_id.split("&")[0];
+				}
+			
 				$.ajax(
 				{
 					async : false,
@@ -240,11 +253,16 @@ function data_browser()
 					success : function(data) {}
 				});
 			}
-			else if($(type).text() == "Value")
+			else if(type == "Value")
 			{
-				var link = $(this).parent().parent().parent().children("td:nth-child(3)").children().attr("href");
-				var split = link.split("&nav=data&value_id=");
-				var value_id = split[1].replace("&action=value_detail","");
+				var link = $(this).parent().parent().children("td:nth-child(3)").children().attr("href");
+				
+				var value_id  = link.split("&value_id=")[1];
+				if(value_id != undefined)
+				{
+					value_id = value_id.split("&")[0];
+				}
+				
 				$.ajax(
 				{
 					async : false,
@@ -254,11 +272,16 @@ function data_browser()
 					success : function(data) {}
 				});
 			}
-			else
+			else if(type == "File")
 			{
-				var link = $(this).parent().parent().parent().children("td:nth-child(3)").children().attr("href");
-				var split = link.split("&nav=data&file_id=");
-				var file_id = split[1].replace("&action=file_detail","");
+				var link = $(this).parent().parent().children("td:nth-child(3)").children().attr("href");
+
+				var file_id  = link.split("&file_id=")[1];
+				if(file_id != undefined)
+				{
+					file_id = file_id.split("&")[0];
+				}
+				
 				$.ajax(
 				{
 					async : false,
