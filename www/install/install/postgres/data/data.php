@@ -146,8 +146,6 @@ $statement[] = "INSERT INTO core_folder_is_system_folder (folder_id) VALUES (6)"
 $statement[] = "INSERT INTO core_folder_is_system_folder (folder_id) VALUES (7)";
 $statement[] = "INSERT INTO core_folder_is_system_folder (folder_id) VALUES (8)";
 $statement[] = "INSERT INTO core_folder_is_system_folder (folder_id) VALUES (9)";
-$statement[] = "INSERT INTO core_folder_is_system_folder (folder_id) VALUES (51)";
-$statement[] = "INSERT INTO core_folder_is_system_folder (folder_id) VALUES (52)";
 
 $statement[] = "INSERT INTO core_folder_is_user_folder (user_id, folder_id) VALUES (1,10000)";
 
