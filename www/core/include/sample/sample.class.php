@@ -354,7 +354,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	    				}
 	    			}    			
 	    			
-	    			if (is_numeric($location_id))
+	    			if (is_numeric($location_id) and $location_id > 0)
 	    			{
 		    			// Create First Location
 		    			$sample_has_locaiton_access = new SampleHasLocation_Access(null);
@@ -606,7 +606,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					$add_new_location = true;
 				}
 				
-    			if (is_numeric($location_id) and $add_new_location == true)
+    			if (is_numeric($location_id) and $add_new_location == true and $location_id > 0)
     			{
 	    			// Create First Location
 	    			$sample_has_location_access = new SampleHasLocation_Access(null);

@@ -959,7 +959,7 @@ class User implements UserInterface {
 	 */
 	public function set_profile($entry, $value)
 	{
-		if ($this->user_profile and isset($value))
+		if ($this->user_profile)
 		{
 			switch($entry):
 			
