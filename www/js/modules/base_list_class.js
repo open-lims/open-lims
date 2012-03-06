@@ -223,6 +223,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 						if($.browser.version == 7.0 || $.browser.version == 9.0)
 						{ //we got an ie version that does not support tbody animation
 							$("#" + css_main_id).html(data);
+							make_resizable();
 							return true;
 						}
 					}
@@ -231,7 +232,6 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 						"height" : new_height
 					}, "fast", function() {
 						$("#" + css_main_id).html(data);
-					
 						make_resizable();
 					});
 				} 
@@ -239,7 +239,6 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 				{
 					$("#" + css_main_id).height(last_height)
 					$("#" + css_main_id).html(data);
-
 					make_resizable();
 				}
 			}
@@ -327,19 +326,30 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 				}
 				
 				var col_index = $(this).parent().children().index($(this));
+
+				//IE8 fix: reset paddings in order to prevent strange gaps between cols
+				var td_padding = $(".ListTable").find("td").css("padding");
+				var th_padding = $(".ListTable").find("th").css("padding");
+
+				$(".ListTable").find("td").css("padding",0);
+				$(".ListTable").find("th").css("padding",0);
 				
 				var head_col_text = $(this).html();			
-				var head_col_text_calc = "<span>" + head_col_text + "</span>";
+				var head_col_text_calc = $("<span>" + head_col_text + "</span>")			
 				
 				$(this).html(head_col_text_calc);
+				
 				var head_col_min_width = $(this).find("span").width() + 1;
+				
+				$(".ListTable").find("td").css("padding",td_padding);
+				$(".ListTable").find("th").css("padding",th_padding);
+				
 				$(this).html(head_col_text);
-
 		
-				if($(this).width() < head_col_min_width)
-				{
-					$(this).addClass("tooSmall");
-				}
+//				if($(this).width() < head_col_min_width)
+//				{
+//					$(this).addClass("tooSmall");
+//				}
 				
 				if(col_index !== num_cols - 1)
 				{
@@ -351,22 +361,21 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 						.data("minWidth", head_col_min_width);
 					$(this).html(helper_div);
 				}
-				
 			});
 			
-			$(".tooSmall").each(function(){
-				var min_width = $(this).children().data("minWidth");
-				var col_index = $(this).children().data("draggedColIndex");
-			
-				var diff = min_width - $(this).width();
-		
-				var next_col = $(".ListTable > thead > tr > th").get(col_index + 1);
-				$(next_col).width($(next_col).width() - diff);
-
-				$(this)
-					.removeClass("tooSmall")
-					.width(min_width);
-			});
+//			$(".tooSmall").each(function(){
+//				var min_width = $(this).children().data("minWidth");
+//				var col_index = $(this).children().data("draggedColIndex");
+//			
+//				var diff = min_width - $(this).width();
+//		
+//				var next_col = $(".ListTable > thead > tr > th").get(col_index + 1);
+//				$(next_col).width($(next_col).width() - diff);
+//
+//				$(this)
+//					.removeClass("tooSmall")
+//					.width(min_width);
+//			});
 			
 			$(".ListTable > tbody > tr > td").each(function(){
 				
@@ -416,7 +425,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 					"background-color": "#669acc",
 					"width": "1px",
 					"height": "100%",
-					"right": "0px",
+					"right": 0,
 					"position": "absolute"
 				});
 			
@@ -427,11 +436,24 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 				.resizable({
 					handles: "e",
 					minWidth: min_width,
-					start:  function(event, ui)
+					start: function(event, ui)
 					{
 						$(this)
 							.css("outline","dotted #669acc 1px")
 							.data("originalWidth", $(head_col).width());
+						
+						var offset = $(this).offset();
+						
+						$("<div id='VerticalRuler'></div>")
+							.css({
+								"position": "absolute",
+								"background-color": "#669acc",
+								"width": 1,
+								"height": $(".ListTable").height() - 1,
+								"left": offset.left + $(this).width() - 1,
+								"top": offset.top
+							})
+							.appendTo("body");
 						
 //						for(var int = 0; int < all_widths.length; int++)
 //						{
@@ -472,13 +494,18 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 						if(new_width > old_width + next_col_width)
 						{
 							$(this).trigger("mouseup"); 
-							$(head_col).width(old_width);
-							$(next_col).width(next_col_old_width);
+							new_width = old_width;
+							next_col_width = next_col_old_width;
+							$(head_col).width(new_width);
+							$(next_col).width(next_col_width);
 						}
 						
 						$(".ResizableColumnHelper").each(function(){
 							$(this).width($(this).parent().width());
 						});
+						
+						var offset = $(this).offset();
+						$("#VerticalRuler").css("left", offset.left + $(this).width() - 1);
 						
 						$(this).data("originalWidth", $(head_col).width());
 						$(next_col).children().data("originalWidth", $(next_col).width());
@@ -495,6 +522,8 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 					{
 						$(this).css("outline","none");
 
+						$("#VerticalRuler").remove();
+						
 						all_widths = new Array();
 						$(".ListTable > thead > tr > th").each(function(){
 							all_widths.push($(this).width());
@@ -705,6 +734,13 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 			
 			var col_to_hide = $(".ListTable > thead > tr > th").get(i);
 			var col_to_add_width_to = $(".ListTable > thead > tr > th").get(i - 1);
+			var col_to_add_width_to_index = i - 1;
+			if($(col_to_hide).is(".resizable:first"))
+			{
+				col_to_add_width_to = $(".ListTable > thead > tr > th").get(i + 1);
+				col_to_add_width_to_index = i + 1;
+			}
+			
 			
 			var width = $(col_to_hide).width();
 			
@@ -713,33 +749,32 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 					"width": 0
 				}, 500, function(){		
 					
-			
-					
 					$(this)
-//						.css("padding", 0);
+//						.css("padding", 0)
 						.hide();
 					
 					$(".ListTable > tbody > tr").each(function(){
 						var body_col = $(this).children("td").get(i);
 						$(body_col).hide();
 					});
-					
-	
 				});
 			
 			$(col_to_hide).children()
-//				.data("hidden")
 				.data("originalWidth", width)
-				.data("widthAddedTo", i - 1);
+				.data("widthAddedTo", col_to_add_width_to_index);
 			
 			
 			$(col_to_add_width_to).animate({
 				"width": $(col_to_add_width_to).width() + width
 			}, 500, function(){
 
-				var remaining_width = $(col_to_hide).outerWidth();
-				var col_to_add_width_to_final_width = $(this).width() + remaining_width;
-				$(this).width(col_to_add_width_to_final_width);
+				//this does not work in ie apparently
+//				var remaining_width = $(col_to_hide).outerWidth();
+//				var col_to_add_width_to_final_width = $(col_to_add_width_to).width() + remaining_width;
+//				$(col_to_add_width_to).width(col_to_add_width_to_final_width);
+				
+				
+				
 				
 //				$(".ListTable > tbody > tr").each(function(){
 //					var body_col = $(this).children("td").get(i - 1);
@@ -748,7 +783,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 				
 			});
 			
-			
+	
 			
 			
 //			var header_col = $(".ListTable > thead > tr > th").get(i);

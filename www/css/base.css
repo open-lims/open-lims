@@ -40,6 +40,7 @@
 
 .ListTable th a 
 {
+	white-space: nowrap;
 	text-decoration: none;
 	color: black !important;
 }
@@ -66,7 +67,7 @@
 #ListTableOptionsTrigger
 {
 	z-index: 95;
-/* 	padding-left: 4px; */
+	padding-left: 4px;
 	border:solid white 2px;
 	border-bottom: 1px #C0C0C0 dotted;
 	background-color:#ffffff;
