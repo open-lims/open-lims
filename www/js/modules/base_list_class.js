@@ -295,6 +295,11 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 					$(column).addClass("presetWidth");
 					$(column).addClass("resizable");
 				}
+				else if($(column).attr("width").indexOf("em") != -1)
+				{
+					$(column).addClass("presetWidth");
+					$(column).addClass("resizable");
+				}
 				else
 				{
 					free_width -= $(column).outerWidth();

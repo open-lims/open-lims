@@ -36,9 +36,9 @@ class HTMLTemplate extends Template implements ConcreteTemplateInterface
 	 * @see TemplateInterface::__construct
 	 * @param string $file
 	 */
-	function __construct($file)
+	function __construct($file, $path = null)
 	{
-		parent::__construct($file);
+		parent::__construct($file, $path);
 		$this->replace_containers();
 	}
 	

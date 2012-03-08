@@ -56,7 +56,7 @@ function tooltip(element_id, message)
 				"top": e.pageY + offsetY,
 				"left": e.pageX + offsetX
 			});
-		});
+		}); 
 }
 
 function base_dialog_reuqest(type, url, data_params)

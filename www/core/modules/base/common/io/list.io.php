@@ -169,16 +169,31 @@ class List_IO
 			}
 			else
 			{
-				if ($value[2] != null)
+				if ($value[0])
 				{
-					$head .= "<th width='".$value[2]."' style='width:".$value[2].";'>".$value[0]."</th>";
+					if ($value[2] != null)
+					{
+						
+						$head .= "<th width='".$value[2]."' style='width:".$value[2].";'>".$value[0]."</th>";
+					}
+					else
+					{
+						$head .= "<th>".$value[0]."</th>";
+					}
 				}
 				else
 				{
-					$head .= "<th>".$value[0]."</th>";
+					if ($value[2] != null)
+					{
+						
+						$head .= "<th width='".$value[2]."' style='width:".$value[2].";'>&nbsp;</th>";
+					}
+					else
+					{
+						$head .= "<th>&nbsp;</th>";
+					}
 				}
 			}
-				
 		}
 		
 		$head .= "</tr></thead>";	

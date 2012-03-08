@@ -75,6 +75,11 @@ function data_browser()
 			}
 			var href = $(link).attr("href");
 			
+			if(href === undefined)
+			{
+				return false;
+			}
+			
 			var linked_folder_id  = href.split("&folder_id=")[1];
 			if(linked_folder_id != undefined)
 			{
@@ -223,6 +228,8 @@ function data_browser()
 	 */
 	function delete_selected_files()
 	{
+	
+		
 		var action = $("#DataBrowserActionSelect").children("option:selected").val();
 		$(".DataBrowserDeleteCheckbox:checked").each(function()
 		{
@@ -232,6 +239,7 @@ function data_browser()
 			{
 				var link = $(this).parent().parent().children("td:nth-child(3)").children().children().attr("href");
 				var folder_id = link.split("&folder_id=")[1];
+
 				$.ajax(
 				{
 					async : false,
@@ -241,11 +249,12 @@ function data_browser()
 					success : function(data) {}
 				});
 			}
-			else if($(type).text() == "Value")
+			else if(type == "Value")
 			{
 				var link = $(this).parent().parent().children("td:nth-child(3)").children().attr("href");
 				var split = link.split("&nav=data&value_id=");
 				var value_id = split[1].replace("&action=value_detail","");
+
 				$.ajax(
 				{
 					async : false,
@@ -255,11 +264,12 @@ function data_browser()
 					success : function(data) {}
 				});
 			}
-			else
+			else if(type == "File")
 			{
 				var link = $(this).parent().parent().children("td:nth-child(3)").children().attr("href");
 				var split = link.split("&nav=data&file_id=");
 				var file_id = split[1].replace("&action=file_detail","");
+
 				$.ajax(
 				{
 					async : false,
@@ -389,14 +399,16 @@ function data_browser()
 			var link = $(element).children("td:nth-child(3)").children().attr("href");
 			if($(element).children("td:nth-child(4)").text() == "File")
 			{
-				var split = link.split("&nav=data&file_id=");
-				var file_id = split[1].replace("&action=file_detail","");
+				var split_before = link.split("&file_id=");
+				var split_after = split_before[1].split("&");
+				var file_id = split_after[0];
 				load_context_sensitive_dialog(file_id,"file");
 			}
 			else if($(element).children("td:nth-child(4)").text() == "Value")
 			{
-				var split = link.split("&nav=data&value_id=");
-				var value_id = split[1].replace("&action=value_detail","");
+				var split_before = link.split("&value_id=");
+				var split_after = split_before[1].split("&");
+				var value_id = split_after[0];
 				load_context_sensitive_dialog(value_id,"value");
 			}
 			else
@@ -680,8 +692,8 @@ function data_browser()
 	 */
 	function init_menu(folder_id)
 	{
-//		$(".ListTable > thead > tr > th:first").html("<input type='checkbox' id='DataBrowserActionMasterCheckbox' name='' value=''></input>")
-		
+		$(".ListTable > thead > tr > th:first").html("<input type='checkbox' id='DataBrowserActionMasterCheckbox' name='' value=''></input>")
+
 		$.ajax({
 			type : "POST",
 			url : "ajax.php?nav=data&session_id="+get_array['session_id']+"&run=get_browser_menu",
@@ -823,6 +835,7 @@ function data_browser()
 				{
 					return;
 				}
+				
 				var container = $("<div>Do you really want to delete the selected items?</div>")
 				$(container).css({"text-align":"center","padding-top":"20px"});
 				$(container).dialog({"title" : "Confirm" ,  
@@ -859,8 +872,7 @@ function data_browser()
 				{
 					$(".DataBrowserDeleteCheckbox").removeAttr("checked");
 				}
-			});
-		
+			});		
 		$("#DataBrowserMenuImageBrowser")
 		.unbind("click")
 		.click(function()
@@ -871,6 +883,7 @@ function data_browser()
 			}
 			image_browser();
 		});
+
 	}
 	
 	/**

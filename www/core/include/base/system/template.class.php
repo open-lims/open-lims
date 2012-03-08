@@ -43,9 +43,16 @@ class Template implements TemplateInterface
 	 * @see TemplateInterface::__construct()
 	 * @param string $file_path
 	 */
-	protected function __construct($file_path)
+	protected function __construct($file_path, $folder_path = null)
 	{
-		$current_folder_file = constant("WWW_DIR")."/template/".self::$current_folder."/".$file_path;
+		if ($folder_path)
+		{
+			$current_folder_file = constant("WWW_DIR")."/".$folder_path."/".$file_path;
+		}
+		else
+		{
+			$current_folder_file = constant("WWW_DIR")."/template/".self::$current_folder."/".$file_path;
+		}
 		
 		if (file_exists($current_folder_file) == true)
 		{
@@ -54,19 +61,34 @@ class Template implements TemplateInterface
 		}
 		else
 		{
-			$fallback_folder_file = constant("WWW_DIR")."/template/".self::$fallback_folder."/".$file_path;
-			
-			if (file_exists($fallback_folder_file) == true)
+			if (!$folder_path)
 			{
-				$this->open_file($fallback_folder_file);
-				$this->file_path = $file_path;
+				$fallback_folder_file = constant("WWW_DIR")."/template/".self::$fallback_folder."/".$file_path;
+				
+				if (file_exists($fallback_folder_file) == true)
+				{
+					$this->open_file($fallback_folder_file);
+					$this->file_path = $file_path;
+				}
+				else
+				{
+					if (file_exists("template/".self::$fallback_folder."/".$file_path) == true)
+					{
+						$this->open_file("template/".self::$fallback_folder."/".$file_path);
+						$this->file_path = "template/".self::$fallback_folder."/".$file_path;
+					}
+					else
+					{
+						die("Template Engine: File Not Found!<br />".$file_path);
+					}
+				}
 			}
 			else
 			{
-				if (file_exists("template/".self::$fallback_folder."/".$file_path) == true)
+				if (file_exists($folder_path."/".$file_path) == true)
 				{
-					$this->open_file("template/".self::$fallback_folder."/".$file_path);
-					$this->file_path = "template/".self::$fallback_folder."/".$file_path;
+					$this->open_file($folder_path."/".$file_path);
+					$this->file_path = $folder_path."/".$file_path;
 				}
 				else
 				{

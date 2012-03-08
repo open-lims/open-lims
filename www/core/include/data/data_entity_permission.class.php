@@ -37,7 +37,9 @@ class DataEntityPermission implements DataEntityPermissionInterface
 	private $owner_id;
 	private $owner_group_id;
 	
-	private $folder_flag;
+	// private $folder_flag;
+	private $read_permission = false;
+	private $write_permission = false;
 	
 	/**
 	 * @see DataEntityPermissionInterface::__construct()
@@ -74,22 +76,19 @@ class DataEntityPermission implements DataEntityPermissionInterface
 	}
 	
 	/**
-	 * @see DataEntityPermissionInterface::set_folder_flag()
-	 * @param integer $folder_flag
-	 * @return bool
+	 * @see DataEntityPermissionInterface::set_write_permission()
 	 */
-	public function set_folder_flag($folder_flag)
+	public function set_read_permission()
 	{
-		if ($folder_flag)
-		{
-			$this->folder_flag = $folder_flag;
-			return true;
-		}
-		else
-		{
-			$this->folder_flag = null;
-			return false;
-		}
+		$this->read_permission = true;
+	}
+	
+	/**
+	 * @see DataEntityPermissionInterface::set_write_permission()
+	 */
+	public function set_write_permission()
+	{
+		$this->write_permission = true;
 	}
 	
 	/**
@@ -109,7 +108,11 @@ class DataEntityPermission implements DataEntityPermissionInterface
 		{
 			if ($this->automatic == true)
 			{	
-				if ($this->folder_flag == 1 and $intention == 1)
+				if ($this->read_permission == true and $intention == 1)
+				{
+					return true;
+				}
+				elseif ($this->write_permission == true and $intention == 2)
 				{
 					return true;
 				}
@@ -121,7 +124,15 @@ class DataEntityPermission implements DataEntityPermissionInterface
 					}
 					else
 					{
-						return false;
+						$group = new Group($this->owner_group_id);
+						if ($group->is_user_in_group($user->get_user_id()) == true and $intention == 1)
+						{
+							return true;	
+						}
+						else
+						{
+							return false;
+						}
 					}
 				}	
 			}

@@ -74,17 +74,7 @@ class AdminSystemLogAjax
 					{	
 						$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
 						$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
-		
-						if (strlen($list_array[$key][info]) > 20)
-						{
-							$list_array[$key][info] = substr($list_array[$key][info],0,20)."...";
-						}
-						
-						if (strlen($list_array[$key][file]) > 20)
-						{
-							$list_array[$key][file] = substr($list_array[$key][file],0,20)."...";
-						}
-						
+
 						$paramquery = $_GET;
 						$paramquery[id] = $list_array[$key][id];
 						$paramquery[action] = "detail";
