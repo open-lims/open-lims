@@ -372,7 +372,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 				
 				var index = $(this).parent().children().index($(this));
 								
-				if(fixed_widths.indexOf(index) !== -1)
+				if($.inArray(index,fixed_widths) !== -1)
 				{
 					return true;
 				}
@@ -403,7 +403,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 					.data("textWidth", body_col_text_width)
 					.data("originalText", body_col_text);
 				
-				resize_text(this, $(this).width());
+//				resize_text(this, $(this).width());
 			});
 		}
 		
@@ -734,7 +734,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 			
 			
 			$(col_to_add_width_to).animate({
-				"width": $(col_to_add_width_to).width() + width,
+				"width": $(col_to_add_width_to).width() + width
 			}, 500, function(){
 
 				var remaining_width = $(col_to_hide).outerWidth();
