@@ -42,12 +42,13 @@ class Session implements SessionInterface
 	
 	private $session;
 	private $user_id;
+	private $install;
 
 	/**
 	 * @see SessionInterface::__construct()
 	 * @param string $session_id
 	 */
-    function __construct($session_id)
+    function __construct($session_id, $install = false)
     {
     	if ($session_id == null)
     	{
@@ -61,6 +62,7 @@ class Session implements SessionInterface
 			$this->session			= new Session_Access($session_id);
 			$this->user_id			= $this->session->get_user_id();
     	}
+    	$this->install			= $install;
     }
     
     function __destruct()
@@ -137,8 +139,21 @@ class Session implements SessionInterface
 			$session_mktime = mktime((int)$session_time[0],(int)$session_time[1],(int)$session_time[2],(int)$session_date[1],(int)$session_date[2],(int)$session_date[0]);
 			
 			$current_mktime = mktime();
-			$session_timeout = Registry::get_value("base_session_timeout");
 			
+			if ($this->install == true)
+			{
+				$session_timeout = 3600;
+			}
+			else
+			{
+				$session_timeout = Registry::get_value("base_session_timeout");
+				
+				if (!is_numeric($session_timeout) or $session_timeout < 300)
+				{
+					$session_timeout = 3600;
+				}
+			}
+						
 			$max_session_mktime = $session_mktime+(int)$session_timeout;
 			
 			if ($current_mktime > $max_session_mktime)

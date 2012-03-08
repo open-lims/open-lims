@@ -64,9 +64,7 @@ class Folder extends DataEntity implements FolderInterface
 				$this->folder				= new Folder_Access($folder_id);
 	
 				parent::__construct($this->folder->get_data_entity_id());
-	
-				$this->data_entity_permission->set_folder_flag($this->folder->get_flag());
-				
+					
 				if ($this->data_entity_permission->is_access(1))
 				{
 					$this->read_access = true;

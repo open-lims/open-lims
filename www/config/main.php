@@ -24,7 +24,7 @@
 /**
  * 
  */
-$server['main_folder']							= "D:/open-lims";
+$server['main_folder']							= "D:/web/open-lims";
 
 $database['type'] 								= "postgres";
 $database['database'] 							= "open-lims";
@@ -32,8 +32,8 @@ $database['user'] 								= "dbadmin";
 $database['password']							= "dbadmin";
 
 // Primary Database Server
-$database['server']								= "localhost";
-$database['port'] 								= "";
+$database[0]['server']							= "localhost";
+$database[0]['port'] 							= "";
 
 // Secondary Database Server
 // $database[1]['server']						= "localhost";

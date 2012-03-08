@@ -635,7 +635,7 @@ class ProjectAjax
 				break;
 				
 				case(1):
-					if ($project_security->is_access(2, false) == true)
+					if ($project_security->is_access(3, false) == true)
 					{
 						if ($project->is_current_status_fulfilled())
 						{
@@ -649,7 +649,7 @@ class ProjectAjax
 				break;
 				
 				case(2):
-					if ($project_security->is_access(2, false) == true)
+					if ($project_security->is_access(3, false) == true)
 					{
 						if ($project->is_current_status_fulfilled())
 						{
@@ -670,7 +670,7 @@ class ProjectAjax
 			$template->set_var("next_status_name",$project->get_next_status_name());
 			
 			
-			if ($project_security->is_access(2, false) == true)
+			if ($project_security->is_access(3, false) == true)
 			{
 				// Status Buttons
 				

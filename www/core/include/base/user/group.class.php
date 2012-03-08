@@ -235,9 +235,9 @@ class Group implements GroupInterface
 	{
 		if (is_numeric($user_id))
 		{
-			$user_array = GroupHasUser_Access::list_users_by_group_id($this->group_id);
+			$group_array = GroupHasUser_Access::list_users_by_group_id($this->group_id);
 			
-			if (in_array($user_id, $user_array))
+			if (is_array($group_array) and in_array($user_id, $group_array))
 			{
 				return true;
 			}

@@ -1,0 +1,60 @@
+<script>
+$(document).ready(function()
+{
+	$.ajax(
+	{
+		type: "POST",
+		url: "ajax.php?run=get_modules",
+		data: '',
+		success: function(data)
+		{	
+			if (data)
+			{
+				var modules = $.parseJSON(data);
+				
+				for(var i = 0; i<=(modules.length-1); i++)
+				{
+					$.ajax(
+					{
+						type: "POST",
+						url: "ajax.php?run=get_table_row",
+						data: 'module='+modules[i][0],
+						async: false,
+						success: function(data)
+						{	
+							$("#InstallTable tr:last").after(data);
+						}
+					});
+				}
+			} 
+		}
+	});
+});
+</script>
+
+<div id='InstallContainer'>
+	<div id='InstallGlobal'>
+		<table id='InstallGlobalTable'>
+			<tr>
+				<td>Global Product Version:</td>
+				<td>[[VERSION]]</td>
+			</tr>
+		</table>
+	</div>
+	<br />
+	<table id='InstallTable'>
+		<tr>
+			<th>Module</th>
+			<th>Installed DB-Version</th>
+			<th>Available DB-Version</th>
+			<th>File-Version</th>
+			<th>Status</th>
+			<th></th>
+		</tr>
+	</table>
+	<br />
+	<input type='checkbox' [[TEMPLATE_DISABLED]] /> Install Default Templates<br />
+	<input type='checkbox' disabled='disabled' />Install Example Data<br />
+	<br />
+	<button id='InstallStart' [[BUTTON_DISABLED]]>[[BUTTON]]</button>
+</div>

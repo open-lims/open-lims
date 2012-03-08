@@ -68,7 +68,7 @@ class OrganisationUnitNavigationAjax
 							
 							foreach ($module_link_array as $array_key => $array_value)
 							{
-								if ($array_value['array']['nav'] == $_GET['nav'])
+								if ($array_value['array']['nav'] == $_GET['vnav'])
 								{
 									$module_link_array_key = $array_key;
 								}
@@ -241,7 +241,7 @@ class OrganisationUnitNavigationAjax
 							
 							foreach ($module_link_array as $array_key => $array_value)
 							{
-								if ($array_value['array']['nav'] == $_GET['nav'])
+								if ($array_value['array']['nav'] == $_GET['vnav'])
 								{
 									$module_link_array_key = $array_key;
 								}

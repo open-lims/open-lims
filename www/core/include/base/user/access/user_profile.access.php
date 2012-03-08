@@ -525,9 +525,18 @@ class UserProfile_Access
 	{
 		global $db;
 
-		if ($this->user_id and $title)
+		if ($this->user_id)
 		{
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET title = '".$title."' WHERE id = ".$this->user_id."";
+			if ($title)
+			{
+				$title_insert = "'".$title."'";
+			}
+			else
+			{
+				$title_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET title = ".$title_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -641,9 +650,18 @@ class UserProfile_Access
 	{
 		global $db;
 			
-		if ($this->user_id and $institution)
+		if ($this->user_id)
 		{
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET institution = '".$institution."' WHERE id = ".$this->user_id."";
+			if ($institution)
+			{
+				$institution_insert = "'".$institution."'";
+			}
+			else
+			{
+				$institution_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET institution = ".$institution_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -670,9 +688,18 @@ class UserProfile_Access
 	{
 		global $db;
 
-		if ($this->user_id and $department)
+		if ($this->user_id)
 		{
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET department = '".$department."' WHERE id = ".$this->user_id."";
+			if ($department)
+			{
+				$department_insert = "'".$department."'";
+			}
+			else
+			{
+				$department_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET department = ".$department_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -699,9 +726,18 @@ class UserProfile_Access
 	{
 		global $db;
 		
-		if ($this->user_id and $street)
+		if ($this->user_id)
 		{
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET street = '".$street."' WHERE id = ".$this->user_id."";
+			if ($street)
+			{
+				$street_insert = "'".$street."'";
+			}
+			else
+			{
+				$street_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET street = ".$street_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -728,9 +764,18 @@ class UserProfile_Access
 	{
 		global $db;
 			
-		if ($this->user_id and $zip)
+		if ($this->user_id)
 		{
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET zip = '".$zip."' WHERE id = ".$this->user_id."";
+			if ($zip)
+			{
+				$zip_insert = "'".$zip."'";
+			}
+			else
+			{
+				$zip_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET zip = ".$zip_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -757,9 +802,18 @@ class UserProfile_Access
 	{
 		global $db;
 			
-		if ($this->user_id and $city)
+		if ($this->user_id)
 		{
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET city = '".$city."' WHERE id = ".$this->user_id."";
+			if ($city)
+			{
+				$city_insert = "'".$city."'";
+			}
+			else
+			{
+				$city_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET city = ".$city_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res)){
@@ -785,9 +839,18 @@ class UserProfile_Access
 	{
 		global $db;
 		
-		if ($this->user_id and $country)
+		if ($this->user_id)
 		{
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET country = '".$country."' WHERE id = ".$this->user_id."";
+			if ($country)
+			{
+				$country_insert = "'".$country."'";
+			}
+			else
+			{
+				$country_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET country = ".$country_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -814,9 +877,18 @@ class UserProfile_Access
 	{
 		global $db;
 		
-		if ($this->user_id and $phone)
+		if ($this->user_id)
 		{
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET phone = '".$phone."' WHERE id = ".$this->user_id."";
+			if ($phone)
+			{
+				$phone_insert = "'".$phone."'";
+			}
+			else
+			{
+				$phone_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET phone = ".$phone_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -843,9 +915,9 @@ class UserProfile_Access
 	{	
 		global $db;
 		
-		if ($this->user_id and is_numeric($icq))
+		if ($this->user_id)
 		{
-			if ($icq)
+			if (is_numeric($icq))
 			{
 				$icq_insert = $icq;
 			}
@@ -881,9 +953,18 @@ class UserProfile_Access
 	{	
 		global $db;
 		
-		if ($this->user_id and $msn)
+		if ($this->user_id)
 		{
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET msn = '".$msn."' WHERE id = ".$this->user_id."";
+			if ($msn)
+			{
+				$msn_insert = "'".$msn."'";
+			}
+			else
+			{
+				$msn_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET msn = ".$msn_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -910,9 +991,18 @@ class UserProfile_Access
 	{
 		global $db;
 			
-		if ($this->user_id and $yahoo)
+		if ($this->user_id)
 		{
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET yahoo = '".$yahoo."' WHERE id = ".$this->user_id."";
+			if ($yahoo)
+			{
+				$yahoo_insert = "'".$yahoo."'";
+			}
+			else
+			{
+				$yahoo_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET yahoo = ".$yahoo_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -939,9 +1029,18 @@ class UserProfile_Access
 	{
 		global $db;
 		
-		if ($this->user_id and $aim)
+		if ($this->user_id)
 		{
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET aim = '".$aim."' WHERE id = ".$this->user_id."";
+			if ($aim)
+			{
+				$aim_insert = "'".$aim."'";
+			}
+			else
+			{
+				$aim_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET aim = ".$aim_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -968,9 +1067,18 @@ class UserProfile_Access
 	{	
 		global $db;
 
-		if ($this->user_id and $skype)
+		if ($this->user_id)
 		{
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET skype = '".$skype."' WHERE id = ".$this->user_id."";
+			if ($skype)
+			{
+				$skype_insert = "'".$skype."'";
+			}
+			else
+			{
+				$skype_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET skype = ".$skype_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))

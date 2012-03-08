@@ -35,18 +35,12 @@ $database['user'] 								= "";
 $database['password']							= "";
 
 // Primary Database Server
-$database['server']								= "localhost";
-$database['port'] 								= "";
+$database[0]['server']								= "localhost";
+$database[0]['port'] 								= "";
 
 // Secondary Database Server
 // $database[1]['server']						= "localhost";
 // $database[1]['port'] 						= "";
-
-
-$server['os']									= "linux";
-$server['user']									= "John Doe & Co.";
-$server['function']								= "test server";
-$server['html_title']							= "Open-LIMS";
 
 
 $mail['enable'] 								= true;
@@ -77,15 +71,6 @@ $server['binary']['java']['xmx']				= "";
 
 
 $server['imagick']['enable']					= true;	
-
-
-$server['update_check']['enable']				= false;
-$server['update_check']['url']					= "http://update.open-lims.org/check.php";
-
-
-$server['security']['session_timeout']			= 36000;
-$server['security']['max_ip_failed_logins']		= 10;
-$server['security']['max_ip_lead_time']			= 36000;
 
 
 $server['behaviour']['debug_mode']				= false;

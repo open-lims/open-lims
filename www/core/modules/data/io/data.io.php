@@ -111,9 +111,6 @@ class DataIO
 		$list->add_column("Size","size",true,null);
 		$list->add_column("Owner","owner",true,null);
 		$list->add_column("Permission","permission",false,null);
-				
-
-		// !!! [...] !!!
 		
 		$folder = Folder::get_instance($folder_id);	
 		

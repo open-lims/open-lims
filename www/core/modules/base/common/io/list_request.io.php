@@ -29,6 +29,7 @@ class ListRequest_IO
 {	
 	private $empty_message;
 	
+	private $first_line_entry_class;
 	private $first_line_entry;
 	
 	private $array;
@@ -39,10 +40,11 @@ class ListRequest_IO
     	$this->empty_message = $message;
     }
     
-    public function add_first_line($array)
+    public function add_first_line($array, $class = null)
     {
    		if (is_array($array))
     	{
+    		$this->first_line_entry_class = $class;
     		$this->first_line_entry = $array;
     		return true;
     	}
@@ -63,7 +65,15 @@ class ListRequest_IO
     	{
     		if (is_array($this->first_line_entry))
     		{
-    			$return .= "<tr class ='trLightGrey'>";
+    			if ($this->first_line_entry_class)
+    			{
+    				$return .= "<tr class ='trLightGrey ".$this->first_line_entry_class."'>";
+    			}
+    			else
+    			{
+    				$return .= "<tr class ='trLightGrey'>";
+    			}
+    			
     			
     			foreach ($this->rows as $key => $value)
 				{
