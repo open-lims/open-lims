@@ -171,16 +171,7 @@ class FileAjax
 						unset($list_array[$key][name]);
 						$list_array[$key][name][link]		= $params;
 						$list_array[$key][name][content] 	= $tmp_name;
-						
-						if (strlen($tmp_name) > 40)
-						{
-							$list_array[$key][version] = substr($tmp_name, 0 , 40)."...";
-						}
-						else
-						{
-							$list_array[$key][version] = $tmp_name;
-						}
-						
+												
 						$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
 						$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
 						

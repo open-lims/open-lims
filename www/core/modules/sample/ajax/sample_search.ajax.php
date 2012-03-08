@@ -92,24 +92,6 @@ class SampleSearchAjax
 						}
 					}
 					
-					if (strlen($list_array[$key][name]) > 17)
-					{
-						$list_array[$key][name] = substr($list_array[$key][name],0,17)."...";
-					}
-					else
-					{
-						$list_array[$key][name] = $list_array[$key][name];
-					}
-					
-					if (strlen($list_array[$key][template]) > 25)
-					{
-						$list_array[$key][template] = substr($list_array[$key][template],0,25)."...";
-					}
-					else
-					{
-						$list_array[$key][template] = $list_array[$key][template];
-					}
-					
 					$sample_id = $list_array[$key][id];
 					$sample_security = new SampleSecurity($sample_id);
 					

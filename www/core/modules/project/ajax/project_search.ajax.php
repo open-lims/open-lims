@@ -67,12 +67,7 @@ class ProjectSearchAjax
 					$tmp_project_name = $list_array[$key][name];
 					unset($list_array[$key][name]);
 					$list_array[$key][name][content] = $tmp_project_name;
-					$list_array[$key][name][link] = $project_params;
-							
-	
-					if (strlen($value[template]) > 20) {
-						$list_array[$key][template] = substr($list_array[$key][template],0,20).".";
-					}
+					$list_array[$key][name][link] = $project_params;			
 				}
 			}
 			else
