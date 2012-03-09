@@ -22,33 +22,37 @@
  */
 
 /**
- * Extension Request Class
+ * IO Class of the test extension
  * @package extension
  */
-class ExtensionRequest
+class TestExtensionIO
 {
-	public static function ajax_handler()
+	public static $template_path;
+	
+	public static function set_template_path($template_path)
 	{
-		
+		self::$template_path = $template_path;
 	}
 	
-	public static function io_handler()
-	{
-		if ($_GET['extension'])
+	public static function start()
+	{		
+		$template = new HTMLTemplate("start.html", self::$template_path);
+		
+		require_once("extensions/test_extension/classes/test.class.php");
+		$test = new Test(null);
+		$content = $test->get_content();
+		
+		if ($content)
 		{
-			$extension = new Extension($_GET['extension']);
-
-			$main_file = constant("EXTENSION_DIR")."/".$extension->get_folder()."/".$extension->get_main_file();
-			$main_class = $extension->get_class();
-			
-			require_once($main_file);
-			
-			$main_class::main();
+			$content = str_replace("\n","<br />", $content);
+			$template->set_var("content", $content);
 		}
 		else
 		{
-			require_once("io/extension.io.php");
-			ExtensionIO::home();
+			$template->set_var("content", "empty");
 		}
+
+		$template->output();
 	}
 }
+?>

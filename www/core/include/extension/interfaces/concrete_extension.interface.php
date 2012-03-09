@@ -22,33 +22,19 @@
  */
 
 /**
- * Extension Request Class
+ * Concrete Extension Interface
  * @package extension
  */
-class ExtensionRequest
+interface ConreteExtensionInterface
 {
-	public static function ajax_handler()
-	{
-		
-	}
+	public static function get_icon();
 	
-	public static function io_handler()
-	{
-		if ($_GET['extension'])
-		{
-			$extension = new Extension($_GET['extension']);
-
-			$main_file = constant("EXTENSION_DIR")."/".$extension->get_folder()."/".$extension->get_main_file();
-			$main_class = $extension->get_class();
-			
-			require_once($main_file);
-			
-			$main_class::main();
-		}
-		else
-		{
-			require_once("io/extension.io.php");
-			ExtensionIO::home();
-		}
-	}
+	public static function get_description();
+	
+	public static function push_data($data);
+	
+	public static function get_data_status($status_id);
+	
+	public static function main();
 }
+?>

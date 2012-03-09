@@ -1026,7 +1026,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 				$counter = 0;
 				$type_counter = 0;
 				$category_counter = 0;
-	
+				
 				if (is_array($requirements_array) and count($requirements_array) >= 1)
 				{
 					foreach($requirements_array as $key => $value)
@@ -1074,7 +1074,17 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						{
 							$return_array[$counter][category_id][$category_counter] = $value[id];
 							$category_counter++;
-						}					
+						}		
+
+						if ($value[xml_element] == "extension" and !$value[close])
+						{
+							$return_array[$counter][name] = "Extension";
+						}
+						
+						if ($value[xml_element] == "extension" and $value[close] == "1")
+						{
+							$counter++;
+						}
 					}
 				}
 				

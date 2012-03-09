@@ -677,7 +677,7 @@ class ProjectAjax
 				$project_template = new ProjectTemplate($project->get_template_id());
 				$current_status_requirements 	= $project->get_current_status_requirements($project->get_current_status_id());
 				$current_fulfilled_requirements = $project->get_fulfilled_status_requirements();
-							
+				
 				$result = array();
 				$counter = 0;
 				

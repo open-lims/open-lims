@@ -123,6 +123,7 @@ class Security implements SecurityInterface
 			case("run"):
 			case("dialog"):
 			case("retrace"):
+			case("extension"):
 				
 			case("action"):
 			case("aspect"):

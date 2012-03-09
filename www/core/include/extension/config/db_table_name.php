@@ -1,6 +1,6 @@
-<?php
+<?php 
 /**
- * @package extension
+ * @package item
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2012 by Roman Konertz
@@ -22,33 +22,7 @@
  */
 
 /**
- * Extension Request Class
- * @package extension
+ * 
  */
-class ExtensionRequest
-{
-	public static function ajax_handler()
-	{
-		
-	}
-	
-	public static function io_handler()
-	{
-		if ($_GET['extension'])
-		{
-			$extension = new Extension($_GET['extension']);
-
-			$main_file = constant("EXTENSION_DIR")."/".$extension->get_folder()."/".$extension->get_main_file();
-			$main_class = $extension->get_class();
-			
-			require_once($main_file);
-			
-			$main_class::main();
-		}
-		else
-		{
-			require_once("io/extension.io.php");
-			ExtensionIO::home();
-		}
-	}
-}
+	define("EXTENSION_TABLE", "core_extensions");
+?>
