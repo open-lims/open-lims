@@ -527,28 +527,31 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    $return_array = array();
 		    $status_found = false;
 		    
-		    foreach($xml_array as $key => $value)
+		    if (is_array($xml_array) and count($xml_array) >= 1)
 		    {
-		    	$value[0] = trim(strtolower($value[0]));
-				$value[1] = trim(strtolower($value[1]));
-				$value[2] = trim(strtolower($value[2]));
-		    	
-	    		if ($value[1] == "status" and is_numeric($value[3][id]))
-	    		{
-		    		if ($status_found == false)
+			    foreach($xml_array as $key => $value)
+			    {
+			    	$value[0] = trim(strtolower($value[0]));
+					$value[1] = trim(strtolower($value[1]));
+					$value[2] = trim(strtolower($value[2]));
+			    	
+		    		if ($value[1] == "status" and is_numeric($value[3][id]))
 		    		{
-		    			if ($value[3][id] == $status_id)
-		    			{
-		    				$status_found = true;
-		    			}
-		    		}
-		    		else
-		    		{
-		    			return $value[3][id];
-		    		}
-		    	}
+			    		if ($status_found == false)
+			    		{
+			    			if ($value[3][id] == $status_id)
+			    			{
+			    				$status_found = true;
+			    			}
+			    		}
+			    		else
+			    		{
+			    			return $value[3][id];
+			    		}
+			    	}
+			    }
 		    }
-			return 2;
+		    return 2;
 		}
 		else
 		{

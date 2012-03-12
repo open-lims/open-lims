@@ -194,7 +194,7 @@ class Xml implements XmlInterface
 				}	
 			}
 			else
-			{
+			{				
 				$return_array[$return_array_count][0] = $layer;
 				
 				$xml_tag_type_begin = 0;
@@ -293,6 +293,13 @@ class Xml implements XmlInterface
 				{
 					$return_array[$return_array_count][3] = false;
 				}
+				$return_array_count++;
+				
+				$return_array[$return_array_count][0] = $layer;
+				$return_array[$return_array_count][1] = $xml_tag_type;
+				$return_array[$return_array_count][2] = "#";
+				$return_array[$return_array_count][3] = "#";
+				
 				$return_array_count++;
 			}
 			unset ($xml_tag_type_end_brace);
