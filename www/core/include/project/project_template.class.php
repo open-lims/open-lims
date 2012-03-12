@@ -551,7 +551,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 			    	}
 			    }
 		    }
-			return 2;
+		    return 2;
 		}
 		else
 		{
