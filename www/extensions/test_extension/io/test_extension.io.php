@@ -34,9 +34,28 @@ class TestExtensionIO
 		self::$template_path = $template_path;
 	}
 	
-	public static function start()
-	{		
+	public static function start($data)
+	{
 		$template = new HTMLTemplate("start.html", self::$template_path);
+		
+		$content = "";
+		
+		foreach($data as $key => $value)
+		{
+			$content .= " ".$value;
+		}
+		
+		$template->set_var("content", $content);
+		
+		$template->set_var("retrace_params", http_build_query(Retrace::resovle_retrace_string($_GET['retrace']),'','&'));
+
+		
+		$template->output();
+	}
+	
+	public static function home()
+	{		
+		$template = new HTMLTemplate("home.html", self::$template_path);
 		
 		require_once("extensions/test_extension/classes/test.class.php");
 		$test = new Test(null);

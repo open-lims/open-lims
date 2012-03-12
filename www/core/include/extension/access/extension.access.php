@@ -485,6 +485,35 @@ class Extension_Access
 			return null;
 		}
 	}
+	
+	/**
+	 * @param string $identifer
+	 * @return array
+	 */
+	public static function get_id_by_identifer($identifer)
+	{
+		global $db;
+
+		if ($identifer)
+		{
+			$sql = "SELECT id FROM ".constant("EXTENSION_TABLE")." WHERE identifer = '".$identifer."'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data['id'])
+			{
+				return $data['id'];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
 }
 	
 ?>

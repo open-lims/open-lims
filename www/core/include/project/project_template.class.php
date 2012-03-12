@@ -455,6 +455,11 @@ class ProjectTemplate implements ProjectTemplateInterface
 			    			$return_array[$counter]['folder'] 		= $value[3]['folder'];
 			    		}
 			    		
+			    		if ($value[3]['identifer'])
+			    		{
+			    			$return_array[$counter]['identifer'] 	= $value[3]['identifer'];
+			    		}
+			    		
 			    		$counter++;
 		    		}
 		    		else

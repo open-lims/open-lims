@@ -685,44 +685,68 @@ class ProjectAjax
 				{
 					foreach($current_status_requirements as $key => $value)
 					{
-						$paramquery = array();
-						$paramquery[username] = $_GET[username];
-						$paramquery[session_id] = $_GET[session_id];
-						$paramquery[nav] = "project";
-						$paramquery[run] = "item_add";
-						$paramquery[project_id] = $_GET[project_id];
-						$paramquery[dialog] = $value[type];
-						$paramquery[key] = $key;
-						$paramquery[retrace] = Retrace::create_retrace_string();
-						unset($paramquery[nextpage]);
-						$params = http_build_query($paramquery,'','&#38;');
-	
-						$result[$counter][name] = $value[name];
-	
-						if ($current_fulfilled_requirements[$key] == true)
-						{
-							if ($value[occurrence] == "multiple")
-							{
-								$result[$counter][status] = 2;
-							}
-							else
-							{
-								$result[$counter][status] = 0;
-							}
-						}
-						else
-						{
-							$result[$counter][status] = 1;
-						}
-	
-						if ($value[requirement] == "optional")
-						{
-							$result[$counter][name] = $result[$counter][name]." (optional)";
-						}
+						switch ($value['element_type']):
 						
-						$result[$counter][params] = $params;					
+							case "item":
+								$paramquery = array();
+								$paramquery[username] = $_GET[username];
+								$paramquery[session_id] = $_GET[session_id];
+								$paramquery[nav] = "project";
+								$paramquery[run] = "item_add";
+								$paramquery[project_id] = $_GET[project_id];
+								$paramquery[dialog] = $value[type];
+								$paramquery[key] = $key;
+								$paramquery[retrace] = Retrace::create_retrace_string();
+								$params = http_build_query($paramquery,'','&#38;');
+			
+								$result[$counter][name] = $value[name];
+			
+								if ($current_fulfilled_requirements[$key] == true)
+								{
+									if ($value[occurrence] == "multiple")
+									{
+										$result[$counter][status] = 2;
+									}
+									else
+									{
+										$result[$counter][status] = 0;
+									}
+								}
+								else
+								{
+									$result[$counter][status] = 1;
+								}
+			
+								if ($value[requirement] == "optional")
+								{
+									$result[$counter][name] = $result[$counter][name]." (optional)";
+								}
+								
+								$result[$counter][params] = $params;					
+								
+								$counter++;
+							break;
+							
+							case "extension":
+								$paramquery = array();
+								$paramquery[username] = $_GET[username];
+								$paramquery[session_id] = $_GET[session_id];
+								$paramquery[nav] = "project";
+								$paramquery[run] = "extension";
+								$paramquery[project_id] = $_GET[project_id];
+								$paramquery[extension] = $value[extension];
+								$paramquery[retrace] = Retrace::create_retrace_string();
+								$params = http_build_query($paramquery,'','&#38;');
+			
+								$result[$counter][status] = 1;
+								
+								$result[$counter][name] = $value[name];
+								$result[$counter][params] = $params;					
+								
+								$counter++;
+							break;
 						
-						$counter++;
+						endswitch;
 					}		
 				}
 				

@@ -89,5 +89,11 @@ class Extension
 			return null;
 		}
 	}
+	
+	
+	public static function get_id_by_identifer($identifer) 
+	{
+		return Extension_Access::get_id_by_identifer($identifer);
+	}
 }
 ?>

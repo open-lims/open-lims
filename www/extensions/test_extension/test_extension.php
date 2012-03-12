@@ -49,9 +49,9 @@ class TestExtension implements ConreteExtensionInterface
 	 */
 	public static function push_data($data)
 	{
-		require_once("classes/test.class.php");
-		$test = new Test(null);
-		return $test->start_analyis();
+		require_once("io/test_extension.io.php");
+		TestExtensionIO::set_template_path("extensions/test_extension/template");
+		TestExtensionIO::start($data);
 	}
 	
 	/**
@@ -69,7 +69,7 @@ class TestExtension implements ConreteExtensionInterface
 	{
 		require_once("io/test_extension.io.php");
 		TestExtensionIO::set_template_path("extensions/test_extension/template");
-		TestExtensionIO::start();
+		TestExtensionIO::home();
 	}
 }
 ?>

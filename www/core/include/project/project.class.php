@@ -1034,6 +1034,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						if ($value[xml_element] == "item" and !$value[close])
 						{
 							$in_item = true;
+							$return_array[$counter][element_type] = "item";
 							$return_array[$counter][type] = $value[type];
 							$return_array[$counter][name] = $value[name];
 							
@@ -1078,7 +1079,9 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 
 						if ($value[xml_element] == "extension" and !$value[close])
 						{
+							$return_array[$counter][element_type] = "extension";
 							$return_array[$counter][name] = "Extension";
+							$return_array[$counter][extension] = $value[identifer];
 						}
 						
 						if ($value[xml_element] == "extension" and $value[close] == "1")

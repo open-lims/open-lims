@@ -737,6 +737,39 @@ class ProjectRequest
 				}
 			break;
 			
+			
+			// Extension
+
+			case("extension"):
+				if ($_GET['extension'])
+				{
+					$extension_id = Extension::get_id_by_identifer($_GET['extension']);
+					if ($extension_id)
+					{
+						$extension = new Extension($extension_id);
+						
+						
+						$main_file = constant("EXTENSION_DIR")."/".$extension->get_folder()."/".$extension->get_main_file();
+						$main_class = $extension->get_class();
+						
+						require_once($main_file);
+						
+						$project_item = new ProjectItem($_GET['project_id']);
+						
+						$main_class::push_data($project_item->get_project_items());
+					}
+					else
+					{
+						// Exception
+					}
+				}
+				else
+				{
+					// Exception
+				}
+			break;
+			
+			
 			// Default
 			
 			default:
