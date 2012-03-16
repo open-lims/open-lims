@@ -191,7 +191,8 @@ html,body
 }
 .NavigationButtonDown
 {
-	padding: 11px 0px 0 1px;
+/* 	padding: 11px 0px 0 1px; */
+	padding: 0px 0px 0 1px;
 	background-image: url('../images/tabs/tab_down.png');
 	background-repeat:no-repeat;
 	background-position: top left;
@@ -204,6 +205,13 @@ html,body
 	background-repeat:no-repeat;
 	background-position: top right;
 }
+
+/* Arrow Down */
+.NavigationButtonDown img
+{
+margin: 11px 0px 0 1px;
+}
+
 
 /* General for Active and Hover */
 #NavigationMenu li.ActiveBlue a span.NavigationButton,
@@ -261,7 +269,9 @@ html,body
 #NavigationMenu li.Orange a:hover span.NavigationButtonDown,
 #NavigationMenu li.Grey a:hover span.NavigationButtonDown
 {
-	padding: 16px 1px 0 0px;
+	
+	padding: 0px 1px 0 0px;
+/* 	padding: 16px 1px 0 0px; */
 }
 
 /* Active Blue */
