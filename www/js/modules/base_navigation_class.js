@@ -216,8 +216,8 @@ function base_scrollable_navigation_tabs()
 		
 		$(tab_container)
 			.css({
-				"margin-left": 0, //reset margin, was 25px
-				"width": total_tab_width //set width to max to prevent line break -> position() not correct
+				"margin-left": 0, //reset margin, was 25px TODO css change
+				"width": total_tab_width //set width to max to prevent line break -> position() would not be correct
 			});
 	
 		var camera = $("<div id='NavigationMenuCamera'></div>")
@@ -228,46 +228,11 @@ function base_scrollable_navigation_tabs()
 			});
 		$(tab_container).wrap(camera);
 		
-	
 		if(total_tab_width > max_total_tab_width)
 		{
-			append_arrows();
-			
-			//(forward)
-	//		var last_visible_tab_num = 0;
-	//		var new_total_tab_width = 0;
-	//		$(tab_container).children().each(function(i){
-	//			new_total_tab_width += $(this).width();
-	//			if(new_total_tab_width > max_total_tab_width)
-	//			{
-	//				last_visible_tab_num = i; //-1
-	//			}
-	//		});
-			
-			
-			
+			append_arrows();		
 			hide_invisible_tabs_and_center();
-			
-			
-			//needed? hide_invisible_tabs_and_center()
-			
-//			var last_visible_tab_num = num_tabs ;
-//			var new_total_tab_width = total_tab_width;
-//			while(true)
-//			{
-//				var last_tab_width = $(tab_container).children(":nth-child("+last_visible_tab_num+")").width();
-//				new_total_tab_width -= last_tab_width;		
-//				if(new_total_tab_width > max_total_tab_width)
-//				{
-//					last_visible_tab_num--;
-//				}
-//				else
-//				{
-//					break;
-//				}
-//			}
-//			
-//			hide_tabs_after(last_visible_tab_num);
+			disable_arrows_if_needed();
 		}
 	}
 	
@@ -291,10 +256,15 @@ function base_scrollable_navigation_tabs()
 			})
 			.click(function()
 			{
+				if($(this).hasClass("Disabled"))
+				{
+					return false;
+				}
+				
 				if($(this).data("hiddenTabsActive") !== true)
 				{
 					$(this).rotate({animateTo:-90,duration:300});
-					show_hidden_tabs_menu(left_arrow_x, left_arrow_y + 20, true);
+					show_hidden_tabs_menu(left_arrow_x, left_arrow_y + 20, left_arrow);
 					$(this).data("hiddenTabsActive", true);
 				}
 				else
@@ -315,10 +285,15 @@ function base_scrollable_navigation_tabs()
 			})
 			.click(function()
 			{
+				if($(this).hasClass("Disabled"))
+				{
+					return false;
+				}
+				
 				if($(this).data("hiddenTabsActive") !== true)
 				{
 					$(this).rotate({animateTo:90,duration:300})
-					show_hidden_tabs_menu(right_arrow_x, right_arrow_y + 20, false);
+					show_hidden_tabs_menu(right_arrow_x - 95, right_arrow_y + 20, right_arrow);
 					$(this).data("hiddenTabsActive", true);
 				}
 				else
@@ -331,7 +306,36 @@ function base_scrollable_navigation_tabs()
 			.appendTo("#NavigationMenuCamera");
 	}
 	
-	function show_hidden_tabs_menu(x, y, left)
+	function disable_arrows_if_needed()
+	{
+		if(!$("#NavigationMenu").children(":first").hasClass("ToBeHidden"))
+		{
+			$("#NavigationMenuArrowLeft")
+				.attr("src","images/1leftarrow_inactive.png")
+				.addClass("Disabled");
+		}
+		else
+		{
+			$("#NavigationMenuArrowLeft")
+				.attr("src","images/1leftarrow.png")
+				.removeClass("Disabled");
+		}
+		
+		if(!$("#NavigationMenu").children(":last").hasClass("ToBeHidden"))
+		{
+			$("#NavigationMenuArrowRight")
+				.attr("src","images/1rightarrow_inactive.png")
+				.addClass("Disabled");
+		}
+		else
+		{
+			$("#NavigationMenuArrowRight")
+				.attr("src","images/1rightarrow.png")
+				.removeClass("Disabled");
+		}
+	}
+	
+	function show_hidden_tabs_menu(x, y, arrow)
 	{
 		var hidden_tabs_menu = $("<div id='NavigationMenuHiddenTabsMenu'></div>")
 			.css(
@@ -340,22 +344,35 @@ function base_scrollable_navigation_tabs()
 				"width":100,
 				"background-color":"white",
 				"border":"solid black 1px",
-				"padding":"2px",
+				"padding":"5px",
 				"font-family":"arial",
 				"font-size":"12px",
 				"z-index":"200",
 				"top": y,
-				"left": x
+				"left": x,
+			    "-moz-border-radius": 10,
+		    	"-webkit-border-radius": 10,
+		    	"-khtml-border-radius": 10,
+		    	"border-radius": 10
 			})
 			.appendTo("#NavigationMenuCamera")
-			.fadeIn(200);
+			.fadeIn(200)
+			.click(function(evt){
+				if($(evt.target).hasClass("NavigationMenuHiddenTabsMenuEntry"))
+				{
+					var tab_to_be_focused = $(evt.target).data("RelatesToTab");
+					focus_tab(tab_to_be_focused);
+					$(arrow).trigger("click");
+				}
+				
+			});
 		
-		if(left)
+		if($(arrow).attr("id") === "NavigationMenuArrowLeft")
 		{
 			for ( var int = 1; int <= num_tabs; int++) 
 			{
 				var tab_to_check = $(tab_container).children(":nth-child("+int+")");
-				if($(tab_to_check).is(":visible"))
+				if(!$(tab_to_check).hasClass("ToBeHidden"))
 				{
 					break;
 				}
@@ -371,7 +388,7 @@ function base_scrollable_navigation_tabs()
 			for ( var int = num_tabs; int > 0; int--) 
 			{
 				var tab_to_check = $(tab_container).children(":nth-child("+int+")");
-				if($(tab_to_check).is(":visible"))
+				if(!$(tab_to_check).hasClass("ToBeHidden"))
 				{
 					break;
 				}
@@ -382,23 +399,12 @@ function base_scrollable_navigation_tabs()
 				}
 			}
 		}
-		
+
 		function get_menu_entry_for_tab(tab)
 		{
-			var entry = $("<div>"+$(tab).find(".NavigationButtonContent").text()+"</div>")
+			var entry = $("<div class='NavigationMenuHiddenTabsMenuEntry'>"+$(tab).find(".NavigationButtonContent").text()+"</div>")
 				.data("RelatesToTab", tab)
 				.css("cursor","pointer")
-				.click(function(){
-					focus_tab($(this).data("RelatesToTab"));
-					if(left)
-					{
-						$("#NavigationMenuArrowLeft").trigger("click");
-					}
-					else
-					{
-						$("#NavigationMenuArrowRight").trigger("click");
-					}
-				});
 			return entry;
 		}
 	}
@@ -410,72 +416,57 @@ function base_scrollable_navigation_tabs()
 		});
 	}
 	
-	function hide_tabs_before(tab_num) //needed?
-	{
-		for (var int = tab_num; int > 0; int--) 
-		{
-			$(tab_container).children(":nth-child("+int+")").hide();
-		}
-	}
-	
-	function hide_tabs_after(tab_num)
-	{
-		for (var int = tab_num; int <= num_tabs; int++) 
-		{
-			$(tab_container).children(":nth-child("+int+")").hide();
-		}
-	}
-	
 	function focus_tab(tab)
-	{
-		$(tab_container).children().show();
-		
+	{		
 		var tab_to_focus_min_x = $(tab).position().left;
-		var tab_to_focus_max_x = $(tab).position().left + $(tab).width();
+		var tab_to_focus_max_x = tab_to_focus_min_x + $(tab).width();
 		
 		var current_camera_min_x = offset;
 		var current_camera_max_x = offset + max_total_tab_width;
 				
 		if(tab_to_focus_min_x >= current_camera_max_x || tab_to_focus_max_x >= current_camera_max_x)
 		{ //tab is on the right side and not visible 	 //tab is on the right side and half visible
-			offset += - (tab_to_focus_max_x - current_camera_max_x);
-//			console.log("tab: "+tab_to_focus_min_x+" - "+tab_to_focus_max_x);
-//			console.log("cam: "+current_camera_min_x+" - "+current_camera_max_x);
+			offset += tab_to_focus_max_x - current_camera_max_x;
 		}
 		else if(tab_to_focus_max_x <= current_camera_min_x || tab_to_focus_min_x <= current_camera_min_x)
 		{ //tab is on the left side and not visible			//tab is on the left side and half visible
-			offset += current_camera_min_x - tab_to_focus_min_x;
-		}
-		else
-		{//strange
-			console.log("strange");
-//			console.log("tab: "+tab_to_focus_min_x+" - "+tab_to_focus_max_x);
-//			console.log("cam: "+current_camera_min_x+" - "+current_camera_max_x);
+			offset -= current_camera_min_x - tab_to_focus_min_x;
 		}
 		
 		scroll_camera_to_offset(true);
-//		hide_invisible_tabs_and_center();
 	}
 	
 	function scroll_camera_to_offset(animate)
 	{
 		if(animate)
 		{
-			$("#NavigationMenuCamera").animate({
-				"margin-left": (offset + 25)
-			}, 100, function(){});
+			$("#NavigationMenu").animate({
+				"margin-left": -offset
+				
+			}, 100, function(){
+				
+				$(".ToBeHidden")
+				.css("opacity",1)
+				.removeClass("ToBeHidden");
+				
+				hide_invisible_tabs_and_center();
+			});
 		}
 		else
 		{
-			$("#NavigationMenuCamera").css("margin-left", (offset + 25));
+			$("#NavigationMenu").css("margin-left", -offset);
+			hide_invisible_tabs_and_center();
 		}
 	}
 
 	function hide_invisible_tabs_and_center()
 	{
+		$(".ToBeHidden")
+			.css("opacity",1)
+			.removeClass("ToBeHidden");
+		
 		var current_camera_min_x = offset;
 		var current_camera_max_x = current_camera_min_x + max_total_tab_width;	
-		
 		
 		for (var int = 1; int <= num_tabs; int++) 
 		{
@@ -485,29 +476,45 @@ function base_scrollable_navigation_tabs()
 			
 			if(tab_to_check_max_x > current_camera_max_x)
 			{
-				console.log($(tab_to_check).find(".NavigationButtonContent").text()+" is on the right and will be hidden");
 				$(tab_to_check).addClass("ToBeHidden")
-				
-//				console.log("tab: "+tab_to_check_min_x+" - "+tab_to_check_max_x);
-//				console.log("cam: "+current_camera_min_x+" - "+current_camera_max_x))
 			}
 			else if(tab_to_check_min_x < current_camera_min_x)
 			{
-				console.log($(tab_to_check).find(".NavigationButtonContent").text()+" is on the left and will be hidden");
 				$(tab_to_check).addClass("ToBeHidden");
 			}
 		}
 		
-		$(".ToBeHidden")
-			.hide()
-			.removeClass("ToBeHidden");
+		$(".ToBeHidden").css("opacity",0);
 		
 		var visible_tabs_width = 0;
-		$(tab_container).children(":visible").each(function(){
-			visible_tabs_width += $(this).width();
+		
+		var margin_on_left = false;
+		
+		$(tab_container).children().each(function(){
+			if(!$(this).hasClass("ToBeHidden"))
+			{	
+				if(visible_tabs_width === 0)
+				{
+					var margin_left = ($(this).position().left - offset);
+					if(margin_left > 0)
+					{
+						margin_on_left = true;
+					}
+				}
+				
+				visible_tabs_width += $(this).width();
+			}
 		});
-//		rest_margin = max_total_tab_width - visible_tabs_width;
-//		offset += offset + (rest_margin / 2);
-//		scroll_camera_to_offset(false);
+		
+		var margin = Math.floor((max_total_tab_width - visible_tabs_width) / 2);
+		
+		if(margin_on_left)
+		{
+			margin = -margin;
+		}
+				
+		$("#NavigationMenu").css("margin-left", -offset + margin);
+		
+		disable_arrows_if_needed();
 	}
 }
