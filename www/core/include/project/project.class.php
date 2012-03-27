@@ -1026,6 +1026,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 				$counter = 0;
 				$type_counter = 0;
 				$category_counter = 0;
+				$filter_counter = 0;
 				
 				if (is_array($requirements_array) and count($requirements_array) >= 1)
 				{
@@ -1082,11 +1083,24 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 							$return_array[$counter][element_type] = "extension";
 							$return_array[$counter][name] = "Extension";
 							$return_array[$counter][extension] = $value[identifer];
+							$in_extension = true;
 						}
 						
 						if ($value[xml_element] == "extension" and $value[close] == "1")
 						{
 							$counter++;
+							$filter_counter = 0;
+							$in_extension = false;
+						}
+						
+						if ($value[xml_element] == "filter" and !$value[close] and $in_extension == true and is_numeric($value[status]))
+						{
+							$return_array[$counter][filter][$filter_counter][status] = $value[status];
+							if ($value[type])
+							{
+								$return_array[$counter][filter][$filter_counter][type] = $value[type];
+							}
+							$filter_counter++;
 						}
 					}
 				}

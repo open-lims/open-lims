@@ -460,6 +460,11 @@ class ProjectTemplate implements ProjectTemplateInterface
 			    			$return_array[$counter]['identifer'] 	= $value[3]['identifer'];
 			    		}
 			    		
+		    			if ($value[3]['status'])
+			    		{
+			    			$return_array[$counter]['status'] 		= $value[3]['status'];
+			    		}
+			    		
 			    		$counter++;
 		    		}
 		    		else

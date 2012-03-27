@@ -739,7 +739,9 @@ class ProjectRequest
 			
 			
 			// Extension
-
+			/**
+			 * @todo type filter
+			 */
 			case("extension"):
 				if ($_GET['extension'])
 				{
@@ -754,9 +756,52 @@ class ProjectRequest
 						
 						require_once($main_file);
 						
+						$project = new Project($_GET['project_id']);
+						$project_status_requirements = $project->get_current_status_requirements();
+						
+						if (is_array($project_status_requirements) and count($project_status_requirements) >= 1)
+						{
+							foreach($project_status_requirements as $key => $value)
+							{
+								if($value['element_type'] == "extension" and $value['extension'] == $_GET['extension'])
+								{
+									if (is_array($value['filter']) and count($value['filter']) >= 1)
+									{
+										$filter_array = $value['filter'];
+									}
+									else
+									{
+										$filter_array = null;
+									}
+									break;
+								}
+							}
+						}
+						else
+						{
+							// Exception
+						}
+						
 						$project_item = new ProjectItem($_GET['project_id']);
 						
-						$main_class::push_data($project_item->get_project_items());
+						if ($filter_array)
+						{
+							$item_array = array();
+							
+							foreach($filter_array as $key => $value)
+							{
+								if (is_numeric($value['status']))
+								{
+									$item_array = array_merge($item_array, $project_item->get_project_status_items($value['status']));
+								}
+							}
+						}
+						else
+						{
+							$item_array = $project_item->get_project_items();
+						}					
+						
+						$main_class::push_data($item_array);
 					}
 					else
 					{

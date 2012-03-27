@@ -27,7 +27,7 @@
  */
 class Test
 {
-	private $file = "data.txt";
+	private $file = "extensions/test_extension/classes/data.txt";
 	private $handle;
 	private $content;
 	private $id;
