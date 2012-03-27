@@ -1,10 +1,12 @@
 <li class='Orange'>
 	<a href='index.php?[[PARAMS]]'>
 		<span class='NavigationButton NavigationButtonLeft'></span>
-		<span class='NavigationButton NavigationButtonContent'>[[TITLE]]</span>
 		<!-- IF ([[DOWN]]) -->
+		<span class='NavigationButton NavigationButtonContent NavigationButtonContentHasBorderRight'>[[TITLE]]</span>
 		<span class='NavigationButton NavigationButtonDown'><img src='images/down.png' alt='' /></span>
-		<!-- ENDIF -->
+		<!-- ELSE -->
+		<span class='NavigationButton NavigationButtonContent'>[[TITLE]]</span>
 		<span class='NavigationButton NavigationButtonRight'></span>
+		<!-- ENDIF -->
 	</a>
 </li>

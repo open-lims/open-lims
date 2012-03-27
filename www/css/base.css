@@ -191,12 +191,11 @@ html,body
 }
 .NavigationButtonDown
 {
-/* 	padding: 11px 0px 0 1px; */
-	padding: 0px 0px 0 1px;
-	background-image: url('../images/tabs/tab_down.png');
+	padding: 0px 1px 0px 0px;
+	background-image: url('../images/tabs/tab_right_button_up.png');
 	background-repeat:no-repeat;
 	background-position: top left;
-	width: 15px;
+	width: 23px;
 }
 .NavigationButtonRight
 {
@@ -204,6 +203,12 @@ html,body
 	background-image: url('../images/tabs/tab_right.png');
 	background-repeat:no-repeat;
 	background-position: top right;
+}
+
+.NavigationButtonContentHasBorderRight
+{
+	border-right: solid #c0c0c0 1px;
+	padding-right:5px;
 }
 
 /* Arrow Down */
@@ -221,7 +226,8 @@ margin: 11px 0px 0 1px;
 #NavigationMenu li.Blue a:hover span.NavigationButton,
 #NavigationMenu li.Green a:hover span.NavigationButton,
 #NavigationMenu li.Orange a:hover span.NavigationButton,
-#NavigationMenu li.Grey a:hover span.NavigationButton
+#NavigationMenu li.Grey a:hover span.NavigationButton,
+#NavigationMenu li.GreyedOut a span.NavigationButton
 {
 	display: block;
 	margin: -5px 0 0 0;
@@ -243,7 +249,8 @@ margin: 11px 0px 0 1px;
 #NavigationMenu li.Blue a:hover span.NavigationButtonRight,
 #NavigationMenu li.Green a:hover span.NavigationButtonRight,
 #NavigationMenu li.Orange a:hover span.NavigationButtonRight,
-#NavigationMenu li.Grey a:hover span.NavigationButtonRight
+#NavigationMenu li.Grey a:hover span.NavigationButtonRight,
+#NavigationMenu li.GreyedOut a span.NavigationButtonRight
 {
 	padding: 0;
 	width: 10px;
@@ -255,7 +262,8 @@ margin: 11px 0px 0 1px;
 #NavigationMenu li.Blue a:hover span.NavigationButtonContent,
 #NavigationMenu li.Green a:hover span.NavigationButtonContent,
 #NavigationMenu li.Orange a:hover span.NavigationButtonContent,
-#NavigationMenu li.Grey a:hover span.NavigationButtonContent
+#NavigationMenu li.Grey a:hover span.NavigationButtonContent,
+#NavigationMenu li.GreyedOut a span.NavigationButtonContent
 {
 	padding: 11px 1px 0 1px;
 	color: #F0F0F0;
@@ -267,36 +275,35 @@ margin: 11px 0px 0 1px;
 #NavigationMenu li.Blue a:hover span.NavigationButtonDown,
 #NavigationMenu li.Green a:hover span.NavigationButtonDown,
 #NavigationMenu li.Orange a:hover span.NavigationButtonDown,
-#NavigationMenu li.Grey a:hover span.NavigationButtonDown
+#NavigationMenu li.Grey a:hover span.NavigationButtonDown,
+#NavigationMenu li.GreyedOut a span.NavigationButtonDown
 {
-	
-	padding: 0px 1px 0 0px;
-/* 	padding: 16px 1px 0 0px; */
+	padding: 5px 1px 0 0px;
 }
 
 /* Active Blue */
 #NavigationMenu li.ActiveBlue a span.NavigationButtonLeft
 {
-	background-image: url('../images/tabs/blue_clicked_left.png');
+	background-image: url('../images/tabs/blue_active_left.png');
 	background-repeat:no-repeat;
 	background-position: top left;
 }
 #NavigationMenu li.ActiveBlue a span.NavigationButtonContent
 {
-	background-image: url('../images/tabs/blue_clicked.png');
+	background-image: url('../images/tabs/blue_active.png');
 	background-repeat:repeat-x;
 	background-position: top center;
 	text-shadow: -1px -1px #336699;
 }
 #NavigationMenu li.ActiveBlue a span.NavigationButtonDown
 {
-	background-image: url('../images/tabs/blue_clicked_down.png');
+	background-image: url('../images/tabs/blue_active_button_up_right.png');
 	background-repeat:no-repeat;
 	background-position: top left;
 }
 #NavigationMenu li.ActiveBlue a span.NavigationButtonRight
 {
-	background-image: url('../images/tabs/blue_clicked_right.png');
+	background-image: url('../images/tabs/blue_active_right.png');
 	background-repeat:no-repeat;
 	background-position: top right;
 }
@@ -304,26 +311,26 @@ margin: 11px 0px 0 1px;
 /* Active Green */
 #NavigationMenu li.ActiveGreen a span.NavigationButtonLeft
 {
-	background-image: url('../images/tabs/green_clicked_left.png');
+	background-image: url('../images/tabs/green_active_left.png');
 	background-repeat:no-repeat;
 	background-position: top left;
 }
 #NavigationMenu li.ActiveGreen a span.NavigationButtonContent
 {
-	background-image: url('../images/tabs/green_clicked.png');
+	background-image: url('../images/tabs/green_active.png');
 	background-repeat:repeat-x;
 	background-position: top center;
 	text-shadow: -1px -1px #99cd32;
 }
 #NavigationMenu li.ActiveGreen a span.NavigationButtonDown
 {
-	background-image: url('../images/tabs/green_clicked_down.png');
+	background-image: url('../images/tabs/green_active_button_up_right.png');
 	background-repeat:no-repeat;
 	background-position: top left;
 }
 #NavigationMenu li.ActiveGreen a span.NavigationButtonRight
 {
-	background-image: url('../images/tabs/green_clicked_right.png');
+	background-image: url('../images/tabs/green_active_right.png');
 	background-repeat:no-repeat;
 	background-position: top right;
 }
@@ -331,26 +338,26 @@ margin: 11px 0px 0 1px;
 /* Active Orange */
 #NavigationMenu li.ActiveOrange a span.NavigationButtonLeft
 {
-	background-image: url('../images/tabs/orange_clicked_left.png');
+	background-image: url('../images/tabs/orange_active_left.png');
 	background-repeat:no-repeat;
 	background-position: top left;
 }
 #NavigationMenu li.ActiveOrange a span.NavigationButtonContent
 {
-	background-image: url('../images/tabs/orange_clicked.png');
+	background-image: url('../images/tabs/orange_active.png');
 	background-repeat:repeat-x;
 	background-position: top center;
 	text-shadow: -1px -1px #dcaf36;
 }
 #NavigationMenu li.ActiveOrange a span.NavigationButtonDown
 {
-	background-image: url('../images/tabs/orange_clicked_down.png');
+	background-image: url('../images/tabs/orange_active_button_up_right.png');
 	background-repeat:no-repeat;
 	background-position: top left;
 }
 #NavigationMenu li.ActiveOrange a span.NavigationButtonRight
 {
-	background-image: url('../images/tabs/orange_clicked_right.png');
+	background-image: url('../images/tabs/orange_active_right.png');
 	background-repeat:no-repeat;
 	background-position: top right;
 }
@@ -358,26 +365,26 @@ margin: 11px 0px 0 1px;
 /* Active Grey */
 #NavigationMenu li.ActiveGrey a span.NavigationButtonLeft
 {
-	background-image: url('../images/tabs/grey_clicked_left.png');
+	background-image: url('../images/tabs/grey_active_left.png');
 	background-repeat:no-repeat;
 	background-position: top left;
 }
 #NavigationMenu li.ActiveGrey a span.NavigationButtonContent
 {
-	background-image: url('../images/tabs/grey_clicked.png');
+	background-image: url('../images/tabs/grey_active.png');
 	background-repeat:repeat-x;
 	background-position: top center;
 	text-shadow: -1px -1px #535353;
 }
 #NavigationMenu li.ActiveGrey a span.NavigationButtonDown
 {
-	background-image: url('../images/tabs/grey_clicked_down.png');
+	background-image: url('../images/tabs/grey_active_button_up_right.png');
 	background-repeat:no-repeat;
 	background-position: top left;
 }
 #NavigationMenu li.ActiveGrey a span.NavigationButtonRight
 {
-	background-image: url('../images/tabs/grey_clicked_right.png');
+	background-image: url('../images/tabs/grey_active_right.png');
 	background-repeat:no-repeat;
 	background-position: top right;
 }
@@ -385,26 +392,26 @@ margin: 11px 0px 0 1px;
 /* Hover Blue */
 #NavigationMenu li.Blue a:hover span.NavigationButtonLeft
 {
-	background-image: url('../images/tabs/blue_hover_left.png');
+	background-image: url('../images/tabs/blue_active_left.png');
 	background-repeat:no-repeat;
 	background-position: top left;
 }
 #NavigationMenu li.Blue a:hover span.NavigationButtonContent
 {
-	background-image: url('../images/tabs/blue_hover.png');
+	background-image: url('../images/tabs/blue_active.png');
 	background-repeat:repeat-x;
 	background-position: top center;
 	text-shadow: -1px -1px #336699;
 }
 #NavigationMenu li.Blue a:hover span.NavigationButtonDown
 {
-	background-image: url('../images/tabs/blue_hover_down.png');
+	background-image: url('../images/tabs/blue_active_button_up_right.png');
 	background-repeat:repeat-x;
 	background-position: top left;
 }
 #NavigationMenu li.Blue a:hover span.NavigationButtonRight
 {
-	background-image: url('../images/tabs/blue_hover_right.png');
+	background-image: url('../images/tabs/blue_active_right.png');
 	background-repeat:no-repeat;
 	background-position: top right;
 }
@@ -412,26 +419,26 @@ margin: 11px 0px 0 1px;
 /* Hover Green */
 #NavigationMenu li.Green a:hover span.NavigationButtonLeft
 {
-	background-image: url('../images/tabs/green_hover_left.png');
+	background-image: url('../images/tabs/green_active_left.png');
 	background-repeat:no-repeat;
 	background-position: top left;
 }
 #NavigationMenu li.Green a:hover span.NavigationButtonContent
 {
-	background-image: url('../images/tabs/green_hover.png');
+	background-image: url('../images/tabs/green_active.png');
 	background-repeat:repeat-x;
 	background-position: top center;
 	text-shadow: -1px -1px #99cd32;
 }
 #NavigationMenu li.Green a:hover span.NavigationButtonDown
 {
-	background-image: url('../images/tabs/green_hover_down.png');
+	background-image: url('../images/tabs/green_active_button_up_right.png');
 	background-repeat:repeat-x;
 	background-position: top left;
 }
 #NavigationMenu li.Green a:hover span.NavigationButtonRight
 {
-	background-image: url('../images/tabs/green_hover_right.png');
+	background-image: url('../images/tabs/green_active_right.png');
 	background-repeat:no-repeat;
 	background-position: top right;
 }
@@ -439,26 +446,26 @@ margin: 11px 0px 0 1px;
 /* Hover Orange */
 #NavigationMenu li.Orange a:hover span.NavigationButtonLeft
 {
-	background-image: url('../images/tabs/orange_hover_left.png');
+	background-image: url('../images/tabs/orange_active_left.png');
 	background-repeat:no-repeat;
 	background-position: top left;
 }
 #NavigationMenu li.Orange a:hover span.NavigationButtonContent
 {
-	background-image: url('../images/tabs/orange_hover.png');
+	background-image: url('../images/tabs/orange_active.png');
 	background-repeat:repeat-x;
 	background-position: top center;
 	text-shadow: -1px -1px #dcaf36;
 }
 #NavigationMenu li.Orange a:hover span.NavigationButtonDown
 {
-	background-image: url('../images/tabs/orange_hover_down.png');
+	background-image: url('../images/tabs/orange_active_button_up_right.png');
 	background-repeat:repeat-x;
 	background-position: top left;
 }
 #NavigationMenu li.Orange a:hover span.NavigationButtonRight
 {
-	background-image: url('../images/tabs/orange_hover_right.png');
+	background-image: url('../images/tabs/orange_active_right.png');
 	background-repeat:no-repeat;
 	background-position: top right;
 }
@@ -466,29 +473,92 @@ margin: 11px 0px 0 1px;
 /* Hover Grey */
 #NavigationMenu li.Grey a:hover span.NavigationButtonLeft
 {
-	background-image: url('../images/tabs/grey_hover_left.png');
+	background-image: url('../images/tabs/grey_active_left.png');
 	background-repeat:no-repeat;
 	background-position: top left;
 }
 #NavigationMenu li.Grey a:hover span.NavigationButtonContent
 {
-	background-image: url('../images/tabs/grey_hover.png');
+	background-image: url('../images/tabs/grey_active.png');
 	background-repeat:repeat-x;
 	background-position: top center;
 	text-shadow: -1px -1px #535353;
 }
 #NavigationMenu li.Grey a:hover span.NavigationButtonDown
 {
-	background-image: url('../images/tabs/grey_hover_down.png');
+	background-image: url('../images/tabs/grey_active_button_up_right.png');
 	background-repeat:repeat-x;
 	background-position: top left;
 }
 #NavigationMenu li.Grey a:hover span.NavigationButtonRight
 {
-	background-image: url('../images/tabs/grey_hover_right.png');
+	background-image: url('../images/tabs/grey_active_right.png');
 	background-repeat:no-repeat;
 	background-position: top right;
 }
+
+/* Content Border */
+#NavigationMenu li.ActiveGreen a span.NavigationButtonContentHasBorderRight,
+#NavigationMenu li.Green a:hover span.NavigationButtonContentHasBorderRight
+{
+	border-right: solid #99cd32 1px;
+	padding-right:5px;
+}
+
+#NavigationMenu li.ActiveGrey a span.NavigationButtonContentHasBorderRight,
+#NavigationMenu li.Grey a:hover span.NavigationButtonContentHasBorderRight
+{
+	border-right: solid #535353 1px;
+	padding-right:5px;
+}
+
+#NavigationMenu li.ActiveBlue a span.NavigationButtonContentHasBorderRight,
+#NavigationMenu li.Blue a:hover span.NavigationButtonContentHasBorderRight
+{
+	border-right: solid #336699 1px;
+	padding-right:5px;
+}
+
+#NavigationMenu li.ActiveOrange a span.NavigationButtonContentHasBorderRight,
+#NavigationMenu li.Orange a:hover span.NavigationButtonContentHasBorderRight
+{
+	border-right: solid #dcaf36 1px;
+	padding-right:5px;
+}
+
+#NavigationMenu li.GreyedOut a span.NavigationButtonContentHasBorderRight
+{
+	padding-right:5px;
+}
+
+
+/* Light Grey */
+#NavigationMenu li.GreyedOut a span.NavigationButtonLeft
+{
+	background-image: url('../images/tabs/light_grey_active_left.png');
+	background-repeat:no-repeat;
+	background-position: top left;
+}
+#NavigationMenu li.GreyedOut a span.NavigationButtonContent
+{
+	background-image: url('../images/tabs/light_grey_active.png');
+	background-repeat:repeat-x;
+	background-position: top center;
+	text-shadow: -1px -1px #b6b6b6;
+}
+#NavigationMenu li.GreyedOut a span.NavigationButtonDown
+{
+	background-image: url('../images/tabs/light_grey_active_button_up.png');
+	background-repeat:no-repeat;
+	background-position: top left;
+}
+#NavigationMenu li.GreyedOut a span.NavigationButtonRight
+{
+	background-image: url('../images/tabs/light_grey_active_right.png');
+	background-repeat:no-repeat;
+	background-position: top right;
+}
+
 
 /* Navigation Menu Clear */
 #NavigationMenuClear

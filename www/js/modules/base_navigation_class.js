@@ -61,15 +61,35 @@ function base_navigation()
 				//close open tab
 				var currently_selected_tab = close_menu();
 				
+				//reset style of currently active tab
+				var original_class = $(".GreyedOut").data("originalClass");
+				$(".GreyedOut")
+					.removeClass("GreyedOut")
+					.attr("class",original_class);
+				
 				if(currently_selected_tab !== undefined)
 				{
 					animate_right_tab_side_up(currently_selected_tab);
-				
+					
 					//if the open tab was this one, we're done
 					if(tab === currently_selected_tab)
-					{
+					{						
 						return true;
 					}
+				}
+				
+				//change style of currently active tab (if the menu does not come from this tab)
+				var active_tab;				
+				$("#NavigationMenu").children().each(function(){
+					if($(this).attr("class").indexOf("Active") !== -1)
+					{
+						active_tab = this;
+						return false;
+					}
+				});
+				if($(tab)[0] !== $(active_tab)[0]) {
+					$(active_tab).data("originalClass",$(active_tab).attr("class"));
+					$(active_tab).attr("class","GreyedOut");
 				}
 				
 				//open new tab
@@ -155,7 +175,7 @@ function base_navigation()
 		$(right_tab_side_arrow)
 			.children()
 			.stop()
-			.animate({"margin-top": arrow_margin_top + animate_downwards_pixels}, 200)
+//			.animate({"margin-top": arrow_margin_top}, 200)
 			.rotate({animateTo:-180, duration:400});
 		
 		//animate right part
@@ -231,7 +251,7 @@ function base_scrollable_navigation_tabs()
 		if(total_tab_width > max_total_tab_width)
 		{
 			append_arrows();		
-			hide_invisible_tabs_and_center();
+			hide_invisible_tabs_and_align_left();
 			disable_arrows_if_needed();
 		}
 	}
@@ -449,17 +469,17 @@ function base_scrollable_navigation_tabs()
 				.css("opacity",1)
 				.removeClass("ToBeHidden");
 				
-				hide_invisible_tabs_and_center();
+				hide_invisible_tabs_and_align_left();
 			});
 		}
 		else
 		{
 			$("#NavigationMenu").css("margin-left", -offset);
-			hide_invisible_tabs_and_center();
+			hide_invisible_tabs_and_align_left();
 		}
 	}
 
-	function hide_invisible_tabs_and_center()
+	function hide_invisible_tabs_and_align_left()
 	{
 		$(".ToBeHidden")
 			.css("opacity",1)
@@ -506,14 +526,12 @@ function base_scrollable_navigation_tabs()
 			}
 		});
 		
-		var margin = Math.floor((max_total_tab_width - visible_tabs_width) / 2);
+		var margin = Math.floor(max_total_tab_width - visible_tabs_width);
 		
 		if(margin_on_left)
 		{
-			margin = -margin;
+			$("#NavigationMenu").css("margin-left", -offset - margin);
 		}
-				
-		$("#NavigationMenu").css("margin-left", -offset + margin);
 		
 		disable_arrows_if_needed();
 	}
