@@ -86,6 +86,7 @@ html,body
 
 .BaseTextfield
 {
+	border-radius: 6px 6px 6px 6px;
 	border: 1px #D0D0D0 solid;
 }
 .BaseButton
@@ -124,8 +125,18 @@ html,body
     text-decoration: none;
     width: auto;
 }
+.BaseButton:hover
+{	
+	background-clip: padding-box;
+    background-color: #0058B7;
+    background-image: -moz-linear-gradient(top, rgba(197,214,233,1) 0%, rgba(174,199,224,1) 10%, rgba(125,168,211,1) 49%, rgba(120,165,210,1) 51%, rgba(140,179,216,1) 100%);
+    box-shadow: 0 0 0.1em 1px rgba(255, 255, 255, 0.36) inset;
+}
 .LoginTextfield,
 .LoginLanguageSelect
 {
+	box-shadow: none;
+	text-shadow: none;
+	border-radius: 6px 6px 6px 6px;
 	width: 220px;
 }
