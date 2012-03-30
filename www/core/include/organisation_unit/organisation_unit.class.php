@@ -625,7 +625,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 		if (is_numeric($user_id))
 		{
 			$user_array = OrganisationUnitHasMember_Access::list_members_by_organisation_unit_id($this->organisation_unit_id, 0);
-			if (in_array($user_id, $user_array))
+			if (is_array($user_array) and in_array($user_id, $user_array))
 			{
 				return true;
 			}
@@ -730,7 +730,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 		if (is_numeric($group_id))
 		{
 			$group_array = OrganisationUnitHasGroup_Access::list_groups_by_organisation_unit_id($this->organisation_unit_id, 0);
-			if (in_array($group_id, $group_array))
+			if (is_array($group_array) and in_array($group_id, $group_array))
 			{
 				return true;
 			}
@@ -896,7 +896,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 		if (is_numeric($leader_id))
 		{
 			$leader_array = OrganisationUnitHasLeader_Access::list_leaders_by_organisation_unit_id($this->organisation_unit_id, 0);
-			if (in_array($leader_id, $leader_array))
+			if (is_array($leader_array) and in_array($leader_id, $leader_array))
 			{
 				return true;
 			}
@@ -1102,7 +1102,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 		if (is_numeric($owner_id))
 		{
 			$owner_array = OrganisationUnitHasOwner_Access::list_owners_by_organisation_unit_id($this->organisation_unit_id, 0);
-			if (in_array($owner_id, $owner_array))
+			if (is_array($owner_array) and in_array($owner_id, $owner_array))
 			{
 				return true;
 			}
@@ -1436,7 +1436,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 		if (is_numeric($quality_manager_id))
 		{
 			$quality_manager_array = OrganisationUnitHasQualityManager_Access::list_quality_managers_by_organisation_unit_id($this->organisation_unit_id, 0);
-			if (in_array($quality_manager_id, $quality_manager_array))
+			if (is_array($quality_manager_array) and in_array($quality_manager_id, $quality_manager_array))
 			{
 				return true;
 			}

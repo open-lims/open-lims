@@ -26,39 +26,37 @@
  */
 function tooltip(element_id, message)
 {
-	var offsetX = 20;
+	$('#tooltip').remove();
+	
+	var offsetX = 15;
 	var offsetY = 10;
 	
-	$("#"+element_id).hover(function(e)
-	{
-		$("<div id='tooltip'>"+message+"</div>")
-			.css(
+	$("#"+element_id)
+		.unbind("mouseover mouseout mousemove")
+		.mouseover(function(e)
+		{
+			$("<div id='tooltip'>"+message+"</div>")
+				.css(
+				{
+					"top": e.pageY + offsetY,
+					"left": e.pageX + offsetX
+				})
+				.hide()
+				.appendTo('body')
+				.fadeIn(300);
+		})
+		.mouseout(function(e)
+		{
+			$('#tooltip').remove();
+		})	
+		.mousemove(function(e) 
+		{
+			$("#tooltip").css(
 			{
-				"position":"absolute",
-				"background-color":"white",
-				"border":"solid black 1px",
-				"padding":"2px 4px 2px 4px",
-				"font-family":"arial",
-				"font-size":"12px",
 				"top": e.pageY + offsetY,
 				"left": e.pageX + offsetX
-			})
-			.hide()
-			.appendTo('body')
-			.fadeIn(300);
-	},function()
-	{
-		$('#tooltip').remove();
-	});
-	
-	$("#"+element_id).mousemove(function(e) 
-	{
-		$("#tooltip").css(
-		{
-			"top": e.pageY + offsetY,
-			"left": e.pageX + offsetX
-		});
-	});
+			});
+		}); 
 }
 
 function base_dialog_reuqest(type, url, data_params)

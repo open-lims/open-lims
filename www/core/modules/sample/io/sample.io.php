@@ -39,7 +39,7 @@ class SampleIO
 		$list->add_column("Date/Time","datetime",true,null);
 		$list->add_column("Type/Tmpl.","template",true,null);
 		$list->add_column("Curr. Loc.","location",true,null);
-		$list->add_column("AV","av",false,"16px");
+		$list->add_column("AV","av",false,"20px");
 		
 		$template = new HTMLTemplate("sample/list_user.html");	
 		

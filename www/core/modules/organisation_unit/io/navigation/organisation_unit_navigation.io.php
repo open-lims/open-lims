@@ -49,7 +49,7 @@ class OrganisationUnitNavigationIO
 	 */
 	public static function get_ajax_url()
 	{
-		return "ajax.php?nav=organisation_unit&run=navigation&session_id=".$_GET['session_id'];
+		return "ajax.php?nav=organisation_unit&run=navigation&session_id=".$_GET['session_id']."";
 	}
 }
 

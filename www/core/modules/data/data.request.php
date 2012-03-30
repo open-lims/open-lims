@@ -187,6 +187,14 @@ class DataRequest
 			break;
 			
 			
+			// Image Types
+			
+			case "get_allowed_image_types":
+				require_once("ajax/data.ajax.php");
+				echo DataAjax::get_allowed_image_types();
+			break;
+			
+			
 			// Admin
 			
 			case "admin_list_value_templates":

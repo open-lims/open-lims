@@ -105,7 +105,7 @@ class DataAjax
 				$first_line_array[owner] = "";
 				$first_line_array[permission] = "";
 				
-				$list_request->add_first_line($first_line_array);
+				$list_request->add_first_line($first_line_array, "DataBrowserParentFolderRow");
 			} 
 			
 			if (is_array($list_array) and count($list_array) >= 1)
@@ -134,9 +134,7 @@ class DataAjax
 
 						if ($file->is_read_access() == true)
 						{
-							$paramquery = array();
-							$paramquery[session_id] = $_GET[session_id];
-							$paramquery[username] = $_GET[username];
+							$paramquery = $_GET;
 							$paramquery[nav] = $_GET[nav];
 							$paramquery[file_id] = $list_array[$key][file_id];
 							$paramquery[action] = "file_detail";
@@ -145,14 +143,6 @@ class DataAjax
 							$list_array[$key][symbol][link] = $params;
 							$list_array[$key][symbol][content] = "<img src='".$file->get_icon()."' alt='' style='border:0;' />";
 							
-							if (strlen($list_array[$key][name]) > 30)
-							{
-								$list_array[$key][name] = substr($list_array[$key][name],0,30)."...";
-							}
-							else
-							{
-								$list_array[$key][name] = $list_array[$key][name];
-							}
 							
 							$tmp_name = $list_array[$key][name];
 							unset($list_array[$key][name]);
@@ -184,27 +174,15 @@ class DataAjax
 
 						if ($value->is_read_access() == true)
 						{
-							$paramquery = array();
-							$paramquery[session_id] = $_GET[session_id];
-							$paramquery[username] = $_GET[username];
+							$paramquery = $_GET;
 							$paramquery[nav] = $_GET[nav];
 							$paramquery[value_id] = $list_array[$key][value_id];
 							$paramquery[action] = "value_detail";
 							$params = http_build_query($paramquery,'','&#38;');
 						
-						
 							$list_array[$key][symbol][link] = $params;
 							$list_array[$key][symbol][content] = "<img src='images/fileicons/16/unknown.png' alt='' style='border:0;' />";
-							
-							if (strlen($list_array[$key][name]) > 30)
-							{
-								$list_array[$key][name] = substr($list_array[$key][name],0,30)."...";
-							}
-							else
-							{
-								$list_array[$key][name] = $list_array[$key][name];
-							}
-							
+														
 							$tmp_name = $list_array[$key][name];
 							unset($list_array[$key][name]);
 							$list_array[$key][name][content] = $tmp_name;
@@ -243,15 +221,6 @@ class DataAjax
 							$list_array[$key][symbol][content] = "<img src='images/icons/folder.png' alt='' style='border:0;' />";
 							$list_array[$key][symbol][link] = $params;
 							
-							if (strlen($list_array[$key][name]) > 30)
-							{
-								$list_array[$key][name] = substr($list_array[$key][name],0,30)."...";
-							}
-							else
-							{
-								$list_array[$key][name] = $list_array[$key][name];
-							}
-							
 							$tmp_name = $list_array[$key][name];
 							unset($list_array[$key][name]);
 							$list_array[$key][name][content] = $tmp_name;
@@ -284,15 +253,6 @@ class DataAjax
 						
 						$list_array[$key][symbol][content] = "<img src='images/icons/virtual_folder.png' alt='' style='border:0;' />";
 						$list_array[$key][symbol][link] = $params;
-
-						if (strlen($list_array[$key][name]) > 30)
-						{
-							$list_array[$key][name] = substr($list_array[$key][name],0,30)."...";
-						}
-						else
-						{
-							$list_array[$key][name] = $list_array[$key][name];
-						}
 						
 						$tmp_name = $list_array[$key][name];
 						unset($list_array[$key][name]);
@@ -590,6 +550,19 @@ class DataAjax
 		{
 			throw new DataSecurityAccessDeniedException();
 		}
+	}
+	
+	public static function get_allowed_image_types()
+	{
+		$array = array();
+		$array[] = "jpg";
+		$array[] = "jpeg";
+		$array[] = "png";
+		$array[] = "tif";
+		$array[] = "tiff";
+		$array[] = "bmp";
+		$array[] = "gif";
+		return json_encode($array);
 	}
 }
 ?>

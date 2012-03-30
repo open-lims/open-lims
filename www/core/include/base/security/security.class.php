@@ -75,28 +75,31 @@ class Security implements SecurityInterface
 	/**
 	 * @see SecurityInterface::protect_session()
 	 */
-	public static function protect_session()
-	{		
-		$module_get_array = array();
-		
-		$registered_module_array = SystemHandler::get_module_folders();
-		if (is_array($registered_module_array) and count($registered_module_array) >= 1)
-		{
-			foreach($registered_module_array as $key => $value)
+	public static function protect_session($install = false)
+	{	
+		if ($install == false)
+		{	
+			$module_get_array = array();
+			
+			$registered_module_array = SystemHandler::get_module_folders();
+			if (is_array($registered_module_array) and count($registered_module_array) >= 1)
 			{
-				$get_file = constant("MODULES_DIR")."/".$value."/config/module_get.php";
-				if (file_exists($get_file))
+				foreach($registered_module_array as $key => $value)
 				{
 					$get_file = constant("MODULES_DIR")."/".$value."/config/module_get.php";
-					include($get_file);
-					
-					if (is_array($get) and count($get) >= 1)
+					if (file_exists($get_file))
 					{
-						foreach($get as $key => $value)
+						$get_file = constant("MODULES_DIR")."/".$value."/config/module_get.php";
+						include($get_file);
+						
+						if (is_array($get) and count($get) >= 1)
 						{
-							if (!in_array($value, $module_get_array))
+							foreach($get as $key => $value)
 							{
-								array_push($module_get_array, $value);
+								if (!in_array($value, $module_get_array))
+								{
+									array_push($module_get_array, $value);
+								}
 							}
 						}
 					}
@@ -114,12 +117,12 @@ class Security implements SecurityInterface
 			switch($key):
 
 			case("nav"):
-			case("vnav"):
+			case("vnav"): // in Left Menu
 			case("username"):
 			case("session_id"):
 			case("run"):
 			case("dialog"):
-			case("retrace");
+			case("retrace"):
 				
 			case("action"):
 			case("aspect"):
@@ -131,20 +134,20 @@ class Security implements SecurityInterface
 			case("sortvalue"):
 			case("sure"):
 			case("nextpage"):
-			case("selectpage");
+			case("selectpage"):
 			case("page"):
-			case("pageref");
+			case("pageref"):
 			case("show"):
 			case("change_nav"):
 			case("tpage"):
 			case("view"):
-			case("clear");
+			case("clear"):
 			
-			case("unique_id");
-			case("height");
-			case("width");
-			case("max_height");
-			case("max_width");
+			case("unique_id"):
+			case("height"):
+			case("width"):
+			case("max_height"):
+			case("max_width"):
 			
 			break;
 			

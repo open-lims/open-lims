@@ -47,9 +47,36 @@ class OrganisationUnitFolder extends Folder implements ConcreteFolderCaseInterfa
 	{
 		if (is_numeric($folder_id))
   		{
+  			global $user;
+  			
   			parent::__construct($folder_id);
   			$this->organisation_unit_folder = new FolderIsOrganisationUnitFolder_Access($folder_id);
   			$this->organisation_unit_id = $this->organisation_unit_folder->get_organisation_unit_id();
+  			
+  			$organisation_unit = new OrganisationUnit($this->organisation_unit_id);
+			if ($organisation_unit->is_user_in_organisation_unit($user->get_user_id()) == true or 
+				$organisation_unit->is_leader_in_organisation_unit($user->get_user_id()) == true or 
+				$organisation_unit->is_owner_in_organisation_unit($user->get_user_id()) == true or 
+				$organisation_unit->is_quality_manager_in_organisation_unit($user->get_user_id()) == true)
+			{
+	  			if ($this->read_access == false)
+	  			{
+	  				$this->data_entity_permission->set_read_permission();
+	  				if ($this->data_entity_permission->is_access(1))
+					{
+						$this->read_access = true;
+					}
+	  			}
+	  			
+	  			if ($this->write_access == false)	
+	  			{
+	  				$this->data_entity_permission->set_write_permission();
+	  				if ($this->data_entity_permission->is_access(2))
+					{
+						$this->write_access = true;
+					}
+	  			}
+			}
   		}
   		else
   		{
@@ -310,7 +337,7 @@ class OrganisationUnitFolder extends Folder implements ConcreteFolderCaseInterfa
     		$folder_id = self::get_folder_by_organisation_unit_id($event_object->get_organisation_unit_id());
     		if ($folder_id)
     		{
-	    		$organisation_unit_folder = new OrganisationUnitFolder();
+	    		$organisation_unit_folder = new OrganisationUnitFolder($folder_id);
 	    		if ($organisation_unit_folder->set_owner_id($organisation_unit->get_master_owner_id()) == false)
 	    		{
 	    			return false;

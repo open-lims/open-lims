@@ -32,8 +32,8 @@ $database['user'] 								= "dbadmin";
 $database['password']							= "dbadmin";
 
 // Primary Database Server
-$database['server']								= "localhost";
-$database['port'] 								= "";
+$database[0]['server']							= "localhost";
+$database[0]['port'] 							= "";
 
 // Secondary Database Server
 // $database[1]['server']						= "localhost";

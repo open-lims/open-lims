@@ -1,25 +1,3 @@
-/**
- * @version: 0.4.0.0
- * @author: Roman Quiring <quiring@open-lims.org>
- * @copyright: (c) 2008-2011 by Roman Quiring
- * @license: GPLv3
- * 
- * This file is part of Open-LIMS
- * Available at http://www.open-lims.org
- * 
- * This program is free software;
- * you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation;
- * version 3 of the License.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
- * See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with this program;
- * if not, see <http://www.gnu.org/licenses/>.
- */
-
-
 function data_browser() 
 {
 	var data_browser_table;
@@ -90,12 +68,17 @@ function data_browser()
 				return true; 
 			}
 
-			var link = $(this).children("td:nth-child(2)").children();
+			var link = $(this).children("td:nth-child(3)").children();
 			if ($(link).is("div")) 
 			{
 				link = $(link).children("a");
 			}
 			var href = $(link).attr("href");
+			
+			if(href === undefined)
+			{
+				return false;
+			}
 			
 			var linked_folder_id  = href.split("&folder_id=")[1];
 			if(linked_folder_id != undefined)
@@ -119,18 +102,29 @@ function data_browser()
 				.unbind("mouseover mouseleave click")
 				.mouseover(function(event)
 				{
-					var text = $(this).children("td:nth-child(3)").text();
+					var text = $(this).children("td:nth-child(4)").text();
 					if(!$(this).hasClass("DataBrowserFileSelected") && text != "Virtual Folder" && text != "Parent Folder")
 					{
 						$(this)
 						.addClass("DataBrowserFileHover")
-						.children().css(
-						{
-							"margin-bottom":"2px",
-							"padding":"0px 4px",
-							"border-bottom":"solid #c3c3c3 2px",
-							"border-top":"solid #c3c3c3 2px"
-						});	
+						.children().each(function(){
+							if($(this).hasClass("ListTableColumnFirstEntry"))
+							{
+								$(this).css("border-left","solid #c3c3c3 2px");
+							}
+							else if($(this).hasClass("ListTableColumnLastEntry"))
+							{
+								$(this).css("border-right","solid #c3c3c3 2px");
+							}
+							$(this).css({
+								"margin-bottom":"2px",
+//								"padding":"0px 4px",
+								"border-bottom":"solid #c3c3c3 2px",
+								"border-top":"solid #c3c3c3 2px"
+							});	
+						});
+						
+						
 					}
 				})
 				.mouseleave(function()
@@ -164,7 +158,7 @@ function data_browser()
 				.click(function(evt)
 				{
 					evt.preventDefault();
-					evt.stopPropagation();
+					evt.stopImmediatePropagation();
 					if(($(evt.target)[0] == $(link)[0]))
 					{ //clicked on a link
 						if(linked_folder_id == undefined && linked_virtual_folder_id == undefined)
@@ -218,7 +212,7 @@ function data_browser()
 						}
 					 }
 				})
-				.children("td:nth-child(2)").each(function()
+				.children("td:nth-child(3)").each(function()
 				{ //bind thumbnail handler
 					var filename = $(this).children().text();
 					if(is_image(filename))
@@ -234,14 +228,18 @@ function data_browser()
 	 */
 	function delete_selected_files()
 	{
+	
+		
 		var action = $("#DataBrowserActionSelect").children("option:selected").val();
 		$(".DataBrowserDeleteCheckbox:checked").each(function()
 		{
-			var type = $(this).parent().parent().parent().children("td:nth-child(3)").children();
+			var type = $(this).parent().parent().children("td:nth-child(4)");
+			
 			if($(type).text() == "Folder")
 			{
-				var link = $(this).parent().parent().parent().children("td:nth-child(2)").children().children().attr("href");
+				var link = $(this).parent().parent().children("td:nth-child(3)").children().children().attr("href");
 				var folder_id = link.split("&folder_id=")[1];
+
 				$.ajax(
 				{
 					async : false,
@@ -251,11 +249,12 @@ function data_browser()
 					success : function(data) {}
 				});
 			}
-			else if($(type).text() == "Value")
+			else if(type == "Value")
 			{
-				var link = $(this).parent().parent().parent().children("td:nth-child(2)").children().attr("href");
+				var link = $(this).parent().parent().children("td:nth-child(3)").children().attr("href");
 				var split = link.split("&nav=data&value_id=");
 				var value_id = split[1].replace("&action=value_detail","");
+
 				$.ajax(
 				{
 					async : false,
@@ -265,11 +264,12 @@ function data_browser()
 					success : function(data) {}
 				});
 			}
-			else
+			else if(type == "File")
 			{
-				var link = $(this).parent().parent().parent().children("td:nth-child(2)").children().attr("href");
+				var link = $(this).parent().parent().children("td:nth-child(3)").children().attr("href");
 				var split = link.split("&nav=data&file_id=");
 				var file_id = split[1].replace("&action=file_detail","");
+
 				$.ajax(
 				{
 					async : false,
@@ -377,7 +377,6 @@ function data_browser()
 	 */
 	function open_data_browser_file_dialog(element)
 	{
-		
 		close_data_browser_file_dialog();
 		close_add_dialog();
 		
@@ -389,25 +388,27 @@ function data_browser()
 		var offset_y = pos.top + height - 2;
 		var dialog = $("<div id='DataBrowserFileDialog'>Permission denied.</div>");
 		
-		if($(element).children("td:nth-child(2)").children().hasClass("DataBrowserIsFolder"))
+		if($(element).children("td:nth-child(3)").children().hasClass("DataBrowserIsFolder"))
 		{
-			var link = $(element).children("td:nth-child(2)").children().children().attr("href");
+			var link = $(element).children("td:nth-child(3)").children().children().attr("href");
 			var folder_id = link.split("&folder_id=")[1];
 			load_context_sensitive_dialog(folder_id,"folder");
 		}
 		else
 		{
-			var link = $(element).children("td:nth-child(2)").children().attr("href");
-			if($(element).children("td:nth-child(3)").text() == "File")
+			var link = $(element).children("td:nth-child(3)").children().attr("href");
+			if($(element).children("td:nth-child(4)").text() == "File")
 			{
-				var split = link.split("&nav=data&file_id=");
-				var file_id = split[1].replace("&action=file_detail","");
+				var split_before = link.split("&file_id=");
+				var split_after = split_before[1].split("&");
+				var file_id = split_after[0];
 				load_context_sensitive_dialog(file_id,"file");
 			}
-			else if($(element).children("td:nth-child(3)").text() == "Value")
+			else if($(element).children("td:nth-child(4)").text() == "Value")
 			{
-				var split = link.split("&nav=data&value_id=");
-				var value_id = split[1].replace("&action=value_detail","");
+				var split_before = link.split("&value_id=");
+				var split_after = split_before[1].split("&");
+				var value_id = split_after[0];
 				load_context_sensitive_dialog(value_id,"value");
 			}
 			else
@@ -415,7 +416,6 @@ function data_browser()
 				return false;
 			}
 		}
-		
 		$(element)
 			.addClass("DataBrowserFileSelected")
 			.children("td").each(function()
@@ -446,7 +446,7 @@ function data_browser()
 			.hide()
 			.appendTo("#main");
 
-		bindDialogCloseClickHandler();
+		setTimeout(bind_dialog_close_click_handler, 20);
 		
 		return true;
 	}
@@ -489,7 +489,7 @@ function data_browser()
 	/**
 	 * Applies a click handler to the body listening for clicks outside the data browser to close open dialogs.
 	 */
-	function bindDialogCloseClickHandler(){
+	function bind_dialog_close_click_handler(){
 		$("body").click(function(evt)
 		{
 			close_data_browser_file_dialog();
@@ -658,6 +658,10 @@ function data_browser()
 				evt.preventDefault();
 				evt.stopPropagation();
 				var target = evt.target;
+				if(!$(target).is("a"))
+				{
+					return false;
+				}
 				var href = $(target).attr("href");
 				var split = href.split(/&(.+)/);
 				var action = split[0];
@@ -668,7 +672,7 @@ function data_browser()
 		$("#DataBrowserAddFileCornerContainer").show();
 		$("#DataBrowserAddFileCorner").show();
 		
-		bindDialogCloseClickHandler();
+		bind_dialog_close_click_handler();
 	}
 	
 	/**
@@ -688,6 +692,8 @@ function data_browser()
 	 */
 	function init_menu(folder_id)
 	{
+		$(".ListTable > thead > tr > th:first").html("<input type='checkbox' id='DataBrowserActionMasterCheckbox' name='' value=''></input>")
+
 		$.ajax({
 			type : "POST",
 			url : "ajax.php?nav=data&session_id="+get_array['session_id']+"&run=get_browser_menu",
@@ -792,7 +798,7 @@ function data_browser()
 				if(!$(this).hasClass("Deactivated"))
 				{
 					event.preventDefault();
-					event.stopPropagation();
+					event.stopImmediatePropagation();
 					if($("#DataBrowserAddFileDialog").is(':visible'))
 					{
 						close_add_dialog();
@@ -825,6 +831,11 @@ function data_browser()
 			.unbind("click")
 			.click(function()
 			{
+				if($(".DataBrowserDeleteCheckbox:checked").length === 0)
+				{
+					return;
+				}
+				
 				var container = $("<div>Do you really want to delete the selected items?</div>")
 				$(container).css({"text-align":"center","padding-top":"20px"});
 				$(container).dialog({"title" : "Confirm" ,  
@@ -843,6 +854,36 @@ function data_browser()
 			             }}]
 				});
 			});
+		
+		$("#DataBrowserActionMasterCheckbox")
+			.unbind("click")
+			.click(function()
+			{
+				if($(this).attr("checked"))
+				{
+					$(".DataBrowserDeleteCheckbox").each(function(){
+						if($(this).attr("disabled") !== true)
+						{
+							$(this).attr("checked","checked");
+						}
+					});
+				}
+				else
+				{
+					$(".DataBrowserDeleteCheckbox").removeAttr("checked");
+				}
+			});		
+		$("#DataBrowserMenuImageBrowser")
+		.unbind("click")
+		.click(function()
+		{
+			if($(this).hasClass("Deactivated"))
+			{
+				return false;
+			}
+			image_browser();
+		});
+
 	}
 	
 	/**
@@ -866,7 +907,10 @@ function data_browser()
 					"font-family":"arial",
 					"font-size":"12px",
 					"top": e.pageY + offsetY,
-					"left": e.pageX + offsetX
+					"left": e.pageX + offsetX,
+					"border-radius": "5px",
+					"-moz-border-radius": "5px",
+					"-webkit-border-radius": "5px"
 				})
 				.hide()
 				.appendTo('body')

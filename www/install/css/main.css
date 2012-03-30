@@ -1,0 +1,71 @@
+html,body
+{
+	margin: 0;
+	padding: 0;
+	background-color: #f3f3f3;
+	height: 100%;
+}
+#Main
+{
+	font: normal 12px Arial, Helvetica, sans-serif;
+	position: relative;
+	width: 980px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #f3f3f3;
+	background-image: url("../../images/shades/shade.png");
+	background-position: center top;
+	background-repeat: repeat-y;
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+}
+#Header
+{
+	margin: 0;
+	padding-top: 0.4em;
+	border-bottom: 1px #C0C0C0 dotted;
+}
+#Header img
+{
+	padding: 10px;
+}
+#Container
+{
+	background-color: white;
+	margin-left: auto;
+	margin-right: auto;
+	width: 968px;
+}
+#Content
+{
+	margin: 10px;
+}
+
+#InstallContainer
+{
+	width: 70%;
+	margin-left: auto;
+	margin-right: auto;
+}
+#InstallTable
+{
+	width: 100%;
+}
+#InstallTable th
+{
+	text-align: left;
+	border-bottom: 1px #C0C0C0 dotted;
+}
+#InstallTable td
+{
+	text-align: left;
+}
+
+#InstallLoginContainer
+{
+	width: 50%;
+	margin-top: 35px;
+	margin-left: auto;
+	margin-right: auto;
+}

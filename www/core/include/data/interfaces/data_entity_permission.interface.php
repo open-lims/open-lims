@@ -38,12 +38,10 @@ interface DataEntityPermissionInterface
 	
 	function __destruct();
 	
-	/**
-	 * @param integer $folder_flag
-	 * @return bool
-	 */
-	public function set_folder_flag($folder_flag);
+	public function set_read_permission();
 	
+	public function set_write_permission();
+		
 	/**
 	 * @param integer $intention
 	 * 	1 = read

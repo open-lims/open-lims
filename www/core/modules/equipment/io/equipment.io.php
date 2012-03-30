@@ -35,6 +35,7 @@ class EquipmentIO
 		{
 			if (!is_numeric($_POST[type_id]))
 			{
+				$error = "You have to select an entry";
 				$page_2_passed = false;
 			}
 			else
@@ -52,6 +53,15 @@ class EquipmentIO
 			$equipment_array = EquipmentType::list_entries();
 		
 			$template = new HTMLTemplate("equipment/add.html");
+			
+			if ($error)
+			{
+				$template->set_var("error", $error);
+			}
+			else
+			{
+				$template->set_var("error", "");	
+			}
 			
 			$paramquery = $_GET;
 			$paramquery[nextpage] = 2;
@@ -74,6 +84,7 @@ class EquipmentIO
 							$equipment_type = new EquipmentType($value);
 						
 							$result[$counter][value] = $value;
+							$result[$counter][disabled] = "";
 							$result[$counter][content] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
 							
 							$counter++;
@@ -97,6 +108,7 @@ class EquipmentIO
 									$equipment_type = new EquipmentType($value);
 							
 									$result[$counter][value] = $value;
+									$result[$counter][disabled] = "";
 									$result[$counter][content] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
 									
 									$counter++;
@@ -124,6 +136,7 @@ class EquipmentIO
 									$equipment_type = new EquipmentType($value);
 							
 									$result[$counter][value] = $value;
+									$result[$counter][disabled] = "";
 									$result[$counter][content] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
 									
 									$counter++;
@@ -141,6 +154,7 @@ class EquipmentIO
 						$equipment_type = new EquipmentType($value);
 						
 						$result[$counter][value] = $value;
+						$result[$counter][disabled] = "";
 						$result[$counter][content] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
 						
 						$counter++;
@@ -151,6 +165,7 @@ class EquipmentIO
 			if ($counter == 0)
 			{
 				$result[0][value] = "0";
+				$result[0][disabled] = "disabled='disabled'";
 				$result[0][content] = "NO EQUIPMENT FOUND!";	
 			}
 			

@@ -43,6 +43,12 @@ class SystemFolder extends Folder implements ConcreteFolderCaseInterface
 		if (is_numeric($folder_id))
   		{
   			parent::__construct($folder_id);
+  			$this->data_entity_permission->set_read_permission();
+  			
+  			if ($this->data_entity_permission->is_access(1))
+			{
+				$this->read_access = true;
+			}
   		}
   		else
   		{
@@ -153,8 +159,4 @@ class SystemFolder extends Folder implements ConcreteFolderCaseInterface
 			return false;
 		}
 	}
-	
-	
-	
-
 }

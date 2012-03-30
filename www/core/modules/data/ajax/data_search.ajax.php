@@ -70,10 +70,6 @@ class DataSearchAjax
 						$params = http_build_query($paramquery, '', '&#38;');
 						
 						$tmp_name = $value[name];
-						if (strlen($tmp_name) > 20)
-						{
-							$tmp_name = substr($tmp_name,0 ,20)."...";
-						}
 						unset($list_array[$key][name]);
 						$list_array[$key][name][content] = $tmp_name;
 						
@@ -111,10 +107,6 @@ class DataSearchAjax
 						$params = http_build_query($paramquery, '', '&#38;');
 						
 						$tmp_name = $value[name];
-						if (strlen($tmp_name) > 20)
-						{
-							$tmp_name = substr($tmp_name,0 ,20)."...";
-						}
 						unset($list_array[$key][name]);
 						$list_array[$key][name][content] = $tmp_name;
 						
@@ -151,10 +143,6 @@ class DataSearchAjax
 						$params = http_build_query($paramquery, '', '&#38;');
 						
 						$tmp_name = $value[name];
-						if (strlen($tmp_name) > 20)
-						{
-							$tmp_name = substr($tmp_name,0 ,20)."...";
-						}
 						unset($list_array[$key][name]);
 						$list_array[$key][name][content] = $tmp_name;
 						
