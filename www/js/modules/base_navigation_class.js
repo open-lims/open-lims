@@ -33,9 +33,8 @@ function base_navigation()
 			var button_down = this;
 			
 			//this should actually fix IE 7 + 8 but somehow it does not?!
-			$(button_down)
-				.css("background-position","0px 0px")
-				.next().css("background-position","0px 0px");
+			$(button_down).css("background-position","0 0");
+			$(button_down).next().css("background-position","0 0");
 //			alert($(this).css("background-position")); //always returns undefined
 			
 			button_handler(button_down);
@@ -48,19 +47,27 @@ function base_navigation()
 	{
 		var tab = $(button_down).parent().parent();
 
+		var last_color;
 		$(tab)
 			.bind("mouseover", function(){
 				if(!$(tab).hasClass(".GreyedOut"))
 				{
 					grey_out_active_tab_if_necessary(tab);
 				}
+				if($("#NavigationButtonMenu").size() === 0)
+				{
+					var color = get_tab_color(tab);
+					last_color = $("#NavigationBackground").css("border-bottom");
+					$("#NavigationBackground").css("border-bottom", "solid 1px "+color);
+				}
 			})
 			.bind("mouseout", function(){
 				if($("#NavigationButtonMenu").size() === 0)
 				{
 					remove_grey_out_active_tab();
+					$("#NavigationBackground").css("border-bottom", last_color);
 				}
-		});
+			});
 		
 		$(button_down)
 			.bind("mouseover", function(){
@@ -126,8 +133,29 @@ function base_navigation()
 			$(".GreyedOut")
 				.removeClass("GreyedOut")
 				.attr("class",original_class);
+		}	
+	}
+	
+	function get_tab_color(tab)
+	{
+		var color;
+		if($(tab).hasClass("Blue"))
+		{
+			color = "#336699";
 		}
-		
+		else if($(tab).hasClass("Green"))
+		{
+			color = "#99cd32";
+		}
+		else if($(tab).hasClass("Orange"))
+		{
+			color = "#dcaf36";
+		}
+		else if($(tab).hasClass("Grey"))
+		{
+			color = "#535353";
+		}
+		return color;
 	}
 	
 	function open_menu(tab)
@@ -135,62 +163,35 @@ function base_navigation()
 		var height = $(tab).find(".NavigationButtonLeft").height();
 		var top = $(tab).offset().top + height + 1;
 		var left = $(tab).offset().left;
-		var color = $(tab).find(".NavigationButtonContent").css("text-shadow");		
-		color = color.split(")")[0] + ")";
-		
-//		color = "#ffffff";
+		var color = get_tab_color(tab);
 		
 		var menu_html = get_html(tab);
-
-//		$(menu_html).find(".NavigationButtonMenuCategory").each(function(i){
-//			if(i > 0)
-//			{
-//				$(this).css("margin-left","2px");
-//			}
-//		});
 		
-		var height = $(menu_html).outerHeight();
-
 		$(menu_html).find(".NavigationButtonMenuColumn").each(function(i){
 			if(i > 0)
 			{
 				$(this).css("border-left","dotted "+color+" 1px");
 				$(this).css("padding-left","5px");
 				$(this).css("margin-left","5px");
-				$(this).height(103);
-			}
-			else
-			{
-//				$(this).css("padding-left","5px");
 			}
 		});
 		
-		$(menu_html).find(".NavigationButtonMenuCategoryCaption").css({
-//			"background-color": color
-//		   	"box-shadow": "inset 0 0 5px "+color,
-//			"-moz-box-shadow": "inset 0 0 5px "+color,
-//			"-webkit-box-shadow": "inset 0 0 5px "+color
-		});
 		$(menu_html).find(".NavigationButtonMenuCategory").children().children().children().each(function(){
 			$(this).hover(function(){
-//			$(this).addClass("NavigationButtonMenuCategoryItemHover")
 				$(this).css("background-color",color);
-		}, function(){
-//			$(this).removeClass("NavigationButtonMenuCategoryItemHover")
-			$(this).css("background-color","");
-		});
+			}, function(){
+				$(this).css("background-color","");
+			});
 		});
 		
-				
-		var menu = $("<div id='NavigationButtonMenu'></div>") //TODO auslagern
+		var menu = $("<div id='NavigationButtonMenu'></div>")
 			.css({
 				"top": top,
 				"left": left,
-//				"background-color": color,
 				"border-left": "solid 1px "+color,
 				"border-right": "solid 1px "+color,
-				"border-bottom": "solid 1px "+color,
-				"min-width": $(tab).width()
+				"border-bottom": "solid 1px "+color
+//				"min-width": $(tab).width()
 			})
 			.html(menu_html)
 			.data("refersToTab", tab)
@@ -205,7 +206,6 @@ function base_navigation()
 			.addClass("Active"+tab_class)
 			.data("originalClass", tab_class);
 		
-		//TODO php?
 		$("#NavigationBackground").css("border-bottom", "solid 1px "+color);
 		
 		var bind_body_click_handler = function() 
@@ -476,20 +476,8 @@ function base_scrollable_navigation_tabs()
 		var hidden_tabs_menu = $("<div id='NavigationMenuHiddenTabsMenu'></div>")
 			.css(
 			{
-				"position":"absolute",
-				"width":100,
-				"background-color":"white",
-				"border":"solid black 1px",
-				"padding":"5px",
-				"font-family":"arial",
-				"font-size":"12px",
-				"z-index":"200",
 				"top": y,
-				"left": x,
-			    "-moz-border-radius": 10,
-		    	"-webkit-border-radius": 10,
-		    	"-khtml-border-radius": 10,
-		    	"border-radius": 10
+				"left": x
 			})
 			.appendTo("#NavigationMenuCamera")
 			.fadeIn(200)

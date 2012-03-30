@@ -156,17 +156,13 @@ html,body
    	-webkit-border-bottom-left-radius: 10px;
    	-khtml-border-bottom-left-radius: 10px;
    	border-bottom-left-radius: 10px;
-/*    	padding: 5px 5px 5px 5px; */
-   	
-/*    	padding-bottom: 2px; */
-   	
    	font-family: arial;
    	background-color: #ffffff;
   	-moz-box-shadow: 3px 3px 5px #636363;
   	-webkit-box-shadow: 3px 3px 5px #636363;
  	 box-shadow: 3px 3px 5px #636363;
 	padding: 5px 5px 7px 5px;
-/*  	 	padding: 1px 1px 1px 1px; */
+	z-index:1000;
 }
 
 .NavigationButtonMenuCategory
@@ -188,7 +184,6 @@ html,body
 {
 	float:left;
 	width: 150px;
-/* 	margin-left:5px; */
 }
 
 .NavigationButtonMenuCategoryCaption
@@ -203,11 +198,9 @@ html,body
 
 .NavigationButtonMenuCategory ul 
 {
-/* 	background-color:#ffffff; */
 	list-style:none;
 	padding: 0;
 	margin: 0;
-/* 	margin: 10px 10px 10px 10px; */
 	font-size: 13px;
 }
 
@@ -217,7 +210,6 @@ html,body
 	text-decoration: none;
 	color: #333333;
 	font-weight: normal;
-/* 	text-shadow: -1px -1px #99cd32; */
 	-moz-border-radius: 5px;
    	-webkit-border-radius: 5px;
    	-khtml-border-radius: 5px;
@@ -230,6 +222,47 @@ html,body
 {
 	color: #ffffff;	
 }
+
+
+/* Tabs Navigation */
+
+#NavigationMenuHiddenTabsMenu
+{
+	position: absolute;
+	background-color: white;
+	border: solid black 1px;
+	font-family: arial;
+	font-size: 12px;
+	z-index: 200;
+	width: 100px;
+    -moz-border-radius: 10px;
+   	-webkit-border-radius: 10px;
+   	-khtml-border-radius: 10px;
+   	border-radius: 10px;
+   	padding: 5px 5px 5px 5px;
+   	border: solid black 1px;
+   	-moz-box-shadow: 3px 3px 5px #636363;
+  	-webkit-box-shadow: 3px 3px 5px #636363;
+ 	box-shadow: 3px 3px 5px #636363;
+}
+
+.NavigationMenuHiddenTabsMenuEntry
+{
+	font-weight: bold;
+	font-size: 14px;
+	padding: 3px 3px 3px 3px;
+	-moz-border-radius: 5px;
+   	-webkit-border-radius: 5px;
+   	-khtml-border-radius: 5px;
+   	border-radius: 5px;
+}
+
+.NavigationMenuHiddenTabsMenuEntry:hover
+{
+	color: #ffffff;
+	background-color: #999;
+}
+
 
 /* Left Navigation */
 #NavigationMenu
