@@ -22,7 +22,7 @@
 function base_navigation()
 {
 	
-	var arrow_margin_top = parseInt($(".NavigationButtonDown").children().css("margin-top").replace("px",""));
+//	var arrow_margin_top = parseInt($(".NavigationButtonLeft").css("margin-top").replace("px",""));
 	var animate_downwards_pixels = 5;
 	
 	init();
@@ -48,6 +48,20 @@ function base_navigation()
 	{
 		var tab = $(button_down).parent().parent();
 
+		$(tab)
+			.bind("mouseover", function(){
+				if(!$(tab).hasClass(".GreyedOut"))
+				{
+					grey_out_active_tab_if_necessary(tab);
+				}
+			})
+			.bind("mouseout", function(){
+				if($("#NavigationButtonMenu").size() === 0)
+				{
+					remove_grey_out_active_tab();
+				}
+		});
+		
 		$(button_down)
 			.bind("mouseover", function(){
 				$(this).children("img").attr("src","images/down_active.png");
@@ -61,12 +75,6 @@ function base_navigation()
 				//close open tab
 				var currently_selected_tab = close_menu();
 				
-				//reset style of currently active tab
-				var original_class = $(".GreyedOut").data("originalClass");
-				$(".GreyedOut")
-					.removeClass("GreyedOut")
-					.attr("class",original_class);
-				
 				if(currently_selected_tab !== undefined)
 				{
 					animate_right_tab_side_up(currently_selected_tab);
@@ -77,25 +85,49 @@ function base_navigation()
 						return true;
 					}
 				}
+				//reset style of currently active tab
+				remove_grey_out_active_tab();
 				
 				//change style of currently active tab (if the menu does not come from this tab)
-				var active_tab;				
-				$("#NavigationMenu").children().each(function(){
-					if($(this).attr("class").indexOf("Active") !== -1)
-					{
-						active_tab = this;
-						return false;
-					}
-				});
-				if($(tab)[0] !== $(active_tab)[0]) {
-					$(active_tab).data("originalClass",$(active_tab).attr("class"));
-					$(active_tab).attr("class","GreyedOut");
-				}
+				grey_out_active_tab_if_necessary(tab);
 				
 				//open new tab
 				animate_right_tab_side_down(tab);
 				open_menu(tab);
 			});
+		
+		function grey_out_active_tab_if_necessary(menu_tab)
+		{
+			var active_tab = undefined;			
+			$("#NavigationMenu").children().each(function(){
+				if($(this).attr("class").indexOf("Active") !== -1)
+				{
+					active_tab = this;				
+					if($(menu_tab)[0] !== $(this)[0])
+					{
+						return false;
+					}
+				}
+			});
+			if($(active_tab).hasClass("SubMenuOpened"))
+			{
+				return false;
+			}
+			
+			if($(menu_tab)[0] !== $(active_tab)[0]) {
+				$(active_tab).data("originalClass",$(active_tab).attr("class"));
+				$(active_tab).attr("class","GreyedOut");
+			}
+		}
+		
+		function remove_grey_out_active_tab() 
+		{	
+			var original_class = $(".GreyedOut").data("originalClass");
+			$(".GreyedOut")
+				.removeClass("GreyedOut")
+				.attr("class",original_class);
+		}
+		
 	}
 	
 	function open_menu(tab)
@@ -106,25 +138,59 @@ function base_navigation()
 		var color = $(tab).find(".NavigationButtonContent").css("text-shadow");		
 		color = color.split(")")[0] + ")";
 		
-		var menu_html = get_html(tab);
+//		color = "#ffffff";
 		
-		var menu = $("<div class='NavigationButtonMenu'></div>")
+		var menu_html = get_html(tab);
+
+//		$(menu_html).find(".NavigationButtonMenuCategory").each(function(i){
+//			if(i > 0)
+//			{
+//				$(this).css("margin-left","2px");
+//			}
+//		});
+		
+		var height = $(menu_html).outerHeight();
+
+		$(menu_html).find(".NavigationButtonMenuColumn").each(function(i){
+			if(i > 0)
+			{
+				$(this).css("border-left","dotted "+color+" 1px");
+				$(this).css("padding-left","5px");
+				$(this).css("margin-left","5px");
+				$(this).height(103);
+			}
+			else
+			{
+//				$(this).css("padding-left","5px");
+			}
+		});
+		
+		$(menu_html).find(".NavigationButtonMenuCategoryCaption").css({
+//			"background-color": color
+//		   	"box-shadow": "inset 0 0 5px "+color,
+//			"-moz-box-shadow": "inset 0 0 5px "+color,
+//			"-webkit-box-shadow": "inset 0 0 5px "+color
+		});
+		$(menu_html).find(".NavigationButtonMenuCategory").children().children().children().each(function(){
+			$(this).hover(function(){
+//			$(this).addClass("NavigationButtonMenuCategoryItemHover")
+				$(this).css("background-color",color);
+		}, function(){
+//			$(this).removeClass("NavigationButtonMenuCategoryItemHover")
+			$(this).css("background-color","");
+		});
+		});
+		
+				
+		var menu = $("<div id='NavigationButtonMenu'></div>") //TODO auslagern
 			.css({
-				"position": "absolute",
 				"top": top,
 				"left": left,
-				"background-color": color,
-				"border": "solid 1px "+color,
-				"border-top": 0,
-			    "-moz-border-bottom-right-radius": 10,
-		    	"-webkit-border-bottom-right-radius": 10,
-		    	"-khtml-border-bottom-right-radius": 10,
-		    	"border-bottom-right-radius": 10,
-		    	"-moz-border-bottom-left-radius": 10,
-		    	"-webkit-border-bottom-left-radius": 10,
-		    	"-khtml-border-bottom-left-radius": 10,
-		    	"border-bottom-left-radius": 10,
-		    	"padding": "5px 10px 10px 10px"
+//				"background-color": color,
+				"border-left": "solid 1px "+color,
+				"border-right": "solid 1px "+color,
+				"border-bottom": "solid 1px "+color,
+				"min-width": $(tab).width()
 			})
 			.html(menu_html)
 			.data("refersToTab", tab)
@@ -135,19 +201,40 @@ function base_navigation()
 		//mark tab as active
 		var tab_class = $(tab).attr("class");
 		$(tab)
+			.addClass("SubMenuOpened")
 			.addClass("Active"+tab_class)
 			.data("originalClass", tab_class);
 		
 		//TODO php?
 		$("#NavigationBackground").css("border-bottom", "solid 1px "+color);
+		
+		var bind_body_click_handler = function() 
+		{
+			$("body")
+				.unbind("click", body_click_handler)
+				.bind("click", body_click_handler);
+		};
+		setTimeout(bind_body_click_handler, 100);
 	}
+	
+	var body_click_handler = function(){
+		var tab_to_close = close_menu();
+		animate_right_tab_side_up(tab_to_close);
+
+		var original_class = $(".GreyedOut").data("originalClass");
+		$(".GreyedOut")
+			.removeClass("GreyedOut")
+			.attr("class",original_class);
+		
+		$("body").unbind("click", body_click_handler);
+	};
 	
 	function close_menu()
 	{
-		var tab_to_close = $(".NavigationButtonMenu").data("refersToTab");
+		var tab_to_close = $("#NavigationButtonMenu").data("refersToTab");
 		
 		//fadeout and destroy menu
-		$(".NavigationButtonMenu").fadeOut(200, function(){
+		$("#NavigationButtonMenu").fadeOut(200, function(){
 			$(this).remove();
 		});
 			
@@ -157,6 +244,8 @@ function base_navigation()
 		
 		//TODO php?
 		$("#NavigationBackground").css("border-bottom", "solid 1px #336699");
+				
+		$("body").unbind("click", body_click_handler);
 		
 		return tab_to_close;
 	}
@@ -196,7 +285,7 @@ function base_navigation()
 		$(right_tab_side_arrow)
 			.children()
 			.stop()
-			.animate({"margin-top": arrow_margin_top}, 200)
+//			.animate({"margin-top": arrow_margin_top}, 200)
 			.rotate({animateTo:0, duration:400});
 		
 		//animate right part
@@ -205,13 +294,40 @@ function base_navigation()
 	
 	function get_html(tab)
 	{
-		var html = $("<ul><li>entry</li><li>long entry</li><li>longer entry</li><li>even longer entry</li><li>very very long entry</li></ul>")
-			.css({
-				"font-family": "arial",
-				"padding": 0,
-				"margin": 0,
-				"margin-left": 10
-			});
+//		var lists = $("<div>headline 1</div><ul><li>entry</li><li>long entry</li><li>longer entry</li><li>even longer entry</li><li>very very long entry</li></ul><div>headline 2</div><ul><li>zonk</li></ul>");
+		var lists = $(tab).find(".NavigationButtonSubMenu").html();
+		
+		var html = $("<div></div>");
+				
+		
+		var append_to = html;
+		$(lists).each(function(){
+			if($(this).is("div") === true)
+			{
+				append_to = $("<div class='NavigationButtonMenuColumn'></div>").appendTo(html);
+				$("<div class='NavigationButtonMenuCategoryCaption'></div>")
+					.append($(this))
+					.appendTo(append_to);
+			}
+			else
+			{
+				$("<div class='NavigationButtonMenuCategory'></div>")
+					.append($(this))
+					.appendTo(append_to);
+			}
+		});
+
+//		$(html).find(".NavigationButtonMenuCategory:last").css({
+//			"-moz-border-bottom-right-radius": 7,
+//		   	"-webkit-border-bottom-right-radius": 7,
+//		   	"-khtml-border-bottom-right-radius": 7,
+//		   	"border-bottom-right-radius": 7,
+//		   	"-moz-border-bottom-left-radius": 7,
+//		   	"-webkit-border-bottom-left-radius": 7,
+//		   	"-khtml-border-bottom-left-radius": 7,
+//		   	"border-bottom-left-radius": 7
+//		});
+		
 		return html;
 	}
 

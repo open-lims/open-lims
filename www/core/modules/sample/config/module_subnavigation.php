@@ -64,20 +64,4 @@ $manufacturer_params = http_build_query($manufacturer_paramquery,'','&#38;');
 
 $sub_menu[3][params] = $manufacturer_params;
 $sub_menu[3][title] = "Manufacturer List";
-
-
-$mini_search_paramquery[username] = $_GET[username];
-$mini_search_paramquery[session_id] = $_GET[session_id];
-$mini_search_paramquery[nav] = "sample";
-$mini_search_paramquery[run] = "search";
-$mini_search_paramquery[dialog] = "sample_search";
-$mini_search_paramquery[nextpage] = "1";
-$mini_search_params = http_build_query($mini_search_paramquery,'','&#38;');
-
-
-$template->set_var("sub_menu", $sub_menu);
-$template->set_var("search_bar", true);
-$template->set_var("mini_search_params", $mini_search_params);
-
-unset($sub_menu);
 ?>

@@ -4,6 +4,7 @@ html,body
 	padding: 0;
 	background-color: #f3f3f3;
 	height: 100%;
+	color: #444444;
 }
 #Main
 {
@@ -135,6 +136,99 @@ html,body
 	background-position: top left;
 	z-index: 1;
 	border-bottom: 1px #336699 solid;	
+}
+
+/* Sub Navigation */
+.NavigationButtonSubMenu 
+{
+	display: none;
+}
+
+#NavigationButtonMenu
+{
+	position: absolute;
+	border-top: 0;
+    -moz-border-bottom-right-radius: 10px;
+   	-webkit-border-bottom-right-radius: 10px;
+   	-khtml-border-bottom-right-radius: 10px;
+   	border-bottom-right-radius: 10px;
+   	-moz-border-bottom-left-radius: 10px;
+   	-webkit-border-bottom-left-radius: 10px;
+   	-khtml-border-bottom-left-radius: 10px;
+   	border-bottom-left-radius: 10px;
+/*    	padding: 5px 5px 5px 5px; */
+   	
+/*    	padding-bottom: 2px; */
+   	
+   	font-family: arial;
+   	background-color: #ffffff;
+  	-moz-box-shadow: 3px 3px 5px #636363;
+  	-webkit-box-shadow: 3px 3px 5px #636363;
+ 	 box-shadow: 3px 3px 5px #636363;
+	padding: 5px 5px 7px 5px;
+/*  	 	padding: 1px 1px 1px 1px; */
+}
+
+.NavigationButtonMenuCategory
+{
+/* 	background-color: none; */
+/* 	-moz-border-bottom-right-radius: 7px; */
+/*    	-webkit-border-bottom-right-radius: 7px; */
+/*    	-khtml-border-bottom-right-radius: 7px; */
+/*    	border-bottom-right-radius: 7px; */
+/*    	-moz-border-bottom-left-radius: 7px; */
+/*    	-webkit-border-bottom-left-radius: 7px; */
+/*    	-khtml-border-bottom-left-radius: 7px; */
+/*    	border-bottom-left-radius: 7px; */
+
+/* 	padding: 5px 5px 5px 5px; */
+}
+
+.NavigationButtonMenuColumn
+{
+	float:left;
+	width: 150px;
+/* 	margin-left:5px; */
+}
+
+.NavigationButtonMenuCategoryCaption
+{
+	color: #ffffff;
+	font-weight:bold;
+	font-size:14px;
+	color: #999;
+	padding-bottom: 5px;
+	padding: 2px 7px 5px 7px;
+}
+
+.NavigationButtonMenuCategory ul 
+{
+/* 	background-color:#ffffff; */
+	list-style:none;
+	padding: 0;
+	margin: 0;
+/* 	margin: 10px 10px 10px 10px; */
+	font-size: 13px;
+}
+
+
+.NavigationButtonMenuCategory ul li a 
+{
+	text-decoration: none;
+	color: #333333;
+	font-weight: normal;
+/* 	text-shadow: -1px -1px #99cd32; */
+	-moz-border-radius: 5px;
+   	-webkit-border-radius: 5px;
+   	-khtml-border-radius: 5px;
+   	border-radius: 5px;	
+   	display:block;
+   	padding: 2px 7px 2px 7px;
+}
+
+.NavigationButtonMenuCategory ul li a:hover 
+{
+	color: #ffffff;	
 }
 
 /* Left Navigation */

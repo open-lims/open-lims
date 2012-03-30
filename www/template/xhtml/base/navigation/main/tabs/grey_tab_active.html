@@ -9,4 +9,16 @@
 		<span class='NavigationButton NavigationButtonRight'></span>
 		<!-- ENDIF -->
 	</a>
+	<!-- IF ([[DOWN]]) -->
+	<div class='NavigationButtonSubMenu'>
+		<div>Actions</div>
+		<ul>
+		<!-- FOREACH BEGIN ([[LINK]]) -->
+			<li>
+				<a href='index.php?[[LINK:PARAMS]]'>[[LINK:TITLE]]</a>
+			</li>
+		<!-- FOREACH END -->
+		</ul>
+	</div>
+	<!-- ENDIF -->
 </li>

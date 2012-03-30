@@ -124,7 +124,17 @@ class Navigation_IO
 						$subnavigation_file = $config_folder."/module_subnavigation.php";
 						if (is_file($subnavigation_file))
 						{
-							$template->set_var("down", true);
+							require_once($subnavigation_file);
+							if (is_array($sub_menu) and count($sub_menu) >= 1)
+							{
+								$template->set_var("down", true);
+								$template->set_var("link", $sub_menu);
+							}
+							else
+							{
+								$template->set_var("down", false);
+							}
+							unset($sub_menu);
 						}
 						else
 						{
