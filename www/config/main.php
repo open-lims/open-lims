@@ -24,7 +24,7 @@
 /**
  * 
  */
-$server['main_folder']							= "D:/open-lims";
+$server['main_folder']							= "D:/web/open-lims";
 
 $database['type'] 								= "postgres";
 $database['database'] 							= "open-lims";
