@@ -22,23 +22,12 @@
  */
 
 /**
- * 
- */
-require_once("interfaces/job.wrapper.interface.php");
-
-if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
-{
-	require_once("access/job.wrapper.access.php");
-}
-
-/**
- * Job Wrapper Class
+ * Job Wrapper Interface
  * @package job
  */
-class Job_Wrapper implements Job_WrapperInterface
+class Job_WrapperInterface
 {
 	/**
-	 * @see Job_WrapperInterface::list_jobs()
 	 * @param string $datetime
 	 * @param string $order_by
 	 * @param string $order_method
@@ -46,19 +35,11 @@ class Job_Wrapper implements Job_WrapperInterface
 	 * @param integer $end
 	 * @return array
 	 */
-	public static function list_jobs($datetime, $order_by, $order_method, $start, $end)
-	{
-		return Job_Wrapper_Access::list_jobs($datetime, $order_by, $order_method, $start, $end);
-	}
+	public static function list_jobs($datetime, $order_by, $order_method, $start, $end);
 	
 	/**
-	 * @see Job_WrapperInterface::count_jobs()
 	 * @param string $datetime
 	 * @return integer
 	 */
-	public static function count_jobs($datetime)
-	{
-		return Job_Wrapper_Access::count_jobs($datetime);
-	}
+	public static function count_jobs($datetime);
 }
-?>

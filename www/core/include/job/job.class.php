@@ -24,7 +24,7 @@
 /**
  * 
  */
-// require_once("interfaces/job.wrapper.interface.php");
+require_once("interfaces/job.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
@@ -36,13 +36,22 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Job Class
  * @package job
  */
-class Job
+class Job implements JobInterface
 {
+	/**
+	 * @see JobInterface::__construct()
+	 * @param $job_id
+	 */
 	function __construct($job_id)
 	{
 		
 	}
 	
+	/**
+	 * @see JobInterface::create()
+	 * @param integer $type_id
+	 * @return integer
+	 */
 	public function create($type_id)
 	{
 		global $user;
@@ -72,6 +81,17 @@ class Job
 		{
 			return null;
 		}
+	}
+	
+	
+	/**
+	 * @see JobInterface::get_type_id_by_internal_name()
+	 * @param string $internal_name
+	 * @return integer
+	 */
+	public static function get_type_id_by_internal_name($internal_name)
+	{
+		return JobType_Access::get_id_by_internal_name($internal_name);
 	}
 }
 ?>

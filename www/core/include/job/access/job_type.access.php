@@ -279,5 +279,35 @@ class JobType_Access
 			return false;
 		}
 	}
+
+
+	/**
+	 * @param string $internal_name
+	 * @return integer
+	 */
+	public static function get_id_by_internal_name($internal_name)
+	{
+		global $db;
+		
+		if ($internal_name)
+		{
+			$sql = "SELECT id FROM ".constant("JOB_TYPE_TABLE")." WHERE internal_name='".$internal_name."'";
+			$res = $db->db_query($sql);			
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data['id'])
+			{
+				return $data['id'];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
 }
 ?>
