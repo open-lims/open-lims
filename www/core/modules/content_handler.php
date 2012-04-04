@@ -293,27 +293,53 @@ class ContentHandler_IO
  		{
 			if ($session->is_valid() == true)
 			{
-				$module_array = SystemHandler::list_modules();
-				
-				if (is_array($module_array) and count($module_array) >= 1)
-				{
-					foreach($module_array as $key => $value)
+				if ($_GET['nav'])
+				{				
+					$module_array = SystemHandler::list_modules();
+					
+					if (is_array($module_array) and count($module_array) >= 1)
 					{
-						if ($_GET[nav] == $value[name])
+						foreach($module_array as $key => $value)
 						{
-							$module_request_handler = "core/modules/".$value[folder]."/".$value[name].".request.php";
-							if (file_exists($module_request_handler))
+							if ($_GET['nav'] == $value['name'])
 							{
-								require_once($module_request_handler);
-								$value['class']::ajax_handler();
+								$module_request_handler = "core/modules/".$value['folder']."/".$value['name'].".request.php";
+								if (file_exists($module_request_handler))
+								{
+									require_once($module_request_handler);
+									$value['class']::ajax_handler();
+								}
 							}
 						}
 					}
 				}
+				elseif($_GET['extension'])
+				{
+					$extension_id = Extension::get_id_by_identifer($_GET['extension']);
+					if (is_numeric($extension_id))
+					{
+						$extension = new Extension($extension_id);
+						$extension_class = $extension->get_class();
+						$extension_file = constant("EXTENSION_DIR")."/".$extension->get_folder()."/".$extension->get_main_file();
+						if (file_exists($extension_file))
+						{
+							require_once($extension_file);
+							$extension_class::ajax();
+						}
+					}
+					else
+					{
+						// Exception
+					}
+				}
+				else
+				{
+					// Exception
+				}
 			}
 			else
 			{
-				if ($_GET[run] == "login" or $_GET[run] == "cron")
+				if ($_GET['run'] == "login" or $_GET['run'] == "cron")
 				{
 					require_once("core/modules/base/base.request.php");
 					BaseRequest::ajax_handler();

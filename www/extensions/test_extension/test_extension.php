@@ -58,11 +58,26 @@ class TestExtension implements ConreteExtensionInterface
 	 * @param integer $status_id
 	 * @return integer
 	 */
-	public static function get_data_status($status_id)
+	public static function get_data_status($run_id)
 	{
 		require_once("classes/test.class.php");
-		$test = new Test($status_id);
+		$test = new Test($run_id);
 		return $test->get_status();
+	}
+	
+	public static function set_target_folder_id($target_folder_id)
+	{
+		
+	}
+	
+	public static function set_event_identifer($event_identifer)
+	{
+		
+	}
+	
+	public static function listen_events($event)
+	{
+		
 	}
 	
 	public static function main()
@@ -70,6 +85,11 @@ class TestExtension implements ConreteExtensionInterface
 		require_once("io/test_extension.io.php");
 		TestExtensionIO::set_template_path("extensions/test_extension/template");
 		TestExtensionIO::home();
+	}
+	
+	public static function ajax()
+	{
+		
 	}
 }
 ?>

@@ -35,7 +35,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Project Extension
  * @package project
  */
-class ProjectExtension // implements ProjectExtensionInterface
+class ProjectExtension // implements ProjectExtensionInterface, EventListenerInterface
 {
 	public static function start_extension($extension_id, $project_id)
 	{
@@ -46,5 +46,33 @@ class ProjectExtension // implements ProjectExtensionInterface
 	{
 		
 	}
+	
+	/**
+     * @see EventListenerInterface::listen_events()
+     * @param object $event_object
+     * @return bool
+     */
+    public static function listen_events($event_object)
+    {
+    	if ($event_object instanceof ExtensionCreateRunEvent)
+    	{
+    		$event_identifer_array = $session->read_value("PROJECT_EXTENSION_EVENT_IDENTIFER_ARRAY");
+    		$event_object_identifer = $event_object->get_event_identifer();
+    		
+    		if ($event_identifer_array[$event_object_identifer])
+    		{
+    			$run_id = $event_object->get_run_id();
+    			$extension_id = $event_object->get_extension_id();
+    			
+    			$project_has_run_access = new ProjectHasExtensionRun_Access(null);
+    			if ($project_has_run_access->create($event_identifer_array[$event_object_identifer], $extension_id, $run_id) == null)
+    			{
+    				return false;
+    			}
+    		}
+    	}
+    	    	
+    	return true;
+    }
 }
 ?>

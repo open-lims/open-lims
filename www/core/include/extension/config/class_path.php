@@ -24,6 +24,8 @@
 /**
  * 
  */
+	$classes['ExtensionCreateRunEvent']		= $path_prefix."core/include/extension/events/extension_create_run_event.class.php";
+
 	$classes['ConreteExtensionInterface']	= $path_prefix."core/include/extension/interfaces/concrete_extension.interface.php";
 
 	$classes['Extension']					= $path_prefix."core/include/extension/extension.class.php";

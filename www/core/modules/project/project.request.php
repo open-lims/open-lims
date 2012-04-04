@@ -757,6 +757,7 @@ class ProjectRequest
 						require_once($main_file);
 						
 						$project = new Project($_GET['project_id']);
+						$project_item = new ProjectItem($_GET['project_id']);
 						$project_status_requirements = $project->get_current_status_requirements();
 						
 						if (is_array($project_status_requirements) and count($project_status_requirements) >= 1)
@@ -781,8 +782,7 @@ class ProjectRequest
 						{
 							// Exception
 						}
-						
-						$project_item = new ProjectItem($_GET['project_id']);
+					
 						
 						if ($filter_array)
 						{
@@ -801,6 +801,23 @@ class ProjectRequest
 							$item_array = $project_item->get_project_items();
 						}					
 						
+						$event_identifer = uniqid("", true);
+						
+						if ($session->is_value("PROJECT_EXTENSION_EVENT_IDENTIFER_ARRAY"))
+						{
+							$project_extension_event_identifer_array = $session->read_value("PROJECT_EXTENSION_EVENT_IDENTIFER_ARRAY");
+							$project_extension_event_identifer_array[$event_identifer] = $_GET['project_id'];
+						}
+						else
+						{
+							$project_extension_event_identifer_array = array();
+							$project_extension_event_identifer_array[$event_identifer] = $_GET['project_id'];
+						}
+						
+						$session->write_value("PROJECT_EXTENSION_EVENT_IDENTIFER_ARRAY", $project_extension_event_identifer_array);
+						$main_class::set_event_identifer($event_identifer);
+						
+						$main_class::set_target_folder_id(ProjectStatusFolder::get_folder_by_project_id_and_project_status_id($_GET['project_id'], $project->get_current_status_id()));
 						$main_class::push_data($item_array);
 					}
 					else

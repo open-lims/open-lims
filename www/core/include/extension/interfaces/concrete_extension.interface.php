@@ -23,18 +23,65 @@
 
 /**
  * Concrete Extension Interface
+ * Defined the interfaces of a Open-LIMS extension
+ * The base class implements this interface and redeirects is to its logic classes
  * @package extension
  */
 interface ConreteExtensionInterface
 {
+	/**
+	 * Returns the path to the icon of the extension
+	 * @return string
+	 */
 	public static function get_icon();
 	
+	/**
+	 * Return the description of the extension
+	 * @return string
+	 */
 	public static function get_description();
 	
+	/**
+	 * Set the data (item-array) of the extensions
+	 * This is a content controller function
+	 * @param array $data
+	 */
 	public static function push_data($data);
 	
-	public static function get_data_status($status_id);
+	/**
+	 * Returns the status of a current run
+	 * @param integer $run_id
+	 * @return integer
+	 */
+	public static function get_data_status($run_id);
 	
+	/**
+	 * Sets the target folder for the generated files or values
+	 * @param integer $target_folder_id
+	 */
+	public static function set_target_folder_id($target_folder_id);
+	
+	/**
+	 * Sets an unique identifer which will be retured by the create-event to identify the extension run
+	 * @param string $event_identifer
+	 */
+	public static function set_event_identifer($event_identifer);
+	
+	/**
+	 * Sets called events which will be listend by the extension system to deal with it
+	 * e.g. deleted files
+	 * @param object $event
+	 */
+	public static function listen_events($event);
+	
+	/**
+	 * main content controller
+	 */
 	public static function main();
+	
+	/**
+	 * AJAX controller
+	 */
+	public static function ajax();
 }
 ?>
