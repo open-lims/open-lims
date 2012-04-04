@@ -185,6 +185,12 @@ interface FileInterface
 	public function get_checksum();
 	
 	/**
+	 * @return integer
+	 */
+	public function get_file_version_id();
+	
+	
+	/**
 	 * Returns true, if a file exists
 	 * @param integer $file_id
 	 * @return bool

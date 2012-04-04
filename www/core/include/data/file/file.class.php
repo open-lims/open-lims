@@ -45,6 +45,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	private static $file_object_array;
 	
 	private $file_id;
+	private $file_version_id;
 	
 	private $file;
 	private $file_version;
@@ -65,8 +66,8 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 				$this->file_id = $file_id;
 				$this->file = new File_Access($file_id);
 				
-				$file_version_id = FileVersion_Access::get_current_entry_by_toid($file_id);
-				$this->file_version = new FileVersion_Access($file_version_id);
+				$this->file_version_id = FileVersion_Access::get_current_entry_by_toid($file_id);
+				$this->file_version = new FileVersion_Access($this->file_version_id);
 	
 				parent::__construct($this->file->get_data_entity_id());
 			}
@@ -1802,8 +1803,24 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 			return null;
 		}
 	}
+	
+	/**
+	 * @see FileInterface::get_file_version_id();
+	 * @return integer
+	 */
+	public function get_file_version_id()
+	{
+		if ($this->file_version_id)
+		{
+			return $this->file_version_id;
+		}
+		else
+		{
+			return null;
+		}
+	}
 
-
+	
 	/**
 	 * @see FileInterface::exist_file()
 	 * @param integer $file_id
