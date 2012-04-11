@@ -471,7 +471,7 @@ class SampleRequest
 										{
 											if ($_GET[retrace])
 											{
-												$params = http_build_query(Retrace::resovle_retrace_string($_GET[retrace]),'','&#38;');
+												$params = http_build_query(Retrace::resolve_retrace_string($_GET[retrace]),'','&#38;');
 											}
 											else
 											{

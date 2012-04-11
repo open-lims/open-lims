@@ -661,7 +661,7 @@ class SampleCloneAjax
 			{
 				if ($sample_item_retrace)
 				{
-					$params = http_build_query(Retrace::resovle_retrace_string($sample_item_retrace),'','&');
+					$params = http_build_query(Retrace::resolve_retrace_string($sample_item_retrace),'','&');
 					return "index.php?".$params;
 				}
 				else
