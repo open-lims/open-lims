@@ -8,7 +8,7 @@ import java.util.HashMap;
  */
 public class JobConfig extends AbstractConfig {
 	
-	static String[] allowedKeys = {"binaryRoot"};
+	static String[] allowedKeys = {"binaryRoot", "logDir"};
 	
 	private static HashMap<String, String> config = new HashMap<String, String>(allowedKeys.length);
 	
