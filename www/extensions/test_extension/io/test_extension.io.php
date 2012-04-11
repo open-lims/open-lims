@@ -47,7 +47,7 @@ class TestExtensionIO
 		
 		$template->set_var("content", $content);
 		
-		$template->set_var("retrace_params", http_build_query(Retrace::resovle_retrace_string($_GET['retrace']),'','&'));
+		$template->set_var("retrace_params", http_build_query(Retrace::resolve_retrace_string($_GET['retrace']),'','&'));
 
 		
 		$template->output();
