@@ -25,7 +25,7 @@
  * Job Interface
  * @package job
  */
-class JobInterface
+interface JobInterface
 {
 	/**
 	 * @param $job_id

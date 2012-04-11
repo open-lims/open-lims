@@ -25,7 +25,7 @@
  * Job Wrapper Interface
  * @package job
  */
-class Job_WrapperInterface
+interface Job_WrapperInterface
 {
 	/**
 	 * @param string $datetime
