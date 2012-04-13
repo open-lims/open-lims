@@ -22,15 +22,16 @@
  */
 
 /**
- * Main Event
+ * Main Delete Event
  * @package base
  */
-class Event
+class DeleteEvent extends Event
 {  
 	protected $event_id;
 	 	
 	function __construct()
     {
+    	parent::__construct();
 		$this->event_id = uniqid();
     }
 }

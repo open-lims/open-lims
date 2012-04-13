@@ -25,7 +25,7 @@
  * Item Delete Event
  * @package item
  */
-class ItemDeleteEvent extends Event
+class ItemDeleteEvent extends DeleteEvent
 {    
 	private $item_id;
 	

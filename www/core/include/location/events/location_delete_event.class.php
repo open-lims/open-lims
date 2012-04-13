@@ -25,7 +25,7 @@
  * Location Delete Event
  * @package location
  */
-class LocationDeleteEvent extends Event
+class LocationDeleteEvent extends DeleteEvent
 {    
 	private $location_id;
 	

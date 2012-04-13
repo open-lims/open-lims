@@ -28,6 +28,8 @@ require_once("interfaces/sample.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("events/sample_delete_event.class.php");
+	
 	require_once("access/sample.access.php");
 	require_once("access/sample_is_item.access.php");
 	require_once("access/sample_has_location.access.php");
@@ -1003,6 +1005,18 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 				}
 			}
     		
+			$sample_delete_event = new SampleDeleteEvent($tmp_sample_id);
+			$event_handler = new EventHandler($sample_delete_event);
+
+			if ($event_handler->get_success() == false)
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+			}
+			
 			$sample_is_item = new SampleIsItem_Access($tmp_sample_id);
 			if ($sample_is_item->delete() == false)
 			{

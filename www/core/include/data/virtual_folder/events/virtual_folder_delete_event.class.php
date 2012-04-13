@@ -25,7 +25,7 @@
  * Virtual Folder Delete Event
  * @package data
  */
-class VirtualFolderDeleteEvent extends Event
+class VirtualFolderDeleteEvent extends DeleteEvent
 {    
 	private $virtual_folder_id;
 	
