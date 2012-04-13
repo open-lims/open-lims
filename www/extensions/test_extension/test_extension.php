@@ -27,6 +27,8 @@
  */
 class TestExtension implements ConreteExtensionInterface
 {
+	private static $event_identifer;
+	
 	/**
 	 * @return string
 	 */
@@ -49,9 +51,10 @@ class TestExtension implements ConreteExtensionInterface
 	 */
 	public static function push_data($data)
 	{
+		require_once("classes/test.class.php");
 		require_once("io/test_extension.io.php");
 		TestExtensionIO::set_template_path("extensions/test_extension/template");
-		TestExtensionIO::start($data);
+		TestExtensionIO::start($data, self::$event_identifer);
 	}
 	
 	/**
@@ -72,12 +75,12 @@ class TestExtension implements ConreteExtensionInterface
 	
 	public static function set_event_identifer($event_identifer)
 	{
-		
+		self::$event_identifer = $event_identifer;
 	}
 	
 	public static function listen_events($event)
 	{
-		
+		return true;
 	}
 	
 	public static function main()

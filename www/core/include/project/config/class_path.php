@@ -126,6 +126,7 @@
 	
 	
 	$classes['Project'] 							= $path_prefix."core/include/project/project.class.php";
+	$classes['ProjectExtension'] 					= $path_prefix."core/include/project/project_extension.class.php";
 	$classes['ProjectFolder'] 						= $path_prefix."core/include/project/project_folder.class.php";
 	$classes['ProjectVirtualFolder'] 				= $path_prefix."core/include/project/project_virtual_folder.class.php";
 	$classes['ProjectItem'] 						= $path_prefix."core/include/project/project_item.class.php";

@@ -26,8 +26,6 @@
  */
 	$name 			= "extension";
 	
-	$no_class_event_listener 	= true;
-	
 	$requires[0] 	= "base";
 	$requires[1] 	= "data";
 	$requires[2] 	= "item";

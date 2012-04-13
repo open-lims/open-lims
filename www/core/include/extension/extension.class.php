@@ -24,7 +24,7 @@
 /**
  * 
  */
-// require_once("interfaces/extension.interface.php");
+require_once("interfaces/extension.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
@@ -35,11 +35,15 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Extension Class
  * @package extension
  */
-class Extension
+class Extension implements ExtensionInterface
 {
 	private $extension_id;
 	private $extension;
 	
+	/**
+	 * @see ExtensionInterface::__construct()
+	 * @param integer $extension_id
+	 */
 	function __construct($extension_id)
 	{
 		if (is_numeric($extension_id))
@@ -54,6 +58,10 @@ class Extension
 		}
 	}
 	
+	/**
+	 * @see ExtensionInterface::get_folder()
+	 * @return string
+	 */
 	public function get_folder()
 	{
 		if ($this->extension_id)
@@ -66,6 +74,10 @@ class Extension
 		}
 	}
 	
+	/**
+	 * @see ExtensionInterface::get_class()
+	 * @return string
+	 */
 	public function get_class()
 	{
 		if ($this->extension_id)
@@ -78,6 +90,10 @@ class Extension
 		}
 	}
 	
+	/**
+	 * @see ExtensionInterface::get_main_file()
+	 * @return string
+	 */
 	public function get_main_file()
 	{
 		if ($this->extension_id)
@@ -90,8 +106,50 @@ class Extension
 		}
 	}
 	
+	/**
+	 * @see ExtensionInterface::get_name()
+	 * @return string
+	 */
+	public function get_name()
+	{
+		if ($this->extension_id)
+		{
+			return $this->extension->get_name();
+		}
+		else
+		{
+			return null;
+		}
+	}
 	
-	public static function get_id_by_identifer($identifer) 
+	/**
+	 * @see ExtensionInterface::get_run_status()
+	 * @param integer $run_id
+	 * @return integer
+	 */
+	public function get_run_status($run_id)
+	{
+		if ($this->extension_id and is_numeric($run_id))
+		{
+			$main_file = constant("EXTENSION_DIR")."/".$this->extension->get_folder()."/".$this->extension->get_main_file();
+			$main_class = $this->extension->get_class();
+			
+			require_once($main_file);
+			return $main_class::get_data_status($run_id);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	
+	/**
+	 * @see ExtensionInterface::get_id_by_identifer()
+	 * @param string $identifer
+	 * @return integer
+	 */
+	public static function get_id_by_identifer($identifer)
 	{
 		return Extension_Access::get_id_by_identifer($identifer);
 	}

@@ -75,6 +75,41 @@
 			<span class='BaseWantToIcon'><img src='images/icons_30/add_done.png' alt='' border='0' /></span>
 			<span class='BaseWantToText'>[[STATUS_ACTION:NAME]]</span>
 		</a>
+		
+	<!-- ELSEIF ([[STATUS_ACTION:STATUS]] == 3) -->
+
+		<a href='index.php?[[STATUS_ACTION:PARAMS]]' class='BaseWantToButton'>
+			<span class='BaseWantToIcon'><img src='images/icons_30/add_extension.png' alt='' border='0' /></span>
+			<span class='BaseWantToText'>[[STATUS_ACTION:NAME]]</span>
+		</a>
+		
+	<!-- ELSEIF ([[STATUS_ACTION:STATUS]] == 4) -->
+
+		<a href='index.php?[[STATUS_ACTION:PARAMS]]' class='BaseWantToButton'>
+			<span class='BaseWantToIcon'><img src='images/icons_30/add_extension_wait.png' alt='' border='0' /></span>
+			<span class='BaseWantToText'>[[STATUS_ACTION:NAME]] (waiting)</span>
+		</a>
+		
+	<!-- ELSEIF ([[STATUS_ACTION:STATUS]] == 5) -->
+
+		<a class='BaseWantToButton'>
+			<span class='BaseWantToIcon'><img src='images/icons_30/add_extension_wait_na.png' alt='' border='0' /></span>
+			<span class='BaseWantToText'>[[STATUS_ACTION:NAME]] (waiting)</span>
+		</a>
+		
+	<!-- ELSEIF ([[STATUS_ACTION:STATUS]] == 6) -->
+
+		<a href='index.php?[[STATUS_ACTION:PARAMS]]' class='BaseWantToButton'>
+			<span class='BaseWantToIcon'><img src='images/icons_30/add_extension_done.png' alt='' border='0' /></span>
+			<span class='BaseWantToText'>[[STATUS_ACTION:NAME]]</span>
+		</a>
+		
+	<!-- ELSEIF ([[STATUS_ACTION:STATUS]] == 7) -->
+
+		<a class='BaseWantToButton'>
+			<span class='BaseWantToIcon'><img src='images/icons_30/add_extension_done_na.png' alt='' border='0' /></span>
+			<span class='BaseWantToText'>[[STATUS_ACTION:NAME]]</span>
+		</a>
 	
 	<!-- ELSE -->
 	

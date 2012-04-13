@@ -41,13 +41,13 @@ class ProjectHasExtensionRun_Access
 	{
 		global $db;
 		
-		if (primary_key == null)
+		if ($primary_key == null)
 		{
 			$this->primary_key = null;
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." WHERE folder_id='".$folder_id."'";
+			$sql = "SELECT * FROM ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." WHERE primary_key='".$primary_key."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
@@ -88,17 +88,17 @@ class ProjectHasExtensionRun_Access
 		
 		if (is_numeric($project_id) and is_numeric($extension_id) and is_numeric($run))
 		{			
-			$sql_write = "INSERT INTO ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." (id, project_id, extension_id, run) " .
-					"VALUES (nextval('".self::PROJECT_HAS_EXTENSION_RUN_PK_SEQUENCE."'::regclass),".$project_id.",".$exntesion_id.",".$run.")";
+			$sql_write = "INSERT INTO ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." (primary_key, project_id, extension_id, run) " .
+					"VALUES (nextval('".self::PROJECT_HAS_EXTENSION_RUN_PK_SEQUENCE."'::regclass),".$project_id.",".$extension_id.",".$run.")";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." WHERE id = currval('".self::PROJECT_HAS_EXTENSION_RUN_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT primary_key FROM ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." WHERE primary_key = currval('".self::PROJECT_HAS_EXTENSION_RUN_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read[primary_key]);
 				
 				return $data_read[id];
 			}
@@ -276,5 +276,41 @@ class ProjectHasExtensionRun_Access
 		}	
 	}
 	
+	
+	/**
+	 * @param integer $extension_id
+	 * @param integer $project_id
+	 * @return array
+	 */
+	public static function list_runs_by_extension_id_and_project_id($extension_id, $project_id)
+	{
+		global $db;
+		
+		if (is_numeric($extension_id) and is_numeric($project_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT run FROM ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." WHERE extension_id='".$extension_id."' AND project_id='".$project_id."'";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,$data[run]);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
 }
 ?>

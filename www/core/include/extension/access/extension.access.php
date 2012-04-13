@@ -438,7 +438,7 @@ class Extension_Access
 		$return_array = array();
 		$counter = 0;
 		
-		$sql = "SELECT id,name,identifer FROM ".constant("EXTENSION_TABLE")."";
+		$sql = "SELECT id,name,identifer,folder,class,main_file FROM ".constant("EXTENSION_TABLE")."";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))
@@ -446,6 +446,9 @@ class Extension_Access
 			$return_array[$counter]['id'] = $data['id'];
 			$return_array[$counter]['name'] = $data['name'];
 			$return_array[$counter]['identifer'] = $data['identifer'];
+			$return_array[$counter]['folder'] = $data['folder'];
+			$return_array[$counter]['class'] = $data['class'];
+			$return_array[$counter]['main_file'] = $data['main_file'];
 			$counter++;
 		}
 		

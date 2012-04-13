@@ -35,9 +35,9 @@ class Test
 	
 	function __construct($id)
 	{
-		$this->handle = fopen($this->file, "w+");
+		$this->handle = fopen($this->file, "c+");
 		
-		if (filesize($this->file) < 0)
+		if (filesize($this->file) > 0)
 		{
 			$this->content = fread($this->handle, filesize($this->file));
 		}
@@ -46,17 +46,33 @@ class Test
 		{
 			$this->id = $id;
 		}
-		
+				
 		if ($this->content)
 		{
-			$analysis_array = explode("\n",$this->content);
-			$analysis_count = count($this->content, "\n");
-			$analysis_line_array = explode(",",$analyis_array[$analysis_count]);
-			$this->last_id = $analysis_line_array[0];
+			$analysis_array = explode("\n", $this->content);
+			$analysis_count = count($analysis_array);
+			
+			if ($analysis_count == 1)
+			{
+				$this->last_id = 1;
+			}
+			else
+			{
+				$analysis_line_array = explode(",",$analysis_array[$analysis_count-1]);
+				$this->last_id = $analysis_line_array[0];
+			}
 		}
 	}
 	
-	public function start_analysis()
+	function __destruct()
+	{
+		if ($this->handle)
+		{
+			fclose($this->handle);
+		}
+	}
+	
+	public function start_analysis($event_identifer)
 	{
 		if ($this->handle)
 		{
@@ -64,17 +80,32 @@ class Test
 			
 			if ($this->content and $this->last_id)
 			{
+				fseek($this->handle, filesize($this->file));
 				$new_id = $this->last_id+1;
 				fwrite($this->handle, "\n".$new_id.",".$microtime);
 				$this->content .= "\n".$new_id.",".$microtime;
-				return $new_id;
 			}
 			else
 			{
+				$new_id = 1;
 				fwrite($this->handle, "1,".$microtime);
 				$this->content = "1,".$microtime;
-				return 1;
 			}
+			
+			
+			
+			$extension_id = Extension::get_id_by_identifer("TEST");
+    		$extension_create_run_event = new ExtensionCreateRunEvent($extension_id, $new_id, $event_identifer);
+    		$event_handler = new EventHandler($extension_create_run_event);
+			
+			if ($event_handler->get_success() == false)
+			{
+				return null;
+			}
+			
+			echo $extension_id."-".$new_id."-".$event_identifer;
+			
+			return $new_id;
 		}
 	}
 	
@@ -91,9 +122,9 @@ class Test
 				foreach($analysis_array as $key => $value)
 				{
 					$analysis_line_array = explode(",",$value);
-					if ($analysis_line_array[0] == $this->id)
+					if (trim($analysis_line_array[0]) == $this->id)
 					{
-						if (($microtime+60) < $analysis_line_array[1])
+						if ($microtime > ((int)trim($analysis_line_array[1])+60))
 						{
 							return 1;
 						}

@@ -44,7 +44,35 @@ class ProjectExtension // implements ProjectExtensionInterface, EventListenerInt
 	
 	public static function get_status($extension_id, $project_id)
 	{
-		
+		if (is_numeric($extension_id) and is_numeric($project_id))
+		{
+			$run_array = ProjectHasExtensionRun_Access::list_runs_by_extension_id_and_project_id($extension_id, $project_id);
+			
+			if (is_array($run_array) and count($run_array) >= 1)
+			{
+				$extension = new Extension($extension_id);
+				$return = 1;
+				
+				foreach($run_array as $key => $value)
+				{
+					$status = $extension->get_run_status($value);
+					if ($status == 0 or $status == -1)
+					{
+						$return = 0;
+					}
+				}
+				
+				return $return;
+			}
+			else
+			{
+				return -1;
+			}
+		}
+		else
+		{
+			return -1;
+		}
 	}
 	
 	/**
@@ -54,6 +82,8 @@ class ProjectExtension // implements ProjectExtensionInterface, EventListenerInt
      */
     public static function listen_events($event_object)
     {
+    	global $session;
+    	
     	if ($event_object instanceof ExtensionCreateRunEvent)
     	{
     		$event_identifer_array = $session->read_value("PROJECT_EXTENSION_EVENT_IDENTIFER_ARRAY");

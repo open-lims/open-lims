@@ -1,6 +1,6 @@
 <?php
 /**
- * @package project
+ * @package extension
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2012 by Roman Konertz
@@ -22,16 +22,49 @@
  */
 
 /**
- * 
+ * Concrete Extension Interface
+ * Defined the interfaces of a Open-LIMS extension
+ * The base class implements this interface and redeirects is to its logic classes
+ * @package extension
  */
-	$event_listener[0] = "Project";
-	$event_listener[1] = "ProjectPermission";
-	$event_listener[2] = "ProjectLog";
-	$event_listener[3] = "ProjectItem";
-	$event_listener[4] = "ProjectLogHasItem";
-	$event_listener[5] = "ProjectTask";
-	$event_listener[6] = "ProjectVirtualFolder";
-	$event_listener[7] = "ProjectUserData";
-	$event_listener[8] = "ProjectItemFactory";
-	$event_listener[9] = "ProjectExtension";
+interface ExtensionInterface
+{
+	/**
+	 * @param integer $extension_id
+	 */
+	function __construct($extension_id);
+	
+	/**
+	 * @return string
+	 */
+	public function get_folder();
+	
+	/**
+	 * @return string
+	 */
+	public function get_class();
+	
+	/**
+	 * @return string
+	 */
+	public function get_main_file();
+	
+	/**
+	 * @return string
+	 */
+	public function get_name();
+	
+	/**
+	 * @param integer $run_id
+	 * @return integer
+	 */
+	public function get_run_status($run_id);
+	
+	
+	/**
+	 * @param string $identifer
+	 * @return integer
+	 */
+	public static function get_id_by_identifer($identifer);
+}
 ?>

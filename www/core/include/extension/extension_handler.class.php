@@ -24,7 +24,7 @@
 /**
  * 
  */
-// require_once("interfaces/extension_handler.interface.php");
+require_once("interfaces/extension_handler.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
@@ -35,8 +35,12 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Extension Handler Class
  * @package extension
  */
-class ExtensionHandler
+class ExtensionHandler implements ExtensionHandlerInterface, EventListenerInterface
 {
+	/**
+	 * @see ExtensionHandlerInterface::__construct()
+	 * @param boolean $scan
+	 */
 	function __construct($scan = true)
 	{
 		if ($scan == true)
@@ -84,9 +88,44 @@ class ExtensionHandler
 		}
 	}
 
+	/**
+	 * @see ExtensionHandlerInterface::list_extensions()
+	 * @return array
+	 */
 	public static function list_extensions()
 	{
 		return Extension_Access::list_entries();
 	}
+	
+	/**
+     * @see EventListenerInterface::listen_events()
+     * @param object $event_object
+     * @return bool
+     */
+    public static function listen_events($event_object)
+    {
+    	if ($event_object instanceof DeleteEvent)
+    	{
+    		$extension_array = Extension_Access::list_entries();
+    		
+    		if (is_array($extension_array) and count($extension_array) >= 1)
+    		{
+    			foreach ($extension_array as $key => $value)
+    			{
+    				$main_file = constant("EXTENSION_DIR")."/".$value['folder']."/".$value['main_file'];
+					$main_class = $value['class'];
+					if (class_exists($main_class))
+					{
+						if ($main_class::listen_events($event_object) == false)
+						{
+							return false;
+						}
+					}
+    			}
+    		}
+    	}
+    	
+    	return true;
+    }
 }
 ?>

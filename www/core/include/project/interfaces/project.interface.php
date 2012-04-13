@@ -104,7 +104,7 @@ interface ProjectInterface
 	public function get_current_status_requirements();
 	
 	/**
-     * Retruns an array with all fulfilled requirements of the current status
+     * Retruns an array with all fulfilled item-requirements of the current status
      * @return array
      */
 	public function get_fulfilled_status_requirements();
@@ -113,6 +113,12 @@ interface ProjectInterface
 	 * @return array
 	 */
 	public function get_fulfilled_status_datetimes();
+	
+	/**
+	 * Retruns an array with all fulfilled extension-requirements of the current status
+	 * @return array
+	 */
+	public function get_fulfilled_status_extension();
 	
 	/**
      * Returns the ID of the next status of the current project

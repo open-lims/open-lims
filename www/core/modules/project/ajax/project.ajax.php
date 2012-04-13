@@ -677,6 +677,7 @@ class ProjectAjax
 				$project_template = new ProjectTemplate($project->get_template_id());
 				$current_status_requirements 	= $project->get_current_status_requirements($project->get_current_status_id());
 				$current_fulfilled_requirements = $project->get_fulfilled_status_requirements();
+				$current_fulfilled_extensions 	= $project->get_fulfilled_status_extension();
 				
 				$result = array();
 				$counter = 0;
@@ -738,10 +739,40 @@ class ProjectAjax
 								$paramquery[retrace] = Retrace::create_retrace_string();
 								$params = http_build_query($paramquery,'','&#38;');
 			
-								$result[$counter][status] = 1;
+								$result[$counter][name] = "Run ".$value[name];
+								$result[$counter][params] = $params;	
 								
-								$result[$counter][name] = $value[name];
-								$result[$counter][params] = $params;					
+								if ($current_fulfilled_extensions[$key] == 1)
+								{
+									if ($value[occurrence] == "multiple")
+									{
+										$result[$counter][status] = 6;
+									}
+									else
+									{
+										$result[$counter][status] = 7;
+									}
+								}
+								elseif($current_fulfilled_extensions[$key] == 0)
+								{
+									if ($value[occurrence] == "multiple")
+									{
+										$result[$counter][status] = 4;
+									}
+									else
+									{
+										$result[$counter][status] = 5;
+									}
+								}
+								else
+								{
+									$result[$counter][status] = 3;
+								}
+								
+								if ($value[requirement] == "optional" and $current_fulfilled_extensions[$key] != 0)
+								{
+									$result[$counter][name] = $result[$counter][name]." (optional)";
+								}			
 								
 								$counter++;
 							break;
@@ -850,6 +881,7 @@ class ProjectAjax
 				$project_template = new ProjectTemplate($project->get_template_id());
 				$current_status_requirements 	= $project->get_current_status_requirements();
 				$current_fulfilled_requirements = $project->get_fulfilled_status_requirements();
+				$current_fulfilled_extensions 	= $project->get_fulfilled_status_extension();
 				
 				$result = array();
 				$counter = 0;
@@ -858,23 +890,49 @@ class ProjectAjax
 				{
 					foreach($current_status_requirements as $key => $value)
 					{
-						$result[$counter][name] = $value[name];
-						if ($current_fulfilled_requirements[$key] == true)
-						{
-							$result[$counter][status] = 0;
-						}
-						else
-						{
-							if ($value[requirement] != "optional")
-							{
-								$result[$counter][status] = 1;
-							}
-							else
-							{
-								$result[$counter][status] = 2;
-							}
-						}
-						$counter++;
+						switch ($value['element_type']):
+						
+							case "item":
+								$result[$counter][name] = $value[name];
+								if ($current_fulfilled_requirements[$key] == true)
+								{
+									$result[$counter][status] = 0;
+								}
+								else
+								{
+									if ($value[requirement] != "optional")
+									{
+										$result[$counter][status] = 1;
+									}
+									else
+									{
+										$result[$counter][status] = 2;
+									}
+								}
+								$counter++;
+							break;
+							
+							case "extension":
+								$result[$counter][name] = $value[name];
+								if ($current_fulfilled_extensions[$key] == 1)
+								{
+									$result[$counter][status] = 0;
+								}
+								else
+								{
+									if ($value[requirement] != "optional")
+									{
+										$result[$counter][status] = 1;
+									}
+									else
+									{
+										$result[$counter][status] = 2;
+									}
+								}
+								$counter++;
+							break;
+							
+						endswitch;
 					}			
 				}
 				else
