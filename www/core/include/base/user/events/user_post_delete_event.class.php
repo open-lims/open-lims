@@ -25,7 +25,7 @@
  * User Post Delete Event
  * @package base
  */
-class UserPostDeleteEvent extends Event
+class UserPostDeleteEvent extends DeleteEvent
 {    
 	private $user_id;
 	

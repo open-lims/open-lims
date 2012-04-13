@@ -1,6 +1,6 @@
 <?php
 /**
- * @package organisation_unit
+ * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2012 by Roman Konertz
@@ -22,50 +22,35 @@
  */
 
 /**
- * Organisation Unit Delete Event
- * @package organisation_unit
+ * Sample Folder Create Event
+ * @package sample
  */
-class OrganisationUnitDeleteEvent extends DeleteEvent
+class SampleDeleteEvent extends DeleteEvent
 {    
-	private $organisation_unit_id;
-	private $stores_data;
+	private $sample_id;
 	
-	function __construct($organisation_unit_id, $stores_data)
+	function __construct($sample_id)
     {
-    	if (is_numeric($organisation_unit_id))
+    	if (is_numeric($sample_id))
     	{
     		parent::__construct();
-    		$this->organisation_unit_id = $organisation_unit_id;
-    		$this->stores_data = $stores_data;
+    		$this->sample_id = $sample_id;
     	}
     	else
     	{
-    		$this->organisation_unit_id = null;
-    		$this->stores_data = false;
+    		$this->sample_id = null;
     	}
     }
     
-    public function get_organisation_unit_id()
+    public function get_sample_id()
     {
-    	if ($this->organisation_unit_id)
+    	if ($this->sample_id)
     	{
-    		return $this->organisation_unit_id;
+    		return $this->sample_id;
     	}
     	else
     	{
     		return null;
-    	}
-    }
-    
-	public function get_stores_data() 
-    {
-    	if ($this->stores_data)
-    	{
-    		return $this->stores_data;
-    	}
-    	else
-    	{
-    		return false;
     	}
     }
 }

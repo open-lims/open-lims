@@ -25,7 +25,7 @@
  * Group Create Event
  * @package base
  */
-class GroupDeleteEvent extends Event
+class GroupDeleteEvent extends DeleteEvent
 {    
 	private $group_id;
 	
