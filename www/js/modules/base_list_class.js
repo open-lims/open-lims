@@ -250,6 +250,34 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 	
 	function make_resizable()
 	{
+//		$(".ListTable").dynamicTable();
+//		
+//		setTimeout(function(){
+//			$(".ListTable").dynamicTable("hide",6);
+//		}, 500);
+//		
+//		setTimeout(function(){
+//			$(".ListTable").dynamicTable("hide",7);
+//		}, 1500);
+//
+//		setTimeout(function(){
+//			$(".ListTable").dynamicTable("show",6);
+//		}, 3000);
+//		
+//		setTimeout(function(){
+//			$(".ListTable").dynamicTable("hide",5);
+//		}, 4500);
+//		
+//		setTimeout(function(){
+//			$(".ListTable").dynamicTable("show",5);
+//		}, 6000);
+//		
+//		setTimeout(function(){
+//			$(".ListTable").dynamicTable("show",7);
+//		}, 7500);
+		
+		return false;
+		
 		var table_width = $(".ListTable > thead").width();
 		
 		var all_widths = new Array();
@@ -596,6 +624,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 				.html("<img src='images/icons/visible.png' alt=''/>")
 				.attr("id","ListTableOptionsTrigger")
 				.click(function(){
+	
 					if($(this).hasClass("active"))
 					{
 						close_display_options_dialog();
@@ -616,7 +645,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 					"left": dialog_pos_x,
 					"top": dialog_pos_y + 3
 				})
-				.appendTo("#main")
+				.appendTo("#Main")
 				.hide();
 			
 			$(".ListTable > thead > tr > th").each(function(i){
@@ -701,9 +730,8 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 		
 			$("#ListTableOptionsCornerContainer").show();
 			$("#ListTableOptionsCorner").show();
-			
+
 			$("#ListTableOptions").slideDown(200, function(){			
-				
 				$("body").bind("click",function(evt){
 					if(!$(evt.target).hasClass("ListTableOptionsEntry") && !$(evt.target).hasClass("ListTableOptionsEntryCheckbox"))
 					{
