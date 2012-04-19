@@ -1,11 +1,11 @@
 /* Vertical Navigation / Menu */
 #navigation {
-	font: normal 0.6em Verdana, Helvetica, sans-serif;
+	font: normal 10px Verdana, Helvetica, sans-serif;
 	float: left;
 	width: 190px;
 	height: 90%;
-	margin-left: 0.6em;
-	margin-top: 0.6em;
+	margin-left: 5px;
+	margin-top: 5px;
 }
 
 #navigation a {

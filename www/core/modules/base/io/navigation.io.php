@@ -33,8 +33,7 @@ class Navigation_IO
 		
 		// Tabs
 		
-		$template = new HTMLTemplate("base/navigation/main/main_navigation_header.html");
-		$template->output();
+		$template_header = new HTMLTemplate("base/navigation/main/main_navigation_header.html");
 
 		$module_navigation_array = ModuleNavigation::list_module_navigations_entries();
 		
@@ -60,6 +59,7 @@ class Navigation_IO
 						case "blue":
 							if ($_GET[nav] == $module_name)
 							{
+								$background_color_class = "NavigationBackgroundBlue";
 								$template = new HTMLTemplate("base/navigation/main/tabs/blue_tab_active.html");
 								$current_module = $module_name;
 								$current_color = $value[colour];
@@ -74,6 +74,7 @@ class Navigation_IO
 						case "green":
 							if ($_GET[nav] == $module_name)
 							{
+								$background_color_class = "NavigationBackgroundGreen";
 								$template = new HTMLTemplate("base/navigation/main/tabs/green_tab_active.html");
 								$current_module = $module_name;
 								$current_color = $value[colour];
@@ -88,6 +89,7 @@ class Navigation_IO
 						case "orange";
 							if ($_GET[nav] == $module_name)
 							{
+								$background_color_class = "NavigationBackgroundOrange";
 								$template = new HTMLTemplate("base/navigation/main/tabs/orange_tab_active.html");
 								$current_module = $module_name;
 								$current_color = $value[colour];
@@ -102,6 +104,7 @@ class Navigation_IO
 						default:
 							if ($_GET[nav] == $module_name)
 							{
+								$background_color_class = "NavigationBackgroundGrey";
 								$template = new HTMLTemplate("base/navigation/main/tabs/grey_tab_active.html");
 								$current_module = $module_name;
 								$current_color = $value[colour];
@@ -151,18 +154,20 @@ class Navigation_IO
 			}
 		}
 		
+	
+		
 		if ($_GET[nav] == "home" or !$_GET[nav] or $module_tab_active == false)
 		{
+			$background_color_class = "NavigationBackgroundBlue";
 			$paramquery[username] = $_GET[username];
 			$paramquery[session_id] = $_GET[session_id];
 			$paramquery[nav] = "home";
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			$template = new HTMLTemplate("base/navigation/main/tabs/blue_tab_active.html");
-			$template->set_var("params", $params);
-			$template->set_var("title", "Home");
-			$template->set_var("down", false);
-			$template->output();
+			$template_home = new HTMLTemplate("base/navigation/main/tabs/blue_tab_active.html");
+			$template_home->set_var("params", $params);
+			$template_home->set_var("title", "Home");
+			$template_home->set_var("down", false);
 		}
 		else
 		{
@@ -171,12 +176,15 @@ class Navigation_IO
 			$paramquery[nav] = "home";
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			$template = new HTMLTemplate("base/navigation/main/tabs/blue_tab.html");
-			$template->set_var("params", $params);
-			$template->set_var("title", "Home");
-			$template->set_var("down", false);
-			$template->output();
+			$template_home = new HTMLTemplate("base/navigation/main/tabs/blue_tab.html");
+			$template_home->set_var("params", $params);
+			$template_home->set_var("title", "Home");
+			$template_home->set_var("down", false);
 		}
+		
+		$template_header->set_var("background_class", $background_color_class);
+		$template_header->output();
+		$template_home->output();
 		
 		echo $module_tab_string;
 

@@ -135,8 +135,27 @@ html,body
 	background-repeat:repeat-x;
 	background-position: top left;
 	z-index: 1;
-	border-bottom: 1px #336699 solid;	
 }
+
+.NavigationBackgroundBlue
+{
+	border-bottom: 1px #336699 solid;
+}
+.NavigationBackgroundGreen
+{
+	border-bottom: 1px #99cd32 solid;
+}
+
+.NavigationBackgroundOrange
+{
+	border-bottom: 1px #dcaf36 solid;
+}
+
+.NavigationBackgroundGrey
+{
+	border-bottom: 1px #535353 solid;
+}
+
 
 /* Sub Navigation */
 .NavigationButtonSubMenu 
