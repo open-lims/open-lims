@@ -1162,6 +1162,24 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 
 	/**
+	 * @see ItemListenerInterface::get_item_add_type()
+	 * @return integer
+	 */
+	public static function get_item_add_type()
+	{
+		return 0;
+	}
+	
+	/**
+	 * @see ItemListenerInterface::get_item_add_script_handling_class()
+	 * @return array
+	 */
+	public static function get_item_add_script_handling_class()
+	{
+		return null;
+	}
+	
+	/**
 	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool

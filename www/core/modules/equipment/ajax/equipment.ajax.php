@@ -39,7 +39,7 @@ class EquipmentAjax
 	 * @param string $sortmethod
 	 * @return string
 	 */
-	public function list_equipment_items($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
+	public static function list_equipment_items($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
 	{		
 		if ($get_array)
 		{
@@ -142,7 +142,7 @@ class EquipmentAjax
 	 * @param string $json_argument_array
 	 * @return integer
 	 */
-	public function count_equipment_items($json_argument_array)
+	public static function count_equipment_items($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
 		
@@ -173,7 +173,7 @@ class EquipmentAjax
 	 * @param string $sortmethod
 	 * @return string
 	 */
-	public function list_organisation_unit_related_equipment($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
+	public static function list_organisation_unit_related_equipment($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
 		$organisation_unit_id = $argument_array[0][1];
@@ -233,7 +233,7 @@ class EquipmentAjax
 	 * @param string $json_argument_array
 	 * @return integer
 	 */
-	public function count_organisation_unit_related_equipment($json_argument_array)
+	public static function count_organisation_unit_related_equipment($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
 		$organisation_unit_id = $argument_array[0][1];
@@ -246,6 +246,83 @@ class EquipmentAjax
 		{
 			return null;
 		}
+	}
+	
+	/**
+	 * @param integer $gid
+	 * @param array $link
+	 * @return array
+	 */
+	public static function item_add_init($gid, $link)
+	{
+		if ($link['parent'] and is_numeric($link['parent_key']))
+		{
+			$array['window_id'] = "EquipmentItemAddWindow".$link['parent_key']."-".$gid;
+			$array['click_id'] = "EquipmentItemAddButton".$link['parent_key']."-".$gid;
+		}
+		else
+		{
+			$array['window_id'] = "EquipmentItemAddWindow".$gid;
+			$array['click_id'] = "EquipmentItemAddButton".$gid;
+		}
+		
+		$array['window_title'] = "Add Equipment";
+		$array['script'] = "
+		$(\"#".$array['window_id']."\").dialog(
+		{
+		autoOpen: false
+		});
+		
+
+		base_dialog(\"POST\", \"ajax.php?session_id=".$_GET['session_id']."&nav=equipment&run=equipment_item_add_window\", 'get_array=".serialize($link)."', \"".$array['click_id']."\");
+
+		";
+		
+		return $array;
+	}
+	
+	/**
+	 * @param array $get_array
+	 * @return string
+	 */
+	public static function item_add_window($get_array)
+	{
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}
+
+		$template = new HTMLTemplate("equipment/add_item_window.html");
+		
+		$array['continue_caption'] = "Add";
+		$array['cancel_caption'] = "Cancel";
+		$array['content_caption'] = "Add Equipment";
+		$array['height'] = 350;
+		$array['width'] = 400;
+		$array['content'] = $template->get_string();
+		
+		if ($_GET['parent'] and is_numeric($_GET['parent_key']))
+		{
+			$array['container'] = "#EquipmentItemAddWindow".$_GET['parent_key']."-".$_GET['key'];
+		}
+		else
+		{
+			$array['container'] = "#EquipmentItemAddWindow".$_GET['key'];
+		}
+		
+		/*
+		$continue_handler_template = new JSTemplate("equipment/js/item_add_handler.js");
+		$continue_handler_template->set_var("session_id", $_GET['session_id']);
+		$continue_handler_template->set_var("get_array", $get_array);
+		
+		$array['continue_handler'] = $continue_handler_template->get_string(); */
+		
+		return json_encode($array);
+	}
+	
+	public static function item_add_action($get_array)
+	{
+		// Ausführung
 	}
 }
 ?>

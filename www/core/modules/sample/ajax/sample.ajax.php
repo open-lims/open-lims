@@ -916,8 +916,7 @@ class SampleAjax
 				
 				$sample_template 				= new SampleTemplate($sample->get_template_id());
 				$current_requirements 			= $sample->get_requirements();
-				$current_fulfilled_requirements = $sample->get_fulfilled_requirements();
-				
+								
 				$result = array();
 				$counter = 0;
 				
@@ -939,7 +938,7 @@ class SampleAjax
 
 						$result[$counter][name] = $value[name];
 
-						if ($current_fulfilled_requirements[$key] == true)
+						if ($value[fulfilled] == true)
 						{
 							if ($value[occurrence] == "multiple")
 							{

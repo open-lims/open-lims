@@ -1064,12 +1064,67 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 		}	
 	}
 
+	/**
+	 * @todo cache values
+	 * @param boolean $parent_sample
+	 * @param integer $gid
+	 * @return boolean
+	 */
+	private function get_fulfilled($parent_sample, $gid)
+	{
+		if ($this->sample_id and is_numeric($gid))
+		{
+			$item_type_array = Item::list_types();
+			$sample_item = new SampleItem($this->sample_id);
+			$item_array = $sample_item->get_sample_items(); // Cachen
+			
+			if ($parent_sample == false)
+			{
+				if (is_array($item_array) and count($item_array) >= 1)
+				{
+					foreach($item_array as $item_key => $item_value)
+					{
+						$item_gid = SampleItem::get_gid_by_item_id_and_sample_id($item_value, $this->sample_id);
+						
+						if (is_array($item_type_array) and count($item_type_array) >= 1)
+						{
+							foreach ($item_type_array as $item_type => $item_handling_class)
+							{
+								if (class_exists($item_handling_class))
+								{
+									if ($item_handling_class::is_kind_of($item_type, $item_value) == true  and $item_gid == $gid)
+									{
+										return true;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				$parent_sample_array = SampleItem::list_sample_id_by_item_id_and_gid_and_parent($this->item_id, $gid);
+				if (is_array($parent_sample_array) and count($parent_sample_array) >= 1)
+				{
+					return true;
+				}
+			}
+			
+			return false;
+		}
+		else
+		{
+			return false;
+		}
+	}
 	
 	/**
 	 * @see SampleInterface::get_requirements()
+	 * @param boolean $get_fulfilled
 	 * @return array
 	 */
-    public function get_requirements()
+    public function get_requirements($get_fulfilled = true)
     {
     	if ($this->sample_id and $this->sample)
     	{
@@ -1089,8 +1144,10 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					if ($value[xml_element] == "item" and !$value[close])
 					{
 						$in_item = true;
+						$return_array[$counter][element_type] = "item";
 						$return_array[$counter][type] = $value[type];
 						$return_array[$counter][name] = $value[name];
+						$return_array[$counter][handling_class] = Item::get_handling_class_by_type($value[type]);
 
 						$return_array[$counter][requirement] = $value[requirement];
 
@@ -1101,6 +1158,27 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 						else
 						{
 							$return_array[$counter][occurrence] = "once";
+						}
+						
+						if ($value[gid])
+						{
+							$gid = $value[gid];
+						}
+						else
+						{
+							$gid = $counter;
+						}
+						
+						if ($get_fulfilled == true)
+						{
+							if ($value[type] != "parentsample")
+							{
+								$return_array[$counter][fulfilled] = $this->get_fulfilled(false, $gid);
+							}
+							else
+							{
+								$return_array[$counter][fulfilled] = $this->get_fulfilled(true, $gid);
+							} 
 						}
 					}
 					
@@ -1132,10 +1210,9 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 				{
 					if (!$value[name] and $value[type])
 					{
-						$item_handling_class = Item::get_handling_class_by_type($value[type]);
-						if ($item_handling_class)
+						if ($return_array[$key][handling_class])
 						{
-							$return_array[$key][name] = "Add ".$item_handling_class::get_generic_name($value[type], $value[type_id]);
+							$return_array[$key][name] = "Add ".$return_array[$key][handling_class]::get_generic_name($value[type], $value[type_id]);
 						}
 					}
 				}
@@ -1148,81 +1225,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     		return null;
     	}
     }
-    
-    /**
-     * @see SampleInterface::get_fulfilled_requirements()
-     * @return array
-     */
-    public function get_fulfilled_requirements()
-    {
-    	if ($this->sample_id and $this->sample)
-    	{
-	    	$requirements_array = $this->get_requirements();			
-			$fulfilled_array = array();
-			$item_type_array = Item::list_types();
-			
-			$sample_item = new SampleItem($this->sample_id);
-			$item_array = $sample_item->get_sample_items();
-			
-			if (is_array($requirements_array) and count($requirements_array) >= 1)
-			{
-				foreach($requirements_array as $key => $value)
-				{
-					if ($value[gid])
-					{
-						$gid = $value[gid];
-					}
-					else
-					{
-						$gid = $key;
-					}
-					
-					if ($value[type] != "parentsample")
-					{
-						if (is_array($item_array) and count($item_array) >= 1)
-						{
-							foreach($item_array as $item_key => $item_value)
-							{
-								$item_gid = SampleItem::get_gid_by_item_id_and_sample_id($item_value, $this->sample_id);
-								
-								if (is_array($item_type_array) and count($item_type_array) >= 1)
-								{
-									foreach ($item_type_array as $item_type => $item_handling_class)
-									{
-										if (class_exists($item_handling_class))
-										{
-											if ($item_handling_class::is_kind_of($item_type, $item_value) == true  and $item_gid == $gid)
-											{
-												$fulfilled_array[$key] = true;
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					else
-					{
-						$parent_sample_array = SampleItem::list_sample_id_by_item_id_and_gid_and_parent($this->item_id, $gid);
-						if (is_array($parent_sample_array) and count($parent_sample_array) >= 1)
-						{
-							$fulfilled_array[$key] = true;
-						}
-					}
-				}
-				return $fulfilled_array;
-			}
-			else
-			{
-				return null;
-			}
-    	}
-    	else
-    	{
-    		return null;
-    	}
-    }
-    
+        
     /**
      * @see SampleInterface::get_sub_folder()
      * @param integer $folder_id Folder-ID
@@ -1654,6 +1657,33 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     	}
 	}
 	
+	/**
+	 * @see ItemHolderInterface::get_item_add_information()
+	 * @param integer $id
+	 * @return array
+	 */
+	public function get_item_add_information($id)
+	{
+		if ($this->sample_id)
+		{
+			$requirements_array = $this->get_requirements(false);
+			return $requirements_array[$id];
+		}
+	}
+	
+	/**
+	 * @see ItemHolderInterface::get_item_add_status()
+	 * @param integer $id
+	 * @return array
+	 */
+	public function get_item_add_status($id)
+	{
+		if ($this->sample_id)
+		{
+			return $this->get_fulfilled(false, $id);
+		}
+	}
+	
 
 	/**
 	 * @see SampleInterface::exist_sample()
@@ -2083,6 +2113,24 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 		}
 	}
 	
+	/**
+	 * @see ItemListenerInterface::get_item_add_type()
+	 * @return integer
+	 */
+	public static function get_item_add_type()
+	{
+		return 0;
+	}
+	
+	/**
+	 * @see ItemListenerInterface::get_item_add_script_handling_class()
+	 * @return array
+	 */
+	public static function get_item_add_script_handling_class()
+	{
+		return null;
+	}
+	
     /**
      * @see EventListenerInterface::listen_events()
      * @param object $event_object
@@ -2141,6 +2189,14 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	{
 		return " SELECT item_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = ".$holder_id."";
 	}
-	
+
+	/**
+	 * @see ItemHolderInterface::get_item_add_io_handling_class()
+	 * @return array
+	 */
+	public static function get_item_add_io_handling_class()
+	{
+		return array("sample/sample.request.php", "SampleRequest");
+	}
 }
 ?>

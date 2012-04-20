@@ -113,13 +113,7 @@ interface ProjectInterface
 	 * @return array
 	 */
 	public function get_fulfilled_status_datetimes();
-	
-	/**
-	 * Retruns an array with all fulfilled extension-requirements of the current status
-	 * @return array
-	 */
-	public function get_fulfilled_status_extension();
-	
+		
 	/**
      * Returns the ID of the next status of the current project
      * @return integer

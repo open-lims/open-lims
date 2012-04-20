@@ -519,6 +519,24 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 		return null;
 	}
 	
+	/**
+	 * @see ItemListenerInterface::get_item_add_type()
+	 * @return integer
+	 */
+	public static function get_item_add_type()
+	{
+		return 1;
+	}
+	
+	/**
+	 * @see ItemListenerInterface::get_item_add_script_handling_class()
+	 * @return array
+	 */
+	public static function get_item_add_script_handling_class()
+	{
+		return array("equipment/ajax/equipment.ajax.php", "EquipmentAjax", "item_add_init");
+	}
+	
     /**
      * @see EventListenerInterface::listen_events()
      * @param object $event_object

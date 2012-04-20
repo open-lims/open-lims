@@ -1,0 +1,20 @@
+<table class='formTable'>
+	<tr>
+		<td>
+
+			<select name='type_id' size='10' class='FormSelect'>
+		
+			<!-- FOREACH BEGIN (SELECT) -->
+			
+				<option value='[[SELECT:VALUE]]' [[SELECT:DISABLED]]>[[SELECT:CONTENT]]</option>
+			
+			<!-- FOREACH END -->
+		
+			</select>
+			<span class='FormError'>[[ERROR]]</span>
+		</td>
+	</tr>
+</table>
+
+<input type='hidden' value='[[DESCRIPTION]]' name='description' />
+<input type='hidden' value='[[KEYWORDS]]' name='keywords' />

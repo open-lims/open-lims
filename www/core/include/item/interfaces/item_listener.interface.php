@@ -148,5 +148,19 @@ interface ItemListenerInterface
 	 * @return string
 	 */
 	public static function get_sql_fulltext_where($type);
+	
+	/**
+	 * Returns the type of the item add method
+	 * 0 for link
+	 * 1 for ajax-script
+	 * @return integer
+	 */
+	public static function get_item_add_type();
+	
+	/**
+	 * Returns the name and the path of the io-class which handles the add-script
+	 * @return array
+	 */
+	public static function get_item_add_script_handling_class();
 }
 ?>

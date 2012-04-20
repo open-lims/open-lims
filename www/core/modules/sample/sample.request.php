@@ -691,5 +691,51 @@ class SampleRequest
 		
 		endswitch;
 	}
+
+	public static function item_add_handler($item_array)
+	{
+		if ($_GET[dialog] and is_array($item_array) and count($item_array) >= 1)
+		{
+			if (count($item_array) > 1)
+			{
+				
+			}
+			else
+			{
+				
+			}
+			
+			$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_add", $_GET[dialog]);
+
+			if (is_array($module_dialog) and $module_dialog[class_path])
+			{
+				if (file_exists($module_dialog[class_path]))
+				{
+					require_once($module_dialog[class_path]);
+					
+					if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+					{	
+						
+					}
+					else
+					{
+						throw new ModuleDialogCorruptException(null, null);
+					}
+				}
+				else
+				{
+					throw new ModuleDialogCorruptException(null, null);
+				}
+			}
+			else
+			{
+				throw new ModuleDialogNotFoundException(null, null);
+			}
+		}
+		else
+		{
+			throw new ModuleDialogMissingException(null, null);
+		}
+	}
 }
 ?>

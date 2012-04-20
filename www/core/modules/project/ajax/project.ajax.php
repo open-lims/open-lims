@@ -676,8 +676,6 @@ class ProjectAjax
 				
 				$project_template = new ProjectTemplate($project->get_template_id());
 				$current_status_requirements 	= $project->get_current_status_requirements($project->get_current_status_id());
-				$current_fulfilled_requirements = $project->get_fulfilled_status_requirements();
-				$current_fulfilled_extensions 	= $project->get_fulfilled_status_extension();
 				
 				$result = array();
 				$counter = 0;
@@ -701,21 +699,44 @@ class ProjectAjax
 								$params = http_build_query($paramquery,'','&#38;');
 			
 								$result[$counter][name] = $value[name];
+								$result[$counter][depends] = false;
 			
-								if ($current_fulfilled_requirements[$key] == true)
+								$item_handling_cass = $value[handling_class];
+								if ($item_handling_cass::get_item_add_type() == 1)
 								{
+									$result[$counter][type] = "ajax";
+									$ajax_handling_array = $item_handling_cass::get_item_add_script_handling_class();
+									require_once("core/modules/".$ajax_handling_array[0]);
+									
+									$ajax_init_array = $ajax_handling_array[1]::$ajax_handling_array[2]($key, $paramquery);
+									
+									$result[$counter][script] = $ajax_init_array[script];
+									$result[$counter][window_title] = $ajax_init_array[window_title];
+									$result[$counter][window_id] = $ajax_init_array[window_id];
+									$result[$counter][click_id] = $ajax_init_array[click_id];
+								}
+								else
+								{
+									$result[$counter][type] = "link";
+								}
+								
+								if ($value[fulfilled] == true)
+								{
+									$added = true;
 									if ($value[occurrence] == "multiple")
 									{
-										$result[$counter][status] = 2;
+										$result[$counter][image] = "add_done";
 									}
 									else
 									{
-										$result[$counter][status] = 0;
+										$result[$counter][type] = false;
+										$result[$counter][image] = "add_done_na";
 									}
 								}
 								else
 								{
-									$result[$counter][status] = 1;
+									$added = false;
+									$result[$counter][image] = "add";
 								}
 			
 								if ($value[requirement] == "optional")
@@ -726,6 +747,119 @@ class ProjectAjax
 								$result[$counter][params] = $params;					
 								
 								$counter++;
+								
+								if (is_array($value['sub_items']) and count($value['sub_items']) >= 1)
+								{
+									foreach($value['sub_items'] as $sub_item_key => $sub_item_value)
+									{
+										if ($sub_item_value['element_type'] == "item")
+										{
+											$paramquery = array();
+											$paramquery['username'] = $_GET[username];
+											$paramquery['session_id'] = $_GET[session_id];
+											$paramquery['nav'] = "project";
+											$paramquery['run'] = "sub_item_add";
+											$paramquery['project_id'] = $_GET[project_id];
+											$paramquery['dialog'] = $sub_item_value[type];
+											$paramquery['key'] = $sub_item_key;
+											$paramquery['parent'] = $value[type];
+											$paramquery['parent_key'] = $key;
+											$paramquery['retrace'] = Retrace::create_retrace_string();
+											$params = http_build_query($paramquery,'','&#38;');
+											
+											$item_handling_cass = $sub_item_value[handling_class];
+											if ($item_handling_cass::get_item_add_type() == 1)
+											{
+												$result[$counter][type] = "ajax";
+												$ajax_handling_array = $item_handling_cass::get_item_add_script_handling_class();
+												require_once("core/modules/".$ajax_handling_array[0]);
+												
+												$ajax_init_array = $ajax_handling_array[1]::$ajax_handling_array[2]($sub_item_key, $paramquery);
+												
+												$result[$counter][script] = $ajax_init_array[script];
+												$result[$counter][window_title] = $ajax_init_array[window_title];
+												$result[$counter][window_id] = $ajax_init_array[window_id];
+												$result[$counter][click_id] = $ajax_init_array[click_id];
+											}
+											else
+											{
+												$result[$counter][type] = "link";
+											}
+											
+											if ($added == true)
+											{
+												if ($sub_item_value[amount] >= 2)
+												{
+													$fulfilled_counter = 0;
+													
+													foreach($sub_item_value[fulfilled] as $fulfilled_key => $fulfilled_value)
+													{
+														if ($fulfilled_value == true)
+														{
+															$fulfilled_counter++;
+														}
+													}
+													$result[$counter][name] = $sub_item_value[name]." (".$fulfilled_counter." of ".$sub_item_value[amount].")";
+													
+													if ($fulfilled_counter == $sub_item_value[amount])
+													{
+														if ($sub_item_value[occurrence] == "multiple")
+														{
+															$result[$counter][image] = "add_done";
+														}
+														else
+														{
+															$result[$counter][type] = false;
+															$result[$counter][image] = "add_done_na";
+														}
+													}
+													else
+													{
+														if ($fulfilled_counter == 0)
+														{
+															$result[$counter][image] = "add";
+														}
+														else
+														{
+															$result[$counter][image] = "add_done_sub_item_missing";
+														}
+													}
+												}
+												elseif($sub_item_value[amount] == 1)
+												{													
+													$result[$counter][name] = $sub_item_value[name];
+													
+													if ($sub_item_value[fulfilled][0] == true)
+													{
+														if ($sub_item_value[occurrence] == "multiple")
+														{
+															$result[$counter][image] = "add_done";
+														}
+														else
+														{
+															$result[$counter][type] = false;
+															$result[$counter][image] = "add_done_na";
+														}
+													}
+													else
+													{
+														$result[$counter][image] = "add";
+													}
+												}
+											}
+											else
+											{
+												$result[$counter][type] = false;
+												$result[$counter][image] = "add_na";
+											}
+
+											$result[$counter][depends] = true;
+											$result[$counter][params] = $params;
+
+											$counter++;
+										}
+									}
+								}
 							break;
 							
 							case "extension":
@@ -740,36 +874,42 @@ class ProjectAjax
 								$params = http_build_query($paramquery,'','&#38;');
 			
 								$result[$counter][name] = "Run ".$value[name];
+								$result[$counter][depends] = false;
 								$result[$counter][params] = $params;	
 								
-								if ($current_fulfilled_extensions[$key] == 1)
+								if ($value[fulfilled] == 1)
 								{
 									if ($value[occurrence] == "multiple")
 									{
-										$result[$counter][status] = 6;
+										$result[$counter][type] = "link";
+										$result[$counter][image] = "add_extension_done";
 									}
 									else
 									{
-										$result[$counter][status] = 7;
+										$result[$counter][type] = false;
+										$result[$counter][image] = "add_extension_done_na";
 									}
 								}
-								elseif($current_fulfilled_extensions[$key] == 0)
+								elseif($value[fulfilled] == 0)
 								{
 									if ($value[occurrence] == "multiple")
 									{
-										$result[$counter][status] = 4;
+										$result[$counter][type] = "link";
+										$result[$counter][image] = "add_extension_wait";
 									}
 									else
 									{
-										$result[$counter][status] = 5;
+										$result[$counter][type] = false;
+										$result[$counter][image] = "add_extension_wait_na";
 									}
 								}
 								else
 								{
-									$result[$counter][status] = 3;
+									$result[$counter][type] = "link";
+									$result[$counter][image] = "add_extension";
 								}
 								
-								if ($value[requirement] == "optional" and $current_fulfilled_extensions[$key] != 0)
+								if ($value[requirement] == "optional" and $value[fulfilled] != 0)
 								{
 									$result[$counter][name] = $result[$counter][name]." (optional)";
 								}			

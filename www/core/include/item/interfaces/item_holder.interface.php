@@ -29,6 +29,18 @@
 interface ItemHolderInterface
 {
 	/**
+	 * @param integer $id
+	 * @return array
+	 */
+	public function get_item_add_information($id);
+	
+	/**
+	 * @param integer $id
+	 * @return array
+	 */
+	public function get_item_add_status($id);
+	
+	/**
 	 * @param integer $holder_id
 	 * @return string
 	 */

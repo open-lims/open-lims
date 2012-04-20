@@ -65,16 +65,11 @@ interface SampleInterface
 	
 	/**
 	 * Returns all requirements
+	 * @param boolean $get_fulfilled
 	 * @return array
 	 */
-	public function get_requirements();
-	
-	/**
-     * Returns fulfilled requirements
-     * @return array
-     */
-	public function get_fulfilled_requirements();
-	
+	public function get_requirements($get_fulfilled = true);
+		
 	 /**
      * Returns subfolder of a given gid
      * @param integer $folder_id Folder-ID
