@@ -250,8 +250,8 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 	
 	function make_resizable()
 	{
-//		$(".ListTable").dynamicTable();
-//		
+		$(".ListTable").dynamicTable();
+		
 //		setTimeout(function(){
 //			$(".ListTable").dynamicTable("hide",6);
 //		}, 500);
