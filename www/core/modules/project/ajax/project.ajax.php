@@ -620,6 +620,8 @@ class ProjectAjax
 		{
 			$project = new Project($_GET[project_id]);
 			
+			$folder_id = ProjectStatusFolder::get_folder_by_project_id_and_project_status_id($_GET[project_id],$project->get_current_status_id());
+			
 			$template = new HTMLTemplate("project/ajax/detail_menu.html");
 			
 			switch ($project->is_next_status_available()):
@@ -675,7 +677,11 @@ class ProjectAjax
 				// Status Buttons
 				
 				$project_template = new ProjectTemplate($project->get_template_id());
-				$current_status_requirements 	= $project->get_current_status_requirements($project->get_current_status_id());
+				$current_status_requirements = $project->get_current_status_requirements($project->get_current_status_id());
+				
+				// echo "<pre>";
+				// print_r($current_status_requirements);
+				// echo "</pre>";
 				
 				$result = array();
 				$counter = 0;
@@ -698,17 +704,32 @@ class ProjectAjax
 								$paramquery[retrace] = Retrace::create_retrace_string();
 								$params = http_build_query($paramquery,'','&#38;');
 			
-								$result[$counter][name] = $value[name];
+								if ($value[amount] > 1)
+								{
+									$result[$counter][name] = $value[name]." (".$value[amount].")";
+								}
+								else
+								{
+									$result[$counter][name] = $value[name];
+								}
+								
 								$result[$counter][depends] = false;
-			
+								
 								$item_handling_cass = $value[handling_class];
 								if ($item_handling_cass::get_item_add_type() == 1)
 								{
+									$sub_folder_id = $project->get_sub_folder($key, $project->get_current_status_id());
+			
+									if (is_numeric($sub_folder_id))
+									{
+										$folder_id = $sub_folder_id;
+									}
+									
 									$result[$counter][type] = "ajax";
 									$ajax_handling_array = $item_handling_cass::get_item_add_script_handling_class();
 									require_once("core/modules/".$ajax_handling_array[0]);
 									
-									$ajax_init_array = $ajax_handling_array[1]::$ajax_handling_array[2]($key, $paramquery);
+									$ajax_init_array = $ajax_handling_array[1]::$ajax_handling_array[2]($key, $paramquery, $folder_id, $project->get_organisation_unit_id(), $value[type_id],  $value[category_id]);
 									
 									$result[$counter][script] = $ajax_init_array[script];
 									$result[$counter][window_title] = $ajax_init_array[window_title];
@@ -722,7 +743,6 @@ class ProjectAjax
 								
 								if ($value[fulfilled] == true)
 								{
-									$added = true;
 									if ($value[occurrence] == "multiple")
 									{
 										$result[$counter][image] = "add_done";
@@ -735,7 +755,6 @@ class ProjectAjax
 								}
 								else
 								{
-									$added = false;
 									$result[$counter][image] = "add";
 								}
 			
@@ -750,118 +769,136 @@ class ProjectAjax
 								
 								if (is_array($value['sub_items']) and count($value['sub_items']) >= 1)
 								{
-									foreach($value['sub_items'] as $sub_item_key => $sub_item_value)
+									$result[$counter][type] = "line";
+									$counter++;
+									
+									for($i=0; $i<=($value['amount']-1); $i++)
 									{
-										if ($sub_item_value['element_type'] == "item")
+										foreach($value['sub_items'] as $sub_item_key => $sub_item_value)
 										{
-											$paramquery = array();
-											$paramquery['username'] = $_GET[username];
-											$paramquery['session_id'] = $_GET[session_id];
-											$paramquery['nav'] = "project";
-											$paramquery['run'] = "sub_item_add";
-											$paramquery['project_id'] = $_GET[project_id];
-											$paramquery['dialog'] = $sub_item_value[type];
-											$paramquery['key'] = $sub_item_key;
-											$paramquery['parent'] = $value[type];
-											$paramquery['parent_key'] = $key;
-											$paramquery['retrace'] = Retrace::create_retrace_string();
-											$params = http_build_query($paramquery,'','&#38;');
-											
-											$item_handling_cass = $sub_item_value[handling_class];
-											if ($item_handling_cass::get_item_add_type() == 1)
+											if ($sub_item_value['element_type'] == "item")
 											{
-												$result[$counter][type] = "ajax";
-												$ajax_handling_array = $item_handling_cass::get_item_add_script_handling_class();
-												require_once("core/modules/".$ajax_handling_array[0]);
+												$paramquery = array();
+												$paramquery['username'] = $_GET[username];
+												$paramquery['session_id'] = $_GET[session_id];
+												$paramquery['nav'] = "project";
+												$paramquery['run'] = "sub_item_add";
+												$paramquery['project_id'] = $_GET[project_id];
+												$paramquery['dialog'] = $sub_item_value[type];
+												$paramquery['key'] = $sub_item_key;
+												$paramquery['parent'] = $value[type];
+												$paramquery['parent_key'] = $sub_item_key;
+												$paramquery['parent_id'] = $sub_item_value[parents][$i][id];
+												$paramquery['retrace'] = Retrace::create_retrace_string();
+												$params = http_build_query($paramquery,'','&#38;');
 												
-												$ajax_init_array = $ajax_handling_array[1]::$ajax_handling_array[2]($sub_item_key, $paramquery);
-												
-												$result[$counter][script] = $ajax_init_array[script];
-												$result[$counter][window_title] = $ajax_init_array[window_title];
-												$result[$counter][window_id] = $ajax_init_array[window_id];
-												$result[$counter][click_id] = $ajax_init_array[click_id];
-											}
-											else
-											{
-												$result[$counter][type] = "link";
-											}
-											
-											if ($added == true)
-											{
-												if ($sub_item_value[amount] >= 2)
+												$item_handling_cass = $sub_item_value[handling_class];
+												if ($item_handling_cass::get_item_add_type() == 1)
 												{
-													$fulfilled_counter = 0;
+													$result[$counter][type] = "ajax";
+													$ajax_handling_array = $item_handling_cass::get_item_add_script_handling_class();
+													require_once("core/modules/".$ajax_handling_array[0]);
 													
-													foreach($sub_item_value[fulfilled] as $fulfilled_key => $fulfilled_value)
-													{
-														if ($fulfilled_value == true)
-														{
-															$fulfilled_counter++;
-														}
-													}
-													$result[$counter][name] = $sub_item_value[name]." (".$fulfilled_counter." of ".$sub_item_value[amount].")";
+													// Folder ID und OU ID !!!!
+													$ajax_init_array = $ajax_handling_array[1]::$ajax_handling_array[2]($sub_item_key, $paramquery, null, null, $sub_item_value[type_id],  $sub_item_value[category_id]);
 													
-													if ($fulfilled_counter == $sub_item_value[amount])
-													{
-														if ($sub_item_value[occurrence] == "multiple")
-														{
-															$result[$counter][image] = "add_done";
-														}
-														else
-														{
-															$result[$counter][type] = false;
-															$result[$counter][image] = "add_done_na";
-														}
-													}
-													else
-													{
-														if ($fulfilled_counter == 0)
-														{
-															$result[$counter][image] = "add";
-														}
-														else
-														{
-															$result[$counter][image] = "add_done_sub_item_missing";
-														}
-													}
+													$result[$counter][script] = $ajax_init_array[script];
+													$result[$counter][window_title] = $ajax_init_array[window_title];
+													$result[$counter][window_id] = $ajax_init_array[window_id];
+													$result[$counter][click_id] = $ajax_init_array[click_id];
 												}
-												elseif($sub_item_value[amount] == 1)
-												{													
+												else
+												{
+													$result[$counter][type] = "link";
+												}
+												
+												if ($sub_item_value[parents][$i][name])
+												{
+													$result[$counter][name] = $sub_item_value[name]." (".$sub_item_value[parents][$i][name].")";
+												}
+												else
+												{
 													$result[$counter][name] = $sub_item_value[name];
-													
-													if ($sub_item_value[fulfilled][0] == true)
+												}
+												
+												
+												if ($sub_item_value[fulfilled][$i] == true)
+												{
+													if ($sub_item_value[occurrence] == "multiple")
 													{
-														if ($sub_item_value[occurrence] == "multiple")
-														{
-															$result[$counter][image] = "add_done";
-														}
-														else
-														{
-															$result[$counter][type] = false;
-															$result[$counter][image] = "add_done_na";
-														}
+														$result[$counter][image] = "add_done";
 													}
 													else
 													{
-														$result[$counter][image] = "add";
+														$result[$counter][type] = false;
+														$result[$counter][image] = "add_done_na";
 													}
 												}
+												else
+												{
+													$result[$counter][image] = "add";
+												}
+	
+												$result[$counter][depends] = true;
+												$result[$counter][params] = $params;
+	
+												$counter++;
 											}
-											else
-											{
-												$result[$counter][type] = false;
-												$result[$counter][image] = "add_na";
-											}
-
-											$result[$counter][depends] = true;
-											$result[$counter][params] = $params;
-
-											$counter++;
 										}
+										
+										$result[$counter][type] = "line";
+										$counter++;
 									}
 								}
 							break;
 							
+							case "itemi":
+							
+								$paramquery = array();
+								$paramquery['username'] = $_GET[username];
+								$paramquery['session_id'] = $_GET[session_id];
+								$paramquery['nav'] = "project";
+								$paramquery['run'] = "sub_item_add";
+								$paramquery['project_id'] = $_GET[project_id];
+								$paramquery['dialog'] = $value[type];
+								$paramquery['key'] = "";
+								$paramquery['parent'] = "";
+								$paramquery['parent_key'] = "";
+								$paramquery['parent_id'] = "";
+								$paramquery['retrace'] = Retrace::create_retrace_string();
+								$params = http_build_query($paramquery,'','&#38;');
+								
+								$item_handling_cass = $value[handling_class];
+								if ($item_handling_cass::get_item_add_type() == 1)
+								{
+									$result[$counter][type] = "ajax";
+									$ajax_handling_array = $item_handling_cass::get_item_add_script_handling_class();
+									require_once("core/modules/".$ajax_handling_array[0]);
+									
+									// Folder ID und OU ID und Key !!!!
+									$ajax_init_array = $ajax_handling_array[1]::$ajax_handling_array[2](null, $paramquery, null, null, $sub_item_value[type_id],  $sub_item_value[category_id]);
+									
+									$result[$counter][script] = $ajax_init_array[script];
+									$result[$counter][window_title] = $ajax_init_array[window_title];
+									$result[$counter][window_id] = $ajax_init_array[window_id];
+									$result[$counter][click_id] = $ajax_init_array[click_id];
+								}
+								else
+								{
+									$result[$counter][type] = "link";
+								}
+								
+								if ($value[parent_name])
+								{
+									$result[$counter][name] = $sub_item_value[name]." (".$value[parent_name].")";
+								}
+								else
+								{
+									$result[$counter][name] = $sub_item_value[name];
+								}
+								
+							break;
+								
 							case "extension":
 								$paramquery = array();
 								$paramquery[username] = $_GET[username];
@@ -1020,8 +1057,6 @@ class ProjectAjax
 							
 				$project_template = new ProjectTemplate($project->get_template_id());
 				$current_status_requirements 	= $project->get_current_status_requirements();
-				$current_fulfilled_requirements = $project->get_fulfilled_status_requirements();
-				$current_fulfilled_extensions 	= $project->get_fulfilled_status_extension();
 				
 				$result = array();
 				$counter = 0;
@@ -1034,7 +1069,7 @@ class ProjectAjax
 						
 							case "item":
 								$result[$counter][name] = $value[name];
-								if ($current_fulfilled_requirements[$key] == true)
+								if ($value[fulfilled] == true)
 								{
 									$result[$counter][status] = 0;
 								}
@@ -1054,7 +1089,7 @@ class ProjectAjax
 							
 							case "extension":
 								$result[$counter][name] = $value[name];
-								if ($current_fulfilled_extensions[$key] == 1)
+								if ($value[fulfilled] == 1)
 								{
 									$result[$counter][status] = 0;
 								}

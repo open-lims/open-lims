@@ -405,7 +405,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 			    			$return_array[$counter]['type'] 		= $value[3]['type'];
 			    		}
 			    		
-			    		if ($value[3]['gid'])
+			    		if (is_numeric($value[3]['gid']))
 			    		{
 			    			$return_array[$counter]['gid']	  		= $value[3]['gid'];
 			    		}
@@ -463,6 +463,11 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    			if ($value[3]['status'])
 			    		{
 			    			$return_array[$counter]['status'] 		= $value[3]['status'];
+			    		}
+			    		
+		    			if ($value[3]['inherit'])
+			    		{
+			    			$return_array[$counter]['inherit'] 		= $value[3]['inherit'];
 			    		}
 			    		
 			    		$counter++;
@@ -592,7 +597,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 					{
 						if ($item_counter == $gid or $value[gid] === $gid)
 						{
-				    		if ($value['gid'])
+				    		if (is_numeric($value['gid']))
 				    		{
 				    			$return_array['gid']	  		= $value['gid'];
 				    		}

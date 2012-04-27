@@ -71,6 +71,12 @@ interface SampleItemInterface
 	public function set_gid($gid);
 	
 	/**
+     * @param integer $parent_item_id
+     * @return bool
+     */
+	public function set_parent_item_id($parent_item_id);
+	
+	/**
      * Adds the Item to a class
      * @param string $class_name
      * @return bool

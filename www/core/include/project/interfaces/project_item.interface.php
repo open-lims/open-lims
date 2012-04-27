@@ -106,6 +106,12 @@ interface ProjectItemInterface
 	public function set_status_id($status_id);
 	
 	/**
+     * @param integer $parent_item_id
+     * @return bool
+     */
+	public function set_parent_item_id($parent_item_id);
+	
+	/**
      * @return bool
      */
 	public function set_item_status();

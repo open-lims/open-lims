@@ -37,6 +37,7 @@ class ProjectHasItem_Access
 	private $required;
 	private $gid;
 	private $project_status_id;
+	private $parent_item_id;
 
 	/**
 	 * @param integer $primary_key
@@ -63,6 +64,7 @@ class ProjectHasItem_Access
 				$this->item_id				= $data[item_id];
 				$this->gid					= $data[gid];
 				$this->project_status_id	= $data[project_status_id];
+				$this->parent_item_id		= $data[parent_item_id];
 				
 				if ($data[active] == 't')
 				{
@@ -270,6 +272,21 @@ class ProjectHasItem_Access
 	}
 	
 	/**
+	 * @return integer
+	 */
+	public function get_parent_item_id()
+	{
+		if ($this->parent_item_id)
+		{
+			return $this->parent_item_id;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @param integer $project_id
 	 * @return bool
 	 */
@@ -448,6 +465,35 @@ class ProjectHasItem_Access
 			if ($db->db_affected_rows($res))
 			{
 				$this->project_status_id = $project_status_id;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}	
+	}
+	
+	/**
+	 * @param integer $parent_item_id
+	 * @return bool
+	 */
+	public function set_parent_item_id($parent_item_id)
+	{
+		global $db;
+
+		if ($this->primary_key and is_numeric($parent_item_id))
+		{
+			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET parent_item_id = '".$parent_item_id."' WHERE primary_key = '".$this->primary_key."'";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->parent_item_id = $parent_item_id;
 				return true;
 			}
 			else

@@ -253,6 +253,33 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 		}
 	}
 
+
+	/**
+	 * @see ItemListenerInterface::get_item_name()
+	 * @return string
+	 */
+	public final function get_item_name()
+	{
+		if ($this->equipment_id and $this->equipment)
+		{
+			$equipment_type = new EquipmentType($this->equipment->get_type_id());
+			return $equipment_type->get_name();
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @see ItemListenerInterface::get_item_parents()
+	 * @return array
+	 */
+	public final function get_item_parents()
+	{
+		return null;
+	}
+		
 	
 	/**
 	 * @see EquipmentInterface::list_entries_by_user_id()
@@ -301,32 +328,6 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 		{
 			return null;
 		}
-	}
-	
-	/**
-	 * @see ItemListenerInterface::get_item_name()
-	 * @return string
-	 */
-	public final function get_item_name()
-	{
-		if ($this->equipment_id and $this->equipment)
-		{
-			$equipment_type = new EquipmentType($this->equipment->get_type_id());
-			return $equipment_type->get_name();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @see ItemListenerInterface::get_item_parents()
-	 * @return array
-	 */
-	public final function get_item_parents()
-	{
-		return null;
 	}
 	
 	/**

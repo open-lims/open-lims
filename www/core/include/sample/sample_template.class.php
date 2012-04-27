@@ -434,7 +434,7 @@ class SampleTemplate implements SampleTemplateInterface
 			    			$return_array[$counter]['type'] 		= $value[3]['type'];
 			    		}
 			    		
-			    		if ($value[3]['gid'])
+			    		if (is_numeric($value[3]['gid']))
 			    		{
 			    			$return_array[$counter]['gid']	  		= $value[3]['gid'];
 			    		}
@@ -529,7 +529,7 @@ class SampleTemplate implements SampleTemplateInterface
 					{
 						if ($item_counter == $gid or $value[gid] === $gid)
 						{
-				    		if ($value['gid'])
+				    		if (is_numeric($value['gid']))
 				    		{
 				    			$return_array['gid']	  		= $value['gid'];
 				    		}

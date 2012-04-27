@@ -692,44 +692,158 @@ class SampleRequest
 		endswitch;
 	}
 
-	public static function item_add_handler($item_array)
+	public static function item_add_handler()
 	{
-		if ($_GET[dialog] and is_array($item_array) and count($item_array) >= 1)
+		global $transaction;
+		
+		if ($_GET['dialog'] and is_numeric($_GET['parent_id']) and is_numeric($_GET['parent_key']))
 		{
-			if (count($item_array) > 1)
-			{
-				
-			}
-			else
-			{
-				
-			}
+			$sample = new Sample($_GET['parent_id']);
+			$sample_security = new SampleSecurity($_GET['parent_id']);
 			
-			$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_add", $_GET[dialog]);
-
-			if (is_array($module_dialog) and $module_dialog[class_path])
+			if ($sample_security->is_access(2, false) == true)
 			{
-				if (file_exists($module_dialog[class_path]))
+				if ($_GET[dialog])
 				{
-					require_once($module_dialog[class_path]);
-					
-					if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
-					{	
-						
+					$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_add", $_GET[dialog]);
+
+					if (is_array($module_dialog) and $module_dialog[class_path])
+					{
+						if (file_exists($module_dialog[class_path]))
+						{
+							require_once($module_dialog[class_path]);
+							
+							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+							{
+								$sample_item = new SampleItem($_GET['parent_id']);
+								$sample_item->set_gid($_GET['parent_key']);
+								
+								$transaction_id = $transaction->begin();
+								
+								$current_requirements = $sample->get_requirements();
+								
+								$folder_id = SampleFolder::get_folder_by_sample_id($_GET['parent_id']);
+								
+								$sub_folder_id = $sample->get_sub_folder($folder_id, $_GET['parent_key']);				
+				
+								if (is_numeric($sub_folder_id))
+								{
+									$folder_id = $sub_folder_id;
+								}
+								
+								$return_value = $module_dialog['class']::$module_dialog[method]($current_requirements[$_GET['parent_key']][type_id], $current_requirements[$_GET['parent_key']][category_id], null, $folder_id);
+								
+								/**
+								 * @todo remove after rebuild all item add dialogs (including "associate sample")
+								 */
+								if (is_numeric($return_value))
+								{
+									if ($_GET['retrace'])
+									{
+										$params = http_build_query(Retrace::resolve_retrace_string($_GET['retrace']),'','&#38;');
+									}
+									else
+									{
+										$paramquery['username'] = $_GET['username'];
+										$paramquery['session_id'] = $_GET['session_id'];
+										$paramquery['nav'] = "home";
+										$params = http_build_query($paramquery,'','&#38;');
+									}
+									
+									// EVIL !!
+									if ($_GET['dialog'] == "parentsample")
+									{
+										$parent_sample_id = Sample::get_entry_by_item_id($return_value);
+										if ($parent_sample_id)
+										{
+											if (SampleItemFactory::create($parent_sample_id, $sample->get_item_id() , $_GET['parent_key'], null, null, true) == true)
+											{
+												if ($transaction_id != null)
+												{
+													$transaction->commit($transaction_id);
+												}
+												Common_IO::step_proceed($params, "Add Item", "Successful." ,null);
+											}
+											else
+											{
+												if ($transaction_id != null)
+												{
+													$transaction->rollback($transaction_id);
+												}
+												Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
+											}
+										}
+										else
+										{
+											if ($transaction_id != null)
+											{
+												$transaction->rollback($transaction_id);
+											}
+											Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
+										}
+									}
+									else
+									{
+										if (SampleItemFactory::create($_GET['parent_id'], $return_value, $_GET['parent_key'], null, null) == true)
+										{
+											if ($transaction_id != null)
+											{
+												$transaction->commit($transaction_id);
+											}
+											Common_IO::step_proceed($params, "Add Item", "Successful." ,null);
+										}
+										else
+										{
+											if ($transaction_id != null)
+											{
+												$transaction->rollback($transaction_id);
+											}
+											Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
+										}
+									}
+								}
+								else
+								{
+									if ($return_value === false)
+									{
+										if ($transaction_id != null)
+										{
+											$transaction->rollback($transaction_id);
+										}
+										throw new ModuleDialogFailedException("",1);
+									}
+									else
+									{
+										if ($transaction_id != null)
+										{
+											$transaction->commit($transaction_id);
+										}
+									}
+								}
+							}
+							else
+							{
+								throw new ModuleDialogCorruptException(null, null);
+							}
+						}
+						else
+						{
+							throw new ModuleDialogCorruptException(null, null);
+						}
 					}
 					else
 					{
-						throw new ModuleDialogCorruptException(null, null);
+						throw new ModuleDialogNotFoundException(null, null);
 					}
 				}
 				else
 				{
-					throw new ModuleDialogCorruptException(null, null);
+					throw new ModuleDialogMissingException(null, null);
 				}
 			}
 			else
 			{
-				throw new ModuleDialogNotFoundException(null, null);
+				throw new SampleSecurityAccessDeniedException();
 			}
 		}
 		else

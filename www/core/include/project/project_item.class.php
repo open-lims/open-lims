@@ -45,6 +45,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 	
 	private $project_log_id;
 	
+	private $parent_item_id;
 	private $status_id;
 	private $gid;
 
@@ -98,6 +99,18 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 						$transaction->rollback($transaction_id);
 					}
 					throw new ProjectItemLinkException(true, "Database entry failed");
+	    		}
+	    		
+	    		if ($this->parent_item_id)
+	    		{
+	    			if ($project_has_item->set_parent_item_id($this->parent_item_id) == false)
+	    			{
+	    				if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						throw new ProjectItemLinkException(true, "Parent Item-ID link failed");
+	    			}
 	    		}
 	    		
 				$project_item_link_event = new ProjectItemLinkEvent($this->item_id, $project_folder_id);
@@ -417,6 +430,24 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     		return false;
     	}
     }
+    
+    /**
+     * @see ProjectItemInterface::set_parent_item_id()
+     * @param integer $parent_item_id
+     * @return bool
+     */
+	public function set_parent_item_id($parent_item_id)
+	{
+		if (is_numeric($parent_item_id))
+    	{
+    		$this->parent_item_id = $parent_item_id;
+    		return true;
+    	}
+    	else
+    	{
+    		return false;
+    	}
+	}
     
     /**
      * @see ProjectItemInterface::set_item_status()

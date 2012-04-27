@@ -44,6 +44,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 	
 	private $gid;
 	private $parent;
+	private $parent_item_id;
 	
 	private $item_class_id;
 
@@ -105,6 +106,18 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 		    	{
 		    		$primary_key = $sample_has_item->create($this->sample_id, $this->item_id, null);
 		    	}
+		    	
+    			if ($this->parent_item_id)
+	    		{
+	    			if ($sample_has_item->set_parent_item_id($this->parent_item_id) == false)
+	    			{
+	    				if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+	    			}
+	    		}
 		    	
 		    	if ($primary_key != null)
 	    		{ 
@@ -326,6 +339,24 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     		return false;
     	}
     }
+    
+ 	/**
+     * @see SampleItemInterface::set_parent_item_id()
+     * @param integer $parent_item_id
+     * @return bool
+     */
+	public function set_parent_item_id($parent_item_id)
+	{
+		if (is_numeric($parent_item_id))
+    	{
+    		$this->parent_item_id = $parent_item_id;
+    		return true;
+    	}
+    	else
+    	{
+    		return false;
+    	}
+	}
     
     /**
      * Checks if a class already exists

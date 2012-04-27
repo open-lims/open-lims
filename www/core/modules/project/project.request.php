@@ -672,45 +672,29 @@ class ProjectRequest
 			break;
 			
 			// Sub Item Add
+			/**
+			 * @todo exception
+			 */
 			case("sub_item_add"):
 				if ($project_security->is_access(3, false) == true)
 				{
-					$project = new Project($_GET[project_id]);
-					$project_item = new ProjectItem($_GET[project_id]);
-					$item_array = $project_item->get_project_status_items($project->get_current_status_id());
-					$item_type_array = Item::list_types();
-					$sub_item_add_item_array = array();
-					
-					if (is_array($item_array) and count($item_array) >= 1)
+					if ($_GET['parent'] and is_numeric($_GET['parent_id']) and is_numeric($_GET['parent_key']))
 					{
-						foreach ($item_array as $key => $value)
-						{
-							$item_gid = ProjectItem::get_gid_by_item_id_and_project_id($item_value, $_GET[project_id], $project->get_current_status_id());
-										
-							if (is_array($item_type_array) and count($item_type_array) >= 1)
-							{
-								foreach ($item_type_array as $item_type => $item_handling_class)
-								{
-									if (class_exists($item_handling_class))
-									{
-										if ($item_gid == $_GET['parent_gid'] and $item_type == $_GET['parent'])
-										{
-											array_push($sub_item_add_item_array, $value);
-										}
-									}
-								}
-							}
-						}
-						
-						if ($item_handling_class and count($sub_item_add_item_array) >= 1)
+						$item_handling_class = Item::get_handling_class_by_type($_GET['parent']);
+												
+						if (class_exists($item_handling_class))
 						{
 							$item_io_handling_class = $item_handling_class::get_item_add_io_handling_class();
 							require_once("core/modules/".$item_io_handling_class[0]);
 							if (class_exists($item_io_handling_class[1]))
 							{
-								$item_io_handling_class[1]::item_add_handler($sub_item_add_item_array);
+								$item_io_handling_class[1]::item_add_handler();
 							}
-						}
+						}	
+					}
+					else
+					{
+						// Exception
 					}
 				}
 				else

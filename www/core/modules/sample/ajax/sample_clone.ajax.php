@@ -643,7 +643,7 @@ class SampleCloneAjax
 			{
 				$parent_sample = new Sample($sample_item_get_array['sample_id']);
 				$sample_item_get_array['sample_id'] = $sample_id;
-				$sample_item_get_array['parent'] = "1";
+				$sample_item_get_array['parent_sample'] = "1";
 				$event_item_id = $parent_sample->get_item_id();
 			}
 			else

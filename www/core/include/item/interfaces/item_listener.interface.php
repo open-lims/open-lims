@@ -41,6 +41,7 @@ interface ItemListenerInterface
 	 * @return string
 	 */
 	public function get_item_parents();
+
 	
 	/**
 	 * Clones the item and returns its ID

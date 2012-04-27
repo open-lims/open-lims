@@ -42,7 +42,7 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
 	 * @param bool $parent
 	 * @return bool
 	 */
-	public static function create($sample_id, $item_id, $gid, $keywords, $description, $parent = false)
+	public static function create($sample_id, $item_id, $gid, $keywords = null, $description = null, $parent_item_id = null, $parent = false)
 	{
 		global $transaction;
 		
@@ -52,7 +52,8 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
 			$sample_item = new SampleItem($sample_id);
 			
 			$sample_item->set_gid($gid);
-			$sample_item->set_parent($parent);
+			$sample_item->set_parent($parent); // For parent sample only
+			$sample_item->set_parent_item_id($parent_item_id);
 			
 			if ($sample_item->set_item_id($item_id) == false)
 			{
@@ -145,11 +146,11 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
     	{
     		$get_array = $event_object->get_get_array();
     		$post_array = $event_object->get_post_array();
-    		if ($get_array[nav] == "sample" and is_numeric($get_array[sample_id]))
+    		if ($get_array[nav] == "sample" and is_numeric($get_array[sample_id]) and !$get_array['parent'] and !$get_array['parent_key'])
     		{
     			$transaction_id = $transaction->begin();
     			
-    			if ($get_array['parent'] == "1")
+    			if ($get_array['parent_sample'] == "1")
     			{
     				$parent = true;
     			}
@@ -158,7 +159,67 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
     				$parent = false;
     			}
     			
-    			if (self::create($get_array[sample_id], $event_object->get_item_id(), $get_array[key], $post_array[keywords], $post_array[description], $parent) == false)
+    			if (self::create($get_array[sample_id], $event_object->get_item_id(), $get_array[key], $post_array[keywords], $post_array[description], null, $parent) == false)
+    			{
+    				if ($transaction_id != null)
+	    			{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
+    			}
+    			else
+    			{
+    				if ($transaction_id != null)
+	    			{
+						$transaction->commit($transaction_id);
+					}
+    			}
+    		}
+    		elseif($get_array['nav'] == "sample" and is_numeric($get_array['sample_id']) and $get_array['parent'] and is_numeric($get_array['parent_key']) and is_numeric($get_array['parent_id']))
+    		{
+    			$transaction_id = $transaction->begin();
+    			
+    			$handling_class = Item::get_holder_handling_class_by_name($get_array['parent']);
+    			
+    			if (class_exists($handling_class))
+    			{
+    				$parent_item = new $handling_class($get_array['parent_id']);
+
+	    			if ($get_array['parent_sample'] == "1")
+	    			{
+	    				$parent = true;
+	    			}
+	    			else
+	    			{
+	    				$parent = false;
+	    			}
+	    			
+	    			if (self::create($get_array[sample_id], $event_object->get_item_id(), $get_array[key], $post_array[keywords], $post_array[description], $parent_item->get_item_id(), $parent) == false)
+	    			{
+	    				if ($transaction_id != null)
+		    			{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+	    			}
+	    			else
+	    			{
+	    				if ($transaction_id != null)
+		    			{
+							$transaction->commit($transaction_id);
+						}
+	    			}
+    			}
+    			else
+    			{
+    				return false;
+    			}
+    		}
+    		elseif($get_array['parent'] == "sample" and is_numeric($get_array['parent_key']) and is_numeric($get_array['parent_id']))
+    		{
+    			$transaction_id = $transaction->begin();
+    			
+    			if (self::create($get_array['parent_id'], $event_object->get_item_id(), $get_array[parent_key]) == false)
     			{
     				if ($transaction_id != null)
 	    			{

@@ -101,19 +101,8 @@ interface ProjectInterface
      * Returns an array with all requirements of the current status
      * @return array
      */
-	public function get_current_status_requirements();
-	
-	/**
-     * Retruns an array with all fulfilled item-requirements of the current status
-     * @return array
-     */
-	public function get_fulfilled_status_requirements();
-	
-	/**
-	 * @return array
-	 */
-	public function get_fulfilled_status_datetimes();
-		
+	public function get_current_status_requirements($inherited = true, $status_id = null);
+				
 	/**
      * Returns the ID of the next status of the current project
      * @return integer

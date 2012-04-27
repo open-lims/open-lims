@@ -41,17 +41,18 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
 	 * @param string $description
 	 * @return bool
 	 */
-	public static function create($project_id, $item_id, $gid, $keywords, $description)
+	public static function create($project_id, $item_id, $gid, $keywords = null, $description = null, $parent_item_id = null)
 	{
 		global $transaction;
 		
 		if ($transaction->is_in_transction() == true)
-		{
+		{			
 			$project = new Project($project_id);
 			$project_item = new ProjectItem($project_id);
 			
 			$project_item->set_gid($gid) == false;
 			$project_item->set_status_id($project->get_current_status_id());
+			$project_item->set_parent_item_id($parent_item_id);
 			
 			if ($project_item->set_item_id($item_id) == false)
 			{
@@ -154,11 +155,11 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
     	{
     		$get_array = $event_object->get_get_array();
     		$post_array = $event_object->get_post_array();
-    		if ($get_array[nav] == "project" and is_numeric($get_array[project_id]))
+    		if ($get_array['nav'] == "project" and is_numeric($get_array['project_id']) and !$get_array['parent'] and !$get_array['parent_key'])
     		{
     			$transaction_id = $transaction->begin();
     			
-    			if (self::create($get_array[project_id], $event_object->get_item_id(), $get_array[key], $post_array[keywords], $post_array[description]) == false)
+    			if (self::create($get_array['project_id'], $event_object->get_item_id(), $get_array['key'], $post_array['keywords'], $post_array['description']) == false)
     			{
     				if ($transaction_id != null)
 	    			{
@@ -172,6 +173,37 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
 	    			{
 						$transaction->commit($transaction_id);
 					}
+    			}
+    		}
+    		elseif($get_array['nav'] == "project" and is_numeric($get_array['project_id']) and $get_array['parent'] and is_numeric($get_array['parent_key']) and is_numeric($get_array['parent_id']))
+    		{
+    			$transaction_id = $transaction->begin();
+    			
+    			$handling_class = Item::get_holder_handling_class_by_name($get_array['parent']);
+    			
+    			if (class_exists($handling_class))
+    			{
+    				$parent_item = new $handling_class($get_array['parent_id']);
+    				
+	    			if (self::create($get_array['project_id'], $event_object->get_item_id(), $get_array['key'], null, null, $parent_item->get_item_id()) == false)
+	    			{
+	    				if ($transaction_id != null)
+		    			{
+							$transaction->rollback($transaction_id);
+						}
+	    				return false;
+	    			}
+	    			else
+	    			{
+	    				if ($transaction_id != null)
+		    			{
+							$transaction->commit($transaction_id);
+						}
+	    			}
+    			}
+    			else
+    			{
+    				return false;
     			}
     		}
     	}

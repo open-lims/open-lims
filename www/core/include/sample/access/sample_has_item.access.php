@@ -35,6 +35,7 @@ class SampleHasItem_Access
 	private $item_id;
 	private $gid;
 	private $parent;
+	private $parent_item_id;
 
 	/**
 	 * @param integer $primary_key
@@ -60,6 +61,7 @@ class SampleHasItem_Access
 				$this->sample_id		= $data[sample_id];
 				$this->item_id			= $data[item_id];
 				$this->gid				= $data[gid];
+				$this->parent_item_id	= $data[parent_item_id];
 				
 				if ($data['parent'] == 't')
 				{
@@ -227,6 +229,21 @@ class SampleHasItem_Access
 	}
 	
 	/**
+	 * @return integer
+	 */
+	public function get_parent_item_id()
+	{
+		if (isset($this->parent_item_id))
+		{
+			return $this->parent_item_id;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
 	 * @param integer $sample_id
 	 * @return bool
 	 */
@@ -350,6 +367,36 @@ class SampleHasItem_Access
 			return false;
 		}	
 	}
+	
+	/**
+	 * @param integer $gid
+	 * @return bool
+	 */
+	public function set_parent_item_id($parent_item_id)
+	{
+		global $db;
+
+		if ($this->primary_key and is_numeric($parent_item_id))
+		{
+			$sql = "UPDATE ".constant("SAMPLE_HAS_ITEM_TABLE")." SET parent_item_id = '".$parent_item_id."' WHERE primary_key = '".$this->primary_key."'";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->parent_item_id = $parent_item_id;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}	
+	}
+	
 	
 	/**
 	 * @param integer $item_id

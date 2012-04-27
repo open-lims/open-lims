@@ -1065,18 +1065,36 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	}
 
 	/**
-	 * @todo cache values
 	 * @param boolean $parent_sample
 	 * @param integer $gid
 	 * @return boolean
 	 */
 	private function get_fulfilled($parent_sample, $gid)
 	{
+		global $runtime_data;
+		
 		if ($this->sample_id and is_numeric($gid))
 		{
-			$item_type_array = Item::list_types();
-			$sample_item = new SampleItem($this->sample_id);
-			$item_array = $sample_item->get_sample_items(); // Cachen
+			if ($runtime_data->is_object_data($this, "SAMPLE_".$this->sample_id."_FULFILLED_ITEM_TYPE_ARRAY") == true)
+    		{
+				$item_type_array = $runtime_data->read_object_data($this, "SAMPLE_".$this->sample_id."_FULFILLED_ITEM_TYPE_ARRAY");
+    		}
+    		else
+    		{
+    			$item_type_array = Item::list_types();
+    			$runtime_data->write_object_data($this, "SAMPLE_".$this->sample_id."_FULFILLED_ITEM_TYPE_ARRAY", $item_type_array);	
+    		}
+    		
+    		if ($runtime_data->is_object_data($this, "SAMPLE_".$this->sample_id."_FULFILLED_ITEM_ARRAY") == true)
+    		{
+    			$item_array = $runtime_data->read_object_data($this, "SAMPLE_".$this->sample_id."_FULFILLED_ITEM_ARRAY");
+    		}
+    		else
+    		{
+    			$sample_item = new SampleItem($this->sample_id);
+				$item_array = $sample_item->get_sample_items(); // Cachen
+				$runtime_data->write_object_data($this, "SAMPLE_".$this->sample_id."_FULFILLED_ITEM_ARRAY", $item_array);	
+    		}
 			
 			if ($parent_sample == false)
 			{
@@ -1364,6 +1382,10 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     	}
     }
     
+    /**
+     * @see SampleInterface::get_description()
+     * @return string;
+     */
     public function get_description()
     {
     	if ($this->sample_id and $this->sample)
@@ -1662,12 +1684,19 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	 * @param integer $id
 	 * @return array
 	 */
-	public function get_item_add_information($id)
+	public final function get_item_add_information($id= null)
 	{
 		if ($this->sample_id)
 		{
 			$requirements_array = $this->get_requirements(false);
-			return $requirements_array[$id];
+			if (is_numeric($id))
+			{
+				return $requirements_array[$id];
+			}
+			else
+			{
+				return $requirements_array;
+			}
 		}
 	}
 	
@@ -1676,7 +1705,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	 * @param integer $id
 	 * @return array
 	 */
-	public function get_item_add_status($id)
+	public final function get_item_add_status($id)
 	{
 		if ($this->sample_id)
 		{
@@ -1684,7 +1713,88 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 		}
 	}
 	
-
+	/**
+	 * @see ItemHolderInterface::get_item_add_id()
+	 * @return integer
+	 */
+	public final function get_item_add_id()
+	{
+		if ($this->sample_id)
+		{
+			return $this->sample_id;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @see ItemHolderInterface::get_item_add_name()
+	 * @return string
+	 */
+	public final function get_item_add_name()
+	{
+		if ($this->sample_id and $this->sample)
+		{
+			return $this->sample->get_name();
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+     * @see ItemListenerInterface::get_item_name()
+	 * @return string
+	 */
+	public final function get_item_name()
+	{
+		if ($this->sample_id and $this->sample)
+    	{
+    		return $this->sample->get_name();
+    	}
+    	else
+    	{
+    		return null;
+    	}
+	}
+    
+    /**
+     * @see ItemListenerInterface::get_item_parents()
+	 * @return string
+	 */
+	public final function get_item_parents()
+	{
+		if ($this->item_id)
+		{
+			$parent_sample_array = SampleItem::list_entries_by_item_id($this->item_id);
+			
+			if (is_array($parent_sample_array) and count($parent_sample_array) >= 1)
+			{
+				$return_array = array();
+				
+				foreach($parent_sample_array as $key => $value)
+				{
+					$sample_is_item = new SampleIsItem_Access($value);
+    				array_push($return_array, $sample_is_item->get_item_id());
+				}
+				
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	
 	/**
 	 * @see SampleInterface::exist_sample()
 	 * @param integer $sample_id
@@ -1771,55 +1881,6 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     {
     	return Sample_Access::list_entries_by_template_id($template_id);;
     }
-
-    /**
-     * @see ItemListenerInterface::get_item_name()
-	 * @return string
-	 */
-	public final function get_item_name()
-	{
-		if ($this->sample_id and $this->sample)
-    	{
-    		return $this->sample->get_name();
-    	}
-    	else
-    	{
-    		return null;
-    	}
-	}
-    
-    /**
-     * @see ItemListenerInterface::get_item_parents()
-	 * @return string
-	 */
-	public final function get_item_parents()
-	{
-		if ($this->item_id)
-		{
-			$parent_sample_array = SampleItem::list_entries_by_item_id($this->item_id);
-			
-			if (is_array($parent_sample_array) and count($parent_sample_array) >= 1)
-			{
-				$return_array = array();
-				
-				foreach($parent_sample_array as $key => $value)
-				{
-					$sample_is_item = new SampleIsItem_Access($value);
-    				array_push($return_array, $sample_is_item->get_item_id());
-				}
-				
-				return $return_array;
-			}
-			else
-			{
-				return null;
-			}
-		}
-		else
-		{
-			return null;
-		}
-	}
     
 	/**
 	 * @see ItemListenerInterface::clone_item()

@@ -131,6 +131,7 @@ class Security implements SecurityInterface
 			case("runid"):
 			case("key"):
 			case("parent_key"):	
+			case("parent_id"):
 			case("parent"):
 			case("version"):
 			case("sortmethod"):
