@@ -6,9 +6,10 @@
 <!ELEMENT REQUIRED (ITEM*,CLASS*)>
 <!ELEMENT BODY (ITEM|CLASS|STATUS|EXTENSION|QUALITYCHECK?)*>
 
-<!ELEMENT STATUS (ITEM|CLASS|EXTENSION|QUALITYCHECK?)*>
+<!ELEMENT STATUS (ITEM|ITEMI|CLASS|EXTENSION|QUALITYCHECK?)*>
 
 <!ELEMENT ITEM (TYPE|INFORMATION|CATEGORY|ITEM)*>
+<!ELEMENT ITEMI (TYPE|CATEGORY)*>
 
 <!ELEMENT CLASS (INFORMATION)*>
 
@@ -42,15 +43,28 @@
 >        
 
 <!ATTLIST 	ITEM
-	type	        CDATA    					#REQUIRED
-	classify	    (force|optional|forbidden)	#IMPLIED
-	occurrence		(once|multiple)				#IMPLIED      
-	requirement		(force|optional)			#IMPLIED   
-	class			CDATA						#IMPLIED      
-	name			CDATA						#IMPLIED      
-	gid				CDATA						#IMPLIED
-	folder			CDATA						#IMPLIED
->           
+	type	        CDATA    									#IMPLIED
+	classify	    (force|optional|forbidden)					#IMPLIED
+	occurrence		(once|multiple|update-once|update-multiple)	#IMPLIED      
+	requirement		(force|optional)							#IMPLIED   
+	class			CDATA										#IMPLIED      
+	name			CDATA										#IMPLIED      
+	gid				CDATA										#IMPLIED
+	folder			CDATA										#IMPLIED
+	inherit			(all|true|false)							#IMPLIED
+>       
+
+<!ATTLIST 	ITEMI
+	parent			CDATA										#REQUIRED
+	type	        CDATA    									#IMPLIED
+	classify	    (force|optional|forbidden)					#IMPLIED
+	occurrence		(once|multiple|update-once|update-multiple)	#IMPLIED      
+	requirement		(force|optional)							#IMPLIED   
+	class			CDATA										#IMPLIED      
+	name			CDATA										#IMPLIED      
+	gid				CDATA										#IMPLIED
+	folder			CDATA										#IMPLIED	
+>      
 
 <!ATTLIST 	TYPE
 	id				CDATA						#REQUIRED
