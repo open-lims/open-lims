@@ -696,7 +696,7 @@ class SampleRequest
 	{
 		global $transaction;
 		
-		if ($_GET['dialog'] and is_numeric($_GET['parent_id']) and is_numeric($_GET['parent_key']))
+		if ($_GET['dialog'] and is_numeric($_GET['parent_id']) and is_numeric($_GET['key']))
 		{
 			$sample = new Sample($_GET['parent_id']);
 			$sample_security = new SampleSecurity($_GET['parent_id']);
@@ -716,7 +716,7 @@ class SampleRequest
 							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
 							{
 								$sample_item = new SampleItem($_GET['parent_id']);
-								$sample_item->set_gid($_GET['parent_key']);
+								$sample_item->set_gid($_GET['key']);
 								
 								$transaction_id = $transaction->begin();
 								
@@ -724,14 +724,14 @@ class SampleRequest
 								
 								$folder_id = SampleFolder::get_folder_by_sample_id($_GET['parent_id']);
 								
-								$sub_folder_id = $sample->get_sub_folder($folder_id, $_GET['parent_key']);				
+								$sub_folder_id = $sample->get_sub_folder($folder_id, $_GET['key']);				
 				
 								if (is_numeric($sub_folder_id))
 								{
 									$folder_id = $sub_folder_id;
 								}
 								
-								$return_value = $module_dialog['class']::$module_dialog[method]($current_requirements[$_GET['parent_key']][type_id], $current_requirements[$_GET['parent_key']][category_id], null, $folder_id);
+								$return_value = $module_dialog['class']::$module_dialog[method]($current_requirements[$_GET['key']][type_id], $current_requirements[$_GET['key']][category_id], null, $folder_id);
 								
 								/**
 								 * @todo remove after rebuild all item add dialogs (including "associate sample")
@@ -756,7 +756,7 @@ class SampleRequest
 										$parent_sample_id = Sample::get_entry_by_item_id($return_value);
 										if ($parent_sample_id)
 										{
-											if (SampleItemFactory::create($parent_sample_id, $sample->get_item_id() , $_GET['parent_key'], null, null, true) == true)
+											if (SampleItemFactory::create($parent_sample_id, $sample->get_item_id() , $_GET['key'], null, null, true) == true)
 											{
 												if ($transaction_id != null)
 												{
@@ -784,7 +784,7 @@ class SampleRequest
 									}
 									else
 									{
-										if (SampleItemFactory::create($_GET['parent_id'], $return_value, $_GET['parent_key'], null, null) == true)
+										if (SampleItemFactory::create($_GET['parent_id'], $return_value, $_GET['key'], null, null) == true)
 										{
 											if ($transaction_id != null)
 											{

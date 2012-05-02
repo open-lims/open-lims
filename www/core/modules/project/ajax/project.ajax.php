@@ -1026,40 +1026,95 @@ class ProjectAjax
 						switch ($value['element_type']):
 						
 							case "item":
-								$result[$counter][name] = $value[name];
-								if ($value[fulfilled] == true)
+								
+								$amount = count($value[fulfilled]);
+								
+								if ($value['display'] == true)
 								{
-									$result[$counter][status] = 0;
-								}
-								else
-								{
-									if ($value[requirement] != "optional")
+									$result[$counter][name] = $value[name];
+									$result[$counter][depends] = false;
+									if (is_array($value[fulfilled]) and count($value[fulfilled]) >= 1)
 									{
-										$result[$counter][status] = 1;
+										$result[$counter][status] = "ok";
 									}
 									else
 									{
-										$result[$counter][status] = 2;
+										if ($value[requirement] != "optional")
+										{
+											$result[$counter][status] = "cancel";
+										}
+										else
+										{
+											$result[$counter][status] = "notice";
+										}
+									}
+									$counter++;
+								}
+								
+								if (is_array($value['sub_items']) and count($value['sub_items']) >= 1)
+								{
+									$result[$counter][status] = "line";
+									$counter++;
+									
+									for($i=0; $i<=($amount-1); $i++)
+									{
+										foreach($value['sub_items'] as $sub_item_key => $sub_item_value)
+										{
+											if ($sub_item_value['element_type'] == "item")
+											{
+												$result[$counter][depends] = true;
+												
+												if ($value[fulfilled][$i][name])
+												{
+													$result[$counter][name] = $sub_item_value[name]." (".$value[fulfilled][$i][name].")";
+												}
+												else
+												{
+													$result[$counter][name] = $sub_item_value[name];
+												}
+												
+												if ($sub_item_value[fulfilled][$i] == true)
+												{
+													$result[$counter][status] = "ok";
+												}
+												else
+												{
+													if ($sub_item_value[requirement] != "optional")
+													{
+														$result[$counter][status] = "cancel";
+													}
+													else
+													{
+														$result[$counter][status] = "notice";
+													}
+												}
+												
+												$counter++;
+											}
+										}
+										
+										$result[$counter][status] = "line";
+										$counter++;
 									}
 								}
-								$counter++;
 							break;
 							
 							case "extension":
 								$result[$counter][name] = $value[name];
+								$result[$counter][depends] = false;
 								if ($value[fulfilled] == 1)
 								{
-									$result[$counter][status] = 0;
+									$result[$counter][status] = "ok";
 								}
 								else
 								{
 									if ($value[requirement] != "optional")
 									{
-										$result[$counter][status] = 1;
+										$result[$counter][status] = "cancel";
 									}
 									else
 									{
-										$result[$counter][status] = 2;
+										$result[$counter][status] = "notice";
 									}
 								}
 								$counter++;

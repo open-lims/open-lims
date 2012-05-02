@@ -169,13 +169,10 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     		{
     			foreach($requirement_array as $key => $value)
     			{
-    				if (($value[type] == "file" or $value[type] == "value") and $value[folder])
-    				{
-						if (!in_array($value[folder], $folder_array))
-						{
-							array_push($folder_array, $value[folder]);
-						}
-					}	
+					if (!in_array($value[folder], $folder_array))
+					{
+						array_push($folder_array, $value[folder]);
+					}
     			}	
     				
     			if (is_array($folder_array) and count($folder_array) >= 1)

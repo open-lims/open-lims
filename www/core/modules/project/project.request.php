@@ -678,7 +678,7 @@ class ProjectRequest
 			case("sub_item_add"):
 				if ($project_security->is_access(3, false) == true)
 				{
-					if ($_GET['parent'] and is_numeric($_GET['parent_id']) and is_numeric($_GET['parent_key']))
+					if ($_GET['parent'] and is_numeric($_GET['parent_id']) and is_numeric($_GET['key']))
 					{
 						$item_handling_class = Item::get_handling_class_by_type($_GET['parent']);
 												

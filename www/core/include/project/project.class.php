@@ -252,12 +252,9 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						{
 							foreach($project_status_array as $status_key => $status_value)
 							{
-								if ($status_value[type] == "file" or $status_value[type] == "value")
+								if (!in_array($value, $folder_array))
 								{
-									if (!in_array($value, $folder_array))
-									{
-										array_push($folder_array, $value);
-									}
+									array_push($folder_array, $value);
 								}
 							}
 						}	
@@ -799,18 +796,35 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 				switch ($value['element_type']):
 						
 					case "item":
-						if ($value[fulfilled] == false and $current_status_requirements[$key][requirement] != "optional")
+						if ((!is_array($value[fulfilled]) or count($value[fulfilled]) == 0) and $value[requirement] != "optional")
 						{
 							$not_fulfilled = true;
+						}
+						
+						if (is_array($value['sub_items']) and count($value['sub_items']) >= 1)
+						{
+							for($i=0; $i<=($amount-1); $i++)
+							{
+								foreach($value['sub_items'] as $sub_item_key => $sub_item_value)
+								{
+									if ($sub_item_value['element_type'] == "item")
+									{
+										if ($sub_item_value[fulfilled][$i] != true and $sub_item_value[requirement] != "optional")
+										{
+											$not_fulfilled = true;
+										}
+									}
+								}
+							}
 						}
 					break;
 					
 					case "extension":
-						if ($value[fulfilled] == 0 and $current_status_requirements[$key][requirement] != "optional")
+						if ($value[fulfilled] == 0 and $value[requirement] != "optional")
 						{
 							$not_fulfilled = true;
 						}
-						if ($value[fulfilled] == -1 and $current_status_requirements[$key][requirement] != "optional")
+						if ($value[fulfilled] == -1 and $value[requirement] != "optional")
 						{
 							$not_fulfilled = true;
 						}
