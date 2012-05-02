@@ -796,6 +796,8 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 				switch ($value['element_type']):
 						
 					case "item":
+						$amount = count($value[fulfilled]);
+						
 						if ((!is_array($value[fulfilled]) or count($value[fulfilled]) == 0) and $value[requirement] != "optional")
 						{
 							$not_fulfilled = true;
@@ -809,7 +811,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 								{
 									if ($sub_item_value['element_type'] == "item")
 									{
-										if ($sub_item_value[fulfilled][$i] != true and $sub_item_value[requirement] != "optional")
+										if ($sub_item_value[fulfilled][$i] == false and $sub_item_value[requirement] != "optional")
 										{
 											$not_fulfilled = true;
 										}
