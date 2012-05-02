@@ -178,6 +178,7 @@ interface ProjectItemInterface
      */
 	public function create_log_entry();
 	
+	
 	/**
      * @param integer $item_id
      * @param integer $project_id

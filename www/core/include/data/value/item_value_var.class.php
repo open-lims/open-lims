@@ -74,9 +74,9 @@ class ItemValueVar implements ValueVarCaseInterface
 	    							if ($item_type_value::is_kind_of($item_type_key, $value))
 	    							{
 	    								$instance = $item_type_value::get_instance_by_item_id($value);
-	    								if (!in_array($instance->get_item_name(), $new_result))
+	    								if (!in_array($instance->get_item_object_name(), $new_result))
 	    								{
-	    									array_push($new_result, $instance->get_item_name());
+	    									array_push($new_result, $instance->get_item_object_name());
 	    								}
 	    							}
 	    						}
@@ -97,7 +97,7 @@ class ItemValueVar implements ValueVarCaseInterface
     							if ($value::is_kind_of($key, $this->stack[count($this->stack)-1]))
     							{
     								$instance = $value::get_instance_by_item_id($this->stack[count($this->stack)-1]);
-    								$this->result = $instance->get_item_name();
+    								$this->result = $instance->get_item_object_name();
     							}
     						}
     					}

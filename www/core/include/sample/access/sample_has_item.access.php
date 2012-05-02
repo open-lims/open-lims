@@ -465,6 +465,77 @@ class SampleHasItem_Access
 	}
 	
 	/**
+	 * @param integer $parent_item_id
+	 * @param integer $sample_id
+	 * @return array
+	 */
+	public static function list_entries_by_parent_item_id_and_sample_id($parent_item_id, $sample_id)
+	{
+		global $db;
+
+		if (is_numeric($parent_item_id) and is_numeric($sample_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE parent_item_id = ".$parent_item_id." AND sample_id = ".$sample_id."";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,$data[primary_key]);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $parent_item_id
+	 * @return array
+	 */
+	public static function list_entries_by_parent_item_id($parent_item_id)
+	{
+		global $db;
+
+		if (is_numeric($parent_item_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE parent_item_id = ".$parent_item_id."";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,$data[primary_key]);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * Returns a list of items by a given sample-id and a given gid which are parent entries
 	 * @param integer $item_id
 	 * @param integer $gid

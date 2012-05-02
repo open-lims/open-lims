@@ -6,10 +6,10 @@
 <!ELEMENT REQUIRED (ITEM*,CLASS*)>
 <!ELEMENT BODY (ITEM|CLASS|STATUS|EXTENSION|QUALITYCHECK?)*>
 
-<!ELEMENT STATUS (ITEM|ITEMI|CLASS|EXTENSION|QUALITYCHECK?)*>
+<!ELEMENT STATUS (ITEM|ITEMI|CLASS|ANALYSIS|QUALITYCHECK?)*>
 
 <!ELEMENT ITEM (TYPE|INFORMATION|CATEGORY|ITEM)*>
-<!ELEMENT ITEMI (TYPE|CATEGORY)*>
+<!ELEMENT ITEMI EMPTY>
 
 <!ELEMENT CLASS (INFORMATION)*>
 
@@ -18,6 +18,10 @@
 <!ELEMENT TYPE EMPTY>
 <!ELEMENT CATEGORY EMPTY>
 
+<!ELEMENT ANALYSIS (COMPARE|MODULE|EXTENSION)>
+
+<!ELEMENT COMPARE (FILTER)>
+<!ELEMENT MODULE (FILTER)>
 <!ELEMENT EXTENSION (FILTER)>
 
 <!ELEMENT FILTER EMPTY>
@@ -56,7 +60,6 @@
 
 <!ATTLIST 	ITEMI
 	parent			CDATA										#REQUIRED
-	type	        CDATA    									#IMPLIED
 	classify	    (force|optional|forbidden)					#IMPLIED
 	occurrence		(once|multiple|update-once|update-multiple)	#IMPLIED      
 	requirement		(force|optional)							#IMPLIED   
@@ -82,9 +85,22 @@
 	keywords		(keywords)					#IMPLIED	
 	description		(description)				#IMPLIED
 >	
-       
-<!ATTLIST 	EXTENSION
+
+<!ATTLIST 	ANALYSIS
 	requirement		(force|optional)			#IMPLIED
+	occurrence		(once|multiple)				#IMPLIED      
+>
+       
+<!ATTLIST 	COMPARE
+	name			CDATA						#REQUIRED
+>      
+       
+<!ATTLIST 	MODULE
+	name			CDATA						#REQUIRED
+	funciton		CDATA						#REQUIRED
+>
+
+<!ATTLIST 	EXTENSION
 	identifer		CDATA						#REQUIRED
 >
 

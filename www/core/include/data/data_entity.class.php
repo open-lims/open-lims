@@ -831,26 +831,25 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 			return false;	
 		}
 	}
-	
+		
 	/**
-	 * @see ItemListenerInterface::get_item_name()
+	 * @see ItemListenerInterface::get_item_parents()
 	 * @return string
 	 */
-	public final function get_item_name()
+	public final function get_item_parents()
+	{
+		return null;
+	}
+	
+	/**
+	 * @see ItemListenerInterface::get_item_object_id()
+	 * @return integer
+	 */
+	public final function get_item_object_id()
 	{
 		if ($this->data_entity_id)
 		{
-			if (($file_id = File::get_file_id_by_data_entity_id($this->data_entity_id)) != null)
-			{
-				$file = File::get_instance($file_id);
-	    		return $file->get_name();
-			}
-					
-	    	if (($value_id = Value::get_value_id_by_data_entity_id($this->data_entity_id)) != null)
-			{
-				$value = Value::get_instance($value_id);
-	    		return $value->get_name();
-			}
+			return $this->data_entity_id;
 		}
 		else
 		{
@@ -859,12 +858,29 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
-	 * @see ItemListenerInterface::get_item_parents()
+	 * @see ItemListenerInterface::get_item_object_name()
 	 * @return string
 	 */
-	public final function get_item_parents()
+	public final function get_item_object_name()
 	{
-		return null;
+		if ($this->data_entity_id and $this->data_entity)
+		{
+
+    		if (($file_id = File::get_file_id_by_data_entity_id($data_entity_id)) != null)
+			{
+				$file = new File($file_id);
+				return $file->get_name();
+			}
+			elseif (($value_id = Value::get_value_id_by_data_entity_id($data_entity_id)) != null)
+    		{
+				$value = new Value($value_id);
+				$value->get_name();
+    		}
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	

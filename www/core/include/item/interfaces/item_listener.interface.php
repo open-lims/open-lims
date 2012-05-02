@@ -29,19 +29,26 @@
 interface ItemListenerInterface
 {
 	/**
-	 * Returns the name of a specific item 
-	 * Requires instance via get_instance_by_item_id($item_id)
-	 * @return string
-	 */
-	public function get_item_name();
-	
-	/**
 	 * Returns a set of parents
 	 * Requires instance via get_instance_by_item_id($item_id)
 	 * @return string
 	 */
 	public function get_item_parents();
-
+	
+	/**
+	 * Returns the ID of the current instance
+	 * Requires instance via get_instance_by_item_id($item_id)
+	 * @return integer
+	 */
+	public function get_item_object_id();
+		
+	/**
+	 * Returns the name of the current instance
+	 * Requires instance via get_instance_by_item_id($item_id)
+	 * @return string
+	 */
+	public function get_item_object_name();
+	
 	
 	/**
 	 * Clones the item and returns its ID

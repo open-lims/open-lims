@@ -157,7 +157,25 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     {    	
     	if ($this->item_id and $this->project_id)
     	{		
-    		$primary_key = ProjectHasItem_Access::get_entry_by_item_id_and_project_id($this->item_id, $this->project_id);
+    		$project_has_sub_item_pk_array = ProjectHasItem_Access::list_entries_by_parent_item_id_and_project_id($this->item_id, $this->project_id);
+    		
+    		if (is_array($project_has_sub_item_pk_array) and count($project_has_sub_item_pk_array) >= 1)
+  			{
+  				foreach ($project_has_sub_item_pk_array as $key => $value)
+  				{
+  					$project_has_item = new ProjectHasItem_Access($value);
+  					if ($project_has_item->delete() == false)
+  					{
+  						if ($transaction_id != null)
+  						{
+							$transaction->rollback($transaction_id);
+						}
+						throw new ProjectItemUnlinkExecption(true, "Database delete failed");
+  					}
+  				}
+  			}
+    		
+  			$primary_key = ProjectHasItem_Access::get_entry_by_item_id_and_project_id($this->item_id, $this->project_id);
     		$project_has_item = new ProjectHasItem_Access($primary_key);
     		
     		if ($project_has_item->delete())
@@ -196,7 +214,25 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     	if ($this->item_id)
     	{
     		$transaction_id = $transaction->begin();
-    			
+
+    		$project_has_sub_item_pk_array = ProjectHasItem_Access::list_entries_by_parent_item_id($this->item_id);
+    		
+    		if (is_array($project_has_sub_item_pk_array) and count($project_has_sub_item_pk_array) >= 1)
+  			{
+  				foreach ($project_has_sub_item_pk_array as $key => $value)
+  				{
+  					$project_has_item = new ProjectHasItem_Access($value);
+  					if ($project_has_item->delete() == false)
+  					{
+  						if ($transaction_id != null)
+  						{
+							$transaction->rollback($transaction_id);
+						}
+						throw new ProjectItemUnlinkExecption(true, "Database delete failed");
+  					}
+  				}
+  			}
+
   			$project_has_item_pk_array = ProjectHasItem_Access::list_entries_by_item_id($this->item_id);
 
   			if (is_array($project_has_item_pk_array))

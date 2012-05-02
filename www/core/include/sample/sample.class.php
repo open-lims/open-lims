@@ -1178,13 +1178,15 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 							$return_array[$counter][occurrence] = "once";
 						}
 						
-						if ($value[gid])
+						if ($value['pos_id'])
 						{
-							$gid = $value[gid];
+							$gid = $value['pos_id'];
+							$return_array[$counter]['pos_id'] = $value['pos_id'];
 						}
 						else
 						{
 							$gid = $counter;
+							$return_array[$counter]['pos_id'] = $counter;
 						}
 						
 						if ($get_fulfilled == true)
@@ -1714,10 +1716,10 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	}
 	
 	/**
-	 * @see ItemHolderInterface::get_item_add_id()
+	 * @see ItemListenerInterface::get_item_object_id()
 	 * @return integer
 	 */
-	public final function get_item_add_id()
+	public final function get_item_object_id()
 	{
 		if ($this->sample_id)
 		{
@@ -1730,10 +1732,10 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	}
 	
 	/**
-	 * @see ItemHolderInterface::get_item_add_name()
+	 * @see ItemListenerInterface::get_item_object_name()
 	 * @return string
 	 */
-	public final function get_item_add_name()
+	public final function get_item_object_name()
 	{
 		if ($this->sample_id and $this->sample)
 		{
@@ -1743,22 +1745,6 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 		{
 			return null;
 		}
-	}
-	
-	/**
-     * @see ItemListenerInterface::get_item_name()
-	 * @return string
-	 */
-	public final function get_item_name()
-	{
-		if ($this->sample_id and $this->sample)
-    	{
-    		return $this->sample->get_name();
-    	}
-    	else
-    	{
-    		return null;
-    	}
 	}
     
     /**

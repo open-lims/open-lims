@@ -257,7 +257,7 @@ class EquipmentAjax
 	{
 		global $session;
 		
-		if ($link['parent'] and is_numeric($link['parent_key']) and is_numeric($link['parent_id']))
+		if ($link['parent'] and is_numeric($link['parent_id']))
 		{
 			$array['window_id'] = "EquipmentItemAddWindow".$link['parent_key']."-".$link['parent_id']."-".$gid;
 			$array['click_id'] = "EquipmentItemAddButton".$link['parent_key']."-".$link['parent_id']."-".$gid;
@@ -426,7 +426,7 @@ class EquipmentAjax
 		
 		$template->set_var("select",$result);
 		
-		if ($_GET['parent'] and is_numeric($_GET['parent_key']) and is_numeric($_GET['parent_id']))
+		if ($_GET['parent'] and is_numeric($_GET['parent_id']))
 		{
 			$array['container'] = "#EquipmentItemAddWindow".$_GET['parent_key']."-".$_GET['parent_id']."-".$_GET['key'];
 			$container_value_select = "EquipmentItemAddValueField".$_GET['parent_key']."-".$_GET['parent_id']."-".$_GET['key'];

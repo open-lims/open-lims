@@ -175,7 +175,7 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
 					}
     			}
     		}
-    		elseif($get_array['nav'] == "sample" and is_numeric($get_array['sample_id']) and $get_array['parent'] and is_numeric($get_array['parent_key']) and is_numeric($get_array['parent_id']))
+    		elseif($get_array['nav'] == "sample" and is_numeric($get_array['sample_id']) and $get_array['parent'] and is_numeric($get_array['parent_id']))
     		{
     			$transaction_id = $transaction->begin();
     			
@@ -194,7 +194,7 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
 	    				$parent = false;
 	    			}
 	    			
-	    			if (self::create($get_array[sample_id], $event_object->get_item_id(), $get_array[key], $post_array[keywords], $post_array[description], $parent_item->get_item_id(), $parent) == false)
+	    			if (self::create($get_array[sample_id], $event_object->get_item_id(), null, null, null, $parent_item->get_item_id(), $parent) == false)
 	    			{
 	    				if ($transaction_id != null)
 		    			{
@@ -215,11 +215,11 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
     				return false;
     			}
     		}
-    		elseif($get_array['parent'] == "sample" and is_numeric($get_array['parent_key']) and is_numeric($get_array['parent_id']))
+    		elseif($get_array['parent'] == "sample" and is_numeric($get_array['key']) and is_numeric($get_array['parent_id']))
     		{
     			$transaction_id = $transaction->begin();
     			
-    			if (self::create($get_array['parent_id'], $event_object->get_item_id(), $get_array[parent_key]) == false)
+    			if (self::create($get_array['parent_id'], $event_object->get_item_id(), $get_array['key']) == false)
     			{
     				if ($transaction_id != null)
 	    			{

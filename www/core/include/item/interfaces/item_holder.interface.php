@@ -39,21 +39,7 @@ interface ItemHolderInterface
 	 * @return array
 	 */
 	public function get_item_add_status($id);
-	
-	/**
-	 * Returns the ID of the current instance
-	 * Requires instance via get_instance_by_item_id($item_id)
-	 * @return integer
-	 */
-	public function get_item_add_id();
-		
-	/**
-	 * Returns the name of the current instance
-	 * Requires instance via get_instance_by_item_id($item_id)
-	 * @return string
-	 */
-	public function get_item_add_name();
-	
+
 	
 	/**
 	 * @param integer $holder_id

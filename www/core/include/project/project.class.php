@@ -1012,22 +1012,27 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
      * @see ProjectInterface::get_current_status_requirements()
      * @return array
      */
-    public function get_current_status_requirements($inherited = true, $status_id = null)
+    public function get_current_status_requirements($force_inherit = false, $status_id = null)
     {
     	global $runtime_data;
-    	
+
     	if ($this->project_id and $this->project)
     	{
-    		if ($runtime_data->is_object_data($this, "PROJECT_".$this->project_id."_CURRENT_STATUS_REQUIREMENTS") == true)
+	    	if ($status_id == null)
+	    	{
+	    		$status_id = $this->get_current_status_id();
+	    	}
+    		
+    		if ($runtime_data->is_object_data($this, "PROJECT_".$this->project_id."_".$status_id."_CURRENT_STATUS_REQUIREMENTS") == true)
     		{
-				return $runtime_data->read_object_data($this, "PROJECT_".$this->project_id."_CURRENT_STATUS_REQUIREMENTS");	
+				return $runtime_data->read_object_data($this, "PROJECT_".$this->project_id."_".$status_id."_CURRENT_STATUS_REQUIREMENTS");	
 			}
 			else
 			{
 		    	$project_template = new ProjectTemplate($this->project->get_template_id());
 		    	
-		    	$status_attribute_array = $project_template->get_status_attributes($this->get_current_status_id());
-		    	$requirements_array = $project_template->get_status_requirements($this->get_current_status_id());
+		    	$status_attribute_array = $project_template->get_status_attributes($status_id);
+		    	$requirements_array = $project_template->get_status_requirements($status_id);
 				
 				if ($status_attribute_array[requirement] == "optional")
 				{
@@ -1039,325 +1044,218 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 				}
 
 				$return_array = array();
+				$parent_item_array = array();
 				$counter = 0;
 				$type_counter = 0;
 				$category_counter = 0;
+				$fulfilled_counter = 0;
 				$filter_counter = 0;
-				$in_item_counter = 0;
 				$sub_item_counter = 0;
-				$sub_item_type_counter = 0;
-				$sub_item_category_counter = 0;
 				
 				if (is_array($requirements_array) and count($requirements_array) >= 1)
 				{
 					$project_item = new ProjectItem($this->project_id);
-					
-					if ($status_id == null)
-					{
-						$item_array = $project_item->get_project_status_items($this->get_current_status_id());
-					}
-					else
-					{
-						$item_array = $project_item->get_project_status_items($status_id);
-					}
-					
+
+					$item_array = $project_item->get_project_status_items($status_id);					
 					$item_type_array = Item::list_types();
 					
 					foreach($requirements_array as $key => $value)
 					{
+						
+						// ITEM
 						if ($value[xml_element] == "item" and !$value[close])
 						{
-							$in_item_counter = $in_item_counter + 1;
+							$in_item = true;
 							
-							if ($in_item_counter == 1)
+							$return_array[$counter][element_type] = "item";		
+							$return_array[$counter][display] = true;
+
+							$type = $value[type];
+							$return_array[$counter][type] = $value[type];
+							$return_array[$counter][name] = $value[name];
+							$return_array[$counter][handling_class] = Item::get_handling_class_by_type($value[type]);
+							
+							if ($value[requirement] and $status_attribute_array[requirement] != "optional")
 							{
-								$return_array[$counter][element_type] = "item";		
-
-								$type = $value[type];
-								$return_array[$counter][type] = $value[type];
-								$return_array[$counter][name] = $value[name];
-								$return_array[$counter][handling_class] = Item::get_handling_class_by_type($value[type]);
-								
-								if ($value[requirement] and $status_attribute_array[requirement] != "optional")
+								$return_array[$counter][requirement] = $value[requirement];
+							}
+							else
+							{
+								$return_array[$counter][requirement] = $requirement_default;
+							}
+							
+							if ($value[occurrence])
+							{
+								$return_array[$counter][occurrence] = $value[occurrence];
+							}
+							else
+							{
+								$return_array[$counter][occurrence] = "once";
+							}
+							
+							if (is_numeric($value['pos_id']))
+							{
+								$pos_id = $value['pos_id'];
+								$return_array[$counter]['pos_id'] = $value['pos_id'];
+							}
+							else
+							{
+								$pos_id = $counter;
+								$return_array[$counter]['pos_id'] = $counter;
+							}
+							
+							if (is_array($item_array) and count($item_array) >= 1)
+							{	
+								$item_instance_array = array();
+		
+								foreach($item_array as $item_key => $item_value)
 								{
-									$return_array[$counter][requirement] = $value[requirement];
-								}
-								else
-								{
-									$return_array[$counter][requirement] = $requirement_default;
-								}
-								
-								if ($value[occurrence])
-								{
-									$return_array[$counter][occurrence] = $value[occurrence];
-								}
-								else
-								{
-									$return_array[$counter][occurrence] = "once";
-								}
-								
-								if (is_numeric($value[gid]))
-								{
-									$gid = $value[gid];
-									$return_array[$counter][gid] = $value[gid];
-								}
-								else
-								{
-									$gid = $counter;
-								}
-								
-								if (is_array($item_array) and count($item_array) >= 1)
-								{	
-									$item_instance = array();
-			
-									foreach($item_array as $item_key => $item_value)
+									$item_pos_id = ProjectItem::get_gid_by_item_id_and_project_id($item_value, $this->project_id,  $status_id);
+									
+									if (is_array($item_type_array) and count($item_type_array) >= 1)
 									{
-										$item_gid = ProjectItem::get_gid_by_item_id_and_project_id($item_value, $this->project_id,  $this->get_current_status_id());
-										
-										if (is_array($item_type_array) and count($item_type_array) >= 1)
+										foreach ($item_type_array as $item_type => $item_handling_class)
 										{
-											foreach ($item_type_array as $item_type => $item_handling_class)
+											if (class_exists($item_handling_class))
 											{
-												if (class_exists($item_handling_class))
+												if ($item_handling_class::is_kind_of($item_type, $item_value) == true  and $item_pos_id == $pos_id)
 												{
-													if ($item_handling_class::is_kind_of($item_type, $item_value) == true  and $item_gid == $gid)
-													{
-														$return_array[$counter][fulfilled] = true;
-														
-														array_push($item_instance, $item_handling_class::get_instance_by_item_id($item_value));
-
-														if ($return_array[$counter][amount])
-														{
-															$return_array[$counter][amount] = $return_array[$counter][amount] + 1;
-														}
-														else
-														{
-															$return_array[$counter][amount] = 1;
-														}
-														
-														break;
-													}
+													$item_instance = $item_handling_class::get_instance_by_item_id($item_value);
+													$return_array[$counter][fulfilled][$fulfilled_counter][item_id] = $item_value;
+													$return_array[$counter][fulfilled][$fulfilled_counter][id] = $item_instance->get_item_object_id();
+													$return_array[$counter][fulfilled][$fulfilled_counter][name] = $item_instance->get_item_object_name();
+													array_push($item_instance_array, $item_instance);
+													$fulfilled_counter++;
+													break;
 												}
-											}
-										}
-									}
-								}
-								
-								if ($value['inherit'] == "all" and $inherited == true)
-								{
-									if (is_array($item_instance) and count($item_instance) >= 1)
-									{
-										if (!$sub_item_counter)
-										{
-											$sub_item_counter = 0;
-										}
-										
-										$sub_item_array = $item_instance[0]->get_item_add_information();
-										
-										if (is_array($sub_item_array) and count($sub_item_array) >= 1)
-										{
-											foreach($sub_item_array as $sub_item_key => $sub_item_value)
-											{
-												$sub_item_amount_counter = 0;
-												$return_array[$counter][sub_items][$sub_item_counter] = $sub_item_value;
-												
-												foreach($item_instance as $object_key => $object_value)
-												{
-													if (is_object($object_value))
-													{	
-														$return_array[$counter][sub_items][$sub_item_counter][fulfilled][$sub_item_amount_counter] = $object_value->get_item_add_status($sub_item_key);
-														$return_array[$counter][sub_items][$sub_item_counter][parents][$sub_item_amount_counter][id] = $object_value->get_item_add_id();
-														$return_array[$counter][sub_items][$sub_item_counter][parents][$sub_item_amount_counter][name] = $object_value->get_item_add_name();
-														$sub_item_amount_counter++;
-													}
-												}
-												
-												$return_array[$counter][sub_items][$sub_item_counter][amount] = count($item_instance);
-												
-												$sub_item_counter++;
 											}
 										}
 									}
 								}
 							}
-							elseif($inherited == true)
-							{
-								if (is_array($item_instance) and count($item_instance) >= 1)
+							
+							if ($value['inherit'] == "all" or $force_inherit == true)
+							{									
+								if (is_array($item_instance_array) and count($item_instance_array) >= 1)
 								{
-									if ($value['inherit'] == "false")
+									if (!$sub_item_counter)
 									{
-										$return_array[$counter][sub_items][$sub_item_counter][element_type] = "item";		
-										$return_array[$counter][sub_items][$sub_item_counter][type] = $value[type];
-										$return_array[$counter][sub_items][$sub_item_counter][name] = $value[name];
-										$return_array[$counter][sub_items][$sub_item_counter][handling_class] = Item::get_handling_class_by_type($value[type]);
-
-										if ($value[requirement] and $status_attribute_array[requirement] != "optional")
-										{
-											$return_array[$counter][sub_items][$sub_item_counter][requirement] = $value[requirement];
-										}
-										else
-										{
-											$return_array[$counter][sub_items][$sub_item_counter][requirement] = $requirement_default;
-										}
-										
-										if ($value[occurrence])
-										{
-											$return_array[$counter][sub_items][$sub_item_counter][occurrence] = $value[occurrence];
-										}
-										else
-										{
-											$return_array[$counter][sub_items][$sub_item_counter][occurrence] = "once";
-										}
-										
-										if (is_numeric($value[gid]))
-										{
-											$gid = $value[gid];
-											$return_array[$counter][sub_items][$sub_item_counter][gid] = $value[gid];
-										}
-										else
-										{
-											$gid = $sub_item_counter;
-										}
-										
-										$sub_item_amount_counter = 0;
-										foreach($item_instance as $object_key => $object_value)
-										{
-											if (is_object($object_value))
-											{	
-												$return_array[$counter][sub_items][$sub_item_counter][fulfilled][$sub_item_amount_counter] = $object_value->get_item_add_status($gid);
-												$return_array[$counter][sub_items][$sub_item_counter][parents][$sub_item_amount_counter][id] = $object_value->get_item_add_id();
-												$return_array[$counter][sub_items][$sub_item_counter][parents][$sub_item_amount_counter][name] = $object_value->get_item_add_name();
-												$sub_item_amount_counter++;
-											}
-										}
-										
-										$return_array[$counter][sub_items][$sub_item_counter][amount] = count($item_instance);
+										$sub_item_counter = 0;
 									}
-									else
+									
+									$sub_item_array = $item_instance_array[0]->get_item_add_information();
+									
+									if (is_array($sub_item_array) and count($sub_item_array) >= 1)
 									{
-										if (is_numeric($value[gid]))
+										foreach($sub_item_array as $sub_item_key => $sub_item_value)
 										{
-											$gid = $value[gid];
-										}
-										else
-										{
-											$gid = $sub_item_counter;
-										}
-										
-										$sub_item_amount_counter = 0;
-										$return_array[$counter][sub_items][$sub_item_counter] = $item_instance[0]->get_item_add_information($gid);
-										
-										foreach($item_instance as $object_key => $object_value)
-										{
-											if (is_object($object_value))
-											{	
-												$return_array[$counter][sub_items][$sub_item_counter][fulfilled][$sub_item_amount_counter] = $object_value->get_item_add_status($gid);
-												$return_array[$counter][sub_items][$sub_item_counter][parents][$sub_item_amount_counter][id] = $object_value->get_item_add_id();
-												$return_array[$counter][sub_items][$sub_item_counter][parents][$sub_item_amount_counter][name] = $object_value->get_item_add_name();
-												$sub_item_amount_counter++;
+											$sub_item_amount_counter = 0;
+											$return_array[$counter][sub_items][$sub_item_counter] = $sub_item_value;
+											
+											foreach($item_instance_array as $object_key => $object_value)
+											{
+												if (is_object($object_value))
+												{	
+													$return_array[$counter][sub_items][$sub_item_counter][fulfilled][$sub_item_amount_counter] = $object_value->get_item_add_status($sub_item_key);
+													$sub_item_amount_counter++;
+												}
 											}
+											
+											$return_array[$counter][sub_items][$sub_item_counter][amount] = count($item_instance_array);
+											
+											$sub_item_counter++;
 										}
-										
-										$return_array[$counter][sub_items][$sub_item_counter][amount] = count($item_instance);
 									}
 								}
 							}
 						}
 						
 						if ($value[xml_element] == "item" and $value[close] == "1")
-						{							
-							if ($in_item_counter == 1)
-							{
-								$counter++;
-								$type_counter = 0;
-								$category_counter = 0;
-								$sub_item_counter = 0;
-								$type = null;
-							}
-							else
-							{
-								$sub_item_counter++;
-								$sub_item_type_counter = 0;
-								$sub_item_category_counter = 0;
-							}
-							$in_item_counter = $in_item_counter - 1;
-						}
-						
-						if ($value[xml_element] == "itemi" and !$value[close])
-						{
-							if ($value['parent'])
-							{
-								$parent_array = explode(":", $value['parent']);
-								if (count($parent_array) == 2)
-								{
-									$parent_requirement_array = $this->get_current_status_requirements(false, $parent_array[0]);
-									$parent_requirement_array = $parent_requirement_array[$parent_array[0]];
-
-									$return_array[$counter][parent_name] = $parent_requirement_array[handling_class]->get_item_add_name();
-									
-									$return_array[$counter][element_type] = "itemi";									
-									$return_array[$counter][type] = $value[type];
-									$return_array[$counter][name] = $value[name];
-									$return_array[$counter][name] = $value[name];
-									$return_array[$counter][handling_class] = Item::get_handling_class_by_type($value[type]);
-									
-									if ($value[requirement] and $status_attribute_array[requirement] != "optional")
-									{
-										$return_array[$counter][requirement] = $value[requirement];
-									}
-									else
-									{
-										$return_array[$counter][requirement] = $requirement_default;
-									}
-									
-									if ($value[occurrence])
-									{
-										$return_array[$counter][occurrence] = $value[occurrence];
-									}
-									else
-									{
-										$return_array[$counter][occurrence] = "once";
-									}
-								}
-							}
-						}
-						
-						if ($value[xml_element] == "itemi" and $value[close] == "1")
 						{
 							$counter++;
 							$type_counter = 0;
 							$category_counter = 0;
+							$fulfilled_counter = 0;
+							$sub_item_type_counter = 0;
+							$type = null;
+							$in_item = false;
 						}
 						
+						
+						// ITEMI
+						if ($value[xml_element] == "itemi" and !$value[close])
+						{
+							if (is_numeric($value['parent_status']) and is_numeric($value['parent_pos_id']) and is_numeric($value['pos_id']))
+							{					
+								$parent_requirement_array = $this->get_current_status_requirements(true, $value['parent_status']);
+								$parent_requirement_array = $parent_requirement_array[$value['parent_pos_id']];
+								
+								$sub_item_array = $parent_requirement_array['sub_items'];
+								unset($parent_requirement_array['sub_items']);
+								
+								if (!is_numeric($parent_item_array[$value['parent_status']]))
+								{
+									$return_array[$counter] = $parent_requirement_array;
+									$return_array[$counter][display] = false;
+
+									$parent_item_counter = $counter;
+									$parent_item_array[$value['parent_status']] = $counter;
+								}
+								else
+								{
+									$parent_item_counter = $parent_item_array[$value['parent_status']];
+								}
+								
+								$return_array[$parent_item_counter]['sub_items'][$value['pos_id']] = $sub_item_array[$value['pos_id']];
+							}
+							elseif($in_item == true and is_array($item_instance_array) and count($item_instance_array) >= 1)
+							{
+								if (is_numeric($value['pos_id']))
+								{
+									$pos_id = $value['pos_id'];
+								}
+								else
+								{
+									$pos_id = $sub_item_counter;
+								}
+								
+								$sub_item_amount_counter = 0;
+								$return_array[$counter]['sub_items'][$sub_item_counter] = $item_instance_array[0]->get_item_add_information($pos_id);
+								
+								foreach($item_instance_array as $object_key => $object_value)
+								{
+									if (is_object($object_value))
+									{	
+										$return_array[$counter][sub_items][$sub_item_counter]['fulfilled'][$sub_item_amount_counter] = $object_value->get_item_add_status($pos_id);
+										$sub_item_amount_counter++;
+									}
+								}
+								
+								$return_array[$counter]['sub_items'][$sub_item_counter]['amount'] = count($item_instance_array);
+								$return_array[$counter]['sub_items'][$sub_item_counter]['pos_id'] = $pos_id;
+								
+								$sub_item_counter++;
+							}
+						}
+						
+						
+						// TYPE
 						if ($value[xml_element] == "type" and !$value[close] and $in_item_counter > 0 and is_numeric($value[id]))
 						{
-							if ($in_item_counter == 1)
-							{
-								$return_array[$counter][type_id][$type_counter] = $value[id];
-								$type_counter++;
-							}
-							else
-							{
-								$return_array[$counter][sub_items][$sub_item_counter][type_id][$sub_item_type_counter] = $value[id];
-								$sub_item_type_counter++;
-							}
+							$return_array[$counter][type_id][$type_counter] = $value[id];
+							$type_counter++;
 						}
 						
+						
+						// CATEGORY
 						if ($value[xml_element] == "category" and !$value[close] and $in_item_counter > 0 and is_numeric($value[id]))
 						{
-							if ($in_item_counter == 1)
-							{
-								$return_array[$counter][category_id][$category_counter] = $value[id];
-								$category_counter++;
-							}
-							else
-							{
-								$return_array[$counter][sub_items][$sub_item_counter][category_id][$sub_item_category_counter] = $value[id];
-								$sub_item_category_counter++;
-							}
+							$return_array[$counter][category_id][$category_counter] = $value[id];
+							$category_counter++;
 						}		
 
 						
+						// EXTENSION
 						if ($value[xml_element] == "extension" and !$value[close])
 						{
 							$extension_id = Extension::get_id_by_identifer($value[identifer]);
@@ -1397,6 +1295,8 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 							$in_extension = false;
 						}
 						
+						
+						// FILTER
 						if ($value[xml_element] == "filter" and !$value[close] and $in_extension == true and is_numeric($value[status]))
 						{
 							$return_array[$counter][filter][$filter_counter][status] = $value[status];
@@ -1437,7 +1337,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					}
 				}
 
-				$runtime_data->write_object_data($this, "PROJECT_".$this->project_id."_CURRENT_STATUS_REQUIREMENTS", $return_array);	
+				$runtime_data->write_object_data($this, "PROJECT_".$this->project_id."_".$status_id."_CURRENT_STATUS_REQUIREMENTS", $return_array);	
 				return $return_array;
     		}
     	}
@@ -2446,25 +2346,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	{
 		return null;
 	}
-	
-	/**
-	 * @see ItemHolderInterface::get_item_add_id()
-	 * @return integer
-	 */
-	public final function get_item_add_id()
-	{
-		return null;
-	}
-	
-	/**
-	 * @see ItemHolderInterface::get_item_add_name()
-	 * @return string
-	 */
-	public final function get_item_add_name()
-	{
-		return null;
-	}
-    
+	    
 	
     /**
      * @see ProjectInterface::list_user_related_projects()
