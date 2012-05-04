@@ -1777,6 +1777,39 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 		}
 	}
 	
+	public final function get_item_holder_value($address, $position_id = null)
+	{
+		if ($this->sample_id and $this->sample)
+		{
+			switch($address):
+			
+				case "folder_id":
+					$folder_id = SampleFolder::get_folder_by_sample_id($this->sample_id);
+										
+					$sub_folder_id = $sample->get_sub_folder($folder_id, $position_id);				
+	
+					if (is_numeric($sub_folder_id))
+					{
+						$folder_id = $sub_folder_id;
+					}
+				break;
+				
+				case "organisation_unin_id":
+					return $this->get_organisation_unit_id();
+				break;
+			
+				default:
+					return null;
+				break;
+			
+			endswitch;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 	
 	/**
 	 * @see SampleInterface::exist_sample()

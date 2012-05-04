@@ -29,6 +29,7 @@ class DataEntityHasDataEntity_Access
 {
 	private $data_entity_pid;
 	private $data_entity_cid;
+	private $link;
 
 	/**
 	 * @param integer $primary_key
@@ -47,6 +48,15 @@ class DataEntityHasDataEntity_Access
 			{
 				$this->data_entity_pid	= $data[data_entity_pid];
 				$this->data_entity_cid	= $data[data_entity_cid];
+				
+				if ($data['link'] == 't')
+				{
+					$this->link = true;
+				}
+				else
+				{
+					$this->link = false;
+				}
 			}
 			else
 			{
@@ -67,6 +77,7 @@ class DataEntityHasDataEntity_Access
 		{
 			unset($this->data_entity_pid);
 			unset($this->data_entity_cid);
+			unset($this->link);
 		}
 	}
 	
@@ -75,14 +86,23 @@ class DataEntityHasDataEntity_Access
 	 * @param integer $data_entity_cid
 	 * @return true
 	 */
-	public function create($data_entity_pid, $data_entity_cid)
+	public function create($data_entity_pid, $data_entity_cid, $link = false)
 	{
 		global $db;
 		
 		if (is_numeric($data_entity_pid) and is_numeric($data_entity_cid))
 		{
-			$sql_write = "INSERT INTO ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." (data_entity_pid,data_entity_cid) " .
-					"VALUES (".$data_entity_pid.",".$data_entity_cid.")";
+			if ($link == true)
+			{
+				$link_insert = "t";
+			}
+			else
+			{
+				$link_insert = "f";
+			}
+			
+			$sql_write = "INSERT INTO ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." (data_entity_pid,data_entity_cid,link) " .
+					"VALUES (".$data_entity_pid.",".$data_entity_cid.",'".$link_insert."')";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
@@ -107,12 +127,12 @@ class DataEntityHasDataEntity_Access
 	{
 		global $db;
 		
-		if ($this->data_entity_pid)
-		{		
+		if ($this->data_entity_pid and $this->data_entity_cid)
+		{
 			$sql = "DELETE FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_pid = ".$this->data_entity_pid." AND data_entity_cid = ".$this->data_entity_cid."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($res !== false)
 			{
 				$this->__destruct();
 				return true;
@@ -124,7 +144,23 @@ class DataEntityHasDataEntity_Access
 		}
 		else
 		{
-			return false;	
+			// If link does not exists
+			return true;
+		}
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function get_link()
+	{
+		if (isset($this->link))
+		{
+			return $this->link;
+		}
+		else
+		{
+			return false;
 		}
 	}
 	
@@ -176,7 +212,7 @@ class DataEntityHasDataEntity_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT data_entity_pid FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_cid = ".$data_entity_cid."";
+			$sql = "SELECT data_entity_pid FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_cid = ".$data_entity_cid." AND (link = 'f' OR link IS NULL)";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))

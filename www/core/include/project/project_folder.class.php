@@ -366,6 +366,7 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 		}
 	}
 	
+	
 	/**
 	 * @see ConcreteFolderCaseInterface::is_case()
 	 * @param integer $folder_id

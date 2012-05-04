@@ -61,6 +61,9 @@
 	$classes['VirtualFolderIDMissingException']		= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder_id_missing.exception.class.php";
 	
 	
+	$classes['DataEntityLinkEvent']			= $path_prefix."core/include/data/events/data_entity_link_event.class.php";	
+	
+	
 	$classes['DataEntity']					= $path_prefix."core/include/data/data_entity.class.php";
 	$classes['DataEntityPermission']		= $path_prefix."core/include/data/data_entity_permission.class.php";
 	$classes['DataBrowser']					= $path_prefix."core/include/data/data_browser.class.php";

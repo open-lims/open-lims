@@ -36,6 +36,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("access/project_has_project_status.access.php");
 	require_once("access/project_template_cat.access.php");
 	require_once("access/project_template.access.php");
+	require_once("access/project_has_extension_run.access.php");
 }
 
 /**
@@ -680,6 +681,16 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     				}
     			}
     		} 
+    		
+    		// Extension Links
+    		if (ProjectHasExtensionRun_Access::delete_by_project_id($tmp_project_id) == false)
+    		{
+    			if ($transaction_id != null)
+    			{
+					$transaction->rollback($transaction_id);
+				}
+				throw new ProjectDeleteException("Extension delete failed");
+    		}
     		
     		// Project DB Entry
     		if ($this->project->delete() == false)
@@ -2362,7 +2373,46 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	{
 		return null;
 	}
-	    
+
+	/**
+	 * @see ItemHolderInterface::get_item_holder_value()
+	 * @param stirng $address
+	 * @return mixed
+	 */
+	public final function get_item_holder_value($address, $position_id = null)
+	{
+		if ($this->project_id and $this->project)
+		{		
+			switch($address):
+			
+				case "folder_id":
+					$folder_id = ProjectStatusFolder::get_folder_by_project_id_and_project_status_id($this->project_id,$this->get_current_status_id());
+												
+					$sub_folder_id = $this->get_sub_folder($position_id, $this->get_current_status_id());
+					
+					if (is_numeric($sub_folder_id))
+					{
+						$folder_id = $sub_folder_id;
+					}
+					return $folder_id;
+				break;
+				
+				case "organisation_unit_id":
+					return $this->get_organisation_unit_id();
+				break;
+			
+				default:
+					return null;
+				break;
+				
+			endswitch;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 	
     /**
      * @see ProjectInterface::list_user_related_projects()

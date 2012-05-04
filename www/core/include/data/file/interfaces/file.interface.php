@@ -145,6 +145,11 @@ interface FileInterface
 	public function get_item_id_array();
 	
 	/**
+	 * @return array
+	 */
+	public function get_data_entity_id_array();
+	
+	/**
 	 * @return string
 	 */
 	public function get_icon();

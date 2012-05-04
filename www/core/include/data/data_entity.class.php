@@ -746,16 +746,17 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	/**
 	 * @see DataEntityInterface::set_as_child_of()
 	 * @param integer $data_entity_id
+	 * @param bool $link
 	 * @return bool
 	 */
-	public final function set_as_child_of($data_entity_id)
+	public final function set_as_child_of($data_entity_id, $link = false)
 	{
 		if ($this->data_entity_id and $data_entity_id)
 		{
 			if (!in_array($this->data_entity_id, DataEntityHasDataEntity_Access::list_data_entity_cid_by_data_entity_pid($data_entity_id)))
 			{
 				$data_entity_has_data_entity = new DataEntityHasDataEntity_Access(null, null);
-				if ($data_entity_has_data_entity->create($data_entity_id, $this->data_entity_id) == true)
+				if ($data_entity_has_data_entity->create($data_entity_id, $this->data_entity_id, $link) == true)
 				{
 					return true;
 				}

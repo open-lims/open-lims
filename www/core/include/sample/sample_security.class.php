@@ -603,7 +603,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
 		    					{
 									$transaction->rollback($transaction_id);
 								}
-					    		return null;
+					    		return false;
 		    				}
 		    			}
 					}

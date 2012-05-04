@@ -312,5 +312,33 @@ class ProjectHasExtensionRun_Access
 			return null;
 		}
 	}
+
+	/**
+	 * @param integer $project_id
+	 * @return array
+	 */
+	public static function delete_by_project_id($project_id)
+	{
+		global $db;
+		
+		if (is_numeric($project_id))
+		{
+			$sql = "DELETE FROM ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." WHERE project_id='".$project_id."'";
+			$res = $db->db_query($sql);
+			
+			if ($res !== false)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 ?>

@@ -581,17 +581,8 @@ class ProjectRequest
 										$transaction_id = $transaction->begin();
 										
 										$current_status_requirements = $project->get_current_status_requirements($project->get_current_status_id());
-																					
-										$folder_id = ProjectStatusFolder::get_folder_by_project_id_and_project_status_id($_GET[project_id],$project->get_current_status_id());
 										
-										$sub_folder_id = $project->get_sub_folder($_GET[key], $project->get_current_status_id());
-										
-										if (is_numeric($sub_folder_id))
-										{
-											$folder_id = $sub_folder_id;
-										}
-										
-										$return_value = $module_dialog['class']::$module_dialog[method]($current_status_requirements[$_GET[key]][type_id], $current_status_requirements[$_GET[key]][category_id], $project->get_organisation_unit_id(), $folder_id);
+										$return_value = $module_dialog['class']::$module_dialog[method]($current_status_requirements[$_GET[key]][type_id], $current_status_requirements[$_GET[key]][category_id], "Project", $_GET['project_id'], $_GET[key]);
 										
 										if (is_numeric($return_value))
 										{

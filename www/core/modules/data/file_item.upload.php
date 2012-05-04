@@ -93,7 +93,7 @@
 			{
 				// Create Item
 				$item_id_array = $file->get_item_id_array();
-				
+								
 				if(is_array($item_id_array) and count($item_id_array) >= 1)
 				{
 					foreach($item_id_array as $key => $value)
@@ -102,6 +102,21 @@
 						$event_handler = new EventHandler($item_add_event);
 					}
 				}
+				
+				if ($_GET['parent'] and $_GET['parent_id'])
+				{
+					$data_entity_id_array = $file->get_data_entity_id_array_id_array();
+					
+					if(is_array($data_entity_id_array) and count($data_entity_id_array) >= 1)
+					{
+						foreach($data_entity_id_array as $key => $value)
+						{
+							$data_entity_link_event = new DataEntityLinkEvent($value, $_GET);
+							$event_handler = new EventHandler($data_entity_link_event);
+						}
+					}
+				}
+				
 				$session->write_value("FILE_UPLOAD_FINISHED_".$_GET[unique_id], true, true);
 			}
 			else

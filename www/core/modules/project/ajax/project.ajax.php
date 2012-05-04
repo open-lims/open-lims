@@ -717,19 +717,12 @@ class ProjectAjax
 									
 									$item_handling_cass = $value[handling_class];
 									if ($item_handling_cass::get_item_add_type() == 1)
-									{
-										$sub_folder_id = $project->get_sub_folder($value['pos_id'], $project->get_current_status_id());
-				
-										if (is_numeric($sub_folder_id))
-										{
-											$folder_id = $sub_folder_id;
-										}
-										
+									{										
 										$result[$counter][type] = "ajax";
 										$ajax_handling_array = $item_handling_cass::get_item_add_script_handling_class();
 										require_once("core/modules/".$ajax_handling_array[0]);
 										
-										$ajax_init_array = $ajax_handling_array[1]::$ajax_handling_array[2]($value['pos_id'], $paramquery, $folder_id, $project->get_organisation_unit_id(), $value[type_id],  $value[category_id]);
+										$ajax_init_array = $ajax_handling_array[1]::$ajax_handling_array[2]($value['pos_id'], $paramquery, $value[type_id],  $value[category_id], "Project", $_GET['project_id']);
 										
 										$result[$counter][script] = $ajax_init_array[script];
 										$result[$counter][window_title] = $ajax_init_array[window_title];
@@ -800,8 +793,8 @@ class ProjectAjax
 													$ajax_handling_array = $item_handling_cass::get_item_add_script_handling_class();
 													require_once("core/modules/".$ajax_handling_array[0]);
 													
-													// Folder ID und OU ID !!!!
-													$ajax_init_array = $ajax_handling_array[1]::$ajax_handling_array[2]($sub_item_value['pos_id'], $paramquery, null, null, $sub_item_value[type_id],  $sub_item_value[category_id]);
+													$item_holder = Item::get_holder_handling_class_by_name($value[type]);
+													$ajax_init_array = $ajax_handling_array[1]::$ajax_handling_array[2]($sub_item_value['pos_id'], $paramquery, $sub_item_value[type_id],  $sub_item_value[category_id], $item_holder, $value[fulfilled][$i][id]);
 													
 													$result[$counter][script] = $ajax_init_array[script];
 													$result[$counter][window_title] = $ajax_init_array[window_title];

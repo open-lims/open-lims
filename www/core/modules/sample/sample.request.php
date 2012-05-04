@@ -453,16 +453,7 @@ class SampleRequest
 										$sample = new Sample($_GET[sample_id]);
 										$current_requirements = $sample->get_requirements();
 										
-										$folder_id = SampleFolder::get_folder_by_sample_id($_GET[sample_id]);
-										
-										$sub_folder_id = $sample->get_sub_folder($folder_id, $_GET[key]);				
-						
-										if (is_numeric($sub_folder_id))
-										{
-											$folder_id = $sub_folder_id;
-										}
-										
-										$return_value = $module_dialog['class']::$module_dialog[method]($current_requirements[$_GET[key]][type_id], $current_requirements[$_GET[key]][category_id], null, $folder_id);
+										$return_value = $module_dialog['class']::$module_dialog[method]($current_requirements[$_GET[key]][type_id], $current_requirements[$_GET[key]][category_id], "Sample", $_GET['sample_id'], $_GET[key]);
 										
 										/**
 										 * @todo remove after rebuild all item add dialogs (including "associate sample")
@@ -721,17 +712,8 @@ class SampleRequest
 								$transaction_id = $transaction->begin();
 								
 								$current_requirements = $sample->get_requirements();
-								
-								$folder_id = SampleFolder::get_folder_by_sample_id($_GET['parent_id']);
-								
-								$sub_folder_id = $sample->get_sub_folder($folder_id, $_GET['key']);				
-				
-								if (is_numeric($sub_folder_id))
-								{
-									$folder_id = $sub_folder_id;
-								}
-								
-								$return_value = $module_dialog['class']::$module_dialog[method]($current_requirements[$_GET['key']][type_id], $current_requirements[$_GET['key']][category_id], null, $folder_id);
+																
+								$return_value = $module_dialog['class']::$module_dialog[method]($current_requirements[$_GET['key']][type_id], $current_requirements[$_GET['key']][category_id], "Sample", $_GET['parent_id'], $_GET[key]);
 								
 								/**
 								 * @todo remove after rebuild all item add dialogs (including "associate sample")
