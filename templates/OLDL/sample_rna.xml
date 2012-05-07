@@ -11,5 +11,12 @@
 		<MANUFACTURER requirement="optional" />
 	</HEAD>
 	<BODY>
+		<ITEM type="value">
+    		<TYPE id="10001"></TYPE>
+		</ITEM>   
+		<ITEM type="file" occurrence="multiple" requirement="optional" name="Add BioAnalyzer File"></ITEM>    
+		<ITEM type="equipment" occurrence="multiple" name="Add Used Hardware">
+			<CATEGORY id="1000" />
+		</ITEM>    
 	</BODY>
 </OLDL>
