@@ -215,24 +215,61 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
     				return false;
     			}
     		}
-    		elseif($get_array['parent'] == "sample" and is_numeric($get_array['key']) and is_numeric($get_array['parent_id']))
+    		elseif($get_array['parent'] == "sample" and is_numeric($get_array['key']) and is_numeric($get_array['parent_key']))
     		{
     			$transaction_id = $transaction->begin();
     			
-    			if (self::create($get_array['parent_id'], $event_object->get_item_id(), $get_array['key']) == false)
+    			if (is_numeric($get_array['parent_id']))
     			{
-    				if ($transaction_id != null)
+	    			if (self::create($get_array['parent_id'], $event_object->get_item_id(), $get_array['key']) == false)
 	    			{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
+	    				if ($transaction_id != null)
+		    			{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+	    			}
+	    			else
+	    			{
+	    				if ($transaction_id != null)
+		    			{
+							$transaction->commit($transaction_id);
+						}
+	    			}
     			}
-    			else
+    			elseif($get_array['nav'])
     			{
-    				if ($transaction_id != null)
+    				$handling_class = Item::get_holder_handling_class_by_name($get_array['nav']);
+    			
+	    			if (class_exists($handling_class))
 	    			{
-						$transaction->commit($transaction_id);
-					}
+	    				$item_holder = new $handling_class($get_array[$get_array['nav'].'_id']);
+	    				$parent_id_array = $item_holder->get_item_add_information($get_array['parent_key']);
+	    				
+	    				if (is_array($parent_id_array['fulfilled']) and count($parent_id_array['fulfilled']) >= 1)
+	    				{
+	    					foreach ($parent_id_array['fulfilled'] as $key => $value)
+	    					{
+	    						if (self::create($value['id'], $event_object->get_item_id(), $get_array['key']) == false)
+				    			{
+				    				if ($transaction_id != null)
+					    			{
+										$transaction->rollback($transaction_id);
+									}
+									return false;
+				    			}
+	    					} 
+	    					
+		    				if ($transaction_id != null)
+			    			{
+								$transaction->commit($transaction_id);
+							}
+	    				}
+	    			}
+	    			else
+	    			{
+	    				return false;
+	    			}
     			}
     		}
     	}

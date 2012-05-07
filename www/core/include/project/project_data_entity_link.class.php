@@ -45,14 +45,17 @@ class ProjectDataEntityLink implements EventListenerInterface
     			$project = new Project($get_array['project_id']);
     			$folder_id = $project->get_item_holder_value("folder_id");
     			$parent_data_entity_id = Folder::get_data_entity_id_by_folder_id($folder_id);
+
+    			$child_data_entity = new DataEntity($data_entity_id);
     			
-    			$parent_data_entity = new DataEntity($parent_data_entity_id);
-    			if ($parent_data_entity->set_as_child_of($data_entity_id, true) == false)
+    			if ($child_data_entity->set_as_child_of($parent_data_entity_id, true) == false)
     			{
     				return false;
     			}
     		}
     	}
+    	
+    	return true;
     }
 }
 ?>

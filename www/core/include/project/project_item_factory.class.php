@@ -175,9 +175,20 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
 					}
     			}
     		}
-    		elseif($get_array['nav'] == "project" and is_numeric($get_array['project_id']) and $get_array['parent'] and is_numeric($get_array['parent_id']))
+    		elseif($get_array['nav'] == "project" and is_numeric($get_array['project_id']) and $get_array['parent'])
     		{
     			$transaction_id = $transaction->begin();
+    			
+    			if (is_numeric($get_array['parent_id']))
+    			{
+    				$parent_item_id = $get_array['parent_id'];
+    			}
+    			else
+    			{
+    				$project = new Project($get_array['project_id']);
+	    			$parent_id_array = $project->get_item_add_information($get_array['parent_key']);
+	    			$parent_item_id = $parent_id_array['fulfilled'][0];
+    			}
     			
     			$handling_class = Item::get_holder_handling_class_by_name($get_array['parent']);
     			

@@ -105,7 +105,7 @@
 				
 				if ($_GET['parent'] and $_GET['parent_id'])
 				{
-					$data_entity_id_array = $file->get_data_entity_id_array_id_array();
+					$data_entity_id_array = $file->get_data_entity_id_array();
 					
 					if(is_array($data_entity_id_array) and count($data_entity_id_array) >= 1)
 					{

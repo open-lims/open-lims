@@ -169,10 +169,13 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     		{
     			foreach($requirement_array as $key => $value)
     			{
-					if (!in_array($value[folder], $folder_array))
-					{
-						array_push($folder_array, $value[folder]);
-					}
+    				if ($value['folder'])
+    				{
+						if (!in_array($value[folder], $folder_array))
+						{
+							array_push($folder_array, $value[folder]);
+						}
+    				}
     			}	
     				
     			if (is_array($folder_array) and count($folder_array) >= 1)
@@ -1777,6 +1780,12 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 		}
 	}
 	
+	/**
+	 * @see ItemHolderInterface::get_item_holder_value()
+	 * @param string $address
+	 * @param integer $position_id
+	 * @return mixed
+	 */
 	public final function get_item_holder_value($address, $position_id = null)
 	{
 		if ($this->sample_id and $this->sample)
@@ -1786,12 +1795,14 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 				case "folder_id":
 					$folder_id = SampleFolder::get_folder_by_sample_id($this->sample_id);
 										
-					$sub_folder_id = $sample->get_sub_folder($folder_id, $position_id);				
+					$sub_folder_id = $this->get_sub_folder($folder_id, $position_id);				
 	
 					if (is_numeric($sub_folder_id))
 					{
 						$folder_id = $sub_folder_id;
 					}
+					
+					return $folder_id;
 				break;
 				
 				case "organisation_unin_id":

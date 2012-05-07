@@ -766,82 +766,105 @@ class ProjectAjax
 									$result[$counter][type] = "line";
 									$counter++;
 									
+									$sub_item_irgnore_array = array();
+									
 									for($i=0; $i<=($amount-1); $i++)
 									{
 										foreach($value['sub_items'] as $sub_item_key => $sub_item_value)
 										{
-											if ($sub_item_value['element_type'] == "item")
+											if (!in_array($sub_item_key, $sub_item_irgnore_array))
 											{
-												$paramquery = array();
-												$paramquery['username'] = $_GET[username];
-												$paramquery['session_id'] = $_GET[session_id];
-												$paramquery['nav'] = "project";
-												$paramquery['run'] = "sub_item_add";
-												$paramquery['project_id'] = $_GET[project_id];
-												$paramquery['dialog'] = $sub_item_value[type];
-												$paramquery['key'] = $sub_item_value['pos_id'];
-												$paramquery['parent'] = $value[type];
-												$paramquery['parent_key'] = $value['pos_id'];
-												$paramquery['parent_id'] = $value[fulfilled][$i][id];
-												$paramquery['retrace'] = Retrace::create_retrace_string();
-												$params = http_build_query($paramquery,'','&#38;');
-												
-												$item_handling_cass = $sub_item_value[handling_class];
-												if ($item_handling_cass::get_item_add_type() == 1)
+												if ($sub_item_value['element_type'] == "item")
 												{
-													$result[$counter][type] = "ajax";
-													$ajax_handling_array = $item_handling_cass::get_item_add_script_handling_class();
-													require_once("core/modules/".$ajax_handling_array[0]);
+													$paramquery = array();
+													$paramquery['username'] = $_GET[username];
+													$paramquery['session_id'] = $_GET[session_id];
+													$paramquery['nav'] = "project";
+													$paramquery['run'] = "sub_item_add";
+													$paramquery['project_id'] = $_GET[project_id];
+													$paramquery['dialog'] = $sub_item_value[type];
+													$paramquery['key'] = $sub_item_value['pos_id'];
+													$paramquery['parent'] = $value[type];
+													$paramquery['parent_key'] = $value['pos_id'];
 													
-													$item_holder = Item::get_holder_handling_class_by_name($value[type]);
-													$ajax_init_array = $ajax_handling_array[1]::$ajax_handling_array[2]($sub_item_value['pos_id'], $paramquery, $sub_item_value[type_id],  $sub_item_value[category_id], $item_holder, $value[fulfilled][$i][id]);
-													
-													$result[$counter][script] = $ajax_init_array[script];
-													$result[$counter][window_title] = $ajax_init_array[window_title];
-													$result[$counter][window_id] = $ajax_init_array[window_id];
-													$result[$counter][click_id] = $ajax_init_array[click_id];
-												}
-												else
-												{
-													$result[$counter][type] = "link";
-												}
-												
-												if ($value[fulfilled][$i][name])
-												{
-													$result[$counter][name] = $sub_item_value[name]." (".$value[fulfilled][$i][name].")";
-												}
-												else
-												{
-													$result[$counter][name] = $sub_item_value[name];
-												}
-												
-												
-												if ($sub_item_value[fulfilled][$i] == true)
-												{
-													if ($sub_item_value[occurrence] == "multiple")
+													if ($sub_item_value['takeover'] == false)
 													{
-														$result[$counter][image] = "add_done";
+														$paramquery['parent_id'] = $value[fulfilled][$i][id];
+													}
+													
+													$paramquery['retrace'] = Retrace::create_retrace_string();
+													$params = http_build_query($paramquery,'','&#38;');
+													
+													$item_handling_cass = $sub_item_value[handling_class];
+													if ($item_handling_cass::get_item_add_type() == 1)
+													{
+														$result[$counter][type] = "ajax";
+														$ajax_handling_array = $item_handling_cass::get_item_add_script_handling_class();
+														require_once("core/modules/".$ajax_handling_array[0]);
+														
+														$item_holder = Item::get_holder_handling_class_by_name($value[type]);
+														$ajax_init_array = $ajax_handling_array[1]::$ajax_handling_array[2]($sub_item_value['pos_id'], $paramquery, $sub_item_value[type_id],  $sub_item_value[category_id], $item_holder, $value[fulfilled][$i][id]);
+														
+														$result[$counter][script] = $ajax_init_array[script];
+														$result[$counter][window_title] = $ajax_init_array[window_title];
+														$result[$counter][window_id] = $ajax_init_array[window_id];
+														$result[$counter][click_id] = $ajax_init_array[click_id];
 													}
 													else
 													{
-														$result[$counter][type] = false;
-														$result[$counter][image] = "add_done_na";
+														$result[$counter][type] = "link";
 													}
-												}
-												else
-												{
-													$result[$counter][image] = "add";
-												}
+													
+													
+													if ($sub_item_value['takeover'] == true)
+													{
+														$result[$counter][name] = $sub_item_value[name]." (for all)";
+														array_push($sub_item_irgnore_array, $sub_item_key);
+													}
+													else
+													{
+														if ($value[fulfilled][$i][name])
+														{
+															$result[$counter][name] = $sub_item_value[name]." (".$value[fulfilled][$i][name].")";
+														}
+														else
+														{
+															$result[$counter][name] = $sub_item_value[name];
+														}
+													}
 	
-												$result[$counter][depends] = true;
-												$result[$counter][params] = $params;
-	
-												$counter++;
+													
+													if ($sub_item_value[fulfilled][$i] == true)
+													{
+														if ($sub_item_value[occurrence] == "multiple")
+														{
+															$result[$counter][image] = "add_done";
+														}
+														else
+														{
+															$result[$counter][type] = false;
+															$result[$counter][image] = "add_done_na";
+														}
+													}
+													else
+													{
+														$result[$counter][image] = "add";
+													}
+		
+													$result[$counter][depends] = true;
+													$result[$counter][params] = $params;
+		
+													$counter++;
+												}
 											}
 										}
+
+										if ($result[$counter-1][type] != "line")
+										{
+											$result[$counter][type] = "line";
+											$counter++;
+										}
 										
-										$result[$counter][type] = "line";
-										$counter++;
 									}
 								}
 							break;

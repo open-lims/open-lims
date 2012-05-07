@@ -367,7 +367,7 @@ class SampleIO
 	public static function add_sample_item($type_array, $category_array, $holder_class, $holder_id, $position_id)
 	{
 		global $session;
-		
+				
 		if (class_exists($holder_class))
 		{
 			$item_holder = new $holder_class($holder_id);

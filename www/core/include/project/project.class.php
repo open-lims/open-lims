@@ -1170,27 +1170,30 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 										$sub_item_counter = 0;
 									}
 									
-									$sub_item_array = $item_instance_array[0]->get_item_add_information();
-									
-									if (is_array($sub_item_array) and count($sub_item_array) >= 1)
-									{
-										foreach($sub_item_array as $sub_item_key => $sub_item_value)
+									if ($item_instance_array[0] instanceof ItemHolderInterface)
+									{									
+										$sub_item_array = $item_instance_array[0]->get_item_add_information();
+										
+										if (is_array($sub_item_array) and count($sub_item_array) >= 1)
 										{
-											$sub_item_amount_counter = 0;
-											$return_array[$counter][sub_items][$sub_item_counter] = $sub_item_value;
-											
-											foreach($item_instance_array as $object_key => $object_value)
+											foreach($sub_item_array as $sub_item_key => $sub_item_value)
 											{
-												if (is_object($object_value))
-												{	
-													$return_array[$counter][sub_items][$sub_item_counter][fulfilled][$sub_item_amount_counter] = $object_value->get_item_add_status($sub_item_key);
-													$sub_item_amount_counter++;
+												$sub_item_amount_counter = 0;
+												$return_array[$counter][sub_items][$sub_item_counter] = $sub_item_value;
+												
+												foreach($item_instance_array as $object_key => $object_value)
+												{
+													if (is_object($object_value))
+													{	
+														$return_array[$counter][sub_items][$sub_item_counter][fulfilled][$sub_item_amount_counter] = $object_value->get_item_add_status($sub_item_key);
+														$sub_item_amount_counter++;
+													}
 												}
+												
+												$return_array[$counter][sub_items][$sub_item_counter][amount] = count($item_instance_array);
+												
+												$sub_item_counter++;
 											}
-											
-											$return_array[$counter][sub_items][$sub_item_counter][amount] = count($item_instance_array);
-											
-											$sub_item_counter++;
 										}
 									}
 								}
@@ -1234,6 +1237,15 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 								}
 								
 								$return_array[$parent_item_counter]['sub_items'][$value['pos_id']] = $sub_item_array[$value['pos_id']];
+								
+								if ($value['takeover'] == "true")
+								{
+									$return_array[$parent_item_counter]['sub_items'][$value['pos_id']]['takeover'] = true;
+								}
+								else
+								{
+									$return_array[$parent_item_counter]['sub_items'][$value['pos_id']]['takeover'] = false;
+								}
 							}
 							elseif($in_item == true and is_array($item_instance_array) and count($item_instance_array) >= 1)
 							{
@@ -1267,7 +1279,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						
 						
 						// TYPE
-						if ($value[xml_element] == "type" and !$value[close] and $in_item_counter > 0 and is_numeric($value[id]))
+						if ($value[xml_element] == "type" and !$value[close] and $in_item = true and is_numeric($value[id]))
 						{
 							$return_array[$counter][type_id][$type_counter] = $value[id];
 							$type_counter++;
@@ -1275,7 +1287,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						
 						
 						// CATEGORY
-						if ($value[xml_element] == "category" and !$value[close] and $in_item_counter > 0 and is_numeric($value[id]))
+						if ($value[xml_element] == "category" and !$value[close] and $in_item = true and is_numeric($value[id]))
 						{
 							$return_array[$counter][category_id][$category_counter] = $value[id];
 							$category_counter++;
@@ -2361,7 +2373,18 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	 */
 	public final function get_item_add_information($id = null)
 	{
-		return null;
+		if ($this->project_id)
+		{
+			$requirements_array = $this->get_current_status_requirements();
+			if (is_numeric($id))
+			{
+				return $requirements_array[$id];
+			}
+			else
+			{
+				return $requirements_array;
+			}
+		}
 	}
 	
 	/**

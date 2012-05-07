@@ -1483,9 +1483,9 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	 */
 	public function get_data_entity_id_array()
 	{
-		if ($this->item_id_array)
+		if ($this->data_entity_id_array)
 		{
-			return $this->item_id_array;
+			return $this->data_entity_id_array;
 		}
 		else
 		{

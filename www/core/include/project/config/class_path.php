@@ -126,6 +126,7 @@
 	
 	
 	$classes['Project'] 							= $path_prefix."core/include/project/project.class.php";
+	$classes['ProjectDataEntityLink'] 				= $path_prefix."core/include/project/project_data_entity_link.class.php";
 	$classes['ProjectExtension'] 					= $path_prefix."core/include/project/project_extension.class.php";
 	$classes['ProjectFolder'] 						= $path_prefix."core/include/project/project_folder.class.php";
 	$classes['ProjectVirtualFolder'] 				= $path_prefix."core/include/project/project_virtual_folder.class.php";
