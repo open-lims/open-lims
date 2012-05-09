@@ -704,7 +704,7 @@ class ProjectAjax
 									$paramquery[retrace] = Retrace::create_retrace_string();
 									$params = http_build_query($paramquery,'','&#38;');
 				
-									if ($amount > 1)
+									if ($value[occurrence] == "multiple" and $amount > 0)
 									{
 										$result[$counter][name] = $value[name]." (".$amount.")";
 									}
@@ -818,7 +818,7 @@ class ProjectAjax
 													
 													if ($sub_item_value['takeover'] == true)
 													{
-														$result[$counter][name] = $sub_item_value[name]." (for all)";
+														$result[$counter][name] = $sub_item_value[name]." (all)";
 														array_push($sub_item_irgnore_array, $sub_item_key);
 													}
 													else
