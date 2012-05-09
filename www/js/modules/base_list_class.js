@@ -253,28 +253,45 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 		$(".ListTable").dynamicTable();
 		
 //		setTimeout(function(){
-//			$(".ListTable").dynamicTable("hide",6);
-//		}, 500);
-//		
-//		setTimeout(function(){
-//			$(".ListTable").dynamicTable("hide",7);
-//		}, 1500);
-//
-//		setTimeout(function(){
-//			$(".ListTable").dynamicTable("show",6);
+//			$(".ListTable").dynamicTable("hide",4);
 //		}, 3000);
 //		
 //		setTimeout(function(){
+//			$(".ListTable").dynamicTable("show",4);
+//		}, 4000);
+//		
+//		setTimeout(function(){
 //			$(".ListTable").dynamicTable("hide",5);
-//		}, 4500);
+//		}, 5000);
 //		
 //		setTimeout(function(){
 //			$(".ListTable").dynamicTable("show",5);
 //		}, 6000);
-//		
-//		setTimeout(function(){
-//			$(".ListTable").dynamicTable("show",7);
-//		}, 7500);
+		
+		
+		setTimeout(function(){
+			$(".ListTable").dynamicTable("hide",6);
+		}, 500);
+		
+		setTimeout(function(){
+			$(".ListTable").dynamicTable("hide",9);
+		}, 1500);
+
+		setTimeout(function(){
+			$(".ListTable").dynamicTable("show",6);
+		}, 3000);
+		
+		setTimeout(function(){
+			$(".ListTable").dynamicTable("hide",5);
+		}, 4500);
+		
+		setTimeout(function(){
+			$(".ListTable").dynamicTable("show",5);
+		}, 6000);
+		
+		setTimeout(function(){
+			$(".ListTable").dynamicTable("show",9);
+		}, 7500);
 		
 		return false;
 		
