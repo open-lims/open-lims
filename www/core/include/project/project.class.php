@@ -816,13 +816,13 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						
 						if (is_array($value['sub_items']) and count($value['sub_items']) >= 1)
 						{
-							for($i=0; $i<=($amount-1); $i++)
+							foreach($value['sub_items'] as $sub_item_key => $sub_item_value)
 							{
-								foreach($value['sub_items'] as $sub_item_key => $sub_item_value)
+								foreach($sub_item_value as $sub_sub_item_key => $sub_sub_item_value)
 								{
-									if ($sub_item_value['element_type'] == "item")
+									if ($sub_sub_item_value['element_type'] == "item")
 									{
-										if ($sub_item_value[fulfilled][$i] == false and $sub_item_value[requirement] != "optional")
+										if (!is_array($sub_sub_item_value[fulfilled]) and $sub_sub_item_value[requirement] != "optional")
 										{
 											$not_fulfilled = true;
 										}
@@ -1162,36 +1162,15 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 							
 							if ($value['inherit'] == "all" or $force_inherit == true)
 							{									
-								if (is_array($item_instance_array) and count($item_instance_array) >= 1)
+								if (is_array($item_instance_array) and count($item_instance_array) >= 1 and $fulfilled_counter >= 1)
 								{
-									if (!$sub_item_counter)
+									foreach($item_instance_array as $object_key => $object_value)
 									{
-										$sub_item_counter = 0;
-									}
-									
-									if ($item_instance_array[0] instanceof ItemHolderInterface)
-									{									
-										$sub_item_array = $item_instance_array[0]->get_item_add_information();
-										
-										if (is_array($sub_item_array) and count($sub_item_array) >= 1)
-										{
-											foreach($sub_item_array as $sub_item_key => $sub_item_value)
-											{
-												$sub_item_amount_counter = 0;
-												$return_array[$counter][sub_items][$sub_item_counter] = $sub_item_value;
-												
-												foreach($item_instance_array as $object_key => $object_value)
-												{
-													if (is_object($object_value))
-													{	
-														$return_array[$counter][sub_items][$sub_item_counter][fulfilled][$sub_item_amount_counter] = $object_value->get_item_add_status($sub_item_key);
-														$sub_item_amount_counter++;
-													}
-												}
-												
-												$return_array[$counter][sub_items][$sub_item_counter][amount] = count($item_instance_array);
-												
-												$sub_item_counter++;
+										if (is_object($object_value))
+										{	
+											if ($object_value instanceof ItemHolderInterface)
+											{	
+												$return_array[$counter][sub_items][$object_key] = $object_value->get_item_add_information();
 											}
 										}
 									}
@@ -1235,48 +1214,34 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 									$parent_item_counter = $parent_item_array[$value['parent_status']];
 								}
 								
-								$return_array[$parent_item_counter]['sub_items'][$value['pos_id']] = $sub_item_array[$value['pos_id']];
+								foreach($sub_item_array as $sub_item_key => $sub_item_value)
+								{
+									$return_array[$parent_item_counter]['sub_items'][$sub_item_key][$value['pos_id']] = $sub_item_value[$value['pos_id']];
 								
-								if ($value['takeover'] == "true")
-								{
-									$return_array[$parent_item_counter]['sub_items'][$value['pos_id']]['takeover'] = true;
-								}
-								else
-								{
-									$return_array[$parent_item_counter]['sub_items'][$value['pos_id']]['takeover'] = false;
+									if ($value['takeover'] == "true")
+									{
+										$return_array[$parent_item_counter]['sub_items'][$sub_item_key][$value['pos_id']]['takeover'] = true;
+									}
+									else
+									{
+										$return_array[$parent_item_counter]['sub_items'][$sub_item_key][$value['pos_id']]['takeover'] = false;
+									}
 								}
 							}
 							elseif($in_item == true and is_array($item_instance_array) and count($item_instance_array) >= 1)
 							{
-								if (is_numeric($value['pos_id']))
-								{
-									$pos_id = $value['pos_id'];
-								}
-								else
-								{
-									$pos_id = $sub_item_counter;
-								}
-								
-								
-								$sub_item_amount_counter = 0;
-								$return_array[$counter]['sub_items'][$sub_item_counter] = $item_instance_array[0]->get_item_add_information($pos_id);
-								
 								foreach($item_instance_array as $object_key => $object_value)
 								{
-									if (is_object($object_value))
-									{	
-										if ($object_value instanceof ItemHolderInterface)
-										{
-											$return_array[$counter][sub_items][$sub_item_counter]['fulfilled'][$sub_item_amount_counter] = $object_value->get_item_add_status($pos_id);
-											$sub_item_amount_counter++;
-										}
+									if (is_numeric($value['pos_id']))
+									{
+										$pos_id = $value['pos_id'];
 									}
+									else
+									{
+										$pos_id = $sub_item_counter;
+									}
+									$return_array[$counter]['sub_items'][$object_key][$pos_id] = $object_value->get_item_add_information($pos_id);
 								}
-								
-								$return_array[$counter]['sub_items'][$sub_item_counter]['amount'] = count($item_instance_array);
-								$return_array[$counter]['sub_items'][$sub_item_counter]['pos_id'] = $pos_id;
-								
-								$sub_item_counter++;
 							}
 						}
 						

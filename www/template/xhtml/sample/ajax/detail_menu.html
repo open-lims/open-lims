@@ -10,7 +10,7 @@
 
 		<script>[[ACTION:SCRIPT]]</script>
 		<div id='[[ACTION:WINDOW_ID]]' title='[[ACTION:WINDOW_TITLE]]' style='display: none;'></div>
-		<a href='#' class='BaseWantToButton' id='[[ACTION:CLICK_ID]]'>
+		<a href='#' class='BaseWantToButton' id='[[ACTION:CLICK_ID]]' title='[[STATUS_ACTION:NAME]]'>
 			<span class='BaseWantToIcon'>
 			
 			<!-- IF ([[ACTION:IMAGE]] == add_done) -->
@@ -41,7 +41,7 @@
 	
 	<!-- ELSEIF ([[ACTION:TYPE]] == link) -->
 	
-		<a href='index.php?[[ACTION:PARAMS]]' class='BaseWantToButton'>
+		<a href='index.php?[[ACTION:PARAMS]]' class='BaseWantToButton' title='[[STATUS_ACTION:NAME]]'>
 			<span class='BaseWantToIcon'>
 			
 			<!-- IF ([[ACTION:IMAGE]] == add_done) -->
@@ -75,7 +75,7 @@
 	
 	<!-- ELSE -->
 		
-		<a class='BaseWantToButton'>
+		<a class='BaseWantToButton' title='[[STATUS_ACTION:NAME]]'>
 			<span class='BaseWantToIcon'>
 			
 			<!-- IF ([[ACTION:IMAGE]] == add_extension_wait_na) -->

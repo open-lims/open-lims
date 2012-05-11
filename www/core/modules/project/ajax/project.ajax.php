@@ -772,13 +772,13 @@ class ProjectAjax
 									
 									$sub_item_irgnore_array = array();
 									
-									for($i=0; $i<=($amount-1); $i++)
+									foreach($value['sub_items'] as $sub_item_key => $sub_item_value)
 									{
-										foreach($value['sub_items'] as $sub_item_key => $sub_item_value)
+										foreach($sub_item_value as $sub_sub_item_key => $sub_sub_item_value)
 										{
-											if (!in_array($sub_item_key, $sub_item_irgnore_array))
+											if (!in_array($sub_sub_item_key, $sub_item_irgnore_array))
 											{
-												if ($sub_item_value['element_type'] == "item")
+												if ($sub_sub_item_value['element_type'] == "item")
 												{
 													$paramquery = array();
 													$paramquery['username'] = $_GET[username];
@@ -786,20 +786,20 @@ class ProjectAjax
 													$paramquery['nav'] = "project";
 													$paramquery['run'] = "sub_item_add";
 													$paramquery['project_id'] = $_GET[project_id];
-													$paramquery['dialog'] = $sub_item_value[type];
-													$paramquery['key'] = $sub_item_value['pos_id'];
+													$paramquery['dialog'] = $sub_sub_item_value[type];
+													$paramquery['key'] = $sub_sub_item_value['pos_id'];
 													$paramquery['parent'] = $value[type];
 													$paramquery['parent_key'] = $value['pos_id'];
 													
-													if ($sub_item_value['takeover'] == false)
+													if ($sub_sub_item_value['takeover'] == false)
 													{
-														$paramquery['parent_id'] = $value[fulfilled][$i][id];
+														$paramquery['parent_id'] = $value[fulfilled][$sub_item_key][id];
 													}
 													
 													$paramquery['retrace'] = Retrace::create_retrace_string();
 													$params = http_build_query($paramquery,'','&#38;');
 													
-													$item_handling_cass = $sub_item_value[handling_class];
+													$item_handling_cass = $sub_sub_item_value[handling_class];
 													if ($item_handling_cass::get_item_add_type() == 1)
 													{
 														$result[$counter][type] = "ajax";
@@ -807,7 +807,7 @@ class ProjectAjax
 														require_once("core/modules/".$ajax_handling_array[0]);
 														
 														$item_holder = Item::get_holder_handling_class_by_name($value[type]);
-														$ajax_init_array = $ajax_handling_array[1]::$ajax_handling_array[2]($sub_item_value['pos_id'], $paramquery, $sub_item_value[type_id],  $sub_item_value[category_id], $item_holder, $value[fulfilled][$i][id]);
+														$ajax_init_array = $ajax_handling_array[1]::$ajax_handling_array[2]($sub_sub_item_value['pos_id'], $paramquery, $sub_sub_item_value[type_id],  $sub_sub_item_value[category_id], $item_holder, $value[fulfilled][$sub_item_key][id]);
 														
 														$result[$counter][script] = $ajax_init_array[script];
 														$result[$counter][window_title] = $ajax_init_array[window_title];
@@ -820,27 +820,30 @@ class ProjectAjax
 													}
 													
 													
-													if ($sub_item_value['takeover'] == true)
+													if ($sub_sub_item_value['takeover'] == true)
 													{
-														$result[$counter][name] = $sub_item_value[name]." (all)";
-														array_push($sub_item_irgnore_array, $sub_item_key);
+														/**
+														 * @todo auf typunterscheidung achten
+														 */
+														$result[$counter][name] = $sub_sub_item_value[name]." (all)";
+														array_push($sub_item_irgnore_array, $sub_sub_item_key);
 													}
 													else
 													{
-														if ($value[fulfilled][$i][name])
+														if ($value[fulfilled][$sub_item_key][name])
 														{
-															$result[$counter][name] = $sub_item_value[name]." (".$value[fulfilled][$i][name].")";
+															$result[$counter][name] = $sub_sub_item_value[name]." (".$value[fulfilled][$sub_item_key][name].")";
 														}
 														else
 														{
-															$result[$counter][name] = $sub_item_value[name];
+															$result[$counter][name] = $sub_sub_item_value[name];
 														}
 													}
 	
 													
-													if ($sub_item_value[fulfilled][$i] == true)
+													if (is_array($sub_sub_item_value[fulfilled]))
 													{
-														if ($sub_item_value[occurrence] == "multiple")
+														if ($sub_sub_item_value[occurrence] == "multiple")
 														{
 															$result[$counter][image] = "add_done";
 														}
@@ -1071,30 +1074,30 @@ class ProjectAjax
 									$result[$counter][status] = "line";
 									$counter++;
 									
-									for($i=0; $i<=($amount-1); $i++)
+									foreach($value['sub_items'] as $sub_item_key => $sub_item_value)
 									{
-										foreach($value['sub_items'] as $sub_item_key => $sub_item_value)
+										foreach($sub_item_value as $sub_sub_item_key => $sub_sub_item_value)
 										{
-											if ($sub_item_value['element_type'] == "item")
+											if ($sub_sub_item_value['element_type'] == "item")
 											{
 												$result[$counter][depends] = true;
 												
-												if ($value[fulfilled][$i][name])
+												if ($value[fulfilled][$sub_item_key][name])
 												{
-													$result[$counter][name] = $sub_item_value[name]." (".$value[fulfilled][$i][name].")";
+													$result[$counter][name] = $sub_sub_item_value[name]." (".$value[fulfilled][$sub_item_key][name].")";
 												}
 												else
 												{
-													$result[$counter][name] = $sub_item_value[name];
+													$result[$counter][name] = $sub_sub_item_value[name];
 												}
 												
-												if ($sub_item_value[fulfilled][$i] == true)
+												if (is_array($sub_sub_item_value[fulfilled]))
 												{
 													$result[$counter][status] = "ok";
 												}
 												else
 												{
-													if ($sub_item_value[requirement] != "optional")
+													if ($sub_sub_item_value[requirement] != "optional")
 													{
 														$result[$counter][status] = "cancel";
 													}
