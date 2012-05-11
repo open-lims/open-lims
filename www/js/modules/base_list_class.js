@@ -250,15 +250,55 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 	
 	function make_resizable()
 	{
-		$(".ListTable").dynamicTable();
+		$(".ListTable").dynamicTable({
+			"sticky" : [0,1],
+			"rulerColor": "#669acc",
+			"handleColor": "#669acc"
+		});
+		
+		$("body").keydown(function(evt){
+			switch(evt.which)
+			{
+				case 220: //^
+					$(".ListTable").dynamicTable("toggle",0);
+					break
+				case 49: //1
+					$(".ListTable").dynamicTable("toggle",1);
+					break;
+				case 50: //2
+					$(".ListTable").dynamicTable("toggle",2);
+					break;
+				case 51: //3
+					$(".ListTable").dynamicTable("toggle",3);
+					break;
+				case 52: //4
+					$(".ListTable").dynamicTable("toggle",4);
+					break;
+				case 53: //5
+					$(".ListTable").dynamicTable("toggle",5);
+					break;
+				case 54: //6
+					$(".ListTable").dynamicTable("toggle",6);
+					break;
+				case 55: //7
+					$(".ListTable").dynamicTable("toggle",7);
+					break;
+				case 56: //8
+					$(".ListTable").dynamicTable("toggle",8);
+					break;
+				default:
+					break;
+			}
+		});
+		
 		
 //		setTimeout(function(){
-//			$(".ListTable").dynamicTable("hide",4);
-//		}, 3000);
+//			$(".ListTable").dynamicTable("toggle",6);
+//		}, 1000);
 //		
 //		setTimeout(function(){
-//			$(".ListTable").dynamicTable("show",4);
-//		}, 4000);
+//			$(".ListTable").dynamicTable("toggle",6);
+//		}, 2000);
 //		
 //		setTimeout(function(){
 //			$(".ListTable").dynamicTable("hide",5);
@@ -268,30 +308,6 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 //			$(".ListTable").dynamicTable("show",5);
 //		}, 6000);
 		
-		
-		setTimeout(function(){
-			$(".ListTable").dynamicTable("hide",6);
-		}, 500);
-		
-		setTimeout(function(){
-			$(".ListTable").dynamicTable("hide",9);
-		}, 1500);
-
-		setTimeout(function(){
-			$(".ListTable").dynamicTable("show",6);
-		}, 3000);
-		
-		setTimeout(function(){
-			$(".ListTable").dynamicTable("hide",5);
-		}, 4500);
-		
-		setTimeout(function(){
-			$(".ListTable").dynamicTable("show",5);
-		}, 6000);
-		
-		setTimeout(function(){
-			$(".ListTable").dynamicTable("show",9);
-		}, 7500);
 		
 		return false;
 		
