@@ -1097,7 +1097,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 							$return_array[$counter][element_type] = "item";		
 							$return_array[$counter][display] = true;
 
-							$type = $value[type];
 							$return_array[$counter][type] = $value[type];
 							$return_array[$counter][name] = $value[name];
 							$return_array[$counter][handling_class] = Item::get_handling_class_by_type($value[type]);
@@ -1145,7 +1144,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 										{
 											if (class_exists($item_handling_class))
 											{
-												if ($item_handling_class::is_kind_of($item_type, $item_value) == true  and $item_pos_id == $pos_id)
+												if ($item_handling_class::is_kind_of($item_type, $item_value) == true  and $item_pos_id == $pos_id and $item_pos_id !== null and $pos_id !== null)
 												{
 													$item_instance = $item_handling_class::get_instance_by_item_id($item_value);
 													$return_array[$counter][fulfilled][$fulfilled_counter][item_id] = $item_value;
@@ -1258,6 +1257,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 									$pos_id = $sub_item_counter;
 								}
 								
+								
 								$sub_item_amount_counter = 0;
 								$return_array[$counter]['sub_items'][$sub_item_counter] = $item_instance_array[0]->get_item_add_information($pos_id);
 								
@@ -1265,8 +1265,11 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 								{
 									if (is_object($object_value))
 									{	
-										$return_array[$counter][sub_items][$sub_item_counter]['fulfilled'][$sub_item_amount_counter] = $object_value->get_item_add_status($pos_id);
-										$sub_item_amount_counter++;
+										if ($object_value instanceof ItemHolderInterface)
+										{
+											$return_array[$counter][sub_items][$sub_item_counter]['fulfilled'][$sub_item_amount_counter] = $object_value->get_item_add_status($pos_id);
+											$sub_item_amount_counter++;
+										}
 									}
 								}
 								

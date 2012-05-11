@@ -29,4 +29,5 @@
 	$event_listener[2] = "SampleItem";
 	$event_listener[3] = "SampleVirtualFolder";
 	$event_listener[4] = "SampleItemFactory";
+	$event_listener[5] = "SampleDataEntityLink";
 ?>

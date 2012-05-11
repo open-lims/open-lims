@@ -411,7 +411,7 @@ class SampleHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND sample_id = ".$sample_id."";
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND sample_id = ".$sample_id." AND parent_item_id IS NULL";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 				
@@ -445,7 +445,7 @@ class SampleHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT gid FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND sample_id = ".$sample_id." AND parent='f'";
+			$sql = "SELECT gid FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND sample_id = ".$sample_id." AND parent='f' AND parent_item_id IS NULL";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 				
@@ -549,7 +549,7 @@ class SampleHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT sample_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND gid = ".$gid." AND parent = 't'";
+			$sql = "SELECT sample_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND gid = ".$gid." AND parent = 't'  AND parent_item_id IS NULL";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -654,7 +654,7 @@ class SampleHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = ".$sample_id."";
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = ".$sample_id."  AND parent_item_id IS NULL";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))

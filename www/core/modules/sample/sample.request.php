@@ -569,7 +569,39 @@ class SampleRequest
 					throw new SampleSecurityAccessDeniedException();
 				}
 			break;
-				
+
+			// Sub Item Add
+			/**
+			 * @todo exception
+			 */
+			case("sub_item_add"):
+				if ($sample_security->is_access(2, false) == true)
+				{
+					if ($_GET['parent'] and is_numeric($_GET['parent_id']) and is_numeric($_GET['key']))
+					{
+						$item_handling_class = Item::get_handling_class_by_type($_GET['parent']);
+												
+						if (class_exists($item_handling_class))
+						{
+							$item_io_handling_class = $item_handling_class::get_item_add_io_handling_class();
+							require_once("core/modules/".$item_io_handling_class[0]);
+							if (class_exists($item_io_handling_class[1]))
+							{
+								$item_io_handling_class[1]::item_add_handler();
+							}
+						}	
+					}
+					else
+					{
+						// Exception
+					}
+				}
+				else
+				{
+					throw new SampleSecurityAccessDeniedException();
+				}
+			break;
+			
 			// Parent Item Lister
 			case("parent_item_list"):
 				if ($sample_security->is_access(1, false) == true)
@@ -715,91 +747,33 @@ class SampleRequest
 																
 								$return_value = $module_dialog['class']::$module_dialog[method]($current_requirements[$_GET['key']][type_id], $current_requirements[$_GET['key']][category_id], "Sample", $_GET['parent_id'], $_GET[key]);
 								
-								/**
-								 * @todo remove after rebuild all item add dialogs (including "associate sample")
-								 */
 								if (is_numeric($return_value))
 								{
-									if ($_GET['retrace'])
+									if ($_GET[retrace])
 									{
-										$params = http_build_query(Retrace::resolve_retrace_string($_GET['retrace']),'','&#38;');
+										$params = http_build_query(Retrace::resolve_retrace_string($_GET[retrace]),'','&#38;');
 									}
 									else
 									{
-										$paramquery['username'] = $_GET['username'];
-										$paramquery['session_id'] = $_GET['session_id'];
-										$paramquery['nav'] = "home";
+										$paramquery[username] = $_GET[username];
+										$paramquery[session_id] = $_GET[session_id];
+										$paramquery[nav] = "home";
 										$params = http_build_query($paramquery,'','&#38;');
 									}
-									
-									// EVIL !!
-									if ($_GET['dialog'] == "parentsample")
-									{
-										$parent_sample_id = Sample::get_entry_by_item_id($return_value);
-										if ($parent_sample_id)
-										{
-											if (SampleItemFactory::create($parent_sample_id, $sample->get_item_id() , $_GET['key'], null, null, true) == true)
-											{
-												if ($transaction_id != null)
-												{
-													$transaction->commit($transaction_id);
-												}
-												Common_IO::step_proceed($params, "Add Item", "Successful." ,null);
-											}
-											else
-											{
-												if ($transaction_id != null)
-												{
-													$transaction->rollback($transaction_id);
-												}
-												Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
-											}
-										}
-										else
-										{
-											if ($transaction_id != null)
-											{
-												$transaction->rollback($transaction_id);
-											}
-											Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
-										}
-									}
-									else
-									{
-										if (SampleItemFactory::create($_GET['parent_id'], $return_value, $_GET['key'], null, null) == true)
-										{
-											if ($transaction_id != null)
-											{
-												$transaction->commit($transaction_id);
-											}
-											Common_IO::step_proceed($params, "Add Item", "Successful." ,null);
-										}
-										else
-										{
-											if ($transaction_id != null)
-											{
-												$transaction->rollback($transaction_id);
-											}
-											Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
-										}
-									}
-								}
-								else
-								{
-									if ($return_value === false)
-									{
-										if ($transaction_id != null)
-										{
-											$transaction->rollback($transaction_id);
-										}
-										throw new ModuleDialogFailedException("",1);
-									}
-									else
+								
+									$item_add_event = new ItemAddEvent($return_value, $_GET, null);
+									$event_handler = new EventHandler($item_add_event);
+									if ($event_handler->get_success() == true)
 									{
 										if ($transaction_id != null)
 										{
 											$transaction->commit($transaction_id);
 										}
+										Common_IO::step_proceed($params, "Add Item", "Successful." ,null);
+									}
+									else
+									{
+										// Exception
 									}
 								}
 							}

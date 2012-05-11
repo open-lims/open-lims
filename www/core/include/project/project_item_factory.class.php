@@ -45,7 +45,7 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
 	{
 		global $transaction;
 		
-		if ($transaction->is_in_transction() == true)
+		if ($transaction->is_in_transction() == true and is_numeric($project_id) and is_numeric($item_id))
 		{			
 			$project = new Project($project_id);
 			$project_item = new ProjectItem($project_id);

@@ -213,7 +213,7 @@ class SampleIO
 	 * @param integer $organisation_id
 	 */
 	public static function create($type_array, $category_array, $organisation_unit_id)
-	{
+	{		
 		global $session;
 				
 		if($_GET[run] == "item_add")

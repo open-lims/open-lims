@@ -146,6 +146,7 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
     	{
     		$get_array = $event_object->get_get_array();
     		$post_array = $event_object->get_post_array();
+    		
     		if ($get_array[nav] == "sample" and is_numeric($get_array[sample_id]) and !$get_array['parent'] and !$get_array['parent_key'])
     		{
     			$transaction_id = $transaction->begin();
@@ -215,7 +216,8 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
     				return false;
     			}
     		}
-    		elseif($get_array['parent'] == "sample" and is_numeric($get_array['key']) and is_numeric($get_array['parent_key']))
+    		
+    		if($get_array['parent'] == "sample" and is_numeric($get_array['key']) and is_numeric($get_array['parent_key']))
     		{
     			$transaction_id = $transaction->begin();
     			

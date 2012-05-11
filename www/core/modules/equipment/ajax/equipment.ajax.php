@@ -253,7 +253,7 @@ class EquipmentAjax
 	 * @param array $link
 	 * @return array
 	 */
-	public static function item_add_init($gid, $link, $folder_id, $organisation_unit_id, $holder_class, $holder_id)
+	public static function item_add_init($gid, $link, $type_array, $category_array, $holder_class, $holder_id)
 	{
 		global $session;
 		
