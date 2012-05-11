@@ -815,7 +815,7 @@ class ProjectRequest
 							{
 								if (is_numeric($value['status']))
 								{
-									$item_array = array_merge($item_array, $project_item->get_project_status_items($value['status']), true);
+									$item_array = array_merge($item_array, $project_item->get_project_status_items($value['status'], true));
 								}
 							}
 						}
