@@ -407,7 +407,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     {
     	if ($this->project_id)
     	{
-    		return ProjectHasItem_Access::list_entries_by_project_id_and_project_status_id($this->project_id, $project_status_id, false);
+    		return ProjectHasItem_Access::list_entries_by_project_id_and_project_status_id($this->project_id, $project_status_id, $sub_items);
     	}
     	else
     	{
