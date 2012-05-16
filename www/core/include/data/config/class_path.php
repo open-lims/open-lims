@@ -81,7 +81,6 @@
 	$classes['Path']						= $path_prefix."core/include/data/folder/path.class.php";
 	$classes['Value']						= $path_prefix."core/include/data/value/value.class.php";
 	$classes['ValueType']					= $path_prefix."core/include/data/value/value_type.class.php";
-	$classes['ValueExternalVar']			= $path_prefix."core/include/data/value/value_external_var.class.php";
 	
 	$classes['ValueVar']					= $path_prefix."core/include/data/value/value_var.class.php";
 	$classes['ItemValueVar']				= $path_prefix."core/include/data/value/item_value_var.class.php";
