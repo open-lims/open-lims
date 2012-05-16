@@ -52,5 +52,11 @@ interface ItemHolderInterface
 	 * @return string
 	 */
 	public static function get_item_list_sql($holder_id);
+	
+	/**
+	 * @param integer $item_id
+	 * @return array
+	 */
+	public static function list_item_holders_by_item_id($item_id);
 }
 ?>

@@ -133,6 +133,15 @@ class ProjectStatusRelation implements ProjectStatusRelationInterface
     }
     
     /**
+     * @see ProjectStatusRelationInterface::get_current()
+     * @return integer
+     */
+    public function get_current()
+    {
+    	return $this->status_id;
+    }
+    
+    /**
      * @see ProjectStatusRelationInterface::get_next()
      * @return integer
      */
@@ -203,6 +212,29 @@ class ProjectStatusRelation implements ProjectStatusRelationInterface
     		return null;
     	}
  	}
+ 	
+ 	/**
+     * @see ProjectStatusRelationInterface::set_next()
+     * @return boolean
+     */
+ 	public function set_next()
+ 	{
+ 		if ($this->status_id)
+ 		{
+ 			$this->status_id = $this->get_next();
+ 		}
+ 	}
     
+	/**
+     * @see ProjectStatusRelationInterface::set_previous()
+     * @return boolean
+     */
+ 	public function set_previous()
+ 	{
+ 		if ($this->status_id)
+ 		{
+ 			$this->status_id = $this->get_previous();
+ 		}
+ 	}
 }
 ?>

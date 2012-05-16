@@ -1037,6 +1037,8 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     
     /**
      * @see ProjectInterface::get_current_status_requirements()
+     * @param bool $force_inherit
+     * @param integer $status_id
      * @return array
      */
     public function get_current_status_requirements($force_inherit = false, $status_id = null)
@@ -1347,6 +1349,186 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 				$runtime_data->write_object_data($this, "PROJECT_".$this->project_id."_".$status_id."_CURRENT_STATUS_REQUIREMENTS", $return_array);	
 				return $return_array;
     		}
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+    /**
+     * @see ProjectInterface::is_sub_item_required()
+     * @param integer $parent_pos_id
+     * @param integer $status_id
+     * @param integer $sub_item_pos_id
+     * @return integer
+     */
+	public function is_sub_item_required($parent_pos_id, $status_id, $sub_item_pos_id)
+    {
+    	if ($this->project_id and $this->project and is_numeric($status_id))
+    	{
+    		$project_template = new ProjectTemplate($this->project->get_template_id());
+    		$status_relation = new ProjectStatusRelation($this->project_id, $status_id);
+    			    	
+    		while ($status_relation->is_less($this->get_current_status_id()) or $status_relation->get_current() == $this->get_current_status_id())
+    		{    	
+    			$current_status_id = $status_relation->get_current();
+	    		$requirements_array = $project_template->get_status_requirements($current_status_id);
+				
+				$counter = 0;
+				$sub_item_counter = 0;
+				$fulfilled_counter = 0;
+				$in_item = false;
+				
+				if (is_array($requirements_array) and count($requirements_array) >= 1)
+				{
+					$project_item = new ProjectItem($this->project_id);
+	
+					$item_array = $project_item->get_project_status_items($current_status_id);					
+					$item_type_array = Item::list_types();
+					
+					foreach($requirements_array as $key => $value)
+					{
+						// ITEM
+						if ($value[xml_element] == "item" and !$value[close])
+						{
+							$in_item = true;
+							
+							if ($value['pos_id'])
+							{
+								$pos_id = $value['pos_id'];
+							}
+							else
+							{
+								$pos_id = $counter;
+							}
+							
+							if ($pos_id != $parent_pos_id)
+							{
+								continue;
+							}
+							else
+							{
+								if (is_array($item_array) and count($item_array) >= 1)
+								{	
+									$item_instance_array = array();
+			
+									foreach($item_array as $item_key => $item_value)
+									{
+										$item_pos_id = ProjectItem::get_gid_by_item_id_and_project_id($item_value, $this->project_id,  $current_status_id);
+										
+										if (is_array($item_type_array) and count($item_type_array) >= 1)
+										{
+											foreach ($item_type_array as $item_type => $item_handling_class)
+											{
+												if (class_exists($item_handling_class))
+												{
+													if ($item_handling_class::is_kind_of($item_type, $item_value) == true and $item_pos_id == $pos_id and $item_pos_id !== null and $pos_id !== null)
+													{
+														$item_instance_array[$fulfilled_counter] =  $item_handling_class::get_instance_by_item_id($item_value);
+														$fulfilled_counter++;
+														break;
+													}
+												}
+											}
+										}
+									}
+									
+									if (is_array($item_instance_array) and count($item_instance_array) >= 1)
+									{
+										if ($value['inherit'] == "all" or $force_inherit == true)
+										{									
+											if (is_array($item_instance_array) and count($item_instance_array) >= 1 and $fulfilled_counter >= 1)
+											{
+												foreach($item_instance_array as $object_key => $object_value)
+												{
+													if (is_object($object_value))
+													{	
+														if ($object_value instanceof ItemHolderInterface)
+														{	
+															$sub_item_array = $object_value->get_item_add_information();
+															
+															if (is_array($sub_item_array) and count($sub_item_array) >= 1)
+															{
+																foreach($sub_item_array as $sub_item_key => $sub_item_value)
+																{
+																	if ($sub_item_value['pos_id'] == $sub_item_pos_id)
+																	{
+																		return $current_status_id;
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									else
+									{
+										return null;
+									}
+								}
+								else
+								{
+									return null;
+								}
+							}
+						}
+						
+						if ($value[xml_element] == "item" and $value[close] == "1")
+						{
+							$counter++;
+							$sub_item_counter = 0;
+							$in_item = false;
+						}
+						
+						
+						// ITEMI
+						if ($value[xml_element] == "itemi" and !$value[close])
+						{
+							if (is_numeric($value['parent_status']) and is_numeric($value['parent_pos_id']) and is_numeric($value['pos_id']))
+							{		
+								if ($value['pos_id'] == $sub_item_pos_id and $value['parent_pos_id'] == $parent_pos_id)
+								{
+									return $current_status_id;
+								}
+								else
+								{
+									continue;
+								}
+							}
+							elseif($in_item == true and is_array($item_instance_array) and count($item_instance_array) >= 1)
+							{
+								foreach($item_instance_array as $object_key => $object_value)
+								{
+									if (is_numeric($value['pos_id']))
+									{
+										$pos_id = $value['pos_id'];
+									}
+									else
+									{
+										$pos_id = $sub_item_counter;
+									}
+									
+									if ($pos_id == $sub_item_pos_id)
+									{
+										return $current_status_id;
+									}
+									else
+									{
+										continue;
+									}
+								}
+								$sub_item_counter++;
+							}
+						}
+					}
+				}
+    			$status_relation->set_next();
+    		}
+    		
+    		return null;
     	}
     	else
     	{
@@ -2680,6 +2862,16 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	public static function get_item_list_sql($holder_id)
 	{
 		return " SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$holder_id."";
+	}
+	
+	/**
+	 * @see ItemHolderInterface::list_item_holders_by_item_id()
+	 * @param $item_id $holder_id
+	 * @return array
+	 */
+	public static function list_item_holders_by_item_id($item_id)
+	{
+		return ProjectItem::list_projects_by_item_id($item_id);
 	}
 }
 

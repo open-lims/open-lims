@@ -52,6 +52,8 @@
 	require_once("../../include/base/system/events/delete_event.class.php");
 	require_once("../../include/base/system/system_handler.class.php");
 
+	require_once("../../include/base/system/runtime_data.class.php");
+	
 	require_once("../../include/base/security/security.class.php");
 	require_once("../../include/base/security/session.class.php");
 	
@@ -67,7 +69,9 @@
 
 	if ($_GET[session_id] and $_FILES)
 	{
-		global $db, $user, $session, $transaction;
+		global $db, $user, $session, $transaction, $runtime_data;
+
+		$runtime_data = new RuntimeData();
 			
 		$session = new Session($_GET[session_id]);
 		$user = new User($session->get_user_id());

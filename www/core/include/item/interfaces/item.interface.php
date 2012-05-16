@@ -75,6 +75,11 @@ interface ItemInterface
 	public static function list_types();
 	
 	/**
+	 * @return array
+	 */
+	public static function list_holders();
+	
+	/**
 	 * Returns the handling class by the type
 	 * @param string $type
 	 * @return string

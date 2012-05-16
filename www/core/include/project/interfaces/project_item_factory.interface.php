@@ -36,6 +36,6 @@ interface ProjectItemFactoryInterface
 	 * @param string $description
 	 * @return bool
 	 */
-	public static function create($project_id, $item_id, $gid, $keywords = null, $description = null, $parent_item_id = null);
+	public static function create($project_id, $item_id, $gid, $keywords = null, $description = null, $parent_item_id = null, $status_id = null);
 }
 ?>

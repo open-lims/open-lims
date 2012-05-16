@@ -48,7 +48,7 @@
 	require_once("../../include/base/system/events/event.class.php");
 	require_once("../../include/base/system/events/delete_event.class.php");
 	require_once("../../include/base/system/system_handler.class.php");
-
+	
 	require_once("../../include/base/security/security.class.php");
 	require_once("../../include/base/security/session.class.php");
 	
@@ -61,7 +61,6 @@
 	SystemConfig::load_module_config();
 	
 	Security::protect_session();
-	
 	
 	$user = new User(1);
 

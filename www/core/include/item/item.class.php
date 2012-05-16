@@ -285,6 +285,15 @@ class Item implements ItemInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @see ItemInterface::list_holders()
+	 * @return array
+	 */
+	public static function list_holders()
+	{
+		return ItemHolder_Access::list_entries();
+	}
+	
+	/**
 	 * @see ItemInterface::get_handling_class_by_type()
 	 * @param string $type
 	 * @return string

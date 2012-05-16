@@ -41,7 +41,7 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
 	 * @param string $description
 	 * @return bool
 	 */
-	public static function create($project_id, $item_id, $gid, $keywords = null, $description = null, $parent_item_id = null)
+	public static function create($project_id, $item_id, $gid, $keywords = null, $description = null, $parent_item_id = null, $status_id = null)
 	{
 		global $transaction;
 		
@@ -51,7 +51,16 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
 			$project_item = new ProjectItem($project_id);
 			
 			$project_item->set_gid($gid);
-			$project_item->set_status_id($project->get_current_status_id());
+			
+			if (!$status_id)
+			{
+				$project_item->set_status_id($project->get_current_status_id());
+			}
+			else
+			{
+				$project_item->set_status_id($status_id);
+			}
+
 			$project_item->set_parent_item_id($parent_item_id);
 			
 			if ($project_item->set_item_id($item_id) == false)
@@ -175,48 +184,46 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
 					}
     			}
     		}
-    		elseif($get_array['nav'] == "project" and is_numeric($get_array['project_id']) and $get_array['parent'])
-    		{
-    			$transaction_id = $transaction->begin();
-    			
-    			if (is_numeric($get_array['parent_id']))
-    			{
-    				$parent_item_id = $get_array['parent_id'];
-    			}
-    			else
-    			{
-    				$project = new Project($get_array['project_id']);
-	    			$parent_id_array = $project->get_item_add_information($get_array['parent_key']);
-	    			$parent_item_id = $parent_id_array['fulfilled'][0];
-    			}
-    			
-    			$handling_class = Item::get_holder_handling_class_by_name($get_array['parent']);
-    			
-    			if (class_exists($handling_class))
-    			{
-    				$parent_item = new $handling_class($get_array['parent_id']);
-    				
-	    			if (self::create($get_array['project_id'], $event_object->get_item_id(), null, null, null, $parent_item->get_item_id()) == false)
-	    			{
-	    				if ($transaction_id != null)
-		    			{
-							$transaction->rollback($transaction_id);
+    	} 
+    	
+   		if ($event_object instanceof ItemHolderAddEvent)
+    	{
+			$id_array = $event_object->get_id_array();
+			$item_id = $event_object->get_item_id();
+			$parent_item_id = $event_object->get_parent_item_id();
+			$pos_id = $event_object->get_pos_id();
+						
+			if(is_array($id_array) and count($id_array) >= 1)
+			{
+				if (is_array($id_array['project']) and count($id_array['project']) >= 1)
+				{
+					foreach($id_array['project'] as $key => $value)
+					{
+						$project = new Project($value['id']);
+						if (($item_status_id = $project->is_sub_item_required($value['pos_id'], $value['status_id'], $pos_id)) == true)
+						{
+							if (self::create($value['id'], $item_id, null, null, null, $parent_item_id, $item_status_id) == false)
+							{
+								return false;
+							}
+							
+							if (DataEntity::is_kind_of("file", $item_id) or DataEntity::is_kind_of("value", $item_id))
+							{
+								$data_entity_id = DataEntity::get_entry_by_item_id($item_id);
+				    			$folder_id = $project->get_item_holder_value("folder_id");
+				    			$parent_data_entity_id = Folder::get_data_entity_id_by_folder_id($folder_id);
+				
+				    			$child_data_entity = new DataEntity($data_entity_id);
+				    			
+				    			if ($child_data_entity->set_as_child_of($parent_data_entity_id, true, $parent_item_id) == false)
+				    			{
+				    				return false;
+				    			}
+							}
 						}
-	    				return false;
-	    			}
-	    			else
-	    			{
-	    				if ($transaction_id != null)
-		    			{
-							$transaction->commit($transaction_id);
-						}
-	    			}
-    			}
-    			else
-    			{
-    				return false;
-    			}
-    		}
+					}
+				}
+			}
     	}
     	    	
     	return true;

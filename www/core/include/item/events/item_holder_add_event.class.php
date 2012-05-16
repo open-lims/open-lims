@@ -22,40 +22,41 @@
  */
 
 /**
- * Item Add Event
- * Called, if an Item Holder clones itself, to duplicate the referenced partents
+ * Item Holder Add Event
+ * Called, if an Item Holder which is an Item too, adds an Item
  * @package item
  */
-class ItemAddHolderEvent extends Event
+class ItemHolderAddEvent extends Event
 {    
-	private $id;
-	private $type;
+	private $item_holder_id;
+	private $parent_item_id;
 	private $item_id;
-	private $gid;
+	private $id_array;
 	
-	function __construct($id, $type, $item_id, $gid = null)
+	function __construct($id_array, $parent_item_id, $item_id, $pos_id)
     {
-    	if (is_numeric($id) and $type and is_numeric($item_id))
+    	if (is_array($id_array) and is_numeric($parent_item_id) and is_numeric($item_id) and is_numeric($pos_id))
     	{
-    		$this->id = $id;
-    		$this->type = $type;
+    		parent::__construct();
+    		$this->id_array = $id_array;
+    		$this->parent_item_id = $parent_item_id;
     		$this->item_id = $item_id;
-    		$this->gid = $gid;
+    		$this->pos_id = $pos_id;
     	}
     	else
     	{
-    		$this->id = null;
-    		$this->type = null;
+    		$this->id_array = null;
+    		$this->parent_item_id = null;
     		$this->item_id = null;
-    		$this->gid = null;
+    		$this->pos_id = null;
     	}
     }
     
-	public function get_id()
+ 	public function get_id_array()
     {
-    	if ($this->id)
+    	if ($this->id_array)
     	{
-    		return $this->id;
+    		return $this->id_array;
     	}
     	else
     	{
@@ -63,11 +64,11 @@ class ItemAddHolderEvent extends Event
     	}
     }
     
-	public function get_type()
+ 	public function get_parent_item_id()
     {
-    	if ($this->type)
+    	if ($this->parent_item_id)
     	{
-    		return $this->type;
+    		return $this->parent_item_id;
     	}
     	else
     	{
@@ -87,11 +88,11 @@ class ItemAddHolderEvent extends Event
     	}
     }
     
-	public function get_gid()
+	public function get_pos_id()
     {
-    	if ($this->gid)
+    	if (is_numeric($this->pos_id))
     	{
-    		return $this->gid;
+    		return $this->pos_id;
     	}
     	else
     	{

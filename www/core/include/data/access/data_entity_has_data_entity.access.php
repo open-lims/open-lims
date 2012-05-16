@@ -30,7 +30,8 @@ class DataEntityHasDataEntity_Access
 	private $data_entity_pid;
 	private $data_entity_cid;
 	private $link;
-
+	private $link_item_id;
+	
 	/**
 	 * @param integer $primary_key
 	 */
@@ -86,7 +87,7 @@ class DataEntityHasDataEntity_Access
 	 * @param integer $data_entity_cid
 	 * @return true
 	 */
-	public function create($data_entity_pid, $data_entity_cid, $link = false)
+	public function create($data_entity_pid, $data_entity_cid, $link = false, $link_item_id = null)
 	{
 		global $db;
 		
@@ -101,8 +102,17 @@ class DataEntityHasDataEntity_Access
 				$link_insert = "f";
 			}
 			
-			$sql_write = "INSERT INTO ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." (data_entity_pid,data_entity_cid,link) " .
-					"VALUES (".$data_entity_pid.",".$data_entity_cid.",'".$link_insert."')";
+			if (is_numeric($link_item_id))
+			{
+				$link_item_id_insert = $link_item_id;
+			}
+			else
+			{
+				$link_item_id_insert = "NULL";
+			}
+			
+			$sql_write = "INSERT INTO ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." (data_entity_pid,data_entity_cid,link,link_item_id) " .
+					"VALUES (".$data_entity_pid.",".$data_entity_cid.",'".$link_insert."',".$link_item_id_insert.")";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
@@ -157,6 +167,21 @@ class DataEntityHasDataEntity_Access
 		if (isset($this->link))
 		{
 			return $this->link;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @return integer
+	 */
+	public function get_link_item_id()
+	{
+		if ($this-link_item_id)
+		{
+			return $this->link_item_id;
 		}
 		else
 		{

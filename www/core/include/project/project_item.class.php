@@ -1103,30 +1103,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
   	 */
   	public static function list_projects_by_item_id($item_id)
   	{
-  		if (is_numeric($item_id))
-  		{
-  			$project_has_item_pk_array = ProjectHasItem_Access::list_entries_by_item_id($item_id);
-  			  			
-  			if (is_array($project_has_item_pk_array) and count($project_has_item_pk_array) >= 1)
-  			{
-  				$return_array = array();
-  				
-  				foreach ($project_has_item_pk_array as $key => $value)
-  				{
-  					$project_has_item = new ProjectHasItem_Access($value);
-  					array_push($return_array, $project_has_item->get_project_id());
-  				}
-  				return $return_array;
-  			}
-  			else
-  			{
-  				return null;
-  			}
-  		}
-  		else
-  		{
-  			return null;
-  		} 		
+  		return ProjectHasItem_Access::list_projects_by_item_id($item_id);
   	}
   	
 	/**

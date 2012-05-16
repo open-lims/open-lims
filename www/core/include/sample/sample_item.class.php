@@ -871,9 +871,9 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
      * @param integer $item_id
      * @return array
      */
-    public static function list_entries_by_item_id($item_id)
+    public static function list_entries_by_item_id($item_id, $sub_items)
     {
-    	return SampleHasItem_Access::list_entries_by_item_id($item_id);
+    	return SampleHasItem_Access::list_entries_by_item_id($item_id, $sub_items);
     }
     
     /**

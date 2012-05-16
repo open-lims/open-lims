@@ -131,7 +131,7 @@ interface SampleItemInterface
      * @param integer $item_id
      * @return array
      */
-    public static function list_entries_by_item_id($item_id);
+    public static function list_entries_by_item_id($item_id, $sub_items);
     
     /**
      * @param integer $item_id

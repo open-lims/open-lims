@@ -99,10 +99,20 @@ interface ProjectInterface
 	
 	/**
      * Returns an array with all requirements of the current status
+     * @param bool $force_inherit
+     * @param integer $status_id
      * @return array
      */
 	public function get_current_status_requirements($inherited = true, $status_id = null);
-				
+
+	/**
+     * @param integer $parent_pos_id
+     * @param integer $status_id
+     * @param integer $sub_item_pos_id
+     * @return bool
+     */
+	public function is_sub_item_required($parent_pos_id, $status_id, $sub_item_pos_id);
+	
 	/**
      * Returns the ID of the next status of the current project
      * @return integer

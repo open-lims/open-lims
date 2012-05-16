@@ -51,7 +51,6 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	private $file_version;
 	
 	private $item_id_array = array();
-	private $data_entity_id_array = array();
 
 	/**
 	 * @see FileInterface::__construct()
@@ -741,10 +740,6 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 						if ($this->get_item_id())
 						{
 							array_push($this->item_id_array, $this->get_item_id());
-						}
-						if ($this->get_data_entity_id())
-						{
-							array_push($this->data_entity_id_array, $this->get_data_entity_id());
 						}
 					}
 					$session->write_value("FILE_UPLOAD_".$unique_id, $session_file_array, true);
@@ -1476,23 +1471,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 			return null;
 		}
 	}
-	
-	/**
-	 * @see FileInterface::get_data_entity_id_array()
-	 * @return array
-	 */
-	public function get_data_entity_id_array()
-	{
-		if ($this->data_entity_id_array)
-		{
-			return $this->data_entity_id_array;
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
+		
 	/**
 	 * @see FileInterface::get_icon()
 	 * @return string

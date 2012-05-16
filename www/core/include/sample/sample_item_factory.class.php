@@ -94,6 +94,25 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
 					$sample_item->set_information($description, $keywords);
 				}
 			}
+			
+			$item_holder_type_array = Item::list_holders();
+			$item_holder_id_array = array();
+			
+			if (is_array($item_holder_type_array) and count($item_holder_type_array) >= 1)
+			{
+				foreach ($item_holder_type_array as $key => $value)
+				{
+					$item_holder_id_array[$key] = $value::list_item_holders_by_item_id($sample->get_item_id());;
+				}
+			}
+			
+			$item_holder_add_event = new ItemHolderAddEvent($item_holder_id_array, $sample->get_item_id(), $item_id, $gid);
+			$event_handler = new EventHandler($item_holder_add_event);
+			
+			if ($event_handler->get_success() == false)
+			{
+				return false;
+			}
 
 			return true;
 		}
@@ -176,46 +195,6 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
 					}
     			}
     		}
-    		elseif($get_array['nav'] == "sample" and is_numeric($get_array['sample_id']) and $get_array['parent'] and is_numeric($get_array['parent_id']))
-    		{
-    			$transaction_id = $transaction->begin();
-    			
-    			$handling_class = Item::get_holder_handling_class_by_name($get_array['parent']);
-    			
-    			if (class_exists($handling_class))
-    			{
-    				$parent_item = new $handling_class($get_array['parent_id']);
-
-	    			if ($get_array['parent_sample'] == "1")
-	    			{
-	    				$parent = true;
-	    			}
-	    			else
-	    			{
-	    				$parent = false;
-	    			}
-	    			
-	    			if (self::create($get_array[sample_id], $event_object->get_item_id(), null, null, null, $parent_item->get_item_id(), $parent) == false)
-	    			{
-	    				if ($transaction_id != null)
-		    			{
-							$transaction->rollback($transaction_id);
-						}
-						return false;
-	    			}
-	    			else
-	    			{
-	    				if ($transaction_id != null)
-		    			{
-							$transaction->commit($transaction_id);
-						}
-	    			}
-    			}
-    			else
-    			{
-    				return false;
-    			}
-    		}
     		
     		if($get_array['parent'] == "sample" and is_numeric($get_array['key']) and is_numeric($get_array['parent_key']))
     		{
@@ -274,6 +253,46 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
 	    			}
     			}
     		}
+    	}
+    	
+    	if ($event_object instanceof ItemHolderAddEvent)
+    	{    		
+			$id_array = $event_object->get_id_array();
+			$item_id = $event_object->get_item_id();
+			$parent_item_id = $event_object->get_parent_item_id();
+			$pos_id = $event_object->get_pos_id();
+			
+			if(is_array($id_array) and count($id_array) >= 1)
+			{
+				if (is_array($id_array['sample']) and count($id_array['sample']) >= 1)
+				{
+					foreach($id_array['sample'] as $key => $value)
+					{						
+						$sample = new Sample($value['id']);
+						if ($sample->is_sub_item_required($value['pos_id'], $pos_id) == true)
+						{
+							if (self::create($value['id'], $item_id, null, null, null, $parent_item_id, false) == false)
+							{
+								return false;
+							}
+							
+							if (DataEntity::is_kind_of("file", $item_id) or DataEntity::is_kind_of("value", $item_id))
+							{
+								$data_entity_id = DataEntity::get_entry_by_item_id($item_id);
+								$folder_id = $sample->get_item_holder_value("folder_id");
+				    			$parent_data_entity_id = Folder::get_data_entity_id_by_folder_id($folder_id);
+				
+				    			$child_data_entity = new DataEntity($data_entity_id);
+				    			
+				    			if ($child_data_entity->set_as_child_of($parent_data_entity_id, true, $parent_item_id) == false)
+				    			{
+				    				return false;
+				    			}
+							}
+						}
+					}
+				}
+			}
     	}
     	
     	return true;

@@ -610,8 +610,9 @@ class SampleHasItem_Access
 	/**
 	 * @param integer $item_id
 	 * @return array
+	 * with adn without sub-items
 	 */
-	public static function list_entries_by_item_id($item_id)
+	public static function list_entries_by_item_id($item_id, $sub_items)
 	{
 		global $db;
 
@@ -619,12 +620,23 @@ class SampleHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT sample_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id."";
+			if ($sub_items == true)
+			{
+				$sql = "SELECT sample_id, gid FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id."";
+			}
+			else
+			{
+				$sql = "SELECT sample_id, gid FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND parent_item_id IS NULL";
+			}
+			
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[sample_id]);
+				$tmp_array = array();
+				$tmp_array[id] = $data[sample_id];
+				$tmp_array[pos_id] = $data[gid];
+				array_push($return_array,$tmp_array);
 			}
 			
 			if (is_array($return_array))

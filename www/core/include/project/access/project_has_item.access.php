@@ -576,6 +576,46 @@ class ProjectHasItem_Access
 	}
 		
 	/**
+	 * @param integer $item_id
+	 * @return array
+	 * Returns without sub-items
+	 */
+	public static function list_projects_by_item_id($item_id)
+	{
+		global $db;
+
+		if (is_numeric($item_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT project_id,project_status_id,gid FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND parent_item_id IS NULL";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				$tmp_array = array();
+				$tmp_array['id'] = $data[project_id];
+				$tmp_array['status_id'] = $data[project_status_id];
+				$tmp_array['pos_id'] = $data[gid];
+				array_push($return_array,$tmp_array);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @param integer $parent_item_id
 	 * @param integer $project_id
 	 * @return array

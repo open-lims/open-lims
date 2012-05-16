@@ -78,7 +78,6 @@
 	
 	
 	$classes['Sample']						= $path_prefix."core/include/sample/sample.class.php";
-	$classes['SampleDataEntityLink']		= $path_prefix."core/include/sample/sample_data_entity_link.class.php";
 	$classes['SampleFolder']				= $path_prefix."core/include/sample/sample_folder.class.php";
 	$classes['SampleVirtualFolder']			= $path_prefix."core/include/sample/sample_virtual_folder.class.php";
 	$classes['SampleItem']					= $path_prefix."core/include/sample/sample_item.class.php";

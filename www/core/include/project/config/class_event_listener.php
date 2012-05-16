@@ -34,5 +34,4 @@
 	$event_listener[7] = "ProjectUserData";
 	$event_listener[8] = "ProjectItemFactory";
 	$event_listener[9] = "ProjectExtension";
-	$event_listener[10] = "ProjectDataEntityLink";
 ?>

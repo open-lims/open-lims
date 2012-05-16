@@ -29,6 +29,7 @@ class ItemAddEvent extends Event
 {    
 	private $item_id;
 	private $get_array;
+	private $post_array;
 	
 	function __construct($item_id, $get_array, $post_array)
     {

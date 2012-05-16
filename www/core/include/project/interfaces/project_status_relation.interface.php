@@ -49,6 +49,12 @@ interface ProjectStatusRelationInterface
     public function is_more($status_id);
     
     /**
+     * Returns current status
+     * @return integer
+     */
+    public function get_current();
+    
+    /**
      * Returns the next status of the given project
      * @return integer
      */
@@ -59,5 +65,19 @@ interface ProjectStatusRelationInterface
      * @return integer
      */
  	public function get_previous();
+ 	
+ 	/**
+ 	 * Set to next status
+     * @see ProjectStatusRelationInterface::set_next()
+     * @return boolean
+     */
+ 	public function set_next();
+ 	
+ 	/**
+ 	 * Set to previous status
+     * @see ProjectStatusRelationInterface::set_previous()
+     * @return boolean
+     */
+ 	public function set_previous();
 }
 ?>

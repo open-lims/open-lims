@@ -482,11 +482,8 @@ class ValueIO
 				{
 					$value_add_successful = $value->create($folder_id, $user->get_user_id(), $type_id, $_POST);
 
-					if ($value_add_successful == true and $data_entity_id = $value->get_data_entity_id())
+					if ($value_add_successful == true)
 					{
-						$data_entity_link_event = new DataEntityLinkEvent($data_entity_id, $_GET);
-						$event_handler = new EventHandler($data_entity_link_event);
-						
 						return $value->get_item_id();
 					}
 					else
