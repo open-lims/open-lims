@@ -112,6 +112,12 @@ interface ProjectInterface
      * @return bool
      */
 	public function is_sub_item_required($parent_pos_id, $status_id, $sub_item_pos_id);
+
+	/**
+     * @param integer $parent_pos_id
+     * @return array
+     */
+    public function list_required_sub_items($parent_pos_id);
 	
 	/**
      * Returns the ID of the next status of the current project

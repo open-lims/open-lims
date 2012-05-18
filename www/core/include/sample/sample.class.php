@@ -1535,6 +1535,86 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     	}
     }
     
+ 	/**
+     * @see SampleInterface::list_required_sub_items()
+     * @param integer $parent_pos_id
+     * @return array
+     */
+    public function list_required_sub_items($parent_pos_id)
+    {
+    	if ($this->sample_id and $this->sample and is_numeric($parent_pos_id))
+    	{
+    		$sample_template 		= new SampleTemplate($this->sample->get_template_id());
+			$requirements_array 	= $sample_template->get_requirements();
+    		
+    		$return_array = array();
+			
+			$counter = 0;
+			$sub_item_counter = 0;
+			$in_item = false;
+			
+			if (is_array($requirements_array) and count($requirements_array) >= 1)
+			{
+				foreach($requirements_array as $key => $value)
+				{
+					if ($value[xml_element] == "item" and !$value[close])
+					{
+						$in_item = true;
+						
+						if ($value['pos_id'])
+						{
+							$pos_id = $value['pos_id'];
+						}
+						else
+						{
+							$pos_id = $counter;
+						}
+						
+						
+						if ($value['inherit'] == "all" and $pos_id == $parent_pos_id)
+						{									
+							return array(0 => "all");
+						}
+					}
+					
+					if ($value[xml_element] == "item" and $value[close] == "1")
+					{
+						$counter++;
+						$in_item = false;
+					}
+
+					
+					// ITEMI
+					if ($value[xml_element] == "itemi" and !$value[close])
+					{
+						if($in_item == true)
+						{
+							if (is_numeric($value['pos_id']))
+							{
+								$pos_id = $value['pos_id'];
+							}
+							else
+							{
+								$pos_id = $sub_item_counter;
+							}
+							
+							if (!in_array($pos_id, $return_array))
+							{
+								array_push($return_array, $pos_id);
+							}
+							$sub_item_counter++;
+						}
+					}
+				}	
+			}    		
+    		return $return_array;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
     /**
      * @see SampleInterface::get_sub_folder()
      * @param integer $folder_id Folder-ID

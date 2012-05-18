@@ -32,6 +32,8 @@ require_once("interfaces/project_item_factory.interface.php");
  */
 class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerInterface
 {
+	private static $project_instance_array;
+	
 	/**
 	 * @see ProjectItemFactoryInterface::create()
 	 * @param integer $project_id
@@ -46,8 +48,17 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
 		global $transaction;
 		
 		if ($transaction->is_in_transction() == true and is_numeric($project_id) and is_numeric($item_id))
-		{			
-			$project = new Project($project_id);
+		{						
+			if (self::$project_instance_array[$project_id])
+    		{
+    			$project = self::$project_instance_array[$project_id];
+    		}
+    		else
+    		{
+    			$project = new Project($project_id);
+    			self::$project_instance_array[$project_id] = $project;
+    		}
+			
 			$project_item = new ProjectItem($project_id);
 			
 			$project_item->set_gid($gid);
@@ -176,9 +187,16 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
     				$item_holder_class = Item::get_holder_handling_class_by_name($item_holder_name);
     				$item_holder_instance = $item_holder_class::get_instance_by_item_id($event_object->get_item_id());
     				
-    				// Hier evtl. static instance array
-    				$project = new Project($get_array['project_id']);
-   
+    				if (self::$project_instance_array[$get_array['project_id']])
+    				{
+    					$project = self::$project_instance_array[$get_array['project_id']];
+    				}
+    				else
+    				{
+    					$project = new Project($get_array['project_id']);
+    					self::$project_instance_array[$get_array['project_id']] = $project;
+    				}
+    				
     				$required_sub_item_array = $project->list_required_sub_items($get_array['key']);
     				    				
     				if (is_array($required_sub_item_array) and count($required_sub_item_array) >= 1)
@@ -284,7 +302,16 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
 				{
 					foreach($id_array['project'] as $key => $value)
 					{
-						$project = new Project($value['id']);
+						if (self::$project_instance_array[$value['id']])
+	    				{
+	    					$project = self::$project_instance_array[$value['id']];
+	    				}
+	    				else
+	    				{
+	    					$project = new Project($value['id']);
+	    					self::$project_instance_array[$value['id']] = $project;
+	    				}
+						
 						if (($item_status_id = $project->is_sub_item_required($value['pos_id'], $value['status_id'], $pos_id)) == true)
 						{
 							if (self::create($value['id'], $item_id, null, null, null, $parent_item_id, $item_status_id) == false)

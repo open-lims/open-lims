@@ -32,6 +32,8 @@ require_once("interfaces/sample_item_factory.interface.php");
  */
 class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInterface
 {
+	private static $sample_instance_array;
+	
 	/**
 	 * @see SampleItemFactoryInterface::create()
 	 * @param integer $sample_id
@@ -165,6 +167,8 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
     	{
     		$get_array = $event_object->get_get_array();
     		$post_array = $event_object->get_post_array();
+    		$item_holder = $event_object->get_item_holder();
+    		$item_holder_name = $event_object->get_item_holder_name();
     		
     		if ($get_array[nav] == "sample" and is_numeric($get_array[sample_id]) and !$get_array['parent'] and !$get_array['parent_key'])
     		{
@@ -177,6 +181,95 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
     			else
     			{
     				$parent = false;
+    			}
+    			
+    			if ($item_holder == true and $item_holder_name)
+    			{
+    				$item_holder_class = Item::get_holder_handling_class_by_name($item_holder_name);
+    				$item_holder_instance = $item_holder_class::get_instance_by_item_id($event_object->get_item_id());
+    				
+    				if (self::$sample_instance_array[$get_array['sample_id']])
+    				{
+    					$sample = self::$sample_instance_array[$get_array['sample_id']];
+    				}
+    				else
+    				{
+    					$sample = new Sample($get_array['sample_id']);
+    					self::$sample_instance_array[$get_array['sample_id']] = $sample;
+    				}
+    				
+    				$required_sub_item_array = $sample->list_required_sub_items($get_array['key']);
+    				    				
+    				if (is_array($required_sub_item_array) and count($required_sub_item_array) >= 1)
+    				{
+	    				if ($required_sub_item_array[0] == "all")
+	    				{
+	    					$sub_item_array = $item_holder_instance->get_item_holder_items(null);
+	    					if (is_array($sub_item_array) and count($sub_item_array))
+	    					{
+		    					foreach($sub_item_array as $sub_item_key => $sub_item_value)
+		    					{
+		    						if (self::create($get_array['sample_id'], $sub_item_value, null, null, null, $event_object->get_item_id()) == false)
+					    			{
+					    				if ($transaction_id != null)
+						    			{
+											$transaction->rollback($transaction_id);
+										}
+					    				return false;
+					    			}
+					    			
+		    						if (DataEntity::is_kind_of("file", $sub_item_value) or DataEntity::is_kind_of("value", $sub_item_value))
+									{
+										$data_entity_id = DataEntity::get_entry_by_item_id($sub_item_value);
+						    			$folder_id = $sample->get_item_holder_value("folder_id");
+						    			$parent_data_entity_id = Folder::get_data_entity_id_by_folder_id($folder_id);
+						
+						    			$child_data_entity = new DataEntity($data_entity_id);
+						    			
+						    			if ($child_data_entity->set_as_child_of($parent_data_entity_id, true, $parent_item_id) == false)
+						    			{
+						    				return false;
+						    			}
+									}
+		    					}
+	    					}
+	    				}
+	    				else
+	    				{
+	    					foreach($required_sub_item_array as $key => $value)
+	    					{
+	    						$sub_item_array = $item_holder_instance->get_item_holder_items($value);	    						
+	    						if (is_array($sub_item_array) and count($sub_item_array))
+	    						{
+	    							foreach($sub_item_array as $sub_item_key => $sub_item_value)
+	    							{
+	    								if (self::create($get_array['sample_id'], $sub_item_value, null, null, null, $event_object->get_item_id()) == false)
+						    			{
+						    				if ($transaction_id != null)
+							    			{
+												$transaction->rollback($transaction_id);
+											}
+						    				return false;
+						    			}
+						    			
+		    							if (DataEntity::is_kind_of("file", $sub_item_value) or DataEntity::is_kind_of("value", $sub_item_value))
+										{
+											$data_entity_id = DataEntity::get_entry_by_item_id($sub_item_value);
+							    			$folder_id = $sample->get_item_holder_value("folder_id");
+							    			$parent_data_entity_id = Folder::get_data_entity_id_by_folder_id($folder_id);
+							
+							    			$child_data_entity = new DataEntity($data_entity_id);
+							    			
+							    			if ($child_data_entity->set_as_child_of($parent_data_entity_id, true, $parent_item_id) == false)
+							    			{
+							    				return false;
+							    			}
+										}
+	    							}
+	    						}
+	    					}
+	    				}
+    				}
     			}
     			
     			if (self::create($get_array[sample_id], $event_object->get_item_id(), $get_array[key], $post_array[keywords], $post_array[description], null, $parent) == false)

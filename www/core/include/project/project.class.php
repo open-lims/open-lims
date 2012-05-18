@@ -1537,7 +1537,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     }
     
     /**
-     * @see
+     * @see ProjectInterface::list_required_sub_items()
      * @param integer $parent_pos_id
      * @return array
      */
