@@ -889,7 +889,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     
 	/**
 	 * @see SampleItemInterface::list_sample_id_by_item_id_and_gid_and_parent()
-	 * @param integer $sample_id
+	 * @param integer $item_id
 	 * @param integer $gid
 	 * @return array
 	 */
@@ -898,6 +898,17 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 		return SampleHasItem_Access::list_sample_id_by_item_id_and_gid_and_parent($item_id, $gid);
 	}
     
+	/**
+	 * @see SampleItemInterface::list_items_by_sample_id_and_gid()
+	 * @param integer $sample_id
+	 * @param integer $gid
+	 * @return array
+	 */
+	public static function list_items_by_sample_id_and_gid($sample_id, $gid)
+	{
+		return SampleHasItem_Access::list_items_by_sample_id_and_gid($sample_id, $gid);
+	}
+	
 	/**
 	 * @see EventListenerInterface::listen_events()
      * @param object $event_object

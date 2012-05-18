@@ -867,6 +867,54 @@ class SampleAjax
 	
 	/**
 	 * @param string $get_array
+	 * @param integer $sample_id
+	 * @return string
+	 */
+	public static function associate($get_array, $sample_id)
+	{
+		global $session;
+		
+		if ($get_array and is_numeric($sample_id))
+		{
+			$_GET = unserialize($get_array);
+			
+			$post_array = array();
+			$post_array['keywords'] = $session->read_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]);
+			$post_array['description'] = $session->read_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]);	
+
+			$sample = new Sample($sample_id);
+			
+			$item_add_event = new ItemAddEvent($sample->get_item_id(), $_GET, $post_array, true, "sample");
+			$event_handler = new EventHandler($item_add_event);
+			if ($event_handler->get_success() == true)
+			{
+				if ($_GET['retrace'])
+				{
+					$params = http_build_query(Retrace::resolve_retrace_string($_GET['retrace']),'','&');
+					return "index.php?".$params;
+				}
+				else
+				{
+					$paramquery['username'] = $username;
+					$paramquery['session_id'] = $session_id;
+					$paramquery['nav'] = "home";
+					$params = http_build_query($paramquery,'','&');
+					return "index.php?".$params;
+				}
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param string $get_array
 	 */
 	public static function get_sample_menu($get_array)
 	{

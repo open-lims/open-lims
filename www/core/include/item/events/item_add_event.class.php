@@ -30,8 +30,10 @@ class ItemAddEvent extends Event
 	private $item_id;
 	private $get_array;
 	private $post_array;
+	private $item_holder;
+	private $item_holder_name;
 	
-	function __construct($item_id, $get_array, $post_array)
+	function __construct($item_id, $get_array, $post_array, $item_holder = false, $item_holder_name = null)
     {
     	if (is_numeric($item_id) and is_array($get_array))
     	{
@@ -46,12 +48,16 @@ class ItemAddEvent extends Event
     		{
     			$this->post_array = null;
     		}
+    		$this->item_holder = $item_holder;
+    		$this->item_holder_name = $item_holder_name;
     	}
     	else
     	{
     		$this->item_id = null;
     		$this->get_array = null;
     		$this->post_array = null;
+    		$this->item_holder = false;
+    		$this->item_holder_name = null;
     	}
     }
     
@@ -84,6 +90,30 @@ class ItemAddEvent extends Event
     	if ($this->post_array)
     	{
     		return $this->post_array;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+	public function get_item_holder()
+    {
+    	if (isset($this->item_holder))
+    	{
+    		return $this->item_holder;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+	public function get_item_holder_name()
+    {
+    	if ($this->item_holder_name)
+    	{
+    		return $this->item_holder_name;
     	}
     	else
     	{

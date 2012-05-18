@@ -41,10 +41,16 @@ interface ItemHolderInterface
 	public function get_item_add_status($id);
 
 	/**
-	 * @param stirng $address
+	 * @param string $address
 	 * @return mixed
 	 */
 	public function get_item_holder_value($address, $position_id = null);
+	
+	/**
+	 * @param integer $position_id
+	 * @return array
+	 */
+	public function get_item_holder_items($position_id);
 	
 	
 	/**

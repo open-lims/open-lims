@@ -101,6 +101,11 @@ class SampleRequest
 				echo SampleAjax::count_location_history($_POST[argument_array]);
 			break;
 			
+			case "associate":
+				require_once("ajax/sample.ajax.php");
+				echo SampleAjax::associate($_POST[get_array], $_POST[sample_id]);
+			break;
+			
 			case "get_sample_menu":
 				require_once("ajax/sample.ajax.php");
 				echo SampleAjax::get_sample_menu($_POST[get_array]);

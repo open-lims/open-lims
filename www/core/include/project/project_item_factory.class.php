@@ -164,9 +164,94 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
     	{
     		$get_array = $event_object->get_get_array();
     		$post_array = $event_object->get_post_array();
+    		$item_holder = $event_object->get_item_holder();
+    		$item_holder_name = $event_object->get_item_holder_name();
+    		
     		if ($get_array['nav'] == "project" and is_numeric($get_array['project_id']) and !$get_array['parent'])
     		{
     			$transaction_id = $transaction->begin();
+    			
+    			if ($item_holder == true and $item_holder_name)
+    			{
+    				$item_holder_class = Item::get_holder_handling_class_by_name($item_holder_name);
+    				$item_holder_instance = $item_holder_class::get_instance_by_item_id($event_object->get_item_id());
+    				
+    				// Hier evtl. static instance array
+    				$project = new Project($get_array['project_id']);
+   
+    				$required_sub_item_array = $project->list_required_sub_items($get_array['key']);
+    				    				
+    				if (is_array($required_sub_item_array) and count($required_sub_item_array) >= 1)
+    				{
+	    				if ($required_sub_item_array[0] == "all")
+	    				{
+	    					$sub_item_array = $item_holder_instance->get_item_holder_items(null);
+	    					if (is_array($sub_item_array) and count($sub_item_array))
+	    					{
+		    					foreach($sub_item_array as $sub_item_key => $sub_item_value)
+		    					{
+		    						if (self::create($get_array['project_id'], $sub_item_value, null, null, null, $event_object->get_item_id()) == false)
+					    			{
+					    				if ($transaction_id != null)
+						    			{
+											$transaction->rollback($transaction_id);
+										}
+					    				return false;
+					    			}
+					    			
+		    						if (DataEntity::is_kind_of("file", $sub_item_value) or DataEntity::is_kind_of("value", $sub_item_value))
+									{
+										$data_entity_id = DataEntity::get_entry_by_item_id($sub_item_value);
+						    			$folder_id = $project->get_item_holder_value("folder_id");
+						    			$parent_data_entity_id = Folder::get_data_entity_id_by_folder_id($folder_id);
+						
+						    			$child_data_entity = new DataEntity($data_entity_id);
+						    			
+						    			if ($child_data_entity->set_as_child_of($parent_data_entity_id, true, $parent_item_id) == false)
+						    			{
+						    				return false;
+						    			}
+									}
+		    					}
+	    					}
+	    				}
+	    				else
+	    				{
+	    					foreach($required_sub_item_array as $key => $value)
+	    					{
+	    						$sub_item_array = $item_holder_instance->get_item_holder_items($value['position_id']);	    						
+	    						if (is_array($sub_item_array) and count($sub_item_array))
+	    						{
+	    							foreach($sub_item_array as $sub_item_key => $sub_item_value)
+	    							{
+	    								if (self::create($get_array['project_id'], $sub_item_value, null, null, null, $event_object->get_item_id(), $value['status_id']) == false)
+						    			{
+						    				if ($transaction_id != null)
+							    			{
+												$transaction->rollback($transaction_id);
+											}
+						    				return false;
+						    			}
+						    			
+		    							if (DataEntity::is_kind_of("file", $sub_item_value) or DataEntity::is_kind_of("value", $sub_item_value))
+										{
+											$data_entity_id = DataEntity::get_entry_by_item_id($sub_item_value);
+							    			$folder_id = $project->get_item_holder_value("folder_id");
+							    			$parent_data_entity_id = Folder::get_data_entity_id_by_folder_id($folder_id);
+							
+							    			$child_data_entity = new DataEntity($data_entity_id);
+							    			
+							    			if ($child_data_entity->set_as_child_of($parent_data_entity_id, true, $parent_item_id) == false)
+							    			{
+							    				return false;
+							    			}
+										}
+	    							}
+	    						}
+	    					}
+	    				}
+    				}
+    			}
     			
     			if (self::create($get_array['project_id'], $event_object->get_item_id(), $get_array['key'], $post_array['keywords'], $post_array['description']) == false)
     			{

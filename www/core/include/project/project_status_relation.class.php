@@ -166,7 +166,8 @@ class ProjectStatusRelation implements ProjectStatusRelationInterface
     				{
     					$return_next = true;
     				}
-    			}	
+    			}
+    			return null;	
     		}
     		else
     		{
@@ -201,6 +202,7 @@ class ProjectStatusRelation implements ProjectStatusRelationInterface
     				}
     				$previous_id = $this->value[id];
     			}
+    			return null;
     		}
     		else
     		{

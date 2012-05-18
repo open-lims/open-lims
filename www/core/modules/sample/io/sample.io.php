@@ -434,82 +434,53 @@ class SampleIO
 	{
 		global $user, $session;
 					
-		if ($_GET[nextpage] < 2)
-		{
-			$template = new HTMLTemplate("sample/associate.html");
-			
-			$paramquery = $_GET;
-			$paramquery[nextpage] = 2;
-			unset($paramquery[idk_unique_id]);
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("params", $params);
-								
-			$result = array();
-			$sample_array = Sample::list_user_related_samples($user->get_user_id());
-			
-			if (!is_array($type_array) or count($type_array) == 0)
-			{
-				$type_array = null;
-			}
+		$template = new HTMLTemplate("sample/associate.html");
 
-			if (is_array($sample_array) and count($sample_array) >= 1)
+		$template->set_var("username", $_GET['username']);
+		$template->set_var("session_id", $_GET['session_id']);
+		$template->set_var("get_array", serialize($_GET));
+		
+		$result = array();
+		$sample_array = Sample::list_user_related_samples($user->get_user_id());
+		
+		if (!is_array($type_array) or count($type_array) == 0)
+		{
+			$type_array = null;
+		}
+
+		if (is_array($sample_array) and count($sample_array) >= 1)
+		{
+			$counter = 0;
+			
+			foreach($sample_array as $key => $value)
 			{
-				$counter = 0;
+				$sample = new Sample($value);
 				
-				foreach($sample_array as $key => $value)
+				if ($type_array == null or in_array($sample->get_template_id(), $type_array))
 				{
-					$sample = new Sample($value);
-					
-					if ($type_array == null or in_array($sample->get_template_id(), $type_array))
+					$result[$counter][value] = $value;
+					$result[$counter][content] = $sample->get_name();
+					if ($_POST[sample] == $value)
 					{
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $sample->get_name();
-						if ($_POST[sample] == $value)
-						{
-							$result[$counter][selected] = "selected";
-						}
-						else
-						{
-							$result[$counter][selected] = "";
-						}
-						$counter++;
+						$result[$counter][selected] = "selected";
 					}
+					else
+					{
+						$result[$counter][selected] = "";
+					}
+					$counter++;
 				}
 			}
-			else
-			{
-				$result[0][value] = 0;
-				$result[0][content] = "You have no samples";
-				$result[0][selected] = "";
-			}
-			$template->set_var("sample", $result);
-			
-			if ($session->is_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]) == true)
-			{
-				$template->set_var("keywords", $session->read_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]));
-			}
-			else
-			{
-				$template->set_var("keywords", "");
-			}
-			
-			if ($session->is_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]) == true)
-			{
-				$template->set_var("description", $session->read_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]));
-			}
-			else
-			{
-				$template->set_var("description", "");
-			}
-			
-			$template->output();
 		}
 		else
 		{
-			$sample = new Sample($_POST[sample]);
-			return  $sample->get_item_id();
+			$result[0][value] = 0;
+			$result[0][content] = "You have no samples";
+			$result[0][selected] = "";
 		}
+		$template->set_var("sample", $result);
+		
+		$template->output();
 	}
 
 	/**

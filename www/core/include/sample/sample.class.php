@@ -1148,196 +1148,205 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     	
     	if ($this->sample_id and $this->sample)
     	{
-	    	$sample_template 		= new SampleTemplate($this->sample->get_template_id());
-	    	
-	    	$requirements_array 	= $sample_template->get_requirements();
-			
-			$return_array = array();
-			$parent_item_array = array();
-			$counter = 0;
-			$type_counter = 0;
-			$category_counter = 0;
-			$fulfilled_counter = 0;
-			$filter_counter = 0;
-			$sub_item_counter = 0;
-
-			if (is_array($requirements_array) and count($requirements_array) >= 1)
-			{
-				if ($runtime_data->is_object_data($this, "SAMPLE_".$this->sample_id."_FULFILLED_ITEM_TYPE_ARRAY") == true)
-	    		{
-					$item_type_array = $runtime_data->read_object_data($this, "SAMPLE_".$this->sample_id."_FULFILLED_ITEM_TYPE_ARRAY");
-	    		}
-	    		else
-	    		{
-	    			$item_type_array = Item::list_types();
-	    			$runtime_data->write_object_data($this, "SAMPLE_".$this->sample_id."_FULFILLED_ITEM_TYPE_ARRAY", $item_type_array);	
-	    		}
-	    		
-	    		if ($runtime_data->is_object_data($this, "SAMPLE_".$this->sample_id."_FULFILLED_ITEM_ARRAY") == true)
-	    		{
-	    			$item_array = $runtime_data->read_object_data($this, "SAMPLE_".$this->sample_id."_FULFILLED_ITEM_ARRAY");
-	    		}
-	    		else
-	    		{
-	    			$sample_item = new SampleItem($this->sample_id);
-					$item_array = $sample_item->get_sample_items();
-					$runtime_data->write_object_data($this, "SAMPLE_".$this->sample_id."_FULFILLED_ITEM_ARRAY", $item_array);	
-	    		}
-					
-				foreach($requirements_array as $key => $value)
-				{
-					if ($value[xml_element] == "item" and !$value[close])
-					{
-						$in_item = true;
-						
-						$return_array[$counter][element_type] = "item";		
-						$return_array[$counter][display] = true;
-							
-						$return_array[$counter][type] = $value[type];
-						$return_array[$counter][name] = $value[name];
-						$return_array[$counter][handling_class] = Item::get_handling_class_by_type($value[type]);
-						
-						$return_array[$counter][requirement] = $value[requirement];
-
-						if ($value[occurrence])
-						{
-							$return_array[$counter][occurrence] = $value[occurrence];
-						}
-						else
-						{
-							$return_array[$counter][occurrence] = "once";
-						}
-						
-						if ($value['pos_id'])
-						{
-							$pos_id = $value['pos_id'];
-							$return_array[$counter]['pos_id'] = $value['pos_id'];
-						}
-						else
-						{
-							$pos_id = $counter;
-							$return_array[$counter]['pos_id'] = $counter;
-						}
-						
-						if (is_array($item_array) and count($item_array) >= 1)
-						{	
-							$item_instance_array = array();
+    		if ($runtime_data->is_object_data($this, "SAMPLE_".$this->sample_id."_REQUIREMENT_ARRAY") == true)
+	    	{
+	    		return $runtime_data->read_object_data($this, "SAMPLE_".$this->sample_id."_REQUIREMENT_ARRAY");
+	    	}
+	    	else
+	    	{
+		    	$sample_template 		= new SampleTemplate($this->sample->get_template_id());
+		    	
+		    	$requirements_array 	= $sample_template->get_requirements();
+				
+				$return_array = array();
+				$parent_item_array = array();
+				$counter = 0;
+				$type_counter = 0;
+				$category_counter = 0;
+				$fulfilled_counter = 0;
+				$filter_counter = 0;
+				$sub_item_counter = 0;
 	
-							foreach($item_array as $item_key => $item_value)
-							{
-								$item_pos_id = SampleItem::get_gid_by_item_id_and_sample_id($item_value, $this->sample_id);
+				if (is_array($requirements_array) and count($requirements_array) >= 1)
+				{
+					if ($runtime_data->is_object_data($this, "SAMPLE_".$this->sample_id."_FULFILLED_ITEM_TYPE_ARRAY") == true)
+		    		{
+						$item_type_array = $runtime_data->read_object_data($this, "SAMPLE_".$this->sample_id."_FULFILLED_ITEM_TYPE_ARRAY");
+		    		}
+		    		else
+		    		{
+		    			$item_type_array = Item::list_types();
+		    			$runtime_data->write_object_data($this, "SAMPLE_".$this->sample_id."_FULFILLED_ITEM_TYPE_ARRAY", $item_type_array);	
+		    		}
+		    		
+		    		if ($runtime_data->is_object_data($this, "SAMPLE_".$this->sample_id."_FULFILLED_ITEM_ARRAY") == true)
+		    		{
+		    			$item_array = $runtime_data->read_object_data($this, "SAMPLE_".$this->sample_id."_FULFILLED_ITEM_ARRAY");
+		    		}
+		    		else
+		    		{
+		    			$sample_item = new SampleItem($this->sample_id);
+						$item_array = $sample_item->get_sample_items();
+						$runtime_data->write_object_data($this, "SAMPLE_".$this->sample_id."_FULFILLED_ITEM_ARRAY", $item_array);	
+		    		}
+						
+					foreach($requirements_array as $key => $value)
+					{
+						if ($value[xml_element] == "item" and !$value[close])
+						{
+							$in_item = true;
+							
+							$return_array[$counter][element_type] = "item";		
+							$return_array[$counter][display] = true;
 								
-								if (is_array($item_type_array) and count($item_type_array) >= 1)
-								{
-									foreach ($item_type_array as $item_type => $item_handling_class)
-									{
-										if (class_exists($item_handling_class))
-										{
-											if ($item_handling_class::is_kind_of($item_type, $item_value) == true and $item_pos_id == $pos_id and $item_pos_id !== null and $pos_id !== null)
-											{
-												$item_instance = $item_handling_class::get_instance_by_item_id($item_value);
-												$return_array[$counter][fulfilled][$fulfilled_counter][item_id] = $item_value;
-												$return_array[$counter][fulfilled][$fulfilled_counter][id] = $item_instance->get_item_object_id();
-												$return_array[$counter][fulfilled][$fulfilled_counter][name] = $item_instance->get_item_object_name();
-												$item_instance_array[$fulfilled_counter] = $item_instance;
-												$fulfilled_counter++;
-												break;
-											}
-										}
-									}
-								}
+							$return_array[$counter][type] = $value[type];
+							$return_array[$counter][name] = $value[name];
+							$return_array[$counter][handling_class] = Item::get_handling_class_by_type($value[type]);
+							
+							$return_array[$counter][requirement] = $value[requirement];
+	
+							if ($value[occurrence])
+							{
+								$return_array[$counter][occurrence] = $value[occurrence];
+							}
+							else
+							{
+								$return_array[$counter][occurrence] = "once";
 							}
 							
-							if ($value['inherit'] == "all" or $force_inherit == true)
-							{									
-								if (is_array($item_instance_array) and count($item_instance_array) >= 1 and $fulfilled_counter >= 1)
+							if ($value['pos_id'])
+							{
+								$pos_id = $value['pos_id'];
+								$return_array[$counter]['pos_id'] = $value['pos_id'];
+							}
+							else
+							{
+								$pos_id = $counter;
+								$return_array[$counter]['pos_id'] = $counter;
+							}
+							
+							if (is_array($item_array) and count($item_array) >= 1)
+							{	
+								$item_instance_array = array();
+		
+								foreach($item_array as $item_key => $item_value)
 								{
-									foreach($item_instance_array as $object_key => $object_value)
+									$item_pos_id = SampleItem::get_gid_by_item_id_and_sample_id($item_value, $this->sample_id);
+									
+									if (is_array($item_type_array) and count($item_type_array) >= 1)
 									{
-										if (is_object($object_value))
-										{	
-											if ($object_value instanceof ItemHolderInterface)
+										foreach ($item_type_array as $item_type => $item_handling_class)
+										{
+											if (class_exists($item_handling_class))
+											{
+												if ($item_handling_class::is_kind_of($item_type, $item_value) == true and $item_pos_id == $pos_id and $item_pos_id !== null and $pos_id !== null)
+												{
+													$item_instance = $item_handling_class::get_instance_by_item_id($item_value);
+													$return_array[$counter][fulfilled][$fulfilled_counter][item_id] = $item_value;
+													$return_array[$counter][fulfilled][$fulfilled_counter][id] = $item_instance->get_item_object_id();
+													$return_array[$counter][fulfilled][$fulfilled_counter][name] = $item_instance->get_item_object_name();
+													$item_instance_array[$fulfilled_counter] = $item_instance;
+													$fulfilled_counter++;
+													break;
+												}
+											}
+										}
+									}
+								}
+								
+								if ($value['inherit'] == "all" or $force_inherit == true)
+								{									
+									if (is_array($item_instance_array) and count($item_instance_array) >= 1 and $fulfilled_counter >= 1)
+									{
+										foreach($item_instance_array as $object_key => $object_value)
+										{
+											if (is_object($object_value))
 											{	
-												$return_array[$counter][sub_items][$object_key] = $object_value->get_item_add_information();
+												if ($object_value instanceof ItemHolderInterface)
+												{	
+													$return_array[$counter][sub_items][$object_key] = $object_value->get_item_add_information();
+												}
 											}
 										}
 									}
 								}
 							}
 						}
-					}
-					
-					// ITEMI
-					if ($value[xml_element] == "itemi" and !$value[close])
-					{
-						if($in_item == true and is_array($item_instance_array) and count($item_instance_array) >= 1)
+						
+						// ITEMI
+						if ($value[xml_element] == "itemi" and !$value[close])
 						{
-							foreach($item_instance_array as $object_key => $object_value)
+							if($in_item == true and is_array($item_instance_array) and count($item_instance_array) >= 1)
 							{
-								if (is_numeric($value['pos_id']))
+								foreach($item_instance_array as $object_key => $object_value)
 								{
-									$pos_id = $value['pos_id'];
+									if (is_numeric($value['pos_id']))
+									{
+										$pos_id = $value['pos_id'];
+									}
+									else
+									{
+										$pos_id = $sub_item_counter;
+									}
+									$return_array[$counter]['sub_items'][$object_key][$pos_id] = $object_value->get_item_add_information($pos_id);
 								}
-								else
-								{
-									$pos_id = $sub_item_counter;
-								}
-								$return_array[$counter]['sub_items'][$object_key][$pos_id] = $object_value->get_item_add_information($pos_id);
 							}
 						}
+						
+						if ($value[xml_element] == "item" and $value[close] == "1")
+						{
+							$counter++;
+							$type_counter = 0;
+							$category_counter = 0;
+							$in_item = false;
+						}
+						
+						if ($value[xml_element] == "type" and !$value[close] and $in_item == true and is_numeric($value[id]))
+						{
+							$return_array[$counter][type_id][$type_counter] = $value[id];
+							$type_counter++;
+						}	
+						
+						if ($value[xml_element] == "category" and !$value[close] and $in_item == true and is_numeric($value[id]))
+						{
+							$return_array[$counter][category_id][$category_counter] = $value[id];
+							$category_counter++;
+						}				
 					}
-					
-					if ($value[xml_element] == "item" and $value[close] == "1")
-					{
-						$counter++;
-						$type_counter = 0;
-						$category_counter = 0;
-						$in_item = false;
-					}
-					
-					if ($value[xml_element] == "type" and !$value[close] and $in_item == true and is_numeric($value[id]))
-					{
-						$return_array[$counter][type_id][$type_counter] = $value[id];
-						$type_counter++;
-					}	
-					
-					if ($value[xml_element] == "category" and !$value[close] and $in_item == true and is_numeric($value[id]))
-					{
-						$return_array[$counter][category_id][$category_counter] = $value[id];
-						$category_counter++;
-					}				
 				}
-			}
-
-			if (is_array($return_array) and count($return_array) >= 1)
-			{
-				foreach($return_array as $key => $value)
+	
+				if (is_array($return_array) and count($return_array) >= 1)
 				{
-					if (!$value[name] and $value[type])
+					foreach($return_array as $key => $value)
 					{
-						if ($return_array[$key][handling_class])
+						if (!$value[name] and $value[type])
 						{
-							$return_array[$key][name] = "Add ".$return_array[$key][handling_class]::get_generic_name($value[type], $value[type_id]);
-						}
-					}
-					
-					if (is_array($value['sub_items']) and count($value['sub_items']) >= 1)
-					{
-						foreach($value['sub_items'] as $sub_item_key => $sub_item_value)
-						{
-							if (!$sub_item_value[name] and $sub_item_value[type])
+							if ($return_array[$key][handling_class])
 							{
-								if ($return_array[$key][sub_items][$sub_item_key][handling_class])
+								$return_array[$key][name] = "Add ".$return_array[$key][handling_class]::get_generic_name($value[type], $value[type_id]);
+							}
+						}
+						
+						if (is_array($value['sub_items']) and count($value['sub_items']) >= 1)
+						{
+							foreach($value['sub_items'] as $sub_item_key => $sub_item_value)
+							{
+								if (!$sub_item_value[name] and $sub_item_value[type])
 								{
-									$return_array[$key][sub_items][$sub_item_key][name] = "Add ".$return_array[$key][sub_items][$sub_item_key][handling_class]::get_generic_name($sub_item_value[type], $sub_item_value[type_id]);
+									if ($return_array[$key][sub_items][$sub_item_key][handling_class])
+									{
+										$return_array[$key][sub_items][$sub_item_key][name] = "Add ".$return_array[$key][sub_items][$sub_item_key][handling_class]::get_generic_name($sub_item_value[type], $sub_item_value[type_id]);
+									}
 								}
 							}
 						}
 					}
 				}
-			}
-			
-			return $return_array;
+								
+				$runtime_data->write_object_data($this, "SAMPLE_".$this->sample_id."_REQUIREMENT_ARRAY", $return_array);	
+				
+				return $return_array;
+	    	}
     	}
     	else
     	{
@@ -2099,6 +2108,23 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 		else
 		{
 			return null;
+		}
+	}
+	
+	/**
+	 * @see ItemHolderInterface::get_item_holder_items()
+	 * @param integer $position_id
+	 * @return array
+	 */
+	public final function get_item_holder_items($position_id)
+	{
+		if (is_numeric($position_id) and $this->sample_id and $this->sample)
+		{
+			return SampleItem::list_items_by_sample_id_and_gid($this->sample_id, $gid);
+		}
+		else
+		{
+			return SampleItem::list_items_by_sample_id_and_gid($this->sample_id, null);
 		}
 	}
 	

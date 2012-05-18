@@ -655,7 +655,7 @@ class SampleCloneAjax
 			$post_array['keywords'] = $sample_item_keywords;
 			$post_array['description'] = $sample_item_description;
 			
-			$item_add_event = new ItemAddEvent($event_item_id, $sample_item_get_array, $post_array);
+			$item_add_event = new ItemAddEvent($event_item_id, $sample_item_get_array, $post_array, true, "sample");
 			$event_handler = new EventHandler($item_add_event);
 			if ($event_handler->get_success() == true)
 			{

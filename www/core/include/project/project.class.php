@@ -1537,6 +1537,111 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     }
     
     /**
+     * @see
+     * @param integer $parent_pos_id
+     * @return array
+     */
+    public function list_required_sub_items($parent_pos_id)
+    {
+    	if ($this->project_id and $this->project and is_numeric($parent_pos_id))
+    	{
+    		$project_template = new ProjectTemplate($this->project->get_template_id());
+    		$status_relation = new ProjectStatusRelation($this->project_id, $this->get_current_status_id());
+
+    		$return_array = array();
+    		
+    		while ($status_relation->get_current() != null)
+    		{
+    			$current_status_id = $status_relation->get_current();
+	    		$requirements_array = $project_template->get_status_requirements($current_status_id);
+				
+				$counter = 0;
+				$sub_item_counter = 0;
+				$in_item = false;
+				
+				if (is_array($requirements_array) and count($requirements_array) >= 1)
+				{
+					foreach($requirements_array as $key => $value)
+					{
+						if ($current_status_id == $this->get_current_status_id())
+						{
+							if ($value[xml_element] == "item" and !$value[close])
+							{
+								$in_item = true;
+								
+								if ($value['pos_id'])
+								{
+									$pos_id = $value['pos_id'];
+								}
+								else
+								{
+									$pos_id = $counter;
+								}
+								
+								
+								if ($value['inherit'] == "all" and $pos_id == $parent_pos_id)
+								{									
+									return array(0 => "all");
+								}
+							}
+							
+							if ($value[xml_element] == "item" and $value[close] == "1")
+							{
+								$counter++;
+								$in_item = false;
+							}
+						}
+						
+						// ITEMI
+						if ($value[xml_element] == "itemi" and !$value[close])
+						{
+							if (is_numeric($value['parent_status']) and is_numeric($value['parent_pos_id']) and is_numeric($value['pos_id']))
+							{		
+								if ($value['parent_pos_id'] == $parent_pos_id and $value['parent_status'] == $current_status_id)
+								{
+									if (!in_array(array("position_id" => $pos_id, "status_id" => $current_status_id), $return_array))
+									{
+										array_push($return_array, array("position_id" => $value['pos_id'], "status_id" => $current_status_id));
+									}
+								}
+								else
+								{
+									continue;
+								}
+							}
+							elseif($in_item == true)
+							{
+								if (is_numeric($value['pos_id']))
+								{
+									$pos_id = $value['pos_id'];
+								}
+								else
+								{
+									$pos_id = $sub_item_counter;
+								}
+								
+								if (!in_array(array("position_id" => $pos_id, "status_id" => $current_status_id), $return_array))
+								{
+									array_push($return_array, array("position_id" => $pos_id, "status_id" => $current_status_id));
+								}
+								$sub_item_counter++;
+							}
+						}
+					}	
+				}
+
+    			$status_relation->set_next();
+    		}
+    		
+    		return $return_array;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+    /**
      * @see ProjectInterface::get_next_status_id()
      * @return integer
      */
@@ -2584,6 +2689,16 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 		{
 			return null;
 		}
+	}
+	
+	/**
+	 * @see ItemHolderInterface::get_item_holder_items()
+	 * @param integer $position_id
+	 * @return array
+	 */
+	public final function get_item_holder_items($position_id)
+	{
+		return null;
 	}
 	
 	
