@@ -44,7 +44,7 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
 	 * @param bool $parent
 	 * @return bool
 	 */
-	public static function create($sample_id, $item_id, $gid, $keywords = null, $description = null, $parent_item_id = null, $parent = false)
+	public static function create($sample_id, $item_id, $gid, $keywords = null, $description = null, $parent_item_id = null, $parent_sample = false, $parent_is_parent_sample = false)
 	{
 		global $transaction;
 		
@@ -54,7 +54,7 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
 			$sample_item = new SampleItem($sample_id);
 			
 			$sample_item->set_gid($gid);
-			$sample_item->set_parent($parent); // For parent sample only
+			$sample_item->set_parent($parent_sample); // For parent sample only
 			$sample_item->set_parent_item_id($parent_item_id);
 			
 			if ($sample_item->set_item_id($item_id) == false)
@@ -105,9 +105,14 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
 				foreach ($item_holder_type_array as $key => $value)
 				{
 					$item_holder_id_array[$key] = $value::list_item_holders_by_item_id($sample->get_item_id());;
+					
+					if ($key == "sample" and $parent_is_parent_sample == true)
+					{
+						$item_holder_id_array[$key] = array_merge($item_holder_id_array[$key], Sample_Wrapper::get_sample_id_and_gid_by_parent_sample_id($sample_id));
+					}
 				}
 			}
-			
+						
 			$item_holder_add_event = new ItemHolderAddEvent($item_holder_id_array, $sample->get_item_id(), $item_id, $gid);
 			$event_handler = new EventHandler($item_holder_add_event);
 			
@@ -289,13 +294,22 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
     			}
     		}
     		
-    		if($get_array['parent'] == "sample" and is_numeric($get_array['key']) and is_numeric($get_array['parent_key']))
+    		if(($get_array['parent'] == "sample" or $get_array['parent'] == "parentsample") and is_numeric($get_array['key']) and is_numeric($get_array['parent_key']))
     		{
     			$transaction_id = $transaction->begin();
     			
     			if (is_numeric($get_array['parent_id']))
     			{
-	    			if (self::create($get_array['parent_id'], $event_object->get_item_id(), $get_array['key']) == false)
+    				if ($get_array['parent'] == "parentsample")
+    				{
+    					$parent_sample = true;
+    				}
+    				else
+    				{
+    					$parent_sample = false;
+    				}
+    				
+	    			if (self::create($get_array['parent_id'], $event_object->get_item_id(), $get_array['key'], null, null, null, false, $parent_sample) == false)
 	    			{
 	    				if ($transaction_id != null)
 		    			{
@@ -360,7 +374,7 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
 				if (is_array($id_array['sample']) and count($id_array['sample']) >= 1)
 				{
 					foreach($id_array['sample'] as $key => $value)
-					{						
+					{				
 						$sample = new Sample($value['id']);
 						if ($sample->is_sub_item_required($value['pos_id'], $pos_id) == true)
 						{

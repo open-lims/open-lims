@@ -295,7 +295,6 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     }
     
     /**
-     * @todo overhaul
      * @see SampleItemInterface::get_sample_items()
      * @return array
      */
@@ -303,23 +302,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     {
     	if ($this->sample_id)
     	{
-    		$sample_has_item_array = SampleHasItem_Access::list_entries_by_sample_id($this->sample_id);
-    	
-    		if (is_array($sample_has_item_array) and count($sample_has_item_array) >= 1)
-    		{
-    			$return_array = array();
-    			
-    			foreach($sample_has_item_array as $key => $value)
-    			{
-    				$sample_has_item = new SampleHasItem_Access($value);
-    				array_push($return_array, $sample_has_item->get_item_id());
-    			}
-    			return $return_array;
-    		}
-    		else
-    		{
-    			return null;
-    		}
+    		return SampleHasItem_Access::list_items_by_sample_id($this->sample_id);
     	}
     	else
     	{

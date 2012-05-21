@@ -35,12 +35,6 @@ interface ItemHolderInterface
 	public function get_item_add_information($id = null);
 	
 	/**
-	 * @param integer $id
-	 * @return array
-	 */
-	public function get_item_add_status($id);
-
-	/**
 	 * @param string $address
 	 * @return mixed
 	 */

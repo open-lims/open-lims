@@ -1736,6 +1736,37 @@ class Sample_Wrapper_Access
    			return null;
    		}
    	}
+   	
+   	/**
+	 * @param integer $sample_id
+	 * @return array
+	 */
+   	public static function get_sample_id_and_gid_by_parent_sample_id($sample_id)
+   	{
+   		global $db;
+
+   		if (is_numeric($sample_id))
+   		{	
+   			$return_array = array();
+   			
+	   		$sql = "SELECT ".constant("SAMPLE_IS_ITEM_TABLE").".sample_id AS id, ".constant("SAMPLE_HAS_ITEM_TABLE").".gid AS pos_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." " .
+	   				"JOIN ".constant("SAMPLE_IS_ITEM_TABLE")." ON ".constant("SAMPLE_HAS_ITEM_TABLE").".item_id = ".constant("SAMPLE_IS_ITEM_TABLE").".item_id " .
+	   				"WHERE ".constant("SAMPLE_HAS_ITEM_TABLE").".sample_id = ".$sample_id." AND ".constant("SAMPLE_HAS_ITEM_TABLE").".parent = 't'";
+	   		
+	   		$res = $db->db_query($sql);
+   			
+	   		while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array, $data);
+			}
+		
+			return $return_array;
+   		}
+   		else
+   		{
+   			return null;
+   		}
+   	}
 }
 
 ?>

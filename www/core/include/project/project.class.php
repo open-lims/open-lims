@@ -2643,16 +2643,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	}
 	
 	/**
-	 * @see ItemHolderInterface::get_item_add_status()
-	 * @param integer $id
-	 * @return array
-	 */
-	public final function get_item_add_status($id)
-	{
-		return null;
-	}
-
-	/**
 	 * @see ItemHolderInterface::get_item_holder_value()
 	 * @param stirng $address
 	 * @return mixed

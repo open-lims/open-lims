@@ -477,56 +477,21 @@ class SampleRequest
 												$params = http_build_query($paramquery,'','&#38;');
 											}
 											
-											// EVIL !!
-											if ($_GET[dialog] == "parentsample")
+											if (SampleItemFactory::create($_GET[sample_id], $return_value, $_GET[key], $_POST[keywords], $_POST[description]) == true)
 											{
-												$parent_sample_id = Sample::get_entry_by_item_id($return_value);
-												if ($parent_sample_id)
+												if ($transaction_id != null)
 												{
-													if (SampleItemFactory::create($parent_sample_id, $sample->get_item_id() , $_GET[key], $_POST[keywords], $_POST[description], true) == true)
-													{
-														if ($transaction_id != null)
-														{
-															$transaction->commit($transaction_id);
-														}
-														Common_IO::step_proceed($params, "Add Item", "Successful." ,null);
-													}
-													else
-													{
-														if ($transaction_id != null)
-														{
-															$transaction->rollback($transaction_id);
-														}
-														Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
-													}
+													$transaction->commit($transaction_id);
 												}
-												else
-												{
-													if ($transaction_id != null)
-													{
-														$transaction->rollback($transaction_id);
-													}
-													Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
-												}
+												Common_IO::step_proceed($params, "Add Item", "Successful." ,null);
 											}
 											else
 											{
-												if (SampleItemFactory::create($_GET[sample_id], $return_value, $_GET[key], $_POST[keywords], $_POST[description]) == true)
+												if ($transaction_id != null)
 												{
-													if ($transaction_id != null)
-													{
-														$transaction->commit($transaction_id);
-													}
-													Common_IO::step_proceed($params, "Add Item", "Successful." ,null);
+													$transaction->rollback($transaction_id);
 												}
-												else
-												{
-													if ($transaction_id != null)
-													{
-														$transaction->rollback($transaction_id);
-													}
-													Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
-												}
+												Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
 											}
 										}
 										else

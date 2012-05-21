@@ -383,5 +383,14 @@ class Sample_Wrapper implements Sample_WrapperInterface
 		}
 	}
 	
+	/**
+	 * @see Sample_WrapperInterface::get_sample_id_and_gid_by_parent_sample_id()
+	 * @param integer $sample_id
+	 * @return array
+	 */
+	public static function get_sample_id_and_gid_by_parent_sample_id($sample_id)
+	{
+		return Sample_Wrapper_Access::get_sample_id_and_gid_by_parent_sample_id($sample_id);
+	}
 }
 ?>

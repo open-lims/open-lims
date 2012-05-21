@@ -112,8 +112,8 @@ class SampleHasItem_Access
 				$gid_insert = "NULL";
 			}
 			
-			$sql_write = "INSERT INTO ".constant("SAMPLE_HAS_ITEM_TABLE")." (primary_key,sample_id,item_id,gid,parent) " .
-					"VALUES (nextval('".self::SAMPLE_HAS_ITEM_PK_SEQUENCE."'::regclass),".$sample_id.",".$item_id.",".$gid_insert.",NULL)";
+			$sql_write = "INSERT INTO ".constant("SAMPLE_HAS_ITEM_TABLE")." (primary_key,sample_id,item_id,gid,parent,parent_item_id) " .
+					"VALUES (nextval('".self::SAMPLE_HAS_ITEM_PK_SEQUENCE."'::regclass),".$sample_id.",".$item_id.",".$gid_insert.",'f',NULL)";
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
@@ -657,8 +657,9 @@ class SampleHasItem_Access
 	/**
 	 * @param integer $sample_id
 	 * @return array
+	 * without sub-items and parent samples
 	 */
-	public static function list_entries_by_sample_id($sample_id)
+	public static function list_items_by_sample_id($sample_id)
 	{
 		global $db;
 
@@ -666,12 +667,12 @@ class SampleHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = ".$sample_id."  AND parent_item_id IS NULL";
+			$sql = "SELECT item_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = ".$sample_id." AND (parent = 'f' OR parent IS NULL) AND parent_item_id IS NULL";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[primary_key]);
+				array_push($return_array,$data[item_id]);
 			}
 			
 			if (is_array($return_array))

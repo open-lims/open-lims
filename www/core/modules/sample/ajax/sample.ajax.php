@@ -964,10 +964,6 @@ class SampleAjax
 				
 				$sample_template 				= new SampleTemplate($sample->get_template_id());
 				$current_requirements 			= $sample->get_requirements();
-
-				//echo "<pre>";
-				//print_r($current_requirements);
-				// echo "</pre>";
 				
 				$result = array();
 				$counter = 0;
