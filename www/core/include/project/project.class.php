@@ -643,7 +643,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	    		}
     		}
     		    	
-    		// Methods and Remaining Item-Links (including Sample Links)
+    		// Linked Items
     		$project_item = new ProjectItem($tmp_project_id);
 			$item_array = $project_item->get_project_items();
 			if (is_array($item_array) and count($item_array) >= 1)

@@ -134,8 +134,15 @@ class Extension implements ExtensionInterface
 			$main_file = constant("EXTENSION_DIR")."/".$this->extension->get_folder()."/".$this->extension->get_main_file();
 			$main_class = $this->extension->get_class();
 			
-			require_once($main_file);
-			return $main_class::get_data_status($run_id);
+			if (file_exists($main_file))
+			{
+				require_once($main_file);
+				return $main_class::get_data_status($run_id);
+			}
+			else
+			{
+				return null;
+			}
 		}
 		else
 		{

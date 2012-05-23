@@ -402,6 +402,7 @@ class SampleHasItem_Access
 	 * @param integer $item_id
 	 * @param integer $sample_id
 	 * @return integer
+	 * with sub-items
 	 */
 	public static function get_entry_by_item_id_and_sample_id($item_id, $sample_id)
 	{
@@ -411,7 +412,7 @@ class SampleHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND sample_id = ".$sample_id." AND parent_item_id IS NULL";
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND sample_id = ".$sample_id."";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 				
@@ -575,6 +576,7 @@ class SampleHasItem_Access
 	/**
 	 * @param integer $item_id
 	 * @return array
+	 * returns with sub-items
 	 */
 	public static function list_entries_by_item_id_pk($item_id)
 	{
@@ -786,6 +788,37 @@ class SampleHasItem_Access
 					" ".constant("SAMPLE_HAS_ITEM_TABLE").".parent_item_id = ".$parent_item_id."";
 			}
 			
+			$res = $db->db_query($sql);
+			
+			if ($res !== false)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+   	}
+   	
+   	/**
+   	 * @param integer $sample_id
+   	 * @return bool
+   	 */
+   	public static function delete_remaining_sample_entries($sample_id)
+   	{
+   		global $db;
+		
+		if (is_numeric($sample_id))
+		{
+			$sql = "DELETE FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." " .
+				" WHERE " .
+				" ".constant("SAMPLE_HAS_ITEM_TABLE").".sample_id = ".$sample_id."";
+
 			$res = $db->db_query($sql);
 			
 			if ($res !== false)

@@ -146,6 +146,13 @@ interface SampleItemInterface
 	 * @return array
 	 */
 	public static function list_sample_id_by_item_id_and_gid_and_parent($item_id, $gid);
+	
+	/**
+	 * Deletes parent-sample sub-items
+	 * @param integer $sample_id
+	 * @return bool
+	 */
+	public static function delete_remaining_sample_entries($sample_id);
 }
 
 ?>

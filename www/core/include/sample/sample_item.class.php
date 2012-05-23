@@ -241,7 +241,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     		}
     		
   			$sample_has_item_pk_array = SampleHasItem_Access::list_entries_by_item_id_pk($this->item_id);
-  			  			
+  			
   			if (is_array($sample_has_item_pk_array))
   			{
   				if (count($sample_has_item_pk_array) >= 1)
@@ -877,6 +877,16 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 	public static function list_items_by_sample_id_and_gid($sample_id, $gid)
 	{
 		return SampleHasItem_Access::list_items_by_sample_id_and_gid($sample_id, $gid);
+	}
+	
+	/**
+	 * @see SampleItemInterface::delete_remaining_sample_entries()
+	 * @param integer $sample_id
+	 * @return bool
+	 */
+	public static function delete_remaining_sample_entries($sample_id)
+	{
+		return SampleHasItem_Access::delete_remaining_sample_entries($sample_id);
 	}
 	
 	/**

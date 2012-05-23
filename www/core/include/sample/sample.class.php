@@ -973,7 +973,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 				}
 			}
 			
-			// Other Items
+			// Items
 			$sample_item = new SampleItem($tmp_sample_id);
 			$item_array = $sample_item->get_sample_items();
 			if (is_array($item_array) and count($item_array) >= 1)
@@ -993,8 +993,19 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 				}
 			}	
 			
+			// Parent-Sample-Sub-Item-Links
+			if (SampleItem::delete_remaining_sample_entries($tmp_sample_id) == false)
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				throw new SampleDeleteItemException("Could not delete parent-sample sub-items");
+			}
+			
 			// Delete Item
-			if ($this->item_id) {
+			if ($this->item_id)
+			{
 				if (parent::delete() == false)
 				{
 					if ($transaction_id != null)
