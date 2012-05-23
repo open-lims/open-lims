@@ -173,23 +173,15 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     {
     	if ($this->item_id and $this->sample_id)
     	{
-    		$sample_has_sub_item_pk_array = SampleHasItem_Access::list_entries_by_parent_item_id_and_sample_id($this->item_id, $this->sample_id);
+    		if (Sample_Wrapper::delete_data_entity_sub_item_links($this->item_id, $this->sample_id) == false)
+    		{
+    			return false;
+    		}
     		
-    		if (is_array($sample_has_sub_item_pk_array) and count($sample_has_sub_item_pk_array) >= 1)
-  			{
-  				foreach ($sample_has_sub_item_pk_array as $key => $value)
-  				{
-  					$sample_has_item = new SampleHasItem_Access($value);
-  					if ($sample_has_item->delete() == false)
-  					{
-  						if ($transaction_id != null)
-  						{
-							$transaction->rollback($transaction_id);
-						}
-						return false;
-  					}
-  				}
-  			}
+    		if (SampleHasItem_Access::delete_sub_items($this->item_id, $this->sample_id) == false)
+    		{
+    			return false;
+    		}
     		
     		$primary_key = SampleHasItem_Access::get_entry_by_item_id_and_sample_id($this->item_id, $this->sample_id);
     		$sample_has_item = new SampleHasItem_Access($primary_key);
@@ -202,10 +194,6 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 					
 				if ($event_handler->get_success() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
 					return false;
 				}
     			
@@ -228,30 +216,29 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
      */
     public function unlink_item_full()
     {
-    	
     	global $transaction;
     	
     	if ($this->item_id)
     	{
     		$transaction_id = $transaction->begin();
     		
-    		$sample_has_sub_item_pk_array = SampleHasItem_Access::list_entries_by_parent_item_id($this->item_id);
-    		
-    		if (is_array($sample_has_sub_item_pk_array) and count($sample_has_sub_item_pk_array) >= 1)
-  			{
-  				foreach ($sample_has_sub_item_pk_array as $key => $value)
+    		if (Sample_Wrapper::delete_data_entity_sub_item_links($this->item_id) == false)
+    		{
+    			if ($transaction_id != null)
   				{
-  					$sample_has_item = new SampleHasItem_Access($value);
-  					if ($sample_has_item->delete() == false)
-  					{
-  						if ($transaction_id != null)
-  						{
-							$transaction->rollback($transaction_id);
-						}
-						return false;
-  					}
-  				}
-  			}
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+    		}
+    		
+    		if (SampleHasItem_Access::delete_sub_items($this->item_id) == false)
+    		{
+    			if ($transaction_id != null)
+  				{
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+    		}
     		
   			$sample_has_item_pk_array = SampleHasItem_Access::list_entries_by_item_id_pk($this->item_id);
   			  			

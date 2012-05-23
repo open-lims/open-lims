@@ -23,34 +23,23 @@
 
 
 /**
- * Item Holder Interface
+ * Item Holder Interface for Items which are Item Listeners too
+ * implement ItemListenerInterface too
  * @package item
  */
-interface ItemHolderInterface
-{	
+interface ItemHolderListenerInterface extends ItemHolderInterface
+{
 	/**
-	 * @param integer $id
+	 * Returns the items of the item holder
+	 * @param integer $position_id
 	 * @return array
 	 */
-	public function get_item_add_information($id = null);
+	public function get_item_holder_items($position_id);
 	
 	/**
-	 * @param string $address
-	 * @return mixed
-	 */
-	public function get_item_holder_value($address, $position_id = null);
-	
-	
-	/**
-	 * @param integer $holder_id
-	 * @return string
-	 */
-	public static function get_item_list_sql($holder_id);
-	
-	/**
-	 * @param integer $item_id
+	 * Returns the I/O logic handling class for adding an item via link
 	 * @return array
 	 */
-	public static function list_item_holders_by_item_id($item_id);
+	public static function get_item_add_io_handling_class();
 }
 ?>

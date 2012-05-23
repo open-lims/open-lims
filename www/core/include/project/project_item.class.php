@@ -157,24 +157,17 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     {    	
     	if ($this->item_id and $this->project_id)
     	{		
-    		$project_has_sub_item_pk_array = ProjectHasItem_Access::list_entries_by_parent_item_id_and_project_id($this->item_id, $this->project_id);
+    		if (Project_Wrapper::delete_data_entity_sub_item_links($this->item_id, $this->project_id) == false)
+    		{
+    			throw new ProjectItemUnlinkException(true, "Data-Entity Sub-Item delete failed");
+    		}
     		
-    		if (is_array($project_has_sub_item_pk_array) and count($project_has_sub_item_pk_array) >= 1)
-  			{
-  				foreach ($project_has_sub_item_pk_array as $key => $value)
-  				{  					
-  					$project_has_item = new ProjectHasItem_Access($value);
-  					if ($project_has_item->delete() == false)
-  					{
-  						if ($transaction_id != null)
-  						{
-							$transaction->rollback($transaction_id);
-						}
-						throw new ProjectItemUnlinkException(true, "Database delete failed");
-  					}
-  				}
-  			}
-    		
+    		if (ProjectHasItem_Access::delete_sub_items($this->item_id, $this->project_id) == false)
+    		{
+    			throw new ProjectItemUnlinkException(true, "Sub-Item delete failed");
+    		}
+
+  			
   			$primary_key = ProjectHasItem_Access::get_entry_by_item_id_and_project_id($this->item_id, $this->project_id);
     		$project_has_item = new ProjectHasItem_Access($primary_key);
     		
@@ -215,23 +208,23 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     	{
     		$transaction_id = $transaction->begin();
 
-    		$project_has_sub_item_pk_array = ProjectHasItem_Access::list_entries_by_parent_item_id($this->item_id);
-    		
-    		if (is_array($project_has_sub_item_pk_array) and count($project_has_sub_item_pk_array) >= 1)
-  			{
-  				foreach ($project_has_sub_item_pk_array as $key => $value)
+    		if (Project_Wrapper::delete_data_entity_sub_item_links($this->item_id) == false)
+    		{
+    			if ($transaction_id != null)
   				{
-  					$project_has_item = new ProjectHasItem_Access($value);
-  					if ($project_has_item->delete() == false)
-  					{
-  						if ($transaction_id != null)
-  						{
-							$transaction->rollback($transaction_id);
-						}
-						throw new ProjectItemUnlinkExecption(true, "Database delete failed");
-  					}
-  				}
-  			}
+					$transaction->rollback($transaction_id);
+				}
+    			throw new ProjectItemUnlinkException(true, "Data-Entity Sub-Item delete failed");
+    		}
+    		
+    		if (ProjectHasItem_Access::delete_sub_items($this->item_id) == false)
+    		{
+    			if ($transaction_id != null)
+  				{
+					$transaction->rollback($transaction_id);
+				}
+    			throw new ProjectItemUnlinkException(true, "Sub-Item delete failed");
+    		}
 
   			$project_has_item_pk_array = ProjectHasItem_Access::list_entries_by_item_id($this->item_id);
 

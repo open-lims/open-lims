@@ -41,7 +41,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Sample Management Class
  * @package sample
  */
-class Sample extends Item implements SampleInterface, EventListenerInterface, ItemListenerInterface, ItemHolderInterface
+class Sample extends Item implements SampleInterface, EventListenerInterface, ItemListenerInterface, ItemHolderListenerInterface
 {
 	private $sample;
 	
@@ -2154,7 +2154,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	}
 	
 	/**
-	 * @see ItemHolderInterface::get_item_holder_items()
+	 * @see ItemHolderListenerInterface::get_item_holder_items()
 	 * @param integer $position_id
 	 * @return array
 	 */
@@ -2611,10 +2611,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     	
    		if ($event_object instanceof ItemUnlinkEvent)
     	{
-    		/**
-    		 * @todo
-    		 */
-    		// Lösche alle DataEntityHasDataEntities bei denen link_item_id = item_id des Samples und link == true
+    		// Do Nothing, Sample will not be deleted
     	}
     	
     	return true;
@@ -2641,7 +2638,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	}
 	
 	/**
-	 * @see ItemHolderInterface::get_item_add_io_handling_class()
+	 * @see ItemHolderListenerInterface::get_item_add_io_handling_class()
 	 * @return array
 	 */
 	public static function get_item_add_io_handling_class()

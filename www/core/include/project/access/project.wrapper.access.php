@@ -1786,5 +1786,56 @@ class Project_Wrapper_Access
    			return null;
    		}
    	}
+   	
+   	/**
+   	 * @param integer $parent_item_id
+   	 * @param integer $project_id
+   	 * @return bool
+   	 */
+	public static function delete_data_entity_sub_item_links($parent_item_id, $project_id = null)
+	{
+		global $db;
+		
+		if (is_numeric($parent_item_id))
+		{
+			if (is_numeric($project_id))
+			{
+				$sql = "DELETE FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." " .
+						"WHERE " .
+							"( ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_pid IN (SELECT * FROM search_get_sub_folders((SELECT data_entity_id FROM ".constant("FOLDER_TABLE")." WHERE id = (SELECT folder_id FROM ".constant("PROJECT_HAS_FOLDER_TABLE")." WHERE project_id = ".$project_id."))::INT)) " .
+							" OR ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_pid = (SELECT data_entity_id FROM ".constant("FOLDER_TABLE")." WHERE id = (SELECT folder_id FROM ".constant("PROJECT_HAS_FOLDER_TABLE")." WHERE project_id = ".$project_id.")) )" .
+						" AND ".
+						"".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_cid IN (SELECT data_entity_id FROM ".constant("DATA_ENTITY_IS_ITEM_TABLE")." WHERE item_id IN (SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE parent_item_id = ".$parent_item_id." AND project_id = ".$project_id.")) " .
+						" AND " .
+						"".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".link_item_id IS NOT NULL";
+			}
+			else
+			{
+				$sql = "DELETE FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." " .
+						"WHERE " .
+							"( ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_pid IN (SELECT * FROM search_get_sub_folders((SELECT data_entity_id FROM ".constant("FOLDER_TABLE")." WHERE id = ".constant("PROJECT_FOLDER_ID").")::INT)) " .
+							" OR ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_pid = (SELECT data_entity_id FROM ".constant("FOLDER_TABLE")." WHERE id = ".constant("PROJECT_FOLDER_ID").") )" .
+						" AND ".
+						"".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_cid IN (SELECT data_entity_id FROM ".constant("DATA_ENTITY_IS_ITEM_TABLE")." WHERE item_id IN (SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE parent_item_id = ".$parent_item_id.")) " .
+						" AND " .
+						"".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".link_item_id IS NOT NULL";
+			}
+			
+			$res = $db->db_query($sql);
+			
+			if ($res !== false)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 ?>

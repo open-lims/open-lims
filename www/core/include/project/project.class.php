@@ -1216,17 +1216,20 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 									$parent_item_counter = $parent_item_array[$value['parent_status']];
 								}
 								
-								foreach($sub_item_array as $sub_item_key => $sub_item_value)
+								if (is_array($sub_item_array) and count($sub_item_array) >= 1)
 								{
-									$return_array[$parent_item_counter]['sub_items'][$sub_item_key][$value['pos_id']] = $sub_item_value[$value['pos_id']];
-								
-									if ($value['takeover'] == "true")
+									foreach($sub_item_array as $sub_item_key => $sub_item_value)
 									{
-										$return_array[$parent_item_counter]['sub_items'][$sub_item_key][$value['pos_id']]['takeover'] = true;
-									}
-									else
-									{
-										$return_array[$parent_item_counter]['sub_items'][$sub_item_key][$value['pos_id']]['takeover'] = false;
+										$return_array[$parent_item_counter]['sub_items'][$sub_item_key][$value['pos_id']] = $sub_item_value[$value['pos_id']];
+									
+										if ($value['takeover'] == "true")
+										{
+											$return_array[$parent_item_counter]['sub_items'][$sub_item_key][$value['pos_id']]['takeover'] = true;
+										}
+										else
+										{
+											$return_array[$parent_item_counter]['sub_items'][$sub_item_key][$value['pos_id']]['takeover'] = false;
+										}
 									}
 								}
 							}
@@ -2679,16 +2682,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 		{
 			return null;
 		}
-	}
-	
-	/**
-	 * @see ItemHolderInterface::get_item_holder_items()
-	 * @param integer $position_id
-	 * @return array
-	 */
-	public final function get_item_holder_items($position_id)
-	{
-		return null;
 	}
 	
 	

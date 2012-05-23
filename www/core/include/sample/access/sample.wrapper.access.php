@@ -1535,7 +1535,6 @@ class Sample_Wrapper_Access
 	 * @param integer $start
 	 * @param integer $end
 	 * @return array
-   	 * @todo search in read-only projects too
    	 */
    	public static function list_data_search($string, $sample_id_array, $item_select_sql_array, $item_join_sql, $item_where_sql, $order_by, $order_method, $start, $end)
    	{
@@ -1642,7 +1641,7 @@ class Sample_Wrapper_Access
 	   							"".$name_select_sql." AS name, ".
 	   							"".$type_select_sql.", ".
 	   							"".$datetime_select_sql." AS datetime, ".
-	   							"sample_table.id AS project_id, " .
+	   							"sample_table.id AS sample_id, " .
 	   							"sample_table.name AS sample_name " .
 								"FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." " .
 								"JOIN ".constant("ITEM_TABLE")." 					ON ".constant("SAMPLE_HAS_ITEM_TABLE").".item_id 	= ".constant("ITEM_TABLE").".id " .
@@ -1767,6 +1766,57 @@ class Sample_Wrapper_Access
    			return null;
    		}
    	}
+   	
+	/**
+   	 * @param integer $parent_item_id
+   	 * @param integer $sample_id
+   	 * @return bool
+   	 */
+	public static function delete_data_entity_sub_item_links($parent_item_id, $sample_id = null)
+	{
+		global $db;
+		
+		if (is_numeric($parent_item_id))
+		{
+			if (is_numeric($sample_id))
+			{
+				$sql = "DELETE FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." " .
+						"WHERE " .
+							"( ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_pid IN (SELECT * FROM search_get_sub_folders((SELECT data_entity_id FROM ".constant("FOLDER_TABLE")." WHERE id = (SELECT folder_id FROM ".constant("SAMPLE_HAS_FOLDER_TABLE")." WHERE sample_id = ".$sample_id."))::INT)) " .
+							" OR ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_pid = (SELECT data_entity_id FROM ".constant("FOLDER_TABLE")." WHERE id = (SELECT folder_id FROM ".constant("SAMPLE_HAS_FOLDER_TABLE")." WHERE sample_id = ".$sample_id.")) )" .
+						" AND ".
+						"".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_cid IN (SELECT data_entity_id FROM ".constant("DATA_ENTITY_IS_ITEM_TABLE")." WHERE item_id IN (SELECT item_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE parent_item_id = ".$parent_item_id." AND sample_id = ".$sample_id.")) " .
+						" AND " .
+						"".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".link_item_id IS NOT NULL";
+			}
+			else
+			{
+				$sql = "DELETE FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." " .
+						"WHERE " .
+							"( ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_pid IN (SELECT * FROM search_get_sub_folders((SELECT data_entity_id FROM ".constant("FOLDER_TABLE")." WHERE id = ".constant("SAMPLE_FOLDER_ID").")::INT)) " .
+							" OR ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_pid = (SELECT data_entity_id FROM ".constant("FOLDER_TABLE")." WHERE id = ".constant("SAMPLE_FOLDER_ID").") )" .
+						" AND ".
+						"".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_cid IN (SELECT data_entity_id FROM ".constant("DATA_ENTITY_IS_ITEM_TABLE")." WHERE item_id IN (SELECT item_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE parent_item_id = ".$parent_item_id.")) " .
+						" AND " .
+						"".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".link_item_id IS NOT NULL";
+			}
+			
+			$res = $db->db_query($sql);
+			
+			if ($res !== false)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 
 ?>

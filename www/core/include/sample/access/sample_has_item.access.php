@@ -761,6 +761,46 @@ class SampleHasItem_Access
 			return null;
 		}
 	}
-	
+
+	/**
+   	 * @param integer $sample_id
+   	 * @param integer $parent_item_id
+   	 * @return bool
+   	 */
+   	public static function delete_sub_items($parent_item_id, $sample_id = null)
+   	{
+   		global $db;
+		
+		if (is_numeric($parent_item_id))
+		{
+			if (is_numeric($sample_id))
+			{
+				$sql = "DELETE FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." " .
+					" WHERE " .
+					" ".constant("SAMPLE_HAS_ITEM_TABLE").".parent_item_id = ".$parent_item_id." AND ".constant("SAMPLE_HAS_ITEM_TABLE").".sample_id = ".$sample_id."";
+			}
+			else
+			{
+					$sql = "DELETE FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." " .
+					" WHERE " .
+					" ".constant("SAMPLE_HAS_ITEM_TABLE").".parent_item_id = ".$parent_item_id."";
+			}
+			
+			$res = $db->db_query($sql);
+			
+			if ($res !== false)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+   	}
 }
 ?>

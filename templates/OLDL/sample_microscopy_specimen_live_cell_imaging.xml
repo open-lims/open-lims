@@ -14,6 +14,7 @@
     	</ITEM>
 	</REQUIRED>
 	<BODY>
-      <ITEM type="parentsample" requirement="optional" occurrence="multiple"></ITEM>      
+      	<ITEM type="parentsample" requirement="optional" occurrence="multiple" inherit="all">
+      	</ITEM>      
 	</BODY>
 </OLDL>

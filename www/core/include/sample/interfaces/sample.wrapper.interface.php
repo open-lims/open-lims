@@ -225,5 +225,12 @@ interface Sample_WrapperInterface
 	 * @return array
 	 */
 	public static function get_sample_id_and_gid_by_parent_sample_id($sample_id);
+	
+	/**
+   	 * @param integer $parent_item_id
+   	 * @param integer $sample_id
+   	 * @return bool
+   	 */
+	public static function delete_data_entity_sub_item_links($parent_item_id, $sample_id = null);
 }
 ?>
