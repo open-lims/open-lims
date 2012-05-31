@@ -1543,6 +1543,27 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 							$element_array['length'] = 30;
 						}
 						
+						if ($value[3]['requirement'])
+						{
+							switch($value[3]['requirement']):
+								case "required":
+									$element_array['requirement'] = 1;	
+								break;
+								
+								case "important";
+									$element_array['requirement'] = 2;	
+								break;
+							
+								default:
+									$element_array['requirement'] = 0;	
+								break;
+							endswitch;
+						}
+						else
+						{
+							$element_array['requirement'] = 0;
+						}
+						
 						if ($value[3]['size'])
 						{
 							$sizeArray = explode(",",$value[3][size]);

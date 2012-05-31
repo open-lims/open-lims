@@ -333,3 +333,9 @@ border-bottom: dotted black 1px;
 {
 width:100%;
 }
+
+/* VALUE */
+.DataValueFieldRequiredImportant
+{
+	border: 1px #FF6F63 dotted !important;
+}

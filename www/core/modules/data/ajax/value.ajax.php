@@ -221,13 +221,58 @@ class ValueAjax
 	
 	private static function add_value($folder_id, $type_id, $value_array)
 	{
+		global $user;
+		
 		$parent_folder = Folder::get_instance($folder_id);
 		if ($parent_folder->is_write_access())
 		{
-			$values = json_decode($value_array, true);
-			require_once("core/modules/data/io/value.io.php");
-			$new_value = ValueIO::add_value_item_window($type_id, $folder_id, $values);
+			$value_array = json_decode($value_array, true);
+			$value = Value::get_instance(null);
+			$new_value = $value->create($folder_id, $user->get_user_id(), $type_id, $value_array);
+			
 			return $new_value;
+		}
+		else
+		{
+			throw new DataSecurityAccessDeniedException();
+		}
+	}
+	
+	/**
+	 * @todo exceptions
+	 */
+	public static function add_as_item($folder_id, $type_id, $value_array, $get_array)
+	{
+		global $user;
+		
+		$parent_folder = Folder::get_instance($folder_id);
+		
+		if ($parent_folder->is_write_access())
+		{
+			$values = json_decode($value_array, true);
+
+			$value = Value::get_instance(null);
+			$value_add_successful = $value->create($folder_id, $user->get_user_id(), $type_id, $value_array);
+			
+			if ($value_add_successful)
+			{
+				$item_id = $value->get_item_id();
+				
+				$item_add_event = new ItemAddEvent($item_id, unserialize($get_array), null);
+				$event_handler = new EventHandler($item_add_event);
+				if ($event_handler->get_success() == false)
+				{
+					throw new BaseException();
+				}
+				else
+				{
+					return 1;
+				}
+			}
+			else
+			{
+				throw new BaseException();
+			}
 		}
 		else
 		{

@@ -1,23 +1,23 @@
 //parse all values and their respective names to a json array
 var value_id = $('#DataBrowserAddValue option:selected').val();
-var json = '{'
+var json = '{';
 $('#AjaxLoadedContent').find('input').each(function(){
 	var name = $(this).attr('name');
 	var value = $(this).val();
-	json += '\"'+name+'\":\"'+value+'\",'
+	json += '\"'+name+'\":\"'+value+'\",';
 });	
 $('#AjaxLoadedContent').find('select').each(function(){
 	var name = $(this).attr('name');
 	var value = $(this).children('option:selected').val();
-	json += '\"'+name+'\":\"'+value+'\",'
+	json += '\"'+name+'\":\"'+value+'\",';
 });	
 $('#AjaxLoadedContent').find('textarea').each(function(){
 	var name = $(this).attr('name');
 	var value = $(this).val();
-	json += '\"'+name+'\":\"'+value+'\",'
+	json += '\"'+name+'\":\"'+value+'\",';
 });	
 json = json.substr(0,json.length-1);
-json += '}'	
+json += '}';
 
 //hand the array to this same function (third call)
 $.ajax({

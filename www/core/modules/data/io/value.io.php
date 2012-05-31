@@ -444,20 +444,30 @@ class ValueIO
 				if (!$_GET[nextpage] or $_GET[nextpage] == "1")
 				{	
 					$template = new HTMLTemplate("data/value_add.html");
-					$paramquery = $_GET;
-					$paramquery[nextpage] = "2";
-					$params = http_build_query($paramquery,'','&#38;');
 					
-					$template->set_var("params", $params);
+					$template->set_var("session_id", $_GET['session_id']);
+					$template->set_var("folder_id", $folder_id);
+					$template->set_var("type_id", $type_id);
+					$template->set_var("get_array", serialize($_GET));
+					
+					if ($_GET['retrace'])
+					{
+						$template->set_var("retrace", "index.php?".http_build_query(Retrace::resolve_retrace_string($_GET['retrace'])));
+					}
+					else
+					{
+						$template->set_var("retrace", "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']);
+					}
+					
 					
 					$template->set_var("title", $value_type->get_name());
 					
 					require_once("value_form.io.php");
 					$value_form_io = new ValueFormIO(null, $type_id, $folder_id);
+					$value_form_io->set_field_class("DataValueAddValues");
+					
 					$template->set_var("value",$value_form_io->get_content());
-		
-					$template->set_var("type_id", $type_id);
-		
+				
 					if ($_POST[keywords])
 					{
 						$template->set_var("keywords", $_POST[keywords]);
@@ -497,14 +507,6 @@ class ValueIO
 		{
 			throw new FolderIDMissingException();
 		}
-	}
-	
-	public static function add_value_item_window($type_id, $folder_id, $value_array)
-	{
-		global $user;
-		$value = Value::get_instance(null);
-		$value_add_successful = $value->create($folder_id, $user->get_user_id(), $type_id, $value_array);
-		return $value_add_successful;
 	}
 
 	/**

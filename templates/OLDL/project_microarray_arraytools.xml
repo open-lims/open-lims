@@ -15,11 +15,8 @@
 	</REQUIRED>
 	<BODY>
 		<STATUS id="10001">
-			<ITEM type="sample" occurrence="multiple">
+			<ITEM type="sample" occurrence="multiple" inherit="all">
             	<TYPE id="10000"></TYPE>
-            	<ITEMI pos_id="0"></ITEMI>
-            	<ITEMI pos_id="1"></ITEMI>
-            	<ITEMI pos_id="2"></ITEMI>
      		</ITEM>
 		</STATUS>
 		<STATUS id="10002">

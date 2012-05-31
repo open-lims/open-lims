@@ -4,7 +4,7 @@
 	<HEAD>
 		<ID>10001</ID>
 	 	<TITLE>RNA w. Date of Expiry</TITLE>
-		<DESC>Organisational RNA Template</DESC>
+		<DESC>RNA Template</DESC>
 		<VERSION>draft</VERSION>
 		<AUTHOR></AUTHOR>
 		<LOCATION requirement="optional" />
@@ -12,12 +12,12 @@
 		<EXPIRY />
 	</HEAD>
 	<BODY>
-		<ITEM type="value">
+		<ITEM type="equipment" occurrence="multiple" name="Add Used Hardware">
+			<CATEGORY id="1000" />
+		</ITEM>
+		<ITEM type="value" name="Add RNA Parameters">
     		<TYPE id="10001"></TYPE>
 		</ITEM>   
 		<ITEM type="file" occurrence="multiple" requirement="optional" name="Add BioAnalyzer File"></ITEM>    
-		<ITEM type="equipment" occurrence="multiple" name="Add Used Hardware">
-			<CATEGORY id="1000" />
-		</ITEM> 
 	</BODY>
 </OLDL>

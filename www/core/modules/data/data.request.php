@@ -150,6 +150,11 @@ class DataRequest
 				echo ValueAjax::get_data_browser_link_html_and_button_handler("permission");
 			break;
 			
+			case "value_add_as_item":
+				require_once("ajax/value.ajax.php");
+				echo ValueAjax::add_as_item($_POST[folder_id], $_POST[type_id], $_POST[value_array], $_POST[get_array]);
+			break;
+			
 			
 			// Folder
 			
