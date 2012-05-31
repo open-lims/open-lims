@@ -42,29 +42,28 @@
 	</div>
 </div>
 
-<form action='index.php?[[PARAMS]]' method='post'>
+
+<div class='Form' id='DataValueAdd'>
+
 
 [[VALUE]]
 
-<table class='formTable'>
-	<tr>
-		<td><br /></td>
-	</tr>
+<table>
 	
 	<!-- IF ([[WRITE_PERMISSION]]) -->
 	
 	<tr>
 		<td>
-			<button type='submit' name='submitbutton' value='major' class='FormButton'>Update</button>
-			<button type='submit' name='submitbutton' value='minor' class='FormButton'>Update Minor</button>
+			<button type='submit' id='DataValueUpdateButton'>Update</button>
+			<button type='submit' id='DataValueUpdateMinorButton'>Update as Minor</button>
 		</td>
 	</tr>
 	
 	<!-- ENDIF -->	
 	
 </table>
+</div>
 
-</form>
 
 <script language='javascript'>
 

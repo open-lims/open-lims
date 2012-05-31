@@ -319,7 +319,10 @@
 
 
 /* Forms */
-
+.Form table
+{
+ 	border-spacing: 0;
+}
 .Form input
 {
 	font-size: 14px;
@@ -328,6 +331,7 @@
 	color: #4F4F4F;  
 	background-color: #EEEEEE;
 	padding: 4px;
+	margin: 3px 0;
 }
 .Form input.FormFocused
 {
@@ -375,7 +379,7 @@
     border-width: 1px;
     
     line-height: 15px;
-    margin: 0 2px;
+    margin: 10px 5px 2px 0;
     padding: 4px 12px;
     
     vertical-align: middle;
@@ -387,6 +391,8 @@
     overflow: visible;
     text-decoration: none;
     width: auto;
+    
+    float:left;
 }
 .Form button:hover
 {
@@ -395,6 +401,31 @@
 .Form input.FormError
 {
 	border: 1px #ff6347 solid;
+}
+
+.FormButtonBox
+{
+	padding-left: 10px;
+}
+.FormButtonBoxClear
+{
+	clear: left;	
+}
+
+.FormBox
+{
+	margin: 20px 10px 5px 10px;
+	padding: 16px 10px 10px 10px;
+	border: 1px #D0D0D0 dotted;
+	clear: left;
+}
+.FormBoxHeadline
+{
+	float: left;
+	margin: -25px 0 0 -2px;
+	padding: 0 2px;
+	font-weight: bold;
+	background: white;
 }
 
 /* !!! OUTDATED !!! */

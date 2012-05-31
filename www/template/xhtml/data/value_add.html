@@ -125,9 +125,11 @@ $(document).ready(function()
 
 <br />
 
-<!-- CONTAINER BEGIN ("Add Value: [[TITLE]]") -->
+<!-- CONTAINER BEGIN ("Add Value") -->
 
 <div class='Form' id='DataValueAdd'>
+<div class='FormBox'>
+<div class='FormBoxHeadline'>[[TITLE]]</div>
 
 [[VALUE]]
 
@@ -135,16 +137,14 @@ $(document).ready(function()
 <input type='hidden' value='[[DESCRIPTION]]' name='description' />
 <input type='hidden' value='[[KEYWORDS]]' name='keywords' />
 
-<table>
-	<tr>
-		<td><br /></td>
-	</tr>
-	<tr>
-		<td>
-			<button type='submit' id='DataValueAddButton'>Add</button>
-		</td>
-	</tr>
-</table>
+</div>
+
+
+<div class='FormButtonBox'>
+<button type='submit' id='DataValueAddButton'>Save</button>
+<button type='submit' id='DataValueCancelButton'>Cancel</button>
+<div class='FormButtonBoxClear'></div>
+</div>
 </div>
 
 <script language='javascript'>

@@ -249,7 +249,7 @@ class ValueAjax
 		
 		if ($parent_folder->is_write_access())
 		{
-			$values = json_decode($value_array, true);
+			$value_array = json_decode($value_array, true);
 
 			$value = Value::get_instance(null);
 			$value_add_successful = $value->create($folder_id, $user->get_user_id(), $type_id, $value_array);

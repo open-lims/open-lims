@@ -452,9 +452,7 @@ class SampleRequest
 										ItemIO::information(http_build_query($_GET), $description_required, $keywords_required);
 									}
 									else
-									{
-										$transaction_id = $transaction->begin();
-										
+									{										
 										$sample = new Sample($_GET[sample_id]);
 										$current_requirements = $sample->get_requirements();
 										

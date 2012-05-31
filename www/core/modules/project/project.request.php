@@ -578,8 +578,6 @@ class ProjectRequest
 									}
 									else
 									{
-										$transaction_id = $transaction->begin();
-										
 										$current_status_requirements = $project->get_current_status_requirements($project->get_current_status_id());
 										
 										// Calls Method
