@@ -458,60 +458,8 @@ class SampleRequest
 										$sample = new Sample($_GET[sample_id]);
 										$current_requirements = $sample->get_requirements();
 										
-										$return_value = $module_dialog['class']::$module_dialog[method]($current_requirements[$_GET[key]][type_id], $current_requirements[$_GET[key]][category_id], "Sample", $_GET['sample_id'], $_GET[key]);
-										
-										/**
-										 * @todo remove after rebuild all item add dialogs (including "associate sample")
-										 */
-										if (is_numeric($return_value))
-										{
-											if ($_GET[retrace])
-											{
-												$params = http_build_query(Retrace::resolve_retrace_string($_GET[retrace]),'','&#38;');
-											}
-											else
-											{
-												$paramquery[username] = $_GET[username];
-												$paramquery[session_id] = $_GET[session_id];
-												$paramquery[nav] = "home";
-												$params = http_build_query($paramquery,'','&#38;');
-											}
-											
-											if (SampleItemFactory::create($_GET[sample_id], $return_value, $_GET[key], $_POST[keywords], $_POST[description]) == true)
-											{
-												if ($transaction_id != null)
-												{
-													$transaction->commit($transaction_id);
-												}
-												Common_IO::step_proceed($params, "Add Item", "Successful." ,null);
-											}
-											else
-											{
-												if ($transaction_id != null)
-												{
-													$transaction->rollback($transaction_id);
-												}
-												Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
-											}
-										}
-										else
-										{
-											if ($return_value === false)
-											{
-												if ($transaction_id != null)
-												{
-													$transaction->rollback($transaction_id);
-												}
-												throw new ModuleDialogFailedException("",1);
-											}
-											else
-											{
-												if ($transaction_id != null)
-												{
-													$transaction->commit($transaction_id);
-												}
-											}
-										}
+										// Calls Method
+										$module_dialog['class']::$module_dialog[method]($current_requirements[$_GET[key]][type_id], $current_requirements[$_GET[key]][category_id], "Sample", $_GET['sample_id'], $_GET[key]);
 									}
 								}
 								else
