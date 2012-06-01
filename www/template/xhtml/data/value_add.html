@@ -1,120 +1,55 @@
+<script type="text/javascript" src="template/xhtml/data/js/value_handler.js"></script>
 <script>
+
 $(document).ready(function()
 {
-	$(".DataValueAddValues").each(function()
-	{	
-		if ($(this).hasClass("DataValueFieldRequiredImportant"))
+	value_handler = new ValueHandler("DataValueAddValues");
+	
+	$("#DataValueCancelButton").click(function()
+	{
+		window.setTimeout('window.location = \'[[RETRACE]]\'',1);
+	});
+		
+	$("#DataValueAddButton").click(function()
+	{
+		var json = value_handler.get_json();
+
+		if (json !== false)
 		{
-			if ($(this).val() != "")
-			{
-				$(this).removeClass("DataValueFieldRequiredImportant");
-			}
-			
-			$(this).focus(function()
-			{
-				 $(this).removeClass("DataValueFieldRequiredImportant");
-			});
-			
-			$(this).blur(function()
-			{
-				if ($(this).val() == "")
+			$.ajax({
+				type : "POST",
+				url : "ajax.php?session_id=[[SESSION_ID]]&nav=data&run=value_add_as_item",
+				data : 'folder_id=[[FOLDER_ID]]&type_id=[[TYPE_ID]]&value_array='+json+'&get_array=[[GET_ARRAY]]',
+				beforeSend: function()
 				{
-					 $(this).addClass("DataValueFieldRequiredImportant");
+					$.blockUI({ message: $('#DataValueAddFinish') , css: { width: '275px' }} ); 
+					$('.blockUI.blockMsg').center();
+				},
+				success : function(data)
+				{
+					if (data == "1")
+					{
+						window.setTimeout('window.location = \'[[RETRACE]]\'',500);
+					}
+					else
+					{						
+						if ((data + '').indexOf("EXCEPTION",0) == 0)
+						{
+							var exception_message = data.replace("EXCEPTION: ","");
+							$.unblockUI();
+							ErrorDialog("Error", exception_message);
+							return false;
+						}
+						else
+						{
+							$.unblockUI();
+							ErrorDialog("Error", "An error occured");
+							return false;
+						}
+					}
 				}
 			});
 		}
-	});
-	
-	$("#DataValueAddButton").click(function()
-	{
-		var json = '{';
-		
-		$(".DataValueAddValues:radio:checked").each(function()
-		{
-			var name = $(this).attr("name");
-			var value = $(this).val();
-			json += '\"'+name+'\":\"'+value+'\",';
-		});
-		
-		$(".DataValueAddValues:checkbox").each(function()
-		{
-			if ($(this).is(":checkbox:checked"))
-			{
-				var name = $(this).attr("name");
-				var value =  $(this).val();
-				json += '\"'+name+'\":\"'+value+'\",';
-			}
-			else
-			{
-				var name = $(this).attr("name");
-				var value = 0;
-				json += '\"'+name+'\":\"'+value+'\",';
-			}
-		});
-		
-		$(".DataValueAddValues").each(function()
-		{	
-			if ($(this).hasClass("DataValueFieldRequired"))
-			{
-				
-			}
-			
-			if ($(this).hasClass("DataValueFieldTypeInteger"))
-			{
-				
-			}
-			else
-			{
-				if ($(this).hasClass("DataValueFieldTypeFloat"))
-				{
-					
-				}
-			}
-			
-			if (($(this).is(":input") == true) && ($(this).is(":radio") == false) && ($(this).is(":checkbox") == false))
-			{
-				var name = $(this).attr("name");
-				var value = $(this).val();
-				json += '\"'+name+'\":\"'+value+'\",';
-			}
-		});
-		
-		json = json.substr(0,json.length-1);
-		json += '}';
-
-		$.ajax({
-			type : "POST",
-			url : "ajax.php?session_id=[[SESSION_ID]]&nav=data&run=value_add_as_item",
-			data : 'folder_id=[[FOLDER_ID]]&type_id=[[TYPE_ID]]&value_array='+json+'&get_array=[[GET_ARRAY]]',
-			beforeSend: function()
-			{
-				$.blockUI({ message: $('#DataValueAddFinish') , css: { width: '275px' }} ); 
-				$('.blockUI.blockMsg').center();
-			},
-			success : function(data)
-			{
-				if (data == "1")
-				{
-					window.setTimeout('window.location = \'[[RETRACE]]\'',500);
-				}
-				else
-				{						
-					if ((data + '').indexOf("EXCEPTION",0) == 0)
-					{
-						var exception_message = data.replace("EXCEPTION: ","");
-						$.unblockUI();
-						ErrorDialog("Error", exception_message);
-						return false;
-					}
-					else
-					{
-						$.unblockUI();
-						ErrorDialog("Error", "An error occured");
-						return false;
-					}
-				}
-			}
-		});
 	});
 });
 </script>

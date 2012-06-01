@@ -150,6 +150,11 @@ interface ValueInterface
 	public function get_version_owner_id();
 
 	/**
+	 * @return integer
+	 */
+	public function get_version_datetime();
+	
+	/**
      * @param bool $history
      * @return array
      */

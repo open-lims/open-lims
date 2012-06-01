@@ -1904,20 +1904,27 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
      * @param integer $file_id
      * @return object
      */
-    public static function get_instance($file_id)
+    public static function get_instance($file_id, $force_new_instance = false)
     {    
     	if (is_numeric($file_id) and $file_id > 0)
     	{
-			if (self::$file_object_array[$file_id])
-			{
-				return self::$file_object_array[$file_id];
-			}
-			else
-			{
-				$file = new File($file_id);
-				self::$file_object_array[$file_id] = $file;
-				return $file;
-			}
+    		if ($force_new_instance == true)
+    		{
+    			return new File($file_id);
+    		}
+    		else
+    		{
+				if (self::$file_object_array[$file_id])
+				{
+					return self::$file_object_array[$file_id];
+				}
+				else
+				{
+					$file = new File($file_id);
+					self::$file_object_array[$file_id] = $file;
+					return $file;
+				}
+    		}
     	}
     	else
     	{

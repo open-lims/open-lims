@@ -280,6 +280,51 @@ class ValueAjax
 		}
 	}
 	
+	/**
+	 * @todo exceptions
+	 */
+	public static function update($value_id, $previous_version_id, $value_array, $major)
+	{
+		if (is_numeric($value_id))
+		{
+			$value = Value::get_instance($value_id);
+			
+			if ($value->is_write_access())
+			{
+				$value_array = json_decode($value_array, true);
+				
+				if (is_array($value_array))
+				{
+					if (!is_numeric($previous_version_id))
+					{
+						$previous_version_id = null;
+					}
+					
+					if ($value->update($value_array, $previous_version_id, $major, true, false))
+					{			
+						return "1";	
+					}
+					else
+					{
+						throw new BaseException();	
+					}
+				}
+				else
+				{
+					throw new BaseException();	
+				}
+			}
+			else
+			{
+				throw new BaseUserAccessDeniedException();	
+			}
+		}
+		else
+		{
+			throw new ValueIDMissingException();
+		}
+	}
+	
 	private static function delete_value($value_id)
 	{
 		$value = Value::get_instance($value_id);

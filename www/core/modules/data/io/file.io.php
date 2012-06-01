@@ -70,7 +70,7 @@ class FileIO
 					
 					foreach($file_version_array as $key => $value)
 					{
-						$file_version = File::get_instance($_GET[file_id]);
+						$file_version = File::get_instance($_GET[file_id], true);
 						$file_version->open_internal_revision($value);
 						
 						$result[$counter][version] = $file_version->get_internal_revision();

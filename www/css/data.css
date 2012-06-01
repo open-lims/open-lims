@@ -339,3 +339,7 @@ width:100%;
 {
 	border: 1px #FF6F63 dotted !important;
 }
+.DataValueFieldError
+{
+	border: 1px #FF6F63 dotted !important;
+}

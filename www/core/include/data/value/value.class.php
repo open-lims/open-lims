@@ -618,12 +618,12 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 			$highest_revision_value_version = new ValueVersion_Access($highest_revision_value_version_id);
 			
 			$new_internal_revision = $current_value_version->get_internal_revision()+1;
-											
+			
 			if ((array_diff_assoc($value_array, $current_value_array) != null) or 
 				(array_diff_assoc($current_value_array, $value_array) != null))
 			{	
 				if ($major == true)
-				{										
+				{									
 					if ($previous_version_id == null)
 					{
 						$new_version = $current_value_version->get_version()+1;
@@ -1032,7 +1032,24 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 			return null;
 		}
 	}
-	    
+	
+	/**
+	 * @see ValueInterface::get_version_datetime()
+	 * @return integer
+	 */
+	public function get_version_datetime()
+	{
+		if ($this->value_version)
+		{
+			return $this->value_version->get_datetime();
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	
     /**
      * @param array $xml_array
      * @return bool
@@ -1527,7 +1544,20 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 						
 						if ($value[3]['vartype'])
 						{
-							$element_array['vartype'] = $value[3]['vartype'];
+							switch($value[3]['vartype']):
+								case "integer":
+								case "int":
+									$element_array['vartype'] = "integer";	
+								break;
+								
+								case "float";
+									$element_array['vartype'] = "float";	
+								break;
+							
+								default:
+									$element_array['vartype'] = "string";	
+								break;
+							endswitch;
 						}
 						else
 						{
@@ -1843,20 +1873,27 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
      * @param integer $file_id
      * @return object
      */
-    public static function get_instance($value_id)
+    public static function get_instance($value_id, $force_new_instance = false)
     {    
     	if (is_numeric($value_id) and $value_id > 0)
     	{
-			if (self::$value_object_array[$value_id])
-			{
-				return self::$value_object_array[$value_id];
-			}
-			else
-			{
-				$value = new Value($value_id);
-				self::$value_object_array[$value_id] = $value;
-				return $value;
-			}
+    		if ($force_new_instance == true)
+    		{
+    			return new Value($value_id);
+    		}
+    		else
+    		{
+	    		if (self::$value_object_array[$value_id])
+				{
+					return self::$value_object_array[$value_id];
+				}
+				else
+				{
+					$value = new Value($value_id);
+					self::$value_object_array[$value_id] = $value;
+					return $value;
+				}
+    		}
     	}
     	else
     	{
