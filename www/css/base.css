@@ -747,7 +747,6 @@ margin: 11px 0px 0 1px;
 
 /* BASE LIST */
 
-
 .ListTable
 {
 	width: 100%;
@@ -767,6 +766,7 @@ margin: 11px 0px 0 1px;
 	color: black;
 	white-space: nowrap;
 	overflow: hidden;
+	padding: 0;
 }
 
 .ListTable th a 
@@ -779,7 +779,7 @@ margin: 11px 0px 0 1px;
 {
 /* 	height:20px; */
 /* 	margin-bottom: 2px; */
-	padding: 4px 4px;
+/* 	padding: 4px 4px; */
 	white-space: nowrap;
 	overflow: hidden;
 }

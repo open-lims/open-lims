@@ -29,24 +29,15 @@ function base_navigation()
 	
 	function init()
 	{
-		$("#NavigationMenu").find(".NavigationButtonDown").each(function(){
-			var button_down = this;
-			
-			//this should actually fix IE 7 + 8 but somehow it does not?!
-			$(button_down).css("background-position","0 0");
-			$(button_down).next().css("background-position","0 0");
-//			alert($(this).css("background-position")); //always returns undefined
-			
-			button_handler(button_down);
+		$("#NavigationMenu").children("li").each(function(){
+			button_handler(this);
 		});
 		
 		base_scrollable_navigation_tabs();
 	}
 	
-	function button_handler(button_down)
+	function button_handler(tab)
 	{
-		var tab = $(button_down).parent().parent();
-
 		var last_color;
 		$(tab)
 			.bind("mouseover", function(){
@@ -54,12 +45,40 @@ function base_navigation()
 				{
 					grey_out_active_tab_if_necessary(tab);
 				}
-				if($("#NavigationButtonMenu").size() === 0)
+				if($("#NavigationButtonMenu").size() !== 0)
 				{
-					var color = get_tab_color(tab);
-					last_color = $("#NavigationBackground").css("border-bottom");
-					$("#NavigationBackground").css("border-bottom", "solid 1px "+color);
+				
+//				}
+//				else
+//				{
+					if($(".SubMenuOpened")[0] !== $(tab)[0])
+					{
+						var open_tab = close_menu();
+						animate_right_tab_side_up(open_tab);
+
+						$(open_tab).removeClass("SubMenuOpened");
+
+						grey_out_active_tab_if_necessary(open_tab);
+						
+						if($(".GreyedOut").size() > 0)
+						{
+							$(open_tab)
+								.removeClass("ActiveOrange")
+								.removeClass("ActiveGreen")
+								.removeClass("ActiveBlue")
+								.removeClass("ActiveGrey");
+						}
+						else
+						{
+							grey_out_active_tab_if_necessary(tab);
+						}
+					}
 				}
+
+				var color = get_tab_color(tab);
+				last_color = $("#NavigationBackground").css("border-bottom");
+				$("#NavigationBackground").css("border-bottom", "solid 1px "+color);
+				
 			})
 			.bind("mouseout", function(){
 				if($("#NavigationButtonMenu").size() === 0)
@@ -69,72 +88,94 @@ function base_navigation()
 				}
 			});
 		
-		$(button_down)
-			.bind("mouseover", function(){
-				$(this).children("img").attr("src","images/down_active.png");
-			})
-			.bind("mouseout", function(){
-				$(this).children("img").attr("src","images/down.png");
-			})
-			.bind("click", function(evt){
-				evt.preventDefault();
-				
-				//close open tab
-				var currently_selected_tab = close_menu();
-				
-				if(currently_selected_tab !== undefined)
-				{
-					animate_right_tab_side_up(currently_selected_tab);
-					
-					//if the open tab was this one, we're done
-					if(tab === currently_selected_tab)
-					{						
-						return true;
-					}
-				}
-				//reset style of currently active tab
-				remove_grey_out_active_tab();
-				
-				//change style of currently active tab (if the menu does not come from this tab)
-				grey_out_active_tab_if_necessary(tab);
-				
-				//open new tab
-				animate_right_tab_side_down(tab);
-				open_menu(tab);
-			});
-		
-		function grey_out_active_tab_if_necessary(menu_tab)
+		var button_down = $(tab).find(".NavigationButtonDown");
+
+		if(button_down.length > 0)
 		{
-			var active_tab = undefined;			
-			$("#NavigationMenu").children().each(function(){
-				if($(this).attr("class").indexOf("Active") !== -1)
-				{
-					active_tab = this;				
-					if($(menu_tab)[0] !== $(this)[0])
+//			//this should actually fix IE 7 + 8 but somehow it does not?!
+//			$(tab).css("background-position-y","0");
+//			
+//			
+//			$(tab).next().css("background-position-y","0");
+//			alert($(tab).css("background-position-y")); //always returns undefined
+//			
+//			
+			$(button_down)
+				.bind("mouseover", function(){
+					$(this).children("img").attr("src","images/down_active.png");
+				})
+				.bind("mouseout", function(){
+					$(this).children("img").attr("src","images/down.png");
+				})
+				.bind("click", function(evt){
+					evt.preventDefault();
+					
+					//close open tab
+					var currently_selected_tab = close_menu();
+								
+					if(currently_selected_tab !== undefined)
 					{
-						return false;
+						animate_right_tab_side_up(currently_selected_tab);
+						
+						//if the open tab was this one, we're done
+						if(tab === currently_selected_tab)
+						{					
+							var color = get_tab_color(tab);
+							$("#NavigationBackground").css("border-bottom", "solid 1px "+color);
+							return true;
+						}
 					}
-				}
-			});
-			if($(active_tab).hasClass("SubMenuOpened"))
+					//reset style of currently active tab
+					remove_grey_out_active_tab();
+					
+					//change style of currently active tab (if the menu does not come from this tab)
+					grey_out_active_tab_if_necessary(tab);
+					
+					//open new tab
+					animate_right_tab_side_down(tab);
+//					open_menu(tab);
+				});
+		}
+	}
+	
+	function grey_out_active_tab_if_necessary(menu_tab)
+	{
+		var active_tab = undefined;			
+		$("#NavigationMenu").children().each(function()
+		{
+			if($(this).attr("class").indexOf("Active") !== -1)
 			{
-				return false;
+				active_tab = this;				
+				if($(menu_tab)[0] !== $(this)[0])
+				{
+					return false;
+				}
 			}
-			
-			if($(menu_tab)[0] !== $(active_tab)[0]) {
-				$(active_tab).data("originalClass",$(active_tab).attr("class"));
-				$(active_tab).attr("class","GreyedOut");
-			}
+		});
+		
+		if($(active_tab).hasClass("SubMenuOpened"))
+		{
+			$("#NavigationButtonMenu").css({
+				"border-left": "solid 1px #b6b6b6",
+				"border-right": "solid 1px #b6b6b6",
+				"border-bottom": "solid 1px #b6b6b6"
+			});
 		}
 		
-		function remove_grey_out_active_tab() 
-		{	
-			var original_class = $(".GreyedOut").data("originalClass");
-			$(".GreyedOut")
-				.removeClass("GreyedOut")
-				.attr("class",original_class);
-		}	
+		if($(menu_tab)[0] !== $(active_tab)[0]) 
+		{
+			$(active_tab).data("originalClass",$(active_tab).attr("class"));
+			$(active_tab).attr("class","GreyedOut");
+		}
 	}
+	
+	function remove_grey_out_active_tab() 
+	{	
+		var original_class = $(".GreyedOut").data("originalClass");
+		$(".GreyedOut")
+			.removeClass("GreyedOut")
+			.attr("class",original_class);
+	}	
 	
 	function get_tab_color(tab)
 	{
@@ -202,9 +243,9 @@ function base_navigation()
 		//mark tab as active
 		var tab_class = $(tab).attr("class");
 		$(tab)
+			.data("originalClass", tab_class)
 			.addClass("SubMenuOpened")
-			.addClass("Active"+tab_class)
-			.data("originalClass", tab_class);
+			.addClass("Active"+tab_class);
 		
 		$("#NavigationBackground").css("border-bottom", "solid 1px "+color);
 		
@@ -226,6 +267,18 @@ function base_navigation()
 			.removeClass("GreyedOut")
 			.attr("class",original_class);
 		
+		var active_tab;
+		$("#NavigationMenu").children().each(function(){
+			if($(this).attr("class").indexOf("Active") !== -1)
+			{
+				active_tab = this;
+			}
+		});
+		
+		var tab_color = get_tab_color(active_tab);
+		
+		$("#NavigationBackground").css("border-bottom", "solid 1px "+tab_color);
+		
 		$("body").unbind("click", body_click_handler);
 	};
 	
@@ -237,16 +290,15 @@ function base_navigation()
 		$("#NavigationButtonMenu").fadeOut(200, function(){
 			$(this).remove();
 		});
-			
+					
 		//mark tab as inactive
 		var original_class = $(tab_to_close).data("originalClass");
 		$(tab_to_close).attr("class", original_class);
 		
-		//TODO php?
 		$("#NavigationBackground").css("border-bottom", "solid 1px #336699");
 				
 		$("body").unbind("click", body_click_handler);
-		
+
 		return tab_to_close;
 	}
 	
@@ -254,21 +306,27 @@ function base_navigation()
 	{
 		var right_tab_side_arrow = $(tab).find(".NavigationButtonDown");
 		var right_tab_side_corner = $(tab).find(".NavigationButtonRight");
-		
 		//animate arrow part
+		
+		$(right_tab_side_arrow).css("background-position-y", 0);
+		
 		$(right_tab_side_arrow)
 			.stop()
-			.animate({backgroundPosition: "0 "+animate_downwards_pixels+"px"}, 200);
-	
+			.animate({"background-position-y": animate_downwards_pixels+"px"}, 200);
+//			.animate({backgroundPosition: "0 "+animate_downwards_pixels+"px"}, 200);
+		
 		//animate arrow
 		$(right_tab_side_arrow)
 			.children()
 			.stop()
 //			.animate({"margin-top": arrow_margin_top}, 200)
 			.rotate({animateTo:-180, duration:400});
-		
+
 		//animate right part
-		$(right_tab_side_corner).stop().animate({backgroundPosition: "0 "+animate_downwards_pixels+"px"}, 200);
+		$(right_tab_side_corner)
+			.stop()
+			.animate({"background-position-y": animate_downwards_pixels+"px"}, 200);
+//			.animate({backgroundPosition: "0 "+animate_downwards_pixels+"px"}, 200);
 	}
 	
 	function animate_right_tab_side_up(tab)

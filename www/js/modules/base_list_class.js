@@ -250,13 +250,20 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 	
 	function make_resizable()
 	{
+		if($(".ListTable").find(".ui-resizable-e").length > 0)
+		{
+			return false;
+		}
 		$(".ListTable").dynamicTable({
 			"sticky" : [0,1],
 			"rulerColor": "#669acc",
 			"handleColor": "#669acc"
 		});
-		
-		$("body").keydown(function(evt){
+
+		$("body")
+//		.attr("tabindex", 0)
+		.keydown(function(evt){
+			
 			switch(evt.which)
 			{
 				case 220: //^
