@@ -135,6 +135,7 @@ class ValueAjax
 				{ //second call (from additional script; loads template)
 					require_once("core/modules/data/io/value_form.io.php");
 					$value_form_io = new ValueFormIO(null, $_POST['type_id'], $_POST['folder_id']);
+					$value_form_io->set_field_class("DataValueAddValues");
 					return $value_form_io->get_content();
 				}
 				if(isset($_POST['value_array']))
@@ -219,6 +220,9 @@ class ValueAjax
 		return json_encode($array);
 	}
 	
+	/**
+	 * @todo exceptions
+	 */
 	private static function add_value($folder_id, $type_id, $value_array)
 	{
 		global $user;
@@ -228,9 +232,14 @@ class ValueAjax
 		{
 			$value_array = json_decode($value_array, true);
 			$value = Value::get_instance(null);
-			$new_value = $value->create($folder_id, $user->get_user_id(), $type_id, $value_array);
-			
-			return $new_value;
+			if ($value->create($folder_id, $user->get_user_id(), $type_id, $value_array) != Null)
+			{
+				return 1;
+			}
+			else
+			{
+				throw new BaseException();
+			}
 		}
 		else
 		{

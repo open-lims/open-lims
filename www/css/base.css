@@ -427,6 +427,10 @@
 	font-weight: bold;
 	background: white;
 }
+.FormBoxClear
+{
+	clear: both;
+}
 
 /* !!! OUTDATED !!! */
 .FormButton

@@ -20,7 +20,7 @@
  */
 
 
-function autofield(field_array_string)
+function autofield(field_array_string, field_css_class)
 {
 	var field_array;
 	
@@ -71,18 +71,34 @@ function autofield(field_array_string)
     			
     			var title_input = $("<input type='hidden' name='af-"+field_array[int][3]+"-title'/>");
     			$(title_input).attr("value",field_array[int][0]);
+    			$(title_input).addClass(field_css_class);
     			$(td1).append(title_input);
+    			
+    			if (field_array[int][1] == "int")
+    			{
+    				var vartype_class = "DataValueFieldTypeInteger";
+    			}
+    			else
+				{
+    				if (field_array[int][1] == "float")
+        			{
+    					var vartype_class = "DataValueFieldTypeFloat";
+        			}
+        			else
+    				{
+        				var vartype_class = "DataValueFieldTypeString";
+    				}
+				}
     			
     			var field_input = $("<input type='textfield' name='af-"+field_array[int][3]+"'/>");
     			$(field_input).attr("value",field_array[int][2]);
+    			$(field_input).addClass(vartype_class);
+    			$(field_input).addClass(field_css_class);
     			$(td2).append(field_input);
-    			
-    			var vartype_input = $("<input type='hidden' name='af-"+field_array[int][3]+"-vartype'/>");
-    			$(vartype_input).attr("value",field_array[int][1]);
-    			$(td3).append(vartype_input);
-    			
+    			    			
     			var name_input = $("<input type='hidden' name='af-"+field_array[int][3]+"-name'/>");
     			$(name_input).attr("value",field_array[int][3]);
+    			$(name_input).addClass(field_css_class);
     			$(td4).append(name_input);
     	
     			$(tr)

@@ -1,4 +1,3 @@
-<script type="text/javascript" src="template/xhtml/data/js/value_handler.js"></script>
 <script>
 
 $(document).ready(function()
@@ -72,6 +71,7 @@ $(document).ready(function()
 <input type='hidden' value='[[DESCRIPTION]]' name='description' />
 <input type='hidden' value='[[KEYWORDS]]' name='keywords' />
 
+<div class='FormBoxClear'></div>
 </div>
 
 
@@ -83,7 +83,7 @@ $(document).ready(function()
 </div>
 
 <script language='javascript'>
-var auto_field = new autofield('[[AUTOFIELD_STRING]]');
+var auto_field = new autofield('[[AUTOFIELD_STRING]]', 'DataValueUpdateValues');
 </script>
 
 <!-- CONTAINER END () -->

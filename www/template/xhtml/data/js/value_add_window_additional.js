@@ -10,12 +10,15 @@ $('#DataBrowserAddValue').change(function(){
 function load_additional_content()
 {
 	var type_id = $('#DataBrowserAddValue option:selected').val();
+	$("#DataBrowserAddValue").parent().addClass("Form");
 	$.ajax({
 		type : "POST",
 		url : "ajax.php?session_id=[[SESSION_ID]]&nav=data&run=value_add",
 		data : "type_id="+type_id,
 		success : function(data) 
 		{
+			value_handler = new ValueHandler("DataValueAddValues");
+			
 			$('#AjaxLoadedContent').find('.jspVerticalBar').show();
 			$('#AjaxLoadedContent').children('.jspContainer').children('.jspPane').html(data);
 			scrollAPI.reinitialise();
@@ -35,7 +38,7 @@ function load_additional_content()
 			} 
 			if($('#AjaxLoadedContent').find('.autofield').length > 0)
 			{
-				auto_field = new autofield(undefined);
+				auto_field = new autofield(undefined, 'DataValueUpdateValues');
 				
 				function check_if_values_were_added()
 				{									
