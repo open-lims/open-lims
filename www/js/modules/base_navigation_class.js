@@ -133,7 +133,7 @@ function base_navigation()
 					
 					//open new tab
 					animate_right_tab_side_down(tab);
-//					open_menu(tab);
+					open_menu(tab);
 				});
 		}
 	}
@@ -305,34 +305,35 @@ function base_navigation()
 	function animate_right_tab_side_down(tab)
 	{
 		var right_tab_side_arrow = $(tab).find(".NavigationButtonDown");
-		var right_tab_side_corner = $(tab).find(".NavigationButtonRight");
+		if($.browser.msie && $.browser.version >= 7.0)
+		{
+			$(right_tab_side_arrow)
+				.css("background-position-y", 0)
+				.animate({"background-position-y": animate_downwards_pixels+"px"}, 200);
+			return false;
+		}
+		
 		//animate arrow part
-		
-		$(right_tab_side_arrow).css("background-position-y", 0);
-		
 		$(right_tab_side_arrow)
 			.stop()
-			.animate({"background-position-y": animate_downwards_pixels+"px"}, 200);
-//			.animate({backgroundPosition: "0 "+animate_downwards_pixels+"px"}, 200);
+			.animate({backgroundPosition: "0 "+animate_downwards_pixels+"px"}, 200);
 		
 		//animate arrow
 		$(right_tab_side_arrow)
 			.children()
 			.stop()
-//			.animate({"margin-top": arrow_margin_top}, 200)
 			.rotate({animateTo:-180, duration:400});
-
-		//animate right part
-		$(right_tab_side_corner)
-			.stop()
-			.animate({"background-position-y": animate_downwards_pixels+"px"}, 200);
-//			.animate({backgroundPosition: "0 "+animate_downwards_pixels+"px"}, 200);
 	}
 	
 	function animate_right_tab_side_up(tab)
 	{
 		var right_tab_side_arrow = $(tab).find(".NavigationButtonDown");
-		var right_tab_side_corner = $(tab).find(".NavigationButtonRight");
+		
+		if($.browser.msie && $.browser.version >= 7.0)
+		{
+			$(right_tab_side_arrow).animate({"background-position-y": "0px"}, 200);
+			return false;
+		}
 		
 		//animate arrow part
 		$(right_tab_side_arrow)
@@ -343,11 +344,7 @@ function base_navigation()
 		$(right_tab_side_arrow)
 			.children()
 			.stop()
-//			.animate({"margin-top": arrow_margin_top}, 200)
 			.rotate({animateTo:0, duration:400});
-		
-		//animate right part
-		$(right_tab_side_corner).stop().animate({backgroundPosition: "0 0"}, 200);
 	}
 	
 	function get_html(tab)

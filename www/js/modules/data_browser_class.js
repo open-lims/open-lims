@@ -713,7 +713,7 @@ function data_browser()
 					
 					var dialog = $("<div id='DataBrowserAddFileDialog'></div>")
 						.css({"position":"absolute","top":offset_y,"left":offset_x,"z-index":"98"})
-						.appendTo("#main")
+						.appendTo("#Main")
 						.html(json["add_list"])
 						.hide();
 
@@ -733,7 +733,7 @@ function data_browser()
 							"padding":"0"
 						})
 						.hide()
-						.appendTo("#main");
+						.appendTo("#Main");
 					var corner = $("<div id='DataBrowserAddFileCorner'></div>")
 						.css(
 						{
@@ -745,7 +745,7 @@ function data_browser()
 							"height":height-2
 						})
 						.hide()
-						.appendTo("#main");
+						.appendTo("#Main");
 					
 					$("#DataBrowserMenuAdd").children("img").attr("src","images/icons/add.png");
 					$("#DataBrowserMenuAdd").removeClass("Deactivated");

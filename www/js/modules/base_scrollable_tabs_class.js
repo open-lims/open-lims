@@ -231,8 +231,9 @@ function scrollable_tabs(tab_list,max_tabs,hide_arrows_if_deactivated,center_tab
 				{
 					$(this).css("background-color","white");
 				})
-				.click(function()
+				.click(function(evt)
 				{
+					evt.preventDefault();
 					focus_tab($(this).text(),true);
 					if(side == "left")
 					{
