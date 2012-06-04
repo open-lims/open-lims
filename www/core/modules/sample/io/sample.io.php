@@ -212,7 +212,7 @@ class SampleIO
 	 * @param array $category_array
 	 * @param integer $organisation_id
 	 */
-	public static function create($type_array, $category_array, $organisation_unit_id)
+	public static function create($type_array, $category_array, $organisation_unit_id, $holder_class, $holder_id)
 	{		
 		global $session;
 				
@@ -243,6 +243,8 @@ class SampleIO
 			else
 			{
 				$session->write_value("SAMPLE_ADD_ROLE", "item", true);
+				$session->write_value("SAMPLE_ADD_ITEM_HOLDER_CLASS", $holder_class, true);
+				$session->write_value("SAMPLE_ADD_ITEM_HOLDER_ID", $holder_id, true);
 			}
 			
 			$session->write_value("SAMPLE_ITEM_RETRACE", $_GET['retrace']);
@@ -413,7 +415,7 @@ class SampleIO
 		{			
 			if ($_GET[selectpage] == 1)
 			{
-				return self::create($type_array, $category_array, $organisation_unit_id);
+				return self::create($type_array, $category_array, $organisation_unit_id, $holder_class, $holder_id);
 			}
 			elseif ($_GET[selectpage] == 2)
 			{

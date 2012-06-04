@@ -464,10 +464,12 @@ class EquipmentAjax
 	 */
 	public static function item_add_action($get_array, $type_id)
 	{
-		global $user;
+		global $user, $transaction;
 		
 		if ($get_array and is_numeric($type_id))
 		{
+			$transaction_id = $transaction->begin();
+			
 			$equipment = new Equipment(null);
 			$equipment_add_successful = $equipment->create($type_id, $user->get_user_id());
 	
@@ -477,19 +479,35 @@ class EquipmentAjax
 				
 				$item_add_event = new ItemAddEvent($item_id, unserialize($get_array), null);
 				$event_handler = new EventHandler($item_add_event);
-				if ($event_handler->get_success() == false)
+				if ($event_handler->get_success() == true)
 				{
-					// Exception
+					if ($transaction_id != null)
+					{
+						$transaction->commit($transaction_id);
+					}
+					return "1";
+				}
+				else
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					throw new BaseException();
 				}
 			}
 			else
 			{
-				// Exception
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				throw new BaseException();
 			}
 		}
 		else
 		{
-			// Exception
+			throw new BaseException();
 		}
 	}
 }

@@ -451,6 +451,41 @@ class SampleHasUser_Access
 	 * @param integer $user_id
 	 * @return array
 	 */
+	public static function list_users_by_sample_id($sample_id)
+	{
+		global $db;
+			
+		if (is_numeric($sample_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT DISTINCT user_id FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE sample_id = ".$sample_id."";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,$data[user_id]);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $user_id
+	 * @return array
+	 */
 	public static function list_entries_by_user_id($user_id)
 	{
 		global $db;
@@ -465,6 +500,41 @@ class SampleHasUser_Access
 			while ($data = $db->db_fetch_assoc($res))
 			{
 				array_push($return_array,$data[primary_key]);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $user_id
+	 * @return array
+	 */
+	public static function list_samples_by_user_id($user_id)
+	{
+		global $db;
+			
+		if (is_numeric($user_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT DISTINCT sample_id FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE user_id = ".$user_id."";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,$data[sample_id]);
 			}
 			
 			if (is_array($return_array))

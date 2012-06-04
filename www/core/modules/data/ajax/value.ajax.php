@@ -252,12 +252,14 @@ class ValueAjax
 	 */
 	public static function add_as_item($folder_id, $type_id, $value_array, $get_array)
 	{
-		global $user;
+		global $user, $transaction;
 		
 		$parent_folder = Folder::get_instance($folder_id);
 		
 		if ($parent_folder->is_write_access())
 		{
+			$transaction_id = $transaction->begin();
+			
 			$value_array = json_decode($value_array, true);
 
 			$value = Value::get_instance(null);
@@ -269,17 +271,29 @@ class ValueAjax
 				
 				$item_add_event = new ItemAddEvent($item_id, unserialize($get_array), null);
 				$event_handler = new EventHandler($item_add_event);
-				if ($event_handler->get_success() == false)
+				if ($event_handler->get_success() == true)
 				{
-					throw new BaseException();
+					if ($transaction_id != null)
+					{
+						$transaction->commit($transaction_id);
+					}
+					return 1;
 				}
 				else
 				{
-					return 1;
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					throw new BaseException();
 				}
 			}
 			else
 			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
 				throw new BaseException();
 			}
 		}

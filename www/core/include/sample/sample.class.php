@@ -133,11 +133,11 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
      * @throws SampleCreateFolderException
      * @throws SampleCreateSubFolderException
      */
-    private function create_sample_folder($transaction_id, $sample_id, $template_id)
+    private function create_sample_folder($sample_id, $template_id)
     {
     	global $user, $transaction;
     	
-    	if ($transaction_id and is_numeric($sample_id) and is_numeric($template_id))
+    	if ($transaction->is_in_transction() and is_numeric($sample_id) and is_numeric($template_id))
     	{
 	    	// Create Sample Folder
 	    	$base_folder_id = constant("SAMPLE_FOLDER_ID");
@@ -221,11 +221,11 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
      * @return bool
      * @throws SampleCreateAsItemException
      */
-    private function create_sample_item($transaction_id, $sample_id)
+    private function create_sample_item($sample_id)
     {
-    	global $transction;
+    	global $transaction;
     	
-    	if ($transaction_id and is_numeric($sample_id))
+    	if ($transaction->is_in_transction() and is_numeric($sample_id))
     	{
     		// Create Item
 			if (($this->item_id = parent::create()) == null)
@@ -297,7 +297,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					// Create Sample Folder
 					try
 					{
-						$this->create_sample_folder($transaction_id, $sample_id, $template_id);
+						$this->create_sample_folder($sample_id, $template_id);
 					}
 					catch(SampleCreateFolderException $e)
 					{
@@ -319,7 +319,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     			
 					try
 					{
-						$this->create_sample_item($transaction_id, $sample_id);
+						$this->create_sample_item($sample_id);
 					}
 					catch(SampleCreateAsItemException $e)
 	    			{
@@ -499,7 +499,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     			// Create Sample Folder
     			try
     			{
-	    			$sub_folder_name_array = $this->create_sample_folder($transaction_id, $sample_id, $source_sample->get_template_id());
+	    			$sub_folder_name_array = $this->create_sample_folder($sample_id, $source_sample->get_template_id());
     			}
 	    		catch (SampleCreateFolderException $e)
 	    		{
@@ -521,7 +521,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	    		
 	    		try
 	    		{
-	    			$this->create_sample_item($transaction_id, $sample_id);
+	    			$this->create_sample_item($sample_id);
 	    		}
 	    		catch (SampleCreateAsItemException $e)
 	    		{
@@ -2193,37 +2193,23 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
    	}
 
    	/**
-   	 * @todo overhaul
+   	 * @see SampleInterface::list_samples_by_item_sql_list()
+	 * @param string $sql
+	 * @return array
+	 */
+	public static function list_samples_by_item_sql_list($sql)
+	{
+		return SampleIsItem_Access::list_samples_by_item_sql_list($sql);
+	}
+   	
+   	/**
    	 * @see SampleInterface::list_user_related_samples()
    	 * @param integer $user_id
    	 * @return array
    	 */
     public static function list_user_related_samples($user_id)
     {
-    	if (is_numeric($user_id))
-    	{
-    		$pk_array = SampleHasUser_Access::list_entries_by_user_id($user_id);
-
-    		if (is_array($pk_array) and count($pk_array) >= 1)
-    		{
-    			$return_array = array();
-    			
-    			foreach ($pk_array as $key => $value)
-    			{
-    				$sample_has_user_access = new SampleHasUser_Access($value);
-    				array_push($return_array, $sample_has_user_access->get_sample_id());
-    			}
-    			return $return_array;
-    		}
-    		else
-    		{
-    			return null;
-    		}
-    	}
-    	else
-    	{
-    		return null;
-    	}
+    	return SampleHasUser_Access::list_samples_by_user_id($user_id);
     }
     
     /**
