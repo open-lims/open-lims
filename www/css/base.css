@@ -334,6 +334,7 @@ html,body
 	background-image: url('../images/tabs/tab.png');
 	background-repeat:repeat-x;
 	background-position: top center;
+	
 }
 .NavigationButtonDown
 {
@@ -355,6 +356,7 @@ html,body
 {
 	border-right: solid #c0c0c0 1px;
 	padding-right:5px;
+	height: 20px;
 }
 
 /* Arrow Down */
@@ -650,13 +652,15 @@ border: none;
 {
 	border-right: solid #99cd32 1px;
 	padding-right:5px;
+	height: 20px;
 }
 
 #NavigationMenu li.ActiveGrey a span.NavigationButtonContentHasBorderRight,
 #NavigationMenu li.Grey a:hover span.NavigationButtonContentHasBorderRight
 {
 	border-right: solid #535353 1px;
-	padding-right:5px;
+	padding-right:5px;#
+	height: 20px;
 }
 
 #NavigationMenu li.ActiveBlue a span.NavigationButtonContentHasBorderRight,
@@ -664,6 +668,7 @@ border: none;
 {
 	border-right: solid #336699 1px;
 	padding-right:5px;
+	height: 20px;
 }
 
 #NavigationMenu li.ActiveOrange a span.NavigationButtonContentHasBorderRight,
@@ -671,11 +676,13 @@ border: none;
 {
 	border-right: solid #dcaf36 1px;
 	padding-right:5px;
+	height: 20px;
 }
 
 #NavigationMenu li.GreyedOut a span.NavigationButtonContentHasBorderRight
 {
 	padding-right:5px;
+	height: 20px;
 }
 
 
