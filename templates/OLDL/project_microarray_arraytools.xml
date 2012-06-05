@@ -28,17 +28,17 @@
 			<ITEM type="value">
          		<TYPE id="10003"></TYPE>
       		</ITEM>
-			<ITEM type="equipment" occurrence="multiple">
+			<ITEM type="equipment" occurrence="multiple" name="Add Used Hardware">
 				<CATEGORY id="1000" />
 			</ITEM>
 		</STATUS>
 		<STATUS id="10004">
-			<ITEM type="equipment" occurrence="multiple">
+			<ITEM type="equipment" occurrence="multiple" name="Add Hybridisation Hardware">
 				<CATEGORY id="1000" />
 			</ITEM>
 		</STATUS>
 		<STATUS id="10005">
-			<ITEM type="equipment" occurrence="multiple">
+			<ITEM type="equipment" occurrence="multiple" name="Add Washing Hardware">
 				<CATEGORY id="1000" />
 			</ITEM>
 		</STATUS>

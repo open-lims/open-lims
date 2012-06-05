@@ -601,7 +601,14 @@ class ProjectAdminAjax
 			{
 				if ($user->is_admin() == true)
 				{
-					$project->delete();
+					if ($project->delete() == true)
+					{
+						return "1";
+					}
+					else
+					{
+						throw new ProjectDeleteException();
+					}
 				}
 				else
 				{
@@ -614,7 +621,14 @@ class ProjectAdminAjax
 				
 				if ($project_security->is_access(6, false) == true)
 				{
-					$project->mark_as_deleted();		
+					if ($project->mark_as_deleted() == true)
+					{
+						return "1";
+					}
+					else
+					{
+						throw new ProjectDeleteException();
+					}
 				}
 				else
 				{
@@ -698,6 +712,10 @@ class ProjectAdminAjax
 					if ($project->mark_as_undeleted() == false)
 					{
 						throw new ProjectException();
+					}
+					else
+					{
+						return "1";
 					}
 				}
 				else
@@ -797,6 +815,10 @@ class ProjectAdminAjax
 					{
 						throw new ProjectException();
 					}
+					else
+					{
+						return "1";
+					}
 				}
 				else
 				{
@@ -812,6 +834,10 @@ class ProjectAdminAjax
 					if ($project->mark_as_canceled($comment) == false)
 					{
 						throw new ProjectException();
+					}
+					else
+					{
+						return "1";	
 					}
 				}
 				else

@@ -1394,7 +1394,15 @@ class SampleAjax
 			if ($user->is_admin())
 			{
 				$sample = new Sample($_GET['sample_id']);
-				$sample->delete();
+				
+				if ($sample->delete() == true)
+				{
+					return "1";
+				}
+				else
+				{
+					throw new SampleDeleteException();
+				}
 			}
 			else
 			{

@@ -551,11 +551,11 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 * @see DataEntityInterface::get_children()
 	 * @return array
 	 */
-	public final function get_children()
+	public final function get_children($list = "all")
 	{
 		if ($this->data_entity_id)
 		{
-			return DataEntityHasDataEntity_Access::list_data_entity_cid_by_data_entity_pid($this->data_entity_id);
+			return DataEntityHasDataEntity_Access::list_data_entity_cid_by_data_entity_pid($this->data_entity_id, $list);
 		}
 		else
 		{
@@ -783,9 +783,34 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 */
 	public final function unset_child_of($data_entity_id)
 	{
-		if ($this->data_entity_id and $data_entity_id)
+		if ($this->data_entity_id and is_numeric($data_entity_id))
 		{
 			$data_entity_has_data_entity = new DataEntityHasDataEntity_Access($data_entity_id, $this->data_entity_id);
+			if ($data_entity_has_data_entity->delete() == true)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;	
+		}
+	}
+	
+	/**
+	 * @see DataEntityInterface::unset_child()
+	 * @param integer $child_data_entity_id
+	 * @return bool
+	 */
+	public final function unset_child($child_data_entity_id)
+	{
+		if ($this->data_entity_id and is_numeric($child_data_entity_id))
+		{
+			$data_entity_has_data_entity = new DataEntityHasDataEntity_Access($this->data_entity_id, $child_data_entity_id);
 			if ($data_entity_has_data_entity->delete() == true)
 			{
 				return true;

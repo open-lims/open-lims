@@ -12,16 +12,26 @@ $.ajax(
 	},
 	success : function(data) 
 	{
-		if ((data + '').indexOf("EXCEPTION:",0) == 0)
-		{
-			var exception_message = data.replace("EXCEPTION: ","");
-			$.unblockUI();
-			ErrorDialog("Error", exception_message);
-		}
-		else
+		if (data == "1")
 		{
 			$.unblockUI();
 			window.setTimeout('window.location = "index.php?username=[[USERNAME]]&session_id=[[SESSION_ID]]&nav=sample"',500);
+		}
+		else
+		{						
+			if ((data + '').indexOf("EXCEPTION",0) == 0)
+			{
+				var exception_message = data.replace("EXCEPTION: ","");
+				$.unblockUI();
+				ErrorDialog("Error", exception_message);
+				return false;
+			}
+			else
+			{
+				$.unblockUI();
+				ErrorDialog("Error", "An error occured");
+				return false;
+			}
 		}
 	}
 });

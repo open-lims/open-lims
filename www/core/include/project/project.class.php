@@ -662,7 +662,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					}
 				}
 			}	
-	
+			
     		// Project Tasks
     		$project_task_array = ProjectTask::list_tasks($tmp_project_id);
     		

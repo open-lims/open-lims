@@ -29,7 +29,7 @@
 					<FIELD name="cy5_cdna_con" length="8" format="field_cdna" vartype="float"></FIELD>
 				</LINE>    
 				<LINE>
-					<PRINT value="DYE-mol/kb:"></PRINT>
+					<PRINT value="DYE-molecules per kb:"></PRINT>
 					<FIELD name="cy3_cdna_dye" length="8" format="field_cdna" vartype="float"></FIELD>
 					<FIELD name="cy5_cdna_dye" length="8" format="field_cdna" vartype="float"></FIELD>
 				</LINE>                   

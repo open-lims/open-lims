@@ -194,7 +194,7 @@ class DataEntityHasDataEntity_Access
 	 * @param integer $data_entity_pid
 	 * @return array
 	 */
-	public static function list_data_entity_cid_by_data_entity_pid($data_entity_pid)
+	public static function list_data_entity_cid_by_data_entity_pid($data_entity_pid, $list = "all")
 	{
 		global $db;
 			
@@ -202,7 +202,19 @@ class DataEntityHasDataEntity_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT data_entity_cid FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_pid = ".$data_entity_pid."";
+			if ($list == "linked_only")
+			{
+				$sql = "SELECT data_entity_cid FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_pid = ".$data_entity_pid." AND link_item_id IS NOT NULL";
+			}
+			elseif ($list == "without_linked")
+			{
+				$sql = "SELECT data_entity_cid FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_pid = ".$data_entity_pid." AND link_item_id IS NULL";
+			}
+			else
+			{
+				$sql = "SELECT data_entity_cid FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_pid = ".$data_entity_pid."";
+			}
+			
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))

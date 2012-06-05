@@ -12,13 +12,7 @@ $.ajax(
 	},
 	success : function(data) 
 	{
-		if ((data + '').indexOf("EXCEPTION:",0) == 0)
-		{
-			var exception_message = data.replace("EXCEPTION: ","");
-			$.unblockUI();
-			ErrorDialog("Error", exception_message);
-		}
-		else
+		if (data == "1")
 		{
 			$.unblockUI();
 			if ([[PROJECT_DELETED]] == true)
@@ -28,6 +22,22 @@ $.ajax(
 			else
 			{
 				reload_admin_menu();
+			}
+		}
+		else
+		{						
+			if ((data + '').indexOf("EXCEPTION",0) == 0)
+			{
+				var exception_message = data.replace("EXCEPTION: ","");
+				$.unblockUI();
+				ErrorDialog("Error", exception_message);
+				return false;
+			}
+			else
+			{
+				$.unblockUI();
+				ErrorDialog("Error", "An error occured");
+				return false;
 			}
 		}
 	}

@@ -6,14 +6,24 @@ $.ajax(
 	success : function(data) 
 	{
 		$("#ProjectRestoreWindow").dialog("close");
-		if ((data + '').indexOf("EXCEPTION:",0) == 0)
-		{
-			var exception_message = data.replace("EXCEPTION: ","");
-			ErrorDialog("Error", exception_message);
-		}
-		else
+		
+		if (data == "1")
 		{
 			reload_admin_menu();
+		}
+		else
+		{						
+			if ((data + '').indexOf("EXCEPTION",0) == 0)
+			{
+				var exception_message = data.replace("EXCEPTION: ","");
+				ErrorDialog("Error", exception_message);
+				return false;
+			}
+			else
+			{
+				ErrorDialog("Error", "An error occured");
+				return false;
+			}
 		}
 	}
 });

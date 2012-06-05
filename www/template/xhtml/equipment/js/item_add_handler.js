@@ -8,14 +8,24 @@ $.ajax(
 	success : function(data) 
 	{
 		$("[[CONTAINER_ID]]").dialog("close");
-		if ((data + '').indexOf("EXCEPTION:",0) == 0)
+		
+		if (data == "1")
 		{
-			var exception_message = data.replace("EXCEPTION: ","");
-			ErrorDialog("Error", exception_message);
+			reload_menu();
 		}
 		else
 		{
-			reload_menu();
+			if ((data + '').indexOf("EXCEPTION",0) == 0)
+			{
+				var exception_message = data.replace("EXCEPTION: ","");
+				ErrorDialog("Error", exception_message);
+				return false;
+			}
+			else
+			{
+				ErrorDialog("Error", "An error occured");
+				return false;
+			}
 		}
 	}
 });

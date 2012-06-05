@@ -375,7 +375,9 @@ class Folder extends DataEntity implements FolderInterface
 					}
 				}
 			
-				$data_entity_array = $this->get_children();
+				
+				// Folder-Content
+				$data_entity_array = $this->get_children("without_linked");
 				
 				if (is_array($data_entity_array) and count($data_entity_array) >= 1)
 				{
@@ -428,6 +430,25 @@ class Folder extends DataEntity implements FolderInterface
 								}
 								return false;
 							}
+						}
+					}
+				}
+				
+				
+				// Linked Folder-Content (e.g. from sub-items)
+				$data_entity_array = $this->get_children("linked_only");
+				
+				if (is_array($data_entity_array) and count($data_entity_array) >= 1)
+				{
+					foreach ($data_entity_array as $key => $value)
+					{
+						if ($this->unset_child($value) == false)
+						{
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							return false;
 						}
 					}
 				}
