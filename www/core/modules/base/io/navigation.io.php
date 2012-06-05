@@ -182,6 +182,7 @@ class Navigation_IO
 			$template_home->set_var("down", false);
 		}
 		
+		
 		$template_header->set_var("background_class", $background_color_class);
 		$template_header->output();
 		$template_home->output();
