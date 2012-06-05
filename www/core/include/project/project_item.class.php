@@ -358,7 +358,6 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
-     * @todo overhaul
      * @see ProjectItemInterface::get_project_items()
      * @return array
      */
@@ -366,23 +365,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     {
     	if ($this->project_id)
     	{
-    		$project_has_item_array = ProjectHasItem_Access::list_entries_by_project_id($this->project_id, $sub_items);
-
-    		if (is_array($project_has_item_array) and count($project_has_item_array) >= 1)
-    		{
-    			$return_array = array();
-    			
-    			foreach($project_has_item_array as $key => $value)
-    			{
-    				$project_has_item = new ProjectHasItem_Access($value);
-    				array_push($return_array, $project_has_item->get_item_id());
-    			}
-    			return $return_array;
-    		}
-    		else
-    		{
-    			return null;
-    		}
+    		return ProjectHasItem_Access::list_items_by_project_id($this->project_id, $sub_items);
     	}
     	else
     	{
@@ -400,7 +383,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     {
     	if ($this->project_id)
     	{
-    		return ProjectHasItem_Access::list_entries_by_project_id_and_project_status_id($this->project_id, $project_status_id, $sub_items);
+    		return ProjectHasItem_Access::list_items_by_project_id_and_project_status_id($this->project_id, $project_status_id, $sub_items);
     	}
     	else
     	{

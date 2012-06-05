@@ -730,7 +730,7 @@ class ProjectHasItem_Access
 	 * @return array
 	 * Returns with or without sub-items
 	 */
-	public static function list_entries_by_project_id_and_project_status_id($project_id, $project_status_id, $sub_items)
+	public static function list_items_by_project_id_and_project_status_id($project_id, $project_status_id, $sub_items)
 	{
 		global $db;
 
@@ -768,14 +768,14 @@ class ProjectHasItem_Access
 			return null;
 		}
 	}
-		
+	
 	/**
 	 * @param integer $project_id
 	 * @param bool $sub_items
 	 * @return array
 	 * Returns with or without subitems
 	 */	
-	public static function list_entries_by_project_id($project_id, $sub_items)
+	public static function list_items_by_project_id($project_id, $sub_items)
 	{
 		global $db;
 
@@ -785,18 +785,18 @@ class ProjectHasItem_Access
 			
 			if ($sub_items == true)
 			{
-				$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$project_id."";
+				$sql = "SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$project_id."";
 			}
 			else
 			{
-				$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$project_id." AND parent_item_id IS NULL";
+				$sql = "SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$project_id." AND parent_item_id IS NULL";
 			}
 			
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[primary_key]);
+				array_push($return_array,$data[item_id]);
 			}
 			
 			if (is_array($return_array))

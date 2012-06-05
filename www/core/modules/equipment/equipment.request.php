@@ -53,7 +53,7 @@ class EquipmentRequest
 			
 			case "equipment_item_add_window":
 				require_once("ajax/equipment.ajax.php");
-				echo EquipmentAjax::item_add_window($_POST[get_array]);
+				echo EquipmentAjax::item_add_window($_POST[get_array], $_POST[type_array], $_POST[category_array]);
 			break;
 			
 			case "equipment_item_add_action":

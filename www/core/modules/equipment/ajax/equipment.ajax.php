@@ -268,21 +268,17 @@ class EquipmentAjax
 		{
 			$array['window_id'] = "EquipmentItemAddWindow".$gid;
 			$array['click_id'] = "EquipmentItemAddButton".$gid;
-			
-			$unique = uniqid()."-".$gid;
 		}
 						
 		if ($type_array)
 		{
-			$session->write_value($unique."-TYPE_ARRAY", $type_array);
+			$type_array_serialized = serialize($type_array);
 		}
 		
 		if ($category_array)
 		{
-			$session->write_value($unique."-CATEGORY_ARRAY", $category_array);
+			$category_array_serialized = serialize($category_array);
 		}
-		
-		$link['unique'] = $unique;
 		
 		$array['window_title'] = "Add Equipment";
 		$array['script'] = "
@@ -291,8 +287,7 @@ class EquipmentAjax
 		autoOpen: false
 		});
 		
-		
-		base_dialog(\"POST\", \"ajax.php?session_id=".$_GET['session_id']."&nav=equipment&run=equipment_item_add_window\", 'get_array=".serialize($link)."', \"".$array['click_id']."\");
+		base_dialog(\"POST\", \"ajax.php?session_id=".$_GET['session_id']."&nav=equipment&run=equipment_item_add_window\", 'get_array=".serialize($link)."&type_array=".$type_array_serialized."&category_array=".$category_array_serialized."', \"".$array['click_id']."\");
 
 		";
 		
@@ -300,10 +295,12 @@ class EquipmentAjax
 	}
 	
 	/**
-	 * @param array $get_array
+	 * @param string $get_array
+	 * @param string $type_array
+	 * @param string $category_array
 	 * @return string
 	 */
-	public static function item_add_window($get_array)
+	public static function item_add_window($get_array, $type_array, $category_array)
 	{
 		global $session;
 		
@@ -311,16 +308,20 @@ class EquipmentAjax
 		{
 			$_GET = unserialize($get_array);	
 		}
+		
+		if ($type_array)
+		{
+			$type_array = unserialize($type_array);	
+		}
+		
+		if ($category_array)
+		{
+			$category_array = unserialize($category_array);	
+		}
 
 		$template = new HTMLTemplate("equipment/add_item_window.html");
 		
 		$equipment_array = EquipmentType::list_entries();
-	
-		if ($_GET['unique'])
-		{
-			$type_array = $session->read_value($_GET['unique']."-TYPE_ARRAY");
-			$category_array = $session->read_value($_GET['unique']."-CATEGORY_ARRAY");
-		}
 		
 		$result = array();
 		$hit_array = array();
