@@ -177,7 +177,7 @@ class DataBrowserAjax
 	public static function delete_stack()
 	{
 		$data_path = new DataPath(null, null);
-		$data_path->delete_stack();
+		return $data_path->delete_stack(true);
 	}
 	
 }

@@ -251,6 +251,10 @@ class EquipmentAjax
 	/**
 	 * @param integer $gid
 	 * @param array $link
+	 * @param array $type_array
+	 * @param array $category_array
+	 * @param string $holder_class
+	 * @param integer $holder_id
 	 * @return array
 	 */
 	public static function item_add_init($gid, $link, $type_array, $category_array, $holder_class, $holder_id)

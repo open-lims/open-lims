@@ -1205,20 +1205,39 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 
 	/**
 	 * @see ItemListenerInterface::get_item_add_type()
-	 * @return integer
+	 * @return array
 	 */
-	public static function get_item_add_type()
+	public static function get_item_add_type($item_type)
 	{
-		return 0;
+		if ($item_type == "file")
+		{
+			return array(array("page"), "page");
+		}
+		elseif($item_type == "value")
+		{
+			return array(array("page", "window"), "page");
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**
 	 * @see ItemListenerInterface::get_item_add_script_handling_class()
+	 * @param string $item_type
 	 * @return array
 	 */
-	public static function get_item_add_script_handling_class()
+	public static function get_item_add_script_handling_class($item_type)
 	{
-		return null;
+		if($item_type == "value")
+		{
+			return array("data/ajax/value.ajax.php", "ValueAjax", "item_add_init");
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**

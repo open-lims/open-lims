@@ -334,9 +334,9 @@ function data_browser()
 	 * @param folder_id the folder id
 	 * @param virtual_folder_id the virtual folder id
 	 */
-	function load_folder(folder_id,virtual_folder_id)
+	function load_folder(folder_id, virtual_folder_id)
 	{
-		if(folder_id == undefined)
+		if(folder_id === undefined)
 		{
 			folder_id = null;
 		}
@@ -345,7 +345,7 @@ function data_browser()
 			folder_id = "\""+folder_id+"\"";
 		}
 		
-		if(virtual_folder_id == undefined)
+		if(virtual_folder_id === undefined)
 		{
 			virtual_folder_id = null;
 		}
@@ -845,7 +845,7 @@ function data_browser()
 					data : "",
 					success : function(data) 
 					{
-						load_folder(null, null);
+						load_folder(data, null);
 					}
 				});
 			});

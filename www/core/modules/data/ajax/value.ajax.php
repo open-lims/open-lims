@@ -304,6 +304,21 @@ class ValueAjax
 	}
 	
 	/**
+	 * @todo implementation
+	 * @param integer $gid
+	 * @param array $link
+	 * @param array $type_array
+	 * @param array $category_array
+	 * @param string $holder_class
+	 * @param integer $holder_id
+	 * @return array
+	 */
+	public static function add_as_item_window_init($gid, $link, $type_array, $category_array, $holder_class, $holder_id)
+	{
+		
+	}
+	
+	/**
 	 * @todo exceptions
 	 */
 	public static function update($value_id, $previous_version_id, $value_array, $major)

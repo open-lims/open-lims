@@ -2549,18 +2549,19 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	
 	/**
 	 * @see ItemListenerInterface::get_item_add_type()
-	 * @return integer
+	 * @return array
 	 */
-	public static function get_item_add_type()
+	public static function get_item_add_type($item_type)
 	{
-		return 0;
+		return array(array("page"), "page");
 	}
 	
 	/**
 	 * @see ItemListenerInterface::get_item_add_script_handling_class()
+	 * @param string $item_type
 	 * @return array
 	 */
-	public static function get_item_add_script_handling_class()
+	public static function get_item_add_script_handling_class($item_type)
 	{
 		return null;
 	}
