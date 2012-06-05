@@ -205,6 +205,13 @@ html,body
 	width: 150px;
 }
 
+.NavigationButtonMenuColumnSeparator
+{
+	width: 0;
+	float: left;
+	margin: 0 5px 0 5px;
+}
+
 .NavigationButtonMenuCategoryCaption
 {
 	color: #ffffff;

@@ -21,8 +21,6 @@
 
 function base_navigation()
 {
-	
-//	var arrow_margin_top = parseInt($(".NavigationButtonLeft").css("margin-top").replace("px",""));
 	var animate_downwards_pixels = 5;
 	
 	init();
@@ -41,16 +39,16 @@ function base_navigation()
 		var last_color;
 		$(tab)
 			.bind("mouseover", function(){
-				if(!$(tab).hasClass(".GreyedOut"))
+				if(!$(tab).hasClass("GreyedOut"))
 				{
 					grey_out_active_tab_if_necessary(tab);
 				}
+				else
+				{
+					remove_grey_out_active_tab();
+				}
 				if($("#NavigationButtonMenu").size() !== 0)
 				{
-				
-//				}
-//				else
-//				{
 					if($(".SubMenuOpened")[0] !== $(tab)[0])
 					{
 						var open_tab = close_menu();
@@ -58,7 +56,7 @@ function base_navigation()
 
 						$(open_tab).removeClass("SubMenuOpened");
 
-						grey_out_active_tab_if_necessary(open_tab);
+						grey_out_active_tab_if_necessary(tab);
 						
 						if($(".GreyedOut").size() > 0)
 						{
@@ -77,6 +75,7 @@ function base_navigation()
 
 				var color = get_tab_color(tab);
 				last_color = $("#NavigationBackground").css("border-bottom");
+				
 				$("#NavigationBackground").css("border-bottom", "solid 1px "+color);
 				
 			})
@@ -92,14 +91,6 @@ function base_navigation()
 
 		if(button_down.length > 0)
 		{
-//			//this should actually fix IE 7 + 8 but somehow it does not?!
-//			$(tab).css("background-position-y","0");
-//			
-//			
-//			$(tab).next().css("background-position-y","0");
-//			alert($(tab).css("background-position-y")); //always returns undefined
-//			
-//			
 			$(button_down)
 				.bind("mouseover", function(){
 					$(this).children("img").attr("src","images/down_active.png");
@@ -125,14 +116,16 @@ function base_navigation()
 							return true;
 						}
 					}
+
 					//reset style of currently active tab
 					remove_grey_out_active_tab();
-					
+
 					//change style of currently active tab (if the menu does not come from this tab)
 					grey_out_active_tab_if_necessary(tab);
 					
 					//open new tab
 					animate_right_tab_side_down(tab);
+
 					open_menu(tab);
 				});
 		}
@@ -152,15 +145,6 @@ function base_navigation()
 				}
 			}
 		});
-		
-		if($(active_tab).hasClass("SubMenuOpened"))
-		{
-			$("#NavigationButtonMenu").css({
-				"border-left": "solid 1px #b6b6b6",
-				"border-right": "solid 1px #b6b6b6",
-				"border-bottom": "solid 1px #b6b6b6"
-			});
-		}
 		
 		if($(menu_tab)[0] !== $(active_tab)[0]) 
 		{
@@ -207,16 +191,7 @@ function base_navigation()
 		var color = get_tab_color(tab);
 		
 		var menu_html = get_html(tab);
-		
-		$(menu_html).find(".NavigationButtonMenuColumn").each(function(i){
-			if(i > 0)
-			{
-				$(this).css("border-left","dotted "+color+" 1px");
-				$(this).css("padding-left","5px");
-				$(this).css("margin-left","5px");
-			}
-		});
-		
+				
 		$(menu_html).find(".NavigationButtonMenuCategory").children().children().children().each(function(){
 			$(this).hover(function(){
 				$(this).css("background-color",color);
@@ -232,13 +207,30 @@ function base_navigation()
 				"border-left": "solid 1px "+color,
 				"border-right": "solid 1px "+color,
 				"border-bottom": "solid 1px "+color
-//				"min-width": $(tab).width()
 			})
 			.html(menu_html)
 			.data("refersToTab", tab)
 			.hide()
 			.appendTo("body")
 			.fadeIn(200);
+		
+		var menu_columns = $(menu_html).find(".NavigationButtonMenuColumn");
+		if(menu_columns.length >= 2)
+		{
+			var menu_height = $("#NavigationButtonMenu").height();
+			$(menu_columns).each(function(i){
+				if(i < menu_columns.length - 1)
+				{
+					var separator = $("<div class='NavigationButtonMenuColumnSeparator'></div>");
+					$(separator).css({
+							"height": menu_height,
+							"border-left": "dotted "+color+" 1px"
+						});
+					
+					$(this).after(separator);
+				}
+			});
+		}
 		
 		//mark tab as active
 		var tab_class = $(tab).attr("class");
@@ -304,8 +296,10 @@ function base_navigation()
 	
 	function animate_right_tab_side_down(tab)
 	{
+
 		var right_tab_side_arrow = $(tab).find(".NavigationButtonDown");
-		if($.browser.msie && $.browser.version >= 7.0)
+
+		if($.browser.msie && ($.browser.version == 7.0 || $.browser.version == 8.0))
 		{
 			$(right_tab_side_arrow)
 				.css("background-position-y", 0)
@@ -329,7 +323,7 @@ function base_navigation()
 	{
 		var right_tab_side_arrow = $(tab).find(".NavigationButtonDown");
 		
-		if($.browser.msie && $.browser.version >= 7.0)
+		if($.browser.msie && ($.browser.version == 7.0 || $.browser.version == 8.0))
 		{
 			$(right_tab_side_arrow).animate({"background-position-y": "0px"}, 200);
 			return false;
@@ -349,15 +343,12 @@ function base_navigation()
 	
 	function get_html(tab)
 	{
-//		var lists = $("<div>headline 1</div><ul><li>entry</li><li>long entry</li><li>longer entry</li><li>even longer entry</li><li>very very long entry</li></ul><div>headline 2</div><ul><li>zonk</li></ul>");
 		var lists = $(tab).find(".NavigationButtonSubMenu").html();
 		
 		var html = $("<div></div>");
-				
-		
 		var append_to = html;
 		$(lists).each(function(){
-			if($(this).is("div") === true)
+			if($(this).hasClass("NavigationButtonSubMenucolumnCaption"))
 			{
 				append_to = $("<div class='NavigationButtonMenuColumn'></div>").appendTo(html);
 				$("<div class='NavigationButtonMenuCategoryCaption'></div>")
@@ -371,17 +362,6 @@ function base_navigation()
 					.appendTo(append_to);
 			}
 		});
-
-//		$(html).find(".NavigationButtonMenuCategory:last").css({
-//			"-moz-border-bottom-right-radius": 7,
-//		   	"-webkit-border-bottom-right-radius": 7,
-//		   	"-khtml-border-bottom-right-radius": 7,
-//		   	"border-bottom-right-radius": 7,
-//		   	"-moz-border-bottom-left-radius": 7,
-//		   	"-webkit-border-bottom-left-radius": 7,
-//		   	"-khtml-border-bottom-left-radius": 7,
-//		   	"border-bottom-left-radius": 7
-//		});
 		
 		return html;
 	}
