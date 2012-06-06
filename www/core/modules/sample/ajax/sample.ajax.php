@@ -981,7 +981,6 @@ class SampleAjax
 									$paramquery[username] = $_GET[username];
 									$paramquery[session_id] = $_GET[session_id];
 									$paramquery[nav] = "sample";
-									$paramquery[run] = "item_add";
 									$paramquery[sample_id] = $_GET[sample_id];
 									
 									require_once("core/modules/item/common/item_common.io.php");

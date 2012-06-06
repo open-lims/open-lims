@@ -46,6 +46,7 @@ class ItemCommonIO
 		if ($element_array['display'] == true)
 		{			
 			$paramquery = $link_base;
+			$paramquery[run] = "item_add";
 			$paramquery[dialog] = $element_array['type'];
 			$paramquery[key] = $key;
 			$paramquery[retrace] = Retrace::create_retrace_string();
@@ -143,6 +144,7 @@ class ItemCommonIO
 						if ($sub_sub_item_value['element_type'] == "item")
 						{
 							$paramquery = $link_base;
+							$paramquery['run'] = "sub_item_add";
 							$paramquery['dialog'] = $sub_sub_item_value['type'];
 							$paramquery['key'] = $sub_sub_item_value['pos_id'];
 							$paramquery['parent'] = $element_array[type];

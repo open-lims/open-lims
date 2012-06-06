@@ -691,7 +691,6 @@ class ProjectAjax
 								$paramquery[username] = $_GET[username];
 								$paramquery[session_id] = $_GET[session_id];
 								$paramquery[nav] = "project";
-								$paramquery[run] = "item_add";
 								$paramquery[project_id] = $_GET[project_id];
 
 								require_once("core/modules/item/common/item_common.io.php");

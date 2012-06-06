@@ -660,7 +660,7 @@ class SampleRequest
 								$transaction_id = $transaction->begin();
 								
 								$current_requirements = $sample->get_requirements();
-																
+								
 								$return_value = $module_dialog['class']::$module_dialog[method]($current_requirements[$_GET['key']][type_id], $current_requirements[$_GET['key']][category_id], "Sample", $_GET['parent_id'], $_GET[key]);
 								
 								if (is_numeric($return_value))
