@@ -19,12 +19,18 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * Base main tab navigation class.
+ */
 function base_navigation()
 {
 	var animate_downwards_pixels = 5;
 	
 	init();
 	
+	/**
+	 * Initialise.
+	 */
 	function init()
 	{
 		$("#NavigationMenu").children("li").each(function(){
@@ -34,6 +40,10 @@ function base_navigation()
 		base_scrollable_navigation_tabs();
 	}
 	
+	/**
+	 * Binds event handlers to a given tab (of whatever kind).
+	 * @param tab
+	 */
 	function button_handler(tab)
 	{
 		var last_color;
@@ -55,8 +65,6 @@ function base_navigation()
 						animate_right_tab_side_up(open_tab);
 
 						$(open_tab).removeClass("SubMenuOpened");
-
-						grey_out_active_tab_if_necessary(tab);
 						
 						if($(".GreyedOut").size() > 0)
 						{
@@ -131,6 +139,10 @@ function base_navigation()
 		}
 	}
 	
+	/**
+	 * Greys out the active tab if it is not the given tab.
+	 * @param menu_tab the tab to be checked against.
+	 */
 	function grey_out_active_tab_if_necessary(menu_tab)
 	{
 		var active_tab = undefined;			
@@ -149,10 +161,13 @@ function base_navigation()
 		if($(menu_tab)[0] !== $(active_tab)[0]) 
 		{
 			$(active_tab).data("originalClass",$(active_tab).attr("class"));
-			$(active_tab).attr("class","GreyedOut");
+			$(active_tab).attr("class", "GreyedOut");
 		}
 	}
 	
+	/**
+	 * Removes the greyed out tab.
+	 */
 	function remove_grey_out_active_tab() 
 	{	
 		var original_class = $(".GreyedOut").data("originalClass");
@@ -161,6 +176,11 @@ function base_navigation()
 			.attr("class",original_class);
 	}	
 	
+	/**
+	 * Returns the color of a given tab as hex value.
+	 * @param tab the tab
+	 * @returns hex color string
+	 */
 	function get_tab_color(tab)
 	{
 		var color;
@@ -183,6 +203,10 @@ function base_navigation()
 		return color;
 	}
 	
+	/**
+	 * Opens the menu of a given tab.
+	 * @param tab
+	 */
 	function open_menu(tab)
 	{
 		var height = $(tab).find(".NavigationButtonLeft").height();
@@ -190,13 +214,35 @@ function base_navigation()
 		var left = $(tab).offset().left;
 		var color = get_tab_color(tab);
 		
-		var menu_html = get_html(tab);
+		var menu_html = get_menu_html(tab);
 				
 		$(menu_html).find(".NavigationButtonMenuCategory").children().children().children().each(function(){
 			$(this).hover(function(){
 				$(this).css("background-color",color);
 			}, function(){
 				$(this).css("background-color","");
+			})
+			.click(function(event){
+				event.stopPropagation();
+				
+				if($(".GreyedOut").size() > 0)
+				{
+					var original_class = $(".GreyedOut").data("originalClass");
+					$(".GreyedOut")
+						.removeClass("GreyedOut")
+						.attr("class",original_class)
+						.removeClass("ActiveOrange")
+						.removeClass("ActiveGreen")
+						.removeClass("ActiveBlue")
+						.removeClass("ActiveGrey");
+				}
+				
+				var tab = $("#NavigationButtonMenu").data("refersToTab");
+				
+				var color = get_tab_color(tab);
+				$("#NavigationBackground").css("border-bottom", "solid 1px "+color);
+				
+				animate_right_tab_side_up(tab);
 			});
 		});
 		
@@ -268,12 +314,15 @@ function base_navigation()
 		});
 		
 		var tab_color = get_tab_color(active_tab);
-		
 		$("#NavigationBackground").css("border-bottom", "solid 1px "+tab_color);
 		
 		$("body").unbind("click", body_click_handler);
 	};
 	
+	/**
+	 * Closes the menu. Returns the tab corresponding to the closed menu.
+	 * @returns the tab whose menu was closed.
+	 */
 	function close_menu()
 	{
 		var tab_to_close = $("#NavigationButtonMenu").data("refersToTab");
@@ -294,9 +343,12 @@ function base_navigation()
 		return tab_to_close;
 	}
 	
+	/**
+	 * Animates the right arrow side of a tab down.
+	 * @param tab
+	 */
 	function animate_right_tab_side_down(tab)
 	{
-
 		var right_tab_side_arrow = $(tab).find(".NavigationButtonDown");
 
 		if($.browser.msie && ($.browser.version == 7.0 || $.browser.version == 8.0))
@@ -319,6 +371,10 @@ function base_navigation()
 			.rotate({animateTo:-180, duration:400});
 	}
 	
+	/**
+	 * Animates the right arrow side of a tab up.
+	 * @param tab
+	 */
 	function animate_right_tab_side_up(tab)
 	{
 		var right_tab_side_arrow = $(tab).find(".NavigationButtonDown");
@@ -341,7 +397,12 @@ function base_navigation()
 			.rotate({animateTo:0, duration:400});
 	}
 	
-	function get_html(tab)
+	/**
+	 * Returns the html to be placed inside the menu of a given tab.
+	 * @param tab
+	 * @returns jQuery-Object.
+	 */
+	function get_menu_html(tab)
 	{
 		var lists = $(tab).find(".NavigationButtonSubMenu").html();
 		
@@ -368,6 +429,9 @@ function base_navigation()
 
 }
 
+/**
+ * Base scrollable tabs class.
+ */
 function base_scrollable_navigation_tabs()
 {
 	var tab_container = $("#NavigationMenu");
@@ -378,6 +442,9 @@ function base_scrollable_navigation_tabs()
 
 	init();
 	
+	/**
+	 * Initialise.
+	 */
 	function init()
 	{
 		var total_tab_width = 0;
@@ -407,6 +474,9 @@ function base_scrollable_navigation_tabs()
 		}
 	}
 	
+	/**
+	 * Appends the left and right arrow to the menu.
+	 */
 	function append_arrows()
 	{
 		var camera_position = $("#NavigationMenuCamera").position();
@@ -477,6 +547,9 @@ function base_scrollable_navigation_tabs()
 			.appendTo("#NavigationMenuCamera");
 	}
 	
+	/**
+	 * Disables the arrows if there is enough space.
+	 */
 	function disable_arrows_if_needed()
 	{
 		if(!$("#NavigationMenu").children(":first").hasClass("ToBeHidden"))
@@ -506,6 +579,12 @@ function base_scrollable_navigation_tabs()
 		}
 	}
 	
+	/**
+	 * Displays the arrow menu that shows hidden tabs.
+	 * @param x the x-coordinate.
+	 * @param y the y-coordinate.
+	 * @param arrow the arrow.
+	 */
 	function show_hidden_tabs_menu(x, y, arrow)
 	{
 		var hidden_tabs_menu = $("<div id='NavigationMenuHiddenTabsMenu'></div>")
@@ -568,6 +647,9 @@ function base_scrollable_navigation_tabs()
 		}
 	}
 	
+	/**
+	 * Hides the arrow menu that shows hidden tabs.
+	 */
 	function hide_hidden_tabs_menu()
 	{
 		$("#NavigationMenuHiddenTabsMenu").fadeOut(200, function(){
@@ -575,6 +657,10 @@ function base_scrollable_navigation_tabs()
 		});
 	}
 	
+	/**
+	 * Selects and centers a tab.
+	 * @param tab
+	 */
 	function focus_tab(tab)
 	{		
 		var tab_to_focus_min_x = $(tab).position().left;
@@ -595,6 +681,10 @@ function base_scrollable_navigation_tabs()
 		scroll_camera_to_offset(true);
 	}
 	
+	/**
+	 * Scrolls the camera to the current offset position.
+	 * @param animate boolean that indicates whether to use an animation as transition.
+	 */
 	function scroll_camera_to_offset(animate)
 	{
 		if(animate)
@@ -618,6 +708,9 @@ function base_scrollable_navigation_tabs()
 		}
 	}
 
+	/**
+	 * Hides the invisible tabs and aligns the tabs on the left side.
+	 */
 	function hide_invisible_tabs_and_align_left()
 	{
 		$(".ToBeHidden")
