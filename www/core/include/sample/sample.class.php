@@ -1139,6 +1139,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 								
 							$return_array[$counter][type] = $value[type];
 							$return_array[$counter][name] = $value[name];
+							$return_array[$counter][dialog] = $value[dialog];
 							$return_array[$counter][handling_class] = Item::get_handling_class_by_type($value[type]);
 							
 							$return_array[$counter][requirement] = $value[requirement];

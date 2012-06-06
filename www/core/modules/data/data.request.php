@@ -155,6 +155,11 @@ class DataRequest
 				echo ValueAjax::add_as_item($_POST[folder_id], $_POST[type_id], $_POST[value_array], $_POST[get_array]);
 			break;
 			
+			case "value_add_as_item_window":
+				require_once("ajax/value.ajax.php");
+				echo ValueAjax::add_as_item_window($_POST[get_array], $_POST[type_array], $_POST[folder_id]);
+			break;
+			
 			case "value_update":
 				require_once("ajax/value.ajax.php");
 				echo ValueAjax::update($_POST[value_id], $_POST[version], $_POST[value_array], true);

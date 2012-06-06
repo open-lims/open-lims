@@ -64,7 +64,7 @@ class ItemCommonIO
 			
 			$item_handling_cass = $element_array[handling_class];
 			$item_add_type_array = $item_handling_cass::get_item_add_type($element_array['type']);
-							
+
 			if (is_array($item_add_type_array))
 			{
 				if (in_array($element['dialog'], $item_add_type_array[0]))
@@ -161,9 +161,9 @@ class ItemCommonIO
 							
 							if (is_array($item_add_type_array))
 							{
-								if (in_array($element['dialog'], $item_add_type_array[0]))
+								if (in_array($sub_sub_item_value['dialog'], $item_add_type_array[0]))
 								{
-									$item_array_type = $element['dialog'];
+									$item_array_type = $sub_sub_item_value['dialog'];
 								}
 								else
 								{
@@ -176,7 +176,7 @@ class ItemCommonIO
 									$ajax_handling_array = $item_handling_cass::get_item_add_script_handling_class($sub_sub_item_value['type']);
 									require_once("core/modules/".$ajax_handling_array[0]);
 									
-									$item_holder = Item::get_holder_handling_class_by_name($element_array[type]);
+									$item_holder = Item::get_holder_handling_class_by_name($element_array[type]); // Type of the ItemHolder
 									$ajax_init_array = $ajax_handling_array[1]::$ajax_handling_array[2]($sub_sub_item_value['pos_id'], $paramquery, $sub_sub_item_value[type_id],  $sub_sub_item_value[category_id], $item_holder, $element_array[fulfilled][$sub_item_key][id]);
 									
 									$result[$counter][script] = $ajax_init_array[script];

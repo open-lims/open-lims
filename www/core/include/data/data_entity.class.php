@@ -1232,7 +1232,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	{
 		if($item_type == "value")
 		{
-			return array("data/ajax/value.ajax.php", "ValueAjax", "item_add_init");
+			return array("data/ajax/value.ajax.php", "ValueAjax", "add_as_item_window_init");
 		}
 		else
 		{

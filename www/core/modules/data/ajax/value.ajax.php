@@ -304,7 +304,7 @@ class ValueAjax
 	}
 	
 	/**
-	 * @todo implementation
+	 * @todo remove JS in template
 	 * @param integer $gid
 	 * @param array $link
 	 * @param array $type_array
@@ -315,7 +315,118 @@ class ValueAjax
 	 */
 	public static function add_as_item_window_init($gid, $link, $type_array, $category_array, $holder_class, $holder_id)
 	{
+		if ($link['parent'] and is_numeric($link['parent_id']))
+		{
+			$array['window_id'] = "ValueItemAddWindow".$link['parent_key']."-".$link['parent_id']."-".$gid;
+			$array['click_id'] = "ValueItemAddButton".$link['parent_key']."-".$link['parent_id']."-".$gid;
+		}
+		else
+		{
+			$array['window_id'] = "ValueItemAddWindow".$gid;
+			$array['click_id'] = "ValueItemAddButton".$gid;
+		}
+						
+		if ($type_array)
+		{
+			$type_array_serialized = serialize($type_array);
+		}
 		
+		if (class_exists($holder_class))
+		{
+			$item_holder = new $holder_class($holder_id);
+			
+			if ($item_holder instanceof ItemHolderInterface)
+			{
+				$folder_id = $item_holder->get_item_holder_value("folder_id", $gid);
+			}
+		}
+		
+		$array['window_title'] = "Add Values";
+		$array['script'] = "
+		$(\"#".$array['window_id']."\").dialog(
+		{
+		autoOpen: false
+		});
+		
+		value_handler = new ValueHandler(\"DataValueAddValues\");
+		
+		base_dialog(\"POST\", \"ajax.php?session_id=".$_GET['session_id']."&nav=data&run=value_add_as_item_window\", 'get_array=".serialize($link)."&type_array=".$type_array_serialized."&folder_id=".$folder_id."', \"".$array['click_id']."\");
+
+		";
+		
+		return $array;
+	}
+	
+	/**
+	 * @todo exceptions
+	 * @param string $get_array
+	 * @param string $type_array
+	 * @return string
+	 */
+	public static function add_as_item_window($get_array, $type_array, $folder_id)
+	{
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}
+		
+		if ($type_array)
+		{
+			$type_array = unserialize($type_array);	
+		}
+
+		if (is_array($type_array) and count($type_array) == 1)
+		{
+			if (is_numeric($folder_id))
+			{
+				$type_id = $type_array[0];
+				
+				$template = new HTMLTemplate("data/value_add_item_window.html");
+				
+				if ($_GET['parent'] and is_numeric($_GET['parent_id']))
+				{
+					$array['container'] = "#ValueItemAddWindow".$_GET['parent_key']."-".$_GET['parent_id']."-".$_GET['key'];
+				}
+				else
+				{
+					$array['container'] = "#ValueItemAddWindow".$_GET['key'];
+				}
+
+				require_once("core/modules/data/io/value_form.io.php");
+				$value_form_io = new ValueFormIO(null, $type_id, $folder_id);
+				$value_form_io->set_field_class("DataValueAddValues");
+				
+				$template->set_var("value",$value_form_io->get_content());
+				
+				$array['continue_caption'] = "Add";
+				$array['cancel_caption'] = "Cancel";
+				$array['content_caption'] = "Add Values";
+				$array['height'] = 350;
+				$array['width'] = 400;
+				$array['content'] = $template->get_string();
+				
+				$continue_handler_template = new JSTemplate("data/js/value_add_item_window.js");
+				$continue_handler_template->set_var("session_id", $_GET['session_id']);
+				$continue_handler_template->set_var("type_id", $type_id);
+				$continue_handler_template->set_var("folder_id", $folder_id);
+				$continue_handler_template->set_var("get_array", $get_array);
+				$continue_handler_template->set_var("container_id", $array['container']);
+	
+		
+				$array['continue_handler'] = $continue_handler_template->get_string();
+				
+				return json_encode($array);
+			}
+			else
+			{
+				throw new FolderIDMissingException();
+			}
+		}
+		else
+		{
+			// Change
+			throw new DataException();
+		}
 	}
 	
 	/**

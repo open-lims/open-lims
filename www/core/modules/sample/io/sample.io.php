@@ -212,7 +212,7 @@ class SampleIO
 	 * @param array $category_array
 	 * @param integer $organisation_id
 	 */
-	public static function create($type_array, $category_array, $organisation_unit_id, $holder_class, $holder_id)
+	public static function create($type_array = null, $category_array = null, $organisation_unit_id = null, $holder_class = null, $holder_id = null)
 	{		
 		global $session;
 				
@@ -284,7 +284,7 @@ class SampleIO
 	 * @param array $type_array
 	 * @param array $category_array
 	 */
-	public static function clone_sample($type_array, $category_array)
+	public static function clone_sample($type_array = null, $category_array = null)
 	{
 		global $session;
 		

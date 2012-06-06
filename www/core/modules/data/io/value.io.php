@@ -335,69 +335,51 @@ class ValueIO
 			}
 			else
 			{	
-				$value = Value::get_instance(null);
 				$value_type = new ValueType($type_id);
+
+				$template = new HTMLTemplate("data/value_add.html");
 				
-				if (!$_GET[nextpage] or $_GET[nextpage] == "1")
-				{	
-					$template = new HTMLTemplate("data/value_add.html");
-					
-					$template->set_var("session_id", $_GET['session_id']);
-					$template->set_var("folder_id", $folder_id);
-					$template->set_var("type_id", $type_id);
-					$template->set_var("get_array", serialize($_GET));
-					
-					if ($_GET['retrace'])
-					{
-						$template->set_var("retrace", "index.php?".http_build_query(Retrace::resolve_retrace_string($_GET['retrace'])));
-					}
-					else
-					{
-						$template->set_var("retrace", "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']);
-					}
-					
-					
-					$template->set_var("title", $value_type->get_name());
-					
-					require_once("value_form.io.php");
-					$value_form_io = new ValueFormIO(null, $type_id, $folder_id);
-					$value_form_io->set_field_class("DataValueAddValues");
-					
-					$template->set_var("value",$value_form_io->get_content());
+				$template->set_var("session_id", $_GET['session_id']);
+				$template->set_var("folder_id", $folder_id);
+				$template->set_var("type_id", $type_id);
+				$template->set_var("get_array", serialize($_GET));
 				
-					if ($_POST[keywords])
-					{
-						$template->set_var("keywords", $_POST[keywords]);
-					}
-					else
-					{
-						$template->set_var("keywords", "");
-					}
-					
-					if ($_POST[description])
-					{
-						$template->set_var("description", $_POST[description]);
-					}
-					else
-					{
-						$template->set_var("description", "");	
-					}
-		
-					$template->output();
+				if ($_GET['retrace'])
+				{
+					$template->set_var("retrace", "index.php?".http_build_query(Retrace::resolve_retrace_string($_GET['retrace'])));
 				}
 				else
 				{
-					$value_add_successful = $value->create($folder_id, $user->get_user_id(), $type_id, $_POST);
-
-					if ($value_add_successful == true)
-					{
-						return $value->get_item_id();
-					}
-					else
-					{
-						return false;
-					}
+					$template->set_var("retrace", "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']);
 				}
+				
+				$template->set_var("title", $value_type->get_name());
+				
+				require_once("value_form.io.php");
+				$value_form_io = new ValueFormIO(null, $type_id, $folder_id);
+				$value_form_io->set_field_class("DataValueAddValues");
+				
+				$template->set_var("value",$value_form_io->get_content());
+			
+				if ($_POST[keywords])
+				{
+					$template->set_var("keywords", $_POST[keywords]);
+				}
+				else
+				{
+					$template->set_var("keywords", "");
+				}
+				
+				if ($_POST[description])
+				{
+					$template->set_var("description", $_POST[description]);
+				}
+				else
+				{
+					$template->set_var("description", "");	
+				}
+	
+				$template->output();
 			}
 		}
 		else

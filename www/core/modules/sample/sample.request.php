@@ -287,12 +287,12 @@ class SampleRequest
 			case ("new"):
 			case ("new_subsample"):
 				require_once("io/sample.io.php");
-				SampleIO::create(null,null,null);
+				SampleIO::create();
 			break;
 			
 			case ("clone"):
 				require_once("io/sample.io.php");
-				SampleIO::clone_sample(null, null);
+				SampleIO::clone_sample();
 			break;
 			
 			case ("organ_unit"):

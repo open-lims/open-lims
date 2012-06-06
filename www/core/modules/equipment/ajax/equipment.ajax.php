@@ -249,6 +249,7 @@ class EquipmentAjax
 	}
 	
 	/**
+	 * @todo remove JS in template
 	 * @param integer $gid
 	 * @param array $link
 	 * @param array $type_array
@@ -258,15 +259,11 @@ class EquipmentAjax
 	 * @return array
 	 */
 	public static function item_add_init($gid, $link, $type_array, $category_array, $holder_class, $holder_id)
-	{
-		global $session;
-		
+	{		
 		if ($link['parent'] and is_numeric($link['parent_id']))
 		{
 			$array['window_id'] = "EquipmentItemAddWindow".$link['parent_key']."-".$link['parent_id']."-".$gid;
 			$array['click_id'] = "EquipmentItemAddButton".$link['parent_key']."-".$link['parent_id']."-".$gid;
-			
-			$unique = uniqid()."-".$link['parent_key']."-".$link['parent_id']."-".$gid;
 		}
 		else
 		{
@@ -306,8 +303,6 @@ class EquipmentAjax
 	 */
 	public static function item_add_window($get_array, $type_array, $category_array)
 	{
-		global $session;
-		
 		if ($get_array)
 		{
 			$_GET = unserialize($get_array);	
