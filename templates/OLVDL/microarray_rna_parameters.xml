@@ -33,7 +33,7 @@
 			</LINE>
 			<LINE>
 				<PRINT value="RIN (&gt;= 7):"></PRINT>
-				<FIELD name="rin" length="8" vartype="int"></FIELD>
+				<FIELD name="rin" length="8" vartype="int" min_value="1" max_value="10"></FIELD>
 			</LINE>                                 
 		</FORMAT> 
 	</BODY>           
