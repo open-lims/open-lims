@@ -139,7 +139,7 @@ class ItemCommonIO
 			{
 				foreach($sub_item_value as $sub_sub_item_key => $sub_sub_item_value)
 				{
-					if (!in_array($sub_item_key, $sub_item_irgnore_array))
+					if (!in_array($sub_sub_item_key, $sub_item_irgnore_array))
 					{
 						if ($sub_sub_item_value['element_type'] == "item")
 						{
@@ -200,7 +200,7 @@ class ItemCommonIO
 							if ($sub_sub_item_value['takeover'] == true)
 							{
 								$result[$counter][name] = $sub_sub_item_value[name]." (all)";
-								array_push($sub_item_irgnore_array, $sub_item_key);
+								array_push($sub_item_irgnore_array, $sub_sub_item_key);
 							}
 							else
 							{
