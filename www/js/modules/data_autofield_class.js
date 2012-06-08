@@ -1,6 +1,7 @@
 /**
  * version: 0.4.0.0
  * author: Roman Quiring <quiring@open-lims.org>
+ * author: Roman Konertz <konertz@open-lims.org>
  * copyright: (c) 2008-2011 by Roman Quiring
  * license: GPLv3
  * 
@@ -95,7 +96,12 @@ function autofield(field_array_string, field_css_class)
     			$(field_input).addClass(vartype_class);
     			$(field_input).addClass(field_css_class);
     			$(td2).append(field_input);
-    			    			
+    			  
+    			var vartype_input = $("<input type='hidden' name='af-"+field_array[int][3]+"-vartype'/>");
+    			$(vartype_input).attr("value",field_array[int][1]);
+    			$(vartype_input).addClass(field_css_class);
+    			$(td3).append(vartype_input);
+    			
     			var name_input = $("<input type='hidden' name='af-"+field_array[int][3]+"-name'/>");
     			$(name_input).attr("value",field_array[int][3]);
     			$(name_input).addClass(field_css_class);
