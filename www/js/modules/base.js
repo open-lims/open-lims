@@ -72,7 +72,7 @@ function base_dialog_reuqest(type, url, data_params)
 			if (data)
 			{
 				var json = $.parseJSON(data);
-				
+
 				var continue_button_click_handler 	= json["continue_handler"];
 				var cancel_button_click_handler 	= json["cancel_handler"];			
 				var additional_script 				= json["additional_script"];
@@ -140,6 +140,11 @@ function base_dialog_reuqest(type, url, data_params)
 				
 				$(container).html(html_content);
 				$(container).dialog("open");
+				
+				if (json["open_handler"])
+				{
+					eval(json["open_handler"]);
+				}
 			}
 		}
 	});	

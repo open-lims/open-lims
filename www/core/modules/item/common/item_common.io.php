@@ -75,19 +75,19 @@ class ItemCommonIO
 			}
 			
 			
-			if ($element_array[occurrence] == "once" and $item_add_occurrence_array[0] == true and $item_add_occurrence_array[2] == "edit")
+			if ($element_array[occurrence] == "once" and $item_add_occurrence_array[0] == true and $item_add_occurrence_array[2] == "edit" and is_array($element_array[fulfilled]) and $amount >= 1)
 			{
 				$paramquery[run] = "item_edit";
 			}
 			
 			
 			$item_add_dialog_array = $item_handling_cass::get_item_add_dialog($element_array['type']);
-
+			
 			if (is_array($item_add_dialog_array))
 			{
-				if (in_array($element['dialog'], $item_add_dialog_array[0]))
+				if (in_array($element_array['dialog'], $item_add_dialog_array[0]))
 				{
-					$item_array_type = $element['dialog'];
+					$item_array_type = $element_array['dialog'];
 				}
 				else
 				{

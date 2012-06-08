@@ -18,7 +18,7 @@ function load_additional_content()
 		success : function(data) 
 		{
 			value_handler = new ValueHandler("DataValueAddValues");
-			
+
 			$('#AjaxLoadedContent').find('.jspVerticalBar').show();
 			$('#AjaxLoadedContent').children('.jspContainer').children('.jspPane').html(data);
 			scrollAPI.reinitialise();
@@ -38,7 +38,7 @@ function load_additional_content()
 			} 
 			if($('#AjaxLoadedContent').find('.autofield').length > 0)
 			{
-				auto_field = new autofield(undefined, 'DataValueUpdateValues');
+				auto_field = new autofield(undefined, 'DataValueAddValues');
 				
 				function check_if_values_were_added()
 				{									
@@ -62,6 +62,7 @@ function load_additional_content()
 				}
 				check_if_values_were_added();
 			}
+			base_form_init();
 		}
 	});
 }

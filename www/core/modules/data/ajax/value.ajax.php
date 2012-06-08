@@ -342,17 +342,16 @@ class ValueAjax
 		}
 		
 		$array['window_title'] = "Add Values";
-		$array['script'] = "
-		$(\"#".$array['window_id']."\").dialog(
-		{
-		autoOpen: false
-		});
 		
-		value_handler = new ValueHandler(\"DataValueAddValues\");
+		$script_template = new JSTemplate("data/js/value_add_item_window_preclick.js");
+		$script_template->set_var("window_id", $array['window_id']);
+		$script_template->set_var("session_id", $_GET['session_id']);
+		$script_template->set_var("type_array", $type_array_serialized);
+		$script_template->set_var("folder_id", $folder_id);
+		$script_template->set_var("get_array", serialize($link));
+		$script_template->set_var("click_id", $array['click_id']);
 		
-		base_dialog(\"POST\", \"ajax.php?session_id=".$_GET['session_id']."&nav=data&run=value_add_as_item_window\", 'get_array=".serialize($link)."&type_array=".$type_array_serialized."&folder_id=".$folder_id."', \"".$array['click_id']."\");
-
-		";
+		$array['script'] = $script_template->get_string();
 		
 		return $array;
 	}
@@ -412,8 +411,10 @@ class ValueAjax
 				$continue_handler_template->set_var("get_array", $get_array);
 				$continue_handler_template->set_var("container_id", $array['container']);
 	
-		
 				$array['continue_handler'] = $continue_handler_template->get_string();
+				
+				$script_template = new JSTemplate("data/js/value_add_item_window_onclick.js");				
+				$array['open_handler'] = $script_template->get_string();
 				
 				return json_encode($array);
 			}

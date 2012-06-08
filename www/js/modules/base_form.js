@@ -1,15 +1,20 @@
 $(document).ready(function()
 {  
-	$(".Form input").each(function()
+	base_form_init = function()
 	{
-		$(this).focus(function()
+		$(".Form input").each(function()
 		{
-			 $(this).addClass("FormFocused");
-		});
-		
-		$(this).blur(function()
-		{
-			 $(this).removeClass("FormFocused");
-		});
-	});	
+			$(this).focus(function()
+			{
+				 $(this).addClass("FormFocused");
+			});
+			
+			$(this).blur(function()
+			{
+				 $(this).removeClass("FormFocused");
+			});
+		});	
+	}
+	
+	base_form_init();
 });

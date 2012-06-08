@@ -111,6 +111,7 @@ function autofield(field_array_string, field_css_class)
     		}	
     	}
     	$("#autofield_area").html(table);
+    	base_form_init();
     }
     
     /**
