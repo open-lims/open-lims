@@ -863,6 +863,15 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 
 	/**
+	 * @see ValueInterface::get_id()
+	 * @return integer
+	 */
+	public function get_id()
+	{
+		return $this->value_id;
+	}
+	
+	/**
 	 * @see ValueInterface::get_value_internal_revisions()
 	 * @return integer
 	 */

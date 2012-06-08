@@ -131,4 +131,11 @@
 	$dialog[13][internal_name]	= "data";
 	$dialog[13][display_name]	= "Data";
 	$dialog[13][weight]			= 300;
+	
+	$dialog[14][type]			= "item_edit";
+	$dialog[14][class_path]		= "core/modules/data/io/value.io.php";
+	$dialog[14]['class']		= "ValueIO";
+	$dialog[14][method]			= "edit_value_item";
+	$dialog[14][internal_name]	= "value";
+	$dialog[14][display_name]	= "Value";
 ?>

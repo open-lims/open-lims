@@ -107,6 +107,11 @@ interface ValueInterface
 	/**
 	 * @return integer
 	 */
+	public function get_id();
+	
+	/**
+	 * @return integer
+	 */
 	public function get_value_internal_revisions();
 	
 	/**

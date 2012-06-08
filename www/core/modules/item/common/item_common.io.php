@@ -45,12 +45,7 @@ class ItemCommonIO
 		
 		if ($element_array['display'] == true)
 		{			
-			$paramquery = $link_base;
-			$paramquery[run] = "item_add";
-			$paramquery[dialog] = $element_array['type'];
-			$paramquery[key] = $key;
-			$paramquery[retrace] = Retrace::create_retrace_string();
-			$params = http_build_query($paramquery,'','&#38;');
+			
 		
 			if ($element_array[occurrence] == "multiple" and $amount > 0)
 			{
@@ -64,17 +59,39 @@ class ItemCommonIO
 			$result[$counter][depends] = false;
 			
 			$item_handling_cass = $element_array[handling_class];
-			$item_add_type_array = $item_handling_cass::get_item_add_type($element_array['type']);
+			
+			$paramquery = $link_base;
+			$paramquery[run] = "item_add";
+			$paramquery[dialog] = $element_array['type'];
+			$paramquery[key] = $key;
+			$paramquery[retrace] = Retrace::create_retrace_string();
+			
 
-			if (is_array($item_add_type_array))
+			$item_add_occurrence_array = $item_handling_cass::get_item_add_occurrence($element_array['type']);
+			
+			if (!is_array($item_add_occurrence_array) or count($item_add_occurrence_array) != 3)
 			{
-				if (in_array($element['dialog'], $item_add_type_array[0]))
+				$item_add_occurrence_array = array(true, true, "deny");
+			}
+			
+			
+			if ($element_array[occurrence] == "once" and $item_add_occurrence_array[0] == true and $item_add_occurrence_array[2] == "edit")
+			{
+				$paramquery[run] = "item_edit";
+			}
+			
+			
+			$item_add_dialog_array = $item_handling_cass::get_item_add_dialog($element_array['type']);
+
+			if (is_array($item_add_dialog_array))
+			{
+				if (in_array($element['dialog'], $item_add_dialog_array[0]))
 				{
 					$item_array_type = $element['dialog'];
 				}
 				else
 				{
-					$item_array_type = $item_add_type_array[1];
+					$item_array_type = $item_add_dialog_array[1];
 				}
 				
 				if (trim($item_array_type) == "window")
@@ -99,11 +116,13 @@ class ItemCommonIO
 			{
 				$result[$counter][type] = "link";
 			}
-
+			
 			
 			if (is_array($element_array[fulfilled]) and $amount >= 1)
 			{
-				if ($element_array[occurrence] == "multiple")
+				if (($element_array[occurrence] == "multiple" and $item_add_occurrence_array[1] == true) or 
+					($element_array[occurrence] == "once" and $item_add_occurrence_array[0] == false) or 
+					($element_array[occurrence] == "once" and $item_add_occurrence_array[0] == true and $item_add_occurrence_array[2] == "edit"))
 				{
 					$result[$counter][image] = "add_done";
 				}
@@ -123,6 +142,7 @@ class ItemCommonIO
 				$result[$counter][name] = $result[$counter][name]." (optional)";
 			}
 			
+			$params = http_build_query($paramquery,'','&#38;');
 			$result[$counter][params] = $params;					
 
 			$counter++;
@@ -156,20 +176,34 @@ class ItemCommonIO
 							}
 							
 							$paramquery['retrace'] = Retrace::create_retrace_string();
-							$params = http_build_query($paramquery,'','&#38;');
+							
 							
 							$item_handling_cass = $sub_sub_item_value[handling_class];
-							$item_add_type_array = $item_handling_cass::get_item_add_type($sub_sub_item_value['type']);
 							
-							if (is_array($item_add_type_array))
+							$item_add_occurrence_array = $item_handling_cass::get_item_add_occurrence($sub_sub_item_value['type']);
+			
+							if (!is_array($item_add_occurrence_array) or count($item_add_occurrence_array) != 3)
 							{
-								if (in_array($sub_sub_item_value['dialog'], $item_add_type_array[0]))
+								$item_add_occurrence_array = array(true, true, "deny");
+							}
+							
+							
+							if ($sub_sub_item_value[occurrence] == "once" and $item_add_occurrence_array[0] == true and $item_add_occurrence_array[2] == "edit")
+							{
+								$paramquery[run] = "sub_item_edit";
+							}
+							
+							$item_add_dialog_array = $item_handling_cass::get_item_add_dialog($sub_sub_item_value['type']);
+							
+							if (is_array($item_add_dialog_array))
+							{
+								if (in_array($sub_sub_item_value['dialog'], $item_add_dialog_array[0]))
 								{
 									$item_array_type = $sub_sub_item_value['dialog'];
 								}
 								else
 								{
-									$item_array_type = $item_add_type_array[1];
+									$item_array_type = $item_add_dialog_array[1];
 								}
 								
 								if (trim($item_array_type) == "window")
@@ -217,7 +251,9 @@ class ItemCommonIO
 							
 							if (is_array($sub_sub_item_value[fulfilled]))
 							{
-								if ($sub_sub_item_value[occurrence] == "multiple")
+								if (($sub_sub_item_value[occurrence] == "multiple" and $item_add_occurrence_array[1] == true) or 
+									($sub_sub_item_value[occurrence] == "once" and $item_add_occurrence_array[0] == false) or 
+									($sub_sub_item_value[occurrence] == "once" and $item_add_occurrence_array[0] == true and $item_add_occurrence_array[2] == "edit"))
 								{
 									$result[$counter][image] = "add_done";
 								}
@@ -232,6 +268,7 @@ class ItemCommonIO
 								$result[$counter][image] = "add";
 							}
 
+							$params = http_build_query($paramquery,'','&#38;');
 							$result[$counter][depends] = true;
 							$result[$counter][params] = $params;
 

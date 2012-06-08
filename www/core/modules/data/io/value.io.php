@@ -28,6 +28,110 @@
 class ValueIO
 {		
 	/**
+	 * @param object $value
+	 * @param string $target_params
+	 * @throws ValueException
+	 */
+	private static function edit($value, $target_params, $display_header = true)
+	{
+		if (is_object($value) and $target_params)
+		{
+			$template = new HTMLTemplate("data/value_detail.html");
+			$template->set_var("display_header", $display_header);
+					
+			$value_version_array = $value->get_value_internal_revisions();
+				
+			if (is_array($value_version_array) and count($value_version_array) > 0)
+			{		
+				$result = array();
+				$counter = 1;
+			
+				$result[0][version] = 0;
+				$result[0][text] = "----------------------------------------------";
+				
+				foreach($value_version_array as $key => $fe_value)
+				{
+					$value_version = Value::get_instance($value->get_id(), true);
+					$value_version->open_internal_revision($fe_value);
+					
+					$result[$counter][version] = $value_version->get_internal_revision();
+					$result[$counter][text] = "Version ".$value_version->get_version()." - ".$value_version->get_version_datetime();
+					$counter++;
+				}
+				$template->set_var("version_option",$result);
+			}
+			
+			$result = array();
+			$counter = 0;
+			
+			foreach($_GET as $key => $fe_value)
+			{
+				if ($key != "version")
+				{
+					$result[$counter][value] = $fe_value;
+					$result[$counter][key] = $key;
+					$counter++;
+				}
+			}
+			
+			$template->set_var("get",$result);
+			
+			$template->set_var("version",$value->get_version());
+			$template->set_var("version_datetime",$value->get_datetime());
+		
+			$paramquery = $_GET;
+			$paramquery[action] = "permission";
+			$params = http_build_query($paramquery,'','&#38;');	
+			$template->set_var("change_permission_params",$params);
+		
+			if ($value->is_control_access() == true or $value->get_owner_id() == $user->get_user_id())
+			{
+				$template->set_var("change_permission",true);
+			}
+			else
+			{
+				$template->set_var("change_permission",false);
+			}
+			
+			if ($value->is_write_access() == true or $value->get_owner_id() == $user->get_user_id())
+			{
+				$template->set_var("write_permission",true);
+			}
+			else
+			{
+				$template->set_var("write_permission",false);
+			}
+		
+			$paramquery = $_GET;
+			$paramquery[action] = "value_history";
+			$params = http_build_query($paramquery,'','&#38;');	
+			
+			$template->set_var("version_list_link",$params);
+						
+			$template->set_var("retrace", "index.php?".$target_params);
+			
+			$template->set_var("session_id", $_GET['session_id']);
+			$template->set_var("internal_revision", $value->get_internal_revision());
+			$template->set_var("value_id", $value->get_id());
+									
+			$template->set_var("title", $value->get_name());
+			
+			require_once("value_form.io.php");
+			$value_form_io = new ValueFormIO($value->get_id());
+			$value_form_io->set_field_class("DataValueUpdateValues");
+			
+			$template->set_var("value",$value_form_io->get_content());
+			$template->set_var("autofield_string",$value->get_autofield_array());
+			
+			$template->output();
+		}
+		else
+		{
+			throw new ValueException();
+		}
+	}
+	
+	/**
 	 * @throws ValueIDMissingException
 	 * @throws DataSecurityAccessDeniedException
 	 */
@@ -137,98 +241,12 @@ class ValueIO
 				}
 				else
 				{
-					$template = new HTMLTemplate("data/value_detail.html");
-				
-					$value_version_array = $value->get_value_internal_revisions();
-						
-					if (is_array($value_version_array) and count($value_version_array) > 0)
-					{		
-						$result = array();
-						$counter = 1;
-					
-						$result[0][version] = 0;
-						$result[0][text] = "----------------------------------------------";
-						
-						foreach($value_version_array as $key => $fe_value)
-						{
-							$value_version = Value::get_instance($_GET[value_id], true);
-							$value_version->open_internal_revision($fe_value);
-							
-							$result[$counter][version] = $value_version->get_internal_revision();
-							$result[$counter][text] = "Version ".$value_version->get_version()." - ".$value_version->get_version_datetime();
-							$counter++;
-						}
-						$template->set_var("version_option",$result);
-					}
-					
-					$result = array();
-					$counter = 0;
-					
-					foreach($_GET as $key => $fe_value)
-					{
-						if ($key != "version")
-						{
-							$result[$counter][value] = $fe_value;
-							$result[$counter][key] = $key;
-							$counter++;
-						}
-					}
-					
-					$template->set_var("get",$result);
-					
-					$template->set_var("version",$value->get_version());
-					$template->set_var("version_datetime",$value->get_datetime());
-				
-					$paramquery = $_GET;
-					$paramquery[action] = "permission";
-					$params = http_build_query($paramquery,'','&#38;');	
-					$template->set_var("change_permission_params",$params);
-				
-					if ($value->is_control_access() == true or $value->get_owner_id() == $user->get_user_id())
-					{
-						$template->set_var("change_permission",true);
-					}
-					else
-					{
-						$template->set_var("change_permission",false);
-					}
-					
-					if ($value->is_write_access() == true or $value->get_owner_id() == $user->get_user_id())
-					{
-						$template->set_var("write_permission",true);
-					}
-					else
-					{
-						$template->set_var("write_permission",false);
-					}
-				
-					$paramquery = $_GET;
-					$paramquery[action] = "value_history";
-					$params = http_build_query($paramquery,'','&#38;');	
-					
-					$template->set_var("version_list_link",$params);
-
 					$paramquery = $_GET;
 					unset($paramquery[action]);
 					unset($paramquery[value_id]);
 					$params = http_build_query($paramquery);
 					
-					$template->set_var("retrace", "index.php?".$params);
-					
-					$template->set_var("session_id", $_GET['session_id']);
-					$template->set_var("internal_revision", $value->get_internal_revision());
-					$template->set_var("value_id", $_GET['value_id']);
-											
-					$template->set_var("title", $value->get_name());
-					
-					require_once("value_form.io.php");
-					$value_form_io = new ValueFormIO($_GET['value_id']);
-					$value_form_io->set_field_class("DataValueUpdateValues");
-					
-					$template->set_var("value",$value_form_io->get_content());
-					$template->set_var("autofield_string",$value->get_autofield_array());
-					
-					$template->output();
+					self::edit($value, $params, true);
 				}
 			}
 			else
@@ -388,6 +406,25 @@ class ValueIO
 		}
 	}
 
+	/**
+	 * @throws FolderIDMissingException
+	 */
+	public static function edit_value_item($item_id)
+	{
+		if (is_numeric($item_id))
+		{
+			$data_entity_id = DataEntity::get_entry_by_item_id($item_id);
+			$value_id = Value::get_value_id_by_data_entity_id($data_entity_id);
+		
+			$value = Value::get_instance($value_id);
+	
+			if ($value->is_read_access())
+			{		
+				self::edit($value, http_build_query(Retrace::resolve_retrace_string($_GET['retrace'])), false);
+			}
+		}
+	}
+	
 	/**
 	 * @throws ValueIDMissingException
 	 * @throws DataSecurityAccessDeniedException

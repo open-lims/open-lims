@@ -426,12 +426,20 @@ class SampleRequest
 			break;
 			
 			case("item_add"):
+			case("item_edit"):
 				if ($sample_security->is_access(2, false) == true)
 				{
 					if ($_GET[dialog])
 					{
-						$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_add", $_GET[dialog]);
-
+						if ($_GET['run'] == "item_add")
+						{
+							$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_add", $_GET[dialog]);
+						}
+						elseif ($_GET['run'] == "item_edit")
+						{
+							$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_edit", $_GET[dialog]);
+						}
+						
 						if (is_array($module_dialog) and $module_dialog[class_path])
 						{
 							if (file_exists($module_dialog[class_path]))
@@ -456,8 +464,14 @@ class SampleRequest
 										$sample = new Sample($_GET[sample_id]);
 										$current_requirements = $sample->get_requirements();
 										
-										// Calls Method
-										$module_dialog['class']::$module_dialog[method]($current_requirements[$_GET[key]][type_id], $current_requirements[$_GET[key]][category_id], "Sample", $_GET['sample_id'], $_GET[key]);
+										if ($_GET['run'] == "item_add")
+										{
+											$module_dialog['class']::$module_dialog['method']($current_requirements[$_GET['key']]['type_id'], $current_requirements[$_GET['key']]['category_id'], "Sample", $_GET['sample_id'], $_GET['key']);
+										}
+										elseif ($_GET['run'] == "item_edit")
+										{
+											$module_dialog['class']::$module_dialog['method']($current_requirements[$_GET['key']]['fulfilled'][0]['item_id']);
+										}
 									}
 								}
 								else
@@ -491,6 +505,7 @@ class SampleRequest
 			 * @todo exception
 			 */
 			case("sub_item_add"):
+			case("sub_item_edit"):
 				if ($sample_security->is_access(2, false) == true)
 				{
 					if ($_GET['parent'] and is_numeric($_GET['parent_id']) and is_numeric($_GET['key']))
@@ -503,7 +518,14 @@ class SampleRequest
 							require_once("core/modules/".$item_io_handling_class[0]);
 							if (class_exists($item_io_handling_class[1]))
 							{
-								$item_io_handling_class[1]::item_add_handler();
+								if ($_GET['run'] == "sub_item_add")
+								{
+									$item_io_handling_class[1]::item_add_edit_handler("add");
+								}
+								else
+								{
+									$item_io_handling_class[1]::item_add_edit_handler("edit");
+								}
 							}
 						}	
 					}
@@ -631,10 +653,8 @@ class SampleRequest
 		endswitch;
 	}
 
-	public static function item_add_handler()
-	{
-		global $transaction;
-		
+	public static function item_add_edit_handler($role = "add")
+	{		
 		if ($_GET['dialog'] and is_numeric($_GET['parent_id']) and is_numeric($_GET['key']))
 		{
 			$sample = new Sample($_GET['parent_id']);
@@ -644,7 +664,14 @@ class SampleRequest
 			{
 				if ($_GET[dialog])
 				{
-					$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_add", $_GET[dialog]);
+					if ($role == "add")
+					{
+						$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_add", $_GET[dialog]);
+					}
+					elseif ($role == "edit")
+					{
+						$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_edit", $_GET[dialog]);
+					}
 
 					if (is_array($module_dialog) and $module_dialog[class_path])
 					{
@@ -656,41 +683,16 @@ class SampleRequest
 							{
 								$sample_item = new SampleItem($_GET['parent_id']);
 								$sample_item->set_gid($_GET['key']);
-								
-								$transaction_id = $transaction->begin();
-								
+																
 								$current_requirements = $sample->get_requirements();
 								
-								$return_value = $module_dialog['class']::$module_dialog[method]($current_requirements[$_GET['key']][type_id], $current_requirements[$_GET['key']][category_id], "Sample", $_GET['parent_id'], $_GET[key]);
-								
-								if (is_numeric($return_value))
+								if ($role == "add")
 								{
-									if ($_GET[retrace])
-									{
-										$params = http_build_query(Retrace::resolve_retrace_string($_GET[retrace]),'','&#38;');
-									}
-									else
-									{
-										$paramquery[username] = $_GET[username];
-										$paramquery[session_id] = $_GET[session_id];
-										$paramquery[nav] = "home";
-										$params = http_build_query($paramquery,'','&#38;');
-									}
-								
-									$item_add_event = new ItemAddEvent($return_value, $_GET, null);
-									$event_handler = new EventHandler($item_add_event);
-									if ($event_handler->get_success() == true)
-									{
-										if ($transaction_id != null)
-										{
-											$transaction->commit($transaction_id);
-										}
-										Common_IO::step_proceed($params, "Add Item", "Successful." ,null);
-									}
-									else
-									{
-										// Exception
-									}
+									$module_dialog['class']::$module_dialog['method']($current_requirements[$_GET['key']]['type_id'], $current_requirements[$_GET['key']]['category_id'], "Sample", $_GET['parent_id'], $_GET['key']);
+								}
+								elseif ($role == "edit")
+								{
+									$module_dialog['class']::$module_dialog['method']($current_requirements[$_GET['key']]['fulfilled'][0]['item_id']);
 								}
 							}
 							else

@@ -1275,6 +1275,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 							$counter++;
 							$type_counter = 0;
 							$category_counter = 0;
+							$fulfilled_counter = 0;
 							$in_item = false;
 						}
 						
@@ -2549,12 +2550,22 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	}
 	
 	/**
-	 * @see ItemListenerInterface::get_item_add_type()
+	 * @see ItemListenerInterface::get_item_add_dialog()
 	 * @return array
 	 */
-	public static function get_item_add_type($item_type)
+	public static function get_item_add_dialog($item_type)
 	{
 		return array(array("page"), "page");
+	}
+	
+	/**
+	 * ItemListenerInterface::get_item_add_occurrence()
+	 * @param unknown_type $item_type
+	 * @return array
+	 */
+	public static function get_item_add_occurrence($item_type)
+	{
+		return array(true, true, "deny");
 	}
 	
 	/**

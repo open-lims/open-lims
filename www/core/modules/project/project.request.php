@@ -549,11 +549,19 @@ class ProjectRequest
 			
 			// Item Add
 			case("item_add"):
+			case("item_edit"):
 				if ($project_security->is_access(3, false) == true)
 				{
 					if ($_GET[dialog])
 					{
-						$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_add", $_GET[dialog]);
+						if ($_GET['run'] == "item_add")
+						{
+							$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_add", $_GET[dialog]);
+						}
+						elseif ($_GET['run'] == "item_edit")
+						{
+							$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_edit", $_GET[dialog]);
+						}
 
 						if (is_array($module_dialog) and $module_dialog[class_path])
 						{
@@ -580,8 +588,14 @@ class ProjectRequest
 									{
 										$current_status_requirements = $project->get_current_status_requirements($project->get_current_status_id());
 										
-										// Calls Method
-										$module_dialog['class']::$module_dialog[method]($current_status_requirements[$_GET[key]][type_id], $current_status_requirements[$_GET[key]][category_id], "Project", $_GET['project_id'], $_GET[key]);
+										if ($_GET['run'] == "item_add")
+										{
+											$module_dialog['class']::$module_dialog['method']($current_status_requirements[$_GET['key']]['type_id'], $current_status_requirements[$_GET['key']]['category_id'], "Project", $_GET['project_id'], $_GET[key]);
+										}
+										elseif ($_GET['run'] == "item_edit")
+										{
+											$module_dialog['class']::$module_dialog['method']($current_status_requirements[$_GET['key']]['fulfilled'][0]['item_id']);
+										}
 									}
 								}
 								else
@@ -610,11 +624,12 @@ class ProjectRequest
 				}
 			break;
 			
-			// Sub Item Add
+			// Sub Item Add and Edit
 			/**
 			 * @todo exception
 			 */
 			case("sub_item_add"):
+			case("sub_item_edit"):
 				if ($project_security->is_access(3, false) == true)
 				{
 					if ($_GET['parent'] and is_numeric($_GET['parent_id']) and is_numeric($_GET['key']))
@@ -627,7 +642,14 @@ class ProjectRequest
 							require_once("core/modules/".$item_io_handling_class[0]);
 							if (class_exists($item_io_handling_class[1]))
 							{
-								$item_io_handling_class[1]::item_add_handler();
+								if ($_GET['run'] == "sub_item_add")
+								{
+									$item_io_handling_class[1]::item_add_edit_handler("add");
+								}
+								elseif($_GET['run'] == "sub_item_edit")
+								{
+									$item_io_handling_class[1]::item_add_edit_handler("edit");
+								}
 							}
 						}	
 					}

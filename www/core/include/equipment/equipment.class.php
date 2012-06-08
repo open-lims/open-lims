@@ -536,13 +536,23 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 	}
 	
 	/**
-	 * @see ItemListenerInterface::get_item_add_type()
+	 * @see ItemListenerInterface::get_item_add_dialog()
 	 * @param string $item_type
 	 * @return array
 	 */
-	public static function get_item_add_type($item_type)
+	public static function get_item_add_dialog($item_type)
 	{
 		return array(array("window"), "window");
+	}
+	
+	/**
+	 * ItemListenerInterface::get_item_add_occurrence()
+	 * @param unknown_type $item_type
+	 * @return array
+	 */
+	public static function get_item_add_occurrence($item_type)
+	{
+		return array(true, true, "deny");
 	}
 	
 	/**

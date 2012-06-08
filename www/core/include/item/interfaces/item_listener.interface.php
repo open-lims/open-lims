@@ -158,13 +158,26 @@ interface ItemListenerInterface
 	public static function get_sql_fulltext_where($type);
 	
 	/**
-	 * Returns the types of the item add methods
+	 * Returns the possible dialog-attributes of the requested item-type
 	 * 0 => array of possbile types
 	 * 1 => standard type
 	 * @param string $item_type
 	 * @return array
 	 */
-	public static function get_item_add_type($item_type);
+	public static function get_item_add_dialog($item_type);
+	
+	/**
+	 * Returns the possible occurrence-attributes and the behaviour of the requested item-type
+	 * array
+	 * 		(
+	 * 			once is possible (if false: behaviour like multiple), 
+	 * 			multiple is possible (if false: behaviour like once), 
+	 * 			behaviour after addgin while occurrence is set to once (possbile values: "deny", "edit")
+	 * 		)
+	 * @param unknown_type $item_type
+	 * @return array
+	 */
+	public static function get_item_add_occurrence($item_type);
 	
 	/**
 	 * Returns the name and the path of the io-class which handles the add-script

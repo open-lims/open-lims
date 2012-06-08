@@ -1204,10 +1204,10 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 
 	/**
-	 * @see ItemListenerInterface::get_item_add_type()
+	 * @see ItemListenerInterface::get_item_add_dialog()
 	 * @return array
 	 */
-	public static function get_item_add_type($item_type)
+	public static function get_item_add_dialog($item_type)
 	{
 		if ($item_type == "file")
 		{
@@ -1216,6 +1216,27 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		elseif($item_type == "value")
 		{
 			return array(array("page", "window"), "page");
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * ItemListenerInterface::get_item_add_occurrence()
+	 * @param unknown_type $item_type
+	 * @return array
+	 */
+	public static function get_item_add_occurrence($item_type)
+	{
+		if ($item_type == "file")
+		{
+			return array(false, true, "deny");
+		}
+		elseif($item_type == "value")
+		{
+			return array(true, true, "edit");
 		}
 		else
 		{
