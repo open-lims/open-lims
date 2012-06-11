@@ -82,8 +82,6 @@ function base_navigation()
 				}
 
 				var color = get_tab_color(tab);
-				last_color = $("#NavigationBackground").css("border-bottom");
-				
 				$("#NavigationBackground").css("border-bottom", "solid 1px "+color);
 				
 			})
@@ -91,7 +89,11 @@ function base_navigation()
 				if($("#NavigationButtonMenu").size() === 0)
 				{
 					remove_grey_out_active_tab();
-					$("#NavigationBackground").css("border-bottom", last_color);
+					
+					var active_tab = get_active_tab();
+					var color = get_tab_color(active_tab);
+
+					$("#NavigationBackground").css("border-bottom", "solid 1px "+color);
 				}
 			});
 		
@@ -145,18 +147,7 @@ function base_navigation()
 	 */
 	function grey_out_active_tab_if_necessary(menu_tab)
 	{
-		var active_tab = undefined;			
-		$("#NavigationMenu").children().each(function()
-		{
-			if($(this).attr("class").indexOf("Active") !== -1)
-			{
-				active_tab = this;				
-				if($(menu_tab)[0] !== $(this)[0])
-				{
-					return false;
-				}
-			}
-		});
+		var active_tab = get_active_tab();			
 		
 		if($(menu_tab)[0] !== $(active_tab)[0]) 
 		{
@@ -173,8 +164,25 @@ function base_navigation()
 		var original_class = $(".GreyedOut").data("originalClass");
 		$(".GreyedOut")
 			.removeClass("GreyedOut")
-			.attr("class",original_class);
+			.attr("class", original_class);
 	}	
+	
+	/**
+	 * Returns the currently active tab.
+	 */
+	function get_active_tab()
+	{
+		var active_tab;
+		$("#NavigationMenu").children().each(function(){
+			if($(this).attr("class").indexOf("Active") !== -1)
+			{
+				active_tab = this;
+				return false;
+			}
+		});
+		return active_tab;
+	}
+	
 	
 	/**
 	 * Returns the color of a given tab as hex value.
@@ -242,7 +250,9 @@ function base_navigation()
 				var color = get_tab_color(tab);
 				$("#NavigationBackground").css("border-bottom", "solid 1px "+color);
 				
-				animate_right_tab_side_up(tab);
+//				animate_right_tab_side_up(tab);
+//				close_menu();
+				
 			});
 		});
 		
@@ -305,13 +315,7 @@ function base_navigation()
 			.removeClass("GreyedOut")
 			.attr("class",original_class);
 		
-		var active_tab;
-		$("#NavigationMenu").children().each(function(){
-			if($(this).attr("class").indexOf("Active") !== -1)
-			{
-				active_tab = this;
-			}
-		});
+		var active_tab = get_active_tab();
 		
 		var tab_color = get_tab_color(active_tab);
 		$("#NavigationBackground").css("border-bottom", "solid 1px "+tab_color);
