@@ -297,6 +297,24 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     	}
     }
     
+	/**
+     * @see SampleItemInterface::get_sample_items_with_pos_id()
+     * @return array
+     */
+    public function get_sample_items_with_pos_id()
+    {
+    	if ($this->sample_id)
+    	{
+    		return SampleHasItem_Access::list_items_by_sample_id_with_pos_id($this->sample_id);
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+    
+    
     /**
      * @see SampleItemInterface::set_item_id()
      * @param integer $item_id

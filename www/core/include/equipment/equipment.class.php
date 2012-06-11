@@ -422,9 +422,11 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
     
     /**
      * @see ItemListenerInterface::get_instance_by_item_id()
+     * @param integer $item_id
+     * @param boolean $light_instance
      * @return object
      */
-    public static function get_instance_by_item_id($item_id)
+    public static function get_instance_by_item_id($item_id, $light_instance = false)
     {
     	if (is_numeric($item_id))
     	{

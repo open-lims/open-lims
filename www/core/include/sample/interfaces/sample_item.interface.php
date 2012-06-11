@@ -59,6 +59,11 @@ interface SampleItemInterface
 	public function get_sample_items();
 	
 	/**
+     * @return array
+     */
+    public function get_sample_items_with_pos_id();
+	
+	/**
      * @param integer $item_id
      * @return bool
      */

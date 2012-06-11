@@ -391,6 +391,23 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     	}
     }
     
+	/**
+     * @see ProjectItemInterface::get_project_status_items_with_pos_id()
+     * @param integer $project_status_id
+     * @return array
+     */
+    public function get_project_status_items_with_pos_id($project_status_id)
+    {
+    	if ($this->project_id)
+    	{
+    		return ProjectHasItem_Access::list_items_by_project_id_and_project_status_id_with_pos_id($this->project_id, $project_status_id, false);
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
     /**
      * @see ProjectItemInterface::set_item_id()
      * @param integer $item_id
@@ -1059,20 +1076,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     		return false;
     	}
     }
-  
-  
-    /**
-     * @see ProjectItemInterface::get_gid_by_item_id_and_project_id()
-     * @param integer $item_id
-     * @param integer $project_id
-     * @param integer $project_status_id
-     * @return array
-     */
-    public static function get_gid_by_item_id_and_project_id($item_id, $project_id, $project_status_id)
-    {
-    	return ProjectHasItem_Access::get_gid_by_item_id_and_project_id($item_id, $project_id, $project_status_id);
-    }
-        
+          
   	/**
   	 * @see ProjectItemInterface::list_projects_by_item_id()
   	 * @return array

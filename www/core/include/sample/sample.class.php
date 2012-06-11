@@ -1124,7 +1124,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 		    		else
 		    		{
 		    			$sample_item = new SampleItem($this->sample_id);
-						$item_array = $sample_item->get_sample_items();
+						$item_array = $sample_item->get_sample_items_with_pos_id();
 						$runtime_data->write_object_data($this, "SAMPLE_".$this->sample_id."_FULFILLED_ITEM_ARRAY", $item_array);	
 		    		}
 						
@@ -1173,18 +1173,16 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 			
 									foreach($item_array as $item_key => $item_value)
 									{
-										$item_pos_id = SampleItem::get_gid_by_item_id_and_sample_id($item_value, $this->sample_id);
-										
 										if (is_array($item_type_array) and count($item_type_array) >= 1)
 										{
 											foreach ($item_type_array as $item_type => $item_handling_class)
 											{
 												if (class_exists($item_handling_class))
 												{
-													if ($item_handling_class::is_kind_of($item_type, $item_value) == true and $item_pos_id == $pos_id and $item_pos_id !== null and $pos_id !== null)
+													if ($item_handling_class::is_kind_of($item_type, $item_value['item_id']) == true and $item_value['pos_id'] == $pos_id and $item_value['pos_id'] !== null and $pos_id !== null)
 													{
-														$item_instance = $item_handling_class::get_instance_by_item_id($item_value);
-														$return_array[$counter][fulfilled][$fulfilled_counter][item_id] = $item_value;
+														$item_instance = $item_handling_class::get_instance_by_item_id($item_value['item_id'], true);
+														$return_array[$counter][fulfilled][$fulfilled_counter][item_id] = $item_value['item_id'];
 														$return_array[$counter][fulfilled][$fulfilled_counter][id] = $item_instance->get_item_object_id();
 														$return_array[$counter][fulfilled][$fulfilled_counter][name] = $item_instance->get_item_object_name();
 														$item_instance_array[$fulfilled_counter] = $item_instance;
@@ -1367,7 +1365,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	    		else
 	    		{
 	    			$sample_item = new SampleItem($this->sample_id);
-					$item_array = $sample_item->get_sample_items();
+					$item_array = $sample_item->get_sample_items_with_pos_id();
 					$runtime_data->write_object_data($this, "SAMPLE_".$this->sample_id."_FULFILLED_ITEM_ARRAY", $item_array);	
 	    		}
 				
@@ -1417,17 +1415,15 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 		
 								foreach($item_array as $item_key => $item_value)
 								{
-									$item_pos_id = SampleItem::get_gid_by_item_id_and_sample_id($item_value, $this->sample_id);
-									
 									if (is_array($item_type_array) and count($item_type_array) >= 1)
 									{
 										foreach ($item_type_array as $item_type => $item_handling_class)
 										{
 											if (class_exists($item_handling_class))
 											{
-												if ($item_handling_class::is_kind_of($item_type, $item_value) == true and $item_pos_id == $pos_id and $item_pos_id !== null and $pos_id !== null)
+												if ($item_handling_class::is_kind_of($item_type, $item_value['item_id']) == true and $item_value['pos_id'] == $pos_id and $item_value['pos_id'] !== null and $pos_id !== null)
 												{
-													$item_instance_array[$fulfilled_counter] =  $item_handling_class::get_instance_by_item_id($item_value);
+													$item_instance_array[$fulfilled_counter] =  $item_handling_class::get_instance_by_item_id($item_value['item_id']);
 													$fulfilled_counter++;
 													break;
 												}
@@ -2349,9 +2345,10 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     /**
      * @see ItemListenerInterface::get_instance_by_item_id()
 	 * @param integer $item_id
+	 * @param boolean $light_instance
 	 * @return object
 	 */
-	public static function get_instance_by_item_id($item_id)
+	public static function get_instance_by_item_id($item_id, $light_instance = false)
     {
     	if (is_numeric($item_id))
     	{

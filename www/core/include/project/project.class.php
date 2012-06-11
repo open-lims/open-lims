@@ -1085,7 +1085,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 				{
 					$project_item = new ProjectItem($this->project_id);
 
-					$item_array = $project_item->get_project_status_items($status_id);					
+					$item_array = $project_item->get_project_status_items_with_pos_id($status_id);					
 					$item_type_array = Item::list_types();
 					
 					foreach($requirements_array as $key => $value)
@@ -1139,18 +1139,16 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 		
 								foreach($item_array as $item_key => $item_value)
 								{
-									$item_pos_id = ProjectItem::get_gid_by_item_id_and_project_id($item_value, $this->project_id,  $status_id);
-									
 									if (is_array($item_type_array) and count($item_type_array) >= 1)
 									{
 										foreach ($item_type_array as $item_type => $item_handling_class)
 										{
 											if (class_exists($item_handling_class))
 											{
-												if ($item_handling_class::is_kind_of($item_type, $item_value) == true  and $item_pos_id == $pos_id and $item_pos_id !== null and $pos_id !== null)
+												if ($item_handling_class::is_kind_of($item_type, $item_value['item_id']) == true  and $item_value['pos_id'] == $pos_id and $item_value['pos_id'] !== null and $pos_id !== null)
 												{
-													$item_instance = $item_handling_class::get_instance_by_item_id($item_value);
-													$return_array[$counter][fulfilled][$fulfilled_counter][item_id] = $item_value;
+													$item_instance = $item_handling_class::get_instance_by_item_id($item_value['item_id'], true);
+													$return_array[$counter][fulfilled][$fulfilled_counter][item_id] = $item_value['item_id'];
 													$return_array[$counter][fulfilled][$fulfilled_counter][id] = $item_instance->get_item_object_id();
 													$return_array[$counter][fulfilled][$fulfilled_counter][name] = $item_instance->get_item_object_name();
 													array_push($item_instance_array, $item_instance);
@@ -1388,7 +1386,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 				{
 					$project_item = new ProjectItem($this->project_id);
 	
-					$item_array = $project_item->get_project_status_items($current_status_id);					
+					$item_array = $project_item->get_project_status_items_with_pos_id($current_status_id);					
 					$item_type_array = Item::list_types();
 					
 					foreach($requirements_array as $key => $value)
@@ -1419,17 +1417,15 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 			
 									foreach($item_array as $item_key => $item_value)
 									{
-										$item_pos_id = ProjectItem::get_gid_by_item_id_and_project_id($item_value, $this->project_id,  $current_status_id);
-										
 										if (is_array($item_type_array) and count($item_type_array) >= 1)
 										{
 											foreach ($item_type_array as $item_type => $item_handling_class)
 											{
 												if (class_exists($item_handling_class))
 												{
-													if ($item_handling_class::is_kind_of($item_type, $item_value) == true and $item_pos_id == $pos_id and $item_pos_id !== null and $pos_id !== null)
+													if ($item_handling_class::is_kind_of($item_type, $item_value['item_id']) == true and $item_value['pos_id'] == $pos_id and $item_value['pos_id'] !== null and $pos_id !== null)
 													{
-														$item_instance_array[$fulfilled_counter] =  $item_handling_class::get_instance_by_item_id($item_value);
+														$item_instance_array[$fulfilled_counter] =  $item_handling_class::get_instance_by_item_id($item_value['item_id']);
 														$fulfilled_counter++;
 														break;
 													}

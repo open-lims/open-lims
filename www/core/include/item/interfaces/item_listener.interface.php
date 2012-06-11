@@ -87,9 +87,10 @@ interface ItemListenerInterface
 	/**
 	 * Returns an instance of a specific class by item-id
 	 * @param integer $item_id
+	 * @param boolean $light_instance Returns an instance without complex permission and dependency calculations
 	 * @return object
 	 */
-	public static function get_instance_by_item_id($item_id);
+	public static function get_instance_by_item_id($item_id, $light_instance = false);
 	
 	/**
 	 * Returns the generic name of the item-type

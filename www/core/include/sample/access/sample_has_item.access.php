@@ -693,6 +693,42 @@ class SampleHasItem_Access
 	}
 	
 	/**
+	 * @param integer $sample_id
+	 * @return array
+	 * without sub-items and parent samples
+	 */
+	public static function list_items_by_sample_id_with_pos_id($sample_id)
+	{
+		global $db;
+
+		if (is_numeric($sample_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT item_id, gid FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = ".$sample_id." AND (parent = 'f' OR parent IS NULL) AND parent_item_id IS NULL";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,array("pos_id" => $data[gid], "item_id" => $data[item_id]));
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @see SampleItemInterface::list_items_by_sample_id_and_gid()
 	 * @param integer $sample_id
 	 * @param integer $gid

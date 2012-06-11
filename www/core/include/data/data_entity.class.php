@@ -61,9 +61,10 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	/**
 	 * @see DataEntityInterface::__construct()
 	 * @param integer $entity_id
+	 * @param boolean $light_instance
 	 * @throws DataEntityNotFoundException
 	 */
-	function __construct($entity_id)
+	function __construct($entity_id, $light_instance = false)
 	{
 		if (is_numeric($entity_id) and $entity_id > 0)
 		{
@@ -88,110 +89,113 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
     		parent::__construct(null);
 		}
 		
-		$this->data_entity_permission = new DataEntityPermission($this->data_entity->get_permission(), $this->data_entity->get_automatic(), $this->data_entity->get_owner_id(), $this->data_entity->get_owner_group_id());
-		
-		if (!self::$data_entity_object_array[$entity_id])
-		{
-			self::$data_entity_object_array[$entity_id] = $this;
-		}
-		
-		if ($this->data_entity_permission->is_access(1))
-		{
-			$this->read_access = true;
-		}
-		else
-		{
-			$this->read_access = false;
-		}
-		
-		if ($this->data_entity_permission->is_access(2))
-		{
-			$this->write_access = true;
-		}
-		else
-		{
-			$this->write_access = false;
-		}
-		
-		if ($this->data_entity_permission->is_access(3))
-		{
-			$this->delete_access = true;
-		}
-		else
-		{
-			$this->delete_access = false;
-		}
-		
-		if ($this->data_entity_permission->is_access(4))
-		{
-			$this->control_access = true;
-		}
-		else
-		{
-			$this->control_access = false;
-		}
-
-		$this->parent_folder_id = $this->calc_parent_folder_id();
-		
-		// Can create folder als methode => flag nur noch für corrupt (über parent folder object)
-
-		if (is_a($this, "SystemFolder") == false and is_numeric($this->parent_folder_id))
+		if ($light_instance == false)
 		{	
-			$this->parent_folder_object = Folder::get_instance($this->parent_folder_id);
+			$this->data_entity_permission = new DataEntityPermission($this->data_entity->get_permission(), $this->data_entity->get_automatic(), $this->data_entity->get_owner_id(), $this->data_entity->get_owner_group_id());
 			
-			if ($this->parent_folder_object->get_inherit_permission() == true and is_a($this->parent_folder_object, "SystemFolder") == false)
-			{				
-				$this->inherit_permission = true;
+			if (!self::$data_entity_object_array[$entity_id])
+			{
+				self::$data_entity_object_array[$entity_id] = $this;
+			}
+			
+			if ($this->data_entity_permission->is_access(1))
+			{
+				$this->read_access = true;
+			}
+			else
+			{
+				$this->read_access = false;
+			}
+			
+			if ($this->data_entity_permission->is_access(2))
+			{
+				$this->write_access = true;
+			}
+			else
+			{
+				$this->write_access = false;
+			}
+			
+			if ($this->data_entity_permission->is_access(3))
+			{
+				$this->delete_access = true;
+			}
+			else
+			{
+				$this->delete_access = false;
+			}
+			
+			if ($this->data_entity_permission->is_access(4))
+			{
+				$this->control_access = true;
+			}
+			else
+			{
+				$this->control_access = false;
+			}
+	
+			$this->parent_folder_id = $this->calc_parent_folder_id();
+			
+			// Can create folder als methode => flag nur noch für corrupt (über parent folder object)
+	
+			if (is_a($this, "SystemFolder") == false and is_numeric($this->parent_folder_id))
+			{	
+				$this->parent_folder_object = Folder::get_instance($this->parent_folder_id);
 				
-				if ($this->parent_folder_object->is_read_access(true) == true)
-				{
-					$this->read_access = true;
+				if ($this->parent_folder_object->get_inherit_permission() == true and is_a($this->parent_folder_object, "SystemFolder") == false)
+				{				
+					$this->inherit_permission = true;
+					
+					if ($this->parent_folder_object->is_read_access(true) == true)
+					{
+						$this->read_access = true;
+					}
+					else
+					{
+						$this->read_access = false;
+					}
+					
+					if ($this->parent_folder_object->is_write_access(true) == true)
+					{
+						$this->write_access = true;
+					}
+					else
+					{
+						$this->write_access = false;
+					}
+					
+					if ($this->parent_folder_object->is_delete_access(true) == true)
+					{
+						$this->delete_access = true;
+					}
+					else
+					{
+						$this->delete_access = false;
+					}
+					
+					if ($this->parent_folder_object->is_control_access(true) == true)
+					{
+						$this->control_access = true;
+					}
+					else
+					{
+						$this->control_access = false;
+					}
+					
+					if ($this->parent_folder_object->can_set_data_entity() == true)
+					{
+						$this->set_data_entity = true;
+					}
 				}
 				else
 				{
-					$this->read_access = false;
-				}
-				
-				if ($this->parent_folder_object->is_write_access(true) == true)
-				{
-					$this->write_access = true;
-				}
-				else
-				{
-					$this->write_access = false;
-				}
-				
-				if ($this->parent_folder_object->is_delete_access(true) == true)
-				{
-					$this->delete_access = true;
-				}
-				else
-				{
-					$this->delete_access = false;
-				}
-				
-				if ($this->parent_folder_object->is_control_access(true) == true)
-				{
-					$this->control_access = true;
-				}
-				else
-				{
-					$this->control_access = false;
-				}
-				
-				if ($this->parent_folder_object->can_set_data_entity() == true)
-				{
-					$this->set_data_entity = true;
+					$this->inherit_permission = false;
 				}
 			}
 			else
 			{
 				$this->inherit_permission = false;
 			}
-		}
-		else
-		{
-			$this->inherit_permission = false;
 		}
 	}
 
@@ -987,16 +991,18 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
     }
     
     /**
+     * @todo make factory-class for light instance generation
      * @see ItemListenerInterface::get_instance_by_item_id()
      * @param integer $item_id
+     * @param boolean $light_instance
      * @return object
      */
-	public static function get_instance_by_item_id($item_id)
+	public static function get_instance_by_item_id($item_id, $light_instance = false)
     {
     	if (is_numeric($item_id))
     	{
     		$data_entity_id = DataEntityIsItem_Access::get_entry_by_item_id($item_id);
-    		return new DataEntity($data_entity_id);
+    		return new DataEntity($data_entity_id, $light_instance);
     	}
     	else
     	{
