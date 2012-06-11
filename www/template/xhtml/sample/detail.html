@@ -10,7 +10,6 @@ $(document).ready(function()
 			type: "POST",
 			url: "ajax.php?session_id="+get_array['session_id']+"&nav=sample&run=get_sample_menu",
 			data: 'get_array=[[GET_ARRAY]]',
-			async: false,
 			success: function(data)
 			{		
 				if (data)

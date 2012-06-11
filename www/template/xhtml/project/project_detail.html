@@ -8,7 +8,6 @@ $(document).ready(function()
 			type: "POST",
 			url: "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=get_project_menu",
 			data: 'get_array=[[GET_ARRAY]]',
-			async: false,
 			success: function(data)
 			{		
 				if (data)
@@ -61,7 +60,6 @@ $(document).ready(function()
 			type: "POST",
 			url: "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=get_project_status_bar",
 			data: 'get_array=[[GET_ARRAY]]',
-			async: false,
 			success: function(data)
 			{		
 				if (data)
