@@ -51,14 +51,14 @@ class EquipmentRequest
 				echo EquipmentAjax::count_organisation_unit_related_equipment($_POST[argument_array]);
 			break;
 			
-			case "equipment_item_add_window":
+			case "equipment_add_as_item_window":
 				require_once("ajax/equipment.ajax.php");
-				echo EquipmentAjax::item_add_window($_POST[get_array], $_POST[type_array], $_POST[category_array]);
+				echo EquipmentAjax::add_as_item_window($_POST[get_array], $_POST[type_array], $_POST[category_array]);
 			break;
 			
-			case "equipment_item_add_action":
+			case "equipment_add_as_item":
 				require_once("ajax/equipment.ajax.php");
-				echo EquipmentAjax::item_add_action($_POST[get_array], $_POST[type_id]);
+				echo EquipmentAjax::add_as_item($_POST[get_array], $_POST[type_id]);
 			break;
 				
 		endswitch;

@@ -249,7 +249,6 @@ class EquipmentAjax
 	}
 	
 	/**
-	 * @todo remove JS in template
 	 * @param integer $gid
 	 * @param array $link
 	 * @param array $type_array
@@ -258,7 +257,7 @@ class EquipmentAjax
 	 * @param integer $holder_id
 	 * @return array
 	 */
-	public static function item_add_init($gid, $link, $type_array, $category_array, $holder_class, $holder_id)
+	public static function add_as_item_window_init($gid, $link, $type_array, $category_array, $holder_class, $holder_id)
 	{		
 		if ($link['parent'] and is_numeric($link['parent_id']))
 		{
@@ -281,16 +280,15 @@ class EquipmentAjax
 			$category_array_serialized = serialize($category_array);
 		}
 		
-		$array['window_title'] = "Add Equipment";
-		$array['script'] = "
-		$(\"#".$array['window_id']."\").dialog(
-		{
-		autoOpen: false
-		});
+		$script_template = new JSTemplate("equipment/js/add_item_window_preclick.js");
+		$script_template->set_var("window_id", $array['window_id']);
+		$script_template->set_var("session_id", $_GET['session_id']);
+		$script_template->set_var("get_array", serialize($link));
+		$script_template->set_var("type_array", $type_array_serialized);
+		$script_template->set_var("category_array", $category_array_serialized);
+		$script_template->set_var("click_id", $array['click_id']);
 		
-		base_dialog(\"POST\", \"ajax.php?session_id=".$_GET['session_id']."&nav=equipment&run=equipment_item_add_window\", 'get_array=".serialize($link)."&type_array=".$type_array_serialized."&category_array=".$category_array_serialized."', \"".$array['click_id']."\");
-
-		";
+		$array['script'] = $script_template->get_string();
 		
 		return $array;
 	}
@@ -301,7 +299,7 @@ class EquipmentAjax
 	 * @param string $category_array
 	 * @return string
 	 */
-	public static function item_add_window($get_array, $type_array, $category_array)
+	public static function add_as_item_window($get_array, $type_array, $category_array)
 	{
 		if ($get_array)
 		{
@@ -461,7 +459,7 @@ class EquipmentAjax
 		$array['width'] = 400;
 		$array['content'] = $template->get_string();
 		
-		$continue_handler_template = new JSTemplate("equipment/js/item_add_handler.js");
+		$continue_handler_template = new JSTemplate("equipment/js/add_item_window.js");
 		$continue_handler_template->set_var("session_id", $_GET['session_id']);
 		$continue_handler_template->set_var("get_array", $get_array);
 		$continue_handler_template->set_var("container_id", $array['container']);
@@ -476,7 +474,7 @@ class EquipmentAjax
 	 * @param array $get_array
 	 * @param integer $type_id
 	 */
-	public static function item_add_action($get_array, $type_id)
+	public static function add_as_item($get_array, $type_id)
 	{
 		global $user, $transaction;
 		

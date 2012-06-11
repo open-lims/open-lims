@@ -38,15 +38,13 @@ class ItemCommonIO
 	 * @return array
 	 */
 	public static function get_menu_element($element_array, $key, $counter, $link_base, $holder_class, $holder_id)
-	{
+	{		
 		$result = array();
 		
 		$amount = count($element_array[fulfilled]);
 		
 		if ($element_array['display'] == true)
-		{			
-			
-		
+		{
 			if ($element_array[occurrence] == "multiple" and $amount > 0)
 			{
 				$result[$counter][name] = $element_array[name]." (".$amount.")";
@@ -284,7 +282,7 @@ class ItemCommonIO
 				}
 			}
 		}
-		
+				
 		return array(0 => $result, 1 => $counter);
 	}
 }

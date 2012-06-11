@@ -12,7 +12,7 @@ else
 	$.ajax(
 	{
 		type : "POST",
-		url : "ajax.php?session_id=[[SESSION_ID]]&nav=equipment&run=equipment_item_add_action",
+		url : "ajax.php?session_id=[[SESSION_ID]]&nav=equipment&run=equipment_add_as_item",
 		data : 'get_array=[[GET_ARRAY]]&type_id='+type_id,
 		success : function(data) 
 		{
