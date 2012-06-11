@@ -332,7 +332,7 @@ class EquipmentAjax
 			{
 				foreach($equipment_array as $key => $value)
 				{
-					if (in_array($value, $type_array))
+					if (in_array($value, $type_array) or $value <= 3)
 					{
 						$equipment_type = new EquipmentType($value);
 					
@@ -379,9 +379,24 @@ class EquipmentAjax
 				foreach ($category_array as $key => $value)
 				{
 					$equipment_cat_array = EquipmentType::list_entries_by_cat_id($value);
-					
+	
 					if (is_array($equipment_cat_array) and count($equipment_cat_array) >= 1)
 					{
+						if (!in_array(1, $equipment_cat_array))
+						{
+							$equipment_cat_array[] = 1;
+						}
+						
+						if (!in_array(2, $equipment_cat_array))
+						{
+							$equipment_cat_array[] = 2;
+						}
+						
+						if (!in_array(3, $equipment_cat_array))
+						{
+							$equipment_cat_array[] = 3;
+						}
+						
 						foreach ($equipment_cat_array as $key => $value)
 						{
 							if (!in_array($value, $hit_array))
@@ -458,7 +473,6 @@ class EquipmentAjax
 	}
 	
 	/**
-	 * @todo throw exception
 	 * @param array $get_array
 	 * @param integer $type_id
 	 */
@@ -493,7 +507,7 @@ class EquipmentAjax
 					{
 						$transaction->rollback($transaction_id);
 					}
-					throw new BaseException();
+					throw new EquipmentCreateException();
 				}
 			}
 			else
@@ -502,12 +516,12 @@ class EquipmentAjax
 				{
 					$transaction->rollback($transaction_id);
 				}
-				throw new BaseException();
+				throw new EquipmentCreateException();
 			}
 		}
 		else
 		{
-			throw new BaseException();
+			throw new EquipmentIDMissingException();
 		}
 	}
 }
