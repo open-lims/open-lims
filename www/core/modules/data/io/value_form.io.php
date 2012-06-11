@@ -227,9 +227,19 @@ class ValueFormIO
 									break;
 								endswitch;
 								
+								if ($array['content']['min_value'])
+								{
+									$min_value_class = "DataValueFieldMinValue DataValueFieldMinValue-".$array['content']['min_value'];
+								}
+								
+								if ($array['content']['max_value'])
+								{
+									$max_value_class = "DataValueFieldMaxValue DataValueFieldMaxValue-".$array['content']['max_value'];
+								}
+								
 								switch($array['content']['type']):
 									case "textfield":
-										$return_string .= "<input type='textfield' name='".$field_name."' value='".$element_content."' size='".$array['content']['length']."' class='".$this->field_class." ".$requirement_class." ".$var_type_class."' />";
+										$return_string .= "<input type='textfield' name='".$field_name."' value='".$element_content."' size='".$array['content']['length']."' class='".$this->field_class." ".$requirement_class." ".$var_type_class." ".$min_value_class." ".$max_value_class."' />";
 									break;
 								
 									case "textarea":

@@ -1058,7 +1058,6 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 		}
 	}
 
-	
     /**
      * @param array $xml_array
      * @return bool
@@ -1551,6 +1550,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 							$element_array['set'] = $value[3]['set'];
 						}
 						
+						// Type of the input						
 						if ($value[3]['vartype'])
 						{
 							switch($value[3]['vartype']):
@@ -1573,6 +1573,34 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 							$element_array['vartype'] = "string";
 						}
 						
+						// Minimum and Maximum Input (possbile with integer and float only)
+						if ($value[3]['min_value'] and ($element_array['vartype'] == "integer" or $element_array['vartype'] == "float"))
+						{
+							if (is_numeric($value[3]['min_value']))
+							{
+								$element_array['min_value'] =  $value[3]['min_value'];
+							}
+						}
+						
+						if ($value[3]['max_value'] and ($element_array['vartype'] == "integer" or $element_array['vartype'] == "float"))
+						{
+							if (is_numeric($value[3]['max_value']))
+							{
+								$element_array['max_value'] =  $value[3]['max_value'];
+							}
+						}
+						
+						if ($element_array['max_value'] and $element_array['min_value'])
+						{
+							if ($element_array['max_value'] < $element_array['min_value'])
+							{
+								// Removes min_value and max_value if it is impossible to fulfill it
+								$element_array['min_value'] = null;
+								$element_array['max_value'] = null;
+							}
+						}
+						
+						// Displayed length of the field
 						if ($value[3]['length'])
 						{
 							$element_array['length'] =  $value[3]['length'];
@@ -1582,6 +1610,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 							$element_array['length'] = 30;
 						}
 						
+						// Requirement of the field
 						if ($value[3]['requirement'])
 						{
 							switch($value[3]['requirement']):
@@ -1603,6 +1632,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 							$element_array['requirement'] = 0;
 						}
 						
+						// Size of a textarea
 						if ($value[3]['size'])
 						{
 							$sizeArray = explode(",",$value[3][size]);

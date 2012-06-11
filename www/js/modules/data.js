@@ -73,6 +73,59 @@ ValueHandler = function(field_class)
 			
 			$(this).parent().children(".FormError").remove();
 			
+			var classes = undefined;
+			
+			if ($(this).hasClass("DataValueFieldMinValue"))
+			{
+				if (( $(this).val() == parseInt($(this).val()) ) && ( $(this).val() !== "" ) )
+				{
+					var current_element = $(this);
+					classes = $(this).attr('class').split(' ');
+					
+					$(classes).each(function()
+					{
+						if (this.indexOf("DataValueFieldMinValue-",0) === 0)
+						{
+							var min_value = this.replace("DataValueFieldMinValue-", "");
+							if ($(current_element).val() < min_value)
+							{
+								error = true;
+								$(current_element).after("<span class='FormError'><br />Please enter a value >= "+min_value+"</span>");
+								$(current_element).addClass("DataValueFieldError");
+								return;
+							}
+						}
+					});
+				}
+			}
+			
+			if ($(this).hasClass("DataValueFieldMaxValue"))
+			{
+				if (( $(this).val() == parseInt($(this).val()) ) && ( $(this).val() !== "" ) )
+				{
+					var current_element = $(this);
+					if (classes === undefined)
+					{
+						classes = $(this).attr('class').split(' ');
+					}
+					
+					$(classes).each(function()
+					{
+						if (this.indexOf("DataValueFieldMaxValue-",0) === 0)
+						{
+							var max_value = this.replace("DataValueFieldMaxValue-", "");
+							if ($(current_element).val() > max_value)
+							{
+								error = true;
+								$(current_element).after("<span class='FormError'><br />Please enter a value <= "+max_value+"</span>");
+								$(current_element).addClass("DataValueFieldError");
+								return;
+							}
+						}
+					});
+				}
+			}
+			
 			if ($(this).hasClass("DataValueFieldRequired"))
 			{
 				if ($(this).val() === "")

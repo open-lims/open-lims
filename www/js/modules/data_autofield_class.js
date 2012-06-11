@@ -288,7 +288,7 @@ function autofield(field_array_string, field_css_class)
     	
     	var tr = $("<tr id='af-NEW"+rand+"-tr'></tr>");
     	
-    	var td1 = $("<td><input type='textfield' class='DataAutofieldNoNameGiven DataAutofieldTitleInput'/></td>");
+    	var td1 = $("<td><input type='textfield' class='DataAutofieldNoNameGiven DataAutofieldTitleInput' /></td>");
     	$(td1).children().keyup(function()
 		{
 			title_change_handler(this);
@@ -332,16 +332,24 @@ function autofield(field_array_string, field_css_class)
     {
     	if($("#DataAutofieldFooterEditTable > tbody").children().length > 2)
     	{
-    		var to_remove = $("#af-"+name+"-tr");
-    		var index_to_delete = parseInt($(to_remove).prevAll().length)-1;
-    		if(field_array.length > 0)
-    		{
-    			if(field_array[index_to_delete][3] == name)
+    		if (name.indexOf("NEW",0) === 0)
+			{
+    			var to_remove = $("#af-"+name+"-tr");
+            	$(to_remove).remove();
+			}
+    		else
+			{
+    			var to_remove = $("#af-"+name+"-tr");
+        		var index_to_delete = parseInt($(to_remove).prevAll().length)-1;
+        		if(field_array.length > 0)
         		{
-    				field_array.splice(index_to_delete,1);
+        			if(field_array[index_to_delete][3] == name)
+            		{
+        				field_array.splice(index_to_delete,1);
+            		}
         		}
-    		}
-        	$(to_remove).remove();
+            	$(to_remove).remove();
+			}
     	}
     }
    
