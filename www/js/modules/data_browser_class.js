@@ -30,7 +30,7 @@ function data_browser()
 		
 		if(children.length == 1 && $(children).hasClass("ListLoadingContents"))
 		{ //not loaded contents yet. children can be an empty div due to list animate function -> base_list_class.js#126
-			setTimeout(init,200);
+			setTimeout(init, 200);
 		}
 		else
 		{
@@ -38,12 +38,12 @@ function data_browser()
 			var argument_parts = argument_array.split("],[");
 			current_folder_id = argument_parts[0].replace("[[\"folder_id\",","").replace(/"/g,"");
 			current_virtual_folder_id = argument_parts[1].replace("\"virtual_folder_id\",","").replace(/]/g,"").replace(/"/g,"");
-			
+
 			init_list_handler();
 			init_base_tree_nav_link_handler();
 			init_menu(current_folder_id);
 			init_menu_handler();
-			
+
 			if(click_from_left_nav_menu)
 			{
 				show_current_dir_path_and_clear_stack();
@@ -74,7 +74,7 @@ function data_browser()
 				link = $(link).children("a");
 			}
 			var href = $(link).attr("href");
-			
+
 			if(href === undefined)
 			{
 				return false;
@@ -211,16 +211,21 @@ function data_browser()
 							}	
 						}
 					 }
-				})
-				.children("td:nth-child(3)").each(function()
-				{ //bind thumbnail handler
-					var filename = $(this).children().text();
+				});
+			
+				var filename = $(this).children("td:nth-child(3)").children().text();
+				
+//				$(this)
+//				.children("td:nth-child(3)").each(function()
+//				{ //bind thumbnail handler
+//					var filename = $(this).children().text();
 					if(is_image(filename))
 					{						
 						show_thumbnail($(this).children(),"<div><img src='image.php?session_id="+get_array['session_id']+"&file_id="+linked_file_id+"&max_width=100&max_height=100' alt='' /></div>");
 					}			
-				});
+//				});
 		});
+
 	}
 	
 	/**
@@ -444,7 +449,7 @@ function data_browser()
 				"left":offset_x
 			})
 			.hide()
-			.appendTo("#main");
+			.appendTo("#Main");
 
 		setTimeout(bind_dialog_close_click_handler, 20);
 		

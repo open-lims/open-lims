@@ -254,69 +254,180 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 		{
 			return false;
 		}
+		
+		var sticky = [0]; //first column is always sticky
+		
+		var num_cols = $(".ListTable > thead > tr > th").size();
+		
+		for (var int = 1; int < num_cols; int++) 
+		{
+			var column = $(".ListTable > thead > tr > th").get(int);
+			
+			var width = $(column).attr("width");
+			if(width !== undefined && width !== "")
+			{
+				if(width.indexOf("%") === -1 && width.indexOf("em") === -1)
+				{
+					sticky.push(int);
+			
+					//check last column
+					if(int === num_cols - 1)
+					{
+						sticky.push(int - 1);
+					}
+				}
+			}
+		}
+		
 		$(".ListTable").dynamicTable({
-			"sticky" : [0,1],
+			"sticky" : sticky,
 			"rulerColor": "#669acc",
 			"handleColor": "#669acc"
 		});
-
-		$("body")
-//		.attr("tabindex", 0)
-		.keydown(function(evt){
+		
+		var column_menu_trigger = $("<div id='ColumnMenuTrigger'><img src='images/icons/visible.png' alt=''/></div>")
+			.css("float", "left")
+			.click(function(){
+				if($(this).hasClass("columnMenuOpen"))
+				{
+					close_column_menu();
+					$(this).removeClass("columnMenuOpen");
+				}
+				else
+				{
+					open_column_menu();
+					$(this).addClass("columnMenuOpen");
+				}
+			})
+			.appendTo(".ContentBoxBeginTitle");
+		
+		tooltip("ColumnMenuTrigger", "Toggle Display Options");
+		
+		
+		function open_column_menu() {
 			
-			switch(evt.which)
+			var position = $("#ColumnMenuTrigger").position();
+			
+			var column_menu = $("<div id='ColumnMenu'></div>")
+				.css({
+					"position": "absolute",
+					"top": position.top + $("#ColumnMenuTrigger").height(),
+					"left": position.left,
+					"background-color": "white",
+					"border": "solid 1px black"
+				})
+				.appendTo("#Main");
+			
+			for (var int = 1; int < num_cols; int++) 
 			{
-				case 220: //^
-					$(".ListTable").dynamicTable("toggle",0);
-					break
-				case 49: //1
-					$(".ListTable").dynamicTable("toggle",1);
-					break;
-				case 50: //2
-					$(".ListTable").dynamicTable("toggle",2);
-					break;
-				case 51: //3
-					$(".ListTable").dynamicTable("toggle",3);
-					break;
-				case 52: //4
-					$(".ListTable").dynamicTable("toggle",4);
-					break;
-				case 53: //5
-					$(".ListTable").dynamicTable("toggle",5);
-					break;
-				case 54: //6
-					$(".ListTable").dynamicTable("toggle",6);
-					break;
-				case 55: //7
-					$(".ListTable").dynamicTable("toggle",7);
-					break;
-				case 56: //8
-					$(".ListTable").dynamicTable("toggle",8);
-					break;
-				default:
-					break;
+				if(sticky.indexOf(int) === -1)
+				{
+					var column = $(".ListTable > thead > tr > th").get(int);
+					
+					if($(column).children(".ResizableColumnHelper").length > 0)
+					{
+						var div = $(column).children(".ResizableColumnHelper").children("div:first");
+						
+						if($(div).children("a:first").length > 0)
+						{
+							var column_text = $(column).children(".ResizableColumnHelper").children("div:first").children("a:first").text();
+						}
+						else
+						{
+							var column_text = $(column).children(".ResizableColumnHelper").children("div:first").text();
+						}
+					}
+//					else
+//					{
+//						var div = $(column).children("div:first");
+//						if($(div).children("a:first").length > 0)
+//						{
+//							var column_text = $(column).children("div:first").children("a:first").text();
+//						}
+//						else
+//						{
+//							var column_text = $(column).children("div:first").text();
+//						}
+//					}
+//					
+				var checkbox = $("<input type='checkbox' class='ColumnMenuEntryCheckbox' name='' value='' checked=''></input>")
+					.css({
+						"float": "right",
+						"cursor": "default",
+						"margin-top": "2px"
+					})
+					.click(function(){
+//						if($(".ColumnMenuEntryCheckbox:checked").size() >= 0)
+//						{
+							$(".ListTable").dynamicTable("toggle", $(this).parent().data("columnIndex"));
+//						}
+//						else
+//						{
+//							$(this).attr("checked","checked");
+//						}						
+					});
+				
+				$("<div class='ColumnMenuEntry'>"+column_text+"</div>")
+					.data("columnIndex", int)
+					.css({
+						"height": "16px",
+						"clear": "both"
+//						"padding-top": "2px"
+					})
+					.append(checkbox)
+					.appendTo(column_menu);
+				}
 			}
-		});
+			
+		}
 		
-		
-//		setTimeout(function(){
-//			$(".ListTable").dynamicTable("toggle",6);
-//		}, 1000);
-//		
-//		setTimeout(function(){
-//			$(".ListTable").dynamicTable("toggle",6);
-//		}, 2000);
-//		
-//		setTimeout(function(){
-//			$(".ListTable").dynamicTable("hide",5);
-//		}, 5000);
-//		
-//		setTimeout(function(){
-//			$(".ListTable").dynamicTable("show",5);
-//		}, 6000);
-		
+		function close_column_menu() {
+			$("#ColumnMenu").remove();
+		}
 		
 		return false;
+		
+
+//		$("body")
+//		.attr("tabindex", 0)
+//		.keydown(function(evt){
+//			
+//			switch(evt.which)
+//			{
+//				case 220: //^
+//					$(".ListTable").dynamicTable("toggle",0);
+//					break
+//				case 49: //1
+//					$(".ListTable").dynamicTable("toggle",1);
+//					break;
+//				case 50: //2
+//					$(".ListTable").dynamicTable("toggle",2);
+//					break;
+//				case 51: //3
+//					$(".ListTable").dynamicTable("toggle",3);
+//					break;
+//				case 52: //4
+//					$(".ListTable").dynamicTable("toggle",4);
+//					break;
+//				case 53: //5
+//					$(".ListTable").dynamicTable("toggle",5);
+//					break;
+//				case 54: //6
+//					$(".ListTable").dynamicTable("toggle",6);
+//					break;
+//				case 55: //7
+//					$(".ListTable").dynamicTable("toggle",7);
+//					break;
+//				case 56: //8
+//					$(".ListTable").dynamicTable("toggle",8);
+//					break;
+//				default:
+//					break;
+//			}
+//		});
+	
+		
+
 		
 		var table_width = $(".ListTable > thead").width();
 		
@@ -954,20 +1065,20 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 
 	function change_symbol(id, symbol) 
 	{
+
 		$("." + css_main_id + "Column").each(
 				function() {
 					var local_id = $(this).attr("id");
-
 					if (local_id == id) {
 						if (symbol == "upside") {
-							$("#" + local_id + " > a > img").attr("src",
+							$("#" + local_id + " > .ResizableColumnHelper > div > a > img").attr("src",
 									"images/upside.png");
 						} else {
-							$("#" + local_id + " > a > img").attr("src",
+							$("#" + local_id + " > .ResizableColumnHelper > div > a > img").attr("src",
 									"images/downside.png");
 						}
 					} else {
-						$("#" + local_id + " > a > img").attr("src",
+						$("#" + local_id + " > .ResizableColumnHelper > div > a > img").attr("src",
 								"images/nosort.png");
 					}
 				});

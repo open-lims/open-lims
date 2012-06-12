@@ -55,12 +55,12 @@
 				column.tds = [];
 				$(tbody).find("tr").each(function() {
 					var td = $(this).children("td:nth-child("+(int + 1)+")");
-					var div = $("<div>"+$(td).html()+"</div>");
-					$(div).css({
-						"margin-left": settings.padding, 
-						"margin-right": settings.padding
-					});
-					$(td).html(div);
+//					var div = $("<div>"+$(td).html()+"</div>");
+//					$(div).css({
+//						"margin-left": settings.padding, 
+//						"margin-right": settings.padding
+//					});
+//					$(td).html(div);
 					column.tds.push(td);
 				});
 				
@@ -528,8 +528,6 @@
 			}
 		}
     	
-//   le.log(acumulated_space+" "+needed_space);
-    	
     	if(acumulated_space < needed_space)
     	{
         	//check right neighbour columns
@@ -754,10 +752,8 @@
     	var resize_helper = $("<div class='ResizableColumnHelper'>"+$(column.th).html()+"</div>");
     	$(column.th).html(resize_helper);
     	
-    	$(resize_helper).children().css("margin",0);
-    	$(resize_helper).css("box-sizing", "padding-box")
-    	$(resize_helper).css("-moz-box-sizing", "padding-box")
-    	
+    	$(resize_helper).css("background-color","white");
+
     	if(settings.showHandle)
     	{
     		$("<div class='ResizableColumnHandle'></div>")
@@ -765,7 +761,7 @@
     				"position" : "absolute",
     				"right" : 0,
     				"top" : 0,
-    				"width": 1,
+    				"min-width": 1,
     				"height": "100%",
     				"background-color": settings.handleColor
     			})
@@ -804,10 +800,16 @@
 				
 				if(neighbour_col_new_width < neighbour_column.headerWidth)
 				{
-					var dif = neighbour_column.headerWidth - neighbour_col_new_width;
+					$(neighbour_column.th).width(neighbour_col_new_width);
+					$(neighbour_column.th).find(".ResizableColumnHelper").css("width", "100%");
+				}
+				
+				if(neighbour_col_new_width < settings.minWidth)
+				{
+					var dif = settings.minWidth - neighbour_col_new_width;
 
 					column_new_width -= Math.floor(dif);
-					neighbour_col_new_width = neighbour_column.headerWidth;
+					neighbour_col_new_width = settings.minWidth;
 
 					$(this).trigger("mouseup"); 
 				}

@@ -14,13 +14,13 @@ function is_image(filename)
 				allowed_image_types = data;
 			}
 		});
-	}	
+	}
 
 	var split = filename.split(".");
 	if(split.length > 1) 
 	{
 		var filetype = split[split.length-1];
-		if($.inArray(filetype, allowed_image_types) != -1)
+		if(allowed_image_types.indexOf(filetype) !== -1)
 		{
 			return true;
 		}

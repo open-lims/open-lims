@@ -25,7 +25,7 @@
 function base_navigation()
 {
 	var animate_downwards_pixels = 5;
-	
+
 	init();
 	
 	/**

@@ -792,20 +792,24 @@ border: none;
 }
 .ListTable td 
 {
-/* 	height:20px; */
+	height:10px;
 /* 	margin-bottom: 2px; */
-/* 	padding: 4px 4px; */
+	padding: 4px 4px;
 	white-space: nowrap;
 	overflow: hidden;
 }
 .ListTable tr 
 {
-	vertical-align: top;
+/* 	vertical-align: top; */
 }
 .ListTableColumnFirstEntry
 {
 	border-left:solid white 2px;
+	padding: 0 !important;
+	vertical-align: middle;
 }
+
+
 .ListTableColumnLastEntry
 {
 	border-right:solid white 2px;
