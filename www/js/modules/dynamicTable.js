@@ -13,6 +13,7 @@
 	var settings = 
 	{
 		sticky: [],
+		notResizable: [],
 		showHandle: true,
 		handleColor: "#000000",
 		showRuler: true,
@@ -20,7 +21,6 @@
 		resizeAnimation: true,
 		resizeAnimationStyle: "swing",
 		minWidth: 20,
-		padding: 2
 	}
 	
 	var methods = 
@@ -40,11 +40,7 @@
 				var column = {};
 				var th = this.find("th").get(int);
 				
-				var div = $("<div>"+$(th).html()+"</div>");
-				$(div).css({
-					"margin-left": settings.padding, 
-					"margin-right": settings.padding
-				});
+				var div = $("<div>"+$(th).html()+"</div>"); //TODO needed?
 				$(th).html(div);
 				
 				column.th = th;
@@ -52,6 +48,7 @@
 				column.width = $(th).width();
 				column.visible = true;
 				column.sticky = ($.inArray(int, settings.sticky) !== -1);
+				column.resizable = ($.inArray(int, settings.notResizable) === -1);
 				column.tds = [];
 				$(tbody).find("tr").each(function() {
 					var td = $(this).children("td:nth-child("+(int + 1)+")");
@@ -83,7 +80,7 @@
 						$(measure).remove();
 					}
 				}
-				column.headerWidth = header_width;// + 10; //TODO
+				column.headerWidth = header_width;
 			
 				columns.push(column);
 			}
@@ -115,8 +112,10 @@
 	    	if(!settings.resizeAnimation)
 	    	{
 		    	$(column_to_hide.th).width(0);
+		    	column_to_hide.visible = false;
 		    	$(column_to_add_width_to.th).width(column_to_add_width_to.width + column_to_hide.width);
 		    	column_to_add_width_to.width = column_to_add_width_to.width + column_to_hide.width;
+		    	animating = false;
 	    		return true;
 	    	}
 	    		    	
@@ -161,11 +160,18 @@
 		       				});
 	       				}
 	       				
-	    				var new_width = $(column_to_add_width_to.th).width() + 1;// + 3;// + column_to_add_width_to.paddingLeft + column_to_add_width_to.paddingRight + 1;
+	    				var new_width = $(column_to_add_width_to.th).width();
 	    				$(column_to_add_width_to.th).width(new_width);
 	    				column_to_add_width_to.width = new_width;
 	    				
 	    				animating = false;
+	    				
+	    				var last_visible_index = get_last_visible_column_index();
+	    				if($(".ListTable > thead > tr > th").get(last_visible_index) === $(column_to_add_width_to.th)[0])
+	    				{
+	    					$(column_to_add_width_to.th).find(".ResizableColumnHandle").hide();
+	    					$(column_to_add_width_to.th).find(".ui-resizable-handle").hide()
+	    				}
 	    			}
 	    		}
 	    	);
@@ -178,7 +184,7 @@
 	    		return false;
 	    	}
 	    	animating = true;
-	    	
+
 	    	var column_to_show = columns[num];
 	    	
 	    	if(column_to_show.sticky)
@@ -192,42 +198,50 @@
 	    	if(num > get_last_visible_column_index())
 	    	{
 	    		showing_last_column = true;
+				$(columns[num - 1].th).find(".ResizableColumnHandle").show();
+				$(columns[num - 1].th).find(".ui-resizable-handle").show()
 	    	}
+
 	    	
 //	    	var column_to_remove_width_from = get_visible_neighbour_column(num);
 	    	
 //	    	var columns_to_remove_width_from = get_columns_to_remove_width_from(num);
-	    	var columns_to_remove_width_from = get_columns_to_remove_width_from3(num);
+//	    	var columns_to_remove_width_from = get_columns_to_remove_width_from3(num);
 	    	
-	    	var current_column_to_remove_width_from_array_index = 0;
+//	    	var current_column_to_remove_width_from_array_index = 0;
 	    	
-	    	if(!settings.resizeAnimation) //TODO
+	    	
+	    	var column_to_remove_width_from = get_column_to_remove_width_from(num);
+	    	
+	    	if(!settings.resizeAnimation)
 	    	{
-		    	$(column_to_show.th).width(column_to_show.width);
-		    	$(column_to_remove_width_from.th).width(column_to_remove_width_from.width - column_to_show.width);
-		    	column_to_remove_width_from.width = column_to_remove_width_from.width - column_to_show.width;
+	    		column_to_show.width = column_to_remove_width_from.space;
+	    		column_to_show.visible = true;
+		    	$(column_to_show.th).width(column_to_remove_width_from.space);
+		    	$(column_to_remove_width_from.th).width(column_to_remove_width_from.width - column_to_remove_width_from.space);
+		    	column_to_remove_width_from.width = column_to_remove_width_from.width - column_to_remove_width_from.space;
+		    	animating = false;
 	    		return true;
 	    	}
 	    	
 	    	//all except ie8
-	    	if(!($.browser.msie && $.browser.version == 8.0))
-	    	{
+//	    	if(!($.browser.msie && ($.browser.version == 7.0 || $.browser.version == 8.0)))
+//	    	{
 		    	$(column_to_show.th).show();
 				$(column_to_show.tds).each(function(){
 					$(this).show();
 				});
-	    	}
+//	    	}
 
 			
-			var first_column_to_remove_width_from = columns_to_remove_width_from[current_column_to_remove_width_from_array_index];
-			first_column_to_remove_width_from.column.width = first_column_to_remove_width_from.column.width - 1;
-			$(first_column_to_remove_width_from.column.th).width(first_column_to_remove_width_from.column.width);
+//			var first_column_to_remove_width_from = columns_to_remove_width_from[current_column_to_remove_width_from_array_index];
+//			first_column_to_remove_width_from.column.width = first_column_to_remove_width_from.column.width - 1;
+//			$(first_column_to_remove_width_from.column.th).width(first_column_to_remove_width_from.column.width);
 			
-			
-
 	    	$(column_to_show.th).animate(
 	    		{
-	    			"width": [column_to_show.initialWidth, settings.resizeAnimationStyle]
+//	    			"width": [column_to_show.initialWidth, settings.resizeAnimationStyle]
+	    			"width": [column_to_remove_width_from.space, settings.resizeAnimationStyle]
 	    		}, 
 	    		{
 	    			duration: 500,
@@ -242,57 +256,56 @@
 	    				{
 	    					var current_width = Math.floor(now);
 	    				}
-	    					    				
-	    	
-	    				
-	    				var this_step_width = current_width - $(column_to_show.th).width();
-//	    				$(this).width(current_width);
-	    				$(column_to_show.th).width(current_width);
-//	    				$(column_to_remove_width_from.th).width(column_to_remove_width_from.width - current_width);
-	    				
-	    				var column_to_remove_width_from = columns_to_remove_width_from[current_column_to_remove_width_from_array_index];
-	    				
-//	    				console.log(column_to_remove_width_from);
-	    				
-	    				if(column_to_remove_width_from.space < this_step_width)
-	    				{
-	    					var needed_space = this_step_width;
 	    					
-	    					while(true)
-	    					{
-	    						if(column_to_remove_width_from.space < needed_space)
-	    						{
-	    							var column_to_remove_width_from_new_width = Math.round(column_to_remove_width_from.column.width - column_to_remove_width_from.space);
-	    							column_to_remove_width_from.column.width = column_to_remove_width_from_new_width;
-	    							$(column_to_remove_width_from.column.th).width(column_to_remove_width_from_new_width);
-	    							
-	    							needed_space -= column_to_remove_width_from.space;
-	    							console.log("still needed: "+needed_space);
-
-	    							if(needed_space < 1)
-	    							{
-	    								break;
-	    							}
-	    							current_column_to_remove_width_from_array_index++;
-	    							column_to_remove_width_from = columns_to_remove_width_from[current_column_to_remove_width_from_array_index];
-	    						}
-	    						else
-	    						{
-	    							var column_to_remove_width_from_new_width = Math.round(column_to_remove_width_from.column.width - needed_space);
-	    							column_to_remove_width_from.column.width = column_to_remove_width_from_new_width;
-	    							$(column_to_remove_width_from.column.th).width(column_to_remove_width_from_new_width);
-	    							column_to_remove_width_from.space = column_to_remove_width_from.space - needed_space;
-	    							break;
-	    						}
-	    					}
-	    				}
-	    				else
-	    				{
-	    					var column_to_remove_width_from_new_width = column_to_remove_width_from.column.width - this_step_width;
-							column_to_remove_width_from.column.width = column_to_remove_width_from_new_width;
-							$(column_to_remove_width_from.column.th).width(column_to_remove_width_from_new_width);
-	    					column_to_remove_width_from.space = column_to_remove_width_from.space - this_step_width;
-	    				}
+	    				var this_step_width = current_width - $(column_to_show.th).width();
+	    				$(column_to_show.th).width(current_width);
+	    				
+	    				
+	    				var column_to_remove_width_from_new_width = column_to_remove_width_from.width - this_step_width;
+	    				$(column_to_remove_width_from.th).width(column_to_remove_width_from_new_width);
+	    				column_to_remove_width_from.width = column_to_remove_width_from_new_width;
+	    				
+	    				
+//	    				var column_to_remove_width_from = columns_to_remove_width_from[current_column_to_remove_width_from_array_index];
+//	    				if(column_to_remove_width_from.space < this_step_width)
+//	    				{
+//	    					var needed_space = this_step_width;
+//	    					
+//	    					while(true)
+//	    					{
+//	    						if(column_to_remove_width_from.space < needed_space)
+//	    						{
+//	    							var column_to_remove_width_from_new_width = Math.round(column_to_remove_width_from.column.width - column_to_remove_width_from.space);
+//	    							column_to_remove_width_from.column.width = column_to_remove_width_from_new_width;
+//	    							$(column_to_remove_width_from.column.th).width(column_to_remove_width_from_new_width);
+//	    							
+//	    							needed_space -= column_to_remove_width_from.space;
+//	    							console.log("still needed: "+needed_space);
+//
+//	    							if(needed_space < 1)
+//	    							{
+//	    								break;
+//	    							}
+//	    							current_column_to_remove_width_from_array_index++;
+//	    							column_to_remove_width_from = columns_to_remove_width_from[current_column_to_remove_width_from_array_index];
+//	    						}
+//	    						else
+//	    						{
+//	    							var column_to_remove_width_from_new_width = Math.round(column_to_remove_width_from.column.width - needed_space);
+//	    							column_to_remove_width_from.column.width = column_to_remove_width_from_new_width;
+//	    							$(column_to_remove_width_from.column.th).width(column_to_remove_width_from_new_width);
+//	    							column_to_remove_width_from.space = column_to_remove_width_from.space - needed_space;
+//	    							break;
+//	    						}
+//	    					}
+//	    				}
+//	    				else
+//	    				{
+//	    					var column_to_remove_width_from_new_width = column_to_remove_width_from.column.width - this_step_width;
+//							column_to_remove_width_from.column.width = column_to_remove_width_from_new_width;
+//							$(column_to_remove_width_from.column.th).width(column_to_remove_width_from_new_width);
+//	    					column_to_remove_width_from.space = column_to_remove_width_from.space - this_step_width;
+//	    				}
 	    				
 	    			},
     				complete: function(now, fx) 
@@ -324,7 +337,7 @@
     {
     	for(var int = columns.length - 1; int >= 0; int--)
     	{
-    		if(columns[int].visible)
+    		if(columns[int].visible && !columns[int].sticky)
     		{
     			return int;
     		}
@@ -333,9 +346,9 @@
     
     function get_first_visible_column_index()
     {
-    	for(var int = 0; int < columns.length; int--)
+    	for(var int = 0; int < columns.length; int++)
     	{
-    		if(columns[int].visible)
+    		if(columns[int].visible && !columns[int].sticky)
     		{
     			return int;
     		}
@@ -349,7 +362,7 @@
     		while(column_index > 0)
     		{
     			var neighbour_column = columns[column_index - 1];
-    			if(neighbour_column.visible)
+    			if(neighbour_column.visible && !neighbour_column.sticky)
     			{
     				break;
     			}
@@ -361,7 +374,7 @@
     		while(column_index < columns.length)
     		{
     			var neighbour_column = columns[column_index + 1];
-    			if(neighbour_column.visible)
+    			if(neighbour_column.visible && !neighbour_column.sticky)
     			{
     				break;
     			}
@@ -370,6 +383,120 @@
     	}
     	return neighbour_column;
     }
+    
+    
+    function get_column_to_remove_width_from(column_index)
+    {
+    	var column = columns[column_index]
+    	
+    	var needed_space = column.initialWidth;
+    	var minimal_space = settings.minWidth;
+    	
+    	var right_neighbour_col = undefined;
+    	var left_neighbour_col = undefined;
+    	
+		for(var int = column_index + 1; int < columns.length; int++) 
+		{
+			var neighbour_column = columns[int];
+			if(neighbour_column.visible && !neighbour_column.sticky)
+			{
+				right_neighbour_col = neighbour_column;
+				break;
+			}
+		}
+
+		for(var int = column_index - 1; int > 0; int--) 
+		{
+			var neighbour_column = columns[int];
+			if(neighbour_column.visible && !neighbour_column.sticky)
+			{
+				left_neighbour_col = neighbour_column;
+				break;
+			}
+		}
+		
+    	//check right neighbour (needed space)
+		var available_space_right;
+		if(right_neighbour_col !== undefined)
+		{
+			available_space_right = right_neighbour_col.width - right_neighbour_col.headerWidth;
+			
+			if(available_space_right >= needed_space)
+			{
+				right_neighbour_col.space = needed_space;
+				return right_neighbour_col;
+			}
+		}
+		
+		//check left neighbour (needed space)
+		var available_space_left;
+		if(left_neighbour_col !== undefined)
+		{
+			available_space_left = left_neighbour_col.width - left_neighbour_col.headerWidth;
+			
+			if(available_space_left >= needed_space)
+			{
+				left_neighbour_col.space = needed_space;
+				return left_neighbour_col;
+			}
+		}
+		
+		//check widest column (needed space)
+		var widest = -1;
+		var widest_available_width = -1;
+		for(var int = 0; int < columns.length; int++) 
+		{
+			var column_to_check = columns[int];
+			if(!column_to_check.sticky)
+			{
+				if(column_to_check.width > widest_available_width)
+				{
+					widest_available_width = column_to_check.width - column_to_check.headerWidth;
+					widest = column_to_check;
+				}
+			}
+		}
+		if(widest_available_width >= needed_space)
+		{
+			widest.space = needed_space;
+			return widest;
+		}
+		
+		//divide widest column by 2
+		var widest_column_half_width = widest.width / 2;
+		if(widest_column_half_width > minimal_space)
+		{
+			widest.space = widest_column_half_width;
+			return widest;
+		}
+		
+		//check right neighbour (minimal space)
+		if(available_space_right >= minimal_space)
+		{
+			right_neighbour_col.space = minimal_space;
+			return right_neighbour_col;
+		}
+		
+		//check left neighbour (minimal space)
+		if(available_space_left >= minimal_space)
+		{
+			left_neighbour_col.space = minimal_space;
+			return left_neighbour_col;
+		}
+		
+		//check widest column (minimal space)
+		if(widest_available_width >= minimal_space)
+		{
+			widest.space = minimal_space;
+			return widest;
+		}
+		
+		alert("Unable to insert column! Resize the other columns to gain enough free space.");
+		
+    }
+    
+    
+    
     
     function get_columns_to_remove_width_from3(column_index)
     {
@@ -408,8 +535,8 @@
         		}
         		step++;
     		}
-    		
-			if(neighbour_column.visible && !neighbour_column.sticky)
+
+    		if(neighbour_column.visible && !neighbour_column.sticky)
 			{
 				var available_space = Math.floor(neighbour_column.width - neighbour_column.headerWidth);
 				
@@ -742,12 +869,10 @@
     {
     	var column = columns[column_index];
     	
-    	if(column.sticky)
+    	if(column.sticky || !column.resizable)
     	{
     		return false;
     	}
-    	
-    	var neighbour_column = get_visible_neighbour_column(column_index);
     	
     	var resize_helper = $("<div class='ResizableColumnHelper'>"+$(column.th).html()+"</div>");
     	$(column.th).html(resize_helper);
@@ -794,8 +919,9 @@
 			{
 				var offset = $(this).offset();
 				
+				var neighbour_column = get_visible_neighbour_column(column_index);
+	
 				var column_new_width = $(this).width();
-				
 				var neighbour_col_new_width = neighbour_column.width + column.width - column_new_width;
 				
 				if(neighbour_col_new_width < neighbour_column.headerWidth)
