@@ -186,7 +186,7 @@ class ItemCommonIO
 							}
 							
 							
-							if ($sub_sub_item_value[occurrence] == "once" and $item_add_occurrence_array[0] == true and $item_add_occurrence_array[2] == "edit")
+							if ($sub_sub_item_value[occurrence] == "once" and $item_add_occurrence_array[0] == true and $item_add_occurrence_array[2] == "edit" and is_array($sub_sub_item_value[fulfilled]) and count($sub_sub_item_value[fulfilled]) >= 1)
 							{
 								$paramquery[run] = "sub_item_edit";
 							}
