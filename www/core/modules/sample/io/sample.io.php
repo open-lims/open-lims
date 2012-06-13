@@ -267,7 +267,7 @@ class SampleIO
 		
 		require_once("core/modules/base/common/io/assistant.io.php");
 		
-		$assistant_io = new AssistantIO("ajax.php?nav=sample&run=create_sample", "SampleCreateAssistantField", false);
+		$assistant_io = new AssistantIO("ajax.php?nav=sample&run=create_sample", "SampleCreateAssistantField");
 		
 		$assistant_io->add_screen("Organisation Unit");
 		$assistant_io->add_screen("Sample Type");
@@ -347,7 +347,7 @@ class SampleIO
 		
 		require_once("core/modules/base/common/io/assistant.io.php");
 		
-		$assistant_io = new AssistantIO("ajax.php?nav=sample&run=clone_sample", "SampleCloneAssistantField", false);
+		$assistant_io = new AssistantIO("ajax.php?nav=sample&run=clone_sample", "SampleCloneAssistantField");
 		
 		$assistant_io->add_screen("Source Sample");
 		$assistant_io->add_screen("Sample Information");

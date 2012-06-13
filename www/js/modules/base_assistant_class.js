@@ -27,10 +27,25 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 
 	var original_error_message;
 	
-	if (init_page == 1)
+	if (init_page >= 1)
 	{
-		set_active(1);
-		set_clickable(1);
+		set_active(init_page);
+		
+		if (init_page > 1)
+		{
+			for(var i=1;i<=init_page;i++)
+			{
+				if (i !== init_page)
+				{
+					set_visited(i)
+				}
+				set_clickable(i);
+			}
+		}
+		else
+		{
+			set_clickable(init_page);
+		}
 	}
 	
 	function set_visited(key)

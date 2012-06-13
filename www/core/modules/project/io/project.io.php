@@ -113,20 +113,33 @@ class ProjectIO
 	
 	public static function create()
 	{
-		$template = new HTMLTemplate("project/new_project.html");	
+		global $session;
 		
 		require_once("core/modules/base/common/io/assistant.io.php");
 		
-		$assistant_io = new AssistantIO("ajax.php?nav=project&run=create_project", "ProjectCreateAssistantField", true);
+		if ($_GET['run'] == "new_subproject")
+		{
+			$session->write_value("PROJECT_ADD_ROLE", "direct_sub_project", true);
+			$session->write_value("PROJECT_TYPE",3);
+			$session->write_value("PROJECT_TOID",$_GET['project_id']);
+			
+			$assistant_io = new AssistantIO("ajax.php?nav=project&run=create_project", "ProjectCreateAssistantField", 2);
+		}
+		else
+		{
+			$session->write_value("PROJECT_ADD_ROLE", "project", true);
+			
+			$assistant_io = new AssistantIO("ajax.php?nav=project&run=create_project", "ProjectCreateAssistantField", 0);
+		}
 		
 		$assistant_io->add_screen("Organisation Unit");
 		$assistant_io->add_screen("Project Information");
 		$assistant_io->add_screen("Template");
 		$assistant_io->add_screen("Template Specific Information");
 		$assistant_io->add_screen("Summary");
-
-		$template->set_var("content", $assistant_io->get_content());
 		
+		$template = new HTMLTemplate("project/new_project.html");	
+		$template->set_var("content", $assistant_io->get_content());
 		$template->output();
 	}
 

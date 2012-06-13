@@ -347,6 +347,7 @@ class ProjectRequest
 		switch($_GET[run]):
 		
 			case ("new"):
+			case ("new_subproject"):
 				require_once("io/project.io.php");
 				ProjectIO::create();
 			break;
@@ -367,11 +368,6 @@ class ProjectRequest
 			case("organ_unit"):
 				require_once("io/project.io.php");
 				ProjectIO::list_organisation_unit_related_projects();
-			break;
-
-			case ("new_subproject"):
-				require_once("io/project.io.php");
-				ProjectIO::create();
 			break;
 			
 			case ("detail"):
