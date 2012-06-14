@@ -1,7 +1,30 @@
-	
+/**
+ * version: 0.4.0.0
+ * author: Roman Quiring <quiring@open-lims.org>
+ * copyright: (c) 2008-2011 by Roman Konertz, Roman Quiring
+ * license: GPLv3
+ * 
+ * This file is part of Open-LIMS
+ * Available at http://www.open-lims.org
+ * 
+ * This program is free software;
+ * you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation;
+ * version 3 of the License.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program;
+ * if not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * DynamicTable jQuery plugin.
+ * Allows dynamic resizing and displaying of table columns.
+ */
 (function($)
 {
-
 	var table;
 	var tbody;
 	var table_width;
@@ -9,7 +32,10 @@
 	var columns = [];
 	
 	var animating = false;
-	 
+	
+	/**
+	 * Settings. These may be overwritten.
+	 */
 	var settings = 
 	{
 		sticky: [],
@@ -20,13 +46,19 @@
 		rulerColor: "#000000",
 		resizeAnimation: true,
 		resizeAnimationStyle: "swing",
-		minWidth: 20,
+		minWidth: 20
 	}
 	
+	/**
+	 * Public Methods.
+	 */
 	var methods = 
 	{
+		/**
+		 * Initialise.
+		 */
 		init : function(options) 
-		{			
+		{
 			settings = $.extend(settings, options);
 			
 			table = this;
@@ -40,7 +72,7 @@
 				var column = {};
 				var th = this.find("th").get(int);
 				
-				var div = $("<div>"+$(th).html()+"</div>"); //TODO needed?
+				var div = $("<div>"+$(th).html()+"</div>");
 				$(th).html(div);
 				
 				column.th = th;
@@ -52,12 +84,6 @@
 				column.tds = [];
 				$(tbody).find("tr").each(function() {
 					var td = $(this).children("td:nth-child("+(int + 1)+")");
-//					var div = $("<div>"+$(td).html()+"</div>");
-//					$(div).css({
-//						"margin-left": settings.padding, 
-//						"margin-right": settings.padding
-//					});
-//					$(td).html(div);
 					column.tds.push(td);
 				});
 				
@@ -70,7 +96,7 @@
 				}
 				else
 				{
-					if($(th).children().html().replace(/&nbsp;/g, "") !== "")
+					if($(th).html().replace(/&nbsp;/g, "") !== "")
 					{
 						var measure = $("<div>"+$(th).children().html()+"</div>");
 						$(measure)
@@ -91,6 +117,10 @@
 			}
 	    },
 	    
+	    /**
+	     * Method for hiding a specific column.
+	     * @param num the index of the column to hide.
+	     */
 	    hide : function(num) 
 	    {
 	    	if(animating)
@@ -111,7 +141,18 @@
 	    	
 	    	if(!settings.resizeAnimation)
 	    	{
-		    	$(column_to_hide.th).width(0);
+   				if($.browser.msie && $.browser.version == 8.0)
+					{ //IE8 does not like hidden columns
+   					$(column_to_hide.th).width(0);
+					}
+   				else
+   				{
+       				$(column_to_hide.th).hide();
+       				$(column_to_hide.tds).each(function()
+       				{
+       					$(this).hide();
+       				});
+   				}
 		    	column_to_hide.visible = false;
 		    	$(column_to_add_width_to.th).width(column_to_add_width_to.width + column_to_hide.width);
 		    	column_to_add_width_to.width = column_to_add_width_to.width + column_to_hide.width;
@@ -177,6 +218,10 @@
 	    	);
 	    },
 	    
+	    /**
+	     * Method for showing a specific column.
+	     * @param num the index of the column to show.
+	     */
 	    show : function(num) 
 	    {
 	    	if(animating)
@@ -193,54 +238,45 @@
 	    		return false;
 	    	}
 	    	
-	    	var showing_last_column = false;
+	    	$(column_to_show.th).find(".ResizableColumnHandle").show();
+			$(column_to_show.th).find(".ui-resizable-handle").show();
 	    	
 	    	if(num > get_last_visible_column_index())
 	    	{
-	    		showing_last_column = true;
-				$(columns[num - 1].th).find(".ResizableColumnHandle").show();
-				$(columns[num - 1].th).find(".ui-resizable-handle").show()
-	    	}
-
-	    	
-//	    	var column_to_remove_width_from = get_visible_neighbour_column(num);
-	    	
-//	    	var columns_to_remove_width_from = get_columns_to_remove_width_from(num);
-//	    	var columns_to_remove_width_from = get_columns_to_remove_width_from3(num);
-	    	
-//	    	var current_column_to_remove_width_from_array_index = 0;
-	    	
+	    		var last_visible_column_index = get_last_visible_column_index();
+	    		
+				$(columns[last_visible_column_index].th).find(".ResizableColumnHandle").show();
+				$(columns[last_visible_column_index].th).find(".ui-resizable-handle").show()
+				
+		    	$(column_to_show.th).find(".ResizableColumnHandle").hide();
+				$(column_to_show.th).find(".ui-resizable-handle").hide()
+	    	}	    	
 	    	
 	    	var column_to_remove_width_from = get_column_to_remove_width_from(num);
 	    	
 	    	if(!settings.resizeAnimation)
 	    	{
-	    		column_to_show.width = column_to_remove_width_from.space;
 	    		column_to_show.visible = true;
+	    		$(column_to_show.th).show();
+   				$(column_to_show.tds).each(function()
+   				{
+   					$(this).show();
+   				});
+	    		column_to_show.width = column_to_remove_width_from.space;
 		    	$(column_to_show.th).width(column_to_remove_width_from.space);
 		    	$(column_to_remove_width_from.th).width(column_to_remove_width_from.width - column_to_remove_width_from.space);
 		    	column_to_remove_width_from.width = column_to_remove_width_from.width - column_to_remove_width_from.space;
 		    	animating = false;
 	    		return true;
 	    	}
-	    	
-	    	//all except ie8
-//	    	if(!($.browser.msie && ($.browser.version == 7.0 || $.browser.version == 8.0)))
-//	    	{
-		    	$(column_to_show.th).show();
-				$(column_to_show.tds).each(function(){
-					$(this).show();
-				});
-//	    	}
 
-			
-//			var first_column_to_remove_width_from = columns_to_remove_width_from[current_column_to_remove_width_from_array_index];
-//			first_column_to_remove_width_from.column.width = first_column_to_remove_width_from.column.width - 1;
-//			$(first_column_to_remove_width_from.column.th).width(first_column_to_remove_width_from.column.width);
+	    	$(column_to_show.th).show();
+			$(column_to_show.tds).each(function(){
+				$(this).show();
+			});
 			
 	    	$(column_to_show.th).animate(
 	    		{
-//	    			"width": [column_to_show.initialWidth, settings.resizeAnimationStyle]
 	    			"width": [column_to_remove_width_from.space, settings.resizeAnimationStyle]
 	    		}, 
 	    		{
@@ -259,54 +295,10 @@
 	    					
 	    				var this_step_width = current_width - $(column_to_show.th).width();
 	    				$(column_to_show.th).width(current_width);
-	    				
-	    				
+
 	    				var column_to_remove_width_from_new_width = column_to_remove_width_from.width - this_step_width;
 	    				$(column_to_remove_width_from.th).width(column_to_remove_width_from_new_width);
-	    				column_to_remove_width_from.width = column_to_remove_width_from_new_width;
-	    				
-	    				
-//	    				var column_to_remove_width_from = columns_to_remove_width_from[current_column_to_remove_width_from_array_index];
-//	    				if(column_to_remove_width_from.space < this_step_width)
-//	    				{
-//	    					var needed_space = this_step_width;
-//	    					
-//	    					while(true)
-//	    					{
-//	    						if(column_to_remove_width_from.space < needed_space)
-//	    						{
-//	    							var column_to_remove_width_from_new_width = Math.round(column_to_remove_width_from.column.width - column_to_remove_width_from.space);
-//	    							column_to_remove_width_from.column.width = column_to_remove_width_from_new_width;
-//	    							$(column_to_remove_width_from.column.th).width(column_to_remove_width_from_new_width);
-//	    							
-//	    							needed_space -= column_to_remove_width_from.space;
-//	    							console.log("still needed: "+needed_space);
-//
-//	    							if(needed_space < 1)
-//	    							{
-//	    								break;
-//	    							}
-//	    							current_column_to_remove_width_from_array_index++;
-//	    							column_to_remove_width_from = columns_to_remove_width_from[current_column_to_remove_width_from_array_index];
-//	    						}
-//	    						else
-//	    						{
-//	    							var column_to_remove_width_from_new_width = Math.round(column_to_remove_width_from.column.width - needed_space);
-//	    							column_to_remove_width_from.column.width = column_to_remove_width_from_new_width;
-//	    							$(column_to_remove_width_from.column.th).width(column_to_remove_width_from_new_width);
-//	    							column_to_remove_width_from.space = column_to_remove_width_from.space - needed_space;
-//	    							break;
-//	    						}
-//	    					}
-//	    				}
-//	    				else
-//	    				{
-//	    					var column_to_remove_width_from_new_width = column_to_remove_width_from.column.width - this_step_width;
-//							column_to_remove_width_from.column.width = column_to_remove_width_from_new_width;
-//							$(column_to_remove_width_from.column.th).width(column_to_remove_width_from_new_width);
-//	    					column_to_remove_width_from.space = column_to_remove_width_from.space - this_step_width;
-//	    				}
-	    				
+	    				column_to_remove_width_from.width = column_to_remove_width_from_new_width;	    				
 	    			},
     				complete: function(now, fx) 
     				{
@@ -319,6 +311,10 @@
 	    	);
 	    },
 	    
+	    /**
+	     * Method for toggling visibility of a specific column.
+	     * @param num the index of the column to toggle.
+	     */
 	    toggle: function(num) 
 	    {
 	    	var column_to_toggle = columns[num];
@@ -330,9 +326,116 @@
 	    	{
 	    		methods.show(num);
 	    	}
+	    },
+	    
+	    /**
+	     * Returns whether there is currently an animation going on.
+	     */
+	    isAnimating: function()
+	    {
+	    	return animating;
+	    },
+	    
+	    reinit: function()
+	    {
+//	    	var widths = [];
+//	    	var visible = [];
+//	    	
+//	    	for (var int = 0; int < columns.length; int++) {
+//				var column = columns[int];
+//				widths.push(column.width);
+//				visible.push(column.visible);
+//			}
+//	    	
+//	    	columns = [];
+//	    	
+//	    	methods.init.apply(this, arguments);
+//	    	
+//	    	for (var int = 0; int < columns.length; int++) {
+//				var column = columns[int];
+//				
+//				column.width = widths[int];
+//				column.visible = visible[int];
+//				
+//				$(column.th).width(column.width);
+//				
+//				if(!column.visible)
+//				{
+//					$(column.th).hide();
+//	   				$(column.tds).each(function()
+//	   				{
+//	   					$(this).hide();
+//	   				});
+//				}
+//			}
+	    	
+	    	
+//			var num_cols = $(table).find("th").size();
+//			
+//			for(var int = 0; int < num_cols; int++) 
+//			{
+//				var column = {};
+//				var th = $(table).find("th").get(int);
+//				
+//				var div = $("<div>"+$(th).html()+"</div>");
+//				$(th).html(div);
+//				
+//				column.th = th;
+//				column.initialWidth = $(th).width();
+//				column.width = widths[int];
+//				column.visible = visible[int];
+//				column.sticky = ($.inArray(int, settings.sticky) !== -1);
+//				column.resizable = ($.inArray(int, settings.notResizable) === -1);
+//				column.tds = [];
+//				$(tbody).find("tr").each(function() {
+//					var td = $(this).children("td:nth-child("+(int + 1)+")");
+//					column.tds.push(td);
+//				});
+//				
+//				var header_width = 0;
+//				if($(th).children().children().size() > 0)
+//				{
+//					$(th).children().children().each(function(){
+//						header_width += $(this).outerWidth(true);
+//					});
+//				}
+//				else
+//				{
+//					if($(th).html().replace(/&nbsp;/g, "") !== "")
+//					{
+//						var measure = $("<div>"+$(th).children().html()+"</div>");
+//						$(measure)
+//							.css("position", "absolute")
+//							.appendTo("body");
+//						header_width = $(measure).width();
+//						$(measure).remove();
+//					}
+//				}
+//				column.headerWidth = header_width;
+//			
+//				columns.push(column);
+//				
+//				
+//				$(column.th).width(column.width);
+//				
+//				if(!column.visible)
+//				{
+//					$(column.th).hide();
+//	   				$(column.tds).each(function()
+//	   				{
+//	   					$(this).hide();
+//	   				});
+//				}
+//			}
 	    }
+	    
 	};
 	
+	
+	/**
+	 * Private Method.
+	 * Returns the index of the last column that is visible and not sticky.
+	 */
     function get_last_visible_column_index()
     {
     	for(var int = columns.length - 1; int >= 0; int--)
@@ -344,6 +447,10 @@
     	}
     }
     
+	/**
+	 * Private Method.
+	 * Returns the index of the first column that is visible and not sticky.
+	 */
     function get_first_visible_column_index()
     {
     	for(var int = 0; int < columns.length; int++)
@@ -355,6 +462,11 @@
     	}
     }
     
+    /**
+     * Private Method.
+     * Returns the column closest to a given column index that is visible and not sticky.
+     * @param column_index the index of the column.
+     */
     function get_visible_neighbour_column(column_index)
     {
     	if(column_index === get_last_visible_column_index() || column_index === columns.length - 1)
@@ -384,7 +496,12 @@
     	return neighbour_column;
     }
     
-    
+    /**
+     * Private Method.
+     * Returns an object that contains a column to take space from and a space parameter, which
+     * indicates how much space to take from that column during animation.
+     * @param column_index the index of the column to insert into the table.
+     */
     function get_column_to_remove_width_from(column_index)
     {
     	var column = columns[column_index]
@@ -447,7 +564,7 @@
 		for(var int = 0; int < columns.length; int++) 
 		{
 			var column_to_check = columns[int];
-			if(!column_to_check.sticky)
+			if(column_to_check.visible && !column_to_check.sticky)
 			{
 				if(column_to_check.width > widest_available_width)
 				{
@@ -492,379 +609,13 @@
 		}
 		
 		alert("Unable to insert column! Resize the other columns to gain enough free space.");
-		
     }
     
-    
-    
-    
-    function get_columns_to_remove_width_from3(column_index)
-    {
-    	var column = columns[column_index]
-    	var columns_to_remove_width_from = [];
-    	
-    	var needed_space = column.initialWidth;
-    	var acumulated_space = 0;
-    	
-    	var step = 1;
-    	var left = false;
-    	
-//    	console.log("need "+needed_space);
-    	
-    	while(acumulated_space < needed_space)
-    	{
-    		if(left)
-    		{
-        		var neighbour_column = columns[column_index - step];
-
-        		if(neighbour_column === undefined)
-        		{
-            		left = false;
-        			continue;
-        		}
-    			step++;
-    		}
-    		else
-    		{
-    			var neighbour_column = columns[column_index + step];
-
-        		if(neighbour_column === undefined)
-        		{
-        			left = true;
-        			continue;
-        		}
-        		step++;
-    		}
-
-    		if(neighbour_column.visible && !neighbour_column.sticky)
-			{
-				var available_space = Math.floor(neighbour_column.width - neighbour_column.headerWidth);
-				
-				var column_to_remove_width_from = {};
-        		column_to_remove_width_from.column = neighbour_column;
-				        		
-				if(acumulated_space + available_space > needed_space)
-				{
-					var rest_space = needed_space - acumulated_space;
-					column_to_remove_width_from.space = rest_space;
-					acumulated_space += rest_space;
-				}
-				else
-				{
-					column_to_remove_width_from.space = available_space;
-					acumulated_space += available_space;
-				}
-				
-				columns_to_remove_width_from.push(column_to_remove_width_from);
-			}
-    	}
-
-    	return columns_to_remove_width_from;
-    }
-    
-    
-    
-    function get_columns_to_remove_width_from2(column_index)
-    {
-    	var column = columns[column_index]
-    	var needed_space = column.width;
-    	var columns_to_remove_width_from = [];
-    	
-//    	//check left neighbour columns
-//    	for (var int = column_index + 1; int < columns.length; int++) 
-//    	{
-//			var neighbour_column = columns[int];
-//			if(neighbour_column.visible && !neighbour_column.sticky)
-//			{
-//				var available_space = neighbour_column.width - neighbour_column.headerWidth;
-//				if(available_space >= needed_space)
-//				{
-//					var column_to_remove_width_from = {};
-//	        		column_to_remove_width_from.column = neighbour_column;
-//	        		column_to_remove_width_from.space = needed_space;
-//					columns_to_remove_width_from.push(column_to_remove_width_from);
-//					break;
-//				}
-//			}
-//		}
-//    	
-//    	if(columns_to_remove_width_from.length === 1)
-//    	{
-//    		return columns_to_remove_width_from;
-//    	}
-//    	
-//    	//check right neighbour columns
-//    	for (var int = column_index - 1; int >= 0; int--) 
-//    	{
-//			var neighbour_column = columns[int];
-//			if(neighbour_column.visible && !neighbour_column.sticky)
-//			{
-//				var available_space = neighbour_column.width - neighbour_column.headerWidth;
-//				if(available_space >= needed_space)
-//				{
-//					var column_to_remove_width_from = {};
-//	        		column_to_remove_width_from.column = neighbour_column;
-//	        		column_to_remove_width_from.space = needed_space;
-//					columns_to_remove_width_from.push(column_to_remove_width_from);
-//					break;
-//				}
-//			}
-//		}
-//    	
-//    	if(columns_to_remove_width_from.length === 1)
-//    	{
-//    		return columns_to_remove_width_from;
-//    	}
-    	
-    	//there is no single column to take space from
-    	
-    	var acumulated_space = 0;
-    	
-    	//check left neighbour columns
-    	for (var int = column_index + 1; int < columns.length; int++) 
-    	{
-			var neighbour_column = columns[int];
-			if(neighbour_column.visible && !neighbour_column.sticky)
-			{
-				var available_space = neighbour_column.width - neighbour_column.headerWidth;
-				
-//				if(available_space >= 10)
-//				{					
-//					console.log("col "+int+" has space "+available_space+" acu "+acumulated_space);
-					var column_to_remove_width_from = {};
-	        		column_to_remove_width_from.column = neighbour_column;
-	        		
-					if(acumulated_space + available_space > needed_space)
-					{
-//						console.log("asd space left "+(needed_space - acumulated_space));
-						var rest_space = needed_space - acumulated_space;
-						
-						column_to_remove_width_from.space = rest_space;
-						columns_to_remove_width_from.push(column_to_remove_width_from);
-						acumulated_space += rest_space;
-						break;
-					}
-					else
-					{
-						column_to_remove_width_from.space = available_space;
-					}
-					columns_to_remove_width_from.push(column_to_remove_width_from);
-					
-					acumulated_space += available_space;
-//				}
-			}
-		}
-    	
-    	if(acumulated_space < needed_space)
-    	{
-        	//check right neighbour columns
-        	for (var int = column_index - 1; int >= 0; int--) 
-        	{
-    			var neighbour_column = columns[int];
-    			if(neighbour_column.visible && !neighbour_column.sticky)
-    			{
-    				var available_space = neighbour_column.width - neighbour_column.headerWidth;
-
-//    				if(available_space >= 10)
-//    				{	
-    					var column_to_remove_width_from = {};
-    	        		column_to_remove_width_from.column = neighbour_column;
-    	        		
-    					if(acumulated_space + available_space > needed_space)
-    					{
-    						var rest_space = needed_space - acumulated_space;
-    						
-    						column_to_remove_width_from.space = rest_space;
-    						columns_to_remove_width_from.push(column_to_remove_width_from);
-    						acumulated_space += rest_space;
-    						break;
-    					}
-    					else
-    					{
-    						column_to_remove_width_from.space = available_space;
-    					}
-    					columns_to_remove_width_from.push(column_to_remove_width_from);
-    					
-    					acumulated_space += available_space;
-//    				}
-    			}
-    		}
-    	}
-    	
-//    	console.log(columns_to_remove_width_from);
-    	
-    	return columns_to_remove_width_from;
-    	
-    }
-    
-    
-    function get_columns_to_remove_width_from(column_index)
-    {
-    	var column = columns[column_index]
-    	
-    	var needed_space = column.width;
-    	var acumulated_space = 0;
-
-    	var columns_to_remove_width_from = [];
-    	
-    	var left = false;
-    	if(column_index === columns.length - 1 || column_index === get_last_visible_column_index())
-    	{
-    		left = true;
-    	}
-    	
-    	var num_left_columns_to_take_space_from = 0;
-    	var num_right_columns_to_take_space_from = 0;
-    	
-    	var recursively_add_columns_to_remove_width_from = function(column_index) 
-    	{
-    		console.log("checking col neighbour of "+column_index+" left: "+left);
-    		
-        	if(left)
-        	{
-            	if(column_index === 0 || column_index === get_first_visible_column_index())
-            	{
-            		console.log("left does not work because "+column_index+" is the first or first visible col or sticky");
-            		left = false;
-            	}
-            	else
-            	{
-            		var current_column_index = column_index;
-            		
-            		while(current_column_index > 0)
-            		{
-            			var neighbour_column = columns[current_column_index - 1];
-            			num_left_columns_to_take_space_from++;
-            			if(neighbour_column.visible && !neighbour_column.sticky)
-            			{
-            				break;
-            			}
-            			current_column_index--;
-            		}
-            		
-             		if(!neighbour_column.visible || neighbour_column.sticky)
-             		{
-             			neighbour_column = undefined;
-             		}
-             		
-            		left = false;
-            	}
-        	}
-        	else
-        	{
-        		if(column_index === columns.length - 1 || column_index === get_last_visible_column_index())
-        		{
-            		console.log("right does not work because "+column_index+" is the last or last visible col");
-            		left = true;
-        		}
-        		else
-        		{
-        			var current_column_index = column_index;
-        			
-             		while(current_column_index < columns.length)
-            		{
-            			var neighbour_column = columns[current_column_index + 1];
-                 		num_right_columns_to_take_space_from++;
-            			if(neighbour_column.visible && !neighbour_column.sticky)
-            			{
-            				break;
-            			}
-            			current_column_index++;
-            		}
-             		
-             		if(!neighbour_column.visible || neighbour_column.sticky)
-             		{
-             			neighbour_column = undefined;
-             		}
-             		
-             		left = true;
-        		}
-        	}
-        	
-        	console.log("neighbour col: ");
-        	console.log(neighbour_column);
-        	
-        	if(neighbour_column !== undefined)
-        	{
-//        		recursively_add_columns_to_remove_width_from(column_index);
-//        	}
-//        	else
-//        	{
-        		var available_space = neighbour_column.width - neighbour_column.headerWidth;
-        		
-        		var space_still_needed = needed_space - acumulated_space;
-        		
-        		
-        		var column_to_remove_width_from = {};
-        		column_to_remove_width_from.column = neighbour_column;
-        		
-        		if(space_still_needed <= available_space)
-        		{
-        			column_to_remove_width_from.space = space_still_needed;
-        			acumulated_space += space_still_needed;
-        			console.log("this col has the needed space of "+space_still_needed);
-        		}
-        		else
-        		{
-        			column_to_remove_width_from.space = available_space;
-            		acumulated_space += available_space;
-            		console.log("this col has not enough space available: need "+space_still_needed+" has "+available_space);
-        		}
-        		
-        		columns_to_remove_width_from.push(column_to_remove_width_from);
-        	}
-        		if(acumulated_space < needed_space)
-        		{
-        			if(left)
-        			{
-        				console.log("go left. checked "+num_left_columns_to_take_space_from+" on the left side already.");
-        				
-        				var current_index_left = column_index - num_left_columns_to_take_space_from - 1;
-        				if(current_index_left > 0)
-        				{
-        					recursively_add_columns_to_remove_width_from(current_index_left);
-        				}
-        				else
-        				{
-        					left = false;
-        					recursively_add_columns_to_remove_width_from(current_index_right);
-        				}
-        			}
-        			if(!left)
-        			{
-        				console.log("go right. checked "+num_right_columns_to_take_space_from+" on the right side already.");
-        				
-        				var current_index_right = column_index + num_right_columns_to_take_space_from + 1;
-        				
-        				if(current_index_right < columns.length)
-        				{
-        					recursively_add_columns_to_remove_width_from(current_index_right);
-        				}
-        				else
-        				{
-        					left = true;
-        					recursively_add_columns_to_remove_width_from(current_index_left);
-        				}
-        			}
-        		}
-        		else
-        		{
-        			console.log("done!");
-        		}
-//        	}
-    	}
-    	
-    	recursively_add_columns_to_remove_width_from(column_index);
-    	
-    	console.log("will remove space from "+columns_to_remove_width_from.length+" columns: ");
-    	for ( var int = 0; int < columns_to_remove_width_from.length; int++) {
-			console.log(columns_to_remove_width_from[int]);
-		}
-    	
-    	return columns_to_remove_width_from;
-    }
-    
-    
+    /**
+     * Private Method.
+     * Makes all columns resizable that are not sticky and defined to be resizable.
+     * @param column_index the index of the column to make resizable.
+     */
     function init_slider(column_index) 
     {
     	var column = columns[column_index];
@@ -892,7 +643,6 @@
     			})
     			.appendTo(resize_helper);
     	}
-    	
     	$(resize_helper).resizable(
     	{
 			handles: "e",

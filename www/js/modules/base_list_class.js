@@ -249,9 +249,10 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 
 	
 	function make_resizable()
-	{
+	{		
 		if($(".ListTable").find(".ui-resizable-e").length > 0)
 		{
+			$(".ListTable").dynamicTable("reinit");
 			return false;
 		}
 		
@@ -262,23 +263,32 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 		
 		for (var int = 1; int < num_cols; int++) 
 		{
-			var column = $(".ListTable > thead > tr > th").get(int);
-			var width = $(column).attr("width");
+			var column = $(".ListTable > thead > tr > th").get(int);		
+			
+			if($.browser.msie)
+			{ //attr("width") causes IE to return numeric values, so we cannot distinguish px from em
+				var width = $(column)[0].currentStyle["width"];
+			}
+			else
+			{
+				var width = $(column).attr("width");
+			}		
+			
 			if(width !== undefined && width !== "")
 			{
-				if(width.indexOf("%") === -1 && width.indexOf("em") === -1)
+				if(width.indexOf("px") !== -1)
 				{
 					sticky.push(int);
-				}
-				
-				//if the last column is sticky, the column before that is not resizable
-				if(int === num_cols - 1)
-				{
-					notResizable.push(int - 1);
+					
+					//if the last column is sticky, the column before that is not resizable
+					if(int === num_cols - 1)
+					{
+						notResizable.push(int - 1);
+					}
 				}
 			}
 		}
-		
+
 		$(".ListTable").dynamicTable({
 			"sticky": sticky,
 			"notResizable": notResizable,
@@ -359,7 +369,13 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 				var label = $("<div class='ColumnMenuEntryLabel'>"+column_text+"</div>");
 				
 				var checkbox = $("<input type='checkbox' class='ColumnMenuEntryCheckbox' name='' value='' "+checked+"></input>")
-					.click(function(){
+					.click(function(event)
+					{
+						if($(".ListTable").dynamicTable("isAnimating"))
+						{
+							event.preventDefault();
+						}
+						
 						$(".ListTable").dynamicTable("toggle", $(this).parent().data("columnIndex"));
 					});
 				

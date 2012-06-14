@@ -110,8 +110,7 @@ function base_navigation()
 				})
 				.bind("click", function(evt){
 					evt.preventDefault();
-					
-					//close open tab
+
 					var currently_selected_tab = close_menu();
 								
 					if(currently_selected_tab !== undefined)
@@ -127,13 +126,10 @@ function base_navigation()
 						}
 					}
 
-					//reset style of currently active tab
 					remove_grey_out_active_tab();
 
-					//change style of currently active tab (if the menu does not come from this tab)
 					grey_out_active_tab_if_necessary(tab);
-					
-					//open new tab
+
 					animate_right_tab_side_down(tab);
 
 					open_menu(tab);
@@ -248,11 +244,7 @@ function base_navigation()
 				var tab = $("#NavigationButtonMenu").data("refersToTab");
 				
 				var color = get_tab_color(tab);
-				$("#NavigationBackground").css("border-bottom", "solid 1px "+color);
-				
-//				animate_right_tab_side_up(tab);
-//				close_menu();
-				
+				$("#NavigationBackground").css("border-bottom", "solid 1px "+color);			
 			});
 		});
 		
@@ -330,8 +322,7 @@ function base_navigation()
 	function close_menu()
 	{
 		var tab_to_close = $("#NavigationButtonMenu").data("refersToTab");
-		
-		//fadeout and destroy menu
+
 		$("#NavigationButtonMenu").fadeOut(200, function(){
 			$(this).remove();
 		});
@@ -458,7 +449,7 @@ function base_scrollable_navigation_tabs()
 		
 		$(tab_container)
 			.css({
-				"margin-left": 0, //reset margin, was 25px TODO css change
+				"margin-left": 0,
 				"width": total_tab_width //set width to max to prevent line break -> position() would not be correct
 			});
 	
