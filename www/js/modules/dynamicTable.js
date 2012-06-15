@@ -336,97 +336,40 @@
 	    	return animating;
 	    },
 	    
-	    reinit: function()
+	    /**
+	     * Returns the indices of all hidden columns.
+	     */
+	    getHiddenColumnIndices: function()
 	    {
-//	    	var widths = [];
-//	    	var visible = [];
-//	    	
-//	    	for (var int = 0; int < columns.length; int++) {
-//				var column = columns[int];
-//				widths.push(column.width);
-//				visible.push(column.visible);
-//			}
-//	    	
-//	    	columns = [];
-//	    	
-//	    	methods.init.apply(this, arguments);
-//	    	
-//	    	for (var int = 0; int < columns.length; int++) {
-//				var column = columns[int];
-//				
-//				column.width = widths[int];
-//				column.visible = visible[int];
-//				
-//				$(column.th).width(column.width);
-//				
-//				if(!column.visible)
-//				{
-//					$(column.th).hide();
-//	   				$(column.tds).each(function()
-//	   				{
-//	   					$(this).hide();
-//	   				});
-//				}
-//			}
-	    	
-	    	
-//			var num_cols = $(table).find("th").size();
-//			
-//			for(var int = 0; int < num_cols; int++) 
-//			{
-//				var column = {};
-//				var th = $(table).find("th").get(int);
-//				
-//				var div = $("<div>"+$(th).html()+"</div>");
-//				$(th).html(div);
-//				
-//				column.th = th;
-//				column.initialWidth = $(th).width();
-//				column.width = widths[int];
-//				column.visible = visible[int];
-//				column.sticky = ($.inArray(int, settings.sticky) !== -1);
-//				column.resizable = ($.inArray(int, settings.notResizable) === -1);
-//				column.tds = [];
-//				$(tbody).find("tr").each(function() {
-//					var td = $(this).children("td:nth-child("+(int + 1)+")");
-//					column.tds.push(td);
-//				});
-//				
-//				var header_width = 0;
-//				if($(th).children().children().size() > 0)
-//				{
-//					$(th).children().children().each(function(){
-//						header_width += $(this).outerWidth(true);
-//					});
-//				}
-//				else
-//				{
-//					if($(th).html().replace(/&nbsp;/g, "") !== "")
-//					{
-//						var measure = $("<div>"+$(th).children().html()+"</div>");
-//						$(measure)
-//							.css("position", "absolute")
-//							.appendTo("body");
-//						header_width = $(measure).width();
-//						$(measure).remove();
-//					}
-//				}
-//				column.headerWidth = header_width;
-//			
-//				columns.push(column);
-//				
-//				
-//				$(column.th).width(column.width);
-//				
-//				if(!column.visible)
-//				{
-//					$(column.th).hide();
-//	   				$(column.tds).each(function()
-//	   				{
-//	   					$(this).hide();
-//	   				});
-//				}
-//			}
+	    	var indices = [];
+	    	for (var int = 0; int < columns.length; int++) 
+	    	{
+	    		var column = columns[int];
+				if(!column.visible)
+				{
+					indices.push(int);
+				}
+			}
+	    	return indices;
+	    },
+	    
+	    /**
+	     * Reinitialises the tds of all columns.
+	     * Useful if the content of tbody changes.
+	     */
+	    reinitTds: function()
+	    {
+	    	for (var int = 0; int < columns.length; int++) 
+	    	{
+				var column = columns[int];
+				
+				column.tds = [];
+				$(tbody).find("tr").each(function() 
+				{
+					var td = $(this).children("td:nth-child("+(int + 1)+")");
+					column.tds.push(td);
+				});
+	    	}
 	    }
 	    
 	};

@@ -216,13 +216,18 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 				$("#" + css_main_id).children().remove();
 				$("#"+css_main_id).css({"display":"block","display":"table-row-group"});
 				$("#" + css_main_id).append("<div class='ListLoadingContents'></div>"); // element must not be empty to animate height
+				
 				if (new_height != last_height) 
 				{
 					if($.browser.msie)
 					{
 						if($.browser.version == 7.0 || $.browser.version == 9.0)
 						{ //we got an ie version that does not support tbody animation
+
+							data = hide_hidden_columns(data);
+							
 							$("#" + css_main_id).html(data);
+							
 							make_resizable();
 							return true;
 						}
@@ -231,14 +236,22 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 					$("#" + css_main_id).animate({
 						"height" : new_height
 					}, "fast", function() {
+					
+						data = hide_hidden_columns(data);
+						
 						$("#" + css_main_id).html(data);
+						
 						make_resizable();
 					});
 				} 
 				else 
 				{
 					$("#" + css_main_id).height(last_height)
+					
+					data = hide_hidden_columns(data);
+					
 					$("#" + css_main_id).html(data);
+
 					make_resizable();
 				}
 			}
@@ -246,13 +259,41 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 	}
 	load_content(sort_value, sort_method, page);
 
-
+	
+	function hide_hidden_columns(data)
+	{
+		var hidden_columns = $(".ListTable").dynamicTable("getHiddenColumnIndices");
+		
+		var table = $("<table><tbody></tbody></table>");
+		
+		$(table).children("tbody").html(data);
+		
+		data = table;
+		
+		$(data).find("tr").each(function()
+		{
+			for (var int = 0; int < hidden_columns.length; int++) 
+			{
+				var n = hidden_columns[int] + 1;
+				
+				//IE8 does not update its dom model css properties if the new tbody gets inserted
+				//for once, a bug in IE that seems to be useful!
+				if(!($.browser.msie && $.browser.version == 8.0)) 
+				{
+					$(this).children(":nth-child("+n+")").hide();
+				}
+			}
+		});
+		data = $(data).find("tbody").html();
+		
+		return data;
+	}
 	
 	function make_resizable()
 	{		
 		if($(".ListTable").find(".ui-resizable-e").length > 0)
 		{
-			$(".ListTable").dynamicTable("reinit");
+			$(".ListTable").dynamicTable("reinitTds");
 			return false;
 		}
 		
@@ -469,22 +510,32 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 	function change_symbol(id, symbol) 
 	{
 
-		$("." + css_main_id + "Column").each(
-				function() {
-					var local_id = $(this).attr("id");
-					if (local_id == id) {
-						if (symbol == "upside") {
-							$("#" + local_id + " > .ResizableColumnHelper > div > a > img").attr("src",
-									"images/upside.png");
-						} else {
-							$("#" + local_id + " > .ResizableColumnHelper > div > a > img").attr("src",
-									"images/downside.png");
-						}
+		$("." + css_main_id + "Column").each(function() 
+			{
+				var local_id = $(this).attr("id");
+				
+				if($("#" + local_id ).children(".ResizableColumnHelper").length > 0)
+				{
+					var img = $("#" + local_id + " > .ResizableColumnHelper > div > a > img");
+				}
+				else
+				{
+					var img = $("#" + local_id + " > div > a > img");
+				}
+				
+				if (local_id == id) 
+				{
+					if (symbol == "upside") {
+						$(img).attr("src", "images/upside.png");
 					} else {
-						$("#" + local_id + " > .ResizableColumnHelper > div > a > img").attr("src",
-								"images/nosort.png");
+						$(img).attr("src", "images/downside.png");
 					}
-				});
+				} 
+				else 
+				{
+					$(img).attr("src", "images/nosort.png");
+				}
+			});
 	}
 
 
