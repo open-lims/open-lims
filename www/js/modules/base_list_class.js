@@ -417,7 +417,22 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 							event.preventDefault();
 						}
 						
-						$(".ListTable").dynamicTable("toggle", $(this).parent().data("columnIndex"));
+						var num_checked = 0;
+						$(".ColumnMenuEntryCheckbox").each(function(){
+							if($(this).is(":checked"))
+							{
+								num_checked++;
+							}
+						});
+						
+						if(num_checked > 0)
+						{
+							$(".ListTable").dynamicTable("toggle", $(this).parent().data("columnIndex"));
+						}
+						else
+						{
+							event.preventDefault();
+						}
 					});
 				
 				$("<div class='ColumnMenuEntry'></div>")
@@ -446,46 +461,6 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 			$("#ColumnMenu").remove();
 		}
 		
-
-//		function resize_text(td, new_width)
-//		{
-//			var containing_element;
-//			if($(td).find("a").length > 0)
-//			{
-//				containing_element = $(td).find("a");
-//			}
-//			else if($(td).find("div").length > 0)
-//			{
-//				containing_element = $(td).find("div");
-//			}
-//			else
-//			{
-//				containing_element = $(td);
-//			}
-//			
-//			var text = $(td).data("originalText");
-//			var text_width = $(td).data("textWidth");
-//			
-//			if(text_width > new_width)
-//			{
-//				var text_calc = "<span id='textMeasure'>" + text + "</span>";
-//				
-//				$(containing_element).html(text_calc);
-//				
-//				while(text.length > 0 && $("#textMeasure").width() >= new_width)
-//				{
-//					text = text.substr(0, text.length - 1);
-//					$("#textMeasure").html(text+"...");
-//				}
-//				$(containing_element).html(text+"...");
-//				
-//			}
-//			else if(text_width < new_width)
-//			{
-//				$(containing_element).html(text);
-//			}
-//		}
-	 
 	}
 
 	function check_array(sort_value) {

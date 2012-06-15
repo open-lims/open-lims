@@ -306,6 +306,84 @@
 	    				column_to_show.width = $(column_to_show.th).width();
 	    				
 	    				animating = false;    				
+	    				
+	    				var current_table_width = $(table).width();
+	    				
+	    				var dif = current_table_width - table_width;
+	    				
+//	    				console.log(dif);
+	    				
+	    				if(dif > 0)
+	    				{
+	    					var valid_columns = [];
+	    					for (var int = columns.length - 1; int >= 0; int--) 
+	    					{
+	    						var current_column = columns[int];
+								if(!current_column.sticky && current_column.visible && current_column.resizable)
+								{
+									valid_columns.push(current_column);
+								}
+							}
+	    					
+	    					var pixels_per_column = Math.floor(dif / valid_columns.length);
+	    					
+//	    					var rest = dif % valid_columns.length; 
+	    					var rest = Math.round((dif / valid_columns.length) - pixels_per_column);
+
+	    					
+	    					for (var int = 0; int < valid_columns.length; int++) 
+	    					{
+//	    						console.log(int+" "+pixels_per_column+" "+rest);
+	    						
+								var current_valid_column = valid_columns[int];
+								
+								current_valid_column.width = current_valid_column.width - pixels_per_column;
+								$(current_valid_column.td).width(current_valid_column.width);
+								
+								if(rest > 0)
+								{
+									current_valid_column.width = current_valid_column.width - 1;
+									$(current_valid_column.td).width(current_valid_column.width);
+									
+									rest--;
+								}
+							}
+	    				}
+	    				else if(dif < 0)
+	    				{
+	    					dif = dif * -1;
+	    					
+	    					var valid_columns = [];
+	    					for (var int = columns.length - 1; int >= 0; int--) 
+	    					{
+	    						var current_column = columns[int];
+								if(!current_column.sticky && current_column.visible && current_column.resizable)
+								{
+									valid_columns.push(current_column);
+								}
+							}
+	    					
+	    					var pixels_per_column = Math.floor(dif / valid_columns.length);
+	    					
+//	    					var rest = dif % valid_columns.length;	    					
+	    					var rest = Math.round((dif / valid_columns.length) - pixels_per_column);
+	    					
+	    					for (var int = 0; int < valid_columns.length; int++) 
+	    					{
+								var current_valid_column = valid_columns[int];
+								
+								current_valid_column.width = current_valid_column.width + pixels_per_column;
+								$(current_valid_column.td).width(current_valid_column.width);
+								
+								if(rest > 0)
+								{
+									current_valid_column.width = current_valid_column.width + 1;
+									$(current_valid_column.td).width(current_valid_column.width);
+									
+									rest--;
+								}
+							}
+	    				}
 	    			}
 	    		}
 	    	);

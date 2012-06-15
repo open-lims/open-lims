@@ -784,6 +784,11 @@ border: none;
 	padding: 0;
 }
 
+.ListTable th div
+{
+	background-color: white;
+}
+
 .ListTable th a 
 {
 	white-space: nowrap;
