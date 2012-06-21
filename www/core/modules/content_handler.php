@@ -306,6 +306,11 @@ class ContentHandler_IO
 						}
  					}
 			 		
+ 					/**
+					 * @todo remove
+					 */
+					echo "</div>";
+ 					
 			 		$template = new HTMLTemplate("main_footer.html");
 			 		$template->output();
 		 		}

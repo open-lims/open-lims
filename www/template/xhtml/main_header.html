@@ -37,30 +37,30 @@ $(document).ready(function()
 });
 </script>
 <div id='Header'>&nbsp;
-			<div id='HeaderLogo'><img src='../images/logo.png' alt='Logo' /></div>
-			<div id='HeaderRight'>
-				<ul id='HeaderMenu'>
-				
-					<!-- IF ([[SUB_MENU]]) -->
+	<div id='HeaderLogo'><img src='../images/logo.png' alt='Logo' /></div>
+	<div id='HeaderRight'>
+		<ul id='HeaderMenu'>
 		
-							<!-- FOREACH BEGIN ([[SUB_MENU]]) -->
+			<!-- IF ([[SUB_MENU]]) -->
+
+					<!-- FOREACH BEGIN ([[SUB_MENU]]) -->
+	
+						<li><a href='index.php?[[SUB_MENU:PARAMS]]'>[[SUB_MENU:TITLE]]</a></li>
+						<li>|</li>
+						
+					<!-- FOREACH END -->
 			
-								<li><a href='index.php?[[SUB_MENU:PARAMS]]'>[[SUB_MENU:TITLE]]</a></li>
-								<li>|</li>
-								
-							<!-- FOREACH END -->
-					
-					<!-- ENDIF -->
-				
-					<li><a href='index.php?[[MY_PROFILE_PARAMS]]'>My Profile</a></li>
-					<li>|</li>
-					<li><a href='index.php?[[SYSTEM_MESSAGES_PARAMS]]'>System Messages</a></li>
-					<li>|</li>
-					<li><a href='index.php?[[ABOUT_PARAMS]]'>About</a></li>
-					<li>|</li>
-					<li><a href='#' id='BaseLogout'>Logout ([[USERNAME]])</a></li>
-				</ul>
-				<div id='HeaderSearch'><input type='text' /><button type='submit'></button></div>
-			</div>
-			<div id='HeaderClear'></div>
-		</div>
+			<!-- ENDIF -->
+		
+			<li><a href='index.php?[[MY_PROFILE_PARAMS]]'>My Profile</a></li>
+			<li>|</li>
+			<li><a href='index.php?[[SYSTEM_MESSAGES_PARAMS]]'>System Messages</a></li>
+			<li>|</li>
+			<li><a href='index.php?[[ABOUT_PARAMS]]'>About</a></li>
+			<li>|</li>
+			<li><a href='#' id='BaseLogout'>Logout ([[USERNAME]])</a></li>
+		</ul>
+		<div id='HeaderSearch'><input type='text' /><button type='submit'></button></div>
+	</div>
+	<div id='HeaderClear'></div>
+</div>

@@ -35,46 +35,31 @@ class Common_IO
 	}
 	
 	/**
+	 * @todo überarbeiten
 	 * @param string $title
 	 * @param string $class
 	 * @return string
 	 */
-	public static function container_begin($title, $class = "ContentBox", $width = 100)
+	public static function container_begin($title, $class = "", $width = 100)
 	{
 		self::$in_container = true;
 
 		$pixel = 750/100*$width;
 		$main_pixel = $pixel - 6;
 		
-		return "<div class='".$class."'>" .
-				"<table class='ContentBoxBegin' style='width: ".$pixel."px;'>" .
-				"<tr>" .
-				"<td class='ContentBoxBeginLeft'><img src='images/corners/corner_top_left.png' alt='' /></td>" .
-				"<td class='ContentBoxBeginTitle'>".$title."</td>" .
-				"<td class='ContentBoxBeginRight'><img src='images/corners/corner_top_right.png' alt='' /></td>" .
-				"</tr>" .
-				"</table>" .
-				"<div class='ContentBoxMain' style='width: ".$main_pixel."px;'>";
+		return "<div class='ContentContainer ".$class."' stlye='width: ".$pixel.";'>" .
+				"<div class='ContentContainerHeadline'>".$title."</div>" .
+				"<div class='ContentContainerContent'>";
 	}
 
 	/**
 	 * @param string $class
 	 * @return string
 	 */
-	public static function container_end($width = 100)
+	public static function container_end()
 	{
-		self::$in_container = false;
-
-		$pixel = 750/100*$width;
-		
-		return "&nbsp;</div>" .
-				"<table class='ContentBoxEnd' style='width: ".$pixel."px;'>" .
-				"<tr>" .
-				"<td class='ContentBoxEndLeft'><img src='images/corners/corner_bottom_left.png' alt='' /></td>" .
-				"<td class='ContentBoxEndBorder'>&nbsp;</td>" .
-				"<td class='ContentBoxEndRight'><img src='images/corners/corner_bottom_right.png' alt='' /></td>" .
-				"</tr>" .
-				"</table></div>";
+		self::$in_container = false;		
+		return "</div></div>";
 	}
 		
 	/**

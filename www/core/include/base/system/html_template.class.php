@@ -65,6 +65,8 @@ class HTMLTemplate extends Template implements ConcreteTemplateInterface
 			
 			$command_array 		= explode(" ", $command, 3);
 			
+			$command_length = $end_position - $start_position;
+			
 			if (trim(strtolower($command_array[0])) == "container")
 			{
 				if (trim(strtolower($command_array[1])) == "begin")
@@ -77,16 +79,23 @@ class HTMLTemplate extends Template implements ConcreteTemplateInterface
 					
 					if ($container_begin_array[2])
 					{
-						$this->string = substr_replace($this->string, Common_IO::container_begin($container_begin_array[0],$container_begin_array[1],$container_begin_array[2]), $start_position, ($end_position-$start_position)+3);
+						$container_begin_string = Common_IO::container_begin($container_begin_array[0],$container_begin_array[1],$container_begin_array[2]);
 					}
-					elseif($container_begin_array[1])
+					elseif ($container_begin_array[1])
 					{
-						$this->string = substr_replace($this->string, Common_IO::container_begin($container_begin_array[0],$container_begin_array[1]), $start_position, ($end_position-$start_position)+3);
+						$container_begin_string = Common_IO::container_begin($container_begin_array[0],$container_begin_array[1]);
 					}
 					else
 					{
-						$this->string = substr_replace($this->string, Common_IO::container_begin($container_begin_array[0]), $start_position, ($end_position-$start_position)+3);
+						$container_begin_string = Common_IO::container_begin($container_begin_array[0]);
+						
 					}
+					
+					$this->string = substr_replace($this->string, $container_begin_string, $start_position, ($end_position-$start_position)+3);
+					$container_begin_string_length = strlen($container_begin_string);
+					
+					$pointer_correction = $container_begin_string_length - $command_length;
+					$end_position = $end_position + $pointer_correction;
 				}
 				elseif (trim(strtolower($command_array[1])) == "end")
 				{
@@ -94,17 +103,16 @@ class HTMLTemplate extends Template implements ConcreteTemplateInterface
 					$container_end = str_replace("\"","",$container_end);
 					$container_end = str_replace(")","",$container_end);
 					
-					if ($container_end)
-					{
-						$this->string = substr_replace($this->string, Common_IO::container_end($container_end), $start_position, ($end_position-$start_position)+3);
-					}
-					else
-					{
-						$this->string = substr_replace($this->string, Common_IO::container_end(), $start_position, ($end_position-$start_position)+3);
-					}
+					$container_end_string = Common_IO::container_end();
+					$container_end_string_length = strlen($container_end_string);
+					
+					$this->string = substr_replace($this->string, $container_end_string, $start_position, ($end_position-$start_position)+3);
+				
+					$pointer_correction = $container_end_string_length - $command_length;
+					$end_position = $end_position + $pointer_correction;
 				}
 			}
-			$start_position 	= $end_position+1;
+			$start_position = $end_position+1;
 		}
 	}
 }
