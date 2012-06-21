@@ -822,13 +822,13 @@ border: none;
 
 .ColumnMenuEntry
 {
+	clear: both;
 	height: 16px;	
 }
 
 .ColumnMenuEntryLabel
 {
 	float: left;
-	clear: right;	
 }
 
 .ColumnMenuEntryCheckbox
@@ -837,6 +837,7 @@ border: none;
 	cursor: default;
 	margin-top: 2px;	
 }
+
 
 
 /* BASE TREE NAVIGATION */
