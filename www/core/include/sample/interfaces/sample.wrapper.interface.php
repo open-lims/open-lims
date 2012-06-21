@@ -219,5 +219,18 @@ interface Sample_WrapperInterface
    	 * @return integer
    	 */
 	public static function count_data_search($string, $sample_id_array, $item_type_array);
+	
+	/**
+	 * @param integer $sample_id
+	 * @return array
+	 */
+	public static function get_sample_id_and_gid_by_parent_sample_id($sample_id);
+	
+	/**
+   	 * @param integer $parent_item_id
+   	 * @param integer $sample_id
+   	 * @return bool
+   	 */
+	public static function delete_data_entity_sub_item_links($parent_item_id, $sample_id = null);
 }
 ?>

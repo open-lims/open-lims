@@ -57,6 +57,8 @@ class SystemConfig implements SystemConfigInterface
 				define("ENABLE_DB_LOG_ON_ROLLBACK",		$server['behaviour']['on_db_rollback']);
 				define("ENABLE_DB_LOG_ON_EXP_ROLLBACK",	$server['behaviour']['on_db_expected_rollback']);							
 				define("ENABLE_DB_LOG_ON_COMMIT",		$server['behaviour']['on_db_commit']);	
+				
+				define("SENDMAIL_FROM", 				$mail['from']);
 			}
 			else
 			{

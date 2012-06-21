@@ -59,7 +59,7 @@
 	$classes['VirtualFolderException']				= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder.exception.class.php";
 	$classes['VirtualFolderNotFoundException']		= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder_not_found.exception.class.php";
 	$classes['VirtualFolderIDMissingException']		= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder_id_missing.exception.class.php";
-	
+		
 	
 	$classes['DataEntity']					= $path_prefix."core/include/data/data_entity.class.php";
 	$classes['DataEntityPermission']		= $path_prefix."core/include/data/data_entity_permission.class.php";
@@ -81,7 +81,6 @@
 	$classes['Path']						= $path_prefix."core/include/data/folder/path.class.php";
 	$classes['Value']						= $path_prefix."core/include/data/value/value.class.php";
 	$classes['ValueType']					= $path_prefix."core/include/data/value/value_type.class.php";
-	$classes['ValueExternalVar']			= $path_prefix."core/include/data/value/value_external_var.class.php";
 	
 	$classes['ValueVar']					= $path_prefix."core/include/data/value/value_var.class.php";
 	$classes['ItemValueVar']				= $path_prefix."core/include/data/value/item_value_var.class.php";

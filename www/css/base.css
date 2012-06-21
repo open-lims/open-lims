@@ -1106,6 +1106,120 @@ border: none;
 
 
 /* Forms */
+.Form table
+{
+ 	border-spacing: 0;
+}
+.Form input
+{
+	font-size: 14px;
+	border-radius: 6px 6px 6px 6px;
+	border: 1px #D0D0D0 solid;
+	color: #2F2F2F;  
+	background-color: #EEEEEE;
+	padding: 4px;
+	margin: 3px 0;
+}
+.Form input.FormFocused
+{
+	border: 1px #73A6FF solid;
+	color: black;  
+	background-color: #EFF5FF;
+}
+.Form textfield
+{
+	background-color: white;
+	border: 1px #C0C0C0 solid;
+}
+.Form select:radio
+{
+	
+}
+.Form select:checkbox
+{
+	
+}
+.Form select
+{
+	
+}
+.Form button
+{
+	background: white;
+	border: 1px #A0A0A0 solid;
+	
+	color: #222222;
+	
+	font: bold 13px Arial, Helvetica, sans-serif;
+	
+	text-shadow: -1px -1px #D0D0D0;
+	
+	background-clip: padding-box;
+    background-color: #FFFFFF;
+    background-image: -moz-linear-gradient(center top , #FFFFFF 0%, #CECECE 100%);
+    border-color: #B7B7B7;
+    
+    box-shadow: 0 0 0.1em 1px rgba(255, 255, 255, 0.867) inset;
+    text-shadow: 0 1px 1px #FFFFFF;
+    
+    border-radius: 6px 6px 6px 6px;
+    border-width: 1px;
+    
+    line-height: 15px;
+    margin: 10px 5px 2px 0;
+    padding: 4px 12px;
+    
+    vertical-align: middle;
+    
+    border-style: solid;
+    cursor: pointer;
+    display: block;
+    
+    overflow: visible;
+    text-decoration: none;
+    width: auto;
+    
+    float:left;
+}
+.Form button:hover
+{
+	
+}
+.Form input.FormError
+{
+	border: 1px #ff6347 solid;
+}
+
+.FormButtonBox
+{
+	padding-left: 10px;
+}
+.FormButtonBoxClear
+{
+	clear: left;	
+}
+
+.FormBox
+{
+	margin: 20px 10px 5px 10px;
+	padding: 16px 10px 10px 10px;
+	border: 1px #D0D0D0 dotted;
+	clear: left;
+}
+.FormBoxHeadline
+{
+	float: left;
+	margin: -25px 0 0 -2px;
+	padding: 0 2px;
+	font-weight: bold;
+	background: white;
+}
+.FormBoxClear
+{
+	clear: both;
+}
+
+/* !!! OUTDATED !!! */
 .FormButton
 {
 	background-color: white;
@@ -1120,7 +1234,7 @@ border: none;
 .FormTextarea
 {
 	background-color: white;
-	border: 1px #C0C0C0 solid
+	border: 1px #C0C0C0 solid;
 }
 
 .FormTextfield
@@ -1140,12 +1254,22 @@ border: none;
 	border: 1px #C0C0C0 solid;
 	width: 100%;
 }
+.FormCheckbox
+{
+	
+}
+.FormDropDown
+{
+	
+}
 .FormError
 {
 	font: normal 0.8em Verdana, Helvatica, sans-serif;
 	color: red;
 }
 
+
+/* Content Rounded Box */ 
 .ContentBoxBegin
 {
 	margin: 0;
@@ -1395,8 +1519,10 @@ border: none;
 {
 	display: block;
 	clear: left;
-	height: 36px;
+	min-height: 30px;
 	text-decoration: none;
+	padding: 5px 5px;
+	margin: 0;
 }
 .BaseWantToButton:hover
 {
@@ -1408,16 +1534,21 @@ border: none;
 	display: block;
 	float: left;
 	width: 35px;
-	margin: 5px;
+	padding: 0 5px 0 0;
+	margin: 0;
 }
 .BaseWantToText
 {
 	display: block;
+	vertical-align: middle;
 	margin-left: 45px;
-	padding-top: 10px;
 	font: bold 1em Verdana, Helvetica, sans-serif;
 	color: black;
 	text-decoration: none;
+	padding: 5px 0;
+	margin: 0;
+	white-space:nowrap;
+	overflow: hidden;
 }
 .BaseWantToHeadline
 {

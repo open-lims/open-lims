@@ -4,49 +4,49 @@
 	
 	<a href='#' class='BaseWantToButton' id='ProjectDetailProceedButton'>
 		<span class='BaseWantToIcon'><img src='images/icons_30/proceed.png' alt='' border='0' /></span>
-		<span class='BaseWantToText'>proceed to [[NEXT_STATUS_NAME]]</span>
+		<span class='BaseWantToText'>Proceed to [[NEXT_STATUS_NAME]]</span>
 	</a>
 
 <!-- ELSEIF ([[PROCEED]] == 2) -->
 
 	<a href='#' class='BaseWantToButton' id='ProjectDetailProceedButton'>
 		<span class='BaseWantToIcon'><img src='images/icons_30/proceed_na.png' alt='' border='0' /></span>
-		<span class='BaseWantToText'>proceed to [[NEXT_STATUS_NAME]]</span>
+		<span class='BaseWantToText'>Proceed to [[NEXT_STATUS_NAME]]</span>
 	</a>
 	
 <!-- ELSEIF ([[PROCEED]] == 3) -->
 
 	<a class='BaseWantToButton'>
 		<span class='BaseWantToIcon'><img src='images/icons_30/proceed_na.png' alt='' border='0' /></span>
-		<span class='BaseWantToText'>project canceled</span>
+		<span class='BaseWantToText'>Project Canceled</span>
 	</a>
 
 <!-- ELSEIF ([[PROCEED]] == 4) -->
 
 	<a class='BaseWantToButton'>
 		<span class='BaseWantToIcon'><img src='images/icons_30/proceed_na.png' alt='' border='0' /></span>
-		<span class='BaseWantToText'>project finished</span>
+		<span class='BaseWantToText'>Project Finished</span>
 	</a>
 
 <!-- ELSEIF ([[PROCEED]] == 5) -->
 
 	<a href='#' class='BaseWantToButton' id='ProjectDetailProceedButton'>
 		<span class='BaseWantToIcon'><img src='images/icons_30/proceed_hold.png' alt='' border='0' /></span>
-		<span class='BaseWantToText'>proceed to [[NEXT_STATUS_NAME]] (blocked)</span>
+		<span class='BaseWantToText'>Proceed to [[NEXT_STATUS_NAME]] (blocked)</span>
 	</a>
 
 <!-- ELSEIF ([[PROCEED]] == 6) -->
 
 	<a href='#' class='BaseWantToButton' id='ProjectDetailProceedButton'>
 		<span class='BaseWantToIcon'><img src='images/icons_30/proceed_na.png' alt='' border='0' /></span>
-		<span class='BaseWantToText'>proceed to [[NEXT_STATUS_NAME]] (blocked)</span>
+		<span class='BaseWantToText'>Proceed to [[NEXT_STATUS_NAME]] (blocked)</span>
 	</a>
 
 <!-- ELSE -->
 
 	<a class='BaseWantToButton'>
 		<span class='BaseWantToIcon'><img src='images/icons_30/proceed_na.png' alt='' border='0' /></span>
-		<span class='BaseWantToText'>proceed to [[NEXT_STATUS_NAME]]</span>
+		<span class='BaseWantToText'>Proceed to [[NEXT_STATUS_NAME]]</span>
 	</a>
 
 <!-- ENDIF -->
@@ -62,27 +62,99 @@
 
 <!-- FOREACH BEGIN ([[STATUS_ACTION]]) -->
 	
-	<!-- IF ([[STATUS_ACTION:STATUS]] == 1) -->
+	<!-- IF ([[STATUS_ACTION:TYPE]] == ajax) -->
 
-		<a href='index.php?[[STATUS_ACTION:PARAMS]]' class='BaseWantToButton'>
-			<span class='BaseWantToIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
-			<span class='BaseWantToText'>[[STATUS_ACTION:NAME]]</span>
+		<script>[[STATUS_ACTION:SCRIPT]]</script>
+		<div id='[[STATUS_ACTION:WINDOW_ID]]' title='[[STATUS_ACTION:WINDOW_TITLE]]' style='display: none;'></div>
+		<a href='#' class='BaseWantToButton' id='[[STATUS_ACTION:CLICK_ID]]' title='[[STATUS_ACTION:NAME]]'>
+			<span class='BaseWantToIcon'>
+			
+			<!-- IF ([[STATUS_ACTION:IMAGE]] == add_done) -->
+				<img src='images/icons_30/add_done.png' alt='' border='0' />
+			<!-- ELSEIF ([[STATUS_ACTION:IMAGE]] == add_extension) -->	
+				<img src='images/icons_30/add_extension.png' alt='' border='0' />
+			<!-- ELSEIF ([[STATUS_ACTION:IMAGE]] == add_extension_wait) -->	
+				<img src='images/icons_30/add_extension_wait.png' alt='' border='0' />
+			<!-- ELSEIF ([[STATUS_ACTION:IMAGE]] == add_extension_done) -->	
+				<img src='images/icons_30/add_extension_done.png' alt='' border='0' />
+			<!-- ELSEIF ([[STATUS_ACTION:IMAGE]] == add_done_sub_item_missing) -->	
+				<img src='images/icons_30/add_done_sub_item_missing.png' alt='' border='0' />
+			<!-- ELSE -->
+				<img src='images/icons_30/add.png' alt='' border='0' />	
+			<!-- ENDIF -->
+
+			</span>
+			<span class='BaseWantToText'>
+			
+			<!-- IF ([[STATUS_ACTION:DEPENDS]]) -->
+				<img src='images/icons/depends.png' alt='' border='0' />&nbsp;
+			<!-- ENDIF -->
+			
+			[[STATUS_ACTION:NAME]]
+			
+			</span>
 		</a>
 	
-	<!-- ELSEIF ([[STATUS_ACTION:STATUS]] == 2) -->
+	<!-- ELSEIF ([[STATUS_ACTION:TYPE]] == link) -->
 	
-		<a href='index.php?[[STATUS_ACTION:PARAMS]]' class='BaseWantToButton'>
-			<span class='BaseWantToIcon'><img src='images/icons_30/add_done.png' alt='' border='0' /></span>
-			<span class='BaseWantToText'>[[STATUS_ACTION:NAME]]</span>
+		<a href='index.php?[[STATUS_ACTION:PARAMS]]' class='BaseWantToButton' title='[[STATUS_ACTION:NAME]]'>
+			<span class='BaseWantToIcon'>
+			
+			<!-- IF ([[STATUS_ACTION:IMAGE]] == add_done) -->
+				<img src='images/icons_30/add_done.png' alt='' border='0' />
+			<!-- ELSEIF ([[STATUS_ACTION:IMAGE]] == add_extension) -->	
+				<img src='images/icons_30/add_extension.png' alt='' border='0' />
+			<!-- ELSEIF ([[STATUS_ACTION:IMAGE]] == add_extension_wait) -->	
+				<img src='images/icons_30/add_extension_wait.png' alt='' border='0' />
+			<!-- ELSEIF ([[STATUS_ACTION:IMAGE]] == add_extension_done) -->	
+				<img src='images/icons_30/add_extension_done.png' alt='' border='0' />
+			<!-- ELSEIF ([[STATUS_ACTION:IMAGE]] == add_done_sub_item_missing) -->	
+				<img src='images/icons_30/add_done_sub_item_missing.png' alt='' border='0' />
+			<!-- ELSE -->
+				<img src='images/icons_30/add.png' alt='' border='0' />	
+			<!-- ENDIF -->
+			
+			</span>
+			<span class='BaseWantToText'>
+			
+			<!-- IF ([[STATUS_ACTION:DEPENDS]]) -->
+				<img src='images/icons/depends.png' alt='' border='0' />&nbsp;
+			<!-- ENDIF -->
+			
+			[[STATUS_ACTION:NAME]]
+			</span>
 		</a>
+	
+	<!-- ELSEIF ([[STATUS_ACTION:TYPE]] == line) -->
+	
+		<div class='BaseWantToLine'></div>
 	
 	<!-- ELSE -->
-	
-		<a class='BaseWantToButton'>
-			<span class='BaseWantToIcon'><img src='images/icons_30/add_done_na.png' alt='' border='0' /></span>
-			<span class='BaseWantToText'>[[STATUS_ACTION:NAME]]</span>
+		
+		<a class='BaseWantToButton' title='[[STATUS_ACTION:NAME]]'>
+			<span class='BaseWantToIcon'>
+			
+			<!-- IF ([[STATUS_ACTION:IMAGE]] == add_extension_wait_na) -->
+				<img src='images/icons_30/add_extension_wait_na.png' alt='' border='0' />
+			<!-- ELSEIF ([[STATUS_ACTION:IMAGE]] == add_extension_done_na) -->	
+				<img src='images/icons_30/add_extension_done_na.png' alt='' border='0' />
+			<!-- ELSEIF ([[STATUS_ACTION:IMAGE]] == add_done_na) -->	
+				<img src='images/icons_30/add_done_na.png' alt='' border='0' />
+			<!-- ELSE -->	
+				<img src='images/icons_30/add_na.png' alt='' border='0' />
+			<!-- ENDIF -->
+			
+			</span>
+			<span class='BaseWantToText'>
+			
+			<!-- IF ([[STATUS_ACTION:DEPENDS]]) -->
+				<img src='images/icons/depends.png' alt='' border='0' />&nbsp;
+			<!-- ENDIF -->
+			
+			[[STATUS_ACTION:NAME]]
+			</span>
 		</a>
-				
+		
 	<!-- ENDIF -->
 
 <!-- FOREACH END -->	
@@ -97,45 +169,45 @@
 
 	<a href='index.php?[[SUPPLEMENTARY_PARAMS]]' class='BaseWantToButton'>
 		<span class='BaseWantToIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
-		<span class='BaseWantToText'>add a supplementary file</span>
+		<span class='BaseWantToText'>Add a Supplementary-File</span>
 	</a>
 				
 	<a href='#' class='BaseWantToButton'  id='ProjectLogCreateButton'>
 		<span class='BaseWantToIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
-		<span class='BaseWantToText'>add a comment to log</span>
+		<span class='BaseWantToText'>Add a Comment to Project-Log</span>
 	</a>
 					
 	<div class='BaseWantToLine'></div>
 				
 	<a href='index.php?[[ADD_TASK_PARAMS]]' class='BaseWantToButton'>
 		<span class='BaseWantToIcon'><img src='images/icons_30/add_limit.png' alt='' border='0' /></span>
-		<span class='BaseWantToText'>add a task</span>
+		<span class='BaseWantToText'>Add a Task</span>
 	</a>
 
 <!-- ELSE -->
 
 	<a class='BaseWantToButton'>
 		<span class='BaseWantToIcon'><img src='images/icons_30/add_na.png' alt='' border='0' /></span>
-		<span class='BaseWantToText'>add a supplementary file</span>
+		<span class='BaseWantToText'>Add a Supplementary-File</span>
 	</a>
 				
 	<a class='BaseWantToButton'>
 		<span class='BaseWantToIcon'><img src='images/icons_30/add_na.png' alt='' border='0' /></span>
-		<span class='BaseWantToText'>add a comment to log</span>
+		<span class='BaseWantToText'>Add a Comment to Project-Log</span>
 	</a>
 					
 	<div class='BaseWantToLine'></div>
 				
 	<a class='BaseWantToButton'>
 		<span class='BaseWantToIcon'><img src='images/icons_30/add_limit_na.png' alt='' border='0' /></span>
-		<span class='BaseWantToText'>add a task</span>
+		<span class='BaseWantToText'>Add a Task</span>
 	</a>
 	
 <!-- ENDIF -->
 					
 <a href='index.php?[[SHOW_TASKS_PARAMS]]' class='BaseWantToButton'>
 	<span class='BaseWantToIcon'><img src='images/icons_30/time.png' alt='' border='0' /></span>
-	<span class='BaseWantToText'>show the tasks</span>
+	<span class='BaseWantToText'>Show existing Tasks</span>
 </a>
 			
 <div class='BaseWantToLine'></div>
@@ -144,14 +216,14 @@
 			
 	<a href='index.php?[[ADD_SUBPROJECT_PARAMS]]' class='BaseWantToButton'>
 		<span class='BaseWantToIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
-		<span class='BaseWantToText'>add a sub-project</span>
+		<span class='BaseWantToText'>Add a Sub-Project</span>
 	</a>
 	
 <!-- ELSE -->	
 
 	<a class='BaseWantToButton'>
 		<span class='BaseWantToIcon'><img src='images/icons_30/add_na.png' alt='' border='0' /></span>
-		<span class='BaseWantToText'>add a sub-project</span>
+		<span class='BaseWantToText'>Add a Sub-Project</span>
 	</a>
 	
 <!-- ENDIF -->

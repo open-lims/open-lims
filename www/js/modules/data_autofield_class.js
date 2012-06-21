@@ -1,6 +1,7 @@
 /**
  * version: 0.4.0.0
  * author: Roman Quiring <quiring@open-lims.org>
+ * author: Roman Konertz <konertz@open-lims.org>
  * copyright: (c) 2008-2011 by Roman Quiring
  * license: GPLv3
  * 
@@ -20,7 +21,7 @@
  */
 
 
-function autofield(field_array_string)
+function autofield(field_array_string, field_css_class)
 {
 	var field_array;
 	
@@ -71,18 +72,39 @@ function autofield(field_array_string)
     			
     			var title_input = $("<input type='hidden' name='af-"+field_array[int][3]+"-title'/>");
     			$(title_input).attr("value",field_array[int][0]);
+    			$(title_input).addClass(field_css_class);
     			$(td1).append(title_input);
+    			
+    			if (field_array[int][1] == "int")
+    			{
+    				var vartype_class = "DataValueFieldTypeInteger";
+    			}
+    			else
+				{
+    				if (field_array[int][1] == "float")
+        			{
+    					var vartype_class = "DataValueFieldTypeFloat";
+        			}
+        			else
+    				{
+        				var vartype_class = "DataValueFieldTypeString";
+    				}
+				}
     			
     			var field_input = $("<input type='textfield' name='af-"+field_array[int][3]+"'/>");
     			$(field_input).attr("value",field_array[int][2]);
+    			$(field_input).addClass(vartype_class);
+    			$(field_input).addClass(field_css_class);
     			$(td2).append(field_input);
-    			
+    			  
     			var vartype_input = $("<input type='hidden' name='af-"+field_array[int][3]+"-vartype'/>");
     			$(vartype_input).attr("value",field_array[int][1]);
+    			$(vartype_input).addClass(field_css_class);
     			$(td3).append(vartype_input);
     			
     			var name_input = $("<input type='hidden' name='af-"+field_array[int][3]+"-name'/>");
     			$(name_input).attr("value",field_array[int][3]);
+    			$(name_input).addClass(field_css_class);
     			$(td4).append(name_input);
     	
     			$(tr)
@@ -95,6 +117,7 @@ function autofield(field_array_string)
     		}	
     	}
     	$("#autofield_area").html(table);
+    	base_form_init();
     }
     
     /**
@@ -265,7 +288,7 @@ function autofield(field_array_string)
     	
     	var tr = $("<tr id='af-NEW"+rand+"-tr'></tr>");
     	
-    	var td1 = $("<td><input type='textfield' class='DataAutofieldNoNameGiven DataAutofieldTitleInput'/></td>");
+    	var td1 = $("<td><input type='textfield' class='DataAutofieldNoNameGiven DataAutofieldTitleInput' /></td>");
     	$(td1).children().keyup(function()
 		{
 			title_change_handler(this);
@@ -309,16 +332,24 @@ function autofield(field_array_string)
     {
     	if($("#DataAutofieldFooterEditTable > tbody").children().length > 2)
     	{
-    		var to_remove = $("#af-"+name+"-tr");
-    		var index_to_delete = parseInt($(to_remove).prevAll().length)-1;
-    		if(field_array.length > 0)
-    		{
-    			if(field_array[index_to_delete][3] == name)
+    		if (name.indexOf("NEW",0) === 0)
+			{
+    			var to_remove = $("#af-"+name+"-tr");
+            	$(to_remove).remove();
+			}
+    		else
+			{
+    			var to_remove = $("#af-"+name+"-tr");
+        		var index_to_delete = parseInt($(to_remove).prevAll().length)-1;
+        		if(field_array.length > 0)
         		{
-    				field_array.splice(index_to_delete,1);
+        			if(field_array[index_to_delete][3] == name)
+            		{
+        				field_array.splice(index_to_delete,1);
+            		}
         		}
-    		}
-        	$(to_remove).remove();
+            	$(to_remove).remove();
+			}
     	}
     }
    

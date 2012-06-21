@@ -145,9 +145,7 @@ class ProjectTaskPoint implements ProjectTaskPointInterface
     {	
     	if ($this->project_id and $this->project)
     	{
-    		$status_requirement_array 		= $this->project->get_current_status_requirements();    		
-    		$fulfilled_requirement_array 	= $this->project->get_fulfilled_status_requirements();   		
-    		$fulfilled_datetime_array		= $this->project->get_fulfilled_status_datetimes();
+    		$status_requirement_array 		= $this->project->get_current_status_requirements(); 
     		
     		if (is_array($status_requirement_array) and 
     			is_array($fulfilled_requirement_array) and 
@@ -156,40 +154,19 @@ class ProjectTaskPoint implements ProjectTaskPointInterface
     		{
     			$points = 0;
     				
-    			foreach ($fulfilled_requirement_array as $key => $value)
+    			foreach ($status_requirement_array as $key => $value)
     			{
-    				if ($status_requirement_array[$key][type] and 
-    					$status_requirement_array[$key][requirement] and 
-    					$status_requirement_array[$key][occurrence])
-    				{
-    					if (is_object($datetime) and $fulfilled_datetime_array[$key])
+    				if ($value[fulfilled] == true and $value[element_type] == "item")
+    				{    					
+    					if ($value[requirement] == "force")
     					{
-    						$item_datetime_handler = new DatetimeHandler($fulfilled_datetime_array[$key]);
-    						if ($item_datetime_handler->distance($datetime) < 0)
+    						if ($value[occurrence] == "once")
     						{
-    							$ignore_points = true;
+    							$points = $points + 2;
     						}
     						else
     						{
-    							$ignore_points = false;
-    						}
-    					}
-    					else
-    					{
-    						$ignore_points = false;
-    					}
-    					
-    					if ($status_requirement_array[$key][requirement] == "force")
-    					{
-    						if ($ignore_points == false) {
-	    						if ($status_requirement_array[$key][occurrence] == "once")
-	    						{
-	    							$points = $points + 2;
-	    						}
-	    						else
-	    						{
-	    							$points = $points + 1;
-	    						}
+    							$points = $points + 1;
     						}
     					}
     				}

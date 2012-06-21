@@ -327,30 +327,14 @@ class ProjectTemplate implements ProjectTemplateInterface
 			
 		    		if ($value[3][id] != "#" and $value[3][type] != "#")
 		    		{
-			    		$return_array[$counter]['xml_element'] 		= $value[1];
-			    		
-			    		if ($value[3]['type'])
-			    		{
-			    			$return_array[$counter]['type'] 		= $value[3]['type'];
-			    		}
-	
-			    		if ($value[3]['id'])
-			    		{
-			    			$return_array[$counter]['id']	  		= $value[3]['id'];
-			    		}
-			    		
-			    		if ($value[3]['name'])
-			    		{
-			    			$return_array[$counter]['name']			= $value[3]['name'];
-			    		}
-			    		
+		    			$return_array[$counter]					= $value[3];
+			    		$return_array[$counter]['xml_element'] 	= $value[1];
 			    		$counter++;
 		    		}
 		    		else
 		    		{
-		    			$return_array[$counter][xml_element] 	= $value[1];
-		    			$return_array[$counter][close]			= "1";
-		    			
+		    			$return_array[$counter]['xml_element'] 	= $value[1];
+		    			$return_array[$counter]['close']		= "1";
 		    			$counter++;
 		    		}
 			    } 
@@ -398,70 +382,14 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    	{
 		    		if ($value[3][id] != "#" and $value[3][type] != "#")
 		    		{
+			    		$return_array[$counter] 				= $value[3];
 			    		$return_array[$counter]['xml_element'] 	= $value[1];
-			    		
-			    		if ($value[3]['type'])
-			    		{
-			    			$return_array[$counter]['type'] 		= $value[3]['type'];
-			    		}
-			    		
-			    		if ($value[3]['gid'])
-			    		{
-			    			$return_array[$counter]['gid']	  		= $value[3]['gid'];
-			    		}
-			    		
-			    		if ($value[3]['id'])
-			    		{
-			    			$return_array[$counter]['id']	  		= $value[3]['id'];
-			    		}
-			    		
-			    		if ($value[3]['classify'])
-			    		{
-			    			$return_array[$counter]['classify']	= $value[3]['classify'];
-			    		}
-			    		
-			    		if ($value[3]['requirement'])
-			    		{
-			    			$return_array[$counter]['requirement']= $value[3]['requirement'];
-			    		}
-			    		
-			    		if ($value[3]['occurrence'])
-			    		{
-			    			$return_array[$counter]['occurrence']	= $value[3]['occurrence'];
-			    		}
-			    		
-			    		if ($value[3]['name'])
-			    		{
-			    			$return_array[$counter]['name']		= $value[3]['name'];
-			    		}
-			    		
-			    		if ($value[3]['class'])
-			    		{
-			    			$return_array[$counter]['class']	= $value[3]['class'];
-			    		}
-			    		
-			    		if ($value[3]['keywords'])
-			    		{
-			    			$return_array[$counter]['keywords']	= $value[3]['keywords'];
-			    		}
-			    		
-			    		if ($value[3]['description'])
-			    		{
-			    			$return_array[$counter]['description']	= $value[3]['description'];
-			    		}
-			    		
-			    		if ($value[3]['folder'])
-			    		{
-			    			$return_array[$counter]['folder'] 		= $value[3]['folder'];
-			    		}
-			    		
 			    		$counter++;
 		    		}
 		    		else
 		    		{
-		    			$return_array[$counter][xml_element] 	= $value[1];
-		    			$return_array[$counter][close]			= "1";
-		    			
+		    			$return_array[$counter]['xml_element'] 	= $value[1];
+		    			$return_array[$counter]['close']		= "1";
 		    			$counter++;
 		    		}
 		    	}
@@ -527,28 +455,31 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    $return_array = array();
 		    $status_found = false;
 		    
-		    foreach($xml_array as $key => $value)
+		    if (is_array($xml_array) and count($xml_array) >= 1)
 		    {
-		    	$value[0] = trim(strtolower($value[0]));
-				$value[1] = trim(strtolower($value[1]));
-				$value[2] = trim(strtolower($value[2]));
-		    	
-	    		if ($value[1] == "status" and is_numeric($value[3][id]))
-	    		{
-		    		if ($status_found == false)
+			    foreach($xml_array as $key => $value)
+			    {
+			    	$value[0] = trim(strtolower($value[0]));
+					$value[1] = trim(strtolower($value[1]));
+					$value[2] = trim(strtolower($value[2]));
+			    	
+		    		if ($value[1] == "status" and is_numeric($value[3][id]))
 		    		{
-		    			if ($value[3][id] == $status_id)
-		    			{
-		    				$status_found = true;
-		    			}
-		    		}
-		    		else
-		    		{
-		    			return $value[3][id];
-		    		}
-		    	}
+			    		if ($status_found == false)
+			    		{
+			    			if ($value[3][id] == $status_id)
+			    			{
+			    				$status_found = true;
+			    			}
+			    		}
+			    		else
+			    		{
+			    			return $value[3][id];
+			    		}
+			    	}
+			    }
 		    }
-			return 2;
+		    return 2;
 		}
 		else
 		{
@@ -579,7 +510,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 					{
 						if ($item_counter == $gid or $value[gid] === $gid)
 						{
-				    		if ($value['gid'])
+				    		if (is_numeric($value['gid']))
 				    		{
 				    			$return_array['gid']	  		= $value['gid'];
 				    		}

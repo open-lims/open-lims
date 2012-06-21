@@ -25,7 +25,7 @@
  * File Upload Event
  * @package data
  */
-class FileDeleteEvent extends Event
+class FileDeleteEvent extends DeleteEvent
 {
 	private $file_id;    
 	private $folder_id;

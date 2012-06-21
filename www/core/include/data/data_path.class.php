@@ -414,10 +414,27 @@ class DataPath implements DataPathInterface
     /**
 	 * @see DataPathInterface::delete_stack()
 	 */
-    public function delete_stack()
+    public function delete_stack($reinit = false)
     {
     	global $session;
     	$session->delete_value("stack_array");
+    	
+    	if ($reinit == true)
+    	{
+    		$folder_id = UserFolder::get_folder_by_user_id($session->get_user_id());
+	    	$folder = Folder::get_instance($folder_id);
+	    	$this->init_stack($folder_id);
+	    	$this->path = $folder->get_object_path();
+	    	
+	    	$this->folder_id = $folder_id;
+	    	$this->virtual_folder_id = null;
+	    	
+	    	return $folder_id;
+    	}
+    	else
+    	{
+    		return -1;
+    	}
     }
     
     /**

@@ -9,7 +9,7 @@
 		<FORMAT>
 			<LINE colspan="1,2">
 				<PRINT value="cDNA-Purification:"></PRINT>
-				<FIELD name="method" default="Fairplay III Microarray Labeling Kit" length="40" type="string"-></FIELD>
+				<FIELD name="method" default="Fairplay III Microarray Labeling Kit" length="40" type="string"  requirement="required"></FIELD>
 			</LINE>
 			<LINE>
 				<PRINT value="cDNA-Concentration" format="bold"></PRINT>
@@ -25,14 +25,14 @@
 				</LINE>
 				<LINE>
 					<PRINT value="ng/&#181;l cDNA:"></PRINT>
-					<FIELD name="cy3_cdna_con" length="8" format="field_cdna" vartype="float"></FIELD>
-					<FIELD name="cy5_cdna_con" length="8" format="field_cdna" vartype="float"></FIELD>
+					<FIELD name="cy3_cdna_con" length="8" format="field_cdna" vartype="float" requirement="required"></FIELD>
+					<FIELD name="cy5_cdna_con" length="8" format="field_cdna" vartype="float" requirement="required"></FIELD>
 				</LINE>    
 				<LINE>
-					<PRINT value="DYE-mol/kb:"></PRINT>
-					<FIELD name="cy3_cdna_dye" length="8" format="field_cdna" vartype="float"></FIELD>
-					<FIELD name="cy5_cdna_dye" length="8" format="field_cdna" vartype="float"></FIELD>
-				</LINE>                   
+					<PRINT value="DYE-molecules per kb:"></PRINT>
+					<FIELD name="cy3_cdna_dye" length="8" format="field_cdna" vartype="int" requirement="required"></FIELD>
+					<FIELD name="cy5_cdna_dye" length="8" format="field_cdna" vartype="int" requirement="required"></FIELD>
+				</LINE>            
 				 <LINE>
 					<PRINT value="RNA:"></PRINT>
 					<FIELD name="cy3_rna" type="dropdown" var="item.each.parents.list.getName"></FIELD>

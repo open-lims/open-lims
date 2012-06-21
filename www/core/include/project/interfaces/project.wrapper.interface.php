@@ -234,5 +234,12 @@ interface Project_WrapperInterface
    	 * @return integer
    	 */
 	public static function count_data_search($string, $project_id_array, $item_type_array);
+	
+	/**
+   	 * @param integer $parent_item_id
+   	 * @param integer $project_id
+   	 * @return bool
+   	 */
+	public static function delete_data_entity_sub_item_links($parent_item_id, $project_id = null);
 }
 ?>

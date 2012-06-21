@@ -184,6 +184,37 @@ class SampleIsItem_Access
 			return null;
 		}
 	}
+	
+	/**
+	 * @param string $sql
+	 * @return array
+	 */
+	public static function list_samples_by_item_sql_list($sql)
+	{
+		global $db;
+
+   		if ($sql)
+   		{
+   			$return_array = array();
+   			
+   			$sql_read = "SELECT sample_id " .
+						"FROM ".constant("SAMPLE_IS_ITEM_TABLE")." " .
+						"WHERE item_id IN (".$sql.")";
+			
+   			$res = $db->db_query($sql_read);
+
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array, $data['sample_id']);
+			}
+
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
 }
 	
 ?>

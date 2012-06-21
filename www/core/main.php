@@ -72,6 +72,7 @@ class Main
 			set_error_handler('error_handler');
 			
 			require_once("include/base/system/events/event.class.php");
+			require_once("include/base/system/events/delete_event.class.php");
 			require_once("include/base/system/system_handler.class.php");
 			
 			require_once("include/base/system/autoload.function.php");

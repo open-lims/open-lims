@@ -44,6 +44,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 	
 	private $gid;
 	private $parent;
+	private $parent_item_id;
 	
 	private $item_class_id;
 
@@ -106,6 +107,18 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 		    		$primary_key = $sample_has_item->create($this->sample_id, $this->item_id, null);
 		    	}
 		    	
+    			if ($this->parent_item_id)
+	    		{
+	    			if ($sample_has_item->set_parent_item_id($this->parent_item_id) == false)
+	    			{
+	    				if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+	    			}
+	    		}
+		    	
 		    	if ($primary_key != null)
 	    		{ 
 		    		$sample_item_link_event = new SampleItemLinkEvent($this->item_id, $sample_folder_id);
@@ -160,6 +173,16 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     {
     	if ($this->item_id and $this->sample_id)
     	{
+    		if (Sample_Wrapper::delete_data_entity_sub_item_links($this->item_id, $this->sample_id) == false)
+    		{
+    			return false;
+    		}
+    		
+    		if (SampleHasItem_Access::delete_sub_items($this->item_id, $this->sample_id) == false)
+    		{
+    			return false;
+    		}
+    		
     		$primary_key = SampleHasItem_Access::get_entry_by_item_id_and_sample_id($this->item_id, $this->sample_id);
     		$sample_has_item = new SampleHasItem_Access($primary_key);
     		
@@ -171,10 +194,6 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 					
 				if ($event_handler->get_success() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
 					return false;
 				}
     			
@@ -197,15 +216,32 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
      */
     public function unlink_item_full()
     {
-    	
     	global $transaction;
     	
     	if ($this->item_id)
     	{
     		$transaction_id = $transaction->begin();
     		
+    		if (Sample_Wrapper::delete_data_entity_sub_item_links($this->item_id) == false)
+    		{
+    			if ($transaction_id != null)
+  				{
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+    		}
+    		
+    		if (SampleHasItem_Access::delete_sub_items($this->item_id) == false)
+    		{
+    			if ($transaction_id != null)
+  				{
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+    		}
+    		
   			$sample_has_item_pk_array = SampleHasItem_Access::list_entries_by_item_id_pk($this->item_id);
-  			  			
+  			
   			if (is_array($sample_has_item_pk_array))
   			{
   				if (count($sample_has_item_pk_array) >= 1)
@@ -246,7 +282,6 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     }
     
     /**
-     * @todo overhaul
      * @see SampleItemInterface::get_sample_items()
      * @return array
      */
@@ -254,29 +289,31 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     {
     	if ($this->sample_id)
     	{
-    		$sample_has_item_array = SampleHasItem_Access::list_entries_by_sample_id($this->sample_id);
-    	
-    		if (is_array($sample_has_item_array) and count($sample_has_item_array) >= 1)
-    		{
-    			$return_array = array();
-    			
-    			foreach($sample_has_item_array as $key => $value)
-    			{
-    				$sample_has_item = new SampleHasItem_Access($value);
-    				array_push($return_array, $sample_has_item->get_item_id());
-    			}
-    			return $return_array;
-    		}
-    		else
-    		{
-    			return null;
-    		}
+    		return SampleHasItem_Access::list_items_by_sample_id($this->sample_id);
     	}
     	else
     	{
     		return null;
     	}
     }
+    
+	/**
+     * @see SampleItemInterface::get_sample_items_with_pos_id()
+     * @return array
+     */
+    public function get_sample_items_with_pos_id()
+    {
+    	if ($this->sample_id)
+    	{
+    		return SampleHasItem_Access::list_items_by_sample_id_with_pos_id($this->sample_id);
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+    
     
     /**
      * @see SampleItemInterface::set_item_id()
@@ -326,6 +363,24 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     		return false;
     	}
     }
+    
+ 	/**
+     * @see SampleItemInterface::set_parent_item_id()
+     * @param integer $parent_item_id
+     * @return bool
+     */
+	public function set_parent_item_id($parent_item_id)
+	{
+		if (is_numeric($parent_item_id))
+    	{
+    		$this->parent_item_id = $parent_item_id;
+    		return true;
+    	}
+    	else
+    	{
+    		return false;
+    	}
+	}
     
     /**
      * Checks if a class already exists
@@ -804,9 +859,9 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
      * @param integer $item_id
      * @return array
      */
-    public static function list_entries_by_item_id($item_id)
+    public static function list_entries_by_item_id($item_id, $sub_items)
     {
-    	return SampleHasItem_Access::list_entries_by_item_id($item_id);
+    	return SampleHasItem_Access::list_entries_by_item_id($item_id, $sub_items);
     }
     
     /**
@@ -822,7 +877,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     
 	/**
 	 * @see SampleItemInterface::list_sample_id_by_item_id_and_gid_and_parent()
-	 * @param integer $sample_id
+	 * @param integer $item_id
 	 * @param integer $gid
 	 * @return array
 	 */
@@ -831,6 +886,27 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 		return SampleHasItem_Access::list_sample_id_by_item_id_and_gid_and_parent($item_id, $gid);
 	}
     
+	/**
+	 * @see SampleItemInterface::list_items_by_sample_id_and_gid()
+	 * @param integer $sample_id
+	 * @param integer $gid
+	 * @return array
+	 */
+	public static function list_items_by_sample_id_and_gid($sample_id, $gid)
+	{
+		return SampleHasItem_Access::list_items_by_sample_id_and_gid($sample_id, $gid);
+	}
+	
+	/**
+	 * @see SampleItemInterface::delete_remaining_sample_entries()
+	 * @param integer $sample_id
+	 * @return bool
+	 */
+	public static function delete_remaining_sample_entries($sample_id)
+	{
+		return SampleHasItem_Access::delete_remaining_sample_entries($sample_id);
+	}
+	
 	/**
 	 * @see EventListenerInterface::listen_events()
      * @param object $event_object

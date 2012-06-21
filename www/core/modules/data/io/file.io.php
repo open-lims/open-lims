@@ -70,7 +70,7 @@ class FileIO
 					
 					foreach($file_version_array as $key => $value)
 					{
-						$file_version = File::get_instance($_GET[file_id]);
+						$file_version = File::get_instance($_GET[file_id], true);
 						$file_version->open_internal_revision($value);
 						
 						$result[$counter][version] = $file_version->get_internal_revision();
@@ -269,8 +269,18 @@ class FileIO
 	 * @param integer $folder_id
 	 * @throws FolderIDMissingException
 	 */
-	public static function upload_as_item($type_array, $category_array, $organisation_unit_id, $folder_id)
+	public static function upload_as_item($type_array, $category_array, $holder_class, $holder_id, $position_id)
 	{		
+		if (class_exists($holder_class))
+		{
+			$item_holder = new $holder_class($holder_id);
+			
+			if ($item_holder instanceof ItemHolderInterface)
+			{
+				$folder_id = $item_holder->get_item_holder_value("folder_id", $position_id);
+			}
+		}
+		
 		if (is_numeric($folder_id))
 		{
 			$template = new HTMLTemplate("data/file_upload_item.html");

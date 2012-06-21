@@ -795,6 +795,54 @@ class SampleAjax
 	
 	/**
 	 * @param string $get_array
+	 * @param integer $sample_id
+	 * @return string
+	 */
+	public static function associate($get_array, $sample_id)
+	{
+		global $session;
+		
+		if ($get_array and is_numeric($sample_id))
+		{
+			$_GET = unserialize($get_array);
+			
+			$post_array = array();
+			$post_array['keywords'] = $session->read_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]);
+			$post_array['description'] = $session->read_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]);	
+
+			$sample = new Sample($sample_id);
+			
+			$item_add_event = new ItemAddEvent($sample->get_item_id(), $_GET, $post_array, true, "sample");
+			$event_handler = new EventHandler($item_add_event);
+			if ($event_handler->get_success() == true)
+			{
+				if ($_GET['retrace'])
+				{
+					$params = http_build_query(Retrace::resolve_retrace_string($_GET['retrace']),'','&');
+					return "index.php?".$params;
+				}
+				else
+				{
+					$paramquery['username'] = $username;
+					$paramquery['session_id'] = $session_id;
+					$paramquery['nav'] = "home";
+					$params = http_build_query($paramquery,'','&');
+					return "index.php?".$params;
+				}
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param string $get_array
 	 */
 	public static function get_sample_menu($get_array)
 	{
@@ -842,67 +890,48 @@ class SampleAjax
 					$template->set_var("is_admin", false);	
 				}
 				
-				$sample_template 				= new SampleTemplate($sample->get_template_id());
-				$current_requirements 			= $sample->get_requirements();
-				$current_fulfilled_requirements = $sample->get_fulfilled_requirements();
-				
-				$result = array();
-				$counter = 0;
-				
-				if (is_array($current_requirements) and count($current_requirements) >= 1)
+				if ($sample_security->is_access(2))
 				{
-					foreach($current_requirements as $key => $value)
-					{						
-						$paramquery = array();
-						$paramquery[username] = $_GET[username];
-						$paramquery[session_id] = $_GET[session_id];
-						$paramquery[nav] = "sample";
-						$paramquery[run] = "item_add";
-						$paramquery[sample_id] = $_GET[sample_id];
-						$paramquery[dialog] = $value[type];
-						$paramquery[key] = $key;
-						$paramquery[retrace] = Retrace::create_retrace_string();
-						unset($paramquery[nextpage]);
-						$params = http_build_query($paramquery,'','&#38;');
-
-						$result[$counter][name] = $value[name];
-
-						if ($current_fulfilled_requirements[$key] == true)
-						{
-							if ($value[occurrence] == "multiple")
-							{
-								$result[$counter][status] = 2;
-							}
-							else
-							{
-								$result[$counter][status] = 0;
-							}
-						}
-						else
-						{
-							$result[$counter][status] = 1;
-						}
-
-						if ($value[requirement] == "optional")
-						{
-							$result[$counter][name] = $result[$counter][name]." (optional)";
-						}
-						
-						$result[$counter][params] = $params;
-												
-						if ($sample_security->is_access(2, false))
-						{
-							$result[$counter][permission] = true;
-						}
-						else
-						{
-							$result[$counter][permission] = false;
-						}
-						$counter++;
-					}			
-				}
+					$sample_template 				= new SampleTemplate($sample->get_template_id());
+					$current_requirements 			= $sample->get_requirements();
+					
+					$result = array();
+					$counter = 0;
+					
+					if (is_array($current_requirements) and count($current_requirements) >= 1)
+					{
+						foreach($current_requirements as $key => $value)
+						{	
+							switch ($value['element_type']):
+							
+								case "item":
+									$paramquery = array();
+									$paramquery[username] = $_GET[username];
+									$paramquery[session_id] = $_GET[session_id];
+									$paramquery[nav] = "sample";
+									$paramquery[sample_id] = $_GET[sample_id];
+									
+									require_once("core/modules/item/common/item_common.io.php");
+									
+									$menu_element_array = ItemCommonIO::get_menu_element($value, $key, $counter, $paramquery, "Sample", $_GET['sample_id']);
+									$result = array_merge($result, $menu_element_array[0]);
+									$counter = $menu_element_array[1];	
+								break;
+								
+								case "extension":
+									// Extension implementation in Sample
+								break;
+								
+							endswitch;
+						}			
+					}
 				
-				$template->set_var("action",$result);
+					$template->set_var("action",$result);
+				}
+				else
+				{
+					$template->set_var("action","");
+				}
 			
 				$move_paramquery = $_GET;
 				$move_paramquery[run] = "move";
@@ -1127,7 +1156,15 @@ class SampleAjax
 			if ($user->is_admin())
 			{
 				$sample = new Sample($_GET['sample_id']);
-				$sample->delete();
+				
+				if ($sample->delete() == true)
+				{
+					return "1";
+				}
+				else
+				{
+					throw new SampleDeleteException();
+				}
 			}
 			else
 			{

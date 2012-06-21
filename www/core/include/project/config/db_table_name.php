@@ -24,6 +24,7 @@
 /**
  * 
  */
+	define("PROJECT_HAS_EXTENSION_RUN_TABLE",		"core_project_has_extension_runs");
 	define("PROJECT_HAS_FOLDER_TABLE", 				"core_project_has_folder");
 	define("PROJECT_HAS_ITEM_TABLE", 				"core_project_has_items");
 	define("PROJECT_HAS_PROJECT_STATUS_TABLE", 		"core_project_has_project_status");

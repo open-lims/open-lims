@@ -6,38 +6,99 @@
 
 <!-- FOREACH BEGIN ([[ACTION]]) -->
 	
-	<!-- IF ([[ACTION:PERMISSION]]) -->
+	<!-- IF ([[ACTION:TYPE]] == ajax) -->
 
-		<!-- IF ([[ACTION:STATUS]] == 1) -->
-	
-			<a href='index.php?[[ACTION:PARAMS]]' class='BaseWantToButton'>
-				<span class='BaseWantToIcon'><img src='images/icons_30/add.png' alt='' border='0' /></span>
-				<span class='BaseWantToText'>[[ACTION:NAME]]</span>
-			</a>
-		
-		<!-- ELSEIF ([[ACTION:STATUS]] == 2) -->
-		
-			<a href='index.php?[[ACTION:PARAMS]]' class='BaseWantToButton'>
-				<span class='BaseWantToIcon'><img src='images/icons_30/add_done.png' alt='' border='0' /></span>
-				<span class='BaseWantToText'>[[ACTION:NAME]]</span>
-			</a>
-		
-		<!-- ELSE -->
-		
-			<a class='BaseWantToButton'>
-				<span class='BaseWantToIcon'><img src='images/icons_30/add_done_na.png' alt='' border='0' /></span>
-				<span class='BaseWantToText'>[[ACTION:NAME]]</span>
-			</a>
-					
-		<!-- ENDIF -->
-		
-	<!-- ELSE -->
-	
-		<a class='BaseWantToButton'>
-			<span class='BaseWantToIcon'><img src='images/icons_30/add_na.png' alt='' border='0' /></span>
-			<span class='BaseWantToText'>[[ACTION:NAME]]</span>
+		<script>[[ACTION:SCRIPT]]</script>
+		<div id='[[ACTION:WINDOW_ID]]' title='[[ACTION:WINDOW_TITLE]]' style='display: none;'></div>
+		<a href='#' class='BaseWantToButton' id='[[ACTION:CLICK_ID]]' title='[[STATUS_ACTION:NAME]]'>
+			<span class='BaseWantToIcon'>
+			
+			<!-- IF ([[ACTION:IMAGE]] == add_done) -->
+				<img src='images/icons_30/add_done.png' alt='' border='0' />
+			<!-- ELSEIF ([[ACTION:IMAGE]] == add_extension) -->	
+				<img src='images/icons_30/add_extension.png' alt='' border='0' />
+			<!-- ELSEIF ([[ACTION:IMAGE]] == add_extension_wait) -->	
+				<img src='images/icons_30/add_extension_wait.png' alt='' border='0' />
+			<!-- ELSEIF ([[ACTION:IMAGE]] == add_extension_done) -->	
+				<img src='images/icons_30/add_extension_done.png' alt='' border='0' />
+			<!-- ELSEIF ([[ACTION:IMAGE]] == add_done_sub_item_missing) -->	
+				<img src='images/icons_30/add_done_sub_item_missing.png' alt='' border='0' />
+			<!-- ELSE -->
+				<img src='images/icons_30/add.png' alt='' border='0' />	
+			<!-- ENDIF -->
+
+			</span>
+			<span class='BaseWantToText'>
+			
+			<!-- IF ([[ACTION:DEPENDS]]) -->
+				<img src='images/icons/depends.png' alt='' border='0' />&nbsp;
+			<!-- ENDIF -->
+			
+			[[ACTION:NAME]]
+			
+			</span>
 		</a>
 	
+	<!-- ELSEIF ([[ACTION:TYPE]] == link) -->
+	
+		<a href='index.php?[[ACTION:PARAMS]]' class='BaseWantToButton' title='[[STATUS_ACTION:NAME]]'>
+			<span class='BaseWantToIcon'>
+			
+			<!-- IF ([[ACTION:IMAGE]] == add_done) -->
+				<img src='images/icons_30/add_done.png' alt='' border='0' />
+			<!-- ELSEIF ([[ACTION:IMAGE]] == add_extension) -->	
+				<img src='images/icons_30/add_extension.png' alt='' border='0' />
+			<!-- ELSEIF ([[ACTION:IMAGE]] == add_extension_wait) -->	
+				<img src='images/icons_30/add_extension_wait.png' alt='' border='0' />
+			<!-- ELSEIF ([[ACTION:IMAGE]] == add_extension_done) -->	
+				<img src='images/icons_30/add_extension_done.png' alt='' border='0' />
+			<!-- ELSEIF ([[ACTION:IMAGE]] == add_done_sub_item_missing) -->	
+				<img src='images/icons_30/add_done_sub_item_missing.png' alt='' border='0' />
+			<!-- ELSE -->
+				<img src='images/icons_30/add.png' alt='' border='0' />	
+			<!-- ENDIF -->
+			
+			</span>
+			<span class='BaseWantToText'>
+			
+			<!-- IF ([[ACTION:DEPENDS]]) -->
+				<img src='images/icons/depends.png' alt='' border='0' />&nbsp;
+			<!-- ENDIF -->
+			
+			[[ACTION:NAME]]
+			</span>
+		</a>
+	
+	<!-- ELSEIF ([[ACTION:TYPE]] == line) -->
+	
+		<div class='BaseWantToLine'></div>
+	
+	<!-- ELSE -->
+		
+		<a class='BaseWantToButton' title='[[STATUS_ACTION:NAME]]'>
+			<span class='BaseWantToIcon'>
+			
+			<!-- IF ([[ACTION:IMAGE]] == add_extension_wait_na) -->
+				<img src='images/icons_30/add_extension_wait_na.png' alt='' border='0' />
+			<!-- ELSEIF ([[ACTION:IMAGE]] == add_extension_done_na) -->	
+				<img src='images/icons_30/add_extension_done_na.png' alt='' border='0' />
+			<!-- ELSEIF ([[ACTION:IMAGE]] == add_done_na) -->	
+				<img src='images/icons_30/add_done_na.png' alt='' border='0' />
+			<!-- ELSE -->	
+				<img src='images/icons_30/add_na.png' alt='' border='0' />
+			<!-- ENDIF -->
+			
+			</span>
+			<span class='BaseWantToText'>
+			
+			<!-- IF ([[ACTION:DEPENDS]]) -->
+				<img src='images/icons/depends.png' alt='' border='0' />&nbsp;
+			<!-- ENDIF -->
+			
+			[[ACTION:NAME]]
+			</span>
+		</a>
+		
 	<!-- ENDIF -->
 
 <!-- FOREACH END -->	

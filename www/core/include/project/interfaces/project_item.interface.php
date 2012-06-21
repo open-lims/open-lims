@@ -78,14 +78,23 @@ interface ProjectItemInterface
 	public function is_required();
 	
 	/**
+	 * @param bool $sub_items
      * @return array
      */
-	public function get_project_items();
+	public function get_project_items($sub_items = false);
 	
 	/**
+	 * @param integer $project_status_id
+	 * @param bool $sub_items
      * @return array
      */
-    public function get_project_status_items($project_status_id);
+    public function get_project_status_items($project_status_id, $sub_items = false);
+
+    /**
+     * @param integer $project_status_id
+     * @return array
+     */
+    public function get_project_status_items_with_pos_id($project_status_id);
     
     /**
      * @param integer $item_id
@@ -104,6 +113,12 @@ interface ProjectItemInterface
      * @return bool
      */
 	public function set_status_id($status_id);
+	
+	/**
+     * @param integer $parent_item_id
+     * @return bool
+     */
+	public function set_parent_item_id($parent_item_id);
 	
 	/**
      * @return bool
@@ -172,20 +187,6 @@ interface ProjectItemInterface
      */
 	public function create_log_entry();
 	
-	/**
-     * @param integer $item_id
-     * @param integer $project_id
-     * @param integer $project_status_id
-     * @return array
-     */
-    public static function get_gid_by_item_id_and_project_id($item_id, $project_id, $project_status_id);
-    
-    /**
-     * @param integer $item_id
-     * @param integer $project_id
-     * @return array
-     */
-    public static function get_gid_by_item_id_and_status_id($item_id, $status_id);
 	
     /**
   	 * Returns a list of project related items

@@ -171,6 +171,12 @@ interface DataEntityInterface
 	public function unset_child_of($data_entity_id);
 	
 	/**
+	 * @param integer $child_data_entity_id
+	 * @return bool
+	 */
+	public function unset_child($child_data_entity_id);
+	
+	/**
 	 * Unsets all children of the current data entity
 	 * @return bool
 	 */

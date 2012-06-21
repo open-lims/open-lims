@@ -50,6 +50,16 @@ class EquipmentRequest
 				require_once("ajax/equipment.ajax.php");
 				echo EquipmentAjax::count_organisation_unit_related_equipment($_POST[argument_array]);
 			break;
+			
+			case "equipment_add_as_item_window":
+				require_once("ajax/equipment.ajax.php");
+				echo EquipmentAjax::add_as_item_window($_POST[get_array], $_POST[type_array], $_POST[category_array]);
+			break;
+			
+			case "equipment_add_as_item":
+				require_once("ajax/equipment.ajax.php");
+				echo EquipmentAjax::add_as_item($_POST[get_array], $_POST[type_id]);
+			break;
 				
 		endswitch;
 	}

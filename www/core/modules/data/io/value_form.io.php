@@ -76,7 +76,7 @@ class ValueFormIO
 				case "format":
 					if (!$this->table_class)
 					{
-						$table_class = "formTable";
+						$table_class = "";
 					}
 					else
 					{
@@ -199,53 +199,59 @@ class ValueFormIO
 									$field_name = $array['content']['name'];
 								}
 								
+								switch($array['content']['requirement']):
+									case 1:
+										$requirement_class = "DataValueFieldRequired";
+									break;
+									
+									case 2:
+										$requirement_class = "DataValueFieldRequired DataValueFieldRequiredImportant";
+									break;
+									
+									default:
+										$requirement_class = "";
+									break;
+								endswitch;
+								
+								switch($array['content']['vartype']):
+									case "integer":
+										$var_type_class = "DataValueFieldTypeInteger";
+									break;
+									
+									case "float":
+										$var_type_class = "DataValueFieldTypeFloat";
+									break;
+									
+									default:
+										$var_type_class = "DataValueFieldTypeString";
+									break;
+								endswitch;
+								
+								if ($array['content']['min_value'])
+								{
+									$min_value_class = "DataValueFieldMinValue DataValueFieldMinValue-".$array['content']['min_value'];
+								}
+								
+								if ($array['content']['max_value'])
+								{
+									$max_value_class = "DataValueFieldMaxValue DataValueFieldMaxValue-".$array['content']['max_value'];
+								}
+								
 								switch($array['content']['type']):
 									case "textfield":
-										if ($this->field_class)
-										{
-											$return_string .= "<input type='textfield' name='".$field_name."' value='".$element_content."' size='".$array['content']['length']."' class='".$this->field_class."' />";
-											$return_string .= "<input type='hidden' name='".$field_name."-vartype' value='".$array['content']['vartype']."' class='".$this->field_class."' />";
-										}
-										else
-										{
-											$return_string .= "<input type='textfield' name='".$field_name."' value='".$element_content."' size='".$array['content']['length']."' />";
-											$return_string .= "<input type='hidden' name='".$field_name."-vartype' value='".$array['content']['vartype']."' />";
-										}
+										$return_string .= "<input type='textfield' name='".$field_name."' value='".$element_content."' size='".$array['content']['length']."' class='".$this->field_class." ".$requirement_class." ".$var_type_class." ".$min_value_class." ".$max_value_class."' />";
 									break;
 								
 									case "textarea":
-										if ($this->field_class)
-										{
-											$return_string .= "<textarea name='".$field_name."' cols='".$array['content']['size']['cols']."' rows='".$array['content']['size']['rows']."' class='".$this->field_class."'>".$element_content."</textarea>";
-											$return_string .= "<input type='hidden' name='".$field_name."-vartype' value='".$array['content']['vartype']."' class='".$this->field_class."' />";
-										}
-										else
-										{
-											$return_string .= "<textarea name='".$field_name."' cols='".$array['content']['size']['cols']."' rows='".$array['content']['size']['rows']."'>".$element_content."</textarea>";
-											$return_string .= "<input type='hidden' name='".$field_name."-vartype' value='".$array['content']['vartype']."' />";
-										}
+										$return_string .= "<textarea name='".$field_name."' cols='".$array['content']['size']['cols']."' rows='".$array['content']['size']['rows']."' class='".$this->field_class." ".$requirement_class." ".$var_type_class."'>".$element_content."</textarea>";
 									break;
 									
 									case "checkbox":
-										if ($this->field_class)
-										{
-											$return_string .= "<select type='checkbox' name='".$field_name."' class='".$this->field_class."'>\n";
-										}
-										else
-										{
-											$return_string .= "<select type='checkbox' name='".$field_name."'>\n";
-										}
+										$return_string .= "<select type='checkbox' name='".$field_name."' class='".$this->field_class."' />\n";
 									break;
 									
 									case "dropdown":
-										if ($this->field_class)
-										{
-											$return_string .= "<select name='".$field_name."' class='".$this->field_class."'>";
-										}
-										else
-										{
-											$return_string .= "<select name='".$field_name."'>";
-										}
+										$return_string .= "<select name='".$field_name."' class='".$this->field_class." ".$requirement_class."'>";
 										
 										if (is_array($array['content']['value']) and count($array['content']['value']) >= 1) {
 			

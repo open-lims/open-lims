@@ -77,12 +77,12 @@ class ProjectValueVar implements ValueVarCaseInterface
     			if ($this->stack[count($this->stack)-2] == "status")
 	    		{
     				$project_item = new ProjectItem($this->project_id);
-					$this->temp = $project_item->get_project_status_items($this->stack[count($this->stack)-1]);
+					$this->temp = $project_item->get_project_status_items($this->stack[count($this->stack)-1], true);
 	    		}
 	    		else
 	    		{
 	    			$project_item = new ProjectItem($this->project_id);
-    				$this->temp = $project_item->get_project_items();
+    				$this->temp = $project_item->get_project_items(true);
 	    		}
 	    		
 	    		array_push($this->stack, "item");

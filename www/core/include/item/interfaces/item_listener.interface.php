@@ -29,18 +29,26 @@
 interface ItemListenerInterface
 {
 	/**
-	 * Returns the name of a specific item 
-	 * Requires instance via get_instance_by_item_id($item_id)
-	 * @return string
-	 */
-	public function get_item_name();
-	
-	/**
 	 * Returns a set of parents
 	 * Requires instance via get_instance_by_item_id($item_id)
 	 * @return string
 	 */
 	public function get_item_parents();
+	
+	/**
+	 * Returns the ID of the current instance
+	 * Requires instance via get_instance_by_item_id($item_id)
+	 * @return integer
+	 */
+	public function get_item_object_id();
+		
+	/**
+	 * Returns the name of the current instance
+	 * Requires instance via get_instance_by_item_id($item_id)
+	 * @return string
+	 */
+	public function get_item_object_name();
+	
 	
 	/**
 	 * Clones the item and returns its ID
@@ -79,9 +87,10 @@ interface ItemListenerInterface
 	/**
 	 * Returns an instance of a specific class by item-id
 	 * @param integer $item_id
+	 * @param boolean $light_instance Returns an instance without complex permission and dependency calculations
 	 * @return object
 	 */
-	public static function get_instance_by_item_id($item_id);
+	public static function get_instance_by_item_id($item_id, $light_instance = false);
 	
 	/**
 	 * Returns the generic name of the item-type
@@ -148,5 +157,34 @@ interface ItemListenerInterface
 	 * @return string
 	 */
 	public static function get_sql_fulltext_where($type);
+	
+	/**
+	 * Returns the possible dialog-attributes of the requested item-type
+	 * 0 => array of possbile types
+	 * 1 => standard type
+	 * @param string $item_type
+	 * @return array
+	 */
+	public static function get_item_add_dialog($item_type);
+	
+	/**
+	 * Returns the possible occurrence-attributes and the behaviour of the requested item-type
+	 * array
+	 * 		(
+	 * 			once is possible (if false: behaviour like multiple), 
+	 * 			multiple is possible (if false: behaviour like once), 
+	 * 			behaviour after addgin while occurrence is set to once (possbile values: "deny", "edit")
+	 * 		)
+	 * @param unknown_type $item_type
+	 * @return array
+	 */
+	public static function get_item_add_occurrence($item_type);
+	
+	/**
+	 * Returns the name and the path of the io-class which handles the add-script
+	 * @param string $item_type
+	 * @return array
+	 */
+	public static function get_item_add_script_handling_class($item_type);
 }
 ?>

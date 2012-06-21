@@ -1,0 +1,135 @@
+<?php
+/**
+ * @package job
+ * @version 0.4.0.0
+ * @author Roman Konertz <konertz@open-lims.org>
+ * @copyright (c) 2008-2011 by Roman Konertz
+ * @license GPLv3
+ * 
+ * This file is part of Open-LIMS
+ * Available at http://www.open-lims.org
+ * 
+ * This program is free software;
+ * you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation;
+ * version 3 of the License.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program;
+ * if not, see <http://www.gnu.org/licenses/>.
+ */
+ 
+/**
+ * Job Wrapper Access Class
+ * @package job
+ */
+class Job_Wrapper_Access
+{	
+	/**
+	 * @param string $datetime
+	 * @param string $order_by
+	 * @param string $order_equipment
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_jobs($datetime, $order_by, $order_method, $start, $end)
+	{
+		global $db;
+		
+		if ($order_by and $order_method)
+		{
+			if ($order_method == "asc")
+			{
+				$sql_order_method = "ASC";
+			}
+			else
+			{
+				$sql_order_method = "DESC";
+			}
+			
+			switch($order_by):
+				
+				case "status":
+					$sql_order_by = "ORDER BY status ".$sql_order_method;
+				break;
+				
+				case "created_at":
+					$sql_order_by = "ORDER BY create_datetime ".$sql_order_method;
+				break;
+				
+				case "user":
+					$sql_order_by = "ORDER BY ".constant("USER_PROFILE_TABLE").".surname ".$sql_order_method;
+				break;
+				
+				default:
+					$sql_order_by = "ORDER BY create_datetime ".$sql_order_method;
+				break;
+			
+			endswitch;
+		}
+		else
+		{
+			$sql_order_by = "ORDER BY create_datetime";
+		}
+			
+		$sql = "SELECT ".constant("JOB_TABLE").".id AS id, " .
+						"".constant("JOB_TYPE_TABLE").".name AS name, " .
+						"".constant("JOB_TABLE").".status AS status, " .
+						"".constant("JOB_TABLE").".create_datetime AS created_at, " .
+						"".constant("JOB_TABLE").".user_id AS user_id " .
+						"FROM ".constant("JOB_TABLE")." " .
+						"JOIN ".constant("JOB_TYPE_TABLE")." ON ".constant("JOB_TABLE").".type_id = ".constant("JOB_TYPE_TABLE").".id " .
+						"JOIN ".constant("USER_PROFILE_TABLE")." ON ".constant("JOB_TABLE").".user_id = ".constant("USER_PROFILE_TABLE").".id " .
+						"".$sql_order_by."";
+		
+		$return_array = array();
+		
+		$res = $db->db_query($sql);
+		
+		if (is_numeric($start) and is_numeric($end))
+		{
+			for ($i = 0; $i<=$end-1; $i++)
+			{
+				if (($data = $db->db_fetch_assoc($res)) == null)
+				{
+					break;
+				}
+				
+				if ($i >= $start)
+				{
+					array_push($return_array, $data);
+				}
+			}
+		}
+		else
+		{
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array, $data);
+			}
+		}
+		return $return_array;
+	}
+	
+	/**
+	 * @param string $datetime
+	 * @return integer
+	 */
+	public static function count_jobs($datetime)
+	{
+		global $db;
+		
+		$sql = "SELECT COUNT(".constant("JOB_TABLE").".id) AS result " .
+						"FROM ".constant("JOB_TABLE")."";
+		
+		$res = $db->db_query($sql);
+		$data = $db->db_fetch_assoc($res);
+
+		return $data[result];
+	}
+}
+?>
+	

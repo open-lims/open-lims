@@ -92,11 +92,11 @@ class Retrace implements RetraceInterface
 	}
 	
 	/**
-	 * @see RetraceInterface::resovle_retrace_string()
+	 * @see RetraceInterface::resolve_retrace_string()
 	 * @param string $retrace_string
 	 * @return array
 	 */
-	public static function resovle_retrace_string($retrace_string)
+	public static function resolve_retrace_string($retrace_string)
 	{
 		if ($retrace_string)
 		{

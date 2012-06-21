@@ -39,7 +39,7 @@ class EquipmentAjax
 	 * @param string $sortmethod
 	 * @return string
 	 */
-	public function list_equipment_items($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
+	public static function list_equipment_items($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
 	{		
 		if ($get_array)
 		{
@@ -142,7 +142,7 @@ class EquipmentAjax
 	 * @param string $json_argument_array
 	 * @return integer
 	 */
-	public function count_equipment_items($json_argument_array)
+	public static function count_equipment_items($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
 		
@@ -173,7 +173,7 @@ class EquipmentAjax
 	 * @param string $sortmethod
 	 * @return string
 	 */
-	public function list_organisation_unit_related_equipment($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
+	public static function list_organisation_unit_related_equipment($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
 		$organisation_unit_id = $argument_array[0][1];
@@ -233,7 +233,7 @@ class EquipmentAjax
 	 * @param string $json_argument_array
 	 * @return integer
 	 */
-	public function count_organisation_unit_related_equipment($json_argument_array)
+	public static function count_organisation_unit_related_equipment($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
 		$organisation_unit_id = $argument_array[0][1];
@@ -245,6 +245,281 @@ class EquipmentAjax
 		else
 		{
 			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $gid
+	 * @param array $link
+	 * @param array $type_array
+	 * @param array $category_array
+	 * @param string $holder_class
+	 * @param integer $holder_id
+	 * @return array
+	 */
+	public static function add_as_item_window_init($gid, $link, $type_array, $category_array, $holder_class, $holder_id)
+	{		
+		if ($link['parent'] and is_numeric($link['parent_id']))
+		{
+			$array['window_id'] = "EquipmentItemAddWindow".$link['parent_key']."-".$link['parent_id']."-".$gid;
+			$array['click_id'] = "EquipmentItemAddButton".$link['parent_key']."-".$link['parent_id']."-".$gid;
+		}
+		else
+		{
+			$array['window_id'] = "EquipmentItemAddWindow".$gid;
+			$array['click_id'] = "EquipmentItemAddButton".$gid;
+		}
+						
+		if ($type_array)
+		{
+			$type_array_serialized = serialize($type_array);
+		}
+		
+		if ($category_array)
+		{
+			$category_array_serialized = serialize($category_array);
+		}
+		
+		$script_template = new JSTemplate("equipment/js/add_item_window_preclick.js");
+		$script_template->set_var("window_id", $array['window_id']);
+		$script_template->set_var("session_id", $_GET['session_id']);
+		$script_template->set_var("get_array", serialize($link));
+		$script_template->set_var("type_array", $type_array_serialized);
+		$script_template->set_var("category_array", $category_array_serialized);
+		$script_template->set_var("click_id", $array['click_id']);
+		
+		$array['script'] = $script_template->get_string();
+		
+		return $array;
+	}
+	
+	/**
+	 * @param string $get_array
+	 * @param string $type_array
+	 * @param string $category_array
+	 * @return string
+	 */
+	public static function add_as_item_window($get_array, $type_array, $category_array)
+	{
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}
+		
+		if ($type_array)
+		{
+			$type_array = unserialize($type_array);	
+		}
+		
+		if ($category_array)
+		{
+			$category_array = unserialize($category_array);	
+		}
+
+		$template = new HTMLTemplate("equipment/add_item_window.html");
+		
+		$equipment_array = EquipmentType::list_entries();
+		
+		$result = array();
+		$hit_array = array();
+		$counter = 0;
+		
+		if (is_array($type_array) and count($type_array) >= 1)
+		{
+			if (is_array($equipment_array) and count($equipment_array) >= 1)
+			{
+				foreach($equipment_array as $key => $value)
+				{
+					if (in_array($value, $type_array) or $value <= 3)
+					{
+						$equipment_type = new EquipmentType($value);
+					
+						$result[$counter][value] = $value;
+						$result[$counter][disabled] = "";
+						$result[$counter][content] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
+						
+						$counter++;
+						array_push($hit_array, $value);
+					}
+				}
+			}
+			
+			if (is_array($category_array) and count($category_array) >= 1)
+			{
+				foreach ($category_array as $key => $value)
+				{
+					$equipment_cat_array = EquipmentType::list_entries_by_cat_id($value);
+					
+					if (is_array($equipment_cat_array) and count($equipment_cat_array) >= 1)
+					{
+						foreach ($equipment_cat_array as $key => $value)
+						{
+							if (!in_array($value, $hit_array))
+							{
+								$equipment_type = new EquipmentType($value);
+						
+								$result[$counter][value] = $value;
+								$result[$counter][disabled] = "";
+								$result[$counter][content] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
+								
+								$counter++;
+								array_push($hit_array, $value);
+							}
+						} 
+					}
+				}
+			}
+		}
+		else
+		{
+			if (is_array($category_array) and count($category_array) >= 1)
+			{
+				foreach ($category_array as $key => $value)
+				{
+					$equipment_cat_array = EquipmentType::list_entries_by_cat_id($value);
+	
+					if (is_array($equipment_cat_array) and count($equipment_cat_array) >= 1)
+					{
+						if (!in_array(1, $equipment_cat_array))
+						{
+							$equipment_cat_array[] = 1;
+						}
+						
+						if (!in_array(2, $equipment_cat_array))
+						{
+							$equipment_cat_array[] = 2;
+						}
+						
+						if (!in_array(3, $equipment_cat_array))
+						{
+							$equipment_cat_array[] = 3;
+						}
+						
+						foreach ($equipment_cat_array as $key => $value)
+						{
+							if (!in_array($value, $hit_array))
+							{
+								$equipment_type = new EquipmentType($value);
+						
+								$result[$counter][value] = $value;
+								$result[$counter][disabled] = "";
+								$result[$counter][content] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
+								
+								$counter++;
+								array_push($hit_array, $value);
+							}
+						} 
+					}
+				}
+			}
+			else
+			{
+				if (is_array($equipment_array) and count($equipment_array) >= 1)
+				{
+					foreach($equipment_array as $key => $value)
+					{
+						$equipment_type = new EquipmentType($value);
+						
+						$result[$counter][value] = $value;
+						$result[$counter][disabled] = "";
+						$result[$counter][content] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
+						
+						$counter++;
+					}
+				}
+			}
+		}
+
+		if ($counter == 0)
+		{
+			$result[0][value] = "0";
+			$result[0][disabled] = "disabled='disabled'";
+			$result[0][content] = "NO EQUIPMENT FOUND!";	
+		}
+		
+		$template->set_var("select",$result);
+		
+		if ($_GET['parent'] and is_numeric($_GET['parent_id']))
+		{
+			$array['container'] = "#EquipmentItemAddWindow".$_GET['parent_key']."-".$_GET['parent_id']."-".$_GET['key'];
+			$container_value_select = "EquipmentItemAddValueField".$_GET['parent_key']."-".$_GET['parent_id']."-".$_GET['key'];
+		}
+		else
+		{
+			$array['container'] = "#EquipmentItemAddWindow".$_GET['key'];
+			$container_value_select = "EquipmentItemAddValueField".$_GET['key'];
+		}
+		
+		$template->set_var("container_value_select_id",$container_value_select);
+		
+		$array['continue_caption'] = "Add";
+		$array['cancel_caption'] = "Cancel";
+		$array['content_caption'] = "Add Equipment";
+		$array['height'] = 350;
+		$array['width'] = 400;
+		$array['content'] = $template->get_string();
+		
+		$continue_handler_template = new JSTemplate("equipment/js/add_item_window.js");
+		$continue_handler_template->set_var("session_id", $_GET['session_id']);
+		$continue_handler_template->set_var("get_array", $get_array);
+		$continue_handler_template->set_var("container_id", $array['container']);
+		$continue_handler_template->set_var("container_value_select_id", $container_value_select);
+
+		$array['continue_handler'] = $continue_handler_template->get_string();
+		
+		return json_encode($array);
+	}
+	
+	/**
+	 * @param array $get_array
+	 * @param integer $type_id
+	 */
+	public static function add_as_item($get_array, $type_id)
+	{
+		global $user, $transaction;
+		
+		if ($get_array and is_numeric($type_id))
+		{
+			$transaction_id = $transaction->begin();
+			
+			$equipment = new Equipment(null);
+			$equipment_add_successful = $equipment->create($type_id, $user->get_user_id());
+	
+			if ($equipment_add_successful)
+			{
+				$item_id = $equipment->get_item_id();
+				
+				$item_add_event = new ItemAddEvent($item_id, unserialize($get_array), null);
+				$event_handler = new EventHandler($item_add_event);
+				if ($event_handler->get_success() == true)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->commit($transaction_id);
+					}
+					return "1";
+				}
+				else
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					throw new EquipmentCreateException();
+				}
+			}
+			else
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				throw new EquipmentCreateException();
+			}
+		}
+		else
+		{
+			throw new EquipmentIDMissingException();
 		}
 	}
 }

@@ -347,6 +347,7 @@ class ProjectRequest
 		switch($_GET[run]):
 		
 			case ("new"):
+			case ("new_subproject"):
 				require_once("io/project.io.php");
 				ProjectIO::create();
 			break;
@@ -367,11 +368,6 @@ class ProjectRequest
 			case("organ_unit"):
 				require_once("io/project.io.php");
 				ProjectIO::list_organisation_unit_related_projects();
-			break;
-
-			case ("new_subproject"):
-				require_once("io/project.io.php");
-				ProjectIO::create();
 			break;
 			
 			case ("detail"):
@@ -549,11 +545,19 @@ class ProjectRequest
 			
 			// Item Add
 			case("item_add"):
+			case("item_edit"):
 				if ($project_security->is_access(3, false) == true)
 				{
 					if ($_GET[dialog])
 					{
-						$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_add", $_GET[dialog]);
+						if ($_GET['run'] == "item_add")
+						{
+							$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_add", $_GET[dialog]);
+						}
+						elseif ($_GET['run'] == "item_edit")
+						{
+							$module_dialog = ModuleDialog::get_by_type_and_internal_name("item_edit", $_GET[dialog]);
+						}
 
 						if (is_array($module_dialog) and $module_dialog[class_path])
 						{
@@ -578,70 +582,15 @@ class ProjectRequest
 									}
 									else
 									{
-										$transaction_id = $transaction->begin();
-										
 										$current_status_requirements = $project->get_current_status_requirements($project->get_current_status_id());
-																					
-										$folder_id = ProjectStatusFolder::get_folder_by_project_id_and_project_status_id($_GET[project_id],$project->get_current_status_id());
 										
-										$sub_folder_id = $project->get_sub_folder($_GET[key], $project->get_current_status_id());
-										
-										if (is_numeric($sub_folder_id))
+										if ($_GET['run'] == "item_add")
 										{
-											$folder_id = $sub_folder_id;
+											$module_dialog['class']::$module_dialog['method']($current_status_requirements[$_GET['key']]['type_id'], $current_status_requirements[$_GET['key']]['category_id'], "Project", $_GET['project_id'], $_GET[key]);
 										}
-										
-										$return_value = $module_dialog['class']::$module_dialog[method]($current_status_requirements[$_GET[key]][type_id], $current_status_requirements[$_GET[key]][category_id], $project->get_organisation_unit_id(), $folder_id);
-										
-										if (is_numeric($return_value))
+										elseif ($_GET['run'] == "item_edit")
 										{
-											if ($_GET[retrace])
-											{
-												$params = http_build_query(Retrace::resovle_retrace_string($_GET[retrace]),'','&#38;');
-											}
-											else
-											{
-												$paramquery[username] = $_GET[username];
-												$paramquery[session_id] = $_GET[session_id];
-												$paramquery[nav] = "home";
-												$params = http_build_query($paramquery,'','&#38;');
-											}
-											
-											
-											if (ProjectItemFactory::create($_GET[project_id], $return_value, $_GET[key], $_POST[keywords], $_POST[description]) == true)
-											{
-												if ($transaction_id != null)
-												{
-													$transaction->commit($transaction_id);
-												}
-												Common_IO::step_proceed($params, "Add Item", "Successful." ,null);
-											}
-											else
-											{
-												if ($transaction_id != null)
-												{
-													$transaction->rollback($transaction_id);
-												}
-												Common_IO::step_proceed($params, "Add Item", "Failed." ,null);	
-											}
-										}
-										else
-										{
-											if ($return_value === false)
-											{
-												if ($transaction_id != null)
-												{
-													$transaction->rollback($transaction_id);
-												}
-												throw new ModuleDialogFailedException("",1);
-											}
-											else
-											{
-												if ($transaction_id != null)
-												{
-													$transaction->commit($transaction_id);
-												}
-											}
+											$module_dialog['class']::$module_dialog['method']($current_status_requirements[$_GET['key']]['fulfilled'][0]['item_id']);
 										}
 									}
 								}
@@ -663,6 +612,46 @@ class ProjectRequest
 					else
 					{
 						throw new ModuleDialogMissingException(null, null);
+					}
+				}
+				else
+				{
+					throw new ProjectSecurityAccessDeniedException();
+				}
+			break;
+			
+			// Sub Item Add and Edit
+			/**
+			 * @todo exception
+			 */
+			case("sub_item_add"):
+			case("sub_item_edit"):
+				if ($project_security->is_access(3, false) == true)
+				{
+					if ($_GET['parent'] and is_numeric($_GET['parent_id']) and is_numeric($_GET['key']))
+					{
+						$item_handling_class = Item::get_handling_class_by_type($_GET['parent']);
+												
+						if (class_exists($item_handling_class))
+						{
+							$item_io_handling_class = $item_handling_class::get_item_add_io_handling_class();
+							require_once("core/modules/".$item_io_handling_class[0]);
+							if (class_exists($item_io_handling_class[1]))
+							{
+								if ($_GET['run'] == "sub_item_add")
+								{
+									$item_io_handling_class[1]::item_add_edit_handler("add");
+								}
+								elseif($_GET['run'] == "sub_item_edit")
+								{
+									$item_io_handling_class[1]::item_add_edit_handler("edit");
+								}
+							}
+						}	
+					}
+					else
+					{
+						// Exception
 					}
 				}
 				else
@@ -736,6 +725,101 @@ class ProjectRequest
 					// error
 				}
 			break;
+			
+			
+			// Extension
+			/**
+			 * @todo type filter
+			 */
+			case("extension"):
+				if ($_GET['extension'])
+				{
+					$extension_id = Extension::get_id_by_identifer($_GET['extension']);
+					if ($extension_id)
+					{
+						$extension = new Extension($extension_id);
+						
+						
+						$main_file = constant("EXTENSION_DIR")."/".$extension->get_folder()."/".$extension->get_main_file();
+						$main_class = $extension->get_class();
+						
+						require_once($main_file);
+						
+						$project = new Project($_GET['project_id']);
+						$project_item = new ProjectItem($_GET['project_id']);
+						$project_status_requirements = $project->get_current_status_requirements();
+						
+						if (is_array($project_status_requirements) and count($project_status_requirements) >= 1)
+						{
+							foreach($project_status_requirements as $key => $value)
+							{
+								if($value['element_type'] == "extension" and $value['extension'] == $_GET['extension'])
+								{
+									if (is_array($value['filter']) and count($value['filter']) >= 1)
+									{
+										$filter_array = $value['filter'];
+									}
+									else
+									{
+										$filter_array = null;
+									}
+									break;
+								}
+							}
+						}
+						else
+						{
+							// Exception
+						}
+					
+						
+						if ($filter_array)
+						{
+							$item_array = array();
+							
+							foreach($filter_array as $key => $value)
+							{
+								if (is_numeric($value['status']))
+								{
+									$item_array = array_merge($item_array, $project_item->get_project_status_items($value['status'], true));
+								}
+							}
+						}
+						else
+						{
+							$item_array = $project_item->get_project_items(true);
+						}					
+						
+						$event_identifer = uniqid("", true);
+						
+						if ($session->is_value("PROJECT_EXTENSION_EVENT_IDENTIFER_ARRAY"))
+						{
+							$project_extension_event_identifer_array = $session->read_value("PROJECT_EXTENSION_EVENT_IDENTIFER_ARRAY");
+							$project_extension_event_identifer_array[$event_identifer] = $_GET['project_id'];
+						}
+						else
+						{
+							$project_extension_event_identifer_array = array();
+							$project_extension_event_identifer_array[$event_identifer] = $_GET['project_id'];
+						}
+						
+						$session->write_value("PROJECT_EXTENSION_EVENT_IDENTIFER_ARRAY", $project_extension_event_identifer_array);
+						$main_class::set_event_identifer($event_identifer);
+						
+						$main_class::set_target_folder_id(ProjectStatusFolder::get_folder_by_project_id_and_project_status_id($_GET['project_id'], $project->get_current_status_id()));
+						$main_class::push_data($item_array);
+					}
+					else
+					{
+						// Exception
+					}
+				}
+				else
+				{
+					// Exception
+				}
+			break;
+			
 			
 			// Default
 			

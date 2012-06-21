@@ -50,13 +50,6 @@ $mail[0]['smtp']['port'] 						= "";
 $mail[0]['smtp']['username'] 					= "";
 $mail[0]['smtp']['password'] 					= "";
 
-// Secondary SMTP
-// $mail[1]['smtp']['server'] 					= "";
-// $mail[1]['smtp']['port'] 					= "";
-///$mail[1]['smtp']['username'] 				= "";
-// $mail[1]['smtp']['password'] 				= "";
-
-
 $ldap['enable']									= false;
 
 

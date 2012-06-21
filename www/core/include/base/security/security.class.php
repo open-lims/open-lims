@@ -123,12 +123,16 @@ class Security implements SecurityInterface
 			case("run"):
 			case("dialog"):
 			case("retrace"):
+			case("extension"):
 				
 			case("action"):
 			case("aspect"):
 			case("id"):
 			case("runid"):
 			case("key"):
+			case("parent_key"):	
+			case("parent_id"):
+			case("parent"):
 			case("version"):
 			case("sortmethod"):
 			case("sortvalue"):

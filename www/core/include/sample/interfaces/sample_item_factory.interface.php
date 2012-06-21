@@ -37,6 +37,6 @@ interface SampleItemFactoryInterface
 	 * @param bool $parent
 	 * @return bool
 	 */
-	public static function create($sample_id, $item_id, $gid, $keywords, $description, $parent = false);
+	public static function create($sample_id, $item_id, $gid, $keywords = null, $description = null, $parent_item_id = null, $parent = false);
 }
 ?>

@@ -407,5 +407,15 @@ class Project_Wrapper implements Project_WrapperInterface
 		}
 	}
 	
+	/**
+	 * @see Project_WrapperInterface::delete_data_entity_sub_item_links
+   	 * @param integer $parent_item_id
+   	 * @param integer $project_id
+   	 * @return bool
+   	 */
+	public static function delete_data_entity_sub_item_links($parent_item_id, $project_id = null)
+	{
+		return Project_Wrapper_Access::delete_data_entity_sub_item_links($parent_item_id, $project_id);
+	}
 }
 ?>

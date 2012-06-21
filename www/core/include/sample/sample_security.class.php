@@ -67,7 +67,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
    	 * @param bool $ignore_admin_status
    	 * @return bool
    	 */
-    public function is_access($intention, $ignore_admin_status)
+    public function is_access($intention, $ignore_admin_status = false)
     {
     	global $user;
     	
@@ -603,7 +603,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
 		    					{
 									$transaction->rollback($transaction_id);
 								}
-					    		return null;
+					    		return false;
 		    				}
 		    			}
 					}

@@ -135,6 +135,7 @@ class ValueAjax
 				{ //second call (from additional script; loads template)
 					require_once("core/modules/data/io/value_form.io.php");
 					$value_form_io = new ValueFormIO(null, $_POST['type_id'], $_POST['folder_id']);
+					$value_form_io->set_field_class("DataValueAddValues");
 					return $value_form_io->get_content();
 				}
 				if(isset($_POST['value_array']))
@@ -219,19 +220,258 @@ class ValueAjax
 		return json_encode($array);
 	}
 	
+	/**
+	 * @todo exceptions
+	 */
 	private static function add_value($folder_id, $type_id, $value_array)
 	{
+		global $user;
+		
 		$parent_folder = Folder::get_instance($folder_id);
 		if ($parent_folder->is_write_access())
 		{
-			$values = json_decode($value_array, true);
-			require_once("core/modules/data/io/value.io.php");
-			$new_value = ValueIO::add_value_item_window($type_id, $folder_id, $values);
-			return $new_value;
+			$value_array = json_decode($value_array, true);
+			$value = Value::get_instance(null);
+			if ($value->create($folder_id, $user->get_user_id(), $type_id, $value_array) != Null)
+			{
+				return 1;
+			}
+			else
+			{
+				throw new BaseException();
+			}
 		}
 		else
 		{
 			throw new DataSecurityAccessDeniedException();
+		}
+	}
+	
+	/**
+	 * @todo exceptions
+	 */
+	public static function add_as_item($folder_id, $type_id, $value_array, $get_array)
+	{
+		global $user, $transaction;
+		
+		$parent_folder = Folder::get_instance($folder_id);
+		
+		if ($parent_folder->is_write_access())
+		{
+			$transaction_id = $transaction->begin();
+			
+			$value_array = json_decode($value_array, true);
+
+			$value = Value::get_instance(null);
+			$value_add_successful = $value->create($folder_id, $user->get_user_id(), $type_id, $value_array);
+			
+			if ($value_add_successful)
+			{
+				$item_id = $value->get_item_id();
+				
+				$item_add_event = new ItemAddEvent($item_id, unserialize($get_array), null);
+				$event_handler = new EventHandler($item_add_event);
+				if ($event_handler->get_success() == true)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->commit($transaction_id);
+					}
+					return 1;
+				}
+				else
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					throw new BaseException();
+				}
+			}
+			else
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				throw new BaseException();
+			}
+		}
+		else
+		{
+			throw new DataSecurityAccessDeniedException();
+		}
+	}
+	
+	/**
+	 * @todo remove JS in template
+	 * @param integer $gid
+	 * @param array $link
+	 * @param array $type_array
+	 * @param array $category_array
+	 * @param string $holder_class
+	 * @param integer $holder_id
+	 * @return array
+	 */
+	public static function add_as_item_window_init($gid, $link, $type_array, $category_array, $holder_class, $holder_id)
+	{
+		if ($link['parent'] and is_numeric($link['parent_id']))
+		{
+			$array['window_id'] = "ValueItemAddWindow".$link['parent_key']."-".$link['parent_id']."-".$gid;
+			$array['click_id'] = "ValueItemAddButton".$link['parent_key']."-".$link['parent_id']."-".$gid;
+		}
+		else
+		{
+			$array['window_id'] = "ValueItemAddWindow".$gid;
+			$array['click_id'] = "ValueItemAddButton".$gid;
+		}
+						
+		if ($type_array)
+		{
+			$type_array_serialized = serialize($type_array);
+		}
+		
+		if (class_exists($holder_class))
+		{
+			$item_holder = new $holder_class($holder_id);
+			
+			if ($item_holder instanceof ItemHolderInterface)
+			{
+				$folder_id = $item_holder->get_item_holder_value("folder_id", $gid);
+			}
+		}
+		
+		$array['window_title'] = "Add Values";
+		
+		$script_template = new JSTemplate("data/js/value_add_item_window_preclick.js");
+		$script_template->set_var("window_id", $array['window_id']);
+		$script_template->set_var("session_id", $_GET['session_id']);
+		$script_template->set_var("type_array", $type_array_serialized);
+		$script_template->set_var("folder_id", $folder_id);
+		$script_template->set_var("get_array", serialize($link));
+		$script_template->set_var("click_id", $array['click_id']);
+		
+		$array['script'] = $script_template->get_string();
+		
+		return $array;
+	}
+	
+	/**
+	 * @todo exceptions
+	 * @param string $get_array
+	 * @param string $type_array
+	 * @return string
+	 */
+	public static function add_as_item_window($get_array, $type_array, $folder_id)
+	{
+		if ($get_array)
+		{
+			$_GET = unserialize($get_array);	
+		}
+		
+		if ($type_array)
+		{
+			$type_array = unserialize($type_array);	
+		}
+
+		if (is_array($type_array) and count($type_array) == 1)
+		{
+			if (is_numeric($folder_id))
+			{
+				$type_id = $type_array[0];
+				
+				$template = new HTMLTemplate("data/value_add_item_window.html");
+				
+				if ($_GET['parent'] and is_numeric($_GET['parent_id']))
+				{
+					$array['container'] = "#ValueItemAddWindow".$_GET['parent_key']."-".$_GET['parent_id']."-".$_GET['key'];
+				}
+				else
+				{
+					$array['container'] = "#ValueItemAddWindow".$_GET['key'];
+				}
+
+				require_once("core/modules/data/io/value_form.io.php");
+				$value_form_io = new ValueFormIO(null, $type_id, $folder_id);
+				$value_form_io->set_field_class("DataValueAddValues");
+				
+				$template->set_var("value",$value_form_io->get_content());
+				
+				$array['continue_caption'] = "Add";
+				$array['cancel_caption'] = "Cancel";
+				$array['content_caption'] = "Add Values";
+				$array['height'] = 350;
+				$array['width'] = 400;
+				$array['content'] = $template->get_string();
+				
+				$continue_handler_template = new JSTemplate("data/js/value_add_item_window.js");
+				$continue_handler_template->set_var("session_id", $_GET['session_id']);
+				$continue_handler_template->set_var("type_id", $type_id);
+				$continue_handler_template->set_var("folder_id", $folder_id);
+				$continue_handler_template->set_var("get_array", $get_array);
+				$continue_handler_template->set_var("container_id", $array['container']);
+	
+				$array['continue_handler'] = $continue_handler_template->get_string();
+				
+				$script_template = new JSTemplate("data/js/value_add_item_window_onclick.js");				
+				$array['open_handler'] = $script_template->get_string();
+				
+				return json_encode($array);
+			}
+			else
+			{
+				throw new FolderIDMissingException();
+			}
+		}
+		else
+		{
+			// Change
+			throw new DataException();
+		}
+	}
+	
+	/**
+	 * @todo exceptions
+	 */
+	public static function update($value_id, $previous_version_id, $value_array, $major)
+	{
+		if (is_numeric($value_id))
+		{
+			$value = Value::get_instance($value_id);
+			
+			if ($value->is_write_access())
+			{
+				$value_array = json_decode($value_array, true);
+				
+				if (is_array($value_array))
+				{
+					if (!is_numeric($previous_version_id))
+					{
+						$previous_version_id = null;
+					}
+					
+					if ($value->update($value_array, $previous_version_id, $major, true, false))
+					{			
+						return "1";	
+					}
+					else
+					{
+						throw new BaseException();	
+					}
+				}
+				else
+				{
+					throw new BaseException();	
+				}
+			}
+			else
+			{
+				throw new BaseUserAccessDeniedException();	
+			}
+		}
+		else
+		{
+			throw new ValueIDMissingException();
 		}
 	}
 	

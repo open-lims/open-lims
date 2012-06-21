@@ -11,20 +11,13 @@
 	<REQUIRED>
 		<ITEM type="value">
           <TYPE id="10000"></TYPE>
-    </ITEM>
+   		 </ITEM>
 	</REQUIRED>
 	<BODY>
-		<STATUS id="1">
-			<ITEM type="sample" occurrence="multiple">
+		<STATUS id="10001">
+			<ITEM type="sample" occurrence="multiple" inherit="all">
             	<TYPE id="10000"></TYPE>
      		</ITEM>
-		</STATUS>
-		<STATUS id="10001">
-			<ITEM type="value">
-          		  <TYPE id="10001"></TYPE>
-      		</ITEM>   
-			<ITEM type="file" occurrence="multiple" requirement="optional" name="Add BioAnalyzer File"></ITEM>    
-			<ITEM type="equipment" occurrence="multiple"></ITEM>       
 		</STATUS>
 		<STATUS id="10002">
   			<ITEM type="sample" occurrence="multiple">
@@ -35,26 +28,35 @@
 			<ITEM type="value">
          		<TYPE id="10003"></TYPE>
       		</ITEM>
-			<ITEM type="equipment" occurrence="multiple"></ITEM>
+			<ITEM type="equipment" occurrence="multiple" name="Add Used Hardware">
+				<CATEGORY id="1000" />
+			</ITEM>
 		</STATUS>
 		<STATUS id="10004">
-			<ITEM type="equipment" occurrence="multiple"></ITEM>
+			<ITEM type="equipment" occurrence="multiple" name="Add Hybridisation Hardware">
+				<CATEGORY id="1000" />
+			</ITEM>
 		</STATUS>
 		<STATUS id="10005">
-			<ITEM type="equipment" occurrence="multiple"></ITEM>
+			<ITEM type="equipment" occurrence="multiple" name="Add Washing Hardware">
+				<CATEGORY id="1000" />
+			</ITEM>
 		</STATUS>
 		<STATUS id="10006">
-		  	<ITEM type="file"></ITEM>
-			<ITEM type="equipment" occurrence="multiple"></ITEM>
+		  	<ITEMI parent_status="10002" parent_pos_id="0" pos_id="0"></ITEMI>
+			<ITEMI parent_status="10002" parent_pos_id="0" pos_id="2" takeover="true"></ITEMI>
 		</STATUS>
 		<STATUS id="10007">
-			<ITEM type="equipment" occurrence="multiple"></ITEM>
+			<ITEMI parent_status="10002" parent_pos_id="0" pos_id="3" takeover="true"></ITEMI>
 		</STATUS>
 		<STATUS id="10008">
-			<ITEM type="file" occurrence="multiple"></ITEM>
+			<ITEMI parent_status="10002" parent_pos_id="0" pos_id="1"></ITEMI>
 		</STATUS>
 		<STATUS id="10009">
-			<EXTENSION internal_name="marray_analysis" />
+			<EXTENSION identifer="MICROARRAY_ANALYSIS" occurrence="multiple">
+				<FILTER status="10002" type="sample" />
+				<FILTER status="10008" type="file" />
+			</EXTENSION>
 			<ITEM type="file" occurrence="multiple" name="Add SAM Result"></ITEM>
 		</STATUS>
 	</BODY>

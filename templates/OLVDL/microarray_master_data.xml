@@ -8,10 +8,6 @@
 	<BODY>
 		<FORMAT>
 			<LINE>
-				<PRINT value="Organism"></PRINT>
-				<FIELD name="organism" type="dropdown" var="external.biological.organism.list"></FIELD>
-			</LINE>
-			<LINE>
 				<PRINT value="Name of Strain 1:"></PRINT>
 				<FIELD name="strain1" vartype="string"></FIELD>
 			</LINE>

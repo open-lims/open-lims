@@ -25,7 +25,7 @@
  * Organisation Unit Delete Event
  * @package organisation_unit
  */
-class OrganisationUnitDeleteEvent extends Event
+class OrganisationUnitDeleteEvent extends DeleteEvent
 {    
 	private $organisation_unit_id;
 	private $stores_data;

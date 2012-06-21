@@ -59,6 +59,11 @@ interface SampleItemInterface
 	public function get_sample_items();
 	
 	/**
+     * @return array
+     */
+    public function get_sample_items_with_pos_id();
+	
+	/**
      * @param integer $item_id
      * @return bool
      */
@@ -69,6 +74,12 @@ interface SampleItemInterface
      * @return bool
      */
 	public function set_gid($gid);
+	
+	/**
+     * @param integer $parent_item_id
+     * @return bool
+     */
+	public function set_parent_item_id($parent_item_id);
 	
 	/**
      * Adds the Item to a class
@@ -125,7 +136,7 @@ interface SampleItemInterface
      * @param integer $item_id
      * @return array
      */
-    public static function list_entries_by_item_id($item_id);
+    public static function list_entries_by_item_id($item_id, $sub_items);
     
     /**
      * @param integer $item_id
@@ -140,6 +151,13 @@ interface SampleItemInterface
 	 * @return array
 	 */
 	public static function list_sample_id_by_item_id_and_gid_and_parent($item_id, $gid);
+	
+	/**
+	 * Deletes parent-sample sub-items
+	 * @param integer $sample_id
+	 * @return bool
+	 */
+	public static function delete_remaining_sample_entries($sample_id);
 }
 
 ?>

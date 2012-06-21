@@ -107,6 +107,11 @@ interface ValueInterface
 	/**
 	 * @return integer
 	 */
+	public function get_id();
+	
+	/**
+	 * @return integer
+	 */
 	public function get_value_internal_revisions();
 	
 	/**
@@ -149,6 +154,11 @@ interface ValueInterface
 	 */
 	public function get_version_owner_id();
 
+	/**
+	 * @return integer
+	 */
+	public function get_version_datetime();
+	
 	/**
      * @param bool $history
      * @return array

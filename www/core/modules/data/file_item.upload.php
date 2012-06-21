@@ -48,8 +48,11 @@
 	require_once("../../include/base/system/transaction.class.php");
 	
 	require_once("../../include/base/system/events/event.class.php");
+	require_once("../../include/base/system/events/delete_event.class.php");
 	require_once("../../include/base/system/system_handler.class.php");
 
+	require_once("../../include/base/system/runtime_data.class.php");
+	
 	require_once("../../include/base/security/security.class.php");
 	require_once("../../include/base/security/session.class.php");
 	
@@ -65,8 +68,10 @@
 
 	if ($_GET[session_id] and $_FILES)
 	{
-		global $db, $user, $session, $transaction;
-			
+		global $db, $user, $session, $transaction, $runtime_data;
+
+		$runtime_data = new RuntimeData();
+		
 		$session = new Session($_GET[session_id]);
 		$user = new User($session->get_user_id());
 		$transaction = new Transaction();
@@ -92,7 +97,7 @@
 			{
 				// Create Item
 				$item_id_array = $file->get_item_id_array();
-				
+								
 				if(is_array($item_id_array) and count($item_id_array) >= 1)
 				{
 					foreach($item_id_array as $key => $value)
@@ -101,6 +106,7 @@
 						$event_handler = new EventHandler($item_add_event);
 					}
 				}
+								
 				$session->write_value("FILE_UPLOAD_FINISHED_".$_GET[unique_id], true, true);
 			}
 			else

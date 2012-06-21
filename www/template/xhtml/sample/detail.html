@@ -3,7 +3,7 @@
 <script>
 $(document).ready(function()
 {
-	function reload_menu()
+	reload_menu = function()
 	{
 		$.ajax(
 		{
@@ -44,6 +44,7 @@ $(document).ready(function()
 			type: "POST",
 			url: "ajax.php?session_id="+get_array['session_id']+"&nav=sample&run=get_sample_information",
 			data: 'get_array=[[GET_ARRAY]]',
+			async: false,
 			success: function(data)
 			{		
 				if (data)

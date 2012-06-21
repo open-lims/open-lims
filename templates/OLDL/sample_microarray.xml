@@ -4,7 +4,7 @@
 	<HEAD>
 		<ID>11000</ID>
 	 	<TITLE>MicroArray</TITLE>
-		<DESC>Organisational Microarray Template</DESC>
+		<DESC>Microarray Template</DESC>
 		<VERSION>draft</VERSION>
 		<AUTHOR></AUTHOR>
 	</HEAD>
@@ -13,5 +13,13 @@
       	<ITEM type="parentsample"></ITEM>
   	</REQUIRED>
 	<BODY>
+		<ITEM type="file" occurrence="multiple" name="Add TIF-Files"></ITEM>
+		<ITEM type="file" occurrence="multiple" name="Add Curated Files"></ITEM>
+		<ITEM type="equipment" occurrence="multiple" name="Add Used Scanning-HW">
+			<CATEGORY id="1000" />
+		</ITEM>
+		<ITEM type="equipment" occurrence="multiple" name="Add Used Scanning-SW">
+			<CATEGORY id="1001" />
+		</ITEM>
 	</BODY>
 </OLDL>

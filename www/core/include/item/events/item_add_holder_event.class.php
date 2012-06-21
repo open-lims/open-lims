@@ -23,6 +23,7 @@
 
 /**
  * Item Add Event
+ * Called, if an Item Holder clones itself, to duplicate the referenced partents
  * @package item
  */
 class ItemAddHolderEvent extends Event

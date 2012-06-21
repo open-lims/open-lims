@@ -1,8 +1,59 @@
+<script>
+$(document).ready(function()
+{
+	$("#AssistantNext").click(function()
+	{
+		var sample_id =  $("#SampleAssociateSampleID").val();
+		
+		if (sample_id != undefined)	
+		{
+			$.ajax(
+			{
+				type: "POST",
+				url: "ajax.php?username=[[USERNAME]]&session_id=[[SESSION_ID]]&nav=sample&run=associate",
+				data: 'get_array=[[GET_ARRAY]]&sample_id='+sample_id,
+				beforeSend: function()
+				{
+					$.blockUI({ message: $('#AssistantFinish') , css: { width: '275px' }} ); 
+					$('.blockUI.blockMsg').center();
+				},
+				success: function(data)
+				{
+					if ((data != '0') && ((data + '').indexOf("index.php?",0) == 0))
+					{
+						window.setTimeout('window.location = "'+data+'"',500);
+					}
+					else
+					{						
+						if ((data + '').indexOf("EXCEPTION",0) == 0)
+						{
+							var exception_message = data.replace("EXCEPTION: ","");
+							$.unblockUI();
+							ErrorDialog("Error", exception_message);
+							return false;
+						}
+						else
+						{
+							$.unblockUI();
+							ErrorDialog("Error", "An error occured");
+							return false;
+						}
+					}
+				}
+			});
+		}
+	});
+});
+</script>
+
 <br />
 
 <!-- CONTAINER BEGIN ("Associate Sample") -->
 
-<form action='index.php?[[PARAMS]]' method='post'>
+<div id="AssistantFinish" class="BaseBlockUIProceed" style="display:none; cursor: default"> 
+<img src='images/animations/loading_circle_small.gif' alt=''> Please wait while sample association.
+</div> 
+
 <br />
 	<table class='formTable'>
 	<tr>
@@ -11,7 +62,7 @@
 		<tr>
 			<td width='30%'>Sample:</td>
 			<td>
-				<select name='sample'>
+				<select id='SampleAssociateSampleID'>
 				
 				<!-- FOREACH BEGIN ([[SAMPLE]]) -->
 				
@@ -26,14 +77,12 @@
 	
 	<tr>
 		<td colspan='2'><br />
-			<div class='button_right'><input type='submit' value='next' name='submitbutton' class='next_button' /></div>
+			<div class='button_right'><button id='AssistantNext' class='AssistantButton'>next</button></div>
 		</td>
 	</tr>
 </table>
 <input type='hidden' name='template_data_type' value='sample' />
 <input type='hidden' value='[[DESCRIPTION]]' name='description' />
 <input type='hidden' value='[[KEYWORDS]]' name='keywords' />
-</form>
-
 
 <!-- CONTAINER END () -->

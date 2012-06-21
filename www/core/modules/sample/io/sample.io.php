@@ -212,8 +212,8 @@ class SampleIO
 	 * @param array $category_array
 	 * @param integer $organisation_id
 	 */
-	public static function create($type_array, $category_array, $organisation_unit_id)
-	{
+	public static function create($type_array = null, $category_array = null, $organisation_unit_id = null, $holder_class = null, $holder_id = null)
+	{		
 		global $session;
 				
 		if($_GET[run] == "item_add")
@@ -243,6 +243,8 @@ class SampleIO
 			else
 			{
 				$session->write_value("SAMPLE_ADD_ROLE", "item", true);
+				$session->write_value("SAMPLE_ADD_ITEM_HOLDER_CLASS", $holder_class, true);
+				$session->write_value("SAMPLE_ADD_ITEM_HOLDER_ID", $holder_id, true);
 			}
 			
 			$session->write_value("SAMPLE_ITEM_RETRACE", $_GET['retrace']);
@@ -265,7 +267,7 @@ class SampleIO
 		
 		require_once("core/modules/base/common/io/assistant.io.php");
 		
-		$assistant_io = new AssistantIO("ajax.php?nav=sample&run=create_sample", "SampleCreateAssistantField", false);
+		$assistant_io = new AssistantIO("ajax.php?nav=sample&run=create_sample", "SampleCreateAssistantField");
 		
 		$assistant_io->add_screen("Organisation Unit");
 		$assistant_io->add_screen("Sample Type");
@@ -282,7 +284,7 @@ class SampleIO
 	 * @param array $type_array
 	 * @param array $category_array
 	 */
-	public static function clone_sample($type_array, $category_array)
+	public static function clone_sample($type_array = null, $category_array = null)
 	{
 		global $session;
 		
@@ -345,7 +347,7 @@ class SampleIO
 		
 		require_once("core/modules/base/common/io/assistant.io.php");
 		
-		$assistant_io = new AssistantIO("ajax.php?nav=sample&run=clone_sample", "SampleCloneAssistantField", false);
+		$assistant_io = new AssistantIO("ajax.php?nav=sample&run=clone_sample", "SampleCloneAssistantField");
 		
 		$assistant_io->add_screen("Source Sample");
 		$assistant_io->add_screen("Sample Information");
@@ -364,9 +366,19 @@ class SampleIO
 	 * @param integer $organisation_unit_id
 	 * @return integer
 	 */
-	public static function add_sample_item($type_array, $category_array, $organisation_unit_id, $folder_id)
+	public static function add_sample_item($type_array, $category_array, $holder_class, $holder_id, $position_id)
 	{
 		global $session;
+				
+		if (class_exists($holder_class))
+		{
+			$item_holder = new $holder_class($holder_id);
+			
+			if ($item_holder instanceof ItemHolderInterface)
+			{
+				$organisation_unit_id = $item_holder->get_item_holder_value("organisation_unit_id", $position_id);
+			}
+		}
 		
 		if (!$_GET[selectpage])
 		{
@@ -403,7 +415,7 @@ class SampleIO
 		{			
 			if ($_GET[selectpage] == 1)
 			{
-				return self::create($type_array, $category_array, $organisation_unit_id);
+				return self::create($type_array, $category_array, $organisation_unit_id, $holder_class, $holder_id);
 			}
 			elseif ($_GET[selectpage] == 2)
 			{
@@ -424,82 +436,53 @@ class SampleIO
 	{
 		global $user, $session;
 					
-		if ($_GET[nextpage] < 2)
-		{
-			$template = new HTMLTemplate("sample/associate.html");
-			
-			$paramquery = $_GET;
-			$paramquery[nextpage] = 2;
-			unset($paramquery[idk_unique_id]);
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("params", $params);
-								
-			$result = array();
-			$sample_array = Sample::list_user_related_samples($user->get_user_id());
-			
-			if (!is_array($type_array) or count($type_array) == 0)
-			{
-				$type_array = null;
-			}
+		$template = new HTMLTemplate("sample/associate.html");
 
-			if (is_array($sample_array) and count($sample_array) >= 1)
+		$template->set_var("username", $_GET['username']);
+		$template->set_var("session_id", $_GET['session_id']);
+		$template->set_var("get_array", serialize($_GET));
+		
+		$result = array();
+		$sample_array = Sample::list_user_related_samples($user->get_user_id());
+		
+		if (!is_array($type_array) or count($type_array) == 0)
+		{
+			$type_array = null;
+		}
+
+		if (is_array($sample_array) and count($sample_array) >= 1)
+		{
+			$counter = 0;
+			
+			foreach($sample_array as $key => $value)
 			{
-				$counter = 0;
+				$sample = new Sample($value);
 				
-				foreach($sample_array as $key => $value)
+				if ($type_array == null or in_array($sample->get_template_id(), $type_array))
 				{
-					$sample = new Sample($value);
-					
-					if ($type_array == null or in_array($sample->get_template_id(), $type_array))
+					$result[$counter][value] = $value;
+					$result[$counter][content] = $sample->get_name();
+					if ($_POST[sample] == $value)
 					{
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $sample->get_name();
-						if ($_POST[sample] == $value)
-						{
-							$result[$counter][selected] = "selected";
-						}
-						else
-						{
-							$result[$counter][selected] = "";
-						}
-						$counter++;
+						$result[$counter][selected] = "selected";
 					}
+					else
+					{
+						$result[$counter][selected] = "";
+					}
+					$counter++;
 				}
 			}
-			else
-			{
-				$result[0][value] = 0;
-				$result[0][content] = "You have no samples";
-				$result[0][selected] = "";
-			}
-			$template->set_var("sample", $result);
-			
-			if ($session->is_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]) == true)
-			{
-				$template->set_var("keywords", $session->read_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]));
-			}
-			else
-			{
-				$template->set_var("keywords", "");
-			}
-			
-			if ($session->is_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]) == true)
-			{
-				$template->set_var("description", $session->read_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]));
-			}
-			else
-			{
-				$template->set_var("description", "");
-			}
-			
-			$template->output();
 		}
 		else
 		{
-			$sample = new Sample($_POST[sample]);
-			return  $sample->get_item_id();
+			$result[0][value] = 0;
+			$result[0][content] = "You have no samples";
+			$result[0][selected] = "";
 		}
+		$template->set_var("sample", $result);
+		
+		$template->output();
 	}
 
 	/**

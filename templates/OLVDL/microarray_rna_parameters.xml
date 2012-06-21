@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE OLVDL PUBLIC "-//OLVDL 0.4//EN" "http://doctype.open-lims.org/olvdl.dtd" >
+<OLVDL>
+	<HEAD>
+		<ID>10001</ID>
+		<TITLE>RNA Parameters</TITLE>	
+	</HEAD>
+	<BODY>
+		<FORMAT>
+			<LINE>
+				<PRINT value="RNA-Purification:"></PRINT>
+			<FIELD name="method" default="RNeasy Kit" requirement="required"></FIELD>				
+			</LINE>
+			<LINE>               
+				<PRINT value="&nbsp;"></PRINT>
+			</LINE> 
+			<LINE>
+				<PRINT value="RNA-Concentration:" format="bold"></PRINT>
+			</LINE>				
+			<LINE>
+				<PRINT value="&#181;g/ml RNA:"></PRINT>
+				<FIELD name="rna_con" length="8" vartype="float" requirement="important"></FIELD>
+			</LINE>
+			<LINE>               
+				<PRINT value="&nbsp;"></PRINT>
+			</LINE>       
+			<LINE>
+				<PRINT value="RNA-Quality:" format="bold"></PRINT>
+			</LINE>				
+			<LINE>
+				<PRINT value="OD [high]260[/high]/[low]280[/low]:"></PRINT>
+				<FIELD name="260to280" length="8" vartype="float" requirement="important"></FIELD>
+			</LINE>
+			<LINE>
+				<PRINT value="RIN (&gt;= 7):"></PRINT>
+				<FIELD name="rin" length="8" vartype="int" min_value="1" max_value="10"></FIELD>
+			</LINE>                                 
+		</FORMAT> 
+	</BODY>           
+</OLVDL>

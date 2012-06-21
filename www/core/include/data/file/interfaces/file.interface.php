@@ -143,7 +143,7 @@ interface FileInterface
 	 * @return array
 	 */
 	public function get_item_id_array();
-	
+		
 	/**
 	 * @return string
 	 */
@@ -183,6 +183,12 @@ interface FileInterface
 	 * @return string
 	 */
 	public function get_checksum();
+	
+	/**
+	 * @return integer
+	 */
+	public function get_file_version_id();
+	
 	
 	/**
 	 * Returns true, if a file exists

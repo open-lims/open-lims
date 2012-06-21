@@ -37,6 +37,7 @@ class ProjectHasItem_Access
 	private $required;
 	private $gid;
 	private $project_status_id;
+	private $parent_item_id;
 
 	/**
 	 * @param integer $primary_key
@@ -63,6 +64,7 @@ class ProjectHasItem_Access
 				$this->item_id				= $data[item_id];
 				$this->gid					= $data[gid];
 				$this->project_status_id	= $data[project_status_id];
+				$this->parent_item_id		= $data[parent_item_id];
 				
 				if ($data[active] == 't')
 				{
@@ -270,6 +272,21 @@ class ProjectHasItem_Access
 	}
 	
 	/**
+	 * @return integer
+	 */
+	public function get_parent_item_id()
+	{
+		if ($this->parent_item_id)
+		{
+			return $this->parent_item_id;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @param integer $project_id
 	 * @return bool
 	 */
@@ -461,11 +478,41 @@ class ProjectHasItem_Access
 		}	
 	}
 	
+	/**
+	 * @param integer $parent_item_id
+	 * @return bool
+	 */
+	public function set_parent_item_id($parent_item_id)
+	{
+		global $db;
+
+		if ($this->primary_key and is_numeric($parent_item_id))
+		{
+			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET parent_item_id = '".$parent_item_id."' WHERE primary_key = '".$this->primary_key."'";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->parent_item_id = $parent_item_id;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}	
+	}
+	
 	
 	/**
 	 * @param integer $item_id
 	 * @param integer $project_id
 	 * @return integer
+	 * Returns with sub-items
 	 */
 	public static function get_entry_by_item_id_and_project_id($item_id, $project_id)
 	{
@@ -493,28 +540,35 @@ class ProjectHasItem_Access
 			return null;
 		}
 	}
-	
+			
 	/**
 	 * @param integer $item_id
-	 * @param integer $sample_id
-	 * @param integer $project_status_id
-	 * @return integer
+	 * @return array
+	 * Returns without sub-items
 	 */
-	public static function get_gid_by_item_id_and_project_id($item_id, $project_id, $project_status_id)
+	public static function list_projects_by_item_id($item_id)
 	{
 		global $db;
-			
-		if (is_numeric($item_id) and is_numeric($project_id) and is_numeric($project_status_id))
+
+		if (is_numeric($item_id))
 		{
 			$return_array = array();
 			
-			$sql = "SELECT gid FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND project_id = ".$project_id." AND project_status_id = ".$project_status_id."";
+			$sql = "SELECT project_id,project_status_id,gid FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND parent_item_id IS NULL";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
-				
-			if (is_numeric($data[gid]))
+			
+			while ($data = $db->db_fetch_assoc($res))
 			{
-				return $data[gid];
+				$tmp_array = array();
+				$tmp_array['id'] = $data[project_id];
+				$tmp_array['status_id'] = $data[project_status_id];
+				$tmp_array['pos_id'] = $data[gid];
+				array_push($return_array,$tmp_array);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
 			}
 			else
 			{
@@ -528,25 +582,66 @@ class ProjectHasItem_Access
 	}
 	
 	/**
-	 * @param integer $item_id
-	 * @param integer $status_id
-	 * @return integer
+	 * @param integer $parent_item_id
+	 * @param integer $project_id
+	 * @return array
+	 * Returns with sub-items
 	 */
-	public static function get_gid_by_item_id_and_status_id($item_id, $project_id, $status_id)
+	public static function list_entries_by_parent_item_id_and_project_id($parent_item_id, $project_id)
 	{
 		global $db;
-			
-		if (is_numeric($item_id) and is_numeric($project_id) and is_numeric($project_status_id))
+
+		if (is_numeric($parent_item_id) and is_numeric($project_id))
 		{
 			$return_array = array();
 			
-			$sql = "SELECT gid FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND status_id = ".$status_id."";
+			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE parent_item_id = ".$parent_item_id." AND project_id = ".$project_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
-				
-			if (is_numeric($data[gid]))
+			
+			while ($data = $db->db_fetch_assoc($res))
 			{
-				return $data[gid];
+				array_push($return_array,$data[primary_key]);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $parent_item_id
+	 * @return array
+	 * Returns with sub-items
+	 */
+	public static function list_entries_by_parent_item_id($parent_item_id)
+	{
+		global $db;
+
+		if (is_numeric($parent_item_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE parent_item_id = ".$parent_item_id."";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,$data[primary_key]);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
 			}
 			else
 			{
@@ -562,6 +657,7 @@ class ProjectHasItem_Access
 	/**
 	 * @param integer $item_id
 	 * @return array
+	 * Returns with sub-items
 	 */
 	public static function list_entries_by_item_id($item_id)
 	{
@@ -593,13 +689,15 @@ class ProjectHasItem_Access
 			return null;
 		}
 	}
-	
+		
 	/**
 	 * @param integer $project_id
 	 * @param integer $project_status_id
+	 * @param boolean $sub_items
 	 * @return array
+	 * Returns with or without sub-items
 	 */
-	public static function list_entries_by_project_id_and_project_status_id($project_id, $project_status_id)
+	public static function list_items_by_project_id_and_project_status_id($project_id, $project_status_id, $sub_items)
 	{
 		global $db;
 
@@ -607,7 +705,15 @@ class ProjectHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$project_id." AND project_status_id = ".$project_status_id."";
+			if ($sub_items == true)
+			{
+				$sql = "SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$project_id." AND project_status_id = ".$project_status_id."";
+			}
+			else
+			{
+				$sql = "SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$project_id." AND project_status_id = ".$project_status_id." AND parent_item_id IS NULL";
+			}
+			
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -632,22 +738,33 @@ class ProjectHasItem_Access
 	
 	/**
 	 * @param integer $project_id
+	 * @param integer $project_status_id
+	 * @param boolean $sub_items
 	 * @return array
-	 */	
-	public static function list_entries_by_project_id($project_id)
+	 * Returns with or without sub-items
+	 */
+	public static function list_items_by_project_id_and_project_status_id_with_pos_id($project_id, $project_status_id, $sub_items)
 	{
 		global $db;
 
-		if (is_numeric($project_id))
+		if (is_numeric($project_id) and is_numeric($project_status_id))
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$project_id."";
+			if ($sub_items == true)
+			{
+				$sql = "SELECT item_id, gid FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$project_id." AND project_status_id = ".$project_status_id."";
+			}
+			else
+			{
+				$sql = "SELECT item_id, gid FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$project_id." AND project_status_id = ".$project_status_id." AND parent_item_id IS NULL";
+			}
+			
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[primary_key]);
+				array_push($return_array,array("pos_id" => $data[gid], "item_id" => $data[item_id]));
 			}
 			
 			if (is_array($return_array))
@@ -666,31 +783,89 @@ class ProjectHasItem_Access
 	}
 	
 	/**
+	 * @param integer $project_id
+	 * @param bool $sub_items
 	 * @return array
+	 * Returns with or without subitems
 	 */	
-	public static function list_entries()
+	public static function list_items_by_project_id($project_id, $sub_items)
 	{
 		global $db;
 
-		$return_array = array();
-		
-		$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")."";
-		$res = $db->db_query($sql);
-		
-		while ($data = $db->db_fetch_assoc($res))
+		if (is_numeric($project_id))
 		{
-			array_push($return_array,$data[primary_key]);
-		}
-		
-		if (is_array($return_array))
-		{
-			return $return_array;
+			$return_array = array();
+			
+			if ($sub_items == true)
+			{
+				$sql = "SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$project_id."";
+			}
+			else
+			{
+				$sql = "SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$project_id." AND parent_item_id IS NULL";
+			}
+			
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,$data[item_id]);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
 		}
 		else
 		{
 			return null;
 		}
-	}
+	}	
 	
+	/**
+   	 * @param integer $project_id
+   	 * @param integer $parent_item_id
+   	 * @return bool
+   	 */
+   	public static function delete_sub_items($parent_item_id, $project_id = null)
+   	{
+   		global $db;
+		
+		if (is_numeric($parent_item_id))
+		{
+			if (is_numeric($project_id))
+			{
+				$sql = "DELETE FROM ".constant("PROJECT_HAS_ITEM_TABLE")." " .
+						" WHERE " .
+						" ".constant("PROJECT_HAS_ITEM_TABLE").".parent_item_id = ".$parent_item_id." AND ".constant("PROJECT_HAS_ITEM_TABLE").".project_id = ".$project_id."";
+			}
+			else
+			{
+				$sql = "DELETE FROM ".constant("PROJECT_HAS_ITEM_TABLE")." " .
+						" WHERE " .
+						" ".constant("PROJECT_HAS_ITEM_TABLE").".parent_item_id = ".$parent_item_id."";
+			}
+			
+			$res = $db->db_query($sql);
+			
+			if ($res !== false)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+   	}
 }
 ?>

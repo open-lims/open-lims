@@ -588,7 +588,7 @@ class SampleCloneAjax
 	
 	public static function run($username, $session_id)
 	{
-		global $session, $user;
+		global $session, $user, $transaction;
 		
 		$sample_clone_role				= $session->read_value("SAMPLE_CLONE_ROLE");
 		
@@ -609,9 +609,17 @@ class SampleCloneAjax
 		$sample_template_array			= $session->read_value("SAMPLE_CLONE_TEMPLATE_ARRAY");
 		$sample_item_array				= $session->read_value("SAMPLE_CLONE_ITEM_ARRAY");
 
+		$transaction_id = $transaction->begin();
+		
 		$sample = new Sample(null);
 		
-		$sample_id = $sample->clone_sample($sample_source_sample, $sample_name, $sample_manufacturer, $sample_location, $sample_description, null, $sample_expiry, $sample_expiry_warning, $sample_template_array, $sample_item_array);
+		if (($sample_id = $sample->clone_sample($sample_source_sample, $sample_name, $sample_manufacturer, $sample_location, $sample_description, null, $sample_expiry, $sample_expiry_warning, $sample_template_array, $sample_item_array)) == null)
+		{
+			if ($transaction_id != null)
+			{
+				$transaction->rollback($transaction_id);
+			}
+		}
 
 		$session->delete_value("SAMPLE_CLONE_ROLE");
 	
@@ -643,7 +651,7 @@ class SampleCloneAjax
 			{
 				$parent_sample = new Sample($sample_item_get_array['sample_id']);
 				$sample_item_get_array['sample_id'] = $sample_id;
-				$sample_item_get_array['parent'] = "1";
+				$sample_item_get_array['parent_sample'] = "1";
 				$event_item_id = $parent_sample->get_item_id();
 			}
 			else
@@ -655,13 +663,18 @@ class SampleCloneAjax
 			$post_array['keywords'] = $sample_item_keywords;
 			$post_array['description'] = $sample_item_description;
 			
-			$item_add_event = new ItemAddEvent($event_item_id, $sample_item_get_array, $post_array);
+			$item_add_event = new ItemAddEvent($event_item_id, $sample_item_get_array, $post_array, true, "sample");
 			$event_handler = new EventHandler($item_add_event);
 			if ($event_handler->get_success() == true)
 			{
+				if ($transaction_id != null)
+				{
+					$transaction->commit($transaction_id);
+				}
+				
 				if ($sample_item_retrace)
 				{
-					$params = http_build_query(Retrace::resovle_retrace_string($sample_item_retrace),'','&');
+					$params = http_build_query(Retrace::resolve_retrace_string($sample_item_retrace),'','&');
 					return "index.php?".$params;
 				}
 				else
@@ -675,11 +688,21 @@ class SampleCloneAjax
 			}
 			else
 			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				
 				return "0";
 			}
 		}
 		else
 		{
+			if ($transaction_id != null)
+			{
+				$transaction->commit($transaction_id);
+			}
+			
 			$paramquery = array();
 			$paramquery['username'] = $username;
 			$paramquery['session_id'] = $session_id;

@@ -29,14 +29,14 @@ class AssistantIO
 {	
 	private $ajax_handler;
 	private $form_field_name;
-	private $null_page;
+	private $init_page;
 	private $screen_array;
 	
 	/**
 	 * @param string $ajax_handler
 	 * @param string $form_field_name
 	 */
-	function __construct($ajax_handler, $form_field_name, $null_page = false)
+	function __construct($ajax_handler, $form_field_name, $init_page =1)
 	{
 		$this->screen_array = array();
 		
@@ -44,7 +44,11 @@ class AssistantIO
 		{
 			$this->ajax_handler = $ajax_handler;
 			$this->form_field_name = $form_field_name;
-			$this->null_page = $null_page;
+			
+			if (is_numeric($init_page) and $init_page >= 0)
+			{
+				$this->init_page = $init_page;
+			}
 		}
 	}
 	
@@ -100,16 +104,7 @@ class AssistantIO
 		$template = new HTMLTemplate("base/assistant/content.html");
 		
 		$template->set_var("ajax_handler", $this->ajax_handler);
-		
-		if ($this->null_page == true)
-		{
-			$template->set_var("ajax_page", 0);
-		}
-		else
-		{
-			$template->set_var("ajax_page", 1);
-		}
-		
+		$template->set_var("ajax_page", $this->init_page);
 		$template->set_var("max_page", count($this->screen_array));
 		$template->set_var("form_field_name", $this->form_field_name);
 		

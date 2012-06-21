@@ -45,6 +45,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 	
 	private $project_log_id;
 	
+	private $parent_item_id;
 	private $status_id;
 	private $gid;
 
@@ -100,6 +101,18 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 					throw new ProjectItemLinkException(true, "Database entry failed");
 	    		}
 	    		
+	    		if ($this->parent_item_id)
+	    		{
+	    			if ($project_has_item->set_parent_item_id($this->parent_item_id) == false)
+	    			{
+	    				if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						throw new ProjectItemLinkException(true, "Parent Item-ID link failed");
+	    			}
+	    		}
+	    		
 				$project_item_link_event = new ProjectItemLinkEvent($this->item_id, $project_folder_id);
 				$event_handler = new EventHandler($project_item_link_event);
 				
@@ -144,7 +157,18 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     {    	
     	if ($this->item_id and $this->project_id)
     	{		
-    		$primary_key = ProjectHasItem_Access::get_entry_by_item_id_and_project_id($this->item_id, $this->project_id);
+    		if (Project_Wrapper::delete_data_entity_sub_item_links($this->item_id, $this->project_id) == false)
+    		{
+    			throw new ProjectItemUnlinkException(true, "Data-Entity Sub-Item delete failed");
+    		}
+    		
+    		if (ProjectHasItem_Access::delete_sub_items($this->item_id, $this->project_id) == false)
+    		{
+    			throw new ProjectItemUnlinkException(true, "Sub-Item delete failed");
+    		}
+
+  			
+  			$primary_key = ProjectHasItem_Access::get_entry_by_item_id_and_project_id($this->item_id, $this->project_id);
     		$project_has_item = new ProjectHasItem_Access($primary_key);
     		
     		if ($project_has_item->delete())
@@ -155,19 +179,19 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 					
 				if ($event_handler->get_success() == false)
 				{
-					throw new ProjectItemUnlinkExecption(true, "Event failed");
+					throw new ProjectItemUnlinkException(true, "Event failed");
 				}
 				
     			return true;
     		}
     		else
     		{
-    			throw new ProjectItemUnlinkExecption(true, "DB failed");
+    			throw new ProjectItemUnlinkException(true, "DB failed");
     		}
     	}
     	else
     	{
-    		throw new ProjectItemUnlinkExecption();
+    		throw new ProjectItemUnlinkException();
     	}
     }
     
@@ -183,7 +207,25 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     	if ($this->item_id)
     	{
     		$transaction_id = $transaction->begin();
-    			
+
+    		if (Project_Wrapper::delete_data_entity_sub_item_links($this->item_id) == false)
+    		{
+    			if ($transaction_id != null)
+  				{
+					$transaction->rollback($transaction_id);
+				}
+    			throw new ProjectItemUnlinkException(true, "Data-Entity Sub-Item delete failed");
+    		}
+    		
+    		if (ProjectHasItem_Access::delete_sub_items($this->item_id) == false)
+    		{
+    			if ($transaction_id != null)
+  				{
+					$transaction->rollback($transaction_id);
+				}
+    			throw new ProjectItemUnlinkException(true, "Sub-Item delete failed");
+    		}
+
   			$project_has_item_pk_array = ProjectHasItem_Access::list_entries_by_item_id($this->item_id);
 
   			if (is_array($project_has_item_pk_array))
@@ -316,31 +358,14 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
-     * @todo overhaul
      * @see ProjectItemInterface::get_project_items()
      * @return array
      */
-    public function get_project_items()
+    public function get_project_items($sub_items = false)
     {
     	if ($this->project_id)
     	{
-    		$project_has_item_array = ProjectHasItem_Access::list_entries_by_project_id($this->project_id);
-
-    		if (is_array($project_has_item_array) and count($project_has_item_array) >= 1)
-    		{
-    			$return_array = array();
-    			
-    			foreach($project_has_item_array as $key => $value)
-    			{
-    				$project_has_item = new ProjectHasItem_Access($value);
-    				array_push($return_array, $project_has_item->get_item_id());
-    			}
-    			return $return_array;
-    		}
-    		else
-    		{
-    			return null;
-    		}
+    		return ProjectHasItem_Access::list_items_by_project_id($this->project_id, $sub_items);
     	}
     	else
     	{
@@ -350,13 +375,32 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     
     /**
      * @see ProjectItemInterface::get_project_status_items()
+     * @param integer $project_status_id
+     * @param bool $sub_items
      * @return array
      */
-    public function get_project_status_items($project_status_id)
+    public function get_project_status_items($project_status_id, $sub_items = false)
     {
     	if ($this->project_id)
     	{
-    		return ProjectHasItem_Access::list_entries_by_project_id_and_project_status_id($this->project_id, $project_status_id);
+    		return ProjectHasItem_Access::list_items_by_project_id_and_project_status_id($this->project_id, $project_status_id, $sub_items);
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+	/**
+     * @see ProjectItemInterface::get_project_status_items_with_pos_id()
+     * @param integer $project_status_id
+     * @return array
+     */
+    public function get_project_status_items_with_pos_id($project_status_id)
+    {
+    	if ($this->project_id)
+    	{
+    		return ProjectHasItem_Access::list_items_by_project_id_and_project_status_id_with_pos_id($this->project_id, $project_status_id, false);
     	}
     	else
     	{
@@ -419,27 +463,48 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     }
     
     /**
+     * @see ProjectItemInterface::set_parent_item_id()
+     * @param integer $parent_item_id
+     * @return bool
+     */
+	public function set_parent_item_id($parent_item_id)
+	{
+		if (is_numeric($parent_item_id))
+    	{
+    		$this->parent_item_id = $parent_item_id;
+    		return true;
+    	}
+    	else
+    	{
+    		return false;
+    	}
+	}
+    
+    /**
      * @see ProjectItemInterface::set_item_status()
      * @return bool
      */
     public function set_item_status()
     {
     	global $transaction;
-
-    	if ($this->item_id and $this->project_id and $this->status_id and is_numeric($this->gid))
+    	    	
+    	if ($this->item_id and $this->project_id and is_numeric($this->status_id))
     	{
     		$transaction_id = $transaction->begin();
 			
 			$primary_key = ProjectHasItem_Access::get_entry_by_item_id_and_project_id($this->item_id, $this->project_id);
 			$project_has_item = new ProjectHasItem_Access($primary_key);
 			
-			if ($project_has_item->set_gid($this->gid) == false)
+			if(is_numeric($this->gid))
 			{
-				if ($transaction_id != null)
+				if ($project_has_item->set_gid($this->gid) == false)
 				{
-					$transaction->rollback($transaction_id);
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return false;
 				}
-				return false;
 			}
 			
     		if ($project_has_item->set_project_status_id($this->status_id) == false)
@@ -1011,61 +1076,14 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     		return false;
     	}
     }
-  
-  
-    /**
-     * @see ProjectItemInterface::get_gid_by_item_id_and_project_id()
-     * @param integer $item_id
-     * @param integer $project_id
-     * @param integer $project_status_id
-     * @return array
-     */
-    public static function get_gid_by_item_id_and_project_id($item_id, $project_id, $project_status_id)
-    {
-    	return ProjectHasItem_Access::get_gid_by_item_id_and_project_id($item_id, $project_id, $project_status_id);
-    }
-    
-    /**
-     * @see ProjectItemInterface::get_gid_by_item_id_and_status_id()
-     * @param integer $item_id
-     * @param integer $project_id
-     * @return array
-     */
-    public static function get_gid_by_item_id_and_status_id($item_id, $status_id)
-    {
-    	return ProjectHasItem_Access::get_gid_by_item_id_and_status_id($item_id, $status_id);
-    }
-    
+          
   	/**
   	 * @see ProjectItemInterface::list_projects_by_item_id()
   	 * @return array
   	 */
   	public static function list_projects_by_item_id($item_id)
   	{
-  		if (is_numeric($item_id))
-  		{
-  			$project_has_item_pk_array = ProjectHasItem_Access::list_entries_by_item_id($item_id);
-  			  			
-  			if (is_array($project_has_item_pk_array) and count($project_has_item_pk_array) >= 1)
-  			{
-  				$return_array = array();
-  				
-  				foreach ($project_has_item_pk_array as $key => $value)
-  				{
-  					$project_has_item = new ProjectHasItem_Access($value);
-  					array_push($return_array, $project_has_item->get_project_id());
-  				}
-  				return $return_array;
-  			}
-  			else
-  			{
-  				return null;
-  			}
-  		}
-  		else
-  		{
-  			return null;
-  		} 		
+  		return ProjectHasItem_Access::list_projects_by_item_id($item_id);
   	}
   	
 	/**

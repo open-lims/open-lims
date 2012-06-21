@@ -299,6 +299,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 						{
 							$transaction->commit($transaction_id);
 						}
+						$this->__construct($value_id);
 						return $value_id;
 					}
 					else
@@ -617,12 +618,12 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 			$highest_revision_value_version = new ValueVersion_Access($highest_revision_value_version_id);
 			
 			$new_internal_revision = $current_value_version->get_internal_revision()+1;
-											
+			
 			if ((array_diff_assoc($value_array, $current_value_array) != null) or 
 				(array_diff_assoc($current_value_array, $value_array) != null))
 			{	
 				if ($major == true)
-				{										
+				{									
 					if ($previous_version_id == null)
 					{
 						$new_version = $current_value_version->get_version()+1;
@@ -862,6 +863,15 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 
 	/**
+	 * @see ValueInterface::get_id()
+	 * @return integer
+	 */
+	public function get_id()
+	{
+		return $this->value_id;
+	}
+	
+	/**
 	 * @see ValueInterface::get_value_internal_revisions()
 	 * @return integer
 	 */
@@ -1031,7 +1041,23 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 			return null;
 		}
 	}
-	    
+	
+	/**
+	 * @see ValueInterface::get_version_datetime()
+	 * @return integer
+	 */
+	public function get_version_datetime()
+	{
+		if ($this->value_version)
+		{
+			return $this->value_version->get_datetime();
+		}
+		else
+		{
+			return null;
+		}
+	}
+
     /**
      * @param array $xml_array
      * @return bool
@@ -1524,15 +1550,57 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 							$element_array['set'] = $value[3]['set'];
 						}
 						
+						// Type of the input						
 						if ($value[3]['vartype'])
 						{
-							$element_array['vartype'] = $value[3]['vartype'];
+							switch($value[3]['vartype']):
+								case "integer":
+								case "int":
+									$element_array['vartype'] = "integer";	
+								break;
+								
+								case "float";
+									$element_array['vartype'] = "float";	
+								break;
+							
+								default:
+									$element_array['vartype'] = "string";	
+								break;
+							endswitch;
 						}
 						else
 						{
 							$element_array['vartype'] = "string";
 						}
 						
+						// Minimum and Maximum Input (possbile with integer and float only)
+						if ($value[3]['min_value'] and ($element_array['vartype'] == "integer" or $element_array['vartype'] == "float"))
+						{
+							if (is_numeric($value[3]['min_value']))
+							{
+								$element_array['min_value'] =  $value[3]['min_value'];
+							}
+						}
+						
+						if ($value[3]['max_value'] and ($element_array['vartype'] == "integer" or $element_array['vartype'] == "float"))
+						{
+							if (is_numeric($value[3]['max_value']))
+							{
+								$element_array['max_value'] =  $value[3]['max_value'];
+							}
+						}
+						
+						if ($element_array['max_value'] and $element_array['min_value'])
+						{
+							if ($element_array['max_value'] < $element_array['min_value'])
+							{
+								// Removes min_value and max_value if it is impossible to fulfill it
+								$element_array['min_value'] = null;
+								$element_array['max_value'] = null;
+							}
+						}
+						
+						// Displayed length of the field
 						if ($value[3]['length'])
 						{
 							$element_array['length'] =  $value[3]['length'];
@@ -1542,6 +1610,29 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 							$element_array['length'] = 30;
 						}
 						
+						// Requirement of the field
+						if ($value[3]['requirement'])
+						{
+							switch($value[3]['requirement']):
+								case "required":
+									$element_array['requirement'] = 1;	
+								break;
+								
+								case "important";
+									$element_array['requirement'] = 2;	
+								break;
+							
+								default:
+									$element_array['requirement'] = 0;	
+								break;
+							endswitch;
+						}
+						else
+						{
+							$element_array['requirement'] = 0;
+						}
+						
+						// Size of a textarea
 						if ($value[3]['size'])
 						{
 							$sizeArray = explode(",",$value[3][size]);
@@ -1821,20 +1912,27 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
      * @param integer $file_id
      * @return object
      */
-    public static function get_instance($value_id)
+    public static function get_instance($value_id, $force_new_instance = false)
     {    
     	if (is_numeric($value_id) and $value_id > 0)
     	{
-			if (self::$value_object_array[$value_id])
-			{
-				return self::$value_object_array[$value_id];
-			}
-			else
-			{
-				$value = new Value($value_id);
-				self::$value_object_array[$value_id] = $value;
-				return $value;
-			}
+    		if ($force_new_instance == true)
+    		{
+    			return new Value($value_id);
+    		}
+    		else
+    		{
+	    		if (self::$value_object_array[$value_id])
+				{
+					return self::$value_object_array[$value_id];
+				}
+				else
+				{
+					$value = new Value($value_id);
+					self::$value_object_array[$value_id] = $value;
+					return $value;
+				}
+    		}
     	}
     	else
     	{

@@ -539,6 +539,8 @@ class ProjectAjax
 		{
 			$project = new Project($_GET[project_id]);
 			
+			$folder_id = ProjectStatusFolder::get_folder_by_project_id_and_project_status_id($_GET[project_id],$project->get_current_status_id());
+			
 			$template = new HTMLTemplate("project/ajax/detail_menu.html");
 			
 			switch ($project->is_next_status_available()):
@@ -590,13 +592,10 @@ class ProjectAjax
 			
 			
 			if ($project_security->is_access(3, false) == true)
-			{
-				// Status Buttons
-				
+			{				
 				$project_template = new ProjectTemplate($project->get_template_id());
-				$current_status_requirements 	= $project->get_current_status_requirements($project->get_current_status_id());
-				$current_fulfilled_requirements = $project->get_fulfilled_status_requirements();
-							
+				$current_status_requirements = $project->get_current_status_requirements($project->get_current_status_id());
+								
 				$result = array();
 				$counter = 0;
 				
@@ -604,44 +603,78 @@ class ProjectAjax
 				{
 					foreach($current_status_requirements as $key => $value)
 					{
-						$paramquery = array();
-						$paramquery[username] = $_GET[username];
-						$paramquery[session_id] = $_GET[session_id];
-						$paramquery[nav] = "project";
-						$paramquery[run] = "item_add";
-						$paramquery[project_id] = $_GET[project_id];
-						$paramquery[dialog] = $value[type];
-						$paramquery[key] = $key;
-						$paramquery[retrace] = Retrace::create_retrace_string();
-						unset($paramquery[nextpage]);
-						$params = http_build_query($paramquery,'','&#38;');
-	
-						$result[$counter][name] = $value[name];
-	
-						if ($current_fulfilled_requirements[$key] == true)
-						{
-							if ($value[occurrence] == "multiple")
-							{
-								$result[$counter][status] = 2;
-							}
-							else
-							{
-								$result[$counter][status] = 0;
-							}
-						}
-						else
-						{
-							$result[$counter][status] = 1;
-						}
-	
-						if ($value[requirement] == "optional")
-						{
-							$result[$counter][name] = $result[$counter][name]." (optional)";
-						}
+						switch ($value['element_type']):
 						
-						$result[$counter][params] = $params;					
+							case "item":
+								$paramquery = array();
+								$paramquery[username] = $_GET[username];
+								$paramquery[session_id] = $_GET[session_id];
+								$paramquery[nav] = "project";
+								$paramquery[project_id] = $_GET[project_id];
+
+								require_once("core/modules/item/common/item_common.io.php");
+								
+								$menu_element_array = ItemCommonIO::get_menu_element($value, $key, $counter, $paramquery, "Project", $_GET['project_id']);
+								$result = array_merge($result, $menu_element_array[0]);
+								$counter = $menu_element_array[1];		
+							break;
+															
+							case "extension":
+								$paramquery = array();
+								$paramquery[username] = $_GET[username];
+								$paramquery[session_id] = $_GET[session_id];
+								$paramquery[nav] = "project";
+								$paramquery[run] = "extension";
+								$paramquery[project_id] = $_GET[project_id];
+								$paramquery[extension] = $value[extension];
+								$paramquery[retrace] = Retrace::create_retrace_string();
+								$params = http_build_query($paramquery,'','&#38;');
+			
+								$result[$counter][name] = "Run ".$value[name];
+								$result[$counter][depends] = false;
+								$result[$counter][params] = $params;	
+								
+								if ($value[fulfilled] == 1)
+								{
+									if ($value[occurrence] == "multiple")
+									{
+										$result[$counter][type] = "link";
+										$result[$counter][image] = "add_extension_done";
+									}
+									else
+									{
+										$result[$counter][type] = false;
+										$result[$counter][image] = "add_extension_done_na";
+									}
+								}
+								elseif($value[fulfilled] == 0)
+								{
+									if ($value[occurrence] == "multiple")
+									{
+										$result[$counter][type] = "link";
+										$result[$counter][image] = "add_extension_wait";
+									}
+									else
+									{
+										$result[$counter][type] = false;
+										$result[$counter][image] = "add_extension_wait_na";
+									}
+								}
+								else
+								{
+									$result[$counter][type] = "link";
+									$result[$counter][image] = "add_extension";
+								}
+								
+								if ($value[requirement] == "optional" and $value[fulfilled] != 0)
+								{
+									$result[$counter][name] = $result[$counter][name]." (optional)";
+								}			
+								
+								$counter++;
+							break;
 						
-						$counter++;
+						endswitch;
 					}		
 				}
 				
@@ -744,7 +777,6 @@ class ProjectAjax
 							
 				$project_template = new ProjectTemplate($project->get_template_id());
 				$current_status_requirements 	= $project->get_current_status_requirements();
-				$current_fulfilled_requirements = $project->get_fulfilled_status_requirements();
 				
 				$result = array();
 				$counter = 0;
@@ -753,23 +785,104 @@ class ProjectAjax
 				{
 					foreach($current_status_requirements as $key => $value)
 					{
-						$result[$counter][name] = $value[name];
-						if ($current_fulfilled_requirements[$key] == true)
-						{
-							$result[$counter][status] = 0;
-						}
-						else
-						{
-							if ($value[requirement] != "optional")
-							{
-								$result[$counter][status] = 1;
-							}
-							else
-							{
-								$result[$counter][status] = 2;
-							}
-						}
-						$counter++;
+						switch ($value['element_type']):
+						
+							case "item":
+								
+								$amount = count($value[fulfilled]);
+								
+								if ($value['display'] == true)
+								{
+									$result[$counter][name] = $value[name];
+									$result[$counter][depends] = false;
+									if (is_array($value[fulfilled]) and count($value[fulfilled]) >= 1)
+									{
+										$result[$counter][status] = "ok";
+									}
+									else
+									{
+										if ($value[requirement] != "optional")
+										{
+											$result[$counter][status] = "cancel";
+										}
+										else
+										{
+											$result[$counter][status] = "notice";
+										}
+									}
+									$counter++;
+								}
+								
+								if (is_array($value['sub_items']) and count($value['sub_items']) >= 1)
+								{
+									$result[$counter][status] = "line";
+									$counter++;
+									
+									foreach($value['sub_items'] as $sub_item_key => $sub_item_value)
+									{
+										foreach($sub_item_value as $sub_sub_item_key => $sub_sub_item_value)
+										{
+											if ($sub_sub_item_value['element_type'] == "item")
+											{
+												$result[$counter][depends] = true;
+												
+												if ($value[fulfilled][$sub_item_key][name])
+												{
+													$result[$counter][name] = $sub_sub_item_value[name]." (".$value[fulfilled][$sub_item_key][name].")";
+												}
+												else
+												{
+													$result[$counter][name] = $sub_sub_item_value[name];
+												}
+												
+												if (is_array($sub_sub_item_value[fulfilled]))
+												{
+													$result[$counter][status] = "ok";
+												}
+												else
+												{
+													if ($sub_sub_item_value[requirement] != "optional")
+													{
+														$result[$counter][status] = "cancel";
+													}
+													else
+													{
+														$result[$counter][status] = "notice";
+													}
+												}
+												
+												$counter++;
+											}
+										}
+										
+										$result[$counter][status] = "line";
+										$counter++;
+									}
+								}
+							break;
+							
+							case "extension":
+								$result[$counter][name] = $value[name];
+								$result[$counter][depends] = false;
+								if ($value[fulfilled] == 1)
+								{
+									$result[$counter][status] = "ok";
+								}
+								else
+								{
+									if ($value[requirement] != "optional")
+									{
+										$result[$counter][status] = "cancel";
+									}
+									else
+									{
+										$result[$counter][status] = "notice";
+									}
+								}
+								$counter++;
+							break;
+							
+						endswitch;
 					}			
 				}
 				else

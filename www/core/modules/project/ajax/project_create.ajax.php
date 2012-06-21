@@ -409,6 +409,7 @@ class ProjectCreateAjax
 						{
 							if ($value[0] == "project_organisation_unit")
 							{
+								$session->delete_value("PROJECT_TOID");
 								$session->write_value("PROJECT_ORGANISATION_UNIT",$value[1],true);
 							}
 						}
@@ -419,6 +420,7 @@ class ProjectCreateAjax
 						{
 							if ($value[0] == "project_toid")
 							{
+								$session->delete_value("PROJECT_ORGANISATION_UNIT");
 								$session->write_value("PROJECT_TOID",$value[1],true);
 							}
 						}
@@ -529,6 +531,7 @@ class ProjectCreateAjax
 		{
 			$new_project_id = $project->create($project_organ_unit, null, $project_name, $project_owner, $project_template, $project_desc);
 			
+			$session->delete_value("PROJECT_ADD_ROLE");
 			$session->delete_value("PROJECT_TYPE");
 			$session->delete_value("PROJECT_ORGANISATION_UNIT");
 			$session->delete_value("PROJECT_NAME");
@@ -555,6 +558,7 @@ class ProjectCreateAjax
 			$session->delete_value("PROJECT_LAST_SCREEN");
 			$session->delete_value("PROJECT_CURRENT_SCREEN");
 			
+			$session->delete_value("PROJECT_ADD_ROLE");
 			$session->delete_value("PROJECT_TYPE");
 			$session->delete_value("PROJECT_TOID");
 			$session->delete_value("PROJECT_NAME");

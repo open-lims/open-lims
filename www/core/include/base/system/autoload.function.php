@@ -77,7 +77,7 @@ function __autoload($classname)
 	$classes['EventHandler']				= $path_prefix."core/include/base/system/event_handler.class.php";
 	$classes['ExceptionHandler']			= $path_prefix."core/include/base/system/exception_handler.class.php";
 	$classes['System']						= $path_prefix."core/include/base/system/system.class.php";
-	$classes['Mail']						= $path_prefix."core/include/base/mail.class.php";	
+	$classes['Mail']						= $path_prefix."core/include/base/system/mail.class.php";	
 	$classes['ModuleDialog']				= $path_prefix."core/include/base/system/module_dialog.class.php";
 	$classes['ModuleLink']					= $path_prefix."core/include/base/system/module_link.class.php";
 	$classes['ModuleNavigation']			= $path_prefix."core/include/base/system/module_navigation.class.php";

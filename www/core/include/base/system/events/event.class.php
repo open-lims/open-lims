@@ -22,7 +22,7 @@
  */
 
 /**
- * User Delete Event
+ * Main Event
  * @package base
  */
 class Event

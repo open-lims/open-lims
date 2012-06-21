@@ -313,6 +313,10 @@ class SampleCreateAjax
 			break;
 			
 			case "4":
+				$sample_add_role				= $session->read_value("SAMPLE_ADD_ROLE");
+				$sample_add_item_holder_class	= $session->read_value("SAMPLE_ADD_ITEM_HOLDER_CLASS");
+				$sample_add_item_holder_id		= $session->read_value("SAMPLE_ADD_ITEM_HOLDER_ID");
+				
 				$sample_template				= $session->read_value("SAMPLE_TEMPLATE");
 				$sample_template_data_type  	= $session->read_value("SAMPLE_TEMPLATE_DATA_TYPE");	
 				$sample_template_data_type_id	= $session->read_value("SAMPLE_TEMPLATE_DATA_TYPE_ID");	
@@ -370,7 +374,24 @@ class SampleCreateAjax
 							if ($sample_count > 0)
 							{
 								$result = array();
-								$sample_array = Sample::list_user_related_samples($user->get_user_id());
+																
+								if ($sample_add_role == "item" and is_numeric($sample_add_item_holder_id) and class_exists($sample_add_item_holder_class))
+								{									
+									$item_holder_list_sql = $sample_add_item_holder_class::get_item_list_sql($sample_add_item_holder_id);
+									
+									if ($item_holder_list_sql)
+									{
+										$sample_array = Sample::list_samples_by_item_sql_list($item_holder_list_sql);
+									}
+									else
+									{
+										$sample_array = Sample::list_user_related_samples($user->get_user_id());
+									}
+								}
+								else
+								{
+									$sample_array = Sample::list_user_related_samples($user->get_user_id());
+								}
 								
 								for($i=0;$i<=$sample_count-1;$i++)
 								{
@@ -647,7 +668,7 @@ class SampleCreateAjax
 	
 	public static function run($username, $session_id)
 	{
-		global $session, $user;
+		global $session, $user, $transaction;
 			
 		$sample_add_role				= $session->read_value("SAMPLE_ADD_ROLE");
 		
@@ -668,15 +689,25 @@ class SampleCreateAjax
 		$sample_template_data_type  	= $session->read_value("SAMPLE_TEMPLATE_DATA_TYPE");	
 		$sample_template_data_type_id	= $session->read_value("SAMPLE_TEMPLATE_DATA_TYPE_ID");	
 		$sample_template_data_array		= $session->read_value("SAMPLE_TEMPLATE_DATA_ARRAY");	
+
+		$transaction_id = $transaction->begin();
 		
 		$sample = new Sample(null);
 
 		$sample->set_template_data($sample_template_data_type, $sample_template_data_type_id, $sample_template_data_array);
 
-		$sample_id = $sample->create($sample_organ_unit, $sample_template, $sample_name, $sample_manufacturer, $sample_location, $sample_desc, null, $sample_expiry, $sample_expiry_warning);
+		if (($sample_id = $sample->create($sample_organ_unit, $sample_template, $sample_name, $sample_manufacturer, $sample_location, $sample_desc, null, $sample_expiry, $sample_expiry_warning)) == null)
+		{
+			if ($transaction_id != null)
+			{
+				$transaction->rollback($transaction_id);
+			}
+		}
 
 		$session->delete_value("SAMPLE_ADD_ROLE");
-	
+		$session->delete_value("SAMPLE_ADD_ITEM_HOLDER_CLASS");
+		$session->delete_value("SAMPLE_ADD_ITEM_HOLDER_ID");
+		
 		$session->delete_value("SAMPLE_ITEM_RETRACE");
 		$session->delete_value("SAMPLE_ITEM_GET_ARRAY");
 		$session->delete_value("SAMPLE_ITEM_KEYWORDS");
@@ -703,7 +734,7 @@ class SampleCreateAjax
 			{
 				$parent_sample = new Sample($sample_item_get_array['sample_id']);
 				$sample_item_get_array['sample_id'] = $sample_id;
-				$sample_item_get_array['parent'] = "1";
+				$sample_item_get_array['parent_sample'] = "1";
 				$event_item_id = $parent_sample->get_item_id();
 			}
 			else
@@ -715,13 +746,18 @@ class SampleCreateAjax
 			$post_array['keywords'] = $sample_item_keywords;
 			$post_array['description'] = $sample_item_description;
 			
-			$item_add_event = new ItemAddEvent($event_item_id, $sample_item_get_array, $post_array);
+			$item_add_event = new ItemAddEvent($event_item_id, $sample_item_get_array, $post_array, true, "sample");
 			$event_handler = new EventHandler($item_add_event);
 			if ($event_handler->get_success() == true)
 			{
+				if ($transaction_id != null)
+				{
+					$transaction->commit($transaction_id);
+				}
+				
 				if ($sample_item_retrace)
 				{
-					$params = http_build_query(Retrace::resovle_retrace_string($sample_item_retrace),'','&');
+					$params = http_build_query(Retrace::resolve_retrace_string($sample_item_retrace),'','&');
 					return "index.php?".$params;
 				}
 				else
@@ -735,11 +771,20 @@ class SampleCreateAjax
 			}
 			else
 			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
 				return "0";
 			}
 		}
 		else
 		{
+			if ($transaction_id != null)
+			{
+				$transaction->commit($transaction_id);
+			}
+			
 			$paramquery = array();
 			$paramquery['username'] = $username;
 			$paramquery['session_id'] = $session_id;
