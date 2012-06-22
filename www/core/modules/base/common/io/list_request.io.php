@@ -67,11 +67,11 @@ class ListRequest_IO
     		{
     			if ($this->first_line_entry_class)
     			{
-    				$return .= "<tr class ='trLightGrey ".$this->first_line_entry_class."'>";
+    				$return .= "<tr class ='ListTableRowEven ".$this->first_line_entry_class."'>";
     			}
     			else
     			{
-    				$return .= "<tr class ='trLightGrey'>";
+    				$return .= "<tr class ='ListTableRowEven'>";
     			}
     			
     			
@@ -114,9 +114,9 @@ class ListRequest_IO
 				foreach ($this->array as $key => $value)
 				{					
 	    			if ($color_count % 2) {
-						$tr_class = " class ='trLightGrey'";
+						$tr_class = " class ='ListTableRowEven'";
 					}else{
-						$tr_class = "";
+						$tr_class = " class ='ListTableRowOdd'";
 					}
 	    			
 	    			$return .= "<tr".$tr_class.">";

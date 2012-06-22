@@ -133,7 +133,7 @@ function data_browser()
 					if(!$(this).hasClass("DataBrowserFileSelected"))
 					{
 						var color = "white";
-						if($(this).hasClass("trLightGrey"))
+						if($(this).hasClass("ListTableRowEven"))
 						{
 							color = "#e0e0e0";
 						}
@@ -467,7 +467,7 @@ function data_browser()
 			.children("td").each(function()
 			{
 				var color = "white";
-				if($(this).parent().hasClass("trLightGrey"))
+				if($(this).parent().hasClass("ListTableRowEven"))
 				{
 					color = "#e0e0e0";
 				}

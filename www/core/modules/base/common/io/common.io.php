@@ -40,14 +40,14 @@ class Common_IO
 	 * @param string $class
 	 * @return string
 	 */
-	public static function container_begin($title, $class = "", $width = 100)
+	public static function container_begin($title, $class = "", $id = "")
 	{
 		self::$in_container = true;
 
 		$pixel = 750/100*$width;
 		$main_pixel = $pixel - 6;
 		
-		return "<div class='ContentContainer ".$class."' stlye='width: ".$pixel.";'>" .
+		return "<div class='ContentContainer ".$class."' id='".$id."'>" .
 				"<div class='ContentContainerHeadline'>".$title."</div>" .
 				"<div class='ContentContainerContent'>";
 	}

@@ -129,7 +129,7 @@ vertical-align:middle;
 cursor:default;
 }
 
-.ListTable #DataBrowserAjax .trLightGrey td
+.ListTable #DataBrowserAjax .ListTableRowEven td
 {
 /* padding: 0px 4px; */
 	padding: 0;
@@ -138,12 +138,12 @@ border-bottom:solid #e0e0e0 2px;
 vertical-align:middle;
 }
 
-.trLightGrey .ListTableColumnFirstEntry
+.ListTableRowEven .ListTableColumnFirstEntry
 {
 border-left:solid #e0e0e0 2px;
 }
 
-.trLightGrey .ListTableColumnLastEntry
+.ListTableRowEven .ListTableColumnLastEntry
 {
 border-right:solid #e0e0e0 2px;
 }

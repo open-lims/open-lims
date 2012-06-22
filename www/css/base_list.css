@@ -1,0 +1,82 @@
+/* BASE LIST */
+
+.ListTable
+{
+	width: 100%;
+	border-collapse: separate;
+	border-spacing:0px;
+	border-collapse: expression('separate', cellSpacing = '0px');
+	table-layout:fixed;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.ListTable th 
+{
+	font-weight: bold;
+	text-align: left;
+	border-bottom: 1px #C0C0C0 dotted;
+	color: black;
+	white-space: nowrap;
+	overflow: hidden;
+	padding: 0 2px;
+}
+
+.ListTable th div
+{
+	background-color: white;
+}
+
+.ListTable th a 
+{
+	white-space: nowrap;
+	text-decoration: none;
+	color: black !important;
+}
+.ListTable td 
+{
+	height:10px;
+	padding: 4px 2px;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.ListTable tr.ListTableRowEven,
+.ListTable tr.ListTableRowEven td
+{
+	background-color: #E0E0E0;
+}
+.ListTable tr.ListTableRowOdd,
+.ListTable tr.ListTableRowOdd td
+{
+	background-color: white;
+}
+.ListTableColumnFirstEntry
+{
+	border-left:solid white 2px;
+	padding: 0 !important;
+	vertical-align: middle;
+}
+
+.ListTableColumnLastEntry
+{
+	border-right:solid white 2px;
+}
+
+
+.ColumnMenuEntry
+{
+	clear: both;
+	height: 16px;	
+}
+
+.ColumnMenuEntryLabel
+{
+	float: left;
+}
+
+.ColumnMenuEntryCheckbox
+{
+	float: right;
+	cursor: default;
+	margin-top: 2px;	
+}

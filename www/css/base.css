@@ -121,610 +121,6 @@ html,body
 	height: 1px;
 }
 
-/* Navigation */
-#NavigationBackground
-{
-	margin: 13px 0 0 6px;
-	padding: 0;
-	left: 0;
-	position: absolute;
-	height: 18px;
-	width: 968px;
-	background-image: url('../images/tabs/bar.png');
-	background-repeat:repeat-x;
-	background-position: top left;
-	z-index: 1;
-}
-
-.NavigationBackgroundBlue
-{
-	border-bottom: 1px #336699 solid;
-}
-.NavigationBackgroundGreen
-{
-	border-bottom: 1px #99cd32 solid;
-}
-
-.NavigationBackgroundOrange
-{
-	border-bottom: 1px #dcaf36 solid;
-}
-
-.NavigationBackgroundGrey
-{
-	border-bottom: 1px #535353 solid;
-}
-
-
-/* Sub Navigation */
-.NavigationButtonSubMenu 
-{
-	display: none;
-}
-
-#NavigationButtonMenu
-{
-	position: absolute;
-	border-top: 0;
-    -moz-border-bottom-right-radius: 10px;
-   	-webkit-border-bottom-right-radius: 10px;
-   	-khtml-border-bottom-right-radius: 10px;
-   	border-bottom-right-radius: 10px;
-   	-moz-border-bottom-left-radius: 10px;
-   	-webkit-border-bottom-left-radius: 10px;
-   	-khtml-border-bottom-left-radius: 10px;
-   	border-bottom-left-radius: 10px;
-   	font-family: arial;
-   	background-color: #ffffff;
-  	-moz-box-shadow: 3px 3px 5px #636363;
-  	-webkit-box-shadow: 3px 3px 5px #636363;
- 	 box-shadow: 3px 3px 5px #636363;
-	padding: 5px 5px 7px 5px;
-	z-index:1000;
-}
-
-.NavigationButtonMenuCategory
-{
-/* 	background-color: none; */
-/* 	-moz-border-bottom-right-radius: 7px; */
-/*    	-webkit-border-bottom-right-radius: 7px; */
-/*    	-khtml-border-bottom-right-radius: 7px; */
-/*    	border-bottom-right-radius: 7px; */
-/*    	-moz-border-bottom-left-radius: 7px; */
-/*    	-webkit-border-bottom-left-radius: 7px; */
-/*    	-khtml-border-bottom-left-radius: 7px; */
-/*    	border-bottom-left-radius: 7px; */
-
-/* 	padding: 5px 5px 5px 5px; */
-}
-
-.NavigationButtonMenuColumn
-{
-	float:left;
-	width: 150px;
-}
-
-.NavigationButtonMenuColumnSeparator
-{
-	width: 0;
-	float: left;
-	margin: 0 5px 0 5px;
-}
-
-.NavigationButtonMenuCategoryCaption
-{
-	color: #ffffff;
-	font-weight:bold;
-	font-size:14px;
-	color: #999;
-	padding-bottom: 5px;
-	padding: 2px 7px 5px 7px;
-}
-
-.NavigationButtonMenuCategory ul 
-{
-	list-style:none;
-	padding: 0;
-	margin: 0;
-	font-size: 13px;
-}
-
-
-.NavigationButtonMenuCategory ul li a 
-{
-	text-decoration: none;
-	color: #333333;
-	font-weight: normal;
-	-moz-border-radius: 5px;
-   	-webkit-border-radius: 5px;
-   	-khtml-border-radius: 5px;
-   	border-radius: 5px;	
-   	display:block;
-   	padding: 2px 7px 2px 7px;
-}
-
-.NavigationButtonMenuCategory ul li a:hover 
-{
-	color: #ffffff;	
-}
-
-
-/* Tabs Navigation */
-
-#NavigationMenuHiddenTabsMenu
-{
-	position: absolute;
-	background-color: white;
-	border: solid black 1px;
-	font-family: arial;
-	font-size: 12px;
-	z-index: 200;
-	width: 100px;
-    -moz-border-radius: 10px;
-   	-webkit-border-radius: 10px;
-   	-khtml-border-radius: 10px;
-   	border-radius: 10px;
-   	padding: 5px 5px 5px 5px;
-   	border: solid black 1px;
-   	-moz-box-shadow: 3px 3px 5px #636363;
-  	-webkit-box-shadow: 3px 3px 5px #636363;
- 	box-shadow: 3px 3px 5px #636363;
-}
-
-.NavigationMenuHiddenTabsMenuEntry
-{
-	font-weight: bold;
-	font-size: 14px;
-	padding: 3px 3px 3px 3px;
-	-moz-border-radius: 5px;
-   	-webkit-border-radius: 5px;
-   	-khtml-border-radius: 5px;
-   	border-radius: 5px;
-}
-
-.NavigationMenuHiddenTabsMenuEntry:hover
-{
-	color: #ffffff;
-	background-color: #999;
-}
-
-
-/* Left Navigation */
-#NavigationMenu
-{
-	position: relative;
-	z-index: 2;
-	margin: 0 0 0 25px;
-	padding: 0;
-	float: left;
-	height: 31px;
-	width: 968px;
-}
-#NavigationMenu li
-{
-	font: bold 14px Arial, Helvetica, sans-serif;
-	list-style: none;
-	float: left;
-}
-#NavigationMenu li a
-{
-	display: block;
-	padding: 5px 0 3px 0;
-	margin: 0;
-	font-weight: bold;
-	text-decoration: none;
-	text-align: center;
-	color: #606060;	
-	text-shadow: -1px -1px #d9d9d9;
-}
-
-/* Normal Button */
-.NavigationButton
-{
-	display: block;
-	margin: 0;
-	padding: 0;
-	height: 26px;
-	float: left;
-}
-.NavigationButtonLeft
-{
-	width: 10px;
-	background-image: url('../images/tabs/tab_left.png');
-	background-repeat:no-repeat;
-	background-position: top left;
-}
-.NavigationButtonContent
-{
-	padding: 6px 1px 0 1px;
-	background-image: url('../images/tabs/tab.png');
-	background-repeat:repeat-x;
-	background-position: top center;
-	
-}
-.NavigationButtonDown
-{
-	padding: 0px 1px 0px 0px;
-	background-image: url('../images/tabs/tab_right_button_up.png');
-	background-repeat:no-repeat;
-	background-position: top left;
-	width: 23px;
-}
-.NavigationButtonRight
-{
-	width: 10px;
-	background-image: url('../images/tabs/tab_right.png');
-	background-repeat:no-repeat;
-	background-position: top right;
-}
-
-.NavigationButtonContentHasBorderRight
-{
-	border-right: solid #c0c0c0 1px;
-	padding-right:5px;
-	height: 20px;
-}
-
-/* Arrow Down */
-.NavigationButtonDown img
-{
-margin: 11px 0px 0 1px;
-border: none;
-}
-
-
-/* General for Active and Hover */
-#NavigationMenu li.ActiveBlue a span.NavigationButton,
-#NavigationMenu li.ActiveGreen a span.NavigationButton,
-#NavigationMenu li.ActiveOrange a span.NavigationButton,
-#NavigationMenu li.ActiveGrey a span.NavigationButton,
-#NavigationMenu li.Blue a:hover span.NavigationButton,
-#NavigationMenu li.Green a:hover span.NavigationButton,
-#NavigationMenu li.Orange a:hover span.NavigationButton,
-#NavigationMenu li.Grey a:hover span.NavigationButton,
-#NavigationMenu li.GreyedOut a span.NavigationButton
-{
-	display: block;
-	margin: -5px 0 0 0;
-	height: 31px;
-	float: left;
-}
-#NavigationMenu li.ActiveBlue a span.NavigationButtonLeft,
-#NavigationMenu li.ActiveGreen a span.NavigationButtonLeft,
-#NavigationMenu li.ActiveOrange a span.NavigationButtonLeft,
-#NavigationMenu li.ActiveGrey a span.NavigationButtonLeft,
-#NavigationMenu li.Blue a:hover span.NavigationButtonLeft,
-#NavigationMenu li.Green a:hover span.NavigationButtonLeft,
-#NavigationMenu li.Orange a:hover span.NavigationButtonLeft,
-#NavigationMenu li.Grey a:hover span.NavigationButtonLeft,
-#NavigationMenu li.ActiveBlue a span.NavigationButtonRight,
-#NavigationMenu li.ActiveGreen a span.NavigationButtonRight,
-#NavigationMenu li.ActiveOrange a span.NavigationButtonRight,
-#NavigationMenu li.ActiveGrey a span.NavigationButtonRight,
-#NavigationMenu li.Blue a:hover span.NavigationButtonRight,
-#NavigationMenu li.Green a:hover span.NavigationButtonRight,
-#NavigationMenu li.Orange a:hover span.NavigationButtonRight,
-#NavigationMenu li.Grey a:hover span.NavigationButtonRight,
-#NavigationMenu li.GreyedOut a span.NavigationButtonRight
-{
-	padding: 0;
-	width: 10px;
-}
-#NavigationMenu li.ActiveBlue a span.NavigationButtonContent,
-#NavigationMenu li.ActiveGreen a span.NavigationButtonContent,
-#NavigationMenu li.ActiveOrange a span.NavigationButtonContent,
-#NavigationMenu li.ActiveGrey a span.NavigationButtonContent,
-#NavigationMenu li.Blue a:hover span.NavigationButtonContent,
-#NavigationMenu li.Green a:hover span.NavigationButtonContent,
-#NavigationMenu li.Orange a:hover span.NavigationButtonContent,
-#NavigationMenu li.Grey a:hover span.NavigationButtonContent,
-#NavigationMenu li.GreyedOut a span.NavigationButtonContent
-{
-	padding: 11px 1px 0 1px;
-	color: #F0F0F0;
-}
-#NavigationMenu li.ActiveBlue a span.NavigationButtonDown,
-#NavigationMenu li.ActiveGreen a span.NavigationButtonDown,
-#NavigationMenu li.ActiveOrange a span.NavigationButtonDown,
-#NavigationMenu li.ActiveGrey a span.NavigationButtonDown,
-#NavigationMenu li.Blue a:hover span.NavigationButtonDown,
-#NavigationMenu li.Green a:hover span.NavigationButtonDown,
-#NavigationMenu li.Orange a:hover span.NavigationButtonDown,
-#NavigationMenu li.Grey a:hover span.NavigationButtonDown,
-#NavigationMenu li.GreyedOut a span.NavigationButtonDown
-{
-	padding: 5px 1px 0 0px;
-}
-
-/* Active Blue */
-#NavigationMenu li.ActiveBlue a span.NavigationButtonLeft
-{
-	background-image: url('../images/tabs/blue_active_left.png');
-	background-repeat:no-repeat;
-	background-position: top left;
-}
-#NavigationMenu li.ActiveBlue a span.NavigationButtonContent
-{
-	background-image: url('../images/tabs/blue_active.png');
-	background-repeat:repeat-x;
-	background-position: top center;
-	text-shadow: -1px -1px #336699;
-}
-#NavigationMenu li.ActiveBlue a span.NavigationButtonDown
-{
-	background-image: url('../images/tabs/blue_active_button_up_right.png');
-	background-repeat:no-repeat;
-	background-position: top left;
-}
-#NavigationMenu li.ActiveBlue a span.NavigationButtonRight
-{
-	background-image: url('../images/tabs/blue_active_right.png');
-	background-repeat:no-repeat;
-	background-position: top right;
-}
-
-/* Active Green */
-#NavigationMenu li.ActiveGreen a span.NavigationButtonLeft
-{
-	background-image: url('../images/tabs/green_active_left.png');
-	background-repeat:no-repeat;
-	background-position: top left;
-}
-#NavigationMenu li.ActiveGreen a span.NavigationButtonContent
-{
-	background-image: url('../images/tabs/green_active.png');
-	background-repeat:repeat-x;
-	background-position: top center;
-	text-shadow: -1px -1px #99cd32;
-}
-#NavigationMenu li.ActiveGreen a span.NavigationButtonDown
-{
-	background-image: url('../images/tabs/green_active_button_up_right.png');
-	background-repeat:no-repeat;
-	background-position: top left;
-}
-#NavigationMenu li.ActiveGreen a span.NavigationButtonRight
-{
-	background-image: url('../images/tabs/green_active_right.png');
-	background-repeat:no-repeat;
-	background-position: top right;
-}
-
-/* Active Orange */
-#NavigationMenu li.ActiveOrange a span.NavigationButtonLeft
-{
-	background-image: url('../images/tabs/orange_active_left.png');
-	background-repeat:no-repeat;
-	background-position: top left;
-}
-#NavigationMenu li.ActiveOrange a span.NavigationButtonContent
-{
-	background-image: url('../images/tabs/orange_active.png');
-	background-repeat:repeat-x;
-	background-position: top center;
-	text-shadow: -1px -1px #dcaf36;
-}
-#NavigationMenu li.ActiveOrange a span.NavigationButtonDown
-{
-	background-image: url('../images/tabs/orange_active_button_up_right.png');
-	background-repeat:no-repeat;
-	background-position: top left;
-}
-#NavigationMenu li.ActiveOrange a span.NavigationButtonRight
-{
-	background-image: url('../images/tabs/orange_active_right.png');
-	background-repeat:no-repeat;
-	background-position: top right;
-}
-
-/* Active Grey */
-#NavigationMenu li.ActiveGrey a span.NavigationButtonLeft
-{
-	background-image: url('../images/tabs/grey_active_left.png');
-	background-repeat:no-repeat;
-	background-position: top left;
-}
-#NavigationMenu li.ActiveGrey a span.NavigationButtonContent
-{
-	background-image: url('../images/tabs/grey_active.png');
-	background-repeat:repeat-x;
-	background-position: top center;
-	text-shadow: -1px -1px #535353;
-}
-#NavigationMenu li.ActiveGrey a span.NavigationButtonDown
-{
-	background-image: url('../images/tabs/grey_active_button_up_right.png');
-	background-repeat:no-repeat;
-	background-position: top left;
-}
-#NavigationMenu li.ActiveGrey a span.NavigationButtonRight
-{
-	background-image: url('../images/tabs/grey_active_right.png');
-	background-repeat:no-repeat;
-	background-position: top right;
-}
-
-/* Hover Blue */
-#NavigationMenu li.Blue a:hover span.NavigationButtonLeft
-{
-	background-image: url('../images/tabs/blue_active_left.png');
-	background-repeat:no-repeat;
-	background-position: top left;
-}
-#NavigationMenu li.Blue a:hover span.NavigationButtonContent
-{
-	background-image: url('../images/tabs/blue_active.png');
-	background-repeat:repeat-x;
-	background-position: top center;
-	text-shadow: -1px -1px #336699;
-}
-#NavigationMenu li.Blue a:hover span.NavigationButtonDown
-{
-	background-image: url('../images/tabs/blue_active_button_up_right.png');
-	background-repeat:repeat-x;
-	background-position: top left;
-}
-#NavigationMenu li.Blue a:hover span.NavigationButtonRight
-{
-	background-image: url('../images/tabs/blue_active_right.png');
-	background-repeat:no-repeat;
-	background-position: top right;
-}
-
-/* Hover Green */
-#NavigationMenu li.Green a:hover span.NavigationButtonLeft
-{
-	background-image: url('../images/tabs/green_active_left.png');
-	background-repeat:no-repeat;
-	background-position: top left;
-}
-#NavigationMenu li.Green a:hover span.NavigationButtonContent
-{
-	background-image: url('../images/tabs/green_active.png');
-	background-repeat:repeat-x;
-	background-position: top center;
-	text-shadow: -1px -1px #99cd32;
-}
-#NavigationMenu li.Green a:hover span.NavigationButtonDown
-{
-	background-image: url('../images/tabs/green_active_button_up_right.png');
-	background-repeat:repeat-x;
-	background-position: top left;
-}
-#NavigationMenu li.Green a:hover span.NavigationButtonRight
-{
-	background-image: url('../images/tabs/green_active_right.png');
-	background-repeat:no-repeat;
-	background-position: top right;
-}
-
-/* Hover Orange */
-#NavigationMenu li.Orange a:hover span.NavigationButtonLeft
-{
-	background-image: url('../images/tabs/orange_active_left.png');
-	background-repeat:no-repeat;
-	background-position: top left;
-}
-#NavigationMenu li.Orange a:hover span.NavigationButtonContent
-{
-	background-image: url('../images/tabs/orange_active.png');
-	background-repeat:repeat-x;
-	background-position: top center;
-	text-shadow: -1px -1px #dcaf36;
-}
-#NavigationMenu li.Orange a:hover span.NavigationButtonDown
-{
-	background-image: url('../images/tabs/orange_active_button_up_right.png');
-	background-repeat:repeat-x;
-	background-position: top left;
-}
-#NavigationMenu li.Orange a:hover span.NavigationButtonRight
-{
-	background-image: url('../images/tabs/orange_active_right.png');
-	background-repeat:no-repeat;
-	background-position: top right;
-}
-
-/* Hover Grey */
-#NavigationMenu li.Grey a:hover span.NavigationButtonLeft
-{
-	background-image: url('../images/tabs/grey_active_left.png');
-	background-repeat:no-repeat;
-	background-position: top left;
-}
-#NavigationMenu li.Grey a:hover span.NavigationButtonContent
-{
-	background-image: url('../images/tabs/grey_active.png');
-	background-repeat:repeat-x;
-	background-position: top center;
-	text-shadow: -1px -1px #535353;
-}
-#NavigationMenu li.Grey a:hover span.NavigationButtonDown
-{
-	background-image: url('../images/tabs/grey_active_button_up_right.png');
-	background-repeat:repeat-x;
-	background-position: top left;
-}
-#NavigationMenu li.Grey a:hover span.NavigationButtonRight
-{
-	background-image: url('../images/tabs/grey_active_right.png');
-	background-repeat:no-repeat;
-	background-position: top right;
-}
-
-/* Content Border */
-#NavigationMenu li.ActiveGreen a span.NavigationButtonContentHasBorderRight,
-#NavigationMenu li.Green a:hover span.NavigationButtonContentHasBorderRight
-{
-	border-right: solid #99cd32 1px;
-	padding-right:5px;
-	height: 20px;
-}
-
-#NavigationMenu li.ActiveGrey a span.NavigationButtonContentHasBorderRight,
-#NavigationMenu li.Grey a:hover span.NavigationButtonContentHasBorderRight
-{
-	border-right: solid #535353 1px;
-	padding-right:5px;#
-	height: 20px;
-}
-
-#NavigationMenu li.ActiveBlue a span.NavigationButtonContentHasBorderRight,
-#NavigationMenu li.Blue a:hover span.NavigationButtonContentHasBorderRight
-{
-	border-right: solid #336699 1px;
-	padding-right:5px;
-	height: 20px;
-}
-
-#NavigationMenu li.ActiveOrange a span.NavigationButtonContentHasBorderRight,
-#NavigationMenu li.Orange a:hover span.NavigationButtonContentHasBorderRight
-{
-	border-right: solid #dcaf36 1px;
-	padding-right:5px;
-	height: 20px;
-}
-
-#NavigationMenu li.GreyedOut a span.NavigationButtonContentHasBorderRight
-{
-	padding-right:5px;
-	height: 20px;
-}
-
-
-/* Light Grey */
-#NavigationMenu li.GreyedOut a span.NavigationButtonLeft
-{
-	background-image: url('../images/tabs/light_grey_active_left.png');
-	background-repeat:no-repeat;
-	background-position: top left;
-}
-#NavigationMenu li.GreyedOut a span.NavigationButtonContent
-{
-	background-image: url('../images/tabs/light_grey_active.png');
-	background-repeat:repeat-x;
-	background-position: top center;
-	text-shadow: -1px -1px #b6b6b6;
-}
-#NavigationMenu li.GreyedOut a span.NavigationButtonDown
-{
-	background-image: url('../images/tabs/light_grey_active_button_up.png');
-	background-repeat:no-repeat;
-	background-position: top left;
-}
-#NavigationMenu li.GreyedOut a span.NavigationButtonRight
-{
-	background-image: url('../images/tabs/light_grey_active_right.png');
-	background-repeat:no-repeat;
-	background-position: top right;
-}
-
-
-/* Navigation Menu Clear */
-#NavigationMenuClear
-{
-	clear: left;	
-}
 
 /* Content */
 #Content
@@ -760,83 +156,6 @@ border: none;
 	-webkit-border-radius:5px;
 }
 
-/* BASE LIST */
-
-.ListTable
-{
-	width: 100%;
-	border-collapse: separate;
-	border-spacing:0px;
-	border-collapse: expression('separate', cellSpacing = '0px');
-	table-layout:fixed;
-	white-space: nowrap;
-	overflow: hidden;
-}
-
-.ListTable th 
-{
-	font-weight: bold;
-	text-align: left;
-	border-bottom: 1px #C0C0C0 dotted;
-	color: black;
-	white-space: nowrap;
-	overflow: hidden;
-	padding: 0;
-}
-
-.ListTable th div
-{
-	background-color: white;
-}
-
-.ListTable th a 
-{
-	white-space: nowrap;
-	text-decoration: none;
-	color: black !important;
-}
-.ListTable td 
-{
-	height:10px;
-/* 	margin-bottom: 2px; */
-	padding: 4px 4px;
-	white-space: nowrap;
-	overflow: hidden;
-}
-.ListTable tr 
-{
-/* 	vertical-align: top; */
-}
-.ListTableColumnFirstEntry
-{
-	border-left:solid white 2px;
-	padding: 0 !important;
-	vertical-align: middle;
-}
-
-.ListTableColumnLastEntry
-{
-	border-right:solid white 2px;
-}
-
-
-.ColumnMenuEntry
-{
-	clear: both;
-	height: 16px;	
-}
-
-.ColumnMenuEntryLabel
-{
-	float: left;
-}
-
-.ColumnMenuEntryCheckbox
-{
-	float: right;
-	cursor: default;
-	margin-top: 2px;	
-}
 
 
 
@@ -945,7 +264,6 @@ border: none;
 	margin: -1px;
 	height: 1px;
 	width: 750px;
-	border-top: 1px #D0D0D0 dotted;
 }
 
 .SmallTabList 
@@ -1010,9 +328,10 @@ border: none;
 	display: block;
 	font: normal 12px Verdana, Tahoma, Helvatica, sans-serif;
 	color: #C0C0C0;
-	background-image: url(../images/tabs/small_tab.png);
+	/* background-image: url(../images/tabs/small_tab.png);
 	background-repeat: no-repeat;
-	background-position: bottom center;
+	background-position: bottom center; */
+	
 	padding: 0 3px 0 3px;
 	margin: 0;
 	float: left;
@@ -1021,6 +340,8 @@ border: none;
 	text-align: center;
 	text-decoration: none;
 	border: 1px #D0D0D0 solid;
+	
+	
 }
 
 #AddPaperSizeDialogGeneral
@@ -1106,167 +427,7 @@ border: none;
 
 
 /* Forms */
-.Form table
-{
- 	border-spacing: 0;
-}
-.Form input
-{
-	font-size: 14px;
-	border-radius: 6px 6px 6px 6px;
-	border: 1px #D0D0D0 solid;
-	color: #2F2F2F;  
-	background-color: #EEEEEE;
-	padding: 4px;
-	margin: 3px 0;
-}
-.Form input.FormFocused
-{
-	border: 1px #73A6FF solid;
-	color: black;  
-	background-color: #EFF5FF;
-}
-.Form textfield
-{
-	background-color: white;
-	border: 1px #C0C0C0 solid;
-}
-.Form select:radio
-{
-	
-}
-.Form select:checkbox
-{
-	
-}
-.Form select
-{
-	
-}
-.Form button
-{
-	background: white;
-	border: 1px #A0A0A0 solid;
-	
-	color: #222222;
-	
-	font: bold 13px Arial, Helvetica, sans-serif;
-	
-	text-shadow: -1px -1px #D0D0D0;
-	
-	background-clip: padding-box;
-    background-color: #FFFFFF;
-    background-image: -moz-linear-gradient(center top , #FFFFFF 0%, #CECECE 100%);
-    border-color: #B7B7B7;
-    
-    box-shadow: 0 0 0.1em 1px rgba(255, 255, 255, 0.867) inset;
-    text-shadow: 0 1px 1px #FFFFFF;
-    
-    border-radius: 6px 6px 6px 6px;
-    border-width: 1px;
-    
-    line-height: 15px;
-    margin: 10px 5px 2px 0;
-    padding: 4px 12px;
-    
-    vertical-align: middle;
-    
-    border-style: solid;
-    cursor: pointer;
-    display: block;
-    
-    overflow: visible;
-    text-decoration: none;
-    width: auto;
-    
-    float:left;
-}
-.Form button:hover
-{
-	
-}
-.Form input.FormError
-{
-	border: 1px #ff6347 solid;
-}
 
-.FormButtonBox
-{
-	padding-left: 10px;
-}
-.FormButtonBoxClear
-{
-	clear: left;	
-}
-
-.FormBox
-{
-	margin: 20px 10px 5px 10px;
-	padding: 16px 10px 10px 10px;
-	border: 1px #D0D0D0 dotted;
-	clear: left;
-}
-.FormBoxHeadline
-{
-	float: left;
-	margin: -25px 0 0 -2px;
-	padding: 0 2px;
-	font-weight: bold;
-	background: white;
-}
-.FormBoxClear
-{
-	clear: both;
-}
-
-/* !!! OUTDATED !!! */
-.FormButton
-{
-	background-color: white;
-	border: 1px #C0C0C0 solid;
-}
-
-.FormCheck
-{
-	background-color: white;
-}
-
-.FormTextarea
-{
-	background-color: white;
-	border: 1px #C0C0C0 solid;
-}
-
-.FormTextfield
-{
-	background-color: white;
-	border: 1px #C0C0C0 solid
-}
-
-.FormRadio
-{
-	background-color: white;
-}
-
-.FormSelect
-{
-	background-color: white;
-	border: 1px #C0C0C0 solid;
-	width: 100%;
-}
-.FormCheckbox
-{
-	
-}
-.FormDropDown
-{
-	
-}
-.FormError
-{
-	font: normal 0.8em Verdana, Helvatica, sans-serif;
-	color: red;
-}
 
 
 /* Content Rounded Box */
@@ -1289,110 +450,29 @@ border: none;
 }
 .ContentContainerContent
 {
-	margin-bottom: 0;
-	padding-bottom: 0;
-	padding-top: 5px;
-	padding-left: 2px;
-	padding-right: 2px;
+	margin: 0;
+	padding: 0;
 }
 
 
-/* OLD */
-.ContentBoxBegin
-{
-	margin: 0;
-	padding: 0;
-	border-spacing: 0;
-	border-collapse: collapse;
-}
-.ContentBoxBegin td
-{
-	padding: 0px;
-}
-.ContentBoxBeginLeft
-{
-	width: 15px;
-	min-height: 10px;
-	background: #C0C0C0;
-	margin: 0;
-	padding: 0;
-	vertical-align: top;
-}
-.ContentBoxBeginRight
-{
-	width: 15px;
-	min-height: 10px;
-	background: #C0C0C0;
-	margin: 0;
-	padding: 0;
-	vertical-align: top;
-	text-align: right;
-}
-.ContentBoxBeginTitle
-{
-	background: #C0C0C0;
-	text-align: center;
-	color: white;
-	font: bold 1em Verdana, Helvetica, sans-serif;
-}
-.ContentBoxMain
-{
-	border-left: 1px #C0C0C0 solid;
-	border-right: 1px #C0C0C0 solid;
-	margin-bottom: 0;
-	padding-bottom: 0;
-	padding-top: 5px;
-	padding-left: 2px;
-	padding-right: 2px;
-}
-.ContentBoxEnd
-{
-	margin: 0;
-	padding: 0;
-	border-spacing: 0;
-	border-collapse: collapse;
-}
-.ContentBoxEnd td
-{
-	padding: 0px;
-}
-.ContentBoxEndLeft
-{
-	width: 10px;
-	height: 10px;
-	margin: 0;
-	padding: 0;
-	vertical-align: bottom;
-}
-.ContentBoxEndRight
-{
-	width: 10px;
-	height: 10px;
-	margin: 0;
-	padding: 0;
-	vertical-align: bottom;
-	text-align: right;
-}
-.ContentBoxEndBorder
-{
-	font: normal 1px sans-serif;
-	vertical-align: bottom;
-	border-bottom: 1px #C0C0C0 solid;
-	height: 10px;
-}
 
 /* Home */
 #HomeWelcome
 {
+	font: bold 14px Arial, Helvetica, sans-serif;
+	color: #666666;
 	float: left;
 }
 #HomeDate
 {
+	font: bold 14px Arial, Helvetica, sans-serif;
+	color: #666666;
 	float: right;
 }
 #HomeSummary
 {
 	width: 100%;
+	margin-bottom: 15px;
 }
 #HomeSummaryLeft
 {
@@ -1418,19 +498,22 @@ border: none;
 {
 	clear: both;
 }
-.HomeLeft
+#HomeLeft
 {
 	float: left;
+	width: 355px;
+	padding: 0;
 }
-.HomeLeft div.ContentBoxMain
+#HomeLeft div.ContentBoxMain
 {
 	min-height: 350px;
 }
-.HomeRight
+#HomeRight
 {
 	float: right;
+	width: 355px;
 }
-.HomeRight div.ContentBoxMain
+#HomeRight div.ContentBoxMain
 {
 	min-height: 350px;
 }
@@ -1551,11 +634,16 @@ border: none;
 	text-decoration: none;
 	padding: 5px 5px;
 	margin: 0;
+	border-bottom: 1px #D0D0D0 dotted;
 }
 .BaseWantToButton:hover
 {
-	background: #99b2cc;
+	background-color: #336699;
 	text-decoration: none;
+}
+.BaseWantToButton:hover .BaseWantToText
+{
+	color: #F0F0F0;
 }
 .BaseWantToIcon
 {
@@ -1570,10 +658,10 @@ border: none;
 	display: block;
 	vertical-align: middle;
 	margin-left: 45px;
-	font: bold 1em Verdana, Helvetica, sans-serif;
-	color: black;
+	font: bold 14px Arial, Helvetica, sans-serif;
+	color: #666666;
 	text-decoration: none;
-	padding: 5px 0;
+	padding: 6px 0;
 	margin: 0;
 	white-space:nowrap;
 	overflow: hidden;
@@ -1593,42 +681,3 @@ border: none;
 	clear: both;
 }
 
-/* Login */
-#LoginHeader
-{
-	height: 235px;
-	width: 	968px;
-	background-image: url("../images/panorama.jpg");
-	background-position: center top;
-	background-repeat: no-repeat;
-}
-
-#LoginContainer
-{
-	color: #272725;
-	width: 370px;
-	margin: 20px auto;
-}
-#LoginTitle
-{
-	font-size: 13px;
-	font-weight: bold;	
-	margin-bottom: 10px;
-}
-#LoginTable
-{
-	width: 100%; 
-	font-weight: bold;	
-	margin: 0;
-	padding: 0;
-	border-collapse: separate;
-	border-spacing: 0;
-}
-#LoginTable td
-{
-	padding: 7px 0;
-}
-#LoginTable a
-{
-	font-weight: normal;	
-}
