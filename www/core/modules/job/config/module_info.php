@@ -28,7 +28,4 @@
 	$main_class				= "JobRequest";
 	
 	$required_include[0] 	= "job";
-	
-	$no_tab					= true;
-	$no_link				= true;
 ?>

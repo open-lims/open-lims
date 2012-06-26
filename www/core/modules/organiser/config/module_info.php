@@ -24,13 +24,14 @@
 /**
  * 
  */
-	$name 					= "organiser";
-	$main_class				= "OrganiserRequest";
+	$name 						= "organiser";
+	$main_class					= "OrganiserRequest";
 	
-	$required_include[0] 	= "user";
-	
-	$tab_name				= "Organiser";
-	$tab_colour				= "lightblue";
+	$tab[0]['language_address']	= "OrganiserMainOrganiser";
+	$tab[0]['colour']			= "blue";
+	$tab[0]['controller_class']	= "OrganiserRequest";
+	$tab[0]['controller_file']	= "organiser.request.php";
+	$tab[0]['alias']				= "";
 
-	$no_link				= true;
+	$required_include[0] 		= "user";
 ?>

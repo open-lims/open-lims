@@ -26,7 +26,4 @@
  */
 	$name 					= "location";
 	$main_class				= "LocationIO";
-	
-	$no_tab					= true;
-	$no_link				= true;
 ?>

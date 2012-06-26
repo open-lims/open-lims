@@ -24,11 +24,26 @@
 /**
  * 
  */
-	$name 					= "base";
-	$main_class				= "BaseRequest";
+	$name 						= "base";
+	$main_class					= "BaseRequest";
+		
+	$tab[0]['language_address']	= "BaseMainHome";
+	$tab[0]['colour']			= "blue";
+	$tab[0]['controller_class']	= "BaseRequest";
+	$tab[0]['controller_file']	= "base.request.php";
+	$tab[0]['alias']			= "";
 	
-	$required_include[0] 	= "base";
+	$tab[1]['language_address']	= "BaseMainSearch";
+	$tab[1]['colour']			= "orange";
+	$tab[1]['controller_class']	= "BaseRequest";
+	$tab[1]['controller_file']	= "base.request.php";
+	$tab[1]['alias']			= "search";
 	
-	$no_tab					= true;
-	$no_link				= true;
+	$tab[2]['language_address']	= "BaseMainAdmin";
+	$tab[2]['colour']			= "grey";
+	$tab[2]['controller_class']	= "AdminRequest";
+	$tab[2]['controller_file']	= "admin.request.php";
+	$tab[2]['alias']			= "admin";
+	
+	$required_include[0] 		= "base";
 ?>

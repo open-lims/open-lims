@@ -41,6 +41,9 @@ class Language // implements LanguageInterface
 	private $language_id;
 	private $language;
 	
+	private static $specific_lang_exception_array;
+	private static $fallback_lang_exception_array;
+	
 	/**
 	 * @param integer $language_id
 	 */
@@ -97,6 +100,92 @@ class Language // implements LanguageInterface
 		}
 	}
 	
+	
+	
+	/**
+	 * @param integer $language_id
+	 * @return array
+	 */
+	private static function scan_language($language_id, $path)
+	{
+		$LANG = array();
+		
+		$module_array = SystemHandler::list_modules();
+		$language = new Language($language_id);
+		
+		if (is_array($module_array)and count($module_array) >= 1)
+		{
+			$lanugage_folder = $sub_folder = constant("WWW_DIR")."/languages/".$language->get_folder_name();
+			
+			foreach ($module_array as $key => $value)
+			{
+				if (file_exists($lanugage_folder."/".trim($value['folder'])."/".$path))
+				{
+					include($lanugage_folder."/".trim($value['folder'])."/".$path);
+				}
+			}
+		}
+		
+		return $LANG;
+	}
+	
+	/**
+	 * @param string $class_name
+	 * @return string
+	 */
+	public static function get_message($address, $type, $path = null)
+	{
+		global $session;
+		
+		switch($type):
+		
+			case "exception":
+				$path = "exceptions.lang.php";
+			break;
+			
+			case "navigation":
+				$path = "navigation.lang.php";
+			break;
+			
+			case "dialog":
+				$path = "dialog.lang.php";
+			break;
+			
+		endswitch;
+		
+		if ($address)
+		{
+			$address = trim($address);
+			
+			self::$fallback_lang_exception_array = self::scan_language(1, $path);
+			
+			if (is_numeric($language_id = $session->read_value("LANGUAGE")))
+			{
+				self::$specific_lang_exception_array = self::scan_language($language_id, $path);
+			}
+			else
+			{
+				self::$specific_lang_exception_array = self::scan_language(1, $path);
+			}
+			
+			if (self::$specific_lang_exception_array[''.$address.''])
+			{
+				return self::$specific_lang_exception_array[''.$address.''];
+			}
+			elseif (self::$fallback_lang_exception_array[''.$address.''])
+			{
+				return self::$fallback_lang_exception_array[''.$address.''];
+			}
+			else
+			{
+				return "$address".null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
 	
 	/**
 	 * Functions returns a valid path of a language templaet file

@@ -27,7 +27,7 @@
  */
 class BaseRequest
 {	
-	public static function ajax_handler()
+	public static function ajax_handler($alias)
 	{
 		switch($_GET[run]):
 
@@ -261,8 +261,10 @@ class BaseRequest
 		endswitch;
 	}
 	
-	public static function io_handler()
+	public static function io_handler($alias)
 	{
+		global $user;
+		
 		switch ($_GET[run]):
 					
 			// BASE
@@ -350,7 +352,11 @@ class BaseRequest
 			case("user_change_timezone"):
 				require_once("io/user.io.php");
 				UserIO::change_timezone();
-			break;		
+			break;	
+
+			default:
+				require_once("io/home.io.php");
+			break;
 			
 		endswitch;
 	}

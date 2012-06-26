@@ -61,7 +61,7 @@
 
 	require_once("../../include/base/system/autoload.function.php");
 
-	SystemHandler::init_db_constants();
+	new SystemHandler(false);
 	
 	SystemConfig::load_module_config();
 	

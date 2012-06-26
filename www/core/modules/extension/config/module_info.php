@@ -24,14 +24,14 @@
 /**
  * 
  */
-	$name 					= "extension";
-	$main_class				= "ExtensionRequest";
+	$name 						= "extension";
+	$main_class					= "ExtensionRequest";
 	
-	$required_include[0] 	= "extension";
+	$tab[0]['language_address']	= "ExtensionMainExtensions";
+	$tab[0]['colour']			= "blue";
+	$tab[0]['controller_class']	= "ExtensionRequest";
+	$tab[0]['controller_file']	= "extension.request.php";
+	$tab[0]['alias']				= "";
 	
-	$tab_name				= "Extensions";
-	$tab_colour				= "blue";
-	
-	$no_link				= true;
-	$no_dialog				= true;
+	$required_include[0] 		= "extension";
 ?>

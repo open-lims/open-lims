@@ -24,14 +24,14 @@
 /**
  * 
  */
-$LANG_EXCEPTION['SampleException'] 													= "A Sample related error occurs!";
+$LANG['SampleException'] 												= "A Sample related error occurs!";
 
-$LANG_EXCEPTION['SampleIDMissingException'] 										= "The Sample-ID is missing!";
-$LANG_EXCEPTION['SampleNotFoundException'] 											= "The requested Sample was not found!";
+$LANG['SampleIDMissingException'] 										= "The Sample-ID is missing!";
+$LANG['SampleNotFoundException'] 										= "The requested Sample was not found!";
 
-$LANG_EXCEPTION['SampleCreateException'] 											= "Could not create Sample!";
+$LANG['SampleCreateException'] 											= "Could not create Sample!";
 
-$LANG_EXCEPTION['SampleDeleteException'] 											= "Could not delete Sample!";
+$LANG['SampleDeleteException'] 											= "Could not delete Sample!";
 
 
 

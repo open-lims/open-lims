@@ -78,7 +78,7 @@ class Main
 			require_once("include/base/system/autoload.function.php");
 			
 			SystemConfig::load_module_config();
-			
+						
 			if ($connection_result == true)
 			{
 				require_once("include/base/system/transaction.class.php");
@@ -92,8 +92,6 @@ class Main
 				
 				require_once("include/base/system_fe/system_log.class.php");
 
-				Security::protect_session();
-				
 				$runtime_data = new RuntimeData();
 				
 				try
@@ -135,6 +133,8 @@ class Main
 				{
 					$GLOBALS['fatal_error'] = "Event-handler creation failed!";
 				}
+				
+				Security::protect_session();
 			}
 			else
 			{

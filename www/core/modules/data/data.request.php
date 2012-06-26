@@ -27,7 +27,7 @@
  */
 class DataRequest
 {
-	public static function ajax_handler()
+	public static function ajax_handler($alias)
 	{
 		switch($_GET[run]):
 			
@@ -272,7 +272,7 @@ class DataRequest
 		endswitch;
 	}
 	
-	public static function io_handler()
+	public static function io_handler($alias)
 	{	
 		switch($_GET[action]):
 			case("permission"):

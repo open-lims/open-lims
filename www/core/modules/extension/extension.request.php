@@ -27,12 +27,12 @@
  */
 class ExtensionRequest
 {
-	public static function ajax_handler()
+	public static function ajax_handler($alias)
 	{
 		
 	}
 	
-	public static function io_handler()
+	public static function io_handler($alias)
 	{
 		if ($_GET['extension'])
 		{

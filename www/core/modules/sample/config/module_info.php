@@ -24,11 +24,14 @@
 /**
  * 
  */
-	$name 					= "sample";
-	$main_class				= "SampleRequest";
+	$name 						= "sample";
+	$main_class					= "SampleRequest";
 	
-	$required_include[0] 	= "sample";
+	$tab[0]['language_address']	= "SampleMainSamples";
+	$tab[0]['colour']			= "orange";
+	$tab[0]['controller_class']	= "SampleRequest";
+	$tab[0]['controller_file']	= "sample.request.php";
+	$tab[0]['alias']				= "";
 	
-	$tab_name				= "Samples";
-	$tab_colour				= "orange";
+	$required_include[0] 		= "sample";
 ?>

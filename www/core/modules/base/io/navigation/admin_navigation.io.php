@@ -34,7 +34,7 @@ class AdminNavigationIO
 		
 		$paramquery[username] = $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "admin";
+		$paramquery[nav] = "base.admin";
 		$paramquery[run] = "general_admin";
 		$params = http_build_query($paramquery,'','&#38;');
 		
@@ -43,7 +43,7 @@ class AdminNavigationIO
 		
 		$paramquery[username] = $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "admin";
+		$paramquery[nav] = "base.admin";
 		$paramquery[run] = "include_admin";
 		$params = http_build_query($paramquery,'','&#38;');
 		
@@ -52,7 +52,7 @@ class AdminNavigationIO
 		
 		$paramquery[username] = $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "admin";
+		$paramquery[nav] = "base.admin";
 		$paramquery[run] = "module_admin";
 		$params = http_build_query($paramquery,'','&#38;');
 		
@@ -61,7 +61,7 @@ class AdminNavigationIO
 		
 		$paramquery[username] = $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "admin";
+		$paramquery[nav] = "base.admin";
 		$paramquery[run] = "navigation";
 		$params = http_build_query($paramquery,'','&#38;');
 		
@@ -70,7 +70,7 @@ class AdminNavigationIO
 		
 		$paramquery[username] = $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "admin";
+		$paramquery[nav] = "base.admin";
 		$paramquery[run] = "registry";
 		$params = http_build_query($paramquery,'','&#38;');
 		
@@ -79,7 +79,7 @@ class AdminNavigationIO
 
 		$paramquery[username] = $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "admin";
+		$paramquery[nav] = "base.admin";
 		$paramquery[run] = "system_log";
 		$params = http_build_query($paramquery,'','&#38;');
 		
@@ -88,7 +88,7 @@ class AdminNavigationIO
 		
 		$paramquery[username] = $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "admin";
+		$paramquery[nav] = "base.admin";
 		$paramquery[run] = "system_message";
 		$params = http_build_query($paramquery,'','&#38;');
 		
@@ -107,7 +107,7 @@ class AdminNavigationIO
 			{
 				$paramquery[username] 	= $_GET[username];
 				$paramquery[session_id] = $_GET[session_id];
-				$paramquery[nav]		= "admin";
+				$paramquery[nav]		= "base.admin";
 				$paramquery[run]		= "organisation";
 				$paramquery[dialog]		= $value['internal_name'];
 				$params 				= http_build_query($paramquery,'','&#38;');
@@ -152,7 +152,7 @@ class AdminNavigationIO
 			{
 				$paramquery[username] 	= $_GET[username];
 				$paramquery[session_id] = $_GET[session_id];
-				$paramquery[nav]		= "admin";
+				$paramquery[nav]		= "base.admin";
 				$paramquery[run]		= "module";
 				$paramquery[dialog]		= $value[internal_name];
 				$params 				= http_build_query($paramquery,'','&#38;');

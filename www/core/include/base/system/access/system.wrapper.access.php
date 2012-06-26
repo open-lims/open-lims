@@ -37,7 +37,7 @@ class System_Wrapper_Access
 		global $db;
 	
 		$sql = "SELECT ".constant("BASE_MODULE_NAVIGATION_TABLE").".id, " .
-							"".constant("BASE_MODULE_NAVIGATION_TABLE").".display_name AS name, " .
+							"".constant("BASE_MODULE_NAVIGATION_TABLE").".language_address AS name, " .
 							"".constant("BASE_MODULE_NAVIGATION_TABLE").".colour AS colour, " .
 							"".constant("BASE_MODULE_NAVIGATION_TABLE").".hidden AS hidden, " .
 							"".constant("BASE_MODULE_NAVIGATION_TABLE").".position AS position, " .

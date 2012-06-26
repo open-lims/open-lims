@@ -371,6 +371,37 @@ class BaseModule_Access
 	}
 	
 	/**
+	 * @param string $name
+	 * @return bool
+	 */
+	public static function get_module_id_by_module_name($name)
+	{
+		global $db;
+		
+		if ($name)
+		{		
+			$name = trim(strtolower($name));
+			
+			$sql = "SELECT id FROM ".constant("BASE_MODULE_TABLE")." WHERE TRIM(LOWER(name)) = '".$name."'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[id])
+			{
+				return $data[id];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @param param $module_name
 	 * @return bool
 	 */
@@ -398,7 +429,7 @@ class BaseModule_Access
 			return null;
 		}
 	}
-	
+
 	/**
 	 * @return array
 	 */

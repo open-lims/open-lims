@@ -28,7 +28,4 @@
 	$main_class				= "ManufacturerRequest";
 	
 	$required_include[0] 	= "manufacturer";
-	
-	$no_tab					= true;
-	$no_link				= true;
 ?>

@@ -33,16 +33,21 @@ class AdminRequest
 	public static function get_navigation()
 	{
 		$return_array = array();
-		$return_array['class_path'] = "core/modules/admin/io/navigation/admin_navigation.io.php";
+		$return_array['class_path'] = "core/modules/base/io/navigation/admin_navigation.io.php";
 		$return_array['class'] = "AdminNavigationIO";
 		$return_array['method'] = "navigation";
 		return $return_array;
 	}
 	
+	public static function ajax_handler($alias)
+	{
+		
+	}
+	
 	/**
 	 * @todo IMPORTANT: remove bad dependency
 	 */
-	public static function io_handler()
+	public static function io_handler($alias)
 	{
 		global $user;
 		

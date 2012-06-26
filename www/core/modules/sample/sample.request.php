@@ -27,7 +27,7 @@
  */
 class SampleRequest
 {
-	public static function ajax_handler()
+	public static function ajax_handler($alias)
 	{
 		global $sample_security;
 		
@@ -266,7 +266,7 @@ class SampleRequest
 	/**
 	 * @throws SampletSecurityAccessDeniedException
 	 */
-	public static function io_handler()
+	public static function io_handler($alias)
 	{
 		global $sample_security, $session, $transaction;
 		

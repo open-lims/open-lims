@@ -27,7 +27,7 @@
  */
 class ManufacturerRequest
 {
-	public static function ajax_handler()
+	public static function ajax_handler($alias)
 	{
 		switch($_GET[run]):
 	
@@ -74,7 +74,7 @@ class ManufacturerRequest
 		endswitch;
 	}
 	
-	public static function io_handler()
+	public static function io_handler($alias)
 	{
 		
 	}

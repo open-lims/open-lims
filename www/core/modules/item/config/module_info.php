@@ -28,7 +28,4 @@
 	$main_class				= "ItemRequest";
 	
 	$required_include[0] 	= "item";
-	
-	$no_tab					= true;
-	$no_link				= true;
 ?>

@@ -27,12 +27,12 @@
  */
 class OrganiserRequest
 {	
-	public static function ajax_handler()
+	public static function ajax_handler($alias)
 	{
 		
 	}
 	
-	public static function io_handler()
+	public static function io_handler($alias)
 	{
 		require_once("io/organiser.io.php");
 		OrganiserIO::personal_organiser();
