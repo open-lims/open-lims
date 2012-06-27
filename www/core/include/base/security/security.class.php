@@ -79,32 +79,7 @@ class Security implements SecurityInterface
 	{	
 		if ($install == false)
 		{	
-			$module_get_array = array();
-			
-			$registered_module_array = SystemHandler::get_module_folders();
-			if (is_array($registered_module_array) and count($registered_module_array) >= 1)
-			{
-				foreach($registered_module_array as $key => $value)
-				{
-					$get_file = constant("MODULES_DIR")."/".$value."/config/module_get.php";
-					if (file_exists($get_file))
-					{
-						$get_file = constant("MODULES_DIR")."/".$value."/config/module_get.php";
-						include($get_file);
-						
-						if (is_array($get) and count($get) >= 1)
-						{
-							foreach($get as $key => $value)
-							{
-								if (!in_array($value, $module_get_array))
-								{
-									array_push($module_get_array, $value);
-								}
-							}
-						}
-					}
-				}
-			}
+			$module_get_array = SystemHandler::get_module_get_values();
 		}
 		
 		if (isset($classes[$classname])) {

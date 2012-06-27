@@ -29,4 +29,5 @@
 	$event_listener[2] = "ModuleLink";
 	$event_listener[3] = "ModuleDialog";
 	$event_listener[4] = "Registry";
+	$event_listener[5] = "ExtensionHandler";
 ?>

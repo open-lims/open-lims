@@ -24,11 +24,15 @@
 /**
  * 
  */
-	$name 					= "project";
-	$main_class				= "ProjectRequest";
+	$name 						= "project";
+	$main_class					= "ProjectRequest";
 	
-	$required_include[0] 	= "project";
+	$tab[0]['language_address']	= "ProjectMainProjects";
+	$tab[0]['colour']			= "green";
+	$tab[0]['controller_class']	= "ProjectRequest";
+	$tab[0]['controller_file']	= "project.request.php";
+	$tab[0]['alias']				= "";
 	
-	$tab_name				= "Projects";
-	$tab_colour				= "green";
+	$required_include[0] 		= "project";
+	
 ?>

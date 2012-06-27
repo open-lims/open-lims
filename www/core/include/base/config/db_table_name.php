@@ -24,16 +24,16 @@
 /**
  * 
  */
-	define("CURRENCY_TABLE", 		"core_currencies");
-	define("LANGUAGE_TABLE", 		"core_languages");
-	define("MEASURING_UNIT_TABLE", 	"core_measuring_units");
-	define("PAPER_SIZE_TABLE", 		"core_paper_sizes");
-	define("SESSION_VALUE_TABLE", 	"core_session_values");
-	define("SESSION_TABLE", 		"core_sessions");
-	define("SYSTEM_LOG_TYPE_TABLE", "core_system_log_types");
-	define("SYSTEM_LOG_TABLE", 		"core_system_log");
-	define("SYSTEM_MESSAGE_TABLE", 	"core_system_messages");
-	define("TIMEZONE_TABLE", 		"core_timezones");
+	define("CURRENCY_TABLE", 			"core_currencies");
+	define("LANGUAGE_TABLE", 			"core_languages");
+	define("MEASURING_UNIT_TABLE", 		"core_measuring_units");
+	define("PAPER_SIZE_TABLE", 			"core_paper_sizes");
+	define("SESSION_VALUE_TABLE", 		"core_session_values");
+	define("SESSION_TABLE", 			"core_sessions");
+	define("SYSTEM_LOG_TYPE_TABLE", 	"core_system_log_types");
+	define("SYSTEM_LOG_TABLE", 			"core_system_log");
+	define("SYSTEM_MESSAGE_TABLE", 		"core_system_messages");
+	define("TIMEZONE_TABLE", 			"core_timezones");
 	
 	define("GROUP_HAS_USER_TABLE", 		"core_group_has_users");
 	define("GROUP_TABLE", 				"core_groups");
@@ -41,4 +41,6 @@
 	define("USER_PROFILE_SETTING_TABLE","core_user_profile_settings");
 	define("USER_PROFILE_TABLE", 		"core_user_profiles");
 	define("USER_TABLE", 				"core_users");
+	
+	define("EXTENSION_TABLE", 			"core_extensions");
 ?>

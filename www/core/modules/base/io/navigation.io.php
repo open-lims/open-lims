@@ -51,17 +51,33 @@ class Navigation_IO
 				
 					$paramquery[username] = $_GET[username];
 					$paramquery[session_id] = $_GET[session_id];
-					$paramquery[nav] = $module_name;
+					
+					if ($value[alias])
+					{
+						$active_alias = $module_name.".".$value[alias];
+						$paramquery[nav] = $module_name.".".$value[alias];
+					}
+					else
+					{
+						$active_alias = $module_name;
+						$paramquery[nav] = $module_name;
+					}
+					
 					$params = http_build_query($paramquery,'','&#38;');
+					
+					if (!$_GET['nav'] and $active_alias == "base")
+					{
+						$_GET['nav'] = "base";
+					}
 					
 					switch ($value[colour]):
 					
 						case "blue":
-							if ($_GET[nav] == $module_name)
+							if ($_GET[nav] == $active_alias)
 							{
 								$background_color_class = "NavigationBackgroundBlue";
 								$template = new HTMLTemplate("base/navigation/main/tabs/blue_tab_active.html");
-								$current_module = $module_name;
+								$current_module = $active_alias;
 								$current_color = $value[colour];
 								$module_tab_active = true;
 							}
@@ -72,11 +88,11 @@ class Navigation_IO
 						break;
 						
 						case "green":
-							if ($_GET[nav] == $module_name)
+							if ($_GET[nav] == $active_alias)
 							{
 								$background_color_class = "NavigationBackgroundGreen";
 								$template = new HTMLTemplate("base/navigation/main/tabs/green_tab_active.html");
-								$current_module = $module_name;
+								$current_module = $active_alias;
 								$current_color = $value[colour];
 								$module_tab_active = true;
 							}
@@ -87,11 +103,11 @@ class Navigation_IO
 						break;
 						
 						case "orange";
-							if ($_GET[nav] == $module_name)
+							if ($_GET[nav] == $active_alias)
 							{
 								$background_color_class = "NavigationBackgroundOrange";
 								$template = new HTMLTemplate("base/navigation/main/tabs/orange_tab_active.html");
-								$current_module = $module_name;
+								$current_module = $active_alias;
 								$current_color = $value[colour];
 								$module_tab_active = true;
 							}
@@ -100,13 +116,13 @@ class Navigation_IO
 								$template = new HTMLTemplate("base/navigation/main/tabs/orange_tab.html");
 							}
 						break;
-											
+						
 						default:
-							if ($_GET[nav] == $module_name)
+							if ($_GET[nav] == $active_alias)
 							{
 								$background_color_class = "NavigationBackgroundGrey";
 								$template = new HTMLTemplate("base/navigation/main/tabs/grey_tab_active.html");
-								$current_module = $module_name;
+								$current_module = $active_alias;
 								$current_color = $value[colour];
 								$module_tab_active = true;
 							}
@@ -118,8 +134,10 @@ class Navigation_IO
 						
 					endswitch;
 					
+					
+					
 					$template->set_var("params", $params);
-					$template->set_var("title", $value[display_name]);
+					$template->set_var("title", Language::get_message($value[language_address], "navigation"));
 					
 					$config_folder = "core/modules/".SystemHandler::get_module_folder_by_module_name($module_name)."/config";
 					if (is_dir($config_folder))
@@ -149,46 +167,17 @@ class Navigation_IO
 						$template->set_var("down", false);
 					}
 					
+					
 					$module_tab_string .= $template->get_string();
 				}
 			}
 		}
-		
-	
-		
-		if ($_GET[nav] == "home" or !$_GET[nav] or $module_tab_active == false)
-		{
-			$background_color_class = "NavigationBackgroundBlue";
-			$paramquery[username] = $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav] = "home";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template_home = new HTMLTemplate("base/navigation/main/tabs/blue_tab_active.html");
-			$template_home->set_var("params", $params);
-			$template_home->set_var("title", "Home");
-			$template_home->set_var("down", false);
-		}
-		else
-		{
-			$paramquery[username] = $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav] = "home";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template_home = new HTMLTemplate("base/navigation/main/tabs/blue_tab.html");
-			$template_home->set_var("params", $params);
-			$template_home->set_var("title", "Home");
-			$template_home->set_var("down", false);
-		}
-		
-		
+
 		$template_header->set_var("background_class", $background_color_class);
 		$template_header->output();
-		$template_home->output();
-		
-		echo $module_tab_string;
 
+		echo $module_tab_string;
+		
 		$template = new HTMLTemplate("base/navigation/main/main_navigation_footer.html");
 		$template->output();
 	}
@@ -216,45 +205,25 @@ class Navigation_IO
 	
 	public static function left()
 	{
-		if ($_GET[nav] and $_GET[nav] != "home" and $_GET[nav] != "base")
+		if ($_GET[nav] and $_GET[nav] != "base")
 		{
-			$module_array = SystemHandler::list_modules();
+			$module_controller_array = SystemHandler::get_module_controller($_GET[nav]);
+								
+			$module_controller_path = "core/modules/".$module_controller_array['path'];
 			
-			if (is_array($module_array) and count($module_array) >= 1)
+			if (file_exists($module_controller_path))
 			{
-				foreach($module_array as $key => $value)
+				require_once($module_controller_path);
+				if (method_exists($module_controller_array['class'], get_navigation))
 				{
-					if ($_GET[nav] == $value[name])
+					if (($navigation_array = $module_controller_array['class']::get_navigation()) !== false)
 					{
-						$module_path = "core/modules/".$value[folder]."/".$value[name].".request.php";
-						if (file_exists($module_path))
+						if ($navigation_array['class'] and $navigation_array['method'] and $navigation_array['class_path'])
 						{
-							require_once($module_path);
-							if (method_exists($value['class'], get_navigation))
+							if (file_exists($navigation_array['class_path']))
 							{
-								if (($navigation_array = $value['class']::get_navigation()) !== false)
-								{
-									if ($navigation_array['class'] and $navigation_array['method'] and $navigation_array['class_path'])
-									{
-										if (file_exists($navigation_array['class_path']))
-										{
-											require_once($navigation_array['class_path']);
-											$navigation_array['class']::$navigation_array['method']();
-										}
-										else
-										{
-											self::get_left_standard_navigation();
-										}
-									}
-									else
-									{
-										self::get_left_standard_navigation();
-									}
-								}
-								else
-								{
-									self::get_left_standard_navigation();
-								}
+								require_once($navigation_array['class_path']);
+								$navigation_array['class']::$navigation_array['method']();
 							}
 							else
 							{
@@ -266,12 +235,20 @@ class Navigation_IO
 							self::get_left_standard_navigation();
 						}
 					}
+					else
+					{
+						self::get_left_standard_navigation();
+					}
+				}
+				else
+				{
+					self::get_left_standard_navigation();
 				}
 			}
 			else
 			{
 				self::get_left_standard_navigation();
-			}
+			}					
 		}
 		else
 		{

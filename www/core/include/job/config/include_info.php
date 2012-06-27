@@ -26,7 +26,5 @@
  */
 	$name 			= "job";
 	
-	$no_class_event_listener 	= true;
-	
 	$requires[0] 	= "base";
 ?>

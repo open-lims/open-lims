@@ -25,6 +25,4 @@
  * 
  */
 	$name 						= "base";
-	
-	$no_class_path				= true;
 ?>

@@ -73,7 +73,6 @@ function __autoload($classname)
 	
 	$classes['Convert']						= $path_prefix."core/include/base/system/convert.class.php";
 	$classes['Cron']						= $path_prefix."core/include/base/system/cron.class.php";
-	$classes['ErrorLanguage']				= $path_prefix."core/include/base/system/error_language.class.php";
 	$classes['EventHandler']				= $path_prefix."core/include/base/system/event_handler.class.php";
 	$classes['ExceptionHandler']			= $path_prefix."core/include/base/system/exception_handler.class.php";
 	$classes['System']						= $path_prefix."core/include/base/system/system.class.php";
@@ -117,23 +116,19 @@ function __autoload($classname)
 	$classes['User_Wrapper'] 				= $path_prefix."core/include/base/user/user.wrapper.class.php";
 	
 	
-	$registered_include_array = SystemHandler::get_include_folders();
-	if (is_array($registered_include_array) and count($registered_include_array) >= 1)
+	// Extension
+	$classes['ExtensionCreateRunEvent']		= $path_prefix."core/include/base/extension/events/extension_create_run_event.class.php";
+
+	$classes['ConreteExtensionInterface']	= $path_prefix."core/include/base/extension/interfaces/concrete_extension.interface.php";
+
+	$classes['Extension']					= $path_prefix."core/include/base/extension/extension.class.php";
+	$classes['ExtensionHandler']			= $path_prefix."core/include/base/extension/extension_handler.class.php";
+	
+	$system_handler_classes = SystemHandler::get_classes();
+
+	if (is_array($system_handler_classes) and count($system_handler_classes) >= 1)
 	{
-		foreach($registered_include_array as $key => $value)
-		{
-			$config_file = constant("INCLUDE_DIR")."/".$value."/config/include_info.php";
-			if (file_exists($config_file))
-			{
-				include($config_file);
-				if ($no_class_path != true)
-				{
-					$class_path_file = constant("INCLUDE_DIR")."/".$value."/config/class_path.php";
-					include($class_path_file);
-				}
-				unset($no_class_path);
-			}
-		}
+		$classes = array_merge($classes, $system_handler_classes);
 	}
 	
 	if (isset($classes[$classname])) {

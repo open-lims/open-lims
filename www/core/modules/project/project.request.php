@@ -27,7 +27,7 @@
  */
 class ProjectRequest
 {	
-	public static function ajax_handler()
+	public static function ajax_handler($alias)
 	{
 		global $project_security;
 	
@@ -325,7 +325,7 @@ class ProjectRequest
 	/**
 	 * @throws ProjectSecurityAccessDeniedException
 	 */
-	public static function io_handler()
+	public static function io_handler($alias)
 	{
 		global $project_security, $session, $transaction;
 

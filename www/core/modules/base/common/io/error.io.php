@@ -42,7 +42,7 @@ class Error_IO
 	
 	public function get_error_message()
 	{
-		$language_error_message = ErrorLanguage::get_message(get_class($this->exception));
+		$language_error_message = Language::get_message(get_class($this->exception), "exception");
 		$exception_error_message = $this->exception->getMessage();
 		
 		if ($language_error_message == null)

@@ -248,45 +248,19 @@ class ContentHandler_IO
  						{
 							if ($_GET[nav])
 							{
-								if($_GET[nav] == "home")
+								$module_controller_array = SystemHandler::get_module_controller($_GET[nav]);
+								
+								$module_controller_path = "core/modules/".$module_controller_array['path'];
+
+								if (file_exists($module_controller_path))
 								{
-									include("core/modules/base/io/home.io.php");
+									require_once($module_controller_path);
+									$module_controller_array['class']::io_handler($module_controller_array['alias']);
 								}
 								else
 								{
-									$module_found = false;
-									$module_array = SystemHandler::list_modules();
-									
-									if (is_array($module_array) and count($module_array) >= 1)
-									{
-										foreach($module_array as $key => $value)
-										{
-											if ($_GET[nav] == $value[name])
-											{
-												$module_request_handler = "core/modules/".$value[folder]."/".$value[name].".request.php";
-												if (file_exists($module_request_handler))
-												{
-													require_once($module_request_handler);
-													$value['class']::io_handler();
-													$module_found = true;
-												}
-												else
-												{
-													throw new ModuleDataCorruptExeception(null, null);
-												}
-											}
-										}
-									}
-									else
-									{
-										include("core/modules/base/io/home.io.php");
-									}
-									
-									if ($module_found == false)
-									{
-										// throw exception
-									}
-								}
+									throw new ModuleDataCorruptExeception();
+								}							
 							}
 							else
 							{
@@ -344,22 +318,18 @@ class ContentHandler_IO
 			{
 				if ($_GET['nav'])
 				{				
-					$module_array = SystemHandler::list_modules();
+					$module_controller_array = SystemHandler::get_module_controller($_GET[nav]);
+								
+					$module_controller_path = "core/modules/".$module_controller_array['path'];
 					
-					if (is_array($module_array) and count($module_array) >= 1)
+					if (file_exists($module_controller_path))
 					{
-						foreach($module_array as $key => $value)
-						{
-							if ($_GET['nav'] == $value['name'])
-							{
-								$module_request_handler = "core/modules/".$value['folder']."/".$value['name'].".request.php";
-								if (file_exists($module_request_handler))
-								{
-									require_once($module_request_handler);
-									$value['class']::ajax_handler();
-								}
-							}
-						}
+						require_once($module_controller_path);
+						$module_controller_array['class']::ajax_handler($module_controller_array['alias']);
+					}
+					else
+					{
+						throw new ModuleDataCorruptExeception();
 					}
 				}
 				elseif($_GET['extension'])
@@ -391,7 +361,7 @@ class ContentHandler_IO
 				if ($_GET['run'] == "login" or $_GET['run'] == "cron")
 				{
 					require_once("core/modules/base/base.request.php");
-					BaseRequest::ajax_handler();
+					BaseRequest::ajax_handler(null);
 				}
 			}
  		}

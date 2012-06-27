@@ -54,8 +54,6 @@
 	
 	if ($_GET[session_id] and $_GET[file_id])
 	{	
-		Security::protect_session();
-		
 		$transaction = new Transaction();
 		
 		try
@@ -90,6 +88,8 @@
 		{
 			die("Event-handler creation failed!");
 		}
+		
+		Security::protect_session();
 		
 		$session = new Session($_GET[session_id]);
 		$user = new User($session->get_user_id());

@@ -39,33 +39,8 @@ class Retrace implements RetraceInterface
 	 */
 	public static function create_retrace_string()
 	{
-		$module_retrace_array = array();
-		
-		$registered_module_array = SystemHandler::get_module_folders();
-		if (is_array($registered_module_array) and count($registered_module_array) >= 1)
-		{
-			foreach($registered_module_array as $key => $value)
-			{
-				$get_file = constant("MODULES_DIR")."/".$value."/config/module_get.php";
-				if (file_exists($get_file))
-				{
-					$get_file = constant("MODULES_DIR")."/".$value."/config/module_get.php";
-					include($get_file);
-					
-					if (is_array($retrace) and count($retrace) >= 1)
-					{
-						foreach($retrace as $key => $value)
-						{
-							if (!in_array($value, $module_retrace_array))
-							{
-								array_push($module_retrace_array, $value);
-							}
-						}
-					}
-				}
-			}
-		}
-		
+		$module_retrace_array = SystemHandler::get_module_retrace_values();
+				
 		$retrace_array = array();
 		
 		foreach ($_GET as $key => $value)

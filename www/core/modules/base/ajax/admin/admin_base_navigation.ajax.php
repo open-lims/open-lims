@@ -60,80 +60,65 @@ class AdminBaseNavigationAjax
 			}
 						
 			$list_array = System_Wrapper::list_base_module_navigation(($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
-			
-			$home_array = array();
-			$home_array[name] = "Home";
-			$home_array[module] = "base";
-			$home_array[colour] = "blue";
-			$home_array[hidden] = "f";
-	
-			array_unshift($list_array, $home_array);
-			
+						
 			if (is_array($list_array) and count($list_array) >= 1)
 			{		
 				foreach($list_array as $key => $value)
 				{	
-					if ($list_array[$key][module] != "base")
+					$paramquery = $_GET;
+					$paramquery[id] = $list_array[$key][id];
+					$paramquery[action] = "hide";
+					unset($paramquery[sortvalue]);
+					unset($paramquery[sortmethod]);
+					unset($paramquery[nextpage]);
+					$params = http_build_query($paramquery, '', '&#38;');
+	
+					$list_array[$key][hide][link] = $params;
+					
+					$list_array[$key][name] = Language::get_message($list_array[$key][name], "navigation");
+					
+					if ($list_array[$key][hidden] == 't')
+					{
+						$list_array[$key][hide][content] = "<img src='images/icons/grey_point.png' alt='hide' style='border: 0;' />";
+					}
+					else
+					{
+						$list_array[$key][hide][content] = "<img src='images/icons/green_point.png' alt='hide' style='border: 0;' />";
+					}
+					
+					if ($list_array[$key][position] != 1)
 					{
 						$paramquery = $_GET;
 						$paramquery[id] = $list_array[$key][id];
-						$paramquery[action] = "hide";
+						$paramquery[action] = "upwards";
 						unset($paramquery[sortvalue]);
 						unset($paramquery[sortmethod]);
 						unset($paramquery[nextpage]);
 						$params = http_build_query($paramquery, '', '&#38;');
 		
-						$list_array[$key][hide][link] = $params;
-						
-						if ($list_array[$key][hidden] == 't')
-						{
-							$list_array[$key][hide][content] = "<img src='images/icons/grey_point.png' alt='hide' style='border: 0;' />";
-						}
-						else
-						{
-							$list_array[$key][hide][content] = "<img src='images/icons/green_point.png' alt='hide' style='border: 0;' />";
-						}
-						
-						if ($list_array[$key][position] != 1)
-						{
-							$paramquery = $_GET;
-							$paramquery[id] = $list_array[$key][id];
-							$paramquery[action] = "upwards";
-							unset($paramquery[sortvalue]);
-							unset($paramquery[sortmethod]);
-							unset($paramquery[nextpage]);
-							$params = http_build_query($paramquery, '', '&#38;');
-			
-							$list_array[$key][uw][link] = $params;
-							$list_array[$key][uw][content] = "<img src='images/icons/upward.png' alt='uw' style='border: 0;' />";
-						}
-						else
-						{
-							$list_array[$key][uw] = "<img src='images/icons/upward_na.png' alt='uw' style='border: 0;' />";
-						}
-						
-						if ($list_array[$key][position] != ModuleNavigation::get_highest_position())
-						{
-							$paramquery = $_GET;
-							$paramquery[id] = $list_array[$key][id];
-							$paramquery[action] = "downwards";
-							unset($paramquery[sortvalue]);
-							unset($paramquery[sortmethod]);
-							unset($paramquery[nextpage]);
-							$params = http_build_query($paramquery, '', '&#38;');
-			
-							$list_array[$key][dw][link] = $params;
-							$list_array[$key][dw][content] = "<img src='images/icons/downward.png' alt='dw' style='border: 0;' />";
-						}
-						else
-						{
-							$list_array[$key][dw] = "<img src='images/icons/downward_na.png' alt='dw' style='border: 0;' />";
-						}
+						$list_array[$key][uw][link] = $params;
+						$list_array[$key][uw][content] = "<img src='images/icons/upward.png' alt='uw' style='border: 0;' />";
 					}
 					else
 					{
-						$list_array[$key][hide] = "<img src='images/icons/green_point.png' alt='hide' style='border: 0;' />";
 						$list_array[$key][uw] = "<img src='images/icons/upward_na.png' alt='uw' style='border: 0;' />";
+					}
+					
+					if ($list_array[$key][position] != ModuleNavigation::get_highest_position())
+					{
+						$paramquery = $_GET;
+						$paramquery[id] = $list_array[$key][id];
+						$paramquery[action] = "downwards";
+						unset($paramquery[sortvalue]);
+						unset($paramquery[sortmethod]);
+						unset($paramquery[nextpage]);
+						$params = http_build_query($paramquery, '', '&#38;');
+		
+						$list_array[$key][dw][link] = $params;
+						$list_array[$key][dw][content] = "<img src='images/icons/downward.png' alt='dw' style='border: 0;' />";
+					}
+					else
+					{
 						$list_array[$key][dw] = "<img src='images/icons/downward_na.png' alt='dw' style='border: 0;' />";
 					}
 				}

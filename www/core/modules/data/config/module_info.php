@@ -24,11 +24,14 @@
 /**
  * 
  */
-	$name 					= "data";
-	$main_class				= "DataRequest";
+	$name 						= "data";
+	$main_class					= "DataRequest";
 	
-	$required_include[0] 	= "data";
-	
-	$tab_name				= "Data";
-	$tab_colour				= "green";
+	$tab[0]['language_address']	= "DataMainData";
+	$tab[0]['colour']			= "green";
+	$tab[0]['controller_class']	= "DataRequest";
+	$tab[0]['controller_file']	= "data.request.php";
+	$tab[0]['alias']				= "";
+
+	$required_include[0] 		= "data";
 ?>

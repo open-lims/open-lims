@@ -30,7 +30,7 @@ class BaseModuleNavigation_Access
 	const BASE_MODULE_NAVIGATION_PK_SEQUENCE = 'core_base_module_navigation_id_seq';
 	
 	private $id;
-	private $display_name;
+	private $language_address;
 	private $position;
 	private $colour;
 	private $module_id;
@@ -96,14 +96,23 @@ class BaseModuleNavigation_Access
 	 * @param integer $module_id
 	 * @return integer
 	 */
-	public function create($display_name, $colour, $position, $module_id)
+	public function create($language_address, $colour, $position, $module_id, $controller_class, $controller_file, $alias)
 	{
 		global $db;
 
-		if ($display_name and $colour and is_numeric($position) and is_numeric($module_id))
+		if ($language_address and $colour and $controller_class and $controller_file and is_numeric($position) and is_numeric($module_id))
 		{
-	 		$sql_write = "INSERT INTO ".constant("BASE_MODULE_NAVIGATION_TABLE")." (id, display_name, position, colour, module_id, hidden) " .
-								"VALUES (nextval('".self::BASE_MODULE_NAVIGATION_PK_SEQUENCE."'::regclass),'".$display_name."','".$position."','".$colour."',".$module_id.",'f')";		
+			if ($alias)
+			{
+				$alias_insert = "'".$alias."'";
+			}
+			else
+			{
+				$alias_insert = "NULL";
+			}
+			
+	 		$sql_write = "INSERT INTO ".constant("BASE_MODULE_NAVIGATION_TABLE")." (id, language_address, position, colour, module_id, hidden, alias, controller_class, controller_file) " .
+								"VALUES (nextval('".self::BASE_MODULE_NAVIGATION_PK_SEQUENCE."'::regclass),'".$language_address."','".$position."','".$colour."',".$module_id.",'f',".$alias_insert.",'".$controller_class."','".$controller_file."')";		
 				
 			$res_write = $db->db_query($sql_write);
 			
@@ -162,11 +171,11 @@ class BaseModuleNavigation_Access
 	/**
 	 * @return string
 	 */
-	public function get_display_name()
+	public function get_language_address()
 	{
-		if ($this->display_name)
+		if ($this->language_address)
 		{
-			return $this->display_name;
+			return $this->language_address;
 		}
 		else
 		{
@@ -219,15 +228,63 @@ class BaseModuleNavigation_Access
 		}	
 	}
 	
+	/**
+	 * @return boolean
+	 */
 	public function get_hidden()
 	{
-		if ($this->hidden)
+		if (isset($this->hidden))
 		{
 			return $this->hidden;
 		}
 		else
 		{
 			return false;
+		}	
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function get_alias()
+	{
+		if ($this->alias)
+		{
+			return $this->alias;
+		}
+		else
+		{
+			return null;
+		}	
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function get_controller_class()
+	{
+		if ($this->controller_class)
+		{
+			return $this->controller_class;
+		}
+		else
+		{
+			return null;
+		}	
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function get_controller_file()
+	{
+		if ($this->controller_file)
+		{
+			return $this->controller_file;
+		}
+		else
+		{
+			return null;
 		}	
 	}
 	
@@ -395,16 +452,105 @@ class BaseModuleNavigation_Access
 	}
 	
 	/**
+	 * @param string $alias
+	 * @return bool
+	 */
+	public function set_alias($alias)
+	{
+		global $db;
+
+		if ($this->id and $alias)
+		{
+			$sql = "UPDATE ".constant("BASE_MODULE_NAVIGATION_TABLE")." SET alias = '".$alias."' WHERE id = ".$this->id."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->alias = $alias;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param string $controller_class
+	 * @return bool
+	 */
+	public function set_controller_class($controller_class)
+	{
+		global $db;
+
+		if ($this->id and $controller_class)
+		{
+			$sql = "UPDATE ".constant("BASE_MODULE_NAVIGATION_TABLE")." SET controller_class = '".$controller_class."' WHERE id = ".$this->id."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->controller_class = $controller_class;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param string $controller_file
+	 * @return bool
+	 */
+	public function set_controller_file($controller_file)
+	{
+		global $db;
+
+		if ($this->id and $controller_file)
+		{
+			$sql = "UPDATE ".constant("BASE_MODULE_NAVIGATION_TABLE")." SET controller_file = '".$controller_file."' WHERE id = ".$this->id."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->controller_file= $controller_file;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
 	 * @return integer
 	 */
 	public function get_next_position()
 	{
 		global $db;
 		
-		if ($this->id)
-		{
+		if ($this->id and $this->position)
+		{			
+			$next_position = $this->position + 1;
+			
 			$sql = "SELECT id FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." " .
-				"WHERE position = ".($this->position+1)."";
+				"WHERE position = ".$next_position."";
 			
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
@@ -417,7 +563,11 @@ class BaseModuleNavigation_Access
 			{
 				return $this->id;
 			}
-		}	
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	
@@ -439,6 +589,90 @@ class BaseModuleNavigation_Access
 		else
 		{
 			return 1;
+		}
+	}
+	
+	
+	public static function list_entries_by_module_id($module_id)
+	{	
+		global $db;
+		
+		if (is_numeric($module_id))
+		{
+			$result_array = array();
+			
+			$sql = "SELECT id,language_address,controller_class,controller_file,alias FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." WHERE module_id = '".$module_id."'";
+			$res = $db->db_query($sql);
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				$result_array[$data[language_address]][id]					= $data[id];
+				$result_array[$data[language_address]][colour]				= $data[colour];
+				$result_array[$data[language_address]][controller_class]	= $data[controller_class];
+				$result_array[$data[language_address]][controller_file]		= $data[controller_file];
+				$result_array[$data[language_address]][alias]				= $data[alias];
+			}
+			
+			return $result_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @return array
+	 */
+	public static function list_entries()
+	{
+		global $db;
+		
+		$result_array = array();
+		
+		$sql = "SELECT id,language_address,alias,colour,module_id FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." WHERE hidden = 'f' ORDER BY position";
+		$res = $db->db_query($sql);
+		while ($data = $db->db_fetch_assoc($res))
+		{
+			$result_array[$data[id]][language_address]	= $data[language_address];
+			$result_array[$data[id]][alias]				= $data[alias];
+			$result_array[$data[id]][colour]			= $data[colour];
+			$result_array[$data[id]][module_id]			= $data[module_id];
+		}
+		
+		return $result_array;
+	}
+	
+	public static function get_module_controller($module_id, $alias)
+	{
+		global $db;
+		
+		if (is_numeric($module_id))
+		{
+			if ($alias)
+			{
+				$alias_sql = "alias = '".$alias."'";
+			}
+			else
+			{
+				$alias_sql = "alias IS NULL";
+			}
+			
+			$sql = "SELECT controller_file, controller_class FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." WHERE module_id = ".$module_id." AND ".$alias_sql."";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data[controller_file] and $data[controller_class])
+			{
+				return array("controller_file" => $data[controller_file], "controller_class" => $data[controller_class]);
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
 		}
 	}
 	
@@ -518,28 +752,7 @@ class BaseModuleNavigation_Access
 		
 		return $result_array;
 	}
-	
-	/**
-	 * @return array
-	 */
-	public static function list_entries()
-	{
-		global $db;
 		
-		$result_array = array();
-		
-		$sql = "SELECT id,display_name,colour,module_id FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." WHERE hidden = 'f' ORDER BY position";
-		$res = $db->db_query($sql);
-		while ($data = $db->db_fetch_assoc($res))
-		{
-			$result_array[$data[id]][display_name]	= $data[display_name];
-			$result_array[$data[id]][colour]		= $data[colour];
-			$result_array[$data[id]][module_id]		= $data[module_id];
-		}
-		
-		return $result_array;
-	}
-	
 	public static function count_entries()
 	{
 		global $db;

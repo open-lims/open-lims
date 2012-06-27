@@ -30,21 +30,9 @@ interface SystemHandlerInterface
 {
 	function __construct();
 	
-	/**
-	 * For AJAX Handler only
-	 */
-	public static function init_db_constants();
+		
 	
-	/**
-	 * @return array;
-	 */
-	public static function get_include_folders();
-	
-	/**
-	 * @return array
-	 */
-	public static function get_module_folders();
-	
+
 	/**
 	 * @param integer $module_id
 	 * @return string
