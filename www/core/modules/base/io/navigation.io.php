@@ -66,6 +66,11 @@ class Navigation_IO
 					
 					$params = http_build_query($paramquery,'','&#38;');
 					
+					if (!$_GET['nav'] and $active_alias == "base")
+					{
+						$_GET['nav'] = "base";
+					}
+					
 					switch ($value[colour]):
 					
 						case "blue":
@@ -154,38 +159,14 @@ class Navigation_IO
 						
 					endswitch;
 					
+					
+					
 					$template->set_var("params", $params);
 					$template->set_var("title", Language::get_message($value[language_address], "navigation"));
 					$module_tab_string .= $template->get_string();
 				}
 			}
 		}
-		
-		/*
-		if ($_GET[nav] == "home" or !$_GET[nav] or $module_tab_active == false)
-		{
-			$paramquery[username] = $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav] = "home";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template = new HTMLTemplate("base/navigation/main/tabs/blue_tab_active.html");
-			$template->set_var("params", $params);
-			$template->set_var("title", "Home");
-			$template->output();
-		}
-		else
-		{
-			$paramquery[username] = $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav] = "home";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template = new HTMLTemplate("base/navigation/main/tabs/blue_tab.html");
-			$template->set_var("params", $params);
-			$template->set_var("title", "Home");
-			$template->output();
-		} */
 		
 		echo $module_tab_string;
 				
@@ -208,7 +189,7 @@ class Navigation_IO
 		
 		// Submenu
 		
-		if ($_GET[nav] == "home" or !$_GET[nav] or $module_tab_active == false)
+		if ($_GET[nav] == "base" or !$_GET[nav] or $module_tab_active == false)
 		{
 			$template = new HTMLTemplate("base/navigation/main/sub/blue.html");
 			

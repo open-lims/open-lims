@@ -545,10 +545,12 @@ class BaseModuleNavigation_Access
 	{
 		global $db;
 		
-		if ($this->id)
-		{
+		if ($this->id and $this->position)
+		{			
+			$next_position = $this->position + 1;
+			
 			$sql = "SELECT id FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." " .
-				"WHERE position = ".($this->position+1)."";
+				"WHERE position = ".$next_position."";
 			
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
@@ -561,7 +563,11 @@ class BaseModuleNavigation_Access
 			{
 				return $this->id;
 			}
-		}	
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	

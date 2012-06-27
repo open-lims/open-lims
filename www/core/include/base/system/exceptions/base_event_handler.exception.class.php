@@ -22,15 +22,15 @@
  */
 
 /**
- * Event Handler Creation Failed Exception
+ * Base Event Handler Excpetion
  * @package base
  */
-class EventHandlerCreationFailedException extends Exception
+class BaseEventHandlerException extends BaseException
 {
-    function __construct($message, $code)
+	function __construct($message = null)
     {
-    	parent::__construct($message, $code);	
-    }    
+    	parent::__construct(true, false, false, $message, null);
+    }   
 }
 
 ?>

@@ -22,15 +22,15 @@
  */
 
 /**
- * Include Requirement Failed Exception
+ * Module Folder Empty Exception
  * @package base
  */
-class IncludeRequirementFailedException extends Exception
+class ModuleFolderEmptyException extends BaseModuleException
 {
-    function __construct($message, $code)
+	function __construct()
     {
-    	parent::__construct($message, $code);	
-    }    
+    	parent::__construct();	
+    }  
 }
 
 ?>

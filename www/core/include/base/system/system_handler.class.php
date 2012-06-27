@@ -29,18 +29,25 @@ require_once("interfaces/system_handler.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	require_once("exceptions/event_handler_creation_failed_exception.class.php");
-	require_once("exceptions/include_folder_empty_exception.class.php");
-	require_once("exceptions/include_data_corrupt_exception.class.php");
-	require_once("exceptions/include_requirement_failed_exception.class.php");
-	require_once("exceptions/include_process_failed_exception.class.php");
-	require_once("exceptions/module_data_corrupt_exception.class.php");
-	require_once("exceptions/module_dialog_corrupt_exception.class.php");
-	require_once("exceptions/module_dialog_creation_failed_exception.class.php");
-	require_once("exceptions/module_dialog_missing_exception.class.php");
-	require_once("exceptions/module_dialog_not_found_exception.class.php");
-	require_once("exceptions/module_folder_empty_exception.class.php");
-	require_once("exceptions/module_process_failed_exception.class.php");
+	require_once("exceptions/base.exception.class.php");
+	
+	require_once("exceptions/base_event_handler.exception.class.php");
+	require_once("exceptions/base_event_handler_creation_failed.exception.class.php");
+	
+	require_once("exceptions/base_include.exception.class.php");
+	require_once("exceptions/base_include_folder_empty.exception.class.php");
+	require_once("exceptions/base_include_data_corrupt.exception.class.php");
+	require_once("exceptions/base_include_requirement_failed.exception.class.php");
+	require_once("exceptions/base_include_process_failed.exception.class.php");
+	
+	require_once("exceptions/base_module.exception.class.php");
+	require_once("exceptions/base_module_data_corrupt.exception.class.php");
+	require_once("exceptions/base_module_dialog_corrupt.exception.class.php");
+	require_once("exceptions/base_module_dialog_creation_failed.exception.class.php");
+	require_once("exceptions/base_module_dialog_missing.exception.class.php");
+	require_once("exceptions/base_module_dialog_not_found.exception.class.php");
+	require_once("exceptions/base_module_folder_empty.exception.class.php");
+	require_once("exceptions/base_module_process_failed.exception.class.php");
 	
 	require_once("events/include_delete_event.class.php");
 	require_once("events/module_disable_event.class.php");
@@ -564,10 +571,10 @@ class SystemHandler implements SystemHandlerInterface
 									$tab_array = array();
 									$tab_list = BaseModuleNavigation_Access::list_entries_by_module_id($register_key);
 									
-									print_r($tab_list);
-									
 									foreach ($tab as $tab_key => $tab_value)
-									{										
+									{				
+										array_push($tab_array, $tab_value['language_address']);
+										
 										if (is_array($tab_list[$tab_value['language_address']]))
 										{
 											if (trim($tab_list[$tab_value['language_address']]['colour']) != $tab_value['colour'])
@@ -845,7 +852,7 @@ class SystemHandler implements SystemHandlerInterface
 					// Position
 					if ($base_module_navigation->get_next_position() != $base_module_navigation_id)
 					{
-						$tmp_base_module_navigation = $base_module_navigation;
+						$tmp_base_module_navigation = clone $base_module_navigation;
 						$tmp_base_module_navigation_id = $base_module_navigation_id;
 						$tmp_position = $base_module_navigation->get_position();
 						
@@ -855,9 +862,12 @@ class SystemHandler implements SystemHandlerInterface
 						}
 						
 						while(($next_base_module_navigation_id = $tmp_base_module_navigation->get_next_position()) != $tmp_base_module_navigation_id)
-						{
+						{							
 							$next_base_module_navigation = new BaseModuleNavigation_Access($next_base_module_navigation_id);
 							$next_position = $next_base_module_navigation->get_position();
+							
+							echo $tmp_position." -> ".$next_position."<br />";
+							
 							if ($next_base_module_navigation->set_position($tmp_position) == false)
 							{
 								throw new ModuleProcessFailedException();

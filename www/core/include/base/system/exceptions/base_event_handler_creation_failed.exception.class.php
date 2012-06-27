@@ -22,14 +22,14 @@
  */
 
 /**
- * Module Dialog Missing Exception
+ * Event Handler Creation Failed Exception
  * @package base
  */
-class ModuleDialogMissingException extends Exception
+class EventHandlerCreationFailedException extends BaseEventHandlerException
 {
-    function __construct($message, $code)
+    function __construct()
     {
-    	parent::__construct($message, $code);	
+    	parent::__construct();	
     }    
 }
 

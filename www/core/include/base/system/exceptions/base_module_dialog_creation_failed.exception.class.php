@@ -1,6 +1,6 @@
 <?php
 /**
- * @package project
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2012 by Roman Konertz
@@ -22,7 +22,15 @@
  */
 
 /**
- * 
+ * Module Dialog Creation Failed Exception
+ * @package base
  */
-	$event_listener[0] = "ExtensionHandler";
+class ModuleDialogCreationFailedException extends BaseModuleException
+{
+	function __construct()
+    {
+    	parent::__construct();	
+    }   
+}
+
 ?>

@@ -1,6 +1,6 @@
-<?php 
+<?php
 /**
- * @package item
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2012 by Roman Konertz
@@ -22,12 +22,15 @@
  */
 
 /**
- * 
+ * Include Procedd Failed Exception
+ * @package base
  */
-	$classes['ExtensionCreateRunEvent']		= $path_prefix."core/include/extension/events/extension_create_run_event.class.php";
+class IncludeProcessFailedException extends BaseIncludeException
+{
+   	function __construct()
+    {
+    	parent::__construct();	
+    }
+}
 
-	$classes['ConreteExtensionInterface']	= $path_prefix."core/include/extension/interfaces/concrete_extension.interface.php";
-
-	$classes['Extension']					= $path_prefix."core/include/extension/extension.class.php";
-	$classes['ExtensionHandler']			= $path_prefix."core/include/extension/extension_handler.class.php";
 ?>

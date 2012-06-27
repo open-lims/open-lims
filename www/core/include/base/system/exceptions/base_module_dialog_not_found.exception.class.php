@@ -22,15 +22,15 @@
  */
 
 /**
- * Include Procedd Failed Exception
+ * Module Dialog Not Found Exception
  * @package base
  */
-class IncludeProcessFailedException extends Exception
+class ModuleDialogNotFoundException extends BaseModuleException
 {
-    function __construct($message, $code)
+	function __construct()
     {
-    	parent::__construct($message, $code);	
-    }    
+    	parent::__construct();	
+    }   
 }
 
 ?>

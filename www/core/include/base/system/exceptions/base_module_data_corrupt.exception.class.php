@@ -22,15 +22,15 @@
  */
 
 /**
- * Include Data Corrupt Exception
+ * Module Data Corrupt Exception
  * @package base
  */
-class IncludeDataCorruptException extends Exception
+class ModuleDataCorruptException extends BaseModuleException
 {
-    function __construct($message, $code)
+	function __construct()
     {
-    	parent::__construct($message, $code);	
-    }    
+    	parent::__construct();	
+    }   
 }
 
 ?>

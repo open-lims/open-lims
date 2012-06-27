@@ -22,15 +22,15 @@
  */
 
 /**
- * Module Dialog Creation Failed Exception
+ * Base Include Excpetion
  * @package base
  */
-class ModuleDialogCreationFailedException extends Exception
+class BaseIncludeException extends BaseException
 {
-    function __construct($message, $code)
+    function __construct($message = null)
     {
-    	parent::__construct($message, $code);	
-    }    
+    	parent::__construct(true, false, false, $message, null);
+    }  
 }
 
 ?>

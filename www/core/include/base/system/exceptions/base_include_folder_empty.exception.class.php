@@ -22,15 +22,15 @@
  */
 
 /**
- * Module Dialog Not Found Exception
+ * Include Folder Empty Exception
  * @package base
  */
-class ModuleDialogNotFoundException extends Exception
+class IncludeFolderEmptyException extends BaseIncludeException
 {
-    function __construct($message, $code)
+	function __construct()
     {
-    	parent::__construct($message, $code);	
-    }    
+    	parent::__construct();	
+    }   
 }
 
 ?>

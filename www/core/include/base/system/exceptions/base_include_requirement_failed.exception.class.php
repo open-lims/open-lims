@@ -22,15 +22,15 @@
  */
 
 /**
- * Module Procedd Failed Exception
+ * Include Requirement Failed Exception
  * @package base
  */
-class ModuleProcessFailedException extends Exception
+class IncludeRequirementFailedException extends BaseIncludeException
 {
-    function __construct($message, $code)
+	function __construct()
     {
-    	parent::__construct($message, $code);	
-    }    
+    	parent::__construct();	
+    }   
 }
 
 ?>

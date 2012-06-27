@@ -1,6 +1,6 @@
-<?php 
+<?php
 /**
- * @package item
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2012 by Roman Konertz
@@ -22,7 +22,15 @@
  */
 
 /**
- * 
+ * Module Dialog Corrupt Exception
+ * @package base
  */
-	define("EXTENSION_TABLE", "core_extensions");
+class ModuleDialogCorruptException extends BaseModuleException
+{
+	function __construct()
+    {
+    	parent::__construct();	
+    }  
+}
+
 ?>

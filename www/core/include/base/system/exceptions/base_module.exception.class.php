@@ -22,15 +22,15 @@
  */
 
 /**
- * Module Folder Empty Exception
+ * Base Module Excpetion
  * @package base
  */
-class ModuleFolderEmptyException extends Exception
+class BaseModuleException extends BaseException
 {
-    function __construct($message, $code)
+	function __construct($message = null)
     {
-    	parent::__construct($message, $code);	
-    }    
+    	parent::__construct(true, false, false, $message, null);
+    }   
 }
 
 ?>

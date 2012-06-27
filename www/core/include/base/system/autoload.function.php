@@ -116,6 +116,14 @@ function __autoload($classname)
 	$classes['User_Wrapper'] 				= $path_prefix."core/include/base/user/user.wrapper.class.php";
 	
 	
+	// Extension
+	$classes['ExtensionCreateRunEvent']		= $path_prefix."core/include/base/extension/events/extension_create_run_event.class.php";
+
+	$classes['ConreteExtensionInterface']	= $path_prefix."core/include/base/extension/interfaces/concrete_extension.interface.php";
+
+	$classes['Extension']					= $path_prefix."core/include/base/extension/extension.class.php";
+	$classes['ExtensionHandler']			= $path_prefix."core/include/base/extension/extension_handler.class.php";
+	
 	$system_handler_classes = SystemHandler::get_classes();
 
 	if (is_array($system_handler_classes) and count($system_handler_classes) >= 1)

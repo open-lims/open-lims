@@ -22,14 +22,14 @@
  */
 
 /**
- * Module Dialog Corrupt Exception
+ * Module Procedd Failed Exception
  * @package base
  */
-class ModuleDialogCorruptException extends Exception
+class ModuleProcessFailedException extends BaseModuleException
 {
-    function __construct($message, $code)
+    function __construct()
     {
-    	parent::__construct($message, $code);	
+    	parent::__construct();	
     }    
 }
 
