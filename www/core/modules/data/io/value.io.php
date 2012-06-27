@@ -152,7 +152,7 @@ class ValueIO
 				
 				if ($value->get_type_id() == 2)
 				{
-					$template = new HTMLTemplate("data/value_project_description_detail.html");
+					$template = new HTMLTemplate("data/value_description_detail.html");
 				
 					$value_version_array = $value->get_value_internal_revisions();
 						
@@ -196,6 +196,7 @@ class ValueIO
 				
 					$paramquery = $_GET;
 					$paramquery[action] = "permission";
+					unset($paramquery['nextpage']);
 					$params = http_build_query($paramquery,'','&#38;');	
 					$template->set_var("change_permission_params",$params);
 					
@@ -222,21 +223,25 @@ class ValueIO
 					$params = http_build_query($paramquery,'','&#38;');	
 					
 					$template->set_var("version_list_link",$params);
-				
-					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
-					$paramquery[version] = $value->get_internal_revision();
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$template->set_var("params", $params);
-					
+									
+									
 					$template->set_var("title", $value->get_type_name());
 					
 					$value_string = unserialize($value->get_value());
 					
-					$template->set_var("desc", $value_string);
-					$template->set_var("error","");
+					$template->set_var("description", $value_string);
 
+					$template->set_var("session_id", $_GET['session_id']);
+					$template->set_var("internal_revision", $value->get_internal_revision());
+					$template->set_var("value_id", $value->get_id());
+					
+					$paramquery = $_GET;
+					unset($paramquery[action]);
+					unset($paramquery[value_id]);
+					$params = http_build_query($paramquery);
+					
+					$template->set_var("retrace", "index.php?".$params);
+					
 					$template->output();
 				}
 				else

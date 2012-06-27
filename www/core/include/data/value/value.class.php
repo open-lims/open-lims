@@ -716,7 +716,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 			if (strlen($current_value) > 0)
 			{
 				$current_value_string = trim(unserialize($current_value));
-				$new_value_string = trim($_POST[desc]);
+				$new_value_string = trim($value_array['description']);
 				
 				if ($current_value_string != $new_value_string and $new_value_string)
 				{

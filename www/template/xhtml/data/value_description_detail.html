@@ -1,0 +1,175 @@
+<script>
+
+$(document).ready(function()
+{
+	value_handler = new ValueHandler("DataValueUpdateValues");
+	
+	$("#DataValueCancelButton").click(function()
+	{
+		history.back();
+	});
+	
+	$("#DataValueUpdateButton").click(function()
+	{
+		var json = value_handler.get_json();
+
+		if (json !== false)
+		{
+			$.ajax({
+				type : "POST",
+				url : "ajax.php?session_id=[[SESSION_ID]]&nav=data&run=value_update",
+				data : 'value_id=[[VALUE_ID]]&version=[[internal_revision]]&value_array='+json,
+				beforeSend: function()
+				{
+					$.blockUI({ message: $('#DataValueUpdateFinish') , css: { width: '275px' }} ); 
+					$('.blockUI.blockMsg').center();
+				},
+				success : function(data)
+				{
+					if (data == "1")
+					{
+						window.setTimeout('window.location = \'[[RETRACE]]\'',500);
+					}
+					else
+					{
+						if ((data + '').indexOf("EXCEPTION",0) == 0)
+						{
+							var exception_message = data.replace("EXCEPTION: ","");
+							$.unblockUI();
+							ErrorDialog("Error", exception_message);
+							return false;
+						}
+						else
+						{
+							$.unblockUI();
+							ErrorDialog("Error", "An error occured");
+							return false;
+						}
+					}
+				}
+			});
+		}
+	});
+	
+	$("#DataValueUpdateMinorButton").click(function()
+	{
+		var json = value_handler.get_json();
+
+		if (json !== false)
+		{
+			$.ajax({
+				type : "POST",
+				url : "ajax.php?session_id=[[SESSION_ID]]&nav=data&run=value_update_minor",
+				data : 'value_id=[[VALUE_ID]]&version=[[internal_revision]]&value_array='+json,
+				beforeSend: function()
+				{
+					$.blockUI({ message: $('#DataValueUpdateFinish') , css: { width: '275px' }} ); 
+					$('.blockUI.blockMsg').center();
+				},
+				success : function(data)
+				{
+					if (data == "1")
+					{
+						window.setTimeout('window.location = \'[[RETRACE]]\'',500);
+					}
+					else
+					{
+						if ((data + '').indexOf("EXCEPTION",0) == 0)
+						{
+							var exception_message = data.replace("EXCEPTION: ","");
+							$.unblockUI();
+							ErrorDialog("Error", exception_message);
+							return false;
+						}
+						else
+						{
+							$.unblockUI();
+							ErrorDialog("Error", "An error occured");
+							return false;
+						}
+					}
+				}
+			});
+		}
+	});
+});
+</script>
+
+<div id="DataValueUpdateFinish" class="BaseBlockUIProceed" style="display:none; cursor: default"> 
+<img src='images/animations/loading_circle_small.gif' alt=''> Please wait while value update.
+</div> 
+
+<br />
+
+<!-- CONTAINER BEGIN ("Detail: [[TITLE]]") -->
+
+<div class='boxIconBar'>
+	<div class='boxIconLeft'>
+
+	Version [[VERSION]] (<a href='index.php?[[VERSION_LIST_LINK]]'>History</a>) |
+	
+	<!-- IF ([[CHANGE_PERMISSION]]) -->
+					
+	<div class='boxIcon'><img src='images/icons/permissions.png' alt='' />&nbsp;<a href='index.php?[[CHANGE_PERMISSION_PARAMS]]'>Change Permissions</a></div>
+	
+	<!-- ELSE -->
+					
+	<div class='boxIcon'><img src='images/icons/permissions_na.png' alt='' />&nbsp;<span class='FontDeactivated'>Change Permissions</span></div>
+					
+	<!-- ENDIF -->	
+	
+	</div>
+	<div class='boxIconRight'>
+		<form  action='index.php' method='get'>
+		<select name='version'>
+		<option value='[[VERSION]]'>Version [[VERSION]] - [[VERSION_DATETIME]]</options>
+		
+		<!-- FOREACH BEGIN ([[VERSION_OPTION]]) -->
+		
+		<option value='[[VERSION_OPTION:VERSION]]'>[[VERSION_OPTION:TEXT]]</option>
+		
+		<!-- FOREACH END -->
+		
+		</select>
+		<input type='submit' value='open' class='FormButton' />
+		
+		<!-- FOREACH BEGIN ([[GET]]) -->		
+
+		<input type='hidden' value='[[GET:VALUE]]' name='[[GET:KEY]]' />
+
+		<!-- FOREACH END -->
+
+		</form>
+	</div>
+</div>
+
+
+<div class='Form' id='DataValueAdd'>
+<div class='FormBox'>
+<div class='FormBoxHeadline'>[[TITLE]]</div>
+
+<table class='formTable'>
+	<tr>
+		<td>
+			<textarea name='description' cols='66' rows='15' class='DataValueUpdateValues'>[[DESCRIPTION]]</textarea>
+		</td>
+	</tr>
+</table>
+
+<div class='FormBoxClear'></div>
+</div>
+
+
+<!-- IF ([[WRITE_PERMISSION]]) -->
+	<div class='FormButtonBox'>
+	<button type='submit' id='DataValueUpdateButton'>Update</button>
+	<button type='submit' id='DataValueUpdateMinorButton'>Update as Minor</button>
+	<button type='submit' id='DataValueCancelButton'>Cancel</button>
+	<div class='FormButtonBoxClear'></div>
+	</div>
+<!-- ENDIF -->	
+	
+</div>
+
+<!-- CONTAINER END () -->
+		

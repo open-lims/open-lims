@@ -866,8 +866,6 @@ class SystemHandler implements SystemHandlerInterface
 							$next_base_module_navigation = new BaseModuleNavigation_Access($next_base_module_navigation_id);
 							$next_position = $next_base_module_navigation->get_position();
 							
-							echo $tmp_position." -> ".$next_position."<br />";
-							
 							if ($next_base_module_navigation->set_position($tmp_position) == false)
 							{
 								throw new ModuleProcessFailedException();
