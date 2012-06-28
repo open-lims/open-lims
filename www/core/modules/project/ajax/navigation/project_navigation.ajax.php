@@ -51,14 +51,20 @@ class ProjectNavigationAjax
 				$project_id = $session->read_value("LEFT_NAVIGATION_PROJECT_ID");
 			}
 
-			if ($session->is_value("LEFT_NAVIGATION_PROJECT_ARRAY") and $project_id == $_GET[project_id])
+			if (is_numeric($_GET['project_id']))
+			{
+				$project = new Project($_GET['project_id']);
+				$master_project_id = $project->get_master_project_id();
+			}
+			
+			if ($session->is_value("LEFT_NAVIGATION_PROJECT_ARRAY") and $master_project_id == $project_id)
 			{
 				echo json_encode($session->read_value("LEFT_NAVIGATION_PROJECT_ARRAY"));
 			}
-			else
+			elseif(is_numeric($master_project_id))
 			{
 				$session->delete_value("LEFT_NAVIGATION_PROJECT_ARRAY");
-				$session->write_value("LEFT_NAVIGATION_PROJECT_ID", $_GET[project_id], true);
+				$session->write_value("LEFT_NAVIGATION_PROJECT_ID", $master_project_id, true);
 				
 				$return_array = array();
 				
