@@ -1558,7 +1558,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 		    		$end_datetime_handler = new DatetimeHandler($this->task->get_end_date()." ".$this->task->get_end_date());
 		    	}
 		    	
-		    	$remaining_mktime = $end_datetime_handler->get_mktime() - mktime();
+		    	$remaining_mktime = $end_datetime_handler->get_mktime() - time();
 		    	
 		    	if ($remaining_mktime < 86400)
 		    	{	

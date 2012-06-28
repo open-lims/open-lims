@@ -123,7 +123,7 @@ function __autoload($classname)
 
 	$classes['Extension']					= $path_prefix."core/include/base/extension/extension.class.php";
 	$classes['ExtensionHandler']			= $path_prefix."core/include/base/extension/extension_handler.class.php";
-	
+		
 	$system_handler_classes = SystemHandler::get_classes();
 
 	if (is_array($system_handler_classes) and count($system_handler_classes) >= 1)
@@ -131,8 +131,12 @@ function __autoload($classname)
 		$classes = array_merge($classes, $system_handler_classes);
 	}
 	
-	if (isset($classes[$classname])) {
-		require_once($classes[$classname]);
+	if (isset($classes[$classname]))
+	{
+		if (file_exists($classes[$classname]))
+		{
+			require_once($classes[$classname]);
+		}
 	}
 	
 }

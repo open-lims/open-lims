@@ -54,9 +54,9 @@
 	
 	$GLOBALS['autoload_prefix'] = "../../../";
 
-	require_once("../../include/base/system/autoload.function.php");
-
 	new SystemHandler(false);
+	
+	require_once("../../include/base/system/autoload.function.php");
 	
 	SystemConfig::load_module_config();
 	

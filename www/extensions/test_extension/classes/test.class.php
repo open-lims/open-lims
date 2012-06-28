@@ -76,7 +76,7 @@ class Test
 	{
 		if ($this->handle)
 		{
-			$microtime = mktime();
+			$microtime = time();
 			
 			if ($this->content and $this->last_id)
 			{
@@ -117,7 +117,7 @@ class Test
 			
 			if (is_array($analysis_array) and count($analysis_array) >= 1)
 			{
-				$microtime = mktime();
+				$microtime = time();
 				
 				foreach($analysis_array as $key => $value)
 				{

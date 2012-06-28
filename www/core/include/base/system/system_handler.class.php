@@ -181,7 +181,17 @@ class SystemHandler implements SystemHandlerInterface
 					$class_path_file = $config_folder."/class_path.php";
 					if (is_file($class_path_file))
 					{
+						if ($GLOBALS['autoload_prefix'])
+						{
+							$path_prefix = $GLOBALS['autoload_prefix'];
+						}
+						else
+						{
+							$path_prefix = "";
+						}
+						
 						require($class_path_file);
+						
 						self::$classes = array_merge(self::$classes, $classes);
 					}
 				}

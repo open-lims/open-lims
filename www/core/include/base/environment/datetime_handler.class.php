@@ -163,7 +163,7 @@ class DatetimeHandler implements DatetimeHandlerInterface
     {
     	if ($this->mktime)
     	{
-    		$current_mktime = mktime()-date("Z");
+    		$current_mktime = time()-date("Z");
     		if ($current_mktime <= $this->mktime)
     		{
     			return false;

@@ -138,7 +138,7 @@ class Session implements SessionInterface
 			$session_time = explode(":",$session_full_time[0]);
 			$session_mktime = mktime((int)$session_time[0],(int)$session_time[1],(int)$session_time[2],(int)$session_date[1],(int)$session_date[2],(int)$session_date[0]);
 			
-			$current_mktime = mktime();
+			$current_mktime = time();
 			
 			if ($this->install == true)
 			{
@@ -346,7 +346,7 @@ class Session implements SessionInterface
 				$session_time = explode(":",$session_full_time[0]);
 				$session_mktime = mktime($session_time[0],$session_time[1],$session_time[2],$session_date[1],$session_date[2],$session_date[0]);
 				
-				$current_mktime = mktime();
+				$current_mktime = time();
 				$session_timeout = Registry::get_value("base_session_timeout");
 				
 				$max_session_mktime = $session_mktime+(int)$session_timeout;

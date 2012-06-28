@@ -1087,7 +1087,7 @@ class User implements UserInterface {
 	{
 		$new_password = "";
 
-		srand(mktime());
+		srand(time());
 		for ($i=0;$i<=7;$i++)
 		{
 			$lu = rand(1,2);

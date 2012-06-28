@@ -87,7 +87,7 @@ ValueHandler = function(field_class)
 						if (this.indexOf("DataValueFieldMinValue-",0) === 0)
 						{
 							var min_value = this.replace("DataValueFieldMinValue-", "");
-							if ($(current_element).val() < min_value)
+							if (parseInt($(current_element).val()) < parseInt(min_value))
 							{
 								error = true;
 								$(current_element).after("<span class='FormError'><br />Please enter a value >= "+min_value+"</span>");
@@ -114,7 +114,7 @@ ValueHandler = function(field_class)
 						if (this.indexOf("DataValueFieldMaxValue-",0) === 0)
 						{
 							var max_value = this.replace("DataValueFieldMaxValue-", "");
-							if ($(current_element).val() > max_value)
+							if (parseInt($(current_element).val()) > parseInt(max_value))
 							{
 								error = true;
 								$(current_element).after("<span class='FormError'><br />Please enter a value <= "+max_value+"</span>");
