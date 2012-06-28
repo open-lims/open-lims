@@ -265,100 +265,179 @@ class BaseRequest
 	{
 		global $user;
 		
-		switch ($_GET[run]):
-					
-			// BASE
-			case "sysmsg":
-				require_once("io/base.io.php");
-				BaseIO::list_system_messages();
-			break;
+		if ($_GET['run'] == "common_dialog" and $_GET[dialog])
+		{
+			$module_dialog = ModuleDialog::get_by_type_and_internal_name("common_dialog", $_GET[dialog]);
 			
-			case "system_info":
-				require_once("io/base.io.php");
-				BaseIO::system_info();
-			break;
-			
-			case "software_info":
-				require_once("io/base.io.php");
-				BaseIO::software_info();
-			break;
-			
-			case "license":
-				require_once("io/base.io.php");
-				BaseIO::license();
-			break;
-			
-			case "base_user_lists";
-				if ($_GET[dialog])
+			if (file_exists($module_dialog[class_path]))
+			{
+				require_once($module_dialog[class_path]);
+				
+				if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
 				{
-					$module_dialog = ModuleDialog::get_by_type_and_internal_name("base_user_lists", $_GET[dialog]);
-					
-					if (file_exists($module_dialog[class_path]))
-					{
-						require_once($module_dialog[class_path]);
-						
-						if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
-						{
-							$module_dialog['class']::$module_dialog[method]();
-						}
-						else
-						{
-							// Error
-						}
-					}
-					else
-					{
-						// Error
-					}
+					$module_dialog['class']::$module_dialog[method]();
 				}
 				else
 				{
-					// error
+					// Error
 				}
-			break;
+			}
+			else
+			{
+				// Error
+			}
+		}
+		else
+		{
+			switch ($alias):
+		
+				case "search":
+					
+					switch($_GET[run]):
+						
+						// Search
+						/**
+						 * @todo errors, exceptions
+						 */
+						case("search"):
+							if ($_GET[dialog])
+							{
+								$module_dialog = ModuleDialog::get_by_type_and_internal_name("search", $_GET[dialog]);
+								
+								if (file_exists($module_dialog[class_path]))
+								{
+									require_once($module_dialog[class_path]);
+									
+									if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+									{
+										$module_dialog['class']::$module_dialog[method]();
+									}
+									else
+									{
+										// Error
+									}
+								}
+								else
+								{
+									// Error
+								}
+							}
+							else
+							{
+								// error
+							}
+						break;
+														
+						default:
+							require_once("io/search.io.php");
+							SearchIO::main();
+						break;
+						
+					endswitch;
+					
+				break;
+				
+				default:
 			
+					switch ($_GET[run]):
+								
+						// BASE
+						case "sysmsg":
+							require_once("io/base.io.php");
+							BaseIO::list_system_messages();
+						break;
+						
+						case "system_info":
+							require_once("io/base.io.php");
+							BaseIO::system_info();
+						break;
+						
+						case "software_info":
+							require_once("io/base.io.php");
+							BaseIO::software_info();
+						break;
+						
+						case "license":
+							require_once("io/base.io.php");
+							BaseIO::license();
+						break;
+						
+						case "base_user_lists";
+							if ($_GET[dialog])
+							{
+								$module_dialog = ModuleDialog::get_by_type_and_internal_name("base_user_lists", $_GET[dialog]);
+								
+								if (file_exists($module_dialog[class_path]))
+								{
+									require_once($module_dialog[class_path]);
+									
+									if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+									{
+										$module_dialog['class']::$module_dialog[method]();
+									}
+									else
+									{
+										// Error
+									}
+								}
+								else
+								{
+									// Error
+								}
+							}
+							else
+							{
+								// error
+							}
+						break;
+						
+						
+						// USER
+						case "user_profile":
+							require_once("io/user.io.php");
+							UserIO::profile();
+						break;
+						
+						case ("user_details"):
+							require_once("io/user.io.php");
+							UserIO::details();
+						break;
+						
+						case("user_change_personal"):
+							require_once("io/user.io.php");
+							UserIO::change_personal();
+						break;
+						
+						case("user_change_my_settings"):
+							require_once("io/user.io.php");
+							UserIO::change_my_settings();
+						break;
+						
+						case("user_change_password"):
+							require_once("io/user.io.php");
+							UserIO::change_password();
+						break;
+						
+						case("user_change_language"):
+							require_once("io/user.io.php");
+							UserIO::change_language();
+						break;
+						
+						case("user_change_timezone"):
+							require_once("io/user.io.php");
+							UserIO::change_timezone();
+						break;	
 			
-			// USER
-			case "user_profile":
-				require_once("io/user.io.php");
-				UserIO::profile();
-			break;
-			
-			case ("user_details"):
-				require_once("io/user.io.php");
-				UserIO::details();
-			break;
-			
-			case("user_change_personal"):
-				require_once("io/user.io.php");
-				UserIO::change_personal();
-			break;
-			
-			case("user_change_my_settings"):
-				require_once("io/user.io.php");
-				UserIO::change_my_settings();
-			break;
-			
-			case("user_change_password"):
-				require_once("io/user.io.php");
-				UserIO::change_password();
-			break;
-			
-			case("user_change_language"):
-				require_once("io/user.io.php");
-				UserIO::change_language();
-			break;
-			
-			case("user_change_timezone"):
-				require_once("io/user.io.php");
-				UserIO::change_timezone();
-			break;	
-
-			default:
-				require_once("io/home.io.php");
-			break;
-			
-		endswitch;
+						default:
+							require_once("io/home.io.php");
+						break;
+						
+					endswitch;
+					
+				break;
+				
+			endswitch;
+		}
 	}
 }
 ?>

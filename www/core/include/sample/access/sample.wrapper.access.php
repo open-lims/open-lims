@@ -1623,7 +1623,7 @@ class Sample_Wrapper_Access
 					break;
 					
 					case "sample_name":
-						$sql_order_by = "ORDER BY sample_name ".$sql_order_method.", name";
+						$sql_order_by = "ORDER BY holder_sample_id ".$sql_order_method.", name";
 					break;
 					
 					default:
@@ -1634,15 +1634,15 @@ class Sample_Wrapper_Access
 			}
 			else
 			{
-				$sql_order_by = "ORDER BY sample_name, name";
+				$sql_order_by = "ORDER BY sample_table.id, name";
 			}
 	   		
 	   		$sql = "SELECT ".constant("SAMPLE_HAS_ITEM_TABLE").".item_id AS id, " .
 	   							"".$name_select_sql." AS name, ".
 	   							"".$type_select_sql.", ".
 	   							"".$datetime_select_sql." AS datetime, ".
-	   							"sample_table.id AS sample_id, " .
-	   							"sample_table.name AS sample_name " .
+	   							"sample_table.id AS holder_sample_id, " .
+	   							"sample_table.name AS holder_sample_name " .
 								"FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." " .
 								"JOIN ".constant("ITEM_TABLE")." 					ON ".constant("SAMPLE_HAS_ITEM_TABLE").".item_id 	= ".constant("ITEM_TABLE").".id " .
 	   							"JOIN ".constant("SAMPLE_TABLE")." AS sample_table 	ON ".constant("SAMPLE_HAS_ITEM_TABLE").".sample_id 	= sample_table.id " .

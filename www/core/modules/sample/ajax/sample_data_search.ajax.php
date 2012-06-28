@@ -61,11 +61,12 @@ class SampleDataSearchAjax
 					$sample_paramquery[session_id] = $_GET[session_id];
 					$sample_paramquery[nav] = "sample";
 					$sample_paramquery[run] = "detail";
-					$sample_paramquery[sample_id] = $value[sample_id];
+					$sample_paramquery[sample_id] = $value[holder_sample_id];
 					$sample_params = http_build_query($sample_paramquery, '', '&#38;');
 					
-					$tmp_sample_name = $list_array[$key][sample_name];
-					unset($list_array[$key][sample_name]);
+					
+					$tmp_sample_name = $list_array[$key][holder_sample_name];
+					unset($list_array[$key][holder_sample_name]);
 					$list_array[$key][sample_name][content] = $tmp_sample_name;
 					$list_array[$key][sample_name][link] = $sample_params;
 					
