@@ -31,7 +31,7 @@ class ExtensionIO
 	{
 		$extension_handler = new ExtensionHandler();
 		
-		$template = new HTMLTemplate("extension/home.html");	
+		$template = new HTMLTemplate("base/extension/home.html");	
 		
 		$extension_array = ExtensionHandler::list_extensions();
 		$display_array = array();

@@ -79,6 +79,11 @@ class AdminRequest
 					require_once("core/modules/base/io/admin/admin_base_registry.io.php");
 					AdminBaseRegistryIO::handler();
 				break;
+				
+				case "services":
+					require_once("core/modules/base/io/admin/admin_base_service.io.php");
+					AdminBaseServiceIO::handler();
+				break;
 			
 				case "system_log":
 					require_once("core/modules/base/io/admin/admin_system_log.io.php");

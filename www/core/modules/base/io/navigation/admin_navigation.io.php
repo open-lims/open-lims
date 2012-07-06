@@ -29,7 +29,7 @@ class AdminNavigationIO
 {
 	public static function navigation()
 	{
-		$template = new HTMLTemplate("admin/navigation/administration.html");
+		$template = new HTMLTemplate("base/admin/navigation/administration.html");
 		
 		
 		$paramquery[username] = $_GET[username];
@@ -77,6 +77,15 @@ class AdminNavigationIO
 		$template->set_var("registry_params", $params);
 		
 
+		$paramquery[username] = $_GET[username];
+		$paramquery[session_id] = $_GET[session_id];
+		$paramquery[nav] = "base.admin";
+		$paramquery[run] = "services";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("services_params", $params);
+		
+		
 		$paramquery[username] = $_GET[username];
 		$paramquery[session_id] = $_GET[session_id];
 		$paramquery[nav] = "base.admin";

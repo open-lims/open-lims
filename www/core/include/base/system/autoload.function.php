@@ -82,6 +82,7 @@ function __autoload($classname)
 	$classes['ModuleNavigation']			= $path_prefix."core/include/base/system/module_navigation.class.php";
 	$classes['Registry']					= $path_prefix."core/include/base/system/registry.class.php";
 	$classes['Retrace']						= $path_prefix."core/include/base/system/retrace.class.php";
+	$classes['Service']						= $path_prefix."core/include/base/system/service.class.php";
 	
 	$classes['System_Wrapper']				= $path_prefix."core/include/base/system/system.wrapper.class.php";
 	

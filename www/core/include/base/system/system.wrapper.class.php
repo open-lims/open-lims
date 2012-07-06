@@ -78,6 +78,24 @@ class System_Wrapper implements System_WrapperInterface
 	}
 	
 	/**
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_base_service($order_by, $order_method, $start, $end)
+	{
+		return System_Wrapper_Access::list_base_service($order_by, $order_method, $start, $end);
+	}
+	
+	/**
+	 * @return integer
+	 */
+	public static function count_base_service()
+	{
+		return System_Wrapper_Access::count_base_service();
+	}
+	
+	/**
 	 * @see System_WrapperInterface::list_base_module()
 	 * @param string $order_by
 	 * @param string $order_method

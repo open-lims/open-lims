@@ -63,13 +63,6 @@ $mail[0]['smtp']['password'] 					= "";
 $ldap['enable']									= false;
 
 
-$server['binary']['enable']						= false;
-$server['binary']['java']['home']				= "";
-$server['binary']['java']['vm']					= "";
-$server['binary']['java']['xms']				= "";
-$server['binary']['java']['xmx']				= "";
-
-
 $server['imagick']['enable']					= true;	
 
 

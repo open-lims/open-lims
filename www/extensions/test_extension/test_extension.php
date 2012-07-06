@@ -25,7 +25,7 @@
  * test extension
  * @package extension
  */
-class TestExtension implements ConreteExtensionInterface
+class TestExtension implements ConcreteExtensionInterface
 {
 	private static $event_identifer;
 	

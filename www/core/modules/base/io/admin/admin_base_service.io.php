@@ -22,9 +22,35 @@
  */
 
 /**
- * IMPORTANT NOTE: Modification of this file is not allowed by developers!
+ * Base Service Admin IO Class
+ * @package base
  */
-define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-74-dev &#945;");
+class AdminBaseServiceIO
+{
+	public static function home()
+	{
+		$list = new List_IO("BaseAdminServiceHome" ,"ajax.php?nav=base", "admin_list_service", "admin_count_service", "0", "BaseAdminServiceHome");
+		
+		$list->add_column("", "icon", false, "16px");
+		$list->add_column("Name", "name", true, null);
+		$list->add_column("Status", "status", true, null);
+		$list->add_column("", "start", false, "16px");
+		$list->add_column("", "stop", false, "16px");
+		
+		$template = new HTMLTemplate("base/admin/service/list.html");
 
+		$template->set_var("list", $list->get_list());
+		
+		$template->output();
+	}
+	
+	public static function handler()
+	{
+		switch($_GET[action]):		
+			default:
+				self::home();
+			break;
+		endswitch;
+	}
+}
 ?>

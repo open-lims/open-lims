@@ -29,7 +29,7 @@ class SearchIO
 {
 	public static function main()
 	{
-		$template = new HTMLTemplate("search/main.html");
+		$template = new HTMLTemplate("base/search/main.html");
 		
 		$module_dialog_array = ModuleDialog::list_dialogs_by_type("search");
 		

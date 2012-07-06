@@ -24,6 +24,9 @@
 /**
  * 
  */
+	define("BASE_BINARY_TABLE", 		"core_binaries");
+	define("BASE_SERVICE_TABLE", 		"core_services");
+
 	define("CURRENCY_TABLE", 			"core_currencies");
 	define("LANGUAGE_TABLE", 			"core_languages");
 	define("MEASURING_UNIT_TABLE", 		"core_measuring_units");

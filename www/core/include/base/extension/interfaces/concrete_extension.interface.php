@@ -27,7 +27,7 @@
  * The base class implements this interface and redeirects is to its logic classes
  * @package extension
  */
-interface ConreteExtensionInterface
+interface ConcreteExtensionInterface
 {
 	/**
 	 * Returns the path to the icon of the extension

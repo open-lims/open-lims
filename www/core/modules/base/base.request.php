@@ -158,6 +158,16 @@ class BaseRequest
 				echo AdminBaseRegistryAjax::edit_handler($_POST[id], $_POST[value]);
 			break;
 			
+			case "admin_list_service":
+				require_once("ajax/admin/admin_base_service.ajax.php");
+				echo AdminBaseServiceAjax::list_service($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+			break;
+			
+			case "admin_count_service":
+				require_once("ajax/admin/admin_base_service.ajax.php");
+				echo AdminBaseServiceAjax::count_service($_POST[argument_array]);
+			break;
+			
 			case "admin_list_users":
 				require_once("ajax/admin/admin_user.ajax.php");
 				echo AdminUserAjax::list_users($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);

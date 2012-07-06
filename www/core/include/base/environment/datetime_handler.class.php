@@ -44,107 +44,115 @@ class DatetimeHandler implements DatetimeHandlerInterface
 	 * @see DatetimeHandlerInterface::__construct()
 	 * @param string $input_string 
 	 */
-    function __construct($input_string)
+    function __construct($input_string = null)
     {    	
-    	$mixed_array = explode(" ", $input_string);
-    	
     	$server_timezone = explode(":",date("P"));
-    	$server_timezone = (int)$server_timezone[0];
-    	$this->server_timezone = $server_timezone;
+	    $server_timezone = (int)$server_timezone[0];
+	    $this->server_timezone = $server_timezone;
     	
-    	if (count($mixed_array) == 1)
+    	if ($input_string)
     	{
-    		$part_array = explode("-", $mixed_array[0]);
-    		
-    		if (count($part_array) == 1)
-    		{
-    			if (is_numeric($part_array[0])) {
-    				$part_array[0] 	= $part_array[0] - date("Z");
-    				$this->mktime	= $part_array[0];
-    				$this->ignore_timezone = false;
-    			}
-    			else
-    			{
-    				// Invalid Input
-    			}
-    		}
-    		else
-    		{
-    			if (count($part_array) == 3)
-    			{
-    				if (strlen($part_array[0]) == 4)
-    				{
-    					$mktime = mktime(0, 0, 0, $part_array[1], $part_array[2], $part_array[0]);
-    				}
-    				else
-    				{
-    					$mktime = mktime(0, 0, 0, $part_array[1], $part_array[0], $part_array[2]);
-    				}
-    				
-    				$this->mktime 	= $mktime;
-    				$this->ignore_timezone = true;
-    			}
-    			else
-    			{
-    				// Invalid Input
-    			}
-    		}
-    	}
-    	else
-    	{
-    		if (count($mixed_array) == 2)
-    		{
-    			$date_array = explode("-", $mixed_array[0]);
-    			$timezone_array = explode("+", $mixed_array[1]);
-    			$time_array = explode(":", $timezone_array[0]);
-    			
-    			if (count($timezone_array) == 2)
-    			{
-    				if (count($date_array) == 3 and count($time_array) == 3)
-    				{
-    					// Timestamp w. Timezone
-    					$mktime = mktime($time_array[0], $time_array[1], $time_array[2], $date_array[1], $date_array[2], $date_array[0]);
-    					$mktime = $mktime - date("Z");
-	    				
-	    				if ($server_timezone != $timezone_array[1])
+	    	$mixed_array = explode(" ", $input_string);
+	    	
+	    	if (count($mixed_array) == 1)
+	    	{
+	    		$part_array = explode("-", $mixed_array[0]);
+	    		
+	    		if (count($part_array) == 1)
+	    		{
+	    			if (is_numeric($part_array[0])) {
+	    				$part_array[0] 	= $part_array[0] - date("Z");
+	    				$this->mktime	= $part_array[0];
+	    				$this->ignore_timezone = false;
+	    			}
+	    			else
+	    			{
+	    				// Invalid Input
+	    			}
+	    		}
+	    		else
+	    		{
+	    			if (count($part_array) == 3)
+	    			{
+	    				if (strlen($part_array[0]) == 4)
 	    				{
-	    					$correction = $timezone_array[1] - $server_timezone;
-	    					$mktime = $mktime - ($correction * 3600);
+	    					$mktime = mktime(0, 0, 0, $part_array[1], $part_array[2], $part_array[0]);
+	    				}
+	    				else
+	    				{
+	    					$mktime = mktime(0, 0, 0, $part_array[1], $part_array[0], $part_array[2]);
 	    				}
 	    				
 	    				$this->mktime 	= $mktime;
-	    				$this->ignore_timezone = false;
-    				}
-    				else
-    				{
-    					// Invalid Input
-    				}
-    			}
-    			elseif (count($timezone_array) == 1)
-    			{
-					if (count($date_array) == 3 and count($time_array) == 3)
-					{
-    					// Timestamp wo. Timezone (Timezone = GMT = 0)
-    					$mktime = mktime($time_array[0], $time_array[1], $time_array[2], $date_array[1], $date_array[2], $date_array[0]);
-    					$mktime = $mktime - date("Z");
-	    				
-	    				$this->mktime 	= $mktime;
-	    				$this->ignore_timezone = false;
-    				}
-    				else
-    				{
-    					// Invalid Input
-    				}
-    			}
-    			else
-    			{
-    				// Invalid Input
-    			}
-    		}
-    		else
-    		{
-    			// Invalid Input
-    		}
+	    				$this->ignore_timezone = true;
+	    			}
+	    			else
+	    			{
+	    				// Invalid Input
+	    			}
+	    		}
+	    	}
+	    	else
+	    	{
+	    		if (count($mixed_array) == 2)
+	    		{
+	    			$date_array = explode("-", $mixed_array[0]);
+	    			$timezone_array = explode("+", $mixed_array[1]);
+	    			$time_array = explode(":", $timezone_array[0]);
+	    			
+	    			if (count($timezone_array) == 2)
+	    			{
+	    				if (count($date_array) == 3 and count($time_array) == 3)
+	    				{
+	    					// Timestamp w. Timezone
+	    					$mktime = mktime($time_array[0], $time_array[1], $time_array[2], $date_array[1], $date_array[2], $date_array[0]);
+	    					$mktime = $mktime - date("Z");
+	    					
+		    				if ($server_timezone != $timezone_array[1])
+		    				{
+		    					$correction = $timezone_array[1] - $server_timezone;
+		    					$mktime = $mktime - ($correction * 3600);
+		    				}
+		    				
+		    				$this->mktime 	= $mktime;
+		    				$this->ignore_timezone = false;
+	    				}
+	    				else
+	    				{
+	    					// Invalid Input
+	    				}
+	    			}
+	    			elseif (count($timezone_array) == 1)
+	    			{
+						if (count($date_array) == 3 and count($time_array) == 3)
+						{
+	    					// Timestamp wo. Timezone (Timezone = GMT = 0)
+	    					$mktime = mktime($time_array[0], $time_array[1], $time_array[2], $date_array[1], $date_array[2], $date_array[0]);
+	    					$mktime = $mktime - date("Z");
+		    				
+		    				$this->mktime 	= $mktime;
+		    				$this->ignore_timezone = false;
+	    				}
+	    				else
+	    				{
+	    					// Invalid Input
+	    				}
+	    			}
+	    			else
+	    			{
+	    				// Invalid Input
+	    			}
+	    		}
+	    		else
+	    		{
+	    			// Invalid Input
+	    		}
+	    	}
+    	}
+    	else
+    	{
+    		$this->mktime 	= time();
+	    	$this->ignore_timezone = true;
     	}
     }
     
