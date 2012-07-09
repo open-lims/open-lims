@@ -28,6 +28,18 @@ $check_statement = "SELECT id FROM core_projects";
 
 $statement = array();
 
+$statement[] = "CREATE TABLE core_project_has_extension_runs
+(
+  primary_key serial NOT NULL,
+  project_id integer,
+  extension_id integer,
+  run integer,
+  CONSTRAINT core_project_has_extension_runs_pkey PRIMARY KEY (primary_key )
+)
+WITH (
+  OIDS=FALSE
+);";
+
 $statement[] = "CREATE TABLE core_project_has_folder
 (
   project_id integer NOT NULL,
@@ -47,6 +59,7 @@ $statement[] = "CREATE TABLE core_project_has_items
   required boolean,
   gid integer,
   project_status_id integer,
+  parent_item_id integer,
   CONSTRAINT core_project_has_items_pkey PRIMARY KEY (primary_key )
 )
 WITH (
@@ -302,6 +315,14 @@ $statement[] = "CREATE INDEX core_projects_name_ix
 
 // FOREIGN KEYS
 
+$statement[] = "ALTER TABLE ONLY core_project_has_extension_runs ADD CONSTRAINT core_project_has_extension_runs_project_id_fkey FOREIGN KEY (project_id)
+      REFERENCES core_projects (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_project_has_extension_runs ADD CONSTRAINT core_project_has_extension_runs_extension_id_fkey FOREIGN KEY (extension_id)
+      REFERENCES core_extensions (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
 $statement[] = "ALTER TABLE ONLY core_project_has_folder ADD CONSTRAINT core_project_has_folder_folder_id_fkey FOREIGN KEY (folder_id)
       REFERENCES core_folders (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
@@ -320,6 +341,10 @@ $statement[] = "ALTER TABLE ONLY core_project_has_items ADD CONSTRAINT core_proj
 
 $statement[] = "ALTER TABLE ONLY core_project_has_items ADD CONSTRAINT core_project_has_items_project_status_id_fkey FOREIGN KEY (project_status_id)
       REFERENCES core_project_status (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_project_has_items ADD CONSTRAINT core_project_has_items_parent_item_id_fkey FOREIGN KEY (parent_item_id)
+      REFERENCES core_items (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
 $statement[] = "ALTER TABLE ONLY core_project_has_project_status ADD CONSTRAINT core_project_has_project_status_project_id_fkey FOREIGN KEY (project_id)

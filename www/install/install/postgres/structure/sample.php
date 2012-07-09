@@ -45,6 +45,7 @@ $statement[] = "CREATE TABLE core_sample_has_items
   item_id integer,
   gid integer,
   parent boolean,
+  parent_item_id integer,
   CONSTRAINT core_sample_has_items_pkey PRIMARY KEY (primary_key )
 )
 WITH (
@@ -186,6 +187,10 @@ $statement[] = "ALTER TABLE ONLY core_sample_has_items ADD CONSTRAINT core_sampl
 
 $statement[] = "ALTER TABLE ONLY core_sample_has_items ADD CONSTRAINT core_sample_has_items_sample_id_fkey FOREIGN KEY (sample_id)
       REFERENCES core_samples (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_sample_has_items ADD CONSTRAINT core_sample_has_items_parent_item_id_fkey FOREIGN KEY (parent_item_id)
+      REFERENCES core_items (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
 $statement[] = "ALTER TABLE ONLY core_sample_has_locations ADD CONSTRAINT core_sample_has_locations_location_id_fkey FOREIGN KEY (location_id)

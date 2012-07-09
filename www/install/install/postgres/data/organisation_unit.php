@@ -27,7 +27,7 @@
 $statement = array();
 
 // Register Module
-$statement[] = "INSERT INTO core_base_includes VALUES (nextval('core_base_includes_id_seq'::regclass), 'organisation_unit', 'organisation_unit', '0.3.9.9-5');";
+$statement[] = "INSERT INTO core_base_includes VALUES (nextval('core_base_includes_id_seq'::regclass), 'organisation_unit', 'organisation_unit', '0.3.9.9-6');";
 
 $statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'organisation_unit','core_organisation_unit_has_groups', NULL);";
 $statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'organisation_unit','core_organisation_unit_has_leaders', NULL);";

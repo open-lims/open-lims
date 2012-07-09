@@ -56,6 +56,11 @@ class Main
 			$GLOBALS['fatal_error'] = "Extension \"GD\" is missing!";
 		}
 		
+		if (!file_exists(constant("BASE_DIR")))
+		{
+			$GLOBALS['fatal_error'] = "Main folder not found!";
+		}
+		
 		if ($GLOBALS['fatal_error'] == null)
 		{
 			global $db, $runtime_data, $transaction;
@@ -77,10 +82,10 @@ class Main
 			
 			require_once("include/base/system/autoload.function.php");
 			
-			SystemConfig::load_module_config();
-						
 			if ($connection_result == true)
 			{
+				SystemConfig::load_module_config();
+				
 				require_once("include/base/system/transaction.class.php");
 				
 				$transaction = new Transaction();

@@ -46,6 +46,14 @@ function error_handler($code, $message, $file, $line)
 					$error_io = new Error_IO($e);
 					$error_io->display_error();
 				}
+				else
+				{
+					echo "PHP Error occurs in: ".$file." on Line ".$line." with Message: ".$message."";
+				}
+			}
+			else
+			{
+				echo "PHP Error occurs in: ".$file." on Line ".$line." with Message: ".$message."";
 			}
 			die();
 		}

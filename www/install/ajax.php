@@ -88,6 +88,7 @@ else
 		define("SESSION_TABLE", 			"core_sessions");
 		
 		require_once("../core/include/base/system/events/event.class.php");
+		require_once("../core/include/base/system/events/delete_event.class.php");
 		require_once("../core/include/base/system/system_handler.class.php");
 		require_once("../core/include/base/system/transaction.class.php");
 		require_once("../core/include/base/security/security.class.php");

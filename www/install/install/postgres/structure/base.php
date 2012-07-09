@@ -138,11 +138,14 @@ WITH (
 $statement[] = "CREATE TABLE core_base_module_navigation
 (
   id serial NOT NULL,
-  display_name text,
+  language_address text,
   \"position\" integer,
   colour text,
   module_id integer,
   hidden boolean,
+  alias text,
+  controller_class text,
+  controller_file text,
   CONSTRAINT core_base_module_navigation_pkey PRIMARY KEY (id ),
   CONSTRAINT core_base_module_navigation_position_key UNIQUE (\"position\" )
 )
@@ -176,6 +179,17 @@ WITH (
   OIDS=FALSE
 );";
 
+$statement[] = "CREATE TABLE core_binaries
+(
+  id serial NOT NULL,
+  path text,
+  file text,
+  CONSTRAINT core_binaries_pkey PRIMARY KEY (id )
+)
+WITH (
+  OIDS=FALSE
+);";
+
 $statement[] = "CREATE TABLE core_currencies
 (
   id serial NOT NULL,
@@ -183,6 +197,22 @@ $statement[] = "CREATE TABLE core_currencies
   symbol text,
   iso_4217 text,
   CONSTRAINT core_currencies_pkey PRIMARY KEY (id )
+)
+WITH (
+  OIDS=FALSE
+);";
+
+$statement[] = "CREATE TABLE core_extensions
+(
+  id serial NOT NULL,
+  name text,
+  identifer text,
+  folder text,
+  class text,
+  main_file text,
+  version text,
+  CONSTRAINT core_extensions_pkey PRIMARY KEY (id ),
+  CONSTRAINT core_extensions_identifer_key UNIQUE (identifer )
 )
 WITH (
   OIDS=FALSE
@@ -204,6 +234,36 @@ $statement[] = "CREATE TABLE core_groups
   id serial NOT NULL,
   name text,
   CONSTRAINT core_groups_pkey PRIMARY KEY (id )
+)
+WITH (
+  OIDS=FALSE
+);";
+
+$statement[] = "CREATE TABLE core_job_types
+(
+  id serial NOT NULL,
+  name text,
+  internal_name text,
+  binary_id integer,
+  CONSTRAINT core_job_types_pkey PRIMARY KEY (id ),
+  CONSTRAINT core_job_types_internal_name_key UNIQUE (internal_name )
+)
+WITH (
+  OIDS=FALSE
+);";
+
+$statement[] = "CREATE TABLE core_jobs
+(
+  id serial NOT NULL,
+  binary_id integer,
+  status integer,
+  create_datetime timestamp with time zone,
+  start_datetime timestamp with time zone,
+  end_datetime timestamp with time zone,
+  last_lifesign timestamp with time zone,
+  user_id integer,
+  type_id integer,
+  CONSTRAINT core_jobs_pkey PRIMARY KEY (id )
 )
 WITH (
   OIDS=FALSE
@@ -251,6 +311,29 @@ $statement[] = "CREATE TABLE core_paper_sizes
   base boolean,
   standard boolean,
   CONSTRAINT core_paper_sizes_pkey PRIMARY KEY (id )
+)
+WITH (
+  OIDS=FALSE
+);";
+
+$statement[] = "CREATE TABLE core_service_has_log_entries
+(
+  service_id integer NOT NULL,
+  log_entry_id integer NOT NULL,
+  CONSTRAINT core_service_has_log_entries_pkey PRIMARY KEY (service_id , log_entry_id )
+)
+WITH (
+  OIDS=FALSE
+);";
+
+$statement[] = "CREATE TABLE core_services
+(
+  id serial NOT NULL,
+  name text,
+  binary_id integer,
+  status integer,
+  last_lifesign timestamp with time zone,
+  CONSTRAINT core_services_pkey PRIMARY KEY (id )
 )
 WITH (
   OIDS=FALSE
@@ -463,8 +546,36 @@ $statement[] = "ALTER TABLE ONLY core_group_has_users ADD CONSTRAINT core_group_
       REFERENCES core_users (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
+$statement[] = "ALTER TABLE ONLY core_job_types ADD CONSTRAINT core_job_types_binary_id_fkey FOREIGN KEY (binary_id)
+      REFERENCES core_binaries (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_jobs ADD CONSTRAINT core_jobs_binary_id_fkey FOREIGN KEY (binary_id)
+      REFERENCES core_binaries (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_jobs ADD CONSTRAINT core_jobs_type_id_fkey FOREIGN KEY (type_id)
+      REFERENCES core_job_types (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_jobs ADD CONSTRAINT core_jobs_user_id_fkey FOREIGN KEY (user_id)
+      REFERENCES core_users (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
 $statement[] = "ALTER TABLE ONLY core_measuring_units ADD CONSTRAINT core_measuring_units_toid_fkey FOREIGN KEY (toid)
       REFERENCES core_measuring_units (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_service_has_log_entries ADD CONSTRAINT core_service_has_log_entries_log_entry_id_fkey FOREIGN KEY (log_entry_id)
+      REFERENCES core_system_log (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_service_has_log_entries ADD CONSTRAINT core_service_has_log_entries_service_id_fkey FOREIGN KEY (service_id)
+      REFERENCES core_services (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_services ADD CONSTRAINT core_services_binary_id_fkey FOREIGN KEY (binary_id)
+      REFERENCES core_binaries (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
 $statement[] = "ALTER TABLE ONLY core_session_values ADD CONSTRAINT core_session_values_session_id_fkey FOREIGN KEY (session_id)

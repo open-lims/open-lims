@@ -644,7 +644,7 @@ class SystemHandler implements SystemHandlerInterface
 								$module_dialog_checksum = BaseModuleFile_Access::get_checksum_by_module_id_and_name($register_key, "module_dialog.php");
 								if ($module_dialog_checksum != md5_file($module_dialog_file))
 								{									
-									require($module_dialog);
+									require($module_dialog_file);
 									
 									if (BaseModuleDialog_Access::delete_by_module_id($register_key) == false)
 									{

@@ -143,22 +143,22 @@ class ContentHandler_IO
 			$template->set_var("INDEX_JS","");
 			$GLOBALS['fatal_error'] = "Main folder not found!";
 		}
-		
-	 	$template->set_var("INDEX_TITLE",Registry::get_value("base_html_title"));
-	
-		if (Cron::check() == true)
-		{
-			$template->set_var("CRON",true);
-		}
-		else
-		{
-			$template->set_var("CRON",false);
-		}
-	 	
-		$template->output();
-		
+
 		if ($GLOBALS['fatal_error'] == null)
 		{
+			$template->set_var("INDEX_TITLE",Registry::get_value("base_html_title"));
+		
+			if (Cron::check() == true)
+			{
+				$template->set_var("CRON",true);
+			}
+			else
+			{
+				$template->set_var("CRON",false);
+			}
+			
+			$template->output();
+			
 			$max_ip_errors = (int)Registry::get_value(base_max_ip_failed_logins);
 			
 			if (!is_numeric($max_ip_errors) or $max_ip_errors < 3)
@@ -252,6 +252,7 @@ class ContentHandler_IO
 		}
 		else
 		{
+			$template->output();
 			Error_IO::fatal_error($GLOBALS['fatal_error']);	
 		}
 		

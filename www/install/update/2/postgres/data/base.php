@@ -29,6 +29,7 @@ $statement = array();
 $statement[] = "UPDATE core_base_includes SET db_version = '0.3.9.9-6' WHERE name='base'";
 
 // Register Table
+$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'base','core_base_registry', NULL);";
 // [...]
 
 // Registry

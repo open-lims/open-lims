@@ -46,6 +46,8 @@ $statement[] = "CREATE TABLE core_data_entity_has_data_entities
 (
   data_entity_pid integer NOT NULL,
   data_entity_cid integer NOT NULL,
+  link boolean,
+  link_item_id integer,
   CONSTRAINT core_data_entity_has_data_entities_pkey PRIMARY KEY (data_entity_pid , data_entity_cid )
 )
 WITH (
@@ -326,6 +328,10 @@ $statement[] = "ALTER TABLE ONLY core_data_entity_has_data_entities ADD CONSTRAI
 
 $statement[] = "ALTER TABLE ONLY core_data_entity_has_data_entities ADD CONSTRAINT core_data_entity_has_data_entities_data_entity_pid_fkey FOREIGN KEY (data_entity_pid)
       REFERENCES core_data_entities (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_entity_has_data_entities ADD CONSTRAINT core_data_entity_has_data_entities_link_item_id_fkey FOREIGN KEY (link_item_id)
+      REFERENCES core_items (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
 $statement[] = "ALTER TABLE ONLY core_data_entity_is_item ADD CONSTRAINT core_data_entity_is_item_data_entity_id_fkey FOREIGN KEY (data_entity_id)
