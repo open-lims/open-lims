@@ -26,8 +26,10 @@
  */
 $statement = array();
 
-$statement[] = "INSERT INTO core_base_include_tables (id,include,table_name,db_version) VALUES (nextval('core_base_include_tables_id_seq'::regclass), 'project','core_project_has_extension_runs', NULL);";
+$statement[] = "ALTER TABLE core_sample_has_items ADD COLUMN parent_item_id integer";
 
-$statement[] = "UPDATE core_base_includes SET db_version = '0.3.9.9-6' WHERE name='project'";
+$statement[] = "ALTER TABLE ONLY core_sample_has_items ADD CONSTRAINT core_sample_has_items_parent_item_id_fkey FOREIGN KEY (parent_item_id)
+      REFERENCES core_items (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
 ?>
