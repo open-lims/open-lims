@@ -24,22 +24,27 @@
 /**
  * 
  */
-// require_once("interfaces/registry.interface.php");
+require_once("interfaces/service.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
 	require_once("access/base_service.access.php");
+	require_once("access/base_binary.access.php");
 }
 
 /**
  * Service Class
  * @package base
  */
-class Service // implements RegistryInterface
+class Service implements ServiceInterface
 {	
 	private $service_id;
 	private $service;
 	
+	/**
+	 * @see ServiceInterface::__construct()
+	 * @param integer $id
+	 */
 	function __construct($id)
 	{
 		if (is_numeric($id))
@@ -54,6 +59,9 @@ class Service // implements RegistryInterface
 		}
 	}
 	
+	/**
+	 * @see ServiceInterface::__destruct()
+	 */
 	function __destruct()
 	{
 		if ($this->service_id)
@@ -63,6 +71,10 @@ class Service // implements RegistryInterface
 		}
 	}
 	
+	/**
+	 * @see ServiceInterface::is_responding()
+	 * @return boolean
+	 */
 	public function is_responding()
 	{
 		if ($this->service and $this->service_id)
@@ -87,6 +99,10 @@ class Service // implements RegistryInterface
 		}
 	}
 	
+	/**
+	 * @see ServiceInterface::start()
+	 * @return boolean
+	 */
 	public function start()
 	{
 		if ($this->service and $this->service_id)
@@ -95,12 +111,15 @@ class Service // implements RegistryInterface
 
 			if ($java_vm)
 			{
-				$cmd = "start /B ".$java_vm." -jar ".$command." ".$this->service_id;
+				$binary_access = new BaseBinary_Access($this->service->get_binary_id());
+				
+				$file = constant("BIN_DIR")."/".$binary_access->get_path()."/".$binary_access->get_file();
+				
+				$cmd = "start /B ".$java_vm." -jar ".$file." ".$this->service_id;
 				
 				if (($handle = popen($cmd, "r")) !== false)
 				{
-					pclose();
-					return $this->service->set_status(1);
+					pclose($handle);
 				}
 				else
 				{
@@ -118,11 +137,22 @@ class Service // implements RegistryInterface
 		}
 	}
 	
+	/**
+	 * @see ServiceInterface::stop()
+	 * @return boolean
+	 */
 	public function stop()
 	{
 		if ($this->service and $this->service_id)
 		{
-			return $this->service->set_status(2);
+			if ($this->is_responding() == false)
+			{
+				return $this->service->set_status(0);
+			}
+			else
+			{
+				return $this->service->set_status(2);
+			}
 		}
 		else
 		{

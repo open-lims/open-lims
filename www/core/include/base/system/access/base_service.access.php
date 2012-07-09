@@ -167,7 +167,7 @@ class BaseService_Access
 	 */
 	public function get_binary_id()
 	{
-		if ($this->include_id)
+		if ($this->binary_id)
 		{
 			return $this->binary_id;
 		}

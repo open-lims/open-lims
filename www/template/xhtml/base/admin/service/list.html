@@ -1,6 +1,58 @@
 <script>
-
-
+$(document).ready(function()
+{
+	$(".BaseAdminServiceStartButton").each().live("click", function()
+	{		
+		var id = $(this).attr("id");
+			id = id.replace("BaseAdminServiceStartButton","");
+			
+		$.ajax(
+		{
+			type : "POST",
+			url : "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=admin_service_start",
+			data : "id="+id,
+			success : function(data) 
+			{
+				$("#BaseAdminRegistryEditWindow").dialog("close");
+				if ((data + '').indexOf("EXCEPTION:",0) == 0)
+				{
+					var exception_message = data.replace("EXCEPTION: ","");
+					ErrorDialog("Error", exception_message);
+				}
+				else
+				{
+					list.reload();
+				}
+			}
+		});
+	});
+	
+	$(".BaseAdminServiceStopButton").each().live("click", function()
+	{		
+		var id = $(this).attr("id");
+			id = id.replace("BaseAdminServiceStopButton","");
+			
+		$.ajax(
+		{
+			type : "POST",
+			url : "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=admin_service_stop",
+			data : "id="+id,
+			success : function(data) 
+			{
+				$("#BaseAdminRegistryEditWindow").dialog("close");
+				if ((data + '').indexOf("EXCEPTION:",0) == 0)
+				{
+					var exception_message = data.replace("EXCEPTION: ","");
+					ErrorDialog("Error", exception_message);
+				}
+				else
+				{
+					list.reload();
+				}
+			}
+		});
+	});
+});
 </script>
 	
 

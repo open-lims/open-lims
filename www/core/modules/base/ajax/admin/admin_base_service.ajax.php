@@ -73,7 +73,7 @@ class AdminBaseServiceAjax
 						case "0":
 							$list_array[$key][status] = "Stopped";
 							
-							$list_array[$key][start] = "<a href='#' class='BaseAdminServiceStartButton' id='BaseAdminServiceStartButton".$list_array[$key][id]."'><img src='images/icons/service_start_d.png' alt='E' style='border: 0;' /></a>";
+							$list_array[$key][start] = "<a href='#' class='BaseAdminServiceStartButton' id='BaseAdminServiceStartButton".$list_array[$key][id]."'><img src='images/icons/service_start.png' alt='E' style='border: 0;' /></a>";
 							$list_array[$key][stop] = "<a href='#'><img src='images/icons/service_stop_d.png' alt='E' style='border: 0;' /></a>";
 						break;
 					
@@ -96,17 +96,39 @@ class AdminBaseServiceAjax
 						break;
 						
 						case "2":
-							$list_array[$key][status] = "Stopping";
+							$service = new Service($list_array[$key][id]);
+							if ($service->is_responding() == false)
+							{
+								$list_array[$key][status] = "Stopping (Not Responing)";
 							
-							$list_array[$key][start] = "<a href='#'><img src='images/icons/service_start_d.png' alt='E' style='border: 0;' /></a>";
-							$list_array[$key][stop] = "<a href='#'><img src='images/icons/service_stop_d.png' alt='E' style='border: 0;' /></a>";
+								$list_array[$key][start] = "<a href='#'><img src='images/icons/service_start_d.png' alt='E' style='border: 0;' /></a>";
+								$list_array[$key][stop] = "<a href='#' class='BaseAdminServiceStopButton' id='BaseAdminServiceStopButton".$list_array[$key][id]."'><img src='images/icons/service_stop.png' alt='E' style='border: 0;' /></a>";
+							}
+							else
+							{
+								$list_array[$key][status] = "Stopping";
+							
+								$list_array[$key][start] = "<a href='#'><img src='images/icons/service_start_d.png' alt='E' style='border: 0;' /></a>";
+								$list_array[$key][stop] = "<a href='#'><img src='images/icons/service_stop_d.png' alt='E' style='border: 0;' /></a>";
+							}
 						break;
 						
 						case "3":
-							$list_array[$key][status] = "Stopping (Hard)";
+							$service = new Service($list_array[$key][id]);
+							if ($service->is_responding() == false)
+							{
+								$list_array[$key][status] = "Stopping (Not Responing)";
 							
-							$list_array[$key][start] = "<a href='#'><img src='images/icons/service_start_d.png' alt='E' style='border: 0;' /></a>";
-							$list_array[$key][stop] = "<a href='#'><img src='images/icons/service_stop_d.png' alt='E' style='border: 0;' /></a>";
+								$list_array[$key][start] = "<a href='#'><img src='images/icons/service_start_d.png' alt='E' style='border: 0;' /></a>";
+								$list_array[$key][stop] = "<a href='#' class='BaseAdminServiceStopButton' id='BaseAdminServiceStopButton".$list_array[$key][id]."'><img src='images/icons/service_stop.png' alt='E' style='border: 0;' /></a>";
+							}
+							else
+							{
+								$list_array[$key][status] = "Stopping (Hard)";
+							
+								$list_array[$key][start] = "<a href='#'><img src='images/icons/service_start_d.png' alt='E' style='border: 0;' /></a>";
+								$list_array[$key][stop] = "<a href='#'><img src='images/icons/service_stop_d.png' alt='E' style='border: 0;' /></a>";
+							}	
 						break;
 					
 						case "4":

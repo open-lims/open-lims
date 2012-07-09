@@ -168,6 +168,16 @@ class BaseRequest
 				echo AdminBaseServiceAjax::count_service($_POST[argument_array]);
 			break;
 			
+			case "admin_service_start":
+				require_once("ajax/admin/admin_base_service.ajax.php");
+				echo AdminBaseServiceAjax::start($_POST[id]);
+			break;
+			
+			case "admin_service_stop":
+				require_once("ajax/admin/admin_base_service.ajax.php");
+				echo AdminBaseServiceAjax::stop($_POST[id]);
+			break;
+			
 			case "admin_list_users":
 				require_once("ajax/admin/admin_user.ajax.php");
 				echo AdminUserAjax::list_users($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
