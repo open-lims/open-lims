@@ -45,11 +45,5 @@
 	$tab[2]['controller_file']	= "admin.request.php";
 	$tab[2]['alias']			= "admin";
 	
-	$tab[3]['language_address']	= "BaseMainExtensions";
-	$tab[3]['colour']			= "blue";
-	$tab[3]['controller_class']	= "ExtensionRequest";
-	$tab[3]['controller_file']	= "extension.request.php";
-	$tab[3]['alias']			= "extension";
-	
 	$required_include[0] 		= "base";
 ?>

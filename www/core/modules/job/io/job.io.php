@@ -41,13 +41,13 @@ class JobIO
 		
 		$template = new HTMLTemplate("job/list.html");
 		
-		if ($user->is_admin())
+		if ($user->is_admin() and Job::get_type_id_by_internal_name("TEST") != null)
 		{
-			$template->set_var("admin", true);
+			$template->set_var("test_job", true);
 		}
 		else
 		{
-			$template->set_var("admin", false);
+			$template->set_var("test_job", false);
 		}
 		
 		$template->set_var("list", $list->get_list());

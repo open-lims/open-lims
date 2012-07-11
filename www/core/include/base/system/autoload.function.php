@@ -120,7 +120,7 @@ function __autoload($classname)
 	// Extension
 	$classes['ExtensionCreateRunEvent']		= $path_prefix."core/include/base/extension/events/extension_create_run_event.class.php";
 
-	$classes['ConreteExtensionInterface']	= $path_prefix."core/include/base/extension/interfaces/concrete_extension.interface.php";
+	$classes['ConcreteExtensionInterface']	= $path_prefix."core/include/base/extension/interfaces/concrete_extension.interface.php";
 
 	$classes['Extension']					= $path_prefix."core/include/base/extension/extension.class.php";
 	$classes['ExtensionHandler']			= $path_prefix."core/include/base/extension/extension_handler.class.php";
