@@ -86,7 +86,7 @@ class ProjectExtension // implements ProjectExtensionInterface, EventListenerInt
     	
     	if ($event_object instanceof ExtensionCreateRunEvent)
     	{
-    		$event_identifier_array = $session->read_value("PROJECT_EXTENSION_EVENT_IDENTIFER_ARRAY");
+    		$event_identifier_array = $session->read_value("PROJECT_EXTENSION_EVENT_IDENTIFIER_ARRAY");
     		$event_object_identifier = $event_object->get_event_identifier();
     		
     		if ($event_identifier_array[$event_object_identifier])

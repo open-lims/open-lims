@@ -499,7 +499,7 @@ class Extension_Access
 
 		if ($identifier)
 		{
-			$sql = "SELECT id FROM ".constant("EXTENSION_TABLE")." WHERE identifier = '".$identifier."'";
+			$sql = "SELECT id FROM ".constant("EXTENSION_TABLE")." WHERE LOWER(identifer) = '".trim(strtolower($identifer))."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
