@@ -4,11 +4,11 @@
 
 <!ELEMENT HEAD (ID|TITLE|VERSION?|AUTHOR?|DESC?|LOCATION?|MANUFACTURER?|EXPIRY?)*>
 <!ELEMENT REQUIRED (ITEM*,CLASS*)>
-<!ELEMENT BODY (ITEM|CLASS|STATUS|EXTENSION|QUALITYCHECK?)*>
+<!ELEMENT BODY (ITEM|CLASS|STATUS|EXTENSION)*>
 
-<!ELEMENT STATUS (ITEM|ITEMI|CLASS|ANALYSIS|QUALITYCHECK?)*>
+<!ELEMENT STATUS (ITEM|ITEMI|CLASS|EXTENSION)*>
 
-<!ELEMENT ITEM (TYPE|INFORMATION|CATEGORY|ITEM)*>
+<!ELEMENT ITEM (TYPE|INFORMATION|CATEGORY|ITEMI)*>
 <!ELEMENT ITEMI EMPTY>
 
 <!ELEMENT CLASS (INFORMATION)*>
@@ -18,15 +18,9 @@
 <!ELEMENT TYPE EMPTY>
 <!ELEMENT CATEGORY EMPTY>
 
-<!ELEMENT ANALYSIS (COMPARE|MODULE|EXTENSION)>
-
-<!ELEMENT COMPARE (FILTER)>
-<!ELEMENT MODULE (FILTER)>
 <!ELEMENT EXTENSION (FILTER)>
 
 <!ELEMENT FILTER EMPTY>
-
-<!ELEMENT QUALITYCHECK EMPTY>
 
 <!ELEMENT ID (#PCDATA)>
 <!ELEMENT TITLE (#PCDATA)>
@@ -47,27 +41,25 @@
 >        
 
 <!ATTLIST 	ITEM
-	type	        CDATA    									#IMPLIED
-	classify	    (force|optional|forbidden)					#IMPLIED
-	occurrence		(once|multiple|update-once|update-multiple)	#IMPLIED      
-	requirement		(force|optional)							#IMPLIED   
-	class			CDATA										#IMPLIED      
-	name			CDATA										#IMPLIED      
-	gid				CDATA										#IMPLIED
-	folder			CDATA										#IMPLIED
-	inherit			(all|true|false)							#IMPLIED
+	type	        CDATA    					#IMPLIED
+	classify	    (force|optional|forbidden)	#IMPLIED
+	occurrence		(once|multiple)				#IMPLIED      
+	requirement		(force|optional)			#IMPLIED   
+	class			CDATA						#IMPLIED      
+	name			CDATA						#IMPLIED      
+	pos_id			CDATA						#IMPLIED
+	folder			CDATA						#IMPLIED
+	inherit			(all|none)					#IMPLIED
+	dialog			(window|page)				#IMPLIED
 >       
 
 <!ATTLIST 	ITEMI
-	parent			CDATA										#REQUIRED
-	classify	    (force|optional|forbidden)					#IMPLIED
-	occurrence		(once|multiple|update-once|update-multiple)	#IMPLIED      
-	requirement		(force|optional)							#IMPLIED   
-	class			CDATA										#IMPLIED      
-	name			CDATA										#IMPLIED      
-	gid				CDATA										#IMPLIED
-	folder			CDATA										#IMPLIED	
->      
+	pos_id			CDATA						#REQUIRED
+	parent_pos_id   CDATA						#IMPLIED
+	parent_status   CDATA						#IMPLIED
+	parent_status   (true|false)				#IMPLIED   
+	dialog			(window|page)				#IMPLIED
+>   
 
 <!ATTLIST 	TYPE
 	id				CDATA						#REQUIRED
@@ -86,22 +78,10 @@
 	description		(description)				#IMPLIED
 >	
 
-<!ATTLIST 	ANALYSIS
-	requirement		(force|optional)			#IMPLIED
-	occurrence		(once|multiple)				#IMPLIED      
->
-       
-<!ATTLIST 	COMPARE
-	name			CDATA						#REQUIRED
->      
-       
-<!ATTLIST 	MODULE
-	name			CDATA						#REQUIRED
-	funciton		CDATA						#REQUIRED
->
-
 <!ATTLIST 	EXTENSION
-	identifer		CDATA						#REQUIRED
+	identifier		CDATA						#REQUIRED
+	requirement		(force|optional)			#IMPLIED 
+	occurrence		(once|multiple)				#IMPLIED 
 >
 
 <!ATTLIST 	FILTER

@@ -53,7 +53,7 @@
 			<ITEMI parent_status="10002" parent_pos_id="0" pos_id="1"></ITEMI>
 		</STATUS>
 		<STATUS id="10009">
-			<EXTENSION identifer="MICROARRAY_ANALYSIS" occurrence="multiple">
+			<EXTENSION identifier="MICROARRAY_ANALYSIS" occurrence="multiple">
 				<FILTER status="10002" type="sample" />
 				<FILTER status="10008" type="file" />
 			</EXTENSION>
