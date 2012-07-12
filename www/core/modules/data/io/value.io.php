@@ -34,6 +34,8 @@ class ValueIO
 	 */
 	private static function edit($value, $target_params, $display_header = true)
 	{
+		global $user;
+		
 		if (is_object($value) and $target_params)
 		{
 			$template = new HTMLTemplate("data/value_detail.html");

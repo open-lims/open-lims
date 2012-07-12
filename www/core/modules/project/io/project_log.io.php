@@ -42,6 +42,15 @@ class ProjectLogIO
 				$template = new HTMLTemplate("project/log.html");
 				$template->set_var("get_array",serialize($_GET));
 				
+				if ($project_security->is_access(3, false) == true)
+				{
+					$template->set_var("write",true);
+				}
+				else
+				{
+					$template->set_var("write",false);
+				}
+				
 				$project_log_array = ProjectLog::list_entries_by_project_id($_GET['project_id']);
 				$entry_count = count($project_log_array);
 				$number_of_pages = ceil($entry_count/constant("PROJECT_LOG_ENTRIES_PER_PAGE"));

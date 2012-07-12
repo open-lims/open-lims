@@ -72,7 +72,7 @@ class Test
 		}
 	}
 	
-	public function start_analysis($event_identifer)
+	public function start_analysis($event_identifier)
 	{
 		if ($this->handle)
 		{
@@ -94,8 +94,8 @@ class Test
 			
 			
 			
-			$extension_id = Extension::get_id_by_identifer("TEST");
-    		$extension_create_run_event = new ExtensionCreateRunEvent($extension_id, $new_id, $event_identifer);
+			$extension_id = Extension::get_id_by_identifier("TEST");
+    		$extension_create_run_event = new ExtensionCreateRunEvent($extension_id, $new_id, $event_identifier);
     		$event_handler = new EventHandler($extension_create_run_event);
 			
 			if ($event_handler->get_success() == false)
@@ -103,7 +103,7 @@ class Test
 				return null;
 			}
 			
-			echo $extension_id."-".$new_id."-".$event_identifer;
+			echo $extension_id."-".$new_id."-".$event_identifier;
 			
 			return $new_id;
 		}

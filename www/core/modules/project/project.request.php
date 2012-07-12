@@ -734,7 +734,7 @@ class ProjectRequest
 			case("extension"):
 				if ($_GET['extension'])
 				{
-					$extension_id = Extension::get_id_by_identifer($_GET['extension']);
+					$extension_id = Extension::get_id_by_identifier($_GET['extension']);
 					if ($extension_id)
 					{
 						$extension = new Extension($extension_id);
@@ -790,21 +790,21 @@ class ProjectRequest
 							$item_array = $project_item->get_project_items(true);
 						}					
 						
-						$event_identifer = uniqid("", true);
+						$event_identifier = uniqid("", true);
 						
 						if ($session->is_value("PROJECT_EXTENSION_EVENT_IDENTIFER_ARRAY"))
 						{
-							$project_extension_event_identifer_array = $session->read_value("PROJECT_EXTENSION_EVENT_IDENTIFER_ARRAY");
-							$project_extension_event_identifer_array[$event_identifer] = $_GET['project_id'];
+							$project_extension_event_identifier_array = $session->read_value("PROJECT_EXTENSION_EVENT_IDENTIFER_ARRAY");
+							$project_extension_event_identifier_array[$event_identifier] = $_GET['project_id'];
 						}
 						else
 						{
-							$project_extension_event_identifer_array = array();
-							$project_extension_event_identifer_array[$event_identifer] = $_GET['project_id'];
+							$project_extension_event_identifier_array = array();
+							$project_extension_event_identifier_array[$event_identifier] = $_GET['project_id'];
 						}
 						
-						$session->write_value("PROJECT_EXTENSION_EVENT_IDENTIFER_ARRAY", $project_extension_event_identifer_array);
-						$main_class::set_event_identifer($event_identifer);
+						$session->write_value("PROJECT_EXTENSION_EVENT_IDENTIFER_ARRAY", $project_extension_event_identifier_array);
+						$main_class::set_event_identifier($event_identifier);
 						
 						$main_class::set_target_folder_id(ProjectStatusFolder::get_folder_by_project_id_and_project_status_id($_GET['project_id'], $project->get_current_status_id()));
 						$main_class::push_data($item_array);

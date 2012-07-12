@@ -29,22 +29,22 @@ class ExtensionCreateRunEvent extends Event
 {    
 	private $extension_id;
 	private $run_id;
-	private $event_identifer;
+	private $event_identifier;
 	
-	function __construct($extension_id, $run_id, $event_identifer)
+	function __construct($extension_id, $run_id, $event_identifier)
     {
-    	if (is_numeric($extension_id) and is_numeric($run_id) and $event_identifer)
+    	if (is_numeric($extension_id) and is_numeric($run_id) and $event_identifier)
     	{
     		parent::__construct();
     		$this->extension_id = $extension_id;
     		$this->run_id = $run_id;
-    		$this->event_identifer = $event_identifer;
+    		$this->event_identifier = $event_identifier;
     	}
     	else
     	{
     		$this->extension_id = null;
     		$this->run_id = null;
-    		$this->event_identifer = null;
+    		$this->event_identifier = null;
     	}
     }
     
@@ -72,11 +72,11 @@ class ExtensionCreateRunEvent extends Event
     	}
     }
     
-	public function get_event_identifer()
+	public function get_event_identifier()
     {
-    	if ($this->event_identifer)
+    	if ($this->event_identifier)
     	{
-    		return $this->event_identifer;
+    		return $this->event_identifier;
     	}
     	else
     	{

@@ -79,7 +79,7 @@ class ExtensionHandler implements ExtensionHandlerInterface, EventListenerInterf
 							else
 							{
 								$extension = new Extension_Access(null);
-								$extension->create($name, $identifer, $value, $main_class, $main_file);
+								$extension->create($name, $identifier, $value, $main_class, $main_file);
 							}
 						}
 					}

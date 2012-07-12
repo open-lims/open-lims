@@ -62,10 +62,10 @@ interface ConcreteExtensionInterface
 	public static function set_target_folder_id($target_folder_id);
 	
 	/**
-	 * Sets an unique identifer which will be retured by the create-event to identify the extension run
-	 * @param string $event_identifer
+	 * Sets an unique identifier which will be retured by the create-event to identify the extension run
+	 * @param string $event_identifier
 	 */
-	public static function set_event_identifer($event_identifer);
+	public static function set_event_identifier($event_identifier);
 	
 	/**
 	 * Sets called events which will be listend by the extension system to deal with it

@@ -1269,12 +1269,12 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						// EXTENSION
 						if ($value[xml_element] == "extension" and !$value[close])
 						{
-							$extension_id = Extension::get_id_by_identifer($value[identifer]);
+							$extension_id = Extension::get_id_by_identifier($value[identifier]);
 							$extension = new Extension($extension_id);
 							
 							$return_array[$counter][element_type] = "extension";
 							$return_array[$counter][name] = $extension->get_name();
-							$return_array[$counter][extension] = $value[identifer];
+							$return_array[$counter][extension] = $value[identifier];
 							
 							if ($value[requirement] and $status_attribute_array[requirement] != "optional")
 							{

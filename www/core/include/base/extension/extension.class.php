@@ -152,13 +152,13 @@ class Extension implements ExtensionInterface
 	
 	
 	/**
-	 * @see ExtensionInterface::get_id_by_identifer()
-	 * @param string $identifer
+	 * @see ExtensionInterface::get_id_by_identifier()
+	 * @param string $identifier
 	 * @return integer
 	 */
-	public static function get_id_by_identifer($identifer)
+	public static function get_id_by_identifier($identifier)
 	{
-		return Extension_Access::get_id_by_identifer($identifer);
+		return Extension_Access::get_id_by_identifier($identifier);
 	}
 }
 ?>

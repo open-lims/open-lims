@@ -286,7 +286,7 @@ class ContentHandler_IO
 				}
 				elseif($_GET['extension'])
 				{
-					$extension_id = Extension::get_id_by_identifer($_GET['extension']);
+					$extension_id = Extension::get_id_by_identifier($_GET['extension']);
 					if (is_numeric($extension_id))
 					{
 						$extension = new Extension($extension_id);

@@ -41,13 +41,13 @@ $statement[] = "CREATE TABLE core_extensions
 (
   id serial NOT NULL,
   name text,
-  identifer text,
+  identifier text,
   folder text,
   class text,
   main_file text,
   version text,
   CONSTRAINT core_extensions_pkey PRIMARY KEY (id ),
-  CONSTRAINT core_extensions_identifer_key UNIQUE (identifer )
+  CONSTRAINT core_extensions_identifier_key UNIQUE (identifier )
 )
 WITH (
   OIDS=FALSE

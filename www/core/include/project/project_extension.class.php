@@ -86,16 +86,16 @@ class ProjectExtension // implements ProjectExtensionInterface, EventListenerInt
     	
     	if ($event_object instanceof ExtensionCreateRunEvent)
     	{
-    		$event_identifer_array = $session->read_value("PROJECT_EXTENSION_EVENT_IDENTIFER_ARRAY");
-    		$event_object_identifer = $event_object->get_event_identifer();
+    		$event_identifier_array = $session->read_value("PROJECT_EXTENSION_EVENT_IDENTIFER_ARRAY");
+    		$event_object_identifier = $event_object->get_event_identifier();
     		
-    		if ($event_identifer_array[$event_object_identifer])
+    		if ($event_identifier_array[$event_object_identifier])
     		{
     			$run_id = $event_object->get_run_id();
     			$extension_id = $event_object->get_extension_id();
     			
     			$project_has_run_access = new ProjectHasExtensionRun_Access(null);
-    			if ($project_has_run_access->create($event_identifer_array[$event_object_identifer], $extension_id, $run_id) == null)
+    			if ($project_has_run_access->create($event_identifier_array[$event_object_identifier], $extension_id, $run_id) == null)
     			{
     				return false;
     			}

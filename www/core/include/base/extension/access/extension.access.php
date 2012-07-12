@@ -31,7 +31,7 @@ class Extension_Access
 
 	private $extension_id;
 	private $name;
-	private $identifer;
+	private $identifier;
 	private $folder;
 	private $class;
 	private $main_file;
@@ -58,7 +58,7 @@ class Extension_Access
 			{
 				$this->extension_id 	= extension_id;
 				$this->name				= $data['name'];
-				$this->identifer		= $data['identifer'];
+				$this->identifier		= $data['identifier'];
 				$this->folder			= $data['folder'];
 				$this->class			= $data['class'];
 				$this->main_file		= $data['main_file'];
@@ -77,7 +77,7 @@ class Extension_Access
 		{
 			unset($this->extension_id);
 			unset($this->name);
-			unset($this->identifer);
+			unset($this->identifier);
 			unset($this->folder);
 			unset($this->class);
 			unset($this->main_file);
@@ -87,20 +87,20 @@ class Extension_Access
 	
 	/**
 	 * @param string $name
-	 * @param string $identifer
+	 * @param string $identifier
 	 * @param string $folder
 	 * @param string $class
 	 * @return integer
 	 */
-	public function create($name, $identifer, $folder, $class, $main_file)
+	public function create($name, $identifier, $folder, $class, $main_file)
 	{
 		global $db;
 		
-		if ($name and $identifer and $folder and $class and $main_file)
+		if ($name and $identifier and $folder and $class and $main_file)
 		{
 
-			$sql_write = "INSERT INTO ".constant("EXTENSION_TABLE")." (id,name,identifer,folder,class,main_file,version) " .
-						"VALUES (nextval('".self::EXTENSION_PK_SEQUENCE."'::regclass),'".$name."','".$identifer."','".$folder."','".$class."','".$main_file."',NULL)";
+			$sql_write = "INSERT INTO ".constant("EXTENSION_TABLE")." (id,name,identifier,folder,class,main_file,version) " .
+						"VALUES (nextval('".self::EXTENSION_PK_SEQUENCE."'::regclass),'".$name."','".$identifier."','".$folder."','".$class."','".$main_file."',NULL)";
 
 			$res_write = $db->db_query($sql_write);
 			
@@ -174,11 +174,11 @@ class Extension_Access
 	/**
 	 * @return string
 	 */
-	public function get_identifer()
+	public function get_identifier()
 	{
-		if ($this->identifer)
+		if ($this->identifier)
 		{
-			return $this->identifer;
+			return $this->identifier;
 		}
 		else
 		{
@@ -278,21 +278,21 @@ class Extension_Access
 	}
 	
 	/**
-	 * @param string $identifer
+	 * @param string $identifier
 	 * @return bool
 	 */
-	public function set_identifer($identifer)
+	public function set_identifier($identifier)
 	{
 		global $db;
 			
-		if ($this->extension_id and $identifer)
+		if ($this->extension_id and $identifier)
 		{
-			$sql = "UPDATE ".constant("EXTENSION_TABLE")." SET identifer = '".$identifer."' WHERE id = '".$this->extension_id."'";
+			$sql = "UPDATE ".constant("EXTENSION_TABLE")." SET identifier = '".$identifier."' WHERE id = '".$this->extension_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
 			{
-				$this->identifer = $identifer;
+				$this->identifier = $identifier;
 				return true;
 			}
 			else
@@ -438,14 +438,14 @@ class Extension_Access
 		$return_array = array();
 		$counter = 0;
 		
-		$sql = "SELECT id,name,identifer,folder,class,main_file FROM ".constant("EXTENSION_TABLE")."";
+		$sql = "SELECT id,name,identifier,folder,class,main_file FROM ".constant("EXTENSION_TABLE")."";
 		$res = $db->db_query($sql);
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
 			$return_array[$counter]['id'] = $data['id'];
 			$return_array[$counter]['name'] = $data['name'];
-			$return_array[$counter]['identifer'] = $data['identifer'];
+			$return_array[$counter]['identifier'] = $data['identifier'];
 			$return_array[$counter]['folder'] = $data['folder'];
 			$return_array[$counter]['class'] = $data['class'];
 			$return_array[$counter]['main_file'] = $data['main_file'];
@@ -490,16 +490,16 @@ class Extension_Access
 	}
 	
 	/**
-	 * @param string $identifer
+	 * @param string $identifier
 	 * @return array
 	 */
-	public static function get_id_by_identifer($identifer)
+	public static function get_id_by_identifier($identifier)
 	{
 		global $db;
 
-		if ($identifer)
+		if ($identifier)
 		{
-			$sql = "SELECT id FROM ".constant("EXTENSION_TABLE")." WHERE identifer = '".$identifer."'";
+			$sql = "SELECT id FROM ".constant("EXTENSION_TABLE")." WHERE identifier = '".$identifier."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			

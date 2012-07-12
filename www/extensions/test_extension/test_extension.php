@@ -27,7 +27,7 @@
  */
 class TestExtension implements ConcreteExtensionInterface
 {
-	private static $event_identifer;
+	private static $event_identifier;
 	
 	/**
 	 * @return string
@@ -54,7 +54,7 @@ class TestExtension implements ConcreteExtensionInterface
 		require_once("classes/test.class.php");
 		require_once("io/test_extension.io.php");
 		TestExtensionIO::set_template_path("extensions/test_extension/template");
-		TestExtensionIO::start($data, self::$event_identifer);
+		TestExtensionIO::start($data, self::$event_identifier);
 	}
 	
 	/**
@@ -73,9 +73,9 @@ class TestExtension implements ConcreteExtensionInterface
 		
 	}
 	
-	public static function set_event_identifer($event_identifer)
+	public static function set_event_identifier($event_identifier)
 	{
-		self::$event_identifer = $event_identifer;
+		self::$event_identifier = $event_identifier;
 	}
 	
 	public static function listen_events($event)

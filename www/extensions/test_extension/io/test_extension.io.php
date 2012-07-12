@@ -34,10 +34,10 @@ class TestExtensionIO
 		self::$template_path = $template_path;
 	}
 	
-	public static function start($data, $event_identifer)
+	public static function start($data, $event_identifier)
 	{
 		$test = new Test(null);
-		$test->start_analysis($event_identifer);
+		$test->start_analysis($event_identifier);
 		
 		$template = new HTMLTemplate("start.html", self::$template_path);
 		

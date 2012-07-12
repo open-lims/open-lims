@@ -1,7 +1,7 @@
 <?php
 
 	$name 					= "Test Extension";
-	$identifer				= "TEST";
+	$identifier				= "TEST";
 	
 	$main_class				= "TestExtension";
 	$main_file				= "test_extension.php";

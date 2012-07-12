@@ -47,7 +47,9 @@ class Navigation_IO
 			{
 				$module_name = SystemHandler::get_module_name_by_module_id($value[module_id]);
 				
-				if (($module_name == "admin" and $user->is_admin()) or $module_name != "admin")
+				if (($module_name == "base" and $value[alias] == "admin" and $user->is_admin()) 
+					or $module_name != "base" 
+					or ($module_name == "base" and $value[alias] != "admin"))
 				{
 				
 					$paramquery[username] = $_GET[username];
