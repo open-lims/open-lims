@@ -100,7 +100,7 @@ class ProjectHasExtensionRun_Access
 				
 				$this->__construct($data_read[primary_key]);
 				
-				return $data_read[id];
+				return $data_read[primary_key];
 			}
 			else
 			{
