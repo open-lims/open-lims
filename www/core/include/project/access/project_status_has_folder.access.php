@@ -184,7 +184,7 @@ class ProjectStatusHasFolder_Access
 	{
 		global $db;
 		
-		if (is_numeric($project_id))
+		if (is_numeric($project_id) and is_numeric($project_status_id))
 		{	
 			$sql = "SELECT folder_id FROM ".constant("PROJECT_STATUS_HAS_FOLDER_TABLE")." WHERE project_id='".$project_id."' AND project_status_id='".$project_status_id."'";
 			$res = $db->db_query($sql);
