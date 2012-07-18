@@ -649,10 +649,9 @@ class UserIO
 		
 		if ($no_error == true)
 		{	
+			$paramquery = array();
 			$paramquery[username] = $_GET[username];
 			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav] = "home";
-			$paramquery[change_tab] = "true";
 			$params = http_build_query($paramquery);
 			
 			if ($user->set_password_on_login($_POST[new_password_1]))
