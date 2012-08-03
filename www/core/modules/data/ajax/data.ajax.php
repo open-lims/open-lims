@@ -143,14 +143,6 @@ class DataAjax
 							$list_array[$key][symbol][link] = $params;
 							$list_array[$key][symbol][content] = "<img src='".$file->get_icon()."' alt='' style='border:0;' />";
 							
-							if (strlen($list_array[$key][name]) > 30)
-							{
-								$list_array[$key][name] = substr($list_array[$key][name],0,30)."...";
-							}
-							else
-							{
-								$list_array[$key][name] = $list_array[$key][name];
-							}
 							
 							$tmp_name = $list_array[$key][name];
 							unset($list_array[$key][name]);
@@ -188,19 +180,9 @@ class DataAjax
 							$paramquery[action] = "value_detail";
 							$params = http_build_query($paramquery,'','&#38;');
 						
-						
 							$list_array[$key][symbol][link] = $params;
 							$list_array[$key][symbol][content] = "<img src='images/fileicons/16/unknown.png' alt='' style='border:0;' />";
-							
-							if (strlen($list_array[$key][name]) > 30)
-							{
-								$list_array[$key][name] = substr($list_array[$key][name],0,30)."...";
-							}
-							else
-							{
-								$list_array[$key][name] = $list_array[$key][name];
-							}
-							
+														
 							$tmp_name = $list_array[$key][name];
 							unset($list_array[$key][name]);
 							$list_array[$key][name][content] = $tmp_name;
@@ -239,15 +221,6 @@ class DataAjax
 							$list_array[$key][symbol][content] = "<img src='images/icons/folder.png' alt='' style='border:0;' />";
 							$list_array[$key][symbol][link] = $params;
 							
-							if (strlen($list_array[$key][name]) > 30)
-							{
-								$list_array[$key][name] = substr($list_array[$key][name],0,30)."...";
-							}
-							else
-							{
-								$list_array[$key][name] = $list_array[$key][name];
-							}
-							
 							$tmp_name = $list_array[$key][name];
 							unset($list_array[$key][name]);
 							$list_array[$key][name][content] = $tmp_name;
@@ -280,15 +253,6 @@ class DataAjax
 						
 						$list_array[$key][symbol][content] = "<img src='images/icons/virtual_folder.png' alt='' style='border:0;' />";
 						$list_array[$key][symbol][link] = $params;
-
-						if (strlen($list_array[$key][name]) > 30)
-						{
-							$list_array[$key][name] = substr($list_array[$key][name],0,30)."...";
-						}
-						else
-						{
-							$list_array[$key][name] = $list_array[$key][name];
-						}
 						
 						$tmp_name = $list_array[$key][name];
 						unset($list_array[$key][name]);

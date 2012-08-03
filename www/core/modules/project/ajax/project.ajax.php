@@ -64,45 +64,18 @@ class ProjectAjax
 				{
 					$tmp_name = trim($list_array[$key][name]);
 					unset($list_array[$key][name]);
-					
-					if (strlen($tmp_name) > 28)
-					{
-						$list_array[$key][name][label] = $tmp_name;
-						$list_array[$key][name][content] = substr($tmp_name,0,28)."...";
-					}
-					else
-					{
-						$list_array[$key][name][label] = $tmp_name;
-						$list_array[$key][name][content] = $tmp_name;
-					}
-					
+					$list_array[$key][name][label] = $tmp_name;
+					$list_array[$key][name][content] = $tmp_name;
+
 					$tmp_template = trim($list_array[$key][template]);
 					unset($list_array[$key][template]);
-					
-					if (strlen($tmp_template) > 20)
-					{
-						$list_array[$key][template][label] = $tmp_template;
-						$list_array[$key][template][content] = substr($tmp_template,0,20)."...";
-					}
-					else
-					{
-						$list_array[$key][template][label] = $tmp_template;
-						$list_array[$key][template][content] = $tmp_template;
-					}
+					$list_array[$key][template][label] = $tmp_template;
+					$list_array[$key][template][content] = $tmp_template;
 					
 					$tmp_status= trim($list_array[$key][status]);
 					unset($list_array[$key][status]);
-					
-					if (strlen($tmp_status) > 15)
-					{
-						$list_array[$key][status][label] = $tmp_status;
-						$list_array[$key][status][content] = substr($tmp_status,0,15)."...";
-					}
-					else
-					{
-						$list_array[$key][status][label] = $tmp_status;
-						$list_array[$key][status][content] = $tmp_status;
-					}
+					$list_array[$key][status][label] = $tmp_status;
+					$list_array[$key][status][content] = $tmp_status;
 					
 					if ($list_array[$key][deleted] == "t")
 					{
@@ -196,47 +169,20 @@ class ProjectAjax
 			{
 				foreach($list_array as $key => $value)
 				{
-				$tmp_name = trim($list_array[$key][name]);
+					$tmp_name = trim($list_array[$key][name]);
 					unset($list_array[$key][name]);
-					
-					if (strlen($tmp_name) > 28)
-					{
-						$list_array[$key][name][label] = $tmp_name;
-						$list_array[$key][name][content] = substr($tmp_name,0,28)."...";
-					}
-					else
-					{
-						$list_array[$key][name][label] = $tmp_name;
-						$list_array[$key][name][content] = $tmp_name;
-					}
+					$list_array[$key][name][label] = $tmp_name;
+					$list_array[$key][name][content] = $tmp_name;
 
 					$tmp_template = trim($list_array[$key][template]);
 					unset($list_array[$key][template]);
-					
-					if (strlen($tmp_template) > 20)
-					{
-						$list_array[$key][template][label] = $tmp_template;
-						$list_array[$key][template][content] = substr($tmp_template,0,20)."...";
-					}
-					else
-					{
-						$list_array[$key][template][label] = $tmp_template;
-						$list_array[$key][template][content] = $tmp_template;
-					}
+					$list_array[$key][template][label] = $tmp_template;
+					$list_array[$key][template][content] = $tmp_template;
 					
 					$tmp_status= trim($list_array[$key][status]);
 					unset($list_array[$key][status]);
-					
-					if (strlen($tmp_status) > 15)
-					{
-						$list_array[$key][status][label] = $tmp_status;
-						$list_array[$key][status][content] = substr($tmp_status,0,15)."...";
-					}
-					else
-					{
-						$list_array[$key][status][label] = $tmp_status;
-						$list_array[$key][status][content] = $tmp_status;
-					}
+					$list_array[$key][status][label] = $tmp_status;
+					$list_array[$key][status][content] = $tmp_status;
 					
 					if ($list_array[$key][deleted] == "t")
 					{
@@ -355,45 +301,18 @@ class ProjectAjax
 				{
 					$tmp_name = trim($list_array[$key][name]);
 					unset($list_array[$key][name]);
-					
-					if (strlen($tmp_name) > 28)
-					{
-						$list_array[$key][name][label] = $tmp_name;
-						$list_array[$key][name][content] = substr($tmp_name,0,28)."...";
-					}
-					else
-					{
-						$list_array[$key][name][label] = $tmp_name;
-						$list_array[$key][name][content] = $tmp_name;
-					}
+					$list_array[$key][name][label] = $tmp_name;
+					$list_array[$key][name][content] = $tmp_name;
 
 					$tmp_template = trim($list_array[$key][template]);
 					unset($list_array[$key][template]);
-					
-					if (strlen($tmp_template) > 20)
-					{
-						$list_array[$key][template][label] = $tmp_template;
-						$list_array[$key][template][content] = substr($tmp_template,0,20)."...";
-					}
-					else
-					{
-						$list_array[$key][template][label] = $tmp_template;
-						$list_array[$key][template][content] = $tmp_template;
-					}
+					$list_array[$key][template][label] = $tmp_template;
+					$list_array[$key][template][content] = $tmp_template;
 					
 					$tmp_status= trim($list_array[$key][status]);
 					unset($list_array[$key][status]);
-					
-					if (strlen($tmp_status) > 15)
-					{
-						$list_array[$key][status][label] = $tmp_status;
-						$list_array[$key][status][content] = substr($tmp_status,0,15)."...";
-					}
-					else
-					{
-						$list_array[$key][status][label] = $tmp_status;
-						$list_array[$key][status][content] = $tmp_status;
-					}
+					$list_array[$key][status][label] = $tmp_status;
+					$list_array[$key][status][content] = $tmp_status;
 					
 					if ($list_array[$key][deleted] == "t")
 					{

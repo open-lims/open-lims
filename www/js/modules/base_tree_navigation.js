@@ -316,7 +316,7 @@ function base_tree_nav(id, name, ajax_handler)
 			return false;
 		}
 		
-		var content_div_height = $("#content").css("height").replace("px", "");
+		var content_div_height = $("#Content").css("height").replace("px", "");
 		max_menu_height = content_div_height;
 		var offset_bottom = 8; 
 		

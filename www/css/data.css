@@ -1,10 +1,9 @@
-@CHARSET "ISO-8859-1";
-
 /* DATA BROWSER */
 
 #DataBrowserMenuAdd
 {
 border:solid white 2px;
+background-color:#ffffff;
 padding:2px 8px;
 position:relative;
 border-top-left-radius:10px;
@@ -122,29 +121,36 @@ cursor:default;
 
 .ListTable #DataBrowserAjax tr td
 {
-padding: 2px 2px;
+/* padding: 0px 4px; */
+padding: 0;
 border-bottom:solid white 2px;
 border-top:solid white 2px;
 vertical-align:middle;
 cursor:default;
 }
 
-.ListTable #DataBrowserAjax .trLightGrey td
+.ListTable #DataBrowserAjax .ListTableRowEven td
 {
-padding: 2px 2px;
-border-bottom:solid #e0e0e0 2px;
+/* padding: 0px 4px; */
+	padding: 0;
 border-top:solid #e0e0e0 2px;
+border-bottom:solid #e0e0e0 2px;
 vertical-align:middle;
 }
 
-.trLightGrey .ListTableColumnFirstEntry
+.ListTableRowEven .ListTableColumnFirstEntry
 {
 border-left:solid #e0e0e0 2px;
 }
 
-.trLightGrey .ListTableColumnLastEntry
+.ListTableRowEven .ListTableColumnLastEntry
 {
 border-right:solid #e0e0e0 2px;
+}
+
+#DataBrowserAjax tr:first-child
+{
+height:21px;
 }
 
 #DataBrowserFileDialog
@@ -197,8 +203,7 @@ vertical-align:middle;
 
 .DataBrowserDeleteCheckbox
 {
-margin: 0;
-padding: 0;
+margin-left: 0;	
 }
 
 #RenameFolderContainer

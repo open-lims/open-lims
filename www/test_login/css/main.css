@@ -1,0 +1,144 @@
+html,body
+{
+	margin: 0;
+	padding: 0;
+	background-color: #f3f3f3;
+	height: 100%;
+}
+#Main
+{
+	font: normal 12px Arial, Helvetica, sans-serif;
+	position: relative;
+	width: 980px;
+	margin: 0 auto;
+	padding: 0;
+	background-color: #f3f3f3;
+	background-image: url("../../images/shades/shade.png");
+	background-position: center top;
+	background-repeat: repeat-y;
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+}
+
+#Footer
+{
+	font-size: 10px;
+	color: #A0A0A0;
+	background-color: white;
+	position: absolute;
+	bottom: 0;
+	width: 968px;
+	text-align: right;
+}
+
+#Container
+{
+	background-color: white;
+	margin: 0 auto;
+	padding: 0;
+	width: 968px;
+}
+
+
+
+#LoginHeader
+{
+	height: 235px;
+	width: 	968px;
+	background-image: url("panorama.jpg");
+	background-position: center top;
+	background-repeat: no-repeat;
+}
+
+#LoginContainer
+{
+	color: #272725;
+	width: 370px;
+	margin: 20px auto;
+}
+#LoginTitle
+{
+	font-size: 13px;
+	font-weight: bold;	
+	margin-bottom: 10px;
+}
+#LoginTable
+{
+	width: 100%; 
+	font-weight: bold;	
+	margin: 0;
+	padding: 0;
+	border-collapse: separate;
+	border-spacing: 0;
+}
+#LoginTable td
+{
+	padding: 7px 0;
+}
+#LoginTable a
+{
+	font-weight: normal;	
+}
+
+.BaseTextfield
+{
+	border-radius: 6px 6px 6px 6px;
+	border: 1px #D0D0D0 solid;
+}
+.BaseButton
+{
+	background: white;
+	border: 1px #A0A0A0 solid;
+	
+	color: #222222;
+	
+	font: bold 13px Arial, Helvetica, sans-serif;
+	
+	text-shadow: -1px -1px #D0D0D0;
+	
+	background-clip: padding-box;
+    background-color: #FFFFFF;
+    background-image: -moz-linear-gradient(center top , #FFFFFF 0%, #CECECE 100%);
+    border-color: #B7B7B7;
+    
+    box-shadow: 0 0 2px 1px #DDDDDD inset;
+    /* box-shadow: 0 0 2px 1px #DDDDDD; */
+    text-shadow: 0 1px 1px #FFFFFF;
+    
+    -webkit-box-shadow: 3px 3px 5px #636363; /* webkit browser*/
+	-moz-box-shadow: 3px 3px 5px #636363; /* firefox */ 
+	box-shadow: 3px 3px 5px #636363;
+    
+    border-radius: 6px 6px 6px 6px;
+    border-width: 1px;
+    
+    line-height: 15px;
+    margin: 0 2px;
+    padding: 4px 12px;
+    
+    vertical-align: middle;
+    
+    border-style: solid;
+    cursor: pointer;
+    display: block;
+    
+    overflow: visible;
+    text-decoration: none;
+    width: auto;
+}
+.BaseButton:hover
+{	
+	background-clip: padding-box;
+    background-color: #0058B7;
+    background-image: -moz-linear-gradient(top, rgba(197,214,233,1) 0%, rgba(174,199,224,1) 10%, rgba(125,168,211,1) 49%, rgba(120,165,210,1) 51%, rgba(140,179,216,1) 100%);
+    box-shadow: 0 0 0.1em 1px rgba(255, 255, 255, 0.36) inset;
+}
+.LoginTextfield,
+.LoginLanguageSelect
+{
+	box-shadow: none;
+	text-shadow: none;
+	border-radius: 6px 6px 6px 6px;
+	width: 220px;
+}

@@ -297,10 +297,6 @@ class BaseRequest
 				{
 					$module_dialog['class']::$module_dialog[method]();
 				}
-				else
-				{
-					// Error
-				}
 			}
 			else
 			{

@@ -23,6 +23,7 @@
 
 List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get_array, css_main_id, entries_per_page, column_array)
 {
+	
 	if (ajax_handler.indexOf("?") == -1) 
 	{
 		ajax_handler = ajax_handler+"?";
@@ -45,6 +46,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 	var number_of_entries = 0;
 	var number_of_pages = 0;
 	
+
 	reload = function() 
 	{
 		count_entries();
@@ -191,6 +193,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 
 		reinit_page_handler(page);
 
+		
 		$.ajax({
 			type : "POST",
 			url : "ajax.php?username="+get_array['username']+"&session_id="+get_array['session_id']+"&nav=base&run=list_get_page_information",
@@ -213,13 +216,19 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 				$("#" + css_main_id).children().remove();
 				$("#"+css_main_id).css({"display":"block","display":"table-row-group"});
 				$("#" + css_main_id).append("<div class='ListLoadingContents'></div>"); // element must not be empty to animate height
+				
 				if (new_height != last_height) 
 				{
 					if($.browser.msie)
 					{
 						if($.browser.version == 7.0 || $.browser.version == 9.0)
 						{ //we got an ie version that does not support tbody animation
+
+							data = hide_hidden_columns(data);
+							
 							$("#" + css_main_id).html(data);
+							
+							make_resizable();
 							return true;
 						}
 					}
@@ -227,18 +236,232 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 					$("#" + css_main_id).animate({
 						"height" : new_height
 					}, "fast", function() {
+					
+						data = hide_hidden_columns(data);
+						
 						$("#" + css_main_id).html(data);
+						
+						make_resizable();
 					});
 				} 
 				else 
 				{
 					$("#" + css_main_id).height(last_height)
+					
+					data = hide_hidden_columns(data);
+					
 					$("#" + css_main_id).html(data);
+
+					make_resizable();
 				}
 			}
 		});
 	}
 	load_content(sort_value, sort_method, page);
+
+	
+	function hide_hidden_columns(data)
+	{
+		var hidden_columns = $(".ListTable").dynamicTable("getHiddenColumnIndices");
+		
+		var table = $("<table><tbody></tbody></table>");
+		
+		$(table).children("tbody").html(data);
+		
+		data = table;
+		
+		$(data).find("tr").each(function()
+		{
+			for (var int = 0; int < hidden_columns.length; int++) 
+			{
+				var n = hidden_columns[int] + 1;
+				
+				//IE8 does not update its dom model css properties if the new tbody gets inserted
+				//for once, a bug in IE that seems to be useful!
+				if(!($.browser.msie && $.browser.version == 8.0)) 
+				{
+					$(this).children(":nth-child("+n+")").hide();
+				}
+			}
+		});
+		data = $(data).find("tbody").html();
+		
+		return data;
+	}
+	
+	function make_resizable()
+	{		
+		if($(".ListTable").find(".ui-resizable-e").length > 0)
+		{
+			$(".ListTable").dynamicTable("reinitTds");
+			return false;
+		}
+		
+		var num_cols = $(".ListTable > thead > tr > th").size();
+		
+		var sticky = [0]; //first column is always sticky
+		var notResizable = [num_cols - 1]; //last column is never resizable
+		
+		for (var int = 1; int < num_cols; int++) 
+		{
+			var column = $(".ListTable > thead > tr > th").get(int);		
+			
+			if($.browser.msie)
+			{ //attr("width") causes IE to return numeric values, so we cannot distinguish px from em
+				var width = $(column)[0].currentStyle["width"];
+			}
+			else
+			{
+				var width = $(column).attr("width");
+			}		
+			
+			if(width !== undefined && width !== "")
+			{
+				if(width.indexOf("px") !== -1)
+				{
+					sticky.push(int);
+					
+					//if the last column is sticky, the column before that is not resizable
+					if(int === num_cols - 1)
+					{
+						notResizable.push(int - 1);
+					}
+				}
+			}
+		}
+
+		$(".ListTable").dynamicTable({
+			"sticky": sticky,
+			"notResizable": notResizable,
+			"rulerColor": "#669acc",
+			"handleColor": "#669acc"
+		});
+		
+		var column_menu_trigger = $("<div id='ColumnMenuTrigger'><img src='images/icons/visible.png' alt=''/></div>")
+			.css("float", "left")
+			.unbind("click")
+			.click(function(){
+				if($(this).hasClass("columnMenuOpen"))
+				{
+					close_column_menu();
+					$(this).removeClass("columnMenuOpen");
+				}
+				else
+				{
+					open_column_menu();
+					$(this).addClass("columnMenuOpen");
+				}
+			})
+			.appendTo(".ContentBoxBeginTitle");
+		
+		tooltip("ColumnMenuTrigger", "Toggle Display Options");
+
+		
+		function open_column_menu() {
+			
+			var position = $("#ColumnMenuTrigger").position();
+			
+			var column_menu = $("<div id='ColumnMenu'></div>");
+	
+			for (var int = 1; int < num_cols; int++) 
+			{
+				if($.inArray(int, sticky) !== -1)
+				{
+					continue;
+				}
+	
+				var column = $(".ListTable > thead > tr > th").get(int);
+				
+				if($.inArray(int, notResizable) === -1)
+				{
+					if($(column).children(".ResizableColumnHelper").length > 0)
+					{
+						var div = $(column).children(".ResizableColumnHelper").children("div:first");
+						if($(div).children("a:first").length > 0)
+						{
+						
+							var column_text = $(column).children(".ResizableColumnHelper").children("div:first").children("a:first").text();
+						}
+						else
+						{
+							var column_text = $(column).children(".ResizableColumnHelper").children("div:first").text();
+						}
+					}
+				}
+				else
+				{
+					var div = $(column).children("div:first");
+					if($(div).children("a:first").length > 0)
+					{
+						var column_text = $(column).children("div:first").children("a:first").text();
+					}
+					else
+					{
+						var column_text = $(column).children("div:first").text();
+					}
+				}
+				
+				var checked = "checked='checked'";
+				if(!$(column).is(":visible") || $(column).width() === 0)
+				{
+					checked = "";
+				}
+				
+				var label = $("<div class='ColumnMenuEntryLabel'>"+column_text+"</div>");
+				
+				var checkbox = $("<input type='checkbox' class='ColumnMenuEntryCheckbox' name='' value='' "+checked+"></input>")
+					.click(function(event)
+					{
+						if($(".ListTable").dynamicTable("isAnimating"))
+						{
+							event.preventDefault();
+						}
+						
+						var num_checked = 0;
+						$(".ColumnMenuEntryCheckbox").each(function(){
+							if($(this).is(":checked"))
+							{
+								num_checked++;
+							}
+						});
+						
+						if(num_checked > 0)
+						{
+							$(".ListTable").dynamicTable("toggle", $(this).parent().data("columnIndex"));
+						}
+						else
+						{
+							event.preventDefault();
+						}
+					});
+				
+				$("<div class='ColumnMenuEntry'></div>")
+					.data("columnIndex", int)
+					.append(label)
+					.append(checkbox)
+					.appendTo(column_menu);
+				
+				$(column_menu).dialog({
+					"title": "Change column visibility",
+					"close": function(){
+						$("#ColumnMenuTrigger").removeClass("columnMenuOpen");
+					},
+					"buttons": [{
+						text: "OK",
+				        click: function() { 
+				        	close_column_menu() 
+				        }
+					}]
+				});
+			}
+		}
+		
+		function close_column_menu() {
+			$("#ColumnMenu").dialog("close");
+			$("#ColumnMenu").remove();
+		}
+		
+	}
 
 	function check_array(sort_value) {
 		if (sort_array != undefined) {
@@ -261,23 +484,33 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 
 	function change_symbol(id, symbol) 
 	{
-		$("." + css_main_id + "Column").each(
-				function() {
-					var local_id = $(this).attr("id");
 
-					if (local_id == id) {
-						if (symbol == "upside") {
-							$("#" + local_id + " > a > img").attr("src",
-									"images/upside.png");
-						} else {
-							$("#" + local_id + " > a > img").attr("src",
-									"images/downside.png");
-						}
+		$("." + css_main_id + "Column").each(function() 
+			{
+				var local_id = $(this).attr("id");
+				
+				if($("#" + local_id ).children(".ResizableColumnHelper").length > 0)
+				{
+					var img = $("#" + local_id + " > .ResizableColumnHelper > div > a > img");
+				}
+				else
+				{
+					var img = $("#" + local_id + " > div > a > img");
+				}
+				
+				if (local_id == id) 
+				{
+					if (symbol == "upside") {
+						$(img).attr("src", "images/upside.png");
 					} else {
-						$("#" + local_id + " > a > img").attr("src",
-								"images/nosort.png");
+						$(img).attr("src", "images/downside.png");
 					}
-				});
+				} 
+				else 
+				{
+					$(img).attr("src", "images/nosort.png");
+				}
+			});
 	}
 
 

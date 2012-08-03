@@ -41,7 +41,7 @@ class DataNavigationIO
 	 */
 	public static function get_icon()
 	{
-		return "images/icons/folder_grey.png";
+		return "images/icons/folder_blue.png";
 	}
 	
 	/**

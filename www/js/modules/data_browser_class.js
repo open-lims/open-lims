@@ -30,7 +30,7 @@ function data_browser()
 		
 		if(children.length == 1 && $(children).hasClass("ListLoadingContents"))
 		{ //not loaded contents yet. children can be an empty div due to list animate function -> base_list_class.js#126
-			setTimeout(init,200);
+			setTimeout(init, 200);
 		}
 		else
 		{
@@ -38,12 +38,12 @@ function data_browser()
 			var argument_parts = argument_array.split("],[");
 			current_folder_id = argument_parts[0].replace("[[\"folder_id\",","").replace(/"/g,"");
 			current_virtual_folder_id = argument_parts[1].replace("\"virtual_folder_id\",","").replace(/]/g,"").replace(/"/g,"");
-			
+
 			init_list_handler();
 			init_base_tree_nav_link_handler();
 			init_menu(current_folder_id);
 			init_menu_handler();
-			
+
 			if(click_from_left_nav_menu)
 			{
 				show_current_dir_path_and_clear_stack();
@@ -74,7 +74,7 @@ function data_browser()
 				link = $(link).children("a");
 			}
 			var href = $(link).attr("href");
-			
+
 			if(href === undefined)
 			{
 				return false;
@@ -118,7 +118,7 @@ function data_browser()
 							}
 							$(this).css({
 								"margin-bottom":"2px",
-								"padding":"2px 2px",
+//								"padding":"0px 4px",
 								"border-bottom":"solid #c3c3c3 2px",
 								"border-top":"solid #c3c3c3 2px"
 							});	
@@ -133,7 +133,7 @@ function data_browser()
 					if(!$(this).hasClass("DataBrowserFileSelected"))
 					{
 						var color = "white";
-						if($(this).hasClass("trLightGrey"))
+						if($(this).hasClass("ListTableRowEven"))
 						{
 							color = "#e0e0e0";
 						}
@@ -211,16 +211,21 @@ function data_browser()
 							}	
 						}
 					 }
-				})
-				.children("td:nth-child(3)").each(function()
-				{ //bind thumbnail handler
-					var filename = $(this).children().text();
+				});
+			
+				var filename = $(this).children("td:nth-child(3)").children().text();
+				
+//				$(this)
+//				.children("td:nth-child(3)").each(function()
+//				{ //bind thumbnail handler
+//					var filename = $(this).children().text();
 					if(is_image(filename))
 					{						
 						show_thumbnail($(this).children(),"<div><img src='image.php?session_id="+get_array['session_id']+"&file_id="+linked_file_id+"&max_width=100&max_height=100' alt='' /></div>");
 					}			
-				});
+//				});
 		});
+
 	}
 	
 	/**
@@ -233,17 +238,13 @@ function data_browser()
 		var action = $("#DataBrowserActionSelect").children("option:selected").val();
 		$(".DataBrowserDeleteCheckbox:checked").each(function()
 		{
-			var type = $(this).parent().parent().children("td:nth-child(4)").text();
-			if(type == "Folder")
+			var type = $(this).parent().parent().children("td:nth-child(4)");
+			
+			if($(type).text() == "Folder")
 			{
 				var link = $(this).parent().parent().children("td:nth-child(3)").children().children().attr("href");
-				
-				var folder_id  = link.split("&folder_id=")[1];
-				if(folder_id != undefined)
-				{
-					folder_id = folder_id.split("&")[0];
-				}
-			
+				var folder_id = link.split("&folder_id=")[1];
+
 				$.ajax(
 				{
 					async : false,
@@ -256,13 +257,9 @@ function data_browser()
 			else if(type == "Value")
 			{
 				var link = $(this).parent().parent().children("td:nth-child(3)").children().attr("href");
-				
-				var value_id  = link.split("&value_id=")[1];
-				if(value_id != undefined)
-				{
-					value_id = value_id.split("&")[0];
-				}
-				
+				var split = link.split("&nav=data&value_id=");
+				var value_id = split[1].replace("&action=value_detail","");
+
 				$.ajax(
 				{
 					async : false,
@@ -275,13 +272,9 @@ function data_browser()
 			else if(type == "File")
 			{
 				var link = $(this).parent().parent().children("td:nth-child(3)").children().attr("href");
+				var split = link.split("&nav=data&file_id=");
+				var file_id = split[1].replace("&action=file_detail","");
 
-				var file_id  = link.split("&file_id=")[1];
-				if(file_id != undefined)
-				{
-					file_id = file_id.split("&")[0];
-				}
-				
 				$.ajax(
 				{
 					async : false,
@@ -456,7 +449,7 @@ function data_browser()
 				"left":offset_x
 			})
 			.hide()
-			.appendTo("#main");
+			.appendTo("#Main");
 
 		setTimeout(bind_dialog_close_click_handler, 20);
 		
@@ -474,7 +467,7 @@ function data_browser()
 			.children("td").each(function()
 			{
 				var color = "white";
-				if($(this).parent().hasClass("trLightGrey"))
+				if($(this).parent().hasClass("ListTableRowEven"))
 				{
 					color = "#e0e0e0";
 				}
@@ -704,19 +697,8 @@ function data_browser()
 	 */
 	function init_menu(folder_id)
 	{
-		var master_checkbox = $("<input type='checkbox' id='DataBrowserActionMasterCheckbox' name='' value=''></input>")
-			.css({
-				"margin": 0,
-				"padding": 0
-			});
-					
-		var first_th = $(".ListTable > thead > tr > th:first")
-			.css("text-align","center")
-			.html(master_checkbox);
+		$(".ListTable > thead > tr > th:first").html("<input type='checkbox' id='DataBrowserActionMasterCheckbox' name='' value=''></input>")
 
-		//IE7 is an idiot when centering text within a td
-		$(first_th).width($(first_th).width());
-		
 		$.ajax({
 			type : "POST",
 			url : "ajax.php?nav=data&session_id="+get_array['session_id']+"&run=get_browser_menu",
@@ -736,7 +718,7 @@ function data_browser()
 					
 					var dialog = $("<div id='DataBrowserAddFileDialog'></div>")
 						.css({"position":"absolute","top":offset_y,"left":offset_x,"z-index":"98"})
-						.appendTo("#main")
+						.appendTo("#Main")
 						.html(json["add_list"])
 						.hide();
 
@@ -756,7 +738,7 @@ function data_browser()
 							"padding":"0"
 						})
 						.hide()
-						.appendTo("#main");
+						.appendTo("#Main");
 					var corner = $("<div id='DataBrowserAddFileCorner'></div>")
 						.css(
 						{
@@ -768,7 +750,7 @@ function data_browser()
 							"height":height-2
 						})
 						.hide()
-						.appendTo("#main");
+						.appendTo("#Main");
 					
 					$("#DataBrowserMenuAdd").children("img").attr("src","images/icons/add.png");
 					$("#DataBrowserMenuAdd").removeClass("Deactivated");
@@ -895,7 +877,18 @@ function data_browser()
 				{
 					$(".DataBrowserDeleteCheckbox").removeAttr("checked");
 				}
-			});
+			});		
+		$("#DataBrowserMenuImageBrowser")
+		.unbind("click")
+		.click(function()
+		{
+			if($(this).hasClass("Deactivated"))
+			{
+				return false;
+			}
+			image_browser();
+		});
+
 	}
 	
 	/**

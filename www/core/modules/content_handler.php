@@ -171,16 +171,60 @@ class ContentHandler_IO
 		 		if ($session->is_valid() == true)
 		 		{
 					$template = new HTMLTemplate("main_header.html");
+			
+					$sub_menu = array();
 					
-					$template->set_var("release",constant("PRODUCT")." ".constant("PRODUCT_VERSION"));
+					$module_dialog_array = ModuleDialog::list_dialogs_by_type("base_user_lists");
 					
-					$product_user = Registry::get_value("base_product_user");
-					$product_function = Registry::get_value("base_product_function");
+					if (is_array($module_dialog_array) and count($module_dialog_array) >= 1)
+					{
+						foreach ($module_dialog_array as $key => $value)
+						{
+							$paramquery[username] 	= $_GET[username];
+							$paramquery[session_id] = $_GET[session_id];
+							$paramquery[nav]		= "base";
+							$paramquery[run]		= "base_user_lists";
+							$paramquery[dialog]		= $value[internal_name];
+							$params 				= http_build_query($paramquery,'','&#38;');
+							
+							$temp_array = array();
+							$temp_array[params] = $params;
+							$temp_array[title] = $value[display_name];
+							array_push($sub_menu, $temp_array);
+							unset($temp_array);
+						}
+					}
 					
-					$template->set_var("user",$product_user);
-					$template->set_var("servertype",$product_function);
+					$template->set_var("sub_menu", $sub_menu);
+		
+					$my_profile_paramquery[username] = $_GET[username];
+					$my_profile_paramquery[session_id] = $_GET[session_id];
+					$my_profile_paramquery[nav] = "base";
+					$my_profile_paramquery[run] = "user_profile";
+					$my_profile_params = http_build_query($my_profile_paramquery,'','&#38;');
 
+					$template->set_var("my_profile_params", $my_profile_params);
+					
+					$system_messages_paramquery[username] = $_GET[username];
+					$system_messages_paramquery[session_id] = $_GET[session_id];
+					$system_messages_paramquery[nav] = "base";
+					$system_messages_paramquery[run] = "sysmsg";
+					$system_messages_params = http_build_query($system_messages_paramquery,'','&#38;');
+					
+					$template->set_var("system_messages_params", $system_messages_params);
+					
+					$about_paramquery[username] = $_GET[username];
+					$about_paramquery[session_id] = $_GET[session_id];
+					$about_paramquery[nav] = "base";
+					$about_paramquery[run] = "system_info";
+					$about_params = http_build_query($about_paramquery,'','&#38;');
+					
+					$template->set_var("about_params", $about_params);
+					
+					$template->set_var("username", $user->get_full_name(true));
+					
 					$template->output();
+
 					
 					// Navigation
 					require_once("base/io/navigation.io.php");
@@ -191,7 +235,7 @@ class ContentHandler_IO
 					/**
 					 * @todo remove
 					 */
-					echo "<div id='content'>";
+					echo "<div id='Content'>";
 					
  					if ($session->read_value("must_change_password") == true)
  					{
@@ -236,6 +280,11 @@ class ContentHandler_IO
 						}
  					}
 			 		
+ 					/**
+					 * @todo remove
+					 */
+					echo "</div>";
+ 					
 			 		$template = new HTMLTemplate("main_footer.html");
 			 		$template->output();
 		 		}

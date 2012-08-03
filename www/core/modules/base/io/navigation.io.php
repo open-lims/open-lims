@@ -33,8 +33,7 @@ class Navigation_IO
 		
 		// Tabs
 		
-		$template = new HTMLTemplate("base/navigation/main/main_navigation_header.html");
-		$template->output();
+		$template_header = new HTMLTemplate("base/navigation/main/main_navigation_header.html");
 
 		$module_navigation_array = ModuleNavigation::list_module_navigations_entries();
 		
@@ -78,6 +77,7 @@ class Navigation_IO
 						case "blue":
 							if ($_GET[nav] == $active_alias)
 							{
+								$background_color_class = "NavigationBackgroundBlue";
 								$template = new HTMLTemplate("base/navigation/main/tabs/blue_tab_active.html");
 								$current_module = $active_alias;
 								$current_color = $value[colour];
@@ -92,6 +92,7 @@ class Navigation_IO
 						case "green":
 							if ($_GET[nav] == $active_alias)
 							{
+								$background_color_class = "NavigationBackgroundGreen";
 								$template = new HTMLTemplate("base/navigation/main/tabs/green_tab_active.html");
 								$current_module = $active_alias;
 								$current_color = $value[colour];
@@ -106,6 +107,7 @@ class Navigation_IO
 						case "orange";
 							if ($_GET[nav] == $active_alias)
 							{
+								$background_color_class = "NavigationBackgroundOrange";
 								$template = new HTMLTemplate("base/navigation/main/tabs/orange_tab_active.html");
 								$current_module = $active_alias;
 								$current_color = $value[colour];
@@ -117,37 +119,10 @@ class Navigation_IO
 							}
 						break;
 						
-						case "lightgreen":
-							if ($_GET[nav] == $active_alias)
-							{
-								$template = new HTMLTemplate("base/navigation/main/tabs/lightgreen_tab_active.html");
-								$current_module = $active_alias;
-								$current_color = $value[colour];
-								$module_tab_active = true;
-							}
-							else
-							{
-								$template = new HTMLTemplate("base/navigation/main/tabs/lightgreen_tab.html");
-							}
-						break;
-							
-						case "lightblue":
-							if ($_GET[nav] == $active_alias)
-							{
-								$template = new HTMLTemplate("base/navigation/main/tabs/lightblue_tab_active.html");
-								$current_module = $active_alias;
-								$current_color = $value[colour];
-								$module_tab_active = true;
-							}
-							else
-							{
-								$template = new HTMLTemplate("base/navigation/main/tabs/lightblue_tab.html");
-							}
-						break;
-					
 						default:
 							if ($_GET[nav] == $active_alias)
 							{
+								$background_color_class = "NavigationBackgroundGrey";
 								$template = new HTMLTemplate("base/navigation/main/tabs/grey_tab_active.html");
 								$current_module = $active_alias;
 								$current_color = $value[colour];
@@ -165,123 +140,45 @@ class Navigation_IO
 					
 					$template->set_var("params", $params);
 					$template->set_var("title", Language::get_message($value[language_address], "navigation"));
+					
+					$config_folder = "core/modules/".SystemHandler::get_module_folder_by_module_name($module_name)."/config";
+					if (is_dir($config_folder))
+					{
+						$subnavigation_file = $config_folder."/module_subnavigation.php";
+						if (is_file($subnavigation_file))
+						{
+							require_once($subnavigation_file);
+							if (is_array($sub_menu) and count($sub_menu) >= 1)
+							{
+								$template->set_var("down", true);
+								$template->set_var("link", $sub_menu);
+							}
+							else
+							{
+								$template->set_var("down", false);
+							}
+							unset($sub_menu);
+						}
+						else
+						{
+							$template->set_var("down", false);
+						}
+					}
+					else
+					{
+						$template->set_var("down", false);
+					}
+					
+					
 					$module_tab_string .= $template->get_string();
 				}
 			}
 		}
-		
-		echo $module_tab_string;
-				
-		$info_paramquery[username] = $_GET[username];
-		$info_paramquery[session_id] = $_GET[session_id];
-		$info_paramquery[nav] = "base";
-		$info_paramquery[run] = "system_info";
-		$info_params = http_build_query($info_paramquery,'','&#38;');
-		
-		$logout_paramquery[username] = $_GET[username];
-		$logout_paramquery[session_id] = $_GET[session_id];
-		$logout_paramquery[run] = "logout";
-		$logout_params = http_build_query($logout_paramquery,'','&#38;');
-			
-		$template = new HTMLTemplate("base/navigation/main/main_navigation_middle.html");
-		$template->set_var("info_params", $info_params);
-		$template->set_var("logout_params", $logout_params);
-		$template->output();
-		
-		
-		// Submenu
-		
-		if ($_GET[nav] == "base" or !$_GET[nav] or $module_tab_active == false)
-		{
-			$template = new HTMLTemplate("base/navigation/main/sub/blue.html");
-			
-			$sub_menu = array();
-			
-			$my_profile_paramquery[username] = $_GET[username];
-			$my_profile_paramquery[session_id] = $_GET[session_id];
-			$my_profile_paramquery[nav] = "base";
-			$my_profile_paramquery[run] = "user_profile";
-			$my_profile_params = http_build_query($my_profile_paramquery,'','&#38;');
-			
-			$sub_menu[0][params] = $my_profile_params;
-			$sub_menu[0][title] = "My Profile";
-						
-			$system_messages_paramquery[username] = $_GET[username];
-			$system_messages_paramquery[session_id] = $_GET[session_id];
-			$system_messages_paramquery[nav] = "base";
-			$system_messages_paramquery[run] = "sysmsg";
-			$system_messages_params = http_build_query($system_messages_paramquery,'','&#38;');
-			
-			$sub_menu[1][params] = $system_messages_params;
-			$sub_menu[1][title] = "System Messages";
-			
-			// Dialogs
-			
-			$module_dialog_array = ModuleDialog::list_dialogs_by_type("base_user_lists");
-			
-			if (is_array($module_dialog_array) and count($module_dialog_array) >= 1)
-			{
-				foreach ($module_dialog_array as $key => $value)
-				{
-					$paramquery[username] 	= $_GET[username];
-					$paramquery[session_id] = $_GET[session_id];
-					$paramquery[nav]		= "base";
-					$paramquery[run]		= "base_user_lists";
-					$paramquery[dialog]		= $value[internal_name];
-					$params 				= http_build_query($paramquery,'','&#38;');
-					
-					$temp_array = array();
-					$temp_array[params] = $params;
-					$temp_array[title] = $value[display_name];
-					array_push($sub_menu, $temp_array);
-					unset($temp_array);
-				}
-			}
 
-			
-			$template->set_var("sub_menu", $sub_menu);
-			$template->set_var("search_bar", false);
-			
-			unset($sub_menu);
-			
-			$template->output();
-		}
-		else
-		{
-			if ($current_color)
-			{
-				$template = new HTMLTemplate("base/navigation/main/sub/".$current_color.".html");
-				
-				$config_folder = "core/modules/".SystemHandler::get_module_folder_by_module_name($_GET[nav])."/config";
-				if (is_dir($config_folder))
-				{
-					$subnavigation_file = $config_folder."/module_subnavigation.php";
-					if (is_file($subnavigation_file))
-					{
-						include($subnavigation_file);
-					}
-					else
-					{
-						$template->set_var("sub_menu", false);
-						$template->set_var("search_bar", false);
-					}
-				}
-				else
-				{
-					$template->set_var("sub_menu", false);
-					$template->set_var("search_bar", false);
-				}
-	
-				$template->output();
-			}
-			else
-			{
-				$template = new HTMLTemplate("base/navigation/main/sub/blue.html");
-				$template->set_var("sub_menu", false);
-				$template->set_var("search_bar", false);
-				$template->output();
-			}
-		}
+		$template_header->set_var("background_class", $background_color_class);
+		$template_header->output();
+
+		echo $module_tab_string;
 		
 		$template = new HTMLTemplate("base/navigation/main/main_navigation_footer.html");
 		$template->output();

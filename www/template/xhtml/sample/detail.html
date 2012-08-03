@@ -1,5 +1,3 @@
-<br />
-
 <script>
 $(document).ready(function()
 {
@@ -114,9 +112,6 @@ $(document).ready(function()
 });
 </script>
 
-
-<!-- CONTAINER BEGIN ("Information","SampleDetailGeneral", 49) -->
-
 <div id="print_dialog" title="Print Report" style='display: none;'>
 	<div style='text-align: center; font-weight: bold;'>Create Report.</div>
 	<p><input type='radio' name='selection' class='selection' value='sample_barcode_report' id='report_barcode' /> Barcode only</p>
@@ -132,23 +127,32 @@ $(document).ready(function()
 	<p><input type='radio' name='selection' class='selection' value='sample_full_report' id='report_full' /> Full Report</p>
 </div>
 
-<div class='SampleBarcode'>
-	<div class='SampleBarcodeTitle'>Barcode:</div>
-	<div class='SampleBarcodePrint'><a href='' id='print_dialog_opener'><img src='images/icons/print.png' alt='' style='border:0;'></a></div>
-	<div class='SampleBarcodeImage'>
-		<img src='core/images/barcode.php?type=Code128&#38;string=[[ID]]' alt='Barcode' />
+
+<!-- CONTAINER BEGIN ("[[TITLE]]") -->
+
+<div id='SampleDetailLeft'>
+
+	<div class='SampleBarcode'>
+		<div class='SampleBarcodeTitle'>Barcode:</div>
+		<div class='SampleBarcodePrint'><a href='' id='print_dialog_opener'><img src='images/icons/print.png' alt='' style='border:0;'></a></div>
+		<div class='SampleBarcodeImage'>
+			<img src='core/images/barcode.php?type=Code128&#38;string=[[ID]]' alt='Barcode' />
+		</div>
 	</div>
+	
+	<div class='horizontal_line'></div>
+	
+	<div id='SampleDetailGeneralInformation'></div>
+
 </div>
 
-<div class='horizontal_line'></div>
 
-<div id='SampleDetailGeneralInformation'></div>
+<div id='SampleDetailRight'>
 
-<!-- CONTAINER END (49) -->
+	<div id='SampleDetailMenu'></div>
+	
+</div>
 
+<div id='SampleDetailClear'></div>
 
-<!-- CONTAINER BEGIN ("I want to...","SampleDetailMenu", 49) -->
-
-<div id='SampleDetailMenu'></div>
-
-<!-- CONTAINER END (49) -->
+<!-- CONTAINER END () -->

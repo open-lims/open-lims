@@ -59,31 +59,13 @@ class SampleAjax
 			{
 				$tmp_name = trim($list_array[$key][name]);
 				unset($list_array[$key][name]);
-				
-				if (strlen($tmp_name) > 17)
-				{
-					$list_array[$key][name][label] = $tmp_name;
-					$list_array[$key][name][content] = substr($tmp_name,0,17)."...";
-				}
-				else
-				{
-					$list_array[$key][name][label] = $tmp_name;
-					$list_array[$key][name][content] = $tmp_name;
-				}
+				$list_array[$key][name][label] = $tmp_name;
+				$list_array[$key][name][content] = $tmp_name;
 				
 				$tmp_template = trim($list_array[$key][template]);
 				unset($list_array[$key][template]);
-				
-				if (strlen($tmp_template) > 25)
-				{
-					$list_array[$key][template][label] = $tmp_template;
-					$list_array[$key][template][content] = substr($tmp_template,0,25)."...";
-				}
-				else
-				{
-					$list_array[$key][template][label] = $tmp_template;
-					$list_array[$key][template][content] = $tmp_template;
-				}
+				$list_array[$key][template][label] = $tmp_template;
+				$list_array[$key][template][content] = $tmp_template;
 				
 				$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
 				$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y");
@@ -208,31 +190,13 @@ class SampleAjax
 				{
 					$tmp_name = trim($list_array[$key][name]);
 					unset($list_array[$key][name]);
-					
-					if (strlen($tmp_name) > 17)
-					{
-						$list_array[$key][name][label] = $tmp_name;
-						$list_array[$key][name][content] = substr($tmp_name,0,17)."...";
-					}
-					else
-					{
-						$list_array[$key][name][label] = $tmp_name;
-						$list_array[$key][name][content] = $tmp_name;
-					}
+					$list_array[$key][name][label] = $tmp_name;
+					$list_array[$key][name][content] = $tmp_name;
 					
 					$tmp_template = trim($list_array[$key][template]);
 					unset($list_array[$key][template]);
-					
-					if (strlen($tmp_template) > 25)
-					{
-						$list_array[$key][template][label] = $tmp_template;
-						$list_array[$key][template][content] = substr($tmp_template,0,25)."...";
-					}
-					else
-					{
-						$list_array[$key][template][label] = $tmp_template;
-						$list_array[$key][template][content] = $tmp_template;
-					}
+					$list_array[$key][template][label] = $tmp_template;
+					$list_array[$key][template][content] = $tmp_template;
 					
 					$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
 					$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y");
@@ -384,31 +348,13 @@ class SampleAjax
 				{
 					$tmp_name = trim($list_array[$key][name]);
 					unset($list_array[$key][name]);
-					
-					if (strlen($tmp_name) > 17)
-					{
-						$list_array[$key][name][label] = $tmp_name;
-						$list_array[$key][name][content] = substr($tmp_name,0,17)."...";
-					}
-					else
-					{
-						$list_array[$key][name][label] = $tmp_name;
-						$list_array[$key][name][content] = $tmp_name;
-					}
+					$list_array[$key][name][label] = $tmp_name;
+					$list_array[$key][name][content] = $tmp_name;
 					
 					$tmp_template = trim($list_array[$key][template]);
 					unset($list_array[$key][template]);
-					
-					if (strlen($tmp_template) > 25)
-					{
-						$list_array[$key][template][label] = $tmp_template;
-						$list_array[$key][template][content] = substr($tmp_template,0,25)."...";
-					}
-					else
-					{
-						$list_array[$key][template][label] = $tmp_template;
-						$list_array[$key][template][content] = $tmp_template;
-					}
+					$list_array[$key][template][label] = $tmp_template;
+					$list_array[$key][template][content] = $tmp_template;
 									
 					if ($argument_array[3][1] == true)
 					{
@@ -605,31 +551,13 @@ class SampleAjax
 				{
 					$tmp_name = trim($list_array[$key][name]);
 					unset($list_array[$key][name]);
-					
-					if (strlen($tmp_name) > 17)
-					{
-						$list_array[$key][name][label] = $tmp_name;
-						$list_array[$key][name][content] = substr($tmp_name,0,17)."...";
-					}
-					else
-					{
-						$list_array[$key][name][label] = $tmp_name;
-						$list_array[$key][name][content] = $tmp_name;
-					}
+					$list_array[$key][name][label] = $tmp_name;
+					$list_array[$key][name][content] = $tmp_name;
 					
 					$tmp_template = trim($list_array[$key][template]);
 					unset($list_array[$key][template]);
-					
-					if (strlen($tmp_template) > 25)
-					{
-						$list_array[$key][template][label] = $tmp_template;
-						$list_array[$key][template][content] = substr($tmp_template,0,25)."...";
-					}
-					else
-					{
-						$list_array[$key][template][label] = $tmp_template;
-						$list_array[$key][template][content] = $tmp_template;
-					}
+					$list_array[$key][template][label] = $tmp_template;
+					$list_array[$key][template][content] = $tmp_template;
 					
 					if ($argument_array[1][1] == true)
 					{

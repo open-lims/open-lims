@@ -1,5 +1,21 @@
 
 /* Sample Detail */
+#SampleDetailLeft
+{
+	float: left;
+	width: 375px;	
+}
+#SampleDetailRight
+{
+	border-left: 1px #C0C0C0 dotted;
+	float: right;
+	width: 370px;	
+}
+#SampleDetailClear
+{
+	clear: both;
+}
+
 .SampleDetailGeneral
 {
 	float: left;

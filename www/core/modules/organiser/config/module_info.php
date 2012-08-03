@@ -26,7 +26,7 @@
  */
 	$name 						= "organiser";
 	$main_class					= "OrganiserRequest";
-	
+
 	$tab[0]['language_address']	= "OrganiserMainOrganiser";
 	$tab[0]['colour']			= "blue";
 	$tab[0]['controller_class']	= "OrganiserRequest";

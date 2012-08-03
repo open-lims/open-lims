@@ -1,22 +1,24 @@
 
 /* Project Detail */
-
-.ProjectDetailGeneral
+#ProjectDetailLeft
 {
 	float: left;
+	width: 375px;	
 }
-.ProjectDetailGeneral div.ContentBoxMain
+#ProjectDetailRight
 {
-	min-height: 400px;
-}
-.ProjectDetailMenu
-{
+	border-left: 1px #C0C0C0 dotted;
 	float: right;
+	width: 370px;	
 }
-.ProjectDetailMenu div.ContentBoxMain
+#ProjectDetailClear
 {
-	min-height: 400px;
+	clear: both;
 }
+
+
+
+
 .ProjectDetailStatusTable
 {
 	width: 100%;

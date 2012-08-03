@@ -39,7 +39,7 @@ class SampleIO
 		$list->add_column("Date/Time","datetime",true,null);
 		$list->add_column("Type/Tmpl.","template",true,null);
 		$list->add_column("Curr. Loc.","location",true,null);
-		$list->add_column("AV","av",false,"16px");
+		$list->add_column("AV","av",false,"20px");
 		
 		$template = new HTMLTemplate("sample/list_user.html");	
 		
@@ -502,6 +502,8 @@ class SampleIO
 				$template = new HTMLTemplate("sample/detail.html");
 				
 				$paper_size_array = PaperSize::list_entries();
+				
+				$template->set_var("title", $sample->get_formatted_id()." : ".$sample->get_name());
 				
 				$template->set_var("paper_size_array", $paper_size_array);
 				$template->set_var("get_array", serialize($_GET));
