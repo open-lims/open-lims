@@ -44,7 +44,7 @@ class SearchIO
 				
 				$paramquery[username] 	= $_GET[username];
 				$paramquery[session_id] = $_GET[session_id];
-				$paramquery[nav]		= "search";
+				$paramquery[nav]		= "base.search";
 				$paramquery[run]		= "search";
 				$paramquery[dialog]		= $value[internal_name];
 				$params 				= http_build_query($paramquery,'','&#38;');
