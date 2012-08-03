@@ -503,6 +503,8 @@ class SampleIO
 				
 				$paper_size_array = PaperSize::list_entries();
 				
+				$template->set_var("title", $sample->get_formatted_id()." : ".$sample->get_name());
+				
 				$template->set_var("paper_size_array", $paper_size_array);
 				$template->set_var("get_array", serialize($_GET));
 				$template->set_var("id", $sample->get_formatted_id());

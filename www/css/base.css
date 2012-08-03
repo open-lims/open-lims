@@ -128,7 +128,7 @@ html,body
 	width: 750px;
 	margin-right: 15px;
 	margin-bottom: 2em;
-	margin-top: 8px;
+	margin-top: 20px;
 	float: right;
 }
 #Content a {
@@ -239,25 +239,28 @@ html,body
 	padding: 2px 2px 2px 5px;
 }
 
-/* Small Tabs (ÜA) */
+/* Small Tabs */
 #SmallTabContainer 
 {
 	width: 750px;
-	font: normal 1em Verdana, Helvetica, sans-serif;
 }
-
-#SmallTabContainer a 
-{
-	color: #404040;
-}
-
+#SmallTabContainer a,
 #SmallTabContainer a:hover,
 #SmallTabContainer a:active,
 #SmallTabContainer a:focus
 {
-	color: #404040;
+	color: #555555;
 }
-
+#SmallTabArrowLeft
+{
+	width: 16px;
+	padding: 4px;
+}
+#SmallTabArrowRight
+{
+	width: 16px;
+	padding: 4px;
+}
 #SmallTabFooter 
 {
 	clear: left;
@@ -265,84 +268,92 @@ html,body
 	height: 1px;
 	width: 750px;
 }
-
 .SmallTabList 
 {
 	width: 750px;
 	padding: 0;
 	margin: 0;
 }
-
 .SmallTabList li 
 {
 	list-style: none;
 	padding: 0;
 	margin: 0;
 	float: left;
-	width: 101px;
 }
-
 .SmallTabList li a.SmallTab 
 {
+	background-color: #E0E0E0;
 	display: block;
 	font: normal 12px Verdana, Tahoma, Helvatica, sans-serif;
-	background-image: url(../images/tabs/small_tab.png);
-	background-repeat: no-repeat;
-	background-position: bottom center;
-	padding: 0 3px 0 3px;
-	margin: 0;
 	float: left;
-	width: 96px;
-	height: 18px;
-	text-align: center;
 	text-decoration: none;
+	text-shadow: 0 1px #FFFFFF;
+	color: #555555;
+	margin: 0;
 }
-
-.SmallTabList li a.SmallTab:hover,
-.SmallTabList li a.SmallTab:active,
-.SmallTabList li a.SmallTab:focus
-{
-	background-image: url(../images/tabs/small_tab_active.png);
-	background-repeat: no-repeat;
-	background-position: bottom center;
-}
-
-.SmallTabList li a.SmallTabActive 
+.SmallTabList li .SmallTabLeft,
+.SmallTabList li .SmallTabRight
 {
 	display: block;
-	font: normal 12px Verdana, Tahoma, Helvatica, sans-serif;
-	background-image: url(../images/tabs/small_tab_active.png);
-	background-repeat: no-repeat;
-	background-position: bottom center;
-	padding: 0 3px 0 3px;
-	margin: 0;
 	float: left;
-	width: 96px;
-	height: 18px;
-	text-align: center;
-	text-decoration: none;
+	width: 10px;
+	height: 26px;
 }
-
-.SmallTabList li span.SmallTabInactive 
+.SmallTabList li .SmallTabContent
 {
 	display: block;
-	font: normal 12px Verdana, Tahoma, Helvatica, sans-serif;
-	color: #C0C0C0;
-	/* background-image: url(../images/tabs/small_tab.png);
-	background-repeat: no-repeat;
-	background-position: bottom center; */
-	
-	padding: 0 3px 0 3px;
-	margin: 0;
 	float: left;
-	width: 96px;
-	height: 16px;
-	text-align: center;
-	text-decoration: none;
-	border: 1px #D0D0D0 solid;
-	
-	
+	padding: 5px 5px 0px 5px;
+	height: 21px;
 }
+	
+.SmallTabList li a.SmallTab .SmallTabLeft
+{
+	background-image: url('../images/tabs/small_tab_left.png');
+	background-repeat:repeat-x;
+	background-position: top center;
+}
+.SmallTabList li a.SmallTab .SmallTabContent
+{
+	background-image: url('../images/tabs/small_tab.png');
+	background-repeat:repeat-x;
+	background-position: top center;
+}
+.SmallTabList li a.SmallTab .SmallTabRight
+{
+	background-image: url('../images/tabs/small_tab_right.png');
+	background-repeat:repeat-x;
+	background-position: top center;
+}
+.SmallTabList li a.SmallTabActive .SmallTabLeft,
+.SmallTabList li a.SmallTab:hover .SmallTabLeft,
+.SmallTabList li a.SmallTab:active .SmallTabLeft,
+.SmallTabList li a.SmallTab:focus .SmallTabLeft
+{
+	background-image: url('../images/tabs/small_tab_left_active.png');
+	background-repeat:repeat-x;
+	background-position: top center;
+}
+.SmallTabList li a.SmallTabActive .SmallTabContent,
+.SmallTabList li a.SmallTab:hover .SmallTabContent,
+.SmallTabList li a.SmallTab:active .SmallTabContent,
+.SmallTabList li a.SmallTab:focus .SmallTabContent
+{
+	background-image: url('../images/tabs/small_tab_active.png');
+	background-repeat:repeat-x;
+	background-position: top center;
+}
+.SmallTabList li a.SmallTabActive .SmallTabRight,
+.SmallTabList li a.SmallTab:hover .SmallTabRight,
+.SmallTabList li a.SmallTab:active .SmallTabRight,
+.SmallTabList li a.SmallTab:focus .SmallTabRight
+{
+	background-image: url('../images/tabs/small_tab_right_active.png');
+	background-repeat:repeat-x;
+	background-position: top center;
+}
+
 
 #AddPaperSizeDialogGeneral
 {

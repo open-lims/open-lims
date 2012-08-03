@@ -163,20 +163,20 @@ function scrollable_tabs(tab_list,max_tabs,hide_arrows_if_deactivated,center_tab
 		
 		if($(arrow_left).hasClass("buttonInactive"))
 		{
-			$(arrow_left).children("img").attr("src","images/1leftarrow_inactive.png");
+			$(arrow_left).children("img").attr("src","images/tabs/arrow_left_inactive.png");
 		}
 		else
 		{
-			$(arrow_left).children("img").attr("src","images/1leftarrow.png");
+			$(arrow_left).children("img").attr("src","images/tabs/arrow_left_active.png");
 		}
 		
 		if($(arrow_right).hasClass("buttonInactive"))
 		{
-			$(arrow_right).children("img").attr("src","images/1rightarrow_inactive.png");
+			$(arrow_right).children("img").attr("src","images/tabs/arrow_right_inactive.png");
 		}
 		else
 		{
-			$(arrow_right).children("img").attr("src","images/1rightarrow.png");
+			$(arrow_right).children("img").attr("src","images/tabs/arrow_right_active.png");
 		}
 	}
 

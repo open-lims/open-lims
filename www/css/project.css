@@ -1,6 +1,20 @@
 
 /* Project Detail */
-
+#ProjectDetailLeft
+{
+	float: left;
+	width: 375px;	
+}
+#ProjectDetailRight
+{
+	border-left: 1px #C0C0C0 dotted;
+	float: right;
+	width: 370px;	
+}
+#ProjectDetailClear
+{
+	clear: both;
+}
 
 
 
