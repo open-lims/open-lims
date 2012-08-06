@@ -20,10 +20,8 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-
 List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get_array, css_main_id, entries_per_page, column_array)
-{
-	
+{	
 	if (ajax_handler.indexOf("?") == -1) 
 	{
 		ajax_handler = ajax_handler+"?";
@@ -119,11 +117,14 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 			url : "ajax.php?username="+get_array['username']+"&session_id="+get_array['session_id']+"&nav=base&run=list_get_page_bar",
 			data : "page="+page+"&number_of_pages="+number_of_pages+"&css_page_id="+css_main_id+"Page",
 			async : false,
-			success : function(data) {
+			success : function(data)
+			{
 				$("#" + css_main_id + "PageBar").html(data);
 
-				$("." + css_main_id + "Page").each(function() {
-					$(this).bind("click",function() {
+				$("." + css_main_id + "Page").each(function()
+				{
+					$(this).bind("click",function()
+					{
 						var id = $(this).attr("id");
 						page = id.replace(css_main_id + "Page", "");
 						load_content(sort_value, sort_method, page);
@@ -208,7 +209,8 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 			type : "POST",
 			url : ajax_handler + "username=" + get_array['username']+"&session_id="+get_array['session_id']+"&run="+ajax_run + "&sortvalue="+sort_value+"&sortmethod="+sort_method+"&page="+page,
 			data : "column_array="+column_array+"&argument_array="+argument_array+"&entries_per_page="+entries_per_page+"&get_array="+json_get_array,
-			success : function(data) {
+			success : function(data)
+			{
 				var last_height = $("#" + css_main_id).height();
 				$("#" + css_main_id).height("auto");
 				$("#" + css_main_id).html(data);
@@ -222,10 +224,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 					if($.browser.msie)
 					{
 						if($.browser.version == 7.0 || $.browser.version == 9.0)
-						{ //we got an ie version that does not support tbody animation
-
-							data = hide_hidden_columns(data);
-							
+						{ //we got an ie version that does not support tbody animation							
 							$("#" + css_main_id).html(data);
 							
 							make_resizable();
@@ -233,25 +232,20 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 						}
 					}
 					$("#" + css_main_id).height(last_height);
-					$("#" + css_main_id).animate({
+					$("#" + css_main_id).animate(
+					{
 						"height" : new_height
-					}, "fast", function() {
-					
-						data = hide_hidden_columns(data);
-						
+					}
+					, "fast", function()
+					{
 						$("#" + css_main_id).html(data);
-						
 						make_resizable();
 					});
 				} 
 				else 
 				{
-					$("#" + css_main_id).height(last_height)
-					
-					data = hide_hidden_columns(data);
-					
+					$("#" + css_main_id).height(last_height)					
 					$("#" + css_main_id).html(data);
-
 					make_resizable();
 				}
 			}
@@ -259,43 +253,24 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 	}
 	load_content(sort_value, sort_method, page);
 
-	
-	function hide_hidden_columns(data)
-	{
-		var hidden_columns = $(".ListTable").dynamicTable("getHiddenColumnIndices");
 		
-		var table = $("<table><tbody></tbody></table>");
-		
-		$(table).children("tbody").html(data);
-		
-		data = table;
-		
-		$(data).find("tr").each(function()
-		{
-			for (var int = 0; int < hidden_columns.length; int++) 
-			{
-				var n = hidden_columns[int] + 1;
-				
-				//IE8 does not update its dom model css properties if the new tbody gets inserted
-				//for once, a bug in IE that seems to be useful!
-				if(!($.browser.msie && $.browser.version == 8.0)) 
-				{
-					$(this).children(":nth-child("+n+")").hide();
-				}
-			}
-		});
-		data = $(data).find("tbody").html();
-		
-		return data;
-	}
-	
 	function make_resizable()
-	{		
+	{			
+		
 		if($(".ListTable").find(".ui-resizable-e").length > 0)
 		{
-			$(".ListTable").dynamicTable("reinitTds");
+			$(".ListTable").dynamicTable("reinit");
 			return false;
 		}
+		
+		$(document).keyup(function(evt)
+		{
+			if(evt.which === 49)
+			{
+				open_column_menu();
+			}
+			
+		});
 		
 		var num_cols = $(".ListTable > thead > tr > th").size();
 		
@@ -330,17 +305,54 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 			}
 		}
 
+		for (var int2 = 0; int2 < sticky.length; int2++)
+		{
+			var sticky_col = sticky[int2];
+			
+			var th = $(".ListTable").find("th:nth-child("+(sticky_col + 1)+")"), 
+			width = $(th).width()
+	
+			//width_dif is padding + border in ie7, just padding in all other browsers
+			var width_dif = $(th).outerWidth() - $(th).width(); 
+	
+			if($.browser.msie && $.browser.version == 7.0)
+			{//ie box model fix
+				var border = parseInt($(th).css("border-left-width"), 10);
+				if(border)
+				{
+					var padding = parseInt($(th).css("padding-left"), 10) + parseInt($(th).css("padding-right"), 10)
+					width_dif = width_dif - border - padding;
+				}
+				else
+				{
+					width_dif = 0;
+				}
+			}
+			
+			$(th).width(width + width_dif);
+			var real_width = $(th).width() - width_dif;
+			var border = width - real_width;
+			$(th).width(width + width_dif - border); 
+		}
+		
 		$(".ListTable").dynamicTable({
 			"sticky": sticky,
 			"notResizable": notResizable,
-			"rulerColor": "#669acc",
-			"handleColor": "#669acc"
+			"settings" : {
+				rulerCSS: {
+					"background-color": "#669acc"
+				},
+				handleCSS: {
+					"background-color": "#669acc"
+				}
+			}
 		});
 		
 		var column_menu_trigger = $("<div id='ColumnMenuTrigger'><img src='images/icons/visible.png' alt=''/></div>")
 			.css("float", "left")
 			.unbind("click")
-			.click(function(){
+			.click(function()
+			{
 				if($(this).hasClass("columnMenuOpen"))
 				{
 					close_column_menu();
@@ -357,8 +369,8 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 		tooltip("ColumnMenuTrigger", "Toggle Display Options");
 
 		
-		function open_column_menu() {
-			
+		function open_column_menu()
+		{
 			var position = $("#ColumnMenuTrigger").position();
 			
 			var column_menu = $("<div id='ColumnMenu'></div>");
@@ -376,15 +388,14 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 				{
 					if($(column).children(".ResizableColumnHelper").length > 0)
 					{
-						var div = $(column).children(".ResizableColumnHelper").children("div:first");
+						var div = $(column).children(".ResizableColumnHelper");
 						if($(div).children("a:first").length > 0)
 						{
-						
-							var column_text = $(column).children(".ResizableColumnHelper").children("div:first").children("a:first").text();
+							var column_text = $(column).children(".ResizableColumnHelper").children("a:first").text();
 						}
 						else
 						{
-							var column_text = $(column).children(".ResizableColumnHelper").children("div:first").text();
+							var column_text = $(column).children(".ResizableColumnHelper").text();
 						}
 					}
 				}
@@ -418,7 +429,8 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 						}
 						
 						var num_checked = 0;
-						$(".ColumnMenuEntryCheckbox").each(function(){
+						$(".ColumnMenuEntryCheckbox").each(function()
+						{
 							if($(this).is(":checked"))
 							{
 								num_checked++;
@@ -441,14 +453,18 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 					.append(checkbox)
 					.appendTo(column_menu);
 				
-				$(column_menu).dialog({
+				$(column_menu).dialog(
+				{
 					"title": "Change column visibility",
-					"close": function(){
+					"close": function()
+					{
 						$("#ColumnMenuTrigger").removeClass("columnMenuOpen");
 					},
-					"buttons": [{
+					"buttons": [
+					{
 						text: "OK",
-				        click: function() { 
+				        click: function()
+				        { 
 				        	close_column_menu() 
 				        }
 					}]
@@ -456,63 +472,63 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 			}
 		}
 		
-		function close_column_menu() {
+		function close_column_menu()
+		{
 			$("#ColumnMenu").dialog("close");
 			$("#ColumnMenu").remove();
 		}
-		
-	}
 
-	function check_array(sort_value) {
-		if (sort_array != undefined) {
+	} 
+
+	function check_array(sort_value)
+	{
+		if (sort_array != undefined)
+		{
 			var sort_array_length = sort_array.length;
 
-			if (sort_array_length >= 1) {
-				for ( var i = 0; i <= sort_array_length - 1; i++) {
-					if (sort_array[i][0] == sort_value) {
+			if (sort_array_length >= 1)
+			{
+				for (var i = 0; i <= sort_array_length - 1; i++)
+				{
+					if (sort_array[i][0] == sort_value)
+					{
 						return i;
 					}
 				}
 				return -1;
-			} else {
+			}
+			else
+			{
 				return -1;
 			}
-		} else {
+		}
+		else
+		{
 			return -1;
 		}
 	}
 
 	function change_symbol(id, symbol) 
 	{
-
 		$("." + css_main_id + "Column").each(function() 
+		{
+			var local_id = $(this).attr("id");
+			var img = $("#" + local_id).find("img");
+			
+			if (local_id == id) 
 			{
-				var local_id = $(this).attr("id");
-				
-				if($("#" + local_id ).children(".ResizableColumnHelper").length > 0)
-				{
-					var img = $("#" + local_id + " > .ResizableColumnHelper > div > a > img");
+				if (symbol == "upside") {
+					$(img).attr("src", "images/upside.png");
+				} else {
+					$(img).attr("src", "images/downside.png");
 				}
-				else
-				{
-					var img = $("#" + local_id + " > div > a > img");
-				}
-				
-				if (local_id == id) 
-				{
-					if (symbol == "upside") {
-						$(img).attr("src", "images/upside.png");
-					} else {
-						$(img).attr("src", "images/downside.png");
-					}
-				} 
-				else 
-				{
-					$(img).attr("src", "images/nosort.png");
-				}
-			});
+			} 
+			else 
+			{
+				$(img).attr("src", "images/nosort.png");
+			}
+		});
 	}
-
 
 	this.reinit_sort_handler();
 }

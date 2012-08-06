@@ -2,9 +2,10 @@
 {
  	border-spacing: 0;
 }
-.Form input
+.Form input,
+.Form textarea
 {
-	font-size: 14px;
+	font: normal 14px Arial, Helvetica, sans-serif;
 	border-radius: 6px 6px 6px 6px;
 	border: 1px #D0D0D0 solid;
 	color: #2F2F2F;  
@@ -12,16 +13,12 @@
 	padding: 4px;
 	margin: 3px 0;
 }
-.Form input.FormFocused
+.Form input.FormFocused,
+.Form textarea.FormFocused
 {
 	border: 1px #73A6FF solid;
 	color: black;  
 	background-color: #EFF5FF;
-}
-.Form textfield
-{
-	background-color: white;
-	border: 1px #C0C0C0 solid;
 }
 .Form select:radio
 {
@@ -110,6 +107,13 @@
 {
 	clear: both;
 }
+.FormCenterBox70
+{
+	margin-left: auto;
+	margin-right: auto;
+	width: 70%;
+}
+
 
 /* !!! OUTDATED !!! */
 .FormButton
