@@ -142,7 +142,7 @@ html,body
 
 /* TOOLTIP */
 
-#tooltip
+#BaseTooltip
 {
 	position:absolute;
 	background-color:white;
@@ -157,6 +157,25 @@ html,body
 }
 
 
+#BaseTopBar
+{
+	padding: 5px;
+}
+#BaseTopBarLeft
+{
+	float: left;
+}
+#BaseTopBarRight
+{
+	text-align: right;
+}
+#BaseTopBarClear
+{
+	padding-top: 5px;
+	margin-bottom: 2px;
+	border-bottom: 1px #A0A0A0 dotted;
+	clear: left;
+}
 
 
 /* BASE TREE NAVIGATION */

@@ -423,7 +423,8 @@ class OrganisationUnitIO
 	}
 	
 	/**
-	 * @todo rebuild with List
+	 * @todo rebuild with List and JS operations
+	 * @todo move to admin
 	 */
 	public static function list_user_admin_organisation_units($user_id)
 	{
@@ -480,7 +481,8 @@ class OrganisationUnitIO
 	}
 	
 	/**
-	 * @todo rebuild with List
+	 * @todo rebuild with List and JS operations
+	 * @todo move to admin
 	 */
 	public static function list_group_admin_organisation_units($group_id)
 	{

@@ -1,12 +1,15 @@
 <!-- CONTAINER BEGIN ("Detail: [[TITLE]]") -->
 
-<div class='boxIconBar'>
-	<div class='boxIconLeft'>
+<div id='BaseTopBar'>
+	<div id='BaseTopBarLeft'>
 
-	Version [[VERSION]] (<a href='index.php?[[VERSION_LIST_LINK]]'>History</a>)
+		<a href='index.php?[[VERSION_LIST_LINK]]' class='ListButton'>
+		<img src='images/icons/history.png' alt='' />
+		<div>History</div>
+		</a>
 	
 	</div>
-	<div class='boxIconRight'>
+	<div id='BaseTopBarRight'>
 		<form  action='index.php' method='get'>
 		<select name='version'>
 		<option value='[[VERSION]]'>Version [[VERSION]] - [[VERSION_DATETIME]]</options>
@@ -29,6 +32,7 @@
 		</form>
 	</div>
 </div>
+<div id='BaseTopBarClear'></div>
 
 <div class='filebox'>
 

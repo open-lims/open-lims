@@ -26,7 +26,7 @@
  */
 function tooltip(element_id, message)
 {
-	$('#tooltip').remove();
+	$('#BaseTooltip').remove();
 	
 	var offsetX = 15;
 	var offsetY = 10;
@@ -35,7 +35,7 @@ function tooltip(element_id, message)
 		.unbind("mouseover mouseout mousemove")
 		.mouseover(function(e)
 		{
-			$("<div id='tooltip'>"+message+"</div>")
+			$("<div id='BaseTooltip'>"+message+"</div>")
 				.css(
 				{
 					"top": e.pageY + offsetY,
@@ -47,11 +47,11 @@ function tooltip(element_id, message)
 		})
 		.mouseout(function(e)
 		{
-			$('#tooltip').remove();
+			$('#BaseTooltip').remove();
 		})	
 		.mousemove(function(e) 
 		{
-			$("#tooltip").css(
+			$("#BaseTooltip").css(
 			{
 				"top": e.pageY + offsetY,
 				"left": e.pageX + offsetX

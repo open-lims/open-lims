@@ -104,23 +104,32 @@ $(document).ready(function()
 
 <!-- IF ([[DISPLAY_HEADER]]) -->
 
-<div class='boxIconBar'>
-	<div class='boxIconLeft'>
+<div id='BaseTopBar'>
+	<div id='BaseTopBarLeft'>
 
-	Version [[VERSION]] (<a href='index.php?[[VERSION_LIST_LINK]]'>History</a>) |
+	<a href='index.php?[[VERSION_LIST_LINK]]' class='ListButton'>
+	<img src='images/icons/history.png' alt='' />
+	<div>History</div>
+	</a>
 	
 	<!-- IF ([[CHANGE_PERMISSION]]) -->
-					
-	<div class='boxIcon'><img src='images/icons/permissions.png' alt='' />&nbsp;<a href='index.php?[[CHANGE_PERMISSION_PARAMS]]'>Change Permissions</a></div>
-	
+			
+	<a href='index.php?[[CHANGE_PERMISSION_PARAMS]]' class='ListButton'>
+	<img src='images/icons/permissions.png' alt='' />
+	<div>Change Permissions</div>
+	</a>
+
 	<!-- ELSE -->
 					
-	<div class='boxIcon'><img src='images/icons/permissions_na.png' alt='' />&nbsp;<span class='FontDeactivated'>Change Permissions</span></div>
+	<a class='ListButtonDisabled'>
+	<img src='images/icons/permissions.png' alt='' />
+	<div>Change Permissions</div>
+	</a>
 					
 	<!-- ENDIF -->	
 	
 	</div>
-	<div class='boxIconRight'>
+	<div id='BaseTopBarRight'>
 		<form  action='index.php' method='get'>
 		<select name='version'>
 		<option value='[[VERSION]]'>Version [[VERSION]] - [[VERSION_DATETIME]]</options>
@@ -143,6 +152,7 @@ $(document).ready(function()
 		</form>
 	</div>
 </div>
+<div id='BaseTopBarClear'></div>
 
 <!-- ENDIF -->
 

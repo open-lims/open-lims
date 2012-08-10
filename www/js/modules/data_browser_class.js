@@ -215,13 +215,13 @@ function data_browser()
 			
 				var filename = $(this).children("td:nth-child(3)").children().text();
 				
-//				$(this)
+//			$(this)
 //				.children("td:nth-child(3)").each(function()
 //				{ //bind thumbnail handler
 //					var filename = $(this).children().text();
 					if(is_image(filename))
 					{						
-						show_thumbnail($(this).children(),"<div><img src='image.php?session_id="+get_array['session_id']+"&file_id="+linked_file_id+"&max_width=100&max_height=100' alt='' /></div>");
+						show_thumbnail($(this).children("td:nth-child(3)").children("a"),"<div><img src='image.php?session_id="+get_array['session_id']+"&file_id="+linked_file_id+"&max_width=100&max_height=100' alt='' /></div>");
 					}			
 //				});
 		});

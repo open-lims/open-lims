@@ -199,7 +199,7 @@ class AdminGroupIO
 			unset($paramquery['tab']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			$tab_io->add("detail", "Group Detail", $params, false);
+			$tab_io->add("detail", "Group Details", $params, false);
 			
 			
 			$paramquery = $_GET;
@@ -310,6 +310,9 @@ class AdminGroupIO
 		$template->output();
 	}
 	
+	/**
+	 * @todo rebuild with List and JS operations
+	 */
 	private static function detail_users()
 	{
 		$group_id = $_GET[id];
@@ -513,7 +516,7 @@ class AdminGroupIO
 	}
 	
 	/**
-	 * @todo IMPORTANT: remove bad dependency
+	 * @todo IMPORTANT: remove bad dependency, replace with JS
 	 */
 	public static function add_organisation_unit()
 	{
@@ -605,7 +608,7 @@ class AdminGroupIO
 	}
 	
 	/**
-	 * @todo IMPORTANT: remove bad dependency
+	 * @todo IMPORTANT: remove bad dependency, replace with JS
 	 */
 	public static function delete_organisation_unit()
 	{

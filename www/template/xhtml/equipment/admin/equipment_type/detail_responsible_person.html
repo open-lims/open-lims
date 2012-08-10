@@ -1,0 +1,38 @@
+<!-- CONTAINER BEGIN ("Equipment Type: [[NAME]]") -->
+
+<div id='ListButtonBar'>
+	<a href='index.php?[[ADD_USER_PARAMS]]' class='ListButton'>
+	<img src=''images/icons/add_user.png'' alt='' />
+	<div>Add User</div>
+	</a>
+</div>
+<div id='ListButtonBarClear'></div>
+	
+<table class='OverviewTable'>
+	<tr>
+		<th>Username:</th>
+		<th width='50%'>Fullname:</th>
+		<th width='15%'>Delete:</th>
+	</tr>
+					
+	<!-- FOREACH BEGIN ([[USER]]) -->
+			
+		<tr>
+			<td>[[USER:USERNAME]]</td>
+			<td>[[USER:FULLNAME]]</td>
+			<td><a href='index.php?[[USER:DELETE_PARAMS]]'>delete</a></td>
+		</tr>
+	
+	<!-- FOREACH END -->
+	
+	<!-- IF ([[NO_USER]]) -->
+	
+		<tr>
+			<td colspan='2'><span class='italic'>No User Found!</span></td>
+		</tr>
+	
+	<!-- ENDIF -->
+
+</table>
+
+<!-- CONTAINER END () -->

@@ -1,20 +1,4 @@
 /* DATA BROWSER */
-.DataBrowserMenuItem /* replaces boxIcon in main.css */
-{
-display:inline;
-margin-right: 1em;
-}
-
-.DataBrowserMenuItem:hover
-{ 
-cursor:pointer;
-}
-
-.DataBrowserMenuItem:hover span
-{
-text-decoration:underline;	
-}
-
 .Deactivated:hover span
 {
 text-decoration:none;	

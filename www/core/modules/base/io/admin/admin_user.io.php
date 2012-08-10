@@ -349,7 +349,7 @@ class AdminUserIO
 			unset($paramquery['tab']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			$tab_io->add("detail", "User Detail", $params, false);
+			$tab_io->add("detail", "User Details", $params, false);
 			
 			
 			$paramquery = $_GET;
@@ -671,7 +671,7 @@ class AdminUserIO
 	}
 	
 	/**
-	 * @todo rebuild with List
+	 * @todo rebuild with List and JS operations
 	 */
 	private static function detail_groups()
 	{
