@@ -70,7 +70,6 @@ class Common_IO
 	 */
 	public static function page_bar($page, $max_page, $paramquery)
 	{
-		
 			$previous_paramquery = $paramquery;
 			$previous_paramquery[page] = $page-1;
 			unset($previous_paramquery[show]);

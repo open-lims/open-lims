@@ -143,7 +143,7 @@ class AdminGeneralIO
 		$paramquery[action] = "list_measuring_units";
 		$params = http_build_query($paramquery,'','&#38;');
 		
-		$tab_io->add("measuring-units", "Measur. Un.", $params, false);  
+		$tab_io->add("measuring-units", "Measuring Units", $params, false);  
 		
 				
 		$paramquery = $_GET;

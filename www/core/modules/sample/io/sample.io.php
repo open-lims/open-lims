@@ -45,6 +45,15 @@ class SampleIO
 		
 		$template->set_var("list", $list->get_list());
 		
+		$paramquery = array();
+		$paramquery['username'] = $_GET['username'];
+		$paramquery['session_id'] = $_GET['session_id'];
+		$paramquery['nav'] = "sample";
+		$paramquery['run'] = "new";
+		$params = http_build_query($paramquery, '', '&#38;');
+		
+		$template->set_var("new_sample_params", $params);
+		
 		$template->output();
 	}
 

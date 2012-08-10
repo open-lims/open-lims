@@ -61,4 +61,18 @@
 	$dialog[4][method]			= "list_user_related_organisation_units";
 	$dialog[4][internal_name]	= "my_organisation_units";
 	$dialog[4][display_name]	= "My Organisation Units";
+	
+	$dialog[5][type]			= "user_admin_detail";
+	$dialog[5][class_path]		= "core/modules/organisation_unit/io/organisation_unit.io.php";
+	$dialog[5]['class']			= "OrganisationUnitIO";
+	$dialog[5][method]			= "list_user_admin_organisation_units";
+	$dialog[5][internal_name]	= "organisation_units";
+	$dialog[5][display_name]	= "Organisation Units";
+	
+	$dialog[6][type]			= "group_admin_detail";
+	$dialog[6][class_path]		= "core/modules/organisation_unit/io/organisation_unit.io.php";
+	$dialog[6]['class']			= "OrganisationUnitIO";
+	$dialog[6][method]			= "list_group_admin_organisation_units";
+	$dialog[6][internal_name]	= "organisation_units";
+	$dialog[6][display_name]	= "Organisation Units";
 ?>

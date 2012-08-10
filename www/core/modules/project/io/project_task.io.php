@@ -1541,7 +1541,7 @@ class ProjectTaskIO
 				
 				$template->set_var("cal_view_params", $cal_view_params);
 				
-				require_once("core/modules/organiser/organiser_library.io.php");
+				require_once("core/modules/organiser/io/organiser_library.io.php");
 				$organiser_library_io = new OrganiserLibraryIO(31);
 								
 				$organiser_library_io->set_calendar_array($calendar_array);

@@ -341,321 +341,385 @@ class AdminUserIO
 	 */
 	public static function detail()
 	{
-		global $user;
-		
 		if ($_GET[id])
 		{
-			$user_id = $_GET[id];
+			$tab_io = new Tab_IO();
+	
+			$paramquery = $_GET;
+			unset($paramquery['tab']);
+			$params = http_build_query($paramquery,'','&#38;');
+			
+			$tab_io->add("detail", "User Detail", $params, false);
+			
+			
+			$paramquery = $_GET;
+			$paramquery['tab'] = "groups";
+			$params = http_build_query($paramquery,'','&#38;');
+			
+			$tab_io->add("groups", "Groups", $params, false);
+			
+			
+			$module_dialog_array = ModuleDialog::list_dialogs_by_type("user_admin_detail");
+			
+			if (is_array($module_dialog_array) and count($module_dialog_array) >= 1)
+			{
+				foreach ($module_dialog_array as $key => $value)
+				{
+					$paramquery = $_GET;
+					$paramquery['tab']			= "dialog";
+					$paramquery['sub_dialog']	= $value[internal_name];
+					$params 					= http_build_query($paramquery,'','&#38;');
+					
+					$tab_io->add($value[internal_name], $value[display_name], $params, false);
+				}
+			}
+			
+			switch($_GET['tab']):
 				
-			$template = new HTMLTemplate("base/user/admin/user/detail.html");
+				case "groups":
+					$tab_io->activate("groups");
+				break;
 			
-			$current_user = new User($user_id);
-			$user_data = new DataUserData($user_id);
-			$project_data = new ProjectUserData($user_id);
+				case "dialog":
+					$tab_io->activate($_GET['sub_dialog']);
+				break;
+				
+				default:
+					$tab_io->activate("detail");
+				break;
 			
-			// General
+			endswitch;
+				
+			$tab_io->output();
 			
-			if ($user_id == $user->get_user_id())
-			{
-				$template->set_var("change_username", false);
-				if ($user_id == 1)
-				{
-					$template->set_var("is_not_system", false);
-				}
-				else
-				{
-					$template->set_var("is_not_system", true);
-				}
-			}
-			else
-			{
-				if ($user_id == 1)
-				{
-					$template->set_var("change_username", false);
-					$template->set_var("is_not_system", false);
-				}
-				else
-				{
-					$template->set_var("change_username", true);
-					$template->set_var("is_not_system", true);
-				}
-			}
+			
+			switch($_GET['tab']):
 
-			$paramquery = $_GET;
-			$paramquery[action] = "rename";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("username", $current_user->get_username());
-			$template->set_var("rename_params", $params);
-			
-			
-			$template->set_var("fullname", $current_user->get_full_name(false));
-			
-			
-			$paramquery = $_GET;
-			$paramquery[action] = "change_mail";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("mail", $current_user->get_profile("mail"));
-			$template->set_var("change_mail_params", $params);
-			
-			
-			$paramquery = $_GET;
-			$paramquery[action] = "change_password";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("change_password_params", $params);
-			
-			
-			// Administrative Settings
-			
-			$paramquery = $_GET;
-			$paramquery[action] = "change_boolean_entry";
-			$paramquery[aspect] = "mc_password";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("mc_password_params", $params);
-			
-			if ($current_user->get_boolean_user_entry("must_change_password") == true)
-			{
-				$template->set_var("mc_password", "yes");
-			}
-			else
-			{
-				$template->set_var("mc_password", "no");
-			}
-	
-	
-			$paramquery = $_GET;
-			$paramquery[action] = "change_boolean_entry";
-			$paramquery[aspect] = "cc_password";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("cc_password_params", $params);
-			
-			if ($current_user->get_boolean_user_entry("can_change_password") == true)
-			{
-				$template->set_var("cc_password", "yes");
-			}
-			else
-			{
-				$template->set_var("cc_password", "no");
-			}
-			
-			
-			$paramquery = $_GET;
-			$paramquery[action] = "change_boolean_entry";
-			$paramquery[aspect] = "secure_password";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("secure_password_params", $params);
-			
-			if ($current_user->get_boolean_user_entry("secure_password") == true)
-			{
-				$template->set_var("secure_password", "yes");
-			}
-			else
-			{
-				$template->set_var("secure_password", "no");
-			}
-			
-			
-			$paramquery = $_GET;
-			$paramquery[action] = "change_boolean_entry";
-			$paramquery[aspect] = "block_write";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("block_write_params", $params);
-			
-			if ($current_user->get_boolean_user_entry("block_write") == true)
-			{
-				$template->set_var("block_write", "yes");
-			}
-			else
-			{
-				$template->set_var("block_write", "no");
-			}
-			
-			
-			$paramquery = $_GET;
-			$paramquery[action] = "change_boolean_entry";
-			$paramquery[aspect] = "create_folder";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("create_folder_params", $params);
-			
-			if ($current_user->get_boolean_user_entry("create_folder") == true)
-			{
-				$template->set_var("create_folder", "yes");
-			}
-			else
-			{
-				$template->set_var("create_folder", "no");
-			}
-			
-			
-			$paramquery = $_GET;
-			$paramquery[action] = "change_boolean_entry";
-			$paramquery[aspect] = "user_locked";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("locked_params", $params);
-			
-			if ($current_user->get_boolean_user_entry("user_locked") == true)
-			{
-				$template->set_var("locked", "yes");
-			}
-			else
-			{
-				$template->set_var("locked", "no");
-			}
-			
-			
-			$paramquery = $_GET;
-			$paramquery[action] = "change_boolean_entry";
-			$paramquery[aspect] = "user_inactive";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("inactive_params", $params);
-			
-			if ($current_user->get_boolean_user_entry("user_inactive") == true)
-			{
-				$template->set_var("inactive", "yes");
-			}
-			else
-			{
-				$template->set_var("inactive", "no");
-			}
-			
-			
-			// Module Settings
-			
-			$user_module_settings_dialog_array = ModuleDialog::list_dialogs_by_type("user_module_detail_setting");
-		
-			if (is_array($user_module_settings_dialog_array) and count($user_module_settings_dialog_array) >= 1)
-			{
-				$module_settings_array = array();
-				$module_settings_counter = 0;
+				case "groups":
+					self::detail_groups();
+				break;
 				
-				foreach ($user_module_settings_dialog_array as $key => $value)
-				{
-					if (file_exists($value['class_path']))
+				case "dialog":
+					$module_dialog = ModuleDialog::get_by_type_and_internal_name("user_admin_detail", $_GET['sub_dialog']);
+						
+					if (file_exists($module_dialog['class_path']))
 					{
-						require_once($value['class_path']);
-						$module_settings_return = $value['class']::$value['method']($user_id);
-						$module_settings_array[$module_settings_counter][title] = $value['display_name'];
-						$module_settings_array[$module_settings_counter][value] = $module_settings_return[value];
-						$module_settings_array[$module_settings_counter][params] = $module_settings_return[params];
-						$module_settings_counter++;
+						require_once($module_dialog['class_path']);
+						
+						if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog['method']))
+						{
+							$module_dialog['class']::$module_dialog[method]($_GET['id']);
+						}
+						else
+						{
+							// Error
+						}
 					}
-				}
+					else
+					{
+						// Error
+					}
+				break;
 				
-				$template->set_var("module_settings_array", $module_settings_array);
-				$template->set_var("module_settings", true);
-			}
-			else
-			{
-				$template->set_var("module_settings", false);
-			}
-			
-			// User Settings
-			
-			$paramquery = $_GET;
-			$paramquery[action] = "change_language";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("language", Regional::get_language_name($current_user->get_language_id()));
-			$template->set_var("language_params", $params);
-			
-			
-			$paramquery = $_GET;
-			$paramquery[action] = "change_timezone";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("timezone", Regional::get_timezone_name($current_user->get_timezone_id()));
-			$template->set_var("timezone_params", $params);
-			
-			
-			$paramquery = $_GET;
-			$paramquery[action] = "add_group";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("add_group_params", $params);
-			
-			
-			$group_array = Group::list_user_releated_groups($user_id);
-			$group_content_array = array();
-			
-			$counter = 0;
-			
-			if (is_array($group_array) and count($group_array) >= 1)
-			{
-				foreach($group_array as $key => $value) {
-					
-					$group = new Group($value);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "delete_group";
-					$paramquery[key] = $value;
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$group_content_array[$counter][name] = $group->get_name();
-					$group_content_array[$counter][delete_params] = $params;
-					
-					$counter++;
-				}
-				$template->set_var("no_group", false);
-			}
-			else
-			{
-				$template->set_var("no_group", true);
-			}
-			
-			$template->set_var("group", $group_content_array);
-			
-			
-			$paramquery = $_GET;
-			$paramquery[action] = "add_organisation_unit";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("add_ou_params", $params);	
-			
-			
-			$organisation_unit_array = OrganisationUnit::list_entries_by_user_id($user_id);
-			$organisation_unit_content_array = array();
-			
-			$counter = 0;
-			
-			if (is_array($organisation_unit_array) and count($organisation_unit_array) >= 1)
-			{
-				foreach($organisation_unit_array as $key => $value)
-				{
-					$organisation_unit = new OrganisationUnit($value);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "delete_organisation_unit";
-					$paramquery[key] = $value;
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$organisation_unit_content_array[$counter][name] = $organisation_unit->get_name();
-					$organisation_unit_content_array[$counter][delete_params] = $params;
-					
-					$counter++;
-				}
-				$template->set_var("no_ou", false);
-			}
-			else
-			{
-				$template->set_var("no_ou", true);
-			}
-			
-			$template->set_var("ou", $organisation_unit_content_array);
-			$template->output();
+				default:
+					self::detail_home();
+				break;
+				
+			endswitch;
 		}
 		else
 		{
 			throw new UserIDMissingException();
 		}
+	}
+	
+	private static function detail_home()
+	{
+		global $user;
+		
+		$user_id = $_GET[id];
+		
+		$template = new HTMLTemplate("base/user/admin/user/detail.html");
+					
+		$current_user = new User($user_id);
+		$user_data = new DataUserData($user_id);
+		$project_data = new ProjectUserData($user_id);
+		
+		// General
+		
+		if ($user_id == $user->get_user_id())
+		{
+			$template->set_var("change_username", false);
+			if ($user_id == 1)
+			{
+				$template->set_var("is_not_system", false);
+			}
+			else
+			{
+				$template->set_var("is_not_system", true);
+			}
+		}
+		else
+		{
+			if ($user_id == 1)
+			{
+				$template->set_var("change_username", false);
+				$template->set_var("is_not_system", false);
+			}
+			else
+			{
+				$template->set_var("change_username", true);
+				$template->set_var("is_not_system", true);
+			}
+		}
+
+		$paramquery = $_GET;
+		$paramquery[action] = "rename";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("username", $current_user->get_username());
+		$template->set_var("rename_params", $params);
+		
+		
+		$template->set_var("fullname", $current_user->get_full_name(false));
+		
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "change_mail";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("mail", $current_user->get_profile("mail"));
+		$template->set_var("change_mail_params", $params);
+		
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "change_password";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("change_password_params", $params);
+		
+		
+		// Administrative Settings
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "change_boolean_entry";
+		$paramquery[aspect] = "mc_password";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("mc_password_params", $params);
+		
+		if ($current_user->get_boolean_user_entry("must_change_password") == true)
+		{
+			$template->set_var("mc_password", "yes");
+		}
+		else
+		{
+			$template->set_var("mc_password", "no");
+		}
+
+
+		$paramquery = $_GET;
+		$paramquery[action] = "change_boolean_entry";
+		$paramquery[aspect] = "cc_password";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("cc_password_params", $params);
+		
+		if ($current_user->get_boolean_user_entry("can_change_password") == true)
+		{
+			$template->set_var("cc_password", "yes");
+		}
+		else
+		{
+			$template->set_var("cc_password", "no");
+		}
+		
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "change_boolean_entry";
+		$paramquery[aspect] = "secure_password";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("secure_password_params", $params);
+		
+		if ($current_user->get_boolean_user_entry("secure_password") == true)
+		{
+			$template->set_var("secure_password", "yes");
+		}
+		else
+		{
+			$template->set_var("secure_password", "no");
+		}
+		
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "change_boolean_entry";
+		$paramquery[aspect] = "block_write";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("block_write_params", $params);
+		
+		if ($current_user->get_boolean_user_entry("block_write") == true)
+		{
+			$template->set_var("block_write", "yes");
+		}
+		else
+		{
+			$template->set_var("block_write", "no");
+		}
+		
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "change_boolean_entry";
+		$paramquery[aspect] = "create_folder";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("create_folder_params", $params);
+		
+		if ($current_user->get_boolean_user_entry("create_folder") == true)
+		{
+			$template->set_var("create_folder", "yes");
+		}
+		else
+		{
+			$template->set_var("create_folder", "no");
+		}
+		
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "change_boolean_entry";
+		$paramquery[aspect] = "user_locked";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("locked_params", $params);
+		
+		if ($current_user->get_boolean_user_entry("user_locked") == true)
+		{
+			$template->set_var("locked", "yes");
+		}
+		else
+		{
+			$template->set_var("locked", "no");
+		}
+		
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "change_boolean_entry";
+		$paramquery[aspect] = "user_inactive";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("inactive_params", $params);
+		
+		if ($current_user->get_boolean_user_entry("user_inactive") == true)
+		{
+			$template->set_var("inactive", "yes");
+		}
+		else
+		{
+			$template->set_var("inactive", "no");
+		}
+		
+		
+		// Module Settings
+		
+		$user_module_settings_dialog_array = ModuleDialog::list_dialogs_by_type("user_module_detail_setting");
+	
+		if (is_array($user_module_settings_dialog_array) and count($user_module_settings_dialog_array) >= 1)
+		{
+			$module_settings_array = array();
+			$module_settings_counter = 0;
+			
+			foreach ($user_module_settings_dialog_array as $key => $value)
+			{
+				if (file_exists($value['class_path']))
+				{
+					require_once($value['class_path']);
+					$module_settings_return = $value['class']::$value['method']($user_id);
+					$module_settings_array[$module_settings_counter][title] = $value['display_name'];
+					$module_settings_array[$module_settings_counter][value] = $module_settings_return[value];
+					$module_settings_array[$module_settings_counter][params] = $module_settings_return[params];
+					$module_settings_counter++;
+				}
+			}
+			
+			$template->set_var("module_settings_array", $module_settings_array);
+			$template->set_var("module_settings", true);
+		}
+		else
+		{
+			$template->set_var("module_settings", false);
+		}
+		
+		// User Settings
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "change_language";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("language", Regional::get_language_name($current_user->get_language_id()));
+		$template->set_var("language_params", $params);
+		
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "change_timezone";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("timezone", Regional::get_timezone_name($current_user->get_timezone_id()));
+		$template->set_var("timezone_params", $params);
+				
+		$template->output();
+	}
+	
+	/**
+	 * @todo rebuild with List
+	 */
+	private static function detail_groups()
+	{
+		$user_id = $_GET[id];
+		
+		$template = new HTMLTemplate("base/user/admin/user/detail_group.html");
+					
+		$current_user = new User($user_id);
+		$template->set_var("username", $current_user->get_username());
+		$template->set_var("fullname", $current_user->get_full_name(false));
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "add_group";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("add_group_params", $params);
+		
+		$group_array = Group::list_user_releated_groups($user_id);
+		$group_content_array = array();
+		
+		$counter = 0;
+		
+		if (is_array($group_array) and count($group_array) >= 1)
+		{
+			foreach($group_array as $key => $value) {
+				
+				$group = new Group($value);
+				
+				$paramquery = $_GET;
+				$paramquery[action] = "delete_group";
+				$paramquery[key] = $value;
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$group_content_array[$counter][name] = $group->get_name();
+				$group_content_array[$counter][delete_params] = $params;
+				
+				$counter++;
+			}
+			$template->set_var("no_group", false);
+		}
+		else
+		{
+			$template->set_var("no_group", true);
+		}
+		
+		$template->set_var("group", $group_content_array);
+		
+		$template->output();
 	}
 	
 	/**
@@ -811,7 +875,7 @@ class AdminUserIO
 	}
 	
 	/**
-	 * @todo IMPORTANT: bad dependency
+	 * @todo IMPORTANT: remove bad dependency, replace with JS
 	 * @throws UserIDMissingException
 	 */
 	public static function add_organisation_unit()
@@ -904,7 +968,7 @@ class AdminUserIO
 	}
 	
 	/**
-	 * @todo IMPORTANT: bad dependency
+	 * @todo IMPORTANT: bad dependency, replace with JS
 	 * @throws UserIDMissingException
 	 */
 	public static function delete_organisation_unit()

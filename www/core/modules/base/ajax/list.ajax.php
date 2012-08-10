@@ -28,7 +28,7 @@
 class ListAjax
 {
 	public static function get_page_bar($page, $number_of_pages, $css_page_id)
-	{
+	{		
 		$pagebar .= "<table style='display: inline;'><tr><td><span class='smallTextBlack'>Page ".$page." of ".$number_of_pages."</span></td>";
 	
 		// Previous
@@ -48,7 +48,7 @@ class ListAjax
 		{
 			$display = false;
 			
-			if ($max_page < 5)
+			if ($number_of_pages < 5)
 			{
 				$display = true;
 			}
@@ -59,7 +59,7 @@ class ListAjax
 					$display = true;
 				}
 				
-				if ($i > $max_page-2)
+				if ($i > $number_of_pages-2)
 				{
 					$display = true;
 				}

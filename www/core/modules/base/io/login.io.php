@@ -46,13 +46,13 @@ class Login_IO
 		{
 			foreach($language_array as $key => $value)
 			{
-				$result[$counter][value] = $value;
-				$result[$counter][content] = Regional::get_language_name($value);
+				$result[$counter]['option'] = $value;
+				$result[$counter]['name'] = Regional::get_language_name($value);
 				$counter++;		
 			}
 		}
 		
-		$template->set_var("option",$result);
+		$template->set_var("languages",$result);
 			
 		$template->output();
 	}

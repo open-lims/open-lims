@@ -423,6 +423,116 @@ class OrganisationUnitIO
 	}
 	
 	/**
+	 * @todo rebuild with List
+	 */
+	public static function list_user_admin_organisation_units($user_id)
+	{
+		if (is_numeric($user_id))
+		{
+			$template = new HTMLTemplate("organisation_unit/admin/dialog/list_user_admin.html");
+			
+			$current_user = new User($user_id);
+			$template->set_var("username", $current_user->get_username());
+			$template->set_var("fullname", $current_user->get_full_name(false));
+			
+			$paramquery = $_GET;
+			$paramquery[action] = "add_organisation_unit";
+			$params = http_build_query($paramquery,'','&#38;');
+			
+			$template->set_var("add_ou_params", $params);	
+			
+			$organisation_unit_array = OrganisationUnit::list_entries_by_user_id($user_id);
+			$organisation_unit_content_array = array();
+			
+			$counter = 0;
+			
+			if (is_array($organisation_unit_array) and count($organisation_unit_array) >= 1)
+			{
+				foreach($organisation_unit_array as $key => $value)
+				{
+					$organisation_unit = new OrganisationUnit($value);
+					
+					$paramquery = $_GET;
+					$paramquery[action] = "delete_organisation_unit";
+					$paramquery[key] = $value;
+					$params = http_build_query($paramquery,'','&#38;');
+					
+					$organisation_unit_content_array[$counter][name] = $organisation_unit->get_name();
+					$organisation_unit_content_array[$counter][delete_params] = $params;
+					
+					$counter++;
+				}
+				$template->set_var("no_ou", false);
+			}
+			else
+			{
+				$template->set_var("no_ou", true);
+			}
+			
+			$template->set_var("ou", $organisation_unit_content_array);
+			
+			$template->output();
+		}
+		else
+		{
+			// Error
+		}
+	}
+	
+	/**
+	 * @todo rebuild with List
+	 */
+	public static function list_group_admin_organisation_units($group_id)
+	{
+		if (is_numeric($group_id))
+		{
+			$template = new HTMLTemplate("organisation_unit/admin/dialog/list_group_admin.html");
+			
+			$paramquery = $_GET;
+			$paramquery[action] = "add_organisation_unit";
+			$params = http_build_query($paramquery,'','&#38;');
+			
+			$template->set_var("add_ou_params", $params);	
+			
+			$organisation_unit_array = OrganisationUnit::list_entries_by_group_id($group_id);
+			$organisation_unit_content_array = array();
+			
+			$counter = 0;
+			
+			if (is_array($organisation_unit_array) and count($organisation_unit_array) >= 1)
+			{
+				foreach($organisation_unit_array as $key => $value)
+				{
+					$organisation_unit = new OrganisationUnit($value);
+					
+					$paramquery = $_GET;
+					$paramquery[action] = "delete_organisation_unit";
+					$paramquery[key] = $value;
+					$params = http_build_query($paramquery,'','&#38;');
+					
+					$organisation_unit_content_array[$counter][name] = $organisation_unit->get_name();
+					$organisation_unit_content_array[$counter][delete_params] = $params;
+					
+					$counter++;
+				}
+				$template->set_var("no_ou", false);
+			}
+			else
+			{
+				$template->set_var("no_ou", true);
+			}
+			
+			$template->set_var("ou", $organisation_unit_content_array);
+			
+			$template->output();
+		}
+		else
+		{
+			// Error
+		}
+	}
+	
+	/**
 	 * @throws OrganisationUnitIDMissingException
 	 */
 	public static function list_owners()

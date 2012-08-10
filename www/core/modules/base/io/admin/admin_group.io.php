@@ -193,105 +193,89 @@ class AdminGroupIO
 	{
 		if ($_GET[id])
 		{
-			$group_id = $_GET[id];
-			
-			$template = new HTMLTemplate("base/user/admin/group/detail.html");
-			
-			$group = new Group($group_id);
-			
-			if ($group_id < 100)
-			{
-				$template->set_var("change_name", false);
-			}
-			else
-			{
-				$template->set_var("change_name", true);
-			}
-			
+			$tab_io = new Tab_IO();
+	
 			$paramquery = $_GET;
-			$paramquery[action] = "rename";
+			unset($paramquery['tab']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			$template->set_var("name", $group->get_name());
-			$template->set_var("rename_params", $params);
+			$tab_io->add("detail", "Group Detail", $params, false);
 			
 			
 			$paramquery = $_GET;
-			$paramquery[action] = "add_user";
+			$paramquery['tab'] = "users";
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			$template->set_var("add_user_params", $params);	
+			$tab_io->add("users", "Users", $params, false);
 			
 			
-			$user_array = Group::list_group_releated_users($group_id);
-			$user_content_array = array();
+			$module_dialog_array = ModuleDialog::list_dialogs_by_type("group_admin_detail");
 			
-			$counter = 0;
-			
-			if (is_array($user_array) and count($user_array) >= 1)
+			if (is_array($module_dialog_array) and count($module_dialog_array) >= 1)
 			{
-				foreach($user_array as $key => $value)
+				foreach ($module_dialog_array as $key => $value)
 				{
-					$user = new User($value);
-					
 					$paramquery = $_GET;
-					$paramquery[action] = "delete_user";
-					$paramquery[key] = $value;
-					$params = http_build_query($paramquery,'','&#38;');
+					$paramquery['tab']			= "dialog";
+					$paramquery['sub_dialog']	= $value[internal_name];
+					$params 					= http_build_query($paramquery,'','&#38;');
 					
-					$user_content_array[$counter][username] = $user->get_username();
-					$user_content_array[$counter][fullname] = $user->get_full_name(false);
-					$user_content_array[$counter][delete_params] = $params;
-					
-					$counter++;
+					$tab_io->add($value[internal_name], $value[display_name], $params, false);
 				}
-				$template->set_var("no_user", false);
-			}
-			else
-			{
-				$template->set_var("no_user", true);
 			}
 			
-			$template->set_var("user", $user_content_array);
+			switch($_GET['tab']):
+				
+				case "users":
+					$tab_io->activate("users");
+				break;
 			
-			$paramquery = $_GET;
-			$paramquery[action] = "add_organisation_unit";
-			$params = http_build_query($paramquery,'','&#38;');
+				case "dialog":
+					$tab_io->activate($_GET['sub_dialog']);
+				break;
+				
+				default:
+					$tab_io->activate("detail");
+				break;
 			
-			$template->set_var("add_ou_params", $params);	
-			
-			$organisation_unit_array = OrganisationUnit::list_entries_by_group_id($group_id);
-			$organisation_unit_content_array = array();
-			
-			$counter = 0;
-			
-			if (is_array($organisation_unit_array) and count($organisation_unit_array) >= 1)
-			{
-				foreach($organisation_unit_array as $key => $value)
-				{
-					$organisation_unit = new OrganisationUnit($value);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "delete_organisation_unit";
-					$paramquery[key] = $value;
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$organisation_unit_content_array[$counter][name] = $organisation_unit->get_name();
-					$organisation_unit_content_array[$counter][delete_params] = $params;
-					
-					$counter++;
-				}
-				$template->set_var("no_ou", false);
-			}
-			else
-			{
-				$template->set_var("no_ou", true);
-			}
-			
-			$template->set_var("ou", $organisation_unit_content_array);
+			endswitch;
+				
+			$tab_io->output();
 			
 			
-			$template->output();
+			switch($_GET['tab']):
+
+				case "users":
+					self::detail_users();
+				break;
+				
+				case "dialog":
+					$module_dialog = ModuleDialog::get_by_type_and_internal_name("group_admin_detail", $_GET['sub_dialog']);
+						
+					if (file_exists($module_dialog['class_path']))
+					{
+						require_once($module_dialog['class_path']);
+						
+						if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog['method']))
+						{
+							$module_dialog['class']::$module_dialog[method]($_GET['id']);
+						}
+						else
+						{
+							// Error
+						}
+					}
+					else
+					{
+						// Error
+					}
+				break;
+				
+				default:
+					self::detail_home();
+				break;
+				
+			endswitch;
 		}
 		else
 		{
@@ -299,6 +283,83 @@ class AdminGroupIO
 		}
 	}
 
+	private static function detail_home()
+	{
+		$group_id = $_GET[id];
+		
+		$template = new HTMLTemplate("base/user/admin/group/detail.html");
+		
+		$group = new Group($group_id);
+		
+		if ($group_id < 100)
+		{
+			$template->set_var("change_name", false);
+		}
+		else
+		{
+			$template->set_var("change_name", true);
+		}
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "rename";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("name", $group->get_name());
+		$template->set_var("rename_params", $params);
+
+		$template->output();
+	}
+	
+	private static function detail_users()
+	{
+		$group_id = $_GET[id];
+		$group = new Group($group_id);
+		
+		$template = new HTMLTemplate("base/user/admin/group/detail_user.html");
+		
+		$template->set_var("name", $group->get_name());
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "add_user";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("add_user_params", $params);	
+		
+		
+		$user_array = Group::list_group_releated_users($group_id);
+		$user_content_array = array();
+		
+		$counter = 0;
+		
+		if (is_array($user_array) and count($user_array) >= 1)
+		{
+			foreach($user_array as $key => $value)
+			{
+				$user = new User($value);
+				
+				$paramquery = $_GET;
+				$paramquery[action] = "delete_user";
+				$paramquery[key] = $value;
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$user_content_array[$counter][username] = $user->get_username();
+				$user_content_array[$counter][fullname] = $user->get_full_name(false);
+				$user_content_array[$counter][delete_params] = $params;
+				
+				$counter++;
+			}
+			$template->set_var("no_user", false);
+		}
+		else
+		{
+			$template->set_var("no_user", true);
+		}
+		
+		$template->set_var("user", $user_content_array);
+		
+		$template->output();
+	}
+	
 	/**
 	 * @throws GroupIDMissingException
 	 */
@@ -310,8 +371,8 @@ class AdminGroupIO
 			{
 				if (is_numeric($_POST[user]))
 				{
-					$group = new Group($_POST[user]);
-					if ($group->is_user_in_group($_GET[id]) == true)
+					$group = new Group($_GET[id]);
+					if ($group->is_user_in_group($_POST[user]) == true)
 					{
 						$page_1_passed = false;
 						$error = "This user is already member of the group.";

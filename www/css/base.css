@@ -578,51 +578,99 @@ html,body
 	border-bottom: 1px #D0D0D0 dotted;
 	height: 4px;
 }
-.AssistantButton,
-.AssistantButtonDisabled
-{
-	background: white;
-	border: 1px #A0A0A0 solid;
-	
-	color: #222222;
-	
-	font: bold 13px Arial, Helvetica, sans-serif;
-	
-	text-shadow: -1px -1px #D0D0D0;
-	
-	background-clip: padding-box;
-    background-color: #FFFFFF;
-    background-image: -moz-linear-gradient(center top , #FFFFFF 0%, #CECECE 100%);
-    border-color: #B7B7B7;
-    
-    box-shadow: 0 0 0.1em 1px rgba(255, 255, 255, 0.867) inset;
-    text-shadow: 0 1px 1px #FFFFFF;
-    
-    border-radius: 6px 6px 6px 6px;
-    border-width: 1px;
-    
-    line-height: 15px;
-    margin: 0 2px;
-    padding: 4px 12px;
-    
-    vertical-align: middle;
-    
-    border-style: solid;
-    cursor: pointer;
-    display: block;
-    
-    overflow: visible;
-    text-decoration: none;
-    width: auto;
-}
-.AssistantButton:hover
-{
-	background-color: #E0E0E0;
-}
 #AssistantLoading
 {
 	text-align: center;	
 }
+
+
+.Button,
+.ButtonDisabled,
+.Form button,
+.ListButton,
+.ListButtonDisabled
+{
+	display: block;
+	cursor: pointer;
+
+	background: rgb(255,255,255);
+	background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(206,206,206,1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(206,206,206,1)));
+	background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(206,206,206,1) 100%);
+	background: -o-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(206,206,206,1) 100%);
+	background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(206,206,206,1) 100%); 
+	background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(206,206,206,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#cecece',GradientType=0 );
+    
+    color: #333333 !important;
+    font: bold 13px Arial, Helvetica, sans-serif;
+    text-shadow: 0 1px 1px #FFFFFF;
+    line-height: 15px;
+    
+    border: 1px #B7B7B7 solid;
+    border-radius: 6px 6px 6px 6px;
+    border-width: 1px;
+    box-shadow: 0 0 0.1em 1px rgba(255, 255, 255, 0.867) inset;
+
+    overflow: visible;
+    text-decoration: none;
+}
+.Button:hover,
+.ButtonDisabled:hover,
+.Form button:hover,
+.ListButton:hover,
+.ListButtonDisabled:hover
+{
+	background: rgb(235,235,235);
+	background: -moz-linear-gradient(top,  rgba(235,235,235,1) 0%, rgba(170,170,170,1) 100%); 
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(235,235,235,1)), color-stop(100%,rgba(170,170,170,1)));
+	background: -webkit-linear-gradient(top,  rgba(235,235,235,1) 0%,rgba(170,170,170,1) 100%); 
+	background: -o-linear-gradient(top,  rgba(235,235,235,1) 0%,rgba(170,170,170,1) 100%);
+	background: -ms-linear-gradient(top,  rgba(235,235,235,1) 0%,rgba(170,170,170,1) 100%);
+	background: linear-gradient(to bottom,  rgba(235,235,235,1) 0%,rgba(170,170,170,1) 100%); 
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ebebeb', endColorstr='#aaaaaa',GradientType=0 );
+	
+	color: #222222 !important;
+	text-shadow: 0 1px 1px #EEEEEE;
+	box-shadow: 0 0 0.1em 1px rgba(255, 255, 255, 0.3) inset;
+}
+.ButtonDisabled,
+.ListButtonDisabled
+{
+	color: #888888;	
+}
+.Button,
+.ButtonDisabled
+{
+	margin: 0 2px;
+    padding: 4px 12px;
+}
+.Form button
+{
+	margin: 0 2px;
+    padding: 4px 12px;
+    float: left;
+}	
+.ListButton
+{
+    margin: 0 5px 0 0;
+    padding: 2px 3px;
+    float: left;
+}
+.ListButton img
+{
+	border: 0;
+	margin: 0;
+	float: left;
+	padding: 1px;
+}
+.ListButton div
+{
+	display: block;
+	float: left;
+	padding: 2px 2px 0 2px;
+}
+
 
 .LoginBox
 {

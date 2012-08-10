@@ -128,10 +128,6 @@ class ProjectCommon_IO
 			 
 				$tab_io->add("admin", "Project-Administration", $params, false, false);
 			}
-			else
-			{
-				$tab_io->add("admin", "Project-Administration", $params, false, true);
-			}
 		
 			if ($_GET[run] != "item_add" and $_GET[run] != "item_list")
 			{

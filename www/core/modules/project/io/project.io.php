@@ -60,6 +60,15 @@ class ProjectIO
 			$template->set_var("title","Projects of ".$user->get_username());
 		}
 	
+		$paramquery = array();
+		$paramquery['username'] = $_GET['username'];
+		$paramquery['session_id'] = $_GET['session_id'];
+		$paramquery['nav'] = "project";
+		$paramquery['run'] = "new";
+		$params = http_build_query($paramquery, '', '&#38;');
+		
+		$template->set_var("new_project_params", $params);
+		
 		$template->set_var("list", $list->get_list());
 	
 		$template->output();

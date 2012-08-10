@@ -668,7 +668,7 @@ class SystemHandler implements SystemHandlerInterface
 									if ($module_dialog_id != null)
 									{
 										$base_module_file = new BaseModuleFile_Access($module_dialog_id);
-										$base_module_file->set_checksum(md5_file($module_dialog));
+										$base_module_file->set_checksum(md5_file($module_dialog_file));
 									}
 									else
 									{

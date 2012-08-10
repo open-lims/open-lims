@@ -1,16 +1,23 @@
 <!-- CONTAINER BEGIN ("Project Tasks") -->
 
-<div class='boxIconBar'>
-
-<div class='boxIconElement'><img src='images/icons/list.png' alt='' />&nbsp;<a href='index.php?[[TABLE_VIEW_PARAMS]]'>Table View</a></div>
-
-<div class='boxIconElement'><img src='images/icons/penguin.png' alt='' />&nbsp;<a href='index.php?[[GANTT_VIEW_PARAMS]]'>Gantt View</a></div>
-		
-<div class='boxIconElement'><img src='images/icons/month.png' alt='' />&nbsp;<a href='index.php?[[CAL_VIEW_PARAMS]]'>Calendar View</a></div>
-						
-<div class='boxIconClear'></div>
-
+<div id='ListButtonBar'>
+	<a href='index.php?[[TABLE_VIEW_PARAMS]]' class='ListButton'>
+	<img src='images/icons/list.png' alt='' />
+	<div>Table View</div>
+	</a>
+	
+	<a href='index.php?[[GANTT_VIEW_PARAMS]]' class='ListButton'>
+	<img src='images/icons/penguin.png' alt='' />
+	<div>Gantt View</div>
+	</a>
+	
+	<a href='index.php?[[CAL_VIEW_PARAMS]]' class='ListButton'>
+	<img src='images/icons/month.png' alt='' />
+	<div>Calendar View</div>
+	</a>
 </div>
+<div id='ListButtonBarClear'></div>
+
 
 [[CONTENT]]
 
