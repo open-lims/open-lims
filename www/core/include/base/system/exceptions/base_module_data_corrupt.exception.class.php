@@ -25,7 +25,7 @@
  * Module Data Corrupt Exception
  * @package base
  */
-class ModuleDataCorruptException extends BaseModuleException
+class BaseModuleDataCorruptException extends BaseModuleException
 {
 	function __construct()
     {

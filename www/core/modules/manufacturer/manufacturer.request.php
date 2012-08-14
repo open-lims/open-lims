@@ -29,36 +29,45 @@ class ManufacturerRequest
 {
 	public static function ajax_handler($alias)
 	{
-		switch($_GET[run]):
+		switch($_GET['run']):
 	
 			case "exist_name":
 				require_once("ajax/manufacturer.ajax.php");
-				echo ManufacturerAjax::exist_name($_POST[name]);
+				echo ManufacturerAjax::exist_name($_POST['name']);
 			break;
 			
 			case "add_entry":
 				require_once("ajax/manufacturer.ajax.php");
-				echo ManufacturerAjax::add_entry($_POST[name]);
+				echo ManufacturerAjax::add_entry($_POST['name']);
 			break;
 		
 			case "get_number_of_entries":
 				require_once("ajax/manufacturer.ajax.php");
-				echo ManufacturerAjax::get_number_of_entries($_POST[string]);
+				echo ManufacturerAjax::get_number_of_entries($_POST['string']);
 			break;
 			
 			case "get_name":
 				require_once("ajax/manufacturer.ajax.php");
-				echo ManufacturerAjax::get_name($_POST[id]);
+				echo ManufacturerAjax::get_name($_POST['id']);
 			break;
 			
 			case "get_next_entries":
 				require_once("ajax/manufacturer.ajax.php");
-				echo ManufacturerAjax::get_next_entries($_POST[number], $_POST[start], $_POST[string]);
+				echo ManufacturerAjax::get_next_entries($_POST['number'], $_POST['start'], $_POST['string']);
 			break;
 			
 			case "list_manufacturers":
 				require_once("ajax/manufacturer.ajax.php");
-				echo ManufacturerAjax::list_manufacturers($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo ManufacturerAjax::list_manufacturers(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['css_page_id'],  
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
 			break;
 			
 			case "count_manufacturers":
@@ -68,7 +77,7 @@ class ManufacturerRequest
 			
 			case "delete":
 				require_once("ajax/manufacturer.ajax.php");
-				echo ManufacturerAjax::delete($_POST[id]);
+				echo ManufacturerAjax::delete($_POST['id']);
 			break;
 				
 		endswitch;

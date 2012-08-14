@@ -25,7 +25,7 @@
  * Module Dialog Method Not Found Exception
  * @package base
  */
-class ModuleDialogMethodNotFoundException extends BaseModuleDialogException
+class BaseModuleDialogMethodNotFoundException extends BaseModuleDialogException
 {
 	function __construct()
     {

@@ -616,22 +616,22 @@ class ProjectRequest
 								}
 								else
 								{
-									throw new ModuleDialogMethodNotFoundException();
+									throw new BaseModuleDialogMethodNotFoundException();
 								}
 							}
 							else
 							{
-								throw new ModuleDialogClassNotFoundException();
+								throw new BaseModuleDialogClassNotFoundException();
 							}
 						}
 						else
 						{
-							throw new ModuleDialogFileNotFoundException();
+							throw new BaseModuleDialogFileNotFoundException();
 						}
 					}
 					else
 					{
-						throw new ModuleDialogMissingException();
+						throw new BaseModuleDialogMissingException();
 					}
 				}
 				else
@@ -695,27 +695,27 @@ class ProjectRequest
 									}
 									else
 									{
-										throw new ModuleDialogMethodNotFoundException();
+										throw new BaseModuleDialogMethodNotFoundException();
 									}
 								}
 								else
 								{
-									throw new ModuleDialogClassNotFoundException();
+									throw new BaseModuleDialogClassNotFoundException();
 								}
 							}
 							else
 							{
-								throw new ModuleDialogFileNotFoundException();
+								throw new BaseModuleDialogFileNotFoundException();
 							}
 						}
 						else
 						{
-							throw new ModuleDialogNotFoundException();
+							throw new BaseModuleDialogNotFoundException();
 						}
 					}
 					else
 					{
-						throw new ModuleDialogMissingException();
+						throw new BaseModuleDialogMissingException();
 					}
 				}
 				else
@@ -790,82 +790,7 @@ class ProjectRequest
 					throw new ProjectSecurityAccessDeniedException();
 				}
 			break;
-			
-			// Common Dialogs
-			case("common_dialog"):
-				if ($_GET['dialog'])
-				{
-					$module_dialog = ModuleDialog::get_by_type_and_internal_name("common_dialog", $_GET['dialog']);
-					
-					if (file_exists($module_dialog['class_path']))
-					{
-						require_once($module_dialog['class_path']);
 						
-						if (class_exists($module_dialog['class']))
-						{
-							if (method_exists($module_dialog['class'], $module_dialog['method']))
-							{
-								$module_dialog['class']::$module_dialog['method']();
-							}
-							else
-							{
-								throw new ModuleDialogMethodNotFoundException();
-							}
-						}
-						else
-						{
-							throw new ModuleDialogClassNotFoundException();
-						}
-					}
-					else
-					{
-						throw new ModuleDialogFileNotFoundException();
-					}
-				}
-				else
-				{
-					throw new ModuleDialogMissingException();
-				}
-			break;
-			
-			// Search
-			case("search"):
-				if ($_GET['dialog'])
-				{
-					$module_dialog = ModuleDialog::get_by_type_and_internal_name("search", $_GET['dialog']);
-					
-					if (file_exists($module_dialog['class_path']))
-					{
-						require_once($module_dialog['class_path']);
-						
-						if (class_exists($module_dialog['class']))
-						{
-							if (method_exists($module_dialog['class'], $module_dialog['method']))
-							{
-								$module_dialog['class']::$module_dialog['method']();
-							}
-							else
-							{
-								throw new ModuleDialogMethodNotFoundException();
-							}
-						}
-						else
-						{
-							throw new ModuleDialogClassNotFoundException();
-						}
-					}
-					else
-					{
-						throw new ModuleDialogFileNotFoundException();
-					}
-				}
-				else
-				{
-					throw new ModuleDialogMissingException();
-				}
-			break;
-			
-			
 			// Extension
 			/**
 			 * @todo type filter
@@ -883,71 +808,85 @@ class ProjectRequest
 						$main_file = constant("EXTENSION_DIR")."/".$extension->get_folder()."/".$extension->get_main_file();
 						$main_class = $extension->get_class();
 						
-						require_once($main_file);
-						
-						$project = new Project($_GET['project_id']);
-						$project_item = new ProjectItem($_GET['project_id']);
-						$project_status_requirements = $project->get_current_status_requirements();
-						
-						if (is_array($project_status_requirements) and count($project_status_requirements) >= 1)
+						if (file_exists($main_file))
 						{
-							foreach($project_status_requirements as $key => $value)
-							{
-								if($value['element_type'] == "extension" and $value['extension'] == $_GET['extension'])
-								{
-									if (is_array($value['filter']) and count($value['filter']) >= 1)
-									{
-										$filter_array = $value['filter'];
-									}
-									else
-									{
-										$filter_array = null;
-									}
-									break;
-								}
-							}
-						}
-						else
-						{
-							throw new ProjectStatusWithoutExtensionException();
-						}
-					
-						
-						if ($filter_array)
-						{
-							$item_array = array();
+							require_once($main_file);
 							
-							foreach($filter_array as $key => $value)
+							if (class_exists($module_dialog['class']))
 							{
-								if (is_numeric($value['status']))
+								$project = new Project($_GET['project_id']);
+								$project_item = new ProjectItem($_GET['project_id']);
+								$project_status_requirements = $project->get_current_status_requirements();
+								
+								if (is_array($project_status_requirements) and count($project_status_requirements) >= 1)
 								{
-									$item_array = array_merge($item_array, $project_item->get_project_status_items($value['status'], true));
+									foreach($project_status_requirements as $key => $value)
+									{
+										if($value['element_type'] == "extension" and $value['extension'] == $_GET['extension'])
+										{
+											if (is_array($value['filter']) and count($value['filter']) >= 1)
+											{
+												$filter_array = $value['filter'];
+											}
+											else
+											{
+												$filter_array = null;
+											}
+											break;
+										}
+									}
 								}
+								else
+								{
+									throw new ProjectStatusWithoutExtensionException();
+								}
+							
+								
+								if ($filter_array)
+								{
+									$item_array = array();
+									
+									foreach($filter_array as $key => $value)
+									{
+										if (is_numeric($value['status']))
+										{
+											$item_array = array_merge($item_array, $project_item->get_project_status_items($value['status'], true));
+										}
+									}
+								}
+								else
+								{
+									$item_array = $project_item->get_project_items(true);
+								}					
+								
+								$event_identifier = uniqid("", true);
+								
+								if ($session->is_value("PROJECT_EXTENSION_EVENT_IDENTIFIER_ARRAY"))
+								{
+									$project_extension_event_identifier_array = $session->read_value("PROJECT_EXTENSION_EVENT_IDENTIFIER_ARRAY");
+									$project_extension_event_identifier_array[$event_identifier] = $_GET['project_id'];
+								}
+								else
+								{
+									$project_extension_event_identifier_array = array();
+									$project_extension_event_identifier_array[$event_identifier] = $_GET['project_id'];
+								}
+								
+								$session->write_value("PROJECT_EXTENSION_EVENT_IDENTIFIER_ARRAY", $project_extension_event_identifier_array);
+								$main_class::set_event_identifier($event_identifier);
+								
+								$main_class::set_target_folder_id(ProjectStatusFolder::get_folder_by_project_id_and_project_status_id($_GET['project_id'], $project->get_current_status_id()));
+								$main_class::push_data($item_array);
+							}
+							else
+							{
+								throw new BaseExtensionClassNotFoundException();
 							}
 						}
 						else
 						{
-							$item_array = $project_item->get_project_items(true);
-						}					
-						
-						$event_identifier = uniqid("", true);
-						
-						if ($session->is_value("PROJECT_EXTENSION_EVENT_IDENTIFIER_ARRAY"))
-						{
-							$project_extension_event_identifier_array = $session->read_value("PROJECT_EXTENSION_EVENT_IDENTIFIER_ARRAY");
-							$project_extension_event_identifier_array[$event_identifier] = $_GET['project_id'];
+							throw new BaseExtensionFileNotFoundException();
 						}
-						else
-						{
-							$project_extension_event_identifier_array = array();
-							$project_extension_event_identifier_array[$event_identifier] = $_GET['project_id'];
-						}
-						
-						$session->write_value("PROJECT_EXTENSION_EVENT_IDENTIFIER_ARRAY", $project_extension_event_identifier_array);
-						$main_class::set_event_identifier($event_identifier);
-						
-						$main_class::set_target_folder_id(ProjectStatusFolder::get_folder_by_project_id_and_project_status_id($_GET['project_id'], $project->get_current_status_id()));
-						$main_class::push_data($item_array);
 					}
 					else
 					{
@@ -960,6 +899,17 @@ class ProjectRequest
 				}
 			break;
 			
+			// Common Dialogs
+			case("common_dialog"):
+				require_once("core/modules/base/common.request.php");
+				CommonRequest::common_dialog();
+			break;
+				
+			// Search
+			case("search"):
+				require_once("core/modules/base/common.request.php");
+				CommonRequest::search_dialog();
+			break;
 			
 			// Default
 			

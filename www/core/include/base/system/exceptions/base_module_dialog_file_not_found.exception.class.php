@@ -25,7 +25,7 @@
  * Module Dialog File Not Found Exception
  * @package base
  */
-class ModuleDialogFileNotFoundException extends BaseModuleDialogException
+class BaseModuleDialogFileNotFoundException extends BaseModuleDialogException
 {
 	function __construct()
     {

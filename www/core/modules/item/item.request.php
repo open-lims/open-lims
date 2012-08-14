@@ -29,18 +29,27 @@ class ItemRequest
 {
 	public static function ajax_handler($alias)
 	{
-		switch($_GET[run]):
+		switch($_GET['run']):
 			
 			// Search
 			
 			case "search_fulltext_list_items":
 				require_once("ajax/item_fulltext_search.ajax.php");
-				echo ItemFulltextSearchAjax::list_items($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo ItemFulltextSearchAjax::list_items(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
 			break;
 			
 			case "search_fulltext_count_items":
 				require_once("ajax/item_fulltext_search.ajax.php");
-				echo ItemFulltextSearchAjax::count_items($_POST[argument_array]);
+				echo ItemFulltextSearchAjax::count_items($_POST['argument_array']);
 			break;
 
 		endswitch;

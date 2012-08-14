@@ -25,7 +25,7 @@
  * Event Handler Creation Failed Exception
  * @package base
  */
-class EventHandlerCreationFailedException extends BaseEventHandlerException
+class BaseEventHandlerCreationFailedException extends BaseEventHandlerException
 {
     function __construct()
     {

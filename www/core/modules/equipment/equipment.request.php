@@ -29,36 +29,54 @@ class EquipmentRequest
 {	
 	public static function ajax_handler($alias)
 	{
-		switch($_GET[run]):
+		switch($_GET['run']):
 			
 			case "list_equipment_items":
 				require_once("ajax/equipment.ajax.php");
-				echo EquipmentAjax::list_equipment_items($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo EquipmentAjax::list_equipment_items(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
 			break;
 			
 			case "count_equipment_items":
 				require_once("ajax/equipment.ajax.php");
-				echo EquipmentAjax::count_equipment_items($_POST[argument_array]);
+				echo EquipmentAjax::count_equipment_items($_POST['argument_array']);
 			break;
 			
 			case "list_organisation_unit_related_equipment":
 				require_once("ajax/equipment.ajax.php");
-				echo EquipmentAjax::list_organisation_unit_related_equipment($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo EquipmentAjax::list_organisation_unit_related_equipment(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
 			break;
 			
 			case "count_organisation_unit_related_equipment":
 				require_once("ajax/equipment.ajax.php");
-				echo EquipmentAjax::count_organisation_unit_related_equipment($_POST[argument_array]);
+				echo EquipmentAjax::count_organisation_unit_related_equipment($_POST['argument_array']);
 			break;
 			
 			case "equipment_add_as_item_window":
 				require_once("ajax/equipment.ajax.php");
-				echo EquipmentAjax::add_as_item_window($_POST[get_array], $_POST[type_array], $_POST[category_array]);
+				echo EquipmentAjax::add_as_item_window($_POST['get_array'], $_POST['type_array'], $_POST['category_array']);
 			break;
 			
 			case "equipment_add_as_item":
 				require_once("ajax/equipment.ajax.php");
-				echo EquipmentAjax::add_as_item($_POST[get_array], $_POST[type_id]);
+				echo EquipmentAjax::add_as_item($_POST['get_array'], $_POST['type_id']);
 			break;
 				
 		endswitch;

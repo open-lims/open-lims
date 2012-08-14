@@ -44,16 +44,13 @@ class AdminRequest
 		
 	}
 	
-	/**
-	 * @todo IMPORTANT: remove bad dependency
-	 */
 	public static function io_handler($alias)
 	{
 		global $user;
 		
 		if ($user->is_admin())
 		{
-			switch($_GET[run]):
+			switch($_GET['run']):
 				
 				case "general_admin":
 					require_once("core/modules/base/io/admin/admin_general.io.php");
@@ -97,91 +94,112 @@ class AdminRequest
 				
 				// Organisation
 				case("organisation"):
-					if ($_GET[dialog])
+					if ($_GET['dialog'])
 					{
-						$module_dialog = ModuleDialog::get_by_type_and_internal_name("organisation_admin", $_GET[dialog]);
+						$module_dialog = ModuleDialog::get_by_type_and_internal_name("organisation_admin", $_GET['dialog']);
 						
-						if (file_exists($module_dialog[class_path]))
+						if (file_exists($module_dialog['class_path']))
 						{
-							require_once($module_dialog[class_path]);
+							require_once($module_dialog['class_path']);
 							
-							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+							if (class_exists($module_dialog['class']))
 							{
-								$module_dialog['class']::$module_dialog[method]($sql);
+								if (method_exists($module_dialog['class'], $module_dialog['method']))
+								{
+									$module_dialog['class']::$module_dialog['method']($sql);
+								}
+								else
+								{
+									throw new BaseModuleDialogMethodNotFoundException();
+								}
 							}
 							else
 							{
-								// Error
+								throw new BaseModuleDialogClassNotFoundException();
 							}
 						}
 						else
 						{
-							// Error
+							throw new BaseModuleDialogFileNotFoundException();
 						}
 					}
 					else
 					{
-						// error
+						throw new BaseModuleDialogMissingException();
 					}
 				break;
 				
 				// Modules
 				case("module"):
-					if ($_GET[dialog])
+					if ($_GET['dialog'])
 					{
-						$module_dialog = ModuleDialog::get_by_type_and_internal_name("module_admin", $_GET[dialog]);
+						$module_dialog = ModuleDialog::get_by_type_and_internal_name("module_admin", $_GET['dialog']);
 						
-						if (file_exists($module_dialog[class_path]))
+						if (file_exists($module_dialog['class_path']))
 						{
-							require_once($module_dialog[class_path]);
+							require_once($module_dialog['class_path']);
 							
-							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+							if (class_exists($module_dialog['class']))
 							{
-								$module_dialog['class']::$module_dialog[method]($sql);
+								if (method_exists($module_dialog['class'], $module_dialog['method']))
+								{
+									$module_dialog['class']::$module_dialog['method']($sql);
+								}
+								else
+								{
+									throw new BaseModuleDialogMethodNotFoundException();
+								}
 							}
 							else
 							{
-								// Error
+								throw new BaseModuleDialogClassNotFoundException();
 							}
 						}
 						else
 						{
-							// Error
+							throw new BaseModuleDialogFileNotFoundException();
 						}
 					}
 					else
 					{
-						// error
+						throw new BaseModuleDialogMissingException();
 					}
 				break;
 				
 				// Module Value Change
 				case("module_value_change"):
-					if ($_GET[dialog])
+					if ($_GET['dialog'])
 					{
-						$module_dialog = ModuleDialog::get_by_type_and_internal_name("module_value_change", $_GET[dialog]);
+						$module_dialog = ModuleDialog::get_by_type_and_internal_name("module_value_change", $_GET['dialog']);
 						
-						if (file_exists($module_dialog[class_path]))
+						if (file_exists($module_dialog['class_path']))
 						{
-							require_once($module_dialog[class_path]);
+							require_once($module_dialog['class_path']);
 							
-							if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+							if (class_exists($module_dialog['class']))
 							{
-								$module_dialog['class']::$module_dialog[method]($sql);
+								if (method_exists($module_dialog['class'], $module_dialog['method']))
+								{
+									$module_dialog['class']::$module_dialog['method']($sql);
+								}
+								else
+								{
+									throw new BaseModuleDialogMethodNotFoundException();
+								}
 							}
 							else
 							{
-								// Error
+								throw new BaseModuleDialogClassNotFoundException();
 							}
 						}
 						else
 						{
-							// Error
+							throw new BaseModuleDialogFileNotFoundException();
 						}
 					}
 					else
 					{
-						// error
+						throw new BaseModuleDialogMissingException();
 					}
 				break;
 				
@@ -194,8 +212,7 @@ class AdminRequest
 		}
 		else
 		{
-			// Error
+			throw new BaseUserAccessDeniedException();
 		}
-		
 	}
 }

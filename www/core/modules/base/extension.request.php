@@ -41,9 +41,23 @@ class ExtensionRequest
 			$main_file = constant("EXTENSION_DIR")."/".$extension->get_folder()."/".$extension->get_main_file();
 			$main_class = $extension->get_class();
 			
-			require_once($main_file);
-			
-			$main_class::main();
+			if (file_exists($main_file))
+			{
+				require_once($main_file);
+				
+				if (class_exists($module_dialog['class']))
+				{			
+					$main_class::main();
+				}
+				else
+				{
+					throw new BaseExtensionClassNotFoundException();
+				}
+			}
+			else
+			{
+				throw new BaseExtensionFileNotFoundException();
+			}
 		}
 		else
 		{

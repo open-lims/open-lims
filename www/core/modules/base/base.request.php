@@ -29,7 +29,7 @@ class BaseRequest
 {	
 	public static function ajax_handler($alias)
 	{
-		switch($_GET[run]):
+		switch($_GET['run']):
 
 			case "cron":
 				require_once("ajax/cron.ajax.php");
@@ -38,7 +38,7 @@ class BaseRequest
 		
 			case "login":
 				require_once("ajax/login.ajax.php");
-				echo LoginAjax::login($_POST[username], $_POST[password], $_POST[language]);
+				echo LoginAjax::login($_POST['username'], $_POST['password'], $_POST['language']);
 			break;
 			
 			case "logout":
@@ -74,22 +74,40 @@ class BaseRequest
 			
 			case "search_user_list_users":
 				require_once("ajax/user_search.ajax.php");
-				echo UserSearchAjax::list_users($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo UserSearchAjax::list_users(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
 			break;
 			
 			case "search_user_count_users":
 				require_once("ajax/user_search.ajax.php");
-				echo UserSearchAjax::count_users($_POST[argument_array]);
+				echo UserSearchAjax::count_users($_POST['argument_array']);
 			break;
 			
 			case "search_user_list_groups":
 				require_once("ajax/user_search.ajax.php");
-				echo UserSearchAjax::list_groups($_POST[column_array], $_POST[argument_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo UserSearchAjax::list_groups(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
 			break;
 			
 			case "search_user_count_groups":
 				require_once("ajax/user_search.ajax.php");
-				echo UserSearchAjax::count_groups($_POST[argument_array]);
+				echo UserSearchAjax::count_groups($_POST['argument_array']);
 			break;
 			
 			
@@ -110,7 +128,15 @@ class BaseRequest
 			
 			case "admin_list_includes":
 				require_once("ajax/admin/admin_base_include.ajax.php");
-				echo AdminBaseIncludeAjax::list_includes($_POST[column_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo AdminBaseIncludeAjax::list_includes(
+						$_POST['column_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
 			break;
 			
 			case "admin_count_includes":
@@ -120,7 +146,16 @@ class BaseRequest
 			
 			case "admin_list_modules":
 				require_once("ajax/admin/admin_base_module.ajax.php");
-				echo AdminBaseModuleAjax::list_modules($_POST[column_array], $_POST[get_array], $_POST[css_page_id], $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo AdminBaseModuleAjax::list_modules(
+						$_POST['column_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
 			break;
 			
 			case "admin_count_modules":
@@ -130,152 +165,279 @@ class BaseRequest
 			
 			case "admin_list_navigation":
 				require_once("ajax/admin/admin_base_navigation.ajax.php");
-				echo AdminBaseNavigationAjax::list_navigation($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo AdminBaseNavigationAjax::list_navigation(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
 			break;
 			
 			case "admin_count_navigation":
 				require_once("ajax/admin/admin_base_navigation.ajax.php");
-				echo AdminBaseNavigationAjax::count_navigation($_POST[argument_array]);
+				echo AdminBaseNavigationAjax::count_navigation($_POST['argument_array']);
 			break;
 			
 			case "admin_list_registry":
 				require_once("ajax/admin/admin_base_registry.ajax.php");
-				echo AdminBaseRegistryAjax::list_registry($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo AdminBaseRegistryAjax::list_registry(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
 			break;
 			
 			case "admin_count_registry":
 				require_once("ajax/admin/admin_base_registry.ajax.php");
-				echo AdminBaseRegistryAjax::count_registry($_POST[argument_array]);
+				echo AdminBaseRegistryAjax::count_registry($_POST['argument_array']);
 			break;
 			
 			case "admin_registry_edit":
 				require_once("ajax/admin/admin_base_registry.ajax.php");
-				echo AdminBaseRegistryAjax::edit($_GET[id]);
+				echo AdminBaseRegistryAjax::edit($_GET['id']);
 			break;
 			
 			case "admin_registry_edit_handler":
 				require_once("ajax/admin/admin_base_registry.ajax.php");
-				echo AdminBaseRegistryAjax::edit_handler($_POST[id], $_POST[value]);
+				echo AdminBaseRegistryAjax::edit_handler($_POST['id'], $_POST['value']);
 			break;
 			
 			case "admin_list_service":
 				require_once("ajax/admin/admin_base_service.ajax.php");
-				echo AdminBaseServiceAjax::list_service($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo AdminBaseServiceAjax::list_service(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
 			break;
 			
 			case "admin_count_service":
 				require_once("ajax/admin/admin_base_service.ajax.php");
-				echo AdminBaseServiceAjax::count_service($_POST[argument_array]);
+				echo AdminBaseServiceAjax::count_service($_POST['argument_array']);
 			break;
 			
 			case "admin_service_start":
 				require_once("ajax/admin/admin_base_service.ajax.php");
-				echo AdminBaseServiceAjax::start($_POST[id]);
+				echo AdminBaseServiceAjax::start($_POST['id']);
 			break;
 			
 			case "admin_service_stop":
 				require_once("ajax/admin/admin_base_service.ajax.php");
-				echo AdminBaseServiceAjax::stop($_POST[id]);
+				echo AdminBaseServiceAjax::stop($_POST['id']);
 			break;
 			
 			case "admin_list_users":
 				require_once("ajax/admin/admin_user.ajax.php");
-				echo AdminUserAjax::list_users($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo AdminUserAjax::list_users(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
 			break;
 			
 			case "admin_count_users":
 				require_once("ajax/admin/admin_user.ajax.php");
-				echo AdminUserAjax::count_users($_POST[argument_array]);
+				echo AdminUserAjax::count_users($_POST['argument_array']);
 			break;
 			
 			case "admin_list_groups":
 				require_once("ajax/admin/admin_group.ajax.php");
-				echo AdminGroupAjax::list_groups($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo AdminGroupAjax::list_groups(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
 			break;
 			
 			case "admin_count_groups":
 				require_once("ajax/admin/admin_group.ajax.php");
-				echo AdminGroupAjax::count_groups($_POST[argument_array]);
+				echo AdminGroupAjax::count_groups($_POST['argument_array']);
 			break;
 			
 			case "admin_list_system_log":
 				require_once("ajax/admin/admin_system_log.ajax.php");
-				echo AdminSystemLogAjax::list_system_log($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo AdminSystemLogAjax::list_system_log(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
 			break;
 			
 			case "admin_count_system_log":
 				require_once("ajax/admin/admin_system_log.ajax.php");
-				echo AdminSystemLogAjax::count_system_log($_POST[argument_array]);
+				echo AdminSystemLogAjax::count_system_log($_POST['argument_array']);
 			break;
 			
 			case "admin_general_list_languages":
 				require_once("ajax/admin/admin_general.ajax.php");
-				echo AdminGeneralAjax::list_languages($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo AdminGeneralAjax::list_languages(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
 			break;
 			
 			case "admin_general_count_languages":
 				require_once("ajax/admin/admin_general.ajax.php");
-				echo AdminGeneralAjax::count_languages($_POST[argument_array]);
+				echo AdminGeneralAjax::count_languages($_POST['argument_array']);
 			break;
 			
 			case "admin_general_list_timezones":
 				require_once("ajax/admin/admin_general.ajax.php");
-				echo AdminGeneralAjax::list_timezones($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo AdminGeneralAjax::list_timezones(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
 			break;
 			
 			case "admin_general_count_timezones":
 				require_once("ajax/admin/admin_general.ajax.php");
-				echo AdminGeneralAjax::count_timezones($_POST[argument_array]);
+				echo AdminGeneralAjax::count_timezones($_POST['argument_array']);
 			break;
 			
 			case "admin_general_list_paper_sizes":
 				require_once("ajax/admin/admin_general.ajax.php");
-				echo AdminGeneralAjax::list_paper_sizes($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo AdminGeneralAjax::list_paper_sizes(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
 			break;
 			
 			case "admin_general_count_paper_sizes":
 				require_once("ajax/admin/admin_general.ajax.php");
-				echo AdminGeneralAjax::count_paper_sizes($_POST[argument_array]);
+				echo AdminGeneralAjax::count_paper_sizes($_POST['argument_array']);
 			break;
 			
 			case "admin_general_add_paper_size":
 				require_once("ajax/admin/admin_general.ajax.php");
-				echo AdminGeneralAjax::add_paper_size($_POST[name], $_POST[width], $_POST[height], $_POST[margin_left], $_POST[margin_right], $_POST[margin_top], $_POST[margin_bottom]);
+				echo AdminGeneralAjax::add_paper_size(
+						$_POST['name'], 
+						$_POST['width'], 
+						$_POST['height'], 
+						$_POST['margin_left'], 
+						$_POST['margin_right'], 
+						$_POST['margin_top'], 
+						$_POST['margin_bottom']
+						);
 			break;
 			
 			case "admin_general_get_paper_size":
 				require_once("ajax/admin/admin_general.ajax.php");
-				echo AdminGeneralAjax::get_paper_size($_POST[id]);
+				echo AdminGeneralAjax::get_paper_size($_POST['id']);
 			break;
 			
 			case "admin_general_set_paper_size":
 				require_once("ajax/admin/admin_general.ajax.php");
-				echo AdminGeneralAjax::set_paper_size($_POST[id], $_POST[name], $_POST[width], $_POST[height], $_POST[margin_left], $_POST[margin_right], $_POST[margin_top], $_POST[margin_bottom]);
+				echo AdminGeneralAjax::set_paper_size(
+						$_POST['id'], 
+						$_POST['name'], 
+						$_POST['width'], 
+						$_POST['height'], 
+						$_POST['margin_left'], 
+						$_POST['margin_right'], 
+						$_POST['margin_top'], 
+						$_POST['margin_bottom']
+						);
 			break;
 			
 			case "admin_general_delete_paper_size":
 				require_once("ajax/admin/admin_general.ajax.php");
-				echo AdminGeneralAjax::delete_paper_size($_POST[id]);
+				echo AdminGeneralAjax::delete_paper_size($_POST['id']);
 			break;
 			
 			case "admin_general_list_measuring_units":
 				require_once("ajax/admin/admin_general.ajax.php");
-				echo AdminGeneralAjax::list_measuring_units($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo AdminGeneralAjax::list_measuring_units(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'],  
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
 			break;
 			
 			case "admin_general_count_measuring_units":
 				require_once("ajax/admin/admin_general.ajax.php");
-				echo AdminGeneralAjax::count_measuring_units($_POST[argument_array]);
+				echo AdminGeneralAjax::count_measuring_units($_POST['argument_array']);
 			break;
 			
 			case "admin_general_list_currencies":
 				require_once("ajax/admin/admin_general.ajax.php");
-				echo AdminGeneralAjax::list_currencies($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id],  $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo AdminGeneralAjax::list_currencies(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
 			break;
 			
 			case "admin_general_count_currencies":
 				require_once("ajax/admin/admin_general.ajax.php");
-				echo AdminGeneralAjax::count_currencies($_POST[argument_array]);
+				echo AdminGeneralAjax::count_currencies($_POST['argument_array']);
 			break;
 			
 		endswitch;
@@ -287,21 +449,8 @@ class BaseRequest
 		
 		if ($_GET['run'] == "common_dialog" and $_GET[dialog])
 		{
-			$module_dialog = ModuleDialog::get_by_type_and_internal_name("common_dialog", $_GET[dialog]);
-			
-			if (file_exists($module_dialog[class_path]))
-			{
-				require_once($module_dialog[class_path]);
-				
-				if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
-				{
-					$module_dialog['class']::$module_dialog[method]();
-				}
-			}
-			else
-			{
-				// Error
-			}
+			require_once("common.request.php");
+			CommonRequest::common_dialog();
 		}
 		else
 		{
@@ -309,41 +458,17 @@ class BaseRequest
 		
 				case "search":
 					
-					switch($_GET[run]):
+					switch($_GET['run']):
 						
 						// Search
 						/**
 						 * @todo errors, exceptions
 						 */
 						case("search"):
-							if ($_GET[dialog])
-							{
-								$module_dialog = ModuleDialog::get_by_type_and_internal_name("search", $_GET[dialog]);
-								
-								if (file_exists($module_dialog[class_path]))
-								{
-									require_once($module_dialog[class_path]);
-									
-									if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
-									{
-										$module_dialog['class']::$module_dialog[method]();
-									}
-									else
-									{
-										// Error
-									}
-								}
-								else
-								{
-									// Error
-								}
-							}
-							else
-							{
-								// error
-							}
+							require_once("common.request.php");
+							CommonRequest::search_dialog();
 						break;
-														
+								
 						default:
 							require_once("io/search.io.php");
 							SearchIO::main();
@@ -355,7 +480,7 @@ class BaseRequest
 				
 				default:
 			
-					switch ($_GET[run]):
+					switch ($_GET['run']):
 								
 						// BASE
 						case "sysmsg":
@@ -379,31 +504,38 @@ class BaseRequest
 						break;
 						
 						case "base_user_lists";
-							if ($_GET[dialog])
+							if ($_GET['dialog'])
 							{
-								$module_dialog = ModuleDialog::get_by_type_and_internal_name("base_user_lists", $_GET[dialog]);
+								$module_dialog = ModuleDialog::get_by_type_and_internal_name("base_user_lists", $_GET['dialog']);
 								
-								if (file_exists($module_dialog[class_path]))
+								if (file_exists($module_dialog['class_path']))
 								{
-									require_once($module_dialog[class_path]);
+									require_once($module_dialog['class_path']);
 									
-									if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+									if (class_exists($module_dialog['class']))
 									{
-										$module_dialog['class']::$module_dialog[method]();
+										if(method_exists($module_dialog['class'], $module_dialog['method']))
+										{
+											$module_dialog['class']::$module_dialog['method']();
+										}
+										else
+										{
+											throw new BaseModuleDialogMethodNotFoundException();
+										}
 									}
 									else
 									{
-										// Error
+										throw new BaseModuleDialogClassNotFoundException();
 									}
 								}
 								else
 								{
-									// Error
+									throw new BaseModuleDialogFileNotFoundException();
 								}
 							}
 							else
 							{
-								// error
+								throw new BaseModuleDialogMissingException();
 							}
 						break;
 						

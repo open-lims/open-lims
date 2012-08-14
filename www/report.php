@@ -64,31 +64,31 @@
 		{
 			$system_handler = new SystemHandler();
 		}
-		catch(IncludeDataCorruptException $e)
+		catch(BaseIncludeDataCorruptException $e)
 		{
 			die("The config-ata of a module is corrupt!");
 		}
-		catch(IncludeProcessFailedException $e)
+		catch(BaseIncludeProcessFailedException $e)
 		{
 			die("Include register process failed!");
 		}
-		catch(IncludeRequirementFailedException $e)
+		catch(BaseIncludeRequirementFailedException $e)
 		{
 			die("An include-module requirement is not found!");
 		}
-		catch(IncludeFolderEmptyException $e)
+		catch(BaseIncludeFolderEmptyException $e)
 		{
 			die("Include folder is empty!");
 		}
-		catch(ModuleProcessFailedException $e)
+		catch(BaseModuleProcessFailedException $e)
 		{
 			die("Module register process failed!");
 		}
-		catch(ModuleDataCorruptException $e)
+		catch(BaseModuleDataCorruptException $e)
 		{
 			die("Module Data Corrupt!");
 		}
-		catch(EventHandlerCreationFailedException $e)
+		catch(BaseEventHandlerCreationFailedException $e)
 		{
 			die("Event-handler creation failed!");
 		}

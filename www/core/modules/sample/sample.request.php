@@ -507,22 +507,22 @@ class SampleRequest
 								}
 								else
 								{
-									throw new ModuleDialogMethodNotFoundException();
+									throw new BaseModuleDialogMethodNotFoundException();
 								}
 							}
 							else
 							{
-								throw new ModuleDialogClassNotFoundException();
+								throw new BaseModuleDialogClassNotFoundException();
 							}
 						}
 						else
 						{
-							throw new ModuleDialogFileNotFoundException();
+							throw new BaseModuleDialogFileNotFoundException();
 						}
 					}
 					else
 					{
-						throw new ModuleDialogMissingException();
+						throw new BaseModuleDialogMissingException();
 					}
 				}
 				else
@@ -584,27 +584,27 @@ class SampleRequest
 									}
 									else
 									{
-										throw new ModuleDialogMethodNotFoundException();
+										throw new BaseModuleDialogMethodNotFoundException();
 									}
 								}
 								else
 								{
-									throw new ModuleDialogClassNotFoundException();
+									throw new BaseModuleDialogClassNotFoundException();
 								}
 							}
 							else
 							{
-								throw new ModuleDialogFileNotFoundException();
+								throw new BaseModuleDialogFileNotFoundException();
 							}
 						}
 						else
 						{
-							throw new ModuleDialogNotFoundException();
+							throw new BaseModuleDialogNotFoundException();
 						}
 					}
 					else
 					{
-						throw new ModuleDialogMissingException();
+						throw new BaseModuleDialogMissingException();
 					}
 				}
 				else
@@ -702,22 +702,22 @@ class SampleRequest
 								}
 								else
 								{
-									throw new ModuleDialogMethodNotFoundException();
+									throw new BaseModuleDialogMethodNotFoundException();
 								}
 							}
 							else
 							{
-								throw new ModuleDialogClassNotFoundException();
+								throw new BaseModuleDialogClassNotFoundException();
 							}
 						}
 						else
 						{
-							throw new ModuleDialogFileNotFoundException;
+							throw new BaseModuleDialogFileNotFoundException;
 						}
 					}
 					else
 					{
-						throw new ModuleDialogMissingException();
+						throw new BaseModuleDialogMissingException();
 					}
 				}
 				else
@@ -728,76 +728,14 @@ class SampleRequest
 			
 			// Common Dialogs
 			case("common_dialog"):
-				if ($_GET['dialog'])
-				{
-					$module_dialog = ModuleDialog::get_by_type_and_internal_name("common_dialog", $_GET['dialog']);
-					
-					if (file_exists($module_dialog['class_path']))
-					{
-						require_once($module_dialog['class_path']);
-						
-						if (class_exists($module_dialog['class']))
-						{
-							if (method_exists($module_dialog['class'], $module_dialog['method']))
-							{
-								$module_dialog['class']::$module_dialog['method']();
-							}
-							else
-							{
-								throw new ModuleDialogMethodNotFoundException();
-							}
-						}
-						else
-						{
-							throw new ModuleDialogClassNotFoundException();
-						}
-					}
-					else
-					{
-						throw new ModuleDialogFileNotFoundException();
-					}
-				}
-				else
-				{
-					throw new ModuleDialogMissingException();
-				}
+				require_once("core/modules/base/common.request.php");
+				CommonRequest::common_dialog();
 			break;
 				
 			// Search
 			case("search"):
-				if ($_GET['dialog'])
-				{
-					$module_dialog = ModuleDialog::get_by_type_and_internal_name("search", $_GET['dialog']);
-					
-					if (file_exists($module_dialog['class_path']))
-					{
-						require_once($module_dialog['class_path']);
-						
-						if (class_exists($module_dialog['class']))
-						{
-							if (method_exists($module_dialog['class'], $module_dialog['method']))
-							{
-								$module_dialog['class']::$module_dialog['method']();
-							}
-							else
-							{
-								throw new ModuleDialogMethodNotFoundException();
-							}
-						}
-						else
-						{
-							throw new ModuleDialogClassNotFoundException();
-						}
-					}
-					else
-					{
-						throw new ModuleDialogFileNotFoundException();
-					}
-				}
-				else
-				{
-					throw new ModuleDialogMissingException();
-				}
+				require_once("core/modules/base/common.request.php");
+				CommonRequest::search_dialog();
 			break;
 			
 			default:
@@ -863,22 +801,22 @@ class SampleRequest
 							}
 							else
 							{
-								throw new ModuleDialogMethodNotFoundException();
+								throw new BaseModuleDialogMethodNotFoundException();
 							}
 						}
 						else
 						{
-							throw new ModuleDialogClassNotFoundException();
+							throw new BaseModuleDialogClassNotFoundException();
 						}
 					}
 					else
 					{
-						throw new ModuleDialogFileNotFoundException();
+						throw new BaseModuleDialogFileNotFoundException();
 					}
 				}
 				else
 				{
-					throw new ModuleDialogNotFoundException();
+					throw new BaseModuleDialogNotFoundException();
 				}
 			}
 			else
@@ -888,7 +826,7 @@ class SampleRequest
 		}
 		else
 		{
-			throw new ModuleDialogMissingException();
+			throw new BaseModuleDialogMissingException();
 		}
 	}
 }
