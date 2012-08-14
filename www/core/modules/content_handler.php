@@ -42,8 +42,6 @@ class ContentHandler_IO
 			{
 				$css_directory_array = scandir($css_directory);
 				
-				
-				
 				if (is_array($css_directory_array))
 				{
 					$index_css = "";
@@ -246,7 +244,7 @@ class ContentHandler_IO
  					{
  						try
  						{
-							if ($_GET[nav])
+							if ($_GET['nav'])
 							{
 								$module_controller_array = SystemHandler::get_module_controller($_GET[nav]);
 								
@@ -255,11 +253,18 @@ class ContentHandler_IO
 								if (file_exists($module_controller_path))
 								{
 									require_once($module_controller_path);
-									$module_controller_array['class']::io_handler($module_controller_array['alias']);
+									if (class_exists($module_controller_array['class']))
+									{
+										$module_controller_array['class']::io_handler($module_controller_array['alias']);
+									}
+									else
+									{
+										throw new BaseModuleControllerClassNotFoundException();
+									}
 								}
 								else
 								{
-									throw new ModuleDataCorruptExeception();
+									throw new BaseModuleControllerFileNotFoundException();
 								}							
 							}
 							else
@@ -319,18 +324,25 @@ class ContentHandler_IO
 			{
 				if ($_GET['nav'])
 				{				
-					$module_controller_array = SystemHandler::get_module_controller($_GET[nav]);
-								
+					$module_controller_array = SystemHandler::get_module_controller($_GET['nav']);
+
 					$module_controller_path = "core/modules/".$module_controller_array['path'];
 					
 					if (file_exists($module_controller_path))
 					{
 						require_once($module_controller_path);
-						$module_controller_array['class']::ajax_handler($module_controller_array['alias']);
+						if (class_exists($module_controller_array['class']))
+						{
+							$module_controller_array['class']::ajax_handler($module_controller_array['alias']);
+						}
+						else
+						{
+							throw new BaseModuleControllerClassNotFoundException();
+						}
 					}
 					else
 					{
-						throw new ModuleDataCorruptExeception();
+						throw new BaseModuleControllerFileNotFoundException();
 					}
 				}
 				elseif($_GET['extension'])
@@ -344,17 +356,28 @@ class ContentHandler_IO
 						if (file_exists($extension_file))
 						{
 							require_once($extension_file);
-							$extension_class::ajax();
+							if (class_exists($extension_class))
+							{
+								$extension_class::ajax();
+							}
+							else
+							{
+								throw new BaseExtensionClassNotFoundException();
+							}
+						}
+						else
+						{
+							throw new BaseExtensionFileNotFoundException();
 						}
 					}
 					else
 					{
-						// Exception
+						throw new BaseExtensionNotFoundException();
 					}
 				}
 				else
 				{
-					// Exception
+					throw new BaseModuleIllegalControllerCallException();
 				}
 			}
 			else

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package base
+ * @package project
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2012 by Roman Konertz
@@ -22,14 +22,14 @@
  */
 
 /**
- * Module Dialog Not Found Exception
- * @package base
+ * Project Status without Extension Exception
+ * @package project
  */
-class ModuleDialogNotFoundException extends BaseModuleDialogException
+class ProjectStatusWithoutExtensionException extends ProjectStatusException
 {
-	function __construct()
+    function __construct()
     {
-    	parent::__construct();	
+    	parent::__construct(true, false, true, $message);	
     }   
 }
 

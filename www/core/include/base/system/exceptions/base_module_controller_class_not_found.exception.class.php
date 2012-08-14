@@ -22,10 +22,10 @@
  */
 
 /**
- * Module Dialog Not Found Exception
+ * Base Module Controller Class Not Found Exception
  * @package base
  */
-class ModuleDialogNotFoundException extends BaseModuleDialogException
+class BaseModuleControllerClassNotFoundException extends BaseModuleControllerException
 {
 	function __construct()
     {

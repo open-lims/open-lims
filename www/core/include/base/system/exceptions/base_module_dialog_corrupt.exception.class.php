@@ -25,7 +25,7 @@
  * Module Dialog Corrupt Exception
  * @package base
  */
-class ModuleDialogCorruptException extends BaseModuleException
+class ModuleDialogCorruptException extends BaseModuleDialogException
 {
 	function __construct()
     {

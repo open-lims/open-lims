@@ -118,6 +118,12 @@ function __autoload($classname)
 	
 	
 	// Extension
+	$classes['BaseExtensionException']				= $path_prefix."core/include/base/extension/exceptions/base_extension.exception.class.php";
+	$classes['BaseExtensionNotFoundException']		= $path_prefix."core/include/base/extension/exceptions/base_extension_not_found.exception.class.php";
+	$classes['BaseExtensionFileNotFoundException']	= $path_prefix."core/include/base/extension/exceptions/base_extension_file_not_found.exception.class.php";
+	$classes['BaseExtensionClassNotFoundException']	= $path_prefix."core/include/base/extension/exceptions/base_extension_class_not_found.exception.class.php";
+	$classes['BaseExtensionMissingException']		= $path_prefix."core/include/base/extension/exceptions/base_extension_missing.exception.class.php";
+	
 	$classes['ExtensionCreateRunEvent']		= $path_prefix."core/include/base/extension/events/extension_create_run_event.class.php";
 
 	$classes['ConcreteExtensionInterface']	= $path_prefix."core/include/base/extension/interfaces/concrete_extension.interface.php";

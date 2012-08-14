@@ -22,14 +22,14 @@
  */
 
 /**
- * Module Dialog Not Found Exception
+ * Base Extension Not Found Excpetion
  * @package base
  */
-class ModuleDialogNotFoundException extends BaseModuleDialogException
+class BaseExtensionNotFoundException extends BaseExtensionException
 {
 	function __construct()
     {
-    	parent::__construct();	
+    	parent::__construct();
     }   
 }
 

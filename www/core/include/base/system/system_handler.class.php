@@ -41,11 +41,25 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("exceptions/base_include_process_failed.exception.class.php");
 	
 	require_once("exceptions/base_module.exception.class.php");
+	require_once("exceptions/base_module_not_found.exception.class.php");
+	require_once("exceptions/base_module_missing.exception.class.php");
 	require_once("exceptions/base_module_data_corrupt.exception.class.php");
+	require_once("exceptions/base_module_illegal_controller_call.exception.class.php");
+	
+	require_once("exceptions/base_module_controller.exception.class.php");
+	require_once("exceptions/base_module_controller_not_found.exception.class.php");
+	require_once("exceptions/base_module_controller_file_not_found.exception.class.php");
+	require_once("exceptions/base_module_controller_class_not_found.exception.class.php");
+	
+	require_once("exceptions/base_module_dialog.exception.class.php");
 	require_once("exceptions/base_module_dialog_corrupt.exception.class.php");
 	require_once("exceptions/base_module_dialog_creation_failed.exception.class.php");
 	require_once("exceptions/base_module_dialog_missing.exception.class.php");
 	require_once("exceptions/base_module_dialog_not_found.exception.class.php");
+	require_once("exceptions/base_module_dialog_class_not_found.exception.class.php");
+	require_once("exceptions/base_module_dialog_file_not_found.exception.class.php");
+	require_once("exceptions/base_module_dialog_method_not_found.exception.class.php");
+	
 	require_once("exceptions/base_module_folder_empty.exception.class.php");
 	require_once("exceptions/base_module_process_failed.exception.class.php");
 	
@@ -942,6 +956,9 @@ class SystemHandler implements SystemHandlerInterface
 	 * @see SystemHandlerInterface::get_module_controller()
 	 * @param string $nav
 	 * @return arráy
+	 * @throws BaseModuleControllerNotFoundException
+	 * @throws BaseModuleNotFoundException
+	 * @throws BaseModuleMissingException
 	 */
 	public static function get_module_controller($nav)
 	{
@@ -950,10 +967,11 @@ class SystemHandler implements SystemHandlerInterface
 			$nav_array = explode(".", $nav);
 			
 			$module_id = BaseModule_Access::get_module_id_by_module_name($nav_array[0]);
-			$base_module = new BaseModule_Access($module_id);
 			
 			if (is_numeric($module_id))
 			{
+				$base_module = new BaseModule_Access($module_id);
+				
 				if (count($nav_array) == 1)
 				{
 					$tmp_array = BaseModuleNavigation_Access::get_module_controller($module_id, null);
@@ -961,6 +979,10 @@ class SystemHandler implements SystemHandlerInterface
 				elseif (count($nav_array) == 2)
 				{
 					$tmp_array = BaseModuleNavigation_Access::get_module_controller($module_id, $nav_array[1]);
+				}
+				else
+				{
+					throw new BaseModuleControllerNotFoundException();
 				}
 					
 					
@@ -990,6 +1012,14 @@ class SystemHandler implements SystemHandlerInterface
 					return $controller_array;
 				}
 			}
+			else
+			{
+				throw new BaseModuleNotFoundException();
+			}
+		}
+		else
+		{
+			throw new BaseModuleMissingException();
 		}							
 	}
 	

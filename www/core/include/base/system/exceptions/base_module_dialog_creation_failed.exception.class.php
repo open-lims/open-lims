@@ -25,7 +25,7 @@
  * Module Dialog Creation Failed Exception
  * @package base
  */
-class ModuleDialogCreationFailedException extends BaseModuleException
+class ModuleDialogCreationFailedException extends BaseModuleDialogException
 {
 	function __construct()
     {

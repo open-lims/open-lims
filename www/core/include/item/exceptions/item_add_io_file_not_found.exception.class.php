@@ -1,6 +1,6 @@
 <?php
 /**
- * @package base
+ * @package item
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2012 by Roman Konertz
@@ -22,14 +22,14 @@
  */
 
 /**
- * Module Dialog Not Found Exception
- * @package base
+ * Item Add IO Not Found Excpetion
+ * @package item
  */
-class ModuleDialogNotFoundException extends BaseModuleDialogException
+class ItemAddIOFileNotFoundException extends ItemAddIOException
 {
 	function __construct()
     {
-    	parent::__construct();	
+    	parent::__construct();
     }   
 }
 

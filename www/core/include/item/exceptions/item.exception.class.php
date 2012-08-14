@@ -1,6 +1,6 @@
 <?php
 /**
- * @package base
+ * @package item
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2012 by Roman Konertz
@@ -22,14 +22,14 @@
  */
 
 /**
- * Module Dialog Not Found Exception
- * @package base
+ * Item Excpetion
+ * @package item
  */
-class ModuleDialogNotFoundException extends BaseModuleDialogException
+class ItemException extends BaseException
 {
-	function __construct()
+	function __construct($message = null)
     {
-    	parent::__construct();	
+    	parent::__construct(true, false, false, $message, null);
     }   
 }
 
