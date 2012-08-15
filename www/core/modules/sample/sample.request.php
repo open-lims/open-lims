@@ -27,6 +27,9 @@
  */
 class SampleRequest
 {
+	/**
+	 * @param string $alias
+	 */
 	public static function ajax_handler($alias)
 	{
 		global $sample_security;
@@ -366,7 +369,19 @@ class SampleRequest
 	}
 	
 	/**
-	 * @throws SampletSecurityAccessDeniedException
+	 * @param string $alias
+	 * @throws SampleSecurityAccessDeniedException
+	 * @throws BaseModuleDialogMethodNotFoundException
+	 * @throws BaseModuleDialogClassNotFoundException
+	 * @throws BaseModuleDialogFileNotFoundException
+	 * @throws BaseModuleDialogMissingException
+	 * @throws BaseModuleDialogNotFoundException
+	 * @throws ItemAddIOClassNotFoundException
+	 * @throws ItemAddIOFileNotFoundException
+	 * @throws ItemHandlerClassNotFoundException
+	 * @throws ItemPositionIDMissingException
+	 * @throws ItemParentIDMissingException
+	 * @throws ItemParentTypeMissingException
 	 */
 	public static function io_handler($alias)
 	{
@@ -740,12 +755,23 @@ class SampleRequest
 			
 			default:
 				require_once("io/sample.io.php");
-				SampleIO::list_user_related_samples(null);
+				SampleIO::list_user_related_samples();
 			break;
 		
 		endswitch;
 	}
 
+	/**
+	 * @param string $role
+	 * @throws ItemParentIDMissingException
+	 * @throws ItemPositionIDMissingException
+	 * @throws BaseModuleDialogMethodNotFoundException
+	 * @throws BaseModuleDialogClassNotFoundException
+	 * @throws BaseModuleDialogFileNotFoundException
+	 * @throws BaseModuleDialogNotFoundException
+	 * @throws SampleSecurityAccessDeniedException
+	 * @throws BaseModuleDialogMissingException
+	 */
 	public static function item_add_edit_handler($role = "add")
 	{		
 		if ($_GET['dialog'])

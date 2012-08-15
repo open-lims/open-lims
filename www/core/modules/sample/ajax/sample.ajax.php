@@ -163,6 +163,7 @@ class SampleAjax
 	 * @param string $sortvalue
 	 * @param string $sortmethod
 	 * @return string
+	 * @throws OrganisationUnitIDMissingException
 	 */
 	public static function list_organisation_unit_related_samples($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
@@ -275,13 +276,14 @@ class SampleAjax
 		}
 		else
 		{
-			// Error
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
 	/**
 	 * @param string $json_argument_array
 	 * @return integer
+	 * @throws OrganisationUnitIDMissingException
 	 */
 	public static function count_organisation_unit_related_samples($json_argument_array)
 	{
@@ -295,7 +297,7 @@ class SampleAjax
 		}
 		else
 		{
-			return null;
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
@@ -309,6 +311,8 @@ class SampleAjax
 	 * @param string $sortvalue
 	 * @param string $sortmethod
 	 * @return string
+	 * @throws BaseAjaxArgumentMissingException
+	 * @throws BaseAjaxDependentArgumentMissingException
 	 */
 	public static function list_sample_items($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
@@ -318,6 +322,10 @@ class SampleAjax
 		if ($handling_class)
 		{
 			$sql = $handling_class::get_item_list_sql($argument_array[1][1]);
+		}
+		else
+		{
+			throw new BaseAjaxArgumentMissingException();
 		}
 		
 		if ($sql)
@@ -478,13 +486,15 @@ class SampleAjax
 		}
 		else
 		{
-			// Error
+			throw new BaseAjaxDependentArgumentMissingException();
 		}
 	}
 	
 	/**
 	 * @param string $json_argument_array
 	 * @return integer
+	 * @throws BaseAjaxArgumentMissingException
+	 * @throws BaseAjaxDependentArgumentMissingException
 	 */
 	public static function count_sample_items($json_argument_array)
 	{
@@ -495,6 +505,10 @@ class SampleAjax
 		{
 			$sql = $handling_class::get_item_list_sql($argument_array[1][1]);
 		}
+		else
+		{
+			throw new BaseAjaxArgumentMissingException();
+		}
 		
 		if ($sql)
 		{
@@ -502,7 +516,7 @@ class SampleAjax
 		}
 		else
 		{
-			return null;
+			throw new BaseAjaxDependentArgumentMissingException();
 		}
 	}
 	
@@ -516,6 +530,7 @@ class SampleAjax
 	 * @param string $sortvalue
 	 * @param string $sortmethod
 	 * @return string
+	 * @throws ItemIDMissingException
 	 */
 	public static function list_samples_by_item_id($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
@@ -681,13 +696,14 @@ class SampleAjax
 		}
 		else
 		{
-			// Error
+			throw new ItemIDMissingException();
 		}
 	}
 
 	/**
 	 * @param string $json_argument_array
 	 * @return integer
+	 * @throws ItemIDMissingException
 	 */
 	public static function count_samples_by_item_id($json_argument_array)
 	{
@@ -700,7 +716,7 @@ class SampleAjax
 		}
 		else
 		{
-			return null;
+			throw new ItemIDMissingException();
 		}
 	}
 	
@@ -714,6 +730,8 @@ class SampleAjax
 	 * @param string $sortvalue
 	 * @param string $sortmethod
 	 * @return string
+	 * @throws SampleSecurityAccessDeniedException
+	 * @throws SampleIDMissingException
 	 */
 	public static function list_location_history($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
@@ -772,11 +790,16 @@ class SampleAjax
 				throw new SampleSecurityAccessDeniedException();
 			}
 		}
+		else
+		{
+			throw new SampleIDMissingException();
+		}
 	}
 	
 	/**
 	 * @param string $json_argument_array
 	 * @return integer
+	 * @throws SampleIDMissingException
 	 */
 	public static function count_location_history($json_argument_array)
 	{
@@ -789,7 +812,7 @@ class SampleAjax
 		}
 		else
 		{
-			return null;
+			throw new SampleIDMissingException();
 		}
 	}
 	
@@ -797,6 +820,7 @@ class SampleAjax
 	 * @param string $get_array
 	 * @param integer $sample_id
 	 * @return string
+	 * @throws SampleIDMissingException
 	 */
 	public static function associate($get_array, $sample_id)
 	{
@@ -837,12 +861,13 @@ class SampleAjax
 		}
 		else
 		{
-			return null;
+			throw new SampleIDMissingException();
 		}
 	}
 	
 	/**
 	 * @param string $get_array
+	 * @throws SampleIDMissingException
 	 */
 	public static function get_sample_menu($get_array)
 	{
@@ -853,13 +878,13 @@ class SampleAjax
 			$_GET = unserialize($get_array);	
 		}
 		
-		if ($_GET[sample_id])
+		if ($_GET['sample_id'])
 		{
-			$sample_security = new SampleSecurity($_GET[sample_id]);
+			$sample_security = new SampleSecurity($_GET['sample_id']);
 			
 			if ($sample_security->is_access(1, false))
 			{
-				$sample = new Sample($_GET[sample_id]);
+				$sample = new Sample($_GET['sample_id']);
 				
 				$template = new HTMLTemplate("sample/ajax/detail_menu.html");
 				
@@ -988,10 +1013,15 @@ class SampleAjax
 				$template->output();
 			}
 		}
+		else
+		{
+			throw new SampleIDMissingException();
+		}
 	}
 	
 	/**
 	 * @param string $get_array
+	 * @throws SampleIDMissingException
 	 */
 	public static function get_sample_information($get_array)
 	{
@@ -1002,13 +1032,13 @@ class SampleAjax
 			$_GET = unserialize($get_array);	
 		}
 		
-		if ($_GET[sample_id])
+		if ($_GET['sample_id'])
 		{
-			$sample_security = new SampleSecurity($_GET[sample_id]);
+			$sample_security = new SampleSecurity($_GET['sample_id']);
 			
 			if ($sample_security->is_access(1, false))
 			{
-				$sample = new Sample($_GET[sample_id]);
+				$sample = new Sample($_GET['sample_id']);
 				$owner = new User($sample->get_owner_id());	
 				
 				$template = new HTMLTemplate("sample/ajax/detail_information.html");
@@ -1098,10 +1128,16 @@ class SampleAjax
 				$template->output();
 			}
 		}
+		else
+		{
+			throw new SampleIDMissingException();
+		}
 	}
 	
 	/**
 	 * @param string $get_array
+	 * @return string
+	 * @throws SampleIDMissingException
 	 */
 	public static function delete($get_array)
 	{
@@ -1135,12 +1171,18 @@ class SampleAjax
 			
 			return json_encode($array);
 		}
+		else
+		{
+			throw new SampleIDMissingException();
+		}
 	}
 	
 	/**
 	 * @param string $get_array
+	 * @return string
 	 * @throws SampleException
 	 * @throws SampleSecurityException
+	 * @throws SampleIDMissingException
 	 */
 	public static function delete_handler($get_array)
 	{
@@ -1170,6 +1212,10 @@ class SampleAjax
 			{
 				throw new SampleSecurityAccessDeniedExcpetion();
 			}
+		}
+		else
+		{
+			throw new SampleIDMissingException();
 		}
 	}
 }

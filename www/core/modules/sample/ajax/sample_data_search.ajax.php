@@ -27,6 +27,18 @@
  */
 class SampleDataSearchAjax
 {
+	/**
+	 * @param array $json_column_array
+	 * @param array $json_argument_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param integer $entries_per_page
+	 * @param integer $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 * @throws BaseAjaxArgumentMissingException
+	 */
 	public static function list_samples($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -99,8 +111,17 @@ class SampleDataSearchAjax
 			
 			return $list_request->get_page($page);
 		}
+		else
+		{
+			throw new BaseAjaxArgumentMissingException();
+		}
 	}
 	
+	/**
+	 * @param array $json_argument_array
+	 * @return integer
+	 * @throws BaseAjaxArgumentMissingException
+	 */
 	public static function count_samples($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -115,7 +136,7 @@ class SampleDataSearchAjax
 		}
 		else
 		{
-			return null;
+			throw new BaseAjaxArgumentMissingException();
 		}
 	}
 }

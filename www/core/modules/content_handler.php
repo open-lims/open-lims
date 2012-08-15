@@ -27,6 +27,11 @@
  */
 class ContentHandler_IO
 {
+	/**
+	 * Main Controller for reqeusts via index.php
+	 * @throws BaseModuleControllerClassNotFoundException
+	 * @throws BaseModuleControllerFileNotFoundException
+	 */
 	public static function io()
 	{
 		global $session, $user, $transaction;
@@ -230,10 +235,9 @@ class ContentHandler_IO
 					Navigation_IO::left();
 					
 					
-					/**
-					 * @todo remove
-					 */
-					echo "<div id='Content'>";
+					$template = new HTMLTemplate("content_header.html");
+					$template->output();
+					
 					
  					if ($session->read_value("must_change_password") == true)
  					{
@@ -284,12 +288,10 @@ class ContentHandler_IO
 							$error_io->display_error();
 						}
  					}
-			 		
- 					/**
-					 * @todo remove
-					 */
-					echo "</div>";
- 					
+						
+					$template = new HTMLTemplate("content_footer.html");
+					$template->output();
+					
 			 		$template = new HTMLTemplate("main_footer.html");
 			 		$template->output();
 		 		}
@@ -314,6 +316,15 @@ class ContentHandler_IO
 		$template->output();
 	}
 	
+	/**
+	 * Main Controller for requests via ajax.php
+	 * @throws BaseModuleControllerClassNotFoundException
+	 * @throws BaseModuleControllerFileNotFoundException
+	 * @throws BaseExtensionClassNotFoundException
+	 * @throws BaseExtensionFileNotFoundException
+	 * @throws BaseExtensionNotFoundException
+	 * @throws BaseModuleIllegalControllerCallException
+	 */
 	public static function ajax()
 	{
 		global $session;
