@@ -27,6 +27,9 @@
  */
 class ProjectIO
 {
+	/**
+	 * @param integer $user_id
+	 */
 	public static function list_user_related_projects($user_id)
 	{
 		global $user;
@@ -76,43 +79,35 @@ class ProjectIO
 	
 	/**
 	 * @throws OrganisationUnitIDMissingException
-	 * @throws OrganisationUnitNotFoundException
 	 */
 	public static function list_organisation_unit_related_projects()
 	{
 		if ($_GET['ou_id'])
 		{
-			try
-			{
-				$organisation_unit_id = $_GET['ou_id'];
-				
-				$argument_array = array();
-				$argument_array[0][0] = "organisation_unit_id";
-				$argument_array[0][1] = $organisation_unit_id;
-				
-				$list = new List_IO("ProjectOrganisationUnitRelated", "ajax.php?nav=project", "list_organisation_unit_related_projects", "count_organisation_unit_related_projects", $argument_array, "ProjectAjaxOrganisationUnit", 12);
+			$organisation_unit_id = $_GET['ou_id'];
 			
-				$list->add_column("","symbol",false,"16px");
-				$list->add_column("Name","name",true,null);
-				$list->add_column("Owner","owner",true,null);
-				$list->add_column("Date/Time","datetime",true,null);
-				$list->add_column("Template","template",true,null);
-				$list->add_column("Status","status",true,null);
+			$argument_array = array();
+			$argument_array[0][0] = "organisation_unit_id";
+			$argument_array[0][1] = $organisation_unit_id;
 			
-				require_once("core/modules/organisation_unit/io/organisation_unit.io.php");
-				$organisation_unit_io = new OrganisationUnitIO;
-				$organisation_unit_io->detail();
-				
-				$template = new HTMLTemplate("project/list_organisation_unit.html");	
-	
-				$template->set_var("list", $list->get_list());
+			$list = new List_IO("ProjectOrganisationUnitRelated", "ajax.php?nav=project", "list_organisation_unit_related_projects", "count_organisation_unit_related_projects", $argument_array, "ProjectAjaxOrganisationUnit", 12);
 		
-				$template->output();
-			}
-			catch (OrganisationUnitNotFoundException $e)
-			{
-				throw $e;
-			}
+			$list->add_column("","symbol",false,"16px");
+			$list->add_column("Name","name",true,null);
+			$list->add_column("Owner","owner",true,null);
+			$list->add_column("Date/Time","datetime",true,null);
+			$list->add_column("Template","template",true,null);
+			$list->add_column("Status","status",true,null);
+		
+			require_once("core/modules/organisation_unit/io/organisation_unit.io.php");
+			$organisation_unit_io = new OrganisationUnitIO();
+			$organisation_unit_io->detail();
+			
+			$template = new HTMLTemplate("project/list_organisation_unit.html");	
+
+			$template->set_var("list", $list->get_list());
+	
+			$template->output();
 		}
 		else
 		{
@@ -296,8 +291,10 @@ class ProjectIO
 	}
 	
 	/**
-	 * @todo specific exception
 	 * @param integer $item_id
+	 * @param bool $in_assistant
+	 * @param bool $form_field_name
+	 * @throws ItemIDMissingException
 	 */
 	public static function list_projects_by_item_id($item_id, $in_assistant = false, $form_field_name = null)
 	{		
@@ -343,7 +340,7 @@ class ProjectIO
 		}
 		else
 		{
-			throw new ProjectException();
+			throw new ItemIDMissingException();
 		}
 	}
 		

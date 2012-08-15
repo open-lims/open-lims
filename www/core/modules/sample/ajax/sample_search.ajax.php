@@ -28,12 +28,12 @@
 class SampleSearchAjax
 {
 	/**
-	 * @param array $json_column_array
-	 * @param array $json_argument_array
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
 	 * @param string $css_page_id
 	 * @param string $css_row_sort_id
-	 * @param integer $entries_per_page
-	 * @param integer $page
+	 * @param string $entries_per_page
+	 * @param string $page
 	 * @param string $sortvalue
 	 * @param string $sortmethod
 	 * @return string
@@ -152,7 +152,7 @@ class SampleSearchAjax
 	}
 	
 	/**
-	 * @param array $json_argument_array
+	 * @param string $json_argument_array
 	 * @return integer
 	 * @throws BaseAjaxArgumentMissingException
 	 */

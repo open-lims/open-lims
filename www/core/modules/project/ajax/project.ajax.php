@@ -37,6 +37,7 @@ class ProjectAjax
 	 * @param string $sortvalue
 	 * @param string $sortmethod
 	 * @return string
+	 * @throws UserIDMissingException
 	 */
 	public static function list_user_related_projects($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
@@ -62,15 +63,15 @@ class ProjectAjax
 			{
 				foreach($list_array as $key => $value)
 				{
-					$tmp_name = trim($list_array[$key][name]);
-					unset($list_array[$key][name]);
-					$list_array[$key][name][label] = $tmp_name;
-					$list_array[$key][name][content] = $tmp_name;
+					$tmp_name = trim($list_array[$key]['name']);
+					unset($list_array[$key]['name']);
+					$list_array[$key]['name']['label'] = $tmp_name;
+					$list_array[$key]['name']['content'] = $tmp_name;
 
-					$tmp_template = trim($list_array[$key][template]);
-					unset($list_array[$key][template]);
-					$list_array[$key][template][label] = $tmp_template;
-					$list_array[$key][template][content] = $tmp_template;
+					$tmp_template = trim($list_array[$key]['template']);
+					unset($list_array[$key]['template']);
+					$list_array[$key]['template']['label'] = $tmp_template;
+					$list_array[$key]['template']['content'] = $tmp_template;
 					
 					$tmp_status= trim($list_array[$key][status]);
 					unset($list_array[$key][status]);
@@ -111,11 +112,16 @@ class ProjectAjax
 			
 			return $list_request->get_page($page);
 		}
+		else
+		{
+			throw new UserIDMissingException();
+		}
 	}
 	
 	/**
 	 * @param string $json_argument_array
 	 * @return integer
+	 * @throws UserIDMissingException
 	 */
 	public static function count_user_related_projects($json_argument_array)
 	{		
@@ -130,7 +136,7 @@ class ProjectAjax
 		}
 		else
 		{
-			return null;
+			throw new UserIDMissingException();
 		}
 	}
 	
@@ -144,6 +150,7 @@ class ProjectAjax
 	 * @param string $sortvalue
 	 * @param string $sortmethod
 	 * @return string
+	 * @throws OrganisationUnitIDMissingException
 	 */
 	public static function list_organisation_unit_related_projects($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
@@ -231,13 +238,14 @@ class ProjectAjax
 		}
 		else
 		{
-			// Error
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
 	/**
 	 * @param string $json_argument_array
 	 * @return integer
+	 * @throws OrganisationUnitIDMissingException
 	 */
 	public static function count_organisation_unit_related_projects($json_argument_array)
 	{
@@ -253,7 +261,7 @@ class ProjectAjax
 		}
 		else
 		{
-			return null;
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
@@ -267,6 +275,7 @@ class ProjectAjax
 	 * @param string $sortvalue
 	 * @param string $sortmethod
 	 * @return string
+	 * @throws ItemIDMissingException
 	 */
 	public static function list_projects_by_item_id($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
@@ -402,13 +411,14 @@ class ProjectAjax
 		}
 		else
 		{
-			// Error
+			throw new ItemIDMissingException();
 		}
 	}
 	
 	/**
 	 * @param string $json_argument_array
 	 * @return integer
+	 * @throws ItemIDMissingException
 	 */
 	public static function count_projects_by_item_id($json_argument_array)
 	{
@@ -423,13 +433,14 @@ class ProjectAjax
 		}
 		else
 		{
-			return null;
+			throw new ItemIDMissingException();
 		}
 	}
 	
 	/**
 	 * @param string $get_array
 	 * @return string
+	 * @throws ProjectIDMissingException
 	 */
 	public static function get_project_status_bar($get_array)
 	{
@@ -438,9 +449,9 @@ class ProjectAjax
 			$_GET = unserialize($get_array);	
 		}
 		
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
-			$project = new Project($_GET[project_id]);
+			$project = new Project($_GET['project_id']);
 			
 			$template = new HTMLTemplate("project/ajax/detail_status.html");
 		
@@ -453,64 +464,64 @@ class ProjectAjax
 			{
 				foreach($all_status_array as $key => $value)
 				{						
-					$project_status = new ProjectStatus($value[id]);
+					$project_status = new ProjectStatus($value['id']);
 					
-					if ($value[optional] == true)
+					if ($value['optional'] == true)
 					{
-						$result[$counter][name] = $project_status->get_name()." (optional)";
+						$result[$counter]['name'] = $project_status->get_name()." (optional)";
 					}
 					else
 					{
-						$result[$counter][name] = $project_status->get_name();	
+						$result[$counter]['name'] = $project_status->get_name();	
 					}
 					
 					if ($value[status] == 3)
 					{
-						$result[$counter][icon] = "<img src='images/icons/status_cancel.png' alt='R' />";
+						$result[$counter]['icon'] = "<img src='images/icons/status_cancel.png' alt='R' />";
 					}
 					elseif($value[status] == 2)
 					{
-						$result[$counter][icon] = "<img src='images/icons/status_ok.png' alt='R' />";
+						$result[$counter]['icon'] = "<img src='images/icons/status_ok.png' alt='R' />";
 					}elseif($value[status] == 1)
 					{
-						$result[$counter][icon]	= "<img src='images/icons/status_run.png' alt='R' />";
+						$result[$counter]['icon']	= "<img src='images/icons/status_run.png' alt='R' />";
 					}
 					else
 					{
-						$result[$counter][icon]	= "";
+						$result[$counter]['icon']	= "";
 					}
 					
 					if (!($counter % 2))
 					{
-						$result[$counter][tr_class] = " class='trLightGrey'";
+						$result[$counter]['tr_class'] = " class='trLightGrey'";
 					}
 					else
 					{
-						$result[$counter][tr_class] = "";
+						$result[$counter]['tr_class'] = "";
 					}
 					
 					$counter++;
 				}
 				
 				$project_status = new ProjectStatus(2);
-				$result[$counter][name] = $project_status->get_name();
+				$result[$counter]['name'] = $project_status->get_name();
 				
 				if ($project->get_current_status_id() == 2)
 				{
-					$result[$counter][icon] = "<img src='images/icons/status_ok.png' alt='R' />";
+					$result[$counter]['icon'] = "<img src='images/icons/status_ok.png' alt='R' />";
 				}
 				else
 				{
-					$result[$counter][icon]	= "";
+					$result[$counter]['icon']	= "";
 				}
 				
 				if (!($counter % 2))
 				{
-					$result[$counter][tr_class] = " class='trLightGrey'";
+					$result[$counter]['tr_class'] = " class='trLightGrey'";
 				}
 				else
 				{
-					$result[$counter][tr_class] = "";
+					$result[$counter]['tr_class'] = "";
 				}
 				
 				$counter++;
@@ -520,11 +531,16 @@ class ProjectAjax
 			
 			$template->output();
 		}
+		else
+		{
+			throw new ProjectIDMissingException();
+		}
 	}
 	
 	/**
 	 * @param string $get_array
 	 * @return string
+	 * @throws ProjectIDMissingException
 	 */
 	public static function get_project_menu($get_array)
 	{
@@ -535,11 +551,11 @@ class ProjectAjax
 			$_GET = unserialize($get_array);	
 		}
 		
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
-			$project = new Project($_GET[project_id]);
+			$project = new Project($_GET['project_id']);
 			
-			$folder_id = ProjectStatusFolder::get_folder_by_project_id_and_project_status_id($_GET[project_id],$project->get_current_status_id());
+			$folder_id = ProjectStatusFolder::get_folder_by_project_id_and_project_status_id($_GET['project_id'],$project->get_current_status_id());
 			
 			$template = new HTMLTemplate("project/ajax/detail_menu.html");
 			
@@ -741,6 +757,10 @@ class ProjectAjax
 			
 			$template->output();
 		}
+		else
+		{
+			throw new ProjectIDMissingException();
+		}
 	}
 	
 	/**
@@ -762,7 +782,7 @@ class ProjectAjax
 		{
 			if ($project_security->is_access(3, false) == true)
 			{
-				$project = new Project($_GET[project_id]);
+				$project = new Project($_GET['project_id']);
 				
 				if ($project->is_current_status_fulfilled())
 				{
@@ -910,6 +930,9 @@ class ProjectAjax
 	/**
 	 * @param string $get_array
 	 * @return string
+	 * @throws ProjectSetNextStatusException
+	 * @throws ProjectSecurityAccessDeniedException
+	 * @throws ProjectIDMissingException
 	 */
 	public static function proceed_project($get_array, $comment)
 	{
@@ -920,16 +943,16 @@ class ProjectAjax
 			$_GET = unserialize($get_array);	
 		}
 		
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
-			$project = new Project($_GET[project_id]);
+			$project = new Project($_GET['project_id']);
 			
 			if ($project_security->is_access(3, false) == true)
 			{
 				if ($comment and $comment != "undefined")
 				{
 					$project_log = new ProjectLog(null);
-					if ($project_log->create($_GET[project_id], $comment) == null)
+					if ($project_log->create($_GET['project_id'], $comment) == null)
 					{
 						throw new ProjectSetNextStatusException();
 					}
@@ -941,6 +964,10 @@ class ProjectAjax
 			{
 				throw new ProjectSecurityAccessDeniedException();
 			}
+		}
+		else
+		{
+			throw new ProjectIDMissingException();
 		}
 	}
 }

@@ -27,6 +27,19 @@
  */
 class AdminProjectTemplateCatAjax
 {
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $get_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
 	public static function list_categories($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		global $user;
@@ -91,6 +104,11 @@ class AdminProjectTemplateCatAjax
 		}
 	}
 	
+	/**
+	 * @param string $json_argument_array
+	 * @return integer
+	 * @throws BaseUserAccessDeniedException
+	 */
 	public static function count_categories($json_argument_array)
 	{
 		global $user;

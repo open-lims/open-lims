@@ -27,6 +27,9 @@
  */
 class ProjectRequest
 {	
+	/**
+	 * @param string $alias
+	 */
 	public static function ajax_handler($alias)
 	{
 		global $project_security;
@@ -416,7 +419,24 @@ class ProjectRequest
 	}
 	
 	/**
+	 * @param string $alias
+	 * @throws BaseModuleDialogMethodNotFoundException
+	 * @throws BaseModuleDialogClassNotFoundException
+	 * @throws BaseModuleDialogFileNotFoundException
+	 * @throws BaseModuleDialogMissingException
 	 * @throws ProjectSecurityAccessDeniedException
+	 * @throws BaseModuleDialogNotFoundException
+	 * @throws ItemAddIOClassNotFoundException
+	 * @throws ItemAddIOFileNotFoundException
+	 * @throws ItemHandlerClassNotFoundException
+	 * @throws ItemPositionIDMissingException
+	 * @throws ItemParentIDMissingException
+	 * @throws ItemParentTypeMissingException
+	 * @throws ProjectStatusWithoutExtensionException
+	 * @throws BaseExtensionClassNotFoundException
+	 * @throws BaseExtensionFileNotFoundException
+	 * @throws BaseExtensionNotFoundException
+	 * @throws BaseExtensionMissingException
 	 */
 	public static function io_handler($alias)
 	{
@@ -920,6 +940,5 @@ class ProjectRequest
 
 		endswitch;
 	}
-
 }
 ?>
