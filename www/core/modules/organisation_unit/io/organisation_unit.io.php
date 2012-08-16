@@ -425,6 +425,7 @@ class OrganisationUnitIO
 	/**
 	 * @todo rebuild with List and JS operations
 	 * @todo move to admin
+	 * @throws UserIDMissingException
 	 */
 	public static function list_user_admin_organisation_units($user_id)
 	{
@@ -476,13 +477,14 @@ class OrganisationUnitIO
 		}
 		else
 		{
-			// Error
+			throw new UserIDMissingException();
 		}
 	}
 	
 	/**
 	 * @todo rebuild with List and JS operations
 	 * @todo move to admin
+	 * @throws GroupIDMissingException
 	 */
 	public static function list_group_admin_organisation_units($group_id)
 	{
@@ -530,7 +532,7 @@ class OrganisationUnitIO
 		}
 		else
 		{
-			// Error
+			throw new GroupIDMissingException();
 		}
 	}
 	

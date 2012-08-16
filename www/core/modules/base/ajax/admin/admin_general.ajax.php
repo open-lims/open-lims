@@ -490,6 +490,7 @@ class AdminGeneralAjax
 	 * @param string $id
 	 * @return string
 	 * @throws BaseUserAccessDeniedException
+	 * @throws BaseEnvironmentPaperSizeIDMissingException
 	 */
 	public static function get_paper_size($id)
 	{
@@ -516,7 +517,7 @@ class AdminGeneralAjax
 			}
 			else
 			{
-				return null;
+				throw new BaseEnvironmentPaperSizeIDMissingException();
 			}
 		}
 		else
@@ -536,6 +537,7 @@ class AdminGeneralAjax
 	 * @param string $margin_bottom
 	 * @return string
 	 * @throws BaseUserAccessDeniedException
+	 * @throws BaseEnvironmentPaperSizeIDMissingException
 	 */
 	public static function set_paper_size($id, $name, $width, $height, $margin_left, $margin_right, $margin_top, $margin_bottom)
 	{
@@ -586,7 +588,7 @@ class AdminGeneralAjax
 			}
 			else
 			{
-				return "0";
+				throw new BaseEnvironmentPaperSizeIDMissingException();
 			}
 		}
 		else
@@ -599,6 +601,7 @@ class AdminGeneralAjax
 	 * @param string $id
 	 * @return string
 	 * @throws BaseUserAccessDeniedException
+	 * @throws BaseEnvironmentPaperSizeIDMissingException
 	 */
 	public static function delete_paper_size($id)
 	{
@@ -620,7 +623,7 @@ class AdminGeneralAjax
 			}
 			else
 			{
-				return "0";
+				throw new BaseEnvironmentPaperSizeIDMissingException();
 			}
 		}
 		else

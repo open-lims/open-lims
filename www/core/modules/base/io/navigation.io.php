@@ -184,24 +184,50 @@ class Navigation_IO
 		$template->output();
 	}
 	
+	/**
+	 * @throws BaseModuleDialogMethodNotFoundException
+	 * @throws BaseModuleDialogClassNotFoundException
+	 * @throws BaseModuleDialogFileNotFoundException
+	 * @throws BaseModuleDialogNotFoundException
+	 */
 	private static function get_left_standard_navigation()
 	{
 		$dialog_array = ModuleDialog::list_dialogs_by_type("standard_navigation");
-		if (count($dialog_array) == 1)
+		
+		if (count($dialog_array) == 0)
+		{
+			return;
+		}
+		elseif (count($dialog_array) == 1)
 		{
 			if (file_exists($dialog_array[0]['class_path']))
 			{
 				require_once($dialog_array[0]['class_path']);
-				$dialog_array[0]['class']::$dialog_array[0]['method']();
+				
+				if (class_exists($dialog_array[0]['class']))
+				{
+					if (method_exists($dialog_array[0]['class'], $dialog_array[0]['method']))
+					{
+						$dialog_array[0]['class']::$dialog_array[0]['method']();
+					}
+					else
+					{
+						throw new BaseModuleDialogMethodNotFoundException();
+					}
+				}
+				else
+				{
+					throw new BaseModuleDialogClassNotFoundException();
+				}
 			}
 			else
 			{
-				// Exception
+				throw new BaseModuleDialogFileNotFoundException();
 			}
 		}
 		else
 		{
-			// Exception
+			throw new BaseModuleDialogNotFoundException();
 		}
 	}
 	

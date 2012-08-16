@@ -27,6 +27,9 @@
  */
 class ItemRequest
 {
+	/**
+	 * @param string $alias
+	 */
 	public static function ajax_handler($alias)
 	{
 		switch($_GET['run']):
@@ -55,6 +58,9 @@ class ItemRequest
 		endswitch;
 	}
 	
+	/**
+	 * @param string $alias
+	 */
 	public static function io_handler($alias)
 	{
 		

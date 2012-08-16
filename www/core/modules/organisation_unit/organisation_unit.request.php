@@ -27,6 +27,9 @@
  */
 class OrganisationUnitRequest
 {	
+	/**
+	 * @param string $alias
+	 */
 	public static function ajax_handler($alias)
 	{
 		switch($_GET['run']):
@@ -335,6 +338,9 @@ class OrganisationUnitRequest
 		endswitch;
 	}
 	
+	/**
+	 * @param string $alias
+	 */
 	public static function io_handler($alias)
 	{
 		

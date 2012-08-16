@@ -681,11 +681,14 @@ class UserIO
 		}
 	}
 
+	/**
+	 * @throws UserIDMissingException
+	 */
 	public static function user_details()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$user = new User($_GET[id]);
+			$user = new User($_GET['id']);
 			
 			$template = new HTMLTemplate("base/user/user_details.html");
 			
@@ -891,11 +894,14 @@ class UserIO
 		}
 	}
 
+	/**
+	 * @throws GroupIDMissingException
+	 */
 	public static function group_details()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$group = new Group($_GET[id]);
+			$group = new Group($_GET['id']);
 			
 			$template = new HTMLTemplate("base/user/group_details.html");
 

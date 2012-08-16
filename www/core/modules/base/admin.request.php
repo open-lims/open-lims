@@ -39,11 +39,22 @@ class AdminRequest
 		return $return_array;
 	}
 	
+	/**
+	 * @param string $alias
+	 */
 	public static function ajax_handler($alias)
 	{
 		
 	}
 	
+	/**
+	 * @param string $alias
+	 * @throws BaseModuleDialogMethodNotFoundException
+	 * @throws BaseModuleDialogClassNotFoundException
+	 * @throws BaseModuleDialogFileNotFoundException
+	 * @throws BaseModuleDialogMissingException
+	 * @throws BaseUserAccessDeniedException
+	 */
 	public static function io_handler($alias)
 	{
 		global $user;

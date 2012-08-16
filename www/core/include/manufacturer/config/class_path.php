@@ -24,6 +24,10 @@
 /**
  * 
  */
-	$classes['Manufacturer'] = $path_prefix."core/include/manufacturer/manufacturer.class.php";
-	$classes['Manufacturer_Wrapper'] = $path_prefix."core/include/manufacturer/manufacturer.wrapper.class.php";
+	$classes['ManufacturerException'] 			= $path_prefix."core/include/manufacturer/exceptions/manufacturer.exception.class.php";
+	$classes['ManufacturerNotFoundException'] 	= $path_prefix."core/include/manufacturer/exceptions/manufacturer_not_found.exception.class.php";
+	$classes['ManufacturerIDMissingException']	= $path_prefix."core/include/manufacturer/exceptions/manufacturer_id_missing.exception.class.php";
+	
+	$classes['Manufacturer'] 					= $path_prefix."core/include/manufacturer/manufacturer.class.php";
+	$classes['Manufacturer_Wrapper'] 			= $path_prefix."core/include/manufacturer/manufacturer.wrapper.class.php";
 ?>

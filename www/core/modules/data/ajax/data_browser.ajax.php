@@ -28,7 +28,11 @@
 
 class DataBrowserAjax 
 {
-	
+	/**
+	 * @param integer $folder_id
+	 * @param integer $virtual_folder_id
+	 * @return string
+	 */
 	public static function get_data_browser_path($folder_id, $virtual_folder_id)
 	{
 		if($folder_id == "null")
@@ -40,6 +44,11 @@ class DataBrowserAjax
 		return $data_path->get_stack_path();
 	}
 	
+	/**
+	 * @param integer $folder_id
+	 * @param integer $virtual_folder_id
+	 * @return string
+	 */
 	public static function get_data_browser_path_cleared($folder_id, $virtual_folder_id)
 	{
 		if($folder_id == "null")
@@ -52,6 +61,10 @@ class DataBrowserAjax
 		return $data_path->get_stack_path();
 	}
 	
+	/**
+	 * @param integer $file_id
+	 * @return string
+	 */
 	public static function get_context_sensitive_file_menu($file_id)
 	{
 		global $user;
@@ -90,6 +103,10 @@ class DataBrowserAjax
 		return $html;
 	}
 	
+	/**
+	 * @param integer $folder_id
+	 * @return string
+	 */
 	public static function get_context_sensitive_folder_menu($folder_id)
 	{
 		global $user;
@@ -119,6 +136,10 @@ class DataBrowserAjax
 		return $html;
 	}
 	
+	/**
+	 * @param integer $value_id
+	 * @return string
+	 */
 	public static function get_context_sensitive_value_menu($value_id)
 	{
 		global $user;
@@ -147,6 +168,10 @@ class DataBrowserAjax
 		return $html;
 	}
 	
+	/**
+	 * @param integer $folder_id
+	 * @return string
+	 */
 	public static function get_browser_menu($folder_id)
 	{
 		$return_array = array("add"=>true,"add_list"=>"","image_browser"=>true);
@@ -174,6 +199,9 @@ class DataBrowserAjax
 		return json_encode($return_array);
 	}
 	
+	/**
+	 * @return string
+	 */
 	public static function delete_stack()
 	{
 		$data_path = new DataPath(null, null);

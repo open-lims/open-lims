@@ -103,6 +103,11 @@ class AdminBaseRegistryAjax
 		}
 	}
 	
+	/**
+	 * @param string $id
+	 * @return string
+	 * @throws BaseRegistyIDMissingException
+	 */
 	public static function edit($id)
 	{
 		if (is_numeric($id))
@@ -128,8 +133,19 @@ class AdminBaseRegistryAjax
 			
 			return json_encode($array);
 		}
+		else
+		{
+			throw new BaseRegistryIDMissingException();
+		}
 	}
 	
+	/**
+	 * @param integer $id
+	 * @param string $value
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 * @throws BaseRegistyIDMissingException
+	 */
 	public static function edit_handler($id, $value)
 	{
 		global $user;
@@ -140,11 +156,16 @@ class AdminBaseRegistryAjax
 			{
 				$registry = new Registry($id);
 				$registry->set_registry_value($value);
+				return "1";
 			}
 			else
 			{
 				throw new BaseUserAccessDeniedException();
 			}
+		}
+		else
+		{
+			throw new BaseRegistryIDMissingException();
 		}
 	}
 }

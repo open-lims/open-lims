@@ -45,6 +45,9 @@ function __autoload($classname)
 	$classes['BaseEnvironmentMeasuringUnitException']			= $path_prefix."core/include/base/environment/exceptions/base_environment_measuring_unit.exception.class.php";
 	$classes['BaseEnvironmentMeasuringUnitIDMissingException']	= $path_prefix."core/include/base/environment/exceptions/base_environment_measuring_unit_id_missing.exception.class.php";
 	$classes['BaseEnvironmentMeasuringUnitNotFoundException']	= $path_prefix."core/include/base/environment/exceptions/base_environment_measuring_unit_not_found.exception.class.php";
+	$classes['BaseEnvironmentPaperSizeException']				= $path_prefix."core/include/base/environment/exceptions/base_environment_paper_size.exception.class.php";
+	$classes['BaseEnvironmentPaperSizeIDMissingException']		= $path_prefix."core/include/base/environment/exceptions/base_environment_paper_size_id_missing.exception.class.php";
+	$classes['BaseEnvironmentPaperSizeNotFoundException']		= $path_prefix."core/include/base/environment/exceptions/base_environment_paper_size_not_found.exception.class.php";
 	
 	$classes['Currency']										= $path_prefix."core/include/base/environment/currency.class.php";
 	$classes['DatetimeHandler']									= $path_prefix."core/include/base/environment/datetime_handler.class.php";
@@ -79,6 +82,18 @@ function __autoload($classname)
 	$classes['BaseReportTCPDFClassMissingException']			= $path_prefix."core/include/base/system/exceptions/base_report_tcpdf_class_missing.exception.class.php";
 	$classes['BaseReportTCPDFFileMissingException']				= $path_prefix."core/include/base/system/exceptions/base_report_tcpdf_file_missing.exception.class.php";
 	$classes['BaseReportTCPDFLanguageFileMissingException']		= $path_prefix."core/include/base/system/exceptions/base_report_tcpdf_language_file_missing.exception.class.php";
+	
+	$classes['BaseModuleNavigationException']					= $path_prefix."core/include/base/system/exceptions/base_module_navigation.exception.class.php";
+	$classes['BaseModuleNavigationIDMissingException']			= $path_prefix."core/include/base/system/exceptions/base_module_navigation_id_missing.exception.class.php";
+	$classes['BaseModuleNavigationNotFoundException']			= $path_prefix."core/include/base/system/exceptions/base_module_navigation_not_found.exception.class.php";
+	
+	$classes['BaseServiceException']							= $path_prefix."core/include/base/system/exceptions/base_service.exception.class.php";
+	$classes['BaseServiceIDMissingException']					= $path_prefix."core/include/base/system/exceptions/base_service_id_missing.exception.class.php";
+	$classes['BaseServiceNotFoundException']					= $path_prefix."core/include/base/system/exceptions/base_service_not_found.exception.class.php";
+	
+	$classes['BaseRegistryException']							= $path_prefix."core/include/base/system/exceptions/base_registry.exception.class.php";
+	$classes['BaseRegistryIDMissingException']					= $path_prefix."core/include/base/system/exceptions/base_registry_id_missing.exception.class.php";
+	$classes['BaseRegistryNotFoundException']					= $path_prefix."core/include/base/system/exceptions/base_registry_not_found.exception.class.php";
 	
 	$classes['Convert']											= $path_prefix."core/include/base/system/convert.class.php";
 	$classes['Cron']											= $path_prefix."core/include/base/system/cron.class.php";

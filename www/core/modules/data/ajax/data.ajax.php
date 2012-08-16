@@ -27,6 +27,19 @@
  */
 class DataAjax
 {	
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $get_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 * @throws FolderIDMissingException
+	 */
 	public static function list_data_browser($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		if ($get_array)
@@ -277,10 +290,15 @@ class DataAjax
 		}
 		else
 		{
-			// Error
+			throw new FolderIDMissingException();
 		}
 	}
 	
+	/**
+	 * @param string $json_argument_array
+	 * @return string
+	 * @throws FolderIDMissingException
+	 */
 	public static function count_data_browser($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -301,194 +319,196 @@ class DataAjax
 		}
 		else
 		{
-			return null;
+			throw new FolderIDMissingException();
 		}
 	}
 	
+	/**
+	 * @return string
+	 * @throws FolderIDMissingException
+	 */
 	public static function permission_window()
 	{
 		global $user;
 		
-		try
+		if ($_POST[file_id] xor $_POST[value_id])
 		{
-			if ($_POST[file_id] xor $_POST[value_id])
+			if ($_POST[file_id])
 			{
-				if ($_POST[file_id])
-				{
-					$id = $_POST[file_id];
-					$object = File::get_instance($id);
-					$type = "file";
-					$title = $object->get_name();
-				}
-				
-				if ($_POST[value_id])
-				{
-					$id = $_POST[value_id];
-					$object = Value::get_instance($id);
-					$type = "value";
-					$title = $object->get_type_name();
-				}
+				$id = $_POST[file_id];
+				$object = File::get_instance($id);
+				$type = "file";
+				$title = $object->get_name();
+			}
+			
+			if ($_POST[value_id])
+			{
+				$id = $_POST[value_id];
+				$object = Value::get_instance($id);
+				$type = "value";
+				$title = $object->get_type_name();
+			}
+		}
+		else
+		{
+			if ($_POST[folder_id])
+			{
+				$id = $_POST[folder_id];
+				$object = Folder::get_instance($id);
+				$type = "folder";
+				$title = $object->get_name();
 			}
 			else
 			{
-				if ($_POST[folder_id])
-				{
-					$id = $_POST[folder_id];
-					$object = Folder::get_instance($id);
-					$type = "folder";
-					$title = $object->get_name();
-				}
-				else
-				{
-					throw new FolderIDMissingException();
-				}
+				throw new FolderIDMissingException();
 			}
+		}
+		
+		$data_permission = new DataPermission($type, $id);
+										
+		$template = new HTMLTemplate("data/data_permission_window.html");
 			
-			$data_permission = new DataPermission($type, $id);
-											
-			$template = new HTMLTemplate("data/data_permission_window.html");
-				
-			$template->set_var("title", $title);
-			
-			$user = new User($data_permission->get_owner_id());
-			$group = new Group($data_permission->get_owner_group_id());
-			
-			$template->set_var("owner", $user->get_full_name(false));
-			$template->set_var("owner_group", $group->get_name());
+		$template->set_var("title", $title);
+		
+		$user = new User($data_permission->get_owner_id());
+		$group = new Group($data_permission->get_owner_group_id());
+		
+		$template->set_var("owner", $user->get_full_name(false));
+		$template->set_var("owner_group", $group->get_name());
 
-			if ($object->can_set_automatic())
-			{
-				$disable_automatic = false;
-			}
-			else
-			{
-				$disable_automatic = true;
-			}
-			
-			if ($object->can_set_data_entity())
-			{
-				$disable_project = false;
-			}
-			else
-			{
-				$disable_project = true;
-			}
-			
-			if ($object->can_set_control())
-			{
-				$disable_control = false;
-			}
-			else
-			{
-				$disable_control = true;
-			}
-			
-			if ($object->can_set_remain())
-			{
-				$disable_remain = false;
-			}
-			else
-			{
-				$disable_remain = true;
-			}
-			
+		if ($object->can_set_automatic())
+		{
+			$disable_automatic = false;
+		}
+		else
+		{
+			$disable_automatic = true;
+		}
+		
+		if ($object->can_set_data_entity())
+		{
+			$disable_project = false;
+		}
+		else
+		{
+			$disable_project = true;
+		}
+		
+		if ($object->can_set_control())
+		{
+			$disable_control = false;
+		}
+		else
+		{
+			$disable_control = true;
+		}
+		
+		if ($object->can_set_remain())
+		{
+			$disable_remain = false;
+		}
+		else
+		{
+			$disable_remain = true;
+		}
+		
+		if ($disable_automatic == true)
+		{
+			$template->set_var("disabled_automatic","disabled='disabled'");
+		}
+		else
+		{
+			$template->set_var("disabled_automatic","");
+		}
+		
+		if ($data_permission->get_automatic() == true) {
+			$template->set_var("checked_automatic","checked='checked'");
 			if ($disable_automatic == true)
 			{
-				$template->set_var("disabled_automatic","disabled='disabled'");
+				$template->set_var("hidden_automatic","<input type='hidden' name='automatic' value='1' />");
 			}
 			else
 			{
-				$template->set_var("disabled_automatic","");
+				$template->set_var("hidden_automatic","");
 			}
-			
-			if ($data_permission->get_automatic() == true) {
-				$template->set_var("checked_automatic","checked='checked'");
-				if ($disable_automatic == true)
+		}else{
+			$template->set_var("checked_automatic","");
+			$template->set_var("hidden_automatic","");
+		}
+		
+
+		$permission_array = $data_permission->get_permission_array();
+
+		for ($i=1;$i<=4;$i++)
+		{
+			for ($j=1;$j<=4;$j++)
+			{
+				$checked_name = "checked_".$i."_".$j;
+				$disabled_name = "disabled_".$i."_".$j;
+				$hidden_name = "hidden_".$i."_".$j;
+				
+				if ($i==3 and $disable_project == true)
 				{
-					$template->set_var("hidden_automatic","<input type='hidden' name='automatic' value='1' />");
+					$template->set_var($disabled_name,"disabled='disabled'");
+					$disabled = true;
 				}
 				else
 				{
-					$template->set_var("hidden_automatic","");
-				}
-			}else{
-				$template->set_var("checked_automatic","");
-				$template->set_var("hidden_automatic","");
-			}
-			
-
-			$permission_array = $data_permission->get_permission_array();
-
-			for ($i=1;$i<=4;$i++)
-			{
-				for ($j=1;$j<=4;$j++)
-				{
-					$checked_name = "checked_".$i."_".$j;
-					$disabled_name = "disabled_".$i."_".$j;
-					$hidden_name = "hidden_".$i."_".$j;
-					
-					if ($i==3 and $disable_project == true)
+					if (($j==3 or $j==4) and $disable_control == true)
 					{
 						$template->set_var($disabled_name,"disabled='disabled'");
 						$disabled = true;
 					}
 					else
 					{
-						if (($j==3 or $j==4) and $disable_control == true)
+						if ($disable_remain == true)
 						{
 							$template->set_var($disabled_name,"disabled='disabled'");
 							$disabled = true;
 						}
 						else
 						{
-							if ($disable_remain == true)
-							{
-								$template->set_var($disabled_name,"disabled='disabled'");
-								$disabled = true;
-							}
-							else
-							{
-								$template->set_var($disabled_name,"");
-								$disabled = false;
-							}
+							$template->set_var($disabled_name,"");
+							$disabled = false;
 						}
 					}
-					
-					if ($permission_array[$i][$j] == true)
+				}
+				
+				if ($permission_array[$i][$j] == true)
+				{
+					$template->set_var($checked_name,"checked='checked'");
+					if ($disabled == true)
 					{
-						$template->set_var($checked_name,"checked='checked'");
-						if ($disabled == true)
-						{
-							$template->set_var($hidden_name, "<input type='hidden' name='".$checked_name."' value='1' />");
-						}
-						else
-						{
-							$template->set_var($hidden_name, "");
-						}
+						$template->set_var($hidden_name, "<input type='hidden' name='".$checked_name."' value='1' />");
 					}
 					else
 					{
-						$template->set_var($checked_name,"");
 						$template->set_var($hidden_name, "");
 					}
-					$disabled = false;
 				}
+				else
+				{
+					$template->set_var($checked_name,"");
+					$template->set_var($hidden_name, "");
+				}
+				$disabled = false;
 			}
+		}
 
-			$paramquery = $_GET;
-			$paramquery[nav] = "data";
-			unset($paramquery[action]);
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			return $template->get_string();	
-		}
-		catch (IdMissingException $e)
-		{
-			$error_io = new Error_IO($e, 20, 40, 3);
-			$error_io->display_error();
-		}
+		$paramquery = $_GET;
+		$paramquery[nav] = "data";
+		unset($paramquery[action]);
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		return $template->get_string();	
 	}
 	
+	/**
+	 * @param string $permission_array
+	 * @param string $type
+	 * @return string
+	 * @throws DataSecurityAccessDeniedException
+	 */
 	public static function change_permission($permission_array, $type)
 	{
 		global $user;
@@ -539,11 +559,11 @@ class DataAjax
 			$params = http_build_query($paramquery,'','&#38;');
 			if ($data_permission->set_permission_array($permissions) == true)
 			{
-				return true;
+				return "1";
 			}
 			else
 			{
-				return false;
+				return "0";
 			}
 		}
 		else
@@ -552,6 +572,9 @@ class DataAjax
 		}
 	}
 	
+	/**
+	 * @return string
+	 */
 	public static function get_allowed_image_types()
 	{
 		$array = array();

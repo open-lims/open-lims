@@ -182,12 +182,23 @@ class AdminBaseServiceAjax
 		}
 	}
 	
+	/**
+	 * @param string $service_id
+	 * @return string
+	 * @throws BaseServiceIDMissingException
+	 * @throws BaseUserAccessDeniedException
+	 */
 	public static function start($service_id)
 	{
 		global $user;
 		
-		if ($user->is_admin() and is_numeric($service_id))
+		if ($user->is_admin())
 		{
+			if (!is_numeric($service_id))
+			{
+				throw new BaseServiceIDMissingException();
+			}
+			
 			$service = new Service($service_id);
 			if ($service->start())
 			{
@@ -200,16 +211,27 @@ class AdminBaseServiceAjax
 		}
 		else
 		{
-			return 0;
+			throw new BaseUserAccessDeniedException();
 		}
 	}
 	
+	/**
+	 * @param string $service_id
+	 * @return string
+	 * @throws BaseServiceIDMissingException
+	 * @throws BaseUserAccessDeniedException
+	 */
 	public static function stop($service_id)
 	{
 		global $user;
 		
-		if ($user->is_admin() and is_numeric($service_id))
+		if ($user->is_admin())
 		{
+			if (!is_numeric($service_id))
+			{
+				throw new BaseServiceIDMissingException();
+			}
+			
 			$service = new Service($service_id);
 			if ($service->stop())
 			{
@@ -222,7 +244,7 @@ class AdminBaseServiceAjax
 		}
 		else
 		{
-			return 0;
+			throw new BaseUserAccessDeniedException();
 		}
 	}
 }

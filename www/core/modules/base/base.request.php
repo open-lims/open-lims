@@ -27,6 +27,9 @@
  */
 class BaseRequest
 {	
+	/**
+	 * @param string $alias
+	 */
 	public static function ajax_handler($alias)
 	{
 		switch($_GET['run']):
@@ -443,6 +446,13 @@ class BaseRequest
 		endswitch;
 	}
 	
+	/**
+	 * @param string $alias
+	 * @throws BaseModuleDialogMethodNotFoundException
+	 * @throws BaseModuleDialogClassNotFoundException
+	 * @throws BaseModuleDialogFileNotFoundException
+	 * @throws BaseModuleDialogMissingException
+	 */
 	public static function io_handler($alias)
 	{
 		global $user;

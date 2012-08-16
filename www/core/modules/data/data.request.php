@@ -27,6 +27,9 @@
  */
 class DataRequest
 {
+	/**
+	 * @param string $alias
+	 */
 	public static function ajax_handler($alias)
 	{
 		switch($_GET['run']):
@@ -344,6 +347,9 @@ class DataRequest
 		endswitch;
 	}
 	
+	/**
+	 * @param string $alias
+	 */
 	public static function io_handler($alias)
 	{	
 		switch($_GET['action']):

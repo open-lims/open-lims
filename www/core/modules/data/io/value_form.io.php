@@ -38,6 +38,12 @@ class ValueFormIO
 	
 	private $folder_id;
 	
+	/**
+	 * @param integer $value_id
+	 * @param integer $type_id
+	 * @param integer $folder_id
+	 * @param array $value_obj_content_array
+	 */
 	function __construct($value_id = null, $type_id = null, $folder_id = null, $value_obj_content_array = null)
 	{		
 		if ($value_id)
@@ -66,6 +72,10 @@ class ValueFormIO
 		}
 	}
 	
+	/**
+	 * @param array $array
+	 * @return string
+	 */
 	private function solve_entries($array)
 	{
 		$return_string = "";
@@ -299,21 +309,33 @@ class ValueFormIO
 		}
 	}
 	
+	/**
+	 * @param string $field_prefix
+	 */
 	public function set_field_prefix($field_prefix)
 	{
 		$this->field_prefix = $field_prefix;
 	}
 	
+	/**
+	 * @param string $field_prefix
+	 */
 	public function set_field_class($field_class)
 	{
 		$this->field_class = $field_class;
 	}
 	
+	/**
+	 * @param string $field_prefix
+	 */
 	public function set_table_class($table_class)
 	{
 		$this->table_class = $table_class;
 	}
 	
+	/**
+	 * @return $field_prefix
+	 */
 	public function get_content()
 	{
 		if(is_array($this->shape_array) and count($this->shape_array) >= 1)

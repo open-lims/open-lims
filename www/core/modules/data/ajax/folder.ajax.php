@@ -29,67 +29,60 @@
  */
 class FolderAjax
 {
-	
+	/**
+	 * @return string
+	 */
 	public static function get_array()
 	{
-		global $session;
-
-		if ($session->is_valid())
+		$return_array = array();
+								
+		$folder = Folder::get_instance(1);
+	
+		$data_array = $folder->get_subfolder_array();
+		
+		if (is_array($data_array) and count($data_array) >= 1)
 		{
-			if ($session->is_value("FILE_SEARCH_ARRAY"))
-			{
-				echo json_encode($session->read_value("FILE_SEARCH_ARRAY"));
-			}
-			else
-			{
-				$return_array = array();
-										
-				$folder = Folder::get_instance(1);
+			$counter = 0;
 			
-				$data_array = $folder->get_subfolder_array();
+			foreach($data_array as $key => $value)
+			{
+				$folder = Folder::get_instance($value);
+			
+				$return_array[$counter][0] = -1;
+				$return_array[$counter][1] = $value;
+				$return_array[$counter][2] = $folder->get_name();
+				$return_array[$counter][3] = "folder.png";
 				
-				if (is_array($data_array) and count($data_array) >= 1)
+				if ($folder->is_read_access() == true)
 				{
-					$counter = 0;
-					
-					foreach($data_array as $key => $value)
-					{
-						$folder = Folder::get_instance($value);
-					
-						$return_array[$counter][0] = -1;
-						$return_array[$counter][1] = $value;
-						$return_array[$counter][2] = $folder->get_name();
-						$return_array[$counter][3] = "folder.png";
-						
-						if ($folder->is_read_access() == true)
-						{
-							$return_array[$counter][4] = true;
-						}
-						else
-						{
-							$return_array[$counter][4] = false;	
-						}
-						
-						$return_array[$counter][5] = true; // Clickable
-						
-						$paramquery['username'] = $_GET['username'];
-						$paramquery['session_id'] = $_GET['session_id'];
-						$paramquery['nav'] = "data";
-						$paramquery['folder_id'] = $value;
-						$params = http_build_query($paramquery, '', '&#38;');
-						
-						$return_array[$counter][6] = $params; //link
-						$return_array[$counter][7] = false; //open
-						
-						$counter++;
-					}
+					$return_array[$counter][4] = true;
+				}
+				else
+				{
+					$return_array[$counter][4] = false;	
 				}
 				
-				echo json_encode($return_array);
+				$return_array[$counter][5] = true; // Clickable
+				
+				$paramquery['username'] = $_GET['username'];
+				$paramquery['session_id'] = $_GET['session_id'];
+				$paramquery['nav'] = "data";
+				$paramquery['folder_id'] = $value;
+				$params = http_build_query($paramquery, '', '&#38;');
+				
+				$return_array[$counter][6] = $params; //link
+				$return_array[$counter][7] = false; //open
+				
+				$counter++;
 			}
 		}
+		
+		return json_encode($return_array);
 	}
 	
+	/**
+	 * @return string
+	 */
 	public static function get_children($id)
 	{
 		if (is_numeric($id) and $id != 0)
@@ -138,10 +131,14 @@ class FolderAjax
 					
 				}
 			}
-			echo json_encode($return_array);
+			return json_encode($return_array);
 		}
 	}
 	
+	/**
+	 * @param string $action
+	 * @return string
+	 */
 	public static function get_data_browser_link_html_and_button_handler($action) 
 	{
 		$html;
@@ -155,7 +152,7 @@ class FolderAjax
 			case "folder_add":
 				if(isset($_POST['folder_name'])) //second call
 				{
-					echo self::add_folder($_POST['folder_id'], $_POST['folder_name']);
+					return self::add_folder($_POST['folder_id'], $_POST['folder_name']);
 				}
 				else //first call
 				{
@@ -172,7 +169,7 @@ class FolderAjax
 			case "folder_delete":
 				if(isset($_POST['sure'])) //second call
 				{
-					echo self::delete_folder($_POST['folder_id']);
+					return self::delete_folder($_POST['folder_id']);
 				}
 				else //first call
 				{
@@ -193,7 +190,7 @@ class FolderAjax
 			case "folder_rename":
 				if(isset($_POST['folder_name'])) //second call
 				{
-					echo self::rename_folder($_POST['folder_id'], $_POST['folder_name']);
+					return self::rename_folder($_POST['folder_id'], $_POST['folder_name']);
 				}
 				else //first call
 				{
@@ -232,6 +229,12 @@ class FolderAjax
 		return json_encode($array);
 	}
 	
+	/**
+	 * @param integer $folder_id
+	 * @param string $folder_name
+	 * @return string
+	 * @throws DataSecurityAccessDeniedException
+	 */
 	private static function add_folder($folder_id, $folder_name)
 	{
 		global $session;
@@ -246,11 +249,11 @@ class FolderAjax
 			$folder = Folder::get_instance(null);
 			if (($folder_id = $folder->create($folder_name, $folder_id, $path->get_path_string(), $session->get_user_id(), null)) == null)
 			{
-			 	return true;
+			 	return "1";
 			}
 			else
 			{
-				return false;
+				return "0";
 			}
 		}
 		else
@@ -259,12 +262,19 @@ class FolderAjax
 		}
 	}
 	
+	/**
+	 * @param integer $folder_id
+	 * @param string $folder_name
+	 * @return string
+	 * @throws DataSecurityAccessDeniedException
+	 */
 	private static function rename_folder($folder_id, $folder_name)
 	{
 		$folder = Folder::get_instance($folder_id);
 		if ($folder->can_rename_folder())
 		{
 			$folder->set_name($folder_name);
+			return "1";
 		}
 		else
 		{
@@ -272,11 +282,17 @@ class FolderAjax
 		}
 	}
 	
+	/**
+	 * @param integer $folder_id
+	 * @return string
+	 * @throws DataSecurityAccessDeniedException
+	 */
 	private static function delete_folder($folder_id) {
 		$folder = Folder::get_instance($folder_id);
 		if ($folder->can_command_folder())
 		{
 			$folder->delete(true, true);
+			return "1";
 		}
 		else
 		{

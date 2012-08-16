@@ -27,6 +27,9 @@
  */
 class JobRequest
 {	
+	/**
+	 * @param string $alias
+	 */
 	public static function ajax_handler($alias)
 	{
 		switch($_GET['run']):
@@ -64,6 +67,9 @@ class JobRequest
 		endswitch;
 	}
 	
+	/**
+	 * @param string $alias
+	 */
 	public static function io_handler($alias)
 	{
 		

@@ -27,6 +27,9 @@
  */
 class EquipmentRequest
 {	
+	/**
+	 * @param string $alias
+	 */
 	public static function ajax_handler($alias)
 	{
 		switch($_GET['run']):
@@ -82,10 +85,12 @@ class EquipmentRequest
 		endswitch;
 	}
 	
+	/**
+	 * @param string $alias
+	 */
 	public static function io_handler($alias)
 	{
 
 	}
-
 }
 ?>

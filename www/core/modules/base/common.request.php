@@ -27,6 +27,12 @@
  */
 class CommonRequest
 {
+	/**
+	 * @throws BaseModuleDialogMethodNotFoundException
+	 * @throws BaseModuleDialogClassNotFoundException
+	 * @throws BaseModuleDialogFileNotFoundException
+	 * @throws BaseModuleDialogMissingException
+	 */
 	public static function common_dialog()
 	{
 		if ($_GET['dialog'])
@@ -64,7 +70,13 @@ class CommonRequest
 		}
 	}
 	
-	public static function saerch_dialog()
+	/**
+	 * @throws BaseModuleDialogMethodNotFoundException
+	 * @throws BaseModuleDialogClassNotFoundException
+	 * @throws BaseModuleDialogFileNotFoundException
+	 * @throws BaseModuleDialogMissingException
+	 */
+	public static function search_dialog()
 	{
 		if ($_GET['dialog'])
 		{

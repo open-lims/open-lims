@@ -215,14 +215,27 @@ class FileIO
 		}
 	}
 
+	/**
+	 * @param string $item_holder_type
+	 * @param integer $item_holder_id
+	 * @param bool $as_page
+	 * @param bool $in_assistant
+	 * @param string $form_field_name
+	 * @throws ItemHolderTypeMissingException
+	 * @throws ItemHolderIDMissingException
+	 */
 	public static function list_file_items($item_holder_type, $item_holder_id, $as_page = true, $in_assistant = false, $form_field_name = null)
 	{
 		global $session, $user;
 		
-		$handling_class = Item::get_holder_handling_class_by_name($item_holder_type);
-		if ($handling_class)
+		if (!$item_holder_type)
 		{
-			$sql = $handling_class::get_item_list_sql($item_holder_id);
+			throw new ItemHolderTypeMissingException();
+		}
+		
+		if (!is_numeric($item_holder_id))
+		{
+			throw new ItemHolderIDMissingException();
 		}
 		
 		$argument_array = array();

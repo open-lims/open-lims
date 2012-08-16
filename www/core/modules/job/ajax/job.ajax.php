@@ -27,6 +27,18 @@
  */
 class JobAjax
 {
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $get_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 */
 	public static function list_jobs($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$list_request = new ListRequest_IO();
@@ -92,11 +104,18 @@ class JobAjax
 		return $list_request->get_page($page);
 	}
 	
+	/**
+	 * @param string $json_argument_array
+	 * @return integer
+	 */
 	public static function count_jobs($json_argument_array)
 	{
 		return Job_Wrapper::count_jobs(null);
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function start_test()
 	{
 		$template = new HTMLTemplate("job/start_test_window.html");
@@ -117,6 +136,12 @@ class JobAjax
 		return json_encode($array);
 	}
 	
+	/**
+	 * @param integer $number_of_jobs
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 * @throws BaseJobInvalidArgumentException
+	 */
 	public static function start_test_handler($number_of_jobs)
 	{
 		global $user;
@@ -130,19 +155,16 @@ class JobAjax
 					$job = new Job(null);
 					$job->create(1);
 				}
+				return "1";
 			}
 			else
 			{
-				/**
-				 * @todo throw excpetion
-				 */
+				throw new BaseJobInvalidArgumentException();
 			}
 		}
 		else
 		{
-			/**
-			 * @todo throw access denied exception
-			 */
+			throw new BaseUserAccessDeniedException();
 		}
 	}
 }

@@ -27,11 +27,19 @@
  */
 class ExtensionRequest
 {
+	/**
+	 * @param string $alias
+	 */
 	public static function ajax_handler($alias)
 	{
 		
 	}
 	
+	/**
+	 * @param string $alias
+	 * @throws BaseExtensionClassNotFoundException
+	 * @throws BaseExtensionFileNotFoundException
+	 */
 	public static function io_handler($alias)
 	{
 		if ($_GET['extension'])

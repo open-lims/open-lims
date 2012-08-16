@@ -30,6 +30,8 @@
 	$classes['ItemParentIDMissingException']		= $path_prefix."core/include/item/exceptions/item_parent_id_missing.exception.class.php";
 	$classes['ItemParentTypeMissingException']		= $path_prefix."core/include/item/exceptions/item_parent_type_missing.exception.class.php";
 	$classes['ItemPositionIDMissingException']		= $path_prefix."core/include/item/exceptions/item_position_id_missing.exception.class.php";
+	$classes['ItemHolderIDMissingException']		= $path_prefix."core/include/item/exceptions/item_holder_id_missing.exception.class.php";
+	$classes['ItemHolderTypeMissingException']		= $path_prefix."core/include/item/exceptions/item_holder_type_missing.exception.class.php";
 
 	$classes['ItemAddIOException']					= $path_prefix."core/include/item/exceptions/item_add_io.exception.class.php";
 	$classes['ItemAddIONotFoundException']			= $path_prefix."core/include/item/exceptions/item_add_io_not_found.exception.class.php";
@@ -43,6 +45,10 @@
 	$classes['ItemListenerInterface']				= $path_prefix."core/include/item/interfaces/item_listener.interface.php";
 	$classes['ItemHolderInterface']					= $path_prefix."core/include/item/interfaces/item_holder.interface.php";
 	$classes['ItemHolderListenerInterface'] 		= $path_prefix."core/include/item/interfaces/item_holder_listener.interface.php";
+	
+	$classes['ItemTypeException']					= $path_prefix."core/include/item/exceptions/item_type.exception.class.php";
+	$classes['ItemTypeRequiredException']			= $path_prefix."core/include/item/exceptions/item_type_required.exception.class.php";
+	
 	
 	$classes['ItemUnlinkEvent']						= $path_prefix."core/include/item/events/item_unlink_event.class.php";
 	$classes['ItemAddEvent']						= $path_prefix."core/include/item/events/item_add_event.class.php";
