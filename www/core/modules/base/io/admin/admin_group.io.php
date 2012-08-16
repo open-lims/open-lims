@@ -187,6 +187,9 @@ class AdminGroupIO
 	}
 	
 	/**
+	 * @throws BaseModuleDialogMethodNotFoundException
+	 * @throws BaseModuleDialogClassNotFoundException
+	 * @throws BaseModuleDialogFileNotFoundException
 	 * @throws GroupIDMissingException
 	 */
 	public static function detail()
@@ -256,18 +259,25 @@ class AdminGroupIO
 					{
 						require_once($module_dialog['class_path']);
 						
-						if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog['method']))
+						if (class_exists($module_dialog['class']))
 						{
-							$module_dialog['class']::$module_dialog[method]($_GET['id']);
+							if (method_exists($module_dialog['class'], $module_dialog['method']))
+							{
+								$module_dialog['class']::$module_dialog[method]($_GET['id']);
+							}
+							else
+							{
+								throw new BaseModuleDialogMethodNotFoundException();
+							}
 						}
 						else
 						{
-							// Error
+							throw new BaseModuleDialogClassNotFoundException();
 						}
 					}
 					else
 					{
-						// Error
+						throw new BaseModuleDialogFileNotFoundException();
 					}
 				break;
 				
