@@ -38,6 +38,7 @@ class SampleAdminAjax
 	 * @param string $sortvalue
 	 * @param string $sortmethod
 	 * @return string
+	 * @throws SampleIDMissingException
 	 * @throws SampleSecurityAccessDeniedException
 	 */
 	public static function list_user_permissions($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
@@ -137,11 +138,16 @@ class SampleAdminAjax
 				throw new SampleSecurityAccessDeniedException();
 			}
 		}
+		else
+		{
+			throw new SampleIDMissingException();	
+		}
 	}
 	
 	/**
 	 * @param string $json_argument_array
 	 * @return integer
+	 * @throws SampleIDMissingException
 	 */
 	public static function count_user_permissions($json_argument_array)
 	{
@@ -154,7 +160,7 @@ class SampleAdminAjax
 		}
 		else
 		{
-			return null;
+			throw new SampleIDMissingException();
 		}
 	}
 	
@@ -169,6 +175,7 @@ class SampleAdminAjax
 	 * @param string $sortvalue
 	 * @param string $sortmethod
 	 * @return string
+	 * @throws SampleIDMissingException
 	 * @throws SampleSecurityAccessDeniedException
 	 */
 	public static function list_organisation_unit_permissions($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
@@ -241,11 +248,16 @@ class SampleAdminAjax
 				throw new SampleSecurityAccessDeniedException();
 			}
 		}
+		else
+		{
+			throw new SampleIDMissingException();
+		}
 	}
 	
 	/**
 	 * @param string $json_argument_array
 	 * @return integer
+	 * @throws SampleIDMissingException
 	 */
 	public static function count_organisation_unit_permissions($json_argument_array)
 	{
@@ -258,7 +270,7 @@ class SampleAdminAjax
 		}
 		else
 		{
-			return null;
+			throw new SampleIDMissingException();
 		}
 	}
 }

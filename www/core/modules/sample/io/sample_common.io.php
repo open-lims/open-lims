@@ -104,7 +104,6 @@ class SampleCommon_IO
 
 		$tab_io->output();
 	}
-
 }
 
 ?>

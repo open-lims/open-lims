@@ -25,7 +25,7 @@
  * Include Data Corrupt Exception
  * @package base
  */
-class IncludeDataCorruptException extends BaseIncludeException
+class BaseIncludeDataCorruptException extends BaseIncludeException
 {
     function __construct()
     {

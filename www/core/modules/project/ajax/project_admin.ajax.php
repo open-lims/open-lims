@@ -580,6 +580,7 @@ class ProjectAdminAjax
 	/**
 	 * @param string $get_array
 	 * @return string
+	 * @throws ProjectDeleteException
 	 * @throws ProjectSecurityAccessDeniedException;
 	 * @throws ProjectIDMissingException
 	 */

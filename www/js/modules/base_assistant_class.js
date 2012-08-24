@@ -104,6 +104,7 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 				if (data)
 				{
 					$("#AssistantContent").empty().append(data).slideDown("slow");
+					base_form_init();
 				}
 			}
 		});

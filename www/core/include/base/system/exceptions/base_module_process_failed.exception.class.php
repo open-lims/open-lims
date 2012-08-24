@@ -25,7 +25,7 @@
  * Module Procedd Failed Exception
  * @package base
  */
-class ModuleProcessFailedException extends BaseModuleException
+class BaseModuleProcessFailedException extends BaseModuleException
 {
     function __construct()
     {

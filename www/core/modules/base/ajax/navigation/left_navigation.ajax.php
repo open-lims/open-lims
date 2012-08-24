@@ -29,7 +29,6 @@
  */
 class LeftNavigationAjax
 {
-	
 	/**
 	 * @param integer $id
 	 */
@@ -42,7 +41,6 @@ class LeftNavigationAjax
 			$session->write_value("LEFT_NAVIGATION_ACTIVE", $id, true);
 		}
 	}
-	
 }
 
 

@@ -28,6 +28,17 @@
  */
 class FileAjax 
 {
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 * @throws BaseAjaxDependentArgumentMissingException
+	 */
 	public static function list_file_items($json_column_array, $json_argument_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -100,12 +111,19 @@ class FileAjax
 			
 			$list_request->set_array($list_array);
 			
-			return $list_request->get_page($page);
-			
+			return $list_request->get_page($page);	
 		}
-		
+		else
+		{
+			throw new BaseAjaxDependentArgumentMissingException();
+		}
 	}
 	
+	/**
+	 * @param string $json_argument_array
+	 * @return integer
+	 * @throws BaseAjaxDependentArgumentMissingException
+	 */
 	public static function count_file_items($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -122,10 +140,24 @@ class FileAjax
 		}
 		else
 		{
-			return null;
+			throw new BaseAjaxDependentArgumentMissingException();
 		}
 	}
 	
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $get_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 * @throws DataSecurityAccessDeniedException
+	 * @throws FileIDMissingException
+	 */
 	public static function list_versions($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		if ($get_array)
@@ -202,8 +234,17 @@ class FileAjax
 				throw new DataSecurityAccessDeniedException();
 			}
 		}
+		else
+		{
+			throw new FileIDMissingException();
+		}
 	}
 	
+	/**
+	 * @param string $json_argument_array
+	 * @return integer
+	 * @throws FileIDMissingException
+	 */
 	public static function count_versions($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -215,10 +256,14 @@ class FileAjax
 		}
 		else
 		{
-			return null;
+			throw new FileIDMissingException();
 		}
 	}
 	
+	/**
+	 * @param string $action
+	 * @return string
+	 */
 	public static function get_data_browser_link_html_and_button_handler($action)
 	{
 		$html;
@@ -264,8 +309,7 @@ class FileAjax
 				
 				if(isset($_POST[permissions])) //second call
 				{
-					$success = DataAjax::change_permission(json_decode($_POST[permissions]), "File");
-					return $success;
+					return DataAjax::change_permission(json_decode($_POST[permissions]), "File");
 				}
 				else //first call
 				{
@@ -282,7 +326,7 @@ class FileAjax
 			case "file_delete":
 				if(isset($_POST['sure']))
 				{					
-					self::delete_file($_POST['file_id']);
+					return self::delete_file($_POST['file_id']);
 				}
 				else
 				{
@@ -301,6 +345,11 @@ class FileAjax
 		return json_encode($array);
 	}
 	
+	/**
+	 * @param string $folder_id
+	 * @return string
+	 * @throws DataSecurityAccessDeniedException
+	 */
 	public static function add_file($folder_id)
 	{
 		$parent_folder = Folder::get_instance($folder_id);
@@ -334,12 +383,18 @@ class FileAjax
 		}
 	}
 	
+	/**
+	 * @param integer $file_id
+	 * @return string
+	 * @throws DataSecurityAccessDeniedException
+	 */
 	private static function delete_file($file_id) 
 	{
 		$file = File::get_instance($file_id);
 		if ($file->is_delete_access())
 		{
 			$file->delete();
+			return "1";
 		}
 		else
 		{

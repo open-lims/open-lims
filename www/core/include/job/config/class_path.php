@@ -24,6 +24,11 @@
 /**
  * 
  */
-	$classes['Job']			= $path_prefix."core/include/job/job.class.php";
-	$classes['Job_Wrapper']	= $path_prefix."core/include/job/job.wrapper.class.php";
+	$classes['BaseJobException']					= $path_prefix."core/include/job/exceptions/base_job.exception.class.php";
+	$classes['BaseJobNotFoundException']			= $path_prefix."core/include/job/exceptions/base_job_not_found.exception.class.php";
+	$classes['BaseJoMissingException']				= $path_prefix."core/include/job/exceptions/base_job_missing.exception.class.php";
+	$classes['BaseJobInvalidArgumentException']		= $path_prefix."core/include/job/exceptions/base_job_invalid_argument.exception.class.php";
+
+	$classes['Job']									= $path_prefix."core/include/job/job.class.php";
+	$classes['Job_Wrapper']							= $path_prefix."core/include/job/job.wrapper.class.php";
 ?>

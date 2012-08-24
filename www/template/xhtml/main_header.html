@@ -1,4 +1,5 @@
-<script>
+<script type="text/javascript">
+/*<![CDATA[*/
 $(document).ready(function()
 {
 	var get_array = getQueryParams(document.location.search);
@@ -12,7 +13,7 @@ $(document).ready(function()
 	$('#yes').click(function()
 	{ 
 		$("#BaseLogoutQuestion").empty();
-		$("#BaseLogoutQuestion").html("<img src='images/animations/loading_circle_small.gif' alt=''> Please wait while logout.");
+		$("#BaseLogoutQuestion").html("<img src='images/animations/loading_circle_small.gif' alt='' /> Please wait while logout.");
 		
 		$.ajax(
 		{
@@ -35,6 +36,7 @@ $(document).ready(function()
         return false; 
     }); 
 });
+/*]]>*/
 </script>
 <div id='Header'>&nbsp;
 	<div id='HeaderLogo'><img src='../images/logo.png' alt='Logo' /></div>

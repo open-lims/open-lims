@@ -27,6 +27,11 @@
  */
 class SampleCreateAjax
 {	
+	/**
+	 * @param integer $page
+	 * @return string
+	 * @throws BaseAssistantRequestPageNotExistsException
+	 */	
 	public static function get_content($page)
 	{
 		global $session, $user;
@@ -516,13 +521,17 @@ class SampleCreateAjax
 			break;
 			
 			default:
-				return "Error: The requested page does not exist!";
+				throw new BaseAssistantRequestedPageNotExistsException();
 			break;
 			
 		endswitch;
 
 	}
 
+	/**
+	 * @param integer $page
+	 * @return integer
+	 */
 	public static function get_next_page($page)
 	{
 		global $session;
@@ -547,6 +556,10 @@ class SampleCreateAjax
 		}
 	}
 	
+	/**
+	 * @param integer $page
+	 * @return integer
+	 */
 	public static function get_previous_page($page)
 	{
 		global $session;
@@ -571,6 +584,10 @@ class SampleCreateAjax
 		}
 	}
 	
+	/**
+	 * @param integer $page
+	 * @param string $data
+	 */
 	public static function set_data($page, $data)
 	{
 		global $session;
@@ -666,6 +683,11 @@ class SampleCreateAjax
 		}
 	}
 	
+	/**
+	 * @param string $username
+	 * @param string $session_id
+	 * @return string
+	 */
 	public static function run($username, $session_id)
 	{
 		global $session, $user, $transaction;

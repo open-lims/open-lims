@@ -38,6 +38,7 @@ class OrganisationUnitAjax
 	 * @param string $sortvalue
 	 * @param string $sortmethod
 	 * @return string
+	 * @throws OrganisationUnitIDMissingException
 	 */
 	public static function list_members($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
@@ -83,11 +84,16 @@ class OrganisationUnitAjax
 			
 			return $list_request->get_page($page);
 		}
+		else
+		{
+			throw new OrganisationUnitIDMissingException();
+		}
 	}
 
 	/**
 	 * @param string $json_argument_array
 	 * @return integer
+	 * @throws OrganisationUnitIDMissingException
 	 */
 	public static function count_members($json_argument_array)
 	{
@@ -101,7 +107,7 @@ class OrganisationUnitAjax
 		}
 		else
 		{
-			return null;
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
@@ -116,6 +122,7 @@ class OrganisationUnitAjax
 	 * @param string $sortvalue
 	 * @param string $sortmethod
 	 * @return string
+	 * @throws OrganisationUnitIDMissingException
 	 */
 	public static function list_owners($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
@@ -161,11 +168,16 @@ class OrganisationUnitAjax
 			
 			return $list_request->get_page($page);
 		}
+		else
+		{
+			throw new OrganisationUnitIDMissingException();
+		}
 	}
 	
 	/**
 	 * @param string $json_argument_array
 	 * @return intger
+	 * @throws OrganisationUnitIDMissingException
 	 */
 	public static function count_owners($json_argument_array)
 	{
@@ -179,7 +191,7 @@ class OrganisationUnitAjax
 		}
 		else
 		{
-			return null;
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
@@ -194,6 +206,7 @@ class OrganisationUnitAjax
 	 * @param string $sortvalue
 	 * @param string $sortmethod
 	 * @return string
+	 * @throws OrganisationUnitIDMissingException
 	 */
 	public static function list_leaders($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
@@ -239,11 +252,16 @@ class OrganisationUnitAjax
 			
 			return $list_request->get_page($page);
 		}
+		else
+		{
+			throw new OrganisationUnitIDMissingException();
+		}
 	}
 
 	/**
 	 * @param string $json_argument_array
 	 * @return integer
+	 * @throws OrganisationUnitIDMissingException
 	 */
 	public static function count_leaders($json_argument_array)
 	{
@@ -257,7 +275,7 @@ class OrganisationUnitAjax
 		}
 		else
 		{
-			return null;
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
@@ -272,6 +290,7 @@ class OrganisationUnitAjax
 	 * @param string $sortvalue
 	 * @param string $sortmethod
 	 * @return string
+	 * @throws OrganisationUnitIDMissingException
 	 */
 	public static function list_quality_managers($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
@@ -317,11 +336,16 @@ class OrganisationUnitAjax
 			
 			return $list_request->get_page($page);
 		}
+		else
+		{
+			throw new OrganisationUnitIDMissingException();
+		}
 	}
 	
 	/**
 	 * @param string $json_argument_array
 	 * @return integer
+	 * @throws OrganisationUnitIDMissingException
 	 */
 	public static function count_quality_managers($json_argument_array)
 	{
@@ -335,7 +359,7 @@ class OrganisationUnitAjax
 		}
 		else
 		{
-			return null;
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
@@ -350,6 +374,7 @@ class OrganisationUnitAjax
 	 * @param string $sortvalue
 	 * @param string $sortmethod
 	 * @return string
+	 * @throws OrganisationUnitIDMissingException
 	 */
 	public static function list_groups($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
@@ -394,11 +419,16 @@ class OrganisationUnitAjax
 			
 			return $list_request->get_page($page);
 		}
+		else
+		{
+			throw new OrganisationUnitIDMissingException();
+		}
 	}
 	
 	/**
 	 * @param string $json_argument_array
 	 * @return integer
+	 * @throws OrganisationUnitIDMissingException
 	 */
 	public static function count_groups($json_argument_array)
 	{
@@ -412,7 +442,7 @@ class OrganisationUnitAjax
 		}
 		else
 		{
-			return null;
+			throw new OrganisationUnitIDMissingException();
 		}
 	}
 	
@@ -427,6 +457,7 @@ class OrganisationUnitAjax
 	 * @param string $sortvalue
 	 * @param string $sortmethod
 	 * @return string
+	 * @throws UserIDMissingException
 	 */
 	public static function list_organisation_units_by_user_id($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
@@ -540,11 +571,16 @@ class OrganisationUnitAjax
 			
 			return $list_request->get_page($page);
 		}
+		else
+		{
+			throw new UserIDMissingException();
+		}
 	}
 	
 	/**
 	 * @param string $json_argument_array
 	 * @return integer
+	 * @throws UserIDMissingException
 	 */
 	public static function count_organisation_units_by_user_id($json_argument_array)
 	{
@@ -558,7 +594,7 @@ class OrganisationUnitAjax
 		}
 		else
 		{
-			return null;
+			throw new UserIDMissingException();
 		}
 	}
 }

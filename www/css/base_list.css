@@ -1,5 +1,4 @@
 /* BASE LIST */
-
 .ListTable
 {
 	width: 100%;
@@ -10,7 +9,6 @@
 	white-space: nowrap;
 	overflow: hidden;
 }
-
 .ListTable th 
 {
 	font-weight: bold;
@@ -21,12 +19,10 @@
 	overflow: hidden;
 	padding: 0 2px;
 }
-
 .ListTable th div
 {
 	background-color: white;
 }
-
 .ListTable th a 
 {
 	white-space: nowrap;
@@ -61,19 +57,26 @@
 {
 	border-right:solid white 2px;
 }
-
-
+#ListButtonBar
+{
+	padding: 5px;
+}
+#ListButtonBarClear
+{
+	padding-top: 5px;
+	margin-bottom: 2px;
+	border-bottom: 1px #A0A0A0 dotted;
+	clear: left;
+}
 .ColumnMenuEntry
 {
 	clear: both;
 	height: 16px;	
 }
-
 .ColumnMenuEntryLabel
 {
 	float: left;
 }
-
 .ColumnMenuEntryCheckbox
 {
 	float: right;

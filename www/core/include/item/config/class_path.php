@@ -24,18 +24,40 @@
 /**
  * 
  */
-	$classes['ItemListenerInterface']		= $path_prefix."core/include/item/interfaces/item_listener.interface.php";
-	$classes['ItemHolderInterface']			= $path_prefix."core/include/item/interfaces/item_holder.interface.php";
-	$classes['ItemHolderListenerInterface'] = $path_prefix."core/include/item/interfaces/item_holder_listener.interface.php";
+	$classes['ItemException']						= $path_prefix."core/include/item/exceptions/item.exception.class.php";
 	
-	$classes['ItemUnlinkEvent']				= $path_prefix."core/include/item/events/item_unlink_event.class.php";
-	$classes['ItemAddEvent']				= $path_prefix."core/include/item/events/item_add_event.class.php";
-	$classes['ItemAddHolderEvent']			= $path_prefix."core/include/item/events/item_add_holder_event.class.php";
-	$classes['ItemHolderAddEvent']			= $path_prefix."core/include/item/events/item_holder_add_event.class.php";
+	$classes['ItemIDMissingException']				= $path_prefix."core/include/item/exceptions/item_id_missing.exception.class.php";
+	$classes['ItemParentIDMissingException']		= $path_prefix."core/include/item/exceptions/item_parent_id_missing.exception.class.php";
+	$classes['ItemParentTypeMissingException']		= $path_prefix."core/include/item/exceptions/item_parent_type_missing.exception.class.php";
+	$classes['ItemPositionIDMissingException']		= $path_prefix."core/include/item/exceptions/item_position_id_missing.exception.class.php";
+	$classes['ItemHolderIDMissingException']		= $path_prefix."core/include/item/exceptions/item_holder_id_missing.exception.class.php";
+	$classes['ItemHolderTypeMissingException']		= $path_prefix."core/include/item/exceptions/item_holder_type_missing.exception.class.php";
+
+	$classes['ItemAddIOException']					= $path_prefix."core/include/item/exceptions/item_add_io.exception.class.php";
+	$classes['ItemAddIONotFoundException']			= $path_prefix."core/include/item/exceptions/item_add_io_not_found.exception.class.php";
+	$classes['ItemAddIOClassNotFoundException']		= $path_prefix."core/include/item/exceptions/item_add_io_class_not_found.exception.class.php";
+	$classes['ItemAddIOFileNotFoundException']		= $path_prefix."core/include/item/exceptions/item_add_io_file_not_found.exception.class.php";
 	
-	$classes['Item']						= $path_prefix."core/include/item/item.class.php";
-	$classes['ItemClass']					= $path_prefix."core/include/item/item_class.class.php";
-	$classes['ItemInformation']				= $path_prefix."core/include/item/item_information.class.php";
+	$classes['ItemHandlerException']				= $path_prefix."core/include/item/exceptions/item_handler.exception.class.php";
+	$classes['ItemHandlerNotFoundException']		= $path_prefix."core/include/item/exceptions/item_handler_not_found.exception.class.php";
+	$classes['ItemHandlerClassNotFoundException']	= $path_prefix."core/include/item/exceptions/item_handler_class_not_found.exception.class.php";
 	
-	$classes['Item_Wrapper']				= $path_prefix."core/include/item/item.wrapper.class.php";
+	$classes['ItemListenerInterface']				= $path_prefix."core/include/item/interfaces/item_listener.interface.php";
+	$classes['ItemHolderInterface']					= $path_prefix."core/include/item/interfaces/item_holder.interface.php";
+	$classes['ItemHolderListenerInterface'] 		= $path_prefix."core/include/item/interfaces/item_holder_listener.interface.php";
+	
+	$classes['ItemTypeException']					= $path_prefix."core/include/item/exceptions/item_type.exception.class.php";
+	$classes['ItemTypeRequiredException']			= $path_prefix."core/include/item/exceptions/item_type_required.exception.class.php";
+	
+	
+	$classes['ItemUnlinkEvent']						= $path_prefix."core/include/item/events/item_unlink_event.class.php";
+	$classes['ItemAddEvent']						= $path_prefix."core/include/item/events/item_add_event.class.php";
+	$classes['ItemAddHolderEvent']					= $path_prefix."core/include/item/events/item_add_holder_event.class.php";
+	$classes['ItemHolderAddEvent']					= $path_prefix."core/include/item/events/item_holder_add_event.class.php";
+	
+	$classes['Item']								= $path_prefix."core/include/item/item.class.php";
+	$classes['ItemClass']							= $path_prefix."core/include/item/item_class.class.php";
+	$classes['ItemInformation']						= $path_prefix."core/include/item/item_information.class.php";
+	
+	$classes['Item_Wrapper']						= $path_prefix."core/include/item/item.wrapper.class.php";
 ?>

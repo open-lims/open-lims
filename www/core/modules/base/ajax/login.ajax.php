@@ -38,6 +38,7 @@ class LoginAjax
 				$session_id = $auth->get_session_id();
 				$session = new Session($session_id);
 				$user = new User($session->get_user_id());
+				$regional = new Regional($session->get_user_id());
 				
 				if (is_numeric($language))
 				{
@@ -45,7 +46,7 @@ class LoginAjax
 				}
 				else
 				{
-					$session->write_value("LANGUAGE", 1);
+					$session->write_value("LANGUAGE", $regional->get_language_id());
 				}
 								
 				if ($user->get_boolean_user_entry("user_locked") == false)

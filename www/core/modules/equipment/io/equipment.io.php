@@ -28,11 +28,13 @@
 class EquipmentIO
 {		
 	/**
-	 * @param string $sql
+	 * @param string $item_holder_type
+	 * @param integer $item_holder_id
+	 * @param bool $in_page
 	 */
 	public static function list_equipment_item_handler($item_holder_type, $item_holder_id, $in_page = true)
 	{
-		switch ($_GET[action]):
+		switch ($_GET['action']):
 		
 			case "detail":
 				self::detail();
@@ -46,17 +48,26 @@ class EquipmentIO
 	}
 
 	/**
-	 * @todo error on missing $sql
-	 * @param string $sql
+	 * @param string $item_holder_type
+	 * @param integer $item_holder_id
+	 * @param bool $as_page
+	 * @param bool $in_assistant
+	 * @param string $form_field_name
+	 * @throws ItemHolderTypeMissingException
+	 * @throws ItemHolderIDMissingException
 	 */
 	public static function list_equipment_items($item_holder_type, $item_holder_id, $as_page = true, $in_assistant = false, $form_field_name = null)
-	{		
-		$handling_class = Item::get_holder_handling_class_by_name($item_holder_type);
-		if ($handling_class)
+	{
+		if (!$item_holder_type)
 		{
-			$sql = $handling_class::get_item_list_sql($item_holder_id);
+			throw new ItemHolderTypeMissingException();
 		}
 		
+		if (!is_numeric($item_holder_id))
+		{
+			throw new ItemHolderIDMissingException();
+		}
+
 		$argument_array = array();
 		$argument_array[0][0] = "item_holder_type";
 		$argument_array[0][1] = $item_holder_type;
@@ -96,15 +107,12 @@ class EquipmentIO
 		$template->output();
 	}
 	
-	/**
-	 * @param string $sql
-	 */
 	public static function list_organisation_unit_related_equipment_handler()
 	{
-		switch ($_GET[action]):
+		switch ($_GET['action']):
 		
 			case "detail":
-				self::type_detail($_GET[id], null);
+				self::type_detail($_GET['id'], null);
 			break;
 			
 			default:
@@ -116,11 +124,11 @@ class EquipmentIO
 	
 	public static function list_organisation_unit_related_equipment()
 	{
-		if ($_GET[ou_id])
+		if ($_GET['ou_id'])
 		{
 			$argument_array = array();
 			$argument_array[0][0] = "organisation_unit_id";
-			$argument_array[0][1] = $_GET[ou_id];
+			$argument_array[0][1] = $_GET['ou_id'];
 					
 			$list = new List_IO("EquipmentOrganisationUnit", "ajax.php?nav=equipment", "list_organisation_unit_related_equipment", "count_organisation_unit_related_equipment", $argument_array, "EquipmentOrganisationUnit");
 		
@@ -145,9 +153,9 @@ class EquipmentIO
 	 */
 	public static function detail()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$equipment = new Equipment($_GET[id]);
+			$equipment = new Equipment($_GET['id']);
 			self::type_detail($equipment->get_type_id(), $equipment->get_owner_id());
 		}
 		else
@@ -202,8 +210,8 @@ class EquipmentIO
 				foreach($user_array as $key => $value)
 				{
 					$user = new User($value);
-					$user_content_array[$counter][username] = $user->get_username();
-					$user_content_array[$counter][fullname] = $user->get_full_name(false);
+					$user_content_array[$counter]['username'] = $user->get_username();
+					$user_content_array[$counter]['fullname'] = $user->get_full_name(false);
 					$counter++;
 				}
 				$template->set_var("no_user", false);

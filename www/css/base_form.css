@@ -2,9 +2,10 @@
 {
  	border-spacing: 0;
 }
-.Form input
+.Form input,
+.Form textarea
 {
-	font-size: 14px;
+	font: normal 14px Arial, Helvetica, sans-serif;
 	border-radius: 6px 6px 6px 6px;
 	border: 1px #D0D0D0 solid;
 	color: #2F2F2F;  
@@ -12,16 +13,12 @@
 	padding: 4px;
 	margin: 3px 0;
 }
-.Form input.FormFocused
+.Form input.FormFocused,
+.Form textarea.FormFocused
 {
 	border: 1px #73A6FF solid;
 	color: black;  
 	background-color: #EFF5FF;
-}
-.Form textfield
-{
-	background-color: white;
-	border: 1px #C0C0C0 solid;
 }
 .Form select:radio
 {
@@ -35,48 +32,7 @@
 {
 	
 }
-.Form button
-{
-	background: white;
-	border: 1px #A0A0A0 solid;
-	
-	color: #222222;
-	
-	font: bold 13px Arial, Helvetica, sans-serif;
-	
-	text-shadow: -1px -1px #D0D0D0;
-	
-	background-clip: padding-box;
-    background-color: #FFFFFF;
-    background-image: -moz-linear-gradient(center top , #FFFFFF 0%, #CECECE 100%);
-    border-color: #B7B7B7;
-    
-    box-shadow: 0 0 0.1em 1px rgba(255, 255, 255, 0.867) inset;
-    text-shadow: 0 1px 1px #FFFFFF;
-    
-    border-radius: 6px 6px 6px 6px;
-    border-width: 1px;
-    
-    line-height: 15px;
-    margin: 10px 5px 2px 0;
-    padding: 4px 12px;
-    
-    vertical-align: middle;
-    
-    border-style: solid;
-    cursor: pointer;
-    display: block;
-    
-    overflow: visible;
-    text-decoration: none;
-    width: auto;
-    
-    float:left;
-}
-.Form button:hover
-{
-	
-}
+
 .Form input.FormError
 {
 	border: 1px #ff6347 solid;
@@ -88,7 +44,8 @@
 }
 .FormButtonBoxClear
 {
-	clear: left;	
+	clear: left;
+	padding: 3px 0;
 }
 
 .FormBox
@@ -110,6 +67,13 @@
 {
 	clear: both;
 }
+.FormCenterBox70
+{
+	margin-left: auto;
+	margin-right: auto;
+	width: 70%;
+}
+
 
 /* !!! OUTDATED !!! */
 .FormButton

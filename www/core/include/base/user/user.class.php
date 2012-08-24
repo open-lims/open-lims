@@ -42,7 +42,6 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	
 	require_once("access/user.access.php");
 	require_once("access/user_admin_setting.access.php");
-	require_once("access/user_profile_setting.access.php");
 	require_once("access/user_profile.access.php");
 	
 	require_once("access/user.wrapper.access.php");
@@ -58,7 +57,6 @@ class User implements UserInterface {
 	
 	private $user;
 	private $user_admin_setting;
-	private $user_profile_setting;
 	private $user_profile;
 	
 	/**
@@ -75,7 +73,6 @@ class User implements UserInterface {
 				$this->user_id = $user_id;
 				$this->user = new User_Access($user_id);
 				$this->user_admin_setting = new UserAdminSetting_Access($user_id);
-				$this->user_profile_setting = new UserProfileSetting_Access($user_id);
 				$this->user_profile = new UserProfile_Access($user_id);
 			}
 			else
@@ -88,7 +85,6 @@ class User implements UserInterface {
 			$this->user_id = null;
 			$this->user = new User_Access(null);
 			$this->user_admin_setting = null;
-			$this->user_profile_setting = null;
 			$this->user_profile = new UserProfile_Access(null);
 		}
 	}
@@ -723,39 +719,7 @@ class User implements UserInterface {
 		}
 		
 	}
-	
-	/**
-	 * @see UserInterface::get_language_id()
-	 * @return integer Language-ID
-	 */
-	public function get_language_id()
-	{
-		if ($this->user_profile_setting)
-		{
-			return $this->user_profile_setting->get_language_id();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	/**
-	 * @see UserInterface::get_timezone_id()
-	 * @return integer Timezone-ID
-	 */
-	public function get_timezone_id()
-	{
-		if ($this->user_profile_setting)
-		{
-			return $this->user_profile_setting->get_timezone_id();
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
+
 	/**
 	 * @see UserInterface::set_username()
 	 * @param string $username New User-Name

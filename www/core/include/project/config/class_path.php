@@ -102,6 +102,7 @@
 	$classes['ProjectStatusDeleteException']									= $path_prefix."core/include/project/exceptions/project_status_delete.exception.class.php";
 	$classes['ProjectStatusNotFoundException']									= $path_prefix."core/include/project/exceptions/project_status_not_found.exception.class.php";
 	$classes['ProjectStatusIDMissingException']									= $path_prefix."core/include/project/exceptions/project_status_id_missing.exception.class.php";
+	$classes['ProjectStatusWithoutExtensionException']							= $path_prefix."core/include/project/exceptions/project_status_without_extension.exception.class.php";
 	
 	$classes['ProjectTaskException']											= $path_prefix."core/include/project/exceptions/project_task.exception.class.php";
 	$classes['ProjectTaskCreateException']										= $path_prefix."core/include/project/exceptions/project_task_create.exception.class.php";

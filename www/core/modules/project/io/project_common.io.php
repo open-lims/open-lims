@@ -126,11 +126,7 @@ class ProjectCommon_IO
 				$params 				= http_build_query($paramquery,'','&#38;');
 			 	unset($paramquery);
 			 
-				$tab_io->add("admin", "Administrat.", $params, false, false);
-			}
-			else
-			{
-				$tab_io->add("admin", "Administrat.", $params, false, true);
+				$tab_io->add("admin", "Project-Administration", $params, false, false);
 			}
 		
 			if ($_GET[run] != "item_add" and $_GET[run] != "item_list")

@@ -75,6 +75,7 @@ class ManufacturerAjax
 	
 	/**
 	 * @param integer $id
+	 * @throws ManufacturerIDMissingException
 	 */
 	public static function get_name($id)
 	{
@@ -82,6 +83,10 @@ class ManufacturerAjax
 		{
 			$manufacturer = new Manufacturer($id);
 			echo $manufacturer->get_name();
+		}
+		else
+		{
+			throw new ManufacturerIDMissingException();
 		}
 	}
 	
@@ -182,6 +187,11 @@ class ManufacturerAjax
 		return Manufacturer_Wrapper::count_manufacturers();
 	}
 	
+	/**
+	 * @param integer $id
+	 * @return string
+	 * @throws ManufacturerIDMissingException
+	 */
 	public static function delete($id)
 	{
 		global $user;
@@ -200,7 +210,7 @@ class ManufacturerAjax
 		}
 		else
 		{
-			echo 0;
+			throw new ManufacturerIDMissingException();
 		}
 	}
 }

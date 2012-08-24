@@ -28,7 +28,6 @@
 class DataIO
 {
 	/**
-	 * @todo remove legacy code
 	 * @throws DataSecuriyAccessDeniedException
 	 */
 	public static function browser()
@@ -36,14 +35,6 @@ class DataIO
 		global $content;
 		
 		$data_browser = new DataBrowser();
-
-		if ($_GET[clear] == "delete_stack")
-		{
-			$data_path = new DataPath(null, null);
-			$data_path->delete_stack();
-			unset($_GET[clear]);
-			unset($_GET[vfolder_id]);
-		}
 		
 		if ($_GET[vfolder_id])
 		{
@@ -115,104 +106,13 @@ class DataIO
 		$folder = Folder::get_instance($folder_id);	
 		
 		$template = new HTMLTemplate("data/data_browser.html");
-
-		if ($folder_id and !$virtual_folder_id)
-		{
-			if ($folder->is_write_access() == true)
-			{
-				$template->set_var("add_file", true);
-			}
-			else
-			{
-				$template->set_var("add_file", false);
-			}
-			
-			if ($folder->is_folder_image_content() == true)
-			{
-				$template->set_var("folder_image", true);
-			}
-			else
-			{
-				$template->set_var("folder_image", false);
-			}
-			
-			if (($folder->can_change_permission() or 
-				$folder->can_add_folder() or 
-				$folder->can_command_folder() or 
-				$folder->can_rename_folder()) and
-				($folder->is_write_access() or 
-				$folder->is_delete_access() or
-				$folder->is_control_access()))
-			{
-				$template->set_var("folder_administration", true);
-			}
-			else
-			{
-				$template->set_var("folder_administration", false);
-			}
-			
-			$template->set_var("item_administration", false);
-		}
-		else
-		{
-			$template->set_var("add_file", false);
-			$template->set_var("folder_image", false);
-			$template->set_var("folder_administration", false);
-			$template->set_var("item_administration", false);
-		}
-		
-		$paramquery = $_GET;
-		$paramquery[action] = "image_browser_detail";
-		$paramquery[folder_id] = $folder_id;
-		unset($paramquery[nextpage]);
-		$params = http_build_query($paramquery,'','&#38;');
-						
-		$template->set_var("folder_image_params", $params);
-		
-		
-		$paramquery = $_GET;
-		$paramquery[action] = "file_add";
-		$paramquery[folder_id] = $folder_id;
-		unset($paramquery[nextpage]);
-		$params = http_build_query($paramquery,'','&#38;');
-						
-		$template->set_var("add_file_params", $params);
-
-
-		$paramquery = $_GET;
-		$paramquery[clear] = "delete_stack";
-		unset($paramquery[folder_id]);
-		unset($paramquery[vfolder_id]);
-		$params = http_build_query($paramquery,'','&#38;');
-						
-		$template->set_var("home_folder_params", $params);
-		
-
-		$paramquery = $_GET;
-		$paramquery[action] = "folder_administration";
-		$paramquery[folder_id] = $folder_id;
-		unset($paramquery[nextpage]);
-		$params = http_build_query($paramquery,'','&#38;');
-						
-		$template->set_var("folder_administration_params", $params);
-		
-		$paramquery = $_GET;
-		$paramquery[action] = "item_administration_folder";
-		$paramquery[folder_id] = $folder_id;
-		unset($paramquery[nextpage]);
-		$params = http_build_query($paramquery,'','&#38;');
-						
-		$template->set_var("item_administration_params", $params);		
-
-
 		$template->set_var("title","Data Browser");
-		
 		$template->set_var("list", $list->get_list());
-		
 		$template->output();
 	}
 	
 	/**
+	 * @todo complete rebuild
 	 * @throws FolderIDMissingException
 	 * @throws FolderIsEmptyException
 	 * @throws DataSecuriyAccessDeniedException
@@ -342,6 +242,7 @@ class DataIO
 	}
 
 	/**
+	 * @todo complete rebuild
 	 * @throws FolderIDMissingException
 	 * @throws FolderIsEmptyException
 	 * @throws DataSecuriyAccessDeniedException

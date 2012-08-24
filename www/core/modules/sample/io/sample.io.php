@@ -27,10 +27,8 @@
  */
 class SampleIO
 {
-	public static function list_user_related_samples($user_id)
+	public static function list_user_related_samples()
 	{
-		global $user;
-		
 		$list = new List_IO("SampleUserRelated", "ajax.php?nav=sample", "list_user_related_samples", "count_user_related_samples", "0", "SampleAjaxMySamples");
 		
 		$list->add_column("","symbol",false,"16px");
@@ -44,6 +42,15 @@ class SampleIO
 		$template = new HTMLTemplate("sample/list_user.html");	
 		
 		$template->set_var("list", $list->get_list());
+		
+		$paramquery = array();
+		$paramquery['username'] = $_GET['username'];
+		$paramquery['session_id'] = $_GET['session_id'];
+		$paramquery['nav'] = "sample";
+		$paramquery['run'] = "new";
+		$params = http_build_query($paramquery, '', '&#38;');
+		
+		$template->set_var("new_sample_params", $params);
 		
 		$template->output();
 	}
@@ -96,8 +103,10 @@ class SampleIO
 	}
 	
 	/**
-	 * @todo error
 	 * @param integer $item_id
+	 * @param bool $in_assistant
+	 * @param bool $form_field_name
+	 * @throws ItemIDMissingException
 	 */
 	public static function list_samples_by_item_id($item_id, $in_assistant = false, $form_field_name = null)
 	{
@@ -146,19 +155,29 @@ class SampleIO
 		}
 		else
 		{
-			// Error	
+			throw new ItemIDMissingException();
 		}
 	}
 	
 	/**
-	 * @param string $sql
+	 * @param string $item_holder_type
+	 * @param integer $item_holder_id
+	 * @param bool $as_page
+	 * @param bool $in_assistant
+	 * @param string $form_field_name
+	 * @throws ItemHolderTypeMissingException
+	 * @throws ItemHolderIDMissingException
 	 */
 	public static function list_sample_items($item_holder_type, $item_holder_id, $as_page = true, $in_assistant = false, $form_field_name = null)
 	{
-		$handling_class = Item::get_holder_handling_class_by_name($item_holder_type);
-		if ($handling_class)
+		if (!$item_holder_type)
 		{
-			$sql = $handling_class::get_item_list_sql($item_holder_id);
+			throw new ItemHolderTypeMissingException();
+		}
+		
+		if (!is_numeric($item_holder_id))
+		{
+			throw new ItemHolderIDMissingException();
 		}
 		
 		$argument_array = array();
@@ -211,6 +230,8 @@ class SampleIO
 	 * @param array $type_array
 	 * @param array $category_array
 	 * @param integer $organisation_id
+	 * @param string $holder_class
+	 * @param integer $holder_id
 	 */
 	public static function create($type_array = null, $category_array = null, $organisation_unit_id = null, $holder_class = null, $holder_id = null)
 	{		
@@ -363,7 +384,9 @@ class SampleIO
 	/**
 	 * @param array $type_array
 	 * @param array $category_array
-	 * @param integer $organisation_unit_id
+	 * @param string $holder_class
+	 * @param integer $holder_id
+	 * @param intger $position_id
 	 * @return integer
 	 */
 	public static function add_sample_item($type_array, $category_array, $holder_class, $holder_id, $position_id)

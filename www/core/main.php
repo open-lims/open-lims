@@ -110,31 +110,31 @@ class Main
 						$system_handler = new SystemHandler(false);
 					}
 				}
-				catch(IncludeDataCorruptException $e)
+				catch(BaseIncludeDataCorruptException $e)
 				{
 					$GLOBALS['fatal_error'] = "The config-data of a module is corrupt!";
 				}
-				catch(IncludeProcessFailedException $e)
+				catch(BaseIncludeProcessFailedException $e)
 				{
 					$GLOBALS['fatal_error'] = "Include register process failed!";
 				}
-				catch(IncludeRequirementFailedException $e)
+				catch(BaseIncludeRequirementFailedException $e)
 				{
 					$GLOBALS['fatal_error'] = "An include-module requirement is not found!";
 				}
-				catch(IncludeFolderEmptyException $e)
+				catch(BaseIncludeFolderEmptyException $e)
 				{
 					$GLOBALS['fatal_error'] = "Include folder is empty!";
 				}
-				catch(ModuleProcessFailedException $e)
+				catch(BaseModuleProcessFailedException $e)
 				{
 					$GLOBALS['fatal_error'] = "Module register process failed!";
 				}
-				catch(ModuleDataCorruptException $e)
+				catch(BaseModuleDataCorruptException $e)
 				{
 					$GLOBALS['fatal_error'] = "Module Data Corrupt!";
 				}
-				catch(EventHandlerCreationFailedException $e)
+				catch(BaseEventHandlerCreationFailedException $e)
 				{
 					$GLOBALS['fatal_error'] = "Event-handler creation failed!";
 				}
@@ -166,7 +166,7 @@ class Main
 	 */
 	public function init()
 	{
-		global $session, $user;
+		global $session, $user, $regional;
 		
 		if ($GLOBALS['fatal_error'] == null)
 		{
@@ -176,6 +176,7 @@ class Main
 				{
 					$session = new Session($_GET[session_id]);
 					$user = new User($session->get_user_id());
+					$regional = new Regional();
 				}
 				catch (UserException $e)
 				{

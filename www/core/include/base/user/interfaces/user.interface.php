@@ -124,16 +124,6 @@ interface UserInterface
 	public function get_profile($entry);
 	
 	/**
-	 * @return integer Language-ID
-	 */
-	public function get_language_id();
-	
-	/**
-	 * @return integer Timezone-ID
-	 */
-	public function get_timezone_id();
-	
-	/**
 	 * @param string $username New User-Name
 	 * @return bool
 	 */

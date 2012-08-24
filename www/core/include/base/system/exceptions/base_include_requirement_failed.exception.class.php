@@ -25,7 +25,7 @@
  * Include Requirement Failed Exception
  * @package base
  */
-class IncludeRequirementFailedException extends BaseIncludeException
+class BaseIncludeRequirementFailedException extends BaseIncludeException
 {
 	function __construct()
     {

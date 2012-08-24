@@ -32,8 +32,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 }
 
 /**
- * Runtime Data Class
- * Saves calculated data via runtime and avoids recalculation
+ * Language Class
  * @package base
  */
 class Language // implements LanguageInterface
@@ -66,6 +65,18 @@ class Language // implements LanguageInterface
 		unset($this->language_id);
 		unset($this->language);
 	}
+	
+	public function get_full_name()
+    {
+    	if ($this->language and $this->language_id)
+		{
+    		return $this->language->get_english_name()."/".$this->language->get_language_name()." (".$this->language->get_iso_639()."-".$this->language->get_iso_3166().")";
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
 	
 	/**
 	 * @return string
@@ -101,6 +112,13 @@ class Language // implements LanguageInterface
 	}
 	
 	
+	/**
+	 * @return array
+	 */
+	public static function list_languages()
+    {
+    	return Language_Access::list_entries();
+    }
 	
 	/**
 	 * @param integer $language_id

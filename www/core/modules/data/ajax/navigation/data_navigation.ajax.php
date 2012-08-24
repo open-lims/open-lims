@@ -44,60 +44,57 @@ class DataNavigationAjax
 	{
 		global $session;
 
-		if ($session->is_valid())
+		if ($session->is_value("LEFT_NAVIGATION_DATA_ARRAY"))
 		{
-			if ($session->is_value("LEFT_NAVIGATION_DATA_ARRAY"))
-			{
-				echo json_encode($session->read_value("LEFT_NAVIGATION_DATA_ARRAY"));
-			}
-			else
-			{
-				$return_array = array();
-										
-				$folder = Folder::get_instance(1);
+			echo json_encode($session->read_value("LEFT_NAVIGATION_DATA_ARRAY"));
+		}
+		else
+		{
+			$return_array = array();
+									
+			$folder = Folder::get_instance(1);
+		
+			$data_array = $folder->get_subfolder_array();
 			
-				$data_array = $folder->get_subfolder_array();
+			if (is_array($data_array) and count($data_array) >= 1)
+			{
+				$counter = 0;
 				
-				if (is_array($data_array) and count($data_array) >= 1)
+				foreach($data_array as $key => $value)
 				{
-					$counter = 0;
-					
-					foreach($data_array as $key => $value)
-					{
-						$folder = Folder::get_instance($value);
-					
-						$return_array[$counter][0] = 0;
-						$return_array[$counter][1] = $value;
-						$return_array[$counter][2] = $folder->get_name();
-						$return_array[$counter][3] = "folder.png";
-						
-						if ($folder->is_read_access() == true)
-						{
-							$return_array[$counter][4] = true;
-						}
-						else
-						{
-							$return_array[$counter][4] = false;	
-						}
-						
-						$return_array[$counter][5] = true; // Clickable
-						
-						$paramquery['username'] = $_GET['username'];
-						$paramquery['session_id'] = $_GET['session_id'];
-						$paramquery['nav'] = "data";
-						$paramquery['folder_id'] = $value;
-						$params = http_build_query($paramquery, '', '&#38;');
-						
-						$return_array[$counter][6] = $params; //link
-						$return_array[$counter][7] = false; //open
-						$return_array[$counter][8] = Data_Wrapper::has_folder_children($value); //has children
-						
-						$counter++;
-					}
-				}
+					$folder = Folder::get_instance($value);
 				
-				echo json_encode($return_array);
+					$return_array[$counter][0] = 0;
+					$return_array[$counter][1] = $value;
+					$return_array[$counter][2] = $folder->get_name();
+					$return_array[$counter][3] = "folder.png";
+					
+					if ($folder->is_read_access() == true)
+					{
+						$return_array[$counter][4] = true;
+					}
+					else
+					{
+						$return_array[$counter][4] = false;	
+					}
+					
+					$return_array[$counter][5] = true; // Clickable
+					
+					$paramquery['username'] = $_GET['username'];
+					$paramquery['session_id'] = $_GET['session_id'];
+					$paramquery['nav'] = "data";
+					$paramquery['folder_id'] = $value;
+					$params = http_build_query($paramquery, '', '&#38;');
+					
+					$return_array[$counter][6] = $params; //link
+					$return_array[$counter][7] = false; //open
+					$return_array[$counter][8] = Data_Wrapper::has_folder_children($value); //has children
+					
+					$counter++;
+				}
 			}
+			
+			echo json_encode($return_array);
 		}
 	}
 	

@@ -1,26 +1,39 @@
-
-<div class='boxIconBar'>
-
-<!-- IF ([[YEAR]]) -->
-	<div class='boxIconElement'><img src='images/icons/year.png' alt='' />&nbsp;<a href='index.php?[[PARAMS]]&#38;view=year'>Year</a></div>
-<!-- ENDIF -->
-
-<!-- IF ([[MONTH]]) -->
-	<div class='boxIconElement'><img src='images/icons/month.png' alt='' />&nbsp;<a href='index.php?[[PARAMS]]&#38;view=month'>Month</a></div>
-<!-- ENDIF -->
-
-<!-- IF ([[WEEK]]) -->
-	<div class='boxIconElement'><img src='images/icons/7days.png' alt='' />&nbsp;<a href='index.php?[[PARAMS]]&#38;view=week'>Week</a></div>
-<!-- ENDIF -->
-
-<!-- IF ([[WORKWEEK]]) -->
-	<div class='boxIconElement'><img src='images/icons/5days.png' alt='' />&nbsp;<a href='index.php?[[PARAMS]]&#38;view=workweek'>Work Week</a></div>
-<!-- ENDIF -->
-
-<!-- IF ([[DAY]]) -->
-	<div class='boxIconElement'><img src='images/icons/1day.png' alt='' />&nbsp;<a href='index.php?[[PARAMS]]&#38;view=day'>1 Day</a></div>
-<!-- ENDIF -->
-
-<div class='boxIconClear'></div>
-
+<div id='ListButtonBar'>
+	
+	<!-- IF ([[YEAR]]) -->
+		<a href='index.php?[[PARAMS]]&#38;view=year' class='ListButton'>
+		<img src='images/icons/year.png' alt='' />
+		<div>Year</div>
+		</a>
+	<!-- ENDIF -->
+	
+	<!-- IF ([[MONTH]]) -->
+		<a href='index.php?[[PARAMS]]&#38;view=month' class='ListButton'>
+		<img src='images/icons/month.png' alt='' />
+		<div>Month</div>
+		</a>
+	<!-- ENDIF -->
+	
+	<!-- IF ([[WEEK]]) -->
+		<a href='index.php?[[PARAMS]]&#38;view=week' class='ListButton'>
+		<img src='images/icons/7days.png' alt='' />
+		<div>Week</div>
+		</a>
+	<!-- ENDIF -->
+	
+	<!-- IF ([[WORKWEEK]]) -->
+		<a href='index.php?[[PARAMS]]&#38;view=workweek' class='ListButton'>
+		<img src='images/icons/5days.png' alt='' />
+		<div>Work Week</div>
+		</a>
+	<!-- ENDIF -->
+	
+	<!-- IF ([[DAY]]) -->
+		<a href='index.php?[[PARAMS]]&#38;view=day' class='ListButton'>
+		<img src='images/icons/1day.png' alt='' />
+		<div>1 Day</div>
+		</a>
+	<!-- ENDIF -->
+	
 </div>
+<div id='ListButtonBarClear'></div>

@@ -25,7 +25,7 @@
  * Include Procedd Failed Exception
  * @package base
  */
-class IncludeProcessFailedException extends BaseIncludeException
+class BaseIncludeProcessFailedException extends BaseIncludeException
 {
    	function __construct()
     {

@@ -25,7 +25,7 @@
  * Include Folder Empty Exception
  * @package base
  */
-class IncludeFolderEmptyException extends BaseIncludeException
+class BaseIncludeFolderEmptyException extends BaseIncludeException
 {
 	function __construct()
     {

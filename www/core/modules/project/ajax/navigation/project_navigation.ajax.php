@@ -44,60 +44,57 @@ class ProjectNavigationAjax
 	{
 		global $session;
 
-		if ($session->is_valid())
+		if ($session->is_value("LEFT_NAVIGATION_PROJECT_ID"))
 		{
-			if ($session->is_value("LEFT_NAVIGATION_PROJECT_ID"))
-			{
-				$project_id = $session->read_value("LEFT_NAVIGATION_PROJECT_ID");
-			}
+			$project_id = $session->read_value("LEFT_NAVIGATION_PROJECT_ID");
+		}
 
-			if (is_numeric($_GET['project_id']))
-			{
-				$project = new Project($_GET['project_id']);
-				$master_project_id = $project->get_master_project_id();
-			}
-			
-			if ($session->is_value("LEFT_NAVIGATION_PROJECT_ARRAY") and $master_project_id == $project_id)
-			{
-				echo json_encode($session->read_value("LEFT_NAVIGATION_PROJECT_ARRAY"));
-			}
-			elseif(is_numeric($master_project_id))
-			{
-				$session->delete_value("LEFT_NAVIGATION_PROJECT_ARRAY");
-				$session->write_value("LEFT_NAVIGATION_PROJECT_ID", $master_project_id, true);
-				
-				$return_array = array();
-				
-				$project = new Project($_GET[project_id]);
-				if ($_GET[project_id] != ($master_project_id = $project->get_master_project_id()))
-				{
-					$project = new Project($master_project_id);
-					$project_id = $master_project_id;
-				}
-				else
-				{
-					$project_id = $_GET[project_id];
-				}
-						
-				$return_array[0][0] = 0;
-				$return_array[0][1] = $project_id;
-				$return_array[0][2] = $project->get_name();
-				$return_array[0][3] = "project.png";
-				$return_array[0][4] = true; // Permission
-				$return_array[0][5] = true;
-				
-				$paramquery['username'] = $_GET['username'];
-				$paramquery['session_id'] = $_GET['session_id'];
-				$paramquery['nav'] = "project";
-				$paramquery['run'] = "detail";
-				$paramquery['project_id'] = $project_id;
-				$params = http_build_query($paramquery, '', '&#38;');
-				
-				$return_array[0][6] = $params;
-				$return_array[0][7] = false;
+		if (is_numeric($_GET['project_id']))
+		{
+			$project = new Project($_GET['project_id']);
+			$master_project_id = $project->get_master_project_id();
+		}
 		
-				echo json_encode($return_array);
+		if ($session->is_value("LEFT_NAVIGATION_PROJECT_ARRAY") and $master_project_id == $project_id)
+		{
+			echo json_encode($session->read_value("LEFT_NAVIGATION_PROJECT_ARRAY"));
+		}
+		elseif(is_numeric($master_project_id))
+		{
+			$session->delete_value("LEFT_NAVIGATION_PROJECT_ARRAY");
+			$session->write_value("LEFT_NAVIGATION_PROJECT_ID", $master_project_id, true);
+			
+			$return_array = array();
+			
+			$project = new Project($_GET[project_id]);
+			if ($_GET[project_id] != ($master_project_id = $project->get_master_project_id()))
+			{
+				$project = new Project($master_project_id);
+				$project_id = $master_project_id;
 			}
+			else
+			{
+				$project_id = $_GET[project_id];
+			}
+					
+			$return_array[0][0] = 0;
+			$return_array[0][1] = $project_id;
+			$return_array[0][2] = $project->get_name();
+			$return_array[0][3] = "project.png";
+			$return_array[0][4] = true; // Permission
+			$return_array[0][5] = true;
+			
+			$paramquery['username'] = $_GET['username'];
+			$paramquery['session_id'] = $_GET['session_id'];
+			$paramquery['nav'] = "project";
+			$paramquery['run'] = "detail";
+			$paramquery['project_id'] = $project_id;
+			$params = http_build_query($paramquery, '', '&#38;');
+			
+			$return_array[0][6] = $params;
+			$return_array[0][7] = false;
+	
+			echo json_encode($return_array);
 		}
 	}
 	

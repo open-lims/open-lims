@@ -1,19 +1,190 @@
 <!-- CONTAINER BEGIN ("My Settings") -->
 
-<br />
-<table class='AdminUserDetailTable'>
+<div class='Form'>
+<div class='FormBox'>
+<div class='FormBoxHeadline'>Country/Language</div>
+
+<table>
+	
 	<tr>
 		<td width='25%'>Default-Language:</td>
-		<td>[[DEFAULT_LANGUAGE]]</td>
-		<td><a href='index.php?[[DEFAULT_LANGUAGE_PARAMS]]'>change</a></td>
+		<td>
+			<select name='language'>
+			
+				<!-- FOREACH BEGIN ([[LANGUAGE]]) -->
+	
+				<option value='[[LANGUAGE:VALUE]]' [[LANGUAGE:SELECTED]]>[[LANGUAGE:CONTENT]]</option>
+		
+				<!-- FOREACH END -->	
+			
+			</select>
+		</td>
 	</tr>
 	<tr>
-		<td>Timezone:</td>
-		<td>[[TIMEZONE]]</td>
-		<td><a href='index.php?[[TIMEZONE_PARAMS]]'>change</a></td>
+		<td>Country:</td>
+		<td>
+			<select name='country'>
+					
+				<!-- FOREACH BEGIN ([[COUNTRY]]) -->
+		
+				<option value='[[COUNTRY:VALUE]]' [[COUNTRY:SELECTED]]>[[COUNTRY:CONTENT]]</option>
+		
+				<!-- FOREACH END -->	
+			
+			</select>
+		</td>
 	</tr>
 
 </table>
+
+<div class='FormBoxClear'></div>
+</div>
+
+
+<div class='FormBox'>
+<div class='FormBoxHeadline'>Date/Time</div>
+
+<table>
+	
+	<tr>
+		<td>Timezone:</td>
+		<td colspan='3'>
+			<select name='timezone'>
+			
+				<!-- FOREACH BEGIN ([[TIMEZONE]]) -->
+	
+				<option value='[[TIMEZONE:VALUE]]' [[TIMEZONE:SELECTED]]>[[TIMEZONE:CONTENT]]</option>
+		
+				<!-- FOREACH END -->	
+			
+			</select>
+		</td>
+	</tr>
+	
+	<tr>
+		<td></td>
+		<td>Display</td>
+		<td>Enter</td>
+	</tr>
+	<tr>
+		<td>Time</td>
+		<td><select><option>24:00</option><option>12:00 pm</option></select></td>
+		<td><select><option>24:00</option><option>12:00 pm</option></select></td>
+	</tr>
+	<tr>
+		<td>Date</td>
+		<td>
+			<select>
+				<option value='1'>31.12.2010 - dd.mm.yyyy</option>
+		 		<option value='2'>2012.12.31 - yyyy.mm.dd</option>
+		 		<option value='3'>31-12-2010 - dd-mm-yyyy)</option>
+		 		<option value='4'>12-31-2010 - mm-dd-yyyy</option>
+		 		<option value='5'>2010-12-31 - yyyy-mm-dd</option>
+		 		<option value='6'>31/12/2010 - dd/mm/yyyy</option>
+		 		<option value='7'>12/31/2010 - mm/dd/yyyy</option>
+		 		<option value='8'>31st Dec 2010 - jS M yyyy</option>
+		 		<option value='9'>31. Dec 2010 - d. M yyyy</option>
+	 		</select>
+	 	</td>
+		<td>
+			<select>
+				<option value='1'>31.12.2010 - dd.mm.yyyy</option>
+		 		<option value='2'>2012.12.31 - yyyy.mm.dd</option>
+		 		<option value='3'>31-12-2010 - dd-mm-yyyy)</option>
+		 		<option value='4'>12-31-2010 - mm-dd-yyyy</option>
+		 		<option value='5'>2010-12-31 - yyyy-mm-dd</option>
+		 		<option value='6'>31/12/2010 - dd/mm/yyyy</option>
+		 		<option value='7'>12/31/2010 - mm/dd/yyyy</option>
+	 		</select>
+		</td>
+	</tr>
+	
+
+</table>
+
+<div class='FormBoxClear'></div>
+</div>
+
+
+
+<div class='FormBox'>
+<div class='FormBoxHeadline'>Currency/Numbers/Units</div>
+
+<table>
+	
+	<tr>
+		<td>System of Units:</td>
+		<td colspan='3'><select><option>metric</option><option>anglo-american</option></select></td>
+	</tr>
+	<tr>
+		<td>Currency:</td>
+		<td>
+			<select name='currency'>
+					
+				<!-- FOREACH BEGIN ([[CURRENCY]]) -->
+		
+				<option value='[[CURRENCY:VALUE]]' [[CURRENCY:SELECTED]]>[[CURRENCY:CONTENT]]</option>
+		
+				<!-- FOREACH END -->	
+			
+			</select>
+		</td>
+		<td>Currency Significant Digits:</td>
+		<td><select><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></td>
+	</tr>
+	
+	<tr>
+		<td>Decimal-Separator:</td>
+		<td><select><option>comma [,]</option><option>dot [.]</option></select></td>
+		<td>Thousand-Separator:</td>
+		<td><select><option>none</option><option>space [&nbsp;]</option><option>comma [,]</option><option>dot [.]</option><option>apostrophe [']</option></select></td>
+	</tr>
+	
+</table>
+
+<div class='FormBoxClear'></div>
+</div>
+
+
+<div class='FormBox'>
+<div class='FormBoxHeadline'>Miscellaneous</div>
+
+<table>
+	
+	<tr>
+		<td>Name Display Format:</td>
+		<td>
+			<select>
+				<option>Dr. John Doe</option>
+				<option>John Doe</option>
+				<option>Dr. Doe</option>
+				<option>Doe, Dr. John</option>
+				<option>Doe, John</option>
+				<option>Dr. Doe, John</option>
+				<option>Doe Dr. John</option>
+				<option>Doe John Dr.</option>
+				<option>Doe John</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>System of Paper Format:</td>
+		<td><select><option>DIN</option><option>anglo-american</option></select></td>
+	</tr>
+
+</table>
+
+<div class='FormBoxClear'></div>
+</div>
+
+
+
+<div class='FormButtonBox'>
+<button type='submit' id='DataValueAddButton'>Save</button>
+<button type='submit' id='DataValueCancelButton'>Cancel</button>
+<div class='FormButtonBoxClear'></div>
+</div>
+</div>
 					
 <!-- CONTAINER END () -->
 			

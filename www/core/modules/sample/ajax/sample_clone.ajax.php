@@ -27,6 +27,10 @@
  */
 class SampleCloneAjax
 {
+	/**
+	 * @param string $name
+	 * @return string
+	 */
 	public static function check_name($name)
 	{
 		global $session;
@@ -53,6 +57,11 @@ class SampleCloneAjax
 		}	
 	}
 	
+	/**
+	 * @param integer $page
+	 * @return string
+	 * @throws BaseAssistantRequestPageNotExistsException
+	 */	
 	public static function get_content($page, $form_field_name)
 	{
 		global $session, $user;
@@ -487,23 +496,35 @@ class SampleCloneAjax
 			break;
 			
 			default:
-				return "Error: The requested page does not exist!";
+				throw new BaseAssistantRequestedPageNotExistsException();
 			break;
 			
 		endswitch;
 
 	}
 
+	/**
+	 * @param integer $page
+	 * @return integer
+	 */
 	public static function get_next_page($page)
 	{
 		return ($page+1);
 	}
 	
+	/**
+	 * @param integer $page
+	 * @return integer
+	 */
 	public static function get_previous_page($page)
 	{
 		return ($page-1);
 	}
 	
+	/**
+	 * @param integer $page
+	 * @param string $data
+	 */
 	public static function set_data($page, $data)
 	{
 		global $session;
@@ -586,6 +607,11 @@ class SampleCloneAjax
 		}
 	}
 	
+	/**
+	 * @param string $username
+	 * @param string $session_id
+	 * @return string
+	 */
 	public static function run($username, $session_id)
 	{
 		global $session, $user, $transaction;

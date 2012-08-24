@@ -27,6 +27,11 @@
  */
 class ProjectCreateAjax
 {	
+	/**
+	 * @param integer $page
+	 * @return string
+	 * @throws BaseAssistantRequestedPageNotExistsException
+	 */
 	public static function get_content($page)
 	{
 		global $session, $user;
@@ -328,13 +333,17 @@ class ProjectCreateAjax
 			break;
 			
 			default:
-				return "Error: The requested page does not exist!";
+				throw new BaseAssistantRequestedPageNotExistsException();
 			break;
 						
 		endswitch;
 
 	}
 
+	/**
+	 * @param integer $page
+	 * @return integer
+	 */
 	public static function get_next_page($page)
 	{
 		global $session;
@@ -359,6 +368,10 @@ class ProjectCreateAjax
 		}
 	}
 	
+	/**
+	 * @param integer $page
+	 * @return integer
+	 */
 	public static function get_previous_page($page)
 	{
 		global $session;
@@ -383,6 +396,10 @@ class ProjectCreateAjax
 		}
 	}
 	
+	/**
+	 * @param integer $page
+	 * @param string $data
+	 */
 	public static function set_data($page, $data)
 	{
 		global $session;
@@ -483,6 +500,10 @@ class ProjectCreateAjax
 		}
 	}
 	
+	/**
+	 * @param string $name
+	 * @return string
+	 */
 	public static function check_data($name)
 	{
 		global $session;
@@ -507,6 +528,11 @@ class ProjectCreateAjax
 		return "0";
 	}
 	
+	/**
+	 * @param string $username
+	 * @param string $session_id
+	 * @return string
+	 */
 	public static function run($username, $session_id)
 	{
 		global $session, $user;

@@ -28,6 +28,20 @@
  */
 class ValueAjax
 {
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $get_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return string
+	 * @throws DataSecurityAccessDeniedException
+	 * @throws ValueIDMissingException
+	 */
 	public static function list_versions($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		if ($get_array)
@@ -103,8 +117,16 @@ class ValueAjax
 				throw new DataSecurityAccessDeniedException();
 			}
 		}
+		else
+		{
+			throw new ValueIDMissingException();
+		}
 	}
 	
+	/**
+	 * @param string $json_argument_array
+	 * @throws ValueIDMissingException
+	 */
 	public static function count_versions($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
@@ -116,10 +138,14 @@ class ValueAjax
 		}
 		else
 		{
-			return null;
+			throw new ValueIDMissingException();
 		}
 	}
 	
+	/**
+	 * @param string $action
+	 * @return string
+	 */
 	public static function get_data_browser_link_html_and_button_handler($action) 
 	{
 		$html;
@@ -221,7 +247,11 @@ class ValueAjax
 	}
 	
 	/**
-	 * @todo exceptions
+	 * @todo business logic exceptions
+	 * @param integer $folder_id
+	 * @param integer $type_id
+	 * @param string $value_array
+	 * @return string
 	 */
 	private static function add_value($folder_id, $type_id, $value_array)
 	{
@@ -248,7 +278,12 @@ class ValueAjax
 	}
 	
 	/**
-	 * @todo exceptions
+	 * @todo business logic exceptions
+	 * @param integer $folder_id
+	 * @param integer $type_id
+	 * @param string $value_array
+	 * @param string $get_array
+	 * @return string
 	 */
 	public static function add_as_item($folder_id, $type_id, $value_array, $get_array)
 	{
@@ -277,7 +312,7 @@ class ValueAjax
 					{
 						$transaction->commit($transaction_id);
 					}
-					return 1;
+					return "1";
 				}
 				else
 				{
@@ -304,7 +339,6 @@ class ValueAjax
 	}
 	
 	/**
-	 * @todo remove JS in template
 	 * @param integer $gid
 	 * @param array $link
 	 * @param array $type_array
@@ -357,10 +391,10 @@ class ValueAjax
 	}
 	
 	/**
-	 * @todo exceptions
 	 * @param string $get_array
 	 * @param string $type_array
 	 * @return string
+	 * @throws ItemTypeRequiredException
 	 */
 	public static function add_as_item_window($get_array, $type_array, $folder_id)
 	{
@@ -425,13 +459,17 @@ class ValueAjax
 		}
 		else
 		{
-			// Change
-			throw new DataException();
+			throw new ItemTypeRequiredException();
 		}
 	}
 	
 	/**
-	 * @todo exceptions
+	 * @todo business logic exceptions
+	 * @param integer $value_id
+	 * @param integer $previous_version_id
+	 * @param string $value_array
+	 * @param string $major
+	 * @return string
 	 */
 	public static function update($value_id, $previous_version_id, $value_array, $major)
 	{
@@ -475,12 +513,18 @@ class ValueAjax
 		}
 	}
 	
+	/**
+	 * @param integer $value_id
+	 * @return string
+	 * @throws DataSecurityAccessDeniedException
+	 */
 	private static function delete_value($value_id)
 	{
 		$value = Value::get_instance($value_id);
 		if ($value->is_delete_access())
 		{
 			$value->delete();
+			return "1";
 		}
 		else
 		{

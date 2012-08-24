@@ -1,0 +1,36 @@
+<!-- CONTAINER BEGIN "[[USERNAME]] - [[FULLNAME]]") -->
+
+<div id='ListButtonBar'>
+	<a href='index.php?[[ADD_GROUP_PARAMS]]' class='ListButton'>
+	<img src='images/icons/add_group.png' alt='' />
+	<div>Add Group</div>
+	</a>
+</div>
+<div id='ListButtonBarClear'></div>
+
+<table class='OverviewTable'>
+	<tr>
+		<th>Groupname:</th>
+		<th width='15%'>Delete:</th>
+	</tr>
+					
+	<!-- FOREACH BEGIN ([[GROUP]]) -->
+			
+		<tr>
+			<td>[[GROUP:NAME]]</td>
+			<td><a href='index.php?[[GROUP:DELETE_PARAMS]]'>delete</a></td>
+		</tr>
+	
+	<!-- FOREACH END -->
+	
+	<!-- IF ([[NO_GROUP]]) -->
+	
+		<tr>
+			<td colspan='2'><span class='italic'>No Groups Found!</span></td>
+		</tr>
+	
+	<!-- ENDIF -->
+
+</table>
+
+<!-- CONTAINER END () -->

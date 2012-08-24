@@ -414,7 +414,7 @@ class ValueIO
 	}
 
 	/**
-	 * @throws FolderIDMissingException
+	 * @throws ItemIDMissingException
 	 */
 	public static function edit_value_item($item_id)
 	{
@@ -429,6 +429,10 @@ class ValueIO
 			{		
 				self::edit($value, http_build_query(Retrace::resolve_retrace_string($_GET['retrace'])), false);
 			}
+		}
+		else
+		{
+			throw new ItemIDMissingException();
 		}
 	}
 	

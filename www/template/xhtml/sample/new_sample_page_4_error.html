@@ -1,38 +1,13 @@
-
-<script>
-$(document).ready(function()
-{
-	function check_form()
-	{
-		return true;
-	}
-	$("#AssistantPrevious").click(function()
-	{
-		if (check_form() == true)
-		{
-			assistant.load_previous_page();
-		}
-	});
-	$("#AssistantNext").click(function()
-	{
-		if (check_form() == true)
-		{
-			assistant.load_next_page();
-		}
-	});
-});
-</script>
-
 <br />
-	<table class='formTable'>
+	<table class='Form FormCenterBox70'>
 	<tr>
 		<td>The Sample Template contains errors</td>
 	</tr>
 	<tr>
 		<td>
 			<br />
-			<div class='button_left'><button id='AssistantPrevious' class='AssistantButtonDisabled'>previous</button></div>
-			<div class='button_right'><button id='AssistantNext' class='AssistantButton'>next</button></div>
+			<div class='button_left'><button class='ButtonDisabled'>previous</button></div>
+			<div class='button_right'><button class='ButtonDisabled'>next</button></div>
 		</td>
 	</tr>
 </table>

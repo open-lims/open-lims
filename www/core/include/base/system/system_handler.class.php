@@ -41,11 +41,25 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("exceptions/base_include_process_failed.exception.class.php");
 	
 	require_once("exceptions/base_module.exception.class.php");
+	require_once("exceptions/base_module_not_found.exception.class.php");
+	require_once("exceptions/base_module_missing.exception.class.php");
 	require_once("exceptions/base_module_data_corrupt.exception.class.php");
+	require_once("exceptions/base_module_illegal_controller_call.exception.class.php");
+	
+	require_once("exceptions/base_module_controller.exception.class.php");
+	require_once("exceptions/base_module_controller_not_found.exception.class.php");
+	require_once("exceptions/base_module_controller_file_not_found.exception.class.php");
+	require_once("exceptions/base_module_controller_class_not_found.exception.class.php");
+	
+	require_once("exceptions/base_module_dialog.exception.class.php");
 	require_once("exceptions/base_module_dialog_corrupt.exception.class.php");
 	require_once("exceptions/base_module_dialog_creation_failed.exception.class.php");
 	require_once("exceptions/base_module_dialog_missing.exception.class.php");
 	require_once("exceptions/base_module_dialog_not_found.exception.class.php");
+	require_once("exceptions/base_module_dialog_class_not_found.exception.class.php");
+	require_once("exceptions/base_module_dialog_file_not_found.exception.class.php");
+	require_once("exceptions/base_module_dialog_method_not_found.exception.class.php");
+	
 	require_once("exceptions/base_module_folder_empty.exception.class.php");
 	require_once("exceptions/base_module_process_failed.exception.class.php");
 	
@@ -278,7 +292,7 @@ class SystemHandler implements SystemHandlerInterface
 										$base_include_file = new BaseIncludeFile_Access(null);
 										if ($base_include_file->create($register_key, "db_table_name.php", md5_file($db_table_name_file)) == null)
 										{
-											throw new IncludeProcessFailedException();
+											throw new BaseIncludeProcessFailedException();
 										}
 									}
 								}
@@ -293,7 +307,7 @@ class SystemHandler implements SystemHandlerInterface
 									
 									if (BaseEventListener_Access::delete_by_include_id($register_key) == false)
 									{
-										throw new IncludeProcessFailedException();
+										throw new BaseIncludeProcessFailedException();
 									}
 									
 									// Register Event Handler
@@ -304,7 +318,7 @@ class SystemHandler implements SystemHandlerInterface
 											$base_event_listener = new BaseEventListener_Access(null);
 											if ($base_event_listener->create($register_key, $event_listener_value) == null)
 											{
-												throw new EventHandlerCreationFailedException();
+												throw new BaseEventHandlerCreationFailedException();
 											}
 										}
 									}
@@ -320,7 +334,7 @@ class SystemHandler implements SystemHandlerInterface
 										$base_include_file = new BaseIncludeFile_Access(null);
 										if ($base_include_file->create($register_key, "class_event_listener.php", md5_file($class_event_listener_file)) == null)
 										{
-											throw new IncludeProcessFailedException();
+											throw new BaseIncludeProcessFailedException();
 										}
 									}
 								}
@@ -342,7 +356,7 @@ class SystemHandler implements SystemHandlerInterface
 										$base_include_file = new BaseIncludeFile_Access(null);
 										if ($base_include_file->create($register_key, "class_path.php", md5_file($class_path_file)) == null)
 										{
-											throw new IncludeProcessFailedException();
+											throw new BaseIncludeProcessFailedException();
 										}
 									}
 								}
@@ -360,14 +374,14 @@ class SystemHandler implements SystemHandlerInterface
 							$base_include = new BaseInclude_Access(null);
 							if (($base_include_id = $base_include->create($name, str_replace(constant("INCLUDE_DIR")."/","",$value))) == null)
 							{
-								throw new IncludeProcessFailedException();
+								throw new BaseIncludeProcessFailedException();
 							}
 							else
 							{
 								$base_include_file = new BaseIncludeFile_Access(null);
 								if ($base_include_file->create($base_include_id, "include_info.php", md5_file($config_file)) == null)
 								{
-									throw new IncludeProcessFailedException();
+									throw new BaseIncludeProcessFailedException();
 								}
 							}
 	
@@ -376,7 +390,7 @@ class SystemHandler implements SystemHandlerInterface
 								$base_include_file = new BaseIncludeFile_Access(null);
 								if ($base_include_file->create($base_include_id, "db_table_name.php", md5_file($db_table_name_file)) == null)
 								{
-									throw new IncludeProcessFailedException();
+									throw new BaseIncludeProcessFailedException();
 								}
 							}
 							
@@ -387,7 +401,7 @@ class SystemHandler implements SystemHandlerInterface
 								$base_include_file = new BaseIncludeFile_Access(null);
 								if ($base_include_file->create($base_include_id, "class_event_listener.php", md5_file($class_event_listener_file)) == null)
 								{
-									throw new IncludeProcessFailedException();
+									throw new BaseIncludeProcessFailedException();
 								}
 								
 								// Register Event Handler
@@ -398,7 +412,7 @@ class SystemHandler implements SystemHandlerInterface
 										$base_event_listener = new BaseEventListener_Access(null);
 										if ($base_event_listener->create($base_include_id, $event_listener_value) == null)
 										{
-											throw new EventHandlerCreationFailedException();
+											throw new BaseEventHandlerCreationFailedException();
 										}
 									}
 								}
@@ -409,7 +423,7 @@ class SystemHandler implements SystemHandlerInterface
 								$base_include_file = new BaseIncludeFile_Access(null);
 								if ($base_include_file->create($base_include_id, "class_path.php", md5_file($class_path_file)) == null)
 								{
-									throw new IncludeProcessFailedException();
+									throw new BaseIncludeProcessFailedException();
 								}
 							}
 							
@@ -435,7 +449,7 @@ class SystemHandler implements SystemHandlerInterface
 						{
 							if (!in_array($sub_value, $registered_include_array))
 							{
-								throw new IncludeRequirementFailedException();
+								throw new BaseIncludeRequirementFailedException();
 							}
 						}
 					}
@@ -450,11 +464,11 @@ class SystemHandler implements SystemHandlerInterface
 				{
 					if (BaseIncludeFile_Access::delete_by_include_id($legacy_key) == false)
 					{
-						throw new IncludeProcessFailedException();
+						throw new BaseIncludeProcessFailedException();
 					}
 					if (BaseEventListener_Access::delete_by_include_id($legacy_key) == false)
 					{
-						throw new IncludeProcessFailedException();
+						throw new BaseIncludeProcessFailedException();
 					}
 					
 					$include_delete_event = new IncludeDeleteEvent($legacy_key);
@@ -462,13 +476,13 @@ class SystemHandler implements SystemHandlerInterface
 					
 					if ($event_handler->get_success() == false)
 					{
-						throw new IncludeProcessFailedException();
+						throw new BaseIncludeProcessFailedException();
 					}	
 					
 					$base_include = new BaseInclude_Access($legacy_key);
 					if ($base_include->delete() == false)
 					{
-						throw new IncludeProcessFailedException();
+						throw new BaseIncludeProcessFailedException();
 					}
 				}
 			}
@@ -494,12 +508,12 @@ class SystemHandler implements SystemHandlerInterface
 								$base_include_file = new BaseIncludeFile_Access(null);
 								if ($base_include_file->create($key, "register_execute.php", md5_file($register_execute)) == null)
 								{
-									throw new IncludeProcessFailedException();
+									throw new BaseIncludeProcessFailedException();
 								}
 							}
 							else
 							{
-								throw new IncludeProcessFailedException();
+								throw new BaseIncludeProcessFailedException();
 							}
 							
 							unset($result);
@@ -554,11 +568,11 @@ class SystemHandler implements SystemHandlerInterface
 								$base_module = new BaseModule_Access($register_key);
 								if ($base_module->set_name($name) == false)
 								{
-									throw new ModuleProcessFailedException();
+									throw new BaseModuleProcessFailedException();
 								}
 								if ($base_module->set_class($main_class) == false)
 								{
-									throw new ModuleProcessFailedException();
+									throw new BaseModuleProcessFailedException();
 								}
 								
 								$module_info_id = BaseModuleFile_Access::get_id_by_module_id_and_name($register_key, "module_info.php");
@@ -572,7 +586,7 @@ class SystemHandler implements SystemHandlerInterface
 									$base_module_file = new BaseModuleFile_Access(null);
 									if ($base_module_file->create($register_key, "module_info.php", md5_file($config_file)) == null)
 									{
-										throw new ModuleProcessFailedException();
+										throw new BaseModuleProcessFailedException();
 									}
 								}
 																
@@ -617,7 +631,7 @@ class SystemHandler implements SystemHandlerInterface
 											$base_module_navigation = new BaseModuleNavigation_Access(null);
 											if ($base_module_navigation->create($tab_value['language_address'], $tab_value['colour'], $position+1, $register_key, $tab_value['controller_class'], $tab_value['controller_file'], $tab_value['alias']) == null)
 											{
-												throw new ModuleProcessFailedException();
+												throw new BaseModuleProcessFailedException();
 											}
 										}
 									}
@@ -631,7 +645,7 @@ class SystemHandler implements SystemHandlerInterface
 												$base_module_navigation = new BaseModuleNavigation_Access($tab_list_value['id']);
 												if ($base_module_navigation->delete() == false)
 												{
-													throw new ModuleProcessFailedException();
+													throw new BaseModuleProcessFailedException();
 												}
 											}
 										}
@@ -648,7 +662,7 @@ class SystemHandler implements SystemHandlerInterface
 									
 									if (BaseModuleDialog_Access::delete_by_module_id($register_key) == false)
 									{
-										throw new ModuleProcessFailedException();
+										throw new BaseModuleProcessFailedException();
 									}
 									
 									// Register Dialog
@@ -659,7 +673,7 @@ class SystemHandler implements SystemHandlerInterface
 											$base_module_dialog = new BaseModuleDialog_Access(null);
 											if ($base_module_dialog->create($register_key, $dialog_value[type], $dialog_value[class_path], $dialog_value['class'], $dialog_value[method], $dialog_value[internal_name], $dialog_value[display_name], $dialog_value[weight]) == null)
 											{
-												throw new ModuleDialogCreationFailedException();
+												throw new BaseModuleDialogCreationFailedException();
 											}
 										}
 									}
@@ -668,14 +682,14 @@ class SystemHandler implements SystemHandlerInterface
 									if ($module_dialog_id != null)
 									{
 										$base_module_file = new BaseModuleFile_Access($module_dialog_id);
-										$base_module_file->set_checksum(md5_file($module_dialog));
+										$base_module_file->set_checksum(md5_file($module_dialog_file));
 									}
 									else
 									{
 										$base_module_file = new BaseModuleFile_Access(null);
 										if ($base_module_file->create($register_key, "module_dialog.php", md5_file($module_dialog_file)) == null)
 										{
-											throw new ModuleProcessFailedException();
+											throw new BaseModuleProcessFailedException();
 										}
 									}
 									
@@ -692,7 +706,7 @@ class SystemHandler implements SystemHandlerInterface
 
 									if (BaseModuleLink_Access::delete_by_module_id($register_key) == false)
 									{
-										throw new ModuleProcessFailedException();
+										throw new BaseModuleProcessFailedException();
 									}
 									
 									// Register Dialog
@@ -719,7 +733,7 @@ class SystemHandler implements SystemHandlerInterface
 										$base_module_file = new BaseModuleFile_Access(null);
 										if ($base_module_file->create($register_key, "module_link.php", md5_file($module_link_file)) == null)
 										{
-											throw new ModuleProcessFailedException();
+											throw new BaseModuleProcessFailedException();
 										}
 									}
 									
@@ -739,14 +753,14 @@ class SystemHandler implements SystemHandlerInterface
 							$base_module = new BaseModule_Access(null);
 							if (($base_module_id = $base_module->create($name, str_replace(constant("MODULES_DIR")."/","",$value), $main_class)) == null)
 							{
-								throw new ModuleProcessFailedException();
+								throw new BaseModuleProcessFailedException();
 							}
 							else
 							{
 								$base_module_file = new BaseModuleFile_Access(null);
 								if ($base_module_file->create($base_module_id, "module_info.php", md5_file($config_file)) == null)
 								{
-									throw new ModuleProcessFailedException();
+									throw new BaseModuleProcessFailedException();
 								}
 							}
 							
@@ -758,7 +772,7 @@ class SystemHandler implements SystemHandlerInterface
 									$base_module_navigation = new BaseModuleNavigation_Access(null);
 									if ($base_module_navigation->create($tab_value['language_address'], $tab_value['colour'], $position+1, $base_module_id, $tab_value['controller_class'], $tab_value['controller_file'], $tab_value['alias']) == null)
 									{
-										throw new ModuleProcessFailedException();
+										throw new BaseModuleProcessFailedException();
 									}
 								}
 							}
@@ -770,7 +784,7 @@ class SystemHandler implements SystemHandlerInterface
 								$base_module_file = new BaseModuleFile_Access(null);
 								if ($base_module_file->create($base_module_id, "module_dialogs.php", md5_file($module_dialog_file)) == null)
 								{
-									throw new ModuleProcessFailedException();
+									throw new BaseModuleProcessFailedException();
 								}
 								
 								// Register Dialog
@@ -781,7 +795,7 @@ class SystemHandler implements SystemHandlerInterface
 										$base_module_dialog = new BaseModuleDialog_Access(null);
 										if ($base_module_dialog->create($base_module_id, $dialog_value[type], $dialog_value[class_path], $dialog_value['class'], $dialog_value[method], $dialog_value[internal_name], $dialog_value[display_name], $dialog_value[weight]) == null)
 										{
-											throw new ModuleDialogCreationFailedException();
+											throw new BaseModuleDialogCreationFailedException();
 										}
 									}
 								}
@@ -796,7 +810,7 @@ class SystemHandler implements SystemHandlerInterface
 								$base_module_file = new BaseModuleFile_Access(null);
 								if ($base_module_file->create($base_module_id, "module_link.php", md5_file($module_link_file)) == null)
 								{
-									throw new ModuleProcessFailedException();
+									throw new BaseModuleProcessFailedException();
 								}
 								
 								// Register Dialog
@@ -853,7 +867,7 @@ class SystemHandler implements SystemHandlerInterface
 				{
 					if (BaseModuleFile_Access::delete_by_module_id($legacy_key) == false)
 					{
-						throw new ModuleProcessFailedException();
+						throw new BaseModuleProcessFailedException();
 					}
 					
 					$base_module_navigation_id = BaseModuleNavigation_Access::get_id_by_module_id($legacy_key);
@@ -868,7 +882,7 @@ class SystemHandler implements SystemHandlerInterface
 						
 						if ($base_module_navigation->set_position(null) === false)
 						{
-							throw new ModuleProcessFailedException();
+							throw new BaseModuleProcessFailedException();
 						}
 						
 						while(($next_base_module_navigation_id = $tmp_base_module_navigation->get_next_position()) != $tmp_base_module_navigation_id)
@@ -878,7 +892,7 @@ class SystemHandler implements SystemHandlerInterface
 							
 							if ($next_base_module_navigation->set_position($tmp_position) == false)
 							{
-								throw new ModuleProcessFailedException();
+								throw new BaseModuleProcessFailedException();
 							}
 							else
 							{
@@ -891,18 +905,18 @@ class SystemHandler implements SystemHandlerInterface
 					
 					if (BaseModuleNavigation_Access::delete_by_module_id($legacy_key) == false)
 					{
-						throw new ModuleProcessFailedException();
+						throw new BaseModuleProcessFailedException();
 					}
 					
 					if (BaseModuleDialog_Access::delete_by_module_id($legacy_key) == false)
 					{
-						throw new ModuleProcessFailedException();
+						throw new BaseModuleProcessFailedException();
 					}
 					
 					$base_module = new BaseModule_Access($legacy_key);
 					if ($base_module->delete() == false)
 					{
-						throw new ModuleProcessFailedException();
+						throw new BaseModuleProcessFailedException();
 					}
 				}
 			}
@@ -942,6 +956,9 @@ class SystemHandler implements SystemHandlerInterface
 	 * @see SystemHandlerInterface::get_module_controller()
 	 * @param string $nav
 	 * @return arráy
+	 * @throws BaseModuleControllerNotFoundException
+	 * @throws BaseModuleNotFoundException
+	 * @throws BaseModuleMissingException
 	 */
 	public static function get_module_controller($nav)
 	{
@@ -950,10 +967,11 @@ class SystemHandler implements SystemHandlerInterface
 			$nav_array = explode(".", $nav);
 			
 			$module_id = BaseModule_Access::get_module_id_by_module_name($nav_array[0]);
-			$base_module = new BaseModule_Access($module_id);
 			
 			if (is_numeric($module_id))
 			{
+				$base_module = new BaseModule_Access($module_id);
+				
 				if (count($nav_array) == 1)
 				{
 					$tmp_array = BaseModuleNavigation_Access::get_module_controller($module_id, null);
@@ -961,6 +979,10 @@ class SystemHandler implements SystemHandlerInterface
 				elseif (count($nav_array) == 2)
 				{
 					$tmp_array = BaseModuleNavigation_Access::get_module_controller($module_id, $nav_array[1]);
+				}
+				else
+				{
+					throw new BaseModuleControllerNotFoundException();
 				}
 					
 					
@@ -990,6 +1012,14 @@ class SystemHandler implements SystemHandlerInterface
 					return $controller_array;
 				}
 			}
+			else
+			{
+				throw new BaseModuleNotFoundException();
+			}
+		}
+		else
+		{
+			throw new BaseModuleMissingException();
 		}							
 	}
 	

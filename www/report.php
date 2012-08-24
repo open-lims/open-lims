@@ -52,99 +52,95 @@
 
 	SystemConfig::load_module_config();
 	
-	// External Libraries
-	require_once("libraries/tcpdf/config/lang/eng.php");
-	require_once("libraries/tcpdf/tcpdf.php");
-	
-	if ($_GET[session_id])
-	{	
-		$transaction = new Transaction();
-		
-		try
+	try
+	{
+		// External Libraries
+		if (file_exists("libraries/tcpdf/config/lang/eng.php"))
 		{
-			$system_handler = new SystemHandler();
+			require_once("libraries/tcpdf/config/lang/eng.php");
 		}
-		catch(IncludeDataCorruptException $e)
+		else
 		{
-			die("The config-ata of a module is corrupt!");
-		}
-		catch(IncludeProcessFailedException $e)
-		{
-			die("Include register process failed!");
-		}
-		catch(IncludeRequirementFailedException $e)
-		{
-			die("An include-module requirement is not found!");
-		}
-		catch(IncludeFolderEmptyException $e)
-		{
-			die("Include folder is empty!");
-		}
-		catch(ModuleProcessFailedException $e)
-		{
-			die("Module register process failed!");
-		}
-		catch(ModuleDataCorruptException $e)
-		{
-			die("Module Data Corrupt!");
-		}
-		catch(EventHandlerCreationFailedException $e)
-		{
-			die("Event-handler creation failed!");
+			throw new BaseReportTCPDFLanguageFileMissingException();
 		}
 		
-		Security::protect_session();
-		
-		$session = new Session($_GET[session_id]);
-		$user = new User($session->get_user_id());
-		
-		if ($session->is_valid() == true)
+		if (file_exists("libraries/tcpdf/tcpdf.php"))
 		{
-			if ($_GET[dialog])
+			require_once("libraries/tcpdf/tcpdf.php");
+		}
+		else
+		{
+			throw new BaseReportTCPDFFileMissingException();
+		}
+		
+		if ($_GET['session_id'])
+		{	
+			$transaction = new Transaction();
+			$system_handler = new SystemHandler(false);
+
+			Security::protect_session();
+			
+			$session = new Session($_GET['session_id']);
+			$user = new User($session->get_user_id());
+			
+			if ($session->is_valid() == true)
 			{
-				require_once("core/modules/base/report/report_table.io.php");	
-				
-				$module_dialog = ModuleDialog::get_by_type_and_internal_name("report", $_GET[dialog]);
-						
-				if (file_exists($module_dialog[class_path]))
+				if ($_GET['dialog'])
 				{
-					require_once($module_dialog[class_path]);
+					require_once("core/modules/base/report/report_table.io.php");	
 					
-					if (class_exists($module_dialog['class']) and method_exists($module_dialog['class'], $module_dialog[method]))
+					$module_dialog = ModuleDialog::get_by_type_and_internal_name("report", $_GET['dialog']);
+							
+					if (file_exists($module_dialog['class_path']))
 					{
-						$pdf = $module_dialog['class']::$module_dialog[method]();
-						if (is_object($pdf))
+						require_once($module_dialog['class_path']);
+						
+						if (class_exists($module_dialog['class']))
 						{
-							$pdf->Output();
+							if (method_exists($module_dialog['class'], $module_dialog['method']))
+							{
+								$pdf = $module_dialog['class']::$module_dialog['method']();
+								if (is_object($pdf))
+								{
+									$pdf->Output();
+								}
+								else
+								{
+									throw new BaseReportException();
+								}
+							}
+							else
+							{
+								throw new BaseModuleDialogMethodNotFoundException();
+							}
 						}
 						else
 						{
-							// Error
+							throw new BaseModuleDialogClassNotFoundException();
 						}
 					}
 					else
 					{
-						// Error
+						throw new BaseModuleDialogFileNotFoundException();
 					}
 				}
 				else
 				{
-					// Error
+					throw new BaseModuleDialogMissingException();
 				}
 			}
 			else
 			{
-				
+				throw new BaseUserAccessDeniedException();
 			}
 		}
 		else
 		{
-			
+			throw new BaseUserAccessDeniedException();
 		}
 	}
-	else
+	catch(BaseException $e)
 	{
-
+		echo "Error; Exception: ".$e->get_message();
 	}
-	
 ?>

@@ -12,6 +12,19 @@ base_form_init = function()
 			 $(this).removeClass("FormFocused");
 		});
 	});	
+	
+	$(".Form textarea").each(function()
+	{
+		$(this).focus(function()
+		{
+			 $(this).addClass("FormFocused");
+		});
+		
+		$(this).blur(function()
+		{
+			 $(this).removeClass("FormFocused");
+		});
+	});	
 }
 
 

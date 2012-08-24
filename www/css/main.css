@@ -28,68 +28,6 @@
 	clear: both;
 }
 
-ul#menu {
-	list-style: none;
-	padding-left: 0;
-	margin-left: 0;
-	font: normal 1em Verdana, Helvetica, sans-serif;
-}
-
-ul#menu a {
-	color: black;
-}
-
-ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
-	color: red;
-}
-
-.title {
-	font-weight: bold;
-	text-align: center;
-}
-
-.box {
-	border: 1px #D0D0D0 solid;
-	width: 61em;
-}
-
-.boxIcon {
-	display: inline;
-	margin-right: 1em;
-}
-
-.boxIconBar {
-	padding-bottom:5px;
-	border-bottom: 1px #C0C0C0 solid;
-	margin: 3px;
-}
-
-.boxIconBarRight {
-	border-bottom: 1px #C0C0C0 solid;
-	margin: 0.2em;
-	padding-right: 0.2em;
-	text-align: right;
-}
-
-.boxIconLeft {
-	float: left;
-}
-
-.boxIconRight {
-	text-align: right;
-	margin-bottom: 0.2em;
-}
-
-.boxIconElement {
-	float: left;
-	padding-left: 10px;
-	padding-right: 10px;
-	border-right: 1px #C0C0C0 dotted;
-}
-
-.boxIconClear {
-	clear: left;
-}
 
 .OverviewTable {
 	width: 100%;
@@ -242,7 +180,6 @@ ul#menu a:hover,ul#menu a:focus,ul#menu a:active {
 
 .smallTextBlack {
 	font: normal 0.8em Verdana, Helvetica, sans-serif;
-	color: black;
 }
 
 .horzontalLineGrey {

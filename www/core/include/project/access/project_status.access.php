@@ -374,7 +374,7 @@ class ProjectStatus_Access
 	 * @param integer $id
 	 * @return bool
 	 */
-	public function exist_id($id)
+	public static function exist_id($id)
 	{
 		global $db;
 

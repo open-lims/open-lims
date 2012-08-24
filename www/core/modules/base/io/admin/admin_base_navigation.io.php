@@ -46,7 +46,7 @@ class AdminBaseNavigationIO
 	}
 	
 	/**
-	 * @todo Error
+	 * @throws BaseModuleNavigationIDMissingException
 	 */
 	public static function hide()
 	{
@@ -70,12 +70,12 @@ class AdminBaseNavigationIO
 		}
 		else
 		{
-			
+			throw new BaseModuleNavigationIDMissingException();
 		}
 	}
 	
 	/**
-	 * @todo Error
+	 * @throws BaseModuleNavigationIDMissingException
 	 */
 	public static function upwards()
 	{
@@ -99,12 +99,12 @@ class AdminBaseNavigationIO
 		}
 		else
 		{
-			
+			throw new BaseModuleNavigationIDMissingException();
 		}
 	}
 	
 	/**
-	 * @todo Error
+	 * @throws BaseModuleNavigationIDMissingException
 	 */
 	public static function downwards()
 	{
@@ -128,7 +128,7 @@ class AdminBaseNavigationIO
 		}
 		else
 		{
-			
+			throw new BaseModuleNavigationIDMissingException();
 		}
 	}
 	

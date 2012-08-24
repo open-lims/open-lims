@@ -25,7 +25,7 @@
  * Module Dialog Missing Exception
  * @package base
  */
-class ModuleDialogMissingException extends BaseModuleException
+class BaseModuleDialogMissingException extends BaseModuleDialogException
 {
     function __construct()
     {

@@ -25,7 +25,7 @@
  * Module Folder Empty Exception
  * @package base
  */
-class ModuleFolderEmptyException extends BaseModuleException
+class BaseModuleFolderEmptyException extends BaseModuleException
 {
 	function __construct()
     {

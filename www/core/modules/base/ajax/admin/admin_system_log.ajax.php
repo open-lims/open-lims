@@ -40,6 +40,7 @@ class AdminSystemLogAjax
 	 * @param string $sortmethod
 	 * @return string
 	 * @throws BaseUserAccessDeniedException
+	 * @throws BaseAjaxArgumentMissingException
 	 */
 	public static function list_system_log($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
@@ -112,6 +113,10 @@ class AdminSystemLogAjax
 			
 				return $list_request->get_page($page);
 			}
+			else
+			{
+				throw new BaseAjaxArgumentMissingException();
+			}
 		}
 		else
 		{
@@ -123,6 +128,7 @@ class AdminSystemLogAjax
 	 * @param string $json_argument_array
 	 * @return integer
 	 * @throws BaseUserAccessDeniedException
+	 * @throws BaseAjaxArgumentMissingException
 	 */
 	public static function count_system_log($json_argument_array)
 	{
@@ -140,7 +146,7 @@ class AdminSystemLogAjax
 			}
 			else
 			{
-				return null;
+				throw new BaseAjaxArgumentMissingException();
 			}
 		}
 		else

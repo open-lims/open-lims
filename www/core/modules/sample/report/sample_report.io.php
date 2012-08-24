@@ -34,14 +34,16 @@ class SampleReportIO
 {
 	/**
 	 * @return object
+	 * @throws SampleIDMissingException
+	 * @throws BaseReportTCPDFClassMissingException
 	 */
 	public static function get_full_report()
 	{
 		if (class_exists("TCPDF"))
 		{
-			if ($_GET[sample_id])
+			if ($_GET['sample_id'])
 			{
-				$sample_id = $_GET[sample_id];
+				$sample_id = $_GET['sample_id'];
 				$sample = new Sample($sample_id);
 				$owner = new User($sample->get_owner_id());
 				$owner_name = str_replace("&nbsp;"," ", $owner->get_full_name(false));
@@ -161,25 +163,27 @@ class SampleReportIO
 			}
 			else
 			{
-				// Error
+				throw new SampleIDMissingException();
 			}
 		}
 		else
 		{
-			// Error
+			throw new BaseReportTCPDFClassMissingException();
 		}
 	}
 	
 	/**
 	 * @return object
+	 * @throws SampleIDMissingException
+	 * @throws BaseReportTCPDFClassMissingException
 	 */
 	public static function get_barcode_report()
 	{
 		if (class_exists("TCPDF"))
 		{
-			if ($_GET[sample_id])
+			if ($_GET['sample_id'])
 			{		
-				$sample_id = $_GET[sample_id];
+				$sample_id = $_GET['sample_id'];
 				
 				if ($_GET[paper_size])
 				{
@@ -263,12 +267,12 @@ class SampleReportIO
 			}
 			else
 			{
-				// Error
+				throw new SampleIDMissingException();
 			}
 		}
 		else
 		{
-			// Error
+			throw new BaseReportTCPDFClassMissingException();
 		}
 	}
 	

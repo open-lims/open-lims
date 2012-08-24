@@ -1,22 +1,22 @@
 <!-- CONTAINER BEGIN ("Project Permissions") -->
 
-<div class='boxIconBar'>
-
-<!-- IF ([[ADD_PERMISSION]]) -->	
-
-<div class='boxIcon'><img src='images/icons/add_user.png' alt='' />&nbsp;<a href='index.php?[[ADD_USER_PARAMS]]'>Add User</a></div>
-<div class='boxIcon'><img src='images/icons/add_group.png' alt='' />&nbsp;<a href='index.php?[[ADD_GROUP_PARAMS]]'>Add Group</a></div>
-<div class='boxIcon'><img src='images/icons/add_organ_unit.png' alt='' />&nbsp;<a href='index.php?[[ADD_OU_PARAMS]]'>Add Organisation Unit</a></div>
-
-<!-- ELSE -->
-
-<div class='boxIcon'><img src='images/icons/add_user_na.png' alt='' />&nbsp;<span class='FontDeactivated'>Add User</span></div>
-<div class='boxIcon'><img src='images/icons/add_group_na.png' alt='' />&nbsp;<span class='FontDeactivated'>Add Group</span></div>
-<div class='boxIcon'><img src='images/icons/add_organ_unit_na.png' alt='' />&nbsp;<span class='FontDeactivated'>Add Organisation Unit</span></div>
-
-<!-- ENDIF -->
-
+<div id='ListButtonBar'>
+	<a href='index.php?[[ADD_USER_PARAMS]]' class='ListButton'>
+	<img src='images/icons/add_user.png' alt='' />
+	<div>Add User</div>
+	</a>
+	
+	<a href='index.php?[[ADD_GROUP_PARAMS]]' class='ListButton'>
+	<img src='images/icons/add_group.png' alt='' />
+	<div>Add Group</div>
+	</a>
+	
+	<a href='index.php?[[ADD_OU_PARAMS]]' class='ListButton'>
+	<img src='images/icons/add_organ_unit.png' alt='' />
+	<div>Add Organisation Unit</div>
+	</a>
 </div>
+<div id='ListButtonBarClear'></div>
 
 [[LIST]]
 

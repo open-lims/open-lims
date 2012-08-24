@@ -27,6 +27,11 @@
  */
 class ContentHandler_IO
 {
+	/**
+	 * Main Controller for reqeusts via index.php
+	 * @throws BaseModuleControllerClassNotFoundException
+	 * @throws BaseModuleControllerFileNotFoundException
+	 */
 	public static function io()
 	{
 		global $session, $user, $transaction;
@@ -41,8 +46,6 @@ class ContentHandler_IO
 			if (file_exists($css_directory))
 			{
 				$css_directory_array = scandir($css_directory);
-				
-				
 				
 				if (is_array($css_directory_array))
 				{
@@ -232,10 +235,9 @@ class ContentHandler_IO
 					Navigation_IO::left();
 					
 					
-					/**
-					 * @todo remove
-					 */
-					echo "<div id='Content'>";
+					$template = new HTMLTemplate("content_header.html");
+					$template->output();
+					
 					
  					if ($session->read_value("must_change_password") == true)
  					{
@@ -246,7 +248,7 @@ class ContentHandler_IO
  					{
  						try
  						{
-							if ($_GET[nav])
+							if ($_GET['nav'])
 							{
 								$module_controller_array = SystemHandler::get_module_controller($_GET[nav]);
 								
@@ -255,11 +257,18 @@ class ContentHandler_IO
 								if (file_exists($module_controller_path))
 								{
 									require_once($module_controller_path);
-									$module_controller_array['class']::io_handler($module_controller_array['alias']);
+									if (class_exists($module_controller_array['class']))
+									{
+										$module_controller_array['class']::io_handler($module_controller_array['alias']);
+									}
+									else
+									{
+										throw new BaseModuleControllerClassNotFoundException();
+									}
 								}
 								else
 								{
-									throw new ModuleDataCorruptExeception();
+									throw new BaseModuleControllerFileNotFoundException();
 								}							
 							}
 							else
@@ -279,12 +288,10 @@ class ContentHandler_IO
 							$error_io->display_error();
 						}
  					}
-			 		
- 					/**
-					 * @todo remove
-					 */
-					echo "</div>";
- 					
+						
+					$template = new HTMLTemplate("content_footer.html");
+					$template->output();
+					
 			 		$template = new HTMLTemplate("main_footer.html");
 			 		$template->output();
 		 		}
@@ -309,6 +316,15 @@ class ContentHandler_IO
 		$template->output();
 	}
 	
+	/**
+	 * Main Controller for requests via ajax.php
+	 * @throws BaseModuleControllerClassNotFoundException
+	 * @throws BaseModuleControllerFileNotFoundException
+	 * @throws BaseExtensionClassNotFoundException
+	 * @throws BaseExtensionFileNotFoundException
+	 * @throws BaseExtensionNotFoundException
+	 * @throws BaseModuleIllegalControllerCallException
+	 */
 	public static function ajax()
 	{
 		global $session;
@@ -319,18 +335,25 @@ class ContentHandler_IO
 			{
 				if ($_GET['nav'])
 				{				
-					$module_controller_array = SystemHandler::get_module_controller($_GET[nav]);
-								
+					$module_controller_array = SystemHandler::get_module_controller($_GET['nav']);
+
 					$module_controller_path = "core/modules/".$module_controller_array['path'];
 					
 					if (file_exists($module_controller_path))
 					{
 						require_once($module_controller_path);
-						$module_controller_array['class']::ajax_handler($module_controller_array['alias']);
+						if (class_exists($module_controller_array['class']))
+						{
+							$module_controller_array['class']::ajax_handler($module_controller_array['alias']);
+						}
+						else
+						{
+							throw new BaseModuleControllerClassNotFoundException();
+						}
 					}
 					else
 					{
-						throw new ModuleDataCorruptExeception();
+						throw new BaseModuleControllerFileNotFoundException();
 					}
 				}
 				elseif($_GET['extension'])
@@ -344,17 +367,28 @@ class ContentHandler_IO
 						if (file_exists($extension_file))
 						{
 							require_once($extension_file);
-							$extension_class::ajax();
+							if (class_exists($extension_class))
+							{
+								$extension_class::ajax();
+							}
+							else
+							{
+								throw new BaseExtensionClassNotFoundException();
+							}
+						}
+						else
+						{
+							throw new BaseExtensionFileNotFoundException();
 						}
 					}
 					else
 					{
-						// Exception
+						throw new BaseExtensionNotFoundException();
 					}
 				}
 				else
 				{
-					// Exception
+					throw new BaseModuleIllegalControllerCallException();
 				}
 			}
 			else

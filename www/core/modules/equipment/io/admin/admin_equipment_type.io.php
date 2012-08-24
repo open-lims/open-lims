@@ -416,127 +416,213 @@ class AdminEquipmentTypeIO
 	{
 		if ($_GET[id])
 		{
-			$equipment_type = new EquipmentType($_GET[id]);	
-					
-			$template = new HTMLTemplate("equipment/admin/equipment_type/detail.html");
-			
+			$tab_io = new Tab_IO();
+	
 			$paramquery = $_GET;
-			$paramquery[action] = "rename";
-			unset($paramquery[nextpage]);
+			unset($paramquery['tab']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			$template->set_var("rename_params", $params);
+			$tab_io->add("detail", "Details", $params, false);
 			
-			$template->set_var("name", $equipment_type->get_name());
-			$template->set_var("category", $equipment_type->get_cat_name());
 			
 			$paramquery = $_GET;
-			$paramquery[action] = "change_location";
-			unset($paramquery[nextpage]);
+			$paramquery['tab'] = "responsible_persons";
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			$template->set_var("change_location_params", $params);
+			$tab_io->add("responsible_persons", "Responsible Persons", $params, false);
 			
-			if ($equipment_type->get_location_id() == null)
-			{
-				$template->set_var("location", "<span class='italic'>none</span>");
-			}
-			else
-			{
-				$location = new Location($equipment_type->get_location_id());
-				$template->set_var("location", $location->get_name(true));
-			}
+			$paramquery = $_GET;
+			$paramquery['tab'] = "organisaiton_units";
+			$params = http_build_query($paramquery,'','&#38;');
 			
-			if ($equipment_type->get_description())
-			{
-				$template->set_var("description", $equipment_type->get_description());
-			}
-			else
-			{
-				$template->set_var("description", "<span class='italic'>none</span>");
-			}
+			$tab_io->add("organisaiton_units", "Organisation Units", $params, false);
+			
+			
+			switch($_GET['tab']):
+				
+				case "responsible_persons":
+					$tab_io->activate("responsible_persons");
+				break;
+			
+				case "organisaiton_units":
+					$tab_io->activate("organisaiton_units");
+				break;
+				
+				default:
+					$tab_io->activate("detail");
+				break;
+			
+			endswitch;
+				
+			$tab_io->output();
+			
+			
+			switch($_GET['tab']):
 
-			$paramquery = $_GET;
-			$paramquery[action] = "add_user";
-			$params = http_build_query($paramquery,'','&#38;');
+				case "responsible_persons":
+					self::detail_reponsible_persons();
+				break;
 			
-			$template->set_var("add_user_params", $params);	
-			
-			$user_array = $equipment_type->list_users();
-			$user_content_array = array();
-			
-			$counter = 0;
-			
-			if (is_array($user_array) and count($user_array) >= 1)
-			{
-				foreach($user_array as $key => $value)
-				{
-					$user = new User($value);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "delete_user";
-					$paramquery[key] = $value;
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$user_content_array[$counter][username] = $user->get_username();
-					$user_content_array[$counter][fullname] = $user->get_full_name(false);
-					$user_content_array[$counter][delete_params] = $params;
-					
-					$counter++;
-				}
-				$template->set_var("no_user", false);
-			}
-			else
-			{
-				$template->set_var("no_user", true);
-			}
-			
-			$template->set_var("user", $user_content_array);
-			
-			
-			$paramquery = $_GET;
-			$paramquery[action] = "add_ou";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("add_ou_params", $params);	
-			
-			$ou_array = $equipment_type->list_organisation_units();
-			$ou_content_array = array();
-			
-			$counter = 0;
-			
-			if (is_array($ou_array) and count($ou_array) >= 1)
-			{
-				foreach($ou_array as $key => $value)
-				{
-					$organisation_unit = new OrganisationUnit($value);
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "delete_ou";
-					$paramquery[key] = $value;
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$ou_content_array[$counter][name] = $organisation_unit->get_name();
-					$ou_content_array[$counter][delete_params] = $params;
-					
-					$counter++;
-				}
-				$template->set_var("no_ou", false);
-			}
-			else
-			{
-				$template->set_var("no_ou", true);
-			}
-			
-			$template->set_var("ou", $ou_content_array);
-			
-			
-			$template->output();
+				case "organisaiton_units":
+					self::detail_organisation_units();
+				break;
+				
+				default:
+					self::detail_home();
+				break;
+				
+			endswitch;
 		}
 		else
 		{
 			throw new EquipmentTypeIDMissingException();
 		}
+	}
+	
+	private static function detail_home()
+	{
+		$equipment_type = new EquipmentType($_GET[id]);	
+					
+		$template = new HTMLTemplate("equipment/admin/equipment_type/detail.html");
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "rename";
+		unset($paramquery[nextpage]);
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("rename_params", $params);
+		
+		$template->set_var("name", $equipment_type->get_name());
+		$template->set_var("category", $equipment_type->get_cat_name());
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "change_location";
+		unset($paramquery[nextpage]);
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("change_location_params", $params);
+		
+		if ($equipment_type->get_location_id() == null)
+		{
+			$template->set_var("location", "<span class='italic'>none</span>");
+		}
+		else
+		{
+			$location = new Location($equipment_type->get_location_id());
+			$template->set_var("location", $location->get_name(true));
+		}
+		
+		if ($equipment_type->get_description())
+		{
+			$template->set_var("description", $equipment_type->get_description());
+		}
+		else
+		{
+			$template->set_var("description", "<span class='italic'>none</span>");
+		}
+	
+		$template->output();
+	}
+	
+	/**
+	 * @todo rebuild with List and JS operations
+	 */
+	private static function detail_reponsible_persons()
+	{
+		$equipment_type = new EquipmentType($_GET[id]);	
+					
+		$template = new HTMLTemplate("equipment/admin/equipment_type/detail_responsible_person.html");
+		
+		$template->set_var("name", $equipment_type->get_name());
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "add_user";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("add_user_params", $params);	
+		
+		$user_array = $equipment_type->list_users();
+		$user_content_array = array();
+		
+		$counter = 0;
+		
+		if (is_array($user_array) and count($user_array) >= 1)
+		{
+			foreach($user_array as $key => $value)
+			{
+				$user = new User($value);
+				
+				$paramquery = $_GET;
+				$paramquery[action] = "delete_user";
+				$paramquery[key] = $value;
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$user_content_array[$counter][username] = $user->get_username();
+				$user_content_array[$counter][fullname] = $user->get_full_name(false);
+				$user_content_array[$counter][delete_params] = $params;
+				
+				$counter++;
+			}
+			$template->set_var("no_user", false);
+		}
+		else
+		{
+			$template->set_var("no_user", true);
+		}
+		
+		$template->set_var("user", $user_content_array);
+		
+		$template->output();
+	}
+	
+	/**
+	 * @todo rebuild with List and JS operations
+	 */
+	private static function detail_organisation_units()
+	{
+		$equipment_type = new EquipmentType($_GET[id]);	
+					
+		$template = new HTMLTemplate("equipment/admin/equipment_type/detail_organisation_unit.html");
+		
+		$template->set_var("name", $equipment_type->get_name());
+		
+		$paramquery = $_GET;
+		$paramquery[action] = "add_ou";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$template->set_var("add_ou_params", $params);	
+		
+		$ou_array = $equipment_type->list_organisation_units();
+		$ou_content_array = array();
+		
+		$counter = 0;
+		
+		if (is_array($ou_array) and count($ou_array) >= 1)
+		{
+			foreach($ou_array as $key => $value)
+			{
+				$organisation_unit = new OrganisationUnit($value);
+				
+				$paramquery = $_GET;
+				$paramquery[action] = "delete_ou";
+				$paramquery[key] = $value;
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$ou_content_array[$counter][name] = $organisation_unit->get_name();
+				$ou_content_array[$counter][delete_params] = $params;
+				
+				$counter++;
+			}
+			$template->set_var("no_ou", false);
+		}
+		else
+		{
+			$template->set_var("no_ou", true);
+		}
+		
+		$template->set_var("ou", $ou_content_array);
+		
+		$template->output();
 	}
 	
 	/**

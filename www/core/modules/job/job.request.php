@@ -27,18 +27,31 @@
  */
 class JobRequest
 {	
+	/**
+	 * @param string $alias
+	 */
 	public static function ajax_handler($alias)
 	{
-		switch($_GET[run]):
+		switch($_GET['run']):
 	
 			case "list_jobs":
 				require_once("ajax/job.ajax.php");
-				echo JobAjax::list_jobs($_POST[column_array], $_POST[argument_array], $_POST[get_array], $_POST[css_page_id], $_POST[css_row_sort_id], $_POST[entries_per_page], $_GET[page], $_GET[sortvalue], $_GET[sortmethod]);
+				echo JobAjax::list_jobs(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
 			break;
 			
 			case "count_jobs":
 				require_once("ajax/job.ajax.php");
-				echo JobAjax::count_jobs($_POST[argument_array]);
+				echo JobAjax::count_jobs($_POST['argument_array']);
 			break;
 			
 			case "start_test":
@@ -48,12 +61,15 @@ class JobRequest
 			
 			case "start_test_handler":
 				require_once("ajax/job.ajax.php");
-				echo JobAjax::start_test_handler($_POST[number_of_jobs]);
+				echo JobAjax::start_test_handler($_POST['number_of_jobs']);
 			break;
 			
 		endswitch;
 	}
 	
+	/**
+	 * @param string $alias
+	 */
 	public static function io_handler($alias)
 	{
 		

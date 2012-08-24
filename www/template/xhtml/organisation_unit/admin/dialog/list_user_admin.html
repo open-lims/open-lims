@@ -1,0 +1,36 @@
+<!-- CONTAINER BEGIN "[[USERNAME]] - [[FULLNAME]]") -->
+
+<div id='ListButtonBar'>
+	<a href='index.php?[[ADD_OU_PARAMS]]' class='ListButton'>
+	<img src='images/icons/add_organ_unit.png' alt='' />
+	<div>Add Organisation Unit</div>
+	</a>
+</div>
+<div id='ListButtonBarClear'></div>
+
+<table class='OverviewTable'>
+	<tr>
+		<th>Name:</th>
+		<th width='15%'>Delete:</th>
+	</tr>
+					
+	<!-- FOREACH BEGIN ([[OU]]) -->
+			
+		<tr>
+			<td>[[OU:NAME]]</td>
+			<td><a href='index.php?[[OU:DELETE_PARAMS]]'>delete</a></td>
+		</tr>
+	
+	<!-- FOREACH END -->
+	
+	<!-- IF ([[NO_OU]]) -->
+	
+		<tr>
+			<td colspan='2'><span class='italic'>No Organisation Unit Found!</span></td>
+		</tr>
+	
+	<!-- ENDIF -->
+
+</table>
+
+<!-- CONTAINER END () -->
