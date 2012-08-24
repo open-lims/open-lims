@@ -41,7 +41,7 @@
 	define("GROUP_HAS_USER_TABLE", 		"core_group_has_users");
 	define("GROUP_TABLE", 				"core_groups");
 	define("USER_ADMIN_SETTING_TABLE", 	"core_user_admin_settings");
-	define("USER_PROFILE_SETTING_TABLE","core_user_profile_settings");
+	define("USER_REGIONAL_SETTING_TABLE","core_user_regional_settings");
 	define("USER_PROFILE_TABLE", 		"core_user_profiles");
 	define("USER_TABLE", 				"core_users");
 	

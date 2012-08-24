@@ -54,7 +54,7 @@ function __autoload($classname)
 	$classes['Language']										= $path_prefix."core/include/base/environment/language.class.php";
 	$classes['MeasuringUnit']									= $path_prefix."core/include/base/environment/measuring_unit.class.php";
 	$classes['PaperSize']										= $path_prefix."core/include/base/environment/paper_size.class.php";
-	$classes['Regional']										= $path_prefix."core/include/base/environment/regional.class.php";
+	$classes['Timezone']										= $path_prefix."core/include/base/environment/timezone.class.php";
 	
 	$classes['Environment_Wrapper']								= $path_prefix."core/include/base/environment/environment.wrapper.class.php";
 	
@@ -137,6 +137,7 @@ function __autoload($classname)
 	
 	$classes['User'] 											= $path_prefix."core/include/base/user/user.class.php";
 	$classes['Group'] 											= $path_prefix."core/include/base/user/group.class.php";
+	$classes['Regional'] 										= $path_prefix."core/include/base/user/regional.class.php";
 	
 	$classes['User_Wrapper'] 									= $path_prefix."core/include/base/user/user.wrapper.class.php";
 	

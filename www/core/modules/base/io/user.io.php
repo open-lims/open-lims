@@ -346,24 +346,66 @@ class UserIO
 	
 	public static function change_my_settings()
 	{
-		global $user;
+		global $regional;
 		
 		$template = new HTMLTemplate("base/user/user_settings.html");
+
 		
-		$paramquery = $_GET;
-		$paramquery[run] = "user_change_language";
-		$params = http_build_query($paramquery,'','&#38;');
+		$language_array = Language::list_languages();
 		
-		$template->set_var("default_language", Regional::get_language_name($user->get_language_id()));
-		$template->set_var("default_language_params", $params);
+		$result = array();
+		$counter = 0;
+		
+		if (is_array($language_array))
+		{
+			foreach($language_array as $key => $value)
+			{
+				$language = new Language($value);
+				
+				$result[$counter][value] = $value;
+				$result[$counter][content] = $language->get_full_name();
+				
+				if ($value == $regional->get_language_id())
+				{
+					$result[$counter][selected] = "selected='selected'";
+				}
+				else
+				{
+					$result[$counter][selected] = "";
+				}
+				$counter++;		
+			}
+		}
+		
+		$template->set_var("language",$result);
 		
 		
-		$paramquery = $_GET;
-		$paramquery[run] = "user_change_timezone";
-		$params = http_build_query($paramquery,'','&#38;');
+		$timezone_array = Timezone::list_timezones();
+			
+		$result = array();
+		$counter = 0;
 		
-		$template->set_var("timezone", Regional::get_timezone_name($user->get_timezone_id()));
-		$template->set_var("timezone_params", $params);
+		if (is_array($timezone_array))
+		{
+			foreach($timezone_array as $key => $value)
+			{
+				$timezone = new Timezone($value);
+				
+				$result[$counter][value] = $value;
+				$result[$counter][content] = $timezone->get_name();
+				
+				if ($value == $regional->get_timezone_id())
+				{
+					$result[$counter][selected] = "selected='selected'";
+				}
+				else
+				{
+					$result[$counter][selected] = "";
+				}
+				$counter++;
+			}
+		}
+		$template->set_var("timezone",$result);
 			
 		$template->output();
 	}
@@ -463,143 +505,7 @@ class UserIO
 			$template->output();
 		}
 	}
-		
-	public static function change_language()
-	{
-		global $user;
-				
-		if ($_GET[nextpage] == 1)
-		{
-			$page_1_passed = true;
-		}
-		else
-		{
-			$page_1_passed = false;
-		}
-		
-		if ($page_1_passed == false)
-		{
-			$template = new HTMLTemplate("base/user/change_language.html");
-			
-			$paramquery = $_GET;
-			$paramquery[nextpage] = "1";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("params",$params);
-			
-			$language_array = Regional::list_languages();
-			
-			$result = array();
-			$counter = 0;
-			
-			if (is_array($language_array))
-			{
-				foreach($language_array as $key => $value)
-				{
-					$result[$counter][value] = $value;
-					$result[$counter][content] = Regional::get_language_name($value);
-					
-					if ($value == $user->get_language_id())
-					{
-						$result[$counter][selected] = "selected='selected'";
-					}
-					else
-					{
-						$result[$counter][selected] = "";
-					}
-					$counter++;		
-				}
-			}
-			
-			$template->set_var("option",$result);
-							
-			$template->output();
-		}
-		else
-		{
-			$paramquery = $_GET;
-			$paramquery[run] = "user_change_my_settings";
-			unset($paramquery[nextpage]);
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			if ($user->set_language_id($_POST[language]))
-			{
-				Common_IO::step_proceed($params, "Change Language", "Operation Successful", null);
-			}
-			else
-			{
-				Common_IO::step_proceed($params, "Change Language", "Operation Failed" ,null);	
-			}
-		}
-	}
-	
-	public static function change_timezone()
-	{
-		global $user;
-						
-		if ($_GET[nextpage] == 1)
-		{
-			$page_1_passed = true;
-		}
-		else
-		{
-			$page_1_passed = false;
-		}
-		
-		if ($page_1_passed == false)
-		{
-			$template = new HTMLTemplate("base/user/change_timezone.html");
-			
-			$paramquery = $_GET;
-			$paramquery[nextpage] = "1";
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			$template->set_var("params",$params);
-			
-			$timezone_array = Regional::list_timezones();
-			
-			$result = array();
-			$counter = 0;
-			
-			if (is_array($timezone_array))
-			{
-				foreach($timezone_array as $key => $value)
-				{
-					$result[$counter][value] = $value;
-					$result[$counter][content] = Regional::get_timezone_name($value);
-					
-					if ($value == $user->get_timezone_id())
-					{
-						$result[$counter][selected] = "selected='selected'";
-					}
-					else
-					{
-						$result[$counter][selected] = "";
-					}
-					$counter++;
-				}
-			}
-			$template->set_var("option",$result);			
-			$template->output();
-		}
-		else
-		{
-			$paramquery = $_GET;
-			$paramquery[run] = "user_change_my_settings";
-			unset($paramquery[nextpage]);
-			$params = http_build_query($paramquery,'','&#38;');
-			
-			if ($user->set_timezone_id($_POST[timezone]))
-			{
-				Common_IO::step_proceed($params, "Change Timezone", "Operation Successful", null);
-			}
-			else
-			{
-				Common_IO::step_proceed($params, "Change Timezone", "Operation Failed" ,null);	
-			}
-		}
-	}
-	
+
 	public static function change_password_on_login()
 	{
 		global $user;

@@ -452,6 +452,7 @@ class AdminUserIO
 		$template = new HTMLTemplate("base/user/admin/user/detail.html");
 					
 		$current_user = new User($user_id);
+		$current_user_regional = new Regional($user_id);
 		$user_data = new DataUserData($user_id);
 		$project_data = new ProjectUserData($user_id);
 		
@@ -666,7 +667,9 @@ class AdminUserIO
 		$paramquery[action] = "change_language";
 		$params = http_build_query($paramquery,'','&#38;');
 		
-		$template->set_var("language", Regional::get_language_name($current_user->get_language_id()));
+		$language = new Language($current_user_regional->get_language_id());
+	
+		$template->set_var("language", $language->get_full_name());
 		$template->set_var("language_params", $params);
 		
 		
@@ -674,7 +677,9 @@ class AdminUserIO
 		$paramquery[action] = "change_timezone";
 		$params = http_build_query($paramquery,'','&#38;');
 		
-		$template->set_var("timezone", Regional::get_timezone_name($current_user->get_timezone_id()));
+		$timezone = new Timezone($current_user_regional->get_timezone_id());
+		
+		$template->set_var("timezone", $timezone->get_name());
 		$template->set_var("timezone_params", $params);
 				
 		$template->output();
@@ -1358,6 +1363,7 @@ class AdminUserIO
 		if ($_GET[id])
 		{
 			$user = new User($_GET[id]);
+			$regional = new Regional($_GET[id]);
 						
 			if ($_GET[nextpage] == 1)
 			{
@@ -1378,7 +1384,7 @@ class AdminUserIO
 				
 				$template->set_var("params",$params);
 				
-				$language_array = Regional::list_languages();
+				$language_array = Language::list_languages();
 				
 				$result = array();
 				$counter = 0;
@@ -1387,10 +1393,12 @@ class AdminUserIO
 				{
 					foreach($language_array as $key => $value)
 					{
-						$result[$counter][value] = $value;
-						$result[$counter][content] = Regional::get_language_name($value);
+						$language = new Language($value);
 						
-						if ($value == $user->get_language_id())
+						$result[$counter][value] = $value;
+						$result[$counter][content] = $language->get_full_name();
+						
+						if ($value == $regional->get_language_id())
 						{
 							$result[$counter][selected] = "selected='selected'";
 						}
@@ -1437,6 +1445,7 @@ class AdminUserIO
 		if ($_GET[id])
 		{
 			$user = new User($_GET[id]);
+			$regional = new Regional($_GET[id]);
 						
 			if ($_GET[nextpage] == 1)
 			{
@@ -1457,7 +1466,7 @@ class AdminUserIO
 				
 				$template->set_var("params",$params);
 				
-				$timezone_array = Regional::list_timezones();
+				$timezone_array = Timezone::list_timezones();
 				
 				$result = array();
 				$counter = 0;
@@ -1466,10 +1475,12 @@ class AdminUserIO
 				{
 					foreach($timezone_array as $key => $value)
 					{
-						$result[$counter][value] = $value;
-						$result[$counter][content] = Regional::get_timezone_name($value);
+						$timezone = new Timezone($value);
 						
-						if ($value == $user->get_timezone_id())
+						$result[$counter][value] = $value;
+						$result[$counter][content] = $timezone->get_name();
+						
+						if ($value == $regional->get_timezone_id())
 						{
 							$result[$counter][selected] = "selected='selected'";
 						}

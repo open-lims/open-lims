@@ -28,32 +28,6 @@
  */
 interface RegionalInterface
 {
-	/**
-	 * @param integer $language_id
-	 * @return string
-	 */
-	public static function get_language_name($language_id);
-	
-	/**
-     * @param integer $timezone_id
-     * @return string
-     */
-	public static function get_timezone_name($timezone_id);
-	
-	/**
-     * @param integer $timezone_id
-     * @return integer
-     */
-	public static function get_timezone_deviation($timezone_id);
-	
-	/**
-     * @return array
-     */
-	public static function list_languages();
-	
-	/**
-     * @return array
-     */
-	public static function list_timezones();
+
 }
 ?>

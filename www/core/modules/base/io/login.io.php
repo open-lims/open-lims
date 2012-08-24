@@ -37,7 +37,7 @@ class Login_IO
 
 		$template->set_var("footer",constant("LOGIN_FOOTER"));
 
-		$language_array = Regional::list_languages();
+		$language_array = Language::list_languages();
 				
 		$result = array();
 		$counter = 0;
@@ -46,8 +46,10 @@ class Login_IO
 		{
 			foreach($language_array as $key => $value)
 			{
+				$language = new Language($value);
+				
 				$result[$counter]['option'] = $value;
-				$result[$counter]['name'] = Regional::get_language_name($value);
+				$result[$counter]['name'] = $language->get_full_name();
 				$counter++;		
 			}
 		}

@@ -166,7 +166,7 @@ class Main
 	 */
 	public function init()
 	{
-		global $session, $user;
+		global $session, $user, $regional;
 		
 		if ($GLOBALS['fatal_error'] == null)
 		{
@@ -176,6 +176,7 @@ class Main
 				{
 					$session = new Session($_GET[session_id]);
 					$user = new User($session->get_user_id());
+					$regional = new Regional();
 				}
 				catch (UserException $e)
 				{

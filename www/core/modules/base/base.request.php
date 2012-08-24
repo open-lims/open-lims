@@ -575,17 +575,7 @@ class BaseRequest
 							require_once("io/user.io.php");
 							UserIO::change_password();
 						break;
-						
-						case("user_change_language"):
-							require_once("io/user.io.php");
-							UserIO::change_language();
-						break;
-						
-						case("user_change_timezone"):
-							require_once("io/user.io.php");
-							UserIO::change_timezone();
-						break;	
-			
+									
 						default:
 							require_once("io/home.io.php");
 						break;
