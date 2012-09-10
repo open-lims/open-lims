@@ -61,6 +61,7 @@ class Regional implements RegionalInterface
 	}
 	
 	/**
+	 * @todo fallback
 	 * @return integer
 	 */
 	public function get_language_id()
@@ -143,7 +144,22 @@ class Regional implements RegionalInterface
 	 */
 	public function get_time_enter_format()
 	{
-
+		if ($this->user_regional_setting)
+		{
+			$time_enter_format = $this->user_regional_setting->get_time_enter_format();
+			if (isset($time_enter_format))
+			{
+				return $time_enter_format;
+			}
+			else
+			{
+				return true;
+			}
+		}
+		else
+		{
+			return true;
+		}
 	}
 	
 	/**
@@ -160,11 +176,17 @@ class Regional implements RegionalInterface
 	 */
 	public function get_date_display_format()
 	{
-		// 
-		
 		if ($this->user_regional_setting)
 		{
-			
+			$date_display_format = $this->user_regional_setting->get_date_display_format();
+			if ($date_display_format)
+			{
+				return $date_display_format;
+			}
+			else
+			{
+				return "jS M Y";
+			}
 		}
 		else
 		{
@@ -186,7 +208,15 @@ class Regional implements RegionalInterface
 	{
 		if ($this->user_regional_setting)
 		{
-			
+			$date_enter_format = $this->user_regional_setting->get_date_enter_format();
+			if ($date_enter_format)
+			{
+				return $date_enter_format;
+			}
+			else
+			{
+				return "dd.mm.YYYY";
+			}
 		}
 		else
 		{
@@ -199,7 +229,14 @@ class Regional implements RegionalInterface
 	 */
 	public function get_country_id()
 	{
-		
+		if ($this->user_regional_setting)
+		{
+			$this->user_regional_setting->get_country_id();
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**
@@ -209,7 +246,22 @@ class Regional implements RegionalInterface
 	 */
 	public function get_system_of_units()
 	{
-		
+		if ($this->user_regional_setting)
+		{
+			$system_of_units = $this->user_regional_setting->get_system_of_units();
+			if ($system_of_units)
+			{
+				return $system_of_units;
+			}
+			else
+			{
+				return "metric";
+			}
+		}
+		else
+		{
+			return "metric";
+		}
 	}
 	
 	/**
@@ -219,7 +271,22 @@ class Regional implements RegionalInterface
 	 */
 	public function get_system_of_paper_format()
 	{
-
+		if ($this->user_regional_setting)
+		{
+			$system_of_paper_format = $this->user_regional_setting->get_system_of_paper_format();
+			if ($system_of_paper_format)
+			{
+				return $system_of_paper_format;
+			}
+			else
+			{
+				return "din";
+			}
+		}
+		else
+		{
+			return "din";
+		}
 	}
 	
 	/**
@@ -227,7 +294,22 @@ class Regional implements RegionalInterface
 	 */
 	public function get_currency_id()
 	{
-		
+		if ($this->user_regional_setting)
+		{
+			$currency_id = $this->user_regional_setting->get_currency_id();
+			if ($currency_id)
+			{
+				return $currency_id;
+			}
+			else
+			{
+				return 1;
+			}
+		}
+		else
+		{
+			return 1;
+		}
 	}
 	
 	/**
@@ -235,7 +317,22 @@ class Regional implements RegionalInterface
 	 */
 	public function get_currency_significant_digits()
 	{
-		
+		if ($this->user_regional_setting)
+		{
+			$currency_significan_digits = $this->user_regional_setting->get_currency_significant_digits();
+			if (is_numeric($currency_significan_digits) and $currency_significan_digits >= 0)
+			{
+				return $currency_significan_digits;
+			}
+			else
+			{
+				return 2;
+			}
+		}
+		else
+		{
+			return 2;
+		}
 	}
 	
 	/**
@@ -243,7 +340,22 @@ class Regional implements RegionalInterface
 	 */
 	public function get_decimal_separator()
 	{
-		
+		if ($this->user_regional_setting)
+		{
+			$decimal_separator = $this->user_regional_setting->get_decimal_separator();
+			if ($decimal_separator)
+			{
+				return $decimal_separator;
+			}
+			else
+			{
+				return ",";
+			}
+		}
+		else
+		{
+			return ",";
+		}
 	}
 	
 	/**
@@ -251,7 +363,22 @@ class Regional implements RegionalInterface
 	 */
 	public function get_thousand_separator()
 	{
-		
+		if ($this->user_regional_setting)
+		{
+			$thousand_separator = $this->user_regional_setting->get_thousand_separator();
+			if ($thousand_separator)
+			{
+				return $thousand_separator;
+			}
+			else
+			{
+				return ".";
+			}
+		}
+		else
+		{
+			return ".";
+		}
 	}
 	
 	/**
@@ -259,8 +386,24 @@ class Regional implements RegionalInterface
 	 */
 	public function get_name_display_format()
 	{
-		
+		if ($this->user_regional_setting)
+		{
+			$name_display_format = $this->user_regional_setting->get_name_display_format();
+			if ($name_display_format)
+			{
+				return $name_display_format;
+			}
+			else
+			{
+				return "T F S";
+			}
+		}
+		else
+		{
+			return "T F S";
+		}
 	}
+	
 	
 	public function set_language_id($language_id)
 	{
@@ -287,7 +430,6 @@ class Regional implements RegionalInterface
 
 	}
 	
-
 	public function set_date_enter_format($date_enter_format_id)
 	{
 		
