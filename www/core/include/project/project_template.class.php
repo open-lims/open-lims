@@ -418,7 +418,18 @@ class ProjectTemplate implements ProjectTemplateInterface
 			$oldl = new Oldl($this->project_template->get_template_id());
 		    $xml_array = $oldl->get_cutted_xml_array("body");
 		    
+		    $workflow = new Workflow();
+		    
+		    $decision_counter = 0;
+		    $option_counter = 0;
+		    $parallel_counter = 0;
+		    $path_counter = 0;
+		    
+		    $last_elements_array = array();
+		    $use_last_elemets = false;
+		    
 		    $return_array = array();
+		    
 		    
 		    foreach($xml_array as $key => $value)
 		    {
@@ -426,11 +437,110 @@ class ProjectTemplate implements ProjectTemplateInterface
 				$value[1] = trim(strtolower($value[1]));
 				$value[2] = trim(strtolower($value[2]));
 		    	
+				if ($value[1] == "decision" and $value[2] != "#")
+		    	{
+		    		$workflow_element_decision[$decision_counter] = new WorkflowElementDecision();
+		    		
+		    		if ($use_last_elemets == true)
+		    		{
+		    			$workflow->add_element($workflow_element_decision[$decision_counter], true, $last_elements_array);
+		    			$use_last_elemets = false;
+		    			$last_elements_array = array();
+		    		}
+		    		else
+		    		{
+		    			$workflow->add_element($workflow_element_decision[$decision_counter]);
+		    		}
+		    		
+		    		$decision_counter++;
+		    	}
+		    	
+		    	if ($value[1] == "decision" and $value[2] == "#")
+		    	{
+		    		// Dem nächsten Element mitteilen, dass es die letzten Elemente der Options verarbeitet
+		    		$use_last_elemets = true;
+		    		
+		    		// Problem, wenn das Descision in Option liegt und danach weitere Options folgen
+		    		// Weitere Options müssen $use_last_elements ignorieren
+
+		    		$decision_counter--;
+		    	}
+		    	
+		   		if ($value[1] == "option" and $value[2] != "#")
+		    	{
+		    		$workflow->set_current_element($workflow_element_decision[$decision_counter-1]);
+		    		
+		    		// $option_counter++;
+		    		// Zeiger vom Workflow wieder auf das Decision-Element
+		    	}
+		    	
+		    	if ($value[1] == "option" and $value[2] == "#")
+		    	{
+		    		// Alle letzten option-elemente sind (wenn kein goto) vor-element 
+		    		// des nächsten Elements nach decision
+		    		
+		    		if ($goto == true)
+		    		{
+		    			$goto = false;
+		    		}
+		    		else
+		    		{
+			    		if (!in_array($workflow_element_status, $last_elements_array))
+			    		{
+			    			array_push($last_elements_array, $workflow_element_status);
+			    		}
+		    		}
+		    	}
+		    	
+		    	if ($value[1] == "parallel" and $value[2] != "#")
+		    	{
+		    		
+		    	}
+		    	
+		    	if ($value[1] == "parallel" and $value[2] == "#")
+		    	{
+		    		
+		    	}
+		    	
+		   		if ($value[1] == "path" and $value[2] != "#")
+		    	{
+		    		
+		    	}
+		    	
+		   		if ($value[1] == "path" and $value[2] == "#")
+		    	{
+		    		
+		    	}
+		    	
+		    	
+		  		if ($value[1] == "goto" and $value[2] != "#")
+		    	{
+		    		$goto = true;
+		    		// Zwischenspeichern und nach der foreach-schleife bearbeiten
+		    	}
+		    	
+				
 		    	if ($value[1] == "status" and is_numeric($value[3][id]))
 		    	{
+		    		$workflow_element_status = new WorkflowElementStatus($value[3][id]);
+		    		
+		    		if ($use_last_elemets == true)
+		    		{
+		    			$workflow->add_element($workflow_element_status, true, $last_elements_array);
+		    			$use_last_elemets = false;
+		    			$last_elements_array = array();
+		    		}
+		    		else
+		    		{
+		    			$workflow->add_element($workflow_element_status);
+		    		}
+		    		
 		    		array_push($return_array, $value[3][id]);
 		    	}
 		    }
+		    
+		    $workflow->print_elements();
+		    
 			return $return_array;
 		
 		}
