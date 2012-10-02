@@ -41,10 +41,16 @@ class Workflow // implements WorkflowInterface
 	
 	private $start_element;
 	private $current_element;
+	private $active_elements = array();
 	
 	function __construct()
 	{
 		
+	}
+	
+	function __sleep()
+	{
+		$active_element = array();
 	}
 	
 	public function add_element($element, $set_as_current = true, $last_elements_array = null)
@@ -86,6 +92,11 @@ class Workflow // implements WorkflowInterface
 	public function set_current_element($element)
 	{
 		$this->current_element = $element;
+	}
+	
+	public function set_status_active($status_id)
+	{
+		
 	}
 	
 	public function print_elements($element = null)

@@ -468,6 +468,11 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    	
 		   		if ($value[1] == "option" and $value[2] != "#")
 		    	{
+		    		if ($use_last_elemets == true)
+		    		{
+		    			$use_last_elemets = false;
+		    		}
+		    		
 		    		$workflow->set_current_element($workflow_element_decision[$decision_counter-1]);
 		    		
 		    		// $option_counter++;
