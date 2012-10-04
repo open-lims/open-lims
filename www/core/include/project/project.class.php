@@ -190,10 +190,12 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					$this->__construct($project_id);
 					
 					$project_template = new ProjectTemplate($template_id);
-					$project_all_status_array = $project_template->get_all_status();
+					
+					$workflow = $project_template->get_workflow_object();
+					$start_element = $workflow->get_start_element();
 					
 					$project_has_project_status = new ProjectHasProjectStatus_Access(null);
-					if ($project_has_project_status->create($project_id,$project_all_status_array[0]) != true)
+					if ($project_has_project_status->create($project_id,$start_element->get_id()) != true)
 					{
 						if ($transaction_id != null)
 						{
@@ -245,17 +247,19 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					// Status Folder
 					$folder_array = array();
 					
-					foreach($project_all_status_array as $key => $value)
+					$all_status_elements = &$workflow->get_all_status_elements();
+					
+					foreach($all_status_elements as $key => $value)
 					{
-						$project_status_array = $project_template->get_status_requirements($value);
+						$project_status_array = $project_template->get_status_requirements($key);
 
 						if (is_array($project_status_array) and count($project_status_array) >= 1)
 						{
 							foreach($project_status_array as $status_key => $status_value)
 							{
-								if (!in_array($value, $folder_array))
+								if (!in_array($key, $folder_array) and $key > 10)
 								{
-									array_push($folder_array, $value);
+									array_push($folder_array, $key);
 								}
 							}
 						}	
@@ -863,7 +867,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     
     /**
      * @see ProjectInterface::get_all_status_array()
-     * @return array
+     * @return object
      */
     public function get_all_status_array()
     {
@@ -880,108 +884,58 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	    		$return_array = array();
 	    		
 	    		$project_template = new ProjectTemplate($this->project->get_template_id());
-	    		$all_status_array = $project_template->get_all_status();
 	    		
-	    		if (is_array($all_status_array) and count($all_status_array) >= 1)
-	    		{
-					$project_canceled 	= false;
-					$status_found 		= false;	
-					$datetime 			= null;	
-		
-	    			foreach($all_status_array as $key => $value)
-	    			{
-	    				$temp_array = array();
-	    				
-	    				$project_has_status_array = ProjectHasProjectStatus_Access::list_entries_by_project_id($this->project_id);
-	    				
-	    				if (is_array($project_has_status_array) and count($project_has_status_array) >= 1)
+	    		
+	    		$workflow = $project_template->get_workflow_object();
+	    		
+	    		
+				$all_status_elements = &$workflow->get_all_status_elements();
+				if (is_array($all_status_elements) and count($all_status_elements) >= 1)
+    			{
+    				foreach($all_status_elements as $key => $value)
+    				{
+    					$project_status = new ProjectStatus($key);
+    					$status_attribute_array = $project_template->get_status_attributes($key);
+    					
+    					$value->attach("name", $project_status->get_name());
+    				
+    					if ($status_attribute_array[requirement] == "optional")
 	    				{
-	    					foreach($project_has_status_array as $status_key => $status_value)
-	    					{
-	    						$project_has_project_status = new ProjectHasProjectStatus_Access($status_value);
-	    						
-	    						if ($status_found == true and $datetime == null)
-	    						{
-	    							$datetime = $project_has_project_status->get_datetime();
-	    						}
-	    						
-	    						if ($project_has_project_status->get_status_id() == $value)
-	    						{
-	    							$status_found = true;
-	    						}
-	    						
-	    						if ($project_has_project_status->get_status_id() == 0)
-	    						{
-	    							$project_canceled = true;
-	    						}
-	    					}
-	    				}
-	    				
-	    				$temp_array[id] = $value;
-	    				
-	    				$status_attribute_array = $project_template->get_status_attributes($value);
-	    				
-	    				if ($status_attribute_array[requirement] == "optional")
-	    				{
-	    					$temp_array[optional] = true;
+	    					$value->attach("optional", true);
 	    				}
 	    				else
 	    				{
-	    					$temp_array[optional] = false;
+	    					$value->attach("optional", false);
 	    				}
-	    				
-	    				if ($status_found == true)
-	    				{
-	    					if ($datetime == null)
-	    					{
-	    						$temp_array[datetime] = date("Y-m-d H:i:s");
-	    					}
-	    					else
-	    					{
-	    						$temp_array[datetime] = $datetime;
-	    						$datetime = null;
-	    					}
-	    					
-							if ($project_canceled == true)
-							{
-								$temp_array[status] = 3;
-							}
-							else
-							{
-								$temp_array[status] = 1;	
-							}
-	    					
-	    					if (($last_element = array_pop($return_array)) != null)
-	    					{
-	    						$last_element[status] = 2;
-	    						array_push($return_array, $last_element);
-	    					}
-	    					
-	    					$status_found = false;
-	    					$datetime = null;
-	    				}
-	    				else
-	    				{
-	    					$temp_array[status] = 0;
-	    				}
-						array_push($return_array, $temp_array);
-	    			}
-	    			
-	    			if ($this->get_current_status_id() == 2)
-	    			{
-	    				if (($last_element = array_pop($return_array)) != null)
-	    				{
-							$last_element[status] = 2;
-							array_push($return_array, $last_element);
-						}
-	    			}
-	    			$runtime_data->write_object_data($this, "PROJECT_ALL_STATUS_ARRAY", $return_array);
-	    			return $return_array;
-	    		}
-	    		else
-	    		{
-	    			return null;
-	    		}
+    				}
+    			}
+	    		
+    			
+	    		$project_status_array = ProjectHasProjectStatus_Access::list_status_id_by_project_id($this->project_id);		
+    			if (is_array($project_status_array) and count($project_status_array) >= 1)
+    			{
+    				foreach($project_status_array as $status_key => $status_value)
+    				{
+    					$workflow->set_status_visited($status_value);
+    					
+    					if ($status_value == 0)
+    					{
+    						$value->attach("cancel", true);
+    					}
+    				}
+    			}
+    			
+    			
+				$project_current_status_array = ProjectHasProjectStatus_Access::list_current_status_id_by_project_id($this->project_id);		
+    			if (is_array($project_current_status_array) and count($project_current_status_array) >= 1)
+    			{
+    				foreach($project_current_status_array as $status_key => $status_value)
+    				{
+    					$workflow->set_status_active($status_value);
+    				}
+    			}
+    			
+    			return $workflow;
 			}
     	}
     	else

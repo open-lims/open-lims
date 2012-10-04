@@ -41,7 +41,11 @@ class Workflow // implements WorkflowInterface
 	
 	private $start_element;
 	private $current_element;
-	private $active_elements = array();
+	
+	private $status_elements = array();
+	private $active_status_elements = array();
+	private $visited_status_elements = array();
+	
 	
 	function __construct()
 	{
@@ -57,6 +61,11 @@ class Workflow // implements WorkflowInterface
 	{
 		if ($element instanceof WorkflowElement)
 		{
+			if ($element instanceof WorkflowElementStatus)
+			{
+				$this->status_elements[$element->get_id()] = &$element;
+			}
+			
 			if (!is_object($this->start_element))
 			{
 				$this->start_element = $element;
@@ -89,12 +98,67 @@ class Workflow // implements WorkflowInterface
 		return $this->current_element;
 	}
 	
+	public function get_start_element()
+	{
+		return $this->start_element;
+	}
+	
+	public function get_status_element($status_id)
+	{
+		return $this->status_elements[$status_id];
+	}
+	
+	public function get_all_status_elements()
+	{
+		return $this->status_elements;
+	}
+	
 	public function set_current_element($element)
 	{
 		$this->current_element = $element;
 	}
 	
 	public function set_status_active($status_id)
+	{
+		if ($this->status_elements[$status_id] instanceof WorkflowElementStatus)
+		{
+			$this->active_status_elements[$status_id] = &$this->status_elements[$status_id];
+		}
+	}
+	
+	public function set_status_visited($status_id)
+	{
+		if ($this->status_elements[$status_id] instanceof WorkflowElementStatus)
+		{
+			$this->visited_status_elements[$status_id] = &$this->status_elements[$status_id];
+		}
+	}
+	
+	public function is_visited($element)
+	{
+		if (in_array($element, $this->visited_status_elements))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public function is_active($element)
+	{
+		if (in_array($element, $this->active_status_elements))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public function is_finished()
 	{
 		
 	}

@@ -246,7 +246,7 @@ class ProjectTaskIO
 									$template->set_var("whole_day_checked", "");
 								}
 								
-								$status_array = $project->get_all_status_array();
+								// $status_array = $project->get_all_status_array();
 														
 								if (is_array($status_array) and count($status_array) >= 1)
 								{

@@ -80,6 +80,7 @@ class ProjectHasProjectStatus_Access
 	}
 	
 	/**
+	 * @todo remove second write SQL-Statement while proceeding
 	 * @param integer $project_id
 	 * @param integer $status_id
 	 * @return integer
@@ -92,9 +93,14 @@ class ProjectHasProjectStatus_Access
 		{
 			$datetime = date("Y-m-d H:i:s");
 			
-			$sql_write = "INSERT INTO ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." (primary_key,project_id,status_id,datetime) " .
-					"VALUES (nextval('".self::PROJECT_HAS_PROJECT_STATUS_PK_SEQUENCE."'::regclass),".$project_id.",".$status_id.",'".$datetime."')";
+			$sql_write2 = "UPDATE ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." SET current='f' WHERE project_id='".$project_id."'";
+			$res_write2 = $db->db_query($sql_write2);
+			
+			
+			$sql_write = "INSERT INTO ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." (primary_key,project_id,status_id,datetime, current) " .
+					"VALUES (nextval('".self::PROJECT_HAS_PROJECT_STATUS_PK_SEQUENCE."'::regclass),".$project_id.",".$status_id.",'".$datetime."', 't')";
 			$res_write = $db->db_query($sql_write);
+
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
@@ -282,6 +288,7 @@ class ProjectHasProjectStatus_Access
 		
 	
 	/**
+	 * @todo check usage
 	 * @param integer $project_id
 	 * @return array
 	 */	
@@ -299,6 +306,76 @@ class ProjectHasProjectStatus_Access
 			while ($data = $db->db_fetch_assoc($res))
 			{
 				array_push($return_array,$data[primary_key]);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $project_id
+	 * @return array
+	 */	
+	public static function list_status_id_by_project_id($project_id)
+	{
+		global $db;
+		
+		if (is_numeric($project_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT status_id FROM ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." WHERE project_id = ".$project_id." ORDER BY datetime ASC";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,$data[status_id]);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $project_id
+	 * @return array
+	 */	
+	public static function list_current_status_id_by_project_id($project_id)
+	{
+		global $db;
+		
+		if (is_numeric($project_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT status_id FROM ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." WHERE project_id = ".$project_id." AND current='t'";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,$data[status_id]);
 			}
 			
 			if (is_array($return_array))

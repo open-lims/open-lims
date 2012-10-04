@@ -40,6 +40,8 @@ class WorkflowElement // implements WorkflowInterface
 	protected $previous_array = array();
 	protected $next_array = array();
 	
+	private $attechments = array();
+	
 	protected function __construct()
 	{
 		
@@ -89,6 +91,16 @@ class WorkflowElement // implements WorkflowInterface
 	public function get_previous()
 	{
 		return $this->previous_array;
+	}
+
+	public function get_attachment($address)
+	{
+		return $this->attechments[$address];
+	}
+	
+	public function attach($address, $object)
+	{
+		$this->attechments[$address] = $object;
 	}
 }
 ?>

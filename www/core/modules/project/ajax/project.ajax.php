@@ -456,40 +456,61 @@ class ProjectAjax
 			$template = new HTMLTemplate("project/ajax/detail_status.html");
 		
 			// Status Bar
-			$all_status_array = $project->get_all_status_array();				
+			$workflow = $project->get_all_status_array();				
 			$result = array();
 			$counter = 0;
 			
-			if (is_array($all_status_array) and count($all_status_array) >= 1)
+			$current_element = $workflow->get_start_element();
+			
+			while ($current_element != null)
 			{
-				foreach($all_status_array as $key => $value)
-				{						
-					$project_status = new ProjectStatus($value['id']);
-					
-					if ($value['optional'] == true)
+				if ($current_element instanceof WorkflowElementDecision)
+				{
+					$result[$counter]['name'] = "/&nbsp;\\ Decision /&nbsp;\\";
+					$result[$counter]['icon']	= "";
+					$counter++;
+				}
+				
+				if ($current_element instanceof WorkflowElementStatus)
+				{
+					if ($current_element->get_attachment("optional") == true)
 					{
-						$result[$counter]['name'] = $project_status->get_name()." (optional)";
+						$result[$counter]['name'] = $current_element->get_attachment("name")." (optional)";
 					}
 					else
 					{
-						$result[$counter]['name'] = $project_status->get_name();	
+						$result[$counter]['name'] = $current_element->get_attachment("name");	
 					}
-					
-					if ($value[status] == 3)
+	
+	
+					if($workflow->is_active($current_element))
 					{
-						$result[$counter]['icon'] = "<img src='images/icons/status_cancel.png' alt='R' />";
+						if($current_element->get_id() == 2)
+						{
+							$result[$counter]['icon'] = "<img src='images/icons/status_ok.png' alt='R' />";
+						}
+						else
+						{
+							if($current_element->get_attachment("cancel") == true)
+							{
+								$result[$counter]['icon'] = "<img src='images/icons/status_cancel.png' alt='R' />";
+							}
+							else
+							{
+								$result[$counter]['icon']	= "<img src='images/icons/status_run.png' alt='R' />";
+							}
+						}
+						
 					}
-					elseif($value[status] == 2)
+					elseif($workflow->is_visited($current_element))
 					{
 						$result[$counter]['icon'] = "<img src='images/icons/status_ok.png' alt='R' />";
-					}elseif($value[status] == 1)
-					{
-						$result[$counter]['icon']	= "<img src='images/icons/status_run.png' alt='R' />";
 					}
 					else
 					{
 						$result[$counter]['icon']	= "";
-					}
+					} 
+					
 					
 					if (!($counter % 2))
 					{
@@ -502,31 +523,24 @@ class ProjectAjax
 					
 					$counter++;
 				}
-				
-				$project_status = new ProjectStatus(2);
-				$result[$counter]['name'] = $project_status->get_name();
-				
-				if ($project->get_current_status_id() == 2)
+					
+				if (is_array($next_elements = $current_element->get_next()))
 				{
-					$result[$counter]['icon'] = "<img src='images/icons/status_ok.png' alt='R' />";
+					if (count($next_elements) >= 1)
+					{
+						$current_element = $next_elements[0];
+					}
+					else
+					{
+						$current_element = null;
+					}
 				}
 				else
 				{
-					$result[$counter]['icon']	= "";
+					$current_element = null;
 				}
-				
-				if (!($counter % 2))
-				{
-					$result[$counter]['tr_class'] = " class='trLightGrey'";
-				}
-				else
-				{
-					$result[$counter]['tr_class'] = "";
-				}
-				
-				$counter++;
 			}
-			
+
 			$template->set_var("status",$result);
 			
 			$template->output();

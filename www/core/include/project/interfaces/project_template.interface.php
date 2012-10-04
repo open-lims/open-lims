@@ -80,10 +80,10 @@ interface ProjectTemplateInterface
 	public function get_status_requirements($status_id);
 	
 	/**
-	 * Returns all status of a project
+	 * Returns whole workflow object with all status
 	 * @return array
 	 */
-	public function get_all_status();
+	public function get_workflow_object();
 	
 	/**
 	 * Returns the next status of an given status

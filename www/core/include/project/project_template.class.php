@@ -408,10 +408,10 @@ class ProjectTemplate implements ProjectTemplateInterface
 	}
 	
 	/**
-	 * @see ProjectTemplateInterface::get_all_status()
+	 * @see ProjectTemplateInterface::get_workflow_object()
 	 * @return array
 	 */
-	public function get_all_status()
+	public function get_workflow_object()
 	{
 		if ($this->project_template and $this->project_template_id)
 		{
@@ -427,8 +427,6 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    
 		    $last_elements_array = array();
 		    $use_last_elemets = false;
-		    
-		    $return_array = array();
 		    
 		    
 		    foreach($xml_array as $key => $value)
@@ -539,14 +537,25 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    		{
 		    			$workflow->add_element($workflow_element_status);
 		    		}
-		    		
-		    		array_push($return_array, $value[3][id]);
 		    	}
 		    }
 		    
-		    $workflow->print_elements();
+			$workflow_element_status = new WorkflowElementStatus(2);
+		    		
+    		if ($use_last_elemets == true)
+    		{
+    			$workflow->add_element($workflow_element_status, true, $last_elements_array);
+    			$use_last_elemets = false;
+    			$last_elements_array = array();
+    		}
+    		else
+    		{
+    			$workflow->add_element($workflow_element_status);
+    		}
 		    
-			return $return_array;
+		    // $workflow->print_elements();
+		    
+			return $workflow;
 		
 		}
 		else
