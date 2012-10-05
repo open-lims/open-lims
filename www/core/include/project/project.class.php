@@ -895,18 +895,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     				foreach($all_status_elements as $key => $value)
     				{
     					$project_status = new ProjectStatus($key);
-    					$status_attribute_array = $project_template->get_status_attributes($key);
-    					
     					$value->attach("name", $project_status->get_name());
-    				
-    					if ($status_attribute_array[requirement] == "optional")
-	    				{
-	    					$value->attach("optional", true);
-	    				}
-	    				else
-	    				{
-	    					$value->attach("optional", false);
-	    				}
     				}
     			}
 	    		

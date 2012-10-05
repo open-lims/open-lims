@@ -1,6 +1,6 @@
 <?php 
 /**
- * @package project
+ * @package workflow
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2012 by Roman Konertz
@@ -27,8 +27,8 @@
 	$classes['Workflow']					= $path_prefix."core/include/workflow/workflow.class.php";
 	
 	$classes['WorkflowElement']				= $path_prefix."core/include/workflow/workflow_element.class.php";
-	$classes['WorkflowElementDecision']		= $path_prefix."core/include/workflow/workflow_element_decision.class.php";
-	$classes['WorkflowElementParallel']		= $path_prefix."core/include/workflow/workflow_element_parallel.class.php";
-	$classes['WorkflowElementStatus']		= $path_prefix."core/include/workflow/workflow_element_status.class.php";
+	$classes['WorkflowElementOr']			= $path_prefix."core/include/workflow/workflow_element_or.class.php";
+	$classes['WorkflowElementAnd']			= $path_prefix."core/include/workflow/workflow_element_and.class.php";
+	$classes['WorkflowElementActivity']		= $path_prefix."core/include/workflow/workflow_element_activity.class.php";
 
 ?>

@@ -464,14 +464,14 @@ class ProjectAjax
 			
 			while ($current_element != null)
 			{
-				if ($current_element instanceof WorkflowElementDecision)
+				if ($current_element instanceof WorkflowElementOr)
 				{
 					$result[$counter]['name'] = "/&nbsp;\\ Decision /&nbsp;\\";
 					$result[$counter]['icon']	= "";
 					$counter++;
 				}
 				
-				if ($current_element instanceof WorkflowElementStatus)
+				if ($current_element instanceof WorkflowElementActivity)
 				{
 					if ($current_element->get_attachment("optional") == true)
 					{

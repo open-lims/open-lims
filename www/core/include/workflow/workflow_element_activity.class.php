@@ -32,14 +32,22 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 }
 
 /**
- * Workflow Element Parallel Class
+ * Workflow Element Status Class
  * @package workflow
  */
-class WorkflowElementParallel extends WorkflowElement // implements WorkflowInterface
+class WorkflowElementActivity extends WorkflowElement // implements WorkflowInterface
 {
-	function __construct()
+	private $id;
+	
+	function __construct($id)
 	{
 		parent::__construct();
+		$this->id = $id;
+	}
+	
+	public function get_id()
+	{
+		return $this->id;
 	}
 }
 ?>

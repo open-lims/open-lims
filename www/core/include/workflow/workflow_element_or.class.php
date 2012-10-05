@@ -32,22 +32,14 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 }
 
 /**
- * Workflow Element Status Class
+ * Workflow Element Decision Class
  * @package workflow
  */
-class WorkflowElementStatus extends WorkflowElement // implements WorkflowInterface
+class WorkflowElementOr extends WorkflowElement // implements WorkflowInterface
 {
-	private $id;
-	
-	function __construct($id)
+	function __construct()
 	{
 		parent::__construct();
-		$this->id = $id;
-	}
-	
-	public function get_id()
-	{
-		return $this->id;
 	}
 }
 ?>

@@ -32,10 +32,10 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 }
 
 /**
- * Workflow Element Decision Class
+ * Workflow Element Parallel Class
  * @package workflow
  */
-class WorkflowElementDecision extends WorkflowElement // implements WorkflowInterface
+class WorkflowElementAnd extends WorkflowElement // implements WorkflowInterface
 {
 	function __construct()
 	{

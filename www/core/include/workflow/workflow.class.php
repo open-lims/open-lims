@@ -61,7 +61,7 @@ class Workflow // implements WorkflowInterface
 	{
 		if ($element instanceof WorkflowElement)
 		{
-			if ($element instanceof WorkflowElementStatus)
+			if ($element instanceof WorkflowElementActivity)
 			{
 				$this->status_elements[$element->get_id()] = &$element;
 			}
@@ -120,7 +120,7 @@ class Workflow // implements WorkflowInterface
 	
 	public function set_status_active($status_id)
 	{
-		if ($this->status_elements[$status_id] instanceof WorkflowElementStatus)
+		if ($this->status_elements[$status_id] instanceof WorkflowElementActivity)
 		{
 			$this->active_status_elements[$status_id] = &$this->status_elements[$status_id];
 		}
@@ -128,7 +128,7 @@ class Workflow // implements WorkflowInterface
 	
 	public function set_status_visited($status_id)
 	{
-		if ($this->status_elements[$status_id] instanceof WorkflowElementStatus)
+		if ($this->status_elements[$status_id] instanceof WorkflowElementActivity)
 		{
 			$this->visited_status_elements[$status_id] = &$this->status_elements[$status_id];
 		}
@@ -173,17 +173,17 @@ class Workflow // implements WorkflowInterface
 		$next_array = $element->get_next();
 		$previous_array = $element->get_previous();
 		
-		if ($element instanceof WorkflowElementStatus)
+		if ($element instanceof WorkflowElementActivity)
 		{
 			echo "Status: ".$element->get_id()."; ";
 		}
 		
-		if ($element instanceof WorkflowElementDecision)
+		if ($element instanceof WorkflowElementOr)
 		{
 			echo "Decision; ";
 		}
 		
-		if ($element instanceof WorkflowElementParallel)
+		if ($element instanceof WorkflowElementAnd)
 		{
 			echo "Parallel; ";
 		}
@@ -194,17 +194,17 @@ class Workflow // implements WorkflowInterface
 		
 		foreach($next_array as $key => $value)
 		{
-			if ($value instanceof WorkflowElementStatus)
+			if ($value instanceof WorkflowElementActivity)
 			{
 				echo $value->get_id()." ";
 			}
 			
-			if ($value instanceof WorkflowElementDecision)
+			if ($value instanceof WorkflowElementOr)
 			{
 				echo "Decision ";
 			}
 			
-			if ($value instanceof WorkflowElementParallel)
+			if ($value instanceof WorkflowElementAnd)
 			{
 				echo "Parallel ";
 			}
@@ -214,17 +214,17 @@ class Workflow // implements WorkflowInterface
 		
 		foreach($previous_array as $key => $value)
 		{
-			if ($value instanceof WorkflowElementStatus)
+			if ($value instanceof WorkflowElementActivity)
 			{
 				echo $value->get_id()." ";
 			}
 			
-			if ($value instanceof WorkflowElementDecision)
+			if ($value instanceof WorkflowElementOr)
 			{
 				echo "Decision ";
 			}
 			
-			if ($value instanceof WorkflowElementParallel)
+			if ($value instanceof WorkflowElementAnd)
 			{
 				echo "Parallel ";
 			}

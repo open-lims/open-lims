@@ -437,7 +437,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    	
 				if ($value[1] == "decision" and $value[2] != "#")
 		    	{
-		    		$workflow_element_decision[$decision_counter] = new WorkflowElementDecision();
+		    		$workflow_element_decision[$decision_counter] = new WorkflowElementOr();
 		    		
 		    		if ($use_last_elemets == true)
 		    		{
@@ -525,7 +525,16 @@ class ProjectTemplate implements ProjectTemplateInterface
 				
 		    	if ($value[1] == "status" and is_numeric($value[3][id]))
 		    	{
-		    		$workflow_element_status = new WorkflowElementStatus($value[3][id]);
+		    		$workflow_element_status = new WorkflowElementActivity($value[3][id]);
+		    		
+		    		if ($value[3][requirement] == "optional")
+    				{
+    					$workflow_element_status->attach("optional", true);
+    				}
+    				else
+    				{
+    					$workflow_element_status->attach("optional", false);
+    				}
 		    		
 		    		if ($use_last_elemets == true)
 		    		{
@@ -540,7 +549,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    	}
 		    }
 		    
-			$workflow_element_status = new WorkflowElementStatus(2);
+			$workflow_element_status = new WorkflowElementActivity(2);
 		    		
     		if ($use_last_elemets == true)
     		{
