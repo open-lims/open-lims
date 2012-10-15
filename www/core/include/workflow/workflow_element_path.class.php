@@ -32,14 +32,48 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 }
 
 /**
- * Workflow Element Parallel Class
+ * Workflow Element Path Class
  * @package workflow
  */
-class WorkflowElementAnd extends WorkflowElementPath // implements WorkflowInterface
+class WorkflowElementPath extends WorkflowElement // implements WorkflowInterface
 {
+	private $path_length_array = array();
+	
 	function __construct()
 	{
 		parent::__construct();
+	}
+	
+	public function get_path_length()
+	{
+		return $this->path_length_array;	
+	}
+	
+	public function get_longest_path_length()
+	{
+		if (is_array($this->path_length_array) and count($this->path_length_array) >= 1)
+		{
+			$longest_path_length = 0;
+			
+			foreach($this->path_length_array as $key => $value)
+			{
+				if ($value > $longest_path_length)
+				{
+					$longest_path_length = $value;
+				}
+			}
+			
+			return $longest_path_length;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
+	public function set_path_length($path_length_array)
+	{
+		$this->path_length_array = $path_length_array;
 	}
 }
 ?>

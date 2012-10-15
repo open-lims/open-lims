@@ -17,6 +17,46 @@
 }
 
 
+.ProjectDetailStatusSpacer
+{
+	width: 20px;	
+	float: left;
+}
+.ProjectDetailStatusElement
+{
+	width: 90px;
+	margin: 10px 0;
+	padding: 4px;
+	border: 1px #C0C0C0 solid;
+	float: left;
+}
+.ProjectDetailStatusEmpty
+{
+	width: 92px;
+	margin: 10px 0;
+	padding: 4px;
+	float: left;
+}
+.ProjectDetailStatusOr
+{
+	background-image: url(../images/workflow/or.png);
+	background-repeat: no-repeat;
+	background-position: top center;
+	width: 100px;
+	height: 40px;
+	margin: 10px auto;
+	padding: 12px 0 0 0;
+	text-align: center;
+	float: left;
+}
+.ProjectDetailStatusElementClear
+{
+	clear:left;	
+}	
+#ProjectDetailStatus .Current
+{
+	border: 1px #99cd32 solid;
+}
 
 
 .ProjectDetailStatusTable
@@ -30,6 +70,8 @@
 	padding-right: 5px;
 	line-height: 22px;
 }
+
+
 
 /* Project Proceed */
 .ProdectDetailProceedTable

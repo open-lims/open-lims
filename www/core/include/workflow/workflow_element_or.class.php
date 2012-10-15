@@ -35,8 +35,10 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Workflow Element Decision Class
  * @package workflow
  */
-class WorkflowElementOr extends WorkflowElement // implements WorkflowInterface
+class WorkflowElementOr extends WorkflowElementPath // implements WorkflowInterface
 {
+	private $path_length;
+	
 	function __construct()
 	{
 		parent::__construct();

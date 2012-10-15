@@ -437,6 +437,226 @@ class ProjectAjax
 		}
 	}
 	
+	// !!! BEGIN !!!
+	
+	private static $visited_elements = array();
+	
+	/**
+	 * @todo evtl. in BL verschieben
+	 * @param unknown_type $element
+	 * @param unknown_type $active_elements
+	 * @param unknown_type $number_of_visible_elements
+	 */
+	private static function get_status_list($element, $active_elements, $number_of_visible_elements, $number_of_parent_children, $child_id)
+	{
+		$next_array = &$element->get_next();
+		// $previous_array = &$element->get_previous();
+		$next_array_count = count($next_array);
+		
+		array_push(self::$visited_elements, $element);
+		
+		// Bekannt, wieviele Kinder das Elternelemnt hat, wieviel gezeigt werden dürfen und welches man ist
+		
+		// $number_of_parent_children, wenn kleiner 3 dann kann mehr als ein eigenes Element ausgegeben werden
+		
+		// Wenn $number_of_visible_elements == 0, dann nur Rückgabe, wenn aktives Element vorhanden
+		
+		if($next_array_count <= 0)
+		{
+			if ($number_of_visible_elements == 0)
+			{
+				if (in_array($element, $active_elements))
+				{
+					return array(array(array(&$element, true)));	// Override maximum
+				}
+				else
+				{
+					// return null;
+					return array(array(array(&$element, false)));
+				}
+			}
+			else
+			{
+				if (in_array($element, $active_elements))
+				{
+					return array(array(array(&$element, true)));	// Override maximum
+				}
+				else
+				{
+					return array(array(array(&$element, false)));
+				}
+			}
+		}
+		else
+		{	
+			$return_array = array();
+			
+			// 0tes Element
+			if (in_array($element, $active_elements))
+			{
+				$return_array[0][0] = array(&$element, true);
+			}
+			else
+			{
+				$return_array[0][0] = array(&$element, false);
+			}
+			
+			$element_counter_default = 0;
+			$element_counter_highest = 0;
+			$element_counter = 0;
+			$active_found = false;
+			
+			$children_array = array();
+			$max_children = null;
+
+			if ($element instanceof WorkflowElementPath)
+			{
+				$path_length = $element->get_path_length();
+				$max_path_length = $element->get_longest_path_length();
+			}
+			
+			for($i = 0; $i <= $next_array_count-1; $i++)
+			{	
+				if (!in_array($next_array[$i], self::$visited_elements))
+				{
+					$child_number_of_visible_elements = $number_of_visible_elements - $i;
+					if ($child_number_of_visible_elements < 0)
+					{
+						$child_number_of_visible_elements = 0;
+					}
+					
+					$array = self::get_status_list($next_array[$i], 
+							$active_elements, 
+							$child_number_of_visible_elements, 
+							$next_array_count, 
+							$i);
+
+					
+					// BEGIN
+					/*
+					if ($array != null)
+					{
+						foreach ($array as $line_key => $line_value)
+						{
+							// Zeilen
+							foreach ($line_value as $element_key => $element_value)
+							{
+								// Elemente
+							
+								if ($element_value[0] instanceof WorkflowElementActivity)
+								{
+									echo $element_value[0]->get_id()." (".$element_key.")&nbsp;";
+								}
+								else
+								{
+									if ($element_value[0] == null)
+									{
+										echo "N&nbsp;";
+									}
+									else
+									{
+										echo "EL (".$element_key.")&nbsp;";
+									}
+								}
+								
+							}
+							echo "<br />";
+						}		
+						
+						echo "<br /><br />";
+					}
+					*/
+					// END
+					
+					if ($array != null)
+					{
+						$line_path_length = $path_length[$i+1];
+						$array_count = count($array);
+						
+						$line_counter = 1;
+						
+						// Path
+						for ($j = 1; $j <= $array_count; $j++)
+						{
+							if ($max_path_length >= 1 and $line_path_length >= 1 and $j > $line_path_length and $line_counter <= $max_path_length)
+							{
+								for ($k = $element_counter_highest; $k <= $element_counter_default; $k++)
+								{
+									$return_array[$line_counter][$k] = array(null, null);
+								}
+								$line_counter++;
+								$j--;
+							}
+							else
+							{	
+								// Zeilen
+								if ($element_counter_highest < $element_counter)
+								{
+									$element_counter_highest = $element_counter;
+								}
+								$element_counter = $element_counter_default;
+								foreach ($array[$j-1] as $element_key => $element_value)
+								{
+									// Elemente
+									$return_array[$line_counter][($element_counter_default+$element_key)] = $element_value;
+									$element_counter++;
+									
+									if ($element_value[1] == true)
+									{
+										$active_found = true;
+									}
+								}
+								$line_counter++;
+							}
+						}
+						
+						if ($element_counter_highest < $element_counter)
+						{
+							$element_counter_highest = $element_counter;
+						}
+						$element_counter_default = $element_counter_highest;
+					}
+				}
+			}
+			
+			
+			
+	
+			/*
+			if ($number_of_visible_elements == 0)
+			{
+				if (!in_array($element, $active_elements) and $active_found == false)
+				{
+					return null;
+				}
+			} 
+			*/
+				
+			
+			
+			// Bereinigung
+			// Versuche maximal $number_of_visible_elements im Array zu halten
+			
+			foreach ($return_array as $line_key => $line_value)
+			{
+				// Zeilen
+				foreach ($line_value as $element_key => $element_value)
+				{
+					// Elemente
+					
+					
+				}
+			}
+			
+			return $return_array;
+			
+		}
+		
+		// Rückgabe (maximal $number_of_visible_elements, minimum 0 bei inaktiv, 1 bei aktiv
+	}
+	
+	// !!! END !!!
+	
 	/**
 	 * @param string $get_array
 	 * @return string
@@ -452,76 +672,201 @@ class ProjectAjax
 		if ($_GET['project_id'])
 		{
 			$project = new Project($_GET['project_id']);
-			
-			$template = new HTMLTemplate("project/ajax/detail_status.html");
-		
+
 			// Status Bar
-			$workflow = $project->get_all_status_array();				
-			$result = array();
-			$counter = 0;
-			
+			$workflow = $project->get_all_status_array();	
+						
 			$current_element = $workflow->get_start_element();
 			
+
+			$return = self::get_status_list($current_element, array(), 3, null, null);
+			
+			/*
+			foreach ($return as $line_key => $line_value)
+			{
+				// Zeilen
+				foreach ($line_value as $element_key => $element_value)
+				{
+					// Elemente
+					
+					if ($element_value[0] instanceof WorkflowElementActivity)
+					{
+						echo $element_value[0]->get_id()." (".$element_key.")&nbsp;";
+					}
+					else
+					{
+						if ($element_value[0] == null)
+						{
+							echo "N&nbsp;";
+						}
+						else
+						{
+							echo "EL (".$element_key.")&nbsp;";
+						}
+					}
+				}
+				echo "<br />";
+			}
+			*/
+
+			
+			if (is_array($return) and count($return) >= 1)
+			{
+				foreach ($return as $key => $value)
+				{
+					$template = new HTMLTemplate("project/ajax/detail_status_line.html");
+					
+					if (is_object($value[0][0]))
+					{
+						if ($value[0][0] instanceof WorkflowElementActivity)
+						{
+							if ($value[0][0]->get_attachment("optional") == true)
+							{
+								$template->set_var("name_l", $value[0][0]->get_attachment("name")." (optional)");
+							}
+							else
+							{
+								$template->set_var("name_l", $value[0][0]->get_attachment("name"));
+							}
+							
+							if($workflow->is_active($value[0][0]))
+							{
+								$template->set_var("class_l", "ProjectDetailStatusElement Current");
+							}
+							else
+							{
+								$template->set_var("class_l", "ProjectDetailStatusElement");
+							}
+						}
+						
+						if ($value[0][0] instanceof WorkflowElementOr)
+						{
+							$template->set_var("name_l", "OR");
+							$template->set_var("class_l", "ProjectDetailStatusOr");
+						}
+					}
+					else
+					{
+						$template->set_var("name_l", "&nbsp;");
+						$template->set_var("class_l", "ProjectDetailStatusEmpty");
+					}
+					
+					if (is_object($value[1][0]))
+					{
+						if ($value[1][0] instanceof WorkflowElementActivity)
+						{
+							if ($value[1][0]->get_attachment("optional") == true)
+							{
+								$template->set_var("name_m", $value[1][0]->get_attachment("name")." (optional)");
+							}
+							else
+							{
+								$template->set_var("name_m", $value[1][0]->get_attachment("name"));
+							}
+							
+							$template->set_var("class_m", "ProjectDetailStatusElement");
+						}
+						
+						if ($value[1][0] instanceof WorkflowElementOr)
+						{
+							$template->set_var("name_m", "OR");
+							$template->set_var("class_m", "ProjectDetailStatusOr");
+						}
+					}
+					else
+					{
+						$template->set_var("name_m", "&nbsp;");
+						$template->set_var("class_m", "ProjectDetailStatusEmpty");
+					}
+					
+					if (is_object($value[2][0]))
+					{
+						if ($value[2][0] instanceof WorkflowElementActivity)
+						{
+							if ($value[2][0]->get_attachment("optional") == true)
+							{
+								$template->set_var("name_r", $value[2][0]->get_attachment("name")." (optional)");
+							}
+							else
+							{
+								$template->set_var("name_r", $value[2][0]->get_attachment("name"));
+							}
+							
+							$template->set_var("class_r", "ProjectDetailStatusElement");
+						}
+						
+						if ($value[2][0] instanceof WorkflowElementOr)
+						{
+							$template->set_var("name_r", "OR");
+							$template->set_var("class_r", "ProjectDetailStatusOr");
+						}
+					}
+					else
+					{
+						$template->set_var("name_r", "&nbsp;");
+						$template->set_var("class_r", "ProjectDetailStatusEmpty");
+					}
+					
+					$template->output();
+				}
+			}
+			
+			
+			/*
 			while ($current_element != null)
 			{
 				if ($current_element instanceof WorkflowElementOr)
 				{
-					$result[$counter]['name'] = "/&nbsp;\\ Decision /&nbsp;\\";
-					$result[$counter]['icon']	= "";
-					$counter++;
+					
 				}
 				
 				if ($current_element instanceof WorkflowElementActivity)
 				{
+					$template = new HTMLTemplate("project/ajax/detail_status_line.html");
+					
+					
 					if ($current_element->get_attachment("optional") == true)
 					{
-						$result[$counter]['name'] = $current_element->get_attachment("name")." (optional)";
+						$template->set_var("name_m", $current_element->get_attachment("name")." (optional)");
 					}
 					else
 					{
-						$result[$counter]['name'] = $current_element->get_attachment("name");	
+						$template->set_var("name_m", $current_element->get_attachment("name"));
 					}
 	
-	
+					// ProjectDetailStatusElement
+					
+					$template->set_var("class_m", "ProjectDetailStatusElement");
+					
 					if($workflow->is_active($current_element))
 					{
 						if($current_element->get_id() == 2)
 						{
-							$result[$counter]['icon'] = "<img src='images/icons/status_ok.png' alt='R' />";
+							// OK
 						}
 						else
 						{
 							if($current_element->get_attachment("cancel") == true)
 							{
-								$result[$counter]['icon'] = "<img src='images/icons/status_cancel.png' alt='R' />";
+								// Cancel
 							}
 							else
 							{
-								$result[$counter]['icon']	= "<img src='images/icons/status_run.png' alt='R' />";
+								$template->set_var("class", "Current");
 							}
 						}
 						
 					}
 					elseif($workflow->is_visited($current_element))
 					{
-						$result[$counter]['icon'] = "<img src='images/icons/status_ok.png' alt='R' />";
+						// OK
 					}
 					else
 					{
-						$result[$counter]['icon']	= "";
+						$template->set_var("class", "");
 					} 
 					
-					
-					if (!($counter % 2))
-					{
-						$result[$counter]['tr_class'] = " class='trLightGrey'";
-					}
-					else
-					{
-						$result[$counter]['tr_class'] = "";
-					}
-					
-					$counter++;
+					$template->output();
 				}
 					
 				if (is_array($next_elements = $current_element->get_next()))
@@ -541,9 +886,11 @@ class ProjectAjax
 				}
 			}
 
-			$template->set_var("status",$result);
+			//$template = new HTMLTemplate("project/ajax/detail_status.html");
+			//$template->set_var("elements",$elements);
+			//$template->output();
 			
-			$template->output();
+			*/
 		}
 		else
 		{

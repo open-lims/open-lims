@@ -27,6 +27,7 @@
 	$classes['Workflow']					= $path_prefix."core/include/workflow/workflow.class.php";
 	
 	$classes['WorkflowElement']				= $path_prefix."core/include/workflow/workflow_element.class.php";
+	$classes['WorkflowElementPath']			= $path_prefix."core/include/workflow/workflow_element_path.class.php";
 	$classes['WorkflowElementOr']			= $path_prefix."core/include/workflow/workflow_element_or.class.php";
 	$classes['WorkflowElementAnd']			= $path_prefix."core/include/workflow/workflow_element_and.class.php";
 	$classes['WorkflowElementActivity']		= $path_prefix."core/include/workflow/workflow_element_activity.class.php";

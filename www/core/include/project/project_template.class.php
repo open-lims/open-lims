@@ -421,9 +421,13 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    $workflow = new Workflow();
 		    
 		    $decision_counter = 0;
-		    $option_counter = 0;
 		    $parallel_counter = 0;
-		    $path_counter = 0;
+		    
+		    $option_counter = array();
+		    $option_element_counter = array();
+		    
+		    $path_counter = array();
+		    $path_element_counter = array();
 		    
 		    $last_elements_array = array();
 		    $use_last_elemets = false;
@@ -451,6 +455,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    		}
 		    		
 		    		$decision_counter++;
+		    		$option_counter[$decision_counter] = 0;
 		    	}
 		    	
 		    	if ($value[1] == "decision" and $value[2] == "#")
@@ -461,7 +466,15 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    		// Problem, wenn das Descision in Option liegt und danach weitere Options folgen
 		    		// Weitere Options müssen $use_last_elements ignorieren
 
+		    		// Pfad schreiben, wenn dc > 1, dann längsten pfad ermitteln und zu oc addieren
+		    		
+		    		$workflow_element_decision[$decision_counter-1]->set_path_length($option_element_counter[$decision_counter]);
 		    		$decision_counter--;
+		    		
+		    		if ($decision_counter > 0)
+		    		{
+		    			$option_element_counter[$decision_counter][$option_counter[$decision_counter]] = $workflow_element_decision[$decision_counter]->get_longest_path_length()+1;
+		    		}
 		    	}
 		    	
 		   		if ($value[1] == "option" and $value[2] != "#")
@@ -472,6 +485,9 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    		}
 		    		
 		    		$workflow->set_current_element($workflow_element_decision[$decision_counter-1]);
+		    		
+		    		$option_counter[$decision_counter]++;
+		    		$option_element_counter[$decision_counter][$option_counter[$decision_counter]] = 0;
 		    		
 		    		// $option_counter++;
 		    		// Zeiger vom Workflow wieder auf das Decision-Element
@@ -493,6 +509,8 @@ class ProjectTemplate implements ProjectTemplateInterface
 			    			array_push($last_elements_array, $workflow_element_status);
 			    		}
 		    		}
+		    		
+		    		// $option_counter[$decision_counter]--;
 		    	}
 		    	
 		    	if ($value[1] == "parallel" and $value[2] != "#")
@@ -525,6 +543,11 @@ class ProjectTemplate implements ProjectTemplateInterface
 				
 		    	if ($value[1] == "status" and is_numeric($value[3][id]))
 		    	{
+		    		if ($decision_counter != 0 and $option_counter != 0)
+		    		{
+		    			$option_element_counter[$decision_counter][$option_counter[$decision_counter]]++;
+		    		}
+		    		
 		    		$workflow_element_status = new WorkflowElementActivity($value[3][id]);
 		    		
 		    		if ($value[3][requirement] == "optional")
