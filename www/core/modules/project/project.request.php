@@ -493,6 +493,13 @@ class ProjectRequest
 				ProjectIO::structure();
 			break;
 			
+			// Project Workflow
+			
+			case("workflow"):
+				require_once("io/project.io.php");
+				ProjectIO::workflow();
+			break;
+			
 			// Project Log
 			
 			case("log"):

@@ -291,6 +291,46 @@ class ProjectIO
 	}
 	
 	/**
+	 * @throws ProjectIDMissingException
+	 * @throws ProjectSecuriyAccessDeniedException
+	 */
+	public static function workflow()
+	{
+		global $project_security;
+		
+		if ($_GET['project_id'])
+		{
+			if ($project_security->is_access(1, false) == true)
+			{
+				$project = new Project($_GET['project_id']);
+				
+				$template = new HTMLTemplate("project/project_workflow.html");
+				
+				$workflow = $project->get_all_status_array();	
+				$workflow_array = ProjectWorkflow::get_status_list($workflow->get_start_element(), array(), null, null, null);
+				
+				if (is_array($workflow_array) and count($workflow_array) >= 1)
+				{
+					foreach ($workflow_array as $key => $value)
+					{
+					
+					}
+				}
+				
+				$template->output();
+			}
+			else
+			{
+				throw new ProjectSecurityAccessDeniedException();
+			}
+		}
+		else
+		{
+			throw new ProjectIDMissingException();
+		}
+	}
+	
+	/**
 	 * @param integer $item_id
 	 * @param bool $in_assistant
 	 * @param bool $form_field_name

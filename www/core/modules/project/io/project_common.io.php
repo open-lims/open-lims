@@ -45,6 +45,20 @@ class ProjectCommon_IO
 			
 			$tab_io->add("main", "Main Page", $params, false);
 			
+			
+			// Workflow
+			
+			$paramquery[username] 	= $_GET[username];
+			$paramquery[session_id] = $_GET[session_id];
+			$paramquery[nav]		= "project";
+			$paramquery[run]		= "workflow";
+			$paramquery[project_id]	= $_GET[project_id];
+			$params 				= http_build_query($paramquery,'','&#38;');
+			unset($paramquery);
+			
+			$tab_io->add("workflow", "Workflow", $params, false);
+			
+			
 			// Log
 			
 			$paramquery[username] 	= $_GET[username];
@@ -133,11 +147,17 @@ class ProjectCommon_IO
 			{
 				switch ($_GET[run]):
 				
+					case "workflow":
+						$tab_io->activate("workflow");
+					break;
+				
+					
 					case "log":
 					case("log_detail"):
 					case("log_add"):
 						$tab_io->activate("log");
 					break;
+
 					
 					case "structure":
 						$tab_io->activate("structure");
