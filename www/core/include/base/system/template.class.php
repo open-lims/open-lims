@@ -401,7 +401,7 @@ class Template implements TemplateInterface
 
 			if (trim(strtolower($command_array[1])) == "if")
 			{
-				if ($block_array[1] === null)
+				if (!isset($block_array[1]) or $block_array[1] === null)
 				{
 					$block_array[1] = $start_pos;
 			

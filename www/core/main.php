@@ -61,7 +61,7 @@ class Main
 			$GLOBALS['fatal_error'] = "Main folder not found!";
 		}
 		
-		if ($GLOBALS['fatal_error'] == null)
+		if (!isset($GLOBALS['fatal_error']))
 		{
 			global $db, $runtime_data, $transaction;
 			
@@ -168,7 +168,7 @@ class Main
 	{
 		global $session, $user, $regional;
 		
-		if ($GLOBALS['fatal_error'] == null)
+		if (!isset($GLOBALS['fatal_error']))
 		{
 			if ($_GET[session_id])
 			{

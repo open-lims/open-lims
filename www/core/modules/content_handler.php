@@ -147,7 +147,7 @@ class ContentHandler_IO
 			$GLOBALS['fatal_error'] = "Main folder not found!";
 		}
 
-		if ($GLOBALS['fatal_error'] == null)
+		if (!isset($GLOBALS['fatal_error']))
 		{
 			$template->set_var("INDEX_TITLE",Registry::get_value("base_html_title"));
 		
