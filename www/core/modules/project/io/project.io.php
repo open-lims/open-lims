@@ -304,19 +304,148 @@ class ProjectIO
 			{
 				$project = new Project($_GET['project_id']);
 				
-				$template = new HTMLTemplate("project/project_workflow.html");
+				$template = new HTMLTemplate("project/workflow/project_workflow.html");
+				
+				$element_string = "";
 				
 				$workflow = $project->get_all_status_array();	
 				$workflow_array = ProjectWorkflow::get_status_list($workflow->get_start_element(), array(), null, null, null);
-				
+								
 				if (is_array($workflow_array) and count($workflow_array) >= 1)
 				{
-					foreach ($workflow_array as $key => $value)
-					{
+					$element_space_cache = array();
 					
+					foreach ($workflow_array as $line_key => $line_value)
+					{
+						$max_columns = max(array_keys($line_value));
+						$element_counter = count($line_value);
+						$element_space_cache_counter = count($element_space_cache);
+						$element_space_temp_cache = array();
+						$first_spacer = false;
+						
+						// Bis zum größeren von $max_columns oder $element_space_cache_counter
+						for ($i = 0; $i <= max($max_columns,($element_space_cache_counter-1)); $i++)
+						{	
+														
+							$spacer_template = new HTMLTemplate("project/workflow/workflow_horizontal_spacer.html");
+							
+							if ($element_space_cache[$i] == true or $first_spacer == true)
+							{
+								// Problem bei paralellen durchgängen
+								
+								if ($first_spacer == false)
+								{
+									
+									if ($element_counter == 1 and $element_space_cache_counter == 1)
+									{
+										$spacer_template->set_var("class", "ProjectWorkflowElementHorizontalSpacerVerticalLine");
+									}
+									else
+									{
+										// OB Unterschied
+										if (isset($line_value[$i+1]) and isset($element_space_cache[$i+1]))
+										{
+											$spacer_template->set_var("class", "ProjectWorkflowElementHorizontalSpacerVerticalLine");
+											$element_counter--;
+											$element_space_cache_counter--;
+										}
+										else
+										{
+											$first_spacer = true;
+											$spacer_template->set_var("class", "ProjectWorkflowElementHorizontalSpacerLeftT");
+										}
+									}
+								}
+								else
+								{
+									if ((!isset($line_value[$i+1]) and !isset($element_space_cache[$i+1])) or 
+										(($i + 1) == max(array_keys($line_value)) and ($i + 1) ==  max(array_keys($element_space_cache))))
+									{
+										// Letztes Element (der Verzweigung oder der Zeile)
+										// -> Top Right
+										if ($line_value[$i])
+										{
+											$spacer_template->set_var("class", "ProjectWorkflowElementHorizontalSpacerTopRightCorner");
+										}
+										else
+										{
+											$spacer_template->set_var("class", "ProjectWorkflowElementHorizontalSpacerBottomRightCorner");
+										}										
+										
+										$first_spacer = false;
+									}
+									else
+									{
+										// -> T
+										if ($line_value[$i])
+										{
+											$spacer_template->set_var("class", "ProjectWorkflowElementHorizontalSpacerT");
+										}
+										else
+										{
+											$spacer_template->set_var("class", "ProjectWorkflowElementHorizontalSpacerReversedT");
+										}
+										// -> Rev T <- wie top right
+									}
+								}
+							}
+							
+							$element_string .= $spacer_template->get_string();
+								
+							if ($line_value[$i])
+							{
+								$element_value = $line_value[$i];	
+								
+								$element_template = new HTMLTemplate("project/workflow/project_workflow_element.html");
+								
+								if (is_object($element_value[0]))
+								{
+									if ($element_value[0] instanceof WorkflowElementActivity)
+									{
+										$element_template->set_var("name", $element_value[0]->get_attachment("name"));
+										$element_template->set_var("class", "ProjectWorkflowElementStatus");
+										
+										$element_space_temp_cache[$i] = true;
+									}
+									
+									if ($element_value[0] instanceof WorkflowElementOr)
+									{
+										$element_template->set_var("name", "or");
+										$element_template->set_var("class", "ProjectWorkflowElementOr");
+										
+										$element_space_temp_cache[$i] = true;
+									}
+								}
+								else
+								{
+									$element_template->set_var("name", "");
+									$element_template->set_var("class", "ProjectWorkflowElementLine");
+									
+									$element_space_temp_cache[$i] = true;
+								}
+								
+								$element_string .= $element_template->get_string();
+							}
+							else
+							{
+								$element_template = new HTMLTemplate("project/workflow/project_workflow_empty_element.html");
+								$element_string .= $element_template->get_string();
+							}
+							
+							
+						}
+						
+						$element_space_cache = $element_space_temp_cache;
+						
+						// Break
+						
+						$element_template = new HTMLTemplate("project/workflow/project_workflow_clear_element.html");
+						$element_string .= $element_template->get_string();
+						
 					}
 				}
 				
+				$template->set_var("elements", $element_string);
 				$template->output();
 			}
 			else

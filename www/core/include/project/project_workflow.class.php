@@ -207,11 +207,26 @@ class ProjectWorkflow // implements ProjectWorkflowInterface
 							}
 						}
 						
+						// Bei Pfaden die nicht enden, wird das ende entsprechend aufgefüllt
+						if ($line_counter < $max_path_length)
+						{
+							for ($j = $line_counter; $j <= $max_path_length; $j++)
+							{
+								for ($k = $element_counter_highest; $k <= $element_counter_default; $k++)
+								{
+									$return_array[$j][$k] = array(null, null);
+								}
+							}
+						}
+						
+						
 						if ($element_counter_highest < $element_counter)
 						{
 							$element_counter_highest = $element_counter;
 						}
 						$element_counter_default = $element_counter_highest;
+						
+					
 					}
 				}
 			}

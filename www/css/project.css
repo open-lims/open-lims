@@ -1,3 +1,129 @@
+/* Project Workflow */
+.ProjectWorkflowElementContainer
+{
+	float: left;
+	width: 122px;
+	margin: 0;
+	padding: 0;
+}
+.ProjectWorkflowElement
+{
+	width: 91px;
+	margin: 0;
+	padding: 4px;
+	height: 31px;
+	overflow: hidden;
+	text-align: center;
+}
+.ProjectWorkflowElementStatus
+{
+	border: 1px #C0C0C0 solid;
+}
+.ProjectWorkflowElementOr
+{
+	background-image: url(../images/workflow/element_or.png);
+	background-repeat: no-repeat;
+	background-position: top center;
+	width: 101px;
+	padding: 12px 0 0 0;
+}
+.ProjectWorkflowElementLine
+{
+	background-image: url(../images/workflow/element_line.png);
+	background-repeat: no-repeat;
+	background-position: top center;
+	width: 93px;
+}
+.ProjectWorkflowEmptyElement
+{
+	width: 93px;
+}
+.ProjectWorkflowClearElement
+{
+	clear: left;
+}
+
+
+.ProjectWorkflowVerticalSpacer
+{
+	width: 21px;	
+	height: 39px;
+	float: left;
+}
+.ProjectWorkflowHorizonalVerticalSpacer
+{
+	width: 21px;
+	height: 21px;	
+	float: left;
+}
+	
+.ProjectWorkflowElementHorizontalSpacer
+{
+	margin: 0 0 0 21px;
+	padding: 0;
+	height: 21px;
+	width: 101px;
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+.ProjectWorkflowElementHorizontalSpacerVerticalLine
+{
+	background-image: url(../images/workflow/spacer_vertical_line.png);
+}
+.ProjectWorkflowElementHorizontalSpacerHorizontalLine
+{
+	background-image: url(../images/workflow/spacer_horizontal_line.png);
+}
+.ProjectWorkflowElementHorizontalSpacerTopRightCorner
+{
+	background-image: url(../images/workflow/spacer_top_right.png);
+}
+.ProjectWorkflowElementHorizontalSpacerTopLeftCorner
+{
+	
+}
+.ProjectWorkflowElementHorizontalSpacerBottomRightCorner
+{
+	background-image: url(../images/workflow/spacer_bottom_right.png);
+}
+.ProjectWorkflowElementHorizontalSpacerBottomLeftCorner
+{
+	
+}
+.ProjectWorkflowElementHorizontalSpacerCross
+{
+	background-image: url(../images/workflow/spacer_cross.png);
+}
+.ProjectWorkflowElementHorizontalSpacerT
+{
+	background-image: url(../images/workflow/spacer_t.png);
+}
+.ProjectWorkflowElementHorizontalSpacerReversedT
+{
+	background-image: url(../images/workflow/spacer_reversed_t.png);
+}
+.ProjectWorkflowElementHorizontalSpacerLeftT
+{
+	background-image: url(../images/workflow/spacer_left_t.png);
+}
+.ProjectWorkflowElementHorizontalSpacerRightT
+{
+	
+}
+.ProjectWorkflowElementHorizontalSpacerJumpCross
+{
+	background-image: url(../images/workflow/spacer_jump_cross.png);
+}
+
+
+.ProjectWorkflowElementVerticalSpacer
+{
+	
+}
+
+
+
+
 
 /* Project Detail */
 #ProjectDetailLeft
