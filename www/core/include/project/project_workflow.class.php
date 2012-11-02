@@ -175,6 +175,13 @@ class ProjectWorkflow // implements ProjectWorkflowInterface
 						// Path
 						for ($j = 1; $j <= $array_count; $j++)
 						{
+							if ($max_path_length >= 1 and $line_path_length >= 1 and $j == 1 and $line_counter <= $max_path_length)
+							{
+								$element_counter_default_path_backup = $element_counter_default;
+								$element_counter_highest_path_backup = $element_counter_highest;
+								$element_counter_backup = $element_counter;
+							}
+							
 							if ($max_path_length >= 1 and $line_path_length >= 1 and $j > $line_path_length and $line_counter <= $max_path_length)
 							{
 								for ($k = $element_counter_highest; $k <= $element_counter_default; $k++)
@@ -186,45 +193,57 @@ class ProjectWorkflow // implements ProjectWorkflowInterface
 							}
 							else
 							{	
+								if ($max_path_length >= 1 and $line_path_length >= 1 and $j >= $max_path_length)
+								{
+									$element_counter_default = $element_counter_default_path_backup;
+									$element_counter_highest = $element_counter_highest_path_backup;
+									$element_counter = $element_counter_backup;
+								}
+								
 								// Lines
 								if ($element_counter_highest < $element_counter)
 								{
 									$element_counter_highest = $element_counter;
 								}
 								$element_counter = $element_counter_default;
-								foreach ($array[$j-1] as $element_key => $element_value)
+								if (is_array($array[$j-1]))
 								{
-									// Elements
-									$return_array[$line_counter][($element_counter_default+$element_key)] = $element_value;
-									$element_counter++;
-									
-									if ($element_value[1] == true)
+									foreach ($array[$j-1] as $element_key => $element_value)
 									{
-										$active_found = true;
+										// Elements
+										$return_array[$line_counter][($element_counter_default+$element_key)] = $element_value;
+										$element_counter++;
+										
+										if ($element_value[1] == true)
+										{
+											$active_found = true;
+										}
 									}
 								}
 								$line_counter++;
 							}
 						}
 						
-						// Bei Pfaden die nicht enden, wird das ende entsprechend aufgefüllt
-						if ($line_counter < $max_path_length)
-						{
-							for ($j = $line_counter; $j <= $max_path_length; $j++)
-							{
-								for ($k = $element_counter_highest; $k <= $element_counter_default; $k++)
-								{
-									$return_array[$j][$k] = array(null, null);
-								}
-							}
-						}
-						
-						
 						if ($element_counter_highest < $element_counter)
 						{
 							$element_counter_highest = $element_counter;
 						}
 						$element_counter_default = $element_counter_highest;
+						
+						// Bei Pfaden die nicht enden, wird das ende entsprechend aufgefüllt
+						if ($line_counter <= $max_path_length)
+						{
+							for ($j = $line_counter; $j <= $max_path_length; $j++)
+							{
+								for ($k = $element_counter_highest; $k <= $element_counter_default; $k++)
+								{
+									$return_array[$j][$k-1] = array(null, null);
+								}
+							}
+						}
+						
+						
+						
 						
 					
 					}

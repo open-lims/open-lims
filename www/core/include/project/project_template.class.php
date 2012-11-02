@@ -456,6 +456,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    		
 		    		$decision_counter++;
 		    		$option_counter[$decision_counter] = 0;
+		    		$option_element_counter[$decision_counter] = array();
 		    	}
 		    	
 		    	if ($value[1] == "decision" and $value[2] == "#")

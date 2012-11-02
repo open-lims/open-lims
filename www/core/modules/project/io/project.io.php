@@ -317,14 +317,25 @@ class ProjectIO
 					
 					foreach ($workflow_array as $line_key => $line_value)
 					{
-						$max_columns = max(array_keys($line_value));
 						$element_counter = count($line_value);
 						$element_space_cache_counter = count($element_space_cache);
 						$element_space_temp_cache = array();
+						
+						$max_columns = max(array_keys($line_value));
+						
+						if (count($element_space_cache) >= 1)
+						{
+							$max_element_space_cache = max(array_keys($element_space_cache));
+						}
+						else
+						{
+							$max_element_space_cache = 0;
+						}
+						
 						$first_spacer = false;
 						
 						// Bis zum größeren von $max_columns oder $element_space_cache_counter
-						for ($i = 0; $i <= max($max_columns,($element_space_cache_counter-1)); $i++)
+						for ($i = 0; $i <= max($max_columns,$max_element_space_cache); $i++)
 						{	
 														
 							$spacer_template = new HTMLTemplate("project/workflow/workflow_horizontal_spacer.html");
@@ -338,54 +349,97 @@ class ProjectIO
 									
 									if ($element_counter == 1 and $element_space_cache_counter == 1)
 									{
-										$spacer_template->set_var("class", "ProjectWorkflowElementHorizontalSpacerVerticalLine");
+										$spacer_template->set_var("spacer_class", "ProjectWorkflowElementHorizontalSpacerVerticalLine");
 									}
 									else
 									{
 										// OB Unterschied
-										if (isset($line_value[$i+1]) and isset($element_space_cache[$i+1]))
+										if (isset($line_value[$i+1]) and isset($element_space_cache[$i+1])
+											 or ($i == max(array_keys($line_value)) and $i ==  max(array_keys($element_space_cache))))
 										{
-											$spacer_template->set_var("class", "ProjectWorkflowElementHorizontalSpacerVerticalLine");
+											$spacer_template->set_var("spacer_class", "ProjectWorkflowElementHorizontalSpacerVerticalLine");
 											$element_counter--;
 											$element_space_cache_counter--;
 										}
 										else
 										{
 											$first_spacer = true;
-											$spacer_template->set_var("class", "ProjectWorkflowElementHorizontalSpacerLeftT");
+											$spacer_template->set_var("spacer_class", "ProjectWorkflowElementHorizontalSpacerLeftT");
 										}
 									}
 								}
 								else
 								{
-									if ((!isset($line_value[$i+1]) and !isset($element_space_cache[$i+1])) or 
-										(($i + 1) == max(array_keys($line_value)) and ($i + 1) ==  max(array_keys($element_space_cache))))
+									// While Schleife überalle zukünftigen Elemente bis 
+									// 1) Oben neues Element ex.
+									// 		-> Exisitiert bis dahin unten ein EL. ?
+									//			dann: 
+									//				-> Existiert unten ein El.
+									//				dann: 
+									//					-> Ist lertes EL.
+									//					dann: TopRightCorner
+									//					ansonsten: T
+									//				ansonsten: hor-line
+									//			ansonsten: nichts
+									// 2) Ende der Zeile
+									//		-> Prüfung wie 1)
+									
+									$n = $i;
+									$next_top_element = null;
+									$last_bottom_element = null;
+									
+									while ($n <= max($max_columns,$max_element_space_cache))
 									{
-										// Letztes Element (der Verzweigung oder der Zeile)
-										// -> Top Right
-										if ($line_value[$i])
+										if ($element_space_cache[$n] and $i != $n)
 										{
-											$spacer_template->set_var("class", "ProjectWorkflowElementHorizontalSpacerTopRightCorner");
+											$next_top_element = $n;
+											break;
 										}
 										else
 										{
-											$spacer_template->set_var("class", "ProjectWorkflowElementHorizontalSpacerBottomRightCorner");
+											if ($line_value[$n])
+											{
+												$last_bottom_element = $n;
+											}
+										}
+										$n = $n+1;	
+									}
+					
+									if ($last_bottom_element == $i or ($next_top_element == ($i+1) and $i <= $max_columns) or ($i == $max_element_space_cache and $i > $max_columns))
+									{
+										if ($line_value[$i])
+										{
+											$spacer_template->set_var("corner_spacer_class", "ProjectWorkflowElementCornerSpacerHorizontalLine");
+											$spacer_template->set_var("spacer_class", "ProjectWorkflowElementHorizontalSpacerTopRightCorner");
+										}
+										else
+										{
+											$spacer_template->set_var("corner_spacer_class", "ProjectWorkflowElementCornerSpacerHorizontalLine");
+											$spacer_template->set_var("spacer_class", "ProjectWorkflowElementHorizontalSpacerBottomRightCorner");
 										}										
 										
 										$first_spacer = false;
 									}
 									else
 									{
-										// -> T
 										if ($line_value[$i])
 										{
-											$spacer_template->set_var("class", "ProjectWorkflowElementHorizontalSpacerT");
+											$spacer_template->set_var("corner_spacer_class", "ProjectWorkflowElementCornerSpacerHorizontalLine");
+											$spacer_template->set_var("spacer_class", "ProjectWorkflowElementHorizontalSpacerT");
 										}
 										else
 										{
-											$spacer_template->set_var("class", "ProjectWorkflowElementHorizontalSpacerReversedT");
+											if ($element_space_cache[$i])
+											{
+												$spacer_template->set_var("corner_spacer_class", "ProjectWorkflowElementCornerSpacerHorizontalLine");
+												$spacer_template->set_var("spacer_class", "ProjectWorkflowElementHorizontalSpacerReversedT");
+											}
+											else
+											{
+												$spacer_template->set_var("corner_spacer_class", "ProjectWorkflowElementCornerSpacerHorizontalLine");
+												$spacer_template->set_var("spacer_class", "ProjectWorkflowElementHorizontalSpacerHorizontalLine");
+											}
 										}
-										// -> Rev T <- wie top right
 									}
 								}
 							}

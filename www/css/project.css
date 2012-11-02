@@ -25,6 +25,7 @@
 	background-repeat: no-repeat;
 	background-position: top center;
 	width: 101px;
+	height: 29px;
 	padding: 12px 0 0 0;
 }
 .ProjectWorkflowElementLine
@@ -33,6 +34,7 @@
 	background-repeat: no-repeat;
 	background-position: top center;
 	width: 93px;
+	height: 33px;
 }
 .ProjectWorkflowEmptyElement
 {
@@ -50,12 +52,6 @@
 	height: 39px;
 	float: left;
 }
-.ProjectWorkflowHorizonalVerticalSpacer
-{
-	width: 21px;
-	height: 21px;	
-	float: left;
-}
 	
 .ProjectWorkflowElementHorizontalSpacer
 {
@@ -68,51 +64,46 @@
 }
 .ProjectWorkflowElementHorizontalSpacerVerticalLine
 {
-	background-image: url(../images/workflow/spacer_vertical_line.png);
+	background-image: url(../images/workflow/horizontal_spacer_vertical_line.png);
 }
 .ProjectWorkflowElementHorizontalSpacerHorizontalLine
 {
-	background-image: url(../images/workflow/spacer_horizontal_line.png);
+	background-image: url(../images/workflow/horizontal_spacer_horizontal_line.png);
 }
 .ProjectWorkflowElementHorizontalSpacerTopRightCorner
 {
-	background-image: url(../images/workflow/spacer_top_right.png);
-}
-.ProjectWorkflowElementHorizontalSpacerTopLeftCorner
-{
-	
+	background-image: url(../images/workflow/horizontal_spacer_top_right.png);
 }
 .ProjectWorkflowElementHorizontalSpacerBottomRightCorner
 {
-	background-image: url(../images/workflow/spacer_bottom_right.png);
-}
-.ProjectWorkflowElementHorizontalSpacerBottomLeftCorner
-{
-	
-}
-.ProjectWorkflowElementHorizontalSpacerCross
-{
-	background-image: url(../images/workflow/spacer_cross.png);
+	background-image: url(../images/workflow/horizontal_spacer_bottom_right.png);
 }
 .ProjectWorkflowElementHorizontalSpacerT
 {
-	background-image: url(../images/workflow/spacer_t.png);
+	background-image: url(../images/workflow/horizontal_spacer_t.png);
 }
 .ProjectWorkflowElementHorizontalSpacerReversedT
 {
-	background-image: url(../images/workflow/spacer_reversed_t.png);
+	background-image: url(../images/workflow/horizontal_spacer_reversed_t.png);
 }
 .ProjectWorkflowElementHorizontalSpacerLeftT
 {
-	background-image: url(../images/workflow/spacer_left_t.png);
+	background-image: url(../images/workflow/horizontal_spacer_left_t.png);
 }
-.ProjectWorkflowElementHorizontalSpacerRightT
+
+.ProjectWorkflowElementCornerSpacer
 {
-	
+	float: left;
+	margin: 0;
+	padding: 0;
+	height: 21px;
+	width: 21px;
+	background-repeat: no-repeat;
+	background-position: top center;
 }
-.ProjectWorkflowElementHorizontalSpacerJumpCross
+.ProjectWorkflowElementCornerSpacerHorizontalLine
 {
-	background-image: url(../images/workflow/spacer_jump_cross.png);
+	background-image: url(../images/workflow/corner_spacer_horizontal_line.png);
 }
 
 
