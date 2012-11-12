@@ -47,7 +47,7 @@ class ProjectWorkflow // implements ProjectWorkflowInterface
 	{
 		$next_array = &$element->get_next();
 		$next_array_count = count($next_array);
-		
+				
 		array_push(self::$visited_elements, $element);
 
 		if($next_array_count <= 0)
@@ -193,7 +193,7 @@ class ProjectWorkflow // implements ProjectWorkflowInterface
 							}
 							else
 							{	
-								if ($max_path_length >= 1 and $line_path_length >= 1 and $j >= $max_path_length)
+								if ($max_path_length >= 1 and $line_path_length >= 1 and $j > $max_path_length)
 								{
 									$element_counter_default = $element_counter_default_path_backup;
 									$element_counter_highest = $element_counter_highest_path_backup;

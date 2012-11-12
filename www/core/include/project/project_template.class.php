@@ -430,6 +430,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    $path_element_counter = array();
 		    
 		    $last_elements_array = array();
+		    $last_elements_array[0] = array();
 		    $use_last_elemets = false;
 		    
 		    
@@ -445,9 +446,9 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    		
 		    		if ($use_last_elemets == true)
 		    		{
-		    			$workflow->add_element($workflow_element_decision[$decision_counter], true, $last_elements_array);
+		    			$workflow->add_element($workflow_element_decision[$decision_counter], true, $current_last_elements_array);
 		    			$use_last_elemets = false;
-		    			$last_elements_array = array();
+		    			$current_last_elements_array = array();
 		    		}
 		    		else
 		    		{
@@ -457,12 +458,25 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    		$decision_counter++;
 		    		$option_counter[$decision_counter] = 0;
 		    		$option_element_counter[$decision_counter] = array();
+		    		$last_elements_array[$decision_counter] = array();
 		    	}
 		    	
 		    	if ($value[1] == "decision" and $value[2] == "#")
 		    	{
 		    		// Dem nächsten Element mitteilen, dass es die letzten Elemente der Options verarbeitet
 		    		$use_last_elemets = true;
+		    		// $last_elements_array[$decision_counter-1] = array_merge($last_elements_array[$decision_counter-1],$last_elements_array[$decision_counter]);
+		    		
+		    		if (is_array($current_last_elements_array) and count($current_last_elements_array) >= 1)
+		    		{
+		    			$current_last_elements_array = array_merge($current_last_elements_array, $last_elements_array[$decision_counter]);
+		    		}
+		    		else
+		    		{
+		    			$current_last_elements_array = $last_elements_array[$decision_counter];
+		    		}
+		    		
+		    		// !!! -> Altes Array in Temp array und das in Kind-EL Schreiben
 		    		
 		    		// Problem, wenn das Descision in Option liegt und danach weitere Options folgen
 		    		// Weitere Options müssen $use_last_elements ignorieren
@@ -490,7 +504,6 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    		$option_counter[$decision_counter]++;
 		    		$option_element_counter[$decision_counter][$option_counter[$decision_counter]] = 0;
 		    		
-		    		// $option_counter++;
 		    		// Zeiger vom Workflow wieder auf das Decision-Element
 		    	}
 		    	
@@ -505,13 +518,11 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    		}
 		    		else
 		    		{
-			    		if (!in_array($workflow_element_status, $last_elements_array))
+			    		if (!in_array($workflow_element_status, $last_elements_array[$decision_counter]))
 			    		{
-			    			array_push($last_elements_array, $workflow_element_status);
+			    			array_push($last_elements_array[$decision_counter], $workflow_element_status);
 			    		}
 		    		}
-		    		
-		    		// $option_counter[$decision_counter]--;
 		    	}
 		    	
 		    	if ($value[1] == "parallel" and $value[2] != "#")
@@ -562,9 +573,9 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    		
 		    		if ($use_last_elemets == true)
 		    		{
-		    			$workflow->add_element($workflow_element_status, true, $last_elements_array);
+		    			$workflow->add_element($workflow_element_status, true, $current_last_elements_array);
 		    			$use_last_elemets = false;
-		    			$last_elements_array = array();
+		    			$current_last_elements_array = array();
 		    		}
 		    		else
 		    		{
@@ -577,9 +588,9 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    		
     		if ($use_last_elemets == true)
     		{
-    			$workflow->add_element($workflow_element_status, true, $last_elements_array);
+    			$workflow->add_element($workflow_element_status, true, $current_last_elements_array);
     			$use_last_elemets = false;
-    			$last_elements_array = array();
+    			$current_last_elements_array = array();
     		}
     		else
     		{
