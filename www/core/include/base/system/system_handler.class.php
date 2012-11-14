@@ -570,9 +570,12 @@ class SystemHandler implements SystemHandlerInterface
 								{
 									throw new BaseModuleProcessFailedException();
 								}
-								if ($base_module->set_class($main_class) == false)
+								if ($main_class)
 								{
-									throw new BaseModuleProcessFailedException();
+									if ($base_module->set_class($main_class) == false)
+									{
+										throw new BaseModuleProcessFailedException();
+									}
 								}
 								
 								$module_info_id = BaseModuleFile_Access::get_id_by_module_id_and_name($register_key, "module_info.php");
@@ -834,6 +837,7 @@ class SystemHandler implements SystemHandlerInterface
 				}
 				
 				unset($name);
+				unset($main_class);
 				unset($class);
 				unset($tab);
 				unset($required_include);

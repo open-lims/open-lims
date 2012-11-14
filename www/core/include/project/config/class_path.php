@@ -148,7 +148,6 @@
 	$classes['ProjectTemplateCat']					= $path_prefix."core/include/project/project_template_cat.class.php";
 	$classes['ProjectUserData']						= $path_prefix."core/include/project/project_user_data.class.php";
 	$classes['ProjectValueVar']						= $path_prefix."core/include/project/project_value_var.class.php";
-	$classes['ProjectWorkflow']						= $path_prefix."core/include/project/project_workflow.class.php";
 	
 	$classes['Project_Wrapper']						= $path_prefix."core/include/project/project.wrapper.class.php";
 ?>

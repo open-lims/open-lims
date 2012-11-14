@@ -1,193 +1,23 @@
-/* Project Workflow */
-.ProjectWorkflowElementContainer
-{
-	float: left;
-	width: 122px;
-	margin: 0;
-	padding: 0;
-}
-.ProjectWorkflowElement
-{
-	width: 91px;
-	margin: 0;
-	padding: 4px;
-	height: 31px;
-	overflow: hidden;
-	text-align: center;
-}
-.ProjectWorkflowElementStatus
-{
-	border: 1px #C0C0C0 solid;
-}
-.ProjectWorkflowElementOr
-{
-	background-image: url(../images/workflow/element_or.png);
-	background-repeat: no-repeat;
-	background-position: top center;
-	width: 101px;
-	height: 29px;
-	padding: 12px 0 0 0;
-}
-.ProjectWorkflowElementLine
-{
-	background-image: url(../images/workflow/element_line.png);
-	background-repeat: no-repeat;
-	background-position: top center;
-	width: 93px;
-	height: 33px;
-}
-.ProjectWorkflowEmptyElement
-{
-	width: 93px;
-}
-.ProjectWorkflowClearElement
-{
-	clear: left;
-}
-
-
-.ProjectWorkflowVerticalSpacer
-{
-	width: 21px;	
-	height: 39px;
-	float: left;
-}
-	
-.ProjectWorkflowElementHorizontalSpacer
-{
-	margin: 0 0 0 21px;
-	padding: 0;
-	height: 21px;
-	width: 101px;
-	background-repeat: no-repeat;
-	background-position: top center;
-}
-.ProjectWorkflowElementHorizontalSpacerVerticalLine
-{
-	background-image: url(../images/workflow/horizontal_spacer_vertical_line.png);
-}
-.ProjectWorkflowElementHorizontalSpacerHorizontalLine
-{
-	background-image: url(../images/workflow/horizontal_spacer_horizontal_line.png);
-}
-.ProjectWorkflowElementHorizontalSpacerTopRightCorner
-{
-	background-image: url(../images/workflow/horizontal_spacer_top_right.png);
-}
-.ProjectWorkflowElementHorizontalSpacerBottomRightCorner
-{
-	background-image: url(../images/workflow/horizontal_spacer_bottom_right.png);
-}
-.ProjectWorkflowElementHorizontalSpacerT
-{
-	background-image: url(../images/workflow/horizontal_spacer_t.png);
-}
-.ProjectWorkflowElementHorizontalSpacerReversedT
-{
-	background-image: url(../images/workflow/horizontal_spacer_reversed_t.png);
-}
-.ProjectWorkflowElementHorizontalSpacerLeftT
-{
-	background-image: url(../images/workflow/horizontal_spacer_left_t.png);
-}
-
-.ProjectWorkflowElementCornerSpacer
-{
-	float: left;
-	margin: 0;
-	padding: 0;
-	height: 21px;
-	width: 21px;
-	background-repeat: no-repeat;
-	background-position: top center;
-}
-.ProjectWorkflowElementCornerSpacerHorizontalLine
-{
-	background-image: url(../images/workflow/corner_spacer_horizontal_line.png);
-}
-
-
-.ProjectWorkflowElementVerticalSpacer
-{
-	
-}
-
-
-
-
-
 /* Project Detail */
 #ProjectDetailLeft
 {
 	float: left;
-	width: 375px;	
+	width: 390px;	
 }
 #ProjectDetailRight
 {
 	border-left: 1px #C0C0C0 dotted;
 	float: right;
-	width: 370px;	
+	width: 355px;	
 }
 #ProjectDetailClear
 {
 	clear: both;
 }
-
-
-.ProjectDetailStatusSpacer
+#ProjectDetailStatusWorkflow
 {
-	width: 20px;	
-	float: left;
+	margin-bottom: 10px;
 }
-.ProjectDetailStatusElement
-{
-	width: 90px;
-	margin: 10px 0;
-	padding: 4px;
-	border: 1px #C0C0C0 solid;
-	float: left;
-}
-.ProjectDetailStatusEmpty
-{
-	width: 92px;
-	margin: 10px 0;
-	padding: 4px;
-	float: left;
-}
-.ProjectDetailStatusOr
-{
-	background-image: url(../images/workflow/or.png);
-	background-repeat: no-repeat;
-	background-position: top center;
-	width: 100px;
-	height: 40px;
-	margin: 10px auto;
-	padding: 12px 0 0 0;
-	text-align: center;
-	float: left;
-}
-.ProjectDetailStatusElementClear
-{
-	clear:left;	
-}	
-#ProjectDetailStatus .Current
-{
-	border: 1px #99cd32 solid;
-}
-
-
-.ProjectDetailStatusTable
-{
-	width: 100%;
-	border-spacing: 0;
-}
-.ProjectDetailStatusTable td
-{
-	padding-left: 5px;
-	padding-right: 5px;
-	line-height: 22px;
-}
-
 
 
 /* Project Proceed */

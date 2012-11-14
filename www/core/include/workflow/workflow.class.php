@@ -38,6 +38,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 class Workflow // implements WorkflowInterface
 {
 	private static $printed_elements = array();
+	private static $visited_elements = array();
 	
 	private $start_element;
 	private $current_element;
@@ -111,6 +112,11 @@ class Workflow // implements WorkflowInterface
 	public function get_all_status_elements()
 	{
 		return $this->status_elements;
+	}
+	
+	public function get_all_active_elements()
+	{
+		return $this->active_status_elements;
 	}
 	
 	public function set_current_element($element)
@@ -239,6 +245,190 @@ class Workflow // implements WorkflowInterface
 			{
 				$this->print_elements($value);
 			}
+		}
+	}
+
+	/**
+	 * @param object $element
+	 * @param array $active_elements
+	 * @param integer $number_of_parent_children
+	 * @param integer $child_id
+	 * @return array
+	 */
+	public static function get_drawable_element_list($element, $active_elements = null, $number_of_parent_children = null, $child_id = null)
+	{
+		$next_array = &$element->get_next();
+		$next_array_count = count($next_array);
+				
+		array_push(self::$visited_elements, $element);
+
+		if($next_array_count <= 0)
+		{
+			if (in_array($element, $active_elements))
+			{
+				return array(array(array(&$element, true)));	// Override maximum
+			}
+			else
+			{
+				return array(array(array(&$element, false)));
+			}
+		}
+		else
+		{	
+			$return_array = array();
+			
+			// Element Itself
+			if (in_array($element, $active_elements))
+			{
+				$return_array[0][0] = array(&$element, true);
+			}
+			else
+			{
+				$return_array[0][0] = array(&$element, false);
+			}
+			
+			$element_counter_default = 0;
+			$element_counter_highest = 0;
+			$element_counter = 0;
+			$active_found = false;
+			
+			$children_array = array();
+			$max_children = null;
+
+			if ($element instanceof WorkflowElementPath)
+			{
+				$path_length = $element->get_path_length();
+				$max_path_length = $element->get_longest_path_length();
+			}
+			
+			for($i = 0; $i <= $next_array_count-1; $i++)
+			{	
+				if (!in_array($next_array[$i], self::$visited_elements))
+				{
+					$array = self::get_drawable_element_list($next_array[$i], 
+							$active_elements, 
+							$next_array_count, 
+							$i);
+
+					
+					// BEGIN
+					/*
+					if ($array != null)
+					{
+						foreach ($array as $line_key => $line_value)
+						{
+							// Zeilen
+							foreach ($line_value as $element_key => $element_value)
+							{
+								// Elemente
+							
+								if ($element_value[0] instanceof WorkflowElementActivity)
+								{
+									echo $element_value[0]->get_id()." (".$element_key.")&nbsp;";
+								}
+								else
+								{
+									if ($element_value[0] == null)
+									{
+										echo "N&nbsp;";
+									}
+									else
+									{
+										echo "EL (".$element_key.")&nbsp;";
+									}
+								}
+								
+							}
+							echo "<br />";
+						}		
+						
+						echo "<br /><br />";
+					}
+					*/
+					// END
+					
+					if ($array != null)
+					{
+						$line_path_length = $path_length[$i+1];
+						$array_count = count($array);
+						
+						$line_counter = 1;
+						
+						// Path
+						for ($j = 1; $j <= $array_count; $j++)
+						{
+							if ($max_path_length >= 1 and $line_path_length >= 1 and $j == 1 and $line_counter <= $max_path_length)
+							{
+								$element_counter_default_path_backup = $element_counter_default;
+								$element_counter_highest_path_backup = $element_counter_highest;
+								$element_counter_backup = $element_counter;
+							}
+							
+							if ($max_path_length >= 1 and $line_path_length >= 1 and $j > $line_path_length and $line_counter <= $max_path_length)
+							{
+								for ($k = $element_counter_highest; $k <= $element_counter_default; $k++)
+								{
+									$return_array[$line_counter][$k] = array(null, null);
+								}
+								$line_counter++;
+								$j--;
+							}
+							else
+							{	
+								if ($max_path_length >= 1 and $line_path_length >= 1 and $j > $max_path_length)
+								{
+									$element_counter_default = $element_counter_default_path_backup;
+									$element_counter_highest = $element_counter_highest_path_backup;
+									$element_counter = $element_counter_backup;
+								}
+								
+								// Lines
+								if ($element_counter_highest < $element_counter)
+								{
+									$element_counter_highest = $element_counter;
+								}
+								$element_counter = $element_counter_default;
+								if (is_array($array[$j-1]))
+								{
+									foreach ($array[$j-1] as $element_key => $element_value)
+									{
+										// Elements
+										$return_array[$line_counter][($element_counter_default+$element_key)] = $element_value;
+										$element_counter++;
+										
+										if ($element_value[1] == true)
+										{
+											$active_found = true;
+										}
+									}
+								}
+								$line_counter++;
+							}
+						}
+						
+						if ($element_counter_highest < $element_counter)
+						{
+							$element_counter_highest = $element_counter;
+						}
+						$element_counter_default = $element_counter_highest;
+						
+						// Bei Pfaden die nicht enden, wird das ende entsprechend aufgefüllt
+						if ($line_counter <= $max_path_length)
+						{
+							for ($j = $line_counter; $j <= $max_path_length; $j++)
+							{
+								for ($k = $element_counter_highest; $k <= $element_counter_default; $k++)
+								{
+									$return_array[$j][$k-1] = array(null, null);
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			return $return_array;
+			
 		}
 	}
 }

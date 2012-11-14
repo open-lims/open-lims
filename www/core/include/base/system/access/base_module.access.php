@@ -96,10 +96,19 @@ class BaseModule_Access
 	{
 		global $db;
 
-		if ($name and $folder and $class)
+		if ($name and $folder)
 		{
+			if (!$class)
+			{
+				$class_insert = "NULL";
+			}
+			else
+			{
+				$class_insert = "'".$class."'";
+			}
+			
 	 		$sql_write = "INSERT INTO ".constant("BASE_MODULE_TABLE")." (id, name, folder, class, disabled) " .
-								"VALUES (nextval('".self::BASE_MODULE_PK_SEQUENCE."'::regclass),'".$name."','".$folder."','".$class."','f')";		
+								"VALUES (nextval('".self::BASE_MODULE_PK_SEQUENCE."'::regclass),'".$name."','".$folder."',".$class_insert.",'f')";		
 				
 			$res_write = $db->db_query($sql_write);
 			

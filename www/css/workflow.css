@@ -1,0 +1,162 @@
+/* Project Workflow */
+.WorkflowElementContainer
+{
+	float: left;
+	width: 122px;
+	margin: 0;
+	padding: 0;
+	
+}
+.WorkflowElement
+{
+	width: 91px;
+	margin: 0;
+	padding: 4px;
+	height: 31px;
+	overflow: hidden;
+	text-align: center;
+}
+.WorkflowElementStatus
+{
+	border: 1px #C0C0C0 solid;
+}
+.WorkflowElementStatusActive
+{
+	border: 1px #99cd32 solid;
+}
+.WorkflowElementOr
+{
+	background-image: url(../images/workflow/element_or.png);
+	background-repeat: no-repeat;
+	background-position: top center;
+	width: 101px;
+	height: 29px;
+	padding: 12px 0 0 0;
+}
+.WorkflowElementLine
+{
+	background-image: url(../images/workflow/element_line.png);
+	background-repeat: no-repeat;
+	background-position: top center;
+	width: 93px;
+	height: 33px;
+}
+.WorkflowEmptyElement
+{
+	width: 93px;
+}
+.WorkflowClearElement
+{
+	clear: left;
+}
+
+
+.WorkflowVerticalSpacer
+{
+	width: 21px;	
+	height: 39px;
+	float: left;
+}
+	
+.WorkflowElementHorizontalSpacer
+{
+	margin: 0 0 0 21px;
+	padding: 0;
+	height: 21px;
+	width: 101px;
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+.WorkflowElementHorizontalSpacerVerticalLine
+{
+	background-image: url(../images/workflow/horizontal_spacer_vertical_line.png);
+}
+.WorkflowElementHorizontalSpacerHorizontalLine
+{
+	background-image: url(../images/workflow/horizontal_spacer_horizontal_line.png);
+}
+.WorkflowElementHorizontalSpacerTopRightCorner
+{
+	background-image: url(../images/workflow/horizontal_spacer_top_right.png);
+}
+.WorkflowElementHorizontalSpacerBottomRightCorner
+{
+	background-image: url(../images/workflow/horizontal_spacer_bottom_right.png);
+}
+.WorkflowElementHorizontalSpacerT
+{
+	background-image: url(../images/workflow/horizontal_spacer_t.png);
+}
+.WorkflowElementHorizontalSpacerReversedT
+{
+	background-image: url(../images/workflow/horizontal_spacer_reversed_t.png);
+}
+.WorkflowElementHorizontalSpacerLeftT
+{
+	background-image: url(../images/workflow/horizontal_spacer_left_t.png);
+}
+
+.WorkflowElementCornerSpacer
+{
+	float: left;
+	margin: 0;
+	padding: 0;
+	height: 21px;
+	width: 21px;
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+.WorkflowElementCornerSpacerHorizontalLine
+{
+	background-image: url(../images/workflow/corner_spacer_horizontal_line.png);
+}
+
+
+.WorkflowElementVerticalSpacer
+{
+	
+}
+
+
+.WorkflowRightElementContainer
+{
+	width: 21px;
+	float: left;
+}
+.WorkflowRightElement
+{
+	
+	width: 21px;
+	height: 41px;
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+.WorkflowRightElementTop
+{
+	background-image: url(../images/workflow/right_spacer_hidden_top_element.png);
+}
+
+
+.WorkflowRightElementHorizontalSpacer
+{
+	width: 21px;
+	height: 21px;
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+.WorkflowRightElementHorizontalSpacerTopRight
+{
+	background-image: url(../images/workflow/right_corner_spacer_top_right.png);
+}
+.WorkflowRightElementHorizontalSpacerBottomRight
+{
+	background-image: url(../images/workflow/right_corner_spacer_bottom_right.png);
+}
+.WorkflowRightElementHorizontalSpacerT
+{
+	background-image: url(../images/workflow/right_corner_spacer_t.png);
+}
+.WorkflowRightElementHorizontalSpacerReversedT
+{
+	background-image: url(../images/workflow/right_corner_spacer_reversed_t.png);
+}
