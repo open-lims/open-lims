@@ -83,7 +83,7 @@ interface ProjectInterface
      * Returns an array with all project status
      * @return array
      */
-	public function get_all_status_array();
+	public function get_status_workflow_object();
 	
 	/**
      * Returns the id of the current status

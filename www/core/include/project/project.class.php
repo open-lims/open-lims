@@ -866,18 +866,18 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     }
     
     /**
-     * @see ProjectInterface::get_all_status_array()
+     * @see ProjectInterface::get_status_workflow_object()
      * @return object
      */
-    public function get_all_status_array()
+    public function get_status_workflow_object()
     {
     	global $runtime_data;
     	
     	if ($this->project_id and $this->project)
     	{
-			if ($runtime_data->is_object_data($this, "PROJECT_ALL_STATUS_ARRAY") == true)
+			if ($runtime_data->is_object_data($this, "PROJECT_WORKFLOW_OBJECT_".$this->project_id) == true)
 			{
-				return $runtime_data->read_object_data($this, "PROJECT_ALL_STATUS_ARRAY");	
+				return $runtime_data->read_object_data($this, "PROJECT_WORKFLOW_OBJECT_".$this->project_id);	
 			}
 			else
 			{
@@ -924,6 +924,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     				}
     			}
     			
+    			$runtime_data->write_object_data($this, "PROJECT_WORKFLOW_OBJECT_".$this->project_id, $workflow);	
     			return $workflow;
 			}
     	}
@@ -1302,6 +1303,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     }
     
     /**
+     * @todo !!!
      * @see ProjectInterface::is_sub_item_required()
      * @param integer $parent_pos_id
      * @param integer $status_id
@@ -1313,11 +1315,16 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     	if ($this->project_id and $this->project and is_numeric($status_id))
     	{
     		$project_template = new ProjectTemplate($this->project->get_template_id());
-    		$status_relation = new ProjectStatusRelation($this->project_id, $status_id);
+    		$workflow = $this->get_status_workflow_object();
+    		$workflow_activity_array = $workflow->get_all_status_elements();
+    		
+    		// $status_relation = new ProjectStatusRelation($this->project_id, $status_id);
     			    	
-    		while ($status_relation->is_less($this->get_current_status_id()) or $status_relation->get_current() == $this->get_current_status_id())
-    		{    	
-    			$current_status_id = $status_relation->get_current();
+    		//while ($status_relation->is_less($this->get_current_status_id()) or $status_relation->get_current() == $this->get_current_status_id())
+    		foreach($workflow_activity_array as $current_status_id => $current_workflow_object)
+    		{
+    			
+    			//$current_status_id = $status_relation->get_current();
 	    		$requirements_array = $project_template->get_status_requirements($current_status_id);
 				
 				$counter = 0;
@@ -1329,7 +1336,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 				{
 					$project_item = new ProjectItem($this->project_id);
 	
-					$item_array = $project_item->get_project_status_items_with_pos_id($current_status_id);					
+					$item_array = $project_item->get_project_status_items_with_pos_id($current_status_id);	
 					$item_type_array = Item::list_types();
 					
 					foreach($requirements_array as $key => $value)
@@ -1468,7 +1475,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						}
 					}
 				}
-    			$status_relation->set_next();
+    			// $status_relation->set_next();
     		}
     		
     		return null;
@@ -1489,13 +1496,17 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     	if ($this->project_id and $this->project and is_numeric($parent_pos_id))
     	{
     		$project_template = new ProjectTemplate($this->project->get_template_id());
-    		$status_relation = new ProjectStatusRelation($this->project_id, $this->get_current_status_id());
+    		// $status_relation = new ProjectStatusRelation($this->project_id, $this->get_current_status_id());
 
+    		$workflow = $this->get_status_workflow_object();
+    		$workflow_activity_array = $workflow->get_all_status_elements();
+    		
     		$return_array = array();
     		
-    		while ($status_relation->get_current() != null)
+    		// while ($status_relation->get_current() != null)
+    		foreach($workflow_activity_array as $current_status_id => $current_workflow_object)
     		{
-    			$current_status_id = $status_relation->get_current();
+    			// $current_status_id = $status_relation->get_current();
 	    		$requirements_array = $project_template->get_status_requirements($current_status_id);
 				
 				$counter = 0;
@@ -1538,6 +1549,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						// ITEMI
 						if ($value[xml_element] == "itemi" and !$value[close])
 						{
+							// Is an ITEMI-element with status relation in another element?
 							if (is_numeric($value['parent_status']) and is_numeric($value['parent_pos_id']) and is_numeric($value['pos_id']))
 							{		
 								if ($value['parent_pos_id'] == $parent_pos_id and $value['parent_status'] == $current_status_id)
@@ -1573,7 +1585,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					}	
 				}
 
-    			$status_relation->set_next();
+    			// $status_relation->set_next();
     		}
     		
     		return $return_array;

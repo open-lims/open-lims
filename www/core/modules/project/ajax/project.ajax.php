@@ -455,7 +455,7 @@ class ProjectAjax
 			
 			$project = new Project($_GET['project_id']);
 			
-			$workflow = $project->get_all_status_array();	
+			$workflow = $project->get_status_workflow_object();	
 			$workflow_array = Workflow::get_drawable_element_list($workflow->get_start_element(), $workflow->get_all_active_elements());
 							
 			require_once(__DIR__."/../../workflow/common/io/workflow_common.io.php");

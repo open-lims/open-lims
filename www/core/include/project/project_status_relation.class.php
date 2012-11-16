@@ -27,6 +27,7 @@
 require_once("interfaces/project_status_relation.interface.php");
 
 /**
+ * @deprecated remove while introducing project workflow system
  * Project Status Relation Class
  * @package project
  */
