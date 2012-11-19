@@ -50,11 +50,11 @@ class File_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->file_id			= $file_id;
-				$this->data_entity_id	= $data[data_entity_id];
-				$this->flag				= $data[flag];
+				$this->data_entity_id	= $data['data_entity_id'];
+				$this->flag				= $data['flag'];
 			}
 			else
 			{
@@ -94,9 +94,9 @@ class File_Access
 			$res_read = $db->db_query($sql_read);
 			$data_read = $db->db_fetch_assoc($res_read);
 								
-			$this->__construct($data_read[id]);
+			$this->__construct($data_read['id']);
 			
-			return $data_read[id];
+			return $data_read['id'];
 		}
 		else
 		{
@@ -240,9 +240,9 @@ class File_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
-				return $data[id];
+				return $data['id'];
 			}
 			else
 			{
@@ -269,7 +269,7 @@ class File_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}

@@ -52,13 +52,13 @@ class GroupHasUser_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[primary_key])
+			if ($data['primary_key'])
 			{
 			
 				$this->primary_key 		= $primary_key;
 				
-				$this->group_id			= $data[group_id];
-				$this->user_id			= $data[user_id];
+				$this->group_id			= $data['group_id'];
+				$this->user_id			= $data['user_id'];
 	
 			}
 			else
@@ -104,9 +104,9 @@ class GroupHasUser_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[primary_key]);
+				$this->__construct($data_read['primary_key']);
 				
-				return $data_read[primary_key];
+				return $data_read['primary_key'];
 			}	
 		}
 		else
@@ -251,9 +251,9 @@ class GroupHasUser_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[primary_key])
+			if ($data['primary_key'])
 			{
-				return $data[primary_key];
+				return $data['primary_key'];
 			}
 			else
 			{
@@ -283,7 +283,7 @@ class GroupHasUser_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[group_id]);
+				array_push($return_array,$data['group_id']);
 			}
 			
 			if (is_array($return_array))
@@ -318,7 +318,7 @@ class GroupHasUser_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[user_id]);
+				array_push($return_array,$data['user_id']);
 			}
 			
 			if (is_array($return_array))
@@ -352,9 +352,9 @@ class GroupHasUser_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[result])
+			if ($data['result'])
 			{
-				return $data[result];
+				return $data['result'];
 			}
 			else
 			{
@@ -383,9 +383,9 @@ class GroupHasUser_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[result])
+			if ($data['result'])
 			{
-				return $data[result];
+				return $data['result'];
 			}
 			else
 			{

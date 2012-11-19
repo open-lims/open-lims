@@ -52,13 +52,13 @@ class Manufacturer_Access
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->manufacturer_id 	= $manufacturer_id;
 				
-				$this->name				= $data[name];
-				$this->user_id			= $data[user_id];
-				$this->datetime			= $data[datetime];
+				$this->name				= $data['name'];
+				$this->user_id			= $data['user_id'];
+				$this->datetime			= $data['datetime'];
 			}
 			else
 			{
@@ -102,9 +102,9 @@ class Manufacturer_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read['id']);
 			
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{
@@ -303,9 +303,9 @@ class Manufacturer_Access
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);
 					
-		if ($data[result])
+		if ($data['result'])
 		{
-			return $data[result];
+			return $data['result'];
 		}
 		else
 		{
@@ -388,7 +388,7 @@ class Manufacturer_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 						
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}

@@ -53,15 +53,15 @@ class DataEntity_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->id				= $id;
-				$this->datetime			= $data[datetime];
-				$this->owner_id			= $data[owner_id];
-				$this->owner_group_id	= $data[owner_group_id];
-				$this->permission		= $data[permission];
+				$this->datetime			= $data['datetime'];
+				$this->owner_id			= $data['owner_id'];
+				$this->owner_group_id	= $data['owner_group_id'];
+				$this->permission		= $data['permission'];
 				
-				if ($data[automatic] == "t")
+				if ($data['automatic'] == "t")
 				{
 					$this->automatic = true;
 				}
@@ -130,9 +130,9 @@ class DataEntity_Access
 			$res_read = $db->db_query($sql_read);
 			$data_read = $db->db_fetch_assoc($res_read);
 								
-			$this->__construct($data_read[id]);
+			$this->__construct($data_read['id']);
 
-			return $data_read[id];
+			return $data_read['id'];
 		}
 		else
 		{

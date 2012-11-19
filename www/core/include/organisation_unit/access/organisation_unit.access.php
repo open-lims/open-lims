@@ -57,16 +57,16 @@ class OrganisationUnit_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
-				$this->organisation_unit_id 	= $data[id];
+				$this->organisation_unit_id 	= $data['id'];
 
-				$this->toid						= $data[toid];
-				$this->name						= $data[name];
-				$this->type_id					= $data[type_id];
-				$this->position					= $data[position];
+				$this->toid						= $data['toid'];
+				$this->name						= $data['name'];
+				$this->type_id					= $data['type_id'];
+				$this->position					= $data['position'];
 				
-				if ($data[is_root] == "t")
+				if ($data['is_root'] == "t")
 				{
 					$this->is_root = true;
 				}
@@ -75,7 +75,7 @@ class OrganisationUnit_Access
 					$this->is_root = false;;
 				}
 				
-				if ($data[stores_data] == "t")
+				if ($data['stores_data'] == "t")
 				{
 					$this->stores_data = true;;
 				}
@@ -84,7 +84,7 @@ class OrganisationUnit_Access
 					$this->stores_data = false;
 				}
 				
-				if ($data[hidden] == "t")
+				if ($data['hidden'] == "t")
 				{
 					$this->hidden = true;
 				}
@@ -164,9 +164,9 @@ class OrganisationUnit_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read['id']);
 				
-				return $data_read[id];
+				return $data_read['id'];
 			}
 		}
 		else
@@ -567,9 +567,9 @@ class OrganisationUnit_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
-				return $data[id];
+				return $data['id'];
 			}
 			else
 			{
@@ -604,9 +604,9 @@ class OrganisationUnit_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
-				return $data[id];
+				return $data['id'];
 			}
 			else
 			{
@@ -646,9 +646,9 @@ class OrganisationUnit_Access
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);
 		
-		if ($data[id])
+		if ($data['id'])
 		{
-			return $data[id];
+			return $data['id'];
 		}
 		else
 		{
@@ -685,9 +685,9 @@ class OrganisationUnit_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
-				return $data[id];
+				return $data['id'];
 			}
 			else
 			{
@@ -714,9 +714,9 @@ class OrganisationUnit_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
-				return $data[id];
+				return $data['id'];
 			}
 			else
 			{
@@ -743,7 +743,7 @@ class OrganisationUnit_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[id]);
+			array_push($return_array,$data['id']);
 		}
 		
 		if (is_array($return_array))
@@ -773,7 +773,7 @@ class OrganisationUnit_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -805,7 +805,7 @@ class OrganisationUnit_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[id]);
+			array_push($return_array,$data['id']);
 		}
 		
 		if (is_array($return_array))
@@ -832,7 +832,7 @@ class OrganisationUnit_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[id]);
+			array_push($return_array,$data['id']);
 		}
 		
 		if (is_array($return_array))
@@ -861,7 +861,7 @@ class OrganisationUnit_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -887,9 +887,9 @@ class OrganisationUnit_Access
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);
 		
-		if ($data[result])
+		if ($data['result'])
 		{
-			return $data[result];
+			return $data['result'];
 		}
 		else
 		{

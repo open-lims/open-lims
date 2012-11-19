@@ -57,19 +57,19 @@ class BaseModuleDialog_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->id 				= $id;
-				$this->module_id		= $data[module_id];
-				$this->dialog_type		= $data[dialog_type];
-				$this->class_path		= $data[class_path];
+				$this->module_id		= $data['module_id'];
+				$this->dialog_type		= $data['dialog_type'];
+				$this->class_path		= $data['class_path'];
 				$this->class			= $data['class'];
-				$this->method			= $data[method];
-				$this->internal_name	= $data[internal_name];
-				$this->display_name		= $data[display_name];
-				$this->weight			= $data[weight];
+				$this->method			= $data['method'];
+				$this->internal_name	= $data['internal_name'];
+				$this->display_name		= $data['display_name'];
+				$this->weight			= $data['weight'];
 				
-				if ($data[disabled] == 't')
+				if ($data['disabled'] == 't')
 				{
 					$this->disabled = true;
 				}
@@ -135,9 +135,9 @@ class BaseModuleDialog_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 							
-				$this->__construct($data_read[id]);		
+				$this->__construct($data_read['id']);		
 								
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{
@@ -604,9 +604,9 @@ class BaseModuleDialog_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 
-			$result_array[class_path] 	= $data[class_path];
+			$result_array['class_path'] = $data['class_path'];
 			$result_array['class'] 		= $data['class'];
-			$result_array[method] 		= $data[method];
+			$result_array['method'] 	= $data['method'];
 
 			if (is_array($result_array))
 			{
@@ -640,11 +640,11 @@ class BaseModuleDialog_Access
 			$res = $db->db_query($sql);
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				$result_array[$counter]['class_path'] 	= $data['class_path'];
-				$result_array[$counter]['class'] 		= $data['class'];
-				$result_array[$counter][method] 		= $data[method];
-				$result_array[$counter][internal_name] 	= $data[internal_name];
-				$result_array[$counter][display_name] 	= $data[display_name];
+				$result_array[$counter]['class_path'] 		= $data['class_path'];
+				$result_array[$counter]['class'] 			= $data['class'];
+				$result_array[$counter]['method'] 			= $data['method'];
+				$result_array[$counter]['internal_name'] 	= $data['internal_name'];
+				$result_array[$counter]['display_name'] 	= $data['display_name'];
 				$counter++;
 			}
 			
@@ -680,7 +680,7 @@ class BaseModuleDialog_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))

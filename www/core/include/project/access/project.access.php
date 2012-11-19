@@ -58,20 +58,20 @@ class Project_Access
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->project_id 		= $project_id;
 				
-				$this->toid_organ_unit	= $data[toid_organ_unit];
-				$this->toid_project		= $data[toid_project];
-				$this->datetime			= $data[datetime];
-				$this->name				= $data[name];
-				$this->owner_id			= $data[owner_id];
-				$this->template_id		= $data[template_id];
-				$this->quota			= $data[quota];
-				$this->filesize			= $data[filesize];
+				$this->toid_organ_unit	= $data['toid_organ_unit'];
+				$this->toid_project		= $data['toid_project'];
+				$this->datetime			= $data['datetime'];
+				$this->name				= $data['name'];
+				$this->owner_id			= $data['owner_id'];
+				$this->template_id		= $data['template_id'];
+				$this->quota			= $data['quota'];
+				$this->filesize			= $data['filesize'];
 				
-				if ($data[deleted] == "t")
+				if ($data['deleted'] == "t")
 				{
 					$this->deleted		= true;
 				}
@@ -152,9 +152,9 @@ class Project_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);	
 				
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read['id']);
 							
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{
@@ -638,7 +638,7 @@ class Project_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -673,7 +673,7 @@ class Project_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -708,7 +708,7 @@ class Project_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -743,7 +743,7 @@ class Project_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -775,7 +775,7 @@ class Project_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[id]);
+			array_push($return_array,$data['id']);
 		}
 		
 		if (is_array($return_array))
@@ -802,7 +802,7 @@ class Project_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -834,7 +834,7 @@ class Project_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -866,7 +866,7 @@ class Project_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -892,9 +892,9 @@ class Project_Access
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);
 		
-		if ($data[size])
+		if ($data['size'])
 		{
-			return $data[size];
+			return $data['size'];
 		}
 		else
 		{

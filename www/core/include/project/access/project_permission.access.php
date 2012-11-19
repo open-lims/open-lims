@@ -56,17 +56,17 @@ class ProjectPermission_Access
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->permission_id 		= $permission_id;
 				
-				$this->user_id				= $data[user_id];
-				$this->organisation_unit_id	= $data[organisation_unit_id];
-				$this->group_id				= $data[group_id];
-				$this->project_id			= $data[project_id];
-				$this->permission			= $data[permission];
-				$this->owner_id				= $data[owner_id];
-				$this->intention			= $data[intention];
+				$this->user_id				= $data['user_id'];
+				$this->organisation_unit_id	= $data['organisation_unit_id'];
+				$this->group_id				= $data['group_id'];
+				$this->project_id			= $data['project_id'];
+				$this->permission			= $data['permission'];
+				$this->owner_id				= $data['owner_id'];
+				$this->intention			= $data['intention'];
 			}
 			else
 			{
@@ -171,9 +171,9 @@ class ProjectPermission_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read['id']);
 				
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{
@@ -543,7 +543,7 @@ class ProjectPermission_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -579,7 +579,7 @@ class ProjectPermission_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -616,7 +616,7 @@ class ProjectPermission_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -653,7 +653,7 @@ class ProjectPermission_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -698,7 +698,7 @@ class ProjectPermission_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[project_id]);
+				array_push($return_array,$data['project_id']);
 			}
 			
 			if (is_array($return_array))
@@ -731,9 +731,9 @@ class ProjectPermission_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[numberofentries])
+			if ($data['numberofentries'])
 			{
-				return $data[numberofentries];
+				return $data['numberofentries'];
 			}
 			else
 			{
@@ -761,9 +761,9 @@ class ProjectPermission_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[numberofentries])
+			if ($data['numberofentries'])
 			{
-				return $data[numberofentries];
+				return $data['numberofentries'];
 			}
 			else
 			{
@@ -791,9 +791,9 @@ class ProjectPermission_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[numberofentries])
+			if ($data['numberofentries'])
 			{
-				return $data[numberofentries];
+				return $data['numberofentries'];
 			}
 			else
 			{

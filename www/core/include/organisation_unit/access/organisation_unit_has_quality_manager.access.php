@@ -49,10 +49,10 @@ class OrganisationUnitHasQualityManager_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[organisation_unit_id])
+			if ($data['organisation_unit_id'])
 			{
-				$this->organisation_unit_id	= $data[organisation_unit_id];
-				$this->quality_manager_id			= $data[quality_manager_id];
+				$this->organisation_unit_id		= $data['organisation_unit_id'];
+				$this->quality_manager_id		= $data['quality_manager_id'];
 			}
 		}
 	}
@@ -234,9 +234,9 @@ class OrganisationUnitHasQualityManager_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[result])
+			if ($data['result'])
 			{
-				return $data[result];
+				return $data['result'];
 			}
 			else
 			{
@@ -265,9 +265,9 @@ class OrganisationUnitHasQualityManager_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[result])
+			if ($data['result'])
 			{
-				return $data[result];
+				return $data['result'];
 			}
 			else
 			{
@@ -298,7 +298,7 @@ class OrganisationUnitHasQualityManager_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[organisation_unit_id]);
+				array_push($return_array,$data['organisation_unit_id']);
 			}
 			
 			if (is_array($return_array))
@@ -342,7 +342,7 @@ class OrganisationUnitHasQualityManager_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[quality_manager_id]);
+				array_push($return_array,$data['quality_manager_id']);
 			}
 			
 			if (is_array($return_array))

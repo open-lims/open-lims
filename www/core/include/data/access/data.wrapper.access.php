@@ -56,7 +56,7 @@ class Data_Wrapper_Access
 			$res = $db->db_query($sql);
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array, $data[id]);
+				array_push($return_array, $data['id']);
 			}
 							
 			if (count($return_array) >= 1)
@@ -98,7 +98,7 @@ class Data_Wrapper_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -132,7 +132,7 @@ class Data_Wrapper_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -298,7 +298,7 @@ class Data_Wrapper_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			return $data[result];
+			return $data['result'];
 		}
 		else
 		{
@@ -326,7 +326,7 @@ class Data_Wrapper_Access
 			$res = $db->db_query($sql);
 			while($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array, $data[id]);
+				array_push($return_array, $data['id']);
 			}
 
 			return $return_array;
@@ -533,7 +533,7 @@ class Data_Wrapper_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 	
-			return $data[result];
+			return $data['result'];
 		}
 	}
 	
@@ -637,7 +637,7 @@ class Data_Wrapper_Access
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);
 
-		return $data[result];
+		return $data['result'];
 	}	
 	
 	/**
@@ -752,7 +752,7 @@ class Data_Wrapper_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 	
-			return $data[result];
+			return $data['result'];
 		}
 		else
 		{
@@ -871,7 +871,7 @@ class Data_Wrapper_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 	
-			return $data[result];
+			return $data['result'];
 		}
 		else
 		{
@@ -959,7 +959,7 @@ class Data_Wrapper_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 	
-			return $data[result];
+			return $data['result'];
 		}
 		else
 		{

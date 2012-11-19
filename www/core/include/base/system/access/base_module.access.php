@@ -52,14 +52,14 @@ class BaseModule_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->id 			= $id;
-				$this->name			= $data[name];
-				$this->folder		= $data[folder];
+				$this->name			= $data['name'];
+				$this->folder		= $data['folder'];
 				$this->class		= $data['class'];
 				
-				if ($data[disabled] == 't')
+				if ($data['disabled'] == 't')
 				{
 					$this->disabled = true;
 				}
@@ -118,9 +118,9 @@ class BaseModule_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 							
-				$this->__construct($data_read[id]);		
+				$this->__construct($data_read['id']);		
 								
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{
@@ -364,9 +364,9 @@ class BaseModule_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[name])
+			if ($data['name'])
 			{
-				return $data[name];
+				return $data['name'];
 			}
 			else
 			{
@@ -395,9 +395,9 @@ class BaseModule_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
-				return $data[id];
+				return $data['id'];
 			}
 			else
 			{
@@ -424,9 +424,9 @@ class BaseModule_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[folder])
+			if ($data['folder'])
 			{
-				return $data[folder];
+				return $data['folder'];
 			}
 			else
 			{
@@ -453,7 +453,7 @@ class BaseModule_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			$return_array[$data[id]] = $data[folder];
+			$return_array[$data['id']] = $data['folder'];
 		}
 		
 		if (is_array($return_array))
@@ -479,9 +479,9 @@ class BaseModule_Access
 		$res = $db->db_query($sql);
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			$result_array[$data[id]][name]		= $data[name];
-			$result_array[$data[id]][folder]	= $data[folder];
-			$result_array[$data[id]]['class']	= $data['class'];
+			$result_array[$data['id']]['name']		= $data['name'];
+			$result_array[$data['id']]['folder']	= $data['folder'];
+			$result_array[$data['id']]['class']		= $data['class'];
 		}
 		
 		return $result_array;
@@ -503,7 +503,7 @@ class BaseModule_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}

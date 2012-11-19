@@ -47,10 +47,10 @@ class SystemLogType_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
-				$this->log_type_id	= $data[id];
-				$this->name			= $data[name];	
+				$this->log_type_id	= $data['id'];
+				$this->name			= $data['name'];	
 			}
 			else
 			{
@@ -97,7 +97,7 @@ class SystemLogType_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[id]);
+			array_push($return_array,$data['id']);
 		}
 		
 		if (is_array($return_array))

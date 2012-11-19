@@ -50,11 +50,11 @@ class EquipmentCat_Access
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
-				$this->equipment_cat_id 	= $equipment_cat_id;
-				$this->toid				= $data[toid];
-				$this->name				= $data[name];
+				$this->equipment_cat_id = $equipment_cat_id;
+				$this->toid				= $data['toid'];
+				$this->name				= $data['name'];
 			}
 			else
 			{
@@ -102,9 +102,9 @@ class EquipmentCat_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read['id']);
 			
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{
@@ -255,7 +255,7 @@ class EquipmentCat_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 						
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -288,7 +288,7 @@ class EquipmentCat_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 						
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -320,7 +320,7 @@ class EquipmentCat_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -352,7 +352,7 @@ class EquipmentCat_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[id]);
+			array_push($return_array,$data['id']);
 		}
 		
 		if (is_array($return_array))
@@ -379,7 +379,7 @@ class EquipmentCat_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[id]);
+			array_push($return_array,$data['id']);
 		}
 		
 		if (is_array($return_array))

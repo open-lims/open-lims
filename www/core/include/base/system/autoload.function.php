@@ -28,7 +28,7 @@
  */
 function __autoload($classname)
 {
-	if ($GLOBALS['autoload_prefix'])
+	if (isset($GLOBALS['autoload_prefix']))
 	{
 		$path_prefix = $GLOBALS['autoload_prefix'];
 	}

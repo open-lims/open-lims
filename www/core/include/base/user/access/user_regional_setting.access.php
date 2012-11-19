@@ -61,24 +61,24 @@ class UserRegionalSetting_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->user_id 						= $user_id;
 				
-				$this->language_id					= $data[language_id];
-				$this->timezone_id					= $data[timezone_id];
-				$this->date_display_format			= $data[date_display_format];
-				$this->date_enter_format			= $data[date_enter_format];
-				$this->country_id					= $data[country_id];
-				$this->system_of_units				= $data[system_of_units];
-				$this->system_of_paper_format		= $data[system_of_paper_format];
-				$this->currency_id					= $data[currency_id];
-				$this->currency_significant_digits 	= $data[currency_significant_digits];
-				$this->decimal_separator 			= $data[decimal_separator];
-				$this->thousand_separator 			= $data[thousand_separator];
-				$this->name_display_format 			= $data[name_display_format];
+				$this->language_id					= $data['language_id'];
+				$this->timezone_id					= $data['timezone_id'];
+				$this->date_display_format			= $data['date_display_format'];
+				$this->date_enter_format			= $data['date_enter_format'];
+				$this->country_id					= $data['country_id'];
+				$this->system_of_units				= $data['system_of_units'];
+				$this->system_of_paper_format		= $data['system_of_paper_format'];
+				$this->currency_id					= $data['currency_id'];
+				$this->currency_significant_digits 	= $data['currency_significant_digits'];
+				$this->decimal_separator 			= $data['decimal_separator'];
+				$this->thousand_separator 			= $data['thousand_separator'];
+				$this->name_display_format 			= $data['name_display_format'];
 				
-				if ($data[time_display_format] == "t")
+				if ($data['time_display_format'] == "t")
 				{
 					$this->time_display_format = true;
 				}
@@ -87,7 +87,7 @@ class UserRegionalSetting_Access
 					$this->time_display_format = false;
 				}
 				
-				if ($data[time_enter_format] == "t")
+				if ($data['time_enter_format'] == "t")
 				{
 					$this->time_enter_format = true;
 				}

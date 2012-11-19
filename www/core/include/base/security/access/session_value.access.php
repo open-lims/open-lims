@@ -52,13 +52,13 @@ class SessionValue_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[session_id])
+			if ($data['session_id'])
 			{
 				$this->id			= $id;
 			
-				$this->session_id 	= $data[session_id];
-				$this->address		= $data[address];
-				$this->value		= $data[value];
+				$this->session_id 	= $data['session_id'];
+				$this->address		= $data['address'];
+				$this->value		= $data['value'];
 			}
 			else
 			{
@@ -232,9 +232,9 @@ class SessionValue_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 				
-			if ($data[id])
+			if ($data['id'])
 			{
-				return $data[id];
+				return $data['id'];
 			}
 			else
 			{

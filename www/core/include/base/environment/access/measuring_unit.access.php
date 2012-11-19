@@ -55,17 +55,17 @@ class MeasuringUnit_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
-				$this->id			= $data[id];
+				$this->id			= $data['id'];
 				
-				$this->toid			= $data[toid];
-				$this->name			= $data[name];
-				$this->type			= $data[type];
-				$this->unit_symbol	= $data[unit_symbol];
-				$this->calculation	= $data[calculation];
+				$this->toid			= $data['toid'];
+				$this->name			= $data['name'];
+				$this->type			= $data['type'];
+				$this->unit_symbol	= $data['unit_symbol'];
+				$this->calculation	= $data['calculation'];
 				
-				if ($data[base] == 't')
+				if ($data['base'] == 't')
 				{
 					$this->base = true;
 				}
@@ -138,9 +138,9 @@ class MeasuringUnit_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read['id']);
 								
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{
@@ -472,7 +472,7 @@ class MeasuringUnit_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -502,10 +502,10 @@ class MeasuringUnit_Access
 		while ($data = $db->db_fetch_assoc($res))
 		{
 			$temp_array = array();
-			$temp_array[id] = $data[id];
-			$temp_array[name] = $data[name];
-			$temp_array[type] = $data[type];
-			$temp_array[unit_symbol] = $data[unit_symbol];
+			$temp_array['id'] = $data['id'];
+			$temp_array['name'] = $data['name'];
+			$temp_array['type'] = $data['type'];
+			$temp_array['unit_symbol'] = $data['unit_symbol'];
 			array_push($return_array,$temp_array);
 			unset($temp_array);
 		}

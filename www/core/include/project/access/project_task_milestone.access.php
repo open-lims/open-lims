@@ -47,10 +47,10 @@ class ProjectTaskMilestone_Access
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[task_id])
+			if ($data['task_id'])
 			{
 				$this->task_id		= $task_id;
-				$this->name			= $data[name];
+				$this->name			= $data['name'];
 			}
 			else
 			{

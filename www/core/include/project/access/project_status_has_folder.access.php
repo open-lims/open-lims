@@ -48,10 +48,10 @@ class ProjectStatusHasFolder_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[project_id])
+			if ($data['project_id'])
 			{
-				$this->project_id			= $data[project_id];
-				$this->project_status_id	= $data[project_status_id];
+				$this->project_id			= $data['project_id'];
+				$this->project_status_id	= $data['project_status_id'];
 				$this->folder_id			= $folder_id;
 			}
 			else
@@ -190,9 +190,9 @@ class ProjectStatusHasFolder_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[folder_id])
+			if ($data['folder_id'])
 			{
-				return $data[folder_id];
+				return $data['folder_id'];
 			}
 			else
 			{

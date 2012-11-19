@@ -51,12 +51,12 @@ class User_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->user_id 				= $user_id;
 				
-				$this->username				= $data[username];
-				$this->password				= $data[password];
+				$this->username				= $data['username'];
+				$this->password				= $data['password'];
 			}
 			else
 			{
@@ -108,9 +108,9 @@ class User_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read['id']);
 				
-				return $data_read[id];
+				return $data_read['id'];
 			}
 		}
 		else
@@ -253,9 +253,9 @@ class User_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
-				return $data[id];
+				return $data['id'];
 			}
 			else
 			{
@@ -281,7 +281,7 @@ class User_Access
 		$res = $db->db_query($sql);
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array, $data[id]);
+			array_push($return_array, $data['id']);
 		}
 		
 		if (is_array($return_array))
@@ -309,7 +309,7 @@ class User_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -335,9 +335,9 @@ class User_Access
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);
 		
-		if ($data[result])
+		if ($data['result'])
 		{
-			return $data[result];
+			return $data['result'];
 		}
 		else
 		{

@@ -47,10 +47,10 @@ class ProjectUserData_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[user_id])
+			if ($data['user_id'])
 			{
 				$this->user_id	= $user_id;
-				$this->quota	= $data[quota];
+				$this->quota	= $data['quota'];
 			}
 			else
 			{

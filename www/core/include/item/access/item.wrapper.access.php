@@ -54,14 +54,14 @@ class Item_Wrapper_Access
 	   			
    				for ($i=0;$i<=($item_select_sql_array_length-2);$i++)
    				{
-   					$name_select_sql 		.= "CONCAT(".$item_select_sql_array[$i][name].",";
-   					$datetime_select_sql 	.= "CONCAT(CAST(".$item_select_sql_array[$i][datetime]." AS TEXT),";
-   					$rank_select_sql 	.= "CONCAT(CAST(".$item_select_sql_array[$i][rank]." AS TEXT),";
+   					$name_select_sql 		.= "CONCAT(".$item_select_sql_array[$i]['name'].",";
+   					$datetime_select_sql 	.= "CONCAT(CAST(".$item_select_sql_array[$i]['datetime']." AS TEXT),";
+   					$rank_select_sql 	.= "CONCAT(CAST(".$item_select_sql_array[$i]['rank']." AS TEXT),";
    				}
    				
-   				$name_select_sql 		.= $item_select_sql_array[($item_select_sql_array_length-1)][name];
-   				$datetime_select_sql	.= "CAST(".$item_select_sql_array[($item_select_sql_array_length-1)][datetime]." AS TEXT)";
-   				$rank_select_sql	.= "CAST(".$item_select_sql_array[($item_select_sql_array_length-1)][rank]." AS TEXT)";
+   				$name_select_sql 		.= $item_select_sql_array[($item_select_sql_array_length-1)]['name'];
+   				$datetime_select_sql	.= "CAST(".$item_select_sql_array[($item_select_sql_array_length-1)]['datetime']." AS TEXT)";
+   				$rank_select_sql	.= "CAST(".$item_select_sql_array[($item_select_sql_array_length-1)]['rank']." AS TEXT)";
    				
    				for ($i=0;$i<=($item_select_sql_array_length-2);$i++)
    				{
@@ -74,21 +74,21 @@ class Item_Wrapper_Access
    				{
    					if ($type_select_sql == "")
    					{
-   						$type_select_sql .= $item_select_sql_array[$i][type_id];
+   						$type_select_sql .= $item_select_sql_array[$i]['type_id'];
    					}
    					else
    					{
-   						$type_select_sql .= ",".$item_select_sql_array[$i][type_id];
+   						$type_select_sql .= ",".$item_select_sql_array[$i]['type_id'];
    					}
    					
    				}
    			}
    			elseif (count($item_select_sql_array) == 1)
    			{
-   				$name_select_sql = $item_select_sql_array[0][name];
-   				$type_select_sql = $item_select_sql_array[0][type_id];
-   				$datetime_select_sql = $item_select_sql_array[0][datetime];
-   				$rank_select_sql = $item_select_sql_array[0][rank];
+   				$name_select_sql = $item_select_sql_array[0]['name'];
+   				$type_select_sql = $item_select_sql_array[0]['type_id'];
+   				$datetime_select_sql = $item_select_sql_array[0]['datetime'];
+   				$rank_select_sql = $item_select_sql_array[0]['rank'];
    			}
    		}
 
@@ -190,7 +190,7 @@ class Item_Wrapper_Access
    		$res = $db->db_query($sql);
    		$data = $db->db_fetch_assoc($res);
 	
-		return $data[result];
+		return $data['result'];
    	}
 }
 

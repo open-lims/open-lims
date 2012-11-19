@@ -129,7 +129,7 @@ class OrganisationUnit_Wrapper_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 	
-			return $data[result];
+			return $data['result'];
 		}
 		else
 		{
@@ -239,7 +239,7 @@ class OrganisationUnit_Wrapper_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 	
-			return $data[result];
+			return $data['result'];
 		}
 		else
 		{
@@ -349,7 +349,7 @@ class OrganisationUnit_Wrapper_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 	
-			return $data[result];
+			return $data['result'];
 		}
 		else
 		{
@@ -459,7 +459,7 @@ class OrganisationUnit_Wrapper_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 	
-			return $data[result];
+			return $data['result'];
 		}
 		else
 		{
@@ -564,7 +564,7 @@ class OrganisationUnit_Wrapper_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 	
-			return $data[result];
+			return $data['result'];
 		}
 		else
 		{
@@ -689,7 +689,7 @@ class OrganisationUnit_Wrapper_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 	
-			return $data[result];
+			return $data['result'];
 		}
 		else
 		{

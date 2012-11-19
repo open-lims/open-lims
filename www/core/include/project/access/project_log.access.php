@@ -55,17 +55,17 @@ class ProjectLog_Access
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->log_id 			= $log_id;
 				
-				$this->project_id		= $data[project_id];
-				$this->datetime			= $data[datetime];
-				$this->content			= $data[content];
-				$this->owner_id			= $data[owner_id];
-				$this->action_checksum	= $data[action_checksum];
+				$this->project_id		= $data['project_id'];
+				$this->datetime			= $data['datetime'];
+				$this->content			= $data['content'];
+				$this->owner_id			= $data['owner_id'];
+				$this->action_checksum	= $data['action_checksum'];
 			
-				if ($data[cancel] == "t")
+				if ($data['cancel'] == "t")
 				{
 					$this->cancel		= true;
 				}
@@ -74,7 +74,7 @@ class ProjectLog_Access
 					$this->cancel		= false;
 				}
 				
-				if ($data[important] == "t")
+				if ($data['important'] == "t")
 				{
 					$this->important	= true;
 				}
@@ -159,9 +159,9 @@ class ProjectLog_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read['id']);
 				
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{
@@ -526,7 +526,7 @@ class ProjectLog_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -561,7 +561,7 @@ class ProjectLog_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -593,7 +593,7 @@ class ProjectLog_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[id]);
+			array_push($return_array,$data['id']);
 		}
 		
 		if (is_array($return_array))

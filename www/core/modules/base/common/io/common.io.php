@@ -44,7 +44,7 @@ class Common_IO
 	{
 		self::$in_container = true;
 
-		$pixel = 750/100*$width;
+		$pixel = 750/100;
 		$main_pixel = $pixel - 6;
 		
 		return "<div class='ContentContainer ".$class."' id='".$id."'>" .

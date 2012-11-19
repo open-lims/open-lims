@@ -63,22 +63,22 @@ class ProjectTask_Access
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->task_id				= $task_id;
 				
-				$this->type_id				= $data[type_id];
-				$this->project_id			= $data[project_id];
-				$this->owner_id				= $data[owner_id];
-				$this->comment				= $data[comment];
-				$this->start_date			= $data[start_date];
-				$this->start_time			= $data[start_time];
-				$this->end_date				= $data[end_date];
-				$this->end_time				= $data[end_time];
-				$this->created_at			= $data[created_at];
-				$this->finished_at			= $data[finished_at];
+				$this->type_id				= $data['type_id'];
+				$this->project_id			= $data['project_id'];
+				$this->owner_id				= $data['owner_id'];
+				$this->comment				= $data['comment'];
+				$this->start_date			= $data['start_date'];
+				$this->start_time			= $data['start_time'];
+				$this->end_date				= $data['end_date'];
+				$this->end_time				= $data['end_time'];
+				$this->created_at			= $data['created_at'];
+				$this->finished_at			= $data['finished_at'];
 			
-				if ($data[whole_day] == "t")
+				if ($data['whole_day'] == "t")
 				{
 					$this->whole_day		= true;
 				}
@@ -87,7 +87,7 @@ class ProjectTask_Access
 					$this->whole_day		= false;
 				}
 				
-				if ($data[auto_connect] == "t")
+				if ($data['auto_connect'] == "t")
 				{
 					$this->auto_connect		= true;
 				}
@@ -96,7 +96,7 @@ class ProjectTask_Access
 					$this->auto_connect		= false;
 				}
 				
-				if ($data[finished] == "t")
+				if ($data['finished'] == "t")
 				{
 					$this->finished		= true;
 				}
@@ -105,7 +105,7 @@ class ProjectTask_Access
 					$this->finished		= false;
 				}
 
-				if ($data[over_time] == "t")
+				if ($data['over_time'] == "t")
 				{
 					$this->over_time	= true;
 				}
@@ -234,9 +234,9 @@ class ProjectTask_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read['id']);
 				
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{
@@ -979,7 +979,7 @@ class ProjectTask_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -1014,7 +1014,7 @@ class ProjectTask_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -1049,7 +1049,7 @@ class ProjectTask_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -1084,7 +1084,7 @@ class ProjectTask_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -1116,7 +1116,7 @@ class ProjectTask_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[id]);
+			array_push($return_array,$data['id']);
 		}
 		
 		if (is_array($return_array))

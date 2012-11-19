@@ -53,15 +53,15 @@ class Location_Access
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->location_id 		= $location_id;
-				$this->toid				= $data[toid];
-				$this->type_id			= $data[type_id];
-				$this->name				= $data[name];
-				$this->additional_name	= $data[additional_name];
+				$this->toid				= $data['toid'];
+				$this->type_id			= $data['type_id'];
+				$this->name				= $data['name'];
+				$this->additional_name	= $data['additional_name'];
 
-				if ($data[prefix] == 't')
+				if ($data['prefix'] == 't')
 				{
 					$this->prefix = true;
 				}
@@ -139,9 +139,9 @@ class Location_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read['id']);
 			
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{
@@ -434,7 +434,7 @@ class Location_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -463,7 +463,7 @@ class Location_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[id]);
+			array_push($return_array,$data['id']);
 		}
 		
 		if (is_array($return_array))
@@ -493,7 +493,7 @@ class Location_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -525,7 +525,7 @@ class Location_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[id]);
+			array_push($return_array,$data['id']);
 		}
 		
 		if (is_array($return_array))

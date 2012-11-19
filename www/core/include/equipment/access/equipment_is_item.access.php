@@ -47,10 +47,10 @@ class EquipmentIsItem_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[equipment_id])
+			if ($data['equipment_id'])
 			{
 				$this->equipment_id	= $equipment_id;
-				$this->item_id		= $data[item_id];
+				$this->item_id		= $data['item_id'];
 			}
 			else
 			{
@@ -170,9 +170,9 @@ class EquipmentIsItem_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[equipment_id])
+			if ($data['equipment_id'])
 			{
-				return $data[equipment_id];
+				return $data['equipment_id'];
 			}
 			else
 			{

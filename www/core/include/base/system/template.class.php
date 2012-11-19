@@ -721,7 +721,7 @@ class Template implements TemplateInterface
 		$var = str_replace("]]","",$var);
 		if (strpos($var,":") === false)
 		{
-			if ($this->var_array[trim(strtolower($var))])
+			if (isset($this->var_array[trim(strtolower($var))]))
 			{
 				if (is_array($this->var_array[trim(strtolower($var))]))
 				{
@@ -808,7 +808,10 @@ class Template implements TemplateInterface
 			$var_array = explode(":",$var,2);
 			if (strpos($var_array[1],",") === false)
 			{
-				return $this->var_array[trim(strtolower($var_array[0]))][trim(strtolower($var_array[1]))];
+				if (isset($this->var_array[trim(strtolower($var_array[0]))][trim(strtolower($var_array[1]))]))
+				{
+					return $this->var_array[trim(strtolower($var_array[0]))][trim(strtolower($var_array[1]))];
+				}
 			}
 			else
 			{

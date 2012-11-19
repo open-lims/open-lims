@@ -33,9 +33,9 @@ class ProjectNavigationIO
 	 */
 	public static function get_active() 
 	{
-		if (is_numeric($_GET[project_id]))
+		if (isset($_GET['project_id']) and is_numeric($_GET['project_id']))
 		{
-			if (Project::exist_project($_GET[project_id]))
+			if (Project::exist_project($_GET['project_id']))
 			{
 				return true;
 			}

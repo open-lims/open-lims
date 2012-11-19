@@ -40,7 +40,7 @@ class Security implements SecurityInterface
  	public static function ip_error_count()
  	{	
  		$ip = $_SERVER['REMOTE_ADDR'];
- 		$lead_time = date("Y-m-d H:i:s", (time()-(int)Registry::get_value(base_max_ip_lead_time)));
+ 		$lead_time = date("Y-m-d H:i:s", (time()-(int)Registry::get_value("base_max_ip_lead_time")));
  		
  		return SystemLog::count_ip_failed_logins_with_begin($ip, $lead_time);
  	}
@@ -82,7 +82,7 @@ class Security implements SecurityInterface
 			$module_get_array = SystemHandler::get_module_get_values();
 		}
 		
-		if (isset($classes[$classname])) {
+		if (isset($classname) and isset($classes[$classname])) {
 			require_once($classes[$classname]);
 		}
 		

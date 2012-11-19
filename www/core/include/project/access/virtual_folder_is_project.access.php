@@ -46,7 +46,7 @@ class VirtualFolderIsProject_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->virtual_folder_id	= $virtual_folder_id;			
 			}
@@ -143,7 +143,7 @@ class VirtualFolderIsProject_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;	
 			}

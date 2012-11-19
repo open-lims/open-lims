@@ -51,12 +51,12 @@ class FolderConcretion_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->id				= $item_id;
-				$this->type				= $data[type];
-				$this->handling_class	= $data[handling_class];
-				$this->include_id		= $data[include_id];
+				$this->type				= $data['type'];
+				$this->handling_class	= $data['handling_class'];
+				$this->include_id		= $data['include_id'];
 			}
 			else
 			{
@@ -96,9 +96,9 @@ class FolderConcretion_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 									
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read['id']);
 				
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{
@@ -288,7 +288,7 @@ class FolderConcretion_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			$return_array[$data[type]] = $data[handling_class];
+			$return_array[$data['type']] = $data['handling_class'];
 		}
 		
 		if (is_array($return_array))

@@ -61,21 +61,21 @@ class SystemLog_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
-				$this->log_id			= $data[id];
+				$this->log_id			= $data['id'];
 				
-				$this->type_id			= $data[type_id];
-				$this->user_id			= $data[user_id];
-				$this->datetime			= $data[datetime];
-				$this->ip				= $data[ip];
-				$this->content_int		= $data[content_int];
-				$this->content_string	= htmlentities($data[content_string]);
-				$this->content_errorno	= $data[content_errorno];
-				$this->file				= $data[file];
-				$this->line				= $data[line];
-				$this->link				= $data[link];
-				$this->stack_trace		= $data[stack_trace];
+				$this->type_id			= $data['type_id'];
+				$this->user_id			= $data['user_id'];
+				$this->datetime			= $data['datetime'];
+				$this->ip				= $data['ip'];
+				$this->content_int		= $data['content_int'];
+				$this->content_string	= htmlentities($data['content_string']);
+				$this->content_errorno	= $data['content_errorno'];
+				$this->file				= $data['file'];
+				$this->line				= $data['line'];
+				$this->link				= $data['link'];
+				$this->stack_trace		= $data['stack_trace'];
 			}
 			else
 			{
@@ -181,9 +181,9 @@ class SystemLog_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read['id']);
 								
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{
@@ -436,7 +436,7 @@ class SystemLog_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[id]);
+			array_push($return_array,$data['id']);
 		}
 		
 		if (is_array($return_array))
@@ -466,7 +466,7 @@ class SystemLog_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -501,7 +501,7 @@ class SystemLog_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -554,7 +554,7 @@ class SystemLog_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -578,7 +578,7 @@ class SystemLog_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -603,9 +603,9 @@ class SystemLog_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[result])
+			if ($data['result'])
 			{
-				return $data[result];
+				return $data['result'];
 			}
 			else
 			{
@@ -628,9 +628,9 @@ class SystemLog_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[result])
+			if ($data['result'])
 			{
-				return $data[result];
+				return $data['result'];
 			}
 			else
 			{
@@ -653,9 +653,9 @@ class SystemLog_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[result])
+			if ($data['result'])
 			{
-				return $data[result];
+				return $data['result'];
 			}
 			else
 			{
@@ -681,7 +681,7 @@ class SystemLog_Access
 			
 			while ($data = $db->db_fetch_assoc($res)) 
 			{
-				array_push($return_array, $data[user_id]);
+				array_push($return_array, $data['user_id']);
 			}
 			
 			if (is_array($return_array))

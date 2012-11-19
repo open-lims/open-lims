@@ -50,13 +50,13 @@ class Session_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[session_id])
+			if ($data['session_id'])
 			{
 				$this->session_id 	= $session_id;
 
-				$this->ip			= $data[ip];
-				$this->user_id		= $data[user_id];
-				$this->datetime		= $data[datetime];
+				$this->ip			= $data['ip'];
+				$this->user_id		= $data['user_id'];
+				$this->datetime		= $data['datetime'];
 
 			}
 			else
@@ -233,7 +233,7 @@ class Session_Access
 			$res = $db->db_query($sql);
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[session_id]);
+				array_push($return_array,$data['session_id']);
 			}
 			
 			if (is_array($return_array))
@@ -264,7 +264,7 @@ class Session_Access
 		$res = $db->db_query($sql);
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[session_id]);
+			array_push($return_array,$data['session_id']);
 		}
 		
 		if (is_array($return_array))
