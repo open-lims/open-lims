@@ -57,18 +57,18 @@ class LeftNavigationIO
 					
 					if (class_exists($value['class']))
 					{
-						$js_array[$counter][ajax_url] = $value['class']::get_ajax_url();
-						$js_array[$counter][id] = "LeftNavigationSymbol".$key;
+						$js_array[$counter]['ajax_url'] = $value['class']::get_ajax_url();
+						$js_array[$counter]['id'] = "LeftNavigationSymbol".$key;
 						
-						if ($js_array[$counter][id] == $active_id)
+						if ($js_array[$counter]['id'] == $active_id)
 						{
-							$active_js_array[ajax_url] = $js_array[$counter][ajax_url];
-							$active_js_array[id] = $js_array[$counter][id];
+							$active_js_array['ajax_url'] = $js_array[$counter]['ajax_url'];
+							$active_js_array['id'] = $js_array[$counter]['id'];
 						}
 						
-						$symbols_array[$counter][icon] = $value['class']::get_icon();
-						$symbols_array[$counter][active] = $value['class']::get_active();
-						$symbols_array[$counter][id] = "LeftNavigationSymbol".$key;
+						$symbols_array[$counter]['icon'] = $value['class']::get_icon();
+						$symbols_array[$counter]['active'] = $value['class']::get_active();
+						$symbols_array[$counter]['id'] = "LeftNavigationSymbol".$key;
 						$counter++;
 					}
 				}
@@ -80,8 +80,8 @@ class LeftNavigationIO
 		$template->set_var("symbols", $symbols_array);
 		$template->set_var("js", $js_array);
 		
-		$template->set_var("active_js_ajax_url", $active_js_array[ajax_url]);
-		$template->set_var("active_js_id", $active_js_array[id]);
+		$template->set_var("active_js_ajax_url", $active_js_array['ajax_url']);
+		$template->set_var("active_js_id", $active_js_array['id']);
 		
 		$template->output();
 	}

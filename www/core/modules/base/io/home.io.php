@@ -39,7 +39,7 @@ if (is_array($home_summery_left_array) and count($home_summery_left_array) >= 1)
 	foreach ($home_summery_left_array as $key => $value)
 	{
 		require_once($value['class_path']);
-		$content_array[$counter][content] = $value['class']::$value['method']();
+		$content_array[$counter]['content'] = $value['class']::$value['method']();
 		$counter++;
 	}
 	
@@ -56,7 +56,7 @@ if (is_array($home_summery_right_array) and count($home_summery_right_array) >= 
 	foreach ($home_summery_right_array as $key => $value)
 	{
 		require_once($value['class_path']);
-		$content_array[$counter][content] = $value['class']::$value['method']();
+		$content_array[$counter]['content'] = $value['class']::$value['method']();
 		$counter++;
 	}
 	
@@ -75,11 +75,11 @@ if (is_array($module_link_array) and count($module_link_array) >= 1)
 	
 	foreach ($module_link_array as $key => $value)
 	{
-		$button_template = new HTMLTemplate($value[file]);
+		$button_template = new HTMLTemplate($value['file']);
 	
 		$button_paramquery = array();
-		$button_paramquery[username] = $_GET[username];
-		$button_paramquery[session_id] = $_GET[session_id];
+		$button_paramquery['username'] = $_GET['username'];
+		$button_paramquery['session_id'] = $_GET['session_id'];
 		
 		if (is_array($value['array']) and count($value['array']) >= 1)
 		{
@@ -92,7 +92,7 @@ if (is_array($module_link_array) and count($module_link_array) >= 1)
 		$button_params = http_build_query($button_paramquery,'','&#38;');
 		$button_template->set_var("params", $button_params);
 		
-		$content_array[$counter][content] = $button_template->get_string();
+		$content_array[$counter]['content'] = $button_template->get_string();
 		$counter++;
 	}
 	
@@ -102,21 +102,17 @@ if (is_array($module_link_array) and count($module_link_array) >= 1)
 
 	
 $paramquery = $_GET;
-$paramquery[nav] = "help";
-unset($paramquery[runit]);
-unset($paramquery[nextpage]);
-unset($paramquery[sure]);
-unset($paramquery[id]);
-unset($paramquery[aspect]);
-unset($paramquery[sortvalue]);
-unset($paramquery[sortby]);
-unset($paramquery[page]);
-unset($paramquery[pageref]);
-unset($paramquery[folderid]);
-unset($paramquery[objectid]);
-unset($paramquery[action]);
-unset($paramquery[projectid]);
-unset($paramquery[run]);
+$paramquery['nav'] = "help";
+unset($paramquery['nextpage']);
+unset($paramquery['sure']);
+unset($paramquery['id']);
+unset($paramquery['aspect']);
+unset($paramquery['sortvalue']);
+unset($paramquery['sortby']);
+unset($paramquery['page']);
+unset($paramquery['pageref']);
+unset($paramquery['action']);
+unset($paramquery['run']);
 $params = http_build_query($paramquery,'','&#38;');
 	
 $template->set_var("GET_HELP","index.php?".$params);

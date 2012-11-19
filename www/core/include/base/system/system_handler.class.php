@@ -195,7 +195,7 @@ class SystemHandler implements SystemHandlerInterface
 					$class_path_file = $config_folder."/class_path.php";
 					if (is_file($class_path_file))
 					{
-						if ($GLOBALS['autoload_prefix'])
+						if (isset($GLOBALS['autoload_prefix']))
 						{
 							$path_prefix = $GLOBALS['autoload_prefix'];
 						}
@@ -276,7 +276,7 @@ class SystemHandler implements SystemHandlerInterface
 						{
 							$found_include_array[$register_key] = str_replace(constant("INCLUDE_DIR")."/","",$value);
 							
-							if ($db_table_name_file)
+							if (isset($db_table_name_file))
 							{
 								$db_table_name_checksum = BaseIncludeFile_Access::get_checksum_by_include_id_and_name($register_key, "db_table_name.php");
 								if ($db_table_name_checksum != md5_file($db_table_name_file))
@@ -298,7 +298,7 @@ class SystemHandler implements SystemHandlerInterface
 								}
 							}
 														
-							if ($class_event_listener_file)
+							if (isset($class_event_listener_file))
 							{
 								$class_event_listener_checksum = BaseIncludeFile_Access::get_checksum_by_include_id_and_name($register_key, "class_event_listener.php");
 								if ($class_event_listener_checksum != md5_file($class_event_listener_file))
@@ -340,7 +340,7 @@ class SystemHandler implements SystemHandlerInterface
 								}
 							}
 							
-							if ($class_path_file)
+							if (isset($class_path_file))
 							{
 								$class_path_checksum = BaseIncludeFile_Access::get_checksum_by_include_id_and_name($register_key, "class_path.php");
 								if ($class_path_checksum != md5_file($class_path_file))
@@ -385,7 +385,7 @@ class SystemHandler implements SystemHandlerInterface
 								}
 							}
 	
-							if ($db_table_name_file)
+							if (isset($db_table_name_file))
 							{
 								$base_include_file = new BaseIncludeFile_Access(null);
 								if ($base_include_file->create($base_include_id, "db_table_name.php", md5_file($db_table_name_file)) == null)
@@ -394,7 +394,7 @@ class SystemHandler implements SystemHandlerInterface
 								}
 							}
 							
-							if ($class_event_listener_file)
+							if (isset($class_event_listener_file))
 							{
 								require($class_event_listener_file);
 								
@@ -418,7 +418,7 @@ class SystemHandler implements SystemHandlerInterface
 								}
 							}
 	
-							if ($class_path_file)
+							if (isset($class_path_file))
 							{
 								$base_include_file = new BaseIncludeFile_Access(null);
 								if ($base_include_file->create($base_include_id, "class_path.php", md5_file($class_path_file)) == null)
@@ -443,7 +443,7 @@ class SystemHandler implements SystemHandlerInterface
 			{
 				foreach($registered_include_array as $key => $value)
 				{
-					if (is_array($include_requirements_array[$value]) and count($include_requirements_array[$value]) >= 1)
+					if (isset($include_requirements_array[$value]) and is_array($include_requirements_array[$value]) and count($include_requirements_array[$value]) >= 1)
 					{
 						foreach ($include_requirements_array[$value] as $sub_key => $sub_value)
 						{
@@ -653,7 +653,7 @@ class SystemHandler implements SystemHandlerInterface
 								}
 							}
 							
-							if ($module_dialog_file)
+							if (isset($module_dialog_file))
 							{
 								$module_dialog_checksum = BaseModuleFile_Access::get_checksum_by_module_id_and_name($register_key, "module_dialog.php");
 								if ($module_dialog_checksum != md5_file($module_dialog_file))
@@ -697,7 +697,7 @@ class SystemHandler implements SystemHandlerInterface
 								}
 							}
 							
-							if ($module_link_file)
+							if (isset($module_link_file))
 							{									
 								$module_link_checksum = BaseModuleFile_Access::get_checksum_by_module_id_and_name($register_key, "module_link.php");							
 								if ($module_link_checksum != md5_file($module_link_file))
@@ -777,7 +777,7 @@ class SystemHandler implements SystemHandlerInterface
 								}
 							}
 
-							if ($module_dialog_file)
+							if (isset($module_dialog_file))
 							{
 								require($module_dialog_file);
 								
@@ -803,7 +803,7 @@ class SystemHandler implements SystemHandlerInterface
 								unset($dialog);
 							}
 							
-							if ($module_link_file)
+							if (isset($module_link_file))
 							{
 								require($module_link_file);
 								
@@ -846,7 +846,7 @@ class SystemHandler implements SystemHandlerInterface
 			{
 				foreach($registered_module_array as $key => $value)
 				{
-					if (is_array($module_requirements_array[$value]) and count($module_requirements_array[$value]) >= 1)
+					if (isset($module_requirements_array[$value]) and is_array($module_requirements_array[$value]) and count($module_requirements_array[$value]) >= 1)
 					{
 						foreach ($module_requirements_array[$value] as $sub_key => $sub_value)
 						{
@@ -991,7 +991,7 @@ class SystemHandler implements SystemHandlerInterface
 					$controller_array['path'] = $base_module->get_folder()."/".$tmp_array['controller_file'];
 					$controller_array['class'] = $tmp_array['controller_class'];
 					
-					if ($nav_array[1])
+					if (isset($nav_array[1]))
 					{
 						$controller_array['alias'] = $nav_array[1];
 					}

@@ -57,7 +57,7 @@ class XmlCacheElement_Access
 			$res_read = $db->db_query($sql_read);
 			$data_read = $db->db_fetch_assoc($res_read);
 			
-			return $data_read[id];
+			return $data_read['id'];
 		}
 		else
 		{
@@ -111,10 +111,10 @@ class XmlCacheElement_Access
 			while ($data = $db->db_fetch_assoc($res))
 			{
 				$tmp_array = array();
-				$tmp_array[0] = unserialize($data[field_0]);
-				$tmp_array[1] = unserialize($data[field_1]);
-				$tmp_array[2] = unserialize($data[field_2]);
-				$tmp_array[3] = unserialize($data[field_3]);
+				$tmp_array[0] = unserialize($data['field_0']);
+				$tmp_array[1] = unserialize($data['field_1']);
+				$tmp_array[2] = unserialize($data['field_2']);
+				$tmp_array[3] = unserialize($data['field_3']);
 				array_push($result_array, $tmp_array);
 			}
 			

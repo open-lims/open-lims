@@ -55,13 +55,13 @@ class UserAdminSetting_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->user_id 				= $user_id;
 				
-				$this->last_password_change	= $data[last_password_change];
+				$this->last_password_change	= $data['last_password_change'];
 				
-				if ($data[can_change_password] == "t")
+				if ($data['can_change_password'] == "t")
 				{
 					$this->can_change_password = true;
 				}
@@ -70,7 +70,7 @@ class UserAdminSetting_Access
 					$this->can_change_password = false;
 				}
 				
-				if ($data[must_change_password] == "t")
+				if ($data['must_change_password'] == "t")
 				{
 					$this->must_change_password = true;
 				}
@@ -79,7 +79,7 @@ class UserAdminSetting_Access
 					$this->must_change_password = false;
 				}
 				
-				if ($data[user_locked] == "t")
+				if ($data['user_locked'] == "t")
 				{
 					$this->user_locked = true;
 				}
@@ -88,7 +88,7 @@ class UserAdminSetting_Access
 					$this->user_locked = false;
 				}
 				
-				if ($data[user_inactive] == "t")
+				if ($data['user_inactive'] == "t")
 				{
 					$this->user_inactive = true;
 				}
@@ -97,7 +97,7 @@ class UserAdminSetting_Access
 					$this->user_inactive = false;
 				}
 				
-				if ($data[secure_password] == "t")
+				if ($data['secure_password'] == "t")
 				{
 					$this->secure_password = true;
 				}
@@ -106,7 +106,7 @@ class UserAdminSetting_Access
 					$this->secure_password = false;
 				}
 				
-				if ($data[block_write] == "t")
+				if ($data['block_write'] == "t")
 				{
 					$this->block_write = true;
 				}
@@ -115,7 +115,7 @@ class UserAdminSetting_Access
 					$this->block_write = false;
 				}
 				
-				if ($data[create_folder] == "t")
+				if ($data['create_folder'] == "t")
 				{
 					$this->create_folder = true;
 				}
@@ -655,9 +655,9 @@ class UserAdminSetting_Access
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);
 		
-		if ($data[result])
+		if ($data['result'])
 		{
-			return $data[result];
+			return $data['result'];
 		}
 		else
 		{
@@ -676,9 +676,9 @@ class UserAdminSetting_Access
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);
 		
-		if ($data[result])
+		if ($data['result'])
 		{
-			return $data[result];
+			return $data['result'];
 		}
 		else
 		{

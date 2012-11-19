@@ -47,8 +47,8 @@ class DataEntityHasDataEntity_Access
 			
 			if ($data[data_entity_pid])
 			{
-				$this->data_entity_pid	= $data[data_entity_pid];
-				$this->data_entity_cid	= $data[data_entity_cid];
+				$this->data_entity_pid	= $data['data_entity_pid'];
+				$this->data_entity_cid	= $data['data_entity_cid'];
 				
 				if ($data['link'] == 't')
 				{
@@ -219,7 +219,7 @@ class DataEntityHasDataEntity_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[data_entity_cid]);
+				array_push($return_array,$data['data_entity_cid']);
 			}
 			
 			if (is_array($return_array))
@@ -254,7 +254,7 @@ class DataEntityHasDataEntity_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[data_entity_pid]);
+				array_push($return_array,$data['data_entity_pid']);
 			}
 			
 			if (is_array($return_array))

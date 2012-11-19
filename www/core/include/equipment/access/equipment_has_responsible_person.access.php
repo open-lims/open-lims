@@ -49,7 +49,7 @@ class EquipmentHasResponsiblePerson_Access
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[equipment_id])
+			if ($data['equipment_id'])
 			{
 				$this->equipment_id = $equipment_id;
 				$this->user_id		= $user_id;
@@ -152,7 +152,7 @@ class EquipmentHasResponsiblePerson_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[user_id]);
+				array_push($return_array,$data['user_id']);
 			}
 			
 			if (is_array($return_array))

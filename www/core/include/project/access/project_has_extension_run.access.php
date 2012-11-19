@@ -51,12 +51,12 @@ class ProjectHasExtensionRun_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[primary_key])
+			if ($data['primary_key'])
 			{
 				$this->primary_key	= $primary_key;
-				$this->project_id	= $data[project_id];
-				$this->extension_id	= $data[extension_id];
-				$this->run			= $data[run];
+				$this->project_id	= $data['project_id'];
+				$this->extension_id	= $data['extension_id'];
+				$this->run			= $data['run'];
 			}
 			else
 			{
@@ -98,9 +98,9 @@ class ProjectHasExtensionRun_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[primary_key]);
+				$this->__construct($data_read['primary_key']);
 				
-				return $data_read[primary_key];
+				return $data_read['primary_key'];
 			}
 			else
 			{
@@ -295,7 +295,7 @@ class ProjectHasExtensionRun_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[run]);
+				array_push($return_array,$data['run']);
 			}
 			
 			if (is_array($return_array))

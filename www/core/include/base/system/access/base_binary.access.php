@@ -50,7 +50,7 @@ class BaseBinary_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->id 		= $id;
 				$this->path		= $data['path'];
@@ -95,9 +95,9 @@ class BaseBinary_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 							
-				$this->__construct($data_read[id]);		
+				$this->__construct($data_read['id']);		
 								
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{

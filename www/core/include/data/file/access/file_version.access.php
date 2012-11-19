@@ -61,23 +61,23 @@ class FileVersion_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->file_version_id		= $file_version_id;
 				
-				$this->toid					= $data[toid];
-				$this->name					= $data[name];
-				$this->version				= $data[version];
-				$this->size					= $data[size];
-				$this->checksum				= $data[checksum];
-				$this->datetime				= $data[datetime];
-				$this->comment				= $data[comment];
-				$this->previous_version_id	= $data[previous_version_id];
-				$this->internal_revision	= $data[internal_revision];
-				$this->file_extension		= $data[file_extension];
-				$this->owner_id				= $data[owner_id];
+				$this->toid					= $data['toid'];
+				$this->name					= $data['name'];
+				$this->version				= $data['version'];
+				$this->size					= $data['size'];
+				$this->checksum				= $data['checksum'];
+				$this->datetime				= $data['datetime'];
+				$this->comment				= $data['comment'];
+				$this->previous_version_id	= $data['previous_version_id'];
+				$this->internal_revision	= $data['internal_revision'];
+				$this->file_extension		= $data['file_extension'];
+				$this->owner_id				= $data['owner_id'];
 				
-				if ($data[current] == 't')
+				if ($data['current'] == 't')
 				{
 					$this->current			= true;
 				}
@@ -183,9 +183,9 @@ class FileVersion_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 									
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read['id']);
 				
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{
@@ -796,7 +796,7 @@ class FileVersion_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -827,7 +827,7 @@ class FileVersion_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -859,7 +859,7 @@ class FileVersion_Access
 		
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[result]);	
+				array_push($return_array,$data['result']);	
 			}
 			
 			if (is_array($return_array))
@@ -894,7 +894,7 @@ class FileVersion_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);	
+				array_push($return_array,$data['id']);	
 			}
 			
 			if (is_array($return_array))
@@ -928,9 +928,9 @@ class FileVersion_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[numberofresults])
+			if ($data['numberofresults'])
 			{
-				return $data[numberofresults];
+				return $data['numberofresults'];
 			}
 			else
 			{
@@ -958,9 +958,9 @@ class FileVersion_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 							
-			if ($data[id])
+			if ($data['id'])
 			{
-				return $data[id];
+				return $data['id'];
 			}
 			else
 			{
@@ -988,9 +988,9 @@ class FileVersion_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 							
-			if ($data[id])
+			if ($data['id'])
 			{
-				return $data[id];
+				return $data['id'];
 			}
 			else
 			{
@@ -1028,9 +1028,9 @@ class FileVersion_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 							
-			if ($data[id])
+			if ($data['id'])
 			{
-				return $data[id];
+				return $data['id'];
 			}
 			else
 			{
@@ -1060,9 +1060,9 @@ class FileVersion_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 							
-			if ($data[id])
+			if ($data['id'])
 			{
-				return $data[id];
+				return $data['id'];
 			}
 			else
 			{
@@ -1091,9 +1091,9 @@ class FileVersion_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 							
-			if ($data[id])
+			if ($data['id'])
 			{
-				return $data[id];
+				return $data['id'];
 			}
 			else
 			{
@@ -1121,9 +1121,9 @@ class FileVersion_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 							
-			if ($data[id])
+			if ($data['id'])
 			{
-				return $data[id];
+				return $data['id'];
 			}
 			else
 			{
@@ -1152,9 +1152,9 @@ class FileVersion_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[file_extension])
+			if ($data['file_extension'])
 			{
-				return $data[file_extension];
+				return $data['file_extension'];
 			}
 			else
 			{

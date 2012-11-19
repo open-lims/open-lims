@@ -74,7 +74,7 @@ class Main
 					
 			require_once("include/base/system/error_handler.php");
 			
-			set_error_handler('error_handler');
+			// set_error_handler('error_handler');
 			
 			require_once("include/base/system/events/event.class.php");
 			require_once("include/base/system/events/delete_event.class.php");
@@ -170,11 +170,11 @@ class Main
 		
 		if (!isset($GLOBALS['fatal_error']))
 		{
-			if ($_GET[session_id])
+			if ($_GET['session_id'])
 			{
 				try 
 				{
-					$session = new Session($_GET[session_id]);
+					$session = new Session($_GET['session_id']);
 					$user = new User($session->get_user_id());
 					$regional = new Regional();
 				}

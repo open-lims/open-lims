@@ -54,15 +54,15 @@ class FileImageCache_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->id				= $id;
 				
-				$this->file_version_id	= $data[file_version_id];
-				$this->width			= $data[width];
-				$this->height			= $data[height];
-				$this->size				= $data[height];
-				$this->last_access		= $data[last_access];
+				$this->file_version_id	= $data['file_version_id'];
+				$this->width			= $data['width'];
+				$this->height			= $data['height'];
+				$this->size				= $data['height'];
+				$this->last_access		= $data['last_access'];
 			}
 			else
 			{
@@ -111,9 +111,9 @@ class FileImageCache_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 									
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read['id']);
 				
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{

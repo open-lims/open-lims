@@ -56,17 +56,17 @@ class ProjectHasItem_Access
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[primary_key])
+			if ($data['primary_key'])
 			{
 				$this->primary_key 			= $primary_key;
 				
-				$this->project_id			= $data[project_id];
-				$this->item_id				= $data[item_id];
-				$this->gid					= $data[gid];
-				$this->project_status_id	= $data[project_status_id];
-				$this->parent_item_id		= $data[parent_item_id];
+				$this->project_id			= $data['project_id'];
+				$this->item_id				= $data['item_id'];
+				$this->gid					= $data['gid'];
+				$this->project_status_id	= $data['project_status_id'];
+				$this->parent_item_id		= $data['parent_item_id'];
 				
-				if ($data[active] == 't')
+				if ($data['active'] == 't')
 				{
 					$this->active = true;
 				}
@@ -75,7 +75,7 @@ class ProjectHasItem_Access
 					$this->active = false;
 				}
 				
-				if ($data[required] == 't')
+				if ($data['required'] == 't')
 				{
 					$this->required = true;
 				}
@@ -135,9 +135,9 @@ class ProjectHasItem_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[primary_key]);
+				$this->__construct($data_read['primary_key']);
 				
-				return $data_read[primary_key];
+				return $data_read['primary_key'];
 			}
 			else
 			{
@@ -526,9 +526,9 @@ class ProjectHasItem_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 				
-			if ($data[primary_key])
+			if ($data['primary_key'])
 			{
-				return $data[primary_key];
+				return $data['primary_key'];
 			}
 			else
 			{
@@ -560,9 +560,9 @@ class ProjectHasItem_Access
 			while ($data = $db->db_fetch_assoc($res))
 			{
 				$tmp_array = array();
-				$tmp_array['id'] = $data[project_id];
-				$tmp_array['status_id'] = $data[project_status_id];
-				$tmp_array['pos_id'] = $data[gid];
+				$tmp_array['id'] = $data['project_id'];
+				$tmp_array['status_id'] = $data['project_status_id'];
+				$tmp_array['pos_id'] = $data['gid'];
 				array_push($return_array,$tmp_array);
 			}
 			
@@ -600,7 +600,7 @@ class ProjectHasItem_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[primary_key]);
+				array_push($return_array,$data['primary_key']);
 			}
 			
 			if (is_array($return_array))
@@ -636,7 +636,7 @@ class ProjectHasItem_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[primary_key]);
+				array_push($return_array,$data['primary_key']);
 			}
 			
 			if (is_array($return_array))
@@ -672,7 +672,7 @@ class ProjectHasItem_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[primary_key]);
+				array_push($return_array,$data['primary_key']);
 			}
 			
 			if (is_array($return_array))
@@ -718,7 +718,7 @@ class ProjectHasItem_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[item_id]);
+				array_push($return_array,$data['item_id']);
 			}
 			
 			if (is_array($return_array))
@@ -764,7 +764,7 @@ class ProjectHasItem_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,array("pos_id" => $data[gid], "item_id" => $data[item_id]));
+				array_push($return_array,array("pos_id" => $data['gid'], "item_id" => $data['item_id']));
 			}
 			
 			if (is_array($return_array))
@@ -809,7 +809,7 @@ class ProjectHasItem_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[item_id]);
+				array_push($return_array,$data['item_id']);
 			}
 			
 			if (is_array($return_array))

@@ -52,13 +52,13 @@ class Currency_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
-				$this->id			= $data[id];
+				$this->id			= $data['id'];
 				
-				$this->name			= $data[name];
-				$this->symbol		= $data[symbol];
-				$this->iso_4217		= $data[iso_4217];
+				$this->name			= $data['name'];
+				$this->symbol		= $data['symbol'];
+				$this->iso_4217		= $data['iso_4217'];
 			}
 			else
 			{
@@ -101,9 +101,9 @@ class Currency_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read['id']);
 								
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{
@@ -294,7 +294,7 @@ class Currency_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -324,10 +324,10 @@ class Currency_Access
 		while ($data = $db->db_fetch_assoc($res))
 		{
 			$temp_array = array();
-			$temp_array[id] = $data[id];
-			$temp_array[name] = $data[name];
-			$temp_array[symbol] = $data[symbol];
-			$temp_array[iso_4217] = $data[iso_4217];
+			$temp_array['id'] = $data['id'];
+			$temp_array['name'] = $data['name'];
+			$temp_array['symbol'] = $data['symbol'];
+			$temp_array['iso_4217'] = $data['iso_4217'];
 			array_push($return_array,$temp_array);
 			unset($temp_array);
 		}

@@ -51,12 +51,12 @@ class ProjectLogHasItem_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[primary_key])
+			if ($data['primary_key'])
 			{
 				$this->primary_key		= $primary_key;
 
-				$this->project_log_id	= $data[project_log_id];
-				$this->item_id			= $data[item_id];
+				$this->project_log_id	= $data['project_log_id'];
+				$this->item_id			= $data['item_id'];
 			}
 			else
 			{
@@ -98,9 +98,9 @@ class ProjectLogHasItem_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 									
-				$this->__construct($data_read[primary_key]);
+				$this->__construct($data_read['primary_key']);
 				
-				return $data_read[primary_key];
+				return $data_read['primary_key'];
 			}
 			else
 			{
@@ -249,7 +249,7 @@ class ProjectLogHasItem_Access
 			$res = $db->db_query($sql);
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array, $data[primary_key]);
+				array_push($return_array, $data['primary_key']);
 			}
 			
 			if (is_array($return_array))

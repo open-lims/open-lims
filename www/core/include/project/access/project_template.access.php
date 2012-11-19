@@ -51,15 +51,15 @@ class ProjectTemplate_Access
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->id				= $id;
 				
-				$this->name				= $data[name];
-				$this->cat_id			= $data[cat_id];
-				$this->template_id		= $data[template_id];
+				$this->name				= $data['name'];
+				$this->cat_id			= $data['cat_id'];
+				$this->template_id		= $data['template_id'];
 				
-				if ($data[parent_template] == "t")
+				if ($data['parent_template'] == "t")
 				{
 					$this->parent_template	= true;
 				}
@@ -364,7 +364,7 @@ class ProjectTemplate_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -393,7 +393,7 @@ class ProjectTemplate_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[id]);
+			array_push($return_array,$data['id']);
 		}
 		
 		if (is_array($return_array))
@@ -423,7 +423,7 @@ class ProjectTemplate_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))

@@ -54,16 +54,16 @@ class Folder_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->folder_id 			= $folder_id;
 				
-				$this->data_entity_id		= $data[data_entity_id];
-				$this->name					= $data[name];
-				$this->path					= $data[path];
-				$this->flag					= $data[flag];
+				$this->data_entity_id		= $data['data_entity_id'];
+				$this->name					= $data['name'];
+				$this->path					= $data['path'];
+				$this->flag					= $data['flag'];
 									
-				if ($data[deleted] == "t")
+				if ($data['deleted'] == "t")
 				{
 					$this->deleted			= true;
 				}
@@ -72,7 +72,7 @@ class Folder_Access
 					$this->deleted			= false;
 				}
 				
-				if ($data[blob] == "t")
+				if ($data['blob'] == "t")
 				{
 					$this->blob				= true;
 				}
@@ -131,9 +131,9 @@ class Folder_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read['id']);
 				
-				return $data_read[id];
+				return $data_read['id'];
 			}
 		}
 		else
@@ -485,7 +485,7 @@ class Folder_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -515,9 +515,9 @@ class Folder_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
-				return $data[id];
+				return $data['id'];
 			}
 			else
 			{
@@ -545,9 +545,9 @@ class Folder_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
-				return $data[id];
+				return $data['id'];
 			}
 			else
 			{
@@ -575,9 +575,9 @@ class Folder_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[data_entity_id])
+			if ($data['data_entity_id'])
 			{
-				return $data[data_entity_id];
+				return $data['data_entity_id'];
 			}
 			else
 			{
@@ -605,9 +605,9 @@ class Folder_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[name])
+			if ($data['name'])
 			{
-				return $data[name];
+				return $data['name'];
 			}
 			else
 			{

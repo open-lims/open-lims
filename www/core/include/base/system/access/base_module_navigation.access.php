@@ -53,15 +53,15 @@ class BaseModuleNavigation_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->id 			= $id;
-				$this->display_name	= $data[display_name];
-				$this->position		= $data[position];
-				$this->colour		= $data[colour];
-				$this->module_id	= $data[module_id];
+				$this->display_name	= $data['display_name'];
+				$this->position		= $data['position'];
+				$this->colour		= $data['colour'];
+				$this->module_id	= $data['module_id'];
 				
-				if ($data[hidden] == 't')
+				if ($data['hidden'] == 't')
 				{
 					$this->hidden	= true;
 				}
@@ -122,9 +122,9 @@ class BaseModuleNavigation_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 							
-				$this->__construct($data_read[id]);		
+				$this->__construct($data_read['id']);		
 								
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{
@@ -555,9 +555,9 @@ class BaseModuleNavigation_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
-				return $data[id];
+				return $data['id'];
 			}
 			else
 			{
@@ -582,9 +582,9 @@ class BaseModuleNavigation_Access
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);
 		
-		if ($data[position])
+		if ($data['position'])
 		{
-			return $data[position];
+			return $data['position'];
 		}
 		else
 		{
@@ -605,11 +605,11 @@ class BaseModuleNavigation_Access
 			$res = $db->db_query($sql);
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				$result_array[$data[language_address]][id]					= $data[id];
-				$result_array[$data[language_address]][colour]				= $data[colour];
-				$result_array[$data[language_address]][controller_class]	= $data[controller_class];
-				$result_array[$data[language_address]][controller_file]		= $data[controller_file];
-				$result_array[$data[language_address]][alias]				= $data[alias];
+				$result_array[$data['language_address']]['id']					= $data['id'];
+				$result_array[$data['language_address']]['colour']				= $data['colour'];
+				$result_array[$data['language_address']]['controller_class']	= $data['controller_class'];
+				$result_array[$data['language_address']]['controller_file']		= $data['controller_file'];
+				$result_array[$data['language_address']]['alias']				= $data['alias'];
 			}
 			
 			return $result_array;
@@ -633,10 +633,10 @@ class BaseModuleNavigation_Access
 		$res = $db->db_query($sql);
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			$result_array[$data[id]][language_address]	= $data[language_address];
-			$result_array[$data[id]][alias]				= $data[alias];
-			$result_array[$data[id]][colour]			= $data[colour];
-			$result_array[$data[id]][module_id]			= $data[module_id];
+			$result_array[$data['id']]['language_address']	= $data['language_address'];
+			$result_array[$data['id']]['alias']				= $data['alias'];
+			$result_array[$data['id']]['colour']			= $data['colour'];
+			$result_array[$data['id']]['module_id']			= $data['module_id'];
 		}
 		
 		return $result_array;
@@ -661,9 +661,9 @@ class BaseModuleNavigation_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[controller_file] and $data[controller_class])
+			if ($data['controller_file'] and $data['controller_class'])
 			{
-				return array("controller_file" => $data[controller_file], "controller_class" => $data[controller_class]);
+				return array("controller_file" => $data['controller_file'], "controller_class" => $data['controller_class']);
 			}
 			else
 			{
@@ -690,9 +690,9 @@ class BaseModuleNavigation_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
-				return $data[id];
+				return $data['id'];
 			}
 			else
 			{
@@ -719,9 +719,9 @@ class BaseModuleNavigation_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
-				return $data[id];
+				return $data['id'];
 			}
 			else
 			{
@@ -747,7 +747,7 @@ class BaseModuleNavigation_Access
 		$res = $db->db_query($sql);
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($result_array, $data[id]);
+			array_push($result_array, $data['id']);
 		}
 		
 		return $result_array;
@@ -761,7 +761,7 @@ class BaseModuleNavigation_Access
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);
 		
-		return $data[result];
+		return $data['result'];
 	}
 	
 	/**
@@ -777,7 +777,7 @@ class BaseModuleNavigation_Access
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);
 		
-		if ($data[maximum] == self::count_entries())
+		if ($data['maximum'] == self::count_entries())
 		{
 			return true;
 		}

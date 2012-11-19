@@ -50,15 +50,15 @@ class ProjectTaskStatusProcess_Access
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[task_id])
+			if ($data['task_id'])
 			{
 				$this->task_id				= $task_id;
 				
-				$this->begin_status_id		= $data[begin_status_id];
-				$this->end_status_id		= $data[end_status_id];
-				$this->subtraction_points	= $data[subtraction_points];
+				$this->begin_status_id		= $data['begin_status_id'];
+				$this->end_status_id		= $data['end_status_id'];
+				$this->subtraction_points	= $data['subtraction_points'];
 				
-				if ($data[finalise] == "t")
+				if ($data['finalise'] == "t")
 				{
 					$this->finalise		= true;
 				}

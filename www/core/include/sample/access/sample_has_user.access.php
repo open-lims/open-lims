@@ -53,14 +53,14 @@ class SampleHasUser_Access
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[primary_key])
+			if ($data['primary_key'])
 			{
 				$this->primary_key 		= $primary_key;
 				
-				$this->sample_id		= $data[sample_id];
-				$this->user_id			= $data[user_id];
+				$this->sample_id		= $data['sample_id'];
+				$this->user_id			= $data['user_id'];
 
-				if ($data[read] == "t")
+				if ($data['read'] == "t")
 				{
 					$this->read		= true;
 				}
@@ -69,7 +69,7 @@ class SampleHasUser_Access
 					$this->read		= false;
 				}
 				
-				if ($data[write] == "t")
+				if ($data['write'] == "t")
 				{
 					$this->write	= true;
 				}
@@ -139,9 +139,9 @@ class SampleHasUser_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[primary_key]);
+				$this->__construct($data_read['primary_key']);
 				
-				return $data_read[primary_key];
+				return $data_read['primary_key'];
 			}
 			else
 			{
@@ -397,9 +397,9 @@ class SampleHasUser_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 
-			if ($data[primary_key])
+			if ($data['primary_key'])
 			{
-				return $data[primary_key];
+				return $data['primary_key'];
 			}
 			else
 			{
@@ -429,7 +429,7 @@ class SampleHasUser_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[primary_key]);
+				array_push($return_array,$data['primary_key']);
 			}
 			
 			if (is_array($return_array))
@@ -464,7 +464,7 @@ class SampleHasUser_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[user_id]);
+				array_push($return_array,$data['user_id']);
 			}
 			
 			if (is_array($return_array))
@@ -499,7 +499,7 @@ class SampleHasUser_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[primary_key]);
+				array_push($return_array,$data['primary_key']);
 			}
 			
 			if (is_array($return_array))
@@ -534,7 +534,7 @@ class SampleHasUser_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[sample_id]);
+				array_push($return_array,$data['sample_id']);
 			}
 			
 			if (is_array($return_array))
@@ -566,7 +566,7 @@ class SampleHasUser_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[primary_key]);
+			array_push($return_array,$data['primary_key']);
 		}
 		
 		if (is_array($return_array))

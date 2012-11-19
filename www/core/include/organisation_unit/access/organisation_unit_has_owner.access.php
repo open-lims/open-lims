@@ -50,12 +50,12 @@ class OrganisationUnitHasOwner_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[organisation_unit_id])
+			if ($data['organisation_unit_id'])
 			{
-				$this->organisation_unit_id	= $data[organisation_unit_id];
-				$this->owner_id				= $data[owner_id];
+				$this->organisation_unit_id	= $data['organisation_unit_id'];
+				$this->owner_id				= $data['owner_id'];
 				
-				if ($data[master_owner] == 't')
+				if ($data['master_owner'] == 't')
 				{
 					$this->master_owner = true;
 				}
@@ -300,9 +300,9 @@ class OrganisationUnitHasOwner_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 						
-			if ($data[owner_id])
+			if ($data['owner_id'])
 			{
-				return $data[owner_id];
+				return $data['owner_id'];
 			}
 			else
 			{
@@ -332,9 +332,9 @@ class OrganisationUnitHasOwner_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 						
-			if ($data[owner_id])
+			if ($data['owner_id'])
 			{
-				return $data[owner_id];
+				return $data['owner_id'];
 			}
 			else
 			{
@@ -363,9 +363,9 @@ class OrganisationUnitHasOwner_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[result])
+			if ($data['result'])
 			{
-				return $data[result];
+				return $data['result'];
 			}
 			else
 			{
@@ -394,9 +394,9 @@ class OrganisationUnitHasOwner_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[result])
+			if ($data['result'])
 			{
-				return $data[result];
+				return $data['result'];
 			}
 			else
 			{
@@ -427,7 +427,7 @@ class OrganisationUnitHasOwner_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[organisation_unit_id]);
+				array_push($return_array,$data['organisation_unit_id']);
 			}
 			
 			if (is_array($return_array))
@@ -471,7 +471,7 @@ class OrganisationUnitHasOwner_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[owner_id]);
+				array_push($return_array,$data['owner_id']);
 			}
 			
 			if (is_array($return_array))

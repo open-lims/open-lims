@@ -60,21 +60,21 @@ class Sample_Access
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->sample_id 		= $sample_id;
 				
-				$this->name				= $data[name];
-				$this->datetime			= $data[datetime];
-				$this->owner_id			= $data[owner_id];
-				$this->template_id		= $data[template_id];
-				$this->comment			= $data[comment];
-				$this->language_id		= $data[language_id];
-				$this->date_of_expiry	= $data[date_of_expiry];
-				$this->expiry_warning	= $data[expiry_warning];
-				$this->manufacturer_id	= $data[manufacturer_id];
+				$this->name				= $data['name'];
+				$this->datetime			= $data['datetime'];
+				$this->owner_id			= $data['owner_id'];
+				$this->template_id		= $data['template_id'];
+				$this->comment			= $data['comment'];
+				$this->language_id		= $data['language_id'];
+				$this->date_of_expiry	= $data['date_of_expiry'];
+				$this->expiry_warning	= $data['expiry_warning'];
+				$this->manufacturer_id	= $data['manufacturer_id'];
 				
-				if ($data[deleted] == "t")
+				if ($data['deleted'] == "t")
 				{
 					$this->deleted	= true;
 				}
@@ -83,7 +83,7 @@ class Sample_Access
 					$this->deleted	= false;
 				}
 				
-				if ($data[available] == "t")
+				if ($data['available'] == "t")
 				{
 					$this->available	= true;
 				}
@@ -186,9 +186,9 @@ class Sample_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read['id']);
 				
-				return $data_read[id];	
+				return $data_read['id'];	
 			}
 			else
 			{
@@ -791,7 +791,7 @@ class Sample_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -826,7 +826,7 @@ class Sample_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -858,7 +858,7 @@ class Sample_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[id]);
+			array_push($return_array,$data['id']);
 		}
 		
 		if (is_array($return_array))
@@ -886,7 +886,7 @@ class Sample_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}

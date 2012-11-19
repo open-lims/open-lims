@@ -54,15 +54,15 @@ class Language_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->language_id		= $language_id;
 			
-				$this->english_name 	= $data[english_name];
-				$this->language_name	= $data[language_name];
-				$this->tsvector_name	= $data[tsvector_name];
-				$this->iso_639			= $data[iso_639];
-				$this->iso_3166			= $data[iso_3166];
+				$this->english_name 	= $data['english_name'];
+				$this->language_name	= $data['language_name'];
+				$this->tsvector_name	= $data['tsvector_name'];
+				$this->iso_639			= $data['iso_639'];
+				$this->iso_3166			= $data['iso_3166'];
 			}
 			else
 			{
@@ -110,9 +110,9 @@ class Language_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read['id']);
 								
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{
@@ -391,7 +391,7 @@ class Language_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[id]);
+			array_push($return_array,$data['id']);
 		}
 		
 		if (is_array($return_array))

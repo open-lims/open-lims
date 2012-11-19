@@ -53,14 +53,14 @@ class ProjectStatus_Access
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->project_status_id	= $project_status_id;
 				
-				$this->name					= $data[name];
-				$this->comment				= $data[comment];
+				$this->name					= $data['name'];
+				$this->comment				= $data['comment'];
 				
-				if ($data[analysis] == "t")
+				if ($data['analysis'] == "t")
 				{
 					$this->analysis			= true;
 				}
@@ -69,7 +69,7 @@ class ProjectStatus_Access
 					$this->analysis			= false;
 				}
 				
-				if ($data[blocked] == "t")
+				if ($data['blocked'] == "t")
 				{
 					$this->blocked			= true;
 				}
@@ -129,9 +129,9 @@ class ProjectStatus_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 								
-				$this->__construct($data_read[id]);				
+				$this->__construct($data_read['id']);				
 								
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{
@@ -384,7 +384,7 @@ class ProjectStatus_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}

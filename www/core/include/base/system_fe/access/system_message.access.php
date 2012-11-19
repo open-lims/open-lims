@@ -52,13 +52,13 @@ class SystemMessage_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
-				$this->id			= $data[id];
+				$this->id			= $data['id'];
 				
-				$this->user_id		= $data[user_id];
-				$this->datetime		= $data[datetime];
-				$this->content		= $data[content];
+				$this->user_id		= $data['user_id'];
+				$this->datetime		= $data['datetime'];
+				$this->content		= $data['content'];
 			}
 			else
 			{
@@ -103,9 +103,9 @@ class SystemMessage_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read['id']);
 								
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{
@@ -294,7 +294,7 @@ class SystemMessage_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -320,7 +320,7 @@ class SystemMessage_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -349,7 +349,7 @@ class SystemMessage_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[id]);
+			array_push($return_array,$data['id']);
 		}
 		
 		if (is_array($return_array))

@@ -54,16 +54,16 @@ class BaseModuleLink_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->id 				= $id;
-				$this->module_id		= $data[module_id];
-				$this->link_type		= $data[link_type];
-				$this->link_array		= $data[link_array];
-				$this->link_file		= $data[link_file];
-				$this->weight			= $data[weight];
+				$this->module_id		= $data['module_id'];
+				$this->link_type		= $data['link_type'];
+				$this->link_array		= $data['link_array'];
+				$this->link_file		= $data['link_file'];
+				$this->weight			= $data['weight'];
 				
-				if ($data[disabled] == 't')
+				if ($data['disabled'] == 't')
 				{
 					$this->disabled = true;
 				}
@@ -135,9 +135,9 @@ class BaseModuleLink_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 							
-				$this->__construct($data_read[id]);		
+				$this->__construct($data_read['id']);		
 								
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{
@@ -472,7 +472,7 @@ class BaseModuleLink_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))

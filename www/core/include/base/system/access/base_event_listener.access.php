@@ -50,11 +50,11 @@ class BaseEventListener_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->id 			= $id;
-				$this->include_id	= $data[include_id];
-				$this->class_name	= $data[class_name];
+				$this->include_id	= $data['include_id'];
+				$this->class_name	= $data['class_name'];
 			}
 			else
 			{
@@ -95,9 +95,9 @@ class BaseEventListener_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 							
-				$this->__construct($data_read[id]);		
+				$this->__construct($data_read['id']);		
 								
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{
@@ -244,7 +244,7 @@ class BaseEventListener_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[id]);
+			array_push($return_array,$data['id']);
 		}
 		
 		if (is_array($return_array))
@@ -271,7 +271,7 @@ class BaseEventListener_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[class_name]);
+			array_push($return_array,$data['class_name']);
 		}
 		
 		if (is_array($return_array))

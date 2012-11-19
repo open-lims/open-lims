@@ -49,11 +49,11 @@ class DataUserData_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[user_id])
+			if ($data['user_id'])
 			{
 				$this->user_id	= $user_id;
-				$this->quota	= $data[quota];
-				$this->filesize	= $data[filesize];
+				$this->quota	= $data['quota'];
+				$this->filesize	= $data['filesize'];
 			}
 			else
 			{
@@ -64,7 +64,7 @@ class DataUserData_Access
 	
 	function __destruct()
 	{
-		if ($this->id)
+		if (isset($this->id))
 		{
 			unset($this->user_id);
 			unset($this->quota);
@@ -234,9 +234,9 @@ class DataUserData_Access
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);
 		
-		if ($data[size])
+		if ($data['size'])
 		{
-			return $data[size];
+			return $data['size'];
 		}
 		else
 		{

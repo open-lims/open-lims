@@ -44,25 +44,25 @@ class Navigation_IO
 			
 			foreach($module_navigation_array as $key => $value)
 			{
-				$module_name = SystemHandler::get_module_name_by_module_id($value[module_id]);
+				$module_name = SystemHandler::get_module_name_by_module_id($value['module_id']);
 				
-				if (($module_name == "base" and $value[alias] == "admin" and $user->is_admin()) 
+				if (($module_name == "base" and $value['alias'] == "admin" and $user->is_admin()) 
 					or $module_name != "base" 
-					or ($module_name == "base" and $value[alias] != "admin"))
+					or ($module_name == "base" and $value['alias'] != "admin"))
 				{
 				
-					$paramquery[username] = $_GET[username];
-					$paramquery[session_id] = $_GET[session_id];
+					$paramquery['username'] = $_GET['username'];
+					$paramquery['session_id'] = $_GET['session_id'];
 					
-					if ($value[alias])
+					if ($value['alias'])
 					{
-						$active_alias = $module_name.".".$value[alias];
-						$paramquery[nav] = $module_name.".".$value[alias];
+						$active_alias = $module_name.".".$value['alias'];
+						$paramquery['nav'] = $module_name.".".$value['alias'];
 					}
 					else
 					{
 						$active_alias = $module_name;
-						$paramquery[nav] = $module_name;
+						$paramquery['nav'] = $module_name;
 					}
 					
 					$params = http_build_query($paramquery,'','&#38;');
@@ -72,15 +72,15 @@ class Navigation_IO
 						$_GET['nav'] = "base";
 					}
 					
-					switch ($value[colour]):
+					switch ($value['colour']):
 					
 						case "blue":
-							if ($_GET[nav] == $active_alias)
+							if ($_GET['nav'] == $active_alias)
 							{
 								$background_color_class = "NavigationBackgroundBlue";
 								$template = new HTMLTemplate("base/navigation/main/tabs/blue_tab_active.html");
 								$current_module = $active_alias;
-								$current_color = $value[colour];
+								$current_color = $value['colour'];
 								$module_tab_active = true;
 							}
 							else
@@ -90,12 +90,12 @@ class Navigation_IO
 						break;
 						
 						case "green":
-							if ($_GET[nav] == $active_alias)
+							if ($_GET['nav'] == $active_alias)
 							{
 								$background_color_class = "NavigationBackgroundGreen";
 								$template = new HTMLTemplate("base/navigation/main/tabs/green_tab_active.html");
 								$current_module = $active_alias;
-								$current_color = $value[colour];
+								$current_color = $value['colour'];
 								$module_tab_active = true;
 							}
 							else
@@ -105,12 +105,12 @@ class Navigation_IO
 						break;
 						
 						case "orange";
-							if ($_GET[nav] == $active_alias)
+							if ($_GET['nav'] == $active_alias)
 							{
 								$background_color_class = "NavigationBackgroundOrange";
 								$template = new HTMLTemplate("base/navigation/main/tabs/orange_tab_active.html");
 								$current_module = $active_alias;
-								$current_color = $value[colour];
+								$current_color = $value['colour'];
 								$module_tab_active = true;
 							}
 							else
@@ -120,12 +120,12 @@ class Navigation_IO
 						break;
 						
 						default:
-							if ($_GET[nav] == $active_alias)
+							if ($_GET['nav'] == $active_alias)
 							{
 								$background_color_class = "NavigationBackgroundGrey";
 								$template = new HTMLTemplate("base/navigation/main/tabs/grey_tab_active.html");
 								$current_module = $active_alias;
-								$current_color = $value[colour];
+								$current_color = $value['colour'];
 								$module_tab_active = true;
 							}
 							else
@@ -139,7 +139,7 @@ class Navigation_IO
 					
 					
 					$template->set_var("params", $params);
-					$template->set_var("title", Language::get_message($value[language_address], "navigation"));
+					$template->set_var("title", Language::get_message($value['language_address'], "navigation"));
 					
 					$config_folder = "core/modules/".SystemHandler::get_module_folder_by_module_name($module_name)."/config";
 					if (is_dir($config_folder))
@@ -233,9 +233,9 @@ class Navigation_IO
 	
 	public static function left()
 	{
-		if ($_GET[nav] and $_GET[nav] != "base")
+		if ($_GET['nav'] and $_GET['nav'] != "base")
 		{
-			$module_controller_array = SystemHandler::get_module_controller($_GET[nav]);
+			$module_controller_array = SystemHandler::get_module_controller($_GET['nav']);
 								
 			$module_controller_path = "core/modules/".$module_controller_array['path'];
 			

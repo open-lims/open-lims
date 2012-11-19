@@ -47,9 +47,9 @@ class FolderIsGroupFolder_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[group_id])
+			if ($data['group_id'])
 			{
-				$this->group_id	= $data[group_id];
+				$this->group_id	= $data['group_id'];
 				$this->folder_id	= $folder_id;
 			}
 			else
@@ -170,9 +170,9 @@ class FolderIsGroupFolder_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[folder_id])
+			if ($data['folder_id'])
 			{
-				return $data[folder_id];
+				return $data['folder_id'];
 			}
 			else
 			{

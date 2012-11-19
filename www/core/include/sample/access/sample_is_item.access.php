@@ -47,10 +47,10 @@ class SampleIsItem_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[sample_id])
+			if ($data['sample_id'])
 			{
 				$this->sample_id	= $sample_id;
-				$this->item_id		= $data[item_id];
+				$this->item_id		= $data['item_id'];
 			}
 			else
 			{
@@ -170,9 +170,9 @@ class SampleIsItem_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[sample_id])
+			if ($data['sample_id'])
 			{
-				return $data[sample_id];
+				return $data['sample_id'];
 			}
 			else
 			{

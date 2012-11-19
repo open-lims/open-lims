@@ -83,6 +83,10 @@ class DataHomeIO
 			{
 				$quotaWarn = " <img src='images/icons/notice.png' alt='W' />";
 			}
+			else
+			{
+				$quotaWarn = "";
+			}
 		}
 		else
 		{

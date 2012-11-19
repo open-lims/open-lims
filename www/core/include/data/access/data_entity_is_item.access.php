@@ -47,10 +47,10 @@ class DataEntityIsItem_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[data_entity_id])
+			if ($data['data_entity_id'])
 			{
 				$this->data_entity_id	= $data_entity_id;
-				$this->item_id		= $data[item_id];
+				$this->item_id		= $data['item_id'];
 			}
 			else
 			{
@@ -170,9 +170,9 @@ class DataEntityIsItem_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[data_entity_id])
+			if ($data['data_entity_id'])
 			{
-				return $data[data_entity_id];
+				return $data['data_entity_id'];
 			}
 			else
 			{

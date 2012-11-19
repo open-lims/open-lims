@@ -55,16 +55,16 @@ class EquipmentType_Access
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->equipment_type_id 	= $equipment_type_id;
 				
-				$this->toid				= $data[toid];
-				$this->name				= $data[name];
-				$this->cat_id			= $data[cat_id];
-				$this->location_id		= $data[location_id];
-				$this->description		= $data[description];
-				$this->manufacturer		= $data[manufacturer];
+				$this->toid				= $data['toid'];
+				$this->name				= $data['name'];
+				$this->cat_id			= $data['cat_id'];
+				$this->location_id		= $data['location_id'];
+				$this->description		= $data['description'];
+				$this->manufacturer		= $data['manufacturer'];
 			}
 			else
 			{
@@ -157,9 +157,9 @@ class EquipmentType_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read['id']);
 			
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{
@@ -511,7 +511,7 @@ class EquipmentType_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 						
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -544,7 +544,7 @@ class EquipmentType_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 						
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}
@@ -576,7 +576,7 @@ class EquipmentType_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -611,7 +611,7 @@ class EquipmentType_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[id]);
+				array_push($return_array,$data['id']);
 			}
 			
 			if (is_array($return_array))
@@ -643,7 +643,7 @@ class EquipmentType_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[id]);
+			array_push($return_array,$data['id']);
 		}
 		
 		if (is_array($return_array))
@@ -670,7 +670,7 @@ class EquipmentType_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[id]);
+			array_push($return_array,$data['id']);
 		}
 		
 		if (is_array($return_array))

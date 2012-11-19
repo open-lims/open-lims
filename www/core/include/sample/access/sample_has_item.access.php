@@ -54,14 +54,14 @@ class SampleHasItem_Access
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[primary_key])
+			if ($data['primary_key'])
 			{
 				$this->primary_key 		= $primary_key;
 				
-				$this->sample_id		= $data[sample_id];
-				$this->item_id			= $data[item_id];
-				$this->gid				= $data[gid];
-				$this->parent_item_id	= $data[parent_item_id];
+				$this->sample_id		= $data['sample_id'];
+				$this->item_id			= $data['item_id'];
+				$this->gid				= $data['gid'];
+				$this->parent_item_id	= $data['parent_item_id'];
 				
 				if ($data['parent'] == 't')
 				{
@@ -122,9 +122,9 @@ class SampleHasItem_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[primary_key]);
+				$this->__construct($data_read['primary_key']);
 				
-				return $data_read[primary_key];
+				return $data_read['primary_key'];
 			}
 			else
 			{
@@ -416,9 +416,9 @@ class SampleHasItem_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 				
-			if ($data[primary_key])
+			if ($data['primary_key'])
 			{
-				return $data[primary_key];
+				return $data['primary_key'];
 			}
 			else
 			{
@@ -450,9 +450,9 @@ class SampleHasItem_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 				
-			if (is_numeric($data[gid]))
+			if (is_numeric($data['gid']))
 			{
-				return $data[gid];
+				return $data['gid'];
 			}
 			else
 			{
@@ -483,7 +483,7 @@ class SampleHasItem_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[primary_key]);
+				array_push($return_array,$data['primary_key']);
 			}
 			
 			if (is_array($return_array))
@@ -518,7 +518,7 @@ class SampleHasItem_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[primary_key]);
+				array_push($return_array,$data['primary_key']);
 			}
 			
 			if (is_array($return_array))
@@ -555,7 +555,7 @@ class SampleHasItem_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[sample_id]);
+				array_push($return_array,$data['sample_id']);
 			}
 			
 			if (is_array($return_array))
@@ -591,7 +591,7 @@ class SampleHasItem_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[primary_key]);
+				array_push($return_array,$data['primary_key']);
 			}
 			
 			if (is_array($return_array))
@@ -636,8 +636,8 @@ class SampleHasItem_Access
 			while ($data = $db->db_fetch_assoc($res))
 			{
 				$tmp_array = array();
-				$tmp_array[id] = $data[sample_id];
-				$tmp_array[pos_id] = $data[gid];
+				$tmp_array['id'] = $data['sample_id'];
+				$tmp_array['pos_id'] = $data['gid'];
 				array_push($return_array,$tmp_array);
 			}
 			
@@ -674,7 +674,7 @@ class SampleHasItem_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[item_id]);
+				array_push($return_array,$data['item_id']);
 			}
 			
 			if (is_array($return_array))
@@ -710,7 +710,7 @@ class SampleHasItem_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,array("pos_id" => $data[gid], "item_id" => $data[item_id]));
+				array_push($return_array,array("pos_id" => $data['gid'], "item_id" => $data['item_id']));
 			}
 			
 			if (is_array($return_array))
@@ -755,7 +755,7 @@ class SampleHasItem_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[item_id]);
+				array_push($return_array,$data['item_id']);
 			}
 			
 			if (is_array($return_array))
@@ -787,7 +787,7 @@ class SampleHasItem_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			array_push($return_array,$data[primary_key]);
+			array_push($return_array,$data['primary_key']);
 		}
 		
 		if (is_array($return_array))

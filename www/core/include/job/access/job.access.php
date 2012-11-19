@@ -56,17 +56,17 @@ class Job_Access
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->job_id 			= $job_id;
-				$this->binary_id 		= $data[binary_id];
-				$this->status 			= $data[status];
-				$this->create_datetime 	= $data[create_datetime];
-				$this->start_datetime 	= $data[start_datetime];
-				$this->end_datetime 	= $data[end_datetime];
-				$this->last_lifesign 	= $data[last_lifesign];
-				$this->user_id			= $data[user_id];
-				$this->type_id			= $data[type_id];
+				$this->binary_id 		= $data['binary_id'];
+				$this->status 			= $data['status'];
+				$this->create_datetime 	= $data['create_datetime'];
+				$this->start_datetime 	= $data['start_datetime'];
+				$this->end_datetime 	= $data['end_datetime'];
+				$this->last_lifesign 	= $data['last_lifesign'];
+				$this->user_id			= $data['user_id'];
+				$this->type_id			= $data['type_id'];
 			}
 			else
 			{
@@ -124,9 +124,9 @@ class Job_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read[id]);
+				$this->__construct($data_read['id']);
 			
-				return $data_read[id];
+				return $data_read['id'];
 			}
 			else
 			{

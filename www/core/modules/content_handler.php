@@ -162,7 +162,7 @@ class ContentHandler_IO
 			
 			$template->output();
 			
-			$max_ip_errors = (int)Registry::get_value(base_max_ip_failed_logins);
+			$max_ip_errors = (int)Registry::get_value("base_max_ip_failed_logins");
 			
 			if (!is_numeric($max_ip_errors) or $max_ip_errors < 3)
 			{
@@ -183,16 +183,16 @@ class ContentHandler_IO
 					{
 						foreach ($module_dialog_array as $key => $value)
 						{
-							$paramquery[username] 	= $_GET[username];
-							$paramquery[session_id] = $_GET[session_id];
-							$paramquery[nav]		= "base";
-							$paramquery[run]		= "base_user_lists";
-							$paramquery[dialog]		= $value[internal_name];
-							$params 				= http_build_query($paramquery,'','&#38;');
+							$paramquery['username'] 	= $_GET['username'];
+							$paramquery['session_id'] 	= $_GET['session_id'];
+							$paramquery['nav']			= "base";
+							$paramquery['run']			= "base_user_lists";
+							$paramquery['dialog']		= $value['internal_name'];
+							$params 					= http_build_query($paramquery,'','&#38;');
 							
 							$temp_array = array();
-							$temp_array[params] = $params;
-							$temp_array[title] = $value[display_name];
+							$temp_array['params'] 	= $params;
+							$temp_array['title'] 	= $value['display_name'];
 							array_push($sub_menu, $temp_array);
 							unset($temp_array);
 						}
@@ -200,26 +200,26 @@ class ContentHandler_IO
 					
 					$template->set_var("sub_menu", $sub_menu);
 		
-					$my_profile_paramquery[username] = $_GET[username];
-					$my_profile_paramquery[session_id] = $_GET[session_id];
-					$my_profile_paramquery[nav] = "base";
-					$my_profile_paramquery[run] = "user_profile";
+					$my_profile_paramquery['username'] = $_GET['username'];
+					$my_profile_paramquery['session_id'] = $_GET['session_id'];
+					$my_profile_paramquery['nav'] = "base";
+					$my_profile_paramquery['run'] = "user_profile";
 					$my_profile_params = http_build_query($my_profile_paramquery,'','&#38;');
 
 					$template->set_var("my_profile_params", $my_profile_params);
 					
-					$system_messages_paramquery[username] = $_GET[username];
-					$system_messages_paramquery[session_id] = $_GET[session_id];
-					$system_messages_paramquery[nav] = "base";
-					$system_messages_paramquery[run] = "sysmsg";
+					$system_messages_paramquery['username'] = $_GET['username'];
+					$system_messages_paramquery['session_id'] = $_GET['session_id'];
+					$system_messages_paramquery['nav'] = "base";
+					$system_messages_paramquery['run'] = "sysmsg";
 					$system_messages_params = http_build_query($system_messages_paramquery,'','&#38;');
 					
 					$template->set_var("system_messages_params", $system_messages_params);
 					
-					$about_paramquery[username] = $_GET[username];
-					$about_paramquery[session_id] = $_GET[session_id];
-					$about_paramquery[nav] = "base";
-					$about_paramquery[run] = "system_info";
+					$about_paramquery['username'] = $_GET['username'];
+					$about_paramquery['session_id'] = $_GET['session_id'];
+					$about_paramquery['nav'] = "base";
+					$about_paramquery['run'] = "system_info";
 					$about_params = http_build_query($about_paramquery,'','&#38;');
 					
 					$template->set_var("about_params", $about_params);
@@ -250,7 +250,7 @@ class ContentHandler_IO
  						{
 							if ($_GET['nav'])
 							{
-								$module_controller_array = SystemHandler::get_module_controller($_GET[nav]);
+								$module_controller_array = SystemHandler::get_module_controller($_GET['nav']);
 								
 								$module_controller_path = "core/modules/".$module_controller_array['path'];
 

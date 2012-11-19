@@ -65,28 +65,28 @@ class UserProfile_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->user_id 			= $user_id;
 				
-				$this->gender			= $data[gender];
-				$this->title			= $data[title];
-				$this->forename			= $data[forename];
-				$this->surname			= $data[surname];
-				$this->mail				= $data[mail];
+				$this->gender			= $data['gender'];
+				$this->title			= $data['title'];
+				$this->forename			= $data['forename'];
+				$this->surname			= $data['surname'];
+				$this->mail				= $data['mail'];
 				
-				$this->institution		= $data[institution];
-				$this->department		= $data[department];
-				$this->street			= $data[street];
-				$this->zip				= $data[zip];
-				$this->city				= $data[city];
-				$this->country			= $data[country];
-				$this->phone			= $data[phone];
-				$this->icq				= $data[icq];
-				$this->msn				= $data[msn];
-				$this->yahoo			= $data[yahoo];
-				$this->aim				= $data[aim];
-				$this->skype			= $data[skype];
+				$this->institution		= $data['institution'];
+				$this->department		= $data['department'];
+				$this->street			= $data['street'];
+				$this->zip				= $data['zip'];
+				$this->city				= $data['city'];
+				$this->country			= $data['country'];
+				$this->phone			= $data['phone'];
+				$this->icq				= $data['icq'];
+				$this->msn				= $data['msn'];
+				$this->yahoo			= $data['yahoo'];
+				$this->aim				= $data['aim'];
+				$this->skype			= $data['skype'];
 			}
 			else
 			{

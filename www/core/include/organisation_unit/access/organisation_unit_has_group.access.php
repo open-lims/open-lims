@@ -49,10 +49,10 @@ class OrganisationUnitHasGroup_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[organisation_unit_id])
+			if ($data['organisation_unit_id'])
 			{
-				$this->organisation_unit_id	= $data[organisation_unit_id];
-				$this->group_id				= $data[group_id];
+				$this->organisation_unit_id	= $data['organisation_unit_id'];
+				$this->group_id				= $data['group_id'];
 			}
 		}
 	}
@@ -233,9 +233,9 @@ class OrganisationUnitHasGroup_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[result])
+			if ($data['result'])
 			{
-				return $data[result];
+				return $data['result'];
 			}
 			else
 			{
@@ -264,9 +264,9 @@ class OrganisationUnitHasGroup_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[result])
+			if ($data['result'])
 			{
-				return $data[result];
+				return $data['result'];
 			}
 			else
 			{
@@ -296,7 +296,7 @@ class OrganisationUnitHasGroup_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[organisation_unit_id]);
+				array_push($return_array,$data['organisation_unit_id']);
 			}
 			
 			if (is_array($return_array))
@@ -340,7 +340,7 @@ class OrganisationUnitHasGroup_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[group_id]);
+				array_push($return_array,$data['group_id']);
 			}
 			
 			if (is_array($return_array))

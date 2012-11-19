@@ -49,10 +49,10 @@ class OldlTemplate_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				$this->oldl_id		= $oldl_id;
-				$this->data_entity_id	= $data[data_entity_id];
+				$this->data_entity_id	= $data['data_entity_id'];
 			}
 			else
 			{
@@ -89,9 +89,9 @@ class OldlTemplate_Access
 			$res_read = $db->db_query($sql_read);
 			$data_read = $db->db_fetch_assoc($res_read);
 								
-			$this->__construct($data_read[id]);
+			$this->__construct($data_read['id']);
 			
-			return $data_read[id];	
+			return $data_read['id'];	
 		}
 		else
 		{
@@ -189,7 +189,7 @@ class OldlTemplate_Access
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[id])
+			if ($data['id'])
 			{
 				return true;
 			}

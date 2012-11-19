@@ -49,7 +49,7 @@ class ProjectTaskHasPreviousTask_Access
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[task_id])
+			if ($data['task_id'])
 			{
 				$this->task_id				= $task_id;
 				$this->previous_task_id		= $previous_task_id;
@@ -209,7 +209,7 @@ class ProjectTaskHasPreviousTask_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[previous_task_id]);
+				array_push($return_array,$data['previous_task_id']);
 			}
 			
 			if (is_array($return_array))
@@ -244,7 +244,7 @@ class ProjectTaskHasPreviousTask_Access
 			
 			while ($data = $db->db_fetch_assoc($res))
 			{
-				array_push($return_array,$data[task_id]);
+				array_push($return_array,$data['task_id']);
 			}
 			
 			if (is_array($return_array))
@@ -277,7 +277,7 @@ class ProjectTaskHasPreviousTask_Access
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[task_id])
+			if ($data['task_id'])
 			{
 				return true;
 			}
