@@ -87,21 +87,21 @@ class FileAjax
 						
 						if ($checkbox_class)
 						{
-							$list_array[$key][checkbox] = "<input type='checkbox' name='file-".$list_array[$key][item_id]."' value='1' class='".$checkbox_class."' />";
+							$list_array[$key]['checkbox'] = "<input type='checkbox' name='file-".$list_array[$key]['item_id']."' value='1' class='".$checkbox_class."' />";
 						}
 						else
 						{
-							$list_array[$key][checkbox] = "<input type='checkbox' name='file-".$list_array[$key][item_id]."' value='1' />";
+							$list_array[$key]['checkbox'] = "<input type='checkbox' name='file-".$list_array[$key]['item_id']."' value='1' />";
 						}
 					} 
 					
-					$file = File::get_instance($list_array[$key][id]);
-					$list_array[$key][symbol] = "<img src='".$file->get_icon()."' alt='' style='border:0;' />";
+					$file = File::get_instance($list_array[$key]['id']);
+					$list_array[$key]['symbol'] = "<img src='".$file->get_icon()."' alt='' style='border:0;' />";
 					
-					$list_array[$key][size] = Convert::convert_byte_1024($list_array[$key][size]);
+					$list_array[$key]['size'] = Convert::convert_byte_1024($list_array[$key]['size']);
 					
-					$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
-					$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+					$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
+					$list_array[$key]['datetime'] = $datetime_handler->get_formatted_string("dS M Y H:i");
 				}
 			}
 			else
@@ -189,34 +189,34 @@ class FileAjax
 					foreach($list_array as $key => $value)
 					{
 						$file_version = clone $file;
-						$file_version->open_internal_revision($value[internal_revision]);
+						$file_version->open_internal_revision($value['internal_revision']);
 						
 						$paramquery = $_GET;
-						$paramquery[action] = "file_detail";
-						$paramquery[version] = $list_array[$key][internal_revision];
+						$paramquery['action'] = "file_detail";
+						$paramquery['version'] = $list_array[$key]['internal_revision'];
 						$params = http_build_query($paramquery,'','&#38;');
 						
-						$list_array[$key][symbol][link]		= $params;
-						$list_array[$key][symbol][content] 	= "<img src='".$file_version->get_icon()."' alt='' style='border:0;' />";
+						$list_array[$key]['symbol']['link']		= $params;
+						$list_array[$key]['symbol']['content'] 	= "<img src='".$file_version->get_icon()."' alt='' style='border:0;' />";
 						
-						$tmp_name = $list_array[$key][name];
-						unset($list_array[$key][name]);
-						$list_array[$key][name][link]		= $params;
-						$list_array[$key][name][content] 	= $tmp_name;
+						$tmp_name = $list_array[$key]['name'];
+						unset($list_array[$key]['name']);
+						$list_array[$key]['name']['link']		= $params;
+						$list_array[$key]['name']['content'] 	= $tmp_name;
 												
-						$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
-						$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+						$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
+						$list_array[$key]['datetime'] = $datetime_handler->get_formatted_string("dS M Y H:i");
 						
-						$user = new User($list_array[$key][owner_id]);
-						$list_array[$key][user] = $user->get_full_name(false);
+						$user = new User($list_array[$key]['owner_id']);
+						$list_array[$key]['user'] = $user->get_full_name(false);
 
 						if ($file_version->is_current() == true)
 						{
-							$list_array[$key][version] = $file_version->get_version()." <span class='italic'>current</span>";
+							$list_array[$key]['version'] = $file_version->get_version()." <span class='italic'>current</span>";
 						}
 						else
 						{
-							$list_array[$key][version] = $file_version->get_version();
+							$list_array[$key]['version'] = $file_version->get_version();
 						}
 					}
 				}
@@ -272,17 +272,17 @@ class FileAjax
 		$button_handler_caption;
 		$template;
 		$paramquery = $_GET;	
-		unset($paramquery[run]);
+		unset($paramquery['run']);
 		switch($action):
 			case "file_update":
 				$unique_id = uniqid();
-				$paramquery[unique_id] = $unique_id;
-				$paramquery[file_id] = $_POST['file_id'];
+				$paramquery['unique_id'] = $unique_id;
+				$paramquery['file_id'] = $_POST['file_id'];
 				$params = http_build_query($paramquery, '', '&#38;');
 				$template = new HTMLTemplate("data/file_update_window.html");
 				$template->set_var("params", $params);
 				$template->set_var("unique_id", $unique_id);
-				$template->set_var("session_id", $_GET[session_id]);
+				$template->set_var("session_id", $_GET['session_id']);
 				$button_handler_template = new JSTemplate("data/js/file_update_window.js");
 				$button_handler = $button_handler_template->get_string();
 				$button_handler_caption = "Upload";
@@ -291,13 +291,13 @@ class FileAjax
 				break;
 			case "file_update_minor":
 				$unique_id = uniqid();
-				$paramquery[unique_id] = $unique_id;
-				$paramquery[file_id] = $_POST['file_id'];
+				$paramquery['unique_id'] = $unique_id;
+				$paramquery['file_id'] = $_POST['file_id'];
 				$params = http_build_query($paramquery, '', '&#38;');
 				$template = new HTMLTemplate("data/file_update_window.html");
 				$template->set_var("params", $params);
 				$template->set_var("unique_id", $unique_id);
-				$template->set_var("session_id", $_GET[session_id]);
+				$template->set_var("session_id", $_GET['session_id']);
 				$button_handler_template = new JSTemplate("data/js/file_update_window.js");
 				$button_handler = $button_handler_template->get_string();
 				$button_handler_caption = "Upload";
@@ -307,9 +307,9 @@ class FileAjax
 			case "permission":
 				require_once("data.ajax.php");
 				
-				if(isset($_POST[permissions])) //second call
+				if(isset($_POST['permissions'])) //second call
 				{
-					return DataAjax::change_permission(json_decode($_POST[permissions]), "File");
+					return DataAjax::change_permission(json_decode($_POST['permissions']), "File");
 				}
 				else //first call
 				{
@@ -357,14 +357,14 @@ class FileAjax
 		{
 			$paramquery = array();
 			$unique_id = uniqid();
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[folder_id] = $folder_id;
-			$paramquery[unique_id] = $unique_id;
+			$paramquery['session_id'] = $_GET['session_id'];
+			$paramquery['folder_id'] = $folder_id;
+			$paramquery['unique_id'] = $unique_id;
 			$params = http_build_query($paramquery);
 			$template = new HTMLTemplate("data/file_upload_window.html");
 			$template->set_var("params", $params);
 			$template->set_var("unique_id", $unique_id);
-			$template->set_var("session_id", $_GET[session_id]);
+			$template->set_var("session_id", $_GET['session_id']);
 			$button_handler_template = new JSTemplate("data/js/file_upload_window.js");
 			$button_handler = $button_handler_template->get_string();
 			$button_handler_caption = "Add";

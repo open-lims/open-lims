@@ -50,13 +50,13 @@ class AdminBaseNavigationIO
 	 */
 	public static function hide()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$module_navigation = new ModuleNavigation($_GET[id]);
+			$module_navigation = new ModuleNavigation($_GET['id']);
 				
 			$paramquery = $_GET;
-			unset($paramquery[action]);
-			unset($paramquery[id]);
+			unset($paramquery['action']);
+			unset($paramquery['id']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			if ($module_navigation->hide())
@@ -79,13 +79,13 @@ class AdminBaseNavigationIO
 	 */
 	public static function upwards()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$module_navigation = new ModuleNavigation($_GET[id]);
+			$module_navigation = new ModuleNavigation($_GET['id']);
 				
 			$paramquery = $_GET;
-			unset($paramquery[action]);
-			unset($paramquery[id]);
+			unset($paramquery['action']);
+			unset($paramquery['id']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			if ($module_navigation->upwards())
@@ -108,13 +108,13 @@ class AdminBaseNavigationIO
 	 */
 	public static function downwards()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$module_navigation = new ModuleNavigation($_GET[id]);
+			$module_navigation = new ModuleNavigation($_GET['id']);
 				
 			$paramquery = $_GET;
-			unset($paramquery[action]);
-			unset($paramquery[id]);
+			unset($paramquery['action']);
+			unset($paramquery['id']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			if ($module_navigation->downwards())
@@ -134,7 +134,7 @@ class AdminBaseNavigationIO
 	
 	public static function handler()
 	{
-		switch($_GET[action]):
+		switch($_GET['action']):
 			case "upwards":
 				self::upwards();
 			break;	

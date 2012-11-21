@@ -48,16 +48,16 @@ class ValueIO
 				$result = array();
 				$counter = 1;
 			
-				$result[0][version] = 0;
-				$result[0][text] = "----------------------------------------------";
+				$result[0]['version'] = 0;
+				$result[0]['text'] = "----------------------------------------------";
 				
 				foreach($value_version_array as $key => $fe_value)
 				{
 					$value_version = Value::get_instance($value->get_id(), true);
 					$value_version->open_internal_revision($fe_value);
 					
-					$result[$counter][version] = $value_version->get_internal_revision();
-					$result[$counter][text] = "Version ".$value_version->get_version()." - ".$value_version->get_version_datetime();
+					$result[$counter]['version'] = $value_version->get_internal_revision();
+					$result[$counter]['text'] = "Version ".$value_version->get_version()." - ".$value_version->get_version_datetime();
 					$counter++;
 				}
 				$template->set_var("version_option",$result);
@@ -70,8 +70,8 @@ class ValueIO
 			{
 				if ($key != "version")
 				{
-					$result[$counter][value] = $fe_value;
-					$result[$counter][key] = $key;
+					$result[$counter]['value'] = $fe_value;
+					$result[$counter]['key'] = $key;
 					$counter++;
 				}
 			}
@@ -82,7 +82,7 @@ class ValueIO
 			$template->set_var("version_datetime",$value->get_datetime());
 		
 			$paramquery = $_GET;
-			$paramquery[action] = "permission";
+			$paramquery['action'] = "permission";
 			$params = http_build_query($paramquery,'','&#38;');	
 			$template->set_var("change_permission_params",$params);
 		
@@ -105,7 +105,7 @@ class ValueIO
 			}
 		
 			$paramquery = $_GET;
-			$paramquery[action] = "value_history";
+			$paramquery['action'] = "value_history";
 			$params = http_build_query($paramquery,'','&#38;');	
 			
 			$template->set_var("version_list_link",$params);
@@ -141,15 +141,15 @@ class ValueIO
 	{
 		global $user;
 		
-		if ($_GET[value_id])
+		if ($_GET['value_id'])
 		{
-			$value = Value::get_instance($_GET[value_id]);
+			$value = Value::get_instance($_GET['value_id']);
 	
 			if ($value->is_read_access())
 			{								
-				if ($_GET[version] and is_numeric($_GET[version]))
+				if ($_GET['version'] and is_numeric($_GET['version']))
 				{
-					$value->open_internal_revision($_GET[version]);
+					$value->open_internal_revision($_GET['version']);
 				}
 				
 				if ($value->get_type_id() == 2)
@@ -163,16 +163,16 @@ class ValueIO
 						$result = array();
 						$counter = 1;
 					
-						$result[0][version] = 0;
-						$result[0][text] = "----------------------------------------------";
+						$result[0]['version'] = 0;
+						$result[0]['text'] = "----------------------------------------------";
 						
 						foreach($value_version_array as $key => $fe_value)
 						{
-							$value_version = Value::get_instance($_GET[value_id], true);
+							$value_version = Value::get_instance($_GET['value_id'], true);
 							$value_version->open_internal_revision($fe_value);
 							
-							$result[$counter][version] = $value_version->get_internal_revision();
-							$result[$counter][text] = "Version ".$value_version->get_version()." - ".$value_version->get_version_datetime();
+							$result[$counter]['version'] = $value_version->get_internal_revision();
+							$result[$counter]['text'] = "Version ".$value_version->get_version()." - ".$value_version->get_version_datetime();
 							$counter++;
 						}
 						$template->set_var("version_option",$result);
@@ -185,8 +185,8 @@ class ValueIO
 					{
 						if ($key != "version")
 						{
-							$result[$counter][value] = $fe_value;
-							$result[$counter][key] = $key;
+							$result[$counter]['value'] = $fe_value;
+							$result[$counter]['key'] = $key;
 							$counter++;
 						}
 					}
@@ -197,7 +197,7 @@ class ValueIO
 					$template->set_var("version_datetime",$value->get_datetime());
 				
 					$paramquery = $_GET;
-					$paramquery[action] = "permission";
+					$paramquery['action'] = "permission";
 					unset($paramquery['nextpage']);
 					$params = http_build_query($paramquery,'','&#38;');	
 					$template->set_var("change_permission_params",$params);
@@ -221,7 +221,7 @@ class ValueIO
 					}
 				
 					$paramquery = $_GET;
-					$paramquery[action] = "value_history";
+					$paramquery['action'] = "value_history";
 					$params = http_build_query($paramquery,'','&#38;');	
 					
 					$template->set_var("version_list_link",$params);
@@ -238,8 +238,8 @@ class ValueIO
 					$template->set_var("value_id", $value->get_id());
 					
 					$paramquery = $_GET;
-					unset($paramquery[action]);
-					unset($paramquery[value_id]);
+					unset($paramquery['action']);
+					unset($paramquery['value_id']);
 					$params = http_build_query($paramquery);
 					
 					$template->set_var("retrace", "index.php?".$params);
@@ -249,8 +249,8 @@ class ValueIO
 				else
 				{
 					$paramquery = $_GET;
-					unset($paramquery[action]);
-					unset($paramquery[value_id]);
+					unset($paramquery['action']);
+					unset($paramquery['value_id']);
 					$params = http_build_query($paramquery);
 					
 					self::edit($value, $params, true);
@@ -286,7 +286,7 @@ class ValueIO
 		
 		if (is_numeric($folder_id))
 		{
-			if (count($type_array) != 1 and !$_POST[type_id])
+			if (count($type_array) != 1 and !$_POST['type_id'])
 			{
 				$result = array();
 				$counter = 0;
@@ -299,8 +299,8 @@ class ValueIO
 					foreach($value_type_array as $key => $value)
 					{
 						$value_type = new ValueType($value);
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $value_type->get_name();
+						$result[$counter]['value'] = $value;
+						$result[$counter]['content'] = $value_type->get_name();
 						
 						$counter++;
 					}
@@ -310,16 +310,16 @@ class ValueIO
 					foreach($type_array as $key => $value)
 					{
 						$value_type = new ValueType($value);
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $value_type->get_name();
+						$result[$counter]['value'] = $value;
+						$result[$counter]['content'] = $value_type->get_name();
 						
 						$counter++;
 					}
 				}
 			}
-			elseif(count($type_array) != 1 and $_POST[type_id])
+			elseif(count($type_array) != 1 and $_POST['type_id'])
 			{
-				$type_id = $_POST[type_id];
+				$type_id = $_POST['type_id'];
 			}
 			else
 			{
@@ -331,25 +331,25 @@ class ValueIO
 				$template = new HTMLTemplate("data/value_select_list.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params", $params);
 				
 				$template->set_var("select",$result);
 				
-				if ($_POST[keywords])
+				if ($_POST['keywords'])
 				{
-					$template->set_var("keywords", $_POST[keywords]);
+					$template->set_var("keywords", $_POST['keywords']);
 				}
 				else
 				{
 					$template->set_var("keywords", "");
 				}
 				
-				if ($_POST[description])
+				if ($_POST['description'])
 				{
-					$template->set_var("description", $_POST[description]);
+					$template->set_var("description", $_POST['description']);
 				}
 				else
 				{
@@ -386,18 +386,18 @@ class ValueIO
 				
 				$template->set_var("value",$value_form_io->get_content());
 			
-				if ($_POST[keywords])
+				if ($_POST['keywords'])
 				{
-					$template->set_var("keywords", $_POST[keywords]);
+					$template->set_var("keywords", $_POST['keywords']);
 				}
 				else
 				{
 					$template->set_var("keywords", "");
 				}
 				
-				if ($_POST[description])
+				if ($_POST['description'])
 				{
-					$template->set_var("description", $_POST[description]);
+					$template->set_var("description", $_POST['description']);
 				}
 				else
 				{
@@ -442,15 +442,15 @@ class ValueIO
 	 */
 	public static function history()
 	{
-		if ($_GET[value_id])
+		if ($_GET['value_id'])
 		{
-			$value_obj = Value::get_instance($_GET[value_id]);
+			$value_obj = Value::get_instance($_GET['value_id']);
 			
 			if ($value_obj->is_read_access())
 			{
 				$argument_array = array();
 				$argument_array[0][0] = "value_id";
-				$argument_array[0][1] = $_GET[value_id];
+				$argument_array[0][1] = $_GET['value_id'];
 	
 				$list = new List_IO("DataValueVersionHistory", "ajax.php?nav=data", "value_list_versions", "value_count_versions", $argument_array, "DataValueVersionHistory");
 
@@ -486,27 +486,27 @@ class ValueIO
 	 */
 	public static function delete_version()
 	{
-		if ($_GET[value_id])
+		if ($_GET['value_id'])
 		{
-			if ($_GET[version])
+			if ($_GET['version'])
 			{
-				$value = Value::get_instance($_GET[value_id]);
+				$value = Value::get_instance($_GET['value_id']);
 				
 				if ($value->is_delete_access())
 				{
-					if ($_GET[sure] != "true")
+					if ($_GET['sure'] != "true")
 					{
 						$template = new HTMLTemplate("data/value_delete_version.html");
 						
 						$paramquery = $_GET;
-						$paramquery[sure] = "true";
+						$paramquery['sure'] = "true";
 						$params = http_build_query($paramquery);
 						
 						$template->set_var("yes_params", $params);
 								
 						$paramquery = $_GET;
-						$paramquery[action] = "value_history";
-						unset($paramquery[sure]);
+						$paramquery['action'] = "value_history";
+						unset($paramquery['sure']);
 						$params = http_build_query($paramquery);
 						
 						$template->set_var("no_params", $params);
@@ -515,22 +515,22 @@ class ValueIO
 					}
 					else
 					{
-						if (($return_value = $value->delete_version($_GET[version])) != 0)
+						if (($return_value = $value->delete_version($_GET['version'])) != 0)
 						{
 							if ($return_value == 1)
 							{
 								$paramquery = $_GET;
-								$paramquery[action] = "value_history";
-								unset($paramquery[sure]);
-								unset($paramquery[version]);
+								$paramquery['action'] = "value_history";
+								unset($paramquery['sure']);
+								unset($paramquery['version']);
 								$params = http_build_query($paramquery);
 							}
 							else
 							{
 								$paramquery = $_GET;
-								unset($paramquery[sure]);
-								unset($paramquery[action]);
-								unset($paramquery[value_id]);
+								unset($paramquery['sure']);
+								unset($paramquery['action']);
+								unset($paramquery['value_id']);
 								$params = http_build_query($paramquery);
 							}					
 							Common_IO::step_proceed($params, "Delete Value", "Operation Successful" ,null);
@@ -538,9 +538,9 @@ class ValueIO
 						else
 						{
 							$paramquery = $_GET;
-							unset($paramquery[sure]);
-							unset($paramquery[action]);
-							unset($paramquery[value_id]);
+							unset($paramquery['sure']);
+							unset($paramquery['action']);
+							unset($paramquery['value_id']);
 							$params = http_build_query($paramquery);
 									
 							Common_IO::step_proceed($params, "Delete Value", "Operation Failed" ,null);

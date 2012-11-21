@@ -48,13 +48,13 @@ class DataSearchIO
 	{
 		global $user, $session;
 		
-		if ($_GET[nextpage])
+		if ($_GET['nextpage'])
 		{
-			if ($_GET[sortvalue] and $_GET[sortmethod])
+			if ($_GET['sortvalue'] and $_GET['sortmethod'])
 			{
-				if ($_GET[nextpage] == "2" and $_POST[name])
+				if ($_GET['nextpage'] == "2" and $_POST['name'])
 				{
-					$name = $_POST[name];
+					$name = $_POST['name'];
 					$folder_id = $session->read_value("SEARCH_FFV_FOLDER_ID");
 				}
 				else
@@ -65,19 +65,19 @@ class DataSearchIO
 			}
 			else
 			{
-				if ($_GET[page])
+				if ($_GET['page'])
 				{
 					$name = $session->read_value("SEARCH_FFV_NAME");
 					$folder_id = $session->read_value("SEARCH_FFV_FOLDER_ID");
 				}
 				else
 				{
-					if ($_GET[nextpage] == "1")
+					if ($_GET['nextpage'] == "1")
 					{
-						$name = $_POST[name];
-						if ($_POST[folder_id])
+						$name = $_POST['name'];
+						if ($_POST['folder_id'])
 						{
-							$folder_id = $_POST[folder_id];
+							$folder_id = $_POST['folder_id'];
 						}
 						else
 						{
@@ -88,7 +88,7 @@ class DataSearchIO
 					}
 					else
 					{
-						$name = $_POST[name];
+						$name = $_POST['name'];
 						$folder_id = $session->read_value("SEARCH_FFV_FOLDER_ID");
 					}
 				}
@@ -105,8 +105,8 @@ class DataSearchIO
 			$template = new HTMLTemplate("data/search/ffv_search.html");
 			
 			$paramquery = $_GET;
-			unset($paramquery[page]);
-			$paramquery[nextpage] = "1";
+			unset($paramquery['page']);
+			$paramquery['nextpage'] = "1";
 			$params = http_build_query($paramquery,'','&#38;');
 					
 			$template->set_var("params",$params);
@@ -119,7 +119,7 @@ class DataSearchIO
 		{
 			if (!$folder_id)
 			{
-				$folder_id = $_POST[folder_id];
+				$folder_id = $_POST['folder_id'];
 			}
 
 			$session->write_value("SEARCH_FFV_NAME", $name, true);
@@ -147,7 +147,7 @@ class DataSearchIO
 			$template = new HTMLTemplate("data/search/ffv_search_result.html");
 		
 			$paramquery = $_GET;
-			$paramquery[nextpage] = "2";
+			$paramquery['nextpage'] = "2";
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			$template->set_var("params", $params);

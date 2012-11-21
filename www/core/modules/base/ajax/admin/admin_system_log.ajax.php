@@ -73,35 +73,35 @@ class AdminSystemLogAjax
 				{		
 					foreach($list_array as $key => $value)
 					{	
-						$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
-						$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+						$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
+						$list_array[$key]['datetime'] = $datetime_handler->get_formatted_string("dS M Y H:i");
 
 						$paramquery = $_GET;
-						$paramquery[id] = $list_array[$key][id];
-						$paramquery[action] = "detail";
-						unset($paramquery[sortvalue]);
-						unset($paramquery[sortmethod]);
-						unset($paramquery[nextpage]);
+						$paramquery['id'] = $list_array[$key]['id'];
+						$paramquery['action'] = "detail";
+						unset($paramquery['sortvalue']);
+						unset($paramquery['sortmethod']);
+						unset($paramquery['nextpage']);
 						$params = http_build_query($paramquery, '', '&#38;');
 		
-						$tmp_datetime = $list_array[$key][datetime];
-						unset($list_array[$key][datetime]);
-						$list_array[$key][datetime][link] = $params;
-						$list_array[$key][datetime][content] = $tmp_datetime;
+						$tmp_datetime = $list_array[$key]['datetime'];
+						unset($list_array[$key]['datetime']);
+						$list_array[$key]['datetime']['link'] = $params;
+						$list_array[$key]['datetime']['content'] = $tmp_datetime;
 						
 						
 						$paramquery = $_GET;
-						$paramquery[id] = $list_array[$key][ip];
-						$paramquery[action] = "ip_info";
-						unset($paramquery[sortvalue]);
-						unset($paramquery[sortmethod]);
-						unset($paramquery[nextpage]);
+						$paramquery['id'] = $list_array[$key]['ip'];
+						$paramquery['action'] = "ip_info";
+						unset($paramquery['sortvalue']);
+						unset($paramquery['sortmethod']);
+						unset($paramquery['nextpage']);
 						$params = http_build_query($paramquery, '', '&#38;');
 		
-						$tmp_ip = $list_array[$key][ip];
-						unset($list_array[$key][ip]);				
-						$list_array[$key][ip][link] = $params;
-						$list_array[$key][ip][content] = $tmp_ip;
+						$tmp_ip = $list_array[$key]['ip'];
+						unset($list_array[$key]['ip']);				
+						$list_array[$key]['ip']['link'] = $params;
+						$list_array[$key]['ip']['content'] = $tmp_ip;
 					}
 				}
 				else

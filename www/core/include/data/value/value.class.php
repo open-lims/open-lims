@@ -1247,9 +1247,9 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 					
 					if ($value[1] == "print" and $value[2] != "#")
 					{
-						if ($value[3][value] and !$value[3]['var'])
+						if ($value[3]['value'] and !$value[3]['var'])
 						{
-							$print_value = $value[3][value];
+							$print_value = $value[3]['value'];
 							$print_value = str_replace("[high]","<sup>",$print_value);
 							$print_value = str_replace("[low]","<sub>",$print_value);
 							$print_value = str_replace("[/high]","</sup>",$print_value);
@@ -1257,7 +1257,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 							
 							$last_print_value = $print_value;
 						}
-						elseif (!$value[3][value] and $value[3]['var'])
+						elseif (!$value[3]['value'] and $value[3]['var'])
 						{
 							$value_var = new ValueVar($folder_id);
 							$value_var_content = $value_var->get_content($value[3]['var']);
@@ -1275,9 +1275,9 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 					
 					if ($value[1] == "field" and $value[2] != "#")
 					{
-						if ($value[3][name])
+						if ($value[3]['name'])
 						{
-							$field_name = $value[3][name];
+							$field_name = $value[3]['name'];
 						}
 						else
 						{
@@ -1293,9 +1293,9 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 							$field_vartype = "string";
 						}
 						
-						if ($value[3][type])
+						if ($value[3]['type'])
 						{
-							switch (trim(strtolower($value[3][type]))):
+							switch (trim(strtolower($value[3]['type']))):
 							
 								case("textarea"):
 									$typename = "textarea";
@@ -1316,15 +1316,15 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 						{
 							foreach ($content_array as $sub_key => $sub_value)
 							{
-								$field_content[$sub_key] = $sub_value[$value[3][name]];
+								$field_content[$sub_key] = $sub_value[$value[3]['name']];
 							}
 							
 							$temp_array = array();
-							$temp_array[name] = $field_name;
-							$temp_array[title] = $last_print_value;
-							$temp_array[vartype] = $field_vartype;
-							$temp_array[type] = $typename;
-							$temp_array[content] = $field_content;
+							$temp_array['name'] = $field_name;
+							$temp_array['title'] = $last_print_value;
+							$temp_array['vartype'] = $field_vartype;
+							$temp_array['type'] = $typename;
+							$temp_array['content'] = $field_content;
 							array_push($return_array, $temp_array);
 							unset($temp_array);
 						}
@@ -1395,10 +1395,10 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 						$return_array[$format_counter] = array();
 						$return_array[$format_counter]['type'] = "format";
 						
-						if ($value[3][colspan])
+						if ($value[3]['colspan'])
 						{
 							$colspan_array = array();
-							$colspan_array = explode(",",$value[3][colspan]);
+							$colspan_array = explode(",",$value[3]['colspan']);
 							$colspan_array_count = 0;
 						}
 					}
@@ -1432,10 +1432,10 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 							$return_array[$format_counter][$line_counter] = array();
 							$return_array[$format_counter][$line_counter]['type'] = "line";
 							
-							if ($value[3][colspan])
+							if ($value[3]['colspan'])
 							{
 								$colspan_array = array();
-								$colspan_array = explode(",",$value[3][colspan]);
+								$colspan_array = explode(",",$value[3]['colspan']);
 								$return_array[$format_counter][$line_counter]['colspan'] = array();
 								$return_array[$format_counter][$line_counter]['colspan'] = $colspan_array;
 							}
@@ -1487,7 +1487,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 						
 						if ($value[3]['value'] and !$value[3]['var'])
 						{
-							array_push($element_array['value'], $value[3][value]);
+							array_push($element_array['value'], $value[3]['value']);
 						}
 						elseif (!$value[3]['value'] and $value[3]['var'])
 						{
@@ -1635,7 +1635,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 						// Size of a textarea
 						if ($value[3]['size'])
 						{
-							$sizeArray = explode(",",$value[3][size]);
+							$sizeArray = explode(",",$value[3]['size']);
 							$field_cols = $sizeArray[0];
 							$field_rows = $sizeArray[1];
 							unset($sizeArray);

@@ -66,32 +66,32 @@
 	
 	Security::protect_session();
 
-	if ($_GET[session_id] and $_FILES)
+	if ($_GET['session_id'] and $_FILES)
 	{
 		global $db, $user, $session, $transaction, $runtime_data;
 
 		$runtime_data = new RuntimeData();
 		
-		$session = new Session($_GET[session_id]);
+		$session = new Session($_GET['session_id']);
 		$user = new User($session->get_user_id());
 		$transaction = new Transaction();
 		
 		if ($session->is_valid() == true)
 		{ 
-			$folder_id = $_GET[folder_id];
+			$folder_id = $_GET['folder_id'];
 			
-			if ($_POST[file_amount] > 25 or $_POST[file_amount] < 1 or !$_POST[file_amount])
+			if ($_POST['file_amount'] > 25 or $_POST['file_amount'] < 1 or !$_POST['file_amount'])
 			{				
 				$file_amount = 1;		
 			}
 			else
 			{	
-				$file_amount = $_POST[file_amount];		
+				$file_amount = $_POST['file_amount'];		
 			}	
 	
 			
 			$file = File::get_instance(null);
-			$file_upload_successful = $file->upload_file_stack($file_amount, $folder_id, $_FILES, $_GET[unique_id]);
+			$file_upload_successful = $file->upload_file_stack($file_amount, $folder_id, $_FILES, $_GET['unique_id']);
 	
 			if ($file_upload_successful == true)
 			{
@@ -107,7 +107,7 @@
 					}
 				}
 								
-				$session->write_value("FILE_UPLOAD_FINISHED_".$_GET[unique_id], true, true);
+				$session->write_value("FILE_UPLOAD_FINISHED_".$_GET['unique_id'], true, true);
 			}
 			else
 			{

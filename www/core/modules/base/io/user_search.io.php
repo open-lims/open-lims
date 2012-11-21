@@ -48,24 +48,24 @@ class UserSearchIO
 	{
 		global $user, $session;
 		
-		if ($_GET[nextpage])
+		if ($_GET['nextpage'])
 		{
-			if ($_GET[page] or $_GET[sortvalue] or $_GET[sortmethod])
+			if ($_GET['page'] or $_GET['sortvalue'] or $_GET['sortmethod'])
 			{
 				$string = $session->read_value("SEARCH_USER_STRING");
 				$type = $session->read_value("SEARCH_USER_TYPE");
 			}
 			else
 			{
-				if ($_GET[nextpage] == "1")
+				if ($_GET['nextpage'] == "1")
 				{
-					$string = $_POST[string];
+					$string = $_POST['string'];
 					$session->delete_value("SEARCH_USER_STRING");
 					$session->delete_value("SEARCH_USER_TYPE");
 				}
 				else
 				{
-					$string = $_POST[string];
+					$string = $_POST['string'];
 					$type = $session->read_value("SEARCH_USER_TYPE");
 				}
 			}
@@ -81,8 +81,8 @@ class UserSearchIO
 			$template = new HTMLTemplate("base/user/search/search.html");
 			
 			$paramquery = $_GET;
-			unset($paramquery[page]);
-			$paramquery[nextpage] = "1";
+			unset($paramquery['page']);
+			$paramquery['nextpage'] = "1";
 			$params = http_build_query($paramquery,'','&#38;');
 					
 			$template->set_var("params",$params);
@@ -95,7 +95,7 @@ class UserSearchIO
 		{
 			if (!$type)
 			{
-				$type = $_POST[search_type];
+				$type = $_POST['search_type'];
 			}
 			
 			$session->write_value("SEARCH_USER_STRING", $string, true);
@@ -131,10 +131,10 @@ class UserSearchIO
 			$template = new HTMLTemplate("base/user/search/search_result.html");
 			
 			$paramquery = $_GET;
-			$paramquery[nextpage] = "2";
-			unset($paramquery[page]);
-			unset($paramquery[sortvalue]);
-			unset($paramquery[sortmethod]);
+			$paramquery['nextpage'] = "2";
+			unset($paramquery['page']);
+			unset($paramquery['sortvalue']);
+			unset($paramquery['sortmethod']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			$template->set_var("params", $params);

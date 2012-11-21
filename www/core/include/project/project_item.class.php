@@ -732,21 +732,21 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     		{
     			foreach($status_item_array as $key => $value)
     			{
-    				if ($value[xml_element] == "information")
+    				if ($value['xml_element'] == "information")
     				{
     					$return_array = array();
     							
-						if ($value[keywords] == "keywords")
+						if ($value['keywords'] == "keywords")
 						{
-							$return_array[keywords] = true;
+							$return_array['keywords'] = true;
 						}
 						
-						if ($value[description] == "description")
+						if ($value['description'] == "description")
 						{
-							$return_array[description] = true;
+							$return_array['description'] = true;
 						}
 						
-						if ($return_array[keywords] or $return_array[description])
+						if ($return_array['keywords'] or $return_array['description'])
 						{
 							return $return_array;
 						}
@@ -794,21 +794,21 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 	    				{
 	    					foreach($class_array as $key => $value)
 	    					{
-	    						if ($value[xml_element] == "information")
+	    						if ($value['xml_element'] == "information")
 	    						{
 	    							$return_array = array();
 	    							
-	    							if ($value[keywords] == "keywords")
+	    							if ($value['keywords'] == "keywords")
 	    							{
-	    								$return_array[keywords] = true;
+	    								$return_array['keywords'] = true;
 	    							}
 	    							
-	    							if ($value[description] == "description")
+	    							if ($value['description'] == "description")
 	    							{
-	    								$return_array[description] = true;
+	    								$return_array['description'] = true;
 	    							}
 	    							
-	    							if ($return_array[keywords] or $return_array[description])
+	    							if ($return_array['keywords'] or $return_array['description'])
 	    							{
 	    								return $return_array;
 	    							}
@@ -854,14 +854,14 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 	    	
 	    	if ($class_information)
 	    	{
-				if ($class_information[description] == true)
+				if ($class_information['description'] == true)
 				{
 					return true;
 				}
 	    	}
 	    	elseif($item_information)
 	    	{
-	    		if ($item_information[description] == true)
+	    		if ($item_information['description'] == true)
 	    		{
 					return true;
 				}
@@ -890,14 +890,14 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 	    	
 	    	if ($class_information)
 	    	{
-				if ($class_information[keywords] == true)
+				if ($class_information['keywords'] == true)
 				{
 					return true;
 				}
 	    	}
 	    	elseif($item_information)
 	    	{
-	    		if ($item_information[keywords] == true)
+	    		if ($item_information['keywords'] == true)
 	    		{
 					return true;
 				}
@@ -926,14 +926,14 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 	    	
 	    	if ($class_information)
 	    	{
-				if ($class_information[description] == true)
+				if ($class_information['description'] == true)
 				{
 					return true;
 				}
 	    	}
 	    	elseif($item_information)
 	    	{
-	    		if ($item_information[description] == true)
+	    		if ($item_information['description'] == true)
 	    		{
 					return true;
 				}
@@ -962,14 +962,14 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 	    	
 	    	if ($class_information)
 	    	{
-				if ($class_information[keywords] == true)
+				if ($class_information['keywords'] == true)
 				{
 					return true;
 				}
 	    	}
 	    	elseif($item_information)
 	    	{
-	    		if ($item_information[keywords] == true)
+	    		if ($item_information['keywords'] == true)
 	    		{
 					return true;
 				}

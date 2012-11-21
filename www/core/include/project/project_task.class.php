@@ -893,8 +893,8 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     						foreach ($next_project_task_has_previous_task_array as $sub_key => $sub_value)
     						{
     							$temp_array 			= array();
-    							$temp_array[previous] 	= $value;
-    							$temp_array[next]		= $sub_value;
+    							$temp_array['previous'] 	= $value;
+    							$temp_array['next']		= $sub_value;
     							if (!in_array($temp_array, $project_relation_array))
     							{
     								array_push($project_relation_array, $temp_array);
@@ -938,7 +938,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 					foreach ($project_relation_array as $key => $value)
 					{
 						$project_task_has_previous_task = new ProjectTaskHasPreviousTask_Access(null, null);
-						if ($project_task_has_previous_task->create($value[next], $value[previous]) == null) {
+						if ($project_task_has_previous_task->create($value['next'], $value['previous']) == null) {
 							if ($transaction_id != null)
 							{
 								$transaction->rollback($transaction_id);
@@ -1077,8 +1077,8 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
     						foreach ($next_project_task_has_previous_task_array as $sub_key => $sub_value)
     						{
     							$temp_array 			= array();
-    							$temp_array[previous] 	= $value;
-    							$temp_array[next]		= $sub_value;
+    							$temp_array['previous'] = $value;
+    							$temp_array['next']		= $sub_value;
     							if (!in_array($temp_array, $project_relation_array))
     							{
     								array_push($project_relation_array, $temp_array);
@@ -1119,7 +1119,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 					foreach ($project_relation_array as $key => $value)
 					{
 						$project_task_has_previous_task = new ProjectTaskHasPreviousTask_Access(null, null);
-						if ($project_task_has_previous_task->create($value[next], $value[previous]) == false) {
+						if ($project_task_has_previous_task->create($value['next'], $value['previous']) == false) {
 							if ($transaction_id != null)
 							{
 								$transaction->rollback($transaction_id);
@@ -2269,11 +2269,11 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
      			if ($project_task->get_over_time() == true)
      			{
      				$temp_array 				= array();
-					$temp_array[project_id]		= $project_task->get_project_id();
-					$temp_array[project_name]	= $project->get_name();
-					$temp_array[task_name]		= $project_task->get_name();
-					$temp_array[end_date]		= $end_task_datetime->get_formatted_string("d/m/Y");
-					$temp_array[status] 		= 1;
+					$temp_array['project_id']	= $project_task->get_project_id();
+					$temp_array['project_name']	= $project->get_name();
+					$temp_array['task_name']	= $project_task->get_name();
+					$temp_array['end_date']		= $end_task_datetime->get_formatted_string("d/m/Y");
+					$temp_array['status'] 		= 1;
 					array_push($upcoming_task_array, $temp_array);
 					unset($temp_array);
      			}
@@ -2282,11 +2282,11 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
      				if ($project_task->get_progress() < 100)
      				{
 						$temp_array 				= array();
-						$temp_array[project_id]		= $project_task->get_project_id();
-						$temp_array[project_name]	= $project->get_name();
-						$temp_array[task_name]		= $project_task->get_name();
-						$temp_array[end_date]		= $end_task_datetime->get_formatted_string("d/m/Y");
-						$temp_array[status] 		= 1;
+						$temp_array['project_id']	= $project_task->get_project_id();
+						$temp_array['project_name']	= $project->get_name();
+						$temp_array['task_name']	= $project_task->get_name();
+						$temp_array['end_date']		= $end_task_datetime->get_formatted_string("d/m/Y");
+						$temp_array['status'] 		= 1;
 						array_push($upcoming_task_array, $temp_array);
 						unset($temp_array);
 						$project_task->set_over_time(true);

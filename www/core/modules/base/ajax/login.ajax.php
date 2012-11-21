@@ -82,7 +82,7 @@ class LoginAjax
 		
 		$auth = new Auth();
 		
-		if ($auth->logout($session->get_user_id(),$_GET[session_id]) == true)
+		if ($auth->logout($session->get_user_id(),$_GET['session_id']) == true)
 		{
 			return 1;
 		}

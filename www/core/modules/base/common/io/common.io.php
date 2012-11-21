@@ -71,13 +71,13 @@ class Common_IO
 	public static function page_bar($page, $max_page, $paramquery)
 	{
 			$previous_paramquery = $paramquery;
-			$previous_paramquery[page] = $page-1;
-			unset($previous_paramquery[show]);
+			$previous_paramquery['page'] = $page-1;
+			unset($previous_paramquery['show']);
 			$prevLink = http_build_query($previous_paramquery,'','&#38;');
 		
 			$next_paramquery = $paramquery;
-			$next_paramquery[page] = $page+1;
-			unset($next_paramquery[show]);
+			$next_paramquery['page'] = $page+1;
+			unset($next_paramquery['show']);
 			$nextLink = http_build_query($next_paramquery,'','&#38;');
 		
 			$return = "<div class='ResultNextPageBar'>";
@@ -97,7 +97,7 @@ class Common_IO
 				for ($i=1;$i<=$max_page;$i++) {
 					
 					$page_paramquery = $paramquery;
-					$page_paramquery[page] = $i;
+					$page_paramquery['page'] = $i;
 					$pageLink = http_build_query($page_paramquery,'','&#38;');
 					
 					$display = false;

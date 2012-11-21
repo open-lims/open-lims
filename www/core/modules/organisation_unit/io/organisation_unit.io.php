@@ -34,9 +34,9 @@ class OrganisationUnitIO
 	{
 		global $user;
 		
-		if ($_GET[ou_id])
+		if ($_GET['ou_id'])
 		{
-			$organisation_unit = new OrganisationUnit($_GET[ou_id]);
+			$organisation_unit = new OrganisationUnit($_GET['ou_id']);
 			
 			$template = new HTMLTemplate("organisation_unit/organisation_unit_detail.html");
 			
@@ -46,11 +46,11 @@ class OrganisationUnitIO
 			if ($user->is_admin() == true)
 			{
 				$paramquery = $_GET;
-				$paramquery[nav] = "administration";
-				$paramquery[run] = "organisation_unit";
-				$paramquery[action] = "detail";
-				$paramquery[id] = $_GET[ou_id];
-				unset($paramquery[ou_id]);
+				$paramquery['nav'] = "administration";
+				$paramquery['run'] = "organisation_unit";
+				$paramquery['action'] = "detail";
+				$paramquery['id'] = $_GET['ou_id'];
+				unset($paramquery['ou_id']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("admin_params", $params);
@@ -75,11 +75,11 @@ class OrganisationUnitIO
 					if ($value == $user->get_user_id())
 					{
 						$paramquery = $_GET;
-						$paramquery[nav] = "administration";
-						$paramquery[run] = "organisation_unit";
-						$paramquery[action] = "detail";
-						$paramquery[id] = $_GET[ou_id];
-						unset($paramquery[ou_id]);
+						$paramquery['nav'] = "administration";
+						$paramquery['run'] = "organisation_unit";
+						$paramquery['action'] = "detail";
+						$paramquery['id'] = $_GET['ou_id'];
+						unset($paramquery['ou_id']);
 						$params = http_build_query($paramquery,'','&#38;');
 						
 						$template->set_var("admin_params", $params);
@@ -90,9 +90,9 @@ class OrganisationUnitIO
 					$owner = new User($value);
 					
 					$owner_paramquery = $_GET;
-					$owner_paramquery[run] = "common_dialog";
-					$owner_paramquery[dialog] = "user_detail";
-					$owner_paramquery[id] = $value;
+					$owner_paramquery['run'] = "common_dialog";
+					$owner_paramquery['dialog'] = "user_detail";
+					$owner_paramquery['id'] = $value;
 					$owner_params = http_build_query($owner_paramquery, '', '&#38;');
 					
 					if ($ou_owners)
@@ -113,10 +113,10 @@ class OrganisationUnitIO
 			$number_of_owners = $organisation_unit->get_number_of_owners();
 			
 			$owner_list_paramquery = $_GET;
-			$owner_list_paramquery[run] = "common_dialog";
-			$owner_list_paramquery[dialog] = "ou_detail";
-			$owner_list_paramquery[action] = "list_owners";
-			$owner_list_paramquery[ou_id] = $_GET[ou_id];
+			$owner_list_paramquery['run'] = "common_dialog";
+			$owner_list_paramquery['dialog'] = "ou_detail";
+			$owner_list_paramquery['action'] = "list_owners";
+			$owner_list_paramquery['ou_id'] = $_GET['ou_id'];
 			$owner_list_params = http_build_query($owner_list_paramquery, '', '&#38;');
 			
 			if ($number_of_owners > 12)
@@ -144,9 +144,9 @@ class OrganisationUnitIO
 					$leader = new User($value);
 					
 					$leader_paramquery = $_GET;
-					$leader_paramquery[run] = "common_dialog";
-					$leader_paramquery[dialog] = "user_detail";
-					$leader_paramquery[id] = $value;
+					$leader_paramquery['run'] = "common_dialog";
+					$leader_paramquery['dialog'] = "user_detail";
+					$leader_paramquery['id'] = $value;
 					$leader_params = http_build_query($leader_paramquery, '', '&#38;');
 					
 					if ($ou_leaders)
@@ -167,10 +167,10 @@ class OrganisationUnitIO
 			$number_of_leaders = $organisation_unit->get_number_of_leaders();
 			
 			$leader_list_paramquery = $_GET;
-			$leader_list_paramquery[run] = "common_dialog";
-			$leader_list_paramquery[dialog] = "ou_detail";
-			$leader_list_paramquery[action] = "list_leaders";
-			$leader_list_paramquery[ou_id] = $_GET[ou_id];
+			$leader_list_paramquery['run'] = "common_dialog";
+			$leader_list_paramquery['dialog'] = "ou_detail";
+			$leader_list_paramquery['action'] = "list_leaders";
+			$leader_list_paramquery['ou_id'] = $_GET['ou_id'];
 			$leader_list_params = http_build_query($leader_list_paramquery, '', '&#38;');
 			
 			if ($number_of_leaders > 12)
@@ -198,9 +198,9 @@ class OrganisationUnitIO
 					$member = new User($value);
 					
 					$member_paramquery = $_GET;
-					$member_paramquery[run] = "common_dialog";
-					$member_paramquery[dialog] = "user_detail";
-					$member_paramquery[id] = $value;
+					$member_paramquery['run'] = "common_dialog";
+					$member_paramquery['dialog'] = "user_detail";
+					$member_paramquery['id'] = $value;
 					$member_params = http_build_query($member_paramquery, '', '&#38;');
 					
 					if ($ou_members)
@@ -221,10 +221,10 @@ class OrganisationUnitIO
 			$number_of_users = $organisation_unit->get_number_of_users();
 			
 			$member_list_paramquery = $_GET;
-			$member_list_paramquery[run] = "common_dialog";
-			$member_list_paramquery[dialog] = "ou_detail";
-			$member_list_paramquery[action] = "list_members";
-			$member_list_paramquery[ou_id] = $_GET[ou_id];
+			$member_list_paramquery['run'] = "common_dialog";
+			$member_list_paramquery['dialog'] = "ou_detail";
+			$member_list_paramquery['action'] = "list_members";
+			$member_list_paramquery['ou_id'] = $_GET['ou_id'];
 			$member_list_params = http_build_query($member_list_paramquery, '', '&#38;');
 			
 			if ($number_of_users > 12)
@@ -252,9 +252,9 @@ class OrganisationUnitIO
 					$quality_manager = new User($value);
 					
 					$quality_manager_paramquery = $_GET;
-					$quality_manager_paramquery[run] = "common_dialog";
-					$quality_manager_paramquery[dialog] = "user_detail";
-					$quality_manager_paramquery[id] = $value;
+					$quality_manager_paramquery['run'] = "common_dialog";
+					$quality_manager_paramquery['dialog'] = "user_detail";
+					$quality_manager_paramquery['id'] = $value;
 					$quality_manager_params = http_build_query($quality_manager_paramquery, '', '&#38;');
 					
 					if ($ou_quality_managers)
@@ -275,10 +275,10 @@ class OrganisationUnitIO
 			$number_of_quality_managers = $organisation_unit->get_number_of_quality_managers();
 			
 			$quality_manager_list_paramquery = $_GET;
-			$quality_manager_list_paramquery[run] = "common_dialog";
-			$quality_manager_list_paramquery[dialog] = "ou_detail";
-			$quality_manager_list_paramquery[action] = "list_quality_managers";
-			$quality_manager_list_paramquery[ou_id] = $_GET[ou_id];
+			$quality_manager_list_paramquery['run'] = "common_dialog";
+			$quality_manager_list_paramquery['dialog'] = "ou_detail";
+			$quality_manager_list_paramquery['action'] = "list_quality_managers";
+			$quality_manager_list_paramquery['ou_id'] = $_GET['ou_id'];
 			$quality_manager_list_params = http_build_query($quality_manager_list_paramquery, '', '&#38;');
 			
 			if ($number_of_quality_managers > 12)
@@ -306,9 +306,9 @@ class OrganisationUnitIO
 					$group = new Group($value);
 					
 					$group_paramquery = $_GET;
-					$group_paramquery[run] = "common_dialog";
-					$group_paramquery[dialog] = "group_detail";
-					$group_paramquery[id] = $value;
+					$group_paramquery['run'] = "common_dialog";
+					$group_paramquery['dialog'] = "group_detail";
+					$group_paramquery['id'] = $value;
 					$group_params = http_build_query($group_paramquery, '', '&#38;');
 					
 					if ($ou_groups)
@@ -329,10 +329,10 @@ class OrganisationUnitIO
 			$number_of_groups = $organisation_unit->get_number_of_groups();
 			
 			$group_list_paramquery = $_GET;
-			$group_list_paramquery[run] = "common_dialog";
-			$group_list_paramquery[dialog] = "ou_detail";
-			$group_list_paramquery[action] = "list_groups";
-			$group_list_paramquery[ou_id] = $_GET[ou_id];
+			$group_list_paramquery['run'] = "common_dialog";
+			$group_list_paramquery['dialog'] = "ou_detail";
+			$group_list_paramquery['action'] = "list_groups";
+			$group_list_paramquery['ou_id'] = $_GET['ou_id'];
 			$group_list_params = http_build_query($group_list_paramquery, '', '&#38;');
 			
 			if ($number_of_groups > 12)
@@ -357,11 +357,11 @@ class OrganisationUnitIO
 				
 				foreach ($module_link_array as $key => $value)
 				{
-					$button_template = new HTMLTemplate($value[file]);
+					$button_template = new HTMLTemplate($value['file']);
 				
 					$button_paramquery = array();
-					$button_paramquery[username] = $_GET[username];
-					$button_paramquery[session_id] = $_GET[session_id];
+					$button_paramquery['username'] = $_GET['username'];
+					$button_paramquery['session_id'] = $_GET['session_id'];
 					
 					if (is_array($value['array']) and count($value['array']) >= 1)
 					{
@@ -385,7 +385,7 @@ class OrganisationUnitIO
 					$button_params = http_build_query($button_paramquery,'','&#38;');
 					$button_template->set_var("params", $button_params);
 					
-					$content_array[$counter][content] = $button_template->get_string();
+					$content_array[$counter]['content'] = $button_template->get_string();
 					$counter++;
 				}
 				
@@ -438,7 +438,7 @@ class OrganisationUnitIO
 			$template->set_var("fullname", $current_user->get_full_name(false));
 			
 			$paramquery = $_GET;
-			$paramquery[action] = "add_organisation_unit";
+			$paramquery['action'] = "add_organisation_unit";
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			$template->set_var("add_ou_params", $params);	
@@ -455,12 +455,12 @@ class OrganisationUnitIO
 					$organisation_unit = new OrganisationUnit($value);
 					
 					$paramquery = $_GET;
-					$paramquery[action] = "delete_organisation_unit";
-					$paramquery[key] = $value;
+					$paramquery['action'] = "delete_organisation_unit";
+					$paramquery['key'] = $value;
 					$params = http_build_query($paramquery,'','&#38;');
 					
-					$organisation_unit_content_array[$counter][name] = $organisation_unit->get_name();
-					$organisation_unit_content_array[$counter][delete_params] = $params;
+					$organisation_unit_content_array[$counter]['name'] = $organisation_unit->get_name();
+					$organisation_unit_content_array[$counter]['delete_params'] = $params;
 					
 					$counter++;
 				}
@@ -493,7 +493,7 @@ class OrganisationUnitIO
 			$template = new HTMLTemplate("organisation_unit/admin/dialog/list_group_admin.html");
 			
 			$paramquery = $_GET;
-			$paramquery[action] = "add_organisation_unit";
+			$paramquery['action'] = "add_organisation_unit";
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			$template->set_var("add_ou_params", $params);	
@@ -510,12 +510,12 @@ class OrganisationUnitIO
 					$organisation_unit = new OrganisationUnit($value);
 					
 					$paramquery = $_GET;
-					$paramquery[action] = "delete_organisation_unit";
-					$paramquery[key] = $value;
+					$paramquery['action'] = "delete_organisation_unit";
+					$paramquery['key'] = $value;
 					$params = http_build_query($paramquery,'','&#38;');
 					
-					$organisation_unit_content_array[$counter][name] = $organisation_unit->get_name();
-					$organisation_unit_content_array[$counter][delete_params] = $params;
+					$organisation_unit_content_array[$counter]['name'] = $organisation_unit->get_name();
+					$organisation_unit_content_array[$counter]['delete_params'] = $params;
 					
 					$counter++;
 				}
@@ -541,13 +541,13 @@ class OrganisationUnitIO
 	 */
 	public static function list_owners()
 	{
-		if ($_GET[ou_id])
+		if ($_GET['ou_id'])
 		{
-			$organisation_unit = new OrganisationUnit($_GET[ou_id]);
+			$organisation_unit = new OrganisationUnit($_GET['ou_id']);
 			
 			$argument_array = array();
 			$argument_array[0][0] = "organisation_unit_id";
-			$argument_array[0][1] = $_GET[ou_id];
+			$argument_array[0][1] = $_GET['ou_id'];
 			
 			$list = new List_IO("OrganisationUnitListOwners", "ajax.php?nav=organisation_unit", "list_owners", "count_owners", $argument_array, "OrganisationUnitListOwners");
 	
@@ -573,13 +573,13 @@ class OrganisationUnitIO
 	 */
 	public static function list_leaders()
 	{
-		if ($_GET[ou_id])
+		if ($_GET['ou_id'])
 		{
-			$organisation_unit = new OrganisationUnit($_GET[ou_id]);
+			$organisation_unit = new OrganisationUnit($_GET['ou_id']);
 			
 			$argument_array = array();
 			$argument_array[0][0] = "organisation_unit_id";
-			$argument_array[0][1] = $_GET[ou_id];
+			$argument_array[0][1] = $_GET['ou_id'];
 			
 			$list = new List_IO("OrganisationUnitListLeaders", "ajax.php?nav=organisation_unit", "list_leaders", "count_leaders", $argument_array, "OrganisationUnitListLeaders");
 	
@@ -605,13 +605,13 @@ class OrganisationUnitIO
 	 */
 	public static function list_members()
 	{
-		if ($_GET[ou_id])
+		if ($_GET['ou_id'])
 		{
-			$organisation_unit = new OrganisationUnit($_GET[ou_id]);
+			$organisation_unit = new OrganisationUnit($_GET['ou_id']);
 			
 			$argument_array = array();
 			$argument_array[0][0] = "organisation_unit_id";
-			$argument_array[0][1] = $_GET[ou_id];
+			$argument_array[0][1] = $_GET['ou_id'];
 			
 			$list = new List_IO("OrganisationUnitListMembers", "ajax.php?nav=organisation_unit", "list_members", "count_members", $argument_array, "OrganisationUnitListMembers");
 	
@@ -637,13 +637,13 @@ class OrganisationUnitIO
 	 */
 	public static function list_quality_managers()
 	{
-		if ($_GET[ou_id])
+		if ($_GET['ou_id'])
 		{
-			$organisation_unit = new OrganisationUnit($_GET[ou_id]);
+			$organisation_unit = new OrganisationUnit($_GET['ou_id']);
 			
 			$argument_array = array();
 			$argument_array[0][0] = "organisation_unit_id";
-			$argument_array[0][1] = $_GET[ou_id];
+			$argument_array[0][1] = $_GET['ou_id'];
 			
 			$list = new List_IO("OrganisationUnitListQualityManagers", "ajax.php?nav=organisation_unit", "list_quality_managers", "count_quality_managers", $argument_array, "OrganisationUnitListQualityManagers");
 	
@@ -669,13 +669,13 @@ class OrganisationUnitIO
 	 */
 	public static function list_groups()
 	{
-		if ($_GET[ou_id])
+		if ($_GET['ou_id'])
 		{
-			$organisation_unit = new OrganisationUnit($_GET[ou_id]);
+			$organisation_unit = new OrganisationUnit($_GET['ou_id']);
 			
 			$argument_array = array();
 			$argument_array[0][0] = "organisation_unit_id";
-			$argument_array[0][1] = $_GET[ou_id];
+			$argument_array[0][1] = $_GET['ou_id'];
 			
 			$list = new List_IO("OrganisationUnitListGroups", "ajax.php?nav=organisation_unit", "list_groups", "count_groups", $argument_array, "OrganisationUnitListGroups");
 	
@@ -697,7 +697,7 @@ class OrganisationUnitIO
 	
 	public static function detail_handler()
 	{
-		switch($_GET[action]):
+		switch($_GET['action']):
 		
 			case "list_owners":
 				self::list_owners();

@@ -64,30 +64,30 @@ class AdminBaseModuleAjax
 			{		
 				foreach($list_array as $key => $value)
 				{	
-					if ($list_array[$key][name] != "base")
+					if ($list_array[$key]['name'] != "base")
 					{
 						$paramquery = $_GET;
-						$paramquery[id] = $list_array[$key][id];
-						$paramquery[action] = "disable";
-						unset($paramquery[sortvalue]);
-						unset($paramquery[sortmethod]);
-						unset($paramquery[nextpage]);
+						$paramquery['id'] = $list_array[$key]['id'];
+						$paramquery['action'] = "disable";
+						unset($paramquery['sortvalue']);
+						unset($paramquery['sortmethod']);
+						unset($paramquery['nextpage']);
 						$params = http_build_query($paramquery, '', '&#38;');
 			
-						$list_array[$key][disable][link] = $params;
+						$list_array[$key]['disable']['link'] = $params;
 						
-						if ($list_array[$key][disabled] == 't')
+						if ($list_array[$key]['disabled'] == 't')
 						{
-							$list_array[$key][disable][content] = "<img src='images/icons/grey_point.png' alt='hide' style='border: 0;' />";
+							$list_array[$key]['disable']['content'] = "<img src='images/icons/grey_point.png' alt='hide' style='border: 0;' />";
 						}
 						else
 						{
-							$list_array[$key][disable][content] = "<img src='images/icons/green_point.png' alt='hide' style='border: 0;' />";
+							$list_array[$key]['disable']['content'] = "<img src='images/icons/green_point.png' alt='hide' style='border: 0;' />";
 						}					
 					}
 					else
 					{
-						$list_array[$key][disable] = "<img src='images/icons/green_point.png' alt='hide' style='border: 0;' />";
+						$list_array[$key]['disable'] = "<img src='images/icons/green_point.png' alt='hide' style='border: 0;' />";
 					}
 				}
 			}

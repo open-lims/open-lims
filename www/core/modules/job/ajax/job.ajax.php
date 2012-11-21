@@ -55,41 +55,41 @@ class JobAjax
 		{
 			foreach($list_array as $key => $value)
 			{
-				$datetime_handler = new DatetimeHandler($list_array[$key][created_at]);
-				$list_array[$key][created_at] = $datetime_handler->get_formatted_string("dS M Y H:i");
+				$datetime_handler = new DatetimeHandler($list_array[$key]['created_at']);
+				$list_array[$key]['created_at'] = $datetime_handler->get_formatted_string("dS M Y H:i");
 				
-				$user = new User($list_array[$key][user_id]);
-				$list_array[$key][user] = $user->get_full_name(true);
+				$user = new User($list_array[$key]['user_id']);
+				$list_array[$key]['user'] = $user->get_full_name(true);
 				
-				switch($list_array[$key][status]):
+				switch($list_array[$key]['status']):
 					case "0":
-						$list_array[$key][symbol] = "<img src='images/icons/job_queue.png' alt='' />";
-						$list_array[$key][status] = "created";
+						$list_array[$key]['symbol'] = "<img src='images/icons/job_queue.png' alt='' />";
+						$list_array[$key]['status'] = "created";
 					break;
 					
 					case "1":
-						$list_array[$key][symbol] = "<img src='images/icons/job_queue.png' alt='' />";
-						$list_array[$key][status] = "in queue";
+						$list_array[$key]['symbol'] = "<img src='images/icons/job_queue.png' alt='' />";
+						$list_array[$key]['status'] = "in queue";
 					break;
 					
 					case "2":
-						$list_array[$key][symbol] = "<img src='images/icons/job_running.png' alt='' />";
-						$list_array[$key][status] = "running";
+						$list_array[$key]['symbol'] = "<img src='images/icons/job_running.png' alt='' />";
+						$list_array[$key]['status'] = "running";
 					break;
 					
 					case "3":
-						$list_array[$key][symbol] = "<img src='images/icons/job_finished.png' alt='' />";
-						$list_array[$key][status] = "finished";
+						$list_array[$key]['symbol'] = "<img src='images/icons/job_finished.png' alt='' />";
+						$list_array[$key]['status'] = "finished";
 					break;
 					
 					case "4":
-						$list_array[$key][symbol] = "<img src='images/icons/job_error.png' alt='' />";
-						$list_array[$key][status] = "error";
+						$list_array[$key]['symbol'] = "<img src='images/icons/job_error.png' alt='' />";
+						$list_array[$key]['status'] = "error";
 					break;
 					
 					default:
-						$list_array[$key][symbol] = "<img src='images/icons/job_unknown.png' alt='' />";
-						$list_array[$key][status] = "unknow status";
+						$list_array[$key]['symbol'] = "<img src='images/icons/job_unknown.png' alt='' />";
+						$list_array[$key]['status'] = "unknow status";
 					break;
 				endswitch;
 			}

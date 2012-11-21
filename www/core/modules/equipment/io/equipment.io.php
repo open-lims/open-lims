@@ -235,7 +235,7 @@ class EquipmentIO
 				{
 					$organisation_unit = new OrganisationUnit($value);
 					
-					$ou_content_array[$counter][name] = $organisation_unit->get_name();
+					$ou_content_array[$counter]['name'] = $organisation_unit->get_name();
 					$counter++;
 				}
 				$template->set_var("no_ou", false);

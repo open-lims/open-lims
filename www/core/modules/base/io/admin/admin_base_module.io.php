@@ -45,14 +45,14 @@ class AdminBaseModuleIO
 	
 	public static function disable()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{				
 			$paramquery = $_GET;
-			unset($paramquery[action]);
-			unset($paramquery[id]);
+			unset($paramquery['action']);
+			unset($paramquery['id']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			if (SystemHandler::disable_module($_GET[id]))
+			if (SystemHandler::disable_module($_GET['id']))
 			{
 				Common_IO::step_proceed($params, "Disable", "Operation Successful", null);
 			}
@@ -69,7 +69,7 @@ class AdminBaseModuleIO
 	
 	public static function handler()
 	{
-		switch($_GET[action]):
+		switch($_GET['action']):
 			case "disable":
 				self::disable();
 			break;	

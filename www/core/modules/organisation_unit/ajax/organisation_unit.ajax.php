@@ -497,7 +497,7 @@ class OrganisationUnitAjax
 						{
 							if ($array_value == "%OU_ID%")
 							{
-								$paramquery['ou_id'] = $list_array[$key][id];
+								$paramquery['ou_id'] = $list_array[$key]['id'];
 							}
 							else
 							{
@@ -508,22 +508,22 @@ class OrganisationUnitAjax
 					
 					$params = http_build_query($paramquery, '', '&#38;');
 					
-					$tmp_symbol = $list_array[$key][symbol];
-					unset($list_array[$key][symbol]);
-					$list_array[$key][symbol][link] = $params;
-					$list_array[$key][symbol][content] = "<img src='images/icons/".$tmp_symbol."' alt='N' border='0' />";
+					$tmp_symbol = $list_array[$key]['symbol'];
+					unset($list_array[$key]['symbol']);
+					$list_array[$key]['symbol']['link'] = $params;
+					$list_array[$key]['symbol']['content'] = "<img src='images/icons/".$tmp_symbol."' alt='N' border='0' />";
 					
-					$tmp_name = $list_array[$key][name];
-					unset($list_array[$key][name]);
-					$list_array[$key][name][link] = $params;
-					$list_array[$key][name][content] = $tmp_name;
+					$tmp_name = $list_array[$key]['name'];
+					unset($list_array[$key]['name']);
+					$list_array[$key]['name']['link'] = $params;
+					$list_array[$key]['name']['content'] = $tmp_name;
 					
-					if ($list_array[$key][is_member])
+					if ($list_array[$key]['is_member'])
 					{
 						$my_status_string = "Member";
 					}
 					
-					if ($list_array[$key][is_owner])
+					if ($list_array[$key]['is_owner'])
 					{
 						if ($my_status_string)
 						{
@@ -535,7 +535,7 @@ class OrganisationUnitAjax
 						}
 					}
 					
-					if ($list_array[$key][is_leader])
+					if ($list_array[$key]['is_leader'])
 					{
 						if ($my_status_string)
 						{
@@ -547,7 +547,7 @@ class OrganisationUnitAjax
 						}
 					}
 					
-					if ($list_array[$key][is_quality_manager])
+					if ($list_array[$key]['is_quality_manager'])
 					{
 						if ($my_status_string)
 						{
@@ -559,7 +559,7 @@ class OrganisationUnitAjax
 						}
 					}
 					
-					$list_array[$key][mystatus] = $my_status_string;
+					$list_array[$key]['mystatus'] = $my_status_string;
 				}
 			}
 			else

@@ -91,32 +91,32 @@ class DataAjax
 				if ($data_path->get_previous_entry_virtual() == true)
 				{			
 					$paramquery = $_GET;
-					$paramquery[vfolder_id] = $data_path->get_previous_entry_id();
-					unset($paramquery[folder_id]);
-					unset($paramquery[nextpage]);
-					unset($paramquery[page]);
+					$paramquery['vfolder_id'] = $data_path->get_previous_entry_id();
+					unset($paramquery['folder_id']);
+					unset($paramquery['nextpage']);
+					unset($paramquery['page']);
 					$params = http_build_query($paramquery,'','&#38;');
 				}
 				else
 				{
 					$paramquery = $_GET;
-					$paramquery[folder_id] = $data_path->get_previous_entry_id();
-					unset($paramquery[nextpage]);
-					unset($paramquery[vfolder_id]);
-					unset($paramquery[page]);
+					$paramquery['folder_id'] = $data_path->get_previous_entry_id();
+					unset($paramquery['nextpage']);
+					unset($paramquery['vfolder_id']);
+					unset($paramquery['page']);
 					$params = http_build_query($paramquery,'','&#38;');
 				}		
 				
-				$first_line_array[symbol][link] = $params;
-				$first_line_array[symbol][content] = "<img src='images/icons/parent_folder.png' alt='' style='border:0;' />";
-				$first_line_array[name][link] = $params;
-				$first_line_array[name][content] = "[parent folder]";
-				$first_line_array[type] = "Parent Folder";
-				$first_line_array[version] = "";
-				$first_line_array[datetime] = "";
-				$first_line_array[size] = "";
-				$first_line_array[owner] = "";
-				$first_line_array[permission] = "";
+				$first_line_array['symbol']['link'] = $params;
+				$first_line_array['symbol']['content'] = "<img src='images/icons/parent_folder.png' alt='' style='border:0;' />";
+				$first_line_array['name']['link'] = $params;
+				$first_line_array['name']['content'] = "[parent folder]";
+				$first_line_array['type'] = "Parent Folder";
+				$first_line_array['version'] = "";
+				$first_line_array['datetime'] = "";
+				$first_line_array['size'] = "";
+				$first_line_array['owner'] = "";
+				$first_line_array['permission'] = "";
 				
 				$list_request->add_first_line($first_line_array, "DataBrowserParentFolderRow");
 			} 
@@ -126,156 +126,156 @@ class DataAjax
 				foreach($list_array as $key => $value)
 				{
 					// Common
-					$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
-					$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+					$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
+					$list_array[$key]['datetime'] = $datetime_handler->get_formatted_string("dS M Y H:i");
 										
-					if ($list_array[$key][owner_id])
+					if ($list_array[$key]['owner_id'])
 					{
-						$user = new User($list_array[$key][owner_id]);
+						$user = new User($list_array[$key]['owner_id']);
 					}
 					else
 					{
 						$user = new User(1);
 					}
 					
-					$list_array[$key][owner] = $user->get_full_name(true);
+					$list_array[$key]['owner'] = $user->get_full_name(true);
 
 					// Special
-					if ($list_array[$key][file_id])
+					if ($list_array[$key]['file_id'])
 					{						
-						$file = File::get_instance($list_array[$key][file_id]);
+						$file = File::get_instance($list_array[$key]['file_id']);
 
 						if ($file->is_read_access() == true)
 						{
 							$paramquery = $_GET;
-							$paramquery[nav] = $_GET[nav];
-							$paramquery[file_id] = $list_array[$key][file_id];
-							$paramquery[action] = "file_detail";
+							$paramquery['nav'] = $_GET['nav'];
+							$paramquery['file_id'] = $list_array[$key]['file_id'];
+							$paramquery['action'] = "file_detail";
 							$params = http_build_query($paramquery,'','&#38;');
 						
-							$list_array[$key][symbol][link] = $params;
-							$list_array[$key][symbol][content] = "<img src='".$file->get_icon()."' alt='' style='border:0;' />";
+							$list_array[$key]['symbol']['link'] = $params;
+							$list_array[$key]['symbol']['content'] = "<img src='".$file->get_icon()."' alt='' style='border:0;' />";
 							
 							
-							$tmp_name = $list_array[$key][name];
-							unset($list_array[$key][name]);
-							$list_array[$key][name][content] = $tmp_name;
-							$list_array[$key][name][link] = $params;
+							$tmp_name = $list_array[$key]['name'];
+							unset($list_array[$key]['name']);
+							$list_array[$key]['name']['content'] = $tmp_name;
+							$list_array[$key]['name']['link'] = $params;
 						}
 						else
 						{
-							$list_array[$key][symbol] = "<img src='core/images/denied_overlay.php?image=".$file->get_icon()."' alt='' border='0' />";
+							$list_array[$key]['symbol'] = "<img src='core/images/denied_overlay.php?image=".$file->get_icon()."' alt='' border='0' />";
 						}
 						
-						$list_array[$key][type] = "File";
-						$list_array[$key][version] = $file->get_version();
-						$list_array[$key][size] = Convert::convert_byte_1024($list_array[$key][size]);
-						$list_array[$key][permission] = $file->get_permission_string();
+						$list_array[$key]['type'] = "File";
+						$list_array[$key]['version'] = $file->get_version();
+						$list_array[$key]['size'] = Convert::convert_byte_1024($list_array[$key]['size']);
+						$list_array[$key]['permission'] = $file->get_permission_string();
 						
 						if($file->is_delete_access())
 						{
-							$list_array[$key][delete_checkbox] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name=''></input>";
+							$list_array[$key]['delete_checkbox'] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name=''></input>";
 						}
 						else
 						{
-							$list_array[$key][delete_checkbox] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name='' disabled='disabled'></input>";
+							$list_array[$key]['delete_checkbox'] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name='' disabled='disabled'></input>";
 						}
 					}
-					elseif ($list_array[$key][value_id])
+					elseif ($list_array[$key]['value_id'])
 					{
-						$value = Value::get_instance($list_array[$key][value_id]);
+						$value = Value::get_instance($list_array[$key]['value_id']);
 
 						if ($value->is_read_access() == true)
 						{
 							$paramquery = $_GET;
-							$paramquery[nav] = $_GET[nav];
-							$paramquery[value_id] = $list_array[$key][value_id];
-							$paramquery[action] = "value_detail";
+							$paramquery['nav'] = $_GET['nav'];
+							$paramquery['value_id'] = $list_array[$key]['value_id'];
+							$paramquery['action'] = "value_detail";
 							$params = http_build_query($paramquery,'','&#38;');
 						
-							$list_array[$key][symbol][link] = $params;
-							$list_array[$key][symbol][content] = "<img src='images/fileicons/16/unknown.png' alt='' style='border:0;' />";
+							$list_array[$key]['symbol']['link'] = $params;
+							$list_array[$key]['symbol']['content'] = "<img src='images/fileicons/16/unknown.png' alt='' style='border:0;' />";
 														
-							$tmp_name = $list_array[$key][name];
-							unset($list_array[$key][name]);
-							$list_array[$key][name][content] = $tmp_name;
-							$list_array[$key][name][link] = $params;
+							$tmp_name = $list_array[$key]['name'];
+							unset($list_array[$key]['name']);
+							$list_array[$key]['name']['content'] = $tmp_name;
+							$list_array[$key]['name']['link'] = $params;
 						}
 						else
 						{
-							$list_array[$key][symbol] = "<img src='core/images/denied_overlay.php?image=images/fileicons/16/unknown.png' alt='' border='0' />";
+							$list_array[$key]['symbol'] = "<img src='core/images/denied_overlay.php?image=images/fileicons/16/unknown.png' alt='' border='0' />";
 						}
 						
-						$list_array[$key][type] = "Value";
-						$list_array[$key][version] = $value->get_version();
-						$list_array[$key][permission] = $value->get_permission_string();
+						$list_array[$key]['type'] = "Value";
+						$list_array[$key]['version'] = $value->get_version();
+						$list_array[$key]['permission'] = $value->get_permission_string();
 						
 						if($value->is_delete_access())
 						{
-							$list_array[$key][delete_checkbox] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name=''></input>";
+							$list_array[$key]['delete_checkbox'] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name=''></input>";
 						}
 						else
 						{
-							$list_array[$key][delete_checkbox] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name='' disabled='disabled'></input>";
+							$list_array[$key]['delete_checkbox'] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name='' disabled='disabled'></input>";
 						}
 					}
-					elseif ($list_array[$key][folder_id])
+					elseif ($list_array[$key]['folder_id'])
 					{	
-						$sub_folder = Folder::get_instance($list_array[$key][folder_id]);				
+						$sub_folder = Folder::get_instance($list_array[$key]['folder_id']);				
 						if ($sub_folder->is_read_access() == true)
 						{
 							$paramquery = $_GET;
-							$paramquery[folder_id] = $list_array[$key][folder_id];
-							unset($paramquery[nextpage]);
-							unset($paramquery[vfolder_id]);
-							unset($paramquery[page]);
+							$paramquery['folder_id'] = $list_array[$key]['folder_id'];
+							unset($paramquery['nextpage']);
+							unset($paramquery['vfolder_id']);
+							unset($paramquery['page']);
 							$params = http_build_query($paramquery,'','&#38;');
 							
-							$list_array[$key][symbol][content] = "<img src='images/icons/folder.png' alt='' style='border:0;' />";
-							$list_array[$key][symbol][link] = $params;
+							$list_array[$key]['symbol']['content'] = "<img src='images/icons/folder.png' alt='' style='border:0;' />";
+							$list_array[$key]['symbol']['link'] = $params;
 							
-							$tmp_name = $list_array[$key][name];
-							unset($list_array[$key][name]);
-							$list_array[$key][name][content] = $tmp_name;
-							$list_array[$key][name][link] = $params;
-							$list_array[$key][name]['class'] = "DataBrowserIsFolder";
+							$tmp_name = $list_array[$key]['name'];
+							unset($list_array[$key]['name']);
+							$list_array[$key]['name']['content'] = $tmp_name;
+							$list_array[$key]['name']['link'] = $params;
+							$list_array[$key]['name']['class'] = "DataBrowserIsFolder";
 						}
 						else
 						{
-							$list_array[$key][symbol] = "<img src='core/images/denied_overlay.php?image=images/icons/folder.png' alt='' border='0' />";
+							$list_array[$key]['symbol'] = "<img src='core/images/denied_overlay.php?image=images/icons/folder.png' alt='' border='0' />";
 						}
 						
-						$list_array[$key][type] = "Folder";
-						$list_array[$key][permission] = $sub_folder->get_permission_string();
+						$list_array[$key]['type'] = "Folder";
+						$list_array[$key]['permission'] = $sub_folder->get_permission_string();
 						
 						if($sub_folder->is_delete_access())
 						{
-							$list_array[$key][delete_checkbox] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name=''></input>";
+							$list_array[$key]['delete_checkbox'] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name=''></input>";
 						}
 						else
 						{
-							$list_array[$key][delete_checkbox] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name='' disabled='disabled'></input>";
+							$list_array[$key]['delete_checkbox'] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name='' disabled='disabled'></input>";
 						}
 					}
-					elseif ($list_array[$key][virtual_folder_id])
+					elseif ($list_array[$key]['virtual_folder_id'])
 					{
 						$paramquery = $_GET;
-						$paramquery[vfolder_id] = $list_array[$key][virtual_folder_id];
-						unset($paramquery[nextpage]);
+						$paramquery['vfolder_id'] = $list_array[$key]['virtual_folder_id'];
+						unset($paramquery['nextpage']);
 						$params = http_build_query($paramquery,'','&#38;');
 						
-						$list_array[$key][symbol][content] = "<img src='images/icons/virtual_folder.png' alt='' style='border:0;' />";
-						$list_array[$key][symbol][link] = $params;
+						$list_array[$key]['symbol']['content'] = "<img src='images/icons/virtual_folder.png' alt='' style='border:0;' />";
+						$list_array[$key]['symbol']['link'] = $params;
 						
-						$tmp_name = $list_array[$key][name];
-						unset($list_array[$key][name]);
-						$list_array[$key][name][content] = $tmp_name;
-						$list_array[$key][name][link] = $params;
+						$tmp_name = $list_array[$key]['name'];
+						unset($list_array[$key]['name']);
+						$list_array[$key]['name']['content'] = $tmp_name;
+						$list_array[$key]['name']['link'] = $params;
 						
-						$list_array[$key][type] = "Virtual Folder";
-						$list_array[$key][permission] = "automatic";
+						$list_array[$key]['type'] = "Virtual Folder";
+						$list_array[$key]['permission'] = "automatic";
 						
-						$list_array[$key][delete_checkbox] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name='' disabled='disabled'></input>";
+						$list_array[$key]['delete_checkbox'] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name='' disabled='disabled'></input>";
 					}
 				}
 			}
@@ -331,19 +331,19 @@ class DataAjax
 	{
 		global $user;
 		
-		if ($_POST[file_id] xor $_POST[value_id])
+		if ($_POST['file_id'] xor $_POST['value_id'])
 		{
-			if ($_POST[file_id])
+			if ($_POST['file_id'])
 			{
-				$id = $_POST[file_id];
+				$id = $_POST['file_id'];
 				$object = File::get_instance($id);
 				$type = "file";
 				$title = $object->get_name();
 			}
 			
-			if ($_POST[value_id])
+			if ($_POST['value_id'])
 			{
-				$id = $_POST[value_id];
+				$id = $_POST['value_id'];
 				$object = Value::get_instance($id);
 				$type = "value";
 				$title = $object->get_type_name();
@@ -351,9 +351,9 @@ class DataAjax
 		}
 		else
 		{
-			if ($_POST[folder_id])
+			if ($_POST['folder_id'])
 			{
-				$id = $_POST[folder_id];
+				$id = $_POST['folder_id'];
 				$object = Folder::get_instance($id);
 				$type = "folder";
 				$title = $object->get_name();
@@ -496,8 +496,8 @@ class DataAjax
 		}
 
 		$paramquery = $_GET;
-		$paramquery[nav] = "data";
-		unset($paramquery[action]);
+		$paramquery['nav'] = "data";
+		unset($paramquery['action']);
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		return $template->get_string();	
@@ -516,15 +516,15 @@ class DataAjax
 		$permissions = (array)$permission_array;
 		switch($type):
 			case "File": 
-				$id = $_POST[file_id];
+				$id = $_POST['file_id'];
 				$object = File::get_instance($id);
 			break;
 			case "Folder": 
-				$id = $_POST[folder_id];
+				$id = $_POST['folder_id'];
 				$object = Folder::get_instance($id);
 			break;
 			case "Value": 
-				$id = $_POST[value_id];
+				$id = $_POST['value_id'];
 				$object = Value::get_instance($id);
 			break;
 		endswitch;
@@ -554,8 +554,8 @@ class DataAjax
 			$data_permission = new DataPermission($type, $id);
 			
 			$paramquery = $_GET;
-			unset($paramquery[action]);
-			unset($paramquery[nextpage]);
+			unset($paramquery['action']);
+			unset($paramquery['nextpage']);
 			$params = http_build_query($paramquery,'','&#38;');
 			if ($data_permission->set_permission_array($permissions) == true)
 			{

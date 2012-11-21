@@ -82,11 +82,11 @@ class ProjectTaskPoint implements ProjectTaskPointInterface
     			
     			foreach($project_status_array as $key => $value)
     			{
-    				if ($value[id] == $status_id)
+    				if ($value['id'] == $status_id)
     				{
     					$array_key = $key;
-    					$status = $value[status];
-    					$status_datetime = $value[datetime];
+    					$status = $value['status'];
+    					$status_datetime = $value['datetime'];
     				}
     			}	
     			
@@ -156,11 +156,11 @@ class ProjectTaskPoint implements ProjectTaskPointInterface
     				
     			foreach ($status_requirement_array as $key => $value)
     			{
-    				if ($value[fulfilled] == true and $value[element_type] == "item")
+    				if ($value['fulfilled'] == true and $value['element_type'] == "item")
     				{    					
-    					if ($value[requirement] == "force")
+    					if ($value['requirement'] == "force")
     					{
-    						if ($value[occurrence] == "once")
+    						if ($value['occurrence'] == "once")
     						{
     							$points = $points + 2;
     						}
@@ -202,9 +202,9 @@ class ProjectTaskPoint implements ProjectTaskPointInterface
     				
     			foreach ($status_requirement_array  as $key => $value)
     			{
-					if ($value[requirement] == "force")
+					if ($value['requirement'] == "force")
 					{
-						if ($value[occurrence] == "once")
+						if ($value['occurrence'] == "once")
     					{
     						$points = $points + 2;
     					}
@@ -252,27 +252,27 @@ class ProjectTaskPoint implements ProjectTaskPointInterface
   
     				foreach($project_status_array as $key => $value)
     				{
-    					if ($value[id] == $begin_status_id)
+    					if ($value['id'] == $begin_status_id)
     					{
     						$use_status = true;
     					}
     					
     					if ($use_status == true)
     					{
-    						if ($value[id] == $end_status_id)
+    						if ($value['id'] == $end_status_id)
     						{
 	    						if ($project_task->get_finalise() == true)
 	    						{
-	    							$points = $points + $this->get_status_max_points($value[id]);
+	    							$points = $points + $this->get_status_max_points($value['id']);
 	    						}
 	    					}
 	    					else
 	    					{
-	    						$points = $points + $this->get_status_max_points($value[id]) + 1;
+	    						$points = $points + $this->get_status_max_points($value['id']) + 1;
 	    					}
     					}
     					
-    					if ($value[id] == $end_status_id)
+    					if ($value['id'] == $end_status_id)
     					{
     						$use_status = false;
     					}
@@ -336,27 +336,27 @@ class ProjectTaskPoint implements ProjectTaskPointInterface
   
     				foreach($project_status_array as $key => $value)
     				{
-    					if ($value[id] == $begin_status_id)
+    					if ($value['id'] == $begin_status_id)
     					{
     						$use_status = true;
     					}
     					
     					if ($use_status == true)
     					{
-	    					if ($value[id] == $end_status_id)
+	    					if ($value['id'] == $end_status_id)
 	    					{
 	    						if ($project_task->get_finalise() == true)
 	    						{
-	    							$points = $points + $this->get_status_achieved_points($value[id], $project_task_end_datetime_handler);
+	    							$points = $points + $this->get_status_achieved_points($value['id'], $project_task_end_datetime_handler);
 	    						}
 	    					}
 	    					else
 	    					{
-	    						$points = $points + $this->get_status_achieved_points($value[id], $project_task_end_datetime_handler);
+	    						$points = $points + $this->get_status_achieved_points($value['id'], $project_task_end_datetime_handler);
 	    					}
     					}
     					
-    					if ($value[id] == $end_status_id)
+    					if ($value['id'] == $end_status_id)
     					{
     						$use_status = false;
     					}

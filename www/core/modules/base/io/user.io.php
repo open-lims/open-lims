@@ -52,21 +52,21 @@ class UserIO
 		}
 				
 		$paramquery_personal = $_GET;
-		$paramquery_personal[run] = "user_change_personal";
+		$paramquery_personal['run'] = "user_change_personal";
 		$param_personal = http_build_query($paramquery_personal);
 		
 		$template->set_var("params_change_personal",$param_personal);
 		
 		
 		$paramquery_my_settings = $_GET;
-		$paramquery_my_settings[run] = "user_change_my_settings";
+		$paramquery_my_settings['run'] = "user_change_my_settings";
 		$param_my_settings = http_build_query($paramquery_my_settings);
 			
 		$template->set_var("params_my_settings",$param_my_settings);
 		
 		
 		$paramquery_password = $_GET;
-		$paramquery_password[run] = "user_change_password";
+		$paramquery_password['run'] = "user_change_password";
 		$param_password = http_build_query($paramquery_password);
 			
 		$template->set_var("params_change_password",$param_password);
@@ -80,11 +80,11 @@ class UserIO
 		global $user;
 		
 		$no_error = false;
-		if ($_GET[nextpage] == 1)
+		if ($_GET['nextpage'] == 1)
 		{
 			$no_error = true;
 			
-			if (!$_POST[forename])
+			if (!$_POST['forename'])
 			{
 				$no_error = false;
 				$error[0] = "<br /><span class='formError'>This field cannot be empty</span>";
@@ -94,7 +94,7 @@ class UserIO
 				$error[0] = "";
 			}
 			
-			if (!$_POST[surname])
+			if (!$_POST['surname'])
 			{
 				$no_error = false;
 				$error[1] = "<br /><span class='formError'>This field cannot be empty</span>";
@@ -104,7 +104,7 @@ class UserIO
 				$error[1] = "";
 			}
 			
-			if (!$_POST[mail])
+			if (!$_POST['mail'])
 			{
 				$no_error = false;
 				$error[2] = "<br /><span class='formError'>This field cannot be empty</span>";
@@ -114,9 +114,9 @@ class UserIO
 				$error[2] = "";
 			}
 			
-			if ($_POST[icq])
+			if ($_POST['icq'])
 			{
-				if (!is_numeric($_POST[icq]))
+				if (!is_numeric($_POST['icq']))
 				{
 					$no_error = false;
 					$error[3] = "<br /><span class='formError'>The value is invalid</span>";
@@ -143,31 +143,31 @@ class UserIO
 		if ($no_error == true)
 		{
 			$paramquery = $_GET;
-			unset($paramquery[nextpage]);
-			$paramquery[run] = "user_profile";
+			unset($paramquery['nextpage']);
+			$paramquery['run'] = "user_profile";
 			$params = http_build_query($paramquery);
 			
 			Common_IO::step_proceed($params, "Change Personal Data", "Data Changed",null);
 			
-			$user->set_profile("gender",$_POST[gender]);
-			$user->set_profile("title",$_POST[title]);
-			$user->set_profile("forename",$_POST[forename]);
-			$user->set_profile("surname",$_POST[surname]);
+			$user->set_profile("gender",$_POST['gender']);
+			$user->set_profile("title",$_POST['title']);
+			$user->set_profile("forename",$_POST['forename']);
+			$user->set_profile("surname",$_POST['surname']);
 			
-			$user->set_profile("mail",$_POST[mail]);
-			$user->set_profile("institution",$_POST[institution]);
-			$user->set_profile("department",$_POST[department]);
-			$user->set_profile("street",$_POST[street]);
-			$user->set_profile("zip",$_POST[zip]);
-			$user->set_profile("city",$_POST[city]);
-			$user->set_profile("country",$_POST[country]);
-			$user->set_profile("phone",$_POST[phone]);
+			$user->set_profile("mail",$_POST['mail']);
+			$user->set_profile("institution",$_POST['institution']);
+			$user->set_profile("department",$_POST['department']);
+			$user->set_profile("street",$_POST['street']);
+			$user->set_profile("zip",$_POST['zip']);
+			$user->set_profile("city",$_POST['city']);
+			$user->set_profile("country",$_POST['country']);
+			$user->set_profile("phone",$_POST['phone']);
 			
-			$user->set_profile("icq",$_POST[icq]);
-			$user->set_profile("msn",$_POST[msn]);
-			$user->set_profile("yahoo",$_POST[yahoo]);
-			$user->set_profile("aim",$_POST[aim]);
-			$user->set_profile("skype",$_POST[skype]);
+			$user->set_profile("icq",$_POST['icq']);
+			$user->set_profile("msn",$_POST['msn']);
+			$user->set_profile("yahoo",$_POST['yahoo']);
+			$user->set_profile("aim",$_POST['aim']);
+			$user->set_profile("skype",$_POST['skype']);
 		}
 		else
 		{
@@ -179,7 +179,7 @@ class UserIO
 			$template->set_var("error_3",$error[3]);
 			
 			$paramquery = $_GET;
-			$paramquery[nextpage] = 1;
+			$paramquery['nextpage'] = 1;
 			$params = http_build_query($paramquery);
 			
 			$template->set_var("params", $params);
@@ -362,16 +362,16 @@ class UserIO
 			{
 				$language = new Language($value);
 				
-				$result[$counter][value] = $value;
-				$result[$counter][content] = $language->get_full_name();
+				$result[$counter]['value'] = $value;
+				$result[$counter]['content'] = $language->get_full_name();
 				
 				if ($value == $regional->get_language_id())
 				{
-					$result[$counter][selected] = "selected='selected'";
+					$result[$counter]['selected'] = "selected='selected'";
 				}
 				else
 				{
-					$result[$counter][selected] = "";
+					$result[$counter]['selected'] = "";
 				}
 				$counter++;		
 			}
@@ -391,16 +391,16 @@ class UserIO
 			{
 				$timezone = new Timezone($value);
 				
-				$result[$counter][value] = $value;
-				$result[$counter][content] = $timezone->get_name();
+				$result[$counter]['value'] = $value;
+				$result[$counter]['content'] = $timezone->get_name();
 				
 				if ($value == $regional->get_timezone_id())
 				{
-					$result[$counter][selected] = "selected='selected'";
+					$result[$counter]['selected'] = "selected='selected'";
 				}
 				else
 				{
-					$result[$counter][selected] = "";
+					$result[$counter]['selected'] = "";
 				}
 				$counter++;
 			}
@@ -416,11 +416,11 @@ class UserIO
 		
 		$no_error = false;
 		
-		if ($_GET[nextpage] == 1)
+		if ($_GET['nextpage'] == 1)
 		{
 			$no_error = true;
 			
-			if (!$_POST[current_password])
+			if (!$_POST['current_password'])
 			{
 				$no_error = false;
 				$error[0] = "<br /><span class='formError'>this field cannot be empty</span>";
@@ -430,7 +430,7 @@ class UserIO
 				$error[0] = "";
 			}
 			
-			if (!$_POST[new_password_1])
+			if (!$_POST['new_password_1'])
 			{
 				$no_error = false;
 				$error[1] = "<br /><span class='formError'>this field cannot be empty</span>";
@@ -440,7 +440,7 @@ class UserIO
 				$error[1] = "";	
 			}
 			
-			if (!$_POST[new_password_2])
+			if (!$_POST['new_password_2'])
 			{
 				$no_error = false;
 				$error[2] = "<br /><span class='formError'>this field cannot be empty</span>";
@@ -450,7 +450,7 @@ class UserIO
 				$error[2] = "";
 			}
 			
-			if ($_POST[new_password_1] and $_POST[new_password_2] and $_POST[new_password_1] != $_POST[new_password_2])
+			if ($_POST['new_password_1'] and $_POST['new_password_2'] and $_POST['new_password_1'] != $_POST['new_password_2'])
 			{
 				$no_error = false;
 				$error[2] = "<br /><span class='formError'>the new passwords are not equal</span>";
@@ -460,7 +460,7 @@ class UserIO
 				$error[2] = "";
 			}
 											
-			if ($user->check_password($_POST[current_password]) == false)
+			if ($user->check_password($_POST['current_password']) == false)
 			{
 				$noerror = false;
 				$error[0] = "<br /><span class='formError'>current password is wrong</span>";
@@ -480,20 +480,20 @@ class UserIO
 		if ($no_error == true)
 		{
 			$paramquery = $_GET;
-			unset($paramquery[nextpage]);
-			$paramquery[run] = "user_profile";
+			unset($paramquery['nextpage']);
+			$paramquery['run'] = "user_profile";
 			$params = http_build_query($paramquery);
 			
 			Common_IO::step_proceed($params, "Change Password", "Password Changed",null);
 			
-			$user->set_password($_POST[new_password_1]);
+			$user->set_password($_POST['new_password_1']);
 		}
 		else
 		{
 			$template = new HTMLTemplate("base/user/user_change_password.html");
 			
 			$paramquery = $_GET;
-			$paramquery[nextpage] = 1;
+			$paramquery['nextpage'] = 1;
 			$params = http_build_query($paramquery);
 			
 			$template->set_var("params", $params);
@@ -512,11 +512,11 @@ class UserIO
 		
 		$no_error = false;
 		
-		if ($_GET[nextpage] == 1)
+		if ($_GET['nextpage'] == 1)
 		{
 			$no_error = true;
 			
-			if (!$_POST[new_password_1])
+			if (!$_POST['new_password_1'])
 			{
 				$no_error = false;
 				$error[1] = "<br /><span class='formError'>this field cannot be empty</span>";
@@ -526,7 +526,7 @@ class UserIO
 				$error[1] = "";	
 			}
 			
-			if (!$_POST[new_password_2])
+			if (!$_POST['new_password_2'])
 			{
 				$no_error = false;
 				$error[2] = "<br /><span class='formError'>this field cannot be empty</span>";
@@ -536,7 +536,7 @@ class UserIO
 				$error[2] = "";
 			}
 			
-			if ($_POST[new_password_1] and $_POST[new_password_2] and $_POST[new_password_1] != $_POST[new_password_2])
+			if ($_POST['new_password_1'] and $_POST['new_password_2'] and $_POST['new_password_1'] != $_POST['new_password_2'])
 			{
 				$no_error = false;
 				$error[2] = "<br /><span class='formError'>the new passwords are not equal</span>";
@@ -556,11 +556,11 @@ class UserIO
 		if ($no_error == true)
 		{	
 			$paramquery = array();
-			$paramquery[username] = $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
+			$paramquery['username'] = $_GET['username'];
+			$paramquery['session_id'] = $_GET['session_id'];
 			$params = http_build_query($paramquery);
 			
-			if ($user->set_password_on_login($_POST[new_password_1]))
+			if ($user->set_password_on_login($_POST['new_password_1']))
 			{
 				Common_IO::step_proceed($params, "Change Password Succesful", "Password Changed",null);
 			}
@@ -574,7 +574,7 @@ class UserIO
 			$template = new HTMLTemplate("base/user/user_change_password_on_login.html");
 			
 			$paramquery = $_GET;
-			$paramquery[nextpage] = 1;
+			$paramquery['nextpage'] = 1;
 			$params = http_build_query($paramquery);
 			
 			$template->set_var("params", $params);
@@ -762,7 +762,7 @@ class UserIO
 				$template->set_var("skype","");
 			}
 			
-			$group_array = Group::list_user_releated_groups($_GET[id]);
+			$group_array = Group::list_user_releated_groups($_GET['id']);
 			$group_content_array = array();
 			
 			$counter = 0;
@@ -774,12 +774,12 @@ class UserIO
 					$group = new Group($value);
 					
 					$paramquery = $_GET;
-					$paramquery[dialog] = "group_detail";
-					$paramquery[id] = $value;
+					$paramquery['dialog'] = "group_detail";
+					$paramquery['id'] = $value;
 					$params = http_build_query($paramquery,'','&#38;');
 					
-					$group_content_array[$counter][name] = $group->get_name();
-					$group_content_array[$counter][params] = $params;
+					$group_content_array[$counter]['name'] = $group->get_name();
+					$group_content_array[$counter]['params'] = $params;
 					
 					$counter++;
 				}
@@ -813,7 +813,7 @@ class UserIO
 
 			$template->set_var("name", $group->get_name());
 			
-			$user_array = Group::list_group_releated_users($_GET[id]);
+			$user_array = Group::list_group_releated_users($_GET['id']);
 			$user_content_array = array();
 			
 			$counter = 0;
@@ -825,13 +825,13 @@ class UserIO
 					$user = new User($value);
 					
 					$paramquery = $_GET;
-					$paramquery[dialog] = "user_detail";
-					$paramquery[id] = $value;
+					$paramquery['dialog'] = "user_detail";
+					$paramquery['id'] = $value;
 					$params = http_build_query($paramquery,'','&#38;');
 					
-					$user_content_array[$counter][username] = $user->get_username();
-					$user_content_array[$counter][fullname] = $user->get_full_name(false);
-					$user_content_array[$counter][params] = $params;
+					$user_content_array[$counter]['username'] = $user->get_username();
+					$user_content_array[$counter]['fullname'] = $user->get_full_name(false);
+					$user_content_array[$counter]['params'] = $params;
 					
 					$counter++;
 				}
@@ -845,7 +845,7 @@ class UserIO
 			$template->set_var("user", $user_content_array);
 			
 			
-			$organisation_unit_array = OrganisationUnit::list_entries_by_group_id($_GET[id]);
+			$organisation_unit_array = OrganisationUnit::list_entries_by_group_id($_GET['id']);
 			$organisation_unit_content_array = array();
 			
 			$counter = 0;
@@ -855,7 +855,7 @@ class UserIO
 				foreach($organisation_unit_array as $key => $value)
 				{
 					$organisation_unit = new OrganisationUnit($value);
-					$organisation_unit_content_array[$counter][name] = $organisation_unit->get_name();
+					$organisation_unit_content_array[$counter]['name'] = $organisation_unit->get_name();
 					$counter++;
 				}
 				$template->set_var("no_ou", false);

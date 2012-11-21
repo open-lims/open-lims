@@ -2266,8 +2266,8 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 				if ($value != $array[$layer])
 				{	
 					$data_array = array();
-					$data_array[id] = $value;
-					$data_array[layer] = $layer+1;	
+					$data_array['id'] = $value;
+					$data_array['layer'] = $layer+1;	
 						
 					array_push($return_array,$data_array);
 					
@@ -2302,8 +2302,8 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 		foreach($organisation_unit_access_array as $key => $value)
 		{
 			$data_array = array();
-			$data_array[id] = $value;
-			$data_array[layer] = 0;
+			$data_array['id'] = $value;
+			$data_array['layer'] = 0;
 			
 			array_push($return_array, $data_array);
 			

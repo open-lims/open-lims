@@ -47,8 +47,8 @@ class AdminDataIO
 				if (file_exists($value['class_path']))
 				{
 					require_once($value['class_path']);
-					$additional_quota_array[$additional_quota_counter][title] = $value['display_name'];
-					$additional_quota_array[$additional_quota_counter][value] = $value['class']::$value['method']();
+					$additional_quota_array[$additional_quota_counter]['title'] = $value['display_name'];
+					$additional_quota_array[$additional_quota_counter]['value'] = $value['class']::$value['method']();
 					$additional_quota_counter++;
 				}
 			}

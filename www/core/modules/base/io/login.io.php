@@ -133,14 +133,14 @@ class Login_IO
 		$template = new HTMLTemplate("login_header.html");
 		$template->output();
 		
-		switch ($_GET[run]):
+		switch ($_GET['run']):
 			
 			case ("forgot"):
-				if ($_POST[username] and $_POST[mail])
+				if ($_POST['username'] and $_POST['mail'])
 				{
 					try
 					{
-						$auth->forgot_password($_POST[username], $_POST[mail]);
+						$auth->forgot_password($_POST['username'], $_POST['mail']);
 						self::forgot_password_proceed(true);
 					}
 					catch(AuthUserNotFoundException $e)

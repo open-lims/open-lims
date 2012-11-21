@@ -77,7 +77,7 @@ class AdminOrganisationUnitAjax
 						$list_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
 						$list_array[$key]['username'] = $user->get_username();
 						$list_array[$key]['fullname'] = $user->get_full_name(false);
-						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key]['id']."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
 					}
 				}
 				else
@@ -252,7 +252,7 @@ class AdminOrganisationUnitAjax
 						$list_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
 						$list_array[$key]['username'] = $user->get_username();
 						$list_array[$key]['fullname'] = $user->get_full_name(false);
-						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key]['id']."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
 					}
 				}
 				else
@@ -427,7 +427,7 @@ class AdminOrganisationUnitAjax
 						$list_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
 						$list_array[$key]['username'] = $user->get_username();
 						$list_array[$key]['fullname'] = $user->get_full_name(false);
-						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key]['id']."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
 					}
 				}
 				else
@@ -602,7 +602,7 @@ class AdminOrganisationUnitAjax
 						$list_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
 						$list_array[$key]['username'] = $user->get_username();
 						$list_array[$key]['fullname'] = $user->get_full_name(false);
-						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key]['id']."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
 					}
 				}
 				else
@@ -776,7 +776,7 @@ class AdminOrganisationUnitAjax
 						$group = new Group($value['id']);
 						$list_array[$key]['symbol'] = "<img src='images/icons/groups.png' alt='' />";
 						$list_array[$key]['groupname'] = $group->get_name();
-						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key]['id']."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
 					}
 				}
 				else

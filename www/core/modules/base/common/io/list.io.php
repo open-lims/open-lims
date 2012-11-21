@@ -143,8 +143,8 @@ class List_IO
 			if ($value[3] == true)
 			{
 				$paramquery = $_GET;
-				unset($paramquery[sortvalue]);
-				unset($paramquery[sortmethod]);
+				unset($paramquery['sortvalue']);
+				unset($paramquery['sortmethod']);
 				$params = http_build_query($paramquery, '', '&#38;');
 				
 				if ($value[2] != null)

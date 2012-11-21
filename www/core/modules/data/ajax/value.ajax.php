@@ -73,33 +73,33 @@ class ValueAjax
 					foreach($list_array as $key => $value)
 					{
 						$paramquery = $_GET;
-						$paramquery[action] = "value_detail";
-						$paramquery[version] = $list_array[$key][internal_revision];
+						$paramquery['action'] = "value_detail";
+						$paramquery['version'] = $list_array[$key]['internal_revision'];
 						$params = http_build_query($paramquery,'','&#38;');
 						
-						$list_array[$key][symbol][link]		= $params;
-						$list_array[$key][symbol][content] 	= "<img src='images/icons/value.png' alt='N' border='0' />";
+						$list_array[$key]['symbol']['link']		= $params;
+						$list_array[$key]['symbol']['content'] 	= "<img src='images/icons/value.png' alt='N' border='0' />";
 					
-						$tmp_name = $list_array[$key][name];
-						unset($list_array[$key][name]);
-						$list_array[$key][name][link]		= $params;
-						$list_array[$key][name][content] 	= $tmp_name;
+						$tmp_name = $list_array[$key]['name'];
+						unset($list_array[$key]['name']);
+						$list_array[$key]['name']['link']		= $params;
+						$list_array[$key]['name']['content'] 	= $tmp_name;
 						
-						$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
-						$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+						$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
+						$list_array[$key]['datetime'] = $datetime_handler->get_formatted_string("dS M Y H:i");
 						
-						$user = new User($list_array[$key][owner_id]);
-						$list_array[$key][user] = $user->get_full_name(false);
+						$user = new User($list_array[$key]['owner_id']);
+						$list_array[$key]['user'] = $user->get_full_name(false);
 						
 						$value_version_obj = clone $value_obj;
-						$value_version_obj->open_internal_revision($value[internal_revision]);
+						$value_version_obj->open_internal_revision($value['internal_revision']);
 						if ($value_version_obj->is_current() == true)
 						{
-							$list_array[$key][version] = $value_version_obj->get_version()." <span class='italic'>current</span>";
+							$list_array[$key]['version'] = $value_version_obj->get_version()." <span class='italic'>current</span>";
 						}
 						else
 						{
-							$list_array[$key][version] = $value_version_obj->get_version();
+							$list_array[$key]['version'] = $value_version_obj->get_version();
 						}
 					}
 				}
@@ -154,7 +154,7 @@ class ValueAjax
 		$button_handler_caption;
 		$template;
 		$paramquery = $_GET;	
-		unset($paramquery[run]);
+		unset($paramquery['run']);
 		switch($action):
 			case "value_add":
 				if(!isset($_POST['folder_id']) && !isset($_POST['value_array']))
@@ -180,10 +180,10 @@ class ValueAjax
 						continue;
 					}
 					$value_type = new ValueType($value);
-					$options[$counter][value] = $value; 
-					$options[$counter][content] = $value_type->get_name();		
-					$options[$counter][selected] = "";
-					$options[$counter][disabled] = "";
+					$options[$counter]['value'] = $value; 
+					$options[$counter]['content'] = $value_type->get_name();		
+					$options[$counter]['selected'] = "";
+					$options[$counter]['disabled'] = "";
 					$counter++;
 				}
 				
@@ -224,9 +224,9 @@ class ValueAjax
 			break;
 			case "permission":
 				require_once("data.ajax.php");
-				if(isset($_POST[permissions]))
+				if(isset($_POST['permissions']))
 				{
-					$success = DataAjax::change_permission(json_decode($_POST[permissions]), "Value");
+					$success = DataAjax::change_permission(json_decode($_POST['permissions']), "Value");
 					return $success;
 				}
 				else

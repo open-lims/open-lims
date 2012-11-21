@@ -65,35 +65,35 @@ class AdminUserAjax
 			{
 				foreach($list_array as $key => $value)
 				{
-					$user = new User($list_array[$key][id]);
+					$user = new User($list_array[$key]['id']);
 					
 					$paramquery = $_GET;
-					$paramquery[action] = "detail";
-					$paramquery[id] = $list_array[$key][id];
+					$paramquery['action'] = "detail";
+					$paramquery['id'] = $list_array[$key]['id'];
 					$params = http_build_query($paramquery,'','&#38;');
 					
-					$list_array[$key][symbol][link] = $params;
-					$list_array[$key][symbol][content] = "<img src='images/icons/user.png' alt='' style='border: 0;' />";
+					$list_array[$key]['symbol']['link'] = $params;
+					$list_array[$key]['symbol']['content'] = "<img src='images/icons/user.png' alt='' style='border: 0;' />";
 					
-					unset($list_array[$key][username]);
-					$list_array[$key][username][link] = $params;
-					$list_array[$key][username][content] = $user->get_username();
-					$list_array[$key][fullname] = $user->get_full_name(false);
-					$list_array[$key][groups] = Group::get_number_of_groups_by_user_id($list_array[$key][id]);
+					unset($list_array[$key]['username']);
+					$list_array[$key]['username']['link'] = $params;
+					$list_array[$key]['username']['content'] = $user->get_username();
+					$list_array[$key]['fullname'] = $user->get_full_name(false);
+					$list_array[$key]['groups'] = Group::get_number_of_groups_by_user_id($list_array[$key]['id']);
 					
 					$paramquery = $_GET;
-					$paramquery[action] = "delete";
-					$paramquery[id] = $list_array[$key][id];
+					$paramquery['action'] = "delete";
+					$paramquery['id'] = $list_array[$key]['id'];
 					$params = http_build_query($paramquery,'','&#38;');
 					
-					if ($list_array[$key][id] == 1)
+					if ($list_array[$key]['id'] == 1)
 					{
-						$list_array[$key][delete] = "<img src='images/icons/delete_user_na.png' alt='' style='border: 0;' />";
+						$list_array[$key]['delete'] = "<img src='images/icons/delete_user_na.png' alt='' style='border: 0;' />";
 					}
 					else
 					{
-						$list_array[$key][delete][link] = $params;
-						$list_array[$key][delete][content] = "<img src='images/icons/delete_user.png' alt='' style='border: 0;' />";
+						$list_array[$key]['delete']['link'] = $params;
+						$list_array[$key]['delete']['content'] = "<img src='images/icons/delete_user.png' alt='' style='border: 0;' />";
 					}
 				}
 			}

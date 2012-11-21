@@ -1072,20 +1072,20 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	{
 		if ($type == "file")
 		{
-			$paramquery[username] = $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav] = "data";
-			$paramquery[action] = "file_detail";
-			$paramquery[file_id] = $id;
+			$paramquery['username'] = $_GET['username'];
+			$paramquery['session_id'] = $_GET['session_id'];
+			$paramquery['nav'] = "data";
+			$paramquery['action'] = "file_detail";
+			$paramquery['file_id'] = $id;
 			return http_build_query($paramquery, '', '&#38;');
 		}
 		else
 		{
-			$paramquery[username] = $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav] = "data";
-			$paramquery[action] = "value_detail";
-			$paramquery[value_id] = $id;
+			$paramquery['username'] = $_GET['username'];
+			$paramquery['session_id'] = $_GET['session_id'];
+			$paramquery['nav'] = "data";
+			$paramquery['action'] = "value_detail";
+			$paramquery['value_id'] = $id;
 			return http_build_query($paramquery, '', '&#38;');
 		}
 	}
@@ -1099,16 +1099,16 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
     {
     	if ($type == "file")
 		{
-			$select_array[name] = "".constant("FILE_VERSION_TABLE").".name";
-			$select_array[type_id] = "".constant("FILE_TABLE").".id AS file_id";
-			$select_array[datetime] = "".constant("FILE_VERSION_TABLE").".datetime";
+			$select_array['name'] = "".constant("FILE_VERSION_TABLE").".name";
+			$select_array['type_id'] = "".constant("FILE_TABLE").".id AS file_id";
+			$select_array['datetime'] = "".constant("FILE_VERSION_TABLE").".datetime";
 			return $select_array;
 		}
 		else
 		{
-			$select_array[name] = "".constant("VALUE_TYPE_TABLE").".name";
-			$select_array[type_id] = "".constant("VALUE_TABLE").".id AS value_id";
-			$select_array[datetime] = "".constant("VALUE_VERSION_TABLE").".datetime";
+			$select_array['name'] = "".constant("VALUE_TYPE_TABLE").".name";
+			$select_array['type_id'] = "".constant("VALUE_TABLE").".id AS value_id";
+			$select_array['datetime'] = "".constant("VALUE_VERSION_TABLE").".datetime";
 			return $select_array;
 		}
     }
@@ -1165,10 +1165,10 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		}
 		else
 		{
-			$select_array[name] = "".constant("VALUE_TYPE_TABLE").".name";
-			$select_array[type_id] = "".constant("VALUE_TABLE").".id AS value_id";
-			$select_array[datetime] = "".constant("VALUE_VERSION_TABLE").".datetime";
-			$select_array[rank] = "ts_rank_cd(".constant("VALUE_VERSION_TABLE").".text_search_vector, to_tsquery('{LANGUAGE}', '{STRING}'), 32 /* rank/(rank+1) */)";
+			$select_array['name'] = "".constant("VALUE_TYPE_TABLE").".name";
+			$select_array['type_id'] = "".constant("VALUE_TABLE").".id AS value_id";
+			$select_array['datetime'] = "".constant("VALUE_VERSION_TABLE").".datetime";
+			$select_array['rank'] = "ts_rank_cd(".constant("VALUE_VERSION_TABLE").".text_search_vector, to_tsquery('{LANGUAGE}', '{STRING}'), 32 /* rank/(rank+1) */)";
 			return $select_array;
 		}
 	}

@@ -479,9 +479,9 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 	 */
 	public static function get_sql_select_array($type)
     {
-    	$select_array[name] = "".constant("EQUIPMENT_TYPE_TABLE").".name";
-		$select_array[type_id] = "".constant("EQUIPMENT_TYPE_TABLE").".id AS equipment_id";
-		$select_array[datetime] = "".constant("EQUIPMENT_TABLE").".datetime";
+    	$select_array['name'] = "".constant("EQUIPMENT_TYPE_TABLE").".name";
+		$select_array['type_id'] = "".constant("EQUIPMENT_TYPE_TABLE").".id AS equipment_id";
+		$select_array['datetime'] = "".constant("EQUIPMENT_TABLE").".datetime";
 		return $select_array;
     }
     

@@ -208,20 +208,20 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     		
     		if ($sample_has_user->get_read() == true)
     		{
-    			$return_array[read] = true;
+    			$return_array['read'] = true;
     		}
     		else
     		{
-    			$return_array[read] = false;
+    			$return_array['read'] = false;
     		}
     		
     		if ($sample_has_user->get_write() == true)
     		{
-    			$return_array[write] = true;
+    			$return_array['write'] = true;
     		}
     		else
     		{
-    			$return_array[write] = false;
+    			$return_array['write'] = false;
     		}
     		return $return_array;
     	}

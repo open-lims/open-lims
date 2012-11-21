@@ -24,10 +24,10 @@
 /**
  * 
  */		
-	$dialog[0][type]			= "base_user_lists";
-	$dialog[0][class_path]		= "core/modules/job/io/job.io.php";
+	$dialog[0]['type']			= "base_user_lists";
+	$dialog[0]['class_path']	= "core/modules/job/io/job.io.php";
 	$dialog[0]['class']			= "JobIO";
-	$dialog[0][method]			= "list_jobs";
-	$dialog[0][internal_name]	= "list_jobs";
-	$dialog[0][display_name]	= "Jobs";
+	$dialog[0]['method']		= "list_jobs";
+	$dialog[0]['internal_name']	= "list_jobs";
+	$dialog[0]['display_name']	= "Jobs";
 ?>

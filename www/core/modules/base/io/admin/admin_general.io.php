@@ -119,41 +119,41 @@ class AdminGeneralIO
 	
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "list_languages";
+		$paramquery['action'] = "list_languages";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$tab_io->add("languages", "Languages", $params, false);
 		
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "list_timezones";
+		$paramquery['action'] = "list_timezones";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$tab_io->add("timezones", "Timezones", $params, false);
 		
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "list_paper_sizes";
+		$paramquery['action'] = "list_paper_sizes";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$tab_io->add("paper-sizes", "Paper Sizes", $params, false);
 
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "list_measuring_units";
+		$paramquery['action'] = "list_measuring_units";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$tab_io->add("measuring-units", "Measuring Units", $params, false);  
 		
 				
 		$paramquery = $_GET;
-		$paramquery[action] = "list_currencies";
+		$paramquery['action'] = "list_currencies";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$tab_io->add("currencies", "Currencies", $params, false);
 		
 		
-		switch($_GET[action]):
+		switch($_GET['action']):
 			
 			case "list_timezones":
 				$tab_io->activate("timezones");
@@ -179,7 +179,7 @@ class AdminGeneralIO
 			
 		$tab_io->output();
 		
-		switch($_GET[action]):
+		switch($_GET['action']):
 			case "list_timezones":
 				self::list_timezones();
 			break;

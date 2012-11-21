@@ -207,7 +207,7 @@ class DataPermission implements DataPermissionInterface
 		
 		if ($this->type == "file")
 		{			
-			if ($array[automatic] == "1")
+			if ($array['automatic'] == "1")
 			{
  				$return_value = $this->file->set_automatic(true);
  			}
@@ -223,7 +223,7 @@ class DataPermission implements DataPermissionInterface
 		}
 		elseif($this->type == "value")
 		{
-			if ($array[automatic] == "1")
+			if ($array['automatic'] == "1")
 			{
  				$return_value = $this->value->set_automatic(true);
  			}
@@ -239,7 +239,7 @@ class DataPermission implements DataPermissionInterface
 		}
 		elseif ($this->type == "folder")
 		{
- 			if ($array[automatic] == "1")
+ 			if ($array['automatic'] == "1")
  			{
  				$return_value = $this->folder->set_automatic(true);
  			}

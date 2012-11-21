@@ -67,13 +67,13 @@
 	
 	Security::protect_session();
 
-	if ($_GET[session_id] and $_FILES)
+	if ($_GET['session_id'] and $_FILES)
 	{
 		global $db, $user, $session, $transaction, $runtime_data;
 
 		$runtime_data = new RuntimeData();
 			
-		$session = new Session($_GET[session_id]);
+		$session = new Session($_GET['session_id']);
 		$user = new User($session->get_user_id());
 		$transaction = new Transaction();
 		
@@ -81,9 +81,9 @@
 		{ 
 			$session_file_array = array();
 			$session_file_array[1] = 0;
-			$session->write_value("FILE_UPLOAD_".$_GET[unique_id], $session_file_array, true);
+			$session->write_value("FILE_UPLOAD_".$_GET['unique_id'], $session_file_array, true);
 			
-			if ($_POST[current] == 1)
+			if ($_POST['current'] == 1)
 			{
 				$current = true;
 			}
@@ -92,7 +92,7 @@
 				$current = false;
 			}
 			
-			if ($_GET[action] == "file_update")
+			if ($_GET['action'] == "file_update")
 			{
 				$major = true;
 			}
@@ -101,9 +101,9 @@
 				$major = false;
 			}
 			
-			if ($_GET[version])
+			if ($_GET['version'])
 			{
-				$previous_version_id = $_GET[version];
+				$previous_version_id = $_GET['version'];
 			}
 			else
 			{
@@ -112,16 +112,16 @@
 			
 			if (!empty($_FILES['file-1']['name']))
 			{				
-				$file = File::get_instance($_GET[file_id]);
+				$file = File::get_instance($_GET['file_id']);
 				$session_file_array[1] = $file->update_file($_FILES['file-1'], $previous_version_id, $major, $current);
-				$session->write_value("FILE_UPLOAD_".$_GET[unique_id], $session_file_array, true);
-				$session->write_value("FILE_UPLOAD_FINISHED_".$_GET[unique_id], true, true);
+				$session->write_value("FILE_UPLOAD_".$_GET['unique_id'], $session_file_array, true);
+				$session->write_value("FILE_UPLOAD_FINISHED_".$_GET['unique_id'], true, true);
 			}
 			else
 			{
 				$session_file_array[1] = 1;
-				$session->write_value("FILE_UPLOAD_".$_GET[unique_id], $session_file_array, true);
-				$session->write_value("FILE_UPLOAD_FINISHED_".$_GET[unique_id], true, true);
+				$session->write_value("FILE_UPLOAD_".$_GET['unique_id'], $session_file_array, true);
+				$session->write_value("FILE_UPLOAD_FINISHED_".$_GET['unique_id'], true, true);
 			}
 		}
 	}

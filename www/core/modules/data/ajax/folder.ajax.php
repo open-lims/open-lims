@@ -147,7 +147,7 @@ class FolderAjax
 		$button_handler_caption;
 		$template;
 		$paramquery = $_GET;	
-		unset($paramquery[run]);
+		unset($paramquery['run']);
 		switch($action):
 			case "folder_add":
 				if(isset($_POST['folder_name'])) //second call
@@ -173,8 +173,8 @@ class FolderAjax
 				}
 				else //first call
 				{
-					$paramquery[sure] = "true";
-					$paramquery[nextpage] = "1";
+					$paramquery['sure'] = "true";
+					$paramquery['nextpage'] = "1";
 					$params = http_build_query($paramquery);
 					$template = new HTMLTemplate("data/folder_delete_window.html");
 					$template->set_var("params", $params);
@@ -207,9 +207,9 @@ class FolderAjax
 			break;
 			case "permission":
 				require_once("data.ajax.php");
-				if(isset($_POST[permissions])) //second call
+				if(isset($_POST['permissions'])) //second call
 				{
-					$success = DataAjax::change_permission(json_decode($_POST[permissions]), "Folder");
+					$success = DataAjax::change_permission(json_decode($_POST['permissions']), "Folder");
 					return $success;
 				}
 				else //first call

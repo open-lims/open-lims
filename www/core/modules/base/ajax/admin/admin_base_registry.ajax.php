@@ -65,8 +65,8 @@ class AdminBaseRegistryAjax
 			{		
 				foreach($list_array as $key => $value)
 				{	
-					$list_array[$key][icon] = "<img src='images/icons/registry.png' alt='' style='border: 0;' />";
-					$list_array[$key][edit] = "<a href='#'><img src='images/icons/edit.png' alt='E' style='border: 0;' /></a>";
+					$list_array[$key]['icon'] = "<img src='images/icons/registry.png' alt='' style='border: 0;' />";
+					$list_array[$key]['edit'] = "<a href='#'><img src='images/icons/edit.png' alt='E' style='border: 0;' /></a>";
 				}
 			}
 			else

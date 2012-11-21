@@ -40,19 +40,19 @@ class SearchIO
 			
 			foreach ($module_dialog_array as $key => $value)
 			{
-				require_once($value[class_path]);
+				require_once($value['class_path']);
 				
-				$paramquery[username] 	= $_GET[username];
-				$paramquery[session_id] = $_GET[session_id];
-				$paramquery[nav]		= "base.search";
-				$paramquery[run]		= "search";
-				$paramquery[dialog]		= $value[internal_name];
-				$params 				= http_build_query($paramquery,'','&#38;');
+				$paramquery['username'] 	= $_GET['username'];
+				$paramquery['session_id'] 	= $_GET['session_id'];
+				$paramquery['nav']			= "base.search";
+				$paramquery['run']			= "search";
+				$paramquery['dialog']		= $value['internal_name'];
+				$params 					= http_build_query($paramquery,'','&#38;');
 				
-				$search_array[$counter][params] = $params;
-				$search_array[$counter][title] = $value[display_name];
-				$search_array[$counter][icon] = $value['class']::get_icon();
-				$search_array[$counter][description] = $value['class']::get_description(null);
+				$search_array[$counter]['params'] 	= $params;
+				$search_array[$counter]['title'] 		= $value['display_name'];
+				$search_array[$counter]['icon'] 		= $value['class']::get_icon();
+				$search_array[$counter]['description'] 	= $value['class']::get_description(null);
 				$counter++;
 			}
 			

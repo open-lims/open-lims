@@ -48,13 +48,13 @@ class ItemFulltextSearchIO
 	{
 		global $session;
 		
-		if ($_GET[nextpage])
+		if ($_GET['nextpage'])
 		{
-			if ($_GET[sortvalue] and $_GET[sortmethod])
+			if ($_GET['sortvalue'] and $_GET['sortmethod'])
 			{
-				if ($_GET[nextpage] == "2" and $_POST[string])
+				if ($_GET['nextpage'] == "2" and $_POST['string'])
 				{
-					$string = $_POST[string];
+					$string = $_POST['string'];
 					$item_type_array = $session->read_value("SEARCH_FULL_TEXT_ITEM_TYPE");		
 				}
 				else
@@ -65,16 +65,16 @@ class ItemFulltextSearchIO
 			}
 			else
 			{
-				if ($_GET[page])
+				if ($_GET['page'])
 				{
 					$string = $session->read_value("SEARCH_FULLTEXT_STRING");
 					$item_type_array = $session->read_value("SEARCH_FULL_TEXT_ITEM_TYPE");		
 				}
 				else
 				{
-					if ($_GET[nextpage] == "1")
+					if ($_GET['nextpage'] == "1")
 					{
-						$string = $_POST[string];
+						$string = $_POST['string'];
 						$session->delete_value("SEARCH_FULL_TEXT_ITEM_TYPE");
 					}
 					else
@@ -96,8 +96,8 @@ class ItemFulltextSearchIO
 			$template = new HTMLTemplate("item/search/full_text_search.html");
 			
 			$paramquery = $_GET;
-			unset($paramquery[page]);
-			$paramquery[nextpage] = "1";
+			unset($paramquery['page']);
+			$paramquery['nextpage'] = "1";
 			$params = http_build_query($paramquery,'','&#38;');
 					
 			$template->set_var("params",$params);
@@ -117,10 +117,10 @@ class ItemFulltextSearchIO
 					{
 						if ($value::get_sql_fulltext_select_array($key) != null)
 						{
-							$result[$counter][title] = $value::get_generic_name($key, null);
-							$result[$counter][name] = "item-".$key;
-							$result[$counter][value] = $key;
-							$result[$counter][checked] = "checked='checked'";
+							$result[$counter]['title'] = $value::get_generic_name($key, null);
+							$result[$counter]['name'] = "item-".$key;
+							$result[$counter]['value'] = $key;
+							$result[$counter]['checked'] = "checked='checked'";
 							
 							$counter++;
 						}
@@ -171,7 +171,7 @@ class ItemFulltextSearchIO
 			$template = new HTMLTemplate("item/search/full_text_search_result.html");
 		
 			$paramquery = $_GET;
-			$paramquery[nextpage] = "2";
+			$paramquery['nextpage'] = "2";
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			$template->set_var("params", $params);

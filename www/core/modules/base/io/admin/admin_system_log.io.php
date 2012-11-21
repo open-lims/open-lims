@@ -29,9 +29,9 @@ class AdminSystemLogIO
 {
 	public static function home()
 	{
-		if ($_GET[runid])
+		if ($_GET['runid'])
 		{
-			$type_id = $_GET[runid];
+			$type_id = $_GET['runid'];
 		}
 		else
 		{
@@ -63,15 +63,15 @@ class AdminSystemLogIO
 			{
 				if ($type_id == $value)
 				{
-					$result[$counter][selected] = "selected='selected'";
+					$result[$counter]['selected'] = "selected='selected'";
 				}
 				else
 				{
-					$result[$counter][selected] = "";
+					$result[$counter]['selected'] = "";
 				}
 				
-				$result[$counter][value] = $value;
-				$result[$counter][content] = SystemLog::get_type_name($value);
+				$result[$counter]['value'] = $value;
+				$result[$counter]['content'] = SystemLog::get_type_name($value);
 				$counter++;
 			}
 		}
@@ -85,8 +85,8 @@ class AdminSystemLogIO
 		{
 			if ($key != "runid")
 			{
-				$result[$counter][value] = $value;
-				$result[$counter][key] = $key;
+				$result[$counter]['value'] = $value;
+				$result[$counter]['key'] = $key;
 				$counter++;
 			}
 		}
@@ -103,10 +103,10 @@ class AdminSystemLogIO
 	 */
 	public static function detail()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
 			
-			$system_log = new SystemLog($_GET[id]);
+			$system_log = new SystemLog($_GET['id']);
 			$user = new User($system_log->get_user_id());
 			$datetime_handler = new DatetimeHandler($system_log->get_datetime());
 		
@@ -212,9 +212,9 @@ class AdminSystemLogIO
 	 */
 	public static function ip_info()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$ip = $_GET[id];
+			$ip = $_GET['id'];
 			$successful_logins = SystemLog::count_ip_successful_logins($ip);
 			$failed_logins = SystemLog::count_ip_failed_logins($ip);
 		
@@ -251,8 +251,8 @@ class AdminSystemLogIO
 				{
 					$user = new User($value);
 					
-					$user_content_array[$counter][username] = $user->get_username();
-					$user_content_array[$counter][fullname] = $user->get_full_name(false);
+					$user_content_array[$counter]['username'] = $user->get_username();
+					$user_content_array[$counter]['fullname'] = $user->get_full_name(false);
 					
 					$counter++;
 				}
@@ -275,7 +275,7 @@ class AdminSystemLogIO
 		
 	public static function handler()
 	{		
-		switch($_GET[action]):
+		switch($_GET['action']):
 				
 			case "detail":
 				self::detail();

@@ -45,7 +45,7 @@ class DataEntityHasDataEntity_Access
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
-			if ($data[data_entity_pid])
+			if ($data['data_entity_pid'])
 			{
 				$this->data_entity_pid	= $data['data_entity_pid'];
 				$this->data_entity_cid	= $data['data_entity_cid'];

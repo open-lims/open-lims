@@ -24,11 +24,11 @@
 /**
  * 
  */
-	$link[0][type]				= "ou_detail_buttons";
-	$link[0]['array'][nav]		= "%NAV%";
-	$link[0]['array'][run]		= "common_dialog";
-	$link[0]['array'][dialog]	= "list_ou_equipment";
-	$link[0]['array'][ou_id]	= "%OU_ID%";
-	$link[0][file]				= "equipment/links/lab_equipment.html";
-	$link[0][weight]			= 200;
+	$link[0]['type']			= "ou_detail_buttons";
+	$link[0]['array']['nav']	= "%NAV%";
+	$link[0]['array']['run']	= "common_dialog";
+	$link[0]['array']['dialog']	= "list_ou_equipment";
+	$link[0]['array']['ou_id']	= "%OU_ID%";
+	$link[0]['file']			= "equipment/links/lab_equipment.html";
+	$link[0]['weight']			= 200;
 ?>

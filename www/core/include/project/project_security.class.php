@@ -46,7 +46,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     	if (is_numeric($project_id))
     	{
     		$project = new Project($project_id);
-			if ($_GET[project_id] != ($master_project_id = $project->get_master_project_id())) {
+			if ($_GET['project_id'] != ($master_project_id = $project->get_master_project_id())) {
 				$project = new Project($master_project_id);
 				$current_project_id = $master_project_id;
 			}else{
@@ -105,31 +105,31 @@ class ProjectSecurity implements ProjectSecurityInterface
 		    				if ($this->user_id == $user_id)
 		    				{
 		    					$permission_array = $project_permission->get_permission_array();
-		    					if ($permission_array[read] == true)
+		    					if ($permission_array['read'] == true)
 		    					{
 		    						$access_read			= true;
 		    					}
-		    					if ($permission_array[set_readable] == true)
+		    					if ($permission_array['set_readable'] == true)
 		    					{
 		    						$access_set_readable	= true;
 		    					}
-		    					if ($permission_array[write] == true)
+		    					if ($permission_array['write'] == true)
 		    					{
 		    						$access_write			= true;
 		    					}
-		    					if ($permission_array[set_writable] == true)
+		    					if ($permission_array['set_writable'] == true)
 		    					{
 		    						$access_set_writeable	= true;
 		    					}
-		    					if ($permission_array[reactivate] == true)
+		    					if ($permission_array['reactivate'] == true)
 		    					{
 		    						$access_reactivate		= true;
 		    					}
-		    					if ($permission_array[delete] == true)
+		    					if ($permission_array['delete'] == true)
 		    					{
 		    						$access_delete			= true;
 		    					}
-		    					if ($permission_array[set_permissions] == true)
+		    					if ($permission_array['set_permissions'] == true)
 		    					{
 		    						$access_set_permissions	= true;
 		    					}
@@ -141,31 +141,31 @@ class ProjectSecurity implements ProjectSecurityInterface
 		    				if ($organisation_unit->is_permission($this->user_id))
 		    				{
 		    					$permission_array = $project_permission->get_permission_array();
-		    					if ($permission_array[read] == true)
+		    					if ($permission_array['read'] == true)
 		    					{
 		    						$access_read			= true;
 		    					}
-		    					if ($permission_array[set_readable] == true)
+		    					if ($permission_array['set_readable'] == true)
 		    					{
 		    						$access_set_readable	= true;
 		    					}
-		    					if ($permission_array[write] == true)
+		    					if ($permission_array['write'] == true)
 		    					{
 		    						$access_write			= true;
 		    					}
-		    					if ($permission_array[set_writable] == true)
+		    					if ($permission_array['set_writable'] == true)
 		    					{
 		    						$access_set_writeable	= true;
 		    					}
-		    					if ($permission_array[reactivate] == true)
+		    					if ($permission_array['reactivate'] == true)
 		    					{
 		    						$access_reactivate		= true;
 		    					}
-		    					if ($permission_array[delete] == true)
+		    					if ($permission_array['delete'] == true)
 		    					{
 		    						$access_delete			= true;
 		    					}
-		    					if ($permission_array[set_permissions] == true)
+		    					if ($permission_array['set_permissions'] == true)
 		    					{
 		    						$access_set_permissions	= true;
 		    					}
@@ -177,31 +177,31 @@ class ProjectSecurity implements ProjectSecurityInterface
 		    				if ($group->is_user_in_group($this->user_id))
 		    				{
 		    					$permission_array = $project_permission->get_permission_array();
-		    					if ($permission_array[read] == true)
+		    					if ($permission_array['read'] == true)
 		    					{
 		    						$access_read			= true;
 		    					}
-		    					if ($permission_array[set_readable] == true)
+		    					if ($permission_array['set_readable'] == true)
 		    					{
 		    						$access_set_readable	= true;
 		    					}
-		    					if ($permission_array[write] == true)
+		    					if ($permission_array['write'] == true)
 		    					{
 		    						$access_write			= true;
 		    					}
-		    					if ($permission_array[set_writable] == true)
+		    					if ($permission_array['set_writable'] == true)
 		    					{
 		    						$access_set_writeable	= true;
 		    					}
-		    					if ($permission_array[reactivate] == true)
+		    					if ($permission_array['reactivate'] == true)
 		    					{
 		    						$access_reactivate		= true;
 		    					}
-		    					if ($permission_array[delete] == true)
+		    					if ($permission_array['delete'] == true)
 		    					{
 		    						$access_delete			= true;
 		    					}
-		    					if ($permission_array[set_permissions] == true)
+		    					if ($permission_array['set_permissions'] == true)
 		    					{
 		    						$access_set_permissions	= true;
 		    					}
@@ -332,7 +332,7 @@ class ProjectSecurity implements ProjectSecurityInterface
 	    			if (($user_id = $project_permission->get_user_id()) != null)
 	    			{
     					$permission_array = $project_permission->get_permission_array();
-    					if ($permission_array[write] == true)
+    					if ($permission_array['write'] == true)
     					{
     						array_push($return_array, $user_id);
     					}

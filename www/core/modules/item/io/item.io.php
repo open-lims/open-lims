@@ -38,11 +38,11 @@ class ItemIO
 		
 		$template->set_var("link", $link);
 		
-		if (!$_POST[description] and $_POST[submitbutton] == "next" and $description == true)
+		if (!$_POST['description'] and $_POST['submitbutton'] == "next" and $description == true)
 		{
 			$template->set_var("error","You must enter a description!");	
 		}
-		elseif (!$_POST[keywords] and $_POST[submitbutton] == "next" and $keywords)
+		elseif (!$_POST['keywords'] and $_POST['submitbutton'] == "next" and $keywords)
 		{
 			$template->set_var("error","You must enter keywords!");		
 		}
@@ -51,18 +51,18 @@ class ItemIO
 			$template->set_var("error",false);		
 		}
 		
-		if ($_POST[description])
+		if ($_POST['description'])
 		{
-			$template->set_var("description_value",$_POST[description]);	
+			$template->set_var("description_value",$_POST['description']);	
 		}
 		else
 		{
 			$template->set_var("description_value","");	
 		}
 		
-		if ($_POST[keywords])
+		if ($_POST['keywords'])
 		{
-			$template->set_var("keywords_value",$_POST[keywords]);	
+			$template->set_var("keywords_value",$_POST['keywords']);	
 		}
 		else
 		{

@@ -40,8 +40,8 @@ class AdminUserIO
 		$template = new HTMLTemplate("base/user/admin/user/list.html");
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "add";
-		unset($paramquery[nextpage]);
+		$paramquery['action'] = "add";
+		unset($paramquery['nextpage']);
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("add_params", $params);
@@ -53,13 +53,13 @@ class AdminUserIO
 	
 	public static function create()
 	{
-		if ($_GET[nextpage] == 1)
+		if ($_GET['nextpage'] == 1)
 		{
 			$page_1_passed = true;
 			
-			if ($_POST[username])
+			if ($_POST['username'])
 			{
-				if (User::exist_username($_POST[username]) == true)
+				if (User::exist_username($_POST['username']) == true)
 				{
 					$page_1_passed = false;
 					$error0 = "This username already exists";
@@ -71,19 +71,19 @@ class AdminUserIO
 				$error0 = "You must enter a username";
 			}
 			
-			if (!$_POST[forename])
+			if (!$_POST['forename'])
 			{
 				$page_1_passed = false;
 				$error1 = "You must enter a forename";
 			}
 			
-			if (!$_POST[surname])
+			if (!$_POST['surname'])
 			{
 				$page_1_passed = false;
 				$error1 = "You must enter a surname";
 			}
 			
-			if (!$_POST[forename])
+			if (!$_POST['mail'])
 			{
 				$page_1_passed = false;
 				$error2 = "You must enter an e-mail address";
@@ -100,7 +100,7 @@ class AdminUserIO
 			$template = new HTMLTemplate("base/user/admin/user/add.html");
 			
 			$paramquery = $_GET;
-			$paramquery[nextpage] = "1";
+			$paramquery['nextpage'] = "1";
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			$template->set_var("params",$params);
@@ -132,18 +132,18 @@ class AdminUserIO
 				$template->set_var("error2", "");	
 			}
 			
-			if ($_POST[username])
+			if ($_POST['username'])
 			{
-				$template->set_var("username", $_POST[username]);
+				$template->set_var("username", $_POST['username']);
 			}
 			else
 			{
 				$template->set_var("username", "");
 			}
 			
-			if ($_POST[gender])
+			if ($_POST['gender'])
 			{
-				if ($_POST[gender] == "m")
+				if ($_POST['gender'] == "m")
 				{
 					$template->set_var("male_checked", "checked='checked'");
 					$template->set_var("female_checked", "");
@@ -160,45 +160,45 @@ class AdminUserIO
 				$template->set_var("female_checked", "");
 			}
 			
-			if ($_POST[title])
+			if ($_POST['title'])
 			{
-				$template->set_var("title", $_POST[title]);
+				$template->set_var("title", $_POST['title']);
 			}
 			else
 			{
 				$template->set_var("title", "");
 			}
 			
-			if ($_POST[forename])
+			if ($_POST['forename'])
 			{
-				$template->set_var("forename", $_POST[forename]);
+				$template->set_var("forename", $_POST['forename']);
 			}
 			else
 			{
 				$template->set_var("forename", "");
 			}
 			
-			if ($_POST[surname])
+			if ($_POST['surname'])
 			{
-				$template->set_var("surname", $_POST[surname]);
+				$template->set_var("surname", $_POST['surname']);
 			}
 			else
 			{
 				$template->set_var("surname", "");
 			}
 			
-			if ($_POST[mail])
+			if ($_POST['mail'])
 			{
-				$template->set_var("mail", $_POST[mail]);
+				$template->set_var("mail", $_POST['mail']);
 			}
 			else
 			{
 				$template->set_var("mail", "");
 			}
 			
-			if ($_POST[can_change_password])
+			if ($_POST['can_change_password'])
 			{
-				if ($_POST[can_change_password] == "true")
+				if ($_POST['can_change_password'] == "true")
 				{
 					$template->set_var("can_change_password_checked", "checked='checked'");
 				}
@@ -212,9 +212,9 @@ class AdminUserIO
 				$template->set_var("can_change_password_checked", "checked='checked'");
 			}
 			
-			if ($_POST[must_change_password])
+			if ($_POST['must_change_password'])
 			{
-				if ($_POST[must_change_password] == "true")
+				if ($_POST['must_change_password'] == "true")
 				{
 					$template->set_var("must_change_password_checked", "checked='checked'");
 				}
@@ -228,9 +228,9 @@ class AdminUserIO
 				$template->set_var("must_change_password_checked", "checked='checked'");
 			}
 			
-			if ($_POST[disabled])
+			if ($_POST['disabled'])
 			{
-				if ($_POST[disabled] == "true")
+				if ($_POST['disabled'] == "true")
 				{
 					$template->set_var("disabled_checked", "");
 				}
@@ -249,20 +249,20 @@ class AdminUserIO
 		else
 		{
 			$paramquery = $_GET;
-			unset($paramquery[nextpage]);
-			unset($paramquery[action]);
+			unset($paramquery['nextpage']);
+			unset($paramquery['action']);
 			$params = http_build_query($paramquery);
 
 			$user = new User(null);
-			$new_password = $user->create($_POST[username], 
-								$_POST[gender], 
-								$_POST[title], 
-								$_POST[forename], 
-								$_POST[surname], 
-								$_POST[mail], 
-								$_POST[can_change_password], 
-								$_POST[must_change_password], 
-								$_POST[disabled]);
+			$new_password = $user->create($_POST['username'], 
+								$_POST['gender'], 
+								$_POST['title'], 
+								$_POST['forename'], 
+								$_POST['surname'], 
+								$_POST['mail'], 
+								$_POST['can_change_password'], 
+								$_POST['must_change_password'], 
+								$_POST['disabled']);
 			
 			
 			$template = new HTMLTemplate("base/user/admin/user/add_proceed.html");
@@ -280,27 +280,27 @@ class AdminUserIO
 	 */
 	public static function delete()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$user_id = $_GET[id];
+			$user_id = $_GET['id'];
 			$user = new User($user_id);
 			
 			if ($user->check_delete_dependencies() == true)
 			{
-				if ($_GET[sure] != "true")
+				if ($_GET['sure'] != "true")
 				{
 					$template = new HTMLTemplate("base/user/admin/user/delete.html");
 					
 					$paramquery = $_GET;
-					$paramquery[sure] = "true";
+					$paramquery['sure'] = "true";
 					$params = http_build_query($paramquery);
 					
 					$template->set_var("yes_params", $params);
 							
 					$paramquery = $_GET;
-					unset($paramquery[sure]);
-					unset($paramquery[action]);
-					unset($paramquery[id]);
+					unset($paramquery['sure']);
+					unset($paramquery['action']);
+					unset($paramquery['id']);
 					$params = http_build_query($paramquery,'','&#38;');
 					
 					$template->set_var("no_params", $params);
@@ -310,9 +310,9 @@ class AdminUserIO
 				else
 				{
 					$paramquery = $_GET;
-					unset($paramquery[sure]);
-					unset($paramquery[action]);
-					unset($paramquery[id]);
+					unset($paramquery['sure']);
+					unset($paramquery['action']);
+					unset($paramquery['id']);
 					$params = http_build_query($paramquery,'','&#38;');
 					
 					if ($user->delete())
@@ -344,7 +344,7 @@ class AdminUserIO
 	 */
 	public static function detail()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
 			$tab_io = new Tab_IO();
 	
@@ -370,10 +370,10 @@ class AdminUserIO
 				{
 					$paramquery = $_GET;
 					$paramquery['tab']			= "dialog";
-					$paramquery['sub_dialog']	= $value[internal_name];
+					$paramquery['sub_dialog']	= $value['internal_name'];
 					$params 					= http_build_query($paramquery,'','&#38;');
 					
-					$tab_io->add($value[internal_name], $value[display_name], $params, false);
+					$tab_io->add($value['internal_name'], $value['display_name'], $params, false);
 				}
 			}
 			
@@ -413,7 +413,7 @@ class AdminUserIO
 						{
 							if (method_exists($module_dialog['class'], $module_dialog['method']))
 							{
-								$module_dialog['class']::$module_dialog[method]($_GET['id']);
+								$module_dialog['class']::$module_dialog['method']($_GET['id']);
 							}
 							else
 							{
@@ -447,7 +447,7 @@ class AdminUserIO
 	{
 		global $user;
 		
-		$user_id = $_GET[id];
+		$user_id = $_GET['id'];
 		
 		$template = new HTMLTemplate("base/user/admin/user/detail.html");
 					
@@ -485,7 +485,7 @@ class AdminUserIO
 		}
 
 		$paramquery = $_GET;
-		$paramquery[action] = "rename";
+		$paramquery['action'] = "rename";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("username", $current_user->get_username());
@@ -496,7 +496,7 @@ class AdminUserIO
 		
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "change_mail";
+		$paramquery['action'] = "change_mail";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("mail", $current_user->get_profile("mail"));
@@ -504,7 +504,7 @@ class AdminUserIO
 		
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "change_password";
+		$paramquery['action'] = "change_password";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("change_password_params", $params);
@@ -513,8 +513,8 @@ class AdminUserIO
 		// Administrative Settings
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "change_boolean_entry";
-		$paramquery[aspect] = "mc_password";
+		$paramquery['action'] = "change_boolean_entry";
+		$paramquery['aspect'] = "mc_password";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("mc_password_params", $params);
@@ -530,8 +530,8 @@ class AdminUserIO
 
 
 		$paramquery = $_GET;
-		$paramquery[action] = "change_boolean_entry";
-		$paramquery[aspect] = "cc_password";
+		$paramquery['action'] = "change_boolean_entry";
+		$paramquery['aspect'] = "cc_password";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("cc_password_params", $params);
@@ -547,8 +547,8 @@ class AdminUserIO
 		
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "change_boolean_entry";
-		$paramquery[aspect] = "secure_password";
+		$paramquery['action'] = "change_boolean_entry";
+		$paramquery['aspect'] = "secure_password";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("secure_password_params", $params);
@@ -564,8 +564,8 @@ class AdminUserIO
 		
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "change_boolean_entry";
-		$paramquery[aspect] = "block_write";
+		$paramquery['action'] = "change_boolean_entry";
+		$paramquery['aspect'] = "block_write";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("block_write_params", $params);
@@ -581,8 +581,8 @@ class AdminUserIO
 		
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "change_boolean_entry";
-		$paramquery[aspect] = "create_folder";
+		$paramquery['action'] = "change_boolean_entry";
+		$paramquery['aspect'] = "create_folder";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("create_folder_params", $params);
@@ -598,8 +598,8 @@ class AdminUserIO
 		
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "change_boolean_entry";
-		$paramquery[aspect] = "user_locked";
+		$paramquery['action'] = "change_boolean_entry";
+		$paramquery['aspect'] = "user_locked";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("locked_params", $params);
@@ -615,8 +615,8 @@ class AdminUserIO
 		
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "change_boolean_entry";
-		$paramquery[aspect] = "user_inactive";
+		$paramquery['action'] = "change_boolean_entry";
+		$paramquery['aspect'] = "user_inactive";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("inactive_params", $params);
@@ -646,9 +646,9 @@ class AdminUserIO
 				{
 					require_once($value['class_path']);
 					$module_settings_return = $value['class']::$value['method']($user_id);
-					$module_settings_array[$module_settings_counter][title] = $value['display_name'];
-					$module_settings_array[$module_settings_counter][value] = $module_settings_return[value];
-					$module_settings_array[$module_settings_counter][params] = $module_settings_return[params];
+					$module_settings_array[$module_settings_counter]['title'] = $value['display_name'];
+					$module_settings_array[$module_settings_counter]['value'] = $module_settings_return['value'];
+					$module_settings_array[$module_settings_counter]['params'] = $module_settings_return['params'];
 					$module_settings_counter++;
 				}
 			}
@@ -664,7 +664,7 @@ class AdminUserIO
 		// User Settings
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "change_language";
+		$paramquery['action'] = "change_language";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$language = new Language($current_user_regional->get_language_id());
@@ -674,7 +674,7 @@ class AdminUserIO
 		
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "change_timezone";
+		$paramquery['action'] = "change_timezone";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$timezone = new Timezone($current_user_regional->get_timezone_id());
@@ -690,7 +690,7 @@ class AdminUserIO
 	 */
 	private static function detail_groups()
 	{
-		$user_id = $_GET[id];
+		$user_id = $_GET['id'];
 		
 		$template = new HTMLTemplate("base/user/admin/user/detail_group.html");
 					
@@ -699,7 +699,7 @@ class AdminUserIO
 		$template->set_var("fullname", $current_user->get_full_name(false));
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "add_group";
+		$paramquery['action'] = "add_group";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("add_group_params", $params);
@@ -716,12 +716,12 @@ class AdminUserIO
 				$group = new Group($value);
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "delete_group";
-				$paramquery[key] = $value;
+				$paramquery['action'] = "delete_group";
+				$paramquery['key'] = $value;
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				$group_content_array[$counter][name] = $group->get_name();
-				$group_content_array[$counter][delete_params] = $params;
+				$group_content_array[$counter]['name'] = $group->get_name();
+				$group_content_array[$counter]['delete_params'] = $params;
 				
 				$counter++;
 			}
@@ -742,14 +742,14 @@ class AdminUserIO
 	 */
 	public static function add_group()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{		
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
-				if (is_numeric($_POST[group]))
+				if (is_numeric($_POST['group']))
 				{
-					$group = new Group($_POST[group]);
-					if ($group->is_user_in_group($_GET[id]) == true)
+					$group = new Group($_POST['group']);
+					if ($group->is_user_in_group($_GET['id']) == true)
 					{
 						$page_1_passed = false;
 						$error = "The user is already member of this group.";
@@ -765,7 +765,7 @@ class AdminUserIO
 					$error = "You must select a group.";
 				}
 			}
-			elseif($_GET[nextpage] > 1)
+			elseif($_GET['nextpage'] > 1)
 			{
 				$page_1_passed = true;
 			}
@@ -780,7 +780,7 @@ class AdminUserIO
 				$template = new HTMLTemplate("base/user/admin/user/add_group.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
@@ -795,8 +795,8 @@ class AdminUserIO
 				foreach($group_array as $key => $value)
 				{
 					$group = new Group($value);
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $group->get_name();
+					$result[$counter]['value'] = $value;
+					$result[$counter]['content'] = $group->get_name();
 					$counter++;
 				}
 				
@@ -806,14 +806,14 @@ class AdminUserIO
 			}
 			else
 			{
-				$group = new Group($_POST[group]);
+				$group = new Group($_POST['group']);
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "detail";
-				unset($paramquery[nextpage]);
+				$paramquery['action'] = "detail";
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				if ($group->create_user_in_group($_GET[id]))
+				if ($group->create_user_in_group($_GET['id']))
 				{
 					Common_IO::step_proceed($params, "Add Group", "Operation Successful", null);
 				}
@@ -835,23 +835,23 @@ class AdminUserIO
 	 */
 	public static function delete_group()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			if ($_GET[key])
+			if ($_GET['key'])
 			{
-				if ($_GET[sure] != "true")
+				if ($_GET['sure'] != "true")
 				{
 					$template = new HTMLTemplate("base/user/admin/user/delete_group.html");
 					
 					$paramquery = $_GET;
-					$paramquery[sure] = "true";
+					$paramquery['sure'] = "true";
 					$params = http_build_query($paramquery);
 					
 					$template->set_var("yes_params", $params);
 							
 					$paramquery = $_GET;
-					unset($paramquery[key]);
-					$paramquery[action] = "detail";
+					unset($paramquery['key']);
+					$paramquery['action'] = "detail";
 					$params = http_build_query($paramquery);
 					
 					$template->set_var("no_params", $params);
@@ -861,14 +861,14 @@ class AdminUserIO
 				else
 				{
 					$paramquery = $_GET;
-					unset($paramquery[key]);
-					unset($paramquery[sure]);
-					$paramquery[action] = "detail";
+					unset($paramquery['key']);
+					unset($paramquery['sure']);
+					$paramquery['action'] = "detail";
 					$params = http_build_query($paramquery);
 					
-					$group = new Group($_GET[key]);		
+					$group = new Group($_GET['key']);		
 							
-					if ($group->delete_user_from_group($_GET[id]))
+					if ($group->delete_user_from_group($_GET['id']))
 					{							
 						Common_IO::step_proceed($params, "Delete Group", "Operation Successful" ,null);
 					}
@@ -895,14 +895,14 @@ class AdminUserIO
 	 */
 	public static function add_organisation_unit()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{			
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
-				if (is_numeric($_POST[ou]))
+				if (is_numeric($_POST['ou']))
 				{
-					$organisation_unit = new OrganisationUnit($_POST[ou]);
-					if ($organisation_unit->is_user_in_organisation_unit($_GET[id]) == true)
+					$organisation_unit = new OrganisationUnit($_POST['ou']);
+					if ($organisation_unit->is_user_in_organisation_unit($_GET['id']) == true)
 					{
 						$page_1_passed = false;
 						$error = "The user is already member of this organisation unit.";
@@ -918,7 +918,7 @@ class AdminUserIO
 					$error = "You must select an organisation unit.";
 				}
 			}
-			elseif($_GET[nextpage] > 1)
+			elseif($_GET['nextpage'] > 1)
 			{
 				$page_1_passed = true;
 			}
@@ -933,7 +933,7 @@ class AdminUserIO
 				$template = new HTMLTemplate("base/user/admin/user/add_organisation_unit.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
@@ -948,8 +948,8 @@ class AdminUserIO
 				foreach($organisation_unit_array as $key => $value)
 				{
 					$organisation_unit = new OrganisationUnit($value);
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $organisation_unit->get_name();
+					$result[$counter]['value'] = $value;
+					$result[$counter]['content'] = $organisation_unit->get_name();
 					$counter++;
 				}
 				
@@ -959,14 +959,14 @@ class AdminUserIO
 			}
 			else
 			{
-				$organisation_unit = new OrganisationUnit($_POST[ou]);
+				$organisation_unit = new OrganisationUnit($_POST['ou']);
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "detail";
-				unset($paramquery[nextpage]);
+				$paramquery['action'] = "detail";
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				if ($organisation_unit->create_user_in_organisation_unit($_GET[id]))
+				if ($organisation_unit->create_user_in_organisation_unit($_GET['id']))
 				{
 					Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Successful", null);
 				}
@@ -988,23 +988,23 @@ class AdminUserIO
 	 */
 	public static function delete_organisation_unit()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			if ($_GET[key])
+			if ($_GET['key'])
 			{
-				if ($_GET[sure] != "true")
+				if ($_GET['sure'] != "true")
 				{
 					$template = new HTMLTemplate("base/user/admin/user/delete_organisation_unit.html");
 					
 					$paramquery = $_GET;
-					$paramquery[sure] = "true";
+					$paramquery['sure'] = "true";
 					$params = http_build_query($paramquery);
 					
 					$template->set_var("yes_params", $params);
 							
 					$paramquery = $_GET;
-					unset($paramquery[key]);
-					$paramquery[action] = "detail";
+					unset($paramquery['key']);
+					$paramquery['action'] = "detail";
 					$params = http_build_query($paramquery);
 					
 					$template->set_var("no_params", $params);
@@ -1014,14 +1014,14 @@ class AdminUserIO
 				else
 				{
 					$paramquery = $_GET;
-					unset($paramquery[key]);
-					unset($paramquery[sure]);
-					$paramquery[action] = "detail";
+					unset($paramquery['key']);
+					unset($paramquery['sure']);
+					$paramquery['action'] = "detail";
 					$params = http_build_query($paramquery);
 					
-					$organisation_unit = new OrganisationUnit($_GET[key]);	
+					$organisation_unit = new OrganisationUnit($_GET['key']);	
 							
-					if ($organisation_unit->delete_user_from_organisation_unit($_GET[id]))
+					if ($organisation_unit->delete_user_from_organisation_unit($_GET['id']))
 					{							
 						Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
 					}
@@ -1047,15 +1047,15 @@ class AdminUserIO
 	 */
 	public static function rename()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$user = new User($_GET[id]);
+			$user = new User($_GET['id']);
 						
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
-				if ($_POST[username])
+				if ($_POST['username'])
 				{
-					if ((User::exist_username($_POST[username]) == true) and ($_POST[username] != $user->get_username()))
+					if ((User::exist_username($_POST['username']) == true) and ($_POST['username'] != $user->get_username()))
 					{
 						$page_1_passed = false;
 						$error = "This username is already allocated.";
@@ -1071,7 +1071,7 @@ class AdminUserIO
 					$error = "You must enter a username.";
 				}
 			}
-			elseif($_GET[nextpage] > 1)
+			elseif($_GET['nextpage'] > 1)
 			{
 				$page_1_passed = true;
 			}
@@ -1086,15 +1086,15 @@ class AdminUserIO
 				$template = new HTMLTemplate("base/user/admin/user/rename.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
 				$template->set_var("error",$error);
 				
-				if ($_POST[username])
+				if ($_POST['username'])
 				{
-					$template->set_var("username", $_POST[username]);
+					$template->set_var("username", $_POST['username']);
 				}
 				else
 				{
@@ -1105,11 +1105,11 @@ class AdminUserIO
 			else
 			{
 				$paramquery = $_GET;
-				$paramquery[action] = "detail";
-				unset($paramquery[nextpage]);
+				$paramquery['action'] = "detail";
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				if ($user->set_username($_POST[username]))
+				if ($user->set_username($_POST['username']))
 				{
 					Common_IO::step_proceed($params, "Rename User", "Operation Successful", null);
 				}
@@ -1130,13 +1130,13 @@ class AdminUserIO
 	 */
 	public static function change_mail()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$user = new User($_GET[id]);
+			$user = new User($_GET['id']);
 						
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
-				if ($_POST[mail])
+				if ($_POST['mail'])
 				{
 					$page_1_passed = true;
 				}
@@ -1146,7 +1146,7 @@ class AdminUserIO
 					$error = "You must enter a mail-address.";
 				}
 			}
-			elseif($_GET[nextpage] > 1)
+			elseif($_GET['nextpage'] > 1)
 			{
 				$page_1_passed = true;
 			}
@@ -1161,15 +1161,15 @@ class AdminUserIO
 				$template = new HTMLTemplate("base/user/admin/user/change_mail.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
 				$template->set_var("error",$error);
 				
-				if ($_POST[mail])
+				if ($_POST['mail'])
 				{
-					$template->set_var("mail", $_POST[mail]);
+					$template->set_var("mail", $_POST['mail']);
 				}
 				else
 				{
@@ -1180,11 +1180,11 @@ class AdminUserIO
 			else
 			{
 				$paramquery = $_GET;
-				$paramquery[action] = "detail";
-				unset($paramquery[nextpage]);
+				$paramquery['action'] = "detail";
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				if ($user->set_profile("mail", $_POST[mail]))
+				if ($user->set_profile("mail", $_POST['mail']))
 				{
 					Common_IO::step_proceed($params, "Change Mail", "Operation Successful", null);
 				}
@@ -1205,11 +1205,11 @@ class AdminUserIO
 	 */
 	public static function change_password()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{		
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
-				if ($_POST[password])
+				if ($_POST['password'])
 				{
 					$page_1_passed = true;
 				}
@@ -1219,7 +1219,7 @@ class AdminUserIO
 					$error = "You must enter a new password.";
 				}
 			}
-			elseif($_GET[nextpage] > 1)
+			elseif($_GET['nextpage'] > 1)
 			{
 				$page_1_passed = true;
 			}
@@ -1234,7 +1234,7 @@ class AdminUserIO
 				$template = new HTMLTemplate("base/user/admin/user/change_password.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
@@ -1244,14 +1244,14 @@ class AdminUserIO
 			}
 			else
 			{
-				$user = new User($_GET[id]);
+				$user = new User($_GET['id']);
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "detail";
-				unset($paramquery[nextpage]);
+				$paramquery['action'] = "detail";
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				if ($user->set_password($_POST[password]))
+				if ($user->set_password($_POST['password']))
 				{
 					Common_IO::step_proceed($params, "Set New Password", "Operation Successful", null);
 				}
@@ -1272,11 +1272,11 @@ class AdminUserIO
 	 */
 	public static function change_boolean_entry()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$user = new User($_GET[id]);
+			$user = new User($_GET['id']);
 		
-			switch($_GET[aspect]):
+			switch($_GET['aspect']):
 			
 				case "mc_password":
 					if ($user->get_boolean_user_entry("must_change_password") == true) {
@@ -1337,7 +1337,7 @@ class AdminUserIO
 			endswitch;
 		
 			$paramquery = $_GET;
-			$paramquery[action] = "detail";
+			$paramquery['action'] = "detail";
 			$params = http_build_query($paramquery,'','&#38;');
 		
 			if ($return == true)
@@ -1360,12 +1360,12 @@ class AdminUserIO
 	 */
 	public static function change_language()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$user = new User($_GET[id]);
-			$regional = new Regional($_GET[id]);
+			$user = new User($_GET['id']);
+			$regional = new Regional($_GET['id']);
 						
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
 				$page_1_passed = true;
 			}
@@ -1379,7 +1379,7 @@ class AdminUserIO
 				$template = new HTMLTemplate("base/user/admin/user/change_language.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
@@ -1395,16 +1395,16 @@ class AdminUserIO
 					{
 						$language = new Language($value);
 						
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $language->get_full_name();
+						$result[$counter]['value'] = $value;
+						$result[$counter]['content'] = $language->get_full_name();
 						
 						if ($value == $regional->get_language_id())
 						{
-							$result[$counter][selected] = "selected='selected'";
+							$result[$counter]['selected'] = "selected='selected'";
 						}
 						else
 						{
-							$result[$counter][selected] = "";
+							$result[$counter]['selected'] = "";
 						}
 						$counter++;		
 					}
@@ -1417,11 +1417,11 @@ class AdminUserIO
 			else
 			{
 				$paramquery = $_GET;
-				$paramquery[action] = "detail";
-				unset($paramquery[nextpage]);
+				$paramquery['action'] = "detail";
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				if ($user->set_language_id($_POST[language]))
+				if ($user->set_language_id($_POST['language']))
 				{
 					Common_IO::step_proceed($params, "Change Language", "Operation Successful", null);
 				}
@@ -1442,12 +1442,12 @@ class AdminUserIO
 	 */
 	public static function change_timezone()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$user = new User($_GET[id]);
-			$regional = new Regional($_GET[id]);
+			$user = new User($_GET['id']);
+			$regional = new Regional($_GET['id']);
 						
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
 				$page_1_passed = true;
 			}
@@ -1461,7 +1461,7 @@ class AdminUserIO
 				$template = new HTMLTemplate("base/user/admin/user/change_timezone.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
@@ -1477,16 +1477,16 @@ class AdminUserIO
 					{
 						$timezone = new Timezone($value);
 						
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $timezone->get_name();
+						$result[$counter]['value'] = $value;
+						$result[$counter]['content'] = $timezone->get_name();
 						
 						if ($value == $regional->get_timezone_id())
 						{
-							$result[$counter][selected] = "selected='selected'";
+							$result[$counter]['selected'] = "selected='selected'";
 						}
 						else
 						{
-							$result[$counter][selected] = "";
+							$result[$counter]['selected'] = "";
 						}
 						$counter++;
 					}
@@ -1497,11 +1497,11 @@ class AdminUserIO
 			else
 			{
 				$paramquery = $_GET;
-				$paramquery[action] = "detail";
-				unset($paramquery[nextpage]);
+				$paramquery['action'] = "detail";
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				if ($user->set_timezone_id($_POST[timezone]))
+				if ($user->set_timezone_id($_POST['timezone']))
 				{
 					Common_IO::step_proceed($params, "Change Timezone", "Operation Successful", null);
 				}
@@ -1519,7 +1519,7 @@ class AdminUserIO
 	
 	public static function handler()
 	{			
-		switch($_GET[action]):
+		switch($_GET['action']):
 			case "add":
 				self::create();
 			break;
@@ -1587,13 +1587,13 @@ class AdminUserIO
 	{
 		$template = new HTMLTemplate("base/user/admin/user/home_dialog.html");
 		
-		$paramquery 			= array();
-		$paramquery[username] 	= $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] 		= $_GET[nav];
-		$paramquery[run] 		= "organisation";
-		$paramquery[dialog] 	= "users";
-		$paramquery[action] 	= "add";
+		$paramquery 				= array();
+		$paramquery['username'] 	= $_GET['username'];
+		$paramquery['session_id'] 	= $_GET['session_id'];
+		$paramquery['nav'] 			= $_GET['nav'];
+		$paramquery['run'] 			= "organisation";
+		$paramquery['dialog'] 		= "users";
+		$paramquery['action'] 		= "add";
 		$params = http_build_query($paramquery, '', '&#38;');
 		
 		$template->set_var("user_add_params", $params);

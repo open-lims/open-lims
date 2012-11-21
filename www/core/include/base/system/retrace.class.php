@@ -76,8 +76,8 @@ class Retrace implements RetraceInterface
 		if ($retrace_string)
 		{
 			$retrace_array = array();
-			$retrace_array[username] = $_GET[username];
-			$retrace_array[session_id] = $_GET[session_id];
+			$retrace_array['username'] = $_GET['username'];
+			$retrace_array['session_id'] = $_GET['session_id'];
 			$retrace_array += unserialize(base64_decode($retrace_string));
 			return $retrace_array;
 		}

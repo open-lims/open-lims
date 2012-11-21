@@ -59,7 +59,7 @@ class System implements SystemInterface
     {
     	global $db;
     	$res = $db->db_database_size();
-    	return $res[size];
+    	return $res['size'];
     }
     
     /**

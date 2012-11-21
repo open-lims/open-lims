@@ -109,9 +109,9 @@ class ProjectTemplate implements ProjectTemplateInterface
 					
 					if ($value[1] == "oldl" and $value[2] != "#")
 					{
-						if ($value[3][type])
+						if ($value[3]['type'])
 						{
-							if ($value[3][type] != "project")
+							if ($value[3]['type'] != "project")
 							{
 								return false;		
 							}
@@ -325,7 +325,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 					$value[1] = trim(strtolower($value[1]));
 					$value[2] = trim(strtolower($value[2]));
 			
-		    		if ($value[3][id] != "#" and $value[3][type] != "#")
+		    		if ($value[3]['id'] != "#" and $value[3]['type'] != "#")
 		    		{
 		    			$return_array[$counter]					= $value[3];
 			    		$return_array[$counter]['xml_element'] 	= $value[1];
@@ -380,7 +380,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    	
 		    	if ($in_status == true)
 		    	{
-		    		if ($value[3][id] != "#" and $value[3][type] != "#")
+		    		if ($value[3]['id'] != "#" and $value[3]['type'] != "#")
 		    		{
 			    		$return_array[$counter] 				= $value[3];
 			    		$return_array[$counter]['xml_element'] 	= $value[1];
@@ -394,7 +394,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    		}
 		    	}
 		    	
-		    	if ($value[1] == "status" and $value[3][id] == $status_id)
+		    	if ($value[1] == "status" and $value[3]['id'] == $status_id)
 		    	{
 					$in_status = true;
 		    	}
@@ -426,9 +426,9 @@ class ProjectTemplate implements ProjectTemplateInterface
 				$value[1] = trim(strtolower($value[1]));
 				$value[2] = trim(strtolower($value[2]));
 		    	
-		    	if ($value[1] == "status" and is_numeric($value[3][id]))
+		    	if ($value[1] == "status" and is_numeric($value[3]['id']))
 		    	{
-		    		array_push($return_array, $value[3][id]);
+		    		array_push($return_array, $value[3]['id']);
 		    	}
 		    }
 			return $return_array;
@@ -463,18 +463,18 @@ class ProjectTemplate implements ProjectTemplateInterface
 					$value[1] = trim(strtolower($value[1]));
 					$value[2] = trim(strtolower($value[2]));
 			    	
-		    		if ($value[1] == "status" and is_numeric($value[3][id]))
+		    		if ($value[1] == "status" and is_numeric($value[3]['id']))
 		    		{
 			    		if ($status_found == false)
 			    		{
-			    			if ($value[3][id] == $status_id)
+			    			if ($value[3]['id'] == $status_id)
 			    			{
 			    				$status_found = true;
 			    			}
 			    		}
 			    		else
 			    		{
-			    			return $value[3][id];
+			    			return $value[3]['id'];
 			    		}
 			    	}
 			    }
@@ -506,9 +506,9 @@ class ProjectTemplate implements ProjectTemplateInterface
 				
 				foreach($status_requirements as $key => $value)
 				{
-					if ($value[xml_element] == "item" and !$value[close])
+					if ($value['xml_element'] == "item" and !$value['close'])
 					{
-						if ($item_counter == $gid or $value[gid] === $gid)
+						if ($item_counter == $gid or $value['gid'] === $gid)
 						{
 				    		if (is_numeric($value['gid']))
 				    		{
@@ -547,7 +547,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 						}
 					}
 					
-					if ($value[xml_element] == "item" and $value[close] == "1")
+					if ($value['xml_element'] == "item" and $value['close'] == "1")
 					{
 						$item_counter++;
 					}
@@ -587,7 +587,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 				$value[1] = trim(strtolower($value[1]));
 				$value[2] = trim(strtolower($value[2]));
 		    	
-		    	if ($value[1] == "status" and $value[3][id] == $status_id and $value[3][id] != "#" and $value[3][type] != "#")
+		    	if ($value[1] == "status" and $value[3]['id'] == $status_id and $value[3]['id'] != "#" and $value[3]['type'] != "#")
 		    	{ 				    		
 		    		if ($value[3]['id'])
 		    		{
@@ -627,9 +627,9 @@ class ProjectTemplate implements ProjectTemplateInterface
 								
 				foreach($status_requirements as $key => $value)
 				{
-					if ($value[xml_element] == "item" and !$value[close])
+					if ($value['xml_element'] == "item" and !$value['close'])
 					{
-						if ($item_counter == $gid or $value[$counter][gid] == $gid)
+						if ($item_counter == $gid or $value[$counter]['gid'] == $gid)
 						{
 							$in_item = true;
 						}
@@ -640,7 +640,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 						array_push($return_array, $value);
 					}
 					
-					if ($value[xml_element] == "item" and $value[close] == "1")
+					if ($value['xml_element'] == "item" and $value['close'] == "1")
 					{
 						$in_item = false;
 						$item_counter++;
@@ -679,7 +679,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 				
 				foreach($status_requirements as $key => $value)
 				{
-					if ($value[xml_element] == "class" and $value[name] == $class_name and !$value[close])
+					if ($value['xml_element'] == "class" and $value['name'] == $class_name and !$value['close'])
 					{
 						$in_class = true;	
 					}
@@ -689,7 +689,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 						array_push($return_array, $value);
 					}
 					
-					if ($value[xml_element] == "class" and $value[close] == "1")
+					if ($value['xml_element'] == "class" and $value['close'] == "1")
 					{
 						$in_class = false;
 					}

@@ -61,25 +61,25 @@ class UserSearchAjax
 			{
 				foreach ($list_array as $key => $value)
 				{
-					$list_array[$key][symbol] = "<img src='images/icons/user.png' alt='N' border='0' />";
+					$list_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='N' border='0' />";
 
 					$user_paramquery = array();
-					$user_paramquery[username] = $_GET[username];
-					$user_paramquery[session_id] = $_GET[session_id];
-					$user_paramquery[nav] = "search";
-					$user_paramquery[run] = "common_dialog";
-					$user_paramquery[dialog] = "user_detail";
-					$user_paramquery[id] = $value[id];
+					$user_paramquery['username'] = $_GET['username'];
+					$user_paramquery['session_id'] = $_GET['session_id'];
+					$user_paramquery['nav'] = "search";
+					$user_paramquery['run'] = "common_dialog";
+					$user_paramquery['dialog'] = "user_detail";
+					$user_paramquery['id'] = $value['id'];
 					$user_params = http_build_query($user_paramquery, '', '&#38;');
 					
-					$tmp_username = $list_array[$key][username];
-					unset($list_array[$key][username]);
-					$list_array[$key][username][content] = $tmp_username;
-					$list_array[$key][username][link] = $user_params;
+					$tmp_username = $list_array[$key]['username'];
+					unset($list_array[$key]['username']);
+					$list_array[$key]['username']['content'] = $tmp_username;
+					$list_array[$key]['username']['link'] = $user_params;
 					
-					if ($list_array[$key][id] == 1)
+					if ($list_array[$key]['id'] == 1)
 					{
-						$list_array[$key][fullname] = "Administrator";
+						$list_array[$key]['fullname'] = "Administrator";
 					}
 				}
 			}
@@ -153,21 +153,21 @@ class UserSearchAjax
 			{
 				foreach ($list_array as $key => $value)
 				{
-					$list_array[$key][symbol] = "<img src='images/icons/groups.png' alt='N' border='0' />";
+					$list_array[$key]['symbol'] = "<img src='images/icons/groups.png' alt='N' border='0' />";
 
 					$group_paramquery = array();
-					$group_paramquery[username] = $_GET[username];
-					$group_paramquery[session_id] = $_GET[session_id];
-					$group_paramquery[nav] = "search";
-					$group_paramquery[run] = "common_dialog";
-					$group_paramquery[dialog] = "group_detail";
-					$group_paramquery[id] = $value[id];
+					$group_paramquery['username'] = $_GET['username'];
+					$group_paramquery['session_id'] = $_GET['session_id'];
+					$group_paramquery['nav'] = "search";
+					$group_paramquery['run'] = "common_dialog";
+					$group_paramquery['dialog'] = "group_detail";
+					$group_paramquery['id'] = $value['id'];
 					$group_params = http_build_query($group_paramquery, '', '&#38;');
 					
-					$tmp_name = $list_array[$key][name];
-					unset($list_array[$key][name]);
-					$list_array[$key][name][content] = $tmp_name;
-					$list_array[$key][name][link] = $group_params;
+					$tmp_name = $list_array[$key]['name'];
+					unset($list_array[$key]['name']);
+					$list_array[$key]['name']['content'] = $tmp_name;
+					$list_array[$key]['name']['link'] = $group_params;
 				}
 			}
 			else

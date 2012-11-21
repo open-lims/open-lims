@@ -46,7 +46,7 @@ class AdminBaseServiceIO
 	
 	public static function handler()
 	{
-		switch($_GET[action]):		
+		switch($_GET['action']):		
 			default:
 				self::home();
 			break;

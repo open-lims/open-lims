@@ -95,32 +95,32 @@ class EquipmentAjax
 						
 						if ($checkbox_class)
 						{
-							$list_array[$key][checkbox] = "<input type='checkbox' name='equipment-".$list_array[$key][item_id]."' value='1' class='".$checkbox_class."' checked='checked' />";
+							$list_array[$key]['checkbox'] = "<input type='checkbox' name='equipment-".$list_array[$key]['item_id']."' value='1' class='".$checkbox_class."' checked='checked' />";
 						}
 						else
 						{
-							$list_array[$key][checkbox] = "<input type='checkbox' name='equipment-".$list_array[$key][item_id]."' value='1' checked='checked' />";
+							$list_array[$key]['checkbox'] = "<input type='checkbox' name='equipment-".$list_array[$key]['item_id']."' value='1' checked='checked' />";
 						}
 						
-						$list_array[$key][symbol]	= "<img src='images/icons/equipment.png' alt='N' border='0' />";					}
+						$list_array[$key]['symbol']	= "<img src='images/icons/equipment.png' alt='N' border='0' />";					}
 					else
 					{
 						$paramquery = $_GET;
-						$paramquery[action] = "detail";
-						$paramquery[id] = $list_array[$key][id];
+						$paramquery['action'] = "detail";
+						$paramquery['id'] = $list_array[$key]['id'];
 						$params = http_build_query($paramquery,'','&#38;');
 						
-						$list_array[$key][symbol][link]		= $params;
-						$list_array[$key][symbol][content] 	= "<img src='images/icons/equipment.png' alt='N' border='0' />";
+						$list_array[$key]['symbol']['link']		= $params;
+						$list_array[$key]['symbol']['content'] 	= "<img src='images/icons/equipment.png' alt='N' border='0' />";
 					
-						$equipment_name = $list_array[$key][name];
-						unset($list_array[$key][name]);
-						$list_array[$key][name][link] 		= $params;
-						$list_array[$key][name][content]		= $equipment_name;
+						$equipment_name = $list_array[$key]['name'];
+						unset($list_array[$key]['name']);
+						$list_array[$key]['name']['link'] 		= $params;
+						$list_array[$key]['name']['content']		= $equipment_name;
 					}
 					
-					$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
-					$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+					$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
+					$list_array[$key]['datetime'] = $datetime_handler->get_formatted_string("dS M Y H:i");
 				}
 			}
 			else
@@ -195,26 +195,26 @@ class EquipmentAjax
 				foreach($list_array as $key => $value)
 				{
 					$paramquery = $_GET;
-					$paramquery[action] = "detail";
-					$paramquery[id] = $list_array[$key][id];
+					$paramquery['action'] = "detail";
+					$paramquery['id'] = $list_array[$key]['id'];
 					$params = http_build_query($paramquery,'','&#38;');
 					
-					$list_array[$key][symbol][link]		= $params;
-					$list_array[$key][symbol][content] 	= "<img src='images/icons/equipment.png' alt='N' border='0' />";
+					$list_array[$key]['symbol']['link']		= $params;
+					$list_array[$key]['symbol']['content'] 	= "<img src='images/icons/equipment.png' alt='N' border='0' />";
 				
-					if ($list_array[$key][organisation_unit_id] != $_GET[ou_id])
+					if ($list_array[$key]['organisation_unit_id'] != $_GET['ou_id'])
 					{
-						$equipment_name = $list_array[$key][name];
-						unset($list_array[$key][name]);
-						$list_array[$key][name][link] 		= $params;
-						$list_array[$key][name][content]		= $equipment_name." (CH)";
+						$equipment_name = $list_array[$key]['name'];
+						unset($list_array[$key]['name']);
+						$list_array[$key]['name']['link'] 		= $params;
+						$list_array[$key]['name']['content']	= $equipment_name." (CH)";
 					}
 					else
 					{
-						$equipment_name = $list_array[$key][name];
-						unset($list_array[$key][name]);
-						$list_array[$key][name][link] 		= $params;
-						$list_array[$key][name][content]		= $equipment_name;
+						$equipment_name = $list_array[$key]['name'];
+						unset($list_array[$key]['name']);
+						$list_array[$key]['name']['link'] 		= $params;
+						$list_array[$key]['name']['content']	= $equipment_name;
 					}
 				}
 			}
@@ -334,9 +334,9 @@ class EquipmentAjax
 					{
 						$equipment_type = new EquipmentType($value);
 					
-						$result[$counter][value] = $value;
-						$result[$counter][disabled] = "";
-						$result[$counter][content] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
+						$result[$counter]['value'] = $value;
+						$result[$counter]['disabled'] = "";
+						$result[$counter]['content'] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
 						
 						$counter++;
 						array_push($hit_array, $value);
@@ -358,9 +358,9 @@ class EquipmentAjax
 							{
 								$equipment_type = new EquipmentType($value);
 						
-								$result[$counter][value] = $value;
-								$result[$counter][disabled] = "";
-								$result[$counter][content] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
+								$result[$counter]['value'] = $value;
+								$result[$counter]['disabled'] = "";
+								$result[$counter]['content'] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
 								
 								$counter++;
 								array_push($hit_array, $value);
@@ -401,9 +401,9 @@ class EquipmentAjax
 							{
 								$equipment_type = new EquipmentType($value);
 						
-								$result[$counter][value] = $value;
-								$result[$counter][disabled] = "";
-								$result[$counter][content] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
+								$result[$counter]['value'] = $value;
+								$result[$counter]['disabled'] = "";
+								$result[$counter]['content'] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
 								
 								$counter++;
 								array_push($hit_array, $value);
@@ -420,9 +420,9 @@ class EquipmentAjax
 					{
 						$equipment_type = new EquipmentType($value);
 						
-						$result[$counter][value] = $value;
-						$result[$counter][disabled] = "";
-						$result[$counter][content] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
+						$result[$counter]['value'] = $value;
+						$result[$counter]['disabled'] = "";
+						$result[$counter]['content'] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
 						
 						$counter++;
 					}
@@ -432,9 +432,9 @@ class EquipmentAjax
 
 		if ($counter == 0)
 		{
-			$result[0][value] = "0";
-			$result[0][disabled] = "disabled='disabled'";
-			$result[0][content] = "NO EQUIPMENT FOUND!";	
+			$result[0]['value'] = "0";
+			$result[0]['disabled'] = "disabled='disabled'";
+			$result[0]['content'] = "NO EQUIPMENT FOUND!";	
 		}
 		
 		$template->set_var("select",$result);
