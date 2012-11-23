@@ -273,12 +273,10 @@ html,body
 #SmallTabArrowLeft
 {
 	width: 16px;
-	padding: 4px;
 }
 #SmallTabArrowRight
 {
 	width: 16px;
-	padding: 4px;
 }
 #SmallTabFooter 
 {
@@ -287,8 +285,48 @@ html,body
 	height: 1px;
 	width: 750px;
 }
+#SmallTabHiddenTabsMenu
+{
+	position: absolute;
+	background-color: white;
+	border: solid black 1px;
+	font-family: arial;
+	font-size: 12px;
+	z-index: 200;
+    -moz-border-radius: 10px;
+   	-webkit-border-radius: 10px;
+   	-khtml-border-radius: 10px;
+   	border-radius: 10px;
+   	padding: 5px 5px 5px 5px;
+   	border: solid #E0E0E0 1px;
+   	-moz-box-shadow: 3px 3px 5px #636363;
+  	-webkit-box-shadow: 3px 3px 5px #636363;
+ 	box-shadow: 3px 3px 5px #636363;
+}
+
+.SmallTabHiddenTabsMenuEntry
+{
+	font-weight: bold;
+	font-size: 14px;
+	padding: 3px 3px 3px 3px;
+	-moz-border-radius: 5px;
+   	-webkit-border-radius: 5px;
+   	-khtml-border-radius: 5px;
+   	border-radius: 5px;
+   	color: #666666;
+   	white-space: nowrap;
+}
+
+.SmallTabHiddenTabsMenuEntry:hover
+{
+	color: #ffffff;
+	background-color: #999;
+}
+
+
 .SmallTabList 
 {
+	position: relative;
 	width: 750px;
 	padding: 0;
 	margin: 0;

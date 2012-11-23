@@ -45,6 +45,10 @@ class ProjectCommon_IO
 			
 			$tab_io->add("main", "Main Page", $params, false);
 			
+			$tab_io->add("main2", "Main Page", $params, false);
+			
+			$tab_io->add("main3", "Main Page", $params, false);
+			
 			// Log
 			
 			$paramquery['username'] 	= $_GET['username'];

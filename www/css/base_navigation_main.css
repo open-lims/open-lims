@@ -133,11 +133,10 @@
 {
 	position: absolute;
 	background-color: white;
-	border: solid black 1px;
+	border: solid #E0E0E0 1px;
 	font-family: arial;
 	font-size: 12px;
 	z-index: 200;
-	width: 100px;
     -moz-border-radius: 10px;
    	-webkit-border-radius: 10px;
    	-khtml-border-radius: 10px;
@@ -158,6 +157,8 @@
    	-webkit-border-radius: 5px;
    	-khtml-border-radius: 5px;
    	border-radius: 5px;
+   	color: #666666;
+   	white-space: nowrap;
 }
 
 .NavigationMenuHiddenTabsMenuEntry:hover
