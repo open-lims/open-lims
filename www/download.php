@@ -52,7 +52,7 @@
 
 	SystemConfig::load_module_config();
 	
-	if ($_GET[session_id] and $_GET[file_id])
+	if ($_GET['session_id'] and $_GET['file_id'])
 	{	
 		$transaction = new Transaction();
 		
@@ -91,16 +91,16 @@
 		
 		Security::protect_session();
 		
-		$session = new Session($_GET[session_id]);
+		$session = new Session($_GET['session_id']);
 		$user = new User($session->get_user_id());
 		
 		if ($session->is_valid() == true)
 		{
-			$file = File::get_instance($_GET[file_id]);
+			$file = File::get_instance($_GET['file_id']);
 			
-			if ($_GET[version])
+			if ($_GET['version'])
 			{
-				$file->open_internal_revision($_GET[version]);
+				$file->open_internal_revision($_GET['version']);
 			}
 			
 			if ($file->is_read_access() == true)
@@ -111,13 +111,13 @@
 				$extension_array = explode(".",$file->get_name());
 				$extension_array_length = substr_count($file->get_name(),".");
 				
-				if (!$_GET[version])
+				if (!$_GET['version'])
 				{
 					$file_path = constant("BASE_DIR")."/".$folder_path."/".$file->get_data_entity_id()."-".$file->get_internal_revision().".".$extension_array[$extension_array_length];
 				}
 				else
 				{
-					$file_path = constant("BASE_DIR")."/".$folder_path."/".$file->get_data_entity_id()."-".$_GET[version].".".$extension_array[$extension_array_length];
+					$file_path = constant("BASE_DIR")."/".$folder_path."/".$file->get_data_entity_id()."-".$_GET['version'].".".$extension_array[$extension_array_length];
 				}
 				
 				header("Content-Type: application/octet-stream");

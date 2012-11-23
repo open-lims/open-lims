@@ -66,27 +66,27 @@ class AdminProjectTemplateCatAjax
 				foreach($list_array as $key => $value)
 				{
 					$paramquery = $_GET;
-					$paramquery[id] = $list_array[$key][id];
-					$paramquery[action] = "edit";
-					unset($paramquery[sortvalue]);
-					unset($paramquery[sortmethod]);
-					unset($paramquery[nextpage]);
+					$paramquery['id'] = $list_array[$key]['id'];
+					$paramquery['action'] = "edit";
+					unset($paramquery['sortvalue']);
+					unset($paramquery['sortmethod']);
+					unset($paramquery['nextpage']);
 					$params = http_build_query($paramquery, '', '&#38;');
 	
-					$list_array[$key][edit][link] = $params;
-					$list_array[$key][edit][content] = "edit";
+					$list_array[$key]['edit']['link'] = $params;
+					$list_array[$key]['edit']['content'] = "edit";
 					
 					
 					$paramquery = $_GET;
-					$paramquery[id] = $list_array[$key][id];
-					$paramquery[action] = "delete";
-					unset($paramquery[sortvalue]);
-					unset($paramquery[sortmethod]);
-					unset($paramquery[nextpage]);
+					$paramquery['id'] = $list_array[$key]['id'];
+					$paramquery['action'] = "delete";
+					unset($paramquery['sortvalue']);
+					unset($paramquery['sortmethod']);
+					unset($paramquery['nextpage']);
 					$params = http_build_query($paramquery, '', '&#38;');
 	
-					$list_array[$key][delete][link] = $params;
-					$list_array[$key][delete][content] = "delete";
+					$list_array[$key]['delete']['link'] = $params;
+					$list_array[$key]['delete']['content'] = "delete";
 				}
 			}
 			else

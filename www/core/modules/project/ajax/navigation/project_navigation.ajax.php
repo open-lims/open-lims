@@ -66,15 +66,15 @@ class ProjectNavigationAjax
 			
 			$return_array = array();
 			
-			$project = new Project($_GET[project_id]);
-			if ($_GET[project_id] != ($master_project_id = $project->get_master_project_id()))
+			$project = new Project($_GET['project_id']);
+			if ($_GET['project_id'] != ($master_project_id = $project->get_master_project_id()))
 			{
 				$project = new Project($master_project_id);
 				$project_id = $master_project_id;
 			}
 			else
 			{
-				$project_id = $_GET[project_id];
+				$project_id = $_GET['project_id'];
 			}
 					
 			$return_array[0][0] = 0;

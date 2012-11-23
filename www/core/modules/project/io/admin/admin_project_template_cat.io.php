@@ -38,8 +38,8 @@ class AdminProjectTemplateCatIO
 		$template = new HTMLTemplate("project/admin/project_template_cat/list.html");	
 	
 		$paramquery = $_GET;
-		$paramquery[action] = "add";
-		unset($paramquery[nextpage]);
+		$paramquery['action'] = "add";
+		unset($paramquery['nextpage']);
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("add_params", $params);
@@ -51,13 +51,13 @@ class AdminProjectTemplateCatIO
 
 	public static function create()
 	{
-		if ($_GET[nextpage] == 1)
+		if ($_GET['nextpage'] == 1)
 		{
 			$page_1_passed = true;
 				
-			if ($_POST[name])
+			if ($_POST['name'])
 			{
-				if (ProjectTemplateCat::exist_name($_POST[name]) == true)
+				if (ProjectTemplateCat::exist_name($_POST['name']) == true)
 				{
 					$page_1_passed = false;
 					$error = "This name already exists";
@@ -80,7 +80,7 @@ class AdminProjectTemplateCatIO
 			$template = new HTMLTemplate("project/admin/project_template_cat/add.html");
 			
 			$paramquery = $_GET;
-			$paramquery[nextpage] = "1";
+			$paramquery['nextpage'] = "1";
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			$template->set_var("params",$params);
@@ -94,9 +94,9 @@ class AdminProjectTemplateCatIO
 				$template->set_var("error", "");	
 			}
 
-			if ($_POST[name])
+			if ($_POST['name'])
 			{
-				$template->set_var("name", $_POST[name]);
+				$template->set_var("name", $_POST['name']);
 			}
 			else
 			{
@@ -110,11 +110,11 @@ class AdminProjectTemplateCatIO
 			$project_template_cat = new ProjectTemplateCat(null);
 								
 			$paramquery = $_GET;
-			unset($paramquery[action]);
-			unset($paramquery[nextpage]);
+			unset($paramquery['action']);
+			unset($paramquery['nextpage']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			if ($project_template_cat->create($_POST[name]))
+			if ($project_template_cat->create($_POST['name']))
 			{
 				Common_IO::step_proceed($params, "Add Project Template Categories", "Operation Successful", null);
 			}
@@ -130,22 +130,22 @@ class AdminProjectTemplateCatIO
 	 */
 	public static function delete()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			if ($_GET[sure] != "true")
+			if ($_GET['sure'] != "true")
 			{
 				$template = new HTMLTemplate("project/admin/project_template_cat/delete.html");
 				
 				$paramquery = $_GET;
-				$paramquery[sure] = "true";
+				$paramquery['sure'] = "true";
 				$params = http_build_query($paramquery);
 				
 				$template->set_var("yes_params", $params);
 						
 				$paramquery = $_GET;
-				unset($paramquery[sure]);
-				unset($paramquery[action]);
-				unset($paramquery[id]);
+				unset($paramquery['sure']);
+				unset($paramquery['action']);
+				unset($paramquery['id']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("no_params", $params);
@@ -155,12 +155,12 @@ class AdminProjectTemplateCatIO
 			else
 			{
 				$paramquery = $_GET;
-				unset($paramquery[sure]);
-				unset($paramquery[action]);
-				unset($paramquery[id]);
+				unset($paramquery['sure']);
+				unset($paramquery['action']);
+				unset($paramquery['id']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				$project_template_cat = new ProjectTemplateCat($_GET[id]);
+				$project_template_cat = new ProjectTemplateCat($_GET['id']);
 				
 				if ($project_template_cat->delete())
 				{							
@@ -183,17 +183,17 @@ class AdminProjectTemplateCatIO
 	 */
 	public static function edit()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$project_template_cat = new ProjectTemplateCat($_GET[id]);
+			$project_template_cat = new ProjectTemplateCat($_GET['id']);
 		
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
 				$page_1_passed = true;
 				
-				if ($_POST[name])
+				if ($_POST['name'])
 				{
-					if (ProjectTemplateCat::exist_name($_POST[name]) == true and $project_template_cat->get_name() != $_POST[name])
+					if (ProjectTemplateCat::exist_name($_POST['name']) == true and $project_template_cat->get_name() != $_POST['name'])
 					{
 						$page_1_passed = false;
 						$error = "This name already exists";
@@ -216,7 +216,7 @@ class AdminProjectTemplateCatIO
 				$template = new HTMLTemplate("project/admin/project_template_cat/edit.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
@@ -230,9 +230,9 @@ class AdminProjectTemplateCatIO
 					$template->set_var("error", "");	
 				}
 													 
-				if ($_POST[name])
+				if ($_POST['name'])
 				{
-					$template->set_var("name", $_POST[name]);
+					$template->set_var("name", $_POST['name']);
 				}
 				else
 				{
@@ -243,11 +243,11 @@ class AdminProjectTemplateCatIO
 			else
 			{
 				$paramquery = $_GET;
-				unset($paramquery[nextpage]);
-				unset($paramquery[action]);
+				unset($paramquery['nextpage']);
+				unset($paramquery['action']);
 				$params = http_build_query($paramquery);
 				
-				if ($project_template_cat->set_name($_POST[name]))
+				if ($project_template_cat->set_name($_POST['name']))
 				{
 					Common_IO::step_proceed($params, "Edit Project Template Category", "Operation Successful", null);
 				}
@@ -265,7 +265,7 @@ class AdminProjectTemplateCatIO
 	
 	public static function handler()
 	{
-		switch($_GET[action]):
+		switch($_GET['action']):
 			case "add":
 				self::create();
 			break;

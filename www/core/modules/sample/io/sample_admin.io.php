@@ -35,17 +35,17 @@ class SampleAdminIO
 	{
 		global $user;
 		
-		if ($_GET[sample_id])
+		if ($_GET['sample_id'])
 		{
-			$sample_id = $_GET[sample_id];		
+			$sample_id = $_GET['sample_id'];		
 			$sample = new Sample($sample_id);
 			
 			if ($sample->get_owner_id() == $user->get_user_id() or
 				$user->is_admin() == true)
 			{
-				if ($_GET[nextpage] == 1)
+				if ($_GET['nextpage'] == 1)
 				{
-					if ($_POST[name])
+					if ($_POST['name'])
 					{
 						$page_1_passed = true;
 					}
@@ -66,16 +66,16 @@ class SampleAdminIO
 					$template = new HTMLTemplate("sample/int_admin/rename.html");
 				
 					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
+					$paramquery['nextpage'] = "1";
 					$params = http_build_query($paramquery,'','&#38;');
 				
 					$template->set_var("params",$params);
 				
 					$template->set_var("error",$error);
 					
-					if ($_POST[name])
+					if ($_POST['name'])
 					{
-						$template->set_var("name",$_POST[name]);
+						$template->set_var("name",$_POST['name']);
 					}
 					else
 					{
@@ -86,11 +86,11 @@ class SampleAdminIO
 				else
 				{
 					$paramquery = $_GET;
-					unset($paramquery[nextpage]);
-					$paramquery[run] = "detail";
+					unset($paramquery['nextpage']);
+					$paramquery['run'] = "detail";
 					$params = http_build_query($paramquery);
 					
-					if ($sample->set_name($_POST[name]))
+					if ($sample->set_name($_POST['name']))
 					{
 						Common_IO::step_proceed($params, "Rename Sample", "Operation Successful", null);
 					}
@@ -119,9 +119,9 @@ class SampleAdminIO
 	{
 		global $user;
 		
-		if ($_GET[sample_id])
+		if ($_GET['sample_id'])
 		{
-			$sample_id = $_GET[sample_id];
+			$sample_id = $_GET['sample_id'];
 		
 			$sample = new Sample($sample_id);
 		
@@ -130,7 +130,7 @@ class SampleAdminIO
 			{
 				$argument_array = array();
 				$argument_array[0][0] = "sample_id";
-				$argument_array[0][1] = $_GET[sample_id];
+				$argument_array[0][1] = $_GET['sample_id'];
 	
 				$list = new List_IO("SampleAdminPermissionUser", "ajax.php?nav=sample", "admin_list_user_permissions", "admin_count_user_permissions", $argument_array, "SampleAdminPermissionUser");
 				
@@ -144,7 +144,7 @@ class SampleAdminIO
 				$template = new HTMLTemplate("sample/int_admin/user_permission.html");
 				
 				$add_user_paramquery = $_GET;
-				$add_user_paramquery[run] = "admin_permission_user_add";
+				$add_user_paramquery['run'] = "admin_permission_user_add";
 				$add_user_params = http_build_query($add_user_paramquery,'','&#38;');
 				
 				$template->set_var("add_user_params", $add_user_params);
@@ -172,20 +172,20 @@ class SampleAdminIO
 	{
 		global $user;
 
-		if ($_GET[sample_id])
+		if ($_GET['sample_id'])
 		{
-			$sample_id = $_GET[sample_id];	
+			$sample_id = $_GET['sample_id'];	
 			$sample = new Sample($sample_id);	
 			$sample_security = new SampleSecurity($sample_id);
 			
 			if ($sample->get_owner_id() == $user->get_user_id() or
 				$user->is_admin() == true)
 			{
-				if ($_GET[nextpage] == 1)
+				if ($_GET['nextpage'] == 1)
 				{
-					if (is_numeric($_POST[user]))
+					if (is_numeric($_POST['user']))
 					{
-						if ($sample_security->is_user($_POST[user]) == true)
+						if ($sample_security->is_user($_POST['user']) == true)
 						{
 							$page_1_passed = false;
 							$error = "This user was already added.";
@@ -201,7 +201,7 @@ class SampleAdminIO
 						$error = "You must select an user.";
 					}
 				}
-				elseif($_GET[nextpage] > 1)
+				elseif($_GET['nextpage'] > 1)
 				{
 					$page_1_passed = true;
 				}
@@ -216,7 +216,7 @@ class SampleAdminIO
 					$template = new HTMLTemplate("sample/int_admin/user_permission_add_page_1.html");
 					
 					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
+					$paramquery['nextpage'] = "1";
 					$params = http_build_query($paramquery,'','&#38;');
 					
 					$template->set_var("params",$params);
@@ -231,8 +231,8 @@ class SampleAdminIO
 					foreach($user_array as $key => $value)
 					{
 						$user = new User($value);
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $user->get_username()." (".$user->get_full_name(false).")";
+						$result[$counter]['value'] = $value;
+						$result[$counter]['content'] = $user->get_username()." (".$user->get_full_name(false).")";
 						$counter++;
 					}
 					
@@ -242,7 +242,7 @@ class SampleAdminIO
 				}
 				else
 				{
-					if ($_GET[nextpage] == 2)
+					if ($_GET['nextpage'] == 2)
 					{
 						$page_2_passed = true;
 					}
@@ -256,25 +256,25 @@ class SampleAdminIO
 						$template = new HTMLTemplate("sample/int_admin/user_permission_add_page_2.html");
 						
 						$paramquery = $_GET;
-						$paramquery[nextpage] = "2";
+						$paramquery['nextpage'] = "2";
 						$params = http_build_query($paramquery,'','&#38;');
 						
 						$template->set_var("params",$params);
 						
-						$template->set_var("user", $_POST[user]);
+						$template->set_var("user", $_POST['user']);
 						
 						$template->output();
 					}
 					else
 					{
 						$paramquery = $_GET;
-						unset($paramquery[nextpage]);
-						unset($paramquery[sure]);
-						$paramquery[nav] = "sample";
-						$paramquery[run] = "admin_permission_user";
+						unset($paramquery['nextpage']);
+						unset($paramquery['sure']);
+						$paramquery['nav'] = "sample";
+						$paramquery['run'] = "admin_permission_user";
 						$params = http_build_query($paramquery);
 						
-						if ($_POST[read] == "1")
+						if ($_POST['read'] == "1")
 						{
 							$read = true;
 						}
@@ -283,7 +283,7 @@ class SampleAdminIO
 							$read = false;
 						}
 						
-						if ($_POST[write] == "1")
+						if ($_POST['write'] == "1")
 						{
 							$write = true;
 						}
@@ -292,7 +292,7 @@ class SampleAdminIO
 							$write = false;
 						}
 						
-						if ($sample_security->create_user($_POST[user], $read, $write) != null)
+						if ($sample_security->create_user($_POST['user'], $read, $write) != null)
 						{							
 							Common_IO::step_proceed($params, "Add Permission", "Operation Successful" ,null);
 						}
@@ -323,32 +323,32 @@ class SampleAdminIO
 	{
 		global $user;
 		
-		if ($_GET[sample_id])
+		if ($_GET['sample_id'])
 		{
-			if ($_GET[id])
+			if ($_GET['id'])
 			{
-				$sample_id = $_GET[sample_id];		
+				$sample_id = $_GET['sample_id'];		
 				$sample = new Sample($sample_id);
 				$sample_security = new SampleSecurity($sample_id);
 		
 				if ($sample->get_owner_id() == $user->get_user_id() or
 					$user->is_admin() == true)
 				{
-					if ($_GET[sure] != "true")
+					if ($_GET['sure'] != "true")
 					{
 						$template = new HTMLTemplate("sample/int_admin/ou_permission_delete.html");
 						
 						$paramquery = $_GET;
-						$paramquery[sure] = "true";
+						$paramquery['sure'] = "true";
 						$params = http_build_query($paramquery);
 						
 						$template->set_var("yes_params", $params);
 								
 						$paramquery = $_GET;
-						unset($paramquery[nextpage]);
-						unset($paramquery[sure]);
-						$paramquery[nav] = "sample";
-						$paramquery[run] = "admin_permission_user";
+						unset($paramquery['nextpage']);
+						unset($paramquery['sure']);
+						$paramquery['nav'] = "sample";
+						$paramquery['run'] = "admin_permission_user";
 						$params = http_build_query($paramquery);
 						
 						$template->set_var("no_params", $params);
@@ -358,13 +358,13 @@ class SampleAdminIO
 					else
 					{
 						$paramquery = $_GET;
-						unset($paramquery[nextpage]);
-						unset($paramquery[sure]);
-						$paramquery[nav] = "sample";
-						$paramquery[run] = "admin_permission_user";
+						unset($paramquery['nextpage']);
+						unset($paramquery['sure']);
+						$paramquery['nav'] = "sample";
+						$paramquery['run'] = "admin_permission_user";
 						$params = http_build_query($paramquery);
 						
-						$entry_id = $sample_security->get_entry_by_user_id($_GET[id]);
+						$entry_id = $sample_security->get_entry_by_user_id($_GET['id']);
 													
 						if ($sample_security->delete_user($entry_id))
 						{							
@@ -400,9 +400,9 @@ class SampleAdminIO
 	{
 		global $user;
 		
-		if ($_GET[sample_id])
+		if ($_GET['sample_id'])
 		{
-			$sample_id = $_GET[sample_id];
+			$sample_id = $_GET['sample_id'];
 		
 			$sample = new Sample($sample_id);
 		
@@ -411,7 +411,7 @@ class SampleAdminIO
 			{
 				$argument_array = array();
 				$argument_array[0][0] = "sample_id";
-				$argument_array[0][1] = $_GET[sample_id];
+				$argument_array[0][1] = $_GET['sample_id'];
 				
 				$list = new List_IO("SampleAdminPermissionOrganisationUnit", "ajax.php?nav=sample", "admin_list_organisation_unit_permissions", "admin_count_organisation_unit_permissions", $argument_array, "SampleAdminPermissionOrganisationUnit");
 				
@@ -422,7 +422,7 @@ class SampleAdminIO
 				$template = new HTMLTemplate("sample/int_admin/ou_permission.html");
 				
 				$add_ou_paramquery = $_GET;
-				$add_ou_paramquery[run] = "admin_permission_ou_add";
+				$add_ou_paramquery['run'] = "admin_permission_ou_add";
 				$add_ou_params = http_build_query($add_ou_paramquery,'','&#38;');
 				
 				$template->set_var("add_ou_params", $add_ou_params);
@@ -450,20 +450,20 @@ class SampleAdminIO
 	{
 		global $user;
 
-		if($_GET[sample_id])
+		if($_GET['sample_id'])
 		{
-			$sample_id = $_GET[sample_id];		
+			$sample_id = $_GET['sample_id'];		
 			$sample = new Sample($sample_id);
 			$sample_security = new SampleSecurity($sample_id);
 
 			if ($sample->get_owner_id() == $user->get_user_id() or
 				$user->is_admin() == true)
 			{
-				if ($_GET[nextpage] == 1)
+				if ($_GET['nextpage'] == 1)
 				{
-					if (is_numeric($_POST[ou]))
+					if (is_numeric($_POST['ou']))
 					{
-						if ($sample_security->is_organisation_unit($_POST[ou]) == true)
+						if ($sample_security->is_organisation_unit($_POST['ou']) == true)
 						{
 							$page_1_passed = false;
 							$error = "This organisation unit was already added.";
@@ -479,7 +479,7 @@ class SampleAdminIO
 						$error = "You must select an organisation unit.";
 					}
 				}
-				elseif($_GET[nextpage] > 1)
+				elseif($_GET['nextpage'] > 1)
 				{
 					$page_1_passed = true;
 				}
@@ -494,7 +494,7 @@ class SampleAdminIO
 					$template = new HTMLTemplate("sample/int_admin/ou_permission_add.html");
 					
 					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
+					$paramquery['nextpage'] = "1";
 					$params = http_build_query($paramquery,'','&#38;');
 					
 					$template->set_var("params",$params);
@@ -509,8 +509,8 @@ class SampleAdminIO
 					foreach($organisation_unit_array as $key => $value)
 					{
 						$organisation_unit = new OrganisationUnit($value);
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $organisation_unit->get_name();
+						$result[$counter]['value'] = $value;
+						$result[$counter]['content'] = $organisation_unit->get_name();
 						$counter++;
 					}
 					
@@ -521,13 +521,13 @@ class SampleAdminIO
 				else
 				{
 					$paramquery = $_GET;
-					unset($paramquery[nextpage]);
-					unset($paramquery[sure]);
-					$paramquery[nav] = "sample";
-					$paramquery[run] = "admin_permission_ou";
+					unset($paramquery['nextpage']);
+					unset($paramquery['sure']);
+					$paramquery['nav'] = "sample";
+					$paramquery['run'] = "admin_permission_ou";
 					$params = http_build_query($paramquery);
 					
-					if ($sample_security->create_organisation_unit($_POST[ou]))
+					if ($sample_security->create_organisation_unit($_POST['ou']))
 					{							
 						Common_IO::step_proceed($params, "Add Permission", "Operation Successful" ,null);
 					}
@@ -557,32 +557,32 @@ class SampleAdminIO
 	{
 		global $user;
 		
-		if ($_GET[sample_id])
+		if ($_GET['sample_id'])
 		{
-			if ($_GET[id])
+			if ($_GET['id'])
 			{
-				$sample_id = $_GET[sample_id];		
+				$sample_id = $_GET['sample_id'];		
 				$sample = new Sample($sample_id);
 				$sample_security = new SampleSecurity($sample_id);
 		
 				if ($sample->get_owner_id() == $user->get_user_id() or
 					$user->is_admin() == true)
 				{
-					if ($_GET[sure] != "true")
+					if ($_GET['sure'] != "true")
 					{
 						$template = new HTMLTemplate("sample/int_admin/ou_permission_delete.html");
 						
 						$paramquery = $_GET;
-						$paramquery[sure] = "true";
+						$paramquery['sure'] = "true";
 						$params = http_build_query($paramquery);
 						
 						$template->set_var("yes_params", $params);
 								
 						$paramquery = $_GET;
-						unset($paramquery[nextpage]);
-						unset($paramquery[sure]);
-						$paramquery[nav] = "sample";
-						$paramquery[run] = "admin_permission_ou";
+						unset($paramquery['nextpage']);
+						unset($paramquery['sure']);
+						$paramquery['nav'] = "sample";
+						$paramquery['run'] = "admin_permission_ou";
 						$params = http_build_query($paramquery);
 						
 						$template->set_var("no_params", $params);
@@ -592,13 +592,13 @@ class SampleAdminIO
 					else
 					{
 						$paramquery = $_GET;
-						unset($paramquery[nextpage]);
-						unset($paramquery[sure]);
-						$paramquery[nav] = "sample";
-						$paramquery[run] = "admin_permission_ou";
+						unset($paramquery['nextpage']);
+						unset($paramquery['sure']);
+						$paramquery['nav'] = "sample";
+						$paramquery['run'] = "admin_permission_ou";
 						$params = http_build_query($paramquery);
 						
-						$entry_id = $sample_security->get_entry_by_organisation_unit_id($_GET[id]);
+						$entry_id = $sample_security->get_entry_by_organisation_unit_id($_GET['id']);
 													
 						if ($sample_security->delete_organisation_unit($entry_id))
 						{							

@@ -32,12 +32,12 @@ class SampleCommon_IO
 		$tab_io = new Tab_IO();
 
 		// Main Page
-		$paramquery[username] 	= $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav]		= "sample";
-		$paramquery[run]		= "detail";
-		$paramquery[sample_id]	= $_GET[sample_id];
-		$params 				= http_build_query($paramquery,'','&#38;');
+		$paramquery['username'] 	= $_GET['username'];
+		$paramquery['session_id'] 	= $_GET['session_id'];
+		$paramquery['nav']			= "sample";
+		$paramquery['run']			= "detail";
+		$paramquery['sample_id']	= $_GET['sample_id'];
+		$params 					= http_build_query($paramquery,'','&#38;');
 		unset($paramquery);
 		
 		$tab_io->add("main", "Main Page", $params, false);
@@ -50,15 +50,15 @@ class SampleCommon_IO
 		{
 			foreach ($module_dialog_array as $key => $value)
 			{
-				$paramquery[username] 	= $_GET[username];
-				$paramquery[session_id] = $_GET[session_id];
-				$paramquery[nav]		= "sample";
-				$paramquery[run]		= "parent_item_list";
-				$paramquery[sample_id]	= $_GET[sample_id];
-				$paramquery[dialog]		= $value[internal_name];
+				$paramquery['username'] 	= $_GET['username'];
+				$paramquery['session_id'] 	= $_GET['session_id'];
+				$paramquery['nav']			= "sample";
+				$paramquery['run']			= "parent_item_list";
+				$paramquery['sample_id']	= $_GET['sample_id'];
+				$paramquery['dialog']		= $value['internal_name'];
 				$params 				= http_build_query($paramquery,'','&#38;');
 				
-				$tab_io->add("pil_".$value[internal_name], $value[display_name], $params, false);
+				$tab_io->add("pil_".$value['internal_name'], $value['display_name'], $params, false);
 			}
 		}
 		
@@ -69,32 +69,32 @@ class SampleCommon_IO
 		{
 			foreach ($module_dialog_array as $key => $value)
 			{
-				$paramquery[username] 	= $_GET[username];
-				$paramquery[session_id] = $_GET[session_id];
-				$paramquery[nav]		= "sample";
-				$paramquery[run]		= "item_list";
-				$paramquery[sample_id]	= $_GET[sample_id];
-				$paramquery[dialog]		= $value[internal_name];
+				$paramquery['username'] 	= $_GET['username'];
+				$paramquery['session_id'] 	= $_GET['session_id'];
+				$paramquery['nav']			= "sample";
+				$paramquery['run']			= "item_list";
+				$paramquery['sample_id']	= $_GET['sample_id'];
+				$paramquery['dialog']		= $value['internal_name'];
 				$params 				= http_build_query($paramquery,'','&#38;');
 				
-				$tab_io->add("il_".$value[internal_name], $value[display_name], $params, false);
+				$tab_io->add("il_".$value['internal_name'], $value['display_name'], $params, false);
 			}
 		}
 		
 		
-		if ($_GET[run] != "parent_item_list" and $_GET[run] != "item_list")
+		if ($_GET['run'] != "parent_item_list" and $_GET['run'] != "item_list")
 		{ 
 			$tab_io->activate("main");
 		}
 		else
 		{
-			if ($_GET[run] == "item_list" and $_GET[dialog])
+			if ($_GET['run'] == "item_list" and $_GET['dialog'])
 			{
-				$tab_io->activate("il_".$_GET[dialog]);
+				$tab_io->activate("il_".$_GET['dialog']);
 			}
-			elseif ($_GET[run] == "parent_item_list" and $_GET[dialog])
+			elseif ($_GET['run'] == "parent_item_list" and $_GET['dialog'])
 			{
-				$tab_io->activate("pil_".$_GET[dialog]);
+				$tab_io->activate("pil_".$_GET['dialog']);
 			}
 			else
 			{

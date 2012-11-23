@@ -151,7 +151,7 @@ class SampleReportIO
 							{
 								if (method_exists($value['class'], $value['method']))
 								{
-									$sql = " SELECT item_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = ".$_GET[sample_id]."";
+									$sql = " SELECT item_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = ".$_GET['sample_id']."";
 									$pdf = $value['class']::$value['method']($sql, $sample->get_item_id(), $pdf);
 								}
 							}
@@ -185,9 +185,9 @@ class SampleReportIO
 			{		
 				$sample_id = $_GET['sample_id'];
 				
-				if ($_GET[paper_size])
+				if ($_GET['paper_size'])
 				{
-					$paper_size_info_array = PaperSize::get_size_by_id($_GET[paper_size]);
+					$paper_size_info_array = PaperSize::get_size_by_id($_GET['paper_size']);
 				}
 				else
 				{
@@ -309,14 +309,14 @@ class SampleReportIO
 				
 				foreach($child_sample_array as $key => $value)
 				{
-					$datetime_handler = new DatetimeHandler($value[datetime]);
-					$value[datetime] = $datetime_handler->get_formatted_string("dS M y H:i");
-					$value[id]		= "S".str_pad($value[id], 8 ,'0', STR_PAD_LEFT);
-					$owner = new User($value[owner]);
+					$datetime_handler = new DatetimeHandler($value['datetime']);
+					$value['datetime'] 	= $datetime_handler->get_formatted_string("dS M y H:i");
+					$value['id']		= "S".str_pad($value['id'], 8 ,'0', STR_PAD_LEFT);
+					$owner = new User($value['owner']);
 					
-					$pdf->MultiCell(35, 0, $value[id], 1, 'L', 1, 0, '', '', true, 0, true, true, 0);
-					$pdf->MultiCell(60, 0, $value[name], 1, 'L', 1, 0, '', '', true, 0, true, true, 0);
-					$pdf->MultiCell(50, 0, $value[datetime], 1, 'L', 1, 0, '', '', true, 0, true, true, 0);
+					$pdf->MultiCell(35, 0, $value['id'], 1, 'L', 1, 0, '', '', true, 0, true, true, 0);
+					$pdf->MultiCell(60, 0, $value['name'], 1, 'L', 1, 0, '', '', true, 0, true, true, 0);
+					$pdf->MultiCell(50, 0, $value['datetime'], 1, 'L', 1, 0, '', '', true, 0, true, true, 0);
 					$pdf->MultiCell(45, 0, $owner->get_full_name(true), 1, 'L', 1, 1, '', '', true, 0, true, true, 0);
 				}
 			}
@@ -351,14 +351,14 @@ class SampleReportIO
 					
 					foreach($parent_sample_array as $key => $value)
 					{
-						$datetime_handler = new DatetimeHandler($value[datetime]);
-						$value[datetime] = $datetime_handler->get_formatted_string("dS M y H:i");
-						$value[id]		= "S".str_pad($value[id], 8 ,'0', STR_PAD_LEFT);
-						$owner = new User($value[owner]);
+						$datetime_handler = new DatetimeHandler($value['datetime']);
+						$value['datetime'] = $datetime_handler->get_formatted_string("dS M y H:i");
+						$value['id']		= "S".str_pad($value['id'], 8 ,'0', STR_PAD_LEFT);
+						$owner = new User($value['owner']);
 						
-						$pdf->MultiCell(35, 0, $value[id], 1, 'L', 1, 0, '', '', true, 0, true, true, 0);
-						$pdf->MultiCell(60, 0, $value[name], 1, 'L', 1, 0, '', '', true, 0, true, true, 0);
-						$pdf->MultiCell(50, 0, $value[datetime], 1, 'L', 1, 0, '', '', true, 0, true, true, 0);
+						$pdf->MultiCell(35, 0, $value['id'], 1, 'L', 1, 0, '', '', true, 0, true, true, 0);
+						$pdf->MultiCell(60, 0, $value['name'], 1, 'L', 1, 0, '', '', true, 0, true, true, 0);
+						$pdf->MultiCell(50, 0, $value['datetime'], 1, 'L', 1, 0, '', '', true, 0, true, true, 0);
 						$pdf->MultiCell(45, 0, $owner->get_full_name(true), 1, 'L', 1, 1, '', '', true, 0, true, true, 0);
 					}
 				}

@@ -65,25 +65,25 @@ class AdminProjectTemplateAjax
 			{	
 				foreach($list_array as $key => $value)
 				{
-					if ($list_array[$key][parent] == "t")
+					if ($list_array[$key]['parent'] == "t")
 					{
-						$list_array[$key][parent] = "Yes";
+						$list_array[$key]['parent'] = "Yes";
 					}
 					else
 					{
-						$list_array[$key][parent] = "No";
+						$list_array[$key]['parent'] = "No";
 					}
 					
 					$paramquery = $_GET;
-					$paramquery[id] = $list_array[$key][id];
-					$paramquery[action] = "delete";
-					unset($paramquery[sortvalue]);
-					unset($paramquery[sortmethod]);
-					unset($paramquery[nextpage]);
+					$paramquery['id'] = $list_array[$key]['id'];
+					$paramquery['action'] = "delete";
+					unset($paramquery['sortvalue']);
+					unset($paramquery['sortmethod']);
+					unset($paramquery['nextpage']);
 					$params = http_build_query($paramquery, '', '&#38;');
 	
-					$list_array[$key][delete][link] = $params;
-					$list_array[$key][delete][content] = "delete";
+					$list_array[$key]['delete']['link'] = $params;
+					$list_array[$key]['delete']['content'] = "delete";
 				}
 			}
 			else

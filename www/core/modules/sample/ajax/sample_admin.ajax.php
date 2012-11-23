@@ -74,53 +74,53 @@ class SampleAdminAjax
 				{
 					foreach($list_array as $key => $value)
 					{
-						$list_array[$key][symbol] = "<img src='images/icons/user.png' alt='' style='border:0;' />";
+						$list_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' style='border:0;' />";
 						
-						if ($list_array[$key][user])
+						if ($list_array[$key]['user'])
 						{
-							$user = new User($list_array[$key][user]);
+							$user = new User($list_array[$key]['user']);
 						}
 						else
 						{
 							$user = new User(1);
 						}
 						
-						$list_array[$key][username] = $user->get_username();
-						$list_array[$key][name] = $user->get_full_name(false);
+						$list_array[$key]['username'] = $user->get_username();
+						$list_array[$key]['name'] = $user->get_full_name(false);
 						
-						if ($list_array[$key][read] == 't')
+						if ($list_array[$key]['read'] == 't')
 						{
-							$list_array[$key][read] = "<img src='images/icons/permission_ok_active.png' alt='' />";
+							$list_array[$key]['read'] = "<img src='images/icons/permission_ok_active.png' alt='' />";
 						}
 						else
 						{
-							$list_array[$key][read] = "<img src='images/icons/permission_denied_active.png' alt='' />";
+							$list_array[$key]['read'] = "<img src='images/icons/permission_denied_active.png' alt='' />";
 						}
 						
-						if ($list_array[$key][write] == 't')
+						if ($list_array[$key]['write'] == 't')
 						{
-							$list_array[$key][write] = "<img src='images/icons/permission_ok_active.png' alt='' />";
+							$list_array[$key]['write'] = "<img src='images/icons/permission_ok_active.png' alt='' />";
 						}
 						else
 						{
-							$list_array[$key][write] = "<img src='images/icons/permission_denied_active.png' alt='' />";
+							$list_array[$key]['write'] = "<img src='images/icons/permission_denied_active.png' alt='' />";
 						}
 						
 						$delete_paramquery = $_GET;
-						$delete_paramquery[run] = "admin_permission_user_delete";
-						$delete_paramquery[id] = $list_array[$key][user];
-						unset($delete_paramquery[sure]);
+						$delete_paramquery['run'] = "admin_permission_user_delete";
+						$delete_paramquery['id'] = $list_array[$key]['user'];
+						unset($delete_paramquery['sure']);
 						$delete_params = http_build_query($delete_paramquery,'','&#38;');
 
-						if ($sample->get_owner_id() == $list_array[$key][user])
+						if ($sample->get_owner_id() == $list_array[$key]['user'])
 						{
-							$list_array[$key][delete][link] = "";
-							$list_array[$key][delete][content] = "";
+							$list_array[$key]['delete']['link'] = "";
+							$list_array[$key]['delete']['content'] = "";
 						}
 						else
 						{
-							$list_array[$key][delete][link] = $delete_params;
-							$list_array[$key][delete][content] = "delete";
+							$list_array[$key]['delete']['link'] = $delete_params;
+							$list_array[$key]['delete']['content'] = "delete";
 						}
 					}
 				}
@@ -211,27 +211,27 @@ class SampleAdminAjax
 				{
 					foreach($list_array as $key => $value)
 					{
-						$list_array[$key][symbol] = "<img src='images/icons/organisation_unit.png' alt='' style='border:0;' />";
+						$list_array[$key]['symbol'] = "<img src='images/icons/organisation_unit.png' alt='' style='border:0;' />";
 						
-						if ($list_array[$key][organisation_unit_id])
+						if ($list_array[$key]['organisation_unit_id'])
 						{
-							$organisation_unit = new OrganisationUnit($list_array[$key][organisation_unit_id]);
+							$organisation_unit = new OrganisationUnit($list_array[$key]['organisation_unit_id']);
 						}
 						else
 						{
 							$organisation_unit = new OrganisationUnit(1);
 						}
 						
-						$list_array[$key][name] = $organisation_unit->get_name();
+						$list_array[$key]['name'] = $organisation_unit->get_name();
 						
 						$delete_paramquery = $_GET;
-						$delete_paramquery[run] = "admin_permission_ou_delete";
-						$delete_paramquery[id] = $list_array[$key][organisation_unit_id];
-						unset($delete_paramquery[sure]);
+						$delete_paramquery['run'] = "admin_permission_ou_delete";
+						$delete_paramquery['id'] = $list_array[$key]['organisation_unit_id'];
+						unset($delete_paramquery['sure']);
 						$delete_params = http_build_query($delete_paramquery,'','&#38;');
 						
-						$list_array[$key][delete][link] = $delete_params;
-						$list_array[$key][delete][content] = "delete";
+						$list_array[$key]['delete']['link'] = $delete_params;
+						$list_array[$key]['delete']['content'] = "delete";
 					}
 				}
 				else

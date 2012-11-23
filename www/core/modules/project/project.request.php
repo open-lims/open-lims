@@ -480,7 +480,7 @@ class ProjectRequest
 				
 				case("userprojects"):
 					require_once("io/project.io.php");
-					ProjectIO::list_user_related_projects($_GET[id]);
+					ProjectIO::list_user_related_projects($_GET['id']);
 				break;		
 	
 				case("organ_unit"):
@@ -699,7 +699,7 @@ class ProjectRequest
 											$description_required = $project_item->is_description_required();
 											$keywords_required = $project_item->is_keywords_required();
 											
-											if (($description_required and !$_POST[description] and !$_GET[idk_unique_id]) or ($keywords_required and !$_POST[keywords] and !$_GET[idk_unique_id]))
+											if (($description_required and !$_POST['description'] and !$_GET['idk_unique_id']) or ($keywords_required and !$_POST['keywords'] and !$_GET['idk_unique_id']))
 											{
 												require_once("core/modules/item/io/item.io.php");
 												ItemIO::information(http_build_query($_GET), $description_required, $keywords_required);

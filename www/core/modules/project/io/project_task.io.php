@@ -35,19 +35,19 @@ class ProjectTaskIO
 	{
 		global $user, $project_security;
 		
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
 			if ($project_security->is_access(3, false) == true)
 			{
-				$project_id = $_GET[project_id];
+				$project_id = $_GET['project_id'];
 				$project = new Project($project_id);
 			
-				if (!$_GET[nextpage])
+				if (!$_GET['nextpage'])
 				{
 					$template = new HTMLTemplate("project/tasks/add.html");
 					
 					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
+					$paramquery['nextpage'] = "1";
 					$params = http_build_query($paramquery,'','&#38;');
 					
 					$template->set_var("params",$params);
@@ -56,29 +56,29 @@ class ProjectTaskIO
 				}
 				else
 				{
-					switch($_POST[type]):
+					switch($_POST['type']):
 						case 1:
-							if ($_GET[nextpage] == "2")
+							if ($_GET['nextpage'] == "2")
 							{
 								$page_2_passed = true;
 								
-								if ((!is_numeric($_POST[time1]) or $_POST[time1] > 24 or !is_numeric($_POST[time2]) or $_POST[time2] > 59))
+								if ((!is_numeric($_POST['time1']) or $_POST['time1'] > 24 or !is_numeric($_POST['time2']) or $_POST['time2'] > 59))
 								{
-									if ($_POST[wholeday] != 1)
+									if ($_POST['wholeday'] != 1)
 									{
 										$error[2] = "<br />Enter a time or select \"whole day\"!";
 										$page_2_passed = false;
 									}
 								}
 								
-								if (!$_POST[startdate])
+								if (!$_POST['startdate'])
 								{
 									$error[0] = "<br />Select a start date.";
 									$page_2_passed = false;
 								}
 								else
 								{
-									$datetime_handler = new DatetimeHandler($_POST[date]);
+									$datetime_handler = new DatetimeHandler($_POST['date']);
 									if ($datetime_handler->less_then_current())
 									{
 										$error[0] = "<br />Select a date in the future.";
@@ -86,14 +86,14 @@ class ProjectTaskIO
 									}
 								}
 								
-								if (!$_POST[enddate])
+								if (!$_POST['enddate'])
 								{
 									$error[1] = "<br />Select an end date";
 									$page_2_passed = false;
 								}
 								else
 								{
-									$datetime_handler = new DatetimeHandler($_POST[date]);
+									$datetime_handler = new DatetimeHandler($_POST['date']);
 									if ($datetime_handler->less_then_current())
 									{
 										$error[1] = "<br />Select a date in the future.";
@@ -101,9 +101,9 @@ class ProjectTaskIO
 									}
 								}
 								
-								if ($_POST[status])
+								if ($_POST['status'])
 								{
-									if ($_POST[finalise] == 1)
+									if ($_POST['finalise'] == 1)
 									{
 										$finalise = true;
 									}
@@ -112,7 +112,7 @@ class ProjectTaskIO
 										$finalise = false;
 									}
 									
-									if ($_POST[auto_connect] == 1)
+									if ($_POST['auto_connect'] == 1)
 									{
 										$auto_connect = true;
 									}
@@ -123,7 +123,7 @@ class ProjectTaskIO
 									
 									$project_task = new ProjectTask(null);
 									
-									if ($project_task->check_status_process($project_id, $_POST[status], $finalise, $auto_connect) == true)
+									if ($project_task->check_status_process($project_id, $_POST['status'], $finalise, $auto_connect) == true)
 									{
 										$error[3] = "<br />You have already created this task.";
 										$page_2_passed = false;
@@ -140,7 +140,7 @@ class ProjectTaskIO
 								$template = new HTMLTemplate("project/tasks/add_status_process.html");
 							
 								$paramquery = $_GET;
-								$paramquery[nextpage] = "2";
+								$paramquery['nextpage'] = "2";
 								$params = http_build_query($paramquery,'','&#38;');
 								
 								$template->set_var("params",$params);
@@ -181,52 +181,52 @@ class ProjectTaskIO
 									$template->set_var("error3", "");
 								}
 								
-								if ($_POST[startdate])
+								if ($_POST['startdate'])
 								{
-									$template->set_var("startdate", $_POST[startdate]);
+									$template->set_var("startdate", $_POST['startdate']);
 								}
 								else
 								{
 									$template->set_var("startdate", date("Y-m-d"));
 								}
 								
-								if ($_POST[enddate])
+								if ($_POST['enddate'])
 								{
-									$template->set_var("enddate", $_POST[enddate]);
+									$template->set_var("enddate", $_POST['enddate']);
 								}
 								else
 								{
 									$template->set_var("enddate", "");
 								}
 								
-								if ($_POST[time1])
+								if ($_POST['time1'])
 								{
-									$template->set_var("time1", $_POST[time1]);
+									$template->set_var("time1", $_POST['time1']);
 								}
 								else
 								{
 									$template->set_var("time1", "");
 								}
 								
-								if ($_POST[time2])
+								if ($_POST['time2'])
 								{
-									$template->set_var("time2", $_POST[time2]);
+									$template->set_var("time2", $_POST['time2']);
 								}
 								else
 								{
 									$template->set_var("time2", "");
 								}
 								
-								if ($_POST[comment])
+								if ($_POST['comment'])
 								{
-									$template->set_var("comment", $_POST[comment]);
+									$template->set_var("comment", $_POST['comment']);
 								}
 								else
 								{
 									$template->set_var("comment", "");
 								}
 								
-								if ($_POST[task] == "2")
+								if ($_POST['task'] == "2")
 								{
 									$template->set_var("achive_checked", "checked='checked'");
 									$template->set_var("finalise_checked", "");
@@ -237,7 +237,7 @@ class ProjectTaskIO
 									$template->set_var("finalise_checked", "checked='checked'");
 								}
 								
-								if ($_POST[wholeday] == "1")
+								if ($_POST['wholeday'] == "1")
 								{
 									$template->set_var("whole_day_checked", "checked='checked'");
 								}
@@ -255,12 +255,12 @@ class ProjectTaskIO
 									
 									foreach($status_array as $key => $value)
 									{
-										if ($value[status] == 0)
+										if ($value['status'] == 0)
 										{
-											$project_status = new ProjectStatus($value[id]);
+											$project_status = new ProjectStatus($value['id']);
 											
-											$status_content_array[$counter][value] = $value[id];
-											$status_content_array[$counter][content] = $project_status->get_name();
+											$status_content_array[$counter]['value'] = $value['id'];
+											$status_content_array[$counter]['content'] = $project_status->get_name();
 											
 											$counter++;
 										}
@@ -269,35 +269,35 @@ class ProjectTaskIO
 								}
 								else
 								{
-									$status_content_array[0][value] = 0;
-									$status_content_array[0][content] = "NO STATUS FOUND";
+									$status_content_array[0]['value'] = 0;
+									$status_content_array[0]['content'] = "NO STATUS FOUND";
 									
 									$template->set_var("status",$status_content_array);		
 								}
 								
-								$template->set_var("type", $_POST[type]);
+								$template->set_var("type", $_POST['type']);
 								
 								$template->output();
 							}
 							else
 							{
 								$paramquery = $_GET;
-								unset($paramquery[nextpage]);
-								$paramquery[run] = "detail";
+								unset($paramquery['nextpage']);
+								$paramquery['run'] = "detail";
 								$params = http_build_query($paramquery);
 								
-								if ($_POST[wholeday] == 1)
+								if ($_POST['wholeday'] == 1)
 								{
 									$time = null;
 									$whole_day = true;
 								}
 								else
 								{
-									$time = $_POST[time1].":".$_POST[time2].":00";
+									$time = $_POST['time1'].":".$_POST['time2'].":00";
 									$whole_day = false;
 								}
 								
-								if ($_POST[finalise] == 1)
+								if ($_POST['finalise'] == 1)
 								{
 									$finalise = true;
 								}
@@ -306,7 +306,7 @@ class ProjectTaskIO
 									$finalise = false;
 								}
 								
-								if ($_POST[auto_connect] == 1)
+								if ($_POST['auto_connect'] == 1)
 								{
 									$auto_connect = true;
 								}
@@ -317,7 +317,7 @@ class ProjectTaskIO
 								
 								$project_task = new ProjectTask(null);
 								
-								if ($project_task->create_status_process($project_id, $user->get_user_id(), $_POST[comment], $_POST[startdate], null, $_POST[enddate], $time, $whole_day, $_POST[status], $finalise, $auto_connect))
+								if ($project_task->create_status_process($project_id, $user->get_user_id(), $_POST['comment'], $_POST['startdate'], null, $_POST['enddate'], $time, $whole_day, $_POST['status'], $finalise, $auto_connect))
 								{
 									Common_IO::step_proceed($params, "Add Project Task", "Operation Successful" ,null);
 								}
@@ -329,33 +329,33 @@ class ProjectTaskIO
 						break;
 						
 						case 2:
-							if ($_GET[nextpage] == "2")
+							if ($_GET['nextpage'] == "2")
 							{
 								$page_2_passed = true;
 								
-								if ((!is_numeric($_POST[time1]) or $_POST[time1] > 24 or !is_numeric($_POST[time2]) or $_POST[time2] > 59))
+								if ((!is_numeric($_POST['time1']) or $_POST['time1'] > 24 or !is_numeric($_POST['time2']) or $_POST['time2'] > 59))
 								{
-									if ($_POST[wholeday] != 1)
+									if ($_POST['wholeday'] != 1)
 									{
 										$error[3] = "<br />Enter a time or select \"whole day\"!";
 										$page_2_passed = false;
 									}
 								}
 								
-								if (!$_POST[name])
+								if (!$_POST['name'])
 								{
 									$error[0] = "<br />Enter a name";
 									$page_2_passed = false;
 								}
 								
-								if (!$_POST[startdate])
+								if (!$_POST['startdate'])
 								{
 									$error[1] = "<br />Select a start date";
 									$page_2_passed = false;
 								}
 								else
 								{
-									$datetime_handler = new DatetimeHandler($_POST[date]);
+									$datetime_handler = new DatetimeHandler($_POST['date']);
 									if ($datetime_handler->less_then_current())
 									{
 										$error[1] = "<br />Select a date in the future";
@@ -363,14 +363,14 @@ class ProjectTaskIO
 									}
 								}
 								
-								if (!$_POST[enddate])
+								if (!$_POST['enddate'])
 								{
 									$error[2] = "<br />Select an end date";
 									$page_2_passed = false;
 								}
 								else
 								{
-									$datetime_handler = new DatetimeHandler($_POST[date]);
+									$datetime_handler = new DatetimeHandler($_POST['date']);
 									if ($datetime_handler->less_then_current())
 									{
 										$error[2] = "<br />Select a date in the future";
@@ -388,7 +388,7 @@ class ProjectTaskIO
 								$template = new HTMLTemplate("project/tasks/add_process.html");
 								
 								$paramquery = $_GET;
-								$paramquery[nextpage] = "2";
+								$paramquery['nextpage'] = "2";
 								$params = http_build_query($paramquery,'','&#38;');
 								
 								$template->set_var("params",$params);
@@ -429,83 +429,83 @@ class ProjectTaskIO
 									$template->set_var("error3", "");
 								}
 								
-								if ($_POST[name])
+								if ($_POST['name'])
 								{
-									$template->set_var("name", $_POST[name]);
+									$template->set_var("name", $_POST['name']);
 								}
 								else
 								{
 									$template->set_var("name", "");
 								}
 								
-								if ($_POST[startdate])
+								if ($_POST['startdate'])
 								{
-									$template->set_var("startdate", $_POST[startdate]);
+									$template->set_var("startdate", $_POST['startdate']);
 								}
 								else
 								{
 									$template->set_var("startdate", date("Y-m-d"));
 								}
 								
-								if ($_POST[enddate])
+								if ($_POST['enddate'])
 								{
-									$template->set_var("enddate", $_POST[enddate]);
+									$template->set_var("enddate", $_POST['enddate']);
 								}
 								else
 								{
 									$template->set_var("enddate", "");
 								}
 								
-								if ($_POST[time1])
+								if ($_POST['time1'])
 								{
-									$template->set_var("time1", $_POST[time1]);
+									$template->set_var("time1", $_POST['time1']);
 								}
 								else
 								{
 									$template->set_var("time1", "");
 								}
 								
-								if ($_POST[time2])
+								if ($_POST['time2'])
 								{
-									$template->set_var("time2", $_POST[time2]);
+									$template->set_var("time2", $_POST['time2']);
 								}
 								else
 								{
 									$template->set_var("time2", "");
 								}
 								
-								if ($_POST[comment])
+								if ($_POST['comment'])
 								{
-									$template->set_var("comment", $_POST[comment]);
+									$template->set_var("comment", $_POST['comment']);
 								}
 								else
 								{
 									$template->set_var("comment", "");
 								}
 								
-								$template->set_var("type", $_POST[type]);
+								$template->set_var("type", $_POST['type']);
 								
 								$template->output();
 							}
 							else
 							{
 								$paramquery = $_GET;
-								unset($paramquery[nextpage]);
-								$paramquery[run] = "detail";
+								unset($paramquery['nextpage']);
+								$paramquery['run'] = "detail";
 								$params = http_build_query($paramquery);
 								
-								if ($_POST[wholeday] == 1)
+								if ($_POST['wholeday'] == 1)
 								{
 									$time = null;
 									$whole_day = true;
 								}
 								else
 								{
-									$time = $_POST[time1].":".$_POST[time2].":00";
+									$time = $_POST['time1'].":".$_POST['time2'].":00";
 									$whole_day = false;
 								}
 								
-								if ($_POST[finalise] == 1)
+								if ($_POST['finalise'] == 1)
 								{
 									$finalise = true;
 								}
@@ -514,7 +514,7 @@ class ProjectTaskIO
 									$finalise = false;
 								}
 								
-								if ($_POST[auto_connect] == 1)
+								if ($_POST['auto_connect'] == 1)
 								{
 									$auto_connect = true;
 								}
@@ -525,7 +525,7 @@ class ProjectTaskIO
 								
 								$project_task = new ProjectTask(null);
 								
-								if ($project_task->create_process($project_id, $user->get_user_id(), $_POST[comment], $_POST[startdate], null, $_POST[enddate], $time, $whole_day, $_POST[name], $auto_connect))
+								if ($project_task->create_process($project_id, $user->get_user_id(), $_POST['comment'], $_POST['startdate'], null, $_POST['enddate'], $time, $whole_day, $_POST['name'], $auto_connect))
 								{
 									Common_IO::step_proceed($params, "Add Project Task", "Operation Successful" ,null);
 								}
@@ -537,24 +537,24 @@ class ProjectTaskIO
 						break;
 						
 						case 3:
-							if ($_GET[nextpage] == "2")
+							if ($_GET['nextpage'] == "2")
 							{
 								$page_2_passed = true;
 								
-								if (!$_POST[name])
+								if (!$_POST['name'])
 								{
 									$error[0] = "<br />Enter a name";
 									$page_2_passed = false;
 								}
 								
-								if (!$_POST[enddate])
+								if (!$_POST['enddate'])
 								{
 									$error[1] = "<br />Select an end date";
 									$page_2_passed = false;
 								}
 								else
 								{
-									$datetime_handler = new DatetimeHandler($_POST[date]);
+									$datetime_handler = new DatetimeHandler($_POST['date']);
 									if ($datetime_handler->less_then_current())
 									{
 										$error[1] = "<br />Select a date in the future";
@@ -572,7 +572,7 @@ class ProjectTaskIO
 								$template = new HTMLTemplate("project/tasks/add_milestone.html");
 								
 								$paramquery = $_GET;
-								$paramquery[nextpage] = "2";
+								$paramquery['nextpage'] = "2";
 								$params = http_build_query($paramquery,'','&#38;');
 								
 								$template->set_var("params",$params);
@@ -595,72 +595,72 @@ class ProjectTaskIO
 									$template->set_var("error1", "");
 								}
 								
-								if ($_POST[name])
+								if ($_POST['name'])
 								{
-									$template->set_var("name", $_POST[name]);
+									$template->set_var("name", $_POST['name']);
 								}
 								else
 								{
 									$template->set_var("name", "");
 								}
 								
-								if ($_POST[enddate])
+								if ($_POST['enddate'])
 								{
-									$template->set_var("enddate", $_POST[enddate]);
+									$template->set_var("enddate", $_POST['enddate']);
 								}
 								else
 								{
 									$template->set_var("enddate", "");
 								}
 								
-								if ($_POST[time1])
+								if ($_POST['time1'])
 								{
-									$template->set_var("time1", $_POST[time1]);
+									$template->set_var("time1", $_POST['time1']);
 								}
 								else
 								{
 									$template->set_var("time1", "");
 								}
 								
-								if ($_POST[time2])
+								if ($_POST['time2'])
 								{
-									$template->set_var("time2", $_POST[time2]);
+									$template->set_var("time2", $_POST['time2']);
 								}
 								else
 								{
 									$template->set_var("time2", "");
 								}
 								
-								if ($_POST[comment])
+								if ($_POST['comment'])
 								{
-									$template->set_var("comment", $_POST[comment]);
+									$template->set_var("comment", $_POST['comment']);
 								}
 								else
 								{
 									$template->set_var("comment", "");
 								}
 								
-								$template->set_var("type", $_POST[type]);
+								$template->set_var("type", $_POST['type']);
 								
 								$template->output();
 							}
 							else
 							{
 								$paramquery = $_GET;
-								unset($paramquery[nextpage]);
-								$paramquery[run] = "detail";
+								unset($paramquery['nextpage']);
+								$paramquery['run'] = "detail";
 								$params = http_build_query($paramquery);
 								
-								if (is_numeric($_POST[time1]) and is_numeric($_POST[time2]))
+								if (is_numeric($_POST['time1']) and is_numeric($_POST['time2']))
 								{
-									$time = $_POST[time1].":".$_POST[time2].":00";
+									$time = $_POST['time1'].":".$_POST['time2'].":00";
 								}
 								else
 								{
 									$time = null;
 								}
 								
-								if ($_POST[auto_connect] == 1)
+								if ($_POST['auto_connect'] == 1)
 								{
 									$auto_connect = true;
 								}
@@ -671,7 +671,7 @@ class ProjectTaskIO
 								
 								$project_task = new ProjectTask(null);
 								
-								if ($project_task->create_milestone($project_id, $user->get_user_id(), $_POST[comment], $_POST[enddate], $time, $_POST[name], $auto_connect))
+								if ($project_task->create_milestone($project_id, $user->get_user_id(), $_POST['comment'], $_POST['enddate'], $time, $_POST['name'], $auto_connect))
 								{
 									Common_IO::step_proceed($params, "Add Project Task", "Operation Successful" ,null);
 								}
@@ -703,23 +703,23 @@ class ProjectTaskIO
 	{
 		global $project_security;
 		
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
 			if ($project_security->is_access(3, false) == true)
 			{
-				if ($_GET[sure] != "true")
+				if ($_GET['sure'] != "true")
 				{
 					$template = new HTMLTemplate("project/tasks/delete.html");
 					
 					$paramquery = $_GET;
-					$paramquery[sure] = "true";
+					$paramquery['sure'] = "true";
 					$params = http_build_query($paramquery);
 					
 					$template->set_var("yes_params", $params);
 							
 					$paramquery = $_GET;
-					unset($paramquery[nextpage]);
-					$paramquery[run] = "task_detail";
+					unset($paramquery['nextpage']);
+					$paramquery['run'] = "task_detail";
 					$params = http_build_query($paramquery);
 					
 					$template->set_var("no_params", $params);
@@ -729,13 +729,13 @@ class ProjectTaskIO
 				else
 				{
 					$paramquery = $_GET;
-					unset($paramquery[nextpage]);
-					unset($paramquery[id]);
-					unset($paramquery[sure]);
-					$paramquery[run] = "show_tasks";
+					unset($paramquery['nextpage']);
+					unset($paramquery['id']);
+					unset($paramquery['sure']);
+					$paramquery['run'] = "show_tasks";
 					$params = http_build_query($paramquery);
 					
-					$project_task = new ProjectTask($_GET[id]);
+					$project_task = new ProjectTask($_GET['id']);
 					
 					if ($project_task->delete())
 					{							
@@ -766,25 +766,25 @@ class ProjectTaskIO
 	{
 		global $project_security;
 		
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
 			if ($project_security->is_access(3, false) == true)
 			{
-				$project_task = new ProjectTask($_GET[id]);
+				$project_task = new ProjectTask($_GET['id']);
 			
-				if (!$_GET[nextpage])
+				if (!$_GET['nextpage'])
 				{
 					$template = new HTMLTemplate("project/tasks/edit_start.html");
 					
 					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
+					$paramquery['nextpage'] = "1";
 					$params = http_build_query($paramquery,'','&#38;');
 					
 					$template->set_var("params", $params);
 					
-					if ($_POST[startdate])
+					if ($_POST['startdate'])
 					{
-						$template->set_var("startdate", $_POST[startdate]);
+						$template->set_var("startdate", $_POST['startdate']);
 					}
 					else
 					{
@@ -795,18 +795,18 @@ class ProjectTaskIO
 					{
 						$time = explode(":", $project_task->get_start_time());
 						
-						if ($_POST[time1])
+						if ($_POST['time1'])
 						{
-							$template->set_var("time1", $_POST[time1]);
+							$template->set_var("time1", $_POST['time1']);
 						}
 						else
 						{
 							$template->set_var("time1", $time[0]);
 						}
 						
-						if ($_POST[time2])
+						if ($_POST['time2'])
 						{
-							$template->set_var("time2", $_POST[time2]);
+							$template->set_var("time2", $_POST['time2']);
 						}
 						else
 						{
@@ -815,18 +815,18 @@ class ProjectTaskIO
 					}
 					else
 					{
-						if ($_POST[time1])
+						if ($_POST['time1'])
 						{
-							$template->set_var("time1", $_POST[time1]);
+							$template->set_var("time1", $_POST['time1']);
 						}
 						else
 						{
 							$template->set_var("time1", "");
 						}
 						
-						if ($_POST[time2])
+						if ($_POST['time2'])
 						{
-							$template->set_var("time2", $_POST[time2]);
+							$template->set_var("time2", $_POST['time2']);
 						}
 						else
 						{
@@ -842,20 +842,20 @@ class ProjectTaskIO
 				else
 				{
 					$paramquery = $_GET;
-					unset($paramquery[nextpage]);
-					$paramquery[run] = "task_detail";
+					unset($paramquery['nextpage']);
+					$paramquery['run'] = "task_detail";
 					$params = http_build_query($paramquery,'','&#38;');
 					
-					if (!$_POST[time1] or !$_POST[time2])
+					if (!$_POST['time1'] or !$_POST['time2'])
 					{
 						$time = null;
 					}
 					else
 					{
-						$time = $_POST[time1].":".$_POST[time2].":00";
+						$time = $_POST['time1'].":".$_POST['time2'].":00";
 					}
 					
-					if ($project_task->set_start($_POST[startdate], $time))
+					if ($project_task->set_start($_POST['startdate'], $time))
 					{
 						Common_IO::step_proceed($params, "Change Start Date/Time", "Operation Successful" ,null);
 					}
@@ -884,25 +884,25 @@ class ProjectTaskIO
 	{
 		global $project_security;
 		
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
 			if ($project_security->is_access(3, false) == true)
 			{
-				$project_task = new ProjectTask($_GET[id]);
+				$project_task = new ProjectTask($_GET['id']);
 			
-				if (!$_GET[nextpage])
+				if (!$_GET['nextpage'])
 				{
 					$template = new HTMLTemplate("project/tasks/edit_end.html");
 					
 					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
+					$paramquery['nextpage'] = "1";
 					$params = http_build_query($paramquery,'','&#38;');
 					
 					$template->set_var("params", $params);
 					
-					if ($_POST[enddate])
+					if ($_POST['enddate'])
 					{
-						$template->set_var("enddate", $_POST[enddate]);
+						$template->set_var("enddate", $_POST['enddate']);
 					}
 					else
 					{
@@ -913,7 +913,7 @@ class ProjectTaskIO
 					{
 						$time = explode(":", $project_task->get_uf_end_time());
 						
-						if ($_POST[wholeday] == 1)
+						if ($_POST['wholeday'] == 1)
 						{
 							$template->set_var("whole_day_checked", "checked");
 						}
@@ -922,18 +922,18 @@ class ProjectTaskIO
 							$template->set_var("whole_day_checked", "");
 						}
 						
-						if ($_POST[time1])
+						if ($_POST['time1'])
 						{
-							$template->set_var("time1", $_POST[time1]);
+							$template->set_var("time1", $_POST['time1']);
 						}
 						else
 						{
 							$template->set_var("time1", $time[0]);
 						}
 						
-						if ($_POST[time2])
+						if ($_POST['time2'])
 						{
-							$template->set_var("time2", $_POST[time2]);
+							$template->set_var("time2", $_POST['time2']);
 						}
 						else
 						{
@@ -942,7 +942,7 @@ class ProjectTaskIO
 					}
 					else
 					{
-						if ($_POST[wholeday] == 1 or !$_POST[wholeday])
+						if ($_POST['wholeday'] == 1 or !$_POST['wholeday'])
 						{
 							$template->set_var("whole_day_checked", "checked");
 						}
@@ -951,18 +951,18 @@ class ProjectTaskIO
 							$template->set_var("whole_day_checked", "");
 						}
 						
-						if ($_POST[time1])
+						if ($_POST['time1'])
 						{
-							$template->set_var("time1", $_POST[time1]);
+							$template->set_var("time1", $_POST['time1']);
 						}
 						else
 						{
 							$template->set_var("time1", "");
 						}
 						
-						if ($_POST[time2])
+						if ($_POST['time2'])
 						{
-							$template->set_var("time2", $_POST[time2]);
+							$template->set_var("time2", $_POST['time2']);
 						}
 						else
 						{
@@ -978,22 +978,22 @@ class ProjectTaskIO
 				else
 				{
 					$paramquery = $_GET;
-					unset($paramquery[nextpage]);
-					$paramquery[run] = "task_detail";
+					unset($paramquery['nextpage']);
+					$paramquery['run'] = "task_detail";
 					$params = http_build_query($paramquery,'','&#38;');
 					
-					if ($_POST[wholeday] == 1)
+					if ($_POST['wholeday'] == 1)
 					{
 						$time = null;
 						$whole_day = true;
 					}
 					else
 					{
-						$time = $_POST[time1].":".$_POST[time2].":00";
+						$time = $_POST['time1'].":".$_POST['time2'].":00";
 						$whole_day = false;
 					}
 					
-					if ($project_task->set_end($_POST[enddate], $time, $whole_day))
+					if ($project_task->set_end($_POST['enddate'], $time, $whole_day))
 					{
 						Common_IO::step_proceed($params, "Change End Date/Time", "Operation Successful" ,null);
 					}
@@ -1022,11 +1022,11 @@ class ProjectTaskIO
 	{
 		global $user, $project_security;
 	
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
 			if ($project_security->is_access(1, false) == true)
 			{
-				$project_task = new ProjectTask($_GET[id]);
+				$project_task = new ProjectTask($_GET['id']);
 				$project_task_owner = new User($project_task->get_owner_id());
 			
 				if ($project_task->get_start_time())
@@ -1101,21 +1101,21 @@ class ProjectTaskIO
 					$template->set_var("task_admin", true);
 					
 					$paramquery = $_GET;
-					$paramquery[run] = "task_edit_start";
+					$paramquery['run'] = "task_edit_start";
 					$params = http_build_query($paramquery,'','&#38;');
 					
 					$template->set_var("task_edit_start_params", $params);
 					
 					
 					$paramquery = $_GET;
-					$paramquery[run] = "task_edit_end";
+					$paramquery['run'] = "task_edit_end";
 					$params = http_build_query($paramquery,'','&#38;');
 					
 					$template->set_var("task_edit_end_params", $params);
 					
 					
 					$paramquery = $_GET;
-					$paramquery[run] = "task_delete";
+					$paramquery['run'] = "task_delete";
 					$params = http_build_query($paramquery,'','&#38;');
 					
 					$template->set_var("delete_params", $params);
@@ -1145,13 +1145,13 @@ class ProjectTaskIO
 	{
 		global $project_security;
 		
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
 			if ($project_security->is_access(1, false) == true)
 			{
 				$argument_array = array();
 				$argument_array[0][0] = "project_id";
-				$argument_array[0][1] = $_GET[project_id];
+				$argument_array[0][1] = $_GET['project_id'];
 				
 				$list = new List_IO("ProjectTaskTableList", "ajax.php?nav=project", "list_project_tasks", "count_project_tasks", $argument_array, "ProjectTaskTableList");
 
@@ -1165,19 +1165,19 @@ class ProjectTaskIO
 				$template = new HTMLTemplate("project/tasks/table_view.html");
 			
 				$table_view_paramquery = $_GET;
-				$table_view_paramquery[show] = "table";
+				$table_view_paramquery['show'] = "table";
 				$table_view_params = http_build_query($table_view_paramquery, '', '&#38;');
 				
 				$template->set_var("table_view_params", $table_view_params);
 				
 				$gantt_view_paramquery = $_GET;
-				$gantt_view_paramquery[show] = "gantt";
+				$gantt_view_paramquery['show'] = "gantt";
 				$gantt_view_params = http_build_query($gantt_view_paramquery, '', '&#38;');
 				
 				$template->set_var("gantt_view_params", $gantt_view_params);
 				
 				$cal_view_paramquery = $_GET;
-				$cal_view_paramquery[show] = "cal";
+				$cal_view_paramquery['show'] = "cal";
 				$cal_view_params = http_build_query($cal_view_paramquery, '', '&#38;');
 				
 				$template->set_var("cal_view_params", $cal_view_params);
@@ -1205,11 +1205,11 @@ class ProjectTaskIO
 	{
 		global $project_security;
 		
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
 			if ($project_security->is_access(1, false) == true)
 			{
-				$project_task_array = ProjectTask::list_tasks($_GET[project_id]);
+				$project_task_array = ProjectTask::list_tasks($_GET['project_id']);
 				
 				$left_limit = 0;
 				$right_limit = 0;
@@ -1302,8 +1302,8 @@ class ProjectTaskIO
 						$day = date("d", $date_mktime);
 						$month = date("M", $date_mktime);
 						
-						$gantt_array[$i][title] = $day."<br />".$month;
-						$gantt_array[$i][mktime] = $date_mktime;
+						$gantt_array[$i]['title'] = $day."<br />".$month;
+						$gantt_array[$i]['mktime'] = $date_mktime;
 						
 						$date_mktime = $date_mktime + $date_range_addition;
 					}
@@ -1311,19 +1311,19 @@ class ProjectTaskIO
 					$template = new HTMLTemplate("project/tasks/gantt_view.html");
 				
 					$table_view_paramquery = $_GET;
-					$table_view_paramquery[show] = "table";
+					$table_view_paramquery['show'] = "table";
 					$table_view_params = http_build_query($table_view_paramquery, '', '&#38;');
 					
 					$template->set_var("table_view_params", $table_view_params);
 					
 					$gantt_view_paramquery = $_GET;
-					$gantt_view_paramquery[show] = "gantt";
+					$gantt_view_paramquery['show'] = "gantt";
 					$gantt_view_params = http_build_query($gantt_view_paramquery, '', '&#38;');
 					
 					$template->set_var("gantt_view_params", $gantt_view_params);
 					
 					$cal_view_paramquery = $_GET;
-					$cal_view_paramquery[show] = "cal";
+					$cal_view_paramquery['show'] = "cal";
 					$cal_view_params = http_build_query($cal_view_paramquery, '', '&#38;');
 					
 					$template->set_var("cal_view_params", $cal_view_params);
@@ -1335,7 +1335,7 @@ class ProjectTaskIO
 					
 					foreach ($gantt_array as $key => $value)
 					{
-						$table .= "<th width='".$width_of_row."px'>".$value[title]."</th>";
+						$table .= "<th width='".$width_of_row."px'>".$value['title']."</th>";
 					}
 					
 					$table .= "</tr>";
@@ -1363,8 +1363,8 @@ class ProjectTaskIO
 						$table .= "<tr>";
 			
 						$paramquery = $_GET;
-						$paramquery[run] = "task_detail";
-						$paramquery[id] = $value;
+						$paramquery['run'] = "task_detail";
+						$paramquery['id'] = $value;
 						$params = http_build_query($paramquery,'','&#38;');
 			
 						$table .= "<td colspan='30'><span class='smallText'><a href='index.php?".$params."'>".$project_task->get_name()." (".$begin_datetime_handler->get_formatted_string("j/n/Y")." - ".$end_datetime_handler->get_formatted_string("j/n/Y").")</a></span></td>";
@@ -1376,14 +1376,14 @@ class ProjectTaskIO
 						
 						foreach ($gantt_array as $fe_key => $fe_value)
 						{
-							if ($fe_value[mktime] >= $begin_mktime)
+							if ($fe_value['mktime'] >= $begin_mktime)
 							{
 								if ($begin_key == -1)
 								{
 									$begin_key = $fe_key;
 								}
 							}
-							if ($begin_key != -1 and $fe_value[mktime] <= $end_mktime)
+							if ($begin_key != -1 and $fe_value['mktime'] <= $end_mktime)
 							{
 								$end_key = $fe_key;
 							}
@@ -1428,19 +1428,19 @@ class ProjectTaskIO
 					$template = new HTMLTemplate("project/tasks/gantt_view.html");
 				
 					$table_view_paramquery = $_GET;
-					$table_view_paramquery[show] = "table";
+					$table_view_paramquery['show'] = "table";
 					$table_view_params = http_build_query($table_view_paramquery, '', '&#38;');
 					
 					$template->set_var("table_view_params", $table_view_params);
 					
 					$gantt_view_paramquery = $_GET;
-					$gantt_view_paramquery[show] = "gantt";
+					$gantt_view_paramquery['show'] = "gantt";
 					$gantt_view_params = http_build_query($gantt_view_paramquery, '', '&#38;');
 					
 					$template->set_var("gantt_view_params", $gantt_view_params);
 					
 					$cal_view_paramquery = $_GET;
-					$cal_view_paramquery[show] = "cal";
+					$cal_view_paramquery['show'] = "cal";
 					$cal_view_params = http_build_query($cal_view_paramquery, '', '&#38;');
 					
 					$template->set_var("cal_view_params", $cal_view_params);
@@ -1469,11 +1469,11 @@ class ProjectTaskIO
 		
 		global $project_security;
 		
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
 			if ($project_security->is_access(1, false) == true)
 			{
-				$project_task_array = ProjectTask::list_tasks($_GET[project_id]);
+				$project_task_array = ProjectTask::list_tasks($_GET['project_id']);
 				
 				$calendar_array = array();
 				$counter = 0;
@@ -1503,19 +1503,19 @@ class ProjectTaskIO
 						}
 						
 						$paramquery = $_GET;
-						$paramquery[run] = "task_detail";
-						$paramquery[id] = $value;
+						$paramquery['run'] = "task_detail";
+						$paramquery['id'] = $value;
 						$params = http_build_query($paramquery,'','&#38;');
 						
-						$calendar_array[$counter][name] 		= $project_task->get_name();
-						$calendar_array[$counter][start_date]	= $project_task->get_start_date();
-						$calendar_array[$counter][start_time]	= $start_time;
-						$calendar_array[$counter][end_date]		= $project_task->get_end_date();
-						$calendar_array[$counter][end_time]		= $end_time;
-						$calendar_array[$counter][color]		= "4284d3";
-						$calendar_array[$counter][link]			= $params;
-						$calendar_array[$counter][id]			= $value;
-						$calendar_array[$counter][serial_id]	= 0;
+						$calendar_array[$counter]['name'] 		= $project_task->get_name();
+						$calendar_array[$counter]['start_date']	= $project_task->get_start_date();
+						$calendar_array[$counter]['start_time']	= $start_time;
+						$calendar_array[$counter]['end_date']	= $project_task->get_end_date();
+						$calendar_array[$counter]['end_time']	= $end_time;
+						$calendar_array[$counter]['color']		= "4284d3";
+						$calendar_array[$counter]['link']		= $params;
+						$calendar_array[$counter]['id']			= $value;
+						$calendar_array[$counter]['serial_id']	= 0;
 						
 						$counter++;
 					}
@@ -1524,19 +1524,19 @@ class ProjectTaskIO
 				$template = new HTMLTemplate("project/tasks/calendar_view.html");
 				
 				$table_view_paramquery = $_GET;
-				$table_view_paramquery[show] = "table";
+				$table_view_paramquery['show'] = "table";
 				$table_view_params = http_build_query($table_view_paramquery, '', '&#38;');
 				
 				$template->set_var("table_view_params", $table_view_params);
 				
 				$gantt_view_paramquery = $_GET;
-				$gantt_view_paramquery[show] = "gantt";
+				$gantt_view_paramquery['show'] = "gantt";
 				$gantt_view_params = http_build_query($gantt_view_paramquery, '', '&#38;');
 				
 				$template->set_var("gantt_view_params", $gantt_view_params);
 				
 				$cal_view_paramquery = $_GET;
-				$cal_view_paramquery[show] = "cal";
+				$cal_view_paramquery['show'] = "cal";
 				$cal_view_params = http_build_query($cal_view_paramquery, '', '&#38;');
 				
 				$template->set_var("cal_view_params", $cal_view_params);
@@ -1563,7 +1563,7 @@ class ProjectTaskIO
 		
 	public static function show()
 	{
-		switch($_GET[show]):
+		switch($_GET['show']):
 			case "gantt":
 				self::gantt_view();
 			break;
@@ -1596,15 +1596,15 @@ class ProjectTaskIO
 			foreach ($project_task_array as $key => $value) {
 				
 				$paramquery = $_GET;
-				$paramquery[nav] = "project";
-				$paramquery[run] = "detail";
-				$paramquery[project_id] = $value[project_id];
+				$paramquery['nav'] = "project";
+				$paramquery['run'] = "detail";
+				$paramquery['project_id'] = $value['project_id'];
 				$params = http_build_query($paramquery, '', '&#38;');
 				
-				if ($value[status] == 1) {
-					$content_array[$counter][name] = "<span class='HomeTodayOverdueEntry'><a href='index.php?".$params."'>".$value[project_name]."</a> - ".$value[task_name]." - ".$value[end_date]."</span>";
+				if ($value['status'] == 1) {
+					$content_array[$counter]['name'] = "<span class='HomeTodayOverdueEntry'><a href='index.php?".$params."'>".$value['project_name']."</a> - ".$value['task_name']." - ".$value['end_date']."</span>";
 				}else{
-					$content_array[$counter][name] = "<a href='index.php?".$params."'>".$value[project_name]."</a> - ".$value[task_name]." - ".$value[end_date];
+					$content_array[$counter]['name'] = "<a href='index.php?".$params."'>".$value['project_name']."</a> - ".$value['task_name']." - ".$value['end_date'];
 				}
 				
 				

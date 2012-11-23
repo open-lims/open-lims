@@ -35,7 +35,7 @@ class ProjectLogIO
 	{
 		global $project_security;
 		
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
 			if ($project_security->is_access(1, false) == true)
 			{

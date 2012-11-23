@@ -399,7 +399,7 @@ class SampleRequest
 			$sample_security = new SampleSecurity(null);
 		}
 			
-		switch($_GET[run]):
+		switch($_GET['run']):
 		
 			case ("new"):
 			case ("new_subsample"):
@@ -518,7 +518,7 @@ class SampleRequest
 							{
 								if (method_exists($module_dialog['class'], $module_dialog['method']))
 								{
-									$module_dialog['class']::$module_dialog[method]("sample", $_GET['sample_id'], true, false);
+									$module_dialog['class']::$module_dialog['method']("sample", $_GET['sample_id'], true, false);
 								}
 								else
 								{

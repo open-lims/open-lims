@@ -63,23 +63,23 @@ class ProjectSearchAjax
 			{
 				foreach ($list_array as $key => $value)
 				{
-					$list_array[$key][symbol] = "<img src='images/icons/project.png' alt='N' border='0' />";
+					$list_array[$key]['symbol'] = "<img src='images/icons/project.png' alt='N' border='0' />";
 					
-					$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
-					$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+					$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
+					$list_array[$key]['datetime'] = $datetime_handler->get_formatted_string("dS M Y H:i");
 					
 					$proejct_paramquery = array();
-					$project_paramquery[username] = $_GET[username];
-					$project_paramquery[session_id] = $_GET[session_id];
-					$project_paramquery[nav] = "project";
-					$project_paramquery[run] = "detail";
-					$project_paramquery[project_id] = $value[id];
+					$project_paramquery['username'] = $_GET['username'];
+					$project_paramquery['session_id'] = $_GET['session_id'];
+					$project_paramquery['nav'] = "project";
+					$project_paramquery['run'] = "detail";
+					$project_paramquery['project_id'] = $value['id'];
 					$project_params = http_build_query($project_paramquery, '', '&#38;');
 					
-					$tmp_project_name = $list_array[$key][name];
-					unset($list_array[$key][name]);
-					$list_array[$key][name][content] = $tmp_project_name;
-					$list_array[$key][name][link] = $project_params;			
+					$tmp_project_name = $list_array[$key]['name'];
+					unset($list_array[$key]['name']);
+					$list_array[$key]['name']['content'] = $tmp_project_name;
+					$list_array[$key]['name']['link'] = $project_params;			
 				}
 			}
 			else

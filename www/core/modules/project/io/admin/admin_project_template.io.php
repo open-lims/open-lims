@@ -41,8 +41,8 @@ class AdminProjectTemplateIO
 		$template = new HTMLTemplate("project/admin/project_template/list.html");	
 	
 		$paramquery = $_GET;
-		$paramquery[action] = "add";
-		unset($paramquery[nextpage]);
+		$paramquery['action'] = "add";
+		unset($paramquery['nextpage']);
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("add_params", $params);
@@ -54,7 +54,7 @@ class AdminProjectTemplateIO
 
 	public static function create()
 	{
-		if ($_GET[nextpage] == 1)
+		if ($_GET['nextpage'] == 1)
 		{
 			$page_1_passed = true;
 		}
@@ -69,7 +69,7 @@ class AdminProjectTemplateIO
 			$template = new HTMLTemplate("project/admin/project_template/add.html");
 			
 			$paramquery = $_GET;
-			$paramquery[nextpage] = "1";
+			$paramquery['nextpage'] = "1";
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			$template->set_var("params",$params);
@@ -96,8 +96,8 @@ class AdminProjectTemplateIO
 					if (($file_id = File::get_file_id_by_data_entity_id($value)) != null)
 					{
 						$file = File::get_instance($file_id);
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $file->get_name();
+						$result[$counter]['value'] = $value;
+						$result[$counter]['content'] = $file->get_name();
 						$counter++;
 					}
 				}
@@ -114,8 +114,8 @@ class AdminProjectTemplateIO
 				foreach($category_array as $key => $value)
 				{
 					$project_template_cat = new ProjectTemplateCat($value);
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $project_template_cat->get_name();
+					$result[$counter]['value'] = $value;
+					$result[$counter]['content'] = $project_template_cat->get_name();
 					$counter++;
 				}
 				$template->set_var("category",$result);
@@ -127,7 +127,7 @@ class AdminProjectTemplateIO
 		{				
 			$project_template = new ProjectTemplate(null);
 				
-			if ($_POST[parent] == "1")
+			if ($_POST['parent'] == "1")
 			{
 				$parent = true;
 			}	
@@ -137,11 +137,11 @@ class AdminProjectTemplateIO
 			}
 				
 			$paramquery = $_GET;
-			unset($paramquery[action]);
-			unset($paramquery[nextpage]);
+			unset($paramquery['action']);
+			unset($paramquery['nextpage']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			if ($project_template->create($_POST[data_entity_id], $_POST[category_id], $parent))
+			if ($project_template->create($_POST['data_entity_id'], $_POST['category_id'], $parent))
 			{
 				Common_IO::step_proceed($params, "Add Project Template", "Operation Successful", null);
 			}
@@ -157,22 +157,22 @@ class AdminProjectTemplateIO
 	 */
 	public static function delete()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			if ($_GET[sure] != "true")
+			if ($_GET['sure'] != "true")
 			{
 				$template = new HTMLTemplate("project/admin/project_template/delete.html");
 				
 				$paramquery = $_GET;
-				$paramquery[sure] = "true";
+				$paramquery['sure'] = "true";
 				$params = http_build_query($paramquery);
 				
 				$template->set_var("yes_params", $params);
 						
 				$paramquery = $_GET;
-				unset($paramquery[sure]);
-				unset($paramquery[action]);
-				unset($paramquery[id]);
+				unset($paramquery['sure']);
+				unset($paramquery['action']);
+				unset($paramquery['id']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("no_params", $params);
@@ -182,12 +182,12 @@ class AdminProjectTemplateIO
 			else
 			{
 				$paramquery = $_GET;
-				unset($paramquery[sure]);
-				unset($paramquery[action]);
-				unset($paramquery[id]);
+				unset($paramquery['sure']);
+				unset($paramquery['action']);
+				unset($paramquery['id']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				$project_template = new ProjectTemplate($_GET[id]);
+				$project_template = new ProjectTemplate($_GET['id']);
 				
 				if ($project_template->delete())
 				{							
@@ -207,7 +207,7 @@ class AdminProjectTemplateIO
 	
 	public static function handler()
 	{		
-		switch($_GET[action]):
+		switch($_GET['action']):
 			case "add":
 				self::create();
 			break;

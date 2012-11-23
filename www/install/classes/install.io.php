@@ -105,7 +105,7 @@ class InstallIO
 						$install = true;
 					}
 					
-					$module_display_array[$counter][av] = $version;
+					$module_display_array[$counter]['av'] = $version;
 				}
 			}
 			

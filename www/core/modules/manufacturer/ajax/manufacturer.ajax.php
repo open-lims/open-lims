@@ -165,7 +165,7 @@ class ManufacturerAjax
 				
 				if ($is_admin == true)
 				{
-					$list_array[$key]['delete'] = "<a href='#' class='ManufacturerListDelete' id='ManufacturerListDelete".$list_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+					$list_array[$key]['delete'] = "<a href='#' class='ManufacturerListDelete' id='ManufacturerListDelete".$list_array[$key]['id']."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
 				}
 			}
 		}

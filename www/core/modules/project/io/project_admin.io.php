@@ -35,9 +35,9 @@ class ProjectAdminIO
 	{
 		global $project_security, $user;
 		
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
-			$project_id = $_GET[project_id];
+			$project_id = $_GET['project_id'];
 			$project = new Project($project_id);
 			$project_permission_array = ProjectPermission::list_entries_by_project_id($project_id);
 			
@@ -48,7 +48,7 @@ class ProjectAdminIO
 			{		
 				$argument_array = array();
 				$argument_array[0][0] = "project_id";
-				$argument_array[0][1] = $_GET[project_id];
+				$argument_array[0][1] = $_GET['project_id'];
 				
 				$list = new List_IO("ProjectPermission", "ajax.php?nav=project", "list_project_permissions", "count_project_permissions", $argument_array, "ProjectAjaxMyProjects");
 				
@@ -70,19 +70,19 @@ class ProjectAdminIO
 				$template = new HTMLTemplate("project/admin/permission.html");
 				
 				$add_user_paramquery = $_GET;
-				$add_user_paramquery[run] = "admin_permission_add_user";
+				$add_user_paramquery['run'] = "admin_permission_add_user";
 				$add_user_params = http_build_query($add_user_paramquery,'','&#38;');
 				
 				$template->set_var("add_user_params", $add_user_params);
 				
 				$add_group_paramquery = $_GET;
-				$add_group_paramquery[run] = "admin_permission_add_group";
+				$add_group_paramquery['run'] = "admin_permission_add_group";
 				$add_group_params = http_build_query($add_group_paramquery,'','&#38;');
 				
 				$template->set_var("add_group_params", $add_group_params);
 				
 				$add_ou_paramquery = $_GET;
-				$add_ou_paramquery[run] = "admin_permission_add_ou";
+				$add_ou_paramquery['run'] = "admin_permission_add_ou";
 				$add_ou_params = http_build_query($add_ou_paramquery,'','&#38;');
 				
 				$template->set_var("add_ou_params", $add_ou_params);
@@ -110,9 +110,9 @@ class ProjectAdminIO
 	{
 		global $project_security, $user;
 
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
-			$project_id = $_GET[project_id];		
+			$project_id = $_GET['project_id'];		
 			$project = new Project($project_id);
 			
 			if ($user->get_user_id() == $project->get_owner_id() or
@@ -121,9 +121,9 @@ class ProjectAdminIO
 				$project_security->is_access(7, false) == true)
 			{
 			
-				if ($_GET[nextpage] == 1)
+				if ($_GET['nextpage'] == 1)
 				{
-					if (is_numeric($_POST[user]))
+					if (is_numeric($_POST['user']))
 					{
 						$page_1_passed = true;
 					}
@@ -133,7 +133,7 @@ class ProjectAdminIO
 						$error = "You must select an user.";
 					}
 				}
-				elseif($_GET[nextpage] > 1)
+				elseif($_GET['nextpage'] > 1)
 				{
 					$page_1_passed = true;
 				}
@@ -148,7 +148,7 @@ class ProjectAdminIO
 					$template = new HTMLTemplate("project/admin/permission_add_user.html");
 					
 					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
+					$paramquery['nextpage'] = "1";
 					$params = http_build_query($paramquery,'','&#38;');
 					
 					$template->set_var("params",$params);
@@ -163,8 +163,8 @@ class ProjectAdminIO
 					foreach($user_array as $key => $value)
 					{
 						$user = new User($value);
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $user->get_username()." (".$user->get_full_name(false).")";
+						$result[$counter]['value'] = $value;
+						$result[$counter]['content'] = $user->get_username()." (".$user->get_full_name(false).")";
 						$counter++;
 					}
 					
@@ -174,15 +174,15 @@ class ProjectAdminIO
 				}
 				else
 				{
-					if ($_GET[nextpage] == 2)
+					if ($_GET['nextpage'] == 2)
 					{
-						if ($_POST[re] == "1" or 
-							$_POST[sr] == "1" or 
-							$_POST[wr] == "1" or 
-							$_POST[sw] == "1" or 
-							$_POST[ra] == "1" or 
-							$_POST[de] == "1" or 
-							$_POST[sp] == "1")
+						if ($_POST['re'] == "1" or 
+							$_POST['sr'] == "1" or 
+							$_POST['wr'] == "1" or 
+							$_POST['sw'] == "1" or 
+							$_POST['ra'] == "1" or 
+							$_POST['de'] == "1" or 
+							$_POST['sp'] == "1")
 						{
 							$page_2_passed = true;
 						}
@@ -192,7 +192,7 @@ class ProjectAdminIO
 							$error = "You must select min. one permission.";
 						}
 					}
-					elseif($_GET[nextpage] > 2)
+					elseif($_GET['nextpage'] > 2)
 					{
 						$page_2_passed = true;
 					}
@@ -208,10 +208,10 @@ class ProjectAdminIO
 						
 						$template->set_var("add_edit","Add");
 						
-						$new_user = new User($_POST[user]);
+						$new_user = new User($_POST['user']);
 						
 						$paramquery = $_GET;
-						$paramquery[nextpage] = "2";
+						$paramquery['nextpage'] = "2";
 						$params = http_build_query($paramquery,'','&#38;');
 						
 						$template->set_var("params",$params);
@@ -278,7 +278,7 @@ class ProjectAdminIO
 						$template->set_var("checked_de", "");	
 						$template->set_var("checked_sp", "");
 						
-						$template->set_var("user",$_POST[user]);
+						$template->set_var("user",$_POST['user']);
 						$template->set_var("group","");
 						$template->set_var("ou","");
 						
@@ -287,45 +287,45 @@ class ProjectAdminIO
 					else
 					{
 						$paramquery = $_GET;
-						unset($paramquery[nextpage]);
-						unset($paramquery[id]);
-						$paramquery[run] = "admin_permission";
+						unset($paramquery['nextpage']);
+						unset($paramquery['id']);
+						$paramquery['run'] = "admin_permission";
 						$params = http_build_query($paramquery);
 						
 						$project_permission = new ProjectPermissionUser(null);
 						
 						$new_permssion = 0;
 						
-						if ($_POST[re] == "1")
+						if ($_POST['re'] == "1")
 						{
 							$new_permission = $new_permission + 1;
 						}
-						if ($_POST[sr] == "1")
+						if ($_POST['sr'] == "1")
 						{
 							$new_permission = $new_permission + 2;
 						}
-						if ($_POST[wr] == "1")
+						if ($_POST['wr'] == "1")
 						{
 							$new_permission = $new_permission + 4;
 						}
-						if ($_POST[sw] == "1")
+						if ($_POST['sw'] == "1")
 						{
 							$new_permission = $new_permission + 8;
 						}
-						if ($_POST[ra] == "1")
+						if ($_POST['ra'] == "1")
 						{
 							$new_permission = $new_permission + 16;
 						}
-						if ($_POST[de] == "1")
+						if ($_POST['de'] == "1")
 						{
 							$new_permission = $new_permission + 32;
 						}
-						if ($_POST[sp] == "1")
+						if ($_POST['sp'] == "1")
 						{
 							$new_permission = $new_permission + 64;
 						}
 						
-						if ($project_permission->create($_POST[user], $project_id, $new_permission, $user->get_user_id(), null))
+						if ($project_permission->create($_POST['user'], $project_id, $new_permission, $user->get_user_id(), null))
 						{
 							Common_IO::step_proceed($params, "Add Permission", "Operation Successful", null);
 						}
@@ -355,9 +355,9 @@ class ProjectAdminIO
 	{
 		global $project_security, $user;
 
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
-			$project_id = $_GET[project_id];		
+			$project_id = $_GET['project_id'];		
 
 			$project = new Project($project_id);
 			
@@ -366,9 +366,9 @@ class ProjectAdminIO
 				$project_security->is_access(4, false) == true or
 				$project_security->is_access(7, false) == true)
 			{
-				if ($_GET[nextpage] == 1)
+				if ($_GET['nextpage'] == 1)
 				{
-					if (is_numeric($_POST[group]))
+					if (is_numeric($_POST['group']))
 					{
 						$page_1_passed = true;
 					}
@@ -378,7 +378,7 @@ class ProjectAdminIO
 						$error = "You must select a group.";
 					}
 				}
-				elseif($_GET[nextpage] > 1)
+				elseif($_GET['nextpage'] > 1)
 				{
 					$page_1_passed = true;
 				}
@@ -393,7 +393,7 @@ class ProjectAdminIO
 					$template = new HTMLTemplate("project/admin/permission_add_group.html");
 					
 					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
+					$paramquery['nextpage'] = "1";
 					$params = http_build_query($paramquery,'','&#38;');
 					
 					$template->set_var("params",$params);
@@ -408,8 +408,8 @@ class ProjectAdminIO
 					foreach($group_array as $key => $value)
 					{
 						$group = new Group($value);
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $group->get_name();
+						$result[$counter]['value'] = $value;
+						$result[$counter]['content'] = $group->get_name();
 						$counter++;
 					}
 					
@@ -419,15 +419,15 @@ class ProjectAdminIO
 				}
 				else
 				{
-					if ($_GET[nextpage] == 2)
+					if ($_GET['nextpage'] == 2)
 					{
-						if ($_POST[re] == "1" or 
-							$_POST[sr] == "1" or 
-							$_POST[wr] == "1" or 
-							$_POST[sw] == "1" or 
-							$_POST[ra] == "1" or 
-							$_POST[de] == "1" or 
-							$_POST[sp] == "1")
+						if ($_POST['re'] == "1" or 
+							$_POST['sr'] == "1" or 
+							$_POST['wr'] == "1" or 
+							$_POST['sw'] == "1" or 
+							$_POST['ra'] == "1" or 
+							$_POST['de'] == "1" or 
+							$_POST['sp'] == "1")
 						{
 							$page_2_passed = true;
 						}
@@ -437,7 +437,7 @@ class ProjectAdminIO
 							$error = "You must select min. one permission.";
 						}
 					}
-					elseif($_GET[nextpage] > 2)
+					elseif($_GET['nextpage'] > 2)
 					{
 						$page_2_passed = true;
 					}
@@ -453,10 +453,10 @@ class ProjectAdminIO
 						
 						$template->set_var("add_edit","Add");
 						
-						$new_group = new Group($_POST[group]);
+						$new_group = new Group($_POST['group']);
 						
 						$paramquery = $_GET;
-						$paramquery[nextpage] = "2";
+						$paramquery['nextpage'] = "2";
 						$params = http_build_query($paramquery,'','&#38;');
 						
 						$template->set_var("params",$params);
@@ -524,7 +524,7 @@ class ProjectAdminIO
 						$template->set_var("checked_sp", "");
 						
 						$template->set_var("user","");
-						$template->set_var("group",$_POST[group]);
+						$template->set_var("group",$_POST['group']);
 						$template->set_var("ou","");
 						
 						$template->output();
@@ -532,45 +532,45 @@ class ProjectAdminIO
 					else
 					{
 						$paramquery = $_GET;
-						unset($paramquery[nextpage]);
-						unset($paramquery[id]);
-						$paramquery[run] = "admin_permission";
+						unset($paramquery['nextpage']);
+						unset($paramquery['id']);
+						$paramquery['run'] = "admin_permission";
 						$params = http_build_query($paramquery);
 						
 						$project_permission = new ProjectPermissionGroup(null);
 						
 						$new_permssion = 0;
 						
-						if ($_POST[re] == "1")
+						if ($_POST['re'] == "1")
 						{
 							$new_permission = $new_permission + 1;
 						}
-						if ($_POST[sr] == "1")
+						if ($_POST['sr'] == "1")
 						{
 							$new_permission = $new_permission + 2;
 						}
-						if ($_POST[wr] == "1")
+						if ($_POST['wr'] == "1")
 						{
 							$new_permission = $new_permission + 4;
 						}
-						if ($_POST[sw] == "1")
+						if ($_POST['sw'] == "1")
 						{
 							$new_permission = $new_permission + 8;
 						}
-						if ($_POST[ra] == "1") 
+						if ($_POST['ra'] == "1") 
 						{
 							$new_permission = $new_permission + 16;
 						}
-						if ($_POST[de] == "1")
+						if ($_POST['de'] == "1")
 						{
 							$new_permission = $new_permission + 32;
 						}
-						if ($_POST[sp] == "1")
+						if ($_POST['sp'] == "1")
 						{
 							$new_permission = $new_permission + 64;
 						}
 						
-						if ($project_permission->create($_POST[group], $project_id, $new_permission, $user->get_user_id(), null))
+						if ($project_permission->create($_POST['group'], $project_id, $new_permission, $user->get_user_id(), null))
 						{
 							Common_IO::step_proceed($params, "Add Permission", "Operation Successful", null);
 						}
@@ -600,9 +600,9 @@ class ProjectAdminIO
 	{
 		global $project_security, $user;
 
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
-			$project_id = $_GET[project_id];		
+			$project_id = $_GET['project_id'];		
 			$project = new Project($project_id);
 			
 			if ($user->get_user_id() == $project->get_owner_id() or
@@ -610,9 +610,9 @@ class ProjectAdminIO
 				$project_security->is_access(4, false) == true or
 				$project_security->is_access(7, false) == true)
 			{
-				if ($_GET[nextpage] == 1)
+				if ($_GET['nextpage'] == 1)
 				{
-					if (is_numeric($_POST[ou]))
+					if (is_numeric($_POST['ou']))
 					{
 						$page_1_passed = true;
 					}
@@ -622,7 +622,7 @@ class ProjectAdminIO
 						$error = "You must select an organisation unit.";
 					}
 				}
-				elseif($_GET[nextpage] > 1)
+				elseif($_GET['nextpage'] > 1)
 				{
 					$page_1_passed = true;
 				}
@@ -637,7 +637,7 @@ class ProjectAdminIO
 					$template = new HTMLTemplate("project/admin/permission_add_ou.html");
 					
 					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
+					$paramquery['nextpage'] = "1";
 					$params = http_build_query($paramquery,'','&#38;');
 					
 					$template->set_var("params",$params);
@@ -652,8 +652,8 @@ class ProjectAdminIO
 					foreach($organisation_unit_array as $key => $value)
 					{
 						$organisation_unit = new OrganisationUnit($value);
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $organisation_unit->get_name();
+						$result[$counter]['value'] = $value;
+						$result[$counter]['content'] = $organisation_unit->get_name();
 						$counter++;
 					}
 					
@@ -663,15 +663,15 @@ class ProjectAdminIO
 				}
 				else
 				{
-					if ($_GET[nextpage] == 2)
+					if ($_GET['nextpage'] == 2)
 					{
-						if ($_POST[re] == "1" or 
-							$_POST[sr] == "1" or 
-							$_POST[wr] == "1" or 
-							$_POST[sw] == "1" or 
-							$_POST[ra] == "1" or 
-							$_POST[de] == "1" or 
-							$_POST[sp] == "1")
+						if ($_POST['re'] == "1" or 
+							$_POST['sr'] == "1" or 
+							$_POST['wr'] == "1" or 
+							$_POST['sw'] == "1" or 
+							$_POST['ra'] == "1" or 
+							$_POST['de'] == "1" or 
+							$_POST['sp'] == "1")
 						{
 							$page_2_passed = true;
 						}
@@ -681,7 +681,7 @@ class ProjectAdminIO
 							$error = "You must select min. one permission.";
 						}
 					}
-					elseif($_GET[nextpage] > 2)
+					elseif($_GET['nextpage'] > 2)
 					{
 						$page_2_passed = true;
 					}
@@ -697,10 +697,10 @@ class ProjectAdminIO
 						
 						$template->set_var("add_edit","Add");
 						
-						$new_ou = new OrganisationUnit($_POST[ou]);
+						$new_ou = new OrganisationUnit($_POST['ou']);
 						
 						$paramquery = $_GET;
-						$paramquery[nextpage] = "2";
+						$paramquery['nextpage'] = "2";
 						$params = http_build_query($paramquery,'','&#38;');
 						
 						$template->set_var("params",$params);
@@ -769,52 +769,52 @@ class ProjectAdminIO
 						
 						$template->set_var("user","");
 						$template->set_var("group","");
-						$template->set_var("ou",$_POST[ou]);
+						$template->set_var("ou",$_POST['ou']);
 						
 						$template->output();
 					}
 					else
 					{
 						$paramquery = $_GET;
-						unset($paramquery[nextpage]);
-						unset($paramquery[id]);
-						$paramquery[run] = "admin_permission";
+						unset($paramquery['nextpage']);
+						unset($paramquery['id']);
+						$paramquery['run'] = "admin_permission";
 						$params = http_build_query($paramquery);
 						
 						$project_permission = new ProjectPermissionOrganisationUnit(null);
 						
 						$new_permssion = 0;
 						
-						if ($_POST[re] == "1")
+						if ($_POST['re'] == "1")
 						{
 							$new_permission = $new_permission + 1;
 						}
-						if ($_POST[sr] == "1")
+						if ($_POST['sr'] == "1")
 						{
 							$new_permission = $new_permission + 2;
 						}
-						if ($_POST[wr] == "1")
+						if ($_POST['wr'] == "1")
 						{
 							$new_permission = $new_permission + 4;
 						}
-						if ($_POST[sw] == "1")
+						if ($_POST['sw'] == "1")
 						{
 							$new_permission = $new_permission + 8;
 						}
-						if ($_POST[ra] == "1")
+						if ($_POST['ra'] == "1")
 						{
 							$new_permission = $new_permission + 16;
 						}
-						if ($_POST[de] == "1")
+						if ($_POST['de'] == "1")
 						{
 							$new_permission = $new_permission + 32;
 						}
-						if ($_POST[sp] == "1")
+						if ($_POST['sp'] == "1")
 						{
 							$new_permission = $new_permission + 64;
 						}
 						
-						if ($project_permission->create($_POST[ou],$project_id, $new_permission, $user->get_user_id(), null))
+						if ($project_permission->create($_POST['ou'],$project_id, $new_permission, $user->get_user_id(), null))
 						{
 							Common_IO::step_proceed($params, "Add Permission", "Operation Successful", null);
 						}
@@ -845,20 +845,20 @@ class ProjectAdminIO
 	{
 		global $project_security, $user;
 		
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
-			if ($_GET[id])
+			if ($_GET['id'])
 			{
-				$project_id = $_GET[project_id];
+				$project_id = $_GET['project_id'];
 				$project = new Project($project_id);
-				$project_permission = ProjectPermission::get_instance($_GET[id]);
+				$project_permission = ProjectPermission::get_instance($_GET['id']);
 				
 				if ($user->get_user_id() == $project->get_owner_id() or
 					$project_security->is_access(2, false) == true or
 					$project_security->is_access(4, false) == true or
 					$project_security->is_access(7, false) == true)
 				{
-					if ($_GET[nextpage] == 1)
+					if ($_GET['nextpage'] == 1)
 					{
 						$page_1_passed = true;
 					}
@@ -875,7 +875,7 @@ class ProjectAdminIO
 						$template->set_var("add_edit","Edit");
 						
 						$paramquery = $_GET;
-						$paramquery[nextpage] = "1";
+						$paramquery['nextpage'] = "1";
 						$params = http_build_query($paramquery,'','&#38;');
 						
 						$template->set_var("params",$params);
@@ -907,7 +907,7 @@ class ProjectAdminIO
 						
 						$permission_array = $project_permission->get_permission_array();
 								
-						if ($permission_array[read] == true)
+						if ($permission_array['read'] == true)
 						{
 							$template->set_var("checked_re", "checked='checked'");
 						}
@@ -916,7 +916,7 @@ class ProjectAdminIO
 							$template->set_var("checked_re", "");
 						}
 						
-						if ($permission_array[set_readable] == true)
+						if ($permission_array['set_readable'] == true)
 						{
 							$template->set_var("checked_sr", "checked='checked'");
 						}
@@ -925,7 +925,7 @@ class ProjectAdminIO
 							$template->set_var("checked_sr", "");
 						}
 						
-						if ($permission_array[write] == true)
+						if ($permission_array['write'] == true)
 						{
 							$template->set_var("checked_wr", "checked='checked'");
 						}
@@ -934,7 +934,7 @@ class ProjectAdminIO
 							$template->set_var("checked_wr", "");
 						}
 						
-						if ($permission_array[set_writeable] == true)
+						if ($permission_array['set_writeable'] == true)
 						{
 							$template->set_var("checked_sw", "checked='checked'");
 						}
@@ -943,7 +943,7 @@ class ProjectAdminIO
 							$template->set_var("checked_sw", "");
 						}
 						
-						if ($permission_array[reactivate] == true)
+						if ($permission_array['reactivate'] == true)
 						{
 							$template->set_var("checked_ra", "checked='checked'");
 						}
@@ -952,7 +952,7 @@ class ProjectAdminIO
 							$template->set_var("checked_ra", "");
 						}
 						
-						if ($permission_array[delete] == true)
+						if ($permission_array['delete'] == true)
 						{
 							$template->set_var("checked_de", "checked='checked'");
 						}
@@ -961,7 +961,7 @@ class ProjectAdminIO
 							$template->set_var("checked_de", "");
 						}
 						
-						if ($permission_array[set_permissions] == true)
+						if ($permission_array['set_permissions'] == true)
 						{
 							$template->set_var("checked_sp", "checked='checked'");
 						}
@@ -1018,38 +1018,38 @@ class ProjectAdminIO
 					else
 					{
 						$paramquery = $_GET;
-						unset($paramquery[nextpage]);
-						unset($paramquery[id]);
-						$paramquery[run] = "admin_permission";
+						unset($paramquery['nextpage']);
+						unset($paramquery['id']);
+						$paramquery['run'] = "admin_permission";
 						$params = http_build_query($paramquery);
 						
 						$new_permission = 0;
 						
-						if ($_POST[re] == "1")
+						if ($_POST['re'] == "1")
 						{
 							$new_permission = $new_permission + 1;
 						}
-						if ($_POST[sr] == "1")
+						if ($_POST['sr'] == "1")
 						{
 							$new_permission = $new_permission + 2;
 						}
-						if ($_POST[wr] == "1")
+						if ($_POST['wr'] == "1")
 						{
 							$new_permission = $new_permission + 4;
 						}
-						if ($_POST[sw] == "1")
+						if ($_POST['sw'] == "1")
 						{
 							$new_permission = $new_permission + 8;
 						}
-						if ($_POST[ra] == "1")
+						if ($_POST['ra'] == "1")
 						{
 							$new_permission = $new_permission + 16;
 						}
-						if ($_POST[de] == "1")
+						if ($_POST['de'] == "1")
 						{
 							$new_permission = $new_permission + 32;
 						}
-						if ($_POST[sp] == "1")
+						if ($_POST['sp'] == "1")
 						{
 							$new_permission = $new_permission + 64;
 						}
@@ -1089,31 +1089,31 @@ class ProjectAdminIO
 	{
 		global $project_security, $user;
 		
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
-			if ($_GET[id])
+			if ($_GET['id'])
 			{
-				$project = new Project($_GET[project_id]);
+				$project = new Project($_GET['project_id']);
 			
 				if ($user->get_user_id() == $project->get_owner_id() or
 					$project_security->is_access(2, false) == true or
 					$project_security->is_access(4, false) == true or
 					$project_security->is_access(7, false) == true)
 				{
-					if ($_GET[sure] != "true")
+					if ($_GET['sure'] != "true")
 					{
 						$template = new HTMLTemplate("project/admin/permission_delete.html");
 						
 						$paramquery = $_GET;
-						$paramquery[sure] = "true";
+						$paramquery['sure'] = "true";
 						$params = http_build_query($paramquery);
 						
 						$template->set_var("yes_params", $params);
 								
 						$paramquery = $_GET;
-						unset($paramquery[nextpage]);
-						unset($paramquery[id]);
-						$paramquery[run] = "admin_permission";
+						unset($paramquery['nextpage']);
+						unset($paramquery['id']);
+						$paramquery['run'] = "admin_permission";
 						$params = http_build_query($paramquery);
 						
 						$template->set_var("no_params", $params);
@@ -1123,13 +1123,13 @@ class ProjectAdminIO
 					else
 					{
 						$paramquery = $_GET;
-						unset($paramquery[nextpage]);
-						unset($paramquery[id]);
-						unset($paramquery[sure]);
-						$paramquery[run] = "admin_permission";
+						unset($paramquery['nextpage']);
+						unset($paramquery['id']);
+						unset($paramquery['sure']);
+						$paramquery['run'] = "admin_permission";
 						$params = http_build_query($paramquery);
 						
-						$project_permission = ProjectPermission::get_instance($_GET[id]);
+						$project_permission = ProjectPermission::get_instance($_GET['id']);
 						
 						if ($project_permission->delete())
 						{							
@@ -1165,21 +1165,21 @@ class ProjectAdminIO
 	{
 		global $project_security, $user;
 		
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
-			$project_id = $_GET[project_id];		
+			$project_id = $_GET['project_id'];		
 			$project = new Project($project_id);
 			
 			if ($user->get_user_id() == $project->get_owner_id() or
 				$project_security->is_access(7, false) == true)
 			{
-				if ($_GET[nextpage] == 1)
+				if ($_GET['nextpage'] == 1)
 				{
-					if ($_POST[name])
+					if ($_POST['name'])
 					{
 						if ($project->get_organisation_unit_id())
 						{
-							if (Project::exist_project_name($project->get_organisation_unit_id(),null, $_POST[name]) == false)
+							if (Project::exist_project_name($project->get_organisation_unit_id(),null, $_POST['name']) == false)
 							{
 								$page_1_passed = true;
 							}
@@ -1191,7 +1191,7 @@ class ProjectAdminIO
 						}
 						else
 						{
-							if (Project::exist_project_name(null,$project->get_project_toid(), $_POST[name]) == false)
+							if (Project::exist_project_name(null,$project->get_project_toid(), $_POST['name']) == false)
 							{
 								$page_1_passed = true;
 							}
@@ -1220,16 +1220,16 @@ class ProjectAdminIO
 					$template = new HTMLTemplate("project/admin/rename.html");
 				
 					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
+					$paramquery['nextpage'] = "1";
 					$params = http_build_query($paramquery,'','&#38;');
 				
 					$template->set_var("params",$params);
 				
 					$template->set_var("error",$error);
 					
-					if ($_POST[name])
+					if ($_POST['name'])
 					{
-						$template->set_var("name",$_POST[name]);
+						$template->set_var("name",$_POST['name']);
 					}
 					else
 					{
@@ -1240,11 +1240,11 @@ class ProjectAdminIO
 				else
 				{
 					$paramquery = $_GET;
-					unset($paramquery[nextpage]);
-					$paramquery[run] = "admin";
+					unset($paramquery['nextpage']);
+					$paramquery['run'] = "admin";
 					$params = http_build_query($paramquery);
 					
-					if ($project->set_name($_POST[name]))
+					if ($project->set_name($_POST['name']))
 					{
 						Common_IO::step_proceed($params, "Rename Project", "Operation Successful", null);
 					}
@@ -1273,16 +1273,16 @@ class ProjectAdminIO
 	{
 		global $project_security;
 	
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
 			if ($project_security->is_access(7, false) == true)
 			{
-				$project_id = $_GET[project_id];		
+				$project_id = $_GET['project_id'];		
 				$project = new Project($project_id);
 				
-				if ($_GET[nextpage] == 1)
+				if ($_GET['nextpage'] == 1)
 				{
-					if (is_numeric($_POST[user]))
+					if (is_numeric($_POST['user']))
 					{
 						$page_1_passed = true;
 					}
@@ -1303,7 +1303,7 @@ class ProjectAdminIO
 					$template = new HTMLTemplate("project/admin/chown.html");
 				
 					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
+					$paramquery['nextpage'] = "1";
 					$params = http_build_query($paramquery,'','&#38;');
 				
 					$template->set_var("params",$params);
@@ -1318,8 +1318,8 @@ class ProjectAdminIO
 					foreach($user_array as $key => $value)
 					{
 						$user = new User($value);
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $user->get_username()." (".$user->get_full_name(false).")";
+						$result[$counter]['value'] = $value;
+						$result[$counter]['content'] = $user->get_username()." (".$user->get_full_name(false).")";
 						$counter++;
 					}
 					
@@ -1330,11 +1330,11 @@ class ProjectAdminIO
 				else
 				{
 					$paramquery = $_GET;
-					unset($paramquery[nextpage]);
-					$paramquery[run] = "admin";
+					unset($paramquery['nextpage']);
+					$paramquery['run'] = "admin";
 					$params = http_build_query($paramquery);
 					
-					if ($project->set_owner_id($_POST[user]))
+					if ($project->set_owner_id($_POST['user']))
 					{
 						Common_IO::step_proceed($params, "Change Project Owner", "Operation Successful", null);
 					}
@@ -1363,16 +1363,16 @@ class ProjectAdminIO
 	{
 		global $project_security, $user;
 
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
-			$project = new Project($_GET[project_id]);
+			$project = new Project($_GET['project_id']);
 			
 			if ($user->get_user_id() == $project->get_owner_id() or
 				$project_security->is_access(7, false) == true)
 			{
-				if ($_GET[nextpage] == 1)
+				if ($_GET['nextpage'] == 1)
 				{
-					if (is_numeric($_POST[type]))
+					if (is_numeric($_POST['type']))
 					{
 						$page_1_passed = true;
 					}
@@ -1382,7 +1382,7 @@ class ProjectAdminIO
 						$error = "You must make a selection.";
 					}
 				}
-				elseif($_GET[nextpage] > 1)
+				elseif($_GET['nextpage'] > 1)
 				{
 					$page_1_passed = true;
 				}
@@ -1397,7 +1397,7 @@ class ProjectAdminIO
 					$template = new HTMLTemplate("project/admin/move_page_1.html");
 					
 					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
+					$paramquery['nextpage'] = "1";
 					$params = http_build_query($paramquery,'','&#38;');
 					
 					$template->set_var("params",$params);
@@ -1408,11 +1408,11 @@ class ProjectAdminIO
 				}
 				else
 				{
-					if ($_POST[type] == 1)
+					if ($_POST['type'] == 1)
 					{
-						if ($_GET[nextpage] == 2)
+						if ($_GET['nextpage'] == 2)
 						{
-							if (is_numeric($_POST[ou]))
+							if (is_numeric($_POST['ou']))
 							{
 								$page_2_passed = true;
 							}
@@ -1422,7 +1422,7 @@ class ProjectAdminIO
 								$error = "You must select an organisation unit.";
 							}
 						}
-						elseif($_GET[nextpage] > 3)
+						elseif($_GET['nextpage'] > 3)
 						{
 							$page_2_passed = true;
 						}
@@ -1437,7 +1437,7 @@ class ProjectAdminIO
 							$template = new HTMLTemplate("project/admin/move_page_2_ou.html");
 			
 							$paramquery = $_GET;
-							$paramquery[nextpage] = "2";
+							$paramquery['nextpage'] = "2";
 							$params = http_build_query($paramquery,'','&#38;');
 							
 							$template->set_var("params",$params);
@@ -1452,27 +1452,27 @@ class ProjectAdminIO
 							foreach($organisation_unit_array as $key => $value)
 							{
 								$organisation_unit = new OrganisationUnit($value);
-								$result[$counter][value] = $value;
-								$result[$counter][content] = $organisation_unit->get_name();
+								$result[$counter]['value'] = $value;
+								$result[$counter]['content'] = $organisation_unit->get_name();
 								$counter++;
 							}
 							
 							$template->set_var("option",$result);
 			
-							$template->set_var("type",$_POST[type]);
+							$template->set_var("type",$_POST['type']);
 			
 							$template->output();
 						}
 						else
 						{
-							$project = new Project($_GET[project_id]);
+							$project = new Project($_GET['project_id']);
 							
 							$paramquery = $_GET;
-							unset($paramquery[nextpage]);
-							$paramquery[run] = "admin";
+							unset($paramquery['nextpage']);
+							$paramquery['run'] = "admin";
 							$params = http_build_query($paramquery);
 							
-							if ($project->move_to_organisation_unit($_POST[ou]))
+							if ($project->move_to_organisation_unit($_POST['ou']))
 							{
 								Common_IO::step_proceed($params, "Move Project", "Operation Successful", null);
 							}
@@ -1484,9 +1484,9 @@ class ProjectAdminIO
 					}
 					else
 					{
-						if ($_GET[nextpage] == 2)
+						if ($_GET['nextpage'] == 2)
 						{
-							if (is_numeric($_POST[project]))
+							if (is_numeric($_POST['project']))
 							{
 								$page_2_passed = true;
 							}
@@ -1496,7 +1496,7 @@ class ProjectAdminIO
 								$error = "You must select a project.";
 							}
 						}
-						elseif($_GET[nextpage] > 3)
+						elseif($_GET['nextpage'] > 3)
 						{
 							$page_2_passed = true;
 						}
@@ -1511,7 +1511,7 @@ class ProjectAdminIO
 							$template = new HTMLTemplate("project/admin/move_page_2_project.html");
 			
 							$paramquery = $_GET;
-							$paramquery[nextpage] = "2";
+							$paramquery['nextpage'] = "2";
 							$params = http_build_query($paramquery,'','&#38;');
 							
 							$template->set_var("params",$params);
@@ -1526,15 +1526,15 @@ class ProjectAdminIO
 							
 							foreach($project_array as $key => $value)
 							{
-								$project = new Project($value[id]);
+								$project = new Project($value['id']);
 		
-								for($i=1;$i<=$value[layer];$i++)
+								for($i=1;$i<=$value['layer'];$i++)
 								{
 									$pre_content .= "&nbsp;";
 								}
 						
-								$result[$counter][value] = $value[id];
-								$result[$counter][content] = $pre_content."".$project->get_name();		
+								$result[$counter]['value'] = $value['id'];
+								$result[$counter]['content'] = $pre_content."".$project->get_name();		
 			
 								$counter++;
 								
@@ -1543,26 +1543,26 @@ class ProjectAdminIO
 							
 							if (!$result)
 							{
-								$result[$counter][value] = "0";
-								$result[$counter][content] = "NO PROJECT FOUND!";		
+								$result[$counter]['value'] = "0";
+								$result[$counter]['content'] = "NO PROJECT FOUND!";		
 							}
 					
 							$template->set_var("option",$result);
 			
-							$template->set_var("type",$_POST[type]);
+							$template->set_var("type",$_POST['type']);
 			
 							$template->output();
 						}
 						else
 						{
-							$project = new Project($_GET[project_id]);
+							$project = new Project($_GET['project_id']);
 							
 							$paramquery = $_GET;
-							unset($paramquery[nextpage]);
-							$paramquery[run] = "admin";
+							unset($paramquery['nextpage']);
+							$paramquery['run'] = "admin";
 							$params = http_build_query($paramquery);
 							
-							if ($project->move_to_project($_POST[project]))
+							if ($project->move_to_project($_POST['project']))
 							{
 								Common_IO::step_proceed($params, "Move Project", "Operation Successful", null);
 							}
@@ -1593,16 +1593,16 @@ class ProjectAdminIO
 	{
 		global $project_security;
 	
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
 			if ($project_security->is_access(7, false) == true)
 			{
-				$project_id = $_GET[project_id];		
+				$project_id = $_GET['project_id'];		
 				$project = new Project($project_id);
 				
-				if ($_GET[nextpage] == 1)
+				if ($_GET['nextpage'] == 1)
 				{
-					if (is_numeric($_POST[quota]))
+					if (is_numeric($_POST['quota']))
 					{
 						$page_1_passed = true;
 					}
@@ -1623,16 +1623,16 @@ class ProjectAdminIO
 					$template = new HTMLTemplate("project/admin/quota.html");
 				
 					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
+					$paramquery['nextpage'] = "1";
 					$params = http_build_query($paramquery,'','&#38;');
 				
 					$template->set_var("params",$params);
 				
 					$template->set_var("error",$error);
 					
-					if ($_POST[name])
+					if ($_POST['name'])
 					{
-						$template->set_var("quota",$_POST[quota]);
+						$template->set_var("quota",$_POST['quota']);
 					}
 					else
 					{
@@ -1643,11 +1643,11 @@ class ProjectAdminIO
 				else
 				{
 					$paramquery = $_GET;
-					unset($paramquery[nextpage]);
-					$paramquery[run] = "admin";
+					unset($paramquery['nextpage']);
+					$paramquery['run'] = "admin";
 					$params = http_build_query($paramquery);
 					
-					if ($project->set_quota($_POST[quota]))
+					if ($project->set_quota($_POST['quota']))
 					{
 						Common_IO::step_proceed($params, "Change Quota", "Operation Successful", null);
 					}

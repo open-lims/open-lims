@@ -29,30 +29,30 @@ class ProjectCommon_IO
 {
 	public static function tab_header()
 	{
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
 			$tab_io = new Tab_IO();
 						
 			// Main Page
 			
-			$paramquery[username] 	= $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav]		= "project";
-			$paramquery[run]		= "detail";
-			$paramquery[project_id]	= $_GET[project_id];
-			$params 				= http_build_query($paramquery,'','&#38;');
+			$paramquery['username'] 	= $_GET['username'];
+			$paramquery['session_id'] 	= $_GET['session_id'];
+			$paramquery['nav']			= "project";
+			$paramquery['run']			= "detail";
+			$paramquery['project_id']	= $_GET['project_id'];
+			$params 					= http_build_query($paramquery,'','&#38;');
 			unset($paramquery);
 			
 			$tab_io->add("main", "Main Page", $params, false);
 			
 			// Log
 			
-			$paramquery[username] 	= $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav]		= "project";
-			$paramquery[run]		= "log";
-			$paramquery[project_id]	= $_GET[project_id];
-			$params 				= http_build_query($paramquery,'','&#38;');
+			$paramquery['username'] 	= $_GET['username'];
+			$paramquery['session_id'] 	= $_GET['session_id'];
+			$paramquery['nav']			= "project";
+			$paramquery['run']			= "log";
+			$paramquery['project_id']	= $_GET['project_id'];
+			$params 					= http_build_query($paramquery,'','&#38;');
 			unset($paramquery);
 			
 			$tab_io->add("log", "Log", $params, false);
@@ -60,12 +60,12 @@ class ProjectCommon_IO
 			
 			// Structure
 			
-			$paramquery[username] 	= $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav]		= "project";
-			$paramquery[run]		= "structure";
-			$paramquery[project_id]	= $_GET[project_id];
-			$params 				= http_build_query($paramquery,'','&#38;');
+			$paramquery['username'] 	= $_GET['username'];
+			$paramquery['session_id'] 	= $_GET['session_id'];
+			$paramquery['nav']			= "project";
+			$paramquery['run']			= "structure";
+			$paramquery['project_id']	= $_GET['project_id'];
+			$params 					= http_build_query($paramquery,'','&#38;');
 			unset($paramquery);
 			
 			$tab_io->add("structure", "Structure", $params, false);
@@ -73,12 +73,12 @@ class ProjectCommon_IO
 			
 			// Schedule
 			
-			$paramquery[username] 	= $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav]		= "project";
-			$paramquery[run]		= "schedule";
-			$paramquery[project_id]	= $_GET[project_id];
-			$params 				= http_build_query($paramquery,'','&#38;');
+			$paramquery['username'] 	= $_GET['username'];
+			$paramquery['session_id'] 	= $_GET['session_id'];
+			$paramquery['nav']			= "project";
+			$paramquery['run']			= "schedule";
+			$paramquery['project_id']	= $_GET['project_id'];
+			$params 					= http_build_query($paramquery,'','&#38;');
 			unset($paramquery);
 			
 			$tab_io->add("schedule", "Schedule", $params, false);
@@ -92,15 +92,15 @@ class ProjectCommon_IO
 			{
 				foreach ($module_dialog_array as $key => $value)
 				{
-					$paramquery[username] 	= $_GET[username];
-					$paramquery[session_id] = $_GET[session_id];
-					$paramquery[nav]		= "project";
-					$paramquery[run]		= "item_list";
-					$paramquery[project_id]	= $_GET[project_id];
-					$paramquery[dialog]		= $value[internal_name];
-					$params 				= http_build_query($paramquery,'','&#38;');
+					$paramquery['username'] 	= $_GET['username'];
+					$paramquery['session_id']	= $_GET['session_id'];
+					$paramquery['nav']			= "project";
+					$paramquery['run']			= "item_list";
+					$paramquery['project_id']	= $_GET['project_id'];
+					$paramquery['dialog']		= $value['internal_name'];
+					$params 					= http_build_query($paramquery,'','&#38;');
 					
-					$tab_io->add($value[internal_name], $value[display_name], $params, false);
+					$tab_io->add($value['internal_name'], $value['display_name'], $params, false);
 				}
 			}
 			
@@ -108,7 +108,7 @@ class ProjectCommon_IO
 			// Administration
 			
 			
-			$project_security = new ProjectSecurity($_GET[project_id]);	
+			$project_security = new ProjectSecurity($_GET['project_id']);	
 	
 			if ($project_security->is_access(2,false) or 
 				$project_security->is_access(3,false) or 
@@ -117,21 +117,21 @@ class ProjectCommon_IO
 				$project_security->is_access(6,false) or 
 				$project_security->is_access(7,false))
 			{
-				$paramquery[username] 	= $_GET[username];
-				$paramquery[session_id] = $_GET[session_id];
-				$paramquery[nav]		= "project";
-				$paramquery[run]		= "admin";
-				$paramquery[project_id]	= $_GET[project_id];
-				unset($paramquery[dialog]);
+				$paramquery['username'] 	= $_GET['username'];
+				$paramquery['session_id'] 	= $_GET['session_id'];
+				$paramquery['nav']			= "project";
+				$paramquery['run']			= "admin";
+				$paramquery['project_id']	= $_GET['project_id'];
+				unset($paramquery['dialog']);
 				$params 				= http_build_query($paramquery,'','&#38;');
 			 	unset($paramquery);
 			 
 				$tab_io->add("admin", "Project-Administration", $params, false, false);
 			}
 		
-			if ($_GET[run] != "item_add" and $_GET[run] != "item_list")
+			if ($_GET['run'] != "item_add" and $_GET['run'] != "item_list")
 			{
-				switch ($_GET[run]):
+				switch ($_GET['run']):
 				
 					case "log":
 					case("log_detail"):
@@ -159,7 +159,7 @@ class ProjectCommon_IO
 					break;
 					
 					default:
-						if (strpos($_GET[run], "admin_") === 0)
+						if (strpos($_GET['run'], "admin_") === 0)
 						{
 							$tab_io->activate("admin");
 						}
@@ -173,9 +173,9 @@ class ProjectCommon_IO
 			}
 			else
 			{
-				if ($_GET[run] == "item_list" and $_GET[dialog])
+				if ($_GET['run'] == "item_list" and $_GET['dialog'])
 				{
-					$tab_io->activate($_GET[dialog]);
+					$tab_io->activate($_GET['dialog']);
 				}
 				else
 				{

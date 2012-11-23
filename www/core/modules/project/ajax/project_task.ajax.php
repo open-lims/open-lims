@@ -61,55 +61,55 @@ class ProjectTaskAjax
 			{
 				foreach($list_array as $key => $value)
 				{
-					$start_date = new DatetimeHandler($list_array[$key][start_date]);
-					$end_date = new DatetimeHandler($list_array[$key][end_date]." ".$list_array[$key][end_time]);
+					$start_date = new DatetimeHandler($list_array[$key]['start_date']);
+					$end_date = new DatetimeHandler($list_array[$key]['end_date']." ".$list_array[$key]['end_time']);
 					
-					$list_array[$key][start_date] = $start_date->get_formatted_string("jS M Y");
-					$list_array[$key][end_date] = $end_date->get_formatted_string("jS M Y");
-					$list_array[$key][end_time] = $end_date->get_formatted_string("H:i");
+					$list_array[$key]['start_date'] = $start_date->get_formatted_string("jS M Y");
+					$list_array[$key]['end_date'] = $end_date->get_formatted_string("jS M Y");
+					$list_array[$key]['end_time'] = $end_date->get_formatted_string("H:i");
 					
-					if ($list_array[$key][whole_day] == "t")
+					if ($list_array[$key]['whole_day'] == "t")
 					{
-						$list_array[$key][end_time] = "whole day";
+						$list_array[$key]['end_time'] = "whole day";
 					}
 					
-					if ($list_array[$key][is_status_process] or $list_array[$key][is_process])
+					if ($list_array[$key]['is_status_process'] or $list_array[$key]['is_process'])
 					{
-						$project_task = new ProjectTask($list_array[$key][id]);
+						$project_task = new ProjectTask($list_array[$key]['id']);
 					}
 									
-					if ($list_array[$key][is_status_process])
+					if ($list_array[$key]['is_status_process'])
 					{
-						$list_array[$key][type] = "Status Rel. Task";
-						$list_array[$key][name] =  $project_task->get_name();
+						$list_array[$key]['type'] = "Status Rel. Task";
+						$list_array[$key]['name'] =  $project_task->get_name();
 					}
 					
-					if ($list_array[$key][is_process])
+					if ($list_array[$key]['is_process'])
 					{
-						$list_array[$key][type] = "Task";
+						$list_array[$key]['type'] = "Task";
 					}
 					
-					if ($list_array[$key][is_milestone])
+					if ($list_array[$key]['is_milestone'])
 					{
-						$list_array[$key][type] = "Milestone";
+						$list_array[$key]['type'] = "Milestone";
 					}
 					else
 					{
-						$list_array[$key][progress] = "<img src='core/images/status_bar.php?length=100&height=15&linecolor=A0A0A0&color=".$project_task->get_color()."&value=".$project_task->get_progress()."' />";
+						$list_array[$key]['progress'] = "<img src='core/images/status_bar.php?length=100&height=15&linecolor=A0A0A0&color=".$project_task->get_color()."&value=".$project_task->get_progress()."' />";
 					}
 					
 					$paramquery = array();
-					$paramquery[session_id] = $_GET[session_id];
-					$paramquery[username] = $_GET[username];
-					$paramquery[nav] = "project";
-					$paramquery[run] = "task_detail";
-					$paramquery[id] = $list_array[$key][id];
+					$paramquery['session_id'] = $_GET['session_id'];
+					$paramquery['username'] = $_GET['username'];
+					$paramquery['nav'] = "project";
+					$paramquery['run'] = "task_detail";
+					$paramquery['id'] = $list_array[$key]['id'];
 					$params = http_build_query($paramquery,'','&#38;');
 					
-					$tmp_name = $list_array[$key][name];
-					unset($list_array[$key][name]);
-					$list_array[$key][name][content] = $tmp_name;
-					$list_array[$key][name][link] = $params;
+					$tmp_name = $list_array[$key]['name'];
+					unset($list_array[$key]['name']);
+					$list_array[$key]['name']['content'] = $tmp_name;
+					$list_array[$key]['name']['link'] = $params;
 				}
 				
 			}

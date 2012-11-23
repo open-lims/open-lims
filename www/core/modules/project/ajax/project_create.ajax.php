@@ -65,19 +65,19 @@ class ProjectCreateAjax
 					
 							if ($organisation_unit->is_permission($user->get_user_id()) and $organisation_unit->get_stores_data() == true)
 							{
-								$result[$counter][value] = $value;
-								$result[$counter][content] = $organisation_unit->get_name();		
+								$result[$counter]['value'] = $value;
+								$result[$counter]['content'] = $organisation_unit->get_name();		
 			
 								if ($project_organ_unit == $value)
 								{
-									$result[$counter][selected] = "selected";
+									$result[$counter]['selected'] = "selected";
 								}
 								else
 								{
-									$result[$counter][selected] = "";
+									$result[$counter]['selected'] = "";
 								}
 			
-								$result[$counter][disabled] = "";
+								$result[$counter]['disabled'] = "";
 								
 								$counter++;
 							}
@@ -86,10 +86,10 @@ class ProjectCreateAjax
 					
 					if (!$result)
 					{
-						$result[$counter][value] = "0";
-						$result[$counter][content] = "NO ORGANISATION UNIT FOUND!";	
-						$result[$counter][selected] = "";
-						$result[$counter][disabled] = "disabled='disabled'";
+						$result[$counter]['value'] = "0";
+						$result[$counter]['content'] = "NO ORGANISATION UNIT FOUND!";	
+						$result[$counter]['selected'] = "";
+						$result[$counter]['disabled'] = "disabled='disabled'";
 					}
 					$template->set_var("option",$result);
 				}
@@ -109,26 +109,26 @@ class ProjectCreateAjax
 					{
 						foreach($project_array as $key => $value)
 						{
-							$project = new Project($value[id]);
+							$project = new Project($value['id']);
 		
-							for($i=1;$i<=$value[layer];$i++)
+							for($i=1;$i<=$value['layer'];$i++)
 							{
 								$pre_content .= "&nbsp;";
 							}
 					
-							$result[$counter][value] = $value[id];
-							$result[$counter][content] = $pre_content."".$project->get_name();		
+							$result[$counter]['value'] = $value['id'];
+							$result[$counter]['content'] = $pre_content."".$project->get_name();		
 		
-							if ($project_toid == $value[id])
+							if ($project_toid == $value['id'])
 							{
-								$result[$counter][selected] = "selected";
+								$result[$counter]['selected'] = "selected";
 							}
 							else
 							{
-								$result[$counter][selected] = "";
+								$result[$counter]['selected'] = "";
 							}
 		
-							$result[$counter][disabled] = "";
+							$result[$counter]['disabled'] = "";
 							
 							$counter++;
 							
@@ -137,10 +137,10 @@ class ProjectCreateAjax
 					}
 					else
 					{
-						$result[$counter][value] = "0";
-						$result[$counter][content] = "NO PROJECT FOUND!";
-						$result[$counter][selected] = "";
-						$result[$counter][disabled] = "disabled='disabled'";
+						$result[$counter]['value'] = "0";
+						$result[$counter]['content'] = "NO PROJECT FOUND!";
+						$result[$counter]['selected'] = "";
+						$result[$counter]['disabled'] = "disabled='disabled'";
 					}
 					$template->set_var("option",$result);
 				}
@@ -190,10 +190,10 @@ class ProjectCreateAjax
 					foreach($project_template_array as $key => $value)
 					{
 						$project_template_cat = new ProjectTemplateCat($value);
-						$result[$counter][value] = "0";
-						$result[$counter][content] = $project_template_cat->get_name();		
-						$result[$counter][selected] = "";
-						$result[$counter][disabled] = "disabled='disabled'";
+						$result[$counter]['value'] = "0";
+						$result[$counter]['content'] = $project_template_cat->get_name();		
+						$result[$counter]['selected'] = "";
+						$result[$counter]['disabled'] = "disabled='disabled'";
 	
 						$counter++;
 						
@@ -209,39 +209,39 @@ class ProjectCreateAjax
 									 $session->read_value("PROJECT_TYPE") == 3) and
 									($project_sub_template->get_parent_template() == false))
 								{
-									$result[$counter][value] = $sub_value;
-									$result[$counter][content] = "&nbsp;".$project_sub_template->get_name();		
+									$result[$counter]['value'] = $sub_value;
+									$result[$counter]['content'] = "&nbsp;".$project_sub_template->get_name();		
 				
 									
 									if ($project_template == $sub_value)
 									{
-										$result[$counter][selected] = "selected";
+										$result[$counter]['selected'] = "selected";
 									}
 									else
 									{
-										$result[$counter][selected] = "";
+										$result[$counter]['selected'] = "";
 									}
 				
-									$result[$counter][disabled] = "";
+									$result[$counter]['disabled'] = "";
 									$counter++;
 								}
 								elseif (($session->read_value("PROJECT_TYPE") == 2 or 
 									 	  $session->read_value("PROJECT_TYPE") == 4) and
 									   	 ($project_sub_template->get_parent_template() == true))
 								{
-									$result[$counter][value] = $sub_value;
-									$result[$counter][content] = "&nbsp;".$project_sub_template->get_name();		
+									$result[$counter]['value'] = $sub_value;
+									$result[$counter]['content'] = "&nbsp;".$project_sub_template->get_name();		
 				
 									if ($project_template == $sub_value)
 									{
-										$result[$counter][selected] = "selected";
+										$result[$counter]['selected'] = "selected";
 									}
 									else
 									{
-										$result[$counter][selected] = "";
+										$result[$counter]['selected'] = "";
 									}
 				
-									$result[$counter][disabled] = "";
+									$result[$counter]['disabled'] = "";
 									$counter++;
 								}
 							}
@@ -251,10 +251,10 @@ class ProjectCreateAjax
 				}
 				else
 				{
-					$result[$counter][value] = "0";
-					$result[$counter][content] = "NO TEMPLATES FOUND!";	
-					$result[$counter][selected] = "";	
-					$result[$counter][disabled] = "disabled='disabled'";
+					$result[$counter]['value'] = "0";
+					$result[$counter]['content'] = "NO TEMPLATES FOUND!";	
+					$result[$counter]['selected'] = "";	
+					$result[$counter]['disabled'] = "disabled='disabled'";
 				}
 		
 				$template->set_var("option",$result);
@@ -279,17 +279,17 @@ class ProjectCreateAjax
 					
 					foreach($required_array as $key => $value)
 					{						
-						if ($value[xml_element] == "item")
+						if ($value['xml_element'] == "item")
 						{
-							if ($value[type] == "value")
+							if ($value['type'] == "value")
 							{
 								$is_value = true;
 							}
 						}
 						
-						if ($value[xml_element] == "type" and !$value[close] and $is_value == true)
+						if ($value['xml_element'] == "type" and !$value['close'] and $is_value == true)
 						{
-							$value_type_id = $value[id];
+							$value_type_id = $value['id'];
 						}
 					} 
 					

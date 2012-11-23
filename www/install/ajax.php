@@ -104,7 +104,7 @@ else
 		
 		Security::protect_session(true);
 		
-		switch($_GET[run]):
+		switch($_GET['run']):
 		
 			case "get_modules":
 				require_once("classes/install.ajax.php");
@@ -128,7 +128,7 @@ else
 			
 			case "login":
 				require_once("classes/login.ajax.php");
-				echo LoginAjax::login($_POST[username], $_POST[password]);
+				echo LoginAjax::login($_POST['username'], $_POST['password']);
 			break;
 		
 		endswitch;

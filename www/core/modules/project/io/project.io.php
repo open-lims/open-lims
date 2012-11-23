@@ -155,11 +155,11 @@ class ProjectIO
 	{
 		global $project_security;
 		
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
 			if ($project_security->is_access(1, false) == true)
 			{
-				$project = new Project($_GET[project_id]);
+				$project = new Project($_GET['project_id']);
 				$project_owner = new User($project->get_owner_id());
 			
 				$template = new HTMLTemplate("project/project_detail.html");
@@ -175,12 +175,12 @@ class ProjectIO
 				$template->set_var("quota",Convert::convert_byte_1024($project->get_quota()));
 				
 				$owner_paramquery = array();
-				$owner_paramquery[username] = $_GET[username];
-				$owner_paramquery[session_id] = $_GET[session_id];
-				$owner_paramquery[nav] = "project";
-				$owner_paramquery[run] = "common_dialog";
-				$owner_paramquery[dialog] = "user_detail";
-				$owner_paramquery[id] = $project->get_owner_id();
+				$owner_paramquery['username'] = $_GET['username'];
+				$owner_paramquery['session_id'] = $_GET['session_id'];
+				$owner_paramquery['nav'] = "project";
+				$owner_paramquery['run'] = "common_dialog";
+				$owner_paramquery['dialog'] = "user_detail";
+				$owner_paramquery['id'] = $project->get_owner_id();
 				$owner_params = http_build_query($owner_paramquery,'','&#38;');
 				
 				$template->set_var("owner_params", $owner_params);	
@@ -206,11 +206,11 @@ class ProjectIO
 	{
 		global $project_security;
 		
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
 			if ($project_security->is_access(1, false) == true)
 			{
-				$project = new Project($_GET[project_id]);
+				$project = new Project($_GET['project_id']);
 				$project_structure_array = $project->get_project_tree();
 				
 				$template = new HTMLTemplate("project/project_structure.html");
@@ -222,23 +222,23 @@ class ProjectIO
 				
 					foreach($project_structure_array as $key => $value)
 					{
-						$project = new Project($value[id]);
-						$project_security = new ProjectSecurity($value[id]);
+						$project = new Project($value['id']);
+						$project_security = new ProjectSecurity($value['id']);
 						$project_owner = new User($project->get_owner_id());
 						
-						$paramquery[username] = $_GET[username];
-						$paramquery[session_id] = $_GET[session_id];
-						$paramquery[nav] = "project";
-						$paramquery[run] = "detail";
-						$paramquery[project_id] = $value[id];
+						$paramquery['username'] = $_GET['username'];
+						$paramquery['session_id'] = $_GET['session_id'];
+						$paramquery['nav'] = "project";
+						$paramquery['run'] = "detail";
+						$paramquery['project_id'] = $value['id'];
 						$params = http_build_query($paramquery, '', '&#38;');
 						
-						$result[$counter][link] = $params;
+						$result[$counter]['link'] 	= $params;
 						
-						$result[$counter][name] 	= $project->get_name();
-						$result[$counter][status] 	= $project->get_current_status_name();
-						$result[$counter][template] = $project->get_template_name();
-						$result[$counter][owner] 	= $project_owner->get_full_name(false);
+						$result[$counter]['name'] 		= $project->get_name();
+						$result[$counter]['status'] 	= $project->get_current_status_name();
+						$result[$counter]['template'] 	= $project->get_template_name();
+						$result[$counter]['owner'] 		= $project_owner->get_full_name(false);
 						
 						$involved_array = $project_security->list_involved_users();
 						
@@ -248,30 +248,30 @@ class ProjectIO
 							{
 								$involved_user = new User($involved_value);
 								
-								if ($result[$counter][involved] == "")
+								if ($result[$counter]['involved'] == "")
 								{
-									$result[$counter][involved] = $involved_user->get_full_name(false);
+									$result[$counter]['involved'] = $involved_user->get_full_name(false);
 								}
 								else
 								{
-									$result[$counter][involved] .= ", ".$involved_user->get_full_name(false);
+									$result[$counter]['involved'] .= ", ".$involved_user->get_full_name(false);
 								}
 							}
 						}
 						else
 						{
-							$result[$counter][involved] 	= "";
+							$result[$counter]['involved'] 	= "";
 						}
 		
 						$subproject_paramquery = $_GET;
-						$subproject_paramquery[run] = "new_subproject";
-						$subproject_paramquery[id] = $value[id];
-						unset($subproject_paramquery[nextpage]);
+						$subproject_paramquery['run'] = "new_subproject";
+						$subproject_paramquery['id'] = $value['id'];
+						unset($subproject_paramquery['nextpage']);
 						$subproject_params = http_build_query($subproject_paramquery,'','&#38;');
 		
-						$result[$counter][add_subproject]	= $subproject_params;
+						$result[$counter]['add_subproject']	= $subproject_params;
 						
-						$result[$counter][padding]			= $value[layer];
+						$result[$counter]['padding']		= $value['layer'];
 						
 						$counter++;
 					}

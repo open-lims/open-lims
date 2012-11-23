@@ -67,7 +67,7 @@
 		
 		Security::protect_session();
 		
-		$session = new Session($_GET[session_id]);
+		$session = new Session($_GET['session_id']);
 		$user = new User($session->get_user_id());
 		
 		if ($session->is_valid() == true)

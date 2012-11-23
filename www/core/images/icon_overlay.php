@@ -22,7 +22,7 @@
  */
 
 
-$image = "../../".$_GET[image];
+$image = "../../".$_GET['image'];
 $denied_overlay = "../../images/icons/denied_overlay.png";
 	
 if (file_exists($image) and file_exists($denied_overlay))

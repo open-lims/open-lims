@@ -21,23 +21,23 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 
-if ($_GET[length] and $_GET[height] and $_GET[value])
+if ($_GET['length'] and $_GET['height'] and $_GET['value'])
 {
 	$background_red = 255;
 	$background_green = 255;
 	$background_blue = 255;
 
-	if ($_GET[value])
+	if ($_GET['value'])
 	{
-		$value_red = hexdec($_GET[value]{0}."".$_GET[value]{1});
-		$value_green = hexdec($_GET[value]{2}."".$_GET[value]{3});
-		$value_blue = hexdec($_GET[value]{4}."".$_GET[value]{5});
+		$value_red = hexdec($_GET['value']{0}."".$_GET['value']{1});
+		$value_green = hexdec($_GET['value']{2}."".$_GET['value']{3});
+		$value_blue = hexdec($_GET['value']{4}."".$_GET['value']{5});
 	}
 	
 	header("Content-Type: image/png");
 
-	$bar_length = $_GET[length];
-	$bar_height = $_GET[height];
+	$bar_length = $_GET['length'];
+	$bar_height = $_GET['height'];
 
 	$image = imagecreatetruecolor($bar_length, $bar_height);
 	
@@ -45,7 +45,7 @@ if ($_GET[length] and $_GET[height] and $_GET[value])
 
 	imagefill($image, 0, 0, $background);
 
-	if ($_GET[value])
+	if ($_GET['value'])
 	{
 		$fill = imagecolorallocate($image, $value_red, $value_green, $value_blue);
 		imagefilledrectangle($image, 1, 1, $bar_length, $bar_height, $fill);

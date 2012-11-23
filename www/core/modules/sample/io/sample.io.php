@@ -61,7 +61,7 @@ class SampleIO
 	 */
 	public static function list_organisation_unit_related_samples()
 	{
-		if ($_GET[ou_id])
+		if ($_GET['ou_id'])
 		{
 			try
 			{
@@ -237,27 +237,27 @@ class SampleIO
 	{		
 		global $session;
 				
-		if($_GET[run] == "item_add")
+		if($_GET['run'] == "item_add")
 		{	
-			if ($session->is_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]) == true)
+			if ($session->is_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET['idk_unique_id']) == true)
 			{
-				$session->write_value("SAMPLE_ITEM_KEYWORDS", $session->read_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]));
+				$session->write_value("SAMPLE_ITEM_KEYWORDS", $session->read_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET['idk_unique_id']));
 			}
 			else
 			{
 				$session->write_value("SAMPLE_ITEM_KEYWORDS", null);
 			}
 			
-			if ($session->is_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]) == true)
+			if ($session->is_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET['idk_unique_id']) == true)
 			{
-				$session->write_value("SAMPLE_ITEM_DESCRIPTION", $session->read_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]));
+				$session->write_value("SAMPLE_ITEM_DESCRIPTION", $session->read_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET['idk_unique_id']));
 			}
 			else
 			{
 				$session->write_value("SAMPLE_ITEM_DESCRIPTION", null);
 			}
 			
-			if ($_GET[dialog] == "parentsample")
+			if ($_GET['dialog'] == "parentsample")
 			{
 				$session->write_value("SAMPLE_ADD_ROLE", "item_parent", true);
 			}
@@ -309,27 +309,27 @@ class SampleIO
 	{
 		global $session;
 		
-		if($_GET[run] == "item_add")
+		if($_GET['run'] == "item_add")
 		{	
-			if ($session->is_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]) == true)
+			if ($session->is_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET['idk_unique_id']) == true)
 			{
-				$session->write_value("SAMPLE_ITEM_KEYWORDS", $session->read_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]));
+				$session->write_value("SAMPLE_ITEM_KEYWORDS", $session->read_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET['idk_unique_id']));
 			}
 			else
 			{
 				$session->write_value("SAMPLE_ITEM_KEYWORDS", null);
 			}
 			
-			if ($session->is_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]) == true)
+			if ($session->is_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET['idk_unique_id']) == true)
 			{
-				$session->write_value("SAMPLE_ITEM_DESCRIPTION", $session->read_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]));
+				$session->write_value("SAMPLE_ITEM_DESCRIPTION", $session->read_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET['idk_unique_id']));
 			}
 			else
 			{
 				$session->write_value("SAMPLE_ITEM_DESCRIPTION", null);
 			}
 			
-			if ($_GET[dialog] == "parentsample")
+			if ($_GET['dialog'] == "parentsample")
 			{
 				$session->write_value("SAMPLE_CLONE_ROLE", "item_parent", true);
 			}
@@ -403,18 +403,18 @@ class SampleIO
 			}
 		}
 		
-		if (!$_GET[selectpage])
+		if (!$_GET['selectpage'])
 		{
 			$unique_id = uniqid();
 			
-			if ($_POST[keywords])
+			if ($_POST['keywords'])
 			{
-				$session->write_value("ADD_ITEM_TEMP_KEYWORDS_".$unique_id, $_POST[keywords], true);
+				$session->write_value("ADD_ITEM_TEMP_KEYWORDS_".$unique_id, $_POST['keywords'], true);
 			}
 			
-			if ($_POST[description])
+			if ($_POST['description'])
 			{
-				$session->write_value("ADD_ITEM_TEMP_DESCRIPTION_".$unique_id, $_POST[description], true);
+				$session->write_value("ADD_ITEM_TEMP_DESCRIPTION_".$unique_id, $_POST['description'], true);
 			}
 			
 			$template = new HTMLTemplate("sample/add_as_item.html");
@@ -424,8 +424,8 @@ class SampleIO
 			
 			foreach ($_GET as $key => $value)
 			{
-				$result[$counter][name] = $key;
-				$result[$counter][value] = $value;
+				$result[$counter]['name'] = $key;
+				$result[$counter]['value'] = $value;
 				$counter++;
 			}
 		
@@ -436,11 +436,11 @@ class SampleIO
 		}
 		else
 		{			
-			if ($_GET[selectpage] == 1)
+			if ($_GET['selectpage'] == 1)
 			{
 				return self::create($type_array, $category_array, $organisation_unit_id, $holder_class, $holder_id);
 			}
-			elseif ($_GET[selectpage] == 2)
+			elseif ($_GET['selectpage'] == 2)
 			{
 				return self::associate($type_array, $category_array);
 			}
@@ -483,15 +483,15 @@ class SampleIO
 				
 				if ($type_array == null or in_array($sample->get_template_id(), $type_array))
 				{
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $sample->get_name();
-					if ($_POST[sample] == $value)
+					$result[$counter]['value'] = $value;
+					$result[$counter]['content'] = $sample->get_name();
+					if ($_POST['sample'] == $value)
 					{
-						$result[$counter][selected] = "selected";
+						$result[$counter]['selected'] = "selected";
 					}
 					else
 					{
-						$result[$counter][selected] = "";
+						$result[$counter]['selected'] = "";
 					}
 					$counter++;
 				}
@@ -499,9 +499,9 @@ class SampleIO
 		}
 		else
 		{
-			$result[0][value] = 0;
-			$result[0][content] = "You have no samples";
-			$result[0][selected] = "";
+			$result[0]['value'] = 0;
+			$result[0]['content'] = "You have no samples";
+			$result[0]['selected'] = "";
 		}
 		$template->set_var("sample", $result);
 		
@@ -516,11 +516,11 @@ class SampleIO
 	{
 		global $sample_security, $user;
 		
-		if ($_GET[sample_id])
+		if ($_GET['sample_id'])
 		{
 			if ($sample_security->is_access(1, false))
 			{
-				$sample = new Sample($_GET[sample_id]);
+				$sample = new Sample($_GET['sample_id']);
 							
 				$template = new HTMLTemplate("sample/detail.html");
 				
@@ -553,16 +553,16 @@ class SampleIO
 	{
 		global $user, $sample_security;
 
-		if ($_GET[sample_id])
+		if ($_GET['sample_id'])
 		{
 			if ($sample_security->is_access(2, false))
 			{
-				$sample_id = $_GET[sample_id];		
+				$sample_id = $_GET['sample_id'];		
 				$sample = new Sample($sample_id);
 				
-				if ($_GET[nextpage] == 1)
+				if ($_GET['nextpage'] == 1)
 				{
-					if (is_numeric($_POST[location]))
+					if (is_numeric($_POST['location']))
 					{
 						$page_1_passed = true;
 					}
@@ -572,7 +572,7 @@ class SampleIO
 						$error = "You must select a location.";
 					}
 				}
-				elseif($_GET[nextpage] > 1)
+				elseif($_GET['nextpage'] > 1)
 				{
 					$page_1_passed = true;
 				}
@@ -587,7 +587,7 @@ class SampleIO
 					$template = new HTMLTemplate("sample/move.html");
 						
 					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
+					$paramquery['nextpage'] = "1";
 					$params = http_build_query($paramquery,'','&#38;');
 					
 					$template->set_var("params",$params);
@@ -605,16 +605,16 @@ class SampleIO
 						{
 							$sample_location_obj = new Location($value);
 											
-							$result[$counter][value] = $value;
-							$result[$counter][content] = $sample_location_obj->get_name(true);		
+							$result[$counter]['value'] = $value;
+							$result[$counter]['content'] = $sample_location_obj->get_name(true);		
 		
 							$counter++;
 						}
 					}
 					else
 					{
-						$result[$counter][value] = "0";
-						$result[$counter][content] = "NO LOCATIONS FOUND!";
+						$result[$counter]['value'] = "0";
+						$result[$counter]['content'] = "NO LOCATIONS FOUND!";
 					}
 
 					$template->set_var("option",$result);
@@ -624,11 +624,11 @@ class SampleIO
 				else
 				{
 					$paramquery = $_GET;
-					unset($paramquery[nextpage]);
-					$paramquery[run] = "detail";
+					unset($paramquery['nextpage']);
+					$paramquery['run'] = "detail";
 					$params = http_build_query($paramquery);
 					
-					if ($sample->add_location($_POST[location]))
+					if ($sample->add_location($_POST['location']))
 					{
 						Common_IO::step_proceed($params, "Move Sample", "Operation Successful", null);
 					}
@@ -657,24 +657,24 @@ class SampleIO
 	{
 		global $sample_security;
 		
-		if ($_GET[sample_id])
+		if ($_GET['sample_id'])
 		{
 			if ($sample_security->is_access(2, false))
 			{
-				if ($_GET[sure] != "true")
+				if ($_GET['sure'] != "true")
 				{
 					$template = new HTMLTemplate("sample/set_availability.html");
 					
 					$paramquery = $_GET;
-					$paramquery[sure] = "true";
+					$paramquery['sure'] = "true";
 					$params = http_build_query($paramquery);
 					
 					$template->set_var("yes_params", $params);
 							
 					$paramquery = $_GET;
-					unset($paramquery[nextpage]);
-					unset($paramquery[id]);
-					$paramquery[run] = "admin_permission";
+					unset($paramquery['nextpage']);
+					unset($paramquery['id']);
+					$paramquery['run'] = "admin_permission";
 					$params = http_build_query($paramquery);
 					
 					$template->set_var("no_params", $params);
@@ -683,12 +683,12 @@ class SampleIO
 				}
 				else
 				{
-					$sample = new Sample($_GET[sample_id]);
+					$sample = new Sample($_GET['sample_id']);
 					
 					$paramquery = $_GET;
-					unset($paramquery[nextpage]);
-					unset($paramquery[sure]);
-					$paramquery[run] = "detail";
+					unset($paramquery['nextpage']);
+					unset($paramquery['sure']);
+					$paramquery['run'] = "detail";
 					$params = http_build_query($paramquery);
 					
 					if ($sample->get_availability() == true)
@@ -734,13 +734,13 @@ class SampleIO
 	{
 		global $sample_security;
 	
-		if ($_GET[sample_id])
+		if ($_GET['sample_id'])
 		{
 			if ($sample_security->is_access(1, false))
 			{
 				$argument_array = array();
 				$argument_array[0][0] = "sample_id";
-				$argument_array[0][1] = $_GET[sample_id];
+				$argument_array[0][1] = $_GET['sample_id'];
 				
 				$list = new List_IO("SampleLocationHistory", "ajax.php?nav=sample", "list_location_history", "count_location_history", $argument_array, "SampleLocationHistory");
 		
@@ -751,7 +751,7 @@ class SampleIO
 
 				$template = new HTMLTemplate("sample/location_history.html");
 				
-				$sample = new Sample($_GET[sample_id]);
+				$sample = new Sample($_GET['sample_id']);
 				
 				$template->set_var("sample_id",$sample->get_formatted_id());
 				$template->set_var("sample_name","(".$sample->get_name().")");
