@@ -272,15 +272,19 @@ html,body
 }
 #SmallTabArrowLeft
 {
-	width: 16px;
+	width: 20px;
+	float: left;
+	margin-top: 6px;
 }
 #SmallTabArrowRight
 {
-	width: 16px;
+	width: 20px;
+	float: right;
+	margin-top: -20px;
 }
 #SmallTabFooter 
 {
-	clear: left;
+	clear: both;
 	margin: -1px;
 	height: 1px;
 	width: 750px;
