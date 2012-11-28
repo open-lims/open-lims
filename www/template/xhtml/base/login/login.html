@@ -61,43 +61,50 @@ $(document).ready(function()
 });
 </script>
 
-
-<div id="LoginHeader"></div>
-<div id="LoginContainer" class="Form">
-	<div id='LoginTitle'>Login on Open-LIMS Lab-Manager</div>
-	<table id='LoginTable'>
-		<tr>
-			<td>Username:</td>
-			<td><input name='username' type='text' size='20' class='BaseTextfield LoginTextfield' id='BaseLoginUsername' /></td>
-		</tr>
-		<tr>
-			<td>Password:</td>
-			<td><input name='password' type='password' size='20' class='BaseTextfield LoginTextfield' id='BaseLoginPassword' /></td>
-		</tr>
-		<tr>
-			<td>Language:</td>
-			<td>
-				<select class='BaseSelect LoginLanguageSelect' name='language' id='BaseLoginLanguage'>
-					<option value='default' selected='selected'>User Default</option>
-					<option value='0'>-------------</option>
-					
-					<!-- FOREACH BEGIN ([[LANGUAGES]]) -->
-	
-					<option value='[[LANGUAGES:OPTION]]'>[[LANGUAGES:NAME]]</option>
-			
-					<!-- FOREACH END -->
-				</select>
-			</td>
-		</tr>
-		<tr>
-			<td colspan='2'><div class='formError' id='BaseLoginError'></div></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><button type='submit' name='submit' id='BaseLoginLogin'>Login</button></td>
-		</tr>
+<div id="LoginWrapper">
+	<div id="LoginContainer" class="Form">
+		<div id='LoginTitle'>[[LANG:BaseLoginTitle]]</div>
+		<table id='LoginTable'>
+			<tr>
+				<td>Username:</td>
+				<td><input name='username' type='text' size='20' class='BaseTextfield LoginTextfield' id='BaseLoginUsername' /></td>
+			</tr>
+			<tr>
+				<td>Password:</td>
+				<td><input name='password' type='password' size='20' class='BaseTextfield LoginTextfield' id='BaseLoginPassword' /></td>
+			</tr>
+			<tr>
+				<td>Language:</td>
+				<td>
+					<select class='BaseSelect LoginLanguageSelect' name='language' id='BaseLoginLanguage'>
+						<option value='default' selected='selected'>User Default</option>
+						<option value='0'>-------------</option>
+						
+						<!-- FOREACH BEGIN ([[LANGUAGES]]) -->
 		
-	</table>
+						<option value='[[LANGUAGES:OPTION]]'>[[LANGUAGES:NAME]]</option>
+				
+						<!-- FOREACH END -->
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td colspan='2'><div class='formError' id='BaseLoginError'></div></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><button type='submit' name='submit' id='BaseLoginLogin'>Login</button></td>
+			</tr>
+			
+		</table>
+	</div>
+</div>
+<div id="LoginFooter">
+[[PRODUCT]], version: [[PRODUCT_VERSION]], [[FUNCTION]], [[USER]]
+<br />This is free software; It comes with ABSOLUTELY NO WARRANTY.
+<br />Copyright &copy; 2008-2013 by R. Konertz, B. Tunggal, L. Eichinger et al.
+<br />Licensed under General Public License, Version 3 (GPL v3)
+<br />Go to <a href='http://www.open-lims.org'>http://www.open-lims.org</a> for details
 </div>
 
 <div id="BaseLoginWindow" class="BaseBlockUIProceed" style="display:none; cursor: default">

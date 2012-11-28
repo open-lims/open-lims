@@ -212,7 +212,7 @@ class Language // implements LanguageInterface
 	 * @return string
 	 * @todo LATER: implementation (multi-language-support)
 	 */
-	public static function get_current_user_path($path)
+	public static function get_current_lanuage_path($path)
 	{
 		
 	}

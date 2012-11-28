@@ -55,7 +55,12 @@ class Login_IO
 		}
 		
 		$template->set_var("languages",$result);
-			
+
+		$template->set_var("product",constant("PRODUCT"));
+		$template->set_var("product_version",constant("PRODUCT_VERSION"));
+		$template->set_var("function",Registry::get_value("base_product_function"));
+		$template->set_var("user",Registry::get_value("base_product_user"));
+		
 		$template->output();
 	}
 		

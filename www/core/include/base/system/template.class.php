@@ -38,6 +38,7 @@ class Template implements TemplateInterface
 	protected $string;
 	protected $file_path;
 	protected $var_array;
+	private $lanuage_file;
 	
 	/**
 	 * @see TemplateInterface::__construct()
@@ -45,6 +46,8 @@ class Template implements TemplateInterface
 	 */
 	protected function __construct($file_path, $folder_path = null)
 	{
+		$this->lanuage_file = Language::get_current_lanuage_path($file_path);
+		
 		if ($folder_path)
 		{
 			$current_folder_file = constant("WWW_DIR")."/".$folder_path."/".$file_path;
@@ -699,8 +702,18 @@ class Template implements TemplateInterface
 			$current_var = substr($this->string, $start_pos+2, ($end_pos - $start_pos)-2);
 			$current_var_length = strlen($current_var);
 
-			$new_var = $this->get_var_value($current_var);
-			$new_var_length = strlen($new_var);
+			if (strpos($current_var, "LANG:") !== false)
+			{
+				$language_address = str_replace("LANG:","",$current_var);
+				
+				
+				$new_var = "LANG";
+			}
+			else
+			{
+				$new_var = $this->get_var_value($current_var);
+				$new_var_length = strlen($new_var);
+			}
 			
 			$this->string = substr_replace($this->string, $new_var, $start_pos, ($end_pos - $start_pos)+2);
 			
@@ -855,6 +868,10 @@ class Template implements TemplateInterface
 				$this->string = fread($handler, filesize($file));
 				$this->string = str_replace("\\[[","[%OB%]",$this->string);
 				$this->string = str_replace("\\]]","[%CB%]",$this->string);
+				
+				
+				
+				$this->lanuage_file = "";
 			}
 			else
 			{
