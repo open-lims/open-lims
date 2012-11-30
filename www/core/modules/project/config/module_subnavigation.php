@@ -33,7 +33,7 @@ $new_project_paramquery['run'] = "new";
 $new_project_params = http_build_query($new_project_paramquery,'','&#38;');
 
 $sub_menu[0]['params'] = $new_project_params;
-$sub_menu[0]['title'] = "New Project";
+$sub_menu[0]['title'] = Language::get_message("ProjectMainSubNewProject", "navigation");
 
 $my_projects_paramquery['username'] = $_GET['username'];
 $my_projects_paramquery['session_id'] = $_GET['session_id'];
@@ -41,5 +41,5 @@ $my_projects_paramquery['nav'] = "project";
 $my_projects_params = http_build_query($my_projects_paramquery,'','&#38;');
 
 $sub_menu[1]['params'] = $my_projects_params;
-$sub_menu[1]['title'] = "My Projects";
+$sub_menu[1]['title'] = Language::get_message("ProjectMainSubMyProjects", "navigation");
 ?>
