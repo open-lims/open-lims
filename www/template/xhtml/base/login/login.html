@@ -66,26 +66,28 @@ $(document).ready(function()
 		<div id='LoginTitle'>[[LANG:BaseLoginTitle]]</div>
 		<table id='LoginTable'>
 			<tr>
-				<td>Username:</td>
+				<td>[[LANG:BaseLoginUsername]]:</td>
 				<td><input name='username' type='text' size='20' class='BaseTextfield LoginTextfield' id='BaseLoginUsername' /></td>
 			</tr>
 			<tr>
-				<td>Password:</td>
+				<td>[[LANG:BaseLoginPassword]]:</td>
 				<td><input name='password' type='password' size='20' class='BaseTextfield LoginTextfield' id='BaseLoginPassword' /></td>
 			</tr>
 			<tr>
-				<td>Language:</td>
+				<td>[[LANG:BaseLoginLanguage]]:</td>
 				<td>
-					<select class='BaseSelect LoginLanguageSelect' name='language' id='BaseLoginLanguage'>
-						<option value='default' selected='selected'>User Default</option>
-						<option value='0'>-------------</option>
-						
-						<!-- FOREACH BEGIN ([[LANGUAGES]]) -->
-		
-						<option value='[[LANGUAGES:OPTION]]'>[[LANGUAGES:NAME]]</option>
-				
-						<!-- FOREACH END -->
-					</select>
+					<form action="index.php" method="get">
+						<select class='BaseSelect LoginLanguageSelect' name='language_id' id='BaseLoginLanguage' onChange="this.form.submit()">
+							<option value='default' selected='selected'>[[LANG:BaseLoginLanguageDefault]]</option>
+							<option value='0'>-------------</option>
+							
+							<!-- FOREACH BEGIN ([[LANGUAGES]]) -->
+			
+							<option value='[[LANGUAGES:OPTION]]' [[LANGUAGES:SELECTED]]>[[LANGUAGES:NAME]]</option>
+					
+							<!-- FOREACH END -->
+						</select>
+					</form>
 				</td>
 			</tr>
 			<tr>
@@ -93,7 +95,7 @@ $(document).ready(function()
 			</tr>
 			<tr>
 				<td></td>
-				<td><button type='submit' name='submit' id='BaseLoginLogin'>Login</button></td>
+				<td><button type='submit' name='submit' id='BaseLoginLogin'>[[LANG:BaseLoginButton]]</button></td>
 			</tr>
 			
 		</table>

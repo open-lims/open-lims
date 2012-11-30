@@ -38,16 +38,15 @@ class Template implements TemplateInterface
 	protected $string;
 	protected $file_path;
 	protected $var_array;
-	private $lanuage_file;
+	
+	private $language_file;
 	
 	/**
 	 * @see TemplateInterface::__construct()
 	 * @param string $file_path
 	 */
-	protected function __construct($file_path, $folder_path = null)
+	protected function __construct($file_path, $folder_path = null, $language_id = null)
 	{
-		$this->lanuage_file = Language::get_current_lanuage_path($file_path);
-		
 		if ($folder_path)
 		{
 			$current_folder_file = constant("WWW_DIR")."/".$folder_path."/".$file_path;
@@ -61,6 +60,7 @@ class Template implements TemplateInterface
 		{
 			$this->open_file($current_folder_file);
 			$this->file_path = $file_path;
+			$this->language_file = Language::get_current_lanuage_path($current_folder_file, $language_id);
 		}
 		else
 		{
@@ -72,6 +72,7 @@ class Template implements TemplateInterface
 				{
 					$this->open_file($fallback_folder_file);
 					$this->file_path = $file_path;
+					$this->language_file = Language::get_current_lanuage_path($fallback_folder_file, $language_id);
 				}
 				else
 				{
@@ -79,6 +80,7 @@ class Template implements TemplateInterface
 					{
 						$this->open_file("template/".self::$fallback_folder."/".$file_path);
 						$this->file_path = "template/".self::$fallback_folder."/".$file_path;
+						$this->language_file = Language::get_current_lanuage_path("template/".self::$fallback_folder."/".$file_path, $language_id);
 					}
 					else
 					{
@@ -92,6 +94,7 @@ class Template implements TemplateInterface
 				{
 					$this->open_file($folder_path."/".$file_path);
 					$this->file_path = $folder_path."/".$file_path;
+					$this->language_file = Language::get_current_lanuage_path($folder_path."/".$file_path, $language_id);
 				}
 				else
 				{
@@ -704,10 +707,13 @@ class Template implements TemplateInterface
 
 			if (strpos($current_var, "LANG:") !== false)
 			{
-				$language_address = str_replace("LANG:","",$current_var);
-				
-				
-				$new_var = "LANG";
+				if($this->language_file != null)
+				{
+					require_once($this->language_file);
+					
+					$language_address = str_replace("LANG:","",$current_var);
+					$new_var = $LANG[$language_address];
+				}	
 			}
 			else
 			{

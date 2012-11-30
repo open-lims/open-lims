@@ -95,6 +95,7 @@ class Security implements SecurityInterface
 			case("vnav"): // in Left Menu
 			case("username"):
 			case("session_id"):
+			case("language_id"):
 			case("run"):
 			case("dialog"):
 			case("sub_dialog"):

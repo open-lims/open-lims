@@ -133,7 +133,7 @@ class Language // implements LanguageInterface
 		
 		if (is_array($module_array)and count($module_array) >= 1)
 		{
-			$lanugage_folder = $sub_folder = constant("WWW_DIR")."/languages/".$language->get_folder_name();
+			$lanugage_folder = constant("WWW_DIR")."/languages/".$language->get_folder_name();
 			
 			foreach ($module_array as $key => $value)
 			{
@@ -158,15 +158,15 @@ class Language // implements LanguageInterface
 		switch($type):
 		
 			case "exception":
-				$path = "exceptions.lang.php";
+				$path = "generic/exceptions.lang.php";
 			break;
 			
 			case "navigation":
-				$path = "navigation.lang.php";
+				$path = "generic/navigation.lang.php";
 			break;
 			
 			case "dialog":
-				$path = "dialog.lang.php";
+				$path = "generic/dialog.lang.php";
 			break;
 			
 		endswitch;
@@ -212,8 +212,83 @@ class Language // implements LanguageInterface
 	 * @return string
 	 * @todo LATER: implementation (multi-language-support)
 	 */
-	public static function get_current_lanuage_path($path)
+	public static function get_current_lanuage_path($path, $language_id = null)
 	{
+		global $session;
 		
+		if ($path)
+		{
+			$path = str_replace(constant("WWW_DIR"),"",$path);
+			$path = str_replace("\\","/",$path);
+			
+			$path_token = explode("/", $path);
+			$path_token_counter = count($path_token);
+			
+			$language_path_token = array();
+			
+			if (($path_token_counter-1) > 0)
+			{
+				for ($i = ($path_token_counter-1); $i>=0; $i--)
+				{
+					if ($i > 0 and $path_token[($i-1)] == "template")
+					{
+						break;
+					}
+					else
+					{
+						if ($i == ($path_token_counter-1))
+						{
+							$path_token[$i] = str_replace(".html",".lang.php",$path_token[$i]);
+						}
+						array_unshift($language_path_token, $path_token[$i]);
+					}
+				}
+				
+				if (is_numeric($language_id) and Language_Access::exist_id($language_id))
+				{
+					$language = new Language($language_id);
+				}
+				else
+				{
+					if (is_numeric($session_language_id = $session->read_value("LANGUAGE")))
+					{
+						$language = new Language($session_language_id);
+					}
+					else
+					{
+						$language = new Language(1);
+					}
+				}
+								
+				$language_file = constant("WWW_DIR")."/languages/".$language->get_folder_name()."/".implode("/", $language_path_token);
+				
+				if (file_exists($language_file))
+				{
+					return $language_file;
+				}
+				else
+				{
+					$language = new Language(1);				
+					$language_file = constant("WWW_DIR")."/languages/".$language->get_folder_name()."/".implode("/", $language_path_token);
+				
+					if (file_exists($language_file))
+					{
+						return $language_file;
+					}
+					else
+					{
+						return null;
+					}
+				}
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
 	}
 }
