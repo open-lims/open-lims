@@ -704,7 +704,7 @@ class Template implements TemplateInterface
 			
 			$current_var = substr($this->string, $start_pos+2, ($end_pos - $start_pos)-2);
 			$current_var_length = strlen($current_var);
-
+			
 			if (strpos($current_var, "LANG:") !== false)
 			{
 				if($this->language_file != null)
@@ -718,8 +718,10 @@ class Template implements TemplateInterface
 			else
 			{
 				$new_var = $this->get_var_value($current_var);
-				$new_var_length = strlen($new_var);
+				
 			}
+			
+			$new_var_length = strlen($new_var);
 			
 			$this->string = substr_replace($this->string, $new_var, $start_pos, ($end_pos - $start_pos)+2);
 			

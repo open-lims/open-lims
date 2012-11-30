@@ -27,6 +27,6 @@
 	$link[0]['type']			= "home_button";
 	$link[0]['array']['nav']	= "static";
 	$link[0]['array']['run']	= "myorgan";
-	$link[0]['file']			= "organisation_unit/home_buttons/get_to_my.html";
+	$link[0]['file']			= "organisation_unit/home/buttons/get_to_my.html";
 	$link[0]['weight']			= 600;
 ?>

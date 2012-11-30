@@ -1,0 +1,3 @@
+<?php
+$LANG['DataHomeSummaryQuota'] = "Quota";
+?>
