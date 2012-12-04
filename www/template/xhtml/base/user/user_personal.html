@@ -1,0 +1,137 @@
+<!-- CONTAINER BEGIN ("[[LANG:BaseUserPersonalTitle]]") -->
+
+<form action='index.php?[[PARAMS]]' method='post'>
+
+<div class='Form'>
+<div class='FormBox'>
+<div class='FormBoxHeadline'>[[LANG:BaseUserPersonalPersonalTitle]]</div>
+
+<table style='width: 100%'>
+	<tr>
+		<td style='width: 30%;'>[[LANG:BaseUserPersonalGender]]:</td>
+		<td>
+		
+			<!-- IF ([[GENDER]]) -->
+		
+			<input name='gender' type='radio' value='m' checked />[[LANG:BaseUserPersonalGenderMale]]&nbsp;
+			<input name='gender' type='radio' value='f' />[[LANG:BaseUserPersonalGenderFemale]]
+			
+			<!-- ELSE -->
+			
+			<input name='gender' type='radio' value='m' />[[LANG:BaseUserPersonalGenderMale]]&nbsp;
+			<input name='gender' type='radio' value='f' checked />[[LANG:BaseUserPersonalGenderFemale]]
+			
+			<!-- ENDIF -->
+						
+		</td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalFirstName]]: *</td>
+		<td><input type='text' name='forename' value='[[FORENAME]]' class='FormTextfield' size='45' />[[ERROR_0]]</td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalLastName]]: *</td>
+		<td><input type='text' name='surname' value='[[SURNAME]]' class='FormTextfield' size='45' />[[ERROR_1]]</td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalPTitle]]:</td>
+		<td><input type='text' name='title' value='[[TITLE]]' class='FormTextfield' size='45' maxlength='10' /></td>
+	</tr>
+	
+</table>
+
+<div class='FormBoxClear'></div>
+</div>
+
+
+<div class='FormBox'>
+<div class='FormBoxHeadline'>[[LANG:BaseUserPersonalContactTitle]]</div>
+
+<table style='width: 100%'>
+
+	<tr>
+		<td style='width: 30%;'>[[LANG:BaseUserPersonalMail]]: *</td>
+		<td><input type='text' name='mail' value='[[MAIL]]' class='FormTextfield' size='45' />[[ERROR_2]]</td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalInstitution]]:</td>
+		<td><input type='text' name='institution' value='[[INSTITUTION]]' class='FormTextfield' size='45' /></td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalDepartment]]:</td>
+		<td><input type='text' name='department' value='[[DEPARTMENT]]' class='FormTextfield' size='45' /></td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalStreet]]:</td>
+		<td><input type='text' name='street' value='[[STREET]]' class='FormTextfield' size='45' /></td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalZip]]:</td>
+		<td><input type='text' name='zip' value='[[ZIP]]' class='FormTextfield' size='10' maxlength='10' /></td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalCity]]:</td>
+		<td><input type='text' name='city' value='[[CITY]]' class='FormTextfield' size='45' /></td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalCountry]]:</td>
+		<td><input type='text' name='country' value='[[COUNTRY]]' class='FormTextfield' size='45' /></td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalPhone]]:</td>
+		<td><input type='text' name='phone' value='[[PHONE]]' class='FormTextfield' size='45' /></td>
+	</tr>
+	
+</table>
+
+<div class='FormBoxClear'></div>
+</div>
+
+
+<div class='FormBox'>
+<div class='FormBoxHeadline'>[[LANG:BaseUserPersonalInstantMessengerTitle]]</div>
+
+<table style='width: 100%'>
+	
+	<tr>
+		<td style='width: 30%;'>[[LANG:BaseUserPersonalICQ]]:</td>
+		<td><input type='text' name='icq' value='[[ICQ]]' class='FormTextfield' size='45' />[[ERROR_3]]</td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalMSN]]:</td>
+		<td><input type='text' name='msn' value='[[MSN]]' class='FormTextfield' size='45' /></td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalYahoo]]:</td>
+		<td><input type='text' name='yahoo' value='[[YAHOO]]' class='FormTextfield' size='45' /></td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalAIM]]:</td>
+		<td><input type='text' name='aim' value='[[AIM]]' class='FormTextfield' size='45' /></td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalSkype]]:</td>
+		<td><input type='text' name='skype' value='[[SKYPE]]' class='FormTextfield' size='45' /></td>
+	</tr>
+
+</table>
+
+<div class='FormBoxClear'></div>
+</div>
+
+
+
+<div class='FormButtonBox'>
+<button type='submit' id='DataValueAddButton'>[[LANG:BaseGlobalButtonSave]]</button>
+<button type='submit' id='DataValueCancelButton'>[[LANG:BaseGlobalButtonCancel]]</button>
+<div class='FormButtonBoxClear'></div>
+</div>
+</div>
+
+</form>
+<br /><div class='center'><span class='smallTextBlack'>* [[LANG:BaseUserPersonalRequiredFields]]</span></div>
+<br />
+
+					
+<!-- CONTAINER END () -->
+			

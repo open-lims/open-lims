@@ -171,7 +171,7 @@ class UserIO
 		}
 		else
 		{
-			$template = new HTMLTemplate("base/user/user_change_personal.html");
+			$template = new HTMLTemplate("base/user/user_personal.html");
 			
 			$template->set_var("error_0",$error[0]);
 			$template->set_var("error_1",$error[1]);

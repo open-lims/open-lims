@@ -1,4 +1,4 @@
-<!-- CONTAINER BEGIN ("My Profile") -->
+<!-- CONTAINER BEGIN ("[[LANG:BaseUserProfileTitle]]") -->
 
 <br />
 <table class='profileQuickLinks'>
@@ -15,22 +15,22 @@
 		<!-- ENDIF -->	
 		
 		
-		<td class='profileText'><a href='index.php?[[PARAMS_CHANGE_PERSONAL]]'>My Personal Data</a><br />Changes your personal data, e.g. your mail-adress or your name.</td>			
+		<td class='profileText'><a href='index.php?[[PARAMS_CHANGE_PERSONAL]]'>[[LANG:BaseUserProfilePersonalDataTitle]]</a><br />[[LANG:BaseUserProfilePersonalDataText]]</td>			
 		
 		
 		<td class='profileIcon'><a href='index.php?[[PARAMS_MY_SETTINGS]]'><img src='images/icons_large/mysettings_50.png' alt='' border='0' /></a></td>
-		<td class='profileText'><a href='index.php?[[PARAMS_MY_SETTINGS]]'>My Regional Settings</a><br />Sets standard-language, timezone, system of units, system of paper-format, date- and time-format and standard-currency.</td>
+		<td class='profileText'><a href='index.php?[[PARAMS_MY_SETTINGS]]'>[[LANG:BaseUserProfileRegionalSettingsTitle]]</a><br />[[LANG:BaseUserProfileRegionalSettingsText]]</td>
 		
 
 		<!-- IF ([[CAN_CHANGE_PASSWORD]]) -->	
 				
 		<td class='profileIcon'><a href='index.php?[[PARAMS_CHANGE_PASSWORD]]'><img src='images/icons_large/mypassword_50.png' alt='' border='0' /></a></td>
-		<td class='profileText'><a href='index.php?[[PARAMS_CHANGE_PASSWORD]]'>Change My Password</a><br />Changes your personal password for the Open-LIMS login.</td>
+		<td class='profileText'><a href='index.php?[[PARAMS_CHANGE_PASSWORD]]'>[[LANG:BaseUserProfileChangePasswordTitle]]</a><br />[[LANG:BaseUserProfileChangePasswordText]]</td>
 		
 		<!-- ELSE -->
 		
 		<td class='profileIcon'><img src='images/icons_large/mypassword_50_d.png' alt='' border='0' /></td>
-		<td class='profileText'><span class='bold'>Change My Password</span><span class='ProjectOptionsFontDeactivated'><br />Changes your personal password for the Open-LIMS login.</span></td>
+		<td class='profileText'><span class='bold'>[[LANG:BaseUserProfileChangePasswordTitle]]</span><span class='ProjectOptionsFontDeactivated'><br />[[LANG:BaseUserProfileChangePasswordText]]</span></td>
 		
 		<!-- ENDIF -->		
 								
@@ -40,6 +40,3 @@
 <br />
 				
 <!-- CONTAINER END () -->	
-	
-<br />
-<div class='center'><a href='index.php?[[BACK_PARAMS]]'>back</a></div>

@@ -60,6 +60,7 @@ base_form_init = function()
 					$(data.option).parent().children("option:selected").removeAttr("selected");
 					$(data.option).attr("selected", "selected");
 					$(entry).html($(data.option).html());
+					$(data.option).parent().trigger("onchange");
 				});
 				
 				$(option_list).append(list_entry);

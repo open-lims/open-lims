@@ -39,6 +39,7 @@ class Template implements TemplateInterface
 	protected $file_path;
 	protected $var_array;
 	
+	private $global_language_file;
 	private $language_file;
 	
 	/**
@@ -46,7 +47,7 @@ class Template implements TemplateInterface
 	 * @param string $file_path
 	 */
 	protected function __construct($file_path, $folder_path = null, $language_id = null)
-	{
+	{		
 		if ($folder_path)
 		{
 			$current_folder_file = constant("WWW_DIR")."/".$folder_path."/".$file_path;
@@ -60,7 +61,7 @@ class Template implements TemplateInterface
 		{
 			$this->open_file($current_folder_file);
 			$this->file_path = $file_path;
-			$this->language_file = Language::get_current_lanuage_path($current_folder_file, $language_id);
+			$this->language_file = Language::get_current_language_path($current_folder_file, $language_id);
 		}
 		else
 		{
@@ -72,7 +73,7 @@ class Template implements TemplateInterface
 				{
 					$this->open_file($fallback_folder_file);
 					$this->file_path = $file_path;
-					$this->language_file = Language::get_current_lanuage_path($fallback_folder_file, $language_id);
+					$this->language_file = Language::get_current_language_path($fallback_folder_file, $language_id);
 				}
 				else
 				{
@@ -80,7 +81,7 @@ class Template implements TemplateInterface
 					{
 						$this->open_file("template/".self::$fallback_folder."/".$file_path);
 						$this->file_path = "template/".self::$fallback_folder."/".$file_path;
-						$this->language_file = Language::get_current_lanuage_path("template/".self::$fallback_folder."/".$file_path, $language_id);
+						$this->language_file = Language::get_current_language_path("template/".self::$fallback_folder."/".$file_path, $language_id);
 					}
 					else
 					{
@@ -94,7 +95,7 @@ class Template implements TemplateInterface
 				{
 					$this->open_file($folder_path."/".$file_path);
 					$this->file_path = $folder_path."/".$file_path;
-					$this->language_file = Language::get_current_lanuage_path($folder_path."/".$file_path, $language_id);
+					$this->language_file = Language::get_current_language_path($folder_path."/".$file_path, $language_id);
 				}
 				else
 				{
@@ -102,6 +103,7 @@ class Template implements TemplateInterface
 				}
 			}
 		}
+		$this->global_language_file = Language::get_current_global_language_path($language_id);
 	}
 	
 	protected function __destruct()
@@ -707,13 +709,21 @@ class Template implements TemplateInterface
 			
 			if (strpos($current_var, "LANG:") !== false)
 			{
+				if($this->global_language_file != null)
+				{
+					require($this->global_language_file);
+				}
+				
 				if($this->language_file != null)
 				{
 					require_once($this->language_file);
+				}
 					
+				if (isset($LANG))
+				{
 					$language_address = str_replace("LANG:","",$current_var);
 					$new_var = $LANG[$language_address];
-				}	
+				}
 			}
 			else
 			{

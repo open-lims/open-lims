@@ -210,9 +210,56 @@ class Language // implements LanguageInterface
 	 * Returns english (en-gb), if no file was found.
 	 * @param string $path
 	 * @return string
-	 * @todo LATER: implementation (multi-language-support)
 	 */
-	public static function get_current_lanuage_path($path, $language_id = null)
+	public static function get_current_global_language_path($language_id = null)
+	{
+		global $session;
+			
+		if (is_numeric($language_id) and Language_Access::exist_id($language_id))
+		{
+			$language = new Language($language_id);
+		}
+		else
+		{
+			if (is_numeric($session_language_id = $session->read_value("LANGUAGE")))
+			{
+				$language = new Language($session_language_id);
+			}
+			else
+			{
+				$language = new Language(1);
+			}
+		}
+						
+		$language_file = constant("WWW_DIR")."/languages/".$language->get_folder_name()."/base/generic/global.lang.php";
+		
+		if (file_exists($language_file))
+		{
+			return $language_file;
+		}
+		else
+		{
+			$language = new Language(1);				
+			$language_file = constant("WWW_DIR")."/languages/".$language->get_folder_name()."/base/generic/global.lang.php";
+		
+			if (file_exists($language_file))
+			{
+				return $language_file;
+			}
+			else
+			{
+				return null;
+			}
+		}
+	}
+	
+	/**
+	 * Functions returns a valid path of a language templaet file
+	 * Returns english (en-gb), if no file was found.
+	 * @param string $path
+	 * @return string
+	 */
+	public static function get_current_language_path($path, $language_id = null)
 	{
 		global $session;
 		

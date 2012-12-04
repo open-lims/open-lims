@@ -1,13 +1,13 @@
-<!-- CONTAINER BEGIN ("My Settings") -->
+<!-- CONTAINER BEGIN ("Regional Settings") -->
 
 <div class='Form'>
 <div class='FormBox'>
 <div class='FormBoxHeadline'>Country/Language</div>
 
-<table>
+<table style='width: 100%'>
 	
 	<tr>
-		<td width='25%'>Default-Language:</td>
+		<td style='width: 25%;'>Default-Language:</td>
 		<td>
 			<select name='language'>
 			
@@ -44,11 +44,11 @@
 <div class='FormBox'>
 <div class='FormBoxHeadline'>Date/Time</div>
 
-<table>
+<table style='width: 100%'>
 	
 	<tr>
-		<td>Timezone:</td>
-		<td colspan='3'>
+		<td style='width: 25%;'>Timezone:</td>
+		<td colspan='2'>
 			<select name='timezone'>
 			
 				<!-- FOREACH BEGIN ([[TIMEZONE]]) -->
@@ -62,8 +62,12 @@
 	</tr>
 	
 	<tr>
+		<td colspan='3'><br /></td>
+	</tr>
+	
+	<tr>
 		<td></td>
-		<td>Display</td>
+		<td style='width: 30%;'>Display</td>
 		<td>Enter</td>
 	</tr>
 	<tr>
@@ -110,15 +114,15 @@
 <div class='FormBox'>
 <div class='FormBoxHeadline'>Currency/Numbers/Units</div>
 
-<table>
+<table style='width: 100%'>
 	
 	<tr>
-		<td>System of Units:</td>
+		<td style='width: 25%;'>System of Units:</td>
 		<td colspan='3'><select><option>metric</option><option>anglo-american</option></select></td>
 	</tr>
 	<tr>
 		<td>Currency:</td>
-		<td>
+		<td style='width: 30%;'>
 			<select name='currency'>
 					
 				<!-- FOREACH BEGIN ([[CURRENCY]]) -->
@@ -129,7 +133,7 @@
 			
 			</select>
 		</td>
-		<td>Currency Significant Digits:</td>
+		<td style='width: 25%;'>Currency Significant Digits:</td>
 		<td><select><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></td>
 	</tr>
 	
@@ -149,10 +153,10 @@
 <div class='FormBox'>
 <div class='FormBoxHeadline'>Miscellaneous</div>
 
-<table>
+<table style='width: 100%'>
 	
 	<tr>
-		<td>Name Display Format:</td>
+		<td style='width: 25%;'>Name Display Format:</td>
 		<td>
 			<select>
 				<option>Dr. John Doe</option>
