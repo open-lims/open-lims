@@ -62,3 +62,7 @@
   	-webkit-box-shadow: 2px 2px 2px #101010;
  	box-shadow: 2px 2px 2px #101010;
 }
+.LoginLanguageSelect
+{
+	width: 199px;
+}
