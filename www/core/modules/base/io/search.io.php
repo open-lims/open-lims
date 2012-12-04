@@ -50,7 +50,7 @@ class SearchIO
 				$params 					= http_build_query($paramquery,'','&#38;');
 				
 				$search_array[$counter]['params'] 	= $params;
-				$search_array[$counter]['title'] 		= $value['display_name'];
+				$search_array[$counter]['title'] 		= Language::get_message($value['language_address'], "dialog");
 				$search_array[$counter]['icon'] 		= $value['class']::get_icon();
 				$search_array[$counter]['description'] 	= $value['class']::get_description(null);
 				$counter++;

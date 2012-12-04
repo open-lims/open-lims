@@ -373,7 +373,7 @@ class AdminUserIO
 					$paramquery['sub_dialog']	= $value['internal_name'];
 					$params 					= http_build_query($paramquery,'','&#38;');
 					
-					$tab_io->add($value['internal_name'], $value['display_name'], $params, false);
+					$tab_io->add($value['internal_name'], Language::get_message($value['language_address'], "dialog"), $params, false);
 				}
 			}
 			
@@ -646,7 +646,7 @@ class AdminUserIO
 				{
 					require_once($value['class_path']);
 					$module_settings_return = $value['class']::$value['method']($user_id);
-					$module_settings_array[$module_settings_counter]['title'] = $value['display_name'];
+					$module_settings_array[$module_settings_counter]['title'] = Language::get_message($value['language_address'], "dialog");
 					$module_settings_array[$module_settings_counter]['value'] = $module_settings_return['value'];
 					$module_settings_array[$module_settings_counter]['params'] = $module_settings_return['params'];
 					$module_settings_counter++;

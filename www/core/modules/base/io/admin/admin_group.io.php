@@ -223,7 +223,7 @@ class AdminGroupIO
 					$paramquery['sub_dialog']	= $value['internal_name'];
 					$params 					= http_build_query($paramquery,'','&#38;');
 					
-					$tab_io->add($value['internal_name'], $value['display_name'], $params, false);
+					$tab_io->add($value['internal_name'], Language::get_message($value['language_address'], "dialog"), $params, false);
 				}
 			}
 			

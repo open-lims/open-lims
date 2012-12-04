@@ -671,7 +671,7 @@ class SystemHandler implements SystemHandlerInterface
 										foreach($dialog as $dialog_key => $dialog_value)
 										{
 											$base_module_dialog = new BaseModuleDialog_Access(null);
-											if ($base_module_dialog->create($register_key, $dialog_value['type'], $dialog_value['class_path'], $dialog_value['class'], $dialog_value['method'], $dialog_value['internal_name'], $dialog_value['display_name'], $dialog_value['weight']) == null)
+											if ($base_module_dialog->create($register_key, $dialog_value['type'], $dialog_value['class_path'], $dialog_value['class'], $dialog_value['method'], $dialog_value['internal_name'], $dialog_value['language_address'], $dialog_value['weight']) == null)
 											{
 												throw new BaseModuleDialogCreationFailedException();
 											}
@@ -793,7 +793,7 @@ class SystemHandler implements SystemHandlerInterface
 									foreach($dialog as $dialog_key => $dialog_value)
 									{
 										$base_module_dialog = new BaseModuleDialog_Access(null);
-										if ($base_module_dialog->create($base_module_id, $dialog_value['type'], $dialog_value['class_path'], $dialog_value['class'], $dialog_value['method'], $dialog_value['internal_name'], $dialog_value['display_name'], $dialog_value['weight']) == null)
+										if ($base_module_dialog->create($base_module_id, $dialog_value['type'], $dialog_value['class_path'], $dialog_value['class'], $dialog_value['method'], $dialog_value['language_address'], $dialog_value['language_address'], $dialog_value['weight']) == null)
 										{
 											throw new BaseModuleDialogCreationFailedException();
 										}
@@ -955,7 +955,7 @@ class SystemHandler implements SystemHandlerInterface
 	/**
 	 * @see SystemHandlerInterface::get_module_controller()
 	 * @param string $nav
-	 * @return arráy
+	 * @return arrï¿½y
 	 * @throws BaseModuleControllerNotFoundException
 	 * @throws BaseModuleNotFoundException
 	 * @throws BaseModuleMissingException

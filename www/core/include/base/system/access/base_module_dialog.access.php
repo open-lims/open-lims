@@ -36,7 +36,7 @@ class BaseModuleDialog_Access
 	private $class;
 	private $method;
 	private $internal_name;
-	private $display_name;
+	private $language_address;
 	private $weight;
 	private $disabled;
 	
@@ -66,7 +66,7 @@ class BaseModuleDialog_Access
 				$this->class			= $data['class'];
 				$this->method			= $data['method'];
 				$this->internal_name	= $data['internal_name'];
-				$this->display_name		= $data['display_name'];
+				$this->language_address	= $data['language_address'];
 				$this->weight			= $data['weight'];
 				
 				if ($data['disabled'] == 't')
@@ -96,7 +96,7 @@ class BaseModuleDialog_Access
 			unset($this->class_path);
 			unset($this->method);
 			unset($this->internal_name);
-			unset($this->display_name);
+			unset($this->language_address);
 			unset($this->weight);
 		}
 	}
@@ -109,11 +109,11 @@ class BaseModuleDialog_Access
 	 * @param string $method
 	 * @return integer
 	 */
-	public function create($module_id, $dialog_type, $class_path, $class, $method, $internal_name, $display_name, $weight)
+	public function create($module_id, $dialog_type, $class_path, $class, $method, $internal_name, $language_address, $weight)
 	{
 		global $db;
 
-		if (is_numeric($module_id) and $dialog_type and $class and $method and $internal_name and $display_name)
+		if (is_numeric($module_id) and $dialog_type and $class and $method and $internal_name)
 		{
 	 		if (is_numeric($weight))
 	 		{
@@ -124,8 +124,17 @@ class BaseModuleDialog_Access
 	 			$weight_insert = "NULL";
 	 		}
 			
-			$sql_write = "INSERT INTO ".constant("BASE_MODULE_DIALOG_TABLE")." (id, module_id, dialog_type, class_path, class, method, internal_name, display_name, weight, disabled) " .
-								"VALUES (nextval('".self::BASE_MODULE_DIALOG_PK_SEQUENCE."'::regclass),'".$module_id."','".$dialog_type."','".$class_path."','".$class."','".$method."','".$internal_name."','".$display_name."',".$weight_insert.",'f')";		
+			if (isset($language_address))
+	 		{
+	 			$language_address_insert = "'".$language_address."'";
+	 		}
+	 		else
+	 		{
+	 			$language_address_insert = "NULL";
+	 		}
+	 		
+			$sql_write = "INSERT INTO ".constant("BASE_MODULE_DIALOG_TABLE")." (id, module_id, dialog_type, class_path, class, method, internal_name, language_address, weight, disabled) " .
+								"VALUES (nextval('".self::BASE_MODULE_DIALOG_PK_SEQUENCE."'::regclass),'".$module_id."','".$dialog_type."','".$class_path."','".$class."','".$method."','".$internal_name."',".$language_address_insert.",".$weight_insert.",'f')";		
 				
 			$res_write = $db->db_query($sql_write);
 			
@@ -274,11 +283,11 @@ class BaseModuleDialog_Access
 	/**
 	 * @return string
 	 */
-	public function get_display_name()
+	public function get_language_address()
 	{
-		if ($this->display_name)
+		if ($this->language_address)
 		{
-			return $this->display_name;
+			return $this->language_address;
 		}
 		else
 		{
@@ -491,21 +500,21 @@ class BaseModuleDialog_Access
 	}
 	
 	/**
-	 * @param string $display_name
+	 * @param string $language_address
 	 * @return bool
 	 */
-	public function set_display_name($display_name)
+	public function set_language_address($language_address)
 	{
 		global $db;
 
 		if ($this->id and $name)
 		{
-			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET display_name = '".$display_name."' WHERE id = ".$this->id."";
+			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET language_address = '".$language_address."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
 			{
-				$this->display_name = $display_name;
+				$this->language_address = $language_address;
 				return true;
 			}
 			else
@@ -644,7 +653,7 @@ class BaseModuleDialog_Access
 				$result_array[$counter]['class'] 			= $data['class'];
 				$result_array[$counter]['method'] 			= $data['method'];
 				$result_array[$counter]['internal_name'] 	= $data['internal_name'];
-				$result_array[$counter]['display_name'] 	= $data['display_name'];
+				$result_array[$counter]['language_address'] = $data['language_address'];
 				$counter++;
 			}
 			

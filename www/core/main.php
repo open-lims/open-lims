@@ -83,7 +83,7 @@ class Main
 			require_once("include/base/system/autoload.function.php");
 			
 			if ($connection_result == true)
-			{
+			{				
 				SystemConfig::load_module_config();
 				
 				require_once("include/base/system/transaction.class.php");

@@ -192,7 +192,7 @@ class ContentHandler_IO
 							
 							$temp_array = array();
 							$temp_array['params'] 	= $params;
-							$temp_array['title'] 	= $value['display_name'];
+							$temp_array['title'] 	= Language::get_message($value['language_address'], "dialog");
 							array_push($sub_menu, $temp_array);
 							unset($temp_array);
 						}

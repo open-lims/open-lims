@@ -29,7 +29,7 @@
 	$dialog[0]['class']				= "DataRequest";
 	$dialog[0]['method']			= "io_handler";
 	$dialog[0]['internal_name']		= "data";
-	$dialog[0]['display_name']		= "Data";
+	$dialog[0]['language_address']	= "DataDialogItemDataList";
 	$dialog[0]['weight']			= 300;
 	
 	$dialog[1]['type']				= "item_add";
@@ -37,21 +37,19 @@
 	$dialog[1]['class']				= "ValueIO";
 	$dialog[1]['method']			= "add_value_item";
 	$dialog[1]['internal_name']		= "value";
-	$dialog[1]['display_name']		= "Value";
 	
 	$dialog[2]['type']				= "item_add";
 	$dialog[2]['class_path']		= "core/modules/data/io/file.io.php";
 	$dialog[2]['class']				= "FileIO";
 	$dialog[2]['method']			= "upload_as_item";
 	$dialog[2]['internal_name']		= "file";
-	$dialog[2]['display_name']		= "File";
 	
 	$dialog[3]['type']				= "search";
 	$dialog[3]['class_path']		= "core/modules/data/io/data_search.io.php";
 	$dialog[3]['class']				= "DataSearchIO";
 	$dialog[3]['method']			= "search";
 	$dialog[3]['internal_name']		= "ffv_search";
-	$dialog[3]['display_name']		= "File/Folder/Value Search";
+	$dialog[3]['language_address']	= "DataDialogFFVSearch";
 	$dialog[3]['weight']			= 600;
 	
 	$dialog[4]['type']				= "module_admin";
@@ -59,7 +57,7 @@
 	$dialog[4]['class']				= "AdminValueTemplateIO";
 	$dialog[4]['method']			= "handler";
 	$dialog[4]['internal_name']		= "value_template";
-	$dialog[4]['display_name']		= "Value Templates";
+	$dialog[4]['language_address']	= "DataDialogAdminMenuValueTemplates";
 	$dialog[4]['weight']			= 100;
 	
 	$dialog[5]['type']				= "admin_home_box";
@@ -67,7 +65,6 @@
 	$dialog[5]['class']				= "AdminDataIO";
 	$dialog[5]['method']			= "home_dialog";
 	$dialog[5]['internal_name']		= "data";
-	$dialog[5]['display_name']		= "data";
 	$dialog[5]['weight']			= "100";
 	
 	$dialog[6]['type']				= "user_module_detail_setting";
@@ -75,7 +72,7 @@
 	$dialog[6]['class']				= "DataIO";
 	$dialog[6]['method']			= "get_user_module_detail_setting";
 	$dialog[6]['internal_name']		= "user_quota";
-	$dialog[6]['display_name']		= "User Quota";
+	$dialog[6]['language_address']	= "DataDialogModuleDetailUserQuota";
 	$dialog[6]['weight']			= 100;
 	
 	$dialog[7]['type']				= "module_value_change";
@@ -83,21 +80,20 @@
 	$dialog[7]['class']				= "DataIO";
 	$dialog[7]['method']			= "change_quota";
 	$dialog[7]['internal_name']		= "user_quota";
-	$dialog[7]['display_name']		= "User Quota";
+	$dialog[7]['language_address']	= "DataDialogModuleValueChangeUserQuota";
 	
 	$dialog[8]['type']				= "common_dialog";
 	$dialog[8]['class_path']		= "core/modules/data/io/file.io.php";
 	$dialog[8]['class']				= "FileIO";
 	$dialog[8]['method']			= "upload";
 	$dialog[8]['internal_name']		= "file_add";
-	$dialog[8]['display_name']		= "File";
 		
 	$dialog[9]['type']				= "base_left_navigation";
 	$dialog[9]['class_path']		= "core/modules/data/io/navigation/data_navigation.io.php";
 	$dialog[9]['class']				= "DataNavigationIO";
 	$dialog[9]['method']			= "get_html";
 	$dialog[9]['internal_name']		= "data";
-	$dialog[9]['display_name']		= "Data";
+	$dialog[9]['language_address']	= "DataDialogLeftNavigation";
 	$dialog[9]['weight']			= 400;
 	
 	$dialog[10]['type']				= "item_report";
@@ -105,7 +101,6 @@
 	$dialog[10]['class']			= "DataReportIO";
 	$dialog[10]['method']			= "get_data_item_report";
 	$dialog[10]['internal_name']	= "data_item_report";
-	$dialog[10]['display_name']		= "Data Item Report";
 	$dialog[10]['weight']			= 100;
 	
 	$dialog[11]['type']				= "item_assistant_list";
@@ -113,7 +108,6 @@
 	$dialog[11]['class']			= "FileIO";
 	$dialog[11]['method']			= "list_file_items";
 	$dialog[11]['internal_name']	= "data";
-	$dialog[11]['display_name']		= "Data";
 	$dialog[11]['weight']			= 100;
 	
 	$dialog[12]['type']				= "home_summary_left";
@@ -121,7 +115,6 @@
 	$dialog[12]['class']			= "DataHomeIO";
 	$dialog[12]['method']			= "quota";
 	$dialog[12]['internal_name']	= "data";
-	$dialog[12]['display_name']		= "Data";
 	$dialog[12]['weight']			= 300;
 	
 	$dialog[13]['type']				= "home_summary_right";
@@ -129,7 +122,6 @@
 	$dialog[13]['class']			= "DataHomeIO";
 	$dialog[13]['method']			= "used_diskspace";
 	$dialog[13]['internal_name']	= "data";
-	$dialog[13]['display_name']		= "Data";
 	$dialog[13]['weight']			= 300;
 	
 	$dialog[14]['type']				= "item_edit";
@@ -137,5 +129,4 @@
 	$dialog[14]['class']			= "ValueIO";
 	$dialog[14]['method']			= "edit_value_item";
 	$dialog[14]['internal_name']	= "value";
-	$dialog[14]['display_name']		= "Value";
 ?>

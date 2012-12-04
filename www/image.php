@@ -33,6 +33,8 @@
 
  	SystemConfig::load_system_config("config/main.php");
  	
+ 	date_default_timezone_set($server['timezone']);
+ 	
 	require_once("core/db/db.php");
 		
 	$database = SystemConfig::get_database();

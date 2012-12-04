@@ -29,7 +29,6 @@
 	$dialog[0]['class']			= "OrganiserIO";
 	$dialog[0]['method']		= "list_upcoming_appointments";
 	$dialog[0]['internal_name']	= "personal_appointments";
-	$dialog[0]['display_name']	= "Personal Appointments";
 	$dialog[0]['weight']		= 200;
 	
 	$dialog[1]['type']			= "home_today_box";
@@ -37,6 +36,5 @@
 	$dialog[1]['class']			= "OrganiserIO";
 	$dialog[1]['method']		= "list_upcoming_tasks";
 	$dialog[1]['internal_name']	= "todo";
-	$dialog[1]['display_name']	= "Todo";
 	$dialog[1]['weight']		= 300;
 ?>

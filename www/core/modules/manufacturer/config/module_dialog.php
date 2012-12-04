@@ -29,5 +29,4 @@
 	$dialog[0]['class']			= "ManufacturerIO";
 	$dialog[0]['method']		= "list_manufacturers";
 	$dialog[0]['internal_name']	= "list_manufacturers";
-	$dialog[0]['display_name']	= "Manufacturer List";
 ?>

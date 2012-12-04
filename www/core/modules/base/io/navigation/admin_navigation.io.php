@@ -141,7 +141,7 @@ class AdminNavigationIO
 				}
 				
 				$organisation_admin_navigation_array[$counter]['params'] = $params;
-				$organisation_admin_navigation_array[$counter]['title'] = $value['display_name'];
+				$organisation_admin_navigation_array[$counter]['title'] = Language::get_message($value['language_address'], "dialog");
 				$counter++;
 			}
 		}
@@ -186,7 +186,7 @@ class AdminNavigationIO
 				}
 				
 				$module_admin_navigation_array[$counter]['params'] = $params;
-				$module_admin_navigation_array[$counter]['title'] = $value['display_name'];
+				$module_admin_navigation_array[$counter]['title'] = Language::get_message($value['language_address'], "dialog");
 				$counter++;
 			}
 		}

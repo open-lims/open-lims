@@ -25,6 +25,7 @@
  * 
  */
 $server['main_folder']							= "D:/web/open-lims";
+$server['timezone']								= "Europe/Berlin";
 
 $database['type'] 								= "postgres";
 $database['database'] 							= "open-lims";
