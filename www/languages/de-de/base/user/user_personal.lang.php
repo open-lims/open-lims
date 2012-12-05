@@ -22,5 +22,11 @@ $LANG['BaseUserPersonalMSN'] = "MSN";
 $LANG['BaseUserPersonalYahoo'] = "Yahoo";
 $LANG['BaseUserPersonalAIM'] = "AIM";
 $LANG['BaseUserPersonalSkype'] = "Skype";
+$LANG['BaseUserPersonalLync'] = "Lync";
+$LANG['BaseUserPersonalJabber'] = "Jabber";
 $LANG['BaseUserPersonalRequiredFields'] = "benötigte Angaben";
+$LANG['BaseUserPersonalError1'] = "Bitte geben Sie einen Vornamen an.";
+$LANG['BaseUserPersonalError2'] = "Bitte geben Sie einen Nachnamen an.";
+$LANG['BaseUserPersonalError3'] = "Bitte geben Sie eine gültige E-Mail-Adresse an.";
+$LANG['BaseUserPersonalError4'] = "Diese ICQ-Nummer ist nicht gültig.";
 ?>

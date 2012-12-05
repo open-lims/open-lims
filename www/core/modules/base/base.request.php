@@ -118,12 +118,36 @@ class BaseRequest
 
 			case "get_users_in_option":
 				require_once("common/ajax/user_common.ajax.php");
-				echo UserAjax::get_users_in_option($_POST['string']);
+				echo UserCommonAjax::get_users_in_option($_POST['string']);
 			break;
 			
 			case "get_groups_in_option":
 				require_once("common/ajax/user_common.ajax.php");
-				echo UserAjax::get_groups_in_option($_POST['string']);
+				echo UserCommonAjax::get_groups_in_option($_POST['string']);
+			break;
+			
+			case "user_profile_personal_data_change":
+				require_once("ajax/user.ajax.php");
+				echo UserAjax::profile_personal_data_change($_POST['gender'], 
+						$_POST['forename'], 
+						$_POST['surname'], 
+						$_POST['title'], 
+						$_POST['mail'], 
+						$_POST['institution'], 
+						$_POST['department'], 
+						$_POST['street'], 
+						$_POST['zip'], 
+						$_POST['city'], 
+						$_POST['country'], 
+						$_POST['phone'], 
+						$_POST['icq'], 
+						$_POST['msn'], 
+						$_POST['yahoo'], 
+						$_POST['aim'], 
+						$_POST['skype'], 
+						$_POST['lync'], 
+						$_POST['jabber']
+						);
 			break;
 			
 			

@@ -79,269 +79,187 @@ class UserIO
 	{
 		global $user;
 		
-		$no_error = false;
-		if ($_GET['nextpage'] == 1)
+		$template = new HTMLTemplate("base/user/user_personal.html");
+		
+		$template->set_var("session_id", $_GET['session_id']);
+		$template->set_var("retrace", "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=base&run=user_profile");
+		
+		$gender = $user->get_profile("gender");
+		
+		if ($gender == "m")
 		{
-			$no_error = true;
-			
-			if (!$_POST['forename'])
-			{
-				$no_error = false;
-				$error[0] = "<br /><span class='formError'>This field cannot be empty</span>";
-			}
-			else
-			{
-				$error[0] = "";
-			}
-			
-			if (!$_POST['surname'])
-			{
-				$no_error = false;
-				$error[1] = "<br /><span class='formError'>This field cannot be empty</span>";
-			}
-			else
-			{
-				$error[1] = "";
-			}
-			
-			if (!$_POST['mail'])
-			{
-				$no_error = false;
-				$error[2] = "<br /><span class='formError'>This field cannot be empty</span>";
-			}
-			else
-			{
-				$error[2] = "";
-			}
-			
-			if ($_POST['icq'])
-			{
-				if (!is_numeric($_POST['icq']))
-				{
-					$no_error = false;
-					$error[3] = "<br /><span class='formError'>The value is invalid</span>";
-				}
-				else
-				{
-					$error[3] = "";
-				}
-			}
-			else
-			{
-				$error[3] = "";
-			}
+			$template->set_var("gender", true);
 		}
 		else
 		{
-			$error[0] = "";
-			$error[1] = "";
-			$error[2] = "";
-			$error[3] = "";
+			$template->set_var("gender", false);
 		}
 		
-		
-		if ($no_error == true)
+		if ($user->get_profile("forename"))
 		{
-			$paramquery = $_GET;
-			unset($paramquery['nextpage']);
-			$paramquery['run'] = "user_profile";
-			$params = http_build_query($paramquery);
-			
-			Common_IO::step_proceed($params, "Change Personal Data", "Data Changed",null);
-			
-			$user->set_profile("gender",$_POST['gender']);
-			$user->set_profile("title",$_POST['title']);
-			$user->set_profile("forename",$_POST['forename']);
-			$user->set_profile("surname",$_POST['surname']);
-			
-			$user->set_profile("mail",$_POST['mail']);
-			$user->set_profile("institution",$_POST['institution']);
-			$user->set_profile("department",$_POST['department']);
-			$user->set_profile("street",$_POST['street']);
-			$user->set_profile("zip",$_POST['zip']);
-			$user->set_profile("city",$_POST['city']);
-			$user->set_profile("country",$_POST['country']);
-			$user->set_profile("phone",$_POST['phone']);
-			
-			$user->set_profile("icq",$_POST['icq']);
-			$user->set_profile("msn",$_POST['msn']);
-			$user->set_profile("yahoo",$_POST['yahoo']);
-			$user->set_profile("aim",$_POST['aim']);
-			$user->set_profile("skype",$_POST['skype']);
+			$template->set_var("forename",$user->get_profile("forename"));
 		}
 		else
 		{
-			$template = new HTMLTemplate("base/user/user_personal.html");
-			
-			$template->set_var("error_0",$error[0]);
-			$template->set_var("error_1",$error[1]);
-			$template->set_var("error_2",$error[2]);
-			$template->set_var("error_3",$error[3]);
-			
-			$paramquery = $_GET;
-			$paramquery['nextpage'] = 1;
-			$params = http_build_query($paramquery);
-			
-			$template->set_var("params", $params);
-			
-			$gender = $user->get_profile("gender");
-			
-			if ($gender == "m")
-			{
-				$template->set_var("gender", true);
-			}
-			else
-			{
-				$template->set_var("gender", false);
-			}
-			
-			if ($user->get_profile("forename"))
-			{
-				$template->set_var("forename",$user->get_profile("forename"));
-			}
-			else
-			{
-				$template->set_var("forename","");
-			}
-			
-			if ($user->get_profile("surname"))
-			{
-				$template->set_var("surname",$user->get_profile("surname"));
-			}
-			else
-			{
-				$template->set_var("surname","");
-			}
-			
-			if ($user->get_profile("title"))
-			{
-				$template->set_var("title",$user->get_profile("title"));
-			}
-			else
-			{
-				$template->set_var("title","");
-			}
-			
-			
-			if ($user->get_profile("mail"))
-			{
-				$template->set_var("mail",$user->get_profile("mail"));
-			}
-			else
-			{
-				$template->set_var("mail","");
-			}
-			
-			if ($user->get_profile("institution"))
-			{
-				$template->set_var("institution",$user->get_profile("institution"));
-			}
-			else
-			{
-				$template->set_var("institution","");
-			}
-			
-			if ($user->get_profile("department"))
-			{
-				$template->set_var("department",$user->get_profile("department"));
-			}
-			else
-			{
-				$template->set_var("department","");
-			}
-			
-			if ($user->get_profile("street"))
-			{
-				$template->set_var("street",$user->get_profile("street"));
-			}
-			else
-			{
-				$template->set_var("street","");
-			}
-			
-			if ($user->get_profile("zip"))
-			{
-				$template->set_var("zip",$user->get_profile("zip"));
-			}
-			else
-			{
-				$template->set_var("zip","");
-			}
-			
-			if ($user->get_profile("city"))
-			{
-				$template->set_var("city",$user->get_profile("city"));
-			}
-			else
-			{
-				$template->set_var("city","");
-			}
-			
-			if ($user->get_profile("country"))
-			{
-				$template->set_var("country",$user->get_profile("country"));
-			}
-			else
-			{
-				$template->set_var("country","");
-			}
-			
-			if ($user->get_profile("phone"))
-			{
-				$template->set_var("phone",$user->get_profile("phone"));
-			}
-			else
-			{
-				$template->set_var("phone","");
-			}
-
-
-			if ($user->get_profile("icq"))
-			{
-				$template->set_var("icq",$user->get_profile("icq"));
-			}
-			else
-			{
-				$template->set_var("icq","");
-			}
-			
-			if ($user->get_profile("msn"))
-			{
-				$template->set_var("msn",$user->get_profile("msn"));
-			}
-			else
-			{
-				$template->set_var("msn","");
-			}
-			
-			if ($user->get_profile("yahoo"))
-			{
-				$template->set_var("yahoo",$user->get_profile("yahoo"));
-			}
-			else
-			{
-				$template->set_var("yahoo","");
-			}
-			
-			if ($user->get_profile("aim"))
-			{
-				$template->set_var("aim",$user->get_profile("aim"));
-			}
-			else
-			{
-				$template->set_var("aim","");
-			}
-			
-			if ($user->get_profile("skype"))
-			{
-				$template->set_var("skype",$user->get_profile("skype"));
-			}
-			else
-			{
-				$template->set_var("skype","");
-			}
-			$template->output();
+			$template->set_var("forename","");
 		}
+		
+		if ($user->get_profile("surname"))
+		{
+			$template->set_var("surname",$user->get_profile("surname"));
+		}
+		else
+		{
+			$template->set_var("surname","");
+		}
+		
+		if ($user->get_profile("title"))
+		{
+			$template->set_var("title",$user->get_profile("title"));
+		}
+		else
+		{
+			$template->set_var("title","");
+		}
+		
+		
+		if ($user->get_profile("mail"))
+		{
+			$template->set_var("mail",$user->get_profile("mail"));
+		}
+		else
+		{
+			$template->set_var("mail","");
+		}
+		
+		if ($user->get_profile("institution"))
+		{
+			$template->set_var("institution",$user->get_profile("institution"));
+		}
+		else
+		{
+			$template->set_var("institution","");
+		}
+		
+		if ($user->get_profile("department"))
+		{
+			$template->set_var("department",$user->get_profile("department"));
+		}
+		else
+		{
+			$template->set_var("department","");
+		}
+		
+		if ($user->get_profile("street"))
+		{
+			$template->set_var("street",$user->get_profile("street"));
+		}
+		else
+		{
+			$template->set_var("street","");
+		}
+		
+		if ($user->get_profile("zip"))
+		{
+			$template->set_var("zip",$user->get_profile("zip"));
+		}
+		else
+		{
+			$template->set_var("zip","");
+		}
+		
+		if ($user->get_profile("city"))
+		{
+			$template->set_var("city",$user->get_profile("city"));
+		}
+		else
+		{
+			$template->set_var("city","");
+		}
+		
+		if ($user->get_profile("country"))
+		{
+			$template->set_var("country",$user->get_profile("country"));
+		}
+		else
+		{
+			$template->set_var("country","");
+		}
+		
+		if ($user->get_profile("phone"))
+		{
+			$template->set_var("phone",$user->get_profile("phone"));
+		}
+		else
+		{
+			$template->set_var("phone","");
+		}
+
+
+		if ($user->get_profile("icq"))
+		{
+			$template->set_var("icq",$user->get_profile("icq"));
+		}
+		else
+		{
+			$template->set_var("icq","");
+		}
+		
+		if ($user->get_profile("msn"))
+		{
+			$template->set_var("msn",$user->get_profile("msn"));
+		}
+		else
+		{
+			$template->set_var("msn","");
+		}
+		
+		if ($user->get_profile("yahoo"))
+		{
+			$template->set_var("yahoo",$user->get_profile("yahoo"));
+		}
+		else
+		{
+			$template->set_var("yahoo","");
+		}
+		
+		if ($user->get_profile("aim"))
+		{
+			$template->set_var("aim",$user->get_profile("aim"));
+		}
+		else
+		{
+			$template->set_var("aim","");
+		}
+		
+		if ($user->get_profile("skype"))
+		{
+			$template->set_var("skype",$user->get_profile("skype"));
+		}
+		else
+		{
+			$template->set_var("skype","");
+		}
+		
+		if ($user->get_profile("lync"))
+		{
+			$template->set_var("lync",$user->get_profile("lync"));
+		}
+		else
+		{
+			$template->set_var("lync","");
+		}
+		
+		if ($user->get_profile("jabber"))
+		{
+			$template->set_var("jabber",$user->get_profile("jabber"));
+		}
+		else
+		{
+			$template->set_var("jabber","");
+		}
+		
+		$template->output();
 	}
 	
 	public static function change_my_settings()
@@ -607,13 +525,13 @@ class UserIO
 				$template->set_var("username","");
 			}
 			
-			if ($user->get_profile("gender") == "m")
+			if ($gender == "m")
 			{
-				$template->set_var("gender", "male");
+				$template->set_var("gender", true);
 			}
 			else
 			{
-				$template->set_var("gender", "female");
+				$template->set_var("gender", false);
 			}
 			
 			if ($user->get_profile("forename"))
@@ -760,6 +678,24 @@ class UserIO
 			else
 			{
 				$template->set_var("skype","");
+			}
+			
+			if ($user->get_profile("lync"))
+			{
+				$template->set_var("lync",$user->get_profile("lync"));
+			}
+			else
+			{
+				$template->set_var("lync","");
+			}
+			
+			if ($user->get_profile("jabber"))
+			{
+				$template->set_var("jabber",$user->get_profile("jabber"));
+			}
+			else
+			{
+				$template->set_var("jabber","");
 			}
 			
 			$group_array = Group::list_user_releated_groups($_GET['id']);

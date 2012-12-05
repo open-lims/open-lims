@@ -25,7 +25,7 @@
  * User AJAX IO Class
  * @package base
  */
-class UserAjax
+class UserCommonAjax
 {
 	/**
 	 * @param string $string

@@ -27,7 +27,7 @@ ErrorDialog = function(title, message)
 	
 	error_dialog_counter++;
 	
-	$("#BaseErrorDialogs").append("<div id='"+dialog_error_id+"' title='"+title+"' style='display: none;'></div>");
+	$("#Footer").append("<div id='"+dialog_error_id+"' title='"+title+"' style='display: none;'></div>");
 	
 	$("#"+dialog_error_id).dialog({
 		autoOpen: false,

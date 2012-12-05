@@ -706,6 +706,14 @@ class User implements UserInterface {
 			case("skype"):
 				return $this->user_profile->get_skype();
 			break;
+			
+			case("lync"):
+				return $this->user_profile->get_lync();
+			break;
+			
+			case("jabber"):
+				return $this->user_profile->get_jabber();
+			break;
 					
 			default:
 				return null;
@@ -995,6 +1003,14 @@ class User implements UserInterface {
 				return $this->user_profile->set_skype($value);
 			break;
 					
+			case("lync"):
+				return $this->user_profile->set_lync($value);
+			break;
+			
+			case("jabber"):
+				return $this->user_profile->set_jabber($value);
+			break;
+			
 			default:
 				return null;
 			break;

@@ -792,3 +792,11 @@ html,body
 	clear: both;
 }
 
+.BasePlaseWaitWindow
+{
+	text-align: center;	
+}
+.BasePlaseWaitWindow div
+{
+	margin: 30px;
+}
