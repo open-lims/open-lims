@@ -31,9 +31,9 @@ class AdminProjectTemplateCatIO
 	{
 		$list = new List_IO("ProjectAdminTemplateCat", "ajax.php?nav=project", "admin_project_template_cat_list_categories", "admin_project_template_cat_count_categories", "0", "ProjectAdminTemplateCat");
 		
-		$list->add_column("Name", "name", true, null);
-		$list->add_column("Edit", "edit", false, "10%");
-		$list->add_column("Delete", "delete", false, "10%");
+		$list->add_column(Language::get_message("ProjectGeneralListColumnName", "general"), "name", true, null);
+		$list->add_column(Language::get_message("ProjectGeneralListColumnEdit", "general"), "edit", false, "10%");
+		$list->add_column(Language::get_message("ProjectGeneralListColumnDelete", "general"), "delete", false, "10%");
 
 		$template = new HTMLTemplate("project/admin/project_template_cat/list.html");	
 	

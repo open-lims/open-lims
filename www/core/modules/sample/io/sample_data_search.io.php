@@ -224,10 +224,10 @@ class SampleDataSearchIO
 			$list = new List_IO("SampleDataSearch", "ajax.php?nav=sample", "search_sample_data_list_samples", "search_sample_data_count_samples", $argument_array, "SampleDataSearch");
 		
 			$list->add_column("", "symbol", false, "16px");
-			$list->add_column("Name", "name", true, null);
-			$list->add_column("Type", "type", false, null);
-			$list->add_column("Datetime", "datetime", true, null);
-			$list->add_column("Sample", "sample_name", true, null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnName", "general"), "name", true, null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnType", "general"), "type", false, null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnDateTime", "general"), "datetime", true, null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnSample", "general"), "sample_name", true, null);
 			
 			$template = new HTMLTemplate("sample/search/data_search_result.html");
 		

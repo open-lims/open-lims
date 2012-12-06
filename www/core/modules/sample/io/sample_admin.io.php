@@ -135,11 +135,11 @@ class SampleAdminIO
 				$list = new List_IO("SampleAdminPermissionUser", "ajax.php?nav=sample", "admin_list_user_permissions", "admin_count_user_permissions", $argument_array, "SampleAdminPermissionUser");
 				
 				$list->add_column("","symbol",false,"16px");
-				$list->add_column("Username","username",true,null);
-				$list->add_column("Full Name","name",true,null);
-				$list->add_column("Read","read",true,"70px");
-				$list->add_column("Write","write",true,"70px");
-				$list->add_column("Delete","delete",false,"70px");
+				$list->add_column(Language::get_message("SampleGeneralListColumnUser", "general"),"username",true,null);
+				$list->add_column(Language::get_message("SampleGeneralListColumnFullName", "general"),"name",true,null);
+				$list->add_column(Language::get_message("SampleGeneralListColumnRead", "general"),"read",true,"70px");
+				$list->add_column(Language::get_message("SampleGeneralListColumnWrite", "general"),"write",true,"70px");
+				$list->add_column(Language::get_message("SampleGeneralListColumnDelete", "general"),"delete",false,"70px");
 
 				$template = new HTMLTemplate("sample/int_admin/user_permission.html");
 				
@@ -416,8 +416,8 @@ class SampleAdminIO
 				$list = new List_IO("SampleAdminPermissionOrganisationUnit", "ajax.php?nav=sample", "admin_list_organisation_unit_permissions", "admin_count_organisation_unit_permissions", $argument_array, "SampleAdminPermissionOrganisationUnit");
 				
 				$list->add_column("","symbol",false,"16px");
-				$list->add_column("Name","name",true,null);
-				$list->add_column("Delete","delete",false,"70px");
+				$list->add_column(Language::get_message("SampleGeneralListColumnName", "general"),"name",true,null);
+				$list->add_column(Language::get_message("SampleGeneralListColumnDelete", "general"),"delete",false,"70px");
 		
 				$template = new HTMLTemplate("sample/int_admin/ou_permission.html");
 				

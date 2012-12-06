@@ -31,12 +31,12 @@ class AdminProjectTemplateIO
 	{
 		$list = new List_IO("ProjectAdminTemplate", "ajax.php?nav=project", "admin_project_template_list_templates", "admin_project_template_count_templates", "0", "ProjectAdminTemplate");
 		
-		$list->add_column("ID", "id", true, null);
-		$list->add_column("Name", "name", true, null);
-		$list->add_column("File", "file", true, null);
-		$list->add_column("Category", "category", true, null);
-		$list->add_column("Par.", "parent", true, null);
-		$list->add_column("Delete", "delete", false, "7%");
+		$list->add_column(Language::get_message("ProjectGeneralListColumnID", "general"), "id", true, null);
+		$list->add_column(Language::get_message("ProjectGeneralListColumnName", "general"), "name", true, null);
+		$list->add_column(Language::get_message("ProjectGeneralListColumnFile", "general"), "file", true, null);
+		$list->add_column(Language::get_message("ProjectGeneralListColumnCategory", "general"), "category", true, null);
+		$list->add_column(Language::get_message("ProjectGeneralListColumnParent", "general"), "parent", true, null);
+		$list->add_column(Language::get_message("ProjectGeneralListColumnDelete", "general"), "delete", false, "7%");
 
 		$template = new HTMLTemplate("project/admin/project_template/list.html");	
 	

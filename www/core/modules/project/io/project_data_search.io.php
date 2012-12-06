@@ -225,10 +225,10 @@ class ProjectDataSearchIO
 			$list = new List_IO("ProjectDataSearch", "ajax.php?nav=project", "search_project_data_list_projects", "search_project_data_count_projects", $argument_array, "ProjectDataSearch");
 
 			$list->add_column("", "symbol", false, "16px");
-			$list->add_column("Name", "name", true, null);
-			$list->add_column("Type", "type", false, null);
-			$list->add_column("Datetime", "datetime", true, null);
-			$list->add_column("Project", "project_name", true, null);
+			$list->add_column(Language::get_message("ProjectGeneralListColumnName", "general"), "name", true, null);
+			$list->add_column(Language::get_message("ProjectGeneralListColumnType", "general"), "type", false, null);
+			$list->add_column(Language::get_message("ProjectGeneralListColumnDateTime", "general"), "datetime", true, null);
+			$list->add_column(Language::get_message("ProjectGeneralListColumnProject", "general"), "project_name", true, null);
 			
 			$template = new HTMLTemplate("project/search/data_search_result.html");
 		

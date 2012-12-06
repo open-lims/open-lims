@@ -1155,12 +1155,12 @@ class ProjectTaskIO
 				
 				$list = new List_IO("ProjectTaskTableList", "ajax.php?nav=project", "list_project_tasks", "count_project_tasks", $argument_array, "ProjectTaskTableList");
 
-				$list->add_column("Name/Task","name",true,null);
-				$list->add_column("Type","type",true,null);
-				$list->add_column("Start Date","start_date",true,null);
-				$list->add_column("End Date","end_date",true,null);
-				$list->add_column("End Time","end_time",true,null);
-				$list->add_column("Progress","progress",false,null);
+				$list->add_column(Language::get_message("ProjectGeneralListColumnTaskName","general"),"name",true,null);
+				$list->add_column(Language::get_message("ProjectGeneralListColumnType","general"),"type",true,null);
+				$list->add_column(Language::get_message("ProjectGeneralListColumnStartDate","general"),"start_date",true,null);
+				$list->add_column(Language::get_message("ProjectGeneralListColumnEndDate","general"),"end_date",true,null);
+				$list->add_column(Language::get_message("ProjectGeneralListColumnEndTime","general"),"end_time",true,null);
+				$list->add_column(Language::get_message("ProjectGeneralListColumnProgress","general"),"progress",false,null);
 				
 				$template = new HTMLTemplate("project/tasks/table_view.html");
 			

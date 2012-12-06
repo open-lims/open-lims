@@ -46,21 +46,21 @@ class ProjectIO
 		$list = new List_IO("ProjectUserRelated", "ajax.php?nav=project", "list_user_related_projects", "count_user_related_projects", $argument_array, "ProjectAjaxMyProjects");
 		
 		$list->add_column("", "symbol", false, "16px");
-		$list->add_column("Name", "name", true, null);
-		$list->add_column("Organisation Unit", "organisation_unit", true, null);
-		$list->add_column("Date/Time", "datetime", true, null);
-		$list->add_column("Template", "template", true, null);
-		$list->add_column("Status", "status", true, null);
+		$list->add_column(Language::get_message("ProjectGeneralListColumnName", "general"), "name", true, null);
+		$list->add_column(Language::get_message("ProjectGeneralListColumnOrganisationUnit", "general"), "organisation_unit", true, null);
+		$list->add_column(Language::get_message("ProjectGeneralListColumnDateTime", "general"), "datetime", true, null);
+		$list->add_column(Language::get_message("ProjectGeneralListColumnTemplate", "general"), "template", true, null);
+		$list->add_column(Language::get_message("ProjectGeneralListColumnStatus", "general"), "status", true, null);
 
 		$template = new HTMLTemplate("project/list_user.html");
 	
 		if ($user_id == $user->get_user_id())
 		{
-			$template->set_var("title","My Projects");
+			$template->set_var("title",Language::get_message("ProjectGeneralMyProjectsSelf", "general"));
 		}
 		else
 		{
-			$template->set_var("title","Projects of ".$user->get_username());
+			$template->set_var("title",Language::get_message("ProjectGeneralMyProjectsOther", "general")." ".$user->get_username());
 		}
 	
 		$paramquery = array();
@@ -93,11 +93,11 @@ class ProjectIO
 			$list = new List_IO("ProjectOrganisationUnitRelated", "ajax.php?nav=project", "list_organisation_unit_related_projects", "count_organisation_unit_related_projects", $argument_array, "ProjectAjaxOrganisationUnit", 12);
 		
 			$list->add_column("","symbol",false,"16px");
-			$list->add_column("Name","name",true,null);
-			$list->add_column("Owner","owner",true,null);
-			$list->add_column("Date/Time","datetime",true,null);
-			$list->add_column("Template","template",true,null);
-			$list->add_column("Status","status",true,null);
+			$list->add_column(Language::get_message("ProjectGeneralListColumnName", "general"),"name",true,null);
+			$list->add_column(Language::get_message("ProjectGeneralListColumnOwner", "general"),"owner",true,null);
+			$list->add_column(Language::get_message("ProjectGeneralListColumnDateTime", "general"),"datetime",true,null);
+			$list->add_column(Language::get_message("ProjectGeneralListColumnTemplate", "general"),"template",true,null);
+			$list->add_column(Language::get_message("ProjectGeneralListColumnStatus", "general"),"status",true,null);
 		
 			require_once("core/modules/organisation_unit/io/organisation_unit.io.php");
 			$organisation_unit_io = new OrganisationUnitIO();
@@ -136,11 +136,11 @@ class ProjectIO
 			$assistant_io = new AssistantIO("ajax.php?nav=project&run=create_project", "ProjectCreateAssistantField", 0);
 		}
 		
-		$assistant_io->add_screen("Organisation Unit");
-		$assistant_io->add_screen("Project Information");
-		$assistant_io->add_screen("Template");
-		$assistant_io->add_screen("Template Specific Information");
-		$assistant_io->add_screen("Summary");
+		$assistant_io->add_screen(Language::get_message("ProjectGeneralCreateTabOrganisationUnit", "general"));
+		$assistant_io->add_screen(Language::get_message("ProjectGeneralCreateTabProjectInformation", "general"));
+		$assistant_io->add_screen(Language::get_message("ProjectGeneralCreateTabTemplate", "general"));
+		$assistant_io->add_screen(Language::get_message("ProjectGeneralCreateTabTemplateSpecificInformation", "general"));
+		$assistant_io->add_screen(Language::get_message("ProjectGeneralCreateTabSummary", "general"));
 		
 		$template = new HTMLTemplate("project/new_project.html");	
 		$template->set_var("content", $assistant_io->get_content());
@@ -313,11 +313,11 @@ class ProjectIO
 				$template = new HTMLTemplate("project/list_projects_by_item.html");
 				
 				$list->add_column("","symbol",false,16);
-				$list->add_column("Name","name",true,null);
-				$list->add_column("Date/Time","datetime",true,null);
-				$list->add_column("Template","template",true,null);
-				$list->add_column("Owner","owner",true,null);
-				$list->add_column("Status","status",true,null);
+				$list->add_column(Language::get_message("ProjectGeneralListColumnName", "general"),"name",true,null);
+				$list->add_column(Language::get_message("ProjectGeneralListColumnDateTime", "general"),"datetime",true,null);
+				$list->add_column(Language::get_message("ProjectGeneralListColumnTemplate", "general"),"template",true,null);
+				$list->add_column(Language::get_message("ProjectGeneralListColumnOwner", "general"),"owner",true,null);
+				$list->add_column(Language::get_message("ProjectGeneralListColumnStatus", "general"),"status",true,null);
 			}
 			else
 			{
@@ -327,11 +327,11 @@ class ProjectIO
 				
 				$list->add_column("","checkbox",false,"16px", $form_field_name);
 				$list->add_column("","symbol",false,16);
-				$list->add_column("Name","name",false,null);
-				$list->add_column("Date/Time","datetime",false,null);
-				$list->add_column("Template","template",false,null);
-				$list->add_column("Owner","owner",false,null);
-				$list->add_column("Status","status",false,null);
+				$list->add_column(Language::get_message("ProjectGeneralListColumnName", "general"),"name",false,null);
+				$list->add_column(Language::get_message("ProjectGeneralListColumnDateTime", "general"),"datetime",false,null);
+				$list->add_column(Language::get_message("ProjectGeneralListColumnTemplate", "general"),"template",false,null);
+				$list->add_column(Language::get_message("ProjectGeneralListColumnOwner", "general"),"owner",false,null);
+				$list->add_column(Language::get_message("ProjectGeneralListColumnStatus", "general"),"status",false,null);
 			}
 		
 			$template->set_var("list", $list->get_list());

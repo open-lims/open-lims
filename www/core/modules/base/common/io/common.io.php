@@ -35,7 +35,7 @@ class Common_IO
 	}
 	
 	/**
-	 * @todo überarbeiten
+	 * @todo ï¿½berarbeiten
 	 * @param string $title
 	 * @param string $class
 	 * @return string
@@ -82,7 +82,7 @@ class Common_IO
 		
 			$return = "<div class='ResultNextPageBar'>";
 
-			$return .= "<table style='display: inline;'><tr><td><span class='smallTextBlack'>Page ".$page." of ".$max_page."</span></td>";
+			$return .= "<table style='display: inline;'><tr><td><span class='smallTextBlack'>".Language::get_message("BaseGeneralListGeneralPage", "general")." ".$page." ".Language::get_message("BaseGeneralListGeneralOf", "general")." ".$max_page."</span></td>";
 
 			// Previous
 			if ($page == 1) {
@@ -174,29 +174,34 @@ class Common_IO
 	 * @param integer $pages
 	 * @return string
 	 */
-	public static function results_on_page($results, $pages) {
-		
-		if ($results > 1) {
-
-			if ($pages > 1) {
-				return $results." Results on ".$pages." Pages";
-			}else{
-				return $results." Results on ".$pages." Page";
+	public static function results_on_page($results, $pages)
+	{
+		if ($results > 1)
+		{
+			if ($pages > 1)
+			{
+				return $results." ".Language::get_message("BaseGeneralListGeneralResults", "general")." ".$pages." ".Language::get_message("BaseGeneralListGeneralPages", "general")."";
 			}
-			
-		}else{
-			
-			if ($results == 0) {
-				return "0 Results on 1 Page";
-			}else{
-				return $results." Result on 1 Page";
+			else
+			{
+				return $results." ".Language::get_message("BaseGeneralListGeneralResults", "general")." ".$pages." ".Language::get_message("BaseGeneralListGeneralPage", "general")."";
 			}
-			
 		}
-		
+		else
+		{
+			if ($results == 0)
+			{
+				return "0 ".Language::get_message("BaseGeneralListGeneralResults", "general")." 1 ".Language::get_message("BaseGeneralListGeneralPage", "general")."";
+			}
+			else
+			{
+				return $results." ".Language::get_message("BaseGeneralListGeneralResult", "general")." 1 ".Language::get_message("BaseGeneralListGeneralPage", "general")."";
+			}
+		}
 	}
 	
 	/**
+	 * @todo remove later
 	 * @param string $target
 	 * @param string $title
 	 * @param string $text

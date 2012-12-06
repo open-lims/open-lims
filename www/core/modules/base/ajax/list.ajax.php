@@ -29,7 +29,7 @@ class ListAjax
 {
 	public static function get_page_bar($page, $number_of_pages, $css_page_id)
 	{		
-		$pagebar .= "<table style='display: inline;'><tr><td><span class='smallTextBlack'>Page ".$page." of ".$number_of_pages."</span></td>";
+		$pagebar .= "<table style='display: inline;'><tr><td><span class='smallTextBlack'>".Language::get_message("BaseGeneralListGeneralPage", "general")." ".$page." ".Language::get_message("BaseGeneralListGeneralOf", "general")." ".$number_of_pages."</span></td>";
 	
 		// Previous
 		if ($page == 1)

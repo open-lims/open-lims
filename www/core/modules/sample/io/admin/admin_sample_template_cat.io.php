@@ -31,9 +31,9 @@ class AdminSampleTemplateCatIO
 	{
 		$list = new List_IO("SampleAdminTemplateCat", "ajax.php?nav=sample", "admin_sample_template_categorie_list_categories", "admin_sample_template_categorie_count_categories", "0", "SampleAdminTemplateCat");
 				
-		$list->add_column("Name", "name", true, null);
-		$list->add_column("Edit", "edit", false, "10%");
-		$list->add_column("Delete", "delete", false, "10%");
+		$list->add_column(Language::get_message("SampleGeneralListColumnName", "general"), "name", true, null);
+		$list->add_column(Language::get_message("SampleGeneralListColumnEdit", "general"), "edit", false, "10%");
+		$list->add_column(Language::get_message("SampleGeneralListColumnDelete", "general"), "delete", false, "10%");
 		
 		$template = new HTMLTemplate("sample/admin/sample_template_cat/list.html");	
 	

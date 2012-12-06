@@ -169,6 +169,10 @@ class Language // implements LanguageInterface
 				$path = "generic/dialog.lang.php";
 			break;
 			
+			case "general":
+				$path = "generic/general.lang.php";
+			break;
+			
 		endswitch;
 		
 		if ($address)

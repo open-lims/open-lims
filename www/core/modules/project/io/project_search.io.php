@@ -257,11 +257,11 @@ class ProjectSearchIO
 			$list = new List_IO("ProjectSearch", "ajax.php?nav=project", "search_project_list_projects", "search_project_count_projects", $argument_array, "ProjectSearch");
 		
 			$list->add_column("","symbol",false,"16px");
-			$list->add_column("Name","name",true,null);
-			$list->add_column("Organisation Unit","organisation_unit",true,null);
-			$list->add_column("Date/Time","datetime",true,null);
-			$list->add_column("Template","template",true,null);
-			$list->add_column("Status","status",true,null);
+			$list->add_column(Language::get_message("ProjectGeneralListColumnName", "general"),"name",true,null);
+			$list->add_column(Language::get_message("ProjectGeneralListColumnOrganisationUnit", "general"),"organisation_unit",true,null);
+			$list->add_column(Language::get_message("ProjectGeneralListColumnDateTime", "general"),"datetime",true,null);
+			$list->add_column(Language::get_message("ProjectGeneralListColumnTemplate", "general"),"template",true,null);
+			$list->add_column(Language::get_message("ProjectGeneralListColumnStatus", "general"),"status",true,null);
 			
 			
 			$template = new HTMLTemplate("project/search/search_result.html");

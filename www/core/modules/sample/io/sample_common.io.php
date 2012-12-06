@@ -40,7 +40,7 @@ class SampleCommon_IO
 		$params 					= http_build_query($paramquery,'','&#38;');
 		unset($paramquery);
 		
-		$tab_io->add("main", "Main Page", $params, false);
+		$tab_io->add("main", Language::get_message("SampleGeneralDetailTabMainPage", "general"), $params, false);
 		
 					
 		// Parent Item Dialogs

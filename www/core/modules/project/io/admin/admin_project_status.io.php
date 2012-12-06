@@ -31,10 +31,10 @@ class AdminProjectStatusIO
 	{	
 		$list = new List_IO("ProjectAdminStatus", "ajax.php?nav=project", "admin_project_status_list_status", "admin_project_status_count_status", "0", "ProjectAdminStatus");
 
-		$list->add_column("ID", "id", true, null);
-		$list->add_column("Name", "name", true, null);
-		$list->add_column("Edit", "edit", false, "15%");
-		$list->add_column("Delete", "delete", false, "15%");
+		$list->add_column(Language::get_message("ProjectGeneralListColumnID", "general"), "id", true, null);
+		$list->add_column(Language::get_message("ProjectGeneralListColumnName", "general"), "name", true, null);
+		$list->add_column(Language::get_message("ProjectGeneralListColumnEdit", "general"), "edit", false, "15%");
+		$list->add_column(Language::get_message("ProjectGeneralListColumnDelete", "general"), "delete", false, "15%");
 
 		$template = new HTMLTemplate("project/admin/project_status/list.html");	
 	

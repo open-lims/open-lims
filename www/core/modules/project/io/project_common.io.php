@@ -43,11 +43,11 @@ class ProjectCommon_IO
 			$params 					= http_build_query($paramquery,'','&#38;');
 			unset($paramquery);
 			
-			$tab_io->add("main", "Main Page", $params, false);
+			$tab_io->add("main", Language::get_message("ProjectGeneralDetailTabMainPage", "general"), $params, false);
 			
-			$tab_io->add("main2", "Main Page", $params, false);
+			$tab_io->add("main2", Language::get_message("ProjectGeneralDetailTabMainPage", "general"), $params, false);
 			
-			$tab_io->add("main3", "Main Page", $params, false);
+			$tab_io->add("main3", Language::get_message("ProjectGeneralDetailTabMainPage", "general"), $params, false);
 			
 			// Log
 			
@@ -59,7 +59,7 @@ class ProjectCommon_IO
 			$params 					= http_build_query($paramquery,'','&#38;');
 			unset($paramquery);
 			
-			$tab_io->add("log", "Log", $params, false);
+			$tab_io->add("log", Language::get_message("ProjectGeneralDetailTabLog", "general"), $params, false);
 			
 			
 			// Structure
@@ -72,7 +72,7 @@ class ProjectCommon_IO
 			$params 					= http_build_query($paramquery,'','&#38;');
 			unset($paramquery);
 			
-			$tab_io->add("structure", "Structure", $params, false);
+			$tab_io->add("structure", Language::get_message("ProjectGeneralDetailTabStructure", "general"), $params, false);
 			
 			
 			// Schedule
@@ -85,7 +85,7 @@ class ProjectCommon_IO
 			$params 					= http_build_query($paramquery,'','&#38;');
 			unset($paramquery);
 			
-			$tab_io->add("schedule", "Schedule", $params, false);
+			$tab_io->add("schedule", Language::get_message("ProjectGeneralDetailTabSchedule", "general"), $params, false);
 			
 			
 			// Item Lister Dialogs
@@ -130,7 +130,7 @@ class ProjectCommon_IO
 				$params 				= http_build_query($paramquery,'','&#38;');
 			 	unset($paramquery);
 			 
-				$tab_io->add("admin", "Project-Administration", $params, false, false);
+				$tab_io->add("admin", Language::get_message("ProjectGeneralDetailTabAdministration", "general"), $params, false, false);
 			}
 		
 			if ($_GET['run'] != "item_add" and $_GET['run'] != "item_list")

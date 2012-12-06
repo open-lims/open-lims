@@ -53,19 +53,19 @@ class ProjectAdminIO
 				$list = new List_IO("ProjectPermission", "ajax.php?nav=project", "list_project_permissions", "count_project_permissions", $argument_array, "ProjectAjaxMyProjects");
 				
 				$list->add_column("", "symbol", false, "16px");
-				$list->add_column("User/Group","name",true,null);
-				$list->add_column("Type","type",true,null);
-				$list->add_column("Full Name","fullname",true,null);
-				$list->add_column("Created by","createdby",true,null);
-				$list->add_column("RE","re",false,"25px");
-				$list->add_column("SR","sr",false,"25px");
-				$list->add_column("WR","wr",false,"25px");
-				$list->add_column("SW","sw",false,"25px");
-				$list->add_column("RA","ra",false,"25px");
-				$list->add_column("DE","de",false,"25px");
-				$list->add_column("SP","sp",false,"25px");
-				$list->add_column("E","e",false,"16px");
-				$list->add_column("D","d",false,"16px");
+				$list->add_column(Language::get_message("ProjectGeneralListColumnUserGroup", "general"),"name",true,null);
+				$list->add_column(Language::get_message("ProjectGeneralListColumnType", "general"),"type",true,null);
+				$list->add_column(Language::get_message("ProjectGeneralListColumnFullName", "general"),"fullname",true,null);
+				$list->add_column(Language::get_message("ProjectGeneralListColumnCreatedBy", "general"),"createdby",true,null);
+				$list->add_column(Language::get_message("ProjectGeneralListColumnRE", "general"),"re",false,"25px");
+				$list->add_column(Language::get_message("ProjectGeneralListColumnSR", "general"),"sr",false,"25px");
+				$list->add_column(Language::get_message("ProjectGeneralListColumnWR", "general"),"wr",false,"25px");
+				$list->add_column(Language::get_message("ProjectGeneralListColumnSW", "general"),"sw",false,"25px");
+				$list->add_column(Language::get_message("ProjectGeneralListColumnRA", "general"),"ra",false,"25px");
+				$list->add_column(Language::get_message("ProjectGeneralListColumnDE", "general"),"de",false,"25px");
+				$list->add_column(Language::get_message("ProjectGeneralListColumnSP", "general"),"sp",false,"25px");
+				$list->add_column(Language::get_message("ProjectGeneralListColumnE", "general"),"e",false,"16px");
+				$list->add_column(Language::get_message("ProjectGeneralListColumnD", "general"),"d",false,"16px");
 				
 				$template = new HTMLTemplate("project/admin/permission.html");
 				

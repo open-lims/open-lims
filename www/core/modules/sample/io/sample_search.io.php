@@ -285,12 +285,12 @@ class SampleSearchIO
 			$list = new List_IO("SampleSearch", "ajax.php?nav=sample", "search_sample_list_samples", "search_sample_count_samples", $argument_array, "SampleSearch");
 		
 			$list->add_column("","symbol",false,"16px");
-			$list->add_column("Smpl. ID","id",true,"11%");
-			$list->add_column("Sample Name","name",true,null);
-			$list->add_column("Date","datetime",true,null);
-			$list->add_column("Type/Tmpl.","template",true,null);
-			$list->add_column("Curr. Loc.","location",true,null);
-			$list->add_column("AV","av",false,"16px");
+			$list->add_column(Language::get_message("SampleGeneralListColumnSampleID", "general"),"id",true,"11%");
+			$list->add_column(Language::get_message("SampleGeneralListColumnSampleName", "general"),"name",true,null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnDate", "general"),"datetime",true,null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnTypeTemplate", "general"),"template",true,null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnCurrentLocation", "general"),"location",true,null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnAvailable", "general"),"av",false,"16px");
 			
 			$template = new HTMLTemplate("sample/search/search_result.html");
 			

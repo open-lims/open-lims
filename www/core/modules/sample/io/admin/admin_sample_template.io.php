@@ -31,11 +31,11 @@ class AdminSampleTemplateIO
 	{
 		$list = new List_IO("SampleAdminTemplate", "ajax.php?nav=sample", "admin_sample_template_list_templates", "admin_sample_template_count_templates", "0", "SampleAdminTemplate");
 		
-		$list->add_column("ID", "id", true, null);
-		$list->add_column("Name", "name", true, null);
-		$list->add_column("File", "file", true, null);
-		$list->add_column("Category", "category", true, null);
-		$list->add_column("Delete", "delete", false, "7%");
+		$list->add_column(Language::get_message("SampleGeneralListColumnID", "general"), "id", true, null);
+		$list->add_column(Language::get_message("SampleGeneralListColumnName", "general"), "name", true, null);
+		$list->add_column(Language::get_message("SampleGeneralListColumnFile", "general"), "file", true, null);
+		$list->add_column(Language::get_message("SampleGeneralListColumnCategory", "general"), "category", true, null);
+		$list->add_column(Language::get_message("SampleGeneralListColumnDelete", "general"), "delete", false, "7%");
 
 		$template = new HTMLTemplate("sample/admin/sample_template/list.html");	
 	
