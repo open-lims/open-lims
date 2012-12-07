@@ -110,8 +110,8 @@ class DataAjax
 				$first_line_array['symbol']['link'] = $params;
 				$first_line_array['symbol']['content'] = "<img src='images/icons/parent_folder.png' alt='' style='border:0;' />";
 				$first_line_array['name']['link'] = $params;
-				$first_line_array['name']['content'] = "[parent folder]";
-				$first_line_array['type'] = "Parent Folder";
+				$first_line_array['name']['content'] = Language::get_message("DataGeneralTitleParentFolder", "general");
+				$first_line_array['type'] = Language::get_message("DataGeneralDataTypeParentFolder", "general");
 				$first_line_array['version'] = "";
 				$first_line_array['datetime'] = "";
 				$first_line_array['size'] = "";
@@ -161,13 +161,14 @@ class DataAjax
 							unset($list_array[$key]['name']);
 							$list_array[$key]['name']['content'] = $tmp_name;
 							$list_array[$key]['name']['link'] = $params;
+							$list_array[$key]['name']['class'] = "DataBrowserIsFile";
 						}
 						else
 						{
 							$list_array[$key]['symbol'] = "<img src='core/images/denied_overlay.php?image=".$file->get_icon()."' alt='' border='0' />";
 						}
 						
-						$list_array[$key]['type'] = "File";
+						$list_array[$key]['type'] = Language::get_message("DataGeneralDataTypeFile", "general");
 						$list_array[$key]['version'] = $file->get_version();
 						$list_array[$key]['size'] = Convert::convert_byte_1024($list_array[$key]['size']);
 						$list_array[$key]['permission'] = $file->get_permission_string();
@@ -200,13 +201,14 @@ class DataAjax
 							unset($list_array[$key]['name']);
 							$list_array[$key]['name']['content'] = $tmp_name;
 							$list_array[$key]['name']['link'] = $params;
+							$list_array[$key]['name']['class'] = "DataBrowserIsValue";
 						}
 						else
 						{
 							$list_array[$key]['symbol'] = "<img src='core/images/denied_overlay.php?image=images/fileicons/16/unknown.png' alt='' border='0' />";
 						}
 						
-						$list_array[$key]['type'] = "Value";
+						$list_array[$key]['type'] = Language::get_message("DataGeneralDataTypeValue", "general");
 						$list_array[$key]['version'] = $value->get_version();
 						$list_array[$key]['permission'] = $value->get_permission_string();
 						
@@ -245,7 +247,7 @@ class DataAjax
 							$list_array[$key]['symbol'] = "<img src='core/images/denied_overlay.php?image=images/icons/folder.png' alt='' border='0' />";
 						}
 						
-						$list_array[$key]['type'] = "Folder";
+						$list_array[$key]['type'] = Language::get_message("DataGeneralDataTypeFolder", "general");
 						$list_array[$key]['permission'] = $sub_folder->get_permission_string();
 						
 						if($sub_folder->is_delete_access())
@@ -271,8 +273,9 @@ class DataAjax
 						unset($list_array[$key]['name']);
 						$list_array[$key]['name']['content'] = $tmp_name;
 						$list_array[$key]['name']['link'] = $params;
+						$list_array[$key]['name']['class'] = "DataBrowserIsVirtualFolder";
 						
-						$list_array[$key]['type'] = "Virtual Folder";
+						$list_array[$key]['type'] = Language::get_message("DataGeneralDataTypeVirtualFolder", "general");
 						$list_array[$key]['permission'] = "automatic";
 						
 						$list_array[$key]['delete_checkbox'] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name='' disabled='disabled'></input>";

@@ -32,10 +32,10 @@ class AdminValueTemplateIO
 		$list = new List_IO("DataAdminValueTemplate", "ajax.php?nav=data", "admin_list_value_templates", "admin_count_value_templates", "0", "DataAdminValueTemplate");
 		
 		
-		$list->add_column("ID", "id", true, null);
-		$list->add_column("Name", "name", true, null);
-		$list->add_column("File", "file", true, null);
-		$list->add_column("Delete", "delete", false, "7%");
+		$list->add_column(Language::get_message("DataGeneralListColumnID", "general"), "id", true, null);
+		$list->add_column(Language::get_message("DataGeneralListColumnName", "general"), "name", true, null);
+		$list->add_column(Language::get_message("DataGeneralListColumnFile", "general"), "file", true, null);
+		$list->add_column(Language::get_message("DataGeneralListColumnDelete", "general"), "delete", false, "7%");
 		
 		$template = new HTMLTemplate("data/admin/value_template/list.html");	
 	

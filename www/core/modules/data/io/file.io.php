@@ -253,9 +253,9 @@ class FileIO
 			$list = new List_IO("DataFileItem", "/core/modules/data/ajax/file.ajax.php", "list_file_items", "count_file_items", $argument_array, "DataAjaxFiles", 20, true, true);
 			
 			$list->add_column("","symbol",false,16);
-			$list->add_column("Name","name",true,null);
-			$list->add_column("Size","size",true,null);
-			$list->add_column("Date/Time","datetime",true,null);
+			$list->add_column(Language::get_message("DataGeneralListColumnName", "general"),"name",true,null);
+			$list->add_column(Language::get_message("DataGeneralListColumnSize", "general"),"size",true,null);
+			$list->add_column(Language::get_message("DataGeneralListColumnDateTime", "general"),"datetime",true,null);
 		}
 		else
 		{	
@@ -263,9 +263,9 @@ class FileIO
 			
 			$list->add_column("","checkbox",false,16, $form_field_name);
 			$list->add_column("","symbol",false,16);
-			$list->add_column("Name","name",false,null);
-			$list->add_column("Size","size",false,null);
-			$list->add_column("Date/Time","datetime",false,null);
+			$list->add_column(Language::get_message("DataGeneralListColumnName", "general"),"name",false,null);
+			$list->add_column(Language::get_message("DataGeneralListColumnSize", "general"),"size",false,null);
+			$list->add_column(Language::get_message("DataGeneralListColumnDateTime", "general"),"datetime",false,null);
 		}
 				
 		$template = new HTMLTemplate("data/file_list.html");	
@@ -634,10 +634,10 @@ class FileIO
 				$list = new List_IO("DataFileVersionHistory", "ajax.php?nav=data", "file_list_versions", "file_count_versions", $argument_array, "DataFileVersionHistory");
 
 				$list->add_column("","symbol",false,"16px");
-				$list->add_column("Name","name",true,null);
-				$list->add_column("Version","version",false,null);
-				$list->add_column("Date/Time","datetime",true,null);
-				$list->add_column("User","user",true,null);
+				$list->add_column(Language::get_message("DataGeneralListColumnName", "general"),"name",true,null);
+				$list->add_column(Language::get_message("DataGeneralListColumnVersion", "general"),"version",false,null);
+				$list->add_column(Language::get_message("DataGeneralListColumnDateTime", "general"),"datetime",true,null);
+				$list->add_column(Language::get_message("DataGeneralListColumnUser", "general"),"user",true,null);
 				$list->add_column("","delete",false,"16px");
 				
 				$template = new HTMLTemplate("data/file_history.html");

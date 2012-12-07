@@ -112,8 +112,8 @@ class UserSearchIO
 				$list = new List_IO("UserUserSearch", "ajax.php?nav=base", "search_user_list_users", "search_user_count_users", $argument_array, "UserUserSearch");
 				
 				$list->add_column("","symbol",false,16);
-				$list->add_column("Username","username",true,null);
-				$list->add_column("Full Name","fullname",true,null);
+				$list->add_column(Language::get_message("BaseGeneralListColumnUsername", "general"),"username",true,null);
+				$list->add_column(Language::get_message("BaseGeneralListColumnFullName", "general"),"fullname",true,null);
 				
 				$type_name = "User";
 			}
@@ -122,8 +122,8 @@ class UserSearchIO
 				$list = new List_IO("UserGroupSearch", "ajax.php?nav=base", "search_user_list_groups", "search_user_count_groups", $argument_array, "UserGroupSearch");
 				
 				$list->add_column("","symbol",false,16);
-				$list->add_column("Group Name","name",true,null);
-				$list->add_column("Users","users",true,null);
+				$list->add_column(Language::get_message("BaseGeneralListColumnGroupName", "general"),"name",true,null);
+				$list->add_column(Language::get_message("BaseGeneralListColumnUsers", "general"),"users",true,null);
 
 				$type_name = "Group";
 			}

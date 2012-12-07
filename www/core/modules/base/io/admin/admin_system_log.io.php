@@ -44,11 +44,11 @@ class AdminSystemLogIO
 
 		$list = new List_IO("BaseAdminSystemLog", "ajax.php?nav=base", "admin_list_system_log", "admin_count_system_log", $argument_array, "BaseAdminSystemLog");
 				
-		$list->add_column("User", "user", true, null);
-		$list->add_column("Date/Time", "datetime", true, null);
-		$list->add_column("IP", "ip", true, null);
-		$list->add_column("Info", "info", true, null);
-		$list->add_column("File", "file", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnUser", "general"), "user", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnDateTime", "general"), "datetime", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnIP", "general"), "ip", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnInfo", "general"), "info", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnFile", "general"), "file", true, null);
 		
 		$template = new HTMLTemplate("base/admin/system_log/list.html");
 										

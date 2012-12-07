@@ -34,10 +34,10 @@ class JobIO
 		$list = new List_IO("JobList", "ajax.php?nav=job", "list_jobs", "count_jobs", $argument_array, "JobList");
 		
 		$list->add_column("", "symbol", false, "16px");
-		$list->add_column("Name", "name", true, null);
-		$list->add_column("Status", "status", true, null);
-		$list->add_column("User", "user", true, null);
-		$list->add_column("Created at", "created_at", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"), "name", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnStatus", "general"), "status", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnUser", "general"), "user", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnCreatedAt", "general"), "created_at", true, null);
 		
 		$template = new HTMLTemplate("job/list.html");
 		

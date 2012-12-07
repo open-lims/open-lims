@@ -163,10 +163,10 @@ class ItemFulltextSearchIO
 			$list = new List_IO("ItemFulltextSearch", "ajax.php?nav=item", "search_fulltext_list_items", "search_fulltext_count_items", $argument_array, "ItemFulltextSearch");
 
 			$list->add_column("", "symbol", false, "16px");
-			$list->add_column("Name", "name", true, null);
-			$list->add_column("Type", "type", false, null);
-			$list->add_column("Datetime", "datetime", true, null);
-			$list->add_column("Rank", "rank", true, null);
+			$list->add_column(Language::get_message("ItemGeneralListColumnName", "general"), "name", true, null);
+			$list->add_column(Language::get_message("ItemGeneralListColumnType", "general"), "type", false, null);
+			$list->add_column(Language::get_message("ItemGeneralListColumnDateTime", "general"), "datetime", true, null);
+			$list->add_column(Language::get_message("ItemGeneralListColumnRank", "general"), "rank", true, null);
 			
 			$template = new HTMLTemplate("item/search/full_text_search_result.html");
 		

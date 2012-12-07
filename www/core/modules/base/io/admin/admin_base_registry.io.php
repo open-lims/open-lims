@@ -32,9 +32,9 @@ class AdminBaseRegistryIO
 		$list = new List_IO("BaseAdminRegistryHome" ,"ajax.php?nav=base", "admin_list_registry", "admin_count_registry", "0", "BaseAdminRegistryHome");
 		
 		$list->add_column("", "icon", false, "16px");
-		$list->add_column("Name", "name", true, null);
-		$list->add_column("Value", "value", true, null);
-		$list->add_column("Include", "include", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"), "name", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnValue", "general"), "value", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnInclude", "general"), "include", true, null);
 		$list->add_column("", "edit", false, "16px", "BaseAdminRegistryEditButton");
 
 		$template = new HTMLTemplate("base/admin/base_registry/list.html");

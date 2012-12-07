@@ -1,4 +1,4 @@
-/*
+/**
  * version: 0.4.0.0
  * author: Roman Konertz <konertz@open-lims.org>
  * author: Roman Quiring <quiring@open-lims.org>

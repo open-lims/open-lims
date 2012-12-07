@@ -1,5 +1,5 @@
 <?php
 $LANG['EquipmentDialogItemEquipmentList'] = "Equipment";
 $LANG['EquipmentDialogAdminMenuCat'] = "Equipment Categories";
-$LANG['EquipmentDialogAdminMenuTypes'] = "Equipment Types";
+$LANG['EquipmentDialogAdminMenuTypes'] = "Equipment/Assets";
 ?>

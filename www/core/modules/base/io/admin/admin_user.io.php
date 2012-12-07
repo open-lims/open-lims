@@ -32,10 +32,10 @@ class AdminUserIO
 		$list = new List_IO("UserAdministration", "ajax.php?nav=base", "admin_list_users", "admin_count_users", null, "UserAdministration");
 		
 		$list->add_column("","symbol",false,"16px");
-		$list->add_column("Username","username",true,null);
-		$list->add_column("Name","fullname",true,null);
-		$list->add_column("Groups","groups",false,null);
-		$list->add_column("D","delete",false,"16px");
+		$list->add_column(Language::get_message("BaseGeneralListColumnUsername", "general"),"username",true,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"fullname",true,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnGroups", "general"),"groups",false,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnD", "general"),"delete",false,"16px");
 		
 		$template = new HTMLTemplate("base/user/admin/user/list.html");
 		

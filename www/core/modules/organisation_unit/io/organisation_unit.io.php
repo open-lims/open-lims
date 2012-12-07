@@ -412,8 +412,8 @@ class OrganisationUnitIO
 		$list = new List_IO("OrganisationUnitUserHasOUList", "ajax.php?nav=organisation_unit", "list_organisation_units_by_user_id", "count_organisation_units_by_user_id", $argument_array, "OrganisationUnitUserHasOU");
 		
 		$list->add_column("","symbol",false,"16px");
-		$list->add_column("Name","name",true,null);
-		$list->add_column("My Status/Role","mystatus",false,null);
+		$list->add_column(Language::get_message("OrganisationUnitGeneralColoumnGroupName", "general"),"name",true,null);
+		$list->add_column(Language::get_message("OrganisationUnitGeneralColoumnMyStatus", "general"),"mystatus",false,null);
 		
 		$template = new HTMLTemplate("organisation_unit/user_related_organisation_units.html");
 		
@@ -552,8 +552,8 @@ class OrganisationUnitIO
 			$list = new List_IO("OrganisationUnitListOwners", "ajax.php?nav=organisation_unit", "list_owners", "count_owners", $argument_array, "OrganisationUnitListOwners");
 	
 			$list->add_column("","symbol",false,"16px");
-			$list->add_column("Username","username",true,null,"OrganisationUnitListSortUsername");
-			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
+			$list->add_column(Language::get_message("OrganisationUnitGeneralColoumnUsername", "general"),"username",true,null,"OrganisationUnitListSortUsername");
+			$list->add_column(Language::get_message("OrganisationUnitGeneralColoumnFullName", "general"),"fullname",true,null,"OrganisationUnitListSortFullname");
 				
 			$template = new HTMLTemplate("organisation_unit/list_owners.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
@@ -584,8 +584,8 @@ class OrganisationUnitIO
 			$list = new List_IO("OrganisationUnitListLeaders", "ajax.php?nav=organisation_unit", "list_leaders", "count_leaders", $argument_array, "OrganisationUnitListLeaders");
 	
 			$list->add_column("","symbol",false,"16px");
-			$list->add_column("Username","username",true,null,"OrganisationUnitListSortUsername");
-			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
+			$list->add_column(Language::get_message("OrganisationUnitGeneralColoumnUsername", "general"),"username",true,null,"OrganisationUnitListSortUsername");
+			$list->add_column(Language::get_message("OrganisationUnitGeneralColoumnFullName", "general"),"fullname",true,null,"OrganisationUnitListSortFullname");
 				
 			$template = new HTMLTemplate("organisation_unit/list_leaders.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
@@ -616,8 +616,8 @@ class OrganisationUnitIO
 			$list = new List_IO("OrganisationUnitListMembers", "ajax.php?nav=organisation_unit", "list_members", "count_members", $argument_array, "OrganisationUnitListMembers");
 	
 			$list->add_column("","symbol",false,"16px");
-			$list->add_column("Username","username",true,null,"OrganisationUnitListSortUsername");
-			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
+			$list->add_column(Language::get_message("OrganisationUnitGeneralColoumnUsername", "general"),"username",true,null,"OrganisationUnitListSortUsername");
+			$list->add_column(Language::get_message("OrganisationUnitGeneralColoumnFullName", "general"),"fullname",true,null,"OrganisationUnitListSortFullname");
 				
 			$template = new HTMLTemplate("organisation_unit/list_members.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
@@ -648,8 +648,8 @@ class OrganisationUnitIO
 			$list = new List_IO("OrganisationUnitListQualityManagers", "ajax.php?nav=organisation_unit", "list_quality_managers", "count_quality_managers", $argument_array, "OrganisationUnitListQualityManagers");
 	
 			$list->add_column("","symbol",false,"16px");
-			$list->add_column("Username","username",true,null,"OrganisationUnitListSortUsername");
-			$list->add_column("Fullname","fullname",true,null,"OrganisationUnitListSortFullname");
+			$list->add_column(Language::get_message("OrganisationUnitGeneralColoumnUsername", "general"),"username",true,null,"OrganisationUnitListSortUsername");
+			$list->add_column(Language::get_message("OrganisationUnitGeneralColoumnFullName", "general"),"fullname",true,null,"OrganisationUnitListSortFullname");
 				
 			$template = new HTMLTemplate("organisation_unit/list_quality_managers.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");
@@ -680,7 +680,7 @@ class OrganisationUnitIO
 			$list = new List_IO("OrganisationUnitListGroups", "ajax.php?nav=organisation_unit", "list_groups", "count_groups", $argument_array, "OrganisationUnitListGroups");
 	
 			$list->add_column("","symbol",false,"16px");
-			$list->add_column("Groupname","groupname",true,null,"OrganisationUnitListSortGroupname");
+			$list->add_column(Language::get_message("OrganisationUnitGeneralColoumnGroupName", "general"),"groupname",true,null,"OrganisationUnitListSortGroupname");
 				
 			$template = new HTMLTemplate("organisation_unit/list_groups.html");
 			$template->set_var("TITLE", "(".$organisation_unit->get_name().")");

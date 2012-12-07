@@ -85,9 +85,9 @@ class EquipmentIO
 			$template = new HTMLTemplate("equipment/list.html");
 			
 			$list->add_column("","symbol",false,"16px");
-			$list->add_column("Equipment Name","name",true,null);
-			$list->add_column("Category","category",true,null);
-			$list->add_column("Date/Time","datetime",true,null);
+			$list->add_column(Language::get_message("EquipmentGeneralListColumnEquipmentName", "general"),"name",true,null);
+			$list->add_column(Language::get_message("EquipmentGeneralListColumnCategory", "general"),"category",true,null);
+			$list->add_column(Language::get_message("EquipmentGeneralListColumnDateTime", "general"),"datetime",true,null);
 		}
 		else
 		{
@@ -97,9 +97,9 @@ class EquipmentIO
 			
 			$list->add_column("","checkbox",false,"16px", $form_field_name);
 			$list->add_column("","symbol",false,"16px");
-			$list->add_column("Equipment Name","name",false,null);
-			$list->add_column("Category","category",false,null);
-			$list->add_column("Date/Time","datetime",false,null);
+			$list->add_column(Language::get_message("EquipmentGeneralListColumnEquipmentName", "general"),"name",false,null);
+			$list->add_column(Language::get_message("EquipmentGeneralListColumnCategory", "general"),"category",false,null);
+			$list->add_column(Language::get_message("EquipmentGeneralListColumnDateTime", "general"),"datetime",false,null);
 		}
 		
 		$template->set_var("list", $list->get_list());
@@ -133,8 +133,8 @@ class EquipmentIO
 			$list = new List_IO("EquipmentOrganisationUnit", "ajax.php?nav=equipment", "list_organisation_unit_related_equipment", "count_organisation_unit_related_equipment", $argument_array, "EquipmentOrganisationUnit");
 		
 			$list->add_column("","symbol",false,16);
-			$list->add_column("Equipment Name","name",true,null);
-			$list->add_column("Category","category",true,null);
+			$list->add_column(Language::get_message("EquipmentGeneralListColumnEquipmentName", "general"),"name",true,null);
+			$list->add_column(Language::get_message("EquipmentGeneralListColumnCategory", "general"),"category",true,null);
 			
 			$template = new HTMLTemplate("equipment/list_organisation_unit.html");
 

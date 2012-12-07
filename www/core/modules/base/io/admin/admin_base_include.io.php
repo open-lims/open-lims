@@ -31,9 +31,9 @@ class AdminBaseIncludeIO
 	{		
 		$list = new List_IO("BaseAdminIncludeHome" ,"ajax.php?nav=base", "admin_list_includes", "admin_count_includes", "0", "BaseAdminIncludeAjax");
 
-		$list->add_column("Name","name",true,null);
-		$list->add_column("Folder","folder",true,null);
-		$list->add_column("Event Listeners","eventlisteners",true,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"name",true,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnFolder", "general"),"folder",true,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnEventListerns", "general"),"eventlisteners",true,null);
 		
 		$template = new HTMLTemplate("base/admin/base_include/list.html");	
 		

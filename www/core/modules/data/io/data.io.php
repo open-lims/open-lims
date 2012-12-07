@@ -95,13 +95,13 @@ class DataIO
 		
 		$list->add_column("","delete_checkbox",false,"22px"); 
 		$list->add_column("","symbol",false,"22px");
-		$list->add_column("Name","name",true,"30%");
-		$list->add_column("Type","type",true,null);
-		$list->add_column("Ver.","version",false,null);
-		$list->add_column("Date/Time","datetime",true,"10em");
-		$list->add_column("Size","size",true,null);
-		$list->add_column("Owner","owner",true,null);
-		$list->add_column("Permission","permission",false,null);
+		$list->add_column(Language::get_message("DataGeneralListColumnName", "general"),"name",true,"30%");
+		$list->add_column(Language::get_message("DataGeneralListColumnType", "general"),"type",true,null);
+		$list->add_column(Language::get_message("DataGeneralListColumnVersion", "general"),"version",false,null);
+		$list->add_column(Language::get_message("DataGeneralListColumnDateTime", "general"),"datetime",true,"10em");
+		$list->add_column(Language::get_message("DataGeneralListColumnSize", "general"),"size",true,null);
+		$list->add_column(Language::get_message("DataGeneralListColumnOwner", "general"),"owner",true,null);
+		$list->add_column(Language::get_message("DataGeneralListColumnPermission", "general"),"permission",false,null);
 		
 		$folder = Folder::get_instance($folder_id);	
 		

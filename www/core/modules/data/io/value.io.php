@@ -455,10 +455,10 @@ class ValueIO
 				$list = new List_IO("DataValueVersionHistory", "ajax.php?nav=data", "value_list_versions", "value_count_versions", $argument_array, "DataValueVersionHistory");
 
 				$list->add_column("","symbol",false,"16px");
-				$list->add_column("Name","name",true,null);
-				$list->add_column("Version","version",false,null);
-				$list->add_column("Date/Time","datetime",true,null);
-				$list->add_column("User","user",true,null);
+				$list->add_column(Language::get_message("DataGeneralListColumnName", "general"),"name",true,null);
+				$list->add_column(Language::get_message("DataGeneralListColumnVersion", "general"),"version",false,null);
+				$list->add_column(Language::get_message("DataGeneralListColumnDateTime", "general"),"datetime",true,null);
+				$list->add_column(Language::get_message("DataGeneralListColumnUser", "general"),"user",true,null);
 				$list->add_column("","delete",false,"16px");
 				
 				$template = new HTMLTemplate("data/value_history.html");

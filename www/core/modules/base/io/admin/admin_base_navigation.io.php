@@ -31,12 +31,12 @@ class AdminBaseNavigationIO
 	{
 		$list = new List_IO("BaseAdminNavigationHome" ,"ajax.php?nav=base", "admin_list_navigation", "admin_count_navigation", "0", "BaseAdminNavigationHome");
 		
-		$list->add_column("Displayed-Name (en-GB)", "name", false, null);
-		$list->add_column("Module", "module", false, null);
-		$list->add_column("Colour", "colour", false, null);
-		$list->add_column("UW", "uw", false, null);
-		$list->add_column("DW", "dw", false, null);
-		$list->add_column("Show/Hide", "hide", false, "80px");
+		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"), "name", false, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnModule", "general"), "module", false, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnColour", "general"), "colour", false, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnUW", "general"), "uw", false, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnDW", "general"), "dw", false, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnShowHide", "general"), "hide", false, "80px");
 
 		$template = new HTMLTemplate("base/admin/base_navigation/list.html");
 

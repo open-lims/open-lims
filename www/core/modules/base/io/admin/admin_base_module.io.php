@@ -31,10 +31,10 @@ class AdminBaseModuleIO
 	{
 		$list = new List_IO("BaseAdminModuleHome" ,"ajax.php?nav=base", "admin_list_modules", "admin_count_modules", "0", "BaseAdminModuleHome");
 		
-		$list->add_column("Name", "name", true, null);
-		$list->add_column("Dialogs", "dialogs", true, null);
-		$list->add_column("Links", "links", true, null);
-		$list->add_column("Disable", "disable", false, "80px");
+		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"), "name", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnDialogs", "general"), "dialogs", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnLinks", "general"), "links", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnDisable", "general"), "disable", false, "80px");
 
 		$template = new HTMLTemplate("base/admin/base_module/list.html");
 

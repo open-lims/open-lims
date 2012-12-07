@@ -134,13 +134,13 @@ class DataSearchIO
 			$list = new List_IO("DataSearch", "ajax.php?nav=data", "search_data_list_data", "search_data_count_data", $argument_array, "DataSearch");
 		
 			$list->add_column("", "symbol", false, "16px");
-			$list->add_column("Name", "name", true, null);
-			$list->add_column("Type", "type", false, null);
-			$list->add_column("Version", "version", false, null);
-			$list->add_column("Datetime", "datetime", true, null);
-			$list->add_column("Size", "size", true, null);
-			$list->add_column("Owner", "owner", true, null);
-			$list->add_column("Permission", "permission", false, null);
+			$list->add_column(Language::get_message("DataGeneralListColumnName", "general"), "name", true, null);
+			$list->add_column(Language::get_message("DataGeneralListColumnType", "general"), "type", false, null);
+			$list->add_column(Language::get_message("DataGeneralListColumnVersion", "general"), "version", false, null);
+			$list->add_column(Language::get_message("DataGeneralListColumnDateTime", "general"), "datetime", true, null);
+			$list->add_column(Language::get_message("DataGeneralListColumnSize", "general"), "size", true, null);
+			$list->add_column(Language::get_message("DataGeneralListColumnOwner", "general"), "owner", true, null);
+			$list->add_column(Language::get_message("DataGeneralListColumnPermission", "general"), "permission", false, null);
 			
 			$folder = Folder::get_instance($folder_id);
 			

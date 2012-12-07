@@ -1,7 +1,8 @@
 /**
  * version: 0.4.0.0
  * author: Roman Quiring <quiring@open-lims.org>
- * copyright: (c) 2008-2011 by Roman Quiring
+ * author: Roman Konertz <konertz@open-lims.org>
+ * copyright: (c) 2008-2011 by Roman Quiring, Roman Konertz
  * license: GPLv3
  * 
  * This file is part of Open-LIMS
