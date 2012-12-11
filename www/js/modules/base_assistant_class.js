@@ -105,6 +105,19 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 				{
 					$("#AssistantContent").empty().append(data).slideDown("slow");
 					base_form_init();
+					$( ".BasePlaseWaitWindow" ).dialog(
+					{
+						autoOpen: false,
+						height: 140,
+						width: 275,
+						modal: true,
+						draggable: false,
+						resizable: false,
+						closeOnEscape: false,
+						open: function(event, ui) { 
+							$(this).parent().children().children('.ui-dialog-titlebar-close').hide();
+						}
+					});
 				}
 			}
 		});
@@ -236,8 +249,7 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 				data: "",
 				beforeSend: function()
 				{
-					$.blockUI({ message: $('#AssistantFinish') , css: { width: '275px' }} ); 
-					$('.blockUI.blockMsg').center();
+					$("#AssistantFinish").dialog("open");
 				},
 				success: function(data)
 				{
@@ -250,13 +262,13 @@ Assistant = function(ajax_handler, init_page, end_page, form_field_name)
 						if ((data + '').indexOf("EXCEPTION",0) == 0)
 						{
 							var exception_message = data.replace("EXCEPTION: ","");
-							$.unblockUI();
+							$("#AssistantFinish").dialog("close");
 							ErrorDialog("Error", exception_message);
 							return false;
 						}
 						else
 						{
-							$.unblockUI();
+							$("#AssistantFinish").dialog("close");
 							ErrorDialog("Error", "An error occured");
 							return false;
 						}

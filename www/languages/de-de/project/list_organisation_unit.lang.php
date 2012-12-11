@@ -1,0 +1,3 @@
+<?php
+$LANG['ProjectListOrganisationUnitTitle'] = "Projekte";
+?>

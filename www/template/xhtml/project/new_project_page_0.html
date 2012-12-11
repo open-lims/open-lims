@@ -9,35 +9,35 @@ $(document).ready(function()
 </script>
 
 <br />
-<div class='center'><span class='bold'>I want to create a ...</span></div>
+<div class='center'><span class='bold'>[[LANG:ProjectCreatePage0IWantTo]]</span></div>
 <br />
 <br />
 <table class='ProjectCreateIWantTo'>
 	<tr>
 		<td><img src='images/explanations/project.png' alt='' /></td>
 		<td><input type='radio' name='project_type' value='1' class='ProjectCreateAssistantField' checked='checked' /></td>
-		<td><span class='bold'>normal project</span><br />A standard project/experiment which contains data (e.g. microscopy or microarray experiments).</td>
+		<td><span class='bold'>[[LANG:ProjectCreatePage0NormalProject]]</span><br />[[LANG:ProjectCreatePage0NormalProjectDesc]]</td>
 	</tr>
 	<tr>
 		<td><img src='images/explanations/parent_project.png' alt='' /></td>
 		<td><input type='radio' name='project_type' value='2' class='ProjectCreateAssistantField' /></td>
-		<td><span class='bold'>parent/master project</span><br />A project which summerises different projects/experiments as subprojects under it.</td>
+		<td><span class='bold'>[[LANG:ProjectCreatePage0ParentProject]]</span><br />[[LANG:ProjectCreatePage0ParentProjectDesc]]</td>
 	</tr>
 	<tr>
 		<td><img src='images/explanations/sub_project.png' alt='' /></td>
 		<td><input type='radio' name='project_type' value='3' class='ProjectCreateAssistantField' /></td>
-		<td><span class='bold'>sub-project</span><br />A (normal) project related to an parent-project (for experimental structure, e.g. timelines).</td>
+		<td><span class='bold'>[[LANG:ProjectCreatePage0SubProject]]</span><br />[[LANG:ProjectCreatePage0SubProjectDesc]]</td>
 	</tr>
 	<tr>
 		<td><img src='images/explanations/sub_parent_project.png' alt='' /></td>
 		<td><input type='radio' name='project_type' value='4' class='ProjectCreateAssistantField' /></td>
-		<td><span class='bold'>sub-parent-project</span><br />A project which summerises different projects as subprojects related to an higher parent project.</td>
+		<td><span class='bold'>[[LANG:ProjectCreatePage0SubParentProject]]</span><br />[[LANG:ProjectCreatePage0SubParentProjectDesc]]</td>
 	</tr>
 	<tr>
 		<td colspan='3'>
 			<br />
-			<div class='button_left'><button class='ButtonDisabled' disabled='disabled'>previous</button></div>
-			<div class='button_right'><button id='AssistantNext' class='Button'>next</button></div>
+			<div class='button_left'><button class='ButtonDisabled' disabled='disabled'>[[LANG:BaseGlobalButtonPrevious]]</button></div>
+			<div class='button_right'><button id='AssistantNext' class='Button'>[[LANG:BaseGlobalButtonNext]]</button></div>
 		</td>
 	</tr>
 </table>

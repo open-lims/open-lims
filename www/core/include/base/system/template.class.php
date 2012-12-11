@@ -668,6 +668,11 @@ class Template implements TemplateInterface
 						$pointer_correction = $new_inner_block_string_length - $current_inner_block_string_length;
 						
 						$pointer = $pointer + $pointer_correction;
+						
+						if ($pointer < 0)
+						{
+							$pointer = 0;
+						}
 
 						$string = substr_replace($string, $new_inner_block_string, $inner_block_begin, ($inner_block_end-$inner_block_begin)+14);
 					}
@@ -702,7 +707,6 @@ class Template implements TemplateInterface
 		while(($start_pos = strpos($this->string, "[[", $pointer)) !== false)
 		{
 			$end_pos = strpos($this->string, "]]", $start_pos+1);
-			$pointer = $start_pos + 1;  
 			
 			$current_var = substr($this->string, $start_pos+2, ($end_pos - $start_pos)-2);
 			$current_var_length = strlen($current_var);
@@ -728,16 +732,20 @@ class Template implements TemplateInterface
 			else
 			{
 				$new_var = $this->get_var_value($current_var);
-				
 			}
 			
 			$new_var_length = strlen($new_var);
 			
 			$this->string = substr_replace($this->string, $new_var, $start_pos, ($end_pos - $start_pos)+2);
 			
-			$pointer_correction = $new_var_length - $current_var_length;
-						
-			$pointer = $pointer + $pointer_correction;
+			$pointer_correction = $new_var_length - ($current_var_length+4);
+			
+			$pointer = ($start_pos + 1) + $pointer_correction;
+			
+			if ($pointer < 0)
+			{
+				$pointer = 0;
+			}
 		}
 	}
 	

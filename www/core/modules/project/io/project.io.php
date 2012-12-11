@@ -162,7 +162,7 @@ class ProjectIO
 				$project = new Project($_GET['project_id']);
 				$project_owner = new User($project->get_owner_id());
 			
-				$template = new HTMLTemplate("project/project_detail.html");
+				$template = new HTMLTemplate("project/detail.html");
 				
 				$template->set_var("get_array", serialize($_GET));
 				
@@ -213,7 +213,7 @@ class ProjectIO
 				$project = new Project($_GET['project_id']);
 				$project_structure_array = $project->get_project_tree();
 				
-				$template = new HTMLTemplate("project/project_structure.html");
+				$template = new HTMLTemplate("project/structure.html");
 				
 				if (is_array($project_structure_array) and count($project_structure_array) >= 1)
 				{
