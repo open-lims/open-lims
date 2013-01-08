@@ -149,5 +149,56 @@ class UserAjax
 		
 		return true;
 	}
+	
+	public static function profile_regional_settings_change($language_id, 
+		$country_id, 
+		$timezone_id, 
+		$time_display, 
+		$time_enter, 
+		$date_display, 
+		$date_enter, 
+		$system_of_units, 
+		$currency_id, 
+		$currency_significant_digits, 
+		$decimal_separator, 
+		$thousand_separator, 
+		$name_display_format, 
+		$system_of_paper_format)
+	{
+		
+	}
+	
+	public static function password_change($current_password, 
+						$new_password_1, 
+						$new_password_2)
+	{
+		global $user;
+		
+		if ($current_password and $new_password_1 and $new_password_2)
+		{
+			if ($user->check_password($current_password) == false)
+			{
+				return "error1";
+			}
+			
+			if ($new_password_1 != $new_password_2)
+			{
+				return "error2";
+			}
+			
+			if ($user->set_password($new_password_1))
+			{
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
+		}
+		else
+		{
+			return 0;
+		}
+	}
 }
 ?>

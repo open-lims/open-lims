@@ -33,19 +33,36 @@ class Login_IO
 	 */
 	public static function login()
 	{
-		if (is_numeric($_GET['language_id']))
+		if (is_numeric($_POST['language_id']))
 		{
-			$template = new HTMLTemplate("base/login/login.html", null, $_GET['language_id']);
+			$template = new HTMLTemplate("base/login/login.html", null, $_POST['language_id']);
 		}
 		else
 		{
 			$template = new HTMLTemplate("base/login/login.html");
 		}
 		
-		$template->set_var("footer",constant("LOGIN_FOOTER"));
-
+		if ($_POST[username])
+		{
+			$template->set_var("username",$_POST[username]);
+		}
+		else
+		{
+			$template->set_var("username","");
+		}
+		
+		if ($_POST[password])
+		{
+			$template->set_var("password",$_POST[password]);
+		}
+		else
+		{
+			$template->set_var("password","");
+		}
+		
+		
 		$language_array = Language::list_languages();
-				
+		
 		$result = array();
 		$counter = 0;
 		
@@ -58,7 +75,7 @@ class Login_IO
 				$result[$counter]['option'] = $value;
 				$result[$counter]['name'] = $language->get_full_name();
 				
-				if ($_GET['language_id'] == $value)
+				if ($_POST['language_id'] == $value)
 				{
 					$result[$counter]['selected'] = "selected='selected'";
 				}

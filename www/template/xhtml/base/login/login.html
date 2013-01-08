@@ -1,14 +1,6 @@
 <script>
 $(document).ready(function()
 {
-	$('#BaseLoginUsername').bind('keypress', function(e)
-	{
-        if(e.keyCode == 13)
-        {
-        	login();
-        }
-	});
-
 	$('#BaseLoginPassword').bind('keypress', function(e)
 	{
         if(e.keyCode == 13)
@@ -64,19 +56,20 @@ $(document).ready(function()
 <div id="LoginWrapper">
 	<div id="LoginContainer" class="Form">
 		<div id='LoginTitle'>[[LANG:BaseLoginTitle]]</div>
+		<form action="index.php" method="post">
 		<table id='LoginTable'>
 			<tr>
 				<td>[[LANG:BaseLoginUsername]]:</td>
-				<td><input name='username' type='text' size='20' class='BaseTextfield LoginTextfield' id='BaseLoginUsername' /></td>
+				<td><input name='username' type='text' size='20' class='BaseTextfield LoginTextfield' id='BaseLoginUsername' value='[[USERNAME]]' /></td>
 			</tr>
 			<tr>
 				<td>[[LANG:BaseLoginPassword]]:</td>
-				<td><input name='password' type='password' size='20' class='BaseTextfield LoginTextfield' id='BaseLoginPassword' /></td>
+				<td><input name='password' type='password' size='20' class='BaseTextfield LoginTextfield' id='BaseLoginPassword' value='[[PASSWORD]]' /></td>
 			</tr>
 			<tr>
 				<td>[[LANG:BaseLoginLanguage]]:</td>
 				<td>
-					<form action="index.php" method="get">
+					
 						<select class='BaseSelect LoginLanguageSelect' name='language_id' id='BaseLoginLanguage' onChange="this.form.submit()">
 							<option value='default' selected='selected'>[[LANG:BaseLoginLanguageDefault]]</option>
 							<option value='0'>-------------</option>
@@ -87,7 +80,6 @@ $(document).ready(function()
 					
 							<!-- FOREACH END -->
 						</select>
-					</form>
 				</td>
 			</tr>
 			<tr>
@@ -95,9 +87,9 @@ $(document).ready(function()
 			</tr>
 			<tr>
 				<td></td>
-				<td><button type='submit' name='submit' id='BaseLoginLogin'>[[LANG:BaseLoginButton]]</button></td>
+				<td><button id='BaseLoginLogin'>[[LANG:BaseLoginButton]]</button></td>
 			</tr>
-			
+			</form>
 		</table>
 	</div>
 </div>

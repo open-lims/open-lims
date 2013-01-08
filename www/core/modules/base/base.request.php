@@ -150,6 +150,33 @@ class BaseRequest
 						);
 			break;
 			
+			case "user_profile_regional_settings_change":
+				require_once("ajax/user.ajax.php");
+				echo UserAjax::profile_regional_settings_change($_POST['language_id'], 
+						$_POST['country_id'], 
+						$_POST['timezone_id'], 
+						$_POST['time_display'], 
+						$_POST['time_enter'], 
+						$_POST['date_display'], 
+						$_POST['date_enter'], 
+						$_POST['system_of_units'], 
+						$_POST['currency_id'], 
+						$_POST['currency_significant_digits'], 
+						$_POST['decimal_separator'], 
+						$_POST['thousand_separator'], 
+						$_POST['name_display_format'], 
+						$_POST['system_of_paper_format']
+						);
+			break;
+			
+			case "user_password_change":
+				require_once("ajax/user.ajax.php");
+				echo UserAjax::password_change($_POST['current_password'], 
+						$_POST['new_password_1'], 
+						$_POST['new_password_2']
+						);
+			break;
+			
 			
 			// Admin
 			

@@ -330,98 +330,10 @@ class UserIO
 	
 	public static function change_password()
 	{
-		global $user;
-		
-		$no_error = false;
-		
-		if ($_GET['nextpage'] == 1)
-		{
-			$no_error = true;
-			
-			if (!$_POST['current_password'])
-			{
-				$no_error = false;
-				$error[0] = "<br /><span class='formError'>this field cannot be empty</span>";
-			}
-			else
-			{
-				$error[0] = "";
-			}
-			
-			if (!$_POST['new_password_1'])
-			{
-				$no_error = false;
-				$error[1] = "<br /><span class='formError'>this field cannot be empty</span>";
-			}
-			else
-			{
-				$error[1] = "";	
-			}
-			
-			if (!$_POST['new_password_2'])
-			{
-				$no_error = false;
-				$error[2] = "<br /><span class='formError'>this field cannot be empty</span>";
-			}
-			else
-			{
-				$error[2] = "";
-			}
-			
-			if ($_POST['new_password_1'] and $_POST['new_password_2'] and $_POST['new_password_1'] != $_POST['new_password_2'])
-			{
-				$no_error = false;
-				$error[2] = "<br /><span class='formError'>the new passwords are not equal</span>";
-			}
-			elseif(!$error[2])
-			{
-				$error[2] = "";
-			}
-											
-			if ($user->check_password($_POST['current_password']) == false)
-			{
-				$noerror = false;
-				$error[0] = "<br /><span class='formError'>current password is wrong</span>";
-			}
-			elseif($error[0])
-			{
-				$error[0] = "";
-			}
-		}
-		else
-		{
-			$error[0] = "";
-			$error[1] = "";
-			$error[2] = "";
-		}
-		
-		if ($no_error == true)
-		{
-			$paramquery = $_GET;
-			unset($paramquery['nextpage']);
-			$paramquery['run'] = "user_profile";
-			$params = http_build_query($paramquery);
-			
-			Common_IO::step_proceed($params, "Change Password", "Password Changed",null);
-			
-			$user->set_password($_POST['new_password_1']);
-		}
-		else
-		{
-			$template = new HTMLTemplate("base/user/user_change_password.html");
-			
-			$paramquery = $_GET;
-			$paramquery['nextpage'] = 1;
-			$params = http_build_query($paramquery);
-			
-			$template->set_var("params", $params);
-			
-			$template->set_var("error_0",$error[0]);
-			$template->set_var("error_1",$error[1]);
-			$template->set_var("error_2",$error[2]);
-			
-			$template->output();
-		}
+		$template = new HTMLTemplate("base/user/user_change_password.html");
+		$template->set_var("session_id", $_GET['session_id']);
+		$template->set_var("retrace", "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=base&run=user_profile");
+		$template->output();
 	}
 
 	public static function change_password_on_login()

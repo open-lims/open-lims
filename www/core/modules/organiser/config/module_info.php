@@ -27,11 +27,5 @@
 	$name 						= "organiser";
 	$main_class					= "OrganiserRequest";
 
-	$tab[0]['language_address']	= "OrganiserMainOrganiser";
-	$tab[0]['colour']			= "blue";
-	$tab[0]['controller_class']	= "OrganiserRequest";
-	$tab[0]['controller_file']	= "organiser.request.php";
-	$tab[0]['alias']				= "";
-
 	$required_include[0] 		= "user";
 ?>
