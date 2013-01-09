@@ -55,9 +55,16 @@ div.FormFocused
 .FormSelectList ul li
 {
 	margin: 0;
-	padding: 3px 2px;
+	padding: 0;
 }
-.FormSelectList ul li:hover
+.FormSelectList ul li a
+{
+	display: block;
+	padding: 3px 2px;
+	text-decoration: none;
+	color: #2F2F2F !important;
+}
+.FormSelectList ul li a:hover
 {
 	background-color: #73A6FF;
 	cursor: pointer;
@@ -73,7 +80,9 @@ div.FormFocused
 	border: 1px #D0D0D0 solid;
 	color: #2F2F2F;  
 	background-color: #EEEEEE;
-	padding: 0;
+	/*padding: 0;
+	margin: 3px 0; */
+	padding: 0 4px;
 	margin: 3px 0;
 	position: relative;
 	height: 24px;
@@ -102,6 +111,8 @@ div.FormFocused
 	position: absolute;
 	top: 0;
 	right: 0;
+	background-color: #EEEEEE;
+	z-index: 10;
 }
 .FormSelectButton img
 {

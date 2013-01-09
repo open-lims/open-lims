@@ -268,6 +268,8 @@ class UserIO
 		
 		$template = new HTMLTemplate("base/user/user_settings.html");
 
+		$template->set_var("session_id", $_GET['session_id']);
+		$template->set_var("retrace", "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=base&run=user_profile");
 		
 		$language_array = Language::list_languages();
 		

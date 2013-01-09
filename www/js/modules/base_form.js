@@ -21,6 +21,8 @@
 
 base_form_init = function()
 {	
+	var open_select_option_list_button = null;
+	var open_select_option_list_global_close_handler = null;
 	
 	$(".Form input").each(function()
 	{
@@ -52,26 +54,53 @@ base_form_init = function()
 	{
 		if (($(this).attr("size") === undefined) || ($(this).attr("size") === 1))
 		{
-			$(this).wrap("<div class='FormSelectContainer'></div>").width($(this).width());
+			var selected_element_exists = false;
+			var selected_element;
+			var focused_element;
 			
-			var option_list = $("<div class='FormSelectList'><ul></ul></div>").css({"display":"none","min-width":$(this).width()});
-			var entry = $("<div class='FormSelectEntry'></div>"); //.width(($(this).width()-35));
+			var container = new $("<div class='FormSelectContainer'></div>");
+			$(container).attr("class", $(container).attr("class")+" "+$(this).attr("class"));
 			
+			if ($(this).css("display") === "block")
+			{
+				$(container).css("display", "block");	
+			}
+			else
+			{
+				$(container).css("display", "inline-block");
+			}
+						
+			$(this).wrap(container);
+			
+			var option_list = $("<div class='FormSelectList'><ul></ul></div>").css({"display":"none","min-width":$(this).parent().width()+8});
+			var entry = $("<div class='FormSelectEntry'></div>");
+			
+			// Option List
 			var button = $("<div class='FormSelectButton'><img src='images/down.png' alt=''></div>").bind("click", function(event)
 			{
 				event.preventDefault();
+				event.stopPropagation();
 				
 				var data = event.data;
 				
 				if ($(option_list).css("display") === "none")
 				{
+					if (open_select_option_list_button !== null)
+					{
+						open_select_option_list_button.trigger("click");
+					}
+
+					open_select_option_list_button = $(this);
+					
+					// Length
 					var max_window_height = $(window).height() - $(this).offset().top - 26;
 					var max_document_height = $(document).height() - $(this).offset().top - 26;
 					
 					$(option_list).css("display", "block");
 					
 					var current_height = $(option_list).height();
-					var max_entry_height = $(option_list).find("ul").children(":first-child").height()*10+60;
+					var entry_height = $(option_list).find("ul").children(":first-child").height();
+					var max_entry_height = entry_height*10;
 
 					if ((current_height < max_window_height) && (current_height < max_entry_height))
 					{
@@ -109,11 +138,11 @@ base_form_init = function()
 							if ((max_entry_height < max_document_height))
 							{
 								// Scroll-Down
+								$(option_list).height(max_entry_height);
+								
 								$('html,body').animate({
 									scrollTop: $(this).offset().top
 								}, 2000);
-								
-								$(option_list).height(max_entry_height);
 							}
 							else
 							{
@@ -124,16 +153,52 @@ base_form_init = function()
 						$(option_list).jScrollPane();
 					}
 
-					/*
-					$(document).bind("click", {option: $(option_list)}, function(event)
+					// Set selected
+					if (selected_element_exists  === true)
 					{
-						var data = event.data;
-						$(data.option).css("display", "none");
-					}); */
+						$(selected_element).children("a").focus();
+					}
+					
+					// Key up and down
+					$(option_list).bind("keydown", function(event)
+					{
+						switch(event.keyCode)
+						{
+							case 40: 
+								event.preventDefault();
+								if ($(option_list).children("li.selected") !== $(option_list).children("li:last-child"))
+								{
+									$(focused_element).next().children("a").focus();
+								}
+							break;
+							
+							case 38:
+								event.preventDefault();
+								if ($(option_list).children("li.selected") !== $(option_list).children("li:first-child"))
+								{
+									$(focused_element).prev().children("a").focus();
+								}
+							break;
+							
+							default:
+								return;
+							break;
+						}
+					}); 
+					
+					open_select_option_list_global_close_handler = function(event)
+					{
+						open_select_option_list_button.trigger("click");
+					}
+					
+					$(document).bind("click", {option: $(option_list), button: $(this)}, open_select_option_list_global_close_handler);
 				}
 				else
 				{
 					$(option_list).css("display", "none");
+					$(option_list).unbind("keydown");
+					$(document).unbind("click", open_select_option_list_global_close_handler);
+					open_select_option_list_button = null;
 				}
 			});
 							
@@ -142,15 +207,11 @@ base_form_init = function()
 				$(entry).html($(this).children("option:selected").html());
 			}
 			
-			if (($(entry).width() == 0) && ($(this).width() < 45))
+			if (($(entry).width() == 0) && ($(this).width() < 45) && ($(this).css("display") !== "block"))
 			{
 				$(this).parent().width(45);
+				$(option_list).width(53);
 			}
-			else
-			{
-				$(this).parent().width($(this).width());
-			}
-			
 			
 			$(this).parent().bind("keydown", {option: $(this)}, function(event)
 			{
@@ -160,6 +221,7 @@ base_form_init = function()
 				{
 					case 40: 
 						// Down
+						event.preventDefault();
 						if ($(data.option).children("option:selected") !== $(data.option).children("option:last-child"))
 						{
 							var next_element = $(data.option).children("option:selected").next();
@@ -171,6 +233,7 @@ base_form_init = function()
 					
 					case 38:
 						// Up
+						event.preventDefault();
 						if ($(data.option).children("option:selected") !== $(data.option).children("option:first-child"))
 						{
 							var previous_element = $(data.option).children("option:selected").prev();
@@ -184,13 +247,16 @@ base_form_init = function()
 						return;
 					break;
 				}
-			}); 
-			
+			});
+
 			$(this).children("option").each(function()
-			{
+			{				
 				var local_option = $(this);
-				var list_entry = $("<li>"+$(this).html()+"</li>").bind("click", {option: $(this)}, function(event)
+				var list_entry = $("<li><a href='#'>"+$(this).html()+"</a></li>").bind("click", {option: $(this)}, function(event)
 				{
+					event.preventDefault();
+					event.stopPropagation();
+					
 					var data = event.data;
 					$(option_list).css("display", "none");
 					$(data.option).parent().children("option:selected").removeAttr("selected");
@@ -198,34 +264,50 @@ base_form_init = function()
 					$(entry).html($(data.option).html());
 					$(data.option).parent().trigger("onchange");
 					
-					$(this).parent().children().each(function()
+					selected_element = $(this);
+					
+					$(option_list).unbind("keydown");
+				});
+				
+				list_entry.children("a").bind("focus", function(event)
+				{
+					$(this).parent().parent().children().each(function()
 					{
 						$(this).removeClass("selected");
-					})
-					$(this).addClass("selected");
+					});
+					$(this).parent().addClass("selected");
+					focused_element = $(this).parent();
 				});
 				
 				if ($(this).attr("selected") === "selected")
 				{
-					$(list_entry).addClass("selected");
+					selected_element_exists = true;
+					selected_element = list_entry;
 				}
 								
 				$(option_list).children("ul").append(list_entry);
 			});
 			
+			var focus_element = $("<a href='#'></a>");
+			$(focus_element).css({"opacity":"0", "z-index":"-1", "position":"relative", "display":"block"});
+			$(focus_element).height($(this).parent().height());
+			$(focus_element).width($(this).width());
+			
+			$(this).parent().append(focus_element);
 			$(this).parent().append(entry);
 			$(this).parent().append(button);
 			$(this).parent().append("<div style='clear: both;'></div>");
 			$(this).parent().after(option_list);
 			
-			$(this).css({"opacity":"0", "z-index":"-1", "position":"relative"});
 			
-			$(this).focus(function()
+			$(this).css({"display":"none", "position":"relative"});
+			
+			$(this).parent().children("a").focus(function()
 			{
 				 $(this).parent().addClass("FormFocused");
 			});
 			
-			$(this).blur(function()
+			$(this).parent().children("a").blur(function()
 			{
 				 $(this).parent().removeClass("FormFocused");
 			});

@@ -47,12 +47,15 @@
 .LoginTextfield
 {
 	width: 190px;
-	border: 1px black solid;
+	/* border: 1px black solid; */
 	-moz-box-shadow: 2px 2px 2px #101010;
   	-webkit-box-shadow: 2px 2px 2px #101010;
  	box-shadow: 2px 2px 2px #101010;
 }
 .LoginLanguageSelect
 {
-	width: 199px;
+	width: 190px;
+	-moz-box-shadow: 2px 2px 2px #101010;
+  	-webkit-box-shadow: 2px 2px 2px #101010;
+ 	box-shadow: 2px 2px 2px #101010;
 }

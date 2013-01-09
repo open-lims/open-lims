@@ -68,18 +68,17 @@ $(document).ready(function()
 			</tr>
 			<tr>
 				<td>[[LANG:BaseLoginLanguage]]:</td>
-				<td>
-					
-						<select class='BaseSelect LoginLanguageSelect' name='language_id' id='BaseLoginLanguage' onChange="this.form.submit()">
-							<option value='default' selected='selected'>[[LANG:BaseLoginLanguageDefault]]</option>
-							<option value='0'>-------------</option>
-							
-							<!-- FOREACH BEGIN ([[LANGUAGES]]) -->
-			
-							<option value='[[LANGUAGES:OPTION]]' [[LANGUAGES:SELECTED]]>[[LANGUAGES:NAME]]</option>
-					
-							<!-- FOREACH END -->
-						</select>
+				<td>		
+					<select class='BaseSelect LoginLanguageSelect' name='language_id' id='BaseLoginLanguage' onChange="this.form.submit()">
+						<option value='default' selected='selected'>[[LANG:BaseLoginLanguageDefault]]</option>
+						<option value='0'>-------------</option>
+						
+						<!-- FOREACH BEGIN ([[LANGUAGES]]) -->
+		
+						<option value='[[LANGUAGES:OPTION]]' [[LANGUAGES:SELECTED]]>[[LANGUAGES:NAME]]</option>
+				
+						<!-- FOREACH END -->
+					</select>
 				</td>
 			</tr>
 			<tr>

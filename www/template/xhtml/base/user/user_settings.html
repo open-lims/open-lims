@@ -46,7 +46,7 @@ $(document).ready(function()
 	<tr>
 		<td style='width: 25%;'>Default-Language:</td>
 		<td>
-			<select name='language_id'>
+			<select name='language_id' style='display: block;'>
 			
 				<!-- FOREACH BEGIN ([[LANGUAGE]]) -->
 	
@@ -60,7 +60,7 @@ $(document).ready(function()
 	<tr>
 		<td>Country:</td>
 		<td>
-			<select name='country_id'>
+			<select name='country_id' style='display: block;'>
 					
 				<!-- FOREACH BEGIN ([[COUNTRY]]) -->
 		
@@ -85,8 +85,8 @@ $(document).ready(function()
 	
 	<tr>
 		<td style='width: 25%;'>Timezone:</td>
-		<td colspan='2'>
-			<select name='timezone_id'>
+		<td colspan='3'>
+			<select name='timezone_id' style='display: block;'>
 			
 				<!-- FOREACH BEGIN ([[TIMEZONE]]) -->
 	
@@ -99,23 +99,25 @@ $(document).ready(function()
 	</tr>
 	
 	<tr>
-		<td colspan='3'><br /></td>
+		<td colspan='4'><br /></td>
 	</tr>
 	
 	<tr>
 		<td></td>
-		<td style='width: 30%;'>Display</td>
-		<td>Enter</td>
+		<td style='width: 37%;'>Display</td>
+		<td style='width: 1%;'></td>
+		<td style='width: 37%;'>Enter</td>
 	</tr>
 	<tr>
 		<td>Time</td>
-		<td><select name='time_display'><option value='0'>24:00</option><option value='1'>12:00 pm</option></select></td>
-		<td><select name='time_enter'><option value='0'>24:00</option><option value='1'>12:00 pm</option></select></td>
+		<td><select name='time_display' style='display: block;'><option value='0'>24:00</option><option value='1'>12:00 pm</option></select></td>
+		<td></td>
+		<td><select name='time_enter' style='display: block;'><option value='0'>24:00</option><option value='1'>12:00 pm</option></select></td>
 	</tr>
 	<tr>
 		<td>Date</td>
 		<td>
-			<select name='date_display'>
+			<select name='date_display' style='display: block;'>
 				<option value='1'>31.12.2010 - dd.mm.yyyy</option>
 		 		<option value='2'>2012.12.31 - yyyy.mm.dd</option>
 		 		<option value='3'>31-12-2010 - dd-mm-yyyy</option>
@@ -127,8 +129,9 @@ $(document).ready(function()
 		 		<option value='9'>31. Dec 2010 - d. M yyyy</option>
 	 		</select>
 	 	</td>
+	 	<td></td>
 		<td>
-			<select name='date_enter'>
+			<select name='date_enter' style='display: block;'>
 				<option value='1'>31.12.2010 - dd.mm.yyyy</option>
 		 		<option value='2'>2012.12.31 - yyyy.mm.dd</option>
 		 		<option value='3'>31-12-2010 - dd-mm-yyyy</option>
@@ -155,12 +158,12 @@ $(document).ready(function()
 	
 	<tr>
 		<td style='width: 25%;'>System of Units:</td>
-		<td colspan='3'><select name='system_of_units'><option value='metric'>metric</option><option value='aa'>anglo-american</option></select></td>
+		<td colspan='4'><select name='system_of_units' style='display: block;'><option value='metric'>metric</option><option value='aa'>anglo-american</option></select></td>
 	</tr>
 	<tr>
 		<td>Currency:</td>
-		<td style='width: 30%;'>
-			<select name='currency_id'>
+		<td style='width: 25%;'>
+			<select name='currency_id' style='display: block;'>
 					
 				<!-- FOREACH BEGIN ([[CURRENCY]]) -->
 		
@@ -170,15 +173,17 @@ $(document).ready(function()
 			
 			</select>
 		</td>
-		<td style='width: 25%;'>Currency Significant Digits:</td>
-		<td><select name='currency_significant_digits'><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></td>
+		<td style='width: 1%;'></td>
+		<td style='width: 24%;'>Currency Significant Digits:</td>
+		<td style='width: 25%;'><select name='currency_significant_digits' style='display: block;'><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></td>
 	</tr>
 	
 	<tr>
 		<td>Decimal-Separator:</td>
-		<td><select name='decimal_separator'><option value='comma'>comma [,]</option><option value='dot'>dot [.]</option></select></td>
+		<td><select name='decimal_separator' style='display: block;'><option value='comma'>comma [,]</option><option value='dot'>dot [.]</option></select></td>
+		<td></td>
 		<td>Thousand-Separator:</td>
-		<td><select name='thousand_separator'><option value='none'>none</option><option vanlue='space'>space [&nbsp;]</option><option value='comme'>comma [,]</option><option value='dot'>dot [.]</option><option value='apostrophe'>apostrophe [']</option></select></td>
+		<td><select name='thousand_separator' style='display: block;'><option value='none'>none</option><option vanlue='space'>space [&nbsp;]</option><option value='comme'>comma [,]</option><option value='dot'>dot [.]</option><option value='apostrophe'>apostrophe [']</option></select></td>
 	</tr>
 	
 </table>
@@ -195,7 +200,7 @@ $(document).ready(function()
 	<tr>
 		<td style='width: 25%;'>Name Display Format:</td>
 		<td>
-			<select name='name_display_format'>
+			<select name='name_display_format' style='display: block;'>
 				<option value='1'>Dr. John Doe</option>
 				<option value='2'>John Doe</option>
 				<option value='3'>Dr. Doe</option>
@@ -210,7 +215,7 @@ $(document).ready(function()
 	</tr>
 	<tr>
 		<td>System of Paper Format:</td>
-		<td><select name='system_of_paper_format'><option value='din'>DIN</option><option value='aa'>anglo-american</option></select></td>
+		<td><select name='system_of_paper_format' style='display: block;'><option value='din'>DIN</option><option value='aa'>anglo-american</option></select></td>
 	</tr>
 
 </table>
