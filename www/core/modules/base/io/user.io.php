@@ -271,6 +271,8 @@ class UserIO
 		$template->set_var("session_id", $_GET['session_id']);
 		$template->set_var("retrace", "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=base&run=user_profile");
 		
+		
+		// Language
 		$language_array = Language::list_languages();
 		
 		$result = array();
@@ -300,6 +302,35 @@ class UserIO
 		$template->set_var("language",$result);
 		
 		
+		// Country
+		$country_array = Country::list_entries();
+		
+		$result = array();
+		$counter = 0;
+		
+		if (is_array($country_array))
+		{
+			foreach($country_array as $key => $value)
+			{
+				$result[$counter]['value'] = $value['id'];
+				$result[$counter]['content'] = $value['english_name']."/".$value['local_name'];
+				
+				if ($value['id'] == $regional->get_country_id())
+				{
+					$result[$counter]['selected'] = "selected='selected'";
+				}
+				else
+				{
+					$result[$counter]['selected'] = "";
+				}
+				$counter++;		
+			}
+		}
+		
+		$template->set_var("country",$result);
+		
+		
+		// Timezone
 		$timezone_array = Timezone::list_timezones();
 			
 		$result = array();
@@ -326,7 +357,537 @@ class UserIO
 			}
 		}
 		$template->set_var("timezone",$result);
+
+		
+		// Time Display
+		$time_display_format_array = $regional->get_time_display_format();
+		if ($time_display_format_array[0] === true)
+		{
+			$template->set_var("time_display_0_selected","");
+			$template->set_var("time_display_1_selected","selected='selected'");
+		}
+		else
+		{
+			$template->set_var("time_display_0_selected","selected='selected'");
+			$template->set_var("time_display_1_selected","");
+		}
+		
+		
+		// Time Enter
+		if ($regional->get_time_enter_format() === true)
+		{
+			$template->set_var("time_enter_0_selected","");
+			$template->set_var("time_enter_1_selected","selected='selected'");
+		}
+		else
+		{
+			$template->set_var("time_enter_0_selected","selected='selected'");
+			$template->set_var("time_enter_1_selected","");
+		}
+		
+		
+		// Date Display
+		switch($regional->get_date_display_format()):
+		
+			case "d.m.Y":
+				$template->set_var("date_display_1_selected","selected='selected'");
+				$template->set_var("date_display_2_selected","");
+				$template->set_var("date_display_3_selected","");
+				$template->set_var("date_display_4_selected","");
+				$template->set_var("date_display_5_selected","");
+				$template->set_var("date_display_6_selected","");
+				$template->set_var("date_display_7_selected","");
+				$template->set_var("date_display_8_selected","");
+				$template->set_var("date_display_9_selected","");
+			break;
 			
+			case "Y.m.d":
+				$template->set_var("date_display_1_selected","");
+				$template->set_var("date_display_2_selected","selected='selected'");
+				$template->set_var("date_display_3_selected","");
+				$template->set_var("date_display_4_selected","");
+				$template->set_var("date_display_5_selected","");
+				$template->set_var("date_display_6_selected","");
+				$template->set_var("date_display_7_selected","");
+				$template->set_var("date_display_8_selected","");
+				$template->set_var("date_display_9_selected","");
+			break;
+			
+			case "d-m-Y":
+				$template->set_var("date_display_1_selected","");
+				$template->set_var("date_display_2_selected","");
+				$template->set_var("date_display_3_selected","selected='selected'");
+				$template->set_var("date_display_4_selected","");
+				$template->set_var("date_display_5_selected","");
+				$template->set_var("date_display_6_selected","");
+				$template->set_var("date_display_7_selected","");
+				$template->set_var("date_display_8_selected","");
+				$template->set_var("date_display_9_selected","");
+			break;
+			
+			case "m-d-Y":
+				$template->set_var("date_display_1_selected","");
+				$template->set_var("date_display_2_selected","");
+				$template->set_var("date_display_3_selected","");
+				$template->set_var("date_display_4_selected","selected='selected'");
+				$template->set_var("date_display_5_selected","");
+				$template->set_var("date_display_6_selected","");
+				$template->set_var("date_display_7_selected","");
+				$template->set_var("date_display_8_selected","");
+				$template->set_var("date_display_9_selected","");
+			break;
+			
+			case "Y-m-d":
+				$template->set_var("date_display_1_selected","");
+				$template->set_var("date_display_2_selected","");
+				$template->set_var("date_display_3_selected","");
+				$template->set_var("date_display_4_selected","");
+				$template->set_var("date_display_5_selected","selected='selected'");
+				$template->set_var("date_display_6_selected","");
+				$template->set_var("date_display_7_selected","");
+				$template->set_var("date_display_8_selected","");
+				$template->set_var("date_display_9_selected","");
+			break;
+			
+			case "d/m/Y":
+				$template->set_var("date_display_1_selected","");
+				$template->set_var("date_display_2_selected","");
+				$template->set_var("date_display_3_selected","");
+				$template->set_var("date_display_4_selected","");
+				$template->set_var("date_display_5_selected","");
+				$template->set_var("date_display_6_selected","selected='selected'");
+				$template->set_var("date_display_7_selected","");
+				$template->set_var("date_display_8_selected","");
+				$template->set_var("date_display_9_selected","");
+			break;
+			
+			case "m/d/Y":
+				$template->set_var("date_display_1_selected","");
+				$template->set_var("date_display_2_selected","");
+				$template->set_var("date_display_3_selected","");
+				$template->set_var("date_display_4_selected","");
+				$template->set_var("date_display_5_selected","");
+				$template->set_var("date_display_6_selected","");
+				$template->set_var("date_display_7_selected","selected='selected'");
+				$template->set_var("date_display_8_selected","");
+				$template->set_var("date_display_9_selected","");
+			break;
+			
+			case "j. M Y":
+				$template->set_var("date_display_1_selected","");
+				$template->set_var("date_display_2_selected","");
+				$template->set_var("date_display_3_selected","");
+				$template->set_var("date_display_4_selected","");
+				$template->set_var("date_display_5_selected","");
+				$template->set_var("date_display_6_selected","");
+				$template->set_var("date_display_7_selected","");
+				$template->set_var("date_display_8_selected","");
+				$template->set_var("date_display_9_selected","selected='selected'");
+			break;
+			
+			default: // jS M Y
+				$template->set_var("date_display_1_selected","");
+				$template->set_var("date_display_2_selected","");
+				$template->set_var("date_display_3_selected","");
+				$template->set_var("date_display_4_selected","");
+				$template->set_var("date_display_5_selected","");
+				$template->set_var("date_display_6_selected","");
+				$template->set_var("date_display_7_selected","");
+				$template->set_var("date_display_8_selected","selected='selected'");
+				$template->set_var("date_display_9_selected","");
+			break;
+		
+		endswitch;
+		
+		
+		// Date Enter
+		switch($regional->get_date_enter_format()):
+		
+			case "yyyy.mm.dd":
+				$template->set_var("date_enter_1_selected","");
+				$template->set_var("date_enter_2_selected","selected='selected'");
+				$template->set_var("date_enter_3_selected","");
+				$template->set_var("date_enter_4_selected","");
+				$template->set_var("date_enter_5_selected","");
+				$template->set_var("date_enter_6_selected","");
+				$template->set_var("date_enter_7_selected","");
+			break;
+			
+			case "dd-mm-yyyy":
+				$template->set_var("date_enter_1_selected","");
+				$template->set_var("date_enter_2_selected","");
+				$template->set_var("date_enter_3_selected","selected='selected'");
+				$template->set_var("date_enter_4_selected","");
+				$template->set_var("date_enter_5_selected","");
+				$template->set_var("date_enter_6_selected","");
+				$template->set_var("date_enter_7_selected","");
+			break;
+			
+			case "mm-dd-yyyy":
+				$template->set_var("date_enter_1_selected","");
+				$template->set_var("date_enter_2_selected","");
+				$template->set_var("date_enter_3_selected","");
+				$template->set_var("date_enter_4_selected","selected='selected'");
+				$template->set_var("date_enter_5_selected","");
+				$template->set_var("date_enter_6_selected","");
+				$template->set_var("date_enter_7_selected","");
+			break;
+			
+			case "yyyy-mm-dd":
+				$template->set_var("date_enter_1_selected","");
+				$template->set_var("date_enter_2_selected","");
+				$template->set_var("date_enter_3_selected","");
+				$template->set_var("date_enter_4_selected","");
+				$template->set_var("date_enter_5_selected","selected='selected'");
+				$template->set_var("date_enter_6_selected","");
+				$template->set_var("date_enter_7_selected","");
+			break;
+			
+			case "dd/mm/yyyy":
+				$template->set_var("date_enter_1_selected","");
+				$template->set_var("date_enter_2_selected","");
+				$template->set_var("date_enter_3_selected","");
+				$template->set_var("date_enter_4_selected","");
+				$template->set_var("date_enter_5_selected","");
+				$template->set_var("date_enter_6_selected","selected='selected'");
+				$template->set_var("date_enter_7_selected","");
+			break;
+			
+			case "mm/dd/yyyy":
+				$template->set_var("date_enter_1_selected","");
+				$template->set_var("date_enter_2_selected","");
+				$template->set_var("date_enter_3_selected","");
+				$template->set_var("date_enter_4_selected","");
+				$template->set_var("date_enter_5_selected","");
+				$template->set_var("date_enter_6_selected","");
+				$template->set_var("date_enter_7_selected","selected='selected'");
+			break;
+			
+			default: // dd.mm.yyyy
+				$template->set_var("date_enter_1_selected","selected='selected'");
+				$template->set_var("date_enter_2_selected","");
+				$template->set_var("date_enter_3_selected","");
+				$template->set_var("date_enter_4_selected","");
+				$template->set_var("date_enter_5_selected","");
+				$template->set_var("date_enter_6_selected","");
+				$template->set_var("date_enter_7_selected","");
+			break;
+			
+		endswitch;
+		
+		
+		// System of Units
+		switch($regional->get_system_of_units()):
+		
+			case "aa":
+				$template->set_var("system_of_units_aa_selected","selected='selected'");
+				$template->set_var("system_of_units_metric_selected","");
+			break;
+			
+			default: // metric
+				$template->set_var("system_of_units_aa_selected","");
+				$template->set_var("system_of_units_metric_selected","selected='selected'");
+			break;
+		
+		endswitch;
+		
+		
+		// Currency
+		$currency_array = Currency::list_entries();
+		
+		$result = array();
+		$counter = 0;
+		
+		if (is_array($currency_array))
+		{
+			foreach($currency_array as $key => $value)
+			{
+				$result[$counter]['value'] = $value['id'];
+				$result[$counter]['content'] = $value['name']."/".$value['iso_4217'];
+				
+				if ($value['id'] == $regional->get_currency_id())
+				{
+					$result[$counter]['selected'] = "selected='selected'";
+				}
+				else
+				{
+					$result[$counter]['selected'] = "";
+				}
+				$counter++;		
+			}
+		}
+		
+		$template->set_var("currency",$result);
+		
+		
+		// Currency Significant Digits
+		switch($regional->get_currency_significant_digits()):
+		
+			case "0":
+				$template->set_var("cur_sig_digits_0_selected","selected='selected'");
+				$template->set_var("cur_sig_digits_1_selected","");
+				$template->set_var("cur_sig_digits_2_selected","");
+				$template->set_var("cur_sig_digits_3_selected","");
+				$template->set_var("cur_sig_digits_4_selected","");
+				$template->set_var("cur_sig_digits_5_selected","");
+				$template->set_var("cur_sig_digits_6_selected","");
+			break;
+			
+			case "1":
+				$template->set_var("cur_sig_digits_0_selected","");
+				$template->set_var("cur_sig_digits_1_selected","selected='selected'");
+				$template->set_var("cur_sig_digits_2_selected","");
+				$template->set_var("cur_sig_digits_3_selected","");
+				$template->set_var("cur_sig_digits_4_selected","");
+				$template->set_var("cur_sig_digits_5_selected","");
+				$template->set_var("cur_sig_digits_6_selected","");
+			break;
+			
+			case "3":
+				$template->set_var("cur_sig_digits_0_selected","");
+				$template->set_var("cur_sig_digits_1_selected","");
+				$template->set_var("cur_sig_digits_2_selected","");
+				$template->set_var("cur_sig_digits_3_selected","selected='selected'");
+				$template->set_var("cur_sig_digits_4_selected","");
+				$template->set_var("cur_sig_digits_5_selected","");
+				$template->set_var("cur_sig_digits_6_selected","");
+			break;
+			
+			case "4":
+				$template->set_var("cur_sig_digits_0_selected","");
+				$template->set_var("cur_sig_digits_1_selected","");
+				$template->set_var("cur_sig_digits_2_selected","");
+				$template->set_var("cur_sig_digits_3_selected","");
+				$template->set_var("cur_sig_digits_4_selected","selected='selected'");
+				$template->set_var("cur_sig_digits_5_selected","");
+				$template->set_var("cur_sig_digits_6_selected","");
+			break;
+			
+			case "5":
+				$template->set_var("cur_sig_digits_0_selected","");
+				$template->set_var("cur_sig_digits_1_selected","");
+				$template->set_var("cur_sig_digits_2_selected","");
+				$template->set_var("cur_sig_digits_3_selected","");
+				$template->set_var("cur_sig_digits_4_selected","");
+				$template->set_var("cur_sig_digits_5_selected","selected='selected'");
+				$template->set_var("cur_sig_digits_6_selected","");
+			break;
+			
+			case "6":
+				$template->set_var("cur_sig_digits_0_selected","");
+				$template->set_var("cur_sig_digits_1_selected","");
+				$template->set_var("cur_sig_digits_2_selected","");
+				$template->set_var("cur_sig_digits_3_selected","");
+				$template->set_var("cur_sig_digits_4_selected","");
+				$template->set_var("cur_sig_digits_5_selected","");
+				$template->set_var("cur_sig_digits_6_selected","selected='selected'");
+			break;
+			
+			default: // 2
+				$template->set_var("cur_sig_digits_0_selected","");
+				$template->set_var("cur_sig_digits_1_selected","");
+				$template->set_var("cur_sig_digits_2_selected","selected='selected'");
+				$template->set_var("cur_sig_digits_3_selected","");
+				$template->set_var("cur_sig_digits_4_selected","");
+				$template->set_var("cur_sig_digits_5_selected","");
+				$template->set_var("cur_sig_digits_6_selected","");
+			break;
+		
+		endswitch;
+		
+		
+		// Decimal Separator
+		switch($regional->get_decimal_separator()):
+		
+			case "dot":
+				$template->set_var("decimal_separator_dot_selected","selected='selected'");
+				$template->set_var("decimal_separator_comma_selected","");
+			break;
+			
+			default: // comma
+				$template->set_var("decimal_separator_dot_selected","");
+				$template->set_var("decimal_separator_comma_selected","selected='selected'");
+			break;
+		
+		endswitch;
+		
+		
+		// Thousand Separator
+		switch($regional->get_thousand_separator()):
+		
+			case "space":
+				$template->set_var("thousand_separator_none_selected","");
+				$template->set_var("thousand_separator_space_selected","selected='selected'");
+				$template->set_var("thousand_separator_comma_selected","");
+				$template->set_var("thousand_separator_dot_selected","");
+				$template->set_var("thousand_separator_apostrophe_selected","");
+			break;
+			
+			case "comma":
+				$template->set_var("thousand_separator_none_selected","");
+				$template->set_var("thousand_separator_space_selected","");
+				$template->set_var("thousand_separator_comma_selected","selected='selected'");
+				$template->set_var("thousand_separator_dot_selected","");
+				$template->set_var("thousand_separator_apostrophe_selected","");
+			break;
+			
+			case "dot":
+				$template->set_var("thousand_separator_none_selected","");
+				$template->set_var("thousand_separator_space_selected","");
+				$template->set_var("thousand_separator_comma_selected","");
+				$template->set_var("thousand_separator_dot_selected","selected='selected'");
+				$template->set_var("thousand_separator_apostrophe_selected","");
+			break;
+			
+			case "apostrophe":
+				$template->set_var("thousand_separator_none_selected","");
+				$template->set_var("thousand_separator_space_selected","");
+				$template->set_var("thousand_separator_comma_selected","");
+				$template->set_var("thousand_separator_dot_selected","");
+				$template->set_var("thousand_separator_apostrophe_selected","selected='selected'");
+			break;
+			
+			default: // none
+				$template->set_var("thousand_separator_none_selected","selected='selected'");
+				$template->set_var("thousand_separator_space_selected","");
+				$template->set_var("thousand_separator_comma_selected","");
+				$template->set_var("thousand_separator_dot_selected","");
+				$template->set_var("thousand_separator_apostrophe_selected","");
+			break;
+		
+		endswitch;
+		
+		
+		// Name Display Format
+		switch($regional->get_name_display_format()):
+		
+			case "F S":
+				$template->set_var("name_display_format_1_selected","");
+				$template->set_var("name_display_format_2_selected","selected='selected'");
+				$template->set_var("name_display_format_3_selected","");
+				$template->set_var("name_display_format_4_selected","");
+				$template->set_var("name_display_format_5_selected","");
+				$template->set_var("name_display_format_6_selected","");
+				$template->set_var("name_display_format_7_selected","");
+				$template->set_var("name_display_format_8_selected","");
+				$template->set_var("name_display_format_9_selected","");
+			break;
+			
+			case "T S":
+				$template->set_var("name_display_format_1_selected","");
+				$template->set_var("name_display_format_2_selected","");
+				$template->set_var("name_display_format_3_selected","selected='selected'");
+				$template->set_var("name_display_format_4_selected","");
+				$template->set_var("name_display_format_5_selected","");
+				$template->set_var("name_display_format_6_selected","");
+				$template->set_var("name_display_format_7_selected","");
+				$template->set_var("name_display_format_8_selected","");
+				$template->set_var("name_display_format_9_selected","");
+			break;
+			
+			case "S, T F":
+				$template->set_var("name_display_format_1_selected","");
+				$template->set_var("name_display_format_2_selected","");
+				$template->set_var("name_display_format_3_selected","");
+				$template->set_var("name_display_format_4_selected","selected='selected'");
+				$template->set_var("name_display_format_5_selected","");
+				$template->set_var("name_display_format_6_selected","");
+				$template->set_var("name_display_format_7_selected","");
+				$template->set_var("name_display_format_8_selected","");
+				$template->set_var("name_display_format_9_selected","");
+			break;
+			
+			case "S, F":
+				$template->set_var("name_display_format_1_selected","");
+				$template->set_var("name_display_format_2_selected","");
+				$template->set_var("name_display_format_3_selected","");
+				$template->set_var("name_display_format_4_selected","");
+				$template->set_var("name_display_format_5_selected","selected='selected'");
+				$template->set_var("name_display_format_6_selected","");
+				$template->set_var("name_display_format_7_selected","");
+				$template->set_var("name_display_format_8_selected","");
+				$template->set_var("name_display_format_9_selected","");
+			break;
+			
+			case "T S, F":
+				$template->set_var("name_display_format_1_selected","");
+				$template->set_var("name_display_format_2_selected","");
+				$template->set_var("name_display_format_3_selected","");
+				$template->set_var("name_display_format_4_selected","");
+				$template->set_var("name_display_format_5_selected","");
+				$template->set_var("name_display_format_6_selected","selected='selected'");
+				$template->set_var("name_display_format_7_selected","");
+				$template->set_var("name_display_format_8_selected","");
+				$template->set_var("name_display_format_9_selected","");
+			break;
+			
+			case "S T F":
+				$template->set_var("name_display_format_1_selected","");
+				$template->set_var("name_display_format_2_selected","");
+				$template->set_var("name_display_format_3_selected","");
+				$template->set_var("name_display_format_4_selected","");
+				$template->set_var("name_display_format_5_selected","");
+				$template->set_var("name_display_format_6_selected","");
+				$template->set_var("name_display_format_7_selected","selected='selected'");
+				$template->set_var("name_display_format_8_selected","");
+				$template->set_var("name_display_format_9_selected","");
+			break;
+			
+			case "S F T":
+				$template->set_var("name_display_format_1_selected","");
+				$template->set_var("name_display_format_2_selected","");
+				$template->set_var("name_display_format_3_selected","");
+				$template->set_var("name_display_format_4_selected","");
+				$template->set_var("name_display_format_5_selected","");
+				$template->set_var("name_display_format_6_selected","");
+				$template->set_var("name_display_format_7_selected","");
+				$template->set_var("name_display_format_8_selected","selected='selected'");
+				$template->set_var("name_display_format_9_selected","");
+			break;
+			
+			case "S F":
+				$template->set_var("name_display_format_1_selected","");
+				$template->set_var("name_display_format_2_selected","");
+				$template->set_var("name_display_format_3_selected","");
+				$template->set_var("name_display_format_4_selected","");
+				$template->set_var("name_display_format_5_selected","");
+				$template->set_var("name_display_format_6_selected","");
+				$template->set_var("name_display_format_7_selected","");
+				$template->set_var("name_display_format_8_selected","");
+				$template->set_var("name_display_format_9_selected","selected='selected'");
+			break;
+			
+			default: // T F S
+				$template->set_var("name_display_format_1_selected","selected='selected'");
+				$template->set_var("name_display_format_2_selected","");
+				$template->set_var("name_display_format_3_selected","");
+				$template->set_var("name_display_format_4_selected","");
+				$template->set_var("name_display_format_5_selected","");
+				$template->set_var("name_display_format_6_selected","");
+				$template->set_var("name_display_format_7_selected","");
+				$template->set_var("name_display_format_8_selected","");
+				$template->set_var("name_display_format_9_selected","");
+			break;
+		
+		endswitch;
+		
+		
+		// System of Paper Format
+		switch($regional->get_system_of_paper_format()):
+		
+			case "aa":
+				$template->set_var("system_of_pf_din_selected","");
+				$template->set_var("system_of_pf_aa_selected","selected='selected'");
+			break;
+			
+			default: // din
+				$template->set_var("system_of_pf_din_selected","selected='selected'");
+				$template->set_var("system_of_pf_aa_selected","");
+			break;
+		
+		endswitch;
+		
+		
 		$template->output();
 	}
 	

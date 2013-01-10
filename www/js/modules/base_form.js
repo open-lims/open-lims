@@ -59,7 +59,10 @@ base_form_init = function()
 			var focused_element;
 			
 			var container = new $("<div class='FormSelectContainer'></div>");
-			$(container).attr("class", $(container).attr("class")+" "+$(this).attr("class"));
+			if ($(this).attr("class") !== undefined)
+			{
+				$(container).attr("class", $(container).attr("class")+" "+$(this).attr("class"));
+			}
 			
 			if ($(this).css("display") === "block")
 			{
@@ -73,6 +76,12 @@ base_form_init = function()
 			$(this).wrap(container);
 			
 			var option_list = $("<div class='FormSelectList'><ul></ul></div>").css({"display":"none","min-width":$(this).parent().width()+8});
+			option_list.bind("click", function(event)
+			{
+				event.preventDefault();
+				event.stopPropagation();
+			});
+						
 			var entry = $("<div class='FormSelectEntry'></div>");
 			
 			// Option List
@@ -188,10 +197,10 @@ base_form_init = function()
 					
 					open_select_option_list_global_close_handler = function(event)
 					{
-						open_select_option_list_button.trigger("click");
+						$(button).trigger("click");
 					}
 					
-					$(document).bind("click", {option: $(option_list), button: $(this)}, open_select_option_list_global_close_handler);
+					$(document).bind("click", open_select_option_list_global_close_handler);
 				}
 				else
 				{
@@ -258,7 +267,6 @@ base_form_init = function()
 					event.stopPropagation();
 					
 					var data = event.data;
-					$(option_list).css("display", "none");
 					$(data.option).parent().children("option:selected").removeAttr("selected");
 					$(data.option).attr("selected", "selected");
 					$(entry).html($(data.option).html());
@@ -266,7 +274,7 @@ base_form_init = function()
 					
 					selected_element = $(this);
 					
-					$(option_list).unbind("keydown");
+					$(button).trigger("click");
 				});
 				
 				list_entry.children("a").bind("focus", function(event)

@@ -49,6 +49,7 @@ function __autoload($classname)
 	$classes['BaseEnvironmentPaperSizeIDMissingException']		= $path_prefix."core/include/base/environment/exceptions/base_environment_paper_size_id_missing.exception.class.php";
 	$classes['BaseEnvironmentPaperSizeNotFoundException']		= $path_prefix."core/include/base/environment/exceptions/base_environment_paper_size_not_found.exception.class.php";
 	
+	$classes['Country']											= $path_prefix."core/include/base/environment/country.class.php";
 	$classes['Currency']										= $path_prefix."core/include/base/environment/currency.class.php";
 	$classes['DatetimeHandler']									= $path_prefix."core/include/base/environment/datetime_handler.class.php";
 	$classes['Language']										= $path_prefix."core/include/base/environment/language.class.php";

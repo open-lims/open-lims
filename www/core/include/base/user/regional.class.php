@@ -61,7 +61,6 @@ class Regional implements RegionalInterface
 	}
 	
 	/**
-	 * @todo fallback
 	 * @return integer
 	 */
 	public function get_language_id()
@@ -75,12 +74,12 @@ class Regional implements RegionalInterface
 			}
 			else
 			{
-				// Fallback
+				return 1;
 			}
 		}
 		else
 		{
-			// Fallback
+			return 1;
 		}
 	}
 	
@@ -117,23 +116,23 @@ class Regional implements RegionalInterface
 			$time_display_format = $this->user_regional_setting->get_time_display_format();
 			if (isset($time_display_format))
 			{
-				if ($time_display_format == true)
+				if ($time_display_format == "t")
 				{
-					return "H:i:s";
+					return array(true, "h:i:s a");
 				}
 				else
 				{
-					return "h:i:s a";
+					return array(false, "H:i:s");
 				}
 			}
 			else
 			{
-				return "H:i:s";
+				return array(false, "H:i:s");
 			}
 		}
 		else
 		{
-			return "H:i:s";
+			return array(false, "H:i:s");
 		}
 	}
 	
@@ -153,12 +152,12 @@ class Regional implements RegionalInterface
 			}
 			else
 			{
-				return true;
+				return false;
 			}
 		}
 		else
 		{
-			return true;
+			return false;
 		}
 	}
 	
@@ -215,12 +214,12 @@ class Regional implements RegionalInterface
 			}
 			else
 			{
-				return "dd.mm.YYYY";
+				return "dd.mm.yyyy";
 			}
 		}
 		else
 		{
-			return "dd.mm.YYYY";
+			return "dd.mm.yyyy";
 		}
 	}
 	
@@ -231,7 +230,7 @@ class Regional implements RegionalInterface
 	{
 		if ($this->user_regional_setting)
 		{
-			$this->user_regional_setting->get_country_id();
+			return $this->user_regional_setting->get_country_id();
 		}
 		else
 		{
@@ -372,12 +371,12 @@ class Regional implements RegionalInterface
 			}
 			else
 			{
-				return ".";
+				return "";
 			}
 		}
 		else
 		{
-			return ".";
+			return "";
 		}
 	}
 	
@@ -407,72 +406,170 @@ class Regional implements RegionalInterface
 	
 	public function set_language_id($language_id)
 	{
-		
+		if ($this->user_regional_setting)
+		{
+			return $this->user_regional_setting->set_language_id($language_id);
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	public function set_timezone_id($timezone_id)
 	{
-		
+		if ($this->user_regional_setting)
+		{
+			return $this->user_regional_setting->set_timezone_id($timezone_id);
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	public function set_time_display_format($time_display_format)
 	{
-		
+		if ($this->user_regional_setting)
+		{
+			return $this->user_regional_setting->set_time_display_format($time_display_format);
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	public function set_time_enter_format($time_enter_format)
 	{
-
+		if ($this->user_regional_setting)
+		{
+			return $this->user_regional_setting->set_time_enter_format($time_enter_format);
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
-	public function set_date_display_format($date_display_format_id)
+	public function set_date_display_format($date_display_format)
 	{
-
+		if ($this->user_regional_setting)
+		{
+			return $this->user_regional_setting->set_date_display_format($date_display_format);
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
-	public function set_date_enter_format($date_enter_format_id)
+	public function set_date_enter_format($date_enter_format)
 	{
-		
+		if ($this->user_regional_setting)
+		{
+			return $this->user_regional_setting->set_date_enter_format($date_enter_format);
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	public function set_country_id($country_id)
 	{
-		
+		if ($this->user_regional_setting)
+		{
+			return $this->user_regional_setting->set_country_id($country_id);
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
-	public function set_system_of_units($system_of_units_id)
+	public function set_system_of_units($system_of_units)
 	{
-		
+		if ($this->user_regional_setting)
+		{
+			return $this->user_regional_setting->set_system_of_units($system_of_units);
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
-	public function set_system_of_paper_format($system_of_paper_format_id)
+	public function set_system_of_paper_format($system_of_paper_format)
 	{
-
+		if ($this->user_regional_setting)
+		{
+			return $this->user_regional_setting->set_system_of_paper_format($system_of_paper_format);
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	public function set_currency_id($currency_id)
 	{
-		
+		if ($this->user_regional_setting)
+		{
+			return $this->user_regional_setting->set_currency_id($currency_id);
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	public function set_currency_significant_digits($currency_significant_digits)
 	{
-		
+		if ($this->user_regional_setting)
+		{
+			return $this->user_regional_setting->set_currency_significant_digits($currency_significant_digits);
+		}
+		else
+		{
+			return false;
+		}
 	}
 
-	public function set_decimal_separator($decimal_separator_id)
+	public function set_decimal_separator($decimal_separator)
 	{
-		
+		if ($this->user_regional_setting)
+		{
+			return $this->user_regional_setting->set_decimal_separator($decimal_separator);
+		}
+		else
+		{
+			return false;
+		}
 	}
 
-	public function set_thousand_separator($thousand_separator_id)
+	public function set_thousand_separator($thousand_separator)
 	{
-		
+		if ($this->user_regional_setting)
+		{
+			return $this->user_regional_setting->set_thousand_separator($thousand_separator);
+		}
+		else
+		{
+			return false;
+		}
 	}
 
-	public function set_name_display_format($name_display_format_id)
+	public function set_name_display_format($name_display_format)
 	{
-		
+		if ($this->user_regional_setting)
+		{
+			return $this->user_regional_setting->set_name_display_format($name_display_format);
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 }

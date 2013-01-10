@@ -9,29 +9,60 @@ $(document).ready(function()
 	
 	$("#BaseUserRegionalSettingsSaveButton").click(function()
 	{
-		if (check_form() === true)
-		{			
-			var language_id = $(".FormTextfield[name='language_id']").val();
-			var country_id = $(".FormTextfield[name='country_id']").val();
-			var timezone_id = $(".FormTextfield[name='timezone_id']").val();
-			var time_display = $(".FormTextfield[name='time_display']").val();
-			var time_enter = $(".FormTextfield[name='time_enter']").val();
-			var date_display = $(".FormTextfield[name='date_display']").val();
-			var date_enter = $(".FormTextfield[name='date_enter']").val();
-			var system_of_units = $(".FormTextfield[name='system_of_units']").val();
-			var currency_id = $(".FormTextfield[name='currency_id']").val();
-			var currency_significant_digits = $(".FormTextfield[name='currency_significant_digits']").val();
-			var decimal_separator = $(".FormTextfield[name='decimal_separator']").val();
-			var thousand_separator = $(".FormTextfield[name='thousand_separator']").val();
-			var name_display_format = $(".FormTextfield[name='name_display_format']").val();
-			var system_of_paper_format = $(".FormTextfield[name='system_of_paper_format']").val();
-		}
+		var language_id = $("select[name='language_id']").val();
+		var country_id = $("select[name='country_id']").val();
+		var timezone_id = $("select[name='timezone_id']").val();
+		var time_display = $("select[name='time_display']").val();
+		var time_enter = $("select[name='time_enter']").val();
+		var date_display = $("select[name='date_display']").val();
+		var date_enter = $("select[name='date_enter']").val();
+		var system_of_units = $("select[name='system_of_units']").val();
+		var currency_id = $("select[name='currency_id']").val();
+		var currency_significant_digits = $("select[name='currency_significant_digits']").val();
+		var decimal_separator = $("select[name='decimal_separator']").val();
+		var thousand_separator = $("select[name='thousand_separator']").val();
+		var name_display_format = $("select[name='name_display_format']").val();
+		var system_of_paper_format = $("select[name='system_of_paper_format']").val();
+
+		$.ajax(
+		{
+			type : "POST",
+			url : "ajax.php?session_id=[[SESSION_ID]]&nav=base&run=user_profile_regional_settings_change",
+			data : "language_id="+language_id+"&country_id="+country_id+"&timezone_id="+timezone_id+"&time_display="+time_display+"&time_enter="+time_enter+"&date_display="+date_display+"&date_enter="+date_enter+"&system_of_units="+system_of_units+"&currency_id="+currency_id+"&currency_significant_digits="+currency_significant_digits+"&decimal_separator="+decimal_separator+"&thousand_separator="+thousand_separator+"&name_display_format="+name_display_format+"&system_of_paper_format="+system_of_paper_format+"",
+			beforeSend: function()
+			{
+				$("#BaseUserRegionalSettingsFinish").dialog("open");
+			},
+			success : function(data)
+			{
+				if (data == "1")
+				{
+				 	window.setTimeout('window.location = \'[[RETRACE]]\'',500);
+				}
+				else
+				{
+					if ((data + '').indexOf("EXCEPTION",0) === 0)
+					{
+						var exception_message = data.replace("EXCEPTION: ","");
+						$("#BaseUserRegionalSettingsFinish").dialog("close");
+						ErrorDialog("Error", exception_message);
+						return false;
+					}
+					else
+					{
+						$("#BaseUserRegionalSettingsFinish").dialog("close");
+						ErrorDialog("Error", "An error occured");
+						return false;
+					}
+				}
+			}
+		});
 	});
 });
 /*]]>*/           
 </script>
 
-<div class="BasePlaseWaitWindow" id="BaseUserProfilePersonalDataFinish" title=""> 
+<div class="BasePlaseWaitWindow" id="BaseUserRegionalSettingsFinish" title=""> 
 <div><img src='images/animations/loading_circle_small.gif' alt=''> [[LANG:BaseGlobalMessageWait]]</div>
 </div> 
 
@@ -110,35 +141,45 @@ $(document).ready(function()
 	</tr>
 	<tr>
 		<td>Time</td>
-		<td><select name='time_display' style='display: block;'><option value='0'>24:00</option><option value='1'>12:00 pm</option></select></td>
+		<td>
+			<select name='time_display' style='display: block;'>
+				<option value='0' [[TIME_DISPLAY_0_SELECTED]]>24:00</option>
+				<option value='1' [[TIME_DISPLAY_1_SELECTED]]>12:00 pm</option>
+			</select>
+		</td>
 		<td></td>
-		<td><select name='time_enter' style='display: block;'><option value='0'>24:00</option><option value='1'>12:00 pm</option></select></td>
+		<td>
+			<select name='time_enter' style='display: block;'>
+				<option value='0' [[TIME_ENTER_0_SELECTED]]>24:00</option>
+				<option value='1' [[TIME_ENTER_1_SELECTED]]>12:00 pm</option>
+			</select>
+		</td>
 	</tr>
 	<tr>
 		<td>Date</td>
 		<td>
 			<select name='date_display' style='display: block;'>
-				<option value='1'>31.12.2010 - dd.mm.yyyy</option>
-		 		<option value='2'>2012.12.31 - yyyy.mm.dd</option>
-		 		<option value='3'>31-12-2010 - dd-mm-yyyy</option>
-		 		<option value='4'>12-31-2010 - mm-dd-yyyy</option>
-		 		<option value='5'>2010-12-31 - yyyy-mm-dd</option>
-		 		<option value='6'>31/12/2010 - dd/mm/yyyy</option>
-		 		<option value='7'>12/31/2010 - mm/dd/yyyy</option>
-		 		<option value='8'>31st Dec 2010 - jS M yyyy</option>
-		 		<option value='9'>31. Dec 2010 - d. M yyyy</option>
+				<option value='1' [[DATE_DISPLAY_1_SELECTED]]>31.12.2010 - dd.mm.yyyy</option>
+		 		<option value='2' [[DATE_DISPLAY_2_SELECTED]]>2012.12.31 - yyyy.mm.dd</option>
+		 		<option value='3' [[DATE_DISPLAY_3_SELECTED]]>31-12-2010 - dd-mm-yyyy</option>
+		 		<option value='4' [[DATE_DISPLAY_4_SELECTED]]>12-31-2010 - mm-dd-yyyy</option>
+		 		<option value='5' [[DATE_DISPLAY_5_SELECTED]]>2010-12-31 - yyyy-mm-dd</option>
+		 		<option value='6' [[DATE_DISPLAY_6_SELECTED]]>31/12/2010 - dd/mm/yyyy</option>
+		 		<option value='7' [[DATE_DISPLAY_7_SELECTED]]>12/31/2010 - mm/dd/yyyy</option>
+		 		<option value='8' [[DATE_DISPLAY_8_SELECTED]]>31st Dec 2010 - jS M yyyy</option>
+		 		<option value='9' [[DATE_DISPLAY_9_SELECTED]]>31. Dec 2010 - d. M yyyy</option>
 	 		</select>
 	 	</td>
 	 	<td></td>
 		<td>
 			<select name='date_enter' style='display: block;'>
-				<option value='1'>31.12.2010 - dd.mm.yyyy</option>
-		 		<option value='2'>2012.12.31 - yyyy.mm.dd</option>
-		 		<option value='3'>31-12-2010 - dd-mm-yyyy</option>
-		 		<option value='4'>12-31-2010 - mm-dd-yyyy</option>
-		 		<option value='5'>2010-12-31 - yyyy-mm-dd</option>
-		 		<option value='6'>31/12/2010 - dd/mm/yyyy</option>
-		 		<option value='7'>12/31/2010 - mm/dd/yyyy</option>
+				<option value='1' [[DATE_ENTER_1_SELECTED]]>31.12.2010 - dd.mm.yyyy</option>
+		 		<option value='2' [[DATE_ENTER_2_SELECTED]]>2012.12.31 - yyyy.mm.dd</option>
+		 		<option value='3' [[DATE_ENTER_3_SELECTED]]>31-12-2010 - dd-mm-yyyy</option>
+		 		<option value='4' [[DATE_ENTER_4_SELECTED]]>12-31-2010 - mm-dd-yyyy</option>
+		 		<option value='5' [[DATE_ENTER_5_SELECTED]]>2010-12-31 - yyyy-mm-dd</option>
+		 		<option value='6' [[DATE_ENTER_6_SELECTED]]>31/12/2010 - dd/mm/yyyy</option>
+		 		<option value='7' [[DATE_ENTER_7_SELECTED]]>12/31/2010 - mm/dd/yyyy</option>
 	 		</select>
 		</td>
 	</tr>
@@ -158,7 +199,12 @@ $(document).ready(function()
 	
 	<tr>
 		<td style='width: 25%;'>System of Units:</td>
-		<td colspan='4'><select name='system_of_units' style='display: block;'><option value='metric'>metric</option><option value='aa'>anglo-american</option></select></td>
+		<td colspan='4'>
+			<select name='system_of_units' style='display: block;'>
+				<option value='metric' [[SYSTEM_OF_UNITS_METRIC_SELECTED]]>metric</option>
+				<option value='aa' [[SYSTEM_OF_UNITS_AA_SELECTED]]>anglo-american</option>
+			</select>
+		</td>
 	</tr>
 	<tr>
 		<td>Currency:</td>
@@ -175,15 +221,38 @@ $(document).ready(function()
 		</td>
 		<td style='width: 1%;'></td>
 		<td style='width: 24%;'>Currency Significant Digits:</td>
-		<td style='width: 25%;'><select name='currency_significant_digits' style='display: block;'><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></td>
+		<td style='width: 25%;'>
+			<select name='currency_significant_digits' style='display: block;'>
+				<option [[CUR_SIG_DIGITS_0_SELECTED]]>0</option>
+				<option [[CUR_SIG_DIGITS_1_SELECTED]]>1</option>
+				<option [[CUR_SIG_DIGITS_2_SELECTED]]>2</option>
+				<option [[CUR_SIG_DIGITS_3_SELECTED]]>3</option>
+				<option [[CUR_SIG_DIGITS_4_SELECTED]]>4</option>
+				<option [[CUR_SIG_DIGITS_5_SELECTED]]>5</option>
+				<option [[CUR_SIG_DIGITS_6_SELECTED]]>6</option>
+			</select>
+		</td>
 	</tr>
 	
 	<tr>
 		<td>Decimal-Separator:</td>
-		<td><select name='decimal_separator' style='display: block;'><option value='comma'>comma [,]</option><option value='dot'>dot [.]</option></select></td>
+		<td>
+			<select name='decimal_separator' style='display: block;'>
+				<option value='comma' [[DECIMAL_SEPARATOR_COMMA_SELECTED]]>comma [,]</option>
+				<option value='dot' [[DECIMAL_SEPARATOR_DOT_SELECTED]]>dot [.]</option>
+			</select>
+		</td>
 		<td></td>
 		<td>Thousand-Separator:</td>
-		<td><select name='thousand_separator' style='display: block;'><option value='none'>none</option><option vanlue='space'>space [&nbsp;]</option><option value='comme'>comma [,]</option><option value='dot'>dot [.]</option><option value='apostrophe'>apostrophe [']</option></select></td>
+		<td>
+			<select name='thousand_separator' style='display: block;'>
+				<option value='none' [[THOUSAND_SEPARATOR_NONE_SELECTED]]>none</option>
+				<option value='space' [[THOUSAND_SEPARATOR_SPACE_SELECTED]]>space [&nbsp;]</option>
+				<option value='comma' [[THOUSAND_SEPARATOR_COMMA_SELECTED]]>comma [,]</option>
+				<option value='dot' [[THOUSAND_SEPARATOR_DOT_SELECTED]]>dot [.]</option>
+				<option value='apostrophe' [[THOUSAND_SEPARATOR_APOSTROPHE_SELECTED]]>apostrophe [']</option>
+			</select>
+		</td>
 	</tr>
 	
 </table>
@@ -201,21 +270,26 @@ $(document).ready(function()
 		<td style='width: 25%;'>Name Display Format:</td>
 		<td>
 			<select name='name_display_format' style='display: block;'>
-				<option value='1'>Dr. John Doe</option>
-				<option value='2'>John Doe</option>
-				<option value='3'>Dr. Doe</option>
-				<option value='4'>Doe, Dr. John</option>
-				<option value='5'>Doe, John</option>
-				<option value='6'>Dr. Doe, John</option>
-				<option value='7'>Doe Dr. John</option>
-				<option value='8'>Doe John Dr.</option>
-				<option value='9'>Doe John</option>
+				<option value='1' [[NAME_DISPLAY_FORMAT_1_SELECTED]]>Dr. John Doe</option>
+				<option value='2' [[NAME_DISPLAY_FORMAT_2_SELECTED]]>John Doe</option>
+				<option value='3' [[NAME_DISPLAY_FORMAT_3_SELECTED]]>Dr. Doe</option>
+				<option value='4' [[NAME_DISPLAY_FORMAT_4_SELECTED]]>Doe, Dr. John</option>
+				<option value='5' [[NAME_DISPLAY_FORMAT_5_SELECTED]]>Doe, John</option>
+				<option value='6' [[NAME_DISPLAY_FORMAT_6_SELECTED]]>Dr. Doe, John</option>
+				<option value='7' [[NAME_DISPLAY_FORMAT_7_SELECTED]]>Doe Dr. John</option>
+				<option value='8' [[NAME_DISPLAY_FORMAT_8_SELECTED]]>Doe John Dr.</option>
+				<option value='9' [[NAME_DISPLAY_FORMAT_9_SELECTED]]>Doe John</option>
 			</select>
 		</td>
 	</tr>
 	<tr>
 		<td>System of Paper Format:</td>
-		<td><select name='system_of_paper_format' style='display: block;'><option value='din'>DIN</option><option value='aa'>anglo-american</option></select></td>
+		<td>
+			<select name='system_of_paper_format' style='display: block;'>
+				<option value='din' [[SYSTEM_OF_PF_DIN_SELECTED]]>DIN</option>
+				<option value='aa' [[SYSTEM_OF_PF_AA_SELECTED]]>anglo-american</option>
+			</select>
+		</td>
 	</tr>
 
 </table>

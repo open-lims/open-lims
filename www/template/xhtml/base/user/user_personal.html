@@ -4,37 +4,42 @@ $(document).ready(function()
 {
 	function check_form()
 	{
+		$("#Error1").html("");
+		$("#Error2").html("");
+		$("#Error3").html("");
+		$("#Error4").html("");
+		
 		var no_error = true;
 		
-		if ($(".FormTextfield[name='forename']").val() === "")
+		if ($("input[name='forename']").val() === "")
 		{
 			no_error = false;
 			$("#Error1").html("<br />[[LANG:BaseUserPersonalError1]]");
 		}
 		
-		if ($(".FormTextfield[name='surname']").val() === "")
+		if ($("input[name='surname']").val() === "")
 		{
 			no_error = false;
 			$("#Error2").html("<br />[[LANG:BaseUserPersonalError2]]");
 		}
 		
-		if ($(".FormTextfield[name='mail']").val() === "")
+		if ($("input[name='mail']").val() === "")
 		{
 			no_error = false;
 			$("#Error3").html("<br />[[LANG:BaseUserPersonalError3]]");
 		}
 		else
 		{
-			if (!is_mail_address_valid($(".FormTextfield[name='mail']").val()))
+			if (!is_mail_address_valid($("input[name='mail']").val()))
 			{
 				no_error = false;
 				$("#Error3").html("<br />[[LANG:BaseUserPersonalError3]]");
 			}
 		}
 		
-		if ($(".FormTextfield[name='icq']").val() !== "")
+		if ($("input[name='icq']").val() !== "")
 		{
-			if (isNaN(parseInt($(".FormTextfield[name='icq']").val())))
+			if (isNaN(parseInt($("input[name='icq']").val())))
 			{
 				no_error = false;
 				$("#Error4").html("<br />[[LANG:BaseUserPersonalError4]]");
@@ -54,25 +59,25 @@ $(document).ready(function()
 	{
 		if (check_form() === true)
 		{			
-			var gender = $(":radio:checked[name='gender']").val();
-			var forename = $(".FormTextfield[name='forename']").val();
-			var surname = $(".FormTextfield[name='surname']").val();
-			var title = $(".FormTextfield[name='title']").val();
-			var mail = $(".FormTextfield[name='mail']").val();
-			var institution = $(".FormTextfield[name='institution']").val();
-			var department = $(".FormTextfield[name='department']").val();
-			var street = $(".FormTextfield[name='street']").val();
-			var zip = $(".FormTextfield[name='zip']").val();
-			var city = $(".FormTextfield[name='city']").val();
-			var country = $(".FormTextfield[name='country']").val();
-			var phone = $(".FormTextfield[name='phone']").val();
-			var icq = $(".FormTextfield[name='icq']").val();
-			var msn = $(".FormTextfield[name='msn']").val();
-			var yahoo = $(".FormTextfield[name='yahoo']").val();
-			var aim = $(".FormTextfield[name='aim']").val();
-			var skype = $(".FormTextfield[name='skype']").val();
-			var lync = $(".FormTextfield[name='lync']").val();
-			var jabber = $(".FormTextfield[name='jabber']").val();
+			var gender = $("input:radio:checked[name='gender']").val();
+			var forename = $("input[name='forename']").val();
+			var surname = $("input[name='surname']").val();
+			var title = $("input[name='title']").val();
+			var mail = $("input[name='mail']").val();
+			var institution = $("input[name='institution']").val();
+			var department = $("input[name='department']").val();
+			var street = $("input[name='street']").val();
+			var zip = $("input[name='zip']").val();
+			var city = $("input[name='city']").val();
+			var country = $("input[name='country']").val();
+			var phone = $("input[name='phone']").val();
+			var icq = $("input[name='icq']").val();
+			var msn = $("input[name='msn']").val();
+			var yahoo = $("input[name='yahoo']").val();
+			var aim = $("input[name='aim']").val();
+			var skype = $("input[name='skype']").val();
+			var lync = $("input[name='lync']").val();
+			var jabber = $("input[name='jabber']").val();
 			
 			$.ajax(
 			{
@@ -145,20 +150,20 @@ $(document).ready(function()
 	<tr>
 		<td>[[LANG:BaseUserPersonalFirstName]]: *</td>
 		<td>
-			<input type='text' name='forename' value='[[FORENAME]]' class='FormTextfield' size='45' />
+			<input type='text' name='forename' value='[[FORENAME]]' size='45' />
 			<span class='FormError' id='Error1'></span>
 		</td>
 	</tr>
 	<tr>
 		<td>[[LANG:BaseUserPersonalLastName]]: *</td>
 		<td>
-			<input type='text' name='surname' value='[[SURNAME]]' class='FormTextfield' size='45' />
+			<input type='text' name='surname' value='[[SURNAME]]' size='45' />
 			<span class='FormError' id='Error2'></span>	
 		</td>
 	</tr>
 	<tr>
 		<td>[[LANG:BaseUserPersonalPTitle]]:</td>
-		<td><input type='text' name='title' value='[[TITLE]]' class='FormTextfield' size='45' maxlength='10' /></td>
+		<td><input type='text' name='title' value='[[TITLE]]' size='45' maxlength='10' /></td>
 	</tr>
 	
 </table>
@@ -175,37 +180,37 @@ $(document).ready(function()
 	<tr>
 		<td style='width: 30%;'>[[LANG:BaseUserPersonalMail]]: *</td>
 		<td>
-			<input type='text' name='mail' value='[[MAIL]]' class='FormTextfield' id='BaseUserProfilePersonalDataMail' size='45' />
+			<input type='text' name='mail' value='[[MAIL]]' id='BaseUserProfilePersonalDataMail' size='45' />
 			<span class='FormError' id='Error3'></span>
 		</td>
 	</tr>
 	<tr>
 		<td>[[LANG:BaseUserPersonalInstitution]]:</td>
-		<td><input type='text' name='institution' value='[[INSTITUTION]]' class='FormTextfield' size='45' /></td>
+		<td><input type='text' name='institution' value='[[INSTITUTION]]' size='45' /></td>
 	</tr>
 	<tr>
 		<td>[[LANG:BaseUserPersonalDepartment]]:</td>
-		<td><input type='text' name='department' value='[[DEPARTMENT]]' class='FormTextfield' size='45' /></td>
+		<td><input type='text' name='department' value='[[DEPARTMENT]]' size='45' /></td>
 	</tr>
 	<tr>
 		<td>[[LANG:BaseUserPersonalStreet]]:</td>
-		<td><input type='text' name='street' value='[[STREET]]' class='FormTextfield' size='45' /></td>
+		<td><input type='text' name='street' value='[[STREET]]' size='45' /></td>
 	</tr>
 	<tr>
 		<td>[[LANG:BaseUserPersonalZip]]:</td>
-		<td><input type='text' name='zip' value='[[ZIP]]' class='FormTextfield' size='10' maxlength='10' /></td>
+		<td><input type='text' name='zip' value='[[ZIP]]' size='10' maxlength='10' /></td>
 	</tr>
 	<tr>
 		<td>[[LANG:BaseUserPersonalCity]]:</td>
-		<td><input type='text' name='city' value='[[CITY]]' class='FormTextfield' size='45' /></td>
+		<td><input type='text' name='city' value='[[CITY]]' size='45' /></td>
 	</tr>
 	<tr>
 		<td>[[LANG:BaseUserPersonalCountry]]:</td>
-		<td><input type='text' name='country' value='[[COUNTRY]]' class='FormTextfield' size='45' /></td>
+		<td><input type='text' name='country' value='[[COUNTRY]]' size='45' /></td>
 	</tr>
 	<tr>
 		<td>[[LANG:BaseUserPersonalPhone]]:</td>
-		<td><input type='text' name='phone' value='[[PHONE]]' class='FormTextfield' size='45' /></td>
+		<td><input type='text' name='phone' value='[[PHONE]]' size='45' /></td>
 	</tr>
 	
 </table>
@@ -222,33 +227,33 @@ $(document).ready(function()
 	<tr>
 		<td style='width: 30%;'>[[LANG:BaseUserPersonalICQ]]:</td>
 		<td>
-			<input type='text' name='icq' value='[[ICQ]]' class='FormTextfield' size='45' />
+			<input type='text' name='icq' value='[[ICQ]]' size='45' />
 			<span class='FormError' id='Error4'></span>
 		</td>
 	</tr>
 	<tr>
 		<td>[[LANG:BaseUserPersonalMSN]]:</td>
-		<td><input type='text' name='msn' value='[[MSN]]' class='FormTextfield' size='45' /></td>
+		<td><input type='text' name='msn' value='[[MSN]]' size='45' /></td>
 	</tr>
 	<tr>
 		<td>[[LANG:BaseUserPersonalYahoo]]:</td>
-		<td><input type='text' name='yahoo' value='[[YAHOO]]' class='FormTextfield' size='45' /></td>
+		<td><input type='text' name='yahoo' value='[[YAHOO]]' size='45' /></td>
 	</tr>
 	<tr>
 		<td>[[LANG:BaseUserPersonalAIM]]:</td>
-		<td><input type='text' name='aim' value='[[AIM]]' class='FormTextfield' size='45' /></td>
+		<td><input type='text' name='aim' value='[[AIM]]' size='45' /></td>
 	</tr>
 	<tr>
 		<td>[[LANG:BaseUserPersonalSkype]]:</td>
-		<td><input type='text' name='skype' value='[[SKYPE]]' class='FormTextfield' size='45' /></td>
+		<td><input type='text' name='skype' value='[[SKYPE]]' size='45' /></td>
 	</tr>
 	<tr>
 		<td>[[LANG:BaseUserPersonalLync]]:</td>
-		<td><input type='text' name='lync' value='[[LYNC]]' class='FormTextfield' size='45' /></td>
+		<td><input type='text' name='lync' value='[[LYNC]]' size='45' /></td>
 	</tr>
 	<tr>
 		<td>[[LANG:BaseUserPersonalJabber]]:</td>
-		<td><input type='text' name='jabber' value='[[JABBER]]' class='FormTextfield' size='45' /></td>
+		<td><input type='text' name='jabber' value='[[JABBER]]' size='45' /></td>
 	</tr>
 </table>
 
