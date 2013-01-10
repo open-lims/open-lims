@@ -393,7 +393,9 @@ class ContentHandler_IO
 			}
 			else
 			{
-				if ($_GET['run'] == "login" or $_GET['run'] == "cron")
+				if (($_GET['run'] == "login" )
+					or ($_GET['run'] == "cron")
+					or ($_GET['nav'] == "base" and $_GET['run'] == "logout" and $session->is_dead() == true))
 				{
 					require_once("core/modules/base/base.request.php");
 					BaseRequest::ajax_handler(null);

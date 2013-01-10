@@ -127,7 +127,14 @@ class Auth implements AuthInterface
     	}
     	else
     	{
-    		return false;
+    		if ($session->is_dead() == true)
+    		{
+    			return true;
+    		}
+    		else
+    		{
+    			return false;
+    		}
     	}
     }
     

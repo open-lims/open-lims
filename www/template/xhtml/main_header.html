@@ -3,41 +3,61 @@
 $(document).ready(function()
 {
 	var get_array = getQueryParams(document.location.search);
-		
-	$('#BaseLogout').click(function()
+	
+	$("#BaseLogoutQuestion").dialog(
 	{
-		$.blockUI({ message: $('#BaseLogoutQuestion'), css: { width: '275px' } }); 
-		$('.blockUI.blockMsg').center();
+		autoOpen: false,
+		height: 180,
+		width: 380,
+		modal: true,
+		draggable: false,
+		resizable: false,
+		closeOnEscape: false,
+		buttons: 
+		{
+			// Yes
+			"[[LANG:BaseGlobalButtonYes]]": function() 
+			{
+				$(this).parent().find("button").attr("disabled", true);
+				$(this).parent().find('.ui-dialog-titlebar-close').hide();
+
+				$("#BaseLogoutQuestion").empty();
+				$("#BaseLogoutQuestion").html("<img src='images/animations/loading_circle_small.gif' alt='' /> [[LANG:BaseMainHeaderLogoutWindowWait]]");
+				
+				$.ajax(
+				{
+					type: "GET",
+					url: "ajax.php",
+					data: "nav=base&run=logout&session_id="+get_array['session_id']+"",
+					success: function(data)
+					{
+						if (data == "1")
+						{
+							window.setTimeout('window.location = "index.php"',1500);
+						}
+					}
+				});
+			},
+			// No
+			"[[LANG:BaseGlobalButtonNo]]": function()
+			{
+			 	$( this ).dialog( "close" );
+			}
+		}
 	});
 	
-	$('#yes').click(function()
-	{ 
-		$("#BaseLogoutQuestion").empty();
-		$("#BaseLogoutQuestion").html("<img src='images/animations/loading_circle_small.gif' alt='' /> Please wait while logout.");
-		
-		$.ajax(
-		{
-			type: "GET",
-			url: "ajax.php",
-			data: "nav=base&run=logout&session_id="+get_array['session_id']+"",
-			success: function(data)
-			{
-				if (data == "1")
-				{
-					window.setTimeout('window.location = "index.php"',1500);
-				}
-			}
-		});
-    }); 
-
-    $('#no').click(function()
-    { 
-        $.unblockUI(); 
-        return false; 
-    }); 
+	$('#BaseLogout').click(function()
+	{
+		$("#BaseLogoutQuestion").dialog("open");
+	});
 });
 /*]]>*/
 </script>
+
+<div id="BaseLogoutQuestion" style="display:none; cursor: default"> 
+[[LANG:BaseMainHeaderLogoutWindowText]]
+</div> 
+
 <div id='Header'>&nbsp;
 	<div id='HeaderLogo'><img src='../images/logo.png' alt='Logo' /></div>
 	<div id='HeaderRight'>

@@ -176,6 +176,22 @@ class Session implements SessionInterface
     }
     
     /**
+     * @see SessionInterface::is_dead()
+     * @return bool
+     */
+    public function is_dead()
+    {
+    	if (!$this->user_id)
+    	{
+    		return true;
+    	}
+    	else
+    	{
+    		return false;
+    	}
+    }
+    
+    /**
      * @see SessionInterface::get_user_id()
      * @return integer
      */

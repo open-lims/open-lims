@@ -49,10 +49,16 @@ interface SessionInterface
 	public function destroy();
 	
 	/**
-     * Checks if current session is valid
+     * Checks if the current session is valid
      * @return bool
      */
 	public function is_valid();
+	
+	/**
+     * Checks if the current session is already alife
+     * @return bool
+     */
+	public function is_dead();
 	
 	/**
      * @return integer

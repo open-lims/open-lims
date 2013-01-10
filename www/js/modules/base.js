@@ -184,7 +184,7 @@ $(document).ready(function()
 		resizable: false,
 		closeOnEscape: false,
 		open: function(event, ui) { 
-			$(this).parent().children().children('.ui-dialog-titlebar-close').hide();
+			$(this).parent().find('.ui-dialog-titlebar-close').hide();
 		}
 	});
 });

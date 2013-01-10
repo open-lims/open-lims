@@ -482,19 +482,8 @@ html,body
 {
 	font: normal 12px Arial, Helvetica, sans-serif;	
 	padding: 10px;
-}
-#BaseLogoutQuestionText
-{
-	font-weight: bold;
 	margin: 15px;
-}
-#BaseLogoutQuestionButtons input
-{
-	background-color: white;
-	border: 1px #C0C0C0 solid;
-	padding: 2px;
-	margin: 10px;
-	width: 50px;
+	text-align: center;
 }
 
 
