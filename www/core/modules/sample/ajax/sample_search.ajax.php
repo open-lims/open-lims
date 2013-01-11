@@ -68,7 +68,7 @@ class SampleSearchAjax
 				foreach($list_array as $key => $value)
 				{
 					$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
-					$list_array[$key]['datetime'] = $datetime_handler->get_formatted_string("dS M Y");
+					$list_array[$key]['datetime'] = $datetime_handler->get_datetime(false);
 	
 					if ($list_array[$key]['av'] == "f")
 					{

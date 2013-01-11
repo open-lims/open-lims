@@ -127,7 +127,7 @@ class DataAjax
 				{
 					// Common
 					$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
-					$list_array[$key]['datetime'] = $datetime_handler->get_formatted_string("dS M Y H:i");
+					$list_array[$key]['datetime'] = $datetime_handler->get_datetime(false);
 										
 					if ($list_array[$key]['owner_id'])
 					{

@@ -107,7 +107,7 @@ class Regional implements RegionalInterface
 	}
 	
 	/**
-	 * @return string
+	 * @return array
 	 */
 	public function get_time_display_format()
 	{

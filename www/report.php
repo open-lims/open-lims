@@ -84,6 +84,7 @@
 			
 			$session = new Session($_GET['session_id']);
 			$user = new User($session->get_user_id());
+			$regional = new Regional();
 			
 			if ($session->is_valid() == true)
 			{

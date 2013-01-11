@@ -92,8 +92,8 @@ class ProjectLogAjax
 						$result[$counter]['show_more'] = false;
 						
 						$datetime_handler = new DatetimeHandler($project_log->get_datetime());
-						$result[$counter]['date'] = $datetime_handler->get_formatted_string("dS M Y");
-						$result[$counter]['time'] = $datetime_handler->get_formatted_string("H:i");
+						$result[$counter]['date'] = $datetime_handler->get_date();
+						$result[$counter]['time'] = $datetime_handler->get_time();
 						$result[$counter]['user'] = $user->get_full_name(false);
 						
 						if (($content = $project_log->get_content()) != null)

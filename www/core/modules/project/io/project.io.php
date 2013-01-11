@@ -168,7 +168,9 @@ class ProjectIO
 				
 				$template->set_var("title", $project->get_name());
 				$template->set_var("owner",$project_owner->get_full_name(false));
-				$template->set_var("created_at",$project->get_datetime());
+				
+				$create_datetime = new DatetimeHandler($project->get_datetime());
+				$template->set_var("created_at",$create_datetime->get_datetime());
 				$template->set_var("template",$project->get_template_name());
 				$template->set_var("permissions","");
 				$template->set_var("size",Convert::convert_byte_1024($project->get_filesize()));

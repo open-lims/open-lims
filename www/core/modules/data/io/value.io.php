@@ -56,8 +56,10 @@ class ValueIO
 					$value_version = Value::get_instance($value->get_id(), true);
 					$value_version->open_internal_revision($fe_value);
 					
+					$version_datetime_handler = new DatetimeHandler($value_version->get_version_datetime());
+					
 					$result[$counter]['version'] = $value_version->get_internal_revision();
-					$result[$counter]['text'] = "Version ".$value_version->get_version()." - ".$value_version->get_version_datetime();
+					$result[$counter]['text'] = "Version ".$value_version->get_version()." - ".$version_datetime_handler->get_datetime();
 					$counter++;
 				}
 				$template->set_var("version_option",$result);
@@ -171,8 +173,10 @@ class ValueIO
 							$value_version = Value::get_instance($_GET['value_id'], true);
 							$value_version->open_internal_revision($fe_value);
 							
+							$version_datetime_handler = new DatetimeHandler($value_version->get_version_datetime());
+							
 							$result[$counter]['version'] = $value_version->get_internal_revision();
-							$result[$counter]['text'] = "Version ".$value_version->get_version()." - ".$value_version->get_version_datetime();
+							$result[$counter]['text'] = "Version ".$value_version->get_version()." - ".$version_datetime_handler->get_datetime();
 							$counter++;
 						}
 						$template->set_var("version_option",$result);

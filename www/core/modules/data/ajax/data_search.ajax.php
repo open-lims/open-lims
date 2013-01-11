@@ -63,7 +63,7 @@ class DataSearchAjax
 				foreach($list_array as $key => $value)
 				{
 					$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
-					$list_array[$key]['datetime'] = $datetime_handler->get_formatted_string("dS M Y H:i");
+					$list_array[$key]['datetime'] = $datetime_handler->get_datetime(false);
 					
 					$owner = new User($value['owner']);
 					$list_array[$key]['owner'] = $owner->get_full_name(true);

@@ -102,7 +102,7 @@ class DataReportIO
 							
 							$line_array = array(array("name" => "name", "content" => $value_version->get_name()),
 												array("name" => "version", "content" => $value_version->get_version()),
-												array("name" => "datetime", "content" => $datetime_handler->get_formatted_string("dS M y H:i")),
+												array("name" => "datetime", "content" => $datetime_handler->get_datetime(false)),
 												array("name" => "user", "content" => $owner->get_full_name(true))
 												);
 												
@@ -144,7 +144,7 @@ class DataReportIO
 					
 					$line_array = array(array("name" => "name", "content" => $value['name']),
 												array("name" => "version", "content" => $file->get_version()),
-												array("name" => "datetime", "content" => $datetime_handler->get_formatted_string("dS M y H:i")),
+												array("name" => "datetime", "content" => $datetime_handler->get_datetime(false)),
 												array("name" => "user", "content" => $owner->get_full_name(true))
 												);
 												

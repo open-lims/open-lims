@@ -56,7 +56,7 @@ class JobAjax
 			foreach($list_array as $key => $value)
 			{
 				$datetime_handler = new DatetimeHandler($list_array[$key]['created_at']);
-				$list_array[$key]['created_at'] = $datetime_handler->get_formatted_string("dS M Y H:i");
+				$list_array[$key]['created_at'] = $datetime_handler->get_datetime(false);
 				
 				$user = new User($list_array[$key]['user_id']);
 				$list_array[$key]['user'] = $user->get_full_name(true);

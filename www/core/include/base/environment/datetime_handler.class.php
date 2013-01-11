@@ -752,24 +752,35 @@ class DatetimeHandler implements DatetimeHandlerInterface
      */
     public function get_date()
     {
+    	global $regional;
+    	
     	if ($this->mktime)
     	{
+    		if (is_object($regional))
+    		{
+    			$format = $regional->get_date_display_format();
+    		}
+    		elseif($format == null and !is_object($regional))
+    		{
+    			$format = "Y-m-d";
+    		}
+    		
     		if ($this->ignore_timezone == false)
     		{
 	    		if ($this->user_timezone)
 	    		{
 	    			$mktime = $this->mktime + ($this->user_timezone * 3600);
-	    			return date("Y-m-d", $mktime);
+	    			return date($format, $mktime);
 	    		}
 	    		else
 	    		{
 	    			$mktime = $this->mktime + ($this->server_timezone * 3600);
-	    			return date("Y-m-d", $mktime);
+	    			return date($format, $mktime);
 	    		}  
     		}
     		else
     		{
-    			return  date("Y-m-d", $this->mktime);
+    			return  date($format, $this->mktime);
     		}  		
     	}
     	else
@@ -780,29 +791,99 @@ class DatetimeHandler implements DatetimeHandlerInterface
     
     /**
      * @see DatetimeHandlerInterface::get_time()
+     * @param bool $display_second
      * @return string
      */
-    public function get_time()
+    public function get_time($display_second = true)
     {
+    	global $regional;
+    	
     	if ($this->mktime)
     	{
+    		if (is_object($regional))
+    		{
+    			$time_display_format = $regional->get_time_display_format();
+    			
+    			if ($display_second == false)
+    			{
+    				$time_display_format[1] = str_replace(":s","",$time_display_format[1]);
+    			}
+    			
+    			$format = $time_display_format[1];
+    		}
+    		elseif($format == null and !is_object($regional))
+    		{
+    			$format = "H:i:s";
+    		}
+    		
     		if ($this->ignore_timezone == false)
     		{
 	    		if ($this->user_timezone)
 	    		{
 	    			$mktime = $this->mktime + ($this->user_timezone * 3600);
-	    			return date("H:i:s", $mktime);
+	    			return date($format, $mktime);
 	    		}
 	    		else
 	    		{
 	    			$mktime = $this->mktime + ($this->server_timezone * 3600);
-	    			return date("H:i:s", $mktime);
+	    			return date($format, $mktime);
 	    		}   
 	    	}
 	    	else
 	    	{
-    			return date("H:i:s", $this->mktime);
+    			return date($format, $this->mktime);
     		} 	 		
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+	/**
+     * @see DatetimeHandlerInterface::get_datetime()
+     * @param bool $display_second
+     * @return string 
+     */
+    public function get_datetime($display_second = true)
+    {
+    	global $regional;
+    	
+    	if ($this->mktime)
+    	{
+    		if (is_object($regional))
+    		{
+    			$time_display_format = $regional->get_time_display_format();
+    			
+    			if ($display_second == false)
+    			{
+    				$time_display_format[1] = str_replace(":s","",$time_display_format[1]);
+    			}
+    			
+    			$format = $regional->get_date_display_format()." ".$time_display_format[1];
+    		}
+    		else
+    		{
+    			return null;
+    		}
+    		
+    		if ($this->ignore_timezone == false)
+    		{
+	    		if ($this->user_timezone)
+	    		{
+	    			$mktime = $this->mktime + ($this->user_timezone * 3600);
+	    			return date($format, $mktime);
+	    		}
+	    		else
+	    		{
+	    			$mktime = $this->mktime + ($this->server_timezone * 3600);
+	    			return date($format, $mktime);
+	    		}   
+    		}
+    		else
+    		{
+    			return date($format, $this->mktime);
+    		} 		
     	}
     	else
     	{
@@ -813,12 +894,31 @@ class DatetimeHandler implements DatetimeHandlerInterface
     /**
      * @see DatetimeHandlerInterface::get_formatted_string()
      * @param string $format Use php-function date() chars for format
+     * @param bool $display_second
      * @return string 
      */
-    public function get_formatted_string($format)
+    public function get_formatted_string($format = null, $display_second = true)
     {
+    	global $regional;
+    	
     	if ($this->mktime)
     	{
+    		if ($format == null and is_object($regional))
+    		{
+    			$time_display_format = $regional->get_time_display_format();
+    			
+    			if ($display_second == false)
+    			{
+    				$time_display_format[1] = str_replace(":s","",$time_display_format[1]);
+    			}
+    			
+    			$format = $regional->get_date_display_format()." ".$time_display_format[1];
+    		}
+    		elseif($format == null and !is_object($regional))
+    		{
+    			return null;
+    		}
+    		
     		if ($this->ignore_timezone == false)
     		{
 	    		if ($this->user_timezone)

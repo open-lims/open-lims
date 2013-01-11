@@ -73,8 +73,10 @@ class FileIO
 						$file_version = File::get_instance($_GET['file_id'], true);
 						$file_version->open_internal_revision($value);
 						
+						$version_datetime_handler = new DatetimeHandler($file_version->get_datetime());
+						
 						$result[$counter]['version'] = $file_version->get_internal_revision();
-						$result[$counter]['text'] = "Version ".$file_version->get_version()." - ".$file_version->get_datetime();
+						$result[$counter]['text'] = "Version ".$file_version->get_version()." - ".$version_datetime_handler->get_datetime();
 						$counter++;
 					}
 					$template->set_var("version_option",$result);
@@ -111,8 +113,11 @@ class FileIO
 				$template->set_var("size",Convert::convert_byte_1024($file->get_size()));
 				$template->set_var("size_in_byte",$file->get_size());
 				
-				$template->set_var("creation_datetime",$file->get_datetime());
-				$template->set_var("version_datetime",$file->get_version_datetime());
+				$create_datetime_handler = new DatetimeHandler($file->get_datetime());
+				$version_datetime_handler = new DatetimeHandler($file->get_version_datetime());
+				
+				$template->set_var("creation_datetime", $create_datetime_handler->get_datetime());
+				$template->set_var("version_datetime", $version_datetime_handler->get_datetime());
 				$template->set_var("mime_type",$file->get_mime_type());
 				$template->set_var("owner",$user->get_full_name(false));
 				$template->set_var("checksum",$file->get_checksum());

@@ -68,7 +68,7 @@ class SampleAjax
 				$list_array[$key]['template']['content'] = $tmp_template;
 				
 				$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
-				$list_array[$key]['datetime'] = $datetime_handler->get_formatted_string("dS M Y");
+				$list_array[$key]['datetime'] = $datetime_handler->get_datetime(false);
 
 				if ($list_array[$key]['av'] == "f")
 				{
@@ -200,7 +200,7 @@ class SampleAjax
 					$list_array[$key]['template']['content'] = $tmp_template;
 					
 					$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
-					$list_array[$key]['datetime'] = $datetime_handler->get_formatted_string("dS M Y");
+					$list_array[$key]['datetime'] = $datetime_handler->get_datetime(false);
 	
 					if ($list_array[$key]['av'] == "f")
 					{
@@ -460,7 +460,7 @@ class SampleAjax
 					}
 					
 					$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
-					$list_array[$key]['datetime'] = $datetime_handler->get_formatted_string("dS M Y");
+					$list_array[$key]['datetime'] = $datetime_handler->get_date();
 				
 					if ($list_array[$key]['owner'])
 					{
@@ -671,7 +671,7 @@ class SampleAjax
 					}
 					
 					$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
-					$list_array[$key]['datetime'] = $datetime_handler->get_formatted_string("dS M Y");
+					$list_array[$key]['datetime'] = $datetime_handler->get_date();
 				
 					if ($list_array[$key]['owner'])
 					{
@@ -762,7 +762,7 @@ class SampleAjax
 						$list_array[$key]['symbol'] = "<img src='images/icons/sample.png' alt='' style='border:0;' />";
 						
 						$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
-						$list_array[$key]['datetime'] = $datetime_handler->get_formatted_string("dS M Y H:i");
+						$list_array[$key]['datetime'] = $datetime_handler->get_datetime(false);
 					
 						if ($list_array[$key]['user'])
 						{
@@ -1050,12 +1050,13 @@ class SampleAjax
 				$template->set_var("permissions", $sample_security->get_access_string());
 			
 				$datetime = new DatetimeHandler($sample->get_datetime());
-				$template->set_var("datetime", $datetime->get_formatted_string("dS M Y H:i"));
+				$template->set_var("datetime", $datetime->get_datetime());
+				
 				
 				if ($sample->get_date_of_expiry())
 				{
 					$date_of_expiry = new DatetimeHandler($sample->get_date_of_expiry());
-					$template->set_var("date_of_expiry", $date_of_expiry->get_formatted_string("dS M Y"));
+					$template->set_var("date_of_expiry", $date_of_expiry->get_date());
 				}
 				else
 				{

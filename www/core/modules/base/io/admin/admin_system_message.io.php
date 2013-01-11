@@ -83,7 +83,7 @@ class AdminSystemMessageIO
 				$content = str_replace("\\", "", $content);
 				
 				$result[$counter]['user'] = $user->get_full_name(false);
-				$result[$counter]['datetime'] = $datetime_handler->get_formatted_string("dS M Y \\a\\t H:i");
+				$result[$counter]['datetime'] = $datetime_handler->get_date()." at ".$datetime_handler->get_time();
 				$result[$counter]['content'] = $content;
 				
 				

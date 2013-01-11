@@ -112,7 +112,7 @@ class AdminSystemLogIO
 		
 			$template = new HTMLTemplate("base/admin/system_log/detail.html");
 			
-			$template->set_var("datetime", $datetime_handler->get_formatted_string("dS M Y H:i"));
+			$template->set_var("datetime", $datetime_handler->get_datetime(false));
 
 			if ($system_log->get_user_id())
 			{

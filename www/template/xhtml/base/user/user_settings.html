@@ -66,16 +66,16 @@ $(document).ready(function()
 <div><img src='images/animations/loading_circle_small.gif' alt=''> [[LANG:BaseGlobalMessageWait]]</div>
 </div> 
 
-<!-- CONTAINER BEGIN ("Regional Settings") -->
+<!-- CONTAINER BEGIN ("[[LANG:BaseUserSettingsTitle]]") -->
 
 <div class='Form'>
 <div class='FormBox'>
-<div class='FormBoxHeadline'>Country/Language</div>
+<div class='FormBoxHeadline'>[[LANG:BaseUserSettingsCountryTitle]]</div>
 
 <table style='width: 100%'>
 	
 	<tr>
-		<td style='width: 25%;'>Default-Language:</td>
+		<td style='width: 25%;'>[[LANG:BaseUserSettingsLanguage]]:</td>
 		<td>
 			<select name='language_id' style='display: block;'>
 			
@@ -89,7 +89,7 @@ $(document).ready(function()
 		</td>
 	</tr>
 	<tr>
-		<td>Country:</td>
+		<td>[[LANG:BaseUserSettingsCountry]]:</td>
 		<td>
 			<select name='country_id' style='display: block;'>
 					
@@ -110,12 +110,12 @@ $(document).ready(function()
 
 
 <div class='FormBox'>
-<div class='FormBoxHeadline'>Date/Time</div>
+<div class='FormBoxHeadline'>[[LANG:BaseUserSettingsDateTimeTitle]]</div>
 
 <table style='width: 100%'>
 	
 	<tr>
-		<td style='width: 25%;'>Timezone:</td>
+		<td style='width: 25%;'>[[LANG:BaseUserSettingsTimezone]]:</td>
 		<td colspan='3'>
 			<select name='timezone_id' style='display: block;'>
 			
@@ -135,12 +135,12 @@ $(document).ready(function()
 	
 	<tr>
 		<td></td>
-		<td style='width: 37%;'>Display</td>
+		<td style='width: 37%;'>[[LANG:BaseUserSettingsDisplay]]</td>
 		<td style='width: 1%;'></td>
-		<td style='width: 37%;'>Enter</td>
+		<td style='width: 37%;'>[[LANG:BaseUserSettingsEnter]]</td>
 	</tr>
 	<tr>
-		<td>Time</td>
+		<td>[[LANG:BaseUserSettingsTime]]</td>
 		<td>
 			<select name='time_display' style='display: block;'>
 				<option value='0' [[TIME_DISPLAY_0_SELECTED]]>24:00</option>
@@ -156,7 +156,7 @@ $(document).ready(function()
 		</td>
 	</tr>
 	<tr>
-		<td>Date</td>
+		<td>[[LANG:BaseUserSettingsDate]]</td>
 		<td>
 			<select name='date_display' style='display: block;'>
 				<option value='1' [[DATE_DISPLAY_1_SELECTED]]>31.12.2010 - dd.mm.yyyy</option>
@@ -193,21 +193,21 @@ $(document).ready(function()
 
 
 <div class='FormBox'>
-<div class='FormBoxHeadline'>Currency/Numbers/Units</div>
+<div class='FormBoxHeadline'>[[LANG:BaseUserSettingsCurrencyTitle]]</div>
 
 <table style='width: 100%'>
 	
 	<tr>
-		<td style='width: 25%;'>System of Units:</td>
+		<td style='width: 25%;'>[[LANG:BaseUserSettingsSystemOfUnits]]:</td>
 		<td colspan='4'>
 			<select name='system_of_units' style='display: block;'>
-				<option value='metric' [[SYSTEM_OF_UNITS_METRIC_SELECTED]]>metric</option>
-				<option value='aa' [[SYSTEM_OF_UNITS_AA_SELECTED]]>anglo-american</option>
+				<option value='metric' [[SYSTEM_OF_UNITS_METRIC_SELECTED]]>[[LANG:BaseUserSettingsMetric]]</option>
+				<option value='aa' [[SYSTEM_OF_UNITS_AA_SELECTED]]>[[LANG:BaseUserSettingsAA]]</option>
 			</select>
 		</td>
 	</tr>
 	<tr>
-		<td>Currency:</td>
+		<td>[[LANG:BaseUserSettingsCurrency]]:</td>
 		<td style='width: 25%;'>
 			<select name='currency_id' style='display: block;'>
 					
@@ -220,7 +220,7 @@ $(document).ready(function()
 			</select>
 		</td>
 		<td style='width: 1%;'></td>
-		<td style='width: 24%;'>Currency Significant Digits:</td>
+		<td style='width: 24%;'>[[LANG:BaseUserSettingsCurrencySigDig]]:</td>
 		<td style='width: 25%;'>
 			<select name='currency_significant_digits' style='display: block;'>
 				<option [[CUR_SIG_DIGITS_0_SELECTED]]>0</option>
@@ -235,22 +235,22 @@ $(document).ready(function()
 	</tr>
 	
 	<tr>
-		<td>Decimal-Separator:</td>
+		<td>[[LANG:BaseUserSettingsDecimalSeparator]]:</td>
 		<td>
 			<select name='decimal_separator' style='display: block;'>
-				<option value='comma' [[DECIMAL_SEPARATOR_COMMA_SELECTED]]>comma [,]</option>
-				<option value='dot' [[DECIMAL_SEPARATOR_DOT_SELECTED]]>dot [.]</option>
+				<option value='comma' [[DECIMAL_SEPARATOR_COMMA_SELECTED]]>[[LANG:BaseUserSettingsDecimalSeparatorComma]] [,]</option>
+				<option value='dot' [[DECIMAL_SEPARATOR_DOT_SELECTED]]>[[LANG:BaseUserSettingsDecimalSeparatorDot]] [.]</option>
 			</select>
 		</td>
 		<td></td>
-		<td>Thousand-Separator:</td>
+		<td>[[LANG:BaseUserSettingsThousandSeparator]]:</td>
 		<td>
 			<select name='thousand_separator' style='display: block;'>
-				<option value='none' [[THOUSAND_SEPARATOR_NONE_SELECTED]]>none</option>
-				<option value='space' [[THOUSAND_SEPARATOR_SPACE_SELECTED]]>space [&nbsp;]</option>
-				<option value='comma' [[THOUSAND_SEPARATOR_COMMA_SELECTED]]>comma [,]</option>
-				<option value='dot' [[THOUSAND_SEPARATOR_DOT_SELECTED]]>dot [.]</option>
-				<option value='apostrophe' [[THOUSAND_SEPARATOR_APOSTROPHE_SELECTED]]>apostrophe [']</option>
+				<option value='none' [[THOUSAND_SEPARATOR_NONE_SELECTED]]>[[LANG:BaseUserSettingsThousandSeparatorNone]]</option>
+				<option value='space' [[THOUSAND_SEPARATOR_SPACE_SELECTED]]>[[LANG:BaseUserSettingsThousandSeparatorSpace]] [&nbsp;]</option>
+				<option value='comma' [[THOUSAND_SEPARATOR_COMMA_SELECTED]]>[[LANG:BaseUserSettingsThousandSeparatorComma]] [,]</option>
+				<option value='dot' [[THOUSAND_SEPARATOR_DOT_SELECTED]]>[[LANG:BaseUserSettingsThousandSeparatorDot]] [.]</option>
+				<option value='apostrophe' [[THOUSAND_SEPARATOR_APOSTROPHE_SELECTED]]>[[LANG:BaseUserSettingsThousandSeparatorApostrophe]] [']</option>
 			</select>
 		</td>
 	</tr>
@@ -262,12 +262,12 @@ $(document).ready(function()
 
 
 <div class='FormBox'>
-<div class='FormBoxHeadline'>Miscellaneous</div>
+<div class='FormBoxHeadline'>[[LANG:BaseUserSettingsMiscellaneousTitle]]</div>
 
 <table style='width: 100%'>
 	
 	<tr>
-		<td style='width: 25%;'>Name Display Format:</td>
+		<td style='width: 25%;'>[[LANG:BaseUserSettingsNameDisplayFormat]]:</td>
 		<td>
 			<select name='name_display_format' style='display: block;'>
 				<option value='1' [[NAME_DISPLAY_FORMAT_1_SELECTED]]>Dr. John Doe</option>
@@ -283,11 +283,11 @@ $(document).ready(function()
 		</td>
 	</tr>
 	<tr>
-		<td>System of Paper Format:</td>
+		<td>[[LANG:BaseUserSettingsSystemOfPaperFormat]]:</td>
 		<td>
 			<select name='system_of_paper_format' style='display: block;'>
 				<option value='din' [[SYSTEM_OF_PF_DIN_SELECTED]]>DIN</option>
-				<option value='aa' [[SYSTEM_OF_PF_AA_SELECTED]]>anglo-american</option>
+				<option value='aa' [[SYSTEM_OF_PF_AA_SELECTED]]>[[LANG:BaseUserSettingsAA]]</option>
 			</select>
 		</td>
 	</tr>
@@ -300,8 +300,8 @@ $(document).ready(function()
 
 
 <div class='FormButtonBox'>
-<button type='submit' id='BaseUserRegionalSettingsSaveButton'>Save</button>
-<button type='submit' id='BaseUserRegionalSettingsCancelButton'>Cancel</button>
+<button type='submit' id='BaseUserRegionalSettingsSaveButton'>[[LANG:BaseGlobalButtonSave]]</button>
+<button type='submit' id='BaseUserRegionalSettingsCancelButton'>[[LANG:BaseGlobalButtonCancel]]</button>
 <div class='FormButtonBoxClear'></div>
 </div>
 </div>

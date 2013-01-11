@@ -66,7 +66,7 @@ class ProjectDataSearchAjax
 				foreach($list_array as $key => $value)
 				{
 					$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
-					$list_array[$key]['datetime'] = $datetime_handler->get_formatted_string("dS M Y H:i");
+					$list_array[$key]['datetime'] = $datetime_handler->get_datetime(false);
 					
 					$project_paramquery = array();
 					$project_paramquery['username'] = $_GET['username'];

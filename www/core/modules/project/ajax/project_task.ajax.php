@@ -64,9 +64,9 @@ class ProjectTaskAjax
 					$start_date = new DatetimeHandler($list_array[$key]['start_date']);
 					$end_date = new DatetimeHandler($list_array[$key]['end_date']." ".$list_array[$key]['end_time']);
 					
-					$list_array[$key]['start_date'] = $start_date->get_formatted_string("jS M Y");
-					$list_array[$key]['end_date'] = $end_date->get_formatted_string("jS M Y");
-					$list_array[$key]['end_time'] = $end_date->get_formatted_string("H:i");
+					$list_array[$key]['start_date'] = $start_date->get_date();
+					$list_array[$key]['end_date'] = $end_date->get_date();
+					$list_array[$key]['end_time'] = $end_date->get_time();
 					
 					if ($list_array[$key]['whole_day'] == "t")
 					{

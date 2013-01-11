@@ -167,16 +167,25 @@ interface DatetimeHandlerInterface
 	
 	/**
      * Returns time of current object
+     * @param bool $display_second
      * @return string
      */
-	public function get_time();
+	public function get_time($display_second = true);
+	
+	/**
+	 * Returns regional formatted datetime string
+	 * @param bool $display_second
+	 * @return string
+	 */
+	public function get_datetime($display_second = true);
 	
 	/**
      * Returns a formatted date/time of current object
      * @param string $format Use php-function date() chars for format
+     * @param bool $display_second
      * @return string 
      */
-	public function get_formatted_string($format);
+	public function get_formatted_string($format = null, $display_second = true);
 	
 	/**
      * @return integer

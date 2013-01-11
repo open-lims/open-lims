@@ -121,7 +121,7 @@ class SampleReportIO
 				
 				$pdf->MultiCell(90, 0, "Date/Time", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
 				$datetime = new DatetimeHandler($sample->get_datetime());
-				$pdf->MultiCell(100, 0, $datetime->get_formatted_string("dS M Y H:i"), 1, '', 1, 1, '', '', true, 0, false, true, 0);
+				$pdf->MultiCell(100, 0, $datetime->get_datetime(false), 1, '', 1, 1, '', '', true, 0, false, true, 0);
 				
 				if ($sample->get_manufacturer_id())
 				{
@@ -135,7 +135,7 @@ class SampleReportIO
 				{
 					$pdf->MultiCell(90, 0, "Date of Expiry", 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
 					$date_of_expiry = new DatetimeHandler($sample->get_date_of_expiry());
-					$pdf->MultiCell(100, 0, $date_of_expiry->get_formatted_string("dS M Y"), 1, '', 1, 1, '', '', true, 0, false, true, 0);
+					$pdf->MultiCell(100, 0, $date_of_expiry->get_date(), 1, '', 1, 1, '', '', true, 0, false, true, 0);
 				}
 				
 				$module_dialog_array = ModuleDialog::list_dialogs_by_type("item_report");
@@ -310,7 +310,7 @@ class SampleReportIO
 				foreach($child_sample_array as $key => $value)
 				{
 					$datetime_handler = new DatetimeHandler($value['datetime']);
-					$value['datetime'] 	= $datetime_handler->get_formatted_string("dS M y H:i");
+					$value['datetime'] 	= $datetime_handler->get_datetime(false);
 					$value['id']		= "S".str_pad($value['id'], 8 ,'0', STR_PAD_LEFT);
 					$owner = new User($value['owner']);
 					
@@ -352,7 +352,7 @@ class SampleReportIO
 					foreach($parent_sample_array as $key => $value)
 					{
 						$datetime_handler = new DatetimeHandler($value['datetime']);
-						$value['datetime'] = $datetime_handler->get_formatted_string("dS M y H:i");
+						$value['datetime'] = $datetime_handler->get_datetime(false);
 						$value['id']		= "S".str_pad($value['id'], 8 ,'0', STR_PAD_LEFT);
 						$owner = new User($value['owner']);
 						

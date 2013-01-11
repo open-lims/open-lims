@@ -66,7 +66,7 @@ class ProjectSearchAjax
 					$list_array[$key]['symbol'] = "<img src='images/icons/project.png' alt='N' border='0' />";
 					
 					$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
-					$list_array[$key]['datetime'] = $datetime_handler->get_formatted_string("dS M Y H:i");
+					$list_array[$key]['datetime'] = $datetime_handler->get_datetime(false);
 					
 					$proejct_paramquery = array();
 					$project_paramquery['username'] = $_GET['username'];

@@ -101,7 +101,7 @@ class FileAjax
 					$list_array[$key]['size'] = Convert::convert_byte_1024($list_array[$key]['size']);
 					
 					$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
-					$list_array[$key]['datetime'] = $datetime_handler->get_formatted_string("dS M Y H:i");
+					$list_array[$key]['datetime'] = $datetime_handler->get_datetime(false);
 				}
 			}
 			else
@@ -205,7 +205,7 @@ class FileAjax
 						$list_array[$key]['name']['content'] 	= $tmp_name;
 												
 						$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
-						$list_array[$key]['datetime'] = $datetime_handler->get_formatted_string("dS M Y H:i");
+						$list_array[$key]['datetime'] = $datetime_handler->get_datetime(false);
 						
 						$user = new User($list_array[$key]['owner_id']);
 						$list_array[$key]['user'] = $user->get_full_name(false);

@@ -56,8 +56,8 @@ $(document).ready(function()
 <div id="LoginWrapper">
 	<div id="LoginContainer" class="Form">
 		<div id='LoginTitle'>[[LANG:BaseLoginTitle]]</div>
-		<form action="index.php" method="post">
 		<table id='LoginTable'>
+			<form action="index.php" method="post">
 			<tr>
 				<td>[[LANG:BaseLoginUsername]]:</td>
 				<td><input name='username' type='text' size='20' class='BaseTextfield LoginTextfield' id='BaseLoginUsername' value='[[USERNAME]]' /></td>
@@ -84,11 +84,11 @@ $(document).ready(function()
 			<tr>
 				<td colspan='2'><div class='formError' id='BaseLoginError'></div></td>
 			</tr>
+			</form>
 			<tr>
 				<td></td>
 				<td><button id='BaseLoginLogin'>[[LANG:BaseLoginButton]]</button></td>
 			</tr>
-			</form>
 		</table>
 	</div>
 </div>
