@@ -48,40 +48,62 @@ class Template implements TemplateInterface
 	 */
 	protected function __construct($file_path, $folder_path = null, $language_id = null)
 	{		
-		if ($folder_path)
+		if (isset($GLOBALS['fatal_error']))
 		{
-			$current_folder_file = constant("WWW_DIR")."/".$folder_path."/".$file_path;
-		}
-		else
-		{
-			$current_folder_file = constant("WWW_DIR")."/template/".self::$current_folder."/".$file_path;
-		}
-		
-		if (file_exists($current_folder_file) == true)
-		{
-			$this->open_file($current_folder_file);
+			$this->open_file("template/".self::$current_folder."/".$file_path);
 			$this->file_path = $file_path;
-			$this->language_file = Language::get_current_language_path($current_folder_file, $language_id);
+			$this->language_file = null;
 		}
 		else
 		{
-			if (!$folder_path)
+			if ($folder_path)
 			{
-				$fallback_folder_file = constant("WWW_DIR")."/template/".self::$fallback_folder."/".$file_path;
-				
-				if (file_exists($fallback_folder_file) == true)
+				$current_folder_file = constant("WWW_DIR")."/".$folder_path."/".$file_path;
+			}
+			else
+			{
+				$current_folder_file = constant("WWW_DIR")."/template/".self::$current_folder."/".$file_path;
+			}
+			
+			if (file_exists($current_folder_file) == true)
+			{
+				$this->open_file($current_folder_file);
+				$this->file_path = $file_path;
+				$this->language_file = Language::get_current_language_path($current_folder_file, $language_id);
+			}
+			else
+			{
+				if (!$folder_path)
 				{
-					$this->open_file($fallback_folder_file);
-					$this->file_path = $file_path;
-					$this->language_file = Language::get_current_language_path($fallback_folder_file, $language_id);
+					$fallback_folder_file = constant("WWW_DIR")."/template/".self::$fallback_folder."/".$file_path;
+					
+					if (file_exists($fallback_folder_file) == true)
+					{
+						$this->open_file($fallback_folder_file);
+						$this->file_path = $file_path;
+						$this->language_file = Language::get_current_language_path($fallback_folder_file, $language_id);
+					}
+					else
+					{
+						if (file_exists("template/".self::$fallback_folder."/".$file_path) == true)
+						{
+							$this->open_file("template/".self::$fallback_folder."/".$file_path);
+							$this->file_path = "template/".self::$fallback_folder."/".$file_path;
+							$this->language_file = Language::get_current_language_path("template/".self::$fallback_folder."/".$file_path, $language_id);
+						}
+						else
+						{
+							die("Template Engine: File Not Found!<br />".$file_path);
+						}
+					}
 				}
 				else
 				{
-					if (file_exists("template/".self::$fallback_folder."/".$file_path) == true)
+					if (file_exists($folder_path."/".$file_path) == true)
 					{
-						$this->open_file("template/".self::$fallback_folder."/".$file_path);
-						$this->file_path = "template/".self::$fallback_folder."/".$file_path;
-						$this->language_file = Language::get_current_language_path("template/".self::$fallback_folder."/".$file_path, $language_id);
+						$this->open_file($folder_path."/".$file_path);
+						$this->file_path = $folder_path."/".$file_path;
+						$this->language_file = Language::get_current_language_path($folder_path."/".$file_path, $language_id);
 					}
 					else
 					{
@@ -89,21 +111,8 @@ class Template implements TemplateInterface
 					}
 				}
 			}
-			else
-			{
-				if (file_exists($folder_path."/".$file_path) == true)
-				{
-					$this->open_file($folder_path."/".$file_path);
-					$this->file_path = $folder_path."/".$file_path;
-					$this->language_file = Language::get_current_language_path($folder_path."/".$file_path, $language_id);
-				}
-				else
-				{
-					die("Template Engine: File Not Found!<br />".$file_path);
-				}
-			}
+			$this->global_language_file = Language::get_current_global_language_path($language_id);
 		}
-		$this->global_language_file = Language::get_current_global_language_path($language_id);
 	}
 	
 	protected function __destruct()

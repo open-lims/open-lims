@@ -56,9 +56,9 @@ class Main
 			$GLOBALS['fatal_error'] = "Extension \"GD\" is missing!";
 		}
 		
-		if (!file_exists(constant("BASE_DIR")))
+		if (!file_exists(constant("BASE_DIR")) or !file_exists(constant("WWW_DIR")))
 		{
-			$GLOBALS['fatal_error'] = "Main folder not found!";
+			$GLOBALS['fatal_error'] = "main-folder not found, check \$server['main_folder'] in config!";
 		}
 		
 		if (!isset($GLOBALS['fatal_error']))
@@ -108,7 +108,7 @@ class Main
 					else
 					{
 						$system_handler = new SystemHandler(false);
-					}
+					}					
 				}
 				catch(BaseIncludeDataCorruptException $e)
 				{

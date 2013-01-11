@@ -38,7 +38,7 @@ class ContentHandler_IO
 
 		$template = new HTMLTemplate("index_header.html");
 	
-		if (file_exists(constant("WWW_DIR")))
+		if (!isset($GLOBALS['fatal_error']))
 		{
 			$unique_id = uniqid();
 			
@@ -144,7 +144,6 @@ class ContentHandler_IO
 		{
 			$template->set_var("INDEX_CSS","<link rel=\"stylesheet\" type=\"text/css\" href=\"css/base.css\" title=\"Style\" />\n<link rel=\"stylesheet\" type=\"text/css\" href=\"css/login.css\" title=\"Style\" />");
 			$template->set_var("INDEX_JS","");
-			$GLOBALS['fatal_error'] = "Main folder not found!";
 		}
 
 		if (!isset($GLOBALS['fatal_error']))
@@ -228,32 +227,31 @@ class ContentHandler_IO
 					
 					$template->output();
 
-					
-					// Navigation
-					require_once("base/io/navigation.io.php");
-					Navigation_IO::main();
-					Navigation_IO::left();
-					
-					
-					$template = new HTMLTemplate("content_header.html");
-					$template->output();
-					
-					
- 					if ($session->read_value("must_change_password") == true)
+					try
  					{
- 						require_once("core/modules/base/io/user.io.php");
-						UserIO::change_password_on_login();
- 					}
- 					else
- 					{
- 						try
- 						{
+						// Navigation
+						require_once("base/io/navigation.io.php");
+						Navigation_IO::main();
+						Navigation_IO::left();
+						
+						
+						$template = new HTMLTemplate("content_header.html");
+						$template->output();
+						
+						
+	 					if ($session->read_value("must_change_password") == true)
+	 					{
+	 						require_once("core/modules/base/io/user.io.php");
+							UserIO::change_password_on_login();
+	 					}
+	 					else
+	 					{
 							if ($_GET['nav'])
 							{
 								$module_controller_array = SystemHandler::get_module_controller($_GET['nav']);
 								
 								$module_controller_path = "core/modules/".$module_controller_array['path'];
-
+	
 								if (file_exists($module_controller_path))
 								{
 									require_once($module_controller_path);
@@ -275,20 +273,20 @@ class ContentHandler_IO
 							{
 								include("core/modules/base/io/home.io.php");
 							}
-						}
-						catch(DatabaseQueryFailedException $e)
-						{
-							$transaction->force_rollback();
-							$error_io = new Error_IO($e);
-							$error_io->display_error();
-						}
- 						catch(BaseException $e)
-						{
-							$error_io = new Error_IO($e);
-							$error_io->display_error();
-						}
+	 					}
  					}
-						
+					catch(DatabaseQueryFailedException $e)
+					{
+						$transaction->force_rollback();
+						$error_io = new Error_IO($e);
+						$error_io->display_error();
+					}
+ 					catch(BaseException $e)
+					{
+						$error_io = new Error_IO($e);
+						$error_io->display_error();
+					}
+ 					
 					$template = new HTMLTemplate("content_footer.html");
 					$template->output();
 					

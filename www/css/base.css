@@ -789,3 +789,27 @@ html,body
 {
 	margin: 30px;
 }
+
+/* */
+#ErrorFatalContainer
+{
+	width: 500px;	
+	margin: 50px auto 0 auto;
+}	
+#ErrorFatalSymbol
+{
+	float: left;
+	width: 55px;
+	margin: 10px 20px;
+}
+#ErrorFatalMessage
+{
+	font: normal 14px Arial, Helvetica, sans-serif;
+	padding: 25px 10px 0 10px;
+	text-align: left;
+}
+#ErrorFatalClear
+{
+	clear: both;
+}
+
