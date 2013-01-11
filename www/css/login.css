@@ -3,9 +3,7 @@
 {
 	height: 331px;
 	width: 968px;
-	margin-bottom: 10px;
-	margin-left: auto;
-	margin-right: auto;
+	margin: 0 auto 10px auto;
 	background-image: url(../images/panorama.jpg);
 	background-repeat: repeat-x;
 	background-position: top center;
@@ -18,14 +16,10 @@
 	border-left: 1px #D0D0D0 solid;
 	border-right: 1px #D0D0D0 solid;
 	width: 300px;
-	height: 271px;
+	height: 281px;
+	margin-top: 0;
 	margin-left: 323px;;
-	padding: 60px 10px 0 10px;
-	
-	/* background-color: white; */
-	/*background-image: url(../images/transparent.png);
-	background-repeat: repeat;
-	background-position: bottom left;*/
+	padding: 50px 10px 0 10px;
 }
 #LoginTitle 
 {
@@ -44,17 +38,28 @@
 	font: normal 9px Verdana, Helvetica, sans-serif;
 	text-align: center;
 }
+#LoginFooter a
+{
+	color: #444444;
+}
+.LoginElement
+{
+	margin: 20px;
+}
+.LoginElement label
+{
+	display:block;
+}
 .LoginTextfield
 {
-	width: 190px;
-	/* border: 1px black solid; */
+	width: 250px;
 	-moz-box-shadow: 2px 2px 2px #101010;
   	-webkit-box-shadow: 2px 2px 2px #101010;
  	box-shadow: 2px 2px 2px #101010;
 }
 .LoginLanguageSelect
 {
-	width: 190px;
+	width: 250px;
 	-moz-box-shadow: 2px 2px 2px #101010;
   	-webkit-box-shadow: 2px 2px 2px #101010;
  	box-shadow: 2px 2px 2px #101010;

@@ -19,7 +19,6 @@ html,body
 	background-repeat: repeat-y;
 	min-height: 100%;
 	height: auto !important;
-	
 }
 
 #Footer
@@ -50,12 +49,13 @@ html,body
 }
 #HeaderLogo
 {
-	padding: 20px 0 18px 25px;
+	margin: 0;
+	padding: 25px 0 22px 25px;
 	float: left;	
 }
 #HeaderRight
 {
-	margin: 20px 15px 0 0;
+	margin: 5px 15px 0 0;
 	float: right;	
 }
 #HeaderMenu
@@ -92,7 +92,7 @@ html,body
 	background-image: url('../images/search_input.png');
 	background-repeat:no-repeat;
 	background-position: top right;
-    margin: 6px 0 0 0;
+    margin: 28px 0 0 0;
     padding: 3px 3px 6px 10px;
     width: 152px;
     height: 18px;
@@ -103,7 +103,7 @@ html,body
 	background-image: url('../images/search_button.png');
 	background-repeat:no-repeat;
 	background-position: top right;
-	margin: 6px 0 0 0;
+	margin: 28px 0 0 0;
 	height: 24px;
 	width: 26px;
 	border: 0;

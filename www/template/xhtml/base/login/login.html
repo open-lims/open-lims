@@ -1,32 +1,94 @@
 <script>
 $(document).ready(function()
-{
-	$('#BaseLoginPassword').bind('keypress', function(e)
-	{
-        if(e.keyCode == 13)
+{	
+	$('#BaseLoginUsername').val("[[LANG:BaseLoginUsername]]");
+	var username_default = true;
+		
+	$('#BaseLoginUsername').bind('keypress', function(event)
+	{		
+		if (username_default === true)
+		{
+			username_default = false;
+			$(this).val("");
+		}
+		
+        if(event.keyCode == 13)
         {
         	login();
         }
+	}).bind('focusin', function(e)
+	{
+		if (username_default === true)
+		{
+			username_default = false;
+			$(this).val("");
+		}
+	}).bind('focusout', function(e)
+	{
+		if (username_default === false)
+		{
+			if ($(this).val() === "")
+			{
+				username_default = true;
+				$(this).val("[[LANG:BaseLoginUsername]]");
+			}
+		}
 	});
-
 	
+	$('#BaseLoginPassword').val("[[LANG:BaseLoginPassword]]");
+	var password_default = true;
+	
+	$('#BaseLoginPassword').bind('keypress', function(event)
+	{		
+		if (password_default === true)
+		{
+			password_default = false;
+			$(this).val("");
+		}
+		
+        if(event.keyCode == 13)
+        {
+        	login();
+        }
+	}).bind('focusin', function(e)
+	{
+		if (password_default === true)
+		{
+			password_default = false;
+			$(this).val("");
+		}
+	}).bind('focusout', function(e)
+	{
+		if (password_default === false)
+		{
+			if ($(this).val() === "")
+			{
+				password_default = true;
+				$(this).val("[[LANG:BaseLoginPassword]]");
+			}
+		}
+	});
+	
+
 	$('#BaseLoginLogin').click(function()
 	{
-		login();
+		if ((username_default === false) && (password_default === false))
+		{
+			login();
+		}
 	});
 
 	function login()
-	{
-		$.blockUI({ message: $('#BaseLoginWindow'), css: { width: '275px' } }); 
-		$('.blockUI.blockMsg').center();
-
-		$("#BaseLoginWindow").html("<img src='images/animations/loading_circle_small.gif' alt=''> Please wait...");
-			
+	{			
 		$.ajax(
 		{
 			type: "POST",
 			url: "ajax.php?nav=base&run=login",
 			data: "username="+$("#BaseLoginUsername").val()+"&password="+$("#BaseLoginPassword").val()+"&language="+$("#BaseLoginLanguage").val()+"",
+			beforeSend: function()
+			{
+				$("#BaseUserRegionalSettingsFinish").dialog("open");
+			},
 			success: function(data)
 			{
 				if ((data != '0') && ((data + '').indexOf("index.php?",0) == 0))
@@ -36,6 +98,7 @@ $(document).ready(function()
 				}
 				else
 				{
+					$("#BaseUserRegionalSettingsFinish").dialog("close");
 					if (data != 0)
 					{
 						$("#BaseLoginError").html(data);
@@ -44,7 +107,6 @@ $(document).ready(function()
 					{
 						$("#BaseLoginError").html("");
 					}
-					$.unblockUI();
 				    return false; 
 				}
 			}
@@ -53,43 +115,64 @@ $(document).ready(function()
 });
 </script>
 
+<div class="BasePlaseWaitWindow" id="BaseUserRegionalSettingsFinish" title=""> 
+<div><img src='images/animations/loading_circle_small.gif' alt=''> [[LANG:BaseGlobalMessageWait]]</div>
+</div> 
+
 <div id="LoginWrapper">
 	<div id="LoginContainer" class="Form">
 		<div id='LoginTitle'>[[LANG:BaseLoginTitle]]</div>
-		<table id='LoginTable'>
-			<form action="index.php" method="post">
-			<tr>
-				<td>[[LANG:BaseLoginUsername]]:</td>
-				<td><input name='username' type='text' size='20' class='BaseTextfield LoginTextfield' id='BaseLoginUsername' value='[[USERNAME]]' /></td>
-			</tr>
-			<tr>
-				<td>[[LANG:BaseLoginPassword]]:</td>
-				<td><input name='password' type='password' size='20' class='BaseTextfield LoginTextfield' id='BaseLoginPassword' value='[[PASSWORD]]' /></td>
-			</tr>
-			<tr>
-				<td>[[LANG:BaseLoginLanguage]]:</td>
-				<td>		
-					<select class='BaseSelect LoginLanguageSelect' name='language_id' id='BaseLoginLanguage' onChange="this.form.submit()">
-						<option value='default' selected='selected'>[[LANG:BaseLoginLanguageDefault]]</option>
-						<option value='0'>-------------</option>
-						
-						<!-- FOREACH BEGIN ([[LANGUAGES]]) -->
 		
-						<option value='[[LANGUAGES:OPTION]]' [[LANGUAGES:SELECTED]]>[[LANGUAGES:NAME]]</option>
-				
-						<!-- FOREACH END -->
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td colspan='2'><div class='formError' id='BaseLoginError'></div></td>
-			</tr>
-			</form>
-			<tr>
-				<td></td>
-				<td><button id='BaseLoginLogin'>[[LANG:BaseLoginButton]]</button></td>
-			</tr>
-		</table>
+		<form action="index.php" method="post">
+		
+		<div class='LoginElement'>
+			<input name='username' type='text' class='BaseTextfield LoginTextfield' id='BaseLoginUsername' value='[[USERNAME]]' />
+		</div>
+		
+		<div class='LoginElement'>
+		<input name='password' type='password' class='BaseTextfield LoginTextfield' id='BaseLoginPassword' value='[[PASSWORD]]' />
+		</div>
+		
+		<div class='LoginElement'>
+		<select class='BaseSelect LoginLanguageSelect' name='language_id' id='BaseLoginLanguage' onChange="this.form.submit()">
+			<option value='default' selected='selected'>[[LANG:BaseLoginLanguage]]/[[LANG:BaseLoginLanguageDefault]]</option>
+			<option value='0'>-------------</option>
+			
+			<!-- FOREACH BEGIN ([[LANGUAGES]]) -->
+
+			<option value='[[LANGUAGES:OPTION]]' [[LANGUAGES:SELECTED]]>[[LANGUAGES:NAME]]</option>
+	
+			<!-- FOREACH END -->
+		</select>
+		</div>
+		
+		<div class='LoginElement'>
+		<button type='button' id='BaseLoginLogin'>[[LANG:BaseLoginButton]]</button>
+		</div>
+		
+		</form>
+						<!-- 
+			<table id='LoginTable'>
+				<tr>
+					<td>[[LANG:BaseLoginUsername]]:</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>[[LANG:BaseLoginPassword]]:</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>[[LANG:BaseLoginLanguage]]:</td>
+					<td>		
+						
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+				</tr>
+			</table> -->
+		
 	</div>
 </div>
 <div id="LoginFooter">
@@ -99,7 +182,3 @@ $(document).ready(function()
 <br />Licensed under General Public License, Version 3 (GPL v3)
 <br />Go to <a href='http://www.open-lims.org'>http://www.open-lims.org</a> for details
 </div>
-
-<div id="BaseLoginWindow" class="BaseBlockUIProceed" style="display:none; cursor: default">
-</div>
-
