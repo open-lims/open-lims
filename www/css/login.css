@@ -64,3 +64,21 @@
   	-webkit-box-shadow: 2px 2px 2px #101010;
  	box-shadow: 2px 2px 2px #101010;
 }
+#BaseLoginPasswordForgot
+{
+	margin-top: 5px;
+	float: right;
+}
+#BaseLoginPasswordForgot:hover
+{
+	text-decoration: underline;
+	cursor: pointer; 
+}
+.BaseLoginForgotTextfield
+{
+	width: 270px;
+}
+.LoginErrorArrowMessage div
+{
+	color: red !important;
+}

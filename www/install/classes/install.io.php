@@ -151,7 +151,8 @@ class InstallIO
 			$session = new Session(null, true);
 		}
 		
-		if ($session->is_valid())
+		$session_valid_array = $session->is_valid();
+		if ($session_valid_array[0] === true)
 		{
 			self::install();
 		}

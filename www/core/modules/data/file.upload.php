@@ -77,7 +77,8 @@
 		$user = new User($session->get_user_id());
 		$transaction = new Transaction();
 		
-		if ($session->is_valid() == true)
+		$session_valid_array = $session->is_valid();
+		if ($session_valid_array[0] === true)
 		{ 
 			if ($_POST['file_amount'] > 25 or $_POST['file_amount'] < 1 or !$_POST['file_amount'])
 			{				

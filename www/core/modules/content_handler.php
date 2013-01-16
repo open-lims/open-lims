@@ -170,7 +170,8 @@ class ContentHandler_IO
 			
 			if (Security::ip_error_count() < $max_ip_errors)
 			{
-		 		if ($session->is_valid() == true)
+				$session_valid_array = $session->is_valid();
+		 		if ($session_valid_array[0] === true)
 		 		{
 					$template = new HTMLTemplate("main_header.html");
 			
@@ -296,7 +297,16 @@ class ContentHandler_IO
 		 		else
 		 		{
 		 			require_once("base/io/login.io.php");
-		 			Login_IO::output();	 			
+		 			
+		 			if ($session_valid_array[1] === true)
+		 			{
+		 				Login_IO::output(true);
+		 			}
+		 			else
+		 			{
+		 				Login_IO::output(false);
+		 			}
+		 			
 		 		}
 			}
 			else
@@ -329,7 +339,8 @@ class ContentHandler_IO
 		
 		try
  		{
-			if ($session->is_valid() == true)
+ 			$session_valid_array = $session->is_valid();
+			if ($session_valid_array[0] === true)
 			{
 				if ($_GET['nav'])
 				{				
@@ -391,7 +402,8 @@ class ContentHandler_IO
 			}
 			else
 			{
-				if (($_GET['run'] == "login" )
+				if (($_GET['nav'] == "base" and $_GET['run'] == "login")
+					or ($_GET['nav'] == "base" and $_GET['run'] == "forgot_password")
 					or ($_GET['run'] == "cron")
 					or ($_GET['nav'] == "base" and $_GET['run'] == "logout" and $session->is_dead() == true))
 				{

@@ -114,9 +114,10 @@ class Auth implements AuthInterface
     	
     	Session::check_all();
     	
-    	if ($session->is_valid($user_id) == true)
+    	$session_valid_array = $session->is_valid($user_id);
+    	if ($session_valid_array[0] === true)
     	{
-    		if ($session->destroy() == true)
+    		if ($session->destroy() === true)
     		{
     			return true;
     		}
@@ -127,7 +128,7 @@ class Auth implements AuthInterface
     	}
     	else
     	{
-    		if ($session->is_dead() == true)
+    		if ($session->is_dead() === true)
     		{
     			return true;
     		}

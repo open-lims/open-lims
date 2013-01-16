@@ -6,4 +6,5 @@ $LANG['BaseGlobalButtonPrevious'] = "Zurück";
 $LANG['BaseGlobalButtonYes'] = "Ja";
 $LANG['BaseGlobalButtonNo'] = "Nein";
 $LANG['BaseGlobalMessageWait'] = "Bitte warten...";
+$LANG['BaseGlobalButtonOK'] = "OK";
 ?>

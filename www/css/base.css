@@ -790,7 +790,36 @@ html,body
 	margin: 30px;
 }
 
-/* */
+
+.BaseArrowMessage
+{
+	font: normal 14px Arial, Helvetica, sans-serif;
+	background-color: #EFF5FF;
+	padding: 8px;
+	border-radius: 6px 6px 6px 6px;
+	border: 2px #D0D0D0 solid;
+	margin-left: 9px;
+	z-index: 99;
+	color: #444444;
+	text-shadow: none;
+	-moz-box-shadow: 2px 2px 2px #101010;
+  	-webkit-box-shadow: 2px 2px 2px #101010;
+ 	box-shadow: 2px 2px 2px #101010;	
+}
+
+.BaseArrowMessageArrow
+{
+	float: left;
+	width: 11px;
+	height: 20px;
+	padding: 8px 0px;
+	background-image: url(../images/message_arrow_left.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	z-index: 100;
+}
+
+/* Errors */
 #ErrorFatalContainer
 {
 	width: 500px;	

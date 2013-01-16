@@ -86,7 +86,8 @@
 			$user = new User($session->get_user_id());
 			$regional = new Regional();
 			
-			if ($session->is_valid() == true)
+			$session_valid_array = $session->is_valid();
+			if ($session_valid_array[0] === true)
 			{
 				if ($_GET['dialog'])
 				{

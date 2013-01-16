@@ -72,7 +72,8 @@
 		$session = new Session($_GET['session_id']);
 		$user = new User($session->get_user_id());
 		
-		if ($session->is_valid() == true)
+		$session_valid_array = $session->is_valid();
+		if ($session_valid_array[0] === true)
 		{
 			try
 			{

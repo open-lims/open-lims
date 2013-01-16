@@ -44,6 +44,11 @@ class BaseRequest
 				echo LoginAjax::login($_POST['username'], $_POST['password'], $_POST['language']);
 			break;
 			
+			case "forgot_password":
+				require_once("ajax/login.ajax.php");
+				echo LoginAjax::forgot_password($_POST['username'], $_POST['mail']);		
+			break;
+			
 			case "logout":
 				require_once("ajax/login.ajax.php");
 				echo LoginAjax::logout();

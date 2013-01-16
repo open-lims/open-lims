@@ -126,7 +126,7 @@ class Session implements SessionInterface
     
     /**
      * @see SessionInterface::is_valid()
-     * @return bool
+     * @return array
      */
     public function is_valid()
     {
@@ -159,19 +159,19 @@ class Session implements SessionInterface
 			if ($current_mktime > $max_session_mktime)
 			{
 				$this->destroy();
-				return false;
+				return array(false, true);
 			}
 			else
 			{
 				$datetime = date("Y-m-d H:i:s"); 
 				$this->session->set_datetime($datetime);
-				return true;
+				return array(true, false);
 			}	
     	}
     	else
     	{
     		
-    		return false;
+    		return array(false, false);
     	}
     }
     

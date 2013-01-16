@@ -50,7 +50,7 @@ interface SessionInterface
 	
 	/**
      * Checks if the current session is valid
-     * @return bool
+     * @return array
      */
 	public function is_valid();
 	
