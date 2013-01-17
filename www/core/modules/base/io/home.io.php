@@ -27,7 +27,8 @@
 $template = new HTMLTemplate("base/home.html");
 
 $template->set_var("USERNAME",$user->get_full_name(false));
-$template->set_var("DATE",date("l, jS F Y"));
+$datetime_handler = new DatetimeHandler();
+$template->set_var("DATE",$datetime_handler->get_formatted_string("l, jS F Y"));
 
 $home_summery_left_array = ModuleDialog::list_dialogs_by_type("home_summary_left");
 	

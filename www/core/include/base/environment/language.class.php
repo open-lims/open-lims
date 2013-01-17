@@ -200,13 +200,33 @@ class Language // implements LanguageInterface
 			}
 			else
 			{
-				return "$address".null;
+				return $address;
 			}
 		}
 		else
 		{
 			return null;
 		}
+	}
+	
+	public static function get_datetime_array()
+	{
+		global $session;
+		
+		if (!is_numeric($language_id = $session->read_value("LANGUAGE")))
+		{
+			$language_id = 1;
+		}
+		
+		$language = new Language($language_id);
+		$lanugage_folder = constant("WWW_DIR")."/languages/".$language->get_folder_name();
+			
+		if (file_exists($lanugage_folder."/base/generic/datetime.lang.php"))
+		{
+			include($lanugage_folder."/base/generic/datetime.lang.php");
+		}
+				
+		return $DATE_LANG;
 	}
 	
 	/**

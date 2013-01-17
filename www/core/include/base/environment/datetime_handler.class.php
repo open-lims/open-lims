@@ -770,18 +770,20 @@ class DatetimeHandler implements DatetimeHandlerInterface
 	    		if ($this->user_timezone)
 	    		{
 	    			$mktime = $this->mktime + ($this->user_timezone * 3600);
-	    			return date($format, $mktime);
 	    		}
 	    		else
 	    		{
 	    			$mktime = $this->mktime + ($this->server_timezone * 3600);
-	    			return date($format, $mktime);
 	    		}  
     		}
     		else
     		{
-    			return  date($format, $this->mktime);
-    		}  		
+    			$mktime = $this->mktime;
+    		}  
+
+    		$date_string = date($format, $mktime);
+    		$date_string = self::replace_language_specific_parts($format, $mktime, $date_string);    		
+    		return $date_string;
     	}
     	else
     	{
@@ -872,18 +874,20 @@ class DatetimeHandler implements DatetimeHandlerInterface
 	    		if ($this->user_timezone)
 	    		{
 	    			$mktime = $this->mktime + ($this->user_timezone * 3600);
-	    			return date($format, $mktime);
 	    		}
 	    		else
 	    		{
 	    			$mktime = $this->mktime + ($this->server_timezone * 3600);
-	    			return date($format, $mktime);
 	    		}   
     		}
     		else
     		{
-    			return date($format, $this->mktime);
-    		} 		
+    			$mktime = $this->mktime;
+    		} 	
+    			
+    		$date_string = date($format, $mktime);
+    		$date_string = self::replace_language_specific_parts($format, $mktime, $date_string);    		
+    		return $date_string;
     	}
     	else
     	{
@@ -919,23 +923,26 @@ class DatetimeHandler implements DatetimeHandlerInterface
     			return null;
     		}
     		
+    		
     		if ($this->ignore_timezone == false)
     		{
 	    		if ($this->user_timezone)
 	    		{
 	    			$mktime = $this->mktime + ($this->user_timezone * 3600);
-	    			return date($format, $mktime);
 	    		}
 	    		else
 	    		{
 	    			$mktime = $this->mktime + ($this->server_timezone * 3600);
-	    			return date($format, $mktime);
 	    		}   
     		}
     		else
     		{
-    			return date($format, $this->mktime);
-    		} 		
+    			$mktime = $this->mktime;
+    		} 	
+
+    		$date_string = date($format, $mktime);
+    		$date_string = self::replace_language_specific_parts($format, $mktime, $date_string);    		
+    		return $date_string;
     	}
     	else
     	{
@@ -991,5 +998,34 @@ class DatetimeHandler implements DatetimeHandlerInterface
     	}
     }
     
+    private static function replace_language_specific_parts($format, $mktime, $date_string)
+    {
+    	if ($format and $date_string)
+    	{
+    		$replacement_character_array = array("l","D","F","M","S");
+    		
+    		foreach($replacement_character_array as $key => $value)
+    		{
+	    		if (($position = strpos($format,$value)) !== false)
+	    		{
+	    			$datetime_language_array = Language::get_datetime_array();
+	    			$needle = date($value, $mktime);
+	    			$needle_position = strpos($date_string,$needle);
+	    			$needle_length = strlen($needle);
+	    			$replace_with = $datetime_language_array[$value][$needle];
+	    			if ($needle and $replace_with)
+	    			{
+	    				$date_string = substr_replace($date_string, $replace_with, $needle_position, $needle_length);
+	    			}
+	    		}
+    		}
+
+    		return $date_string;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
 }
 ?>
