@@ -130,4 +130,10 @@
 	$dialog[15]['method']			= "empty_space";
 	$dialog[15]['internal_name']	= "sample";
 	$dialog[15]['weight']			= 200;
+	
+	$dialog[16]['type']				= "standard_search";
+	$dialog[16]['class_path']		= "core/modules/sample/io/sample_search.io.php";
+	$dialog[16]['class']			= "SampleSearchIO";
+	$dialog[16]['method']			= "search";
+	$dialog[16]['internal_name']	= "sample_search";
 ?>

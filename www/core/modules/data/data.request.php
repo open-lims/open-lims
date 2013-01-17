@@ -432,12 +432,6 @@ class DataRequest
 				require_once("core/modules/base/common.request.php");
 				CommonRequest::common_dialog();
 			break;
-				
-			// Search
-			case("search"):
-				require_once("core/modules/base/common.request.php");
-				CommonRequest::search_dialog();
-			break;
 			
 			default:
 				require_once("io/data.io.php");

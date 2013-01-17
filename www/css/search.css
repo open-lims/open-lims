@@ -76,17 +76,3 @@ a.SearchMainButton:hover span span
 {
 	width: 300px;
 }
-.SmallSearch
-{
-	width: 100%;
-	border-bottom: 1px #C0C0C0 solid;
-}
-.SmallSearchTable
-{
-	margin-left: auto;
-	margin-right: auto;
-}
-.SmallSearchInfo
-{
-	font-size: 10px;
-}

@@ -263,6 +263,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 			return false;
 		}
 		
+		/*
 		$(document).keyup(function(evt)
 		{
 			if(evt.which === 49)
@@ -270,7 +271,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 				open_column_menu();
 			}
 			
-		});
+		}); */
 		
 		var num_cols = $(".ListTable > thead > tr > th").size();
 		

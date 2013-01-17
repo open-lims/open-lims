@@ -130,4 +130,10 @@
 	$dialog[13]['method']			= "finished_projects";
 	$dialog[13]['internal_name']	= "project";
 	$dialog[13]['weight']			= 200;
+	
+	$dialog[14]['type']				= "standard_search";
+	$dialog[14]['class_path']		= "core/modules/project/io/project_search.io.php";
+	$dialog[14]['class']			= "ProjectSearchIO";
+	$dialog[14]['method']			= "search";
+	$dialog[14]['internal_name']	= "project_search";
 ?>

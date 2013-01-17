@@ -207,6 +207,21 @@ class SampleDataSearchIO
 						array_push($item_type_array, $value);
 					}
 				}
+				
+				if (!$item_type_array)
+				{
+					$tmp_item_type_array = Item::list_types();
+					foreach($tmp_item_type_array as $key => $value)
+					{
+						if (class_exists($value))
+						{
+							if ($value::get_sql_select_array($key) != null)
+							{
+								array_push($item_type_array, $key);
+							}
+						}
+					}
+				}
 			}
 			
 			$session->write_value("SEARCH_DATA_STRING", $string, true);

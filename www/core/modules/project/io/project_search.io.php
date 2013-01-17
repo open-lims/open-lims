@@ -59,14 +59,14 @@ class ProjectSearchIO
 			{
 				if ($_GET['nextpage'] == "1")
 				{
-					$name = $_POST['name'];
+					$name = $_POST['string'];
 					$session->delete_value("SEARCH_PROJECT_NAME");
 					$session->delete_value("SEARCH_PROJECT_ORGANISATION_UNIT_ARRAY");
 					$session->delete_value("SEARCH_PROJECT_TEMPLATE_ARRAY");
 				}
 				else
 				{
-					$name = $_POST['name'];
+					$name = $_POST['string'];
 					$organisation_unit_array = $session->read_value("SEARCH_PROJECT_ORGANISATION_UNIT_ARRAY");
 					$template_array = $session->read_value("SEARCH_PROJECT_TEMPLATE_ARRAY");
 				}
@@ -132,7 +132,7 @@ class ProjectSearchIO
 				foreach($project_template_array as $key => $value)
 				{
 					$project_template_cat = new ProjectTemplateCat($value);	
-					$result[$counter]['value'] = "0";
+					$result[$counter]['value'] = "";
 					$result[$counter]['content'] = $project_template_cat->get_name();		
 					$result[$counter]['selected'] = "";
 	

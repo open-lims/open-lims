@@ -69,48 +69,5 @@ class CommonRequest
 			throw new BaseModuleDialogMissingException();
 		}
 	}
-	
-	/**
-	 * @throws BaseModuleDialogMethodNotFoundException
-	 * @throws BaseModuleDialogClassNotFoundException
-	 * @throws BaseModuleDialogFileNotFoundException
-	 * @throws BaseModuleDialogMissingException
-	 */
-	public static function search_dialog()
-	{
-		if ($_GET['dialog'])
-		{
-			$module_dialog = ModuleDialog::get_by_type_and_internal_name("search", $_GET['dialog']);
-			
-			if (file_exists($module_dialog['class_path']))
-			{
-				require_once($module_dialog['class_path']);
-				
-				if (class_exists($module_dialog['class']))
-				{
-					if (method_exists($module_dialog['class'], $module_dialog['method']))
-					{
-						$module_dialog['class']::$module_dialog['method']();
-					}
-					else
-					{
-						throw new BaseModuleDialogMethodNotFoundException();
-					}
-				}
-				else
-				{
-					throw new BaseModuleDialogClassNotFoundException();
-				}
-			}
-			else
-			{
-				throw new BaseModuleDialogFileNotFoundException();
-			}
-		}
-		else
-		{
-			throw new BaseModuleDialogMissingException();
-		}
-	}
 }
 ?>

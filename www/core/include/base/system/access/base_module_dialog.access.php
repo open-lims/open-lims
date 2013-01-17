@@ -673,6 +673,46 @@ class BaseModuleDialog_Access
 	}
 	
 	/**
+	 * @param string $dialog_type
+	 * @return array
+	 */
+	public static function list_dialogs_by_type_and_module_id($dialog_type, $module_id)
+	{
+		global $db;
+
+		if ($dialog_type and is_numeric($module_id))
+		{
+			$result_array = array();
+			$counter = 0;
+			
+			$sql = "SELECT * FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE TRIM(dialog_type) = '".trim($dialog_type)."' AND module_id = ".$module_id." AND disabled='f' ORDER BY weight";
+			$res = $db->db_query($sql);
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				$result_array[$counter]['class_path'] 		= $data['class_path'];
+				$result_array[$counter]['class'] 			= $data['class'];
+				$result_array[$counter]['method'] 			= $data['method'];
+				$result_array[$counter]['internal_name'] 	= $data['internal_name'];
+				$result_array[$counter]['language_address'] = $data['language_address'];
+				$counter++;
+			}
+			
+			if (is_array($result_array))
+			{
+				return $result_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @param integer $module_id
 	 * @return integer
 	 */

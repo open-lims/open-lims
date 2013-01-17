@@ -40,5 +40,12 @@ interface ModuleDialogInterface
 	 * @return array
 	 */
 	public static function list_dialogs_by_type($dialog_type);
+	
+	/**
+	 * @param string $dialog_type
+	 * @param string $module
+	 * @return array
+	 */
+	public static function list_dialogs_by_type_and_module($dialog_type, $module);
 }
 ?>

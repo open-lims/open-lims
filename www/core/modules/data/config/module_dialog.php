@@ -129,4 +129,10 @@
 	$dialog[14]['class']			= "ValueIO";
 	$dialog[14]['method']			= "edit_value_item";
 	$dialog[14]['internal_name']	= "value";
+	
+	$dialog[15]['type']				= "standard_search";
+	$dialog[15]['class_path']		= "core/modules/data/io/data_search.io.php";
+	$dialog[15]['class']			= "DataSearchIO";
+	$dialog[15]['method']			= "search";
+	$dialog[15]['internal_name']	= "ffv_search";
 ?>

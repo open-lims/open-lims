@@ -28,6 +28,7 @@ require_once("interfaces/module_dialog.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("access/base_module.access.php");
 	require_once("access/base_module_dialog.access.php");
 }
 
@@ -56,6 +57,18 @@ class ModuleDialog implements ModuleDialogInterface, EventListenerInterface
 	public static function list_dialogs_by_type($dialog_type)
 	{
 		return BaseModuleDialog_Access::list_dialogs_by_type($dialog_type);
+	}
+	
+	/**
+	 * @see ModuleDialogInterface::list_dialogs_by_type_and_module()
+	 * @param string $module
+	 * @param string $dialog_type
+	 * @return array
+	 */
+	public static function list_dialogs_by_type_and_module($dialog_type, $module)
+	{
+		$module_id = BaseModule_Access::get_module_id_by_module_name($module);
+		return BaseModuleDialog_Access::list_dialogs_by_type_and_module_id($dialog_type, $module_id);
 	}
 
 	/**

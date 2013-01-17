@@ -32,7 +32,7 @@ interface DataPathInterface
 	 * @param integer $folder_id
 	 * @param integer $virtual_folder_id
 	 */
-	function __construct($folder_id, $virtual_folder_id);	
+	function __construct($folder_id = null, $virtual_folder_id = null);	
 	
 	function __destruct();
 	

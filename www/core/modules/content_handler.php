@@ -226,6 +226,16 @@ class ContentHandler_IO
 					
 					$template->set_var("username", $user->get_full_name(true));
 					
+					$header_search_paramquery['username'] = $_GET['username'];
+					$header_search_paramquery['session_id'] = $_GET['session_id'];
+					$header_search_paramquery['nav'] = "base.search";
+					$header_search_paramquery['run'] = "header_search";
+					$header_search_paramquery['nextpage'] = "1";
+					$header_search_params = http_build_query($header_search_paramquery,'','&#38;');
+					
+					$template->set_var("header_search_params", $header_search_params);
+					$template->set_var("header_search_current_module", $_GET['nav']);
+					
 					$template->output();
 
 					try

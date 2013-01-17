@@ -59,7 +59,7 @@ class ItemFulltextSearchIO
 				}
 				else
 				{
-					$string = $session->read_value("SEARCH_FULLTEXT_STRING");
+					$string = $session->read_value("SEARCH_FULL_TEXT_STRING");
 					$item_type_array = $session->read_value("SEARCH_FULL_TEXT_ITEM_TYPE");	
 				}
 			}
@@ -67,7 +67,7 @@ class ItemFulltextSearchIO
 			{
 				if ($_GET['page'])
 				{
-					$string = $session->read_value("SEARCH_FULLTEXT_STRING");
+					$string = $session->read_value("SEARCH_FULL_TEXT_STRING");
 					$item_type_array = $session->read_value("SEARCH_FULL_TEXT_ITEM_TYPE");		
 				}
 				else
@@ -79,7 +79,7 @@ class ItemFulltextSearchIO
 					}
 					else
 					{
-						$string = $session->read_value("SEARCH_FULLTEXT_STRING");
+						$string = $_POST['string'];
 						$item_type_array = $session->read_value("SEARCH_FULL_TEXT_ITEM_TYPE");	
 					}
 				}
@@ -148,7 +148,7 @@ class ItemFulltextSearchIO
 				}
 			}
 			
-			$session->write_value("SEARCH_FULLTEXT_STRING", $string, true);
+			$session->write_value("SEARCH_FULL_TEXT_STRING", $string, true);
 			$session->write_value("SEARCH_FULL_TEXT_ITEM_TYPE", $item_type_array, true);	
 
 			

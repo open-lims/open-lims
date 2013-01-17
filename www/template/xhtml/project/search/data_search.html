@@ -1,55 +1,56 @@
-<!-- CONTAINER BEGIN ("Project Data Search") -->
+<!-- CONTAINER BEGIN ("[[LANG:ProjectDataSearchTitle]]") -->
 
-<br />
-<div class='SearchContainer'>
 <form action='index.php?[[PARAMS]]' method='post'>
-<br />
-<br />
-<table class='SearchTable'>
-	<tr>
-		<td colspan='2'>
-			<input type='text' name='string' size='47' class='FormTextfield' />
-			<span class='formError'>[[ERROR]]</span>
-		</td>
-	</tr>
-	<tr>
-		<td colspan='2'><div class='center'><span class='smallTextBlack'>use * as a wildcard character</span></div></td>
-	</tr>
-	<tr>
-		<td colspan='2'><br /></td>
-	</tr>
-	<tr>
-		<td colspan='2'>
-			<select class='SearchCommonSelect' id='SearchDataAjaxSelectProject' size='8' name='project_id'>
-			
-				<option value='0' selected='selected'>All</option>
-			
-				<!-- FOREACH BEGIN ([[PROJECT_ARRAY]]) -->
-		
-					<option value='[[PROJECT_ARRAY:VALUE]]' [[PROJECT_ARRAY:SELECTED]]>[[PROJECT_ARRAY:CONTENT]]</option>
-		
-				<!-- FOREACH END -->
-			
-			</select>
-		</td>
-	</tr>
 
-		<!-- FOREACH BEGIN ([[ITEM_TYPE_ARRAY]]) -->
-		
-		<tr>
-			<td colspan='2'>
-			<input type='checkbox' name='[[ITEM_TYPE_ARRAY:NAME]]' value='[[ITEM_TYPE_ARRAY:VALUE]]' [[ITEM_TYPE_ARRAY:CHECKED]]>[[ITEM_TYPE_ARRAY:TITLE]]</option>
-			</td>
-		</tr>
-		
-		<!-- FOREACH END -->
-
-	<tr>
-		<td colspan='2'><br /><input type='submit' value='Search' class='FormButton' /></td>
-	</tr>
-</table>
-<br />
-</form>
+<div class='Form'>
+<div class='FormBox'>
+	<div class='FormBoxHeadline'>[[LANG:ProjectDataSearchStringTitle]]</div>
+	<input type='text' name='string' size='47' class='FormTextfield' />
+	<span class='formError'>[[ERROR]]</span>
+	<br /><span class='smallTextBlack'>[[LANG:ProjectDataSearchWildcard]]</span>
 </div>
+
+<div class='FormBoxClear'></div>
+
+<div class='FormBox'>
+	<div class='FormBoxHeadline'>[[LANG:ProjectDataSearchProjecTitle]]</div>
+
+	<select class='BaseSearchCommonSelect' id='SearchDataAjaxSelectProject' size='8' name='project_id'>
+	
+		<option value='0' selected='selected'>[[LANG:ProjectDataSearchAll]]</option>
+	
+		<!-- FOREACH BEGIN ([[PROJECT_ARRAY]]) -->
+
+			<option value='[[PROJECT_ARRAY:VALUE]]' [[PROJECT_ARRAY:SELECTED]]>[[PROJECT_ARRAY:CONTENT]]</option>
+
+		<!-- FOREACH END -->
+	
+	</select>
+</div>
+
+<div class='FormBoxClear'></div>
+
+<div class='FormBox'>
+	<div class='FormBoxHeadline'>[[LANG:ProjectDataSearchStringTypeTitle]]</div>
+
+	<!-- FOREACH BEGIN ([[ITEM_TYPE_ARRAY]]) -->
+	
+		<input type='checkbox' name='[[ITEM_TYPE_ARRAY:NAME]]' value='[[ITEM_TYPE_ARRAY:VALUE]]' [[ITEM_TYPE_ARRAY:CHECKED]]>&nbsp;[[ITEM_TYPE_ARRAY:TITLE]]</option><br />
+	
+	<!-- FOREACH END -->
+
+</div>
+	
+<div class='FormBoxClear'></div>	
+	
+<div class='FormButtonBox'>
+<button type='submit'>[[LANG:BaseGlobalButtonSearch]]</button>
+<div class='FormButtonBoxClear'></div>
+</div>
+
+</div>
+
+</form>
+
 					
 <!-- CONTAINER END () -->

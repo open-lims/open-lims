@@ -1,63 +1,62 @@
-<!-- CONTAINER BEGIN ("Search") -->
+<!-- CONTAINER BEGIN ("[[LANG:ProjectSearchTitle]]") -->
 
-<br />
-<div class='SearchContainer'>
 <form action='index.php?[[PARAMS]]' method='post'>
-<div class='center'><span class='bold'>Project Search</span></div>
-<br />
-<br />
-<table class='SearchTable'>
-	<tr>
-		<td colspan='2'>
-			<input type='text' name='name' size='47' class='FormTextfield' />
-			<span class='formError'>[[ERROR]]</span>
-		</td>
-	</tr>
-	<tr>
-		<td colspan='2'><div class='center'><span class='smallTextBlack'>use * as a wildcard character</span></div></td>
-	</tr>
-	<tr>
-		<td colspan='2'><br />Organisation Units</td>
-	</tr>
-	<tr>
-		<td colspan='2'>
-			<select class='SearchCommonSelect' size='8' name='organisation_unit'>
-			
-				<option value='0' selected='selected'>All</option>
-			
-				<!-- FOREACH BEGIN ([[ORGAN_UNIT]]) -->
-		
-					<option value='[[ORGAN_UNIT:VALUE]]' [[ORGAN_UNIT:SELECTED]]>[[ORGAN_UNIT:CONTENT]]</option>
-		
-				<!-- FOREACH END -->
-			
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<td colspan='2'><br />Templates</td>
-	</tr>
-	<tr>
-		<td colspan='2'>
-			<select class='SearchCommonSelect' size='8' name='template'>
-			
-				<option value='0' selected='selected'>All</option>
-			
-				<!-- FOREACH BEGIN ([[TEMPLATE]]) -->
-		
-					<option value='[[TEMPLATE:VALUE]]' [[TEMPLATE:SELECTED]]>[[TEMPLATE:CONTENT]]</option>
-		
-				<!-- FOREACH END -->
-			
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<td colspan='2'><br /><input type='submit' value='Search' class='FormButton' /></td>
-	</tr>
-</table>
-<br />
-</form>
+
+<div class='Form'>
+<div class='FormBox'>
+	<div class='FormBoxHeadline'>[[LANG:ProjectSearchNameTitle]]</div>
+	<input type='text' name='string' size='47' class='FormTextfield' />
+	<span class='formError'>[[ERROR]]</span>
+	<br /><span class='smallTextBlack'>[[LANG:ProjectSearchNameWildcard]]</span></td>
 </div>
+
+<div class='FormBoxClear'></div>
+
+<div class='FormBox'>
+<div class='FormBoxHeadline'>[[LANG:ProjectSearchOrganisationUnitTitle]]</div>
+
+<select class=BaseSearchCommonSelect size='8' name='organisation_unit'>
+
+	<option value='0' selected='selected'>[[LANG:ProjectSearchAll]]</option>
+
+	<!-- FOREACH BEGIN ([[ORGAN_UNIT]]) -->
+
+		<option value='[[ORGAN_UNIT:VALUE]]' [[ORGAN_UNIT:SELECTED]]>[[ORGAN_UNIT:CONTENT]]</option>
+
+	<!-- FOREACH END -->
+
+</select>
+
+</div>
+
+<div class='FormBoxClear'></div>
+
+<div class='FormBox'>
+<div class='FormBoxHeadline'>[[LANG:ProjectSearchTemplateTitle]]</div>
+
+<select class='BaseSearchCommonSelect' size='8' name='template'>
+
+	<option value='0' selected='selected'>[[LANG:ProjectSearchAll]]</option>
+
+	<!-- FOREACH BEGIN ([[TEMPLATE]]) -->
+
+		<option value='[[TEMPLATE:VALUE]]' [[TEMPLATE:SELECTED]]>[[TEMPLATE:CONTENT]]</option>
+
+	<!-- FOREACH END -->
+
+</select>
+
+</div>
+
+<div class='FormBoxClear'></div>
+
+<div class='FormButtonBox'>
+<button type='submit'>[[LANG:BaseGlobalButtonSearch]]</button>
+<div class='FormButtonBoxClear'></div>
+</div>
+
+</div>
+
+</form>
 					
 <!-- CONTAINER END () -->

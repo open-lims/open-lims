@@ -96,6 +96,10 @@ class UserSearchIO
 			if (!$type)
 			{
 				$type = $_POST['search_type'];
+				IF (!$_POST['search_type'])
+				{
+					$type = 1;
+				}
 			}
 			
 			$session->write_value("SEARCH_USER_STRING", $string, true);
@@ -115,7 +119,7 @@ class UserSearchIO
 				$list->add_column(Language::get_message("BaseGeneralListColumnUsername", "general"),"username",true,null);
 				$list->add_column(Language::get_message("BaseGeneralListColumnFullName", "general"),"fullname",true,null);
 				
-				$type_name = "User";
+				$type_name = true;
 			}
 			else
 			{	
@@ -125,7 +129,7 @@ class UserSearchIO
 				$list->add_column(Language::get_message("BaseGeneralListColumnGroupName", "general"),"name",true,null);
 				$list->add_column(Language::get_message("BaseGeneralListColumnUsers", "general"),"users",true,null);
 
-				$type_name = "Group";
+				$type_name = false;
 			}
 						
 			$template = new HTMLTemplate("base/user/search/search_result.html");

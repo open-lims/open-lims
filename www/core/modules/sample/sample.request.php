@@ -746,13 +746,7 @@ class SampleRequest
 				require_once("core/modules/base/common.request.php");
 				CommonRequest::common_dialog();
 			break;
-				
-			// Search
-			case("search"):
-				require_once("core/modules/base/common.request.php");
-				CommonRequest::search_dialog();
-			break;
-			
+							
 			default:
 				require_once("io/sample.io.php");
 				SampleIO::list_user_related_samples();

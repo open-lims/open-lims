@@ -82,7 +82,13 @@ $(document).ready(function()
 			<li>|</li>
 			<li><a href='#' id='BaseLogout'>[[LANG:BaseMainHeaderLogout]]  ([[USERNAME]])</a></li>
 		</ul>
-		<div id='HeaderSearch'><input type='text' /><button type='submit'></button></div>
+		<div id='HeaderSearch'>
+			<form action='index.php?[[HEADER_SEARCH_PARAMS]]' method='post' >
+				<input type='text' name='string' />
+				<button type='submit'></button>
+				<input type='hidden' name='current_module' value='[[HEADER_SEARCH_CURRENT_MODULE]]' />
+			</form>
+		</div>
 	</div>
 	<div id='HeaderClear'></div>
 </div>

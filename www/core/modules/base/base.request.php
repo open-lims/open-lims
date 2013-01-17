@@ -526,15 +526,16 @@ class BaseRequest
 					
 					switch($_GET['run']):
 						
-						// Search
-						/**
-						 * @todo errors, exceptions
-						 */
 						case("search"):
-							require_once("common.request.php");
-							CommonRequest::search_dialog();
+							require_once("io/search.io.php");
+							SearchIO::search($_GET['dialog']);
 						break;
 								
+						case ("header_search"):
+							require_once("io/search.io.php");
+							SearchIO::header_search($_POST['string'], $_POST['current_module']);
+						break;
+						
 						default:
 							require_once("io/search.io.php");
 							SearchIO::main();

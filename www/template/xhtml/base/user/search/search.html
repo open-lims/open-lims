@@ -1,34 +1,39 @@
-<!-- CONTAINER BEGIN ("Search") -->
+<!-- CONTAINER BEGIN ("[[LANG:BaseUserSearchTitle]]") -->
 
-<br />
-<div class='SearchContainer'>
 <form action='index.php?[[PARAMS]]' method='post'>
-<div class='center'><span class='bold'>User/Group Search</span></div>
-<br />
-<br />
-<table class='SearchTable'>
-	<tr>
-		<td colspan='2'>
-			<input type='text' name='string' size='47' class='FormTextfield' />
-			<span class='formError'>[[ERROR]]</span>
-		</td>
-	</tr>
-	<tr>
-		<td colspan='2'><div class='center'><span class='smallTextBlack'>use * as a wildcard character</span></div></td>
-	</tr>
-	<tr>
-		<td colspan='2'><br /></td>
-	</tr>
-	<tr>
-		<td><input type='radio' name='search_type' value='1' checked='checked' /> Users</td>
-		<td><input type='radio' name='search_type' value='2' /> Groups</td>
-	</tr>
-	<tr>
-		<td colspan='2'><br /><input type='submit' value='Search' class='FormButton' /></td>
-	</tr>
-</table>
-<br />
-</form>
+
+<div class='Form'>
+<div class='FormBox'>
+	<div class='FormBoxHeadline'>[[LANG:BaseUserSearchNameTitle]]</div>
+	<input type='text' name='string' size='47' class='FormTextfield' />
+	<span class='formError'>[[ERROR]]</span>
+	<br /><span class='smallTextBlack'>[[LANG:BaseUserSearchNameWildcard]]</span>
 </div>
+
+<div class='FormBoxClear'></div>
+
+<div class='FormBox'>
+	<div class='FormBoxHeadline'>[[LANG:BaseUserSearchTypeTitle]]</div>
+	
+	<table style='width: 50%;'>
+		<tr>
+			<td><input type='radio' name='search_type' value='1' checked='checked' /> [[LANG:BaseUserSearchTypeUser]]</td>
+			<td><input type='radio' name='search_type' value='2' /> [[LANG:BaseUserSearchTypeGroup]]</td>
+		</tr>
+	</table>
+
+</div>
+	
+<div class='FormBoxClear'></div>	
+	
+<div class='FormButtonBox'>
+<button type='submit'>[[LANG:BaseGlobalButtonSearch]]</button>
+<div class='FormButtonBoxClear'></div>
+</div>
+
+</div>
+
+</form>
+
 					
 <!-- CONTAINER END () -->

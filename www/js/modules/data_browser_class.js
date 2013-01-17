@@ -671,8 +671,7 @@ function data_browser()
 		close_data_browser_file_dialog();
 		$("#DataBrowserMenuAdd").css(
 		{
-			"border":"solid #669acc 2px",
-			"border-bottom":"solid white 2px",
+			"border":"solid #B7B7B7 1px",
 			"z-index":"99"
 		});
 		$("#DataBrowserAddFileDialog")
@@ -693,8 +692,6 @@ function data_browser()
 				open_link_in_ui(action, additional_params);
 			})
 			.slideDown(200);
-		$("#DataBrowserAddFileCornerContainer").show();
-		$("#DataBrowserAddFileCorner").show();
 		
 		bind_dialog_close_click_handler();
 	}
@@ -704,10 +701,8 @@ function data_browser()
 	 */
 	function close_add_dialog()
 	{
-		$("#DataBrowserMenuAdd").css("border","solid white 2px");
+		$("#DataBrowserMenuAdd").css("border","solid #B7B7B7 1px");
 		$("#DataBrowserAddFileDialog").hide();
-		$("#DataBrowserAddFileCornerContainer").hide();
-		$("#DataBrowserAddFileCorner").hide();
 	}
 	
 	/**
@@ -741,36 +736,6 @@ function data_browser()
 						.html(json["add_list"])
 						.hide();
 
-					var corner_offset_x = offset_x + width + 18;
-					var corner_offset_y = offset_y - height + 2;
-					var corner_container = $("<div id='DataBrowserAddFileCornerContainer'></div>")
-						.css(
-						{
-							"position":"absolute",
-							"top":corner_offset_y + 1,
-							"left":corner_offset_x,
-							"z-index":"100",
-							"width":height-1,
-							"height":height-1, 
-							"background-color":"white",
-							"margin":"0",
-							"padding":"0"
-						})
-						.hide()
-						.appendTo("#Main");
-					var corner = $("<div id='DataBrowserAddFileCorner'></div>")
-						.css(
-						{
-							"position":"absolute",
-							"top":corner_offset_y,
-							"left":corner_offset_x,
-							"z-index":"101",
-							"width":height-2,
-							"height":height-2
-						})
-						.hide()
-						.appendTo("#Main");
-					
 					$("#DataBrowserMenuAdd").children("img").attr("src","images/icons/add.png");
 					$("#DataBrowserMenuAdd").removeClass("Deactivated");
 				}
@@ -830,6 +795,7 @@ function data_browser()
 					else
 					{
 						open_add_dialog();
+						
 					}
 				}
 			});

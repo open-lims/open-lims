@@ -65,7 +65,7 @@ class SampleSearchIO
 			{
 				if ($_GET['nextpage'] == "1")
 				{
-					$name = $_POST['name'];
+					$name = $_POST['string'];
 					$session->delete_value("SEARCH_SAMPLE_NAME");
 					$session->delete_value("SEARCH_SAMPLE_ORGANISATION_UNIT_ARRAY");
 					$session->delete_value("SEARCH_SAMPLE_TEMPLATE_ARRAY");
@@ -74,7 +74,7 @@ class SampleSearchIO
 				}
 				else
 				{
-					$name = $_POST['name'];
+					$name = $_POST['string'];
 					$organisation_unit_array = $session->read_value("SEARCH_SAMPLE_ORGANISATION_UNIT_ARRAY");
 					$template_array = $session->read_value("SEARCH_SAMPLE_TEMPLATE_ARRAY");
 					$in_id = $session->read_value("SEARCH_SAMPLE_IN_ID");
@@ -142,7 +142,7 @@ class SampleSearchIO
 				foreach($sample_template_array as $key => $value)
 				{
 					$sample_template_cat = new SampleTemplateCat($value);					
-					$result[$counter]['value'] = "0";
+					$result[$counter]['value'] = "";
 					$result[$counter]['content'] = $sample_template_cat->get_name();		
 					$result[$counter]['selected'] = "";
 	

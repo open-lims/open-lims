@@ -52,9 +52,9 @@ class DataSearchIO
 		{
 			if ($_GET['sortvalue'] and $_GET['sortmethod'])
 			{
-				if ($_GET['nextpage'] == "2" and $_POST['name'])
+				if ($_GET['nextpage'] == "2" and $_POST['string'])
 				{
-					$name = $_POST['name'];
+					$name = $_POST['string'];
 					$folder_id = $session->read_value("SEARCH_FFV_FOLDER_ID");
 				}
 				else
@@ -74,21 +74,31 @@ class DataSearchIO
 				{
 					if ($_GET['nextpage'] == "1")
 					{
-						$name = $_POST['name'];
-						if ($_POST['folder_id'])
+						$name = $_POST['string'];
+						if (isset($_POST['folder_id']) and is_numeric($_POST['folder_id']))
 						{
 							$folder_id = $_POST['folder_id'];
 						}
 						else
 						{
-							$folder_id = UserFolder::get_folder_by_user_id($user->get_user_id());
+							$data_path = new DataPath();
+							$data_path_folder_id = $data_path->get_folder_id();
+							if (is_numeric($data_path_folder_id))
+							{
+								$folder_id = $data_path_folder_id;
+							}
+							else
+							{
+								$folder_id = UserFolder::get_folder_by_user_id($user->get_user_id());
+							}
+							
 						}
 						$session->delete_value("SEARCH_FFV_NAME");
 						$session->delete_value("SEARCH_FFV_FOLDER_ID");
 					}
 					else
 					{
-						$name = $_POST['name'];
+						$name = $_POST['string'];
 						$folder_id = $session->read_value("SEARCH_FFV_FOLDER_ID");
 					}
 				}
