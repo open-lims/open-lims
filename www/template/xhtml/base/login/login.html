@@ -34,10 +34,19 @@ $(document).ready(function()
 		message_container.offset({ top: message_top, left: message_left});		
 	}
 	
+	
 	// Textfield default values
-	$('#BaseLoginUsername').val("[[LANG:BaseLoginUsername]]");
-	var username_default = true;
-		
+	if ("[[USERNAME]]" === "")
+	{
+		$('#BaseLoginUsername').val("[[LANG:BaseLoginUsername]]");
+		var username_default = true;
+	}
+	else
+	{
+		$('#BaseLoginUsername').val("[[USERNAME]]");
+		var username_default = false;
+	}
+
 	$('#BaseLoginUsername').bind('keypress', function(event)
 	{		
 		if (username_default === true)
@@ -69,8 +78,17 @@ $(document).ready(function()
 		}
 	});
 
-	$('#BaseLoginPassword').val("[[LANG:BaseLoginPassword]]");
-	var password_default = true;
+	
+	if ("[[PASSWORD]]" === "")
+	{
+		$('#BaseLoginPassword').val("[[LANG:BaseLoginPassword]]");
+		var password_default = true;
+	}
+	else
+	{
+		$('#BaseLoginPassword').val("[[PASSWORD]]");
+		var password_default = false;
+	}
 	
 	$('#BaseLoginPassword').bind('keypress', function(event)
 	{		
@@ -334,7 +352,7 @@ $(document).ready(function()
 		<form action="index.php" method="post">
 		
 		<div class='LoginElement'>
-			<input name='username' type='text' class='BaseTextfield LoginTextfield' id='BaseLoginUsername' value='[[USERNAME]]' />
+			<input name='username' type='text' class='BaseTextfield LoginTextfield' id='BaseLoginUsername' />
 		</div>
 		
 		<div class='LoginElement'>

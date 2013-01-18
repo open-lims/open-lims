@@ -57,7 +57,7 @@ class AdminSystemLogAjax
 		
 			if (is_array($argument_array))
 			{
-				$type_id = $argument_array[0][1];
+				$type_id = $argument_array[1];
 	
 				$list_request = new ListRequest_IO();
 				$list_request->set_column_array($json_column_array);
@@ -140,8 +140,7 @@ class AdminSystemLogAjax
 			
 			if (is_array($argument_array))
 			{
-				$type_id = $argument_array[0][1];
-				
+				$type_id = $argument_array[1];
 				return SystemFE_Wrapper::count_list_system_log($type_id);
 			}
 			else
