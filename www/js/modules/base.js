@@ -134,7 +134,7 @@ function base_dialog_reuqest(type, url, data_params)
 					}]
 				});
 				
-				if(additional_script != undefined)
+				if(additional_script !== undefined)
 				{
 					eval(additional_script);
 				}

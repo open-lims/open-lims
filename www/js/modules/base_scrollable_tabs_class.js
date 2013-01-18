@@ -44,7 +44,7 @@ function scrollable_tabs()
 		$(tab_container)
 			.css({
 				"margin-left": 0,
-				"width": total_tab_width //set width to max to prevent line break -> position() would not be correct
+				"width": total_tab_width+40 //set width to max to prevent line break -> position() would not be correct
 			});
 	
 		var camera = $("<div id='SmallTabCamera'></div>")
@@ -111,7 +111,8 @@ function scrollable_tabs()
 					$(this).data("hiddenTabsActive", false);
 				}
 			})
-			.insertBefore("#SmallTabCamera");
+			.insertBefore("#SmallTabCamera")
+			.css({"left":left_arrow_x,"top":left_arrow_y});
 		
 		var right_arrow = $("<div id='SmallTabArrowRight'><img src='images/tabs/arrow_right_active.png' />")
 			.click(function()
@@ -134,7 +135,8 @@ function scrollable_tabs()
 					$(this).data("hiddenTabsActive", false);
 				}
 			})
-			.insertAfter("#SmallTabCamera");
+			.insertAfter("#SmallTabCamera")
+			.css({"left":right_arrow_x,"top":right_arrow_y});
 	}
 	
 	/**

@@ -1,5 +1,5 @@
 <script type="text/javascript">
-/*<![CDATA[*/
+/*<![CDATA[*/          
 $(document).ready(function()
 {
 	var get_array = getQueryParams(document.location.search);
@@ -15,7 +15,6 @@ $(document).ready(function()
 		closeOnEscape: false,
 		buttons: 
 		{
-			// Yes
 			"[[LANG:BaseGlobalButtonYes]]": function() 
 			{
 				$(this).parent().find("button").attr("disabled", true);
@@ -38,7 +37,6 @@ $(document).ready(function()
 					}
 				});
 			},
-			// No
 			"[[LANG:BaseGlobalButtonNo]]": function()
 			{
 			 	$( this ).dialog( "close" );
