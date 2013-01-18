@@ -1,6 +1,6 @@
 <?php
 /**
- * @package job
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -22,10 +22,10 @@
  */
 
 /**
- * Job Ajax Class
- * @package job
+ * Batch Ajax Class
+ * @package base
  */
-class JobAjax
+class BatchAjax
 {
 	/**
 	 * @param string $json_column_array
@@ -39,7 +39,7 @@ class JobAjax
 	 * @param string $sortmethod
 	 * @return string
 	 */
-	public static function list_jobs($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	public static function list_batches($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
 	{
 		$list_request = new ListRequest_IO();
 		$list_request->set_column_array($json_column_array);
@@ -49,7 +49,7 @@ class JobAjax
 			$entries_per_page = 20;
 		}
 		
-		$list_array = Job_Wrapper::list_jobs(null, $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+		$list_array = Batch_Wrapper::list_batches(null, $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
 
 		if (is_array($list_array) and count($list_array) >= 1)
 		{
@@ -96,7 +96,7 @@ class JobAjax
 		}
 		else
 		{
-			$list_request->empty_message("<span class='italic'>No jobs at the moment</span>");
+			$list_request->empty_message("<span class='italic'>No Batches at the moment</span>");
 		}
 
 		$list_request->set_array($list_array);
@@ -108,9 +108,9 @@ class JobAjax
 	 * @param string $json_argument_array
 	 * @return integer
 	 */
-	public static function count_jobs($json_argument_array)
+	public static function count_batches($json_argument_array)
 	{
-		return Job_Wrapper::count_jobs(null);
+		return Batch_Wrapper::count_batches(null);
 	}
 
 	/**
@@ -118,17 +118,17 @@ class JobAjax
 	 */
 	public static function start_test()
 	{
-		$template = new HTMLTemplate("job/start_test_window.html");
-		$array['content_caption'] = "Start Test Job(s)";
+		$template = new HTMLTemplate("base/batch/start_test_window.html");
+		$array['content_caption'] = "Start Test Batch(es)";
 		$array['height'] = 200;
 		$array['width'] = 400;
 
 		$array['continue_caption'] = "Start";
 		$array['cancel_caption'] = "Cancel";
 		$array['content'] = $template->get_string();
-		$array['container'] = "#JobTestStartWindow";
+		$array['container'] = "#BaseBatchTestStartWindow";
 		
-		$continue_handler_template = new JSTemplate("job/js/start_test.js");
+		$continue_handler_template = new JSTemplate("base/batch/js/start_test.js");
 		$continue_handler_template->set_var("session_id", $_GET['session_id']);
 		
 		$array['continue_handler'] = $continue_handler_template->get_string();
@@ -137,29 +137,29 @@ class JobAjax
 	}
 	
 	/**
-	 * @param integer $number_of_jobs
+	 * @param integer $number_of_batches
 	 * @return string
 	 * @throws BaseUserAccessDeniedException
-	 * @throws BaseJobInvalidArgumentException
+	 * @throws BaseBatchInvalidArgumentException
 	 */
-	public static function start_test_handler($number_of_jobs)
+	public static function start_test_handler($number_of_batches)
 	{
 		global $user;
 		
 		if ($user->is_admin())
 		{
-			if (is_numeric($number_of_jobs) and $number_of_jobs >= 1)
+			if (is_numeric($number_of_batches) and $number_of_batches >= 1)
 			{
-				for ($i=1;$i<=$number_of_jobs;$i++)
+				for ($i=1;$i<=$number_of_batches;$i++)
 				{
-					$job = new Job(null);
-					$job->create(1);
+					$batch = new Batch(null);
+					$batch->create(1);
 				}
 				return "1";
 			}
 			else
 			{
-				throw new BaseJobInvalidArgumentException();
+				throw new BaseBatchInvalidArgumentException();
 			}
 		}
 		else

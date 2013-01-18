@@ -37,6 +37,15 @@ function __autoload($classname)
 		$path_prefix = "";
 	}
 	
+	// Batch
+	$classes['BaseBatchException']								= $path_prefix."core/include/base/batch/exceptions/base_batch.exception.class.php";
+	$classes['BaseBatchNotFoundException']						= $path_prefix."core/include/base/batch/exceptions/base_batch_not_found.exception.class.php";
+	$classes['BaseBatchMissingException']						= $path_prefix."core/include/base/batch/exceptions/base_batch_missing.exception.class.php";
+	$classes['BaseBatchInvalidArgumentException']				= $path_prefix."core/include/base/batch/exceptions/base_batch_invalid_argument.exception.class.php";
+
+	$classes['Batch']											= $path_prefix."core/include/base/batch/batch.class.php";
+	$classes['Batch_Wrapper']									= $path_prefix."core/include/base/batch/batch.wrapper.class.php";
+	
 	// Environment
 	$classes['BaseEnvironmentException']						= $path_prefix."core/include/base/environment/exceptions/base_environment.exception.class.php";
 	$classes['BaseEnvironmentCurrencyException']				= $path_prefix."core/include/base/environment/exceptions/base_environment_currency.exception.class.php";

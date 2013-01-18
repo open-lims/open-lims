@@ -22,10 +22,10 @@
  */
 
 /**
- * Base Job Exception
+ * Base Batch Exception
  * @package base
  */
-class BaseJobException extends BaseException
+class BaseBatchException extends BaseException
 {
     function __construct($write_log = false, $write_hdd_session = false, $write_hdd_sql = false, $message = null, $additional_information = null)
     {

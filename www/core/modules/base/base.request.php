@@ -182,6 +182,38 @@ class BaseRequest
 						);
 			break;
 			
+			// Batch
+			
+			case "batch_list_batches":
+				require_once("ajax/batch.ajax.php");
+				echo BatchAjax::list_batches(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
+			break;
+			
+			case "batch_count_batches":
+				require_once("ajax/batch.ajax.php");
+				echo BatchAjax::count_batches($_POST['argument_array']);
+			break;
+			
+			case "batch_start_test":
+				require_once("ajax/batch.ajax.php");
+				echo BatchAjax::start_test();
+			break;
+			
+			case "batch_start_test_handler":
+				require_once("ajax/batch.ajax.php");
+				echo BatchAjax::start_test_handler($_POST['number_of_batches']);
+			break;
+			
 			
 			// Admin
 			

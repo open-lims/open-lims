@@ -1,6 +1,6 @@
-<?php 
+<?php
 /**
- * @package job
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -22,12 +22,26 @@
  */
 
 /**
- * 
- */		
-	$dialog[0]['type']				= "base_user_lists";
-	$dialog[0]['class_path']		= "core/modules/job/io/job.io.php";
-	$dialog[0]['class']				= "JobIO";
-	$dialog[0]['method']			= "list_jobs";
-	$dialog[0]['internal_name']		= "list_jobs";
-	$dialog[0]['language_address']	= "BaseJobTopMenuUserList";
-?>
+ * Batch Interface
+ * @package base
+ */
+interface BatchInterface
+{
+	/**
+	 * @param $batch_id
+	 */
+	function __construct($batch_id);
+	
+	/**
+	 * @param integer $type_id
+	 * @return integer
+	 */
+	public function create($type_id);
+	
+	
+	/**
+	 * @param string $internal_name
+	 * @return integer
+	 */
+	public static function get_type_id_by_internal_name($internal_name);
+}

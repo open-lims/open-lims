@@ -1,6 +1,6 @@
 <?php
 /**
- * @package job
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -22,14 +22,14 @@
  */
 
 /**
- * Job Access Class
- * @package job
+ * Base Batch Run Access Class
+ * @package base
  */
-class Job_Access
+class BaseBatchRun_Access
 {
-	const JOB_PK_SEQUENCE = 'core_jobs_id_seq';
+	const BASE_BATCH_RUN_PK_SEQUENCE = 'core_base_batch_runs_id_seq';
 
-	private $job_id;
+	private $batch_id;
 	private $binary_id;
 	private $status;
 	private $create_datetime;
@@ -40,25 +40,25 @@ class Job_Access
 	private $type_id;
 	
 	/**
-	 * @param integer $job_id
+	 * @param integer $batch_id
 	 */
-	function __construct($job_id)
+	function __construct($batch_id)
 	{
 		global $db;
 
-		if ($job_id == null)
+		if ($batch_id == null)
 		{
-			$this->job_id = null;
+			$this->batch_id = null;
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("JOB_TABLE")." WHERE id='".$job_id."'";
+			$sql = "SELECT * FROM ".constant("BASE_BATCH_RUN_TABLE")." WHERE id='".$batch_id."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
 			if ($data['id'])
 			{
-				$this->job_id 			= $job_id;
+				$this->batch_id 		= $batch_id;
 				$this->binary_id 		= $data['binary_id'];
 				$this->status 			= $data['status'];
 				$this->create_datetime 	= $data['create_datetime'];
@@ -70,16 +70,16 @@ class Job_Access
 			}
 			else
 			{
-				$this->job_id	= null;
+				$this->batch_id	= null;
 			}
 		}
 	}
 	
 	function __destruct()
 	{
-		if ($this->job_id)
+		if ($this->batch_id)
 		{
-			unset($this->job_id);
+			unset($this->batch_id);
 			unset($this->binary_id);
 			unset($this->status);
 			unset($this->create_datetime);
@@ -113,14 +113,14 @@ class Job_Access
 			
 			$datetime = date("Y-m-d H:i:s");
 			
-			$sql_write = "INSERT INTO ".constant("JOB_TABLE")." (id,binary_id,status,create_datetime,start_datetime,end_datetime,last_lifesign,user_id,type_id) " .
-						"VALUES (nextval('".self::JOB_PK_SEQUENCE."'::regclass),".$binary_id.",0,'".$datetime."',NULL,NULL,NULL,".$user_id_insert.",".$type_id.")";
+			$sql_write = "INSERT INTO ".constant("BASE_BATCH_RUN_TABLE")." (id,binary_id,status,create_datetime,start_datetime,end_datetime,last_lifesign,user_id,type_id) " .
+						"VALUES (nextval('".self::BASE_BATCH_RUN_PK_SEQUENCE."'::regclass),".$binary_id.",0,'".$datetime."',NULL,NULL,NULL,".$user_id_insert.",".$type_id.")";
 
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".constant("JOB_TABLE")." WHERE id = currval('".self::JOB_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("BASE_BATCH_RUN_TABLE")." WHERE id = currval('".self::BASE_BATCH_RUN_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -146,13 +146,13 @@ class Job_Access
 	{
 		global $db;
 		
-		if ($this->job_id)
+		if ($this->batch_id)
 		{
-			$tmp_job_id = $this->job_id;
+			$tmp_batch_id = $this->batch_id;
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".constant("JOB_TABLE")." WHERE id = ".$tmp_job_id."";
+			$sql = "DELETE FROM ".constant("BASE_BATCH_RUN_TABLE")." WHERE id = ".$tmp_batch_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -313,9 +313,9 @@ class Job_Access
 	{
 		global $db;
 			
-		if ($this->job_id and is_numeric($binary_id))
+		if ($this->batch_id and is_numeric($binary_id))
 		{
-			$sql = "UPDATE ".constant("JOB_TABLE")." SET binary_id = '".$binary_id."' WHERE id = '".$this->job_id."'";
+			$sql = "UPDATE ".constant("BASE_BATCH_RUN_TABLE")." SET binary_id = '".$binary_id."' WHERE id = '".$this->batch_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -343,9 +343,9 @@ class Job_Access
 	{
 		global $db;
 			
-		if ($this->job_id and is_numeric($status))
+		if ($this->batch_id and is_numeric($status))
 		{
-			$sql = "UPDATE ".constant("JOB_TABLE")." SET status = '".$status."' WHERE id = '".$this->job_id."'";
+			$sql = "UPDATE ".constant("BASE_BATCH_RUN_TABLE")." SET status = '".$status."' WHERE id = '".$this->batch_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -373,9 +373,9 @@ class Job_Access
 	{
 		global $db;
 			
-		if ($this->job_id and $create_datetime)
+		if ($this->batch_id and $create_datetime)
 		{
-			$sql = "UPDATE ".constant("JOB_TABLE")." SET create_datetime = '".$create_datetime."' WHERE id = '".$this->job_id."'";
+			$sql = "UPDATE ".constant("BASE_BATCH_RUN_TABLE")." SET create_datetime = '".$create_datetime."' WHERE id = '".$this->batch_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -403,9 +403,9 @@ class Job_Access
 	{
 		global $db;
 			
-		if ($this->job_id and $start_datetime)
+		if ($this->batch_id and $start_datetime)
 		{
-			$sql = "UPDATE ".constant("JOB_TABLE")." SET start_datetime = '".$start_datetime."' WHERE id = '".$this->job_id."'";
+			$sql = "UPDATE ".constant("BASE_BATCH_RUN_TABLE")." SET start_datetime = '".$start_datetime."' WHERE id = '".$this->batch_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -433,9 +433,9 @@ class Job_Access
 	{
 		global $db;
 			
-		if ($this->job_id and $end_datetime)
+		if ($this->batch_id and $end_datetime)
 		{
-			$sql = "UPDATE ".constant("JOB_TABLE")." SET end_datetime = '".$end_datetime."' WHERE id = '".$this->job_id."'";
+			$sql = "UPDATE ".constant("BASE_BATCH_RUN_TABLE")." SET end_datetime = '".$end_datetime."' WHERE id = '".$this->batch_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -463,9 +463,9 @@ class Job_Access
 	{
 		global $db;
 			
-		if ($this->job_id and $last_lifesign)
+		if ($this->batch_id and $last_lifesign)
 		{
-			$sql = "UPDATE ".constant("JOB_TABLE")." SET last_lifesign = '".$last_lifesign."' WHERE id = '".$this->job_id."'";
+			$sql = "UPDATE ".constant("BASE_BATCH_RUN_TABLE")." SET last_lifesign = '".$last_lifesign."' WHERE id = '".$this->batch_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -493,9 +493,9 @@ class Job_Access
 	{
 		global $db;
 			
-		if ($this->job_id and is_numeric($user_id))
+		if ($this->batch_id and is_numeric($user_id))
 		{
-			$sql = "UPDATE ".constant("JOB_TABLE")." SET user_id = '".$user_id."' WHERE id = '".$this->job_id."'";
+			$sql = "UPDATE ".constant("BASE_BATCH_RUN_TABLE")." SET user_id = '".$user_id."' WHERE id = '".$this->batch_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -523,9 +523,9 @@ class Job_Access
 	{
 		global $db;
 			
-		if ($this->job_id and is_numeric($type_id))
+		if ($this->batch_id and is_numeric($type_id))
 		{
-			$sql = "UPDATE ".constant("JOB_TABLE")." SET type_id = '".$type_id."' WHERE id = '".$this->job_id."'";
+			$sql = "UPDATE ".constant("BASE_BATCH_RUN_TABLE")." SET type_id = '".$type_id."' WHERE id = '".$this->batch_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))

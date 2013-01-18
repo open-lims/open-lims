@@ -26,7 +26,10 @@
  */
 	define("BASE_BINARY_TABLE", 		"core_binaries");
 	define("BASE_SERVICE_TABLE", 		"core_services");
-
+	
+	define("BASE_BATCH_RUN_TABLE", 		"core_base_batch_runs");
+	define("BASE_BATCH_TYPE_TABLE", 	"core_base_batch_types");
+	
 	define("COUNTRY_TABLE", 			"core_countries");
 	define("CURRENCY_TABLE", 			"core_currencies");
 	define("LANGUAGE_TABLE", 			"core_languages");

@@ -1,9 +1,9 @@
-<?php 
+<?php
 /**
- * @package job
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2011 by Roman Konertz
+ * @copyright (c) 2008-2012 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -22,10 +22,15 @@
  */
 
 /**
- * 
+ * Base Batch Missing Exception
+ * @package base
  */
-	$name 					= "job";
-	$main_class				= "JobRequest";
-	
-	$required_include[0] 	= "job";
+class BaseBatchMissingException extends BaseBatchException
+{    
+	function __construct()
+    {
+    	parent::__construct(true, false, false, "Manufacturer not found", null);	
+    } 
+}
+
 ?>

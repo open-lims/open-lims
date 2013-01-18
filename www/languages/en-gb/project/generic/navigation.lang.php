@@ -1,5 +1,5 @@
 <?php
-$LANG['ProjectMainProjects'] = "Projects";
-$LANG['ProjectMainSubNewProject'] = "New Project";
-$LANG['ProjectMainSubMyProjects'] = "My Projects";
+$LANG['ProjectMainProjects'] = "Projects/Jobs";
+$LANG['ProjectMainSubNewProject'] = "New Project/Job";
+$LANG['ProjectMainSubMyProjects'] = "My Projects/Jobs";
 ?>

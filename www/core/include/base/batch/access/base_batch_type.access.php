@@ -1,6 +1,6 @@
 <?php
 /**
- * @package job
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -22,54 +22,54 @@
  */
 
 /**
- * Job Type Access Class
- * @package job
+ * Base Batch Type Access Class
+ * @package base
  */
-class JobType_Access
+class BaseBatchType_Access
 {
-	const JOB_TYPE_PK_SEQUENCE = 'core_job_types_id_seq';
+	const  BASE_BATCH_TYPE_PK_SEQUENCE = 'core_base_batch_types_id_seq';
 
-	private $job_type_id;
+	private $batch_type_id;
 	private $name;
 	private $internal_name;
 	private $binary_id;
 	
 	/**
-	 * @param integer $job_type_id
+	 * @param integer $batch_type_id
 	 */
-	function __construct($job_type_id)
+	function __construct($batch_type_id)
 	{
 		global $db;
 
-		if ($job_type_id == null)
+		if ($batch_type_id == null)
 		{
-			$this->job_type_id = null;
+			$this->batch_type_id = null;
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("JOB_TYPE_TABLE")." WHERE id='".$job_type_id."'";
+			$sql = "SELECT * FROM ".constant("BASE_BATCH_TYPE_TABLE")." WHERE id='".$batch_type_id."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			
 			if ($data['id'])
 			{
-				$this->job_type_id 		= $job_type_id;
+				$this->batch_type_id 	= $batch_type_id;
 				$this->name 			= $data['name'];
 				$this->internal_name 	= $data['internal_name'];
 				$this->binary_id 		= $data['binary_id'];
 			}
 			else
 			{
-				$this->job_type_id	= null;
+				$this->batch_type_id	= null;
 			}
 		}
 	}
 	
 	function __destruct()
 	{
-		if ($this->job_type_id)
+		if ($this->batch_type_id)
 		{
-			unset($this->job_type_id);
+			unset($this->batch_type_id);
 			unset($this->name);
 			unset($this->internal_name);
 			unset($this->binary_id);
@@ -88,14 +88,14 @@ class JobType_Access
 		
 		if ($name and $internal_name and is_numeric($binary_id))
 		{
-			$sql_write = "INSERT INTO ".constant("JOB_TYPE_TABLE")." (id,name,internal_name,binary_id) " .
-						"VALUES (nextval('".self::JOB_TYPE_PK_SEQUENCE."'::regclass),'".$name."','".$internal_name."',".$binary_id.")";
+			$sql_write = "INSERT INTO ".constant("BASE_BATCH_TYPE_TABLE")." (id,name,internal_name,binary_id) " .
+						"VALUES (nextval('".self::BASE_BATCH_TYPE_PK_SEQUENCE."'::regclass),'".$name."','".$internal_name."',".$binary_id.")";
 
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".constant("JOB_TABLE")." WHERE id = currval('".self::JOB_TYPE_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("BASE_BATCH_TYPE_TABLE")." WHERE id = currval('".self::BASE_BATCH_TYPE_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
@@ -121,13 +121,13 @@ class JobType_Access
 	{
 		global $db;
 		
-		if ($this->job_type_id)
+		if ($this->batch_type_id)
 		{
-			$tmp_job_type_id = $this->job_type_id;
+			$tmp_batch_type_id = $this->batch_type_id;
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".constant("JOB_TYPE_TABLE")." WHERE id = ".$tmp_job_type_id."";
+			$sql = "DELETE FROM ".constant("BASE_BATCH_TYPE_TABLE")." WHERE id = ".$tmp_batch_type_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -198,9 +198,9 @@ class JobType_Access
 	{
 		global $db;
 			
-		if ($this->job_type_id and $name)
+		if ($this->batch_type_id and $name)
 		{
-			$sql = "UPDATE ".constant("JOB_TYPE_TABLE")." SET name = '".$name."' WHERE id = '".$this->job_type_id."'";
+			$sql = "UPDATE ".constant("BASE_BATCH_TYPE_TABLE")." SET name = '".$name."' WHERE id = '".$this->batch_type_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -228,9 +228,9 @@ class JobType_Access
 	{
 		global $db;
 			
-		if ($this->job_type_id and $internal_name)
+		if ($this->batch_type_id and $internal_name)
 		{
-			$sql = "UPDATE ".constant("JOB_TYPE_TABLE")." SET internal_name = '".$internal_name."' WHERE id = '".$this->job_type_id."'";
+			$sql = "UPDATE ".constant("BASE_BATCH_TYPE_TABLE")." SET internal_name = '".$internal_name."' WHERE id = '".$this->batch_type_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -258,9 +258,9 @@ class JobType_Access
 	{
 		global $db;
 			
-		if ($this->job_type_id and is_numeric($binary_id))
+		if ($this->batch_type_id and is_numeric($binary_id))
 		{
-			$sql = "UPDATE ".constant("JOB_TYPE_TABLE")." SET binary_id = '".$binary_id."' WHERE id = '".$this->job_type_id."'";
+			$sql = "UPDATE ".constant("BASE_BATCH_TYPE_TABLE")." SET binary_id = '".$binary_id."' WHERE id = '".$this->batch_type_id."'";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -291,7 +291,7 @@ class JobType_Access
 		
 		if ($internal_name)
 		{
-			$sql = "SELECT id FROM ".constant("JOB_TYPE_TABLE")." WHERE internal_name='".$internal_name."'";
+			$sql = "SELECT id FROM ".constant("BASE_BATCH_TYPE_TABLE")." WHERE internal_name='".$internal_name."'";
 			$res = $db->db_query($sql);			
 			$data = $db->db_fetch_assoc($res);
 			

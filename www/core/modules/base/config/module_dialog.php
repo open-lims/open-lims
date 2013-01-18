@@ -80,4 +80,10 @@
 	$dialog[7]['internal_name']		= "groups";
 	$dialog[7]['weight']			= 300;
 	
+	$dialog[8]['type']				= "base_user_lists";
+	$dialog[8]['class_path']		= "core/modules/base/io/batch.io.php";
+	$dialog[8]['class']				= "BatchIO";
+	$dialog[8]['method']			= "list_batches";
+	$dialog[8]['internal_name']		= "list_batches";
+	$dialog[8]['language_address']	= "BaseDialogBatchTopMenuUserList";
 ?>

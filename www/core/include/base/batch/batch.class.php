@@ -1,6 +1,6 @@
 <?php
 /**
- * @package job
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -24,31 +24,31 @@
 /**
  * 
  */
-require_once("interfaces/job.interface.php");
+require_once("interfaces/batch.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-	require_once("access/job.access.php");
-	require_once("access/job_type.access.php");
+	require_once("access/base_batch_run.access.php");
+	require_once("access/base_batch_type.access.php");
 }
 
 /**
- * Job Class
- * @package job
+ * Batch Class
+ * @package base
  */
-class Job implements JobInterface
+class Batch implements BatchInterface
 {
 	/**
-	 * @see JobInterface::__construct()
-	 * @param $job_id
+	 * @see BatchInterface::__construct()
+	 * @param $batch_id
 	 */
-	function __construct($job_id)
+	function __construct($batch_id)
 	{
 		
 	}
 	
 	/**
-	 * @see JobInterface::create()
+	 * @see BatchInterface::create()
 	 * @param integer $type_id
 	 * @return integer
 	 */
@@ -58,14 +58,14 @@ class Job implements JobInterface
 		
 		if (is_numeric($type_id))
 		{
-			$job_type_access = new JobType_Access($type_id);
-			if ($job_type_binary_id = $job_type_access->get_binary_id())
+			$batch_type_access = new BaseBatchType_Access($type_id);
+			if ($batch_type_binary_id = $batch_type_access->get_binary_id())
 			{
-				$job_access = new Job_Access(null);
-				if ($job_id = $job_access->create($type_id, $job_type_binary_id, $user->get_user_id()))
+				$batch_run_access = new BaseBatchRun_Access(null);
+				if ($batch_run_id = $batch_run_access->create($type_id, $batch_type_binary_id, $user->get_user_id()))
 				{
-					$this->__construct($job_id);
-					return $job_id;
+					$this->__construct($batch_run_id);
+					return $batch_run_id;
 				}
 				else
 				{
@@ -85,13 +85,13 @@ class Job implements JobInterface
 	
 	
 	/**
-	 * @see JobInterface::get_type_id_by_internal_name()
+	 * @see BatchInterface::get_type_id_by_internal_name()
 	 * @param string $internal_name
 	 * @return integer
 	 */
 	public static function get_type_id_by_internal_name($internal_name)
 	{
-		return JobType_Access::get_id_by_internal_name($internal_name);
+		return BaseBatchType_Access::get_id_by_internal_name($internal_name);
 	}
 }
 ?>

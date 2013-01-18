@@ -904,6 +904,13 @@ a.BaseSearchMainButton:hover span span
 	font-size: 10px;
 }
 
+/* Batch */
+#BaseBatchTestStartWindowContainer
+{
+	text-align: center;
+	padding: 20px 0;	
+}
+
 /* Errors */
 #ErrorFatalContainer
 {

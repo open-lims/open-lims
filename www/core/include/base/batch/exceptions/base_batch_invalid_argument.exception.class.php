@@ -22,10 +22,10 @@
  */
 
 /**
- * Base Job Not Found Exception
+ * Base Batch Invalid Argument Exception
  * @package base
  */
-class BaseJobNotFoundException extends BaseJobException
+class BaseBatchInvalidArgumentException extends BaseBatchException
 {    
 	function __construct()
     {

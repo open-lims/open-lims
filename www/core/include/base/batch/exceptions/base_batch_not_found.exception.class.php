@@ -1,9 +1,9 @@
 <?php
 /**
- * @package job
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2011 by Roman Konertz
+ * @copyright (c) 2008-2012 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -22,26 +22,15 @@
  */
 
 /**
- * Job Interface
- * @package job
+ * Base Batch Not Found Exception
+ * @package base
  */
-interface JobInterface
-{
-	/**
-	 * @param $job_id
-	 */
-	function __construct($job_id);
-	
-	/**
-	 * @param integer $type_id
-	 * @return integer
-	 */
-	public function create($type_id);
-	
-	
-	/**
-	 * @param string $internal_name
-	 * @return integer
-	 */
-	public static function get_type_id_by_internal_name($internal_name);
+class BaseBatchNotFoundException extends BaseBatchException
+{    
+	function __construct()
+    {
+    	parent::__construct(true, false, false, "Manufacturer not found", null);	
+    } 
 }
+
+?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package job
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -22,10 +22,10 @@
  */
  
 /**
- * Job Wrapper Access Class
- * @package job
+ * Base Batch Wrapper Access Class
+ * @package base
  */
-class Job_Wrapper_Access
+class BaseBatch_Wrapper_Access
 {	
 	/**
 	 * @param string $datetime
@@ -35,7 +35,7 @@ class Job_Wrapper_Access
 	 * @param integer $end
 	 * @return array
 	 */
-	public static function list_jobs($datetime, $order_by, $order_method, $start, $end)
+	public static function list_batches($datetime, $order_by, $order_method, $start, $end)
 	{
 		global $db;
 		
@@ -75,14 +75,14 @@ class Job_Wrapper_Access
 			$sql_order_by = "ORDER BY create_datetime";
 		}
 			
-		$sql = "SELECT ".constant("JOB_TABLE").".id AS id, " .
-						"".constant("JOB_TYPE_TABLE").".name AS name, " .
-						"".constant("JOB_TABLE").".status AS status, " .
-						"".constant("JOB_TABLE").".create_datetime AS created_at, " .
-						"".constant("JOB_TABLE").".user_id AS user_id " .
-						"FROM ".constant("JOB_TABLE")." " .
-						"JOIN ".constant("JOB_TYPE_TABLE")." ON ".constant("JOB_TABLE").".type_id = ".constant("JOB_TYPE_TABLE").".id " .
-						"JOIN ".constant("USER_PROFILE_TABLE")." ON ".constant("JOB_TABLE").".user_id = ".constant("USER_PROFILE_TABLE").".id " .
+		$sql = "SELECT ".constant("BASE_BATCH_RUN_TABLE").".id AS id, " .
+						"".constant("BASE_BATCH_TYPE_TABLE").".name AS name, " .
+						"".constant("BASE_BATCH_RUN_TABLE").".status AS status, " .
+						"".constant("BASE_BATCH_RUN_TABLE").".create_datetime AS created_at, " .
+						"".constant("BASE_BATCH_RUN_TABLE").".user_id AS user_id " .
+						"FROM ".constant("BASE_BATCH_RUN_TABLE")." " .
+						"JOIN ".constant("BASE_BATCH_TYPE_TABLE")." ON ".constant("BASE_BATCH_RUN_TABLE").".type_id = ".constant("BASE_BATCH_TYPE_TABLE").".id " .
+						"JOIN ".constant("USER_PROFILE_TABLE")." ON ".constant("BASE_BATCH_RUN_TABLE").".user_id = ".constant("USER_PROFILE_TABLE").".id " .
 						"".$sql_order_by."";
 		
 		$return_array = array();
@@ -118,12 +118,12 @@ class Job_Wrapper_Access
 	 * @param string $datetime
 	 * @return integer
 	 */
-	public static function count_jobs($datetime)
+	public static function count_batches($datetime)
 	{
 		global $db;
 		
-		$sql = "SELECT COUNT(".constant("JOB_TABLE").".id) AS result " .
-						"FROM ".constant("JOB_TABLE")."";
+		$sql = "SELECT COUNT(".constant("BASE_BATCH_RUN_TABLE").".id) AS result " .
+						"FROM ".constant("BASE_BATCH_RUN_TABLE")."";
 		
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);

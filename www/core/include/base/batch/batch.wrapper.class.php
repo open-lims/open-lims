@@ -1,6 +1,6 @@
 <?php
 /**
- * @package job
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -22,12 +22,23 @@
  */
 
 /**
- * Job Wrapper Interface
- * @package job
+ * 
  */
-interface Job_WrapperInterface
+require_once("interfaces/batch.wrapper.interface.php");
+
+if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
+{
+	require_once("access/base_batch.wrapper.access.php");
+}
+
+/**
+ * Batch Wrapper Class
+ * @package base
+ */
+class Batch_Wrapper implements Batch_WrapperInterface
 {
 	/**
+	 * @see Batch_WrapperInterface::list_batches()
 	 * @param string $datetime
 	 * @param string $order_by
 	 * @param string $order_method
@@ -35,11 +46,19 @@ interface Job_WrapperInterface
 	 * @param integer $end
 	 * @return array
 	 */
-	public static function list_jobs($datetime, $order_by, $order_method, $start, $end);
+	public static function list_batches($datetime, $order_by, $order_method, $start, $end)
+	{
+		return BaseBatch_Wrapper_Access::list_batches($datetime, $order_by, $order_method, $start, $end);
+	}
 	
 	/**
+	 * @see Batch_WrapperInterface::count_batches()
 	 * @param string $datetime
 	 * @return integer
 	 */
-	public static function count_jobs($datetime);
+	public static function count_batches($datetime)
+	{
+		return BaseBatch_Wrapper_Access::count_batches($datetime);
+	}
 }
+?>

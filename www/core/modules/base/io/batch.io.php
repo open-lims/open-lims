@@ -1,6 +1,6 @@
 <?php
 /**
- * @package job
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2011 by Roman Konertz
@@ -22,16 +22,16 @@
  */
 
 /**
- * Job IO Class
- * @package job
+ * Batch IO Class
+ * @package base
  */
-class JobIO
+class BatchIO
 {
-	public static function list_jobs()
+	public static function list_batches()
 	{
 		global $user;
 		
-		$list = new List_IO("JobList", "ajax.php?nav=job", "list_jobs", "count_jobs", $argument_array, "JobList");
+		$list = new List_IO("BaseBatchList", "ajax.php?nav=base", "batch_list_batches", "batch_count_batches", $argument_array, "BatchList");
 		
 		$list->add_column("", "symbol", false, "16px");
 		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"), "name", true, null);
@@ -39,15 +39,15 @@ class JobIO
 		$list->add_column(Language::get_message("BaseGeneralListColumnUser", "general"), "user", true, null);
 		$list->add_column(Language::get_message("BaseGeneralListColumnCreatedAt", "general"), "created_at", true, null);
 		
-		$template = new HTMLTemplate("job/list.html");
+		$template = new HTMLTemplate("base/batch/list.html");
 		
-		if ($user->is_admin() and Job::get_type_id_by_internal_name("TEST") != null)
+		if ($user->is_admin() and Batch::get_type_id_by_internal_name("TEST") != null)
 		{
-			$template->set_var("test_job", true);
+			$template->set_var("test_batch", true);
 		}
 		else
 		{
-			$template->set_var("test_job", false);
+			$template->set_var("test_batch", false);
 		}
 		
 		$template->set_var("list", $list->get_list());
