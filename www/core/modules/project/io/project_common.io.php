@@ -45,10 +45,6 @@ class ProjectCommon_IO
 			
 			$tab_io->add("main", Language::get_message("ProjectGeneralDetailTabMainPage", "general"), $params, false);
 			
-			$tab_io->add("main2", Language::get_message("ProjectGeneralDetailTabMainPage", "general"), $params, false);
-			
-			$tab_io->add("main3", Language::get_message("ProjectGeneralDetailTabMainPage", "general"), $params, false);
-			
 			// Log
 			
 			$paramquery['username'] 	= $_GET['username'];
