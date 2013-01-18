@@ -256,7 +256,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 		
 	function make_resizable()
 	{		
-		if($.browser.msie && $.browser.version == 7.0)
+		if(navigator.appVersion.indexOf("MSIE 7.") != -1)
 		{
 			return;
 		}
@@ -298,7 +298,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 					var width = $(column).attr("width");
 				}		
 				
-				if(width !== "")
+				if((width !== undefined) && (width !== ""))
 				{
 					if(width.indexOf("px") !== -1)
 					{
