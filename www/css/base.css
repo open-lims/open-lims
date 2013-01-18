@@ -168,6 +168,7 @@ html,body
 #BaseTopBarRight
 {
 	text-align: right;
+	float: right;
 }
 #BaseTopBarClear
 {
@@ -704,7 +705,7 @@ html,body
 .ListButton
 {
     margin: 0 5px 0 0;
-    padding: 2px 3px;
+    padding: 3px 3px;
     float: left;
 }
 .ListButton img
@@ -826,6 +827,64 @@ html,body
 }
 
 /* Search */
+.BaseSearchMain
+{
+	margin-left: auto;
+	margin-right: auto;
+	width: 705px;
+}
+.BaseSearchMainLeft
+{
+	float: left;
+	width: 350px;
+}
+.BaseSearchMainClear
+{
+	clear: both;
+}
+.BaseSearchMainButton
+{
+	display: block;
+	height: 60px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+.BaseSearchMainButton
+{
+	border: 0;
+	text-decoration: none;
+}
+.BaseSearchMainButton:hover
+{
+	background: #99b2cc;
+	text-decoration: none;
+	color: black;
+}
+a.BaseSearchMainButton:hover span span
+{
+	color: black;
+}
+.BaseSearchMainButtonImage
+{
+	display: block;
+	float: left;
+	margin: 4px;
+}
+.BaseSearchMainButtonText
+{
+	display: block;
+	padding: 4px;
+}
+.BaseSearchMainButtonTitle
+{
+	display: block;
+	font-weight: bold;
+}
+.BaseSearchMainButtonDescription
+{
+	display: block;
+	font-size: 11px;
+}
 .BaseSearchCommonSelect
 {
 	width: 100%;

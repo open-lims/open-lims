@@ -189,17 +189,7 @@
 
 /* Files */
 
-.filebox_left {
-	width: 340px;
-	float: left;
-}
 
-.filebox_right {
-	float: right;
-	text-align: center;
-	width: 340px;
-	margin: 5px 10px;
-}
 
 #file_chmod_container {
 	width: 100%;
@@ -325,73 +315,7 @@
 
 /* ------------------ */ /* Neu */ /* ------------------ */
 
-.FileDetailMenu
-{
-	clear: both;
-}
-.FileDetailLeft
-{
-	float: left;
-	width: 50%;
-}
-.FileDetailRight
-{
-	
-}
-.FileDetailClear
-{
-	clear: both;
-}
-.FileDetailAdminMenuHead
-{
-	font-weight: bold;
-}
-ul.FileDetailAdminMenu
-{
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-ul.FileDetailAdminMenu li
-{
-	display: block;
-	margin: 0;
-	padding: 0;
-}
-ul.FileDetailAdminMenu li a
-{
-	display: block;
-	text-decoration: none;
-}
-.FileDetailAdminMenuIcon
-{
-	
-}
-.FileDetailAdminMenuTitle
-{
-	
-}
-.FileDetailDownload
-{
-	
-}
-.FileDetailDownloadImage
-{
-	float: left;
-	width: 55px;
-}
-.FileDetailDownloadText
-{
-	padding: 15px;
-}
-.FileDetailDownloadText a
-{
-	text-decoration: none;
-}
-.FileDetailDownloadText a:hover,.FileDetailDownloadText a:focus,.FileDetailDownloadText a:active
-{
-	text-decoration: underline;
-}
+
 
 .ImageBrowserMultiTable
 {

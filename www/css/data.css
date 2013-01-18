@@ -1,3 +1,9 @@
+/* Data Common */
+.DataTopSelect
+{
+	float: left;	
+}
+
 /* DATA BROWSER */
 .Deactivated:hover span
 {
@@ -305,4 +311,88 @@ width:100%;
 .DataValueFieldError
 {
 	border: 1px #FF6F63 dotted !important;
+}
+
+
+
+/* File Info */
+#BaseFileDetailLeft
+{
+	width: 340px;
+	float: left;
+	margin: 5px;
+}
+#BaseFileDetailRight
+{
+	float: right;
+	text-align: center;
+	width: 340px;
+	margin: 5px 10px;
+}
+#BaseFileDetailTable
+{
+	width: 100%;
+}
+#BaseFileDetailTable tr
+{
+	vertical-align: top;
+}
+#BaseFileDetailTable tr td
+{
+	padding: 2px;
+}
+#BaseFileDetailClear
+{
+	clear: both;
+}
+#BaseFileDetailAdminMenuTitle
+{
+	clear: left;
+	margin-top: 70px;
+	margin-bottom: 5px;
+	font-weight: bold;
+}
+ul.BaseFileDetailAdminMenu
+{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+ul.BaseFileDetailAdminMenu li
+{
+	display: block;
+	margin: 0;
+	padding: 0;
+}
+ul.BaseFileDetailAdminMenu li a
+{
+	display: block;
+	text-decoration: none;
+}
+.BaseFileDetailDownload
+{
+	display: block;
+	padding: 20px 5px 0px 5px;	
+	color: #444444 !important;
+	text-decoration: none;
+}
+.BaseFileDetailDownload:hover,
+.BaseFileDetailDownload:focus,
+.BaseFileDetailDownload:active
+{
+	text-decoration: underline;
+	color: #444444 !important;
+}
+.BaseFileDetailDownloadImage
+{
+	display: block;
+	float: left;
+	width: 55px;
+}
+.BaseFileDetailDownloadText
+{
+	float: left;
+	padding-top: 15px;
+	display: block;
+	font-size: 14px;
 }
