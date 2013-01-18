@@ -27,6 +27,9 @@
  */
 class ProjectCommon_IO
 {
+	/**
+	 * @todo reactivate schedule after workflow integration
+	 */
 	public static function tab_header()
 	{
 		if ($_GET['project_id'])
@@ -72,7 +75,7 @@ class ProjectCommon_IO
 			
 			
 			// Schedule
-			
+			/*
 			$paramquery['username'] 	= $_GET['username'];
 			$paramquery['session_id'] 	= $_GET['session_id'];
 			$paramquery['nav']			= "project";
@@ -82,7 +85,7 @@ class ProjectCommon_IO
 			unset($paramquery);
 			
 			$tab_io->add("schedule", Language::get_message("ProjectGeneralDetailTabSchedule", "general"), $params, false);
-			
+			*/
 			
 			// Item Lister Dialogs
 			
