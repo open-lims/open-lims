@@ -430,7 +430,7 @@ class UserRegionalSetting_Access
 	 */
 	public function get_currency_significant_digits()
 	{
-		if ($this->currency_significant_digits)
+		if (isset($this->currency_significant_digits))
 		{
 			return $this->currency_significant_digits;
 		}

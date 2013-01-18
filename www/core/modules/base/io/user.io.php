@@ -618,11 +618,11 @@ class UserIO
 		}
 		
 		$template->set_var("currency",$result);
-		
+
 		
 		// Currency Significant Digits
 		switch($regional->get_currency_significant_digits()):
-		
+			
 			case "0":
 				$template->set_var("cur_sig_digits_0_selected","selected='selected'");
 				$template->set_var("cur_sig_digits_1_selected","");

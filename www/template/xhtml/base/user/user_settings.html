@@ -9,20 +9,20 @@ $(document).ready(function()
 	
 	$("#BaseUserRegionalSettingsSaveButton").click(function()
 	{
-		var language_id = $("select[name='language_id']").val();
-		var country_id = $("select[name='country_id']").val();
-		var timezone_id = $("select[name='timezone_id']").val();
-		var time_display = $("select[name='time_display']").val();
-		var time_enter = $("select[name='time_enter']").val();
-		var date_display = $("select[name='date_display']").val();
-		var date_enter = $("select[name='date_enter']").val();
-		var system_of_units = $("select[name='system_of_units']").val();
-		var currency_id = $("select[name='currency_id']").val();
-		var currency_significant_digits = $("select[name='currency_significant_digits']").val();
-		var decimal_separator = $("select[name='decimal_separator']").val();
-		var thousand_separator = $("select[name='thousand_separator']").val();
-		var name_display_format = $("select[name='name_display_format']").val();
-		var system_of_paper_format = $("select[name='system_of_paper_format']").val();
+		var language_id = $("select[name='language_id'] option:selected").val();
+		var country_id = $("select[name='country_id'] option:selected").val();
+		var timezone_id = $("select[name='timezone_id'] option:selected").val();
+		var time_display = $("select[name='time_display'] option:selected").val();
+		var time_enter = $("select[name='time_enter'] option:selected").val();
+		var date_display = $("select[name='date_display'] option:selected").val();
+		var date_enter = $("select[name='date_enter'] option:selected").val();
+		var system_of_units = $("select[name='system_of_units'] option:selected").val();
+		var currency_id = $("select[name='currency_id'] option:selected").val();
+		var currency_significant_digits = $("select[name='currency_significant_digits'] option:selected").val();
+		var decimal_separator = $("select[name='decimal_separator'] option:selected").val();
+		var thousand_separator = $("select[name='thousand_separator'] option:selected").val();
+		var name_display_format = $("select[name='name_display_format'] option:selected").val();
+		var system_of_paper_format = $("select[name='system_of_paper_format'] option:selected").val();
 
 		$.ajax(
 		{
