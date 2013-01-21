@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -42,6 +42,10 @@ class Regional implements RegionalInterface
 {
 	private $user_regional_setting;
 	
+	/**
+	 * @see RegionalInterface::__construct()
+	 * @param integer $user_id
+	 */
 	public function __construct($user_id = null)
 	{
 		global $user;
@@ -61,6 +65,7 @@ class Regional implements RegionalInterface
 	}
 	
 	/**
+	 * @see RegionalInterface::get_language_id()
 	 * @return integer
 	 */
 	public function get_language_id()
@@ -84,6 +89,7 @@ class Regional implements RegionalInterface
 	}
 	
     /**
+     * @see RegionalInterface::get_timezone_id()
 	 * @return integer
 	 */
 	public function get_timezone_id()
@@ -107,6 +113,7 @@ class Regional implements RegionalInterface
 	}
 	
 	/**
+	 * @see RegionalInterface::get_time_display_format()
 	 * @return array
 	 */
 	public function get_time_display_format()
@@ -137,9 +144,8 @@ class Regional implements RegionalInterface
 	}
 	
 	/**
+	 * @see RegionalInterface::get_time_enter_format()
 	 * @return bool
-	 * true = 24 hr
-	 * false = 12 hr
 	 */
 	public function get_time_enter_format()
 	{
@@ -162,16 +168,8 @@ class Regional implements RegionalInterface
 	}
 	
 	/**
+	 * @see RegionalInterface::get_date_display_format()
 	 * @return string
-	 * d.m.Y
-	 * Y.m.d
-	 * d-m-Y
-	 * m-d-Y
-	 * Y-m-d
-	 * d/m/Y
-	 * m/d/Y
-	 * jS M Y
-	 * d. M Y
 	 */
 	public function get_date_display_format()
 	{
@@ -194,14 +192,8 @@ class Regional implements RegionalInterface
 	}
 	
 	/**
+	 * @see RegionalInterface::get_date_enter_format()
 	 * @return string
-	 * dd.mm.YYYY
-	 * YYYY.mm.dd
-	 * dd-mm-YYYY
-	 * mm-dd-YYYY
-	 * YYYY-mm-dd
-	 * dd/mm/YYYY
-	 * mm/dd/YYYY
 	 */
 	public function get_date_enter_format()
 	{
@@ -224,6 +216,7 @@ class Regional implements RegionalInterface
 	}
 	
 	/**
+	 * @see RegionalInterface::get_country_id()
 	 * @return integer
 	 */
 	public function get_country_id()
@@ -239,9 +232,8 @@ class Regional implements RegionalInterface
 	}
 	
 	/**
+	 * @see RegionalInterface::get_system_of_units()
 	 * @return string
-	 * metric
-	 * angloamerican
 	 */
 	public function get_system_of_units()
 	{
@@ -264,9 +256,8 @@ class Regional implements RegionalInterface
 	}
 	
 	/**
+	 * @see RegionalInterface::get_system_of_paper_format()
 	 * @return string
-	 * din
-	 * angloamerican
 	 */
 	public function get_system_of_paper_format()
 	{
@@ -289,6 +280,7 @@ class Regional implements RegionalInterface
 	}
 	
 	/**
+	 * @see RegionalInterface::get_currency_id()
 	 * @return integer
 	 */
 	public function get_currency_id()
@@ -312,6 +304,7 @@ class Regional implements RegionalInterface
 	}
 	
 	/**
+	 * @see RegionalInterface::get_currency_significant_digits()
 	 * @return integer
 	 */
 	public function get_currency_significant_digits()
@@ -335,6 +328,7 @@ class Regional implements RegionalInterface
 	}
 	
 	/**
+	 * @see RegionalInterface::get_decimal_separator()
 	 * @return string
 	 */
 	public function get_decimal_separator()
@@ -344,7 +338,15 @@ class Regional implements RegionalInterface
 			$decimal_separator = $this->user_regional_setting->get_decimal_separator();
 			if ($decimal_separator)
 			{
-				return $decimal_separator;
+				switch($decimal_separator):
+					case "dot":
+						return ".";
+					break;
+					
+					default:
+						return ",";
+					break;
+				endswitch;
 			}
 			else
 			{
@@ -358,6 +360,7 @@ class Regional implements RegionalInterface
 	}
 	
 	/**
+	 * @see RegionalInterface::get_thousand_separator()
 	 * @return string
 	 */
 	public function get_thousand_separator()
@@ -367,7 +370,29 @@ class Regional implements RegionalInterface
 			$thousand_separator = $this->user_regional_setting->get_thousand_separator();
 			if ($thousand_separator)
 			{
-				return $thousand_separator;
+				switch($thousand_separator):
+				
+					case "space":
+						return "&nbsp;";
+					break;
+					
+					case "comma":
+						return ",";
+					break;
+					
+					case "dot":
+						return ".";
+					break;
+					
+					case "apostrophe":
+						return "'";
+					break;
+					
+					default:
+						return "";
+					break;
+				
+				endswitch;
 			}
 			else
 			{
@@ -381,6 +406,7 @@ class Regional implements RegionalInterface
 	}
 	
 	/**
+	 * @see RegionalInterface::get_name_display_format()
 	 * @return string
 	 */
 	public function get_name_display_format()
@@ -403,7 +429,29 @@ class Regional implements RegionalInterface
 		}
 	}
 	
+	/**
+	 * @see RegionalInterface::format_number()
+	 * @param float $number
+	 * @param integer $decimal
+	 * @param boolean $cut_decimal
+	 * @return string
+	 */
+	public function format_number($number, $decimal = 10, $cut_decimal = true)
+	{ 
+		 $number = number_format($number, $decimal, $this->get_decimal_separator(), $this->get_thousand_separator());
+		 if ($cut_decimal == true)
+		 {
+		 	$number = rtrim($number, "0");
+		 	$number = rtrim($number, ",");
+		 }
+		 return $number;
+	}
 	
+	/**
+	 * @see RegionalInterface::set_language_id()
+	 * @param integer $language_id
+	 * @return boolean
+	 */
 	public function set_language_id($language_id)
 	{
 		if ($this->user_regional_setting)
@@ -416,6 +464,11 @@ class Regional implements RegionalInterface
 		}
 	}
 	
+	/**
+	 * @see RegionalInterface::set_timezone_id()
+	 * @param integer $timezone_id
+	 * @return boolean
+	 */
 	public function set_timezone_id($timezone_id)
 	{
 		if ($this->user_regional_setting)
@@ -428,6 +481,11 @@ class Regional implements RegionalInterface
 		}
 	}
 	
+	/**
+	 * @see RegionalInterface::set_time_display_format()
+	 * @param boolean $time_display_format
+	 * @return boolean
+	 */
 	public function set_time_display_format($time_display_format)
 	{
 		if ($this->user_regional_setting)
@@ -440,6 +498,11 @@ class Regional implements RegionalInterface
 		}
 	}
 	
+	/**
+	 * @see RegionalInterface::set_time_enter_format()
+	 * @param boolean $time_enter_format
+	 * @return boolean
+	 */
 	public function set_time_enter_format($time_enter_format)
 	{
 		if ($this->user_regional_setting)
@@ -452,6 +515,11 @@ class Regional implements RegionalInterface
 		}
 	}
 	
+	/**
+	 * @see RegionalInterface::set_date_display_format()
+	 * @param string $date_display_format
+	 * @return boolean
+	 */
 	public function set_date_display_format($date_display_format)
 	{
 		if ($this->user_regional_setting)
@@ -464,6 +532,11 @@ class Regional implements RegionalInterface
 		}
 	}
 	
+	/**
+	 * @see RegionalInterface::set_date_enter_format()
+	 * @param string $date_enter_format
+	 * @return boolean
+	 */
 	public function set_date_enter_format($date_enter_format)
 	{
 		if ($this->user_regional_setting)
@@ -476,6 +549,11 @@ class Regional implements RegionalInterface
 		}
 	}
 	
+	/**
+	 * @see RegionalInterface::set_country_id()
+	 * @param integer $country_id
+	 * @return boolean
+	 */
 	public function set_country_id($country_id)
 	{
 		if ($this->user_regional_setting)
@@ -488,6 +566,11 @@ class Regional implements RegionalInterface
 		}
 	}
 	
+	/**
+	 * @see RegionalInterface::set_system_of_units()
+	 * @param string $system_of_units
+	 * @return boolean
+	 */
 	public function set_system_of_units($system_of_units)
 	{
 		if ($this->user_regional_setting)
@@ -500,6 +583,11 @@ class Regional implements RegionalInterface
 		}
 	}
 	
+	/**
+	 * @see RegionalInterface::set_system_of_paper_format()
+	 * @param string $system_of_paper_format
+	 * @return boolean
+	 */
 	public function set_system_of_paper_format($system_of_paper_format)
 	{
 		if ($this->user_regional_setting)
@@ -512,6 +600,11 @@ class Regional implements RegionalInterface
 		}
 	}
 
+	/**
+	 * @see RegionalInterface::set_currency_id()
+	 * @param integer $currency_id
+	 * @return boolean
+	 */
 	public function set_currency_id($currency_id)
 	{
 		if ($this->user_regional_setting)
@@ -524,6 +617,11 @@ class Regional implements RegionalInterface
 		}
 	}
 	
+	/**
+	 * @see RegionalInterface::set_currency_significant_digits()
+	 * @param integer $currency_significant_digits
+	 * @return boolean
+	 */
 	public function set_currency_significant_digits($currency_significant_digits)
 	{
 		if ($this->user_regional_setting)
@@ -536,6 +634,11 @@ class Regional implements RegionalInterface
 		}
 	}
 
+	/**
+	 * @see RegionalInterface::set_decimal_separator()
+	 * @param string $decimal_separator
+	 * @return boolean
+	 */
 	public function set_decimal_separator($decimal_separator)
 	{
 		if ($this->user_regional_setting)
@@ -548,6 +651,11 @@ class Regional implements RegionalInterface
 		}
 	}
 
+	/**
+	 * @see RegionalInterface::set_thousand_separator()
+	 * @param string $thousand_separator
+	 * @return boolean
+	 */
 	public function set_thousand_separator($thousand_separator)
 	{
 		if ($this->user_regional_setting)
@@ -560,6 +668,11 @@ class Regional implements RegionalInterface
 		}
 	}
 
+	/**
+	 * @see RegionalInterface::set_name_display_format()
+	 * @param string $name_display_format
+	 * @return boolean
+	 */
 	public function set_name_display_format($name_display_format)
 	{
 		if ($this->user_regional_setting)

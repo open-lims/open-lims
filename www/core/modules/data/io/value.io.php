@@ -3,7 +3,7 @@
  * @package data
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -34,12 +34,14 @@ class ValueIO
 	 */
 	private static function edit($value, $target_params, $display_header = true)
 	{
-		global $user;
+		global $user, $regional;
 		
 		if (is_object($value) and $target_params)
 		{
 			$template = new HTMLTemplate("data/value_detail.html");
 			$template->set_var("display_header", $display_header);
+			$template->set_var("decimal_separator", $regional->get_decimal_separator());
+			$template->set_var("thousand_separator", $regional->get_thousand_separator());
 					
 			$value_version_array = $value->get_value_internal_revisions();
 				
@@ -81,7 +83,9 @@ class ValueIO
 			$template->set_var("get",$result);
 			
 			$template->set_var("version",$value->get_version());
-			$template->set_var("version_datetime",$value->get_datetime());
+					
+			$version_datetime_handler = new DatetimeHandler($value->get_version_datetime());
+			$template->set_var("version_datetime",$version_datetime_handler->get_datetime());
 		
 			$paramquery = $_GET;
 			$paramquery['action'] = "permission";
@@ -141,7 +145,7 @@ class ValueIO
 	 */
 	public static function detail()
 	{
-		global $user;
+		global $user, $regional;
 		
 		if ($_GET['value_id'])
 		{
@@ -158,6 +162,9 @@ class ValueIO
 				{
 					$template = new HTMLTemplate("data/value_description_detail.html");
 				
+					$template->set_var("decimal_separator", $regional->get_decimal_separator());
+					$template->set_var("thousand_separator", $regional->get_thousand_separator());
+					
 					$value_version_array = $value->get_value_internal_revisions();
 						
 					if (is_array($value_version_array) and count($value_version_array) > 0)
@@ -198,7 +205,9 @@ class ValueIO
 					$template->set_var("get",$result);
 					
 					$template->set_var("version",$value->get_version());
-					$template->set_var("version_datetime",$value->get_datetime());
+					
+					$version_datetime_handler = new DatetimeHandler($value->get_version_datetime());
+					$template->set_var("version_datetime",$version_datetime_handler->get_datetime());
 				
 					$paramquery = $_GET;
 					$paramquery['action'] = "permission";
@@ -276,7 +285,7 @@ class ValueIO
 	 */
 	public static function add_value_item($type_array, $category_array, $holder_class, $holder_id, $position_id)
 	{
-		global $user;
+		global $user, $regional;
 		
 		if (class_exists($holder_class))
 		{
@@ -367,6 +376,9 @@ class ValueIO
 				$value_type = new ValueType($type_id);
 
 				$template = new HTMLTemplate("data/value_add.html");
+				
+				$template->set_var("decimal_separator", $regional->get_decimal_separator());
+				$template->set_var("thousand_separator", $regional->get_thousand_separator());
 				
 				$template->set_var("session_id", $_GET['session_id']);
 				$template->set_var("folder_id", $folder_id);

@@ -17,7 +17,7 @@ function load_additional_content()
 		data : "type_id="+type_id,
 		success : function(data) 
 		{
-			value_handler = new ValueHandler("DataValueAddValues");
+			value_handler = new ValueHandler("DataValueAddValues", "[[DECIMAL_SEPARATOR]]", "[[THOUSAND_SEPARATOR]]");
 
 			$('#AjaxLoadedContent').find('.jspVerticalBar').show();
 			$('#AjaxLoadedContent').children('.jspContainer').children('.jspPane').html(data);

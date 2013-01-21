@@ -3,7 +3,7 @@
  * @package data
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -33,6 +33,8 @@ class FileIO
 	 */
 	public static function detail()
 	{
+		global $regional;
+		
 		if ($_GET['file_id'])
 		{
 			$file = File::get_instance($_GET['file_id']);
@@ -111,7 +113,7 @@ class FileIO
 				$template->set_var("path",$folder->get_object_path());
 				
 				$template->set_var("size",Convert::convert_byte_1024($file->get_size()));
-				$template->set_var("size_in_byte",$file->get_size());
+				$template->set_var("size_in_byte",$regional->format_number($file->get_size()));
 				
 				$create_datetime_handler = new DatetimeHandler($file->get_datetime());
 				$version_datetime_handler = new DatetimeHandler($file->get_version_datetime());

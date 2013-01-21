@@ -3,7 +3,7 @@
  * @package data
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -231,10 +231,26 @@ class ImageCache // implements ImageCacheInterface, EventListenerInterface
 			if ($width)
 			{
 				$image->thumbnailImage($width,0);
+				
+				if (isset($this->max_height))
+				{
+					if ($this->max_height < $image->getImageHeight())
+					{	
+						$image->thumbnailImage(0,$this->max_height);
+					}
+				}
 			}
 			elseif ($height)
 			{
 				$image->thumbnailImage(0,$height);
+				
+				if (isset($this->max_width))
+				{
+					if ($this->max_width < $image->getImageWidth())
+					{	
+						$image->thumbnailImage($this->max_width,0);
+					}
+				}
 			}
 			else
 			{

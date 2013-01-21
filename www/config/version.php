@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -25,6 +25,6 @@
  * IMPORTANT NOTE: Modification of this file is not allowed by developers!
  */
 define("PRODUCT", "Open-LIMS");
-define("PRODUCT_VERSION", "0.3.9.9-88-dev &#945;");
+define("PRODUCT_VERSION", "0.3.9.9-89-dev &#945;");
 
 ?>

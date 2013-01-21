@@ -4,7 +4,7 @@
  * @version 0.4.0.0
  * @author Roman Quiring <quiring@open-lims.org>
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz, Roman Quiring
+ * @copyright (c) 2008-2013 by Roman Konertz, Roman Quiring
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -148,6 +148,8 @@ class ValueAjax
 	 */
 	public static function get_data_browser_link_html_and_button_handler($action) 
 	{
+		global $regional;
+		
 		$html;
 		$html_caption;
 		$button_handler;
@@ -199,6 +201,8 @@ class ValueAjax
 				$button_handler_caption = "Add";
 				
 				$additional_script_template = new JSTemplate("data/js/value_add_window_additional.js");
+				$additional_script_template->set_var("decimal_separator", $regional->get_decimal_separator());
+				$additional_script_template->set_var("thousand_separator", $regional->get_thousand_separator());		
 				$additional_script_template->set_var("session_id", $_GET['session_id']);
 				$additional_script = $additional_script_template->get_string();
 				$array = array("content"=>$html , "content_caption"=>$html_caption , "handler"=>$button_handler , "handler_caption"=>$button_handler_caption, "additional_script"=>$additional_script);
@@ -398,6 +402,8 @@ class ValueAjax
 	 */
 	public static function add_as_item_window($get_array, $type_array, $folder_id)
 	{
+		global $regional;
+		
 		if ($get_array)
 		{
 			$_GET = unserialize($get_array);	
@@ -447,7 +453,9 @@ class ValueAjax
 	
 				$array['continue_handler'] = $continue_handler_template->get_string();
 				
-				$script_template = new JSTemplate("data/js/value_add_item_window_onclick.js");				
+				$script_template = new JSTemplate("data/js/value_add_item_window_onclick.js");		
+				$script_template->set_var("decimal_separator", $regional->get_decimal_separator());
+				$script_template->set_var("thousand_separator", $regional->get_thousand_separator());		
 				$array['open_handler'] = $script_template->get_string();
 				
 				return json_encode($array);

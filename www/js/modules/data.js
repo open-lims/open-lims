@@ -1,7 +1,7 @@
 /**
  * version: 0.4.0.0
  * author: Roman Quiring <quiring@open-lims.org>
- * copyright: (c) 2008-2011 by Roman Quiring
+ * copyright: (c) 2008-2013 by Roman Quiring
  * license: GPLv3
  * 
  * This file is part of Open-LIMS
@@ -92,7 +92,7 @@ function image_browser()
 	}
 }
 	
-ValueHandler = function(field_class)
+ValueHandler = function(field_class, decimal_separator, thousand_separator)
 {
 	$("."+field_class).each(function()
 	{	
@@ -147,7 +147,7 @@ ValueHandler = function(field_class)
 		});
 		
 		$("."+field_class+"").each(function()
-		{	
+		{				
 			if ($(this).hasClass("DataValueFieldError"))
 			{
 				$(this).removeClass("DataValueFieldError");
@@ -224,7 +224,7 @@ ValueHandler = function(field_class)
 				if (( $(this).val() != parseInt($(this).val()) ) && ( $(this).val() !== "" ) )
 				{
 					error = true;
-					$(this).after("<span class='FormError'><br />Please enter a valid number without decimal</span>");
+					$(this).after("<span class='FormError'><br />Please enter a valid non-decimal number</span>");
 					$(this).addClass("DataValueFieldError");
 				}
 			}
@@ -232,12 +232,16 @@ ValueHandler = function(field_class)
 			{
 				if ($(this).hasClass("DataValueFieldTypeFloat"))
 				{
-					$(this).val($(this).val().replace(",","."));
+					var check_value = $(this).val().replace(thousand_separator,"'");
+					var check_value = check_value.replace(decimal_separator,".");
 					
-					if (($(this).val() != parseFloat($(this).val())) && ( $(this).val() !== "" ) )
+					
+					// $(this).val($(this).val().replace(",","."));
+					
+					if ((check_value != parseFloat(check_value)) && ( check_value !== "" ) )
 					{
 						error = true;
-						$(this).after("<span class='FormError'><br />Please enter a valid number with or without decimal</span>");
+						$(this).after("<span class='FormError'><br />Please enter a valid number; decimal-separator is: \""+decimal_separator+"\"</span>");
 						$(this).addClass("DataValueFieldError");
 					}
 				}

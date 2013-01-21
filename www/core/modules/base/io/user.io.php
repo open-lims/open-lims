@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -699,7 +699,7 @@ class UserIO
 		// Decimal Separator
 		switch($regional->get_decimal_separator()):
 		
-			case "dot":
+			case ".":
 				$template->set_var("decimal_separator_dot_selected","selected='selected'");
 				$template->set_var("decimal_separator_comma_selected","");
 			break;
@@ -715,7 +715,7 @@ class UserIO
 		// Thousand Separator
 		switch($regional->get_thousand_separator()):
 		
-			case "space":
+			case "&nbsp;":
 				$template->set_var("thousand_separator_none_selected","");
 				$template->set_var("thousand_separator_space_selected","selected='selected'");
 				$template->set_var("thousand_separator_comma_selected","");
@@ -723,7 +723,7 @@ class UserIO
 				$template->set_var("thousand_separator_apostrophe_selected","");
 			break;
 			
-			case "comma":
+			case ",":
 				$template->set_var("thousand_separator_none_selected","");
 				$template->set_var("thousand_separator_space_selected","");
 				$template->set_var("thousand_separator_comma_selected","selected='selected'");
@@ -731,7 +731,7 @@ class UserIO
 				$template->set_var("thousand_separator_apostrophe_selected","");
 			break;
 			
-			case "dot":
+			case ".":
 				$template->set_var("thousand_separator_none_selected","");
 				$template->set_var("thousand_separator_space_selected","");
 				$template->set_var("thousand_separator_comma_selected","");
@@ -739,7 +739,7 @@ class UserIO
 				$template->set_var("thousand_separator_apostrophe_selected","");
 			break;
 			
-			case "apostrophe":
+			case "'":
 				$template->set_var("thousand_separator_none_selected","");
 				$template->set_var("thousand_separator_space_selected","");
 				$template->set_var("thousand_separator_comma_selected","");

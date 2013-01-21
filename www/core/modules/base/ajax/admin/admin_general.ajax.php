@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -346,7 +346,7 @@ class AdminGeneralAjax
 	}
 	
 	/**
-	 * @param string $json_argument_array´
+	 * @param string $json_argument_arrayï¿½
 	 * @return integer
 	 * @throws BaseUserAccessDeniedException
 	 */

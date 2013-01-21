@@ -3,7 +3,7 @@
  * @package data
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -78,6 +78,8 @@ class ValueFormIO
 	 */
 	private function solve_entries($array)
 	{
+		global $regional;
+		
 		$return_string = "";
 		
 		if (is_array($array))
@@ -230,6 +232,10 @@ class ValueFormIO
 									
 									case "float":
 										$var_type_class = "DataValueFieldTypeFloat";
+										if ($element_content)
+										{											
+											$element_content = str_replace(".", $regional->get_decimal_separator(), $element_content);
+										}
 									break;
 									
 									default:

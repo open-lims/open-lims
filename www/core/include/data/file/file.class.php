@@ -3,7 +3,7 @@
  * @package data
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -583,7 +583,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 					// Minimise Filesize
 					$folder->decrease_filesize($this->file_version->get_owner_id(), $this->file_version->get_size());
 					
-					// Datei Löschen
+					// Datei Lï¿½schen
 							
 					$extension_array = explode(".",$this->file_version->get_name());
 					$extension_array_length = substr_count($this->file_version->get_name(),".");

@@ -3,7 +3,7 @@
  * @package data
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -136,7 +136,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	
 			$this->parent_folder_id = $this->calc_parent_folder_id();
 			
-			// Can create folder als methode => flag nur noch für corrupt (über parent folder object)
+			// Can create folder als methode => flag nur noch fï¿½r corrupt (ï¿½ber parent folder object)
 	
 			if (is_a($this, "SystemFolder") == false and is_numeric($this->parent_folder_id))
 			{	
