@@ -837,7 +837,7 @@ class ProjectRequest
 							{
 								require_once($main_file);
 								
-								if (class_exists($module_dialog['class']))
+								if (class_exists($main_class))
 								{
 									$project = new Project($_GET['project_id']);
 									$project_item = new ProjectItem($_GET['project_id']);

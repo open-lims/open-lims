@@ -53,7 +53,7 @@ class ExtensionRequest
 			{
 				require_once($main_file);
 				
-				if (class_exists($module_dialog['class']))
+				if (class_exists($main_class))
 				{			
 					$main_class::main();
 				}
