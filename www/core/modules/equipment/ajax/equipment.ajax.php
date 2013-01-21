@@ -176,7 +176,7 @@ class EquipmentAjax
 	public static function list_organisation_unit_related_equipment($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $page, $sortvalue, $sortmethod)
 	{
 		$argument_array = json_decode($json_argument_array);
-		$organisation_unit_id = $argument_array[0][1];
+		$organisation_unit_id = $argument_array[1];
 		
 		if (is_numeric($organisation_unit_id))
 		{
@@ -236,7 +236,7 @@ class EquipmentAjax
 	public static function count_organisation_unit_related_equipment($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
-		$organisation_unit_id = $argument_array[0][1];
+		$organisation_unit_id = $argument_array[1];
 		
 		if (is_numeric($organisation_unit_id))
 		{

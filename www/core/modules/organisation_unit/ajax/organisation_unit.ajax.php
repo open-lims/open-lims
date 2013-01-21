@@ -49,7 +49,7 @@ class OrganisationUnitAjax
 		
 		$argument_array = json_decode($json_argument_array);
 		
-		$organisation_unit_id = $argument_array[0][1];
+		$organisation_unit_id = $argument_array[1];
 		
 		if (is_numeric($organisation_unit_id))
 		{				
@@ -99,7 +99,7 @@ class OrganisationUnitAjax
 	{
 		$argument_array = json_decode($json_argument_array);
 		
-		$organisation_unit_id = $argument_array[0][1];
+		$organisation_unit_id = $argument_array[1];
 		
 		if (is_numeric($organisation_unit_id))
 		{
@@ -133,7 +133,7 @@ class OrganisationUnitAjax
 		
 		$argument_array = json_decode($json_argument_array);
 		
-		$organisation_unit_id = $argument_array[0][1];
+		$organisation_unit_id = $argument_array[1];
 		
 		if (is_numeric($organisation_unit_id))
 		{				
@@ -183,7 +183,7 @@ class OrganisationUnitAjax
 	{
 		$argument_array = json_decode($json_argument_array);
 		
-		$organisation_unit_id = $argument_array[0][1];
+		$organisation_unit_id = $argument_array[1];
 		
 		if (is_numeric($organisation_unit_id))
 		{
@@ -217,7 +217,7 @@ class OrganisationUnitAjax
 		
 		$argument_array = json_decode($json_argument_array);
 		
-		$organisation_unit_id = $argument_array[0][1];
+		$organisation_unit_id = $argument_array[1];
 		
 		if (is_numeric($organisation_unit_id))
 		{				
@@ -267,7 +267,7 @@ class OrganisationUnitAjax
 	{
 		$argument_array = json_decode($json_argument_array);
 			
-		$organisation_unit_id = $argument_array[0][1];
+		$organisation_unit_id = $argument_array[1];
 		
 		if (is_numeric($organisation_unit_id))
 		{
@@ -301,7 +301,7 @@ class OrganisationUnitAjax
 		
 		$argument_array = json_decode($json_argument_array);
 		
-		$organisation_unit_id = $argument_array[0][1];
+		$organisation_unit_id = $argument_array[1];
 		
 		if (is_numeric($organisation_unit_id))
 		{				
@@ -351,7 +351,7 @@ class OrganisationUnitAjax
 	{
 		$argument_array = json_decode($json_argument_array);
 		
-		$organisation_unit_id = $argument_array[0][1];
+		$organisation_unit_id = $argument_array[1];
 		
 		if (is_numeric($organisation_unit_id))
 		{
@@ -385,7 +385,7 @@ class OrganisationUnitAjax
 		
 		$argument_array = json_decode($json_argument_array);
 		
-		$organisation_unit_id = $argument_array[0][1];
+		$organisation_unit_id = $argument_array[1];
 		
 		if (is_numeric($organisation_unit_id))
 		{				
@@ -434,7 +434,7 @@ class OrganisationUnitAjax
 	{
 		$argument_array = json_decode($json_argument_array);
 		
-		$organisation_unit_id = $argument_array[0][1];
+		$organisation_unit_id = $argument_array[1];
 		
 		if (is_numeric($organisation_unit_id))
 		{
@@ -468,7 +468,7 @@ class OrganisationUnitAjax
 		
 		$argument_array = json_decode($json_argument_array);
 		
-		$user_id = $argument_array[0][1];
+		$user_id = $argument_array[1];
 		
 		if (is_numeric($user_id))
 		{
@@ -586,7 +586,7 @@ class OrganisationUnitAjax
 	{
 		$argument_array = json_decode($json_argument_array);
 		
-		$user_id = $argument_array[0][1];
+		$user_id = $argument_array[1];
 		
 		if (is_numeric($user_id))
 		{

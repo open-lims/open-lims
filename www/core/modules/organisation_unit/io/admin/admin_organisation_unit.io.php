@@ -705,8 +705,8 @@ class AdminOrganisationUnitIO
 		if ($_GET['id'])
 		{
 			$argument_array = array();
-			$argument_array[0][0] = "organisation_unit_id";
-			$argument_array[0][1] = $_GET['id'];
+			$argument_array[0] = "organisation_unit_id";
+			$argument_array[1] = $_GET['id'];
 			
 			$list = new List_IO("OrganisationUnitAdminMember" ,"ajax.php?nav=organisation_unit", "admin_list_members", "admin_count_members", $argument_array, "OrganisationUnitAdminMember");
 			
@@ -743,8 +743,8 @@ class AdminOrganisationUnitIO
 		if ($_GET['id'])
 		{
 			$argument_array = array();
-			$argument_array[0][0] = "organisation_unit_id";
-			$argument_array[0][1] = $_GET['id'];
+			$argument_array[0] = "organisation_unit_id";
+			$argument_array[1] = $_GET['id'];
 			
 			$list = new List_IO("OrganisationUnitAdminGroup" ,"ajax.php?nav=organisation_unit", "admin_list_groups", "admin_count_groups", $argument_array, "OrganisationUnitAdminGroup");
 			
@@ -780,8 +780,8 @@ class AdminOrganisationUnitIO
 		if ($_GET['id'])
 		{
 			$argument_array = array();
-			$argument_array[0][0] = "organisation_unit_id";
-			$argument_array[0][1] = $_GET['id'];
+			$argument_array[0] = "organisation_unit_id";
+			$argument_array[1] = $_GET['id'];
 			
 			$list = new List_IO("OrganisationUnitAdminOwner" ,"ajax.php?nav=organisation_unit", "admin_list_owners", "admin_count_owners", $argument_array, "OrganisationUnitAdminOwner");
 			
@@ -818,8 +818,8 @@ class AdminOrganisationUnitIO
 		if ($_GET['id'])
 		{
 			$argument_array = array();
-			$argument_array[0][0] = "organisation_unit_id";
-			$argument_array[0][1] = $_GET['id'];
+			$argument_array[0] = "organisation_unit_id";
+			$argument_array[1] = $_GET['id'];
 			
 			$list = new List_IO("OrganisationUnitAdminLeader" ,"ajax.php?nav=organisation_unit", "admin_list_leaders", "admin_count_leaders", $argument_array, "OrganisationUnitAdminLeader");
 			
@@ -856,8 +856,8 @@ class AdminOrganisationUnitIO
 		if ($_GET['id'])
 		{
 			$argument_array = array();
-			$argument_array[0][0] = "organisation_unit_id";
-			$argument_array[0][1] = $_GET['id'];
+			$argument_array[0] = "organisation_unit_id";
+			$argument_array[1] = $_GET['id'];
 			
 			$list = new List_IO("OrganisationUnitAdminQualityManager" ,"ajax.php?nav=organisation_unit", "admin_list_quality_managers", "admin_count_quality_managers", $argument_array, "OrganisationUnitAdminQualityManager");
 			

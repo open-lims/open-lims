@@ -635,8 +635,8 @@ class FileIO
 			if ($file->is_read_access())
 			{
 				$argument_array = array();
-				$argument_array[0][0] = "file_id";
-				$argument_array[0][1] = $_GET['file_id'];
+				$argument_array[0] = "file_id";
+				$argument_array[1] = $_GET['file_id'];
 	
 				$list = new List_IO("DataFileVersionHistory", "ajax.php?nav=data", "file_list_versions", "file_count_versions", $argument_array, "DataFileVersionHistory");
 

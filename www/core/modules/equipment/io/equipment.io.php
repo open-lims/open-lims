@@ -127,8 +127,8 @@ class EquipmentIO
 		if ($_GET['ou_id'])
 		{
 			$argument_array = array();
-			$argument_array[0][0] = "organisation_unit_id";
-			$argument_array[0][1] = $_GET['ou_id'];
+			$argument_array[0] = "organisation_unit_id";
+			$argument_array[1] = $_GET['ou_id'];
 					
 			$list = new List_IO("EquipmentOrganisationUnit", "ajax.php?nav=equipment", "list_organisation_unit_related_equipment", "count_organisation_unit_related_equipment", $argument_array, "EquipmentOrganisationUnit");
 		

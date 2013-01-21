@@ -39,8 +39,8 @@ class AdminSystemLogIO
 		}
 		
 		$argument_array = array();
-		$argument_array[0][0] = "type_id";
-		$argument_array[0][1] = $type_id;
+		$argument_array[0] = "type_id";
+		$argument_array[1] = $type_id;
 
 		$list = new List_IO("BaseAdminSystemLog", "ajax.php?nav=base", "admin_list_system_log", "admin_count_system_log", $argument_array, "BaseAdminSystemLog");
 				

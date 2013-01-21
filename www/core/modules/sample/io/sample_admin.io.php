@@ -129,8 +129,8 @@ class SampleAdminIO
 				$user->is_admin() == true)
 			{
 				$argument_array = array();
-				$argument_array[0][0] = "sample_id";
-				$argument_array[0][1] = $_GET['sample_id'];
+				$argument_array[0] = "sample_id";
+				$argument_array[1] = $_GET['sample_id'];
 	
 				$list = new List_IO("SampleAdminPermissionUser", "ajax.php?nav=sample", "admin_list_user_permissions", "admin_count_user_permissions", $argument_array, "SampleAdminPermissionUser");
 				
@@ -410,8 +410,8 @@ class SampleAdminIO
 				$user->is_admin() == true)
 			{
 				$argument_array = array();
-				$argument_array[0][0] = "sample_id";
-				$argument_array[0][1] = $_GET['sample_id'];
+				$argument_array[0] = "sample_id";
+				$argument_array[1] = $_GET['sample_id'];
 				
 				$list = new List_IO("SampleAdminPermissionOrganisationUnit", "ajax.php?nav=sample", "admin_list_organisation_unit_permissions", "admin_count_organisation_unit_permissions", $argument_array, "SampleAdminPermissionOrganisationUnit");
 				

@@ -465,8 +465,8 @@ class ValueIO
 			if ($value_obj->is_read_access())
 			{
 				$argument_array = array();
-				$argument_array[0][0] = "value_id";
-				$argument_array[0][1] = $_GET['value_id'];
+				$argument_array[0] = "value_id";
+				$argument_array[1] = $_GET['value_id'];
 	
 				$list = new List_IO("DataValueVersionHistory", "ajax.php?nav=data", "value_list_versions", "value_count_versions", $argument_array, "DataValueVersionHistory");
 

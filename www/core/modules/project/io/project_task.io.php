@@ -1150,8 +1150,8 @@ class ProjectTaskIO
 			if ($project_security->is_access(1, false) == true)
 			{
 				$argument_array = array();
-				$argument_array[0][0] = "project_id";
-				$argument_array[0][1] = $_GET['project_id'];
+				$argument_array[0] = "project_id";
+				$argument_array[1] = $_GET['project_id'];
 				
 				$list = new List_IO("ProjectTaskTableList", "ajax.php?nav=project", "list_project_tasks", "count_project_tasks", $argument_array, "ProjectTaskTableList");
 

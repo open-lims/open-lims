@@ -166,7 +166,7 @@ class FileAjax
 		}
 		
 		$argument_array = json_decode($json_argument_array);
-		$file_id = $argument_array[0][1];
+		$file_id = $argument_array[1];
 		
 		if (is_numeric($file_id))
 		{
@@ -248,7 +248,7 @@ class FileAjax
 	public static function count_versions($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
-		$file_id = $argument_array[0][1];
+		$file_id = $argument_array[1];
 		
 		if (is_numeric($file_id))
 		{

@@ -45,7 +45,7 @@ class UserSearchAjax
 		
 		if (is_array($argument_array))
 		{
-			$string = $argument_array[0][1];
+			$string = $argument_array[1];
 			
 			$list_request = new ListRequest_IO();
 			$list_request->set_column_array($json_column_array);
@@ -109,7 +109,7 @@ class UserSearchAjax
 		
 		if (is_array($argument_array))
 		{
-			$string = $argument_array[0][1];
+			$string = $argument_array[1];
 			
 			return User_Wrapper::count_search_users($string);
 		}
@@ -137,7 +137,7 @@ class UserSearchAjax
 		
 		if (is_array($argument_array))
 		{
-			$string = $argument_array[0][1];
+			$string = $argument_array[1];
 			
 			$list_request = new ListRequest_IO();
 			$list_request->set_column_array($json_column_array);
@@ -196,7 +196,7 @@ class UserSearchAjax
 		
 		if (is_array($argument_array))
 		{
-			$string = $argument_array[0][1];
+			$string = $argument_array[1];
 			
 			return User_Wrapper::count_search_groups($string);
 		}

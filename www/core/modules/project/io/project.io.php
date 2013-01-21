@@ -40,8 +40,8 @@ class ProjectIO
 		}
 
 		$argument_array = array();
-		$argument_array[0][0] = "user_id";
-		$argument_array[0][1] = $user_id;
+		$argument_array[0] = "user_id";
+		$argument_array[1] = $user_id;
 		
 		$list = new List_IO("ProjectUserRelated", "ajax.php?nav=project", "list_user_related_projects", "count_user_related_projects", $argument_array, "ProjectAjaxMyProjects");
 		
@@ -87,7 +87,7 @@ class ProjectIO
 			$organisation_unit_id = $_GET['ou_id'];
 			
 			$argument_array = array();
-			$argument_array[0][0] = "organisation_unit_id";
+			$argument_array[0] = "organisation_unit_id";
 			$argument_array[0][1] = $organisation_unit_id;
 			
 			$list = new List_IO("ProjectOrganisationUnitRelated", "ajax.php?nav=project", "list_organisation_unit_related_projects", "count_organisation_unit_related_projects", $argument_array, "ProjectAjaxOrganisationUnit", 12);

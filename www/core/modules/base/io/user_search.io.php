@@ -108,8 +108,8 @@ class UserSearchIO
 			$content_array = array();
 			
 			$argument_array = array();
-			$argument_array[0][0] = "string";
-			$argument_array[0][1] = $string;
+			$argument_array[0] = "string";
+			$argument_array[1] = $string;
 			
 			if ($type == 1)
 			{

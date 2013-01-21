@@ -43,7 +43,7 @@ class ProjectTaskAjax
 	{
 		$argument_array = json_decode($json_argument_array);
 		
-		$project_id = $argument_array[0][1];
+		$project_id = $argument_array[1];
 		
 		if (is_numeric($project_id))
 		{
@@ -137,7 +137,7 @@ class ProjectTaskAjax
 	{
 		$argument_array = json_decode($json_argument_array);
 		
-		$project_id = $argument_array[0][1];
+		$project_id = $argument_array[1];
 		
 		if (is_numeric($project_id))
 		{

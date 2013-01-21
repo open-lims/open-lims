@@ -57,7 +57,7 @@ class AdminOrganisationUnitAjax
 			
 			if (is_numeric($organisation_unit_id))
 			{
-				$type_id = $argument_array[0][1];
+				$type_id = $argument_array[1];
 	
 				$list_request = new ListRequest_IO();
 				$list_request->set_column_array($json_column_array);
@@ -113,7 +113,7 @@ class AdminOrganisationUnitAjax
 		if ($user->is_admin())
 		{
 			$argument_array = json_decode($json_argument_array);
-			$organisation_unit_id = $argument_array[0][1];
+			$organisation_unit_id = $argument_array[1];
 			
 			if (is_numeric($organisation_unit_id))
 			{
@@ -228,7 +228,7 @@ class AdminOrganisationUnitAjax
 			}
 			
 			$argument_array = json_decode($json_argument_array);
-			$organisation_unit_id = $argument_array[0][1];
+			$organisation_unit_id = $argument_array[1];
 			
 			if (is_numeric($organisation_unit_id))
 			{
@@ -288,7 +288,7 @@ class AdminOrganisationUnitAjax
 		if ($user->is_admin())
 		{
 			$argument_array = json_decode($json_argument_array);
-			$organisation_unit_id = $argument_array[0][1];
+			$organisation_unit_id = $argument_array[1];
 			
 			if (is_numeric($organisation_unit_id))
 			{
@@ -403,7 +403,7 @@ class AdminOrganisationUnitAjax
 			}
 			
 			$argument_array = json_decode($json_argument_array);
-			$organisation_unit_id = $argument_array[0][1];
+			$organisation_unit_id = $argument_array[1];
 			
 			if (is_numeric($organisation_unit_id))
 			{
@@ -463,7 +463,7 @@ class AdminOrganisationUnitAjax
 		if ($user->is_admin())
 		{
 			$argument_array = json_decode($json_argument_array);
-			$organisation_unit_id = $argument_array[0][1];
+			$organisation_unit_id = $argument_array[1];
 			
 			if (is_numeric($organisation_unit_id))
 			{
@@ -578,7 +578,7 @@ class AdminOrganisationUnitAjax
 			}
 			
 			$argument_array = json_decode($json_argument_array);
-			$organisation_unit_id = $argument_array[0][1];
+			$organisation_unit_id = $argument_array[1];
 			
 			if (is_numeric($organisation_unit_id))
 			{
@@ -638,7 +638,7 @@ class AdminOrganisationUnitAjax
 		if ($user->is_admin())
 		{
 			$argument_array = json_decode($json_argument_array);
-			$organisation_unit_id = $argument_array[0][1];
+			$organisation_unit_id = $argument_array[1];
 			
 			if (is_numeric($organisation_unit_id))
 			{
@@ -753,7 +753,7 @@ class AdminOrganisationUnitAjax
 			}
 			
 			$argument_array = json_decode($json_argument_array);
-			$organisation_unit_id = $argument_array[0][1];
+			$organisation_unit_id = $argument_array[1];
 			
 			if (is_numeric($organisation_unit_id))
 			{
@@ -812,7 +812,7 @@ class AdminOrganisationUnitAjax
 		if ($user->is_admin())
 		{
 			$argument_array = json_decode($json_argument_array);
-			$organisation_unit_id = $argument_array[0][1];
+			$organisation_unit_id = $argument_array[1];
 			
 			if (is_numeric($organisation_unit_id))
 			{

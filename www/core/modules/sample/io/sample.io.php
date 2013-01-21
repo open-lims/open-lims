@@ -68,8 +68,8 @@ class SampleIO
 				$organisation_unit_id = $_GET['ou_id'];
 				
 				$argument_array = array();
-				$argument_array[0][0] = "organisation_unit_id";
-				$argument_array[0][1] = $organisation_unit_id;
+				$argument_array[0] = "organisation_unit_id";
+				$argument_array[1] = $organisation_unit_id;
 				
 				$list = new List_IO("SampleOrganisationUnitRelated", "ajax.php?nav=sample", "list_organisation_unit_related_samples", "count_organisation_unit_related_samples", $argument_array, "SampleAjaxMySamples", 12);
 				
@@ -739,8 +739,8 @@ class SampleIO
 			if ($sample_security->is_access(1, false))
 			{
 				$argument_array = array();
-				$argument_array[0][0] = "sample_id";
-				$argument_array[0][1] = $_GET['sample_id'];
+				$argument_array[0] = "sample_id";
+				$argument_array[1] = $_GET['sample_id'];
 				
 				$list = new List_IO("SampleLocationHistory", "ajax.php?nav=sample", "list_location_history", "count_location_history", $argument_array, "SampleLocationHistory");
 		

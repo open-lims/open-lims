@@ -47,8 +47,8 @@ class ProjectAdminIO
 				$project_security->is_access(7, false) == true)
 			{		
 				$argument_array = array();
-				$argument_array[0][0] = "project_id";
-				$argument_array[0][1] = $_GET['project_id'];
+				$argument_array[0] = "project_id";
+				$argument_array[1] = $_GET['project_id'];
 				
 				$list = new List_IO("ProjectPermission", "ajax.php?nav=project", "list_project_permissions", "count_project_permissions", $argument_array, "ProjectAjaxMyProjects");
 				

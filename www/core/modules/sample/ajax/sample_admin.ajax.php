@@ -51,7 +51,7 @@ class SampleAdminAjax
 		}
 		
 		$argument_array = json_decode($json_argument_array);
-		$sample_id = $argument_array[0][1];
+		$sample_id = $argument_array[1];
 		
 		if (is_numeric($sample_id))
 		{
@@ -152,7 +152,7 @@ class SampleAdminAjax
 	public static function count_user_permissions($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
-		$sample_id = $argument_array[0][1];
+		$sample_id = $argument_array[1];
 		
 		if (is_numeric($sample_id))
 		{
@@ -188,7 +188,7 @@ class SampleAdminAjax
 		}
 		
 		$argument_array = json_decode($json_argument_array);
-		$sample_id = $argument_array[0][1];
+		$sample_id = $argument_array[1];
 		
 		if (is_numeric($sample_id))
 		{
@@ -262,7 +262,7 @@ class SampleAdminAjax
 	public static function count_organisation_unit_permissions($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
-		$sample_id = $argument_array[0][1];
+		$sample_id = $argument_array[1];
 		
 		if (is_numeric($sample_id))
 		{
