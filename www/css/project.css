@@ -18,7 +18,10 @@
 
 
 
-
+#ProjectDetailStatus div
+{
+	margin: 5px;	
+}
 .ProjectDetailStatusTable
 {
 	width: 100%;

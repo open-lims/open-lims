@@ -1,39 +1,7 @@
 <script>
 $(document).ready(function()
 {	
-	// Arrow Message Function
-	// @todo move to class (with close all function etc.)
-	function arrow_message(element, message, additional_class)
-	{
-		var element_offset = $(element).offset();
-		var element_width = $(element).outerWidth();
-		var element_height = $(element).outerHeight();
-	
-		var message_container = $("<div class='BaseArrowMessageContainer' style='display: none;'></div>");
-		var message_arrow = $("<div class='BaseArrowMessageArrow'></div>");
-		var message_element = $("<div class='BaseArrowMessage'></div>").html(message);
-
-		message_container.append(message_arrow).append(message_element);
-		
-		if ((additional_class !== "") && (additional_class !== undefined))
-		{
-			message_container.addClass(additional_class);
-		}
-		
-		if (element.next().hasClass("BaseArrowMessageContainer") === true)
-		{
-			element.next().remove();
-		}
-
-		element.after(message_container);
-		
-		var message_left = element_offset.left + element_width + 3;
-		var message_top = element_offset.top - Math.round((message_container.outerHeight() - element_height)/2);
-		
-		message_container.css({'display':'block', 'position':'absolute'});
-		message_container.offset({ top: message_top, left: message_left});		
-	}
-	
+	arrow_message = new ArrowMessage();
 	
 	// Textfield default values
 	if ("[[USERNAME]]" === "")
@@ -124,13 +92,13 @@ $(document).ready(function()
 	// Session Expired Message
 	if ([[SESSION_EXPIRED]] === true)
 	{
-		arrow_message($("#BaseLoginPassword"), "[[LANG:BaseLoginErrorSessionExpired]]", "LoginErrorArrowMessage");
+		arrow_message.new_arrow($("#BaseLoginPassword"), "[[LANG:BaseLoginErrorSessionExpired]]", "LoginErrorArrowMessage");
 	}
 	
 	// Login Button Handler
 	$('#BaseLoginLogin').click(function()
 	{
-		if ($("#BaseLoginUsername").next().hasClass("BaseArrowMessageContainer") === true)
+		/*if ($("#BaseLoginUsername").next().hasClass("BaseArrowMessageContainer") === true)
 		{
 			$("#BaseLoginUsername").next().remove();
 		}
@@ -138,17 +106,19 @@ $(document).ready(function()
 		if ($("#BaseLoginPassword").next().hasClass("BaseArrowMessageContainer") === true)
 		{
 			$("#BaseLoginPassword").next().remove();
-		}
+		}*/
+		
+		arrow_message.remove_all_arrows();
 		
 		if ((username_default === true) || ($('#BaseLoginUsername').val() === ""))
 		{
-			arrow_message($("#BaseLoginUsername"), "[[LANG:BaseLoginErrorMissingUsername]]", "LoginErrorArrowMessage");
+			arrow_message.new_arrow($("#BaseLoginUsername"), "[[LANG:BaseLoginErrorMissingUsername]]", "LoginErrorArrowMessage");
 			return;
 		}
 		
 		if ((password_default === true) || ($('#BaseLoginPassword').val() === ""))
 		{
-			arrow_message($("#BaseLoginPassword"), "[[LANG:BaseLoginErrorMissingPassword]]", "LoginErrorArrowMessage");
+			arrow_message.new_arrow($("#BaseLoginPassword"), "[[LANG:BaseLoginErrorMissingPassword]]", "LoginErrorArrowMessage");
 			return;
 		}
 		
@@ -188,7 +158,7 @@ $(document).ready(function()
 				else
 				{
 					$("#BaseLoginFinish").dialog("close");
-					arrow_message($("#BaseLoginPassword"), "[[LANG:BaseLoginErrorWrongUsernamePassword]]", "LoginErrorArrowMessage");
+					arrow_message.new_arrow($("#BaseLoginPassword"), "[[LANG:BaseLoginErrorWrongUsernamePassword]]", "LoginErrorArrowMessage");
 				    return false; 
 				}
 			}

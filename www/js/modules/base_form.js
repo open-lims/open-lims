@@ -196,7 +196,7 @@ base_form_init = function()
 								break;
 							}
 						}); 
-						
+												
 						open_select_option_list_global_close_handler = function(event)
 						{
 							$(button).trigger("click");
