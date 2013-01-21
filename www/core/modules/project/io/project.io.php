@@ -88,7 +88,7 @@ class ProjectIO
 			
 			$argument_array = array();
 			$argument_array[0] = "organisation_unit_id";
-			$argument_array[0][1] = $organisation_unit_id;
+			$argument_array[1] = $organisation_unit_id;
 			
 			$list = new List_IO("ProjectOrganisationUnitRelated", "ajax.php?nav=project", "list_organisation_unit_related_projects", "count_organisation_unit_related_projects", $argument_array, "ProjectAjaxOrganisationUnit", 12);
 		
