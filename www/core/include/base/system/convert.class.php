@@ -51,7 +51,7 @@ class Convert implements ConvertInterface
 		 	
 		 	if ($tmp_filesize == 0)
 		 	{
-		 		$act_filesize = $byte."&nbsp;Byte";
+		 		$act_filesize = $regional->format_number($byte)."&nbsp;Byte";
 		 	}
 		 	else
 		 	{
@@ -60,7 +60,7 @@ class Convert implements ConvertInterface
 		 		if ($tmp_filesize == 0)
 		 		{
 		 			$rounder = $byte/1024;
-		 			$act_filesize = round($rounder,2)."&nbsp;KiB";
+		 			$act_filesize = $regional->format_number($rounder,2)."&nbsp;KiB";
 		 		}
 		 		else
 		 		{
@@ -69,7 +69,7 @@ class Convert implements ConvertInterface
 		 			{
 		 			
 		 				$rounder = $byte/1048576;
-		 				$act_filesize = round($rounder,2)."&nbsp;MiB";
+		 				$act_filesize = $regional->format_number($rounder,2)."&nbsp;MiB";
 		 			}
 		 			else
 		 			{
@@ -77,20 +77,20 @@ class Convert implements ConvertInterface
 		 				if ($tmp_filesize == 0)
 		 				{
 		 					$rounder = $byte/1073741824;
-		 					$act_filesize = round($rounder,2)."&nbsp;GiB";
+		 					$act_filesize = $regional->format_number($rounder,2)."&nbsp;GiB";
 		 				}
 		 				else
 		 				{
 		 					$tmp_filesize = floor($tmp_filesize/1024);
 		 					$rounder = $byte/1099511627776;
-		 					$act_filesize = round($rounder,2)."&nbsp;TiB";	
+		 					$act_filesize = $regional->format_number($rounder, 2)."&nbsp;TiB";	
 		 				}
 		 			}
 		 		}
 		 	}
 		 }
 
-		 return $regional->format_number($act_filesize);
+		 return $act_filesize;
 	}
 
 }
