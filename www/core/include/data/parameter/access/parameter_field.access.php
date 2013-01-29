@@ -45,7 +45,7 @@ class ParameterField_Access
 		
 		if ($parameter_field_id == null)
 		{
-			$this->value_id = null;
+			$this->parameter_field_id = null;
 		}
 		else
 		{
@@ -353,5 +353,4 @@ class ParameterField_Access
 		}
 	}
 }
-
 ?>
