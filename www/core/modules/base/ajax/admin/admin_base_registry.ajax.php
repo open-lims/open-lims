@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -65,8 +65,8 @@ class AdminBaseRegistryAjax
 			{		
 				foreach($list_array as $key => $value)
 				{	
-					$list_array[$key][icon] = "<img src='images/icons/registry.png' alt='' style='border: 0;' />";
-					$list_array[$key][edit] = "<a href='#'><img src='images/icons/edit.png' alt='E' style='border: 0;' /></a>";
+					$list_array[$key]['icon'] = "<img src='images/icons/registry.png' alt='' style='border: 0;' />";
+					$list_array[$key]['edit'] = "<a href='#'><img src='images/icons/edit.png' alt='E' style='border: 0;' /></a>";
 				}
 			}
 			else

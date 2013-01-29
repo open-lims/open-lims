@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -55,11 +55,11 @@ class BaseModuleNavigation_Access
 			
 			if ($data['id'])
 			{
-				$this->id 			= $id;
-				$this->display_name	= $data['display_name'];
-				$this->position		= $data['position'];
-				$this->colour		= $data['colour'];
-				$this->module_id	= $data['module_id'];
+				$this->id 				= $id;
+				$this->language_address	= $data['language_address'];
+				$this->position			= $data['position'];
+				$this->colour			= $data['colour'];
+				$this->module_id		= $data['module_id'];
 				
 				if ($data['hidden'] == 't')
 				{
@@ -82,7 +82,7 @@ class BaseModuleNavigation_Access
 		if ($this->id)
 		{
 			unset($this->id);
-			unset($this->display_name);
+			unset($this->language_address);
 			unset($this->position);
 			unset($this->colour);
 			unset($this->module_id);
@@ -90,7 +90,7 @@ class BaseModuleNavigation_Access
 	}
 	
 	/**
-	 * @param string $display_name
+	 * @param string $language_address
 	 * @param string $colour
 	 * @param integer $position
 	 * @param integer $module_id
@@ -289,21 +289,21 @@ class BaseModuleNavigation_Access
 	}
 	
 	/**
-	 * @param string $display_name
+	 * @param string $language_address
 	 * @return bool
 	 */
-	public function set_display_name($display_name)
+	public function set_language_address($language_address)
 	{
 		global $db;
 
-		if ($this->id and $display_name)
+		if ($this->id and $language_address)
 		{
-			$sql = "UPDATE ".constant("BASE_MODULE_NAVIGATION_TABLE")." SET display_name = '".$display_name."' WHERE id = ".$this->id."";
+			$sql = "UPDATE ".constant("BASE_MODULE_NAVIGATION_TABLE")." SET language_address = '".$language_address."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
 			{
-				$this->display_name = $display_name;
+				$this->language_address = $language_address;
 				return true;
 			}
 			else

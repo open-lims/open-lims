@@ -3,7 +3,7 @@
  * @package project
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -88,13 +88,13 @@ class ProjectLogAjax
 						
 						$user = new User($project_log->get_owner_id());
 						
-						$result[$counter][id] = $value;
-						$result[$counter][show_more] = false;
+						$result[$counter]['id'] = $value;
+						$result[$counter]['show_more'] = false;
 						
 						$datetime_handler = new DatetimeHandler($project_log->get_datetime());
-						$result[$counter][date] = $datetime_handler->get_formatted_string("dS M Y");
-						$result[$counter][time] = $datetime_handler->get_formatted_string("H:i");
-						$result[$counter][user] = $user->get_full_name(false);
+						$result[$counter]['date'] = $datetime_handler->get_date();
+						$result[$counter]['time'] = $datetime_handler->get_time();
+						$result[$counter]['user'] = $user->get_full_name(false);
 						
 						if (($content = $project_log->get_content()) != null)
 						{
@@ -102,14 +102,14 @@ class ProjectLogAjax
 							if (strlen($content) > 500)
 							{
 								$content = substr($content,0,500)."...";
-								$result[$counter][show_more] = true;
+								$result[$counter]['show_more'] = true;
 							}
 							
-							$result[$counter][content] = $content;
+							$result[$counter]['content'] = $content;
 						}
 						else
 						{
-							$result[$counter][content] = false;
+							$result[$counter]['content'] = false;
 						}
 						
 						$status_id = $project_log->get_status_id();
@@ -117,20 +117,20 @@ class ProjectLogAjax
 						if ($status_id != null)
 						{
 							$project_status = new ProjectStatus($status_id);
-							$result[$counter][status] = $project_status->get_name();
+							$result[$counter]['status'] = $project_status->get_name();
 						}
 						else
 						{
-							$result[$counter][status] = false;
+							$result[$counter]['status'] = false;
 						}
 						
 						if ($project_log->get_important() == true)
 						{
-							$result[$counter][important] = true;
+							$result[$counter]['important'] = true;
 						}
 						else
 						{
-							$result[$counter][important] = false;
+							$result[$counter]['important'] = false;
 						}
 						
 						$item_array = $project_log->list_items();
@@ -138,35 +138,35 @@ class ProjectLogAjax
 						
 						if ($number_of_items == 0)
 						{
-							$result[$counter][items] = false;
+							$result[$counter]['items'] = false;
 						}
 						else
 						{
 							if ($number_of_items == 1)
 							{
-								$result[$counter][items] = $number_of_items." Item was added";
+								$result[$counter]['items'] = $number_of_items." Item was added";
 							}
 							else
 							{
-								$result[$counter][items] = $number_of_items." Items were added";
+								$result[$counter]['items'] = $number_of_items." Items were added";
 							}
 						}
 						
 						
 						$detail_paramquery = $_GET;
-						$detail_paramquery[run] = "log_detail";
-						$detail_paramquery[id] = $value;
+						$detail_paramquery['run'] = "log_detail";
+						$detail_paramquery['id'] = $value;
 						$detail_params = http_build_query($detail_paramquery,'','&#38;');
 						
-						$result[$counter][detail_params] = $detail_params;
+						$result[$counter]['detail_params'] = $detail_params;
 						
 						if ($user->is_admin())
 						{
-							$result[$counter][delete] = true;
+							$result[$counter]['delete'] = true;
 						}
 						else
 						{
-							$result[$counter][delete] = false;
+							$result[$counter]['delete'] = false;
 						}
 						
 						$counter++;

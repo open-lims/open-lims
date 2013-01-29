@@ -3,7 +3,7 @@
  * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -171,9 +171,9 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     			{
     				if ($value['folder'])
     				{
-						if (!in_array($value[folder], $folder_array))
+						if (!in_array($value['folder'], $folder_array))
 						{
-							array_push($folder_array, $value[folder]);
+							array_push($folder_array, $value['folder']);
 						}
     				}
     			}	
@@ -1130,27 +1130,27 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 						
 					foreach($requirements_array as $key => $value)
 					{
-						if ($value[xml_element] == "item" and !$value[close])
+						if ($value['xml_element'] == "item" and !$value['close'])
 						{
 							$in_item = true;
 							
-							$return_array[$counter][element_type] = "item";		
-							$return_array[$counter][display] = true;
+							$return_array[$counter]['element_type'] = "item";		
+							$return_array[$counter]['display'] = true;
 								
-							$return_array[$counter][type] = $value[type];
-							$return_array[$counter][name] = $value[name];
-							$return_array[$counter][dialog] = $value[dialog];
-							$return_array[$counter][handling_class] = Item::get_handling_class_by_type($value[type]);
+							$return_array[$counter]['type'] = $value['type'];
+							$return_array[$counter]['name'] = $value['name'];
+							$return_array[$counter]['dialog'] = $value['dialog'];
+							$return_array[$counter]['handling_class'] = Item::get_handling_class_by_type($value['type']);
 							
-							$return_array[$counter][requirement] = $value[requirement];
+							$return_array[$counter]['requirement'] = $value['requirement'];
 	
-							if ($value[occurrence])
+							if ($value['occurrence'])
 							{
-								$return_array[$counter][occurrence] = $value[occurrence];
+								$return_array[$counter]['occurrence'] = $value['occurrence'];
 							}
 							else
 							{
-								$return_array[$counter][occurrence] = "once";
+								$return_array[$counter]['occurrence'] = "once";
 							}
 							
 							if ($value['pos_id'])
@@ -1165,7 +1165,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 							}
 							
 							
-							if ($value[type] != "parentsample")
+							if ($value['type'] != "parentsample")
 							{
 								if (is_array($item_array) and count($item_array) >= 1)
 								{	
@@ -1182,9 +1182,9 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 													if ($item_handling_class::is_kind_of($item_type, $item_value['item_id']) == true and $item_value['pos_id'] == $pos_id and $item_value['pos_id'] !== null and $pos_id !== null)
 													{
 														$item_instance = $item_handling_class::get_instance_by_item_id($item_value['item_id'], true);
-														$return_array[$counter][fulfilled][$fulfilled_counter][item_id] = $item_value['item_id'];
-														$return_array[$counter][fulfilled][$fulfilled_counter][id] = $item_instance->get_item_object_id();
-														$return_array[$counter][fulfilled][$fulfilled_counter][name] = $item_instance->get_item_object_name();
+														$return_array[$counter]['fulfilled'][$fulfilled_counter]['item_id'] = $item_value['item_id'];
+														$return_array[$counter]['fulfilled'][$fulfilled_counter]['id'] = $item_instance->get_item_object_id();
+														$return_array[$counter]['fulfilled'][$fulfilled_counter]['name'] = $item_instance->get_item_object_name();
 														$item_instance_array[$fulfilled_counter] = $item_instance;
 														$fulfilled_counter++;
 														break;
@@ -1204,7 +1204,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 												{	
 													if ($object_value instanceof ItemHolderInterface)
 													{	
-														$return_array[$counter][sub_items][$object_key] = $object_value->get_item_add_information();
+														$return_array[$counter]['sub_items'][$object_key] = $object_value->get_item_add_information();
 													}
 												}
 											}
@@ -1221,9 +1221,9 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 									foreach ($parent_sample_array as $parent_sample_key => $parent_sample_value)
 									{
 										$item_instance = new Sample($parent_sample_value);
-										$return_array[$counter][fulfilled][$fulfilled_counter][item_id] = $item_instance->get_item_id();
-										$return_array[$counter][fulfilled][$fulfilled_counter][id] = $parent_sample_value;
-										$return_array[$counter][fulfilled][$fulfilled_counter][name] = $item_instance->get_item_object_name();
+										$return_array[$counter]['fulfilled'][$fulfilled_counter]['item_id'] = $item_instance->get_item_id();
+										$return_array[$counter]['fulfilled'][$fulfilled_counter]['id'] = $parent_sample_value;
+										$return_array[$counter]['fulfilled'][$fulfilled_counter]['name'] = $item_instance->get_item_object_name();
 										$item_instance_array[$fulfilled_counter] = $item_instance;
 										$fulfilled_counter++;
 									}
@@ -1239,7 +1239,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 											{	
 												if ($object_value instanceof ItemHolderInterface)
 												{	
-													$return_array[$counter][sub_items][$object_key] = $object_value->get_item_add_information();
+													$return_array[$counter]['sub_items'][$object_key] = $object_value->get_item_add_information();
 												}
 											}
 										}
@@ -1249,7 +1249,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 						}
 						
 						// ITEMI
-						if ($value[xml_element] == "itemi" and !$value[close])
+						if ($value['xml_element'] == "itemi" and !$value['close'])
 						{
 							if($in_item == true and is_array($item_instance_array) and count($item_instance_array) >= 1)
 							{
@@ -1268,7 +1268,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 							}
 						}
 						
-						if ($value[xml_element] == "item" and $value[close] == "1")
+						if ($value['xml_element'] == "item" and $value['close'] == "1")
 						{
 							$counter++;
 							$type_counter = 0;
@@ -1277,15 +1277,15 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 							$in_item = false;
 						}
 						
-						if ($value[xml_element] == "type" and !$value[close] and $in_item == true and is_numeric($value[id]))
+						if ($value['xml_element'] == "type" and !$value['close'] and $in_item == true and is_numeric($value['id']))
 						{
-							$return_array[$counter][type_id][$type_counter] = $value[id];
+							$return_array[$counter]['type_id'][$type_counter] = $value['id'];
 							$type_counter++;
 						}	
 						
-						if ($value[xml_element] == "category" and !$value[close] and $in_item == true and is_numeric($value[id]))
+						if ($value['xml_element'] == "category" and !$value['close'] and $in_item == true and is_numeric($value['id']))
 						{
-							$return_array[$counter][category_id][$category_counter] = $value[id];
+							$return_array[$counter]['category_id'][$category_counter] = $value['id'];
 							$category_counter++;
 						}				
 					}
@@ -1295,11 +1295,11 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 				{
 					foreach($return_array as $key => $value)
 					{
-						if (!$value[name] and $value[type])
+						if (!$value['name'] and $value['type'])
 						{
-							if ($return_array[$key][handling_class])
+							if ($return_array[$key]['handling_class'])
 							{
-								$return_array[$key][name] = "Add ".$return_array[$key][handling_class]::get_generic_name($value[type], $value[type_id]);
+								$return_array[$key]['name'] = "Add ".$return_array[$key]['handling_class']::get_generic_name($value['type'], $value['type_id']);
 							}
 						}
 						
@@ -1307,11 +1307,11 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 						{
 							foreach($value['sub_items'] as $sub_item_key => $sub_item_value)
 							{
-								if (!$sub_item_value[name] and $sub_item_value[type])
+								if (!$sub_item_value['name'] and $sub_item_value['type'])
 								{
-									if ($return_array[$key][sub_items][$sub_item_key][handling_class])
+									if ($return_array[$key]['sub_items'][$sub_item_key]['handling_class'])
 									{
-										$return_array[$key][sub_items][$sub_item_key][name] = "Add ".$return_array[$key][sub_items][$sub_item_key][handling_class]::get_generic_name($sub_item_value[type], $sub_item_value[type_id]);
+										$return_array[$key]['sub_items'][$sub_item_key]['name'] = "Add ".$return_array[$key]['sub_items'][$sub_item_key]['handling_class']::get_generic_name($sub_item_value['type'], $sub_item_value['type_id']);
 									}
 								}
 							}
@@ -1376,7 +1376,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 				
 		    	foreach($requirements_array as $key => $value)
 				{
-					if ($value[xml_element] == "item" and !$value[close])
+					if ($value['xml_element'] == "item" and !$value['close'])
 					{
 						$in_item = true;
 						
@@ -1470,14 +1470,14 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 						}
 					}
 					
-					if ($value[xml_element] == "item" and $value[close] == "1")
+					if ($value['xml_element'] == "item" and $value['close'] == "1")
 					{
 						$counter++;
 						$sub_item_counter = 0;
 						$in_item = false;
 					}
 					
-					if ($value[xml_element] == "itemi" and !$value[close])
+					if ($value['xml_element'] == "itemi" and !$value['close'])
 					{
 						if($in_item == true and is_array($item_instance_array) and count($item_instance_array) >= 1)
 						{
@@ -1541,7 +1541,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 			{
 				foreach($requirements_array as $key => $value)
 				{
-					if ($value[xml_element] == "item" and !$value[close])
+					if ($value['xml_element'] == "item" and !$value['close'])
 					{
 						$in_item = true;
 						
@@ -1561,7 +1561,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 						}
 					}
 					
-					if ($value[xml_element] == "item" and $value[close] == "1")
+					if ($value['xml_element'] == "item" and $value['close'] == "1")
 					{
 						$counter++;
 						$in_item = false;
@@ -1569,7 +1569,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 
 					
 					// ITEMI
-					if ($value[xml_element] == "itemi" and !$value[close])
+					if ($value['xml_element'] == "itemi" and !$value['close'])
 					{
 						if($in_item == true)
 						{
@@ -1620,9 +1620,9 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	    			$sample_template = new SampleTemplate($this->sample->get_template_id());
 	    			$attribute_array = $sample_template->get_gid_attributes($gid);
 	    			
-	    			if ($attribute_array[folder])
+	    			if ($attribute_array['folder'])
 	    			{
-	    				$folder_name = strtolower(trim($attribute_array[folder]));
+	    				$folder_name = strtolower(trim($attribute_array['folder']));
 	    				$folder_name = str_replace(" ","-",$folder_name);
 	    				
 	    				$folder_path = new Path($folder->get_path());
@@ -2426,11 +2426,11 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	{
 		if ($type == "sample")
 		{
-			$paramquery[username] = $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav] = "sample";
-			$paramquery[run] = "detail";
-			$paramquery[sample_id] = $id;
+			$paramquery['username'] = $_GET['username'];
+			$paramquery['session_id'] = $_GET['session_id'];
+			$paramquery['nav'] = "sample";
+			$paramquery['run'] = "detail";
+			$paramquery['sample_id'] = $id;
 			return http_build_query($paramquery, '', '&#38;');
 		}
 	}
@@ -2444,9 +2444,9 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     {
    		if ($type == "sample")
 		{
-			$select_array[name] = "".constant("SAMPLE_TABLE").".name";
-			$select_array[type_id] = "".constant("SAMPLE_TABLE").".id AS sample_id";
-			$select_array[datetime] = "".constant("SAMPLE_TABLE").".datetime";
+			$select_array['name'] = "".constant("SAMPLE_TABLE").".name";
+			$select_array['type_id'] = "".constant("SAMPLE_TABLE").".id AS sample_id";
+			$select_array['datetime'] = "".constant("SAMPLE_TABLE").".datetime";
 			return $select_array;
 		}
 		else
@@ -2499,10 +2499,10 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	{
 		if ($type == "sample")
 		{
-			$select_array[name] = "".constant("SAMPLE_TABLE").".name";
-			$select_array[type_id] = "".constant("SAMPLE_TABLE").".id AS sample_id";
-			$select_array[datetime] = "".constant("SAMPLE_TABLE").".datetime";
-			$select_array[rank] = "ts_rank_cd(".constant("SAMPLE_TABLE").".comment_text_search_vector, to_tsquery('{LANGUAGE}', '{STRING}'), 32 /* rank/(rank+1) */)";
+			$select_array['name'] = "".constant("SAMPLE_TABLE").".name";
+			$select_array['type_id'] = "".constant("SAMPLE_TABLE").".id AS sample_id";
+			$select_array['datetime'] = "".constant("SAMPLE_TABLE").".datetime";
+			$select_array['rank'] = "ts_rank_cd(".constant("SAMPLE_TABLE").".comment_text_search_vector, to_tsquery('{LANGUAGE}', '{STRING}'), 32 /* rank/(rank+1) */)";
 			return $select_array;
 		}
 		else

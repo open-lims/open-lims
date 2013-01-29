@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -49,10 +49,16 @@ interface SessionInterface
 	public function destroy();
 	
 	/**
-     * Checks if current session is valid
-     * @return bool
+     * Checks if the current session is valid
+     * @return array
      */
 	public function is_valid();
+	
+	/**
+     * Checks if the current session is already alife
+     * @return bool
+     */
+	public function is_dead();
 	
 	/**
      * @return integer

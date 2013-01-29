@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -40,6 +40,8 @@ class Convert implements ConvertInterface
 	 */
 	public static function convert_byte_1024($byte)
 	{
+		global $regional;
+		
 		if ($byte == 0)
 		{
 		 	$act_filesize = "0&nbsp;Byte";
@@ -49,7 +51,7 @@ class Convert implements ConvertInterface
 		 	
 		 	if ($tmp_filesize == 0)
 		 	{
-		 		$act_filesize = $byte."&nbsp;Byte";
+		 		$act_filesize = $regional->format_number($byte)."&nbsp;Byte";
 		 	}
 		 	else
 		 	{
@@ -58,7 +60,7 @@ class Convert implements ConvertInterface
 		 		if ($tmp_filesize == 0)
 		 		{
 		 			$rounder = $byte/1024;
-		 			$act_filesize = round($rounder,2)."&nbsp;KiB";
+		 			$act_filesize = $regional->format_number($rounder,2)."&nbsp;KiB";
 		 		}
 		 		else
 		 		{
@@ -67,7 +69,7 @@ class Convert implements ConvertInterface
 		 			{
 		 			
 		 				$rounder = $byte/1048576;
-		 				$act_filesize = round($rounder,2)."&nbsp;MiB";
+		 				$act_filesize = $regional->format_number($rounder,2)."&nbsp;MiB";
 		 			}
 		 			else
 		 			{
@@ -75,18 +77,19 @@ class Convert implements ConvertInterface
 		 				if ($tmp_filesize == 0)
 		 				{
 		 					$rounder = $byte/1073741824;
-		 					$act_filesize = round($rounder,2)."&nbsp;GiB";
+		 					$act_filesize = $regional->format_number($rounder,2)."&nbsp;GiB";
 		 				}
 		 				else
 		 				{
 		 					$tmp_filesize = floor($tmp_filesize/1024);
 		 					$rounder = $byte/1099511627776;
-		 					$act_filesize = round($rounder,2)."&nbsp;TiB";	
+		 					$act_filesize = $regional->format_number($rounder, 2)."&nbsp;TiB";	
 		 				}
 		 			}
 		 		}
 		 	}
 		 }
+
 		 return $act_filesize;
 	}
 

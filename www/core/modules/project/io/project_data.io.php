@@ -3,7 +3,7 @@
  * @package project
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -42,14 +42,14 @@ class ProjectDataIO
 			$project_user_data = new ProjectUserData($user_id);
 			
 			$paramquery = $_GET;
-			$paramquery[run] = "module_value_change";
-			$paramquery[dialog] = "project_quota";
-			$paramquery[retrace] = Retrace::create_retrace_string();
+			$paramquery['run'] = "module_value_change";
+			$paramquery['dialog'] = "project_quota";
+			$paramquery['retrace'] = Retrace::create_retrace_string();
 			$params = http_build_query($paramquery, '', '&#38;');
 			
 			$return_array = array();
-			$return_array[value] = Convert::convert_byte_1024($project_user_data->get_quota());
-			$return_array[params] = $params;
+			$return_array['value'] = Convert::convert_byte_1024($project_user_data->get_quota());
+			$return_array['params'] = $params;
 			return $return_array;	
 		}
 		else
@@ -63,14 +63,14 @@ class ProjectDataIO
 	 */
 	public static function change()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$user = new User($_GET[id]);
-			$project_data = new ProjectUserData($_GET[id]);
+			$user = new User($_GET['id']);
+			$project_data = new ProjectUserData($_GET['id']);
 						
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
-				if (is_numeric($_POST[quota]))
+				if (is_numeric($_POST['quota']))
 				{
 					$page_1_passed = true;
 				}
@@ -80,7 +80,7 @@ class ProjectDataIO
 					$error = "You must enter a valid quota.";
 				}
 			}
-			elseif($_GET[nextpage] > 1)
+			elseif($_GET['nextpage'] > 1)
 			{
 				$page_1_passed = true;
 			}
@@ -95,15 +95,15 @@ class ProjectDataIO
 				$template = new HTMLTemplate("project/admin/user/change_project_quota.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
 				$template->set_var("error",$error);
 				
-				if ($_POST[quota])
+				if ($_POST['quota'])
 				{
-					$template->set_var("mail", $_POST[quota]);
+					$template->set_var("mail", $_POST['quota']);
 				}
 				else
 				{
@@ -113,19 +113,19 @@ class ProjectDataIO
 			}
 			else
 			{
-				if ($_GET[retrace])
+				if ($_GET['retrace'])
 				{
-					$params = http_build_query(Retrace::resolve_retrace_string($_GET[retrace]),'','&#38;');
+					$params = http_build_query(Retrace::resolve_retrace_string($_GET['retrace']),'','&#38;');
 				}
 				else
 				{
-					$paramquery[username] = $_GET[username];
-					$paramquery[session_id] = $_GET[session_id];
-					$paramquery[nav] = "home";
+					$paramquery['username'] = $_GET['username'];
+					$paramquery['session_id'] = $_GET['session_id'];
+					$paramquery['nav'] = "home";
 					$params = http_build_query($paramquery,'','&#38;');
 				}
 												
-				if ($project_data->set_quota($_POST[quota]))
+				if ($project_data->set_quota($_POST['quota']))
 				{
 					Common_IO::step_proceed($params, "Change Project Quota", "Operation Successful", null);
 				}

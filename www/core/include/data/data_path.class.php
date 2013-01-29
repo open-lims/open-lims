@@ -3,7 +3,7 @@
  * @package data
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -43,7 +43,7 @@ class DataPath implements DataPathInterface
 	 * @param integer $folder_id
 	 * @param integer $virtual_folder_id
 	 */
-    function __construct($folder_id, $virtual_folder_id)
+    function __construct($folder_id = null, $virtual_folder_id = null)
     {
     	global $session, $user;
     	
@@ -97,14 +97,14 @@ class DataPath implements DataPathInterface
 		   		
 		   		if ($previous_entry != null and is_array($previous_entry))
 		   		{
-		   			if ($previous_entry[virtual] == true)
+		   			if ($previous_entry['virtual'] == true)
 		   			{
 		   				$this->folder_id = null;
-	    				$this->virtual_folder_id = $previous_entry[id];
+	    				$this->virtual_folder_id = $previous_entry['id'];
 		   			}
 		   			else
 		   			{
-		   				$this->folder_id = $previous_entry[id];
+		   				$this->folder_id = $previous_entry['id'];
 	    				$this->virtual_folder_id = null;
 		   			}
 		   		}
@@ -150,17 +150,17 @@ class DataPath implements DataPathInterface
 			if ($break == false)
 			{
 				$temp_array = array();
-				$temp_array[id] = $value[id];
-				$temp_array[virtual] = $value[virtual];
+				$temp_array['id'] = $value['id'];
+				$temp_array['virtual'] = $value['virtual'];
 				array_push($cleared_path_stack_array, $temp_array);
 			}
 			
-			if ($value[virtual] == true and $value[id] == $this->virtual_folder_id) 
+			if ($value['virtual'] == true and $value['id'] == $this->virtual_folder_id) 
 			{
 				$break = true;
 			}
 			
-			if ($value[virtual] == false and $value[id] == $this->folder_id)
+			if ($value['virtual'] == false and $value['id'] == $this->folder_id)
 			{
 				$break = true;
 			}
@@ -180,11 +180,11 @@ class DataPath implements DataPathInterface
     	
     	foreach($this->path_stack_array as $key => $value)
     	{
-    		if ($value[virtual] == true)
+    		if ($value['virtual'] == true)
     		{
     			$virtual_folder_found = true;
     		}
-    		$last_folder_id = $value[id];
+    		$last_folder_id = $value['id'];
     	}
     	
     	if ($virtual_folder_found == true)
@@ -216,8 +216,8 @@ class DataPath implements DataPathInterface
 	    	foreach($init_array as $key => $value)
 	    	{
 	    		$temp_array = array();
-	    		$temp_array[virtual] = false;
-	    		$temp_array[id] = $value;
+	    		$temp_array['virtual'] = false;
+	    		$temp_array['id'] = $value;
 	    		array_unshift($this->path_stack_array, $temp_array);
 	    	}
     	}
@@ -237,7 +237,7 @@ class DataPath implements DataPathInterface
     	
     	foreach($this->path_stack_array as $key => $value)
     	{
-    		if ($value[id] == $folder_id and $value[virtual] == false)
+    		if ($value['id'] == $folder_id and $value['virtual'] == false)
     		{
     			$cut = true;
     		}
@@ -246,8 +246,8 @@ class DataPath implements DataPathInterface
     	if ($cut == false)
     	{
 			$temp_array = array();
-	    	$temp_array[virtual] = false;
-	    	$temp_array[id] = $folder_id;
+	    	$temp_array['virtual'] = false;
+	    	$temp_array['id'] = $folder_id;
 	    	array_push($this->path_stack_array, $temp_array);
     	}
     	
@@ -266,7 +266,7 @@ class DataPath implements DataPathInterface
    		
    		foreach($this->path_stack_array as $key => $value)
    		{
-    		if ($value[id] == $virtual_folder_id and $value[virtual] == true)
+    		if ($value['id'] == $virtual_folder_id and $value['virtual'] == true)
     		{
     			$cut = true;
     		}
@@ -275,8 +275,8 @@ class DataPath implements DataPathInterface
     	if ($cut == false)
     	{
 	   		$temp_array = array();
-	    	$temp_array[virtual] = true;
-	    	$temp_array[id] = $virtual_folder_id;
+	    	$temp_array['virtual'] = true;
+	    	$temp_array['id'] = $virtual_folder_id;
 	    	array_push($this->path_stack_array, $temp_array);
     	}
    		
@@ -309,17 +309,17 @@ class DataPath implements DataPathInterface
 			$return_string = "";
 	    	foreach ($this->path_stack_array as $key => $value)
 	    	{
-	    		if ($value[virtual] == false)
+	    		if ($value['virtual'] == false)
 	    		{
-	    			if ($value[id] != 1)
+	    			if ($value['id'] != 1)
 	    			{
-	    				$folder = Folder::get_instance($value[id]);
+	    				$folder = Folder::get_instance($value['id']);
 	    				$return_string = $return_string."/".$folder->get_name();
 	    			}
 	    		}
 	    		else
 	    		{
-	    			$virtual_folder = new VirtualFolder($value[id]);
+	    			$virtual_folder = new VirtualFolder($value['id']);
 	    			$return_string = $return_string."/<span class='underline'>".$virtual_folder->get_name()."</span>";
 	    		}
 	    	}
@@ -343,7 +343,7 @@ class DataPath implements DataPathInterface
    		
    		if ($previous_entry != null and is_array($previous_entry))
    		{
-   			return $previous_entry[virtual];
+   			return $previous_entry['virtual'];
    		}
    		else
    		{
@@ -363,7 +363,7 @@ class DataPath implements DataPathInterface
    		
    		if ($previous_entry != null and is_array($previous_entry))
    		{
-   			return $previous_entry[id];
+   			return $previous_entry['id'];
    		}
    		else
    		{
@@ -383,7 +383,7 @@ class DataPath implements DataPathInterface
    		
    		if ($previous_entry != null and is_array($previous_entry))
    		{
-   			return $previous_entry[virtual];
+   			return $previous_entry['virtual'];
    		}
    		else
    		{
@@ -403,7 +403,7 @@ class DataPath implements DataPathInterface
    		
    		if ($previous_entry != null and is_array($previous_entry))
    		{
-   			return $previous_entry[id];
+   			return $previous_entry['id'];
    		}
    		else
    		{

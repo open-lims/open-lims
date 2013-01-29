@@ -3,7 +3,7 @@
  * @package data
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -431,12 +431,6 @@ class DataRequest
 			case("common_dialog"):
 				require_once("core/modules/base/common.request.php");
 				CommonRequest::common_dialog();
-			break;
-				
-			// Search
-			case("search"):
-				require_once("core/modules/base/common.request.php");
-				CommonRequest::search_dialog();
 			break;
 			
 			default:

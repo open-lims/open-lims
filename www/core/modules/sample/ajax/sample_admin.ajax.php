@@ -3,7 +3,7 @@
  * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -51,7 +51,7 @@ class SampleAdminAjax
 		}
 		
 		$argument_array = json_decode($json_argument_array);
-		$sample_id = $argument_array[0][1];
+		$sample_id = $argument_array[1];
 		
 		if (is_numeric($sample_id))
 		{
@@ -74,53 +74,53 @@ class SampleAdminAjax
 				{
 					foreach($list_array as $key => $value)
 					{
-						$list_array[$key][symbol] = "<img src='images/icons/user.png' alt='' style='border:0;' />";
+						$list_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' style='border:0;' />";
 						
-						if ($list_array[$key][user])
+						if ($list_array[$key]['user'])
 						{
-							$user = new User($list_array[$key][user]);
+							$user = new User($list_array[$key]['user']);
 						}
 						else
 						{
 							$user = new User(1);
 						}
 						
-						$list_array[$key][username] = $user->get_username();
-						$list_array[$key][name] = $user->get_full_name(false);
+						$list_array[$key]['username'] = $user->get_username();
+						$list_array[$key]['name'] = $user->get_full_name(false);
 						
-						if ($list_array[$key][read] == 't')
+						if ($list_array[$key]['read'] == 't')
 						{
-							$list_array[$key][read] = "<img src='images/icons/permission_ok_active.png' alt='' />";
+							$list_array[$key]['read'] = "<img src='images/icons/permission_ok_active.png' alt='' />";
 						}
 						else
 						{
-							$list_array[$key][read] = "<img src='images/icons/permission_denied_active.png' alt='' />";
+							$list_array[$key]['read'] = "<img src='images/icons/permission_denied_active.png' alt='' />";
 						}
 						
-						if ($list_array[$key][write] == 't')
+						if ($list_array[$key]['write'] == 't')
 						{
-							$list_array[$key][write] = "<img src='images/icons/permission_ok_active.png' alt='' />";
+							$list_array[$key]['write'] = "<img src='images/icons/permission_ok_active.png' alt='' />";
 						}
 						else
 						{
-							$list_array[$key][write] = "<img src='images/icons/permission_denied_active.png' alt='' />";
+							$list_array[$key]['write'] = "<img src='images/icons/permission_denied_active.png' alt='' />";
 						}
 						
 						$delete_paramquery = $_GET;
-						$delete_paramquery[run] = "admin_permission_user_delete";
-						$delete_paramquery[id] = $list_array[$key][user];
-						unset($delete_paramquery[sure]);
+						$delete_paramquery['run'] = "admin_permission_user_delete";
+						$delete_paramquery['id'] = $list_array[$key]['user'];
+						unset($delete_paramquery['sure']);
 						$delete_params = http_build_query($delete_paramquery,'','&#38;');
 
-						if ($sample->get_owner_id() == $list_array[$key][user])
+						if ($sample->get_owner_id() == $list_array[$key]['user'])
 						{
-							$list_array[$key][delete][link] = "";
-							$list_array[$key][delete][content] = "";
+							$list_array[$key]['delete']['link'] = "";
+							$list_array[$key]['delete']['content'] = "";
 						}
 						else
 						{
-							$list_array[$key][delete][link] = $delete_params;
-							$list_array[$key][delete][content] = "delete";
+							$list_array[$key]['delete']['link'] = $delete_params;
+							$list_array[$key]['delete']['content'] = "delete";
 						}
 					}
 				}
@@ -152,7 +152,7 @@ class SampleAdminAjax
 	public static function count_user_permissions($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
-		$sample_id = $argument_array[0][1];
+		$sample_id = $argument_array[1];
 		
 		if (is_numeric($sample_id))
 		{
@@ -188,7 +188,7 @@ class SampleAdminAjax
 		}
 		
 		$argument_array = json_decode($json_argument_array);
-		$sample_id = $argument_array[0][1];
+		$sample_id = $argument_array[1];
 		
 		if (is_numeric($sample_id))
 		{
@@ -211,27 +211,27 @@ class SampleAdminAjax
 				{
 					foreach($list_array as $key => $value)
 					{
-						$list_array[$key][symbol] = "<img src='images/icons/organisation_unit.png' alt='' style='border:0;' />";
+						$list_array[$key]['symbol'] = "<img src='images/icons/organisation_unit.png' alt='' style='border:0;' />";
 						
-						if ($list_array[$key][organisation_unit_id])
+						if ($list_array[$key]['organisation_unit_id'])
 						{
-							$organisation_unit = new OrganisationUnit($list_array[$key][organisation_unit_id]);
+							$organisation_unit = new OrganisationUnit($list_array[$key]['organisation_unit_id']);
 						}
 						else
 						{
 							$organisation_unit = new OrganisationUnit(1);
 						}
 						
-						$list_array[$key][name] = $organisation_unit->get_name();
+						$list_array[$key]['name'] = $organisation_unit->get_name();
 						
 						$delete_paramquery = $_GET;
-						$delete_paramquery[run] = "admin_permission_ou_delete";
-						$delete_paramquery[id] = $list_array[$key][organisation_unit_id];
-						unset($delete_paramquery[sure]);
+						$delete_paramquery['run'] = "admin_permission_ou_delete";
+						$delete_paramquery['id'] = $list_array[$key]['organisation_unit_id'];
+						unset($delete_paramquery['sure']);
 						$delete_params = http_build_query($delete_paramquery,'','&#38;');
 						
-						$list_array[$key][delete][link] = $delete_params;
-						$list_array[$key][delete][content] = "delete";
+						$list_array[$key]['delete']['link'] = $delete_params;
+						$list_array[$key]['delete']['content'] = "delete";
 					}
 				}
 				else
@@ -262,7 +262,7 @@ class SampleAdminAjax
 	public static function count_organisation_unit_permissions($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
-		$sample_id = $argument_array[0][1];
+		$sample_id = $argument_array[1];
 		
 		if (is_numeric($sample_id))
 		{

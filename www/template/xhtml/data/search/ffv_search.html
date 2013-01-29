@@ -1,61 +1,57 @@
-<!-- CONTAINER BEGIN ("Search") -->
+<!-- CONTAINER BEGIN ("[[LANG:DataFFVSearchTitle]]") -->
 
-<br />
-<div class='SearchContainer'>
-<form action='index.php?[[PARAMS]]' method='post''>
-<div class='center'><span class='bold'>File/Folder/Value Search</span></div>
-<br />
-<br />
-<table class='SearchTable'>
-	<tr>
-		<td colspan='2'>
-			<input type='text' name='name' size='47' class='FormTextfield' />
-			<span class='formError'>[[ERROR]]</span>
-		</td>
-	</tr>
-	<tr>
-		<td colspan='2'><div class='center'><span class='smallTextBlack'>use * as a wildcard character</span></div></td>
-	</tr>
-	<tr>
-		<td colspan='2'><br />Folder</td>
-	</tr>
-	<tr>
-		<td>
-			<div id='FileSearchList'>
-					<script type="text/javascript">
-						var tree_search = new base_tree_nav("FileSearchList","FileSearch","ajax.php?nav=data&session_id="+get_array['session_id']+"&run=navigation_folder");
-						tree_search.set_scrollbar(false);
-						tree_search.set_follow_link(false);
-						tree_search.set_writeback(false);
-						var handler = function(element)
-						{
-							var parent = $(element).parent();
-							
-							$(".SearchRadioButton").each(function(){
-// 								$(this).removeAttr("checked");
-								var empty_radio = $("<input type='radio' class='SearchRadioButton OptionalTreeElement' />"); //checked='checked' 
-								$(this).parent().append(empty_radio);
-								
-								$(this).remove();
-							});
-							var current_id = $(element).attr("id");
-							var new_radio = $("<input type='radio' id='"+current_id+"' value='"+current_id+"' name='folder_id' class='SearchRadioButton OptionalTreeElement' checked='checked' />"); 
-							$(new_radio).attr("checked","checked"); //extrawurst für safari
-							$(parent).children().remove();
-							$(parent).append(new_radio);
-						}
-						tree_search.add_element_to_insert($("<input type='radio' class='SearchRadioButton OptionalTreeElement' />"), handler);
-						tree_search.init();
-					</script> 
-			</div>
-		</td>
-	</tr>
-	<tr>
-		<td colspan='2'><br /><input type='submit' value='Search' class='FormButton' /></td>
-	</tr>
-</table>
-<br />
-</form>
+<form action='index.php?[[PARAMS]]' method='post'>
+
+<div class='Form'>
+<div class='FormBox'>
+	<div class='FormBoxHeadline'>[[LANG:DataFFVSearchNameTitle]]</div>
+	<input type='text' name='string' size='47' class='FormTextfield' />
+	<span class='formError'>[[ERROR]]</span>
+	<br /><span class='smallTextBlack'>[[LANG:DataFFVSearchNameWildcard]]</span>
 </div>
+
+<div class='FormBoxClear'></div>
+
+<div class='FormBox'>
+	<div class='FormBoxHeadline'>[[LANG:DataFFVSearchFolderTitle]]</div>
+	<div id='FileSearchList'>
+		<script type="text/javascript">
+			var tree_search = new base_tree_nav("FileSearchList","FileSearch","ajax.php?nav=data&session_id="+get_array['session_id']+"&run=navigation_folder");
+			tree_search.set_scrollbar(false);
+			tree_search.set_follow_link(false);
+			tree_search.set_writeback(false);
+			var handler = function(element)
+			{
+				var parent = $(element).parent();
+							
+				$(".SearchRadioButton").each(function()
+				{
+					var empty_radio = $("<input type='radio' class='SearchRadioButton OptionalTreeElement' />"); //checked='checked' 
+					$(this).parent().append(empty_radio);
+					$(this).remove();
+				});
+				var current_id = $(element).attr("id");
+				var new_radio = $("<input type='radio' id='"+current_id+"' value='"+current_id+"' name='folder_id' class='SearchRadioButton OptionalTreeElement' checked='checked' />"); 
+				$(new_radio).attr("checked","checked"); //extrawurst für safari
+				$(parent).children().remove();
+				$(parent).append(new_radio);
+			}
+			tree_search.add_element_to_insert($("<input type='radio' class='SearchRadioButton OptionalTreeElement' />"), handler);
+			tree_search.init();
+		</script> 
+	</div>
+		
+</div>
+	
+<div class='FormBoxClear'></div>	
+	
+<div class='FormButtonBox'>
+<button type='submit'>[[LANG:BaseGlobalButtonSearch]]</button>
+<div class='FormButtonBoxClear'></div>
+</div>
+
+</div>
+
+</form>
 					
 <!-- CONTAINER END () -->

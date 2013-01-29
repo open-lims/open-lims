@@ -2,7 +2,7 @@
 
 $(document).ready(function()
 {
-	value_handler = new ValueHandler("DataValueUpdateValues");
+	value_handler = new ValueHandler("DataValueUpdateValues", "[[DECIMAL_SEPARATOR]]", "[[THOUSAND_SEPARATOR]]");
 	
 	$("#DataValueCancelButton").click(function()
 	{
@@ -101,37 +101,37 @@ $(document).ready(function()
 
 <br />
 
-<!-- CONTAINER BEGIN ("Detail: [[TITLE]]") -->
+<!-- CONTAINER BEGIN ("[[LANG:DataValueDescriptionDetailTitle]]: [[TITLE]]") -->
 
 <div id='BaseTopBar'>
 	<div id='BaseTopBarLeft'>
 
 	<a href='index.php?[[VERSION_LIST_LINK]]' class='ListButton'>
 	<img src='images/icons/history.png' alt='' />
-	<div>History</div>
+	<div>[[LANG:DataValueDescriptionDetailTopHistory]]</div>
 	</a>
 	
 	<!-- IF ([[CHANGE_PERMISSION]]) -->
 			
 	<a href='index.php?[[CHANGE_PERMISSION_PARAMS]]' class='ListButton'>
 	<img src='images/icons/permissions.png' alt='' />
-	<div>Change Permissions</div>
+	<div>[[LANG:DataValueDescriptionDetailTopChangePermissions]]</div>
 	</a>
 
 	<!-- ELSE -->
 					
 	<a class='ListButtonDisabled'>
 	<img src='images/icons/permissions.png' alt='' />
-	<div>Change Permissions</div>
+	<div>[[LANG:DataValueDescriptionDetailTopChangePermissions]]</div>
 	</a>
 					
 	<!-- ENDIF -->	
 	
 	</div>
-	<div id='BaseTopBarRight'>
+	<div id='BaseTopBarRight' class='Form'>
 		<form  action='index.php' method='get'>
-		<select name='version'>
-		<option value='[[VERSION]]'>Version [[VERSION]] - [[VERSION_DATETIME]]</options>
+		<select name='version' class='DataTopSelect'>
+		<option value='[[VERSION]]'>[[LANG:DataValueDescriptionDetailTopVersion]] [[VERSION]] - [[VERSION_DATETIME]]</option>
 		
 		<!-- FOREACH BEGIN ([[VERSION_OPTION]]) -->
 		
@@ -140,7 +140,7 @@ $(document).ready(function()
 		<!-- FOREACH END -->
 		
 		</select>
-		<input type='submit' value='open' class='FormButton' />
+		<button type='submit' value='open' style='margin: 3px;'>[[LANG:BaseGlobalButtonOpen]]</button>
 		
 		<!-- FOREACH BEGIN ([[GET]]) -->		
 
@@ -172,9 +172,9 @@ $(document).ready(function()
 
 <!-- IF ([[WRITE_PERMISSION]]) -->
 	<div class='FormButtonBox'>
-	<button type='submit' id='DataValueUpdateButton'>Update</button>
-	<button type='submit' id='DataValueUpdateMinorButton'>Update as Minor</button>
-	<button type='submit' id='DataValueCancelButton'>Cancel</button>
+	<button type='submit' id='DataValueUpdateButton'>[[LANG:BaseGlobalButtonUpdate]]</button>
+	<button type='submit' id='DataValueUpdateMinorButton'>[[LANG:BaseGlobalButtonUpdateMinor]]</button>
+	<button type='submit' id='DataValueCancelButton'>[[LANG:BaseGlobalButtonCancel]]</button>
 	<div class='FormButtonBoxClear'></div>
 	</div>
 <!-- ENDIF -->	

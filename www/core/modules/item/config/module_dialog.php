@@ -3,7 +3,7 @@
  * @package item
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -24,11 +24,11 @@
 /**
  * 
  */	
-	$dialog[0][type]			= "search";
-	$dialog[0][class_path]		= "core/modules/item/io/item_fulltext_search.io.php";
-	$dialog[0]['class']			= "ItemFulltextSearchIO";
-	$dialog[0][method]			= "search";
-	$dialog[0][internal_name]	= "item_fulltext_search";
-	$dialog[0][display_name]	= "Fulltext Search";
-	$dialog[0][weight]			= 700;
+	$dialog[0]['type']				= "search";
+	$dialog[0]['class_path']		= "core/modules/item/io/item_fulltext_search.io.php";
+	$dialog[0]['class']				= "ItemFulltextSearchIO";
+	$dialog[0]['method']			= "search";
+	$dialog[0]['internal_name']		= "item_fulltext_search";
+	$dialog[0]['language_address']	= "ItemDialogFulltextSearch";
+	$dialog[0]['weight']			= 700;
 ?>

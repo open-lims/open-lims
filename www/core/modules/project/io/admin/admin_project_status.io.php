@@ -3,7 +3,7 @@
  * @package project
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -31,16 +31,16 @@ class AdminProjectStatusIO
 	{	
 		$list = new List_IO("ProjectAdminStatus", "ajax.php?nav=project", "admin_project_status_list_status", "admin_project_status_count_status", "0", "ProjectAdminStatus");
 
-		$list->add_column("ID", "id", true, null);
-		$list->add_column("Name", "name", true, null);
-		$list->add_column("Edit", "edit", false, "15%");
-		$list->add_column("Delete", "delete", false, "15%");
+		$list->add_column(Language::get_message("ProjectGeneralListColumnID", "general"), "id", true, null);
+		$list->add_column(Language::get_message("ProjectGeneralListColumnName", "general"), "name", true, null);
+		$list->add_column(Language::get_message("ProjectGeneralListColumnEdit", "general"), "edit", false, "15%");
+		$list->add_column(Language::get_message("ProjectGeneralListColumnDelete", "general"), "delete", false, "15%");
 
 		$template = new HTMLTemplate("project/admin/project_status/list.html");	
 	
 		$paramquery = $_GET;
-		$paramquery[action] = "add";
-		unset($paramquery[nextpage]);
+		$paramquery['action'] = "add";
+		unset($paramquery['nextpage']);
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("add_params", $params);
@@ -52,11 +52,11 @@ class AdminProjectStatusIO
 
 	public static function create()
 	{
-		if ($_GET[nextpage] == 1)
+		if ($_GET['nextpage'] == 1)
 		{
 			$page_1_passed = true;
 			
-			if (!$_POST[name])
+			if (!$_POST['name'])
 			{
 				$page_1_passed = false;
 				$error = "You must enter a name";
@@ -73,7 +73,7 @@ class AdminProjectStatusIO
 			$template = new HTMLTemplate("project/admin/project_status/add.html");
 			
 			$paramquery = $_GET;
-			$paramquery[nextpage] = "1";
+			$paramquery['nextpage'] = "1";
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			$template->set_var("params",$params);
@@ -87,9 +87,9 @@ class AdminProjectStatusIO
 				$template->set_var("error", "");	
 			}
 												 
-			if ($_POST[name])
+			if ($_POST['name'])
 			{
-				$template->set_var("name", $_POST[name]);
+				$template->set_var("name", $_POST['name']);
 			}
 			else
 			{
@@ -103,11 +103,11 @@ class AdminProjectStatusIO
 			$project_status = new ProjectStatus(null);
 
 			$paramquery = $_GET;
-			unset($paramquery[action]);
-			unset($paramquery[nextpage]);
+			unset($paramquery['action']);
+			unset($paramquery['nextpage']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			if ($project_status->create($_POST[name], null))
+			if ($project_status->create($_POST['name'], null))
 			{
 				Common_IO::step_proceed($params, "Add Project Status", "Operation Successful", null);
 			}
@@ -123,22 +123,22 @@ class AdminProjectStatusIO
 	 */
 	public static function delete()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			if ($_GET[sure] != "true")
+			if ($_GET['sure'] != "true")
 			{
 				$template = new HTMLTemplate("project/admin/project_status/delete.html");
 				
 				$paramquery = $_GET;
-				$paramquery[sure] = "true";
+				$paramquery['sure'] = "true";
 				$params = http_build_query($paramquery);
 				
 				$template->set_var("yes_params", $params);
 						
 				$paramquery = $_GET;
-				unset($paramquery[sure]);
-				unset($paramquery[action]);
-				unset($paramquery[id]);
+				unset($paramquery['sure']);
+				unset($paramquery['action']);
+				unset($paramquery['id']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("no_params", $params);
@@ -148,12 +148,12 @@ class AdminProjectStatusIO
 			else
 			{
 				$paramquery = $_GET;
-				unset($paramquery[sure]);
-				unset($paramquery[action]);
-				unset($paramquery[id]);
+				unset($paramquery['sure']);
+				unset($paramquery['action']);
+				unset($paramquery['id']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				$project_status = new ProjectStatus($_GET[id]);
+				$project_status = new ProjectStatus($_GET['id']);
 				
 				if ($project_status->delete())
 				{							
@@ -176,15 +176,15 @@ class AdminProjectStatusIO
 	 */
 	public static function edit()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$project_status = new ProjectStatus($_GET[id]);
+			$project_status = new ProjectStatus($_GET['id']);
 		
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
 				$page_1_passed = true;
 				
-				if (!$_POST[name])
+				if (!$_POST['name'])
 				{
 					$page_1_passed = false;
 					$error = "You must enter a name";
@@ -201,7 +201,7 @@ class AdminProjectStatusIO
 				$template = new HTMLTemplate("project/admin/project_status/edit.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
@@ -215,9 +215,9 @@ class AdminProjectStatusIO
 					$template->set_var("error", "");	
 				}
 													 
-				if ($_POST[name])
+				if ($_POST['name'])
 				{
-					$template->set_var("name", $_POST[name]);
+					$template->set_var("name", $_POST['name']);
 				}
 				else
 				{
@@ -229,11 +229,11 @@ class AdminProjectStatusIO
 			else
 			{
 				$paramquery = $_GET;
-				unset($paramquery[nextpage]);
-				unset($paramquery[action]);
+				unset($paramquery['nextpage']);
+				unset($paramquery['action']);
 				$params = http_build_query($paramquery);
 				
-				if ($project_status->set_name($_POST[name]))
+				if ($project_status->set_name($_POST['name']))
 				{
 					Common_IO::step_proceed($params, "Edit Project Status", "Operation Successful", null);
 				}
@@ -251,7 +251,7 @@ class AdminProjectStatusIO
 
 	public static function handler()
 	{
-		switch($_GET[action]):
+		switch($_GET['action']):
 			case "add":
 				self::create();
 			break;

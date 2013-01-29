@@ -1,3 +1,24 @@
+/**
+ * version: 0.4.0.0
+ * author: Roman Quiring <quiring@open-lims.org>
+ * copyright: (c) 2008-2013 by Roman Quiring
+ * license: GPLv3
+ * 
+ * This file is part of Open-LIMS
+ * Available at http://www.open-lims.org
+ * 
+ * This program is free software;
+ * you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation;
+ * version 3 of the License.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program;
+ * if not, see <http://www.gnu.org/licenses/>.
+ */
+
 function data_browser() 
 {
 	var data_browser_table;
@@ -237,10 +258,8 @@ function data_browser()
 		
 		var action = $("#DataBrowserActionSelect").children("option:selected").val();
 		$(".DataBrowserDeleteCheckbox:checked").each(function()
-		{
-			var type = $(this).parent().parent().children("td:nth-child(4)");
-			
-			if($(type).text() == "Folder")
+		{			
+			if($(this).parent().parent().children("td:nth-child(3)").children().hasClass("DataBrowserIsFolder"))
 			{
 				var link = $(this).parent().parent().children("td:nth-child(3)").children().children().attr("href");
 				var folder_id = link.split("&folder_id=")[1];
@@ -254,9 +273,9 @@ function data_browser()
 					success : function(data) {}
 				});
 			}
-			else if(type == "Value")
+			else if($(this).parent().parent().children("td:nth-child(3)").children().hasClass("DataBrowserIsValue"))
 			{
-				var link = $(this).parent().parent().children("td:nth-child(3)").children().attr("href");
+				var link = $(this).parent().parent().children("td:nth-child(3)").children().children().attr("href");
 				var split = link.split("&nav=data&value_id=");
 				var value_id = split[1].replace("&action=value_detail","");
 
@@ -269,9 +288,9 @@ function data_browser()
 					success : function(data) {}
 				});
 			}
-			else if(type == "File")
+			else if($(this).parent().parent().children("td:nth-child(3)").children().hasClass("DataBrowserIsFile"))
 			{
-				var link = $(this).parent().parent().children("td:nth-child(3)").children().attr("href");
+				var link = $(this).parent().parent().children("td:nth-child(3)").children().children().attr("href");
 				var split = link.split("&nav=data&file_id=");
 				var file_id = split[1].replace("&action=file_detail","");
 
@@ -401,15 +420,15 @@ function data_browser()
 		}
 		else
 		{
-			var link = $(element).children("td:nth-child(3)").children().attr("href");
-			if($(element).children("td:nth-child(4)").text() == "File")
+			var link = $(element).children("td:nth-child(3)").children().children().attr("href");
+			if($(element).children("td:nth-child(3)").children().hasClass("DataBrowserIsFile"))
 			{
 				var split_before = link.split("&file_id=");
 				var split_after = split_before[1].split("&");
 				var file_id = split_after[0];
 				load_context_sensitive_dialog(file_id,"file");
 			}
-			else if($(element).children("td:nth-child(4)").text() == "Value")
+			else if($(element).children("td:nth-child(3)").children().hasClass("DataBrowserIsValue"))
 			{
 				var split_before = link.split("&value_id=");
 				var split_after = split_before[1].split("&");
@@ -652,8 +671,7 @@ function data_browser()
 		close_data_browser_file_dialog();
 		$("#DataBrowserMenuAdd").css(
 		{
-			"border":"solid #669acc 2px",
-			"border-bottom":"solid white 2px",
+			"border":"solid #B7B7B7 1px",
 			"z-index":"99"
 		});
 		$("#DataBrowserAddFileDialog")
@@ -674,8 +692,6 @@ function data_browser()
 				open_link_in_ui(action, additional_params);
 			})
 			.slideDown(200);
-		$("#DataBrowserAddFileCornerContainer").show();
-		$("#DataBrowserAddFileCorner").show();
 		
 		bind_dialog_close_click_handler();
 	}
@@ -685,10 +701,8 @@ function data_browser()
 	 */
 	function close_add_dialog()
 	{
-		$("#DataBrowserMenuAdd").css("border","solid white 2px");
+		$("#DataBrowserMenuAdd").css("border","solid #B7B7B7 1px");
 		$("#DataBrowserAddFileDialog").hide();
-		$("#DataBrowserAddFileCornerContainer").hide();
-		$("#DataBrowserAddFileCorner").hide();
 	}
 	
 	/**
@@ -722,36 +736,6 @@ function data_browser()
 						.html(json["add_list"])
 						.hide();
 
-					var corner_offset_x = offset_x + width + 18;
-					var corner_offset_y = offset_y - height + 2;
-					var corner_container = $("<div id='DataBrowserAddFileCornerContainer'></div>")
-						.css(
-						{
-							"position":"absolute",
-							"top":corner_offset_y + 1,
-							"left":corner_offset_x,
-							"z-index":"100",
-							"width":height-1,
-							"height":height-1, 
-							"background-color":"white",
-							"margin":"0",
-							"padding":"0"
-						})
-						.hide()
-						.appendTo("#Main");
-					var corner = $("<div id='DataBrowserAddFileCorner'></div>")
-						.css(
-						{
-							"position":"absolute",
-							"top":corner_offset_y,
-							"left":corner_offset_x,
-							"z-index":"101",
-							"width":height-2,
-							"height":height-2
-						})
-						.hide()
-						.appendTo("#Main");
-					
 					$("#DataBrowserMenuAdd").children("img").attr("src","images/icons/add.png");
 					$("#DataBrowserMenuAdd").removeClass("Deactivated");
 				}
@@ -811,6 +795,7 @@ function data_browser()
 					else
 					{
 						open_add_dialog();
+						
 					}
 				}
 			});

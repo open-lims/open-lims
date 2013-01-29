@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -48,24 +48,24 @@ class UserSearchIO
 	{
 		global $user, $session;
 		
-		if ($_GET[nextpage])
+		if ($_GET['nextpage'])
 		{
-			if ($_GET[page] or $_GET[sortvalue] or $_GET[sortmethod])
+			if ($_GET['page'] or $_GET['sortvalue'] or $_GET['sortmethod'])
 			{
 				$string = $session->read_value("SEARCH_USER_STRING");
 				$type = $session->read_value("SEARCH_USER_TYPE");
 			}
 			else
 			{
-				if ($_GET[nextpage] == "1")
+				if ($_GET['nextpage'] == "1")
 				{
-					$string = $_POST[string];
+					$string = $_POST['string'];
 					$session->delete_value("SEARCH_USER_STRING");
 					$session->delete_value("SEARCH_USER_TYPE");
 				}
 				else
 				{
-					$string = $_POST[string];
+					$string = $_POST['string'];
 					$type = $session->read_value("SEARCH_USER_TYPE");
 				}
 			}
@@ -81,8 +81,8 @@ class UserSearchIO
 			$template = new HTMLTemplate("base/user/search/search.html");
 			
 			$paramquery = $_GET;
-			unset($paramquery[page]);
-			$paramquery[nextpage] = "1";
+			unset($paramquery['page']);
+			$paramquery['nextpage'] = "1";
 			$params = http_build_query($paramquery,'','&#38;');
 					
 			$template->set_var("params",$params);
@@ -95,7 +95,11 @@ class UserSearchIO
 		{
 			if (!$type)
 			{
-				$type = $_POST[search_type];
+				$type = $_POST['search_type'];
+				IF (!$_POST['search_type'])
+				{
+					$type = 1;
+				}
 			}
 			
 			$session->write_value("SEARCH_USER_STRING", $string, true);
@@ -104,37 +108,37 @@ class UserSearchIO
 			$content_array = array();
 			
 			$argument_array = array();
-			$argument_array[0][0] = "string";
-			$argument_array[0][1] = $string;
+			$argument_array[0] = "string";
+			$argument_array[1] = $string;
 			
 			if ($type == 1)
 			{
 				$list = new List_IO("UserUserSearch", "ajax.php?nav=base", "search_user_list_users", "search_user_count_users", $argument_array, "UserUserSearch");
 				
 				$list->add_column("","symbol",false,16);
-				$list->add_column("Username","username",true,null);
-				$list->add_column("Full Name","fullname",true,null);
+				$list->add_column(Language::get_message("BaseGeneralListColumnUsername", "general"),"username",true,null);
+				$list->add_column(Language::get_message("BaseGeneralListColumnFullName", "general"),"fullname",true,null);
 				
-				$type_name = "User";
+				$type_name = true;
 			}
 			else
 			{	
 				$list = new List_IO("UserGroupSearch", "ajax.php?nav=base", "search_user_list_groups", "search_user_count_groups", $argument_array, "UserGroupSearch");
 				
 				$list->add_column("","symbol",false,16);
-				$list->add_column("Group Name","name",true,null);
-				$list->add_column("Users","users",true,null);
+				$list->add_column(Language::get_message("BaseGeneralListColumnGroupName", "general"),"name",true,null);
+				$list->add_column(Language::get_message("BaseGeneralListColumnUsers", "general"),"users",true,null);
 
-				$type_name = "Group";
+				$type_name = false;
 			}
 						
 			$template = new HTMLTemplate("base/user/search/search_result.html");
 			
 			$paramquery = $_GET;
-			$paramquery[nextpage] = "2";
-			unset($paramquery[page]);
-			unset($paramquery[sortvalue]);
-			unset($paramquery[sortmethod]);
+			$paramquery['nextpage'] = "2";
+			unset($paramquery['page']);
+			unset($paramquery['sortvalue']);
+			unset($paramquery['sortmethod']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			$template->set_var("params", $params);

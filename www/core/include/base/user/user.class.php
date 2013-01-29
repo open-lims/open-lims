@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -706,6 +706,14 @@ class User implements UserInterface {
 			case("skype"):
 				return $this->user_profile->get_skype();
 			break;
+			
+			case("lync"):
+				return $this->user_profile->get_lync();
+			break;
+			
+			case("jabber"):
+				return $this->user_profile->get_jabber();
+			break;
 					
 			default:
 				return null;
@@ -995,6 +1003,14 @@ class User implements UserInterface {
 				return $this->user_profile->set_skype($value);
 			break;
 					
+			case("lync"):
+				return $this->user_profile->set_lync($value);
+			break;
+			
+			case("jabber"):
+				return $this->user_profile->set_jabber($value);
+			break;
+			
 			default:
 				return null;
 			break;

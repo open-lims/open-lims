@@ -1,0 +1,30 @@
+<?php
+$LANG['BaseUserDetailTitle'] = "User Details";
+$LANG['BaseUserDetailPersonalTitle'] = "Personal Information";
+$LANG['BaseUserDetailUsername'] = "Username";
+$LANG['BaseUserDetailGender'] = "Gender";
+$LANG['BaseUserDetailGenderMale'] = "male";
+$LANG['BaseUserDetailGenderFemale'] = "female";
+$LANG['BaseUserDetailFirstName'] = "First Name";
+$LANG['BaseUserDetailLastName'] = "Last Name";
+$LANG['BaseUserDetailPTitle'] = "Title";
+$LANG['BaseUserDetailContactTitle'] = "Contact Information";
+$LANG['BaseUserDetailMail'] = "Mail";
+$LANG['BaseUserDetailInstitution'] = "Institution";
+$LANG['BaseUserDetailDepartment'] = "Department";
+$LANG['BaseUserDetailStreet'] = "Street";
+$LANG['BaseUserDetailZip'] = "Zip";
+$LANG['BaseUserDetailCity'] = "City";
+$LANG['BaseUserDetailCountry'] = "Country";
+$LANG['BaseUserDetailPhone'] = "Phone (Office)";
+$LANG['BaseUserDetailInstantMessengerTitle'] = "Instant-Messengers";
+$LANG['BaseUserDetailICQ'] = "ICQ";
+$LANG['BaseUserDetailMSN'] = "MSN";
+$LANG['BaseUserDetailYahoo'] = "Yahoo";
+$LANG['BaseUserDetailAIM'] = "AIM";
+$LANG['BaseUserDetailSkype'] = "Skype";
+$LANG['BaseUserDetailLync'] = "Lync";
+$LANG['BaseUserDetailJabber'] = "Jabber";
+$LANG['BaseUserDetailGroups'] = "Groups";
+$LANG['BaseUserDetailGroupsNotFound'] = "No Groups Found!";
+?>

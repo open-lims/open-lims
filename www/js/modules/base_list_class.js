@@ -1,8 +1,8 @@
-/*
+/**
  * version: 0.4.0.0
  * author: Roman Konertz <konertz@open-lims.org>
  * author: Roman Quiring <quiring@open-lims.org>
- * copyright: (c) 2008-2011 by Roman Konertz, Roman Quiring
+ * copyright: (c) 2008-2013 by Roman Konertz, Roman Quiring
  * license: GPLv3
  * 
  * This file is part of Open-LIMS
@@ -255,229 +255,238 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 
 		
 	function make_resizable()
-	{			
-		
-		if($(".ListTable").find(".ui-resizable-e").length > 0)
+	{		
+		if(navigator.appVersion.indexOf("MSIE 7.") != -1)
 		{
-			$(".ListTable").dynamicTable("reinit");
-			return false;
+			return;
 		}
-		
-		$(document).keyup(function(evt)
+		else
 		{
-			if(evt.which === 49)
+			var width = "";
+			
+			if($(".ListTable").find(".ui-resizable-e").length > 0)
 			{
-				open_column_menu();
+				$(".ListTable").dynamicTable("reinit");
+				return false;
 			}
 			
-		});
-		
-		var num_cols = $(".ListTable > thead > tr > th").size();
-		
-		var sticky = [0]; //first column is always sticky
-		var notResizable = [num_cols - 1]; //last column is never resizable
-		
-		for (var int = 1; int < num_cols; int++) 
-		{
-			var column = $(".ListTable > thead > tr > th").get(int);		
-			
-			if($.browser.msie)
-			{ //attr("width") causes IE to return numeric values, so we cannot distinguish px from em
-				var width = $(column)[0].currentStyle["width"];
-			}
-			else
+			/*
+			$(document).keyup(function(evt)
 			{
-				var width = $(column).attr("width");
-			}		
-			
-			if(width !== undefined && width !== "")
-			{
-				if(width.indexOf("px") !== -1)
-				{
-					sticky.push(int);
-					
-					//if the last column is sticky, the column before that is not resizable
-					if(int === num_cols - 1)
-					{
-						notResizable.push(int - 1);
-					}
-				}
-			}
-		}
-
-		for (var int2 = 0; int2 < sticky.length; int2++)
-		{
-			var sticky_col = sticky[int2];
-			
-			var th = $(".ListTable").find("th:nth-child("+(sticky_col + 1)+")"), 
-			width = $(th).width()
-	
-			//width_dif is padding + border in ie7, just padding in all other browsers
-			var width_dif = $(th).outerWidth() - $(th).width(); 
-	
-			if($.browser.msie && $.browser.version == 7.0)
-			{//ie box model fix
-				var border = parseInt($(th).css("border-left-width"), 10);
-				if(border)
-				{
-					var padding = parseInt($(th).css("padding-left"), 10) + parseInt($(th).css("padding-right"), 10)
-					width_dif = width_dif - border - padding;
-				}
-				else
-				{
-					width_dif = 0;
-				}
-			}
-			
-			$(th).width(width + width_dif);
-			var real_width = $(th).width() - width_dif;
-			var border = width - real_width;
-			$(th).width(width + width_dif - border); 
-		}
-		
-		$(".ListTable").dynamicTable({
-			"sticky": sticky,
-			"notResizable": notResizable,
-			"settings" : {
-				rulerCSS: {
-					"background-color": "#669acc"
-				},
-				handleCSS: {
-					"background-color": "#669acc"
-				}
-			}
-		});
-		
-		var column_menu_trigger = $("<div id='ColumnMenuTrigger'><img src='images/icons/visible.png' alt=''/></div>")
-			.css("float", "left")
-			.unbind("click")
-			.click(function()
-			{
-				if($(this).hasClass("columnMenuOpen"))
-				{
-					close_column_menu();
-					$(this).removeClass("columnMenuOpen");
-				}
-				else
+				if(evt.which === 49)
 				{
 					open_column_menu();
-					$(this).addClass("columnMenuOpen");
 				}
-			})
-			.appendTo(".ContentBoxBeginTitle");
-		
-		tooltip("ColumnMenuTrigger", "Toggle Display Options");
-
-		
-		function open_column_menu()
-		{
-			var position = $("#ColumnMenuTrigger").position();
+				
+			}); */
 			
-			var column_menu = $("<div id='ColumnMenu'></div>");
-	
+			var num_cols = $(".ListTable > thead > tr > th").size();
+			
+			var sticky = [0]; //first column is always sticky
+			var notResizable = [num_cols - 1]; //last column is never resizable
+			
 			for (var int = 1; int < num_cols; int++) 
 			{
-				if($.inArray(int, sticky) !== -1)
-				{
-					continue;
-				}
-	
-				var column = $(".ListTable > thead > tr > th").get(int);
+				var column = $(".ListTable > thead > tr > th").get(int);		
 				
-				if($.inArray(int, notResizable) === -1)
-				{
-					if($(column).children(".ResizableColumnHelper").length > 0)
-					{
-						var div = $(column).children(".ResizableColumnHelper");
-						if($(div).children("a:first").length > 0)
-						{
-							var column_text = $(column).children(".ResizableColumnHelper").children("a:first").text();
-						}
-						else
-						{
-							var column_text = $(column).children(".ResizableColumnHelper").text();
-						}
-					}
+				if($.browser.msie)
+				{ //attr("width") causes IE to return numeric values, so we cannot distinguish px from em
+					var width = $(column)[0].currentStyle["width"];
 				}
 				else
 				{
-					var div = $(column).children("div:first");
-					if($(div).children("a:first").length > 0)
+					var width = $(column).attr("width");
+				}		
+				
+				if((width !== undefined) && (width !== ""))
+				{
+					if(width.indexOf("px") !== -1)
 					{
-						var column_text = $(column).children("div:first").children("a:first").text();
+						sticky.push(int);
+						
+						//if the last column is sticky, the column before that is not resizable
+						if(int === num_cols - 1)
+						{
+							notResizable.push(int - 1);
+						}
+					}
+				}
+			}
+			
+			for (var int2 = 0; int2 < sticky.length; int2++)
+			{
+				var sticky_col = sticky[int2];
+				
+				var th = $(".ListTable").find("th:nth-child("+(sticky_col + 1)+")"), 
+				width = $(th).width()
+		
+				//width_dif is padding + border in ie7, just padding in all other browsers
+				var width_dif = $(th).outerWidth() - $(th).width(); 
+		
+				if($.browser.msie && $.browser.version == 7.0)
+				{//ie box model fix
+					var border = parseInt($(th).css("border-left-width"), 10);
+					if(border)
+					{
+						var padding = parseInt($(th).css("padding-left"), 10) + parseInt($(th).css("padding-right"), 10)
+						width_dif = width_dif - border - padding;
 					}
 					else
 					{
-						var column_text = $(column).children("div:first").text();
+						width_dif = 0;
 					}
 				}
 				
-				var checked = "checked='checked'";
-				if(!$(column).is(":visible") || $(column).width() === 0)
-				{
-					checked = "";
+				$(th).width(width + width_dif);
+				var real_width = $(th).width() - width_dif;
+				var border = width - real_width;
+				$(th).width(width + width_dif - border); 
+			}
+					
+			$(".ListTable").dynamicTable({
+				"sticky": sticky,
+				"notResizable": notResizable,
+				"settings" : {
+					rulerCSS: {
+						"background-color": "#669acc"
+					},
+					handleCSS: {
+						"background-color": "#669acc"
+					}
 				}
-				
-				var label = $("<div class='ColumnMenuEntryLabel'>"+column_text+"</div>");
-				
-				var checkbox = $("<input type='checkbox' class='ColumnMenuEntryCheckbox' name='' value='' "+checked+"></input>")
-					.click(function(event)
+			});
+			
+			
+			var column_menu_trigger = $("<div id='ColumnMenuTrigger'><img src='images/icons/visible.png' alt=''/></div>")
+				.css("float", "left")
+				.unbind("click")
+				.click(function()
+				{
+					if($(this).hasClass("columnMenuOpen"))
 					{
-						if($(".ListTable").dynamicTable("isAnimating"))
+						close_column_menu();
+						$(this).removeClass("columnMenuOpen");
+					}
+					else
+					{
+						open_column_menu();
+						$(this).addClass("columnMenuOpen");
+					}
+				})
+				.appendTo(".ContentBoxBeginTitle");
+			
+			tooltip("ColumnMenuTrigger", "Toggle Display Options");
+	
+			
+			function open_column_menu()
+			{
+				var position = $("#ColumnMenuTrigger").position();
+				
+				var column_menu = $("<div id='ColumnMenu'></div>");
+		
+				for (var int = 1; int < num_cols; int++) 
+				{
+					if($.inArray(int, sticky) !== -1)
+					{
+						continue;
+					}
+		
+					var column = $(".ListTable > thead > tr > th").get(int);
+					
+					if($.inArray(int, notResizable) === -1)
+					{
+						if($(column).children(".ResizableColumnHelper").length > 0)
 						{
-							event.preventDefault();
-						}
-						
-						var num_checked = 0;
-						$(".ColumnMenuEntryCheckbox").each(function()
-						{
-							if($(this).is(":checked"))
+							var div = $(column).children(".ResizableColumnHelper");
+							if($(div).children("a:first").length > 0)
 							{
-								num_checked++;
+								var column_text = $(column).children(".ResizableColumnHelper").children("a:first").text();
 							}
-						});
-						
-						if(num_checked > 0)
+							else
+							{
+								var column_text = $(column).children(".ResizableColumnHelper").text();
+							}
+						}
+					}
+					else
+					{
+						var div = $(column).children("div:first");
+						if($(div).children("a:first").length > 0)
 						{
-							$(".ListTable").dynamicTable("toggle", $(this).parent().data("columnIndex"));
+							var column_text = $(column).children("div:first").children("a:first").text();
 						}
 						else
 						{
-							event.preventDefault();
+							var column_text = $(column).children("div:first").text();
 						}
+					}
+					
+					var checked = "checked='checked'";
+					if(!$(column).is(":visible") || $(column).width() === 0)
+					{
+						checked = "";
+					}
+					
+					var label = $("<div class='ColumnMenuEntryLabel'>"+column_text+"</div>");
+					
+					var checkbox = $("<input type='checkbox' class='ColumnMenuEntryCheckbox' name='' value='' "+checked+"></input>")
+						.click(function(event)
+						{
+							if($(".ListTable").dynamicTable("isAnimating"))
+							{
+								event.preventDefault();
+							}
+							
+							var num_checked = 0;
+							$(".ColumnMenuEntryCheckbox").each(function()
+							{
+								if($(this).is(":checked"))
+								{
+									num_checked++;
+								}
+							});
+							
+							if(num_checked > 0)
+							{
+								$(".ListTable").dynamicTable("toggle", $(this).parent().data("columnIndex"));
+							}
+							else
+							{
+								event.preventDefault();
+							}
+						});
+					
+					$("<div class='ColumnMenuEntry'></div>")
+						.data("columnIndex", int)
+						.append(label)
+						.append(checkbox)
+						.appendTo(column_menu);
+					
+					$(column_menu).dialog(
+					{
+						"title": "Change column visibility",
+						"close": function()
+						{
+							$("#ColumnMenuTrigger").removeClass("columnMenuOpen");
+						},
+						"buttons": [
+						{
+							text: "OK",
+					        click: function()
+					        { 
+					        	close_column_menu() 
+					        }
+						}]
 					});
-				
-				$("<div class='ColumnMenuEntry'></div>")
-					.data("columnIndex", int)
-					.append(label)
-					.append(checkbox)
-					.appendTo(column_menu);
-				
-				$(column_menu).dialog(
-				{
-					"title": "Change column visibility",
-					"close": function()
-					{
-						$("#ColumnMenuTrigger").removeClass("columnMenuOpen");
-					},
-					"buttons": [
-					{
-						text: "OK",
-				        click: function()
-				        { 
-				        	close_column_menu() 
-				        }
-					}]
-				});
+				}
+			}
+			
+			function close_column_menu()
+			{
+				$("#ColumnMenu").dialog("close");
+				$("#ColumnMenu").remove();
 			}
 		}
-		
-		function close_column_menu()
-		{
-			$("#ColumnMenu").dialog("close");
-			$("#ColumnMenu").remove();
-		}
-
 	} 
 
 	function check_array(sort_value)

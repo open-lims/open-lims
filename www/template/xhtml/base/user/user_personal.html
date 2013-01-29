@@ -1,0 +1,277 @@
+<script type="text/javascript">
+/*<![CDATA[*/
+$(document).ready(function()
+{
+	function check_form()
+	{
+		$("#Error1").html("");
+		$("#Error2").html("");
+		$("#Error3").html("");
+		$("#Error4").html("");
+		
+		var no_error = true;
+		
+		if ($("input[name='forename']").val() === "")
+		{
+			no_error = false;
+			$("#Error1").html("<br />[[LANG:BaseUserPersonalError1]]");
+		}
+		
+		if ($("input[name='surname']").val() === "")
+		{
+			no_error = false;
+			$("#Error2").html("<br />[[LANG:BaseUserPersonalError2]]");
+		}
+		
+		if ($("input[name='mail']").val() === "")
+		{
+			no_error = false;
+			$("#Error3").html("<br />[[LANG:BaseUserPersonalError3]]");
+		}
+		else
+		{
+			if (!is_mail_address_valid($("input[name='mail']").val()))
+			{
+				no_error = false;
+				$("#Error3").html("<br />[[LANG:BaseUserPersonalError3]]");
+			}
+		}
+		
+		if ($("input[name='icq']").val() !== "")
+		{
+			if (isNaN(parseInt($("input[name='icq']").val())))
+			{
+				no_error = false;
+				$("#Error4").html("<br />[[LANG:BaseUserPersonalError4]]");
+			}
+		}
+		
+		return no_error;
+	}
+	
+	$("#BaseUserProfilePersonalDataCancelButton").click(function()
+	{
+		history.back();
+	});    
+  
+	
+	$("#BaseUserProfilePersonalDataSaveButton").click(function()
+	{
+		if (check_form() === true)
+		{			
+			var gender = $("input:radio:checked[name='gender']").val();
+			var forename = $("input[name='forename']").val();
+			var surname = $("input[name='surname']").val();
+			var title = $("input[name='title']").val();
+			var mail = $("input[name='mail']").val();
+			var institution = $("input[name='institution']").val();
+			var department = $("input[name='department']").val();
+			var street = $("input[name='street']").val();
+			var zip = $("input[name='zip']").val();
+			var city = $("input[name='city']").val();
+			var country = $("input[name='country']").val();
+			var phone = $("input[name='phone']").val();
+			var icq = $("input[name='icq']").val();
+			var msn = $("input[name='msn']").val();
+			var yahoo = $("input[name='yahoo']").val();
+			var aim = $("input[name='aim']").val();
+			var skype = $("input[name='skype']").val();
+			var lync = $("input[name='lync']").val();
+			var jabber = $("input[name='jabber']").val();
+			
+			$.ajax(
+			{
+				type : "POST",
+				url : "ajax.php?session_id=[[SESSION_ID]]&nav=base&run=user_profile_personal_data_change",
+				data : "gender="+gender+"&forename="+forename+"&surname="+surname+"&title="+title+"&mail="+mail+"&institution="+institution+"&department="+department+"&street="+street+"&zip="+zip+"&city="+city+"&country="+country+"&phone="+phone+"&icq="+icq+"&msn="+msn+"&yahoo="+yahoo+"&aim="+aim+"&skype="+skype+"&lync="+lync+"&jabber="+jabber+"",
+				beforeSend: function()
+				{
+					$("#BaseUserProfilePersonalDataFinish").dialog("open");
+				},
+				success : function(data)
+				{
+					if (data == "1")
+					{
+						window.setTimeout('window.location = \'[[RETRACE]]\'',500);
+					}
+					else
+					{
+						if ((data + '').indexOf("EXCEPTION",0) === 0)
+						{
+							var exception_message = data.replace("EXCEPTION: ","");
+							$("#BaseUserProfilePersonalDataFinish").dialog("close");
+							ErrorDialog("Error", exception_message);
+							return false;
+						}
+						else
+						{
+							$("#BaseUserProfilePersonalDataFinish").dialog("close");
+							ErrorDialog("Error", "An error occured");
+							return false;
+						}
+					}
+				}
+			});
+		}
+	});	
+});
+/*]]>*/           
+</script>
+
+<div class="BasePlaseWaitWindow" id="BaseUserProfilePersonalDataFinish" title=""> 
+<div><img src='images/animations/loading_circle_small.gif' alt=''> [[LANG:BaseGlobalMessageWait]]</div>
+</div> 
+
+<!-- CONTAINER BEGIN ("[[LANG:BaseUserPersonalTitle]]") -->
+
+<div class='Form'>
+<div class='FormBox'>
+<div class='FormBoxHeadline'>[[LANG:BaseUserPersonalPersonalTitle]]</div>
+
+<table style='width: 100%'>
+	<tr>
+		<td style='width: 30%;'>[[LANG:BaseUserPersonalGender]]:</td>
+		<td>
+		
+			<!-- IF ([[GENDER]]) -->
+		
+			<input name='gender' type='radio' value='m' checked />[[LANG:BaseUserPersonalGenderMale]]&nbsp;
+			<input name='gender' type='radio' value='f' />[[LANG:BaseUserPersonalGenderFemale]]
+			
+			<!-- ELSE -->
+			
+			<input name='gender' type='radio' value='m' />[[LANG:BaseUserPersonalGenderMale]]&nbsp;
+			<input name='gender' type='radio' value='f' checked />[[LANG:BaseUserPersonalGenderFemale]]
+			
+			<!-- ENDIF -->
+						
+		</td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalFirstName]]: *</td>
+		<td>
+			<input type='text' name='forename' value='[[FORENAME]]' size='45' />
+			<span class='FormError' id='Error1'></span>
+		</td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalLastName]]: *</td>
+		<td>
+			<input type='text' name='surname' value='[[SURNAME]]' size='45' />
+			<span class='FormError' id='Error2'></span>	
+		</td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalPTitle]]:</td>
+		<td><input type='text' name='title' value='[[TITLE]]' size='45' maxlength='10' /></td>
+	</tr>
+	
+</table>
+
+<div class='FormBoxClear'></div>
+</div>
+
+
+<div class='FormBox'>
+<div class='FormBoxHeadline'>[[LANG:BaseUserPersonalContactTitle]]</div>
+
+<table style='width: 100%'>
+
+	<tr>
+		<td style='width: 30%;'>[[LANG:BaseUserPersonalMail]]: *</td>
+		<td>
+			<input type='text' name='mail' value='[[MAIL]]' id='BaseUserProfilePersonalDataMail' size='45' />
+			<span class='FormError' id='Error3'></span>
+		</td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalInstitution]]:</td>
+		<td><input type='text' name='institution' value='[[INSTITUTION]]' size='45' /></td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalDepartment]]:</td>
+		<td><input type='text' name='department' value='[[DEPARTMENT]]' size='45' /></td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalStreet]]:</td>
+		<td><input type='text' name='street' value='[[STREET]]' size='45' /></td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalZip]]:</td>
+		<td><input type='text' name='zip' value='[[ZIP]]' size='10' maxlength='10' /></td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalCity]]:</td>
+		<td><input type='text' name='city' value='[[CITY]]' size='45' /></td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalCountry]]:</td>
+		<td><input type='text' name='country' value='[[COUNTRY]]' size='45' /></td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalPhone]]:</td>
+		<td><input type='text' name='phone' value='[[PHONE]]' size='45' /></td>
+	</tr>
+	
+</table>
+
+<div class='FormBoxClear'></div>
+</div>
+
+
+<div class='FormBox'>
+<div class='FormBoxHeadline'>[[LANG:BaseUserPersonalInstantMessengerTitle]]</div>
+
+<table style='width: 100%'>
+	
+	<tr>
+		<td style='width: 30%;'>[[LANG:BaseUserPersonalICQ]]:</td>
+		<td>
+			<input type='text' name='icq' value='[[ICQ]]' size='45' />
+			<span class='FormError' id='Error4'></span>
+		</td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalMSN]]:</td>
+		<td><input type='text' name='msn' value='[[MSN]]' size='45' /></td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalYahoo]]:</td>
+		<td><input type='text' name='yahoo' value='[[YAHOO]]' size='45' /></td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalAIM]]:</td>
+		<td><input type='text' name='aim' value='[[AIM]]' size='45' /></td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalSkype]]:</td>
+		<td><input type='text' name='skype' value='[[SKYPE]]' size='45' /></td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalLync]]:</td>
+		<td><input type='text' name='lync' value='[[LYNC]]' size='45' /></td>
+	</tr>
+	<tr>
+		<td>[[LANG:BaseUserPersonalJabber]]:</td>
+		<td><input type='text' name='jabber' value='[[JABBER]]' size='45' /></td>
+	</tr>
+</table>
+
+<div class='FormBoxClear'></div>
+</div>
+
+
+
+<div class='FormButtonBox'>
+<button type='submit' id='BaseUserProfilePersonalDataSaveButton'>[[LANG:BaseGlobalButtonSave]]</button>
+<button type='submit' id='BaseUserProfilePersonalDataCancelButton'>[[LANG:BaseGlobalButtonCancel]]</button>
+<div class='FormButtonBoxClear'></div>
+</div>
+</div>
+
+<br /><div class='center'><span class='smallTextBlack'>* [[LANG:BaseUserPersonalRequiredFields]]</span></div>
+<br />
+
+					
+<!-- CONTAINER END () -->
+			

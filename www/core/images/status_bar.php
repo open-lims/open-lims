@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -22,18 +22,18 @@
  */
  
  
-if ($_GET[length] and $_GET[height] and $_GET[color])
+if ($_GET['length'] and $_GET['height'] and $_GET['color'])
 {
-	if (!$_GET[value])
+	if (!$_GET['value'])
 	{
-		$_GET[value] = 0;
+		$_GET['value'] = 0;
 	}
 
 	/*
 	 * bgcolor and linecolor is optional
 	 */
 	 
-	if (!$_GET[bgcolor])
+	if (!$_GET['bgcolor'])
 	{
 		$background_red = 255;
 		$background_green = 255;
@@ -41,12 +41,12 @@ if ($_GET[length] and $_GET[height] and $_GET[color])
 	}
 	else
 	{
-		$background_red = hexdec($_GET[bgcolor]{0}."".$_GET[bgcolor]{1});
-		$background_green = hexdec($_GET[bgcolor]{2}."".$_GET[bgcolor]{3});
-		$background_blue = hexdec($_GET[bgcolor]{4}."".$_GET[bgcolor]{5});
+		$background_red = hexdec($_GET['bgcolor']{0}."".$_GET['bgcolor']{1});
+		$background_green = hexdec($_GET['bgcolor']{2}."".$_GET['bgcolor']{3});
+		$background_blue = hexdec($_GET['bgcolor']{4}."".$_GET['bgcolor']{5});
 	}
 			
-	if (!$_GET[linecolor])
+	if (!$_GET['linecolor'])
 	{
 		$line_red = 0;
 		$line_green = 0;
@@ -54,19 +54,19 @@ if ($_GET[length] and $_GET[height] and $_GET[color])
 	}
 	else
 	{
-		$line_red = hexdec($_GET[linecolor]{0}."".$_GET[linecolor]{1});
-		$line_green = hexdec($_GET[linecolor]{2}."".$_GET[linecolor]{3});
-		$line_blue = hexdec($_GET[linecolor]{4}."".$_GET[linecolor]{5});
+		$line_red = hexdec($_GET['linecolor']{0}."".$_GET['linecolor']{1});
+		$line_green = hexdec($_GET['linecolor']{2}."".$_GET['linecolor']{3});
+		$line_blue = hexdec($_GET['linecolor']{4}."".$_GET['linecolor']{5});
 	}
 
 	header("Content-Type: image/png");
 
-	$bar_length = $_GET[length];
-	$bar_height = $_GET[height];
+	$bar_length = $_GET['length'];
+	$bar_height = $_GET['height'];
 	
-	$fill_red = hexdec($_GET[color]{0}."".$_GET[color]{1});
-	$fill_green =hexdec($_GET[color]{2}."".$_GET[color]{3});
-	$fill_blue = hexdec($_GET[color]{4}."".$_GET[color]{5});
+	$fill_red = hexdec($_GET['color']{0}."".$_GET['color']{1});
+	$fill_green =hexdec($_GET['color']{2}."".$_GET['color']{3});
+	$fill_blue = hexdec($_GET['color']{4}."".$_GET['color']{5});
 	
 	$image = imagecreatetruecolor($bar_length, $bar_height);
 	
@@ -82,7 +82,7 @@ if ($_GET[length] and $_GET[height] and $_GET[color])
 	imageline($image, 1, $bar_height-1, $bar_length-1, $bar_height-1, $line);
 	imageline($image, $bar_length-1, 1, $bar_length-1, $bar_height-1, $line);
 	
-	$percent = $_GET[value];
+	$percent = $_GET['value'];
 	
 	if ($percent > 100)
 	{

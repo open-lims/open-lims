@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -31,9 +31,9 @@ class AdminBaseIncludeIO
 	{		
 		$list = new List_IO("BaseAdminIncludeHome" ,"ajax.php?nav=base", "admin_list_includes", "admin_count_includes", "0", "BaseAdminIncludeAjax");
 
-		$list->add_column("Name","name",true,null);
-		$list->add_column("Folder","folder",true,null);
-		$list->add_column("Event Listeners","eventlisteners",true,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"name",true,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnFolder", "general"),"folder",true,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnEventListerns", "general"),"eventlisteners",true,null);
 		
 		$template = new HTMLTemplate("base/admin/base_include/list.html");	
 		
@@ -44,7 +44,7 @@ class AdminBaseIncludeIO
 	
 	public static function handler()
 	{
-		switch($_GET[action]):		
+		switch($_GET['action']):		
 			default:
 				self::home();
 			break;

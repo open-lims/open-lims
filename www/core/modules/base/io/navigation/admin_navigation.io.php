@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -32,73 +32,73 @@ class AdminNavigationIO
 		$template = new HTMLTemplate("base/admin/navigation/administration.html");
 		
 		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "base.admin";
-		$paramquery[run] = "general_admin";
+		$paramquery['username'] = $_GET['username'];
+		$paramquery['session_id'] = $_GET['session_id'];
+		$paramquery['nav'] = "base.admin";
+		$paramquery['run'] = "general_admin";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("general_params", $params);
 		
 		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "base.admin";
-		$paramquery[run] = "include_admin";
+		$paramquery['username'] = $_GET['username'];
+		$paramquery['session_id'] = $_GET['session_id'];
+		$paramquery['nav'] = "base.admin";
+		$paramquery['run'] = "include_admin";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("include_params", $params);
 		
 		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "base.admin";
-		$paramquery[run] = "module_admin";
+		$paramquery['username'] = $_GET['username'];
+		$paramquery['session_id'] = $_GET['session_id'];
+		$paramquery['nav'] = "base.admin";
+		$paramquery['run'] = "module_admin";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("module_params", $params);
 		
 		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "base.admin";
-		$paramquery[run] = "navigation";
+		$paramquery['username'] = $_GET['username'];
+		$paramquery['session_id'] = $_GET['session_id'];
+		$paramquery['nav'] = "base.admin";
+		$paramquery['run'] = "navigation";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("navigation_params", $params);
 		
 		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "base.admin";
-		$paramquery[run] = "registry";
+		$paramquery['username'] = $_GET['username'];
+		$paramquery['session_id'] = $_GET['session_id'];
+		$paramquery['nav'] = "base.admin";
+		$paramquery['run'] = "registry";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("registry_params", $params);
 		
 
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "base.admin";
-		$paramquery[run] = "services";
+		$paramquery['username'] = $_GET['username'];
+		$paramquery['session_id'] = $_GET['session_id'];
+		$paramquery['nav'] = "base.admin";
+		$paramquery['run'] = "services";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("services_params", $params);
 		
 		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "base.admin";
-		$paramquery[run] = "system_log";
+		$paramquery['username'] = $_GET['username'];
+		$paramquery['session_id'] = $_GET['session_id'];
+		$paramquery['nav'] = "base.admin";
+		$paramquery['run'] = "system_log";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("system_log_params", $params);
 		
 		
-		$paramquery[username] = $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] = "base.admin";
-		$paramquery[run] = "system_message";
+		$paramquery['username'] = $_GET['username'];
+		$paramquery['session_id'] = $_GET['session_id'];
+		$paramquery['nav'] = "base.admin";
+		$paramquery['run'] = "system_message";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("system_message_params", $params);
@@ -114,12 +114,12 @@ class AdminNavigationIO
 		{
 			foreach ($organisation_dialog_array as $key => $value)
 			{
-				$paramquery[username] 	= $_GET[username];
-				$paramquery[session_id] = $_GET[session_id];
-				$paramquery[nav]		= "base.admin";
-				$paramquery[run]		= "organisation";
-				$paramquery[dialog]		= $value['internal_name'];
-				$params 				= http_build_query($paramquery,'','&#38;');
+				$paramquery['username'] 	= $_GET['username'];
+				$paramquery['session_id'] 	= $_GET['session_id'];
+				$paramquery['nav']			= "base.admin";
+				$paramquery['run']			= "organisation";
+				$paramquery['dialog']		= $value['internal_name'];
+				$params 					= http_build_query($paramquery,'','&#38;');
 				
 				require_once($value['class_path']);
 				
@@ -127,21 +127,21 @@ class AdminNavigationIO
 				{
 					if (($icon = $value['class']::get_icon()) != null)
 					{
-						$organisation_admin_navigation_array[$counter][icon] = $icon;
+						$organisation_admin_navigation_array[$counter]['icon'] = $icon;
 					}
 					else
 					{
-						$organisation_admin_navigation_array[$counter][icon] = "blank.png";
+						$organisation_admin_navigation_array[$counter]['icon'] = "blank.png";
 					}
 					
 				}
 				else
 				{
-					$organisation_admin_navigation_array[$counter][icon] = "blank.png";
+					$organisation_admin_navigation_array[$counter]['icon'] = "blank.png";
 				}
 				
-				$organisation_admin_navigation_array[$counter][params] = $params;
-				$organisation_admin_navigation_array[$counter][title] = $value[display_name];
+				$organisation_admin_navigation_array[$counter]['params'] = $params;
+				$organisation_admin_navigation_array[$counter]['title'] = Language::get_message($value['language_address'], "dialog");
 				$counter++;
 			}
 		}
@@ -159,12 +159,12 @@ class AdminNavigationIO
 		{
 			foreach ($module_dialog_array as $key => $value)
 			{
-				$paramquery[username] 	= $_GET[username];
-				$paramquery[session_id] = $_GET[session_id];
-				$paramquery[nav]		= "base.admin";
-				$paramquery[run]		= "module";
-				$paramquery[dialog]		= $value[internal_name];
-				$params 				= http_build_query($paramquery,'','&#38;');
+				$paramquery['username'] 	= $_GET['username'];
+				$paramquery['session_id'] 	= $_GET['session_id'];
+				$paramquery['nav']			= "base.admin";
+				$paramquery['run']			= "module";
+				$paramquery['dialog']		= $value['internal_name'];
+				$params 					= http_build_query($paramquery,'','&#38;');
 				
 				require_once($value['class_path']);
 				
@@ -172,21 +172,21 @@ class AdminNavigationIO
 				{
 					if (($icon = $value['class']::get_icon()) != null)
 					{
-						$module_admin_navigation_array[$counter][icon] = $icon;
+						$module_admin_navigation_array[$counter]['icon'] = $icon;
 					}
 					else
 					{
-						$module_admin_navigation_array[$counter][icon] = "blank.png";
+						$module_admin_navigation_array[$counter]['icon'] = "blank.png";
 					}
 					
 				}
 				else
 				{
-					$module_admin_navigation_array[$counter][icon] = "blank.png";
+					$module_admin_navigation_array[$counter]['icon'] = "blank.png";
 				}
 				
-				$module_admin_navigation_array[$counter][params] = $params;
-				$module_admin_navigation_array[$counter][title] = $value[display_name];
+				$module_admin_navigation_array[$counter]['params'] = $params;
+				$module_admin_navigation_array[$counter]['title'] = Language::get_message($value['language_address'], "dialog");
 				$counter++;
 			}
 		}

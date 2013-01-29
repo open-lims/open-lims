@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -63,7 +63,7 @@ class AdminGeneralAjax
 			{
 				foreach($list_array as $key => $value)
 				{
-					$list_array[$key][symbol] = "<img src='images/icons/language.png' alt='N' border='0' />";
+					$list_array[$key]['symbol'] = "<img src='images/icons/language.png' alt='N' border='0' />";
 				}
 			}
 			else
@@ -136,7 +136,7 @@ class AdminGeneralAjax
 			{
 				foreach($list_array as $key => $value)
 				{
-					$list_array[$key][symbol] = "<img src='images/icons/currency.png' alt='N' border='0' />";
+					$list_array[$key]['symbol'] = "<img src='images/icons/currency.png' alt='N' border='0' />";
 				}
 			}
 			else
@@ -209,19 +209,19 @@ class AdminGeneralAjax
 			{
 				foreach($list_array as $key => $value)
 				{
-					$list_array[$key][symbol] = "<img src='images/icons/timezone.png' alt='N' border='0' />";
+					$list_array[$key]['symbol'] = "<img src='images/icons/timezone.png' alt='N' border='0' />";
 					
-					if ($list_array[$key][deviation] > 0)
+					if ($list_array[$key]['deviation'] > 0)
 					{
-						$list_array[$key][deviation] = "GMT+".$list_array[$key][deviation];
+						$list_array[$key]['deviation'] = "GMT+".$list_array[$key]['deviation'];
 					}
-					elseif ($list_array[$key][deviation] < 0)
+					elseif ($list_array[$key]['deviation'] < 0)
 					{
-						$list_array[$key][deviation] = "GMT".$list_array[$key][deviation];
+						$list_array[$key]['deviation'] = "GMT".$list_array[$key]['deviation'];
 					}
 					else
 					{
-						$list_array[$key][deviation] = "GTM+/-0";
+						$list_array[$key]['deviation'] = "GTM+/-0";
 					}
 				}
 			}
@@ -295,36 +295,36 @@ class AdminGeneralAjax
 			{
 				foreach($list_array as $key => $value)
 				{
-					$list_array[$key][symbol] = "<img src='images/icons/measuring_unit.png' alt='N' border='0' />";
+					$list_array[$key]['symbol'] = "<img src='images/icons/measuring_unit.png' alt='N' border='0' />";
 					
-					switch ($list_array[$key][type]):
+					switch ($list_array[$key]['type']):
 					
 						case 1:
-							$list_array[$key][type] = "length";
+							$list_array[$key]['type'] = "length";
 						break;
 						
 						case 2:
-							$list_array[$key][type] = "mass";
+							$list_array[$key]['type'] = "mass";
 						break;
 						
 						case 3:
-							$list_array[$key][type] = "electric current";
+							$list_array[$key]['type'] = "electric current";
 						break;
 						
 						case 4:
-							$list_array[$key][type] = "thermodynamic temperature";
+							$list_array[$key]['type'] = "thermodynamic temperature";
 						break;
 						
 						case 5:
-							$list_array[$key][type] = "amount of substance";
+							$list_array[$key]['type'] = "amount of substance";
 						break;
 						
 						case 6:
-							$list_array[$key][type] = "luminous intensity";
+							$list_array[$key]['type'] = "luminous intensity";
 						break;
 						
 						case 7:
-							$list_array[$key][type] = "time";
+							$list_array[$key]['type'] = "time";
 						break;
 					
 					endswitch;
@@ -346,7 +346,7 @@ class AdminGeneralAjax
 	}
 	
 	/**
-	 * @param string $json_argument_array´
+	 * @param string $json_argument_arrayï¿½
 	 * @return integer
 	 * @throws BaseUserAccessDeniedException
 	 */
@@ -397,25 +397,25 @@ class AdminGeneralAjax
 			{
 				foreach($list_array as $key => $value)
 				{
-					$list_array[$key][symbol] = "<img src='images/icons/text.png' alt='' />";
+					$list_array[$key]['symbol'] = "<img src='images/icons/text.png' alt='' />";
 					
 					if ($value['standard'] == 't')
 					{
-						$list_array[$key][name] = $list_array[$key][name]." <img src='images/icons/status_ok.png' alt='Standard' />";
+						$list_array[$key]['name'] = $list_array[$key]['name']." <img src='images/icons/status_ok.png' alt='Standard' />";
 					}
 					
-					$list_array[$key][width] = $list_array[$key][width]." mm";
-					$list_array[$key][height] = $list_array[$key][height]." mm";
-					$list_array[$key][margin_left] = $list_array[$key][margin_left]." mm";
-					$list_array[$key][margin_right] = $list_array[$key][margin_right]." mm";
-					$list_array[$key][margin_top] = $list_array[$key][margin_top]." mm";
-					$list_array[$key][margin_bottom] = $list_array[$key][margin_bottom]." mm";
+					$list_array[$key]['width'] = $list_array[$key]['width']." mm";
+					$list_array[$key]['height'] = $list_array[$key]['height']." mm";
+					$list_array[$key]['margin_left'] = $list_array[$key]['margin_left']." mm";
+					$list_array[$key]['margin_right'] = $list_array[$key]['margin_right']." mm";
+					$list_array[$key]['margin_top'] = $list_array[$key]['margin_top']." mm";
+					$list_array[$key]['margin_bottom'] = $list_array[$key]['margin_bottom']." mm";
 					
-					$list_array[$key]['edit'] = "<a href='#' class='BaseAdminPaperSizeEdit' id='BaseAdminPaperSizeEdit".$list_array[$key][id]."'><img src='images/icons/edit.png' alt='' style='border: 0;' /></a>";
+					$list_array[$key]['edit'] = "<a href='#' class='BaseAdminPaperSizeEdit' id='BaseAdminPaperSizeEdit".$list_array[$key]['id']."'><img src='images/icons/edit.png' alt='' style='border: 0;' /></a>";
 					
 					if ($value['base'] == 'f')
 					{
-						$list_array[$key]['delete'] = "<a href='#' class='BaseAdminPaperSizeDelete' id='BaseAdminPaperSizeDelete".$list_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+						$list_array[$key]['delete'] = "<a href='#' class='BaseAdminPaperSizeDelete' id='BaseAdminPaperSizeDelete".$list_array[$key]['id']."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
 					}
 				}
 			}

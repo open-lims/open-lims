@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -37,6 +37,15 @@ function __autoload($classname)
 		$path_prefix = "";
 	}
 	
+	// Batch
+	$classes['BaseBatchException']								= $path_prefix."core/include/base/batch/exceptions/base_batch.exception.class.php";
+	$classes['BaseBatchNotFoundException']						= $path_prefix."core/include/base/batch/exceptions/base_batch_not_found.exception.class.php";
+	$classes['BaseBatchMissingException']						= $path_prefix."core/include/base/batch/exceptions/base_batch_missing.exception.class.php";
+	$classes['BaseBatchInvalidArgumentException']				= $path_prefix."core/include/base/batch/exceptions/base_batch_invalid_argument.exception.class.php";
+
+	$classes['Batch']											= $path_prefix."core/include/base/batch/batch.class.php";
+	$classes['Batch_Wrapper']									= $path_prefix."core/include/base/batch/batch.wrapper.class.php";
+	
 	// Environment
 	$classes['BaseEnvironmentException']						= $path_prefix."core/include/base/environment/exceptions/base_environment.exception.class.php";
 	$classes['BaseEnvironmentCurrencyException']				= $path_prefix."core/include/base/environment/exceptions/base_environment_currency.exception.class.php";
@@ -49,6 +58,7 @@ function __autoload($classname)
 	$classes['BaseEnvironmentPaperSizeIDMissingException']		= $path_prefix."core/include/base/environment/exceptions/base_environment_paper_size_id_missing.exception.class.php";
 	$classes['BaseEnvironmentPaperSizeNotFoundException']		= $path_prefix."core/include/base/environment/exceptions/base_environment_paper_size_not_found.exception.class.php";
 	
+	$classes['Country']											= $path_prefix."core/include/base/environment/country.class.php";
 	$classes['Currency']										= $path_prefix."core/include/base/environment/currency.class.php";
 	$classes['DatetimeHandler']									= $path_prefix."core/include/base/environment/datetime_handler.class.php";
 	$classes['Language']										= $path_prefix."core/include/base/environment/language.class.php";

@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -27,7 +27,8 @@
 $template = new HTMLTemplate("base/home.html");
 
 $template->set_var("USERNAME",$user->get_full_name(false));
-$template->set_var("DATE",date("l, jS F Y"));
+$datetime_handler = new DatetimeHandler();
+$template->set_var("DATE",$datetime_handler->get_formatted_string("l, jS F Y"));
 
 $home_summery_left_array = ModuleDialog::list_dialogs_by_type("home_summary_left");
 	

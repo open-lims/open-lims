@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -56,13 +56,13 @@ class UserRegionalSetting_Access
 			$this->user_id = null;
 		}
 		else
-		{
+		{			
 			$sql = "SELECT * FROM ".constant("USER_REGIONAL_SETTING_TABLE")." WHERE id='".$user_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
 			if ($data['id'])
-			{
+			{				
 				$this->user_id 						= $user_id;
 				
 				$this->language_id					= $data['language_id'];
@@ -430,7 +430,7 @@ class UserRegionalSetting_Access
 	 */
 	public function get_currency_significant_digits()
 	{
-		if ($this->currency_significant_digits)
+		if (isset($this->currency_significant_digits))
 		{
 			return $this->currency_significant_digits;
 		}
@@ -736,21 +736,21 @@ class UserRegionalSetting_Access
 	}
 	
 	/**
-	 * @param string $system_of_paper_formats
+	 * @param string $system_of_paper_format
 	 * @return bool
 	 */
-	public function set_system_of_paper_formats($system_of_paper_formats)
+	public function set_system_of_paper_format($system_of_paper_format)
 	{
 		global $db;
 			
-		if ($this->user_id and $system_of_paper_formats)
+		if ($this->user_id and $system_of_paper_format)
 		{
-			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET system_of_paper_formats = '".$system_of_paper_formats."' WHERE id = ".$this->user_id."";
+			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET system_of_paper_format = '".$system_of_paper_format."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
 			{
-				$this->system_of_paper_formats = $system_of_paper_formats;
+				$this->system_of_paper_format = $system_of_paper_format;
 				return true;
 			}
 			else

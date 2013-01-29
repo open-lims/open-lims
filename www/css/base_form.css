@@ -28,9 +28,95 @@
 {
 	
 }
-.Form select
+
+
+/* Select */
+div.FormFocused
 {
-	
+	border: 1px #73A6FF solid;
+}
+.FormSelectList
+{
+	position: absolute;
+	border: 1px #D0D0D0 solid;
+	background-color: #EEEEEE;
+	color: #2F2F2F; 
+	text-shadow: none; 
+	margin: -3px 0 0 0;
+	padding: 0;
+	z-index: 100;
+}
+.FormSelectList ul
+{
+	list-style: none;
+	margin: 0 0 0 0;
+	padding: 0;
+}
+.FormSelectList ul li
+{
+	margin: 0;
+	padding: 0;
+}
+.FormSelectList ul li a
+{
+	display: block;
+	padding: 3px 2px;
+	text-decoration: none;
+	color: #2F2F2F !important;
+}
+.FormSelectList ul li a:hover
+{
+	background-color: #73A6FF;
+	cursor: pointer;
+}
+.FormSelectList ul li.selected
+{
+	background-color: #73A6FF;
+	cursor: pointer;
+}
+.FormSelectContainer
+{
+	border-radius: 6px 6px 6px 6px;
+	border: 1px #D0D0D0 solid;
+	color: #2F2F2F;  
+	background-color: #EEEEEE;
+	/*padding: 0;
+	margin: 3px 0; */
+	padding: 0 4px;
+	margin: 3px 0;
+	position: relative;
+	height: 24px;
+}
+.FormSelectEntry
+{
+	padding: 4px;
+	float: left;
+	overflow: hidden;
+	white-space: nowrap;
+	text-shadow: none; 
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 5;
+}
+.FormSelectButton
+{
+	border-radius: 6px 6px 6px 6px;
+	margin: 1px;
+	float: right;
+	border: 1px #B0B0B0 solid;
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	position: absolute;
+	top: 0;
+	right: 0;
+	background-color: #EEEEEE;
+	z-index: 10;
+}
+.FormSelectButton img
+{
+	margin: 8px 5px;
 }
 
 .Form input.FormError

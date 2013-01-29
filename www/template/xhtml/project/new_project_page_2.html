@@ -23,7 +23,7 @@ $(document).ready(function()
 					{
 						if (data == '1')
 						{
-							$("#ProjectCreateError1").html("<br />This project already exists.");
+							$("#ProjectCreateError1").html("<br />[[LANG:ProjectCreatePage2ProjectAlreadyExistsError]]");
 							success = false;
 						}
 						else
@@ -37,7 +37,7 @@ $(document).ready(function()
 			}
 			else
 			{
-				$("#ProjectCreateError2").html("<br />You have to enter a description.");
+				$("#ProjectCreateError2").html("<br />[[LANG:ProjectCreatePage2EnterDescriptionError]]");
 				$.ajax(
 				{
 					type: "POST",
@@ -48,7 +48,7 @@ $(document).ready(function()
 					{
 						if (data == '1')
 						{
-							$("#ProjectCreateError1").html("<br />This project already exists.");
+							$("#ProjectCreateError1").html("<br />[[LANG:ProjectCreatePage2ProjectAlreadyExistsError]]");
 						}
 					}
 				});
@@ -59,10 +59,10 @@ $(document).ready(function()
 		}
 		else
 		{
-			$("#ProjectCreateError1").html("<br />You have to enter a name.");
+			$("#ProjectCreateError1").html("<br />[[LANG:ProjectCreatePage2EnterNameError]]");
 			if (!$(".ProjectCreateAssistantField[name='project_description']").val())
 			{
-				$("#ProjectCreateError2").html("<br />You have to enter a description.");
+				$("#ProjectCreateError2").html("<br />[[LANG:ProjectCreatePage2EnterDescriptionError]].");
 			}
 			return false;
 		}
@@ -87,17 +87,17 @@ $(document).ready(function()
 <br />
 <table class='Form FormCenterBox70'>
 	<tr>
-		<td>Project name:</td>
+		<td>[[LANG:ProjectCreatePage2ProjectName]]:</td>
 		<td>
 			<input name='project_name' value='[[PROJECT_NAME]]' type='text' size='30' class='FormTextfield ProjectCreateAssistantField' />
 			<span class='FormError' id='ProjectCreateError1'></span>
 		</td>
 	</tr>
 	<tr>
-		<td colspan='2'><img src='images/icons/info.png' alt='info' /><span class='smallTextBlack'> Enter a significant project name (e.g. P. marcidus infection w. M. marinum).</span><br /><br /></td>
+		<td colspan='2'><img src='images/icons/info.png' alt='info' /><span class='smallTextBlack'> [[LANG:ProjectCreatePage2ProjectNameSubTitle]]</span><br /><br /></td>
 	</tr>
 	<tr>
-		<td colspan='2'>Project Description</td>
+		<td colspan='2'>[[LANG:ProjectCreatePage2ProjectDescription]]:</td>
 	</tr>
 	<tr>
 		<td colspan='2'>
@@ -112,8 +112,8 @@ $(document).ready(function()
 	<tr>
 		<td colspan='2'>
 			<br />
-			<div class='button_left'><button id='AssistantPrevious' class='Button'>previous</button></div>
-			<div class='button_right'><button id='AssistantNext' class='Button'>next</button></div>
+			<div class='button_left'><button id='AssistantPrevious' class='Button'>[[LANG:BaseGlobalButtonPrevious]]</button></div>
+			<div class='button_right'><button id='AssistantNext' class='Button'>[[LANG:BaseGlobalButtonNext]]</button></div>
 		</td>
 	</tr>
 </table>

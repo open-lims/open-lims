@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -80,13 +80,13 @@ class ListRequest_IO
 					if (is_array($this->first_line_entry[$value[1]]))
 					{
 						
-						if ($this->first_line_entry[$value[1]][link] and $this->first_line_entry[$value[1]][content])
+						if ($this->first_line_entry[$value[1]]['link'] and $this->first_line_entry[$value[1]]['content'])
 						{
-							$return .= "<td><a href='index.php?".$this->first_line_entry[$value[1]][link]."'>".$this->first_line_entry[$value[1]][content]."</a></td>";
+							$return .= "<td><a href='index.php?".$this->first_line_entry[$value[1]]['link']."'>".$this->first_line_entry[$value[1]]['content']."</a></td>";
 						}
-						elseif(!$this->first_line_entry[$value[1]][link] and $this->first_line_entry[$value[1]][content])
+						elseif(!$this->first_line_entry[$value[1]]['link'] and $this->first_line_entry[$value[1]]['content'])
 						{
-							$return .= "<td>".$this->first_line_entry[$value[1]][content]."</td>";
+							$return .= "<td>".$this->first_line_entry[$value[1]]['content']."</td>";
 						}else
 						{
 							$return .= "<td></td>";
@@ -182,21 +182,21 @@ class ListRequest_IO
 						// !! LABEL !!
 						if (is_array($content[$row_value[1]]))
 						{
-							if ($content[$row_value[1]][label])
+							if ($content[$row_value[1]]['label'])
 							{
-								$content_string .= "<span title='".$content[$row_value[1]][label]."'>";
+								$content_string .= "<span title='".$content[$row_value[1]]['label']."'>";
 							}
 							
-							if ($content[$row_value[1]][link] and $content[$row_value[1]][content])
+							if ($content[$row_value[1]]['link'] and $content[$row_value[1]]['content'])
 							{
-								$content_string .= "<a href='index.php?".$content[$row_value[1]][link]."'>".$content[$row_value[1]][content]."</a>";
+								$content_string .= "<a href='index.php?".$content[$row_value[1]]['link']."'>".$content[$row_value[1]]['content']."</a>";
 							}
-							elseif(!$content[$row_value[1]][link] and $content[$row_value[1]][content])
+							elseif(!$content[$row_value[1]]['link'] and $content[$row_value[1]]['content'])
 							{
-								$content_string .= $content[$row_value[1]][content];
+								$content_string .= $content[$row_value[1]]['content'];
 							}
 
-							if ($content[$row_value[1]][label])
+							if ($content[$row_value[1]]['label'])
 							{
 								$content_string .= "</span>";
 							}

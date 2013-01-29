@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -114,9 +114,10 @@ class Auth implements AuthInterface
     	
     	Session::check_all();
     	
-    	if ($session->is_valid($user_id) == true)
+    	$session_valid_array = $session->is_valid($user_id);
+    	if ($session_valid_array[0] === true)
     	{
-    		if ($session->destroy() == true)
+    		if ($session->destroy() === true)
     		{
     			return true;
     		}
@@ -127,7 +128,14 @@ class Auth implements AuthInterface
     	}
     	else
     	{
-    		return false;
+    		if ($session->is_dead() === true)
+    		{
+    			return true;
+    		}
+    		else
+    		{
+    			return false;
+    		}
     	}
     }
     

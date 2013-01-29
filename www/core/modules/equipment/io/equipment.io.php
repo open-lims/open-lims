@@ -3,7 +3,7 @@
  * @package equipment
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -85,9 +85,9 @@ class EquipmentIO
 			$template = new HTMLTemplate("equipment/list.html");
 			
 			$list->add_column("","symbol",false,"16px");
-			$list->add_column("Equipment Name","name",true,null);
-			$list->add_column("Category","category",true,null);
-			$list->add_column("Date/Time","datetime",true,null);
+			$list->add_column(Language::get_message("EquipmentGeneralListColumnEquipmentName", "general"),"name",true,null);
+			$list->add_column(Language::get_message("EquipmentGeneralListColumnCategory", "general"),"category",true,null);
+			$list->add_column(Language::get_message("EquipmentGeneralListColumnDateTime", "general"),"datetime",true,null);
 		}
 		else
 		{
@@ -97,9 +97,9 @@ class EquipmentIO
 			
 			$list->add_column("","checkbox",false,"16px", $form_field_name);
 			$list->add_column("","symbol",false,"16px");
-			$list->add_column("Equipment Name","name",false,null);
-			$list->add_column("Category","category",false,null);
-			$list->add_column("Date/Time","datetime",false,null);
+			$list->add_column(Language::get_message("EquipmentGeneralListColumnEquipmentName", "general"),"name",false,null);
+			$list->add_column(Language::get_message("EquipmentGeneralListColumnCategory", "general"),"category",false,null);
+			$list->add_column(Language::get_message("EquipmentGeneralListColumnDateTime", "general"),"datetime",false,null);
 		}
 		
 		$template->set_var("list", $list->get_list());
@@ -127,14 +127,14 @@ class EquipmentIO
 		if ($_GET['ou_id'])
 		{
 			$argument_array = array();
-			$argument_array[0][0] = "organisation_unit_id";
-			$argument_array[0][1] = $_GET['ou_id'];
+			$argument_array[0] = "organisation_unit_id";
+			$argument_array[1] = $_GET['ou_id'];
 					
 			$list = new List_IO("EquipmentOrganisationUnit", "ajax.php?nav=equipment", "list_organisation_unit_related_equipment", "count_organisation_unit_related_equipment", $argument_array, "EquipmentOrganisationUnit");
 		
 			$list->add_column("","symbol",false,16);
-			$list->add_column("Equipment Name","name",true,null);
-			$list->add_column("Category","category",true,null);
+			$list->add_column(Language::get_message("EquipmentGeneralListColumnEquipmentName", "general"),"name",true,null);
+			$list->add_column(Language::get_message("EquipmentGeneralListColumnCategory", "general"),"category",true,null);
 			
 			$template = new HTMLTemplate("equipment/list_organisation_unit.html");
 
@@ -235,7 +235,7 @@ class EquipmentIO
 				{
 					$organisation_unit = new OrganisationUnit($value);
 					
-					$ou_content_array[$counter][name] = $organisation_unit->get_name();
+					$ou_content_array[$counter]['name'] = $organisation_unit->get_name();
 					$counter++;
 				}
 				$template->set_var("no_ou", false);

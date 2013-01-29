@@ -1,0 +1,22 @@
+<!-- CONTAINER BEGIN ("Search") -->
+
+<div class='Form'>
+
+	<div style='font-weight: bold; text-align: center;'><br />[[LANG:BaseSearchHeaderSearchTitle]]</div>
+
+	<!-- FOREACH BEGIN ([[SEARCH_ARRAY]]) -->
+
+		<div class='FormBox'>
+			<div class='FormBoxHeadline'>[[SEARCH_ARRAY:TITLE]]</div>
+			<form action='index.php?[[SEARCH_ARRAY:PARAMS]]' method='post'>
+				<input type='text' value='[[STRING]]' name='string' style='float: left;' size='45' />
+				<button type='submit' style='margin: 3px;'>[[LANG:BaseGlobalButtonSearch]]</button>
+			</form>
+			<div class='FormBoxClear'></div>
+		</div>
+	
+	<!-- FOREACH END -->
+
+</div>
+
+<!-- CONTAINER END () -->

@@ -19,7 +19,6 @@ html,body
 	background-repeat: repeat-y;
 	min-height: 100%;
 	height: auto !important;
-	
 }
 
 #Footer
@@ -50,12 +49,13 @@ html,body
 }
 #HeaderLogo
 {
-	padding: 20px 0 18px 25px;
+	margin: 0;
+	padding: 25px 0 22px 25px;
 	float: left;	
 }
 #HeaderRight
 {
-	margin: 20px 15px 0 0;
+	margin: 5px 15px 0 0;
 	float: right;	
 }
 #HeaderMenu
@@ -92,7 +92,7 @@ html,body
 	background-image: url('../images/search_input.png');
 	background-repeat:no-repeat;
 	background-position: top right;
-    margin: 6px 0 0 0;
+    margin: 28px 0 0 0;
     padding: 3px 3px 6px 10px;
     width: 152px;
     height: 18px;
@@ -103,7 +103,7 @@ html,body
 	background-image: url('../images/search_button.png');
 	background-repeat:no-repeat;
 	background-position: top right;
-	margin: 6px 0 0 0;
+	margin: 28px 0 0 0;
 	height: 24px;
 	width: 26px;
 	border: 0;
@@ -168,6 +168,7 @@ html,body
 #BaseTopBarRight
 {
 	text-align: right;
+	float: right;
 }
 #BaseTopBarClear
 {
@@ -270,25 +271,61 @@ html,body
 {
 	color: #555555;
 }
-#SmallTabArrowLeft
-{
-	width: 16px;
-	padding: 4px;
-}
+#SmallTabArrowLeft,
 #SmallTabArrowRight
 {
-	width: 16px;
-	padding: 4px;
+	width: 20px;
+	position: absolute;
 }
 #SmallTabFooter 
 {
-	clear: left;
+	clear: both;
 	margin: -1px;
 	height: 1px;
 	width: 750px;
 }
+#SmallTabCamera
+{
+	height: 26px;
+}
+#SmallTabHiddenTabsMenu
+{
+	position: absolute;
+	background-color: white;
+	border: solid black 1px;
+	font-family: arial;
+	font-size: 12px;
+	z-index: 200;
+    -moz-border-radius: 10px;
+   	-webkit-border-radius: 10px;
+   	-khtml-border-radius: 10px;
+   	border-radius: 10px;
+   	padding: 5px 5px 5px 5px;
+   	border: solid #E0E0E0 1px;
+   	-moz-box-shadow: 3px 3px 5px #636363;
+  	-webkit-box-shadow: 3px 3px 5px #636363;
+ 	box-shadow: 3px 3px 5px #636363;
+}
+.SmallTabHiddenTabsMenuEntry
+{
+	font-weight: bold;
+	font-size: 14px;
+	padding: 3px 3px 3px 3px;
+	-moz-border-radius: 5px;
+   	-webkit-border-radius: 5px;
+   	-khtml-border-radius: 5px;
+   	border-radius: 5px;
+   	color: #666666;
+   	white-space: nowrap;
+}
+.SmallTabHiddenTabsMenuEntry:hover
+{
+	color: #ffffff;
+	background-color: #999;
+}
 .SmallTabList 
 {
+	position: relative;
 	width: 750px;
 	padding: 0;
 	margin: 0;
@@ -440,19 +477,8 @@ html,body
 {
 	font: normal 12px Arial, Helvetica, sans-serif;	
 	padding: 10px;
-}
-#BaseLogoutQuestionText
-{
-	font-weight: bold;
 	margin: 15px;
-}
-#BaseLogoutQuestionButtons input
-{
-	background-color: white;
-	border: 1px #C0C0C0 solid;
-	padding: 2px;
-	margin: 10px;
-	width: 50px;
+	text-align: center;
 }
 
 
@@ -673,7 +699,7 @@ html,body
 .ListButton
 {
     margin: 0 5px 0 0;
-    padding: 2px 3px;
+    padding: 3px 3px;
     float: left;
 }
 .ListButton img
@@ -689,14 +715,11 @@ html,body
 	float: left;
 	padding: 2px 2px 0 2px;
 }
-
-
-.LoginBox
+.ListButton div img
 {
-	width: 450px;
-	margin-left: auto;
-	margin-right: auto;
-	font: normal 0.8em Verdana, Helvetica, sans-serif;
+	display: block;
+	float: left;
+	padding: 4px 0px 4px 2px;
 }
 
 .BaseBlockUIProceed
@@ -756,6 +779,152 @@ html,body
 	height: 1px;
 	border-bottom: 1px #C0C0C0 dotted;
 	font-size: 10px;
+	clear: both;
+}
+
+.BasePlaseWaitWindow
+{
+	text-align: center;	
+}
+.BasePlaseWaitWindow div
+{
+	margin: 30px;
+}
+
+
+.BaseArrowMessage
+{
+	font: normal 14px Arial, Helvetica, sans-serif;
+	background-color: #EFF5FF;
+	padding: 8px;
+	border-radius: 6px 6px 6px 6px;
+	border: 2px #D0D0D0 solid;
+	margin-left: 9px;
+	z-index: 99;
+	color: #444444;
+	text-shadow: none;
+	-moz-box-shadow: 2px 2px 2px #101010;
+  	-webkit-box-shadow: 2px 2px 2px #101010;
+ 	box-shadow: 2px 2px 2px #101010;	
+}
+
+.BaseArrowMessageArrow
+{
+	float: left;
+	width: 11px;
+	height: 20px;
+	padding: 8px 0px;
+	background-image: url(../images/message_arrow_left.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	z-index: 100;
+}
+
+/* Search */
+.BaseSearchMain
+{
+	margin-left: auto;
+	margin-right: auto;
+	width: 705px;
+}
+.BaseSearchMainLeft
+{
+	float: left;
+	width: 350px;
+}
+.BaseSearchMainClear
+{
+	clear: both;
+}
+.BaseSearchMainButton
+{
+	display: block;
+	height: 60px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+.BaseSearchMainButton
+{
+	border: 0;
+	text-decoration: none;
+}
+.BaseSearchMainButton:hover
+{
+	background: #99b2cc;
+	text-decoration: none;
+	color: black;
+}
+a.BaseSearchMainButton:hover span span
+{
+	color: black;
+}
+.BaseSearchMainButtonImage
+{
+	display: block;
+	float: left;
+	margin: 4px;
+}
+.BaseSearchMainButtonText
+{
+	display: block;
+	padding: 4px;
+}
+.BaseSearchMainButtonTitle
+{
+	display: block;
+	font-weight: bold;
+}
+.BaseSearchMainButtonDescription
+{
+	display: block;
+	font-size: 11px;
+}
+.BaseSearchCommonSelect
+{
+	width: 100%;
+}
+.BaseSmallSearchContainer
+{
+	width: 100%;
+	border-bottom: 1px #C0C0C0 solid;
+}
+.BaseSmallSearchTable
+{
+	margin-left: auto;
+	margin-right: auto;
+}
+.BaseSmallSearchInfo
+{
+	font-size: 10px;
+}
+
+/* Batch */
+#BaseBatchTestStartWindowContainer
+{
+	text-align: center;
+	padding: 20px 0;	
+}
+
+/* Errors */
+#ErrorFatalContainer
+{
+	width: 500px;	
+	margin: 50px auto 0 auto;
+}	
+#ErrorFatalSymbol
+{
+	float: left;
+	width: 55px;
+	margin: 10px 20px;
+}
+#ErrorFatalMessage
+{
+	font: normal 14px Arial, Helvetica, sans-serif;
+	padding: 25px 10px 0 10px;
+	text-align: left;
+}
+#ErrorFatalClear
+{
 	clear: both;
 }
 

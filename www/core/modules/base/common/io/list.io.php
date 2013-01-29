@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -143,8 +143,8 @@ class List_IO
 			if ($value[3] == true)
 			{
 				$paramquery = $_GET;
-				unset($paramquery[sortvalue]);
-				unset($paramquery[sortmethod]);
+				unset($paramquery['sortvalue']);
+				unset($paramquery['sortmethod']);
 				$params = http_build_query($paramquery, '', '&#38;');
 				
 				if ($value[2] != null)

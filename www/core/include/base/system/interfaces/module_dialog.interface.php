@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -40,5 +40,12 @@ interface ModuleDialogInterface
 	 * @return array
 	 */
 	public static function list_dialogs_by_type($dialog_type);
+	
+	/**
+	 * @param string $dialog_type
+	 * @param string $module
+	 * @return array
+	 */
+	public static function list_dialogs_by_type_and_module($dialog_type, $module);
 }
 ?>

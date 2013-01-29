@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -55,24 +55,17 @@ class LoginAjax
 				}
 				else
 				{
-					return "This user is locked by administrator.";
+					return 0;
 				}
 			}
 			else
 			{
-				return "Your username or your password are wrong.";
+				return 0;
 			}
 		}
 		else
 		{
-			if ($username and !$password)
-			{
-				return "Your must enter a password.";
-			}
-			else
-			{
-				return "You must enter an username.";
-			}
+			return 0;
 		}
 	}
 	
@@ -82,13 +75,39 @@ class LoginAjax
 		
 		$auth = new Auth();
 		
-		if ($auth->logout($session->get_user_id(),$_GET[session_id]) == true)
+		if ($auth->logout($session->get_user_id(),$_GET['session_id']) == true)
 		{
 			return 1;
 		}
 		else
 		{
 			return 0;
+		}
+	}
+	
+	public static function forgot_password($username, $mail)
+	{
+		if (isset($username) and isset($mail))
+		{
+			try
+			{
+				$auth = new Auth();
+				
+				$auth->forgot_password($_POST['username'], $_POST['mail']);
+				return 1;
+			}
+			catch(AuthUserNotFoundException $e)
+			{
+				return 0;
+			}
+			catch(AuthForgotPasswordSendFailedException $e)
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
 		}
 	}
 }

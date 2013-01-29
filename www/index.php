@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -34,7 +34,9 @@
  require_once("core/include/base/system/system_config.class.php");
 
  SystemConfig::load_system_config("config/main.php");
-  
+
+ date_default_timezone_set($server['timezone']);
+ 
  require_once("core/include/base/system/template.class.php");
  require_once("core/include/base/system/html_template.class.php");
  require_once("core/include/base/system/js_template.class.php");

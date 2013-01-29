@@ -3,7 +3,7 @@
  * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -67,72 +67,72 @@ class SampleSearchAjax
 				
 				foreach($list_array as $key => $value)
 				{
-					$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
-					$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y");
+					$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
+					$list_array[$key]['datetime'] = $datetime_handler->get_datetime(false);
 	
-					if ($list_array[$key][av] == "f")
+					if ($list_array[$key]['av'] == "f")
 					{
-						$list_array[$key][av] = "<img src='images/icons/grey_point.png' alt='' />";
+						$list_array[$key]['av'] = "<img src='images/icons/grey_point.png' alt='' />";
 					}
 					else
 					{
-						if ($list_array[$key][date_of_expiry] and $list_array[$key][expiry_warning])
+						if ($list_array[$key]['date_of_expiry'] and $list_array[$key]['expiry_warning'])
 						{
-							$date_of_expiry = new DatetimeHandler($list_array[$key][date_of_expiry]." 23:59:59");
+							$date_of_expiry = new DatetimeHandler($list_array[$key]['date_of_expiry']." 23:59:59");
 							$warning_day = clone $date_of_expiry;
-							$warning_day->sub_day($list_array[$key][expiry_warning]);
+							$warning_day->sub_day($list_array[$key]['expiry_warning']);
 						
 							if ($date_of_expiry->distance($today_end) > 0)
 							{
-								$list_array[$key][av] = "<img src='images/icons/red_point.png' alt='' />";
+								$list_array[$key]['av'] = "<img src='images/icons/red_point.png' alt='' />";
 							}
 							else
 							{
 								if ($warning_day->distance($today_end) > 0)
 								{
-									$list_array[$key][av] = "<img src='images/icons/yellow_point.png' alt='' />";
+									$list_array[$key]['av'] = "<img src='images/icons/yellow_point.png' alt='' />";
 								}
 								else
 								{
-									$list_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
+									$list_array[$key]['av'] = "<img src='images/icons/green_point.png' alt='' />";
 								}
 							}
 						}
 						else
 						{
-							$list_array[$key][av] = "<img src='images/icons/green_point.png' alt='' />";
+							$list_array[$key]['av'] = "<img src='images/icons/green_point.png' alt='' />";
 						}
 					}
 					
-					$sample_id = $list_array[$key][id];
+					$sample_id = $list_array[$key]['id'];
 					$sample_security = new SampleSecurity($sample_id);
 					
 					if ($sample_security->is_access(1, false))
 					{
 						$paramquery = array();
-						$paramquery[username] = $_GET[username];
-						$paramquery[session_id] = $_GET[session_id];
-						$paramquery[nav] = "sample";
-						$paramquery[run] = "detail";
-						$paramquery[sample_id] = $sample_id;
+						$paramquery['username'] = $_GET['username'];
+						$paramquery['session_id'] = $_GET['session_id'];
+						$paramquery['nav'] = "sample";
+						$paramquery['run'] = "detail";
+						$paramquery['sample_id'] = $sample_id;
 						$params = http_build_query($paramquery,'','&#38;');
 						
-						$list_array[$key][symbol][link]		= $params;
-						$list_array[$key][symbol][content] 	= "<img src='images/icons/sample.png' alt='' style='border:0;' />";
+						$list_array[$key]['symbol']['link']		= $params;
+						$list_array[$key]['symbol']['content'] 	= "<img src='images/icons/sample.png' alt='' style='border:0;' />";
 					
-						unset($list_array[$key][id]);
-						$list_array[$key][id][link] 			= $params;
-						$list_array[$key][id][content]		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
+						unset($list_array[$key]['id']);
+						$list_array[$key]['id']['link'] 		= $params;
+						$list_array[$key]['id']['content']		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
 					
-						$sample_name = $list_array[$key][name];
-						unset($list_array[$key][name]);
-						$list_array[$key][name][link] 		= $params;
-						$list_array[$key][name][content]		= $sample_name;
+						$sample_name = $list_array[$key]['name'];
+						unset($list_array[$key]['name']);
+						$list_array[$key]['name']['link'] 		= $params;
+						$list_array[$key]['name']['content']	= $sample_name;
 					}
 					else
 					{
-						$list_array[$key][symbol]	= "<img src='core/images/denied_overlay.php?image=images/icons/sample.png' alt='N' border='0' />";
-						$list_array[$key][id]		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
+						$list_array[$key]['symbol']	= "<img src='core/images/denied_overlay.php?image=images/icons/sample.png' alt='N' border='0' />";
+						$list_array[$key]['id']		= "S".str_pad($sample_id, 8 ,'0', STR_PAD_LEFT);
 					}
 				}
 			}

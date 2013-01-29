@@ -3,7 +3,7 @@
  * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -175,7 +175,7 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
     		$item_holder = $event_object->get_item_holder();
     		$item_holder_name = $event_object->get_item_holder_name();
     		
-    		if ($get_array[nav] == "sample" and is_numeric($get_array[sample_id]) and !$get_array['parent'] and !$get_array['parent_key'])
+    		if ($get_array['nav'] == "sample" and is_numeric($get_array['sample_id']) and !$get_array['parent'] and !$get_array['parent_key'])
     		{
     			$transaction_id = $transaction->begin();
     			
@@ -277,7 +277,7 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
     				}
     			}
     			
-    			if (self::create($get_array[sample_id], $event_object->get_item_id(), $get_array[key], $post_array[keywords], $post_array[description], null, $parent) == false)
+    			if (self::create($get_array['sample_id'], $event_object->get_item_id(), $get_array['key'], $post_array['keywords'], $post_array['description'], null, $parent) == false)
     			{
     				if ($transaction_id != null)
 	    			{

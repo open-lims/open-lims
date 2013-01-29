@@ -3,7 +3,7 @@
  * @package project
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -74,12 +74,12 @@ class ProjectStatusRelation implements ProjectStatusRelationInterface
     		{
     			foreach($project_status_array as $key => $value)
     			{
-    				if ($value[id] == $this->status_id)
+    				if ($value['id'] == $this->status_id)
     				{
     					return true;
     				}
     				
-    				if ($value[id] == $status_id)
+    				if ($value['id'] == $status_id)
     				{
     					return false;
     				}	
@@ -112,11 +112,11 @@ class ProjectStatusRelation implements ProjectStatusRelationInterface
     			
     			foreach($project_status_array as $key => $value) {
     				
-    				if ($value[id] == $this->status_id) {
+    				if ($value['id'] == $this->status_id) {
     					return false;
     				}
     				
-    				if ($value[id] == $status_id) {
+    				if ($value['id'] == $status_id) {
     					return true;
     				}
     				
@@ -160,10 +160,10 @@ class ProjectStatusRelation implements ProjectStatusRelationInterface
     			{
     				if ($return_next == true)
     				{
-    					return $value[id];
+    					return $value['id'];
     				}
     				
-    				if ($value[id] == $this->status_id)
+    				if ($value['id'] == $this->status_id)
     				{
     					$return_next = true;
     				}
@@ -197,11 +197,11 @@ class ProjectStatusRelation implements ProjectStatusRelationInterface
     		{
     			foreach($project_status_array as $key => $value)
     			{
-    				if ($value[id] == $this->status_id)
+    				if ($value['id'] == $this->status_id)
     				{
     					return $previous_id;
     				}
-    				$previous_id = $this->value[id];
+    				$previous_id = $this->value['id'];
     			}
     			return null;
     		}

@@ -1,116 +1,84 @@
-#login_footer {
-	position: absolute;
-	height: 100px;
-	width: 98%;
-	bottom: 0;
-	background-image: url(../images/login_logo.png);
-	background-repeat: no-repeat;
-	background-position: bottom right;
-}
-
 /* Login */
-.login_container {
-	font: normal 0.8em Verdana, Helvetica, sans-serif;
-	border: 1px #D0D0D0 solid;
-	width: 35em;
-	margin-left: auto;
-	margin-right: auto;
-	padding: 0;
-	margin-bottom: 0;
-}
-
-.login_title {
-	background-color: #C0C0C0;
-	text-align: center;
-}
-
-.login_main_container {
-	margin-left: auto;
-	margin-right: auto;
-	width: 30em;
-}
-
-.login_image {
-	float: left;
-	width: 8em;
-}
-
-.login_field {
-	width: 20em;
-	margin-left: 8em;
-}
-
-.smallLoginText {
-	font: normal 0.8em Verdana, Helvetica, sans-serif;
-	color: #A0A0A0;
-}
-
-.smallLoginText a {
-	color: #A0A0A0;
-	text-decoration: none;
-}
-
-.smallLoginText a:hover,.smallLoginText a:focus,.smallLoginText a:active
-	{
-	color: red;
-	text-decoration: underline;
-}
-
-.login {
-	border: 1px #C0C0C0 solid;
-	width: 170px;
-}
-
-.login:hover,.login:focus {
-	border: 1px #336699 solid;
-	width: 170px;
-}
-
-.login_button {
-	border: 1px #C0C0C0 solid;
-	width: 50px;
-	color: black;
-	background-color: white;
-}
-
-.login_button:hover,.login_button:focus {
-	border: 1px #336699 solid;
-}
-
-.login_right_buttons {
-	width: 99%;
-	text-align: right;
-}
-
-.info_login_container {
-	font: normal 0.6em Verdana, Helvetica, sans-serif;
-	color: #C0C0C0;
-	width: 60em;
-	margin-left: auto;
-	margin-right: auto;
-	text-align: center;
-	clear: both;
-}
-
-.nologin_field {
-	font: normal 0.8em Verdana, Helvetica, sans-serif;
-	width: 26em;
-	margin-left: 10em;
-	text-align: justify;
-}
-
-.login_important {
-	text-align: center;
-	font: normal 0.8em Verdana, Helvetica, sans-serif;
-}
-
-.login_header {
-	height: 130px;
+#LoginWrapper
+{
+	height: 331px;
 	width: 968px;
-	margin-bottom: 2%;
-	margin-left: auto;
-	margin-right: auto;
+	margin: 0 auto 10px auto;
 	background-image: url(../images/panorama.jpg);
 	background-repeat: repeat-x;
-	background-position: bottom left;
+	background-position: top center;
+}	
+#LoginContainer
+{
+	font: normal 12px Verdana, Helvetica, sans-serif;
+	color: white;
+	text-shadow: 1px 1px black;
+	border-left: 1px #D0D0D0 solid;
+	border-right: 1px #D0D0D0 solid;
+	width: 300px;
+	height: 281px;
+	margin-top: 0;
+	margin-left: 323px;;
+	padding: 50px 10px 0 10px;
+}
+#LoginTitle 
+{
+	text-align: center;
+}
+#LoginTable
+{
+	width: 300px;
+}
+#LoginTable tr td:first-child
+{
+	width: 90px;
+}
+#LoginFooter
+{
+	font: normal 9px Verdana, Helvetica, sans-serif;
+	text-align: center;
+}
+#LoginFooter a
+{
+	color: #444444;
+}
+.LoginElement
+{
+	margin: 20px;
+}
+.LoginElement label
+{
+	display:block;
+}
+.LoginTextfield
+{
+	width: 250px;
+	-moz-box-shadow: 2px 2px 2px #101010;
+  	-webkit-box-shadow: 2px 2px 2px #101010;
+ 	box-shadow: 2px 2px 2px #101010;
+}
+.LoginLanguageSelect
+{
+	width: 250px;
+	-moz-box-shadow: 2px 2px 2px #101010;
+  	-webkit-box-shadow: 2px 2px 2px #101010;
+ 	box-shadow: 2px 2px 2px #101010;
+}
+#BaseLoginPasswordForgot
+{
+	margin-top: 5px;
+	float: right;
+}
+#BaseLoginPasswordForgot:hover
+{
+	text-decoration: underline;
+	cursor: pointer; 
+}
+.BaseLoginForgotTextfield
+{
+	width: 270px;
+}
+.LoginErrorArrowMessage div
+{
+	color: red !important;
 }

@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -752,25 +752,38 @@ class DatetimeHandler implements DatetimeHandlerInterface
      */
     public function get_date()
     {
+    	global $regional;
+    	
     	if ($this->mktime)
     	{
+    		if (is_object($regional))
+    		{
+    			$format = $regional->get_date_display_format();
+    		}
+    		elseif($format == null and !is_object($regional))
+    		{
+    			$format = "Y-m-d";
+    		}
+    		
     		if ($this->ignore_timezone == false)
     		{
 	    		if ($this->user_timezone)
 	    		{
 	    			$mktime = $this->mktime + ($this->user_timezone * 3600);
-	    			return date("Y-m-d", $mktime);
 	    		}
 	    		else
 	    		{
 	    			$mktime = $this->mktime + ($this->server_timezone * 3600);
-	    			return date("Y-m-d", $mktime);
 	    		}  
     		}
     		else
     		{
-    			return  date("Y-m-d", $this->mktime);
-    		}  		
+    			$mktime = $this->mktime;
+    		}  
+
+    		$date_string = date($format, $mktime);
+    		$date_string = self::replace_language_specific_parts($format, $mktime, $date_string);    		
+    		return $date_string;
     	}
     	else
     	{
@@ -780,29 +793,101 @@ class DatetimeHandler implements DatetimeHandlerInterface
     
     /**
      * @see DatetimeHandlerInterface::get_time()
+     * @param bool $display_second
      * @return string
      */
-    public function get_time()
+    public function get_time($display_second = true)
     {
+    	global $regional;
+    	
     	if ($this->mktime)
     	{
+    		if (is_object($regional))
+    		{
+    			$time_display_format = $regional->get_time_display_format();
+    			
+    			if ($display_second == false)
+    			{
+    				$time_display_format[1] = str_replace(":s","",$time_display_format[1]);
+    			}
+    			
+    			$format = $time_display_format[1];
+    		}
+    		elseif($format == null and !is_object($regional))
+    		{
+    			$format = "H:i:s";
+    		}
+    		
     		if ($this->ignore_timezone == false)
     		{
 	    		if ($this->user_timezone)
 	    		{
 	    			$mktime = $this->mktime + ($this->user_timezone * 3600);
-	    			return date("H:i:s", $mktime);
+	    			return date($format, $mktime);
 	    		}
 	    		else
 	    		{
 	    			$mktime = $this->mktime + ($this->server_timezone * 3600);
-	    			return date("H:i:s", $mktime);
+	    			return date($format, $mktime);
 	    		}   
 	    	}
 	    	else
 	    	{
-    			return date("H:i:s", $this->mktime);
+    			return date($format, $this->mktime);
     		} 	 		
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+	/**
+     * @see DatetimeHandlerInterface::get_datetime()
+     * @param bool $display_second
+     * @return string 
+     */
+    public function get_datetime($display_second = true)
+    {
+    	global $regional;
+    	
+    	if ($this->mktime)
+    	{
+    		if (is_object($regional))
+    		{
+    			$time_display_format = $regional->get_time_display_format();
+    			
+    			if ($display_second == false)
+    			{
+    				$time_display_format[1] = str_replace(":s","",$time_display_format[1]);
+    			}
+    			
+    			$format = $regional->get_date_display_format()." ".$time_display_format[1];
+    		}
+    		else
+    		{
+    			return null;
+    		}
+    		
+    		if ($this->ignore_timezone == false)
+    		{
+	    		if ($this->user_timezone)
+	    		{
+	    			$mktime = $this->mktime + ($this->user_timezone * 3600);
+	    		}
+	    		else
+	    		{
+	    			$mktime = $this->mktime + ($this->server_timezone * 3600);
+	    		}   
+    		}
+    		else
+    		{
+    			$mktime = $this->mktime;
+    		} 	
+    			
+    		$date_string = date($format, $mktime);
+    		$date_string = self::replace_language_specific_parts($format, $mktime, $date_string);    		
+    		return $date_string;
     	}
     	else
     	{
@@ -813,29 +898,51 @@ class DatetimeHandler implements DatetimeHandlerInterface
     /**
      * @see DatetimeHandlerInterface::get_formatted_string()
      * @param string $format Use php-function date() chars for format
+     * @param bool $display_second
      * @return string 
      */
-    public function get_formatted_string($format)
+    public function get_formatted_string($format = null, $display_second = true)
     {
+    	global $regional;
+    	
     	if ($this->mktime)
     	{
+    		if ($format == null and is_object($regional))
+    		{
+    			$time_display_format = $regional->get_time_display_format();
+    			
+    			if ($display_second == false)
+    			{
+    				$time_display_format[1] = str_replace(":s","",$time_display_format[1]);
+    			}
+    			
+    			$format = $regional->get_date_display_format()." ".$time_display_format[1];
+    		}
+    		elseif($format == null and !is_object($regional))
+    		{
+    			return null;
+    		}
+    		
+    		
     		if ($this->ignore_timezone == false)
     		{
 	    		if ($this->user_timezone)
 	    		{
 	    			$mktime = $this->mktime + ($this->user_timezone * 3600);
-	    			return date($format, $mktime);
 	    		}
 	    		else
 	    		{
 	    			$mktime = $this->mktime + ($this->server_timezone * 3600);
-	    			return date($format, $mktime);
 	    		}   
     		}
     		else
     		{
-    			return date($format, $this->mktime);
-    		} 		
+    			$mktime = $this->mktime;
+    		} 	
+
+    		$date_string = date($format, $mktime);
+    		$date_string = self::replace_language_specific_parts($format, $mktime, $date_string);    		
+    		return $date_string;
     	}
     	else
     	{
@@ -891,5 +998,34 @@ class DatetimeHandler implements DatetimeHandlerInterface
     	}
     }
     
+    private static function replace_language_specific_parts($format, $mktime, $date_string)
+    {
+    	if ($format and $date_string)
+    	{
+    		$replacement_character_array = array("l","D","F","M","S");
+    		
+    		foreach($replacement_character_array as $key => $value)
+    		{
+	    		if (($position = strpos($format,$value)) !== false)
+	    		{
+	    			$datetime_language_array = Language::get_datetime_array();
+	    			$needle = date($value, $mktime);
+	    			$needle_position = strpos($date_string,$needle);
+	    			$needle_length = strlen($needle);
+	    			$replace_with = $datetime_language_array[$value][$needle];
+	    			if ($needle and $replace_with)
+	    			{
+	    				$date_string = substr_replace($date_string, $replace_with, $needle_position, $needle_length);
+	    			}
+	    		}
+    		}
+
+    		return $date_string;
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
 }
 ?>

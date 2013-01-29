@@ -3,7 +3,7 @@
  * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -399,7 +399,7 @@ class SampleRequest
 			$sample_security = new SampleSecurity(null);
 		}
 			
-		switch($_GET[run]):
+		switch($_GET['run']):
 		
 			case ("new"):
 			case ("new_subsample"):
@@ -518,7 +518,7 @@ class SampleRequest
 							{
 								if (method_exists($module_dialog['class'], $module_dialog['method']))
 								{
-									$module_dialog['class']::$module_dialog[method]("sample", $_GET['sample_id'], true, false);
+									$module_dialog['class']::$module_dialog['method']("sample", $_GET['sample_id'], true, false);
 								}
 								else
 								{
@@ -746,13 +746,7 @@ class SampleRequest
 				require_once("core/modules/base/common.request.php");
 				CommonRequest::common_dialog();
 			break;
-				
-			// Search
-			case("search"):
-				require_once("core/modules/base/common.request.php");
-				CommonRequest::search_dialog();
-			break;
-			
+							
 			default:
 				require_once("io/sample.io.php");
 				SampleIO::list_user_related_samples();

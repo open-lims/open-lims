@@ -3,7 +3,7 @@
  * @package project
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -43,7 +43,7 @@ class ProjectAjax
 	{
 		$argument_array = json_decode($json_argument_array);
 		
-		$user_id = $argument_array[0][1];
+		$user_id = $argument_array[1];
 		
 		if (is_numeric($user_id))
 		{
@@ -73,33 +73,33 @@ class ProjectAjax
 					$list_array[$key]['template']['label'] = $tmp_template;
 					$list_array[$key]['template']['content'] = $tmp_template;
 					
-					$tmp_status= trim($list_array[$key][status]);
-					unset($list_array[$key][status]);
-					$list_array[$key][status][label] = $tmp_status;
-					$list_array[$key][status][content] = $tmp_status;
+					$tmp_status= trim($list_array[$key]['status']);
+					unset($list_array[$key]['status']);
+					$list_array[$key]['status']['label'] = $tmp_status;
+					$list_array[$key]['status']['content'] = $tmp_status;
 					
-					if ($list_array[$key][deleted] == "t")
+					if ($list_array[$key]['deleted'] == "t")
 					{
-						$list_array[$key][name][content] = "<span class='crossed'>".$list_array[$key][name][content]."</span>";
-						$list_array[$key][template][content] = "<span class='crossed'>".$list_array[$key][template][content]."</span>";
-						$list_array[$key][status][content] = "<span class='crossed'>".$list_array[$key][status][content]."</span>";
+						$list_array[$key]['name']['content'] = "<span class='crossed'>".$list_array[$key]['name']['content']."</span>";
+						$list_array[$key]['template']['content'] = "<span class='crossed'>".$list_array[$key]['template']['content']."</span>";
+						$list_array[$key]['status']['content'] = "<span class='crossed'>".$list_array[$key]['status']['content']."</span>";
 					}
 					
-					$list_array[$key][symbol] = "<img src='images/icons/project.png' alt='N' border='0' />";
+					$list_array[$key]['symbol'] = "<img src='images/icons/project.png' alt='N' border='0' />";
 					
 					
-					$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
-					$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+					$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
+					$list_array[$key]['datetime'] = $datetime_handler->get_datetime(false);
 					
 					$proejct_paramquery = array();
-					$project_paramquery[username] = $_GET[username];
-					$project_paramquery[session_id] = $_GET[session_id];
-					$project_paramquery[nav] = "project";
-					$project_paramquery[run] = "detail";
-					$project_paramquery[project_id] = $value[id];
+					$project_paramquery['username'] = $_GET['username'];
+					$project_paramquery['session_id'] = $_GET['session_id'];
+					$project_paramquery['nav'] = "project";
+					$project_paramquery['run'] = "detail";
+					$project_paramquery['project_id'] = $value['id'];
 					$project_params = http_build_query($project_paramquery, '', '&#38;');
 					
-					$list_array[$key][name][link] = $project_params;
+					$list_array[$key]['name']['link'] = $project_params;
 				}
 				
 			}
@@ -127,7 +127,7 @@ class ProjectAjax
 	{		
 		$argument_array = json_decode($json_argument_array);
 		
-		$user_id = $argument_array[0][1];
+		$user_id = $argument_array[1];
 		$user = new User($user_id);
 		
 		if (is_numeric($user_id))
@@ -158,7 +158,7 @@ class ProjectAjax
 		
 		$argument_array = json_decode($json_argument_array);
 		
-		$organisation_unit_id = $argument_array[0][1];
+		$organisation_unit_id = $argument_array[1];
 		
 		if (is_numeric($organisation_unit_id))
 		{			
@@ -176,54 +176,54 @@ class ProjectAjax
 			{
 				foreach($list_array as $key => $value)
 				{
-					$tmp_name = trim($list_array[$key][name]);
-					unset($list_array[$key][name]);
-					$list_array[$key][name][label] = $tmp_name;
-					$list_array[$key][name][content] = $tmp_name;
+					$tmp_name = trim($list_array[$key]['name']);
+					unset($list_array[$key]['name']);
+					$list_array[$key]['name']['label'] = $tmp_name;
+					$list_array[$key]['name']['content'] = $tmp_name;
 
-					$tmp_template = trim($list_array[$key][template]);
-					unset($list_array[$key][template]);
-					$list_array[$key][template][label] = $tmp_template;
-					$list_array[$key][template][content] = $tmp_template;
+					$tmp_template = trim($list_array[$key]['template']);
+					unset($list_array[$key]['template']);
+					$list_array[$key]['template']['label'] = $tmp_template;
+					$list_array[$key]['template']['content'] = $tmp_template;
 					
-					$tmp_status= trim($list_array[$key][status]);
-					unset($list_array[$key][status]);
-					$list_array[$key][status][label] = $tmp_status;
-					$list_array[$key][status][content] = $tmp_status;
+					$tmp_status= trim($list_array[$key]['status']);
+					unset($list_array[$key]['status']);
+					$list_array[$key]['status']['label'] = $tmp_status;
+					$list_array[$key]['status']['content'] = $tmp_status;
 					
-					if ($list_array[$key][deleted] == "t")
+					if ($list_array[$key]['deleted'] == "t")
 					{
-						$list_array[$key][name][content] = "<span class='crossed'>".$list_array[$key][name][content]."</span>";
-						$list_array[$key][template][content] = "<span class='crossed'>".$list_array[$key][template][content]."</span>";
-						$list_array[$key][status][content] = "<span class='crossed'>".$list_array[$key][status][content]."</span>";
+						$list_array[$key]['name']['content'] = "<span class='crossed'>".$list_array[$key]['name']['content']."</span>";
+						$list_array[$key]['template']['content'] = "<span class='crossed'>".$list_array[$key]['template']['content']."</span>";
+						$list_array[$key]['status']['content'] = "<span class='crossed'>".$list_array[$key]['status']['content']."</span>";
 					}
 					
-					$list_array[$key][symbol] = "<img src='images/icons/project.png' alt='N' border='0' />";
+					$list_array[$key]['symbol'] = "<img src='images/icons/project.png' alt='N' border='0' />";
 					
 					
-					$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
-					$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+					$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
+					$list_array[$key]['datetime'] = $datetime_handler->get_datetime(false);
 					
 					$proejct_paramquery = array();
-					$project_paramquery[username] = $_GET[username];
-					$project_paramquery[session_id] = $_GET[session_id];
-					$project_paramquery[nav] = "project";
-					$project_paramquery[run] = "detail";
-					$project_paramquery[project_id] = $value[id];
+					$project_paramquery['username'] = $_GET['username'];
+					$project_paramquery['session_id'] = $_GET['session_id'];
+					$project_paramquery['nav'] = "project";
+					$project_paramquery['run'] = "detail";
+					$project_paramquery['project_id'] = $value['id'];
 					$project_params = http_build_query($project_paramquery, '', '&#38;');
 					
-					$list_array[$key][name][link] = $project_params;
+					$list_array[$key]['name']['link'] = $project_params;
 					
-					if ($list_array[$key][owner_id])
+					if ($list_array[$key]['owner_id'])
 					{
-						$user = new User($list_array[$key][owner_id]);
+						$user = new User($list_array[$key]['owner_id']);
 					}
 					else
 					{
 						$user = new User(1);
 					}
 					
-					$list_array[$key][owner] = $user->get_full_name(true);
+					$list_array[$key]['owner'] = $user->get_full_name(true);
 				}
 				
 			}
@@ -253,7 +253,7 @@ class ProjectAjax
 		
 		$argument_array = json_decode($json_argument_array);
 		
-		$organisation_unit_id = $argument_array[0][1];
+		$organisation_unit_id = $argument_array[1];
 		
 		if (is_numeric($organisation_unit_id))
 		{
@@ -308,26 +308,26 @@ class ProjectAjax
 			{				
 				foreach($list_array as $key => $value)
 				{
-					$tmp_name = trim($list_array[$key][name]);
-					unset($list_array[$key][name]);
-					$list_array[$key][name][label] = $tmp_name;
-					$list_array[$key][name][content] = $tmp_name;
+					$tmp_name = trim($list_array[$key]['name']);
+					unset($list_array[$key]['name']);
+					$list_array[$key]['name']['label'] = $tmp_name;
+					$list_array[$key]['name']['content'] = $tmp_name;
 
-					$tmp_template = trim($list_array[$key][template]);
-					unset($list_array[$key][template]);
-					$list_array[$key][template][label] = $tmp_template;
-					$list_array[$key][template][content] = $tmp_template;
+					$tmp_template = trim($list_array[$key]['template']);
+					unset($list_array[$key]['template']);
+					$list_array[$key]['template']['label'] = $tmp_template;
+					$list_array[$key]['template']['content'] = $tmp_template;
 					
-					$tmp_status= trim($list_array[$key][status]);
-					unset($list_array[$key][status]);
-					$list_array[$key][status][label] = $tmp_status;
-					$list_array[$key][status][content] = $tmp_status;
+					$tmp_status= trim($list_array[$key]['status']);
+					unset($list_array[$key]['status']);
+					$list_array[$key]['status']['label'] = $tmp_status;
+					$list_array[$key]['status']['content'] = $tmp_status;
 					
-					if ($list_array[$key][deleted] == "t")
+					if ($list_array[$key]['deleted'] == "t")
 					{
-						$list_array[$key][name][content] = "<span class='crossed'>".$list_array[$key][name][content]."</span>";
-						$list_array[$key][template][content] = "<span class='crossed'>".$list_array[$key][template][content]."</span>";
-						$list_array[$key][status][content] = "<span class='crossed'>".$list_array[$key][status][content]."</span>";
+						$list_array[$key]['name']['content'] = "<span class='crossed'>".$list_array[$key]['name']['content']."</span>";
+						$list_array[$key]['template']['content'] = "<span class='crossed'>".$list_array[$key]['template']['content']."</span>";
+						$list_array[$key]['status']['content'] = "<span class='crossed'>".$list_array[$key]['status']['content']."</span>";
 					}
 					
 					if ($argument_array[1][1] == true)
@@ -350,54 +350,54 @@ class ProjectAjax
 						
 						if ($checkbox_class)
 						{
-							$list_array[$key][checkbox] = "<input type='checkbox' name='parent-project-".$list_array[$key][id]."' value='1' class='".$checkbox_class."' />";
+							$list_array[$key]['checkbox'] = "<input type='checkbox' name='parent-project-".$list_array[$key]['id']."' value='1' class='".$checkbox_class."' />";
 						}
 						else
 						{
-							$list_array[$key][checkbox] = "<input type='checkbox' name='parent-project-".$list_array[$key][id]."' value='1' />";
+							$list_array[$key]['checkbox'] = "<input type='checkbox' name='parent-project-".$list_array[$key]['id']."' value='1' />";
 						}
 						
-						$list_array[$key][symbol] 	= "<img src='images/icons/project.png' alt='' style='border:0;' />";
+						$list_array[$key]['symbol'] 	= "<img src='images/icons/project.png' alt='' style='border:0;' />";
 					}
 					else
 					{
-						$project_id = $list_array[$key][id];
+						$project_id = $list_array[$key]['id'];
 						$project_security = new ProjectSecurity($project_id);
 						
 						if ($project_security->is_access(1, false))
 						{
 							$paramquery = array();
-							$paramquery[username] = $_GET[username];
-							$paramquery[session_id] = $_GET[session_id];
-							$paramquery[nav] = "project";
-							$paramquery[run] = "detail";
-							$paramquery[project_id] = $project_id;
+							$paramquery['username'] = $_GET['username'];
+							$paramquery['session_id'] = $_GET['session_id'];
+							$paramquery['nav'] = "project";
+							$paramquery['run'] = "detail";
+							$paramquery['project_id'] = $project_id;
 							$params = http_build_query($paramquery,'','&#38;');
 							
-							$list_array[$key][symbol][link]		= $params;
-							$list_array[$key][symbol][content] 	= "<img src='images/icons/project.png' alt='' style='border:0;' />";
+							$list_array[$key]['symbol']['link']		= $params;
+							$list_array[$key]['symbol']['content'] 	= "<img src='images/icons/project.png' alt='' style='border:0;' />";
 						
-							$list_array[$key][name][link] 		= $params;
+							$list_array[$key]['name']['link'] 		= $params;
 						}
 						else
 						{
-							$list_array[$key][symbol]	= "<img src='core/images/denied_overlay.php?image=images/icons/project.png' alt='N' border='0' />";
+							$list_array[$key]['symbol']	= "<img src='core/images/denied_overlay.php?image=images/icons/project.png' alt='N' border='0' />";
 						}
 					}
 					
-					$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
-					$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y");
+					$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
+					$list_array[$key]['datetime'] = $datetime_handler->get_datetime(false);
 				
-					if ($list_array[$key][owner])
+					if ($list_array[$key]['owner'])
 					{
-						$user = new User($list_array[$key][owner]);
+						$user = new User($list_array[$key]['owner']);
 					}
 					else
 					{
 						$user = new User(1);
 					}
 					
-					$list_array[$key][owner] = $user->get_full_name(true);
+					$list_array[$key]['owner'] = $user->get_full_name(true);
 				}
 			}
 			else
@@ -558,10 +558,10 @@ class ProjectAjax
 						
 							case "item":
 								$paramquery = array();
-								$paramquery[username] = $_GET[username];
-								$paramquery[session_id] = $_GET[session_id];
-								$paramquery[nav] = "project";
-								$paramquery[project_id] = $_GET[project_id];
+								$paramquery['username'] = $_GET['username'];
+								$paramquery['session_id'] = $_GET['session_id'];
+								$paramquery['nav'] = "project";
+								$paramquery['project_id'] = $_GET['project_id'];
 
 								require_once("core/modules/item/common/item_common.io.php");
 								
@@ -572,54 +572,54 @@ class ProjectAjax
 															
 							case "extension":
 								$paramquery = array();
-								$paramquery[username] = $_GET[username];
-								$paramquery[session_id] = $_GET[session_id];
-								$paramquery[nav] = "project";
-								$paramquery[run] = "extension";
-								$paramquery[project_id] = $_GET[project_id];
-								$paramquery[extension] = $value[extension];
-								$paramquery[retrace] = Retrace::create_retrace_string();
+								$paramquery['username'] = $_GET['username'];
+								$paramquery['session_id'] = $_GET['session_id'];
+								$paramquery['nav'] = "project";
+								$paramquery['run'] = "extension";
+								$paramquery['project_id'] = $_GET['project_id'];
+								$paramquery['extension'] = $value['extension'];
+								$paramquery['retrace'] = Retrace::create_retrace_string();
 								$params = http_build_query($paramquery,'','&#38;');
 			
-								$result[$counter][name] = "Run ".$value[name];
-								$result[$counter][depends] = false;
-								$result[$counter][params] = $params;	
+								$result[$counter]['name'] = "Run ".$value['name'];
+								$result[$counter]['depends'] = false;
+								$result[$counter]['params'] = $params;	
 								
-								if ($value[fulfilled] == 1)
+								if ($value['fulfilled'] == 1)
 								{
-									if ($value[occurrence] == "multiple")
+									if ($value['occurrence'] == "multiple")
 									{
-										$result[$counter][type] = "link";
-										$result[$counter][image] = "add_extension_done";
+										$result[$counter]['type'] = "link";
+										$result[$counter]['image'] = "add_extension_done";
 									}
 									else
 									{
-										$result[$counter][type] = false;
-										$result[$counter][image] = "add_extension_done_na";
+										$result[$counter]['type'] = false;
+										$result[$counter]['image'] = "add_extension_done_na";
 									}
 								}
-								elseif($value[fulfilled] == 0)
+								elseif($value['fulfilled'] == 0)
 								{
-									if ($value[occurrence] == "multiple")
+									if ($value['occurrence'] == "multiple")
 									{
-										$result[$counter][type] = "link";
-										$result[$counter][image] = "add_extension_wait";
+										$result[$counter]['type'] = "link";
+										$result[$counter]['image'] = "add_extension_wait";
 									}
 									else
 									{
-										$result[$counter][type] = false;
-										$result[$counter][image] = "add_extension_wait_na";
+										$result[$counter]['type'] = false;
+										$result[$counter]['image'] = "add_extension_wait_na";
 									}
 								}
 								else
 								{
-									$result[$counter][type] = "link";
-									$result[$counter][image] = "add_extension";
+									$result[$counter]['type'] = "link";
+									$result[$counter]['image'] = "add_extension";
 								}
 								
-								if ($value[requirement] == "optional" and $value[fulfilled] != 0)
+								if ($value['requirement'] == "optional" and $value['fulfilled'] != 0)
 								{
-									$result[$counter][name] = $result[$counter][name]." (optional)";
+									$result[$counter]['name'] = $result[$counter]['name']." (optional)";
 								}			
 								
 								$counter++;
@@ -633,10 +633,6 @@ class ProjectAjax
 				{
 					$template->set_var("status_action",$result);
 				}
-				else
-				{
-					$template->set_var("status_action",false);
-				}
 				
 				$template->set_var("write",true);
 			}
@@ -646,46 +642,46 @@ class ProjectAjax
 			}
 			
 			$paramquery = array();
-			$paramquery[username] = $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav] = "project";
-			$paramquery[run] = "common_dialog";
-			$paramquery[folder_id] = ProjectFolder::get_supplementary_folder($_GET[project_id]);
-			$paramquery[dialog] = "file_add";
-			$paramquery[retrace] = Retrace::create_retrace_string();
-			unset($paramquery[nextpage]);
+			$paramquery['username'] = $_GET['username'];
+			$paramquery['session_id'] = $_GET['session_id'];
+			$paramquery['nav'] = "project";
+			$paramquery['run'] = "common_dialog";
+			$paramquery['folder_id'] = ProjectFolder::get_supplementary_folder($_GET['project_id']);
+			$paramquery['dialog'] = "file_add";
+			$paramquery['retrace'] = Retrace::create_retrace_string();
+			unset($paramquery['nextpage']);
 			$supplementary_params = http_build_query($paramquery,'','&#38;');
 			
 			$template->set_var("supplementary_params",$supplementary_params);
 			
 			
 			$log_paramquery = $_GET;
-			$log_paramquery[run] = "log_add";
-			unset($log_paramquery[nextpage]);
+			$log_paramquery['run'] = "log_add";
+			unset($log_paramquery['nextpage']);
 			$log_params = http_build_query($log_paramquery,'','&#38;');
 			
 			$template->set_var("log_params",$log_params);
 			
 			
 			$add_task_paramquery = $_GET;
-			$add_task_paramquery[run] = "add_task";
-			unset($add_task_paramquery[nextpage]);
+			$add_task_paramquery['run'] = "add_task";
+			unset($add_task_paramquery['nextpage']);
 			$add_task_params = http_build_query($add_task_paramquery,'','&#38;');
 			
 			$template->set_var("add_task_params",$add_task_params);
 			
 			
 			$show_tasks_paramquery = $_GET;
-			$show_tasks_paramquery[run] = "show_tasks";
-			unset($show_tasks_paramquery[nextpage]);
+			$show_tasks_paramquery['run'] = "show_tasks";
+			unset($show_tasks_paramquery['nextpage']);
 			$show_tasks_params = http_build_query($show_tasks_paramquery,'','&#38;');
 			
 			$template->set_var("show_tasks_params",$show_tasks_params);
 			
 			
 			$subproject_paramquery = $_GET;
-			$subproject_paramquery[run] = "new_subproject";
-			unset($subproject_paramquery[nextpage]);
+			$subproject_paramquery['run'] = "new_subproject";
+			unset($subproject_paramquery['nextpage']);
 			$subproject_params = http_build_query($subproject_paramquery,'','&#38;');
 			
 			$template->set_var("add_subproject_params",$subproject_params);
@@ -713,7 +709,7 @@ class ProjectAjax
 			$_GET = unserialize($get_array);	
 		}
 		
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
 			if ($project_security->is_access(3, false) == true)
 			{
@@ -744,25 +740,25 @@ class ProjectAjax
 						
 							case "item":
 								
-								$amount = count($value[fulfilled]);
+								$amount = count($value['fulfilled']);
 								
 								if ($value['display'] == true)
 								{
-									$result[$counter][name] = $value[name];
-									$result[$counter][depends] = false;
-									if (is_array($value[fulfilled]) and count($value[fulfilled]) >= 1)
+									$result[$counter]['name'] = $value['name'];
+									$result[$counter]['depends'] = false;
+									if (is_array($value['fulfilled']) and count($value['fulfilled']) >= 1)
 									{
-										$result[$counter][status] = "ok";
+										$result[$counter]['status'] = "ok";
 									}
 									else
 									{
-										if ($value[requirement] != "optional")
+										if ($value['requirement'] != "optional")
 										{
-											$result[$counter][status] = "cancel";
+											$result[$counter]['status'] = "cancel";
 										}
 										else
 										{
-											$result[$counter][status] = "notice";
+											$result[$counter]['status'] = "notice";
 										}
 									}
 									$counter++;
@@ -770,7 +766,7 @@ class ProjectAjax
 								
 								if (is_array($value['sub_items']) and count($value['sub_items']) >= 1)
 								{
-									$result[$counter][status] = "line";
+									$result[$counter]['status'] = "line";
 									$counter++;
 									
 									foreach($value['sub_items'] as $sub_item_key => $sub_item_value)
@@ -779,30 +775,30 @@ class ProjectAjax
 										{
 											if ($sub_sub_item_value['element_type'] == "item")
 											{
-												$result[$counter][depends] = true;
+												$result[$counter]['depends'] = true;
 												
-												if ($value[fulfilled][$sub_item_key][name])
+												if ($value['fulfilled'][$sub_item_key]['name'])
 												{
-													$result[$counter][name] = $sub_sub_item_value[name]." (".$value[fulfilled][$sub_item_key][name].")";
+													$result[$counter]['name'] = $sub_sub_item_value['name']." (".$value['fulfilled'][$sub_item_key]['name'].")";
 												}
 												else
 												{
-													$result[$counter][name] = $sub_sub_item_value[name];
+													$result[$counter]['name'] = $sub_sub_item_value['name'];
 												}
 												
-												if (is_array($sub_sub_item_value[fulfilled]))
+												if (is_array($sub_sub_item_value['fulfilled']))
 												{
-													$result[$counter][status] = "ok";
+													$result[$counter]['status'] = "ok";
 												}
 												else
 												{
-													if ($sub_sub_item_value[requirement] != "optional")
+													if ($sub_sub_item_value['requirement'] != "optional")
 													{
-														$result[$counter][status] = "cancel";
+														$result[$counter]['status'] = "cancel";
 													}
 													else
 													{
-														$result[$counter][status] = "notice";
+														$result[$counter]['status'] = "notice";
 													}
 												}
 												
@@ -810,28 +806,28 @@ class ProjectAjax
 											}
 										}
 										
-										$result[$counter][status] = "line";
+										$result[$counter]['status'] = "line";
 										$counter++;
 									}
 								}
 							break;
 							
 							case "extension":
-								$result[$counter][name] = $value[name];
-								$result[$counter][depends] = false;
-								if ($value[fulfilled] == 1)
+								$result[$counter]['name'] = $value['name'];
+								$result[$counter]['depends'] = false;
+								if ($value['fulfilled'] == 1)
 								{
-									$result[$counter][status] = "ok";
+									$result[$counter]['status'] = "ok";
 								}
 								else
 								{
-									if ($value[requirement] != "optional")
+									if ($value['requirement'] != "optional")
 									{
-										$result[$counter][status] = "cancel";
+										$result[$counter]['status'] = "cancel";
 									}
 									else
 									{
-										$result[$counter][status] = "notice";
+										$result[$counter]['status'] = "notice";
 									}
 								}
 								$counter++;
@@ -842,8 +838,8 @@ class ProjectAjax
 				}
 				else
 				{
-					$result[$counter][icon] = "";
-					$result[$counter][name] = "No Requirements";
+					$result[$counter]['icon'] = "";
+					$result[$counter]['name'] = "No Requirements";
 				}
 	
 				$template->set_var("status_action",$result);

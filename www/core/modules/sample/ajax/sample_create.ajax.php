@@ -3,7 +3,7 @@
  * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -53,19 +53,19 @@ class SampleCreateAjax
 			
 					if ($organisation_unit->is_permission($user->get_user_id()) and $organisation_unit->get_stores_data() == true)
 					{
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $organisation_unit->get_name();		
+						$result[$counter]['value'] = $value;
+						$result[$counter]['content'] = $organisation_unit->get_name();		
 	
 						if ($sample_organ_unit == $value)
 						{
-							$result[$counter][selected] = "selected";
+							$result[$counter]['selected'] = "selected";
 						}
 						else
 						{
-							$result[$counter][selected] = "";
+							$result[$counter]['selected'] = "";
 						}
 						
-						$result[$counter][disabled] = "";
+						$result[$counter]['disabled'] = "";
 						
 						$counter++;
 					}
@@ -73,10 +73,10 @@ class SampleCreateAjax
 				
 				if (!$result)
 				{
-					$result[$counter][value] = "0";
-					$result[$counter][content] = "NO ORGANISATION UNIT FOUND!";
-					$result[$counter][selected] = "";
-					$result[$counter][disabled] = "disabled='disabled'";
+					$result[$counter]['value'] = "0";
+					$result[$counter]['content'] = "NO ORGANISATION UNIT FOUND!";
+					$result[$counter]['selected'] = "";
+					$result[$counter]['disabled'] = "disabled='disabled'";
 				}
 		
 				$template->set_var("option",$result);
@@ -108,19 +108,19 @@ class SampleCreateAjax
 						{
 							$sample_sub_template = new SampleTemplate($value);
 							
-							$result[$counter][value] = $value;
-							$result[$counter][content] = $sample_sub_template->get_name();		
+							$result[$counter]['value'] = $value;
+							$result[$counter]['content'] = $sample_sub_template->get_name();		
 		
 							if ($sample_template == $value)
 							{
-								$result[$counter][selected] = "selected";
+								$result[$counter]['selected'] = "selected";
 							}
 							else
 							{
-								$result[$counter][selected] = "";
+								$result[$counter]['selected'] = "";
 							}
 							
-							$result[$counter][disabled] = "";
+							$result[$counter]['disabled'] = "";
 							
 							$counter++;
 						}
@@ -128,25 +128,25 @@ class SampleCreateAjax
 				}
 				else
 				{
-					$result[$counter][value] = "0";
-					$result[$counter][content] = "NO TEMPLATES FOUND!";
-					$result[$counter][selected] = "";
-					$result[$counter][disabled] = "disabled='disabled'";
+					$result[$counter]['value'] = "0";
+					$result[$counter]['content'] = "NO TEMPLATES FOUND!";
+					$result[$counter]['selected'] = "";
+					$result[$counter]['disabled'] = "disabled='disabled'";
 				}
 				$template->set_var("option",$result);
 				
-				if ($session->is_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]) == true)
+				if ($session->is_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET['idk_unique_id']) == true)
 				{
-					$template->set_var("keywords", $session->read_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]));
+					$template->set_var("keywords", $session->read_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET['idk_unique_id']));
 				}
 				else
 				{
 					$template->set_var("keywords", "");
 				}
 				
-				if ($session->is_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]) == true)
+				if ($session->is_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET['idk_unique_id']) == true)
 				{
-					$template->set_var("description", $session->read_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]));
+					$template->set_var("description", $session->read_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET['idk_unique_id']));
 				}
 				else
 				{
@@ -171,7 +171,7 @@ class SampleCreateAjax
 
 				$template = new HTMLTemplate("sample/new_sample_page_3.html");
 				
-				if ($information_fields[manufacturer][name] and $information_fields[manufacturer][requirement] != "optional")
+				if ($information_fields['manufacturer']['name'] and $information_fields['manufacturer']['requirement'] != "optional")
 				{
 					$template->set_var("check_manufacturer", true);
 				}
@@ -180,7 +180,7 @@ class SampleCreateAjax
 					$template->set_var("check_manufacturer", false);
 				}
 				
-				if ($information_fields[expiry][name] and $information_fields[expiry][requirement] != "optional")
+				if ($information_fields['expiry']['name'] and $information_fields['expiry']['requirement'] != "optional")
 				{
 					$template->set_var("check_expiry", true);
 				}
@@ -189,7 +189,7 @@ class SampleCreateAjax
 					$template->set_var("check_expiry", false);
 				}
 				
-				if ($information_fields[location][name] and $information_fields[location][requirement] != "optional")
+				if ($information_fields['location']['name'] and $information_fields['location']['requirement'] != "optional")
 				{
 					$template->set_var("check_location", true);
 				}
@@ -207,7 +207,7 @@ class SampleCreateAjax
 					$template->set_var("name","");
 				}
 				
-				if ($information_fields[manufacturer][name])
+				if ($information_fields['manufacturer']['name'])
 				{
 					require_once("core/modules/manufacturer/io/manufacturer.io.php");
 					$template->set_var("show_manufacturer",true);
@@ -219,7 +219,7 @@ class SampleCreateAjax
 					$template->set_var("manufacturer_html","");
 				}
 				
-				if ($information_fields[expiry][name])
+				if ($information_fields['expiry']['name'])
 				{
 					$template->set_var("show_expiry",true);
 				}
@@ -228,7 +228,7 @@ class SampleCreateAjax
 					$template->set_var("show_expiry",false);
 				}
 				
-				if ($information_fields[location][name])
+				if ($information_fields['location']['name'])
 				{
 					$template->set_var("show_location",true);
 					
@@ -243,24 +243,24 @@ class SampleCreateAjax
 						{
 							$sample_location_obj = new Location($value);
 											
-							$result[$counter][value] = $value;
-							$result[$counter][content] = $sample_location_obj->get_name(true);		
+							$result[$counter]['value'] = $value;
+							$result[$counter]['content'] = $sample_location_obj->get_name(true);		
 		
 							if ($sample_location == $value)
 							{
-								$result[$counter][selected] = "selected";
+								$result[$counter]['selected'] = "selected";
 							}
 							else
 							{
-								$result[$counter][selected] = "";
+								$result[$counter]['selected'] = "";
 							}
 							$counter++;
 						}
 					}
 					else
 					{
-						$result[$counter][value] = "0";
-						$result[$counter][content] = "NO LOCATIONS FOUND!";
+						$result[$counter]['value'] = "0";
+						$result[$counter]['content'] = "NO LOCATIONS FOUND!";
 					}
 					$template->set_var("location",$result);
 				}
@@ -339,22 +339,22 @@ class SampleCreateAjax
 					
 					foreach($required_array as $key => $value)
 					{						
-						if ($value[xml_element] == "item")
+						if ($value['xml_element'] == "item")
 						{
-							if ($value[type] == "value")
+							if ($value['type'] == "value")
 							{
 								$is_value = true;
 							}
-							elseif($value[type] == "parentsample")
+							elseif($value['type'] == "parentsample")
 							{
 								$is_sample = true;
 								$sample_count++;
 							}
 						}
 						
-						if ($value[xml_element] == "type" and !$value[close] and $is_value == true)
+						if ($value['xml_element'] == "type" and !$value['close'] and $is_value == true)
 						{
-							$value_type_id = $value[id];
+							$value_type_id = $value['id'];
 						}
 					} 
 					
@@ -400,13 +400,13 @@ class SampleCreateAjax
 								
 								for($i=0;$i<=$sample_count-1;$i++)
 								{
-									$result[$i][id] = $i+1;
+									$result[$i]['id'] = $i+1;
 									
 									if ($sample_template_data_type == "sample")
 									{
-										if ($sample_template_data_array['sample-'.$result[$i][id].''])
+										if ($sample_template_data_array['sample-'.$result[$i]['id'].''])
 										{
-											$selected_id = $sample_template_data_array['sample-'.$result[$i][id].''];
+											$selected_id = $sample_template_data_array['sample-'.$result[$i]['id'].''];
 										}
 									}	
 									
@@ -418,15 +418,15 @@ class SampleCreateAjax
 										{
 											$sample = new Sample($value);
 											
-											$result[$i][$counter][value] = $value;
-											$result[$i][$counter][content] = $sample->get_name();
+											$result[$i][$counter]['value'] = $value;
+											$result[$i][$counter]['content'] = $sample->get_name();
 											if ($selected_id == $value)
 											{
-												$result[$i][$counter][selected] = "selected";
+												$result[$i][$counter]['selected'] = "selected";
 											}
 											else
 											{
-												$result[$i][$counter][selected] = "";
+												$result[$i][$counter]['selected'] = "";
 											}
 											
 											$counter++;
@@ -434,9 +434,9 @@ class SampleCreateAjax
 									}
 									else
 									{
-										$result[$i][0][value] = 0;
-										$result[$i][0][content] = "You have no samples";
-										$result[$i][0][selected] = "";
+										$result[$i][0]['value'] = 0;
+										$result[$i][0]['content'] = "You have no samples";
+										$result[$i][0]['selected'] = "";
 									}
 									unset($selected_id);
 								}

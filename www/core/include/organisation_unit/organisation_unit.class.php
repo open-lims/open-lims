@@ -3,7 +3,7 @@
  * @package organisation_unit
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -2266,8 +2266,8 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 				if ($value != $array[$layer])
 				{	
 					$data_array = array();
-					$data_array[id] = $value;
-					$data_array[layer] = $layer+1;	
+					$data_array['id'] = $value;
+					$data_array['layer'] = $layer+1;	
 						
 					array_push($return_array,$data_array);
 					
@@ -2302,8 +2302,8 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 		foreach($organisation_unit_access_array as $key => $value)
 		{
 			$data_array = array();
-			$data_array[id] = $value;
-			$data_array[layer] = 0;
+			$data_array['id'] = $value;
+			$data_array['layer'] = 0;
 			
 			array_push($return_array, $data_array);
 			

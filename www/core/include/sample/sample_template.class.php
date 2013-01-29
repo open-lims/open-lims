@@ -3,7 +3,7 @@
  * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -104,9 +104,9 @@ class SampleTemplate implements SampleTemplateInterface
 					
 					if ($value[1] == "oldl" and $value[2] != "#")
 					{
-						if ($value[3][type])
+						if ($value[3]['type'])
 						{
-							if ($value[3][type] == "sample")
+							if ($value[3]['type'] == "sample")
 							{
 								$oldl_found = true;
 							}
@@ -288,9 +288,9 @@ class SampleTemplate implements SampleTemplateInterface
 			
 					if ($value[1] == "location" or $value[1] == "manufacturer" or $value[1] == "expiry")
 					{
-			    		if ($value[3][id] != "#" and $value[3][type] != "#")
+			    		if ($value[3]['id'] != "#" and $value[3]['type'] != "#")
 			    		{
-				    		$return_array[$value[1]][name]		= $value[1];
+				    		$return_array[$value[1]]['name'] = $value[1];
 				    					    		
 				    		if ($value[3]['requirement'])
 				    		{
@@ -360,7 +360,7 @@ class SampleTemplate implements SampleTemplateInterface
 					$value[1] = trim(strtolower($value[1]));
 					$value[2] = trim(strtolower($value[2]));
 			
-		    		if ($value[3][id] != "#" and $value[3][type] != "#")
+		    		if ($value[3]['id'] != "#" and $value[3]['type'] != "#")
 		    		{
 			    		$return_array[$counter]['xml_element'] 		= $value[1];
 			    		
@@ -383,8 +383,8 @@ class SampleTemplate implements SampleTemplateInterface
 		    		}
 		    		else
 		    		{
-		    			$return_array[$counter][xml_element] 	= $value[1];
-		    			$return_array[$counter][close]			= "1";
+		    			$return_array[$counter]['xml_element'] 	= $value[1];
+		    			$return_array[$counter]['close']			= "1";
 		    			
 		    			$counter++;
 		    		}
@@ -425,7 +425,7 @@ class SampleTemplate implements SampleTemplateInterface
 					$value[1] = trim(strtolower($value[1]));
 					$value[2] = trim(strtolower($value[2]));
 			
-		    		if ($value[3][id] != "#" and $value[3][type] != "#")
+		    		if ($value[3]['id'] != "#" and $value[3]['type'] != "#")
 		    		{
 			    		$return_array[$counter] 				= $value[3];
 			    		$return_array[$counter]['xml_element'] 	= $value[1];
@@ -469,9 +469,9 @@ class SampleTemplate implements SampleTemplateInterface
 				
 				foreach($requirements as $key => $value)
 				{
-					if ($value[xml_element] == "item" and !$value[close])
+					if ($value['xml_element'] == "item" and !$value['close'])
 					{
-						if ($item_counter == $gid or $value[gid] === $gid)
+						if ($item_counter == $gid or $value['gid'] === $gid)
 						{
 				    		if (is_numeric($value['gid']))
 				    		{
@@ -510,7 +510,7 @@ class SampleTemplate implements SampleTemplateInterface
 						}
 					}
 					
-					if ($value[xml_element] == "item" and $value[close] == "1")
+					if ($value['xml_element'] == "item" and $value['close'] == "1")
 					{
 						$item_counter++;
 					}
@@ -547,9 +547,9 @@ class SampleTemplate implements SampleTemplateInterface
 								
 				foreach($requirements as $key => $value)
 				{
-					if ($value[xml_element] == "item" and !$value[close])
+					if ($value['xml_element'] == "item" and !$value['close'])
 					{
-						if ($item_counter == $gid or $value[$counter][gid] == $gid)
+						if ($item_counter == $gid or $value[$counter]['gid'] == $gid)
 						{
 							$in_item = true;
 						}
@@ -560,7 +560,7 @@ class SampleTemplate implements SampleTemplateInterface
 						array_push($return_array, $value);
 					}
 					
-					if ($value[xml_element] == "item" and $value[close] == "1")
+					if ($value['xml_element'] == "item" and $value['close'] == "1")
 					{
 						$in_item = false;
 						$item_counter++;
@@ -599,7 +599,7 @@ class SampleTemplate implements SampleTemplateInterface
 				
 				foreach($requirements as $key => $value)
 				{
-					if ($value[xml_element] == "class" and $value[name] == $class_name and !$value[close])
+					if ($value['xml_element'] == "class" and $value['name'] == $class_name and !$value['close'])
 					{
 						$in_class = true;	
 					}
@@ -609,7 +609,7 @@ class SampleTemplate implements SampleTemplateInterface
 						array_push($return_array, $value);
 					}
 					
-					if ($value[xml_element] == "class" and $value[close] == "1")
+					if ($value['xml_element'] == "class" and $value['close'] == "1")
 					{
 						$in_class = false;
 					}

@@ -3,7 +3,7 @@
  * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -53,27 +53,27 @@ class AdminSampleTemplateCatAjax
 				foreach($list_array as $key => $value)
 				{
 					$paramquery = $_GET;
-					$paramquery[id] = $list_array[$key][id];
-					$paramquery[action] = "edit";
-					unset($paramquery[sortvalue]);
-					unset($paramquery[sortmethod]);
-					unset($paramquery[nextpage]);
+					$paramquery['id'] = $list_array[$key]['id'];
+					$paramquery['action'] = "edit";
+					unset($paramquery['sortvalue']);
+					unset($paramquery['sortmethod']);
+					unset($paramquery['nextpage']);
 					$params = http_build_query($paramquery, '', '&#38;');
 	
-					$list_array[$key][edit][link] = $params;
-					$list_array[$key][edit][content] = "edit";
+					$list_array[$key]['edit']['link'] = $params;
+					$list_array[$key]['edit']['content'] = "edit";
 					
 					
 					$paramquery = $_GET;
-					$paramquery[id] = $list_array[$key][id];
-					$paramquery[action] = "delete";
-					unset($paramquery[sortvalue]);
-					unset($paramquery[sortmethod]);
-					unset($paramquery[nextpage]);
+					$paramquery['id'] = $list_array[$key]['id'];
+					$paramquery['action'] = "delete";
+					unset($paramquery['sortvalue']);
+					unset($paramquery['sortmethod']);
+					unset($paramquery['nextpage']);
 					$params = http_build_query($paramquery, '', '&#38;');
 	
-					$list_array[$key][delete][link] = $params;
-					$list_array[$key][delete][content] = "delete";
+					$list_array[$key]['delete']['link'] = $params;
+					$list_array[$key]['delete']['content'] = "delete";
 				}
 			}
 			else

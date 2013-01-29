@@ -3,7 +3,7 @@
  * @package organiser
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -133,8 +133,8 @@ class OrganiserLibraryIO {
 				
 				foreach($this->calendar_array as $key => $value)
 				{
-					$date_start_datetime_handler = new DatetimeHandler($value[start_date]." ".$value[start_time]);
-					$date_end_datetime_handler = new DatetimeHandler($value[end_date]." ".$value[end_time]);
+					$date_start_datetime_handler = new DatetimeHandler($value['start_date']." ".$value['start_time']);
+					$date_end_datetime_handler = new DatetimeHandler($value['end_date']." ".$value['end_time']);
 					
 					$date_start_mktime = $date_start_datetime_handler->get_mktime();
 					$date_end_mktime = $date_end_datetime_handler->get_mktime();
@@ -170,13 +170,13 @@ class OrganiserLibraryIO {
 		$today = date("j-m-Y");
 		$today_datetime_handler = new DatetimeHandler($today);
 		
-		if (!$_GET[page])
+		if (!$_GET['page'])
 		{
 			$date = date("Y");
 		}
 		else
 		{
-			$date = $_GET[page];
+			$date = $_GET['page'];
 		}
 		
 		$datetime_handler = new DatetimeHandler("1-1-".$date);
@@ -206,7 +206,7 @@ class OrganiserLibraryIO {
 			
 			$month_name = date("F", $mktime);
 			
-			$content_array[$i][monthname] = $month_name;
+			$content_array[$i]['monthname'] = $month_name;
 			
 			$begin = false;		
 			for ($j=0; $j<=$number_of_weeks; $j++)
@@ -215,7 +215,7 @@ class OrganiserLibraryIO {
 							
 				$week = date("W", $mktime);
 				
-				$content_array[$i][$j][week] = $week;
+				$content_array[$i][$j]['week'] = $week;
 				
 				for ($k=0; $k<=6;$k++)
 				{
@@ -231,32 +231,32 @@ class OrganiserLibraryIO {
 						
 						if (is_array($date_array) and count($date_array) >= 1)
 						{
-							$content_array[$i][$j][$k][date] = true;
+							$content_array[$i][$j][$k]['date'] = true;
 						}
 						else
 						{
-							$content_array[$i][$j][$k][date] = false;
+							$content_array[$i][$j][$k]['date'] = false;
 						}
 	
 						$day = date("d", $mktime);
 	
 						if ($datetime_handler->get_formatted_string("Y-m-d") == $today_datetime_handler->get_formatted_string("Y-m-d"))
 						{
-							$content_array[$i][$j][$k][content] = "<span class='CalendarToday'>".$day."</span>";
+							$content_array[$i][$j][$k]['content'] = "<span class='CalendarToday'>".$day."</span>";
 						}
 						else
 						{
-							$content_array[$i][$j][$k][content] = $day;
+							$content_array[$i][$j][$k]['content'] = $day;
 						}
 						
-						if ($this->calendar_array[$date_array[0]][link])
+						if ($this->calendar_array[$date_array[0]]['link'])
 						{
-							$content_array[$i][$j][$k][link] = true;
-							$content_array[$i][$j][$k][link_params] = $this->calendar_array[$date_array[0]][link];
+							$content_array[$i][$j][$k]['link'] = true;
+							$content_array[$i][$j][$k]['link_params'] = $this->calendar_array[$date_array[0]]['link'];
 						}
 						else
 						{
-							$content_array[$i][$j][$k][link] = false;
+							$content_array[$i][$j][$k]['link'] = false;
 						}
 												
 						$datetime_handler->add_day(1);
@@ -269,32 +269,32 @@ class OrganiserLibraryIO {
 						
 						if (is_array($date_array) and count($date_array) >= 1)
 						{
-							$content_array[$i][$j][$k][date] = true;
+							$content_array[$i][$j][$k]['date'] = true;
 						}
 						else
 						{
-							$content_array[$i][$j][$k][date] = false;
+							$content_array[$i][$j][$k]['date'] = false;
 						}
 						
 						$day = date("d", $mktime);
 						
 						if ($datetime_handler->get_formatted_string("Y-m-d") == $today_datetime_handler->get_formatted_string("Y-m-d"))
 						{
-							$content_array[$i][$j][$k][content] = "<span class='CalendarToday'>".$day."</span>";
+							$content_array[$i][$j][$k]['content'] = "<span class='CalendarToday'>".$day."</span>";
 						}
 						else
 						{
-							$content_array[$i][$j][$k][content] = $day;
+							$content_array[$i][$j][$k]['content'] = $day;
 						}
 						
-						if ($this->calendar_array[$date_array[0]][link])
+						if ($this->calendar_array[$date_array[0]]['link'])
 						{
-							$content_array[$i][$j][$k][link] = true;
-							$content_array[$i][$j][$k][link_params] = $this->calendar_array[$date_array[0]][link];
+							$content_array[$i][$j][$k]['link'] = true;
+							$content_array[$i][$j][$k]['link_params'] = $this->calendar_array[$date_array[0]]['link'];
 						}
 						else
 						{
-							$content_array[$i][$j][$k][link] = false;
+							$content_array[$i][$j][$k]['link'] = false;
 						}
 											
 						$datetime_handler->add_day(1);
@@ -306,29 +306,29 @@ class OrganiserLibraryIO {
 					}
 					else
 					{
-						$content_array[$i][$j][$k][content] = "";
+						$content_array[$i][$j][$k]['content'] = "";
 					}			
 				}
 			}
 				
 			if ((($i+1) % 4) == 0)
 			{
-				$content_array[$i][display_tr] = true;
+				$content_array[$i]['display_tr'] = true;
 			}
 			else
 			{
-				$content_array[$i][display_tr] = false;
+				$content_array[$i]['display_tr'] = false;
 			}
 		}
 				
 		$template = new HTMLTemplate("organiser/views/year.html");
 		
 		$paramquery_prev = $_GET;
-		$paramquery_prev[page] = $prev_year;
+		$paramquery_prev['page'] = $prev_year;
 		$params_prev = http_build_query($paramquery_prev,'','&#38;');
 		
 		$paramquery_next = $_GET;
-		$paramquery_next[page] = $next_year;
+		$paramquery_next['page'] = $next_year;
 		$params_next = http_build_query($paramquery_next,'','&#38;');
 		
 		$template->set_var("previous_params", $params_prev);
@@ -345,13 +345,13 @@ class OrganiserLibraryIO {
 		$today = date("j-m-Y");
 		$today_datetime_handler = new DatetimeHandler($today);
 		
-		if (!$_GET[page])
+		if (!$_GET['page'])
 		{
 			$date = date("m-Y");
 		}
 		else
 		{
-			$date = $_GET[page];
+			$date = $_GET['page'];
 		}
 		
 		$datetime_handler = new DatetimeHandler("1-".$date);
@@ -385,7 +385,7 @@ class OrganiserLibraryIO {
 			
 			$week = date("W", $mktime);
 			
-			$content_array[$i][week] = $week; 
+			$content_array[$i]['week'] = $week; 
 						
 			for ($j=0; $j<=6;$j++)
 			{
@@ -398,65 +398,65 @@ class OrganiserLibraryIO {
 					$date_array = $this->mktime_has_date($mktime, $mktime+21599);
 					if (is_array($date_array) and count($date_array) >= 1)
 					{
-						$content_array[$i][$j][value1] = $this->calendar_array[$date_array[0]][color];
+						$content_array[$i][$j]['value1'] = $this->calendar_array[$date_array[0]]['color'];
 					}
 					else
 					{
-						$content_array[$i][$j][value1] = "FFFFFF";
+						$content_array[$i][$j]['value1'] = "FFFFFF";
 					}
 									
 					$date_array = $this->mktime_has_date($mktime+21601, $mktime+43199);
 					if (is_array($date_array) and count($date_array) >= 1)
 					{
-						$content_array[$i][$j][value2] = $this->calendar_array[$date_array[0]][color];
+						$content_array[$i][$j]['value2'] = $this->calendar_array[$date_array[0]]['color'];
 					}
 					else
 					{
-						$content_array[$i][$j][value2] = "FFFFFF";	
+						$content_array[$i][$j]['value2'] = "FFFFFF";	
 					}
 									
 					$date_array = $this->mktime_has_date($mktime+43201, $mktime+64799);
 					if (is_array($date_array) and count($date_array) >= 1)
 					{
-						$content_array[$i][$j][value3] = $this->calendar_array[$date_array[0]][color];
+						$content_array[$i][$j]['value3'] = $this->calendar_array[$date_array[0]]['color'];
 					}
 					else
 					{
-						$content_array[$i][$j][value3] = "FFFFFF";	
+						$content_array[$i][$j]['value3'] = "FFFFFF";	
 					}
 									
 					$date_array = $this->mktime_has_date($mktime+64801, $mktime+86399);
 					if (is_array($date_array) and count($date_array) >= 1)
 					{
-						$content_array[$i][$j][value4] = $this->calendar_array[$date_array[0]][color];
+						$content_array[$i][$j]['value4'] = $this->calendar_array[$date_array[0]]['color'];
 					}
 					else
 					{
-						$content_array[$i][$j][value4] = "FFFFFF";	
+						$content_array[$i][$j]['value4'] = "FFFFFF";	
 					}
 
 					$day = date("d", $mktime);
 					
 					if ($datetime_handler->get_formatted_string("Y-m-d") == $today_datetime_handler->get_formatted_string("Y-m-d"))
 					{
-						$content_array[$i][$j][content] = "<span class='CalendarToday'>".$day."</span>";
+						$content_array[$i][$j]['content'] = "<span class='CalendarToday'>".$day."</span>";
 					}
 					else
 					{
-						$content_array[$i][$j][content] = $day;
+						$content_array[$i][$j]['content'] = $day;
 					}
 					
-					if ($this->calendar_array[$date_array[0]][link])
+					if ($this->calendar_array[$date_array[0]]['link'])
 					{
-						$content_array[$i][$j][link] = true;
-						$content_array[$i][$j][link_params] = $this->calendar_array[$date_array[0]][link];
+						$content_array[$i][$j]['link'] = true;
+						$content_array[$i][$j]['link_params'] = $this->calendar_array[$date_array[0]]['link'];
 					}
 					else
 					{
-						$content_array[$i][$j][link] = false;
+						$content_array[$i][$j]['link'] = false;
 					}
 					
-					$content_array[$i][$j][today] = false;
+					$content_array[$i][$j]['today'] = false;
 											
 					$datetime_handler->add_day(1);
 				}
@@ -465,65 +465,65 @@ class OrganiserLibraryIO {
 					$date_array = $this->mktime_has_date($mktime, $mktime+21599);
 					if (is_array($date_array) and count($date_array) >= 1)
 					{
-						$content_array[$i][$j][value1] = $this->calendar_array[$date_array[0]][color];
+						$content_array[$i][$j]['value1'] = $this->calendar_array[$date_array[0]]['color'];
 					}
 					else
 					{
-						$content_array[$i][$j][value1] = "FFFFFF";
+						$content_array[$i][$j]['value1'] = "FFFFFF";
 					}
 									
 					$date_array = $this->mktime_has_date($mktime+21601, $mktime+43199);
 					if (is_array($date_array) and count($date_array) >= 1)
 					{
-						$content_array[$i][$j][value2] = $this->calendar_array[$date_array[0]][color];
+						$content_array[$i][$j]['value2'] = $this->calendar_array[$date_array[0]]['color'];
 					}
 					else
 					{
-						$content_array[$i][$j][value2] = "FFFFFF";	
+						$content_array[$i][$j]['value2'] = "FFFFFF";	
 					}
 									
 					$date_array = $this->mktime_has_date($mktime+43201, $mktime+64799);
 					if (is_array($date_array) and count($date_array) >= 1)
 					{
-						$content_array[$i][$j][value3] = $this->calendar_array[$date_array[0]][color];
+						$content_array[$i][$j]['value3'] = $this->calendar_array[$date_array[0]]['color'];
 					}
 					else
 					{
-						$content_array[$i][$j][value3] = "FFFFFF";	
+						$content_array[$i][$j]['value3'] = "FFFFFF";	
 					}
 									
 					$date_array = $this->mktime_has_date($mktime+64801, $mktime+86399);
 					if (is_array($date_array) and count($date_array) >= 1)
 					{
-						$content_array[$i][$j][value4] = $this->calendar_array[$date_array[0]][color];
+						$content_array[$i][$j]['value4'] = $this->calendar_array[$date_array[0]]['color'];
 					}
 					else
 					{
-						$content_array[$i][$j][value4] = "FFFFFF";	
+						$content_array[$i][$j]['value4'] = "FFFFFF";	
 					}					
 					
 					$day = date("d", $mktime);
 					
 					if ($datetime_handler->get_formatted_string("Y-m-d") == $today_datetime_handler->get_formatted_string("Y-m-d"))
 					{
-						$content_array[$i][$j][content] = "<span class='CalendarToday'>".$day."</span>";
+						$content_array[$i][$j]['content'] = "<span class='CalendarToday'>".$day."</span>";
 					}
 					else
 					{
-						$content_array[$i][$j][content] = $day;
+						$content_array[$i][$j]['content'] = $day;
 					}
 					
-					if ($this->calendar_array[$date_array[0]][link])
+					if ($this->calendar_array[$date_array[0]]['link'])
 					{
-						$content_array[$i][$j][link] = true;
-						$content_array[$i][$j][link_params] = $this->calendar_array[$date_array[0]][link];
+						$content_array[$i][$j]['link'] = true;
+						$content_array[$i][$j]['link_params'] = $this->calendar_array[$date_array[0]]['link'];
 					}
 					else
 					{
-						$content_array[$i][$j][link] = false;
+						$content_array[$i][$j]['link'] = false;
 					}
 					
-					$content_array[$i][$j][today] = false;
+					$content_array[$i][$j]['today'] = false;
 										
 					$datetime_handler->add_day(1);
 					
@@ -534,11 +534,11 @@ class OrganiserLibraryIO {
 				}
 				else
 				{
-					$content_array[$i][$j][content] = "";
-					$content_array[$i][$j][value1] = "FFFFFF";
-					$content_array[$i][$j][value2] = "FFFFFF";
-					$content_array[$i][$j][value3] = "FFFFFF";
-					$content_array[$i][$j][value4] = "FFFFFF";
+					$content_array[$i][$j]['content'] = "";
+					$content_array[$i][$j]['value1'] = "FFFFFF";
+					$content_array[$i][$j]['value2'] = "FFFFFF";
+					$content_array[$i][$j]['value3'] = "FFFFFF";
+					$content_array[$i][$j]['value4'] = "FFFFFF";
 				}		
 			}
 		}
@@ -546,11 +546,11 @@ class OrganiserLibraryIO {
 		$template = new HTMLTemplate("organiser/views/month.html");
 		
 		$paramquery_prev = $_GET;
-		$paramquery_prev[page] = date("m-Y", $prev_month_datetime_handler->get_mktime());
+		$paramquery_prev['page'] = date("m-Y", $prev_month_datetime_handler->get_mktime());
 		$params_prev = http_build_query($paramquery_prev,'','&#38;');
 		
 		$paramquery_next = $_GET;
-		$paramquery_next[page] = date("m-Y", $next_month_datetime_handler->get_mktime());
+		$paramquery_next['page'] = date("m-Y", $next_month_datetime_handler->get_mktime());
 		$params_next = http_build_query($paramquery_next,'','&#38;');
 		
 		$template->set_var("previous_params", $params_prev);
@@ -568,13 +568,13 @@ class OrganiserLibraryIO {
 		$today = date("j-m-Y");
 		$today_datetime_handler = new DatetimeHandler($today);
 		
-		if (!$_GET[page])
+		if (!$_GET['page'])
 		{
 			$date = date("W-Y");
 		}
 		else
 		{
-			$date = $_GET[page];
+			$date = $_GET['page'];
 		}
 		
 		$date_aray = explode("-",$date);
@@ -619,13 +619,13 @@ class OrganiserLibraryIO {
 				$tr_class = "";
 			}
 		
-			$content_array[$i][tr_class] = $tr_class;
+			$content_array[$i]['tr_class'] = $tr_class;
 					
 			if ($i==0)
 			{
-				$content_array[$i][head] = true;
+				$content_array[$i]['head'] = true;
 				
-				$content_array[$i][0][content] = "";
+				$content_array[$i][0]['content'] = "";
 			
 				for ($j=1;$j<=7;$j++)
 				{
@@ -635,11 +635,11 @@ class OrganiserLibraryIO {
 					
 					if ($datetime_handler->get_formatted_string("Y-m-d") == $today_datetime_handler->get_formatted_string("Y-m-d"))
 					{
-						$content_array[$i][$j][content] = "<span class='CalendarToday'>".$day."</span>";
+						$content_array[$i][$j]['content'] = "<span class='CalendarToday'>".$day."</span>";
 					}
 					else
 					{
-						$content_array[$i][$j][content] = $day;
+						$content_array[$i][$j]['content'] = $day;
 					}
 
 					$datetime_handler->add_day(1);
@@ -649,14 +649,14 @@ class OrganiserLibraryIO {
 			{
 				$datetime_handler->sub_day(7);
 				
-				$content_array[$i][head] = false;
+				$content_array[$i]['head'] = false;
 				
-				$content_array[$i][0][time] = true;
-				$content_array[$i][0][content] = $datetime_handler->get_formatted_string("H:i");
+				$content_array[$i][0]['time'] = true;
+				$content_array[$i][0]['content'] = $datetime_handler->get_formatted_string("H:i");
 				
 				for ($j=1;$j<=7;$j++)
 				{
-					$content_array[$i][$j][time] = false;
+					$content_array[$i][$j]['time'] = false;
 					
 					$mktime = $datetime_handler->get_mktime();
 					
@@ -669,43 +669,43 @@ class OrganiserLibraryIO {
 						{
 							if (!in_array($value, $day_date_array[$j]))
 							{
-								if ($content_array[$i][$j][content])
+								if ($content_array[$i][$j]['content'])
 								{
-									if ($this->calendar_array[$value][link])
+									if ($this->calendar_array[$value]['link'])
 									{
-										$content_array[$i][$j][content] .= "<div class='CalendarWeekEntry'><a href='index.php?".$this->calendar_array[$value][link]."'>".$this->calendar_array[$value][name]."</a></div>";
+										$content_array[$i][$j]['content'] .= "<div class='CalendarWeekEntry'><a href='index.php?".$this->calendar_array[$value]['link']."'>".$this->calendar_array[$value]['name']."</a></div>";
 									}
 									else
 									{
-										$content_array[$i][$j][content] .= "<div class='CalendarWeekEntry'>".$this->calendar_array[$value][name]."</div>";
+										$content_array[$i][$j]['content'] .= "<div class='CalendarWeekEntry'>".$this->calendar_array[$value]['name']."</div>";
 									}
 								}
 								else
 								{
-									if ($this->calendar_array[$value][link])
+									if ($this->calendar_array[$value]['link'])
 									{
-										$content_array[$i][$j][content] = "<div class='CalendarWeekEntry'><a href='index.php?".$this->calendar_array[$value][link]."'>".$this->calendar_array[$value][name]."</a></div>";
+										$content_array[$i][$j]['content'] = "<div class='CalendarWeekEntry'><a href='index.php?".$this->calendar_array[$value]['link']."'>".$this->calendar_array[$value]['name']."</a></div>";
 									}
 									else
 									{
-										$content_array[$i][$j][content] = "<div class='CalendarWeekEntry'>".$this->calendar_array[$value][name]."</div>";
+										$content_array[$i][$j]['content'] = "<div class='CalendarWeekEntry'>".$this->calendar_array[$value]['name']."</div>";
 									}
 								}
 								array_push($day_date_array[$j],$value);
 							}
 							else
 							{
-								$content_array[$i][$j][content] = "";
+								$content_array[$i][$j]['content'] = "";
 							}
 							
-							$content_array[$i][$j][$counter][value] = $this->calendar_array[$value][color];
+							$content_array[$i][$j][$counter]['value'] = $this->calendar_array[$value]['color'];
 								
 							$counter++;		
 						}
 					}
 					else
 					{
-						$content_array[$i][$j][content] = "";
+						$content_array[$i][$j]['content'] = "";
 					}
 					$datetime_handler->add_day(1);
 				}
@@ -717,11 +717,11 @@ class OrganiserLibraryIO {
 		$template = new HTMLTemplate("organiser/views/week.html");
 		
 		$paramquery_prev = $_GET;
-		$paramquery_prev[page] = date("W-Y", $prev_week_datetime_handler->get_mktime());
+		$paramquery_prev['page'] = date("W-Y", $prev_week_datetime_handler->get_mktime());
 		$params_prev = http_build_query($paramquery_prev,'','&#38;');
 		
 		$paramquery_next = $_GET;
-		$paramquery_next[page] = date("W-Y", $next_week_datetime_handler->get_mktime());
+		$paramquery_next['page'] = date("W-Y", $next_week_datetime_handler->get_mktime());
 		$params_next = http_build_query($paramquery_next,'','&#38;');
 		
 		$template->set_var("previous_params", $params_prev);
@@ -739,13 +739,13 @@ class OrganiserLibraryIO {
 		$today = date("j-m-Y");
 		$today_datetime_handler = new DatetimeHandler($today);
 		
-		if (!$_GET[page])
+		if (!$_GET['page'])
 		{
 			$date = date("W-Y");
 		}
 		else
 		{
-			$date = $_GET[page];
+			$date = $_GET['page'];
 		}
 		
 		$date_aray = explode("-",$date);
@@ -788,13 +788,13 @@ class OrganiserLibraryIO {
 				$tr_class = "";
 			}
 		
-			$content_array[$i][tr_class] = $tr_class;
+			$content_array[$i]['tr_class'] = $tr_class;
 					
 			if ($i==0)
 			{
-				$content_array[$i][head] = true;
+				$content_array[$i]['head'] = true;
 				
-				$content_array[$i][0][content] = "";
+				$content_array[$i][0]['content'] = "";
 			
 				for ($j=1;$j<=5;$j++)
 				{
@@ -804,11 +804,11 @@ class OrganiserLibraryIO {
 					
 					if ($datetime_handler->get_formatted_string("Y-m-d") == $today_datetime_handler->get_formatted_string("Y-m-d"))
 					{
-						$content_array[$i][$j][content] = "<span class='CalendarToday'>".$day."</span>";
+						$content_array[$i][$j]['content'] = "<span class='CalendarToday'>".$day."</span>";
 					}
 					else
 					{
-						$content_array[$i][$j][content] = $day;
+						$content_array[$i][$j]['content'] = $day;
 					}
 
 					$datetime_handler->add_day(1);
@@ -818,14 +818,14 @@ class OrganiserLibraryIO {
 			{
 				$datetime_handler->sub_day(5);
 				
-				$content_array[$i][head] = false;
+				$content_array[$i]['head'] = false;
 				
-				$content_array[$i][0][time] = true;
-				$content_array[$i][0][content] = $datetime_handler->get_formatted_string("H:i");
+				$content_array[$i][0]['time'] = true;
+				$content_array[$i][0]['content'] = $datetime_handler->get_formatted_string("H:i");
 				
 				for ($j=1;$j<=5;$j++)
 				{
-					$content_array[$i][$j][time] = false;
+					$content_array[$i][$j]['time'] = false;
 					
 					$mktime = $datetime_handler->get_mktime();
 					
@@ -838,43 +838,43 @@ class OrganiserLibraryIO {
 						{
 							if (!in_array($value, $day_date_array[$j]))
 							{
-								if ($content_array[$i][$j][content])
+								if ($content_array[$i][$j]['content'])
 								{
-									if ($this->calendar_array[$value][link])
+									if ($this->calendar_array[$value]['link'])
 									{
-										$content_array[$i][$j][content] .= "<div class='CalendarWeekEntry'><a href='index.php?".$this->calendar_array[$value][link]."'>".$this->calendar_array[$value][name]."</a></div>";
+										$content_array[$i][$j]['content'] .= "<div class='CalendarWeekEntry'><a href='index.php?".$this->calendar_array[$value]['link']."'>".$this->calendar_array[$value]['name']."</a></div>";
 									}
 									else
 									{
-										$content_array[$i][$j][content] .= "<div class='CalendarWeekEntry'>".$this->calendar_array[$value][name]."</div>";
+										$content_array[$i][$j]['content'] .= "<div class='CalendarWeekEntry'>".$this->calendar_array[$value]['name']."</div>";
 									}
 								}
 								else
 								{
-									if ($this->calendar_array[$value][link])
+									if ($this->calendar_array[$value]['link'])
 									{
-										$content_array[$i][$j][content] = "<div class='CalendarWeekEntry'><a href='index.php?".$this->calendar_array[$value][link]."'>".$this->calendar_array[$value][name]."</a></div>";
+										$content_array[$i][$j]['content'] = "<div class='CalendarWeekEntry'><a href='index.php?".$this->calendar_array[$value]['link']."'>".$this->calendar_array[$value]['name']."</a></div>";
 									}
 									else
 									{
-										$content_array[$i][$j][content] = "<div class='CalendarWeekEntry'>".$this->calendar_array[$value][name]."</div>";
+										$content_array[$i][$j]['content'] = "<div class='CalendarWeekEntry'>".$this->calendar_array[$value]['name']."</div>";
 									}
 								}
 								array_push($day_date_array[$j],$value);
 							}
 							else
 							{
-								$content_array[$i][$j][content] = "";
+								$content_array[$i][$j]['content'] = "";
 							}
 							
-							$content_array[$i][$j][$counter][value] = $this->calendar_array[$value][color];
+							$content_array[$i][$j][$counter]['value'] = $this->calendar_array[$value]['color'];
 								
 							$counter++;	
 						}
 					}
 					else
 					{
-						$content_array[$i][$j][content] = "";
+						$content_array[$i][$j]['content'] = "";
 					}
 					$datetime_handler->add_day(1);	
 				}
@@ -886,11 +886,11 @@ class OrganiserLibraryIO {
 		$template = new HTMLTemplate("organiser/views/work_week.html");
 		
 		$paramquery_prev = $_GET;
-		$paramquery_prev[page] = date("W-Y", $prev_week_datetime_handler->get_mktime());
+		$paramquery_prev['page'] = date("W-Y", $prev_week_datetime_handler->get_mktime());
 		$params_prev = http_build_query($paramquery_prev,'','&#38;');
 		
 		$paramquery_next = $_GET;
-		$paramquery_next[page] = date("W-Y", $next_week_datetime_handler->get_mktime());
+		$paramquery_next['page'] = date("W-Y", $next_week_datetime_handler->get_mktime());
 		$params_next = http_build_query($paramquery_next,'','&#38;');
 		
 		$template->set_var("previous_params", $params_prev);
@@ -908,13 +908,13 @@ class OrganiserLibraryIO {
 		$today = date("j-m-Y");
 		$today_datetime_handler = new DatetimeHandler($today);
 		
-		if (!$_GET[page])
+		if (!$_GET['page'])
 		{
 			$date = date("j-m-Y");
 		}
 		else
 		{
-			$date = $_GET[page];
+			$date = $_GET['page'];
 		}
 		
 		$datetime_handler = new DatetimeHandler($date);
@@ -962,21 +962,21 @@ class OrganiserLibraryIO {
 				{
 					if (!in_array($value, $column_array))
 					{
-						if ($this->calendar_array[$value][link])
+						if ($this->calendar_array[$value]['link'])
 						{
-							$content_array[$i][$column_array_count][name] = "<a href='index.php?".$this->calendar_array[$value][link]."'>".$this->calendar_array[$value][name]."</a>";
+							$content_array[$i][$column_array_count]['name'] = "<a href='index.php?".$this->calendar_array[$value]['link']."'>".$this->calendar_array[$value]['name']."</a>";
 						}
 						else
 						{
-							$content_array[$i][$column_array_count][name] = $this->calendar_array[$value][name];
+							$content_array[$i][$column_array_count]['name'] = $this->calendar_array[$value]['name'];
 						}
-						$content_array[$i][$column_array_count][value] = $this->calendar_array[$value][color];
-						$content_array[$i][$column_array_count][datebegin] = true;
+						$content_array[$i][$column_array_count]['value'] = $this->calendar_array[$value]['color'];
+						$content_array[$i][$column_array_count]['datebegin'] = true;
 						
-						$start_datetime_handler = new DatetimeHandler($this->calendar_array[$value][start_date]." ".$this->calendar_array[$value][start_time]);
-						$end_datetime_handler = new DatetimeHandler($this->calendar_array[$value][end_date]." ".$this->calendar_array[$value][end_time]);
+						$start_datetime_handler = new DatetimeHandler($this->calendar_array[$value]['start_date']." ".$this->calendar_array[$value]['start_time']);
+						$end_datetime_handler = new DatetimeHandler($this->calendar_array[$value]['end_date']." ".$this->calendar_array[$value]['end_time']);
 						
-						$content_array[$i][$column_array_count][range] = $start_datetime_handler->get_formatted_string("j-n-Y (H:i)")." - ".$end_datetime_handler->get_formatted_string("j-n-Y (H:i)");
+						$content_array[$i][$column_array_count]['range'] = $start_datetime_handler->get_formatted_string("j-n-Y (H:i)")." - ".$end_datetime_handler->get_formatted_string("j-n-Y (H:i)");
 						
 						$column_array_count++;
 						array_push($column_array, $value);
@@ -984,31 +984,31 @@ class OrganiserLibraryIO {
 				}
 				for ($j=0; $j<=($rows-1); $j++)
 				{
-					if (!$content_array[$i][$j][content])
+					if (!$content_array[$i][$j]['content'])
 					{
 						if (isset($column_array[$j]) and in_array($column_array[$j], $date_array))
 						{
-							$content_array[$i][$j][value] = $this->calendar_array[$column_array[$j]][color];
-							if ($content_array[$i][$j][datebegin] != true)
+							$content_array[$i][$j]['value'] = $this->calendar_array[$column_array[$j]]['color'];
+							if ($content_array[$i][$j]['datebegin'] != true)
 							{
-								$content_array[$i][$j][datebegin] = false;
+								$content_array[$i][$j]['datebegin'] = false;
 							}
 						}
 						else
 						{
-							$content_array[$i][$j][value] = "";
-							$content_array[$i][$j][datebegin] = false;
+							$content_array[$i][$j]['value'] = "";
+							$content_array[$i][$j]['datebegin'] = false;
 						}
 					}
 				}
 			}
 			else
 			{
-				$content_array[$i][0][datebegin] = false;
-				$content_array[$i][0][value] = "";
+				$content_array[$i][0]['datebegin'] = false;
+				$content_array[$i][0]['value'] = "";
 			}
 			
-			$content_array[$i][time] = $datetime_handler->get_formatted_string("H:i");
+			$content_array[$i]['time'] = $datetime_handler->get_formatted_string("H:i");
 			
 			$datetime_handler->add_hour(1);
 			
@@ -1021,7 +1021,7 @@ class OrganiserLibraryIO {
 				$tr_class = "";
 			}
 			
-			$content_array[$i][tr_class] = $tr_class;
+			$content_array[$i]['tr_class'] = $tr_class;
 					
 			$color_count++;
 		}
@@ -1029,11 +1029,11 @@ class OrganiserLibraryIO {
 		$template = new HTMLTemplate("organiser/views/day.html");
 		
 		$paramquery_prev = $_GET;
-		$paramquery_prev[page] = date("j-m-Y", $prev_day_datetime_handler->get_mktime());
+		$paramquery_prev['page'] = date("j-m-Y", $prev_day_datetime_handler->get_mktime());
 		$params_prev = http_build_query($paramquery_prev,'','&#38;');
 		
 		$paramquery_next = $_GET;
-		$paramquery_next[page] = date("j-m-Y", $next_day_datetime_handler->get_mktime());
+		$paramquery_next['page'] = date("j-m-Y", $next_day_datetime_handler->get_mktime());
 		$params_next = http_build_query($paramquery_next,'','&#38;');
 			
 		$template->set_var("previous_params", $params_prev);
@@ -1065,17 +1065,17 @@ class OrganiserLibraryIO {
 			return false;
 		}
 		/*
-		 * [name]
-		 * [startdate]
-		 * [starttime]
-		 * [enddate]
-		 * [endtime]
-		 * [name]
-		 * [color]
-		 * [link]
-		 * [id]
-		 * [serial]
-		 * [serialid]
+		 * ['name']
+		 * ['startdate']
+		 * ['starttime']
+		 * ['enddate']
+		 * ['endtime']
+		 * ['name']
+		 * ['color']
+		 * ['link']
+		 * ['id']
+		 * ['serial']
+		 * ['serialid']
 		 */
 	}
 	
@@ -1094,14 +1094,14 @@ class OrganiserLibraryIO {
 			return false;
 		}
 		/*
-		 * [symbol]
-		 * [name]
-		 * [enddate]
-		 * [endtime]
-		 * [done]
-		 * [link]
-		 * [id]
-		 * [user_id]
+		 * ['symbol']
+		 * ['name']
+		 * ['enddate']
+		 * ['endtime']
+		 * ['done']
+		 * ['link']
+		 * ['id']
+		 * ['user_id']
 		 */
 	}
 	
@@ -1164,15 +1164,15 @@ class OrganiserLibraryIO {
 		}
 		
 		$paramquery = $_GET;
-		unset($paramquery[page]);
-		unset($paramquery[view]);
+		unset($paramquery['page']);
+		unset($paramquery['view']);
 		$params = http_build_query($paramquery, '', '&#38;');
 
 		$template->set_var("params", $params);
 			
 		$return = $template->get_string();
 		
-		switch($_GET[view]):
+		switch($_GET['view']):
 		
 			case "year":
 				$return .= $this->year_view();

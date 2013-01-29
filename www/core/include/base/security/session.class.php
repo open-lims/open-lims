@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -126,7 +126,7 @@ class Session implements SessionInterface
     
     /**
      * @see SessionInterface::is_valid()
-     * @return bool
+     * @return array
      */
     public function is_valid()
     {
@@ -159,18 +159,34 @@ class Session implements SessionInterface
 			if ($current_mktime > $max_session_mktime)
 			{
 				$this->destroy();
-				return false;
+				return array(false, true);
 			}
 			else
 			{
 				$datetime = date("Y-m-d H:i:s"); 
 				$this->session->set_datetime($datetime);
-				return true;
+				return array(true, false);
 			}	
     	}
     	else
     	{
     		
+    		return array(false, false);
+    	}
+    }
+    
+    /**
+     * @see SessionInterface::is_dead()
+     * @return bool
+     */
+    public function is_dead()
+    {
+    	if (!$this->user_id)
+    	{
+    		return true;
+    	}
+    	else
+    	{
     		return false;
     	}
     }

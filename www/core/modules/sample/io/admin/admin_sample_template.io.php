@@ -3,7 +3,7 @@
  * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -31,17 +31,17 @@ class AdminSampleTemplateIO
 	{
 		$list = new List_IO("SampleAdminTemplate", "ajax.php?nav=sample", "admin_sample_template_list_templates", "admin_sample_template_count_templates", "0", "SampleAdminTemplate");
 		
-		$list->add_column("ID", "id", true, null);
-		$list->add_column("Name", "name", true, null);
-		$list->add_column("File", "file", true, null);
-		$list->add_column("Category", "category", true, null);
-		$list->add_column("Delete", "delete", false, "7%");
+		$list->add_column(Language::get_message("SampleGeneralListColumnID", "general"), "id", true, null);
+		$list->add_column(Language::get_message("SampleGeneralListColumnName", "general"), "name", true, null);
+		$list->add_column(Language::get_message("SampleGeneralListColumnFile", "general"), "file", true, null);
+		$list->add_column(Language::get_message("SampleGeneralListColumnCategory", "general"), "category", true, null);
+		$list->add_column(Language::get_message("SampleGeneralListColumnDelete", "general"), "delete", false, "7%");
 
 		$template = new HTMLTemplate("sample/admin/sample_template/list.html");	
 	
 		$paramquery = $_GET;
-		$paramquery[action] = "add";
-		unset($paramquery[nextpage]);
+		$paramquery['action'] = "add";
+		unset($paramquery['nextpage']);
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("add_params", $params);
@@ -53,7 +53,7 @@ class AdminSampleTemplateIO
 
 	public static function create()
 	{
-		if ($_GET[nextpage] == 1)
+		if ($_GET['nextpage'] == 1)
 		{
 			$page_1_passed = true;
 		}
@@ -68,7 +68,7 @@ class AdminSampleTemplateIO
 			$template = new HTMLTemplate("sample/admin/sample_template/add.html");
 			
 			$paramquery = $_GET;
-			$paramquery[nextpage] = "1";
+			$paramquery['nextpage'] = "1";
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			$template->set_var("params",$params);
@@ -95,8 +95,8 @@ class AdminSampleTemplateIO
 					if (($file_id = File::get_file_id_by_data_entity_id($value)) != null)
 					{
 						$file = File::get_instance($file_id);
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $file->get_name();
+						$result[$counter]['value'] = $value;
+						$result[$counter]['content'] = $file->get_name();
 						$counter++;
 					}
 				}
@@ -113,8 +113,8 @@ class AdminSampleTemplateIO
 				foreach($category_array as $key => $value)
 				{
 					$sample_template_cat = new SampleTemplateCat($value);				
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $sample_template_cat->get_name();
+					$result[$counter]['value'] = $value;
+					$result[$counter]['content'] = $sample_template_cat->get_name();
 					$counter++;
 				}
 				$template->set_var("category",$result);
@@ -126,11 +126,11 @@ class AdminSampleTemplateIO
 			$sample_template = new SampleTemplate(null);
 								
 			$paramquery = $_GET;
-			unset($paramquery[action]);
-			unset($paramquery[nextpage]);
+			unset($paramquery['action']);
+			unset($paramquery['nextpage']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			if ($sample_template->create($_POST[data_entity_id], $_POST[category_id]))
+			if ($sample_template->create($_POST['data_entity_id'], $_POST['category_id']))
 			{
 				Common_IO::step_proceed($params, "Add Sample Template", "Operation Successful", null);
 			}
@@ -146,22 +146,22 @@ class AdminSampleTemplateIO
 	 */
 	public static function delete()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			if ($_GET[sure] != "true")
+			if ($_GET['sure'] != "true")
 			{
 				$template = new HTMLTemplate("sample/admin/sample_template/delete.html");
 				
 				$paramquery = $_GET;
-				$paramquery[sure] = "true";
+				$paramquery['sure'] = "true";
 				$params = http_build_query($paramquery);
 				
 				$template->set_var("yes_params", $params);
 						
 				$paramquery = $_GET;
-				unset($paramquery[sure]);
-				unset($paramquery[action]);
-				unset($paramquery[id]);
+				unset($paramquery['sure']);
+				unset($paramquery['action']);
+				unset($paramquery['id']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("no_params", $params);
@@ -171,12 +171,12 @@ class AdminSampleTemplateIO
 			else
 			{
 				$paramquery = $_GET;
-				unset($paramquery[sure]);
-				unset($paramquery[action]);
-				unset($paramquery[id]);
+				unset($paramquery['sure']);
+				unset($paramquery['action']);
+				unset($paramquery['id']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				$sample_template = new SampleTemplate($_GET[id]);
+				$sample_template = new SampleTemplate($_GET['id']);
 				
 				if ($sample_template->delete())
 				{							
@@ -196,7 +196,7 @@ class AdminSampleTemplateIO
 	
 	public static function handler()
 	{
-		switch($_GET[action]):
+		switch($_GET['action']):
 			case "add":
 				self::create();
 			break;

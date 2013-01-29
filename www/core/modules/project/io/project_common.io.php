@@ -3,7 +3,7 @@
  * @package project
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -27,23 +27,26 @@
  */
 class ProjectCommon_IO
 {
+	/**
+	 * @todo reactivate schedule after workflow integration
+	 */
 	public static function tab_header()
 	{
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
 			$tab_io = new Tab_IO();
 						
 			// Main Page
 			
-			$paramquery[username] 	= $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav]		= "project";
-			$paramquery[run]		= "detail";
-			$paramquery[project_id]	= $_GET[project_id];
-			$params 				= http_build_query($paramquery,'','&#38;');
+			$paramquery['username'] 	= $_GET['username'];
+			$paramquery['session_id'] 	= $_GET['session_id'];
+			$paramquery['nav']			= "project";
+			$paramquery['run']			= "detail";
+			$paramquery['project_id']	= $_GET['project_id'];
+			$params 					= http_build_query($paramquery,'','&#38;');
 			unset($paramquery);
 			
-			$tab_io->add("main", "Main Page", $params, false);
+			$tab_io->add("main", Language::get_message("ProjectGeneralDetailTabMainPage", "general"), $params, false);
 			
 			
 			// Workflow
@@ -61,42 +64,42 @@ class ProjectCommon_IO
 			
 			// Log
 			
-			$paramquery[username] 	= $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav]		= "project";
-			$paramquery[run]		= "log";
-			$paramquery[project_id]	= $_GET[project_id];
-			$params 				= http_build_query($paramquery,'','&#38;');
+			$paramquery['username'] 	= $_GET['username'];
+			$paramquery['session_id'] 	= $_GET['session_id'];
+			$paramquery['nav']			= "project";
+			$paramquery['run']			= "log";
+			$paramquery['project_id']	= $_GET['project_id'];
+			$params 					= http_build_query($paramquery,'','&#38;');
 			unset($paramquery);
 			
-			$tab_io->add("log", "Log", $params, false);
+			$tab_io->add("log", Language::get_message("ProjectGeneralDetailTabLog", "general"), $params, false);
 			
 			
 			// Structure
 			
-			$paramquery[username] 	= $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav]		= "project";
-			$paramquery[run]		= "structure";
-			$paramquery[project_id]	= $_GET[project_id];
-			$params 				= http_build_query($paramquery,'','&#38;');
+			$paramquery['username'] 	= $_GET['username'];
+			$paramquery['session_id'] 	= $_GET['session_id'];
+			$paramquery['nav']			= "project";
+			$paramquery['run']			= "structure";
+			$paramquery['project_id']	= $_GET['project_id'];
+			$params 					= http_build_query($paramquery,'','&#38;');
 			unset($paramquery);
 			
-			$tab_io->add("structure", "Structure", $params, false);
+			$tab_io->add("structure", Language::get_message("ProjectGeneralDetailTabStructure", "general"), $params, false);
 			
 			
 			// Schedule
-			
-			$paramquery[username] 	= $_GET[username];
-			$paramquery[session_id] = $_GET[session_id];
-			$paramquery[nav]		= "project";
-			$paramquery[run]		= "schedule";
-			$paramquery[project_id]	= $_GET[project_id];
-			$params 				= http_build_query($paramquery,'','&#38;');
+			/*
+			$paramquery['username'] 	= $_GET['username'];
+			$paramquery['session_id'] 	= $_GET['session_id'];
+			$paramquery['nav']			= "project";
+			$paramquery['run']			= "schedule";
+			$paramquery['project_id']	= $_GET['project_id'];
+			$params 					= http_build_query($paramquery,'','&#38;');
 			unset($paramquery);
 			
-			$tab_io->add("schedule", "Schedule", $params, false);
-			
+			$tab_io->add("schedule", Language::get_message("ProjectGeneralDetailTabSchedule", "general"), $params, false);
+			*/
 			
 			// Item Lister Dialogs
 			
@@ -106,15 +109,15 @@ class ProjectCommon_IO
 			{
 				foreach ($module_dialog_array as $key => $value)
 				{
-					$paramquery[username] 	= $_GET[username];
-					$paramquery[session_id] = $_GET[session_id];
-					$paramquery[nav]		= "project";
-					$paramquery[run]		= "item_list";
-					$paramquery[project_id]	= $_GET[project_id];
-					$paramquery[dialog]		= $value[internal_name];
-					$params 				= http_build_query($paramquery,'','&#38;');
+					$paramquery['username'] 	= $_GET['username'];
+					$paramquery['session_id']	= $_GET['session_id'];
+					$paramquery['nav']			= "project";
+					$paramquery['run']			= "item_list";
+					$paramquery['project_id']	= $_GET['project_id'];
+					$paramquery['dialog']		= $value['internal_name'];
+					$params 					= http_build_query($paramquery,'','&#38;');
 					
-					$tab_io->add($value[internal_name], $value[display_name], $params, false);
+					$tab_io->add($value['internal_name'], Language::get_message($value['language_address'], "dialog"), $params, false);
 				}
 			}
 			
@@ -122,7 +125,7 @@ class ProjectCommon_IO
 			// Administration
 			
 			
-			$project_security = new ProjectSecurity($_GET[project_id]);	
+			$project_security = new ProjectSecurity($_GET['project_id']);	
 	
 			if ($project_security->is_access(2,false) or 
 				$project_security->is_access(3,false) or 
@@ -131,21 +134,21 @@ class ProjectCommon_IO
 				$project_security->is_access(6,false) or 
 				$project_security->is_access(7,false))
 			{
-				$paramquery[username] 	= $_GET[username];
-				$paramquery[session_id] = $_GET[session_id];
-				$paramquery[nav]		= "project";
-				$paramquery[run]		= "admin";
-				$paramquery[project_id]	= $_GET[project_id];
-				unset($paramquery[dialog]);
+				$paramquery['username'] 	= $_GET['username'];
+				$paramquery['session_id'] 	= $_GET['session_id'];
+				$paramquery['nav']			= "project";
+				$paramquery['run']			= "admin";
+				$paramquery['project_id']	= $_GET['project_id'];
+				unset($paramquery['dialog']);
 				$params 				= http_build_query($paramquery,'','&#38;');
 			 	unset($paramquery);
 			 
-				$tab_io->add("admin", "Project-Administration", $params, false, false);
+				$tab_io->add("admin", Language::get_message("ProjectGeneralDetailTabAdministration", "general"), $params, false, false);
 			}
 		
-			if ($_GET[run] != "item_add" and $_GET[run] != "item_list")
+			if ($_GET['run'] != "item_add" and $_GET['run'] != "item_list")
 			{
-				switch ($_GET[run]):
+				switch ($_GET['run']):
 				
 					case "workflow":
 						$tab_io->activate("workflow");
@@ -179,7 +182,7 @@ class ProjectCommon_IO
 					break;
 					
 					default:
-						if (strpos($_GET[run], "admin_") === 0)
+						if (strpos($_GET['run'], "admin_") === 0)
 						{
 							$tab_io->activate("admin");
 						}
@@ -193,9 +196,9 @@ class ProjectCommon_IO
 			}
 			else
 			{
-				if ($_GET[run] == "item_list" and $_GET[dialog])
+				if ($_GET['run'] == "item_list" and $_GET['dialog'])
 				{
-					$tab_io->activate($_GET[dialog]);
+					$tab_io->activate($_GET['dialog']);
 				}
 				else
 				{

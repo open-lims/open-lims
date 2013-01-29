@@ -3,7 +3,7 @@
  * @package equipment
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -56,12 +56,12 @@ class EquipmentReportIO
 				
 				foreach($result_array as $key => $value)
 				{
-					$datetime_handler = new DatetimeHandler($result_array[$key][datetime]);
-					$result_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M y H:i");
+					$datetime_handler = new DatetimeHandler($result_array[$key]['datetime']);
+					$result_array[$key]['datetime'] = $datetime_handler->get_datetime(false);
 					
-					$pdf->MultiCell(70, 0, $result_array[$key][name], 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
-					$pdf->MultiCell(60, 0, $result_array[$key][category], 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
-					$pdf->MultiCell(60, 0, $result_array[$key][datetime], 1, 'L', 1, 1, '', '', true, 0, false, true, 0);
+					$pdf->MultiCell(70, 0, $result_array[$key]['name'], 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
+					$pdf->MultiCell(60, 0, $result_array[$key]['category'], 1, 'L', 1, 0, '', '', true, 0, false, true, 0);
+					$pdf->MultiCell(60, 0, $result_array[$key]['datetime'], 1, 'L', 1, 1, '', '', true, 0, false, true, 0);
 				}
 			}
 			

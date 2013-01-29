@@ -3,7 +3,7 @@
  * @package data
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -47,8 +47,8 @@ class AdminDataIO
 				if (file_exists($value['class_path']))
 				{
 					require_once($value['class_path']);
-					$additional_quota_array[$additional_quota_counter][title] = $value['display_name'];
-					$additional_quota_array[$additional_quota_counter][value] = $value['class']::$value['method']();
+					$additional_quota_array[$additional_quota_counter]['title'] = Language::get_message($value['language_address'], "dialog");
+					$additional_quota_array[$additional_quota_counter]['value'] = $value['class']::$value['method']();
 					$additional_quota_counter++;
 				}
 			}

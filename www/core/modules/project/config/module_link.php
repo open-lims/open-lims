@@ -3,7 +3,7 @@
  * @package project
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -24,20 +24,20 @@
 /**
  * 
  */
-	$link[0][type]				= "home_button";
-	$link[0]['array'][nav]		= "project";
-	$link[0]['array'][run]		= "new";
-	$link[0][file]				= "project/home/buttons/create.html";
-	$link[0][weight]			= 100;
+	$link[0]['type']			= "home_button";
+	$link[0]['array']['nav']	= "project";
+	$link[0]['array']['run']	= "new";
+	$link[0]['file']			= "project/home/buttons/create.html";
+	$link[0]['weight']			= 100;
 	
-	$link[1][type]				= "home_button";
-	$link[1]['array'][nav]		= "project";
-	$link[1][file]				= "project/home/buttons/view_my.html";
-	$link[1][weight]			= 200;
-	
-	$link[2][type]				= "ou_navigation";
-	$link[2]['array'][nav]		= "project";
-	$link[2]['array'][run]		= "organ_unit";
-	$link[2]['array'][ou_id]	= "%OU_ID%";
-	$link[2][weight]			= 0;
+	$link[1]['type']			= "home_button";
+	$link[1]['array']['nav']	= "project";
+	$link[1]['file']			= "project/home/buttons/view_my.html";
+	$link[1]['weight']			= 200;
+
+	$link[2]['type']			= "ou_navigation";
+	$link[2]['array']['nav']	= "project";
+	$link[2]['array']['run']	= "organ_unit";
+	$link[2]['array']['ou_id']	= "%OU_ID%";
+	$link[2]['weight']			= 0;
 ?>

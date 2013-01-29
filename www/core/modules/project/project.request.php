@@ -3,7 +3,7 @@
  * @package project
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -480,7 +480,7 @@ class ProjectRequest
 				
 				case("userprojects"):
 					require_once("io/project.io.php");
-					ProjectIO::list_user_related_projects($_GET[id]);
+					ProjectIO::list_user_related_projects($_GET['id']);
 				break;		
 	
 				case("organ_unit"):
@@ -706,7 +706,7 @@ class ProjectRequest
 											$description_required = $project_item->is_description_required();
 											$keywords_required = $project_item->is_keywords_required();
 											
-											if (($description_required and !$_POST[description] and !$_GET[idk_unique_id]) or ($keywords_required and !$_POST[keywords] and !$_GET[idk_unique_id]))
+											if (($description_required and !$_POST['description'] and !$_GET['idk_unique_id']) or ($keywords_required and !$_POST['keywords'] and !$_GET['idk_unique_id']))
 											{
 												require_once("core/modules/item/io/item.io.php");
 												ItemIO::information(http_build_query($_GET), $description_required, $keywords_required);
@@ -844,7 +844,7 @@ class ProjectRequest
 							{
 								require_once($main_file);
 								
-								if (class_exists($module_dialog['class']))
+								if (class_exists($main_class))
 								{
 									$project = new Project($_GET['project_id']);
 									$project_item = new ProjectItem($_GET['project_id']);
@@ -935,12 +935,6 @@ class ProjectRequest
 				case("common_dialog"):
 					require_once("core/modules/base/common.request.php");
 					CommonRequest::common_dialog();
-				break;
-					
-				// Search
-				case("search"):
-					require_once("core/modules/base/common.request.php");
-					CommonRequest::search_dialog();
 				break;
 				
 				// Default

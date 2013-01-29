@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -39,43 +39,78 @@ class Template implements TemplateInterface
 	protected $file_path;
 	protected $var_array;
 	
+	private $global_fallback_language_file;
+	private $global_language_file;
+	private $fallback_language_file;
+	private $language_file;
+	
 	/**
 	 * @see TemplateInterface::__construct()
 	 * @param string $file_path
 	 */
-	protected function __construct($file_path, $folder_path = null)
-	{
-		if ($folder_path)
+	protected function __construct($file_path, $folder_path = null, $language_id = null)
+	{		
+		if (isset($GLOBALS['fatal_error']))
 		{
-			$current_folder_file = constant("WWW_DIR")."/".$folder_path."/".$file_path;
-		}
-		else
-		{
-			$current_folder_file = constant("WWW_DIR")."/template/".self::$current_folder."/".$file_path;
-		}
-		
-		if (file_exists($current_folder_file) == true)
-		{
-			$this->open_file($current_folder_file);
+			$this->open_file("template/".self::$current_folder."/".$file_path);
 			$this->file_path = $file_path;
+			$this->fallback_language_file = null;
+			$this->language_file = null;
 		}
 		else
 		{
-			if (!$folder_path)
+			if ($folder_path)
 			{
-				$fallback_folder_file = constant("WWW_DIR")."/template/".self::$fallback_folder."/".$file_path;
-				
-				if (file_exists($fallback_folder_file) == true)
+				$current_folder_file = constant("WWW_DIR")."/".$folder_path."/".$file_path;
+			}
+			else
+			{
+				$current_folder_file = constant("WWW_DIR")."/template/".self::$current_folder."/".$file_path;
+			}
+			
+			if (file_exists($current_folder_file) == true)
+			{
+				$this->open_file($current_folder_file);
+				$this->file_path = $file_path;
+				$this->fallback_language_file = Language::get_current_language_path($current_folder_file, 1);
+				$this->language_file = Language::get_current_language_path($current_folder_file, $language_id);
+			}
+			else
+			{
+				if (!$folder_path)
 				{
-					$this->open_file($fallback_folder_file);
-					$this->file_path = $file_path;
+					$fallback_folder_file = constant("WWW_DIR")."/template/".self::$fallback_folder."/".$file_path;
+					
+					if (file_exists($fallback_folder_file) == true)
+					{
+						$this->open_file($fallback_folder_file);
+						$this->file_path = $file_path;
+						$this->fallback_language_file = Language::get_current_language_path($fallback_folder_file, 1);
+						$this->language_file = Language::get_current_language_path($fallback_folder_file, $language_id);
+					}
+					else
+					{
+						if (file_exists("template/".self::$fallback_folder."/".$file_path) == true)
+						{
+							$this->open_file("template/".self::$fallback_folder."/".$file_path);
+							$this->file_path = "template/".self::$fallback_folder."/".$file_path;
+							$this->fallback_language_file = Language::get_current_language_path("template/".self::$fallback_folder."/".$file_path, 1);
+							$this->language_file = Language::get_current_language_path("template/".self::$fallback_folder."/".$file_path, $language_id);
+						}
+						else
+						{
+							die("Template Engine: File Not Found!<br />".$file_path);
+						}
+					}
 				}
 				else
 				{
-					if (file_exists("template/".self::$fallback_folder."/".$file_path) == true)
+					if (file_exists($folder_path."/".$file_path) == true)
 					{
-						$this->open_file("template/".self::$fallback_folder."/".$file_path);
-						$this->file_path = "template/".self::$fallback_folder."/".$file_path;
+						$this->open_file($folder_path."/".$file_path);
+						$this->file_path = $folder_path."/".$file_path;
+						$this->fallback_language_file = Language::get_current_language_path($folder_path."/".$file_path, 1);
+						$this->language_file = Language::get_current_language_path($folder_path."/".$file_path, $language_id);
 					}
 					else
 					{
@@ -83,18 +118,8 @@ class Template implements TemplateInterface
 					}
 				}
 			}
-			else
-			{
-				if (file_exists($folder_path."/".$file_path) == true)
-				{
-					$this->open_file($folder_path."/".$file_path);
-					$this->file_path = $folder_path."/".$file_path;
-				}
-				else
-				{
-					die("Template Engine: File Not Found!<br />".$file_path);
-				}
-			}
+			$this->global_fallback_language_file = Language::get_current_global_language_path(1);
+			$this->global_language_file = Language::get_current_global_language_path($language_id);
 		}
 	}
 	
@@ -660,6 +685,11 @@ class Template implements TemplateInterface
 						$pointer_correction = $new_inner_block_string_length - $current_inner_block_string_length;
 						
 						$pointer = $pointer + $pointer_correction;
+						
+						if ($pointer < 0)
+						{
+							$pointer = 0;
+						}
 
 						$string = substr_replace($string, $new_inner_block_string, $inner_block_begin, ($inner_block_end-$inner_block_begin)+14);
 					}
@@ -694,19 +724,55 @@ class Template implements TemplateInterface
 		while(($start_pos = strpos($this->string, "[[", $pointer)) !== false)
 		{
 			$end_pos = strpos($this->string, "]]", $start_pos+1);
-			$pointer = $start_pos + 1;  
 			
 			$current_var = substr($this->string, $start_pos+2, ($end_pos - $start_pos)-2);
 			$current_var_length = strlen($current_var);
-
-			$new_var = $this->get_var_value($current_var);
+			
+			if (strpos($current_var, "LANG:") !== false)
+			{
+				if($this->global_fallback_language_file != null)
+				{
+					require($this->global_fallback_language_file);
+				}
+				
+				if($this->global_language_file != null)
+				{
+					require($this->global_language_file);
+				}
+				
+				if($this->fallback_language_file != null)
+				{
+					require_once($this->fallback_language_file);
+				}
+				
+				if($this->language_file != null)
+				{
+					require_once($this->language_file);
+				}
+					
+				if (isset($LANG))
+				{
+					$language_address = str_replace("LANG:","",$current_var);
+					$new_var = $LANG[$language_address];
+				}
+			}
+			else
+			{
+				$new_var = $this->get_var_value($current_var);
+			}
+			
 			$new_var_length = strlen($new_var);
 			
 			$this->string = substr_replace($this->string, $new_var, $start_pos, ($end_pos - $start_pos)+2);
 			
-			$pointer_correction = $new_var_length - $current_var_length;
-						
-			$pointer = $pointer + $pointer_correction;
+			$pointer_correction = $new_var_length - ($current_var_length+4);
+			
+			$pointer = ($start_pos + 1) + $pointer_correction;
+			
+			if ($pointer < 0)
+			{
+				$pointer = 0;
+			}
 		}
 	}
 	
@@ -855,6 +921,10 @@ class Template implements TemplateInterface
 				$this->string = fread($handler, filesize($file));
 				$this->string = str_replace("\\[[","[%OB%]",$this->string);
 				$this->string = str_replace("\\]]","[%CB%]",$this->string);
+				
+				
+				
+				$this->lanuage_file = "";
 			}
 			else
 			{

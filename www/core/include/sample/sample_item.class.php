@@ -3,7 +3,7 @@
  * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -562,21 +562,21 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     		{
     			foreach($gid_item_array as $key => $value)
     			{
-    				if ($value[xml_element] == "information")
+    				if ($value['xml_element'] == "information")
     				{
     					$return_array = array();
     							
-						if ($value[keywords] == "keywords")
+						if ($value['keywords'] == "keywords")
 						{
-							$return_array[keywords] = true;
+							$return_array['keywords'] = true;
 						}
 						
-						if ($value[description] == "description")
+						if ($value['description'] == "description")
 						{
-							$return_array[description] = true;
+							$return_array['description'] = true;
 						}
 						
-						if ($return_array[keywords] or $return_array[description])
+						if ($return_array['keywords'] or $return_array['description'])
 						{
 							return $return_array;
 						}
@@ -624,21 +624,21 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 	    				{
 	    					foreach($class_array as $key => $value)
 	    					{
-	    						if ($value[xml_element] == "information")
+	    						if ($value['xml_element'] == "information")
 	    						{
 	    							$return_array = array();
 	    							
-	    							if ($value[keywords] == "keywords")
+	    							if ($value['keywords'] == "keywords")
 	    							{
-	    								$return_array[keywords] = true;
+	    								$return_array['keywords'] = true;
 	    							}
 	    							
-	    							if ($value[description] == "description")
+	    							if ($value['description'] == "description")
 	    							{
-	    								$return_array[description] = true;
+	    								$return_array['description'] = true;
 	    							}
 	    							
-	    							if ($return_array[keywords] or $return_array[description])
+	    							if ($return_array['keywords'] or $return_array['description'])
 	    							{
 	    								return $return_array;
 	    							}
@@ -684,14 +684,14 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 	    	
 	    	if ($class_information)
 	    	{
-				if ($class_information[description] == true)
+				if ($class_information['description'] == true)
 				{
 					return true;
 				}
 	    	}
 	    	elseif($item_information)
 	    	{
-	    		if ($item_information[description] == true)
+	    		if ($item_information['description'] == true)
 	    		{
 					return true;
 				}
@@ -720,14 +720,14 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 	    	
 	    	if ($class_information)
 	    	{
-				if ($class_information[keywords] == true)
+				if ($class_information['keywords'] == true)
 				{
 					return true;
 				}
 	    	}
 	    	elseif($item_information)
 	    	{
-	    		if ($item_information[keywords] == true)
+	    		if ($item_information['keywords'] == true)
 	    		{
 					return true;
 				}
@@ -756,14 +756,14 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 	    	
 	    	if ($class_information)
 	    	{
-				if ($class_information[description] == true)
+				if ($class_information['description'] == true)
 				{
 					return true;
 				}
 	    	}
 	    	elseif($item_information)
 	    	{
-	    		if ($item_information[description] == true)
+	    		if ($item_information['description'] == true)
 	    		{
 					return true;
 				}
@@ -792,14 +792,14 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 	    	
 	    	if ($class_information)
 	    	{
-				if ($class_information[keywords] == true)
+				if ($class_information['keywords'] == true)
 				{
 					return true;
 				}
 	    	}
 	    	elseif($item_information)
 	    	{
-	    		if ($item_information[keywords] == true)
+	    		if ($item_information['keywords'] == true)
 	    		{
 					return true;
 				}

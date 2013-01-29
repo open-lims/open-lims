@@ -3,7 +3,7 @@
  * @package project
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -286,11 +286,11 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						
 						foreach($project_status_requirements as $sub_key => $sub_value)
 	    				{
-	    					if (($sub_value[type] == "file" or $sub_value[type] == "value") and $sub_value[folder])
+	    					if (($sub_value['type'] == "file" or $sub_value['type'] == "value") and $sub_value['folder'])
 	    					{
-								if (array_search(trim($sub_value[folder]), $sub_folder_array) === false)
+								if (array_search(trim($sub_value['folder']), $sub_folder_array) === false)
 								{
-									array_push($sub_folder_array, trim($sub_value[folder]));
+									array_push($sub_folder_array, trim($sub_value['folder']));
 								}
 							}
 	    					
@@ -811,9 +811,9 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 				switch ($value['element_type']):
 						
 					case "item":
-						$amount = count($value[fulfilled]);
+						$amount = count($value['fulfilled']);
 						
-						if ((!is_array($value[fulfilled]) or count($value[fulfilled]) == 0) and $value[requirement] != "optional")
+						if ((!is_array($value['fulfilled']) or count($value['fulfilled']) == 0) and $value['requirement'] != "optional")
 						{
 							$not_fulfilled = true;
 						}
@@ -826,7 +826,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 								{
 									if ($sub_sub_item_value['element_type'] == "item")
 									{
-										if (!is_array($sub_sub_item_value[fulfilled]) and $sub_sub_item_value[requirement] != "optional")
+										if (!is_array($sub_sub_item_value['fulfilled']) and $sub_sub_item_value['requirement'] != "optional")
 										{
 											$not_fulfilled = true;
 										}
@@ -837,11 +837,11 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					break;
 					
 					case "extension":
-						if ($value[fulfilled] == 0 and $value[requirement] != "optional")
+						if ($value['fulfilled'] == 0 and $value['requirement'] != "optional")
 						{
 							$not_fulfilled = true;
 						}
-						if ($value[fulfilled] == -1 and $value[requirement] != "optional")
+						if ($value['fulfilled'] == -1 and $value['requirement'] != "optional")
 						{
 							$not_fulfilled = true;
 						}
@@ -884,7 +884,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	    		$return_array = array();
 	    		
 	    		$project_template = new ProjectTemplate($this->project->get_template_id());
-	    		
 	    		
 	    		$workflow = $project_template->get_workflow_object();
 	    		
@@ -1007,7 +1006,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 		    	$status_attribute_array = $project_template->get_status_attributes($status_id);
 		    	$requirements_array = $project_template->get_status_requirements($status_id);
 				
-				if ($status_attribute_array[requirement] == "optional")
+				if ($status_attribute_array['requirement'] == "optional")
 				{
 					$requirement_default = "optional";
 				}
@@ -1036,34 +1035,34 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					{
 						
 						// ITEM
-						if ($value[xml_element] == "item" and !$value[close])
+						if ($value['xml_element'] == "item" and !$value['close'])
 						{
 							$in_item = true;
 							
-							$return_array[$counter][element_type] = "item";		
-							$return_array[$counter][display] = true;
+							$return_array[$counter]['element_type'] = "item";		
+							$return_array[$counter]['display'] = true;
 
-							$return_array[$counter][type] = $value[type];
-							$return_array[$counter][name] = $value[name];
-							$return_array[$counter][dialog] = $value[dialog];
-							$return_array[$counter][handling_class] = Item::get_handling_class_by_type($value[type]);
+							$return_array[$counter]['type'] = $value['type'];
+							$return_array[$counter]['name'] = $value['name'];
+							$return_array[$counter]['dialog'] = $value['dialog'];
+							$return_array[$counter]['handling_class'] = Item::get_handling_class_by_type($value['type']);
 							
-							if ($value[requirement] and $status_attribute_array[requirement] != "optional")
+							if ($value['requirement'] and $status_attribute_array['requirement'] != "optional")
 							{
-								$return_array[$counter][requirement] = $value[requirement];
+								$return_array[$counter]['requirement'] = $value['requirement'];
 							}
 							else
 							{
-								$return_array[$counter][requirement] = $requirement_default;
+								$return_array[$counter]['requirement'] = $requirement_default;
 							}
 							
-							if ($value[occurrence])
+							if ($value['occurrence'])
 							{
-								$return_array[$counter][occurrence] = $value[occurrence];
+								$return_array[$counter]['occurrence'] = $value['occurrence'];
 							}
 							else
 							{
-								$return_array[$counter][occurrence] = "once";
+								$return_array[$counter]['occurrence'] = "once";
 							}
 							
 							if (is_numeric($value['pos_id']))
@@ -1092,9 +1091,9 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 												if ($item_handling_class::is_kind_of($item_type, $item_value['item_id']) == true  and $item_value['pos_id'] == $pos_id and $item_value['pos_id'] !== null and $pos_id !== null)
 												{
 													$item_instance = $item_handling_class::get_instance_by_item_id($item_value['item_id'], true);
-													$return_array[$counter][fulfilled][$fulfilled_counter][item_id] = $item_value['item_id'];
-													$return_array[$counter][fulfilled][$fulfilled_counter][id] = $item_instance->get_item_object_id();
-													$return_array[$counter][fulfilled][$fulfilled_counter][name] = $item_instance->get_item_object_name();
+													$return_array[$counter]['fulfilled'][$fulfilled_counter]['item_id'] = $item_value['item_id'];
+													$return_array[$counter]['fulfilled'][$fulfilled_counter]['id'] = $item_instance->get_item_object_id();
+													$return_array[$counter]['fulfilled'][$fulfilled_counter]['name'] = $item_instance->get_item_object_name();
 													array_push($item_instance_array, $item_instance);
 													$fulfilled_counter++;
 													break;
@@ -1115,7 +1114,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 										{	
 											if ($object_value instanceof ItemHolderInterface)
 											{	
-												$return_array[$counter][sub_items][$object_key] = $object_value->get_item_add_information();
+												$return_array[$counter]['sub_items'][$object_key] = $object_value->get_item_add_information();
 											}
 										}
 									}
@@ -1123,7 +1122,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 							}
 						}
 						
-						if ($value[xml_element] == "item" and $value[close] == "1")
+						if ($value['xml_element'] == "item" and $value['close'] == "1")
 						{
 							$counter++;
 							$type_counter = 0;
@@ -1136,7 +1135,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						
 						
 						// ITEMI
-						if ($value[xml_element] == "itemi" and !$value[close])
+						if ($value['xml_element'] == "itemi" and !$value['close'])
 						{
 							if (is_numeric($value['parent_status']) and is_numeric($value['parent_pos_id']) and is_numeric($value['pos_id']))
 							{					
@@ -1149,7 +1148,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 								if (!is_numeric($parent_item_array[$value['parent_status']]))
 								{
 									$return_array[$counter] = $parent_requirement_array;
-									$return_array[$counter][display] = false;
+									$return_array[$counter]['display'] = false;
 
 									$parent_item_counter = $counter;
 									$parent_item_array[$value['parent_status']] = $counter;
@@ -1195,55 +1194,55 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						
 						
 						// TYPE
-						if ($value[xml_element] == "type" and !$value[close] and $in_item = true and is_numeric($value[id]))
+						if ($value['xml_element'] == "type" and !$value['close'] and $in_item = true and is_numeric($value['id']))
 						{
-							$return_array[$counter][type_id][$type_counter] = $value[id];
+							$return_array[$counter]['type_id'][$type_counter] = $value['id'];
 							$type_counter++;
 						}
 						
 						
 						// CATEGORY
-						if ($value[xml_element] == "category" and !$value[close] and $in_item = true and is_numeric($value[id]))
+						if ($value['xml_element'] == "category" and !$value['close'] and $in_item = true and is_numeric($value['id']))
 						{
-							$return_array[$counter][category_id][$category_counter] = $value[id];
+							$return_array[$counter]['category_id'][$category_counter] = $value['id'];
 							$category_counter++;
 						}		
 
 						
 						// EXTENSION
-						if ($value[xml_element] == "extension" and !$value[close])
+						if ($value['xml_element'] == "extension" and !$value['close'])
 						{
-							$extension_id = Extension::get_id_by_identifier($value[identifier]);
+							$extension_id = Extension::get_id_by_identifier($value['identifier']);
 							$extension = new Extension($extension_id);
 							
-							$return_array[$counter][element_type] = "extension";
-							$return_array[$counter][name] = $extension->get_name();
-							$return_array[$counter][extension] = $value[identifier];
+							$return_array[$counter]['element_type'] = "extension";
+							$return_array[$counter]['name'] = $extension->get_name();
+							$return_array[$counter]['extension'] = $value['identifier'];
 							
-							if ($value[requirement] and $status_attribute_array[requirement] != "optional")
+							if ($value['requirement'] and $status_attribute_array['requirement'] != "optional")
 							{
-								$return_array[$counter][requirement] = $value[requirement];
+								$return_array[$counter]['requirement'] = $value['requirement'];
 							}
 							else
 							{
-								$return_array[$counter][requirement] = $requirement_default;
+								$return_array[$counter]['requirement'] = $requirement_default;
 							}
 							
-							if ($value[occurrence])
+							if ($value['occurrence'])
 							{
-								$return_array[$counter][occurrence] = $value[occurrence];
+								$return_array[$counter]['occurrence'] = $value['occurrence'];
 							}
 							else
 							{
-								$return_array[$counter][occurrence] = "once";
+								$return_array[$counter]['occurrence'] = "once";
 							}
 
-							$return_array[$counter][fulfilled] = ProjectExtension::get_status($extension_id, $this->project_id);
+							$return_array[$counter]['fulfilled'] = ProjectExtension::get_status($extension_id, $this->project_id);
 							
 							$in_extension = true;
 						}
 						
-						if ($value[xml_element] == "extension" and $value[close] == "1")
+						if ($value['xml_element'] == "extension" and $value['close'] == "1")
 						{
 							$counter++;
 							$filter_counter = 0;
@@ -1252,12 +1251,12 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						
 						
 						// FILTER
-						if ($value[xml_element] == "filter" and !$value[close] and $in_extension == true and is_numeric($value[status]))
+						if ($value['xml_element'] == "filter" and !$value['close'] and $in_extension == true and is_numeric($value['status']))
 						{
-							$return_array[$counter][filter][$filter_counter][status] = $value[status];
-							if ($value[type])
+							$return_array[$counter]['filter'][$filter_counter]['status'] = $value['status'];
+							if ($value['type'])
 							{
-								$return_array[$counter][filter][$filter_counter][type] = $value[type];
+								$return_array[$counter]['filter'][$filter_counter]['type'] = $value['type'];
 							}
 							$filter_counter++;
 						}
@@ -1268,11 +1267,11 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 				{
 					foreach($return_array as $key => $value)
 					{
-						if (!$value[name] and $value[type])
+						if (!$value['name'] and $value['type'])
 						{
-							if ($return_array[$key][handling_class])
+							if ($return_array[$key]['handling_class'])
 							{
-								$return_array[$key][name] = "Add ".$return_array[$key][handling_class]::get_generic_name($value[type], $value[type_id]);
+								$return_array[$key]['name'] = "Add ".$return_array[$key]['handling_class']::get_generic_name($value['type'], $value['type_id']);
 							}
 						}
 						
@@ -1280,11 +1279,11 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						{
 							foreach($value['sub_items'] as $sub_item_key => $sub_item_value)
 							{
-								if (!$sub_item_value[name] and $sub_item_value[type])
+								if (!$sub_item_value['name'] and $sub_item_value['type'])
 								{
-									if ($return_array[$key][sub_items][$sub_item_key][handling_class])
+									if ($return_array[$key]['sub_items'][$sub_item_key]['handling_class'])
 									{
-										$return_array[$key][sub_items][$sub_item_key][name] = "Add ".$return_array[$key][sub_items][$sub_item_key][handling_class]::get_generic_name($sub_item_value[type], $sub_item_value[type_id]);
+										$return_array[$key]['sub_items'][$sub_item_key]['name'] = "Add ".$return_array[$key]['sub_items'][$sub_item_key]['handling_class']::get_generic_name($sub_item_value['type'], $sub_item_value['type_id']);
 									}
 								}
 							}
@@ -1342,7 +1341,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					foreach($requirements_array as $key => $value)
 					{
 						// ITEM
-						if ($value[xml_element] == "item" and !$value[close])
+						if ($value['xml_element'] == "item" and !$value['close'])
 						{
 							$in_item = true;
 							
@@ -1426,7 +1425,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 							}
 						}
 						
-						if ($value[xml_element] == "item" and $value[close] == "1")
+						if ($value['xml_element'] == "item" and $value['close'] == "1")
 						{
 							$counter++;
 							$sub_item_counter = 0;
@@ -1435,7 +1434,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						
 						
 						// ITEMI
-						if ($value[xml_element] == "itemi" and !$value[close])
+						if ($value['xml_element'] == "itemi" and !$value['close'])
 						{
 							if (is_numeric($value['parent_status']) and is_numeric($value['parent_pos_id']) and is_numeric($value['pos_id']))
 							{		
@@ -1519,7 +1518,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					{
 						if ($current_status_id == $this->get_current_status_id())
 						{
-							if ($value[xml_element] == "item" and !$value[close])
+							if ($value['xml_element'] == "item" and !$value['close'])
 							{
 								$in_item = true;
 								
@@ -1539,7 +1538,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 								}
 							}
 							
-							if ($value[xml_element] == "item" and $value[close] == "1")
+							if ($value['xml_element'] == "item" and $value['close'] == "1")
 							{
 								$counter++;
 								$in_item = false;
@@ -1547,7 +1546,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						}
 						
 						// ITEMI
-						if ($value[xml_element] == "itemi" and !$value[close])
+						if ($value['xml_element'] == "itemi" and !$value['close'])
 						{
 							// Is an ITEMI-element with status relation in another element?
 							if (is_numeric($value['parent_status']) and is_numeric($value['parent_pos_id']) and is_numeric($value['pos_id']))
@@ -1725,7 +1724,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	    	$status_attribute_array = $project_template->get_status_attributes($status_id);
 	    	$requirements_array = $project_template->get_status_requirements($status_id);
 			
-			if ($status_attribute_array[requirement] == "optional")
+			if ($status_attribute_array['requirement'] == "optional")
 			{
 				$requirement_default = "optional";
 			}
@@ -1742,41 +1741,41 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 			{
 				foreach($requirements_array as $key => $value)
 				{
-					if ($value[xml_element] == "item" and !$value[close])
+					if ($value['xml_element'] == "item" and !$value['close'])
 					{
 						$in_item = true;
-						$return_array[$counter][type] = $value[type];
-						$return_array[$counter][name] = $value[name];
+						$return_array[$counter]['type'] = $value['type'];
+						$return_array[$counter]['name'] = $value['name'];
 						
-						if ($value[requirement] and $status_attribute_array[requirement] != "optional")
+						if ($value['requirement'] and $status_attribute_array['requirement'] != "optional")
 						{
-							$return_array[$counter][requirement] = $value[requirement];
+							$return_array[$counter]['requirement'] = $value['requirement'];
 						}
 						else
 						{
-							$return_array[$counter][requirement] = $requirement_default;
+							$return_array[$counter]['requirement'] = $requirement_default;
 						}
 						
-						if ($value[occurrence])
+						if ($value['occurrence'])
 						{
-							$return_array[$counter][occurrence] = $value[occurrence];
+							$return_array[$counter]['occurrence'] = $value['occurrence'];
 						}
 						else
 						{
-							$return_array[$counter][occurrence] = "once";
+							$return_array[$counter]['occurrence'] = "once";
 						}
 					}
 					
-					if ($value[xml_element] == "item" and $value[close] == "1")
+					if ($value['xml_element'] == "item" and $value['close'] == "1")
 					{
 						$counter++;
 						$type_counter = 0;
 						$in_item = false;
 					}
 					
-					if ($value[xml_element] == "type" and !$value[close] and $in_item == true and is_numeric($value[id]))
+					if ($value['xml_element'] == "type" and !$value['close'] and $in_item == true and is_numeric($value['id']))
 					{
-						$return_array[$counter][type_id][$type_counter] = $value[id];
+						$return_array[$counter]['type_id'][$type_counter] = $value['id'];
 						$type_counter++;
 					}				
 				}
@@ -1808,9 +1807,9 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     			$project_template = new ProjectTemplate($this->project->get_template_id());
     			$attribute_array = $project_template->get_gid_attributes($gid, $status_id);
     			
-    			if ($attribute_array[folder])
+    			if ($attribute_array['folder'])
     			{
-    				$folder_name = strtolower(trim($attribute_array[folder]));
+    				$folder_name = strtolower(trim($attribute_array['folder']));
     				$folder_name = str_replace(" ","-",$folder_name);
     				
     				$folder_path = new Path($folder->get_path());
@@ -2170,8 +2169,8 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	    		$return_array = self::make_project_tree_rec(1, $project_id);
 	    		
 	    		$data_array = array();
-	    		$data_array[id] = $project_id;
-	    		$data_array[layer] = 0;
+	    		$data_array['id'] = $project_id;
+	    		$data_array['layer'] = 0;
 	    		
 	    		array_unshift($return_array, $data_array);
 	    	
@@ -2195,8 +2194,8 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     				$tmp_array = self::make_project_tree_rec(1, $value);
 	    		
 		    		$data_array = array();
-		    		$data_array[id] = $value;
-		    		$data_array[layer] = 0;
+		    		$data_array['id'] = $value;
+		    		$data_array['layer'] = 0;
 		    		
 		    		array_unshift($tmp_array, $data_array);
 		    		$return_array = array_merge($return_array, $tmp_array);
@@ -2790,8 +2789,8 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	    	foreach($project_array as $key => $value)
 	    	{
 	    		$temp_array = array();
-	    		$temp_array[id] = $value;
-	    		$temp_array[layer] = $layer;
+	    		$temp_array['id'] = $value;
+	    		$temp_array['layer'] = $layer;
 	    		
 	    		array_push($return_array, $temp_array);
 	    		

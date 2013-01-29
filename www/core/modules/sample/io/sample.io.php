@@ -3,7 +3,7 @@
  * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -32,12 +32,12 @@ class SampleIO
 		$list = new List_IO("SampleUserRelated", "ajax.php?nav=sample", "list_user_related_samples", "count_user_related_samples", "0", "SampleAjaxMySamples");
 		
 		$list->add_column("","symbol",false,"16px");
-		$list->add_column("Smpl. ID","id",true,"11%");
-		$list->add_column("Sample Name","name",true,null);
-		$list->add_column("Date/Time","datetime",true,null);
-		$list->add_column("Type/Tmpl.","template",true,null);
-		$list->add_column("Curr. Loc.","location",true,null);
-		$list->add_column("AV","av",false,"20px");
+		$list->add_column(Language::get_message("SampleGeneralListColumnSampleID", "general"),"id",true,"11%");
+		$list->add_column(Language::get_message("SampleGeneralListColumnSampleName", "general"),"name",true,null);
+		$list->add_column(Language::get_message("SampleGeneralListColumnDateTime", "general"),"datetime",true,null);
+		$list->add_column(Language::get_message("SampleGeneralListColumnTypeTemplate", "general"),"template",true,null);
+		$list->add_column(Language::get_message("SampleGeneralListColumnCurrentLocation", "general"),"location",true,null);
+		$list->add_column(Language::get_message("SampleGeneralListColumnAvailable", "general"),"av",false,"20px");
 		
 		$template = new HTMLTemplate("sample/list_user.html");	
 		
@@ -61,25 +61,25 @@ class SampleIO
 	 */
 	public static function list_organisation_unit_related_samples()
 	{
-		if ($_GET[ou_id])
+		if ($_GET['ou_id'])
 		{
 			try
 			{
 				$organisation_unit_id = $_GET['ou_id'];
 				
 				$argument_array = array();
-				$argument_array[0][0] = "organisation_unit_id";
-				$argument_array[0][1] = $organisation_unit_id;
+				$argument_array[0] = "organisation_unit_id";
+				$argument_array[1] = $organisation_unit_id;
 				
 				$list = new List_IO("SampleOrganisationUnitRelated", "ajax.php?nav=sample", "list_organisation_unit_related_samples", "count_organisation_unit_related_samples", $argument_array, "SampleAjaxMySamples", 12);
 				
 				$list->add_column("","symbol",false,"16px");
-				$list->add_column("Smpl. ID","id",true,"11%");
-				$list->add_column("Sample Name","name",true,null);
-				$list->add_column("Date/Time","datetime",true,null);
-				$list->add_column("Type/Tmpl.","template",true,null);
-				$list->add_column("Curr. Loc.","location",true,null);
-				$list->add_column("AV","av",false,"16px");
+				$list->add_column(Language::get_message("SampleGeneralListColumnSampleID", "general"),"id",true,"11%");
+				$list->add_column(Language::get_message("SampleGeneralListColumnSampleName", "general"),"name",true,null);
+				$list->add_column(Language::get_message("SampleGeneralListColumnDateTime", "general"),"datetime",true,null);
+				$list->add_column(Language::get_message("SampleGeneralListColumnTypeTemplate", "general"),"template",true,null);
+				$list->add_column(Language::get_message("SampleGeneralListColumnCurrentLocation", "general"),"location",true,null);
+				$list->add_column(Language::get_message("SampleGeneralListColumnAvailable", "general"),"av",false,"16px");
 							
 				require_once("core/modules/organisation_unit/io/organisation_unit.io.php");
 				$organisation_unit_io = new OrganisationUnitIO;
@@ -125,13 +125,13 @@ class SampleIO
 				$template = new HTMLTemplate("sample/list_parents.html");
 				
 				$list->add_column("","symbol",false,"16px");
-				$list->add_column("Smpl. ID","sid",true,"11%");
-				$list->add_column("Sample Name","name",true,null);
-				$list->add_column("Date","datetime",true,null);
-				$list->add_column("Type/Tmpl.","template",true,null);
-				$list->add_column("Curr. Loc.","location",true,null);
-				$list->add_column("Owner","owner",true,null);
-				$list->add_column("AV","av",false,"16px");
+				$list->add_column(Language::get_message("SampleGeneralListColumnSampleID", "general"),"sid",true,"11%");
+				$list->add_column(Language::get_message("SampleGeneralListColumnSampleName", "general"),"name",true,null);
+				$list->add_column(Language::get_message("SampleGeneralListColumnDate", "general"),"datetime",true,null);
+				$list->add_column(Language::get_message("SampleGeneralListColumnTypeTemplate", "general"),"template",true,null);
+				$list->add_column(Language::get_message("SampleGeneralListColumnCurrentLocation", "general"),"location",true,null);
+				$list->add_column(Language::get_message("SampleGeneralListColumnOwner", "general"),"owner",true,null);
+				$list->add_column(Language::get_message("SampleGeneralListColumnAvailable", "general"),"av",false,"16px");
 			}
 			else
 			{
@@ -141,12 +141,12 @@ class SampleIO
 				
 				$list->add_column("","checkbox",false,"16px", $form_field_name);
 				$list->add_column("","symbol",false,"16px");
-				$list->add_column("Smpl. ID","sid",false,"11%");
-				$list->add_column("Sample Name","name",false,null);
-				$list->add_column("Date","datetime",false,null);
-				$list->add_column("Type/Tmpl.","template",false,null);
-				$list->add_column("Curr. Loc.","location",false,null);
-				$list->add_column("Owner","owner",false,null);
+				$list->add_column(Language::get_message("SampleGeneralListColumnSampleID", "general"),"sid",false,"11%");
+				$list->add_column(Language::get_message("SampleGeneralListColumnSampleName", "general"),"name",false,null);
+				$list->add_column(Language::get_message("SampleGeneralListColumnDate", "general"),"datetime",false,null);
+				$list->add_column(Language::get_message("SampleGeneralListColumnTypeTemplate", "general"),"template",false,null);
+				$list->add_column(Language::get_message("SampleGeneralListColumnCurrentLocation", "general"),"location",false,null);
+				$list->add_column(Language::get_message("SampleGeneralListColumnAvailable", "general"),"owner",false,null);
 			}
 		
 			$template->set_var("list", $list->get_list());
@@ -197,13 +197,13 @@ class SampleIO
 			$template = new HTMLTemplate("sample/list.html");
 			
 			$list->add_column("","symbol",false,"16px");
-			$list->add_column("Smpl. ID","sid",true,"11%");
-			$list->add_column("Sample Name","name",true,null);
-			$list->add_column("Date","datetime",true,null);
-			$list->add_column("Type/Tmpl.","template",true,null);
-			$list->add_column("Curr. Loc.","location",true,null);
-			$list->add_column("Owner","owner",true,null);
-			$list->add_column("AV","av",false,"16px");
+			$list->add_column(Language::get_message("SampleGeneralListColumnSampleID", "general"),"sid",true,"11%");
+			$list->add_column(Language::get_message("SampleGeneralListColumnSampleName", "general"),"name",true,null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnDate", "general"),"datetime",true,null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnTypeTemplate", "general"),"template",true,null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnCurrentLocation", "general"),"location",true,null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnOwner", "general"),"owner",true,null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnAvailable", "general"),"av",false,"16px");
 		}
 		else
 		{
@@ -213,12 +213,12 @@ class SampleIO
 			
 			$list->add_column("","checkbox",false,"16px", $form_field_name);
 			$list->add_column("","symbol",false,"16px");
-			$list->add_column("Smpl. ID","sid",false,"11%");
-			$list->add_column("Sample Name","name",false,null);
-			$list->add_column("Date","datetime",false,null);
-			$list->add_column("Type/Tmpl.","template",false,null);
-			$list->add_column("Curr. Loc.","location",false,null);
-			$list->add_column("Owner","owner",false,null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnSampleID", "general"),"sid",false,"11%");
+			$list->add_column(Language::get_message("SampleGeneralListColumnSampleName", "general"),"name",false,null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnDate", "general"),"datetime",false,null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnTypeTemplate", "general"),"template",false,null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnCurrentLocation", "general"),"location",false,null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnOwner", "general"),"owner",false,null);
 		}
 		
 		$template->set_var("list", $list->get_list());
@@ -237,27 +237,27 @@ class SampleIO
 	{		
 		global $session;
 				
-		if($_GET[run] == "item_add")
+		if($_GET['run'] == "item_add")
 		{	
-			if ($session->is_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]) == true)
+			if ($session->is_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET['idk_unique_id']) == true)
 			{
-				$session->write_value("SAMPLE_ITEM_KEYWORDS", $session->read_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]));
+				$session->write_value("SAMPLE_ITEM_KEYWORDS", $session->read_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET['idk_unique_id']));
 			}
 			else
 			{
 				$session->write_value("SAMPLE_ITEM_KEYWORDS", null);
 			}
 			
-			if ($session->is_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]) == true)
+			if ($session->is_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET['idk_unique_id']) == true)
 			{
-				$session->write_value("SAMPLE_ITEM_DESCRIPTION", $session->read_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]));
+				$session->write_value("SAMPLE_ITEM_DESCRIPTION", $session->read_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET['idk_unique_id']));
 			}
 			else
 			{
 				$session->write_value("SAMPLE_ITEM_DESCRIPTION", null);
 			}
 			
-			if ($_GET[dialog] == "parentsample")
+			if ($_GET['dialog'] == "parentsample")
 			{
 				$session->write_value("SAMPLE_ADD_ROLE", "item_parent", true);
 			}
@@ -290,11 +290,11 @@ class SampleIO
 		
 		$assistant_io = new AssistantIO("ajax.php?nav=sample&run=create_sample", "SampleCreateAssistantField");
 		
-		$assistant_io->add_screen("Organisation Unit");
-		$assistant_io->add_screen("Sample Type");
-		$assistant_io->add_screen("Sample Information");
-		$assistant_io->add_screen("Sample Specific Information");
-		$assistant_io->add_screen("Summary");
+		$assistant_io->add_screen(Language::get_message("SampleGeneralCreateTabOrganisationUnit", "general"));
+		$assistant_io->add_screen(Language::get_message("SampleGeneralCreateTabSampleType", "general"));
+		$assistant_io->add_screen(Language::get_message("SampleGeneralCreateTabSampleInformation", "general"));
+		$assistant_io->add_screen(Language::get_message("SampleGeneralCreateTabSampleSpecificInformation", "general"));
+		$assistant_io->add_screen(Language::get_message("SampleGeneralCreateTabSummary", "general"));
 
 		$template->set_var("content", $assistant_io->get_content());
 		
@@ -309,27 +309,27 @@ class SampleIO
 	{
 		global $session;
 		
-		if($_GET[run] == "item_add")
+		if($_GET['run'] == "item_add")
 		{	
-			if ($session->is_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]) == true)
+			if ($session->is_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET['idk_unique_id']) == true)
 			{
-				$session->write_value("SAMPLE_ITEM_KEYWORDS", $session->read_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET[idk_unique_id]));
+				$session->write_value("SAMPLE_ITEM_KEYWORDS", $session->read_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET['idk_unique_id']));
 			}
 			else
 			{
 				$session->write_value("SAMPLE_ITEM_KEYWORDS", null);
 			}
 			
-			if ($session->is_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]) == true)
+			if ($session->is_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET['idk_unique_id']) == true)
 			{
-				$session->write_value("SAMPLE_ITEM_DESCRIPTION", $session->read_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET[idk_unique_id]));
+				$session->write_value("SAMPLE_ITEM_DESCRIPTION", $session->read_value("ADD_ITEM_TEMP_DESCRIPTION_".$_GET['idk_unique_id']));
 			}
 			else
 			{
 				$session->write_value("SAMPLE_ITEM_DESCRIPTION", null);
 			}
 			
-			if ($_GET[dialog] == "parentsample")
+			if ($_GET['dialog'] == "parentsample")
 			{
 				$session->write_value("SAMPLE_CLONE_ROLE", "item_parent", true);
 			}
@@ -370,11 +370,11 @@ class SampleIO
 		
 		$assistant_io = new AssistantIO("ajax.php?nav=sample&run=clone_sample", "SampleCloneAssistantField");
 		
-		$assistant_io->add_screen("Source Sample");
-		$assistant_io->add_screen("Sample Information");
-		$assistant_io->add_screen("Sample Values");
-		$assistant_io->add_screen("Sample Items");
-		$assistant_io->add_screen("Summary");
+		$assistant_io->add_screen(Language::get_message("SampleGeneralCloneTabSourceSample", "general"));
+		$assistant_io->add_screen(Language::get_message("SampleGeneralCloneTabSampleInformation", "general"));
+		$assistant_io->add_screen(Language::get_message("SampleGeneralCloneTabSampleValues", "general"));
+		$assistant_io->add_screen(Language::get_message("SampleGeneralCloneTabSampleItems", "general"));
+		$assistant_io->add_screen(Language::get_message("SampleGeneralCloneTabSummary", "general"));
 
 		$template->set_var("content", $assistant_io->get_content());
 		
@@ -403,18 +403,18 @@ class SampleIO
 			}
 		}
 		
-		if (!$_GET[selectpage])
+		if (!$_GET['selectpage'])
 		{
 			$unique_id = uniqid();
 			
-			if ($_POST[keywords])
+			if ($_POST['keywords'])
 			{
-				$session->write_value("ADD_ITEM_TEMP_KEYWORDS_".$unique_id, $_POST[keywords], true);
+				$session->write_value("ADD_ITEM_TEMP_KEYWORDS_".$unique_id, $_POST['keywords'], true);
 			}
 			
-			if ($_POST[description])
+			if ($_POST['description'])
 			{
-				$session->write_value("ADD_ITEM_TEMP_DESCRIPTION_".$unique_id, $_POST[description], true);
+				$session->write_value("ADD_ITEM_TEMP_DESCRIPTION_".$unique_id, $_POST['description'], true);
 			}
 			
 			$template = new HTMLTemplate("sample/add_as_item.html");
@@ -424,8 +424,8 @@ class SampleIO
 			
 			foreach ($_GET as $key => $value)
 			{
-				$result[$counter][name] = $key;
-				$result[$counter][value] = $value;
+				$result[$counter]['name'] = $key;
+				$result[$counter]['value'] = $value;
 				$counter++;
 			}
 		
@@ -436,11 +436,11 @@ class SampleIO
 		}
 		else
 		{			
-			if ($_GET[selectpage] == 1)
+			if ($_GET['selectpage'] == 1)
 			{
 				return self::create($type_array, $category_array, $organisation_unit_id, $holder_class, $holder_id);
 			}
-			elseif ($_GET[selectpage] == 2)
+			elseif ($_GET['selectpage'] == 2)
 			{
 				return self::associate($type_array, $category_array);
 			}
@@ -483,15 +483,15 @@ class SampleIO
 				
 				if ($type_array == null or in_array($sample->get_template_id(), $type_array))
 				{
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $sample->get_name();
-					if ($_POST[sample] == $value)
+					$result[$counter]['value'] = $value;
+					$result[$counter]['content'] = $sample->get_name();
+					if ($_POST['sample'] == $value)
 					{
-						$result[$counter][selected] = "selected";
+						$result[$counter]['selected'] = "selected";
 					}
 					else
 					{
-						$result[$counter][selected] = "";
+						$result[$counter]['selected'] = "";
 					}
 					$counter++;
 				}
@@ -499,9 +499,9 @@ class SampleIO
 		}
 		else
 		{
-			$result[0][value] = 0;
-			$result[0][content] = "You have no samples";
-			$result[0][selected] = "";
+			$result[0]['value'] = 0;
+			$result[0]['content'] = "You have no samples";
+			$result[0]['selected'] = "";
 		}
 		$template->set_var("sample", $result);
 		
@@ -516,11 +516,11 @@ class SampleIO
 	{
 		global $sample_security, $user;
 		
-		if ($_GET[sample_id])
+		if ($_GET['sample_id'])
 		{
 			if ($sample_security->is_access(1, false))
 			{
-				$sample = new Sample($_GET[sample_id]);
+				$sample = new Sample($_GET['sample_id']);
 							
 				$template = new HTMLTemplate("sample/detail.html");
 				
@@ -553,16 +553,16 @@ class SampleIO
 	{
 		global $user, $sample_security;
 
-		if ($_GET[sample_id])
+		if ($_GET['sample_id'])
 		{
 			if ($sample_security->is_access(2, false))
 			{
-				$sample_id = $_GET[sample_id];		
+				$sample_id = $_GET['sample_id'];		
 				$sample = new Sample($sample_id);
 				
-				if ($_GET[nextpage] == 1)
+				if ($_GET['nextpage'] == 1)
 				{
-					if (is_numeric($_POST[location]))
+					if (is_numeric($_POST['location']))
 					{
 						$page_1_passed = true;
 					}
@@ -572,7 +572,7 @@ class SampleIO
 						$error = "You must select a location.";
 					}
 				}
-				elseif($_GET[nextpage] > 1)
+				elseif($_GET['nextpage'] > 1)
 				{
 					$page_1_passed = true;
 				}
@@ -587,7 +587,7 @@ class SampleIO
 					$template = new HTMLTemplate("sample/move.html");
 						
 					$paramquery = $_GET;
-					$paramquery[nextpage] = "1";
+					$paramquery['nextpage'] = "1";
 					$params = http_build_query($paramquery,'','&#38;');
 					
 					$template->set_var("params",$params);
@@ -605,16 +605,16 @@ class SampleIO
 						{
 							$sample_location_obj = new Location($value);
 											
-							$result[$counter][value] = $value;
-							$result[$counter][content] = $sample_location_obj->get_name(true);		
+							$result[$counter]['value'] = $value;
+							$result[$counter]['content'] = $sample_location_obj->get_name(true);		
 		
 							$counter++;
 						}
 					}
 					else
 					{
-						$result[$counter][value] = "0";
-						$result[$counter][content] = "NO LOCATIONS FOUND!";
+						$result[$counter]['value'] = "0";
+						$result[$counter]['content'] = "NO LOCATIONS FOUND!";
 					}
 
 					$template->set_var("option",$result);
@@ -624,11 +624,11 @@ class SampleIO
 				else
 				{
 					$paramquery = $_GET;
-					unset($paramquery[nextpage]);
-					$paramquery[run] = "detail";
+					unset($paramquery['nextpage']);
+					$paramquery['run'] = "detail";
 					$params = http_build_query($paramquery);
 					
-					if ($sample->add_location($_POST[location]))
+					if ($sample->add_location($_POST['location']))
 					{
 						Common_IO::step_proceed($params, "Move Sample", "Operation Successful", null);
 					}
@@ -657,24 +657,24 @@ class SampleIO
 	{
 		global $sample_security;
 		
-		if ($_GET[sample_id])
+		if ($_GET['sample_id'])
 		{
 			if ($sample_security->is_access(2, false))
 			{
-				if ($_GET[sure] != "true")
+				if ($_GET['sure'] != "true")
 				{
 					$template = new HTMLTemplate("sample/set_availability.html");
 					
 					$paramquery = $_GET;
-					$paramquery[sure] = "true";
+					$paramquery['sure'] = "true";
 					$params = http_build_query($paramquery);
 					
 					$template->set_var("yes_params", $params);
 							
 					$paramquery = $_GET;
-					unset($paramquery[nextpage]);
-					unset($paramquery[id]);
-					$paramquery[run] = "admin_permission";
+					unset($paramquery['nextpage']);
+					unset($paramquery['id']);
+					$paramquery['run'] = "admin_permission";
 					$params = http_build_query($paramquery);
 					
 					$template->set_var("no_params", $params);
@@ -683,12 +683,12 @@ class SampleIO
 				}
 				else
 				{
-					$sample = new Sample($_GET[sample_id]);
+					$sample = new Sample($_GET['sample_id']);
 					
 					$paramquery = $_GET;
-					unset($paramquery[nextpage]);
-					unset($paramquery[sure]);
-					$paramquery[run] = "detail";
+					unset($paramquery['nextpage']);
+					unset($paramquery['sure']);
+					$paramquery['run'] = "detail";
 					$params = http_build_query($paramquery);
 					
 					if ($sample->get_availability() == true)
@@ -734,24 +734,24 @@ class SampleIO
 	{
 		global $sample_security;
 	
-		if ($_GET[sample_id])
+		if ($_GET['sample_id'])
 		{
 			if ($sample_security->is_access(1, false))
 			{
 				$argument_array = array();
-				$argument_array[0][0] = "sample_id";
-				$argument_array[0][1] = $_GET[sample_id];
+				$argument_array[0] = "sample_id";
+				$argument_array[1] = $_GET['sample_id'];
 				
 				$list = new List_IO("SampleLocationHistory", "ajax.php?nav=sample", "list_location_history", "count_location_history", $argument_array, "SampleLocationHistory");
 		
 				$list->add_column("","symbol",false,"16px");
-				$list->add_column("Name","name",true,null);
-				$list->add_column("Date","datetime",true,null);
-				$list->add_column("User","user",true,null);
+				$list->add_column(Language::get_message("SampleGeneralListColumnName", "general"),"name",true,null);
+				$list->add_column(Language::get_message("SampleGeneralListColumnDateTime", "general"),"datetime",true,null);
+				$list->add_column(Language::get_message("SampleGeneralListColumnUser", "general"),"user",true,null);
 
 				$template = new HTMLTemplate("sample/location_history.html");
 				
-				$sample = new Sample($_GET[sample_id]);
+				$sample = new Sample($_GET['sample_id']);
 				
 				$template->set_var("sample_id",$sample->get_formatted_id());
 				$template->set_var("sample_name","(".$sample->get_name().")");

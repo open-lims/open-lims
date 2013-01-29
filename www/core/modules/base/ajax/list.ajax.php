@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -29,7 +29,7 @@ class ListAjax
 {
 	public static function get_page_bar($page, $number_of_pages, $css_page_id)
 	{		
-		$pagebar .= "<table style='display: inline;'><tr><td><span class='smallTextBlack'>Page ".$page." of ".$number_of_pages."</span></td>";
+		$pagebar .= "<table style='display: inline;'><tr><td><span class='smallTextBlack'>".Language::get_message("BaseGeneralListGeneralPage", "general")." ".$page." ".Language::get_message("BaseGeneralListGeneralOf", "general")." ".$number_of_pages."</span></td>";
 	
 		// Previous
 		if ($page == 1)

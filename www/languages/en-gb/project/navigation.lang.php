@@ -1,3 +1,0 @@
-<?php
-$LANG['ProjectMainProjects'] = "Projects";
-?>

@@ -3,7 +3,7 @@
  * @package item
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -48,38 +48,38 @@ class ItemFulltextSearchIO
 	{
 		global $session;
 		
-		if ($_GET[nextpage])
+		if ($_GET['nextpage'])
 		{
-			if ($_GET[sortvalue] and $_GET[sortmethod])
+			if ($_GET['sortvalue'] and $_GET['sortmethod'])
 			{
-				if ($_GET[nextpage] == "2" and $_POST[string])
+				if ($_GET['nextpage'] == "2" and $_POST['string'])
 				{
-					$string = $_POST[string];
+					$string = $_POST['string'];
 					$item_type_array = $session->read_value("SEARCH_FULL_TEXT_ITEM_TYPE");		
 				}
 				else
 				{
-					$string = $session->read_value("SEARCH_FULLTEXT_STRING");
+					$string = $session->read_value("SEARCH_FULL_TEXT_STRING");
 					$item_type_array = $session->read_value("SEARCH_FULL_TEXT_ITEM_TYPE");	
 				}
 			}
 			else
 			{
-				if ($_GET[page])
+				if ($_GET['page'])
 				{
-					$string = $session->read_value("SEARCH_FULLTEXT_STRING");
+					$string = $session->read_value("SEARCH_FULL_TEXT_STRING");
 					$item_type_array = $session->read_value("SEARCH_FULL_TEXT_ITEM_TYPE");		
 				}
 				else
 				{
-					if ($_GET[nextpage] == "1")
+					if ($_GET['nextpage'] == "1")
 					{
-						$string = $_POST[string];
+						$string = $_POST['string'];
 						$session->delete_value("SEARCH_FULL_TEXT_ITEM_TYPE");
 					}
 					else
 					{
-						$string = $session->read_value("SEARCH_FULLTEXT_STRING");
+						$string = $_POST['string'];
 						$item_type_array = $session->read_value("SEARCH_FULL_TEXT_ITEM_TYPE");	
 					}
 				}
@@ -96,8 +96,8 @@ class ItemFulltextSearchIO
 			$template = new HTMLTemplate("item/search/full_text_search.html");
 			
 			$paramquery = $_GET;
-			unset($paramquery[page]);
-			$paramquery[nextpage] = "1";
+			unset($paramquery['page']);
+			$paramquery['nextpage'] = "1";
 			$params = http_build_query($paramquery,'','&#38;');
 					
 			$template->set_var("params",$params);
@@ -117,10 +117,10 @@ class ItemFulltextSearchIO
 					{
 						if ($value::get_sql_fulltext_select_array($key) != null)
 						{
-							$result[$counter][title] = $value::get_generic_name($key, null);
-							$result[$counter][name] = "item-".$key;
-							$result[$counter][value] = $key;
-							$result[$counter][checked] = "checked='checked'";
+							$result[$counter]['title'] = $value::get_generic_name($key, null);
+							$result[$counter]['name'] = "item-".$key;
+							$result[$counter]['value'] = $key;
+							$result[$counter]['checked'] = "checked='checked'";
 							
 							$counter++;
 						}
@@ -148,7 +148,7 @@ class ItemFulltextSearchIO
 				}
 			}
 			
-			$session->write_value("SEARCH_FULLTEXT_STRING", $string, true);
+			$session->write_value("SEARCH_FULL_TEXT_STRING", $string, true);
 			$session->write_value("SEARCH_FULL_TEXT_ITEM_TYPE", $item_type_array, true);	
 
 			
@@ -163,15 +163,15 @@ class ItemFulltextSearchIO
 			$list = new List_IO("ItemFulltextSearch", "ajax.php?nav=item", "search_fulltext_list_items", "search_fulltext_count_items", $argument_array, "ItemFulltextSearch");
 
 			$list->add_column("", "symbol", false, "16px");
-			$list->add_column("Name", "name", true, null);
-			$list->add_column("Type", "type", false, null);
-			$list->add_column("Datetime", "datetime", true, null);
-			$list->add_column("Rank", "rank", true, null);
+			$list->add_column(Language::get_message("ItemGeneralListColumnName", "general"), "name", true, null);
+			$list->add_column(Language::get_message("ItemGeneralListColumnType", "general"), "type", false, null);
+			$list->add_column(Language::get_message("ItemGeneralListColumnDateTime", "general"), "datetime", true, null);
+			$list->add_column(Language::get_message("ItemGeneralListColumnRank", "general"), "rank", true, null);
 			
 			$template = new HTMLTemplate("item/search/full_text_search_result.html");
 		
 			$paramquery = $_GET;
-			$paramquery[nextpage] = "2";
+			$paramquery['nextpage'] = "2";
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			$template->set_var("params", $params);

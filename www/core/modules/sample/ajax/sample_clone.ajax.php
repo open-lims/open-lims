@@ -3,7 +3,7 @@
  * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -91,18 +91,18 @@ class SampleCloneAjax
 						
 						if ($sample_type_array == null or in_array($sample->get_template_id(), $sample_type_array))
 						{
-							$result[$counter][value] = $value;
-							$result[$counter][content] = $sample->get_name();
+							$result[$counter]['value'] = $value;
+							$result[$counter]['content'] = $sample->get_name();
 							if ($sample_source_sample == $value)
 							{
-								$result[$counter][selected] = "selected";
+								$result[$counter]['selected'] = "selected";
 							}
 							else
 							{
-								$result[$counter][selected] = "";
+								$result[$counter]['selected'] = "";
 							}
 							
-							$result[$counter][disabled] = "";
+							$result[$counter]['disabled'] = "";
 							
 							$counter++;
 						}
@@ -111,10 +111,10 @@ class SampleCloneAjax
 				
 				if (!$result)
 				{
-					$result[$counter][value] = "0";
-					$result[$counter][content] = "NO SAMPLE FOUND!";
-					$result[$counter][selected] = "";
-					$result[$counter][disabled] = "disabled='disabled'";
+					$result[$counter]['value'] = "0";
+					$result[$counter]['content'] = "NO SAMPLE FOUND!";
+					$result[$counter]['selected'] = "";
+					$result[$counter]['disabled'] = "disabled='disabled'";
 				}
 		
 				$template->set_var("option",$result);
@@ -138,7 +138,7 @@ class SampleCloneAjax
 
 				$template = new HTMLTemplate("sample/clone_sample_page_2.html");
 				
-				if ($information_fields[manufacturer][name] and $information_fields[manufacturer][requirement] != "optional")
+				if ($information_fields['manufacturer']['name'] and $information_fields['manufacturer']['requirement'] != "optional")
 				{
 					$template->set_var("check_manufacturer", true);
 				}
@@ -147,7 +147,7 @@ class SampleCloneAjax
 					$template->set_var("check_manufacturer", false);
 				}
 				
-				if ($information_fields[expiry][name] and $information_fields[expiry][requirement] != "optional")
+				if ($information_fields['expiry']['name'] and $information_fields['expiry']['requirement'] != "optional")
 				{
 					$template->set_var("check_expiry", true);
 				}
@@ -156,7 +156,7 @@ class SampleCloneAjax
 					$template->set_var("check_expiry", false);
 				}
 				
-				if ($information_fields[location][name] and $information_fields[location][requirement] != "optional")
+				if ($information_fields['location']['name'] and $information_fields['location']['requirement'] != "optional")
 				{
 					$template->set_var("check_location", true);
 				}
@@ -181,7 +181,7 @@ class SampleCloneAjax
 					}
 				}
 				
-				if ($information_fields[manufacturer][name])
+				if ($information_fields['manufacturer']['name'])
 				{
 					require_once("core/modules/manufacturer/io/manufacturer.io.php");
 					$template->set_var("show_manufacturer",true);
@@ -193,7 +193,7 @@ class SampleCloneAjax
 					$template->set_var("manufacturer_html","");
 				}
 				
-				if ($information_fields[expiry][name])
+				if ($information_fields['expiry']['name'])
 				{
 					$template->set_var("show_expiry",true);
 				}
@@ -202,7 +202,7 @@ class SampleCloneAjax
 					$template->set_var("show_expiry",false);
 				}
 				
-				if ($information_fields[location][name])
+				if ($information_fields['location']['name'])
 				{
 					$template->set_var("show_location",true);
 					
@@ -217,24 +217,24 @@ class SampleCloneAjax
 						{
 							$sample_location_obj = new Location($value);
 											
-							$result[$counter][value] = $value;
-							$result[$counter][content] = $sample_location_obj->get_name(true);		
+							$result[$counter]['value'] = $value;
+							$result[$counter]['content'] = $sample_location_obj->get_name(true);		
 		
 							if ($sample_location == $value)
 							{
-								$result[$counter][selected] = "selected";
+								$result[$counter]['selected'] = "selected";
 							}
 							else
 							{
-								$result[$counter][selected] = "";
+								$result[$counter]['selected'] = "";
 							}
 							$counter++;
 						}
 					}
 					else
 					{
-						$result[$counter][value] = "0";
-						$result[$counter][content] = "NO LOCATIONS FOUND!";
+						$result[$counter]['value'] = "0";
+						$result[$counter]['content'] = "NO LOCATIONS FOUND!";
 					}
 					$template->set_var("location",$result);
 				}
@@ -384,13 +384,13 @@ class SampleCloneAjax
 				{
 					foreach ($module_dialog_array as $key => $value)
 					{		
-						if (file_exists($value[class_path]))
+						if (file_exists($value['class_path']))
 						{	
-							require_once($value[class_path]);
+							require_once($value['class_path']);
 							
-							if (class_exists($value['class']) and method_exists($value['class'], $value[method]))
+							if (class_exists($value['class']) and method_exists($value['class'], $value['method']))
 							{
-								echo $value['class']::$value[method]("sample", $sample_source_sample, false, true, $form_field_name);
+								echo $value['class']::$value['method']("sample", $sample_source_sample, false, true, $form_field_name);
 							}
 							else
 							{
@@ -410,13 +410,13 @@ class SampleCloneAjax
 				{
 					foreach ($module_dialog_array as $key => $value)
 					{		
-						if (file_exists($value[class_path]))
+						if (file_exists($value['class_path']))
 						{	
-							require_once($value[class_path]);
+							require_once($value['class_path']);
 							
-							if (class_exists($value['class']) and method_exists($value['class'], $value[method]))
+							if (class_exists($value['class']) and method_exists($value['class'], $value['method']))
 							{
-								echo $value['class']::$value[method]($source_sample->get_item_id(), true, $form_field_name);
+								echo $value['class']::$value['method']($source_sample->get_item_id(), true, $form_field_name);
 							}
 							else
 							{

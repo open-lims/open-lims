@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -31,10 +31,10 @@ class AdminBaseModuleIO
 	{
 		$list = new List_IO("BaseAdminModuleHome" ,"ajax.php?nav=base", "admin_list_modules", "admin_count_modules", "0", "BaseAdminModuleHome");
 		
-		$list->add_column("Name", "name", true, null);
-		$list->add_column("Dialogs", "dialogs", true, null);
-		$list->add_column("Links", "links", true, null);
-		$list->add_column("Disable", "disable", false, "80px");
+		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"), "name", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnDialogs", "general"), "dialogs", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnLinks", "general"), "links", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnDisable", "general"), "disable", false, "80px");
 
 		$template = new HTMLTemplate("base/admin/base_module/list.html");
 
@@ -45,14 +45,14 @@ class AdminBaseModuleIO
 	
 	public static function disable()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{				
 			$paramquery = $_GET;
-			unset($paramquery[action]);
-			unset($paramquery[id]);
+			unset($paramquery['action']);
+			unset($paramquery['id']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			if (SystemHandler::disable_module($_GET[id]))
+			if (SystemHandler::disable_module($_GET['id']))
 			{
 				Common_IO::step_proceed($params, "Disable", "Operation Successful", null);
 			}
@@ -69,7 +69,7 @@ class AdminBaseModuleIO
 	
 	public static function handler()
 	{
-		switch($_GET[action]):
+		switch($_GET['action']):
 			case "disable":
 				self::disable();
 			break;	

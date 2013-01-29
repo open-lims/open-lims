@@ -1,0 +1,28 @@
+<script>
+$(document).ready(function()
+{
+	base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=batch_start_test", 'get_array=[[GET_ARRAY]]', "BatchTestStart");
+	list.autoreload(5000);
+});
+</script>
+
+<div id="BaseBatchTestStartWindow" title="Create New Log Entry" style='display: none;'>
+</div>
+
+<!-- CONTAINER BEGIN ("Batches") -->
+
+<!-- IF ([[TEST_BATCH]]) -->
+
+<div id='ListButtonBar'>
+	<a id='BatchTestStart' class='ListButton'>
+	<img src='images/icons/add.png' alt='' />
+	<div>Start Test Batch(es)</div>
+	</a>
+</div>
+<div id='ListButtonBarClear'></div>
+
+<!-- ENDIF -->
+
+[[LIST]]
+
+<!-- CONTAINER END () -->

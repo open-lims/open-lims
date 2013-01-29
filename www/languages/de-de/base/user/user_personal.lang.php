@@ -1,0 +1,32 @@
+<?php
+$LANG['BaseUserPersonalTitle'] = "Persönliche Daten";
+$LANG['BaseUserPersonalPersonalTitle'] = "Persönliche Angaben";
+$LANG['BaseUserPersonalGender'] = "Geschlecht";
+$LANG['BaseUserPersonalGenderMale'] = "männlich";
+$LANG['BaseUserPersonalGenderFemale'] = "weiblich";
+$LANG['BaseUserPersonalFirstName'] = "Vorname";
+$LANG['BaseUserPersonalLastName'] = "Nachname";
+$LANG['BaseUserPersonalPTitle'] = "Titel";
+$LANG['BaseUserPersonalContactTitle'] = "Kontakt-Informationen";
+$LANG['BaseUserPersonalMail'] = "E-Mail";
+$LANG['BaseUserPersonalInstitution'] = "Institution";
+$LANG['BaseUserPersonalDepartment'] = "Abteilung";
+$LANG['BaseUserPersonalStreet'] = "Straße";
+$LANG['BaseUserPersonalZip'] = "PLZ";
+$LANG['BaseUserPersonalCity'] = "Stadt";
+$LANG['BaseUserPersonalCountry'] = "Land/Nation";
+$LANG['BaseUserPersonalPhone'] = "Telefon (Büro)";
+$LANG['BaseUserPersonalInstantMessengerTitle'] = "Instant-Messengers";
+$LANG['BaseUserPersonalICQ'] = "ICQ";
+$LANG['BaseUserPersonalMSN'] = "MSN";
+$LANG['BaseUserPersonalYahoo'] = "Yahoo";
+$LANG['BaseUserPersonalAIM'] = "AIM";
+$LANG['BaseUserPersonalSkype'] = "Skype";
+$LANG['BaseUserPersonalLync'] = "Lync";
+$LANG['BaseUserPersonalJabber'] = "Jabber";
+$LANG['BaseUserPersonalRequiredFields'] = "benötigte Angaben";
+$LANG['BaseUserPersonalError1'] = "Bitte geben Sie einen Vornamen an.";
+$LANG['BaseUserPersonalError2'] = "Bitte geben Sie einen Nachnamen an.";
+$LANG['BaseUserPersonalError3'] = "Bitte geben Sie eine gültige E-Mail-Adresse an.";
+$LANG['BaseUserPersonalError4'] = "Diese ICQ-Nummer ist nicht gültig.";
+?>

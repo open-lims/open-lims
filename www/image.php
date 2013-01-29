@@ -3,7 +3,7 @@
  * @package data
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -32,6 +32,8 @@
 	require_once("core/include/base/system/system_config.class.php");
 
  	SystemConfig::load_system_config("config/main.php");
+ 	
+ 	date_default_timezone_set($server['timezone']);
  	
 	require_once("core/db/db.php");
 		
@@ -67,10 +69,11 @@
 		
 		Security::protect_session();
 		
-		$session = new Session($_GET[session_id]);
+		$session = new Session($_GET['session_id']);
 		$user = new User($session->get_user_id());
 		
-		if ($session->is_valid() == true)
+		$session_valid_array = $session->is_valid();
+		if ($session_valid_array[0] === true)
 		{
 			try
 			{

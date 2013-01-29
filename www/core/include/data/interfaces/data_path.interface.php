@@ -3,7 +3,7 @@
  * @package data
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -32,7 +32,7 @@ interface DataPathInterface
 	 * @param integer $folder_id
 	 * @param integer $virtual_folder_id
 	 */
-	function __construct($folder_id, $virtual_folder_id);	
+	function __construct($folder_id = null, $virtual_folder_id = null);	
 	
 	function __destruct();
 	

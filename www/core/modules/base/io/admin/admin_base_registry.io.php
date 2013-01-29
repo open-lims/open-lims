@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -32,9 +32,9 @@ class AdminBaseRegistryIO
 		$list = new List_IO("BaseAdminRegistryHome" ,"ajax.php?nav=base", "admin_list_registry", "admin_count_registry", "0", "BaseAdminRegistryHome");
 		
 		$list->add_column("", "icon", false, "16px");
-		$list->add_column("Name", "name", true, null);
-		$list->add_column("Value", "value", true, null);
-		$list->add_column("Include", "include", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"), "name", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnValue", "general"), "value", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnInclude", "general"), "include", true, null);
 		$list->add_column("", "edit", false, "16px", "BaseAdminRegistryEditButton");
 
 		$template = new HTMLTemplate("base/admin/base_registry/list.html");
@@ -46,7 +46,7 @@ class AdminBaseRegistryIO
 	
 	public static function handler()
 	{
-		switch($_GET[action]):		
+		switch($_GET['action']):		
 			default:
 				self::home();
 			break;

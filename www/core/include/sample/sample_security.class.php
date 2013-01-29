@@ -3,7 +3,7 @@
  * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -208,20 +208,20 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     		
     		if ($sample_has_user->get_read() == true)
     		{
-    			$return_array[read] = true;
+    			$return_array['read'] = true;
     		}
     		else
     		{
-    			$return_array[read] = false;
+    			$return_array['read'] = false;
     		}
     		
     		if ($sample_has_user->get_write() == true)
     		{
-    			$return_array[write] = true;
+    			$return_array['write'] = true;
     		}
     		else
     		{
-    			$return_array[write] = false;
+    			$return_array['write'] = false;
     		}
     		return $return_array;
     	}

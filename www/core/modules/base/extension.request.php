@@ -3,7 +3,7 @@
  * @package extension
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -53,7 +53,7 @@ class ExtensionRequest
 			{
 				require_once($main_file);
 				
-				if (class_exists($module_dialog['class']))
+				if (class_exists($main_class))
 				{			
 					$main_class::main();
 				}

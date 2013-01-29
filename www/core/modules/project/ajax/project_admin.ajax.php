@@ -3,7 +3,7 @@
  * @package project
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -46,7 +46,7 @@ class ProjectAdminAjax
 		
 		$argument_array = json_decode($json_argument_array);
 		
-		$project_id = $argument_array[0][1];
+		$project_id = $argument_array[1];
 		
 		if (is_numeric($project_id))
 		{
@@ -75,9 +75,9 @@ class ProjectAdminAjax
 					
 					foreach($list_array as $key => $value)
 					{					
-						$list_array[$key][symbol] = "<img src='images/icons/permissions.png' alt='N' border='0' />";
+						$list_array[$key]['symbol'] = "<img src='images/icons/permissions.png' alt='N' border='0' />";
 						
-						$project_permission = ProjectPermission::get_instance($list_array[$key][id]);
+						$project_permission = ProjectPermission::get_instance($list_array[$key]['id']);
 				
 						$user_id = $project_permission->get_user_id();
 						$group_id = $project_permission->get_group_id();
@@ -86,211 +86,211 @@ class ProjectAdminAjax
 						if ($user_id)
 						{
 							$permission_user = new User($user_id);
-							$list_array[$key][name] = $permission_user->get_username();
-							$list_array[$key][type] = "user";
-							$list_array[$key][fullname] = $permission_user->get_full_name(false);
+							$list_array[$key]['name'] = $permission_user->get_username();
+							$list_array[$key]['type'] = "user";
+							$list_array[$key]['fullname'] = $permission_user->get_full_name(false);
 						}
 						elseif($group_id)
 						{
-							$list_array[$key][type] = "group";
+							$list_array[$key]['type'] = "group";
 						}
 						else
 						{
-							$list_array[$key][type] = "organisation unit";
+							$list_array[$key]['type'] = "organisation unit";
 						}
 				
 						if ($project_permission->get_owner_id() == null)
 						{
-							$list_array[$key][createdby] = "system";
+							$list_array[$key]['createdby'] = "system";
 						}
 						else
 						{
 							$created_by = new User($project_permission->get_owner_id());
-							$list_array[$key][createdby] = $created_by->get_username();
+							$list_array[$key]['createdby'] = $created_by->get_username();
 						}
 						
 						$permission_array = $project_permission->get_permission_array();
 							
 						if ($project_security->is_access(2, false) or $project->get_owner_id() == $user->get_user_id())
 						{				
-							if ($permission_array[read] == true)
+							if ($permission_array['read'] == true)
 							{
-								$list_array[$key][re] = "<img src='images/icons/permission_ok_active.png' alt='' />";
+								$list_array[$key]['re'] = "<img src='images/icons/permission_ok_active.png' alt='' />";
 							}
 							else
 							{
-								$list_array[$key][re] = "<img src='images/icons/permission_denied_active.png' alt='' />";
+								$list_array[$key]['re'] = "<img src='images/icons/permission_denied_active.png' alt='' />";
 							}
 						}
 						else
 						{
-							if ($permission_array[read] == true)
+							if ($permission_array['read'] == true)
 							{
-								$list_array[$key][re] = "<img src='images/icons/permission_ok_active_na.png' alt='' />";
+								$list_array[$key]['re'] = "<img src='images/icons/permission_ok_active_na.png' alt='' />";
 							}
 							else
 							{
-								$list_array[$key][re] = "<img src='images/icons/permission_denied_active_na.png' alt='' />";
+								$list_array[$key]['re'] = "<img src='images/icons/permission_denied_active_na.png' alt='' />";
 							}
 						}
 						
 						if ($project_security->is_access(7, false) or $project->get_owner_id() == $user->get_user_id())
 						{
-							if ($permission_array[set_readable] == true)
+							if ($permission_array['set_readable'] == true)
 							{
-								$list_array[$key][sr] = "<img src='images/icons/permission_ok_active.png' alt='' />";
+								$list_array[$key]['sr'] = "<img src='images/icons/permission_ok_active.png' alt='' />";
 							}
 							else
 							{
-								$list_array[$key][sr] = "<img src='images/icons/permission_denied_active.png' alt='' />";
+								$list_array[$key]['sr'] = "<img src='images/icons/permission_denied_active.png' alt='' />";
 							}
 						}
 						else
 						{
-							if ($permission_array[set_readable] == true)
+							if ($permission_array['set_readable'] == true)
 							{
-								$list_array[$key][sr] = "<img src='images/icons/permission_ok_active_na.png' alt='' />";
+								$list_array[$key]['sr'] = "<img src='images/icons/permission_ok_active_na.png' alt='' />";
 							}
 							else
 							{
-								$list_array[$key][sr] = "<img src='images/icons/permission_denied_active_na.png' alt='' />";
+								$list_array[$key]['sr'] = "<img src='images/icons/permission_denied_active_na.png' alt='' />";
 							}
 						}
 						
 						if ($project_security->is_access(4, false) or $project->get_owner_id() == $user->get_user_id())
 						{
-							if ($permission_array[write] == true)
+							if ($permission_array['write'] == true)
 							{
-								$list_array[$key][wr] = "<img src='images/icons/permission_ok_active.png' alt='' />";
+								$list_array[$key]['wr'] = "<img src='images/icons/permission_ok_active.png' alt='' />";
 							}
 							else
 							{
-								$list_array[$key][wr] = "<img src='images/icons/permission_denied_active.png' alt='' />";
+								$list_array[$key]['wr'] = "<img src='images/icons/permission_denied_active.png' alt='' />";
 							}
 						}
 						else
 						{
-							if ($permission_array[write] == true)
+							if ($permission_array['write'] == true)
 							{
-								$list_array[$key][wr] = "<img src='images/icons/permission_ok_active_na.png' alt='' />";
+								$list_array[$key]['wr'] = "<img src='images/icons/permission_ok_active_na.png' alt='' />";
 							}
 							else
 							{
-								$list_array[$key][wr] = "<img src='images/icons/permission_denied_active_na.png' alt='' />";
+								$list_array[$key]['wr'] = "<img src='images/icons/permission_denied_active_na.png' alt='' />";
 							}
 						}
 						
 						if ($project_security->is_access(7, false) or $project->get_owner_id() == $user->get_user_id())
 						{
-							if ($permission_array[set_writeable] == true)
+							if ($permission_array['set_writeable'] == true)
 							{
-								$list_array[$key][sw] = "<img src='images/icons/permission_ok_active.png' alt='' />";
+								$list_array[$key]['sw'] = "<img src='images/icons/permission_ok_active.png' alt='' />";
 							}
 							else
 							{
-								$list_array[$key][sw] = "<img src='images/icons/permission_denied_active.png' alt='' />";
+								$list_array[$key]['sw'] = "<img src='images/icons/permission_denied_active.png' alt='' />";
 							}
 						}
 						else
 						{
-							if ($permission_array[set_writeable] == true)
+							if ($permission_array['set_writeable'] == true)
 							{
-								$list_array[$key][sw] = "<img src='images/icons/permission_ok_active_na.png' alt='' />";
+								$list_array[$key]['sw'] = "<img src='images/icons/permission_ok_active_na.png' alt='' />";
 							}
 							else
 							{
-								$list_array[$key][sw] = "<img src='images/icons/permission_denied_active_na.png' alt='' />";
+								$list_array[$key]['sw'] = "<img src='images/icons/permission_denied_active_na.png' alt='' />";
 							}
 						}
 						
 						if ($project_security->is_access(7, false))
 						{
-							if ($permission_array[reactivate] == true)
+							if ($permission_array['reactivate'] == true)
 							{
-								$list_array[$key][ra] = "<img src='images/icons/permission_ok_active.png' alt='' />";
+								$list_array[$key]['ra'] = "<img src='images/icons/permission_ok_active.png' alt='' />";
 							}
 							else
 							{
-								$list_array[$key][ra] = "<img src='images/icons/permission_denied_active.png' alt='' />";
+								$list_array[$key]['ra'] = "<img src='images/icons/permission_denied_active.png' alt='' />";
 							}
 							
-							if ($permission_array[delete] == true)
+							if ($permission_array['delete'] == true)
 							{
-								$list_array[$key][de] = "<img src='images/icons/permission_ok_active.png' alt='' />";
+								$list_array[$key]['de'] = "<img src='images/icons/permission_ok_active.png' alt='' />";
 							}
 							else
 							{
-								$list_array[$key][de] = "<img src='images/icons/permission_denied_active.png' alt='' />";
+								$list_array[$key]['de'] = "<img src='images/icons/permission_denied_active.png' alt='' />";
 							}
 							
-							if ($permission_array[set_permissions] == true)
+							if ($permission_array['set_permissions'] == true)
 							{
-								$list_array[$key][sp] = "<img src='images/icons/permission_ok_active.png' alt='' />";
+								$list_array[$key]['sp'] = "<img src='images/icons/permission_ok_active.png' alt='' />";
 							}
 							else
 							{
-								$list_array[$key][sp] = "<img src='images/icons/permission_denied_active.png' alt='' />";
+								$list_array[$key]['sp'] = "<img src='images/icons/permission_denied_active.png' alt='' />";
 							}
 						}
 						else
 						{
-							if ($permission_array[reactivate] == true)
+							if ($permission_array['reactivate'] == true)
 							{
-								$list_array[$key][ra] = "<img src='images/icons/permission_ok_active_na.png' alt='' />";
+								$list_array[$key]['ra'] = "<img src='images/icons/permission_ok_active_na.png' alt='' />";
 							}
 							else
 							{
-								$list_array[$key][ra] = "<img src='images/icons/permission_denied_active_na.png' alt='' />";
+								$list_array[$key]['ra'] = "<img src='images/icons/permission_denied_active_na.png' alt='' />";
 							}
 							
-							if ($permission_array[delete] == true)
+							if ($permission_array['delete'] == true)
 							{
-								$list_array[$key][de] = "<img src='images/icons/permission_ok_active_na.png' alt='' />";
+								$list_array[$key]['de'] = "<img src='images/icons/permission_ok_active_na.png' alt='' />";
 							}
 							else
 							{
-								$list_array[$key][de] = "<img src='images/icons/permission_denied_active_na.png' alt='' />";
+								$list_array[$key]['de'] = "<img src='images/icons/permission_denied_active_na.png' alt='' />";
 							}
 							
-							if ($permission_array[set_permissions] == true)
+							if ($permission_array['set_permissions'] == true)
 							{
-								$list_array[$key][sp] = "<img src='images/icons/permission_ok_active_na.png' alt='' />";
+								$list_array[$key]['sp'] = "<img src='images/icons/permission_ok_active_na.png' alt='' />";
 							}
 							else
 							{
-								$list_array[$key][sp] = "<img src='images/icons/permission_denied_active_na.png' alt='' />";
+								$list_array[$key]['sp'] = "<img src='images/icons/permission_denied_active_na.png' alt='' />";
 							}
 						}
 						
 						$edit_paramquery = array();
-						$edit_paramquery[username] = $_GET[username];
-						$edit_paramquery[session_id] = $_GET[session_id];
-						$edit_paramquery[nav] = "project";
-						$edit_paramquery[run] = "admin_permission_edit";
-						$edit_paramquery[project_id] = $project_id;
-						$edit_paramquery[id] = $list_array[$key][id];
+						$edit_paramquery['username'] = $_GET['username'];
+						$edit_paramquery['session_id'] = $_GET['session_id'];
+						$edit_paramquery['nav'] = "project";
+						$edit_paramquery['run'] = "admin_permission_edit";
+						$edit_paramquery['project_id'] = $project_id;
+						$edit_paramquery['id'] = $list_array[$key]['id'];
 						$edit_params = http_build_query($edit_paramquery, '', '&#38;');
 							
-						$list_array[$key][e][link] = $edit_params;
-						$list_array[$key][e][content] = "E";
+						$list_array[$key]['e']['link'] = $edit_params;
+						$list_array[$key]['e']['content'] = "E";
 						
 						if ($project_permission->get_intention() == null)
 						{
 							$delete_paramquery = array();
-							$delete_paramquery[username] = $_GET[username];
-							$delete_paramquery[session_id] = $_GET[session_id];
-							$delete_paramquery[nav] = "project";
-							$delete_paramquery[run] = "admin_permission_delete";
-							$delete_paramquery[project_id] = $project_id;
-							$delete_paramquery[id] = $list_array[$key][id];
+							$delete_paramquery['username'] = $_GET['username'];
+							$delete_paramquery['session_id'] = $_GET['session_id'];
+							$delete_paramquery['nav'] = "project";
+							$delete_paramquery['run'] = "admin_permission_delete";
+							$delete_paramquery['project_id'] = $project_id;
+							$delete_paramquery['id'] = $list_array[$key]['id'];
 							$delete_params = http_build_query($delete_paramquery, '', '&#38;');
 													
-							$list_array[$key][d][link] = $delete_params;
-							$list_array[$key][d][content] = "D";
+							$list_array[$key]['d']['link'] = $delete_params;
+							$list_array[$key]['d']['content'] = "D";
 						}
 						else
 						{
-							$list_array[$key][d][content] = "";
+							$list_array[$key]['d']['content'] = "";
 						}
 					}
 				}
@@ -326,7 +326,7 @@ class ProjectAdminAjax
 		
 		$argument_array = json_decode($json_argument_array);
 		
-		$project_id = $argument_array[0][1];
+		$project_id = $argument_array[1];
 		
 		if (is_numeric($project_id))
 		{
@@ -366,10 +366,10 @@ class ProjectAdminAjax
 			$_GET = unserialize($get_array);	
 		}
 		
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
-			$project = new Project($_GET[project_id]);
-			$project_security = new ProjectSecurity($_GET[project_id]);
+			$project = new Project($_GET['project_id']);
+			$project_security = new ProjectSecurity($_GET['project_id']);
 			$project_owner = new User($project->get_owner_id());
 			$organisation_unit_id = $project->get_organisation_unit_id();
 			$parent_project_id = $project->get_project_toid();
@@ -467,45 +467,45 @@ class ProjectAdminAjax
 				}
 			
 				$permission_paramquery = $_GET;
-				$permission_paramquery[run] = "admin_permission";
-				unset($permission_paramquery[nextpage]);
-				unset($permission_paramquery[sure]);
+				$permission_paramquery['run'] = "admin_permission";
+				unset($permission_paramquery['nextpage']);
+				unset($permission_paramquery['sure']);
 				$permission_params = http_build_query($permission_paramquery,'','&#38;');
 				
 				$template->set_var("permission_params", $permission_params);
 				
 				
 				$rename_paramquery = $_GET;
-				$rename_paramquery[run] = "admin_rename";
-				unset($rename_paramquery[nextpage]);
-				unset($rename_paramquery[sure]);
+				$rename_paramquery['run'] = "admin_rename";
+				unset($rename_paramquery['nextpage']);
+				unset($rename_paramquery['sure']);
 				$rename_params = http_build_query($rename_paramquery,'','&#38;');
 				
 				$template->set_var("rename_params", $rename_params);
 				
 				
 				$chown_paramquery = $_GET;
-				$chown_paramquery[run] = "admin_chown";
-				unset($chown_paramquery[nextpage]);
-				unset($chown_paramquery[sure]);
+				$chown_paramquery['run'] = "admin_chown";
+				unset($chown_paramquery['nextpage']);
+				unset($chown_paramquery['sure']);
 				$chown_params = http_build_query($chown_paramquery,'','&#38;');
 				
 				$template->set_var("chown_params", $chown_params);
 				
 				
 				$move_paramquery = $_GET;
-				$move_paramquery[run] = "admin_move";
-				unset($move_paramquery[nextpage]);
-				unset($move_paramquery[sure]);
+				$move_paramquery['run'] = "admin_move";
+				unset($move_paramquery['nextpage']);
+				unset($move_paramquery['sure']);
 				$move_params = http_build_query($move_paramquery,'','&#38;');
 				
 				$template->set_var("move_params", $move_params);
 				
 				
 				$chquota_paramquery = $_GET;
-				$chquota_paramquery[run] = "admin_quota";
-				unset($chquota_paramquery[nextpage]);
-				unset($chquota_paramquery[sure]);
+				$chquota_paramquery['run'] = "admin_quota";
+				unset($chquota_paramquery['nextpage']);
+				unset($chquota_paramquery['sure']);
 				$chquota_params = http_build_query($chquota_paramquery,'','&#38;');
 				
 				$template->set_var("chquota_params", $chquota_params);
@@ -618,7 +618,7 @@ class ProjectAdminAjax
 			}
 			else
 			{
-				$project_security = new ProjectSecurity($_GET[project_id]);
+				$project_security = new ProjectSecurity($_GET['project_id']);
 				
 				if ($project_security->is_access(6, false) == true)
 				{
@@ -828,7 +828,7 @@ class ProjectAdminAjax
 			}
 			else
 			{
-				$project_security = new ProjectSecurity($_GET[project_id]);
+				$project_security = new ProjectSecurity($_GET['project_id']);
 				
 				if ($project_security->is_access(3, false) == true)
 				{

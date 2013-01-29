@@ -3,7 +3,7 @@
  * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -51,9 +51,9 @@ class SampleSearchIO
 	{
 		global $user, $session;
 		
-		if ($_GET[nextpage])
+		if ($_GET['nextpage'])
 		{
-			if ($_GET[page] or $_GET[sortvalue] or $_GET[sortmethod])
+			if ($_GET['page'] or $_GET['sortvalue'] or $_GET['sortmethod'])
 			{
 				$name = $session->read_value("SEARCH_SAMPLE_NAME");
 				$organisation_unit_array = $session->read_value("SEARCH_SAMPLE_ORGANISATION_UNIT_ARRAY");
@@ -63,9 +63,9 @@ class SampleSearchIO
 			}
 			else
 			{
-				if ($_GET[nextpage] == "1")
+				if ($_GET['nextpage'] == "1")
 				{
-					$name = $_POST[name];
+					$name = $_POST['string'];
 					$session->delete_value("SEARCH_SAMPLE_NAME");
 					$session->delete_value("SEARCH_SAMPLE_ORGANISATION_UNIT_ARRAY");
 					$session->delete_value("SEARCH_SAMPLE_TEMPLATE_ARRAY");
@@ -74,7 +74,7 @@ class SampleSearchIO
 				}
 				else
 				{
-					$name = $_POST[name];
+					$name = $_POST['string'];
 					$organisation_unit_array = $session->read_value("SEARCH_SAMPLE_ORGANISATION_UNIT_ARRAY");
 					$template_array = $session->read_value("SEARCH_SAMPLE_TEMPLATE_ARRAY");
 					$in_id = $session->read_value("SEARCH_SAMPLE_IN_ID");
@@ -93,8 +93,8 @@ class SampleSearchIO
 			$template = new HTMLTemplate("sample/search/search.html");
 			
 			$paramquery = $_GET;
-			unset($paramquery[page]);
-			$paramquery[nextpage] = "1";
+			unset($paramquery['page']);
+			$paramquery['nextpage'] = "1";
 			$params = http_build_query($paramquery,'','&#38;');
 					
 			$template->set_var("params",$params);
@@ -114,9 +114,9 @@ class SampleSearchIO
 			
 					if ($organisation_unit->is_permission($user->get_user_id()))
 					{
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $organisation_unit->get_name();		
-						$result[$counter][selected] = "";
+						$result[$counter]['value'] = $value;
+						$result[$counter]['content'] = $organisation_unit->get_name();		
+						$result[$counter]['selected'] = "";
 		
 						$counter++;
 					}
@@ -125,8 +125,8 @@ class SampleSearchIO
 			
 			if (!$result)
 			{
-				$result[$counter][value] = "0";
-				$result[$counter][content] = "NO ORGANISATION UNIT FOUND!";
+				$result[$counter]['value'] = "0";
+				$result[$counter]['content'] = "NO ORGANISATION UNIT FOUND!";
 			}
 			
 			$template->set_var("organ_unit",$result);
@@ -142,9 +142,9 @@ class SampleSearchIO
 				foreach($sample_template_array as $key => $value)
 				{
 					$sample_template_cat = new SampleTemplateCat($value);					
-					$result[$counter][value] = "0";
-					$result[$counter][content] = $sample_template_cat->get_name();		
-					$result[$counter][selected] = "";
+					$result[$counter]['value'] = "";
+					$result[$counter]['content'] = $sample_template_cat->get_name();		
+					$result[$counter]['selected'] = "";
 	
 					$counter++;
 					
@@ -156,9 +156,9 @@ class SampleSearchIO
 						{
 							$sample_sub_template = new SampleTemplate($sub_value);
 							
-							$result[$counter][value] = $sub_value;
-							$result[$counter][content] = "&nbsp;".$sample_sub_template->get_name();		
-							$result[$counter][selected] = "";
+							$result[$counter]['value'] = $sub_value;
+							$result[$counter]['content'] = "&nbsp;".$sample_sub_template->get_name();		
+							$result[$counter]['selected'] = "";
 		
 							$counter++;
 						}
@@ -168,8 +168,8 @@ class SampleSearchIO
 			}
 			else
 			{
-				$result[$counter][value] = "0";
-				$result[$counter][content] = "NO TEMPLATES FOUND!";	
+				$result[$counter]['value'] = "0";
+				$result[$counter]['content'] = "NO TEMPLATES FOUND!";	
 			}
 	
 			$template->set_var("template",$result);
@@ -180,7 +180,7 @@ class SampleSearchIO
 		{
 			if(!$organisation_unit_array)
 			{			
-				if (!$_POST[organisation_unit])
+				if (!$_POST['organisation_unit'])
 				{
 					$organisation_unit_array = array();
 					
@@ -203,8 +203,8 @@ class SampleSearchIO
 				else
 				{
 					$organisation_unit_array = array();
-					$organisation_unit_array[0] = $_POST[organisation_unit];
-					$organisation_unit = new OrganisationUnit($_POST[organisation_unit]);
+					$organisation_unit_array[0] = $_POST['organisation_unit'];
+					$organisation_unit = new OrganisationUnit($_POST['organisation_unit']);
 					$search_organisation_unit_name = $organisation_unit->get_name();
 				}
 			}
@@ -223,7 +223,7 @@ class SampleSearchIO
 			
 			if (!$template_array)
 			{
-				if (!$_POST[template])
+				if (!$_POST['template'])
 				{
 					$template_array = null;
 					$search_template_name = "All";
@@ -231,15 +231,15 @@ class SampleSearchIO
 				else
 				{
 					$template_array = array();
-					$template_array[0] = $_POST[template];
-					$sample_template = new SampleTemplate($_POST[template]);
+					$template_array[0] = $_POST['template'];
+					$sample_template = new SampleTemplate($_POST['template']);
 					$search_template_name = $sample_template->get_name();
 				}
 			}
 			
 			if (!isset($in_id))
 			{
-				if ($_POST[in_id] == 1)
+				if ($_POST['in_id'] == 1)
 				{
 					$in_id = true;
 				}
@@ -251,7 +251,7 @@ class SampleSearchIO
 			
 			if (!isset($in_name))
 			{
-				if ($_POST[in_name] == 1)
+				if ($_POST['in_name'] == 1)
 				{
 					$in_name = true;
 				}
@@ -285,20 +285,20 @@ class SampleSearchIO
 			$list = new List_IO("SampleSearch", "ajax.php?nav=sample", "search_sample_list_samples", "search_sample_count_samples", $argument_array, "SampleSearch");
 		
 			$list->add_column("","symbol",false,"16px");
-			$list->add_column("Smpl. ID","id",true,"11%");
-			$list->add_column("Sample Name","name",true,null);
-			$list->add_column("Date","datetime",true,null);
-			$list->add_column("Type/Tmpl.","template",true,null);
-			$list->add_column("Curr. Loc.","location",true,null);
-			$list->add_column("AV","av",false,"16px");
+			$list->add_column(Language::get_message("SampleGeneralListColumnSampleID", "general"),"id",true,"11%");
+			$list->add_column(Language::get_message("SampleGeneralListColumnSampleName", "general"),"name",true,null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnDate", "general"),"datetime",true,null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnTypeTemplate", "general"),"template",true,null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnCurrentLocation", "general"),"location",true,null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnAvailable", "general"),"av",false,"16px");
 			
 			$template = new HTMLTemplate("sample/search/search_result.html");
 			
 			$paramquery = $_GET;
-			$paramquery[nextpage] = "2";
-			unset($paramquery[page]);
-			unset($paramquery[sortvalue]);
-			unset($paramquery[sortmethod]);
+			$paramquery['nextpage'] = "2";
+			unset($paramquery['page']);
+			unset($paramquery['sortvalue']);
+			unset($paramquery['sortmethod']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			$template->set_var("params", $params);

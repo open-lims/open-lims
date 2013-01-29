@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -31,12 +31,12 @@ class AdminBaseNavigationIO
 	{
 		$list = new List_IO("BaseAdminNavigationHome" ,"ajax.php?nav=base", "admin_list_navigation", "admin_count_navigation", "0", "BaseAdminNavigationHome");
 		
-		$list->add_column("Displayed-Name (en-GB)", "name", false, null);
-		$list->add_column("Module", "module", false, null);
-		$list->add_column("Colour", "colour", false, null);
-		$list->add_column("UW", "uw", false, null);
-		$list->add_column("DW", "dw", false, null);
-		$list->add_column("Show/Hide", "hide", false, "80px");
+		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"), "name", false, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnModule", "general"), "module", false, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnColour", "general"), "colour", false, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnUW", "general"), "uw", false, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnDW", "general"), "dw", false, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnShowHide", "general"), "hide", false, "80px");
 
 		$template = new HTMLTemplate("base/admin/base_navigation/list.html");
 
@@ -50,13 +50,13 @@ class AdminBaseNavigationIO
 	 */
 	public static function hide()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$module_navigation = new ModuleNavigation($_GET[id]);
+			$module_navigation = new ModuleNavigation($_GET['id']);
 				
 			$paramquery = $_GET;
-			unset($paramquery[action]);
-			unset($paramquery[id]);
+			unset($paramquery['action']);
+			unset($paramquery['id']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			if ($module_navigation->hide())
@@ -79,13 +79,13 @@ class AdminBaseNavigationIO
 	 */
 	public static function upwards()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$module_navigation = new ModuleNavigation($_GET[id]);
+			$module_navigation = new ModuleNavigation($_GET['id']);
 				
 			$paramquery = $_GET;
-			unset($paramquery[action]);
-			unset($paramquery[id]);
+			unset($paramquery['action']);
+			unset($paramquery['id']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			if ($module_navigation->upwards())
@@ -108,13 +108,13 @@ class AdminBaseNavigationIO
 	 */
 	public static function downwards()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$module_navigation = new ModuleNavigation($_GET[id]);
+			$module_navigation = new ModuleNavigation($_GET['id']);
 				
 			$paramquery = $_GET;
-			unset($paramquery[action]);
-			unset($paramquery[id]);
+			unset($paramquery['action']);
+			unset($paramquery['id']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			if ($module_navigation->downwards())
@@ -134,7 +134,7 @@ class AdminBaseNavigationIO
 	
 	public static function handler()
 	{
-		switch($_GET[action]):
+		switch($_GET['action']):
 			case "upwards":
 				self::upwards();
 			break;	

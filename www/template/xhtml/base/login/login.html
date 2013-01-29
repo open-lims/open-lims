@@ -1,105 +1,359 @@
 <script>
 $(document).ready(function()
-{
-	$('#BaseLoginUsername').bind('keypress', function(e)
+{	
+	arrow_message = new ArrowMessage();
+	
+	// Textfield default values
+	if ("[[USERNAME]]" === "")
 	{
-        if(e.keyCode == 13)
-        {
-        	login();
-        }
-	});
+		$('#BaseLoginUsername').val("[[LANG:BaseLoginUsername]]");
+		var username_default = true;
+	}
+	else
+	{
+		$('#BaseLoginUsername').val("[[USERNAME]]");
+		var username_default = false;
+	}
 
-	$('#BaseLoginPassword').bind('keypress', function(e)
-	{
-        if(e.keyCode == 13)
+	$('#BaseLoginUsername').bind('keypress', function(event)
+	{		
+		if (username_default === true)
+		{
+			username_default = false;
+			$(this).val("");
+		}
+		
+        if(event.keyCode == 13)
         {
         	login();
         }
+	}).bind('focusin', function(e)
+	{
+		if (username_default === true)
+		{
+			username_default = false;
+			$(this).val("");
+		}
+	}).bind('focusout', function(e)
+	{
+		if (username_default === false)
+		{
+			if ($(this).val() === "")
+			{
+				username_default = true;
+				$(this).val("[[LANG:BaseLoginUsername]]");
+			}
+		}
 	});
 
 	
+	if ("[[PASSWORD]]" === "")
+	{
+		$('#BaseLoginPassword').val("[[LANG:BaseLoginPassword]]");
+		var password_default = true;
+	}
+	else
+	{
+		$('#BaseLoginPassword').val("[[PASSWORD]]");
+		var password_default = false;
+	}
+	
+	$('#BaseLoginPassword').bind('keypress', function(event)
+	{		
+		if (password_default === true)
+		{
+			password_default = false;
+			$(this).val("");
+		}
+		
+        if(event.keyCode == 13)
+        {
+        	login();
+        }
+	}).bind('focusin', function(e)
+	{
+		if (password_default === true)
+		{
+			password_default = false;
+			$(this).val("");
+		}
+	}).bind('focusout', function(e)
+	{
+		if (password_default === false)
+		{
+			if ($(this).val() === "")
+			{
+				password_default = true;
+				$(this).val("[[LANG:BaseLoginPassword]]");
+			}
+		}
+	});
+	
+	// Session Expired Message
+	if ([[SESSION_EXPIRED]] === true)
+	{
+		arrow_message.new_arrow($("#BaseLoginPassword"), "[[LANG:BaseLoginErrorSessionExpired]]", "LoginErrorArrowMessage");
+	}
+	
+	// Login Button Handler
 	$('#BaseLoginLogin').click(function()
 	{
-		login();
+		/*if ($("#BaseLoginUsername").next().hasClass("BaseArrowMessageContainer") === true)
+		{
+			$("#BaseLoginUsername").next().remove();
+		}
+		
+		if ($("#BaseLoginPassword").next().hasClass("BaseArrowMessageContainer") === true)
+		{
+			$("#BaseLoginPassword").next().remove();
+		}*/
+		
+		arrow_message.remove_all_arrows();
+		
+		if ((username_default === true) || ($('#BaseLoginUsername').val() === ""))
+		{
+			arrow_message.new_arrow($("#BaseLoginUsername"), "[[LANG:BaseLoginErrorMissingUsername]]", "LoginErrorArrowMessage");
+			return;
+		}
+		
+		if ((password_default === true) || ($('#BaseLoginPassword').val() === ""))
+		{
+			arrow_message.new_arrow($("#BaseLoginPassword"), "[[LANG:BaseLoginErrorMissingPassword]]", "LoginErrorArrowMessage");
+			return;
+		}
+		
+		if ((username_default === false) && (password_default === false))
+		{
+			login();
+		}
 	});
 
 	function login()
-	{
-		$.blockUI({ message: $('#BaseLoginWindow'), css: { width: '275px' } }); 
-		$('.blockUI.blockMsg').center();
-
-		$("#BaseLoginWindow").html("<img src='images/animations/loading_circle_small.gif' alt=''> Please wait...");
-			
+	{			
 		$.ajax(
 		{
 			type: "POST",
 			url: "ajax.php?nav=base&run=login",
 			data: "username="+$("#BaseLoginUsername").val()+"&password="+$("#BaseLoginPassword").val()+"&language="+$("#BaseLoginLanguage").val()+"",
+			beforeSend: function()
+			{
+				$("#BaseLoginFinish").dialog("open");
+			},
 			success: function(data)
 			{
 				if ((data != '0') && ((data + '').indexOf("index.php?",0) == 0))
 				{
-					$("#BaseLoginError").html("");
+					if ($("#BaseLoginUsername").next().hasClass("BaseArrowMessageContainer") === true)
+					{
+						$("#BaseLoginUsername").next().remove();
+					}
+					
+					if ($("#BaseLoginPassword").next().hasClass("BaseArrowMessageContainer") === true)
+					{
+						$("#BaseLoginPassword").next().remove();
+					}
+					
 					window.setTimeout('window.location = "'+data+'"',1500);
 				}
 				else
 				{
-					if (data != 0)
-					{
-						$("#BaseLoginError").html(data);
-					}
-					else
-					{
-						$("#BaseLoginError").html("");
-					}
-					$.unblockUI();
+					$("#BaseLoginFinish").dialog("close");
+					arrow_message.new_arrow($("#BaseLoginPassword"), "[[LANG:BaseLoginErrorWrongUsernamePassword]]", "LoginErrorArrowMessage");
 				    return false; 
 				}
 			}
 		}); 
 	}
+	
+	// Forgot Password
+	var forgot_html = "";
+	
+	$("#BaseLoginForgotPasswordSuccessful").dialog(
+	{
+			autoOpen: false,
+			height: 200,
+			width: 340,
+			resizable: false,
+			buttons: 
+			{
+				"[[LANG:BaseGlobalButtonOK]]": function() 
+				{
+					$(this).dialog("close");
+				}
+			}
+	});
+	
+	$("#BaseLoginForgotPassword").dialog(
+	{
+		autoOpen: false,
+		height: 340,
+		width: 340,
+		resizable: false,
+		buttons: 
+		{
+			// OK
+			"[[LANG:BaseGlobalButtonOK]]": function() 
+			{
+				$('#BaseLoginForgotUsernameError').html("");
+				$('#BaseLoginForgotMailError').html("");
+				
+				if ($('#BaseLoginForgotUsername').val() === "")
+				{
+					$('#BaseLoginForgotUsernameError').html("<br />[[LANG:BaseLoginForgotErrorMissingUsername]]");
+					return;
+				}
+				
+				if ($('#BaseLoginForgotMail').val() === "")
+				{
+					$('#BaseLoginForgotMailError').html("<br />[[LANG:BaseLoginForgotErrorMissingMail]]");
+					return;
+				}
+				
+				if (!is_mail_address_valid($("#BaseLoginForgotMail").val()))
+				{
+					$('#BaseLoginForgotMailError').html("<br />[[LANG:BaseLoginForgotErrorInvalidMail]]");
+					return;
+				}
+			
+				var username = $('#BaseLoginForgotUsername').val();
+				var mail = $('#BaseLoginForgotMail').val();
+				
+				$(this).parent().find("button").attr("disabled", true);
+				
+				$.ajax(
+				{
+					type: "POST",
+					url: "ajax.php?nav=base&run=forgot_password",
+					data: "username="+username+"&mail="+mail,
+					beforeSend: function()
+					{
+						$('#BaseLoginForgotPassword').html("<div><img src='images/animations/loading_circle_small.gif' alt=''> [[LANG:BaseGlobalMessageWait]]</div>");
+					},
+					success: function(data)
+					{
+						if (data === "1")
+						{
+							$("#BaseLoginForgotPassword").dialog("close");
+							$("#BaseLoginForgotPasswordSuccessful").dialog("open");
+						}
+						else if (data === "0")
+						{
+							$("#BaseLoginForgotPassword").parent().find("button").attr("disabled", false);
+							$('#BaseLoginForgotPassword').html(forgot_html);
+							$('#BaseLoginForgotMailError').html("<br />[[LANG:BaseLoginForgotErrorWrongUsernameMail]]");
+							$('#BaseLoginForgotUsername').val(username);
+							$('#BaseLoginForgotMail').val(mail);
+						}
+						else
+						{
+							if ((data + '').indexOf("EXCEPTION",0) === 0)
+							{
+								var exception_message = data.replace("EXCEPTION: ","");
+								$("#BaseLoginForgotPassword").dialog("close");
+								ErrorDialog("Error", exception_message);
+								return false;
+							}
+							else
+							{
+								$("#BaseLoginForgotPassword").dialog("close");
+								ErrorDialog("Error", "An error occured");
+								return false;
+							}
+						}
+					}
+				});
+			},
+			// Cancel
+			"[[LANG:BaseGlobalButtonCancel]]": function()
+			{
+			 	$(this).dialog("close");
+			}
+		}
+	});
+	
+	$('#BaseLoginPasswordForgot').click(function()
+	{
+		if (forgot_html === "")
+		{
+			forgot_html = $('#BaseLoginForgotPassword').html();
+		}
+		else
+		{
+			$('#BaseLoginForgotPassword').html(forgot_html);
+		}
+		
+		$("#BaseLoginForgotPassword").parent().find("button").attr("disabled", false);
+		$("#BaseLoginForgotPassword").dialog("open");
+	});
 });
 </script>
 
+<div class="BasePlaseWaitWindow" id="BaseLoginFinish" title=""> 
+<div><img src='images/animations/loading_circle_small.gif' alt=''> [[LANG:BaseGlobalMessageWait]]</div>
+</div> 
 
-<div id="LoginHeader"></div>
-<div id="LoginContainer" class="Form">
-	<div id='LoginTitle'>Login on Open-LIMS Lab-Manager</div>
-	<table id='LoginTable'>
-		<tr>
-			<td>Username:</td>
-			<td><input name='username' type='text' size='20' class='BaseTextfield LoginTextfield' id='BaseLoginUsername' /></td>
-		</tr>
-		<tr>
-			<td>Password:</td>
-			<td><input name='password' type='password' size='20' class='BaseTextfield LoginTextfield' id='BaseLoginPassword' /></td>
-		</tr>
-		<tr>
-			<td>Language:</td>
-			<td>
-				<select class='BaseSelect LoginLanguageSelect' name='language' id='BaseLoginLanguage'>
-					<option value='default' selected='selected'>User Default</option>
-					<option value='0'>-------------</option>
-					
-					<!-- FOREACH BEGIN ([[LANGUAGES]]) -->
-	
-					<option value='[[LANGUAGES:OPTION]]'>[[LANGUAGES:NAME]]</option>
-			
-					<!-- FOREACH END -->
-				</select>
-			</td>
-		</tr>
-		<tr>
-			<td colspan='2'><div class='formError' id='BaseLoginError'></div></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><button type='submit' name='submit' id='BaseLoginLogin'>Login</button></td>
-		</tr>
+
+<div id="BaseLoginForgotPassword" title="[[LANG:BaseLoginForgotYourPasswordTitle]]"> 
+	<div class="Form">
+		<div class='LoginElement'>
+		[[LANG:BaseLoginForgotYourPasswordHeadline]]
+		</div>
 		
-	</table>
-</div>
+		<div class='LoginElement'>
+			<label>[[LANG:BaseLoginUsername]]:</label>
+			<input name='username' type='text' class='BaseLoginForgotTextfield' id='BaseLoginForgotUsername' />
+			<span class='FormError' id='BaseLoginForgotUsernameError'></span>
+		</div>
+		
+		<div class='LoginElement'>
+			<label>[[LANG:BaseLoginMailAdress]]:</label>
+			<input name='mail' text='text' class='BaseLoginForgotTextfield' id='BaseLoginForgotMail' />
+			<span class='FormError' id='BaseLoginForgotMailError'></span>
+		</div>
+	</div>
+</div> 
 
-<div id="BaseLoginWindow" class="BaseBlockUIProceed" style="display:none; cursor: default">
-</div>
+<div id="BaseLoginForgotPasswordSuccessful" title="[[LANG:BaseLoginForgotYourPasswordTitle]]" style="text-align: center; padding-top: 25px;"'>[[LANG:BaseLoginForgotSuccessful]]</div>
 
+<div id="LoginWrapper">
+	<div id="LoginContainer" class="Form">
+		<div id='LoginTitle'>[[LANG:BaseLoginTitle]]</div>
+		
+		<form action="index.php" method="post">
+		
+		<div class='LoginElement'>
+			<input name='username' type='text' class='BaseTextfield LoginTextfield' id='BaseLoginUsername' />
+		</div>
+		
+		<div class='LoginElement'>
+			<input name='password' type='password' class='BaseTextfield LoginTextfield' id='BaseLoginPassword' value='[[PASSWORD]]' />
+		</div>
+		
+		<div class='LoginElement'>
+		<select class='BaseSelect LoginLanguageSelect' name='language_id' id='BaseLoginLanguage' onChange="this.form.submit()">
+			<option value='default' selected='selected'>[[LANG:BaseLoginLanguage]]/[[LANG:BaseLoginLanguageDefault]]</option>
+			<option value='0'>-------------</option>
+			
+			<!-- FOREACH BEGIN ([[LANGUAGES]]) -->
+
+			<option value='[[LANGUAGES:OPTION]]' [[LANGUAGES:SELECTED]]>[[LANGUAGES:NAME]]</option>
+	
+			<!-- FOREACH END -->
+		</select>
+		</div>
+		
+		<div class='LoginElement'>
+		<button type='button' id='BaseLoginLogin'>[[LANG:BaseLoginButton]]</button>
+		<div id='BaseLoginPasswordForgot'>[[LANG:BaseLoginForgotYourPasswordLink]]</div>
+		</div>
+		
+		</form>		
+	</div>
+</div>
+<div id="LoginFooter">
+[[PRODUCT]], version: [[PRODUCT_VERSION]], [[FUNCTION]], [[USER]]
+<br />This is free software; It comes with ABSOLUTELY NO WARRANTY.
+<br />Copyright &copy; 2008-2013 by R. Konertz, B. Tunggal, L. Eichinger et al.
+<br />Licensed under General Public License, Version 3 (GPL v3)
+<br />Go to <a href='http://www.open-lims.org'>http://www.open-lims.org</a> for details
+</div>

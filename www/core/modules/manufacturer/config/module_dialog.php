@@ -3,7 +3,7 @@
  * @package manufacturer
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -24,10 +24,9 @@
 /**
  * 
  */
-	$dialog[0][type]			= "common_dialog";
-	$dialog[0][class_path]		= "core/modules/manufacturer/io/manufacturer.io.php";
+	$dialog[0]['type']			= "common_dialog";
+	$dialog[0]['class_path']	= "core/modules/manufacturer/io/manufacturer.io.php";
 	$dialog[0]['class']			= "ManufacturerIO";
-	$dialog[0][method]			= "list_manufacturers";
-	$dialog[0][internal_name]	= "list_manufacturers";
-	$dialog[0][display_name]	= "Manufacturer List";
+	$dialog[0]['method']		= "list_manufacturers";
+	$dialog[0]['internal_name']	= "list_manufacturers";
 ?>

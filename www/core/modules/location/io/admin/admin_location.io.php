@@ -3,7 +3,7 @@
  * @package location
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -44,31 +44,31 @@ class AdminLocationIO
 				{
 					$location = new Location($value);
 					
-					$content_array[self::$home_list_counter][padding] = 0.5 * $layer;				
-					$content_array[self::$home_list_counter][name] = $location->get_name(true);					
+					$content_array[self::$home_list_counter]['padding'] = 0.5 * $layer;				
+					$content_array[self::$home_list_counter]['name'] = $location->get_name(true);					
 					
 					$paramquery = $_GET;
-					$paramquery[action] = "delete";
-					$paramquery[id] = $value;
+					$paramquery['action'] = "delete";
+					$paramquery['id'] = $value;
 					$params = http_build_query($paramquery,'','&#38;');
 					
-					$content_array[self::$home_list_counter][delete_params] = $params;
-					
-					
-					$paramquery = $_GET;
-					$paramquery[action] = "add_child";
-					$paramquery[id] = $value;
-					$params = http_build_query($paramquery,'','&#38;');
-					
-					$content_array[self::$home_list_counter][create_child_params] = $params;
+					$content_array[self::$home_list_counter]['delete_params'] = $params;
 					
 					
 					$paramquery = $_GET;
-					$paramquery[action] = "edit";
-					$paramquery[id] = $value;
+					$paramquery['action'] = "add_child";
+					$paramquery['id'] = $value;
 					$params = http_build_query($paramquery,'','&#38;');
 					
-					$content_array[self::$home_list_counter][edit_params] = $params;
+					$content_array[self::$home_list_counter]['create_child_params'] = $params;
+					
+					
+					$paramquery = $_GET;
+					$paramquery['action'] = "edit";
+					$paramquery['id'] = $value;
+					$params = http_build_query($paramquery,'','&#38;');
+					
+					$content_array[self::$home_list_counter]['edit_params'] = $params;
 					
 					$temp_counter = self::$home_list_counter;
 					
@@ -78,7 +78,7 @@ class AdminLocationIO
 				
 					if (is_array($location_child_array))
 					{
-						$content_array[$temp_counter][show_line] = true;
+						$content_array[$temp_counter]['show_line'] = true;
 						$content_array =  $content_array + $location_child_array;
 					}
 				}
@@ -109,31 +109,31 @@ class AdminLocationIO
 			{
 				$location = new Location($value);
 				
-				$content_array[self::$home_list_counter][padding] = 0;
-				$content_array[self::$home_list_counter][name] = $location->get_name(true);				
+				$content_array[self::$home_list_counter]['padding'] = 0;
+				$content_array[self::$home_list_counter]['name'] = $location->get_name(true);				
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "delete";
-				$paramquery[id] = $value;
+				$paramquery['action'] = "delete";
+				$paramquery['id'] = $value;
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				$content_array[self::$home_list_counter][delete_params] = $params;
-				
-				
-				$paramquery = $_GET;
-				$paramquery[action] = "add_child";
-				$paramquery[id] = $value;
-				$params = http_build_query($paramquery,'','&#38;');
-				
-				$content_array[self::$home_list_counter][create_child_params] = $params;
+				$content_array[self::$home_list_counter]['delete_params'] = $params;
 				
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "edit";
-				$paramquery[id] = $value;
+				$paramquery['action'] = "add_child";
+				$paramquery['id'] = $value;
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				$content_array[self::$home_list_counter][edit_params] = $params;
+				$content_array[self::$home_list_counter]['create_child_params'] = $params;
+				
+				
+				$paramquery = $_GET;
+				$paramquery['action'] = "edit";
+				$paramquery['id'] = $value;
+				$params = http_build_query($paramquery,'','&#38;');
+				
+				$content_array[self::$home_list_counter]['edit_params'] = $params;
 				
 				$temp_counter = self::$home_list_counter;
 				
@@ -143,7 +143,7 @@ class AdminLocationIO
 				
 				if (is_array($location_child_array))
 				{
-					$content_array[$temp_counter][show_line] = true;
+					$content_array[$temp_counter]['show_line'] = true;
 					$content_array = $content_array + $location_child_array;
 				}
 			}
@@ -155,8 +155,8 @@ class AdminLocationIO
 		}
 				
 		$paramquery = $_GET;
-		$paramquery[action] = "add";
-		unset($paramquery[nextpage]);
+		$paramquery['action'] = "add";
+		unset($paramquery['nextpage']);
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("add_params", $params);
@@ -171,13 +171,13 @@ class AdminLocationIO
 	 */
 	public static function add()
 	{
-		if (($_GET[action] == "add_child" and $_GET[id]) or $_GET[action] == "add")
+		if (($_GET['action'] == "add_child" and $_GET['id']) or $_GET['action'] == "add")
 		{
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
 				$page_1_passed = true;
 				
-				if (!$_POST[name])
+				if (!$_POST['name'])
 				{
 					$page_1_passed = false;
 					$error = "You must enter a name";
@@ -194,7 +194,7 @@ class AdminLocationIO
 				$template = new HTMLTemplate("location/admin/location/add.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
@@ -217,35 +217,35 @@ class AdminLocationIO
 				{
 					foreach($type_array as $key => $value)
 					{
-						if ($_POST[type_id] == $value[id])
+						if ($_POST['type_id'] == $value['id'])
 						{
-							$result[$counter][selected] = "selected='selected'";
+							$result[$counter]['selected'] = "selected='selected'";
 						}
 						else
 						{
-							$result[$counter][selected] = "";
+							$result[$counter]['selected'] = "";
 						}
 						
-						$result[$counter][value] = $value[id];
-						$result[$counter][content] = $value[name];
+						$result[$counter]['value'] = $value['id'];
+						$result[$counter]['content'] = $value['name'];
 						$counter++;
 					}
 				}
 				
 				$template->set_var("type_array",$result);
 				
-				if ($_POST[name])
+				if ($_POST['name'])
 				{
-					$template->set_var("name", $_POST[name]);
+					$template->set_var("name", $_POST['name']);
 				}
 				else
 				{
 					$template->set_var("name", "");
 				}
 				
-				if ($_POST[additional_name])
+				if ($_POST['additional_name'])
 				{
-					$template->set_var("additional_name", $_POST[additional_name]);
+					$template->set_var("additional_name", $_POST['additional_name']);
 				}
 				else
 				{
@@ -258,16 +258,16 @@ class AdminLocationIO
 			{				
 				$location = new Location(null);
 					
-				if ($_GET[action] == "add_child" and is_numeric($_GET[id]))
+				if ($_GET['action'] == "add_child" and is_numeric($_GET['id']))
 				{
-					$toid = $_GET[id];
+					$toid = $_GET['id'];
 				}
 				else
 				{
 					$toid = null;
 				}
 				
-				if ($_POST[prefix] == "1")
+				if ($_POST['prefix'] == "1")
 				{
 					$show_prefix = true;
 				}
@@ -277,11 +277,11 @@ class AdminLocationIO
 				}
 
 				$paramquery = $_GET;
-				unset($paramquery[action]);
-				unset($paramquery[nextpage]);
+				unset($paramquery['action']);
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				if ($location->create($toid, $_POST[type_id], $_POST[name], $_POST[additional_name], $show_prefix))
+				if ($location->create($toid, $_POST['type_id'], $_POST['name'], $_POST['additional_name'], $show_prefix))
 				{
 					Common_IO::step_proceed($params, "Add Location", "Operation Successful", null);
 				}
@@ -302,15 +302,15 @@ class AdminLocationIO
 	 */
 	public static function edit()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$location = new Location($_GET[id]);
+			$location = new Location($_GET['id']);
 			
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
 				$page_1_passed = true;
 				
-				if (!$_POST[name])
+				if (!$_POST['name'])
 				{
 					$page_1_passed = false;
 					$error = "You must enter a name";
@@ -327,7 +327,7 @@ class AdminLocationIO
 				$template = new HTMLTemplate("location/admin/location/edit.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
@@ -346,9 +346,9 @@ class AdminLocationIO
 				$result = array();
 				$counter = 0;
 				
-				if ($_POST[type_id])
+				if ($_POST['type_id'])
 				{
-					$type_id = $_POST[type_id];
+					$type_id = $_POST['type_id'];
 				}
 				else
 				{
@@ -359,35 +359,35 @@ class AdminLocationIO
 				{
 					foreach($type_array as $key => $value)
 					{
-						if ($type_id == $value[id])
+						if ($type_id == $value['id'])
 						{
-							$result[$counter][selected] = "selected='selected'";
+							$result[$counter]['selected'] = "selected='selected'";
 						}
 						else
 						{
-							$result[$counter][selected] = "";
+							$result[$counter]['selected'] = "";
 						}
 						
-						$result[$counter][value] = $value[id];
-						$result[$counter][content] = $value[name];
+						$result[$counter]['value'] = $value['id'];
+						$result[$counter]['content'] = $value['name'];
 						$counter++;
 					}
 				}
 				
 				$template->set_var("type_array",$result);
 				
-				if ($_POST[name])
+				if ($_POST['name'])
 				{
-					$template->set_var("name", $_POST[name]);
+					$template->set_var("name", $_POST['name']);
 				}
 				else
 				{
 					$template->set_var("name", $location->get_db_name());
 				}
 				
-				if ($_POST[additional_name])
+				if ($_POST['additional_name'])
 				{
-					$template->set_var("additional_name", $_POST[additional_name]);
+					$template->set_var("additional_name", $_POST['additional_name']);
 				}
 				else
 				{
@@ -401,7 +401,7 @@ class AdminLocationIO
 					}
 				}
 
-				if ($_POST[prefix] == "1")
+				if ($_POST['prefix'] == "1")
 				{
 					$template->set_var("prefix", "checked='checked'");
 				}
@@ -421,7 +421,7 @@ class AdminLocationIO
 			}
 			else
 			{	
-				if ($_POST[prefix] == "1")
+				if ($_POST['prefix'] == "1")
 				{
 					$show_prefix = true;
 				}
@@ -431,13 +431,13 @@ class AdminLocationIO
 				}
 
 				$paramquery = $_GET;
-				unset($paramquery[action]);
-				unset($paramquery[nextpage]);
+				unset($paramquery['action']);
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				if ($location->set_type_id($_POST[type_id]) and 
-					$location->set_db_name($_POST[name]) and 
-					$location->set_additional_name($_POST[additional_name]) and 
+				if ($location->set_type_id($_POST['type_id']) and 
+					$location->set_db_name($_POST['name']) and 
+					$location->set_additional_name($_POST['additional_name']) and 
 					$location->set_prefix($show_prefix))
 				{
 					Common_IO::step_proceed($params, "Edit Location", "Operation Successful", null);
@@ -459,22 +459,22 @@ class AdminLocationIO
 	 */
 	public static function delete()
 	{	
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			if ($_GET[sure] != "true")
+			if ($_GET['sure'] != "true")
 			{
 				$template = new HTMLTemplate("location/admin/location/delete.html");
 				
 				$paramquery = $_GET;
-				$paramquery[sure] = "true";
+				$paramquery['sure'] = "true";
 				$params = http_build_query($paramquery);
 				
 				$template->set_var("yes_params", $params);
 						
 				$paramquery = $_GET;
-				unset($paramquery[sure]);
-				unset($paramquery[action]);
-				unset($paramquery[id]);
+				unset($paramquery['sure']);
+				unset($paramquery['action']);
+				unset($paramquery['id']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("no_params", $params);
@@ -484,12 +484,12 @@ class AdminLocationIO
 			else
 			{
 				$paramquery = $_GET;
-				unset($paramquery[sure]);
-				unset($paramquery[action]);
-				unset($paramquery[id]);
+				unset($paramquery['sure']);
+				unset($paramquery['action']);
+				unset($paramquery['id']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				$location = new Location($_GET[id]);
+				$location = new Location($_GET['id']);
 				
 				if ($location->delete())
 				{							
@@ -509,7 +509,7 @@ class AdminLocationIO
 	
 	public static function handler()
 	{
-		switch($_GET[action]):
+		switch($_GET['action']):
 			case "add":
 			case "add_child":
 				self::add();

@@ -1,0 +1,176 @@
+<script>
+$(document).ready(function()
+{
+	reload_menu = function()
+	{
+		$.ajax(
+		{
+			type: "POST",
+			url: "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=get_project_menu",
+			data: 'get_array=[[GET_ARRAY]]',
+			success: function(data)
+			{		
+				if (data)
+				{
+					$("#ProjectDetailMenu").hide().html(data).fadeIn("slow");
+
+					$("#ProjectDetailProceedButton").click(function()
+					{
+						$.ajax(
+						{
+							type: "POST",
+							url: "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=get_project_proceed",
+							data: 'get_array=[[GET_ARRAY]]',
+							async: false,
+							success: function(data)
+							{
+								if (data)
+								{
+									var data_array = data.split("::;::");
+									$("#ProjectDetailProceedWindow").html(data_array[1]);
+									if (data_array[0] == "0")
+									{
+										
+									}
+									else
+									{
+										
+									}
+								}
+							}
+						});
+						$("#ProjectDetailProceedWindow").dialog("open");
+						return false;
+					});
+					
+					$("#ProjectLogCreateWindow").dialog({
+						autoOpen: false
+					});
+					
+					base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=log_create", 'get_array=[[GET_ARRAY]]', "ProjectLogCreateButton");
+				}
+			}
+		});
+	}
+
+	function reload_status()
+	{
+		$.ajax(
+		{
+			type: "POST",
+			url: "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=get_project_status_bar",
+			data: 'get_array=[[GET_ARRAY]]',
+			success: function(data)
+			{		
+				if (data)
+				{
+					$("#ProjectDetailStatus").hide().html(data).fadeIn("slow");
+				}
+			}
+		});
+	}
+
+	reload_menu();
+	reload_status();
+	
+	$("#ProjectDetailProceedWindow").dialog(
+	{
+		autoOpen: false,
+		height: 470,
+		width: 400,
+		buttons: 
+		{
+			"OK": function()
+			{
+				var comment = $("#ProjectDetailProceedCommentTextarea").val();
+				
+				$.ajax(
+				{
+					type: "POST",
+					url: "ajax.php?session_id="+get_array['session_id']+"&nav=project&run=proceed_project",
+					data: 'get_array=[[GET_ARRAY]]&comment='+comment,
+					async: false,
+					success: function(data)
+					{		
+						if ((data + '').indexOf("EXCEPTION:",0) == 0)
+						{
+							var exception_message = data.replace("EXCEPTION: ","");
+							ErrorDialog("Error", exception_message);
+						}
+						else
+						{
+							$("#ProjectDetailStatus").fadeOut("slow");
+							$("#ProjectDetailMenu").fadeOut("slow");
+							reload_menu();
+							reload_status();
+						}
+					}
+				});
+				$(this).dialog( "close" );
+			},
+			"Cancel": function()
+			{
+		        $(this).dialog( "close" );
+			}
+		}
+	});
+});
+</script>
+
+<div id="ProjectLogCreateWindow" title="Create New Log Entry" style='display: none;'>
+</div>
+
+<div id="ProjectLogCreateSuccessfulWindow" title="Create New Log Entry" style='display: none;'>
+Project entry has been successfully created.
+</div>
+
+<div id="ProjectDetailProceedWindow" title="Proceed with Project" style='display: none;'>
+</div>
+
+<!-- CONTAINER BEGIN ("[[TITLE]]") -->
+
+<div id='ProjectDetailLeft'>
+
+	<table class='ProjectGeneralTable'>
+		<tr>
+			<td>[[LANG:ProjectDetailOwner]]:</td>
+			<td><a href='index.php?[[OWNER_PARAMS]]'>[[OWNER]]</a></td>
+		</tr>
+		<tr>
+			<td>[[LANG:ProjectDetailCreatedAt]]:</td>
+			<td>[[CREATED_AT]]</td>
+		</tr>
+		<tr>
+			<td>[[LANG:ProjectDetailTemplate]]:</td>
+			<td>[[TEMPLATE]]</td>
+		</tr>
+		<tr>
+			<td>[[LANG:ProjectDetailPermissions]]:</td>
+			<td>[[PERMISSIONS]]</td>
+		</tr>
+		<tr>
+			<td>[[LANG:ProjectDetailSizeQuota]]:</td>
+			<td>[[SIZE]] / [[QUOTA]]</td>
+		</tr>
+	</table>
+			
+	<div class='horizontal_line'></div>
+
+	<div id='ProjectDetailStatus'>
+	
+	</div>
+
+</div>
+
+
+<div id='ProjectDetailRight'>
+
+	<div id='ProjectDetailMenu'>
+	
+	</div>
+
+</div>
+
+<div id='ProjectDetailClear'></div>
+
+<!-- CONTAINER END () -->

@@ -3,7 +3,7 @@
  * @package manufacturer
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -44,8 +44,8 @@ class ManufacturerIO
 		$list = new List_IO("Manufacturer", "ajax.php?nav=manufacturer", "list_manufacturers", "count_manufacturers", "0", "ManufacturerListPage");
 		
 		$list->add_column("","symbol",false,"16px");
-		$list->add_column("Name","name",true,null);
-		$list->add_column("User","user",true,null);
+		$list->add_column(Language::get_message("ManufacturerGeneralListColumnName", "general"),"name",true,null);
+		$list->add_column(Language::get_message("ManufacturerGeneralListColumnUser", "general"),"user",true,null);
 		$list->add_column("","delete",false,"16px");
 		
 		$template = new HTMLTemplate("manufacturer/list.html");

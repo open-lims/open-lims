@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -36,9 +36,9 @@ class HTMLTemplate extends Template implements ConcreteTemplateInterface
 	 * @see TemplateInterface::__construct
 	 * @param string $file
 	 */
-	function __construct($file, $path = null)
+	function __construct($file, $path = null, $language_id = null)
 	{
-		parent::__construct($file, $path);
+		parent::__construct($file, $path, $language_id);
 		$this->replace_containers();
 	}
 	

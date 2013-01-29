@@ -3,7 +3,7 @@
  * @package data
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -36,17 +36,17 @@ class DataIO
 		
 		$data_browser = new DataBrowser();
 		
-		if ($_GET[vfolder_id])
+		if ($_GET['vfolder_id'])
 		{
-			$virtual_folder = new VirtualFolder($_GET[vfolder_id]);
+			$virtual_folder = new VirtualFolder($_GET['vfolder_id']);
 			
-			$virtual_folder_id = $_GET[vfolder_id];
+			$virtual_folder_id = $_GET['vfolder_id'];
 			$folder_id = null;
-			$data_path = new DataPath(null, $_GET[vfolder_id]);
+			$data_path = new DataPath(null, $_GET['vfolder_id']);
 		}
-		elseif ($_GET[folder_id])
+		elseif ($_GET['folder_id'])
 		{
-			$folder = Folder::get_instance($_GET[folder_id]);
+			$folder = Folder::get_instance($_GET['folder_id']);
 			
 			if ($folder->is_read_access() == false)
 			{
@@ -55,8 +55,8 @@ class DataIO
 			else
 			{
 				$virtual_folder_id = null;
-				$folder_id = $_GET[folder_id];
-				$data_path = new DataPath($_GET[folder_id], null);
+				$folder_id = $_GET['folder_id'];
+				$data_path = new DataPath($_GET['folder_id'], null);
 			}
 		}
 		else
@@ -95,13 +95,13 @@ class DataIO
 		
 		$list->add_column("","delete_checkbox",false,"22px"); 
 		$list->add_column("","symbol",false,"22px");
-		$list->add_column("Name","name",true,"30%");
-		$list->add_column("Type","type",true,null);
-		$list->add_column("Ver.","version",false,null);
-		$list->add_column("Date/Time","datetime",true,"10em");
-		$list->add_column("Size","size",true,null);
-		$list->add_column("Owner","owner",true,null);
-		$list->add_column("Permission","permission",false,null);
+		$list->add_column(Language::get_message("DataGeneralListColumnName", "general"),"name",true,"30%");
+		$list->add_column(Language::get_message("DataGeneralListColumnType", "general"),"type",true,null);
+		$list->add_column(Language::get_message("DataGeneralListColumnVersion", "general"),"version",false,null);
+		$list->add_column(Language::get_message("DataGeneralListColumnDateTime", "general"),"datetime",true,"10em");
+		$list->add_column(Language::get_message("DataGeneralListColumnSize", "general"),"size",true,null);
+		$list->add_column(Language::get_message("DataGeneralListColumnOwner", "general"),"owner",true,null);
+		$list->add_column(Language::get_message("DataGeneralListColumnPermission", "general"),"permission",false,null);
 		
 		$folder = Folder::get_instance($folder_id);	
 		
@@ -119,9 +119,9 @@ class DataIO
 	 */
 	public static function image_browser_multi()
 	{
-		if ($_GET[folder_id])
+		if ($_GET['folder_id'])
 		{
-			$folder_id = $_GET[folder_id];
+			$folder_id = $_GET['folder_id'];
 			$folder = Folder::get_instance($folder_id);
 			
 			if ($folder->is_read_access() == true)
@@ -130,42 +130,42 @@ class DataIO
 				
 				if (is_array($image_browser_array) and count($image_browser_array) >= 1)
 				{
-					if (!$_GET[page])
+					if (!$_GET['page'])
 					{
 						$page = 1;
 						$address = 0;
 					}
 					else
 					{
-						if ($_GET[page] > count($image_browser_array))
+						if ($_GET['page'] > count($image_browser_array))
 						{
 							$page = count($image_browser_array);
 							$address = count($image_browser_array)-1;
 						}
 						else
 						{
-							$page = $_GET[page];
-							$address = $_GET[page]-1;
+							$page = $_GET['page'];
+							$address = $_GET['page']-1;
 						}
 					}
 				
 					$template = new HTMLTemplate("data/data_image_browser_multi.html");
 					
 					$paramquery = $_GET;
-					$paramquery[nav] = "data";
-					$paramquery[run] = "image_browser_multi";
-					$paramquery[folder_id] = $folder_id;
-					unset($paramquery[nextpage]);
+					$paramquery['nav'] = "data";
+					$paramquery['run'] = "image_browser_multi";
+					$paramquery['folder_id'] = $folder_id;
+					unset($paramquery['nextpage']);
 					$params = http_build_query($paramquery,'','&#38;');
 									
 					$template->set_var("multi_params", $params);
 					
 					
 					$paramquery = $_GET;
-					$paramquery[nav] = "data";
-					$paramquery[run] = "image_browser_detail";
-					$paramquery[folder_id] = $folder_id;
-					unset($paramquery[nextpage]);
+					$paramquery['nav'] = "data";
+					$paramquery['run'] = "image_browser_detail";
+					$paramquery['folder_id'] = $folder_id;
+					unset($paramquery['nextpage']);
 					$params = http_build_query($paramquery,'','&#38;');
 									
 					$template->set_var("detail_params", $params);
@@ -181,39 +181,39 @@ class DataIO
 							
 							if ($image_browser_array[$current_address])
 							{
-								$content_array[$counter][display_image] = true;
+								$content_array[$counter]['display_image'] = true;
 								
 								$file = File::get_instance($image_browser_array[$current_address]);
 						
-								$paramquery[session_id] = $_GET[session_id];
-								$paramquery[file_id] = $image_browser_array[$current_address];
-								$paramquery[multithumb] = "true";
+								$paramquery['session_id'] = $_GET['session_id'];
+								$paramquery['file_id'] = $image_browser_array[$current_address];
+								$paramquery['multithumb'] = "true";
 								$params = http_build_query($paramquery,'','&#38;');
 												
-								$content_array[$counter][image_params] = $params;
+								$content_array[$counter]['image_params'] = $params;
 								
 								$paramquery = $_GET;
-								$paramquery[page] = $current_address+1;
-								$paramquery[run] = "image_browser_detail";
+								$paramquery['page'] = $current_address+1;
+								$paramquery['run'] = "image_browser_detail";
 								$params = http_build_query($paramquery,'','&#38;');
 								
-								$content_array[$counter][image_click_params] = $params;
+								$content_array[$counter]['image_click_params'] = $params;
 								
-								$content_array[$counter][name] = $file->get_name();
-								$content_array[$counter][version] = $file->get_version();
+								$content_array[$counter]['name'] = $file->get_name();
+								$content_array[$counter]['version'] = $file->get_version();
 							}
 							else
 							{
-								$content_array[$counter][display_image] = false;
+								$content_array[$counter]['display_image'] = false;
 							}
 							
 							if ($j==3)
 							{
-								$content_array[$counter][display_tr] = true;
+								$content_array[$counter]['display_tr'] = true;
 							}
 							else
 							{
-								$content_array[$counter][display_tr] = false;
+								$content_array[$counter]['display_tr'] = false;
 							}
 							$counter++;
 						}
@@ -249,9 +249,9 @@ class DataIO
 	 */
 	public static function image_browser_detail()
 	{
-		if ($_GET[folder_id])
+		if ($_GET['folder_id'])
 		{
-			$folder_id = $_GET[folder_id];
+			$folder_id = $_GET['folder_id'];
 			$folder = Folder::get_instance($folder_id);
 			
 			if ($folder->is_read_access() == true)
@@ -260,19 +260,19 @@ class DataIO
 				
 				if (is_array($image_browser_array) and count($image_browser_array) >= 1)
 				{
-					if (!$_GET[page])
+					if (!$_GET['page'])
 					{
 						$page = 0;
 					}
 					else
 					{
-						if ($_GET[page] > count($image_browser_array))
+						if ($_GET['page'] > count($image_browser_array))
 						{
 							$page = count($image_browser_array)-1;
 						}
 						else
 						{
-							$page = $_GET[page]-1;
+							$page = $_GET['page']-1;
 						}
 					}
 				
@@ -282,10 +282,10 @@ class DataIO
 				
 						$template = new HTMLTemplate("data/data_image_browser_detail.html");
 						
-						if ($_GET[version] and is_numeric($_GET[version])) 
+						if ($_GET['version'] and is_numeric($_GET['version'])) 
 						{
-							$file->open_internal_revision($_GET[version]);
-							$internal_revision = $_GET[version];
+							$file->open_internal_revision($_GET['version']);
+							$internal_revision = $_GET['version'];
 						}
 						else
 						{
@@ -299,16 +299,16 @@ class DataIO
 							$result = array();
 							$counter = 1;
 						
-							$result[0][version] = 0;
-							$result[0][text] = "----------------------------------------------";
+							$result[0]['version'] = 0;
+							$result[0]['text'] = "----------------------------------------------";
 							
 							foreach($file_version_array as $key => $value)
 							{
 								$file_version = File::get_instance($image_browser_array[$page]);
 								$file_version->open_internal_revision($value);
 								
-								$result[$counter][version] = $file_version->get_internal_revision();
-								$result[$counter][text] = "Version ".$file_version->get_version()." - ".$file_version->get_datetime();
+								$result[$counter]['version'] = $file_version->get_internal_revision();
+								$result[$counter]['text'] = "Version ".$file_version->get_version()." - ".$file_version->get_datetime();
 								$counter++;
 							}
 							$template->set_var("version_option",$result);
@@ -321,8 +321,8 @@ class DataIO
 						{
 							if ($key != "version")
 							{
-								$result[$counter][value] = $value;
-								$result[$counter][key] = $key;
+								$result[$counter]['value'] = $value;
+								$result[$counter]['key'] = $key;
 								$counter++;
 							}
 						}
@@ -331,38 +331,38 @@ class DataIO
 						
 						
 						$paramquery = $_GET;
-						$paramquery[nav] = "data";
-						$paramquery[run] = "image_browser_multi";
-						$paramquery[folder_id] = $folder_id;
-						$paramquery[page] = floor($page/12)+1;
-						unset($paramquery[nextpage]);
+						$paramquery['nav'] = "data";
+						$paramquery['run'] = "image_browser_multi";
+						$paramquery['folder_id'] = $folder_id;
+						$paramquery['page'] = floor($page/12)+1;
+						unset($paramquery['nextpage']);
 						$params = http_build_query($paramquery,'','&#38;');
 										
 						$template->set_var("multi_params", $params);
 						
 						
 						$paramquery = $_GET;
-						$paramquery[nav] = "data";
-						$paramquery[run] = "image_browser_detail";
-						$paramquery[folder_id] = $folder_id;
-						unset($paramquery[nextpage]);
+						$paramquery['nav'] = "data";
+						$paramquery['run'] = "image_browser_detail";
+						$paramquery['folder_id'] = $folder_id;
+						unset($paramquery['nextpage']);
 						$params = http_build_query($paramquery,'','&#38;');
 										
 						$template->set_var("detail_params", $params);
 											
 						
-						$paramquery[session_id] = $_GET[session_id];
-						$paramquery[file_id] = $image_browser_array[$page];
-						$paramquery[version] = $internal_revision;
+						$paramquery['session_id'] = $_GET['session_id'];
+						$paramquery['file_id'] = $image_browser_array[$page];
+						$paramquery['version'] = $internal_revision;
 						$params = http_build_query($paramquery,'','&#38;');
 										
 						$template->set_var("image_params", $params);
 						
 						
-						$paramquery[session_id] = $_GET[session_id];
-						$paramquery[file_id] = $image_browser_array[$page];
-						$paramquery[full] = "true";
-						$paramquery[version] = $internal_revision;
+						$paramquery['session_id'] = $_GET['session_id'];
+						$paramquery['file_id'] = $image_browser_array[$page];
+						$paramquery['full'] = "true";
+						$paramquery['version'] = $internal_revision;
 						$params = http_build_query($paramquery,'','&#38;');
 						
 						$template->set_var("image_click_params", $params);
@@ -402,19 +402,19 @@ class DataIO
 	{
 		global $user;
 		
-		if ($_GET[file_id] xor $_GET[value_id])
+		if ($_GET['file_id'] xor $_GET['value_id'])
 		{
-			if ($_GET[file_id])
+			if ($_GET['file_id'])
 			{
-				$id = $_GET[file_id];
+				$id = $_GET['file_id'];
 				$object = File::get_instance($id);
 				$type = "file";
 				$title = $object->get_name();
 			}
 			
-			if ($_GET[value_id])
+			if ($_GET['value_id'])
 			{
-				$id = $_GET[value_id];
+				$id = $_GET['value_id'];
 				$object = Value::get_instance($id);
 				$type = "value";
 				$title = $object->get_type_name();
@@ -422,9 +422,9 @@ class DataIO
 		}
 		else
 		{
-			if ($_GET[folder_id])
+			if ($_GET['folder_id'])
 			{
-				$id = $_GET[folder_id];
+				$id = $_GET['folder_id'];
 				$object = Folder::get_instance($id);
 				$type = "folder";
 				$title = $object->get_name();
@@ -456,24 +456,24 @@ class DataIO
 		{
 			$data_permission = new DataPermission($type, $id);
 			
-			if (!$_GET[nextpage])
+			if (!$_GET['nextpage'])
 			{
 				$template = new HTMLTemplate("data/data_permission.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params", $params);
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "chown";
+				$paramquery['action'] = "chown";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params_chown", $params);
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "chgroup";
+				$paramquery['action'] = "chgroup";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params_chgroup", $params);
@@ -607,8 +607,8 @@ class DataIO
 				}
 
 				$paramquery = $_GET;
-				$paramquery[nav] = "data";
-				unset($paramquery[action]);
+				$paramquery['nav'] = "data";
+				unset($paramquery['action']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("back_link", $params);
@@ -617,10 +617,10 @@ class DataIO
 			}
 			else
 			{
-				if ($_POST[save])
+				if ($_POST['save'])
 				{
 					$paramquery = $_GET;
-					unset($paramquery[nextpage]);
+					unset($paramquery['nextpage']);
 					$params = http_build_query($paramquery,'','&#38;');
 				}
 				else
@@ -628,15 +628,15 @@ class DataIO
 					if ($type == folder)
 					{
 						$paramquery = $_GET;
-						unset($paramquery[action]);
-						unset($paramquery[nextpage]);
+						unset($paramquery['action']);
+						unset($paramquery['nextpage']);
 						$params = http_build_query($paramquery,'','&#38;');
 					}
 					else
 					{
 						$paramquery = $_GET;
-						unset($paramquery[action]);
-						unset($paramquery[nextpage]);
+						unset($paramquery['action']);
+						unset($paramquery['nextpage']);
 						$params = http_build_query($paramquery,'','&#38;');
 					}
 				}
@@ -662,13 +662,13 @@ class DataIO
 		$permissions = (array)$permission_array;
 		switch($type):
 			case "File": 
-				$id = $_GET[file_id];
+				$id = $_GET['file_id'];
 			break;
 			case "Folder": 
-				$id = $_GET[folder_id];
+				$id = $_GET['folder_id'];
 			break;
 			case "Value": 
-				$id = $_GET[value_id];
+				$id = $_GET['value_id'];
 			break;
 			
 		endswitch;
@@ -678,8 +678,8 @@ class DataIO
 		$data_permission = new DataPermission($type, $id);
 		
 		$paramquery = $_GET;
-		unset($paramquery[action]);
-		unset($paramquery[nextpage]);
+		unset($paramquery['action']);
+		unset($paramquery['nextpage']);
 		$params = http_build_query($paramquery,'','&#38;');
 		if ($data_permission->set_permission_array($permissions) == true)
 		{
@@ -696,18 +696,18 @@ class DataIO
 	 */
 	public static function change_owner()
 	{
-		if ($_GET[file_id] xor $_GET[value_id])
+		if ($_GET['file_id'] xor $_GET['value_id'])
 		{
-			if ($_GET[file_id])
+			if ($_GET['file_id'])
 			{
-				$id = $_GET[file_id];
+				$id = $_GET['file_id'];
 				$object = File::get_instance($id);
 				$type = "file";
 				$title = $object->get_name();
 			}
-			if ($_GET[value_id])
+			if ($_GET['value_id'])
 			{
-				$id = $_GET[value_id];
+				$id = $_GET['value_id'];
 				$object = Value::get_instance($id);
 				$type = "value";
 				$title = $object->get_type_name();
@@ -715,9 +715,9 @@ class DataIO
 		}
 		else
 		{
-			if ($_GET[folder_id])
+			if ($_GET['folder_id'])
 			{
-				$id = $_GET[folder_id];
+				$id = $_GET['folder_id'];
 				$object = Folder::get_instance($id);
 				$type = "folder";
 				$title = $object->get_name();
@@ -732,12 +732,12 @@ class DataIO
 		{
 			$data_permission = new DataPermission($type, $id);
 			
-			if (!$_GET[nextpage])
+			if (!$_GET['nextpage'])
 			{
 				$template = new HTMLTemplate("data/data_change_owner.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
@@ -753,16 +753,16 @@ class DataIO
 				foreach($user_array as $key => $value)
 				{
 					$user = new User($value);
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $user->get_username()." (".$user->get_full_name(false).")";
+					$result[$counter]['value'] = $value;
+					$result[$counter]['content'] = $user->get_username()." (".$user->get_full_name(false).")";
 					$counter++;
 				}
 				
 				$template->set_var("option",$result);
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "permission";
-				unset($paramquery[nextpage]);
+				$paramquery['action'] = "permission";
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("back_link", $params);
@@ -772,11 +772,11 @@ class DataIO
 			else
 			{
 				$paramquery = $_GET;
-				$paramquery[action] = "permission";
-				unset($paramquery[nextpage]);
+				$paramquery['action'] = "permission";
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				if ($data_permission->set_owner_id($_POST[user]) == true)
+				if ($data_permission->set_owner_id($_POST['user']) == true)
 				{
 					Common_IO::step_proceed($params, "Permission: ".$title."", "Changes saved succesful" ,null);
 				}
@@ -797,18 +797,18 @@ class DataIO
 	 */
 	public static function change_group()
 	{
-		if ($_GET[file_id] xor $_GET[value_id])
+		if ($_GET['file_id'] xor $_GET['value_id'])
 		{
-			if ($_GET[file_id])
+			if ($_GET['file_id'])
 			{
-				$id = $_GET[file_id];
+				$id = $_GET['file_id'];
 				$object = File::get_instance($id);
 				$type = "file";
 				$title = $object->get_name();
 			}
-			if ($_GET[value_id])
+			if ($_GET['value_id'])
 			{
-				$id = $_GET[value_id];
+				$id = $_GET['value_id'];
 				$object = Value::get_instance($id);
 				$type = "value";
 				$title = $object->get_type_name();
@@ -816,9 +816,9 @@ class DataIO
 		}
 		else
 		{
-			if ($_GET[folder_id])
+			if ($_GET['folder_id'])
 			{
-				$id = $_GET[folder_id];
+				$id = $_GET['folder_id'];
 				$object = Folder::get_instance($id);
 				$type = "folder";
 				$title = $object->get_name();
@@ -833,12 +833,12 @@ class DataIO
 		{
 			$data_permission = new DataPermission($type, $id);
 			
-			if (!$_GET[nextpage])
+			if (!$_GET['nextpage'])
 			{
 				$template = new HTMLTemplate("data/data_change_group.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
@@ -854,16 +854,16 @@ class DataIO
 				foreach($group_array as $key => $value)
 				{
 					$group = new Group($value);
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $group->get_name();
+					$result[$counter]['value'] = $value;
+					$result[$counter]['content'] = $group->get_name();
 					$counter++;
 				}
 				
 				$template->set_var("option",$result);
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "permission";
-				unset($paramquery[nextpage]);
+				$paramquery['action'] = "permission";
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("back_link", $params);
@@ -873,11 +873,11 @@ class DataIO
 			else
 			{
 				$paramquery = $_GET;
-				$paramquery[action] = "permission";
-				unset($paramquery[nextpage]);
+				$paramquery['action'] = "permission";
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				if ($data_permission->set_owner_group_id($_POST[group]) == true)
+				if ($data_permission->set_owner_group_id($_POST['group']) == true)
 				{
 					Common_IO::step_proceed($params, "Permission: ".$title."", "Changes saved succesful" ,null);
 				}
@@ -898,14 +898,14 @@ class DataIO
 	 */
 	public static function change_quota()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$user = new User($_GET[id]);
-			$user_data = new DataUserData($_GET[id]);
+			$user = new User($_GET['id']);
+			$user_data = new DataUserData($_GET['id']);
 						
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
-				if (is_numeric($_POST[quota]))
+				if (is_numeric($_POST['quota']))
 				{
 					$page_1_passed = true;
 				}
@@ -915,7 +915,7 @@ class DataIO
 					$error = "You must enter a valid quota.";
 				}
 			}
-			elseif($_GET[nextpage] > 1)
+			elseif($_GET['nextpage'] > 1)
 			{
 				$page_1_passed = true;
 			}
@@ -930,15 +930,15 @@ class DataIO
 				$template = new HTMLTemplate("data/admin/user/change_user_quota.html");
 
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
 				$template->set_var("error",$error);
 				
-				if ($_POST[quota])
+				if ($_POST['quota'])
 				{
-					$template->set_var("mail", $_POST[quota]);
+					$template->set_var("mail", $_POST['quota']);
 				}
 				else
 				{
@@ -948,19 +948,19 @@ class DataIO
 			}
 			else
 			{
-				if ($_GET[retrace])
+				if ($_GET['retrace'])
 				{
-					$params = http_build_query(Retrace::resolve_retrace_string($_GET[retrace]),'','&#38;');
+					$params = http_build_query(Retrace::resolve_retrace_string($_GET['retrace']),'','&#38;');
 				}
 				else
 				{
-					$paramquery[username] = $_GET[username];
-					$paramquery[session_id] = $_GET[session_id];
-					$paramquery[nav] = "home";
+					$paramquery['username'] = $_GET['username'];
+					$paramquery['session_id'] = $_GET['session_id'];
+					$paramquery['nav'] = "home";
 					$params = http_build_query($paramquery,'','&#38;');
 				}
 			
-				if ($user_data->set_quota($_POST[quota]))
+				if ($user_data->set_quota($_POST['quota']))
 				{
 					Common_IO::step_proceed($params, "Change User Quota", "Operation Successful", null);
 				}
@@ -987,14 +987,14 @@ class DataIO
 			$data_user_data = new DataUserData($user_id);
 			
 			$paramquery = $_GET;
-			$paramquery[run] = "module_value_change";
-			$paramquery[dialog] = "user_quota";
-			$paramquery[retrace] = Retrace::create_retrace_string();
+			$paramquery['run'] = "module_value_change";
+			$paramquery['dialog'] = "user_quota";
+			$paramquery['retrace'] = Retrace::create_retrace_string();
 			$params = http_build_query($paramquery, '', '&#38;');
 			
 			$return_array = array();
-			$return_array[value] = Convert::convert_byte_1024($data_user_data->get_quota());
-			$return_array[params] = $params;
+			$return_array['value'] = Convert::convert_byte_1024($data_user_data->get_quota());
+			$return_array['params'] = $params;
 			return $return_array;	
 		}
 		else

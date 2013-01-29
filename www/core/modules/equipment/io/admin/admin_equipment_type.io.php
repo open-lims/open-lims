@@ -3,7 +3,7 @@
  * @package equipment
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -44,43 +44,43 @@ class AdminEquipmentTypeIO
 				{
 					$equipment_type = new EquipmentType($value);
 					
-					$content_array[self::$home_list_counter][padding] = 0.5 * $layer;				
-					$content_array[self::$home_list_counter][name] = $equipment_type->get_name();					
-					$content_array[self::$home_list_counter][category] = $equipment_type->get_cat_name();	
-					$content_array[self::$home_list_counter][id] = $value;	
+					$content_array[self::$home_list_counter]['padding'] = 0.5 * $layer;				
+					$content_array[self::$home_list_counter]['name'] = $equipment_type->get_name();					
+					$content_array[self::$home_list_counter]['category'] = $equipment_type->get_cat_name();	
+					$content_array[self::$home_list_counter]['id'] = $value;	
 					
 					if ($equipment_type->get_location_id() == null)
 					{
-						$content_array[self::$home_list_counter][location] = "<span class='italic'>none</span>";	
+						$content_array[self::$home_list_counter]['location'] = "<span class='italic'>none</span>";	
 					}
 					else
 					{
 						$location = new Location($equipment_type->get_location_id());
-						$content_array[self::$home_list_counter][location] = $location->get_name(false);
+						$content_array[self::$home_list_counter]['location'] = $location->get_name(false);
 					}
 					
 					$paramquery = $_GET;
-					$paramquery[action] = "detail";
-					$paramquery[id] = $value;
+					$paramquery['action'] = "detail";
+					$paramquery['id'] = $value;
 					$params = http_build_query($paramquery,'','&#38;');
 					
-					$content_array[self::$home_list_counter][detail_params] = $params;
+					$content_array[self::$home_list_counter]['detail_params'] = $params;
 					
 					
 					$paramquery = $_GET;
-					$paramquery[action] = "delete";
-					$paramquery[id] = $value;
+					$paramquery['action'] = "delete";
+					$paramquery['id'] = $value;
 					$params = http_build_query($paramquery,'','&#38;');
 					
-					$content_array[self::$home_list_counter][delete_params] = $params;
+					$content_array[self::$home_list_counter]['delete_params'] = $params;
 					
 					
 					$paramquery = $_GET;
-					$paramquery[action] = "add_child";
-					$paramquery[id] = $value;
+					$paramquery['action'] = "add_child";
+					$paramquery['id'] = $value;
 					$params = http_build_query($paramquery,'','&#38;');
 					
-					$content_array[self::$home_list_counter][create_child_params] = $params;
+					$content_array[self::$home_list_counter]['create_child_params'] = $params;
 					
 
 					$temp_counter = self::$home_list_counter;
@@ -121,43 +121,43 @@ class AdminEquipmentTypeIO
 			{
 				$equipment_type = new EquipmentType($value);
 				
-				$content_array[self::$home_list_counter][padding] = 0;
-				$content_array[self::$home_list_counter][name] = $equipment_type->get_name();				
-				$content_array[self::$home_list_counter][category] = $equipment_type->get_cat_name();	
-				$content_array[self::$home_list_counter][id] = $value;	
+				$content_array[self::$home_list_counter]['padding'] = 0;
+				$content_array[self::$home_list_counter]['name'] = $equipment_type->get_name();				
+				$content_array[self::$home_list_counter]['category'] = $equipment_type->get_cat_name();	
+				$content_array[self::$home_list_counter]['id'] = $value;	
 				
 				if ($equipment_type->get_location_id() == null)
 				{
-					$content_array[self::$home_list_counter][location] = "<span class='italic'>none</span>";	
+					$content_array[self::$home_list_counter]['location'] = "<span class='italic'>none</span>";	
 				}
 				else
 				{
 					$location = new Location($equipment_type->get_location_id());
-					$content_array[self::$home_list_counter][location] = $location->get_name(false);
+					$content_array[self::$home_list_counter]['location'] = $location->get_name(false);
 				}
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "detail";
-				$paramquery[id] = $value;
+				$paramquery['action'] = "detail";
+				$paramquery['id'] = $value;
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				$content_array[self::$home_list_counter][detail_params] = $params;
+				$content_array[self::$home_list_counter]['detail_params'] = $params;
 				
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "delete";
-				$paramquery[id] = $value;
+				$paramquery['action'] = "delete";
+				$paramquery['id'] = $value;
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				$content_array[self::$home_list_counter][delete_params] = $params;
+				$content_array[self::$home_list_counter]['delete_params'] = $params;
 				
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "add_child";
-				$paramquery[id] = $value;
+				$paramquery['action'] = "add_child";
+				$paramquery['id'] = $value;
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				$content_array[self::$home_list_counter][create_child_params] = $params;
+				$content_array[self::$home_list_counter]['create_child_params'] = $params;
 				
 				
 				$temp_counter = self::$home_list_counter;
@@ -179,8 +179,8 @@ class AdminEquipmentTypeIO
 		}
 				
 		$paramquery = $_GET;
-		$paramquery[action] = "add";
-		unset($paramquery[nextpage]);
+		$paramquery['action'] = "add";
+		unset($paramquery['nextpage']);
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("add_params", $params);
@@ -195,17 +195,17 @@ class AdminEquipmentTypeIO
 	 */
 	public static function create()
 	{
-		if (($_GET[action] == "add_child" and $_GET[id]) or $_GET[action] == "add")
+		if (($_GET['action'] == "add_child" and $_GET['id']) or $_GET['action'] == "add")
 		{
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
 				$page_1_passed = true;
 				
-				if ($_POST[name] or $_POST[manufacturer])
+				if ($_POST['name'] or $_POST['manufacturer'])
 				{
-					if ($_POST[name])
+					if ($_POST['name'])
 					{
-						if (EquipmentType::exist_name($_POST[name]) == true)
+						if (EquipmentType::exist_name($_POST['name']) == true)
 						{
 							$page_1_passed = false;
 							$error = "This name already exists";
@@ -229,7 +229,7 @@ class AdminEquipmentTypeIO
 				$template = new HTMLTemplate("equipment/admin/equipment_type/add.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
@@ -252,27 +252,27 @@ class AdminEquipmentTypeIO
 					$template->set_var("error2", "");	
 				}
 
-				if ($_POST[manufacturer])
+				if ($_POST['manufacturer'])
 				{
-					$template->set_var("manufacturer", $_POST[manufacturer]);
+					$template->set_var("manufacturer", $_POST['manufacturer']);
 				}
 				else
 				{
 					$template->set_var("manufacturer", "");
 				}
 				
-				if ($_POST[name])
+				if ($_POST['name'])
 				{
-					$template->set_var("name", $_POST[name]);
+					$template->set_var("name", $_POST['name']);
 				}
 				else
 				{
 					$template->set_var("name", "");
 				}
 				
-				if ($_POST[description])
+				if ($_POST['description'])
 				{
-					$template->set_var("description", $_POST[description]);
+					$template->set_var("description", $_POST['description']);
 				}
 				else
 				{
@@ -287,15 +287,15 @@ class AdminEquipmentTypeIO
 				foreach($cat_array as $key => $value)
 				{
 					$equipment_cat = new EquipmentCat($value);
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $equipment_cat->get_name();
-					if ($_POST[cat_id] == $value)
+					$result[$counter]['value'] = $value;
+					$result[$counter]['content'] = $equipment_cat->get_name();
+					if ($_POST['cat_id'] == $value)
 					{
-						$result[$counter][selected] = "selected='selected'";
+						$result[$counter]['selected'] = "selected='selected'";
 					}
 					else
 					{
-						$result[$counter][selected] = "";
+						$result[$counter]['selected'] = "";
 					}
 					$counter++;
 				}
@@ -307,14 +307,14 @@ class AdminEquipmentTypeIO
 				$result = array();
 				$counter = 1;
 				
-				$result[0][value] = 0;
-				$result[0][content] = "none";
+				$result[0]['value'] = 0;
+				$result[0]['content'] = "none";
 				
 				foreach($location_array as $key => $value)
 				{
 					$location = new Location($value);
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $location->get_name(true);
+					$result[$counter]['value'] = $value;
+					$result[$counter]['content'] = $location->get_name(true);
 					$counter++;
 				}
 				
@@ -326,9 +326,9 @@ class AdminEquipmentTypeIO
 			{				
 				$equipment_type = new EquipmentType(null);
 					
-				if ($_GET[action] == "add_child" and is_numeric($_GET[id]))
+				if ($_GET['action'] == "add_child" and is_numeric($_GET['id']))
 				{
-					$toid = $_GET[id];
+					$toid = $_GET['id'];
 				}
 				else
 				{
@@ -336,11 +336,11 @@ class AdminEquipmentTypeIO
 				}	
 
 				$paramquery = $_GET;
-				unset($paramquery[action]);
-				unset($paramquery[nextpage]);
+				unset($paramquery['action']);
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				if ($equipment_type->create($toid, $_POST[name], $_POST[cat_id], $_POST[location_id], $_POST[description], $_POST[manufacturer]))
+				if ($equipment_type->create($toid, $_POST['name'], $_POST['cat_id'], $_POST['location_id'], $_POST['description'], $_POST['manufacturer']))
 				{
 					Common_IO::step_proceed($params, "Add Equipment Type", "Operation Successful", null);
 				}
@@ -361,22 +361,22 @@ class AdminEquipmentTypeIO
 	 */
 	public static function delete()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			if ($_GET[sure] != "true")
+			if ($_GET['sure'] != "true")
 			{
 				$template = new HTMLTemplate("equipment/admin/equipment_type/delete.html");
 				
 				$paramquery = $_GET;
-				$paramquery[sure] = "true";
+				$paramquery['sure'] = "true";
 				$params = http_build_query($paramquery);
 				
 				$template->set_var("yes_params", $params);
 						
 				$paramquery = $_GET;
-				unset($paramquery[sure]);
-				unset($paramquery[action]);
-				unset($paramquery[id]);
+				unset($paramquery['sure']);
+				unset($paramquery['action']);
+				unset($paramquery['id']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("no_params", $params);
@@ -386,12 +386,12 @@ class AdminEquipmentTypeIO
 			else
 			{
 				$paramquery = $_GET;
-				unset($paramquery[sure]);
-				unset($paramquery[action]);
-				unset($paramquery[id]);
+				unset($paramquery['sure']);
+				unset($paramquery['action']);
+				unset($paramquery['id']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				$equipment_type = new EquipmentType($_GET[id]);
+				$equipment_type = new EquipmentType($_GET['id']);
 				
 				if ($equipment_type->delete())
 				{							
@@ -414,7 +414,7 @@ class AdminEquipmentTypeIO
 	 */
 	public static function detail()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
 			$tab_io = new Tab_IO();
 	
@@ -481,13 +481,13 @@ class AdminEquipmentTypeIO
 	
 	private static function detail_home()
 	{
-		$equipment_type = new EquipmentType($_GET[id]);	
+		$equipment_type = new EquipmentType($_GET['id']);	
 					
 		$template = new HTMLTemplate("equipment/admin/equipment_type/detail.html");
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "rename";
-		unset($paramquery[nextpage]);
+		$paramquery['action'] = "rename";
+		unset($paramquery['nextpage']);
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("rename_params", $params);
@@ -496,8 +496,8 @@ class AdminEquipmentTypeIO
 		$template->set_var("category", $equipment_type->get_cat_name());
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "change_location";
-		unset($paramquery[nextpage]);
+		$paramquery['action'] = "change_location";
+		unset($paramquery['nextpage']);
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("change_location_params", $params);
@@ -529,14 +529,14 @@ class AdminEquipmentTypeIO
 	 */
 	private static function detail_reponsible_persons()
 	{
-		$equipment_type = new EquipmentType($_GET[id]);	
+		$equipment_type = new EquipmentType($_GET['id']);	
 					
 		$template = new HTMLTemplate("equipment/admin/equipment_type/detail_responsible_person.html");
 		
 		$template->set_var("name", $equipment_type->get_name());
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "add_user";
+		$paramquery['action'] = "add_user";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("add_user_params", $params);	
@@ -553,13 +553,13 @@ class AdminEquipmentTypeIO
 				$user = new User($value);
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "delete_user";
-				$paramquery[key] = $value;
+				$paramquery['action'] = "delete_user";
+				$paramquery['key'] = $value;
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				$user_content_array[$counter][username] = $user->get_username();
-				$user_content_array[$counter][fullname] = $user->get_full_name(false);
-				$user_content_array[$counter][delete_params] = $params;
+				$user_content_array[$counter]['username'] = $user->get_username();
+				$user_content_array[$counter]['fullname'] = $user->get_full_name(false);
+				$user_content_array[$counter]['delete_params'] = $params;
 				
 				$counter++;
 			}
@@ -580,14 +580,14 @@ class AdminEquipmentTypeIO
 	 */
 	private static function detail_organisation_units()
 	{
-		$equipment_type = new EquipmentType($_GET[id]);	
+		$equipment_type = new EquipmentType($_GET['id']);	
 					
 		$template = new HTMLTemplate("equipment/admin/equipment_type/detail_organisation_unit.html");
 		
 		$template->set_var("name", $equipment_type->get_name());
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "add_ou";
+		$paramquery['action'] = "add_ou";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("add_ou_params", $params);	
@@ -604,12 +604,12 @@ class AdminEquipmentTypeIO
 				$organisation_unit = new OrganisationUnit($value);
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "delete_ou";
-				$paramquery[key] = $value;
+				$paramquery['action'] = "delete_ou";
+				$paramquery['key'] = $value;
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				$ou_content_array[$counter][name] = $organisation_unit->get_name();
-				$ou_content_array[$counter][delete_params] = $params;
+				$ou_content_array[$counter]['name'] = $organisation_unit->get_name();
+				$ou_content_array[$counter]['delete_params'] = $params;
 				
 				$counter++;
 			}
@@ -630,19 +630,19 @@ class AdminEquipmentTypeIO
 	 */
 	public static function rename()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$equipment_type = new EquipmentType($_GET[id]);
+			$equipment_type = new EquipmentType($_GET['id']);
 		
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
 				$page_1_passed = true;
 				
-				if ($_POST[name] or $_POST[manufacturer])
+				if ($_POST['name'] or $_POST['manufacturer'])
 				{
-					if ($_POST[name])
+					if ($_POST['name'])
 					{
-						if (EquipmentType::exist_name($_POST[name]) == true and $equipment_type->get_name() != $_POST[name])
+						if (EquipmentType::exist_name($_POST['name']) == true and $equipment_type->get_name() != $_POST['name'])
 						{
 							$page_1_passed = false;
 							$error = "This name already exists";
@@ -666,7 +666,7 @@ class AdminEquipmentTypeIO
 				$template = new HTMLTemplate("equipment/admin/equipment_type/rename.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
@@ -680,9 +680,9 @@ class AdminEquipmentTypeIO
 					$template->set_var("error", "");	
 				}
 
-				if ($_POST[manufacturer])
+				if ($_POST['manufacturer'])
 				{
-					$template->set_var("manufacturer", $_POST[manufacturer]);
+					$template->set_var("manufacturer", $_POST['manufacturer']);
 				}
 				else
 				{
@@ -696,9 +696,9 @@ class AdminEquipmentTypeIO
 					}
 				}
 				
-				if ($_POST[name])
+				if ($_POST['name'])
 				{
-					$template->set_var("name", $_POST[name]);
+					$template->set_var("name", $_POST['name']);
 				}
 				else
 				{
@@ -717,11 +717,11 @@ class AdminEquipmentTypeIO
 			else
 			{
 				$paramquery = $_GET;
-				unset($paramquery[nextpage]);
-				$paramquery[action] = "detail";
+				unset($paramquery['nextpage']);
+				$paramquery['action'] = "detail";
 				$params = http_build_query($paramquery);
 				
-				if ($equipment_type->set_name($_POST[name]) and $equipment_type->set_manufacturer($_POST[manufacturer]))
+				if ($equipment_type->set_name($_POST['name']) and $equipment_type->set_manufacturer($_POST['manufacturer']))
 				{
 					Common_IO::step_proceed($params, "Rename Equipment Type", "Operation Successful", null);
 				}
@@ -742,14 +742,14 @@ class AdminEquipmentTypeIO
 	 */
 	public static function add_user()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{			
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
-				if (is_numeric($_POST[user]))
+				if (is_numeric($_POST['user']))
 				{
-					$equipment_type = new EquipmentType($_GET[id]);
-					if ($equipment_type->is_user_responsible($_POST[user]) == true)
+					$equipment_type = new EquipmentType($_GET['id']);
+					if ($equipment_type->is_user_responsible($_POST['user']) == true)
 					{
 						$page_1_passed = false;
 						$error = "The user is already responsible for this equipment.";
@@ -765,7 +765,7 @@ class AdminEquipmentTypeIO
 					$error = "You must select an user.";
 				}
 			}
-			elseif($_GET[nextpage] > 1)
+			elseif($_GET['nextpage'] > 1)
 			{
 				$page_1_passed = true;
 			}
@@ -780,7 +780,7 @@ class AdminEquipmentTypeIO
 				$template = new HTMLTemplate("equipment/admin/equipment_type/add_user.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
@@ -795,8 +795,8 @@ class AdminEquipmentTypeIO
 				foreach($user_array as $key => $value)
 				{
 					$user = new User($value);
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $user->get_username()." (".$user->get_full_name(false).")";
+					$result[$counter]['value'] = $value;
+					$result[$counter]['content'] = $user->get_username()." (".$user->get_full_name(false).")";
 					$counter++;
 				}
 				
@@ -806,14 +806,14 @@ class AdminEquipmentTypeIO
 			}
 			else
 			{
-				$equipment_type = new EquipmentType($_GET[id]);
+				$equipment_type = new EquipmentType($_GET['id']);
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "detail";
-				unset($paramquery[nextpage]);
+				$paramquery['action'] = "detail";
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				if ($equipment_type->add_responsible_person($_POST[user]))
+				if ($equipment_type->add_responsible_person($_POST['user']))
 				{
 					Common_IO::step_proceed($params, "Equipment Type", "Operation Successful", null);
 				}
@@ -835,23 +835,23 @@ class AdminEquipmentTypeIO
 	 */
 	public static function delete_user()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			if ($_GET[key])
+			if ($_GET['key'])
 			{
-				if ($_GET[sure] != "true")
+				if ($_GET['sure'] != "true")
 				{
 					$template = new HTMLTemplate("equipment/admin/equipment_type/delete_user.html");
 					
 					$paramquery = $_GET;
-					$paramquery[sure] = "true";
+					$paramquery['sure'] = "true";
 					$params = http_build_query($paramquery);
 					
 					$template->set_var("yes_params", $params);
 							
 					$paramquery = $_GET;
-					unset($paramquery[key]);
-					$paramquery[action] = "detail";
+					unset($paramquery['key']);
+					$paramquery['action'] = "detail";
 					$params = http_build_query($paramquery);
 					
 					$template->set_var("no_params", $params);
@@ -861,14 +861,14 @@ class AdminEquipmentTypeIO
 				else
 				{
 					$paramquery = $_GET;
-					unset($paramquery[key]);
-					unset($paramquery[sure]);
-					$paramquery[action] = "detail";
+					unset($paramquery['key']);
+					unset($paramquery['sure']);
+					$paramquery['action'] = "detail";
 					$params = http_build_query($paramquery);
 					
-					$equipment_type = new EquipmentType($_GET[id]);	
+					$equipment_type = new EquipmentType($_GET['id']);	
 							
-					if ($equipment_type->delete_responsible_person($_GET[key]))
+					if ($equipment_type->delete_responsible_person($_GET['key']))
 					{							
 						Common_IO::step_proceed($params, "Equipment Type", "Operation Successful" ,null);
 					}
@@ -894,14 +894,14 @@ class AdminEquipmentTypeIO
 	 */
 	public static function add_organisation_unit()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{			
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
-				if (is_numeric($_POST[ou]))
+				if (is_numeric($_POST['ou']))
 				{
-					$equipment_type = new EquipmentType($_GET[id]);
-					if ($equipment_type->is_organisation_unit($_POST[ou]) == true)
+					$equipment_type = new EquipmentType($_GET['id']);
+					if ($equipment_type->is_organisation_unit($_POST['ou']) == true)
 					{
 						$page_1_passed = false;
 						$error = "The organisation units is already connected with this equipment.";
@@ -917,7 +917,7 @@ class AdminEquipmentTypeIO
 					$error = "You must select an organisation unit.";
 				}
 			}
-			elseif($_GET[nextpage] > 1)
+			elseif($_GET['nextpage'] > 1)
 			{
 				$page_1_passed = true;
 			}
@@ -932,7 +932,7 @@ class AdminEquipmentTypeIO
 				$template = new HTMLTemplate("equipment/admin/equipment_type/add_organisation_unit.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
@@ -947,8 +947,8 @@ class AdminEquipmentTypeIO
 				foreach($organisation_unit_array as $key => $value)
 				{
 					$organisation_unit = new OrganisationUnit($value);
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $organisation_unit->get_name();
+					$result[$counter]['value'] = $value;
+					$result[$counter]['content'] = $organisation_unit->get_name();
 					$counter++;
 				}
 				
@@ -958,14 +958,14 @@ class AdminEquipmentTypeIO
 			}
 			else
 			{
-				$equipment_type = new EquipmentType($_GET[id]);
+				$equipment_type = new EquipmentType($_GET['id']);
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "detail";
-				unset($paramquery[nextpage]);
+				$paramquery['action'] = "detail";
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				if ($equipment_type->add_organisation_unit($_POST[ou]))
+				if ($equipment_type->add_organisation_unit($_POST['ou']))
 				{
 					Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Successful", null);
 				}
@@ -987,23 +987,23 @@ class AdminEquipmentTypeIO
 	 */
 	public static function delete_organisation_unit()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			if ($_GET[key])
+			if ($_GET['key'])
 			{
-				if ($_GET[sure] != "true")
+				if ($_GET['sure'] != "true")
 				{
 					$template = new HTMLTemplate("equipment/admin/equipment_type/delete_organisation_unit.html");
 					
 					$paramquery = $_GET;
-					$paramquery[sure] = "true";
+					$paramquery['sure'] = "true";
 					$params = http_build_query($paramquery);
 					
 					$template->set_var("yes_params", $params);
 							
 					$paramquery = $_GET;
-					unset($paramquery[key]);
-					$paramquery[action] = "detail";
+					unset($paramquery['key']);
+					$paramquery['action'] = "detail";
 					$params = http_build_query($paramquery);
 					
 					$template->set_var("no_params", $params);
@@ -1013,14 +1013,14 @@ class AdminEquipmentTypeIO
 				else
 				{
 					$paramquery = $_GET;
-					unset($paramquery[key]);
-					unset($paramquery[sure]);
-					$paramquery[action] = "detail";
+					unset($paramquery['key']);
+					unset($paramquery['sure']);
+					$paramquery['action'] = "detail";
 					$params = http_build_query($paramquery);
 					
-					$equipment_type = new EquipmentType($_GET[id]);
+					$equipment_type = new EquipmentType($_GET['id']);
 							
-					if ($equipment_type->delete_organisation_unit($_GET[key]))
+					if ($equipment_type->delete_organisation_unit($_GET['key']))
 					{							
 						Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
 					}
@@ -1046,9 +1046,9 @@ class AdminEquipmentTypeIO
 	 */
 	public static function change_location()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
 				$page_1_passed = true;
 			}
@@ -1062,7 +1062,7 @@ class AdminEquipmentTypeIO
 				$template = new HTMLTemplate("equipment/admin/equipment_type/change_location.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
@@ -1073,14 +1073,14 @@ class AdminEquipmentTypeIO
 				$counter = 1;
 				
 				$location = new Location($value);
-				$result[0][value] = 0;
-				$result[0][content] = "none";
+				$result[0]['value'] = 0;
+				$result[0]['content'] = "none";
 				
 				foreach($location_array as $key => $value)
 				{
 					$location = new Location($value);
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $location->get_name(true);
+					$result[$counter]['value'] = $value;
+					$result[$counter]['content'] = $location->get_name(true);
 					$counter++;
 				}
 				
@@ -1090,14 +1090,14 @@ class AdminEquipmentTypeIO
 			}
 			else
 			{
-				$equipment_type = new EquipmentType($_GET[id]);
+				$equipment_type = new EquipmentType($_GET['id']);
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "detail";
-				unset($paramquery[nextpage]);
+				$paramquery['action'] = "detail";
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				if ($equipment_type->set_location_id($_POST[location]))
+				if ($equipment_type->set_location_id($_POST['location']))
 				{
 					Common_IO::step_proceed($params, "Equipment Type", "Operation Successful", null);
 				}
@@ -1115,7 +1115,7 @@ class AdminEquipmentTypeIO
 	
 	public static function handler()
 	{
-		switch($_GET[action]):
+		switch($_GET['action']):
 			case "add":
 			case "add_child":
 				self::create();

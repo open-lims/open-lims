@@ -4,7 +4,7 @@
  * @version 0.4.0.0
  * @author Roman Quiring <quiring@open-lims.org>
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz, Roman Quiring
+ * @copyright (c) 2008-2013 by Roman Konertz, Roman Quiring
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -50,7 +50,7 @@ class ValueAjax
 		}
 		
 		$argument_array = json_decode($json_argument_array);
-		$value_id = $argument_array[0][1];
+		$value_id = $argument_array[1];
 		
 		if (is_numeric($value_id))
 		{
@@ -73,33 +73,33 @@ class ValueAjax
 					foreach($list_array as $key => $value)
 					{
 						$paramquery = $_GET;
-						$paramquery[action] = "value_detail";
-						$paramquery[version] = $list_array[$key][internal_revision];
+						$paramquery['action'] = "value_detail";
+						$paramquery['version'] = $list_array[$key]['internal_revision'];
 						$params = http_build_query($paramquery,'','&#38;');
 						
-						$list_array[$key][symbol][link]		= $params;
-						$list_array[$key][symbol][content] 	= "<img src='images/icons/value.png' alt='N' border='0' />";
+						$list_array[$key]['symbol']['link']		= $params;
+						$list_array[$key]['symbol']['content'] 	= "<img src='images/icons/value.png' alt='N' border='0' />";
 					
-						$tmp_name = $list_array[$key][name];
-						unset($list_array[$key][name]);
-						$list_array[$key][name][link]		= $params;
-						$list_array[$key][name][content] 	= $tmp_name;
+						$tmp_name = $list_array[$key]['name'];
+						unset($list_array[$key]['name']);
+						$list_array[$key]['name']['link']		= $params;
+						$list_array[$key]['name']['content'] 	= $tmp_name;
 						
-						$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
-						$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+						$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
+						$list_array[$key]['datetime'] = $datetime_handler->get_datetime(false);
 						
-						$user = new User($list_array[$key][owner_id]);
-						$list_array[$key][user] = $user->get_full_name(false);
+						$user = new User($list_array[$key]['owner_id']);
+						$list_array[$key]['user'] = $user->get_full_name(false);
 						
 						$value_version_obj = clone $value_obj;
-						$value_version_obj->open_internal_revision($value[internal_revision]);
+						$value_version_obj->open_internal_revision($value['internal_revision']);
 						if ($value_version_obj->is_current() == true)
 						{
-							$list_array[$key][version] = $value_version_obj->get_version()." <span class='italic'>current</span>";
+							$list_array[$key]['version'] = $value_version_obj->get_version()." <span class='italic'>current</span>";
 						}
 						else
 						{
-							$list_array[$key][version] = $value_version_obj->get_version();
+							$list_array[$key]['version'] = $value_version_obj->get_version();
 						}
 					}
 				}
@@ -130,7 +130,7 @@ class ValueAjax
 	public static function count_versions($json_argument_array)
 	{
 		$argument_array = json_decode($json_argument_array);
-		$value_id = $argument_array[0][1];
+		$value_id = $argument_array[1];
 		
 		if (is_numeric($value_id))
 		{
@@ -148,13 +148,15 @@ class ValueAjax
 	 */
 	public static function get_data_browser_link_html_and_button_handler($action) 
 	{
+		global $regional;
+		
 		$html;
 		$html_caption;
 		$button_handler;
 		$button_handler_caption;
 		$template;
 		$paramquery = $_GET;	
-		unset($paramquery[run]);
+		unset($paramquery['run']);
 		switch($action):
 			case "value_add":
 				if(!isset($_POST['folder_id']) && !isset($_POST['value_array']))
@@ -180,10 +182,10 @@ class ValueAjax
 						continue;
 					}
 					$value_type = new ValueType($value);
-					$options[$counter][value] = $value; 
-					$options[$counter][content] = $value_type->get_name();		
-					$options[$counter][selected] = "";
-					$options[$counter][disabled] = "";
+					$options[$counter]['value'] = $value; 
+					$options[$counter]['content'] = $value_type->get_name();		
+					$options[$counter]['selected'] = "";
+					$options[$counter]['disabled'] = "";
 					$counter++;
 				}
 				
@@ -199,6 +201,8 @@ class ValueAjax
 				$button_handler_caption = "Add";
 				
 				$additional_script_template = new JSTemplate("data/js/value_add_window_additional.js");
+				$additional_script_template->set_var("decimal_separator", $regional->get_decimal_separator());
+				$additional_script_template->set_var("thousand_separator", $regional->get_thousand_separator());		
 				$additional_script_template->set_var("session_id", $_GET['session_id']);
 				$additional_script = $additional_script_template->get_string();
 				$array = array("content"=>$html , "content_caption"=>$html_caption , "handler"=>$button_handler , "handler_caption"=>$button_handler_caption, "additional_script"=>$additional_script);
@@ -224,9 +228,9 @@ class ValueAjax
 			break;
 			case "permission":
 				require_once("data.ajax.php");
-				if(isset($_POST[permissions]))
+				if(isset($_POST['permissions']))
 				{
-					$success = DataAjax::change_permission(json_decode($_POST[permissions]), "Value");
+					$success = DataAjax::change_permission(json_decode($_POST['permissions']), "Value");
 					return $success;
 				}
 				else
@@ -398,6 +402,8 @@ class ValueAjax
 	 */
 	public static function add_as_item_window($get_array, $type_array, $folder_id)
 	{
+		global $regional;
+		
 		if ($get_array)
 		{
 			$_GET = unserialize($get_array);	
@@ -447,7 +453,9 @@ class ValueAjax
 	
 				$array['continue_handler'] = $continue_handler_template->get_string();
 				
-				$script_template = new JSTemplate("data/js/value_add_item_window_onclick.js");				
+				$script_template = new JSTemplate("data/js/value_add_item_window_onclick.js");		
+				$script_template->set_var("decimal_separator", $regional->get_decimal_separator());
+				$script_template->set_var("thousand_separator", $regional->get_thousand_separator());		
 				$array['open_handler'] = $script_template->get_string();
 				
 				return json_encode($array);

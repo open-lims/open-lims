@@ -1,7 +1,7 @@
-/*
+/**
  * version: 0.4.0.0
  * author: Roman Konertz <konertz@open-lims.org>
- * copyright: (c) 2008-2011 by Roman Konertz
+ * copyright: (c) 2008-2013 by Roman Konertz
  * license: GPLv3
  * 
  * This file is part of Open-LIMS
@@ -27,7 +27,7 @@ ErrorDialog = function(title, message)
 	
 	error_dialog_counter++;
 	
-	$("#BaseErrorDialogs").append("<div id='"+dialog_error_id+"' title='"+title+"' style='display: none;'></div>");
+	$("#Footer").append("<div id='"+dialog_error_id+"' title='"+title+"' style='display: none;'></div>");
 	
 	$("#"+dialog_error_id).dialog({
 		autoOpen: false,

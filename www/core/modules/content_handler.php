@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -38,7 +38,7 @@ class ContentHandler_IO
 
 		$template = new HTMLTemplate("index_header.html");
 	
-		if (file_exists(constant("WWW_DIR")))
+		if (!isset($GLOBALS['fatal_error']))
 		{
 			$unique_id = uniqid();
 			
@@ -144,7 +144,6 @@ class ContentHandler_IO
 		{
 			$template->set_var("INDEX_CSS","<link rel=\"stylesheet\" type=\"text/css\" href=\"css/base.css\" title=\"Style\" />\n<link rel=\"stylesheet\" type=\"text/css\" href=\"css/login.css\" title=\"Style\" />");
 			$template->set_var("INDEX_JS","");
-			$GLOBALS['fatal_error'] = "Main folder not found!";
 		}
 
 		if (!isset($GLOBALS['fatal_error']))
@@ -171,7 +170,8 @@ class ContentHandler_IO
 			
 			if (Security::ip_error_count() < $max_ip_errors)
 			{
-		 		if ($session->is_valid() == true)
+				$session_valid_array = $session->is_valid();
+		 		if ($session_valid_array[0] === true)
 		 		{
 					$template = new HTMLTemplate("main_header.html");
 			
@@ -192,7 +192,7 @@ class ContentHandler_IO
 							
 							$temp_array = array();
 							$temp_array['params'] 	= $params;
-							$temp_array['title'] 	= $value['display_name'];
+							$temp_array['title'] 	= Language::get_message($value['language_address'], "dialog");
 							array_push($sub_menu, $temp_array);
 							unset($temp_array);
 						}
@@ -226,34 +226,43 @@ class ContentHandler_IO
 					
 					$template->set_var("username", $user->get_full_name(true));
 					
+					$header_search_paramquery['username'] = $_GET['username'];
+					$header_search_paramquery['session_id'] = $_GET['session_id'];
+					$header_search_paramquery['nav'] = "base.search";
+					$header_search_paramquery['run'] = "header_search";
+					$header_search_paramquery['nextpage'] = "1";
+					$header_search_params = http_build_query($header_search_paramquery,'','&#38;');
+					
+					$template->set_var("header_search_params", $header_search_params);
+					$template->set_var("header_search_current_module", $_GET['nav']);
+					
 					$template->output();
 
-					
-					// Navigation
-					require_once("base/io/navigation.io.php");
-					Navigation_IO::main();
-					Navigation_IO::left();
-					
-					
-					$template = new HTMLTemplate("content_header.html");
-					$template->output();
-					
-					
- 					if ($session->read_value("must_change_password") == true)
+					try
  					{
- 						require_once("core/modules/base/io/user.io.php");
-						UserIO::change_password_on_login();
- 					}
- 					else
- 					{
- 						try
- 						{
+						// Navigation
+						require_once("base/io/navigation.io.php");
+						Navigation_IO::main();
+						Navigation_IO::left();
+						
+						
+						$template = new HTMLTemplate("content_header.html");
+						$template->output();
+						
+						
+	 					if ($session->read_value("must_change_password") == true)
+	 					{
+	 						require_once("core/modules/base/io/user.io.php");
+							UserIO::change_password_on_login();
+	 					}
+	 					else
+	 					{
 							if ($_GET['nav'])
 							{
 								$module_controller_array = SystemHandler::get_module_controller($_GET['nav']);
 								
 								$module_controller_path = "core/modules/".$module_controller_array['path'];
-
+	
 								if (file_exists($module_controller_path))
 								{
 									require_once($module_controller_path);
@@ -275,20 +284,20 @@ class ContentHandler_IO
 							{
 								include("core/modules/base/io/home.io.php");
 							}
-						}
-						catch(DatabaseQueryFailedException $e)
-						{
-							$transaction->force_rollback();
-							$error_io = new Error_IO($e);
-							$error_io->display_error();
-						}
- 						catch(BaseException $e)
-						{
-							$error_io = new Error_IO($e);
-							$error_io->display_error();
-						}
+	 					}
  					}
-						
+					catch(DatabaseQueryFailedException $e)
+					{
+						$transaction->force_rollback();
+						$error_io = new Error_IO($e);
+						$error_io->display_error();
+					}
+ 					catch(BaseException $e)
+					{
+						$error_io = new Error_IO($e);
+						$error_io->display_error();
+					}
+ 					
 					$template = new HTMLTemplate("content_footer.html");
 					$template->output();
 					
@@ -298,7 +307,16 @@ class ContentHandler_IO
 		 		else
 		 		{
 		 			require_once("base/io/login.io.php");
-		 			Login_IO::output();	 			
+		 			
+		 			if ($session_valid_array[1] === true)
+		 			{
+		 				Login_IO::output(true);
+		 			}
+		 			else
+		 			{
+		 				Login_IO::output(false);
+		 			}
+		 			
 		 		}
 			}
 			else
@@ -331,7 +349,8 @@ class ContentHandler_IO
 		
 		try
  		{
-			if ($session->is_valid() == true)
+ 			$session_valid_array = $session->is_valid();
+			if ($session_valid_array[0] === true)
 			{
 				if ($_GET['nav'])
 				{				
@@ -393,7 +412,10 @@ class ContentHandler_IO
 			}
 			else
 			{
-				if ($_GET['run'] == "login" or $_GET['run'] == "cron")
+				if (($_GET['nav'] == "base" and $_GET['run'] == "login")
+					or ($_GET['nav'] == "base" and $_GET['run'] == "forgot_password")
+					or ($_GET['run'] == "cron")
+					or ($_GET['nav'] == "base" and $_GET['run'] == "logout" and $session->is_dead() == true))
 				{
 					require_once("core/modules/base/base.request.php");
 					BaseRequest::ajax_handler(null);

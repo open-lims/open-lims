@@ -3,7 +3,7 @@
  * @package manufacturer
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -110,14 +110,14 @@ class ManufacturerAjax
 			{
 				if ($counter%2)
 				{
-					$content_array[$counter][style] = "background-color: white;";
+					$content_array[$counter]['style'] = "background-color: white;";
 				}
 				else
 				{
-					$content_array[$counter][style] = "background-color: #D0D0D0;";	
+					$content_array[$counter]['style'] = "background-color: #D0D0D0;";	
 				}
-				$content_array[$counter][id] = $value[id];
-				$content_array[$counter][name] = $value[name];
+				$content_array[$counter]['id'] = $value['id'];
+				$content_array[$counter]['name'] = $value['name'];
 				$counter++;
 			}
 
@@ -158,14 +158,14 @@ class ManufacturerAjax
 			
 			foreach($list_array as $key => $value)
 			{
-				$list_array[$key][symbol] = "<img src='images/icons/manufacturer.png' alt='' />";
+				$list_array[$key]['symbol'] = "<img src='images/icons/manufacturer.png' alt='' />";
 				
-				$user = new User($list_array[$key][user_id]);
-				$list_array[$key][user] = $user->get_full_name(false);
+				$user = new User($list_array[$key]['user_id']);
+				$list_array[$key]['user'] = $user->get_full_name(false);
 				
 				if ($is_admin == true)
 				{
-					$list_array[$key][delete] = "<a href='#' class='ManufacturerListDelete' id='ManufacturerListDelete".$list_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+					$list_array[$key]['delete'] = "<a href='#' class='ManufacturerListDelete' id='ManufacturerListDelete".$list_array[$key]['id']."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
 				}
 			}
 		}

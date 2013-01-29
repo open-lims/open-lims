@@ -1,7 +1,7 @@
 /**
  * version: 0.4.0.0
  * author: Roman Quiring <quiring@open-lims.org>
- * copyright: (c) 2008-2011 by Roman Quiring
+ * copyright: (c) 2008-2013 by Roman Quiring
  * license: GPLv3
  * 
  * This file is part of Open-LIMS
@@ -603,7 +603,7 @@ function base_tree_nav(id, name, ajax_handler)
 								$(ul).append(li);
 						});
 						
-						$(".jspContainer").css("height",max_menu_height-5); //temporäre höhe für flüssige animation
+						$(".jspContainer").css("height",max_menu_height-5); //temporï¿½re hï¿½he fï¿½r flï¿½ssige animation
 						$(ul).hide().appendTo(parent_li).slideDown("normal", function()
 						{
 							update_icons();

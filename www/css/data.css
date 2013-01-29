@@ -1,3 +1,9 @@
+/* Data Common */
+.DataTopSelect
+{
+	float: left;	
+}
+
 /* DATA BROWSER */
 .Deactivated:hover span
 {
@@ -14,15 +20,6 @@ cursor:default;
 color:grey;
 }
 
-#DataBrowserAddFileCorner
-{
-border-bottom-left-radius:10px;
--moz-border-radius-bottomleft:10px;
--webkit-border-bottom-left-radius:10px;
-border-left:solid #669acc 2px;
-border-bottom:solid #669acc 2px;
-}
-
 .DataBrowserMenuImage
 {
 vertical-align:middle;
@@ -34,17 +31,15 @@ padding-bottom:1px;
 font-family:arial;
 font-size:12px;
 background-color:#ffffff;
-border:solid #669acc 2px;
+border: 1px #B7B7B7 solid;
 padding: 2px 6px 2px 6px;
+margin-top: -1px;
 -moz-border-radius-bottomleft:10px;
 -moz-border-radius-bottomright:10px;
 border-bottom-left-radius:10px;
 border-bottom-right-radius:10px;
 -webkit-border-bottom-left-radius:10px;
 -webkit-border-bottom-right-radius:10px;
-border-top-right-radius:10px;
--moz-border-radius-topright:10px;
--webkit-border-top-right-radius:10px;
 }
 
 #DataBrowserAddFileDialog a
@@ -281,7 +276,7 @@ margin-left:10px;
 #FileSearchList a
 {
 text-decoration: none;
-color: black;
+color: #444444;
 }
 
 #FileSearchList a:hover, 
@@ -300,7 +295,7 @@ outline: none;
 padding-top: 6px;
 padding-bottom: 4px;
 position:relative;
-border-bottom: dotted black 1px;
+border-bottom: dotted #C0C0C0 1px;
 }
 
 #FileSearchList ul li div table
@@ -316,4 +311,88 @@ width:100%;
 .DataValueFieldError
 {
 	border: 1px #FF6F63 dotted !important;
+}
+
+
+
+/* File Info */
+#BaseFileDetailLeft
+{
+	width: 340px;
+	float: left;
+	margin: 5px;
+}
+#BaseFileDetailRight
+{
+	float: right;
+	text-align: center;
+	width: 340px;
+	margin: 5px 10px;
+}
+#BaseFileDetailTable
+{
+	width: 100%;
+}
+#BaseFileDetailTable tr
+{
+	vertical-align: top;
+}
+#BaseFileDetailTable tr td
+{
+	padding: 2px;
+}
+#BaseFileDetailClear
+{
+	clear: both;
+}
+#BaseFileDetailAdminMenuTitle
+{
+	clear: left;
+	margin-top: 70px;
+	margin-bottom: 5px;
+	font-weight: bold;
+}
+ul.BaseFileDetailAdminMenu
+{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+ul.BaseFileDetailAdminMenu li
+{
+	display: block;
+	margin: 0;
+	padding: 0;
+}
+ul.BaseFileDetailAdminMenu li a
+{
+	display: block;
+	text-decoration: none;
+}
+.BaseFileDetailDownload
+{
+	display: block;
+	padding: 20px 5px 0px 5px;	
+	color: #444444 !important;
+	text-decoration: none;
+}
+.BaseFileDetailDownload:hover,
+.BaseFileDetailDownload:focus,
+.BaseFileDetailDownload:active
+{
+	text-decoration: underline;
+	color: #444444 !important;
+}
+.BaseFileDetailDownloadImage
+{
+	display: block;
+	float: left;
+	width: 55px;
+}
+.BaseFileDetailDownloadText
+{
+	float: left;
+	padding-top: 15px;
+	display: block;
+	font-size: 14px;
 }

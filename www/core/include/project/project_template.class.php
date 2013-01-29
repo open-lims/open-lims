@@ -3,7 +3,7 @@
  * @package project
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -109,9 +109,9 @@ class ProjectTemplate implements ProjectTemplateInterface
 					
 					if ($value[1] == "oldl" and $value[2] != "#")
 					{
-						if ($value[3][type])
+						if ($value[3]['type'])
 						{
-							if ($value[3][type] != "project")
+							if ($value[3]['type'] != "project")
 							{
 								return false;		
 							}
@@ -325,7 +325,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 					$value[1] = trim(strtolower($value[1]));
 					$value[2] = trim(strtolower($value[2]));
 			
-		    		if ($value[3][id] != "#" and $value[3][type] != "#")
+		    		if ($value[3]['id'] != "#" and $value[3]['type'] != "#")
 		    		{
 		    			$return_array[$counter]					= $value[3];
 			    		$return_array[$counter]['xml_element'] 	= $value[1];
@@ -380,7 +380,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    	
 		    	if ($in_status == true)
 		    	{
-		    		if ($value[3][id] != "#" and $value[3][type] != "#")
+		    		if ($value[3]['id'] != "#" and $value[3]['type'] != "#")
 		    		{
 			    		$return_array[$counter] 				= $value[3];
 			    		$return_array[$counter]['xml_element'] 	= $value[1];
@@ -394,7 +394,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    		}
 		    	}
 		    	
-		    	if ($value[1] == "status" and $value[3][id] == $status_id)
+		    	if ($value[1] == "status" and $value[3]['id'] == $status_id)
 		    	{
 					$in_status = true;
 		    	}
@@ -439,7 +439,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    	$value[0] = trim(strtolower($value[0]));
 				$value[1] = trim(strtolower($value[1]));
 				$value[2] = trim(strtolower($value[2]));
-		    	
+
 				if ($value[1] == "decision" and $value[2] != "#")
 		    	{
 		    		$workflow_element_decision[$decision_counter] = new WorkflowElementOr();
@@ -463,7 +463,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    	
 		    	if ($value[1] == "decision" and $value[2] == "#")
 		    	{
-		    		// Dem nächsten Element mitteilen, dass es die letzten Elemente der Options verarbeitet
+		    		// Dem nï¿½chsten Element mitteilen, dass es die letzten Elemente der Options verarbeitet
 		    		$use_last_elemets = true;
 		    		// $last_elements_array[$decision_counter-1] = array_merge($last_elements_array[$decision_counter-1],$last_elements_array[$decision_counter]);
 		    		
@@ -479,9 +479,9 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    		// !!! -> Altes Array in Temp array und das in Kind-EL Schreiben
 		    		
 		    		// Problem, wenn das Descision in Option liegt und danach weitere Options folgen
-		    		// Weitere Options müssen $use_last_elements ignorieren
+		    		// Weitere Options mï¿½ssen $use_last_elements ignorieren
 
-		    		// Pfad schreiben, wenn dc > 1, dann längsten pfad ermitteln und zu oc addieren
+		    		// Pfad schreiben, wenn dc > 1, dann lï¿½ngsten pfad ermitteln und zu oc addieren
 		    		
 		    		$workflow_element_decision[$decision_counter-1]->set_path_length($option_element_counter[$decision_counter]);
 		    		$decision_counter--;
@@ -510,7 +510,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    	if ($value[1] == "option" and $value[2] == "#")
 		    	{
 		    		// Alle letzten option-elemente sind (wenn kein goto) vor-element 
-		    		// des nächsten Elements nach decision
+		    		// des nï¿½chsten Elements nach decision
 		    		
 		    		if ($goto == true)
 		    		{
@@ -553,7 +553,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    	}
 		    	
 				
-		    	if ($value[1] == "status" and is_numeric($value[3][id]))
+		    	if ($value[1] == "status" and is_numeric($value[3]['id']))
 		    	{
 		    		if ($decision_counter != 0 and $option_counter != 0)
 		    		{
@@ -562,7 +562,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    		
 		    		$workflow_element_status = new WorkflowElementActivity($value[3][id]);
 		    		
-		    		if ($value[3][requirement] == "optional")
+		    		if ($value[3]['requirement'] == "optional")
     				{
     					$workflow_element_status->attach("optional", true);
     				}
@@ -631,18 +631,18 @@ class ProjectTemplate implements ProjectTemplateInterface
 					$value[1] = trim(strtolower($value[1]));
 					$value[2] = trim(strtolower($value[2]));
 			    	
-		    		if ($value[1] == "status" and is_numeric($value[3][id]))
+		    		if ($value[1] == "status" and is_numeric($value[3]['id']))
 		    		{
 			    		if ($status_found == false)
 			    		{
-			    			if ($value[3][id] == $status_id)
+			    			if ($value[3]['id'] == $status_id)
 			    			{
 			    				$status_found = true;
 			    			}
 			    		}
 			    		else
 			    		{
-			    			return $value[3][id];
+			    			return $value[3]['id'];
 			    		}
 			    	}
 			    }
@@ -674,9 +674,9 @@ class ProjectTemplate implements ProjectTemplateInterface
 				
 				foreach($status_requirements as $key => $value)
 				{
-					if ($value[xml_element] == "item" and !$value[close])
+					if ($value['xml_element'] == "item" and !$value['close'])
 					{
-						if ($item_counter == $gid or $value[gid] === $gid)
+						if ($item_counter == $gid or $value['gid'] === $gid)
 						{
 				    		if (is_numeric($value['gid']))
 				    		{
@@ -715,7 +715,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 						}
 					}
 					
-					if ($value[xml_element] == "item" and $value[close] == "1")
+					if ($value['xml_element'] == "item" and $value['close'] == "1")
 					{
 						$item_counter++;
 					}
@@ -755,7 +755,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 				$value[1] = trim(strtolower($value[1]));
 				$value[2] = trim(strtolower($value[2]));
 		    	
-		    	if ($value[1] == "status" and $value[3][id] == $status_id and $value[3][id] != "#" and $value[3][type] != "#")
+		    	if ($value[1] == "status" and $value[3]['id'] == $status_id and $value[3]['id'] != "#" and $value[3]['type'] != "#")
 		    	{ 				    		
 		    		if ($value[3]['id'])
 		    		{
@@ -795,9 +795,9 @@ class ProjectTemplate implements ProjectTemplateInterface
 								
 				foreach($status_requirements as $key => $value)
 				{
-					if ($value[xml_element] == "item" and !$value[close])
+					if ($value['xml_element'] == "item" and !$value['close'])
 					{
-						if ($item_counter == $gid or $value[$counter][gid] == $gid)
+						if ($item_counter == $gid or $value[$counter]['gid'] == $gid)
 						{
 							$in_item = true;
 						}
@@ -808,7 +808,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 						array_push($return_array, $value);
 					}
 					
-					if ($value[xml_element] == "item" and $value[close] == "1")
+					if ($value['xml_element'] == "item" and $value['close'] == "1")
 					{
 						$in_item = false;
 						$item_counter++;
@@ -847,7 +847,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 				
 				foreach($status_requirements as $key => $value)
 				{
-					if ($value[xml_element] == "class" and $value[name] == $class_name and !$value[close])
+					if ($value['xml_element'] == "class" and $value['name'] == $class_name and !$value['close'])
 					{
 						$in_class = true;	
 					}
@@ -857,7 +857,7 @@ class ProjectTemplate implements ProjectTemplateInterface
 						array_push($return_array, $value);
 					}
 					
-					if ($value[xml_element] == "class" and $value[close] == "1")
+					if ($value['xml_element'] == "class" and $value['close'] == "1")
 					{
 						$in_class = false;
 					}

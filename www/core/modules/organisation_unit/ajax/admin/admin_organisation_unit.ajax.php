@@ -3,7 +3,7 @@
  * @package organisation_unit
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -53,11 +53,11 @@ class AdminOrganisationUnitAjax
 			}
 			
 			$argument_array = json_decode($json_argument_array);
-			$organisation_unit_id = $argument_array[0][1];
+			$organisation_unit_id = $argument_array[1];
 			
 			if (is_numeric($organisation_unit_id))
 			{
-				$type_id = $argument_array[0][1];
+				$type_id = $argument_array[1];
 	
 				$list_request = new ListRequest_IO();
 				$list_request->set_column_array($json_column_array);
@@ -77,7 +77,7 @@ class AdminOrganisationUnitAjax
 						$list_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
 						$list_array[$key]['username'] = $user->get_username();
 						$list_array[$key]['fullname'] = $user->get_full_name(false);
-						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key]['id']."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
 					}
 				}
 				else
@@ -113,7 +113,7 @@ class AdminOrganisationUnitAjax
 		if ($user->is_admin())
 		{
 			$argument_array = json_decode($json_argument_array);
-			$organisation_unit_id = $argument_array[0][1];
+			$organisation_unit_id = $argument_array[1];
 			
 			if (is_numeric($organisation_unit_id))
 			{
@@ -228,11 +228,11 @@ class AdminOrganisationUnitAjax
 			}
 			
 			$argument_array = json_decode($json_argument_array);
-			$organisation_unit_id = $argument_array[0][1];
+			$organisation_unit_id = $argument_array[1];
 			
 			if (is_numeric($organisation_unit_id))
 			{
-				$type_id = $argument_array[0][1];
+				$type_id = $argument_array[1];
 	
 				$list_request = new ListRequest_IO();
 				$list_request->set_column_array($json_column_array);
@@ -252,7 +252,7 @@ class AdminOrganisationUnitAjax
 						$list_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
 						$list_array[$key]['username'] = $user->get_username();
 						$list_array[$key]['fullname'] = $user->get_full_name(false);
-						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key]['id']."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
 					}
 				}
 				else
@@ -288,7 +288,7 @@ class AdminOrganisationUnitAjax
 		if ($user->is_admin())
 		{
 			$argument_array = json_decode($json_argument_array);
-			$organisation_unit_id = $argument_array[0][1];
+			$organisation_unit_id = $argument_array[1];
 			
 			if (is_numeric($organisation_unit_id))
 			{
@@ -403,11 +403,11 @@ class AdminOrganisationUnitAjax
 			}
 			
 			$argument_array = json_decode($json_argument_array);
-			$organisation_unit_id = $argument_array[0][1];
+			$organisation_unit_id = $argument_array[1];
 			
 			if (is_numeric($organisation_unit_id))
 			{
-				$type_id = $argument_array[0][1];
+				$type_id = $argument_array[1];
 	
 				$list_request = new ListRequest_IO();
 				$list_request->set_column_array($json_column_array);
@@ -427,7 +427,7 @@ class AdminOrganisationUnitAjax
 						$list_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
 						$list_array[$key]['username'] = $user->get_username();
 						$list_array[$key]['fullname'] = $user->get_full_name(false);
-						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key]['id']."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
 					}
 				}
 				else
@@ -463,7 +463,7 @@ class AdminOrganisationUnitAjax
 		if ($user->is_admin())
 		{
 			$argument_array = json_decode($json_argument_array);
-			$organisation_unit_id = $argument_array[0][1];
+			$organisation_unit_id = $argument_array[1];
 			
 			if (is_numeric($organisation_unit_id))
 			{
@@ -578,11 +578,11 @@ class AdminOrganisationUnitAjax
 			}
 			
 			$argument_array = json_decode($json_argument_array);
-			$organisation_unit_id = $argument_array[0][1];
+			$organisation_unit_id = $argument_array[1];
 			
 			if (is_numeric($organisation_unit_id))
 			{
-				$type_id = $argument_array[0][1];
+				$type_id = $argument_array[1];
 	
 				$list_request = new ListRequest_IO();
 				$list_request->set_column_array($json_column_array);
@@ -602,7 +602,7 @@ class AdminOrganisationUnitAjax
 						$list_array[$key]['symbol'] = "<img src='images/icons/user.png' alt='' />";
 						$list_array[$key]['username'] = $user->get_username();
 						$list_array[$key]['fullname'] = $user->get_full_name(false);
-						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key]['id']."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
 					}
 				}
 				else
@@ -638,7 +638,7 @@ class AdminOrganisationUnitAjax
 		if ($user->is_admin())
 		{
 			$argument_array = json_decode($json_argument_array);
-			$organisation_unit_id = $argument_array[0][1];
+			$organisation_unit_id = $argument_array[1];
 			
 			if (is_numeric($organisation_unit_id))
 			{
@@ -753,11 +753,11 @@ class AdminOrganisationUnitAjax
 			}
 			
 			$argument_array = json_decode($json_argument_array);
-			$organisation_unit_id = $argument_array[0][1];
+			$organisation_unit_id = $argument_array[1];
 			
 			if (is_numeric($organisation_unit_id))
 			{
-				$type_id = $argument_array[0][1];
+				$type_id = $argument_array[1];
 	
 				$list_request = new ListRequest_IO();
 				$list_request->set_column_array($json_column_array);
@@ -776,7 +776,7 @@ class AdminOrganisationUnitAjax
 						$group = new Group($value['id']);
 						$list_array[$key]['symbol'] = "<img src='images/icons/groups.png' alt='' />";
 						$list_array[$key]['groupname'] = $group->get_name();
-						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key][id]."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+						$list_array[$key]['delete'] = "<a href='#' class='OrganisationUnitAdminListDelete' id='OrganisationUnitAdminListDelete".$list_array[$key]['id']."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
 					}
 				}
 				else
@@ -812,7 +812,7 @@ class AdminOrganisationUnitAjax
 		if ($user->is_admin())
 		{
 			$argument_array = json_decode($json_argument_array);
-			$organisation_unit_id = $argument_array[0][1];
+			$organisation_unit_id = $argument_array[1];
 			
 			if (is_numeric($organisation_unit_id))
 			{

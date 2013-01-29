@@ -3,7 +3,7 @@
  * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -31,15 +31,15 @@ class AdminSampleTemplateCatIO
 	{
 		$list = new List_IO("SampleAdminTemplateCat", "ajax.php?nav=sample", "admin_sample_template_categorie_list_categories", "admin_sample_template_categorie_count_categories", "0", "SampleAdminTemplateCat");
 				
-		$list->add_column("Name", "name", true, null);
-		$list->add_column("Edit", "edit", false, "10%");
-		$list->add_column("Delete", "delete", false, "10%");
+		$list->add_column(Language::get_message("SampleGeneralListColumnName", "general"), "name", true, null);
+		$list->add_column(Language::get_message("SampleGeneralListColumnEdit", "general"), "edit", false, "10%");
+		$list->add_column(Language::get_message("SampleGeneralListColumnDelete", "general"), "delete", false, "10%");
 		
 		$template = new HTMLTemplate("sample/admin/sample_template_cat/list.html");	
 	
 		$paramquery = $_GET;
-		$paramquery[action] = "add";
-		unset($paramquery[nextpage]);
+		$paramquery['action'] = "add";
+		unset($paramquery['nextpage']);
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("add_params", $params);
@@ -51,13 +51,13 @@ class AdminSampleTemplateCatIO
 
 	public static function create()
 	{
-		if ($_GET[nextpage] == 1)
+		if ($_GET['nextpage'] == 1)
 		{
 			$page_1_passed = true;
 				
-			if ($_POST[name])
+			if ($_POST['name'])
 			{
-				if (SampleTemplateCat::exist_name($_POST[name]) == true)
+				if (SampleTemplateCat::exist_name($_POST['name']) == true)
 				{
 					$page_1_passed = false;
 					$error = "This name already exists";
@@ -80,7 +80,7 @@ class AdminSampleTemplateCatIO
 			$template = new HTMLTemplate("sample/admin/sample_template_cat/add.html");
 			
 			$paramquery = $_GET;
-			$paramquery[nextpage] = "1";
+			$paramquery['nextpage'] = "1";
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			$template->set_var("params",$params);
@@ -94,9 +94,9 @@ class AdminSampleTemplateCatIO
 				$template->set_var("error", "");	
 			}
 
-			if ($_POST[name])
+			if ($_POST['name'])
 			{
-				$template->set_var("name", $_POST[name]);
+				$template->set_var("name", $_POST['name']);
 			}
 			else
 			{
@@ -110,11 +110,11 @@ class AdminSampleTemplateCatIO
 			$sample_template_cat = new SampleTemplateCat(null);
 								
 			$paramquery = $_GET;
-			unset($paramquery[action]);
-			unset($paramquery[nextpage]);
+			unset($paramquery['action']);
+			unset($paramquery['nextpage']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			if ($sample_template_cat->create($_POST[name]))
+			if ($sample_template_cat->create($_POST['name']))
 			{
 				Common_IO::step_proceed($params, "Add Sample Template Categories", "Operation Successful", null);
 			}
@@ -130,22 +130,22 @@ class AdminSampleTemplateCatIO
 	 */
 	public static function delete()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			if ($_GET[sure] != "true")
+			if ($_GET['sure'] != "true")
 			{
 				$template = new HTMLTemplate("sample/admin/sample_template_cat/delete.html");
 				
 				$paramquery = $_GET;
-				$paramquery[sure] = "true";
+				$paramquery['sure'] = "true";
 				$params = http_build_query($paramquery);
 				
 				$template->set_var("yes_params", $params);
 						
 				$paramquery = $_GET;
-				unset($paramquery[sure]);
-				unset($paramquery[action]);
-				unset($paramquery[id]);
+				unset($paramquery['sure']);
+				unset($paramquery['action']);
+				unset($paramquery['id']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("no_params", $params);
@@ -155,12 +155,12 @@ class AdminSampleTemplateCatIO
 			else
 			{
 				$paramquery = $_GET;
-				unset($paramquery[sure]);
-				unset($paramquery[action]);
-				unset($paramquery[id]);
+				unset($paramquery['sure']);
+				unset($paramquery['action']);
+				unset($paramquery['id']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				$sample_template_cat = new SampleTemplateCat($_GET[id]);
+				$sample_template_cat = new SampleTemplateCat($_GET['id']);
 				
 				if ($sample_template_cat->delete())
 				{							
@@ -183,17 +183,17 @@ class AdminSampleTemplateCatIO
 	 */
 	public static function edit()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$sample_template_cat = new SampleTemplateCat($_GET[id]);
+			$sample_template_cat = new SampleTemplateCat($_GET['id']);
 		
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
 				$page_1_passed = true;
 				
-				if ($_POST[name])
+				if ($_POST['name'])
 				{
-					if (SampleTemplateCat::exist_name($_POST[name]) == true and $sample_template_cat->get_name() != $_POST[name])
+					if (SampleTemplateCat::exist_name($_POST['name']) == true and $sample_template_cat->get_name() != $_POST['name'])
 					{
 						$page_1_passed = false;
 						$error = "This name already exists";
@@ -216,7 +216,7 @@ class AdminSampleTemplateCatIO
 				$template = new HTMLTemplate("sample/admin/sample_template_cat/edit.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
@@ -230,9 +230,9 @@ class AdminSampleTemplateCatIO
 					$template->set_var("error", "");	
 				}
 													 
-				if ($_POST[name])
+				if ($_POST['name'])
 				{
-					$template->set_var("name", $_POST[name]);
+					$template->set_var("name", $_POST['name']);
 				}
 				else
 				{
@@ -244,11 +244,11 @@ class AdminSampleTemplateCatIO
 			else
 			{
 				$paramquery = $_GET;
-				unset($paramquery[nextpage]);
-				unset($paramquery[action]);
+				unset($paramquery['nextpage']);
+				unset($paramquery['action']);
 				$params = http_build_query($paramquery);
 				
-				if ($sample_template_cat->set_name($_POST[name]))
+				if ($sample_template_cat->set_name($_POST['name']))
 				{
 					Common_IO::step_proceed($params, "Edit Sample Template Category", "Operation Successful", null);
 				}
@@ -266,7 +266,7 @@ class AdminSampleTemplateCatIO
 	
 	public static function handler()
 	{			
-		switch($_GET[action]):
+		switch($_GET['action']):
 			case "add":
 				self::create();
 			break;

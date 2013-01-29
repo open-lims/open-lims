@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -32,8 +32,8 @@ class AdminGeneralIO
 		$list = new List_IO("AdminGeneralLanguage", "ajax.php?nav=base", "admin_general_list_languages", "admin_general_count_languages", $argument_array, "AdminGeneralLanguage");
 		
 		$list->add_column("","symbol",false,"16px");
-		$list->add_column("Name","language_name",true,null);
-		$list->add_column("English Name","english_name",true,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"language_name",true,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnEnglishName", "general"),"english_name",true,null);
 		$list->add_column("ISO 639","iso_639",true,null);
 		$list->add_column("ISO 3166","iso_3166",true,null);
 		
@@ -49,8 +49,8 @@ class AdminGeneralIO
 		$list = new List_IO("AdminGeneralTimezone", "ajax.php?nav=base", "admin_general_list_timezones", "admin_general_count_timezones", $argument_array, "AdminGeneralTimezone");
 		
 		$list->add_column("","symbol",false,"16px");
-		$list->add_column("Name","name",true,null);
-		$list->add_column("Deviation","deviation",true,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"name",true,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnDeviation", "general"),"deviation",true,null);
 		
 		$template = new HTMLTemplate("base/admin/general/list_timezones.html");
 		
@@ -64,13 +64,13 @@ class AdminGeneralIO
 		$list = new List_IO("AdminGeneralPaperSize", "ajax.php?nav=base", "admin_general_list_paper_sizes", "admin_general_count_paper_sizes", $argument_array, "AdminGeneralPaperSize");
 		
 		$list->add_column("","symbol",false,"16px");
-		$list->add_column("Name","name",true,null,"BaseGeneralAdminListSortName");
-		$list->add_column("Width","width",false,null);
-		$list->add_column("Height","height",false,null);
-		$list->add_column("Left-M.","margin_left",false,null);
-		$list->add_column("Right-M.","margin_right",false,null);
-		$list->add_column("Top-M.","margin_top",false,null);
-		$list->add_column("Bottom-M.","margin_bottom",false,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"name",true,null,"BaseGeneralAdminListSortName");
+		$list->add_column(Language::get_message("BaseGeneralListColumnWidth", "general"),"width",false,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnHeight", "general"),"height",false,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnLeftM", "general"),"margin_left",false,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnRightM", "general"),"margin_right",false,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnTopM", "general"),"margin_top",false,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnBottomM", "general"),"margin_bottom",false,null);
 		$list->add_column("","edit",false,"20px");
 		$list->add_column("","delete",false,"20px");
 		
@@ -86,9 +86,9 @@ class AdminGeneralIO
 		$list = new List_IO("AdminGeneralMeasuringUnit", "ajax.php?nav=base", "admin_general_list_measuring_units", "admin_general_count_measuring_units", $argument_array, "AdminGeneralMeasuringUnit");
 		
 		$list->add_column("","symbol",false,"16px");
-		$list->add_column("Name","name",true,null);
-		$list->add_column("Type","type",true,null);
-		$list->add_column("Symbol","unit_symbol",false,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"name",true,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnType", "general"),"type",true,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnSymbol", "general"),"unit_symbol",false,null);
 		
 		$template = new HTMLTemplate("base/admin/general/list_measuring_units.html");
 		
@@ -102,8 +102,8 @@ class AdminGeneralIO
 		$list = new List_IO("AdminGeneralCurrency", "ajax.php?nav=base", "admin_general_list_currencies", "admin_general_count_currencies", $argument_array, "AdminGeneralCurrency");
 		
 		$list->add_column("","symbol",false,"16px");
-		$list->add_column("Name","name",true,null);
-		$list->add_column("Symbol","currency_symbol",false,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"name",true,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnSymbol", "general"),"currency_symbol",false,null);
 		$list->add_column("ISO 4217","iso_4217",true,null);
 		
 		$template = new HTMLTemplate("base/admin/general/list_currencies.html");
@@ -119,41 +119,41 @@ class AdminGeneralIO
 	
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "list_languages";
+		$paramquery['action'] = "list_languages";
 		$params = http_build_query($paramquery,'','&#38;');
 		
-		$tab_io->add("languages", "Languages", $params, false);
+		$tab_io->add("languages", Language::get_message("BaseGeneralAdminGeneralTabLanguages", "general"), $params, false);
 		
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "list_timezones";
+		$paramquery['action'] = "list_timezones";
 		$params = http_build_query($paramquery,'','&#38;');
 		
-		$tab_io->add("timezones", "Timezones", $params, false);
+		$tab_io->add("timezones", Language::get_message("BaseGeneralAdminGeneralTabTimezones", "general"), $params, false);
 		
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "list_paper_sizes";
+		$paramquery['action'] = "list_paper_sizes";
 		$params = http_build_query($paramquery,'','&#38;');
 		
-		$tab_io->add("paper-sizes", "Paper Sizes", $params, false);
+		$tab_io->add("paper-sizes", Language::get_message("BaseGeneralAdminGeneralTabPaperSizes", "general"), $params, false);
 
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "list_measuring_units";
+		$paramquery['action'] = "list_measuring_units";
 		$params = http_build_query($paramquery,'','&#38;');
 		
-		$tab_io->add("measuring-units", "Measuring Units", $params, false);  
+		$tab_io->add("measuring-units", Language::get_message("BaseGeneralAdminGeneralTabMeasuringUnits", "general"), $params, false);  
 		
 				
 		$paramquery = $_GET;
-		$paramquery[action] = "list_currencies";
+		$paramquery['action'] = "list_currencies";
 		$params = http_build_query($paramquery,'','&#38;');
 		
-		$tab_io->add("currencies", "Currencies", $params, false);
+		$tab_io->add("currencies", Language::get_message("BaseGeneralAdminGeneralTabCurrencies", "general"), $params, false);
 		
 		
-		switch($_GET[action]):
+		switch($_GET['action']):
 			
 			case "list_timezones":
 				$tab_io->activate("timezones");
@@ -179,7 +179,7 @@ class AdminGeneralIO
 			
 		$tab_io->output();
 		
-		switch($_GET[action]):
+		switch($_GET['action']):
 			case "list_timezones":
 				self::list_timezones();
 			break;

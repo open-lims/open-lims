@@ -3,7 +3,7 @@
  * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -48,13 +48,13 @@ class SampleDataSearchIO
 	{
 		global $user, $session;
 		
-		if ($_GET[nextpage])
+		if ($_GET['nextpage'])
 		{
-			if ($_GET[sortvalue] and $_GET[sortmethod])
+			if ($_GET['sortvalue'] and $_GET['sortmethod'])
 			{
-				if ($_GET[nextpage] == "2" and $_POST[string])
+				if ($_GET['nextpage'] == "2" and $_POST['string'])
 				{
-					$string = $_POST[string];
+					$string = $_POST['string'];
 					$item_type_array = $session->read_value("SEARCH_DATA_ITEM_TYPE");
 					$sample_id_array = $session->read_value("SEARCH_DATA_SAMPLE_ID");
 				}
@@ -67,7 +67,7 @@ class SampleDataSearchIO
 			}
 			else
 			{
-				if ($_GET[page])
+				if ($_GET['page'])
 				{
 					$string = $session->read_value("SEARCH_DATA_STRING");
 					$item_type_array = $session->read_value("SEARCH_DATA_ITEM_TYPE");
@@ -75,16 +75,16 @@ class SampleDataSearchIO
 				}
 				else
 				{
-					if ($_GET[nextpage] == "1")
+					if ($_GET['nextpage'] == "1")
 					{
-						$string = $_POST[string];
+						$string = $_POST['string'];
 						$session->delete_value("SEARCH_DATA_STRING");
 						$session->delete_value("SEARCH_DATA_ITEM_TYPE");
 						$session->delete_value("SEARCH_DATA_SAMPLE_ID");
 					}
 					else
 					{
-						$string = $_POST[string];
+						$string = $_POST['string'];
 						$item_type_array = $session->read_value("SEARCH_DATA_ITEM_TYPE");
 						$sample_id_array = $session->read_value("SEARCH_DATA_SAMPLE_ID");
 					}
@@ -104,8 +104,8 @@ class SampleDataSearchIO
 			$template->set_var("error", "");
 			
 			$paramquery = $_GET;
-			unset($paramquery[page]);
-			$paramquery[nextpage] = "1";
+			unset($paramquery['page']);
+			$paramquery['nextpage'] = "1";
 			$params = http_build_query($paramquery,'','&#38;');
 					
 			$template->set_var("params",$params);
@@ -121,9 +121,9 @@ class SampleDataSearchIO
 				{
 					$sample = new Sample($value);
 				
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $sample->get_name();		
-					$result[$counter][selected] = "";
+					$result[$counter]['value'] = $value;
+					$result[$counter]['content'] = $sample->get_name();		
+					$result[$counter]['selected'] = "";
 		
 					$counter++;
 				}
@@ -144,10 +144,10 @@ class SampleDataSearchIO
 					{
 						if ($value::get_sql_select_array($key) != null)
 						{
-							$result[$counter][title] = $value::get_generic_name($key, null);
-							$result[$counter][name] = "item-".$key;
-							$result[$counter][value] = $key;
-							$result[$counter][checked] = "checked='checked'";
+							$result[$counter]['title'] = $value::get_generic_name($key, null);
+							$result[$counter]['name'] = "item-".$key;
+							$result[$counter]['value'] = $key;
+							$result[$counter]['checked'] = "checked='checked'";
 							
 							$counter++;
 						}
@@ -163,7 +163,7 @@ class SampleDataSearchIO
 		{
 			if(!$sample_id_array)
 			{	
-				if ($_POST[sample_id] == 0)
+				if ($_POST['sample_id'] == 0)
 				{
 					$sample_id_array = array();
 					$tmp_id_array = Sample::list_user_related_samples($user->get_user_id(), false);
@@ -178,8 +178,8 @@ class SampleDataSearchIO
 				else
 				{
 					$sample_id_array = array();
-					$sample_id_array[0] = $_POST[sample_id];
-					$sample = new Sample($_POST[sample_id]);
+					$sample_id_array[0] = $_POST['sample_id'];
+					$sample = new Sample($_POST['sample_id']);
 					$search_name = $sample->get_name();
 				}
 			}
@@ -207,6 +207,21 @@ class SampleDataSearchIO
 						array_push($item_type_array, $value);
 					}
 				}
+				
+				if (!$item_type_array)
+				{
+					$tmp_item_type_array = Item::list_types();
+					foreach($tmp_item_type_array as $key => $value)
+					{
+						if (class_exists($value))
+						{
+							if ($value::get_sql_select_array($key) != null)
+							{
+								array_push($item_type_array, $key);
+							}
+						}
+					}
+				}
 			}
 			
 			$session->write_value("SEARCH_DATA_STRING", $string, true);
@@ -224,15 +239,15 @@ class SampleDataSearchIO
 			$list = new List_IO("SampleDataSearch", "ajax.php?nav=sample", "search_sample_data_list_samples", "search_sample_data_count_samples", $argument_array, "SampleDataSearch");
 		
 			$list->add_column("", "symbol", false, "16px");
-			$list->add_column("Name", "name", true, null);
-			$list->add_column("Type", "type", false, null);
-			$list->add_column("Datetime", "datetime", true, null);
-			$list->add_column("Sample", "sample_name", true, null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnName", "general"), "name", true, null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnType", "general"), "type", false, null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnDateTime", "general"), "datetime", true, null);
+			$list->add_column(Language::get_message("SampleGeneralListColumnSample", "general"), "sample_name", true, null);
 			
 			$template = new HTMLTemplate("sample/search/data_search_result.html");
 		
 			$paramquery = $_GET;
-			$paramquery[nextpage] = "2";
+			$paramquery['nextpage'] = "2";
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			$template->set_var("params", $params);

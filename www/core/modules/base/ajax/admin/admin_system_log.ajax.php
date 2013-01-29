@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -57,7 +57,7 @@ class AdminSystemLogAjax
 		
 			if (is_array($argument_array))
 			{
-				$type_id = $argument_array[0][1];
+				$type_id = $argument_array[1];
 	
 				$list_request = new ListRequest_IO();
 				$list_request->set_column_array($json_column_array);
@@ -73,35 +73,35 @@ class AdminSystemLogAjax
 				{		
 					foreach($list_array as $key => $value)
 					{	
-						$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
-						$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+						$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
+						$list_array[$key]['datetime'] = $datetime_handler->get_datetime(false);
 
 						$paramquery = $_GET;
-						$paramquery[id] = $list_array[$key][id];
-						$paramquery[action] = "detail";
-						unset($paramquery[sortvalue]);
-						unset($paramquery[sortmethod]);
-						unset($paramquery[nextpage]);
+						$paramquery['id'] = $list_array[$key]['id'];
+						$paramquery['action'] = "detail";
+						unset($paramquery['sortvalue']);
+						unset($paramquery['sortmethod']);
+						unset($paramquery['nextpage']);
 						$params = http_build_query($paramquery, '', '&#38;');
 		
-						$tmp_datetime = $list_array[$key][datetime];
-						unset($list_array[$key][datetime]);
-						$list_array[$key][datetime][link] = $params;
-						$list_array[$key][datetime][content] = $tmp_datetime;
+						$tmp_datetime = $list_array[$key]['datetime'];
+						unset($list_array[$key]['datetime']);
+						$list_array[$key]['datetime']['link'] = $params;
+						$list_array[$key]['datetime']['content'] = $tmp_datetime;
 						
 						
 						$paramquery = $_GET;
-						$paramquery[id] = $list_array[$key][ip];
-						$paramquery[action] = "ip_info";
-						unset($paramquery[sortvalue]);
-						unset($paramquery[sortmethod]);
-						unset($paramquery[nextpage]);
+						$paramquery['id'] = $list_array[$key]['ip'];
+						$paramquery['action'] = "ip_info";
+						unset($paramquery['sortvalue']);
+						unset($paramquery['sortmethod']);
+						unset($paramquery['nextpage']);
 						$params = http_build_query($paramquery, '', '&#38;');
 		
-						$tmp_ip = $list_array[$key][ip];
-						unset($list_array[$key][ip]);				
-						$list_array[$key][ip][link] = $params;
-						$list_array[$key][ip][content] = $tmp_ip;
+						$tmp_ip = $list_array[$key]['ip'];
+						unset($list_array[$key]['ip']);				
+						$list_array[$key]['ip']['link'] = $params;
+						$list_array[$key]['ip']['content'] = $tmp_ip;
 					}
 				}
 				else
@@ -140,8 +140,7 @@ class AdminSystemLogAjax
 			
 			if (is_array($argument_array))
 			{
-				$type_id = $argument_array[0][1];
-				
+				$type_id = $argument_array[1];
 				return SystemFE_Wrapper::count_list_system_log($type_id);
 			}
 			else

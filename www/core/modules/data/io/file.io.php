@@ -3,7 +3,7 @@
  * @package data
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -33,9 +33,11 @@ class FileIO
 	 */
 	public static function detail()
 	{
-		if ($_GET[file_id])
+		global $regional;
+		
+		if ($_GET['file_id'])
 		{
-			$file = File::get_instance($_GET[file_id]);
+			$file = File::get_instance($_GET['file_id']);
 			
 			if ($file->is_read_access())
 			{
@@ -43,10 +45,10 @@ class FileIO
 				
 				$folder = Folder::get_instance($file->get_parent_folder_id());
 				
-				if ($_GET[version] and is_numeric($_GET[version]))
+				if ($_GET['version'] and is_numeric($_GET['version']))
 				{	
-					$file->open_internal_revision($_GET[version]);
-					$internal_revision = $_GET[version];
+					$file->open_internal_revision($_GET['version']);
+					$internal_revision = $_GET['version'];
 				}
 				else
 				{
@@ -65,16 +67,18 @@ class FileIO
 					$result = array();
 					$counter = 1;
 				
-					$result[0][version] = 0;
-					$result[0][text] = "----------------------------------------------";
+					$result[0]['version'] = 0;
+					$result[0]['text'] = "----------------------------------------------";
 					
 					foreach($file_version_array as $key => $value)
 					{
-						$file_version = File::get_instance($_GET[file_id], true);
+						$file_version = File::get_instance($_GET['file_id'], true);
 						$file_version->open_internal_revision($value);
 						
-						$result[$counter][version] = $file_version->get_internal_revision();
-						$result[$counter][text] = "Version ".$file_version->get_version()." - ".$file_version->get_datetime();
+						$version_datetime_handler = new DatetimeHandler($file_version->get_datetime());
+						
+						$result[$counter]['version'] = $file_version->get_internal_revision();
+						$result[$counter]['text'] = "Version ".$file_version->get_version()." - ".$version_datetime_handler->get_datetime();
 						$counter++;
 					}
 					$template->set_var("version_option",$result);
@@ -87,8 +91,8 @@ class FileIO
 				{
 					if ($key != "version")
 					{
-						$result[$counter][value] = $value;
-						$result[$counter][key] = $key;
+						$result[$counter]['value'] = $value;
+						$result[$counter]['key'] = $key;
 						$counter++;
 					}
 				}
@@ -98,7 +102,7 @@ class FileIO
 				$template->set_var("version",$file->get_version());
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "file_history";
+				$paramquery['action'] = "file_history";
 				$params = http_build_query($paramquery,'','&#38;');	
 				
 				$template->set_var("version_list_link",$params);
@@ -109,10 +113,13 @@ class FileIO
 				$template->set_var("path",$folder->get_object_path());
 				
 				$template->set_var("size",Convert::convert_byte_1024($file->get_size()));
-				$template->set_var("size_in_byte",$file->get_size());
+				$template->set_var("size_in_byte",$regional->format_number($file->get_size()));
 				
-				$template->set_var("creation_datetime",$file->get_datetime());
-				$template->set_var("version_datetime",$file->get_version_datetime());
+				$create_datetime_handler = new DatetimeHandler($file->get_datetime());
+				$version_datetime_handler = new DatetimeHandler($file->get_version_datetime());
+				
+				$template->set_var("creation_datetime", $create_datetime_handler->get_datetime());
+				$template->set_var("version_datetime", $version_datetime_handler->get_datetime());
 				$template->set_var("mime_type",$file->get_mime_type());
 				$template->set_var("owner",$user->get_full_name(false));
 				$template->set_var("checksum",$file->get_checksum());
@@ -121,7 +128,7 @@ class FileIO
 				
 				if ($file->is_image() == true)
 				{
-					$template->set_var("thumbnail_image","<img src='image.php?session_id=".$_GET[session_id]."&file_id=".$_GET[file_id]."&max_width=340&max_height=350' alt='' />");
+					$template->set_var("thumbnail_image","<img src='image.php?session_id=".$_GET['session_id']."&file_id=".$_GET['file_id']."&max_width=340&max_height=350' alt='' />");
 				}
 				else
 				{
@@ -144,21 +151,21 @@ class FileIO
 				$template->set_var("download_params",$params);
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "file_update";
-				$paramquery[version] = $internal_revision;
-				$paramquery[retrace] = Retrace::create_retrace_string();
+				$paramquery['action'] = "file_update";
+				$paramquery['version'] = $internal_revision;
+				$paramquery['retrace'] = Retrace::create_retrace_string();
 				$params = http_build_query($paramquery,'','&#38;');	
 				$template->set_var("update_params",$params);
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "file_update_minor";
-				$paramquery[version] = $file->get_internal_revision();
-				$paramquery[retrace] = Retrace::create_retrace_string();
+				$paramquery['action'] = "file_update_minor";
+				$paramquery['version'] = $file->get_internal_revision();
+				$paramquery['retrace'] = Retrace::create_retrace_string();
 				$params = http_build_query($paramquery,'','&#38;');	
 				$template->set_var("update_minor_params",$params);
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "permission";
+				$paramquery['action'] = "permission";
 				$params = http_build_query($paramquery,'','&#38;');	
 				$template->set_var("set_permission_params",$params);
 				
@@ -178,26 +185,26 @@ class FileIO
 				
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "file_delete";
-				unset($paramquery[sure]);
+				$paramquery['action'] = "file_delete";
+				unset($paramquery['sure']);
 				$params = http_build_query($paramquery,'','&#38;');	
 				
 				$template->set_var("delete_file_params",$params);
 				
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "file_delete_version";
-				$paramquery[version] = $internal_revision;
-				unset($paramquery[sure]);
+				$paramquery['action'] = "file_delete_version";
+				$paramquery['version'] = $internal_revision;
+				unset($paramquery['sure']);
 				$params = http_build_query($paramquery,'','&#38;');	
 				
 				$template->set_var("delete_file_version_params",$params);
 				
 				
 				$paramquery = $_GET;
-				unset($paramquery[file_id]);
-				unset($paramquery[version]);
-				unset($paramquery[action]);
+				unset($paramquery['file_id']);
+				unset($paramquery['version']);
+				unset($paramquery['action']);
 				$params = http_build_query($paramquery,'','&#38;');	
 				
 				$template->set_var("back_link",$params);
@@ -253,9 +260,9 @@ class FileIO
 			$list = new List_IO("DataFileItem", "/core/modules/data/ajax/file.ajax.php", "list_file_items", "count_file_items", $argument_array, "DataAjaxFiles", 20, true, true);
 			
 			$list->add_column("","symbol",false,16);
-			$list->add_column("Name","name",true,null);
-			$list->add_column("Size","size",true,null);
-			$list->add_column("Date/Time","datetime",true,null);
+			$list->add_column(Language::get_message("DataGeneralListColumnName", "general"),"name",true,null);
+			$list->add_column(Language::get_message("DataGeneralListColumnSize", "general"),"size",true,null);
+			$list->add_column(Language::get_message("DataGeneralListColumnDateTime", "general"),"datetime",true,null);
 		}
 		else
 		{	
@@ -263,9 +270,9 @@ class FileIO
 			
 			$list->add_column("","checkbox",false,16, $form_field_name);
 			$list->add_column("","symbol",false,16);
-			$list->add_column("Name","name",false,null);
-			$list->add_column("Size","size",false,null);
-			$list->add_column("Date/Time","datetime",false,null);
+			$list->add_column(Language::get_message("DataGeneralListColumnName", "general"),"name",false,null);
+			$list->add_column(Language::get_message("DataGeneralListColumnSize", "general"),"size",false,null);
+			$list->add_column(Language::get_message("DataGeneralListColumnDateTime", "general"),"datetime",false,null);
 		}
 				
 		$template = new HTMLTemplate("data/file_list.html");	
@@ -301,19 +308,19 @@ class FileIO
 			$unique_id = uniqid();
 			
 			$paramquery = $_GET;
-			$paramquery[unique_id] = $unique_id;
-			$paramquery[folder_id] = $folder_id;
+			$paramquery['unique_id'] = $unique_id;
+			$paramquery['folder_id'] = $folder_id;
 			$params = http_build_query($paramquery, '', '&#38;');
 			
 			$template->set_var("params", $params);
 			$template->set_var("unique_id", $unique_id);
-			$template->set_var("session_id", $_GET[session_id]);
+			$template->set_var("session_id", $_GET['session_id']);
 			
-			if ($_GET[retrace])
+			if ($_GET['retrace'])
 			{
 				$js_retrace_array = array();
 				$js_retrace_counter = 0;
-				$retrace_array = unserialize(base64_decode($_GET[retrace]));
+				$retrace_array = unserialize(base64_decode($_GET['retrace']));
 				foreach($retrace_array as $key => $value)
 				{
 					$js_retrace_array[$js_retrace_counter][0] = $key;
@@ -327,18 +334,18 @@ class FileIO
 				$template->set_var("retrace", "");
 			}
 			
-			if ($_POST[keywords])
+			if ($_POST['keywords'])
 			{
-				$template->set_var("keywords", $_POST[keywords]);
+				$template->set_var("keywords", $_POST['keywords']);
 			}
 			else
 			{
 				$template->set_var("keywords", "");
 			}
 			
-			if ($_POST[description])
+			if ($_POST['description'])
 			{
-				$template->set_var("description", $_POST[description]);
+				$template->set_var("description", $_POST['description']);
 			}
 			else
 			{
@@ -359,9 +366,9 @@ class FileIO
 	 */
 	public static function upload()
 	{
-		if ($_GET[folder_id])
+		if ($_GET['folder_id'])
 		{
-			$folder = Folder::get_instance($_GET[folder_id]);
+			$folder = Folder::get_instance($_GET['folder_id']);
 			
 			if ($folder->is_write_access() == true)
 			{
@@ -370,18 +377,18 @@ class FileIO
 				$unique_id = uniqid();
 				
 				$paramquery = $_GET;
-				$paramquery[unique_id] = $unique_id;
+				$paramquery['unique_id'] = $unique_id;
 				$params = http_build_query($paramquery, '', '&#38;');
 				
 				$template->set_var("params", $params);
 				$template->set_var("unique_id", $unique_id);
-				$template->set_var("session_id", $_GET[session_id]);
+				$template->set_var("session_id", $_GET['session_id']);
 				
-				if ($_GET[retrace])
+				if ($_GET['retrace'])
 				{
 					$js_retrace_array = array();
 					$js_retrace_counter = 0;
-					$retrace_array = unserialize(base64_decode($_GET[retrace]));
+					$retrace_array = unserialize(base64_decode($_GET['retrace']));
 					foreach($retrace_array as $key => $value)
 					{
 						$js_retrace_array[$js_retrace_counter][0] = $key;
@@ -414,9 +421,9 @@ class FileIO
 	 */
 	public static function update()
 	{
-		if ($_GET[file_id])
+		if ($_GET['file_id'])
 		{		
-			$file = File::get_instance($_GET[file_id]);
+			$file = File::get_instance($_GET['file_id']);
 			
 			if ($file->is_write_access())
 			{
@@ -425,18 +432,18 @@ class FileIO
 				$unique_id = uniqid();
 				
 				$paramquery = $_GET;
-				$paramquery[unique_id] = $unique_id;
+				$paramquery['unique_id'] = $unique_id;
 				$params = http_build_query($paramquery, '', '&#38;');
 				
 				$template->set_var("params", $params);
 				$template->set_var("unique_id", $unique_id);
-				$template->set_var("session_id", $_GET[session_id]);
+				$template->set_var("session_id", $_GET['session_id']);
 				
-				if ($_GET[retrace])
+				if ($_GET['retrace'])
 				{
 					$js_retrace_array = array();
 					$js_retrace_counter = 0;
-					$retrace_array = unserialize(base64_decode($_GET[retrace]));
+					$retrace_array = unserialize(base64_decode($_GET['retrace']));
 					foreach($retrace_array as $key => $value)
 					{
 						$js_retrace_array[$js_retrace_counter][0] = $key;
@@ -469,25 +476,25 @@ class FileIO
 	 */
 	public static function delete()
 	{		
-		if ($_GET[file_id])
+		if ($_GET['file_id'])
 		{
-			$file = File::get_instance($_GET[file_id]);
+			$file = File::get_instance($_GET['file_id']);
 			
 			if ($file->is_delete_access())
 			{
-				if ($_GET[sure] != "true")
+				if ($_GET['sure'] != "true")
 				{
 					$template = new HTMLTemplate("data/file_delete.html");
 					
 					$paramquery = $_GET;
-					$paramquery[sure] = "true";
+					$paramquery['sure'] = "true";
 					$params = http_build_query($paramquery);
 					
 					$template->set_var("yes_params", $params);
 							
 					$paramquery = $_GET;
-					$paramquery[action] = "file_detail";
-					unset($paramquery[sure]);
+					$paramquery['action'] = "file_detail";
+					unset($paramquery['sure']);
 					$params = http_build_query($paramquery);
 					
 					$template->set_var("no_params", $params);
@@ -496,14 +503,14 @@ class FileIO
 				}
 				else
 				{
-					$file = File::get_instance($_GET[file_id]);
+					$file = File::get_instance($_GET['file_id']);
 					
 					if ($file->delete() == true)
 					{
 						$paramquery = $_GET;
-						unset($paramquery[sure]);
-						unset($paramquery[action]);
-						unset($paramquery[file_id]);
+						unset($paramquery['sure']);
+						unset($paramquery['action']);
+						unset($paramquery['file_id']);
 						$params = http_build_query($paramquery);
 								
 						Common_IO::step_proceed($params, "Delete File", "Operation Successful" ,null);
@@ -511,8 +518,8 @@ class FileIO
 					else
 					{
 						$paramquery = $_GET;
-						$paramquery[action] = "file_detail";
-						unset($paramquery[sure]);
+						$paramquery['action'] = "file_detail";
+						unset($paramquery['sure']);
 						$params = http_build_query($paramquery);
 								
 						Common_IO::step_proceed($params, "Delete File", "Operation Failed" ,null);
@@ -537,27 +544,27 @@ class FileIO
 	 */
 	public static function delete_version()
 	{		
-		if ($_GET[file_id])
+		if ($_GET['file_id'])
 		{
-			if ($_GET[version])
+			if ($_GET['version'])
 			{
-				$file = File::get_instance($_GET[file_id]);
+				$file = File::get_instance($_GET['file_id']);
 				
 				if ($file->is_delete_access())
 				{
-					if ($_GET[sure] != "true")
+					if ($_GET['sure'] != "true")
 					{
 						$template = new HTMLTemplate("data/file_delete_version.html");
 						
 						$paramquery = $_GET;
-						$paramquery[sure] = "true";
+						$paramquery['sure'] = "true";
 						$params = http_build_query($paramquery);
 						
 						$template->set_var("yes_params", $params);
 								
 						$paramquery = $_GET;
-						$paramquery[action] = "file_detail";
-						unset($paramquery[sure]);
+						$paramquery['action'] = "file_detail";
+						unset($paramquery['sure']);
 						$params = http_build_query($paramquery);
 						
 						$template->set_var("no_params", $params);
@@ -566,24 +573,24 @@ class FileIO
 					}
 					else
 					{
-						$file = File::get_instance($_GET[file_id]);
+						$file = File::get_instance($_GET['file_id']);
 						
-						if (($return_value = $file->delete_version($_GET[version])) != 0)
+						if (($return_value = $file->delete_version($_GET['version'])) != 0)
 						{
 							if ($return_value == 1)
 							{
 								$paramquery = $_GET;
-								$paramquery[action] = "file_detail";
-								unset($paramquery[sure]);
-								unset($paramquery[version]);
+								$paramquery['action'] = "file_detail";
+								unset($paramquery['sure']);
+								unset($paramquery['version']);
 								$params = http_build_query($paramquery);
 							}
 							else
 							{
 								$paramquery = $_GET;
-								unset($paramquery[sure]);
-								unset($paramquery[action]);
-								unset($paramquery[file_id]);
+								unset($paramquery['sure']);
+								unset($paramquery['action']);
+								unset($paramquery['file_id']);
 								$params = http_build_query($paramquery);
 							}
 							Common_IO::step_proceed($params, "Delete File", "Operation Successful" ,null);
@@ -591,8 +598,8 @@ class FileIO
 						else
 						{
 							$paramquery = $_GET;
-							$paramquery[action] = "file_detail";
-							unset($paramquery[sure]);
+							$paramquery['action'] = "file_detail";
+							unset($paramquery['sure']);
 							$params = http_build_query($paramquery);
 									
 							Common_IO::step_proceed($params, "Delete File", "Operation Failed" ,null);
@@ -621,23 +628,23 @@ class FileIO
 	 */
 	public static function history()
 	{
-		if ($_GET[file_id])
+		if ($_GET['file_id'])
 		{
-			$file = File::get_instance($_GET[file_id]);
+			$file = File::get_instance($_GET['file_id']);
 			
 			if ($file->is_read_access())
 			{
 				$argument_array = array();
-				$argument_array[0][0] = "file_id";
-				$argument_array[0][1] = $_GET[file_id];
+				$argument_array[0] = "file_id";
+				$argument_array[1] = $_GET['file_id'];
 	
 				$list = new List_IO("DataFileVersionHistory", "ajax.php?nav=data", "file_list_versions", "file_count_versions", $argument_array, "DataFileVersionHistory");
 
 				$list->add_column("","symbol",false,"16px");
-				$list->add_column("Name","name",true,null);
-				$list->add_column("Version","version",false,null);
-				$list->add_column("Date/Time","datetime",true,null);
-				$list->add_column("User","user",true,null);
+				$list->add_column(Language::get_message("DataGeneralListColumnName", "general"),"name",true,null);
+				$list->add_column(Language::get_message("DataGeneralListColumnVersion", "general"),"version",false,null);
+				$list->add_column(Language::get_message("DataGeneralListColumnDateTime", "general"),"datetime",true,null);
+				$list->add_column(Language::get_message("DataGeneralListColumnUser", "general"),"user",true,null);
 				$list->add_column("","delete",false,"16px");
 				
 				$template = new HTMLTemplate("data/file_history.html");

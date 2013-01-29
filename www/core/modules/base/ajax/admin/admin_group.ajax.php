@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -65,33 +65,33 @@ class AdminGroupAjax
 			{
 				foreach($list_array as $key => $value)
 				{
-					$group 	= new Group($list_array[$key][id]);
+					$group 	= new Group($list_array[$key]['id']);
 						
 					$paramquery = $_GET;
-					$paramquery[action] = "detail";
-					$paramquery[id] = $list_array[$key][id];
+					$paramquery['action'] = "detail";
+					$paramquery['id'] = $list_array[$key]['id'];
 					$params = http_build_query($paramquery,'','&#38;');
 	
-					unset($list_array[$key][name]);
-					$list_array[$key][symbol][link] = $params;	
-					$list_array[$key][symbol][content] = "<img src='images/icons/groups.png' alt='' style='border: 0;' />";
-					$list_array[$key][name][link] = $params;	
-					$list_array[$key][name][content] = $group->get_name();
-					$list_array[$key][users] = $group->get_number_of_user_members();
+					unset($list_array[$key]['name']);
+					$list_array[$key]['symbol']['link'] = $params;	
+					$list_array[$key]['symbol']['content'] = "<img src='images/icons/groups.png' alt='' style='border: 0;' />";
+					$list_array[$key]['name']['link'] = $params;	
+					$list_array[$key]['name']['content'] = $group->get_name();
+					$list_array[$key]['users'] = $group->get_number_of_user_members();
 					
 					$paramquery = $_GET;
-					$paramquery[action] = "delete";
-					$paramquery[id] = $list_array[$key][id];
+					$paramquery['action'] = "delete";
+					$paramquery['id'] = $list_array[$key]['id'];
 					$params = http_build_query($paramquery,'','&#38;');
 					
-					if ($list_array[$key][id] < 100)
+					if ($list_array[$key]['id'] < 100)
 					{
-						$list_array[$key][delete] = "<img src='images/icons/delete_group_na.png' alt='' style='border: 0;' />";
+						$list_array[$key]['delete'] = "<img src='images/icons/delete_group_na.png' alt='' style='border: 0;' />";
 					}
 					else
 					{
-						$list_array[$key][delete][link] = $params;
-						$list_array[$key][delete][content] = "<img src='images/icons/delete_group.png' alt='' style='border: 0;' />";
+						$list_array[$key]['delete']['link'] = $params;
+						$list_array[$key]['delete']['content'] = "<img src='images/icons/delete_group.png' alt='' style='border: 0;' />";
 					}
 				}
 			}

@@ -3,7 +3,7 @@
  * @package project
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -47,9 +47,9 @@ class ProjectSearchIO
 	{
 		global $user, $session;
 		
-		if ($_GET[nextpage])
+		if ($_GET['nextpage'])
 		{
-			if ($_GET[page] or $_GET[sortvalue] or $_GET[sortmethod])
+			if ($_GET['page'] or $_GET['sortvalue'] or $_GET['sortmethod'])
 			{
 				$name = $session->read_value("SEARCH_PROJECT_NAME");
 				$organisation_unit_array = $session->read_value("SEARCH_PROJECT_ORGANISATION_UNIT_ARRAY");
@@ -57,16 +57,16 @@ class ProjectSearchIO
 			}
 			else
 			{
-				if ($_GET[nextpage] == "1")
+				if ($_GET['nextpage'] == "1")
 				{
-					$name = $_POST[name];
+					$name = $_POST['string'];
 					$session->delete_value("SEARCH_PROJECT_NAME");
 					$session->delete_value("SEARCH_PROJECT_ORGANISATION_UNIT_ARRAY");
 					$session->delete_value("SEARCH_PROJECT_TEMPLATE_ARRAY");
 				}
 				else
 				{
-					$name = $_POST[name];
+					$name = $_POST['string'];
 					$organisation_unit_array = $session->read_value("SEARCH_PROJECT_ORGANISATION_UNIT_ARRAY");
 					$template_array = $session->read_value("SEARCH_PROJECT_TEMPLATE_ARRAY");
 				}
@@ -83,8 +83,8 @@ class ProjectSearchIO
 			$template = new HTMLTemplate("project/search/search.html");
 			
 			$paramquery = $_GET;
-			unset($paramquery[page]);
-			$paramquery[nextpage] = "1";
+			unset($paramquery['page']);
+			$paramquery['nextpage'] = "1";
 			$params = http_build_query($paramquery,'','&#38;');
 					
 			$template->set_var("params",$params);
@@ -104,9 +104,9 @@ class ProjectSearchIO
 			
 					if ($organisation_unit->is_permission($user->get_user_id()))
 					{
-						$result[$counter][value] = $value;
-						$result[$counter][content] = $organisation_unit->get_name();		
-						$result[$counter][selected] = "";
+						$result[$counter]['value'] = $value;
+						$result[$counter]['content'] = $organisation_unit->get_name();		
+						$result[$counter]['selected'] = "";
 		
 						$counter++;
 					}
@@ -115,8 +115,8 @@ class ProjectSearchIO
 			
 			if (!$result)
 			{
-				$result[$counter][value] = "0";
-				$result[$counter][content] = "NO ORGANISATION UNIT FOUND!";	
+				$result[$counter]['value'] = "0";
+				$result[$counter]['content'] = "NO ORGANISATION UNIT FOUND!";	
 			}
 			
 			$template->set_var("organ_unit",$result);
@@ -132,9 +132,9 @@ class ProjectSearchIO
 				foreach($project_template_array as $key => $value)
 				{
 					$project_template_cat = new ProjectTemplateCat($value);	
-					$result[$counter][value] = "0";
-					$result[$counter][content] = $project_template_cat->get_name();		
-					$result[$counter][selected] = "";
+					$result[$counter]['value'] = "";
+					$result[$counter]['content'] = $project_template_cat->get_name();		
+					$result[$counter]['selected'] = "";
 	
 					$counter++;
 					
@@ -147,9 +147,9 @@ class ProjectSearchIO
 							$project_sub_template = new ProjectTemplate($sub_value);
 	
 							
-							$result[$counter][value] = $sub_value;
-							$result[$counter][content] = "&nbsp;".$project_sub_template->get_name();		
-							$result[$counter][selected] = "";
+							$result[$counter]['value'] = $sub_value;
+							$result[$counter]['content'] = "&nbsp;".$project_sub_template->get_name();		
+							$result[$counter]['selected'] = "";
 			
 							$counter++;
 						}
@@ -159,8 +159,8 @@ class ProjectSearchIO
 			}
 			else
 			{
-				$result[$counter][value] = "0";
-				$result[$counter][content] = "NO TEMPLATES FOUND!";
+				$result[$counter]['value'] = "0";
+				$result[$counter]['content'] = "NO TEMPLATES FOUND!";
 			}
 	
 			$template->set_var("template",$result);
@@ -171,7 +171,7 @@ class ProjectSearchIO
 		{
 			if(!$organisation_unit_array)
 			{			
-				if (!$_POST[organisation_unit])
+				if (!$_POST['organisation_unit'])
 				{
 					$organisation_unit_array = array();
 					
@@ -193,8 +193,8 @@ class ProjectSearchIO
 				else
 				{
 					$organisation_unit_array = array();
-					$organisation_unit_array[0] = $_POST[organisation_unit];
-					$organisation_unit = new OrganisationUnit($_POST[organisation_unit]);
+					$organisation_unit_array[0] = $_POST['organisation_unit'];
+					$organisation_unit = new OrganisationUnit($_POST['organisation_unit']);
 					$search_organisation_unit_name = $organisation_unit->get_name();
 				}
 			}
@@ -213,7 +213,7 @@ class ProjectSearchIO
 			
 			if (!$template_array)
 			{
-				if (!$_POST[template])
+				if (!$_POST['template'])
 				{
 					$template_array = null;
 					$search_template_name = "All";
@@ -221,8 +221,8 @@ class ProjectSearchIO
 				else
 				{
 					$template_array = array();
-					$template_array[0] = $_POST[template];
-					$project_template = new ProjectTemplate($_POST[template]);
+					$template_array[0] = $_POST['template'];
+					$project_template = new ProjectTemplate($_POST['template']);
 					$search_template_name = $project_template->get_name();
 				}
 			}
@@ -257,20 +257,20 @@ class ProjectSearchIO
 			$list = new List_IO("ProjectSearch", "ajax.php?nav=project", "search_project_list_projects", "search_project_count_projects", $argument_array, "ProjectSearch");
 		
 			$list->add_column("","symbol",false,"16px");
-			$list->add_column("Name","name",true,null);
-			$list->add_column("Organisation Unit","organisation_unit",true,null);
-			$list->add_column("Date/Time","datetime",true,null);
-			$list->add_column("Template","template",true,null);
-			$list->add_column("Status","status",true,null);
+			$list->add_column(Language::get_message("ProjectGeneralListColumnName", "general"),"name",true,null);
+			$list->add_column(Language::get_message("ProjectGeneralListColumnOrganisationUnit", "general"),"organisation_unit",true,null);
+			$list->add_column(Language::get_message("ProjectGeneralListColumnDateTime", "general"),"datetime",true,null);
+			$list->add_column(Language::get_message("ProjectGeneralListColumnTemplate", "general"),"template",true,null);
+			$list->add_column(Language::get_message("ProjectGeneralListColumnStatus", "general"),"status",true,null);
 			
 			
 			$template = new HTMLTemplate("project/search/search_result.html");
 			
 			$paramquery = $_GET;
-			$paramquery[nextpage] = "2";
-			unset($paramquery[page]);
-			unset($paramquery[sortvalue]);
-			unset($paramquery[sortmethod]);
+			$paramquery['nextpage'] = "2";
+			unset($paramquery['page']);
+			unset($paramquery['sortvalue']);
+			unset($paramquery['sortmethod']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			$template->set_var("params", $params);

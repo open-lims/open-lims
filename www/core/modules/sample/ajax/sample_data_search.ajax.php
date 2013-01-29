@@ -3,7 +3,7 @@
  * @package sample
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -65,22 +65,22 @@ class SampleDataSearchAjax
 				
 				foreach($list_array as $key => $value)
 				{
-					$datetime_handler = new DatetimeHandler($list_array[$key][datetime]);
-					$list_array[$key][datetime] = $datetime_handler->get_formatted_string("dS M Y H:i");
+					$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
+					$list_array[$key]['datetime'] = $datetime_handler->get_datetime(false);
 					
 					$sample_paramquery = array();
-					$sample_paramquery[username] = $_GET[username];
-					$sample_paramquery[session_id] = $_GET[session_id];
-					$sample_paramquery[nav] = "sample";
-					$sample_paramquery[run] = "detail";
-					$sample_paramquery[sample_id] = $value[holder_sample_id];
+					$sample_paramquery['username'] = $_GET['username'];
+					$sample_paramquery['session_id'] = $_GET['session_id'];
+					$sample_paramquery['nav'] = "sample";
+					$sample_paramquery['run'] = "detail";
+					$sample_paramquery['sample_id'] = $value['holder_sample_id'];
 					$sample_params = http_build_query($sample_paramquery, '', '&#38;');
 					
 					
-					$tmp_sample_name = $list_array[$key][holder_sample_name];
-					unset($list_array[$key][holder_sample_name]);
-					$list_array[$key][sample_name][content] = $tmp_sample_name;
-					$list_array[$key][sample_name][link] = $sample_params;
+					$tmp_sample_name = $list_array[$key]['holder_sample_name'];
+					unset($list_array[$key]['holder_sample_name']);
+					$list_array[$key]['sample_name']['content'] = $tmp_sample_name;
+					$list_array[$key]['sample_name']['link'] = $sample_params;
 					
 					if (is_array($item_type_array) and count($item_type_array) >= 1)
 					{
@@ -88,15 +88,15 @@ class SampleDataSearchAjax
 						{
 							if($value[$item_key."_id"] != null)
 							{
-								$list_array[$key][type] = $item_value::get_generic_name($item_key, null);
+								$list_array[$key]['type'] = $item_value::get_generic_name($item_key, null);
 								
-								$tmp_item_name = $list_array[$key][name];
-								unset($list_array[$key][name]);
-								$list_array[$key][name][content] = $tmp_item_name;
-								$list_array[$key][name][link] = $item_value::get_generic_link($item_key, $value[$item_key."_id"]);
+								$tmp_item_name = $list_array[$key]['name'];
+								unset($list_array[$key]['name']);
+								$list_array[$key]['name']['content'] = $tmp_item_name;
+								$list_array[$key]['name']['link'] = $item_value::get_generic_link($item_key, $value[$item_key."_id"]);
 								
-								$list_array[$key][symbol][content] = $item_value::get_generic_symbol($item_key, $value[$item_key."_id"]);
-								$list_array[$key][symbol][link] = $item_value::get_generic_link($item_key, $value[$item_key."_id"]);
+								$list_array[$key]['symbol']['content'] = $item_value::get_generic_symbol($item_key, $value[$item_key."_id"]);
+								$list_array[$key]['symbol']['link'] = $item_value::get_generic_link($item_key, $value[$item_key."_id"]);
 							}
 						}
 					}

@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -404,6 +404,30 @@ class Language_Access
 		}
 	}
 	
+	/**
+	 * @param integer $language_id
+	 * @return bool
+	 */
+	public static function exist_id($language_id)
+	{
+		global $db;
+		
+		if (is_numeric($language_id))
+		{
+			$sql = "SELECT id FROM ".constant("LANGUAGE_TABLE")." WHERE id = ".$language_id."";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+		
+			if($data['id'])
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
 }
 
 ?>

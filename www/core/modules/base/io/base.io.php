@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -33,13 +33,13 @@ class BaseIO
 		
 		$system_message_array = SystemMessage::list_entries();
 	
-		if (!$_GET[page])
+		if (!$_GET['page'])
     	{
 			$page = 1;
 		}
 		else
 		{
-			$page = $_GET[page];	
+			$page = $_GET['page'];	
 		}
 	
 		$entry_count = count($system_message_array);
@@ -75,9 +75,9 @@ class BaseIO
 				$content = str_replace("\n", "<br />", $system_message->get_content());
 				$content = str_replace("\\", "", $content);
 				
-				$result[$counter][user] = $user->get_full_name(false);
-				$result[$counter][datetime] = $datetime_handler->get_formatted_string("dS M Y \\a\\t H:i");
-				$result[$counter][content] = $content;
+				$result[$counter]['user'] = $user->get_full_name(false);
+				$result[$counter]['datetime'] = $datetime_handler->get_date()." at ".$datetime_handler->get_time();
+				$result[$counter]['content'] = $content;
 				
 				$counter++;
 			}
@@ -115,13 +115,13 @@ class BaseIO
 		$template->set_var("product_function", $product_function);
 
 		$paramquery = $_GET;
-		$paramquery[run] = "software_info";
+		$paramquery['run'] = "software_info";
 		$params = http_build_query($paramquery, '', '&#38;');
 		
 		$template->set_var("sw_info_params", $params);
 		
 		$paramquery = $_GET;
-		$paramquery[run] = "license";
+		$paramquery['run'] = "license";
 		$params = http_build_query($paramquery, '', '&#38;');
 		
 		$template->set_var("license_params", $params);
@@ -136,11 +136,11 @@ class BaseIO
 			{
 				if (!$include_string)
 				{
-					$include_string = $value[name];
+					$include_string = $value['name'];
 				}
 				else
 				{
-					$include_string = $include_string.", ".$value[name];
+					$include_string = $include_string.", ".$value['name'];
 				}
 			}
 			
@@ -161,11 +161,11 @@ class BaseIO
 			{
 				if (!$module_string)
 				{
-					$module_string = $value[name];
+					$module_string = $value['name'];
 				}
 				else
 				{
-					$module_string = $module_string.", ".$value[name];
+					$module_string = $module_string.", ".$value['name'];
 				}
 			}
 			
@@ -187,7 +187,7 @@ class BaseIO
 		$template->set_var("product_version", constant("PRODUCT_VERSION"));
 		
 		$paramquery = $_GET;
-		$paramquery[run] = "license";
+		$paramquery['run'] = "license";
 		$params = http_build_query($paramquery, '', '&#38;');
 		
 		$template->set_var("license_params", $params);

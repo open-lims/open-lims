@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -26,7 +26,11 @@
  */
 	define("BASE_BINARY_TABLE", 		"core_binaries");
 	define("BASE_SERVICE_TABLE", 		"core_services");
-
+	
+	define("BASE_BATCH_RUN_TABLE", 		"core_base_batch_runs");
+	define("BASE_BATCH_TYPE_TABLE", 	"core_base_batch_types");
+	
+	define("COUNTRY_TABLE", 			"core_countries");
 	define("CURRENCY_TABLE", 			"core_currencies");
 	define("LANGUAGE_TABLE", 			"core_languages");
 	define("MEASURING_UNIT_TABLE", 		"core_measuring_units");

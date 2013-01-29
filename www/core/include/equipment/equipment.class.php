@@ -3,7 +3,7 @@
  * @package equipment
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -479,9 +479,9 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 	 */
 	public static function get_sql_select_array($type)
     {
-    	$select_array[name] = "".constant("EQUIPMENT_TYPE_TABLE").".name";
-		$select_array[type_id] = "".constant("EQUIPMENT_TYPE_TABLE").".id AS equipment_id";
-		$select_array[datetime] = "".constant("EQUIPMENT_TABLE").".datetime";
+    	$select_array['name'] = "".constant("EQUIPMENT_TYPE_TABLE").".name";
+		$select_array['type_id'] = "".constant("EQUIPMENT_TYPE_TABLE").".id AS equipment_id";
+		$select_array['datetime'] = "".constant("EQUIPMENT_TABLE").".datetime";
 		return $select_array;
     }
     

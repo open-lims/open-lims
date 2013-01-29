@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -42,6 +42,11 @@ class BaseRequest
 			case "login":
 				require_once("ajax/login.ajax.php");
 				echo LoginAjax::login($_POST['username'], $_POST['password'], $_POST['language']);
+			break;
+			
+			case "forgot_password":
+				require_once("ajax/login.ajax.php");
+				echo LoginAjax::forgot_password($_POST['username'], $_POST['mail']);		
 			break;
 			
 			case "logout":
@@ -118,12 +123,95 @@ class BaseRequest
 
 			case "get_users_in_option":
 				require_once("common/ajax/user_common.ajax.php");
-				echo UserAjax::get_users_in_option($_POST['string']);
+				echo UserCommonAjax::get_users_in_option($_POST['string']);
 			break;
 			
 			case "get_groups_in_option":
 				require_once("common/ajax/user_common.ajax.php");
-				echo UserAjax::get_groups_in_option($_POST['string']);
+				echo UserCommonAjax::get_groups_in_option($_POST['string']);
+			break;
+			
+			case "user_profile_personal_data_change":
+				require_once("ajax/user.ajax.php");
+				echo UserAjax::profile_personal_data_change($_POST['gender'], 
+						$_POST['forename'], 
+						$_POST['surname'], 
+						$_POST['title'], 
+						$_POST['mail'], 
+						$_POST['institution'], 
+						$_POST['department'], 
+						$_POST['street'], 
+						$_POST['zip'], 
+						$_POST['city'], 
+						$_POST['country'], 
+						$_POST['phone'], 
+						$_POST['icq'], 
+						$_POST['msn'], 
+						$_POST['yahoo'], 
+						$_POST['aim'], 
+						$_POST['skype'], 
+						$_POST['lync'], 
+						$_POST['jabber']
+						);
+			break;
+			
+			case "user_profile_regional_settings_change":
+				require_once("ajax/user.ajax.php");
+				echo UserAjax::profile_regional_settings_change($_POST['language_id'], 
+						$_POST['country_id'], 
+						$_POST['timezone_id'], 
+						$_POST['time_display'], 
+						$_POST['time_enter'], 
+						$_POST['date_display'], 
+						$_POST['date_enter'], 
+						$_POST['system_of_units'], 
+						$_POST['currency_id'], 
+						$_POST['currency_significant_digits'], 
+						$_POST['decimal_separator'], 
+						$_POST['thousand_separator'], 
+						$_POST['name_display_format'], 
+						$_POST['system_of_paper_format']
+						);
+			break;
+			
+			case "user_password_change":
+				require_once("ajax/user.ajax.php");
+				echo UserAjax::password_change($_POST['current_password'], 
+						$_POST['new_password_1'], 
+						$_POST['new_password_2']
+						);
+			break;
+			
+			// Batch
+			
+			case "batch_list_batches":
+				require_once("ajax/batch.ajax.php");
+				echo BatchAjax::list_batches(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
+			break;
+			
+			case "batch_count_batches":
+				require_once("ajax/batch.ajax.php");
+				echo BatchAjax::count_batches($_POST['argument_array']);
+			break;
+			
+			case "batch_start_test":
+				require_once("ajax/batch.ajax.php");
+				echo BatchAjax::start_test();
+			break;
+			
+			case "batch_start_test_handler":
+				require_once("ajax/batch.ajax.php");
+				echo BatchAjax::start_test_handler($_POST['number_of_batches']);
 			break;
 			
 			
@@ -470,15 +558,16 @@ class BaseRequest
 					
 					switch($_GET['run']):
 						
-						// Search
-						/**
-						 * @todo errors, exceptions
-						 */
 						case("search"):
-							require_once("common.request.php");
-							CommonRequest::search_dialog();
+							require_once("io/search.io.php");
+							SearchIO::search($_GET['dialog']);
 						break;
 								
+						case ("header_search"):
+							require_once("io/search.io.php");
+							SearchIO::header_search($_POST['string'], $_POST['current_module']);
+						break;
+						
 						default:
 							require_once("io/search.io.php");
 							SearchIO::main();

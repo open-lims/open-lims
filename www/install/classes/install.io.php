@@ -3,7 +3,7 @@
  * @package install
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -105,7 +105,7 @@ class InstallIO
 						$install = true;
 					}
 					
-					$module_display_array[$counter][av] = $version;
+					$module_display_array[$counter]['av'] = $version;
 				}
 			}
 			
@@ -151,7 +151,8 @@ class InstallIO
 			$session = new Session(null, true);
 		}
 		
-		if ($session->is_valid())
+		$session_valid_array = $session->is_valid();
+		if ($session_valid_array[0] === true)
 		{
 			self::install();
 		}

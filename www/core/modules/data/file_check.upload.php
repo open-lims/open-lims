@@ -3,7 +3,7 @@
  * @package data
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -64,17 +64,16 @@
 	
 	$user = new User(1);
 
-	if ($_GET[session_id] and $_GET[unique_id])
+	if ($_GET['session_id'] and $_GET['unique_id'])
 	{
-		$session = new Session($_GET[session_id]);
-		$file_upload_status = $session->read_value("FILE_UPLOAD_".$_GET[unique_id]);
+		$session = new Session($_GET['session_id']);
+		$file_upload_status = $session->read_value("FILE_UPLOAD_".$_GET['unique_id']);
 		
 	
 		if (is_array($file_upload_status) and count($file_upload_status) > 0)
 		{
-			if ($session->is_value("FILE_UPLOAD_FINISHED_".$_GET[unique_id]) == true)
+			if ($session->is_value("FILE_UPLOAD_FINISHED_".$_GET['unique_id']) == true)
 			{
-				// $session->write_value("FILE_UPLOAD_FINISHED_".$_GET[unique_id], false, true);
 				echo "ALL_OK";
 				echo json_encode($file_upload_status);
 			}

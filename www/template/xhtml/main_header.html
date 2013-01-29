@@ -1,43 +1,61 @@
 <script type="text/javascript">
-/*<![CDATA[*/
+/*<![CDATA[*/          
 $(document).ready(function()
 {
 	var get_array = getQueryParams(document.location.search);
-		
-	$('#BaseLogout').click(function()
+	
+	$("#BaseLogoutQuestion").dialog(
 	{
-		$.blockUI({ message: $('#BaseLogoutQuestion'), css: { width: '275px' } }); 
-		$('.blockUI.blockMsg').center();
+		autoOpen: false,
+		height: 180,
+		width: 380,
+		modal: true,
+		draggable: false,
+		resizable: false,
+		closeOnEscape: false,
+		buttons: 
+		{
+			"[[LANG:BaseGlobalButtonYes]]": function() 
+			{
+				$(this).parent().find("button").attr("disabled", true);
+				$(this).parent().find('.ui-dialog-titlebar-close').hide();
+
+				$("#BaseLogoutQuestion").empty();
+				$("#BaseLogoutQuestion").html("<img src='images/animations/loading_circle_small.gif' alt='' /> [[LANG:BaseMainHeaderLogoutWindowWait]]");
+				
+				$.ajax(
+				{
+					type: "GET",
+					url: "ajax.php",
+					data: "nav=base&run=logout&session_id="+get_array['session_id']+"",
+					success: function(data)
+					{
+						if (data == "1")
+						{
+							window.setTimeout('window.location = "index.php"',1500);
+						}
+					}
+				});
+			},
+			"[[LANG:BaseGlobalButtonNo]]": function()
+			{
+			 	$( this ).dialog( "close" );
+			}
+		}
 	});
 	
-	$('#yes').click(function()
-	{ 
-		$("#BaseLogoutQuestion").empty();
-		$("#BaseLogoutQuestion").html("<img src='images/animations/loading_circle_small.gif' alt='' /> Please wait while logout.");
-		
-		$.ajax(
-		{
-			type: "GET",
-			url: "ajax.php",
-			data: "nav=base&run=logout&session_id="+get_array['session_id']+"",
-			success: function(data)
-			{
-				if (data == "1")
-				{
-					window.setTimeout('window.location = "index.php"',1500);
-				}
-			}
-		});
-    }); 
-
-    $('#no').click(function()
-    { 
-        $.unblockUI(); 
-        return false; 
-    }); 
+	$('#BaseLogout').click(function()
+	{
+		$("#BaseLogoutQuestion").dialog("open");
+	});
 });
 /*]]>*/
 </script>
+
+<div id="BaseLogoutQuestion" style="display:none; cursor: default"> 
+[[LANG:BaseMainHeaderLogoutWindowText]]
+</div> 
+
 <div id='Header'>&nbsp;
 	<div id='HeaderLogo'><img src='../images/logo.png' alt='Logo' /></div>
 	<div id='HeaderRight'>
@@ -54,15 +72,21 @@ $(document).ready(function()
 			
 			<!-- ENDIF -->
 		
-			<li><a href='index.php?[[MY_PROFILE_PARAMS]]'>My Profile</a></li>
+			<li><a href='index.php?[[MY_PROFILE_PARAMS]]'>[[LANG:BaseMainHeaderMyProfile]]</a></li>
 			<li>|</li>
-			<li><a href='index.php?[[SYSTEM_MESSAGES_PARAMS]]'>System Messages</a></li>
+			<li><a href='index.php?[[SYSTEM_MESSAGES_PARAMS]]'>[[LANG:BaseMainHeaderSystemMessages]]</a></li>
 			<li>|</li>
-			<li><a href='index.php?[[ABOUT_PARAMS]]'>About</a></li>
+			<li><a href='index.php?[[ABOUT_PARAMS]]'>[[LANG:BaseMainHeaderAbout]]</a></li>
 			<li>|</li>
-			<li><a href='#' id='BaseLogout'>Logout ([[USERNAME]])</a></li>
+			<li><a href='#' id='BaseLogout'>[[LANG:BaseMainHeaderLogout]]  ([[USERNAME]])</a></li>
 		</ul>
-		<div id='HeaderSearch'><input type='text' /><button type='submit'></button></div>
+		<div id='HeaderSearch'>
+			<form action='index.php?[[HEADER_SEARCH_PARAMS]]' method='post' >
+				<input type='text' name='string' />
+				<button type='submit'></button>
+				<input type='hidden' name='current_module' value='[[HEADER_SEARCH_CURRENT_MODULE]]' />
+			</form>
+		</div>
 	</div>
 	<div id='HeaderClear'></div>
 </div>

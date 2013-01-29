@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -32,8 +32,8 @@ class AdminBaseServiceIO
 		$list = new List_IO("BaseAdminServiceHome" ,"ajax.php?nav=base", "admin_list_service", "admin_count_service", "0", "BaseAdminServiceHome");
 		
 		$list->add_column("", "icon", false, "16px");
-		$list->add_column("Name", "name", true, null);
-		$list->add_column("Status", "status", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"), "name", true, null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnStatus", "general"), "status", true, null);
 		$list->add_column("", "start", false, "16px");
 		$list->add_column("", "stop", false, "16px");
 		
@@ -46,7 +46,7 @@ class AdminBaseServiceIO
 	
 	public static function handler()
 	{
-		switch($_GET[action]):		
+		switch($_GET['action']):		
 			default:
 				self::home();
 			break;

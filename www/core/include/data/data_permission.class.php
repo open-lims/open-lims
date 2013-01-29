@@ -3,7 +3,7 @@
  * @package data
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -207,7 +207,7 @@ class DataPermission implements DataPermissionInterface
 		
 		if ($this->type == "file")
 		{			
-			if ($array[automatic] == "1")
+			if ($array['automatic'] == "1")
 			{
  				$return_value = $this->file->set_automatic(true);
  			}
@@ -223,7 +223,7 @@ class DataPermission implements DataPermissionInterface
 		}
 		elseif($this->type == "value")
 		{
-			if ($array[automatic] == "1")
+			if ($array['automatic'] == "1")
 			{
  				$return_value = $this->value->set_automatic(true);
  			}
@@ -239,7 +239,7 @@ class DataPermission implements DataPermissionInterface
 		}
 		elseif ($this->type == "folder")
 		{
- 			if ($array[automatic] == "1")
+ 			if ($array['automatic'] == "1")
  			{
  				$return_value = $this->folder->set_automatic(true);
  			}

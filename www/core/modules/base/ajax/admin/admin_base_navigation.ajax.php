@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -66,60 +66,60 @@ class AdminBaseNavigationAjax
 				foreach($list_array as $key => $value)
 				{	
 					$paramquery = $_GET;
-					$paramquery[id] = $list_array[$key][id];
-					$paramquery[action] = "hide";
-					unset($paramquery[sortvalue]);
-					unset($paramquery[sortmethod]);
-					unset($paramquery[nextpage]);
+					$paramquery['id'] = $list_array[$key]['id'];
+					$paramquery['action'] = "hide";
+					unset($paramquery['sortvalue']);
+					unset($paramquery['sortmethod']);
+					unset($paramquery['nextpage']);
 					$params = http_build_query($paramquery, '', '&#38;');
 	
-					$list_array[$key][hide][link] = $params;
+					$list_array[$key]['hide']['link'] = $params;
 					
-					$list_array[$key][name] = Language::get_message($list_array[$key][name], "navigation");
+					$list_array[$key]['name'] = Language::get_message($list_array[$key]['name'], "navigation");
 					
-					if ($list_array[$key][hidden] == 't')
+					if ($list_array[$key]['hidden'] == 't')
 					{
-						$list_array[$key][hide][content] = "<img src='images/icons/grey_point.png' alt='hide' style='border: 0;' />";
+						$list_array[$key]['hide']['content'] = "<img src='images/icons/grey_point.png' alt='hide' style='border: 0;' />";
 					}
 					else
 					{
-						$list_array[$key][hide][content] = "<img src='images/icons/green_point.png' alt='hide' style='border: 0;' />";
+						$list_array[$key]['hide']['content'] = "<img src='images/icons/green_point.png' alt='hide' style='border: 0;' />";
 					}
 					
-					if ($list_array[$key][position] != 1)
+					if ($list_array[$key]['position'] != 1)
 					{
 						$paramquery = $_GET;
-						$paramquery[id] = $list_array[$key][id];
-						$paramquery[action] = "upwards";
-						unset($paramquery[sortvalue]);
-						unset($paramquery[sortmethod]);
-						unset($paramquery[nextpage]);
+						$paramquery['id'] = $list_array[$key]['id'];
+						$paramquery['action'] = "upwards";
+						unset($paramquery['sortvalue']);
+						unset($paramquery['sortmethod']);
+						unset($paramquery['nextpage']);
 						$params = http_build_query($paramquery, '', '&#38;');
 		
-						$list_array[$key][uw][link] = $params;
-						$list_array[$key][uw][content] = "<img src='images/icons/upward.png' alt='uw' style='border: 0;' />";
+						$list_array[$key]['uw']['link'] = $params;
+						$list_array[$key]['uw']['content'] = "<img src='images/icons/upward.png' alt='uw' style='border: 0;' />";
 					}
 					else
 					{
-						$list_array[$key][uw] = "<img src='images/icons/upward_na.png' alt='uw' style='border: 0;' />";
+						$list_array[$key]['uw'] = "<img src='images/icons/upward_na.png' alt='uw' style='border: 0;' />";
 					}
 					
-					if ($list_array[$key][position] != ModuleNavigation::get_highest_position())
+					if ($list_array[$key]['position'] != ModuleNavigation::get_highest_position())
 					{
 						$paramquery = $_GET;
-						$paramquery[id] = $list_array[$key][id];
-						$paramquery[action] = "downwards";
-						unset($paramquery[sortvalue]);
-						unset($paramquery[sortmethod]);
-						unset($paramquery[nextpage]);
+						$paramquery['id'] = $list_array[$key]['id'];
+						$paramquery['action'] = "downwards";
+						unset($paramquery['sortvalue']);
+						unset($paramquery['sortmethod']);
+						unset($paramquery['nextpage']);
 						$params = http_build_query($paramquery, '', '&#38;');
 		
-						$list_array[$key][dw][link] = $params;
-						$list_array[$key][dw][content] = "<img src='images/icons/downward.png' alt='dw' style='border: 0;' />";
+						$list_array[$key]['dw']['link'] = $params;
+						$list_array[$key]['dw']['content'] = "<img src='images/icons/downward.png' alt='dw' style='border: 0;' />";
 					}
 					else
 					{
-						$list_array[$key][dw] = "<img src='images/icons/downward_na.png' alt='dw' style='border: 0;' />";
+						$list_array[$key]['dw'] = "<img src='images/icons/downward_na.png' alt='dw' style='border: 0;' />";
 					}
 				}
 			}

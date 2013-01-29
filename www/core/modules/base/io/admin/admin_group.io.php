@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -32,15 +32,15 @@ class AdminGroupIO
 		$list = new List_IO("GroupAdministration", "ajax.php?nav=base", "admin_list_groups", "admin_count_groups", null, "GroupAdministration");
 		
 		$list->add_column("","symbol",false,"16px");
-		$list->add_column("Name","name",true,null);
-		$list->add_column("Users","users",false,null);
-		$list->add_column("D","delete",false,"16px");
+		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"name",true,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnUsers", "general"),"users",false,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnD", "general"),"delete",false,"16px");
 		
 		$template = new HTMLTemplate("base/user/admin/group/list.html");
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "add";
-		unset($paramquery[nextpage]);
+		$paramquery['action'] = "add";
+		unset($paramquery['nextpage']);
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("add_params", $params);
@@ -52,13 +52,13 @@ class AdminGroupIO
 	
 	public static function create()
 	{
-		if ($_GET[nextpage] == 1)
+		if ($_GET['nextpage'] == 1)
 		{
 			$page_1_passed = true;
 			
-			if ($_POST[name])
+			if ($_POST['name'])
 			{
-				if (Group::exist_name($_POST[name]) == true)
+				if (Group::exist_name($_POST['name']) == true)
 				{
 					$page_1_passed = false;
 					$error = "This groupname already exists";
@@ -81,7 +81,7 @@ class AdminGroupIO
 			$template = new HTMLTemplate("base/user/admin/group/add.html");
 			
 			$paramquery = $_GET;
-			$paramquery[nextpage] = "1";
+			$paramquery['nextpage'] = "1";
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			$template->set_var("params",$params);
@@ -95,9 +95,9 @@ class AdminGroupIO
 				$template->set_var("error", "");	
 			}
 						
-			if ($_POST[name])
+			if ($_POST['name'])
 			{
-				$template->set_var("name", $_POST[name]);
+				$template->set_var("name", $_POST['name']);
 			}
 			else
 			{
@@ -109,19 +109,19 @@ class AdminGroupIO
 		else
 		{
 			$paramquery = $_GET;
-			unset($paramquery[nextpage]);
-			unset($paramquery[action]);
+			unset($paramquery['nextpage']);
+			unset($paramquery['action']);
 			$params = http_build_query($paramquery);
 			
 				
-			$group = new Group($_POST[group]);
+			$group = new Group($_POST['group']);
 			
 			$paramquery = $_GET;
-			unset($paramquery[action]);
-			unset($paramquery[nextpage]);
+			unset($paramquery['action']);
+			unset($paramquery['nextpage']);
 			$params = http_build_query($paramquery,'','&#38;');
 			
-			if ($group->create($_POST[name]))
+			if ($group->create($_POST['name']))
 			{
 				Common_IO::step_proceed($params, "Add Group", "Operation Successful", null);
 			}
@@ -137,25 +137,25 @@ class AdminGroupIO
 	 */
 	public static function delete()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$group_id = $_GET[id];
+			$group_id = $_GET['id'];
 			$group = new Group($group_id);
 			
-			if ($_GET[sure] != "true")
+			if ($_GET['sure'] != "true")
 			{
 				$template = new HTMLTemplate("base/user/admin/group/delete.html");
 				
 				$paramquery = $_GET;
-				$paramquery[sure] = "true";
+				$paramquery['sure'] = "true";
 				$params = http_build_query($paramquery);
 				
 				$template->set_var("yes_params", $params);
 						
 				$paramquery = $_GET;
-				unset($paramquery[sure]);
-				unset($paramquery[action]);
-				unset($paramquery[id]);
+				unset($paramquery['sure']);
+				unset($paramquery['action']);
+				unset($paramquery['id']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("no_params", $params);
@@ -165,9 +165,9 @@ class AdminGroupIO
 			else
 			{
 				$paramquery = $_GET;
-				unset($paramquery[sure]);
-				unset($paramquery[action]);
-				unset($paramquery[id]);
+				unset($paramquery['sure']);
+				unset($paramquery['action']);
+				unset($paramquery['id']);
 				$params = http_build_query($paramquery,'','&#38;');
 								
 				if ($group->delete())
@@ -194,7 +194,7 @@ class AdminGroupIO
 	 */
 	public static function detail()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
 			$tab_io = new Tab_IO();
 	
@@ -220,10 +220,10 @@ class AdminGroupIO
 				{
 					$paramquery = $_GET;
 					$paramquery['tab']			= "dialog";
-					$paramquery['sub_dialog']	= $value[internal_name];
+					$paramquery['sub_dialog']	= $value['internal_name'];
 					$params 					= http_build_query($paramquery,'','&#38;');
 					
-					$tab_io->add($value[internal_name], $value[display_name], $params, false);
+					$tab_io->add($value['internal_name'], Language::get_message($value['language_address'], "dialog"), $params, false);
 				}
 			}
 			
@@ -263,7 +263,7 @@ class AdminGroupIO
 						{
 							if (method_exists($module_dialog['class'], $module_dialog['method']))
 							{
-								$module_dialog['class']::$module_dialog[method]($_GET['id']);
+								$module_dialog['class']::$module_dialog['method']($_GET['id']);
 							}
 							else
 							{
@@ -295,7 +295,7 @@ class AdminGroupIO
 
 	private static function detail_home()
 	{
-		$group_id = $_GET[id];
+		$group_id = $_GET['id'];
 		
 		$template = new HTMLTemplate("base/user/admin/group/detail.html");
 		
@@ -311,7 +311,7 @@ class AdminGroupIO
 		}
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "rename";
+		$paramquery['action'] = "rename";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("name", $group->get_name());
@@ -325,7 +325,7 @@ class AdminGroupIO
 	 */
 	private static function detail_users()
 	{
-		$group_id = $_GET[id];
+		$group_id = $_GET['id'];
 		$group = new Group($group_id);
 		
 		$template = new HTMLTemplate("base/user/admin/group/detail_user.html");
@@ -333,7 +333,7 @@ class AdminGroupIO
 		$template->set_var("name", $group->get_name());
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "add_user";
+		$paramquery['action'] = "add_user";
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("add_user_params", $params);	
@@ -351,13 +351,13 @@ class AdminGroupIO
 				$user = new User($value);
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "delete_user";
-				$paramquery[key] = $value;
+				$paramquery['action'] = "delete_user";
+				$paramquery['key'] = $value;
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				$user_content_array[$counter][username] = $user->get_username();
-				$user_content_array[$counter][fullname] = $user->get_full_name(false);
-				$user_content_array[$counter][delete_params] = $params;
+				$user_content_array[$counter]['username'] = $user->get_username();
+				$user_content_array[$counter]['fullname'] = $user->get_full_name(false);
+				$user_content_array[$counter]['delete_params'] = $params;
 				
 				$counter++;
 			}
@@ -378,14 +378,14 @@ class AdminGroupIO
 	 */
 	public static function add_user()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{			
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
-				if (is_numeric($_POST[user]))
+				if (is_numeric($_POST['user']))
 				{
-					$group = new Group($_GET[id]);
-					if ($group->is_user_in_group($_POST[user]) == true)
+					$group = new Group($_GET['id']);
+					if ($group->is_user_in_group($_POST['user']) == true)
 					{
 						$page_1_passed = false;
 						$error = "This user is already member of the group.";
@@ -401,7 +401,7 @@ class AdminGroupIO
 					$error = "You must select an user.";
 				}
 			}
-			elseif($_GET[nextpage] > 1)
+			elseif($_GET['nextpage'] > 1)
 			{
 				$page_1_passed = true;
 			}
@@ -416,7 +416,7 @@ class AdminGroupIO
 				$template = new HTMLTemplate("base/user/admin/group/add_user.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
@@ -431,8 +431,8 @@ class AdminGroupIO
 				foreach($user_array as $key => $value)
 				{
 					$user = new User($value);
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $user->get_username()." (".$user->get_full_name(false).")";
+					$result[$counter]['value'] = $value;
+					$result[$counter]['content'] = $user->get_username()." (".$user->get_full_name(false).")";
 					$counter++;
 				}
 				
@@ -442,14 +442,14 @@ class AdminGroupIO
 			}
 			else
 			{
-				$group = new Group($_GET[id]);
+				$group = new Group($_GET['id']);
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "detail";
-				unset($paramquery[nextpage]);
+				$paramquery['action'] = "detail";
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				if ($group->create_user_in_group($_POST[user]))
+				if ($group->create_user_in_group($_POST['user']))
 				{
 					Common_IO::step_proceed($params, "Add User", "Operation Successful", null);
 				}
@@ -471,23 +471,23 @@ class AdminGroupIO
 	 */
 	public static function delete_user()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			if ($_GET[key])
+			if ($_GET['key'])
 			{
-				if ($_GET[sure] != "true")
+				if ($_GET['sure'] != "true")
 				{
 					$template = new HTMLTemplate("base/user/admin/group/delete_user.html");
 					
 					$paramquery = $_GET;
-					$paramquery[sure] = "true";
+					$paramquery['sure'] = "true";
 					$params = http_build_query($paramquery);
 					
 					$template->set_var("yes_params", $params);
 							
 					$paramquery = $_GET;
-					unset($paramquery[key]);
-					$paramquery[action] = "detail";
+					unset($paramquery['key']);
+					$paramquery['action'] = "detail";
 					$params = http_build_query($paramquery);
 					
 					$template->set_var("no_params", $params);
@@ -497,14 +497,14 @@ class AdminGroupIO
 				else
 				{
 					$paramquery = $_GET;
-					unset($paramquery[key]);
-					unset($paramquery[sure]);
-					$paramquery[action] = "detail";
+					unset($paramquery['key']);
+					unset($paramquery['sure']);
+					$paramquery['action'] = "detail";
 					$params = http_build_query($paramquery);
 					
-					$group = new Group($_GET[id]);		
+					$group = new Group($_GET['id']);		
 							
-					if ($group->delete_user_from_group($_GET[key]))
+					if ($group->delete_user_from_group($_GET['key']))
 					{							
 						Common_IO::step_proceed($params, "Delete User", "Operation Successful" ,null);
 					}
@@ -530,14 +530,14 @@ class AdminGroupIO
 	 */
 	public static function add_organisation_unit()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{		
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
-				if (is_numeric($_POST[ou]))
+				if (is_numeric($_POST['ou']))
 				{
-					$organisation_unit = new OrganisationUnit($_POST[ou]);
-					if ($organisation_unit->is_group_in_organisation_unit($_GET[id]) == true)
+					$organisation_unit = new OrganisationUnit($_POST['ou']);
+					if ($organisation_unit->is_group_in_organisation_unit($_GET['id']) == true)
 					{
 						$page_1_passed = false;
 						$error = "This organisation-unit is already member of the group.";
@@ -553,7 +553,7 @@ class AdminGroupIO
 					$error = "You must select an organisation unit.";
 				}
 			}
-			elseif($_GET[nextpage] > 1)
+			elseif($_GET['nextpage'] > 1)
 			{
 				$page_1_passed = true;
 			}
@@ -568,7 +568,7 @@ class AdminGroupIO
 				$template = new HTMLTemplate("base/user/admin/group/add_organisation_unit.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
@@ -583,8 +583,8 @@ class AdminGroupIO
 				foreach($organisation_unit_array as $key => $value)
 				{
 					$organisation_unit = new OrganisationUnit($value);
-					$result[$counter][value] = $value;
-					$result[$counter][content] = $organisation_unit->get_name();
+					$result[$counter]['value'] = $value;
+					$result[$counter]['content'] = $organisation_unit->get_name();
 					$counter++;
 				}
 				
@@ -594,14 +594,14 @@ class AdminGroupIO
 			}
 			else
 			{
-				$organisation_unit = new OrganisationUnit($_POST[ou]);
+				$organisation_unit = new OrganisationUnit($_POST['ou']);
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "detail";
-				unset($paramquery[nextpage]);
+				$paramquery['action'] = "detail";
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				if ($organisation_unit->create_group_in_organisation_unit($_GET[id]))
+				if ($organisation_unit->create_group_in_organisation_unit($_GET['id']))
 				{
 					Common_IO::step_proceed($params, "Add Organisation Unit", "Operation Successful", null);
 				}
@@ -622,21 +622,21 @@ class AdminGroupIO
 	 */
 	public static function delete_organisation_unit()
 	{
-		if ($_GET[id] and $_GET[key])
+		if ($_GET['id'] and $_GET['key'])
 		{
-			if ($_GET[sure] != "true")
+			if ($_GET['sure'] != "true")
 			{
 				$template = new HTMLTemplate("base/user/admin/group/delete_organisation_unit.html");
 				
 				$paramquery = $_GET;
-				$paramquery[sure] = "true";
+				$paramquery['sure'] = "true";
 				$params = http_build_query($paramquery);
 				
 				$template->set_var("yes_params", $params);
 						
 				$paramquery = $_GET;
-				unset($paramquery[key]);
-				$paramquery[action] = "detail";
+				unset($paramquery['key']);
+				$paramquery['action'] = "detail";
 				$params = http_build_query($paramquery);
 				
 				$template->set_var("no_params", $params);
@@ -646,14 +646,14 @@ class AdminGroupIO
 			else
 			{
 				$paramquery = $_GET;
-				unset($paramquery[key]);
-				unset($paramquery[sure]);
-				$paramquery[action] = "detail";
+				unset($paramquery['key']);
+				unset($paramquery['sure']);
+				$paramquery['action'] = "detail";
 				$params = http_build_query($paramquery);
 				
-				$organisation_unit = new OrganisationUnit($_GET[key]);	
+				$organisation_unit = new OrganisationUnit($_GET['key']);	
 						
-				if ($organisation_unit->delete_group_from_organisation_unit($_GET[id]))
+				if ($organisation_unit->delete_group_from_organisation_unit($_GET['id']))
 				{							
 					Common_IO::step_proceed($params, "Delete Organisation Unit", "Operation Successful" ,null);
 				}
@@ -674,15 +674,15 @@ class AdminGroupIO
 	 */
 	public static function rename()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$group = new Group($_GET[id]);
+			$group = new Group($_GET['id']);
 						
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
-				if ($_POST[name])
+				if ($_POST['name'])
 				{
-					if (Group::exist_name($_POST[name]) == true)
+					if (Group::exist_name($_POST['name']) == true)
 					{
 						$page_1_passed = false;
 						$error = "This name is already allocated.";
@@ -698,7 +698,7 @@ class AdminGroupIO
 					$error = "You must enter a name.";
 				}
 			}
-			elseif($_GET[nextpage] > 1)
+			elseif($_GET['nextpage'] > 1)
 			{
 				$page_1_passed = true;
 			}
@@ -713,15 +713,15 @@ class AdminGroupIO
 				$template = new HTMLTemplate("base/user/admin/group/rename.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
 				$template->set_var("error",$error);
 				
-				if ($_POST[username])
+				if ($_POST['username'])
 				{
-					$template->set_var("name", $_POST[name]);
+					$template->set_var("name", $_POST['name']);
 				}
 				else
 				{
@@ -732,11 +732,11 @@ class AdminGroupIO
 			else
 			{
 				$paramquery = $_GET;
-				$paramquery[action] = "detail";
-				unset($paramquery[nextpage]);
+				$paramquery['action'] = "detail";
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				if ($group->set_name($_POST[name]))
+				if ($group->set_name($_POST['name']))
 				{
 					Common_IO::step_proceed($params, "Rename User", "Operation Successful", null);
 				}
@@ -754,7 +754,7 @@ class AdminGroupIO
 	
 	public static function handler()
 	{		
-		switch($_GET[action]):
+		switch($_GET['action']):
 			case "add":
 				self::create();
 			break;
@@ -797,13 +797,13 @@ class AdminGroupIO
 	{
 		$template = new HTMLTemplate("base/user/admin/group/home_dialog.html");
 	
-		$paramquery 			= array();
-		$paramquery[username] 	= $_GET[username];
-		$paramquery[session_id] = $_GET[session_id];
-		$paramquery[nav] 		= $_GET[nav];
-		$paramquery[run] 		= "organisation";
-		$paramquery[dialog] 	= "groups";
-		$paramquery[action] 	= "add";
+		$paramquery 				= array();
+		$paramquery['username'] 	= $_GET['username'];
+		$paramquery['session_id'] 	= $_GET['session_id'];
+		$paramquery['nav'] 			= $_GET['nav'];
+		$paramquery['run'] 			= "organisation";
+		$paramquery['dialog'] 		= "groups";
+		$paramquery['action'] 		= "add";
 		$params = http_build_query($paramquery, '', '&#38;');
 		
 		$template->set_var("group_add_params", $params);

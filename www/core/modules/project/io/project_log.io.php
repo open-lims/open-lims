@@ -3,7 +3,7 @@
  * @package project
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -35,7 +35,7 @@ class ProjectLogIO
 	{
 		global $project_security;
 		
-		if ($_GET[project_id])
+		if ($_GET['project_id'])
 		{
 			if ($project_security->is_access(1, false) == true)
 			{

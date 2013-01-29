@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -674,7 +674,7 @@ class SystemHandler implements SystemHandlerInterface
 										foreach($dialog as $dialog_key => $dialog_value)
 										{
 											$base_module_dialog = new BaseModuleDialog_Access(null);
-											if ($base_module_dialog->create($register_key, $dialog_value[type], $dialog_value[class_path], $dialog_value['class'], $dialog_value[method], $dialog_value[internal_name], $dialog_value[display_name], $dialog_value[weight]) == null)
+											if ($base_module_dialog->create($register_key, $dialog_value['type'], $dialog_value['class_path'], $dialog_value['class'], $dialog_value['method'], $dialog_value['internal_name'], $dialog_value['language_address'], $dialog_value['weight']) == null)
 											{
 												throw new BaseModuleDialogCreationFailedException();
 											}
@@ -705,7 +705,7 @@ class SystemHandler implements SystemHandlerInterface
 								$module_link_checksum = BaseModuleFile_Access::get_checksum_by_module_id_and_name($register_key, "module_link.php");							
 								if ($module_link_checksum != md5_file($module_link_file))
 								{										
-									require($module_link);
+									require($module_link_file);
 
 									if (BaseModuleLink_Access::delete_by_module_id($register_key) == false)
 									{
@@ -718,7 +718,7 @@ class SystemHandler implements SystemHandlerInterface
 										foreach($link as $link_key => $link_value)
 										{
 											$base_module_link = new BaseModuleLink_Access(null);
-											if ($base_module_link->create($register_key, $link_value[type], serialize($link_value['array']), $link_value[file], $link_value[weight]) == null)
+											if ($base_module_link->create($register_key, $link_value['type'], serialize($link_value['array']), $link_value['file'], $link_value['weight']) == null)
 											{
 												throw new ModuleLinkCreationFailedException();
 											}
@@ -729,7 +729,7 @@ class SystemHandler implements SystemHandlerInterface
 									if ($module_link_id != null)
 									{
 										$base_module_file = new BaseModuleFile_Access($module_link_id);
-										$base_module_file->set_checksum(md5_file($module_link));
+										$base_module_file->set_checksum(md5_file($module_link_file));
 									}
 									else
 									{
@@ -796,7 +796,7 @@ class SystemHandler implements SystemHandlerInterface
 									foreach($dialog as $dialog_key => $dialog_value)
 									{
 										$base_module_dialog = new BaseModuleDialog_Access(null);
-										if ($base_module_dialog->create($base_module_id, $dialog_value[type], $dialog_value[class_path], $dialog_value['class'], $dialog_value[method], $dialog_value[internal_name], $dialog_value[display_name], $dialog_value[weight]) == null)
+										if ($base_module_dialog->create($base_module_id, $dialog_value['type'], $dialog_value['class_path'], $dialog_value['class'], $dialog_value['method'], $dialog_value['language_address'], $dialog_value['language_address'], $dialog_value['weight']) == null)
 										{
 											throw new BaseModuleDialogCreationFailedException();
 										}
@@ -822,7 +822,7 @@ class SystemHandler implements SystemHandlerInterface
 									foreach($link as $link_key => $link_value)
 									{
 										$base_module_link= new BaseModuleLink_Access(null);
-										if ($base_module_link->create($base_module_id, $link_value[type], serialize($link_value['array']), $link_value[file], $link_value[weight]) == null)
+										if ($base_module_link->create($base_module_id, $link_value['type'], serialize($link_value['array']), $link_value['file'], $link_value['weight']) == null)
 										{
 											throw new ModuleLinkCreationFailedException();
 										}
@@ -959,7 +959,7 @@ class SystemHandler implements SystemHandlerInterface
 	/**
 	 * @see SystemHandlerInterface::get_module_controller()
 	 * @param string $nav
-	 * @return arráy
+	 * @return arrï¿½y
 	 * @throws BaseModuleControllerNotFoundException
 	 * @throws BaseModuleNotFoundException
 	 * @throws BaseModuleMissingException

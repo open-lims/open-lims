@@ -1,0 +1,40 @@
+<!-- CONTAINER BEGIN ("Project Structure") -->
+
+<!-- FOREACH BEGIN ([[STRUCTURE]]) -->
+
+	<div style='padding-left: [[STRUCTURE:PADDING]]em' />
+		<table>
+			<tr>
+				<td>[[LANG:ProjectStructureName]]:</td>
+				<td><a href='index.php?[[STRUCTURE:LINK]]'>[[STRUCTURE:NAME]]</a></td>
+			</tr>
+			<tr>
+				<td>[[LANG:ProjectStructureStatus]]:</td>
+				<td>[[STRUCTURE:STATUS]]</td>
+			</tr>
+			<tr>
+				<td>[[LANG:ProjectStructureTemplate]]:</td>
+				<td>[[STRUCTURE:TEMPLATE]]</td>
+			</tr>
+			<tr>
+				<td>[[LANG:ProjectStructureOwner]]:</td>
+				<td>[[STRUCTURE:OWNER]]</td>
+			</tr>
+			
+			<!-- IF ([[STRUCTURE:PADDING]] == 0) -->
+			
+			<tr>
+				<td>[[LANG:ProjectStructureInvolvedUsers]]:</td>
+				<td>[[STRUCTURE:INVOLVED]]</td>
+			</tr>
+			
+			<!-- ENDIF -->
+			
+		</table>
+		<div class='button_right'><img src='images/icons/add_child.png' alt='' /> <a href='index.php?[[STRUCTURE:ADD_SUBPROJECT]]'>[[LANG:ProjectStructureAddSubproject]]</a></div>	
+	</div>
+	<div class='horizontal_line'></div>
+
+<!-- FOREACH END -->
+
+<!-- CONTAINER END () -->

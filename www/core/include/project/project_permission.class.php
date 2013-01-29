@@ -3,7 +3,7 @@
  * @package project
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -111,49 +111,49 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 					case (0):
 						if ($permission_string{$address})
 						{
-							$permission_array[read] = true;
+							$permission_array['read'] = true;
 						}
 					break;
 					
 					case(1):
 						if ($permission_string{$address})
 						{
-							$permission_array[set_readable] = true;
+							$permission_array['set_readable'] = true;
 						}
 					break;
 					
 					case(2):
 						if ($permission_string{$address})
 						{
-							$permission_array[write] = true;
+							$permission_array['write'] = true;
 						}
 					break;
 					
 					case(3):
 						if ($permission_string{$address})
 						{
-							$permission_array[set_writeable] = true;
+							$permission_array['set_writeable'] = true;
 						}
 					break;
 					
 					case(4):
 						if ($permission_string{$address})
 						{
-							$permission_array[reactivate] = true;
+							$permission_array['reactivate'] = true;
 						}
 					break;
 					
 					case(5):
 						if ($permission_string{$address})
 						{
-							$permission_array[delete] = true;
+							$permission_array['delete'] = true;
 						}
 					break;
 					
 					case(6):
 						if ($permission_string{$address})
 						{
-							$permission_array[set_permissions] = true;
+							$permission_array['set_permissions'] = true;
 						}
 					break;
 					

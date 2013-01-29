@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -35,7 +35,7 @@ class Common_IO
 	}
 	
 	/**
-	 * @todo überarbeiten
+	 * @todo ï¿½berarbeiten
 	 * @param string $title
 	 * @param string $class
 	 * @return string
@@ -71,18 +71,18 @@ class Common_IO
 	public static function page_bar($page, $max_page, $paramquery)
 	{
 			$previous_paramquery = $paramquery;
-			$previous_paramquery[page] = $page-1;
-			unset($previous_paramquery[show]);
+			$previous_paramquery['page'] = $page-1;
+			unset($previous_paramquery['show']);
 			$prevLink = http_build_query($previous_paramquery,'','&#38;');
 		
 			$next_paramquery = $paramquery;
-			$next_paramquery[page] = $page+1;
-			unset($next_paramquery[show]);
+			$next_paramquery['page'] = $page+1;
+			unset($next_paramquery['show']);
 			$nextLink = http_build_query($next_paramquery,'','&#38;');
 		
 			$return = "<div class='ResultNextPageBar'>";
 
-			$return .= "<table style='display: inline;'><tr><td><span class='smallTextBlack'>Page ".$page." of ".$max_page."</span></td>";
+			$return .= "<table style='display: inline;'><tr><td><span class='smallTextBlack'>".Language::get_message("BaseGeneralListGeneralPage", "general")." ".$page." ".Language::get_message("BaseGeneralListGeneralOf", "general")." ".$max_page."</span></td>";
 
 			// Previous
 			if ($page == 1) {
@@ -97,7 +97,7 @@ class Common_IO
 				for ($i=1;$i<=$max_page;$i++) {
 					
 					$page_paramquery = $paramquery;
-					$page_paramquery[page] = $i;
+					$page_paramquery['page'] = $i;
 					$pageLink = http_build_query($page_paramquery,'','&#38;');
 					
 					$display = false;
@@ -174,29 +174,34 @@ class Common_IO
 	 * @param integer $pages
 	 * @return string
 	 */
-	public static function results_on_page($results, $pages) {
-		
-		if ($results > 1) {
-
-			if ($pages > 1) {
-				return $results." Results on ".$pages." Pages";
-			}else{
-				return $results." Results on ".$pages." Page";
+	public static function results_on_page($results, $pages)
+	{
+		if ($results > 1)
+		{
+			if ($pages > 1)
+			{
+				return $results." ".Language::get_message("BaseGeneralListGeneralResults", "general")." ".$pages." ".Language::get_message("BaseGeneralListGeneralPages", "general")."";
 			}
-			
-		}else{
-			
-			if ($results == 0) {
-				return "0 Results on 1 Page";
-			}else{
-				return $results." Result on 1 Page";
+			else
+			{
+				return $results." ".Language::get_message("BaseGeneralListGeneralResults", "general")." ".$pages." ".Language::get_message("BaseGeneralListGeneralPage", "general")."";
 			}
-			
 		}
-		
+		else
+		{
+			if ($results == 0)
+			{
+				return "0 ".Language::get_message("BaseGeneralListGeneralResults", "general")." 1 ".Language::get_message("BaseGeneralListGeneralPage", "general")."";
+			}
+			else
+			{
+				return $results." ".Language::get_message("BaseGeneralListGeneralResult", "general")." 1 ".Language::get_message("BaseGeneralListGeneralPage", "general")."";
+			}
+		}
 	}
 	
 	/**
+	 * @todo remove later
 	 * @param string $target
 	 * @param string $title
 	 * @param string $text

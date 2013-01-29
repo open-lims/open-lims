@@ -1,0 +1,16 @@
+<?php
+$LANG['BaseGlobalButtonSave'] = "Save";
+$LANG['BaseGlobalButtonCancel'] = "Cancel";
+$LANG['BaseGlobalButtonNext'] = "Next";
+$LANG['BaseGlobalButtonPrevious'] = "Previous";
+$LANG['BaseGlobalButtonYes'] = "Yes";
+$LANG['BaseGlobalButtonNo'] = "No";
+$LANG['BaseGlobalMessageWait'] = "Please wait...";
+$LANG['BaseGlobalButtonOK'] = "OK";
+$LANG['BaseGlobalButtonSearch'] = "Search";
+$LANG['BaseGlobalButtonOpen'] = "open";
+$LANG['BaseGlobalButtonClose'] = "close";
+$LANG['BaseGlobalButtonChange'] = "change";
+$LANG['BaseGlobalButtonUpdate'] = "Update";
+$LANG['BaseGlobalButtonUpdateMinor'] = "Update as Minor";
+?>

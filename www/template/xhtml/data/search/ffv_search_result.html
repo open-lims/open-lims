@@ -1,14 +1,14 @@
-<!-- CONTAINER BEGIN ("Search Result") -->
+<!-- CONTAINER BEGIN ("[[LANG:DataFFVSearchResultTitle]]") -->
 
-<div class='SmallSearch'>
+<div class='BaseSmallSearchContainer'>
 	<form action='index.php?[[PARAMS]]' method='post'>
-		<table class='SmallSearchTable'>
+		<table class='BaseSmallSearchTable Form'>
 			<tr>
-				<td><input type='text' name='name' value='[[NAME]]' size='30' class='FormTextfield' /></td>
-				<td><div style='text-align: right;'><input type='submit' value='Search' class='FormButton' /></div></td>
+				<td><input type='text' name='string' value='[[NAME]]' size='30' /></td>
+				<td><div style='text-align: right;'><button type='submit'>[[LANG:BaseGlobalButtonSearch]]</button></div></td>
 			</tr>
 			<tr>
-				<td colspan='2'><div class='SmallSearchInfo'>Folder: [[FOLDER]]</div></td>	
+				<td colspan='2'><div class='BaseSmallSearchInfo'>[[LANG:DataFFVSearchResultFolder]]: [[FOLDER]]</div></td>	
 			</tr>
 		</table>
 	</form>

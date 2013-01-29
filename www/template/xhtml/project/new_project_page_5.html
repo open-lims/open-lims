@@ -23,25 +23,25 @@ $(document).ready(function()
 });
 </script>
 
-<div id="AssistantFinish" class="BaseBlockUIProceed" style="display:none; cursor: default"> 
-<img src='images/animations/loading_circle_small.gif' alt=''> Please wait while project creation.
+<div class="BasePlaseWaitWindow" id="AssistantFinish" title=""> 
+<div><img src='images/animations/loading_circle_small.gif' alt=''> [[LANG:BaseGlobalMessageWait]]</div>
 </div> 
 
 <br />
 <table class='Form FormCenterBox70'>
 	<tr>
-		<td>Project name:</td>
+		<td>[[LANG:ProjectCreatePage5Name]]:</td>
 		<td>[[PROJECT_NAME]]</td>
 	</tr>
 	<tr>
-		<td>Template:</td>
+		<td>[[LANG:ProjectCreatePage5Template]]:</td>
 		<td>[[PROJECT_TEMPLATE]]</td>
 	</tr>
 	<tr>
 		<td colspan='2'><br /></td>
 	</tr>
 	<tr>
-		<td colspan='2'>Project Description:</td>
+		<td colspan='2'>[[LANG:ProjectCreatePage5Description]]:</td>
 	</tr>
 	<tr>
 		<td colspan='2'>[[PROJECT_DESCRIPTION]]</td>
@@ -55,8 +55,8 @@ $(document).ready(function()
 	<tr>
 		<td>
 			<br />
-			<div class='button_left'><button id='AssistantPrevious' class='Button'>previous</button></div>
-			<div class='button_right'><button id='AssistantNext' class='Button'>next</button></div>
+			<div class='button_left'><button id='AssistantPrevious' class='Button'>[[LANG:BaseGlobalButtonPrevious]]</button></div>
+			<div class='button_right'><button id='AssistantNext' class='Button'>[[LANG:BaseGlobalButtonNext]]</button></div>
 		</td>
 	</tr>
 </table>

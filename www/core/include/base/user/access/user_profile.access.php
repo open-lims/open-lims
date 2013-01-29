@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -47,6 +47,8 @@ class UserProfile_Access
 	private $yahoo;
 	private $aim;
 	private $skype;
+	private $lync;
+	private $jabber;
 	
 	/**
 	 * @param integer $user_id
@@ -87,6 +89,8 @@ class UserProfile_Access
 				$this->yahoo			= $data['yahoo'];
 				$this->aim				= $data['aim'];
 				$this->skype			= $data['skype'];
+				$this->lync				= $data['lync'];
+				$this->jabber			= $data['jabber'];
 			}
 			else
 			{
@@ -119,6 +123,8 @@ class UserProfile_Access
 			unset($this->yahoo);
 			unset($this->aim);
 			unset($this->skype);
+			unset($this->lync);
+			unset($this->jabber);
 		}
 	}
 	
@@ -163,13 +169,17 @@ class UserProfile_Access
 																"msn," .
 																"yahoo," .
 																"aim," .
-																"skype) " .
+																"skype, " .
+																"lync, " .
+																"jabber) " .
 													"VALUES (".$user_id."," .
 																"'".$gender."'," .
 																"".$title_insert."," .
 																"'".$forename."'," .
 																"'".$surname."'," .
 																"'".$mail."'," .
+																"NULL," .
+																"NULL," .
 																"NULL," .
 																"NULL," .
 																"NULL," .
@@ -481,6 +491,36 @@ class UserProfile_Access
 		if ($this->skype)
 		{
 			return $this->skype;
+		}
+		else
+		{
+			return null;
+		}		
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function get_lync()
+	{
+		if ($this->lync)
+		{
+			return $this->lync;
+		}
+		else
+		{
+			return null;
+		}		
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function get_jabber()
+	{
+		if ($this->jabber)
+		{
+			return $this->jabber;
 		}
 		else
 		{
@@ -1096,7 +1136,82 @@ class UserProfile_Access
 			return false;
 		}
 	}
-		
+
+	/**
+	 * @param string $lync
+	 * @return bool
+	 */
+	public function set_lync($lync)
+	{	
+		global $db;
+
+		if ($this->user_id)
+		{
+			if ($lync)
+			{
+				$lync_insert = "'".$lync."'";
+			}
+			else
+			{
+				$lync_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET lync = ".$lync_insert." WHERE id = ".$this->user_id."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->lync = $lync;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param string $jabber
+	 * @return bool
+	 */
+	public function set_jabber($jabber)
+	{	
+		global $db;
+
+		if ($this->user_id)
+		{
+			if ($jabber)
+			{
+				$jabber_insert = "'".$jabber."'";
+			}
+			else
+			{
+				$jabber_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET jabber = ".$jabber_insert." WHERE id = ".$this->user_id."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->jabber = $jabber;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 
 ?>

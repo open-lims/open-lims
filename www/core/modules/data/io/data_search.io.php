@@ -3,7 +3,7 @@
  * @package data
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -48,13 +48,13 @@ class DataSearchIO
 	{
 		global $user, $session;
 		
-		if ($_GET[nextpage])
+		if ($_GET['nextpage'])
 		{
-			if ($_GET[sortvalue] and $_GET[sortmethod])
+			if ($_GET['sortvalue'] and $_GET['sortmethod'])
 			{
-				if ($_GET[nextpage] == "2" and $_POST[name])
+				if ($_GET['nextpage'] == "2" and $_POST['string'])
 				{
-					$name = $_POST[name];
+					$name = $_POST['string'];
 					$folder_id = $session->read_value("SEARCH_FFV_FOLDER_ID");
 				}
 				else
@@ -65,30 +65,40 @@ class DataSearchIO
 			}
 			else
 			{
-				if ($_GET[page])
+				if ($_GET['page'])
 				{
 					$name = $session->read_value("SEARCH_FFV_NAME");
 					$folder_id = $session->read_value("SEARCH_FFV_FOLDER_ID");
 				}
 				else
 				{
-					if ($_GET[nextpage] == "1")
+					if ($_GET['nextpage'] == "1")
 					{
-						$name = $_POST[name];
-						if ($_POST[folder_id])
+						$name = $_POST['string'];
+						if (isset($_POST['folder_id']) and is_numeric($_POST['folder_id']))
 						{
-							$folder_id = $_POST[folder_id];
+							$folder_id = $_POST['folder_id'];
 						}
 						else
 						{
-							$folder_id = UserFolder::get_folder_by_user_id($user->get_user_id());
+							$data_path = new DataPath();
+							$data_path_folder_id = $data_path->get_folder_id();
+							if (is_numeric($data_path_folder_id))
+							{
+								$folder_id = $data_path_folder_id;
+							}
+							else
+							{
+								$folder_id = UserFolder::get_folder_by_user_id($user->get_user_id());
+							}
+							
 						}
 						$session->delete_value("SEARCH_FFV_NAME");
 						$session->delete_value("SEARCH_FFV_FOLDER_ID");
 					}
 					else
 					{
-						$name = $_POST[name];
+						$name = $_POST['string'];
 						$folder_id = $session->read_value("SEARCH_FFV_FOLDER_ID");
 					}
 				}
@@ -105,8 +115,8 @@ class DataSearchIO
 			$template = new HTMLTemplate("data/search/ffv_search.html");
 			
 			$paramquery = $_GET;
-			unset($paramquery[page]);
-			$paramquery[nextpage] = "1";
+			unset($paramquery['page']);
+			$paramquery['nextpage'] = "1";
 			$params = http_build_query($paramquery,'','&#38;');
 					
 			$template->set_var("params",$params);
@@ -119,7 +129,7 @@ class DataSearchIO
 		{
 			if (!$folder_id)
 			{
-				$folder_id = $_POST[folder_id];
+				$folder_id = $_POST['folder_id'];
 			}
 
 			$session->write_value("SEARCH_FFV_NAME", $name, true);
@@ -134,20 +144,20 @@ class DataSearchIO
 			$list = new List_IO("DataSearch", "ajax.php?nav=data", "search_data_list_data", "search_data_count_data", $argument_array, "DataSearch");
 		
 			$list->add_column("", "symbol", false, "16px");
-			$list->add_column("Name", "name", true, null);
-			$list->add_column("Type", "type", false, null);
-			$list->add_column("Version", "version", false, null);
-			$list->add_column("Datetime", "datetime", true, null);
-			$list->add_column("Size", "size", true, null);
-			$list->add_column("Owner", "owner", true, null);
-			$list->add_column("Permission", "permission", false, null);
+			$list->add_column(Language::get_message("DataGeneralListColumnName", "general"), "name", true, null);
+			$list->add_column(Language::get_message("DataGeneralListColumnType", "general"), "type", false, null);
+			$list->add_column(Language::get_message("DataGeneralListColumnVersion", "general"), "version", false, null);
+			$list->add_column(Language::get_message("DataGeneralListColumnDateTime", "general"), "datetime", true, null);
+			$list->add_column(Language::get_message("DataGeneralListColumnSize", "general"), "size", true, null);
+			$list->add_column(Language::get_message("DataGeneralListColumnOwner", "general"), "owner", true, null);
+			$list->add_column(Language::get_message("DataGeneralListColumnPermission", "general"), "permission", false, null);
 			
 			$folder = Folder::get_instance($folder_id);
 			
 			$template = new HTMLTemplate("data/search/ffv_search_result.html");
 		
 			$paramquery = $_GET;
-			$paramquery[nextpage] = "2";
+			$paramquery['nextpage'] = "2";
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			$template->set_var("params", $params);

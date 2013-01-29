@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2012 by Roman Konertz
+ * @copyright (c) 2008-2013 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -33,13 +33,13 @@ class AdminSystemMessageIO
 		
 		$system_message_array = SystemMessage::list_entries();
 	
-		if (!$_GET[page])
+		if (!$_GET['page'])
     	{
 			$page = 1;
 		}
 		else
 		{
-			$page = $_GET[page];	
+			$page = $_GET['page'];	
 		}
 
 		$entry_count = count($system_message_array);
@@ -48,8 +48,8 @@ class AdminSystemMessageIO
 		$template = new HTMLTemplate("base/admin/system_message/list.html");	
 		
 		$paramquery = $_GET;
-		$paramquery[action] = "add";
-		unset($paramquery[nextpage]);
+		$paramquery['action'] = "add";
+		unset($paramquery['nextpage']);
 		$params = http_build_query($paramquery,'','&#38;');
 		
 		$template->set_var("add_params", $params);
@@ -82,27 +82,27 @@ class AdminSystemMessageIO
 				$content = str_replace("\n", "<br />", $system_message->get_content());
 				$content = str_replace("\\", "", $content);
 				
-				$result[$counter][user] = $user->get_full_name(false);
-				$result[$counter][datetime] = $datetime_handler->get_formatted_string("dS M Y \\a\\t H:i");
-				$result[$counter][content] = $content;
+				$result[$counter]['user'] = $user->get_full_name(false);
+				$result[$counter]['datetime'] = $datetime_handler->get_date()." at ".$datetime_handler->get_time();
+				$result[$counter]['content'] = $content;
 				
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "edit";
-				$paramquery[id] = $value;
-				unset($paramquery[nextpage]);
+				$paramquery['action'] = "edit";
+				$paramquery['id'] = $value;
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				$result[$counter][edit_params] = $params;
+				$result[$counter]['edit_params'] = $params;
 				
 				
 				$paramquery = $_GET;
-				$paramquery[action] = "delete";
-				$paramquery[id] = $value;
-				unset($paramquery[nextpage]);
+				$paramquery['action'] = "delete";
+				$paramquery['id'] = $value;
+				unset($paramquery['nextpage']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
-				$result[$counter][delete_params] = $params;
+				$result[$counter]['delete_params'] = $params;
 				
 				$counter++;
 			}
@@ -129,11 +129,11 @@ class AdminSystemMessageIO
 	{
 		global $user;
 		
-		if ($_GET[nextpage] == 1)
+		if ($_GET['nextpage'] == 1)
 		{
 			$page_1_passed = true;
 			
-			if (!$_POST[content])
+			if (!$_POST['content'])
 			{
 				$page_1_passed = false;
 				$error = "You must enter a text";
@@ -150,7 +150,7 @@ class AdminSystemMessageIO
 			$template = new HTMLTemplate("base/admin/system_message/add.html");
 			
 			$paramquery = $_GET;
-			$paramquery[nextpage] = "1";
+			$paramquery['nextpage'] = "1";
 			$params = http_build_query($paramquery,'','&#38;');
 			
 			$template->set_var("params",$params);
@@ -164,9 +164,9 @@ class AdminSystemMessageIO
 				$template->set_var("error", "");	
 			}
 						
-			if ($_POST[content])
+			if ($_POST['content'])
 			{
-				$template->set_var("content", $_POST[content]);
+				$template->set_var("content", $_POST['content']);
 			}
 			else
 			{
@@ -178,13 +178,13 @@ class AdminSystemMessageIO
 		else
 		{
 			$paramquery = $_GET;
-			unset($paramquery[nextpage]);
-			unset($paramquery[action]);
+			unset($paramquery['nextpage']);
+			unset($paramquery['action']);
 			$params = http_build_query($paramquery);
 			
 			$system_message = new SystemMessage(null);
 			
-			if ($system_message->create($user->get_user_id(), $_POST[content]))
+			if ($system_message->create($user->get_user_id(), $_POST['content']))
 			{
 				Common_IO::step_proceed($params, "Add System Message", "Operation Successful", null);
 			}
@@ -200,24 +200,24 @@ class AdminSystemMessageIO
 	 */
 	public static function delete()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$system_message = new SystemMessage($_GET[id]);
+			$system_message = new SystemMessage($_GET['id']);
 		
-			if ($_GET[sure] != "true")
+			if ($_GET['sure'] != "true")
 			{
 				$template = new HTMLTemplate("base/admin/system_message/delete.html");
 				
 				$paramquery = $_GET;
-				$paramquery[sure] = "true";
+				$paramquery['sure'] = "true";
 				$params = http_build_query($paramquery);
 				
 				$template->set_var("yes_params", $params);
 						
 				$paramquery = $_GET;
-				unset($paramquery[sure]);
-				unset($paramquery[action]);
-				unset($paramquery[id]);
+				unset($paramquery['sure']);
+				unset($paramquery['action']);
+				unset($paramquery['id']);
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("no_params", $params);
@@ -227,9 +227,9 @@ class AdminSystemMessageIO
 			else
 			{
 				$paramquery = $_GET;
-				unset($paramquery[sure]);
-				unset($paramquery[action]);
-				unset($paramquery[id]);
+				unset($paramquery['sure']);
+				unset($paramquery['action']);
+				unset($paramquery['id']);
 				$params = http_build_query($paramquery,'','&#38;');
 								
 				if ($system_message->delete())
@@ -253,15 +253,15 @@ class AdminSystemMessageIO
 	 */
 	public static function edit()
 	{
-		if ($_GET[id])
+		if ($_GET['id'])
 		{
-			$system_message = new SystemMessage($_GET[id]);
+			$system_message = new SystemMessage($_GET['id']);
 		
-			if ($_GET[nextpage] == 1)
+			if ($_GET['nextpage'] == 1)
 			{
 				$page_1_passed = true;
 				
-				if (!$_POST[content])
+				if (!$_POST['content'])
 				{
 					$page_1_passed = false;
 					$error = "You must enter a text";
@@ -278,7 +278,7 @@ class AdminSystemMessageIO
 				$template = new HTMLTemplate("base/admin/system_message/edit.html");
 				
 				$paramquery = $_GET;
-				$paramquery[nextpage] = "1";
+				$paramquery['nextpage'] = "1";
 				$params = http_build_query($paramquery,'','&#38;');
 				
 				$template->set_var("params",$params);
@@ -294,9 +294,9 @@ class AdminSystemMessageIO
 				
 				$content = str_replace("\\", "", $system_message->get_content());
 							
-				if ($_POST[content])
+				if ($_POST['content'])
 				{
-					$template->set_var("content", $_POST[content]);
+					$template->set_var("content", $_POST['content']);
 				}
 				else
 				{
@@ -308,11 +308,11 @@ class AdminSystemMessageIO
 			else
 			{
 				$paramquery = $_GET;
-				unset($paramquery[nextpage]);
-				unset($paramquery[action]);
+				unset($paramquery['nextpage']);
+				unset($paramquery['action']);
 				$params = http_build_query($paramquery);
 
-				if ($system_message->set_content($_POST[content]))
+				if ($system_message->set_content($_POST['content']))
 				{
 					Common_IO::step_proceed($params, "Add System Message", "Operation Successful", null);
 				}
@@ -330,7 +330,7 @@ class AdminSystemMessageIO
 	
 	public static function handler()
 	{
-		switch($_GET[action]):
+		switch($_GET['action']):
 			case "add":
 				self::create();
 			break;
