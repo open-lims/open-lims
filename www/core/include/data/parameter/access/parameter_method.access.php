@@ -22,72 +22,72 @@
  */
 
 /**
- * Parameter Access Class
+ * Parameter Method Access Class
  * @package data
  */
-class Parameter_Access
+class ParameterMethod_Access
 {
-	const PARAMETER_PK_SEQUENCE = 'core_data_parameters_id_seq';
+	const PARAMETER_METHOD_PK_SEQUENCE = 'core_data_parameter_methods_id_seq';
 
-	private $parameter_id;
-	private $data_entity_id;
+	private $parameter_method_id;
+	private $name;
 
 	/**
-	 * @param integer $parameter_id
+	 * @param integer $parameter_method_id
 	 */
-	function __construct($parameter_id)
+	function __construct($parameter_method_id)
 	{
 		global $db;
 		
-		if ($parameter_id == null)
+		if ($parameter_method_id == null)
 		{
-			$this->parameter_id = null;
+			$this->parameter_method_id = null;
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("PARAMETER_TABLE")." WHERE id='".$parameter_id."'";
+			$sql = "SELECT * FROM ".constant("PARAMETER_METHOD_TABLE")." WHERE id='".$parameter_method_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
 			if ($data['id'])
 			{
-				$this->parameter_id		= $parameter_id;
-				$this->data_entity_id	= $data['data_entity_id'];
+				$this->parameter_method_id	= $parameter_method_id;
+				$this->name					= $data['name'];
 			}
 			else
 			{
-				$this->parameter_id		= null;
+				$this->parameter_method_id		= null;
 			}
 		}
 	}
 
 	function __destruct()
 	{
-		if ($this->parameter_id)
+		if ($this->parameter_method_id)
 		{
-			unset($this->parameter_id);
-			unset($this->data_entity_id);
+			unset($this->parameter_method_id);
+			unset($this->name);
 		}
 	}
 
 	/**
-	 * @param integer $data_entity_id
+	 * @param string $name
 	 * @return integer
 	 */
-	public function create($data_entity_id)
+	public function create($name)
 	{
 		global $db;
 		
-		if (is_numeric($data_entity_id))
+		if ($name)
 		{				
-			$sql_write = "INSERT INTO ".constant("PARAMETER_TABLE")." (id,data_entity_id) " .
-					"VALUES (nextval('".self::PARAMETER_PK_SEQUENCE."'::regclass),'".$data_entity_id."')";
+			$sql_write = "INSERT INTO ".constant("PARAMETER_METHOD_TABLE")." (id,name) " .
+					"VALUES (nextval('".self::PARAMETER_METHOD_PK_SEQUENCE."'::regclass),'".$name."')";
 					
 			$res_write = $db->db_query($sql_write);	
 
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$sql_read = "SELECT id FROM ".constant("PARAMETER_TABLE")." WHERE id = currval('".self::PARAMETER_PK_SEQUENCE."'::regclass)";
+				$sql_read = "SELECT id FROM ".constant("PARAMETER_METHOD_TABLE")." WHERE id = currval('".self::PARAMETER_METHOD_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 									
@@ -113,13 +113,13 @@ class Parameter_Access
 	{
 		global $db;
 
-		if ($this->parameter_id)
+		if ($this->parameter_method_id)
 		{
-			$parameter_id_tmp = $this->parameter_id;
+			$parameter_method_id_tmp = $this->parameter_method_id;
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".constant("PARAMETER_TABLE")." WHERE id = ".$parameter_id_tmp."";
+			$sql = "DELETE FROM ".constant("PARAMETER_METHOD_TABLE")." WHERE id = ".$parameter_method_id_tmp."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res) == 1)
@@ -138,13 +138,13 @@ class Parameter_Access
 	}
 	
 	/**
-	 * @return integer
+	 * @return string
 	 */
-	public function get_data_entity_id()
+	public function get_name()
 	{
-		if ($this->data_entity_id)
+		if ($this->name)
 		{
-			return $this->data_entity_id;
+			return $this->name;
 		}
 		else
 		{
@@ -153,21 +153,21 @@ class Parameter_Access
 	}
 		
 	/**
-	 * @param integer $data_entity_id
+	 * @param string $name
 	 * @return bool
 	 */
-	public function set_data_entity_id($data_entity_id)
+	public function set_name($name)
 	{	
 		global $db;
 
-		if ($this->parameter_id and is_numeric($data_entity_id))
+		if ($this->parameter_method_id and $name)
 		{
-			$sql = "UPDATE ".constant("PARAMETER_TABLE")." SET data_entity_id = '".$data_entity_id."' WHERE id = ".$this->parameter_id."";
+			$sql = "UPDATE ".constant("PARAMETER_METHOD_TABLE")." SET name = '".$name."' WHERE id = ".$this->parameter_method_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
 			{
-				$this->data_entity_id = $data_entity_id;
+				$this->name = $name;
 				return true;
 			}
 			else

@@ -69,7 +69,7 @@ class List_IO
     	}
     }
     
- 	public function add_column($title, $address, $sortable, $width, $column_css_id = null, $hideable = true)
+ 	public function add_column($title, $address, $sortable = true, $width = null, $column_css_id = null, $hideable = true)
     {
     	if ($address)
     	{

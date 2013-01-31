@@ -38,6 +38,41 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class Parameter extends DataEntity implements ParameterInterface, EventListenerInterface
 {
+	function __construct()
+	{
+		
+	}
+	
+	function __destruct()
+	{
+		
+	}
+	
+	protected function create()
+	{
+		
+	}
+	
+	public function delete()
+	{
+		
+	}
+	
+	public function delete_version()
+	{
+		
+	}
+	
+	public function exist_parameter_version($internal_revision)
+	{
+		
+	}
+	
+	protected function update()
+	{
+		
+	}
+	
 	
 	/**
 	 * @see EventListenerInterface::listen_events()

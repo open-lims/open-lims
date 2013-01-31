@@ -297,37 +297,131 @@ class AdminGeneralAjax
 				{
 					$list_array[$key]['symbol'] = "<img src='images/icons/measuring_unit.png' alt='N' border='0' />";
 					
-					switch ($list_array[$key]['type']):
+					switch($list_array[$key]['type']):
 					
-						case 1:
-							$list_array[$key]['type'] = "length";
+						case "aa":
+							$list_array[$key]['type'] = "anglo-american";
 						break;
 						
-						case 2:
-							$list_array[$key]['type'] = "mass";
+						case "metric":
+							$list_array[$key]['type'] = "metric";
 						break;
 						
-						case 3:
-							$list_array[$key]['type'] = "electric current";
-						break;
-						
-						case 4:
-							$list_array[$key]['type'] = "thermodynamic temperature";
-						break;
-						
-						case 5:
-							$list_array[$key]['type'] = "amount of substance";
-						break;
-						
-						case 6:
-							$list_array[$key]['type'] = "luminous intensity";
-						break;
-						
-						case 7:
-							$list_array[$key]['type'] = "time";
+						default:
+							$list_array[$key]['type'] = "none";
 						break;
 					
 					endswitch;
+					
+					if (is_numeric($list_array[$key]['min_prefix_exponent']) and $list_array[$key]['min_prefix_exponent'] > 0)
+					{
+						for ($i=$list_array[$key]['min_prefix_exponent'];$i>=1;$i--)
+						{
+							$prefix = "";
+							
+							switch ($i):
+							
+								case 3:
+									$prefix = "m";
+								break;
+								
+								case 6:
+									$prefix = "&mu;";
+								break;
+								
+								case 9:
+									$prefix = "n";
+								break;
+								
+								case 12:
+									$prefix = "p";
+								break;
+								
+								case 15:
+									$prefix = "f";
+								break;
+								
+								case 18:
+									$prefix = "a";
+								break;
+								
+								case 21:
+									$prefix = "z";
+								break;
+								
+								case 25:
+									$prefix = "y";
+								break;
+							
+							endswitch;
+							
+							if ($prefix)
+							{
+								if ($list_array[$key]['secondary_units'])
+								{
+									$list_array[$key]['secondary_units'] = $list_array[$key]['secondary_units']." ,".$prefix."".$list_array[$key]['unit_symbol'];
+								}
+								else
+								{
+									$list_array[$key]['secondary_units'] = $prefix."".$list_array[$key]['unit_symbol'];
+								}
+							}
+						}
+					}
+					
+					if (is_numeric($list_array[$key]['max_prefix_exponent']) and $list_array[$key]['max_prefix_exponent'] > 0)
+					{
+						for ($i=1;$i<=$list_array[$key]['max_prefix_exponent'];$i++)
+						{
+							switch ($i):
+							
+								case 3:
+									$prefix = "k";
+								break;
+								
+								case 6:
+									$prefix = "M";
+								break;
+								
+								case 9:
+									$prefix = "G";
+								break;
+								
+								case 12:
+									$prefix = "T";
+								break;
+								
+								case 15:
+									$prefix = "P";
+								break;
+								
+								case 18:
+									$prefix = "E";
+								break;
+								
+								case 21:
+									$prefix = "Z";
+								break;
+								
+								case 25:
+									$prefix = "Y";
+								break;
+							
+							endswitch;
+							
+							if ($prefix)
+							{
+								if ($list_array[$key]['secondary_units'])
+								{
+									$list_array[$key]['secondary_units'] = $list_array[$key]['secondary_units']." ,".$prefix."".$list_array[$key]['unit_symbol'];
+								}
+								else
+								{
+									$list_array[$key]['secondary_units'] = $prefix."".$list_array[$key]['unit_symbol'];
+								}
+							}
+						}
+					}
 				}
 			}
 			else

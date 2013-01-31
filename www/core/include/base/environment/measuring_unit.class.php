@@ -29,6 +29,7 @@ require_once("interfaces/measuring_unit.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("access/measuring_unit_category.access.php");
 	require_once("access/measuring_unit.access.php");
 }
 
@@ -149,8 +150,40 @@ class MeasuringUnit implements MeasuringUnitInterface
 	 * @see MeasuringUnitInterface::list_entries()
 	 * @return array
 	 */
-	public static function list_entries()
+	public static function get_categorized_list()
 	{
-		return MeasuringUnit_Access::list_entries();
+		$return_array = array();
+		$counter = 0;
+		
+		$category_array = MeasuringUnitCategory_Access::list_entries();
+				
+		foreach($category_array as $key => $value)
+		{
+			$return_array[$counter]['name'] = $value['name'];
+			$return_array[$counter]['headline'] = true;
+			$counter++;
+			
+			$unit_array = MeasuringUnit_Access::list_entries_by_category_id($value['id']);
+			
+			foreach($unit_array as $unit_key => $unit_value)
+			{
+				if ($unit_array['min_prefix_exponent'])
+				{
+					
+				}
+				
+				$return_array[$counter]['name'] = $unit_value['name']." (".$unit_value['unit_symbol'].")";
+				$return_array[$counter]['exponent'] = 0;
+				$return_array[$counter]['headline'] = false;
+				$counter++;
+				
+				if ($unit_array['max_prefix_exponent'])
+				{
+					
+				}
+			}
+		}
+		
+		return $return_array;
 	}
 }

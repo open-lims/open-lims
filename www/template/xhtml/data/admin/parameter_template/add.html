@@ -1,0 +1,98 @@
+<script>
+
+$(document).ready(function()
+{
+	
+	
+	$("#DataParameterTemplateFieldNewButton").bind("click", function()
+	{
+		console.log($("#DataParameterTemplateTable").children("tbody").children(":last-child"));
+		
+		$("#DataParameterTemplateTable").children("tbody").children(":last-child").after("<tr>" +
+			"<td><input type='text' /></td>" +
+			"<td>" +
+			"<select class='DataParameterMeasuringUnitSelect'>" +
+			"" +
+			"<!-- FOREACH BEGIN ([[MEASURING_UNITS]]) -->" +
+			"" +
+			"	<option value='[[MEASURING_UNITS:VALUE]]' [[MEASURING_UNITS:DISABLED]] [[MEASURING_UNITS:SELECTED]]>[[MEASURING_UNITS:CONTENT]]</option>" +
+			"" +
+			"<!-- FOREACH END -->" +
+			"" +
+			"</select>" +
+			"</td>" +
+			"<td><input type='text' size='6' /></td>" +
+			"<td><input type='text' size='6' /></td>" +
+			"<td><input type='text' size='6' /></td>" +
+			"<td><input type='text' size='6' /></td>" +
+			"<td>Methods</td>" +
+			"<td>Delete</td>" +
+			"</tr>");
+		
+		base_form_init();
+	});
+	
+	
+});
+
+</script>
+
+<!-- CONTAINER BEGIN ("Add Parameter Template") -->
+
+<div class='Form'>
+
+<div class='FormBox'>
+<div class='FormBoxHeadline'>Parameter-Fields</div>
+
+<table style='width: 100%; text-align: left;' id='DataParameterTemplateTable' class='DataParameterTable'>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Unit</th>
+			<th>USL (max)</th>
+			<th>LSL (min)</th>
+			<th>Min (valid)</th>
+			<th>Max (valid)</th>
+			<th>Methods</th>
+			<th>Delete</th>
+		<tr>
+	</thead>
+	<tbody>
+		<tr class='odd'>
+			<td><input type='text' /></td>
+			<td>
+				<select class='DataParameterMeasuringUnitSelect'>
+				
+				<!-- FOREACH BEGIN ([[MEASURING_UNITS]]) -->
+	
+					<option value='[[MEASURING_UNITS:VALUE]]' [[MEASURING_UNITS:DISABLED]] [[MEASURING_UNITS:SELECTED]]>[[MEASURING_UNITS:CONTENT]]</option>
+		
+				<!-- FOREACH END -->
+				
+				</select>
+			</td>
+			<td><input type='text' size='6' /></td>
+			<td><input type='text' size='6' /></td>
+			<td><input type='text' size='6' /></td>
+			<td><input type='text' size='6' /></td>
+			<td>Methods</td>
+			<td>Delete</td>
+		</tr>
+	</tbody>
+</table>
+
+<br />
+
+<button type='submit' id='DataParameterTemplateFieldNewButton'>New Field</button>
+<button type='submit' id='DataParameterTemplateLimitButton'>More Limits (USL/LSL)</button>
+<div class='FormButtonBoxClear'></div>
+</div>
+
+<div class='FormButtonBox'>
+<button type='submit' id='DataParameterTemplateSaveButton'>Save</button>
+<button type='submit' id='DataParameterTemplateCancelButton'>Cancel</button>
+<div class='FormButtonBoxClear'></div>
+</div>
+</div>
+
+<!-- CONTAINER END () -->

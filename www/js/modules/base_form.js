@@ -263,38 +263,46 @@ base_form_init = function()
 				$(this).children("option").each(function()
 				{				
 					var local_option = $(this);
-					var list_entry = $("<li><a href='#'>"+$(this).html()+"</a></li>").bind("click", {option: $(this)}, function(event)
-					{
-						event.preventDefault();
-						event.stopPropagation();
-						
-						var data = event.data;
-						$(data.option).parent().children("option:selected").removeAttr("selected");
-						$(data.option).attr("selected", "selected");
-						$(entry).html($(data.option).html());
-						$(data.option).parent().trigger("onchange");
-						
-						selected_element = $(this);
-						
-						$(button).trigger("click");
-					});
 					
-					list_entry.children("a").bind("focus", function(event)
+					if ($(this).is(":disabled"))
 					{
-						$(this).parent().parent().children().each(function()
-						{
-							$(this).removeClass("selected");
-						});
-						$(this).parent().addClass("selected");
-						focused_element = $(this).parent();
-					});
-					
-					if ($(this).attr("selected") === "selected")
-					{
-						selected_element_exists = true;
-						selected_element = list_entry;
+						var list_entry = $("<li><span>"+$(this).html()+"</span></li>");
 					}
-									
+					else
+					{
+						var list_entry = $("<li><a href='#'>"+$(this).html()+"</a></li>").bind("click", {option: $(this)}, function(event)
+						{
+							event.preventDefault();
+							event.stopPropagation();
+							
+							var data = event.data;
+							$(data.option).parent().children("option:selected").removeAttr("selected");
+							$(data.option).attr("selected", "selected");
+							$(entry).html($(data.option).html());
+							$(data.option).parent().trigger("onchange");
+							
+							selected_element = $(this);
+							
+							$(button).trigger("click");
+						});
+						
+						list_entry.children("a").bind("focus", function(event)
+						{
+							$(this).parent().parent().children().each(function()
+							{
+								$(this).removeClass("selected");
+							});
+							$(this).parent().addClass("selected");
+							focused_element = $(this).parent();
+						});
+						
+						if ($(this).attr("selected") === "selected")
+						{
+							selected_element_exists = true;
+							selected_element = list_entry;
+						}
+					}
+			
 					$(option_list).children("ul").append(list_entry);
 				});
 				

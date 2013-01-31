@@ -38,6 +38,30 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class ParameterTemplate implements ParameterTemplateInterface, EventListenerInterface
 {
+	function __construct()
+	{
+		
+	}
+	
+	function __destruct()
+	{
+		
+	}
+	
+	public function create($field_array)
+	{
+		
+	}
+	
+	public function delete()
+	{
+		
+	}
+	
+	public function update($field_array)
+	{
+		
+	}
 	
 	/**
 	 * @see EventListenerInterface::listen_events()

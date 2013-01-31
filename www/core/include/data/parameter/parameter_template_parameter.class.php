@@ -38,6 +38,14 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class ParameterTemplateParameter extends Parameter implements ParameterTemplateParameterInterface
 {
+	public function create($folder_id, $owner_id, $template_id, $value_array)
+	{
+		
+	}
 	
+	public function update($value_array, $previous_version_id, $major, $current)
+	{
+		
+	}
 }
 ?>

@@ -63,6 +63,6 @@ interface MeasuringUnitInterface
 	/**
 	 * @return array
 	 */
-	public static function list_entries();
+	public static function get_categorized_list();
 }
 ?>

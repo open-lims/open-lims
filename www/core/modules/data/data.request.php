@@ -301,6 +301,28 @@ class DataRequest
 				require_once("ajax/admin/admin_value_template.ajax.php");
 				echo AdminValueTemplateAjax::count_templates($_POST['argument_array']);
 			break;	
+			
+			
+			
+			case "admin_list_parameter_templates":
+				require_once("ajax/admin/admin_parameter_template.ajax.php");
+				echo AdminParameterTemplateAjax::list_templates(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
+			break;
+			
+			case "admin_count_parameter_templates":
+				require_once("ajax/admin/admin_parameter_template.ajax.php");
+				echo AdminParameterTemplateAjax::count_templates($_POST['argument_array']);
+			break;	
 
 			
 			// Navigation

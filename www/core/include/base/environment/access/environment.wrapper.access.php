@@ -368,9 +368,16 @@ class Environment_Wrapper_Access
 		$sql = "SELECT ".constant("MEASURING_UNIT_TABLE").".id, " .
 					"".constant("MEASURING_UNIT_TABLE").".name, " .
 					"".constant("MEASURING_UNIT_TABLE").".type, " .
-					"".constant("MEASURING_UNIT_TABLE").".unit_symbol " .
+					"".constant("MEASURING_UNIT_TABLE").".unit_symbol, " .
+					"".constant("MEASURING_UNIT_TABLE").".min_value, " .
+					"".constant("MEASURING_UNIT_TABLE").".max_value, " .
+					"".constant("MEASURING_UNIT_TABLE").".min_prefix_exponent, " .
+					"".constant("MEASURING_UNIT_TABLE").".max_prefix_exponent, " .
+					"".constant("MEASURING_UNIT_CATEGORY_TABLE").".name AS category " .
 					"FROM ".constant("MEASURING_UNIT_TABLE")." " .
+					"LEFT JOIN ".constant("MEASURING_UNIT_CATEGORY_TABLE")." ON ".constant("MEASURING_UNIT_TABLE").".category_id = ".constant("MEASURING_UNIT_CATEGORY_TABLE").".id ".
 					"".$sql_order_by."";
+
 		
 		$return_array = array();
 		

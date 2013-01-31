@@ -74,6 +74,14 @@ div.FormFocused
 	background-color: #73A6FF;
 	cursor: pointer;
 }
+.FormSelectList ul li span
+{
+	display: block;
+	padding: 3px 2px;
+	text-decoration: unterline;
+	font-weight: bold;
+	color: #2F2F2F !important;
+}
 .FormSelectContainer
 {
 	border-radius: 6px 6px 6px 6px;

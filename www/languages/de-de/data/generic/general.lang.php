@@ -10,6 +10,8 @@ $LANG['DataGeneralListColumnUser'] = "Benutzer";
 $LANG['DataGeneralListColumnID'] = "ID";
 $LANG['DataGeneralListColumnFile'] = "Datei";
 $LANG['DataGeneralListColumnDelete'] = "Löschen";
+$LANG['DataGeneralListColumnInternalName'] = "Interner Name";
+$LANG['DataGeneralListColumnCreatedBy'] = "Erzeugt von";
 
 $LANG['DataGeneralTitleParentFolder'] = "[eine Ebene höher]";
 

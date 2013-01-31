@@ -45,5 +45,7 @@
 	define("VALUE_VERSION_TABLE", 						"core_value_versions");
 	define("VALUE_TABLE", 								"core_values");
 	
+	define("PARAMETER_TEMPLATE_TABLE",					"core_data_parameter_templates");
+	
 	define("VIRTUAL_FOLDER_TABLE", 						"core_virtual_folders");
 ?>

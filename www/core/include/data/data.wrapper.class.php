@@ -116,6 +116,28 @@ class Data_Wrapper implements Data_WrapperInterface
     } 
     
     /**
+	 * @see Data_WrapperInterface::list_parameter_templates()
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+    public static function list_parameter_templates($order_by, $order_method, $start, $end)
+	{
+		return Data_Wrapper_Access::list_parameter_templates($order_by, $order_method, $start, $end);
+	}
+	
+	/**
+     * @see Data_WrapperInterface::count_list_value_templates()
+     * @return integer
+     */
+	public static function count_list_parameter_templates()
+	{
+		return Data_Wrapper_Access::count_list_parameter_templates();
+	}
+    
+    /**
      * @see Data_WrapperInterface::list_value_versions()
 	 * @param integer $value_id
 	 * @param string $order_by

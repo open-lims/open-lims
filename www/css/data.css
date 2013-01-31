@@ -396,3 +396,14 @@ ul.BaseFileDetailAdminMenu li a
 	display: block;
 	font-size: 14px;
 }
+
+/* Parameter */
+.DataParameterTable
+{
+	border-collapse: collapse;
+}
+
+.DataParameterMeasuringUnitSelect
+{
+	width: 140px;
+}

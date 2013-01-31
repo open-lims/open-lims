@@ -135,4 +135,12 @@
 	$dialog[15]['class']			= "DataSearchIO";
 	$dialog[15]['method']			= "search";
 	$dialog[15]['internal_name']	= "ffv_search";
+	
+	$dialog[16]['type']				= "module_admin";
+	$dialog[16]['class_path']		= "core/modules/data/io/admin/admin_parameter_template.io.php";
+	$dialog[16]['class']			= "AdminParameterTemplateIO";
+	$dialog[16]['method']			= "handler";
+	$dialog[16]['internal_name']	= "parameter_template";
+	$dialog[16]['language_address']	= "DataDialogAdminMenuParameterTemplates";
+	$dialog[16]['weight']			= 200;
 ?>

@@ -33,8 +33,8 @@ class ParameterFieldLimit_Access
 	
 	private $parameter_field_id;
 	private $name;
-	private $upper_tolerance_limit;
-	private $lower_tolerance_limit;
+	private $upper_specification_limit;
+	private $lower_specification_limit;
 
 	/**
 	 * @param integer $parameter_field_limit_id
@@ -58,8 +58,8 @@ class ParameterFieldLimit_Access
 				$this->parameter_field_limit_id	= $parameter_field_limit_id;
 				$this->parameter_field_id		= $data['parameter_field_id'];
 				$this->name						= $data['name'];
-				$this->upper_tolerance_limit	= $data['upper_tolerance_limit'];
-				$this->lower_tolerance_limit	= $data['lower_tolerance_limit'];
+				$this->upper_specification_limit	= $data['upper_specification_limit'];
+				$this->lower_specification_limit	= $data['lower_specification_limit'];
 			}
 			else
 			{
@@ -75,26 +75,26 @@ class ParameterFieldLimit_Access
 			unset($this->parameter_field_limit_id);
 			unset($this->parameter_field_id);
 			unset($this->name);
-			unset($this->upper_tolerance_limit);
-			unset($this->lower_tolerance_limit);
+			unset($this->upper_specification_limit);
+			unset($this->lower_specification_limit);
 		}
 	}
 
 	/**
 	 * @param integer $parameter_field_id
 	 * @param string $name
-	 * @param float $upper_tolerance_limit
-	 * @param float $lower_tolerance_limit
+	 * @param float $upper_specification_limit
+	 * @param float $lower_specification_limit
 	 * @return integer
 	 */
-	public function create($parameter_field_id, $name, $upper_tolerance_limit, $lower_tolerance_limit)
+	public function create($parameter_field_id, $name, $upper_specification_limit, $lower_specification_limit)
 	{
 		global $db;
 		
-		if (is_numeric($parameter_field_id) and $name and is_numeric($upper_tolerance_limit) and is_numeric($lower_tolerance_limit))
+		if (is_numeric($parameter_field_id) and $name and is_numeric($upper_specification_limit) and is_numeric($lower_specification_limit))
 		{	
-			$sql_write = "INSERT INTO ".constant("PARAMETER_FIELD_LIMIT_TABLE")." (id,parameter_field_id,name,upper_tolerance_limit,lower_tolerance_limit) " .
-					"VALUES (nextval('".self::PARAMETER_FIELD_LIMIT_PK_SEQUENCE."'::regclass),".$parameter_field_id.",'".$name."',".$upper_tolerance_limit.",".$lower_tolerance_limit.")";
+			$sql_write = "INSERT INTO ".constant("PARAMETER_FIELD_LIMIT_TABLE")." (id,parameter_field_id,name,upper_specification_limit,lower_specification_limit) " .
+					"VALUES (nextval('".self::PARAMETER_FIELD_LIMIT_PK_SEQUENCE."'::regclass),".$parameter_field_id.",'".$name."',".$upper_specification_limit.",".$lower_specification_limit.")";
 					
 			$res_write = $db->db_query($sql_write);	
 
@@ -183,11 +183,11 @@ class ParameterFieldLimit_Access
 	/**
 	 * @return float
 	 */
-	public function get_upper_tolerance_limit()
+	public function get_upper_specification_limit()
 	{
-		if ($this->upper_tolerance_limit)
+		if ($this->upper_specification_limit)
 		{
-			return $this->upper_tolerance_limit;
+			return $this->upper_specification_limit;
 		}
 		else
 		{
@@ -198,11 +198,11 @@ class ParameterFieldLimit_Access
 	/**
 	 * @return float
 	 */
-	public function get_lower_tolerance_limit()
+	public function get_lower_specification_limit()
 	{
-		if ($this->lower_tolerance_limit)
+		if ($this->lower_specification_limit)
 		{
-			return $this->lower_tolerance_limit;
+			return $this->lower_specification_limit;
 		}
 		else
 		{
@@ -269,21 +269,21 @@ class ParameterFieldLimit_Access
 	}
 	
 	/**
-	 * @param integer $upper_tolerance_limit
+	 * @param integer $upper_specification_limit
 	 * @return bool
 	 */
-	public function set_upper_tolerance_limit($upper_tolerance_limit)
+	public function set_upper_specification_limit($upper_specification_limit)
 	{	
 		global $db;
 
-		if ($this->parameter_field_limit_id and is_numeric($upper_tolerance_limit))
+		if ($this->parameter_field_limit_id and is_numeric($upper_specification_limit))
 		{
-			$sql = "UPDATE ".constant("PARAMETER_FIELD_LIMIT_TABLE")." SET upper_tolerance_limit = '".$upper_tolerance_limit."' WHERE id = ".$this->parameter_field_limit_id."";
+			$sql = "UPDATE ".constant("PARAMETER_FIELD_LIMIT_TABLE")." SET upper_specification_limit = '".$upper_specification_limit."' WHERE id = ".$this->parameter_field_limit_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
 			{
-				$this->upper_tolerance_limit = $upper_tolerance_limit;
+				$this->upper_specification_limit = $upper_specification_limit;
 				return true;
 			}
 			else
@@ -298,21 +298,21 @@ class ParameterFieldLimit_Access
 	}
 	
 	/**
-	 * @param integer $lower_tolerance_limit
+	 * @param integer $lower_specification_limit
 	 * @return bool
 	 */
-	public function set_lower_tolerance_limit($lower_tolerance_limit)
+	public function set_lower_specification_limit($lower_specification_limit)
 	{	
 		global $db;
 
-		if ($this->parameter_field_limit_id and is_numeric($lower_tolerance_limit))
+		if ($this->parameter_field_limit_id and is_numeric($lower_specification_limit))
 		{
-			$sql = "UPDATE ".constant("PARAMETER_FIELD_LIMIT_TABLE")." SET lower_tolerance_limit = '".$lower_tolerance_limit."' WHERE id = ".$this->parameter_field_limit_id."";
+			$sql = "UPDATE ".constant("PARAMETER_FIELD_LIMIT_TABLE")." SET lower_specification_limit = '".$lower_specification_limit."' WHERE id = ".$this->parameter_field_limit_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
 			{
-				$this->lower_tolerance_limit = $lower_tolerance_limit;
+				$this->lower_specification_limit = $lower_specification_limit;
 				return true;
 			}
 			else

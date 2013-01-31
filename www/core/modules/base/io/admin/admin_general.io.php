@@ -87,8 +87,13 @@ class AdminGeneralIO
 		
 		$list->add_column("","symbol",false,"16px");
 		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"name",true,null);
-		$list->add_column(Language::get_message("BaseGeneralListColumnType", "general"),"type",true,null);
 		$list->add_column(Language::get_message("BaseGeneralListColumnSymbol", "general"),"unit_symbol",false,null);
+		$list->add_column("Secondary Units","secondary_units",false,null);
+		$list->add_column("Min-Value","min_value",true,null);
+		$list->add_column("Max-Value","max_value",true,null);
+		$list->add_column("Category","category",true,null);
+		$list->add_column(Language::get_message("BaseGeneralListColumnType", "general"),"type",true,null);
+		
 		
 		$template = new HTMLTemplate("base/admin/general/list_measuring_units.html");
 		

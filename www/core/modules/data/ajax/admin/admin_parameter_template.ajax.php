@@ -22,10 +22,10 @@
  */
 
 /**
- * Value Template Admin Ajax IO Class
+ * Parameter Template Admin Ajax IO Class
  * @package data
  */
-class AdminValueTemplateAjax
+class AdminParameterTemplateAjax
 {
 	/**
 	 * @param string $json_column_array
@@ -59,7 +59,7 @@ class AdminValueTemplateAjax
 				$entries_per_page = 20;
 			}
 						
-			$list_array = Data_Wrapper::list_value_templates($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+			$list_array = Data_Wrapper::list_parameter_templates($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
 			
 			if (is_array($list_array) and count($list_array) >= 1)
 			{	
@@ -103,7 +103,7 @@ class AdminValueTemplateAjax
 		
 		if ($user->is_admin())
 		{
-			return Data_Wrapper::count_list_value_templates();
+			return Data_Wrapper::count_list_parameter_templates();
 		}
 		else
 		{
