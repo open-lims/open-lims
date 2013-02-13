@@ -172,6 +172,7 @@ class MeasuringUnit implements MeasuringUnitInterface
 					
 				}
 				
+				$return_array[$counter]['id'] = $unit_value['id'];
 				$return_array[$counter]['name'] = $unit_value['name']." (".$unit_value['unit_symbol'].")";
 				$return_array[$counter]['exponent'] = 0;
 				$return_array[$counter]['headline'] = false;

@@ -149,10 +149,25 @@ div.FormFocused
 	border: 1px #D0D0D0 dotted;
 	clear: left;
 }
+.FormBoxWithoutLRPadding
+{
+	margin: 20px 10px 5px 10px;
+	padding: 16px 0 10px 0;
+	border: 1px #D0D0D0 dotted;
+	clear: left;
+}
 .FormBoxHeadline
 {
 	float: left;
 	margin: -25px 0 0 -2px;
+	padding: 0 2px;
+	font-weight: bold;
+	background: white;
+}
+.FormBoxHeadlineWithoutLRPadding
+{
+	float: left;
+	margin: -25px 0 0 8px;
 	padding: 0 2px;
 	font-weight: bold;
 	background: white;

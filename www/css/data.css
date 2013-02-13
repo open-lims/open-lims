@@ -402,6 +402,20 @@ ul.BaseFileDetailAdminMenu li a
 {
 	border-collapse: collapse;
 }
+.DataParameterTable tbody tr.odd
+{
+	background-color: #EFEFEF;
+}
+.DataParameterTable tbody tr td:first-child,
+.DataParameterTable thead tr th:first-child
+{
+	padding-left: 10px;
+}
+.DataParameterTable tbody tr td:last-child,
+.DataParameterTable thead tr th:last-child
+{
+	padding-right: 10px;
+}
 
 .DataParameterMeasuringUnitSelect
 {

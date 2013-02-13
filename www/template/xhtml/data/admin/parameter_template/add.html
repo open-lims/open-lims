@@ -1,17 +1,26 @@
 <script>
-
+/*<![CDATA[*/
 $(document).ready(function()
 {
+	var line_counter = 1;
 	
-	
-	$("#DataParameterTemplateFieldNewButton").bind("click", function()
+	$("#DataParameterTemplateFieldNewButton").click(function()
 	{
-		console.log($("#DataParameterTemplateTable").children("tbody").children(":last-child"));
+		line_counter++;
 		
-		$("#DataParameterTemplateTable").children("tbody").children(":last-child").after("<tr>" +
-			"<td><input type='text' /></td>" +
+		if ($("#DataParameterTemplateTable").children("tbody").children(":last-child").hasClass("odd"))
+		{
+			var tr_class = "even";	
+		}
+		else
+		{
+			var tr_class = "odd";	
+		}
+		
+		$("#DataParameterTemplateTable").children("tbody").children(":last-child").after("<tr class='"+tr_class+" DataParameterTemplateField' id='DataParameterTemplateField"+line_counter+"'>" +
+			"<td><input type='text' name='name-"+line_counter+"' class='DataParameterAdminValue' /></td>" +
 			"<td>" +
-			"<select class='DataParameterMeasuringUnitSelect'>" +
+			"<select class='DataParameterMeasuringUnitSelect DataParameterAdminValue' name='unit-"+line_counter+"'>" +
 			"" +
 			"<!-- FOREACH BEGIN ([[MEASURING_UNITS]]) -->" +
 			"" +
@@ -21,28 +30,164 @@ $(document).ready(function()
 			"" +
 			"</select>" +
 			"</td>" +
-			"<td><input type='text' size='6' /></td>" +
-			"<td><input type='text' size='6' /></td>" +
-			"<td><input type='text' size='6' /></td>" +
-			"<td><input type='text' size='6' /></td>" +
+			"<td><input type='text' size='6' name='usl-"+line_counter+"' class='DataParameterAdminValue' /></td>" +
+			"<td><input type='text' size='6' name='lsl-"+line_counter+"' class='DataParameterAdminValue' /></td>" +
+			"<td><input type='text' size='6' name='min-"+line_counter+"' class='DataParameterAdminValue' /></td>" +
+			"<td><input type='text' size='6' name='max-"+line_counter+"' class='DataParameterAdminValue' /></td>" +
 			"<td>Methods</td>" +
-			"<td>Delete</td>" +
+			"<td><a title='delete' style='cursor: pointer;' id='DataParameterTemplateFieldDeleteButton"+line_counter+"'><img src='images/icons/delete.png' alt='D' /></a></td>" +
 			"</tr>");
+		
+		$("#DataParameterTemplateFieldDeleteButton"+line_counter+"").click(function()
+		{
+			var current_line_counter = $(this).attr("id").replace("DataParameterTemplateFieldDeleteButton","");
+			
+			$(this).parent().parent().fadeOut(400, function()
+			{
+				$(this).remove();
+
+				var tmp_delete_counter = 1;
+				
+				$(".DataParameterTemplateField").each(function()
+				{
+					if ((tmp_delete_counter % 2) !== 0)
+					{
+						var tmp_tr_class = "even";	
+					}
+					else
+					{
+						var tmp_tr_class = "odd";	
+					}
+					
+					$(this).removeClass("odd");
+					$(this).removeClass("even");
+					$(this).addClass(tmp_tr_class);
+					
+					tmp_delete_counter++;
+				});
+			});
+		});
 		
 		base_form_init();
 	});
 	
+	$("#DataParameterTemplateLimitButton").click(function()
+	{
+
+	});
+	
+	$("#DataParameterTemplateCancelButton").click(function()
+	{
+		history.back();
+	});
+		
+	$("#DataParameterTemplateSaveButton").click(function()
+	{
+		var field_object = new Object();
+		
+		$(".DataParameterAdminValue").each(function()
+		{
+			var name = $(this).attr("name");
+			if (name !== undefined)
+			{
+				var type = name.split("-")[0];
+				var id = parseInt(name.split("-")[1]);
+				var value = $(this).val();
+
+				
+				if (field_object[id] === undefined)
+				{
+					field_object[id] = new Object();
+				}
+				
+				field_object[id][""+type+""] = value;
+			}
+		});
+		
+		var json_field_object = JSON.stringify(field_object);
+		
+		if ($("input[name='name']").val() === "")
+		{
+			return;
+		}
+		else
+		{
+			var name = $("input[name='name']").val();
+		}
+		
+		if ($("input[name='internal_name']").val() === "")
+		{
+			return;
+		}
+		else
+		{
+			var interal_name = $("input[name='name']").val();
+		}
+		
+		$.ajax(
+		{
+			type : "POST",
+			url : "ajax.php?session_id=[[SESSION_ID]]&nav=data&run=admin_add_parameter_template",
+			data : "name="+name+"&internal_name="+interal_name+"&json_object_string="+json_field_object,
+			beforeSend: function()
+			{
+				$("#DataParameterAdminTemplateAddFinish").dialog("open");
+			},
+			success : function(data)
+			{
+				if (data == "1")
+				{
+					// window.setTimeout('window.location = \'[[RETRACE]]\'',500);
+				}
+				else
+				{
+					if ((data + '').indexOf("EXCEPTION",0) === 0)
+					{
+						var exception_message = data.replace("EXCEPTION: ","");
+						$("#DataParameterAdminTemplateAddFinish").dialog("close");
+						ErrorDialog("Error", exception_message);
+						return false;
+					}
+					else
+					{
+						$("#DataParameterAdminTemplateAddFinish").dialog("close");
+						ErrorDialog("Error", "An error occured");
+						return false;
+					}
+				}
+			}
+		});
+	});
 	
 });
-
+/*]]>*/  
 </script>
+
+<div class="BasePlaseWaitWindow" id="DataParameterAdminTemplateAddFinish" title=""> 
+<div><img src='images/animations/loading_circle_small.gif' alt=''> [[LANG:BaseGlobalMessageWait]]</div>
+</div> 
 
 <!-- CONTAINER BEGIN ("Add Parameter Template") -->
 
 <div class='Form'>
 
 <div class='FormBox'>
-<div class='FormBoxHeadline'>Parameter-Fields</div>
+<div class='FormBoxHeadline'>Parameter Template Details</div>
+
+<table style='width: 80%'>
+	<tr>
+		<td>Name:</td>
+		<td><input type='text' name='name' /></td>
+		<td>Internal-Name:</td>
+		<td><input type='text' name='internal_name' /></td>
+	</tr>
+</table>
+
+</div>
+
+
+<div class='FormBoxWithoutLRPadding'>
+<div class='FormBoxHeadlineWithoutLRPadding'>Parameter-Fields</div>
 
 <table style='width: 100%; text-align: left;' id='DataParameterTemplateTable' class='DataParameterTable'>
 	<thead>
@@ -54,14 +199,14 @@ $(document).ready(function()
 			<th>Min (valid)</th>
 			<th>Max (valid)</th>
 			<th>Methods</th>
-			<th>Delete</th>
+			<th style='width: 20px;'></th>
 		<tr>
 	</thead>
 	<tbody>
 		<tr class='odd'>
-			<td><input type='text' /></td>
+			<td><input type='text' name='name-1' class='DataParameterAdminValue' /></td>
 			<td>
-				<select class='DataParameterMeasuringUnitSelect'>
+				<select class='DataParameterMeasuringUnitSelect DataParameterAdminValue' name='unit-1'>
 				
 				<!-- FOREACH BEGIN ([[MEASURING_UNITS]]) -->
 	
@@ -71,21 +216,23 @@ $(document).ready(function()
 				
 				</select>
 			</td>
-			<td><input type='text' size='6' /></td>
-			<td><input type='text' size='6' /></td>
-			<td><input type='text' size='6' /></td>
-			<td><input type='text' size='6' /></td>
+			<td><input type='text' size='6' name='usl-1' class='DataParameterAdminValue' /></td>
+			<td><input type='text' size='6' name='lsl-1' class='DataParameterAdminValue' /></td>
+			<td><input type='text' size='6' name='min-1' class='DataParameterAdminValue' /></td>
+			<td><input type='text' size='6' name='max-1' class='DataParameterAdminValue' /></td>
 			<td>Methods</td>
-			<td>Delete</td>
+			<td></td>
 		</tr>
 	</tbody>
 </table>
 
 <br />
 
+<div style='padding: 0 10px;'>
 <button type='submit' id='DataParameterTemplateFieldNewButton'>New Field</button>
 <button type='submit' id='DataParameterTemplateLimitButton'>More Limits (USL/LSL)</button>
 <div class='FormButtonBoxClear'></div>
+</div>
 </div>
 
 <div class='FormButtonBox'>

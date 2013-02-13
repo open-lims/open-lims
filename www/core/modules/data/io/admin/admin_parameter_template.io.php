@@ -55,6 +55,11 @@ class AdminParameterTemplateIO
 	{
 		$template = new HTMLTemplate("data/admin/parameter_template/add.html");
 		
+		$template->set_var("session_id", $_GET['session_id']);
+		
+		
+		$template->set_var("retrace", "");
+		
 		$result = array();
 		$counter = 0;
 		
@@ -73,7 +78,7 @@ class AdminParameterTemplateIO
 					$result[$counter]['disabled'] = "";
 				}
 				
-				$result[$counter]['value'] = "";
+				$result[$counter]['value'] = $value['id']."-".$value['exponent'];
 				
 				$result[$counter]['selected'] = "";
 				$result[$counter]['content'] = $value['name'];

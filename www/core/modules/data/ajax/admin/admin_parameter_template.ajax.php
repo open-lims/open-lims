@@ -65,6 +65,12 @@ class AdminParameterTemplateAjax
 			{	
 				foreach($list_array as $key => $value)
 				{
+					$user = new User($list_array[$key]['created_by']);
+					$list_array[$key]['created_by'] = $user->get_full_name(true);
+					
+					$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
+					$list_array[$key]['datetime'] = $datetime_handler->get_datetime(false);
+					
 					$paramquery = $_GET;
 					$paramquery['id'] = $list_array[$key]['id'];
 					$paramquery['action'] = "delete";
@@ -108,6 +114,29 @@ class AdminParameterTemplateAjax
 		else
 		{
 			throw new BaseUserAccessDeniedException();
+		}
+	}
+	
+	public static function add_template($name, $internal_name, $json_object_string)
+	{
+		if ($name and $internal_name and $json_object_string)
+		{			
+			$json_object = json_decode($json_object_string, true);
+			
+			$parameter_template = new ParameterTemplate();
+			
+			if ($parameter_template->create($name, $internal_name, $json_object) !== null)
+			{
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
+		}
+		else
+		{
+			return 0;
 		}
 	}
 }

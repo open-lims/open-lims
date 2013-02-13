@@ -25,7 +25,7 @@
  * Parameter Template Has Field Access Class
  * @package data
  */
-class ParameterTemplateHasField_Access
+class ParameterNonTemplateHasField_Access
 {
 	private $non_template_id;
 	private $parameter_field_id;

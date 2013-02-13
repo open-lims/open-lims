@@ -29,7 +29,11 @@ require_once("interfaces/parameter_template.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-
+	require_once("access/parameter_template.access.php");
+	require_once("access/parameter_template_has_field.access.php");
+	require_once("access/parameter_field.access.php");
+	require_once("access/parameter_field_limit.access.php");
+	require_once("access/parameter_field_has_method.access.php");
 }
 
 /**
@@ -38,7 +42,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class ParameterTemplate implements ParameterTemplateInterface, EventListenerInterface
 {
-	function __construct()
+	function __construct($parameter_template_id = null)
 	{
 		
 	}
@@ -48,9 +52,98 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 		
 	}
 	
-	public function create($field_array)
+	public function create($internal_name, $name, $field_array)
 	{
+		global $transaction, $user;
 		
+		if (is_array($field_array) and count($field_array) >= 1)
+		{
+			$transaction_id = $transaction->begin();
+			
+			$parameter_template = new ParameterTemplate_Access(null);
+			if (($parameter_template_id = $parameter_template->create($internal_name, $name, $user->get_user_id())) === null)
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				return null;
+			}
+		
+			foreach($field_array as $key => $value)
+			{
+				foreach($value as $field_key => $field_value)
+				{
+					switch($field_key):
+					
+						case "name":
+							$name = $field_value;	
+						break;
+						
+						case "unit":
+							$unit_array = explode("-", $field_value);
+							if (is_array($unit_array) and count($unit_array) === 2)
+							{
+								$measuring_unit_id = $unit_array[0];
+								$measuring_unit_exponent = $unit_array[1];
+							}
+						break;
+						
+						case "min":
+							$min_value = $field_value;	
+						break;	
+							
+						case "max":
+							$max_value = $field_value;	
+						break;
+							
+						default:
+		
+						break;
+					
+					endswitch;
+				}
+				
+				$parameter_field = new ParameterField_Access(null);
+				if (($parameter_field_id = $parameter_field->create($name, $min_value, $max_value, $measuring_unit_id, $measuring_unit_exponent)) === null)
+				{
+					echo "2";
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return null;
+				}
+				
+				$parameter_template_has_field = new ParameterTemplateHasField_Access(null, null);
+				if ($parameter_template_has_field->create($parameter_template_id, $parameter_field_id) === false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return null;
+				}
+				
+				unset($name);
+				unset($min_value);
+				unset($max_value);
+				unset($measuring_unit_id);
+				unset($measuring_unit_exponent);
+			}
+			
+			print_r($field_array);
+			
+			if ($transaction_id != null)
+			{
+				$transaction->commit($transaction_id);
+			}
+			return $parameter_template_id;
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	public function delete()
