@@ -232,11 +232,17 @@ ValueHandler = function(field_class, decimal_separator, thousand_separator)
 			{
 				if ($(this).hasClass("DataValueFieldTypeFloat"))
 				{
-					var check_value = $(this).val().replace(thousand_separator,"'");
-					var check_value = check_value.replace(decimal_separator,".");
+					var check_value = $(this).val();
 					
-					
-					// $(this).val($(this).val().replace(",","."));
+					if ((thousand_separator !== undefined) && (thousand_separator !== ""))
+					{
+						check_value = check_value.replace(thousand_separator,"'");
+						check_value = check_value.replace(decimal_separator,".");
+					}
+					else
+					{
+						check_value = check_value.replace(",",".");
+					}
 					
 					if ((check_value != parseFloat(check_value)) && ( check_value !== "" ) )
 					{
