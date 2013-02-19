@@ -71,9 +71,23 @@ $(document).ready(function()
 		base_form_init();
 	});
 	
+	$("#DataParameterAdminTemplateLimitsDialog").dialog(
+	{
+		autoOpen: false,
+		height: 300,
+		width: 400,
+		buttons: 
+		{
+			"[[LANG:BaseGlobalButtonClose]]": function()
+			{
+			 	$(this).dialog("close");
+			}
+		}
+	});
+	
 	$("#DataParameterTemplateLimitButton").click(function()
 	{
-
+		$("#DataParameterAdminTemplateLimitsDialog").dialog("open");
 	});
 	
 	$("#DataParameterTemplateCancelButton").click(function()
@@ -167,6 +181,30 @@ $(document).ready(function()
 <div><img src='images/animations/loading_circle_small.gif' alt=''> [[LANG:BaseGlobalMessageWait]]</div>
 </div> 
 
+<div id="DataParameterAdminTemplateLimitsDialog" title="Limits (USL/LSL)">
+	<div id="" class="Form"><select><option>First Limit (Initial-Limit)</option></select></div>
+	<div id=""><a href=''>New Limit</a> <a href=''>Rename this Limit</a> <a href=''>Delete this Limit</a></div>
+	<div id="" class="Form">
+		<table style='width: 100%; text-align: left;'>
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>USL (max)</th>
+					<th>LSL (max)</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Text</td>
+					<td><input type='text' size='6' name='usl-1' class='DataParameterAdminValue' /></td>
+					<td><input type='text' size='6' name='lsl-1' class='DataParameterAdminValue' /></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div> 
+
+
 <!-- CONTAINER BEGIN ("Add Parameter Template") -->
 
 <div class='Form'>
@@ -230,7 +268,7 @@ $(document).ready(function()
 
 <div style='padding: 0 10px;'>
 <button type='submit' id='DataParameterTemplateFieldNewButton'>New Field</button>
-<button type='submit' id='DataParameterTemplateLimitButton'>More Limits (USL/LSL)</button>
+<button type='submit' id='DataParameterTemplateLimitButton'>Limits (USL/LSL)</button>
 <div class='FormButtonBoxClear'></div>
 </div>
 </div>
