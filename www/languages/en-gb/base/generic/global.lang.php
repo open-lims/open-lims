@@ -13,4 +13,5 @@ $LANG['BaseGlobalButtonClose'] = "close";
 $LANG['BaseGlobalButtonChange'] = "change";
 $LANG['BaseGlobalButtonUpdate'] = "Update";
 $LANG['BaseGlobalButtonUpdateMinor'] = "Update as Minor";
+$LANG['BaseGlobalButtonNew'] = "New";
 ?>

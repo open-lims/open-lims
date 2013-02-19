@@ -3,6 +3,8 @@
 $(document).ready(function()
 {
 	var line_counter = 1;
+	var limit_array = new Array();
+	var limit_counter = 0;
 	
 	$("#DataParameterTemplateFieldNewButton").click(function()
 	{
@@ -74,11 +76,81 @@ $(document).ready(function()
 	$("#DataParameterAdminTemplateLimitsDialog").dialog(
 	{
 		autoOpen: false,
-		height: 300,
-		width: 400,
+		height: 400,
+		width: 530,
 		buttons: 
 		{
 			"[[LANG:BaseGlobalButtonClose]]": function()
+			{
+			 	$(this).dialog("close");
+			 	// USL und LSL für 1 übernehmen
+			}
+		}
+	});
+	
+	$("#DataParameterAdminTemplateLimitsDialogNew").dialog(
+	{
+		autoOpen: false,
+		height: 150,
+		width: 350,
+		buttons: 
+		{
+			"[[LANG:BaseGlobalButtonNew]]": function()
+			{
+			 	$(this).dialog("close");
+			 	
+			 	var name = $(this).find('input').val();
+			 	
+			 	limit_counter++;
+			 	limit_array[limit_counter] = new Array();
+			 	limit_array[limit_counter]['name'] = name;
+			 	
+			 	$("#DataParameterAdminTemplateLimitsDialogSelect select").append("<option>"+name+"</option>");
+			 	// Neuer Select Eintrag
+			 	// Array erweitern
+			 	// Select Eintrag auswählen
+			},
+			"[[LANG:BaseGlobalButtonCancel]]": function()
+			{
+			 	$(this).dialog("close");
+			}
+		}
+	});
+	
+	$("#DataParameterAdminTemplateLimitsDialogDelete").dialog(
+	{
+		autoOpen: false,
+		height: 150,
+		width: 350,
+		buttons: 
+		{
+			"[[LANG:BaseGlobalButtonYes]]": function()
+			{
+			 	$(this).dialog("close");
+			 	// Select eintrag löschen
+			 	// Array-Einträge löschen
+			 	// Zu Standart springen
+			},
+			"[[LANG:BaseGlobalButtonNo]]": function()
+			{
+			 	$(this).dialog("close");
+			}
+		}
+	});
+	
+	$("#DataParameterAdminTemplateLimitsDialogRename").dialog(
+	{
+		autoOpen: false,
+		height: 150,
+		width: 350,
+		buttons: 
+		{
+			"[[LANG:BaseGlobalButtonSave]]": function()
+			{
+			 	$(this).dialog("close");
+			 	// Selecteintrag und Array-Eintrag umbennen
+			},
+			"[[LANG:BaseGlobalButtonCancel]]": function()
 			{
 			 	$(this).dialog("close");
 			}
@@ -87,6 +159,43 @@ $(document).ready(function()
 	
 	$("#DataParameterTemplateLimitButton").click(function()
 	{
+		$("#DataParameterAdminTemplateLimitsDialogNewButton").click(function()
+		{
+			$("#DataParameterAdminTemplateLimitsDialogNew").dialog("open");
+		});
+		
+		$("#DataParameterAdminTemplateLimitsDialogRenameButton").click(function()
+		{
+			$("#DataParameterAdminTemplateLimitsDialogRename").dialog("open");	
+		});
+		
+		$("#DataParameterAdminTemplateLimitsDialogDeleteButton").click(function()
+		{
+			$("#DataParameterAdminTemplateLimitsDialogDelete").dialog("open");	
+		});
+		
+		// var number_of_entries = $("#DataParameterTemplateTable tbody tr").length;
+				
+		$("#DataParameterTemplateLimitTable tbody").empty();
+		$("#DataParameterTemplateTable tbody tr").each(function()
+		{
+			var id = $(this).attr("id").replace("DataParameterTemplateField","");
+			var name = $(this).children(":first-child").children("input").val();
+			var usl = $(this).children().children("input[name='usl-"+id+"']").val();
+			var lsl = $(this).children().children("input[name='lsl-"+id+"']").val();
+			
+			if ((name === undefined) || (name === ""))
+			{
+				name = "Field "+id;	
+			}
+						
+			$("#DataParameterTemplateLimitTable tbody").append("<tr>" +
+			"<td>"+name+"</td>" +
+			"<td><input type='text' size='6' name='usl-"+id+"' class='DataParameterAdminValue' value='"+usl+"' /></td>" +
+			"<td><input type='text' size='6' name='lsl-"+id+"' class='DataParameterAdminValue' value='"+lsl+"' /></td>" +
+			"</tr>");
+		});
+		
 		$("#DataParameterAdminTemplateLimitsDialog").dialog("open");
 	});
 	
@@ -108,13 +217,19 @@ $(document).ready(function()
 				var id = parseInt(name.split("-")[1]);
 				var value = $(this).val();
 
-				
-				if (field_object[id] === undefined)
+				if ((type !== "lsl") && (type !== "usl"))
 				{
-					field_object[id] = new Object();
+					if (field_object[id] === undefined)
+					{
+						field_object[id] = new Object();
+					}
+					
+					field_object[id][""+type+""] = value;
 				}
-				
-				field_object[id][""+type+""] = value;
+				else
+				{
+					
+				}
 			}
 		});
 		
@@ -182,10 +297,23 @@ $(document).ready(function()
 </div> 
 
 <div id="DataParameterAdminTemplateLimitsDialog" title="Limits (USL/LSL)">
-	<div id="" class="Form"><select><option>First Limit (Initial-Limit)</option></select></div>
-	<div id=""><a href=''>New Limit</a> <a href=''>Rename this Limit</a> <a href=''>Delete this Limit</a></div>
-	<div id="" class="Form">
-		<table style='width: 100%; text-align: left;'>
+	<div id="DataParameterAdminTemplateLimitsDialogSelect" class="Form"><select><option>First Limit (Initial-Limit)</option></select></div>
+	<div id="DataParameterAdminTemplateLimitsDialogButtons">
+		<a href='#' class='ListButton' id='DataParameterAdminTemplateLimitsDialogNewButton'>
+		<img src='images/icons/add.png' alt='' />
+		<div>New Limit</div>
+		</a>
+		<a href='#' class='ListButton' id='DataParameterAdminTemplateLimitsDialogRenameButton'>
+		<img src='images/icons/delete.png' alt='' />
+		<div>Rename current Limit</div>
+		</a>
+		<a href='#' class='ListButton' id='DataParameterAdminTemplateLimitsDialogDeleteButton'>
+		<img src='images/icons/delete.png' alt='' />
+		<div>Delete current Limit</div>
+		</a>
+	</div>
+	<div style='clear: both;' id="" class="Form">
+		<table style='width: 100%; text-align: left;' id="DataParameterTemplateLimitTable">
 			<thead>
 				<tr>
 					<th>Name</th>
@@ -194,15 +322,22 @@ $(document).ready(function()
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>Text</td>
-					<td><input type='text' size='6' name='usl-1' class='DataParameterAdminValue' /></td>
-					<td><input type='text' size='6' name='lsl-1' class='DataParameterAdminValue' /></td>
-				</tr>
 			</tbody>
 		</table>
 	</div>
 </div> 
+
+<div id="DataParameterAdminTemplateLimitsDialogNew" title="New Limit" class='Form'>
+Name: <input type='text' size='35' />
+</div>
+
+<div id="DataParameterAdminTemplateLimitsDialogDelete" title="Delete Limit">
+Are you sure?
+</div>
+
+<div id="DataParameterAdminTemplateLimitsDialogRename" title="Rename Limit">
+Name: <input type='text' size='35' />
+</div>
 
 
 <!-- CONTAINER BEGIN ("Add Parameter Template") -->
@@ -241,7 +376,7 @@ $(document).ready(function()
 		<tr>
 	</thead>
 	<tbody>
-		<tr class='odd'>
+		<tr class='odd' id='DataParameterTemplateField1'>
 			<td><input type='text' name='name-1' class='DataParameterAdminValue' /></td>
 			<td>
 				<select class='DataParameterMeasuringUnitSelect DataParameterAdminValue' name='unit-1'>
