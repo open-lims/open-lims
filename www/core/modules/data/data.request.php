@@ -326,7 +326,7 @@ class DataRequest
 			
 			case "admin_add_parameter_template":
 				require_once("ajax/admin/admin_parameter_template.ajax.php");
-				echo AdminParameterTemplateAjax::add_template($_POST['name'], $_POST['internal_name'], $_POST['json_object_string']);
+				echo AdminParameterTemplateAjax::add_template($_POST['name'], $_POST['internal_name'], $_POST['json_object_string'], $_POST['json_limit_string']);
 			break;
 
 			

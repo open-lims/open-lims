@@ -5,7 +5,14 @@ $(document).ready(function()
 	var line_counter = 1;
 	var limit_array = new Array();
 	var limit_counter = 0;
+	var current_limit = 0;
 	
+	limit_array[limit_counter] = new Object();
+	limit_array[limit_counter]['name'] = "First Limit";
+	limit_array[limit_counter]['usl'] = new Array();
+	limit_array[limit_counter]['lsl'] = new Array();
+	
+	// New Template Line
 	$("#DataParameterTemplateFieldNewButton").click(function()
 	{
 		line_counter++;
@@ -73,6 +80,7 @@ $(document).ready(function()
 		base_form_init();
 	});
 	
+	// Limit Dialog
 	$("#DataParameterAdminTemplateLimitsDialog").dialog(
 	{
 		autoOpen: false,
@@ -83,11 +91,18 @@ $(document).ready(function()
 			"[[LANG:BaseGlobalButtonClose]]": function()
 			{
 			 	$(this).dialog("close");
-			 	// USL und LSL für 1 übernehmen
+			 	$("#DataParameterAdminTemplateLimitsDialogSelect select").trigger("onchange");
+			 	$("#DataParameterTemplateTable tbody tr").each(function()
+	 			{
+			 		var id = $(this).attr("id").replace("DataParameterTemplateField","");
+	 				$(this).children().children("input[name='usl-"+id+"']").val(limit_array[0]['usl'][id]);
+	 				$(this).children().children("input[name='lsl-"+id+"']").val(limit_array[0]['lsl'][id]);
+	 			});
 			}
 		}
 	});
 	
+	// New Limit
 	$("#DataParameterAdminTemplateLimitsDialogNew").dialog(
 	{
 		autoOpen: false,
@@ -102,13 +117,18 @@ $(document).ready(function()
 			 	var name = $(this).find('input').val();
 			 	
 			 	limit_counter++;
-			 	limit_array[limit_counter] = new Array();
+			 	limit_array[limit_counter] = new Object();
 			 	limit_array[limit_counter]['name'] = name;
+			 	limit_array[limit_counter]['usl'] = new Array();
+			 	limit_array[limit_counter]['lsl'] = new Array();
 			 	
-			 	$("#DataParameterAdminTemplateLimitsDialogSelect select").append("<option>"+name+"</option>");
-			 	// Neuer Select Eintrag
-			 	// Array erweitern
-			 	// Select Eintrag auswählen
+			 	var new_option = $("<option value='"+limit_counter+"'>"+name+"</option>")
+			 	$("#DataParameterAdminTemplateLimitsDialogSelect select").append(new_option);
+			 	$(new_option).attr("selected", "selected");
+			 	
+			 	base_form_init();
+			 	
+			 	$("#DataParameterAdminTemplateLimitsDialogSelect select").trigger("onchange");
 			},
 			"[[LANG:BaseGlobalButtonCancel]]": function()
 			{
@@ -117,6 +137,7 @@ $(document).ready(function()
 		}
 	});
 	
+	// Delete Limit
 	$("#DataParameterAdminTemplateLimitsDialogDelete").dialog(
 	{
 		autoOpen: false,
@@ -127,9 +148,15 @@ $(document).ready(function()
 			"[[LANG:BaseGlobalButtonYes]]": function()
 			{
 			 	$(this).dialog("close");
-			 	// Select eintrag löschen
-			 	// Array-Einträge löschen
-			 	// Zu Standart springen
+			 	
+			 	limit_array[limit_counter] = undefined;
+			 	
+			 	$("#DataParameterAdminTemplateLimitsDialogSelect select").find("option:selected").remove();
+				$("#DataParameterAdminTemplateLimitsDialogSelect select").find("option[value='0']").attr("selected", "selected");
+			 	
+			 	base_form_init();
+			 	
+			 	$("#DataParameterAdminTemplateLimitsDialogSelect select").trigger("onchange");
 			},
 			"[[LANG:BaseGlobalButtonNo]]": function()
 			{
@@ -138,6 +165,7 @@ $(document).ready(function()
 		}
 	});
 	
+	// Rename Limit
 	$("#DataParameterAdminTemplateLimitsDialogRename").dialog(
 	{
 		autoOpen: false,
@@ -148,7 +176,14 @@ $(document).ready(function()
 			"[[LANG:BaseGlobalButtonSave]]": function()
 			{
 			 	$(this).dialog("close");
-			 	// Selecteintrag und Array-Eintrag umbennen
+			 	
+			 	var name = $(this).find('input').val();
+			 	
+			 	limit_array[current_limit]['name'] = name;
+			 	
+			 	$("#DataParameterAdminTemplateLimitsDialogSelect select").find("option:selected").html(name);
+			 	
+			 	base_form_init();
 			},
 			"[[LANG:BaseGlobalButtonCancel]]": function()
 			{
@@ -157,15 +192,67 @@ $(document).ready(function()
 		}
 	});
 	
+	// Limit Select Change
+	$("#DataParameterAdminTemplateLimitsDialogSelect select").bind("onchange", function()
+	{
+		if (limit_array[current_limit] !== undefined)
+		{
+			$(".DataParameterAdminLimitValue").each(function()
+			{
+				if ($(this).is("input"))
+				{
+					var name = $(this).attr("name");
+					
+					if (name.indexOf("usl-") !== -1)
+					{
+						name = parseInt(name.replace("usl-",""));
+						limit_array[current_limit]['usl'][name] = $(this).val();
+					}
+					else if (name.indexOf("lsl-") !== -1)
+					{
+						name = parseInt(name.replace("lsl-",""));
+						limit_array[current_limit]['lsl'][name] = $(this).val();
+					}
+				}
+			});
+		}
+		
+		current_limit = $(this).children("option:selected").val();
+		
+		$(".DataParameterAdminLimitValue").each(function()
+		{
+			if ($(this).is("input"))
+			{
+				var name = $(this).attr("name");
+				
+				if (name.indexOf("usl-") !== -1)
+				{
+					name = parseInt(name.replace("usl-",""));
+					$(this).val(limit_array[current_limit]['usl'][name]);
+				}
+				else if (name.indexOf("lsl-") !== -1)
+				{
+					name = parseInt(name.replace("lsl-",""));
+					$(this).val(limit_array[current_limit]['lsl'][name]);
+				}
+			}
+		});
+		
+		console.log(limit_array);
+	});
+	
+	// Open Limit Dialog
 	$("#DataParameterTemplateLimitButton").click(function()
 	{
 		$("#DataParameterAdminTemplateLimitsDialogNewButton").click(function()
 		{
+			$("#DataParameterAdminTemplateLimitsDialogNew").find('input').val("");
 			$("#DataParameterAdminTemplateLimitsDialogNew").dialog("open");
 		});
 		
 		$("#DataParameterAdminTemplateLimitsDialogRenameButton").click(function()
 		{
+			$("#DataParameterAdminTemplateLimitsDialogRename").find('input').val(limit_array[current_limit]['name']);
 			$("#DataParameterAdminTemplateLimitsDialogRename").dialog("open");	
 		});
 		
@@ -191,19 +278,28 @@ $(document).ready(function()
 						
 			$("#DataParameterTemplateLimitTable tbody").append("<tr>" +
 			"<td>"+name+"</td>" +
-			"<td><input type='text' size='6' name='usl-"+id+"' class='DataParameterAdminValue' value='"+usl+"' /></td>" +
-			"<td><input type='text' size='6' name='lsl-"+id+"' class='DataParameterAdminValue' value='"+lsl+"' /></td>" +
+			"<td><input type='text' size='6' name='usl-"+id+"' class='DataParameterAdminLimitValue' value='"+usl+"' /></td>" +
+			"<td><input type='text' size='6' name='lsl-"+id+"' class='DataParameterAdminLimitValue' value='"+lsl+"' /></td>" +
 			"</tr>");
 		});
+		
+		$("#DataParameterAdminTemplateLimitsDialogSelect select").find("option:selected").attr("selected", false);
+		$("#DataParameterAdminTemplateLimitsDialogSelect select").find("option[value=0]").attr("selected", "selected");
+		
+		current_limit = 0;
+		
+		base_form_init();
 		
 		$("#DataParameterAdminTemplateLimitsDialog").dialog("open");
 	});
 	
+	// Cancel Template Admin
 	$("#DataParameterTemplateCancelButton").click(function()
 	{
 		history.back();
 	});
-		
+	
+	// Save Template Admin
 	$("#DataParameterTemplateSaveButton").click(function()
 	{
 		var field_object = new Object();
@@ -226,14 +322,11 @@ $(document).ready(function()
 					
 					field_object[id][""+type+""] = value;
 				}
-				else
-				{
-					
-				}
 			}
 		});
 		
 		var json_field_object = JSON.stringify(field_object);
+		var json_limit_object = JSON.stringify(limit_array);
 		
 		if ($("input[name='name']").val() === "")
 		{
@@ -257,7 +350,7 @@ $(document).ready(function()
 		{
 			type : "POST",
 			url : "ajax.php?session_id=[[SESSION_ID]]&nav=data&run=admin_add_parameter_template",
-			data : "name="+name+"&internal_name="+interal_name+"&json_object_string="+json_field_object,
+			data : "name="+name+"&internal_name="+interal_name+"&json_object_string="+json_field_object+"&json_limit_string="+json_limit_object,
 			beforeSend: function()
 			{
 				$("#DataParameterAdminTemplateAddFinish").dialog("open");
@@ -297,7 +390,7 @@ $(document).ready(function()
 </div> 
 
 <div id="DataParameterAdminTemplateLimitsDialog" title="Limits (USL/LSL)">
-	<div id="DataParameterAdminTemplateLimitsDialogSelect" class="Form"><select><option>First Limit (Initial-Limit)</option></select></div>
+	<div id="DataParameterAdminTemplateLimitsDialogSelect" class="Form"><select><option value='0'>First Limit (Initial-Limit)</option></select></div>
 	<div id="DataParameterAdminTemplateLimitsDialogButtons">
 		<a href='#' class='ListButton' id='DataParameterAdminTemplateLimitsDialogNewButton'>
 		<img src='images/icons/add.png' alt='' />

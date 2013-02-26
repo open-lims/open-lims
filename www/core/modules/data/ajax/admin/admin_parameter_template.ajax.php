@@ -117,11 +117,12 @@ class AdminParameterTemplateAjax
 		}
 	}
 	
-	public static function add_template($name, $internal_name, $json_object_string)
+	public static function add_template($name, $internal_name, $json_object_string, $json_limit_string)
 	{
 		if ($name and $internal_name and $json_object_string)
 		{			
 			$json_object = json_decode($json_object_string, true);
+			$json_limit = json_decode($json_limit_string, true);
 			
 			$parameter_template = new ParameterTemplate();
 			
