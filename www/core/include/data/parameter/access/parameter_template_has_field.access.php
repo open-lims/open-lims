@@ -135,5 +135,71 @@ class ParameterTemplateHasField_Access
 			return false;
 		}
 	}
+	
+	
+	/**
+	 * @param integer $template_id
+	 * @return array
+	 */
+	public static function list_fields_by_template_id($template_id)
+	{
+		global $db;
+			
+		if (is_numeric($template_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT parameter_field_id FROM ".constant("PARAMETER_TEMPLATE_HAS_FIELD_TABLE")." WHERE template_id = ".$template_id."";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,$data['parameter_field_id']);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $template_id
+	 * @param integer $parameter_field_id
+	 * @return bool
+	 */
+	public static function field_exists_in_template($template_id, $parameter_field_id)
+	{
+		global $db;
+		
+		if (is_numeric($template_id) and is_numeric($parameter_field_id))
+		{
+			$sql = "SELECT template_id FROM ".constant("PARAMETER_TEMPLATE_HAS_FIELD_TABLE")." WHERE template_id='".$template_id."' AND parameter_field_id='".$parameter_field_id."'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data['template_id'])
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 ?>

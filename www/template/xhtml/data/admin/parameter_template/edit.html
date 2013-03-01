@@ -4,6 +4,9 @@ $(document).ready(function()
 {
 	data_parameter = new DataParameter();
 	data_parameter.init_admin("DataParameterAdminTemplateAfterElement");
+	data_parameter.set_limit_json('[[LIMIT_JSON]]');
+	data_parameter.set_limit_counter([[LIMIT_COUNTER]]);
+	data_parameter.set_line_counter([[LINE_COUNTER]]);
 	
 	// Cancel Template Admin
 	$("#DataParameterTemplateCancelButton").click(function()
@@ -38,7 +41,7 @@ $(document).ready(function()
 		$.ajax(
 		{
 			type : "POST",
-			url : "ajax.php?session_id=[[SESSION_ID]]&nav=data&run=admin_add_parameter_template",
+			url : "ajax.php?session_id=[[SESSION_ID]]&nav=data&run=admin_edit_parameter_template&id=[[ID]]",
 			data : "name="+name+"&internal_name="+interal_name+"&json_object_string="+json_field_object+"&json_limit_string="+json_limit_object,
 			beforeSend: function()
 			{
@@ -81,7 +84,7 @@ $(document).ready(function()
 <div id='DataParameterAdminTemplateAfterElement'></div>
 
 
-<!-- CONTAINER BEGIN ("Add Parameter Template") -->
+<!-- CONTAINER BEGIN ("Edit Parameter Template") -->
 
 <div class='Form'>
 
@@ -91,9 +94,9 @@ $(document).ready(function()
 <table style='width: 80%'>
 	<tr>
 		<td>Name:</td>
-		<td><input type='text' name='name' /></td>
+		<td><input type='text' name='name' value='[[NAME]]' /></td>
 		<td>Internal-Name:</td>
-		<td><input type='text' name='internal_name' /></td>
+		<td><input type='text' name='internal_name' value='[[INTERNAL_NAME]]' /></td>
 	</tr>
 </table>
 
@@ -116,27 +119,34 @@ $(document).ready(function()
 			<th style='width: 20px;'></th>
 		<tr>
 	</thead>
-	<tbody>
-		<tr class='odd' id='DataParameterTemplateField1'>
-			<td><input type='text' name='name-1' class='DataParameterAdminValue' /></td>
-			<td>
-				<select class='DataParameterMeasuringUnitSelect DataParameterAdminValue' name='unit-1'>
-				
-				<!-- FOREACH BEGIN ([[MEASURING_UNITS]]) -->
-	
-					<option value='[[MEASURING_UNITS:VALUE]]' [[MEASURING_UNITS:DISABLED]] [[MEASURING_UNITS:SELECTED]]>[[MEASURING_UNITS:CONTENT]]</option>
+	<tbody>			
+		<!-- FOREACH BEGIN ([[FIELDS]]) -->
 		
-				<!-- FOREACH END -->
-				
-				</select>
-			</td>
-			<td><input type='text' size='6' name='usl-1' class='DataParameterAdminValue' /></td>
-			<td><input type='text' size='6' name='lsl-1' class='DataParameterAdminValue' /></td>
-			<td><input type='text' size='6' name='min-1' class='DataParameterAdminValue' /></td>
-			<td><input type='text' size='6' name='max-1' class='DataParameterAdminValue' /></td>
-			<td>Methods</td>
-			<td></td>
-		</tr>
+			<tr class='[[FIELDS:CLASS]]' id='DataParameterTemplateField[[FIELDS:ID]]' >
+				<td>
+					<input type='hidden' name='pk-[[FIELDS:ID]]' value='[[FIELDS:PK]]'  class='DataParameterAdminValue'/>
+					<input type='text' name='name-[[FIELDS:ID]]' class='DataParameterAdminValue' value='[[FIELDS:NAME]]' />
+				</td>
+				<td>
+					<select class='DataParameterMeasuringUnitSelect DataParameterAdminValue' name='unit-[[FIELDS:ID]]'>
+					
+					<!-- FOREACH BEGIN ([[FIELDS]]) -->
+		
+						<option value='[[FIELDS:VALUE]]' [[FIELDS:DISABLED]] [[FIELDS:SELECTED]]>[[FIELDS:CONTENT]]</option>
+			
+					<!-- FOREACH END -->
+					
+					</select>
+				</td>
+				<td><input type='text' size='6' name='usl-[[FIELDS:ID]]' class='DataParameterAdminValue' value='[[FIELDS:USL]]' /></td>
+				<td><input type='text' size='6' name='lsl-[[FIELDS:ID]]' class='DataParameterAdminValue' value='[[FIELDS:LSL]]' /></td>
+				<td><input type='text' size='6' name='min-[[FIELDS:ID]]' class='DataParameterAdminValue' value='[[FIELDS:MIN]]' /></td>
+				<td><input type='text' size='6' name='max-[[FIELDS:ID]]' class='DataParameterAdminValue' value='[[FIELDS:MAX]]' /></td>
+				<td>Methods</td>
+				<td></td>
+			</tr>
+		
+		<!-- FOREACH END -->
 	</tbody>
 </table>
 

@@ -51,6 +51,7 @@
 	define("PARAMETER_FIELD_TABLE",						"core_data_parameter_fields");
 	define("PARAMETER_HAS_NON_TEMPLATE_TABLE",			"core_data_parameter_has_non_template");
 	define("PARAMETER_HAS_TEMPLATE_TABLE",				"core_data_parameter_has_template");
+	define("PARAMETER_LIMIT_TABLE",						"core_data_parameter_limits");
 	define("PARAMETER_METHOD_TABLE",					"core_data_parameter_methods");
 	define("PARAMETER_NON_TEMPLATE_HAS_FIELD_TABLE",	"core_data_parameter_non_template_has_fields");
 	define("PARAMETER_NON_TEMPLATE_TABLE",				"core_data_parameter_non_templates");

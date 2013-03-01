@@ -335,5 +335,35 @@ class ParameterTemplate_Access
 			return false;
 		}
 	}
+	
+	
+	/**
+	 * @param integer $template_id
+	 * @return bool
+	 */
+	public static function exist_id($template_id)
+	{
+		global $db;
+			
+		if (is_numeric($template_id))
+		{
+			$sql = "SELECT id FROM ".constant("PARAMETER_TEMPLATE_TABLE")." WHERE id = ".$template_id."";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data['id'])
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 ?>

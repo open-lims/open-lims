@@ -55,10 +55,8 @@ class AdminParameterTemplateIO
 	{
 		$template = new HTMLTemplate("data/admin/parameter_template/add.html");
 		
-		$template->set_var("session_id", $_GET['session_id']);
-		
-		
 		$template->set_var("retrace", "");
+		$template->set_var("session_id", $_GET['session_id']);
 		
 		$result = array();
 		$counter = 0;
@@ -91,12 +89,143 @@ class AdminParameterTemplateIO
 		$template->output();
 	}
 	
+	public static function edit()
+	{
+		if (isset($_GET['id']) and is_numeric($_GET['id']))
+		{			
+			$parameter_template = new ParameterTemplate($_GET['id']);
+			
+			$template = new HTMLTemplate("data/admin/parameter_template/edit.html");
+			
+			$template->set_var("retrace", "");
+			$template->set_var("session_id", $_GET['session_id']);
+			$template->set_var("name", $parameter_template->get_name());
+			$template->set_var("internal_name", $parameter_template->get_internal_name());
+			
+			$measuring_unit_array = MeasuringUnit::get_categorized_list();
+			
+			$parameter_template_field_array = $parameter_template->get_fields();
+			$parameter_template_limit_array = $parameter_template->get_limits();
+			$output_template_field_array = array();
+			$output_template_field_counter = 0;
+
+			$parameter_template_limit_json = json_encode($parameter_template_limit_array);
+			
+			if(is_array($parameter_template_field_array) and count($parameter_template_field_array) >= 1)
+			{
+				foreach($parameter_template_field_array as $key => $value)
+				{
+					$output_template_field_array[$output_template_field_counter]['id'] = $key;
+					$output_template_field_array[$output_template_field_counter]['pk']= $value['pk'];
+					$output_template_field_array[$output_template_field_counter]['name'] = $value['name'];
+					
+					if (is_numeric($value['min']))
+					{
+						$output_template_field_array[$output_template_field_counter]['min'] = $value['min'];
+					}
+					else
+					{
+						$output_template_field_array[$output_template_field_counter]['min'] = "";
+					}
+					
+					if (is_numeric($value['max']))
+					{
+						$output_template_field_array[$output_template_field_counter]['max'] = $value['max'];
+					}
+					else
+					{
+						$output_template_field_array[$output_template_field_counter]['max'] = "";
+					}
+					
+					if (is_numeric($parameter_template_limit_array[0]['usl'][$key]))
+					{
+						$output_template_field_array[$output_template_field_counter]['usl'] = $parameter_template_limit_array[0]['usl'][$key];
+					}
+					else
+					{
+						$output_template_field_array[$output_template_field_counter]['usl'] = "";
+					}
+					
+					if (is_numeric($parameter_template_limit_array[0]['lsl'][$key]))
+					{
+						$output_template_field_array[$output_template_field_counter]['lsl'] = $parameter_template_limit_array[0]['lsl'][$key];
+					}
+					else
+					{
+						$output_template_field_array[$output_template_field_counter]['lsl'] = "";
+					}
+						
+						
+					if (($output_template_field_counter % 2) == 0)
+					{
+						$output_template_field_array[$output_template_field_counter]['class'] = "odd";
+					}
+					else
+					{
+						$output_template_field_array[$output_template_field_counter]['class'] = "evan";
+					}
+
+					if (is_array($measuring_unit_array) and count($measuring_unit_array) >= 1)
+					{
+						$measuring_unit_counter = 0;
+						
+						foreach($measuring_unit_array as $measuring_unit_key => $measuring_unit_value)
+						{
+							if ($measuring_unit_value['headline'] == true)
+							{
+								$output_template_field_array[$output_template_field_counter][$measuring_unit_counter]['disabled'] = "disabled='disabled'";
+								$output_template_field_array[$output_template_field_counter][$measuring_unit_counter]['selected'] = "";
+							}
+							else
+							{
+								$output_template_field_array[$output_template_field_counter][$measuring_unit_counter]['disabled'] = "";
+								
+								if ($measuring_unit_value['id'] == $value['unit'] and $measuring_unit_value['exponent'] == $value['unit_exponent'])
+								{
+									$output_template_field_array[$output_template_field_counter][$measuring_unit_counter]['selected'] = "selected='selected'";
+								}
+								else
+								{
+									$output_template_field_array[$output_template_field_counter][$measuring_unit_counter]['selected'] = "";
+								}
+							}
+
+							$output_template_field_array[$output_template_field_counter][$measuring_unit_counter]['value'] = $measuring_unit_value['id']."-".$measuring_unit_value['exponent'];
+							$output_template_field_array[$output_template_field_counter][$measuring_unit_counter]['content'] = $measuring_unit_value['name'];
+							$measuring_unit_counter++;
+						}
+					}
+										
+					$output_template_field_counter++;
+				}
+			}
+			
+			$template->set_var("fields",$output_template_field_array);
+			
+			$template->set_var("limit_json", $parameter_template_limit_json);
+			$template->set_var("limit_counter", (count($parameter_template_limit_array)-1));
+			$template->set_var("line_counter", count($parameter_template_field_array));
+			
+			$template->set_var("id", $_GET['id']);
+			
+			$template->output();
+		}
+		else
+		{
+			// Exception
+		}
+	}
+	
 	public static function handler()
 	{			
 		switch($_GET['action']):
 			
 			case "add":
 				self::add();
+			break;
+			
+			case "edit":
+				self::edit();
 			break;
 			
 			case "delete":

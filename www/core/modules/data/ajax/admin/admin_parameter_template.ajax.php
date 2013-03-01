@@ -65,6 +65,24 @@ class AdminParameterTemplateAjax
 			{	
 				foreach($list_array as $key => $value)
 				{
+					$paramquery = $_GET;
+					$paramquery['id'] = $list_array[$key]['id'];
+					$paramquery['action'] = "edit";
+					unset($paramquery['sortvalue']);
+					unset($paramquery['sortmethod']);
+					unset($paramquery['nextpage']);
+					$params = http_build_query($paramquery, '', '&#38;');
+					
+					$name = $list_array[$key]['name'];
+					unset($list_array[$key]['name']);
+					$list_array[$key]['name']['link'] = $params;
+					$list_array[$key]['name']['content'] = $name;
+					
+					$internal_name = $list_array[$key]['internal_name'];
+					unset($list_array[$key]['internal_name']);
+					$list_array[$key]['internal_name']['link'] = $params;
+					$list_array[$key]['internal_name']['content'] = $internal_name;
+					
 					$user = new User($list_array[$key]['created_by']);
 					$list_array[$key]['created_by'] = $user->get_full_name(true);
 					
@@ -117,16 +135,53 @@ class AdminParameterTemplateAjax
 		}
 	}
 	
+	/**
+	 * @param string $name
+	 * @param string $internal_name
+	 * @param string $json_object_string
+	 * @param string $json_limit_string
+	 */
 	public static function add_template($name, $internal_name, $json_object_string, $json_limit_string)
 	{
-		if ($name and $internal_name and $json_object_string)
+		if ($name and $internal_name and $json_object_string and $json_limit_string)
 		{			
-			$json_object = json_decode($json_object_string, true);
-			$json_limit = json_decode($json_limit_string, true);
+			$field_array = json_decode($json_object_string, true);
+			$limit_array = json_decode($json_limit_string, true);
 			
 			$parameter_template = new ParameterTemplate();
 			
-			if ($parameter_template->create($name, $internal_name, $json_object) !== null)
+			if ($parameter_template->create($name, $internal_name, $field_array, $limit_array) !== null)
+			{
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
+	/**
+	 * @param integer $id
+	 * @param string $name
+	 * @param string $internal_name
+	 * @param string $json_object_string
+	 * @param string $json_limit_string
+	 */
+	public static function edit_template($id, $name, $internal_name, $json_object_string, $json_limit_string)
+	{
+		if (is_numeric($id) and $name and $internal_name and $json_object_string and $json_limit_string)
+		{
+			$field_array = json_decode($json_object_string, true);
+			$limit_array = json_decode($json_limit_string, true);
+			
+			$parameter_template = new ParameterTemplate($id);
+			
+			if ($parameter_template->edit($name, $internal_name, $field_array, $limit_array) == true)
 			{
 				return 1;
 			}
