@@ -338,6 +338,35 @@ class ParameterTemplate_Access
 	
 	
 	/**
+	 * @param string $internal_name
+	 * @return bool
+	 */
+	public static function exist_internal_name($internal_name)
+	{
+		global $db;
+			
+		if ($internal_name)
+		{
+			$sql = "SELECT id FROM ".constant("PARAMETER_TEMPLATE_TABLE")." WHERE internal_name = '".$internal_name."'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data['id'])
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
 	 * @param integer $template_id
 	 * @return bool
 	 */

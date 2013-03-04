@@ -172,16 +172,16 @@ class AdminParameterTemplateAjax
 	 * @param string $json_object_string
 	 * @param string $json_limit_string
 	 */
-	public static function edit_template($id, $name, $internal_name, $json_object_string, $json_limit_string)
+	public static function edit_template($id, $name, $json_object_string, $json_limit_string)
 	{
-		if (is_numeric($id) and $name and $internal_name and $json_object_string and $json_limit_string)
+		if (is_numeric($id) and $name and $json_object_string and $json_limit_string)
 		{
 			$field_array = json_decode($json_object_string, true);
 			$limit_array = json_decode($json_limit_string, true);
 			
 			$parameter_template = new ParameterTemplate($id);
 			
-			if ($parameter_template->edit($name, $internal_name, $field_array, $limit_array) == true)
+			if ($parameter_template->edit($name, $field_array, $limit_array) == true)
 			{
 				return 1;
 			}
@@ -189,6 +189,18 @@ class AdminParameterTemplateAjax
 			{
 				return 0;
 			}
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
+	public static function exist_internal_name($internal_name)
+	{
+		if (ParameterTemplate::exist_internal_name($internal_name) === true)
+		{
+			return 1;
 		}
 		else
 		{

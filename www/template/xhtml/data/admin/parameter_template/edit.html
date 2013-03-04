@@ -2,11 +2,25 @@
 /*<![CDATA[*/
 $(document).ready(function()
 {
+	var language_json = '{' +
+						'"close_button":"[[LANG:BaseGlobalButtonClose]]",' +
+						'"new_button":"[[LANG:BaseGlobalButtonNew]]",' +
+						'"cancel_button":"[[LANG:BaseGlobalButtonCancel]]",' +
+						'"yes_button":"[[LANG:BaseGlobalButtonYes]]",' +
+						'"no_button":"[[LANG:BaseGlobalButtonNo]]",' +
+						'"save_button":"[[LANG:BaseGlobalButtonSave]]"' +
+						'}';
+	
+	
 	data_parameter = new DataParameter();
+	data_parameter.set_language_json(language_json);
+
 	data_parameter.init_admin("DataParameterAdminTemplateAfterElement");
+	
 	data_parameter.set_limit_json('[[LIMIT_JSON]]');
 	data_parameter.set_limit_counter([[LIMIT_COUNTER]]);
 	data_parameter.set_line_counter([[LINE_COUNTER]]);
+	
 	
 	// Cancel Template Admin
 	$("#DataParameterTemplateCancelButton").click(function()
@@ -18,7 +32,7 @@ $(document).ready(function()
 	$("#DataParameterTemplateSaveButton").click(function()
 	{		
 		var json_field_object = data_parameter.get_field_json("DataParameterAdminValue");
-		var json_limit_object = data_parameter.get_limit_json();
+		var json_limit_object = data_parameter.get_limit_json("DataParameterAdminValue");
 		
 		if ($("input[name='name']").val() === "")
 		{
@@ -42,7 +56,7 @@ $(document).ready(function()
 		{
 			type : "POST",
 			url : "ajax.php?session_id=[[SESSION_ID]]&nav=data&run=admin_edit_parameter_template&id=[[ID]]",
-			data : "name="+name+"&internal_name="+interal_name+"&json_object_string="+json_field_object+"&json_limit_string="+json_limit_object,
+			data : "name="+name+"&json_object_string="+json_field_object+"&json_limit_string="+json_limit_object,
 			beforeSend: function()
 			{
 				$("#DataParameterAdminTemplateAddFinish").dialog("open");
@@ -51,7 +65,7 @@ $(document).ready(function()
 			{
 				if (data == "1")
 				{
-					// window.setTimeout('window.location = \'[[RETRACE]]\'',500);
+					window.setTimeout('window.location = \'[[RETRACE]]\'',500);
 				}
 				else
 				{
@@ -96,7 +110,7 @@ $(document).ready(function()
 		<td>Name:</td>
 		<td><input type='text' name='name' value='[[NAME]]' /></td>
 		<td>Internal-Name:</td>
-		<td><input type='text' name='internal_name' value='[[INTERNAL_NAME]]' /></td>
+		<td><input type='text' name='internal_name' value='[[INTERNAL_NAME]]' disabled='disabled' /></td>
 	</tr>
 </table>
 

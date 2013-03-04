@@ -108,14 +108,48 @@ DataParameter = function()
 					
 					field_object[id][""+type+""] = value;
 				}
+				else
+				{
+					if (type === "lsl")
+					{
+						
+					}
+					else
+					{
+						
+					}
+				}
 			}
 		});
 		
 		return JSON.stringify(field_object);
 	}
 	
-	get_limit_json = function()
-	{
+	get_limit_json = function(class_name)
+	{	
+		$("."+class_name).each(function()
+		{
+			var name = $(this).attr("name");
+			if (name !== undefined)
+			{
+				var type = name.split("-")[0];
+				var id = parseInt(name.split("-")[1]);
+				var value = $(this).val();
+
+				if ((type === "lsl") || (type === "usl"))
+				{
+					if (type === "lsl")
+					{
+						limit_array[0]['lsl'][id] = value;
+					}
+					else
+					{
+						limit_array[0]['usl'][id] = value;
+					}
+				}
+			}
+		});
+		
 		return JSON.stringify(limit_array);
 	}
 	
@@ -126,8 +160,11 @@ DataParameter = function()
 	
 	set_limit_json = function(limit_json)
 	{
-		limit_array = jQuery.parseJSON(limit_json);
-		console.log(limit_array);
+		var tmp_limit_array = jQuery.parseJSON(limit_json);
+		if ((tmp_limit_array !== null) && (tmp_limit_array !== undefined) && (tmp_limit_array.length > 0))
+		{
+			limit_array = tmp_limit_array;
+		}
 	}
 	
 	set_line_counter = function(local_line_counter)
@@ -137,7 +174,10 @@ DataParameter = function()
 	
 	set_limit_counter = function(local_limit_counter)
 	{
-		limit_counter = parseInt(local_limit_counter);
+		if (local_limit_counter > 0)
+		{
+			limit_counter = parseInt(local_limit_counter);
+		}
 	}
 	
 	this.init_admin = init_admin;
@@ -149,7 +189,25 @@ DataParameter = function()
 	this.set_line_counter = set_line_counter;
 	this.set_limit_counter = set_limit_counter;
 	
-		
+	get_language_label = function(address)
+	{
+		if ((language_array !== undefined))
+		{
+			if (language_array[address] !== undefined)
+			{
+				return language_array[address];
+			}
+			else
+			{
+				return address;
+			}
+		}
+		else
+		{
+			return address;
+		}
+	}
+	
 	init = function()
 	{
 		// Limit Dialog
@@ -159,8 +217,9 @@ DataParameter = function()
 			height: 400,
 			width: 530,
 			buttons: 
-			{
-				"[[LANG:BaseGlobalButtonClose]]": function()
+			[{
+				text: get_language_label("close_button"),
+				click: function()
 				{
 				 	$(this).dialog("close");
 				 	$("#DataParameterAdminTemplateLimitsDialogSelect select").trigger("onchange");
@@ -171,7 +230,7 @@ DataParameter = function()
 		 				$(this).children().children("input[name='lsl-"+id+"']").val(limit_array[0]['lsl'][id]);
 		 			});
 				}
-			}
+			}]
 		});
 		
 		// New Limit
@@ -181,8 +240,9 @@ DataParameter = function()
 			height: 150,
 			width: 350,
 			buttons: 
-			{
-				"[[LANG:BaseGlobalButtonNew]]": function()
+			[{
+				text: get_language_label("new_button"),
+				click: function()
 				{
 				 	$(this).dialog("close");
 				 	
@@ -201,12 +261,14 @@ DataParameter = function()
 				 	base_form_init();
 				 	
 				 	$("#DataParameterAdminTemplateLimitsDialogSelect select").trigger("onchange");
-				},
-				"[[LANG:BaseGlobalButtonCancel]]": function()
+				}
+			},{
+				text: get_language_label("cancel_button"),
+				click: function()
 				{
 				 	$(this).dialog("close");
 				}
-			}
+			}]
 		});
 		
 		// Delete Limit
@@ -216,8 +278,9 @@ DataParameter = function()
 			height: 150,
 			width: 350,
 			buttons: 
-			{
-				"[[LANG:BaseGlobalButtonYes]]": function()
+			[{
+				text: get_language_label("yes_button"),
+				click: function()
 				{
 				 	$(this).dialog("close");
 				 	
@@ -229,12 +292,14 @@ DataParameter = function()
 				 	base_form_init();
 				 	
 				 	$("#DataParameterAdminTemplateLimitsDialogSelect select").trigger("onchange");
-				},
-				"[[LANG:BaseGlobalButtonNo]]": function()
+				}
+			},{
+				text: get_language_label("no_button"),
+				click: function()
 				{
 				 	$(this).dialog("close");
 				}
-			}
+			}]
 		});
 	
 		// Rename Limit
@@ -244,8 +309,9 @@ DataParameter = function()
 			height: 150,
 			width: 350,
 			buttons: 
-			{
-				"[[LANG:BaseGlobalButtonSave]]": function()
+			[{
+				text: get_language_label("save_button"),
+				click: function()
 				{
 				 	$(this).dialog("close");
 				 	
@@ -257,11 +323,13 @@ DataParameter = function()
 				 	
 				 	base_form_init();
 				},
-				"[[LANG:BaseGlobalButtonCancel]]": function()
+			},{
+				text: get_language_label("cancel_button"),
+				click: function()
 				{
 				 	$(this).dialog("close");
 				}
-			}
+			}]
 		});
 
 		// Limit Select Change
@@ -407,7 +475,7 @@ DataParameter = function()
 		$("#DataParameterTemplateTable tbody tr").each(function()
 		{
 			var id = $(this).attr("id").replace("DataParameterTemplateField","");
-			var name = $(this).children(":first-child").children("input").val();
+			var name = $(this).children(":first-child").children("input[type=text]").val();
 			var usl = $(this).children().children("input[name='usl-"+id+"']").val();
 			var lsl = $(this).children().children("input[name='lsl-"+id+"']").val();
 			

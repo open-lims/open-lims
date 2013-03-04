@@ -2,7 +2,17 @@
 /*<![CDATA[*/
 $(document).ready(function()
 {
+	var language_json = '{' +
+						'"close_button":"[[LANG:BaseGlobalButtonClose]]",' +
+						'"new_button":"[[LANG:BaseGlobalButtonNew]]",' +
+						'"cancel_button":"[[LANG:BaseGlobalButtonCancel]]",' +
+						'"yes_button":"[[LANG:BaseGlobalButtonYes]]",' +
+						'"no_button":"[[LANG:BaseGlobalButtonNo]]",' +
+						'"save_button":"[[LANG:BaseGlobalButtonSave]]"' +
+						'}';
+	
 	data_parameter = new DataParameter();
+	data_parameter.set_language_json(language_json);
 	data_parameter.init_admin("DataParameterAdminTemplateAfterElement");
 	
 	// Cancel Template Admin
@@ -14,12 +24,15 @@ $(document).ready(function()
 	// Save Template Admin
 	$("#DataParameterTemplateSaveButton").click(function()
 	{		
-		var json_field_object = data_parameter.get_field_json("DataParameterAdminValue");
-		var json_limit_object = data_parameter.get_limit_json();
+		$("#DataParameterAdminTemplateError1").html("");
+		$("#DataParameterAdminTemplateError2").html("");
+		
+		var abort = false;
 		
 		if ($("input[name='name']").val() === "")
 		{
-			return;
+			$("#DataParameterAdminTemplateError1").html("You must enter a Name!");
+			abort = true;
 		}
 		else
 		{
@@ -28,12 +41,37 @@ $(document).ready(function()
 		
 		if ($("input[name='internal_name']").val() === "")
 		{
-			return;
+			$("#DataParameterAdminTemplateError2").html("You must enter an Internal-Name!");
+			abort = true;
 		}
 		else
 		{
 			var interal_name = $("input[name='name']").val();
+			
+			$.ajax(
+			{
+				type : "POST",
+				url : "ajax.php?session_id=[[SESSION_ID]]&nav=data&run=admin_parameter_template_exist_internal_name",
+				data : "internal_name="+interal_name,
+				async : false,
+				success : function(data)
+				{
+					if (data !== "0")
+					{
+						$("#DataParameterAdminTemplateError2").html("This Internal-Name already exsits!");
+						abort = true;
+					}
+				}
+			});
 		}
+		
+		if (abort === true)
+		{
+			return;
+		}
+		
+		var json_field_object = data_parameter.get_field_json("DataParameterAdminValue");
+		var json_limit_object = data_parameter.get_limit_json("DataParameterAdminValue");
 		
 		$.ajax(
 		{
@@ -48,7 +86,7 @@ $(document).ready(function()
 			{
 				if (data == "1")
 				{
-					// window.setTimeout('window.location = \'[[RETRACE]]\'',500);
+					window.setTimeout('window.location = \'[[RETRACE]]\'',500);
 				}
 				else
 				{
@@ -94,6 +132,12 @@ $(document).ready(function()
 		<td><input type='text' name='name' /></td>
 		<td>Internal-Name:</td>
 		<td><input type='text' name='internal_name' /></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td id='DataParameterAdminTemplateError1' class='FormError'></td>
+		<td></td>
+		<td id='DataParameterAdminTemplateError2' class='FormError'></td>
 	</tr>
 </table>
 

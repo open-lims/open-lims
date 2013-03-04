@@ -331,7 +331,12 @@ class DataRequest
 			
 			case "admin_edit_parameter_template":
 				require_once("ajax/admin/admin_parameter_template.ajax.php");
-				echo AdminParameterTemplateAjax::edit_template($_GET['id'], $_POST['name'], $_POST['internal_name'], $_POST['json_object_string'], $_POST['json_limit_string']);
+				echo AdminParameterTemplateAjax::edit_template($_GET['id'], $_POST['name'], $_POST['json_object_string'], $_POST['json_limit_string']);
+			break;
+			
+			case "admin_parameter_template_exist_internal_name":
+				require_once("ajax/admin/admin_parameter_template.ajax.php");
+				echo AdminParameterTemplateAjax::exist_internal_name($_POST['internal_name']);
 			break;
 
 			

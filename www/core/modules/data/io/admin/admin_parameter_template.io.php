@@ -55,7 +55,11 @@ class AdminParameterTemplateIO
 	{
 		$template = new HTMLTemplate("data/admin/parameter_template/add.html");
 		
-		$template->set_var("retrace", "");
+		$paramquery = $_GET;
+		unset($paramquery['action']);
+		$params = http_build_query($paramquery, '', '&');
+		
+		$template->set_var("retrace", "index.php?".$params);
 		$template->set_var("session_id", $_GET['session_id']);
 		
 		$result = array();
@@ -97,7 +101,12 @@ class AdminParameterTemplateIO
 			
 			$template = new HTMLTemplate("data/admin/parameter_template/edit.html");
 			
-			$template->set_var("retrace", "");
+			$paramquery = $_GET;
+			unset($paramquery['action']);
+			unset($paramquery['id']);
+			$params = http_build_query($paramquery, '', '&');
+			
+			$template->set_var("retrace", "index.php?".$params);
 			$template->set_var("session_id", $_GET['session_id']);
 			$template->set_var("name", $parameter_template->get_name());
 			$template->set_var("internal_name", $parameter_template->get_internal_name());

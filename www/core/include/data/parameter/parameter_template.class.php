@@ -183,8 +183,6 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 				unset($measuring_unit_exponent);
 			}
 			
-			print_r($field_array);
-			
 			if ($transaction_id != null)
 			{
 				$transaction->commit($transaction_id);
@@ -325,11 +323,11 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 		}
 	}
 	
-	public function edit($name, $internal_name, $field_array, $limit_array)
+	public function edit($name, $field_array, $limit_array)
 	{
 		global $transaction;
 		
-		if ($this->parameter_template_id and $name and $internal_name and is_array($field_array) and count($field_array) and is_array($limit_array))
+		if ($this->parameter_template_id and $name and is_array($field_array) and count($field_array) and is_array($limit_array))
 		{
 			$transaction_id = $transaction->begin();
 			
@@ -341,16 +339,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 				}
 				return false;
 			}
-			
-			if ($this->parameter_template->set_internal_name($internal_name) == false)
-			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
-				return false;
-			}
-			
+						
 			$limit_counter = count($limit_array);
 			$parameter_limit_id_array = array();
 			
@@ -584,7 +573,17 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 			return false;
 		}
 	}
-		
+
+
+	/**
+	 * @param string $internal_name
+	 * @return bool
+	 */
+	public static function exist_internal_name($internal_name)
+	{
+		return ParameterTemplate_Access::exist_internal_name($internal_name);
+	}
+	
 	/**
 	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
