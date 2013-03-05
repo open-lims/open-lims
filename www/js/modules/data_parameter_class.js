@@ -26,6 +26,7 @@ DataParameter = function()
 	var limit_counter = 0;
 	var current_limit = 0;
 	var language_array = new Object();
+	var field_error_array = new Object();
 	
 	limit_array[limit_counter] = new Object();
 	limit_array[limit_counter]['name'] = "First Limit";
@@ -106,18 +107,19 @@ DataParameter = function()
 						field_object[id] = new Object();
 					}
 					
+					if (type === "name")
+					{
+						if ((value === undefined) || (value === ""))
+						{
+							field_error_array[id] = true;
+						}
+						else
+						{
+							field_error_array[id] = false;
+						}
+					}
+					
 					field_object[id][""+type+""] = value;
-				}
-				else
-				{
-					if (type === "lsl")
-					{
-						
-					}
-					else
-					{
-						
-					}
 				}
 			}
 		});
@@ -151,6 +153,11 @@ DataParameter = function()
 		});
 		
 		return JSON.stringify(limit_array);
+	}
+	
+	get_field_error_array = function()
+	{
+		return field_error_array;
 	}
 	
 	set_language_json  = function(language_json)
@@ -188,6 +195,7 @@ DataParameter = function()
 	this.set_limit_json = set_limit_json;
 	this.set_line_counter = set_line_counter;
 	this.set_limit_counter = set_limit_counter;
+	this.get_field_error_array = get_field_error_array;
 	
 	get_language_label = function(address)
 	{
@@ -401,7 +409,7 @@ DataParameter = function()
 		$(measuring_unit_select).removeClass("FormSelect");
 		
 		$("#DataParameterTemplateTable").children("tbody").children(":last-child").after("<tr class='"+tr_class+" DataParameterTemplateField' id='DataParameterTemplateField"+line_counter+"'>" +
-			"<td><input type='text' name='name-"+line_counter+"' class='DataParameterAdminValue' /></td>" +
+			"<td><input type='text' name='name-"+line_counter+"' class='DataParameterAdminValue' /><span id='DataParameterTemplateFieldError"+line_counter+"' class='FormError'></span></td>" +
 			"<td>"+$(measuring_unit_select).prop('outerHTML')+"</td>" +
 			"<td><input type='text' size='6' name='usl-"+line_counter+"' class='DataParameterAdminValue' /></td>" +
 			"<td><input type='text' size='6' name='lsl-"+line_counter+"' class='DataParameterAdminValue' /></td>" +

@@ -65,13 +65,27 @@ $(document).ready(function()
 			});
 		}
 		
+		var json_field_object = data_parameter.get_field_json("DataParameterAdminValue");
+		var json_limit_object = data_parameter.get_limit_json("DataParameterAdminValue");
+		var field_error_array = data_parameter.get_field_error_array();
+		
+		$.each(field_error_array, function(index, value)
+		{
+			if (value === true)
+			{
+				$("#DataParameterTemplateFieldError"+index).html("<br />Please enter a Field-Name");
+				abort = true;
+			}
+			else
+			{
+				$("#DataParameterTemplateFieldError"+index).html("");
+			}
+		});
+		
 		if (abort === true)
 		{
 			return;
 		}
-		
-		var json_field_object = data_parameter.get_field_json("DataParameterAdminValue");
-		var json_limit_object = data_parameter.get_limit_json("DataParameterAdminValue");
 		
 		$.ajax(
 		{
@@ -162,7 +176,7 @@ $(document).ready(function()
 	</thead>
 	<tbody>
 		<tr class='odd' id='DataParameterTemplateField1'>
-			<td><input type='text' name='name-1' class='DataParameterAdminValue' /></td>
+			<td><input type='text' name='name-1' class='DataParameterAdminValue' /><span id='DataParameterTemplateFieldError1' class='FormError'></span></td>
 			<td>
 				<select class='DataParameterMeasuringUnitSelect DataParameterAdminValue' name='unit-1'>
 				

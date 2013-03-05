@@ -93,7 +93,9 @@ base_form_init = function()
 		}
 		else
 		{
-			var option_list = $("<div class='FormSelectList'><ul></ul></div>").css({"display":"none","min-width":$(this).parent().width()+8});
+			var option_list = $("<div class='FormSelectList'><ul></ul></div>").css({"display":"block","min-width":$(this).parent().width()+8});
+			// $(option_list).jScrollPane({autoReinitialise: true}).hide();
+			$(option_list).hide();
 		}
 		
 		if ($(this).next().next().hasClass("FormSelectEntry"))
@@ -112,13 +114,14 @@ base_form_init = function()
 		else
 		{
 			var button = $("<div class='FormSelectButton'><img src='images/down.png' alt=''></div>").bind("click", function(event)
-			{
+			{				
 				event.preventDefault();
 				event.stopPropagation();
 				
 				var data = event.data;
 				
-				if ($(option_list).css("display") === "none")
+				// if ($(option_list).css("display") === "none")
+				if ($(option_list).is(":hidden"))
 				{
 					if (open_select_option_list_button !== null)
 					{
@@ -131,8 +134,9 @@ base_form_init = function()
 					var max_window_height = $(window).height() - $(this).offset().top - 26;
 					var max_document_height = $(document).height() - $(this).offset().top - 26;
 					
-					$(option_list).css("display", "block");
-					
+					// $(option_list).css("display", "block");
+					$(option_list).show();
+
 					var current_height = $(option_list).height();
 					var entry_height = $(option_list).find("ul").children(":first-child").height();
 					var max_entry_height = entry_height*10;
@@ -230,7 +234,8 @@ base_form_init = function()
 				}
 				else
 				{
-					$(option_list).css("display", "none");
+					$(option_list).hide()
+					// $(option_list).css("display", "none");
 					$(option_list).unbind("keydown");
 					$(document).unbind("click", open_select_option_list_global_close_handler);
 					open_select_option_list_button = null;

@@ -144,7 +144,105 @@ class MeasuringUnit implements MeasuringUnitInterface
     		return null;
     	}
 	}
-	
+		
+	private static function get_prefix($exponent, $positive = true)
+	{
+		switch ($exponent):
+		
+			case 3:
+				if ($positive == true)
+				{
+					return array("kilo", "k");
+				}
+				else
+				{
+					return array("milli", "m");
+				}
+			break;
+			
+			case 6:
+				if ($positive == true)
+				{
+					return array("mega", "M");
+				}
+				else
+				{
+					return array("mikro", "&micro;");
+				}
+			break;
+			
+			case 9:
+				if ($positive == true)
+				{
+					return array("giga", "G");
+				}
+				else
+				{
+					return array("nano", "n");
+				}
+			break;
+			
+			case 12:
+				if ($positive == true)
+				{
+					return array("tera", "T");
+				}
+				else
+				{
+					return array("piko", "p");
+				}
+			break;
+			
+			case 15:
+				if ($positive == true)
+				{
+					return array("femto", "f");
+				}
+				else
+				{
+					
+				}
+			break;
+			
+			case 18:
+				if ($positive == true)
+				{
+					return array("exa", "E");
+				}
+				else
+				{
+					return array("atto", "a");
+				}
+			break;
+			
+			case 21:
+				if ($positive == true)
+				{
+					return array("zetta", "Z");
+				}
+				else
+				{
+					return array("zepto", "z");
+				}
+			break;
+			
+			case 24:
+				if ($positive == true)
+				{
+					return array("yota", "Y");
+				}
+				else
+				{
+					return array("yokto", "y");
+				}	
+			break;
+			
+			default:
+				return null;
+			break;
+		
+		endswitch;
+	}
 	
 	/**
 	 * @see MeasuringUnitInterface::list_entries()
@@ -155,21 +253,23 @@ class MeasuringUnit implements MeasuringUnitInterface
 		$return_array = array();
 		$counter = 0;
 		
-		$category_array = MeasuringUnitCategory_Access::list_entries();
-				
-		foreach($category_array as $key => $value)
+		$unit_array = MeasuringUnit_Access::list_entries_without_category();
+			
+		if (is_array($unit_array) and count($unit_array) >= 1)
 		{
-			$return_array[$counter]['name'] = $value['name'];
-			$return_array[$counter]['headline'] = true;
-			$counter++;
-			
-			$unit_array = MeasuringUnit_Access::list_entries_by_category_id($value['id']);
-			
 			foreach($unit_array as $unit_key => $unit_value)
 			{
-				if ($unit_array['min_prefix_exponent'])
+				if ($unit_array['min_prefix_exponent'] and $unit_value['min_prefix_exponent'] >= 3)
 				{
-					
+					$prefix_array = self::get_prefix($i, false);
+					if (is_array($prefix_array) and count($prefix_array) == 2)
+					{
+						$return_array[$counter]['id'] = $unit_value['id'];
+						$return_array[$counter]['name'] = $prefix_array[0]."".$unit_value['name']." (".$prefix_array[1]."".$unit_value['unit_symbol'].")";
+						$return_array[$counter]['exponent'] = "-".$i;
+						$return_array[$counter]['headline'] = false;
+						$counter++;
+					}
 				}
 				
 				$return_array[$counter]['id'] = $unit_value['id'];
@@ -178,9 +278,75 @@ class MeasuringUnit implements MeasuringUnitInterface
 				$return_array[$counter]['headline'] = false;
 				$counter++;
 				
-				if ($unit_array['max_prefix_exponent'])
+				if ($unit_array['max_prefix_exponent'] and $unit_value['max_prefix_exponent'] >= 3)
 				{
-					
+					$prefix_array = self::get_prefix($i);
+					if (is_array($prefix_array) and count($prefix_array) == 2)
+					{
+						$return_array[$counter]['id'] = $unit_value['id'];
+						$return_array[$counter]['name'] = $prefix_array[0]."".$unit_value['name']." (".$prefix_array[1]."".$unit_value['unit_symbol'].")";
+						$return_array[$counter]['exponent'] = $i;
+						$return_array[$counter]['headline'] = false;
+						$counter++;
+					}
+				}
+			}
+		}
+		
+		$category_array = MeasuringUnitCategory_Access::list_entries();
+
+		if (is_array($category_array) and count($category_array) >= 1)
+		{
+			foreach($category_array as $key => $value)
+			{
+				$return_array[$counter]['name'] = $value['name'];
+				$return_array[$counter]['headline'] = true;
+				$counter++;
+				
+				$unit_array = MeasuringUnit_Access::list_entries_by_category_id($value['id']);
+				
+				if (is_array($unit_array) and count($unit_array) >= 1)
+				{
+					foreach($unit_array as $unit_key => $unit_value)
+					{
+						if ($unit_value['min_prefix_exponent'] and $unit_value['min_prefix_exponent'] >= 3)
+						{
+							for ($i=$unit_value['min_prefix_exponent'];$i>=3;$i=$i-3)
+							{
+								$prefix_array = self::get_prefix($i, false);
+								if (is_array($prefix_array) and count($prefix_array) == 2)
+								{
+									$return_array[$counter]['id'] = $unit_value['id'];
+									$return_array[$counter]['name'] = $prefix_array[0]."".$unit_value['name']." (".$prefix_array[1]."".$unit_value['unit_symbol'].")";
+									$return_array[$counter]['exponent'] = "-".$i;
+									$return_array[$counter]['headline'] = false;
+									$counter++;
+								}
+							}
+						}
+						
+						$return_array[$counter]['id'] = $unit_value['id'];
+						$return_array[$counter]['name'] = $unit_value['name']." (".$unit_value['unit_symbol'].")";
+						$return_array[$counter]['exponent'] = 0;
+						$return_array[$counter]['headline'] = false;
+						$counter++;
+						
+						if ($unit_value['max_prefix_exponent'] and $unit_value['max_prefix_exponent'] >= 3)
+						{
+							for ($i=3;$i<=$unit_value['max_prefix_exponent'];$i=$i+3)
+							{
+								$prefix_array = self::get_prefix($i);
+								if (is_array($prefix_array) and count($prefix_array) == 2)
+								{
+									$return_array[$counter]['id'] = $unit_value['id'];
+									$return_array[$counter]['name'] = $prefix_array[0]."".$unit_value['name']." (".$prefix_array[1]."".$unit_value['unit_symbol'].")";
+									$return_array[$counter]['exponent'] = $i;
+									$return_array[$counter]['headline'] = false;
+									$counter++;
+								}
+							}
+						}
+					}
 				}
 			}
 		}

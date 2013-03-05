@@ -802,7 +802,7 @@ class MeasuringUnit_Access
 				$temp_array['id'] = $data['id'];
 				$temp_array['name'] = $data['name'];
 				$temp_array['min_prefix_exponent'] = $data['min_prefix_exponent'];
-				$temp_array['max_prefix_exponent'] = $data['min_prefix_exponent'];
+				$temp_array['max_prefix_exponent'] = $data['max_prefix_exponent'];
 				$temp_array['unit_symbol'] = $data['unit_symbol'];
 				array_push($return_array,$temp_array);
 				unset($temp_array);
@@ -816,6 +816,40 @@ class MeasuringUnit_Access
 			{
 				return null;
 			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @return array
+	 */
+	public static function list_entries_without_category()
+	{
+		global $db;
+
+		$return_array = array();
+		
+		$sql = "SELECT id,name,min_prefix_exponent,max_prefix_exponent,unit_symbol FROM ".constant("MEASURING_UNIT_TABLE")." WHERE category_id IS NULL ORDER BY id";
+		$res = $db->db_query($sql);
+		
+		while ($data = $db->db_fetch_assoc($res))
+		{
+			$temp_array = array();
+			$temp_array['id'] = $data['id'];
+			$temp_array['name'] = $data['name'];
+			$temp_array['min_prefix_exponent'] = $data['min_prefix_exponent'];
+			$temp_array['max_prefix_exponent'] = $data['max_prefix_exponent'];
+			$temp_array['unit_symbol'] = $data['unit_symbol'];
+			array_push($return_array,$temp_array);
+			unset($temp_array);
+		}
+		
+		if (is_array($return_array))
+		{
+			return $return_array;
 		}
 		else
 		{

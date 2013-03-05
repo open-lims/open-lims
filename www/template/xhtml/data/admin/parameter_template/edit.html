@@ -30,27 +30,43 @@ $(document).ready(function()
 	
 	// Save Template Admin
 	$("#DataParameterTemplateSaveButton").click(function()
-	{		
-		var json_field_object = data_parameter.get_field_json("DataParameterAdminValue");
-		var json_limit_object = data_parameter.get_limit_json("DataParameterAdminValue");
+	{	
+		$("#DataParameterAdminTemplateError1").html("");
+		
+		abort = false;
 		
 		if ($("input[name='name']").val() === "")
 		{
-			return;
+			$("#DataParameterAdminTemplateError1").html("You must enter a Name!");
+			abort = true;
 		}
 		else
 		{
 			var name = $("input[name='name']").val();
 		}
 		
-		if ($("input[name='internal_name']").val() === "")
+		var json_field_object = data_parameter.get_field_json("DataParameterAdminValue");
+		var json_limit_object = data_parameter.get_limit_json("DataParameterAdminValue");
+		var field_error_array = data_parameter.get_field_error_array();
+		
+		$.each(field_error_array, function(index, value)
+		{
+			if (value === true)
+			{
+				$("#DataParameterTemplateFieldError"+index).html("<br />Please enter a Field-Name");
+				abort = true;
+			}
+			else
+			{
+				$("#DataParameterTemplateFieldError"+index).html("");
+			}
+		});
+		
+		if (abort === true)
 		{
 			return;
 		}
-		else
-		{
-			var interal_name = $("input[name='name']").val();
-		}
+		
 		
 		$.ajax(
 		{
@@ -112,6 +128,12 @@ $(document).ready(function()
 		<td>Internal-Name:</td>
 		<td><input type='text' name='internal_name' value='[[INTERNAL_NAME]]' disabled='disabled' /></td>
 	</tr>
+	<tr>
+		<td></td>
+		<td id='DataParameterAdminTemplateError1' class='FormError'></td>
+		<td></td>
+		<td></td>
+	</tr>
 </table>
 
 </div>
@@ -140,6 +162,7 @@ $(document).ready(function()
 				<td>
 					<input type='hidden' name='pk-[[FIELDS:ID]]' value='[[FIELDS:PK]]'  class='DataParameterAdminValue'/>
 					<input type='text' name='name-[[FIELDS:ID]]' class='DataParameterAdminValue' value='[[FIELDS:NAME]]' />
+					<span id='DataParameterTemplateFieldError[[FIELDS:ID]]' class='FormError'></span>
 				</td>
 				<td>
 					<select class='DataParameterMeasuringUnitSelect DataParameterAdminValue' name='unit-[[FIELDS:ID]]'>
