@@ -145,8 +145,13 @@ class MeasuringUnit implements MeasuringUnitInterface
     		return null;
     	}
 	}
-		
-	private static function get_prefix($exponent, $positive = true)
+
+	/**
+	 * @param integer $exponent
+	 * @param bool $positive
+	 * @return array
+	 */
+	public static function get_prefix($exponent, $positive = true)
 	{
 		if ($exponent < 0)
 		{

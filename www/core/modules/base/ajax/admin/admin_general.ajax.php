@@ -315,55 +315,18 @@ class AdminGeneralAjax
 					
 					if (is_numeric($list_array[$key]['min_prefix_exponent']) and $list_array[$key]['min_prefix_exponent'] > 0)
 					{
-						for ($i=$list_array[$key]['min_prefix_exponent'];$i>=1;$i--)
+						for ($i=$list_array[$key]['min_prefix_exponent'];$i>=3;$i=$i-3)
 						{
-							$prefix = "";
-							
-							switch ($i):
-							
-								case 3:
-									$prefix = "m";
-								break;
-								
-								case 6:
-									$prefix = "&mu;";
-								break;
-								
-								case 9:
-									$prefix = "n";
-								break;
-								
-								case 12:
-									$prefix = "p";
-								break;
-								
-								case 15:
-									$prefix = "f";
-								break;
-								
-								case 18:
-									$prefix = "a";
-								break;
-								
-								case 21:
-									$prefix = "z";
-								break;
-								
-								case 25:
-									$prefix = "y";
-								break;
-							
-							endswitch;
-							
-							if ($prefix)
+							$prefix_array = MeasuringUnit::get_prefix($i, false);
+							if (is_array($prefix_array) and count($prefix_array) == 2)
 							{
 								if ($list_array[$key]['secondary_units'])
 								{
-									$list_array[$key]['secondary_units'] = $list_array[$key]['secondary_units']." ,".$prefix."".$list_array[$key]['unit_symbol'];
+									$list_array[$key]['secondary_units'] = $list_array[$key]['secondary_units'].", ".$prefix_array[1]."".$list_array[$key]['unit_symbol'];
 								}
 								else
 								{
-									$list_array[$key]['secondary_units'] = $prefix."".$list_array[$key]['unit_symbol'];
+									$list_array[$key]['secondary_units'] = $prefix_array[1]."".$list_array[$key]['unit_symbol'];
 								}
 							}
 						}
@@ -371,53 +334,18 @@ class AdminGeneralAjax
 					
 					if (is_numeric($list_array[$key]['max_prefix_exponent']) and $list_array[$key]['max_prefix_exponent'] > 0)
 					{
-						for ($i=1;$i<=$list_array[$key]['max_prefix_exponent'];$i++)
+						for ($i=3;$i<=$list_array[$key]['max_prefix_exponent'];$i=$i+3)
 						{
-							switch ($i):
-							
-								case 3:
-									$prefix = "k";
-								break;
-								
-								case 6:
-									$prefix = "M";
-								break;
-								
-								case 9:
-									$prefix = "G";
-								break;
-								
-								case 12:
-									$prefix = "T";
-								break;
-								
-								case 15:
-									$prefix = "P";
-								break;
-								
-								case 18:
-									$prefix = "E";
-								break;
-								
-								case 21:
-									$prefix = "Z";
-								break;
-								
-								case 25:
-									$prefix = "Y";
-								break;
-							
-							endswitch;
-							
-							if ($prefix)
+							$prefix_array = MeasuringUnit::get_prefix($i, true);
+							if (is_array($prefix_array) and count($prefix_array) == 2)
 							{
 								if ($list_array[$key]['secondary_units'])
 								{
-									$list_array[$key]['secondary_units'] = $list_array[$key]['secondary_units']." ,".$prefix."".$list_array[$key]['unit_symbol'];
+									$list_array[$key]['secondary_units'] = $list_array[$key]['secondary_units'].", ".$prefix_array[1]."".$list_array[$key]['unit_symbol'];
 								}
 								else
 								{
-									$list_array[$key]['secondary_units'] = $prefix."".$list_array[$key]['unit_symbol'];
+									$list_array[$key]['secondary_units'] = $prefix_array[1]."".$list_array[$key]['unit_symbol'];
 								}
 							}
 						}

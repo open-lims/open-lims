@@ -114,18 +114,18 @@ $(document).ready(function()
 <div id='DataParameterAdminTemplateAfterElement'></div>
 
 
-<!-- CONTAINER BEGIN ("Edit Parameter Template") -->
+<!-- CONTAINER BEGIN ("[[LANG:DataAdminParameterTemplateEditHeadline]]") -->
 
 <div class='Form'>
 
 <div class='FormBox'>
-<div class='FormBoxHeadline'>Parameter Template Details</div>
+<div class='FormBoxHeadline'>[[LANG:DataAdminParameterTemplateEditHeadlineDetails]]</div>
 
 <table style='width: 80%'>
 	<tr>
-		<td>Name:</td>
+		<td>[[LANG:DataAdminParameterTemplateEditName]]:</td>
 		<td><input type='text' name='name' value='[[NAME]]' /></td>
-		<td>Internal-Name:</td>
+		<td>[[LANG:DataAdminParameterTemplateEditInternalName]]:</td>
 		<td><input type='text' name='internal_name' value='[[INTERNAL_NAME]]' disabled='disabled' /></td>
 	</tr>
 	<tr>
@@ -140,18 +140,18 @@ $(document).ready(function()
 
 
 <div class='FormBoxWithoutLRPadding'>
-<div class='FormBoxHeadlineWithoutLRPadding'>Parameter-Fields</div>
+<div class='FormBoxHeadlineWithoutLRPadding'>[[LANG:DataAdminParameterTemplateEditHeadlineFields]]</div>
 
 <table style='width: 100%; text-align: left;' id='DataParameterTemplateTable' class='DataParameterTable'>
 	<thead>
 		<tr>
-			<th>Name</th>
-			<th>Unit</th>
-			<th>USL (max)</th>
-			<th>LSL (min)</th>
-			<th>Min (valid)</th>
-			<th>Max (valid)</th>
-			<th>Methods</th>
+			<th>[[LANG:DataAdminParameterTemplateEditName]]</th>
+			<th>[[LANG:DataAdminParameterTemplateEditUnit]]</th>
+			<th>[[LANG:DataAdminParameterTemplateEditLSL]]</th>
+			<th>[[LANG:DataAdminParameterTemplateEditUSL]]</th>
+			<th>[[LANG:DataAdminParameterTemplateEditMin]]</th>
+			<th>[[LANG:DataAdminParameterTemplateEditMax]]</th>
+			<th>[[LANG:DataAdminParameterTemplateEditMethods]]</th>
 			<th style='width: 20px;'></th>
 		<tr>
 	</thead>
@@ -179,7 +179,7 @@ $(document).ready(function()
 				<td><input type='text' size='6' name='usl-[[FIELDS:ID]]' class='DataParameterAdminValue' value='[[FIELDS:USL]]' /></td>
 				<td><input type='text' size='6' name='min-[[FIELDS:ID]]' class='DataParameterAdminValue' value='[[FIELDS:MIN]]' /></td>
 				<td><input type='text' size='6' name='max-[[FIELDS:ID]]' class='DataParameterAdminValue' value='[[FIELDS:MAX]]' /></td>
-				<td>Methods</td>
+				<td>[[LANG:DataAdminParameterTemplateEditMethods]]</td>
 				<td>
 				<!-- IF ([[FIELDS:DELETABLE]]) -->
 		 		<a title='delete' style='cursor: pointer;' id='DataParameterTemplateFieldDeleteButton[[FIELDS:ID]]' class='DataParameterTemplateFieldDeleteButton'><img src='images/icons/delete.png' alt='D' /></a>
@@ -194,15 +194,15 @@ $(document).ready(function()
 <br />
 
 <div style='padding: 0 10px;'>
-<button type='submit' id='DataParameterTemplateFieldNewButton'>New Field</button>
-<button type='submit' id='DataParameterTemplateLimitButton'>Limits (USL/LSL)</button>
+<button type='submit' id='DataParameterTemplateFieldNewButton'>[[LANG:DataAdminParameterTemplateEditButtonNewField]]</button>
+<button type='submit' id='DataParameterTemplateLimitButton'>[[LANG:DataAdminParameterTemplateEditButtonLimits]]</button>
 <div class='FormButtonBoxClear'></div>
 </div>
 </div>
 
 <div class='FormButtonBox'>
-<button type='submit' id='DataParameterTemplateSaveButton'>Save</button>
-<button type='submit' id='DataParameterTemplateCancelButton'>Cancel</button>
+<button type='submit' id='DataParameterTemplateSaveButton'>[[LANG:BaseGlobalButtonSave]]</button>
+<button type='submit' id='DataParameterTemplateCancelButton'>[[LANG:BaseGlobalButtonCancel]]</button>
 <div class='FormButtonBoxClear'></div>
 </div>
 </div>

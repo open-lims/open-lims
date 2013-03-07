@@ -36,6 +36,7 @@ class AdminParameterTemplateIO
 		$list->add_column(Language::get_message("DataGeneralListColumnInternalName", "general"), "internal_name");
 		$list->add_column(Language::get_message("DataGeneralListColumnCreatedBy", "general"), "created_by");
 		$list->add_column(Language::get_message("DataGeneralListColumnDateTime", "general"), "datetime");
+		$list->add_column("", "delete", false, "20px");
 		
 		$template = new HTMLTemplate("data/admin/parameter_template/list.html");	
 	

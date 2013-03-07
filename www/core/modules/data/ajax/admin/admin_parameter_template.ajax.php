@@ -89,16 +89,14 @@ class AdminParameterTemplateAjax
 					$datetime_handler = new DatetimeHandler($list_array[$key]['datetime']);
 					$list_array[$key]['datetime'] = $datetime_handler->get_datetime(false);
 					
-					$paramquery = $_GET;
-					$paramquery['id'] = $list_array[$key]['id'];
-					$paramquery['action'] = "delete";
-					unset($paramquery['sortvalue']);
-					unset($paramquery['sortmethod']);
-					unset($paramquery['nextpage']);
-					$params = http_build_query($paramquery, '', '&#38;');
-	
-					$list_array[$key]['delete']['link'] = $params;
-					$list_array[$key]['delete']['content'] = "delete";
+					if (ParameterTemplate::is_deletable($list_array[$key]['id']) === true)
+					{
+						$list_array[$key]['delete'] = "<a title='delete' style='cursor: pointer;' id='DataParameterTemplateDeleteButton".$list_array[$key]['id']."' class='DataParameterTemplateDeleteButton'><img src='images/icons/delete.png' alt='D' /></a>";
+					}
+					else
+					{
+						$list_array[$key]['delete'] = "";
+					}
 				}
 			}
 			else
@@ -140,6 +138,7 @@ class AdminParameterTemplateAjax
 	 * @param string $internal_name
 	 * @param string $json_object_string
 	 * @param string $json_limit_string
+	 * @return integer
 	 */
 	public static function add_template($name, $internal_name, $json_object_string, $json_limit_string)
 	{
@@ -171,6 +170,7 @@ class AdminParameterTemplateAjax
 	 * @param string $internal_name
 	 * @param string $json_object_string
 	 * @param string $json_limit_string
+	 * @return integer
 	 */
 	public static function edit_template($id, $name, $json_object_string, $json_limit_string)
 	{
@@ -196,6 +196,41 @@ class AdminParameterTemplateAjax
 		}
 	}
 	
+	/**
+	 * @param integer $id
+	 * @return integer
+	 */
+	public static function delete_template($id)
+	{
+		if (is_numeric($id))
+		{
+			if (ParameterTemplate::is_deletable($id) === true)
+			{
+				$parameter_template = new ParameterTemplate($id);
+				if ($parameter_template->delete() === true)
+				{
+					return 1;
+				}
+				else
+				{
+					return 0;
+				}
+			}
+			else
+			{
+				return 0;
+			}
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
+	/**
+	 * @param integer $internal_name
+	 * @return integer
+	 */
 	public static function exist_internal_name($internal_name)
 	{
 		if (ParameterTemplate::exist_internal_name($internal_name) === true)

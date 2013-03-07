@@ -209,7 +209,91 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 	
 	public function delete()
 	{
+		global $transaction;
 		
+		if ($this->parameter_template_id)
+		{
+			$transaction_id = $transaction->begin();
+			
+			$template_field_array = ParameterTemplateHasField_Access::list_fields_by_template_id($this->parameter_template_id);
+
+			// Delete Limits
+			$template_limit_array = ParameterFieldLimit_Access::list_parameter_limits_by_parameter_field_array($template_field_array);
+			
+			if (is_array($template_limit_array) and count($template_limit_array) >= 1)
+			{
+				foreach($template_limit_array as $key => $value)
+				{
+					if (ParameterFieldLimit_Access::delete_limits_by_parameter_limit_id($value) === false)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+					}
+					
+					$parameter_limit = new ParameterLimit_Access($value);
+					if ($parameter_limit->delete() === false)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+					}
+				}
+			}
+			
+			// Delete Fields
+			if (is_array($template_field_array) and count($template_field_array) >= 1)
+			{
+				foreach ($template_field_array as $key => $value)
+				{					
+					$parameter_template_field = new ParameterTemplateHasField_Access($this->parameter_template_id, $value);
+					if ($parameter_template_field->delete() === false)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+					}
+					
+					$parameter_field = new ParameterField_Access($value);
+					if ($parameter_field->delete() === false)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+					}
+				}
+			}
+			
+			// Delete Template
+			if ($this->parameter_template->delete() === true)
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->commit($transaction_id);
+				}
+				return true;
+			}
+			else
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
 	}
 		
 	public function get_name()
@@ -746,6 +830,16 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
     		}*/
     	}
     	
+    	return true;
+    }
+    
+    /**
+     * @todo implement check if the parameter-tempalte is linked to any parameter
+     * @param integer $parameter_template_id
+     * @return bool
+     */
+    public static function is_deletable($parameter_template_id)
+    {
     	return true;
     }
 }
