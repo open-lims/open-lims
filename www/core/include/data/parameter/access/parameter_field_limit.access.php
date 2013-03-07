@@ -166,7 +166,7 @@ class ParameterFieldLimit_Access
 	 */
 	public function get_upper_specification_limit()
 	{
-		if ($this->upper_specification_limit)
+		if (isset($this->upper_specification_limit))
 		{
 			return $this->upper_specification_limit;
 		}
@@ -181,7 +181,7 @@ class ParameterFieldLimit_Access
 	 */
 	public function get_lower_specification_limit()
 	{
-		if ($this->lower_specification_limit)
+		if (isset($this->lower_specification_limit))
 		{
 			return $this->lower_specification_limit;
 		}
@@ -250,7 +250,11 @@ class ParameterFieldLimit_Access
 	}
 	
 	
-	public static function list_limits_by_parameter_field_id($parameter_field_id)
+	/**
+	 * @param integer $parameter_field_id
+	 * @return bool
+	 */
+	public static function list_field_limits_by_parameter_field_id($parameter_field_id)
 	{
 		global $db;
 		
@@ -258,7 +262,7 @@ class ParameterFieldLimit_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT parameter_limit_id,upper_specification_limit,lower_specification_limit FROM ".constant("PARAMETER_FIELD_LIMIT_TABLE")." WHERE parameter_field_id = ".$parameter_field_id."";
+			$sql = "SELECT parameter_limit_id,upper_specification_limit,lower_specification_limit FROM ".constant("PARAMETER_FIELD_LIMIT_TABLE")." WHERE parameter_field_id = ".$parameter_field_id." ORDER BY parameter_limit_id";
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->db_fetch_assoc($res))
@@ -282,7 +286,47 @@ class ParameterFieldLimit_Access
 		}
 	}
 	
-	public function exist_field_limit($parameter_limit_id, $parameter_field_id)
+	/**
+	 * @param array $parameter_field_array
+	 * @return bool
+	 */
+	public static function list_parameter_limits_by_parameter_field_array($parameter_field_array)
+	{
+		global $db;
+		
+		if (is_array($parameter_field_array) and count($parameter_field_array) >= 1)
+		{
+			$return_array = array();
+			
+			$sql = "SELECT DISTINCT parameter_limit_id FROM ".constant("PARAMETER_FIELD_LIMIT_TABLE")." WHERE parameter_field_id IN (".implode(",",$parameter_field_array).")";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array, $data['parameter_limit_id']);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $parameter_limit_id
+	 * @param integer $parameter_field_id
+	 * @return bool
+	 */
+	public static function exist_field_limit($parameter_limit_id, $parameter_field_id)
 	{
 		global $db;
 		
@@ -293,6 +337,62 @@ class ParameterFieldLimit_Access
 			$data = $db->db_fetch_assoc($res);
 			
 			if ($data['parameter_limit_id'])
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param integer $parameter_field_id
+	 * @return bool
+	 */
+	public static function delete_limits_by_parameter_field_id($parameter_field_id)
+	{
+		global $db;
+		
+		if (is_numeric($parameter_field_id))
+		{
+			$sql = "DELETE FROM ".constant("PARAMETER_FIELD_LIMIT_TABLE")." WHERE parameter_field_id = ".$parameter_field_id."";
+			$res = $db->db_query($sql);
+			
+			if ($res !== false)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param integer $parameter_limit_id
+	 * @return bool
+	 */
+	public static function delete_limits_by_parameter_limit_id($parameter_limit_id)
+	{
+		global $db;
+		
+		if (is_numeric($parameter_limit_id))
+		{
+			$sql = "DELETE FROM ".constant("PARAMETER_FIELD_LIMIT_TABLE")." WHERE parameter_limit_id = ".$parameter_limit_id."";
+			$res = $db->db_query($sql);
+			
+			if ($res !== false)
 			{
 				return true;
 			}

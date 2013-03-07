@@ -39,15 +39,15 @@ DataParameter = function()
 			"<div id='DataParameterAdminTemplateLimitsDialog' title='Limits (USL/LSL)'>" +
 			"	<div id='DataParameterAdminTemplateLimitsDialogSelect' class='Form'><select style='width: 500px;'></select></div>" +
 			"	<div id='DataParameterAdminTemplateLimitsDialogButtons'>" +
-			"		<a href='#' class='ListButton' id='DataParameterAdminTemplateLimitsDialogNewButton'>" +
+			"		<a style='cursor: pointer;' class='ListButton' id='DataParameterAdminTemplateLimitsDialogNewButton'>" +
 			"		<img src='images/icons/add.png' alt='' />" +
 			"		<div>New Limit</div>" +
 			"		</a>" +
-			"		<a href='#' class='ListButton' id='DataParameterAdminTemplateLimitsDialogRenameButton'>" +
+			"		<a style='cursor: pointer;' class='ListButton' id='DataParameterAdminTemplateLimitsDialogRenameButton'>" +
 			"		<img src='images/icons/delete.png' alt='' />" +
 			"		<div>Rename current Limit</div>" +
 			"		</a>" +
-			"		<a href='#' class='ListButton' id='DataParameterAdminTemplateLimitsDialogDeleteButton'>" +
+			"		<a style='cursor: pointer;' class='ListButton' id='DataParameterAdminTemplateLimitsDialogDeleteButton'>" +
 			"		<img src='images/icons/delete.png' alt='' />" +
 			"		<div>Delete current Limit</div>" +
 			"		</a>" +
@@ -78,6 +78,39 @@ DataParameter = function()
 			"<div id='DataParameterAdminTemplateLimitsDialogRename' title='Rename Limit'>" +
 			"Name: <input type='text' size='35' />" +
 			"</div>");
+		
+		$(".DataParameterTemplateFieldDeleteButton").each(function()
+		{
+			$(this).click(function()
+			{
+				var current_line_counter = $(this).attr("id").replace("DataParameterTemplateFieldDeleteButton","");
+				
+				$(this).parent().parent().fadeOut(400, function()
+				{
+					$(this).remove();
+
+					var tmp_delete_counter = 1;
+					
+					$(".DataParameterTemplateField").each(function()
+					{
+						if ((tmp_delete_counter % 2) !== 0)
+						{
+							var tmp_tr_class = "even";	
+						}
+						else
+						{
+							var tmp_tr_class = "odd";	
+						}
+						
+						$(this).removeClass("odd");
+						$(this).removeClass("even");
+						$(this).addClass(tmp_tr_class);
+						
+						tmp_delete_counter++;
+					});
+				});
+			});
+		});
 		
 		init();
 	}
@@ -292,14 +325,17 @@ DataParameter = function()
 				{
 				 	$(this).dialog("close");
 				 	
-				 	limit_array[limit_counter] = undefined;
-				 	
-				 	$("#DataParameterAdminTemplateLimitsDialogSelect select").find("option:selected").remove();
-					$("#DataParameterAdminTemplateLimitsDialogSelect select").find("option[value='0']").attr("selected", "selected");
-				 	
-				 	base_form_init();
-				 	
-				 	$("#DataParameterAdminTemplateLimitsDialogSelect select").trigger("onchange");
+				 	if (current_limit !== 0)
+				 	{
+					 	limit_array[current_limit] = undefined;
+					 	
+					 	$("#DataParameterAdminTemplateLimitsDialogSelect select").find("option:selected").remove();
+						$("#DataParameterAdminTemplateLimitsDialogSelect select").find("option[value='0']").attr("selected", "selected");
+					 	
+					 	base_form_init();
+					 	
+					 	$("#DataParameterAdminTemplateLimitsDialogSelect select").trigger("onchange");
+				 	}
 				}
 			},{
 				text: get_language_label("no_button"),
@@ -407,12 +443,13 @@ DataParameter = function()
 		var measuring_unit_select = $("#DataParameterTemplateTable").children("tbody").children(":first-child").find("select");
 		measuring_unit_select = measuring_unit_select.clone();
 		$(measuring_unit_select).removeClass("FormSelect");
+		$(measuring_unit_select).attr("name", "unit-"+line_counter);
 		
 		$("#DataParameterTemplateTable").children("tbody").children(":last-child").after("<tr class='"+tr_class+" DataParameterTemplateField' id='DataParameterTemplateField"+line_counter+"'>" +
 			"<td><input type='text' name='name-"+line_counter+"' class='DataParameterAdminValue' /><span id='DataParameterTemplateFieldError"+line_counter+"' class='FormError'></span></td>" +
 			"<td>"+$(measuring_unit_select).prop('outerHTML')+"</td>" +
-			"<td><input type='text' size='6' name='usl-"+line_counter+"' class='DataParameterAdminValue' /></td>" +
 			"<td><input type='text' size='6' name='lsl-"+line_counter+"' class='DataParameterAdminValue' /></td>" +
+			"<td><input type='text' size='6' name='usl-"+line_counter+"' class='DataParameterAdminValue' /></td>" +
 			"<td><input type='text' size='6' name='min-"+line_counter+"' class='DataParameterAdminValue' /></td>" +
 			"<td><input type='text' size='6' name='max-"+line_counter+"' class='DataParameterAdminValue' /></td>" +
 			"<td>Methods</td>" +
@@ -459,7 +496,10 @@ DataParameter = function()
 		
 		for (var i=0;i<=limit_counter;i++)
 		{
-			$("#DataParameterAdminTemplateLimitsDialogSelect select").append("<option value='"+i+"'>"+limit_array[i]['name']+"</option>");
+			if (limit_array[i] !== undefined)
+			{
+				$("#DataParameterAdminTemplateLimitsDialogSelect select").append("<option value='"+i+"'>"+limit_array[i]['name']+"</option>");
+			}
 		}
 		
 		$("#DataParameterAdminTemplateLimitsDialogNewButton").click(function()
@@ -494,8 +534,8 @@ DataParameter = function()
 						
 			$("#DataParameterTemplateLimitTable tbody").append("<tr>" +
 			"<td>"+name+"</td>" +
-			"<td><input type='text' size='6' name='usl-"+id+"' class='DataParameterAdminLimitValue' value='"+usl+"' /></td>" +
 			"<td><input type='text' size='6' name='lsl-"+id+"' class='DataParameterAdminLimitValue' value='"+lsl+"' /></td>" +
+			"<td><input type='text' size='6' name='usl-"+id+"' class='DataParameterAdminLimitValue' value='"+usl+"' /></td>" +
 			"</tr>");
 		});
 		

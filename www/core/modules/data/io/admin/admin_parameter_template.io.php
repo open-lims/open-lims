@@ -164,14 +164,20 @@ class AdminParameterTemplateIO
 						$output_template_field_array[$output_template_field_counter]['lsl'] = "";
 					}
 						
-						
-					if (($output_template_field_counter % 2) == 0)
+					if ($key == 1)
 					{
 						$output_template_field_array[$output_template_field_counter]['class'] = "odd";
 					}
 					else
 					{
-						$output_template_field_array[$output_template_field_counter]['class'] = "evan";
+						if (($output_template_field_counter % 2) == 0)
+						{
+							$output_template_field_array[$output_template_field_counter]['class'] = "odd DataParameterTemplateField";
+						}
+						else
+						{
+							$output_template_field_array[$output_template_field_counter]['class'] = "evan DataParameterTemplateField";
+						}
 					}
 
 					if (is_array($measuring_unit_array) and count($measuring_unit_array) >= 1)
@@ -193,6 +199,10 @@ class AdminParameterTemplateIO
 								{
 									$output_template_field_array[$output_template_field_counter][$measuring_unit_counter]['selected'] = "selected='selected'";
 								}
+								elseif ($measuring_unit_value['exponent'] == "" and $measuring_unit_value['id'] == $value['unit_ratio'])
+								{
+									$output_template_field_array[$output_template_field_counter][$measuring_unit_counter]['selected'] = "selected='selected'";
+								}
 								else
 								{
 									$output_template_field_array[$output_template_field_counter][$measuring_unit_counter]['selected'] = "";
@@ -203,6 +213,15 @@ class AdminParameterTemplateIO
 							$output_template_field_array[$output_template_field_counter][$measuring_unit_counter]['content'] = $measuring_unit_value['name'];
 							$measuring_unit_counter++;
 						}
+					}
+					
+					if ($key == 1)
+					{
+						$output_template_field_array[$output_template_field_counter]['deletable'] = false;
+					}
+					else
+					{
+						$output_template_field_array[$output_template_field_counter]['deletable'] = true;
 					}
 										
 					$output_template_field_counter++;

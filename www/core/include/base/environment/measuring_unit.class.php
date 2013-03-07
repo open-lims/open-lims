@@ -31,6 +31,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
 	require_once("access/measuring_unit_category.access.php");
 	require_once("access/measuring_unit.access.php");
+	require_once("access/measuring_unit_ratio.access.php");
 }
 
 /**
@@ -147,6 +148,12 @@ class MeasuringUnit implements MeasuringUnitInterface
 		
 	private static function get_prefix($exponent, $positive = true)
 	{
+		if ($exponent < 0)
+		{
+			$exponent = $exponent*-1;
+			$positive = false;
+		}
+		
 		switch ($exponent):
 		
 			case 3:
@@ -167,7 +174,7 @@ class MeasuringUnit implements MeasuringUnitInterface
 				}
 				else
 				{
-					return array("mikro", "&micro;");
+					return array("micro", "&micro;");
 				}
 			break;
 			
@@ -189,18 +196,18 @@ class MeasuringUnit implements MeasuringUnitInterface
 				}
 				else
 				{
-					return array("piko", "p");
+					return array("pico", "p");
 				}
 			break;
 			
 			case 15:
 				if ($positive == true)
 				{
-					return array("femto", "f");
+					return array("peta", "P");
 				}
 				else
 				{
-					
+					return array("femto", "f");
 				}
 			break;
 			
@@ -233,7 +240,7 @@ class MeasuringUnit implements MeasuringUnitInterface
 				}
 				else
 				{
-					return array("yokto", "y");
+					return array("yocto", "y");
 				}	
 			break;
 			
@@ -348,6 +355,31 @@ class MeasuringUnit implements MeasuringUnitInterface
 						}
 					}
 				}
+			}
+		}
+		
+		$return_array[$counter]['name'] =  "Ratios";
+		$return_array[$counter]['headline'] = true;
+		$counter++;
+		
+		$ratio_array = MeasuringUnitRatio_Access::list_entries();
+		
+		if (is_array($ratio_array) and count($ratio_array) >= 1)
+		{
+			foreach($ratio_array as $ratio_key => $ratio_value)
+			{
+				$numerator_unit = new MeasuringUnit_Access($ratio_value['numerator_unit_id']);
+				$numerator_prefix_array = self::get_prefix($ratio_value['numerator_unit_exponent']);
+				
+				$denominator_unit = new MeasuringUnit_Access($ratio_value['denominator_unit_id']);
+				$denominator_prefix_array = self::get_prefix($ratio_value['denominator_unit_exponent']);
+				
+				
+				$return_array[$counter]['id'] = $ratio_value['id'];
+				$return_array[$counter]['name'] = $numerator_prefix_array[0]."".$numerator_unit->get_name()." per ".$denominator_prefix_array[1]."".$denominator_unit->get_unit_symbol()." (".$numerator_prefix_array[1]."".$numerator_unit->get_unit_symbol()."/".$denominator_prefix_array[1]."".$denominator_unit->get_unit_symbol().")";
+				$return_array[$counter]['exponent'] = "";
+				$return_array[$counter]['headline'] = false;
+				$counter++;
 			}
 		}
 		

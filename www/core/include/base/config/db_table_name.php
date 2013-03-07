@@ -35,6 +35,7 @@
 	define("LANGUAGE_TABLE", 			"core_languages");
 	define("MEASURING_UNIT_CATEGORY_TABLE", "core_base_measuring_unit_categories");
 	define("MEASURING_UNIT_TABLE", 		"core_base_measuring_units");
+	define("MEASURING_UNIT_RATIO_TABLE", 		"core_base_measuring_unit_ratios");
 	define("PAPER_SIZE_TABLE", 			"core_paper_sizes");
 	define("SESSION_VALUE_TABLE", 		"core_session_values");
 	define("SESSION_TABLE", 			"core_sessions");

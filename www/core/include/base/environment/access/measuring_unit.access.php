@@ -432,7 +432,6 @@ class MeasuringUnit_Access
 		}
 	}
 	
-
 	/**
 	 * @param integer $base_id
 	 * @return bool

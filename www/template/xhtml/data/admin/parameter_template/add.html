@@ -46,7 +46,7 @@ $(document).ready(function()
 		}
 		else
 		{
-			var interal_name = $("input[name='name']").val();
+			var interal_name = $("input[name='internal_name']").val();
 			
 			$.ajax(
 			{
@@ -166,8 +166,8 @@ $(document).ready(function()
 		<tr>
 			<th>Name</th>
 			<th>Unit</th>
-			<th>USL (max)</th>
 			<th>LSL (min)</th>
+			<th>USL (max)</th>
 			<th>Min (valid)</th>
 			<th>Max (valid)</th>
 			<th>Methods</th>
@@ -188,8 +188,8 @@ $(document).ready(function()
 				
 				</select>
 			</td>
-			<td><input type='text' size='6' name='usl-1' class='DataParameterAdminValue' /></td>
 			<td><input type='text' size='6' name='lsl-1' class='DataParameterAdminValue' /></td>
+			<td><input type='text' size='6' name='usl-1' class='DataParameterAdminValue' /></td>
 			<td><input type='text' size='6' name='min-1' class='DataParameterAdminValue' /></td>
 			<td><input type='text' size='6' name='max-1' class='DataParameterAdminValue' /></td>
 			<td>Methods</td>

@@ -36,6 +36,7 @@ class ParameterField_Access
 	private $max_value;
 	private $measuring_unit_id;
 	private $measuring_unit_exponent;
+	private $measuring_unit_ratio_id;
 
 	/**
 	 * @param integer $parameter_field_id
@@ -62,6 +63,7 @@ class ParameterField_Access
 				$this->max_value				= $data['max_value'];
 				$this->measuring_unit_id		= $data['measuring_unit_id'];
 				$this->measuring_unit_exponent	= $data['measuring_unit_exponent'];
+				$this->measuring_unit_ratio_id	= $data['measuring_unit_ratio_id'];
 			}
 			else
 			{
@@ -80,6 +82,7 @@ class ParameterField_Access
 			unset($this->max_value);
 			unset($this->measuring_unit_id);
 			unset($this->measuring_unit_exponent);
+			unset($this->measuring_unit_ratio_id);
 		}
 	}
 
@@ -90,7 +93,7 @@ class ParameterField_Access
 	 * @param integer $measuring_unit_id
 	 * @return integer
 	 */
-	public function create($name, $min_value, $max_value, $measuring_unit_id, $measuring_unit_exponent)
+	public function create($name, $min_value, $max_value, $measuring_unit_id, $measuring_unit_exponent, $measuring_unit_ratio_id)
 	{
 		global $db;
 		
@@ -132,8 +135,17 @@ class ParameterField_Access
 				$measuring_unit_exponent_insert = "NULL";
 			}
 			
-			$sql_write = "INSERT INTO ".constant("PARAMETER_FIELD_TABLE")." (id,name,min_value,max_value,measuring_unit_id,measuring_unit_exponent) " .
-					"VALUES (nextval('".self::PARAMETER_FIELD_PK_SEQUENCE."'::regclass),'".$name."',".$min_value_insert.",".$max_value_insert.",".$measuring_unit_id_insert.",".$measuring_unit_exponent_insert.")";
+			if (is_numeric($measuring_unit_ratio_id))
+			{
+				$measuring_unit_ratio_id_insert = $measuring_unit_ratio_id;
+			}
+			else
+			{
+				$measuring_unit_ratio_id_insert = "NULL";
+			}
+			
+			$sql_write = "INSERT INTO ".constant("PARAMETER_FIELD_TABLE")." (id,name,min_value,max_value,measuring_unit_id,measuring_unit_exponent,measuring_unit_ratio_id) " .
+					"VALUES (nextval('".self::PARAMETER_FIELD_PK_SEQUENCE."'::regclass),'".$name."',".$min_value_insert.",".$max_value_insert.",".$measuring_unit_id_insert.",".$measuring_unit_exponent_insert.",".$measuring_unit_ratio_id_insert.")";
 					
 			$res_write = $db->db_query($sql_write);	
 
@@ -209,7 +221,7 @@ class ParameterField_Access
 	 */
 	public function get_min_value()
 	{
-		if ($this->min_value)
+		if (isset($this->min_value))
 		{
 			return $this->min_value;
 		}
@@ -224,7 +236,7 @@ class ParameterField_Access
 	 */
 	public function get_max_value()
 	{
-		if ($this->max_value)
+		if (isset($this->max_value))
 		{
 			return $this->max_value;
 		}
@@ -257,6 +269,21 @@ class ParameterField_Access
 		if ($this->measuring_unit_exponent)
 		{
 			return $this->measuring_unit_exponent;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @return integer
+	 */
+	public function get_measuring_unit_ratio_id()
+	{
+		if ($this->measuring_unit_ratio_id)
+		{
+			return $this->measuring_unit_ratio_id;
 		}
 		else
 		{
@@ -359,9 +386,18 @@ class ParameterField_Access
 	{	
 		global $db;
 
-		if ($this->parameter_field_id and is_numeric($measuring_unit_id))
+		if ($this->parameter_field_id)
 		{
-			$sql = "UPDATE ".constant("PARAMETER_FIELD_TABLE")." SET measuring_unit_id = '".$measuring_unit_id."' WHERE id = ".$this->parameter_field_id."";
+			if (is_numeric($measuring_unit_id))
+			{
+				$measuring_unit_id_insert = $measuring_unit_id;
+			}
+			else
+			{
+				$measuring_unit_id_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("PARAMETER_FIELD_TABLE")." SET measuring_unit_id = ".$measuring_unit_id_insert." WHERE id = ".$this->parameter_field_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -388,14 +424,61 @@ class ParameterField_Access
 	{	
 		global $db;
 
-		if ($this->parameter_field_id and is_numeric($measuring_unit_exponent))
+		if ($this->parameter_field_id)
 		{
-			$sql = "UPDATE ".constant("PARAMETER_FIELD_TABLE")." SET measuring_unit_exponent = '".$measuring_unit_exponent."' WHERE id = ".$this->parameter_field_id."";
+			if (is_numeric($measuring_unit_exponent))
+			{
+				$measuring_unit_exponent_insert = $measuring_unit_exponent;
+			}
+			else
+			{
+				$measuring_unit_exponent_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("PARAMETER_FIELD_TABLE")." SET measuring_unit_exponent = ".$measuring_unit_exponent_insert." WHERE id = ".$this->parameter_field_id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
 			{
 				$this->measuring_unit_exponent = $measuring_unit_exponent;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param integer $measuring_unit_ratio_id
+	 * @return bool
+	 */
+	public function set_measuring_unit_ratio_id($measuring_unit_ratio_id)
+	{	
+		global $db;
+
+		if ($this->parameter_field_id)
+		{
+			if (is_numeric($measuring_unit_ratio_id))
+			{
+				$measuring_unit_ratio_id_insert = $measuring_unit_ratio_id;
+			}
+			else
+			{
+				$measuring_unit_ratio_id_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("PARAMETER_FIELD_TABLE")." SET measuring_unit_ratio_id = ".$measuring_unit_ratio_id_insert." WHERE id = ".$this->parameter_field_id."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->measuring_unit_ratio_id = $measuring_unit_ratio_id;
 				return true;
 			}
 			else

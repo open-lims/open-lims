@@ -117,11 +117,22 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 						break;
 						
 						case "unit":
-							$unit_array = explode("-", $field_value);
+							$unit_array = explode("-", $field_value, 2);
 							if (is_array($unit_array) and count($unit_array) === 2)
 							{
-								$measuring_unit_id = $unit_array[0];
-								$measuring_unit_exponent = $unit_array[1];
+								if (is_numeric($unit_array[1]))
+								{
+									$measuring_unit_id = $unit_array[0];
+									$measuring_unit_exponent = $unit_array[1];
+								}
+								else
+								{
+									$measuring_unit_ratio_id = $unit_array[0];
+								}
+							}
+							elseif(is_array($unit_array) and count($unit_array) === 1)
+							{
+								$measuring_unit_ratio_id = $unit_array[0];
 							}
 						break;
 						
@@ -141,7 +152,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 				}
 				
 				$parameter_field = new ParameterField_Access(null);
-				if (($parameter_field_id = $parameter_field->create($name, $min_value, $max_value, $measuring_unit_id, $measuring_unit_exponent)) === null)
+				if (($parameter_field_id = $parameter_field->create($name, $min_value, $max_value, $measuring_unit_id, $measuring_unit_exponent, $measuring_unit_ratio_id)) === null)
 				{
 					if ($transaction_id != null)
 					{
@@ -181,6 +192,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 				unset($max_value);
 				unset($measuring_unit_id);
 				unset($measuring_unit_exponent);
+				unset($measuring_unit_ratio_id);
 			}
 			
 			if ($transaction_id != null)
@@ -199,12 +211,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 	{
 		
 	}
-	
-	public function update($field_array)
-	{
 		
-	}
-	
 	public function get_name()
 	{
 		if ($this->parameter_template_id)
@@ -248,6 +255,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 					$return_array[$counter]['name'] = $parameter_field->get_name();
 					$return_array[$counter]['unit'] = $parameter_field->get_measuring_unit_id();
 					$return_array[$counter]['unit_exponent'] = $parameter_field->get_measuring_unit_exponent();
+					$return_array[$counter]['unit_ratio'] = $parameter_field->get_measuring_unit_ratio_id();
 					$return_array[$counter]['min'] = $parameter_field->get_min_value();
 					$return_array[$counter]['max'] = $parameter_field->get_max_value();
 					
@@ -282,7 +290,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 				
 				foreach($template_field_array as $key => $value)
 				{
-					$field_limit_array = ParameterFieldLimit_Access::list_limits_by_parameter_field_id($value);
+					$field_limit_array = ParameterFieldLimit_Access::list_field_limits_by_parameter_field_id($value);
 					
 					foreach($field_limit_array as $limit_key => $limit_value)
 					{
@@ -328,7 +336,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 		global $transaction;
 		
 		if ($this->parameter_template_id and $name and is_array($field_array) and count($field_array) and is_array($limit_array))
-		{
+		{			
 			$transaction_id = $transaction->begin();
 			
 			if ($this->parameter_template->set_name($name) == false)
@@ -342,38 +350,47 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 						
 			$limit_counter = count($limit_array);
 			$parameter_limit_id_array = array();
+			$current_limit_array = array();
 			
 			for ($i=0;$i<=($limit_counter-1);$i++)
 			{
-				if (isset($limit_array[$i]['pk']) and is_numeric($limit_array[$i]['pk']))
+				if ($limit_array[$i] !== null)
 				{
-					/**
-					 * @todo MINOR-IMPORTANT: insert a security check
-					 */
-					$parameter_limit_id_array[$i] = $limit_array[$i]['pk'];
-					$parameter_limit = new ParameterLimit_Access($limit_array[$i]['pk']);
-					if ($parameter_limit->set_name($limit_array[$i]['name']) == false)
+					if (isset($limit_array[$i]['pk']) and is_numeric($limit_array[$i]['pk']))
 					{
-						if ($transaction_id != null)
+						array_push($current_limit_array, $limit_array[$i]['pk']);
+						
+						/**
+						 * @todo MINOR-IMPORTANT: insert a security check
+						 */
+						$parameter_limit_id_array[$i] = $limit_array[$i]['pk'];
+						$parameter_limit = new ParameterLimit_Access($limit_array[$i]['pk']);
+						if ($parameter_limit->set_name($limit_array[$i]['name']) == false)
 						{
-							$transaction->rollback($transaction_id);
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							return null;
 						}
-						return null;
 					}
-				}
-				else
-				{
-					$parameter_limit = new ParameterLimit_Access(null);
-					if (($parameter_limit_id_array[$i] = $parameter_limit->create($limit_array[$i]['name'])) == null)
+					else
 					{
-						if ($transaction_id != null)
+						$parameter_limit = new ParameterLimit_Access(null);
+						if (($parameter_limit_id_array[$i] = $parameter_limit->create($limit_array[$i]['name'])) == null)
 						{
-							$transaction->rollback($transaction_id);
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							return null;
 						}
-						return null;
 					}
 				}
 			}
+			
+			$current_field_array = array();
+			$new_field_array = array();
 			
 			foreach($field_array as $key => $value)
 			{
@@ -386,11 +403,22 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 						break;
 						
 						case "unit":
-							$unit_array = explode("-", $field_value);
+							$unit_array = explode("-", $field_value, 2);
 							if (is_array($unit_array) and count($unit_array) === 2)
 							{
-								$measuring_unit_id = $unit_array[0];
-								$measuring_unit_exponent = $unit_array[1];
+								if (is_numeric($unit_array[1]))
+								{
+									$measuring_unit_id = $unit_array[0];
+									$measuring_unit_exponent = $unit_array[1];
+								}
+								else
+								{
+									$measuring_unit_ratio_id = $unit_array[0];
+								}
+							}
+							elseif(is_array($unit_array) and count($unit_array) === 1)
+							{
+								$measuring_unit_ratio_id = $unit_array[0];
 							}
 						break;
 						
@@ -413,6 +441,8 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 				{
 					$parameter_field_id = $value['pk'];
 					
+					array_push($current_field_array, $value['pk']);
+					
 					// Edit Field
 					if (ParameterTemplateHasField_Access::field_exists_in_template($this->parameter_template_id, $value['pk']) == true)
 					{
@@ -427,22 +457,63 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 							return false;
 						}
 						
-						if ($parameter_field->set_measuring_unit_id($measuring_unit_id) == false)
+						if (is_numeric($measuring_unit_id) and is_numeric($measuring_unit_exponent))
 						{
-							if ($transaction_id != null)
+							if ($parameter_field->set_measuring_unit_id($measuring_unit_id) == false)
 							{
-								$transaction->rollback($transaction_id);
+								if ($transaction_id != null)
+								{
+									$transaction->rollback($transaction_id);
+								}
+								return false;
 							}
-							return false;
+							
+							if ($parameter_field->set_measuring_unit_exponent($measuring_unit_exponent) == false)
+							{
+								if ($transaction_id != null)
+								{
+									$transaction->rollback($transaction_id);
+								}
+								return false;
+							}
+							
+							if ($parameter_field->set_measuring_unit_ratio_id(null) == false)
+							{
+								if ($transaction_id != null)
+								{
+									$transaction->rollback($transaction_id);
+								}
+								return false;
+							}
 						}
-						
-						if ($parameter_field->set_measuring_unit_exponent($measuring_unit_exponent) == false)
+						elseif (is_numeric($measuring_unit_ratio_id))
 						{
-							if ($transaction_id != null)
+							if ($parameter_field->set_measuring_unit_id(null) == false)
 							{
-								$transaction->rollback($transaction_id);
+								if ($transaction_id != null)
+								{
+									$transaction->rollback($transaction_id);
+								}
+								return false;
 							}
-							return false;
+							
+							if ($parameter_field->set_measuring_unit_exponent(null) == false)
+							{
+								if ($transaction_id != null)
+								{
+									$transaction->rollback($transaction_id);
+								}
+								return false;
+							}
+							
+							if ($parameter_field->set_measuring_unit_ratio_id($measuring_unit_ratio_id) == false)
+							{
+								if ($transaction_id != null)
+								{
+									$transaction->rollback($transaction_id);
+								}
+								return false;
+							}
 						}
 						
 						if (is_numeric($min_value))
@@ -501,6 +572,8 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 						}
 						return false;
 					}
+					
+					array_push($new_field_array, $parameter_field_id);
 				}
 				
 				for ($i=0;$i<=($limit_counter-1);$i++)
@@ -518,7 +591,6 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 								{
 									$transaction->rollback($transaction_id);
 								}
-								echo "2";
 								return null;
 							}
 						}
@@ -531,7 +603,6 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 								{
 									$transaction->rollback($transaction_id);
 								}
-								echo "3";
 								return null;
 							}
 						}
@@ -547,7 +618,6 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 								{
 									$transaction->rollback($transaction_id);
 								}
-								echo "4";
 								return null;
 							}
 						}
@@ -560,7 +630,84 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 				unset($max_value);
 				unset($measuring_unit_id);
 				unset($measuring_unit_exponent);
+				unset($measuring_unit_ratio_id);
 			}
+			
+			if (is_array($current_field_array) and count($current_field_array) >= 1)
+			{
+				$template_field_array = ParameterTemplateHasField_Access::list_fields_by_template_id($this->parameter_template_id);
+				$field_delete_array = array_diff($template_field_array, $current_field_array);
+				
+				if (is_array($field_delete_array) and count($field_delete_array) >= 1)
+				{
+					foreach ($field_delete_array as $key => $value)
+					{
+						if (ParameterFieldLimit_Access::delete_limits_by_parameter_field_id($value) === false)
+						{
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							return null;
+						}
+						
+						$parameter_template_field = new ParameterTemplateHasField_Access($this->parameter_template_id, $value);
+						if ($parameter_template_field->delete() === false)
+						{
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							return null;
+						}
+						
+						$parameter_field = new ParameterField_Access($value);
+						if ($parameter_field->delete() === false)
+						{
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							return null;
+						}
+					}
+				}
+			}
+			
+			
+			if (is_array($current_limit_array) and count($current_limit_array) >= 1)
+			{
+				$full_field_array = array_merge($new_field_array, $current_field_array);
+				
+				$template_limit_array = ParameterFieldLimit_Access::list_parameter_limits_by_parameter_field_array($full_field_array);
+				$limit_delete_array = array_diff($template_limit_array, $current_limit_array);
+				
+				if (is_array($limit_delete_array) and count($limit_delete_array) >= 1)
+				{
+					foreach($limit_delete_array as $key => $value)
+					{
+						if (ParameterFieldLimit_Access::delete_limits_by_parameter_limit_id($value) === false)
+						{
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							return null;
+						}
+						
+						$parameter_limit = new ParameterLimit_Access($value);
+						if ($parameter_limit->delete() === false)
+						{
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							return null;
+						}
+					}
+				}
+			}
+			
 			
 			if ($transaction_id != null)
 			{
