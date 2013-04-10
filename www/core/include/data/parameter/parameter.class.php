@@ -29,7 +29,8 @@ require_once("interfaces/parameter.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-
+	require_once("access/parameter.access.php");
+	require_once("access/parameter_version.access.php");
 }
 
 /**
@@ -38,14 +39,44 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class Parameter extends DataEntity implements ParameterInterface, EventListenerInterface
 {
-	function __construct()
+	protected $parameter_id;
+	
+	protected $parameter;
+	protected $parameter_version;
+	
+	function __construct($parameter_id)
 	{
-		
+		if (is_numeric($parameter_id))
+    	{
+    		if (Parameter_Access::exist_parameter_by_parameter_id($parameter_id) == true)
+    		{
+    			$this->parameter_id = $parameter_id;
+				$this->parameter = new Parameter_Access($parameter_id);
+				
+				$parameter_version_id = ParameterVersion_Access::get_current_entry_by_toid($parameter_id);
+				$this->parameter_version = new ParameterVersion_Access($parameter_version_id);
+	
+				parent::__construct($this->parameter->get_data_entity_id());
+    		}
+    		else
+    		{
+    			throw new ParameterNotFoundException();
+    		}
+    	}
+    	else
+    	{
+    		parent::__construct(null);
+			$this->parameter_id = null;
+			$this->parameter = new Parameter_Access(null);
+			$this->parameter_version = new ParameterVersion_Access(null);
+    	}
 	}
 	
 	function __destruct()
 	{
-		
+		unset($this->parameter_id);
+    	unset($this->parameter);
+    	unset($this->parameter_version);
 	}
 	
 	protected function create()
