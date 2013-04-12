@@ -143,4 +143,10 @@
 	$dialog[16]['internal_name']	= "parameter_template";
 	$dialog[16]['language_address']	= "DataDialogAdminMenuParameterTemplates";
 	$dialog[16]['weight']			= 200;
+	
+	$dialog[17]['type']				= "item_add";
+	$dialog[17]['class_path']		= "core/modules/data/io/parameter.io.php";
+	$dialog[17]['class']			= "ParameterIO";
+	$dialog[17]['method']			= "add_parameter_item";
+	$dialog[17]['internal_name']	= "parameter";
 ?>

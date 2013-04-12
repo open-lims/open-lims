@@ -250,6 +250,19 @@ class DataRequest
 			break;
 			
 			
+			// Parameter
+			
+			case "parameter_add_as_item":
+				require_once("ajax/parameter.ajax.php");
+				echo ParameterAjax::add_as_item(
+						$_POST['folder_id'], 
+						$_POST['type_id'], 
+						$_POST['parameter_array'], 
+						$_POST['get_array']
+						);
+			break;
+			
+			
 			// Search 
 			
 			case "search_data_list_data":

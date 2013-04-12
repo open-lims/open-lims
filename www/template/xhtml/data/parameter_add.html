@@ -1,0 +1,118 @@
+<script>
+/*<![CDATA[*/
+$(document).ready(function()
+{
+	$("#DataParameterCancelButton").click(function()
+	{
+		window.setTimeout('window.location = \'[[RETRACE]]\'',1);
+	});
+	
+	$("#DataParameterSaveButton").click(function()
+	{
+		var json = '{';
+		
+		$(".DataParameterValue").each(function()
+		{		
+			if (($(this).is(":input") == true) && ($(this).is(":radio") == false) && ($(this).is(":checkbox") == false))
+			{
+				var name = $(this).attr("name");
+				var value = $(this).val();
+				json += '\"'+name+'\":\"'+value+'\",';
+			}
+		});
+		
+		json = json.substr(0,json.length-1);
+		json += '}';
+		
+		if (json !== false)
+		{
+			$.ajax({
+				type : "POST",
+				url : "ajax.php?session_id=[[SESSION_ID]]&nav=data&run=parameter_add_as_item",
+				data : 'folder_id=[[FOLDER_ID]]&type_id=[[TYPE_ID]]&parameter_array='+json+'&get_array=[[GET_ARRAY]]',
+				beforeSend: function()
+				{
+					$("#DataParameterAddFinish").dialog("open");
+				},
+				success : function(data)
+				{
+					if (data == "1")
+					{
+						window.setTimeout('window.location = \'[[RETRACE]]\'',500);
+					}
+					else
+					{						
+						if ((data + '').indexOf("EXCEPTION",0) == 0)
+						{
+							var exception_message = data.replace("EXCEPTION: ","");
+							$("#DataParameterAddFinish").dialog("close");
+							ErrorDialog("Error", exception_message);
+							return false;
+						}
+						else
+						{
+							$("#DataParameterAddFinish").dialog("close");
+							ErrorDialog("Error", "An error occured");
+							return false;
+						}
+					}
+				}
+			});
+		}
+	});
+});
+/*]]>*/ 
+</script>
+
+<div class="BasePlaseWaitWindow" id="DataParameterAddFinish" title=""> 
+<div><img src='images/animations/loading_circle_small.gif' alt=''> Please wait while parameter creation.</div>
+</div> 
+
+<!-- CONTAINER BEGIN ("Add Parameter") -->
+
+<div class='Form'>
+
+<div class='FormBoxWithoutLRPadding'>
+<div class='FormBoxHeadlineWithoutLRPadding'>[[NAME]]</div>
+
+<table style='width: 100%; text-align: left;' class='DataParameterTable'>
+	<thead>
+		<tr>
+			<th>Parameter</th>
+			<th>Value</th>
+			<th>Unit</th>
+			<th>Min (LSL)</th>
+			<th>Max (USL)</th>
+			<th>Method</th>
+			<th>Status</th>
+		<tr>
+	</thead>
+	<tbody>			
+		<!-- FOREACH BEGIN ([[FIELDS]]) -->
+		
+			<tr class='[[FIELDS:CLASS]]'>
+				<td>[[FIELDS:NAME]]</td>
+				<td><input type='text' name='value-[[FIELDS:ID]]' value='' class='DataParameterValue' /></td>
+				<td>[[FIELDS:UNIT]]</td>
+				<td>[[FIELDS:LSL]]</td>
+				<td>[[FIELDS:USL]]</td>
+				<td><select name='method-[[FIELDS:ID]]' class='DataParameterValue'></select></td>
+				<td>OK</td>
+			</tr>
+		
+		<!-- FOREACH END -->
+	</tbody>
+</table>
+
+</div>
+
+<div class='FormButtonBox'>
+<button type='submit' id='DataParameterSaveButton'>[[LANG:BaseGlobalButtonSave]]</button>
+<button type='submit' id='DataParameterCancelButton'>[[LANG:BaseGlobalButtonCancel]]</button>
+<div class='FormButtonBoxClear'></div>
+</div>
+</div>
+
+
+<!-- CONTAINER END () -->
+		

@@ -79,9 +79,49 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
     	unset($this->parameter_version);
 	}
 	
-	protected function create()
+	protected function create($folder_id, $owner_id = null)
 	{
+		global $user, $transaction;
 		
+		if (is_numeric($folder_id))
+		{
+			$transaction_id = $transaction->begin();
+			
+			if ($owner_id == null)
+			{
+				$owner_id = $user->get_user_id();
+			}
+			
+			$checksum = md5(serialize($value));
+			
+			$folder = Folder::get_instance($folder_id);
+					
+			if (($data_entity_id = parent::create($owner_id, null)) != null)
+			{
+				if (parent::set_as_child_of($folder->get_data_entity_id()) == false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return null;
+				}
+				
+				
+			}
+			else
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	public function delete()

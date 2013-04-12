@@ -327,6 +327,36 @@ class MeasuringUnitRatio_Access
 		}
 	}
 	
+	
+	/**
+	 * @param integer $id
+	 * @return bool
+	 */
+	public static function exist_id($id)
+	{
+		global $db;
+			
+		if (is_numeric($id))
+		{
+			$sql = "SELECT id FROM ".constant("MEASURING_UNIT_RATIO_TABLE")." WHERE id = '".$id."'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data['id'])
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	/**
 	 * @return array
 	 */

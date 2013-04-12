@@ -1,6 +1,6 @@
 <?php
 /**
- * @package data
+ * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2013 by Roman Konertz
@@ -22,15 +22,15 @@
  */
 
 /**
- * Parameter Exception
- * @package data
+ * Base Environment Measuring Unit Ratio Not Found Exception
+ * @package base
  */
-class ParameterException extends DataException
+class BaseEnvironmentMeasuringUnitRatioNotFoundException extends BaseEnvironmentMeasuringUnitRatioException
 {
-    function __construct($write_log = false, $write_hdd_session = false, $write_hdd_sql = false, $message = null, $additional_information = null)
+    function __construct()
     {
-    	parent::__construct($write_log, $write_hdd_session, $write_hdd_sql, $message, $additional_information);	
-    }     
+    	parent::__construct(true, false, false, "Measuring Unit not found", null);
+    }
 }
 
 ?>

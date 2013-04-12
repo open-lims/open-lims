@@ -29,7 +29,7 @@ require_once("interfaces/parameter_template_parameter.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
-
+	require_once("access/parameter_has_template.access.php");
 }
 
 /**
@@ -38,7 +38,19 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class ParameterTemplateParameter extends Parameter implements ParameterTemplateParameterInterface
 {
-	public function create($folder_id, $owner_id, $template_id, $value_array)
+	
+	
+	function __construct($parameter_id)
+	{
+		
+	}
+	
+	function __destruct()
+	{
+		
+	}
+	
+	public function create($folder_id, $owner_id, $template_id, $parameter_array)
 	{
 		
 	}

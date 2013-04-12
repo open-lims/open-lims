@@ -1022,6 +1022,11 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
     	{
     		return "File";
     	}
+    	elseif ($type == "parameter")
+    	{
+    		// todo
+    		return "Parameter";
+    	}
     	else
     	{
     		if (is_array($type_array) and count($type_array) == 1)
