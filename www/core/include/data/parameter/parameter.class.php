@@ -39,7 +39,10 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class Parameter extends DataEntity implements ParameterInterface, EventListenerInterface
 {
+	protected static $parameter_object_array;
+	
 	protected $parameter_id;
+	protected $parameter_version_id;
 	
 	protected $parameter;
 	protected $parameter_version;
@@ -53,9 +56,9 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
     			$this->parameter_id = $parameter_id;
 				$this->parameter = new Parameter_Access($parameter_id);
 				
-				$parameter_version_id = ParameterVersion_Access::get_current_entry_by_toid($parameter_id);
-				$this->parameter_version = new ParameterVersion_Access($parameter_version_id);
-	
+				$this->parameter_version_id = ParameterVersion_Access::get_current_entry_by_parameter_id($parameter_id);
+				$this->parameter_version = new ParameterVersion_Access($this->parameter_version_id);
+				
 				parent::__construct($this->parameter->get_data_entity_id());
     		}
     		else
@@ -107,7 +110,34 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 					return null;
 				}
 				
+				$parameter_access = new Parameter_Access(null);
+				if (($parameter_id = $parameter_access->create($data_entity_id)) == null)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return null;
+				}
 				
+				$parameter_version_access = new ParameterVersion_Access(null);
+				if (($parameter_version_id = $parameter_version_access->create($parameter_id, 1, 1, null, true, $owner_id, null)) == null)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					return null;
+				}
+				else
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->commit($transaction_id);
+					}
+					$this->__construct($parameter_id);
+					return $parameter_id;
+				}
 			}
 			else
 			{
@@ -139,6 +169,38 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 		
 	}
 	
+	public function get_version()
+	{
+		if ($this->parameter_version)
+		{
+			if ($this->parameter_version->get_id() == $this->parameter_version->get_previous_version_id())
+			{
+				return $this->parameter_version->get_version();
+			}
+			else
+			{
+				$tmp_parameter_version_id = $this->parameter_version->get_id();
+				$tmp_internal_revision = $this->parameter_version->get_internal_revision();
+				$tmp_previous_version_id = $this->parameter_version->get_previous_version_id();
+				
+				$return_string = $this->parameter_version->get_version();
+				
+				do
+				{
+					$tmp_parameter_version = new ParameterVersion_Access($tmp_previous_version_id);
+					$return_string = $tmp_parameter_version->get_version().".".$return_string;
+					$tmp_previous_version_id = $tmp_parameter_version->get_previous_version_id();
+				}while($tmp_parameter_version->get_id() != $tmp_parameter_version->get_previous_version_id());
+			
+				return $return_string;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 	protected function update()
 	{
 		
@@ -162,7 +224,6 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
     	
     	return true;
     }
-    
 
 }
 ?>

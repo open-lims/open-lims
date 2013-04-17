@@ -106,9 +106,18 @@ class ParameterVersion_Access
 	{
 		global $db;
 		
-		if (is_numeric($parameter_id) and is_numeric($version) and is_numeric($internal_revision) and is_numeric($previous_version_id) and is_numeric($owner_id))
+		if (is_numeric($parameter_id) and is_numeric($version) and is_numeric($internal_revision) and is_numeric($owner_id))
 		{	
-			if ($current === true)
+			if (is_numeric($previous_version_id))
+			{
+				$previous_version_id_insert = $previous_version_id;
+			}
+			else
+			{
+				$previous_version_id_insert = "currval('".self::PARAMETER_VERSION_PK_SEQUENCE."'::regclass)";
+			}
+			
+			if ($current == true)
 			{
 				$current_insert = "t";
 			}
@@ -129,7 +138,7 @@ class ParameterVersion_Access
 			$datetime = date("Y-m-d H:i:s");
 			
 			$sql_write = "INSERT INTO ".constant("PARAMETER_VERSION_TABLE")." (id,parameter_id,version,internal_revision,previous_version_id,current,owner_id,datetime,name) " .
-					"VALUES (nextval('".self::PARAMETER_VERSION_PK_SEQUENCE."'::regclass),'".$parameter_id."','".$version."','".$internal_revision."','".$previous_version_id."','".$current_insert."','".$owner_id."','".$datetime."',".$name_insert.")";
+					"VALUES (nextval('".self::PARAMETER_VERSION_PK_SEQUENCE."'::regclass),'".$parameter_id."','".$version."','".$internal_revision."',".$previous_version_id_insert.",'".$current_insert."','".$owner_id."','".$datetime."',".$name_insert.")";
 					
 			$res_write = $db->db_query($sql_write);	
 
@@ -183,6 +192,21 @@ class ParameterVersion_Access
 		{
 			return false;
 		}
+	}
+	
+	/**
+	 * @return integer
+	 */
+	public function get_id()
+	{
+		if ($this->parameter_verson_id)
+		{
+			return $this->parameter_verson_id;
+		}
+		else
+		{
+			return null;
+		}	
 	}
 	
 	/**
@@ -543,6 +567,37 @@ class ParameterVersion_Access
 		else
 		{
 			return false;
+		}
+	}
+	
+	
+	/**
+	 * @param integer $parameter_id
+	 * @return integer
+	 */
+	public static function get_current_entry_by_parameter_id($parameter_id)
+	{
+		global $db;
+
+		if (is_numeric($parameter_id))
+		{
+			$sql = "SELECT id FROM ".constant("PARAMETER_VERSION_TABLE")." WHERE parameter_id = ".$parameter_id." " .
+							"AND current = 't'";				
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+							
+			if ($data['id'])
+			{
+				return $data['id'];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
 		}
 	}
 }

@@ -60,35 +60,39 @@
 	$classes['VirtualFolderNotFoundException']		= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder_not_found.exception.class.php";
 	$classes['VirtualFolderIDMissingException']		= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder_id_missing.exception.class.php";
 		
+	$classes['ParameterException']					= $path_prefix."core/include/data/parameter/exceptions/parameter.exception.class.php";
+	$classes['ParameterNotFoundException']			= $path_prefix."core/include/data/parameter/exceptions/parameter_not_found.exception.class.php";
+	$classes['ParameterIDMissingException']			= $path_prefix."core/include/data/parameter/exceptions/parameter_id_missing.exception.class.php";
 	
-	$classes['DataEntity']					= $path_prefix."core/include/data/data_entity.class.php";
-	$classes['DataEntityPermission']		= $path_prefix."core/include/data/data_entity_permission.class.php";
-	$classes['DataBrowser']					= $path_prefix."core/include/data/data_browser.class.php";
-	$classes['DataPath']					= $path_prefix."core/include/data/data_path.class.php";
-	$classes['DataPermission']				= $path_prefix."core/include/data/data_permission.class.php";
-	$classes['DataUserData']				= $path_prefix."core/include/data/data_user_data.class.php";
 	
-	$classes['File']						= $path_prefix."core/include/data/file/file.class.php";
-	$classes['ImageCache']					= $path_prefix."core/include/data/file/image_cache.class.php";
+	$classes['DataEntity']							= $path_prefix."core/include/data/data_entity.class.php";
+	$classes['DataEntityPermission']				= $path_prefix."core/include/data/data_entity_permission.class.php";
+	$classes['DataBrowser']							= $path_prefix."core/include/data/data_browser.class.php";
+	$classes['DataPath']							= $path_prefix."core/include/data/data_path.class.php";
+	$classes['DataPermission']						= $path_prefix."core/include/data/data_permission.class.php";
+	$classes['DataUserData']						= $path_prefix."core/include/data/data_user_data.class.php";
 	
-	$classes['Folder']						= $path_prefix."core/include/data/folder/folder.class.php";
-	$classes['SystemFolder']				= $path_prefix."core/include/data/folder/system_folder.class.php";
-	$classes['UserFolder']					= $path_prefix."core/include/data/folder/user_folder.class.php";
-	$classes['GroupFolder']					= $path_prefix."core/include/data/folder/group_folder.class.php";
-	$classes['OrganisationUnitFolder']		= $path_prefix."core/include/data/folder/organisation_unit_folder.class.php";
-	$classes['Path']						= $path_prefix."core/include/data/folder/path.class.php";
+	$classes['File']								= $path_prefix."core/include/data/file/file.class.php";
+	$classes['ImageCache']							= $path_prefix."core/include/data/file/image_cache.class.php";
 	
-	$classes['Value']						= $path_prefix."core/include/data/value/value.class.php";
-	$classes['ValueType']					= $path_prefix."core/include/data/value/value_type.class.php";
-	$classes['ValueVar']					= $path_prefix."core/include/data/value/value_var.class.php";
-	$classes['ItemValueVar']				= $path_prefix."core/include/data/value/item_value_var.class.php";
+	$classes['Folder']								= $path_prefix."core/include/data/folder/folder.class.php";
+	$classes['SystemFolder']						= $path_prefix."core/include/data/folder/system_folder.class.php";
+	$classes['UserFolder']							= $path_prefix."core/include/data/folder/user_folder.class.php";
+	$classes['GroupFolder']							= $path_prefix."core/include/data/folder/group_folder.class.php";
+	$classes['OrganisationUnitFolder']				= $path_prefix."core/include/data/folder/organisation_unit_folder.class.php";
+	$classes['Path']								= $path_prefix."core/include/data/folder/path.class.php";
 	
-	$classes['VirtualFolder']				= $path_prefix."core/include/data/virtual_folder/virtual_folder.class.php";
+	$classes['Value']								= $path_prefix."core/include/data/value/value.class.php";
+	$classes['ValueType']							= $path_prefix."core/include/data/value/value_type.class.php";
+	$classes['ValueVar']							= $path_prefix."core/include/data/value/value_var.class.php";
+	$classes['ItemValueVar']						= $path_prefix."core/include/data/value/item_value_var.class.php";
 	
-	$classes['Parameter']						= $path_prefix."core/include/data/parameter/parameter.class.php";
-	$classes['ParameterTemplateParameter']		= $path_prefix."core/include/data/parameter/parameter_template_parameter.class.php";
-	$classes['ParameterNonTemplateParameter']	= $path_prefix."core/include/data/parameter/parameter_non_template_parameter.class.php";
-	$classes['ParameterTemplate']				= $path_prefix."core/include/data/parameter/parameter_template.class.php";
+	$classes['VirtualFolder']						= $path_prefix."core/include/data/virtual_folder/virtual_folder.class.php";
 	
-	$classes['Data_Wrapper']				= $path_prefix."core/include/data/data.wrapper.class.php";
+	$classes['Parameter']							= $path_prefix."core/include/data/parameter/parameter.class.php";
+	$classes['ParameterTemplateParameter']			= $path_prefix."core/include/data/parameter/parameter_template_parameter.class.php";
+	$classes['ParameterNonTemplateParameter']		= $path_prefix."core/include/data/parameter/parameter_non_template_parameter.class.php";
+	$classes['ParameterTemplate']					= $path_prefix."core/include/data/parameter/parameter_template.class.php";
+	
+	$classes['Data_Wrapper']						= $path_prefix."core/include/data/data.wrapper.class.php";
 ?>

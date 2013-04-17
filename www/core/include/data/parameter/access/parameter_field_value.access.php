@@ -95,7 +95,7 @@ class ParameterFieldValue_Access
 	 * @param boolean $locked
 	 * @return integer
 	 */
-	public function create($parameter_version_id, $parameter_field_id, $parameter_method_id, $value, $source, $locked)
+	public function create($parameter_version_id, $parameter_field_id, $parameter_method_id, $value, $source = null, $locked = false)
 	{
 		global $db;
 		

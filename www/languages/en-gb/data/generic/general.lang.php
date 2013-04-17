@@ -20,5 +20,5 @@ $LANG['DataGeneralDataTypeFolder'] = "Folder";
 $LANG['DataGeneralDataTypeVirtualFolder'] = "Virtual Folder";
 $LANG['DataGeneralDataTypeFile'] = "File";
 $LANG['DataGeneralDataTypeValue'] = "Value";
-
+$LANG['DataGeneralDataTypeParameter'] = "Parameter";
 ?>

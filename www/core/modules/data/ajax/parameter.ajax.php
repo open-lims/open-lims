@@ -40,8 +40,6 @@ class ParameterAjax
 	{
 		global $user, $transaction;
 		
-		return "0";
-		
 		$parent_folder = Folder::get_instance($folder_id);
 		
 		if ($parent_folder->is_write_access())
@@ -50,12 +48,12 @@ class ParameterAjax
 			
 			$parameter_array = json_decode($parameter_array, true);
 
-			$parameter = Parameter::get_instance(null);
-			// $parameter_add_successful = $parameter->create();
+			$parameter = ParameterTemplateParameter::get_instance(null);
+			$parameter_add_successful = $parameter->create($folder_id, $user->get_user_id(), $type_id, $parameter_array);
 			
-			if ($value_add_successful)
-			{
-				$item_id = $value->get_item_id();
+			if ($parameter_add_successful)
+			{				
+				$item_id = $parameter->get_item_id();
 				
 				$item_add_event = new ItemAddEvent($item_id, unserialize($get_array), null);
 				$event_handler = new EventHandler($item_add_event);

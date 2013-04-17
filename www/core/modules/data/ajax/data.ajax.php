@@ -221,6 +221,14 @@ class DataAjax
 							$list_array[$key]['delete_checkbox'] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name='' disabled='disabled'></input>";
 						}
 					}
+					elseif ($list_array[$key]['parameter_id'])
+					{
+						$parameter = ParameterTemplateParameter::get_instance($list_array[$key]['parameter_id']);
+						
+						$list_array[$key]['type'] = Language::get_message("DataGeneralDataTypeParameter", "general");
+						$list_array[$key]['version'] = $parameter->get_version();
+						$list_array[$key]['permission'] = $parameter->get_permission_string();
+					}
 					elseif ($list_array[$key]['folder_id'])
 					{	
 						$sub_folder = Folder::get_instance($list_array[$key]['folder_id']);				

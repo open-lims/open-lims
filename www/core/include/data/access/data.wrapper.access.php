@@ -215,7 +215,9 @@ class Data_Wrapper_Access
 								"CONCAT(".constant("FOLDER_TABLE").".name, " .
 										"".constant("VIRTUAL_FOLDER_TABLE").".name ), " .
 								"CONCAT(".constant("FILE_VERSION_TABLE").".name, " .
-										"".constant("VALUE_TYPE_TABLE").".name) " .
+										"CONCAT(".constant("VALUE_TYPE_TABLE").".name, ".
+										"".constant("PARAMETER_TEMPLATE_TABLE").".name)" .
+										") " .
 									") AS name, " .
 							"current_entity.datetime AS datetime, " .
 							"current_entity.owner_id AS owner_id, " .
@@ -224,6 +226,7 @@ class Data_Wrapper_Access
 							"".constant("DATA_ENTITY_TABLE").".automatic, " .
 							"".constant("FOLDER_TABLE").".id AS folder_id, " .
 							"".constant("FILE_TABLE").".id AS file_id, " .
+							"".constant("PARAMETER_TABLE").".id AS parameter_id, " .
 							"".constant("VALUE_TABLE").".id AS value_id, " .
 							"".constant("VIRTUAL_FOLDER_TABLE").".id AS virtual_folder_id " .
 						 "FROM ".constant("DATA_ENTITY_TABLE")." " .
@@ -232,6 +235,10 @@ class Data_Wrapper_Access
 						"LEFT JOIN ".constant("FOLDER_TABLE")."							ON ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_cid	= ".constant("FOLDER_TABLE").".data_entity_id " .
 						"LEFT JOIN ".constant("FILE_TABLE")." 							ON ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_cid 	= ".constant("FILE_TABLE").".data_entity_id " .
 						"LEFT JOIN ".constant("FILE_VERSION_TABLE")." 					ON ".constant("FILE_TABLE").".id 										= ".constant("FILE_VERSION_TABLE").".toid " .
+						"LEFT JOIN ".constant("PARAMETER_TABLE")." 						ON ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_cid 	= ".constant("PARAMETER_TABLE").".data_entity_id " .
+						"LEFT JOIN ".constant("PARAMETER_HAS_TEMPLATE_TABLE")." 		ON ".constant("PARAMETER_TABLE").".id									= ".constant("PARAMETER_HAS_TEMPLATE_TABLE").".parameter_id " .
+						"LEFT JOIN ".constant("PARAMETER_TEMPLATE_TABLE")." 			ON ".constant("PARAMETER_HAS_TEMPLATE_TABLE").".template_id 			= ".constant("PARAMETER_TEMPLATE_TABLE").".id " .
+						"LEFT JOIN ".constant("PARAMETER_VERSION_TABLE")." 				ON ".constant("PARAMETER_TABLE").".id 									= ".constant("PARAMETER_VERSION_TABLE").".parameter_id " .
 						"LEFT JOIN ".constant("VALUE_TABLE")." 							ON ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE").".data_entity_cid 	= ".constant("VALUE_TABLE").".data_entity_id " . 
 						"LEFT JOIN ".constant("VALUE_TYPE_TABLE")." 					ON ".constant("VALUE_TABLE").".type_id 									= ".constant("VALUE_TYPE_TABLE").".id " .
 						"LEFT JOIN ".constant("VALUE_VERSION_TABLE")." 					ON ".constant("VALUE_TABLE").".id 										= ".constant("VALUE_VERSION_TABLE").".toid " .
@@ -241,6 +248,7 @@ class Data_Wrapper_Access
 							"(".constant("FOLDER_TABLE").".id IS NOT NULL OR " .
 							"".constant("VIRTUAL_FOLDER_TABLE")." IS NOT NULL OR " .
 							"".constant("FILE_VERSION_TABLE").".current = 't' OR " .
+							"".constant("PARAMETER_VERSION_TABLE").".current = 't' OR " .
 							"".constant("VALUE_VERSION_TABLE").".current = 't') " .
 						"AND " .
 						"".constant("DATA_ENTITY_TABLE").".id = ".$data_entity_pid." " .
@@ -338,6 +346,7 @@ class Data_Wrapper_Access
 	}
 	
 	/**
+	 * @todo parameter
 	 * @param integer $folder_id
 	 * @param string $search_string
 	 * @param string $order_by
@@ -475,6 +484,7 @@ class Data_Wrapper_Access
 	}
 	
 	/**
+	 * @todo parameter
 	 * @param integer $folder_id
 	 * @param string $search_string
 	 * @return integer

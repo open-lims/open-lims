@@ -180,5 +180,35 @@ class Parameter_Access
 			return false;
 		}
 	}
+	
+	
+	/**
+	 * @param integer $parameter_id
+	 * @return bool
+	 */
+	public static function exist_parameter_by_parameter_id($parameter_id)
+	{
+		global $db;
+			
+		if (is_numeric($parameter_id))
+		{
+			$sql = "SELECT id FROM ".constant("PARAMETER_TABLE")." WHERE id = ".$parameter_id."";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data['id'])
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 ?>

@@ -9,21 +9,42 @@ $(document).ready(function()
 	
 	$("#DataParameterSaveButton").click(function()
 	{
-		var json = '{';
+		var json_object = new Object();
 		
 		$(".DataParameterValue").each(function()
-		{		
-			if (($(this).is(":input") == true) && ($(this).is(":radio") == false) && ($(this).is(":checkbox") == false))
+		{				
+			var id = $(this).attr("id").replace("DataParameterValue","");
+			
+			json_object[''+id+''] = new Object();
+			
+			$(this).find("input").each(function()
 			{
-				var name = $(this).attr("name");
-				var value = $(this).val();
-				json += '\"'+name+'\":\"'+value+'\",';
-			}
+				if (($(this).is(":input") == true) && ($(this).is(":radio") == false) && ($(this).is(":checkbox") == false))
+				{
+					if ($(this).attr("name") === "value")
+					{
+						json_object[''+id+'']['value'] = $(this).val();
+					}
+				}
+			});
+			
+			$(this).find("select").each(function()
+			{
+				if (($(this).is(":input") == true) && ($(this).is(":radio") == false) && ($(this).is(":checkbox") == false))
+				{
+					if ($(this).attr("name") === "method")
+					{
+						json_object[''+id+'']['method'] = $(this).val();
+					}
+				}
+			});
+			
+			
+			
 		});
 		
-		json = json.substr(0,json.length-1);
-		json += '}';
-		
+		var json = JSON.stringify(json_object);
+				
 		if (json !== false)
 		{
 			$.ajax({
@@ -90,13 +111,13 @@ $(document).ready(function()
 	<tbody>			
 		<!-- FOREACH BEGIN ([[FIELDS]]) -->
 		
-			<tr class='[[FIELDS:CLASS]]'>
+			<tr class='[[FIELDS:CLASS]] DataParameterValue' id='DataParameterValue[[FIELDS:PK]]'>
 				<td>[[FIELDS:NAME]]</td>
-				<td><input type='text' name='value-[[FIELDS:ID]]' value='' class='DataParameterValue' /></td>
+				<td><input type='text' name='value' value='' /></td>
 				<td>[[FIELDS:UNIT]]</td>
 				<td>[[FIELDS:LSL]]</td>
 				<td>[[FIELDS:USL]]</td>
-				<td><select name='method-[[FIELDS:ID]]' class='DataParameterValue'></select></td>
+				<td><select name='method'></select></td>
 				<td>OK</td>
 			</tr>
 		

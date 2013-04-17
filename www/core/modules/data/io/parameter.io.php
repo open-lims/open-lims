@@ -111,8 +111,6 @@ class ParameterIO
 						$output_template_field_array[$output_template_field_counter]['class'] = "evan DataParameterTemplateField";
 					}
 				}
-
-				// Ratio
 				
 				if (is_numeric($value['unit']))
 				{
