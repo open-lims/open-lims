@@ -191,7 +191,7 @@ class User implements UserInterface {
 						throw new UserCreationFailedException("",1);
 					}
 					
-					$this->__construct($user_id);
+					self::__construct($user_id);
 					
 					$group = new Group(10);
 					if ($group->create_user_in_group($user_id) == false)

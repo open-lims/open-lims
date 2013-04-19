@@ -118,7 +118,7 @@ class ProjectTemplate_Access
 			
 			if ($db->db_affected_rows($res) == 1)
 			{				
-				$this->__construct($id);
+				self::__construct($id);
 				return true;
 			}
 			else

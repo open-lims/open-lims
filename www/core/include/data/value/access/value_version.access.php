@@ -158,7 +158,7 @@ class ValueVersion_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 									
-				$this->__construct($data_read['id']);
+				self::__construct($data_read['id']);
 				return $data_read['id'];
 			}
 			else

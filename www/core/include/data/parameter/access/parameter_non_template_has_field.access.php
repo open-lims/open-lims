@@ -89,7 +89,7 @@ class ParameterNonTemplateHasField_Access
 
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$this->__construct($non_template_id, $parameter_field_id);
+				self::__construct($non_template_id, $parameter_field_id);
 				return true;
 			}
 			else

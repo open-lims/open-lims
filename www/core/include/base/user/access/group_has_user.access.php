@@ -104,7 +104,7 @@ class GroupHasUser_Access
 				$res_read = $db->db_query($sql_read);
 				$data_read = $db->db_fetch_assoc($res_read);
 				
-				$this->__construct($data_read['primary_key']);
+				self::__construct($data_read['primary_key']);
 				
 				return $data_read['primary_key'];
 			}	

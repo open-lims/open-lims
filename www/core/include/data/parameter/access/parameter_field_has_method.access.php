@@ -89,7 +89,7 @@ class ParameterFieldFieldHasMethod_Access
 
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$this->__construct($parameter_field_id, $parameter_method_id);
+				self::__construct($parameter_field_id, $parameter_method_id);
 				return true;
 			}
 			else

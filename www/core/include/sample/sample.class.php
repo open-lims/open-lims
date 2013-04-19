@@ -427,7 +427,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 						$transaction->commit($transaction_id);
 					}
 		
-					$this->__construct($sample_id);
+					self::__construct($sample_id);
 	    			return $sample_id;	
 	    		}
 	    		else
@@ -880,7 +880,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					$transaction->commit($transaction_id);
 				}
 	
-				$this->__construct($sample_id);
+				self::__construct($sample_id);
     			return $sample_id;	
     		}
     		else

@@ -89,7 +89,7 @@ class ParameterHasTemplate_Access
 
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$this->__construct($parameter_id, $template_id);
+				self::__construct($parameter_id, $template_id);
 				return true;
 			}
 			else

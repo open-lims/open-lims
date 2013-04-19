@@ -124,7 +124,7 @@ class ProjectTaskStatusProcess_Access
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$this->__construct($task_id);
+				self::__construct($task_id);
 				return true;
 			}
 			else

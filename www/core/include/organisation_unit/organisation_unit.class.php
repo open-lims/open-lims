@@ -140,7 +140,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 				
 				if (($organisation_unit_id = $this->organisation_unit->create($toid, $name, $type_id, $stores_data, $new_highest_position)) != null)
 				{
-					$this->__construct($organisation_unit_id);
+					self::__construct($organisation_unit_id);
 					
 					// Create Owner
 					if ($this->create_owner_in_organisation_unit($session->get_user_id(), true) == false)

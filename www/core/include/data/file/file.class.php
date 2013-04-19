@@ -1319,7 +1319,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 				{
 					$transaction->commit($transaction_id);
 				}
-				$this->__construct($file_id);
+				self::__construct($file_id);
 				return true;
 			}
 			else

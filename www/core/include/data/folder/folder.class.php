@@ -208,7 +208,7 @@ class Folder extends DataEntity implements FolderInterface
 			{
 				if (($folder_id = $this->folder->create($data_entity_id, $name, $path)) != null)
 				{	
-					$this->__construct($folder_id);
+					self::__construct($folder_id);
 					
 					if (parent::set_as_child_of($parent_data_entity_id) == false)
 					{

@@ -81,7 +81,7 @@ class ItemClass implements ItemClassInterface
     	$class_id = $this->item_class->create($name, $owner_id);
     	if (is_numeric($class_id))
     	{
-    		$this->__construct($class_id);
+    		self::__construct($class_id);
     		return $class_id;
     	}
     	else

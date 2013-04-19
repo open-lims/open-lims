@@ -113,7 +113,7 @@ class Group implements GroupInterface
 				
 				if (($group_id = $this->group->create($name)) != null)
 				{
-					$this->__construct($group_id);
+					self::__construct($group_id);
 					
 					$group_create_event = new GroupCreateEvent($group_id);
 					$event_handler = new EventHandler($group_create_event);

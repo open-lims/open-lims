@@ -121,7 +121,7 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 					{
 						$transaction->commit($transaction_id);
 					}
-					$this->__construct($equipment_id);
+					self::__construct($equipment_id);
 					return $equipment_id;
 				}
 			}

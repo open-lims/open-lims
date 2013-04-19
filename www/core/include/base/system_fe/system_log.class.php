@@ -95,7 +95,7 @@ class SystemLog implements SystemLogInterface
 			$log_id = $this->system_log->create($user_id, $type_id, $content_int, $content_string, $content_errorno, $file, $line, $link);
 			if ($log_id)
 			{
-				$this->__construct($log_id);
+				self::__construct($log_id);
 				return $log_id;
 			}
 			else

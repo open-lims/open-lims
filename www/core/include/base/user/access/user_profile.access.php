@@ -197,7 +197,7 @@ class UserProfile_Access
 			
 			if ($db->db_affected_rows($res) == 1)
 			{
-				$this->__construct($user_id);
+				self::__construct($user_id);
 				return $user_id;
 			}
 			else

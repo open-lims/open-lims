@@ -86,7 +86,7 @@ class SystemMessage implements SystemMessageInterface, EventListenerInterface
 			$id = $this->system_message->create($user_id, $content);
 			if ($id)
 			{
-				$this->__construct($id);
+				self::__construct($id);
 				return $id;
 			}
 			else

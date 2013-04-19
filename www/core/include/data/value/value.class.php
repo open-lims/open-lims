@@ -299,7 +299,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 						{
 							$transaction->commit($transaction_id);
 						}
-						$this->__construct($value_id);
+						self::__construct($value_id);
 						return $value_id;
 					}
 					else

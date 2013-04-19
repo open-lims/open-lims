@@ -187,7 +187,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 				}
 				else
 				{
-					$this->__construct($project_id);
+					self::__construct($project_id);
 					
 					$project_template = new ProjectTemplate($template_id);
 					$project_all_status_array = $project_template->get_all_status();
@@ -500,7 +500,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						}
 					}
 							
-					$this->__construct($project_id);
+					self::__construct($project_id);
 					if ($transaction_id != null)
 					{
 						$transaction->commit($transaction_id);

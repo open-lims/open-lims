@@ -78,7 +78,7 @@ class ItemInformation implements ItemInformationInterface
     	if ($this->item_information)
     	{
     		$item_information_id = $this->item_information->create($description, $keywords);
-    		$this->__construct($item_information_id);
+    		self::__construct($item_information_id);
     		
     		if ($description)
     		{

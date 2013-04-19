@@ -94,7 +94,7 @@ class OrganisationUnitHasOwner_Access
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$this->__construct($organisation_unit_id, $owner_id);
+				self::__construct($organisation_unit_id, $owner_id);
 				return true;
 			}
 			else

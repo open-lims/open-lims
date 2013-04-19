@@ -183,7 +183,7 @@ class UserAdminSetting_Access
 			
 			if ($db->db_affected_rows($res_write) == 1)
 			{
-				$this->__construct($user_id);
+				self::__construct($user_id);
 				return true;
 			}
 			else

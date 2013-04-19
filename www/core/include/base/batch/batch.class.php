@@ -64,7 +64,7 @@ class Batch implements BatchInterface
 				$batch_run_access = new BaseBatchRun_Access(null);
 				if ($batch_run_id = $batch_run_access->create($type_id, $batch_type_binary_id, $user->get_user_id()))
 				{
-					$this->__construct($batch_run_id);
+					self::__construct($batch_run_id);
 					return $batch_run_id;
 				}
 				else

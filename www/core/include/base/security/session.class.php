@@ -89,7 +89,7 @@ class Session implements SessionInterface
 			}
 			else
 			{			
-				$this->__construct($session_id);
+				self::__construct($session_id);
 				return $session_id;
 			}
 		}

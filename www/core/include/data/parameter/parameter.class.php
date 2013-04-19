@@ -143,7 +143,9 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 			{
 				$transaction->commit($transaction_id);
 			}
-			$this->__construct($parameter_id);
+			
+			self::__construct($parameter_id);
+			
 			return $parameter_id;
 		}
 		else

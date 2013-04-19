@@ -343,10 +343,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 				$transaction->commit($transaction_id);
 			}
 	   		
-			$this->data_entity_id = $data_entity_id;
-			$this->data_entity = new DataEntity_Access($data_entity_id);
-   	   		$this->item_id = $item_id;
-    		parent::__construct($item_id);
+			self::__construct($data_entity_id);
 			
 	   		return $data_entity_id;
 		}

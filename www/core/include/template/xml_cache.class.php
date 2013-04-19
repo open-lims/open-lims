@@ -154,7 +154,7 @@ class XmlCache implements XmlCacheInterface
 						$xml_cache_element->create($id, $value[0], $value[1], $value[2], $value[3]);
 					}
 					
-					$this->__construct($this->data_entity_id);
+					self::__construct($this->data_entity_id);
 					
 					if ($transaction_id != null)
 					{

@@ -90,7 +90,7 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 		{
 			if (($log_id = $this->log->create($project_id, $content, $cancel, $important, $user->get_user_id())) != null)
 			{
-				$this->__construct($log_id);
+				self::__construct($log_id);
 				return $log_id;
 			}
 			else

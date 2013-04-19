@@ -71,7 +71,7 @@ class ProjectPermissionGroup extends ProjectPermission implements ProjectPermiss
     		
     		if (($permission_id = parent::create(null, null, $group_id, $project_id, $permission, $owner_id, $intention)) != null)
     		{
-    			$this->__construct($permission_id);
+    			self::__construct($permission_id);
     			$project_folder_id = ProjectFolder::get_folder_by_project_id($project_id);
     			
     			$permission_string = strrev(decbin($permission));
