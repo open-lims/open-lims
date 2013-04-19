@@ -225,9 +225,40 @@ class DataAjax
 					{
 						$parameter = ParameterTemplateParameter::get_instance($list_array[$key]['parameter_id']);
 						
+						if ($parameter->is_read_access() == true)
+						{
+							$paramquery = $_GET;
+							$paramquery['nav'] = $_GET['nav'];
+							$paramquery['parameter_id'] = $list_array[$key]['parameter_id'];
+							$paramquery['action'] = "parameter_detail";
+							$params = http_build_query($paramquery,'','&#38;');
+						
+							$list_array[$key]['symbol']['link'] = $params;
+							$list_array[$key]['symbol']['content'] = "<img src='images/fileicons/16/unknown.png' alt='' style='border:0;' />";
+														
+							$tmp_name = $list_array[$key]['name'];
+							unset($list_array[$key]['name']);
+							$list_array[$key]['name']['content'] = $tmp_name;
+							$list_array[$key]['name']['link'] = $params;
+							$list_array[$key]['name']['class'] = "DataBrowserIsParameter";
+						}
+						else
+						{
+							$list_array[$key]['symbol'] = "<img src='core/images/denied_overlay.php?image=images/fileicons/16/unknown.png' alt='' border='0' />";
+						}
+						
 						$list_array[$key]['type'] = Language::get_message("DataGeneralDataTypeParameter", "general");
 						$list_array[$key]['version'] = $parameter->get_version();
 						$list_array[$key]['permission'] = $parameter->get_permission_string();
+						
+						if($parameter->is_delete_access())
+						{
+							$list_array[$key]['delete_checkbox'] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name=''></input>";
+						}
+						else
+						{
+							$list_array[$key]['delete_checkbox'] = "<input type='checkbox' class='DataBrowserDeleteCheckbox' value='' name='' disabled='disabled'></input>";
+						}
 					}
 					elseif ($list_array[$key]['folder_id'])
 					{	

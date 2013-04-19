@@ -262,6 +262,16 @@ class DataRequest
 						);
 			break;
 			
+			case "parameter_update":
+				require_once("ajax/parameter.ajax.php");
+				echo ParameterAjax::update(
+						$_GET['parameter_id'], 
+						$_POST['parameter_array'], 
+						$_POST['major'], 
+						$_POST['current']
+						);
+			break;
+			
 			
 			// Search 
 			
@@ -409,6 +419,7 @@ class DataRequest
 	{	
 		switch($_GET['action']):
 		
+			// General
 			case("permission"):
 				require_once("io/data.io.php");
 				DataIO::permission();
@@ -435,6 +446,7 @@ class DataRequest
 			break;
 
 			
+			// Values
 			case("value_detail"):
 				require_once("io/value.io.php");
 				ValueIO::detail();
@@ -451,6 +463,7 @@ class DataRequest
 			break;
 
 			
+			// File
 			case("file_add"):
 				require_once("io/file.io.php");
 				FileIO::upload();
@@ -482,12 +495,27 @@ class DataRequest
 				FileIO::delete_version();
 			break;
 			
+			
+			// Parameter
+			case("parameter_detail"):
+				require_once("io/parameter.io.php");
+				ParameterIO::detail();
+			break;
+			
+			case("parameter_history"):
+				require_once("io/parameter.io.php");
+				ParameterIO::history();
+			break;
+			
+			
 			// Common Dialogs
 			case("common_dialog"):
 				require_once("core/modules/base/common.request.php");
 				CommonRequest::common_dialog();
 			break;
 			
+			
+			// Default
 			default:
 				require_once("io/data.io.php");
 				DataIO::browser();

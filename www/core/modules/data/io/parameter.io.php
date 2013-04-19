@@ -27,6 +27,138 @@
  */
 class ParameterIO
 {	
+	public static function detail()
+	{
+		if (is_numeric($_GET['parameter_id']))
+		{
+			$parameter_id = $_GET['parameter_id'];
+			$parameter = ParameterTemplateParameter::get_instance($parameter_id);
+						
+			$parameter_template = new ParameterTemplate($parameter->get_template_id());
+			
+			$parameter_template_field_array = $parameter_template->get_fields();
+			$parameter_template_limit_array = $parameter_template->get_limits();
+			
+			$parameter_value_array = $parameter->get_values();
+			$parameter_method_array = $parameter->get_methods();
+			
+			$output_template_field_array = array();
+			$output_template_field_counter = 0;
+				
+			if(is_array($parameter_template_field_array) and count($parameter_template_field_array) >= 1)
+			{
+				foreach($parameter_template_field_array as $key => $value)
+				{
+					$output_template_field_array[$output_template_field_counter]['id'] = $key;
+					$output_template_field_array[$output_template_field_counter]['pk']= $value['pk'];
+					$output_template_field_array[$output_template_field_counter]['name'] = $value['name'];
+					$output_template_field_array[$output_template_field_counter]['value'] = $parameter_value_array[$value['pk']];
+					
+					if (is_numeric($value['min']))
+					{
+						$output_template_field_array[$output_template_field_counter]['min'] = $value['min'];
+					}
+					else
+					{
+						$output_template_field_array[$output_template_field_counter]['min'] = "";
+					}
+					
+					if (is_numeric($value['max']))
+					{
+						$output_template_field_array[$output_template_field_counter]['max'] = $value['max'];
+					}
+					else
+					{
+						$output_template_field_array[$output_template_field_counter]['max'] = "";
+					}
+					
+					if (is_numeric($parameter_template_limit_array[0]['usl'][$key]))
+					{
+						$output_template_field_array[$output_template_field_counter]['usl'] = $parameter_template_limit_array[0]['usl'][$key];
+					}
+					else
+					{
+						$output_template_field_array[$output_template_field_counter]['usl'] = "";
+					}
+					
+					if (is_numeric($parameter_template_limit_array[0]['lsl'][$key]))
+					{
+						$output_template_field_array[$output_template_field_counter]['lsl'] = $parameter_template_limit_array[0]['lsl'][$key];
+					}
+					else
+					{
+						$output_template_field_array[$output_template_field_counter]['lsl'] = "";
+					}
+						
+					if ($key == 1)
+					{
+						$output_template_field_array[$output_template_field_counter]['class'] = "odd";
+					}
+					else
+					{
+						if (($output_template_field_counter % 2) == 0)
+						{
+							$output_template_field_array[$output_template_field_counter]['class'] = "odd DataParameterTemplateField";
+						}
+						else
+						{
+							$output_template_field_array[$output_template_field_counter]['class'] = "evan DataParameterTemplateField";
+						}
+					}
+					
+					if (is_numeric($value['unit']))
+					{
+						if ($value['unit_exponent'] < 0)
+						{
+							$unit_exponent = $value['unit_exponent']*-1;
+							$unit_prefix = MeasuringUnit::get_prefix($unit_exponent, false);
+						}
+						else
+						{
+							$unit_prefix = MeasuringUnit::get_prefix( $value['unit_exponent'], true);
+						}
+						
+						$measuring_unit = new MeasuringUnit($value['unit']);
+						
+						$output_template_field_array[$output_template_field_counter]['unit'] = $unit_prefix[1]."".$measuring_unit->get_unit_symbol();
+					}
+					elseif (is_numeric($value['unit_ratio']))
+					{
+						$measuring_unit_ratio = new MeasuringUnitRatio($value['unit_ratio']);
+						$output_template_field_array[$output_template_field_counter]['unit'] = $measuring_unit_ratio->get_symbol();
+					}
+					else
+					{
+						$output_template_field_array[$output_template_field_counter]['unit'] = "";
+					}
+					
+					$output_template_field_counter++;
+				}
+			}
+				
+			$template = new HTMLTemplate("data/parameter_detail.html");
+						
+			$template->set_var("session_id", $_GET['session_id']);
+			$template->set_var("parameter_id", $parameter_id);
+			
+			$template->set_var("name", $parameter_template->get_name());
+			$template->set_var("fields", $output_template_field_array);
+			
+			$paramquery = $_GET;
+			unset($paramquery['action']);
+			unset($paramquery['parameter_id']);
+			$params = http_build_query($paramquery);
+			
+			$template->set_var("retrace", "index.php?".$params);
+			
+			$template->output();
+		}
+		else
+		{
+			throw new ParameterIDMissingException();
+		}
+	}
+	
 	/**
 	 * @throws FolderIDMissingException
 	 */
@@ -163,6 +295,11 @@ class ParameterIO
 		$template->set_var("fields", $output_template_field_array);
 		
 		$template->output();
+	}
+
+	public static function history()
+	{
+		
 	}
 }
 ?>

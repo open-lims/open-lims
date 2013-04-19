@@ -1,0 +1,145 @@
+<script>
+/*<![CDATA[*/
+$(document).ready(function()
+{
+	$("#DataParameterCancelButton").click(function()
+	{
+		history.back();
+	});
+	
+	$("#DataParameterUpdateButton").click(function()
+	{
+		var json_object = new Object();
+		
+		$(".DataParameterValue").each(function()
+		{				
+			var id = $(this).attr("id").replace("DataParameterValue","");
+			
+			json_object[''+id+''] = new Object();
+			
+			$(this).find("input").each(function()
+			{
+				if (($(this).is(":input") == true) && ($(this).is(":radio") == false) && ($(this).is(":checkbox") == false))
+				{
+					if ($(this).attr("name") === "value")
+					{
+						json_object[''+id+'']['value'] = $(this).val();
+					}
+				}
+			});
+			
+			$(this).find("select").each(function()
+			{
+				if (($(this).is(":input") == true) && ($(this).is(":radio") == false) && ($(this).is(":checkbox") == false))
+				{
+					if ($(this).attr("name") === "method")
+					{
+						json_object[''+id+'']['method'] = $(this).val();
+					}
+				}
+			});
+			
+			
+			
+		});
+		
+		var json = JSON.stringify(json_object);
+				
+		if (json !== false)
+		{
+			$.ajax({
+				type : "POST",
+				url : "ajax.php?session_id=[[SESSION_ID]]&nav=data&run=parameter_update&parameter_id=[[PARAMETER_ID]]",
+				data : 'parameter_array='+json+'&major=true&current=true',
+				beforeSend: function()
+				{
+					$("#DataParameterDetailFinish").dialog("open");
+				},
+				success : function(data)
+				{
+					if (data == "1")
+					{
+						window.setTimeout('window.location = \'[[RETRACE]]\'',500);
+					}
+					else
+					{						
+						if ((data + '').indexOf("EXCEPTION",0) == 0)
+						{
+							var exception_message = data.replace("EXCEPTION: ","");
+							$("#DataParameterDetailFinish").dialog("close");
+							ErrorDialog("Error", exception_message);
+							return false;
+						}
+						else
+						{
+							$("#DataParameterDetailFinish").dialog("close");
+							ErrorDialog("Error", "An error occured");
+							return false;
+						}
+					}
+				}
+			});
+		}
+	});
+});
+/*]]>*/ 
+</script>
+
+<div class="BasePlaseWaitWindow" id="DataParameterDetailFinish" title=""> 
+<div><img src='images/animations/loading_circle_small.gif' alt=''> Please wait while saving.</div>
+</div> 
+
+<!-- CONTAINER BEGIN ("Parameter Details") -->
+
+<div class='Form'>
+
+<div class='FormBox'>
+<div class='FormBoxHeadline'>Limit</div>
+
+</div>
+
+<div class='FormBoxWithoutLRPadding'>
+<div class='FormBoxHeadlineWithoutLRPadding'>[[NAME]]</div>
+
+<table style='width: 100%; text-align: left;' class='DataParameterTable'>
+	<thead>
+		<tr>
+			<th>Parameter</th>
+			<th>Value</th>
+			<th>Unit</th>
+			<th>Min (LSL)</th>
+			<th>Max (USL)</th>
+			<th>Method</th>
+			<th>Status</th>
+		<tr>
+	</thead>
+	<tbody>			
+		<!-- FOREACH BEGIN ([[FIELDS]]) -->
+		
+			<tr class='[[FIELDS:CLASS]] DataParameterValue' id='DataParameterValue[[FIELDS:PK]]'>
+				<td>[[FIELDS:NAME]]</td>
+				<td><input type='text' name='value' value='[[FIELDS:VALUE]]' /></td>
+				<td>[[FIELDS:UNIT]]</td>
+				<td>[[FIELDS:LSL]]</td>
+				<td>[[FIELDS:USL]]</td>
+				<td><select name='method'></select></td>
+				<td>OK</td>
+			</tr>
+		
+		<!-- FOREACH END -->
+	</tbody>
+</table>
+
+</div>
+
+<div class='FormButtonBox'>
+<button type='submit' id='DataParameterUpdateButton'>[[LANG:BaseGlobalButtonUpdate]]</button>
+<button type='submit' id='DataParameterUpdateMinorButton'>[[LANG:BaseGlobalButtonUpdateMinor]]</button>
+<button type='submit' id='DataParameterCancelButton'>[[LANG:BaseGlobalButtonCancel]]</button>
+<div class='FormButtonBoxClear'></div>
+</div>
+</div>
+
+
+<!-- CONTAINER END () -->
+		

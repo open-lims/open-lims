@@ -29,7 +29,7 @@ class ParameterVersion_Access
 {
 	const PARAMETER_VERSION_PK_SEQUENCE = 'core_data_parameter_versions_id_seq';
 
-	private $parameter_verson_id;
+	private $parameter_version_id;
 	
 	private $parameter_id;
 	private $version;
@@ -41,25 +41,25 @@ class ParameterVersion_Access
 	private $name;
 
 	/**
-	 * @param integer $parameter_verson_id
+	 * @param integer $parameter_version_id
 	 */
-	function __construct($parameter_verson_id)
+	function __construct($parameter_version_id)
 	{
 		global $db;
 		
-		if ($parameter_verson_id == null)
+		if ($parameter_version_id == null)
 		{
-			$this->parameter_verson_id = null;
+			$this->parameter_version_id = null;
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("PARAMETER_VERSION_TABLE")." WHERE id='".$parameter_verson_id."'";
+			$sql = "SELECT * FROM ".constant("PARAMETER_VERSION_TABLE")." WHERE id='".$parameter_version_id."'";
 			$res = $db->db_query($sql);
 			$data = $db->db_fetch_assoc($res);
 			
 			if ($data['id'])
 			{
-				$this->parameter_verson_id	= $parameter_verson_id;
+				$this->parameter_version_id	= $parameter_version_id;
 				$this->parameter_id			= $data['parameter_id'];
 				$this->version				= $data['version'];
 				$this->internal_revision	= $data['internal_revision'];
@@ -71,16 +71,16 @@ class ParameterVersion_Access
 			}
 			else
 			{
-				$this->parameter_verson_id		= null;
+				$this->parameter_version_id		= null;
 			}
 		}
 	}
 
 	function __destruct()
 	{
-		if ($this->parameter_verson_id)
+		if ($this->parameter_version_id)
 		{
-			unset($this->parameter_verson_id);
+			unset($this->parameter_version_id);
 			unset($this->parameter_id);
 			unset($this->version);
 			unset($this->internal_revision);
@@ -199,9 +199,9 @@ class ParameterVersion_Access
 	 */
 	public function get_id()
 	{
-		if ($this->parameter_verson_id)
+		if ($this->parameter_version_id)
 		{
-			return $this->parameter_verson_id;
+			return $this->parameter_version_id;
 		}
 		else
 		{
@@ -452,7 +452,7 @@ class ParameterVersion_Access
 	public function set_current($current)
 	{	
 		global $db;
-
+		
 		if ($this->parameter_version_id and isset($current))
 		{
 			if ($current === true)
@@ -598,6 +598,136 @@ class ParameterVersion_Access
 		else
 		{
 			return null;
+		}
+	}
+				
+	/**
+	 * @param integer $id
+	 * @return integer
+	 */
+	public static function get_highest_minor_version_entry_by_id($id)
+	{
+		global $db;
+	
+		if (is_numeric($id))
+		{
+			$sql = "SELECT id FROM ".constant("PARAMETER_VERSION_TABLE")." WHERE previous_version_id = ".$id." " .
+							"AND version = (SELECT MAX(version) FROM ".constant("PARAMETER_VERSION_TABLE")." WHERE previous_version_id = ".$id." AND previous_version_id != id) AND previous_version_id != id";				
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+							
+			if ($data['id'])
+			{
+				return $data['id'];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $parameter_id
+	 * @param integer $previous_version_id
+	 * @return integer
+	 */
+	public static function get_highest_major_version_entry_by_parameter_id_and_previous_version_id($parameter_id, $previous_version_id)
+	{	
+		global $db;
+	
+		if (is_numeric($parameter_id))
+		{
+			if (!is_numeric($previous_version_id))
+			{
+				$sql = "SELECT id FROM ".constant("PARAMETER_VERSION_TABLE")." WHERE previous_version_id = id AND parameter_id = ".$parameter_id."" .
+						"AND version = (SELECT MAX(version) FROM ".constant("PARAMETER_VERSION_TABLE")." WHERE previous_version_id = id AND parameter_id = ".$parameter_id.")";				
+			}
+			else
+			{
+				$sql = "SELECT id FROM ".constant("PARAMETER_VERSION_TABLE")." WHERE previous_version_id = ".$previous_version_id." AND parameter_id = ".$parameter_id."" .
+						"AND version = (SELECT MAX(version) FROM ".constant("PARAMETER_VERSION_TABLE")." WHERE previous_version_id = ".$previous_version_id." AND parameter_id = ".$parameter_id." AND previous_version_id != id) AND previous_version_id != id";				
+			}
+			
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+							
+			if ($data['id'])
+			{
+				return $data['id'];
+			}
+			else
+			{
+				return null;
+			}	
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $parameter_id
+	 * @param integer $internal_revision
+	 * @return integer
+	 */
+	public static function get_entry_by_parameter_id_and_internal_revision($parameter_id, $internal_revision)
+	{
+		global $db;
+
+		if (is_numeric($parameter_id) and is_numeric($internal_revision))
+		{
+			$sql = "SELECT id FROM ".constant("PARAMETER_VERSION_TABLE")." WHERE parameter_id = ".$parameter_id." " .
+							"AND internal_revision = ".$internal_revision."";				
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+							
+			if ($data['id'])
+			{
+				return $data['id'];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	/**
+	 * @param integer $owner_id
+	 * @return bool
+	 */
+	public static function set_owner_id_on_null($owner_id)
+	{
+		global $db;
+
+		if (is_numeric($owner_id))
+		{
+			$sql = "UPDATE ".constant("PARAMETER_VERSION_TABLE")." SET owner_id = NULL WHERE owner_id = '".$owner_id."'";				
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+							
+			if ($res !== false)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
 		}
 	}
 }

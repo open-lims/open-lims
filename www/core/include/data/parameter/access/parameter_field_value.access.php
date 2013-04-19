@@ -235,7 +235,7 @@ class ParameterFieldValue_Access
 	 */
 	public function get_value()
 	{
-		if ($this->value)
+		if (is_numeric($this->value))
 		{
 			return $this->value;
 		}
@@ -455,6 +455,94 @@ class ParameterFieldValue_Access
 		else
 		{
 			return false;
+		}
+	}
+	
+	
+	public static function list_values($parameter_version_id)
+	{
+		global $db;
+		
+		if(is_numeric($parameter_version_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT parameter_field_id,value FROM ".constant("PARAMETER_FIELD_VALUE_TABLE")." WHERE parameter_version_id='".$parameter_version_id."'";
+			$res = $db->db_query($sql);
+			
+			while($data = $db->db_fetch_assoc($res))
+			{
+				$return_array[$data['parameter_field_id']] = $data['value'];
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public static function list_methods($parameter_version_id)
+	{
+		global $db;
+		
+		if(is_numeric($parameter_version_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT parameter_field_id,parameter_method_id FROM ".constant("PARAMETER_FIELD_VALUE_TABLE")." WHERE parameter_version_id='".$parameter_version_id."'";
+			$res = $db->db_query($sql);
+			
+			while($data = $db->db_fetch_assoc($res))
+			{
+				$return_array[$data['parameter_field_id']] = $data['parameter_method_id'];
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public static function get_id_by_version_id_and_field_id($parameter_version_id, $parameter_field_id)
+	{
+		global $db;
+		
+		if(is_numeric($parameter_version_id) and is_numeric($parameter_field_id))
+		{			
+			$sql = "SELECT id FROM ".constant("PARAMETER_FIELD_VALUE_TABLE")." WHERE parameter_version_id='".$parameter_version_id."' AND parameter_field_id='".$parameter_field_id."'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data['id'])
+			{
+				return $data['id'];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
 		}
 	}
 }

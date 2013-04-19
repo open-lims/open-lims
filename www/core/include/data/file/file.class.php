@@ -1046,9 +1046,6 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 									$current_file_version_id = FileVersion_Access::get_current_entry_by_toid($this->file_id);
 									$current_file_version = new FileVersion_Access($current_file_version_id);
 									
-									$highest_revision_file_version_id = FileVersion_Access::get_highest_internal_revision_entry_by_toid($this->file_id);
-									$highest_revision_file_version = new FileVersion_Access($highest_revision_file_version_id);
-									
 									$extension_array = explode(".",$current_file_version->get_name());
 									$extension_array_length = substr_count($current_file_version->get_name(),".");
 												

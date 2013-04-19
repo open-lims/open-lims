@@ -88,5 +88,21 @@ class ParameterAjax
 			throw new DataSecurityAccessDeniedException();
 		}
 	}
+
+	public static function update($parameter_id, $parameter_array, $major, $current)
+	{
+		if (is_numeric($parameter_id))
+		{
+			$parameter = ParameterTemplateParameter::get_instance($parameter_id);
+			$parameter_array = json_decode($parameter_array, true);
+
+			$parameter->update($parameter_array, null, $major, $current);
+			return "1";
+		}
+		else
+		{
+			throw new ParameterIDMissingException();
+		}
+	}
 }
 ?>

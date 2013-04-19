@@ -24,75 +24,85 @@
 /**
  * 
  */
-	$classes['ConcreteFolderCaseInterface']	= $path_prefix."core/include/data/folder/interfaces/concrete_folder_case.interface.php";		
-	$classes['ValueVarCaseInterface']		= $path_prefix."core/include/data/value/interfaces/value_var_case.interface.php";	
+	$classes['ConcreteFolderCaseInterface']					= $path_prefix."core/include/data/folder/interfaces/concrete_folder_case.interface.php";		
+	$classes['ValueVarCaseInterface']						= $path_prefix."core/include/data/value/interfaces/value_var_case.interface.php";	
 
 	
-	$classes['DataException']						= $path_prefix."core/include/data/exceptions/data.exception.class.php";
-	$classes['DataSecurityException']				= $path_prefix."core/include/data/exceptions/data_security.exception.class.php";
-	$classes['DataSecurityAccessDeniedException']	= $path_prefix."core/include/data/exceptions/data_security_access_denied.exception.class.php";
+	$classes['DataException']								= $path_prefix."core/include/data/exceptions/data.exception.class.php";
+	$classes['DataSecurityException']						= $path_prefix."core/include/data/exceptions/data_security.exception.class.php";
+	$classes['DataSecurityAccessDeniedException']			= $path_prefix."core/include/data/exceptions/data_security_access_denied.exception.class.php";
 	
-	$classes['DataEntityException']					= $path_prefix."core/include/data/exceptions/data_entity.exception.class.php";
-	$classes['DataEntityNotFoundException']			= $path_prefix."core/include/data/exceptions/data_entity_not_found.exception.class.php";
-	$classes['DataEntityIDMissingException']		= $path_prefix."core/include/data/exceptions/data_entity_id_missing.exception.class.php";
+	$classes['DataEntityException']							= $path_prefix."core/include/data/exceptions/data_entity.exception.class.php";
+	$classes['DataEntityNotFoundException']					= $path_prefix."core/include/data/exceptions/data_entity_not_found.exception.class.php";
+	$classes['DataEntityIDMissingException']				= $path_prefix."core/include/data/exceptions/data_entity_id_missing.exception.class.php";
 	
-	$classes['FolderException']						= $path_prefix."core/include/data/folder/exceptions/folder.exception.class.php";
-	$classes['FolderNotFoundException']				= $path_prefix."core/include/data/folder/exceptions/folder_not_found.exception.class.php";
-	$classes['FolderIDMissingException']			= $path_prefix."core/include/data/folder/exceptions/folder_id_missing.exception.class.php";
-	$classes['FolderIsEmptyException']				= $path_prefix."core/include/data/folder/exceptions/folder_is_empty.exception.class.php";
+	$classes['FolderException']								= $path_prefix."core/include/data/folder/exceptions/folder.exception.class.php";
+	$classes['FolderNotFoundException']						= $path_prefix."core/include/data/folder/exceptions/folder_not_found.exception.class.php";
+	$classes['FolderIDMissingException']					= $path_prefix."core/include/data/folder/exceptions/folder_id_missing.exception.class.php";
+	$classes['FolderIsEmptyException']						= $path_prefix."core/include/data/folder/exceptions/folder_is_empty.exception.class.php";
 	
-	$classes['FileException']						= $path_prefix."core/include/data/file/exceptions/file.exception.class.php";
-	$classes['FileNotFoundException']				= $path_prefix."core/include/data/file/exceptions/file_not_found.exception.class.php";
-	$classes['FileIDMissingException']				= $path_prefix."core/include/data/file/exceptions/file_id_missing.exception.class.php";
-	$classes['FileVersionNotFoundException']		= $path_prefix."core/include/data/file/exceptions/file_version_not_found.exception.class.php";
-	$classes['FileVersionIDMissingException']		= $path_prefix."core/include/data/file/exceptions/file_veriosn_id_missing.exception.class.php";
+	$classes['FileException']								= $path_prefix."core/include/data/file/exceptions/file.exception.class.php";
+	$classes['FileNotFoundException']						= $path_prefix."core/include/data/file/exceptions/file_not_found.exception.class.php";
+	$classes['FileIDMissingException']						= $path_prefix."core/include/data/file/exceptions/file_id_missing.exception.class.php";
+	$classes['FileVersionNotFoundException']				= $path_prefix."core/include/data/file/exceptions/file_version_not_found.exception.class.php";
+	$classes['FileVersionIDMissingException']				= $path_prefix."core/include/data/file/exceptions/file_veriosn_id_missing.exception.class.php";
 	
-	$classes['ValueException']						= $path_prefix."core/include/data/value/exceptions/value.exception.class.php";
-	$classes['ValueNotFoundException']				= $path_prefix."core/include/data/value/exceptions/value_not_found.exception.class.php";
-	$classes['ValueIDMissingException']				= $path_prefix."core/include/data/value/exceptions/value_id_missing.exception.class.php";
-	$classes['ValueVersionNotFoundException']		= $path_prefix."core/include/data/value/exceptions/value_version_not_found.exception.class.php";
-	$classes['ValueVersionIDMissingException']		= $path_prefix."core/include/data/value/exceptions/value_version_id_missing.exception.class.php";
-	$classes['ValueTypeException']					= $path_prefix."core/include/data/value/exceptions/value_type.exception.class.php";
-	$classes['ValueTypeNotFoundException']			= $path_prefix."core/include/data/value/exceptions/value_type_not_found.exception.class.php";
-	$classes['ValueTypeIDMissingException']			= $path_prefix."core/include/data/value/exceptions/value_type_id_missing.exception.class.php";
+	$classes['ValueException']								= $path_prefix."core/include/data/value/exceptions/value.exception.class.php";
+	$classes['ValueNotFoundException']						= $path_prefix."core/include/data/value/exceptions/value_not_found.exception.class.php";
+	$classes['ValueIDMissingException']						= $path_prefix."core/include/data/value/exceptions/value_id_missing.exception.class.php";
+	$classes['ValueVersionNotFoundException']				= $path_prefix."core/include/data/value/exceptions/value_version_not_found.exception.class.php";
+	$classes['ValueVersionIDMissingException']				= $path_prefix."core/include/data/value/exceptions/value_version_id_missing.exception.class.php";
+	$classes['ValueTypeException']							= $path_prefix."core/include/data/value/exceptions/value_type.exception.class.php";
+	$classes['ValueTypeNotFoundException']					= $path_prefix."core/include/data/value/exceptions/value_type_not_found.exception.class.php";
+	$classes['ValueTypeIDMissingException']					= $path_prefix."core/include/data/value/exceptions/value_type_id_missing.exception.class.php";
 
-	$classes['VirtualFolderException']				= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder.exception.class.php";
-	$classes['VirtualFolderNotFoundException']		= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder_not_found.exception.class.php";
-	$classes['VirtualFolderIDMissingException']		= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder_id_missing.exception.class.php";
+	$classes['VirtualFolderException']						= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder.exception.class.php";
+	$classes['VirtualFolderNotFoundException']				= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder_not_found.exception.class.php";
+	$classes['VirtualFolderIDMissingException']				= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder_id_missing.exception.class.php";
 		
-	$classes['ParameterException']					= $path_prefix."core/include/data/parameter/exceptions/parameter.exception.class.php";
-	$classes['ParameterNotFoundException']			= $path_prefix."core/include/data/parameter/exceptions/parameter_not_found.exception.class.php";
-	$classes['ParameterIDMissingException']			= $path_prefix."core/include/data/parameter/exceptions/parameter_id_missing.exception.class.php";
+	$classes['ParameterException']							= $path_prefix."core/include/data/parameter/exceptions/parameter.exception.class.php";
+	$classes['ParameterNotFoundException']					= $path_prefix."core/include/data/parameter/exceptions/parameter_not_found.exception.class.php";
+	$classes['ParameterIDMissingException']					= $path_prefix."core/include/data/parameter/exceptions/parameter_id_missing.exception.class.php";
+	$classes['ParameterNoInstanceException']				= $path_prefix."core/include/data/parameter/exceptions/parameter_no_instance.exception.class.php";
+	$classes['ParameterUpdateException']					= $path_prefix."core/include/data/parameter/exceptions/parameter_update.exception.class.php";
+	$classes['ParameterUpdateNoValuesException']			= $path_prefix."core/include/data/parameter/exceptions/parameter_update_no_values.exception.class.php";
+	$classes['ParameterUpdateValueCreateFailedException']	= $path_prefix."core/include/data/parameter/exceptions/parameter_update_value_create_failed.exception.class.php";
+	$classes['ParameterUpdateVersionCreateFailedException']	= $path_prefix."core/include/data/parameter/exceptions/parameter_update_version_create_failed.exception.class.php";
+	$classes['ParameterCreateException']					= $path_prefix."core/include/data/parameter/exceptions/parameter_create.exception.class.php";
+	$classes['ParameterCreateIDMissingException']			= $path_prefix."core/include/data/parameter/exceptions/parameter_create_id_missing.exception.class.php";
+	$classes['ParameterCreateFailedException']				= $path_prefix."core/include/data/parameter/exceptions/parameter_create_failed.exception.class.php";
+	$classes['ParameterCreateValueCreateFailedException']	= $path_prefix."core/include/data/parameter/exceptions/parameter_create_value_create_failed.exception.class.php";
+	$classes['ParameterCreateVersionCreateFailedException']	= $path_prefix."core/include/data/parameter/exceptions/parameter_create_version_create_failed.exception.class.php";
+	$classes['ParameterCreateTemplateLinkFailed']			= $path_prefix."core/include/data/parameter/exceptions/parameter_create_template_link_failed.exception.class.php";
 	
+	$classes['DataEntity']									= $path_prefix."core/include/data/data_entity.class.php";
+	$classes['DataEntityPermission']						= $path_prefix."core/include/data/data_entity_permission.class.php";
+	$classes['DataBrowser']									= $path_prefix."core/include/data/data_browser.class.php";
+	$classes['DataPath']									= $path_prefix."core/include/data/data_path.class.php";
+	$classes['DataPermission']								= $path_prefix."core/include/data/data_permission.class.php";
+	$classes['DataUserData']								= $path_prefix."core/include/data/data_user_data.class.php";
 	
-	$classes['DataEntity']							= $path_prefix."core/include/data/data_entity.class.php";
-	$classes['DataEntityPermission']				= $path_prefix."core/include/data/data_entity_permission.class.php";
-	$classes['DataBrowser']							= $path_prefix."core/include/data/data_browser.class.php";
-	$classes['DataPath']							= $path_prefix."core/include/data/data_path.class.php";
-	$classes['DataPermission']						= $path_prefix."core/include/data/data_permission.class.php";
-	$classes['DataUserData']						= $path_prefix."core/include/data/data_user_data.class.php";
+	$classes['File']										= $path_prefix."core/include/data/file/file.class.php";
+	$classes['ImageCache']									= $path_prefix."core/include/data/file/image_cache.class.php";
 	
-	$classes['File']								= $path_prefix."core/include/data/file/file.class.php";
-	$classes['ImageCache']							= $path_prefix."core/include/data/file/image_cache.class.php";
+	$classes['Folder']										= $path_prefix."core/include/data/folder/folder.class.php";
+	$classes['SystemFolder']								= $path_prefix."core/include/data/folder/system_folder.class.php";
+	$classes['UserFolder']									= $path_prefix."core/include/data/folder/user_folder.class.php";
+	$classes['GroupFolder']									= $path_prefix."core/include/data/folder/group_folder.class.php";
+	$classes['OrganisationUnitFolder']						= $path_prefix."core/include/data/folder/organisation_unit_folder.class.php";
+	$classes['Path']										= $path_prefix."core/include/data/folder/path.class.php";
 	
-	$classes['Folder']								= $path_prefix."core/include/data/folder/folder.class.php";
-	$classes['SystemFolder']						= $path_prefix."core/include/data/folder/system_folder.class.php";
-	$classes['UserFolder']							= $path_prefix."core/include/data/folder/user_folder.class.php";
-	$classes['GroupFolder']							= $path_prefix."core/include/data/folder/group_folder.class.php";
-	$classes['OrganisationUnitFolder']				= $path_prefix."core/include/data/folder/organisation_unit_folder.class.php";
-	$classes['Path']								= $path_prefix."core/include/data/folder/path.class.php";
+	$classes['Value']										= $path_prefix."core/include/data/value/value.class.php";
+	$classes['ValueType']									= $path_prefix."core/include/data/value/value_type.class.php";
+	$classes['ValueVar']									= $path_prefix."core/include/data/value/value_var.class.php";
+	$classes['ItemValueVar']								= $path_prefix."core/include/data/value/item_value_var.class.php";
 	
-	$classes['Value']								= $path_prefix."core/include/data/value/value.class.php";
-	$classes['ValueType']							= $path_prefix."core/include/data/value/value_type.class.php";
-	$classes['ValueVar']							= $path_prefix."core/include/data/value/value_var.class.php";
-	$classes['ItemValueVar']						= $path_prefix."core/include/data/value/item_value_var.class.php";
+	$classes['VirtualFolder']								= $path_prefix."core/include/data/virtual_folder/virtual_folder.class.php";
 	
-	$classes['VirtualFolder']						= $path_prefix."core/include/data/virtual_folder/virtual_folder.class.php";
+	$classes['Parameter']									= $path_prefix."core/include/data/parameter/parameter.class.php";
+	$classes['ParameterTemplateParameter']					= $path_prefix."core/include/data/parameter/parameter_template_parameter.class.php";
+	$classes['ParameterNonTemplateParameter']				= $path_prefix."core/include/data/parameter/parameter_non_template_parameter.class.php";
+	$classes['ParameterTemplate']							= $path_prefix."core/include/data/parameter/parameter_template.class.php";
 	
-	$classes['Parameter']							= $path_prefix."core/include/data/parameter/parameter.class.php";
-	$classes['ParameterTemplateParameter']			= $path_prefix."core/include/data/parameter/parameter_template_parameter.class.php";
-	$classes['ParameterNonTemplateParameter']		= $path_prefix."core/include/data/parameter/parameter_non_template_parameter.class.php";
-	$classes['ParameterTemplate']					= $path_prefix."core/include/data/parameter/parameter_template.class.php";
-	
-	$classes['Data_Wrapper']						= $path_prefix."core/include/data/data.wrapper.class.php";
+	$classes['Data_Wrapper']								= $path_prefix."core/include/data/data.wrapper.class.php";
 ?>

@@ -942,37 +942,7 @@ class FileVersion_Access
 			return null;
 		}
 	}
-	
-	/**
-	 * @param integer $toid
-	 * @return integer
-	 */	
-	public static function get_highest_internal_revision_entry_by_toid($toid)
-	{
-		global $db;
-
-		if (is_numeric($toid))
-		{
-			$sql = "SELECT id FROM ".constant("FILE_VERSION_TABLE")." WHERE toid = ".$toid." " .
-							"AND internal_revision = (SELECT MAX(internal_revision) FROM ".constant("FILE_VERSION_TABLE")." WHERE toid = ".$toid.")";				
-			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
-							
-			if ($data['id'])
-			{
-				return $data['id'];
-			}
-			else
-			{
-				return null;
-			}
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
+		
 	/**
 	 * @param integer $id
 	 * @return integer

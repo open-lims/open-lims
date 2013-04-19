@@ -30,7 +30,6 @@ require_once("interfaces/parameter_template_parameter.interface.php");
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
 	require_once("access/parameter_has_template.access.php");
-	require_once("access/parameter_field_value.access.php");
 }
 
 /**
@@ -61,40 +60,25 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
 			{
 				$transaction_id = $transaction->begin();
 				
-				if (($parameter_id = parent::create($folder_id, $owner_id)) == null)
+				try
+				{
+					$parameter_id = parent::create($folder_id, $parameter_array, $owner_id);
+					
+					$parameter_has_template = new ParameterHasTemplate_Access(null, null);
+					if ($parameter_has_template->create($parameter_id, $template_id) == null)
+					{
+						throw new ParameterCreateTemplateLinkFailedException();
+					}
+				}
+				catch(BaseException $e)
 				{
 					if ($transaction_id != null)
 					{
 						$transaction->rollback($transaction_id);
 					}
-					return null;
+					throw $e;
 				}
 				
-				$parameter_version_id = $this->parameter_version_id;
-				
-				$parameter_has_template = new ParameterHasTemplate_Access(null, null);
-				if ($parameter_has_template->create($parameter_id, $template_id) == null)
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return null;
-				}
-								
-				foreach($parameter_array as $key => $value)
-				{
-					$parameter_field_value = new ParameterFieldValue_Access(null);
-					if ($parameter_field_value->create($parameter_version_id, $key, $value['method'], $value['value']) == null)
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						return null;
-					}
-				}
-												
 				if ($transaction_id != null)
 				{
 					$transaction->commit($transaction_id);
@@ -103,20 +87,26 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
 			}
 			else
 			{
-				return null;
+				throw new ParameterCreateIDMissingException();
 			}
+		}
+		else
+		{
+			throw new ParameterCreateIDMissingException();
+		}
+	}
+		
+	public function get_template_id()
+	{
+		if ($this->parameter_id)
+		{
+			return $parameter_has_template = ParameterHasTemplate_Access::get_template_id_by_parameter_id($this->parameter_id);		
 		}
 		else
 		{
 			return null;
 		}
 	}
-	
-	public function update($value_array, $previous_version_id, $major, $current)
-	{
-		
-	}
-	
 	
 	public static function get_instance($parameter_id, $force_new_instance = false)
     {    

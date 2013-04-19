@@ -614,9 +614,6 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 			$current_value_version_id = ValueVersion_Access::get_current_entry_by_toid($this->value_id);
 			$current_value_version = new ValueVersion_Access($current_value_version_id);
 			
-			$highest_revision_value_version_id = ValueVersion_Access::get_highest_internal_revision_entry_by_toid($this->value_id);
-			$highest_revision_value_version = new ValueVersion_Access($highest_revision_value_version_id);
-			
 			$new_internal_revision = $current_value_version->get_internal_revision()+1;
 			
 			if ((array_diff_assoc($value_array, $current_value_array) != null) or 
@@ -670,35 +667,49 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 
 				if ($current == true)
 				{
-					$value_version_id = $this->value_version->create($this->value_id, $new_version, $value_string , $value_checksum, $previous_version_pk_id, $new_internal_revision, true, $user->get_user_id());			
-					$current_value_version->set_current(false);
+					if(($value_version_id = $this->value_version->create($this->value_id, $new_version, $value_string , $value_checksum, $previous_version_pk_id, $new_internal_revision, true, $user->get_user_id())) == null)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+					}		
+					
+					if ($current_value_version->set_current(false) == false)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+					}
 				}
 				else
 				{
-					$value_version_id = $this->value_version->create($this->value_id, $new_version, $value_string , $value_checksum, $previous_version_pk_id, $new_internal_revision, true, $user->get_user_id());
+					if (($value_version_id = $this->value_version->create($this->value_id, $new_version, $value_string , $value_checksum, $previous_version_pk_id, $new_internal_revision, false, $user->get_user_id())) == null)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						return false;
+					}
+				}
+			
+				if ($full_text_index == true and $full_text_content_string)
+				{
+					$this->value_version->set_text_search_vector($full_text_content_string, "english");
 				}
 				
-				if ($value_version_id != null)
+				$this->value_version->__construct($value_version_id);
+				
+				if ($transaction_id != null)
 				{
-					if ($full_text_index == true and $full_text_content_string)
-					{
-						$this->value_version->set_text_search_vector($full_text_content_string, "english");
-					}
-					$this->value_version->__construct($value_version_id);
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
-					return true;
+					$transaction->commit($transaction_id);
 				}
-				else
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
-				}
+				
+				return true;
 			}
 			else
 			{
@@ -725,9 +736,6 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 					$current_value_version_id = ValueVersion_Access::get_current_entry_by_toid($this->value_id);
 					$current_value_version = new ValueVersion_Access($current_value_version_id);
 					
-					$highest_revision_value_version_id = ValueVersion_Access::get_highest_internal_revision_entry_by_toid($this->value_id);
-					$highest_revision_value_version = new ValueVersion_Access($highest_revision_value_version_id);
-
 					$new_internal_revision = $current_value_version->get_internal_revision()+1;
 						
 					if ($major == true)

@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * @package data
  * @version 0.4.0.0
@@ -22,13 +22,15 @@
  */
 
 /**
- * 
+ * Parameter Create ID Missing Exception
+ * @package data
  */
-	$get[0]	= "vfolder_id";
-	$get[1]	= "folder_id";
-	$get[2]	= "file_id";
-	$get[3]	= "value_id";
-	$get[4]	= "parameter_id";
-	
-	$retrace[0] = "file_id";
+class ParameterCreateIDMissingException extends ParameterCreateException
+{
+    function __construct()
+    {
+    	parent::__construct();	
+    }
+}
+
 ?>
