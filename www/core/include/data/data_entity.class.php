@@ -297,10 +297,13 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
-	 * Create a new DataEntity
+	 * Creates a new DataEntity
 	 * @param integer $owner_id
 	 * @param integer $owner_group_id
 	 * @return integer
+	 * @throws DataEntityCreateEntryException
+	 * @throws DataEntityCreateItemLinkException
+	 * @throws DataEntityCreateIDMissingException
 	 */
 	protected function create($owner_id, $owner_group_id)
 	{
@@ -310,53 +313,46 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		{
 			$transaction_id = $transaction->begin();
 			
-			$data_entity_id = $this->data_entity->create($owner_id, $owner_group_id);
-			
-			if ($data_entity_id)
-	   		{
-				if (($item_id = parent::create()) == null)
+			try
+			{
+				if(($data_entity_id = $this->data_entity->create($owner_id, $owner_group_id)) == null)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return null;
-				}
+					throw new DataEntityCreateEntryFailedException();
+				}	
+				
+				$item_id = parent::create();
 				
 				$data_entity_is_item = new DataEntityIsItem_Access(null);
 				if ($data_entity_is_item->create($data_entity_id, $item_id) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return null;
+					throw new DataEntityCreateItemLinkFailedException();
 				}
-		   		
-		   		if ($transaction_id != null)
-		   		{
-					$transaction->commit($transaction_id);
-				}
-		   		
-				$this->data_entity_id = $data_entity_id;
-				$this->data_entity = new DataEntity_Access($data_entity_id);
-	   	   		$this->item_id = $item_id;
-	    		parent::__construct($item_id);
-				
-		   		return $data_entity_id;
-	   		}
-	   		else
-	   		{
-	   			if ($transaction_id != null)
-	   			{
+			}
+			catch(BaseException $e)
+			{
+				if ($transaction_id != null)
+				{
 					$transaction->rollback($transaction_id);
 				}
-				return null;
-	   		}
+				throw $e;
+			}
+			
+	
+	   		if ($transaction_id != null)
+	   		{
+				$transaction->commit($transaction_id);
+			}
+	   		
+			$this->data_entity_id = $data_entity_id;
+			$this->data_entity = new DataEntity_Access($data_entity_id);
+   	   		$this->item_id = $item_id;
+    		parent::__construct($item_id);
+			
+	   		return $data_entity_id;
 		}
 		else
 		{
-			return null;
+			throw new DataEntityCreateIDMissingException();
 		}
 	}
 	

@@ -26,6 +26,9 @@
  */
 	$classes['ItemException']						= $path_prefix."core/include/item/exceptions/item.exception.class.php";
 	
+	$classes['ItemCreateException']					= $path_prefix."core/include/item/exceptions/item_create.exception.class.php";
+	$classes['ItemCreateFailedException']			= $path_prefix."core/include/item/exceptions/item_create_failed.exception.class.php";
+	
 	$classes['ItemIDMissingException']				= $path_prefix."core/include/item/exceptions/item_id_missing.exception.class.php";
 	$classes['ItemParentIDMissingException']		= $path_prefix."core/include/item/exceptions/item_parent_id_missing.exception.class.php";
 	$classes['ItemParentTypeMissingException']		= $path_prefix."core/include/item/exceptions/item_parent_type_missing.exception.class.php";

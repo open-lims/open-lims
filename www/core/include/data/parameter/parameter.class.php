@@ -102,37 +102,32 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 				
 				$folder = Folder::get_instance($folder_id);
 						
-				if (($data_entity_id = parent::create($owner_id, null)) != null)
-				{
-					if (parent::set_as_child_of($folder->get_data_entity_id()) == false)
-					{
-						throw new ParameterCreateException(); // DataEntity Should Return own exceptions
-					}
-					
-					$parameter_access = new Parameter_Access(null);
-					if (($parameter_id = $parameter_access->create($data_entity_id)) == null)
-					{
-						throw new ParameterCreateFailedException();
-					}
-					
-					$parameter_version_access = new ParameterVersion_Access(null);
-					if (($parameter_version_id = $parameter_version_access->create($parameter_id, 1, 1, null, true, $owner_id, null)) == null)
-					{
-						throw new ParameterCreateVersionCreateFailedException();
-					}
-					
-					foreach($parameter_array as $key => $value)
-					{
-						$parameter_field_value = new ParameterFieldValue_Access(null);
-						if ($parameter_field_value->create($parameter_version_id, $key, $value['method'], $value['value']) == null)
-						{
-							throw new ParameterCreateValueCreateFailedException();
-						}
-					}
-				}
-				else
+				$data_entity_id = parent::create($owner_id, null);
+
+				if (parent::set_as_child_of($folder->get_data_entity_id()) == false)
 				{
 					throw new ParameterCreateException(); // DataEntity Should Return own exceptions
+				}
+				
+				$parameter_access = new Parameter_Access(null);
+				if (($parameter_id = $parameter_access->create($data_entity_id)) == null)
+				{
+					throw new ParameterCreateFailedException();
+				}
+				
+				$parameter_version_access = new ParameterVersion_Access(null);
+				if (($parameter_version_id = $parameter_version_access->create($parameter_id, 1, 1, null, true, $owner_id, null)) == null)
+				{
+					throw new ParameterCreateVersionCreateFailedException();
+				}
+				
+				foreach($parameter_array as $key => $value)
+				{
+					$parameter_field_value = new ParameterFieldValue_Access(null);
+					if ($parameter_field_value->create($parameter_version_id, $key, $value['method'], $value['value']) == null)
+					{
+						throw new ParameterCreateValueCreateFailedException();
+					}
 				}
 			}
 			catch(BaseException $e)

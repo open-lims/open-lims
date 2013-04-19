@@ -77,6 +77,7 @@ class Item implements ItemInterface, EventListenerInterface
 	/**
 	 * Creates a new item
 	 * @return integer
+	 * @throws ItemCreateFailedException
 	 */
 	protected function create()
 	{
@@ -86,7 +87,7 @@ class Item implements ItemInterface, EventListenerInterface
 		}
 		else
 		{
-			return null;
+			throw new ItemCreateFailedException();
 		}
 	}
 	
