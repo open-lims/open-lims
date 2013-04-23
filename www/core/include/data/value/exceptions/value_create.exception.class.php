@@ -22,15 +22,15 @@
  */
 
 /**
- * Data Entity Create Exception
+ * Value Create Exception
  * @package data
  */
-class DataEntityCreateException extends DataEntityException
+class ValueCreateException extends ValueException
 {
     function __construct()
     {
-    	parent::__construct(true, false, false, "Data Entity Create Exception", null);	
-    }    
+    	parent::__construct(true, false, false, "Value Create Exception", null);	
+    }
 }
 
 ?>

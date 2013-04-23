@@ -221,117 +221,97 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 		{
 			$transaction_id = $transaction->begin();
 			
-			if ($owner_id == null)
+			try
 			{
-				$owner_id = $user->get_user_id();
-			}
-			
-			$checksum = md5(serialize($value));
-			
-			$folder = Folder::get_instance($folder_id);
-					
-			if (($data_entity_id = parent::create($owner_id, null)) != null)
-			{
-				if (parent::set_as_child_of($folder->get_data_entity_id()) == false)
+				if ($owner_id == null)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return null;
+					$owner_id = $user->get_user_id();
 				}
+				
+				$checksum = md5(serialize($value));
+				
+				$folder = Folder::get_instance($folder_id);
+					
+				$data_entity_id = parent::create($owner_id, null);
+				parent::set_as_child_of($folder->get_data_entity_id());
 				
 				$value_access = new Value_Access(null);
 				
-				if (($value_id = $value_access->create($data_entity_id, $type_id)) != null)
+				if (($value_id = $value_access->create($data_entity_id, $type_id)) == null)
 				{
-					if ($type_id != 2 and is_array($value))
+					throw new ValueCreateFailedException();
+				}
+				
+				if ($type_id != 2 and is_array($value))
+				{
+					$full_text_index = false;
+					$full_text_key_array = array();
+					$full_text_content_string = "";
+				
+					foreach ($value as $fe_key => $fe_value)
 					{
-						$full_text_index = false;
-						$full_text_key_array = array();
-						$full_text_content_string = "";
-					
-						foreach ($value as $fe_key => $fe_value)
+						if (strpos($fe_key, "-vartype") !== false)
 						{
-							if (strpos($fe_key, "-vartype") !== false)
+							if ($fe_value == "string")
 							{
-								if ($fe_value == "string")
-								{
-									$full_text_index = true;
-									$tmp_key = str_replace("-vartype","",$fe_key);
-									array_push($full_text_key_array, $tmp_key);
-								}
-							}
-						}
-						
-						if (is_array($full_text_key_array) and count($full_text_key_array) >= 1)
-						{
-							foreach($full_text_key_array as $fe_key => $fe_value)
-							{
-								if ($full_text_content_string)
-								{
-									$full_text_content_string = $full_text_content_string." ".$value[$fe_value];
-								}
-								else
-								{
-									$full_text_content_string = $value[$fe_value];
-								}
+								$full_text_index = true;
+								$tmp_key = str_replace("-vartype","",$fe_key);
+								array_push($full_text_key_array, $tmp_key);
 							}
 						}
 					}
-					else
-					{
-						$full_text_index = true;
-						$full_text_content_string = $value;
-					}
 					
-					$value_version_access = new ValueVersion_access(null);
-					$value_version_id = $value_version_access->create($value_id, 1, serialize($value), $checksum, null, 1, true, $owner_id);
-					
-					if ($full_text_index == true and $full_text_content_string)
+					if (is_array($full_text_key_array) and count($full_text_key_array) >= 1)
 					{
-						$value_version_access->set_text_search_vector($full_text_content_string, "english");
-					}
-					
-					if ($value_version_id != null)
-					{
-						if ($transaction_id != null)
+						foreach($full_text_key_array as $fe_key => $fe_value)
 						{
-							$transaction->commit($transaction_id);
+							if ($full_text_content_string)
+							{
+								$full_text_content_string = $full_text_content_string." ".$value[$fe_value];
+							}
+							else
+							{
+								$full_text_content_string = $value[$fe_value];
+							}
 						}
-						self::__construct($value_id);
-						return $value_id;
-					}
-					else
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						return null;
 					}
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return null;
+					$full_text_index = true;
+					$full_text_content_string = $value;
+				}
+				
+				$value_version_access = new ValueVersion_access(null);
+				if ($value_version_access->create($value_id, 1, serialize($value), $checksum, null, 1, true, $owner_id) == null)
+				{
+					throw new ValueCreateVersionCreateFailedException();
+				}
+				
+				if ($full_text_index == true and $full_text_content_string)
+				{
+					$value_version_access->set_text_search_vector($full_text_content_string, "english");
 				}
 			}
-			else
+			catch(BaseException $e)
 			{
 				if ($transaction_id != null)
 				{
 					$transaction->rollback($transaction_id);
 				}
-				return null;
+				throw $e;
 			}
+			
+			if ($transaction_id != null)
+			{
+				$transaction->commit($transaction_id);
+			}
+			self::__construct($value_id);
+			return $value_id;
 		}
 		else
 		{
-			return null;
+			throw new ValueCreateIDMissingException();
 		}
 	}
 	

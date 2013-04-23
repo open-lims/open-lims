@@ -22,14 +22,14 @@
  */
 
 /**
- * Data Entity Create Exception
+ * Folder Create Failed Exception
  * @package data
  */
-class DataEntityCreateException extends DataEntityException
+class FolderCreateFailedException extends FolderCreateException
 {
     function __construct()
     {
-    	parent::__construct(true, false, false, "Data Entity Create Exception", null);	
+    	parent::__construct();	
     }    
 }
 

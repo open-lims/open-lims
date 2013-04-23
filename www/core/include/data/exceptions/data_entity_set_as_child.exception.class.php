@@ -22,14 +22,14 @@
  */
 
 /**
- * Data Entity Create Exception
+ * Data Entity Set as Child Exception
  * @package data
  */
-class DataEntityCreateException extends DataEntityException
+class DataEntitySetAsChildException extends DataEntityException
 {
     function __construct()
     {
-    	parent::__construct(true, false, false, "Data Entity Create Exception", null);	
+    	parent::__construct(true, false, false, "Data Entity Set as Child Exception", null);	
     }    
 }
 

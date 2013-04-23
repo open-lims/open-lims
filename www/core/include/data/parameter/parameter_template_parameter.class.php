@@ -50,6 +50,16 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
 		
 	}
 	
+	/**
+	 * @see ParameterTemplateParameterInterface::create()
+	 * @param integer $folder_id
+	 * @param integer $owner_id
+	 * @param integer $template_id
+	 * @param array $parameter_array
+	 * @return integer
+	 * @throws ParameterCreateTemplateLinkFailedException
+	 * @throws ParameterCreateIDMissingException
+	 */
 	public function create($folder_id, $owner_id, $template_id, $parameter_array)
 	{
 		global $transaction;

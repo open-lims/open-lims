@@ -242,56 +242,44 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 		{
 			$transaction_id = $transaction->begin();
 			
-			if ($owner_id == null)
+			try
 			{
-				$owner_id = $user->get_user_id();
-			}
-			
-			$folder = Folder::get_instance($folder_id);
-					
-			if (($data_entity_id = parent::create($owner_id, null)) != null)
-			{
-				if (parent::set_as_child_of($folder->get_data_entity_id()) == false)
+				if ($owner_id == null)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return null;
+					$owner_id = $user->get_user_id();
 				}
-			
-				$this->file = new File_Access(null);
-				$file_id = $this->file->create($data_entity_id);
 				
-				if ($file_id != null)
+				$folder = Folder::get_instance($folder_id);
+						
+				$data_entity_id = parent::create($owner_id, null);
+				parent::set_as_child_of($folder->get_data_entity_id());
+					
+				
+				$this->file = new File_Access(null);
+				if (($file_id = $this->file->create($data_entity_id)) == null)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
-					return $file_id;
+					throw new FileCreateFailedException();
 				}
-				else
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return null;
-				}
-			}
-			else
+			}	
+			catch(BaseException $e)
 			{
 				if ($transaction_id != null)
 				{
 					$transaction->rollback($transaction_id);
 				}
-				return null;
+				throw $e;
 			}
+			
+			if ($transaction_id != null)
+			{
+				$transaction->commit($transaction_id);
+			}
+			
+			return $file_id;
 		}
 		else
 		{
-			return null;
+			throw new FileCreateIDMissingException();
 		}
 	}
 	
@@ -312,56 +300,51 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 		{
 			$transaction_id = $transaction->begin();
 			
-			if ($owner_id == null)
+			try
 			{
-				$owner_id = $user->get_user_id();
-			}
-			
-			if (substr_count($path, constant("BASE_DIR")) != 1)
-			{
-				$path = constant("BASE_DIR")."/".$path;
-			}
-
-			$size = filesize($path);
-			$checksum = md5_file($path);
-			
-			$file_id = $this->create_shape($folder_id, $owner_id);
+				if ($owner_id == null)
+				{
+					$owner_id = $user->get_user_id();
+				}
 				
-			if ($file_id != null)
-			{
+				if (substr_count($path, constant("BASE_DIR")) != 1)
+				{
+					$path = constant("BASE_DIR")."/".$path;
+				}
+	
+				$size = filesize($path);
+				$checksum = md5_file($path);
+				
+				$file_id = $this->create_shape($folder_id, $owner_id);
+					
+	
 				$file_version_access = new FileVersion_access(null);
-				$file_version_id = $file_version_access->create($file_id, $name, 1, $size, $checksum, null, null, 1, true, $owner_id);
-				
-				if ($file_version_id != null)
+				if ($file_version_access->create($file_id, $name, 1, $size, $checksum, null, null, 1, true, $owner_id) == null)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
-					return $file_id;
+					throw new FileCreateVersionCreateFailedException();
 				}
-				else
-				{
-					$this->file->delete();
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return null;
-				}
-			}
-			else
+			}	
+			catch(BaseException $e)
 			{
 				if ($transaction_id != null)
 				{
 					$transaction->rollback($transaction_id);
 				}
-				return null;
-			}	
+				throw $e;
+			}
+			
+			if ($transaction_id != null)
+			{
+				$transaction->commit($transaction_id);
+			}
+			
+			self::__construct($file_id);
+			
+			return $file_id;
 		}
 		else
 		{
-			return null;
+			throw new FileCreateIDMissingException();
 		}
 	}
 	
@@ -837,7 +820,14 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 									}
 									
 			 						// Create File
-			 						if (($file_id = $this->create($file_array['name'], $folder_id, $target, $user->get_user_id())) == null)
+			 						/**
+			 						 * @todo Exception in whole method
+			 						 */
+			 						try
+			 						{
+			 							$file_id = $this->create($file_array['name'], $folder_id, $target, $user->get_user_id());
+			 						}
+			 						catch(BaseException $e)
 			 						{
 			 							if ($transaction_id != null)
 										{
@@ -958,6 +948,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @todo better transaction
 	 * @see FileInterface::update_file()
 	 * @param array $file_array
 	 * @param integer $previous_version_id
@@ -1238,11 +1229,12 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	}
 	
 	/**
+	 * @todo copy all versions, transaction, exceptions
 	 * @see FileInterface::copy()
 	 * @param integer $folder_id
 	 * @return bool
 	 */
-	public function copy($folder_id)
+	public function copy($folder_id, $all_versions = false)
 	{
 		global $transaction, $user;
 		
@@ -1255,14 +1247,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 			$folder = Folder::get_instance($folder_id);
 			
 			// Create File
- 			if (($file_id = $this->create_shape($folder_id, $user->get_user_id())) == null)
- 			{
- 				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
-				return false;
- 			}
+ 			$file_id = $this->create_shape($folder_id, $user->get_user_id());
  			$data_entity_id = $this->get_data_entity_id();
 
  			// Alle Versionen kopieren

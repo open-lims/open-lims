@@ -113,7 +113,7 @@ interface FileInterface
 	 * @param integer $folder_id
 	 * @return bool
 	 */
-	public function copy($folder_id);
+	public function copy($folder_id, $all_versions = false);
 	
 	/**
 	 * Checks if the current opened file version is the current file version

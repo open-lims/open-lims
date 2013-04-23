@@ -93,6 +93,9 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 	 * @param integer $folder_id
 	 * @param string $name
 	 * @return integer
+	 * @throws VirtualFolderCreateFailedException
+	 * @throws VirtualFolderCreateFolderNotFoundException
+	 * @throws VirtualFolderCreateIDMissingException
 	 */
 	public final function create($folder_id, $name)
 	{
@@ -102,60 +105,44 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 		{
 			$transaction_id = $transaction->begin();
 			
-			$folder = Folder::get_instance($folder_id);
-			
-			if ($folder->exist_folder() == true)
+			try
 			{
-				if (($data_entity_id = parent::create(1 , null)) != null)
-				{
-					
-					if (parent::set_as_child_of($folder->get_data_entity_id()) == false)
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						return null;
-					}
+				$folder = Folder::get_instance($folder_id);
 				
-					if (($vfolder_id = $this->virtual_folder->create($data_entity_id, $name)) != null)
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
-						return $vfolder_id;	
-					}
-					else
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						return null;
-					}
-				}
-				else
+				if ($folder->exist_folder() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return null;
+					throw new VirtualFolderCreateFolderNotFoundException();
+				}
+				
+				$data_entity_id = parent::create(1 , null);
+				parent::set_as_child_of($folder->get_data_entity_id());
+				
+				if (($vfolder_id = $this->virtual_folder->create($data_entity_id, $name)) == null)
+				{
+					throw new VirtualFolderCreateFailedException();
 				}
 			}
-			else
+			catch(BaseException $e)
 			{
 				if ($transaction_id != null)
 				{
 					$transaction->rollback($transaction_id);
 				}
-				return null;
+				throw $e;
 			}
+			
+			if ($transaction_id != null)
+			{
+				$transaction->commit($transaction_id);
+			}
+			
+			self::__construct($vfolder_id);
+			
+			return $vfolder_id;	
 		}
 		else
 		{
-			return null;
+			throw new VirtualFolderCreateIDMissingException();
 		}
 	}
 	

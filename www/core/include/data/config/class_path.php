@@ -34,22 +34,33 @@
 	
 	$classes['DataEntityException']							= $path_prefix."core/include/data/exceptions/data_entity.exception.class.php";
 	$classes['DataEntityNotFoundException']					= $path_prefix."core/include/data/exceptions/data_entity_not_found.exception.class.php";
+	$classes['DataEntityNoInstanceException']				= $path_prefix."core/include/data/exceptions/data_entity_no_instance.exception.class.php";
 	$classes['DataEntityIDMissingException']				= $path_prefix."core/include/data/exceptions/data_entity_id_missing.exception.class.php";
 	$classes['DataEntityCreateException']					= $path_prefix."core/include/data/exceptions/data_entity_create.exception.class.php";
 	$classes['DataEntityCreateIDMissingException']			= $path_prefix."core/include/data/exceptions/data_entity_create_id_missing.exception.class.php";
 	$classes['DataEntityCreateEntryFailedException']		= $path_prefix."core/include/data/exceptions/data_entity_create_entry_failed.exception.class.php";
 	$classes['DataEntityCreateItemLinkFailedException']		= $path_prefix."core/include/data/exceptions/data_entity_create_item_link_failed.exception.class.php";
+	$classes['DataEntitySetAsChildException']				= $path_prefix."core/include/data/exceptions/data_entity_set_as_child.exception.class.php";
 	
 	$classes['FolderException']								= $path_prefix."core/include/data/folder/exceptions/folder.exception.class.php";
 	$classes['FolderNotFoundException']						= $path_prefix."core/include/data/folder/exceptions/folder_not_found.exception.class.php";
 	$classes['FolderIDMissingException']					= $path_prefix."core/include/data/folder/exceptions/folder_id_missing.exception.class.php";
 	$classes['FolderIsEmptyException']						= $path_prefix."core/include/data/folder/exceptions/folder_is_empty.exception.class.php";
+	$classes['FolderCreateException']						= $path_prefix."core/include/data/folder/exceptions/folder_create.exception.class.php";
+	$classes['FolderCreateFailedException']					= $path_prefix."core/include/data/folder/exceptions/folder_create_failed.exception.class.php";
+	$classes['FolderCreateIDMissingException']				= $path_prefix."core/include/data/folder/exceptions/folder_create_id_missing.exception.class.php";
+	$classes['FolderCreateFolderAlreadyExsitsException']	= $path_prefix."core/include/data/folder/exceptions/folder_create_folder_already_exists.exception.class.php";
+	$classes['FolderCreatePhysicalCreationFailedException']	= $path_prefix."core/include/data/folder/exceptions/folder_create_physical_creation_failed.exception.class.php";
 	
 	$classes['FileException']								= $path_prefix."core/include/data/file/exceptions/file.exception.class.php";
 	$classes['FileNotFoundException']						= $path_prefix."core/include/data/file/exceptions/file_not_found.exception.class.php";
 	$classes['FileIDMissingException']						= $path_prefix."core/include/data/file/exceptions/file_id_missing.exception.class.php";
 	$classes['FileVersionNotFoundException']				= $path_prefix."core/include/data/file/exceptions/file_version_not_found.exception.class.php";
 	$classes['FileVersionIDMissingException']				= $path_prefix."core/include/data/file/exceptions/file_veriosn_id_missing.exception.class.php";
+	$classes['FileCreateException']							= $path_prefix."core/include/data/file/exceptions/file_create.exception.class.php";
+	$classes['FileCreateIDMissingException']				= $path_prefix."core/include/data/file/exceptions/file_create_id_missing.exception.class.php";
+	$classes['FileCreateFailedException']					= $path_prefix."core/include/data/file/exceptions/file_create_failed.exception.class.php";
+	$classes['FileCreateVersionCreateFaileException']		= $path_prefix."core/include/data/file/exceptions/file_create_version_create_failed.exception.class.php";
 	
 	$classes['ValueException']								= $path_prefix."core/include/data/value/exceptions/value.exception.class.php";
 	$classes['ValueNotFoundException']						= $path_prefix."core/include/data/value/exceptions/value_not_found.exception.class.php";
@@ -59,11 +70,19 @@
 	$classes['ValueTypeException']							= $path_prefix."core/include/data/value/exceptions/value_type.exception.class.php";
 	$classes['ValueTypeNotFoundException']					= $path_prefix."core/include/data/value/exceptions/value_type_not_found.exception.class.php";
 	$classes['ValueTypeIDMissingException']					= $path_prefix."core/include/data/value/exceptions/value_type_id_missing.exception.class.php";
-
+	$classes['ValueCreateException']						= $path_prefix."core/include/data/value/exceptions/value_create.exception.class.php";
+	$classes['ValueCreateIDMissingException']				= $path_prefix."core/include/data/value/exceptions/value_create_id_missing.exception.class.php";
+	$classes['ValueCreateFailedException']					= $path_prefix."core/include/data/value/exceptions/value_create_failed.exception.class.php";
+	$classes['ValueCreateVersionCreateFailedException']		= $path_prefix."core/include/data/value/exceptions/value_create_version_create_failed.exception.class.php";
+	
 	$classes['VirtualFolderException']						= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder.exception.class.php";
 	$classes['VirtualFolderNotFoundException']				= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder_not_found.exception.class.php";
 	$classes['VirtualFolderIDMissingException']				= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder_id_missing.exception.class.php";
-		
+	$classes['VirtualFolderCreateException']				= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder_create.exception.class.php";
+	$classes['VirtualFolderCreateFailedException']			= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder_create_failed.exception.class.php";
+	$classes['VirtualFolderCreateFolderNotFoundException']	= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder_create_folder_not_found.exception.class.php";
+	$classes['VirtualFolderCreateIDMissingException']		= $path_prefix."core/include/data/virtual_folder/exceptions/virtual_folder_create_id_missing.exception.class.php";
+	
 	$classes['ParameterException']							= $path_prefix."core/include/data/parameter/exceptions/parameter.exception.class.php";
 	$classes['ParameterNotFoundException']					= $path_prefix."core/include/data/parameter/exceptions/parameter_not_found.exception.class.php";
 	$classes['ParameterIDMissingException']					= $path_prefix."core/include/data/parameter/exceptions/parameter_id_missing.exception.class.php";

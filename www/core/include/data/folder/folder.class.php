@@ -186,6 +186,10 @@ class Folder extends DataEntity implements FolderInterface
 	 * @param integer $owner_id
 	 * @param integer $owner_group_id
 	 * @return integer
+	 * @throws FolderCreateFailedException
+	 * @throws FolderCreateFolderAlreadyExistsException
+	 * @throws FolderCreatePhysicalCreationFailedException
+	 * @throws FolderCreateIDMissingException
 	 */
 	public function create($name, $toid, $path, $owner_id, $owner_group_id)
 	{
@@ -194,82 +198,61 @@ class Folder extends DataEntity implements FolderInterface
 		if (is_numeric($toid))
 		{
 			$transaction_id = $transaction->begin();
-			$folder = new Folder($toid);
-			$parent_data_entity_id = $folder->get_data_entity_id();
 			
-			if (!$path)
+			try
 			{
 				$folder = new Folder($toid);
-				$folder_name = str_replace(" ","_",trim($name));
-				$path = $folder->get_path()."/".$folder_name;
-			}
-
-			if (($data_entity_id = parent::create($owner_id, $owner_group_id)) != null)
-			{
-				if (($folder_id = $this->folder->create($data_entity_id, $name, $path)) != null)
-				{	
-					self::__construct($folder_id);
-					
-					if (parent::set_as_child_of($parent_data_entity_id) == false)
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						return null;
-					}
-					
-					$system_path = constant("BASE_DIR")."/".$path;
-						
-					if (!file_exists($system_path))
-					{
-						if (mkdir($system_path) == true)
-						{
-							if ($transaction_id != null)
-							{
-								$transaction->commit($transaction_id);
-							}
-							return $folder_id;
-						}
-						else
-						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							return null;
-						}
-					}
-					else
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						return null;
-					}
-				}
-				else
+				$parent_data_entity_id = $folder->get_data_entity_id();
+				
+				if (!$path)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return null;
+					$folder = new Folder($toid);
+					$folder_name = str_replace(" ","_",trim($name));
+					$path = $folder->get_path()."/".$folder_name;
+				}
+	
+				$data_entity_id = parent::create($owner_id, $owner_group_id);
+				parent::set_as_child_of($parent_data_entity_id);
+				
+				if (($folder_id = $this->folder->create($data_entity_id, $name, $path)) == null)
+				{	
+					throw new FolderCreateFailedException();
+				}
+				
+				self::__construct($folder_id);
+										
+				$system_path = constant("BASE_DIR")."/".$path;
+					
+				if (file_exists($system_path))
+				{
+					throw new FolderCreateFolderAlreadyExistsException();
+					
+				}
+				
+				if (mkdir($system_path) == false)
+				{
+					throw new FolderCreatePhysicalCreationFailedException();
 				}
 			}
-			else
+			catch(BaseException $e)
 			{
 				if ($transaction_id != null)
 				{
 					$transaction->rollback($transaction_id);
 				}
-				return null;
+				throw $e;
 			}
+			
+			if ($transaction_id != null)
+			{
+				$transaction->commit($transaction_id);
+			}
+			
+			return $folder_id;
 		}
 		else
 		{
-			return null;
+			throw new FolderCreateIDMissingException();
 		}
 	}
 		

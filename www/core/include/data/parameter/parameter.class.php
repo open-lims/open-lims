@@ -103,11 +103,7 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 				$folder = Folder::get_instance($folder_id);
 						
 				$data_entity_id = parent::create($owner_id, null);
-
-				if (parent::set_as_child_of($folder->get_data_entity_id()) == false)
-				{
-					throw new ParameterCreateException(); // DataEntity Should Return own exceptions
-				}
+				parent::set_as_child_of($folder->get_data_entity_id());
 				
 				$parameter_access = new Parameter_Access(null);
 				if (($parameter_id = $parameter_access->create($data_entity_id)) == null)

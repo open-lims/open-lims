@@ -219,12 +219,12 @@ class UserRegionalSetting_Access
 															"".$country_id."," .
 															"'".$system_of_units."'," .
 															"'".$system_of_paper_formats."'," .
-															"".$currency_id_insert.",";
+															"".$currency_id_insert."," .
 															"".$currency_significant_digits_insert."," .
 															"'".$decimal_separator."'," .
 															"'".$thousand_separator."'," .
 															"'".$name_display_format."')";
-																	
+										
 			$res_write = $db->db_query($sql_write);
 			
 			if ($db->db_affected_rows($res_write) == 1)

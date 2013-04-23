@@ -745,6 +745,8 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 * @param integer $data_entity_id
 	 * @param bool $link
 	 * @return bool
+	 * @throws DataEntitySetAsChildException;
+	 * @throws DataEntityNoInstanceException
 	 */
 	public final function set_as_child_of($data_entity_id, $link = false, $link_item_id = null)
 	{
@@ -759,7 +761,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 				}
 				else
 				{
-					return false;
+					throw new DataEntitySetAsChildException();
 				}
 			}
 			else
@@ -769,7 +771,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		}
 		else
 		{
-			return false;	
+			throw new DataEntityNoInstanceException();
 		}
 	}
 	
