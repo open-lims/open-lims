@@ -25,7 +25,10 @@
  * 
  */
 	$classes['EquipmentException']						= $path_prefix."core/include/equipment/exceptions/equipment.exception.class.php";	
-	$classes['EquipmentCreateException']				= $path_prefix."core/include/equipment/exceptions/equipment_create.exception.class.php";	
+	$classes['EquipmentCreateException']				= $path_prefix."core/include/equipment/exceptions/equipment_create.exception.class.php";
+	$classes['EquipmentCreateAsItemException']			= $path_prefix."core/include/equipment/exceptions/equipment_create_as_item.exception.class.php";	
+	$classes['EquipmentCreateFailedException']			= $path_prefix."core/include/equipment/exceptions/equipment_create_failed.exception.class.php";	
+	$classes['EquipmentCreateIDMissingException']		= $path_prefix."core/include/equipment/exceptions/equipment_create_id_missing.exception.class.php";		
 	$classes['EquipmentNotFoundException']				= $path_prefix."core/include/equipment/exceptions/equipment_not_found.exception.class.php";
 	$classes['EquipmentIDMissingException']				= $path_prefix."core/include/equipment/exceptions/equipment_id_missing.exception.class.php";
 	$classes['EquipmentTypeException']					= $path_prefix."core/include/equipment/exceptions/equipment_type.exception.class.php";

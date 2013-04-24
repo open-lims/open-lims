@@ -714,18 +714,50 @@ class SampleCreateAjax
 
 		$transaction_id = $transaction->begin();
 		
-		$sample = new Sample(null);
-
-		$sample->set_template_data($sample_template_data_type, $sample_template_data_type_id, $sample_template_data_array);
-
-		if (($sample_id = $sample->create($sample_organ_unit, $sample_template, $sample_name, $sample_manufacturer, $sample_location, $sample_desc, null, $sample_expiry, $sample_expiry_warning)) == null)
+		try
+		{
+			$sample = new Sample(null);
+	
+			$sample->set_template_data($sample_template_data_type, $sample_template_data_type_id, $sample_template_data_array);
+	
+			$sample_id = $sample->create($sample_organ_unit, $sample_template, $sample_name, $sample_manufacturer, $sample_location, $sample_desc, null, $sample_expiry, $sample_expiry_warning);
+			
+			if ($sample_add_role == "item" or $sample_add_role == "item_parent")
+			{
+				// Special Parent Sample Case
+				if ($sample_add_role == "item_parent")
+				{
+					$parent_sample = new Sample($sample_item_get_array['sample_id']);
+					$sample_item_get_array['sample_id'] = $sample_id;
+					$sample_item_get_array['parent_sample'] = "1";
+					$event_item_id = $parent_sample->get_item_id();
+				}
+				else
+				{
+					$event_item_id = $sample->get_item_id();
+				}
+				
+				$post_array = array();
+				$post_array['keywords'] = $sample_item_keywords;
+				$post_array['description'] = $sample_item_description;
+				
+				$item_add_event = new ItemAddEvent($event_item_id, $sample_item_get_array, $post_array, true, "sample");
+				$event_handler = new EventHandler($item_add_event);
+				if ($event_handler->get_success() == true)
+				{
+					// Nothing
+				}
+			}
+		}
+		catch(BaseException $e)
 		{
 			if ($transaction_id != null)
 			{
 				$transaction->rollback($transaction_id);
 			}
+			throw $e;
 		}
-
+		
 		$session->delete_value("SAMPLE_ADD_ROLE");
 		$session->delete_value("SAMPLE_ADD_ITEM_HOLDER_CLASS");
 		$session->delete_value("SAMPLE_ADD_ITEM_HOLDER_ID");
@@ -751,53 +783,23 @@ class SampleCreateAjax
 		
 		if ($sample_add_role == "item" or $sample_add_role == "item_parent")
 		{
-			// Special Parent Sample Case
-			if ($sample_add_role == "item_parent")
+			if ($transaction_id != null)
 			{
-				$parent_sample = new Sample($sample_item_get_array['sample_id']);
-				$sample_item_get_array['sample_id'] = $sample_id;
-				$sample_item_get_array['parent_sample'] = "1";
-				$event_item_id = $parent_sample->get_item_id();
+				$transaction->commit($transaction_id);
+			}
+			
+			if ($sample_item_retrace)
+			{
+				$params = http_build_query(Retrace::resolve_retrace_string($sample_item_retrace),'','&');
+				return "index.php?".$params;
 			}
 			else
 			{
-				$event_item_id = $sample->get_item_id();
-			}
-			
-			$post_array = array();
-			$post_array['keywords'] = $sample_item_keywords;
-			$post_array['description'] = $sample_item_description;
-			
-			$item_add_event = new ItemAddEvent($event_item_id, $sample_item_get_array, $post_array, true, "sample");
-			$event_handler = new EventHandler($item_add_event);
-			if ($event_handler->get_success() == true)
-			{
-				if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
-				
-				if ($sample_item_retrace)
-				{
-					$params = http_build_query(Retrace::resolve_retrace_string($sample_item_retrace),'','&');
-					return "index.php?".$params;
-				}
-				else
-				{
-					$paramquery['username'] = $username;
-					$paramquery['session_id'] = $session_id;
-					$paramquery['nav'] = "home";
-					$params = http_build_query($paramquery,'','&');
-					return "index.php?".$params;
-				}
-			}
-			else
-			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
-				return "0";
+				$paramquery['username'] = $username;
+				$paramquery['session_id'] = $session_id;
+				$paramquery['nav'] = "home";
+				$params = http_build_query($paramquery,'','&');
+				return "index.php?".$params;
 			}
 		}
 		else
@@ -817,6 +819,7 @@ class SampleCreateAjax
 			
 			return "index.php?".$params;
 		}
+		
 	}
 }
 ?>

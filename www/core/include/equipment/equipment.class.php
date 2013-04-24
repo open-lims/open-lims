@@ -82,6 +82,9 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 	 * @param integer $type_id
 	 * @param integer $owner_id
 	 * @return integer
+	 * @throws EquipmentCreateFailedException
+	 * @throws EquipmentCreateAsItemException
+	 * @throws EquipmentCreateIDMissingException
 	 */
 	public function create($type_id, $owner_id)
 	{
@@ -91,52 +94,42 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 		{		
 			$transaction_id = $transaction->begin();
 			
-			if (($equipment_id = $this->equipment->create($type_id, $owner_id)) != null)
+			try
 			{
-				
-			// Create Item
-				if (($this->item_id = parent::create()) == null)
+				if (($equipment_id = $this->equipment->create($type_id, $owner_id)) == null)
 				{
-					$folder->delete(true, true);
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return null;
+					throw new EquipmentCreateFailedException();
 				}
-				
+					
+				$this->item_id = parent::create();
+						
 				$equipment_is_item = new EquipmentIsItem_Access(null);
 				if ($equipment_is_item->create($equipment_id, $this->item_id) == false)
 				{
-					$folder->delete(true, true);
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return null;
-				}
-				else
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
-					self::__construct($equipment_id);
-					return $equipment_id;
+					throw new EquipmentCreateAsItemException();
 				}
 			}
-			else
+			catch(BaseException $e)
 			{
 				if ($transaction_id != null)
 				{
 					$transaction->rollback($transaction_id);
 				}
-				return null;
+				throw $e;
 			}
+			
+			if ($transaction_id != null)
+			{
+				$transaction->commit($transaction_id);
+			}
+			
+			self::__construct($equipment_id);
+			
+			return $equipment_id;
 		}
 		else
 		{
-			return null;
+			throw new EquipmentCreateIDMissingException();
 		}
 	}
 	
