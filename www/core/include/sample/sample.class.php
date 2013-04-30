@@ -1108,13 +1108,13 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 							$in_item = false;
 						}
 						
-						if ($value['xml_element'] == "type" and !$value['close'] and $in_item == true and is_numeric($value['id']))
+						if ($value['xml_element'] == "type" and !$value['close'] and $in_item == true and $value['id'])
 						{
 							$return_array[$counter]['type_id'][$type_counter] = $value['id'];
 							$type_counter++;
 						}	
 						
-						if ($value['xml_element'] == "category" and !$value['close'] and $in_item == true and is_numeric($value['id']))
+						if ($value['xml_element'] == "category" and !$value['close'] and $in_item == true and $value['id'])
 						{
 							$return_array[$counter]['category_id'][$category_counter] = $value['id'];
 							$category_counter++;

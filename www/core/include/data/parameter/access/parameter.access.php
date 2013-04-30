@@ -183,6 +183,36 @@ class Parameter_Access
 	
 	
 	/**
+	 * @param string $data_entity_id
+	 * @return integer
+	 */
+	public static function get_entry_by_data_entity_id($data_entity_id)
+	{
+		global $db;
+
+		if (is_numeric($data_entity_id))
+		{
+			$sql = "SELECT id FROM ".constant("PARAMETER_TABLE")." WHERE data_entity_id = '".$data_entity_id."'";
+
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data['id'])
+			{
+				return $data['id'];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @param integer $parameter_id
 	 * @return bool
 	 */

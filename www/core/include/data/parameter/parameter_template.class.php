@@ -806,6 +806,11 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 	}
 
 
+	public static function get_id_by_internal_name($internal_name)
+	{
+		return ParameterTemplate_Access::get_id_by_internal_name($internal_name);
+	}
+	
 	/**
 	 * @param string $internal_name
 	 * @return bool
