@@ -98,8 +98,6 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 					$owner_id = $user->get_user_id();
 				}
 				
-				$checksum = md5(serialize($value));
-				
 				$folder = Folder::get_instance($folder_id);
 						
 				$data_entity_id = parent::create($owner_id, null);
@@ -219,6 +217,11 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 		{
 			return null;
 		}
+	}
+	
+	public function get_name()
+	{
+		
 	}
 	
 	/**
@@ -388,6 +391,11 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 	}
 	
 	
+	public static function get_parameter_id_by_data_entity_id($date_entity_id)
+	{
+		
+	}
+	
 	/**
 	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
@@ -406,5 +414,10 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
     	return true;
     }
 
+    public static function get_instance($parameter_id, $force_new_instance = false)
+    { 
+    	
+    }
+    
 }
 ?>

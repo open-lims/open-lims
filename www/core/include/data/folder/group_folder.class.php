@@ -157,6 +157,8 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 	 */
 	public function create($group_id)
 	{
+		global $transaction;
+		
 		if (is_numeric($group_id))
 		{
 			$group = new Group($group_id);

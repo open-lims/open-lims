@@ -901,6 +901,11 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 				$value = new Value($value_id);
 				$value->get_name();
     		}
+			elseif (($parameter_id = Parameter::get_parameter_id_by_data_entity_id($data_entity_id)) != null)
+    		{
+				$parameter = new Parameter($parameter_id);
+				$parameter->get_name();
+    		}
 		}
 		else
 		{
@@ -957,6 +962,14 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 					}
     			}
     			
+    			if ($type == "parameter")
+    			{
+    				if (Parameter::get_parameter_id_by_data_entity_id($data_entity_id) != null)
+					{
+						return true;
+					}
+    			}
+    			
     			if ($type == null)
     			{
     				return true;
@@ -1006,6 +1019,8 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
     }
     
     /**
+     * @todo parameter name and template
+     * @todo value name
      * @see ItemListenerInterface::get_generic_name()
      * @param string $type
      * @param array $type_array
@@ -1056,6 +1071,10 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
     		$file = File::get_instance($id);
     		return "<img src='".$file->get_icon()."' alt='' style='border: 0;' />";
     	}
+    	elseif($type == "parameter")
+    	{
+    		return "<img src='images/icons/value.png' alt='' style='border: 0;' />";
+    	}
     	else
     	{
     		return "<img src='images/icons/value.png' alt='' style='border: 0;' />";
@@ -1077,6 +1096,15 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 			$paramquery['nav'] = "data";
 			$paramquery['action'] = "file_detail";
 			$paramquery['file_id'] = $id;
+			return http_build_query($paramquery, '', '&#38;');
+		}
+		elseif($type == "parameter")
+		{
+			$paramquery['username'] = $_GET['username'];
+			$paramquery['session_id'] = $_GET['session_id'];
+			$paramquery['nav'] = "data";
+			$paramquery['action'] = "parameter_detail";
+			$paramquery['parameter_id'] = $id;
 			return http_build_query($paramquery, '', '&#38;');
 		}
 		else
@@ -1104,6 +1132,13 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 			$select_array['datetime'] = "".constant("FILE_VERSION_TABLE").".datetime";
 			return $select_array;
 		}
+    	elseif($type == "parameter")
+		{
+			$select_array['name'] = "".constant("PARAMETER_TEMPLATE_TABLE").".name";
+			$select_array['type_id'] = "".constant("PARAMETER_TABLE").".id AS parameter_id";
+			$select_array['datetime'] = "".constant("PARAMETER_VERSION_TABLE").".datetime";
+			return $select_array;
+		}
 		else
 		{
 			$select_array['name'] = "".constant("VALUE_TYPE_TABLE").".name";
@@ -1114,6 +1149,8 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
     }
     
     /**
+     * @todo parameter name and type
+	 * @todo value name and type
      * @see ItemListenerInterface::get_sql_join()
      * @param string $type
      * @return string
@@ -1126,6 +1163,14 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 					"LEFT JOIN ".constant("FILE_TABLE")." 					ON deiita_a.data_entity_id 						= ".constant("FILE_TABLE").".data_entity_id " .
 					"LEFT JOIN ".constant("FILE_VERSION_TABLE")." 			ON ".constant("FILE_TABLE").".id 				= ".constant("FILE_VERSION_TABLE").".toid ";
 		}
+		elseif($type == "parameter")
+		{
+			return 	"LEFT JOIN ".constant("DATA_ENTITY_IS_ITEM_TABLE")." AS deiita_c  	ON ".constant("ITEM_TABLE").".id 	= deiita_c.item_id " .
+					"LEFT JOIN ".constant("PARAMETER_TABLE")." 				ON deiita_c.data_entity_id 						= ".constant("PARAMETER_TABLE").".data_entity_id " .
+					"LEFT JOIN ".constant("PARAMETER_HAS_TEMPLATE_TABLE")." ON ".constant("PARAMETER_TABLE").".id 			= ".constant("PARAMETER_HAS_TEMPLATE_TABLE").".parameter_id " .		
+					"LEFT JOIN ".constant("PARAMETER_TEMPLATE_TABLE")." 	ON ".constant("PARAMETER_HAS_TEMPLATE_TABLE").".template_id = ".constant("PARAMETER_TEMPLATE_TABLE").".id " .		
+					"LEFT JOIN ".constant("PARAMETER_VERSION_TABLE")." 		ON ".constant("PARAMETER_TABLE").".id 			= ".constant("PARAMETER_VERSION_TABLE").".parameter_id ";
+		}
 		else
 		{
 			return 	"LEFT JOIN ".constant("DATA_ENTITY_IS_ITEM_TABLE")." AS deiita_b  	ON ".constant("ITEM_TABLE").".id 	= deiita_b.item_id " .
@@ -1136,6 +1181,8 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * @todo parameter name and type
+	 * @todo value name and type
      * @see ItemListenerInterface::get_sql_where()
      * @param string $type
      * @return string
@@ -1145,6 +1192,10 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		if ($type == "file")
 		{
 			return "(LOWER(TRIM(".constant("FILE_VERSION_TABLE").".name)) LIKE '{STRING}' AND ".constant("FILE_VERSION_TABLE").".current = 't')";
+		}
+		elseif ($type == "parameter")
+		{
+			return "(LOWER(TRIM(".constant("PARAMETER_TEMPLATE_TABLE").".name)) LIKE '{STRING}' AND ".constant("PARAMETER_VERSION_TABLE").".current = 't')";
 		}
 		else
 		{
@@ -1160,6 +1211,10 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	public static function get_sql_fulltext_select_array($type)
 	{
 		if ($type == "file")
+		{
+			return null;
+		}
+		elseif ($type == "parameter")
 		{
 			return null;
 		}
@@ -1184,6 +1239,10 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		{
 			return 	null;
 		}
+		elseif ($type == "parameter")
+		{
+			return 	null;
+		}
 		else
 		{
 			return 	"LEFT JOIN ".constant("DATA_ENTITY_IS_ITEM_TABLE")." AS deiita_b  	ON ".constant("ITEM_TABLE").".id 	= deiita_b.item_id " .
@@ -1200,6 +1259,10 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	public static function get_sql_fulltext_where($type)
 	{
 		if ($type == "file")
+		{
+			return null;
+		}
+		elseif ($type == "parameter")
 		{
 			return null;
 		}
@@ -1220,6 +1283,10 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 			return array(array("page"), "page");
 		}
 		elseif($item_type == "value")
+		{
+			return array(array("page", "window"), "page");
+		}
+		elseif($item_type == "parameter")
 		{
 			return array(array("page", "window"), "page");
 		}
@@ -1244,6 +1311,10 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		{
 			return array(true, true, "edit");
 		}
+		elseif($item_type == "parameter")
+		{
+			return array(true, true, "edit");
+		}
 		else
 		{
 			return null;
@@ -1260,6 +1331,10 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		if($item_type == "value")
 		{
 			return array("data/ajax/value.ajax.php", "ValueAjax", "add_as_item_window_init");
+		}
+		elseif($item_type == "parameter")
+		{
+			return array("data/ajax/parameter.ajax.php", "ParameterAjax", "add_as_item_window_init");
 		}
 		else
 		{
@@ -1291,6 +1366,15 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 				{
 					$value = Value::get_instance($value_id);
     				if ($value->delete() == false)
+    				{
+    					return false;
+    				}
+				}
+				
+    			if (($parameter_id = Parameter::get_parameter_id_by_data_entity_id($data_entity_id)) != null)
+				{
+					$parameter = Parameter::get_instance($value_id);
+    				if ($parameter->delete() == false)
     				{
     					return false;
     				}
