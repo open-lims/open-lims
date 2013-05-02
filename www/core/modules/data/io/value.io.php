@@ -129,7 +129,6 @@ class ValueIO
 			$value_form_io->set_field_class("DataValueUpdateValues");
 			
 			$template->set_var("value",$value_form_io->get_content());
-			$template->set_var("autofield_string",$value->get_autofield_array());
 			
 			$template->output();
 		}

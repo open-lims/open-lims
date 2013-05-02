@@ -978,6 +978,12 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
     			{
     				return false;
     			}
+    			
+    			return false;
+    		}
+    		else
+    		{
+    			return false;
     		}
     	}
     	else
@@ -1019,8 +1025,6 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
     }
     
     /**
-     * @todo parameter name and template
-     * @todo value name
      * @see ItemListenerInterface::get_generic_name()
      * @param string $type
      * @param array $type_array
@@ -1034,8 +1038,30 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
     	}
     	elseif ($type == "parameter")
     	{
-    		// todo
-    		return "Parameter";
+    		if (is_array($type_array) and count($type_array) == 1)
+    		{
+    			$parameter_template_id = ParameterTemplate::get_id_by_internal_name($type_array[0]);
+    			if (is_numeric($parameter_template_id))
+    			{
+					$parameter_template = new ParameterTemplate($parameter_template_id);
+					if (($parameter_name = $parameter_template->get_name()) != null)
+					{
+						return "".$parameter_name;
+					}
+					else
+					{
+						return "Parameter";
+					}
+    			}
+    			else
+    			{
+    				return "Parameter";
+    			}
+    		}
+    		else
+    		{
+    			return "Parameter";
+    		}
     	}
     	else
     	{

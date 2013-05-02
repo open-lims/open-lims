@@ -391,7 +391,7 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 	}
 	
 	
-	public static function get_parameter_id_by_data_entity_id($date_entity_id)
+	public static function get_parameter_id_by_data_entity_id($data_entity_id)
 	{
 		return Parameter_Access::get_entry_by_data_entity_id($data_entity_id);
 	}

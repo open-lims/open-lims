@@ -36,32 +36,6 @@ function load_additional_content()
 			{
 				$('#AjaxLoadedContent').find('.jspVerticalBar').hide();
 			} 
-			if($('#AjaxLoadedContent').find('.autofield').length > 0)
-			{
-				auto_field = new autofield(undefined, 'DataValueAddValues');
-				
-				function check_if_values_were_added()
-				{									
-					if($('#DataAutofieldTable').children().length > 0)
-					{
-						var content_height = scrollAPI.getContentHeight();
-						if(content_height > 320)
-						{	
-							$('#AjaxLoadedContent').children('.jspContainer').css('height',320);
-						}
-						else
-						{
-							$('#AjaxLoadedContent').children('.jspContainer').css('height',content_height);
-						}
-						scrollAPI.reinitialise();
-					}
-					if($('#DataBrowserLoadedAjaxContent').length != 0)
-					{
-						setTimeout(check_if_values_were_added, 200);
-					}
-				}
-				check_if_values_were_added();
-			}
 			base_form_init();
 		}
 	});

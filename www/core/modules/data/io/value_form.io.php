@@ -298,13 +298,6 @@ class ValueFormIO
 					}
 				break;
 				
-				case "autofield":
-					$return_string .= "<div class='autofield'>" .
-								"<div class='autofield_header'>Dynamic Values</div>" .
-								"<div id='autofield_area'></div>" .
-								"<button type='button' id='autofield_edit' class='autofield_button'>edit</button>" .
-								"</div>";
-				break;
 			endswitch;
 			
 			return $return_string;

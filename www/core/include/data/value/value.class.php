@@ -48,8 +48,6 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 		
 	private $content_array;
 	
-	private $autofield_array_string;
-
 	/**
 	 * @see ValueInterface::__construct();
 	 * @param integer $value_id
@@ -532,10 +530,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 					
 					foreach ($current_value_array as $fe_key => $fe_value)
 					{
-						if (strpos($fe_key, "af-") === false)
-						{
-							$new_current_value_array[$fe_key] = $fe_value;
-						}
+						$new_current_value_array[$fe_key] = $fe_value;
 					}
 				
 					$current_value_array = $new_current_value_array;			
@@ -1710,20 +1705,6 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 							$format_counter++;
 						}
 					}
-					
-					if ($value[1] == "autofield" and $value[2] != "#")
-					{
-						if ($in_line == true and $in_format == true)
-						{
-							$return_array[$format_counter][$line_counter][$element_counter]['type'] = "autofield";
-							$element_counter++;
-						}
-						else
-						{
-							$return_array[$format_counter]['type'] = "autofield";
-							$format_counter++;
-						}
-					}
 				}
 				
 				return $return_array;
@@ -1738,63 +1719,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
     		return null;
     	}
     }
-    
-    /**
-     * @see ValueInterface::get_autofield_array()
-     * @return string
-     */
-    public function get_autofield_array()
-    {
-    	if ($this->value and $this->value_id)
-    	{
-			$content_array = unserialize($this->value_version->get_value());
-    		
-	   		if (is_array($content_array) and count($content_array) >= 1)
-			{
-				$autofield_array = array();
-				$autofield_counter = 0;
-				
-				$value_array = array();
-				
-				foreach ($content_array as $fe_key => $fe_value)
-				{		
-					if (strpos($fe_key, "af-") !== false)
-					{
-						if (strpos($fe_key, "-vartype") !== false)
-						{
-							$autofield_array[$autofield_counter][1] = $fe_value;
-						}
-						elseif(strpos($fe_key, "-name") !== false)
-						{
-							$autofield_array[$autofield_counter][3] = $fe_value;
-							$autofield_counter++;
-						}
-						elseif(strpos($fe_key, "-title") !== false)
-						{
-							$autofield_array[$autofield_counter][0] = $fe_value;
-							//$autofield_counter++;
-						}
-						else
-						{
-							$autofield_array[$autofield_counter][2] = $fe_value;
-						}
-					}
-				}
-			
-				if (is_array($autofield_array) and count($autofield_array) >= 1)
-				{
-					$local_autofield_array_string = serialize($autofield_array);
-				}
-			
-				return $local_autofield_array_string;		
-			}
-    	}
-    	else
-    	{
-    		return null;
-    	}
-    }
-    		
+        		
 	/**
 	 * @see ValueInterface::set_content_array()
 	 * @param array $content_array
@@ -1806,20 +1731,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 			$this->content_array = $content_array;
 		}
 	}
-	
-	/**
-	 * @see ValueInterface::set_autofield_array_string()
-	 * @param array $autofield_array_string
-	 */
-	public function set_autofield_array_string($autofield_array_string)
-	{
-		if ($autofield_array_string)
-		{
-			$this->autofield_array_string = $autofield_array_string;
-		}
-	}
-	
-	
+
 	/**
 	 * @see ValueInterface::list_entries_by_type_id()
 	 * @return array

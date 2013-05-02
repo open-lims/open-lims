@@ -170,21 +170,11 @@ interface ValueInterface
      */
     public function get_value_shape();
 	
-    /**
-     * @return string
-     */
-    public function get_autofield_array();
-    
 	/**
 	 * @param array $content_array
 	 */
 	public function set_content_array($content_array);
-	
-	/**
-	 * @param array $autofield_array_string
-	 */
-	public function set_autofield_array_string($autofield_array_string);
-	
+		
 	/**
 	 * @return array
 	 */
