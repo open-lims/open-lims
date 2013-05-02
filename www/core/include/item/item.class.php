@@ -94,61 +94,83 @@ class Item implements ItemInterface, EventListenerInterface
 	/**
 	 * Deletes an item
 	 * @return bool
+	 * @throws ItemDeleteInformationException
+	 * @throws ItemDeleteClassException
+	 * @throws ItemDeleteEventFailedException
+	 * @throws ItemDeleteFailedException
+	 * @throws ItemNoInstanceException
 	 */
 	protected function delete()
 	{
+		global $transaction;
+		
 		if ($this->item_id and $this->item)
 		{
-			// Item Information
-			$item_information_array = ItemInformation::list_item_information($this->item_id);
-			
-			if (is_array($item_information_array) and count($item_information_array) >= 1)
+			$transaction_id = $transaction->begin();
+				
+			try
 			{
-				foreach($item_information_array as $key => $value)
+				$item_information_array = ItemInformation::list_item_information($this->item_id);
+				
+				if (is_array($item_information_array) and count($item_information_array) >= 1)
 				{
-					$item_information = new ItemInformation($value);
-					if ($item_information->unlink_item($this->item_id) == false)
+					foreach($item_information_array as $key => $value)
 					{
-						return false;
+						$item_information = new ItemInformation($value);
+						if ($item_information->unlink_item($this->item_id) == false)
+						{
+							throw new ItemDeleteInformationException();
+						}
 					}
+				}
+				
+				// Item Classes
+				$item_class_array = ItemClass::list_classes_by_item_id($this->item_id);
+	
+				if (is_array($item_class_array) and count($item_class_array) >= 1)
+				{
+					foreach($item_class_array as $key => $value)
+					{
+						$item_class = new ItemClass($value);
+						if ($item_class->unlink_item($this->item_id) == false)
+						{
+							throw new ItemDeleteClassException();
+						}
+					}
+				}			
+	
+				// Event
+	  			$item_delete_event = new ItemDeleteEvent($this->item_id);
+				$event_handler = new EventHandler($item_delete_event);
+					
+				if ($event_handler->get_success() == false)
+				{
+					throw new ItemDeleteEventFailedException();
+				}
+	
+				if($this->item->delete() == false)
+				{
+					throw new ItemDeleteFailedException();
 				}
 			}
-			
-			// Itme Classes
-			$item_class_array = ItemClass::list_classes_by_item_id($this->item_id);
-
-			if (is_array($item_class_array) and count($item_class_array) >= 1)
-			{
-				foreach($item_class_array as $key => $value)
-				{
-					$item_class = new ItemClass($value);
-					if ($item_class->unlink_item($this->item_id) == false)
-					{
-						return false;
-					}
-				}
-			}			
-
-			// Event
-  			$item_delete_event = new ItemDeleteEvent($this->item_id);
-			$event_handler = new EventHandler($item_delete_event);
-				
-			if ($event_handler->get_success() == false)
+			catch(BaseException $e)
 			{
 				if ($transaction_id != null)
 				{
 					$transaction->rollback($transaction_id);
 				}
-				return false;
+				throw $e;
 			}
-
-			$success = $this->item->delete();
 			
-			return $success;
+			if ($transaction_id != null)
+			{
+				$transaction->commit($transaction_id);
+			}
+			return true;
 		}
 		else
 		{
-			return false;
+			throw new ItemNoInstanceException();
 		}
 	}
 	

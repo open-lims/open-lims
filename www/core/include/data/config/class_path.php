@@ -40,6 +40,10 @@
 	$classes['DataEntityCreateIDMissingException']			= $path_prefix."core/include/data/exceptions/data_entity_create_id_missing.exception.class.php";
 	$classes['DataEntityCreateEntryFailedException']		= $path_prefix."core/include/data/exceptions/data_entity_create_entry_failed.exception.class.php";
 	$classes['DataEntityCreateItemLinkFailedException']		= $path_prefix."core/include/data/exceptions/data_entity_create_item_link_failed.exception.class.php";
+	$classes['DataEntityDeleteException']					= $path_prefix."core/include/data/exceptions/data_entity_delete.exception.class.php";
+	$classes['DataEntityDeleteFailedException']				= $path_prefix."core/include/data/exceptions/data_entity_delete_failed.exception.class.php";
+	$classes['DataEntityDeleteItemLinkException']			= $path_prefix."core/include/data/exceptions/data_entity_delete_item_link.exception.class.php";
+	$classes['DataEntityDeleteParentLinkException']			= $path_prefix."core/include/data/exceptions/data_entity_delete_parent_link.exception.class.php";
 	$classes['DataEntitySetAsChildException']				= $path_prefix."core/include/data/exceptions/data_entity_set_as_child.exception.class.php";
 	
 	$classes['FolderException']								= $path_prefix."core/include/data/folder/exceptions/folder.exception.class.php";

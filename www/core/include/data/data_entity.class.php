@@ -356,6 +356,10 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	/**
 	 * Deletes a DataEntity
 	 * @return bool
+	 * @throws DataEntityDeleteParentLinkException
+	 * @throws DataEntityDeleteItemLinkException
+	 * @throws DataEntityDeleteFailedException
+	 * @throws DataEntityNoInstanceException
 	 */
 	protected function delete()
 	{
@@ -365,45 +369,44 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		{
 			$transaction_id = $transaction->begin();
 
-			if (DataEntityHasDataEntity_Access::delete_by_data_entity_cid($this->data_entity_id) == false)
+			try
+			{
+				if (DataEntityHasDataEntity_Access::delete_by_data_entity_cid($this->data_entity_id) == false)
+				{
+					throw new DataEntityDeleteParentLinkException();
+				}
+				
+				$data_entity_is_item = new DataEntityIsItem_Access($this->data_entity_id);
+				if ($data_entity_is_item->delete() == false)
+				{
+					throw new DataEntityDeleteItemLinkException();
+				}
+				
+				if ($this->data_entity->delete() == false)
+				{
+					throw new DataEntityDeleteFailedException();
+				}
+				
+				parent::delete();
+			}
+			catch(BaseException $e)
 			{
 				if ($transaction_id != null)
 				{
 					$transaction->rollback($transaction_id);
 				}
-				return false;
+				throw $e;
 			}
 			
-			$data_entity_is_item = new DataEntityIsItem_Access($this->data_entity_id);
-			if ($data_entity_is_item->delete() == false)
+			if ($transaction_id != null)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
-				return false;
+				$transaction->commit($transaction_id);
 			}
-			
-			if ($this->data_entity->delete() == true)
-			{
-				if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
-				return true;
-			}
-			else
-			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
-				return false;
-			}
+			return true;
 		}
 		else
 		{
-			return false;
+			throw new DataEntityNoInstanceException();
 		}
 	}
 	

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package sample
+ * @package item
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
  * @copyright (c) 2008-2013 by Roman Konertz
@@ -22,14 +22,14 @@
  */
 
 /**
- * Sample Delete As Item Exception
- * @package sample
+ * Item No Instance Excpetion
+ * @package item
  */
-class SampleDeleteAsItemException extends SampleDeleteException
+class ItemNoInstanceException extends ItemException
 {
-    function __construct($message = null)
+	function __construct()
     {
-    	parent::__construct($message);	
+    	parent::__construct(true, false, false, "Item No Instance Exception", null);
     }   
 }
 

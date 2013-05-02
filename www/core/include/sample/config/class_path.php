@@ -28,6 +28,7 @@
 	
 	$classes['SampleIDMissingException']							= $path_prefix."core/include/sample/exceptions/sample_id_missing.exception.class.php";
 	$classes['SampleNotFoundException']								= $path_prefix."core/include/sample/exceptions/sample_not_found.exception.class.php";
+	$classes['SampleNoInstanceException']								= $path_prefix."core/include/sample/exceptions/sample_no_instance.exception.class.php";
 	
 	$classes['SampleCreateException']								= $path_prefix."core/include/sample/exceptions/sample_create.exception.class.php";
 	$classes['SampleCreateFolderException']							= $path_prefix."core/include/sample/exceptions/sample_create_folder.exception.class.php";
@@ -62,8 +63,10 @@
 	$classes['SampleDeleteUserException']							= $path_prefix."core/include/sample/exceptions/sample_delete_user.exception.class.php";
 	$classes['SampleDeleteOrganisationUnitException']				= $path_prefix."core/include/sample/exceptions/sample_delete_organisation_unit.exception.class.php";
 	$classes['SampleDeleteItemException']							= $path_prefix."core/include/sample/exceptions/sample_delete_item.exception.class.php";
-	$classes['SampleDeleteAsItemException']							= $path_prefix."core/include/sample/exceptions/sample_delete_as_item.exception.class.php";
 	$classes['SampleDeleteFolderException']							= $path_prefix."core/include/sample/exceptions/sample_delete_folder.exception.class.php";
+	$classes['SampleDeleteEventFailedException']					= $path_prefix."core/include/sample/exceptions/sample_delete_event_failed.exception.class.php";
+	$classes['SampleDeleteFailedException']							= $path_prefix."core/include/sample/exceptions/sample_delete_failed.exception.class.php";
+	$classes['SampleDeleteItemLinkException']						= $path_prefix."core/include/sample/exceptions/sample_delete_item_link.exception.class.php";
 	
 	$classes['SampleSecurityException']								= $path_prefix."core/include/sample/exceptions/sample_security.exception.class.php";
 	$classes['SampleSecurityAccessDeniedException']					= $path_prefix."core/include/sample/exceptions/sample_security_access_denied.exception.class.php";

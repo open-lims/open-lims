@@ -136,6 +136,9 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 	/**
 	 * @see EquipmentInterface::delete()
 	 * @return bool
+	 * @throws EquipmentDeleteItemLinkException
+	 * @throws EquipmentDeleteFailedException
+	 * @throws EquipmentNoInstanceException
 	 */
 	public function delete()
 	{
@@ -145,56 +148,39 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 		{
 			$transaction_id = $transaction->begin();
 			
-			$tmp_equipment_id = $this->equipment_id;
+			try
+			{
+				parent::delete();
+							
+				$equipment_is_item = new EquipmentIsItem_Access($tmp_equipment_id);
+				if ($equipment_is_item->delete() == false)
+				{
+					throw new EquipmentDeleteItemLinkException();
+				}
 			
-			// Delete Item
-			if ($this->item_id) {
-				if (parent::delete() == false)
+				if ($this->equipment->delete() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
+					throw new EquipmentDeleteFailedException();
 				}
-			}else{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
-				return false;
 			}
-			
-			$equipment_is_item = new EquipmentIsItem_Access($tmp_equipment_id);
-			if ($equipment_is_item->delete() == false)
+			catch(BaseException $e)
 			{
 				if ($transaction_id != null)
 				{
 					$transaction->rollback($transaction_id);
 				}
-				return false;
+				throw $e;
 			}
 			
-			if ($this->equipment->delete() == false)
+			if ($transaction_id != null)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
-				return false;
+				$transaction->commit($transaction_id);
 			}
-			else
-			{
-				if ($transaction_id != null)
-    			{
-					$transaction->commit($transaction_id);
-				}
-				return true;
-			}
+			return true;
 		}
 		else
 		{
-			return false;
+			throw new EquipmentNoInstanceException();
 		}
 	}
 		

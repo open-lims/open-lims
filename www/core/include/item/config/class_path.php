@@ -29,6 +29,13 @@
 	$classes['ItemCreateException']					= $path_prefix."core/include/item/exceptions/item_create.exception.class.php";
 	$classes['ItemCreateFailedException']			= $path_prefix."core/include/item/exceptions/item_create_failed.exception.class.php";
 	
+	$classes['ItemDeleteException']					= $path_prefix."core/include/item/exceptions/item_delete.exception.class.php";
+	$classes['ItemDeleteEventFailedException']		= $path_prefix."core/include/item/exceptions/item_delete_event_failed.exception.class.php";
+	$classes['ItemDeleteFailedException']			= $path_prefix."core/include/item/exceptions/item_delete_failed.exception.class.php";
+	$classes['ItemDeleteClassException']			= $path_prefix."core/include/item/exceptions/item_delete_class.exception.class.php";
+	$classes['ItemDeleteInformationException']		= $path_prefix."core/include/item/exceptions/item_delete_information.exception.class.php";
+	
+	$classes['ItemNoInstanceException']				= $path_prefix."core/include/item/exceptions/item_no_instance.exception.class.php";
 	$classes['ItemIDMissingException']				= $path_prefix."core/include/item/exceptions/item_id_missing.exception.class.php";
 	$classes['ItemParentIDMissingException']		= $path_prefix."core/include/item/exceptions/item_parent_id_missing.exception.class.php";
 	$classes['ItemParentTypeMissingException']		= $path_prefix."core/include/item/exceptions/item_parent_type_missing.exception.class.php";

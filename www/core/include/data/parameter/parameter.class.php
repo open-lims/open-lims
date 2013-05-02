@@ -117,10 +117,13 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 				
 				foreach($parameter_array as $key => $value)
 				{
-					$parameter_field_value = new ParameterFieldValue_Access(null);
-					if ($parameter_field_value->create($parameter_version_id, $key, $value['method'], $value['value']) == null)
+					if (is_numeric($value['value']))
 					{
-						throw new ParameterCreateValueCreateFailedException();
+						$parameter_field_value = new ParameterFieldValue_Access(null);
+						if ($parameter_field_value->create($parameter_version_id, $key, $value['method'], $value['value']) == null)
+						{
+							throw new ParameterCreateValueCreateFailedException();
+						}
 					}
 				}
 			}
@@ -148,9 +151,43 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 		}
 	}
 	
-	public function delete()
+	protected function delete()
 	{
+		global $transaction;
 		
+		if ($this->parameter_version)
+		{
+			$transaction_id = $transaction->begin();
+				
+			try
+			{
+				// Alle Values über alle Versions
+				
+				// Alle Versions
+				
+				// Parameter
+				
+				parent::delete();				
+			}
+			catch(BaseException $e)
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				throw $e;
+			}
+			
+			if ($transaction_id != null)
+			{
+				$transaction->commit($transaction_id);
+			}
+			return true;
+		}
+		else
+		{
+			// Exception
+		}
 	}
 	
 	public function delete_version()
@@ -344,10 +381,13 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 		
 							foreach($parameter_array as $key => $value)
 							{
-								$parameter_field_value = new ParameterFieldValue_Access(null);
-								if ($parameter_field_value->create($parameter_version_id, $key, $value['method'], $value['value']) == null)
+								if (is_numeric($value['value']))
 								{
-									throw new ParameterUpdateValueCreateFailedException();
+									$parameter_field_value = new ParameterFieldValue_Access(null);
+									if ($parameter_field_value->create($parameter_version_id, $key, $value['method'], $value['value']) == null)
+									{
+										throw new ParameterUpdateValueCreateFailedException();
+									}
 								}
 							}
 						}
@@ -416,8 +456,57 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 
     public static function get_instance($parameter_id, $force_new_instance = false)
     { 
-    	
+    	if(is_numeric($parameter_id) and $parameter_id > 0)
+    	{
+    		if(ParameterTemplateParameter::is_template_parameter($parameter_id) == true)
+    		{
+	    		if($force_new_instance == true)
+	    		{
+	    			return new ParameterTemplateParameter($parameter_id);
+	    		}
+	    		else
+	    		{
+		    		if (self::$parameter_object_array[$parameter_id])
+					{
+						return self::$parameter_object_array[$parameter_id];
+					}
+					else
+					{
+						$parameter = new ParameterTemplateParameter($parameter_id);
+						self::$parameter_object_array[$parameter_id] = $parameter;
+						return $parameter;
+					}
+	    		}
+    		}
+    		elseif(ParameterNonTemplateParameter::is_non_template_parameter($parameter_id) == true)
+    		{
+	    		if($force_new_instance == true)
+	    		{
+	    			return new ParameterNonTemplateParameter($parameter_id);
+	    		}
+	    		else
+	    		{
+		    		if (self::$parameter_object_array[$parameter_id])
+					{
+						return self::$parameter_object_array[$parameter_id];
+					}
+					else
+					{
+						$parameter = new ParameterNonTemplateParameter($parameter_id);
+						self::$parameter_object_array[$parameter_id] = $parameter;
+						return $parameter;
+					}
+	    		}
+    		}
+    		else
+    		{
+    			return null;
+    		}
+    	}
+    	else
+    	{
+    		return new ParameterTemplateParameter(null);
+    	}
     }
-    
 }
 ?>

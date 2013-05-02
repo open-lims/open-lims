@@ -135,5 +135,34 @@ class ParameterHasNonTemplate_Access
 			return false;
 		}
 	}
+
+	/**
+	 * @param integer $parameter_id
+	 * @return integer
+	 */
+	public static function get_non_template_id_by_parameter_id($parameter_id)
+	{
+		global $db;
+		
+		if (is_numeric($parameter_id))
+		{
+			$sql = "SELECT non_template_id FROM ".constant("PARAMETER_HAS_NON_TEMPLATE_TABLE")." WHERE parameter_id='".$parameter_id."'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data['non_template_id'])
+			{
+				return $data['non_template_id'];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
 }
 ?>

@@ -732,13 +732,15 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	/**
 	 * @see SampleInterface::delete()
 	 * @return bool
-	 * @throws SampleDeleteException
 	 * @throws SampleDeleteLocationException
 	 * @throws SampleDeleteUserException
 	 * @throws SampleDeleteOrganisationUnitException
 	 * @throws SampleDeleteItemException
-	 * @throws SampleDeleteAsItemException
 	 * @throws SampleDeleteFolderException
+	 * @throws SampleDeleteEventFailedException
+	 * @throws SampleDeleteFailedException
+	 * @throws SampleDeleteItemLinkException
+	 * @throws SampleNoInstanceException
 	 */
 	public function delete()
 	{
@@ -748,161 +750,124 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 		{
 			$transaction_id = $transaction->begin();
 			
-			array_push(self::$sample_delete_array, $this->sample_id);
-			
-			$tmp_sample_id = $this->sample_id;
-		
-			// Location Relations
-			$sample_has_location_array = SampleHasLocation_Access::list_entries_by_sample_id($tmp_sample_id);
-			if (is_array($sample_has_location_array) and count($sample_has_location_array) >= 1)
+			try
 			{
-				foreach($sample_has_location_array as $key => $value)
+				array_push(self::$sample_delete_array, $this->sample_id);
+				
+				$tmp_sample_id = $this->sample_id;
+			
+				// Location Relations
+				$sample_has_location_array = SampleHasLocation_Access::list_entries_by_sample_id($tmp_sample_id);
+				if (is_array($sample_has_location_array) and count($sample_has_location_array) >= 1)
 				{
-					$sample_has_location = new SampleHasLocation_Access($value);
-					if ($sample_has_location->delete() == false)
+					foreach($sample_has_location_array as $key => $value)
 					{
-						if ($transaction_id != null)
+						$sample_has_location = new SampleHasLocation_Access($value);
+						if ($sample_has_location->delete() == false)
 						{
-							$transaction->rollback($transaction_id);
+							throw new SampleDeleteLocationException();
 						}
-						throw new SampleDeleteLocationException("Could not delete a location");
 					}
 				}
+				
+				// Organisation Unit and User Relations
+				$sample_security = new SampleSecurity($tmp_sample_id);
+				$organisation_unit_array = $sample_security->list_organisation_unit_entries();
+				if (is_array($organisation_unit_array) and count($organisation_unit_array) >= 1)
+				{
+					foreach($organisation_unit_array as $key => $value)
+					{
+						if ($sample_security->delete_organisation_unit($value) == false)
+						{
+							throw new SampleDeleteOrganisationUnitException();
+						}
+					}
+				}
+							
+				$user_array = $sample_security->list_user_entries();
+				if (is_array($user_array) and count($user_array) >= 1)
+				{
+					foreach($user_array as $key => $value)
+					{
+						if ($sample_security->delete_user($value) == false)
+						{
+							throw new SampleDeleteUserException();
+						}
+					}
+				}
+				
+				// Items
+				$sample_item = new SampleItem($tmp_sample_id);
+				$item_array = $sample_item->get_sample_items();
+				if (is_array($item_array) and count($item_array) >= 1)
+				{
+					foreach($item_array as $item_key => $item_value)
+					{
+						$sample_item = new SampleItem($tmp_sample_id);
+						$sample_item->set_item_id($item_value);
+						if ($sample_item->unlink_item() == false)
+						{
+							throw new SampleDeleteItemException();
+						}
+					}
+				}	
+				
+				// Parent-Sample-Sub-Item-Links
+				if (SampleItem::delete_remaining_sample_entries($tmp_sample_id) == false)
+				{
+					throw new SampleDeleteItemException();
+				}
+				
+				parent::delete();
+	    		
+				$sample_delete_event = new SampleDeleteEvent($tmp_sample_id);
+				$event_handler = new EventHandler($sample_delete_event);
+	
+				if ($event_handler->get_success() == false)
+				{
+					throw new SampleDeleteEventFailedException();
+				}
+				
+				$sample_is_item = new SampleIsItem_Access($tmp_sample_id);
+				if ($sample_is_item->delete() == false)
+				{
+					throw new SampleDeleteItemLinkException();
+				}
+				
+				if ($this->sample->delete() == false)
+				{
+					throw new SampleDeleteFailedException();
+				}
+				else
+				{
+					$this->__destruct();
+		    		$folder_id = SampleFolder::get_folder_by_sample_id($tmp_sample_id);
+		    		$folder = Folder::get_instance($folder_id);
+		    		if ($folder->delete(true, true) == false)
+		    		{
+						throw new SampleDeleteFolderException();
+		    		}
+				}
+			
 			}
-			
-			// Organisation Unit and User Relations
-			$sample_security = new SampleSecurity($tmp_sample_id);
-			$organisation_unit_array = $sample_security->list_organisation_unit_entries();
-			if (is_array($organisation_unit_array) and count($organisation_unit_array) >= 1)
-			{
-				foreach($organisation_unit_array as $key => $value)
-				{
-					if ($sample_security->delete_organisation_unit($value) == false)
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						throw new SampleDeleteOrganisationUnitException("Could not delete an organisation unit");
-					}
-				}
-			}
-						
-			$user_array = $sample_security->list_user_entries();
-			if (is_array($user_array) and count($user_array) >= 1)
-			{
-				foreach($user_array as $key => $value)
-				{
-					if ($sample_security->delete_user($value) == false)
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						throw new SampleDeleteUserException("Could not delete an user");
-					}
-				}
-			}
-			
-			// Items
-			$sample_item = new SampleItem($tmp_sample_id);
-			$item_array = $sample_item->get_sample_items();
-			if (is_array($item_array) and count($item_array) >= 1)
-			{
-				foreach($item_array as $item_key => $item_value)
-				{
-					$sample_item = new SampleItem($tmp_sample_id);
-					$sample_item->set_item_id($item_value);
-					if ($sample_item->unlink_item() == false)
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						throw new SampleDeleteItemException("Could not delete related items");
-					}
-				}
-			}	
-			
-			// Parent-Sample-Sub-Item-Links
-			if (SampleItem::delete_remaining_sample_entries($tmp_sample_id) == false)
+			catch(BaseException $e)
 			{
 				if ($transaction_id != null)
 				{
 					$transaction->rollback($transaction_id);
 				}
-				throw new SampleDeleteItemException("Could not delete parent-sample sub-items");
+				throw $e;
 			}
 			
-			// Delete Item
-			if ($this->item_id)
-			{
-				if (parent::delete() == false)
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					throw new SampleDeleteAsItemException("Could not delete sample-item entry");
-				}
+			if ($transaction_id != null)
+    		{
+				$transaction->commit($transaction_id);
 			}
-    		
-			$sample_delete_event = new SampleDeleteEvent($tmp_sample_id);
-			$event_handler = new EventHandler($sample_delete_event);
-
-			if ($event_handler->get_success() == false)
-			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
-				return false;
-			}
-			
-			$sample_is_item = new SampleIsItem_Access($tmp_sample_id);
-			if ($sample_is_item->delete() == false)
-			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
-				throw new SampleDeleteAsItemException("Could not delete sample-item entry");
-			}
-			
-			if ($this->sample->delete() == false)
-			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
-				throw new SampleDeleteException("Could not delete sample");
-			}
-			else
-			{
-				$this->__destruct();
-	    		$folder_id = SampleFolder::get_folder_by_sample_id($tmp_sample_id);
-	    		$folder = Folder::get_instance($folder_id);
-	    		if ($folder->delete(true, true) == false)
-	    		{
-	    			if ($transaction_id != null)
-	    			{
-						$transaction->rollback($transaction_id);
-					}
-					throw new SampleDeleteFolderException("Could not delete sample-folder");
-	    		}
-	    		else
-	    		{
-	    			if ($transaction_id != null)
-	    			{
-						$transaction->commit($transaction_id);
-					}
-					return true;
-	    		}
-			}
+			return true;
 		}
 		else
 		{
-			throw new SampleDeleteException("Could not delete sample");
+			throw new SampleNoInstanceException();
 		}	
 	}
 	

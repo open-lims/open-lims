@@ -37,9 +37,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * @package data
  */
 class ParameterTemplateParameter extends Parameter implements ParameterTemplateParameterInterface
-{
-	
-	
+{	
 	function __construct($parameter_id)
 	{
 		parent::__construct($parameter_id);
@@ -105,12 +103,53 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
 			throw new ParameterCreateIDMissingException();
 		}
 	}
+
+	public function delete()
+	{
+		global $transaction;
 		
+		if ($this->parameter_id)
+		{
+			$transaction_id = $transaction->begin();
+				
+			try
+			{
+				$parameter_template_id = ParameterHasTemplate_Access::get_template_id_by_parameter_id($this->parameter_id);		
+				$parameter_has_template = new ParameterHasTemplate_Access($this->parameter_id, $parameter_template_id);
+				
+				if ($parameter_has_template->delete() == false)
+				{
+					// Exception
+				}
+				
+				parent::delete();
+			}
+			catch(BaseException $e)
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				throw $e;
+			}
+			
+			if ($transaction_id != null)
+			{
+				$transaction->commit($transaction_id);
+			}
+			return true;
+		}
+		else
+		{
+			// Exception
+		}
+	}
+	
 	public function get_template_id()
 	{
 		if ($this->parameter_id)
 		{
-			return $parameter_has_template = ParameterHasTemplate_Access::get_template_id_by_parameter_id($this->parameter_id);		
+			return ParameterHasTemplate_Access::get_template_id_by_parameter_id($this->parameter_id);		
 		}
 		else
 		{
@@ -143,6 +182,18 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
     	else
     	{
     		return new ParameterTemplateParameter(null);
+    	}
+    }
+    
+    public static function is_template_parameter($parameter_id)
+    {
+    	if (ParameterHasTemplate_Access::get_template_id_by_parameter_id($parameter_id) !== null)
+    	{
+    		return true;
+    	}
+    	else
+    	{
+    		return false;
     	}
     }
 }

@@ -25,15 +25,24 @@
  * 
  */
 	$classes['EquipmentException']						= $path_prefix."core/include/equipment/exceptions/equipment.exception.class.php";	
+	
 	$classes['EquipmentCreateException']				= $path_prefix."core/include/equipment/exceptions/equipment_create.exception.class.php";
 	$classes['EquipmentCreateAsItemException']			= $path_prefix."core/include/equipment/exceptions/equipment_create_as_item.exception.class.php";	
 	$classes['EquipmentCreateFailedException']			= $path_prefix."core/include/equipment/exceptions/equipment_create_failed.exception.class.php";	
 	$classes['EquipmentCreateIDMissingException']		= $path_prefix."core/include/equipment/exceptions/equipment_create_id_missing.exception.class.php";		
+	
+	$classes['EquipmentDeleteException']				= $path_prefix."core/include/equipment/exceptions/equipment_delete.exception.class.php";
+	$classes['EquipmentDeleteFailedException']			= $path_prefix."core/include/equipment/exceptions/equipment_delete_failed.exception.class.php";
+	$classes['EquipmentDeleteItemLinkException']		= $path_prefix."core/include/equipment/exceptions/equipment_delete_item_link.exception.class.php";
+	
+	$classes['EquipmentNoInstanceException']			= $path_prefix."core/include/equipment/exceptions/equipment_no_instance.exception.class.php";
 	$classes['EquipmentNotFoundException']				= $path_prefix."core/include/equipment/exceptions/equipment_not_found.exception.class.php";
 	$classes['EquipmentIDMissingException']				= $path_prefix."core/include/equipment/exceptions/equipment_id_missing.exception.class.php";
+	
 	$classes['EquipmentTypeException']					= $path_prefix."core/include/equipment/exceptions/equipment_type.exception.class.php";
 	$classes['EquipmentTypeNotFoundException']			= $path_prefix."core/include/equipment/exceptions/equipment_type_not_found.exception.class.php";
 	$classes['EquipmentTypeIDMissingException']			= $path_prefix."core/include/equipment/exceptions/equipment_type_id_missing.exception.class.php";
+	
 	$classes['EquipmentCategoryException']				= $path_prefix."core/include/equipment/exceptions/equipment_category.exception.class.php";
 	$classes['EquipmentCategoryNotFoundException']		= $path_prefix."core/include/equipment/exceptions/equipment_category_not_found.exception.class.php";
 	$classes['EquipmentCategoryIDMissingException']		= $path_prefix."core/include/equipment/exceptions/equipment_category_id_missing.exception.class.php";
