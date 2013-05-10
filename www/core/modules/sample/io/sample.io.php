@@ -236,8 +236,25 @@ class SampleIO
 	public static function create($type_array = null, $category_array = null, $organisation_unit_id = null, $holder_class = null, $holder_id = null)
 	{		
 		global $session;
-				
-		if($_GET['run'] == "item_add")
+
+		if($_GET['run'] == "new_subsample" and is_numeric($_GET['sample_id']))
+		{
+			$sample = new Sample($_GET['sample_id']);
+			
+			$organisation_unit_id = $sample->get_organisation_unit_id();
+			$holder_class = "Sample";
+			$holder_id = $_GET['sample_id'];
+			
+			$paramquery = array();
+			$paramquery['username'] = $_GET['username'];
+			$paramquery['session_id'] = $_GET['session_id'];
+			$paramquery['nav'] = "sample";
+			$paramquery['run'] = "detail";
+			$paramquery['sample_id'] = $_GET['sample_id'];
+			$_GET['retrace'] = base64_encode(serialize($paramquery));
+		}
+		
+		if($_GET['run'] == "item_add" or ($_GET['run'] == "new_subsample" and is_numeric($_GET['sample_id'])))
 		{	
 			if ($session->is_value("ADD_ITEM_TEMP_KEYWORDS_".$_GET['idk_unique_id']) == true)
 			{
