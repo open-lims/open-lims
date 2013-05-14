@@ -72,6 +72,7 @@ $statement[] = "CREATE TABLE core_project_has_project_status
   project_id integer,
   status_id integer,
   datetime timestamp with time zone,
+  current boolean,
   CONSTRAINT core_project_has_project_status_pkey PRIMARY KEY (primary_key )
 )
 WITH (

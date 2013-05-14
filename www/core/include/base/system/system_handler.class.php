@@ -793,7 +793,7 @@ class SystemHandler implements SystemHandlerInterface
 									foreach($dialog as $dialog_key => $dialog_value)
 									{
 										$base_module_dialog = new BaseModuleDialog_Access(null);
-										if ($base_module_dialog->create($base_module_id, $dialog_value['type'], $dialog_value['class_path'], $dialog_value['class'], $dialog_value['method'], $dialog_value['language_address'], $dialog_value['language_address'], $dialog_value['weight']) == null)
+										if ($base_module_dialog->create($base_module_id, $dialog_value['type'], $dialog_value['class_path'], $dialog_value['class'], $dialog_value['method'], $dialog_value['internal_name'], $dialog_value['language_address'], $dialog_value['weight']) == null)
 										{
 											throw new BaseModuleDialogCreationFailedException();
 										}
@@ -1163,6 +1163,11 @@ class SystemHandler implements SystemHandlerInterface
 	public static function module_exists($module_name)
 	{
 		return BaseModule_Access::exist_entry($module_name);
+	}
+	
+	public static function check_installation()
+	{
+		return BaseInclude_Access::check_installation($module_name);
 	}
 }
 ?>

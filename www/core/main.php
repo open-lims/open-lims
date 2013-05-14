@@ -83,63 +83,70 @@ class Main
 			require_once("include/base/system/autoload.function.php");
 			
 			if ($connection_result == true)
-			{				
-				SystemConfig::load_module_config();
-				
-				require_once("include/base/system/transaction.class.php");
-				
-				$transaction = new Transaction();
-				
-				require_once("include/base/security/security.class.php");
-				require_once("include/base/security/session.class.php");
-				
-				require_once("include/base/system/runtime_data.class.php");
-				
-				require_once("include/base/system_fe/system_log.class.php");
-
-				$runtime_data = new RuntimeData();
-				
-				try
+			{	
+				if(SystemHandler::check_installation() == false)
 				{
-					if ($type == "io")
+					$GLOBALS['fatal_error'] = "Installation Not Found! Install Database first.";
+				}
+				else
+				{
+					SystemConfig::load_module_config();
+				
+					require_once("include/base/system/transaction.class.php");
+					
+					$transaction = new Transaction();
+					
+					require_once("include/base/security/security.class.php");
+					require_once("include/base/security/session.class.php");
+					
+					require_once("include/base/system/runtime_data.class.php");
+					
+					require_once("include/base/system_fe/system_log.class.php");
+	
+					$runtime_data = new RuntimeData();
+					
+					try
 					{
-						$system_handler = new SystemHandler(true);
+						if ($type == "io")
+						{
+							$system_handler = new SystemHandler(true);
+						}
+						else
+						{
+							$system_handler = new SystemHandler(false);
+						}					
 					}
-					else
+					catch(BaseIncludeDataCorruptException $e)
 					{
-						$system_handler = new SystemHandler(false);
-					}					
-				}
-				catch(BaseIncludeDataCorruptException $e)
-				{
-					$GLOBALS['fatal_error'] = "The config-data of a module is corrupt!";
-				}
-				catch(BaseIncludeProcessFailedException $e)
-				{
-					$GLOBALS['fatal_error'] = "Include register process failed!";
-				}
-				catch(BaseIncludeRequirementFailedException $e)
-				{
-					$GLOBALS['fatal_error'] = "An include-module requirement is not found!";
-				}
-				catch(BaseIncludeFolderEmptyException $e)
-				{
-					$GLOBALS['fatal_error'] = "Include folder is empty!";
-				}
-				catch(BaseModuleProcessFailedException $e)
-				{
-					$GLOBALS['fatal_error'] = "Module register process failed!";
-				}
-				catch(BaseModuleDataCorruptException $e)
-				{
-					$GLOBALS['fatal_error'] = "Module Data Corrupt!";
-				}
-				catch(BaseEventHandlerCreationFailedException $e)
-				{
-					$GLOBALS['fatal_error'] = "Event-handler creation failed!";
-				}
-				
-				Security::protect_session();
+						$GLOBALS['fatal_error'] = "The config-data of a module is corrupt!";
+					}
+					catch(BaseIncludeProcessFailedException $e)
+					{
+						$GLOBALS['fatal_error'] = "Include register process failed!";
+					}
+					catch(BaseIncludeRequirementFailedException $e)
+					{
+						$GLOBALS['fatal_error'] = "An include-module requirement is not found!";
+					}
+					catch(BaseIncludeFolderEmptyException $e)
+					{
+						$GLOBALS['fatal_error'] = "Include folder is empty!";
+					}
+					catch(BaseModuleProcessFailedException $e)
+					{
+						$GLOBALS['fatal_error'] = "Module register process failed!";
+					}
+					catch(BaseModuleDataCorruptException $e)
+					{
+						$GLOBALS['fatal_error'] = "Module Data Corrupt!";
+					}
+					catch(BaseEventHandlerCreationFailedException $e)
+					{
+						$GLOBALS['fatal_error'] = "Event-handler creation failed!";
+					}
+					
+					Security::protect_session();
+				}	
 			}
 			else
 			{

@@ -326,6 +326,7 @@ class ContentHandler_IO
 		}
 		else
 		{
+			$template->set_var("INDEX_TITLE","Open-LIMS");
 			$template->output();
 			Error_IO::fatal_error($GLOBALS['fatal_error']);	
 		}

@@ -354,6 +354,24 @@ class BaseInclude_Access
 			return false;
 		}
 	}
+	
+	public static function check_installation()
+	{
+		global $db;
+		
+		$sql = "SELECT table_name FROM information_schema.tables";
+		$res = $db->db_query($sql);
+		
+		while($data = $db->db_fetch_assoc($res))
+		{
+			if ($data['table_name'] == "core_base_includes")
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }
 
 ?>

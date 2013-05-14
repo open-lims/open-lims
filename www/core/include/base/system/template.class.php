@@ -72,8 +72,12 @@ class Template implements TemplateInterface
 			{
 				$this->open_file($current_folder_file);
 				$this->file_path = $file_path;
-				$this->fallback_language_file = Language::get_current_language_path($current_folder_file, 1);
-				$this->language_file = Language::get_current_language_path($current_folder_file, $language_id);
+				
+				if (class_exists("Language"))
+				{
+					$this->fallback_language_file = Language::get_current_language_path($current_folder_file, 1);
+					$this->language_file = Language::get_current_language_path($current_folder_file, $language_id);
+				}
 			}
 			else
 			{
@@ -85,8 +89,12 @@ class Template implements TemplateInterface
 					{
 						$this->open_file($fallback_folder_file);
 						$this->file_path = $file_path;
-						$this->fallback_language_file = Language::get_current_language_path($fallback_folder_file, 1);
-						$this->language_file = Language::get_current_language_path($fallback_folder_file, $language_id);
+						
+						if (class_exists("Language"))
+						{
+							$this->fallback_language_file = Language::get_current_language_path($fallback_folder_file, 1);
+							$this->language_file = Language::get_current_language_path($fallback_folder_file, $language_id);
+						}
 					}
 					else
 					{
@@ -94,8 +102,12 @@ class Template implements TemplateInterface
 						{
 							$this->open_file("template/".self::$fallback_folder."/".$file_path);
 							$this->file_path = "template/".self::$fallback_folder."/".$file_path;
-							$this->fallback_language_file = Language::get_current_language_path("template/".self::$fallback_folder."/".$file_path, 1);
-							$this->language_file = Language::get_current_language_path("template/".self::$fallback_folder."/".$file_path, $language_id);
+							
+							if (class_exists("Language"))
+							{
+								$this->fallback_language_file = Language::get_current_language_path("template/".self::$fallback_folder."/".$file_path, 1);
+								$this->language_file = Language::get_current_language_path("template/".self::$fallback_folder."/".$file_path, $language_id);
+							}
 						}
 						else
 						{
@@ -109,8 +121,12 @@ class Template implements TemplateInterface
 					{
 						$this->open_file($folder_path."/".$file_path);
 						$this->file_path = $folder_path."/".$file_path;
-						$this->fallback_language_file = Language::get_current_language_path($folder_path."/".$file_path, 1);
-						$this->language_file = Language::get_current_language_path($folder_path."/".$file_path, $language_id);
+						
+						if (class_exists("Language"))
+						{
+							$this->fallback_language_file = Language::get_current_language_path($folder_path."/".$file_path, 1);
+							$this->language_file = Language::get_current_language_path($folder_path."/".$file_path, $language_id);
+						}
 					}
 					else
 					{
@@ -118,8 +134,12 @@ class Template implements TemplateInterface
 					}
 				}
 			}
-			$this->global_fallback_language_file = Language::get_current_global_language_path(1);
-			$this->global_language_file = Language::get_current_global_language_path($language_id);
+			
+			if (class_exists("Language"))
+			{
+				$this->global_fallback_language_file = Language::get_current_global_language_path(1);
+				$this->global_language_file = Language::get_current_global_language_path($language_id);
+			}
 		}
 	}
 	

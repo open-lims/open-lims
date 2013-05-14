@@ -31,6 +31,36 @@ $statement = array();
 
 // TABLES
 
+$statement[] = "CREATE TABLE core_base_batch_runs
+(
+  id serial NOT NULL,
+  binary_id integer,
+  status integer,
+  create_datetime timestamp with time zone,
+  start_datetime timestamp with time zone,
+  end_datetime timestamp with time zone,
+  last_lifesign timestamp with time zone,
+  user_id integer,
+  type_id integer,
+  CONSTRAINT core_jobs_pkey PRIMARY KEY (id )
+)
+WITH (
+  OIDS=FALSE
+);"; // 1
+
+$statement[] = "CREATE TABLE core_base_batch_types
+(
+  id serial NOT NULL,
+  name text,
+  internal_name text,
+  binary_id integer,
+  CONSTRAINT core_job_types_pkey PRIMARY KEY (id ),
+  CONSTRAINT core_job_types_internal_name_key UNIQUE (internal_name )
+)
+WITH (
+  OIDS=FALSE
+);"; // 2
+
 $statement[] = "CREATE TABLE core_base_event_listeners
 (
   id serial NOT NULL,
@@ -40,7 +70,7 @@ $statement[] = "CREATE TABLE core_base_event_listeners
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 3
 
 $statement[] = "CREATE TABLE core_base_include_files
 (
@@ -52,7 +82,7 @@ $statement[] = "CREATE TABLE core_base_include_files
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 4
 
 $statement[] = "CREATE TABLE core_base_include_functions
 (
@@ -64,7 +94,7 @@ $statement[] = "CREATE TABLE core_base_include_functions
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 5
 
 $statement[] = "CREATE TABLE core_base_include_tables
 (
@@ -76,7 +106,7 @@ $statement[] = "CREATE TABLE core_base_include_tables
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 6
 
 $statement[] = "CREATE TABLE core_base_includes
 (
@@ -88,7 +118,50 @@ $statement[] = "CREATE TABLE core_base_includes
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 7
+
+$statement[] = "CREATE TABLE core_base_measuring_unit_categories
+(
+  id serial NOT NULL,
+  name text,
+  CONSTRAINT core_measuring_unit_categories_pkey PRIMARY KEY (id )
+)
+WITH (
+  OIDS=FALSE
+);"; // 8
+
+$statement[] = "CREATE TABLE core_base_measuring_unit_ratios
+(
+  id serial NOT NULL,
+  numerator_unit_id integer,
+  numerator_unit_exponent integer,
+  denominator_unit_id integer,
+  denominator_unit_exponent integer,
+  CONSTRAINT core_base_measuring_unit_ratios_pkey PRIMARY KEY (id )
+)
+WITH (
+  OIDS=FALSE
+);"; // 9
+
+$statement[] = "CREATE TABLE core_base_measuring_units
+(
+  id serial NOT NULL,
+  base_id integer,
+  category_id integer,
+  name text,
+  unit_symbol text,
+  min_value double precision,
+  max_value double precision,
+  min_prefix_exponent integer,
+  max_prefix_exponent integer,
+  prefix_calculation_exponent integer,
+  calculation text,
+  type text,
+  CONSTRAINT core_measuring_units_pkey PRIMARY KEY (id )
+)
+WITH (
+  OIDS=FALSE
+);"; // 10
 
 $statement[] = "CREATE TABLE core_base_module_dialogs
 (
@@ -99,14 +172,14 @@ $statement[] = "CREATE TABLE core_base_module_dialogs
   class text,
   method text,
   internal_name text,
-  display_name text,
+  language_address text,
   weight integer,
   disabled boolean,
   CONSTRAINT core_base_module_dialogs_pkey PRIMARY KEY (id )
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 11
 
 $statement[] = "CREATE TABLE core_base_module_files
 (
@@ -118,7 +191,7 @@ $statement[] = "CREATE TABLE core_base_module_files
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 12
 
 $statement[] = "CREATE TABLE core_base_module_links
 (
@@ -133,7 +206,7 @@ $statement[] = "CREATE TABLE core_base_module_links
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 13
 
 $statement[] = "CREATE TABLE core_base_module_navigation
 (
@@ -151,7 +224,7 @@ $statement[] = "CREATE TABLE core_base_module_navigation
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 14
 
 $statement[] = "CREATE TABLE core_base_modules
 (
@@ -164,7 +237,7 @@ $statement[] = "CREATE TABLE core_base_modules
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 15
 
 $statement[] = "CREATE TABLE core_base_registry
 (
@@ -177,7 +250,7 @@ $statement[] = "CREATE TABLE core_base_registry
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 16
 
 $statement[] = "CREATE TABLE core_binaries
 (
@@ -188,7 +261,19 @@ $statement[] = "CREATE TABLE core_binaries
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 17
+
+$statement[] = "CREATE TABLE core_countries
+(
+  id serial NOT NULL,
+  english_name text,
+  local_name text,
+  iso_3166 text,
+  CONSTRAINT core_countries_pkey PRIMARY KEY (id )
+)
+WITH (
+  OIDS=FALSE
+);"; // 18
 
 $statement[] = "CREATE TABLE core_currencies
 (
@@ -200,7 +285,7 @@ $statement[] = "CREATE TABLE core_currencies
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 19
 
 $statement[] = "CREATE TABLE core_extensions
 (
@@ -212,11 +297,11 @@ $statement[] = "CREATE TABLE core_extensions
   main_file text,
   version text,
   CONSTRAINT core_extensions_pkey PRIMARY KEY (id ),
-  CONSTRAINT core_extensions_identifier_key UNIQUE (identifier )
+  CONSTRAINT core_extensions_identifer_key UNIQUE (identifier )
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 20
 
 $statement[] = "CREATE TABLE core_group_has_users
 (
@@ -227,7 +312,7 @@ $statement[] = "CREATE TABLE core_group_has_users
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 21
 
 $statement[] = "CREATE TABLE core_groups
 (
@@ -237,37 +322,7 @@ $statement[] = "CREATE TABLE core_groups
 )
 WITH (
   OIDS=FALSE
-);";
-
-$statement[] = "CREATE TABLE core_job_types
-(
-  id serial NOT NULL,
-  name text,
-  internal_name text,
-  binary_id integer,
-  CONSTRAINT core_job_types_pkey PRIMARY KEY (id ),
-  CONSTRAINT core_job_types_internal_name_key UNIQUE (internal_name )
-)
-WITH (
-  OIDS=FALSE
-);";
-
-$statement[] = "CREATE TABLE core_jobs
-(
-  id serial NOT NULL,
-  binary_id integer,
-  status integer,
-  create_datetime timestamp with time zone,
-  start_datetime timestamp with time zone,
-  end_datetime timestamp with time zone,
-  last_lifesign timestamp with time zone,
-  user_id integer,
-  type_id integer,
-  CONSTRAINT core_jobs_pkey PRIMARY KEY (id )
-)
-WITH (
-  OIDS=FALSE
-);";
+);"; // 22
 
 $statement[] = "CREATE TABLE core_languages
 (
@@ -281,22 +336,7 @@ $statement[] = "CREATE TABLE core_languages
 )
 WITH (
   OIDS=FALSE
-);";
-
-$statement[] = "CREATE TABLE core_measuring_units
-(
-  id serial NOT NULL,
-  toid integer,
-  name text,
-  type integer,
-  base boolean,
-  unit_symbol text,
-  calculation text,
-  CONSTRAINT core_measuring_units_pkey PRIMARY KEY (id )
-)
-WITH (
-  OIDS=FALSE
-);";
+);"; // 23
 
 $statement[] = "CREATE TABLE core_paper_sizes
 (
@@ -314,7 +354,7 @@ $statement[] = "CREATE TABLE core_paper_sizes
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 24
 
 $statement[] = "CREATE TABLE core_service_has_log_entries
 (
@@ -324,7 +364,7 @@ $statement[] = "CREATE TABLE core_service_has_log_entries
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 25
 
 $statement[] = "CREATE TABLE core_services
 (
@@ -337,7 +377,7 @@ $statement[] = "CREATE TABLE core_services
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 26
 
 $statement[] = "CREATE TABLE core_session_values
 (
@@ -350,7 +390,7 @@ $statement[] = "CREATE TABLE core_session_values
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 27
 
 $statement[] = "CREATE TABLE core_sessions
 (
@@ -362,7 +402,7 @@ $statement[] = "CREATE TABLE core_sessions
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 28
 
 $statement[] = "CREATE TABLE core_system_log
 (
@@ -382,7 +422,7 @@ $statement[] = "CREATE TABLE core_system_log
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 29
 
 $statement[] = "CREATE TABLE core_system_log_types
 (
@@ -392,7 +432,7 @@ $statement[] = "CREATE TABLE core_system_log_types
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 30
 
 $statement[] = "CREATE TABLE core_system_messages
 (
@@ -404,7 +444,7 @@ $statement[] = "CREATE TABLE core_system_messages
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 31
 
 $statement[] = "CREATE TABLE core_timezones
 (
@@ -416,7 +456,7 @@ $statement[] = "CREATE TABLE core_timezones
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 32
 
 $statement[] = "CREATE TABLE core_user_admin_settings
 (
@@ -433,18 +473,7 @@ $statement[] = "CREATE TABLE core_user_admin_settings
 )
 WITH (
   OIDS=FALSE
-);";
-
-$statement[] = "CREATE TABLE core_user_profile_settings
-(
-  id integer NOT NULL,
-  language_id integer,
-  timezone_id integer,
-  CONSTRAINT core_user_profile_settings_pkey PRIMARY KEY (id )
-)
-WITH (
-  OIDS=FALSE
-);";
+);"; // 33
 
 $statement[] = "CREATE TABLE core_user_profiles
 (
@@ -466,11 +495,36 @@ $statement[] = "CREATE TABLE core_user_profiles
   yahoo text,
   aim text,
   skype text,
+  lync text,
+  jabber text,
   CONSTRAINT core_user_profiles_pkey PRIMARY KEY (id )
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 34
+
+$statement[] = "CREATE TABLE core_user_regional_settings
+(
+  id integer NOT NULL,
+  language_id integer,
+  timezone_id integer,
+  time_display_format boolean,
+  time_enter_format boolean,
+  date_display_format text,
+  date_enter_format text,
+  country_id integer,
+  system_of_units text,
+  system_of_paper_format text,
+  currency_id integer,
+  currency_significant_digits integer,
+  decimal_separator text,
+  thousand_separator text,
+  name_display_format text,
+  CONSTRAINT core_user_regional_settings_pkey PRIMARY KEY (id )
+)
+WITH (
+  OIDS=FALSE
+);"; // 35
 
 $statement[] = "CREATE TABLE core_users
 (
@@ -482,7 +536,7 @@ $statement[] = "CREATE TABLE core_users
 )
 WITH (
   OIDS=FALSE
-);";
+);"; // 36
 
 
 // INDIZES
@@ -510,12 +564,44 @@ $statement[] = "CREATE INDEX core_sessions_address_ix
 
 // FOREIGN KEYS
 
+$statement[] = "ALTER TABLE ONLY core_base_batch_runs ADD CONSTRAINT core_jobs_binary_id_fkey FOREIGN KEY (binary_id)
+      REFERENCES core_binaries (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_base_batch_runs ADD CONSTRAINT core_jobs_type_id_fkey FOREIGN KEY (type_id)
+      REFERENCES core_base_batch_types (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_base_batch_runs ADD  CONSTRAINT core_jobs_user_id_fkey FOREIGN KEY (user_id)
+      REFERENCES core_users (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_base_batch_types ADD CONSTRAINT core_job_types_binary_id_fkey FOREIGN KEY (binary_id)
+      REFERENCES core_binaries (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
 $statement[] = "ALTER TABLE ONLY core_base_event_listeners ADD CONSTRAINT core_base_event_listeners_include_id_fkey FOREIGN KEY (include_id)
       REFERENCES core_base_includes (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
 $statement[] = "ALTER TABLE ONLY core_base_include_files ADD CONSTRAINT core_base_include_files_include_id_fkey FOREIGN KEY (include_id)
       REFERENCES core_base_includes (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_base_measuring_unit_ratios ADD CONSTRAINT core_base_measuring_unit_ratios_denominator_unit_id_fkey FOREIGN KEY (denominator_unit_id)
+      REFERENCES core_base_measuring_units (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_base_measuring_unit_ratios ADD CONSTRAINT core_base_measuring_unit_ratios_numerator_unit_id_fkey FOREIGN KEY (numerator_unit_id)
+      REFERENCES core_base_measuring_units (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_base_measuring_units ADD CONSTRAINT core_base_measuring_units_base_id_fkey FOREIGN KEY (base_id)
+      REFERENCES core_base_measuring_units (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_base_measuring_units ADD CONSTRAINT core_base_measuring_units_category_id_fkey FOREIGN KEY (category_id)
+      REFERENCES core_base_measuring_unit_categories (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
 $statement[] = "ALTER TABLE ONLY core_base_module_dialogs ADD CONSTRAINT core_base_module_dialogs_module_id_fkey FOREIGN KEY (module_id)
@@ -546,26 +632,6 @@ $statement[] = "ALTER TABLE ONLY core_group_has_users ADD CONSTRAINT core_group_
       REFERENCES core_users (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
-$statement[] = "ALTER TABLE ONLY core_job_types ADD CONSTRAINT core_job_types_binary_id_fkey FOREIGN KEY (binary_id)
-      REFERENCES core_binaries (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
-
-$statement[] = "ALTER TABLE ONLY core_jobs ADD CONSTRAINT core_jobs_binary_id_fkey FOREIGN KEY (binary_id)
-      REFERENCES core_binaries (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
-
-$statement[] = "ALTER TABLE ONLY core_jobs ADD CONSTRAINT core_jobs_type_id_fkey FOREIGN KEY (type_id)
-      REFERENCES core_job_types (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
-
-$statement[] = "ALTER TABLE ONLY core_jobs ADD CONSTRAINT core_jobs_user_id_fkey FOREIGN KEY (user_id)
-      REFERENCES core_users (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
-
-$statement[] = "ALTER TABLE ONLY core_measuring_units ADD CONSTRAINT core_measuring_units_toid_fkey FOREIGN KEY (toid)
-      REFERENCES core_measuring_units (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
-
 $statement[] = "ALTER TABLE ONLY core_service_has_log_entries ADD CONSTRAINT core_service_has_log_entries_log_entry_id_fkey FOREIGN KEY (log_entry_id)
       REFERENCES core_system_log (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
@@ -594,7 +660,7 @@ $statement[] = "ALTER TABLE ONLY core_system_log ADD CONSTRAINT core_system_log_
       REFERENCES core_users (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
-$statement[] = "ALTER TABLE ONLY core_system_messages ADD  CONSTRAINT core_system_messages_user_id_fkey FOREIGN KEY (user_id)
+$statement[] = "ALTER TABLE ONLY core_system_messages ADD CONSTRAINT core_system_messages_user_id_fkey FOREIGN KEY (user_id)
       REFERENCES core_users (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
@@ -602,20 +668,28 @@ $statement[] = "ALTER TABLE ONLY core_user_admin_settings ADD CONSTRAINT core_us
       REFERENCES core_users (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
-$statement[] = "ALTER TABLE ONLY core_user_profile_settings ADD CONSTRAINT core_user_profile_settings_id_fkey FOREIGN KEY (id)
+$statement[] = "ALTER TABLE ONLY core_user_profiles ADD  CONSTRAINT core_user_profiles_id_fkey FOREIGN KEY (id)
       REFERENCES core_users (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
-$statement[] = "ALTER TABLE ONLY core_user_profile_settings ADD CONSTRAINT core_user_profile_settings_language_id_fkey FOREIGN KEY (language_id)
+$statement[] = "ALTER TABLE ONLY core_user_regional_settings ADD CONSTRAINT core_user_regional_settings_currency_id_fkey FOREIGN KEY (currency_id)
+      REFERENCES core_currencies (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_user_regional_settings ADD CONSTRAINT core_user_regional_settings_id_fkey FOREIGN KEY (id)
+      REFERENCES core_users (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_user_regional_settings ADD CONSTRAINT core_user_regional_settings_language_id_fkey FOREIGN KEY (language_id)
       REFERENCES core_languages (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
-$statement[] = "ALTER TABLE ONLY core_user_profile_settings ADD CONSTRAINT core_user_profile_settings_timezone_id_fkey FOREIGN KEY (timezone_id)
+$statement[] = "ALTER TABLE ONLY core_user_regional_settings ADD CONSTRAINT core_user_regional_settings_timezone_id_fkey FOREIGN KEY (timezone_id)
       REFERENCES core_timezones (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
-$statement[] = "ALTER TABLE ONLY core_user_profiles ADD CONSTRAINT core_user_profiles_id_fkey FOREIGN KEY (id)
-      REFERENCES core_users (id) MATCH SIMPLE
+$statement[] = "ALTER TABLE ONLY core_user_regional_settings ADD CONSTRAINT core_user_regional_settings_country_id_fkey FOREIGN KEY (country_id)
+      REFERENCES core_countries (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
 
@@ -627,16 +701,6 @@ $statement[] = "CREATE OR REPLACE FUNCTION concat(text, text)
 CASE WHEN \$1 IS NULL THEN \$2
 WHEN \$2 IS NULL THEN \$1
 ELSE \$1 || \$2
-END\$BODY\$
-  LANGUAGE sql VOLATILE
-  COST 100;";
-
-$statement[] = "CREATE OR REPLACE FUNCTION higher(double precision, double precision)
-  RETURNS double precision AS
-\$BODY\$SELECT
-CASE WHEN \$1 < \$2 THEN \$2
-WHEN \$2 < \$1 THEN \$1
-ELSE \$1
 END\$BODY\$
   LANGUAGE sql VOLATILE
   COST 100;";

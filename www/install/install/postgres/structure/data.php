@@ -65,6 +65,174 @@ WITH (
   OIDS=FALSE
 );";
 
+$statement[] = "CREATE TABLE core_data_parameter_field_has_methods
+(
+  parameter_field_id integer NOT NULL,
+  parameter_method_id integer NOT NULL,
+  CONSTRAINT core_data_parameter_field_has_methods_pkey PRIMARY KEY (parameter_field_id , parameter_method_id )
+)
+WITH (
+  OIDS=FALSE
+);";
+
+$statement[] = "CREATE TABLE core_data_parameter_field_limits
+(
+  parameter_limit_id integer NOT NULL,
+  parameter_field_id integer NOT NULL,
+  upper_specification_limit double precision,
+  lower_specification_limit double precision,
+  CONSTRAINT core_data_parameter_field_limits_pkey PRIMARY KEY (parameter_limit_id , parameter_field_id )
+)
+WITH (
+  OIDS=FALSE
+);";
+
+$statement[] = "CREATE TABLE core_data_parameter_field_values
+(
+  id serial NOT NULL,
+  parameter_version_id integer,
+  parameter_field_id integer,
+  parameter_method_id integer,
+  value double precision,
+  source text,
+  locked boolean,
+  CONSTRAINT core_data_parameter_field_values_pkey PRIMARY KEY (id )
+)
+WITH (
+  OIDS=FALSE
+);";
+
+$statement[] = "CREATE TABLE core_data_parameter_fields
+(
+  id serial NOT NULL,
+  name text,
+  min_value double precision,
+  max_value double precision,
+  measuring_unit_id integer,
+  measuring_unit_exponent integer,
+  measuring_unit_ratio_id integer,
+  CONSTRAINT core_data_parameter_fields_pkey PRIMARY KEY (id )
+)
+WITH (
+  OIDS=FALSE
+);";
+
+$statement[] = "CREATE TABLE core_data_parameter_has_non_template
+(
+  parameter_id integer NOT NULL,
+  non_template_id integer NOT NULL,
+  CONSTRAINT core_data_parameter_has_non_template_pkey PRIMARY KEY (parameter_id , non_template_id ),
+  CONSTRAINT core_data_parameter_has_non_te_parameter_id_non_template_id_key UNIQUE (parameter_id , non_template_id ),
+  CONSTRAINT core_data_parameter_has_non_template_parameter_id_key UNIQUE (parameter_id )
+)
+WITH (
+  OIDS=FALSE
+);";
+
+$statement[] = "CREATE TABLE core_data_parameter_has_template
+(
+  parameter_id integer NOT NULL,
+  template_id integer NOT NULL,
+  CONSTRAINT core_parameter_has_template_pkey PRIMARY KEY (parameter_id , template_id ),
+  CONSTRAINT core_data_parameter_has_template_parameter_id_key UNIQUE (parameter_id ),
+  CONSTRAINT core_data_parameter_has_template_parameter_id_template_id_key UNIQUE (parameter_id , template_id )
+)
+WITH (
+  OIDS=FALSE
+);";
+
+$statement[] = "CREATE TABLE core_data_parameter_limits
+(
+  id serial NOT NULL,
+  name text,
+  CONSTRAINT core_data_parameter_limits_pkey PRIMARY KEY (id )
+)
+WITH (
+  OIDS=FALSE
+);";
+
+$statement[] = "CREATE TABLE core_data_parameter_methods
+(
+  id serial NOT NULL,
+  name text,
+  CONSTRAINT core_data_parameter_methods_pkey PRIMARY KEY (id )
+)
+WITH (
+  OIDS=FALSE
+);";
+
+$statement[] = "CREATE TABLE core_data_parameter_non_template_has_fields
+(
+  non_template_id integer NOT NULL,
+  parameter_field_id integer NOT NULL,
+  CONSTRAINT core_data_parameter_non_template_has_fields_pkey PRIMARY KEY (non_template_id , parameter_field_id )
+)
+WITH (
+  OIDS=FALSE
+);";
+
+$statement[] = "CREATE TABLE core_data_parameter_non_templates
+(
+  id serial NOT NULL,
+  datetime timestamp with time zone,
+  CONSTRAINT core_data_parameter_non_templates_pkey PRIMARY KEY (id )
+)
+WITH (
+  OIDS=FALSE
+);";
+
+$statement[] = "CREATE TABLE core_data_parameter_template_has_fields
+(
+  template_id integer NOT NULL,
+  parameter_field_id integer NOT NULL,
+  \"position\" integer,
+  CONSTRAINT core_data_parameter_template_has_fields_pkey PRIMARY KEY (template_id , parameter_field_id )
+)
+WITH (
+  OIDS=FALSE
+);";
+
+$statement[] = "CREATE TABLE core_data_parameter_templates
+(
+  id serial NOT NULL,
+  internal_name text,
+  name text,
+  created_by integer,
+  datetime timestamp with time zone,
+  CONSTRAINT core_data_parameter_templates_pkey PRIMARY KEY (id ),
+  CONSTRAINT core_data_parameter_templates_internal_name_key UNIQUE (internal_name )
+)
+WITH (
+  OIDS=FALSE
+);";
+
+$statement[] = "CREATE TABLE core_data_parameter_versions
+(
+  id serial NOT NULL,
+  parameter_id integer,
+  version integer,
+  internal_revision integer,
+  previous_version_id integer,
+  current boolean,
+  owner_id integer,
+  datetime timestamp with time zone,
+  name text,
+  CONSTRAINT core_data_parameter_versions_pkey PRIMARY KEY (id )
+)
+WITH (
+  OIDS=FALSE
+);";
+
+$statement[] = "CREATE TABLE core_data_parameters
+(
+  id serial NOT NULL,
+  data_entity_id integer,
+  CONSTRAINT core_data_parameters_pkey PRIMARY KEY (id ) 
+)
+WITH (
+  OIDS=FALSE
+);";
+
 $statement[] = "CREATE TABLE core_data_user_data
 (
   user_id integer NOT NULL,
@@ -340,6 +508,94 @@ $statement[] = "ALTER TABLE ONLY core_data_entity_is_item ADD CONSTRAINT core_da
 
 $statement[] = "ALTER TABLE ONLY core_data_entity_is_item ADD CONSTRAINT core_data_entity_is_item_item_id_fkey FOREIGN KEY (item_id)
       REFERENCES core_items (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_field_has_methods ADD CONSTRAINT core_data_parameter_field_has_methods_parameter_field_id_fkey FOREIGN KEY (parameter_field_id)
+      REFERENCES core_data_parameter_fields (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_field_has_methods ADD CONSTRAINT core_data_parameter_field_has_methods_parameter_method_id_fkey FOREIGN KEY (parameter_method_id)
+      REFERENCES core_data_parameter_methods (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_field_limits ADD CONSTRAINT core_data_parameter_field_limits_parameter_field_id_fkey FOREIGN KEY (parameter_field_id)
+      REFERENCES core_data_parameter_fields (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_field_limits ADD CONSTRAINT core_data_parameter_field_limits_parameter_limit_id_fkey FOREIGN KEY (parameter_limit_id)
+      REFERENCES core_data_parameter_limits (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_field_values ADD CONSTRAINT core_data_parameter_field_values_parameter_field_id_fkey FOREIGN KEY (parameter_field_id)
+      REFERENCES core_data_parameter_fields (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_field_values ADD CONSTRAINT core_data_parameter_field_values_parameter_method_id_fkey FOREIGN KEY (parameter_method_id)
+      REFERENCES core_data_parameter_methods (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_field_values ADD CONSTRAINT core_data_parameter_field_values_parameter_version_id_fkey FOREIGN KEY (parameter_version_id)
+      REFERENCES core_data_parameter_versions (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_fields ADD CONSTRAINT core_data_parameter_fields_measuring_unit_id_fkey FOREIGN KEY (measuring_unit_id)
+      REFERENCES core_base_measuring_units (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_fields ADD CONSTRAINT core_data_parameter_fields_measuring_unit_ratio_id_fkey FOREIGN KEY (measuring_unit_ratio_id)
+      REFERENCES core_base_measuring_unit_ratios (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_has_non_template ADD CONSTRAINT core_data_parameter_has_non_template_non_template_id_fkey FOREIGN KEY (non_template_id)
+      REFERENCES core_data_parameter_non_templates (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_has_non_template ADD CONSTRAINT core_data_parameter_has_non_template_parameter_id_fkey FOREIGN KEY (parameter_id)
+      REFERENCES core_data_parameters (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_has_template ADD CONSTRAINT core_data_parameter_has_template_parameter_id_fkey FOREIGN KEY (parameter_id)
+      REFERENCES core_data_parameters (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_has_template ADD CONSTRAINT core_data_parameter_has_template_template_id_fkey FOREIGN KEY (template_id)
+      REFERENCES core_data_parameter_templates (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_non_template_has_fields ADD CONSTRAINT core_data_parameter_non_template_has_fi_parameter_field_id_fkey FOREIGN KEY (parameter_field_id)
+      REFERENCES core_data_parameter_fields (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_non_template_has_fields ADD CONSTRAINT core_data_parameter_non_template_has_field_non_template_id_fkey FOREIGN KEY (non_template_id)
+      REFERENCES core_data_parameter_non_templates (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_template_has_fields ADD CONSTRAINT core_data_parameter_template_has_fields_parameter_field_id_fkey FOREIGN KEY (parameter_field_id)
+      REFERENCES core_data_parameter_fields (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_template_has_fields ADD CONSTRAINT core_data_parameter_template_has_fields_template_id_fkey FOREIGN KEY (template_id)
+      REFERENCES core_data_parameter_templates (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_templates ADD CONSTRAINT core_data_parameter_templates_created_by_fkey FOREIGN KEY (created_by)
+      REFERENCES core_users (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_versions ADD CONSTRAINT core_data_parameter_versions_owner_id_fkey FOREIGN KEY (owner_id)
+      REFERENCES core_users (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_versions ADD CONSTRAINT core_data_parameter_versions_parameter_id_fkey FOREIGN KEY (parameter_id)
+      REFERENCES core_data_parameters (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_versions ADD CONSTRAINT core_data_parameter_versions_previous_version_id_fkey FOREIGN KEY (previous_version_id)
+      REFERENCES core_data_parameter_versions (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameters ADD CONSTRAINT core_data_parameters_data_entitiy_id_fkey FOREIGN KEY (data_entity_id)
+      REFERENCES core_data_entities (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
 $statement[] = "ALTER TABLE ONLY core_data_user_data ADD CONSTRAINT core_data_user_data_user_id_fkey FOREIGN KEY (user_id)
