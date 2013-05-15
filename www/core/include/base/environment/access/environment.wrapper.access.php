@@ -431,6 +431,203 @@ class Environment_Wrapper_Access
 	 * @param integer $end
 	 * @return array
 	 */
+	public static function list_measuring_unit_ratios($order_by, $order_method, $start, $end)
+	{
+		global $db;
+	
+		if ($order_by and $order_method)
+		{
+			if ($order_method == "asc")
+			{
+				$sql_order_method = "ASC";
+			}
+			else
+			{
+				$sql_order_method = "DESC";
+			}
+			
+			switch($order_by):
+			
+				case "numerator":
+					$sql_order_by = "ORDER BY numerator ".$sql_order_method;
+				break;
+				
+				case "numerator_exp":
+					$sql_order_by = "ORDER BY numerator_exp ".$sql_order_method;
+				break;
+				
+				case "denominator":
+					$sql_order_by = "ORDER BY denominator ".$sql_order_method;
+				break;
+				
+				case "denominator_exp":
+					$sql_order_by = "ORDER BY denominator_exp ".$sql_order_method;
+				break;
+						
+				default:
+					$sql_order_by = "ORDER BY id ASC";
+				break;
+			
+			endswitch;
+		}
+		else
+		{
+			$sql_order_by = "ORDER BY id ASC";
+		}
+		
+		$sql = "SELECT a.name AS numerator, " .
+					"b.name AS denominator, " .
+					"".constant("MEASURING_UNIT_RATIO_TABLE").".numerator_unit_exponent AS numerator_exp, " .
+					"".constant("MEASURING_UNIT_RATIO_TABLE").".denominator_unit_exponent AS denominator_exp, " .
+					"".constant("MEASURING_UNIT_RATIO_TABLE").".id " .
+					"FROM ".constant("MEASURING_UNIT_RATIO_TABLE")." " .
+					"LEFT JOIN ".constant("MEASURING_UNIT_TABLE")." AS a ON ".constant("MEASURING_UNIT_RATIO_TABLE").".numerator_unit_id = a.id ".
+					"LEFT JOIN ".constant("MEASURING_UNIT_TABLE")." AS b ON ".constant("MEASURING_UNIT_RATIO_TABLE").".denominator_unit_id = b.id ".
+					"".$sql_order_by."";
+
+		
+		$return_array = array();
+		
+		$res = $db->db_query($sql);
+		
+		if (is_numeric($start) and is_numeric($end))
+		{
+			for ($i = 0; $i<=$end-1; $i++)
+			{
+				if (($data = $db->db_fetch_assoc($res)) == null)
+				{
+					break;
+				}
+				
+				if ($i >= $start)
+				{
+					array_push($return_array, $data);
+				}
+			}
+		}
+		else
+		{
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array, $data);
+			}
+		}
+		return $return_array;
+	}
+	
+	/**
+	 * @return integer
+	 */
+	public static function count_measuring_unit_ratios()
+	{
+		global $db;
+
+		$sql = "SELECT COUNT(".constant("MEASURING_UNIT_RATIO_TABLE").".id) AS result " .
+					 "FROM ".constant("MEASURING_UNIT_RATIO_TABLE")."";
+			
+		$res = $db->db_query($sql);
+		$data = $db->db_fetch_assoc($res);
+
+		return $data['result'];
+	}
+
+	/**
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_measuring_unit_categories($order_by, $order_method, $start, $end)
+	{
+		global $db;
+		
+		if ($order_by and $order_method)
+		{
+			if ($order_method == "asc")
+			{
+				$sql_order_method = "ASC";
+			}
+			else
+			{
+				$sql_order_method = "DESC";
+			}
+			
+			switch($order_by):
+			
+				case "name":
+					$sql_order_by = "ORDER BY name ".$sql_order_method;
+				break;
+										
+				default:
+					$sql_order_by = "ORDER BY name ASC";
+				break;
+			
+			endswitch;
+		}
+		else
+		{
+			$sql_order_by = "ORDER BY name ASC";
+		}
+		
+		$sql = "SELECT ".constant("MEASURING_UNIT_CATEGORY_TABLE").".id, " .
+					"".constant("MEASURING_UNIT_CATEGORY_TABLE").".name " .
+					"FROM ".constant("MEASURING_UNIT_CATEGORY_TABLE")." " .
+					"".$sql_order_by."";
+
+		
+		$return_array = array();
+		
+		$res = $db->db_query($sql);
+		
+		if (is_numeric($start) and is_numeric($end))
+		{
+			for ($i = 0; $i<=$end-1; $i++)
+			{
+				if (($data = $db->db_fetch_assoc($res)) == null)
+				{
+					break;
+				}
+				
+				if ($i >= $start)
+				{
+					array_push($return_array, $data);
+				}
+			}
+		}
+		else
+		{
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array, $data);
+			}
+		}
+		return $return_array;
+	}
+
+	/**
+	 * @return integer
+	 */
+	public static function count_measuring_unit_categories()
+	{
+		global $db;
+
+		$sql = "SELECT COUNT(".constant("MEASURING_UNIT_CATEGORY_TABLE").".id) AS result " .
+					 "FROM ".constant("MEASURING_UNIT_CATEGORY_TABLE")."";
+			
+		$res = $db->db_query($sql);
+		$data = $db->db_fetch_assoc($res);
+
+		return $data['result'];
+	}
+	
+	/**
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
 	public static function list_currencies($order_by, $order_method, $start, $end)
 	{
 		global $db;

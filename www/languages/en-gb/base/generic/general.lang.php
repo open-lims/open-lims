@@ -46,5 +46,7 @@ $LANG['BaseGeneralAdminGeneralTabLanguages'] = "Languages";
 $LANG['BaseGeneralAdminGeneralTabTimezones'] = "Timezones";
 $LANG['BaseGeneralAdminGeneralTabPaperSizes'] = "Paper Sizes";
 $LANG['BaseGeneralAdminGeneralTabMeasuringUnits'] = "Measuring Units";
+$LANG['BaseGeneralAdminGeneralTabMeasuringUnitRatios'] = "Measuring Unit Ratios";
+$LANG['BaseGeneralAdminGeneralTabMeasuringUnitCategories'] = "Measuring Unit Categories";
 $LANG['BaseGeneralAdminGeneralTabCurrencies'] = "Currencies";
 ?>

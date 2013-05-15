@@ -3,7 +3,7 @@ $LANG['BaseAdministrationMenuTitleBase'] = "Basis";
 $LANG['BaseAdministrationMenuTitleOrganisation'] = "Organisation";
 $LANG['BaseAdministrationMenuTitleModules'] = "Module";
 
-$LANG['BaseAdministrationMenuBaseGeneral'] = "Generelles";
+$LANG['BaseAdministrationMenuBaseGeneral'] = "Allgemein";
 $LANG['BaseAdministrationMenuBaseIncludes'] = "Module/BL (Includes)";
 $LANG['BaseAdministrationMenuBaseModules'] = "Module/IO (Modules)";
 $LANG['BaseAdministrationMenuBaseNavigation'] = "Navigation";

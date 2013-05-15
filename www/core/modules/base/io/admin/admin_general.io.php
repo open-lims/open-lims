@@ -83,7 +83,7 @@ class AdminGeneralIO
 	
 	public static function list_measuring_units()
 	{
-		$list = new List_IO("AdminGeneralMeasuringUnit", "ajax.php?nav=base", "admin_general_list_measuring_units", "admin_general_count_measuring_units", $argument_array, "AdminGeneralMeasuringUnit");
+		$list = new List_IO("AdminGeneralMeasuringUnit", "ajax.php?nav=base", "admin_general_list_measuring_units", "admin_general_count_measuring_units", null, "AdminGeneralMeasuringUnit");
 		
 		$list->add_column("","symbol",false,"16px");
 		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"name",true,null);
@@ -96,6 +96,39 @@ class AdminGeneralIO
 		
 		
 		$template = new HTMLTemplate("base/admin/general/list_measuring_units.html");
+		
+		$template->set_var("list", $list->get_list());
+		
+		$template->output();
+	}
+	
+	public static function list_measuring_unit_ratios()
+	{
+		$list = new List_IO("AdminGeneralMeasuringUnitRatio", "ajax.php?nav=base", "admin_general_list_measuring_unit_ratios", "admin_general_count_measuring_unit_ratios", null, "AdminGeneralMeasuringUnitRatio");
+		
+		$list->add_column("","symbol",false,"16px");
+		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"name",false);
+		$list->add_column("Numerator","numerator");
+		$list->add_column("Numerator-Exp.","numerator_exp");
+		$list->add_column("Denominator","denominator");
+		$list->add_column("Denominator-Exp.","denominator_exp",true,null);
+		$list->add_column("","delete",false,"16px");
+		
+		$template = new HTMLTemplate("base/admin/general/list_measuring_unit_ratios.html");
+		
+		$template->set_var("list", $list->get_list());
+		
+		$template->output();
+	}
+	
+	public static function list_measuring_unit_categories()
+	{
+		$list = new List_IO("AdminGeneralMeasuringUnit", "ajax.php?nav=base", "admin_general_list_measuring_unit_categories", "admin_general_count_measuring_unit_categories", null, "AdminGeneralMeasuringUnit");
+		
+		$list->add_column("","symbol",false,"16px");
+		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"name",true);
+		
+		$template = new HTMLTemplate("base/admin/general/list_measuring_unit_categories.html");
 		
 		$template->set_var("list", $list->get_list());
 		
@@ -150,7 +183,21 @@ class AdminGeneralIO
 		
 		$tab_io->add("measuring-units", Language::get_message("BaseGeneralAdminGeneralTabMeasuringUnits", "general"), $params, false);  
 		
-				
+		
+		$paramquery = $_GET;
+		$paramquery['action'] = "list_measuring_unit_ratios";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$tab_io->add("measuring-unit-ratios", Language::get_message("BaseGeneralAdminGeneralTabMeasuringUnitRatios", "general"), $params, false);  
+		
+		
+		$paramquery = $_GET;
+		$paramquery['action'] = "list_measuring_unit_categories";
+		$params = http_build_query($paramquery,'','&#38;');
+		
+		$tab_io->add("measuring-unit-categories", Language::get_message("BaseGeneralAdminGeneralTabMeasuringUnitCategories", "general"), $params, false);  
+
+		
 		$paramquery = $_GET;
 		$paramquery['action'] = "list_currencies";
 		$params = http_build_query($paramquery,'','&#38;');
@@ -170,6 +217,14 @@ class AdminGeneralIO
 			
 			case "list_measuring_units":
 				$tab_io->activate("measuring-units");
+			break;
+			
+			case "list_measuring_unit_ratios":
+				$tab_io->activate("measuring-unit-ratios");
+			break;
+			
+			case "list_measuring_unit_categories":
+				$tab_io->activate("measuring-unit-categories");
 			break;
 			
 			case "list_currencies":
@@ -195,6 +250,14 @@ class AdminGeneralIO
 			
 			case "list_measuring_units":
 				self::list_measuring_units();
+			break;
+			
+			case "list_measuring_unit_ratios":
+				self::list_measuring_unit_ratios();
+			break;
+			
+			case "list_measuring_unit_categories":
+				self::list_measuring_unit_categories();
 			break;
 			
 			case "list_currencies":

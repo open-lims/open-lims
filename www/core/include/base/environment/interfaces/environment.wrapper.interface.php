@@ -92,6 +92,34 @@ interface Environment_WrapperInterface
 	 * @param integer $end
 	 * @return array
 	 */
+	public static function list_measuring_unit_ratios($order_by, $order_method, $start, $end);
+	
+	/**
+	 * @return integer
+	 */
+	public static function count_measuring_unit_ratios();
+	
+	/**
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_measuring_unit_categories($order_by, $order_method, $start, $end);
+	
+	/**
+	 * @return integer
+	 */
+	public static function count_measuring_unit_categories();
+	
+	/**
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
 	public static function list_currencies($order_by, $order_method, $start, $end);
 	
 	/**

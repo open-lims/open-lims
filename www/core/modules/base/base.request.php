@@ -511,6 +511,46 @@ class BaseRequest
 				echo AdminGeneralAjax::count_measuring_units($_POST['argument_array']);
 			break;
 			
+			case "admin_general_list_measuring_unit_ratios":
+				require_once("ajax/admin/admin_general.ajax.php");
+				echo AdminGeneralAjax::list_measuring_unit_ratios(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'],  
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
+			break;
+			
+			case "admin_general_count_measuring_unit_ratios":
+				require_once("ajax/admin/admin_general.ajax.php");
+				echo AdminGeneralAjax::count_measuring_unit_ratios($_POST['argument_array']);
+			break;
+			
+			case "admin_general_list_measuring_unit_categories":
+				require_once("ajax/admin/admin_general.ajax.php");
+				echo AdminGeneralAjax::list_measuring_unit_categories(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'],  
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
+			break;
+			
+			case "admin_general_count_measuring_unit_categories":
+				require_once("ajax/admin/admin_general.ajax.php");
+				echo AdminGeneralAjax::count_measuring_unit_categories($_POST['argument_array']);
+			break;
+			
 			case "admin_general_list_currencies":
 				require_once("ajax/admin/admin_general.ajax.php");
 				echo AdminGeneralAjax::list_currencies(

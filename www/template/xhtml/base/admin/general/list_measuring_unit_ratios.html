@@ -1,0 +1,118 @@
+<script>
+/*<![CDATA[*/
+$(document).ready(function()
+{
+	$("#BaseAdminMeasuringUnitRatioAddEditDialog").dialog(
+	{
+		autoOpen: false,
+		buttons: 
+		{
+			"Close": function()
+			{
+				$( this ).dialog( "close" );
+			},
+			"OK": function()
+			{
+				$( this ).dialog( "close" );
+			}
+		},
+		height: 340,
+		width: 350
+	});
+	
+	$('#BaseAdminMeasuringUnitRatioAdd').click(function()
+	{
+		$("#BaseAdminMeasuringUnitRatioAddEditDialog").dialog("open");
+		$("#BaseAdminMeasuringUnitRatioAddEditDialog").dialog("option", "title", "Add a Measuring Unit Ratio");
+	});
+		
+	$(".BaseAdminMeasuringUnitRatioDelete").each().live('click', function()
+	{
+		
+	});
+});
+/*]]>*/  
+</script>
+
+<div id="BaseAdminMeasuringUnitRatioAddEditDialog" style='display: none;'>
+<div class='Form'>
+
+<div class='FormBox'>
+<div class='FormBoxHeadline'>Numerator</div>
+<table style='width: 80%'>
+	<tr>
+		<td>Measuring Unit:</td>
+		<td>
+			<select>
+			
+			<!-- FOREACH BEGIN ([[MEASURING_UNITS]]) -->
+		
+				<option value='[[MEASURING_UNITS:VALUE]]' [[MEASURING_UNITS:DISABLED]]>[[MEASURING_UNITS:CONTENT]]</option>
+			
+			<!-- FOREACH END -->
+			
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Exponent:</td>
+		<td>
+			<select>
+			<!-- FOREACH BEGIN ([[NUMERATOR_EXPONENTS]]) -->
+		
+				<option value='[[NUMERATOR_EXPONENTS:VALUE]]' [[NUMERATOR_EXPONENTS:DISABLED]]>[[NUMERATOR_EXPONENTS:CONTENT]]</option>
+			
+			<!-- FOREACH END -->
+			</select>
+		</td>
+	</tr>
+</table>
+</div>
+
+<div class='FormBox'>
+<div class='FormBoxHeadline'>Denominator</div>
+<table style='width: 80%'>
+	<tr>
+		<td>Measuring Unit:</td>
+		<td>
+			<select>
+			<!-- FOREACH BEGIN ([[MEASURING_UNITS]]) -->
+		
+				<option value='[[MEASURING_UNITS:VALUE]]' [[MEASURING_UNITS:DISABLED]]>[[MEASURING_UNITS:CONTENT]]</option>
+			
+			<!-- FOREACH END -->
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Exponent:</td>
+		<td>
+			<select>
+			<!-- FOREACH BEGIN ([[DENOMINATOR_EXPONENTS]]) -->
+		
+				<option value='[[DENOMINATOR_EXPONENTS:VALUE]]' [[DENOMINATOR_EXPONENTS:DISABLED]]>[[DENOMINATOR_EXPONENTS:CONTENT]]</option>
+			
+			<!-- FOREACH END -->
+			</select>
+		</td>
+	</tr>
+</table>
+</div>
+
+</table>
+</div>
+</div>
+
+<!-- CONTAINER BEGIN ("Measuring Unit Ratios") -->
+
+<div id='ListButtonBar'>
+	<a id='BaseAdminMeasuringUnitRatioAdd' class='ListButton'>
+	<img src='images/icons/add.png' alt='' />
+	<div>Add a Measuring Unit Ratio</div>
+	</a>
+</div>
+<div id='ListButtonBarClear'></div>
+
+[[LIST]]
+
+<!-- CONTAINER END () -->

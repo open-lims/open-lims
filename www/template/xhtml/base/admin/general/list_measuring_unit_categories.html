@@ -1,0 +1,62 @@
+<script>
+/*<![CDATA[*/
+$(document).ready(function()
+{
+	$("#BaseAdminMeasuringUnitCategoryAddEditDialog").dialog(
+	{
+		autoOpen: false,
+		buttons: 
+		{
+			"Close": function()
+			{
+				$( this ).dialog( "close" );
+			},
+			"OK": function()
+			{
+				$( this ).dialog( "close" );
+			}
+		},
+		height: 480,
+		width: 500
+	});
+	
+	$('#BaseAdminMeasuringUnitCategoryAdd').click(function()
+	{
+		$("#BaseAdminMeasuringUnitAddEditDialog").dialog("open");
+		$("#BaseAdminMeasuringUnitAddEditDialog").dialog("option", "title", "Add a Measuring Unit Category");
+	});
+	
+	$(".BaseAdminMeasuringUnitCategoryEdit").each().live('click', function()
+	{
+		var id = $(this).attr("id");
+		id = id.replace("BaseAdminMeasuringUnitEdit","");
+		
+		$("#BaseAdminMeasuringUnitCategoryAddEditDialog").dialog("open");
+		$("#BaseAdminMeasuringUnitCategoryAddEditDialog").dialog("option", "title", "Edit a Measuring Unit Category");
+	});
+	
+	$(".BaseAdminMeasuringUnitCategoryDelete").each().live('click', function()
+	{
+		
+	});
+});
+/*]]>*/  
+</script>
+
+<div id="BaseAdminMeasuringUnitCategoryAddEditDialog" style='display: none;'>
+
+</div>
+
+<!-- CONTAINER BEGIN ("Measuring Unit Categories") -->
+
+<div id='ListButtonBar'>
+	<a id='BaseAdminMeasuringUnitCategoryAdd' class='ListButton'>
+	<img src='images/icons/add.png' alt='' />
+	<div>Add a Measuring Unit Category</div>
+	</a>
+</div>
+<div id='ListButtonBarClear'></div>
+
+[[LIST]]
+
+<!-- CONTAINER END () -->

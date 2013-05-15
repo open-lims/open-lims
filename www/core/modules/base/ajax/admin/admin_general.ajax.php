@@ -68,7 +68,7 @@ class AdminGeneralAjax
 			}
 			else
 			{
-				$list_request->override_last_line("<span class='italic'>No results found!</span>");
+				$list_request->empty_message("<span class='italic'>No results found!</span>");
 			}
 				
 			$list_request->set_array($list_array);
@@ -141,7 +141,7 @@ class AdminGeneralAjax
 			}
 			else
 			{
-				$list_request->override_last_line("<span class='italic'>No results found!</span>");
+				$list_request->empty_message("<span class='italic'>No results found!</span>");
 			}
 				
 			$list_request->set_array($list_array);
@@ -227,7 +227,7 @@ class AdminGeneralAjax
 			}
 			else
 			{
-				$list_request->override_last_line("<span class='italic'>No results found!</span>");
+				$list_request->empty_message("<span class='italic'>No results found!</span>");
 			}
 				
 			$list_request->set_array($list_array);
@@ -354,7 +354,7 @@ class AdminGeneralAjax
 			}
 			else
 			{
-				$list_request->override_last_line("<span class='italic'>No results found!</span>");
+				$list_request->empty_message("<span class='italic'>No results found!</span>");
 			}
 				
 			$list_request->set_array($list_array);
@@ -379,6 +379,165 @@ class AdminGeneralAjax
 		if ($user->is_admin())
 		{
 			return Environment_Wrapper::count_measuring_units();
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
+	}
+	
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $get_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return integer
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function list_measuring_unit_ratios($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			$argument_array = json_decode($json_argument_array);
+			
+			$list_request = new ListRequest_IO();
+			$list_request->set_column_array($json_column_array);
+		
+			if (!is_numeric($entries_per_page) or $entries_per_page < 1)
+			{
+				$entries_per_page = 20;
+			}
+			
+			$list_array = Environment_Wrapper::list_measuring_unit_ratios($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+		
+			
+			if (is_array($list_array) and count($list_array) >= 1)
+			{
+				foreach($list_array as $key => $value)
+				{
+					if (!$list_array[$key]['numerator_exp'])
+					{
+						$list_array[$key]['numerator_exp'] = "0";
+					}
+					
+					if (!$list_array[$key]['denominator_exp'])
+					{
+						$list_array[$key]['denominator_exp'] = "0";
+					}
+					
+					$measuring_unit_ratio = new MeasuringUnitRatio($list_array[$key]['id']);
+					$list_array[$key]['name'] = $measuring_unit_ratio->get_symbol();
+					
+					$list_array[$key]['delete'] = "<a href='#' class='BaseAdminMeasuringUnitRatioDelete' id='BaseAdminMeasuringUnitRatioDelete".$list_array[$key]['id']."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
+				}
+			}
+			else
+			{
+				$list_request->empty_message("<span class='italic'>No results found!</span>");
+			}
+				
+			$list_request->set_array($list_array);
+			
+			return $list_request->get_page($page);
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
+	}
+	
+	/**
+	 * @param string $json_argument_array�
+	 * @return integer
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function count_measuring_unit_ratios($json_argument_array)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			return Environment_Wrapper::count_measuring_unit_ratios();
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
+	}
+	
+	/**
+	 * @param string $json_column_array
+	 * @param string $json_argument_array
+	 * @param string $get_array
+	 * @param string $css_page_id
+	 * @param string $css_row_sort_id
+	 * @param string $entries_per_page
+	 * @param string $page
+	 * @param string $sortvalue
+	 * @param string $sortmethod
+	 * @return integer
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function list_measuring_unit_categories($json_column_array, $json_argument_array, $get_array, $css_page_id, $css_row_sort_id, $entries_per_page, $page, $sortvalue, $sortmethod)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			$argument_array = json_decode($json_argument_array);
+			
+			$list_request = new ListRequest_IO();
+			$list_request->set_column_array($json_column_array);
+		
+			if (!is_numeric($entries_per_page) or $entries_per_page < 1)
+			{
+				$entries_per_page = 20;
+			}
+			
+			$list_array = Environment_Wrapper::list_measuring_unit_categories($sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+		
+			
+			if (is_array($list_array) and count($list_array) >= 1)
+			{
+				foreach($list_array as $key => $value)
+				{
+					
+				}
+			}
+			else
+			{
+				$list_request->empty_message("<span class='italic'>No results found!</span>");
+			}
+				
+			$list_request->set_array($list_array);
+			
+			return $list_request->get_page($page);
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
+	}
+	
+	/**
+	 * @param string $json_argument_array�
+	 * @return integer
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function count_measuring_unit_categories($json_argument_array)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			return Environment_Wrapper::count_measuring_unit_categories();
 		}
 		else
 		{

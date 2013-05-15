@@ -126,6 +126,50 @@ class Environment_Wrapper implements Environment_WrapperInterface
 	}
 	
 	/**
+	 * @see SystemFE_WrapperInterface::list_measuring_unit_ratios()
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_measuring_unit_ratios($order_by, $order_method, $start, $end)
+	{
+		return Environment_Wrapper_Access::list_measuring_unit_ratios($order_by, $order_method, $start, $end);
+	}
+	
+	/**
+	 * @see SystemFE_WrapperInterface::count_measuring_unit_ratios()
+	 * @return integer
+	 */
+	public static function count_measuring_unit_ratios()
+	{
+		return Environment_Wrapper_Access::count_measuring_unit_ratios();
+	}
+	
+	/**
+	 * @see SystemFE_WrapperInterface::list_measuring_unit_categories()
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_measuring_unit_categories($order_by, $order_method, $start, $end)
+	{
+		return Environment_Wrapper_Access::list_measuring_unit_categories($order_by, $order_method, $start, $end);
+	}
+	
+	/**
+	 * @see SystemFE_WrapperInterface::count_measuring_unit_categories()
+	 * @return integer
+	 */
+	public static function count_measuring_unit_categories()
+	{
+		return Environment_Wrapper_Access::count_measuring_unit_categories();
+	}
+	
+	/**
 	 * @see SystemFE_WrapperInterface::list_currencies()
 	 * @param string $order_by
 	 * @param string $order_method
