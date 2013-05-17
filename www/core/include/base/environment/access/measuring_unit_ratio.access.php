@@ -94,7 +94,7 @@ class MeasuringUnitRatio_Access
 		
 		if (is_numeric($numerator_unit_id) and is_numeric($numerator_unit_exponent) and is_numeric($denominator_unit_id) and is_numeric($denominator_unit_exponent))
 		{
-			$sql_write = "INSERT INTO ".constant("MEASURING_UNIT_RATIO_TABLE")." (id,numerator_unit_id,numerator_unit_exponent,denominator_unit_id,basdenominator_unit_exponente_id) " .
+			$sql_write = "INSERT INTO ".constant("MEASURING_UNIT_RATIO_TABLE")." (id,numerator_unit_id,numerator_unit_exponent,denominator_unit_id,denominator_unit_exponent) " .
 							"VALUES (nextval('".self::MEASURING_UNIT_RATIO_PK_SEQUENCE."'::regclass),".$numerator_unit_id.",".$numerator_unit_exponent.",".$denominator_unit_id.",".$denominator_unit_exponent.")";
 			
 			$res_write = $db->db_query($sql_write);

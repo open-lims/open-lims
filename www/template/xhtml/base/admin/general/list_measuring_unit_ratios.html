@@ -13,11 +13,74 @@ $(document).ready(function()
 			},
 			"OK": function()
 			{
-				$( this ).dialog( "close" );
+				var numerator 	= $(".BaseAdminMeasuringUnitRatioAddEditValue[name='numerator']").val();
+				var denominator = $(".BaseAdminMeasuringUnitRatioAddEditValue[name='denominator']").val();
+				
+				$.ajax(
+				{
+					type: "POST",
+					url: "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=admin_general_add_measuring_unit_ratio",
+					data: "numerator="+numerator+"&denominator="+denominator+"",
+					success: function(data)
+					{
+						if (data == "1")
+						{
+							list.reload();
+							$("#BaseAdminMeasuringUnitRatioAddEditDialog").dialog( "close" );
+						}
+					}
+				});
 			}
 		},
-		height: 340,
+		height: 370,
 		width: 350
+	});
+	
+	$("#BaseAdminMeasuringUnitRatioDeleteDialog").dialog(
+	{
+		autoOpen: false,
+		height: 150,
+		width: 350,
+		buttons: 
+		[{
+			text: "[[LANG:BaseGlobalButtonYes]]",
+			click: function()
+			{
+			 	var open_element = $.data(this, "open_element");
+			 	var id = $(open_element).attr("id").replace("BaseAdminMeasuringUnitRatioDelete","");
+			 	var element = $(open_element);
+			 	
+			 	$.ajax(
+	 			{
+	 				type: "POST",
+	 				url: "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=admin_general_delete_measuring_unit_ratio",
+	 				data: "id="+id,
+	 				success: function(data)
+	 				{
+	 					if (data == 1)
+	 					{
+	 						$(element).parent().parent().fadeOut(400, function()
+	 						{
+	 							list.reload();
+	 						});
+	 					}
+	 					else
+	 					{
+	 						ErrorDialog("Error", "An error occured");
+	 					}
+	 				}
+	 			});
+			 	
+			 	$(this).dialog("close");
+			 	
+			}
+		},{
+			text: "[[LANG:BaseGlobalButtonNo]]",
+			click: function()
+			{
+			 	$(this).dialog("close");
+			}
+		}]
 	});
 	
 	$('#BaseAdminMeasuringUnitRatioAdd').click(function()
@@ -28,22 +91,26 @@ $(document).ready(function()
 		
 	$(".BaseAdminMeasuringUnitRatioDelete").each().live('click', function()
 	{
-		
+		$("#BaseAdminMeasuringUnitRatioDeleteDialog").data('open_element', this).dialog("open");
 	});
 });
 /*]]>*/  
 </script>
+
+<div id='BaseAdminMeasuringUnitRatioDeleteDialog' title='Delete Measuring Unit Ratio'>
+Are you sure?
+</div>
 
 <div id="BaseAdminMeasuringUnitRatioAddEditDialog" style='display: none;'>
 <div class='Form'>
 
 <div class='FormBox'>
 <div class='FormBoxHeadline'>Numerator</div>
-<table style='width: 80%'>
+<table style='width: 100%'>
 	<tr>
 		<td>Measuring Unit:</td>
 		<td>
-			<select>
+			<select name='numerator' class='BaseAdminMeasuringUnitRatioAddEditValue' style='display: block; width: 130px;'>
 			
 			<!-- FOREACH BEGIN ([[MEASURING_UNITS]]) -->
 		
@@ -51,18 +118,6 @@ $(document).ready(function()
 			
 			<!-- FOREACH END -->
 			
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<td>Exponent:</td>
-		<td>
-			<select>
-			<!-- FOREACH BEGIN ([[NUMERATOR_EXPONENTS]]) -->
-		
-				<option value='[[NUMERATOR_EXPONENTS:VALUE]]' [[NUMERATOR_EXPONENTS:DISABLED]]>[[NUMERATOR_EXPONENTS:CONTENT]]</option>
-			
-			<!-- FOREACH END -->
 			</select>
 		</td>
 	</tr>
@@ -71,28 +126,18 @@ $(document).ready(function()
 
 <div class='FormBox'>
 <div class='FormBoxHeadline'>Denominator</div>
-<table style='width: 80%'>
+<table style='width: 100%'>
 	<tr>
 		<td>Measuring Unit:</td>
 		<td>
-			<select>
+			<select name='denominator' class='BaseAdminMeasuringUnitRatioAddEditValue' style='display: block; width: 130px;'>
+			
 			<!-- FOREACH BEGIN ([[MEASURING_UNITS]]) -->
 		
 				<option value='[[MEASURING_UNITS:VALUE]]' [[MEASURING_UNITS:DISABLED]]>[[MEASURING_UNITS:CONTENT]]</option>
 			
 			<!-- FOREACH END -->
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<td>Exponent:</td>
-		<td>
-			<select>
-			<!-- FOREACH BEGIN ([[DENOMINATOR_EXPONENTS]]) -->
-		
-				<option value='[[DENOMINATOR_EXPONENTS:VALUE]]' [[DENOMINATOR_EXPONENTS:DISABLED]]>[[DENOMINATOR_EXPONENTS:CONTENT]]</option>
 			
-			<!-- FOREACH END -->
 			</select>
 		</td>
 	</tr>

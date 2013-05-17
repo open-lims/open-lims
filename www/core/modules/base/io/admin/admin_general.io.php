@@ -118,6 +118,34 @@ class AdminGeneralIO
 		
 		$template->set_var("list", $list->get_list());
 		
+		$result = array();
+		$counter = 0;
+		
+		$measuring_unit_array = MeasuringUnit::get_categorized_list();
+				
+		if (is_array($measuring_unit_array) and count($measuring_unit_array) >= 1)
+		{
+			foreach($measuring_unit_array as $key => $value)
+			{
+				if ($value['headline'] == true)
+				{
+					$result[$counter]['disabled'] = "disabled='disabled'";
+				}
+				else
+				{
+					$result[$counter]['disabled'] = "";
+				}
+				
+				$result[$counter]['value'] = $value['id']."-".$value['exponent'];
+				
+				$result[$counter]['selected'] = "";
+				$result[$counter]['content'] = $value['name'];
+				$counter++;
+			}
+		}
+		
+		$template->set_var("measuring_units",$result);
+		
 		$template->output();
 	}
 	

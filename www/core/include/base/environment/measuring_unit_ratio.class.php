@@ -86,7 +86,6 @@ class MeasuringUnitRatio //implements MeasuringUnitRatioInterface
 	}
 	
 	/**
-	 * @todo
 	 * @see MeasuringUnitRatioInterface::create()
 	 * @param integer $numerator_id
 	 * @param integer $numerator_exponent
@@ -94,19 +93,32 @@ class MeasuringUnitRatio //implements MeasuringUnitRatioInterface
 	 * @param integer $denominator_exponent
 	 * @return integer
 	 */
-	public function create($numerator_id, $numerator_exponent, $denominator_id, $denominator_exponent)
+	public function create($numerator_unit_id, $numerator_unit_exponent, $denominator_unit_id, $denominator_unit_exponent)
 	{
-		
+		if (is_numeric($numerator_unit_id) and is_numeric($numerator_unit_exponent) and is_numeric($denominator_unit_id) and is_numeric($denominator_unit_exponent))
+		{
+			return $this->measuring_unit_ratio->create($numerator_unit_id, $numerator_unit_exponent, $denominator_unit_id, $denominator_unit_exponent);
+		}
+		else 
+		{
+			return null;
+		}
 	}
 	
 	/**
-	 * @todo
 	 * @see MeasuringUnitRatioInterface::delete()
 	 * @return bool
 	 */
 	public function delete()
 	{
-		
+		if ($this->measuring_unit_ratio_id and $this->measuring_unit_ratio)
+		{
+			return $this->measuring_unit_ratio->delete();
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**

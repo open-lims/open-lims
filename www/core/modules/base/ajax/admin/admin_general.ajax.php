@@ -472,6 +472,86 @@ class AdminGeneralAjax
 		}
 	}
 	
+	public static function add_measuring_unit_ratio($numerator, $denominator)
+	{
+		if ($numerator and $denominator)
+		{
+			$numerator_array = explode("-", $numerator, 2);
+			if (is_array($numerator_array) and count($numerator_array) === 2)
+			{
+				if (is_numeric($numerator_array[1]))
+				{
+					$numerator_unit_id = $numerator_array[0];
+					$numerator_unit_exponent = $numerator_array[1];
+				}
+				else
+				{
+					$numerator_unit_id = $numerator_array[0];
+					$numerator_unit_exponent = 0;
+				}
+			}
+			elseif(is_array($numerator_array) and count($numerator_array) === 1)
+			{
+				$numerator_unit_id = $numerator_array[0];
+				$numerator_unit_exponent = 0;
+			}
+			
+			$denominator_array = explode("-", $denominator, 2);
+			if (is_array($denominator_array) and count($denominator_array) === 2)
+			{
+				if (is_numeric($denominator_array[1]))
+				{
+					$denominator_unit_id = $denominator_array[0];
+					$denominator_unit_exponent = $denominator_array[1];
+				}
+				else
+				{
+					$denominator_unit_id = $denominator_array[0];
+					$denominator_unit_exponent = 0;
+				}
+			}
+			elseif(is_array($denominator_array) and count($denominator_array) === 1)
+			{
+				$denominator_unit_id = $denominator_array[0];
+				$denominator_unit_exponent = 0;
+			}
+			
+			$measuring_unit_ratio = new MeasuringUnitRatio(null);
+			if ($measuring_unit_ratio->create($numerator_unit_id, $numerator_unit_exponent, $denominator_unit_id, $denominator_unit_exponent) !== null)
+			{
+				return "1";
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			return "0";
+		}
+	}
+	
+	public static function delete_measuring_unit_ratio($id)
+	{
+		if (is_numeric($id))
+		{
+			$measuring_unit_ratio = new MeasuringUnitRatio($id);
+			if ($measuring_unit_ratio->delete() == true)
+			{
+				return "1";
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			return "0";
+		}
+	}
+	
 	/**
 	 * @param string $json_column_array
 	 * @param string $json_argument_array

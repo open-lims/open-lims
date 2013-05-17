@@ -531,6 +531,16 @@ class BaseRequest
 				echo AdminGeneralAjax::count_measuring_unit_ratios($_POST['argument_array']);
 			break;
 			
+			case "admin_general_add_measuring_unit_ratio":
+				require_once("ajax/admin/admin_general.ajax.php");
+				echo AdminGeneralAjax::add_measuring_unit_ratio($_POST['numerator'], $_POST['denominator']);
+			break;
+			
+			case "admin_general_delete_measuring_unit_ratio":
+				require_once("ajax/admin/admin_general.ajax.php");
+				echo AdminGeneralAjax::delete_measuring_unit_ratio($_POST['id']);
+			break;
+			
 			case "admin_general_list_measuring_unit_categories":
 				require_once("ajax/admin/admin_general.ajax.php");
 				echo AdminGeneralAjax::list_measuring_unit_categories(
