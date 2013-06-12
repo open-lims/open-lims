@@ -27,13 +27,35 @@
  */
 class ParameterIO
 {	
-	public static function detail()
+	public static function detail($parameter = null, $target_params = null, $display_header = true)
 	{
-		if (is_numeric($_GET['parameter_id']))
+		if (is_object($parameter) and $target_params)
+		{
+			$retrace = "index.php?".$target_params;			
+		}
+		elseif(is_numeric($_GET['parameter_id']))
 		{
 			$parameter_id = $_GET['parameter_id'];
 			$parameter = ParameterTemplateParameter::get_instance($parameter_id);
-						
+			
+			$paramquery = $_GET;
+			unset($paramquery['action']);
+			unset($paramquery['parameter_id']);
+			$params = http_build_query($paramquery);
+			$retrace = "index.php?".$params;
+			
+			if ($_GET['version'] and is_numeric($_GET['version']))
+			{
+				$parameter->open_internal_revision($_GET['version']);
+			}
+		}
+		else
+		{
+			throw new ParameterIDMissingException();
+		}
+
+		if ($parameter->is_read_access())
+		{	
 			$parameter_template = new ParameterTemplate($parameter->get_template_id());
 			
 			$parameter_template_field_array = $parameter_template->get_fields();
@@ -144,18 +166,13 @@ class ParameterIO
 			$template->set_var("name", $parameter_template->get_name());
 			$template->set_var("fields", $output_template_field_array);
 			
-			$paramquery = $_GET;
-			unset($paramquery['action']);
-			unset($paramquery['parameter_id']);
-			$params = http_build_query($paramquery);
-			
-			$template->set_var("retrace", "index.php?".$params);
+			$template->set_var("retrace", $retrace);
 			
 			$template->output();
 		}
 		else
 		{
-			throw new ParameterIDMissingException();
+			throw new DataSecurityAccessDeniedException();
 		}
 	}
 	
@@ -316,6 +333,26 @@ class ParameterIO
 		}
 	}
 
+	public static function edit_parameter_item($item_id)
+	{
+		if (is_numeric($item_id))
+		{
+			$data_entity_id = DataEntity::get_entry_by_item_id($item_id);
+			$parameter_id = Parameter::get_parameter_id_by_data_entity_id($data_entity_id);
+		
+			$parameter = Parameter::get_instance($parameter_id);
+	
+			if ($parameter->is_read_access())
+			{		
+				self::detail($parameter, http_build_query(Retrace::resolve_retrace_string($_GET['retrace'])), false);
+			}
+		}
+		else
+		{
+			throw new ItemIDMissingException();
+		}
+	}
+	
 	public static function history()
 	{
 		

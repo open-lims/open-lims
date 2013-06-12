@@ -387,6 +387,35 @@ class AdminGeneralAjax
 	}
 	
 	/**
+	 * @param string $base_id
+	 * @param string $category_id
+	 * @param string $name
+	 * @param string $min_value
+	 * @param string $max_value
+	 * @param string $min_prefix_exponent
+	 * @param string $max_prefix_exponent
+	 * @param string $prefix_calculcation_exponent
+	 * @param string $calculation
+	 * @param string $type
+	 * @return integer
+	 */
+	public static function add_measuring_unit($base_id, $category_id, $name, $min_value, $max_value, $min_prefix_exponent, $max_prefix_exponent, $prefix_calculcation_exponent, $calculation, $type)
+	{
+		
+		
+		// create($base_id, $category_id, $name, $unit_symbol, $min_value, $max_value, $min_prefix_exponent, $max_prefix_exponent, $prefix_calculation_exponent, $calculation, $type)
+	}
+	
+	/**
+	 * @param string $id
+	 * @return string
+	 */
+	public static function delete_measuring_unit($id)
+	{
+		
+	}
+	
+	/**
 	 * @param string $json_column_array
 	 * @param string $json_argument_array
 	 * @param string $get_array
@@ -472,6 +501,11 @@ class AdminGeneralAjax
 		}
 	}
 	
+	/**
+	 * @param string $numerator
+	 * @param string $denominator
+	 * @return integer
+	 */
 	public static function add_measuring_unit_ratio($numerator, $denominator)
 	{
 		if ($numerator and $denominator)
@@ -532,6 +566,10 @@ class AdminGeneralAjax
 		}
 	}
 	
+	/**
+	 * @param string $id
+	 * @return string
+	 */
 	public static function delete_measuring_unit_ratio($id)
 	{
 		if (is_numeric($id))
@@ -623,6 +661,24 @@ class AdminGeneralAjax
 		{
 			throw new BaseUserAccessDeniedException();	
 		}
+	}
+	
+	/**
+	 * @param string $name
+	 * @return integer
+	 */
+	public static function add_measuring_unit_category($name)
+	{
+		
+	}
+	
+	/**
+	 * @param string $id
+	 * @return string
+	 */
+	public static function delete_measuring_unit_category($id)
+	{
+		
 	}
 	
 	/**

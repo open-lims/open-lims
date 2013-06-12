@@ -42,7 +42,7 @@ interface MeasuringUnitInterface
 	 * @param string $unit_symbol
 	 * @param stirng $calculation
 	 */
-	public function create($toid, $name, $type, $unit_symbol, $calulcation);
+	public function create($base_id, $category_id, $name, $unit_symbol, $min_value, $max_value, $min_prefix_exponent, $max_prefix_exponent, $prefix_calculation_exponent, $calculation, $type);
 	
 	/**
 	 * @return bool

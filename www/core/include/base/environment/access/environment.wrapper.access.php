@@ -353,6 +353,18 @@ class Environment_Wrapper_Access
 				case "type":
 					$sql_order_by = "ORDER BY type ".$sql_order_method;
 				break;
+				
+				case "min_value":
+					$sql_order_by = "ORDER BY min_value ".$sql_order_method;
+				break;
+				
+				case "max_value":
+					$sql_order_by = "ORDER BY max_value ".$sql_order_method;
+				break;
+				
+				case "category":
+					$sql_order_by = "ORDER BY category ".$sql_order_method;
+				break;
 						
 				default:
 					$sql_order_by = "ORDER BY type ASC";

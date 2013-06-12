@@ -16,9 +16,56 @@ $(document).ready(function()
 				$( this ).dialog( "close" );
 			}
 		},
-		height: 480,
+		height: 550,
 		width: 500
 	});
+	
+	$("#BaseAdminMeasuringUnitDeleteDialog").dialog(
+	{
+		autoOpen: false,
+		height: 150,
+		width: 350,
+		buttons: 
+		[{
+			text: "[[LANG:BaseGlobalButtonYes]]",
+			click: function()
+			{
+			 	var open_element = $.data(this, "open_element");
+			 	var id = $(open_element).attr("id").replace("BaseAdminMeasuringUnitRatioDelete","");
+			 	var element = $(open_element);
+			 	
+			 	$.ajax(
+	 			{
+	 				type: "POST",
+	 				url: "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=admin_general_delete_measuring_unit_ratio",
+	 				data: "id="+id,
+	 				success: function(data)
+	 				{
+	 					if (data == 1)
+	 					{
+	 						$(element).parent().parent().fadeOut(400, function()
+	 						{
+	 							list.reload();
+	 						});
+	 					}
+	 					else
+	 					{
+	 						ErrorDialog("Error", "An error occured");
+	 					}
+	 				}
+	 			});
+			 	
+			 	$(this).dialog("close");
+			 	
+			}
+		},{
+			text: "[[LANG:BaseGlobalButtonNo]]",
+			click: function()
+			{
+			 	$(this).dialog("close");
+			}
+		}]
+	});	
 	
 	$('#BaseAdminMeasuringUnitAdd').click(function()
 	{
@@ -43,8 +90,91 @@ $(document).ready(function()
 /*]]>*/  
 </script>
 
-<div id="BaseAdminMeasuringUnitAddEditDialog" style='display: none;'>
+<div id='BaseAdminMeasuringUnitDeleteDialog' title='Delete Measuring Unit' style='display: none;'>
+Are you sure?
+</div>
 
+<div id="BaseAdminMeasuringUnitAddEditDialog" style='display: none;'>
+<div class='Form'>
+
+<div class='FormBox'>
+<div class='FormBoxHeadline'>Main-Information</div>
+<table style='width: 100%'>
+	<tr>
+		<td style='width: 170px;'>Name:</td>
+		<td><input type='text' style='display: block;' /></td>
+	</tr>
+	<tr>
+		<td>Category:</td>
+		<td>
+			<select name='numerator' style='display: block; width: 130px;'>
+			
+			<!-- FOREACH BEGIN ([[MEASURING_UNIT_CATEGORIES]]) -->
+		
+				<option value='[[MEASURING_UNIT_CATEGORIES:VALUE]]'>[[MEASURING_UNIT_CATEGORIES:CONTENT]]</option>
+			
+			<!-- FOREACH END -->
+			
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Type:</td>
+		<td>
+			<select name='numerator' style='display: block; width: 130px;'>
+				<option>none</option>
+				<option>metric</option>
+				<option>anglo-american</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Secondary-Unit-Exp. from:</td>
+		<td>
+			<select name='numerator' style='display: block; width: 130px;'>
+				<option>none</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Secondary-Unit-Exp. to:</td>
+		<td>
+			<select name='numerator' style='display: block; width: 130px;'>
+				<option>none</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Symbol:</td>
+		<td><input type='text' /></td>
+	</tr>
+</table>
+</div>
+
+<div class='FormBox'>
+<div class='FormBoxHeadline'>Additional-Information</div>
+<table style='width: 100%'>
+	<tr>
+		<td style='width: 170px;'>Calculation:</td>
+		<td><input type='text' value='B[mul]0' /></td>
+	</tr>
+	<tr>
+		<td>Min-Value:</td>
+		<td><input type='text' /></td>
+	</tr>
+	<tr>
+		<td>Max-Value:</td>
+		<td><input type='text' /></td>
+	</tr>
+	<tr>
+		<td>Calculation-Exp.:</td>
+		<td><input type='text' /></td>
+	</tr>
+</table>
+</div>
+
+</table>
+</div>
 </div>
 
 <!-- CONTAINER BEGIN ("Measuring Units") -->

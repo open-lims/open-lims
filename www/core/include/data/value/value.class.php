@@ -696,14 +696,14 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 			}
 		}
 		else
-		{
+		{			
 			$current_value = $this->value_version->get_value();
 			
 			if (strlen($current_value) > 0)
 			{
 				$current_value_string = trim(unserialize($current_value));
 				$new_value_string = trim($value_array['description']);
-				
+								
 				if ($current_value_string != $new_value_string and $new_value_string)
 				{
 					$value_checksum = md5($new_value_string);
@@ -787,6 +787,10 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 						}
 						return false;
 					}
+				}
+				else
+				{
+					return true;
 				}
 			}
 			else

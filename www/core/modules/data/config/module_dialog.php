@@ -144,9 +144,23 @@
 	$dialog[16]['language_address']	= "DataDialogAdminMenuParameterTemplates";
 	$dialog[16]['weight']			= 200;
 	
-	$dialog[17]['type']				= "item_add";
-	$dialog[17]['class_path']		= "core/modules/data/io/parameter.io.php";
-	$dialog[17]['class']			= "ParameterIO";
-	$dialog[17]['method']			= "add_parameter_item";
-	$dialog[17]['internal_name']	= "parameter";
+	$dialog[17]['type']				= "module_admin";
+	$dialog[17]['class_path']		= "core/modules/data/io/admin/admin_parameter_method.io.php";
+	$dialog[17]['class']			= "AdminParameterMethodIO";
+	$dialog[17]['method']			= "handler";
+	$dialog[17]['internal_name']	= "parameter_method";
+	$dialog[17]['language_address']	= "DataDialogAdminMenuParameterMethods";
+	$dialog[17]['weight']			= 200;
+	
+	$dialog[18]['type']				= "item_add";
+	$dialog[18]['class_path']		= "core/modules/data/io/parameter.io.php";
+	$dialog[18]['class']			= "ParameterIO";
+	$dialog[18]['method']			= "add_parameter_item";
+	$dialog[18]['internal_name']	= "parameter";
+	
+	$dialog[19]['type']				= "item_edit";
+	$dialog[19]['class_path']		= "core/modules/data/io/parameter.io.php";
+	$dialog[19]['class']			= "ParameterIO";
+	$dialog[19]['method']			= "edit_parameter_item";
+	$dialog[19]['internal_name']	= "parameter";
 ?>

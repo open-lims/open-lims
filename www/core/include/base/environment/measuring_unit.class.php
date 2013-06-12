@@ -77,20 +77,27 @@ class MeasuringUnit implements MeasuringUnitInterface
 		unset($this->measuring_unit_id);
 		unset($this->measuring_unit);
 	}
-	
+
 	/**
 	 * @see MeasuringUnitInterface::create()
-	 * @param integer $toid
+	 * @param integer $base_id
+	 * @param integer $category_id
 	 * @param string $name
-	 * @param integer $type
 	 * @param string $unit_symbol
-	 * @param stirng $calculation
+	 * @param float $min_value
+	 * @param float $max_value
+	 * @param integer $min_prefix_exponent
+	 * @param integer $max_prefix_exponent
+	 * @param integer $prefix_calculation_exponent
+	 * @param string $calculation
+	 * @param string $type
+	 * @return integer
 	 */
-	public function create($toid, $name, $type, $unit_symbol, $calulcation)
+	public function create($base_id, $category_id, $name, $unit_symbol, $min_value, $max_value, $min_prefix_exponent, $max_prefix_exponent, $prefix_calculation_exponent, $calculation, $type)
 	{
 		if ($this->measuring_unit)
 		{
-			return $this->measuring_unit->create($toid, $name, $type, $unit_symbol, $calulcation);
+			return $this->measuring_unit->create($base_id, $category_id, $name, $unit_symbol, $min_value, $max_value, $min_prefix_exponent, $max_prefix_exponent, $prefix_calculation_exponent, $calculation, $type);
 		}
 		else
 		{

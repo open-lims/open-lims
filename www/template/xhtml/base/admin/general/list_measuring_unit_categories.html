@@ -16,14 +16,14 @@ $(document).ready(function()
 				$( this ).dialog( "close" );
 			}
 		},
-		height: 480,
-		width: 500
+		height: 140,
+		width: 400
 	});
 	
 	$('#BaseAdminMeasuringUnitCategoryAdd').click(function()
 	{
-		$("#BaseAdminMeasuringUnitAddEditDialog").dialog("open");
-		$("#BaseAdminMeasuringUnitAddEditDialog").dialog("option", "title", "Add a Measuring Unit Category");
+		$("#BaseAdminMeasuringUnitCategoryAddEditDialog").dialog("open");
+		$("#BaseAdminMeasuringUnitCategoryAddEditDialog").dialog("option", "title", "Add a Measuring Unit Category");
 	});
 	
 	$(".BaseAdminMeasuringUnitCategoryEdit").each().live('click', function()
@@ -43,8 +43,19 @@ $(document).ready(function()
 /*]]>*/  
 </script>
 
-<div id="BaseAdminMeasuringUnitCategoryAddEditDialog" style='display: none;'>
+<div id='BaseAdminMeasuringUnitCategoryDeleteDialog' title='Delete Measuring Unit' style='display: none;'>
+Are you sure?
+</div>
 
+<div id="BaseAdminMeasuringUnitCategoryAddEditDialog" style='display: none;'>
+<div class='Form'>
+<table style='width: 100%'>
+	<tr>
+		<td style='width:100px;'>Name:</td>
+		<td><input type='text' size='35' /></td>
+	</tr>
+</table>
+</div>
 </div>
 
 <!-- CONTAINER BEGIN ("Measuring Unit Categories") -->
