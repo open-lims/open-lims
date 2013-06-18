@@ -256,6 +256,11 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 		}
 	}
 	
+	public function get_status()
+	{
+		
+	}
+	
 	public function get_name()
 	{
 		

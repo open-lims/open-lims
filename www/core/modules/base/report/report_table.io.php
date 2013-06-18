@@ -36,13 +36,14 @@ class ReportTable_IO
 	private $width_array = array();
 	private $max_width = 190;
 	
+	private $font_size;
 	private $height;
 	
 	/**
 	 * @param object $pdf
 	 * @param integer $height
 	 */
-	function __construct($pdf, $height='')
+	function __construct($pdf, $height='', $font_size = null)
 	{
 		if (is_object($pdf))
 		{
@@ -50,6 +51,10 @@ class ReportTable_IO
 			if ($height)
 			{
 				$this->height = $height;
+			}
+			if ($font_size)
+			{
+				$this->font_size = $font_size;
 			}
 		}
 		else
@@ -101,7 +106,15 @@ class ReportTable_IO
 	{
 		if (is_array($this->header_array) and count($this->header_array) >= 1)
 		{
-			$this->pdf->SetFont('dejavusans', 'B', 14, '', true);
+			if ($this->font_size)
+			{
+				$this->pdf->SetFont('dejavusans', 'B', $this->font_size, '', true);
+			}
+			else
+			{
+				$this->pdf->SetFont('dejavusans', 'B', 14, '', true);
+			}
+			
 			
 			foreach($this->header_array as $key => $value)
 			{
@@ -124,7 +137,15 @@ class ReportTable_IO
 		if (is_array($this->content_array) and count($this->content_array) >= 1)
 		{
 			$this->get_header();
-			$this->pdf->SetFont('dejavusans', '', 14, '', true);
+			
+			if ($this->font_size)
+			{
+				$this->pdf->SetFont('dejavusans', '', $this->font_size, '', true);
+			}
+			else
+			{
+				$this->pdf->SetFont('dejavusans', '', 14, '', true);
+			}
 			
 			foreach($this->content_array as $key => $value)
 			{

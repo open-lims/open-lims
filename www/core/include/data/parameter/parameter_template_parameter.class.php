@@ -157,6 +157,19 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
 		}
 	}
 	
+	public function get_name()
+	{
+		if ($this->parameter_id)
+		{
+			$parameter_template = new ParameterTemplate($this->get_template_id());
+			return $parameter_template->get_name();	
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 	public static function get_instance($parameter_id, $force_new_instance = false)
     {    
     	if (is_numeric($parameter_id) and $parameter_id > 0)

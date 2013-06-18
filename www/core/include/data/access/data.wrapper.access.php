@@ -1018,7 +1018,6 @@ class Data_Wrapper_Access
 						"LEFT JOIN ".constant("DATA_ENTITY_TABLE")."	ON ".constant("DATA_ENTITY_IS_ITEM_TABLE").".data_entity_id	= ".constant("DATA_ENTITY_TABLE").".id " .
 						"LEFT JOIN ".constant("FILE_TABLE")." 			ON ".constant("DATA_ENTITY_TABLE").".id 					= ".constant("FILE_TABLE").".data_entity_id " .
 						"LEFT JOIN ".constant("FILE_VERSION_TABLE")." 	ON ".constant("FILE_TABLE").".id 							= ".constant("FILE_VERSION_TABLE").".toid " .
-						"LEFT JOIN ".constant("USER_PROFILE_TABLE")."	ON ".constant("DATA_ENTITY_TABLE").".owner_id				= ".constant("USER_PROFILE_TABLE").".id " .
 						"WHERE " .
 							"".constant("FILE_VERSION_TABLE").".current = 't' " .
 						"AND " .
@@ -1105,9 +1104,50 @@ class Data_Wrapper_Access
 						"LEFT JOIN ".constant("VALUE_TABLE")." 			ON ".constant("DATA_ENTITY_TABLE").".id 					= ".constant("VALUE_TABLE").".data_entity_id " .
 						"LEFT JOIN ".constant("VALUE_VERSION_TABLE")." 	ON ".constant("VALUE_TABLE").".id 							= ".constant("VALUE_VERSION_TABLE").".toid " .
 						"LEFT JOIN ".constant("VALUE_TYPE_TABLE")." 	ON ".constant("VALUE_TABLE").".type_id 						= ".constant("VALUE_TYPE_TABLE").".id " .
-						"LEFT JOIN ".constant("USER_PROFILE_TABLE")."	ON ".constant("DATA_ENTITY_TABLE").".owner_id				= ".constant("USER_PROFILE_TABLE").".id " .
 						"WHERE " .
 							"".constant("VALUE_VERSION_TABLE").".current = 't' " .
+						"AND " .
+						"".constant("DATA_ENTITY_IS_ITEM_TABLE").".item_id IN (".$item_sql.")";
+
+			$return_array = array();
+			
+			$res = $db->db_query($sql);
+
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array, $data);
+			}
+
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param string $item_sql
+	 * @return array
+	 */
+	public static function list_item_parameters($item_sql)
+	{
+		global $db;
+		
+		if ($item_sql)
+		{			
+			$sql = "SELECT ".constant("PARAMETER_TEMPLATE_TABLE").".name AS name, " .				
+							"".constant("DATA_ENTITY_TABLE").".datetime AS datetime, " .
+							"".constant("DATA_ENTITY_TABLE").".owner_id AS owner_id, " .
+							"".constant("PARAMETER_TABLE").".id AS id " .
+						 "FROM ".constant("DATA_ENTITY_IS_ITEM_TABLE")." " .
+						"LEFT JOIN ".constant("DATA_ENTITY_TABLE")."			ON ".constant("DATA_ENTITY_IS_ITEM_TABLE").".data_entity_id	= ".constant("DATA_ENTITY_TABLE").".id " .
+						"LEFT JOIN ".constant("PARAMETER_TABLE")." 				ON ".constant("DATA_ENTITY_TABLE").".id 					= ".constant("PARAMETER_TABLE").".data_entity_id " .
+						"LEFT JOIN ".constant("PARAMETER_HAS_TEMPLATE_TABLE")." ON ".constant("PARAMETER_TABLE").".id 			= ".constant("PARAMETER_HAS_TEMPLATE_TABLE").".parameter_id " .		
+						"LEFT JOIN ".constant("PARAMETER_TEMPLATE_TABLE")." 	ON ".constant("PARAMETER_HAS_TEMPLATE_TABLE").".template_id = ".constant("PARAMETER_TEMPLATE_TABLE").".id " .		
+						"LEFT JOIN ".constant("PARAMETER_VERSION_TABLE")." 		ON ".constant("PARAMETER_TABLE").".id 			= ".constant("PARAMETER_VERSION_TABLE").".parameter_id " .
+						"WHERE " .
+							"".constant("PARAMETER_VERSION_TABLE").".current = 't' " .
 						"AND " .
 						"".constant("DATA_ENTITY_IS_ITEM_TABLE").".item_id IN (".$item_sql.")";
 

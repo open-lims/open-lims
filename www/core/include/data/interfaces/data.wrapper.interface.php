@@ -130,5 +130,11 @@ interface Data_WrapperInterface
 	 * @return array
 	 */
 	public static function list_item_values($sql);
+	
+	/**
+	 * @param string $sql
+	 * @return array
+	 */
+	public static function list_item_parameters($sql);
 }
 ?>

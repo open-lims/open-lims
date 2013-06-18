@@ -209,5 +209,15 @@ class Data_Wrapper implements Data_WrapperInterface
 	{
 		return Data_Wrapper_Access::list_item_values($sql);
 	}
+	
+	/**
+	 * @see Data_WrapperInterface::list_item_parameters()
+	 * @param string $sql
+	 * @return array
+	 */
+	public static function list_item_parameters($sql)
+	{
+		return Data_Wrapper_Access::list_item_parameters($sql);
+	}
 }
 ?>
