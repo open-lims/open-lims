@@ -53,16 +53,17 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
 	 * @param integer $folder_id
 	 * @param integer $owner_id
 	 * @param integer $template_id
+	 * @param integer $limit_id
 	 * @param array $parameter_array
 	 * @return integer
 	 * @throws ParameterCreateTemplateLinkFailedException
 	 * @throws ParameterCreateIDMissingException
 	 */
-	public function create($folder_id, $owner_id, $template_id, $parameter_array)
+	public function create($folder_id, $owner_id, $template_id, $limit_id, $parameter_array)
 	{
 		global $transaction;
 		
-		if (is_numeric($folder_id) and is_numeric($owner_id) and is_numeric($template_id) and $parameter_array)
+		if (is_numeric($folder_id) and is_numeric($owner_id) and is_numeric($template_id) and is_numeric($limit_id) and $parameter_array)
 		{			
 			if (is_array($parameter_array))
 			{
@@ -70,7 +71,7 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
 				
 				try
 				{
-					$parameter_id = parent::create($folder_id, $parameter_array, $owner_id);
+					$parameter_id = parent::create($folder_id, $limit_id, $parameter_array, $owner_id);
 					
 					$parameter_has_template = new ParameterHasTemplate_Access(null, null);
 					if ($parameter_has_template->create($parameter_id, $template_id) == null)

@@ -32,6 +32,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 	require_once("access/parameter.access.php");
 	require_once("access/parameter_version.access.php");
 	require_once("access/parameter_field_value.access.php");
+	require_once("access/parameter_field_limit.access.php");
 }
 
 /**
@@ -83,9 +84,17 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
     	unset($this->parameter_version);
 	}
 	
-	protected function create($folder_id, $parameter_array, $owner_id = null)
+	/**
+	 * @see ParameterInterface::create()
+	 * @param integer $folder_id
+	 * @param integer $limit_id
+	 * @param array $parameter_array
+	 * @param integer $owner_id
+	 * @return integer
+	 */
+	protected function create($folder_id, $limit_id, $parameter_array, $owner_id = null)
 	{
-		global $user, $transaction;
+		global $user, $regional, $transaction;
 		
 		if (is_numeric($folder_id) and is_array($parameter_array))
 		{
@@ -110,13 +119,15 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 				}
 				
 				$parameter_version_access = new ParameterVersion_Access(null);
-				if (($parameter_version_id = $parameter_version_access->create($parameter_id, 1, 1, null, true, $owner_id, null)) == null)
+				if (($parameter_version_id = $parameter_version_access->create($parameter_id, 1, 1, null, true, $owner_id, null, $limit_id)) == null)
 				{
 					throw new ParameterCreateVersionCreateFailedException();
 				}
 				
 				foreach($parameter_array as $key => $value)
 				{
+					$value['value'] = str_replace($regional->get_decimal_separator(),".",$value['value']);
+					
 					if (is_numeric($value['value']))
 					{
 						$parameter_field_value = new ParameterFieldValue_Access(null);
@@ -200,6 +211,18 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 		
 	}
 	
+	public function get_id()
+	{
+		if($this->parameter_id)
+		{
+			return $this->parameter_id;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 	public function get_version()
 	{
 		if ($this->parameter_version)
@@ -243,7 +266,10 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 			return null;
 		}
 	}
-	
+		
+	/**
+	 * Returns an array with all current selected methods
+	 */
 	public function get_methods()
 	{
 		if ($this->parameter_version_id)
@@ -258,12 +284,73 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 	
 	public function get_status()
 	{
-		
+		if ($this->parameter_version_id)
+		{
+			$limit_id = $this->parameter_version->get_parameter_limit_id();
+			$limit_array = ParameterFieldLimit_Access::list_limits_by_limit_id($limit_id);
+			$value_array = ParameterFieldValue_Access::list_values($this->parameter_version_id);
+						
+			if (is_array($value_array) and (count($value_array) >= 1) and is_array($limit_array))
+			{
+				$return_array = array();
+				
+				foreach($value_array as $key => $value)
+				{		
+					if (is_numeric($limit_array[$key]['lsl']) and $value < $limit_array[$key]['lsl'])
+					{
+						$return_array[$key] = "min";
+					}
+					elseif (is_numeric($limit_array[$key]['usl']) and $value > $limit_array[$key]['usl'])
+					{
+						$return_array[$key] = "max";
+					}
+					else
+					{
+						$return_array[$key] = "ok";
+					}
+				}
+				
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}	
 	}
 	
 	public function get_name()
 	{
 		
+	}
+	
+	public function get_limit_id()
+	{
+		if ($this->parameter_version_id)
+		{
+			return $this->parameter_version->get_parameter_limit_id();
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public function get_limits()
+	{
+		if ($this->parameter_version_id)
+		{
+			$limit_id = $this->parameter_version->get_parameter_limit_id();
+			return ParameterFieldLimit_Access::list_limits_by_limit_id($limit_id);
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**
@@ -278,15 +365,15 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 	 * @throws ParameterUpdateNoValuesException
 	 * @throws ParameterNoInstanceException
 	 */
-	public function update($parameter_array, $previous_version_id = null, $major = true, $current = true)
+	public function update($parameter_array, $limit_id, $previous_version_id = null, $major = true, $current = true)
 	{
-		global $transaction, $user;
+		global $transaction, $regional, $user;
 		
 		if ($this->parameter_id and $this->parameter_version_id)
 		{
 			if ($this->is_write_access())
 			{
-				if (is_array($parameter_array) and count($parameter_array) >= 1)
+				if (is_array($parameter_array) and is_numeric($limit_id) and count($parameter_array) >= 1)
 				{
 					$changed = false;
 					
@@ -294,7 +381,9 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 					{
 						$parameter_field_value_id = ParameterFieldValue_Access::get_id_by_version_id_and_field_id($this->parameter_version_id, $key);
 						$parameter_field_value = new ParameterFieldValue_Access($parameter_field_value_id);
-												
+
+						$value['value'] = str_replace($regional->get_decimal_separator(),".",$value['value']);
+						
 						if ($parameter_field_value->get_value() != $value['value'])
 						{
 							$changed = true;
@@ -365,7 +454,7 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 			
 							if ($current == true)
 							{
-								if (($parameter_version_id = $this->parameter_version->create($this->parameter_id, $new_version, $new_internal_revision, $previous_version_pk_id, true, $user->get_user_id(), null)) == null)
+								if (($parameter_version_id = $this->parameter_version->create($this->parameter_id, $new_version, $new_internal_revision, $previous_version_pk_id, true, $user->get_user_id(), null, $limit_id)) == null)
 								{
 									throw new ParameterUpdateVersionCreateFailedException();
 								}
@@ -377,7 +466,7 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 							}
 							else
 							{
-								if (($parameter_version_id = $this->parameter_version->create($this->parameter_id, $new_version, $new_internal_revision, $previous_version_pk_id, false, $user->get_user_id(), null)) == null)
+								if (($parameter_version_id = $this->parameter_version->create($this->parameter_id, $new_version, $new_internal_revision, $previous_version_pk_id, false, $user->get_user_id(), null, $limit_id)) == null)
 								{
 									throw new ParameterUpdateVersionCreateFailedException();
 								}
@@ -386,6 +475,8 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 		
 							foreach($parameter_array as $key => $value)
 							{
+								$value['value'] = str_replace($regional->get_decimal_separator(),".",$value['value']);
+								
 								if (is_numeric($value['value']))
 								{
 									$parameter_field_value = new ParameterFieldValue_Access(null);

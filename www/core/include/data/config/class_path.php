@@ -130,6 +130,7 @@
 	$classes['ParameterTemplateParameter']					= $path_prefix."core/include/data/parameter/parameter_template_parameter.class.php";
 	$classes['ParameterNonTemplateParameter']				= $path_prefix."core/include/data/parameter/parameter_non_template_parameter.class.php";
 	$classes['ParameterTemplate']							= $path_prefix."core/include/data/parameter/parameter_template.class.php";
+	$classes['ParameterMethod']								= $path_prefix."core/include/data/parameter/parameter_method.class.php";
 	
 	$classes['Data_Wrapper']								= $path_prefix."core/include/data/data.wrapper.class.php";
 ?>

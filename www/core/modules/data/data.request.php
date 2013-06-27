@@ -257,6 +257,7 @@ class DataRequest
 				echo ParameterAjax::add_as_item(
 						$_POST['folder_id'], 
 						$_POST['type_id'], 
+						$_POST['limit_id'], 
 						$_POST['parameter_array'], 
 						$_POST['get_array']
 						);
@@ -267,8 +268,17 @@ class DataRequest
 				echo ParameterAjax::update(
 						$_GET['parameter_id'], 
 						$_POST['parameter_array'], 
+						$_POST['limit_id'], 
 						$_POST['major'], 
 						$_POST['current']
+						);
+			break;
+			
+			case "parameter_get_limits":
+				require_once("ajax/parameter.ajax.php");
+				echo ParameterAjax::get_limits(
+						$_POST['parameter_template_id'], 
+						$_POST['parameter_limit_id']
 						);
 			break;
 			
@@ -367,6 +377,26 @@ class DataRequest
 				echo AdminParameterTemplateAjax::exist_internal_name($_POST['internal_name']);
 			break;
 
+			case "admin_list_parameter_methods":
+				require_once("ajax/admin/admin_parameter_method.ajax.php");
+				echo AdminParameterMethodAjax::list_methods(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
+			break;
+			
+			case "admin_count_parameter_methods":
+				require_once("ajax/admin/admin_parameter_method.ajax.php");
+				echo AdminParameterMethodAjax::count_methods($_POST['argument_array']);
+			break;	
+			
 			
 			// Navigation
 			

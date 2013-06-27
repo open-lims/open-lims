@@ -36,7 +36,7 @@ class ParameterAjax
 	 * @param string $get_array
 	 * @return string
 	 */
-	public static function add_as_item($folder_id, $type_id, $parameter_array, $get_array)
+	public static function add_as_item($folder_id, $type_id, $limit_id, $parameter_array, $get_array)
 	{
 		global $user, $transaction;
 		
@@ -49,7 +49,7 @@ class ParameterAjax
 			$parameter_array = json_decode($parameter_array, true);
 
 			$parameter = ParameterTemplateParameter::get_instance(null);
-			$parameter_add_successful = $parameter->create($folder_id, $user->get_user_id(), $type_id, $parameter_array);
+			$parameter_add_successful = $parameter->create($folder_id, $user->get_user_id(), $type_id, $limit_id, $parameter_array);
 			
 			if ($parameter_add_successful)
 			{				
@@ -89,15 +89,29 @@ class ParameterAjax
 		}
 	}
 
-	public static function update($parameter_id, $parameter_array, $major, $current)
+	public static function update($parameter_id, $parameter_array,  $limit_id, $major, $current)
 	{
 		if (is_numeric($parameter_id))
 		{
 			$parameter = ParameterTemplateParameter::get_instance($parameter_id);
 			$parameter_array = json_decode($parameter_array, true);
 
-			$parameter->update($parameter_array, null, $major, $current);
+			$parameter->update($parameter_array, $limit_id, null, $major, $current);
 			return "1";
+		}
+		else
+		{
+			throw new ParameterIDMissingException();
+		}
+	}
+	
+	public static function get_limits($parameter_template_id, $parameter_limit_id)
+	{
+		if (is_numeric($parameter_template_id) and is_numeric($parameter_limit_id))
+		{
+			$parameter_template = new ParameterTemplate($parameter_template_id);
+			
+			return json_encode($parameter_template->get_limits($parameter_limit_id));
 		}
 		else
 		{

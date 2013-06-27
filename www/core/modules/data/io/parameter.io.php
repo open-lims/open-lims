@@ -29,9 +29,12 @@ class ParameterIO
 {	
 	public static function detail($parameter = null, $target_params = null, $display_header = true)
 	{
+		global $regional;
+		
 		if (is_object($parameter) and $target_params)
 		{
-			$retrace = "index.php?".$target_params;			
+			$retrace = "index.php?".$target_params;		
+			$parameter_id = $parameter->get_id();	
 		}
 		elseif(is_numeric($_GET['parameter_id']))
 		{
@@ -56,13 +59,43 @@ class ParameterIO
 
 		if ($parameter->is_read_access())
 		{	
-			$parameter_template = new ParameterTemplate($parameter->get_template_id());
+			$parameter_template_id = $parameter->get_template_id();
+			$parameter_template = new ParameterTemplate($parameter_template_id);
 			
 			$parameter_template_field_array = $parameter_template->get_fields();
 			$parameter_template_limit_array = $parameter_template->get_limits();
+			$parameter_possible_methods_array = $parameter_template->get_methods();
 			
 			$parameter_value_array = $parameter->get_values();
 			$parameter_method_array = $parameter->get_methods();
+			$parameter_limit_array = $parameter->get_limits();
+			
+			
+			$output_template_limit_array = array();
+			$output_template_limit_counter = 0;
+			
+			if(is_array($parameter_template_limit_array) and count($parameter_template_limit_array) >= 1)
+			{
+				$current_limit = $parameter->get_limit_id();
+				
+				foreach($parameter_template_limit_array as $key => $value)
+				{
+					$output_template_limit_array[$output_template_limit_counter]['value'] = $value['pk'];
+					$output_template_limit_array[$output_template_limit_counter]['content'] = $value['name'];
+					
+					if ($value['pk'] == $current_limit)
+					{
+						$output_template_limit_array[$output_template_limit_counter]['selected'] = "selected='selected'";
+					}
+					else
+					{
+						$output_template_limit_array[$output_template_limit_counter]['selected'] = "";
+					}
+					
+					$output_template_limit_counter++;
+				}
+			}
+			
 			
 			$output_template_field_array = array();
 			$output_template_field_counter = 0;
@@ -74,7 +107,16 @@ class ParameterIO
 					$output_template_field_array[$output_template_field_counter]['id'] = $key;
 					$output_template_field_array[$output_template_field_counter]['pk']= $value['pk'];
 					$output_template_field_array[$output_template_field_counter]['name'] = $value['name'];
-					$output_template_field_array[$output_template_field_counter]['value'] = $parameter_value_array[$value['pk']];
+					
+					if (is_numeric($parameter_value_array[$value['pk']]))
+					{
+						$regionalized_value = str_replace(".", $regional->get_decimal_separator(), $parameter_value_array[$value['pk']]);
+						$output_template_field_array[$output_template_field_counter]['value'] = $regionalized_value;
+					}
+					else
+					{
+						$output_template_field_array[$output_template_field_counter]['value'] = "";
+					}
 					
 					if (is_numeric($value['min']))
 					{
@@ -94,24 +136,47 @@ class ParameterIO
 						$output_template_field_array[$output_template_field_counter]['max'] = "";
 					}
 					
-					if (is_numeric($parameter_template_limit_array[0]['usl'][$key]))
+					if ($parameter_limit_array[$value['pk']])
 					{
-						$output_template_field_array[$output_template_field_counter]['usl'] = $parameter_template_limit_array[0]['usl'][$key];
-					}
-					else
-					{
-						$output_template_field_array[$output_template_field_counter]['usl'] = "";
-					}
-					
-					if (is_numeric($parameter_template_limit_array[0]['lsl'][$key]))
-					{
-						$output_template_field_array[$output_template_field_counter]['lsl'] = $parameter_template_limit_array[0]['lsl'][$key];
-					}
-					else
-					{
-						$output_template_field_array[$output_template_field_counter]['lsl'] = "";
-					}
+						if (is_numeric($parameter_limit_array[$value['pk']]['usl']))
+						{
+							$output_template_field_array[$output_template_field_counter]['usl'] = $parameter_limit_array[$value['pk']]['usl'];
+						}
+						else
+						{
+							$output_template_field_array[$output_template_field_counter]['usl'] = "";
+						}
 						
+						if (is_numeric($parameter_limit_array[$value['pk']]['lsl']))
+						{
+							$output_template_field_array[$output_template_field_counter]['lsl'] = $parameter_limit_array[$value['pk']]['lsl'];
+						}
+						else
+						{
+							$output_template_field_array[$output_template_field_counter]['lsl'] = "";
+						}
+					}
+					else
+					{
+						if (is_numeric($parameter_template_limit_array[0]['usl'][$key]))
+						{
+							$output_template_field_array[$output_template_field_counter]['usl'] = $parameter_template_limit_array[0]['usl'][$key];
+						}
+						else
+						{
+							$output_template_field_array[$output_template_field_counter]['usl'] = "";
+						}
+						
+						if (is_numeric($parameter_template_limit_array[0]['lsl'][$key]))
+						{
+							$output_template_field_array[$output_template_field_counter]['lsl'] = $parameter_template_limit_array[0]['lsl'][$key];
+						}
+						else
+						{
+							$output_template_field_array[$output_template_field_counter]['lsl'] = "";
+						}
+					}
+											
 					if ($key == 1)
 					{
 						$output_template_field_array[$output_template_field_counter]['class'] = "odd";
@@ -154,6 +219,21 @@ class ParameterIO
 						$output_template_field_array[$output_template_field_counter]['unit'] = "";
 					}
 					
+					$method_counter = 1;
+					
+					$output_template_field_array[$output_template_field_counter][0]['value'] = "0";
+					$output_template_field_array[$output_template_field_counter][0]['content'] = "none";
+					
+					if (is_array($parameter_possible_methods_array) and count($parameter_possible_methods_array) >= 1)
+					{						
+						foreach($parameter_possible_methods_array as $method_key => $method_value)
+						{
+							$output_template_field_array[$output_template_field_counter][$method_counter]['value'] = $method_key;
+							$output_template_field_array[$output_template_field_counter][$method_counter]['content'] = $method_value;
+							$method_counter++;
+						}
+					}
+					
 					$output_template_field_counter++;
 				}
 			}
@@ -162,8 +242,13 @@ class ParameterIO
 						
 			$template->set_var("session_id", $_GET['session_id']);
 			$template->set_var("parameter_id", $parameter_id);
+			$template->set_var("type_id", $parameter_template_id);
+			
+			$template->set_var("thousand_separator", $regional->get_thousand_separator());
+			$template->set_var("decimal_separator", $regional->get_decimal_separator());
 			
 			$template->set_var("name", $parameter_template->get_name());
+			$template->set_var("limits", $output_template_limit_array);
 			$template->set_var("fields", $output_template_field_array);
 			
 			$template->set_var("retrace", $retrace);
@@ -181,6 +266,8 @@ class ParameterIO
 	 */
 	public static function add_parameter_item($type_array, $category_array, $holder_class, $holder_id, $position_id)
 	{
+		global $regional;
+		
 		if (class_exists($holder_class))
 		{
 			$item_holder = new $holder_class($holder_id);
@@ -191,23 +278,57 @@ class ParameterIO
 			}
 		}
 		
-		if (count($type_array) != 1 and !$_POST['type_id'])
+		if(count($type_array) != 1 and $_POST['type_id'])
 		{
-			
+			$parameter_template_id = $_POST['type_id'];
 		}
-		elseif(count($type_array) != 1 and $_POST['type_id'])
+		elseif(count($type_array) == 1 and $type_array[0] !== "")
 		{
-			$parameter_template_id = ParameterTemplate::get_id_by_internal_name($_POST['type_id']);
+			$parameter_template_id = ParameterTemplate::get_id_by_internal_name($type_array[0]);
 		}
 		else
 		{
-			$parameter_template_id = ParameterTemplate::get_id_by_internal_name($type_array[0]);
+			$parameter_template_id = null;
 		}
 			
 		
 		if (!is_numeric($parameter_template_id))
 		{
-			// Select
+			$template = new HTMLTemplate("data/parameter_select_list.html");
+				
+			$paramquery = $_GET;
+			$params = http_build_query($paramquery,'','&#38;');
+			
+			$template->set_var("params", $params);
+			
+			if (count($type_array) > 1)
+			{
+				$template->set_var("select", ParameterTemplate::list_templates($type_array));
+			}
+			else
+			{
+				$template->set_var("select", ParameterTemplate::list_templates());
+			}
+			
+			if ($_POST['keywords'])
+			{
+				$template->set_var("keywords", $_POST['keywords']);
+			}
+			else
+			{
+				$template->set_var("keywords", "");
+			}
+			
+			if ($_POST['description'])
+			{
+				$template->set_var("description", $_POST['description']);
+			}
+			else
+			{
+				$template->set_var("description", "");	
+			}
+			
+			$template->output();
 		}
 		else
 		{
@@ -215,10 +336,26 @@ class ParameterIO
 			
 			$parameter_template_field_array = $parameter_template->get_fields();
 			$parameter_template_limit_array = $parameter_template->get_limits();
+			$parameter_possible_methods_array = $parameter_template->get_methods();
+			
+			$output_template_limit_array = array();
+			$output_template_limit_counter = 0;
+			
+			if(is_array($parameter_template_limit_array) and count($parameter_template_limit_array) >= 1)
+			{
+				foreach($parameter_template_limit_array as $key => $value)
+				{
+					$output_template_limit_array[$output_template_limit_counter]['value'] = $value['pk'];
+					$output_template_limit_array[$output_template_limit_counter]['selected'] = "";
+					$output_template_limit_array[$output_template_limit_counter]['content'] = $value['name'];
+					$output_template_limit_counter++;
+				}
+			}
+			
 			
 			$output_template_field_array = array();
 			$output_template_field_counter = 0;
-				
+			
 			if(is_array($parameter_template_field_array) and count($parameter_template_field_array) >= 1)
 			{
 				foreach($parameter_template_field_array as $key => $value)
@@ -303,6 +440,21 @@ class ParameterIO
 					else
 					{
 						$output_template_field_array[$output_template_field_counter]['unit'] = "";
+					}
+					
+					$method_counter = 1;
+					
+					$output_template_field_array[$output_template_field_counter][0]['value'] = "0";
+					$output_template_field_array[$output_template_field_counter][0]['content'] = "none";
+					
+					if (is_array($parameter_possible_methods_array) and count($parameter_possible_methods_array) >= 1)
+					{						
+						foreach($parameter_possible_methods_array as $method_key => $method_value)
+						{
+							$output_template_field_array[$output_template_field_counter][$method_counter]['value'] = $method_key;
+							$output_template_field_array[$output_template_field_counter][$method_counter]['content'] = $method_value;
+							$method_counter++;
+						}
 					}
 					
 					$output_template_field_counter++;
@@ -326,7 +478,11 @@ class ParameterIO
 			$template->set_var("type_id", $parameter_template_id);
 			$template->set_var("get_array", serialize($_GET));
 			
+			$template->set_var("thousand_separator", $regional->get_thousand_separator());
+			$template->set_var("decimal_separator", $regional->get_decimal_separator());
+			
 			$template->set_var("name", $parameter_template->get_name());
+			$template->set_var("limits", $output_template_limit_array);
 			$template->set_var("fields", $output_template_field_array);
 			
 			$template->output();

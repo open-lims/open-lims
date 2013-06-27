@@ -39,6 +39,7 @@ class ParameterVersion_Access
 	private $owner_id;
 	private $datetime;
 	private $name;
+	private $parameter_limit_id;
 
 	/**
 	 * @param integer $parameter_version_id
@@ -68,6 +69,7 @@ class ParameterVersion_Access
 				$this->owner_id				= $data['owner_id'];
 				$this->datetime				= $data['datetime'];
 				$this->name					= $data['name'];
+				$this->parameter_limit_id	= $data['parameter_limit_id'];
 			}
 			else
 			{
@@ -89,6 +91,7 @@ class ParameterVersion_Access
 			unset($this->owner_id);
 			unset($this->datetime);
 			unset($this->name);
+			unset($this->parameter_limit_id);
 		}
 	}
 
@@ -102,11 +105,11 @@ class ParameterVersion_Access
 	 * @param string $name
 	 * @return integer
 	 */
-	public function create($parameter_id, $version, $internal_revision, $previous_version_id, $current, $owner_id, $name)
+	public function create($parameter_id, $version, $internal_revision, $previous_version_id, $current, $owner_id, $name, $parameter_limit_id)
 	{
 		global $db;
 		
-		if (is_numeric($parameter_id) and is_numeric($version) and is_numeric($internal_revision) and is_numeric($owner_id))
+		if (is_numeric($parameter_id) and is_numeric($version) and is_numeric($internal_revision) and is_numeric($owner_id) and is_numeric($parameter_limit_id))
 		{	
 			if (is_numeric($previous_version_id))
 			{
@@ -137,8 +140,8 @@ class ParameterVersion_Access
 
 			$datetime = date("Y-m-d H:i:s");
 			
-			$sql_write = "INSERT INTO ".constant("PARAMETER_VERSION_TABLE")." (id,parameter_id,version,internal_revision,previous_version_id,current,owner_id,datetime,name) " .
-					"VALUES (nextval('".self::PARAMETER_VERSION_PK_SEQUENCE."'::regclass),'".$parameter_id."','".$version."','".$internal_revision."',".$previous_version_id_insert.",'".$current_insert."','".$owner_id."','".$datetime."',".$name_insert.")";
+			$sql_write = "INSERT INTO ".constant("PARAMETER_VERSION_TABLE")." (id,parameter_id,version,internal_revision,previous_version_id,current,owner_id,datetime,name,parameter_limit_id) " .
+					"VALUES (nextval('".self::PARAMETER_VERSION_PK_SEQUENCE."'::regclass),'".$parameter_id."','".$version."','".$internal_revision."',".$previous_version_id_insert.",'".$current_insert."','".$owner_id."','".$datetime."',".$name_insert.",".$parameter_limit_id.")";
 					
 			$res_write = $db->db_query($sql_write);	
 
@@ -322,6 +325,21 @@ class ParameterVersion_Access
 		if ($this->name)
 		{
 			return $this->name;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @return integer
+	 */
+	public function get_parameter_limit_id()
+	{
+		if ($this->parameter_limit_id)
+		{
+			return $this->parameter_limit_id;
 		}
 		else
 		{
@@ -557,6 +575,35 @@ class ParameterVersion_Access
 			if ($db->db_affected_rows($res))
 			{
 				$this->name = $name;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param integer $parameter_limit_id
+	 * @return bool
+	 */
+	public function set_parameter_limit_id($parameter_limit_id)
+	{	
+		global $db;
+
+		if ($this->parameter_version_id and is_numeric($parameter_limit_id))
+		{
+			$sql = "UPDATE ".constant("PARAMETER_VERSION_TABLE")." SET parameter_limit_id = '".$parameter_limit_id."' WHERE id = ".$this->parameter_version_id."";
+			$res = $db->db_query($sql);
+			
+			if ($db->db_affected_rows($res))
+			{
+				$this->parameter_limit_id = $parameter_limit_id;
 				return true;
 			}
 			else

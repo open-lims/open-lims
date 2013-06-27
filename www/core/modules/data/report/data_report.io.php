@@ -171,7 +171,8 @@ class DataReportIO
 					$parameter_value_array = $parameter_object->get_values();
 					$parameter_method_array = $parameter_object->get_methods();
 					$parameter_status_array = $parameter_object->get_status();
-					
+					$parameter_limit_array = $parameter_object->geT_limits();
+										
 					$pdf->addPage();
 						
 					$pdf->SetFont('dejavusans', 'B', 14, '', true);
@@ -195,6 +196,15 @@ class DataReportIO
 					{
 						foreach($parameter_template_field_array as $key => $value)
 						{
+							if (is_numeric($parameter_value_array[$value['pk']]))
+							{
+								$regionalized_value = str_replace(".", $regional->get_decimal_separator(), $parameter_value_array[$value['pk']]);
+							}
+							else
+							{
+								$regionalized_value = "";
+							}
+							
 								
 							if (is_numeric($value['unit']))
 							{
@@ -221,6 +231,49 @@ class DataReportIO
 							{
 								$unit = "";
 							}
+	
+							
+							if ($parameter_limit_array[$value['pk']])
+							{
+								if (is_numeric($parameter_limit_array[$value['pk']]['usl']))
+								{
+									$usl = $parameter_limit_array[$value['pk']]['usl'];
+								}
+								else
+								{
+									$usl = "";
+								}
+								
+								if (is_numeric($parameter_limit_array[$value['pk']]['lsl']))
+								{
+									$lsl = $parameter_limit_array[$value['pk']]['lsl'];
+								}
+								else
+								{
+									$lsl = "";
+								}
+							}
+							else
+							{
+								if (is_numeric($parameter_template_limit_array[0]['usl'][$key]))
+								{
+									$usl = $parameter_template_limit_array[0]['usl'][$key];
+								}
+								else
+								{
+									$usl = "";
+								}
+								
+								if (is_numeric($parameter_template_limit_array[0]['lsl'][$key]))
+								{
+									$lsl = $parameter_template_limit_array[0]['lsl'][$key];
+								}
+								else
+								{
+									$lsl = "";
+								}
+							}
+							
 							
 							if ($parameter_method_array[$key])
 							{
@@ -230,10 +283,20 @@ class DataReportIO
 							{
 								$method = "none";
 							}
-							
-							if ($parameter_status_array[$key])
+								
+							if ($parameter_status_array[$value['pk']])
 							{
-								$status = $parameter_status_array[$key];
+								switch($parameter_status_array[$value['pk']]):
+									case "max":
+										$status = ">max";
+									break;
+									case "min":
+										$status = "<min";
+									break;
+									default:
+										$status = "OK";
+									break;
+								endswitch;
 							}
 							else
 							{
@@ -241,15 +304,22 @@ class DataReportIO
 							}
 							
 							$line_array = array(array("name" => "parameter", "content" => $value['name']),
-												array("name" => "value", "content" => $parameter_value_array[$value['pk']]),
+												array("name" => "value", "content" => $regionalized_value),
 												array("name" => "unit", "content" => $unit),
-												array("name" => "min", "content" => $parameter_template_limit_array[0]['lsl'][$key]),
-												array("name" => "max", "content" => $parameter_template_limit_array[0]['usl'][$key]),
+												array("name" => "min", "content" => $lsl),
+												array("name" => "max", "content" => $usl),
 												array("name" => "method", "content" => $method),
 												array("name" => "status", "content" => $status)
 												);
 												
 							$report_table->add_line($line_array);
+							
+							unset($regionalized_value);
+							unset($unit);
+							unset($lsl);
+							unset($usl);
+							unset($method);
+							unset($status);
 						}	
 					}				
 												

@@ -420,5 +420,57 @@ class ParameterTemplate_Access
 			return false;
 		}
 	}
+	
+	/**
+	 * @return array
+	 */
+	public static function list_templates($internal_name_array = null)
+	{		
+		global $db;
+			
+		$return_array = array();
+		
+		if(is_array($internal_name_array) and count($internal_name_array) >= 1)
+		{
+			$additional_sql = "WHERE internal_name IN (";
+			$first = false;
+			
+			foreach($internal_name_array as $key => $value)
+			{
+				if ($first == false)
+				{
+					$additional_sql .= "'".$value."'";
+					$first = true;
+				}
+				else
+				{
+					$additional_sql .= ",'".$value."'";
+				}
+			}
+			
+			$additional_sql .= ")"; 
+		}
+		else
+		{
+			$additional_sql = "";
+		}
+		
+		$sql = "SELECT id,name FROM ".constant("PARAMETER_TEMPLATE_TABLE")." ".$additional_sql." ORDER BY name";
+		$res = $db->db_query($sql);
+		
+		while ($data = $db->db_fetch_assoc($res))
+		{
+			array_push($return_array,array("id" => $data['id'], "name" => $data['name']));
+		}
+		
+		if (is_array($return_array))
+		{
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
 }
 ?>

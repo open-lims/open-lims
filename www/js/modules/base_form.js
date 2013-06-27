@@ -375,6 +375,7 @@ base_form_init = function()
 							var next_element = $(data.option).children("option:selected").next();
 							$(data.option).children("option:selected").attr("selected", false);
 							$(next_element).attr("selected", true);
+							$(data.option).parent().trigger("onchange");
 							$(entry).html($(data.option).children("option:selected").html());
 						}
 					break;
@@ -387,6 +388,7 @@ base_form_init = function()
 							var previous_element = $(data.option).children("option:selected").prev();
 							$(data.option).children("option:selected").attr("selected", false);
 							$(previous_element).attr("selected", true);
+							$(data.option).parent().trigger("onchange");
 							$(entry).html($(data.option).children("option:selected").html());
 						}
 					break;

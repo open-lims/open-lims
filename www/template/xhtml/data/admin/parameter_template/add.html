@@ -46,13 +46,13 @@ $(document).ready(function()
 		}
 		else
 		{
-			var interal_name = $("input[name='internal_name']").val();
+			var internal_name = $("input[name='internal_name']").val();
 			
 			$.ajax(
 			{
 				type : "POST",
 				url : "ajax.php?session_id=[[SESSION_ID]]&nav=data&run=admin_parameter_template_exist_internal_name",
-				data : "internal_name="+interal_name,
+				data : "internal_name="+internal_name,
 				async : false,
 				success : function(data)
 				{
@@ -91,7 +91,7 @@ $(document).ready(function()
 		{
 			type : "POST",
 			url : "ajax.php?session_id=[[SESSION_ID]]&nav=data&run=admin_add_parameter_template",
-			data : "name="+name+"&internal_name="+interal_name+"&json_object_string="+json_field_object+"&json_limit_string="+json_limit_object,
+			data : "name="+name+"&internal_name="+internal_name+"&json_object_string="+json_field_object+"&json_limit_string="+json_limit_object,
 			beforeSend: function()
 			{
 				$("#DataParameterAdminTemplateAddFinish").dialog("open");

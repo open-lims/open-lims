@@ -21,6 +21,7 @@
 
 DataParameter = function()
 {
+	// Admin
 	var line_counter = 1;
 	var limit_array = new Array();
 	var limit_counter = 0;
@@ -32,6 +33,10 @@ DataParameter = function()
 	limit_array[limit_counter]['name'] = "First Limit";
 	limit_array[limit_counter]['usl'] = new Array();
 	limit_array[limit_counter]['lsl'] = new Array();
+	
+	// Parameter
+	var thousand_separator;
+	var deciamal_separator;
 		
 	init_admin = function(element)
 	{
@@ -115,11 +120,102 @@ DataParameter = function()
 		init();
 	}
 	
-	init_parameter = function()
+	init_parameter = function(local_thousand_separator, local_decimal_separator)
 	{
+		thousand_separator = local_thousand_separator
+		decimal_separator = local_decimal_separator
 		
+		check_status();
+		
+		$("select.DataParameterLimit").bind("onchange", function()
+		{
+			var limit_id = $(".DataParameterLimit option:selected").val();
+			
+			$.ajax({
+				type : "POST",
+				url : "ajax.php?session_id=[[SESSION_ID]]&nav=data&run=parameter_get_limits",
+				data : 'parameter_template_id=[[TYPE_ID]]&parameter_limit_id='+limit_id,
+				success : function(data)
+				{
+					var counter = 1;
+					var limit_array = jQuery.parseJSON(data);
+				
+					$(".DataParameterValue").each(function()
+					{
+						$(this).children(".DataParameterValueLSL").html(limit_array[0]['lsl'][counter]);
+						$(this).children(".DataParameterValueUSL").html(limit_array[0]['usl'][counter]);
+						counter++;
+					});
+				}
+			});
+			
+			check_status();
+		});
 	}
 	
+	// Parameter
+	function check_status()
+	{
+		$('.DataParameterValue').each(function()
+		{
+			function check(object, id)
+			{
+				var temp_value = object.find("input").val();
+				
+					temp_value = temp_value.replace(thousand_separator,"");
+					temp_value = temp_value.replace(decimal_separator,"[[DEC]]");
+					temp_value = temp_value.replace(",","");
+					temp_value = temp_value.replace(".","");
+				
+				var check_value = temp_value.replace("[[DEC]]",".");
+				var print_value = temp_value.replace("[[DEC]]",decimal_separator);
+			
+				
+				if ((check_value != parseFloat(check_value)) && ( check_value !== "" ))
+				{
+					$("#DataParameterValueStatus"+id).html("invalid (NaN)");
+					// check min (valid) and max (valid)
+				}
+				else if (check_value !== "")
+				{
+					if (check_value !== "")
+					{
+						var lsl = parseFloat(object.find(".DataParameterValueLSL").html());
+						var usl = parseFloat(object.find(".DataParameterValueUSL").html());
+						if (check_value < lsl)
+						{
+							$("#DataParameterValueStatus"+id).html("< min");
+						}
+						else if (check_value > usl)
+						{
+							$("#DataParameterValueStatus"+id).html("> max");
+						}
+						else
+						{
+							$("#DataParameterValueStatus"+id).html("OK");
+						}
+					}
+					else
+					{
+						$("#DataParameterValueStatus"+id).html("");
+					}
+					
+					object.find("input").val(print_value);
+				}
+			}
+		
+			var id = $(this).attr("id").replace("DataParameterValue","");
+			
+			$(this).change(function()
+			{
+				check($(this), id);
+			});
+			
+			check($(this), id);
+		});
+	}
+	
+	// Admin
 	get_field_json = function(class_name)
 	{
 		var field_object = new Object();
@@ -160,6 +256,7 @@ DataParameter = function()
 		return JSON.stringify(field_object);
 	}
 	
+	// Admin
 	get_limit_json = function(class_name)
 	{	
 		$("."+class_name).each(function()
@@ -188,16 +285,19 @@ DataParameter = function()
 		return JSON.stringify(limit_array);
 	}
 	
+	// Admin
 	get_field_error_array = function()
 	{
 		return field_error_array;
 	}
 	
+	// Admin
 	set_language_json  = function(language_json)
 	{
 		language_array = jQuery.parseJSON(language_json);
 	}
 	
+	// Admin
 	set_limit_json = function(limit_json)
 	{
 		var tmp_limit_array = jQuery.parseJSON(limit_json);
@@ -207,11 +307,13 @@ DataParameter = function()
 		}
 	}
 	
+	// Admin
 	set_line_counter = function(local_line_counter)
 	{
 		line_counter = parseInt(local_line_counter);
 	}
 	
+	// Admin
 	set_limit_counter = function(local_limit_counter)
 	{
 		if (local_limit_counter > 0)
@@ -230,6 +332,7 @@ DataParameter = function()
 	this.set_limit_counter = set_limit_counter;
 	this.get_field_error_array = get_field_error_array;
 	
+	// Admin
 	get_language_label = function(address)
 	{
 		if ((language_array !== undefined))
@@ -249,6 +352,7 @@ DataParameter = function()
 		}
 	}
 	
+	// Admin
 	init = function()
 	{
 		// Limit Dialog
@@ -426,6 +530,7 @@ DataParameter = function()
 		});
 	}
 	
+	// Admin
 	// New Template Line
 	$("#DataParameterTemplateFieldNewButton").click(function()
 	{
@@ -489,6 +594,7 @@ DataParameter = function()
 		base_form_init();
 	});
 	
+	// Admin
 	// Open Limit Dialog
 	$("#DataParameterTemplateLimitButton").click(function()
 	{

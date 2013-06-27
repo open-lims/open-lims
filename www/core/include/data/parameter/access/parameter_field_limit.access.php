@@ -321,6 +321,37 @@ class ParameterFieldLimit_Access
 		}
 	}
 	
+	public static function list_limits_by_limit_id($parameter_limit_id)
+	{
+		global $db;
+		
+		if (is_numeric($parameter_limit_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT lower_specification_limit, upper_specification_limit, parameter_field_id FROM ".constant("PARAMETER_FIELD_LIMIT_TABLE")." WHERE parameter_limit_id = ".$parameter_limit_id."";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				$return_array[$data['parameter_field_id']] = array("lsl" => $data['lower_specification_limit'], "usl" => $data['upper_specification_limit']);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+		
 	/**
 	 * @param integer $parameter_limit_id
 	 * @param integer $parameter_field_id

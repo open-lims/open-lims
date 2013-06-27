@@ -760,6 +760,95 @@ class Data_Wrapper_Access
 	}	
 	
 	/**
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_parameter_methods($order_by, $order_method, $start, $end)
+	{
+		global $db;
+			
+		if ($order_by and $order_method)
+		{
+			if ($order_method == "asc")
+			{
+				$sql_order_method = "ASC";
+			}
+			else
+			{
+				$sql_order_method = "DESC";
+			}
+			
+			switch($order_by):
+				
+				case "name":
+					$sql_order_by = "ORDER BY name ".$sql_order_method;
+				break;
+				
+				default:
+					$sql_order_by = "ORDER BY name ".$sql_order_method;
+				break;
+			
+			endswitch;	
+		}
+		else
+		{
+			$sql_order_by = "ORDER BY name";
+		}
+			
+		$sql = "SELECT ".constant("PARAMETER_METHOD_TABLE").".id AS id, " .
+					"".constant("PARAMETER_METHOD_TABLE").".name AS name " .
+					"FROM ".constant("PARAMETER_METHOD_TABLE")." " .
+					"".$sql_order_by."";
+		
+		$return_array = array();
+		
+		$res = $db->db_query($sql);
+		
+		if (is_numeric($start) and is_numeric($end))
+		{
+			for ($i = 0; $i<=$end-1; $i++)
+			{
+				if (($data = $db->db_fetch_assoc($res)) == null)
+				{
+					break;
+				}
+				
+				if ($i >= $start)
+				{
+					array_push($return_array, $data);
+				}
+			}
+		}
+		else
+		{
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array, $data);
+			}
+		}
+		return $return_array;
+	}
+
+	/**
+	 * @return array
+	 */
+	public static function count_list_parameter_methods()
+	{
+		global $db;
+						
+		$sql = "SELECT COUNT(".constant("PARAMETER_METHOD_TABLE").".id) AS result " .
+					"FROM ".constant("PARAMETER_METHOD_TABLE")."";
+		
+		$res = $db->db_query($sql);
+		$data = $db->db_fetch_assoc($res);
+
+		return $data['result'];
+	}	
+	
+	/**
 	 * @param integer $value_id
 	 * @param string $order_by
 	 * @param string $order_method

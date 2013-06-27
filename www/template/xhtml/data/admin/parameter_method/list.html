@@ -1,0 +1,76 @@
+<script>
+/*<![CDATA[*/
+$(document).ready(function()
+{
+	$("#DataParameterAdminMethodDialogDelete").dialog(
+	{
+		autoOpen: false,
+		height: 150,
+		width: 350,
+		buttons: 
+		[{
+			text: "[[LANG:BaseGlobalButtonYes]]",
+			click: function()
+			{
+			 	var open_element = $.data(this, "open_element");
+			 	var template_id = $(open_element).attr("id").replace("DataParameterTemplateDeleteButton","");
+			 	var element = $(open_element);
+			 	
+			 	$.ajax(
+	 			{
+	 				type: "POST",
+	 				url: "ajax.php?session_id="+get_array['session_id']+"&nav=data&run=admin_delete_parameter_template",
+	 				data: "id="+template_id,
+	 				success: function(data)
+	 				{
+	 					if (data == 1)
+	 					{
+	 						$(element).parent().parent().fadeOut(400, function()
+	 						{
+	 							list.reload();
+	 						});
+	 					}
+	 					else
+	 					{
+	 						ErrorDialog("Error", "An error occured");
+	 					}
+	 				}
+	 			});
+			 	
+			 	$(this).dialog("close");
+			 	
+			}
+		},{
+			text: "[[LANG:BaseGlobalButtonNo]]",
+			click: function()
+			{
+			 	$(this).dialog("close");
+			}
+		}]
+	});
+	
+	$(".DataParameterAdminMethodDeleteButton").each().live("click", function()
+	{
+		$("#DataParameterAdminMethodDialogDelete").data('open_element', this).dialog("open");
+	});
+});
+/*]]>*/  
+</script>
+
+<div id='DataParameterAdminMethodDialogDelete' title='Delete Method'>
+Are you sure?
+</div>
+
+<!-- CONTAINER BEGIN ("Parameter Methods") -->
+		
+<div id='ListButtonBar'>
+	<a href='#' class='ListButton'>
+	<img src='images/icons/add.png' alt='' />
+	<div>Add Parameter Method</div>
+	</a>
+</div>
+<div id='ListButtonBarClear'></div>
+
+[[LIST]]
+
+<!-- CONTAINER END () -->

@@ -101,7 +101,7 @@ class ParameterFieldValue_Access
 		
 		if (is_numeric($parameter_version_id) and is_numeric($parameter_field_id) and is_numeric($value))
 		{	
-			if (is_numeric($parameter_method_id))
+			if (is_numeric($parameter_method_id) and $parameter_method_id > 0)
 			{
 				$parameter_method_id_insert = $parameter_method_id;
 			}
@@ -520,7 +520,7 @@ class ParameterFieldValue_Access
 			return null;
 		}
 	}
-	
+		
 	public static function get_id_by_version_id_and_field_id($parameter_version_id, $parameter_field_id)
 	{
 		global $db;

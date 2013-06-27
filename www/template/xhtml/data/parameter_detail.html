@@ -37,11 +37,10 @@ $(document).ready(function()
 						json_object[''+id+'']['method'] = $(this).val();
 					}
 				}
-			});
-			
-			
-			
+			});			
 		});
+		
+		var limit = $(".DataParameterLimit option:selected").val();
 		
 		var json = JSON.stringify(json_object);
 				
@@ -50,7 +49,7 @@ $(document).ready(function()
 			$.ajax({
 				type : "POST",
 				url : "ajax.php?session_id=[[SESSION_ID]]&nav=data&run=parameter_update&parameter_id=[[PARAMETER_ID]]",
-				data : 'parameter_array='+json+'&major=true&current=true',
+				data : 'parameter_array='+json+'&limit_id='+limit+'&major=true&current=true',
 				beforeSend: function()
 				{
 					$("#DataParameterDetailFinish").dialog("open");
@@ -81,6 +80,9 @@ $(document).ready(function()
 			});
 		}
 	});
+	
+	data_parameter = new DataParameter();
+	data_parameter.init_parameter("[[THOUSAND_SEPARATOR]]", "[[DECIMAL_SEPARATOR]]");
 });
 /*]]>*/ 
 </script>
@@ -95,7 +97,11 @@ $(document).ready(function()
 
 <div class='FormBox'>
 <div class='FormBoxHeadline'>Limit</div>
-
+	<select name='limit' class='DataParameterLimit'>
+	<!-- FOREACH BEGIN ([[LIMITS]]) -->
+		<option value='[[LIMITS:VALUE]]' [[LIMITS:SELECTED]]>[[LIMITS:CONTENT]]</option>
+	<!-- FOREACH END -->
+	</select>
 </div>
 
 <div class='FormBoxWithoutLRPadding'>
@@ -120,10 +126,16 @@ $(document).ready(function()
 				<td>[[FIELDS:NAME]]</td>
 				<td><input type='text' name='value' value='[[FIELDS:VALUE]]' /></td>
 				<td>[[FIELDS:UNIT]]</td>
-				<td>[[FIELDS:LSL]]</td>
-				<td>[[FIELDS:USL]]</td>
-				<td><select name='method'></select></td>
-				<td>OK</td>
+				<td class='DataParameterValueLSL'>[[FIELDS:LSL]]</td>
+				<td class='DataParameterValueUSL'>[[FIELDS:USL]]</td>
+				<td>
+					<select name='method'>
+					<!-- FOREACH BEGIN ([[FIELDS]]) -->
+						<option value='[[FIELDS:VALUE]]' [[FIELDS:DISABLED]] [[FIELDS:SELECTED]]>[[FIELDS:CONTENT]]</option>
+					<!-- FOREACH END -->
+					</select>
+				</td>
+				<td id='DataParameterValueStatus[[FIELDS:PK]]'>[[FIELDS:STATUS]]</td>
 			</tr>
 		
 		<!-- FOREACH END -->

@@ -72,7 +72,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 		
 	}
 	
-	public function create($internal_name, $name, $field_array, $limit_array)
+	public function create($name, $internal_name, $field_array, $limit_array)
 	{
 		global $transaction, $user;
 		
@@ -359,7 +359,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 		}
 	}
 	
-	public function get_limits()
+	public function get_limits($limit_id = null)
 	{
 		if ($this->parameter_template_id)
 		{
@@ -376,27 +376,35 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 				{
 					$field_limit_array = ParameterFieldLimit_Access::list_field_limits_by_parameter_field_id($value);
 					
-					foreach($field_limit_array as $limit_key => $limit_value)
+					if (is_numeric($limit_id) and $field_limit_array[$limit_id])
+					{						
+						$return_array[0]['usl'][$field_counter] = $field_limit_array[$limit_id]['usl'];
+						$return_array[0]['lsl'][$field_counter] = $field_limit_array[$limit_id]['lsl'];
+					}
+					else
 					{
-						if(is_numeric($limit_key_array[$limit_key]))
+						foreach($field_limit_array as $limit_key => $limit_value)
 						{
-							$limit_array_address = $limit_key_array[$limit_key];
-						}
-						else
-						{
-							$parameter_limit = new ParameterLimit_Access($limit_key);
+							if(is_numeric($limit_key_array[$limit_key]))
+							{
+								$limit_array_address = $limit_key_array[$limit_key];
+							}
+							else
+							{
+								$parameter_limit = new ParameterLimit_Access($limit_key);
+								
+								$limit_array_address = $limit_key_counter;
+								$limit_key_array[$limit_key] = $limit_key_counter;
+								$return_array[$limit_array_address]['name'] = $parameter_limit->get_name();
+								$return_array[$limit_array_address]['pk'] = $limit_key;
+								$return_array[$limit_array_address]['usl'][0] = null;
+								$return_array[$limit_array_address]['lsl'][0] = null;
+								$limit_key_counter++;
+							}
 							
-							$limit_array_address = $limit_key_counter;
-							$limit_key_array[$limit_key] = $limit_key_counter;
-							$return_array[$limit_array_address]['name'] = $parameter_limit->get_name();
-							$return_array[$limit_array_address]['pk'] = $limit_key;
-							$return_array[$limit_array_address]['usl'][0] = null;
-							$return_array[$limit_array_address]['lsl'][0] = null;
-							$limit_key_counter++;
+							$return_array[$limit_array_address]['usl'][$field_counter] = $limit_value['usl'];
+							$return_array[$limit_array_address]['lsl'][$field_counter] = $limit_value['lsl'];
 						}
-						
-						$return_array[$limit_array_address]['usl'][$field_counter] = $limit_value['usl'];
-						$return_array[$limit_array_address]['lsl'][$field_counter] = $limit_value['lsl'];
 					}
 					
 					$field_counter++;
@@ -413,6 +421,15 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 		{
 			return null;
 		}
+	}
+	
+	/**
+	 * Returns an array with all possible methods
+	 */
+	public function get_methods()
+	{
+		
+		return null;
 	}
 	
 	public function edit($name, $field_array, $limit_array)
@@ -455,7 +472,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 							{
 								$transaction->rollback($transaction_id);
 							}
-							return null;
+							return false;
 						}
 					}
 					else
@@ -467,7 +484,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 							{
 								$transaction->rollback($transaction_id);
 							}
-							return null;
+							return false;
 						}
 					}
 				}
@@ -675,7 +692,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 								{
 									$transaction->rollback($transaction_id);
 								}
-								return null;
+								return false;
 							}
 						}
 						
@@ -687,7 +704,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 								{
 									$transaction->rollback($transaction_id);
 								}
-								return null;
+								return false;
 							}
 						}
 					}
@@ -702,7 +719,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 								{
 									$transaction->rollback($transaction_id);
 								}
-								return null;
+								return false;
 							}
 						}
 					}
@@ -732,7 +749,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 							{
 								$transaction->rollback($transaction_id);
 							}
-							return null;
+							return false;
 						}
 						
 						$parameter_template_field = new ParameterTemplateHasField_Access($this->parameter_template_id, $value);
@@ -742,7 +759,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 							{
 								$transaction->rollback($transaction_id);
 							}
-							return null;
+							return false;
 						}
 						
 						$parameter_field = new ParameterField_Access($value);
@@ -752,7 +769,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 							{
 								$transaction->rollback($transaction_id);
 							}
-							return null;
+							return false;
 						}
 					}
 				}
@@ -776,7 +793,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 							{
 								$transaction->rollback($transaction_id);
 							}
-							return null;
+							return false;
 						}
 						
 						$parameter_limit = new ParameterLimit_Access($value);
@@ -786,7 +803,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 							{
 								$transaction->rollback($transaction_id);
 							}
-							return null;
+							return false;
 						}
 					}
 				}
@@ -818,6 +835,14 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 	public static function exist_internal_name($internal_name)
 	{
 		return ParameterTemplate_Access::exist_internal_name($internal_name);
+	}
+	
+	/**
+	 * @return array
+	 */
+	public static function list_templates($internal_name_array = null)
+	{
+		return ParameterTemplate_Access::list_templates($internal_name_array);
 	}
 	
 	/**
