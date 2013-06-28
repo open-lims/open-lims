@@ -336,7 +336,6 @@ class DataRequest
 			break;	
 			
 			
-			
 			case "admin_list_parameter_templates":
 				require_once("ajax/admin/admin_parameter_template.ajax.php");
 				echo AdminParameterTemplateAjax::list_templates(
@@ -396,6 +395,31 @@ class DataRequest
 				require_once("ajax/admin/admin_parameter_method.ajax.php");
 				echo AdminParameterMethodAjax::count_methods($_POST['argument_array']);
 			break;	
+			
+			case "admin_add_parameter_method":
+				require_once("ajax/admin/admin_parameter_method.ajax.php");
+				echo AdminParameterMethodAjax::add_method($_POST['name']);
+			break;
+			
+			case "admin_edit_parameter_method":
+				require_once("ajax/admin/admin_parameter_method.ajax.php");
+				echo AdminParameterMethodAjax::edit_method($_POST['id'], $_POST['name']);
+			break;
+			
+			case "admin_delete_parameter_method":
+				require_once("ajax/admin/admin_parameter_method.ajax.php");
+				echo AdminParameterMethodAjax::delete_method($_POST['id']);
+			break;
+			
+			case "admin_parameter_method_get_name":
+				require_once("ajax/admin/admin_parameter_method.ajax.php");
+				echo AdminParameterMethodAjax::get_name($_POST['id']);
+			break;
+			
+			case "admin_parameter_method_exist_name":
+				require_once("ajax/admin/admin_parameter_method.ajax.php");
+				echo AdminParameterMethodAjax::exist_name($_POST['name']);
+			break;
 			
 			
 			// Navigation

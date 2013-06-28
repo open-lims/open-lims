@@ -2,6 +2,59 @@
 /*<![CDATA[*/
 $(document).ready(function()
 {
+	$("#DataParameterAdminMethodAddEditDialog").dialog(
+	{
+		autoOpen: false,
+		buttons: 
+		{
+			"Close": function()
+			{
+				$( this ).dialog( "close" );
+			},
+			"OK": function()
+			{
+				var name = $(".DataParameterAdminMethodAddEditValue[name='name']").val();
+				
+				if ($("#DataParameterAdminMethodAddEditDialogFunction").html() == "add")
+				{
+					$.ajax(
+					{
+						type: "POST",
+						url: "ajax.php?session_id="+get_array['session_id']+"&nav=data&run=admin_add_parameter_method",
+						data: "name="+name+"",
+						success: function(data)
+						{
+							if (data == "1")
+							{
+								list.reload();
+								$("#DataParameterAdminMethodAddEditDialog").dialog( "close" );
+							}
+						}
+					});
+				}
+				else
+				{
+					$.ajax(
+					{
+						type: "POST",
+						url: "ajax.php?session_id="+get_array['session_id']+"&nav=data&run=admin_edit_parameter_method",
+						data: "id="+$("#DataParameterAdminMethodAddEditDialogId").html()+"&name="+name+"",
+						success: function(data)
+						{
+							if (data == "1")
+							{
+								list.reload();
+								$("#DataParameterAdminMethodAddEditDialog").dialog( "close" );
+							}
+						}
+					});
+				}
+			}
+		},
+		height: 140,
+		width: 400
+	});
+	
 	$("#DataParameterAdminMethodDialogDelete").dialog(
 	{
 		autoOpen: false,
@@ -13,14 +66,14 @@ $(document).ready(function()
 			click: function()
 			{
 			 	var open_element = $.data(this, "open_element");
-			 	var template_id = $(open_element).attr("id").replace("DataParameterTemplateDeleteButton","");
+			 	var method_id = $(open_element).attr("id").replace("DataParameterAdminMethodDeleteButton","");
 			 	var element = $(open_element);
 			 	
 			 	$.ajax(
 	 			{
 	 				type: "POST",
-	 				url: "ajax.php?session_id="+get_array['session_id']+"&nav=data&run=admin_delete_parameter_template",
-	 				data: "id="+template_id,
+	 				url: "ajax.php?session_id="+get_array['session_id']+"&nav=data&run=admin_delete_parameter_method",
+	 				data: "id="+method_id,
 	 				success: function(data)
 	 				{
 	 					if (data == 1)
@@ -49,6 +102,39 @@ $(document).ready(function()
 		}]
 	});
 	
+	$('#DataParameterAdminMethodAddButton').click(function()
+	{
+		$("#DataParameterAdminMethodAddEditDialog").dialog("open");
+		$("#DataParameterAdminMethodAddEditDialog").dialog("option", "title", "Add a Parameter Method");
+		
+		$("#DataParameterAdminMethodAddEditDialogFunction").html("add");
+		$("#DataParameterAdminMethodAddEditDialogId").html("");
+		$(".DataParameterAdminMethodAddEditValue[name='name']").val("");
+	});
+	
+	$(".DataParameterAdminMethodEditButton").each().live('click', function()
+	{
+		var id = $(this).attr("id");
+		id = id.replace("DataParameterAdminMethodEditButton","");
+		
+		$("#DataParameterAdminMethodAddEditDialog").dialog("open");
+		$("#DataParameterAdminMethodAddEditDialog").dialog("option", "title", "Edit a Parameter Method");
+		
+		$("#DataParameterAdminMethodAddEditDialogFunction").html("edit");
+		$("#DataParameterAdminMethodAddEditDialogId").html(id);
+		
+		$.ajax(
+		{
+			type: "POST",
+			url: "ajax.php?session_id="+get_array['session_id']+"&nav=data&run=admin_parameter_method_get_name",
+			data: "id="+id,
+			success: function(data)
+			{
+				$(".DataParameterAdminMethodAddEditValue[name='name']").val(data);
+			}
+		});
+	});
+	
 	$(".DataParameterAdminMethodDeleteButton").each().live("click", function()
 	{
 		$("#DataParameterAdminMethodDialogDelete").data('open_element', this).dialog("open");
@@ -61,10 +147,23 @@ $(document).ready(function()
 Are you sure?
 </div>
 
+<div id="DataParameterAdminMethodAddEditDialog" style='display: none;'>
+<div class='Form'>
+<table style='width: 100%'>
+	<tr>
+		<td style='width:100px;'>Name:</td>
+		<td><input type='text' size='35' class='DataParameterAdminMethodAddEditValue' name='name' /></td>
+	</tr>
+</table>
+</div>
+<div id='DataParameterAdminMethodAddEditDialogFunction' style='display:none;'></div>
+<div id='DataParameterAdminMethodAddEditDialogId' style='display:none;'></div>
+</div>
+
 <!-- CONTAINER BEGIN ("Parameter Methods") -->
 		
 <div id='ListButtonBar'>
-	<a href='#' class='ListButton'>
+	<a id='DataParameterAdminMethodAddButton' class='ListButton'>
 	<img src='images/icons/add.png' alt='' />
 	<div>Add Parameter Method</div>
 	</a>

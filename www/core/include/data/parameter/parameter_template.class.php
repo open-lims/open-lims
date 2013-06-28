@@ -69,7 +69,8 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 	
 	function __destruct()
 	{
-		
+		unset($this->parameter_template_id);
+		unset($this->parameter_template);
 	}
 	
 	public function create($name, $internal_name, $field_array, $limit_array)

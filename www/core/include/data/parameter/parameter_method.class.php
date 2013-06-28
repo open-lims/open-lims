@@ -38,6 +38,83 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class ParameterMethod // implements ParameterMethodInterface
 {
+	private $parameter_method_id;
+	private $parameter_method;
+	
+	function __construct($parameter_method_id = null)
+	{
+		if (is_numeric($parameter_method_id))
+		{
+			if (ParameterMethod_Access::exist_id($parameter_method_id) == true)
+			{
+				$this->parameter_method_id = $parameter_method_id;
+				$this->parameter_method = new ParameterMethod_Access($parameter_method_id);
+			}
+			else
+			{
+				// throw new ParameterMethodNotFoundException();
+			}
+		}
+		else
+		{
+			$this->parameter_method_id = null;
+			$this->parameter_method = new ParameterMethod_Access(null);
+		}
+	}
+	
+	function __destruct()
+	{
+		unset($this->parameter_method_id);
+		unset($this->parameter_method);
+	}
+	
+	public function create($name)
+	{
+		if ($name)
+		{
+			return $this->parameter_method->create($name);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public function delete()
+	{
+		if ($this->parameter_method and $this->parameter_method_id)
+		{
+			return $this->parameter_method->delete();
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public function get_name()
+	{
+		if ($this->parameter_method and $this->parameter_method_id)
+		{
+			return $this->parameter_method->get_name();
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public function set_name($name)
+	{
+		if ($this->parameter_method and $this->parameter_method_id)
+		{
+			return $this->parameter_method->set_name($name);
+		}
+		else
+		{
+			return false;
+		}
+	}
 	
 	/**
      * @todo implement check if the parameter-method is linked to any parameter

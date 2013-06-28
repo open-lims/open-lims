@@ -120,7 +120,7 @@ DataParameter = function()
 		init();
 	}
 	
-	init_parameter = function(local_thousand_separator, local_decimal_separator)
+	init_parameter = function(session_id, parameter_template_id, local_thousand_separator, local_decimal_separator)
 	{
 		thousand_separator = local_thousand_separator
 		decimal_separator = local_decimal_separator
@@ -133,19 +133,22 @@ DataParameter = function()
 			
 			$.ajax({
 				type : "POST",
-				url : "ajax.php?session_id=[[SESSION_ID]]&nav=data&run=parameter_get_limits",
-				data : 'parameter_template_id=[[TYPE_ID]]&parameter_limit_id='+limit_id,
+				url : "ajax.php?session_id="+session_id+"&nav=data&run=parameter_get_limits",
+				data : 'parameter_template_id='+parameter_template_id+'&parameter_limit_id='+limit_id,
 				success : function(data)
 				{
 					var counter = 1;
 					var limit_array = jQuery.parseJSON(data);
-				
-					$(".DataParameterValue").each(function()
+					
+					if ((limit_array !== undefined) && (limit_array !== null))
 					{
-						$(this).children(".DataParameterValueLSL").html(limit_array[0]['lsl'][counter]);
-						$(this).children(".DataParameterValueUSL").html(limit_array[0]['usl'][counter]);
-						counter++;
-					});
+						$(".DataParameterValue").each(function()
+						{
+							$(this).children(".DataParameterValueLSL").html(limit_array[0]['lsl'][counter]);
+							$(this).children(".DataParameterValueUSL").html(limit_array[0]['usl'][counter]);
+							counter++;
+						});
+					}
 				}
 			});
 			

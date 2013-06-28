@@ -64,10 +64,12 @@ class AdminParameterMethodAjax
 			if (is_array($list_array) and count($list_array) >= 1)
 			{	
 				foreach($list_array as $key => $value)
-				{					
+				{	
+					$list_array[$key]['edit'] = "<a title='edit' style='cursor: pointer;' id='DataParameterAdminMethodEditButton".$list_array[$key]['id']."' class='DataParameterAdminMethodEditButton'><img src='images/icons/edit.png' alt='D' /></a>";
+					
 					if (ParameterMethod::is_deletable($list_array[$key]['id']) === true)
 					{
-						$list_array[$key]['delete'] = "<a title='delete' style='cursor: pointer;' id='DataParameterAdminMethodDeleteButton".$list_array[$key]['id']."' class='DataParameterAdminTemplateDeleteButton'><img src='images/icons/delete.png' alt='D' /></a>";
+						$list_array[$key]['delete'] = "<a title='delete' style='cursor: pointer;' id='DataParameterAdminMethodDeleteButton".$list_array[$key]['id']."' class='DataParameterAdminMethodDeleteButton'><img src='images/icons/delete.png' alt='D' /></a>";
 					}
 					else
 					{
@@ -107,6 +109,59 @@ class AdminParameterMethodAjax
 		{
 			throw new BaseUserAccessDeniedException();
 		}
+	}
+	
+	public static function add_method($name)
+	{
+		$parameter_method = new ParameterMethod();
+			
+		if ($parameter_method->create($name) !== null)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
+	public static function edit_method($id, $name)
+	{
+		$parameter_method = new ParameterMethod($id);
+			
+		if ($parameter_method->set_name($name) !== null)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
+	public static function delete_method($id)
+	{
+		$parameter_method = new ParameterMethod($id);
+			
+		if ($parameter_method->delete() !== false)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	public static function get_name($id)
+	{
+		$parameter_method = new ParameterMethod($id);
+		return $parameter_method->get_name();
+	}
+	
+	public static function exist_name($name)
+	{
+		
 	}
 }
 ?>

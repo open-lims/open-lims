@@ -33,6 +33,7 @@ class AdminParameterMethodIO
 		
 		$list->add_column("", "symbol", false, "20px");
 		$list->add_column(Language::get_message("DataGeneralListColumnName", "general"), "name");
+		$list->add_column("", "edit", false, "20px");
 		$list->add_column("", "delete", false, "20px");
 		
 		$template = new HTMLTemplate("data/admin/parameter_method/list.html");	

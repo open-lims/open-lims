@@ -217,6 +217,7 @@ $statement[] = "CREATE TABLE core_data_parameter_versions
   owner_id integer,
   datetime timestamp with time zone,
   name text,
+  parameter_limit_id integer,
   CONSTRAINT core_data_parameter_versions_pkey PRIMARY KEY (id )
 )
 WITH (
@@ -592,6 +593,10 @@ $statement[] = "ALTER TABLE ONLY core_data_parameter_versions ADD CONSTRAINT cor
 
 $statement[] = "ALTER TABLE ONLY core_data_parameter_versions ADD CONSTRAINT core_data_parameter_versions_previous_version_id_fkey FOREIGN KEY (previous_version_id)
       REFERENCES core_data_parameter_versions (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
+
+$statement[] = "ALTER TABLE ONLY core_data_parameter_versions ADD CONSTRAINT core_data_parameter_versions_parameter_limit_id_fkey FOREIGN KEY (parameter_limit_id)
+      REFERENCES core_data_parameter_limits (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE";
 
 $statement[] = "ALTER TABLE ONLY core_data_parameters ADD CONSTRAINT core_data_parameters_data_entitiy_id_fkey FOREIGN KEY (data_entity_id)
