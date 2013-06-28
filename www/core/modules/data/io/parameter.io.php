@@ -69,8 +69,7 @@ class ParameterIO
 			$parameter_value_array = $parameter->get_values();
 			$parameter_method_array = $parameter->get_methods();
 			$parameter_limit_array = $parameter->get_limits();
-			
-			
+						
 			$output_template_limit_array = array();
 			$output_template_limit_counter = 0;
 			
@@ -224,12 +223,22 @@ class ParameterIO
 					$output_template_field_array[$output_template_field_counter][0]['value'] = "0";
 					$output_template_field_array[$output_template_field_counter][0]['content'] = "none";
 					
-					if (is_array($parameter_possible_methods_array) and count($parameter_possible_methods_array) >= 1)
+					if (is_array($parameter_possible_methods_array) and is_array($parameter_possible_methods_array[$value['pk']]) and count($parameter_possible_methods_array[$value['pk']]) >= 1)
 					{						
-						foreach($parameter_possible_methods_array as $method_key => $method_value)
+						foreach($parameter_possible_methods_array[$value['pk']] as $method_key => $method_value)
 						{
 							$output_template_field_array[$output_template_field_counter][$method_counter]['value'] = $method_key;
 							$output_template_field_array[$output_template_field_counter][$method_counter]['content'] = $method_value;
+							
+							if ($parameter_method_array[$value['pk']] == $method_key)
+							{
+								$output_template_field_array[$output_template_field_counter][$method_counter]['selected'] = " selected='selected'";
+							}
+							else
+							{
+								$output_template_field_array[$output_template_field_counter][$method_counter]['selected'] = "";
+							}
+							
 							$method_counter++;
 						}
 					}
@@ -447,9 +456,9 @@ class ParameterIO
 					$output_template_field_array[$output_template_field_counter][0]['value'] = "0";
 					$output_template_field_array[$output_template_field_counter][0]['content'] = "none";
 					
-					if (is_array($parameter_possible_methods_array) and count($parameter_possible_methods_array) >= 1)
+					if (is_array($parameter_possible_methods_array) and is_array($parameter_possible_methods_array[$value['pk']]) and count($parameter_possible_methods_array[$value['pk']]) >= 1)
 					{						
-						foreach($parameter_possible_methods_array as $method_key => $method_value)
+						foreach($parameter_possible_methods_array[$value['pk']] as $method_key => $method_value)
 						{
 							$output_template_field_array[$output_template_field_counter][$method_counter]['value'] = $method_key;
 							$output_template_field_array[$output_template_field_counter][$method_counter]['content'] = $method_value;

@@ -429,8 +429,39 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 	 */
 	public function get_methods()
 	{
-		
-		return null;
+		if ($this->parameter_template_id)
+		{
+			$all_methods_array = ParameterMethod::list_methods();
+			$template_field_array = ParameterTemplateHasField_Access::list_fields_by_template_id($this->parameter_template_id);
+			
+			if(is_array($template_field_array) and count($template_field_array) >= 1)
+			{	
+				$return_array = array();
+								
+				foreach($template_field_array as $key => $value)
+				{
+					$method_array = ParameterFieldFieldHasMethod_Access::list_methods_by_field_id($value);
+					if (is_array($method_array) and count($method_array) >= 1)
+					{
+						$return_array[$value] = $method_array;
+					}
+					else
+					{
+						$return_array[$value] = $all_methods_array;
+					}
+				}
+				
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	public function edit($name, $field_array, $limit_array)

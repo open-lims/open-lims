@@ -134,5 +134,41 @@ class ParameterFieldFieldHasMethod_Access
 			return false;
 		}
 	}
+	
+	
+	/**
+	 * @param integer $parameter_field_id
+	 * @return array
+	 */
+	public function list_methods_by_field_id($parameter_field_id)
+	{
+		global $db;
+		
+		if (is_numeric($parameter_field_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT parameter_method_id FROM ".constant("PARAMETER_FIELD_HAS_METHOD_TABLE")." WHERE parameter_field_id = ".$parameter_field_id."";
+			$res = $db->db_query($sql);
+			
+			while($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array, $data['parameter_method_id']);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
 }
 ?>

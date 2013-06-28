@@ -116,6 +116,12 @@ class ParameterMethod // implements ParameterMethodInterface
 		}
 	}
 	
+	
+	public static function list_methods()
+	{
+		return ParameterMethod_Access::list_methods();
+	}
+	
 	/**
      * @todo implement check if the parameter-method is linked to any parameter
      * @param integer $parameter_method_id

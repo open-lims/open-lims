@@ -183,6 +183,33 @@ class ParameterMethod_Access
 	
 	
 	/**
+	 * @return array
+	 */
+	public static function list_methods()
+	{
+		global $db;
+		
+		$return_array = array();
+		
+		$sql = "SELECT id, name FROM ".constant("PARAMETER_METHOD_TABLE")." ORDER BY name";
+		$res = $db->db_query($sql);
+		
+		while($data = $db->db_fetch_assoc($res))
+		{
+			$return_array[$data['id']] = $data['name'];
+		}
+		
+		if (is_array($return_array))
+		{
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @param integer $method_id
 	 * @return bool
 	 */
