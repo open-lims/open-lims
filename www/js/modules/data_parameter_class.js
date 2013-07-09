@@ -82,6 +82,10 @@ DataParameter = function()
 			"" +
 			"<div id='DataParameterAdminTemplateLimitsDialogRename' title='Rename Limit'>" +
 			"Name: <input type='text' size='35' />" +
+			"</div>" +
+			"" +
+			"<div id='DataParameterAdminTemplateDialogMethods' title='Delete Template' style='display: none;'>" +
+			"Lorem Ipsum" +
 			"</div>");
 		
 		$(".DataParameterTemplateFieldDeleteButton").each(function()
@@ -114,6 +118,14 @@ DataParameter = function()
 						tmp_delete_counter++;
 					});
 				});
+			});
+		});
+		
+		$(".DataParameterTemplateFieldMethodButton").each(function()
+		{
+			$(this).click(function()
+			{
+				$("#DataParameterAdminTemplateDialogMethods").dialog("open");
 			});
 		});
 		
@@ -358,6 +370,25 @@ DataParameter = function()
 	// Admin
 	init = function()
 	{
+		// Method Dialog
+		$("#DataParameterAdminTemplateDialogMethods").dialog(
+		{
+			autoOpen: false,
+			buttons: 
+			{
+				"Close": function()
+				{
+					$( this ).dialog( "close" );
+				},
+				"OK": function()
+				{
+					$( this ).dialog( "close" );
+				}
+			},
+			height: 140,
+			width: 400
+		});
+		
 		// Limit Dialog
 		$("#DataParameterAdminTemplateLimitsDialog").dialog(
 		{
@@ -560,7 +591,7 @@ DataParameter = function()
 			"<td><input type='text' size='6' name='usl-"+line_counter+"' class='DataParameterAdminValue' /></td>" +
 			"<td><input type='text' size='6' name='min-"+line_counter+"' class='DataParameterAdminValue' /></td>" +
 			"<td><input type='text' size='6' name='max-"+line_counter+"' class='DataParameterAdminValue' /></td>" +
-			"<td>Methods</td>" +
+			"<td><button id='DataParameterTemplateFieldMethodButton"+line_counter+"'>Methods</button></td>" +
 			"<td><a title='delete' style='cursor: pointer;' id='DataParameterTemplateFieldDeleteButton"+line_counter+"'><img src='images/icons/delete.png' alt='D' /></a></td>" +
 			"</tr>");
 		
@@ -592,6 +623,11 @@ DataParameter = function()
 					tmp_delete_counter++;
 				});
 			});
+		});
+		
+		$("#DataParameterTemplateFieldMethodButton"+line_counter+"").click(function()
+		{
+			$("#DataParameterAdminTemplateDialogMethods").dialog("open");
 		});
 		
 		base_form_init();

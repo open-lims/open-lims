@@ -35,6 +35,8 @@ class DataReportIO
 	 */
 	public static function get_data_item_report($sql, $item_id, $pdf)
 	{
+		global $regional;
+		
 		if ($sql and is_object($pdf))
 		{
 			// Values
@@ -52,7 +54,7 @@ class DataReportIO
 					$pdf->SetFont('dejavusans', 'B', 14, '', true);
 					$pdf->Write(0, 'Value - '.$value_object->get_name().'', '', 0, 'C', true, 0, false, false, 0);
 					$pdf->Write(0, '', '', 0, 'L', true, 0, false, false, 0);
-					$pdf->SetFont('dejavusans', '', 14, '', true);
+					$pdf->SetFont('dejavusans', '', 12, '', true);
 					
 					if (is_array($value_object_value_array) and count($value_object_value_array) >= 1)
 					{
@@ -62,17 +64,32 @@ class DataReportIO
 							
 							if ($sub_value['type'] == "textarea")
 							{
-								$pdf->SetFont('dejavusans', 'B', 14, '', true);
+								$pdf->SetFont('dejavusans', 'B', 12, '', true);
 								$pdf->MultiCell(190, 9, $sub_value['title'], 1, 'L', 1, 1, '', '', true, 0, true, true, 0, "T");
-								$pdf->SetFont('dejavusans', '', 14, '', true);
-								$pdf->MultiCell(190, 40, $sub_value['content'][0], 1, 'L', 1, 1, '', '', true, 0, true, true, 0, "T");
+								$pdf->SetFont('dejavusans', '', 12, '', true);
+								$string_height = $pdf->getStringHeight(110, $sub_value['content'][0], true, true, '', 1);
+								$pdf->MultiCell(190, $string_height, $sub_value['content'][0], 1, 'L', 1, 1, '', '', true, 0, true, true, 0, "T");
 							}
 							else
 							{
-								$pdf->SetFont('dejavusans', 'B', 14, '', true);
-								$pdf->MultiCell(80, 9, $sub_value['title'], 1, 'L', 1, 0, '', '', true, 0, true, true, 0, "T");
-								$pdf->SetFont('dejavusans', '', 14, '', true);
-								$pdf->MultiCell(110, 9, $sub_value['content'][0], 1, 'L', 1, 1, '', '', false, 0, true, true, 0, "T");
+								$pdf->SetFont('dejavusans', 'B', 12, '', true);
+								$string_height1 = $pdf->getStringHeight(80, $sub_value['title'], true, true, '', 1);
+								$pdf->SetFont('dejavusans', '', 12, '', true);
+								$string_height2 = $pdf->getStringHeight(110, $sub_value['content'][0], true, true, '', 1);
+								
+								if ($string_height1 > $string_height2)
+								{
+									$height = $string_height1;
+								}
+								else
+								{
+									$height = $string_height2;
+								}
+								
+								$pdf->SetFont('dejavusans', 'B', 12, '', true);
+								$pdf->MultiCell(80, $height, $sub_value['title'], 1, 'L', 1, 0, '', '', true, 0, true, true, 0, "T");
+								$pdf->SetFont('dejavusans', '', 12, '', true);
+								$pdf->MultiCell(110, $height, $sub_value['content'][0], 1, 'L', 1, 1, '', '', true, 0, true, true, 0, "T");
 							}
 						}
 					}
@@ -89,7 +106,7 @@ class DataReportIO
 												array("name" => "user", "title" => "User", "width" =>50)
 												);
 						
-						$report_table = new ReportTable_IO($pdf);						
+						$report_table = new ReportTable_IO($pdf, '', '12');						
 						$report_table->add_header($header_array);
 						
 						foreach($value_object_version_array as $sub_key => $sub_value)
@@ -133,7 +150,7 @@ class DataReportIO
 												array("name" => "user", "title" => "User", "width" =>48)
 												);
 				
-				$report_table = new ReportTable_IO($pdf, '17');						
+				$report_table = new ReportTable_IO($pdf, '', '12');						
 				$report_table->add_header($header_array);
 												
 				foreach ($file_array as $key => $value)

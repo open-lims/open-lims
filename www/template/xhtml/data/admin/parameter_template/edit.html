@@ -103,6 +103,7 @@ $(document).ready(function()
 		});
 	});
 	
+		
 });
 /*]]>*/  
 </script>
@@ -179,7 +180,7 @@ $(document).ready(function()
 				<td><input type='text' size='6' name='usl-[[FIELDS:ID]]' class='DataParameterAdminValue' value='[[FIELDS:USL]]' /></td>
 				<td><input type='text' size='6' name='min-[[FIELDS:ID]]' class='DataParameterAdminValue' value='[[FIELDS:MIN]]' /></td>
 				<td><input type='text' size='6' name='max-[[FIELDS:ID]]' class='DataParameterAdminValue' value='[[FIELDS:MAX]]' /></td>
-				<td>[[LANG:DataAdminParameterTemplateEditMethods]]</td>
+				<td><button id='DataParameterTemplateFieldMethodButton[[FIELDS:ID]]' class='DataParameterTemplateFieldMethodButton'>[[LANG:DataAdminParameterTemplateEditMethods]]</button></td>
 				<td>
 				<!-- IF ([[FIELDS:DELETABLE]]) -->
 		 		<a title='delete' style='cursor: pointer;' id='DataParameterTemplateFieldDeleteButton[[FIELDS:ID]]' class='DataParameterTemplateFieldDeleteButton'><img src='images/icons/delete.png' alt='D' /></a>

@@ -149,11 +149,26 @@ class ReportTable_IO
 			
 			foreach($this->content_array as $key => $value)
 			{
+				$height = $this->height;
+				
 				foreach($value as $sub_key => $sub_value)
 				{
 					if (($width = $this->width_array[$sub_value['name']]) != null)
 					{
-						$this->pdf->MultiCell($width, $this->height, $sub_value['content'], 1, 'L', 1, 0, '', '', true, 0, true, true, 0, "T");
+						$string_height = $this->pdf->getStringHeight($width, $sub_value['content'], true, true, '', 1);
+						
+						if ($string_height > $height)
+						{
+							$height = $string_height;
+						}
+					}
+				}
+				
+				foreach($value as $sub_key => $sub_value)
+				{
+					if (($width = $this->width_array[$sub_value['name']]) != null)
+					{
+						$this->pdf->MultiCell($width, $height, $sub_value['content'], 1, 'L', 1, 0, '', '', true, 0, true, true, 0, "T");
 					}
 				}
 				

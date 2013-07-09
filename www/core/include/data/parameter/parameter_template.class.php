@@ -753,6 +753,8 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 								}
 								return false;
 							}
+							
+							array_push($current_limit_array, $parameter_limit_id_array[$i]);
 						}
 					}
 				}
