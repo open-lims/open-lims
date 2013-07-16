@@ -282,6 +282,11 @@ class DataRequest
 						);
 			break;
 			
+			case "parameter_get_methods":
+				require_once("ajax/parameter.ajax.php");
+				echo ParameterAjax::get_methods();
+			break;
+			
 			
 			// Search 
 			

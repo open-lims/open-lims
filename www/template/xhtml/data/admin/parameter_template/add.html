@@ -13,7 +13,7 @@ $(document).ready(function()
 	
 	data_parameter = new DataParameter();
 	data_parameter.set_language_json(language_json);
-	data_parameter.init_admin("DataParameterAdminTemplateAfterElement");
+	data_parameter.init_admin("DataParameterAdminTemplateAfterElement", "[[SESSION_ID]]");
 	
 	// Cancel Template Admin
 	$("#DataParameterTemplateCancelButton").click(function()
@@ -170,7 +170,6 @@ $(document).ready(function()
 			<th>[[LANG:DataAdminParameterTemplateAddUSL]]</th>
 			<th>[[LANG:DataAdminParameterTemplateAddMin]]</th>
 			<th>[[LANG:DataAdminParameterTemplateAddMax]]</th>
-			<th>[[LANG:DataAdminParameterTemplateAddMethods]]</th>
 			<th style='width: 20px;'></th>
 		<tr>
 	</thead>
@@ -192,7 +191,6 @@ $(document).ready(function()
 			<td><input type='text' size='6' name='usl-1' class='DataParameterAdminValue' /></td>
 			<td><input type='text' size='6' name='min-1' class='DataParameterAdminValue' /></td>
 			<td><input type='text' size='6' name='max-1' class='DataParameterAdminValue' /></td>
-			<td><button id='DataParameterTemplateFieldMethodButton1' class='DataParameterTemplateFieldMethodButton'>[[LANG:DataAdminParameterTemplateAddMethods]]</button></td>
 			<td></td>
 		</tr>
 	</tbody>

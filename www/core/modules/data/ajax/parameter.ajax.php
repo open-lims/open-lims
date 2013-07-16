@@ -118,5 +118,10 @@ class ParameterAjax
 			throw new ParameterIDMissingException();
 		}
 	}
+	
+	public static function get_methods()
+	{
+		return json_encode(ParameterMethod::list_methods());
+	}
 }
 ?>

@@ -15,7 +15,7 @@ $(document).ready(function()
 	data_parameter = new DataParameter();
 	data_parameter.set_language_json(language_json);
 
-	data_parameter.init_admin("DataParameterAdminTemplateAfterElement");
+	data_parameter.init_admin("DataParameterAdminTemplateAfterElement", "[[SESSION_ID]]");
 	
 	data_parameter.set_limit_json('[[LIMIT_JSON]]');
 	data_parameter.set_limit_counter([[LIMIT_COUNTER]]);
@@ -152,7 +152,6 @@ $(document).ready(function()
 			<th>[[LANG:DataAdminParameterTemplateEditUSL]]</th>
 			<th>[[LANG:DataAdminParameterTemplateEditMin]]</th>
 			<th>[[LANG:DataAdminParameterTemplateEditMax]]</th>
-			<th>[[LANG:DataAdminParameterTemplateEditMethods]]</th>
 			<th style='width: 20px;'></th>
 		<tr>
 	</thead>
@@ -180,7 +179,6 @@ $(document).ready(function()
 				<td><input type='text' size='6' name='usl-[[FIELDS:ID]]' class='DataParameterAdminValue' value='[[FIELDS:USL]]' /></td>
 				<td><input type='text' size='6' name='min-[[FIELDS:ID]]' class='DataParameterAdminValue' value='[[FIELDS:MIN]]' /></td>
 				<td><input type='text' size='6' name='max-[[FIELDS:ID]]' class='DataParameterAdminValue' value='[[FIELDS:MAX]]' /></td>
-				<td><button id='DataParameterTemplateFieldMethodButton[[FIELDS:ID]]' class='DataParameterTemplateFieldMethodButton'>[[LANG:DataAdminParameterTemplateEditMethods]]</button></td>
 				<td>
 				<!-- IF ([[FIELDS:DELETABLE]]) -->
 		 		<a title='delete' style='cursor: pointer;' id='DataParameterTemplateFieldDeleteButton[[FIELDS:ID]]' class='DataParameterTemplateFieldDeleteButton'><img src='images/icons/delete.png' alt='D' /></a>

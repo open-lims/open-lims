@@ -29,6 +29,8 @@ DataParameter = function()
 	var language_array = new Object();
 	var field_error_array = new Object();
 	
+	var method_array = new Array();
+	
 	limit_array[limit_counter] = new Object();
 	limit_array[limit_counter]['name'] = "First Limit";
 	limit_array[limit_counter]['usl'] = new Array();
@@ -38,8 +40,9 @@ DataParameter = function()
 	var thousand_separator;
 	var deciamal_separator;
 		
-	init_admin = function(element)
+	init_admin = function(element, session_id)
 	{
+		
 		$("#"+element).after("" +
 			"<div id='DataParameterAdminTemplateLimitsDialog' title='Limits (USL/LSL)'>" +
 			"	<div id='DataParameterAdminTemplateLimitsDialogSelect' class='Form'><select style='width: 500px;'></select></div>" +
@@ -84,8 +87,10 @@ DataParameter = function()
 			"Name: <input type='text' size='35' />" +
 			"</div>" +
 			"" +
-			"<div id='DataParameterAdminTemplateDialogMethods' title='Delete Template' style='display: none;'>" +
-			"Lorem Ipsum" +
+			"<div id='DataParameterAdminTemplateDialogMethods' title='Select Allowed Methods' style='display: none;'>" +
+			"<table id='DataParameterAdminTemplateDialogMethodsTable'>" +
+			"<tbody></tbody>" +
+			"</table>" +
 			"</div>");
 		
 		$(".DataParameterTemplateFieldDeleteButton").each(function()
@@ -129,7 +134,7 @@ DataParameter = function()
 			});
 		});
 		
-		init();
+		init(session_id);
 	}
 	
 	init_parameter = function(session_id, parameter_template_id, local_thousand_separator, local_decimal_separator)
@@ -322,6 +327,17 @@ DataParameter = function()
 		}
 	}
 	
+	// NOT USED
+	// Admin
+	set_method_json = function(method_json)
+	{
+		var tmp_method_array = jQuery.parseJSON(method_json);
+		if ((tmp_method_array !== null) && (tmp_method_array !== undefined) && (tmp_method_array.length > 0))
+		{
+			method_array = tmp_method_array;
+		}
+	}
+	
 	// Admin
 	set_line_counter = function(local_line_counter)
 	{
@@ -343,6 +359,7 @@ DataParameter = function()
 	this.get_limit_json = get_limit_json;
 	this.set_language_json = set_language_json;
 	this.set_limit_json = set_limit_json;
+	this.set_method_json = set_method_json;
 	this.set_line_counter = set_line_counter;
 	this.set_limit_counter = set_limit_counter;
 	this.get_field_error_array = get_field_error_array;
@@ -368,8 +385,9 @@ DataParameter = function()
 	}
 	
 	// Admin
-	init = function()
+	init = function(session_id)
 	{
+		// NOT USED
 		// Method Dialog
 		$("#DataParameterAdminTemplateDialogMethods").dialog(
 		{
@@ -385,8 +403,29 @@ DataParameter = function()
 					$( this ).dialog( "close" );
 				}
 			},
-			height: 140,
-			width: 400
+			height: 350,
+			width: 400,
+			open: function()
+			{
+				$.ajax({
+					type : "POST",
+					url : "ajax.php?session_id="+session_id+"&nav=data&run=parameter_get_methods",
+					data : '',
+					success : function(data)
+					{
+						if (data)
+						{
+							var method_array = jQuery.parseJSON(data);
+							
+							$.each(method_array, function(key, value)
+							{
+								var line = $("<tr><td><input type='checkbox' /></td><td>"+value+"</td></tr>");
+							 	$("#DataParameterAdminTemplateDialogMethodsTable tbody").append(line);
+							});
+						}
+					}
+				});
+			}
 		});
 		
 		// Limit Dialog
@@ -433,7 +472,7 @@ DataParameter = function()
 				 	limit_array[limit_counter]['usl'] = new Array();
 				 	limit_array[limit_counter]['lsl'] = new Array();
 				 	
-				 	var new_option = $("<option value='"+limit_counter+"'>"+name+"</option>")
+				 	var new_option = $("<option value='"+limit_counter+"'>"+name+"</option>");
 				 	$("#DataParameterAdminTemplateLimitsDialogSelect select").append(new_option);
 				 	$(new_option).attr("selected", "selected");
 				 	
@@ -559,8 +598,6 @@ DataParameter = function()
 					}
 				}
 			});
-			
-			console.log(limit_array);
 		});
 	}
 	
@@ -591,7 +628,6 @@ DataParameter = function()
 			"<td><input type='text' size='6' name='usl-"+line_counter+"' class='DataParameterAdminValue' /></td>" +
 			"<td><input type='text' size='6' name='min-"+line_counter+"' class='DataParameterAdminValue' /></td>" +
 			"<td><input type='text' size='6' name='max-"+line_counter+"' class='DataParameterAdminValue' /></td>" +
-			"<td><button id='DataParameterTemplateFieldMethodButton"+line_counter+"'>Methods</button></td>" +
 			"<td><a title='delete' style='cursor: pointer;' id='DataParameterTemplateFieldDeleteButton"+line_counter+"'><img src='images/icons/delete.png' alt='D' /></a></td>" +
 			"</tr>");
 		

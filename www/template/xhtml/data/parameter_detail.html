@@ -2,6 +2,9 @@
 /*<![CDATA[*/
 $(document).ready(function()
 {
+	data_parameter = new DataParameter();
+	data_parameter.init_parameter("[[SESSION_ID]]", "[[TYPE_ID]]", "[[THOUSAND_SEPARATOR]]", "[[DECIMAL_SEPARATOR]]");
+	
 	$("#DataParameterCancelButton").click(function()
 	{
 		history.back();
@@ -80,9 +83,6 @@ $(document).ready(function()
 			});
 		}
 	});
-	
-	data_parameter = new DataParameter();
-	data_parameter.init_parameter("[[SESSION_ID]]", "[[TYPE_ID]]", "[[THOUSAND_SEPARATOR]]", "[[DECIMAL_SEPARATOR]]");
 });
 /*]]>*/ 
 </script>
@@ -135,7 +135,7 @@ $(document).ready(function()
 					<!-- FOREACH END -->
 					</select>
 				</td>
-				<td id='DataParameterValueStatus[[FIELDS:PK]]'>[[FIELDS:STATUS]]</td>
+				<td id='DataParameterValueStatus[[FIELDS:PK]]'></td>
 			</tr>
 		
 		<!-- FOREACH END -->

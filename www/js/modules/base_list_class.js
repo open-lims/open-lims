@@ -211,6 +211,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 			data : "column_array="+column_array+"&argument_array="+argument_array+"&entries_per_page="+entries_per_page+"&get_array="+json_get_array,
 			success : function(data)
 			{
+				
 				var last_height = $("#" + css_main_id).height();
 				$("#" + css_main_id).height("auto");
 				$("#" + css_main_id).html(data);
@@ -219,11 +220,12 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 				$("#"+css_main_id).css({"display":"block","display":"table-row-group"});
 				$("#" + css_main_id).append("<div class='ListLoadingContents'></div>"); // element must not be empty to animate height
 				
+				
 				if (new_height != last_height) 
 				{
 					if($.browser.msie)
 					{
-						if($.browser.version == 7.0 || $.browser.version == 9.0)
+						if($.browser.version == 7.0 || $.browser.version >= 9.0)
 						{ //we got an ie version that does not support tbody animation							
 							$("#" + css_main_id).html(data);
 							
