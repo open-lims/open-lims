@@ -69,7 +69,7 @@ interface RegionalInterface
 	 */
 	public function get_date_display_format();
 	
-		/**
+	/**
 	 * @return string
 	 * dd.mm.YYYY
 	 * YYYY.mm.dd
@@ -80,6 +80,18 @@ interface RegionalInterface
 	 * mm/dd/YYYY
 	 */
 	public function get_date_enter_format();
+	
+	/**
+	 * @return string
+	 * dd.mm.YYYY
+	 * YYYY.mm.dd
+	 * dd-mm-YYYY
+	 * mm-dd-YYYY
+	 * YYYY-mm-dd
+	 * dd/mm/YYYY
+	 * mm/dd/YYYY
+	 */
+	public function get_jquery_date_enter_format();
 	
 	/**
 	 * @return integer
