@@ -270,6 +270,60 @@ class Regional implements RegionalInterface
 	}
 	
 	/**
+	 * @see RegionalInterface::get_jquery_date_enter_format()
+	 * @return string
+	 */
+	public function get_php_date_enter_format()
+	{
+		if ($this->user_regional_setting)
+		{
+			$date_enter_format = $this->user_regional_setting->get_date_enter_format();
+			if ($date_enter_format)
+			{
+				switch($date_enter_format):
+	
+				case "yyyy.mm.dd":
+					return "Y.m.d";
+				break;
+					
+				case "dd-mm-yyyy":
+					return "d-m-Y";
+					break;
+	
+				case "mm-dd-yyyy":
+					return "m-d-Y";
+					break;
+	
+				case "yyyy-mm-dd":
+					return "Y-m-d";
+					break;
+	
+				case "dd/mm/yyyy":
+					return "d/m/Y";
+					break;
+	
+				case "mm/dd/yyyy":
+					return "m/d/Y";
+					break;
+	
+				default: // dd.mm.yyyy
+					return "d.m.Y";
+					break;
+	
+					endswitch;
+			}
+			else
+			{
+				return "d.m.Y";
+			}
+		}
+		else
+		{
+			return "d.m.Y";
+		}
+	}
+	
+	/**
 	 * @see RegionalInterface::get_country_id()
 	 * @return integer
 	 */

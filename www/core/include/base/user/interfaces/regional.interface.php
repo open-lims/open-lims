@@ -94,6 +94,11 @@ interface RegionalInterface
 	public function get_jquery_date_enter_format();
 	
 	/**
+	 * @return string
+	 */
+	public function get_php_date_enter_format();
+	
+	/**
 	 * @return integer
 	 */
 	public function get_country_id();

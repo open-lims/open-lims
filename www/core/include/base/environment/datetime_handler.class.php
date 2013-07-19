@@ -998,6 +998,60 @@ class DatetimeHandler implements DatetimeHandlerInterface
     	}
     }
     
+    public static function convert_to_db_date_format($php_format, $date_string)
+    {
+    	if ($php_format and $date_string)
+    	{
+    		
+    		if(strpos($php_format, ".") !== false)
+    		{
+    			$format_array = explode(".", $php_format);
+    			$date_string_array = explode(".", $date_string);
+    		}
+    		elseif(strpos($php_format, "/") !== false)
+    		{
+    			$format_array = explode("/", $php_format);
+    			$date_string_array = explode("/", $date_string);
+    		}
+    		elseif(strpos($php_format, "-") !== false)
+    		{
+    			$format_array = explode("-", $php_format);
+    			$date_string_array = explode("-", $date_string);
+    		}
+    		else
+    		{
+    			return null;
+    		}
+    		
+    		if ($format_array[0] == "Y")
+    		{
+    			if($format_array[1] == "m")
+    			{
+    				return $date_string_array[0]."-".$date_string_array[1]."-".$date_string_array[2];
+    			}
+    			else
+    			{
+    				return $date_string_array[0]."-".$date_string_array[2]."-".$date_string_array[1];
+    			}	
+    		}
+    		else
+    		{
+    			if($format_array[1] == "m")
+    			{
+    				return $date_string_array[2]."-".$date_string_array[1]."-".$date_string_array[0];
+    			}
+    			else
+    			{
+    				return $date_string_array[1]."-".$date_string_array[2]."-".$date_string_array[0];
+    			}
+    		}
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
     private static function replace_language_specific_parts($format, $mktime, $date_string)
     {
     	if ($format and $date_string)
