@@ -459,6 +459,39 @@ class ParameterFieldValue_Access
 	}
 	
 	
+	/**
+	 * @param integer $method_id
+	 * @return bool
+	 */
+	public static function is_method_linked($method_id)
+	{
+		global $db;
+		
+		if(is_numeric($method_id))
+		{
+			$sql = "SELECT id FROM ".constant("PARAMETER_FIELD_VALUE_TABLE")." WHERE parameter_method_id='".$method_id."'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data['id'])
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param integer $parameter_version_id
+	 * @return array
+	 */
 	public static function list_values($parameter_version_id)
 	{
 		global $db;
@@ -490,6 +523,10 @@ class ParameterFieldValue_Access
 		}
 	}
 	
+	/**
+	 * @param integer $parameter_version_id
+	 * @return array
+	 */
 	public static function list_methods($parameter_version_id)
 	{
 		global $db;
@@ -520,7 +557,12 @@ class ParameterFieldValue_Access
 			return null;
 		}
 	}
-		
+
+	/**
+	 * @param integer $parameter_version_id
+	 * @param integer $parameter_field_id
+	 * @return integer
+	 */
 	public static function get_id_by_version_id_and_field_id($parameter_version_id, $parameter_field_id)
 	{
 		global $db;

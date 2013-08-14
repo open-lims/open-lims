@@ -165,5 +165,40 @@ class ParameterHasTemplate_Access
 			return null;
 		}
 	}
+	
+	/**
+	 * @param integer $template_id
+	 * @return integer
+	 */
+	public static function list_parameter_ids_by_template_id($template_id)
+	{
+		global $db;
+		
+		if (is_numeric($template_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT parameter_id FROM ".constant("PARAMETER_HAS_TEMPLATE_TABLE")." WHERE template_id='".$template_id."'";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array, $data['parameter_id']);
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
 }
 ?>

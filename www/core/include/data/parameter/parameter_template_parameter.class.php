@@ -38,11 +38,18 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class ParameterTemplateParameter extends Parameter implements ParameterTemplateParameterInterface
 {	
+	/**
+	 * @see ParameterTemplateParameterInterface::__construct()
+	 * @param integer $parameter_id
+	 */
 	function __construct($parameter_id)
 	{
 		parent::__construct($parameter_id);
 	}
 	
+	/**
+	 * @see ParameterTemplateParameterInterface::__destruct()
+	 */
 	function __destruct()
 	{
 		
@@ -105,6 +112,12 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
 		}
 	}
 
+	/**
+	 * @see ParameterTemplateParameterInterface::delete()
+	 * @return bool
+	 * @throws ParameterDeleteTemplateLinkFailedException
+	 * @throws ParameterDeleteIDMissingException
+	 */
 	public function delete()
 	{
 		global $transaction;
@@ -120,7 +133,7 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
 				
 				if ($parameter_has_template->delete() == false)
 				{
-					// Exception
+					throw new ParameterDeleteTemplateLinkFailedException();
 				}
 				
 				parent::delete();
@@ -142,10 +155,14 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
 		}
 		else
 		{
-			// Exception
+			throw new ParameterDeleteIDMissingException();
 		}
 	}
 	
+	/**
+	 * @see ParameterTemplateParameterInterface::get_template_id()
+	 * @return integer
+	 */
 	public function get_template_id()
 	{
 		if ($this->parameter_id)
@@ -158,6 +175,10 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
 		}
 	}
 	
+	/**
+	 * @see ParameterTemplateParameterInterface::get_name()
+	 * @return string
+	 */
 	public function get_name()
 	{
 		if ($this->parameter_id)
@@ -171,6 +192,12 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
 		}
 	}
 	
+	/**
+	 * @see ParameterTemplateParameterInterface::get_instance()
+	 * @param integer $parameter_id
+	 * @param bool $force_new_instance
+	 * @return object
+	 */
 	public static function get_instance($parameter_id, $force_new_instance = false)
     {    
     	if (is_numeric($parameter_id) and $parameter_id > 0)
@@ -199,6 +226,11 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
     	}
     }
     
+    /**
+     * @see ParameterTemplateParameterInterface::is_template_parameter()
+     * @param integer $parameter_id
+     * @return bool
+     */
     public static function is_template_parameter($parameter_id)
     {
     	if (ParameterHasTemplate_Access::get_template_id_by_parameter_id($parameter_id) !== null)
@@ -210,5 +242,24 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
     		return false;
     	}
     }
+    
+    /**
+     * @see ParameterTemplateParameterInterface::is_template_linked()
+     * @param integer $template_id
+     * @return bool
+     */
+	public static function is_template_linked($template_id)
+	{
+		$parameter_array = ParameterHasTemplate_Access::list_parameter_ids_by_template_id($template_id);
+		
+		if(is_array($parameter_array) and count($parameter_array) >= 1)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 ?>

@@ -80,6 +80,9 @@ class ParameterMethod // implements ParameterMethodInterface
 		}
 	}
 	
+	/**
+	 * @todo delete from table "core_parameter_field_has_methods"
+	 */
 	public function delete()
 	{
 		if ($this->parameter_method and $this->parameter_method_id)
@@ -123,13 +126,12 @@ class ParameterMethod // implements ParameterMethodInterface
 	}
 	
 	/**
-     * @todo implement check if the parameter-method is linked to any parameter
      * @param integer $parameter_method_id
      * @return bool
      */
     public static function is_deletable($parameter_method_id)
     {
-    	return true;
+    	return !Parameter::is_method_linked($parameter_method_id);
     }
 }
 ?>

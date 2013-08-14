@@ -49,6 +49,9 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 	protected $parameter;
 	protected $parameter_version;
 	
+	/**
+	 * @param integer $parameter_id
+	 */
 	function __construct($parameter_id)
 	{
 		if (is_numeric($parameter_id))
@@ -91,6 +94,10 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 	 * @param array $parameter_array
 	 * @param integer $owner_id
 	 * @return integer
+	 * @throws ParameterCreateFailedException
+	 * @throws ParameterCreateVersionCreateFailedException
+	 * @throws ParameterCreateValueCreateFailedException
+	 * @throws ParameterCreateIDMissingException
 	 */
 	protected function create($folder_id, $limit_id, $parameter_array, $owner_id = null)
 	{
@@ -162,6 +169,10 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 		}
 	}
 	
+	/**
+	 * @todo implementation
+	 * @return bool
+	 */
 	protected function delete()
 	{
 		global $transaction;
@@ -201,16 +212,25 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 		}
 	}
 	
+	/**
+	 * @todo implementation
+	 */
 	public function delete_version()
 	{
 		
 	}
 	
+	/**
+	 * @todo implementation
+	 */
 	public function exist_parameter_version($internal_revision)
 	{
 		
 	}
 	
+	/**
+	 * @return integer
+	 */
 	public function get_id()
 	{
 		if($this->parameter_id)
@@ -223,6 +243,9 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 		}
 	}
 	
+	/**
+	 * @return string
+	 */
 	public function get_version()
 	{
 		if ($this->parameter_version)
@@ -255,6 +278,9 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 		}
 	}
 	
+	/**
+	 * @return array
+	 */
 	public function get_values()
 	{
 		if ($this->parameter_version_id)
@@ -269,6 +295,7 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 		
 	/**
 	 * Returns an array with all current selected methods
+	 * @return array
 	 */
 	public function get_methods()
 	{
@@ -282,6 +309,9 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 		}
 	}
 	
+	/**
+	 * @return string
+	 */
 	public function get_status()
 	{
 		if ($this->parameter_version_id)
@@ -323,11 +353,17 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 		}	
 	}
 	
+	/**
+	 * @todo implementation
+	 */
 	public function get_name()
 	{
 		
 	}
 	
+	/**
+	 * @return integer
+	 */
 	public function get_limit_id()
 	{
 		if ($this->parameter_version_id)
@@ -340,6 +376,9 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 		}
 	}
 	
+	/**
+	 * @return array
+	 */
 	public function get_limits()
 	{
 		if ($this->parameter_version_id)
@@ -526,10 +565,22 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 		}
 	}
 	
-	
+	/**
+	 * @param integer $data_entity_id
+	 * @return integer
+	 */
 	public static function get_parameter_id_by_data_entity_id($data_entity_id)
 	{
 		return Parameter_Access::get_entry_by_data_entity_id($data_entity_id);
+	}
+	
+	/**
+	 * @param integer $method_id
+	 * @return bool
+	 */
+	public static function is_method_linked($method_id)
+	{
+		return ParameterFieldValue_Access::is_method_linked($method_id);
 	}
 	
 	/**
@@ -550,6 +601,11 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
     	return true;
     }
 
+    /**
+     * @param integer $parameter_id
+     * @param bool $force_new_instance
+     * @return object
+     */
     public static function get_instance($parameter_id, $force_new_instance = false)
     { 
     	if(is_numeric($parameter_id) and $parameter_id > 0)

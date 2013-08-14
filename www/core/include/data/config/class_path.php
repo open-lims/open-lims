@@ -101,6 +101,9 @@
 	$classes['ParameterCreateValueCreateFailedException']	= $path_prefix."core/include/data/parameter/exceptions/parameter_create_value_create_failed.exception.class.php";
 	$classes['ParameterCreateVersionCreateFailedException']	= $path_prefix."core/include/data/parameter/exceptions/parameter_create_version_create_failed.exception.class.php";
 	$classes['ParameterCreateTemplateLinkFailed']			= $path_prefix."core/include/data/parameter/exceptions/parameter_create_template_link_failed.exception.class.php";
+	$classes['ParameterDeleteException']					= $path_prefix."core/include/data/parameter/exceptions/parameter_delete.exception.class.php";
+	$classes['ParameterDeleteIDMissingException']			= $path_prefix."core/include/data/parameter/exceptions/parameter_delete_id_missing.exception.class.php";
+	$classes['ParameterDeleteTemplateLinkFailedException']	= $path_prefix."core/include/data/parameter/exceptions/parameter_delete_template_link_failed.exception.class.php";
 	
 	$classes['DataEntity']									= $path_prefix."core/include/data/data_entity.class.php";
 	$classes['DataEntityPermission']						= $path_prefix."core/include/data/data_entity_permission.class.php";

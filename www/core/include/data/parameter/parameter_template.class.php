@@ -898,13 +898,12 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
     }
     
     /**
-     * @todo implement check if the parameter-tempalte is linked to any parameter
      * @param integer $parameter_template_id
      * @return bool
      */
     public static function is_deletable($parameter_template_id)
     {
-    	return true;
+    	return !ParameterTemplateParameter::is_template_linked($parameter_template_id);
     }
 }
 ?>
