@@ -453,8 +453,6 @@ class AdminUserIO
 					
 		$current_user = new User($user_id);
 		$current_user_regional = new Regional($user_id);
-		$user_data = new DataUserData($user_id);
-		$project_data = new ProjectUserData($user_id);
 		
 		// General
 		

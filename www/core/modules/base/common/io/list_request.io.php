@@ -82,7 +82,14 @@ class ListRequest_IO
 						
 						if ($this->first_line_entry[$value[1]]['link'] and $this->first_line_entry[$value[1]]['content'])
 						{
-							$return .= "<td><a href='index.php?".$this->first_line_entry[$value[1]]['link']."'>".$this->first_line_entry[$value[1]]['content']."</a></td>";
+							if (strpos($this->first_line_entry[$value[1]]['link'], "?") === false)
+							{
+								$return .= "<td><a href='index.php?".$this->first_line_entry[$value[1]]['link']."'>".$this->first_line_entry[$value[1]]['content']."</a></td>";
+							}
+							else
+							{
+								$return .= "<td><a href='".$this->first_line_entry[$value[1]]['link']."'>".$this->first_line_entry[$value[1]]['content']."</a></td>";
+							}	
 						}
 						elseif(!$this->first_line_entry[$value[1]]['link'] and $this->first_line_entry[$value[1]]['content'])
 						{
@@ -189,7 +196,14 @@ class ListRequest_IO
 							
 							if ($content[$row_value[1]]['link'] and $content[$row_value[1]]['content'])
 							{
-								$content_string .= "<a href='index.php?".$content[$row_value[1]]['link']."'>".$content[$row_value[1]]['content']."</a>";
+								if (strpos($content[$row_value[1]]['link'], "?") === false)
+								{
+									$content_string .= "<a href='index.php?".$content[$row_value[1]]['link']."'>".$content[$row_value[1]]['content']."</a>";
+								}
+								else
+								{
+									$content_string .= "<a href='".$content[$row_value[1]]['link']."'>".$content[$row_value[1]]['content']."</a>";
+								}
 							}
 							elseif(!$content[$row_value[1]]['link'] and $content[$row_value[1]]['content'])
 							{
