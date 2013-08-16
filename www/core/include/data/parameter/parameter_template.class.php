@@ -73,6 +73,19 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 		unset($this->parameter_template);
 	}
 	
+	/**
+	 * @param string $name
+	 * @param string $internal_name
+	 * @param array $field_array
+	 * @param array $limit_array
+	 * @throws ParameterTemplateCreateFailedException
+	 * @throws ParameterTemplateCreateLimitCreateFailedException
+	 * @throws ParameterTemplateCreateFieldCreateFailedException
+	 * @throws ParameterTemplateCreateFieldLinkFailedException
+	 * @throws ParameterTemplateCreateFieldLimitCreateFailedException
+	 * @throws ParameterTemplateCreateIDMissingException
+	 * @return integer
+	 */
 	public function create($name, $internal_name, $field_array, $limit_array)
 	{
 		global $transaction, $user;
@@ -88,7 +101,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 				{
 					$transaction->rollback($transaction_id);
 				}
-				return null;
+				throw new ParameterTemplateCreateFailedException();
 			}
 		
 			$limit_counter = count($limit_array);
@@ -103,7 +116,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 					{
 						$transaction->rollback($transaction_id);
 					}
-					return null;
+					throw new ParameterTemplateCreateLimitCreateFailedException();
 				}
 			}
 			
@@ -159,7 +172,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 					{
 						$transaction->rollback($transaction_id);
 					}
-					return null;
+					throw new ParameterTemplateCreateFieldCreateFailedException();
 				}
 				
 				$parameter_template_has_field = new ParameterTemplateHasField_Access(null, null);
@@ -169,7 +182,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 					{
 						$transaction->rollback($transaction_id);
 					}
-					return null;
+					throw new ParameterTemplateCreateFieldLinkFailedException();
 				}
 				
 				for ($i=0;$i<=($limit_counter-1);$i++)
@@ -183,7 +196,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 							{
 								$transaction->rollback($transaction_id);
 							}
-							return null;
+							throw new ParameterTemplateCreateFieldLimitCreateFailedException();
 						}
 					}
 				}
@@ -204,10 +217,20 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 		}
 		else
 		{
-			return null;
+			throw new ParameterTemplateCreateIDMissingException();
 		}
 	}
 	
+	/**
+	 * @throws ParameterTemplateDeleteFieldLimitDeleteFailedException
+	 * @throws ParameterTemplateDeleteLimitDeleteFailedException
+	 * @throws ParameterTemplateDeleteFieldMethodFailedException
+	 * @throws ParameterTemplateDeleteFieldLinkFailedException
+	 * @throws ParameterTemplateDeleteFieldDeleteFailedException
+	 * @throws ParameterTemplateDeleteFailedException
+	 * @throws ParameterTemplateDeleteIDMissingException
+	 * @return bool
+	 */
 	public function delete()
 	{
 		global $transaction;
@@ -231,7 +254,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 						{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new ParameterTemplateDeleteFieldLimitDeleteFailedException();
 					}
 					
 					$parameter_limit = new ParameterLimit_Access($value);
@@ -241,7 +264,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 						{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new ParameterTemplateDeleteLimitDeleteFailedException();
 					}
 				}
 			}
@@ -250,7 +273,16 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 			if (is_array($template_field_array) and count($template_field_array) >= 1)
 			{
 				foreach ($template_field_array as $key => $value)
-				{					
+				{	
+					if (ParameterFieldFieldHasMethod_Access::delete_by_field_id($value) === false)
+					{
+						if ($transaction_id != null)
+						{
+							$transaction->rollback($transaction_id);
+						}
+						throw new ParameterTemplateDeleteFieldMethodFailedException();
+					}
+					
 					$parameter_template_field = new ParameterTemplateHasField_Access($this->parameter_template_id, $value);
 					if ($parameter_template_field->delete() === false)
 					{
@@ -258,7 +290,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 						{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new ParameterTemplateDeleteFieldLinkFailedException();
 					}
 					
 					$parameter_field = new ParameterField_Access($value);
@@ -268,7 +300,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 						{
 							$transaction->rollback($transaction_id);
 						}
-						return false;
+						throw new ParameterTemplateDeleteFieldDeleteFailedException();
 					}
 				}
 			}
@@ -288,12 +320,12 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 				{
 					$transaction->rollback($transaction_id);
 				}
-				return false;
+				throw new ParameterTemplateDeleteFailedException();
 			}
 		}
 		else
 		{
-			return false;
+			throw new ParameterTemplateDeleteIDMissingException();
 		}
 	}
 		
@@ -856,7 +888,19 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 		}
 	}
 
-
+	
+	public static function delete_field_methods($parameter_method_id)
+	{
+		if (is_numeric($parameter_method_id))
+		{
+			return ParameterFieldFieldHasMethod_Access::delete_by_method_id($parameter_method_id);
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	public static function get_id_by_internal_name($internal_name)
 	{
 		return ParameterTemplate_Access::get_id_by_internal_name($internal_name);

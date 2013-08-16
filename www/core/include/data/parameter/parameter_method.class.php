@@ -80,14 +80,39 @@ class ParameterMethod // implements ParameterMethodInterface
 		}
 	}
 	
-	/**
-	 * @todo delete from table "core_parameter_field_has_methods"
-	 */
 	public function delete()
 	{
+		global $transaction;
+		
 		if ($this->parameter_method and $this->parameter_method_id)
 		{
-			return $this->parameter_method->delete();
+			$transaction_id = $transaction->begin();
+			
+			if (ParameterTemplate::delete_field_methods($this->parameter_method_id) === false)
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+			}
+
+			if($this->parameter_method->delete() == true)
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->commit($transaction_id);
+				}
+				return true;
+			}
+			else
+			{
+				if ($transaction_id != null)
+				{
+					$transaction->rollback($transaction_id);
+				}
+				return false;
+			}
 		}
 		else
 		{

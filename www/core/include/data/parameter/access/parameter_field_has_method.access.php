@@ -140,7 +140,7 @@ class ParameterFieldFieldHasMethod_Access
 	 * @param integer $parameter_field_id
 	 * @return array
 	 */
-	public function list_methods_by_field_id($parameter_field_id)
+	public static function list_methods_by_field_id($parameter_field_id)
 	{
 		global $db;
 		
@@ -168,6 +168,62 @@ class ParameterFieldFieldHasMethod_Access
 		else
 		{
 			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $parameter_method_id
+	 * @return bool
+	 */
+	public static function delete_by_method_id($parameter_method_id)
+	{
+		global $db;
+
+		if (is_numeric($parameter_method_id))
+		{
+			$sql = "DELETE FROM ".constant("PARAMETER_FIELD_HAS_METHOD_TABLE")." WHERE parameter_method_id=".$parameter_method_id."";
+			$res = $db->db_query($sql);
+			
+			if ($res !== false)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * @param integer $parameter_field_id
+	 * @return bool
+	 */
+	public static function delete_by_field_id($parameter_field_id)
+	{
+		global $db;
+
+		if (is_numeric($parameter_field_id))
+		{
+			$sql = "DELETE FROM ".constant("PARAMETER_FIELD_HAS_METHOD_TABLE")." WHERE parameter_field_id = ".$parameter_field_id."";
+			$res = $db->db_query($sql);
+			
+			if ($res !== false)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
 		}
 	}
 }
