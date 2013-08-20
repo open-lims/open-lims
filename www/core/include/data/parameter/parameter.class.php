@@ -88,6 +88,25 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 	}
 	
 	/**
+	 * Opens another version of the parameter with parameter version id (primary key)
+	 * @param integer $parameter_verion_id
+	 * @return bool
+	 */
+	private function open_parameter_version_id($parameter_verion_id)
+	{
+		if (is_numeric($parameter_verion_id) and $this->parameter_id)
+		{
+			$this->parameter_version = new ParameterVersion_Access($parameter_verion_id);
+			$this->parameter_version_id = $parameter_verion_id;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
 	 * @see ParameterInterface::create()
 	 * @param integer $folder_id
 	 * @param integer $limit_id
@@ -170,24 +189,58 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 	}
 	
 	/**
-	 * @todo implementation
 	 * @return bool
+	 * @throws ParameterDeleteVersionValueFailedException
+	 * @throws ParameterDeleteVersionFailedException
+	 * @throws ParameterDeleteFailedException
+	 * @throws ParameterDeleteIDMissingException
 	 */
 	protected function delete()
 	{
 		global $transaction;
 		
-		if ($this->parameter_version)
+		if ($this->parameter_id and $this->parameter)
 		{
 			$transaction_id = $transaction->begin();
 				
 			try
 			{
-				// Alle Values über alle Versions
+				$parameter_version_array = ParameterVersion_Access::list_entries_by_parameter_id($this->parameter_id);
 				
-				// Alle Versions
+				if (is_array($parameter_version_array) and count($parameter_version_array) >= 1)
+				{
+					foreach($parameter_version_array as $key => $value)
+					{
+						if(ParameterFieldValue_Access::delete_by_parameter_version_id($value) == false)
+						{
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							throw new ParameterDeleteVersionValueFailedException();
+						}
+						
+						$parameter_version = new ParameterVersion_Access($value);
+						
+						if ($parameter_version->delete() == false)
+						{
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							throw new ParameterDeleteVersionFailedException();
+						}
+					}
+				}	
 				
-				// Parameter
+				if ($this->parameter->delete() == false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					throw new ParameterDeleteFailedException();
+				}
 				
 				parent::delete();				
 			}
@@ -208,16 +261,98 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 		}
 		else
 		{
-			// Exception
+			throw new ParameterDeleteIDMissingException();
 		}
 	}
 	
 	/**
-	 * @todo implementation
+	 * @param integer $internal_revision
+	 * @return integer
+	 * @throws ParameterDeletePreviousVersionValueFailedException
+	 * @throws ParameterDeletePreviousVersionFailedException
+	 * @throws ParameterDeleteVersionValueFailedException
+	 * @throws ParameterDeleteVersionFailedException
+	 * @throws ParameterDeleteIDMissingException
 	 */
-	public function delete_version()
+	public function delete_version($internal_revision)
 	{
+		global $transaction;
 		
+		if ($this->parameter_id and $this->parameter_version_id and $this->parameter_version and is_numeric($internal_revision))
+		{
+			$number_of_root_major_versions = ParameterVersion_Access::get_number_of_root_major_versions_by_parameter_id($this->parameter_id);
+				
+			if ($number_of_root_major_versions > 1)
+			{
+				$transaction_id = $transaction->begin();
+									
+				$parameter_version_id = ParameterVersion_Access::get_entry_by_parameter_id_and_internal_revision($this->parameter_id, $internal_revision);			
+				
+				$minor_parameter_array = ParameterVersion_Access::list_entries_by_previous_version_id($parameter_version_id);
+				
+				if (is_array($minor_parameter_array) and count($minor_parameter_array) >= 1)
+				{
+					foreach($minor_parameter_array as $fe_key => $fe_value)
+					{
+						if(ParameterFieldValue_Access::delete_by_parameter_version_id($fe_value) == false)
+						{
+							throw new ParameterDeletePreviousVersionValueFailedException();
+						}
+						
+						$parameter = new Parameter($this->parameter_id);
+						$parameter->open_parameter_version_id($fe_value);	
+						if ($parameter->delete_version($parameter->get_internal_revision()) == false)
+						{
+							if ($transaction_id != null)
+							{
+								$transaction->rollback($transaction_id);
+							}
+							throw new ParameterDeletePreviousVersionFailedException();
+						}								
+					}	
+				}
+
+				if ($this->parameter_version->get_current() == true)
+				{
+					$next_current_parameter_version_id = ParameterVersion_Access::get_last_uploaded_version_entry_by_parameter_id($this->parameter_id, $internal_revision);
+					$parameter_version_access = new ParameterVersion_Access($next_current_parameter_version_id);
+					$parameter_version_access->set_current(true);
+				}
+
+				if(ParameterFieldValue_Access::delete_by_parameter_version_id($this->parameter_version_id) == false)
+				{
+					throw new ParameterDeleteVersionValueFailedException();
+				}
+				
+				if ($this->parameter_version->delete() == false)
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->rollback($transaction_id);
+					}
+					throw new ParameterDeleteVersionFailedException();
+				}
+				else
+				{
+					if ($transaction_id != null)
+					{
+						$transaction->commit($transaction_id);
+					}
+					return 1;
+				}
+			}
+			else
+			{
+				if($this->delete() == true)
+				{
+					return 2;
+				}
+			}			
+		}
+		else
+		{
+			throw new ParameterDeleteIDMissingException();
+		}
 	}
 	
 	/**
@@ -359,6 +494,21 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 	public function get_name()
 	{
 		
+	}
+	
+	/**
+	 * @return integer
+	 */
+	public function get_internal_revision()
+	{
+		if ($this->parameter_version)
+		{
+			return $this->parameter_version->get_internal_revision();
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**

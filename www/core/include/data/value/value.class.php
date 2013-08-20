@@ -398,8 +398,6 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 		
 		if ($this->value_id and $this->value and $this->value_version)
 		{
-			$transaction_id = $transaction->begin();
-			
 			if (is_numeric($internal_revision))
 			{
 				$this->open_internal_revision($internal_revision);
@@ -408,6 +406,8 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 				
 				if ($number_of_root_major_versions > 1)
 				{
+					$transaction_id = $transaction->begin();
+					
 					$value_version_id = ValueVersion_Access::get_entry_by_toid_and_internal_revision($this->value_id, $internal_revision);			
 					
 					$minor_value_array = ValueVersion_Access::list_entries_by_previous_version_id($value_version_id);
@@ -457,18 +457,10 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 				{
 					if ($this->delete() == true)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
 						return 2;
 					}
 					else
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
 						return 0;
 					}
 				}	

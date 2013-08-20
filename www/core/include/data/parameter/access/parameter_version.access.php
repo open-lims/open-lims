@@ -620,6 +620,139 @@ class ParameterVersion_Access
 	
 	/**
 	 * @param integer $parameter_id
+	 * @return array
+	 */
+	public static function list_entries_by_parameter_id($parameter_id)
+	{
+		global $db;
+
+		if (is_numeric($parameter_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT id FROM ".constant("PARAMETER_VERSION_TABLE")." WHERE parameter_id = '".$parameter_id."'";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,$data['id']);	
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $previous_version_id
+	 * @return array
+	 */
+	public static function list_entries_by_previous_version_id($previous_version_id)
+	{
+		global $db;
+
+		if (is_numeric($previous_version_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT id FROM ".constant("PARAMETER_VERSION_TABLE")." WHERE previous_version_id = ".$previous_version_id." AND id != previous_version_id";
+			$res = $db->db_query($sql);
+			
+			while ($data = $db->db_fetch_assoc($res))
+			{
+				array_push($return_array,$data['id']);	
+			}
+			
+			if (is_array($return_array))
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $parameter_id
+	 * @param integer $internal_revision
+	 * @return integer
+	 */
+	public static function get_last_uploaded_version_entry_by_parameter_id($parameter_id, $internal_revision)
+	{
+		global $db;
+	
+		if (is_numeric($parameter_id) and is_numeric($internal_revision))
+		{
+			$sql = "SELECT id FROM ".constant("PARAMETER_VERSION_TABLE")." WHERE parameter_id = ".$parameter_id." AND internal_revision != ".$internal_revision." " .
+						"AND datetime = (SELECT MAX(datetime) FROM ".constant("PARAMETER_VERSION_TABLE")." WHERE parameter_id = ".$parameter_id." AND internal_revision != ".$internal_revision.")";				
+			
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+							
+			if ($data['id'])
+			{
+				return $data['id'];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $parameter_id
+	 * @return integer
+	 */
+	public static function get_number_of_root_major_versions_by_parameter_id($parameter_id)
+	{
+		global $db;
+	
+		if (is_numeric($parameter_id))
+		{
+			$return_array = array();
+			
+			$sql = "SELECT COUNT(id) AS numberofresults FROM ".constant("PARAMETER_VERSION_TABLE")." WHERE parameter_id = ".$parameter_id." AND id = previous_version_id";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data['numberofresults'])
+			{
+				return $data['numberofresults'];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $parameter_id
 	 * @return integer
 	 */
 	public static function get_current_entry_by_parameter_id($parameter_id)

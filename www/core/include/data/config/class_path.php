@@ -104,6 +104,11 @@
 	$classes['ParameterDeleteException']								= $path_prefix."core/include/data/parameter/exceptions/parameter_delete.exception.class.php";
 	$classes['ParameterDeleteIDMissingException']						= $path_prefix."core/include/data/parameter/exceptions/parameter_delete_id_missing.exception.class.php";
 	$classes['ParameterDeleteTemplateLinkFailedException']				= $path_prefix."core/include/data/parameter/exceptions/parameter_delete_template_link_failed.exception.class.php";
+	$classes['ParameterDeleteFailedException']							= $path_prefix."core/include/data/parameter/exceptions/parameter_delete_failed.exception.class.php";
+	$classes['ParameterDeletePreviousVerionFailedException']			= $path_prefix."core/include/data/parameter/exceptions/parameter_delete_previous_version_failed.exception.class.php";
+	$classes['ParameterDeletePreviousVersionValueFailedException']		= $path_prefix."core/include/data/parameter/exceptions/parameter_delete_previous_version_value_failed.exception.class.php";
+	$classes['ParameterDeleteVersionFailedException']					= $path_prefix."core/include/data/parameter/exceptions/parameter_delete_version_failed.exception.class.php";
+	$classes['ParameterDeleteVersionValueFailedException']				= $path_prefix."core/include/data/parameter/exceptions/parameter_delete_version_value_failed.exception.class.php";
 	$classes['ParameterTemplateException']								= $path_prefix."core/include/data/parameter/exceptions/parameter_template.exception.class.php";
 	$classes['ParameterTemplateCreateException']						= $path_prefix."core/include/data/parameter/exceptions/parameter_template_create.exception.class.php";
 	$classes['ParameterTemplateCreateFailedException']					= $path_prefix."core/include/data/parameter/exceptions/parameter_template_create_failed.exception.class.php";

@@ -558,6 +558,30 @@ class ParameterFieldValue_Access
 		}
 	}
 
+	public static function delete_by_parameter_version_id($parameter_version_id)
+	{
+		global $db;
+
+		if ($parameter_version_id)
+		{
+			$sql = "DELETE FROM ".constant("PARAMETER_FIELD_VALUE_TABLE")." WHERE parameter_version_id = ".$parameter_version_id."";
+			$res = $db->db_query($sql);
+			
+			if ($res !== false)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	/**
 	 * @param integer $parameter_version_id
 	 * @param integer $parameter_field_id
