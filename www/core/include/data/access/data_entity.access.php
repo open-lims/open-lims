@@ -341,7 +341,7 @@ class DataEntity_Access
 	{
 		global $db;
 			
-		if ($this->id and $permission)
+		if ($this->id and is_numeric($permission))
 		{
 			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET permission = ".$permission." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);

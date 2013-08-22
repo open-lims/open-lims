@@ -87,6 +87,27 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
     	unset($this->parameter_version);
 	}
 	
+	public function open_internal_revision($internal_revision)
+	{
+		if (is_numeric($internal_revision) and $this->parameter_id)
+		{
+			if (ParameterVersion_Access::exist_internal_revision($this->parameter_id, $internal_revision) == true)
+			{
+				$parameter_version_id = ParameterVersion_Access::get_entry_by_parameter_id_and_internal_revision($this->parameter_id, $internal_revision);
+				$this->paramter_version = new ParameterVersion_Access($parameter_version_id);
+				return true;
+			}
+			else
+			{
+				throw new ParameterVersionNotFoundException();
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	/**
 	 * Opens another version of the parameter with parameter version id (primary key)
 	 * @param integer $parameter_verion_id
@@ -379,6 +400,34 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 	}
 	
 	/**
+	 * @see ValueInterface::get_value_internal_revisions()
+	 * @return integer
+	 */
+	public function get_parameter_internal_revisions()
+	{
+		if ($this->parameter_id and $this->parameter_version)
+		{
+			$parameter_version_array = ParameterVersion_Access::list_entries_by_parameter_id($this->parameter_id);
+			$return_array = array();
+	
+			foreach($parameter_version_array as $key => $value)
+			{
+				$parameter_version = new ParameterVersion_Access($value);
+				array_push($return_array, $parameter_version->get_internal_revision());
+			}
+			
+			if (count($return_array) > 0)
+			{
+				return $return_array;
+			}
+			else
+			{
+				return null;
+			}			
+		}
+	}
+	
+	/**
 	 * @return string
 	 */
 	public function get_version()
@@ -487,13 +536,25 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 			return null;
 		}	
 	}
-	
+		
 	/**
 	 * @todo implementation
 	 */
 	public function get_name()
 	{
-		
+		return "Parameter";
+	}
+	
+	public function get_version_datetime()
+	{
+		if ($this->parameter_version)
+		{
+			return $this->parameter_version->get_datetime();
+		}
+		else
+		{
+			return null;
+		}
 	}
 	
 	/**

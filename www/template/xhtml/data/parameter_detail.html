@@ -64,6 +64,60 @@ $(document).ready(function()
 
 <!-- CONTAINER BEGIN ("Parameter Details") -->
 
+<!-- IF ([[DISPLAY_HEADER]]) -->
+
+<div id='BaseTopBar'>
+	<div id='BaseTopBarLeft'>
+
+	<a href='index.php?[[VERSION_LIST_LINK]]' class='ListButton'>
+	<img src='images/icons/history.png' alt='' />
+	<div>History</div>
+	</a>
+	
+	<!-- IF ([[CHANGE_PERMISSION]]) -->
+			
+	<a href='index.php?[[CHANGE_PERMISSION_PARAMS]]' class='ListButton'>
+	<img src='images/icons/permissions.png' alt='' />
+	<div>Change Permissions</div>
+	</a>
+
+	<!-- ELSE -->
+					
+	<a class='ListButtonDisabled'>
+	<img src='images/icons/permissions.png' alt='' />
+	<div>Change Permissions</div>
+	</a>
+					
+	<!-- ENDIF -->	
+	
+	</div>
+	<div id='BaseTopBarRight' class='Form'>
+		<form  action='index.php' method='get'>
+		<select name='version' class='DataTopSelect'>
+		<option value='[[VERSION]]'>Version [[VERSION]] - [[VERSION_DATETIME]]</option>
+		
+		<!-- FOREACH BEGIN ([[VERSION_OPTION]]) -->
+		
+		<option value='[[VERSION_OPTION:VERSION]]'>[[VERSION_OPTION:TEXT]]</option>
+		
+		<!-- FOREACH END -->
+		
+		</select>
+		<button type='submit' value='open' style='margin: 3px;'>[[LANG:BaseGlobalButtonOpen]]</button>
+		
+		<!-- FOREACH BEGIN ([[GET]]) -->		
+
+		<input type='hidden' value='[[GET:VALUE]]' name='[[GET:KEY]]' />
+
+		<!-- FOREACH END -->
+
+		</form>
+	</div>
+</div>
+<div id='BaseTopBarClear'></div>
+
+<!-- ENDIF -->
+
 <div class='Form'>
 
 <div class='FormBox'>
@@ -115,12 +169,15 @@ $(document).ready(function()
 
 </div>
 
-<div class='FormButtonBox'>
-<button type='submit' id='DataParameterUpdateButton' class='DataParameterSaveButton'>[[LANG:BaseGlobalButtonUpdate]]</button>
-<button type='submit' id='DataParameterUpdateMinorButton' class='DataParameterSaveButton'>[[LANG:BaseGlobalButtonUpdateMinor]]</button>
-<button type='submit' id='DataParameterCancelButton'>[[LANG:BaseGlobalButtonCancel]]</button>
-<div class='FormButtonBoxClear'></div>
-</div>
+<!-- IF ([[WRITE_PERMISSION]]) -->
+	<div class='FormButtonBox'>
+	<button type='submit' id='DataParameterUpdateButton' class='DataParameterSaveButton'>[[LANG:BaseGlobalButtonUpdate]]</button>
+	<button type='submit' id='DataParameterUpdateMinorButton' class='DataParameterSaveButton'>[[LANG:BaseGlobalButtonUpdateMinor]]</button>
+	<button type='submit' id='DataParameterCancelButton'>[[LANG:BaseGlobalButtonCancel]]</button>
+	<div class='FormButtonBoxClear'></div>
+	</div>
+<!-- ENDIF -->
+
 </div>
 
 

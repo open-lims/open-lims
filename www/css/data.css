@@ -363,6 +363,15 @@ ul.BaseFileDetailAdminMenu li a
 	font-size: 14px;
 }
 
+/* Permissions */
+#DataPermissionCHMODTable {
+	width: 80%;
+}
+
+#DataPermissionCHMODTable th {
+	text-align: left;
+}
+
 /* Parameter */
 .DataParameterTable
 {

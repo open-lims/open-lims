@@ -189,33 +189,6 @@
 
 /* Files */
 
-
-
-#file_chmod_container {
-	width: 100%;
-	background-image: url(../images/backgrounds/permissions.png);
-	background-repeat: no-repeat;
-	background-position: bottom right;
-}
-
-#file_chmod_box {
-	width: 60%;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.file_chmod_table {
-	width: 100%;
-}
-
-.file_chmod_table th {
-	text-align: left;
-}
-
-.file_chmod_select {
-	width: 35em;
-}
-
 .file_upload_container {
 	width: 100%;
 	background-image: url(../images/backgrounds/wizard.png);

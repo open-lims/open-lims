@@ -1,31 +1,42 @@
+<script>
+/*<![CDATA[*/
+$(document).ready(function()
+{	
+	$("#DataPermissionCancelButton").click(function(event)
+	{
+		event.preventDefault()
+		history.back();
+	});
+});
+/*]]>*/ 
+</script>
+
 <!-- CONTAINER BEGIN ("Change Group: [[TITLE]]") -->
 
-<br />
 <form action='index.php?[[PARAMS]]' method='post'>
-<table class='formTable'>
-	<tr>
-		<td><span class='bold'>Select the new group:</span></td>
-	</tr>
-	<tr>
-		<td><select name='group' size='10' class='FormSelect' />
 
-		<!-- FOREACH BEGIN ([[OPTION]]) -->
+<div class='Form'>
 
-		<option value='[[OPTION:VALUE]]'>[[OPTION:CONTENT]]</option>
+<div class='FormBox'>
+<div class='FormBoxHeadline'>Select Group:</div>
+<select name='group' size='10' class='FormSelect' />
 
-		<!-- FOREACH END -->
+<!-- FOREACH BEGIN ([[OPTION]]) -->
 
-		</select>[[ERROR]]</td>
-	</tr>
-	<tr>
-		<td><br />
-			<div class='button_right'><input type='submit' value='next' name='submitbutton' class='next_button' /></div>
-		</td>
-	</tr>
-</table>
+<option value='[[OPTION:VALUE]]'>[[OPTION:CONTENT]]</option>
+
+<!-- FOREACH END -->
+
+</select>[[ERROR]]
+</div>
+
+<div class='FormButtonBox'>
+<button type='submit' id='DataPermissionSaveButton'>[[LANG:BaseGlobalButtonSave]]</button>
+<button type='submit' id='DataPermissionCancelButton'>[[LANG:BaseGlobalButtonCancel]]</button>
+<div class='FormButtonBoxClear'></div>
+</div>
+</div>
+
 </form>
 
-<!-- CONTAINER END () -->					
-
-<br />
-<div class='center'><a href='index.php?[[BACK_LINK]]'>back</a></div>
+<!-- CONTAINER END () -->

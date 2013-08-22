@@ -34,13 +34,8 @@ class DataPermission implements DataPermissionInterface
 {	
 	private $type;
 	
-	private $file_id;
-	private $value_id;
-	private $folder_id;
-	
-	private $file;
-	private $value;
-	private $folder;
+	private $id;
+	private $object;
 	
 	private $owner_id;
 	private $owner_group_id;
@@ -62,58 +57,44 @@ class DataPermission implements DataPermissionInterface
 			switch($type):
 			
 				case("file"):
-					$this->file_id = $id;
-					$this->file = File::get_instance($id);
-					
-					$this->automatic = $this->file->get_automatic();
-					$this->permission = $this->file->get_permission();
-					$this->owner_id = $this->file->get_owner_id();
-					$this->owner_group_id = $this->file->get_owner_group_id();
+					$this->id = $id;
+					$this->object = File::get_instance($id);
 				break;
 				
 				case("value"):
-					$this->value_id = $id;
-					$this->value = Value::get_instance($id);
-					
-					$this->automatic = $this->value->get_automatic();
-					$this->permission = $this->value->get_permission();
-					$this->owner_id = $this->value->get_owner_id();
-					$this->owner_group_id = $this->value->get_owner_group_id();
+					$this->id = $id;
+					$this->object = Value::get_instance($id);
+				break;
+				
+				case("parameter"):
+					$this->id = $id;
+					$this->object = Parameter::get_instance($id);
 				break;
 				
 				case("folder"):
-					$this->folder_id = $id;
-					$this->folder = Folder::get_instance($id);
-					
-					$this->automatic = $this->folder->get_automatic();
-					$this->permission = $this->folder->get_permission();
-					$this->owner_id = $this->folder->get_owner_id();
-					$this->owner_group_id = $this->folder->get_owner_group_id();
+					$this->id = $id;
+					$this->object = Folder::get_instance($id);
 				break;
 			
 			endswitch;	
+			
+			$this->automatic = $this->object->get_automatic();
+			$this->permission = $this->object->get_permission();
+			$this->owner_id = $this->object->get_owner_id();
+			$this->owner_group_id = $this->object->get_owner_group_id();
 		}
 		else
 		{
-			$this->file_id = null;
-			$this->value_id = null;
-			$this->folder_id = null;
-			
-			$this->file = null;
-			$this->value = null;
-			$this->folder = null;
+			$this->id = null;
+			$this->object = null;
 		}
 	}
 	
 	function __destruct()
 	{
 		unset($this->type);
-		unset($this->file_id);
-		unset($this->value_id);
-		unset($this->folder_id);
-		unset($this->file);
-		unset($this->value);
-		unset($this->folder);
+		unset($this->id);
+		unset($this->object);
 		unset($this->owner_id);
 		unset($this->owner_group_id);
 		unset($this->permission);
@@ -204,55 +185,21 @@ class DataPermission implements DataPermissionInterface
 		}
 		
 		$return_value = false;
+					
+		if ($array['automatic'] == "1")
+		{
+ 			$return_value = $this->object->set_automatic(true);
+ 		}
+ 		else
+ 		{
+ 			$return_value = $this->object->set_automatic(false);
+ 		}
+ 		 			
+ 		if ($return_value == true)
+ 		{
+ 			$return_value = $this->object->set_permission($new_permission);
+ 		}
 		
-		if ($this->type == "file")
-		{			
-			if ($array['automatic'] == "1")
-			{
- 				$return_value = $this->file->set_automatic(true);
- 			}
- 			else
- 			{
- 				$return_value = $this->file->set_automatic(false);
- 			}
- 			 			
- 			if ($return_value == true)
- 			{
- 				$return_value = $this->file->set_permission($new_permission);
- 			}
-		}
-		elseif($this->type == "value")
-		{
-			if ($array['automatic'] == "1")
-			{
- 				$return_value = $this->value->set_automatic(true);
- 			}
- 			else
- 			{
- 				$return_value = $this->value->set_automatic(false);
- 			}
- 			
- 			if ($return_value == true)
- 			{
- 				$return_value = $this->value->set_permission($new_permission);
- 			}
-		}
-		elseif ($this->type == "folder")
-		{
- 			if ($array['automatic'] == "1")
- 			{
- 				$return_value = $this->folder->set_automatic(true);
- 			}
- 			else
- 			{
- 				$return_value = $this->folder->set_automatic(false);
- 			}
- 			
- 			if ($return_value == true)
- 			{
- 				$return_value = $this->folder->set_permission($new_permission);
- 			}
-		}
 		return $return_value;
 	}
 	
@@ -290,25 +237,9 @@ class DataPermission implements DataPermissionInterface
 	 */
 	public function set_owner_id($owner_id)
 	{
-		if (is_numeric($owner_id) and ($this->file or $this->value or $this->folder))
+		if (is_numeric($owner_id) and $this->object)
 		{
-			switch($this->type):
-			
-				case("file"):
-					$return_value = $this->file->set_owner_id($owner_id);
-				break;
-				
-				case("value"):
-					$return_value = $this->value->set_owner_id($owner_id);
-				break;
-				
-				case("folder"):
-					$return_value = $this->folder->set_owner_id($owner_id);
-				break;
-			
-			endswitch;
-			
-			return $return_value;	
+			return $this->object->set_owner_id($owner_id);
 		}
 		else
 		{
@@ -323,25 +254,9 @@ class DataPermission implements DataPermissionInterface
 	 */
 	public function set_owner_group_id($owner_group_id)
 	{
-		if (is_numeric($owner_group_id) and ($this->file or $this->value or $this->folder))
-		{
-			switch($this->type):
-			
-				case("file"):
-					$return_value = $this->file->set_owner_group_id($owner_group_id);
-				break;
-				
-				case("value"):
-					$return_value = $this->value->set_owner_group_id($owner_group_id);
-				break;
-				
-				case("folder"):
-					$return_value = $this->folder->set_owner_group_id($owner_group_id);
-				break;
-			
-			endswitch;
-			
-			return $return_value;
+		if (is_numeric($owner_group_id) and $this->object)
+		{			
+			return $this->object->set_owner_group_id($owner_group_id);
 		}
 		else
 		{

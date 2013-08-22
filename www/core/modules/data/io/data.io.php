@@ -402,7 +402,7 @@ class DataIO
 	{
 		global $user;
 		
-		if ($_GET['file_id'] xor $_GET['value_id'])
+		if ($_GET['file_id'] or $_GET['value_id'] or($_GET['parameter_id']) or $_GET['folder_id'])
 		{
 			if ($_GET['file_id'])
 			{
@@ -419,9 +419,15 @@ class DataIO
 				$type = "value";
 				$title = $object->get_type_name();
 			}
-		}
-		else
-		{
+			
+			if ($_GET['parameter_id'])
+			{
+				$id = $_GET['parameter_id'];
+				$object = Parameter::get_instance($id);
+				$type = "parameter";
+				$title = $object->get_name();
+			}
+			
 			if ($_GET['folder_id'])
 			{
 				$id = $_GET['folder_id'];
@@ -429,10 +435,10 @@ class DataIO
 				$type = "folder";
 				$title = $object->get_name();
 			}
-			else
-			{
-				throw new FolderIDMissingException();
-			}
+		}
+		else
+		{
+			throw new FolderIDMissingException();
 		}
 		
 		if ($object->is_control_access() == true)
@@ -545,8 +551,6 @@ class DataIO
 					$template->set_var("checked_automatic","");
 					$template->set_var("hidden_automatic","");
 				}
-				
-				
 				
 				$permission_array = $data_permission->get_permission_array();
 	
@@ -670,7 +674,9 @@ class DataIO
 			case "Value": 
 				$id = $_GET['value_id'];
 			break;
-			
+			case "Parameter": 
+				$id = $_GET['parameter_id'];
+			break;
 		endswitch;
 		$type = strtolower($type);
 		$id = intval($id);
@@ -696,7 +702,7 @@ class DataIO
 	 */
 	public static function change_owner()
 	{
-		if ($_GET['file_id'] xor $_GET['value_id'])
+		if ($_GET['file_id'] or $_GET['value_id'] or($_GET['parameter_id']) or $_GET['folder_id'])
 		{
 			if ($_GET['file_id'])
 			{
@@ -705,6 +711,7 @@ class DataIO
 				$type = "file";
 				$title = $object->get_name();
 			}
+			
 			if ($_GET['value_id'])
 			{
 				$id = $_GET['value_id'];
@@ -712,9 +719,15 @@ class DataIO
 				$type = "value";
 				$title = $object->get_type_name();
 			}
-		}
-		else
-		{
+			
+			if ($_GET['parameter_id'])
+			{
+				$id = $_GET['parameter_id'];
+				$object = Parameter::get_instance($id);
+				$type = "parameter";
+				$title = $object->get_name();
+			}
+			
 			if ($_GET['folder_id'])
 			{
 				$id = $_GET['folder_id'];
@@ -722,10 +735,10 @@ class DataIO
 				$type = "folder";
 				$title = $object->get_name();
 			}
-			else
-			{
-				throw new FolderIDMissingException();
-			}
+		}
+		else
+		{
+			throw new FolderIDMissingException();
 		}
 		
 		if ($object->is_control_access() == true)
@@ -797,7 +810,7 @@ class DataIO
 	 */
 	public static function change_group()
 	{
-		if ($_GET['file_id'] xor $_GET['value_id'])
+		if ($_GET['file_id'] or $_GET['value_id'] or($_GET['parameter_id']) or $_GET['folder_id'])
 		{
 			if ($_GET['file_id'])
 			{
@@ -806,6 +819,7 @@ class DataIO
 				$type = "file";
 				$title = $object->get_name();
 			}
+			
 			if ($_GET['value_id'])
 			{
 				$id = $_GET['value_id'];
@@ -813,9 +827,15 @@ class DataIO
 				$type = "value";
 				$title = $object->get_type_name();
 			}
-		}
-		else
-		{
+			
+			if ($_GET['parameter_id'])
+			{
+				$id = $_GET['parameter_id'];
+				$object = Parameter::get_instance($id);
+				$type = "parameter";
+				$title = $object->get_name();
+			}
+			
 			if ($_GET['folder_id'])
 			{
 				$id = $_GET['folder_id'];
@@ -823,10 +843,10 @@ class DataIO
 				$type = "folder";
 				$title = $object->get_name();
 			}
-			else
-			{
-				throw new FolderIDMissingException();
-			}
+		}
+		else
+		{
+			throw new FolderIDMissingException();
 		}
 		
 		if ($object->is_control_access() == true)

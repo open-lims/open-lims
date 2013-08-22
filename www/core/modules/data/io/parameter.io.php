@@ -248,7 +248,82 @@ class ParameterIO
 			}
 				
 			$template = new HTMLTemplate("data/parameter_detail.html");
-						
+
+			$parameter_version_array = $parameter->get_parameter_internal_revisions();
+			
+			if (is_array($parameter_version_array) and count($parameter_version_array) > 0)
+			{		
+				$result = array();
+				$counter = 1;
+			
+				$result[0]['version'] = 0;
+				$result[0]['text'] = "----------------------------------------------";
+				
+				foreach($parameter_version_array as $key => $fe_value)
+				{
+					$parameter_version = Parameter::get_instance($_GET['parameter_id'], true);
+					$parameter_version->open_internal_revision($fe_value);
+					
+					$version_datetime_handler = new DatetimeHandler($parameter_version->get_version_datetime());
+					
+					$result[$counter]['version'] = $parameter_version->get_internal_revision();
+					$result[$counter]['text'] = "Version ".$parameter_version->get_version()." - ".$version_datetime_handler->get_datetime();
+					$counter++;
+				}
+				$template->set_var("version_option",$result);
+			}
+			
+			$result = array();
+			$counter = 0;
+			
+			foreach($_GET as $key => $fe_value)
+			{
+				if ($key != "version")
+				{
+					$result[$counter]['value'] = $fe_value;
+					$result[$counter]['key'] = $key;
+					$counter++;
+				}
+			}
+			
+			$template->set_var("get",$result);
+			
+			$template->set_var("version",$parameter->get_version());
+			
+			$version_datetime_handler = new DatetimeHandler($parameter->get_version_datetime());
+			$template->set_var("version_datetime",$version_datetime_handler->get_datetime());
+			
+			$paramquery = $_GET;
+			$paramquery['action'] = "permission";
+			unset($paramquery['nextpage']);
+			$params = http_build_query($paramquery,'','&#38;');	
+			$template->set_var("change_permission_params",$params);
+			
+			if ($parameter->is_control_access() == true or $parameter->get_owner_id() == $user->get_user_id())
+			{
+				$template->set_var("change_permission",true);
+			}
+			else
+			{
+				$template->set_var("change_permission",false);
+			}
+		
+			if ($parameter->is_write_access() == true or $parameter->get_owner_id() == $user->get_user_id())
+			{
+				$template->set_var("write_permission",true);
+			}
+			else
+			{
+				$template->set_var("write_permission",false);
+			}
+			
+			$paramquery = $_GET;
+			$paramquery['action'] = "parameter_history";
+			$params = http_build_query($paramquery,'','&#38;');	
+			
+			$template->set_var("version_list_link",$params);
+			$template->set_var("display_header", $display_header);
+			
 			$template->set_var("session_id", $_GET['session_id']);
 			$template->set_var("parameter_id", $parameter_id);
 			$template->set_var("type_id", $parameter_template_id);

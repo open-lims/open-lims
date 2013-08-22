@@ -619,6 +619,36 @@ class ParameterVersion_Access
 	
 	
 	/**
+	 * @param integer $value_id
+	 * @param integer $internal_revision
+	 * @return bool
+	 */
+	public static function exist_internal_revision($parameter_id, $internal_revision)
+	{
+		global $db;
+
+		if (is_numeric($parameter_id) and is_numeric($internal_revision))
+		{
+			$sql = "SELECT id FROM ".constant("PARAMETER_VERSION_TABLE")." WHERE parameter_id = '".$parameter_id."' AND internal_revision = '".$internal_revision."'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data['id'])
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}	
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
 	 * @param integer $parameter_id
 	 * @return array
 	 */

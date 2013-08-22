@@ -1,5 +1,6 @@
 <?php
 $LANG['BaseGlobalButtonSave'] = "Save";
+$LANG['BaseGlobalButtonSaveAndClose'] = "Save and Close";
 $LANG['BaseGlobalButtonCancel'] = "Cancel";
 $LANG['BaseGlobalButtonNext'] = "Next";
 $LANG['BaseGlobalButtonPrevious'] = "Previous";
