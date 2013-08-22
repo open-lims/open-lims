@@ -12,36 +12,7 @@ $(document).ready(function()
 	
 	$("#DataParameterUpdateButton").click(function()
 	{
-		var json_object = new Object();
-		
-		$(".DataParameterValue").each(function()
-		{				
-			var id = $(this).attr("id").replace("DataParameterValue","");
-			
-			json_object[''+id+''] = new Object();
-			
-			$(this).find("input").each(function()
-			{
-				if (($(this).is(":input") == true) && ($(this).is(":radio") == false) && ($(this).is(":checkbox") == false))
-				{
-					if ($(this).attr("name") === "value")
-					{
-						json_object[''+id+'']['value'] = $(this).val();
-					}
-				}
-			});
-			
-			$(this).find("select").each(function()
-			{
-				if (($(this).is(":input") == true) && ($(this).is(":radio") == false) && ($(this).is(":checkbox") == false))
-				{
-					if ($(this).attr("name") === "method")
-					{
-						json_object[''+id+'']['method'] = $(this).val();
-					}
-				}
-			});			
-		});
+		var json_object = data_parameter.get_parameter_value_object();
 		
 		var limit = $(".DataParameterLimit option:selected").val();
 		

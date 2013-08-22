@@ -228,7 +228,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 						if($.browser.version == 7.0 || $.browser.version >= 9.0)
 						{ //we got an ie version that does not support tbody animation							
 							$("#" + css_main_id).html(data);
-							
+			
 							make_resizable();
 							return true;
 						}
@@ -246,7 +246,7 @@ List = function(ajax_handler, ajax_run, ajax_count_run, argument_array, json_get
 				} 
 				else 
 				{
-					$("#" + css_main_id).height(last_height)					
+					$("#" + css_main_id).height(last_height);				
 					$("#" + css_main_id).html(data);
 					make_resizable();
 				}

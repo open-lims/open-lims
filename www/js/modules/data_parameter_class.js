@@ -242,6 +242,44 @@ DataParameter = function()
 		});
 	}
 	
+	// Parameter
+	get_parameter_value_object = function()
+	{
+		var json_object = new Object();
+		
+		$(".DataParameterValue").each(function()
+		{	
+			var id = $(this).attr("id").replace("DataParameterValue","");
+			
+			json_object[''+id+''] = new Object();
+			
+			$(this).find("input").each(function()
+			{
+				if (($(this).is(":input") == true) && ($(this).is(":radio") == false) && ($(this).is(":checkbox") == false))
+				{
+					if ($(this).attr("name") === "value")
+					{
+						json_object[''+id+'']['value'] = $(this).val();
+					}
+				}
+			});
+			
+			$(this).find("select").each(function()
+			{
+				if (($(this).is(":input") == true) && ($(this).is(":radio") == false) && ($(this).is(":checkbox") == false))
+				{
+					if ($(this).attr("name") === "method")
+					{
+						json_object[''+id+'']['method'] = $(this).val();
+					}
+				}
+			});
+			
+		});
+		
+		return json_object;
+	}
+	
 	// Admin
 	get_field_json = function(class_name)
 	{
@@ -362,6 +400,7 @@ DataParameter = function()
 	
 	this.init_admin = init_admin;
 	this.init_parameter = init_parameter;
+	this.get_parameter_value_object = get_parameter_value_object;
 	this.get_field_json = get_field_json;
 	this.get_limit_json = get_limit_json;
 	this.set_language_json = set_language_json;
