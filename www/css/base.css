@@ -680,9 +680,11 @@ html,body
 	box-shadow: 0 0 0.1em 1px rgba(255, 255, 255, 0.3) inset;
 }
 .ButtonDisabled,
+.Form button:disabled,
+.Form button[disabled=disabled],
 .ListButtonDisabled
 {
-	color: #888888;	
+	color: #888888 !important;	
 }
 .Button,
 .ButtonDisabled

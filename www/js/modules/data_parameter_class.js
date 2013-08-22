@@ -194,10 +194,12 @@ DataParameter = function()
 				if ((check_value != parseFloat(check_value)) && ( check_value !== "" ))
 				{
 					$("#DataParameterValueStatus"+id).html("invalid (NaN)");
+					$(".DataParameterSaveButton").attr("disabled", "disabled");
 					// check min (valid) and max (valid)
 				}
 				else if (check_value !== "")
 				{
+					$(".DataParameterSaveButton").attr("disabled", false);
 					if (check_value !== "")
 					{
 						var lsl = parseFloat(object.find(".DataParameterValueLSL").html());
@@ -221,6 +223,11 @@ DataParameter = function()
 					}
 					
 					object.find("input").val(print_value);
+				}
+				else
+				{
+					$("#DataParameterValueStatus"+id).html("");
+					$(".DataParameterSaveButton").attr("disabled", false);
 				}
 			}
 		
