@@ -65,11 +65,19 @@ class ParameterVersion_Access
 				$this->version				= $data['version'];
 				$this->internal_revision	= $data['internal_revision'];
 				$this->previous_version_id	= $data['previous_version_id'];
-				$this->current				= $data['current'];
 				$this->owner_id				= $data['owner_id'];
 				$this->datetime				= $data['datetime'];
 				$this->name					= $data['name'];
 				$this->parameter_limit_id	= $data['parameter_limit_id'];
+				
+				if ($data['current'] == 't')
+				{
+					$this->current = true;
+				}
+				else
+				{
+					$this->current = false;
+				}
 			}
 			else
 			{

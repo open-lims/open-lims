@@ -252,6 +252,26 @@ class DataRequest
 			
 			// Parameter
 			
+			case "parameter_list_versions":
+				require_once("ajax/parameter.ajax.php");
+				echo ParameterAjax::list_versions(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'], 
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
+			break;
+			
+			case "parameter_count_versions":
+				require_once("ajax/parameter.ajax.php");
+				echo ParameterAjax::count_versions($_POST['argument_array']);
+			break;
+			
 			case "parameter_add_as_item":
 				require_once("ajax/parameter.ajax.php");
 				echo ParameterAjax::add_as_item(

@@ -969,6 +969,127 @@ class Data_Wrapper_Access
 	}
 	
 	/**
+	 * @param integer $parameter_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_parameter_versions($parameter_id, $order_by, $order_method, $start, $end)
+	{
+		global $db;
+		
+		if (is_numeric($parameter_id))
+		{			
+			if ($order_by and $order_method)
+			{
+				if ($order_method == "asc")
+				{
+					$sql_order_method = "ASC";
+				}
+				else
+				{
+					$sql_order_method = "DESC";
+				}
+				
+				switch($order_by):
+							
+					case "name":
+						$sql_order_by = "ORDER BY name ".$sql_order_method;
+					break;
+					
+					case "datetime":
+						$sql_order_by = "ORDER BY datetime ".$sql_order_method;
+					break;
+					
+					case "user":
+						$sql_order_by = "ORDER BY user ".$sql_order_method;
+					break;
+								
+					default:
+						$sql_order_by = "";
+					break;
+				
+				endswitch;	
+			}
+			else
+			{
+				$sql_order_by = "";
+			}
+				
+			$sql = "SELECT ".constant("PARAMETER_VERSION_TABLE").".id AS id, " .
+						"".constant("PARAMETER_TEMPLATE_TABLE").".name AS name," .
+						"".constant("PARAMETER_VERSION_TABLE").".internal_revision AS internal_revision, " .
+						"".constant("PARAMETER_VERSION_TABLE").".datetime AS datetime, " .
+						"".constant("PARAMETER_VERSION_TABLE").".owner_id AS owner_id " .
+						"FROM get_all_parameter_versions(".$parameter_id.", NULL) " .
+						"LEFT JOIN ".constant("PARAMETER_VERSION_TABLE")." 		ON get_all_parameter_versions 									= ".constant("PARAMETER_VERSION_TABLE").".id " .
+						"LEFT JOIN ".constant("PARAMETER_TABLE")." 				ON ".constant("PARAMETER_VERSION_TABLE").".parameter_id		= ".constant("PARAMETER_TABLE").".id " .
+						"LEFT JOIN ".constant("PARAMETER_HAS_TEMPLATE_TABLE")." ON ".constant("PARAMETER_TABLE").".id						= ".constant("PARAMETER_HAS_TEMPLATE_TABLE").".parameter_id " .
+						"LEFT JOIN ".constant("PARAMETER_TEMPLATE_TABLE")." 	ON ".constant("PARAMETER_HAS_TEMPLATE_TABLE").".template_id = ".constant("PARAMETER_TEMPLATE_TABLE").".id " .
+						"LEFT JOIN ".constant("USER_PROFILE_TABLE")." 			ON ".constant("PARAMETER_VERSION_TABLE").".owner_id			= ".constant("USER_PROFILE_TABLE").".id " .
+						"WHERE ".constant("PARAMETER_VERSION_TABLE").".id IN (SELECT * FROM get_all_parameter_versions(".$parameter_id.", NULL)) " .
+						"".$sql_order_by."";
+			
+			$return_array = array();
+			
+			$res = $db->db_query($sql);
+			
+			if (is_numeric($start) and is_numeric($end))
+			{
+				for ($i = 0; $i<=$end-1; $i++)
+				{
+					if (($data = $db->db_fetch_assoc($res)) == null)
+					{
+						break;
+					}
+					
+					if ($i >= $start)
+					{
+						array_push($return_array, $data);
+					}
+				}
+			}
+			else
+			{
+				while ($data = $db->db_fetch_assoc($res))
+				{
+					array_push($return_array, $data);
+				}
+			}
+			return $return_array;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param integer $parameter_id
+	 * @return integer
+	 */
+	public static function count_parameter_versions($parameter_id)
+	{
+		if (is_numeric($parameter_id))
+		{
+			global $db;
+						
+			$sql = "SELECT COUNT(*) AS result FROM get_all_parameter_versions(".$parameter_id.", NULL)";
+			
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+	
+			return $data['result'];
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
 	 * @param integer $file_id
 	 * @param string $order_by
 	 * @param string $order_method

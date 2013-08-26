@@ -93,8 +93,8 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 		{
 			if (ParameterVersion_Access::exist_internal_revision($this->parameter_id, $internal_revision) == true)
 			{
-				$parameter_version_id = ParameterVersion_Access::get_entry_by_parameter_id_and_internal_revision($this->parameter_id, $internal_revision);
-				$this->paramter_version = new ParameterVersion_Access($parameter_version_id);
+				$this->parameter_version_id = ParameterVersion_Access::get_entry_by_parameter_id_and_internal_revision($this->parameter_id, $internal_revision);
+				$this->parameter_version = new ParameterVersion_Access($this->parameter_version_id);
 				return true;
 			}
 			else
@@ -382,6 +382,28 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 	public function exist_parameter_version($internal_revision)
 	{
 		
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function is_current()
+	{
+		if ($this->parameter_id and $this->parameter_version)
+		{
+			if ($this->parameter_version->get_current() == true)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**

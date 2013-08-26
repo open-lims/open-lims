@@ -104,6 +104,22 @@ interface Data_WrapperInterface
 	public static function count_value_versions($value_id);
 	
 	/**
+	 * @param integer $parameter_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_parameter_versions($parameter_id, $order_by, $order_method, $start, $end);
+	
+	/**
+	 * @param integer $parameter_id
+	 * @return integer
+	 */
+	public static function count_parameter_versions($parameter_id);
+	
+	/**
 	 * @param integer $file_id
 	 * @param string $order_by
 	 * @param string $order_method

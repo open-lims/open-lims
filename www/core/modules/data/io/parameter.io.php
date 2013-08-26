@@ -595,7 +595,41 @@ class ParameterIO
 	
 	public static function history()
 	{
-		
+		if ($_GET['parameter_id'])
+		{
+			$parameter = Parameter::get_instance($_GET['parameter_id']);
+			
+			if ($parameter->is_read_access())
+			{
+				$argument_array = array();
+				$argument_array[0] = "parameter_id";
+				$argument_array[1] = $_GET['parameter_id'];
+	
+				$list = new List_IO("DataParameterVersionHistory", "ajax.php?nav=data", "parameter_list_versions", "parameter_count_versions", $argument_array, "DataParameterVersionHistory");
+
+				$list->add_column("","symbol",false,"16px");
+				$list->add_column(Language::get_message("DataGeneralListColumnName", "general"),"name",true,null);
+				$list->add_column(Language::get_message("DataGeneralListColumnVersion", "general"),"version",false,null);
+				$list->add_column(Language::get_message("DataGeneralListColumnDateTime", "general"),"datetime",true,null);
+				$list->add_column(Language::get_message("DataGeneralListColumnUser", "general"),"user",true,null);
+				$list->add_column("","delete",false,"16px");
+				
+				$template = new HTMLTemplate("data/parameter_history.html");
+	
+				$template->set_var("title",$parameter->get_name());
+				$template->set_var("list", $list->get_list());
+
+				$template->output();
+			}
+			else
+			{
+				throw new DataSecurityAccessDeniedException();
+			}	
+		}
+		else
+		{
+			throw new ParameterIDMissingException();
+		}
 	}
 }
 ?>

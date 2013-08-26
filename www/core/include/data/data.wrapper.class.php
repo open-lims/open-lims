@@ -184,6 +184,30 @@ class Data_Wrapper implements Data_WrapperInterface
     }
     
     /**
+     * @see Data_WrapperInterface::list_parameter_versions()
+	 * @param integer $parameter_id
+	 * @param string $order_by
+	 * @param string $order_method
+	 * @param integer $start
+	 * @param integer $end
+	 * @return array
+	 */
+	public static function list_parameter_versions($parameter_id, $order_by, $order_method, $start, $end)
+	{
+		return Data_Wrapper_Access::list_parameter_versions($parameter_id, $order_by, $order_method, $start, $end);
+	}
+    
+	/**
+	 * @see Data_WrapperInterface::count_parameter_versions()
+	 * @param integer $parameter_id
+	 * @return integer
+	 */
+	public static function count_parameter_versions($parameter_id)
+	{
+		return Data_Wrapper_Access::count_parameter_versions($parameter_id);
+	}
+	
+    /**
      * @see Data_WrapperInterface::list_file_versions()
 	 * @param integer $file_id
 	 * @param string $order_by
