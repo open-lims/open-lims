@@ -198,7 +198,7 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
     				}
     				
     				$required_sub_item_array = $project->list_required_sub_items($get_array['key']);
-    				    				
+    				
     				if (is_array($required_sub_item_array) and count($required_sub_item_array) >= 1)
     				{
 	    				if ($required_sub_item_array[0] == "all")
@@ -217,10 +217,10 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
 					    				return false;
 					    			}
 					    			
-		    						if (DataEntity::is_kind_of("file", $sub_item_value) or DataEntity::is_kind_of("value", $sub_item_value))
+		    						if (DataEntity::is_kind_of("file", $sub_item_value) or DataEntity::is_kind_of("value", $sub_item_value) or DataEntity::is_kind_of("parameter", $sub_item_value))
 									{
 										$data_entity_id = DataEntity::get_entry_by_item_id($sub_item_value);
-						    			$folder_id = $project->get_item_holder_value("folder_id");
+						    			$folder_id = $project->get_item_holder_value("folder_id", null, $value['status_id']);
 						    			$parent_data_entity_id = Folder::get_data_entity_id_by_folder_id($folder_id);
 						
 						    			$child_data_entity = new DataEntity($data_entity_id);
@@ -236,8 +236,9 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
 	    				else
 	    				{
 	    					foreach($required_sub_item_array as $key => $value)
-	    					{
-	    						$sub_item_array = $item_holder_instance->get_item_holder_items($value['position_id']);	    						
+	    					{	    						
+	    						$sub_item_array = $item_holder_instance->get_item_holder_items($value['position_id']);	    
+	    						
 	    						if (is_array($sub_item_array) and count($sub_item_array))
 	    						{
 	    							foreach($sub_item_array as $sub_item_key => $sub_item_value)
@@ -251,10 +252,10 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
 						    				return false;
 						    			}
 						    			
-		    							if (DataEntity::is_kind_of("file", $sub_item_value) or DataEntity::is_kind_of("value", $sub_item_value))
+		    							if (DataEntity::is_kind_of("file", $sub_item_value) or DataEntity::is_kind_of("value", $sub_item_value) or DataEntity::is_kind_of("parameter", $sub_item_value))
 										{
 											$data_entity_id = DataEntity::get_entry_by_item_id($sub_item_value);
-							    			$folder_id = $project->get_item_holder_value("folder_id");
+							    			$folder_id = $project->get_item_holder_value("folder_id", null, $value['status_id']);
 							    			$parent_data_entity_id = Folder::get_data_entity_id_by_folder_id($folder_id);
 							
 							    			$child_data_entity = new DataEntity($data_entity_id);
@@ -311,7 +312,7 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
 	    					$project = new Project($value['id']);
 	    					self::$project_instance_array[$value['id']] = $project;
 	    				}
-						
+	    				
 						if (($item_status_id = $project->is_sub_item_required($value['pos_id'], $value['status_id'], $pos_id)) == true)
 						{
 							if (self::create($value['id'], $item_id, null, null, null, $parent_item_id, $item_status_id) == false)
@@ -319,10 +320,10 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
 								return false;
 							}
 							
-							if (DataEntity::is_kind_of("file", $item_id) or DataEntity::is_kind_of("value", $item_id))
+							if (DataEntity::is_kind_of("file", $item_id) or DataEntity::is_kind_of("value", $item_id) or DataEntity::is_kind_of("parameter", $sub_item_value))
 							{
 								$data_entity_id = DataEntity::get_entry_by_item_id($item_id);
-				    			$folder_id = $project->get_item_holder_value("folder_id");
+				    			$folder_id = $project->get_item_holder_value("folder_id", null, $item_status_id);
 				    			$parent_data_entity_id = Folder::get_data_entity_id_by_folder_id($folder_id);
 				
 				    			$child_data_entity = new DataEntity($data_entity_id);

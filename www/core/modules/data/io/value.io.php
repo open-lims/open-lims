@@ -89,9 +89,10 @@ class ValueIO
 				$result[0]['version'] = 0;
 				$result[0]['text'] = "----------------------------------------------";
 				
+				$value_version = Value::get_instance($_GET['value_id'], true);
+				
 				foreach($value_version_array as $key => $fe_value)
 				{
-					$value_version = Value::get_instance($_GET['value_id'], true);
 					$value_version->open_internal_revision($fe_value);
 					
 					$version_datetime_handler = new DatetimeHandler($value_version->get_version_datetime());

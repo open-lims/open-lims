@@ -259,9 +259,10 @@ class ParameterIO
 				$result[0]['version'] = 0;
 				$result[0]['text'] = "----------------------------------------------";
 				
+				$parameter_version = Parameter::get_instance($_GET['parameter_id'], true);
+				
 				foreach($parameter_version_array as $key => $fe_value)
 				{
-					$parameter_version = Parameter::get_instance($_GET['parameter_id'], true);
 					$parameter_version->open_internal_revision($fe_value);
 					
 					$version_datetime_handler = new DatetimeHandler($parameter_version->get_version_datetime());

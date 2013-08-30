@@ -223,7 +223,7 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
 					    				return false;
 					    			}
 					    			
-		    						if (DataEntity::is_kind_of("file", $sub_item_value) or DataEntity::is_kind_of("value", $sub_item_value))
+		    						if (DataEntity::is_kind_of("file", $sub_item_value) or DataEntity::is_kind_of("value", $sub_item_value) or DataEntity::is_kind_of("parameter", $sub_item_value))
 									{
 										$data_entity_id = DataEntity::get_entry_by_item_id($sub_item_value);
 						    			$folder_id = $sample->get_item_holder_value("folder_id");
@@ -257,7 +257,7 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
 						    				return false;
 						    			}
 						    			
-		    							if (DataEntity::is_kind_of("file", $sub_item_value) or DataEntity::is_kind_of("value", $sub_item_value))
+		    							if (DataEntity::is_kind_of("file", $sub_item_value) or DataEntity::is_kind_of("value", $sub_item_value) or DataEntity::is_kind_of("parameter", $sub_item_value))
 										{
 											$data_entity_id = DataEntity::get_entry_by_item_id($sub_item_value);
 							    			$folder_id = $sample->get_item_holder_value("folder_id");
@@ -383,7 +383,7 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
 								return false;
 							}
 							
-							if (DataEntity::is_kind_of("file", $item_id) or DataEntity::is_kind_of("value", $item_id))
+							if (DataEntity::is_kind_of("file", $item_id) or DataEntity::is_kind_of("value", $item_id) or DataEntity::is_kind_of("parameter", $sub_item_value))
 							{
 								$data_entity_id = DataEntity::get_entry_by_item_id($item_id);
 								$folder_id = $sample->get_item_holder_value("folder_id");

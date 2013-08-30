@@ -70,9 +70,10 @@ class FileIO
 					$result[0]['version'] = 0;
 					$result[0]['text'] = "----------------------------------------------";
 					
+					$file_version = File::get_instance($_GET['file_id'], true);
+					
 					foreach($file_version_array as $key => $value)
 					{
-						$file_version = File::get_instance($_GET['file_id'], true);
 						$file_version->open_internal_revision($value);
 						
 						$version_datetime_handler = new DatetimeHandler($file_version->get_datetime());

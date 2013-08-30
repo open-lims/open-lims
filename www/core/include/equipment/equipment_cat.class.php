@@ -124,7 +124,6 @@ class EquipmentCat implements EquipmentCatInterface
     	}
     	else
     	{
-    		echo "e";
     		return false;
     	}
 	}

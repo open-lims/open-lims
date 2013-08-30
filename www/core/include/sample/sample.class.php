@@ -1967,7 +1967,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	{
 		if (is_numeric($position_id) and $this->sample_id and $this->sample)
 		{
-			return SampleItem::list_items_by_sample_id_and_gid($this->sample_id, $gid);
+			return SampleItem::list_items_by_sample_id_and_gid($this->sample_id, $position_id);
 		}
 		else
 		{
