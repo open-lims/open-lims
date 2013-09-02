@@ -1402,7 +1402,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 				
     			if (($parameter_id = Parameter::get_parameter_id_by_data_entity_id($data_entity_id)) != null)
 				{
-					$parameter = Parameter::get_instance($value_id);
+					$parameter = Parameter::get_instance($parameter_id);
     				if ($parameter->delete() == false)
     				{
     					return false;

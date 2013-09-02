@@ -110,7 +110,7 @@ class ParameterHasTemplate_Access
 	{
 		global $db;
 
-		if ($this->template_id and $this->parameter_field_id)
+		if ($this->template_id and $this->parameter_id)
 		{
 			$parameter_id_tmp = $this->parameter_id;
 			$template_id_tmp = $this->template_id;
