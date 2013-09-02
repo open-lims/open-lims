@@ -149,10 +149,10 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 			$transaction_id = $transaction->begin();
 			
 			try
-			{
+			{				
 				parent::delete();
 							
-				$equipment_is_item = new EquipmentIsItem_Access($tmp_equipment_id);
+				$equipment_is_item = new EquipmentIsItem_Access($this->equipment_id);
 				if ($equipment_is_item->delete() == false)
 				{
 					throw new EquipmentDeleteItemLinkException();
