@@ -366,6 +366,7 @@ class DataAjax
 	}
 	
 	/**
+	 * @todo remove code; merge with IO permission function (GET <-> POST)
 	 * @return string
 	 * @throws FolderIDMissingException
 	 */
@@ -373,7 +374,7 @@ class DataAjax
 	{
 		global $user;
 		
-		if ($_POST['file_id'] xor $_POST['value_id'])
+		if ($_POST['file_id'] or $_POST['value_id'] or($_POST['parameter_id']) or $_POST['folder_id'])
 		{
 			if ($_POST['file_id'])
 			{
@@ -390,9 +391,15 @@ class DataAjax
 				$type = "value";
 				$title = $object->get_type_name();
 			}
-		}
-		else
-		{
+			
+			if ($_POST['parameter_id'])
+			{
+				$id = $_POST['parameter_id'];
+				$object = Parameter::get_instance($id);
+				$type = "parameter";
+				$title = $object->get_name();
+			}
+			
 			if ($_POST['folder_id'])
 			{
 				$id = $_POST['folder_id'];
@@ -400,10 +407,10 @@ class DataAjax
 				$type = "folder";
 				$title = $object->get_name();
 			}
-			else
-			{
-				throw new FolderIDMissingException();
-			}
+		}
+		else
+		{
+			throw new FolderIDMissingException();
 		}
 		
 		$data_permission = new DataPermission($type, $id);
@@ -568,6 +575,10 @@ class DataAjax
 			case "Value": 
 				$id = $_POST['value_id'];
 				$object = Value::get_instance($id);
+			break;
+			case "Parameter": 
+				$id = $_POST['parameter_id'];
+				$object = Parameter::get_instance($id);
 			break;
 		endswitch;
 		

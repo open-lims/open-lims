@@ -169,6 +169,38 @@ class DataBrowserAjax
 	}
 	
 	/**
+	 * @param integer $parameter_id
+	 * @return string
+	 */
+	public static function get_context_sensitive_parameter_menu($parameter_id)
+	{
+		global $user;
+		$parameter= Parameter::get_instance($parameter_id);
+		$html = "";
+		if($parameter->is_read_access())
+		{
+			$history_link = "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=data&parameter_id=".$parameter_id."&action=parameter_history";
+			$html .= "<img src='images/icons/history.png' alt='' /><a href='".$history_link."' class='DataBrowserDialogLinkFollowDirectly'>History</a><br/>";
+		}
+		if($parameter->is_control_access() == true or $parameter->get_owner_id() == $user->get_user_id())
+		{
+			$change_permission_link = "run=parameter_permission&parameter_id=".$parameter_id;
+			$html .= "<img src='images/icons/permissions.png' alt='' /><a href='".$change_permission_link."' class='DataBrowserDialogLinkChangePermission'>Change permission</a><br/>";
+		}
+		if($parameter->is_delete_access())
+		{
+			$delete_link = "run=parameter_delete&parameter_id=".$parameter_id;
+			$html .= "<img src='images/icons/delete.png' alt='' /><a href='".$delete_link."' class='DataBrowserDialogLinkDelete'>Delete</a><br/>";
+		}
+		if($parameter->is_read_access())
+		{
+			$open_link = "index.php?username=".$_GET['username']."&session_id=".$_GET['session_id']."&nav=data&parameter_id=".$parameter_id."&action=parameter_detail";
+			$html .= "<img src='images/icons/file_open.png' alt='' /><a href='".$open_link."' class='DataBrowserDialogLinkFollowDirectly'>Open / Edit</a><br/>";
+		}
+		return $html;
+	}
+	
+	/**
 	 * @param integer $folder_id
 	 * @return string
 	 */

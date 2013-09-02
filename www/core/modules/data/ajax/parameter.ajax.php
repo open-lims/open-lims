@@ -28,6 +28,63 @@
  */
 class ParameterAjax
 {
+	/**
+	 * @param string $action
+	 * @return string
+	 */
+	public static function get_data_browser_link_html_and_button_handler($action) 
+	{
+		global $regional;
+		
+		$html;
+		$html_caption;
+		$button_handler;
+		$button_handler_caption;
+		$template;
+		$paramquery = $_GET;	
+		unset($paramquery['run']);
+		switch($action):
+			case "parameter_delete":
+				if(isset($_POST['sure']))
+				{
+					self::delete($_POST['parameter_id']);
+				}
+				else
+				{
+					$template = new HTMLTemplate("data/parameter_delete_window.html");
+					$button_handler_template = new JSTemplate("data/js/parameter_delete_window.js");
+					$button_handler_template->set_var("session_id", $_GET['session_id']);
+					$button_handler_template->set_var("parameter_id", $_POST['parameter_id']);
+					$button_handler = $button_handler_template->get_string();
+					$button_handler_caption = "Delete";
+					$html_caption = "Delete Parameter";
+					$html = $template->get_string();
+				}
+			break;
+			case "permission":
+				require_once("data.ajax.php");
+				if(isset($_POST['permissions']))
+				{
+					$success = DataAjax::change_permission(json_decode($_POST['permissions']), "Parameter");
+					return $success;
+				}
+				else
+				{
+					$permission = DataAjax::permission_window();
+					$button_handler_template = new JSTemplate("data/js/parameter_permission_window.js");
+					$button_handler_template->set_var("session_id", $_GET['session_id']);
+					$button_handler_template->set_var("parameter_id", $_POST['parameter_id']);
+					$button_handler = $button_handler_template->get_string();
+					$button_handler_caption = "Change";
+					$html_caption = "Change permission";
+					$html = $permission;	
+				}
+			break;
+		endswitch;
+		$array = array("content"=>$html , "content_caption"=>$html_caption , "handler"=>$button_handler , "handler_caption"=>$button_handler_caption);
+		return json_encode($array);
+	}
+	
 /**
 	 * @param string $json_column_array
 	 * @param string $json_argument_array
@@ -236,6 +293,25 @@ class ParameterAjax
 	public static function get_methods()
 	{
 		return json_encode(ParameterMethod::list_methods());
+	}
+	
+	/**
+	 * @param integer $parameter_id
+	 * @return string
+	 * @throws DataSecurityAccessDeniedException
+	 */
+	private static function delete($parameter_id)
+	{
+		$parameter = Parameter::get_instance($parameter_id);
+		if ($parameter->is_delete_access())
+		{
+			$parameter->delete();
+			return "1";
+		}
+		else
+		{
+			throw new DataSecurityAccessDeniedException();
+		}
 	}
 }
 ?>

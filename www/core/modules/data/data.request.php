@@ -82,17 +82,22 @@ class DataRequest
 			
 			case "get_context_sensitive_file_menu":
 				require_once("ajax/data_browser.ajax.php");
-				echo DataBrowserAjax::get_context_sensitive_file_menu($_POST['file_id']);
+				echo DataBrowserAjax::get_context_sensitive_file_menu($_POST['id']);
 			break;
 			
 			case "get_context_sensitive_folder_menu":
 				require_once("ajax/data_browser.ajax.php");
-				echo DataBrowserAjax::get_context_sensitive_folder_menu($_POST['file_id']);
+				echo DataBrowserAjax::get_context_sensitive_folder_menu($_POST['id']);
 			break;
 			
 			case "get_context_sensitive_value_menu":
 				require_once("ajax/data_browser.ajax.php");
-				echo DataBrowserAjax::get_context_sensitive_value_menu($_POST['file_id']);
+				echo DataBrowserAjax::get_context_sensitive_value_menu($_POST['id']);
+			break;
+			
+			case "get_context_sensitive_parameter_menu":
+				require_once("ajax/data_browser.ajax.php");
+				echo DataBrowserAjax::get_context_sensitive_parameter_menu($_POST['id']);
 			break;
 			
 			case "get_browser_menu":
@@ -305,6 +310,16 @@ class DataRequest
 			case "parameter_get_methods":
 				require_once("ajax/parameter.ajax.php");
 				echo ParameterAjax::get_methods();
+			break;
+			
+			case "parameter_delete":
+				require_once("ajax/parameter.ajax.php");
+				echo ParameterAjax::get_data_browser_link_html_and_button_handler("parameter_delete");
+			break;
+			
+			case "parameter_permission":
+				require_once("ajax/parameter.ajax.php");
+				echo ParameterAjax::get_data_browser_link_html_and_button_handler("permission");
 			break;
 			
 			

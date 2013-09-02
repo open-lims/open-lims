@@ -276,7 +276,7 @@ function data_browser()
 			else if($(this).parent().parent().children("td:nth-child(3)").children().hasClass("DataBrowserIsValue"))
 			{
 				var link = $(this).parent().parent().children("td:nth-child(3)").children().children().attr("href");
-				var split = link.split("&nav=data&value_id=");
+				var split = link.split("&value_id=");
 				var value_id = split[1].replace("&action=value_detail","");
 
 				$.ajax(
@@ -288,10 +288,25 @@ function data_browser()
 					success : function(data) {}
 				});
 			}
+			else if($(this).parent().parent().children("td:nth-child(3)").children().hasClass("DataBrowserIsParameter"))
+			{
+				var link = $(this).parent().parent().children("td:nth-child(3)").children().children().attr("href");
+				var split = link.split("&parameter_id=");
+				var parameter_id = split[1].replace("&action=parameter_detail","");
+
+				$.ajax(
+				{
+					async : false,
+					type : "POST",
+					url : "ajax.php?nav=data&session_id="+get_array['session_id']+"&run=parameter_delete",
+					data : "parameter_id="+parameter_id+"&sure=true",
+					success : function(data) {}
+				});
+			}
 			else if($(this).parent().parent().children("td:nth-child(3)").children().hasClass("DataBrowserIsFile"))
 			{
 				var link = $(this).parent().parent().children("td:nth-child(3)").children().children().attr("href");
-				var split = link.split("&nav=data&file_id=");
+				var split = link.split("&file_id=");
 				var file_id = split[1].replace("&action=file_detail","");
 
 				$.ajax(
@@ -435,6 +450,13 @@ function data_browser()
 				var value_id = split_after[0];
 				load_context_sensitive_dialog(value_id,"value");
 			}
+			else if($(element).children("td:nth-child(3)").children().hasClass("DataBrowserIsParameter"))
+			{
+				var split_before = link.split("&parameter_id=");
+				var split_after = split_before[1].split("&");
+				var parameter_id = split_after[0];
+				load_context_sensitive_dialog(parameter_id,"parameter");
+			}
 			else
 			{
 				return false;
@@ -527,9 +549,9 @@ function data_browser()
 	 * @param item_id the id of the selected item
 	 * @param type the type (folder, file, value)
 	 */
-	function load_context_sensitive_dialog(item_id, type)
+	function load_context_sensitive_dialog(id, type)
 	{
-		var data = "file_id="+item_id;
+		var data = "id="+id;
 		var action;
 		switch(type)
 		{
@@ -541,6 +563,9 @@ function data_browser()
 				break;
 			case "value":
 				action = "get_context_sensitive_value_menu";
+				break;
+			case "parameter":
+				action = "get_context_sensitive_parameter_menu";
 				break;
 			default: 
 				break;
