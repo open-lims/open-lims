@@ -44,7 +44,70 @@ class AdminRequest
 	 */
 	public static function ajax_handler($alias)
 	{
+		switch($_GET['run']):
+			
+			// General - Measuring Units 
+			case "admin_general_list_measuring_units":
+				require_once("ajax/admin/admin_general.ajax.php");
+				echo AdminGeneralAjax::list_measuring_units(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'],  
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
+			break;
+			
+			case "admin_general_count_measuring_units":
+				require_once("ajax/admin/admin_general.ajax.php");
+				echo AdminGeneralAjax::count_measuring_units($_POST['argument_array']);
+			break;
 		
+			case "admin_general_get_measuring_unit":
+				require_once("ajax/admin/admin_general.ajax.php");
+				echo AdminGeneralAjax::get_measuring_unit($_POST['id']);
+			break;
+		
+			case "admin_general_add_measuring_unit":
+				require_once("ajax/admin/admin_general.ajax.php");
+				echo AdminGeneralAjax::add_measuring_unit($_POST['category_id'], 
+						$_POST['name'], 
+						$_POST['symbol'], 
+						$_POST['min_value'], 
+						$_POST['max_value'], 
+						$_POST['min_prefix_exponent'], 
+						$_POST['max_prefix_exponent'], 
+						$_POST['prefix_calculcation_exponent'], 
+						$_POST['calculation'], 
+						$_POST['type']);
+			break;
+			
+			case "admin_general_set_measuring_unit":
+				require_once("ajax/admin/admin_general.ajax.php");
+				echo AdminGeneralAjax::set_measuring_unit($_POST['id'],
+						$_POST['category_id'], 
+						$_POST['name'], 
+						$_POST['symbol'], 
+						$_POST['min_value'], 
+						$_POST['max_value'], 
+						$_POST['min_prefix_exponent'], 
+						$_POST['max_prefix_exponent'], 
+						$_POST['prefix_calculcation_exponent'], 
+						$_POST['calculation'], 
+						$_POST['type']);
+			break;
+			
+			case "admin_general_delete_measuring_unit":
+				require_once("ajax/admin/admin_general.ajax.php");
+				echo AdminGeneralAjax::delete_measuring_unit($_POST['id']);
+			break;
+			
+			
+		endswitch;
 	}
 	
 	/**

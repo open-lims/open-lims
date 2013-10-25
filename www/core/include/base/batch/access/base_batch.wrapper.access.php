@@ -28,14 +28,15 @@
 class BaseBatch_Wrapper_Access
 {	
 	/**
-	 * @param string $datetime
+	 * @param string $create_datetime
+	 * @param string $end_datetime
 	 * @param string $order_by
 	 * @param string $order_equipment
 	 * @param integer $start
 	 * @param integer $end
 	 * @return array
 	 */
-	public static function list_batches($datetime, $order_by, $order_method, $start, $end)
+	public static function list_batches($create_datetime, $end_datetime, $order_by, $order_method, $start, $end)
 	{
 		global $db;
 		
@@ -74,7 +75,27 @@ class BaseBatch_Wrapper_Access
 		{
 			$sql_order_by = "ORDER BY create_datetime";
 		}
-			
+		
+		if ($create_datetime != null and $end_datetime != null)
+		{
+			$sql_where = "WHERE create_datetime >= '".$create_datetime."' AND end_datetime >= '".$end_datetime."'";
+		}
+		else
+		{
+			if ($create_datetime != null)
+			{
+				$sql_where = "WHERE end_datetime >= '".$create_datetime."'";
+			}
+			elseif($end_datetime != null)
+			{
+				$sql_where = "WHERE end_datetime >= '".$end_datetime."'";
+			}
+			else
+			{
+				$sql_where = "";
+			}
+		}
+		
 		$sql = "SELECT ".constant("BASE_BATCH_RUN_TABLE").".id AS id, " .
 						"".constant("BASE_BATCH_TYPE_TABLE").".name AS name, " .
 						"".constant("BASE_BATCH_RUN_TABLE").".status AS status, " .
@@ -83,6 +104,7 @@ class BaseBatch_Wrapper_Access
 						"FROM ".constant("BASE_BATCH_RUN_TABLE")." " .
 						"JOIN ".constant("BASE_BATCH_TYPE_TABLE")." ON ".constant("BASE_BATCH_RUN_TABLE").".type_id = ".constant("BASE_BATCH_TYPE_TABLE").".id " .
 						"JOIN ".constant("USER_PROFILE_TABLE")." ON ".constant("BASE_BATCH_RUN_TABLE").".user_id = ".constant("USER_PROFILE_TABLE").".id " .
+						"".$sql_where." " .
 						"".$sql_order_by."";
 		
 		$return_array = array();
@@ -115,15 +137,37 @@ class BaseBatch_Wrapper_Access
 	}
 	
 	/**
-	 * @param string $datetime
+	 * @param string $create_datetime
+	 * @param string $end_datetime
 	 * @return integer
 	 */
-	public static function count_batches($datetime)
+	public static function count_batches($create_datetime, $end_datetime)
 	{
 		global $db;
 		
+		if ($create_datetime != null and $end_datetime != null)
+		{
+			$sql_where = "WHERE create_datetime >= '".$create_datetime."' AND end_datetime >= '".$end_datetime."'";
+		}
+		else
+		{
+			if ($create_datetime != null)
+			{
+				$sql_where = "WHERE end_datetime >= '".$create_datetime."'";
+			}
+			elseif($end_datetime != null)
+			{
+				$sql_where = "WHERE end_datetime >= '".$end_datetime."'";
+			}
+			else
+			{
+				$sql_where = "";
+			}
+		}
+		
 		$sql = "SELECT COUNT(".constant("BASE_BATCH_RUN_TABLE").".id) AS result " .
-						"FROM ".constant("BASE_BATCH_RUN_TABLE")."";
+						"FROM ".constant("BASE_BATCH_RUN_TABLE")." " .
+						"".$sql_where."";
 		
 		$res = $db->db_query($sql);
 		$data = $db->db_fetch_assoc($res);

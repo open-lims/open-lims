@@ -567,6 +567,9 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 		return "Parameter";
 	}
 	
+	/**
+	 * @return string
+	 */
 	public function get_version_datetime()
 	{
 		if ($this->parameter_version)
@@ -825,10 +828,10 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
     {
     	if ($event_object instanceof UserDeleteEvent)
     	{
-    		/*if (ValueVersion_Access::set_owner_id_on_null($event_object->get_user_id()) == false)
+    		if (ParameterVersion_Access::set_owner_id_on_null($event_object->get_user_id()) == false)
     		{
     			return false;
-    		}*/
+    		}
     	}
     	
     	return true;

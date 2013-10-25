@@ -13,7 +13,51 @@ $(document).ready(function()
 			},
 			"OK": function()
 			{
-				$( this ).dialog( "close" );
+				var name = $(".BaseAdminMeasuringUnitAddEditValue[name='name']").val();
+				var category = $(".BaseAdminMeasuringUnitAddEditValue[name='category']").val();
+				var type = $(".BaseAdminMeasuringUnitAddEditValue[name='type']").val();
+				var exp_from = $(".BaseAdminMeasuringUnitAddEditValue[name='exp_from']").val();
+				var exp_to = $(".BaseAdminMeasuringUnitAddEditValue[name='exp_to']").val();
+				var symbol = $(".BaseAdminMeasuringUnitAddEditValue[name='symbol']").val();
+				var calculation = $(".BaseAdminMeasuringUnitAddEditValue[name='calculation']").val();
+				var min_value = $(".BaseAdminMeasuringUnitAddEditValue[name='min_value']").val();
+				var max_value = $(".BaseAdminMeasuringUnitAddEditValue[name='max_value']").val();
+				var calculation_exp = $(".BaseAdminMeasuringUnitAddEditValue[name='calculation_exp']").val();
+
+				if ($("#BaseAdminMeasuringUnitDialogFunction").html() == "add")
+				{
+					$.ajax(
+					{
+						type: "POST",
+						url: "ajax.php?session_id="+get_array['session_id']+"&nav=base.admin&run=admin_general_add_measuring_unit",
+						data: "category_id="+category+"&name="+name+"&symbol="+symbol+"&min_value="+min_value+"&max_value="+max_value+"&min_prefix_exponent="+exp_from+"&max_prefix_exponent="+exp_to+"&prefix_calculcation_exponent="+calculation_exp+"&calculation="+calculation+"&type="+type+"",
+						success: function(data)
+						{
+							if (data == "1")
+							{
+								list.reload();
+								$("#BaseAdminMeasuringUnitAddEditDialog").dialog( "close" );
+							}
+						}
+					});
+				}
+				else
+				{
+					$.ajax(
+					{
+						type: "POST",
+						url: "ajax.php?session_id="+get_array['session_id']+"&nav=base.admin&run=admin_general_set_measuring_unit",
+						data: "id="+$("#BaseAdminMeasuringUnitDialogId").html()+"&category_id="+category+"&name="+name+"&symbol="+symbol+"&min_value="+min_value+"&max_value="+max_value+"&min_prefix_exponent="+exp_from+"&max_prefix_exponent="+exp_to+"&prefix_calculcation_exponent="+calculation_exp+"&calculation="+calculation+"&type="+type+"",
+						success: function(data)
+						{
+							if (data == "1")
+							{
+								list.reload();
+								$("#BaseAdminMeasuringUnitAddEditDialog").dialog( "close" );
+							}
+						}
+					});
+				}
 			}
 		},
 		height: 550,
@@ -31,13 +75,13 @@ $(document).ready(function()
 			click: function()
 			{
 			 	var open_element = $.data(this, "open_element");
-			 	var id = $(open_element).attr("id").replace("BaseAdminMeasuringUnitRatioDelete","");
+			 	var id = $(open_element).attr("id").replace("BaseAdminMeasuringUnitDelete","");
 			 	var element = $(open_element);
 			 	
 			 	$.ajax(
 	 			{
 	 				type: "POST",
-	 				url: "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=admin_general_delete_measuring_unit_ratio",
+	 				url: "ajax.php?session_id="+get_array['session_id']+"&nav=base.admin&run=admin_general_delete_measuring_unit",
 	 				data: "id="+id,
 	 				success: function(data)
 	 				{
@@ -71,6 +115,27 @@ $(document).ready(function()
 	{
 		$("#BaseAdminMeasuringUnitAddEditDialog").dialog("open");
 		$("#BaseAdminMeasuringUnitAddEditDialog").dialog("option", "title", "Add a Measuring Unit");
+		
+		$("#BaseAdminMeasuringUnitDialogFunction").html("add");
+		$("#BaseAdminMeasuringUnitDialogId").html("");
+		
+		$(".BaseAdminMeasuringUnitAddEditValue[name='category'] option:selected").attr("selected", false);
+		$(".BaseAdminMeasuringUnitAddEditValue[name='type'] option:selected").attr("selected", false);
+		$(".BaseAdminMeasuringUnitAddEditValue[name='exp_from'] option:selected").attr("selected", false);
+		$(".BaseAdminMeasuringUnitAddEditValue[name='exp_to'] option:selected").attr("selected", false);
+		
+		$(".BaseAdminMeasuringUnitAddEditValue[name='name']").val("");
+		$(".BaseAdminMeasuringUnitAddEditValue[name='category']").val("");
+		$(".BaseAdminMeasuringUnitAddEditValue[name='type']").val("");
+		$(".BaseAdminMeasuringUnitAddEditValue[name='exp_from']").val("");
+		$(".BaseAdminMeasuringUnitAddEditValue[name='exp_to']").val("");
+		$(".BaseAdminMeasuringUnitAddEditValue[name='symbol']").val("");
+		$(".BaseAdminMeasuringUnitAddEditValue[name='calculation']").val("");
+		$(".BaseAdminMeasuringUnitAddEditValue[name='min_value']").val("");
+		$(".BaseAdminMeasuringUnitAddEditValue[name='max_value']").val("");
+		$(".BaseAdminMeasuringUnitAddEditValue[name='calculation_exp']").val("");
+
+		base_form_init();
 	});
 	
 	$(".BaseAdminMeasuringUnitEdit").each().live('click', function()
@@ -80,11 +145,75 @@ $(document).ready(function()
 		
 		$("#BaseAdminMeasuringUnitAddEditDialog").dialog("open");
 		$("#BaseAdminMeasuringUnitAddEditDialog").dialog("option", "title", "Edit a Measuring Unit");
+		
+		$("#BaseAdminMeasuringUnitDialogFunction").html("edit");
+		$("#BaseAdminMeasuringUnitDialogId").html(id);
+		
+		$.ajax(
+		{
+			type: "POST",
+			url: "ajax.php?session_id="+get_array['session_id']+"&nav=base.admin&run=admin_general_get_measuring_unit",
+			data: "id="+id,
+			success: function(data)
+			{
+				array = $.parseJSON(data);
+				
+				$(".BaseAdminMeasuringUnitAddEditValue[name='name']").val(array[0]);
+				$(".BaseAdminMeasuringUnitAddEditValue[name='symbol']").val(array[5]);
+				$(".BaseAdminMeasuringUnitAddEditValue[name='calculation']").val(array[6]);
+				$(".BaseAdminMeasuringUnitAddEditValue[name='min_value']").val(array[7]);
+				$(".BaseAdminMeasuringUnitAddEditValue[name='max_value']").val(array[8]);
+				$(".BaseAdminMeasuringUnitAddEditValue[name='calculation_exp']").val(array[9]);
+				
+				$(".BaseAdminMeasuringUnitAddEditValue[name='category'] option:selected").attr("selected", false);
+				$(".BaseAdminMeasuringUnitAddEditValue[name='type'] option:selected").attr("selected", false);
+				$(".BaseAdminMeasuringUnitAddEditValue[name='exp_from'] option:selected").attr("selected", false);
+				$(".BaseAdminMeasuringUnitAddEditValue[name='exp_to'] option:selected").attr("selected", false);
+				
+				if (array[1] === null)
+				{
+					$(".BaseAdminMeasuringUnitAddEditValue[name='category']").val("");
+				}
+				else
+				{
+					$(".BaseAdminMeasuringUnitAddEditValue[name='category'] option[value='"+array[1]+"']").attr("selected", true);
+				}
+				
+				if (array[2] === null)
+				{
+					$(".BaseAdminMeasuringUnitAddEditValue[name='type']").val("");
+				}
+				else
+				{
+					$(".BaseAdminMeasuringUnitAddEditValue[name='type'] option[value='"+array[2]+"']").attr("selected", true);
+				}
+				
+				if (array[3] === null)
+				{
+					$(".BaseAdminMeasuringUnitAddEditValue[name='exp_from']").val("");
+				}
+				else
+				{
+					$(".BaseAdminMeasuringUnitAddEditValue[name='exp_from'] option[value='"+array[3]+"']").attr("selected", true);
+				}
+				
+				if (array[4] === null)
+				{
+					$(".BaseAdminMeasuringUnitAddEditValue[name='exp_to']").val("");
+				}
+				else
+				{
+					$(".BaseAdminMeasuringUnitAddEditValue[name='exp_to'] option[value='"+array[4]+"']").attr("selected", true);
+				}
+
+				base_form_init();
+			}
+		});
 	});
 	
 	$(".BaseAdminMeasuringUnitDelete").each().live('click', function()
 	{
-		
+		$("#BaseAdminMeasuringUnitDeleteDialog").data('open_element', this).dialog("open");
 	});
 });
 /*]]>*/  
@@ -102,16 +231,16 @@ Are you sure?
 <table style='width: 100%'>
 	<tr>
 		<td style='width: 170px;'>Name:</td>
-		<td><input type='text' style='display: block;' /></td>
+		<td><input class='BaseAdminMeasuringUnitAddEditValue' name='name' type='text' style='display: block;' /></td>
 	</tr>
 	<tr>
 		<td>Category:</td>
 		<td>
-			<select name='numerator' style='display: block; width: 130px;'>
+			<select class='BaseAdminMeasuringUnitAddEditValue' name='category' style='display: block; width: 130px;'>
 			
 			<!-- FOREACH BEGIN ([[MEASURING_UNIT_CATEGORIES]]) -->
 		
-				<option value='[[MEASURING_UNIT_CATEGORIES:VALUE]]'>[[MEASURING_UNIT_CATEGORIES:CONTENT]]</option>
+				<option value='[[MEASURING_UNIT_CATEGORIES:ID]]'>[[MEASURING_UNIT_CATEGORIES:NAME]]</option>
 			
 			<!-- FOREACH END -->
 			
@@ -121,32 +250,48 @@ Are you sure?
 	<tr>
 		<td>Type:</td>
 		<td>
-			<select name='numerator' style='display: block; width: 130px;'>
-				<option>none</option>
-				<option>metric</option>
-				<option>anglo-american</option>
+			<select class='BaseAdminMeasuringUnitAddEditValue' name='type' style='display: block; width: 130px;'>
+				<option value='none'>none</option>
+				<option value='metric'>metric</option>
+				<option value='aa'>anglo-american</option>
 			</select>
 		</td>
 	</tr>
 	<tr>
 		<td>Secondary-Unit-Exp. from:</td>
 		<td>
-			<select name='numerator' style='display: block; width: 130px;'>
-				<option>none</option>
+			<select class='BaseAdminMeasuringUnitAddEditValue' name='exp_from' style='display: block; width: 130px;'>
+				<option value='none'>none</option>
+				<option value='24'>yocto - 10e-24</option>
+				<option value='21'>zepto - 10e-21</option>
+				<option value='18'>atto - 10e-18</option>
+				<option value='15'>femto - 10e-15</option>
+				<option value='12'>pico - 10e-12</option>
+				<option value='9'>nano - 10e-9</option>
+				<option value='6'>micro - 10e-6</option>
+				<option value='3'>milli - 10e-3</option>
 			</select>
 		</td>
 	</tr>
 	<tr>
 		<td>Secondary-Unit-Exp. to:</td>
 		<td>
-			<select name='numerator' style='display: block; width: 130px;'>
-				<option>none</option>
+			<select class='BaseAdminMeasuringUnitAddEditValue' name='exp_to' style='display: block; width: 130px;'>
+				<option value='none'>none</option>
+				<option value='3'>kilo - 10e3</option>
+				<option value='6'>mega - 10e6</option>
+				<option value='9'>giga - 10e9</option>
+				<option value='12'>tera - 10e12</option>
+				<option value='15'>peta - 10e15</option>
+				<option value='18'>exa - 10e18</option>
+				<option value='21'>zetta - 10e21</option>
+				<option value='24'>yota - 10e24</option>
 			</select>
 		</td>
 	</tr>
 	<tr>
 		<td>Symbol:</td>
-		<td><input type='text' /></td>
+		<td><input  class='BaseAdminMeasuringUnitAddEditValue' name='symbol' type='text' /></td>
 	</tr>
 </table>
 </div>
@@ -156,25 +301,26 @@ Are you sure?
 <table style='width: 100%'>
 	<tr>
 		<td style='width: 170px;'>Calculation:</td>
-		<td><input type='text' value='B[mul]0' /></td>
+		<td><input class='BaseAdminMeasuringUnitAddEditValue' name='calculation' type='text' value='B[mul]0' /></td>
 	</tr>
 	<tr>
 		<td>Min-Value:</td>
-		<td><input type='text' /></td>
+		<td><input class='BaseAdminMeasuringUnitAddEditValue' name='min_value' type='text' /></td>
 	</tr>
 	<tr>
 		<td>Max-Value:</td>
-		<td><input type='text' /></td>
+		<td><input class='BaseAdminMeasuringUnitAddEditValue' name='max_value' type='text' /></td>
 	</tr>
 	<tr>
 		<td>Calculation-Exp.:</td>
-		<td><input type='text' /></td>
+		<td><input class='BaseAdminMeasuringUnitAddEditValue' name='calculation_exp' type='text' /></td>
 	</tr>
 </table>
 </div>
 
-</table>
 </div>
+<div id='BaseAdminMeasuringUnitDialogFunction' style='display:none;'></div>
+<div id='BaseAdminMeasuringUnitDialogId' style='display:none;'></div>
 </div>
 
 <!-- CONTAINER BEGIN ("Measuring Units") -->

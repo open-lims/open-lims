@@ -80,24 +80,39 @@ class MeasuringUnit implements MeasuringUnitInterface
 
 	/**
 	 * @see MeasuringUnitInterface::create()
-	 * @param integer $base_id
 	 * @param integer $category_id
 	 * @param string $name
-	 * @param string $unit_symbol
-	 * @param float $min_value
-	 * @param float $max_value
+	 * @param string $symbol
+	 * @param integer $min_value
+	 * @param integer $max_value
 	 * @param integer $min_prefix_exponent
 	 * @param integer $max_prefix_exponent
 	 * @param integer $prefix_calculation_exponent
-	 * @param string $calculation
+	 * @param integer $calculation
 	 * @param string $type
 	 * @return integer
 	 */
-	public function create($base_id, $category_id, $name, $unit_symbol, $min_value, $max_value, $min_prefix_exponent, $max_prefix_exponent, $prefix_calculation_exponent, $calculation, $type)
+	public function create($category_id, $name, $symbol, $min_value, $max_value, $min_prefix_exponent, $max_prefix_exponent, $prefix_calculation_exponent, $calculation, $type)
 	{
-		if ($this->measuring_unit)
+		if($name and $symbol)
 		{
-			return $this->measuring_unit->create($base_id, $category_id, $name, $unit_symbol, $min_value, $max_value, $min_prefix_exponent, $max_prefix_exponent, $prefix_calculation_exponent, $calculation, $type);
+			if (is_numeric($category_id))
+			{
+				$base_id = MeasuringUnit_Access::get_category_base_id($category_id);
+			}
+			else
+			{
+				$base_id = null;
+			}
+		
+			if ($this->measuring_unit)
+			{
+				return $this->measuring_unit->create($base_id, $category_id, $name, $symbol, $min_value, $max_value, $min_prefix_exponent, $max_prefix_exponent, $prefix_calculation_exponent, $calculation, $type);
+			}
+			else
+			{
+				return null;
+			}
 		}
 		else
 		{
@@ -119,6 +134,22 @@ class MeasuringUnit implements MeasuringUnitInterface
 		{
 			return null;
 		}
+	}
+	
+	/**
+	 * @see MeasuringUnitInterface::get_category_id()
+	 * @return integer
+	 */
+	public function get_category_id()
+	{
+		if ($this->measuring_unit_id and $this->measuring_unit)
+    	{
+    		return $this->measuring_unit->get_category_id();
+    	}
+    	else
+    	{
+    		return null;
+    	}
 	}
 	
 	/**
@@ -153,6 +184,290 @@ class MeasuringUnit implements MeasuringUnitInterface
     	}
 	}
 
+	/**
+	 * @see MeasuringUnitInterface::get_min_value()
+	 * @return integer
+	 */
+	public function get_min_value()
+	{
+		if ($this->measuring_unit_id and $this->measuring_unit)
+    	{
+    		return $this->measuring_unit->get_min_value();
+    	}
+    	else
+    	{
+    		return null;
+    	}
+	}
+	
+	/**
+	 * @see MeasuringUnitInterface::get_max_value()
+	 * @return integer
+	 */
+	public function get_max_value()
+	{
+		if ($this->measuring_unit_id and $this->measuring_unit)
+    	{
+    		return $this->measuring_unit->get_max_value();
+    	}
+    	else
+    	{
+    		return null;
+    	}
+	}
+	
+	/**
+	 * @see MeasuringUnitInterface::get_min_prefix_exponent()
+	 * @return integer
+	 */
+	public function get_min_prefix_exponent()
+	{
+		if ($this->measuring_unit_id and $this->measuring_unit)
+    	{
+    		return $this->measuring_unit->get_min_prefix_exponent();
+    	}
+    	else
+    	{
+    		return null;
+    	}
+	}
+	
+	/**
+	 * @see MeasuringUnitInterface::get_max_prefix_exponent()
+	 * @return integer
+	 */
+	public function get_max_prefix_exponent()
+	{
+		if ($this->measuring_unit_id and $this->measuring_unit)
+    	{
+    		return $this->measuring_unit->get_max_prefix_exponent();
+    	}
+    	else
+    	{
+    		return null;
+    	}
+	}
+	
+	/**
+	 * @see MeasuringUnitInterface::get_prefix_calculation_exponent()
+	 * @return integer
+	 */
+	public function get_prefix_calculation_exponent()
+	{
+		if ($this->measuring_unit_id and $this->measuring_unit)
+    	{
+    		return $this->measuring_unit->get_prefix_calculation_exponent();
+    	}
+    	else
+    	{
+    		return null;
+    	}
+	}
+	
+	/**
+	 * @see MeasuringUnitInterface::get_calculation()
+	 * @return string
+	 */
+	public function get_calculation()
+	{
+		if ($this->measuring_unit_id and $this->measuring_unit)
+    	{
+    		return $this->measuring_unit->get_calculation();
+    	}
+    	else
+    	{
+    		return null;
+    	}
+	}
+	
+	/**
+	 * @see MeasuringUnitInterface::get_type()
+	 * @return string
+	 */
+	public function get_type()
+	{
+		if ($this->measuring_unit_id and $this->measuring_unit)
+    	{
+    		return $this->measuring_unit->get_type();
+    	}
+    	else
+    	{
+    		return null;
+    	}
+	}
+	
+	/**
+	 * @see MeasuringUnitInterface::set_category_id()
+	 * @param integer $category_id
+	 * @return bool
+	 */
+	public function set_category_id($category_id)
+	{
+		if ($this->measuring_unit_id and $this->measuring_unit)
+    	{
+    		return $this->measuring_unit->set_category_id($category_id);
+    	}
+    	else
+    	{
+    		return null;
+    	}
+	}
+	
+	/**
+	 * @see MeasuringUnitInterface::set_name()
+	 * @param string $name
+	 * @return bool
+	 */
+	public function set_name($name)
+	{
+		if ($this->measuring_unit_id and $this->measuring_unit)
+    	{
+    		return $this->measuring_unit->set_name($name);
+    	}
+    	else
+    	{
+    		return null;
+    	}
+	}
+	
+	/**
+	 * @see MeasuringUnitInterface::set_unit_symbol()
+	 * @param string $unit_symbol
+	 * @return bool
+	 */
+	public function set_unit_symbol($unit_symbol)
+	{
+		if ($this->measuring_unit_id and $this->measuring_unit)
+    	{
+    		return $this->measuring_unit->set_unit_symbol($unit_symbol);
+    	}
+    	else
+    	{
+    		return null;
+    	}
+	}
+	
+	/**
+	 * @see MeasuringUnitInterface::set_min_value()
+	 * @param float $min_value
+	 * @return bool
+	 */
+	public function set_min_value($min_value)
+	{
+		if ($this->measuring_unit_id and $this->measuring_unit)
+    	{
+    		return $this->measuring_unit->set_min_value($min_value);
+    	}
+    	else
+    	{
+    		return null;
+    	}
+	}
+	
+	/**
+	 * @see MeasuringUnitInterface::set_max_value()
+	 * @param float $max_value
+	 * @return bool
+	 */
+	public function set_max_value($max_value)
+	{
+		if ($this->measuring_unit_id and $this->measuring_unit)
+    	{
+    		return $this->measuring_unit->set_max_value($max_value);
+    	}
+    	else
+    	{
+    		return null;
+    	}
+	}
+	
+	/**
+	 * @see MeasuringUnitInterface::set_min_prefix_exponent()
+	 * @param integer $min_prefix_exponent
+	 * @return bool
+	 */
+	public function set_min_prefix_exponent($min_prefix_exponent)
+	{
+		if ($this->measuring_unit_id and $this->measuring_unit)
+    	{
+    		return $this->measuring_unit->set_min_prefix_exponent($min_prefix_exponent);
+    	}
+    	else
+    	{
+    		return null;
+    	}
+	}
+	
+	/**
+	 * @see MeasuringUnitInterface::set_max_prefix_exponent()
+	 * @param integer $max_prefix_exponent
+	 * @return bool
+	 */
+	public function set_max_prefix_exponent($max_prefix_exponent)
+	{
+		if ($this->measuring_unit_id and $this->measuring_unit)
+    	{
+    		return $this->measuring_unit->set_max_prefix_exponent($max_prefix_exponent);
+    	}
+    	else
+    	{
+    		return null;
+    	}
+	}
+	
+	/**
+	 * @see MeasuringUnitInterface::set_prefix_calculation_exponent()
+	 * @param integer $prefix_calculation_exponent
+	 * @return bool
+	 */
+	public function set_prefix_calculation_exponent($prefix_calculation_exponent)
+	{
+		if ($this->measuring_unit_id and $this->measuring_unit)
+    	{
+    		return $this->measuring_unit->set_prefix_calculation_exponent($prefix_calculation_exponent);
+    	}
+    	else
+    	{
+    		return null;
+    	}
+	}
+	
+	/**
+	 * @see MeasuringUnitInterface::set_calculation()
+	 * @param string $calculation
+	 * @return bool
+	 */
+	public function set_calculation($calculation)
+	{
+		if ($this->measuring_unit_id and $this->measuring_unit)
+    	{
+    		return $this->measuring_unit->set_calculation($calculation);
+    	}
+    	else
+    	{
+    		return null;
+    	}
+	}
+	
+	/**
+	 * @see MeasuringUnitInterface::set_type()
+	 * @param string $type
+	 * @return bool
+	 */
+	public function set_type($type)
+	{
+		if ($this->measuring_unit_id and $this->measuring_unit)
+    	{
+    		return $this->measuring_unit->set_type($type);
+    	}
+    	else
+    	{
+    		return null;
+    	}
+	}
+	
+	
+	
 	/**
 	 * @param integer $exponent
 	 * @param bool $positive
@@ -397,4 +712,14 @@ class MeasuringUnit implements MeasuringUnitInterface
 		
 		return $return_array;
 	}
+	
+ 	/**
+ 	 * @todo is it in use?
+     * @param integer $measuring_unit_id
+     * @return bool
+     */
+    public static function is_deletable($measuring_unit_id)
+    {
+    	return MeasuringUnit_Access::is_deletable($measuring_unit_id);
+    }
 }

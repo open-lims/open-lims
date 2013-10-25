@@ -27,7 +27,7 @@
  */
 class MeasuringUnit_Access
 {
-	const MEASURING_UNIT_PK_SEQUENCE = 'core_measuring_units_id_seq';
+	const MEASURING_UNIT_PK_SEQUENCE = 'core_base_measuring_units_id_seq';
 	
 	private $id;
 	
@@ -42,6 +42,7 @@ class MeasuringUnit_Access
 	private $prefix_calculation_exponent;
 	private $calculation;
 	private $type;
+	private $created_by_user;
 	
 	/**
 	 * @param integer $id
@@ -75,6 +76,15 @@ class MeasuringUnit_Access
 				$this->prefix_calculation_exponent	= $data['prefix_calculation_exponent'];
 				$this->calculation					= $data['calculation'];
 				$this->type							= $data['type'];
+				
+				if ($data['created_by_user'] == "t")
+				{
+					$this->created_by_user = true;
+				}
+				else
+				{
+					$this->created_by_user = false;
+				}
 			}
 			else
 			{
@@ -99,6 +109,7 @@ class MeasuringUnit_Access
 			unset($this->prefix_calculation_exponent);
 			unset($this->calculation);
 			unset($this->type);
+			unset($this->created_by_user);
 		}
 	}
 	
@@ -210,8 +221,8 @@ class MeasuringUnit_Access
 				$type_insert = "NULL";
 			}
 			
-			$sql_write = "INSERT INTO ".constant("MEASURING_UNIT_TABLE")." (id,base_id,category_id,name,unit_symbol,min_value,max_value,min_prefix_exponent,max_prefix_exponent,prefix_calculation_exponent,calculation,type) " .
-							"VALUES (nextval('".self::MEASURING_UNIT_PK_SEQUENCE."'::regclass),".$base_id_insert.",".$category_id.",'".$name."','".$unit_symbol."',".$min_value_insert.",".$max_value_insert.",".$min_prefix_exponent_insert.",".$max_prefix_exponent_insert.",".$prefix_calculation_exponent_insert.",".$calculation_insert.",".$type_insert.")";
+			$sql_write = "INSERT INTO ".constant("MEASURING_UNIT_TABLE")." (id,base_id,category_id,name,unit_symbol,min_value,max_value,min_prefix_exponent,max_prefix_exponent,prefix_calculation_exponent,calculation,type,created_by_user) " .
+							"VALUES (nextval('".self::MEASURING_UNIT_PK_SEQUENCE."'::regclass),".$base_id_insert.",".$category_id.",'".$name."','".$unit_symbol."',".$min_value_insert.",".$max_value_insert.",".$min_prefix_exponent_insert.",".$max_prefix_exponent_insert.",".$prefix_calculation_exponent_insert.",".$calculation_insert.",".$type_insert.",'t')";
 			
 			$res_write = $db->db_query($sql_write);
 			
@@ -332,7 +343,7 @@ class MeasuringUnit_Access
      */
 	public function get_min_value()
 	{
-		if ($this->min_value)
+		if (is_numeric($this->min_value))
 		{
 			return $this->min_value;
 		}
@@ -347,7 +358,7 @@ class MeasuringUnit_Access
      */
 	public function get_max_value()
 	{
-		if ($this->max_value)
+		if (is_numeric($this->max_value))
 		{
 			return $this->max_value;
 		}
@@ -362,7 +373,7 @@ class MeasuringUnit_Access
      */
 	public function get_min_prefix_exponent()
 	{
-		if ($this->min_prefix_exponent)
+		if (is_numeric($this->min_prefix_exponent))
 		{
 			return $this->min_prefix_exponent;
 		}
@@ -377,7 +388,7 @@ class MeasuringUnit_Access
      */
 	public function get_max_prefix_exponent()
 	{
-		if ($this->max_prefix_exponent)
+		if (is_numeric($this->max_prefix_exponent))
 		{
 			return $this->max_prefix_exponent;
 		}
@@ -392,7 +403,7 @@ class MeasuringUnit_Access
      */
 	public function get_prefix_calculation_exponent()
 	{
-		if ($this->prefix_calculation_exponent)
+		if (is_numeric($this->prefix_calculation_exponent))
 		{
 			return $this->prefix_calculation_exponent;
 		}
@@ -433,6 +444,21 @@ class MeasuringUnit_Access
 	}
 	
 	/**
+	 * @return bool
+	 */
+	public function get_created_by_user()
+	{
+		if (isset($this->created_by_user))
+		{
+			return $this->created_by_user;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
 	 * @param integer $base_id
 	 * @return bool
 	 */
@@ -469,9 +495,18 @@ class MeasuringUnit_Access
 	{
 		global $db;
 
-		if ($this->id and is_numeric($category_id))
+		if ($this->id)
 		{
-			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET category_id = '".$category_id."' WHERE id = ".$this->id."";
+			if (is_numeric($category_id))
+			{
+				$category_id_insert = $category_id;
+			}
+			else
+			{
+				$category_id_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET category_id = ".$category_id_insert." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -556,9 +591,18 @@ class MeasuringUnit_Access
 	{
 		global $db;
 
-		if ($this->id and is_numeric($min_value))
+		if ($this->id)
 		{
-			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET min_value = '".$min_value."' WHERE id = ".$this->id."";
+			if (is_numeric($min_value))
+			{
+				$min_value_insert = $min_value;
+			}
+			else
+			{
+				$min_value_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET min_value = ".$min_value_insert." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -585,9 +629,18 @@ class MeasuringUnit_Access
 	{
 		global $db;
 
-		if ($this->id and is_numeric($max_value))
+		if ($this->id)
 		{
-			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET max_value = '".$max_value."' WHERE id = ".$this->id."";
+			if (is_numeric($max_value))
+			{
+				$max_value_insert = $max_value;
+			}
+			else
+			{
+				$max_value_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET max_value = ".$max_value_insert." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -614,9 +667,18 @@ class MeasuringUnit_Access
 	{
 		global $db;
 
-		if ($this->id and is_numeric($min_prefix_exponent))
+		if ($this->id)
 		{
-			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET min_prefix_exponent = '".$min_prefix_exponent."' WHERE id = ".$this->id."";
+			if (is_numeric($min_prefix_exponent))
+			{
+				$min_prefix_exponent_insert = $min_prefix_exponent;
+			}
+			else
+			{
+				$min_prefix_exponent_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET min_prefix_exponent = ".$min_prefix_exponent_insert." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -643,9 +705,18 @@ class MeasuringUnit_Access
 	{
 		global $db;
 
-		if ($this->id and is_numeric($max_prefix_exponent))
+		if ($this->id)
 		{
-			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET max_prefix_exponent = '".$max_prefix_exponent."' WHERE id = ".$this->id."";
+			if (is_numeric($max_prefix_exponent))
+			{
+				$max_prefix_exponent_insert = $max_prefix_exponent;
+			}
+			else
+			{
+				$max_prefix_exponent_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET max_prefix_exponent = ".$max_prefix_exponent_insert." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -672,9 +743,18 @@ class MeasuringUnit_Access
 	{
 		global $db;
 
-		if ($this->id and is_numeric($prefix_calculation_exponent))
+		if ($this->id)
 		{
-			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET prefix_calculation_exponent = '".$prefix_calculation_exponent."' WHERE id = ".$this->id."";
+			if (is_numeric($prefix_calculation_exponent))
+			{
+				$prefix_calculation_exponent_insert = $prefix_calculation_exponent;
+			}
+			else
+			{
+				$prefix_calculation_exponent_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET prefix_calculation_exponent = ".$prefix_calculation_exponent_insert." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -701,9 +781,18 @@ class MeasuringUnit_Access
 	{
 		global $db;
 
-		if ($this->id and $calculation)
+		if ($this->id)
 		{
-			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET calculation = '".$calculation."' WHERE id = ".$this->id."";
+			if ($calculation)
+			{
+				$calculation_insert = "'".$calculation."'";
+			}
+			else
+			{
+				$calculation_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET calculation = ".$calculation_insert." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -730,9 +819,18 @@ class MeasuringUnit_Access
 	{
 		global $db;
 
-		if ($this->id and $type)
+		if ($this->id)
 		{
-			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET type = '".$type."' WHERE id = ".$this->id."";
+			if ($type)
+			{
+				$type_insert = "'".$type."'";
+			}
+			else
+			{
+				$type_insert = "NULL";
+			}
+			
+			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET type = ".$type_insert." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
 			if ($db->db_affected_rows($res))
@@ -834,7 +932,7 @@ class MeasuringUnit_Access
 		$sql = "SELECT id,name,min_prefix_exponent,max_prefix_exponent,unit_symbol FROM ".constant("MEASURING_UNIT_TABLE")." WHERE category_id IS NULL ORDER BY id";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while($data = $db->db_fetch_assoc($res))
 		{
 			$temp_array = array();
 			$temp_array['id'] = $data['id'];
@@ -846,7 +944,7 @@ class MeasuringUnit_Access
 			unset($temp_array);
 		}
 		
-		if (is_array($return_array))
+		if(is_array($return_array))
 		{
 			return $return_array;
 		}
@@ -855,5 +953,63 @@ class MeasuringUnit_Access
 			return null;
 		}
 	}
+	
+	/**
+	 * @param integer $category_id
+	 * @return integer
+	 */
+	public static function get_category_base_id($category_id)
+	{
+		global $db;
+		
+		if(is_numeric($category_id))
+		{
+			$sql = "SELECT min(id) AS id FROM ".constant("MEASURING_UNIT_TABLE")." WHERE category_id = '".$category_id."' AND calculation='B'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data['id'])
+			{
+				return $data['id'];
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+     * @param integer $measuring_unit_id
+     * @return bool
+     */
+    public static function is_deletable($measuring_unit_id)
+    {
+    	global $db;
+    	
+   		if(is_numeric($measuring_unit_id))
+		{
+			$sql = "SELECT created_by_user FROM ".constant("MEASURING_UNIT_TABLE")." WHERE id = '".$measuring_unit_id."'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data['created_by_user'] == "t")
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+    }
 }
 ?>

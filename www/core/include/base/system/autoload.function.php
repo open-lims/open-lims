@@ -66,6 +66,7 @@ function __autoload($classname)
 	$classes['DatetimeHandler']										= $path_prefix."core/include/base/environment/datetime_handler.class.php";
 	$classes['Language']											= $path_prefix."core/include/base/environment/language.class.php";
 	$classes['MeasuringUnit']										= $path_prefix."core/include/base/environment/measuring_unit.class.php";
+	$classes['MeasuringUnitCategory']								= $path_prefix."core/include/base/environment/measuring_unit_category.class.php";
 	$classes['MeasuringUnitRatio']									= $path_prefix."core/include/base/environment/measuring_unit_ratio.class.php";
 	$classes['PaperSize']											= $path_prefix."core/include/base/environment/paper_size.class.php";
 	$classes['Timezone']											= $path_prefix."core/include/base/environment/timezone.class.php";

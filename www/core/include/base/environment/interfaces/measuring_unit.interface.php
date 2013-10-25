@@ -36,18 +36,29 @@ interface MeasuringUnitInterface
 	function __destruct();
 	
 	/**
-	 * @param integer $toid
+	 * @param integer $category_id
 	 * @param string $name
-	 * @param integer $type
-	 * @param string $unit_symbol
-	 * @param stirng $calculation
+	 * @param string $symbol
+	 * @param integer $min_value
+	 * @param integer $max_value
+	 * @param integer $min_prefix_exponent
+	 * @param integer $max_prefix_exponent
+	 * @param integer $prefix_calculcation_exponent
+	 * @param integer $calculation
+	 * @param string $type
+	 * @return integer
 	 */
-	public function create($base_id, $category_id, $name, $unit_symbol, $min_value, $max_value, $min_prefix_exponent, $max_prefix_exponent, $prefix_calculation_exponent, $calculation, $type);
+	public function create($category_id, $name, $symbol, $min_value, $max_value, $min_prefix_exponent, $max_prefix_exponent, $prefix_calculation_exponent, $calculation, $type);
 	
 	/**
 	 * @return bool
 	 */
 	public function delete();
+	
+	/**
+	 * @return integer
+	 */
+	public function get_category_id();
 	
 	/**
 	 * @return string
@@ -58,6 +69,101 @@ interface MeasuringUnitInterface
 	 * @return string
 	 */
 	public function get_unit_symbol();
+	
+	/**
+	 * @return integer
+	 */
+	public function get_min_value();
+	
+	/**
+	 * @return integer
+	 */
+	public function get_max_value();
+	
+	/**
+	 * @return integer
+	 */
+	public function get_min_prefix_exponent();
+	
+	/**
+	 * @return integer
+	 */
+	public function get_max_prefix_exponent();
+	
+	/**
+	 * @return integer
+	 */
+	public function get_prefix_calculation_exponent();
+	
+	/**
+	 * @return string
+	 */
+	public function get_calculation();
+	
+	/**
+	 * @return string
+	 */
+	public function get_type();
+	
+	/**
+	 * @param integer $category_id
+	 * @return bool
+	 */
+	public function set_category_id($category_id);
+	
+	/**
+	 * @param string $name
+	 * @return bool
+	 */
+	public function set_name($name);
+	
+	/**
+	 * @param string $unit_symbol
+	 * @return bool
+	 */
+	public function set_unit_symbol($unit_symbol);
+	
+	/**
+	 * @param float $min_value
+	 * @return bool
+	 */
+	public function set_min_value($min_value);
+	
+	/**
+	 * @param float $max_value
+	 * @return bool
+	 */
+	public function set_max_value($max_value);
+	
+	/**
+	 * @param integer $min_prefix_exponent
+	 * @return bool
+	 */
+	public function set_min_prefix_exponent($min_prefix_exponent);
+	
+	/**
+	 * @param integer $max_prefix_exponent
+	 * @return bool
+	 */
+	public function set_max_prefix_exponent($max_prefix_exponent);
+	
+	/**
+	 * @param integer $prefix_calculation_exponent
+	 * @return bool
+	 */
+	public function set_prefix_calculation_exponent($prefix_calculation_exponent);
+	
+	/**
+	 * @param string $calculation
+	 * @return bool
+	 */
+	public function set_calculation($calculation);
+	
+	/**
+	 * @param string $type
+	 * @return bool
+	 */
+	public function set_type($type);
 	
 	
 	/**

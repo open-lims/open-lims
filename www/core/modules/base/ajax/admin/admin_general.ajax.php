@@ -350,6 +350,17 @@ class AdminGeneralAjax
 							}
 						}
 					}
+					
+					$list_array[$key]['edit'] = "<a title='edit' style='cursor: pointer;' id='BaseAdminMeasuringUnitEdit".$list_array[$key]['id']."' class='BaseAdminMeasuringUnitEdit'><img src='images/icons/edit.png' alt='D' /></a>";
+					
+					if (MeasuringUnit::is_deletable($list_array[$key]['id']) === true)
+					{
+						$list_array[$key]['delete'] = "<a title='delete' style='cursor: pointer;' id='BaseAdminMeasuringUnitDelete".$list_array[$key]['id']."' class='BaseAdminMeasuringUnitDelete'><img src='images/icons/delete.png' alt='D' /></a>";
+					}
+					else
+					{
+						$list_array[$key]['delete'] = "";
+					}
 				}
 			}
 			else
@@ -387,7 +398,6 @@ class AdminGeneralAjax
 	}
 	
 	/**
-	 * @param string $base_id
 	 * @param string $category_id
 	 * @param string $name
 	 * @param string $min_value
@@ -399,20 +409,188 @@ class AdminGeneralAjax
 	 * @param string $type
 	 * @return integer
 	 */
-	public static function add_measuring_unit($base_id, $category_id, $name, $min_value, $max_value, $min_prefix_exponent, $max_prefix_exponent, $prefix_calculcation_exponent, $calculation, $type)
+	public static function add_measuring_unit($category_id, $name, $symbol, $min_value, $max_value, $min_prefix_exponent, $max_prefix_exponent, $prefix_calculation_exponent, $calculation, $type)
 	{
+		global $user;
 		
+		if ($user->is_admin())
+		{
+			$measuring_unit = new MeasuringUnit(null);
+			if ($measuring_unit->create($category_id, $name, $symbol, $min_value, $max_value, $min_prefix_exponent, $max_prefix_exponent, $prefix_calculation_exponent, $calculation, $type))
+			{
+				return "1";
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
+	}
+	
+	/**
+	 * @param integer $id
+	 * @param string $category_id
+	 * @param string $name
+	 * @param string $min_value
+	 * @param string $max_value
+	 * @param string $min_prefix_exponent
+	 * @param string $max_prefix_exponent
+	 * @param string $prefix_calculcation_exponent
+	 * @param string $calculation
+	 * @param string $type
+	 * @return integer
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function set_measuring_unit($id, $category_id, $name, $symbol, $min_value, $max_value, $min_prefix_exponent, $max_prefix_exponent, $prefix_calculation_exponent, $calculation, $type)
+	{
+		global $user;
 		
-		// create($base_id, $category_id, $name, $unit_symbol, $min_value, $max_value, $min_prefix_exponent, $max_prefix_exponent, $prefix_calculation_exponent, $calculation, $type)
+		if ($user->is_admin())
+		{
+			if (is_numeric($id) and $name and $symbol)
+			{
+				$measuring_unit = new MeasuringUnit($id);
+				
+				if ($measuring_unit->set_category_id($category_id) == false)
+				{
+					return "0";
+				}
+				
+				if ($measuring_unit->set_name($name) == false)
+				{
+					return "0";
+				}
+				
+				if ($measuring_unit->set_unit_symbol($symbol) == false)
+				{
+					return "0";
+				}
+				
+				if ($measuring_unit->set_min_value($min_value) == false)
+				{
+					return "0";
+				}
+				
+				if ($measuring_unit->set_max_value($max_value) == false)
+				{
+					return "0";
+				}
+				
+				if ($measuring_unit->set_min_prefix_exponent($min_prefix_exponent) == false)
+				{
+					return "0";
+				}
+				
+				if ($measuring_unit->set_max_prefix_exponent($max_prefix_exponent) == false)
+				{
+					return "0";
+				}
+				
+				if ($measuring_unit->set_prefix_calculation_exponent($prefix_calculation_exponent) == false)
+				{
+					return "0";
+				}
+				
+				if ($measuring_unit->set_calculation($calculation) == false)
+				{
+					return "0";
+				}
+				
+				if ($measuring_unit->set_type($type) == false)
+				{
+					return "0";
+				}
+				
+				return "1";
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
 	}
 	
 	/**
 	 * @param string $id
 	 * @return string
+	 * @throws BaseUserAccessDeniedException
 	 */
 	public static function delete_measuring_unit($id)
 	{
+		global $user;
 		
+		if ($user->is_admin())
+		{
+			if (is_numeric($id))
+			{
+				$measuring_unit = new MeasuringUnit($id);
+				if ($measuring_unit->delete() == true)
+				{
+					return "1";
+				}
+				else
+				{
+					return "0";
+				}
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
+	}
+	
+	/**
+	 * @param string $id
+	 * @return string
+	 * @throws BaseUserAccessDeniedException
+	 */
+	public static function get_measuring_unit($id)
+	{
+		global $user;
+		
+		if ($user->is_admin())
+		{
+			if (is_numeric($id))
+			{
+				$measuring_unit = new MeasuringUnit($id);
+				
+				$return_array = array();
+				
+				$return_array[0] = $measuring_unit->get_name();
+				$return_array[1] = $measuring_unit->get_category_id();
+				$return_array[2] = $measuring_unit->get_type();
+				$return_array[3] = $measuring_unit->get_min_prefix_exponent();
+				$return_array[4] = $measuring_unit->get_max_prefix_exponent();
+				$return_array[5] = $measuring_unit->get_unit_symbol();
+				$return_array[6] = $measuring_unit->get_calculation();
+				$return_array[7] = $measuring_unit->get_min_value();
+				$return_array[8] = $measuring_unit->get_max_value();
+				$return_array[9] = $measuring_unit->get_prefix_calculation_exponent();
+				
+				return json_encode($return_array);
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
 	}
 	
 	/**

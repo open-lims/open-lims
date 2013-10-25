@@ -53,6 +53,15 @@ class MeasuringUnitCategory_Access
 			{
 				$this->id			= $data['id'];
 				$this->name			= $data['name'];
+				
+				if ($data['created_by_user'] == "t")
+				{
+					$this->created_by_user = true;
+				}
+				else
+				{
+					$this->created_by_user = false;
+				}
 			}
 			else
 			{
@@ -67,6 +76,7 @@ class MeasuringUnitCategory_Access
 		{
 			unset($this->id);
 			unset($this->name);
+			unset($this->created_by_user);
 		}
 	}
 	
@@ -80,8 +90,8 @@ class MeasuringUnitCategory_Access
 		
 		if ($name)
 		{			
-			$sql_write = "INSERT INTO ".constant("MEASURING_UNIT_CATEGORY_TABLE")." (id,name) " .
-							"VALUES (nextval('".self::MEASURING_UNIT_PK_SEQUENCE."'::regclass),'".$name."')";
+			$sql_write = "INSERT INTO ".constant("MEASURING_UNIT_CATEGORY_TABLE")." (id,name,created_by_user) " .
+							"VALUES (nextval('".self::MEASURING_UNIT_PK_SEQUENCE."'::regclass),'".$name."','t')";
 			
 			$res_write = $db->db_query($sql_write);
 			
@@ -153,6 +163,21 @@ class MeasuringUnitCategory_Access
 	}
 	
 	/**
+	 * @return bool
+	 */
+	public function get_created_by_user()
+	{
+		if (isset($this->created_by_user))
+		{
+			return $this->created_by_user;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
 	 * @param string $name
 	 * @return bool
 	 */
@@ -196,11 +221,7 @@ class MeasuringUnitCategory_Access
 		
 		while ($data = $db->db_fetch_assoc($res))
 		{
-			$temp_array = array();
-			$temp_array['id'] = $data['id'];
-			$temp_array['name'] = $data['name'];
-			array_push($return_array,$temp_array);
-			unset($temp_array);
+			array_push($return_array, array("id" => $data['id'], "name" => $data['name']));
 		}
 		
 		if (is_array($return_array))

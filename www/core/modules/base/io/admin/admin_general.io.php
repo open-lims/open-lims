@@ -83,9 +83,9 @@ class AdminGeneralIO
 	
 	public static function list_measuring_units()
 	{
-		$list = new List_IO("AdminGeneralMeasuringUnit", "ajax.php?nav=base", "admin_general_list_measuring_units", "admin_general_count_measuring_units", null, "AdminGeneralMeasuringUnit");
+		$list = new List_IO("AdminGeneralMeasuringUnit", "ajax.php?nav=base.admin", "admin_general_list_measuring_units", "admin_general_count_measuring_units", null, "AdminGeneralMeasuringUnit");
 		
-		$list->add_column("","symbol",false,"16px");
+		$list->add_column("","symbol",false,"20px");
 		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"name",true,null);
 		$list->add_column(Language::get_message("BaseGeneralListColumnSymbol", "general"),"unit_symbol",false,null);
 		$list->add_column("Secondary Units","secondary_units",false,null);
@@ -93,11 +93,16 @@ class AdminGeneralIO
 		$list->add_column("Max-Value","max_value",true,null);
 		$list->add_column("Category","category",true,null);
 		$list->add_column(Language::get_message("BaseGeneralListColumnType", "general"),"type",true,null);
+		$list->add_column("", "edit", false, "20px");
+		$list->add_column("", "delete", false, "20px");
+		
 		
 		
 		$template = new HTMLTemplate("base/admin/general/list_measuring_units.html");
 		
 		$template->set_var("list", $list->get_list());
+		
+		$template->set_var("measuring_unit_categories", MeasuringUnitCategory::list_categories());
 		
 		$template->output();
 	}

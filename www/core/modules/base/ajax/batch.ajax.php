@@ -49,7 +49,13 @@ class BatchAjax
 			$entries_per_page = 20;
 		}
 		
-		$list_array = Batch_Wrapper::list_batches(null, $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
+		$datetime_handler_end = new DatetimeHandler();
+		$datetime_handler_end->sub_day(7);
+		
+		$datetime_handler_create = new DatetimeHandler();
+		$datetime_handler_create->sub_day(30);
+		
+		$list_array = Batch_Wrapper::list_batches($datetime_handler_create->get_formatted_string("Y-m-d H:i:s"), $datetime_handler_end->get_formatted_string("Y-m-d H:i:s"), $sortvalue, $sortmethod, ($page*$entries_per_page)-$entries_per_page, ($page*$entries_per_page));
 
 		if (is_array($list_array) and count($list_array) >= 1)
 		{
@@ -96,7 +102,7 @@ class BatchAjax
 		}
 		else
 		{
-			$list_request->empty_message("<span class='italic'>No Batches at the moment</span>");
+			$list_request->empty_message("<span class='italic'>No Batches in the last 7 days</span>");
 		}
 
 		$list_request->set_array($list_array);
@@ -110,7 +116,13 @@ class BatchAjax
 	 */
 	public static function count_batches($json_argument_array)
 	{
-		return Batch_Wrapper::count_batches(null);
+		$datetime_handler_end = new DatetimeHandler();
+		$datetime_handler_end->sub_day(7);
+		
+		$datetime_handler_create = new DatetimeHandler();
+		$datetime_handler_create->sub_day(30);
+		
+		return Batch_Wrapper::count_batches($datetime_handler_create->get_formatted_string("Y-m-d H:i:s"), $datetime_handler_end->get_formatted_string("Y-m-d H:i:s"));
 	}
 
 	/**

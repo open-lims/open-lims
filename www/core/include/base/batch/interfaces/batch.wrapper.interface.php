@@ -28,18 +28,20 @@
 interface Batch_WrapperInterface
 {
 	/**
-	 * @param string $datetime
+	 * @param string $create_datetime
+	 * @param string $end_datetime
 	 * @param string $order_by
 	 * @param string $order_method
 	 * @param integer $start
 	 * @param integer $end
 	 * @return array
 	 */
-	public static function list_batches($datetime, $order_by, $order_method, $start, $end);
+	public static function list_batches($create_datetime, $end_datetime, $order_by, $order_method, $start, $end);
 	
 	/**
-	 * @param string $datetime
+	 * @param string $create_datetime
+	 * @param string $end_datetime
 	 * @return integer
 	 */
-	public static function count_batches($datetime);
+	public static function count_batches($create_datetime, $end_datetime);
 }
