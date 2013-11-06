@@ -121,13 +121,13 @@ ValueHandler = function(field_class, decimal_separator, thousand_separator)
 	get_json = function()
 	{
 		var error = false;
-		var json = '{';
+		var json_array = new Object();
 		
 		$("."+field_class+":radio:checked").each(function()
 		{
 			var name = $(this).attr("name");
 			var value = $(this).val();
-			json += '\"'+name+'\":\"'+value+'\",';
+			json_array['name'] = value;
 		});
 		
 		$("."+field_class+":checkbox").each(function()
@@ -136,13 +136,13 @@ ValueHandler = function(field_class, decimal_separator, thousand_separator)
 			{
 				var name = $(this).attr("name");
 				var value =  $(this).val();
-				json += '\"'+name+'\":\"'+value+'\",';
+				json_array[name] = value;
 			}
 			else
 			{
 				var name = $(this).attr("name");
 				var value = 0;
-				json += '\"'+name+'\":\"'+value+'\",';
+				json_array[name] = value;
 			}
 		});
 		
@@ -257,12 +257,12 @@ ValueHandler = function(field_class, decimal_separator, thousand_separator)
 			{
 				var name = $(this).attr("name");
 				var value = $(this).val();
-				json += '\"'+name+'\":\"'+value+'\",';
+				json_array[name] = value;
 			}
 		});
 		
-		json = json.substr(0,json.length-1);
-		json += '}';
+		
+		json = JSON.stringify(json_array);
 		
 		if (error === true)
 		{

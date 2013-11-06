@@ -480,13 +480,13 @@ class ValueAjax
 	 * @return string
 	 */
 	public static function update($value_id, $previous_version_id, $value_array, $major)
-	{
+	{		
 		if (is_numeric($value_id))
-		{
+		{			
 			$value = Value::get_instance($value_id);
 			
 			if ($value->is_write_access())
-			{
+			{						
 				$value_array = json_decode($value_array, true);
 				
 				if (is_array($value_array))
