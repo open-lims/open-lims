@@ -521,6 +521,7 @@ class AdminGeneralAjax
 	/**
 	 * @param string $id
 	 * @return string
+	 * @throws BaseEnvironmentMeasuringUnitIDMissingException
 	 * @throws BaseUserAccessDeniedException
 	 */
 	public static function delete_measuring_unit($id)
@@ -543,7 +544,7 @@ class AdminGeneralAjax
 			}
 			else
 			{
-				return "0";
+				throw new BaseEnvironmentMeasuringUnitIDMissingException();
 			}
 		}
 		else
@@ -804,7 +805,14 @@ class AdminGeneralAjax
 			{
 				foreach($list_array as $key => $value)
 				{
-					
+					if (MeasuringUnitCategory::is_deletable($list_array[$key]['id']) === true)
+					{
+						$list_array[$key]['delete'] = "<a title='delete' style='cursor: pointer;' id='BaseAdminMeasuringUnitCategoryDelete".$list_array[$key]['id']."' class='BaseAdminMeasuringUnitCategoryDelete'><img src='images/icons/delete.png' alt='D' /></a>";
+					}
+					else
+					{
+						$list_array[$key]['delete'] = "";
+					}
 				}
 			}
 			else
@@ -847,16 +855,59 @@ class AdminGeneralAjax
 	 */
 	public static function add_measuring_unit_category($name)
 	{
+		global $user;
 		
+		if ($user->is_admin())
+		{
+			$measuring_unit_category = new MeasuringUnitCategory(null);
+			if ($measuring_unit_category->create($name))
+			{
+				return "1";
+			}
+			else
+			{
+				return "0";
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
 	}
 	
 	/**
 	 * @param string $id
 	 * @return string
+	 * @throws BaseEnvironmentMeasuringUnitCategoryIDMissingException
+	 * @throws BaseUserAccessDeniedException
 	 */
 	public static function delete_measuring_unit_category($id)
 	{
+		global $user;
 		
+		if ($user->is_admin())
+		{
+			if (is_numeric($id))
+			{
+				$measuring_unit_category = new MeasuringUnitCategory($id);
+				if ($measuring_unit_category->delete() == true)
+				{
+					return "1";
+				}
+				else
+				{
+					return "0";
+				}
+			}
+			else
+			{
+				throw new BaseEnvironmentMeasuringUnitCategoryIDMissingException();	
+			}
+		}
+		else
+		{
+			throw new BaseUserAccessDeniedException();	
+		}
 	}
 	
 	/**

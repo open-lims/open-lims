@@ -31,6 +31,7 @@ class MeasuringUnitCategory_Access
 	
 	private $id;
 	private $name;
+	private $created_by_user;
 	
 	/**
 	 * @param integer $id
@@ -208,6 +209,35 @@ class MeasuringUnitCategory_Access
 	
 	
 	/**
+	 * @param integer $id
+	 * @return bool
+	 */
+	public static function exist_id($id)
+	{
+		global $db;
+			
+		if (is_numeric($id))
+		{
+			$sql = "SELECT id FROM ".constant("MEASURING_UNIT_CATEGORY_TABLE")." WHERE id = '".$id."'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data['id'])
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	/**
 	 * @return array
 	 */
 	public static function list_entries()
@@ -233,5 +263,34 @@ class MeasuringUnitCategory_Access
 			return null;
 		}
 	}
+	
+	/**
+     * @param integer $measuring_unit_category_id
+     * @return bool
+     */
+    public static function is_deletable($measuring_unit_category_id)
+    {
+    	global $db;
+    	
+   		if(is_numeric($measuring_unit_category_id))
+		{
+			$sql = "SELECT created_by_user FROM ".constant("MEASURING_UNIT_CATEGORY_TABLE")." WHERE id = '".$measuring_unit_category_id."'";
+			$res = $db->db_query($sql);
+			$data = $db->db_fetch_assoc($res);
+			
+			if ($data['created_by_user'] == "t")
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+    }
 }
 ?>

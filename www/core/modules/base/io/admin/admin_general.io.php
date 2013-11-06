@@ -156,10 +156,11 @@ class AdminGeneralIO
 	
 	public static function list_measuring_unit_categories()
 	{
-		$list = new List_IO("AdminGeneralMeasuringUnit", "ajax.php?nav=base", "admin_general_list_measuring_unit_categories", "admin_general_count_measuring_unit_categories", null, "AdminGeneralMeasuringUnit");
+		$list = new List_IO("AdminGeneralMeasuringUnit", "ajax.php?nav=base.admin", "admin_general_list_measuring_unit_categories", "admin_general_count_measuring_unit_categories", null, "AdminGeneralMeasuringUnit");
 		
 		$list->add_column("","symbol",false,"16px");
 		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"name",true);
+		$list->add_column("", "delete", false, "20px");
 		
 		$template = new HTMLTemplate("base/admin/general/list_measuring_unit_categories.html");
 		

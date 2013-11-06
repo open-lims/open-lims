@@ -106,6 +106,36 @@ class AdminRequest
 				echo AdminGeneralAjax::delete_measuring_unit($_POST['id']);
 			break;
 			
+			// General - Measuring Units Categories
+			case "admin_general_list_measuring_unit_categories":
+				require_once("ajax/admin/admin_general.ajax.php");
+				echo AdminGeneralAjax::list_measuring_unit_categories(
+						$_POST['column_array'], 
+						$_POST['argument_array'], 
+						$_POST['get_array'], 
+						$_POST['css_page_id'],  
+						$_POST['css_row_sort_id'], 
+						$_POST['entries_per_page'], 
+						$_GET['page'], 
+						$_GET['sortvalue'], 
+						$_GET['sortmethod']
+						);
+			break;
+			
+			case "admin_general_count_measuring_unit_categories":
+				require_once("ajax/admin/admin_general.ajax.php");
+				echo AdminGeneralAjax::count_measuring_unit_categories($_POST['argument_array']);
+			break;
+			
+			case "admin_general_add_measuring_unit_category":
+				require_once("ajax/admin/admin_general.ajax.php");
+				echo AdminGeneralAjax::add_measuring_unit_category($_POST['name']);
+			break;
+			
+			case "admin_general_delete_measuring_unit_category":
+				require_once("ajax/admin/admin_general.ajax.php");
+				echo AdminGeneralAjax::delete_measuring_unit_category($_POST['id']);
+			break;
 			
 		endswitch;
 	}

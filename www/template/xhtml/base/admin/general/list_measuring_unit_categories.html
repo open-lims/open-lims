@@ -13,31 +13,86 @@ $(document).ready(function()
 			},
 			"OK": function()
 			{
-				$( this ).dialog( "close" );
+				var name = $(".BaseAdminMeasuringUnitCategoryAddEditValue[name='name']").val();
+
+				$.ajax(
+				{
+					type: "POST",
+					url: "ajax.php?session_id="+get_array['session_id']+"&nav=base.admin&run=admin_general_add_measuring_unit_category",
+					data: "name="+name+"",
+					success: function(data)
+					{
+						if (data == "1")
+						{
+							list.reload();
+							$("#BaseAdminMeasuringUnitCategoryAddEditDialog").dialog( "close" );
+						}
+					}
+				});
 			}
 		},
 		height: 140,
 		width: 400
 	});
 	
+	$("#BaseAdminMeasuringUnitCategoryDeleteDialog").dialog(
+	{
+		autoOpen: false,
+		height: 150,
+		width: 350,
+		buttons: 
+		[{
+			text: "[[LANG:BaseGlobalButtonYes]]",
+			click: function()
+			{
+			 	var open_element = $.data(this, "open_element");
+			 	var id = $(open_element).attr("id").replace("BaseAdminMeasuringUnitCategoryDelete","");
+			 	var element = $(open_element);
+			 	
+			 	$.ajax(
+	 			{
+	 				type: "POST",
+	 				url: "ajax.php?session_id="+get_array['session_id']+"&nav=base.admin&run=admin_general_delete_measuring_unit_category",
+	 				data: "id="+id,
+	 				success: function(data)
+	 				{
+	 					if (data == 1)
+	 					{
+	 						$(element).parent().parent().fadeOut(400, function()
+	 						{
+	 							list.reload();
+	 						});
+	 					}
+	 					else
+	 					{
+	 						ErrorDialog("Error", "An error occured");
+	 					}
+	 				}
+	 			});
+			 	
+			 	$(this).dialog("close");
+			 	
+			}
+		},{
+			text: "[[LANG:BaseGlobalButtonNo]]",
+			click: function()
+			{
+			 	$(this).dialog("close");
+			}
+		}]
+	});	
+	
 	$('#BaseAdminMeasuringUnitCategoryAdd').click(function()
 	{
 		$("#BaseAdminMeasuringUnitCategoryAddEditDialog").dialog("open");
 		$("#BaseAdminMeasuringUnitCategoryAddEditDialog").dialog("option", "title", "Add a Measuring Unit Category");
+		$(".BaseAdminMeasuringUnitCategoryAddEditValue[name='name']").val("");
 	});
-	
-	$(".BaseAdminMeasuringUnitCategoryEdit").each().live('click', function()
-	{
-		var id = $(this).attr("id");
-		id = id.replace("BaseAdminMeasuringUnitEdit","");
-		
-		$("#BaseAdminMeasuringUnitCategoryAddEditDialog").dialog("open");
-		$("#BaseAdminMeasuringUnitCategoryAddEditDialog").dialog("option", "title", "Edit a Measuring Unit Category");
-	});
+
 	
 	$(".BaseAdminMeasuringUnitCategoryDelete").each().live('click', function()
 	{
-		
+		$("#BaseAdminMeasuringUnitCategoryDeleteDialog").data('open_element', this).dialog("open");
 	});
 });
 /*]]>*/  
@@ -52,7 +107,7 @@ Are you sure?
 <table style='width: 100%'>
 	<tr>
 		<td style='width:100px;'>Name:</td>
-		<td><input type='text' size='35' /></td>
+		<td><input class='BaseAdminMeasuringUnitCategoryAddEditValue' name='name' type='text' size='35' /></td>
 	</tr>
 </table>
 </div>
