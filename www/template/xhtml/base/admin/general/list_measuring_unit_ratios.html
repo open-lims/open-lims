@@ -19,7 +19,7 @@ $(document).ready(function()
 				$.ajax(
 				{
 					type: "POST",
-					url: "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=admin_general_add_measuring_unit_ratio",
+					url: "ajax.php?session_id="+get_array['session_id']+"&nav=base.admin&run=admin_general_add_measuring_unit_ratio",
 					data: "numerator="+numerator+"&denominator="+denominator+"",
 					success: function(data)
 					{
@@ -53,7 +53,7 @@ $(document).ready(function()
 			 	$.ajax(
 	 			{
 	 				type: "POST",
-	 				url: "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=admin_general_delete_measuring_unit_ratio",
+	 				url: "ajax.php?session_id="+get_array['session_id']+"&nav=base.admin&run=admin_general_delete_measuring_unit_ratio",
 	 				data: "id="+id,
 	 				success: function(data)
 	 				{

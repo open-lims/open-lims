@@ -42,7 +42,7 @@ class AdminSystemLogIO
 		$argument_array[0] = "type_id";
 		$argument_array[1] = $type_id;
 
-		$list = new List_IO("BaseAdminSystemLog", "ajax.php?nav=base", "admin_list_system_log", "admin_count_system_log", $argument_array, "BaseAdminSystemLog");
+		$list = new List_IO("BaseAdminSystemLog", "ajax.php?nav=base.admin", "admin_list_system_log", "admin_count_system_log", $argument_array, "BaseAdminSystemLog");
 				
 		$list->add_column(Language::get_message("BaseGeneralListColumnUser", "general"), "user", true, null);
 		$list->add_column(Language::get_message("BaseGeneralListColumnDateTime", "general"), "datetime", true, null);

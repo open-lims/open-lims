@@ -29,7 +29,7 @@ class AdminGeneralIO
 {	
 	public static function list_languages()
 	{
-		$list = new List_IO("AdminGeneralLanguage", "ajax.php?nav=base", "admin_general_list_languages", "admin_general_count_languages", $argument_array, "AdminGeneralLanguage");
+		$list = new List_IO("AdminGeneralLanguage", "ajax.php?nav=base.admin", "admin_general_list_languages", "admin_general_count_languages", $argument_array, "AdminGeneralLanguage");
 		
 		$list->add_column("","symbol",false,"16px");
 		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"language_name",true,null);
@@ -46,7 +46,7 @@ class AdminGeneralIO
 	
 	public static function list_timezones()
 	{
-		$list = new List_IO("AdminGeneralTimezone", "ajax.php?nav=base", "admin_general_list_timezones", "admin_general_count_timezones", $argument_array, "AdminGeneralTimezone");
+		$list = new List_IO("AdminGeneralTimezone", "ajax.php?nav=base.admin", "admin_general_list_timezones", "admin_general_count_timezones", $argument_array, "AdminGeneralTimezone");
 		
 		$list->add_column("","symbol",false,"16px");
 		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"name",true,null);
@@ -61,7 +61,7 @@ class AdminGeneralIO
 	
 	public static function list_paper_sizes()
 	{
-		$list = new List_IO("AdminGeneralPaperSize", "ajax.php?nav=base", "admin_general_list_paper_sizes", "admin_general_count_paper_sizes", $argument_array, "AdminGeneralPaperSize");
+		$list = new List_IO("AdminGeneralPaperSize", "ajax.php?nav=base.admin", "admin_general_list_paper_sizes", "admin_general_count_paper_sizes", $argument_array, "AdminGeneralPaperSize");
 		
 		$list->add_column("","symbol",false,"16px");
 		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"name",true,null,"BaseGeneralAdminListSortName");
@@ -109,7 +109,7 @@ class AdminGeneralIO
 	
 	public static function list_measuring_unit_ratios()
 	{
-		$list = new List_IO("AdminGeneralMeasuringUnitRatio", "ajax.php?nav=base", "admin_general_list_measuring_unit_ratios", "admin_general_count_measuring_unit_ratios", null, "AdminGeneralMeasuringUnitRatio");
+		$list = new List_IO("AdminGeneralMeasuringUnitRatio", "ajax.php?nav=base.admin", "admin_general_list_measuring_unit_ratios", "admin_general_count_measuring_unit_ratios", null, "AdminGeneralMeasuringUnitRatio");
 		
 		$list->add_column("","symbol",false,"16px");
 		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"name",false);
@@ -171,7 +171,7 @@ class AdminGeneralIO
 	
 	public static function list_currencies()
 	{
-		$list = new List_IO("AdminGeneralCurrency", "ajax.php?nav=base", "admin_general_list_currencies", "admin_general_count_currencies", $argument_array, "AdminGeneralCurrency");
+		$list = new List_IO("AdminGeneralCurrency", "ajax.php?nav=base.admin", "admin_general_list_currencies", "admin_general_count_currencies", $argument_array, "AdminGeneralCurrency");
 		
 		$list->add_column("","symbol",false,"16px");
 		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"name",true,null);

@@ -29,7 +29,7 @@ class AdminBaseNavigationIO
 {
 	public static function home()
 	{
-		$list = new List_IO("BaseAdminNavigationHome" ,"ajax.php?nav=base", "admin_list_navigation", "admin_count_navigation", "0", "BaseAdminNavigationHome");
+		$list = new List_IO("BaseAdminNavigationHome" ,"ajax.php?nav=base.admin", "admin_list_navigation", "admin_count_navigation", "0", "BaseAdminNavigationHome");
 		
 		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"), "name", false, null);
 		$list->add_column(Language::get_message("BaseGeneralListColumnModule", "general"), "module", false, null);

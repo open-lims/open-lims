@@ -29,7 +29,7 @@ class AdminBaseModuleIO
 {
 	public static function home()
 	{
-		$list = new List_IO("BaseAdminModuleHome" ,"ajax.php?nav=base", "admin_list_modules", "admin_count_modules", "0", "BaseAdminModuleHome");
+		$list = new List_IO("BaseAdminModuleHome" ,"ajax.php?nav=base.admin", "admin_list_modules", "admin_count_modules", "0", "BaseAdminModuleHome");
 		
 		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"), "name", true, null);
 		$list->add_column(Language::get_message("BaseGeneralListColumnDialogs", "general"), "dialogs", true, null);

@@ -29,7 +29,7 @@ class AdminGroupIO
 {
 	public static function home()
 	{
-		$list = new List_IO("GroupAdministration", "ajax.php?nav=base", "admin_list_groups", "admin_count_groups", null, "GroupAdministration");
+		$list = new List_IO("GroupAdministration", "ajax.php?nav=base.admin", "admin_list_groups", "admin_count_groups", null, "GroupAdministration");
 		
 		$list->add_column("","symbol",false,"16px");
 		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"name",true,null);

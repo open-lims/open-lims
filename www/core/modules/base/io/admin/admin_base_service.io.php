@@ -29,7 +29,7 @@ class AdminBaseServiceIO
 {
 	public static function home()
 	{
-		$list = new List_IO("BaseAdminServiceHome" ,"ajax.php?nav=base", "admin_list_service", "admin_count_service", "0", "BaseAdminServiceHome");
+		$list = new List_IO("BaseAdminServiceHome" ,"ajax.php?nav=base.admin", "admin_list_service", "admin_count_service", "0", "BaseAdminServiceHome");
 		
 		$list->add_column("", "icon", false, "16px");
 		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"), "name", true, null);

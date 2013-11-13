@@ -26,7 +26,7 @@ $(document).ready(function()
 					$.ajax(
 					{
 						type: "POST",
-						url: "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=admin_general_add_paper_size",
+						url: "ajax.php?session_id="+get_array['session_id']+"&nav=base.admin&run=admin_general_add_paper_size",
 						data: "name="+name+"&width="+width+"&height="+height+"&margin_left="+margin_left+"&margin_right="+margin_right+"&margin_top="+margin_top+"&margin_bottom="+margin_bottom+"",
 						success: function(data)
 						{
@@ -43,7 +43,7 @@ $(document).ready(function()
 					$.ajax(
 					{
 						type: "POST",
-						url: "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=admin_general_set_paper_size",
+						url: "ajax.php?session_id="+get_array['session_id']+"&nav=base.admin&run=admin_general_set_paper_size",
 						data: "id="+$("#AddPaperSizeDialogId").html()+"&name="+name+"&width="+width+"&height="+height+"&margin_left="+margin_left+"&margin_right="+margin_right+"&margin_top="+margin_top+"&margin_bottom="+margin_bottom+"",
 						success: function(data)
 						{
@@ -96,7 +96,7 @@ $(document).ready(function()
 		$.ajax(
 		{
 			type: "POST",
-			url: "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=admin_general_get_paper_size",
+			url: "ajax.php?session_id="+get_array['session_id']+"&nav=base.admin&run=admin_general_get_paper_size",
 			data: "id="+id,
 			success: function(data)
 			{
@@ -130,25 +130,60 @@ $(document).ready(function()
 	
 	$(".BaseAdminPaperSizeDelete").each().live('click', function()
 	{
-		var id = $(this).attr("id");
-		id = id.replace("BaseAdminPaperSizeDelete","");
-		$.ajax(
-		{
-			type: "POST",
-			url: "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=admin_general_delete_paper_size",
-			data: "id="+id,
-			success: function(data)
-			{
-				if (data == 1)
-				{
-					list.reload();
-				}
-			}
-		});
+		$("#BaseAdminPaperSizeDeleteDialog").data('open_element', this).dialog("open");		
 	});
+	
+	$("#BaseAdminPaperSizeDeleteDialog").dialog(
+	{
+		autoOpen: false,
+		height: 150,
+		width: 350,
+		buttons: 
+		[{
+			text: "[[LANG:BaseGlobalButtonYes]]",
+			click: function()
+			{
+			 	var open_element = $.data(this, "open_element");
+			 	var id = $(open_element).attr("id").replace("BaseAdminPaperSizeDelete","");
+			 	var element = $(open_element);
+			 	
+			 	$.ajax(
+	 			{
+	 				type: "POST",
+	 				url: "ajax.php?session_id="+get_array['session_id']+"&nav=base.admin&run=admin_general_delete_paper_size",
+	 				data: "id="+id,
+	 				success: function(data)
+	 				{
+	 					if (data == 1)
+	 					{
+	 						$(element).parent().parent().fadeOut(400, function()
+	 						{
+	 							list.reload();
+	 						});
+	 					}
+	 					else
+	 					{
+	 						ErrorDialog("Error", "An error occured");
+	 					}
+	 				}
+	 			});			 	
+			 	$(this).dialog("close");
+			}
+		},{
+			text: "[[LANG:BaseGlobalButtonNo]]",
+			click: function()
+			{
+			 	$(this).dialog("close");
+			}
+		}]
+	});	
 });
 
 </script>
+
+<div id='BaseAdminPaperSizeDeleteDialog' title='Delete Paper Size' style='display: none;'>
+Are you sure?
+</div>
 
 <div id="AddPaperSizeDialog" style='display: none;'>
 	<div id='AddPaperSizeDialogGeneral'>

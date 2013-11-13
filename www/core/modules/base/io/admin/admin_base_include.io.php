@@ -29,7 +29,7 @@ class AdminBaseIncludeIO
 {
 	public static function home()
 	{		
-		$list = new List_IO("BaseAdminIncludeHome" ,"ajax.php?nav=base", "admin_list_includes", "admin_count_includes", "0", "BaseAdminIncludeAjax");
+		$list = new List_IO("BaseAdminIncludeHome" ,"ajax.php?nav=base.admin", "admin_list_includes", "admin_count_includes", "0", "BaseAdminIncludeAjax");
 
 		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"),"name",true,null);
 		$list->add_column(Language::get_message("BaseGeneralListColumnFolder", "general"),"folder",true,null);

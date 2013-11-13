@@ -29,7 +29,7 @@ class AdminBaseRegistryIO
 {
 	public static function home()
 	{
-		$list = new List_IO("BaseAdminRegistryHome" ,"ajax.php?nav=base", "admin_list_registry", "admin_count_registry", "0", "BaseAdminRegistryHome");
+		$list = new List_IO("BaseAdminRegistryHome" ,"ajax.php?nav=base.admin", "admin_list_registry", "admin_count_registry", "0", "BaseAdminRegistryHome");
 		
 		$list->add_column("", "icon", false, "16px");
 		$list->add_column(Language::get_message("BaseGeneralListColumnName", "general"), "name", true, null);

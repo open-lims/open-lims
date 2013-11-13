@@ -9,7 +9,7 @@ $(document).ready(function()
 		$.ajax(
 		{
 			type : "POST",
-			url : "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=admin_service_start",
+			url : "ajax.php?session_id="+get_array['session_id']+"&nav=base.admin&run=admin_service_start",
 			data : "id="+id,
 			success : function(data) 
 			{
@@ -35,7 +35,7 @@ $(document).ready(function()
 		$.ajax(
 		{
 			type : "POST",
-			url : "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=admin_service_stop",
+			url : "ajax.php?session_id="+get_array['session_id']+"&nav=base.admin&run=admin_service_stop",
 			data : "id="+id,
 			success : function(data) 
 			{

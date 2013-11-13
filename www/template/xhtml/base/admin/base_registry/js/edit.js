@@ -4,7 +4,7 @@ var id = $("#BaseAdminRegistryEditId").val();
 $.ajax(
 {
 	type : "POST",
-	url : "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=admin_registry_edit_handler",
+	url : "ajax.php?session_id="+get_array['session_id']+"&nav=base.admin&run=admin_registry_edit_handler",
 	data : "value="+value+"&id="+id,
 	success : function(data) 
 	{

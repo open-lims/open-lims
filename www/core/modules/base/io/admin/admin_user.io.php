@@ -29,7 +29,7 @@ class AdminUserIO
 {
 	public static function home()
 	{		
-		$list = new List_IO("UserAdministration", "ajax.php?nav=base", "admin_list_users", "admin_count_users", null, "UserAdministration");
+		$list = new List_IO("UserAdministration", "ajax.php?nav=base.admin", "admin_list_users", "admin_count_users", null, "UserAdministration");
 		
 		$list->add_column("","symbol",false,"16px");
 		$list->add_column(Language::get_message("BaseGeneralListColumnUsername", "general"),"username",true,null);

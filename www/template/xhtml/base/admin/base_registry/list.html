@@ -6,7 +6,7 @@ $(document).ready(function()
 		var id = $(this).attr("id");
 			id = id.replace("BaseAdminRegistryEditButton","");
 			
-		base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=admin_registry_edit&id="+id, '', null);
+		base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=base.admin&run=admin_registry_edit&id="+id, '', null);
 	});
 });
 </script>
