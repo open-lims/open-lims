@@ -773,6 +773,62 @@ END;\$BODY\$
   COST 100
   ROWS 1000;";
 
+$statement[] = "CREATE OR REPLACE FUNCTION get_all_parameter_versions(integer, integer)
+  RETURNS SETOF integer AS
+\$BODY\$DECLARE
+parameter_record RECORD;
+rec_return RECORD;
+BEGIN
+	
+	IF $2 IS NULL THEN
+
+		FOR parameter_record IN SELECT id FROM core_data_parameter_versions WHERE previous_version_id=id AND parameter_id=$1 ORDER BY version
+		LOOP
+
+			IF parameter_record.id IS NOT NULL THEN
+
+				RETURN NEXT parameter_record.id;
+
+				FOR rec_return IN select * from get_all_parameter_versions($1, parameter_record.id) AS subid
+				LOOP
+					RETURN NEXT rec_return.subid;
+				END LOOP;
+
+			ELSE
+				RETURN;
+			END IF;
+
+		END LOOP;
+
+	ELSE
+
+		FOR parameter_record IN SELECT id FROM core_data_parameter_versions WHERE previous_version_id=$2 AND parameter_id=$1 AND previous_version_id != id ORDER BY version
+		LOOP
+
+			IF parameter_record.id IS NOT NULL THEN
+				
+				RETURN NEXT parameter_record.id;
+
+				FOR rec_return IN select * from get_all_parameter_versions($1, value_record.id) AS subid
+				LOOP
+					RETURN NEXT rec_return.subid;
+				END LOOP;
+
+			ELSE
+				RETURN;
+			END IF;
+
+		END LOOP;
+
+	END IF;
+
+	RETURN;	
+
+END;\$BODY\$
+  LANGUAGE plpgsql VOLATILE
+  COST 100
+  ROWS 1000;";
+
 $statement[] = "CREATE OR REPLACE FUNCTION get_all_value_versions(integer, integer)
   RETURNS SETOF integer AS
 \$BODY\$DECLARE

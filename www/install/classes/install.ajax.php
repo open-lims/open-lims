@@ -255,6 +255,11 @@ class InstallAjax
 		
 		$template = new HTMLTemplate("table_row.html", "install/template");
 		
+		if (file_exists("update/update.php"))
+		{
+			include("update/update.php");
+		}
+		
 		if (file_exists("information/".$module.".php"))
 		{
 			include("information/".$module.".php");
@@ -276,6 +281,8 @@ class InstallAjax
 
 				$iv = self::$installed_module_array[$module];
 				
+				// Überprüfen ob größer
+				// Überprüfen ob Update-Routine vorhanden
 				if (self::$installed_module_array[$module] == $version)
 				{
 					$status = "up to date";
@@ -283,8 +290,26 @@ class InstallAjax
 				}
 				else
 				{
-					$status = "update required";
-					$status_image = "";
+					$version_found = false;
+					foreach($update as $key => $value)
+					{
+						if ($value['from'] == self::$installed_module_array[$module])
+						{
+							$version_found = true;
+							break;
+						}
+					}
+					
+					if ($version_found == true)
+					{
+						$status = "update required";
+						$status_image = "";
+					}
+					else
+					{
+						$status = "update not available";
+						$status_image = "";
+					}
 				}
 			}
 			catch(DatabaseQueryFailedException $e)

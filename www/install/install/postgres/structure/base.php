@@ -124,6 +124,7 @@ $statement[] = "CREATE TABLE core_base_measuring_unit_categories
 (
   id serial NOT NULL,
   name text,
+  created_by_user boolean,
   CONSTRAINT core_measuring_unit_categories_pkey PRIMARY KEY (id )
 )
 WITH (
@@ -157,6 +158,7 @@ $statement[] = "CREATE TABLE core_base_measuring_units
   prefix_calculation_exponent integer,
   calculation text,
   type text,
+  created_by_user boolean,
   CONSTRAINT core_measuring_units_pkey PRIMARY KEY (id )
 )
 WITH (
