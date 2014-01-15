@@ -3,7 +3,7 @@
  * @package install
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2013 by Roman Konertz
+ * @copyright (c) 2008-2014 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -170,6 +170,9 @@ $statement[] = "INSERT INTO core_folder_is_group_folder (group_id, folder_id) VA
 $statement[] = "INSERT INTO core_folder_is_group_folder (group_id, folder_id) VALUES (9,109)";
 $statement[] = "INSERT INTO core_folder_is_group_folder (group_id, folder_id) VALUES (10,110)";
 $statement[] = "INSERT INTO core_folder_is_group_folder (group_id, folder_id) VALUES (11,111)";
+
+
+// Parameter Example Data
 
 $statement[] = "INSERT INTO core_data_parameter_templates (id, internal_name, name, created_by, datetime) VALUES (1, 'BC', 'Blood Count', 1, '2011-01-01 08:00:00+01')";
 $statement[] = "INSERT INTO core_data_parameter_templates (id, internal_name, name, created_by, datetime) VALUES (2, 'DBC', 'Differential Blood Count', 1, '2011-01-01 08:00:00+01')";
