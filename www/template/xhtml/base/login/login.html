@@ -1,4 +1,5 @@
-<script>
+<script type="text/javascript">
+/*<![CDATA[*/  
 $(document).ready(function()
 {	
 	arrow_message = new ArrowMessage();
@@ -227,7 +228,7 @@ $(document).ready(function()
 					data: "username="+username+"&mail="+mail,
 					beforeSend: function()
 					{
-						$('#BaseLoginForgotPassword').html("<div><img src='images/animations/loading_circle_small.gif' alt=''> [[LANG:BaseGlobalMessageWait]]</div>");
+						$('#BaseLoginForgotPassword').html("<div><img src='images/animations/loading_circle_small.gif' alt='' /> [[LANG:BaseGlobalMessageWait]]</div>");
 					},
 					success: function(data)
 					{
@@ -286,10 +287,11 @@ $(document).ready(function()
 		$("#BaseLoginForgotPassword").dialog("open");
 	});
 });
+/*]]>*/
 </script>
 
 <div class="BasePlaseWaitWindow" id="BaseLoginFinish" title=""> 
-<div><img src='images/animations/loading_circle_small.gif' alt=''> [[LANG:BaseGlobalMessageWait]]</div>
+<div><img src='images/animations/loading_circle_small.gif' alt='' /> [[LANG:BaseGlobalMessageWait]]</div>
 </div> 
 
 
@@ -307,13 +309,13 @@ $(document).ready(function()
 		
 		<div class='LoginElement'>
 			<label>[[LANG:BaseLoginMailAdress]]:</label>
-			<input name='mail' text='text' class='BaseLoginForgotTextfield' id='BaseLoginForgotMail' />
+			<input name='mail' type='text' class='BaseLoginForgotTextfield' id='BaseLoginForgotMail' />
 			<span class='FormError' id='BaseLoginForgotMailError'></span>
 		</div>
 	</div>
 </div> 
 
-<div id="BaseLoginForgotPasswordSuccessful" title="[[LANG:BaseLoginForgotYourPasswordTitle]]" style="text-align: center; padding-top: 25px;"'>[[LANG:BaseLoginForgotSuccessful]]</div>
+<div id="BaseLoginForgotPasswordSuccessful" title="[[LANG:BaseLoginForgotYourPasswordTitle]]" style="text-align: center; padding-top: 25px;">[[LANG:BaseLoginForgotSuccessful]]</div>
 
 <div id="LoginWrapper">
 	<div id="LoginContainer" class="Form">
@@ -330,7 +332,7 @@ $(document).ready(function()
 		</div>
 		
 		<div class='LoginElement'>
-		<select class='BaseSelect LoginLanguageSelect' name='language_id' id='BaseLoginLanguage' onChange="this.form.submit()">
+		<select class='BaseSelect LoginLanguageSelect' name='language_id' id='BaseLoginLanguage' onchange="this.form.submit()">
 			<option value='default' selected='selected'>[[LANG:BaseLoginLanguage]]/[[LANG:BaseLoginLanguageDefault]]</option>
 			<option value='0'>-------------</option>
 			

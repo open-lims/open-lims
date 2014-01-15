@@ -91,7 +91,7 @@ function image_browser()
 		}
 	}
 }
-	
+
 ValueHandler = function(field_class, decimal_separator, thousand_separator)
 {
 	$("."+field_class).each(function()
@@ -262,7 +262,7 @@ ValueHandler = function(field_class, decimal_separator, thousand_separator)
 		});
 		
 		
-		json = JSON.stringify(json_array);
+		var json = JSON.stringify(json_array);
 		
 		if (error === true)
 		{

@@ -719,7 +719,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 				{
 					// New Field
 					$parameter_field = new ParameterField_Access(null);
-					if (($parameter_field_id = $parameter_field->create($name, $min_value, $max_value, $measuring_unit_id, $measuring_unit_exponent)) === null)
+					if (($parameter_field_id = $parameter_field->create($name, $min_value, $max_value, $measuring_unit_id, $measuring_unit_exponent, $measuring_unit_ratio_id)) === null)
 					{
 						if ($transaction_id != null)
 						{
@@ -739,6 +739,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 					}
 					
 					array_push($new_field_array, $parameter_field_id);
+					array_push($current_field_array, $parameter_field_id);
 				}
 				
 				for ($i=0;$i<=($limit_counter-1);$i++)

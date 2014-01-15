@@ -39,7 +39,7 @@ DataParameter = function()
 	// Parameter
 	var thousand_separator;
 	var deciamal_separator;
-		
+
 	init_admin = function(element, session_id)
 	{
 		
@@ -136,7 +136,7 @@ DataParameter = function()
 		
 		init(session_id);
 	}
-	
+
 	init_parameter = function(session_id, parameter_template_id, local_thousand_separator, local_decimal_separator)
 	{
 		thousand_separator = local_thousand_separator
@@ -172,7 +172,7 @@ DataParameter = function()
 			check_status();
 		});
 	}
-	
+
 	// Parameter
 	function check_status()
 	{
@@ -241,7 +241,7 @@ DataParameter = function()
 			check($(this), id);
 		});
 	}
-	
+
 	// Parameter
 	get_parameter_value_object = function()
 	{
@@ -320,7 +320,7 @@ DataParameter = function()
 		
 		return JSON.stringify(field_object);
 	}
-	
+
 	// Admin
 	get_limit_json = function(class_name)
 	{	
@@ -397,7 +397,7 @@ DataParameter = function()
 			limit_counter = parseInt(local_limit_counter);
 		}
 	}
-	
+
 	this.init_admin = init_admin;
 	this.init_parameter = init_parameter;
 	this.get_parameter_value_object = get_parameter_value_object;
@@ -429,10 +429,11 @@ DataParameter = function()
 			return address;
 		}
 	}
-	
+
 	// Admin
 	init = function(session_id)
 	{
+		
 		// NOT USED
 		// Method Dialog
 		$("#DataParameterAdminTemplateDialogMethods").dialog(
@@ -568,7 +569,7 @@ DataParameter = function()
 				}
 			}]
 		});
-	
+		
 		// Rename Limit
 		$("#DataParameterAdminTemplateLimitsDialogRename").dialog(
 		{
@@ -589,7 +590,7 @@ DataParameter = function()
 				 	$("#DataParameterAdminTemplateLimitsDialogSelect select").find("option:selected").html(name);
 				 	
 				 	base_form_init();
-				},
+				}
 			},{
 				text: get_language_label("cancel_button"),
 				click: function()
@@ -597,8 +598,8 @@ DataParameter = function()
 				 	$(this).dialog("close");
 				}
 			}]
-		});
-
+		}); 
+		
 		// Limit Select Change
 		$("#DataParameterAdminTemplateLimitsDialogSelect select").bind("onchange", function()
 		{
@@ -645,6 +646,7 @@ DataParameter = function()
 				}
 			});
 		});
+		
 	}
 	
 	// Admin

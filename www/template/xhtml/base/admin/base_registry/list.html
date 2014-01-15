@@ -1,4 +1,5 @@
-<script>
+<script type="text/javascript">
+/*<![CDATA[*/  
 $(document).ready(function()
 {
 	$(".BaseAdminRegistryEditButton").each().live("click", function()
@@ -9,6 +10,7 @@ $(document).ready(function()
 		base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=base.admin&run=admin_registry_edit&id="+id, '', null);
 	});
 });
+/*]]>*/
 </script>
 
 <div id="BaseAdminRegistryEditWindow" title="Create New Log Entry" style='display: none;'>

@@ -1,9 +1,11 @@
-<script>
+<script type="text/javascript">
+/*<![CDATA[*/  
 $(document).ready(function()
 {
 	base_dialog("POST", "ajax.php?session_id="+get_array['session_id']+"&nav=base&run=batch_start_test", 'get_array=[[GET_ARRAY]]', "BatchTestStart");
 	list.autoreload(5000);
 });
+/*]]>*/
 </script>
 
 <div id="BaseBatchTestStartWindow" title="Create New Log Entry" style='display: none;'>

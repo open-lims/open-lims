@@ -64,7 +64,7 @@
 	
 	<!-- IF ([[STATUS_ACTION:TYPE]] == ajax) -->
 
-		<script>[[STATUS_ACTION:SCRIPT]]</script>
+		<script type="text/javascript">/*<![CDATA[*/[[STATUS_ACTION:SCRIPT]]/*]]>*/</script>
 		<div id='[[STATUS_ACTION:WINDOW_ID]]' title='[[STATUS_ACTION:WINDOW_TITLE]]' style='display: none;'></div>
 		<a style='cursor: pointer;' class='BaseWantToButton' id='[[STATUS_ACTION:CLICK_ID]]' title='[[STATUS_ACTION:NAME]]'>
 			<span class='BaseWantToIcon'>
