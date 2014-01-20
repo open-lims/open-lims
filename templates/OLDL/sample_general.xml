@@ -11,8 +11,7 @@
 		<MANUFACTURER requirement="optional" />
 	</HEAD>
 	<BODY>
-      <ITEM type="value">       
-            <TYPE id="100"></TYPE>
-      </ITEM>      
+      	<ITEM type="parameter">
+	 	</ITEM>    
 	</BODY>
 </OLDL>
