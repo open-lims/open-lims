@@ -31,6 +31,9 @@ DataParameter = function()
 	
 	var method_array = new Array();
 	
+	var invalid_field_counter = 0;
+	var invalid_field_array = new Array();
+	
 	limit_array[limit_counter] = new Object();
 	limit_array[limit_counter]['name'] = "First Limit";
 	limit_array[limit_counter]['usl'] = new Array();
@@ -195,11 +198,21 @@ DataParameter = function()
 				{
 					$("#DataParameterValueStatus"+id).html("invalid (NaN)");
 					$(".DataParameterSaveButton").attr("disabled", "disabled");
-					// check min (valid) and max (valid)
+					invalid_field_counter++;
+					invalid_field_array[id] = true;
 				}
 				else if (check_value !== "")
 				{
-					$(".DataParameterSaveButton").attr("disabled", false);
+					if (invalid_field_array[id] === true)
+					{
+						invalid_field_counter--;
+					}
+					
+					if(invalid_field_counter <= 0)
+					{
+						$(".DataParameterSaveButton").attr("disabled", false);
+					}
+					
 					if (check_value !== "")
 					{
 						var lsl = parseFloat(object.find(".DataParameterValueLSL").html());
@@ -227,7 +240,16 @@ DataParameter = function()
 				else
 				{
 					$("#DataParameterValueStatus"+id).html("");
-					$(".DataParameterSaveButton").attr("disabled", false);
+					
+					if (invalid_field_array[id] === true)
+					{
+						invalid_field_counter--;
+					}
+					
+					if(invalid_field_counter <= 0)
+					{
+						$(".DataParameterSaveButton").attr("disabled", false);
+					}
 				}
 			}
 		
