@@ -52,6 +52,10 @@ class Database
 			require_once("postgresql.php");
 			$this->sql = new Postgresql;	
 		break;
+		case ("pdo_pggsl"):
+			require_once("pdo_pgsql.php");
+			$this->sql = new PDOpgsql;
+			break;
 		default:
 			die("Wrong Database Type");
 		break;
