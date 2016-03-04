@@ -54,7 +54,7 @@ class System_Wrapper_Access
 		{
 			for ($i = 0; $i<=$end-1; $i++)
 			{
-				if (($data = $db->db_fetch_assoc($res)) == null)
+				if (($data = $db->fetch($res)) == null)
 				{
 					break;
 				}
@@ -67,7 +67,7 @@ class System_Wrapper_Access
 		}
 		else
 		{
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data);
 			}
@@ -86,7 +86,7 @@ class System_Wrapper_Access
 					 "FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")."";
 			
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 
 		return $data['result'];
 	}
@@ -152,7 +152,7 @@ class System_Wrapper_Access
 		{
 			for ($i = 0; $i<=$end-1; $i++)
 			{
-				if (($data = $db->db_fetch_assoc($res)) == null)
+				if (($data = $db->fetch($res)) == null)
 				{
 					break;
 				}
@@ -165,7 +165,7 @@ class System_Wrapper_Access
 		}
 		else
 		{
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data);
 			}
@@ -184,7 +184,7 @@ class System_Wrapper_Access
 					 "FROM ".constant("BASE_REGISTRY_TABLE")."";
 			
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 
 		return $data['result'];
 	}
@@ -245,7 +245,7 @@ class System_Wrapper_Access
 		{
 			for ($i = 0; $i<=$end-1; $i++)
 			{
-				if (($data = $db->db_fetch_assoc($res)) == null)
+				if (($data = $db->fetch($res)) == null)
 				{
 					break;
 				}
@@ -258,7 +258,7 @@ class System_Wrapper_Access
 		}
 		else
 		{
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data);
 			}
@@ -277,7 +277,7 @@ class System_Wrapper_Access
 					 "FROM ".constant("BASE_SERVICE_TABLE")."";
 			
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 
 		return $data['result'];
 	}
@@ -348,7 +348,7 @@ class System_Wrapper_Access
 		{
 			for ($i = 0; $i<=$end-1; $i++)
 			{
-				if (($data = $db->db_fetch_assoc($res)) == null)
+				if (($data = $db->fetch($res)) == null)
 				{
 					break;
 				}
@@ -361,7 +361,7 @@ class System_Wrapper_Access
 		}
 		else
 		{
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data);
 			}
@@ -381,7 +381,7 @@ class System_Wrapper_Access
 					 "FROM ".constant("BASE_MODULE_TABLE")."";
 			
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 
 		return $data['result'];
 	}
@@ -451,7 +451,7 @@ class System_Wrapper_Access
 		{
 			for ($i = 0; $i<=$end-1; $i++)
 			{
-				if (($data = $db->db_fetch_assoc($res)) == null)
+				if (($data = $db->fetch($res)) == null)
 				{
 					break;
 				}
@@ -464,7 +464,7 @@ class System_Wrapper_Access
 		}
 		else
 		{
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data);
 			}
@@ -484,7 +484,7 @@ class System_Wrapper_Access
 					 "FROM ".constant("BASE_INCLUDE_TABLE")."";
 			
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 
 		return $data['result'];
 	}

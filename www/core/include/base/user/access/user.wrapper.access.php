@@ -102,7 +102,7 @@ class User_Wrapper_Access
 		{
 			for ($i = 0; $i<=$end-1; $i++)
 			{
-				if (($data = $db->db_fetch_assoc($res)) == null)
+				if (($data = $db->fetch($res)) == null)
 				{
 					break;
 				}
@@ -115,7 +115,7 @@ class User_Wrapper_Access
 		}
 		else
 		{
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data);
 			}
@@ -151,7 +151,7 @@ class User_Wrapper_Access
    		}
    						
    		$res = $db->db_query($sql);
-   		$data = $db->db_fetch_assoc($res);
+   		$data = $db->fetch($res);
 	
 		return $data['result'];
    	}
@@ -220,7 +220,7 @@ class User_Wrapper_Access
 			{
 				for ($i = 0; $i<=$end-1; $i++)
 				{
-					if (($data = $db->db_fetch_assoc($res)) == null)
+					if (($data = $db->fetch($res)) == null)
 					{
 						break;
 					}
@@ -233,7 +233,7 @@ class User_Wrapper_Access
 			}
 			else
 			{
-				while ($data = $db->db_fetch_assoc($res))
+				while ($data = $db->fetch($res))
 				{
 					array_push($return_array, $data);
 				}
@@ -264,7 +264,7 @@ class User_Wrapper_Access
    					"WHERE LOWER(name) LIKE '".$groupname."'";
    						
    			$res = $db->db_query($sql);
-   			$data = $db->db_fetch_assoc($res);
+   			$data = $db->fetch($res);
 	
 			return $data['result'];
    		}
@@ -334,7 +334,7 @@ class User_Wrapper_Access
 		{
 			for ($i = 0; $i<=$end-1; $i++)
 			{
-				if (($data = $db->db_fetch_assoc($res)) == null)
+				if (($data = $db->fetch($res)) == null)
 				{
 					break;
 				}
@@ -347,7 +347,7 @@ class User_Wrapper_Access
 		}
 		else
 		{
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data);
 			}
@@ -366,7 +366,7 @@ class User_Wrapper_Access
    				"FROM ".constant("USER_TABLE")."";  
    						
    		$res = $db->db_query($sql);
-   		$data = $db->db_fetch_assoc($res);
+   		$data = $db->fetch($res);
 	
 		return $data['result'];
    	}
@@ -425,7 +425,7 @@ class User_Wrapper_Access
 		{
 			for ($i = 0; $i<=$end-1; $i++)
 			{
-				if (($data = $db->db_fetch_assoc($res)) == null)
+				if (($data = $db->fetch($res)) == null)
 				{
 					break;
 				}
@@ -438,7 +438,7 @@ class User_Wrapper_Access
 		}
 		else
 		{
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data);
 			}
@@ -457,7 +457,7 @@ class User_Wrapper_Access
    				"FROM ".constant("GROUP_TABLE")."";  
    						
    		$res = $db->db_query($sql);
-   		$data = $db->db_fetch_assoc($res);
+   		$data = $db->fetch($res);
 	
 		return $data['result'];
    	}
@@ -474,7 +474,7 @@ class User_Wrapper_Access
 				"WHERE ".constant("GROUP_HAS_USER_TABLE").".group_id = 1";
 				
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 		
 		if ($data['result'])
 		{

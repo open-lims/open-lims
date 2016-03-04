@@ -45,7 +45,7 @@ class SampleIsItem_Access
 		{
 			$sql = "SELECT * FROM ".constant("SAMPLE_IS_ITEM_TABLE")." WHERE sample_id='".$sample_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['sample_id'])
 			{
@@ -82,7 +82,7 @@ class SampleIsItem_Access
 					
 			$res_write = $db->db_query($sql_write);	
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{	
 				return true;
 			}
@@ -109,7 +109,7 @@ class SampleIsItem_Access
 			$sql = "DELETE FROM ".constant("SAMPLE_IS_ITEM_TABLE")." WHERE sample_id = ".$this->sample_id." AND item_id = ".$this->item_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				$this->__destruct();
 				return true;
@@ -168,7 +168,7 @@ class SampleIsItem_Access
 		{	
 			$sql = "SELECT sample_id FROM ".constant("SAMPLE_IS_ITEM_TABLE")." WHERE item_id='".$item_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['sample_id'])
 			{
@@ -203,7 +203,7 @@ class SampleIsItem_Access
 			
    			$res = $db->db_query($sql_read);
 
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data['sample_id']);
 			}

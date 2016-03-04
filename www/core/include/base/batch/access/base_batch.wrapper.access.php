@@ -115,7 +115,7 @@ class BaseBatch_Wrapper_Access
 		{
 			for ($i = 0; $i<=$end-1; $i++)
 			{
-				if (($data = $db->db_fetch_assoc($res)) == null)
+				if (($data = $db->fetch($res)) == null)
 				{
 					break;
 				}
@@ -128,7 +128,7 @@ class BaseBatch_Wrapper_Access
 		}
 		else
 		{
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data);
 			}
@@ -170,7 +170,7 @@ class BaseBatch_Wrapper_Access
 						"".$sql_where."";
 		
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 
 		return $data['result'];
 	}

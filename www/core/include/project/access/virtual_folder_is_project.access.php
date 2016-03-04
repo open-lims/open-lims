@@ -44,7 +44,7 @@ class VirtualFolderIsProject_Access
 		{
 			$sql = "SELECT * FROM ".constant("VIRTUAL_FOLDER_IS_PROJECT_TABLE")." WHERE id='".$virtual_folder_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -82,7 +82,7 @@ class VirtualFolderIsProject_Access
 			
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) != 1)
+			if ($db->row_count($res_write) != 1)
 			{
 				return false;
 			}
@@ -113,7 +113,7 @@ class VirtualFolderIsProject_Access
 			$sql = "DELETE FROM ".constant("VIRTUAL_FOLDER_IS_PROJECT_TABLE")." WHERE id = ".$virtual_folder_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -141,7 +141,7 @@ class VirtualFolderIsProject_Access
 		{
 			$sql = "SELECT * FROM ".constant("VIRTUAL_FOLDER_IS_PROJECT_TABLE")." WHERE id='".$virtual_folder_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{

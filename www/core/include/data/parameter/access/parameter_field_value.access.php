@@ -53,7 +53,7 @@ class ParameterFieldValue_Access
 		{
 			$sql = "SELECT * FROM ".constant("PARAMETER_FIELD_VALUE_TABLE")." WHERE id='".$parameter_field_value_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -133,11 +133,11 @@ class ParameterFieldValue_Access
 					
 			$res_write = $db->db_query($sql_write);	
 
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("PARAMETER_FIELD_VALUE_TABLE")." WHERE id = currval('".self::PARAMETER_FIELD_VALUE_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 									
 				self::__construct($data_read['id']);
 				
@@ -170,7 +170,7 @@ class ParameterFieldValue_Access
 			$sql = "DELETE FROM ".constant("PARAMETER_FIELD_VALUE_TABLE")." WHERE id = ".$parameter_field_value_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -288,7 +288,7 @@ class ParameterFieldValue_Access
 			$sql = "UPDATE ".constant("PARAMETER_FIELD_VALUE_TABLE")." SET parameter_version_id = '".$parameter_version_id."' WHERE id = ".$this->parameter_field_value_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->parameter_version_id = $parameter_version_id;
 				return true;
@@ -317,7 +317,7 @@ class ParameterFieldValue_Access
 			$sql = "UPDATE ".constant("PARAMETER_FIELD_VALUE_TABLE")." SET parameter_field_id = '".$parameter_field_id."' WHERE id = ".$this->parameter_field_value_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->parameter_field_id = $parameter_field_id;
 				return true;
@@ -346,7 +346,7 @@ class ParameterFieldValue_Access
 			$sql = "UPDATE ".constant("PARAMETER_FIELD_VALUE_TABLE")." SET parameter_method_id = '".$parameter_method_id."' WHERE id = ".$this->parameter_field_value_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->parameter_method_id = $parameter_method_id;
 				return true;
@@ -375,7 +375,7 @@ class ParameterFieldValue_Access
 			$sql = "UPDATE ".constant("PARAMETER_FIELD_VALUE_TABLE")." SET value = '".$value."' WHERE id = ".$this->parameter_field_value_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->value = $value;
 				return true;
@@ -404,7 +404,7 @@ class ParameterFieldValue_Access
 			$sql = "UPDATE ".constant("PARAMETER_FIELD_VALUE_TABLE")." SET source = '".$source."' WHERE id = ".$this->parameter_field_value_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->source = $source;
 				return true;
@@ -442,7 +442,7 @@ class ParameterFieldValue_Access
 			$sql = "UPDATE ".constant("PARAMETER_FIELD_VALUE_TABLE")." SET locked = '".$locked_insert."' WHERE id = ".$this->parameter_field_value_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->locked = $locked;
 				return true;
@@ -471,7 +471,7 @@ class ParameterFieldValue_Access
 		{
 			$sql = "SELECT id FROM ".constant("PARAMETER_FIELD_VALUE_TABLE")." WHERE parameter_method_id='".$method_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -503,7 +503,7 @@ class ParameterFieldValue_Access
 			$sql = "SELECT parameter_field_id,value FROM ".constant("PARAMETER_FIELD_VALUE_TABLE")." WHERE parameter_version_id='".$parameter_version_id."'";
 			$res = $db->db_query($sql);
 			
-			while($data = $db->db_fetch_assoc($res))
+			while($data = $db->fetch($res))
 			{
 				$return_array[$data['parameter_field_id']] = $data['value'];
 			}
@@ -538,7 +538,7 @@ class ParameterFieldValue_Access
 			$sql = "SELECT parameter_field_id,parameter_method_id FROM ".constant("PARAMETER_FIELD_VALUE_TABLE")." WHERE parameter_version_id='".$parameter_version_id."'";
 			$res = $db->db_query($sql);
 			
-			while($data = $db->db_fetch_assoc($res))
+			while($data = $db->fetch($res))
 			{
 				$return_array[$data['parameter_field_id']] = $data['parameter_method_id'];
 			}
@@ -595,7 +595,7 @@ class ParameterFieldValue_Access
 		{			
 			$sql = "SELECT id FROM ".constant("PARAMETER_FIELD_VALUE_TABLE")." WHERE parameter_version_id='".$parameter_version_id."' AND parameter_field_id='".$parameter_field_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{

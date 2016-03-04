@@ -47,7 +47,7 @@ class OrganisationUnitHasMember_Access
 		{	
 			$sql = "SELECT * FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id." AND member_id = ".$member_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['organisation_unit_id'])
 			{
@@ -81,7 +81,7 @@ class OrganisationUnitHasMember_Access
 					"VALUES (".$organisation_unit_id.",".$member_id.")";
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				return true;
 			}
@@ -113,7 +113,7 @@ class OrganisationUnitHasMember_Access
 			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE organisation_unit_id = ".$tmp_organisation_unit_id." AND member_id = ".$tmp_member_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -171,7 +171,7 @@ class OrganisationUnitHasMember_Access
 			$sql = "UPDATE ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." SET organisation_unit_id = '".$organisation_unit_id."' WHERE organisation_unit_id = '".$this->organisation_unit_id."' AND member_id='".$this->member_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->organisation_unit_id = $organisation_unit_id;
 				return true;
@@ -201,7 +201,7 @@ class OrganisationUnitHasMember_Access
 			$sql = "UPDATE ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." SET member_id = '".$member_id."' WHERE organisation_unit_id = '".$this->organisation_unit_id."' AND member_id='".$this->member_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->member_id = $member_id;
 				return true;
@@ -232,7 +232,7 @@ class OrganisationUnitHasMember_Access
 			
 			$sql = "SELECT COUNT(organisation_unit_id) AS result FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE member_id = ".$member_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['result'])
 			{
@@ -263,7 +263,7 @@ class OrganisationUnitHasMember_Access
 			
 			$sql = "SELECT COUNT(member_id) AS result FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['result'])
 			{
@@ -296,7 +296,7 @@ class OrganisationUnitHasMember_Access
 			$sql = "SELECT organisation_unit_id FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE member_id = ".$member_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['organisation_unit_id']);
 			}
@@ -340,7 +340,7 @@ class OrganisationUnitHasMember_Access
 			$sql = "SELECT member_id FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."".$limit_sql;
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['member_id']);
 			}
@@ -375,7 +375,7 @@ class OrganisationUnitHasMember_Access
 			
 			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE member_id = ".$member_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			return true;	
 		}
@@ -399,7 +399,7 @@ class OrganisationUnitHasMember_Access
 			
 			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_MEMBER_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			return true;	
 		}

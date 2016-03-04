@@ -50,7 +50,7 @@ class ItemInformation_Access
 		{
 			$sql = "SELECT * FROM ".constant("ITEM_INFORMATION_TABLE")." WHERE id='".$information_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -114,11 +114,11 @@ class ItemInformation_Access
 					
 			$res_write = $db->db_query($sql_write);	
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("ITEM_INFORMATION_TABLE")." WHERE id = currval('".self::ITEM_INFORMATION_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 									
 				self::__construct($data_read['id']);
 				
@@ -151,7 +151,7 @@ class ItemInformation_Access
 			$sql = "DELETE FROM ".constant("ITEM_INFORMATION_TABLE")." WHERE id = ".$information_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -224,7 +224,7 @@ class ItemInformation_Access
 			$sql = "UPDATE ".constant("ITEM_INFORMATION_TABLE")." SET description = '".$description."' WHERE id = ".$this->information_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->description = $description;
 				return true;
@@ -253,7 +253,7 @@ class ItemInformation_Access
 			$sql = "UPDATE ".constant("ITEM_INFORMATION_TABLE")." SET keywords = '".$keywords."' WHERE id = ".$this->information_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->keywords = $keywords;
 				return true;
@@ -282,7 +282,7 @@ class ItemInformation_Access
 			$sql = "UPDATE ".constant("ITEM_INFORMATION_TABLE")." SET last_update = '".$last_update."' WHERE id = ".$this->information_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->last_update = $last_update;
 				return true;
@@ -321,7 +321,7 @@ class ItemInformation_Access
 			$sql = "UPDATE ".constant("ITEM_INFORMATION_TABLE")." SET description_text_search_vector = to_tsvector('".$language_name_insert."','".$string."') WHERE id = ".$this->information_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				return true;
 			}
@@ -359,7 +359,7 @@ class ItemInformation_Access
 				$sql = "UPDATE ".constant("ITEM_INFORMATION_TABLE")." SET keywords_text_search_vector = to_tsvector('".$language_name_insert."','".$string."') WHERE id = ".$this->information_id."";
 				$res = $db->db_query($sql);
 				
-				if ($db->db_affected_rows($res))
+				if ($db->row_count($res))
 				{
 					return true;
 				}
@@ -387,7 +387,7 @@ class ItemInformation_Access
 		$sql = "SELECT id FROM ".constant("ITEM_INFORMATION_TABLE")."";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($return_array,$data['id']);	
 		}

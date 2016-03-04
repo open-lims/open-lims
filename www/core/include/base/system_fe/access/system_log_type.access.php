@@ -45,7 +45,7 @@ class SystemLogType_Access
 		{
 			$sql = "SELECT * FROM ".constant("SYSTEM_LOG_TYPE_TABLE")." WHERE id = ".$log_type_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -95,7 +95,7 @@ class SystemLogType_Access
 		$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TYPE_TABLE")." ORDER BY id";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($return_array,$data['id']);
 		}

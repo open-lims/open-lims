@@ -49,7 +49,7 @@ class BaseBatchType_Access
 		{
 			$sql = "SELECT * FROM ".constant("BASE_BATCH_TYPE_TABLE")." WHERE id='".$batch_type_id."'";
 			$res = $db->db_query($sql);			
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -93,11 +93,11 @@ class BaseBatchType_Access
 
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("BASE_BATCH_TYPE_TABLE")." WHERE id = currval('".self::BASE_BATCH_TYPE_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
 			
@@ -130,7 +130,7 @@ class BaseBatchType_Access
 			$sql = "DELETE FROM ".constant("BASE_BATCH_TYPE_TABLE")." WHERE id = ".$tmp_batch_type_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -203,7 +203,7 @@ class BaseBatchType_Access
 			$sql = "UPDATE ".constant("BASE_BATCH_TYPE_TABLE")." SET name = '".$name."' WHERE id = '".$this->batch_type_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name = $name;
 				return true;
@@ -233,7 +233,7 @@ class BaseBatchType_Access
 			$sql = "UPDATE ".constant("BASE_BATCH_TYPE_TABLE")." SET internal_name = '".$internal_name."' WHERE id = '".$this->batch_type_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->internal_name = $internal_name;
 				return true;
@@ -263,7 +263,7 @@ class BaseBatchType_Access
 			$sql = "UPDATE ".constant("BASE_BATCH_TYPE_TABLE")." SET binary_id = '".$binary_id."' WHERE id = '".$this->batch_type_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->binary_id = $binary_id;
 				return true;
@@ -293,7 +293,7 @@ class BaseBatchType_Access
 		{
 			$sql = "SELECT id FROM ".constant("BASE_BATCH_TYPE_TABLE")." WHERE internal_name='".$internal_name."'";
 			$res = $db->db_query($sql);			
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{

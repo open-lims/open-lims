@@ -51,7 +51,7 @@ class SampleHasLocation_Access
 		{
 			$sql = "SELECT * FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE primary_key='".$primary_key."'";
 			$res = $db->db_query($sql);			
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['primary_key'])
 			{
@@ -100,11 +100,11 @@ class SampleHasLocation_Access
 					"VALUES (nextval('".self::SAMPLE_HAS_LOCATION_PK_SEQUENCE."'::regclass),".$sample_id.",".$location_id.",'".$datetime."',".$user_id.")";
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT primary_key FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE primary_key = currval('".self::SAMPLE_HAS_LOCATION_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['primary_key']);
 				
@@ -137,7 +137,7 @@ class SampleHasLocation_Access
 			$sql = "DELETE FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE primary_key = ".$tmp_primary_key."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -225,7 +225,7 @@ class SampleHasLocation_Access
 			$sql = "UPDATE ".constant("SAMPLE_HAS_LOCATION_TABLE")." SET sample_id = '".$sample_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->sample_id = $sample_id;
 				return true;
@@ -254,7 +254,7 @@ class SampleHasLocation_Access
 			$sql = "UPDATE ".constant("SAMPLE_HAS_LOCATION_TABLE")." SET location_id = '".$location_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->location_id = $location_id;
 				return true;
@@ -283,7 +283,7 @@ class SampleHasLocation_Access
 			$sql = "UPDATE ".constant("SAMPLE_HAS_LOCATION_TABLE")." SET datetime = '".$datetime."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->datetime = $datetime;
 				return true;
@@ -312,7 +312,7 @@ class SampleHasLocation_Access
 			$sql = "UPDATE ".constant("SAMPLE_HAS_LOCATION_TABLE")." SET user_id = '".$user_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->user_id = $user_id;
 				return true;
@@ -340,7 +340,7 @@ class SampleHasLocation_Access
 			$sql = "UPDATE ".constant("SAMPLE_HAS_LOCATION_TABLE")." SET location_id = NULL WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->location_id= null;
 				return true;
@@ -372,7 +372,7 @@ class SampleHasLocation_Access
 			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE sample_id = ".$sample_id." ORDER BY datetime ASC";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['primary_key']);
 			}
@@ -407,7 +407,7 @@ class SampleHasLocation_Access
 			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE location_id = ".$location_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['primary_key']);
 			}
@@ -439,7 +439,7 @@ class SampleHasLocation_Access
 		$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")."";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($return_array,$data['primary_key']);
 		}

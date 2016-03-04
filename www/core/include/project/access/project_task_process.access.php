@@ -46,7 +46,7 @@ class ProjectTaskProcess_Access
 		{
 			$sql = "SELECT * FROM ".constant("PROJECT_TASK_PROCESS_TABLE")." WHERE task_id='".$task_id."'";
 			$res = $db->db_query($sql);			
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['task_id'])
 			{
@@ -86,7 +86,7 @@ class ProjectTaskProcess_Access
 					"VALUES (".$task_id.", '".$name."', '0')";
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				return true;
 			}
@@ -117,7 +117,7 @@ class ProjectTaskProcess_Access
 			$sql = "DELETE FROM ".constant("PROJECT_TASK_PROCESS_TABLE")." WHERE task_id = ".$tmp_task_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -175,7 +175,7 @@ class ProjectTaskProcess_Access
 			$sql = "UPDATE ".constant("PROJECT_TASK_PROCESS_TABLE")." SET name = '".$name."' WHERE task_id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name = $name;
 				return true;
@@ -204,7 +204,7 @@ class ProjectTaskProcess_Access
 			$sql = "UPDATE ".constant("PROJECT_TASK_PROCESS_TABLE")." SET progress = '".$progress."' WHERE task_id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->progress = $progress;
 				return true;

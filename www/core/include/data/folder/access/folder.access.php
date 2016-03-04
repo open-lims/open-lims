@@ -52,7 +52,7 @@ class Folder_Access
 		{
 			$sql = "SELECT * FROM ".constant("FOLDER_TABLE")." WHERE id='".$folder_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -121,7 +121,7 @@ class Folder_Access
 			
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) != 1)
+			if ($db->row_count($res_write) != 1)
 			{
 				return null;
 			}
@@ -129,7 +129,7 @@ class Folder_Access
 			{
 				$sql_read = "SELECT id FROM ".constant("FOLDER_TABLE")." WHERE id = currval('".self::FOLDER_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
 				
@@ -158,7 +158,7 @@ class Folder_Access
 			$sql = "DELETE FROM ".constant("FOLDER_TABLE")." WHERE id = ".$folder_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -291,7 +291,7 @@ class Folder_Access
 			$sql = "UPDATE ".constant("FOLDER_TABLE")." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->folder_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->data_entity_id = $data_entity_id;
 				return true;
@@ -320,7 +320,7 @@ class Folder_Access
 			$sql = "UPDATE ".constant("FOLDER_TABLE")." SET name = '".$name."' WHERE id = ".$this->folder_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name = $name;
 				return true;
@@ -349,7 +349,7 @@ class Folder_Access
 			$sql = "UPDATE ".constant("FOLDER_TABLE")." SET path = '".$path."' WHERE id = ".$this->folder_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->path = $path;
 				return true;
@@ -387,7 +387,7 @@ class Folder_Access
 			$sql = "UPDATE ".constant("FOLDER_TABLE")." SET deleted = '".$deleted_insert."' WHERE id = ".$this->folder_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->deleted = $deleted;
 				return true;
@@ -425,7 +425,7 @@ class Folder_Access
 			$sql = "UPDATE ".constant("FOLDER_TABLE")." SET blob = '".$blob_insert."' WHERE id = ".$this->folder_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->blob = $blob;
 				return true;
@@ -454,7 +454,7 @@ class Folder_Access
 			$sql = "UPDATE ".constant("FOLDER_TABLE")." SET flag = ".$flag." WHERE id = ".$this->folder_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->flag = $flag;
 				return true;
@@ -483,7 +483,7 @@ class Folder_Access
 		{
 			$sql = "SELECT id FROM ".constant("FOLDER_TABLE")." WHERE id = ".$folder_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -513,7 +513,7 @@ class Folder_Access
 			$sql = "SELECT id FROM ".constant("FOLDER_TABLE")." WHERE TRIM(LOWER(path)) = '".trim(strtolower($path))."'";
 
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -543,7 +543,7 @@ class Folder_Access
 			$sql = "SELECT id FROM ".constant("FOLDER_TABLE")." WHERE data_entity_id = '".$data_entity_id."'";
 
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -573,7 +573,7 @@ class Folder_Access
 			$sql = "SELECT data_entity_id FROM ".constant("FOLDER_TABLE")." WHERE id = '".$folder_id."'";
 
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['data_entity_id'])
 			{
@@ -603,7 +603,7 @@ class Folder_Access
 			$sql = "SELECT name FROM ".constant("FOLDER_TABLE")." WHERE id = '".$folder_id."'";
 
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['name'])
 			{

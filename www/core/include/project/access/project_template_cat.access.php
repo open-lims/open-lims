@@ -47,7 +47,7 @@ class ProjectTemplateCat_Access
 		{
 			$sql = "SELECT * FROM ".constant("PROJECT_TEMPLATE_CAT_TABLE")." WHERE id='".$template_cat_id."'";
 			$res = $db->db_query($sql);			
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -85,11 +85,11 @@ class ProjectTemplateCat_Access
 							"VALUES (nextval('".self::PROJECT_TEMPLATE_CAT_PK_SEQUENCE."'::regclass),'".$name."')";
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{				
 				$sql_read = "SELECT id FROM ".constant("PROJECT_TEMPLATE_CAT_TABLE")." WHERE id = currval('".self::PROJECT_TEMPLATE_CAT_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 								
 				self::__construct($data_read['id']);				
 								
@@ -122,7 +122,7 @@ class ProjectTemplateCat_Access
     		$sql = "DELETE FROM ".constant("PROJECT_TEMPLATE_CAT_TABLE")." WHERE id = ".$tmp_template_cat_id."";
     		$res = $db->db_query($sql);
     		
-    		if ($db->db_affected_rows($res) == 1)
+    		if ($db->row_count($res) == 1)
     		{
     			return true;
     		}
@@ -165,7 +165,7 @@ class ProjectTemplateCat_Access
 			$sql = "UPDATE ".constant("PROJECT_TEMPLATE_CAT_TABLE")." SET name = '".$name."' WHERE id = ".$this->template_cat_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name = $name;
 				return true;
@@ -196,7 +196,7 @@ class ProjectTemplateCat_Access
 			
 			$sql = "SELECT id FROM ".constant("PROJECT_TEMPLATE_CAT_TABLE")." WHERE TRIM(LOWER(NAME))='".$name."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -224,7 +224,7 @@ class ProjectTemplateCat_Access
 		{		
 			$sql = "SELECT id FROM ".constant("PROJECT_TEMPLATE_CAT_TABLE")." WHERE id='".$id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -252,7 +252,7 @@ class ProjectTemplateCat_Access
 		$sql = "SELECT id FROM ".constant("PROJECT_TEMPLATE_CAT_TABLE")." ORDER BY id";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($return_array,$data['id']);
 		}

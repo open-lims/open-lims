@@ -55,7 +55,7 @@ class BaseModuleDialog_Access
 		{
 			$sql = "SELECT * FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE id='".$id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -138,11 +138,11 @@ class BaseModuleDialog_Access
 				
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE id = currval('".self::BASE_MODULE_DIALOG_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 							
 				self::__construct($data_read['id']);		
 								
@@ -175,7 +175,7 @@ class BaseModuleDialog_Access
 			$sql = "DELETE FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE id = '".$id_tmp."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -338,7 +338,7 @@ class BaseModuleDialog_Access
 			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET module_id = '".$module_id."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->module_id = $module_id;
 				return true;
@@ -367,7 +367,7 @@ class BaseModuleDialog_Access
 			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET dialog_type = '".$dialog_type."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->dialog_type = $dialog_type;
 				return true;
@@ -396,7 +396,7 @@ class BaseModuleDialog_Access
 			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET class_path = '".$class_path."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->class_path = $class_path;
 				return true;
@@ -425,7 +425,7 @@ class BaseModuleDialog_Access
 			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET class = '".$class."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->class = $class;
 				return true;
@@ -454,7 +454,7 @@ class BaseModuleDialog_Access
 			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET method = '".$method."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->method = $method;
 				return true;
@@ -483,7 +483,7 @@ class BaseModuleDialog_Access
 			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET internal_name = '".$internal_name."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->internal_name = $internal_name;
 				return true;
@@ -512,7 +512,7 @@ class BaseModuleDialog_Access
 			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET language_address = '".$language_address."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->language_address = $language_address;
 				return true;
@@ -541,7 +541,7 @@ class BaseModuleDialog_Access
 			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET weight = '".$weight."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->weight = $weight;
 				return true;
@@ -579,7 +579,7 @@ class BaseModuleDialog_Access
 			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET disabled = '".$disabled_insert."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->disabled = $disabled;
 				return true;
@@ -611,7 +611,7 @@ class BaseModuleDialog_Access
 			
 			$sql = "SELECT * FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE TRIM(dialog_type) = '".trim($dialog_type)."' AND internal_name = '".$internal_name."' AND disabled='f'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 
 			$result_array['class_path'] = $data['class_path'];
 			$result_array['class'] 		= $data['class'];
@@ -647,7 +647,7 @@ class BaseModuleDialog_Access
 			
 			$sql = "SELECT * FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE TRIM(dialog_type) = '".trim($dialog_type)."' AND disabled='f' ORDER BY weight";
 			$res = $db->db_query($sql);
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				$result_array[$counter]['class_path'] 		= $data['class_path'];
 				$result_array[$counter]['class'] 			= $data['class'];
@@ -687,7 +687,7 @@ class BaseModuleDialog_Access
 			
 			$sql = "SELECT * FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE TRIM(dialog_type) = '".trim($dialog_type)."' AND module_id = ".$module_id." AND disabled='f' ORDER BY weight";
 			$res = $db->db_query($sql);
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				$result_array[$counter]['class_path'] 		= $data['class_path'];
 				$result_array[$counter]['class'] 			= $data['class'];
@@ -727,7 +727,7 @@ class BaseModuleDialog_Access
 			$sql = "SELECT id FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE module_id = ".$module_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['id']);
 			}

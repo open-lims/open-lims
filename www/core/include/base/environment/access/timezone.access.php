@@ -50,7 +50,7 @@ class Timezone_Access
 		{
 			$sql = "SELECT * FROM ".constant("TIMEZONE_TABLE")." WHERE id='".$timezone_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -95,11 +95,11 @@ class Timezone_Access
 				
 			$res_write = $db->db_query($sql_write);
 		
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("TIMEZONE_TABLE")." WHERE id = currval('".self::TIMEZONE_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 							
 				self::__construct($data_read['id']);		
 								
@@ -132,7 +132,7 @@ class Timezone_Access
 			$sql = "DELETE FROM ".constant("TIMEZONE_TABLE")." WHERE id = '".$id_tmp."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -205,7 +205,7 @@ class Timezone_Access
 			$sql = "UPDATE ".constant("TIMEZONE_TABLE")." SET title = '".$title."' WHERE id = ".$this->timezone_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->title = $title;
 				return true;
@@ -234,7 +234,7 @@ class Timezone_Access
 			$sql = "UPDATE ".constant("TIMEZONE_TABLE")." SET php_title = '".$php_title."' WHERE id = ".$this->timezone_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->php_title = $php_title;
 				return true;
@@ -263,7 +263,7 @@ class Timezone_Access
 			$sql = "UPDATE ".constant("TIMEZONE_TABLE")." SET deviation = '".$deviation."' WHERE id = ".$this->timezone_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->deviation = $deviation;
 				return true;
@@ -292,7 +292,7 @@ class Timezone_Access
 		$sql = "SELECT id FROM ".constant("TIMEZONE_TABLE")." ORDER BY deviation, title";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($return_array,$data['id']);
 		}
@@ -315,7 +315,7 @@ class Timezone_Access
 		{
 			$sql = "SELECT id FROM ".constant("TIMEZONE_TABLE")." WHERE id = ".$id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{

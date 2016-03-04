@@ -48,7 +48,7 @@ class Value_Access
 		{
 			$sql = "SELECT * FROM ".constant("VALUE_TABLE")." WHERE id='".$value_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -91,11 +91,11 @@ class Value_Access
 					
 			$res_write = $db->db_query($sql_write);	
 
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("VALUE_TABLE")." WHERE id = currval('".self::VALUE_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 									
 				self::__construct($data_read['id']);
 				
@@ -128,7 +128,7 @@ class Value_Access
 			$sql = "DELETE FROM ".constant("VALUE_TABLE")." WHERE id = ".$value_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -187,7 +187,7 @@ class Value_Access
 			$sql = "UPDATE ".constant("VALUE_TABLE")." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->value_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->data_entity_id = $data_entity_id;
 				return true;
@@ -216,7 +216,7 @@ class Value_Access
 			$sql = "UPDATE ".constant("VALUE_TABLE")." SET type_id = ".$type_id." WHERE id = ".$this->value_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->type_id = $type_id;
 				return true;
@@ -247,7 +247,7 @@ class Value_Access
 			$sql = "SELECT id FROM ".constant("VALUE_TABLE")." WHERE data_entity_id = '".$data_entity_id."'";
 
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -279,7 +279,7 @@ class Value_Access
 			$sql = "SELECT id FROM ".constant("VALUE_TABLE")." WHERE type_id = ".$type_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['id']);	
 			}
@@ -314,7 +314,7 @@ class Value_Access
 			
 			$sql = "SELECT id FROM ".constant("VALUE_TABLE")." WHERE id= ".$value_id." AND type_id = ".$type_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -343,7 +343,7 @@ class Value_Access
 		{
 			$sql = "SELECT id FROM ".constant("VALUE_TABLE")." WHERE id = ".$value_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{

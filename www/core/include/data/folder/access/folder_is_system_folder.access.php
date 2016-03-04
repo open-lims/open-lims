@@ -44,7 +44,7 @@ class FolderIsSystemFolder_Access
 		{
 			$sql = "SELECT * FROM ".constant("FOLDER_IS_SYSTEM_FOLDER_TABLE")." WHERE folder_id='".$folder_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['folder_id'])
 			{

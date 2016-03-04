@@ -59,7 +59,7 @@ class SystemLog_Access
 		{	
 			$sql = "SELECT * FROM ".constant("SYSTEM_LOG_TABLE")." WHERE id = ".$log_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -173,11 +173,11 @@ class SystemLog_Access
 			
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE id = currval('".self::SYSTEM_LOG_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
 								
@@ -210,7 +210,7 @@ class SystemLog_Access
     		$sql = "DELETE FROM ".constant("SYSTEM_LOG_TABLE")." WHERE id = ".$tmp_log_id."";
     		$res = $db->db_query($sql);
     		
-    		if ($db->db_affected_rows($res) == 1)
+    		if ($db->row_count($res) == 1)
     		{
     			return true;
     		}
@@ -403,7 +403,7 @@ class SystemLog_Access
 			$sql = "UPDATE ".constant("SYSTEM_LOG_TABLE")." SET stack_trace = '".$stack_trace."' WHERE id = ".$this->log_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->stack_trace = $stack_trace;
 				return true;
@@ -432,7 +432,7 @@ class SystemLog_Access
 		$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." ORDER BY datetime";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($return_array,$data['id']);
 		}
@@ -462,7 +462,7 @@ class SystemLog_Access
 			$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE type_id = ".$type_id." ORDER BY datetime";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['id']);
 			}
@@ -497,7 +497,7 @@ class SystemLog_Access
 			$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE user_id = ".$user_id." ORDER BY datetime";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['id']);
 			}
@@ -550,7 +550,7 @@ class SystemLog_Access
 		{
 			$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE id = '".$id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -574,7 +574,7 @@ class SystemLog_Access
 		{
 			$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE ip = '".$ip."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -599,7 +599,7 @@ class SystemLog_Access
 		{
 			$sql = "SELECT COUNT(id) AS result FROM ".constant("SYSTEM_LOG_TABLE")." WHERE type_id = 1 AND LOWER(content_errorno) = 'login' AND content_int IS NULL AND ip = '".$ip."' AND datetime > '".$begin."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['result'])
 			{
@@ -624,7 +624,7 @@ class SystemLog_Access
 		{
 			$sql = "SELECT COUNT(id) AS result FROM ".constant("SYSTEM_LOG_TABLE")." WHERE type_id = 1 AND LOWER(content_errorno) = 'login' AND content_int IS NULL AND ip = '".$ip."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['result'])
 			{
@@ -649,7 +649,7 @@ class SystemLog_Access
 		{
 			$sql = "SELECT COUNT(id) AS result FROM ".constant("SYSTEM_LOG_TABLE")." WHERE type_id = 1 AND LOWER(content_errorno) = 'login' AND content_int = '1' AND ip = '".$ip."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['result'])
 			{
@@ -677,7 +677,7 @@ class SystemLog_Access
 			$sql = "SELECT user_id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE user_id IS NOT NULL AND ip = '".$ip."' GROUP BY user_id";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res)) 
+			while ($data = $db->fetch($res)) 
 			{
 				array_push($return_array, $data['user_id']);
 			}

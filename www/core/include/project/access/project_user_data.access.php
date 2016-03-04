@@ -45,7 +45,7 @@ class ProjectUserData_Access
 		{
 			$sql = "SELECT * FROM ".constant("PROJECT_USER_DATA_TABLE")." WHERE user_id='".$user_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['user_id'])
 			{
@@ -84,7 +84,7 @@ class ProjectUserData_Access
 					
 			$res_write = $db->db_query($sql_write);	
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				return true;
 			}
@@ -115,7 +115,7 @@ class ProjectUserData_Access
 			$sql = "DELETE FROM ".constant("PROJECT_USER_DATA_TABLE")." WHERE user_id = ".$user_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -158,7 +158,7 @@ class ProjectUserData_Access
 			$sql = "UPDATE ".constant("PROJECT_USER_DATA_TABLE")." SET quota = '".$quota."' WHERE user_id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->quota = $quota;
 				return true;

@@ -53,7 +53,7 @@ class UserAdminSetting_Access
 		{
 			$sql = "SELECT * FROM ".constant("USER_ADMIN_SETTING_TABLE")." WHERE id='".$user_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -181,7 +181,7 @@ class UserAdminSetting_Access
 																	
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				self::__construct($user_id);
 				return true;
@@ -214,7 +214,7 @@ class UserAdminSetting_Access
 			$sql = "DELETE FROM ".constant("USER_ADMIN_SETTING_TABLE")." WHERE id = ".$user_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -371,7 +371,7 @@ class UserAdminSetting_Access
 			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET can_change_password = '".$can_change_password_insert."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->can_change_password = $can_change_password;
 				return true;
@@ -409,7 +409,7 @@ class UserAdminSetting_Access
 			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET must_change_password = '".$must_change_password_insert."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->must_change_password = $must_change_password;
 				return true;
@@ -447,7 +447,7 @@ class UserAdminSetting_Access
 			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET user_locked = '".$user_locked_insert."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->user_locked = $user_locked;
 				return true;
@@ -485,7 +485,7 @@ class UserAdminSetting_Access
 			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET user_inactive = '".$user_inactive_insert."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->user_inactive = $user_inactive;
 				return true;
@@ -523,7 +523,7 @@ class UserAdminSetting_Access
 			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET secure_password = '".$secure_password_insert."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->secure_password = $secure_password;
 				return true;
@@ -552,7 +552,7 @@ class UserAdminSetting_Access
 			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET last_password_change = ".$last_password_change." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->last_password_change = $last_password_change;
 				return true;
@@ -590,7 +590,7 @@ class UserAdminSetting_Access
 			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET block_write = '".$block_write_insert."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->block_write = $block_write;
 				return true;
@@ -628,7 +628,7 @@ class UserAdminSetting_Access
 			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET create_folder = '".$create_folder_insert."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->create_folder = $create_folder;
 				return true;
@@ -653,7 +653,7 @@ class UserAdminSetting_Access
 									
 		$sql = "SELECT COUNT(id) AS result FROM ".constant("USER_ADMIN_SETTING_TABLE")." WHERE user_inactive = 't'";
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 		
 		if ($data['result'])
 		{
@@ -674,7 +674,7 @@ class UserAdminSetting_Access
 									
 		$sql = "SELECT COUNT(id) AS result FROM ".constant("USER_ADMIN_SETTING_TABLE")." WHERE user_locked = 't'";
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 		
 		if ($data['result'])
 		{

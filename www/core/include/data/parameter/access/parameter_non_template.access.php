@@ -47,7 +47,7 @@ class ParameterNonTemplate_Access
 		{
 			$sql = "SELECT * FROM ".constant("PARAMETER_NON_TEMPLATE_TABLE")." WHERE id='".$parameter_non_template_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -84,11 +84,11 @@ class ParameterNonTemplate_Access
 				
 		$res_write = $db->db_query($sql_write);	
 
-		if ($db->db_affected_rows($res_write) == 1)
+		if ($db->row_count($res_write) == 1)
 		{
 			$sql_read = "SELECT id FROM ".constant("PARAMETER_NON_TEMPLATE_TABLE")." WHERE id = currval('".self::PARAMETER_NON_TEMPLATE_PK_SEQUENCE."'::regclass)";
 			$res_read = $db->db_query($sql_read);
-			$data_read = $db->db_fetch_assoc($res_read);
+			$data_read = $db->fetch($res_read);
 								
 			self::__construct($data_read['id']);
 			
@@ -116,7 +116,7 @@ class ParameterNonTemplate_Access
 			$sql = "DELETE FROM ".constant("PARAMETER_NON_TEMPLATE_TABLE")." WHERE id = ".$parameter_non_template_id_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -159,7 +159,7 @@ class ParameterNonTemplate_Access
 			$sql = "UPDATE ".constant("PARAMETER_NON_TEMPLATE_TABLE")." SET datetime = '".$datetime."' WHERE id = ".$this->parameter_non_template_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->datetime = $datetime;
 				return true;

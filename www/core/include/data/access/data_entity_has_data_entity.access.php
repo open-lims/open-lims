@@ -43,7 +43,7 @@ class DataEntityHasDataEntity_Access
 		{
 			$sql = "SELECT * FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_pid = ".$data_entity_pid." AND data_entity_cid = ".$data_entity_cid."";
 			$res = $db->db_query($sql);			
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['data_entity_pid'])
 			{
@@ -115,7 +115,7 @@ class DataEntityHasDataEntity_Access
 					"VALUES (".$data_entity_pid.",".$data_entity_cid.",'".$link_insert."',".$link_item_id_insert.")";
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				return true;
 			}
@@ -217,7 +217,7 @@ class DataEntityHasDataEntity_Access
 			
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['data_entity_cid']);
 			}
@@ -252,7 +252,7 @@ class DataEntityHasDataEntity_Access
 			$sql = "SELECT data_entity_pid FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_cid = ".$data_entity_cid." AND (link = 'f' OR link IS NULL)";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['data_entity_pid']);
 			}

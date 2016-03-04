@@ -28,6 +28,9 @@
 class Database
 {
 	private $pdo;	
+	
+	private $last_statement;
+	
 	private $query_log;
 	private $query_log_status;
 				
@@ -61,21 +64,29 @@ class Database
 	
 	public function prepare($query)
 	{
+		if ($this->query_log_status === true)
+		{
+			$this->query_log = $this->query_log."\n".$query;
+		}
+		
 		return $this->pdo->prepare($query);
 	}
 	
 	public function execute($statement)
 	{
+		$last_statement = $statement;
 		$statement->execute();
 	}
 	
 	public function row_count($statement)
 	{
+		$last_statement = $statement;
 		return $statement->rowCount();
 	}
 	
 	public function fetch($statement)
 	{
+		$last_statement = $statement;
 		return $statement->fetch(PDO::FETCH_ASSOC);
 	}
 	
@@ -102,6 +113,11 @@ class Database
 		}
 	}
 	
+	public function get_last_error()
+	{
+		return $last_statement->errorInfo();
+	}
+	
 	public function close()
 	{
 		unset($this->pdo);
@@ -118,44 +134,7 @@ class Database
  	 	$pg_result->execute();
  	 	
  	 	return $pg_result;
- 	}
- 	
-	public function db_fetch_assoc($assoc)
-	{
- 		return $assoc->fetch(PDO::FETCH_ASSOC);
- 	}
- 	
- 	public function db_fetch_assoc_wrow($resultset, $row)
- 	{
- 		return $this->sql->sql_fetch_assoc_wrow($resultset, $row);
- 	}
- 
- 	public function db_fetch_array($resultset)
- 	{
- 		return $this->sql->sql_fetch_array($resultset);
- 	}
- 	
- 	public function db_fetch_array_wrow($resultset, $row)
- 	{
- 		return $this->sql->sql_fetch_array_wrow($resultset, $row);
- 	}
- 
- 
- 	
- 	public function db_num_rows($resultset)
- 	{
- 		return $this->sql->sql_num_rows($resultset);
- 	}
- 	
- 	public function db_affected_rows($resultset)
- 	{
- 		return $resultset->rowCount();
- 	}
- 	 	 	
-	public function db_last_error()
- 	{
- 		return $this->sql->sql_last_error();
- 	}
+ 	}	 	 
 }
 
 ?>

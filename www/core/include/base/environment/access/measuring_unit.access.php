@@ -59,7 +59,7 @@ class MeasuringUnit_Access
 		{	
 			$sql = "SELECT * FROM ".constant("MEASURING_UNIT_TABLE")." WHERE id = ".$id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -226,11 +226,11 @@ class MeasuringUnit_Access
 			
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("MEASURING_UNIT_TABLE")." WHERE id = currval('".self::MEASURING_UNIT_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
 								
@@ -263,7 +263,7 @@ class MeasuringUnit_Access
     		$sql = "DELETE FROM ".constant("MEASURING_UNIT_TABLE")." WHERE id = ".$tmp_id."";
     		$res = $db->db_query($sql);
     		
-    		if ($db->db_affected_rows($res) == 1)
+    		if ($db->row_count($res) == 1)
     		{
     			return true;
     		}
@@ -471,7 +471,7 @@ class MeasuringUnit_Access
 			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET base_id = '".$base_id."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->base_id = $base_id;
 				return true;
@@ -509,7 +509,7 @@ class MeasuringUnit_Access
 			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET category_id = ".$category_id_insert." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->category_id = $category_id;
 				return true;
@@ -538,7 +538,7 @@ class MeasuringUnit_Access
 			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET name = '".$name."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name = $name;
 				return true;
@@ -567,7 +567,7 @@ class MeasuringUnit_Access
 			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET unit_symbol = '".$unit_symbol."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->unit_symbol = $unit_symbol;
 				return true;
@@ -605,7 +605,7 @@ class MeasuringUnit_Access
 			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET min_value = ".$min_value_insert." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->min_value = $min_value;
 				return true;
@@ -643,7 +643,7 @@ class MeasuringUnit_Access
 			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET max_value = ".$max_value_insert." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->max_value = $max_value;
 				return true;
@@ -681,7 +681,7 @@ class MeasuringUnit_Access
 			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET min_prefix_exponent = ".$min_prefix_exponent_insert." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->min_prefix_exponent = $min_prefix_exponent;
 				return true;
@@ -719,7 +719,7 @@ class MeasuringUnit_Access
 			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET max_prefix_exponent = ".$max_prefix_exponent_insert." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->max_prefix_exponent = $max_prefix_exponent;
 				return true;
@@ -757,7 +757,7 @@ class MeasuringUnit_Access
 			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET prefix_calculation_exponent = ".$prefix_calculation_exponent_insert." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->prefix_calculation_exponent = $prefix_calculation_exponent;
 				return true;
@@ -795,7 +795,7 @@ class MeasuringUnit_Access
 			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET calculation = ".$calculation_insert." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->calculation = $calculation;
 				return true;
@@ -833,7 +833,7 @@ class MeasuringUnit_Access
 			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET type = ".$type_insert." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->type = $type;
 				return true;
@@ -862,7 +862,7 @@ class MeasuringUnit_Access
 		{
 			$sql = "SELECT id FROM ".constant("MEASURING_UNIT_TABLE")." WHERE id = '".$id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -893,7 +893,7 @@ class MeasuringUnit_Access
 			$sql = "SELECT id,name,min_prefix_exponent,max_prefix_exponent,unit_symbol FROM ".constant("MEASURING_UNIT_TABLE")." WHERE category_id = '".$category_id."' ORDER BY id";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				$temp_array = array();
 				$temp_array['id'] = $data['id'];
@@ -932,7 +932,7 @@ class MeasuringUnit_Access
 		$sql = "SELECT id,name,min_prefix_exponent,max_prefix_exponent,unit_symbol FROM ".constant("MEASURING_UNIT_TABLE")." WHERE category_id IS NULL ORDER BY id";
 		$res = $db->db_query($sql);
 		
-		while($data = $db->db_fetch_assoc($res))
+		while($data = $db->fetch($res))
 		{
 			$temp_array = array();
 			$temp_array['id'] = $data['id'];
@@ -966,7 +966,7 @@ class MeasuringUnit_Access
 		{
 			$sql = "SELECT min(id) AS id FROM ".constant("MEASURING_UNIT_TABLE")." WHERE category_id = '".$category_id."' AND calculation='B'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -995,7 +995,7 @@ class MeasuringUnit_Access
 		{
 			$sql = "SELECT created_by_user FROM ".constant("MEASURING_UNIT_TABLE")." WHERE id = '".$measuring_unit_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['created_by_user'] == "t")
 			{

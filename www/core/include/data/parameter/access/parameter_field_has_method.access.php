@@ -47,7 +47,7 @@ class ParameterFieldFieldHasMethod_Access
 		{
 			$sql = "SELECT * FROM ".constant("PARAMETER_FIELD_HAS_METHOD_TABLE")." WHERE parameter_field_id='".$parameter_field_id."' AND parameter_method_id='".$parameter_method_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['parameter_field_id'] and $data['parameter_method_id'])
 			{
@@ -87,7 +87,7 @@ class ParameterFieldFieldHasMethod_Access
 					
 			$res_write = $db->db_query($sql_write);	
 
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				self::__construct($parameter_field_id, $parameter_method_id);
 				return true;
@@ -120,7 +120,7 @@ class ParameterFieldFieldHasMethod_Access
 			$sql = "DELETE FROM ".constant("PARAMETER_FIELD_HAS_METHOD_TABLE")." WHERE parameter_field_id = ".$parameter_field_id_tmp." AND parameter_method_id=".$parameter_method_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -151,7 +151,7 @@ class ParameterFieldFieldHasMethod_Access
 			$sql = "SELECT parameter_method_id FROM ".constant("PARAMETER_FIELD_HAS_METHOD_TABLE")." WHERE parameter_field_id = ".$parameter_field_id."";
 			$res = $db->db_query($sql);
 			
-			while($data = $db->db_fetch_assoc($res))
+			while($data = $db->fetch($res))
 			{
 				array_push($return_array, $data['parameter_method_id']);
 			}

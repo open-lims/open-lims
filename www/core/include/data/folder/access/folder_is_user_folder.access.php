@@ -45,7 +45,7 @@ class FolderIsUserFolder_Access
 		{
 			$sql = "SELECT * FROM ".constant("FOLDER_IS_USER_FOLDER_TABLE")." WHERE folder_id='".$folder_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['user_id'])
 			{
@@ -82,7 +82,7 @@ class FolderIsUserFolder_Access
 					
 			$res_write = $db->db_query($sql_write);	
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{	
 				return true;
 			}
@@ -109,7 +109,7 @@ class FolderIsUserFolder_Access
 			$sql = "DELETE FROM ".constant("FOLDER_IS_USER_FOLDER_TABLE")." WHERE user_id = ".$this->user_id." AND folder_id = ".$this->folder_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				$this->__destruct();
 				return true;
@@ -168,7 +168,7 @@ class FolderIsUserFolder_Access
 		{	
 			$sql = "SELECT folder_id FROM ".constant("FOLDER_IS_USER_FOLDER_TABLE")." WHERE user_id='".$user_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['folder_id'])
 			{

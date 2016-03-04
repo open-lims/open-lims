@@ -47,7 +47,7 @@ class ValueType_Access
 		{
 			$sql = "SELECT * FROM ".constant("VALUE_TYPE_TABLE")." WHERE id='".$value_type_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -87,7 +87,7 @@ class ValueType_Access
 					"VALUES (".$id.",'".$name."',".$template_id.")";			
 			$res_write = $db->db_query($sql_write);	
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{				
 				return true;
 			}
@@ -115,7 +115,7 @@ class ValueType_Access
 			$sql = "DELETE FROM ".constant("VALUE_TYPE_TABLE")." WHERE id = ".$value_type_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -173,7 +173,7 @@ class ValueType_Access
 			$sql = "UPDATE ".constant("VALUE_TYPE_TABLE")." SET name = '".$name."' WHERE id = ".$this->value_type_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name = $name;
 				return true;
@@ -202,7 +202,7 @@ class ValueType_Access
 			$sql = "UPDATE ".constant("VALUE_TYPE_TABLE")." SET template_id = ".$template_id." WHERE id = ".$this->value_type_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->template_id = $template_id;
 				return true;
@@ -230,7 +230,7 @@ class ValueType_Access
 		{	
 			$sql = "SELECT id FROM ".constant("VALUE_TYPE_TABLE")." WHERE id = '".$id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 		
 			if ($data['id'])
 			{
@@ -258,7 +258,7 @@ class ValueType_Access
 		$sql = "SELECT id FROM ".constant("VALUE_TYPE_TABLE")."";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($return_array,$data['id']);	
 		}

@@ -49,7 +49,7 @@ class ProjectLink_Access
 		{
 			$sql = "SELECT * FROM ".constant("PROJECT_LINK_TABLE")." WHERE primary_key='".$primary_key."'";
 			$res = $db->db_query($sql);			
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['primary_key'])
 			{
@@ -90,11 +90,11 @@ class ProjectLink_Access
 					"VALUES (nextval('".self::PROJECT_LINK_PK_SEQUENCE."'::regclass),".$to_project_id.",".$project_id.")";
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT primary_key FROM ".constant("PROJECT_LINK_TABLE")." WHERE primary_key = currval('".self::PROJECT_LINK_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['primary_key']);
 				
@@ -127,7 +127,7 @@ class ProjectLink_Access
 			$sql = "DELETE FROM ".constant("PROJECT_LINK_TABLE")." WHERE primary_key = ".$tmp_primary_key."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -185,7 +185,7 @@ class ProjectLink_Access
 			$sql = "UPDATE ".constant("PROJECT_LINK_TABLE")." SET to_project_id = '".$to_project_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->to_project_id = $to_project_id;
 				return true;
@@ -214,7 +214,7 @@ class ProjectLink_Access
 			$sql = "UPDATE ".constant("PROJECT_LINK_TABLE")." SET project_id = '".$project_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->project_id = $project_id;
 				return true;
@@ -246,7 +246,7 @@ class ProjectLink_Access
 			$sql = "SELECT primary_key FROM ".constant("PROJECT_LINK_TABLE")." WHERE to_project_id = ".$project_id." OR project_id = ".$project_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['primary_key']);
 			}

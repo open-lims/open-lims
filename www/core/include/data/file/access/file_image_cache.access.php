@@ -52,7 +52,7 @@ class FileImageCache_Access
 		{
 			$sql = "SELECT * FROM ".constant("FILE_IMAGE_CACHE_TABLE")." WHERE id='".$id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -105,11 +105,11 @@ class FileImageCache_Access
 					
 			$res_write = $db->db_query($sql_write);	
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("FILE_IMAGE_CACHE_TABLE")." WHERE id = currval('".self::FILE_IMAGE_CACHE_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 									
 				self::__construct($data_read['id']);
 				
@@ -143,7 +143,7 @@ class FileImageCache_Access
 			$sql = "DELETE FROM ".constant("FILE_IMAGE_CACHE_TABLE")." WHERE id = ".$id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -246,7 +246,7 @@ class FileImageCache_Access
 			$sql = "UPDATE ".constant("FILE_IMAGE_CACHE_TABLE")." SET file_version_id = ".$file_version_id." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->file_version_id = $file_version_id;
 				return true;
@@ -275,7 +275,7 @@ class FileImageCache_Access
 			$sql = "UPDATE ".constant("FILE_IMAGE_CACHE_TABLE")." SET width = ".$width." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->width = $width;
 				return true;
@@ -304,7 +304,7 @@ class FileImageCache_Access
 			$sql = "UPDATE ".constant("FILE_IMAGE_CACHE_TABLE")." SET height = ".$height." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->height = $height;
 				return true;
@@ -333,7 +333,7 @@ class FileImageCache_Access
 			$sql = "UPDATE ".constant("FILE_IMAGE_CACHE_TABLE")." SET size = ".$size." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->size = $size;
 				return true;
@@ -362,7 +362,7 @@ class FileImageCache_Access
 			$sql = "UPDATE ".constant("FILE_IMAGE_CACHE_TABLE")." SET last_access = '".$last_access."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->last_access = $last_access;
 				return true;
@@ -392,7 +392,7 @@ class FileImageCache_Access
 		{
 			$sql = "SELECT id FROM ".constant("FILE_IMAGE_CACHE_TABLE")." WHERE file_version_id='".$file_version_id."' AND width='".$width."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -422,7 +422,7 @@ class FileImageCache_Access
 		{
 			$sql = "SELECT id FROM ".constant("FILE_IMAGE_CACHE_TABLE")." WHERE file_version_id='".$file_version_id."' AND height='".$height."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -448,7 +448,7 @@ class FileImageCache_Access
 		
 		$sql = "SELECT SUM(size) AS result FROM ".constant("FILE_IMAGE_CACHE_TABLE")."";
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 		
 		if ($data['result'])
 		{
@@ -469,7 +469,7 @@ class FileImageCache_Access
 		
 		$sql = "SELECT COUNT(id) AS result FROM ".constant("FILE_IMAGE_CACHE_TABLE")."";
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 		
 		if ($data['result'])
 		{
@@ -496,7 +496,7 @@ class FileImageCache_Access
 			$sql = "SELECT id,height,width FROM ".constant("FILE_IMAGE_CACHE_TABLE")." WHERE file_version_id='".$file_version_id."'";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				$temp_array = array();
 				$temp_array['id'] = $data['id'];
@@ -533,7 +533,7 @@ class FileImageCache_Access
 		{
 			$sql_count = "SELECT COUNT(id) AS result FROM ".constant("FILE_IMAGE_CACHE_TABLE")."";
 			$res_count = $db->db_query($sql_count);
-			$data_count = $db->db_fetch_assoc($res_count);
+			$data_count = $db->fetch($res_count);
 			
 			$limit = $data_count['result']-$number;
 			if ($limit <= 0)
@@ -546,7 +546,7 @@ class FileImageCache_Access
 			$sql = "SELECT id,file_version_id,width,height FROM ".constant("FILE_IMAGE_CACHE_TABLE")." ORDER BY last_access ASC LIMIT ".$limit;
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				$temp_array = array();
 				$temp_array['id'] = $data['id'];

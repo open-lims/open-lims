@@ -38,7 +38,7 @@ class InstallAjax
 
 			$sql = "SELECT name,db_version FROM core_base_includes";
 			$res = @$db->db_query($sql);
-			while($data = $db->db_fetch_assoc($res))
+			while($data = $db->fetch($res))
 			{
 				if (!$data['db_version'])
 				{
@@ -56,7 +56,7 @@ class InstallAjax
 			{
 				$sql = "SELECT name FROM core_base_includes";
 				$res = @$db->db_query($sql);
-				while($data = $db->db_fetch_assoc($res))
+				while($data = $db->fetch($res))
 				{
 					self::$installed_module_array[$data['name']] = "0.3.9.9-4";
 				}

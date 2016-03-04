@@ -50,7 +50,7 @@ class BaseModule_Access
 		{
 			$sql = "SELECT * FROM ".constant("BASE_MODULE_TABLE")." WHERE id='".$id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -103,11 +103,11 @@ class BaseModule_Access
 				
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("BASE_MODULE_TABLE")." WHERE id = currval('".self::BASE_MODULE_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 							
 				self::__construct($data_read['id']);		
 								
@@ -140,7 +140,7 @@ class BaseModule_Access
 			$sql = "DELETE FROM ".constant("BASE_MODULE_TABLE")." WHERE id = '".$id_tmp."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -228,7 +228,7 @@ class BaseModule_Access
 			$sql = "UPDATE ".constant("BASE_MODULE_TABLE")." SET name = '".$name."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name = $name;
 				return true;
@@ -257,7 +257,7 @@ class BaseModule_Access
 			$sql = "UPDATE ".constant("BASE_MODULE_TABLE")." SET folder = '".$folder."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->folder = $folder;
 				return true;
@@ -286,7 +286,7 @@ class BaseModule_Access
 			$sql = "UPDATE ".constant("BASE_MODULE_TABLE")." SET class = '".$class."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->class = $class;
 				return true;
@@ -324,7 +324,7 @@ class BaseModule_Access
 			$sql = "UPDATE ".constant("BASE_MODULE_TABLE")." SET disabled = '".$disabled_insert."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->disabled = $disabled;
 				return true;
@@ -353,7 +353,7 @@ class BaseModule_Access
 		{		
 			$sql = "SELECT name FROM ".constant("BASE_MODULE_TABLE")." WHERE id = ".$module_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['name'])
 			{
@@ -384,7 +384,7 @@ class BaseModule_Access
 			
 			$sql = "SELECT id FROM ".constant("BASE_MODULE_TABLE")." WHERE TRIM(LOWER(name)) = '".$name."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -413,7 +413,7 @@ class BaseModule_Access
 		{		
 			$sql = "SELECT folder FROM ".constant("BASE_MODULE_TABLE")." WHERE TRIM(name) = '".trim($module_name)."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['folder'])
 			{
@@ -442,7 +442,7 @@ class BaseModule_Access
 		$sql = "SELECT id, folder FROM ".constant("BASE_MODULE_TABLE")."";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			$return_array[$data['id']] = $data['folder'];
 		}
@@ -468,7 +468,7 @@ class BaseModule_Access
 		
 		$sql = "SELECT id,name,folder,class FROM ".constant("BASE_MODULE_TABLE")." ORDER BY name";
 		$res = $db->db_query($sql);
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			$result_array[$data['id']]['name']		= $data['name'];
 			$result_array[$data['id']]['folder']	= $data['folder'];
@@ -492,7 +492,7 @@ class BaseModule_Access
 			
 			$sql = "SELECT id FROM ".constant("BASE_MODULE_TABLE")." WHERE TRIM(LOWER(name)) = '".$name."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{

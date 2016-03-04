@@ -47,7 +47,7 @@ class ParameterHasTemplate_Access
 		{
 			$sql = "SELECT * FROM ".constant("PARAMETER_HAS_TEMPLATE_TABLE")." WHERE parameter_id='".$parameter_id."' AND template_id='".$template_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['parameter_id'] and $data['template_id'])
 			{
@@ -87,7 +87,7 @@ class ParameterHasTemplate_Access
 					
 			$res_write = $db->db_query($sql_write);	
 
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				self::__construct($parameter_id, $template_id);
 				return true;
@@ -121,7 +121,7 @@ class ParameterHasTemplate_Access
 			$sql = "DELETE FROM ".constant("PARAMETER_HAS_TEMPLATE_TABLE")." WHERE parameter_id=".$parameter_id_tmp." AND template_id = ".$template_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -149,7 +149,7 @@ class ParameterHasTemplate_Access
 		{
 			$sql = "SELECT template_id FROM ".constant("PARAMETER_HAS_TEMPLATE_TABLE")." WHERE parameter_id='".$parameter_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['template_id'])
 			{
@@ -181,7 +181,7 @@ class ParameterHasTemplate_Access
 			$sql = "SELECT parameter_id FROM ".constant("PARAMETER_HAS_TEMPLATE_TABLE")." WHERE template_id='".$template_id."'";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data['parameter_id']);
 			}

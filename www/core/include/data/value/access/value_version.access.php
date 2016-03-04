@@ -58,7 +58,7 @@ class ValueVersion_Access
 		{
 			$sql = "SELECT * FROM ".constant("VALUE_VERSION_TABLE")." WHERE id='".$value_version_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -152,11 +152,11 @@ class ValueVersion_Access
 					
 			$res_write = $db->db_query($sql_write);	
 
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("VALUE_VERSION_TABLE")." WHERE id = currval('".self::VALUE_VERSION_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 									
 				self::__construct($data_read['id']);
 				return $data_read['id'];
@@ -188,7 +188,7 @@ class ValueVersion_Access
 			$sql = "DELETE FROM ".constant("VALUE_VERSION_TABLE")." WHERE id = ".$value_version_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -396,7 +396,7 @@ class ValueVersion_Access
 			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET toid = ".$toid." WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->toid = $toid;
 				return true;
@@ -425,7 +425,7 @@ class ValueVersion_Access
 			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET version = ".$version." WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->version = $version;
 				return true;
@@ -454,7 +454,7 @@ class ValueVersion_Access
 			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET value = '".$value."' WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->value = $value;
 				return true;
@@ -493,7 +493,7 @@ class ValueVersion_Access
 			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET text_search_vector = to_tsvector('".$language_name_insert."','".$string."') WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				return true;
 			}
@@ -521,7 +521,7 @@ class ValueVersion_Access
 			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET checksum = '".$checksum."' WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->checksum = $checksum;
 				return true;
@@ -550,7 +550,7 @@ class ValueVersion_Access
 			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET datetime = '".$datetime."' WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->datetime = $datetime;
 				return true;
@@ -579,7 +579,7 @@ class ValueVersion_Access
 			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET language_id = '".$language_id."' WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->language_id = $language_id;
 				return true;
@@ -608,7 +608,7 @@ class ValueVersion_Access
 			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET previous_version_id = '".$previous_version_id."' WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->previous_version_id = $previous_version_id;
 				return true;
@@ -637,7 +637,7 @@ class ValueVersion_Access
 			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET internal_revision = '".$internal_revision."' WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->internal_revision = $internal_revision;
 				return true;
@@ -675,7 +675,7 @@ class ValueVersion_Access
 			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET current= '".$current_insert."' WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->current = $current;
 				return true;
@@ -704,7 +704,7 @@ class ValueVersion_Access
 			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET owner_id = '".$owner_id."' WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->owner_id = $owner_id;
 				return true;
@@ -733,7 +733,7 @@ class ValueVersion_Access
 			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET name = '".$name."' WHERE id = ".$this->value_version_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name = $name;
 				return true;
@@ -761,7 +761,7 @@ class ValueVersion_Access
 		{
 			$sql = "SELECT id FROM ".constant("VALUE_VERSION_TABLE")." WHERE internal_revision = ".$internal_revision." AND toid = '".$this->toid."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -793,7 +793,7 @@ class ValueVersion_Access
 		{
 			$sql = "SELECT id FROM ".constant("VALUE_VERSION_TABLE")." WHERE toid = '".$value_id."' AND internal_revision = '".$internal_revision."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -825,7 +825,7 @@ class ValueVersion_Access
 			$sql = "SELECT * FROM get_all_value_versions(".$toid.", NULL) AS result";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['result']);	
 			}
@@ -860,7 +860,7 @@ class ValueVersion_Access
 			$sql = "SELECT id FROM ".constant("VALUE_VERSION_TABLE")." WHERE previous_version_id = ".$previous_version_id." AND id != previous_version_id";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['id']);	
 			}
@@ -894,7 +894,7 @@ class ValueVersion_Access
 			
 			$sql = "SELECT COUNT(id) AS numberofresults FROM ".constant("VALUE_VERSION_TABLE")." WHERE toid = ".$toid." AND id = previous_version_id";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['numberofresults'])
 			{
@@ -924,7 +924,7 @@ class ValueVersion_Access
 			$sql = "SELECT id FROM ".constant("VALUE_VERSION_TABLE")." WHERE previous_version_id = ".$id." " .
 							"AND version = (SELECT MAX(version) FROM ".constant("VALUE_VERSION_TABLE")." WHERE previous_version_id = ".$id." AND previous_version_id != id) AND previous_version_id != id";				
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 							
 			if ($data['id'])
 			{
@@ -964,7 +964,7 @@ class ValueVersion_Access
 			}
 			
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 							
 			if ($data['id'])
 			{
@@ -996,7 +996,7 @@ class ValueVersion_Access
 						"AND datetime = (SELECT MAX(datetime) FROM ".constant("VALUE_VERSION_TABLE")." WHERE toid = ".$toid." AND internal_revision != ".$internal_revision.")";				
 			
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 							
 			if ($data['id'])
 			{
@@ -1027,7 +1027,7 @@ class ValueVersion_Access
 			$sql = "SELECT id FROM ".constant("VALUE_VERSION_TABLE")." WHERE toid = ".$toid." " .
 							"AND internal_revision = ".$internal_revision."";				
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 							
 			if ($data['id'])
 			{
@@ -1057,7 +1057,7 @@ class ValueVersion_Access
 			$sql = "SELECT id FROM ".constant("VALUE_VERSION_TABLE")." WHERE toid = ".$toid." " .
 							"AND current = 't'";				
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 							
 			if ($data['id'])
 			{
@@ -1086,7 +1086,7 @@ class ValueVersion_Access
 		{
 			$sql = "UPDATE ".constant("VALUE_VERSION_TABLE")." SET owner_id = NULL WHERE owner_id = '".$owner_id."'";				
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 							
 			if ($res !== false)
 			{

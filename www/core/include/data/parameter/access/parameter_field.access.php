@@ -53,7 +53,7 @@ class ParameterField_Access
 		{
 			$sql = "SELECT * FROM ".constant("PARAMETER_FIELD_TABLE")." WHERE id='".$parameter_field_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -149,11 +149,11 @@ class ParameterField_Access
 					
 			$res_write = $db->db_query($sql_write);	
 
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("PARAMETER_FIELD_TABLE")." WHERE id = currval('".self::PARAMETER_FIELD_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 									
 				self::__construct($data_read['id']);
 				
@@ -186,7 +186,7 @@ class ParameterField_Access
 			$sql = "DELETE FROM ".constant("PARAMETER_FIELD_TABLE")." WHERE id = ".$parameter_field_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -304,7 +304,7 @@ class ParameterField_Access
 			$sql = "UPDATE ".constant("PARAMETER_FIELD_TABLE")." SET name = '".$name."' WHERE id = ".$this->parameter_field_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name = $name;
 				return true;
@@ -333,7 +333,7 @@ class ParameterField_Access
 			$sql = "UPDATE ".constant("PARAMETER_FIELD_TABLE")." SET min_value = '".$min_value."' WHERE id = ".$this->parameter_field_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->min_value = $min_value;
 				return true;
@@ -362,7 +362,7 @@ class ParameterField_Access
 			$sql = "UPDATE ".constant("PARAMETER_FIELD_TABLE")." SET max_value = '".$max_value."' WHERE id = ".$this->parameter_field_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->max_value = $max_value;
 				return true;
@@ -400,7 +400,7 @@ class ParameterField_Access
 			$sql = "UPDATE ".constant("PARAMETER_FIELD_TABLE")." SET measuring_unit_id = ".$measuring_unit_id_insert." WHERE id = ".$this->parameter_field_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->measuring_unit_id = $measuring_unit_id;
 				return true;
@@ -438,7 +438,7 @@ class ParameterField_Access
 			$sql = "UPDATE ".constant("PARAMETER_FIELD_TABLE")." SET measuring_unit_exponent = ".$measuring_unit_exponent_insert." WHERE id = ".$this->parameter_field_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->measuring_unit_exponent = $measuring_unit_exponent;
 				return true;
@@ -476,7 +476,7 @@ class ParameterField_Access
 			$sql = "UPDATE ".constant("PARAMETER_FIELD_TABLE")." SET measuring_unit_ratio_id = ".$measuring_unit_ratio_id_insert." WHERE id = ".$this->parameter_field_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->measuring_unit_ratio_id = $measuring_unit_ratio_id;
 				return true;

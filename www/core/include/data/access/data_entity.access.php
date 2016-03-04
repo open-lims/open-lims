@@ -51,7 +51,7 @@ class DataEntity_Access
 		{
 			$sql = "SELECT * FROM ".constant("DATA_ENTITY_TABLE")." WHERE id='".$id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -124,11 +124,11 @@ class DataEntity_Access
 				
 		$res_write = $db->db_query($sql_write);	
 		
-		if ($db->db_affected_rows($res_write) == 1)
+		if ($db->row_count($res_write) == 1)
 		{
 			$sql_read = "SELECT id FROM ".constant("DATA_ENTITY_TABLE")." WHERE id = currval('".self::DATA_ENTITY_PK_SEQUENCE."'::regclass)";
 			$res_read = $db->db_query($sql_read);
-			$data_read = $db->db_fetch_assoc($res_read);
+			$data_read = $db->fetch($res_read);
 								
 			self::__construct($data_read['id']);
 
@@ -156,7 +156,7 @@ class DataEntity_Access
 			$sql = "DELETE FROM ".constant("DATA_ENTITY_TABLE")." WHERE id = ".$id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -259,7 +259,7 @@ class DataEntity_Access
 			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET datetime = '".$datetime."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->toid = $toid;
 				return true;
@@ -288,7 +288,7 @@ class DataEntity_Access
 			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET owner_id = ".$owner_id." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->owner_id = $owner_id;
 				return true;
@@ -317,7 +317,7 @@ class DataEntity_Access
 			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET owner_group_id = ".$owner_group_id." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->owner_group_id = $owner_group_id;
 				return true;
@@ -346,7 +346,7 @@ class DataEntity_Access
 			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET permission = ".$permission." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->permission = $permission;
 				return true;
@@ -384,7 +384,7 @@ class DataEntity_Access
 			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET automatic = '".$automatic_insert."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->automatic = $automatic;
 				return true;
@@ -409,7 +409,7 @@ class DataEntity_Access
 		{
 			$sql = "SELECT id FROM ".constant("DATA_ENTITY_TABLE")." WHERE id='".$id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{

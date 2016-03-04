@@ -49,7 +49,7 @@ class ProjectTemplate_Access
 		{
 			$sql = "SELECT * FROM ".constant("PROJECT_TEMPLATE_TABLE")." WHERE id='".$id."'";
 			$res = $db->db_query($sql);			
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -116,7 +116,7 @@ class ProjectTemplate_Access
 							"VALUES (".$id.",'".$name."',".$cat_id.",'".$parent_template_insert."',".$template_id.")";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{				
 				self::__construct($id);
 				return true;
@@ -148,7 +148,7 @@ class ProjectTemplate_Access
     		$sql = "DELETE FROM ".constant("PROJECT_TEMPLATE_TABLE")." WHERE id = ".$tmp_template_id."";
     		$res = $db->db_query($sql);
     		
-    		if ($db->db_affected_rows($res) == 1)
+    		if ($db->row_count($res) == 1)
     		{
     			return true;
     		}
@@ -235,7 +235,7 @@ class ProjectTemplate_Access
 			$sql = "UPDATE ".constant("PROJECT_TEMPLATE_TABLE")." SET name = '".$name."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name = $name;
 				return true;
@@ -264,7 +264,7 @@ class ProjectTemplate_Access
 			$sql = "UPDATE ".constant("PROJECT_TEMPLATE_TABLE")." SET cat_id = ".$cat_id." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->cat_id = $cat_id;
 				return true;
@@ -302,7 +302,7 @@ class ProjectTemplate_Access
 			$sql = "UPDATE ".constant("PROJECT_TEMPLATE_TABLE")." SET parent_template = '".$parent_template_insert."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->parent_template = $parent_template;
 				return true;
@@ -331,7 +331,7 @@ class ProjectTemplate_Access
 			$sql = "UPDATE ".constant("PROJECT_TEMPLATE_TABLE")." SET template_id = ".$template_id." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->template_id = $template_id;
 				return true;
@@ -362,7 +362,7 @@ class ProjectTemplate_Access
 			
 			$sql = "SELECT id FROM ".constant("PROJECT_TEMPLATE_TABLE")." WHERE id=".$id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -391,7 +391,7 @@ class ProjectTemplate_Access
 		$sql = "SELECT id FROM ".constant("PROJECT_TEMPLATE_TABLE")." ORDER BY id";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($return_array,$data['id']);
 		}
@@ -421,7 +421,7 @@ class ProjectTemplate_Access
 			$sql = "SELECT id FROM ".constant("PROJECT_TEMPLATE_TABLE")." WHERE cat_id = ".$cat_id." ORDER BY id";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['id']);
 			}

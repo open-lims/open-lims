@@ -47,7 +47,7 @@ class ParameterMethod_Access
 		{
 			$sql = "SELECT * FROM ".constant("PARAMETER_METHOD_TABLE")." WHERE id='".$parameter_method_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -85,11 +85,11 @@ class ParameterMethod_Access
 					
 			$res_write = $db->db_query($sql_write);	
 
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("PARAMETER_METHOD_TABLE")." WHERE id = currval('".self::PARAMETER_METHOD_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 									
 				self::__construct($data_read['id']);
 				
@@ -122,7 +122,7 @@ class ParameterMethod_Access
 			$sql = "DELETE FROM ".constant("PARAMETER_METHOD_TABLE")." WHERE id = ".$parameter_method_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -165,7 +165,7 @@ class ParameterMethod_Access
 			$sql = "UPDATE ".constant("PARAMETER_METHOD_TABLE")." SET name = '".$name."' WHERE id = ".$this->parameter_method_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name = $name;
 				return true;
@@ -194,7 +194,7 @@ class ParameterMethod_Access
 		$sql = "SELECT id, name FROM ".constant("PARAMETER_METHOD_TABLE")." ORDER BY name";
 		$res = $db->db_query($sql);
 		
-		while($data = $db->db_fetch_assoc($res))
+		while($data = $db->fetch($res))
 		{
 			$return_array[$data['id']] = $data['name'];
 		}
@@ -221,7 +221,7 @@ class ParameterMethod_Access
 		{
 			$sql = "SELECT id FROM ".constant("PARAMETER_METHOD_TABLE")." WHERE id = ".$method_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{

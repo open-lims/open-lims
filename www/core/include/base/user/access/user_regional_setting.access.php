@@ -59,7 +59,7 @@ class UserRegionalSetting_Access
 		{			
 			$sql = "SELECT * FROM ".constant("USER_REGIONAL_SETTING_TABLE")." WHERE id='".$user_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{				
@@ -227,7 +227,7 @@ class UserRegionalSetting_Access
 										
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				self::__construct($user_id);
 				return true;
@@ -260,7 +260,7 @@ class UserRegionalSetting_Access
 			$sql = "DELETE FROM ".constant("USER_REGIONAL_SETTING_TABLE")." WHERE id = ".$user_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -498,7 +498,7 @@ class UserRegionalSetting_Access
 			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET language_id = ".$language_id." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->language_id = $language_id;
 				return true;
@@ -527,7 +527,7 @@ class UserRegionalSetting_Access
 			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET timezone_id = ".$timezone_id." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->timezone_id = $timezone_id;
 				return true;
@@ -565,7 +565,7 @@ class UserRegionalSetting_Access
 			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET time_display_format = '".$time_display_format_insert."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->time_display_format = $time_display_format;
 				return true;
@@ -603,7 +603,7 @@ class UserRegionalSetting_Access
 			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET time_enter_format = '".$time_enter_format_insert."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->time_enter_format = $time_enter_format;
 				return true;
@@ -632,7 +632,7 @@ class UserRegionalSetting_Access
 			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET date_display_format = '".$date_display_format."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->date_display_format = $date_display_format;
 				return true;
@@ -661,7 +661,7 @@ class UserRegionalSetting_Access
 			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET date_enter_format = '".$date_enter_format."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->date_enter_format = $date_enter_format;
 				return true;
@@ -690,7 +690,7 @@ class UserRegionalSetting_Access
 			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET country_id = '".$country_id."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->country_id = $country_id;
 				return true;
@@ -719,7 +719,7 @@ class UserRegionalSetting_Access
 			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET system_of_units = '".$system_of_units."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->system_of_units = $system_of_units;
 				return true;
@@ -748,7 +748,7 @@ class UserRegionalSetting_Access
 			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET system_of_paper_format = '".$system_of_paper_format."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->system_of_paper_format = $system_of_paper_format;
 				return true;
@@ -777,7 +777,7 @@ class UserRegionalSetting_Access
 			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET currency_id = '".$currency_id."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->currency_id = $currency_id;
 				return true;
@@ -806,7 +806,7 @@ class UserRegionalSetting_Access
 			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET currency_significant_digits = '".$currency_significant_digits."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->currency_significant_digits = $currency_significant_digits;
 				return true;
@@ -835,7 +835,7 @@ class UserRegionalSetting_Access
 			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET decimal_separator = '".$decimal_separator."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->decimal_separator = $decimal_separator;
 				return true;
@@ -864,7 +864,7 @@ class UserRegionalSetting_Access
 			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET thousand_separator = '".$thousand_separator."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->thousand_separator = $thousand_separator;
 				return true;
@@ -893,7 +893,7 @@ class UserRegionalSetting_Access
 			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET name_display_format = '".$name_display_format."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name_display_format = $name_display_format;
 				return true;

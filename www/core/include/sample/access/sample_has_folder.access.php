@@ -45,7 +45,7 @@ class SampleHasFolder_Access
 		{
 			$sql = "SELECT * FROM ".constant("SAMPLE_HAS_FOLDER_TABLE")." WHERE folder_id='".$folder_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['sample_id'])
 			{
@@ -82,7 +82,7 @@ class SampleHasFolder_Access
 					
 			$res_write = $db->db_query($sql_write);	
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{	
 				return true;
 			}
@@ -109,7 +109,7 @@ class SampleHasFolder_Access
 			$sql = "DELETE FROM ".constant("SAMPLE_HAS_FOLDER_TABLE")." WHERE sample_id = ".$this->sample_id." AND folder_id = ".$this->folder_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				$this->__destruct();
 				return true;
@@ -168,7 +168,7 @@ class SampleHasFolder_Access
 		{	
 			$sql = "SELECT folder_id FROM ".constant("SAMPLE_HAS_FOLDER_TABLE")." WHERE sample_id='".$sample_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['folder_id'])
 			{
@@ -197,7 +197,7 @@ class SampleHasFolder_Access
 		{
 			$sql = "SELECT get_sample_id_by_folder_id(".$folder_id.") AS return_value";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['return_value'])
 			{

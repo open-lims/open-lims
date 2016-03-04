@@ -97,7 +97,7 @@ class Equipment_Wrapper_Access
 			{
 				for ($i = 0; $i<=$end-1; $i++)
 				{
-					if (($data = $db->db_fetch_assoc($res)) == null)
+					if (($data = $db->fetch($res)) == null)
 					{
 						break;
 					}
@@ -110,7 +110,7 @@ class Equipment_Wrapper_Access
 			}
 			else
 			{
-				while ($data = $db->db_fetch_assoc($res))
+				while ($data = $db->fetch($res))
 				{
 					array_push($return_array, $data);
 				}
@@ -138,7 +138,7 @@ class Equipment_Wrapper_Access
 							"WHERE ".constant("EQUIPMENT_IS_ITEM_TABLE").".item_id IN (".$item_sql.")";
 			
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 	
 			return $data['result'];
 		}
@@ -212,7 +212,7 @@ class Equipment_Wrapper_Access
 			{
 				for ($i = 0; $i<=$end-1; $i++)
 				{
-					if (($data = $db->db_fetch_assoc($res)) == null)
+					if (($data = $db->fetch($res)) == null)
 					{
 						break;
 					}
@@ -225,7 +225,7 @@ class Equipment_Wrapper_Access
 			}
 			else
 			{
-				while ($data = $db->db_fetch_assoc($res))
+				while ($data = $db->fetch($res))
 				{
 					array_push($return_array, $data);
 				}
@@ -254,7 +254,7 @@ class Equipment_Wrapper_Access
 							"WHERE ".constant("EQUIPMENT_HAS_ORGANISTAION_UNIT_TABLE").".organisation_unit_id IN (SELECT * FROM get_organisation_unit_childs(".$organisation_unit_id."))";
 
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 
 			return $data['result'];
 		}

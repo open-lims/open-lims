@@ -51,7 +51,7 @@ class ParameterTemplate_Access
 		{
 			$sql = "SELECT * FROM ".constant("PARAMETER_TEMPLATE_TABLE")." WHERE id='".$template_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -108,11 +108,11 @@ class ParameterTemplate_Access
 					
 			$res_write = $db->db_query($sql_write);	
 
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("PARAMETER_TEMPLATE_TABLE")." WHERE id = currval('".self::PARAMETER_TEMPLATE_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 									
 				self::__construct($data_read['id']);
 				
@@ -145,7 +145,7 @@ class ParameterTemplate_Access
 			$sql = "DELETE FROM ".constant("PARAMETER_TEMPLATE_TABLE")." WHERE id = ".$template_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -233,7 +233,7 @@ class ParameterTemplate_Access
 			$sql = "UPDATE ".constant("PARAMETER_TEMPLATE_TABLE")." SET internal_name = '".$internal_name."' WHERE id = ".$this->template_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->internal_name = $internal_name;
 				return true;
@@ -262,7 +262,7 @@ class ParameterTemplate_Access
 			$sql = "UPDATE ".constant("PARAMETER_TEMPLATE_TABLE")." SET name = '".$name."' WHERE id = ".$this->template_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name = $name;
 				return true;
@@ -291,7 +291,7 @@ class ParameterTemplate_Access
 			$sql = "UPDATE ".constant("PARAMETER_TEMPLATE_TABLE")." SET created_by = '".$created_by."' WHERE id = ".$this->template_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->created_by = $created_by;
 				return true;
@@ -320,7 +320,7 @@ class ParameterTemplate_Access
 			$sql = "UPDATE ".constant("PARAMETER_TEMPLATE_TABLE")." SET datetime = '".$datetime."' WHERE id = ".$this->template_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->datetime = $datetime;
 				return true;
@@ -346,7 +346,7 @@ class ParameterTemplate_Access
 		{
 			$sql = "SELECT id FROM ".constant("PARAMETER_TEMPLATE_TABLE")." WHERE internal_name = '".$internal_name."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -375,7 +375,7 @@ class ParameterTemplate_Access
 		{
 			$sql = "SELECT id FROM ".constant("PARAMETER_TEMPLATE_TABLE")." WHERE internal_name = '".$internal_name."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -404,7 +404,7 @@ class ParameterTemplate_Access
 		{
 			$sql = "SELECT id FROM ".constant("PARAMETER_TEMPLATE_TABLE")." WHERE id = ".$template_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -458,7 +458,7 @@ class ParameterTemplate_Access
 		$sql = "SELECT id,name FROM ".constant("PARAMETER_TEMPLATE_TABLE")." ".$additional_sql." ORDER BY name";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($return_array,array("id" => $data['id'], "name" => $data['name']));
 		}

@@ -50,7 +50,7 @@ class GroupHasUser_Access
 		{
 			$sql = "SELECT * FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE primary_key='".$primary_key."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['primary_key'])
 			{
@@ -94,7 +94,7 @@ class GroupHasUser_Access
 																	
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) != 1)
+			if ($db->row_count($res_write) != 1)
 			{
 				return null;
 			}
@@ -102,7 +102,7 @@ class GroupHasUser_Access
 			{
 				$sql_read = "SELECT primary_key FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE primary_key = currval('".self::GROUP_HAS_USER_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['primary_key']);
 				
@@ -131,7 +131,7 @@ class GroupHasUser_Access
 			$sql = "DELETE FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE primary_key = ".$primary_key_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -189,7 +189,7 @@ class GroupHasUser_Access
 			$sql = "UPDATE ".constant("GROUP_HAS_USER_TABLE")." SET group_id = ".$group_id." WHERE primary_key = ".$this->primary_key."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->group_id = $group_id;
 				return true;
@@ -218,7 +218,7 @@ class GroupHasUser_Access
 			$sql = "UPDATE ".constant("GROUP_HAS_USER_TABLE")." SET user_id = ".$user_id." WHERE primary_key = ".$this->primary_key."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->user_id = $user_id;
 				return true;
@@ -249,7 +249,7 @@ class GroupHasUser_Access
 			
 			$sql = "SELECT primary_key FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE user_id = ".$user_id." AND group_id = ".$group_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['primary_key'])
 			{
@@ -281,7 +281,7 @@ class GroupHasUser_Access
 			$sql = "SELECT group_id FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE user_id = ".$user_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['group_id']);
 			}
@@ -316,7 +316,7 @@ class GroupHasUser_Access
 			$sql = "SELECT user_id FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE group_id = ".$group_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['user_id']);
 			}
@@ -350,7 +350,7 @@ class GroupHasUser_Access
 			
 			$sql = "SELECT COUNT(group_id) AS result FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE user_id = ".$user_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['result'])
 			{
@@ -381,7 +381,7 @@ class GroupHasUser_Access
 			
 			$sql = "SELECT COUNT(user_id) AS result FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE group_id = ".$group_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['result'])
 			{
@@ -413,7 +413,7 @@ class GroupHasUser_Access
 			
 			$sql = "DELETE FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE user_id = ".$user_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			return true;
 		}
@@ -437,7 +437,7 @@ class GroupHasUser_Access
 			
 			$sql = "DELETE FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE group_id = ".$group_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			return true;	
 		}

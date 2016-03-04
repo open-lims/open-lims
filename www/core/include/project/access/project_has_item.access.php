@@ -54,7 +54,7 @@ class ProjectHasItem_Access
 		{
 			$sql = "SELECT * FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE primary_key='".$primary_key."'";
 			$res = $db->db_query($sql);			
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['primary_key'])
 			{
@@ -129,11 +129,11 @@ class ProjectHasItem_Access
 					"VALUES (nextval('".self::PROJECT_HAS_ITEM_PK_SEQUENCE."'::regclass),".$project_id.",".$item_id.",'t','f',".$gid_insert.",NULL)";
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE primary_key = currval('".self::PROJECT_HAS_ITEM_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['primary_key']);
 				
@@ -166,7 +166,7 @@ class ProjectHasItem_Access
 			$sql = "DELETE FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE primary_key = ".$tmp_primary_key."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -299,7 +299,7 @@ class ProjectHasItem_Access
 			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET project_id = '".$project_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->project_id = $project_id;
 				return true;
@@ -328,7 +328,7 @@ class ProjectHasItem_Access
 			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET item_id = '".$item_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->item_id = $item_id;
 				return true;
@@ -366,7 +366,7 @@ class ProjectHasItem_Access
 			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET active = '".$active_insert."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->active = $active;
 				return true;
@@ -404,7 +404,7 @@ class ProjectHasItem_Access
 			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET required = '".$required_insert."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->required = $required;
 				return true;
@@ -433,7 +433,7 @@ class ProjectHasItem_Access
 			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET gid = '".$gid."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->gid = $gid;
 				return true;
@@ -462,7 +462,7 @@ class ProjectHasItem_Access
 			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET project_status_id = '".$project_status_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->project_status_id = $project_status_id;
 				return true;
@@ -491,7 +491,7 @@ class ProjectHasItem_Access
 			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET parent_item_id = '".$parent_item_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->parent_item_id = $parent_item_id;
 				return true;
@@ -524,7 +524,7 @@ class ProjectHasItem_Access
 			
 			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND project_id = ".$project_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 				
 			if ($data['primary_key'])
 			{
@@ -557,7 +557,7 @@ class ProjectHasItem_Access
 			$sql = "SELECT project_id,project_status_id,gid FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND parent_item_id IS NULL";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				$tmp_array = array();
 				$tmp_array['id'] = $data['project_id'];
@@ -598,7 +598,7 @@ class ProjectHasItem_Access
 			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE parent_item_id = ".$parent_item_id." AND project_id = ".$project_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['primary_key']);
 			}
@@ -634,7 +634,7 @@ class ProjectHasItem_Access
 			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE parent_item_id = ".$parent_item_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['primary_key']);
 			}
@@ -670,7 +670,7 @@ class ProjectHasItem_Access
 			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['primary_key']);
 			}
@@ -716,7 +716,7 @@ class ProjectHasItem_Access
 			
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['item_id']);
 			}
@@ -762,7 +762,7 @@ class ProjectHasItem_Access
 			
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,array("pos_id" => $data['gid'], "item_id" => $data['item_id']));
 			}
@@ -807,7 +807,7 @@ class ProjectHasItem_Access
 			
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['item_id']);
 			}

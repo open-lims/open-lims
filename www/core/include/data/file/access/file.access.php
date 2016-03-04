@@ -48,7 +48,7 @@ class File_Access
 		{
 			$sql = "SELECT * FROM ".constant("FILE_TABLE")." WHERE id='".$file_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -92,7 +92,7 @@ class File_Access
 			
 			$sql_read = "SELECT id FROM ".constant("FILE_TABLE")." WHERE id = currval('".self::FILE_PK_SEQUENCE."'::regclass)";
 			$res_read = $db->db_query($sql_read);
-			$data_read = $db->db_fetch_assoc($res_read);
+			$data_read = $db->fetch($res_read);
 								
 			self::__construct($data_read['id']);
 			
@@ -120,7 +120,7 @@ class File_Access
 			$sql = "DELETE FROM ".constant("FILE_TABLE")." WHERE id = ".$file_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -179,7 +179,7 @@ class File_Access
 			$sql = "UPDATE ".constant("FILE_TABLE")." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->file_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->data_entity_id = $data_entity_id;
 				return true;
@@ -208,7 +208,7 @@ class File_Access
 			$sql = "UPDATE ".constant("FILE_TABLE")." SET flag = ".$flag." WHERE id = ".$this->file_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->flag = $flag;
 				return true;
@@ -238,7 +238,7 @@ class File_Access
 			$sql = "SELECT id FROM ".constant("FILE_TABLE")." WHERE data_entity_id = '".$data_entity_id."'";
 
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -267,7 +267,7 @@ class File_Access
 		{
 			$sql = "SELECT id FROM ".constant("FILE_TABLE")." WHERE id = ".$file_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{

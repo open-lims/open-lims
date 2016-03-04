@@ -49,7 +49,7 @@ class ParameterFieldLimit_Access
 		{
 			$sql = "SELECT * FROM ".constant("PARAMETER_FIELD_LIMIT_TABLE")." WHERE parameter_limit_id='".$parameter_limit_id."' AND parameter_field_id='".$parameter_field_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['parameter_limit_id'] and $data['parameter_field_id'])
 			{
@@ -114,7 +114,7 @@ class ParameterFieldLimit_Access
 					
 			$res_write = $db->db_query($sql_write);	
 
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				return true;
 			}
@@ -146,7 +146,7 @@ class ParameterFieldLimit_Access
 			$sql = "DELETE FROM ".constant("PARAMETER_FIELD_LIMIT_TABLE")." WHERE parameter_limit_id = ".$parameter_limit_id_tmp." AND parameter_field_id = ".$parameter_field_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -204,7 +204,7 @@ class ParameterFieldLimit_Access
 			$sql = "UPDATE ".constant("PARAMETER_FIELD_LIMIT_TABLE")." SET upper_specification_limit = '".$upper_specification_limit."' WHERE parameter_limit_id = ".$this->parameter_limit_id." AND parameter_field_id = ".$this->parameter_field_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->upper_specification_limit = $upper_specification_limit;
 				return true;
@@ -233,7 +233,7 @@ class ParameterFieldLimit_Access
 			$sql = "UPDATE ".constant("PARAMETER_FIELD_LIMIT_TABLE")." SET lower_specification_limit = '".$lower_specification_limit."' WHERE parameter_limit_id = ".$this->parameter_limit_id." AND parameter_field_id = ".$this->parameter_field_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->lower_specification_limit = $lower_specification_limit;
 				return true;
@@ -265,7 +265,7 @@ class ParameterFieldLimit_Access
 			$sql = "SELECT parameter_limit_id,upper_specification_limit,lower_specification_limit FROM ".constant("PARAMETER_FIELD_LIMIT_TABLE")." WHERE parameter_field_id = ".$parameter_field_id." ORDER BY parameter_limit_id";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				$return_array[$data['parameter_limit_id']]['usl'] = $data['upper_specification_limit'];
 				$return_array[$data['parameter_limit_id']]['lsl'] = $data['lower_specification_limit'];
@@ -301,7 +301,7 @@ class ParameterFieldLimit_Access
 			$sql = "SELECT DISTINCT parameter_limit_id FROM ".constant("PARAMETER_FIELD_LIMIT_TABLE")." WHERE parameter_field_id IN (".implode(",",$parameter_field_array).")";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data['parameter_limit_id']);
 			}
@@ -332,7 +332,7 @@ class ParameterFieldLimit_Access
 			$sql = "SELECT lower_specification_limit, upper_specification_limit, parameter_field_id FROM ".constant("PARAMETER_FIELD_LIMIT_TABLE")." WHERE parameter_limit_id = ".$parameter_limit_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				$return_array[$data['parameter_field_id']] = array("lsl" => $data['lower_specification_limit'], "usl" => $data['upper_specification_limit']);
 			}
@@ -365,7 +365,7 @@ class ParameterFieldLimit_Access
 		{
 			$sql = "SELECT parameter_limit_id FROM ".constant("PARAMETER_FIELD_LIMIT_TABLE")." WHERE parameter_limit_id = ".$parameter_limit_id." AND parameter_field_id = ".$parameter_field_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['parameter_limit_id'])
 			{

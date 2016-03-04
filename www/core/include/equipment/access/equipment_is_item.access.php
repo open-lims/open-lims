@@ -45,7 +45,7 @@ class EquipmentIsItem_Access
 		{
 			$sql = "SELECT * FROM ".constant("EQUIPMENT_IS_ITEM_TABLE")." WHERE equipment_id='".$equipment_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['equipment_id'])
 			{
@@ -82,7 +82,7 @@ class EquipmentIsItem_Access
 					
 			$res_write = $db->db_query($sql_write);	
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{	
 				return true;
 			}
@@ -109,7 +109,7 @@ class EquipmentIsItem_Access
 			$sql = "DELETE FROM ".constant("EQUIPMENT_IS_ITEM_TABLE")." WHERE equipment_id = ".$this->equipment_id." AND item_id = ".$this->item_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				$this->__destruct();
 				return true;
@@ -168,7 +168,7 @@ class EquipmentIsItem_Access
 		{	
 			$sql = "SELECT equipment_id FROM ".constant("EQUIPMENT_IS_ITEM_TABLE")." WHERE item_id='".$item_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['equipment_id'])
 			{

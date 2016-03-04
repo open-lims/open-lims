@@ -50,7 +50,7 @@ class Equipment_Access
 		{
 			$sql = "SELECT * FROM ".constant("EQUIPMENT_TABLE")." WHERE id='".$equipment_id."'";
 			$res = $db->db_query($sql);			
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -95,11 +95,11 @@ class Equipment_Access
 					"VALUES (nextval('".self::EQUIPMENT_PK_SEQUENCE."'::regclass),".$type_id.",".$owner_id.",'".$datetime."')";
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("EQUIPMENT_TABLE")." WHERE id = currval('".self::EQUIPMENT_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
 			
@@ -132,7 +132,7 @@ class Equipment_Access
 			$sql = "DELETE FROM ".constant("EQUIPMENT_TABLE")." WHERE id = ".$tmp_equipment_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -205,7 +205,7 @@ class Equipment_Access
 			$sql = "UPDATE ".constant("EQUIPMENT_TABLE")." SET type_id = '".$type_id."' WHERE id = '".$this->equipment_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->type_id = $type_id;
 				return true;
@@ -234,7 +234,7 @@ class Equipment_Access
 			$sql = "UPDATE ".constant("EQUIPMENT_TABLE")." SET owner_id = '".$owner_id."' WHERE id = '".$this->equipment_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->owner_id = $owner_id;
 				return true;
@@ -263,7 +263,7 @@ class Equipment_Access
 			$sql = "UPDATE ".constant("EQUIPMENT_TABLE")." SET datetime = '".$datetime."' WHERE id = '".$this->equipment_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->odatetime = $datetime;
 				return true;
@@ -294,7 +294,7 @@ class Equipment_Access
 			
 			$sql = "SELECT id FROM ".constant("EQUIPMENT_TABLE")." WHERE id=".$id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 						
 			if ($data['id'])
 			{
@@ -327,7 +327,7 @@ class Equipment_Access
 			$sql = "SELECT id FROM ".constant("EQUIPMENT_TABLE")." WHERE owner_id = ".$owner_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['id']);
 			}
@@ -362,7 +362,7 @@ class Equipment_Access
 			$sql = "SELECT id FROM ".constant("EQUIPMENT_TABLE")." WHERE type_id = ".$type_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['id']);
 			}
@@ -394,7 +394,7 @@ class Equipment_Access
 		$sql = "SELECT id FROM ".constant("EQUIPMENT_TABLE")."";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($return_array,$data['id']);
 		}

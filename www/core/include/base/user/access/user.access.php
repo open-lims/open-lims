@@ -49,7 +49,7 @@ class User_Access
 		{
 			$sql = "SELECT * FROM ".constant("USER_TABLE")." WHERE id='".$user_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -98,7 +98,7 @@ class User_Access
 																	
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) != 1)
+			if ($db->row_count($res_write) != 1)
 			{
 				return null;
 			}
@@ -106,7 +106,7 @@ class User_Access
 			{
 				$sql_read = "SELECT id FROM ".constant("USER_TABLE")." WHERE id = currval('".self::USER_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
 				
@@ -135,7 +135,7 @@ class User_Access
 			$sql = "DELETE FROM ".constant("USER_TABLE")." WHERE id = ".$user_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -193,7 +193,7 @@ class User_Access
 			$sql = "UPDATE ".constant("USER_TABLE")." SET username = '".$username."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->username = $username;
 				return true;
@@ -222,7 +222,7 @@ class User_Access
 			$sql = "UPDATE ".constant("USER_TABLE")." SET password = '".$password."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->password = $password;
 				return true;
@@ -251,7 +251,7 @@ class User_Access
 		{						
 			$sql = "SELECT id FROM ".constant("USER_TABLE")." WHERE LOWER(username) = '".$username."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -279,7 +279,7 @@ class User_Access
 											
 		$sql = "SELECT id FROM ".constant("USER_TABLE")." ORDER BY id";
 		$res = $db->db_query($sql);
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($return_array, $data['id']);
 		}
@@ -307,7 +307,7 @@ class User_Access
 												
 			$sql = "SELECT id FROM ".constant("USER_TABLE")." WHERE id = ".$user_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -333,7 +333,7 @@ class User_Access
 											
 		$sql = "SELECT COUNT(id) AS result FROM ".constant("USER_TABLE")."";
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 		
 		if ($data['result'])
 		{

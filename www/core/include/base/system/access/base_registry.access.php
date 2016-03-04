@@ -49,7 +49,7 @@ class BaseRegistry_Access
 		{
 			$sql = "SELECT * FROM ".constant("BASE_REGISTRY_TABLE")." WHERE id='".$id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -93,11 +93,11 @@ class BaseRegistry_Access
 				
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("BASE_REGISTRY_TABLE")." WHERE id = currval('".self::BASE_REGISTRY_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 							
 				self::__construct($data_read['id']);		
 								
@@ -130,7 +130,7 @@ class BaseRegistry_Access
 			$sql = "DELETE FROM ".constant("BASE_REGISTRY_TABLE")." WHERE id = '".$id_tmp."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -203,7 +203,7 @@ class BaseRegistry_Access
 			$sql = "UPDATE ".constant("BASE_REGISTRY_TABLE")." SET name = '".$name."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name = $name;
 				return true;
@@ -232,7 +232,7 @@ class BaseRegistry_Access
 			$sql = "UPDATE ".constant("BASE_REGISTRY_TABLE")." SET include_id = '".$include_id."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->include_id = $include_id;
 				return true;
@@ -261,7 +261,7 @@ class BaseRegistry_Access
 			$sql = "UPDATE ".constant("BASE_REGISTRY_TABLE")." SET value = '".$value."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->value = $value;
 				return true;
@@ -290,7 +290,7 @@ class BaseRegistry_Access
 		{
 			$sql = "SELECT id FROM ".constant("BASE_REGISTRY_TABLE")." WHERE TRIM(LOWER(name)) = '".trim(strtolower($name))."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{

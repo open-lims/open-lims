@@ -50,7 +50,7 @@ class Currency_Access
 		{	
 			$sql = "SELECT * FROM ".constant("CURRENCY_TABLE")." WHERE id = ".$id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -95,11 +95,11 @@ class Currency_Access
 			
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("CURRENCY_TABLE")." WHERE id = currval('".self::CURRENCY_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
 								
@@ -132,7 +132,7 @@ class Currency_Access
     		$sql = "DELETE FROM ".constant("CURRENCY_TABLE")." WHERE id = ".$tmp_id."";
     		$res = $db->db_query($sql);
     		
-    		if ($db->db_affected_rows($res) == 1)
+    		if ($db->row_count($res) == 1)
     		{
     			return true;
     		}
@@ -205,7 +205,7 @@ class Currency_Access
 			$sql = "UPDATE ".constant("CURRENCY_TABLE")." SET name = '".$name."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name = $name;
 				return true;
@@ -234,7 +234,7 @@ class Currency_Access
 			$sql = "UPDATE ".constant("CURRENCY_TABLE")." SET symbol = '".$symbol."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->symbol = $symbol;
 				return true;
@@ -263,7 +263,7 @@ class Currency_Access
 			$sql = "UPDATE ".constant("CURRENCY_TABLE")." SET iso_4217 = '".$iso_4217."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->iso_4217 = $iso_4217;
 				return true;
@@ -292,7 +292,7 @@ class Currency_Access
 		{
 			$sql = "SELECT id FROM ".constant("CURRENCY_TABLE")." WHERE id = '".$id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -321,7 +321,7 @@ class Currency_Access
 		$sql = "SELECT id,name,symbol,iso_4217 FROM ".constant("CURRENCY_TABLE")." ORDER BY name";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			$temp_array = array();
 			$temp_array['id'] = $data['id'];

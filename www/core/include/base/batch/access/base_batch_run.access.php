@@ -54,7 +54,7 @@ class BaseBatchRun_Access
 		{
 			$sql = "SELECT * FROM ".constant("BASE_BATCH_RUN_TABLE")." WHERE id='".$batch_id."'";
 			$res = $db->db_query($sql);			
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -118,11 +118,11 @@ class BaseBatchRun_Access
 
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("BASE_BATCH_RUN_TABLE")." WHERE id = currval('".self::BASE_BATCH_RUN_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
 			
@@ -155,7 +155,7 @@ class BaseBatchRun_Access
 			$sql = "DELETE FROM ".constant("BASE_BATCH_RUN_TABLE")." WHERE id = ".$tmp_batch_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -318,7 +318,7 @@ class BaseBatchRun_Access
 			$sql = "UPDATE ".constant("BASE_BATCH_RUN_TABLE")." SET binary_id = '".$binary_id."' WHERE id = '".$this->batch_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->binary_id = $binary_id;
 				return true;
@@ -348,7 +348,7 @@ class BaseBatchRun_Access
 			$sql = "UPDATE ".constant("BASE_BATCH_RUN_TABLE")." SET status = '".$status."' WHERE id = '".$this->batch_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->status = $status;
 				return true;
@@ -378,7 +378,7 @@ class BaseBatchRun_Access
 			$sql = "UPDATE ".constant("BASE_BATCH_RUN_TABLE")." SET create_datetime = '".$create_datetime."' WHERE id = '".$this->batch_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->create_datetime = $create_datetime;
 				return true;
@@ -408,7 +408,7 @@ class BaseBatchRun_Access
 			$sql = "UPDATE ".constant("BASE_BATCH_RUN_TABLE")." SET start_datetime = '".$start_datetime."' WHERE id = '".$this->batch_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->start_datetime = $start_datetime;
 				return true;
@@ -438,7 +438,7 @@ class BaseBatchRun_Access
 			$sql = "UPDATE ".constant("BASE_BATCH_RUN_TABLE")." SET end_datetime = '".$end_datetime."' WHERE id = '".$this->batch_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->end_datetime = $end_datetime;
 				return true;
@@ -468,7 +468,7 @@ class BaseBatchRun_Access
 			$sql = "UPDATE ".constant("BASE_BATCH_RUN_TABLE")." SET last_lifesign = '".$last_lifesign."' WHERE id = '".$this->batch_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->last_lifesign = $last_lifesign;
 				return true;
@@ -498,7 +498,7 @@ class BaseBatchRun_Access
 			$sql = "UPDATE ".constant("BASE_BATCH_RUN_TABLE")." SET user_id = '".$user_id."' WHERE id = '".$this->batch_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->user_id = $user_id;
 				return true;
@@ -528,7 +528,7 @@ class BaseBatchRun_Access
 			$sql = "UPDATE ".constant("BASE_BATCH_RUN_TABLE")." SET type_id = '".$type_id."' WHERE id = '".$this->batch_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->type_id = $type_id;
 				return true;

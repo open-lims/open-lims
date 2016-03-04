@@ -54,7 +54,7 @@ class ProjectPermission_Access
 		{
 			$sql = "SELECT * FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE id='".$permission_id."'";
 			$res = $db->db_query($sql);			
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -165,11 +165,11 @@ class ProjectPermission_Access
 					"VALUES (nextval('".self::PROJECT_PERMISSION_PK_SEQUENCE."'::regclass),".$user_id_insert.",".$organisation_unit_id_insert.",".$group_id_insert.",".$project_id.",".$permission_insert.",".$owner_id_insert.",".$intention_insert.")";
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE id = currval('".self::PROJECT_PERMISSION_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
 				
@@ -202,7 +202,7 @@ class ProjectPermission_Access
 			$sql = "DELETE FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE id = ".$tmp_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -335,7 +335,7 @@ class ProjectPermission_Access
 			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET user_id = '".$user_id."' WHERE id = '".$this->permission_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->user_id = $user_id;
 				return true;
@@ -364,7 +364,7 @@ class ProjectPermission_Access
 			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET organisation_unit_id = '".$organisation_unit_id."' WHERE id = '".$this->permission_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->organisation_unit_id = $organisation_unit_id;
 				return true;
@@ -393,7 +393,7 @@ class ProjectPermission_Access
 			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET group_id = '".$group_id."' WHERE id = '".$this->permission_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->group_id = $group_id;
 				return true;
@@ -422,7 +422,7 @@ class ProjectPermission_Access
 			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET project_id = '".$project_id."' WHERE id = '".$this->permission_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->project_id = $project_id;
 				return true;
@@ -451,7 +451,7 @@ class ProjectPermission_Access
 			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET permission = '".$permission."' WHERE id = '".$this->permission_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->permission = $permission;
 				return true;
@@ -480,7 +480,7 @@ class ProjectPermission_Access
 			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET owner_id = '".$owner_id."' WHERE id = '".$this->permission_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->owner_id = $owner_id;
 				return true;
@@ -509,7 +509,7 @@ class ProjectPermission_Access
 		{			
 			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE id = ".$id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -541,7 +541,7 @@ class ProjectPermission_Access
 			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." ORDER BY intention DESC";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['id']);
 			}
@@ -577,7 +577,7 @@ class ProjectPermission_Access
 			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." AND intention = ".$intention." AND intention IS NOT NULL";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['id']);
 			}
@@ -614,7 +614,7 @@ class ProjectPermission_Access
 			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." AND intention = ".$intention." AND intention IS NOT NULL AND group_id = ".$group_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['id']);
 			}
@@ -651,7 +651,7 @@ class ProjectPermission_Access
 			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." AND intention = ".$intention." AND intention IS NOT NULL AND user_id = ".$user_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['id']);
 			}
@@ -696,7 +696,7 @@ class ProjectPermission_Access
 			$sql = "SELECT project_id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id." ".$intention_insert."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['project_id']);
 			}
@@ -729,7 +729,7 @@ class ProjectPermission_Access
 		{			
 			$sql = "SELECT COUNT(id) AS numberofentries FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." and user_id = ".$user_id." AND TRUE = (SELECT * FROM project_permission_user(".$project_id.", ".$user_id."))";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['numberofentries'])
 			{
@@ -759,7 +759,7 @@ class ProjectPermission_Access
 		{
 			$sql = "SELECT COUNT(id) AS numberofentries FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." and organisation_unit_id = ".$organisation_unit_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['numberofentries'])
 			{
@@ -789,7 +789,7 @@ class ProjectPermission_Access
 		{	
 			$sql = "SELECT COUNT(id) AS numberofentries FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." and group_id = ".$group_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['numberofentries'])
 			{
@@ -923,7 +923,7 @@ class ProjectPermission_Access
 		{			
 			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE user_id IS NOT NULL AND id = ".$permission_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -952,7 +952,7 @@ class ProjectPermission_Access
 		{			
 			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE group_id IS NOT NULL AND id = ".$permission_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -981,7 +981,7 @@ class ProjectPermission_Access
 		{			
 			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE organisation_unit_id IS NOT NULL AND id = ".$permission_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{

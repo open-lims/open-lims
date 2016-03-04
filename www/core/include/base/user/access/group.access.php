@@ -47,7 +47,7 @@ class Group_Access
 		{
 			$sql = "SELECT * FROM ".constant("GROUP_TABLE")." WHERE id='".$group_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -85,7 +85,7 @@ class Group_Access
 																	
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) != 1)
+			if ($db->row_count($res_write) != 1)
 			{
 				return null;
 			}
@@ -93,7 +93,7 @@ class Group_Access
 			{
 				$sql_read = "SELECT id FROM ".constant("GROUP_TABLE")." WHERE id = currval('".self::GROUP_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
 				
@@ -122,7 +122,7 @@ class Group_Access
 			$sql = "DELETE FROM ".constant("GROUP_TABLE")." WHERE id = ".$group_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -165,7 +165,7 @@ class Group_Access
 			$sql = "UPDATE ".constant("GROUP_TABLE")." SET name = '".$name."' WHERE id = ".$this->group_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name = $name;
 				return true;
@@ -194,7 +194,7 @@ class Group_Access
 		{					
 			$sql = "SELECT id FROM ".constant("GROUP_TABLE")." WHERE LOWER(name) = '".$name."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -220,7 +220,7 @@ class Group_Access
 									
 		$sql = "SELECT COUNT(id) AS result FROM ".constant("GROUP_TABLE")."";
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 		
 		if ($data['result'])
 		{
@@ -244,7 +244,7 @@ class Group_Access
 		$sql = "SELECT id FROM ".constant("GROUP_TABLE")."";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($return_array,$data['id']);
 		}
@@ -275,7 +275,7 @@ class Group_Access
    				
    			$sql = "SELECT id FROM ".constant("GROUP_TABLE")." WHERE LOWER(name) LIKE '".$groupname."'";   			
    			$res = $db->db_query($sql);
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data['id']);
 			}
@@ -311,7 +311,7 @@ class Group_Access
 												
 			$sql = "SELECT id FROM ".constant("GROUP_TABLE")." WHERE id = ".$group_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -337,7 +337,7 @@ class Group_Access
 											
 		$sql = "SELECT COUNT(id) AS result FROM ".constant("GROUP_TABLE")."";
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 		
 		if ($data['result'])
 		{

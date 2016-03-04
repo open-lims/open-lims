@@ -49,7 +49,7 @@ class BaseInclude_Access
 		{
 			$sql = "SELECT * FROM ".constant("BASE_INCLUDE_TABLE")." WHERE id='".$id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -92,11 +92,11 @@ class BaseInclude_Access
 				
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("BASE_INCLUDE_TABLE")." WHERE id = currval('".self::BASE_INCLUDE_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 							
 				self::__construct($data_read['id']);		
 								
@@ -129,7 +129,7 @@ class BaseInclude_Access
 			$sql = "DELETE FROM ".constant("BASE_INCLUDE_TABLE")." WHERE id = '".$id_tmp."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -202,7 +202,7 @@ class BaseInclude_Access
 			$sql = "UPDATE ".constant("BASE_INCLUDE_TABLE")." SET name = '".$name."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name = $name;
 				return true;
@@ -231,7 +231,7 @@ class BaseInclude_Access
 			$sql = "UPDATE ".constant("BASE_INCLUDE_TABLE")." SET folder = '".$folder."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->folder = $folder;
 				return true;
@@ -260,7 +260,7 @@ class BaseInclude_Access
 			$sql = "UPDATE ".constant("BASE_INCLUDE_TABLE")." SET db_version = '".$db_version."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->db_version = $db_version;
 				return true;
@@ -289,7 +289,7 @@ class BaseInclude_Access
 		$sql = "SELECT id, folder FROM ".constant("BASE_INCLUDE_TABLE")."";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			$return_array[$data['id']] = $data['folder'];
 		}
@@ -315,7 +315,7 @@ class BaseInclude_Access
 		
 		$sql = "SELECT id,name,folder FROM ".constant("BASE_INCLUDE_TABLE")." ORDER BY name";
 		$res = $db->db_query($sql);
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			$result_array[$data['id']]['name']		= $data['name'];
 			$result_array[$data['id']]['folder']	= $data['folder'];
@@ -338,7 +338,7 @@ class BaseInclude_Access
 			
 			$sql = "SELECT id FROM ".constant("BASE_INCLUDE_TABLE")." WHERE TRIM(LOWER(name)) = '".$name."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -362,7 +362,7 @@ class BaseInclude_Access
 		$sql = "SELECT table_name FROM information_schema.tables";
 		$res = $db->db_query($sql);
 		
-		while($data = $db->db_fetch_assoc($res))
+		while($data = $db->fetch($res))
 		{
 			if ($data['table_name'] == "core_base_includes")
 			{

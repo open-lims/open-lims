@@ -48,7 +48,7 @@ class BaseEventListener_Access
 		{
 			$sql = "SELECT * FROM ".constant("BASE_EVENT_LISTENER_TABLE")." WHERE id='".$id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -89,11 +89,11 @@ class BaseEventListener_Access
 				
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("BASE_EVENT_LISTENER_TABLE")." WHERE id = currval('".self::BASE_EVENT_LISTENER_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 							
 				self::__construct($data_read['id']);		
 								
@@ -126,7 +126,7 @@ class BaseEventListener_Access
 			$sql = "DELETE FROM ".constant("BASE_EVENT_LISTENER_TABLE")." WHERE id = '".$id_tmp."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -184,7 +184,7 @@ class BaseEventListener_Access
 			$sql = "UPDATE ".constant("BASE_EVENT_LISTENER_TABLE")." SET include_id = '".$include_id."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->include_id = $include_id;
 				return true;
@@ -213,7 +213,7 @@ class BaseEventListener_Access
 			$sql = "UPDATE ".constant("BASE_EVENT_LISTENER_TABLE")." SET class_name = '".$class_name."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->class_name = $class_name;
 				return true;
@@ -242,7 +242,7 @@ class BaseEventListener_Access
 		$sql = "SELECT id FROM ".constant("BASE_EVENT_LISTENER_TABLE")."";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($return_array,$data['id']);
 		}
@@ -269,7 +269,7 @@ class BaseEventListener_Access
 		$sql = "SELECT class_name FROM ".constant("BASE_EVENT_LISTENER_TABLE")."";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($return_array,$data['class_name']);
 		}

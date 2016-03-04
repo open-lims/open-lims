@@ -47,7 +47,7 @@ class ProjectTaskHasPreviousTask_Access
 		{
 			$sql = "SELECT * FROM ".constant("PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE")." WHERE task_id='".$task_id."' AND previous_task_id='".$previous_task_id."'";
 			$res = $db->db_query($sql);			
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['task_id'])
 			{
@@ -86,7 +86,7 @@ class ProjectTaskHasPreviousTask_Access
 					"VALUES (".$task_id.", ".$previous_task_id.")";
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				return true;
 			}
@@ -118,7 +118,7 @@ class ProjectTaskHasPreviousTask_Access
 			$sql = "DELETE FROM ".constant("PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE")." WHERE task_id = ".$tmp_task_id." AND previous_task_id = ".$tmp_previous_task_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -146,7 +146,7 @@ class ProjectTaskHasPreviousTask_Access
 			$sql = "UPDATE ".constant("PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE")." SET task_id = '".$task_id."' WHERE task_id = ".$this->task_id." AND previous_task_id = ".$this->previous_task_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->task_id = $task_id;
 				return true;
@@ -175,7 +175,7 @@ class ProjectTaskHasPreviousTask_Access
 			$sql = "UPDATE ".constant("PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE")." SET previous_task_id = '".$previous_task_id."' WHERE task_id = ".$this->task_id." AND previous_task_id = ".$this->previous_task_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->previous_task_id = $previous_task_id;
 				return true;
@@ -207,7 +207,7 @@ class ProjectTaskHasPreviousTask_Access
 			$sql = "SELECT previous_task_id FROM ".constant("PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE")." WHERE task_id = ".$task_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['previous_task_id']);
 			}
@@ -242,7 +242,7 @@ class ProjectTaskHasPreviousTask_Access
 			$sql = "SELECT task_id FROM ".constant("PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE")." WHERE previous_task_id = ".$previous_task_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['task_id']);
 			}
@@ -275,7 +275,7 @@ class ProjectTaskHasPreviousTask_Access
 		{
 			$sql = "SELECT * FROM ".constant("PROJECT_TASK_HAS_PREVIOUS_TASK_TABLE")." WHERE task_id='".$task_id."' AND previous_task_id='".$previous_task_id."'";
 			$res = $db->db_query($sql);			
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['task_id'])
 			{

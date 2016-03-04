@@ -48,7 +48,7 @@ class ProjectTaskStatusProcess_Access
 		{
 			$sql = "SELECT * FROM ".constant("PROJECT_TASK_STATUS_PROCESS_TABLE")." WHERE task_id='".$task_id."'";
 			$res = $db->db_query($sql);			
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['task_id'])
 			{
@@ -122,7 +122,7 @@ class ProjectTaskStatusProcess_Access
 					"VALUES (".$task_id.", ".$begin_status_id.", ".$end_status_id.", '".$finalise_insert."', ".$subtraction_points_insert.")";
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				self::__construct($task_id);
 				return true;
@@ -154,7 +154,7 @@ class ProjectTaskStatusProcess_Access
 			$sql = "DELETE FROM ".constant("PROJECT_TASK_STATUS_PROCESS_TABLE")." WHERE task_id = ".$tmp_task_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -242,7 +242,7 @@ class ProjectTaskStatusProcess_Access
 			$sql = "UPDATE ".constant("PROJECT_TASK_STATUS_PROCESS_TABLE")." SET begin_status_id = '".$begin_status_id."' WHERE task_id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->begin_status_id = $begin_status_id;
 				return true;
@@ -271,7 +271,7 @@ class ProjectTaskStatusProcess_Access
 			$sql = "UPDATE ".constant("PROJECT_TASK_STATUS_PROCESS_TABLE")." SET end_status_id = '".$end_status_id."' WHERE task_id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->end_status_id = $end_status_id;
 				return true;
@@ -309,7 +309,7 @@ class ProjectTaskStatusProcess_Access
 			$sql = "UPDATE ".constant("PROJECT_TASK_STATUS_PROCESS_TABLE")." SET finalise = '".$finalise_insert."' WHERE task_id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->finalise = $finalise;
 				return true;
@@ -338,7 +338,7 @@ class ProjectTaskStatusProcess_Access
 			$sql = "UPDATE ".constant("PROJECT_TASK_STATUS_PROCESS_TABLE")." SET subtraction_points = '".$subtraction_points."' WHERE task_id = '".$this->task_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->subtraction_points = $subtraction_points;
 				return true;

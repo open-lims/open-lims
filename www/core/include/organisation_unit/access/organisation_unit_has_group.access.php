@@ -47,7 +47,7 @@ class OrganisationUnitHasGroup_Access
 		{
 			$sql = "SELECT * FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id." AND group_id = ".$group_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['organisation_unit_id'])
 			{
@@ -81,7 +81,7 @@ class OrganisationUnitHasGroup_Access
 					"VALUES (".$organisation_unit_id.",".$group_id.")";
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				return true;
 			}
@@ -113,7 +113,7 @@ class OrganisationUnitHasGroup_Access
 			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE organisation_unit_id=".$tmp_organisation_unit_id." AND group_id=".$tmp_group_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -171,7 +171,7 @@ class OrganisationUnitHasGroup_Access
 			$sql = "UPDATE ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." SET organisation_unit_id = '".$organisation_unit_id."' WHERE organisation_unit_id = '".$this->organisation_unit_id."' AND group_id='".$this->group_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->organisation_unit_id = $organisation_unit_id;
 				return true;
@@ -200,7 +200,7 @@ class OrganisationUnitHasGroup_Access
 			$sql = "UPDATE ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." SET group_id = '".$group_id."' WHERE organisation_unit_id = '".$this->organisation_unit_id."' AND group_id='".$this->group_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->group_id = $group_id;
 				return true;
@@ -231,7 +231,7 @@ class OrganisationUnitHasGroup_Access
 			
 			$sql = "SELECT COUNT(organisation_unit_id) AS result FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE group_id = ".$group_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['result'])
 			{
@@ -262,7 +262,7 @@ class OrganisationUnitHasGroup_Access
 			
 			$sql = "SELECT COUNT(group_id) AS result FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['result'])
 			{
@@ -294,7 +294,7 @@ class OrganisationUnitHasGroup_Access
 			$sql = "SELECT organisation_unit_id FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE group_id = ".$group_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['organisation_unit_id']);
 			}
@@ -338,7 +338,7 @@ class OrganisationUnitHasGroup_Access
 			$sql = "SELECT group_id FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."".$limit_sql;
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['group_id']);
 			}
@@ -372,7 +372,7 @@ class OrganisationUnitHasGroup_Access
 			
 			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE group_id = ".$group_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			return true;
 		}
@@ -396,7 +396,7 @@ class OrganisationUnitHasGroup_Access
 			
 			$sql = "DELETE FROM ".constant("ORGANISATION_UNIT_HAS_GROUP_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			return true;	
 		}

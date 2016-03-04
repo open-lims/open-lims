@@ -45,7 +45,7 @@ class DataEntityIsItem_Access
 		{
 			$sql = "SELECT * FROM ".constant("DATA_ENTITY_IS_ITEM_TABLE")." WHERE data_entity_id='".$data_entity_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['data_entity_id'])
 			{
@@ -82,7 +82,7 @@ class DataEntityIsItem_Access
 					
 			$res_write = $db->db_query($sql_write);	
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{	
 				return true;
 			}
@@ -109,7 +109,7 @@ class DataEntityIsItem_Access
 			$sql = "DELETE FROM ".constant("DATA_ENTITY_IS_ITEM_TABLE")." WHERE data_entity_id = ".$this->data_entity_id." AND item_id = ".$this->item_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				$this->__destruct();
 				return true;
@@ -168,7 +168,7 @@ class DataEntityIsItem_Access
 		{	
 			$sql = "SELECT data_entity_id FROM ".constant("DATA_ENTITY_IS_ITEM_TABLE")." WHERE item_id='".$item_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['data_entity_id'])
 			{

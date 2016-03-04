@@ -65,7 +65,7 @@ class UserProfile_Access
 		{			
 			$sql = "SELECT * FROM ".constant("USER_PROFILE_TABLE")." WHERE id='".$user_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -195,7 +195,7 @@ class UserProfile_Access
 			
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				self::__construct($user_id);
 				return $user_id;
@@ -228,7 +228,7 @@ class UserProfile_Access
 			$sql = "DELETE FROM ".constant("USER_PROFILE_TABLE")." WHERE id = ".$user_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -541,7 +541,7 @@ class UserProfile_Access
 			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET gender = '".$gender."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->gender = $gender;
 				return true;
@@ -579,7 +579,7 @@ class UserProfile_Access
 			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET title = ".$title_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->title = $title;
 				return true;
@@ -608,7 +608,7 @@ class UserProfile_Access
 			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET forename = '".$forename."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->forename = $forename;
 				return true;
@@ -637,7 +637,7 @@ class UserProfile_Access
 			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET surname = '".$surname."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->surname = $surname;
 				return true;
@@ -666,7 +666,7 @@ class UserProfile_Access
 			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET mail = '".$mail."' WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->mail = $mail;
 				return true;
@@ -704,7 +704,7 @@ class UserProfile_Access
 			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET institution = ".$institution_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->institution = $institution;
 				return true;
@@ -742,7 +742,7 @@ class UserProfile_Access
 			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET department = ".$department_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->department = $department;
 				return true;
@@ -780,7 +780,7 @@ class UserProfile_Access
 			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET street = ".$street_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->street = $street;
 				return true;
@@ -818,7 +818,7 @@ class UserProfile_Access
 			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET zip = ".$zip_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->zip = $zip;
 				return true;
@@ -856,7 +856,7 @@ class UserProfile_Access
 			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET city = ".$city_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res)){
+			if ($db->row_count($res)){
 				$this->city = $city;
 				return true;
 			}
@@ -893,7 +893,7 @@ class UserProfile_Access
 			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET country = ".$country_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->country = $country;
 				return true;
@@ -931,7 +931,7 @@ class UserProfile_Access
 			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET phone = ".$phone_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->phone = $phone;
 				return true;
@@ -969,7 +969,7 @@ class UserProfile_Access
 			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET icq = ".$icq_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->icq = $icq;
 				return true;
@@ -1007,7 +1007,7 @@ class UserProfile_Access
 			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET msn = ".$msn_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->msn = $msn;
 				return true;
@@ -1045,7 +1045,7 @@ class UserProfile_Access
 			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET yahoo = ".$yahoo_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->yahoo = $yahoo;
 				return true;
@@ -1083,7 +1083,7 @@ class UserProfile_Access
 			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET aim = ".$aim_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->aim = $aim;
 				return true;
@@ -1121,7 +1121,7 @@ class UserProfile_Access
 			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET skype = ".$skype_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->skype = $skype;
 				return true;
@@ -1159,7 +1159,7 @@ class UserProfile_Access
 			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET lync = ".$lync_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->lync = $lync;
 				return true;
@@ -1197,7 +1197,7 @@ class UserProfile_Access
 			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET jabber = ".$jabber_insert." WHERE id = ".$this->user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->jabber = $jabber;
 				return true;

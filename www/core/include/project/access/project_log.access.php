@@ -53,7 +53,7 @@ class ProjectLog_Access
 		{
 			$sql = "SELECT * FROM ".constant("PROJECT_LOG_TABLE")." WHERE id='".$log_id."'";
 			$res = $db->db_query($sql);			
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -153,11 +153,11 @@ class ProjectLog_Access
 					"VALUES (nextval('".self::PROJECT_LOG_PK_SEQUENCE."'::regclass),".$project_id.",'".$datetime."',".$content_insert.",'".$cancel_insert."','".$important_insert."',".$owner_id.")";
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("PROJECT_LOG_TABLE")." WHERE id = currval('".self::PROJECT_LOG_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
 				
@@ -190,7 +190,7 @@ class ProjectLog_Access
 			$sql = "DELETE FROM ".constant("PROJECT_LOG_TABLE")." WHERE id = ".$tmp_log_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -300,7 +300,7 @@ class ProjectLog_Access
 			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET project_id = '".$project_id."' WHERE id = '".$this->log_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->project_id = $project_id;
 				return true;
@@ -329,7 +329,7 @@ class ProjectLog_Access
 			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET datetime = '".$datetime."' WHERE id = '".$this->log_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->datetime = $datetime;
 				return true;
@@ -358,7 +358,7 @@ class ProjectLog_Access
 			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET content = '".$content."' WHERE id = '".$this->log_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->content = $content;
 				return true;
@@ -396,7 +396,7 @@ class ProjectLog_Access
 			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET cancel = '".$cancel_insert."' WHERE id = '".$this->log_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->cancel = $cancel;
 				return true;
@@ -434,7 +434,7 @@ class ProjectLog_Access
 			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET important = '".$important_insert."' WHERE id = '".$this->log_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->important = $important;
 				return true;
@@ -463,7 +463,7 @@ class ProjectLog_Access
 			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET owner_id = '".$owner_id."' WHERE id = '".$this->log_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->owner_id = $owner_id;
 				return true;
@@ -492,7 +492,7 @@ class ProjectLog_Access
 		{
 			$sql = "SELECT id FROM ".constant("PROJECT_LOG_TABLE")." WHERE id = ".$id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -524,7 +524,7 @@ class ProjectLog_Access
 			$sql = "SELECT id FROM ".constant("PROJECT_LOG_TABLE")." WHERE project_id = ".$project_id." ORDER BY datetime DESC, id DESC";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['id']);
 			}
@@ -559,7 +559,7 @@ class ProjectLog_Access
 			$sql = "SELECT id FROM ".constant("PROJECT_LOG_TABLE")." WHERE owner_id = ".$owner_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['id']);
 			}
@@ -591,7 +591,7 @@ class ProjectLog_Access
 		$sql = "SELECT id FROM ".constant("PROJECT_LOG_TABLE")."";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($return_array,$data['id']);
 		}

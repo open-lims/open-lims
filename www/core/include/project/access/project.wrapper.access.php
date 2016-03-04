@@ -52,7 +52,7 @@ class Project_Wrapper_Access
 				
 			$res = $db->db_query($sql);
 
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data['id']);
 			}
@@ -152,7 +152,7 @@ class Project_Wrapper_Access
 		{
 			for ($i = 0; $i<=$end-1; $i++)
 			{
-				if (($data = $db->db_fetch_assoc($res)) == null)
+				if (($data = $db->fetch($res)) == null)
 				{
 					break;
 				}
@@ -164,7 +164,7 @@ class Project_Wrapper_Access
 		}
 		else
 		{
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data);
 			}
@@ -183,7 +183,7 @@ class Project_Wrapper_Access
 					 "FROM ".constant("PROJECT_STATUS_TABLE")."";
 		
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 
 		return $data['result'];
 	}
@@ -263,7 +263,7 @@ class Project_Wrapper_Access
 		{
 			for ($i = 0; $i<=$end-1; $i++)
 			{
-				if (($data = $db->db_fetch_assoc($res)) == null)
+				if (($data = $db->fetch($res)) == null)
 				{
 					break;
 				}
@@ -276,7 +276,7 @@ class Project_Wrapper_Access
 		}
 		else
 		{
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data);
 			}
@@ -295,7 +295,7 @@ class Project_Wrapper_Access
 					"FROM ".constant("PROJECT_TEMPLATE_TABLE")."";
 		
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 
 		return $data['result'];
 	}
@@ -350,7 +350,7 @@ class Project_Wrapper_Access
 		{
 			for ($i = 0; $i<=$end-1; $i++)
 			{
-				if (($data = $db->db_fetch_assoc($res)) == null)
+				if (($data = $db->fetch($res)) == null)
 				{
 					break;
 				}
@@ -363,7 +363,7 @@ class Project_Wrapper_Access
 		}
 		else
 		{
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data);
 			}
@@ -382,7 +382,7 @@ class Project_Wrapper_Access
 					"FROM ".constant("PROJECT_TEMPLATE_CAT_TABLE")."";
 		
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 
 		return $data['result'];
 	}
@@ -410,7 +410,7 @@ class Project_Wrapper_Access
 							"AND ".constant("PROJECT_TABLE").".deleted = 'f'";	
 			
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 	
 			return $data['result'];
 		}
@@ -445,7 +445,7 @@ class Project_Wrapper_Access
 							"AND ".constant("PROJECT_TABLE").".deleted = 'f'";	
 			
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 
 			return $data['result'];
 		}
@@ -480,7 +480,7 @@ class Project_Wrapper_Access
 							"AND ".constant("PROJECT_TABLE").".deleted = 'f'";	
 
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 	
 			return $data['result'];
 		}
@@ -595,7 +595,7 @@ class Project_Wrapper_Access
 			{
 				for ($i = 0; $i<=$end-1; $i++)
 				{
-					if (($data = $db->db_fetch_assoc($res)) == null)
+					if (($data = $db->fetch($res)) == null)
 					{
 						break;
 					}
@@ -607,7 +607,7 @@ class Project_Wrapper_Access
 			}
 			else
 			{
-				while ($data = $db->db_fetch_assoc($res))
+				while ($data = $db->fetch($res))
 				{
 					array_push($return_array, $data);
 				}
@@ -654,7 +654,7 @@ class Project_Wrapper_Access
 							"".$admin_sql."";
 				
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 	
 			return $data['result'];
 		}
@@ -691,7 +691,7 @@ class Project_Wrapper_Access
 							"".$admin_sql.""; 
 				
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 	
 			return $data['result'];
 		}
@@ -799,7 +799,7 @@ class Project_Wrapper_Access
 			{
 				for ($i = 0; $i<=$end-1; $i++)
 				{
-					if (($data = $db->db_fetch_assoc($res)) == null)
+					if (($data = $db->fetch($res)) == null)
 					{
 						break;
 					}
@@ -811,7 +811,7 @@ class Project_Wrapper_Access
 			}
 			else
 			{
-				while ($data = $db->db_fetch_assoc($res))
+				while ($data = $db->fetch($res))
 				{
 					array_push($return_array, $data);
 				}
@@ -918,7 +918,7 @@ class Project_Wrapper_Access
 			{
 				for ($i = 0; $i<=$end-1; $i++)
 				{
-					if (($data = $db->db_fetch_assoc($res)) == null)
+					if (($data = $db->fetch($res)) == null)
 					{
 						break;
 					}
@@ -931,7 +931,7 @@ class Project_Wrapper_Access
 			}
 			else
 			{
-				while ($data = $db->db_fetch_assoc($res))
+				while ($data = $db->fetch($res))
 				{
 					array_push($return_array, $data);
 				}
@@ -970,7 +970,7 @@ class Project_Wrapper_Access
 						"".$admin_sql."";
 						
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 	
 			return $data['result'];
 		}
@@ -1068,7 +1068,7 @@ class Project_Wrapper_Access
 			{
 				for ($i = 0; $i<=$end-1; $i++)
 				{
-					if (($data = $db->db_fetch_assoc($res)) == null)
+					if (($data = $db->fetch($res)) == null)
 					{
 						break;
 					}
@@ -1081,7 +1081,7 @@ class Project_Wrapper_Access
 			}
 			else
 			{
-				while ($data = $db->db_fetch_assoc($res))
+				while ($data = $db->fetch($res))
 				{
 					array_push($return_array, $data);
 				}
@@ -1109,7 +1109,7 @@ class Project_Wrapper_Access
 						"WHERE ".constant("PROJECT_PERMISSION_TABLE").".project_id = ".$project_id." ";
 						
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 	
 			return $data['result'];
 		}
@@ -1210,7 +1210,7 @@ class Project_Wrapper_Access
 			{
 				for ($i = 0; $i<=$end-1; $i++)
 				{
-					if (($data = $db->db_fetch_assoc($res)) == null)
+					if (($data = $db->fetch($res)) == null)
 					{
 						break;
 					}
@@ -1223,7 +1223,7 @@ class Project_Wrapper_Access
 			}
 			else
 			{
-				while ($data = $db->db_fetch_assoc($res))
+				while ($data = $db->fetch($res))
 				{
 					array_push($return_array, $data);
 				}
@@ -1251,7 +1251,7 @@ class Project_Wrapper_Access
 						"WHERE ".constant("PROJECT_TASK_TABLE").".project_id = ".$project_id." ";
 						
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 	
 			return $data['result'];
 		}
@@ -1424,7 +1424,7 @@ class Project_Wrapper_Access
 			{
 				for ($i = 0; $i<=$end-1; $i++)
 				{
-					if (($data = $db->db_fetch_assoc($res)) == null)
+					if (($data = $db->fetch($res)) == null)
 					{
 						break;
 					}
@@ -1437,7 +1437,7 @@ class Project_Wrapper_Access
 			}
 			else
 			{
-				while ($data = $db->db_fetch_assoc($res))
+				while ($data = $db->fetch($res))
 				{
 					array_push($return_array, $data);
 				}
@@ -1546,7 +1546,7 @@ class Project_Wrapper_Access
    			
 
    			$res = $db->db_query($sql);
-   			$data = $db->db_fetch_assoc($res);
+   			$data = $db->fetch($res);
 	
 			return $data['result'];
    		}
@@ -1702,7 +1702,7 @@ class Project_Wrapper_Access
 			{
 				for ($i = 0; $i<=$end-1; $i++)
 				{
-					if (($data = $db->db_fetch_assoc($res)) == null)
+					if (($data = $db->fetch($res)) == null)
 					{
 						break;
 					}
@@ -1715,7 +1715,7 @@ class Project_Wrapper_Access
 			}
 			else
 			{
-				while ($data = $db->db_fetch_assoc($res))
+				while ($data = $db->fetch($res))
 				{
 					array_push($return_array, $data);
 				}
@@ -1777,7 +1777,7 @@ class Project_Wrapper_Access
 	   							"".$sql_order_by."";
 	   		
 	   		$res = $db->db_query($sql);
-	   		$data = $db->db_fetch_assoc($res);
+	   		$data = $db->fetch($res);
 		
 			return $data['result'];
    		}

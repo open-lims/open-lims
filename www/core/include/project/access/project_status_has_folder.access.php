@@ -46,7 +46,7 @@ class ProjectStatusHasFolder_Access
 		{
 			$sql = "SELECT * FROM ".constant("PROJECT_STATUS_HAS_FOLDER_TABLE")." WHERE folder_id='".$folder_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['project_id'])
 			{
@@ -86,7 +86,7 @@ class ProjectStatusHasFolder_Access
 					
 			$res_write = $db->db_query($sql_write);	
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{	
 				return true;
 			}
@@ -113,7 +113,7 @@ class ProjectStatusHasFolder_Access
 			$sql = "DELETE FROM ".constant("PROJECT_STATUS_HAS_FOLDER_TABLE")." WHERE project_id = ".$this->project_id." AND folder_id = ".$this->folder_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				$this->__destruct();
 				return true;
@@ -188,7 +188,7 @@ class ProjectStatusHasFolder_Access
 		{	
 			$sql = "SELECT folder_id FROM ".constant("PROJECT_STATUS_HAS_FOLDER_TABLE")." WHERE project_id='".$project_id."' AND project_status_id='".$project_status_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['folder_id'])
 			{

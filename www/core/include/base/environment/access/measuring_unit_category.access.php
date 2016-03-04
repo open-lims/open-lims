@@ -48,7 +48,7 @@ class MeasuringUnitCategory_Access
 		{	
 			$sql = "SELECT * FROM ".constant("MEASURING_UNIT_CATEGORY_TABLE")." WHERE id = ".$id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -96,11 +96,11 @@ class MeasuringUnitCategory_Access
 			
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("MEASURING_UNIT_CATEGORY_TABLE")." WHERE id = currval('".self::MEASURING_UNIT_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
 								
@@ -133,7 +133,7 @@ class MeasuringUnitCategory_Access
     		$sql = "DELETE FROM ".constant("MEASURING_UNIT_CATEGORY_TABLE")." WHERE id = ".$tmp_id."";
     		$res = $db->db_query($sql);
     		
-    		if ($db->db_affected_rows($res) == 1)
+    		if ($db->row_count($res) == 1)
     		{
     			return true;
     		}
@@ -191,7 +191,7 @@ class MeasuringUnitCategory_Access
 			$sql = "UPDATE ".constant("MEASURING_UNIT_CATEGORY_TABLE")." SET name = '".$name."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name = $name;
 				return true;
@@ -220,7 +220,7 @@ class MeasuringUnitCategory_Access
 		{
 			$sql = "SELECT id FROM ".constant("MEASURING_UNIT_CATEGORY_TABLE")." WHERE id = '".$id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -249,7 +249,7 @@ class MeasuringUnitCategory_Access
 		$sql = "SELECT id,name FROM ".constant("MEASURING_UNIT_CATEGORY_TABLE")." ORDER BY id";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($return_array, array("id" => $data['id'], "name" => $data['name']));
 		}
@@ -276,7 +276,7 @@ class MeasuringUnitCategory_Access
 		{
 			$sql = "SELECT created_by_user FROM ".constant("MEASURING_UNIT_CATEGORY_TABLE")." WHERE id = '".$measuring_unit_category_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['created_by_user'] == "t")
 			{

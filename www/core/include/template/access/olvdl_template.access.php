@@ -47,7 +47,7 @@ class OlvdlTemplate_Access
 		{
 			$sql = "SELECT * FROM ".constant("OLVDL_TEMPLATE_TABLE")." WHERE id='".$olvdl_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -86,7 +86,7 @@ class OlvdlTemplate_Access
 			
 			$sql_read = "SELECT id FROM ".constant("OLVDL_TEMPLATE_TABLE")." WHERE id = currval('".self::OLVDL_TEMPLATE_PK_SEQUENCE."'::regclass)";
 			$res_read = $db->db_query($sql_read);
-			$data_read = $db->db_fetch_assoc($res_read);
+			$data_read = $db->fetch($res_read);
 								
 			self::__construct($data_read['id']);
 			
@@ -114,7 +114,7 @@ class OlvdlTemplate_Access
 			$sql = "DELETE FROM ".constant("OLVDL_TEMPLATE_TABLE")." WHERE id = ".$olvdl_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -157,7 +157,7 @@ class OlvdlTemplate_Access
 			$sql = "UPDATE ".constant("OLVDL_TEMPLATE_TABLE")." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->olvdl_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->data_entity_id = $data_entity_id;
 				return true;
@@ -186,7 +186,7 @@ class OlvdlTemplate_Access
 		{
 			$sql = "SELECT * FROM ".constant("OLVDL_TEMPLATE_TABLE")." WHERE data_entity_id='".$data_entity_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{

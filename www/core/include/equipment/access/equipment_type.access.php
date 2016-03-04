@@ -53,7 +53,7 @@ class EquipmentType_Access
 		{
 			$sql = "SELECT * FROM ".constant("EQUIPMENT_TYPE_TABLE")." WHERE id='".$equipment_type_id."'";
 			$res = $db->db_query($sql);			
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -151,11 +151,11 @@ class EquipmentType_Access
 			
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("EQUIPMENT_TYPE_TABLE")." WHERE id = currval('".self::EQUIPMENT_TYPE_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
 			
@@ -188,7 +188,7 @@ class EquipmentType_Access
 			$sql = "DELETE FROM ".constant("EQUIPMENT_TYPE_TABLE")." WHERE id = ".$tmp_equipment_type_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -306,7 +306,7 @@ class EquipmentType_Access
 			$sql = "UPDATE ".constant("EQUIPMENT_TYPE_TABLE")." SET toid = '".$toid."' WHERE id = '".$this->equipment_type_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->toid = $toid;
 				return true;
@@ -344,7 +344,7 @@ class EquipmentType_Access
 			$sql = "UPDATE ".constant("EQUIPMENT_TYPE_TABLE")." SET name = ".$name_insert." WHERE id = '".$this->equipment_type_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name = $name;
 				return true;
@@ -373,7 +373,7 @@ class EquipmentType_Access
 			$sql = "UPDATE ".constant("EQUIPMENT_TYPE_TABLE")." SET cat_id = '".$cat_id."' WHERE id = '".$this->equipment_type_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->cat_id = $cat_id;
 				return true;
@@ -411,7 +411,7 @@ class EquipmentType_Access
 			$sql = "UPDATE ".constant("EQUIPMENT_TYPE_TABLE")." SET location_id = ".$location_id_insert." WHERE id = '".$this->equipment_type_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->location_id = $location_id;
 				return true;
@@ -440,7 +440,7 @@ class EquipmentType_Access
 			$sql = "UPDATE ".constant("EQUIPMENT_TYPE_TABLE")." SET description = '".$description."' WHERE id = '".$this->equipment_type_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->description = $description;
 				return true;
@@ -478,7 +478,7 @@ class EquipmentType_Access
 			$sql = "UPDATE ".constant("EQUIPMENT_TYPE_TABLE")." SET manufacturer = ".$manufacturer_insert." WHERE id = '".$this->equipment_type_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->manufacturer = $manufacturer;
 				return true;
@@ -509,7 +509,7 @@ class EquipmentType_Access
 			
 			$sql = "SELECT id FROM ".constant("EQUIPMENT_TYPE_TABLE")." WHERE id=".$id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 						
 			if ($data['id'])
 			{
@@ -542,7 +542,7 @@ class EquipmentType_Access
 			
 			$sql = "SELECT id FROM ".constant("EQUIPMENT_TYPE_TABLE")." WHERE TRIM(LOWER(name))='".$name."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 						
 			if ($data['id'])
 			{
@@ -574,7 +574,7 @@ class EquipmentType_Access
 			$sql = "SELECT id FROM ".constant("EQUIPMENT_TYPE_TABLE")." WHERE toid = ".$toid." AND toid != id ORDER BY name";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['id']);
 			}
@@ -609,7 +609,7 @@ class EquipmentType_Access
 			$sql = "SELECT id FROM ".constant("EQUIPMENT_TYPE_TABLE")." WHERE cat_id = ".$cat_id." ORDER BY cat_id,name";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['id']);
 			}
@@ -641,7 +641,7 @@ class EquipmentType_Access
 		$sql = "SELECT id FROM ".constant("EQUIPMENT_TYPE_TABLE")." WHERE id = toid ORDER BY cat_id,name";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($return_array,$data['id']);
 		}
@@ -668,7 +668,7 @@ class EquipmentType_Access
 		$sql = "SELECT id FROM ".constant("EQUIPMENT_TYPE_TABLE")." ORDER BY name";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($return_array,$data['id']);
 		}

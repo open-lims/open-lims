@@ -48,7 +48,7 @@ class Session_Access
 		{
 			$sql = "SELECT * FROM ".constant("SESSION_TABLE")." WHERE session_id='".$session_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['session_id'])
 			{
@@ -97,7 +97,7 @@ class Session_Access
 				
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) != 1)
+			if ($db->row_count($res_write) != 1)
 			{
 				return false;
 			}
@@ -127,7 +127,7 @@ class Session_Access
 			$sql = "DELETE FROM ".constant("SESSION_TABLE")." WHERE session_id = '".$session_id_tmp."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -200,7 +200,7 @@ class Session_Access
 			$sql = "UPDATE ".constant("SESSION_TABLE")." SET datetime = '".$datetime."' WHERE session_id = '".$this->session_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->datetime = $datetime;
 				return true;
@@ -231,7 +231,7 @@ class Session_Access
 			
 			$sql = "SELECT session_id FROM ".constant("SESSION_TABLE")." WHERE user_id = ".$user_id."";
 			$res = $db->db_query($sql);
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['session_id']);
 			}
@@ -262,7 +262,7 @@ class Session_Access
 		
 		$sql = "SELECT session_id FROM ".constant("SESSION_TABLE")." ORDER BY user_id ASC";
 		$res = $db->db_query($sql);
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($return_array,$data['session_id']);
 		}

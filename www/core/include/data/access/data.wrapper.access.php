@@ -54,7 +54,7 @@ class Data_Wrapper_Access
 									"LOWER(".constant("FILE_VERSION_TABLE").".file_extension) = 'gif')";				
 			
 			$res = $db->db_query($sql);
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data['id']);
 			}
@@ -96,7 +96,7 @@ class Data_Wrapper_Access
 									"LOWER(TRIM(".constant("FILE_VERSION_TABLE").".name)) = '".$name."'";	
 
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -130,7 +130,7 @@ class Data_Wrapper_Access
 						"WHERE current_folder.id = ".$folder_id."";	
 
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -262,7 +262,7 @@ class Data_Wrapper_Access
 			{
 				for ($i = 0; $i<=$end-1; $i++)
 				{
-					if (($data = $db->db_fetch_assoc($res)) == null)
+					if (($data = $db->fetch($res)) == null)
 					{
 						break;
 					}
@@ -275,7 +275,7 @@ class Data_Wrapper_Access
 			}
 			else
 			{
-				while ($data = $db->db_fetch_assoc($res))
+				while ($data = $db->fetch($res))
 				{
 					array_push($return_array, $data);
 				}
@@ -304,7 +304,7 @@ class Data_Wrapper_Access
 						"WHERE ".constant("DATA_ENTITY_TABLE").".id = ".$data_entity_pid."";
 
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			return $data['result'];
 		}
@@ -332,7 +332,7 @@ class Data_Wrapper_Access
 			$return_array = array();
 			
 			$res = $db->db_query($sql);
-			while($data = $db->db_fetch_assoc($res))
+			while($data = $db->fetch($res))
 			{
 				array_push($return_array, $data['id']);
 			}
@@ -461,7 +461,7 @@ class Data_Wrapper_Access
 			{
 				for ($i = 0; $i<=$end-1; $i++)
 				{
-					if (($data = $db->db_fetch_assoc($res)) == null)
+					if (($data = $db->fetch($res)) == null)
 					{
 						break;
 					}
@@ -474,7 +474,7 @@ class Data_Wrapper_Access
 			}
 			else
 			{
-				while ($data = $db->db_fetch_assoc($res))
+				while ($data = $db->fetch($res))
 				{
 					array_push($return_array, $data);
 				}
@@ -541,7 +541,7 @@ class Data_Wrapper_Access
 								"".$sql_order_by."";
 			
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 	
 			return $data['result'];
 		}
@@ -613,7 +613,7 @@ class Data_Wrapper_Access
 		{
 			for ($i = 0; $i<=$end-1; $i++)
 			{
-				if (($data = $db->db_fetch_assoc($res)) == null)
+				if (($data = $db->fetch($res)) == null)
 				{
 					break;
 				}
@@ -626,7 +626,7 @@ class Data_Wrapper_Access
 		}
 		else
 		{
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data);
 			}
@@ -645,7 +645,7 @@ class Data_Wrapper_Access
 					"FROM ".constant("VALUE_TYPE_TABLE")."";
 		
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 
 		return $data['result'];
 	}	
@@ -722,7 +722,7 @@ class Data_Wrapper_Access
 		{
 			for ($i = 0; $i<=$end-1; $i++)
 			{
-				if (($data = $db->db_fetch_assoc($res)) == null)
+				if (($data = $db->fetch($res)) == null)
 				{
 					break;
 				}
@@ -735,7 +735,7 @@ class Data_Wrapper_Access
 		}
 		else
 		{
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data);
 			}
@@ -754,7 +754,7 @@ class Data_Wrapper_Access
 					"FROM ".constant("PARAMETER_TEMPLATE_TABLE")."";
 		
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 
 		return $data['result'];
 	}	
@@ -811,7 +811,7 @@ class Data_Wrapper_Access
 		{
 			for ($i = 0; $i<=$end-1; $i++)
 			{
-				if (($data = $db->db_fetch_assoc($res)) == null)
+				if (($data = $db->fetch($res)) == null)
 				{
 					break;
 				}
@@ -824,7 +824,7 @@ class Data_Wrapper_Access
 		}
 		else
 		{
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data);
 			}
@@ -843,7 +843,7 @@ class Data_Wrapper_Access
 					"FROM ".constant("PARAMETER_METHOD_TABLE")."";
 		
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 
 		return $data['result'];
 	}	
@@ -919,7 +919,7 @@ class Data_Wrapper_Access
 			{
 				for ($i = 0; $i<=$end-1; $i++)
 				{
-					if (($data = $db->db_fetch_assoc($res)) == null)
+					if (($data = $db->fetch($res)) == null)
 					{
 						break;
 					}
@@ -932,7 +932,7 @@ class Data_Wrapper_Access
 			}
 			else
 			{
-				while ($data = $db->db_fetch_assoc($res))
+				while ($data = $db->fetch($res))
 				{
 					array_push($return_array, $data);
 				}
@@ -958,7 +958,7 @@ class Data_Wrapper_Access
 			$sql = "SELECT COUNT(*) AS result FROM get_all_value_versions(".$value_id.", NULL)";
 			
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 	
 			return $data['result'];
 		}
@@ -1040,7 +1040,7 @@ class Data_Wrapper_Access
 			{
 				for ($i = 0; $i<=$end-1; $i++)
 				{
-					if (($data = $db->db_fetch_assoc($res)) == null)
+					if (($data = $db->fetch($res)) == null)
 					{
 						break;
 					}
@@ -1053,7 +1053,7 @@ class Data_Wrapper_Access
 			}
 			else
 			{
-				while ($data = $db->db_fetch_assoc($res))
+				while ($data = $db->fetch($res))
 				{
 					array_push($return_array, $data);
 				}
@@ -1079,7 +1079,7 @@ class Data_Wrapper_Access
 			$sql = "SELECT COUNT(*) AS result FROM get_all_parameter_versions(".$parameter_id.", NULL)";
 			
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 	
 			return $data['result'];
 		}
@@ -1159,7 +1159,7 @@ class Data_Wrapper_Access
 			{
 				for ($i = 0; $i<=$end-1; $i++)
 				{
-					if (($data = $db->db_fetch_assoc($res)) == null)
+					if (($data = $db->fetch($res)) == null)
 					{
 						break;
 					}
@@ -1172,7 +1172,7 @@ class Data_Wrapper_Access
 			}
 			else
 			{
-				while ($data = $db->db_fetch_assoc($res))
+				while ($data = $db->fetch($res))
 				{
 					array_push($return_array, $data);
 				}
@@ -1198,7 +1198,7 @@ class Data_Wrapper_Access
 			$sql = "SELECT COUNT(*) AS result FROM get_all_file_versions(".$file_id.", NULL)";
 			
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 	
 			return $data['result'];
 		}
@@ -1241,7 +1241,7 @@ class Data_Wrapper_Access
 			{
 				for ($i = 0; $i<=$end-1; $i++)
 				{
-					if (($data = $db->db_fetch_assoc($res)) == null)
+					if (($data = $db->fetch($res)) == null)
 					{
 						break;
 					}
@@ -1254,7 +1254,7 @@ class Data_Wrapper_Access
 			}
 			else
 			{
-				while ($data = $db->db_fetch_assoc($res))
+				while ($data = $db->fetch($res))
 				{
 					array_push($return_array, $data);
 				}
@@ -1285,7 +1285,7 @@ class Data_Wrapper_Access
 						"".constant("DATA_ENTITY_IS_ITEM_TABLE").".item_id IN (".$item_sql.")";
 			
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 	
 			return $data['result'];
 		}
@@ -1323,7 +1323,7 @@ class Data_Wrapper_Access
 			
 			$res = $db->db_query($sql);
 
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data);
 			}
@@ -1365,7 +1365,7 @@ class Data_Wrapper_Access
 			
 			$res = $db->db_query($sql);
 
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data);
 			}

@@ -50,7 +50,7 @@ class XmlCache_Access
 		{
 			$sql = "SELECT * FROM ".constant("XML_CACHE_TABLE")." WHERE id='".$id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -96,7 +96,7 @@ class XmlCache_Access
 			
 			$sql_read = "SELECT id FROM ".constant("XML_CACHE_TABLE")." WHERE id = currval('".self::XML_CACHE_PK_SEQUENCE."'::regclass)";
 			$res_read = $db->db_query($sql_read);
-			$data_read = $db->db_fetch_assoc($res_read);
+			$data_read = $db->fetch($res_read);
 								
 			self::__construct($data_read['id']);
 			
@@ -124,7 +124,7 @@ class XmlCache_Access
 			$sql = "DELETE FROM ".constant("XML_CACHE_TABLE")." WHERE id = ".$id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -196,7 +196,7 @@ class XmlCache_Access
 			$sql = "UPDATE ".constant("XML_CACHE_TABLE")." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->data_entity_id = $data_entity_id;
 				return true;
@@ -225,7 +225,7 @@ class XmlCache_Access
 			$sql = "UPDATE ".constant("XML_CACHE_TABLE")." SET path = ".$path." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->path = $path;
 				return true;
@@ -254,7 +254,7 @@ class XmlCache_Access
 			$sql = "UPDATE ".constant("XML_CACHE_TABLE")." SET checksum = ".$checksum." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->checksum = $checksum;
 				return true;
@@ -283,7 +283,7 @@ class XmlCache_Access
 		{
 			$sql = "SELECT id FROM ".constant("XML_CACHE_TABLE")." WHERE data_entity_id = ".$data_entity_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{

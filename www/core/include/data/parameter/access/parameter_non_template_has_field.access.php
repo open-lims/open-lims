@@ -47,7 +47,7 @@ class ParameterNonTemplateHasField_Access
 		{
 			$sql = "SELECT * FROM ".constant("PARAMETER_NON_TEMPLATE_HAS_FIELD_TABLE")." WHERE non_template_id='".$non_template_id."' AND parameter_field_id='".$parameter_field_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['non_template_id'] and $data['parameter_field_id'])
 			{
@@ -87,7 +87,7 @@ class ParameterNonTemplateHasField_Access
 					
 			$res_write = $db->db_query($sql_write);	
 
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				self::__construct($non_template_id, $parameter_field_id);
 				return true;
@@ -121,7 +121,7 @@ class ParameterNonTemplateHasField_Access
 			$sql = "DELETE FROM ".constant("PARAMETER_NON_TEMPLATE_HAS_FIELD_TABLE")." WHERE non_template_id=".$non_template_id_tmp." AND parameter_field_id = ".$parameter_field_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}

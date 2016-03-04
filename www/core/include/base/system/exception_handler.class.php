@@ -78,7 +78,7 @@ class ExceptionHandler  // implements ExceptionHandlerInterface
 		    				fwrite($handle, "\n\n");
 		    				fwrite($handle, "-----------\n");
 		    				fwrite($handle, "LAST ERROR:\n");
-		    				fwrite($handle, $db->db_last_error());
+		    				fwrite($handle, serialize($db->get_last_error()));
 		    				fclose($handle);
 	    				}
 	    			}

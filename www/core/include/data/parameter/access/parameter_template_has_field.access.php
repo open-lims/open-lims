@@ -47,7 +47,7 @@ class ParameterTemplateHasField_Access
 		{
 			$sql = "SELECT * FROM ".constant("PARAMETER_TEMPLATE_HAS_FIELD_TABLE")." WHERE template_id='".$template_id."' AND parameter_field_id='".$parameter_field_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['template_id'] and $data['parameter_field_id'])
 			{
@@ -87,7 +87,7 @@ class ParameterTemplateHasField_Access
 					
 			$res_write = $db->db_query($sql_write);	
 
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				self::__construct($template_id, $parameter_field_id);
 				return true;
@@ -121,7 +121,7 @@ class ParameterTemplateHasField_Access
 			$sql = "DELETE FROM ".constant("PARAMETER_TEMPLATE_HAS_FIELD_TABLE")." WHERE template_id=".$template_id_tmp." AND parameter_field_id = ".$parameter_field_id_tmp."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -152,7 +152,7 @@ class ParameterTemplateHasField_Access
 			$sql = "SELECT parameter_field_id FROM ".constant("PARAMETER_TEMPLATE_HAS_FIELD_TABLE")." WHERE template_id = ".$template_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['parameter_field_id']);
 			}
@@ -185,7 +185,7 @@ class ParameterTemplateHasField_Access
 		{
 			$sql = "SELECT template_id FROM ".constant("PARAMETER_TEMPLATE_HAS_FIELD_TABLE")." WHERE template_id='".$template_id."' AND parameter_field_id='".$parameter_field_id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['template_id'])
 			{

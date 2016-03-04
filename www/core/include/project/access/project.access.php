@@ -56,7 +56,7 @@ class Project_Access
 		{
 			$sql = "SELECT * FROM ".constant("PROJECT_TABLE")." WHERE id='".$project_id."'";
 			$res = $db->db_query($sql);			
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -146,11 +146,11 @@ class Project_Access
 
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("PROJECT_TABLE")." WHERE id = currval('".self::PROJECT_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);	
+				$data_read = $db->fetch($res_read);	
 				
 				self::__construct($data_read['id']);
 							
@@ -183,7 +183,7 @@ class Project_Access
     		$sql = "DELETE FROM ".constant("PROJECT_TABLE")." WHERE id = ".$tmp_project_id."";
     		$res = $db->db_query($sql);
     		
-    		if ($db->db_affected_rows($res) == 1)
+    		if ($db->row_count($res) == 1)
     		{
     			return true;
     		}
@@ -355,7 +355,7 @@ class Project_Access
 			$sql = "UPDATE ".constant("PROJECT_TABLE")." SET toid_organ_unit = ".$organ_unit_id_insert." WHERE id = ".$this->project_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->organ_unit_id = $organ_unit_id;
 				return true;
@@ -393,7 +393,7 @@ class Project_Access
 			$sql = "UPDATE ".constant("PROJECT_TABLE")." SET toid_project = ".$project_id_insert." WHERE id = ".$this->project_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->toid_project = $project_id;
 				return true;
@@ -422,7 +422,7 @@ class Project_Access
 			$sql = "UPDATE ".constant("PROJECT_TABLE")." SET datetime = '".$datetime."' WHERE id = ".$this->project_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				return true;
 			}
@@ -450,7 +450,7 @@ class Project_Access
 			$sql = "UPDATE ".constant("PROJECT_TABLE")." SET name = '".$name."' WHERE id = ".$this->project_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name = $name;
 				return true;
@@ -479,7 +479,7 @@ class Project_Access
 			$sql = "UPDATE ".constant("PROJECT_TABLE")." SET owner_id = ".$owner_id." WHERE id = ".$this->project_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->owner_id = $owner_id;
 				return true;
@@ -508,7 +508,7 @@ class Project_Access
 			$sql = "UPDATE ".constant("PROJECT_TABLE")." SET template_id = ".$template_id." WHERE id = ".$this->project_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->template_id = $template_id;
 				return true;
@@ -537,7 +537,7 @@ class Project_Access
 			$sql = "UPDATE ".constant("PROJECT_TABLE")." SET quota = '".$quota."' WHERE id = ".$this->project_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->quota = $quota;
 				return true;
@@ -567,7 +567,7 @@ class Project_Access
 			$sql = "UPDATE ".constant("PROJECT_TABLE")." SET filesize = '".$filesize."' WHERE id = ".$this->project_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->filesize = $filesize;
 				return true;
@@ -605,7 +605,7 @@ class Project_Access
 			$sql = "UPDATE ".constant("PROJECT_TABLE")." SET deleted = '".$deleted_insert."' WHERE id = ".$this->project_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				return true;
 			}
@@ -636,7 +636,7 @@ class Project_Access
 			$sql = "SELECT id FROM ".constant("PROJECT_TABLE")." WHERE toid_organ_unit = ".$organ_unit_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['id']);
 			}
@@ -671,7 +671,7 @@ class Project_Access
 			$sql = "SELECT id FROM ".constant("PROJECT_TABLE")." WHERE toid_project = ".$project_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['id']);
 			}
@@ -706,7 +706,7 @@ class Project_Access
 			$sql = "SELECT id FROM ".constant("PROJECT_TABLE")." WHERE owner_id = ".$owner_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['id']);
 			}
@@ -741,7 +741,7 @@ class Project_Access
 			$sql = "SELECT id FROM ".constant("PROJECT_TABLE")." WHERE template_id = ".$template_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['id']);
 			}
@@ -773,7 +773,7 @@ class Project_Access
 		$sql = "SELECT id FROM ".constant("PROJECT_TABLE")." WHERE toid_project IS NULL AND toid_organ_unit IS NOT NULL";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($return_array,$data['id']);
 		}
@@ -800,7 +800,7 @@ class Project_Access
 		{
 			$sql = "SELECT id FROM ".constant("PROJECT_TABLE")." WHERE id = ".$project_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -832,7 +832,7 @@ class Project_Access
 			
 			$sql = "SELECT id FROM ".constant("PROJECT_TABLE")." WHERE LOWER(TRIM(name)) = '".$name."' AND toid_organ_unit = ".$toid_organ_unit."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -864,7 +864,7 @@ class Project_Access
 			
 			$sql = "SELECT id FROM ".constant("PROJECT_TABLE")." WHERE LOWER(TRIM(name)) = '".$name."' AND toid_project = ".$toid_project."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -890,7 +890,7 @@ class Project_Access
 		
 		$sql = "SELECT SUM(filesize) AS size FROM ".constant("PROJECT_TABLE")."";
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 		
 		if ($data['size'])
 		{

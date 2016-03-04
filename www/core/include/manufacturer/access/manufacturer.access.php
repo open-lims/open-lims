@@ -50,7 +50,7 @@ class Manufacturer_Access
 		{
 			$sql = "SELECT * FROM ".constant("MANUFACTURER_TABLE")." WHERE id='".$manufacturer_id."'";
 			$res = $db->db_query($sql);			
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -96,11 +96,11 @@ class Manufacturer_Access
 
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("MANUFACTURER_TABLE")." WHERE id = currval('".self::MANUFACTURER_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
 			
@@ -133,7 +133,7 @@ class Manufacturer_Access
 			$sql = "DELETE FROM ".constant("MANUFACTURER_TABLE")." WHERE id = ".$tmp_manufacturer_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -206,7 +206,7 @@ class Manufacturer_Access
 			$sql = "UPDATE ".constant("MANUFACTURER_TABLE")." SET name = '".$name."' WHERE id = '".$this->manufacturer_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name = $name;
 				return true;
@@ -235,7 +235,7 @@ class Manufacturer_Access
 			$sql = "UPDATE ".constant("MANUFACTURER_TABLE")." SET user_id = ".$user_id." WHERE id = '".$this->manufacturer_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->user_id = $user_id;
 				return true;
@@ -264,7 +264,7 @@ class Manufacturer_Access
 			$sql = "UPDATE ".constant("MANUFACTURER_TABLE")." SET datetime = '".$datetime."' WHERE id = '".$this->manufacturer_id."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->datetime = $datetime;
 				return true;
@@ -301,7 +301,7 @@ class Manufacturer_Access
 		}
 		
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 					
 		if ($data['result'])
 		{
@@ -346,7 +346,7 @@ class Manufacturer_Access
 			{
 				for ($i = 0; $i<=$end_entry-1; $i++)
 				{
-					if (($data = $db->db_fetch_assoc($res)) == null)
+					if (($data = $db->fetch($res)) == null)
 					{
 						break;
 					}
@@ -359,7 +359,7 @@ class Manufacturer_Access
 			}
 			else
 			{
-				while ($data = $db->db_fetch_assoc($res))
+				while ($data = $db->fetch($res))
 				{
 					array_push($return_array, $data);
 				}
@@ -386,7 +386,7 @@ class Manufacturer_Access
 			
 			$sql = "SELECT id FROM ".constant("MANUFACTURER_TABLE")." WHERE TRIM(LOWER(name))='".$name."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 						
 			if ($data['id'])
 			{
@@ -416,7 +416,7 @@ class Manufacturer_Access
 		{
 			$sql = "UPDATE ".constant("MANUFACTURER_TABLE")." SET user_id = ".$new_user_id." WHERE user_id = ".$user_id."";				
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 							
 			if ($res !== false)
 			{

@@ -47,7 +47,7 @@ class EquipmentHasResponsiblePerson_Access
 		{
 			$sql = "SELECT * FROM ".constant("EQUIPMENT_HAS_RESPONSIBLE_PERSON_TABLE")." WHERE equipment_id='".$equipment_id."' AND user_id='".$user_id."'";
 			$res = $db->db_query($sql);			
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['equipment_id'])
 			{
@@ -87,7 +87,7 @@ class EquipmentHasResponsiblePerson_Access
 
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				return true;
 			}
@@ -119,7 +119,7 @@ class EquipmentHasResponsiblePerson_Access
 			$sql = "DELETE FROM ".constant("EQUIPMENT_HAS_RESPONSIBLE_PERSON_TABLE")." WHERE equipment_id = ".$tmp_equipment_id." AND user_id = ".$tmp_user_id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -150,7 +150,7 @@ class EquipmentHasResponsiblePerson_Access
 			$sql = "SELECT user_id FROM ".constant("EQUIPMENT_HAS_RESPONSIBLE_PERSON_TABLE")." WHERE equipment_id = ".$equipment_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['user_id']);
 			}
@@ -185,7 +185,7 @@ class EquipmentHasResponsiblePerson_Access
 			
 			$sql = "DELETE FROM ".constant("EQUIPMENT_HAS_RESPONSIBLE_PERSON_TABLE")." WHERE user_id = ".$user_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			return true;	
 		}

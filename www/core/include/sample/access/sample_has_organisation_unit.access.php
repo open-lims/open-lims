@@ -49,7 +49,7 @@ class SampleHasOrganisationUnit_Access
 		{
 			$sql = "SELECT * FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE primary_key='".$primary_key."'";
 			$res = $db->db_query($sql);			
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['primary_key'])
 			{
@@ -91,11 +91,11 @@ class SampleHasOrganisationUnit_Access
 					"VALUES (nextval('".self::SAMPLE_HAS_ORGANISATION_UNIT_PK_SEQUENCE."'::regclass),".$sample_id.",".$organisation_unit_id.")";
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE primary_key = currval('".self::SAMPLE_HAS_ORGANISATION_UNIT_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['primary_key']);
 				
@@ -128,7 +128,7 @@ class SampleHasOrganisationUnit_Access
 			$sql = "DELETE FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE primary_key = ".$tmp_primary_key."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -186,7 +186,7 @@ class SampleHasOrganisationUnit_Access
 			$sql = "UPDATE ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." SET sample_id = '".$sample_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->sample_id = $sample_id;
 				return true;
@@ -215,7 +215,7 @@ class SampleHasOrganisationUnit_Access
 			$sql = "UPDATE ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." SET organisation_unit_id = '".$organisation_unit_id."' WHERE primary_key = '".$this->primary_key."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->organisation_unit_id = $organisation_unit_id;
 				return true;
@@ -248,7 +248,7 @@ class SampleHasOrganisationUnit_Access
 			
 			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE sample_id = ".$sample_id." AND organisation_unit_id = ".$organisation_unit_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 
 			if ($data['primary_key'])
 			{
@@ -280,7 +280,7 @@ class SampleHasOrganisationUnit_Access
 			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE sample_id = ".$sample_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['primary_key']);
 			}
@@ -315,7 +315,7 @@ class SampleHasOrganisationUnit_Access
 			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
 			$res = $db->db_query($sql);
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['primary_key']);
 			}
@@ -347,7 +347,7 @@ class SampleHasOrganisationUnit_Access
 		$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")."";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($return_array,$data['primary_key']);
 		}

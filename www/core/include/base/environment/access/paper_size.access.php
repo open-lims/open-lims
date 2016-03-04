@@ -56,7 +56,7 @@ class PaperSize_Access
 		{	
 			$sql = "SELECT * FROM ".constant("PAPER_SIZE_TABLE")." WHERE id = ".$id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -133,11 +133,11 @@ class PaperSize_Access
 			
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("PAPER_SIZE_TABLE")." WHERE id = currval('".self::PAPER_SIZE_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
 								
@@ -170,7 +170,7 @@ class PaperSize_Access
     		$sql = "DELETE FROM ".constant("PAPER_SIZE_TABLE")." WHERE id = ".$tmp_id."";
     		$res = $db->db_query($sql);
     		
-    		if ($db->db_affected_rows($res) == 1)
+    		if ($db->row_count($res) == 1)
     		{
     			return true;
     		}
@@ -333,7 +333,7 @@ class PaperSize_Access
 			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET name = '".$name."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->name = $name;
 				return true;
@@ -362,7 +362,7 @@ class PaperSize_Access
 			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET width = '".$width."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->width = $width;
 				return true;
@@ -391,7 +391,7 @@ class PaperSize_Access
 			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET height = '".$height."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->height = $height;
 				return true;
@@ -420,7 +420,7 @@ class PaperSize_Access
 			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET margin_left = '".$margin_left."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->margin_left = $margin_left;
 				return true;
@@ -449,7 +449,7 @@ class PaperSize_Access
 			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET margin_right = '".$margin_right."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->margin_right = $margin_right;
 				return true;
@@ -478,7 +478,7 @@ class PaperSize_Access
 			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET margin_top = '".$margin_top."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->margin_top = $margin_top;
 				return true;
@@ -507,7 +507,7 @@ class PaperSize_Access
 			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET margin_bottom = '".$margin_bottom."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->margin_bottom = $margin_bottom;
 				return true;
@@ -545,7 +545,7 @@ class PaperSize_Access
 			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET base = '".$base_insert."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->base = $base;
 				return true;
@@ -583,7 +583,7 @@ class PaperSize_Access
 			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET base = '".$standard_insert."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->standard = $standard;
 				return true;
@@ -612,7 +612,7 @@ class PaperSize_Access
 		$sql = "SELECT id,name FROM ".constant("PAPER_SIZE_TABLE")." ORDER BY standard DESC,name";
 		$res = $db->db_query($sql);
 		
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			$temp_array = array();
 			$temp_array['id'] = $data['id'];
@@ -643,7 +643,7 @@ class PaperSize_Access
 		{
 			$sql = "SELECT width,height,margin_left,margin_right,margin_top,margin_bottom FROM ".constant("PAPER_SIZE_TABLE")." WHERE id = '".$id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			$return_array = array();
 			$return_array['width'] 			= $data['width'];
@@ -677,7 +677,7 @@ class PaperSize_Access
 			
 		$sql = "SELECT width,height,margin_left,margin_right,margin_top,margin_bottom FROM ".constant("PAPER_SIZE_TABLE")." WHERE standard = 't'";
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 		
 		$return_array = array();
 		$return_array['width'] 			= $data['width'];

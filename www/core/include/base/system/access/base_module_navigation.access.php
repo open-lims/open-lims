@@ -51,7 +51,7 @@ class BaseModuleNavigation_Access
 		{
 			$sql = "SELECT * FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." WHERE id='".$id."'";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -116,11 +116,11 @@ class BaseModuleNavigation_Access
 				
 			$res_write = $db->db_query($sql_write);
 			
-			if ($db->db_affected_rows($res_write) == 1)
+			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." WHERE id = currval('".self::BASE_MODULE_NAVIGATION_PK_SEQUENCE."'::regclass)";
 				$res_read = $db->db_query($sql_read);
-				$data_read = $db->db_fetch_assoc($res_read);
+				$data_read = $db->fetch($res_read);
 							
 				self::__construct($data_read['id']);		
 								
@@ -153,7 +153,7 @@ class BaseModuleNavigation_Access
 			$sql = "DELETE FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." WHERE id = '".$id_tmp."'";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res) == 1)
+			if ($db->row_count($res) == 1)
 			{
 				return true;
 			}
@@ -301,7 +301,7 @@ class BaseModuleNavigation_Access
 			$sql = "UPDATE ".constant("BASE_MODULE_NAVIGATION_TABLE")." SET language_address = '".$language_address."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->language_address = $language_address;
 				return true;
@@ -339,7 +339,7 @@ class BaseModuleNavigation_Access
 			$sql = "UPDATE ".constant("BASE_MODULE_NAVIGATION_TABLE")." SET position = ".$position_insert." WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->position = $position;
 				return true;
@@ -368,7 +368,7 @@ class BaseModuleNavigation_Access
 			$sql = "UPDATE ".constant("BASE_MODULE_NAVIGATION_TABLE")." SET colour = '".$colour."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->colour = $colour;
 				return true;
@@ -397,7 +397,7 @@ class BaseModuleNavigation_Access
 			$sql = "UPDATE ".constant("BASE_MODULE_NAVIGATION_TABLE")." SET module_id = '".$module_id."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->module_id = $module_id;
 				return true;
@@ -435,7 +435,7 @@ class BaseModuleNavigation_Access
 			$sql = "UPDATE ".constant("BASE_MODULE_NAVIGATION_TABLE")." SET hidden = '".$hidden_insert."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->hidden = $hidden;
 				return true;
@@ -464,7 +464,7 @@ class BaseModuleNavigation_Access
 			$sql = "UPDATE ".constant("BASE_MODULE_NAVIGATION_TABLE")." SET alias = '".$alias."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->alias = $alias;
 				return true;
@@ -493,7 +493,7 @@ class BaseModuleNavigation_Access
 			$sql = "UPDATE ".constant("BASE_MODULE_NAVIGATION_TABLE")." SET controller_class = '".$controller_class."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->controller_class = $controller_class;
 				return true;
@@ -522,7 +522,7 @@ class BaseModuleNavigation_Access
 			$sql = "UPDATE ".constant("BASE_MODULE_NAVIGATION_TABLE")." SET controller_file = '".$controller_file."' WHERE id = ".$this->id."";
 			$res = $db->db_query($sql);
 			
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				$this->controller_file= $controller_file;
 				return true;
@@ -553,7 +553,7 @@ class BaseModuleNavigation_Access
 				"WHERE position = ".$next_position."";
 			
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -580,7 +580,7 @@ class BaseModuleNavigation_Access
 		
 		$sql = "SELECT MAX(position) AS position FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")."";
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 		
 		if ($data['position'])
 		{
@@ -603,7 +603,7 @@ class BaseModuleNavigation_Access
 			
 			$sql = "SELECT id,language_address,controller_class,controller_file,alias FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." WHERE module_id = '".$module_id."'";
 			$res = $db->db_query($sql);
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				$result_array[$data['language_address']]['id']					= $data['id'];
 				$result_array[$data['language_address']]['colour']				= $data['colour'];
@@ -631,7 +631,7 @@ class BaseModuleNavigation_Access
 		
 		$sql = "SELECT id,language_address,alias,colour,module_id FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." WHERE hidden = 'f' ORDER BY position";
 		$res = $db->db_query($sql);
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			$result_array[$data['id']]['language_address']	= $data['language_address'];
 			$result_array[$data['id']]['alias']				= $data['alias'];
@@ -659,7 +659,7 @@ class BaseModuleNavigation_Access
 			
 			$sql = "SELECT controller_file, controller_class FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." WHERE module_id = ".$module_id." AND ".$alias_sql."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['controller_file'] and $data['controller_class'])
 			{
@@ -688,7 +688,7 @@ class BaseModuleNavigation_Access
 		{
 			$sql = "SELECT id FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." WHERE module_id = ".$module_id."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -717,7 +717,7 @@ class BaseModuleNavigation_Access
 		{
 			$sql = "SELECT id FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." WHERE position = ".$position."";
 			$res = $db->db_query($sql);
-			$data = $db->db_fetch_assoc($res);
+			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
@@ -745,7 +745,7 @@ class BaseModuleNavigation_Access
 		
 		$sql = "SELECT id FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." ORDER BY position";
 		$res = $db->db_query($sql);
-		while ($data = $db->db_fetch_assoc($res))
+		while ($data = $db->fetch($res))
 		{
 			array_push($result_array, $data['id']);
 		}
@@ -759,7 +759,7 @@ class BaseModuleNavigation_Access
 		
 		$sql = "SELECT COUNT(id) AS result FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")."";
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 		
 		return $data['result'];
 	}
@@ -775,7 +775,7 @@ class BaseModuleNavigation_Access
 		
 		$sql = "SELECT MAX(position) AS maximum FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")."";
 		$res = $db->db_query($sql);
-		$data = $db->db_fetch_assoc($res);
+		$data = $db->fetch($res);
 		
 		if ($data['maximum'] == self::count_entries())
 		{

@@ -55,7 +55,7 @@ class XmlCacheElement_Access
 			
 			$sql_read = "SELECT primary_key FROM ".constant("XML_CACHE_ELEMENT_TABLE")." WHERE primary_key = currval('".self::XML_CACHE_ELEMENT_PK_SEQUENCE."'::regclass)";
 			$res_read = $db->db_query($sql_read);
-			$data_read = $db->db_fetch_assoc($res_read);
+			$data_read = $db->fetch($res_read);
 			
 			return $data_read['id'];
 		}
@@ -78,7 +78,7 @@ class XmlCacheElement_Access
 			$sql = "DELETE FROM ".constant("XML_CACHE_ELEMENT_TABLE")." WHERE toid = ".$toid."";
 			$res = $db->db_query($sql);
 						
-			if ($db->db_affected_rows($res))
+			if ($db->row_count($res))
 			{
 				return true;
 			}
@@ -108,7 +108,7 @@ class XmlCacheElement_Access
 			
 			$result_array = array();
 			
-			while ($data = $db->db_fetch_assoc($res))
+			while ($data = $db->fetch($res))
 			{
 				$tmp_array = array();
 				$tmp_array[0] = unserialize($data['field_0']);
