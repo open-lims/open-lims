@@ -91,7 +91,6 @@ class SystemLog implements SystemLogInterface
 
 		if ($this->system_log)
 		{
-			$content_string = $db->db_escape_string($content_string);
 			$log_id = $this->system_log->create($user_id, $type_id, $content_int, $content_string, $content_errorno, $file, $line, $link);
 			if ($log_id)
 			{

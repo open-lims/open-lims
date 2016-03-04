@@ -69,8 +69,8 @@ class Main
 			
 			$database = SystemConfig::get_database();
 			
-			$db = new Database($database['type']);
-			@$connection_result = $db->db_connect($database[0]['server'],$database[0]['port'],$database['user'],$database['password'],$database['database']);
+			$db = new Database();
+			@$connection_result = $db->connect($database['type'],$database[0]['server'],$database[0]['port'],$database['user'],$database['password'],$database['database']);
 					
 			require_once("include/base/system/error_handler.php");
 			
@@ -82,7 +82,7 @@ class Main
 			
 			require_once("include/base/system/autoload.function.php");
 			
-			if ($connection_result == true)
+			if ($connection_result === true)
 			{	
 				if(SystemHandler::check_installation() == false)
 				{

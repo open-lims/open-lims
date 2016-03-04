@@ -22,45 +22,61 @@
  */
 
 /**
- * 
- */
-if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
-{
-	require_once("exceptions/database_query_failed_exception.class.php");
-}
-
-/**
  * DB Class
  * @package base
  */
 class Database
 {
-	private $sql;
-	private $connection;
-	
+	private $pdo;	
 	private $query_log;
 	private $query_log_status;
-		
-	function __construct($sql_type)
+				
+	/**
+	 * @todo move try catch to global
+	 */
+	public function connect($type, $server, $port, $username, $password, $database)
 	{
-		$this->query_log = "";
-		$this->query_log_status = false;
-		
-		switch ($sql_type):
-		
-		case ("postgres"):
-			require_once("postgresql.php");
-			$this->sql = new Postgresql;	
-		break;
-		case ("pdo_pggsl"):
-			require_once("pdo_pgsql.php");
-			$this->sql = new PDOpgsql;
-			break;
-		default:
-			die("Wrong Database Type");
-		break;
-		
-		endswitch;
+		$options = "";
+			
+		$options = "host=".$server.";";
+		$options = $options." dbname=".$database;
+	
+		if ($port)
+		{
+			$options = $options."; port:".$port."";
+		}
+	
+		try
+		{
+			$this->pdo = new PDO($type.':'.$options, $username, $password);
+			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			
+			return true;
+		}
+		catch (PDOException $e)
+		{
+			return false;
+		}
+	}
+	
+	public function prepare($query)
+	{
+		return $this->pdo->prepare($query);
+	}
+	
+	public function execute($statement)
+	{
+		$statement->execute();
+	}
+	
+	public function row_count($statement)
+	{
+		return $statement->rowCount();
+	}
+	
+	public function fetch($statement)
+	{
+		return $statement->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	public function query_log_start()
@@ -86,41 +102,27 @@ class Database
 		}
 	}
 	
-	public function db_connect($server,$port,$db_user,$pass,$database)
+	public function close()
 	{
-		$this->connection = $this->sql->sql_connect($server,$port,$db_user,$pass,$database);
-		return $this->connection;
+		unset($this->pdo);
 	}
+	
+	
+	
+	
+	// !! DECPRECATED
 	
 	public function db_query($query)
 	{
- 	 	if ($this->query_log_status == true)
- 	 	{
- 	 		if (trim($this->query_log))
- 	 		{
- 	 			$this->query_log = $this->query_log."\n".$query.";";
- 	 		}
- 	 		else
- 	 		{
- 	 			$this->query_log = $query.";";
- 	 		}
- 	 	}
+ 	 	$pg_result = $this->pdo->prepare($query);
+ 	 	$pg_result->execute();
  	 	
- 	 	$db_result = $this->sql->sql_query($this->connection, $query);
- 	 	
- 	 	if (!$db_result)
- 	 	{
- 	 		return 0;
- 	 	}
- 	 	else
- 	 	{
- 	 		return $db_result;
- 	 	}
+ 	 	return $pg_result;
  	}
  	
-	public function db_fetch_assoc($resultset)
+	public function db_fetch_assoc($assoc)
 	{
- 		return $this->sql->sql_fetch_assoc($resultset);
+ 		return $assoc->fetch(PDO::FETCH_ASSOC);
  	}
  	
  	public function db_fetch_assoc_wrow($resultset, $row)
@@ -138,10 +140,7 @@ class Database
  		return $this->sql->sql_fetch_array_wrow($resultset, $row);
  	}
  
- 	public function db_close()
- 	{
- 		$this->sql->sql_close();
- 	}
+ 
  	
  	public function db_num_rows($resultset)
  	{
@@ -150,29 +149,9 @@ class Database
  	
  	public function db_affected_rows($resultset)
  	{
- 		return $this->sql->sql_affected_rows($resultset);
+ 		return $resultset->rowCount();
  	}
- 	
- 	public function db_escape_string($string)
- 	{
- 		return $this->sql->sql_escape_string($string);
- 	}
- 	
- 	public function db_escape_bytea($string)
- 	{
- 		return $this->sql->sql_escape_bytea($string);
- 	}
- 	
- 	public function db_unescape_bytea($string)
- 	{
- 		return $this->sql->sql_unescape_bytea($string);
- 	}
- 	
- 	public function db_database_size()
- 	{
- 		return $this->sql->sql_database_size();
- 	}
- 	
+ 	 	 	
 	public function db_last_error()
  	{
  		return $this->sql->sql_last_error();

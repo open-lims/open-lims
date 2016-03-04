@@ -34,8 +34,8 @@ class Transaction_Access
 	{
 		global $db;
 		
-    	$db->db_query("BEGIN");
     	$db->db_query("START TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+    	$db->db_query("BEGIN");
     	$db->db_query("SET CONSTRAINTS ALL DEFERRED");
 		
 		return true;

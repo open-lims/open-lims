@@ -54,20 +54,13 @@ class Security implements SecurityInterface
  		
 		foreach ($_GET as $key => $value)
 		{
-			// HTML-Entities	
 			$_GET[$key] = htmlentities($_GET[$key], ENT_NOQUOTES, "UTF-8", false);
-				
-			// SQL-Injections
-			$_GET[$key] = $db->db_escape_string($_GET[$key]);
-			
-			// UTF8-Encoding
 			$_GET[$key] = mb_convert_encoding($_GET[$key], "UTF-8", "auto");
 		}
  		
  		foreach ($_POST as $key => $value)
 		{			
 			$_POST[$key] = htmlentities($_POST[$key], ENT_NOQUOTES, "UTF-8", false);
-			$_POST[$key] = $db->db_escape_string($_POST[$key]);
 			$_POST[$key] = mb_convert_encoding($_POST[$key], "UTF-8", "auto");	
 		}
  	}

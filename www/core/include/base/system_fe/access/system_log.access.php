@@ -119,9 +119,7 @@ class SystemLog_Access
 		global $db;
 		
 		if ($type_id)
-		{
-			$content_string = $db->db_escape_string($content_string);
-		
+		{		
 			$datetime = date("Y-m-d H:i:s");
 			$ip = $_SERVER['REMOTE_ADDR'];
 			
