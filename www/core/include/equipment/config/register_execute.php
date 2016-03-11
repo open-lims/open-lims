@@ -24,7 +24,7 @@
 /**
  * Registering Functions
  */ 
-function register_method($include_id)
+function register_equipment($include_id)
 {
 	if (Item::register_type("equipment", "Equipment", $include_id) == true)
 	{
@@ -35,5 +35,5 @@ function register_method($include_id)
 		return false;
 	}
 }
-$result = register_method($key);
+$result = register_equipment($key);
 ?>

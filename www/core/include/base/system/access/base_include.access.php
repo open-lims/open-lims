@@ -47,8 +47,10 @@ class BaseInclude_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("BASE_INCLUDE_TABLE")." WHERE id='".$id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("BASE_INCLUDE_TABLE")." WHERE id=:id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -88,14 +90,18 @@ class BaseInclude_Access
 		if ($name and $folder)
 		{
 	 		$sql_write = "INSERT INTO ".constant("BASE_INCLUDE_TABLE")." (id, name, folder, db_version) " .
-								"VALUES (nextval('".self::BASE_INCLUDE_PK_SEQUENCE."'::regclass),'".$name."','".$folder."', NULL)";		
+								"VALUES (nextval('".self::BASE_INCLUDE_PK_SEQUENCE."'::regclass),:name,:folder, NULL)";		
 				
-			$res_write = $db->db_query($sql_write);
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+			$db->bind_value($res, ":folder", $folder, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("BASE_INCLUDE_TABLE")." WHERE id = currval('".self::BASE_INCLUDE_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 							
 				self::__construct($data_read['id']);		
@@ -126,8 +132,10 @@ class BaseInclude_Access
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".constant("BASE_INCLUDE_TABLE")." WHERE id = '".$id_tmp."'";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("BASE_INCLUDE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -199,8 +207,11 @@ class BaseInclude_Access
 
 		if ($this->id and $name)
 		{
-			$sql = "UPDATE ".constant("BASE_INCLUDE_TABLE")." SET name = '".$name."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_INCLUDE_TABLE")." SET name = :name WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -228,8 +239,11 @@ class BaseInclude_Access
 
 		if ($this->id and $folder)
 		{
-			$sql = "UPDATE ".constant("BASE_INCLUDE_TABLE")." SET folder = '".$folder."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_INCLUDE_TABLE")." SET folder = :folder WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":folder", $folder, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -257,8 +271,11 @@ class BaseInclude_Access
 
 		if ($this->id and $db_version)
 		{
-			$sql = "UPDATE ".constant("BASE_INCLUDE_TABLE")." SET db_version = '".$db_version."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_INCLUDE_TABLE")." SET db_version = :db_version WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":db_version", $db_version, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -287,7 +304,8 @@ class BaseInclude_Access
 		$return_array = array();
 		
 		$sql = "SELECT id, folder FROM ".constant("BASE_INCLUDE_TABLE")."";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{
@@ -314,7 +332,9 @@ class BaseInclude_Access
 		$result_array = array();
 		
 		$sql = "SELECT id,name,folder FROM ".constant("BASE_INCLUDE_TABLE")." ORDER BY name";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
+		
 		while ($data = $db->fetch($res))
 		{
 			$result_array[$data['id']]['name']		= $data['name'];
@@ -336,8 +356,11 @@ class BaseInclude_Access
 		{		
 			$name = trim(strtolower($name));
 			
-			$sql = "SELECT id FROM ".constant("BASE_INCLUDE_TABLE")." WHERE TRIM(LOWER(name)) = '".$name."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("BASE_INCLUDE_TABLE")." WHERE TRIM(LOWER(name)) = :name";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+			$db->execute($res);
+
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -360,7 +383,8 @@ class BaseInclude_Access
 		global $db;
 		
 		$sql = "SELECT table_name FROM information_schema.tables";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while($data = $db->fetch($res))
 		{

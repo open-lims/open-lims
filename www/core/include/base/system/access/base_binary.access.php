@@ -46,8 +46,10 @@ class BaseBinary_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("BASE_BINARY_TABLE")." WHERE id='".$id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("BASE_BINARY_TABLE")." WHERE id=:id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -85,14 +87,18 @@ class BaseBinary_Access
 		if ($path and $file)
 		{
 	 		$sql_write = "INSERT INTO ".constant("BASE_BINARY_TABLE")." (id, path, file) " .
-								"VALUES (nextval('".self::BASE_BINARY_PK_SEQUENCE."'::regclass),'".$path."','".$file."')";		
+								"VALUES (nextval('".self::BASE_BINARY_PK_SEQUENCE."'::regclass),:path,:file)";		
 				
-			$res_write = $db->db_query($sql_write);
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":path", $path, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":file", $file, PDO::PARAM_STR);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("BASE_BINARY_TABLE")." WHERE id = currval('".self::BASE_BINARY_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 							
 				self::__construct($data_read['id']);		
@@ -123,8 +129,10 @@ class BaseBinary_Access
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".constant("BASE_BINARY_TABLE")." WHERE id = '".$id_tmp."'";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("BASE_BINARY_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -181,8 +189,11 @@ class BaseBinary_Access
 
 		if ($this->id and $path)
 		{
-			$sql = "UPDATE ".constant("BASE_BINARY_TABLE")." SET path = '".$path."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_BINARY_TABLE")." SET path = :path WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":path", $path, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -210,8 +221,11 @@ class BaseBinary_Access
 
 		if ($this->id and $file)
 		{
-			$sql = "UPDATE ".constant("BASE_BINARY_TABLE")." SET file = '".$file."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_BINARY_TABLE")." SET file = :file WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":file", $file, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{

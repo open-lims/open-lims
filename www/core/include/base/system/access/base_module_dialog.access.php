@@ -53,8 +53,10 @@ class BaseModuleDialog_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE id='".$id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE id=:id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -115,28 +117,37 @@ class BaseModuleDialog_Access
 
 		if (is_numeric($module_id) and $dialog_type and $class and $method and $internal_name)
 		{
-	 		if (is_numeric($weight))
-	 		{
-	 			$weight_insert = $weight;
-	 		}
-	 		else
-	 		{
-	 			$weight_insert = "NULL";
-	 		}
-			
-			if (isset($language_address))
-	 		{
-	 			$language_address_insert = "'".$language_address."'";
-	 		}
-	 		else
-	 		{
-	 			$language_address_insert = "NULL";
-	 		}
-	 		
 			$sql_write = "INSERT INTO ".constant("BASE_MODULE_DIALOG_TABLE")." (id, module_id, dialog_type, class_path, class, method, internal_name, language_address, weight, disabled) " .
-								"VALUES (nextval('".self::BASE_MODULE_DIALOG_PK_SEQUENCE."'::regclass),'".$module_id."','".$dialog_type."','".$class_path."','".$class."','".$method."','".$internal_name."',".$language_address_insert.",".$weight_insert.",'f')";		
+								"VALUES (nextval('".self::BASE_MODULE_DIALOG_PK_SEQUENCE."'::regclass), :module_id, :dialog_type, :class_path, :class, :method, :internal_name, :language_address, :weight,'f')";		
 				
-			$res_write = $db->db_query($sql_write);
+			$res_write = $db->prepare($sql_write);
+			
+			if (is_numeric($weight))
+			{
+				$db->bind_value($res_write, ":weight", $weight, PDO::PARAM_INT);
+			}
+			else
+			{
+				
+				$db->bind_value($res_write, ":weight", null, PDO::PARAM_NULL);
+			}
+				
+			if (isset($language_address))
+			{
+				$db->bind_value($res_write, ":language_address", $language_address, PDO::PARAM_STR);
+			}
+			else
+			{
+				$db->bind_value($res_write, ":language_address", null, PDO::PARAM_NULL);
+			}
+			
+			$db->bind_value($res_write, ":module_id", $module_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":dialog_type", $dialog_type, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":class_path", $class_path, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":class", $class, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":method", $method, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":internal_name", $internal_name, PDO::PARAM_STR);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
@@ -172,8 +183,10 @@ class BaseModuleDialog_Access
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE id = '".$id_tmp."'";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -335,8 +348,11 @@ class BaseModuleDialog_Access
 
 		if ($this->id and is_numeric($module_id))
 		{
-			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET module_id = '".$module_id."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET module_id = :module_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":module_id", $module_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -364,8 +380,11 @@ class BaseModuleDialog_Access
 
 		if ($this->id and $dialog_type)
 		{
-			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET dialog_type = '".$dialog_type."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET dialog_type = :dialog_type WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":dialog_type", $dialog_type, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -393,8 +412,11 @@ class BaseModuleDialog_Access
 
 		if ($this->id and $class_path)
 		{
-			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET class_path = '".$class_path."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET class_path = :class_path WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":class_path", $class_path, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -422,8 +444,11 @@ class BaseModuleDialog_Access
 
 		if ($this->id and $class)
 		{
-			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET class = '".$class."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET class = :class WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":class", $class, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -451,8 +476,11 @@ class BaseModuleDialog_Access
 
 		if ($this->id and $method)
 		{
-			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET method = '".$method."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET method = :method WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":method", $method, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -480,8 +508,11 @@ class BaseModuleDialog_Access
 
 		if ($this->id and $internal_name)
 		{
-			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET internal_name = '".$internal_name."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET internal_name = :internal_name WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":internal_name", $internal_name, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -509,8 +540,11 @@ class BaseModuleDialog_Access
 
 		if ($this->id and $name)
 		{
-			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET language_address = '".$language_address."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET language_address = :language_address WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":language_address", $language_address, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -538,8 +572,11 @@ class BaseModuleDialog_Access
 
 		if ($this->id and is_numeric($weight))
 		{
-			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET weight = '".$weight."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET weight = :weight WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":weight", $weight, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -566,18 +603,12 @@ class BaseModuleDialog_Access
 		global $db;
 
 		if ($this->id and isset($disabled))
-		{
-			if ($disabled == true)
-			{
-				$disabled_insert = "t";
-			}
-			else
-			{
-				$disabled_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET disabled = '".$disabled_insert."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("BASE_MODULE_DIALOG_TABLE")." SET disabled = :disabled WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":disabled", $disabled, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -609,8 +640,11 @@ class BaseModuleDialog_Access
 		{
 			$result_array = array();
 			
-			$sql = "SELECT * FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE TRIM(dialog_type) = '".trim($dialog_type)."' AND internal_name = '".$internal_name."' AND disabled='f'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE TRIM(dialog_type) = TRIM(:dialog_type) AND internal_name = TRIM(:internal_name) AND disabled='f'";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":dialog_type", $dialog_type, PDO::PARAM_STR);
+			$db->bind_value($res, ":internal_name", $internal_name, PDO::PARAM_STR);
+			$db->execute($res);
 			$data = $db->fetch($res);
 
 			$result_array['class_path'] = $data['class_path'];
@@ -645,8 +679,11 @@ class BaseModuleDialog_Access
 			$result_array = array();
 			$counter = 0;
 			
-			$sql = "SELECT * FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE TRIM(dialog_type) = '".trim($dialog_type)."' AND disabled='f' ORDER BY weight";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE TRIM(dialog_type) = TRIM(:dialog_type) AND disabled='f' ORDER BY weight";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":dialog_type", $dialog_type, PDO::PARAM_STR);
+			$db->execute($res);
+			
 			while ($data = $db->fetch($res))
 			{
 				$result_array[$counter]['class_path'] 		= $data['class_path'];
@@ -685,8 +722,12 @@ class BaseModuleDialog_Access
 			$result_array = array();
 			$counter = 0;
 			
-			$sql = "SELECT * FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE TRIM(dialog_type) = '".trim($dialog_type)."' AND module_id = ".$module_id." AND disabled='f' ORDER BY weight";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE TRIM(dialog_type) = TRIM(:dialog_type) AND module_id = :module_id AND disabled='f' ORDER BY weight";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":dialog_type", $dialog_type, PDO::PARAM_STR);
+			$db->bind_value($res, ":module_id", $module_id, PDO::PARAM_INT);
+			$db->execute($res);
+			
 			while ($data = $db->fetch($res))
 			{
 				$result_array[$counter]['class_path'] 		= $data['class_path'];
@@ -724,8 +765,10 @@ class BaseModuleDialog_Access
 		{
 			$return_array = array();
 					
-			$sql = "SELECT id FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE module_id = ".$module_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE module_id = :module_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":module_id", $module_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -757,8 +800,10 @@ class BaseModuleDialog_Access
 
 		if (is_numeric($module_id))
 		{
-			$sql = "DELETE FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE module_id = '".$module_id."'";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE module_id = :module_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":module_id", $module_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($res !== false)
 			{

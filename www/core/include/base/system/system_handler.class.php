@@ -498,11 +498,14 @@ class SystemHandler implements SystemHandlerInterface
 					{
 						$register_execute_checksum = BaseIncludeFile_Access::get_checksum_by_include_id_and_name($key, "register_execute.php");
 						if ($register_execute_checksum != md5_file($register_execute))
-						{										
-							require($register_execute);
-
-							if ($result == true)
-							{
+						{	
+							require_once($register_execute);
+							
+							/**
+							 * @todo IMPORTAT: Use an include manager
+							 */
+							//if ($result == true)
+							//{
 								BaseIncludeFile_Access::delete_by_include_id_and_name($key, "register_execute.php");
 								
 								$base_include_file = new BaseIncludeFile_Access(null);
@@ -510,13 +513,14 @@ class SystemHandler implements SystemHandlerInterface
 								{
 									throw new BaseIncludeProcessFailedException();
 								}
-							}
-							else
-							{
-								throw new BaseIncludeProcessFailedException();
-							}
+							//}
+							//else
+							//{
+							//	throw new BaseIncludeProcessFailedException();
+							//}
 							
 							unset($result);
+							
 						}
 					}
 				}

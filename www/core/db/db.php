@@ -78,6 +78,11 @@ class Database
 		$statement->execute();
 	}
 	
+	public function bind_value($statement, $parameter, $variable, $data_type = null)
+	{
+		$statement->bindValue($parameter, $variable, $data_type);
+	}
+	
 	public function row_count($statement)
 	{
 		$last_statement = $statement;

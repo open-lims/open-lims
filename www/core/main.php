@@ -84,7 +84,7 @@ class Main
 			
 			if ($connection_result === true)
 			{	
-				if(SystemHandler::check_installation() == false)
+				if(SystemHandler::check_installation() === false)
 				{
 					$GLOBALS['fatal_error'] = "Installation Not Found! Install Database first.";
 				}
@@ -123,6 +123,10 @@ class Main
 					catch(BaseIncludeProcessFailedException $e)
 					{
 						$GLOBALS['fatal_error'] = "Include register process failed!";
+						if (constant("DEBUG") === true)
+						{
+							print_r($e);
+						}
 					}
 					catch(BaseIncludeRequirementFailedException $e)
 					{
@@ -135,6 +139,10 @@ class Main
 					catch(BaseModuleProcessFailedException $e)
 					{
 						$GLOBALS['fatal_error'] = "Module register process failed!";
+						if (constant("DEBUG") === true)
+						{
+							print_r($e);
+						}
 					}
 					catch(BaseModuleDataCorruptException $e)
 					{
@@ -143,6 +151,10 @@ class Main
 					catch(BaseEventHandlerCreationFailedException $e)
 					{
 						$GLOBALS['fatal_error'] = "Event-handler creation failed!";
+						if (constant("DEBUG") === true)
+						{
+							print_r($e);
+						}
 					}
 					
 					Security::protect_session();
