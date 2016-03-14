@@ -48,8 +48,10 @@ class BaseService_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("BASE_SERVICE_TABLE")." WHERE id='".$id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("BASE_SERVICE_TABLE")." WHERE id=:id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -91,14 +93,18 @@ class BaseService_Access
 		if ($name and is_numeric($binary_id))
 		{
 	 		$sql_write = "INSERT INTO ".constant("BASE_SERVICE_TABLE")." (id, name, binary_id, status, last_lifesign) " .
-								"VALUES (nextval('".self::BASE_SERVICE_PK_SEQUENCE."'::regclass),'".$name."','".$binary_id."',0,NULL)";		
-				
-			$res_write = $db->db_query($sql_write);
+								"VALUES (nextval('".self::BASE_SERVICE_PK_SEQUENCE."'::regclass), :name, :binary_id, 0, NULL)";		
+
+	 		$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":name", $name, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":binary_id", $binary_id, PDO::PARAM_INT);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("BASE_SERVICE_TABLE")." WHERE id = currval('".self::BASE_SERVICE_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 							
 				self::__construct($data_read['id']);		
@@ -129,8 +135,10 @@ class BaseService_Access
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".constant("BASE_SERVICE_TABLE")." WHERE id = '".$id_tmp."'";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("BASE_SERVICE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -217,8 +225,11 @@ class BaseService_Access
 
 		if ($this->id and $name)
 		{
-			$sql = "UPDATE ".constant("BASE_SERVICE_TABLE")." SET name = '".$name."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_SERVICE_TABLE")." SET name = :name WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -246,8 +257,11 @@ class BaseService_Access
 
 		if ($this->id and is_numeric($binary_id))
 		{
-			$sql = "UPDATE ".constant("BASE_SERVICE_TABLE")." SET binary_id = '".$binary_id."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_SERVICE_TABLE")." SET binary_id = :binary_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":binary_id", $binary_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -275,8 +289,11 @@ class BaseService_Access
 
 		if ($this->id and is_numeric($status))
 		{
-			$sql = "UPDATE ".constant("BASE_SERVICE_TABLE")." SET status = '".$status."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_SERVICE_TABLE")." SET status = :status WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":status", $status, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -304,8 +321,11 @@ class BaseService_Access
 
 		if ($this->id and $last_lifesign)
 		{
-			$sql = "UPDATE ".constant("BASE_SERVICE_TABLE")." SET last_lifesign = '".$last_lifesign."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_SERVICE_TABLE")." SET last_lifesign = :lifesign WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":last_lifesign", $last_lifesign, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{

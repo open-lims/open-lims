@@ -47,8 +47,10 @@ class BaseRegistry_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("BASE_REGISTRY_TABLE")." WHERE id='".$id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("BASE_REGISTRY_TABLE")." WHERE id=:id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -89,14 +91,19 @@ class BaseRegistry_Access
 		if ($name and is_numeric($include_id) and $value)
 		{
 	 		$sql_write = "INSERT INTO ".constant("BASE_REGISTRY_TABLE")." (id, name, include_id, value) " .
-								"VALUES (nextval('".self::BASE_REGISTRY_PK_SEQUENCE."'::regclass),'".$name."','".$include_id."','".$value."')";		
+								"VALUES (nextval('".self::BASE_REGISTRY_PK_SEQUENCE."'::regclass), :name, :include_id, :value)";		
 				
-			$res_write = $db->db_query($sql_write);
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":name", $name, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":include_id", $include_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":value", $value, PDO::PARAM_STR);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("BASE_REGISTRY_TABLE")." WHERE id = currval('".self::BASE_REGISTRY_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 							
 				self::__construct($data_read['id']);		
@@ -127,8 +134,10 @@ class BaseRegistry_Access
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".constant("BASE_REGISTRY_TABLE")." WHERE id = '".$id_tmp."'";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("BASE_REGISTRY_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -200,8 +209,11 @@ class BaseRegistry_Access
 
 		if ($this->id and $name)
 		{
-			$sql = "UPDATE ".constant("BASE_REGISTRY_TABLE")." SET name = '".$name."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_REGISTRY_TABLE")." SET name = :name WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -229,8 +241,11 @@ class BaseRegistry_Access
 
 		if ($this->id and is_numeric($include_id))
 		{
-			$sql = "UPDATE ".constant("BASE_REGISTRY_TABLE")." SET include_id = '".$include_id."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_REGISTRY_TABLE")." SET include_id = :include_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":include_id", $include_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -258,8 +273,11 @@ class BaseRegistry_Access
 
 		if ($this->id and $value)
 		{
-			$sql = "UPDATE ".constant("BASE_REGISTRY_TABLE")." SET value = '".$value."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_REGISTRY_TABLE")." SET value = :value WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":value", $value, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -288,8 +306,10 @@ class BaseRegistry_Access
 
 		if ($name)
 		{
-			$sql = "SELECT id FROM ".constant("BASE_REGISTRY_TABLE")." WHERE TRIM(LOWER(name)) = '".trim(strtolower($name))."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("BASE_REGISTRY_TABLE")." WHERE TRIM(LOWER(name)) = TRIM(LOWER(:name))";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -317,8 +337,10 @@ class BaseRegistry_Access
 
 		if (is_numeric($include_id))
 		{
-			$sql = "DELETE FROM ".constant("BASE_REGISTRY_TABLE")." WHERE include_id = '".$include_id."'";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("BASE_REGISTRY_TABLE")." WHERE include_id = :include_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":include_id", $include_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($res !== false)
 			{

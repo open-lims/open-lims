@@ -48,7 +48,8 @@ class System_Wrapper_Access
 		
 		$return_array = array();
 		
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		if (is_numeric($start) and is_numeric($end))
 		{
@@ -85,7 +86,8 @@ class System_Wrapper_Access
 		$sql = "SELECT COUNT(".constant("BASE_MODULE_NAVIGATION_TABLE").".id) AS result " .
 					 "FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")."";
 			
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 
 		return $data['result'];
@@ -146,7 +148,8 @@ class System_Wrapper_Access
 		
 		$return_array = array();
 		
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		if (is_numeric($start) and is_numeric($end))
 		{
@@ -183,7 +186,8 @@ class System_Wrapper_Access
 		$sql = "SELECT COUNT(".constant("BASE_REGISTRY_TABLE").".id) AS result " .
 					 "FROM ".constant("BASE_REGISTRY_TABLE")."";
 			
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 
 		return $data['result'];
@@ -239,7 +243,8 @@ class System_Wrapper_Access
 		
 		$return_array = array();
 		
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		if (is_numeric($start) and is_numeric($end))
 		{
@@ -276,7 +281,8 @@ class System_Wrapper_Access
 		$sql = "SELECT COUNT(".constant("BASE_SERVICE_TABLE").".id) AS result " .
 					 "FROM ".constant("BASE_SERVICE_TABLE")."";
 			
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 
 		return $data['result'];
@@ -342,7 +348,8 @@ class System_Wrapper_Access
 		
 		$return_array = array();
 		
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		if (is_numeric($start) and is_numeric($end))
 		{
@@ -380,7 +387,8 @@ class System_Wrapper_Access
 		$sql = "SELECT COUNT(".constant("BASE_MODULE_TABLE").".id) AS result " .
 					 "FROM ".constant("BASE_MODULE_TABLE")."";
 			
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 
 		return $data['result'];
@@ -445,7 +453,8 @@ class System_Wrapper_Access
 		
 		$return_array = array();
 		
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		if (is_numeric($start) and is_numeric($end))
 		{
@@ -483,7 +492,8 @@ class System_Wrapper_Access
 		$sql = "SELECT COUNT(".constant("BASE_INCLUDE_TABLE").".id) AS result " .
 					 "FROM ".constant("BASE_INCLUDE_TABLE")."";
 			
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 
 		return $data['result'];

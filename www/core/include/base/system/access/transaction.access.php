@@ -34,9 +34,9 @@ class Transaction_Access
 	{
 		global $db;
 		
-    	$db->db_query("START TRANSACTION ISOLATION LEVEL SERIALIZABLE");
-    	$db->db_query("BEGIN");
-    	$db->db_query("SET CONSTRAINTS ALL DEFERRED");
+    	$db->query("START TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+    	$db->query("BEGIN");
+    	$db->query("SET CONSTRAINTS ALL DEFERRED");
 		
 		return true;
 	}
@@ -47,7 +47,7 @@ class Transaction_Access
 	public static function commit()
 	{
 		global $db;
-		return $db->db_query("COMMIT");
+		return $db->query("COMMIT");
 	}
 	
 	/**
@@ -56,7 +56,7 @@ class Transaction_Access
 	public static function rollback()
 	{
 		global $db;
-		return $db->db_query("ROLLBACK");
+		return $db->query("ROLLBACK");
 	}
 	
 }

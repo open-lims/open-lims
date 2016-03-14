@@ -47,8 +47,10 @@ class BaseModuleFile_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("BASE_MODULE_FILE_TABLE")." WHERE id='".$id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("BASE_MODULE_FILE_TABLE")." WHERE id=:id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -89,14 +91,19 @@ class BaseModuleFile_Access
 		if (is_numeric($module_id) and $name and $checksum)
 		{
 	 		$sql_write = "INSERT INTO ".constant("BASE_MODULE_FILE_TABLE")." (id, module_id, name, checksum) " .
-								"VALUES (nextval('".self::BASE_MODULE_FILE_PK_SEQUENCE."'::regclass),'".$module_id."','".$name."','".$checksum."')";		
+								"VALUES (nextval('".self::BASE_MODULE_FILE_PK_SEQUENCE."'::regclass),:module_id,:name,:checksum)";		
 				
-			$res_write = $db->db_query($sql_write);
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":module_id", $module_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":name", $name, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":checksum", $checksum, PDO::PARAM_STR);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("BASE_MODULE_FILE_TABLE")." WHERE id = currval('".self::BASE_MODULE_FILE_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 							
 				self::__construct($data_read['id']);		
@@ -127,8 +134,10 @@ class BaseModuleFile_Access
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".constant("BASE_MODULE_FILE_TABLE")." WHERE id = '".$id_tmp."'";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("BASE_MODULE_FILE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -200,8 +209,11 @@ class BaseModuleFile_Access
 
 		if ($this->id and is_numeric($module_id))
 		{
-			$sql = "UPDATE ".constant("BASE_MODULE_FILE_TABLE")." SET module_id = '".$module_id."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_MODULE_FILE_TABLE")." SET module_id = :module_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":module_id", $module_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -229,8 +241,11 @@ class BaseModuleFile_Access
 
 		if ($this->id and $name)
 		{
-			$sql = "UPDATE ".constant("BASE_MODULE_FILE_TABLE")." SET name = '".$name."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_MODULE_FILE_TABLE")." SET name = :name WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -258,8 +273,11 @@ class BaseModuleFile_Access
 
 		if ($this->id and $checksum)
 		{
-			$sql = "UPDATE ".constant("BASE_MODULE_FILE_TABLE")." SET checksum = '".$checksum."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_MODULE_FILE_TABLE")." SET checksum = :checksum WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":checksum", $checksum, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -291,8 +309,11 @@ class BaseModuleFile_Access
 		{
 			$name = trim(strtolower($name));
 			
-			$sql = "SELECT checksum FROM ".constant("BASE_MODULE_FILE_TABLE")." WHERE module_id = '".$module_id."' AND TRIM(LOWER(name)) = '".$name."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT checksum FROM ".constant("BASE_MODULE_FILE_TABLE")." WHERE module_id = :module_id AND TRIM(LOWER(name)) = :name";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":module_id", $module_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['checksum'])
@@ -323,8 +344,11 @@ class BaseModuleFile_Access
 		{
 			$name = trim(strtolower($name));
 			
-			$sql = "SELECT id FROM ".constant("BASE_MODULE_FILE_TABLE")." WHERE module_id = '".$module_id."' AND TRIM(LOWER(name)) = '".$name."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("BASE_MODULE_FILE_TABLE")." WHERE module_id = :module_id AND TRIM(LOWER(name)) = :name";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":module_id", $module_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -352,8 +376,10 @@ class BaseModuleFile_Access
 
 		if (is_numeric($module_id))
 		{
-			$sql = "DELETE FROM ".constant("BASE_MODULE_FILE_TABLE")." WHERE module_id = '".$module_id."'";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("BASE_MODULE_FILE_TABLE")." WHERE module_id = :module_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":module_id", $module_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($res !== false)
 			{

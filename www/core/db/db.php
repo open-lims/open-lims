@@ -62,6 +62,16 @@ class Database
 		}
 	}
 	
+	public function query($query)
+	{
+		if ($this->query_log_status === true)
+		{
+			$this->query_log = $this->query_log."\n".$query;
+		}
+		
+		return $this->pdo->query($query);
+	}
+	
 	public function prepare($query)
 	{
 		if ($this->query_log_status === true)

@@ -128,7 +128,6 @@ class BaseModuleDialog_Access
 			}
 			else
 			{
-				
 				$db->bind_value($res_write, ":weight", null, PDO::PARAM_NULL);
 			}
 				
@@ -152,7 +151,8 @@ class BaseModuleDialog_Access
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("BASE_MODULE_DIALOG_TABLE")." WHERE id = currval('".self::BASE_MODULE_DIALOG_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 							
 				self::__construct($data_read['id']);		
