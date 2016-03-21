@@ -43,8 +43,10 @@ class SystemLogType_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("SYSTEM_LOG_TYPE_TABLE")." WHERE id = ".$log_type_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("SYSTEM_LOG_TYPE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $log_type_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -93,7 +95,8 @@ class SystemLogType_Access
 		$return_array = array();
 		
 		$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TYPE_TABLE")." ORDER BY id";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{

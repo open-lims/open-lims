@@ -48,8 +48,10 @@ class SystemMessage_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("SYSTEM_MESSAGE_TABLE")." WHERE id = ".$id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("SYSTEM_MESSAGE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -89,18 +91,21 @@ class SystemMessage_Access
 		global $db;
 		
 		if (is_numeric($user_id) and $content)
-		{
-			$datetime = date("Y-m-d H:i:s");
-		
+		{		
 			$sql_write = "INSERT INTO ".constant("SYSTEM_MESSAGE_TABLE")." (id,user_id,datetime,content) " .
-							"VALUES (nextval('".self::SYSTEM_MESSAGE_PK_SEQUENCE."'::regclass),".$user_id.",'".$datetime."','".$content."')";
+							"VALUES (nextval('".self::SYSTEM_MESSAGE_PK_SEQUENCE."'::regclass), :user_id, :datetime, :content)";
 			
-			$res_write = $db->db_query($sql_write);
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":datetime", date("Y-m-d H:i:s"), PDO::PARAM_STR);
+			$db->bind_value($res_write, ":content", $content, PDO::PARAM_STR);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("SYSTEM_MESSAGE_TABLE")." WHERE id = currval('".self::SYSTEM_MESSAGE_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
@@ -127,11 +132,13 @@ class SystemMessage_Access
     	
     	if ($this->id)
     	{
-    		$tmp_id = $this->id;
+    		$id_tmp = $this->id;
     		$this->__destruct();
 
-    		$sql = "DELETE FROM ".constant("SYSTEM_MESSAGE_TABLE")." WHERE id = ".$tmp_id."";
-    		$res = $db->db_query($sql);
+    		$sql = "DELETE FROM ".constant("SYSTEM_MESSAGE_TABLE")." WHERE id = :id";
+    		$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
     		
     		if ($db->row_count($res) == 1)
     		{
@@ -202,8 +209,11 @@ class SystemMessage_Access
 
 		if ($this->id and is_numeric($user_id))
 		{
-			$sql = "UPDATE ".constant("SYSTEM_MESSAGE_TABLE")." SET user_id = '".$user_id."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SYSTEM_MESSAGE_TABLE")." SET user_id = :user_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -231,8 +241,11 @@ class SystemMessage_Access
 
 		if ($this->id and $datetime)
 		{
-			$sql = "UPDATE ".constant("SYSTEM_MESSAGE_TABLE")." SET datetime = '".$datetime."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SYSTEM_MESSAGE_TABLE")." SET datetime = ':datetime WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":datetime", $datetime, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -260,8 +273,11 @@ class SystemMessage_Access
 
 		if ($this->id and $content)
 		{
-			$sql = "UPDATE ".constant("SYSTEM_MESSAGE_TABLE")." SET content = '".$content."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SYSTEM_MESSAGE_TABLE")." SET content = :content WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":content", $content, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -290,8 +306,10 @@ class SystemMessage_Access
 		
 		if (is_numeric($id))
 		{
-			$sql = "SELECT id FROM ".constant("SYSTEM_MESSAGE_TABLE")." WHERE id = '".$id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("SYSTEM_MESSAGE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -316,8 +334,10 @@ class SystemMessage_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".constant("SYSTEM_MESSAGE_TABLE")." WHERE id = '".$id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("SYSTEM_MESSAGE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 
 			if ($data['id'])
@@ -345,7 +365,8 @@ class SystemMessage_Access
 		$return_array = array();
 		
 		$sql = "SELECT id FROM ".constant("SYSTEM_MESSAGE_TABLE")." ORDER BY datetime DESC";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{
@@ -372,8 +393,10 @@ class SystemMessage_Access
 
 		if (is_numeric($user_id))
 		{
-			$sql = "DELETE FROM ".constant("SYSTEM_MESSAGE_TABLE")." WHERE user_id = '".$user_id."'";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("SYSTEM_MESSAGE_TABLE")." WHERE user_id = :user_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 
 			if ($res !== false)
 			{

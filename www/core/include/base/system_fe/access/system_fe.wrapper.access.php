@@ -94,12 +94,14 @@ class SystemFE_Wrapper_Access
 						 "FROM ".constant("SYSTEM_LOG_TABLE")." " .
 					"LEFT JOIN ".constant("USER_TABLE")." ON ".constant("USER_TABLE").".id = ".constant("SYSTEM_LOG_TABLE").".user_id " .
 						"WHERE " .
-							"type_id = ".$type_id. " " .
+							"type_id = :type_id " .
 									"".$sql_order_by."";
 			
 			$return_array = array();
 			
-			$res = $db->db_query($sql);
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":type_id", $type_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if (is_numeric($start) and is_numeric($end))
 			{
@@ -144,9 +146,11 @@ class SystemFE_Wrapper_Access
 			$sql = "SELECT COUNT(".constant("SYSTEM_LOG_TABLE").".id) AS result " .
 						 "FROM ".constant("SYSTEM_LOG_TABLE")." " .
 						"WHERE " .
-							"type_id = ".$type_id;
+							"type_id = :type_id";
 			
-			$res = $db->db_query($sql);
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":type_id", $type_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 
 			return $data['result'];

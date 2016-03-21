@@ -57,8 +57,10 @@ class SystemLog_Access
 		}
 		else
 		{	
-			$sql = "SELECT * FROM ".constant("SYSTEM_LOG_TABLE")." WHERE id = ".$log_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("SYSTEM_LOG_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $log_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -119,64 +121,69 @@ class SystemLog_Access
 		global $db;
 		
 		if ($type_id)
-		{		
-			$datetime = date("Y-m-d H:i:s");
-			$ip = $_SERVER['REMOTE_ADDR'];
+		{					
+			$sql_write = "INSERT INTO ".constant("SYSTEM_LOG_TABLE")." (id,type_id,user_id,datetime,ip,content_int,content_string,content_errorno,file,line,link,stack_trace) " .
+					"VALUES (nextval('".self::SYSTEM_LOG_PK_SEQUENCE."'::regclass), :type_id, :user_id, :datetime, :ip, :content_int, :content_string, :content_errorno, :file, :line, :link, NULL)";
+				
+			$res_write = $db->prepare($sql_write);
 			
 			if ($user_id)
 			{
-				$user_id_insert = $user_id;
+				$db->bind_value($res_write, ":user_id", $user_id, PDO::PARAM_INT);
 			}
 			else
 			{
-				$user_id_insert = "NULL";
+				$db->bind_value($res_write, ":user_id", null, PDO::PARAM_NULL);
 			}
 			
 			if ($content_int)
 			{
-				$content_int_insert = $content_int;
+				$db->bind_value($res_write, ":content_int", $content_int, PDO::PARAM_INT);
 			}
 			else
 			{
-				$content_int_insert = "NULL";
+				$db->bind_value($res_write, ":content_int", null, PDO::PARAM_NULL);
 			}
 			
 			if ($line)
 			{
-				$line_insert = $line;
+				$db->bind_value($res_write, ":line", $line, PDO::PARAM_INT);
 			}
 			else
 			{
-				$line_insert = "NULL";
+				$db->bind_value($res_write, ":line", null, PDO::PARAM_NULL);
 			}
 			
 			if ($link)
 			{
-				$link_insert = "'".$link."'";
+				$db->bind_value($res_write, ":link", $link, PDO::PARAM_STR);
 			}
 			else
 			{
-				$link_insert = "NULL";
+				$db->bind_value($res_write, ":link", null, PDO::PARAM_NULL);
 			}
 			
 			if ($content_errorno)
 			{
-				 $content_errorno_insert = "'".$content_errorno."'";
+				$db->bind_value($res_write, ":content_errorno", $content_errorno, PDO::PARAM_STR);
 			}
 			else
 			{
-				 $content_errorno_insert = "NULL";
+				$db->bind_value($res_write, ":content_errorno", null, PDO::PARAM_NULL);
 			}
 			
-			$sql_write = "INSERT INTO ".constant("SYSTEM_LOG_TABLE")." (id,type_id,user_id,datetime,ip,content_int,content_string,content_errorno,file,line,link) " .
-							"VALUES (nextval('".self::SYSTEM_LOG_PK_SEQUENCE."'::regclass),".$type_id.",".$user_id_insert.",'".$datetime."','".$ip."',".$content_int_insert.",'".$content_string."',".$content_errorno_insert.",'".$file."',".$line_insert.",".$link_insert.")";
-			
-			$res_write = $db->db_query($sql_write);
+			$db->bind_value($res_write, ":type_id", $type_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":datetime", date("Y-m-d H:i:s"), PDO::PARAM_STR);
+			$db->bind_value($res_write, ":ip", $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
+			$db->bind_value($res_write, ":content_string", $content_string, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":file", $file, PDO::PARAM_STR);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE id = currval('".self::SYSTEM_LOG_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
@@ -203,12 +210,14 @@ class SystemLog_Access
     	
     	if ($this->log_id)
     	{
-    		$tmp_log_id = $this->log_id;
+    		$id_tmp = $this->log_id;
     		
     		$this->__destruct();
 
-    		$sql = "DELETE FROM ".constant("SYSTEM_LOG_TABLE")." WHERE id = ".$tmp_log_id."";
-    		$res = $db->db_query($sql);
+    		$sql = "DELETE FROM ".constant("SYSTEM_LOG_TABLE")." WHERE id = :id";
+    		$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
     		
     		if ($db->row_count($res) == 1)
     		{
@@ -400,8 +409,11 @@ class SystemLog_Access
 
 		if ($this->log_id and $stack_trace)
 		{
-			$sql = "UPDATE ".constant("SYSTEM_LOG_TABLE")." SET stack_trace = '".$stack_trace."' WHERE id = ".$this->log_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SYSTEM_LOG_TABLE")." SET stack_trace = :stack_trace WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->log_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":stack_trace", $stack_trace, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -430,7 +442,8 @@ class SystemLog_Access
 		$return_array = array();
 		
 		$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." ORDER BY datetime";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{
@@ -459,8 +472,10 @@ class SystemLog_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE type_id = ".$type_id." ORDER BY datetime";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE type_id = :type_id ORDER BY datetime";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":type_id", $type_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -494,8 +509,10 @@ class SystemLog_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE user_id = ".$user_id." ORDER BY datetime";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE user_id =:user_id ORDER BY datetime";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -527,8 +544,10 @@ class SystemLog_Access
 		
 		if (is_numeric($user_id))
 		{
-			$sql = "UPDATE ".constant("SYSTEM_LOG_TABLE")." SET user_id = NULL WHERE user_id = ".$user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SYSTEM_LOG_TABLE")." SET user_id = NULL WHERE user_id = :user_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 				
 			return true;
 		}
@@ -548,8 +567,10 @@ class SystemLog_Access
 		
 		if (is_numeric($id))
 		{
-			$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE id = '".$id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -572,8 +593,10 @@ class SystemLog_Access
 		
 		if ($ip)
 		{
-			$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE ip = '".$ip."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE ip = :ip";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":ip", $ip, PDO::PARAM_STR);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -597,8 +620,11 @@ class SystemLog_Access
 		
 		if ($ip and $begin)
 		{
-			$sql = "SELECT COUNT(id) AS result FROM ".constant("SYSTEM_LOG_TABLE")." WHERE type_id = 1 AND LOWER(content_errorno) = 'login' AND content_int IS NULL AND ip = '".$ip."' AND datetime > '".$begin."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT COUNT(id) AS result FROM ".constant("SYSTEM_LOG_TABLE")." WHERE type_id = 1 AND LOWER(content_errorno) = 'login' AND content_int IS NULL AND ip = :ip AND datetime > :begin";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":ip", $ip, PDO::PARAM_STR);
+			$db->bind_value($res, ":begin", $begin, PDO::PARAM_STR);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['result'])
@@ -622,8 +648,10 @@ class SystemLog_Access
 		
 		if ($ip)
 		{
-			$sql = "SELECT COUNT(id) AS result FROM ".constant("SYSTEM_LOG_TABLE")." WHERE type_id = 1 AND LOWER(content_errorno) = 'login' AND content_int IS NULL AND ip = '".$ip."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT COUNT(id) AS result FROM ".constant("SYSTEM_LOG_TABLE")." WHERE type_id = 1 AND LOWER(content_errorno) = 'login' AND content_int IS NULL AND ip = :ip";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":ip", $ip, PDO::PARAM_STR);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['result'])
@@ -647,8 +675,10 @@ class SystemLog_Access
 		
 		if ($ip)
 		{
-			$sql = "SELECT COUNT(id) AS result FROM ".constant("SYSTEM_LOG_TABLE")." WHERE type_id = 1 AND LOWER(content_errorno) = 'login' AND content_int = '1' AND ip = '".$ip."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT COUNT(id) AS result FROM ".constant("SYSTEM_LOG_TABLE")." WHERE type_id = 1 AND LOWER(content_errorno) = 'login' AND content_int = '1' AND ip = :ip";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":ip", $ip, PDO::PARAM_STR);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['result'])
@@ -674,8 +704,10 @@ class SystemLog_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT user_id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE user_id IS NOT NULL AND ip = '".$ip."' GROUP BY user_id";
-			$res = $db->db_query($sql);
+			$sql = "SELECT user_id FROM ".constant("SYSTEM_LOG_TABLE")." WHERE user_id IS NOT NULL AND ip = :ip GROUP BY user_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":ip", $ip, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res)) 
 			{
