@@ -57,8 +57,10 @@ class MeasuringUnit_Access
 		}
 		else
 		{	
-			$sql = "SELECT * FROM ".constant("MEASURING_UNIT_TABLE")." WHERE id = ".$id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("MEASURING_UNIT_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -76,15 +78,7 @@ class MeasuringUnit_Access
 				$this->prefix_calculation_exponent	= $data['prefix_calculation_exponent'];
 				$this->calculation					= $data['calculation'];
 				$this->type							= $data['type'];
-				
-				if ($data['created_by_user'] == "t")
-				{
-					$this->created_by_user = true;
-				}
-				else
-				{
-					$this->created_by_user = false;
-				}
+				$this->created_by_user				= $data['created_by_user'];
 			}
 			else
 			{
@@ -133,103 +127,108 @@ class MeasuringUnit_Access
 		
 		if ($name and $unit_symbol)
 		{
+			$sql_write = "INSERT INTO ".constant("MEASURING_UNIT_TABLE")." (id,base_id,category_id,name,unit_symbol,min_value,max_value,min_prefix_exponent,max_prefix_exponent,prefix_calculation_exponent,calculation,type,created_by_user) " .
+					"VALUES (nextval('".self::MEASURING_UNIT_PK_SEQUENCE."'::regclass), :base_id, :category_id, :name, :unit_symbol, :min_value, :max_value, :min_prefix_exponent, :max_prefix_exponent, :prefix_calculation_exponent, :calculation, :type, 't')";
+				
+			$res_write = $db->prepare($sql_write);
+			
 			if (is_numeric($base_id))
 			{
-				$base_id_insert = $base_id;
+				$db->bind_value($res_write, ":base_id", $base_id, PDO::PARAM_INT);
 			}
 			else
 			{
-				$base_id_insert = "NULL";
+				$db->bind_value($res_write, ":base_id", null, PDO::PARAM_NULL);
 			}
 			
 			if (is_numeric($category_id))
 			{
-				$category_id_insert = $category_id;
+				$db->bind_value($res_write, ":category_id", $category_id, PDO::PARAM_INT);
 			}
 			else
 			{
-				$category_id_insert = "NULL";
+				$db->bind_value($res_write, ":category_id", null, PDO::PARAM_NULL);
 			}
 			
 			if ($calculation)
 			{
-				$calculation_insert = "'".$calculation."'";
+				$db->bind_value($res_write, ":calculation", $calculation, PDO::PARAM_STR);
 			}
 			else
 			{
-				$calculation_insert = "NULL";
+				$db->bind_value($res_write, ":calculation", null, PDO::PARAM_NULL);
 			}
 			
 			if (is_numeric($min_value))
 			{
-				$min_value_insert = "'".$min_value."'";
+				$db->bind_value($res_write, ":min_value", $min_value, PDO::PARAM_STR);
 			}
 			else
 			{
-				$min_value_insert = "NULL";
+				$db->bind_value($res_write, ":min_value", null, PDO::PARAM_NULL);
 			}
 			
 			if (is_numeric($max_value))
 			{
-				$max_value_insert = "'".$max_value."'";
+				$db->bind_value($res_write, ":max_value", $max_value, PDO::PARAM_STR);
 			}
 			else
 			{
-				$max_value_insert = "NULL";
+				$db->bind_value($res_write, ":max_value", null, PDO::PARAM_NULL);
 			}
 			
 			if (is_numeric($min_prefix_exponent))
 			{
-				$min_prefix_exponent_insert = "'".$min_prefix_exponent."'";
+				$db->bind_value($res_write, ":min_prefix_exponent", $min_prefix_exponent, PDO::PARAM_INT);
 			}
 			else
 			{
-				$min_prefix_exponent_insert = "NULL";
+				$db->bind_value($res_write, ":min_prefix_exponent", null, PDO::PARAM_NULL);
 			}
 			
 			if (is_numeric($max_prefix_exponent))
 			{
-				$max_prefix_exponent_insert = "'".$max_prefix_exponent."'";
+				$db->bind_value($res_write, ":max_prefix_exponent", $max_prefix_exponent, PDO::PARAM_INT);
 			}
 			else
 			{
-				$max_prefix_exponent_insert = "NULL";
+				$db->bind_value($res_write, ":max_prefix_exponent", null, PDO::PARAM_NULL);
 			}
 			
 			if (is_numeric($prefix_calculation_exponent))
 			{
-				$prefix_calculation_exponent_insert = "'".$prefix_calculation_exponent."'";
+				$db->bind_value($res_write, ":prefix_calculation_exponent", $prefix_calculation_exponent, PDO::PARAM_INT);
 			}
 			else
 			{
-				$prefix_calculation_exponent_insert = "NULL";
+				$db->bind_value($res_write, ":prefix_calculation_exponent", null, PDO::PARAM_NULL);
 			}
 			
 			if ($type)
 			{
 				 if($type === "aa")
 				 {
-				 	$type_insert = "'aa'";
+				 	$db->bind_value($res_write, ":type", "aa", PDO::PARAM_STR);
 				 }
 				 else
 				 {
-				 	$type_insert = "'metric'";
+				 	$db->bind_value($res_write, ":type", "metric", PDO::PARAM_STR);
 				 }
 			}
 			else
 			{
-				$type_insert = "NULL";
+				$db->bind_value($res_write, ":type", null, PDO::PARAM_NULL);
 			}
 			
-			$sql_write = "INSERT INTO ".constant("MEASURING_UNIT_TABLE")." (id,base_id,category_id,name,unit_symbol,min_value,max_value,min_prefix_exponent,max_prefix_exponent,prefix_calculation_exponent,calculation,type,created_by_user) " .
-							"VALUES (nextval('".self::MEASURING_UNIT_PK_SEQUENCE."'::regclass),".$base_id_insert.",".$category_id.",'".$name."','".$unit_symbol."',".$min_value_insert.",".$max_value_insert.",".$min_prefix_exponent_insert.",".$max_prefix_exponent_insert.",".$prefix_calculation_exponent_insert.",".$calculation_insert.",".$type_insert.",'t')";
-			
-			$res_write = $db->db_query($sql_write);
+			$db->bind_value($res_write, ":name", $name, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":unit_symbol", $unit_symbol, PDO::PARAM_STR);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("MEASURING_UNIT_TABLE")." WHERE id = currval('".self::MEASURING_UNIT_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
@@ -256,12 +255,14 @@ class MeasuringUnit_Access
     	
     	if ($this->id)
     	{
-    		$tmp_id = $this->id;
+    		$id_tmp = $this->id;
     		
     		$this->__destruct();
 
-    		$sql = "DELETE FROM ".constant("MEASURING_UNIT_TABLE")." WHERE id = ".$tmp_id."";
-    		$res = $db->db_query($sql);
+    		$sql = "DELETE FROM ".constant("MEASURING_UNIT_TABLE")." WHERE id = :id";
+    		$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
     		
     		if ($db->row_count($res) == 1)
     		{
@@ -468,8 +469,11 @@ class MeasuringUnit_Access
 
 		if ($this->id and is_numeric($base_id))
 		{
-			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET base_id = '".$base_id."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET base_id = :base_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":base_id", $base_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -496,18 +500,21 @@ class MeasuringUnit_Access
 		global $db;
 
 		if ($this->id)
-		{
+		{			
+			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET category_id = :category_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			
 			if (is_numeric($category_id))
 			{
-				$category_id_insert = $category_id;
+				$db->bind_value($res, ":category_id", $category_id, PDO::PARAM_INT);
 			}
 			else
 			{
-				$category_id_insert = "NULL";
+				$db->bind_value($res, ":category_id", null, PDO::PARAM_NULL);
 			}
 			
-			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET category_id = ".$category_id_insert." WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -535,8 +542,11 @@ class MeasuringUnit_Access
 
 		if ($this->id and $name)
 		{
-			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET name = '".$name."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET name = :name WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -564,8 +574,11 @@ class MeasuringUnit_Access
 
 		if ($this->id and $unit_symbol)
 		{
-			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET unit_symbol = '".$unit_symbol."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET unit_symbol = :unit_symbol WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":unit_symbol", $unit_symbol, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -592,18 +605,21 @@ class MeasuringUnit_Access
 		global $db;
 
 		if ($this->id)
-		{
+		{			
+			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET min_value = :min_value WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			
 			if (is_numeric($min_value))
 			{
-				$min_value_insert = $min_value;
+				$db->bind_value($res, ":min_value", $min_value, PDO::PARAM_STR);
 			}
 			else
 			{
-				$min_value_insert = "NULL";
+				$db->bind_value($res, ":min_value", null, PDO::PARAM_NULL);
 			}
 			
-			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET min_value = ".$min_value_insert." WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -630,18 +646,21 @@ class MeasuringUnit_Access
 		global $db;
 
 		if ($this->id)
-		{
+		{			
+			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET max_value = :max_value WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			
 			if (is_numeric($max_value))
 			{
-				$max_value_insert = $max_value;
+				$db->bind_value($res, ":max_value", $max_value, PDO::PARAM_STR);
 			}
 			else
 			{
-				$max_value_insert = "NULL";
+				$db->bind_value($res, ":max_value", null, PDO::PARAM_NULL);
 			}
 			
-			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET max_value = ".$max_value_insert." WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -668,18 +687,21 @@ class MeasuringUnit_Access
 		global $db;
 
 		if ($this->id)
-		{
+		{			
+			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET min_prefix_exponent = :min_prefix_exponent WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			
 			if (is_numeric($min_prefix_exponent))
 			{
-				$min_prefix_exponent_insert = $min_prefix_exponent;
+				$db->bind_value($res, ":min_prefix_exponent", $min_prefix_exponent, PDO::PARAM_INT);
 			}
 			else
 			{
-				$min_prefix_exponent_insert = "NULL";
+				$db->bind_value($res, ":min_prefix_exponent", null, PDO::PARAM_NULL);
 			}
 			
-			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET min_prefix_exponent = ".$min_prefix_exponent_insert." WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -706,18 +728,21 @@ class MeasuringUnit_Access
 		global $db;
 
 		if ($this->id)
-		{
+		{			
+			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET max_prefix_exponent = :max_prefix_exponent WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			
 			if (is_numeric($max_prefix_exponent))
 			{
-				$max_prefix_exponent_insert = $max_prefix_exponent;
+				$db->bind_value($res, ":max_prefix_exponent", $max_prefix_exponent, PDO::PARAM_INT);
 			}
 			else
 			{
-				$max_prefix_exponent_insert = "NULL";
+				$db->bind_value($res, ":max_prefix_exponent", null, PDO::PARAM_NULL);
 			}
 			
-			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET max_prefix_exponent = ".$max_prefix_exponent_insert." WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -744,18 +769,21 @@ class MeasuringUnit_Access
 		global $db;
 
 		if ($this->id)
-		{
+		{			
+			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET prefix_calculation_exponent = :prefix_calculation_exponent WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			
 			if (is_numeric($prefix_calculation_exponent))
 			{
-				$prefix_calculation_exponent_insert = $prefix_calculation_exponent;
+				$db->bind_value($res, ":prefix_calculation_exponent", $prefix_calculation_exponent, PDO::PARAM_INT);
 			}
 			else
 			{
-				$prefix_calculation_exponent_insert = "NULL";
+				$db->bind_value($res, ":prefix_calculation_exponent", null, PDO::PARAM_NULL);
 			}
 			
-			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET prefix_calculation_exponent = ".$prefix_calculation_exponent_insert." WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -782,18 +810,21 @@ class MeasuringUnit_Access
 		global $db;
 
 		if ($this->id)
-		{
+		{			
+			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET calculation = :calculation WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			
 			if ($calculation)
 			{
-				$calculation_insert = "'".$calculation."'";
+				$db->bind_value($res, ":calculation", $calculation, PDO::PARAM_STR);
 			}
 			else
 			{
-				$calculation_insert = "NULL";
+				$db->bind_value($res, ":calculation", null, PDO::PARAM_NULL);
 			}
 			
-			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET calculation = ".$calculation_insert." WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -820,18 +851,21 @@ class MeasuringUnit_Access
 		global $db;
 
 		if ($this->id)
-		{
+		{			
+			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET type = :type WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			
 			if ($type)
 			{
-				$type_insert = "'".$type."'";
+				$db->bind_value($res, ":type", $type, PDO::PARAM_STR);
 			}
 			else
 			{
-				$type_insert = "NULL";
+				$db->bind_value($res, ":type", null, PDO::PARAM_NULL);
 			}
 			
-			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET type = ".$type_insert." WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -860,8 +894,10 @@ class MeasuringUnit_Access
 			
 		if (is_numeric($id))
 		{
-			$sql = "SELECT id FROM ".constant("MEASURING_UNIT_TABLE")." WHERE id = '".$id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("MEASURING_UNIT_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -890,8 +926,10 @@ class MeasuringUnit_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id,name,min_prefix_exponent,max_prefix_exponent,unit_symbol FROM ".constant("MEASURING_UNIT_TABLE")." WHERE category_id = '".$category_id."' ORDER BY id";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id,name,min_prefix_exponent,max_prefix_exponent,unit_symbol FROM ".constant("MEASURING_UNIT_TABLE")." WHERE category_id = :category_id ORDER BY id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":category_id", $category_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -930,7 +968,8 @@ class MeasuringUnit_Access
 		$return_array = array();
 		
 		$sql = "SELECT id,name,min_prefix_exponent,max_prefix_exponent,unit_symbol FROM ".constant("MEASURING_UNIT_TABLE")." WHERE category_id IS NULL ORDER BY id";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while($data = $db->fetch($res))
 		{
@@ -964,8 +1003,10 @@ class MeasuringUnit_Access
 		
 		if(is_numeric($category_id))
 		{
-			$sql = "SELECT min(id) AS id FROM ".constant("MEASURING_UNIT_TABLE")." WHERE category_id = '".$category_id."' AND calculation='B'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT min(id) AS id FROM ".constant("MEASURING_UNIT_TABLE")." WHERE category_id = :category_id AND calculation='B'";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":category_id", $category_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -993,8 +1034,10 @@ class MeasuringUnit_Access
     	
    		if(is_numeric($measuring_unit_id))
 		{
-			$sql = "SELECT created_by_user FROM ".constant("MEASURING_UNIT_TABLE")." WHERE id = '".$measuring_unit_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT created_by_user FROM ".constant("MEASURING_UNIT_TABLE")." WHERE id = :measuring_unit_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":measuring_unit_id", $measuring_unit_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['created_by_user'] == "t")

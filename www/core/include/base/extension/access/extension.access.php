@@ -50,8 +50,10 @@ class Extension_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("EXTENSION_TABLE")." WHERE id='".$extension_id."'";
-			$res = $db->db_query($sql);			
+			$sql = "SELECT * FROM ".constant("EXTENSION_TABLE")." WHERE id= :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $extension_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -100,14 +102,21 @@ class Extension_Access
 		{
 
 			$sql_write = "INSERT INTO ".constant("EXTENSION_TABLE")." (id,name,identifier,folder,class,main_file,version) " .
-						"VALUES (nextval('".self::EXTENSION_PK_SEQUENCE."'::regclass),'".$name."','".$identifier."','".$folder."','".$class."','".$main_file."',NULL)";
+						"VALUES (nextval('".self::EXTENSION_PK_SEQUENCE."'::regclass), :name, :identifier, :folder, :class, :main_file, NULL)";
 
-			$res_write = $db->db_query($sql_write);
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":name", $name, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":identifier", $identifier, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":folder", $folder, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":class", $class, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":main_file", $main_file, PDO::PARAM_STR);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("EXTENSION_TABLE")." WHERE id = currval('".self::EXTENSION_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
@@ -134,12 +143,14 @@ class Extension_Access
 		
 		if ($this->extension_id)
 		{
-			$tmp_extension_id = $this->extension_id;
+			$id_tmp = $this->extension_id;
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".constant("EXTENSION_TABLE")." WHERE id = ".$tmp_extension_id."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("EXTENSION_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -257,8 +268,11 @@ class Extension_Access
 			
 		if ($this->extension_id and $name)
 		{
-			$sql = "UPDATE ".constant("EXTENSION_TABLE")." SET name = '".$name."' WHERE id = '".$this->extension_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("EXTENSION_TABLE")." SET name = :name WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->extension_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -287,8 +301,11 @@ class Extension_Access
 			
 		if ($this->extension_id and $identifier)
 		{
-			$sql = "UPDATE ".constant("EXTENSION_TABLE")." SET identifier = '".$identifier."' WHERE id = '".$this->extension_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("EXTENSION_TABLE")." SET identifier = :identifier WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->extension_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":identifier", $identifier, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -317,8 +334,11 @@ class Extension_Access
 			
 		if ($this->extension_id and $folder)
 		{
-			$sql = "UPDATE ".constant("EXTENSION_TABLE")." SET folder = '".$folder."' WHERE id = '".$this->extension_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("EXTENSION_TABLE")." SET folder = :folder WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->extension_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":folder", $folder, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -347,8 +367,11 @@ class Extension_Access
 			
 		if ($this->extension_id and $class)
 		{
-			$sql = "UPDATE ".constant("EXTENSION_TABLE")." SET class = '".$class."' WHERE id = '".$this->extension_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("EXTENSION_TABLE")." SET class = :class WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->extension_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":class", $class, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -377,8 +400,11 @@ class Extension_Access
 			
 		if ($this->extension_id and $main_file)
 		{
-			$sql = "UPDATE ".constant("EXTENSION_TABLE")." SET main_file = '".$main_file."' WHERE id = '".$this->extension_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("EXTENSION_TABLE")." SET main_file = :main_file WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->extension_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":main_file", $main_file, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -407,8 +433,11 @@ class Extension_Access
 			
 		if ($this->extension_id and $version)
 		{
-			$sql = "UPDATE ".constant("EXTENSION_TABLE")." SET version = '".$version."' WHERE id = '".$this->extension_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("EXTENSION_TABLE")." SET version = :version WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->extension_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":version", $version, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -439,7 +468,8 @@ class Extension_Access
 		$counter = 0;
 		
 		$sql = "SELECT id,name,identifier,folder,class,main_file FROM ".constant("EXTENSION_TABLE")."";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{
@@ -472,7 +502,8 @@ class Extension_Access
 		$return_array = array();
 		
 		$sql = "SELECT id,folder FROM ".constant("EXTENSION_TABLE")."";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{
@@ -499,8 +530,10 @@ class Extension_Access
 
 		if ($identifier)
 		{
-			$sql = "SELECT id FROM ".constant("EXTENSION_TABLE")." WHERE LOWER(identifier) = '".trim(strtolower($identifier))."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("EXTENSION_TABLE")." WHERE LOWER(identifier) = LOWER(TRIM(:identifier))";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":identifier", $identifier, PDO::PARAM_STR);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])

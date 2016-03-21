@@ -48,8 +48,10 @@ class Timezone_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("TIMEZONE_TABLE")." WHERE id='".$timezone_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("TIMEZONE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $timezone_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -91,14 +93,19 @@ class Timezone_Access
 		if ($title and $php_title and is_numeric($deviation))
 		{
 	 		$sql_write = "INSERT INTO ".constant("TIMEZONE_TABLE")." (id, title, php_title, deviation) " .
-								"VALUES (nextval('".self::TIMEZONE_PK_SEQUENCE."'::regclass),'".$title."','".$php_title."','".$deviation."')";		
-				
-			$res_write = $db->db_query($sql_write);
+								"VALUES (nextval('".self::TIMEZONE_PK_SEQUENCE."'::regclass), :title, :php_title, :deviation')";		
+
+	 		$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":title", $title, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":php_title", $php_title, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":deviation", $deviation, PDO::PARAM_STR);
+			$db->execute($res_write);
 		
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("TIMEZONE_TABLE")." WHERE id = currval('".self::TIMEZONE_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 							
 				self::__construct($data_read['id']);		
@@ -129,8 +136,10 @@ class Timezone_Access
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".constant("TIMEZONE_TABLE")." WHERE id = '".$id_tmp."'";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("TIMEZONE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -202,8 +211,11 @@ class Timezone_Access
 
 		if ($this->timezone_id and $title)
 		{
-			$sql = "UPDATE ".constant("TIMEZONE_TABLE")." SET title = '".$title."' WHERE id = ".$this->timezone_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("TIMEZONE_TABLE")." SET title = :title WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->timezone_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":title", $title, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -231,8 +243,11 @@ class Timezone_Access
 
 		if ($this->timezone_id and $php_title)
 		{
-			$sql = "UPDATE ".constant("TIMEZONE_TABLE")." SET php_title = '".$php_title."' WHERE id = ".$this->timezone_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("TIMEZONE_TABLE")." SET php_title = :php_title WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->timezone_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":php_title", $php_title, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -260,8 +275,11 @@ class Timezone_Access
 
 		if ($this->timezone_id and $deviation)
 		{
-			$sql = "UPDATE ".constant("TIMEZONE_TABLE")." SET deviation = '".$deviation."' WHERE id = ".$this->timezone_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("TIMEZONE_TABLE")." SET deviation = :deviation WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->timezone_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":deviation", $deviation, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -290,7 +308,8 @@ class Timezone_Access
 		$return_array = array();
 		
 		$sql = "SELECT id FROM ".constant("TIMEZONE_TABLE")." ORDER BY deviation, title";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{
@@ -313,8 +332,10 @@ class Timezone_Access
 
 		if (is_numeric($id))
 		{
-			$sql = "SELECT id FROM ".constant("TIMEZONE_TABLE")." WHERE id = ".$id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("TIMEZONE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])

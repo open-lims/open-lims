@@ -60,15 +60,7 @@ class BaseModule_Access
 				$this->name			= $data['name'];
 				$this->folder		= $data['folder'];
 				$this->class		= $data['class'];
-				
-				if ($data['disabled'] == 't')
-				{
-					$this->disabled = true;
-				}
-				else
-				{
-					$this->disabled = false;
-				}
+				$this->disabled		= $data['disabled'];
 			}
 			else
 			{
@@ -112,7 +104,7 @@ class BaseModule_Access
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("BASE_MODULE_TABLE")." WHERE id = currval('".self::BASE_MODULE_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->prepare($sql);
+				$res_read = $db->prepare($sql_read);
 				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 							

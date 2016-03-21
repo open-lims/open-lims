@@ -78,17 +78,17 @@ class BaseBatch_Wrapper_Access
 		
 		if ($create_datetime != null and $end_datetime != null)
 		{
-			$sql_where = "WHERE create_datetime >= '".$create_datetime."' AND end_datetime >= '".$end_datetime."'";
+			$sql_where = "WHERE create_datetime >= :create_datetime AND end_datetime >= :end_datetime";
 		}
 		else
 		{
 			if ($create_datetime != null)
 			{
-				$sql_where = "WHERE end_datetime >= '".$create_datetime."'";
+				$sql_where = "WHERE end_datetime >= :create_datetime";
 			}
 			elseif($end_datetime != null)
 			{
-				$sql_where = "WHERE end_datetime >= '".$end_datetime."'";
+				$sql_where = "WHERE end_datetime >= :end_datetime";
 			}
 			else
 			{
@@ -109,7 +109,30 @@ class BaseBatch_Wrapper_Access
 		
 		$return_array = array();
 		
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		
+		if ($create_datetime != null and $end_datetime != null)
+		{
+			$db->bind_value($res, ":create_datetime", $create_datetime, PDO::PARAM_STR);
+			$db->bind_value($res, ":end_datetime", $end_datetime, PDO::PARAM_STR);
+		}
+		else
+		{
+			if ($create_datetime != null)
+			{
+				$db->bind_value($res, ":end_datetime", $end_datetime, PDO::PARAM_STR);
+			}
+			elseif($end_datetime != null)
+			{
+				$db->bind_value($res, ":create_datetime", $create_datetime, PDO::PARAM_STR);
+			}
+			else
+			{
+				$sql_where = "";
+			}
+		}
+		
+		$db->execute($res);
 		
 		if (is_numeric($start) and is_numeric($end))
 		{
@@ -147,17 +170,17 @@ class BaseBatch_Wrapper_Access
 		
 		if ($create_datetime != null and $end_datetime != null)
 		{
-			$sql_where = "WHERE create_datetime >= '".$create_datetime."' AND end_datetime >= '".$end_datetime."'";
+			$sql_where = "WHERE create_datetime >= :create_datetime AND end_datetime >= :end_datetime";
 		}
 		else
 		{
 			if ($create_datetime != null)
 			{
-				$sql_where = "WHERE end_datetime >= '".$create_datetime."'";
+				$sql_where = "WHERE end_datetime >= :create_datetime";
 			}
 			elseif($end_datetime != null)
 			{
-				$sql_where = "WHERE end_datetime >= '".$end_datetime."'";
+				$sql_where = "WHERE end_datetime >= :end_datetime";
 			}
 			else
 			{
@@ -169,7 +192,30 @@ class BaseBatch_Wrapper_Access
 						"FROM ".constant("BASE_BATCH_RUN_TABLE")." " .
 						"".$sql_where."";
 		
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		
+		if ($create_datetime != null and $end_datetime != null)
+		{
+			$db->bind_value($res, ":create_datetime", $create_datetime, PDO::PARAM_STR);
+			$db->bind_value($res, ":end_datetime", $end_datetime, PDO::PARAM_STR);
+		}
+		else
+		{
+			if ($create_datetime != null)
+			{
+				$db->bind_value($res, ":end_datetime", $end_datetime, PDO::PARAM_STR);
+			}
+			elseif($end_datetime != null)
+			{
+				$db->bind_value($res, ":create_datetime", $create_datetime, PDO::PARAM_STR);
+			}
+			else
+			{
+				$sql_where = "";
+			}
+		}
+		
+		$db->execute($res);
 		$data = $db->fetch($res);
 
 		return $data['result'];

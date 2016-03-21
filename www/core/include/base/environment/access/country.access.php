@@ -48,8 +48,10 @@ class Country_Access
 		}
 		else
 		{	
-			$sql = "SELECT * FROM ".constant("COUNTRY_TABLE")." WHERE id = ".$id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("COUNTRY_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -91,14 +93,19 @@ class Country_Access
 		if ($english_name and $local_name and $iso_3166)
 		{
 			$sql_write = "INSERT INTO ".constant("COUNTRY_TABLE")." (id,english_name,local_name,iso_3166) " .
-							"VALUES (nextval('".self::COUNTRY_PK_SEQUENCE."'::regclass),'".$english_name."','".$local_name."','".$iso_3166."')";
+							"VALUES (nextval('".self::COUNTRY_PK_SEQUENCE."'::regclass), :english_name, :local_name, :iso_3166)";
 			
-			$res_write = $db->db_query($sql_write);
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":english_name", $english_name, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":local_name", $local_name, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":iso_3166", $iso_3166, PDO::PARAM_STR);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("COUNTRY_TABLE")." WHERE id = currval('".self::COUNTRY_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
@@ -125,12 +132,14 @@ class Country_Access
     	
     	if ($this->id)
     	{
-    		$tmp_id = $this->id;
+    		$id_tmp = $this->id;
     		
     		$this->__destruct();
 
-    		$sql = "DELETE FROM ".constant("COUNTRY_TABLE")." WHERE id = ".$tmp_id."";
-    		$res = $db->db_query($sql);
+    		$sql = "DELETE FROM ".constant("COUNTRY_TABLE")." WHERE id = :id";
+    		$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
     		
     		if ($db->row_count($res) == 1)
     		{
@@ -202,8 +211,11 @@ class Country_Access
 
 		if ($this->id and $english_name)
 		{
-			$sql = "UPDATE ".constant("COUNTRY_TABLE")." SET english_name = '".$english_name."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("COUNTRY_TABLE")." SET english_name = :english_name WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":english_name", $english_name, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -231,8 +243,11 @@ class Country_Access
 
 		if ($this->id and $local_name)
 		{
-			$sql = "UPDATE ".constant("COUNTRY_TABLE")." SET local_name = '".$local_name."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("COUNTRY_TABLE")." SET local_name = :local_name WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":local_name", $local_name, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -260,8 +275,11 @@ class Country_Access
 
 		if ($this->id and $iso_3166)
 		{
-			$sql = "UPDATE ".constant("COUNTRY_TABLE")." SET iso_3166 = '".$iso_3166."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("COUNTRY_TABLE")." SET iso_3166 = :iso_3166 WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":iso_3166", $iso_3166, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -290,8 +308,10 @@ class Country_Access
 			
 		if (is_numeric($id))
 		{
-			$sql = "SELECT id FROM ".constant("COUNTRY_TABLE")." WHERE id = '".$id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("COUNTRY_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -319,7 +339,8 @@ class Country_Access
 		$return_array = array();
 		
 		$sql = "SELECT id,english_name,local_name,iso_3166 FROM ".constant("COUNTRY_TABLE")." ORDER BY english_name";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{

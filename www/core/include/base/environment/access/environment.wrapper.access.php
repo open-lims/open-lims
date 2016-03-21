@@ -88,7 +88,8 @@ class Environment_Wrapper_Access
 		
 		$return_array = array();
 		
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		if (is_numeric($start) and is_numeric($end))
 		{
@@ -125,7 +126,8 @@ class Environment_Wrapper_Access
 		$sql = "SELECT COUNT(".constant("LANGUAGE_TABLE").".id) AS result " .
 					 "FROM ".constant("LANGUAGE_TABLE")."";
 			
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 
 		return $data['result'];
@@ -182,7 +184,8 @@ class Environment_Wrapper_Access
 		
 		$return_array = array();
 		
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		if (is_numeric($start) and is_numeric($end))
 		{
@@ -219,7 +222,8 @@ class Environment_Wrapper_Access
 		$sql = "SELECT COUNT(".constant("TIMEZONE_TABLE").".id) AS result " .
 					 "FROM ".constant("TIMEZONE_TABLE")."";
 			
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 
 		return $data['result'];
@@ -279,7 +283,8 @@ class Environment_Wrapper_Access
 		
 		$return_array = array();
 		
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		if (is_numeric($start) and is_numeric($end))
 		{
@@ -316,7 +321,8 @@ class Environment_Wrapper_Access
 		$sql = "SELECT COUNT(".constant("PAPER_SIZE_TABLE").".id) AS result " .
 					 "FROM ".constant("PAPER_SIZE_TABLE")."";
 			
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 
 		return $data['result'];
@@ -393,7 +399,8 @@ class Environment_Wrapper_Access
 		
 		$return_array = array();
 		
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		if (is_numeric($start) and is_numeric($end))
 		{
@@ -430,7 +437,8 @@ class Environment_Wrapper_Access
 		$sql = "SELECT COUNT(".constant("MEASURING_UNIT_TABLE").".id) AS result " .
 					 "FROM ".constant("MEASURING_UNIT_TABLE")."";
 			
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 
 		return $data['result'];
@@ -500,7 +508,8 @@ class Environment_Wrapper_Access
 		
 		$return_array = array();
 		
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		if (is_numeric($start) and is_numeric($end))
 		{
@@ -537,7 +546,8 @@ class Environment_Wrapper_Access
 		$sql = "SELECT COUNT(".constant("MEASURING_UNIT_RATIO_TABLE").".id) AS result " .
 					 "FROM ".constant("MEASURING_UNIT_RATIO_TABLE")."";
 			
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 
 		return $data['result'];
@@ -590,7 +600,8 @@ class Environment_Wrapper_Access
 		
 		$return_array = array();
 		
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		if (is_numeric($start) and is_numeric($end))
 		{
@@ -627,7 +638,8 @@ class Environment_Wrapper_Access
 		$sql = "SELECT COUNT(".constant("MEASURING_UNIT_CATEGORY_TABLE").".id) AS result " .
 					 "FROM ".constant("MEASURING_UNIT_CATEGORY_TABLE")."";
 			
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 
 		return $data['result'];
@@ -685,7 +697,8 @@ class Environment_Wrapper_Access
 		
 		$return_array = array();
 		
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		if (is_numeric($start) and is_numeric($end))
 		{
@@ -722,7 +735,8 @@ class Environment_Wrapper_Access
 		$sql = "SELECT COUNT(".constant("CURRENCY_TABLE").".id) AS result " .
 					 "FROM ".constant("CURRENCY_TABLE")."";
 			
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 
 		return $data['result'];

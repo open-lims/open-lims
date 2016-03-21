@@ -48,8 +48,10 @@ class Currency_Access
 		}
 		else
 		{	
-			$sql = "SELECT * FROM ".constant("CURRENCY_TABLE")." WHERE id = ".$id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("CURRENCY_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -91,14 +93,19 @@ class Currency_Access
 		if ($name and $symbol and $iso_4217)
 		{
 			$sql_write = "INSERT INTO ".constant("CURRENCY_TABLE")." (id,name,symbol,iso_4217) " .
-							"VALUES (nextval('".self::CURRENCY_PK_SEQUENCE."'::regclass),'".$name."','".$symbol."','".$iso_4217."')";
+							"VALUES (nextval('".self::CURRENCY_PK_SEQUENCE."'::regclass), :name, :symbol, :iso_4217)";
 			
-			$res_write = $db->db_query($sql_write);
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":name", $name, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":symbol", $symbol, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":iso_4217", $iso_4217, PDO::PARAM_STR);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("CURRENCY_TABLE")." WHERE id = currval('".self::CURRENCY_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
@@ -125,12 +132,14 @@ class Currency_Access
     	
     	if ($this->id)
     	{
-    		$tmp_id = $this->id;
+    		$id_tmp = $this->id;
     		
     		$this->__destruct();
 
-    		$sql = "DELETE FROM ".constant("CURRENCY_TABLE")." WHERE id = ".$tmp_id."";
-    		$res = $db->db_query($sql);
+    		$sql = "DELETE FROM ".constant("CURRENCY_TABLE")." WHERE id = :id";
+    		$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
     		
     		if ($db->row_count($res) == 1)
     		{
@@ -202,8 +211,11 @@ class Currency_Access
 
 		if ($this->id and $name)
 		{
-			$sql = "UPDATE ".constant("CURRENCY_TABLE")." SET name = '".$name."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("CURRENCY_TABLE")." SET name = :name WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -231,8 +243,11 @@ class Currency_Access
 
 		if ($this->id and $symbol)
 		{
-			$sql = "UPDATE ".constant("CURRENCY_TABLE")." SET symbol = '".$symbol."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("CURRENCY_TABLE")." SET symbol = :symbol WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":symbol", $symbol, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -260,8 +275,11 @@ class Currency_Access
 
 		if ($this->id and $iso_4217)
 		{
-			$sql = "UPDATE ".constant("CURRENCY_TABLE")." SET iso_4217 = '".$iso_4217."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("CURRENCY_TABLE")." SET iso_4217 = :iso_4217 WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":iso_4217", $iso_4217, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -290,8 +308,10 @@ class Currency_Access
 			
 		if (is_numeric($id))
 		{
-			$sql = "SELECT id FROM ".constant("CURRENCY_TABLE")." WHERE id = '".$id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("CURRENCY_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -319,7 +339,8 @@ class Currency_Access
 		$return_array = array();
 		
 		$sql = "SELECT id,name,symbol,iso_4217 FROM ".constant("CURRENCY_TABLE")." ORDER BY name";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{

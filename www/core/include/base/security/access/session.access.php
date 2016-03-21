@@ -46,8 +46,10 @@ class Session_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("SESSION_TABLE")." WHERE session_id='".$session_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("SESSION_TABLE")." WHERE session_id= :session_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":session_id", $session_id, PDO::PARAM_STR);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['session_id'])
@@ -93,9 +95,15 @@ class Session_Access
 			$ip = $_SERVER['REMOTE_ADDR'];
 			
 	 		$sql_write = "INSERT INTO ".constant("SESSION_TABLE")." (session_id, ip, user_id, datetime) " .
-								"VALUES ('".$session_id."','".$ip."',".$user_id.",'".$datetime."')";		
+								"VALUES (:session_id, :ip, :user_id, :datetime)";		
 				
-			$res_write = $db->db_query($sql_write);
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":session_id", $session_id, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":ip", $ip, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":datetime", $datetime, PDO::PARAM_STR);
+			$db->execute($res_write);
+			
 			
 			if ($db->row_count($res_write) != 1)
 			{
@@ -124,8 +132,10 @@ class Session_Access
 			$session_id_tmp = $this->session_id;
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".constant("SESSION_TABLE")." WHERE session_id = '".$session_id_tmp."'";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("SESSION_TABLE")." WHERE session_id = :session_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":session_id", $session_id_tmp, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -197,8 +207,11 @@ class Session_Access
 
 		if ($this->session_id and $datetime)
 		{
-			$sql = "UPDATE ".constant("SESSION_TABLE")." SET datetime = '".$datetime."' WHERE session_id = '".$this->session_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SESSION_TABLE")." SET datetime = :datetime WHERE session_id = :session_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":session_id", $this->session_id, PDO::PARAM_STR);
+			$db->bind_value($res, ":datetime", $datetime, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -229,8 +242,10 @@ class Session_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT session_id FROM ".constant("SESSION_TABLE")." WHERE user_id = ".$user_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT session_id FROM ".constant("SESSION_TABLE")." WHERE user_id = :user_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			while ($data = $db->fetch($res))
 			{
 				array_push($return_array,$data['session_id']);
@@ -261,7 +276,8 @@ class Session_Access
 		$return_array = array();
 		
 		$sql = "SELECT session_id FROM ".constant("SESSION_TABLE")." ORDER BY user_id ASC";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		while ($data = $db->fetch($res))
 		{
 			array_push($return_array,$data['session_id']);

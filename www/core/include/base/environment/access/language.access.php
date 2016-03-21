@@ -50,8 +50,10 @@ class Language_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("LANGUAGE_TABLE")." WHERE id='".$language_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("LANGUAGE_TABLE")." WHERE id= :language_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":language_id", $language_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 
 			if ($data['id'])
@@ -100,14 +102,21 @@ class Language_Access
 		if ($english_name and $language_name and $tsvector_name and $iso_639 and $iso_3166)
 		{
 	 		$sql_write = "INSERT INTO ".constant("LANGUAGE_TABLE")." (id, english_name, language_name, tsvector_name, iso_639, iso_3166) " .
-								"VALUES (nextval('".self::LANGUAGE_PK_SEQUENCE."'::regclass),'".$english_name."','".$language_name."','".$tsvector_name."','".$iso_639."','".$iso_3166."')";		
+								"VALUES (nextval('".self::LANGUAGE_PK_SEQUENCE."'::regclass), :english_name, :language_name, :tsvector_name, :iso_639, :iso_3166)";		
 				
-			$res_write = $db->db_query($sql_write);
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":english_name", $english_name, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":language_name", $language_name, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":tsvector_name", $tsvector_name, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":iso_639", $iso_639, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":iso_3166", $iso_3166, PDO::PARAM_STR);
+			$db->execute($res_write);
 		
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("LANGUAGE_TABLE")." WHERE id = currval('".self::LANGUAGE_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
@@ -132,14 +141,16 @@ class Language_Access
 	{
 		global $db;
 
-		if ($this->id)
+		if ($this->language_id)
 		{
-			$id_tmp = $this->id;
+			$id_tmp = $this->language_id;
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".constant("LANGUAGE_TABLE")." WHERE id = '".$id_tmp."'";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("LANGUAGE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -241,8 +252,11 @@ class Language_Access
 
 		if ($this->language_id and $english_name)
 		{
-			$sql = "UPDATE ".constant("LANGUAGE_TABLE")." SET english_name = '".$english_name."' WHERE id = ".$this->language_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("LANGUAGE_TABLE")." SET english_name = :english_name WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->language_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":english_name", $english_name, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -270,8 +284,11 @@ class Language_Access
 
 		if ($this->language_id and $language_name)
 		{
-			$sql = "UPDATE ".constant("LANGUAGE_TABLE")." SET language_name = '".$language_name."' WHERE id = ".$this->language_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("LANGUAGE_TABLE")." SET language_name = :language_name WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->language_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":language_name", $language_name, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -299,8 +316,11 @@ class Language_Access
 
 		if ($this->language_id and $tsvector_name)
 		{
-			$sql = "UPDATE ".constant("LANGUAGE_TABLE")." SET tsvector_name = '".$tsvector_name."' WHERE id = ".$this->language_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("LANGUAGE_TABLE")." SET tsvector_name = :tsvector_name WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->language_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":tsvector_name", $tsvector_name, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -328,8 +348,11 @@ class Language_Access
 			
 		if ($this->language_id and $iso_639)
 		{
-			$sql = "UPDATE ".constant("LANGUAGE_TABLE")." SET iso_639 = '".$iso_639."' WHERE id = ".$this->language_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("LANGUAGE_TABLE")." SET iso_639 = :iso_639 WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->language_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":iso_639", $iso_639, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -357,8 +380,11 @@ class Language_Access
 
 		if ($this->language_id and $iso_3166)
 		{
-			$sql = "UPDATE ".constant("LANGUAGE_TABLE")." SET iso_3166 = '".$iso_3166."' WHERE id = ".$this->language_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("LANGUAGE_TABLE")." SET iso_3166 = :iso_3166 WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->language_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":iso_3166", $iso_3166, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -387,7 +413,8 @@ class Language_Access
 		$return_array = array();
 		
 		$sql = "SELECT id FROM ".constant("LANGUAGE_TABLE")." ORDER BY english_name";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{
@@ -414,8 +441,10 @@ class Language_Access
 		
 		if (is_numeric($language_id))
 		{
-			$sql = "SELECT id FROM ".constant("LANGUAGE_TABLE")." WHERE id = ".$language_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("LANGUAGE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $language_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 		
 			if($data['id'])

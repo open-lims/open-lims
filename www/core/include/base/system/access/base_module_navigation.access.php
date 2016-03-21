@@ -62,15 +62,7 @@ class BaseModuleNavigation_Access
 				$this->position			= $data['position'];
 				$this->colour			= $data['colour'];
 				$this->module_id		= $data['module_id'];
-				
-				if ($data['hidden'] == 't')
-				{
-					$this->hidden	= true;
-				}
-				else
-				{
-					$this->hidden	= false;
-				}
+				$this->hidden 			= $data['hidden'];
 			}
 			else
 			{
@@ -129,7 +121,7 @@ class BaseModuleNavigation_Access
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("BASE_MODULE_NAVIGATION_TABLE")." WHERE id = currval('".self::BASE_MODULE_NAVIGATION_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->prepare($sql);
+				$res_read = $db->prepare($sql_read);
 				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 							

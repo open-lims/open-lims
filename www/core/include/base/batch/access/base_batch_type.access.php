@@ -47,8 +47,10 @@ class BaseBatchType_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("BASE_BATCH_TYPE_TABLE")." WHERE id='".$batch_type_id."'";
-			$res = $db->db_query($sql);			
+			$sql = "SELECT * FROM ".constant("BASE_BATCH_TYPE_TABLE")." WHERE id= :batch_type_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":batch_type_id", $batch_type_id, PDO::PARAM_INT);
+			$db->execute($res);		
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -89,14 +91,19 @@ class BaseBatchType_Access
 		if ($name and $internal_name and is_numeric($binary_id))
 		{
 			$sql_write = "INSERT INTO ".constant("BASE_BATCH_TYPE_TABLE")." (id,name,internal_name,binary_id) " .
-						"VALUES (nextval('".self::BASE_BATCH_TYPE_PK_SEQUENCE."'::regclass),'".$name."','".$internal_name."',".$binary_id.")";
+						"VALUES (nextval('".self::BASE_BATCH_TYPE_PK_SEQUENCE."'::regclass), :name, :internal_name, :binary_id)";
 
-			$res_write = $db->db_query($sql_write);
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":name", $name, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":internal_name", $internal_name, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":binary_id", $binary_id, PDO::PARAM_INT);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("BASE_BATCH_TYPE_TABLE")." WHERE id = currval('".self::BASE_BATCH_TYPE_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
@@ -127,8 +134,10 @@ class BaseBatchType_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".constant("BASE_BATCH_TYPE_TABLE")." WHERE id = ".$tmp_batch_type_id."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("BASE_BATCH_TYPE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $tmp_batch_type_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -200,8 +209,11 @@ class BaseBatchType_Access
 			
 		if ($this->batch_type_id and $name)
 		{
-			$sql = "UPDATE ".constant("BASE_BATCH_TYPE_TABLE")." SET name = '".$name."' WHERE id = '".$this->batch_type_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_BATCH_TYPE_TABLE")." SET name = :name WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->batch_type_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -230,8 +242,11 @@ class BaseBatchType_Access
 			
 		if ($this->batch_type_id and $internal_name)
 		{
-			$sql = "UPDATE ".constant("BASE_BATCH_TYPE_TABLE")." SET internal_name = '".$internal_name."' WHERE id = '".$this->batch_type_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_BATCH_TYPE_TABLE")." SET internal_name = :internal_name WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->batch_type_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":internal_name", $internal_name, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -260,8 +275,11 @@ class BaseBatchType_Access
 			
 		if ($this->batch_type_id and is_numeric($binary_id))
 		{
-			$sql = "UPDATE ".constant("BASE_BATCH_TYPE_TABLE")." SET binary_id = '".$binary_id."' WHERE id = '".$this->batch_type_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("BASE_BATCH_TYPE_TABLE")." SET binary_id = :binary_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->batch_type_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":binary_id", $binary_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -291,8 +309,10 @@ class BaseBatchType_Access
 		
 		if ($internal_name)
 		{
-			$sql = "SELECT id FROM ".constant("BASE_BATCH_TYPE_TABLE")." WHERE internal_name='".$internal_name."'";
-			$res = $db->db_query($sql);			
+			$sql = "SELECT id FROM ".constant("BASE_BATCH_TYPE_TABLE")." WHERE internal_name= :internal_name";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":internal_name", $internal_name, PDO::PARAM_STR);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])

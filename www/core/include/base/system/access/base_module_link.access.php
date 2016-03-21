@@ -64,15 +64,7 @@ class BaseModuleLink_Access
 				$this->link_array		= $data['link_array'];
 				$this->link_file		= $data['link_file'];
 				$this->weight			= $data['weight'];
-				
-				if ($data['disabled'] == 't')
-				{
-					$this->disabled = true;
-				}
-				else
-				{
-					$this->disabled = false;
-				}
+				$this->disabled			= $data['disabled'];
 			}
 			else
 			{
@@ -140,7 +132,7 @@ class BaseModuleLink_Access
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("BASE_MODULE_LINK_TABLE")." WHERE id = currval('".self::BASE_MODULE_LINK_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->prepare($sql);
+				$res_read = $db->prepare($sql_read);
 				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 							

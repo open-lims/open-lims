@@ -54,8 +54,10 @@ class PaperSize_Access
 		}
 		else
 		{	
-			$sql = "SELECT * FROM ".constant("PAPER_SIZE_TABLE")." WHERE id = ".$id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("PAPER_SIZE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -69,24 +71,8 @@ class PaperSize_Access
 				$this->margin_right		= $data['margin_right'];
 				$this->margin_top		= $data['margin_top'];
 				$this->margin_bottom	= $data['margin_bottom'];
-				
-				if ($data['base'] == 't')
-				{
-					$this->base = true;
-				}
-				else
-				{
-					$this->base = false;
-				}
-				
-				if ($data['standard'] == 't')
-				{
-					$this->standard = true;
-				}
-				else
-				{
-					$this->standard = false;
-				}
+				$this->base				= $data['base'];
+				$this->standard 		= $data['standard'];
 			}
 			else
 			{
@@ -129,14 +115,24 @@ class PaperSize_Access
 		if ($name and is_numeric($width) and is_numeric($height) and is_numeric($margin_left) and is_numeric($margin_right) and is_numeric($margin_top) and is_numeric($margin_bottom))
 		{			
 			$sql_write = "INSERT INTO ".constant("PAPER_SIZE_TABLE")." (id,name,width,height,margin_left,margin_right,margin_top,margin_bottom,base,standard) " .
-							"VALUES (nextval('".self::PAPER_SIZE_PK_SEQUENCE."'::regclass),'".$name."','".$width."','".$height."','".$margin_left."','".$margin_right."','".$margin_top."','".$margin_bottom."','f','f')";
+							"VALUES (nextval('".self::PAPER_SIZE_PK_SEQUENCE."'::regclass), :name, :width, :height, :margin_left, :margin_right, :margin_top, :margin_bottom,'f','f')";
 			
-			$res_write = $db->db_query($sql_write);
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":name", $name, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":width", $width, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":height", $height, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":margin_left", $margin_left, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":margin_right", $margin_right, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":margin_top", $margin_top, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":margin_bottom", $margin_bottom, PDO::PARAM_STR);
+			$db->execute($res_write);
+			
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("PAPER_SIZE_TABLE")." WHERE id = currval('".self::PAPER_SIZE_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
@@ -163,12 +159,14 @@ class PaperSize_Access
     	
     	if ($this->id)
     	{
-    		$tmp_id = $this->id;
+    		$id_tmp = $this->id;
     		
     		$this->__destruct();
 
-    		$sql = "DELETE FROM ".constant("PAPER_SIZE_TABLE")." WHERE id = ".$tmp_id."";
-    		$res = $db->db_query($sql);
+    		$sql = "DELETE FROM ".constant("PAPER_SIZE_TABLE")." WHERE id = :id";
+    		$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
     		
     		if ($db->row_count($res) == 1)
     		{
@@ -330,8 +328,11 @@ class PaperSize_Access
 
 		if ($this->id and $name)
 		{
-			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET name = '".$name."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET name = :name WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -359,8 +360,11 @@ class PaperSize_Access
 
 		if ($this->id and is_numeric($width))
 		{
-			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET width = '".$width."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET width = :width WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":width", $width, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -388,8 +392,11 @@ class PaperSize_Access
 
 		if ($this->id and is_numeric($height))
 		{
-			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET height = '".$height."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET height = :height WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":height", $height, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -417,8 +424,11 @@ class PaperSize_Access
 
 		if ($this->id and is_numeric($margin_left))
 		{
-			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET margin_left = '".$margin_left."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET margin_left = :margin_left WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":margin_left", $margin_left, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -446,8 +456,11 @@ class PaperSize_Access
 
 		if ($this->id and is_numeric($margin_right))
 		{
-			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET margin_right = '".$margin_right."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET margin_right = :margin_right WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":margin_right", $margin_right, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -475,8 +488,11 @@ class PaperSize_Access
 
 		if ($this->id and is_numeric($margin_top))
 		{
-			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET margin_top = '".$margin_top."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET margin_top = :margin_top WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":margin_top", $margin_top, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -504,8 +520,11 @@ class PaperSize_Access
 
 		if ($this->id and is_numeric($margin_bottom))
 		{
-			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET margin_bottom = '".$margin_bottom."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET margin_bottom = :margin_bottom WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":margin_bottom", $margin_bottom, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -532,18 +551,12 @@ class PaperSize_Access
 		global $db;
 
 		if ($this->id and isset($base))
-		{
-			if ($base == true)
-			{
-				$base_insert = "t";
-			}
-			else
-			{
-				$base_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET base = '".$base_insert."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET base = :base WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":base", $base, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -571,17 +584,11 @@ class PaperSize_Access
 
 		if ($this->id and isset($standard))
 		{
-			if ($standard == true)
-			{
-				$standard_insert = "t";
-			}
-			else
-			{
-				$standard_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET base = '".$standard_insert."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PAPER_SIZE_TABLE")." SET base = :standard WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":standard", $standard, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -610,7 +617,8 @@ class PaperSize_Access
 		$return_array = array();
 		
 		$sql = "SELECT id,name FROM ".constant("PAPER_SIZE_TABLE")." ORDER BY standard DESC,name";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{
@@ -641,8 +649,10 @@ class PaperSize_Access
 			
 		if (is_numeric($id))
 		{
-			$sql = "SELECT width,height,margin_left,margin_right,margin_top,margin_bottom FROM ".constant("PAPER_SIZE_TABLE")." WHERE id = '".$id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT width,height,margin_left,margin_right,margin_top,margin_bottom FROM ".constant("PAPER_SIZE_TABLE")." WHERE id = :id'";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			$return_array = array();
@@ -676,7 +686,8 @@ class PaperSize_Access
 		global $db;
 			
 		$sql = "SELECT width,height,margin_left,margin_right,margin_top,margin_bottom FROM ".constant("PAPER_SIZE_TABLE")." WHERE standard = 't'";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 		
 		$return_array = array();

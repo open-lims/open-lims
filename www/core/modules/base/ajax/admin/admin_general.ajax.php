@@ -945,7 +945,7 @@ class AdminGeneralAjax
 				{
 					$list_array[$key]['symbol'] = "<img src='images/icons/text.png' alt='' />";
 					
-					if ($value['standard'] == 't')
+					if ($value['standard'] === true)
 					{
 						$list_array[$key]['name'] = $list_array[$key]['name']." <img src='images/icons/status_ok.png' alt='Standard' />";
 					}
@@ -959,7 +959,7 @@ class AdminGeneralAjax
 					
 					$list_array[$key]['edit'] = "<a href='#' class='BaseAdminPaperSizeEdit' id='BaseAdminPaperSizeEdit".$list_array[$key]['id']."'><img src='images/icons/edit.png' alt='' style='border: 0;' /></a>";
 					
-					if ($value['base'] == 'f')
+					if ($value['base'] === false)
 					{
 						$list_array[$key]['delete'] = "<a href='#' class='BaseAdminPaperSizeDelete' id='BaseAdminPaperSizeDelete".$list_array[$key]['id']."'><img src='images/icons/delete.png' alt='' style='border: 0;' /></a>";
 					}

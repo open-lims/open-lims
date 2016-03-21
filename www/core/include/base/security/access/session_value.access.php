@@ -48,8 +48,10 @@ class SessionValue_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("SESSION_VALUE_TABLE")." WHERE id='".$id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("SESSION_VALUE_TABLE")." WHERE id= :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['session_id'])
@@ -92,9 +94,13 @@ class SessionValue_Access
 		if ($session_id and $address and $value)
 		{
 	 		$sql_write = "INSERT INTO ".constant("SESSION_VALUE_TABLE")." (id, session_id, address, value) " .
-								"VALUES (nextval('".self::SESSION_VALUE_PK_SEQUENCE."'::regclass),'".$session_id."','".$address."','".$value."')";		
+								"VALUES (nextval('".self::SESSION_VALUE_PK_SEQUENCE."'::regclass), :session_id, :address, :value)";		
 				
-			$res_write = $db->db_query($sql_write);
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":session_id", $session_id, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":address", $address, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":value", $value, PDO::PARAM_STR);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) != 1)
 			{
@@ -124,8 +130,10 @@ class SessionValue_Access
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".constant("SESSION_VALUE_TABLE")." WHERE id = '".$id_tmp."'";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("SESSION_VALUE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -197,8 +205,11 @@ class SessionValue_Access
 		
 		if ($this->session_id and $value)
 		{
-			$sql = "UPDATE ".constant("SESSION_VALUE_TABLE")." SET value = '".$value."' WHERE id = '".$this->id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SESSION_VALUE_TABLE")." SET value = :value WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":value", $value, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -228,8 +239,11 @@ class SessionValue_Access
 		
 		if ($session_id and $address)
 		{
-			$sql = "SELECT id FROM ".constant("SESSION_VALUE_TABLE")." WHERE session_id = '".$session_id."' AND address = '".$address."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("SESSION_VALUE_TABLE")." WHERE session_id = :session_id AND address = :address";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":session_id", $session_id, PDO::PARAM_STR);
+			$db->bind_value($res, ":address", $address, PDO::PARAM_STR);
+			$db->execute($res);
 			$data = $db->fetch($res);
 				
 			if ($data['id'])
@@ -259,8 +273,10 @@ class SessionValue_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id,address,value FROM ".constant("SESSION_VALUE_TABLE")." WHERE session_id = '".$session_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id,address,value FROM ".constant("SESSION_VALUE_TABLE")." WHERE session_id = :session_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":session_id", $session_id, PDO::PARAM_STR);
+			$db->execute($res);
 			while ($data = $db->fetch($res))
 			{
 				$temp_array = array();

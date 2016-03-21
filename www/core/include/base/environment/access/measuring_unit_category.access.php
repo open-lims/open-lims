@@ -46,23 +46,17 @@ class MeasuringUnitCategory_Access
 		}
 		else
 		{	
-			$sql = "SELECT * FROM ".constant("MEASURING_UNIT_CATEGORY_TABLE")." WHERE id = ".$id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("MEASURING_UNIT_CATEGORY_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
-				$this->id			= $data['id'];
-				$this->name			= $data['name'];
-				
-				if ($data['created_by_user'] == "t")
-				{
-					$this->created_by_user = true;
-				}
-				else
-				{
-					$this->created_by_user = false;
-				}
+				$this->id				= $data['id'];
+				$this->name				= $data['name'];
+				$this->created_by_user	= $data['created_by_user'];
 			}
 			else
 			{
@@ -92,14 +86,16 @@ class MeasuringUnitCategory_Access
 		if ($name)
 		{			
 			$sql_write = "INSERT INTO ".constant("MEASURING_UNIT_CATEGORY_TABLE")." (id,name,created_by_user) " .
-							"VALUES (nextval('".self::MEASURING_UNIT_PK_SEQUENCE."'::regclass),'".$name."','t')";
+							"VALUES (nextval('".self::MEASURING_UNIT_PK_SEQUENCE."'::regclass), :name, 't')";
 			
-			$res_write = $db->db_query($sql_write);
+			$db->bind_value($res_write, ":name", $name, PDO::PARAM_STR);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("MEASURING_UNIT_CATEGORY_TABLE")." WHERE id = currval('".self::MEASURING_UNIT_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
@@ -126,12 +122,14 @@ class MeasuringUnitCategory_Access
     	
     	if ($this->id)
     	{
-    		$tmp_id = $this->id;
+    		$id_tmp = $this->id;
     		
     		$this->__destruct();
 
-    		$sql = "DELETE FROM ".constant("MEASURING_UNIT_CATEGORY_TABLE")." WHERE id = ".$tmp_id."";
-    		$res = $db->db_query($sql);
+    		$sql = "DELETE FROM ".constant("MEASURING_UNIT_CATEGORY_TABLE")." WHERE id = :id";
+    		$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
     		
     		if ($db->row_count($res) == 1)
     		{
@@ -188,8 +186,11 @@ class MeasuringUnitCategory_Access
 
 		if ($this->id and $name)
 		{
-			$sql = "UPDATE ".constant("MEASURING_UNIT_CATEGORY_TABLE")." SET name = '".$name."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("MEASURING_UNIT_CATEGORY_TABLE")." SET name = :name WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -218,8 +219,10 @@ class MeasuringUnitCategory_Access
 			
 		if (is_numeric($id))
 		{
-			$sql = "SELECT id FROM ".constant("MEASURING_UNIT_CATEGORY_TABLE")." WHERE id = '".$id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("MEASURING_UNIT_CATEGORY_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -247,7 +250,8 @@ class MeasuringUnitCategory_Access
 		$return_array = array();
 			
 		$sql = "SELECT id,name FROM ".constant("MEASURING_UNIT_CATEGORY_TABLE")." ORDER BY id";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{
@@ -274,8 +278,10 @@ class MeasuringUnitCategory_Access
     	
    		if(is_numeric($measuring_unit_category_id))
 		{
-			$sql = "SELECT created_by_user FROM ".constant("MEASURING_UNIT_CATEGORY_TABLE")." WHERE id = '".$measuring_unit_category_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT created_by_user FROM ".constant("MEASURING_UNIT_CATEGORY_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $measuring_unit_category_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['created_by_user'] == "t")
